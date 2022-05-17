@@ -2,139 +2,141 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C2CAC433EF
-	for <linux-kselftest@archiver.kernel.org>; Tue, 17 May 2022 15:54:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B2FAC433F5
+	for <linux-kselftest@archiver.kernel.org>; Tue, 17 May 2022 16:04:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232370AbiEQPyI (ORCPT
+        id S231485AbiEQQE0 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 17 May 2022 11:54:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59064 "EHLO
+        Tue, 17 May 2022 12:04:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350662AbiEQPyC (ORCPT
+        with ESMTP id S235701AbiEQQEV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 May 2022 11:54:02 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62D950B26;
-        Tue, 17 May 2022 08:53:54 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 137so17293266pgb.5;
-        Tue, 17 May 2022 08:53:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=rmBZXjHGe6pjrZrcbSckkH/iPjlINFANkKf9gszWPYU=;
-        b=mCL2WZQfUMWu4xy6yy7X1+ebSif5rAu/jKymgNsJYYzZFnA9ugCrwiihsPYjvzThIU
-         DFn5Lk91C0tZGoeUNkgplThRXBMayt2xcmaeF/kI+0KvGVR+kIISN5RmRdDJqe7Oadm+
-         ApJfECbPyywghswoV+jBSpOdkrBps9EXktTRVf3Url5a8fO/0L7wfegdHmd2rnO/VKqr
-         5aIFJRbhhBTCl8CG9Fz4O9HHJKwwrK9Rxg2vuvpaHSd9SFQ95LPDBKs/Xs2D02Uy/oXT
-         ZFn7YQQsYYxadnuLDDRi0dvdKAfQu/UzUbSJrsKeXA9Nrm8fbp9Bp3m1fdX1C87JU/JQ
-         FXxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rmBZXjHGe6pjrZrcbSckkH/iPjlINFANkKf9gszWPYU=;
-        b=Ib3dDUlTM04ry+BsbBJCGicKyfD0/9WIB+k0j8S6lgvmCrayRA2OM/3KYcnpChQHEa
-         YHGfzKJpQtQXXyWQlFXSCjnZOUVRV5qVeVqfERpxWHgm+3PqUfnhgt1SwnfYLoZKPh0Z
-         RSQOSYxo2Q5qO7xOHRKvsdOD/HjG46gWHysagO571KmfEWVkVA6zBf+TgVSw6CX0YF+L
-         QztLEkEaBOsZGsi5N7WMW7ixsMCoWMeyK1E4RrbNXpi+Ucb9F3Wqfqpq3dTdHhMfdnOw
-         LFC/Auv2sMTNW8+jV0Hrid8yRvHxMqj1/1oPNo5pNyk52iMC611MEgxS5TjxT+H32dht
-         iTsQ==
-X-Gm-Message-State: AOAM530j5FON1Djz9qZ5xcdpYGD1PkNHYtIYQpBTuyFwixC/CdWCkh77
-        HQ83wXMvDO4/v0SbDbDPquk=
-X-Google-Smtp-Source: ABdhPJxrXCSmhatJuzbkg3Oy+emIhom0t5nAYkNpvRG00a6Wimvdurd952Xq+8TaFxwV35QJJRu07A==
-X-Received: by 2002:a63:8442:0:b0:3c6:4271:cad with SMTP id k63-20020a638442000000b003c642710cadmr20242021pgd.275.1652802834212;
-        Tue, 17 May 2022 08:53:54 -0700 (PDT)
-Received: from MacBook-Pro.local ([2620:10d:c090:500::2:c22a])
-        by smtp.gmail.com with ESMTPSA id d14-20020a62f80e000000b0050dc76281fdsm6932pfh.215.2022.05.17.08.53.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 08:53:53 -0700 (PDT)
-Date:   Tue, 17 May 2022 08:53:49 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Xu Kuohai <xukuohai@huawei.com>
-Cc:     bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        hpa@zytor.com, Shuah Khan <shuah@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Daniel Kiss <daniel.kiss@arm.com>,
-        Steven Price <steven.price@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Mark Brown <broonie@kernel.org>,
-        Delyan Kratunov <delyank@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: Re: [PATCH bpf-next v4 3/6] bpf: Move is_valid_bpf_tramp_flags() to
- the public trampoline code
-Message-ID: <20220517155349.4jk5oymnjvrasw2p@MacBook-Pro.local>
-References: <20220517071838.3366093-1-xukuohai@huawei.com>
- <20220517071838.3366093-4-xukuohai@huawei.com>
+        Tue, 17 May 2022 12:04:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7C550046;
+        Tue, 17 May 2022 09:04:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 78FB161243;
+        Tue, 17 May 2022 16:04:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B39E4C385B8;
+        Tue, 17 May 2022 16:04:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652803459;
+        bh=fMF2BNIvkvrF0iD186WbKtU3kdy8mDQgsofbJCS1OPk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:From;
+        b=FUW9q9owWQTX9xiyiV23z1NZBo2aGhO4u75vC9rqi9hDzbQ/13UvfRIPhoHHMIhiF
+         lpS5/2Hy0RKLVpGp2lrWG13uJ6qzJpZqpd5Xk3EUi5Sodu7iWfNtuCK9F2AA/Iw/rM
+         8DHReuWxlzXmh/VInI11ifLQBU0U5HTdKOz+tsoQznXZN8T1vC7Uu+IE54Pdah8u35
+         iLjFnkg2/5Fb56+N0ppwTtEyznOladA6h4tPcHcHPEaW8BBm3JVvJnSX89zL75nugE
+         OIU3QYtdnIx3+zeB4TnYn5etQF7WWgx3YZz3Rd0XXvhXacFI/0hbD7jz3iUYEHW83C
+         2hYgy70+PzyAQ==
+From:   SeongJae Park <sj@kernel.org>
+To:     Yuanchu Xie <yuanchu@google.com>
+Cc:     SeongJae Park <sj@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Markus Boehme <markubo@amazon.de>,
+        David Rientjes <rientjes@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] selftests/damon: suppress compiler warnings for huge_count_read_write
+Date:   Tue, 17 May 2022 09:04:17 -0700
+Message-Id: <20220517160417.1096-1-sj@kernel.org>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220517071838.3366093-4-xukuohai@huawei.com>
+In-Reply-To: <CAJj2-QGk9DmGhjPsjHwL5uj+cQs6=12iKEffpq+Vxv3=CrMPBA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, May 17, 2022 at 03:18:35AM -0400, Xu Kuohai wrote:
->  
-> +static bool is_valid_bpf_tramp_flags(unsigned int flags)
-> +{
-> +	if ((flags & BPF_TRAMP_F_RESTORE_REGS) &&
-> +	    (flags & BPF_TRAMP_F_SKIP_FRAME))
-> +		return false;
-> +
-> +	/* BPF_TRAMP_F_RET_FENTRY_RET is only used by bpf_struct_ops,
-> +	 * and it must be used alone.
-> +	 */
-> +	if ((flags & BPF_TRAMP_F_RET_FENTRY_RET) &&
-> +	    (flags & ~BPF_TRAMP_F_RET_FENTRY_RET))
-> +		return false;
-> +
-> +	return true;
-> +}
-> +
-> +int bpf_prepare_trampoline(struct bpf_tramp_image *tr, void *image,
-> +			   void *image_end, const struct btf_func_model *m,
-> +			   u32 flags, struct bpf_tramp_links *tlinks,
-> +			   void *orig_call)
-> +{
-> +	if (!is_valid_bpf_tramp_flags(flags))
-> +		return -EINVAL;
-> +
-> +	return arch_prepare_bpf_trampoline(tr, image, image_end, m, flags,
-> +					   tlinks, orig_call);
-> +}
+Hi Yuanchu,
 
-It's an overkill to introduce a new helper function just to validate
-flags that almost compile time constants.
-The flags are not user supplied.
-Please move /* BPF_TRAMP_F_RET_FENTRY_RET is only used by bpf_struct_ops ... */
-comment to bpf_struct_ops.c right before it calls arch_prepare_bpf_trampoline()
-And add a comment to trampoline.c saying that BPF_TRAMP_F_RESTORE_REGS
-and BPF_TRAMP_F_SKIP_FRAME should not be set together.
-We could add a warn_on there or in arch code, but feels like overkill.
+On Mon, 16 May 2022 21:07:25 -0400 Yuanchu Xie <yuanchu@google.com> wrote:
+
+> SeongJae,
+> 
+> Do you have a preference on how this should be handled?
+
+Sorry for late response.  I was thinking you were asking Shuah's opinion.  I
+have no strong opinion but the approach you made in v2 looks slightly better
+for me.
+
+
+Thanks,
+SJ
+
+> 
+> Thanks,
+> Yuanchu
+> 
+> On Wed, May 4, 2022 at 6:12 PM Yuanchu Xie <yuanchu@google.com> wrote:
+> >
+> > Hi SeongJae,
+> >
+> > On Wed, May 4, 2022 at 11:45 AM SeongJae Park <sj@kernel.org> wrote:
+> > >
+> > > Hi Yuanchu,
+> > >
+> > > On Wed, 4 May 2022 18:29:08 +0000 Yuanchu Xie <yuanchu@google.com> wrote:
+> > >
+> > > > The test case added in commit db7a347b26fe ("mm/damon/dbgfs:
+> > > > use '__GFP_NOWARN' for user-specified size buffer allocation")
+> > > > intentionally writes and reads with a large count to cause
+> > > > allocation failure and check for kernel warnings. We suppress
+> > > > the compiler warnings for these calls as they work as intended.
+> > > >
+> > > > Signed-off-by: Yuanchu Xie <yuanchu@google.com>
+> > > > ---
+> > >
+> > > It would be a good practice to mention the changes from the previous version of
+> > > this patch here[1].
+> > >
+> > > [1] https://docs.kernel.org/process/submitting-patches.html#the-canonical-patch-format
+> > >
+> > Thank you, I missed this when trying to figure out how to add
+> > additional comments for a revision.
+> >
+> > > >  tools/testing/selftests/damon/huge_count_read_write.c | 2 ++
+> > > >  1 file changed, 2 insertions(+)
+> > > >
+> > > > diff --git a/tools/testing/selftests/damon/huge_count_read_write.c b/tools/testing/selftests/damon/huge_count_read_write.c
+> > > > index ad7a6b4cf338..91bd80c75cd9 100644
+> > > > --- a/tools/testing/selftests/damon/huge_count_read_write.c
+> > > > +++ b/tools/testing/selftests/damon/huge_count_read_write.c
+> > > > @@ -2,6 +2,8 @@
+> > > >  /*
+> > > >   * Author: SeongJae Park <sj@kernel.org>
+> > > >   */
+> > > > +#pragma GCC diagnostic ignored "-Wstringop-overflow"
+> > > > +#pragma GCC diagnostic ignored "-Wstringop-overread"
+> > >
+> > > I agree that this must be the cleaner way than v2.  But, I get below warning
+> > > after applying this:
+> > >
+> > >     $ sudo make -C tools/testing/selftests/damon run_tests
+> > >     make: Entering directory '/home/sjpark/linux/tools/testing/selftests/damon'
+> > >     gcc     huge_count_read_write.c  -o /home/sjpark/linux/tools/testing/selftests/damon/huge_count_read_write
+> > >     huge_count_read_write.c:6:32: warning: unknown option after ‘#pragma GCC diagnostic’ kind [-Wpragmas]
+> > >         6 | #pragma GCC diagnostic ignored "-Wstringop-overread"
+> > >           |                                ^~~~~~~~~~~~~~~~~~~~~
+> > >
+> > > My gcc version is:
+> > >
+> > >     $ gcc --version
+> > >     gcc (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0
+> > I see, I'm running
+> >
+> >     $ gcc --version
+> >     gcc (Debian 11.2.0-16+build1) 11.2.0
+> >
+> > I believe this is a new warning for gcc-11 [1], and somewhat
+> > unfortunate that it results in a warning for gcc-9.4. I'm not sure
+> > what the preference is here.
+> > [1] https://gcc.gnu.org/onlinedocs/gcc-10.3.0/gcc/Warning-Options.html
+> >
+> > Thanks,
+> > Yuanchu
+> 
