@@ -2,66 +2,140 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D66FC4332F
-	for <linux-kselftest@archiver.kernel.org>; Tue, 17 May 2022 17:08:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 036F1C433EF
+	for <linux-kselftest@archiver.kernel.org>; Tue, 17 May 2022 19:45:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245072AbiEQRIf (ORCPT
+        id S231749AbiEQTpW (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 17 May 2022 13:08:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57606 "EHLO
+        Tue, 17 May 2022 15:45:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351359AbiEQRId (ORCPT
+        with ESMTP id S229838AbiEQTpV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 May 2022 13:08:33 -0400
-X-Greylist: delayed 2400 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 17 May 2022 10:08:31 PDT
-Received: from mail.neweas.com (mail.neweas.com [162.19.155.127])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5B8F41F8F
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 May 2022 10:08:31 -0700 (PDT)
-Received: by mail.neweas.com (Postfix, from userid 1002)
-        id AB88022D2A; Tue, 17 May 2022 15:50:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=neweas.com; s=mail;
-        t=1652802663; bh=qQhd+6rcOH+OhrNQ6A9OWLCE/79cwvyTtb6LUe1aYuU=;
-        h=Date:From:To:Subject:From;
-        b=jlGidj5PPGCBxwQqpOV5YgPpiELaz/PPVwFo6PRLkrq9zALtPZqBO76BnMaVlfm/2
-         HjjTsv7e/RvUqYUyehXQmBUyEyDKvPTf5Y69nunbCOwU+zKZAba9syPALnwpLLlTVI
-         RK8XH8Xx9MI6bM64t2oDxcaZl787zjAsp82gnRfcyG7PoqHjIAD6xUN9tZTVmVbeDR
-         C93pv1DZRcNQk344tE45NmYsfMoANcjFppHnbXB8GL03r0VkFFSnVokIAPQZVYufn/
-         fnR2Udr+4KFyKWY0DCM8qEEvs5MG8S8+fFaDJnTEnsBVIVmoS0OIDIEVIB9khnQSuB
-         vDZ6AFEOweyXA==
-Received: by mail.neweas.com for <linux-kselftest@vger.kernel.org>; Tue, 17 May 2022 15:50:50 GMT
-Message-ID: <20220517141500-0.1.f.10gh.0.59637n1gml@neweas.com>
-Date:   Tue, 17 May 2022 15:50:50 GMT
-From:   "Luca Gauthier" <luca.gauthier@neweas.com>
-To:     <linux-kselftest@vger.kernel.org>
-Subject: New collaboration
-X-Mailer: mail.neweas.com
+        Tue, 17 May 2022 15:45:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9C327B07;
+        Tue, 17 May 2022 12:45:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AD2DA61693;
+        Tue, 17 May 2022 19:45:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B67D8C34100;
+        Tue, 17 May 2022 19:45:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652816719;
+        bh=c1beyBekg5NzKpRS9WeSk2ceWZaUGUXSIyjIHLaVIo0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=XqGXXVQWfnT2fPRc8+2qxE902Atqm5mk0KFCqrSahCuQpM7DCoRhEsl6tnIf/mIOK
+         pOMqPWKRv8Tz/7FCpoxk2llVhXECCxDkTAxE56KgOaR1y8OV6g7kD9+zHl1b5Td4D3
+         wD1PAqe2co074cWNt/JsFeh8DkSVZc+z9pvQWXPbPseSrxjPyj/TSrPL/6KJfQfEPr
+         rUynEGel55G5Dy+SzmkhlZFEJA4W11ea3h/EQ4KacvHNwlaL+eoNigZ/ucIah4tLKz
+         KQCa1V/8viXR2dmdvOhdHN2nW5Qnl6cSDWvTTN1r1BX/KCw2tw8rXZ3tQ9S85nibPC
+         bH+rkEc0ntZHw==
+Date:   Tue, 17 May 2022 12:45:17 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Hangbin Liu <liuhangbin@gmail.com>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net 0/2] selftests: net: add missing tests to Makefile
+Message-ID: <20220517124517.363445f4@kernel.org>
+In-Reply-To: <YoM/Wr6FaTzgokx3@Laptop-X1>
+References: <20220428044511.227416-1-liuhangbin@gmail.com>
+        <20220429175604.249bb2fb@kernel.org>
+        <YoM/Wr6FaTzgokx3@Laptop-X1>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello,
+On Tue, 17 May 2022 14:23:22 +0800 Hangbin Liu wrote:
+> On Fri, Apr 29, 2022 at 05:56:04PM -0700, Jakub Kicinski wrote:
+> > On Thu, 28 Apr 2022 12:45:09 +0800 Hangbin Liu wrote:  
+> > > I think there need a way to notify the developer when they created a new
+> > > file in selftests folder. Maybe a bot like bluez.test.bot or kernel
+> > > test robot could help do that?  
+> > 
+> > Our netdev patch checks are here:
+> > 
+> > https://github.com/kuba-moo/nipa/tree/master/tests/patch
+> > 
+> > in case you're willing to code it up and post a PR.  
+> 
+> Hi Jakub,
+> 
+> I checked the tools and write a draft patch. But I have a question before post
+> the PR.
 
-are you looking for more business clients?
+First off - thanks a log for doing this!
 
-We would like to start working with you as a partner in acquiring or exch=
-anging leads, which directly translates into mutual benefits in the form =
-of an increased client portfolio.
+> AFAIK, This bot is only used for checking patches and adding status in
+> patchwork. But it doesn't support sending a reply to developer, right?
+> 
+> For the selftest reminder, I think it would be good to let developer know
+> via email if the file is missing in Makefile. What do you think?
 
-We work in the sector of internet marketing and as one of the first in Eu=
-rope SEO Agencies we=E2=80=99ve introduced the SEO 360 service which allo=
-ws your clients to gain the access to original SEO consultations.
+Yes, we don't have the auto-reply. There's too much noise in some of
+the tests, but mostly it's because we don't want to encourage people
+posting patches just to build them. If it's a machine replying rather
+than a human some may think that it's okay. We already have
+jaw-droppingly expensive VM instance to keep up with the build volume.
+And the list is very busy. So we can't afford "post to run the CI"
+development model.
 
-By choosing to work with us you receive support in achieving your busines=
-s goals, and help in handling Digital Marketing for your clients.
+> Here is the draft patch:
+> 
+> diff --git a/tests/patch/check_selftest/check_selftest.sh b/tests/patch/check_selftest/check_selftest.sh
+> new file mode 100755
+> index 0000000..ad7c608
+> --- /dev/null
+> +++ b/tests/patch/check_selftest/check_selftest.sh
+> @@ -0,0 +1,28 @@
+> +#!/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +rt=0
+> +if ! git show --name-status --oneline | \
+> +	grep -P '^A\ttools/testing/selftests/net/' | \
+> +	grep '\.sh$'; then
+> +	echo "No new net selftests script" >&$DESC_FD
+> +	exit 0
+> +fi
+> +
+> +files=$(git show --name-status --oneline | grep -P '^A\ttools/testing/selftests/net/' | grep '\.sh$' | sed 's@A\ttools/testing/selftests/net/@@')
+> +for file in $files; do
+> +	if echo $file | grep forwarding; then
+> +		file=$(echo $file | sed 's/forwarding\///')
+> +		if ! grep -P "[\t| ]$file" tools/testing/selftests/net/forwarding/Makefile;then
+> +			echo "new test $file not in selftests/net/forwarding/Makefile" >&$DESC_FD
+> +			rc=1
+> +		fi
+> +	else
+> +		if ! grep -P "[\t| ]$file" tools/testing/selftests/net/Makefile;then
+> +			echo "new test $file not in selftests/net/Makefile" >&$DESC_FD
+> +			rc=1
+> +		fi
 
-We support over 237 partner companies. We have one of the biggest executi=
-ve departments in Europe at our disposal, we=E2=80=99ve prepared over 200=
-0 campaigns in Europe and 200 in the USA and Canada.
+Does it matter which exact selftest makefile the changes are?
+Maybe as a first stab we should just check if there are changes 
+to anything in tools/testing/selftests/.*/Makefile?
 
-Are you interested in the details of our partnership programme?
+We can see if there are false-negatives.
 
-Yours sincerely,
-Luca Gauthier
+> +	fi
+> +done
+> +
+> +exit $rc
+> diff --git a/tests/patch/check_selftest/info.json b/tests/patch/check_selftest/info.json
+> new file mode 100644
+> index 0000000..615779f
+> --- /dev/null
+> +++ b/tests/patch/check_selftest/info.json
+> @@ -0,0 +1,3 @@
+> +{
+> +  "run": ["check_selftest.sh"]
+> +}
+
