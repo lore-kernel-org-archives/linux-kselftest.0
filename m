@@ -2,103 +2,77 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 34FD3C433EF
-	for <linux-kselftest@archiver.kernel.org>; Wed, 18 May 2022 13:54:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72AFAC433F5
+	for <linux-kselftest@archiver.kernel.org>; Wed, 18 May 2022 14:53:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238403AbiERNyd (ORCPT
+        id S239130AbiEROxO (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 18 May 2022 09:54:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55908 "EHLO
+        Wed, 18 May 2022 10:53:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238395AbiERNy2 (ORCPT
+        with ESMTP id S239127AbiEROxO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 18 May 2022 09:54:28 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1831C7666;
-        Wed, 18 May 2022 06:54:08 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L3DwB0mhqzhZBc;
-        Wed, 18 May 2022 21:53:14 +0800 (CST)
-Received: from huawei.com (10.67.174.197) by kwepemi500013.china.huawei.com
- (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 18 May
- 2022 21:54:02 +0800
-From:   Xu Kuohai <xukuohai@huawei.com>
-To:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>
-CC:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Daniel Kiss <daniel.kiss@arm.com>,
-        Steven Price <steven.price@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Mark Brown <broonie@kernel.org>,
-        Delyan Kratunov <delyank@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: [PATCH bpf-next v5 6/6] selftests/bpf: Fix trivial typo in fentry_fexit.c
-Date:   Wed, 18 May 2022 09:16:38 -0400
-Message-ID: <20220518131638.3401509-7-xukuohai@huawei.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220518131638.3401509-1-xukuohai@huawei.com>
-References: <20220518131638.3401509-1-xukuohai@huawei.com>
+        Wed, 18 May 2022 10:53:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A8F1BB9B1;
+        Wed, 18 May 2022 07:53:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 85CD8B820E8;
+        Wed, 18 May 2022 14:53:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A779C385A5;
+        Wed, 18 May 2022 14:53:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652885585;
+        bh=lXkoTr4TDp4rM2FOPzDoIAso5d5MafhgaSnp5RZ6Pqg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lM5hxpshMP7RblMPCzTsVDDDOvD7Wz/oqSTxTuRkn2CNev/CTz6750vPaU7c9ISr0
+         GABrREgltlfpZfoNhWUAHQvQdXL/d7O88WtV7rmfenRpPA1S13mXcmIssnUhSD/lB8
+         2CtvNyECxuGcSRdae6YRi0B/GyqcC+CETuDTJVojI6NSl7/JDmcNHA5UY0rrEXQQR5
+         D8gmtRp0VHd77jKpNhmdrXCe1+nBdG9wkTxsJE71ZCRbNlm8e7N8B893Xiyzn2R0qR
+         eZJmU86uIzytGzDmJCFx7wHfSaqP+Mf2P1MBuA3gHa2rtx2+a40vtZItKRZu8cx0+H
+         kG6Wt74RZOkNg==
+Date:   Wed, 18 May 2022 17:54:45 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-sgx@vger.kernel.org, stable@vger.kernel.org,
+        Reinette Chatre <reinette.chatre@intel.com>
+Subject: Re: [PATCH] selftests/sgx: add test_encl.elf to TEST_GEN_FILES
+Message-ID: <YoUItUEAKpzzwoQr@iki.fi>
+References: <20220518031619.1179862-1-jarkko@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.197]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220518031619.1179862-1-jarkko@kernel.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The "ipv6" word in assertion message should be "fentry_fexit".
+On Wed, May 18, 2022 at 06:16:19AM +0300, Jarkko Sakkinen wrote:
+> TEST_GEN_FILES contains files that are generated during compilation and are
+> required to be included together with the test binaries, e.g. when
+> performing:
+> 
+> make -C tools/testing/selftests install INSTALL_PATH=/some/other/path [*]
+> 
+> Add test_encl.elf to TEST_GEN_FILES because otherwise the installed test
+> binary will fail to run.
+> 
+> [*] https://docs.kernel.org/dev-tools/kselftest.html
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 2adcba79e69d ("selftests/x86: Add a selftest for SGX")
+> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
-Acked-by: Song Liu <songliubraving@fb.com>
----
- tools/testing/selftests/bpf/prog_tests/fentry_fexit.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I found this while trying to create an image with BuldRoot containing
+the self-tests:
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c b/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
-index 130f5b82d2e6..e3c139bde46e 100644
---- a/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
-@@ -28,8 +28,8 @@ void test_fentry_fexit(void)
- 
- 	prog_fd = fexit_skel->progs.test1.prog_fd;
- 	err = bpf_prog_test_run_opts(prog_fd, &topts);
--	ASSERT_OK(err, "ipv6 test_run");
--	ASSERT_OK(topts.retval, "ipv6 test retval");
-+	ASSERT_OK(err, "fentry_fexit test_run");
-+	ASSERT_OK(topts.retval, "fentry_fexit test retval");
- 
- 	fentry_res = (__u64 *)fentry_skel->bss;
- 	fexit_res = (__u64 *)fexit_skel->bss;
--- 
-2.30.2
+https://github.com/jarkkojs/buildroot-sgx
 
+On SGX capable machine can be built and run in QEMU as
+
+make sgx_x86_64_defconfig && make && output/image/run.sh
+
+BR, Jarkko
