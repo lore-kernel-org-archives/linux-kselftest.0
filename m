@@ -2,127 +2,123 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B6DD0C433EF
-	for <linux-kselftest@archiver.kernel.org>; Wed, 18 May 2022 15:51:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6CB5C433FE
+	for <linux-kselftest@archiver.kernel.org>; Wed, 18 May 2022 16:19:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239603AbiERPv0 (ORCPT
+        id S239918AbiERQTP (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 18 May 2022 11:51:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43094 "EHLO
+        Wed, 18 May 2022 12:19:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239627AbiERPvD (ORCPT
+        with ESMTP id S239904AbiERQTO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 18 May 2022 11:51:03 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB9690CEE
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 May 2022 08:51:01 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id c10so3600343edr.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 May 2022 08:51:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cqJvUd681sz/Rpj3bROR5w8jszwa8bJSwwyEmSegot4=;
-        b=cPb1tJ1h/ExxwGcfPisCk9cYxVkxu4zTnNyhm8MU3HLzkkedyyXQHCZcS+39qSREQW
-         bZQblEk4puk1CLb2hzJKwRCkaqKnSkOZhhO9SsNZwlh4fSWbl2yIL4PeyF/w48jOyDVb
-         sJan6jKTe8TlxVRFkIrZ62DO3vNuYmkk+32E1Do9LyRqkO/ws+tYsD0PxWGzCzT1Yfv+
-         d1nRUuirNV3+t0eF2vwIgKY1izNmGxkJiTPA/4/TOAbCMKd/7gUj02TQvyNm7xhMGOQP
-         ACm7bA4BBpmmam8X+adli4IzDzD3AjeKxNzRue4T9B/2PJC/mByNGKw9EBAuh2EC/ONI
-         zkLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cqJvUd681sz/Rpj3bROR5w8jszwa8bJSwwyEmSegot4=;
-        b=C6MDFRtQVyrtuW3QLNwdQ288TjI9aw7wvw7BjzdofFhPzElJc7LqPx5u4b+BscP2pl
-         ounOTlU+YLFG3aPTIzAI0FBkNP7ahjdLkKN3GEPuVWw0a45iVriCe1DsU0erg6cmsw8U
-         4M4PkRDJ2HPbnnbJZItrJJKr5zYxxnQBOHr7q49VEimYoLEBNWfJ+eplfroKTcyTSuvI
-         jzsjLCisDqbHSykuadpK3pKsb4Brt64moTt+75BQ8fNbbHxuI/lPU7N03Ls8VcITXSit
-         DbqsPLKusMQaotrcOlBqWvl388owQ9httnNcEdmD8UAlCI+Di8EsHK7GzFbvp80RFEh+
-         o9cA==
-X-Gm-Message-State: AOAM531RYGbUmmxAbXKzp5muvGn/K9HKd0E/28Z+4TtJ8ypKTrpHqf5G
-        29weGrcKanfN8prho/HYULZGpLVFQ4PY3UyLJoh24A==
-X-Google-Smtp-Source: ABdhPJz9BjdO5Rzu/CX+M/2TdhMlwR3/Hv2vNRt9DPqIBxsRJeE1O37QbIGWPl+oOoM0PQiWjNO7ghXa3Ggvq6LCJUk=
-X-Received: by 2002:aa7:cb48:0:b0:42a:addf:4bf1 with SMTP id
- w8-20020aa7cb48000000b0042aaddf4bf1mr392612edt.283.1652889059935; Wed, 18 May
- 2022 08:50:59 -0700 (PDT)
+        Wed, 18 May 2022 12:19:14 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 943B61E3EF7;
+        Wed, 18 May 2022 09:19:13 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 485DF1F9B3;
+        Wed, 18 May 2022 16:19:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1652890752; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9TALER6uGEPhyDBJIGUBF4QopYcd9dTN133tIYMuZrM=;
+        b=W/3z2HSBFhk3yXZ2o/G9I9W2gGRfm9inEi+FS+WztQ0y7WSOWwEIg2zthFnm1StjtsoWQ7
+        G/mpCtedChX9KQSNOi/yXYslgoqx9FnuyryWCN2odhBbf1Ez+kEWXnga+PXPGrSLlUXYBa
+        R2sHd39pLOt3+U+N2nceEee+9eSCS4c=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 18A1413ADC;
+        Wed, 18 May 2022 16:19:12 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id QGQVBYAchWLqZAAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Wed, 18 May 2022 16:19:12 +0000
+From:   =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
+To:     cgroups@vger.kernel.org, linux-mm@kvack.org
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Richard Palethorpe <rpalethorpe@suse.de>
+Subject: [PATCH v2 1/5] selftests: memcg: Fix compilation
+Date:   Wed, 18 May 2022 18:18:55 +0200
+Message-Id: <20220518161859.21565-2-mkoutny@suse.com>
+X-Mailer: git-send-email 2.35.3
+In-Reply-To: <20220518161859.21565-1-mkoutny@suse.com>
+References: <20220518161859.21565-1-mkoutny@suse.com>
 MIME-Version: 1.0
-References: <20220516194730.1546328-1-dlatypov@google.com> <20220516194730.1546328-3-dlatypov@google.com>
- <CABVgOSn1Hq6AX-+=+m_uLwKne3wuUadrsE=uPRsgYH3+TFBEuA@mail.gmail.com>
-In-Reply-To: <CABVgOSn1Hq6AX-+=+m_uLwKne3wuUadrsE=uPRsgYH3+TFBEuA@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Wed, 18 May 2022 08:50:48 -0700
-Message-ID: <CAGS_qxqJNpoZkv0==q_yMTuWzATTtUsXw3o1ZOR=n+fjVS+ghA@mail.gmail.com>
-Subject: Re: [PATCH 3/3] kunit: tool: refactoring printing logic into kunit_printer.py
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 18, 2022 at 12:48 AM David Gow <davidgow@google.com> wrote:
->
-> On Tue, May 17, 2022 at 3:48 AM Daniel Latypov <dlatypov@google.com> wrote:
-> >
-> > Context:
-> > * kunit_kernel.py is importing kunit_parser.py just to use the
-> >   print_with_timestamp() function
-> > * the parser is directly printing to stdout, which will become an issue
-> >   if we ever try to run multiple kernels in parallel
-> >
-> > This patch introduces a kunit_printer.py file and migrates callers of
-> > kunit_parser.print_with_timestamp() to call
-> > kunit_printer.stdout.print_with_timestamp() instead.
-> >
-> > Future changes:
-> > If we want to support showing results for parallel runs, we could then
-> > create new Printer's that don't directly write to stdout and refactor
-> > the code to pass around these Printer objects.
-> >
-> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> > ---
->
-> I agree that this will be useful down the line, as running multiple
-> kernels in parallel is definitely something which could be useful. I
-> know the original idea for that was to have multiple parsers, and just
-> to combine the results they gave after the fact, but given that
-> incremental output is so useful, I agree that this is the better path.
->
-> My only super-minor gripe (which I can live with) is that importing
-> 'stdout' and using it as 'stdout.print_with_timestamp()' is a little
-> confusing: I'd've assumed an stdout variable imported into the global
-> namespace was sys.stdout, not a wrapper. Explicitly using
-> kunit_printer.stdout would be a little clearer, IMO. Up to you,
-> though.
+This fixes mis-applied changes from commit 72b1e03aa725 ("cgroup:
+account for memory_localevents in test_memcg_oom_group_leaf_events()").
 
-I was initially writing it that way, but then the following pattern
-got super long
+Signed-off-by: Michal Koutný <mkoutny@suse.com>
+Reviewed-by: David Vernet <void@manifault.com>
+Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
+---
+ .../selftests/cgroup/test_memcontrol.c        | 25 +++++++++++--------
+ 1 file changed, 14 insertions(+), 11 deletions(-)
 
-Old:
-print_with_timestamp(red("[ERROR]") + " some error")
+diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
+index 6ab94317c87b..c012db9d07d6 100644
+--- a/tools/testing/selftests/cgroup/test_memcontrol.c
++++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+@@ -1241,7 +1241,16 @@ static int test_memcg_oom_group_leaf_events(const char *root)
+ 	if (cg_read_key_long(child, "memory.events", "oom_kill ") <= 0)
+ 		goto cleanup;
+ 
+-	if (cg_read_key_long(parent, "memory.events", "oom_kill ") <= 0)
++	parent_oom_events = cg_read_key_long(
++			parent, "memory.events", "oom_kill ");
++	/*
++	 * If memory_localevents is not enabled (the default), the parent should
++	 * count OOM events in its children groups. Otherwise, it should not
++	 * have observed any events.
++	 */
++	if (has_localevents && parent_oom_events != 0)
++		goto cleanup;
++	else if (!has_localevents && parent_oom_events <= 0)
+ 		goto cleanup;
+ 
+ 	ret = KSFT_PASS;
+@@ -1349,20 +1358,14 @@ static int test_memcg_oom_group_score_events(const char *root)
+ 	if (!cg_run(memcg, alloc_anon, (void *)MB(100)))
+ 		goto cleanup;
+ 
+-	parent_oom_events = cg_read_key_long(
+-			parent, "memory.events", "oom_kill ");
+-	/*
+-	 * If memory_localevents is not enabled (the default), the parent should
+-	 * count OOM events in its children groups. Otherwise, it should not
+-	 * have observed any events.
+-	 */
+-	if ((has_localevents && parent_oom_events == 0) ||
+-	     parent_oom_events > 0)
+-		ret = KSFT_PASS;
++	if (cg_read_key_long(memcg, "memory.events", "oom_kill ") != 3)
++		goto cleanup;
+ 
+ 	if (kill(safe_pid, SIGKILL))
+ 		goto cleanup;
+ 
++	ret = KSFT_PASS;
++
+ cleanup:
+ 	if (memcg)
+ 		cg_destroy(memcg);
+-- 
+2.35.3
 
-New options:
-stdout.print_with_timestamp(stdout.red("[ERROR]") + " some error")
-kunit_printer.stdout.print_with_timestamp(kunit_printer.stdout.red("[ERROR]")
-+ " some error")
-
-But yeah, I see what you mean about potential confusion with sys.stdout.
-I couldn't think of a better (while still short name) for it.
-E.g. "default_printer", "stdout_printer", etc.
-
-FWIW, I have a local patch that drops 99% of the direct uses of
-kunit_printer.stdout in the parser and passes around buffered
-printers.
-And in that case, the use of stdout becomes small enough that we could
-do `kunit_printer.stdout` w/o as much pain/noise.
-
-But I have no plans of sending that out until we need it, since it
-muddies up the code quite a bit.
-And I don't have a clear idea of what the interface to parallel
-testing should look like, so that day is still far off.
