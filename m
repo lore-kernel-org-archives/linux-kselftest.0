@@ -2,107 +2,121 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8002C433EF
-	for <linux-kselftest@archiver.kernel.org>; Wed, 18 May 2022 15:39:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D0B3C4332F
+	for <linux-kselftest@archiver.kernel.org>; Wed, 18 May 2022 15:40:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239405AbiERPjc (ORCPT
+        id S239514AbiERPkz (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 18 May 2022 11:39:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48150 "EHLO
+        Wed, 18 May 2022 11:40:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239379AbiERPjb (ORCPT
+        with ESMTP id S239494AbiERPkx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 18 May 2022 11:39:31 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A63BBA88B6
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 May 2022 08:39:29 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id n13so2722194ejv.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 May 2022 08:39:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mZSb0554f2n8IO9cffG87Gnp2j/skjs0bnuEFWLNgIY=;
-        b=WHvW2VBAWCKNirykCIyA6YptIU6wNsv9VCGN8wOYMmKaMjRzSeTzXVb1yHCgJS+KT7
-         1iBphXfPCXXOwa29DMSIMcAMmGjG8XAxYg0yESaZ83dzWTSHThvUF7Awts9WtGe1UXkQ
-         u+KC4dhFZQIfEZT5XqXaYWB0g9xywDTEvSxLMidkGpJW8RvyqiIbXdoIe8VuclRnRBe6
-         Zyi83obCclcurYrIGkGydvwcoHGmgg4wOe9VeN/cl6Y9X7AiFpBJUPlA0XAX6OJytvOC
-         hoGJ15W7z3GtBPR8QN/WDMIjmt9VCNCvTSRfHoHe2/LswP0YKhOYhCPyslKJ8vbjxb2x
-         Gniw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mZSb0554f2n8IO9cffG87Gnp2j/skjs0bnuEFWLNgIY=;
-        b=B2Fm/Y8X20ZT3NPTgbu1DoGv0f6wfkC3abNrOsbI5cedasAbVA4ndyxfk3xplppHNL
-         zhMfRZ65gWwcHvOpVTOuKnKPPjVUyEkuvhNQQw1kzjSV/BpdbHkH+7DawUd9Qls5nunm
-         pJL5bRHuDLs157cnLKDokhNbZs1odDGHOw+1bq+WezU/Rsyi6f1OFoh4NI+qK264HZXC
-         a/IWQxfqTyOI/CKavBnkoqXfBA+dNjJQi0uajSwfqtQ5V01f4hDyj16p+leowYX/ZkTW
-         2Oxi8weVlCxEIRXYVGdMfLXoqJbkhuh2ZAxy4gJFv97nI+RgpfDZx/jr+jvvAK9beWME
-         ab9w==
-X-Gm-Message-State: AOAM531rWaw/B0vjmOVZTPoQSSJTRy4oDOORb1C7xA1NDcvnG+l0Oj9h
-        ZWr/YiCQjH0GIwkOkWlxIUL9MssccTuCaCKpJJYupw==
-X-Google-Smtp-Source: ABdhPJzYpWouIziad7D8nl6r5roTQa4hx5zFTiFU4Z1KMkPe481kLhzDmKMeDJHNd638PlKuV4hsYIx8MUM4+EatzPk=
-X-Received: by 2002:a17:907:1c06:b0:6df:b257:cbb3 with SMTP id
- nc6-20020a1709071c0600b006dfb257cbb3mr139397ejc.631.1652888367981; Wed, 18
- May 2022 08:39:27 -0700 (PDT)
+        Wed, 18 May 2022 11:40:53 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E80672CE2C;
+        Wed, 18 May 2022 08:40:48 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 5530421B98;
+        Wed, 18 May 2022 15:40:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1652888447; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KUNLA0b9x+opMHbbbhr08H0E2VJuSYLLBACnTDB2Dic=;
+        b=UqYoUqb5nJc9EZ77jyiai+SjiEo9dhFuOX2NLDKRFVWPUDk+UcCDOftCF3sUPcMN80I5TJ
+        ydA8ZJI4nSn9qJjMjijjmjZoeM0OLgVz95mOuhE7ewMGEIRHfWg1IKVNzOXdUGeQX9xpMm
+        hD6Vh0aq5kSs2cIpoS2dTSF0kn8/eaU=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2844A13ADC;
+        Wed, 18 May 2022 15:40:47 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id sBz4CH8ThWJDUgAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Wed, 18 May 2022 15:40:47 +0000
+From:   =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
+To:     cgroups@vger.kernel.org, linux-mm@kvack.org
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Richard Palethorpe <rpalethorpe@suse.de>
+Subject: [PATCH 1/4] selftests: memcg: Fix compilation
+Date:   Wed, 18 May 2022 17:40:34 +0200
+Message-Id: <20220518154037.18819-2-mkoutny@suse.com>
+X-Mailer: git-send-email 2.35.3
+In-Reply-To: <20220518154037.18819-1-mkoutny@suse.com>
+References: <20220518154037.18819-1-mkoutny@suse.com>
 MIME-Version: 1.0
-References: <20220518073232.526443-1-davidgow@google.com> <CAGS_qxrOUYC5iycS436Rb-gEoEnYDa2OJLkQhEVXcDN0BEJ4YA@mail.gmail.com>
- <CANpmjNPSm8eZX7nAJyMts-4XdYB2ChXK17HApUpoHN-SOo7fRA@mail.gmail.com>
-In-Reply-To: <CANpmjNPSm8eZX7nAJyMts-4XdYB2ChXK17HApUpoHN-SOo7fRA@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Wed, 18 May 2022 08:39:16 -0700
-Message-ID: <CAGS_qxr4vTSEtcGGFyoZibga2Q_Avp9pFD78GOA3W9o6F9RVRQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kunit: tool: Add x86_64-smp architecture for SMP testing
-To:     Marco Elver <elver@google.com>
-Cc:     David Gow <davidgow@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Dmitry Vyukov <dvyukov@google.com>, kunit-dev@googlegroups.com,
-        kasan-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 18, 2022 at 8:36 AM Marco Elver <elver@google.com> wrote:
->
-> On Wed, 18 May 2022 at 17:31, Daniel Latypov <dlatypov@google.com> wrote:
-> >
-> > On Wed, May 18, 2022 at 12:32 AM 'David Gow' via KUnit Development
-> > <kunit-dev@googlegroups.com> wrote:
-> > >
-> > > Add a new QEMU config for kunit_tool, x86_64-smp, which provides an
-> > > 8-cpu SMP setup. No other kunit_tool configurations provide an SMP
-> > > setup, so this is the best bet for testing things like KCSAN, which
-> > > require a multicore/multi-cpu system.
-> > >
-> > > The choice of 8 CPUs is pretty arbitrary: it's enough to get tests like
-> > > KCSAN to run with a nontrivial number of worker threads, while still
-> > > working relatively quickly on older machines.
-> > >
-> >
-> > Since it's arbitrary, I somewhat prefer the idea of leaving up
-> > entirely to the caller
-> > i.e.
-> > $ kunit.py run --kconfig_add=CONFIG_SMP=y --qemu_args '-smp 8'
-> >
-> > We could add CONFIG_SMP=y to the default qemu_configs/*.py and do
-> > $ kunit.py run --qemu_args '-smp 8'
-> > but I'd prefer the first, even if it is more verbose.
-> >
-> > Marco, does this seem reasonable from your perspective?
->
-> Either way works. But I wouldn't mind a sane default though, where
-> that default can be overridden with custom number of CPUs.
->
+This fixes mis-applied changes from commit 72b1e03aa725 ("cgroup:
+account for memory_localevents in test_memcg_oom_group_leaf_events()").
 
-Ack.
-Let me clean up what I have for --qemu_args and send it out for discussion.
+Signed-off-by: Michal Koutný <mkoutny@suse.com>
+---
+ .../selftests/cgroup/test_memcontrol.c        | 25 +++++++++++--------
+ 1 file changed, 14 insertions(+), 11 deletions(-)
 
-One downside I see to adding more qemu_configs is that --arch now
-becomes more kunit-specific.
-Before, a user could assume "oh, it's just what I pass in to make ARCH=...".
-This new "--arch=x86_64-smp" violates that. I don't personally see it
-being that confusing, but I still worry.
+diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
+index 6ab94317c87b..4958b42201a9 100644
+--- a/tools/testing/selftests/cgroup/test_memcontrol.c
++++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+@@ -1241,7 +1241,16 @@ static int test_memcg_oom_group_leaf_events(const char *root)
+ 	if (cg_read_key_long(child, "memory.events", "oom_kill ") <= 0)
+ 		goto cleanup;
+ 
+-	if (cg_read_key_long(parent, "memory.events", "oom_kill ") <= 0)
++	parent_oom_events = cg_read_key_long(
++			parent, "memory.events", "oom_kill ");
++	/*
++	 * If memory_localevents is not enabled (the default), the parent should
++	 * count OOM events in its children groups. Otherwise, it should not
++	 * have observed any events.
++	 */
++	if (has_localevents && parent_oom_events != 0)
++		goto cleanup;
++	else if (!has_localevents && parent_oom_events <= 0)
+ 		goto cleanup;
+ 
+ 	ret = KSFT_PASS;
+@@ -1349,20 +1358,14 @@ static int test_memcg_oom_group_score_events(const char *root)
+ 	if (!cg_run(memcg, alloc_anon, (void *)MB(100)))
+ 		goto cleanup;
+ 
+-	parent_oom_events = cg_read_key_long(
+-			parent, "memory.events", "oom_kill ");
+-	/*
+-	 * If memory_localevents is not enabled (the default), the parent should
+-	 * count OOM events in its children groups. Otherwise, it should not
+-	 * have observed any events.
+-	 */
+-	if ((has_localevents && parent_oom_events == 0) ||
+-	     parent_oom_events > 0)
+-		ret = KSFT_PASS;
++	if (cg_read_key_long(memcg, "memory.events", "oom_kill ") != 3)
++		FAIL(cleanup);
+ 
+ 	if (kill(safe_pid, SIGKILL))
+ 		goto cleanup;
+ 
++	ret = KSFT_PASS;
++
+ cleanup:
+ 	if (memcg)
+ 		cg_destroy(memcg);
+-- 
+2.35.3
+
