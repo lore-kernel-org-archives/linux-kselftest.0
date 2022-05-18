@@ -2,201 +2,106 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A1390C433EF
-	for <linux-kselftest@archiver.kernel.org>; Thu, 26 May 2022 14:27:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DF61C433FE
+	for <linux-kselftest@archiver.kernel.org>; Wed, 18 May 2022 16:19:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241176AbiEZO14 (ORCPT
+        id S239948AbiERQTR (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 26 May 2022 10:27:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58746 "EHLO
+        Wed, 18 May 2022 12:19:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231149AbiEZO1z (ORCPT
+        with ESMTP id S239910AbiERQTO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 26 May 2022 10:27:55 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AAB2C5E76;
-        Thu, 26 May 2022 07:27:52 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id BBC6A3200258;
-        Thu, 26 May 2022 10:27:49 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Thu, 26 May 2022 10:27:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1653575269; x=1653661669; bh=StrlpIYajUUCDicQmIv6vQpHKNJZ
-        suJXBuDoYzce0XU=; b=mnurwjAcVnldsgZxi5JsRrqsPfBzzO+n+pBlmvIxIEGS
-        kCvlFvVteXMu2KLrIDvuFFxLoIOYwZEkZQag4qZizXF1Z1w7TqZzqZnmjhkto+Cj
-        NAQRgqf6yPtmOuTNvU8WpivNyc0eKwfhfWyvXlRnY5VyWzfAxN/0rpB7sAqH0DD/
-        C5sibS8yfugBPbOuVPNnwgH/hoSUawgsItougUcqFjjubuiGMTyj+DGgLNuF00Pp
-        TjwtixybLl7hvTYO5a6tIOTnWwa1qaO8H71ToAicqxlrOAqa2TKMTSjNZjRlV/5d
-        rvzxH+MHDNkGPcjUH2Ky9FZuUjs9Zh9KqTI4RvdOQw==
-X-ME-Sender: <xms:ZI6PYsj9-lGfCcktnJMYvwdjZJvG-R2VgT54-_H3pFkLd0dP1yj52Q>
-    <xme:ZI6PYlDaNRT0UvC2JuNaSIM9S42hecCUg_zdfnpKWRRjHS7nM5N8tJjGOrGqV_-Wn
-    wHPvVOZzB5v6XE>
-X-ME-Received: <xmr:ZI6PYkEsMpaEriXO3REaQVKHsCZnqGnfAi7zrGMUtPEtngRdCmFwsF4JprAdGkEfIEFTyCXDBJXPdj2GtKNINHTHoatEiQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrjeejgdejhecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkughoucfu
-    tghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrghtth
-    gvrhhnpedvudefveekheeugeeftddvveefgfduieefudeifefgleekheegleegjeejgeeg
-    hfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehiug
-    hoshgthhesihguohhstghhrdhorhhg
-X-ME-Proxy: <xmx:ZI6PYtSp7nXI7Me_4H6_3FIgV29oSnLPHc7lIxggZUJ-QoXD5O-2mQ>
-    <xmx:ZI6PYpyL5kbIvBmI00ulXuEbzBlZFEELdV3mR1DzhVvmLJm0nCXiMQ>
-    <xmx:ZI6PYr41Ts6Tco_zDGOk7gfVM-N2_G698tfN5utgWoJkDZ6O9h4WLA>
-    <xmx:ZY6PYqohC4uJX-0Kk2MNsWzIYvaiCq9AtC0t5NZIZeUn1ClV6zay5w>
-Feedback-ID: i494840e7:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 26 May 2022 10:27:47 -0400 (EDT)
-Date:   Thu, 26 May 2022 17:27:44 +0300
-From:   Ido Schimmel <idosch@idosch.org>
-To:     Hans Schultz <schultz.hans@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Hans Schultz <schultz.hans+netdev@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH V3 net-next 4/4] selftests: forwarding: add test of
- MAC-Auth Bypass to locked port tests
-Message-ID: <Yo+OYN/rjdB7wfQu@shredder>
-References: <20220524152144.40527-1-schultz.hans+netdev@gmail.com>
- <20220524152144.40527-5-schultz.hans+netdev@gmail.com>
+        Wed, 18 May 2022 12:19:14 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE3C1E3EF5;
+        Wed, 18 May 2022 09:19:13 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 1523C21B69;
+        Wed, 18 May 2022 16:19:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1652890752; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=MA/TGEKVPxKbLeu24UuN4Wl1Ug0/+Zeg7Z8sjXvszlQ=;
+        b=T85gBeJqRK7xR4vfqE2zMJJ0HcOS1Oi0LQBMKaORbDWklcTCaU6N0C+f/+G32E1UIaG2pf
+        uN7mFG3ut+AnHRXV4hElSGMXOe4Z3ksjgrCJsuNXmcgZNR7l7Mt3ecWR4ZUOijndkH1n6F
+        pdEZxqpGuYJi3qbHxvEon2tXxQjwnS8=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D94E313A6D;
+        Wed, 18 May 2022 16:19:11 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id PXsQNH8chWLqZAAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Wed, 18 May 2022 16:19:11 +0000
+From:   =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
+To:     cgroups@vger.kernel.org, linux-mm@kvack.org
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Richard Palethorpe <rpalethorpe@suse.de>
+Subject: 
+Date:   Wed, 18 May 2022 18:18:54 +0200
+Message-Id: <20220518161859.21565-1-mkoutny@suse.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220524152144.40527-5-schultz.hans+netdev@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, May 24, 2022 at 05:21:44PM +0200, Hans Schultz wrote:
-> Verify that the MAC-Auth mechanism works by adding a FDB entry with the
-> locked flag set. denying access until the FDB entry is replaced with a
-> FDB entry without the locked flag set.
-> 
-> Signed-off-by: Hans Schultz <schultz.hans+netdev@gmail.com>
-> ---
->  .../net/forwarding/bridge_locked_port.sh      | 42 ++++++++++++++++---
->  1 file changed, 36 insertions(+), 6 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
-> index 5b02b6b60ce7..50b9048d044a 100755
-> --- a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
-> +++ b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
-> @@ -1,7 +1,7 @@
->  #!/bin/bash
->  # SPDX-License-Identifier: GPL-2.0
->  
-> -ALL_TESTS="locked_port_ipv4 locked_port_ipv6 locked_port_vlan"
-> +ALL_TESTS="locked_port_ipv4 locked_port_ipv6 locked_port_vlan locked_port_mab"
->  NUM_NETIFS=4
->  CHECK_TC="no"
->  source lib.sh
-> @@ -94,13 +94,13 @@ locked_port_ipv4()
->  	ping_do $h1 192.0.2.2
->  	check_fail $? "Ping worked after locking port, but before adding FDB entry"
->  
-> -	bridge fdb add `mac_get $h1` dev $swp1 master static
-> +	bridge fdb replace `mac_get $h1` dev $swp1 master static
->  
->  	ping_do $h1 192.0.2.2
->  	check_err $? "Ping did not work after locking port and adding FDB entry"
->  
->  	bridge link set dev $swp1 locked off
-> -	bridge fdb del `mac_get $h1` dev $swp1 master static
-> +	bridge fdb del `mac_get $h1` dev $swp1 master
->  
->  	ping_do $h1 192.0.2.2
->  	check_err $? "Ping did not work after unlocking port and removing FDB entry."
-> @@ -124,13 +124,13 @@ locked_port_vlan()
->  	ping_do $h1.100 198.51.100.2
->  	check_fail $? "Ping through vlan worked after locking port, but before adding FDB entry"
->  
-> -	bridge fdb add `mac_get $h1` dev $swp1 vlan 100 master static
-> +	bridge fdb replace `mac_get $h1` dev $swp1 master static
->  
->  	ping_do $h1.100 198.51.100.2
->  	check_err $? "Ping through vlan did not work after locking port and adding FDB entry"
->  
->  	bridge link set dev $swp1 locked off
-> -	bridge fdb del `mac_get $h1` dev $swp1 vlan 100 master static
-> +	bridge fdb del `mac_get $h1` dev $swp1 vlan 100 master
->  
->  	ping_do $h1.100 198.51.100.2
->  	check_err $? "Ping through vlan did not work after unlocking port and removing FDB entry"
-> @@ -153,7 +153,8 @@ locked_port_ipv6()
->  	ping6_do $h1 2001:db8:1::2
->  	check_fail $? "Ping6 worked after locking port, but before adding FDB entry"
->  
-> -	bridge fdb add `mac_get $h1` dev $swp1 master static
-> +	bridge fdb replace `mac_get $h1` dev $swp1 master static
-> +
->  	ping6_do $h1 2001:db8:1::2
->  	check_err $? "Ping6 did not work after locking port and adding FDB entry"
->  
-> @@ -166,6 +167,35 @@ locked_port_ipv6()
->  	log_test "Locked port ipv6"
->  }
+Subject: [PATCH v2 0/5] memcontrol selftests fixups
 
-Why did you change s/add/replace/? Also, from the subject and commit
-message I understand the patch is about adding a new test, not changing
-existing ones.
+Hello.
 
->  
-> +locked_port_mab()
-> +{
-> +	RET=0
-> +	check_locked_port_support || return 0
-> +
-> +	ping_do $h1 192.0.2.2
-> +	check_err $? "MAB: Ping did not work before locking port"
-> +
-> +	bridge link set dev $swp1 locked on
-> +	bridge link set dev $swp1 learning on
-> +
-> +	bridge fdb del `mac_get $h1` dev $swp1 master
+I'm just flushing the patches to make memcontrol selftests check the
+events behavior we had consensus about (test_memcg_low fails).
 
-Why the delete is needed? Aren't you getting errors on trying to delete
-a non-existing entry? In previous test cases learning is disabled and it
-seems the FDB entry is cleaned up.
+(test_memcg_reclaim, test_memcg_swap_max fail for me now but it's present
+even before the refactoring.)
 
-> +
-> +	ping_do $h1 192.0.2.2
-> +	check_fail $? "MAB: Ping worked on locked port without FDB entry"
-> +
-> +	bridge fdb show | grep `mac_get $h1` | grep -q "locked"
-> +	check_err $? "MAB: No locked fdb entry after ping on locked port"
-> +
-> +	bridge fdb replace `mac_get $h1` dev $swp1 master static
-> +
-> +	ping_do $h1 192.0.2.2
-> +	check_err $? "MAB: Ping did not work with fdb entry without locked flag"
-> +
-> +	bridge fdb del `mac_get $h1` dev $swp1 master
+The two bigger changes are:
+- adjustment of the protected values to make tests succeed with the given
+  tolerance,
+- both test_memcg_low and test_memcg_min check protection of memory in
+  populated cgroups (actually as per Documentation/admin-guide/cgroup-v2.rst
+  memory.min should not apply to empty cgroups, which is not the case
+  currently. Therefore I unified tests with the populated case in order to to
+  bring more broken tests).
 
-bridge link set dev $swp1 learning off
 
-> +	bridge link set dev $swp1 locked off
-> +
-> +	log_test "Locked port MAB"
-> +}
->  trap cleanup EXIT
->  
->  setup_prepare
-> -- 
-> 2.30.2
-> 
+Thanks,
+Michal
+
+Changes from v1 (https://lore.kernel.org/r/20220513171811.730-1-mkoutny@suse.com/)
+- fixed mis-rebase in compilation fix patch,
+- added review, ack tags from v1,
+- applied feedback from v1 (Octave script in git tree),
+- added one more patch extracting common parts,
+- rebased on mm-stable bbe832b9db2e.
+
+Michal Koutný (5):
+  selftests: memcg: Fix compilation
+  selftests: memcg: Expect no low events in unprotected sibling
+  selftests: memcg: Adjust expected reclaim values of protected cgroups
+  selftests: memcg: Remove protection from top level memcg
+  selftests: memcg: Factor out common parts of memory.{low,min} tests
+
+ MAINTAINERS                                   |   1 +
+ .../selftests/cgroup/memcg_protection.m       |  89 +++++++
+ .../selftests/cgroup/test_memcontrol.c        | 247 +++++-------------
+ 3 files changed, 152 insertions(+), 185 deletions(-)
+ create mode 100644 tools/testing/selftests/cgroup/memcg_protection.m
+
+-- 
+2.35.3
+
