@@ -2,140 +2,193 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1189CC433EF
-	for <linux-kselftest@archiver.kernel.org>; Wed, 18 May 2022 13:50:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC1E5C4332F
+	for <linux-kselftest@archiver.kernel.org>; Wed, 18 May 2022 13:53:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238315AbiERNuL (ORCPT
+        id S238263AbiERNxu (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 18 May 2022 09:50:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36058 "EHLO
+        Wed, 18 May 2022 09:53:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238296AbiERNuL (ORCPT
+        with ESMTP id S238258AbiERNxt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 18 May 2022 09:50:11 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC3941A6AFE;
-        Wed, 18 May 2022 06:50:09 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24IDPqYx030026;
-        Wed, 18 May 2022 13:50:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=dWMpcf1fFhGeG5K+GHkTA+8dPHcZ8xFCl+mlQGZSnSc=;
- b=KopzyziubJGRRHKGUQaUgJ7L4nuVh6heou5PGcXgCKj5tDd7phRfaxaZVKU/L0feY1LK
- QVrPi0KN4W0EJ53nPiY7WIH0fBOxp+ndYEhA6jOPBuJJRL+/YKgJGySLNPZqrvDuaZBB
- uISQ+Hb8Mshu4aKhgpp/m/1SjNEIDcp+p4gwSodAcrDCewVGA2Y0T8xHQjGAXFI0Ouwn
- V3G7zMq2TwP/hjoafT3kgBTPFLVNqA1xSZo8iW6nyvcjb/k64HLkX0mTuAe6OoSD45Tw
- 1D5PP+9F0VjWagfVrpaciqPTYwm4UEeJAq1XavzsSoAkpJqXUHHR0OnD2hjRYD7IR2Rq mw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g51p6gk26-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 May 2022 13:50:03 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24IDbxVh027515;
-        Wed, 18 May 2022 13:50:03 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g51p6gk11-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 May 2022 13:50:03 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24IDmA7h008671;
-        Wed, 18 May 2022 13:50:01 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma04fra.de.ibm.com with ESMTP id 3g2428vp8p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 May 2022 13:50:01 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24IDnw3459179384
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 18 May 2022 13:49:58 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0ED0311C04A;
-        Wed, 18 May 2022 13:49:58 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A01C911C04C;
-        Wed, 18 May 2022 13:49:57 +0000 (GMT)
-Received: from [9.152.224.153] (unknown [9.152.224.153])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 18 May 2022 13:49:57 +0000 (GMT)
-Message-ID: <7d87d5c9-2d16-7574-3c08-04dbfb58d943@linux.ibm.com>
-Date:   Wed, 18 May 2022 15:49:57 +0200
+        Wed, 18 May 2022 09:53:49 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AC731C72E0;
+        Wed, 18 May 2022 06:53:48 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4L3DvC4DgTz1JC8C;
+        Wed, 18 May 2022 21:52:23 +0800 (CST)
+Received: from huawei.com (10.67.174.197) by kwepemi500013.china.huawei.com
+ (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 18 May
+ 2022 21:53:44 +0800
+From:   Xu Kuohai <xukuohai@huawei.com>
+To:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>
+CC:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Daniel Kiss <daniel.kiss@arm.com>,
+        Steven Price <steven.price@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Mark Brown <broonie@kernel.org>,
+        Delyan Kratunov <delyank@fb.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Subject: [PATCH bpf-next v5 0/6] bpf trampoline for arm64
+Date:   Wed, 18 May 2022 09:16:32 -0400
+Message-ID: <20220518131638.3401509-1-xukuohai@huawei.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v4 1/2] drivers/s390/char: Add Ultravisor io device
-Content-Language: en-US
-To:     Janosch Frank <frankja@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>
-Cc:     Greg KH <greg@kroah.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Nico Boehr <nrb@linux.ibm.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kvm@vger.kernel.org
-References: <20220510144724.3321985-1-seiden@linux.ibm.com>
- <20220510144724.3321985-2-seiden@linux.ibm.com> <YoTcxhulemnqiUbC@osiris>
- <48550162-0f8c-4b23-dea4-b9060b24eed9@linux.ibm.com>
-From:   Steffen Eiden <seiden@linux.ibm.com>
-Organization: IBM
-In-Reply-To: <48550162-0f8c-4b23-dea4-b9060b24eed9@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 4PXw9WdJfBOhROzPURaz9QOHPsUWR84b
-X-Proofpoint-ORIG-GUID: R9WD7trTZ3m1yyULm_c3UQfDCYvGFXQ5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-18_04,2022-05-17_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- suspectscore=0 phishscore=0 clxscore=1015 mlxlogscore=999
- priorityscore=1501 lowpriorityscore=0 adultscore=0 mlxscore=0
- impostorscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2202240000 definitions=main-2205180079
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.197]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Add bpf trampoline support for arm64. Most of the logic is the same as
+x86.
 
+Tested on raspberry pi 4b and qemu with KASLR disabled (avoid long jump),
+result:
+ #9  /1     bpf_cookie/kprobe:OK
+ #9  /2     bpf_cookie/multi_kprobe_link_api:FAIL
+ #9  /3     bpf_cookie/multi_kprobe_attach_api:FAIL
+ #9  /4     bpf_cookie/uprobe:OK
+ #9  /5     bpf_cookie/tracepoint:OK
+ #9  /6     bpf_cookie/perf_event:OK
+ #9  /7     bpf_cookie/trampoline:OK
+ #9  /8     bpf_cookie/lsm:OK
+ #9         bpf_cookie:FAIL
+ #18 /1     bpf_tcp_ca/dctcp:OK
+ #18 /2     bpf_tcp_ca/cubic:OK
+ #18 /3     bpf_tcp_ca/invalid_license:OK
+ #18 /4     bpf_tcp_ca/dctcp_fallback:OK
+ #18 /5     bpf_tcp_ca/rel_setsockopt:OK
+ #18        bpf_tcp_ca:OK
+ #51 /1     dummy_st_ops/dummy_st_ops_attach:OK
+ #51 /2     dummy_st_ops/dummy_init_ret_value:OK
+ #51 /3     dummy_st_ops/dummy_init_ptr_arg:OK
+ #51 /4     dummy_st_ops/dummy_multiple_args:OK
+ #51        dummy_st_ops:OK
+ #55        fentry_fexit:OK
+ #56        fentry_test:OK
+ #57 /1     fexit_bpf2bpf/target_no_callees:OK
+ #57 /2     fexit_bpf2bpf/target_yes_callees:OK
+ #57 /3     fexit_bpf2bpf/func_replace:OK
+ #57 /4     fexit_bpf2bpf/func_replace_verify:OK
+ #57 /5     fexit_bpf2bpf/func_sockmap_update:OK
+ #57 /6     fexit_bpf2bpf/func_replace_return_code:OK
+ #57 /7     fexit_bpf2bpf/func_map_prog_compatibility:OK
+ #57 /8     fexit_bpf2bpf/func_replace_multi:OK
+ #57 /9     fexit_bpf2bpf/fmod_ret_freplace:OK
+ #57        fexit_bpf2bpf:OK
+ #58        fexit_sleep:OK
+ #59        fexit_stress:OK
+ #60        fexit_test:OK
+ #67        get_func_args_test:OK
+ #68        get_func_ip_test:OK
+ #104       modify_return:OK
+ #237       xdp_bpf2bpf:OK
 
-On 5/18/22 15:45, Janosch Frank wrote:
-> On 5/18/22 13:47, Heiko Carstens wrote:
->> On Tue, May 10, 2022 at 02:47:23PM +0000, Steffen Eiden wrote:
->>> diff --git a/drivers/s390/char/Kconfig b/drivers/s390/char/Kconfig
->>> index 6cc4b19acf85..e9b9902abbaf 100644
->>> --- a/drivers/s390/char/Kconfig
->>> +++ b/drivers/s390/char/Kconfig
->>> @@ -100,6 +100,16 @@ config SCLP_OFB
->>>         This option enables the Open-for-Business interface to the s390
->>>         Service Element.
->>> +config S390_UV_UAPI
->>> +    def_tristate y
->>> +    prompt "Ultravisor userspace API"
->>> +    help
->>> +      Selecting exposes parts of the UV interface to userspace
->>> +      by providing a misc character device at /dev/uv.
->>> +      Using IOCTLs one can interact with the UV.
->>> +      The device is only available if the Ultravisor
->>> +      Facility (158) is present.
->>
->> Is there a reason why this is default "y"? If you think this should be
->> compiled into the kernel if used, then why allow to make it a module
->> at all?
->> Instead you could get rid of a couple if lines of code.
-> 
-> There was a lot of discussion around this already and the "Y" was chosen 
-> as auto-loading this is a pain and therefore the SCLP and CHSC-Misc set 
-> it to Y and we took that as an example (Steffen spoke to Peter to get 
-> guidance).
-> 
-> I'm sure that we want the possibility to have this as a module. 
-> Personally I'd choose "m" over "y" since the module is only useful for a 
-> very small amount of users.
+bpf_cookie/multi_kprobe_link_api and bpf_cookie/multi_kprobe_attach_api
+failed due to lack of multi_kprobe on arm64.
 
-I am fine with changing "y" to "m".
+v5:
+- As Alexei suggested, remove is_valid_bpf_tramp_flags()
 
-Steffen
+v4: https://lore.kernel.org/bpf/20220517071838.3366093-1-xukuohai@huawei.com/
+- Run the test cases on raspberry pi 4b
+- Rebase and add cookie to trampoline
+- As Steve suggested, move trace_direct_tramp() back to entry-ftrace.S to
+  avoid messing up generic code with architecture specific code
+- As Jakub suggested, merge patch 4 and patch 5 of v3 to provide full function
+  in one patch
+- As Mark suggested, add a comment for the use of aarch64_insn_patch_text_nosync()
+- Do not generate trampoline for long jump to avoid triggering ftrace_bug
+- Round stack size to multiples of 16B to avoid SPAlignmentFault
+- Use callee saved register x20 to reduce the use of mov_i64
+- Add missing BTI J instructions
+- Trivial spelling and code style fixes
+
+v3: https://lore.kernel.org/bpf/20220424154028.1698685-1-xukuohai@huawei.com/
+- Append test results for bpf_tcp_ca, dummy_st_ops, fexit_bpf2bpf,
+  xdp_bpf2bpf
+- Support to poke bpf progs
+- Fix return value of arch_prepare_bpf_trampoline() to the total number
+  of bytes instead of number of instructions 
+- Do not check whether CONFIG_DYNAMIC_FTRACE_WITH_REGS is enabled in
+  arch_prepare_bpf_trampoline, since the trampoline may be hooked to a bpf
+  prog
+- Restrict bpf_arch_text_poke() to poke bpf text only, as kernel functions
+  are poked by ftrace
+- Rewrite trace_direct_tramp() in inline assembly in trace_selftest.c
+  to avoid messing entry-ftrace.S
+- isolate arch_ftrace_set_direct_caller() with macro
+  CONFIG_HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS to avoid compile error
+  when this macro is disabled
+- Some trivial code sytle fixes
+
+v2: https://lore.kernel.org/bpf/20220414162220.1985095-1-xukuohai@huawei.com/
+- Add Song's ACK
+- Change the multi-line comment in is_valid_bpf_tramp_flags() into net
+  style (patch 3)
+- Fix a deadloop issue in ftrace selftest (patch 2)
+- Replace pt_regs->x0 with pt_regs->orig_x0 in patch 1 commit message 
+- Replace "bpf trampoline" with "custom trampoline" in patch 1, as
+  ftrace direct call is not only used by bpf trampoline.
+
+v1: https://lore.kernel.org/bpf/20220413054959.1053668-1-xukuohai@huawei.com/
+
+Xu Kuohai (6):
+  arm64: ftrace: Add ftrace direct call support
+  ftrace: Fix deadloop caused by direct call in ftrace selftest
+  bpf: Remove is_valid_bpf_tramp_flags()
+  bpf, arm64: Impelment bpf_arch_text_poke() for arm64
+  bpf, arm64: bpf trampoline for arm64
+  selftests/bpf: Fix trivial typo in fentry_fexit.c
+
+ arch/arm64/Kconfig                            |   2 +
+ arch/arm64/include/asm/ftrace.h               |  22 +
+ arch/arm64/kernel/asm-offsets.c               |   1 +
+ arch/arm64/kernel/entry-ftrace.S              |  28 +-
+ arch/arm64/net/bpf_jit.h                      |   1 +
+ arch/arm64/net/bpf_jit_comp.c                 | 523 +++++++++++++++++-
+ arch/x86/net/bpf_jit_comp.c                   |  20 -
+ kernel/bpf/bpf_struct_ops.c                   |   3 +
+ kernel/bpf/trampoline.c                       |   3 +
+ kernel/trace/trace_selftest.c                 |   2 +
+ .../selftests/bpf/prog_tests/fentry_fexit.c   |   4 +-
+ 11 files changed, 570 insertions(+), 39 deletions(-)
+
+-- 
+2.30.2
 
