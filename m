@@ -2,127 +2,236 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BF3CC433F5
-	for <linux-kselftest@archiver.kernel.org>; Tue, 24 May 2022 15:09:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF489C433EF
+	for <linux-kselftest@archiver.kernel.org>; Tue, 24 May 2022 15:16:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237897AbiEXPJB (ORCPT
+        id S238766AbiEXPQ6 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 24 May 2022 11:09:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43010 "EHLO
+        Tue, 24 May 2022 11:16:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238379AbiEXPI7 (ORCPT
+        with ESMTP id S233605AbiEXPQ4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 May 2022 11:08:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 804049C2CB
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 May 2022 08:08:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653404937;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=F3oBMgO+hCxSnEMbdD2Kd4e6rlC5Fzw1CIMzw7rrxbA=;
-        b=Di96Rolb7nRmdU5QqCC/30lgfJ2IOzv/MnumoOnI9x+Tx6+a3dfxrEEswHGjzjYcelZS3v
-        5k6WMYLUuCsAPGZwPQ8Be5r3pAGNF/mLlgelUElWVAXQo45HFJGfyM5PpLjBAAcy+htvTN
-        wQp+ilmDP5CoiZ4XINXnu0E5QUXLXno=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-495-j5VWtpmRP4GKZne9zA8-yA-1; Tue, 24 May 2022 11:08:56 -0400
-X-MC-Unique: j5VWtpmRP4GKZne9zA8-yA-1
-Received: by mail-wr1-f70.google.com with SMTP id c11-20020adffb4b000000b0020ff998391dso398155wrs.8
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 May 2022 08:08:56 -0700 (PDT)
+        Tue, 24 May 2022 11:16:56 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76FF019284
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 May 2022 08:16:54 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id v9so17085658oie.5
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 May 2022 08:16:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=oPCAh/MbNJ7vTzTZ4OICpOYd9k58HhsAFhhZYJpObms=;
+        b=T5qQDbRM+U5IieOuT0qtFSvOh21ZF62wGaKxGUwtlgHrCMThlJ4Gw8B91aRK5nhj6z
+         tf3F4MNHUJRdtwCO5KyQVrSuhoSvGAW9/0FpJ9aFpULcf/cxjwQr4/cq8KVWICgAFT0O
+         gjrxNVlAu2FnAoO3mV25cFGeGCr3EMHsxwtXU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=F3oBMgO+hCxSnEMbdD2Kd4e6rlC5Fzw1CIMzw7rrxbA=;
-        b=wS8RW7CJBJOO87Qki7z1corfCpnJ7h447fEIZKRyUUQ1iQE5hONA+3vL5Xb7cC3N4l
-         +ioJGrKzOED3mg4ufpO0tvWNjivKsd+2Bnu3MSBCackYx2Nk5oGLqrbo8VDBr2/K2mj5
-         up3HZLMrcnoxKwy8nfw1GMf/csz1MDLM07mdwK9DfJuDv91SO9hDffH7WPLgoi749kZx
-         CRmLnqePJmENucjPRfs3Gk/eJQQJWGIz4m7TwEwGNgHAO7oIhvNjqiJ15NAlm+AsUjGX
-         tv8u8Ll14u0VdGFxVJeZ4dcl5RuOQyXuoWRMzopg6O1VfZ6X+0LLY5g2unTBmzeGf8Mp
-         B15g==
-X-Gm-Message-State: AOAM530kDpjwZPWH9/HKUWoYMjiZFiOEFp+4d1gkrAqJyeolQmFCIyTb
-        2TK69o8Xq8dOy2ATCQ5zWDdZ/mPNz4MopT8Wqcd7Wb1XEvTYgv/1cNZ9vDTxuBeaGq6rPecwn9f
-        SuhXzjz2kd38e5XckDPH5lYjAsY+t
-X-Received: by 2002:a05:6000:1689:b0:20e:6de0:a578 with SMTP id y9-20020a056000168900b0020e6de0a578mr21835309wrd.85.1653404928499;
-        Tue, 24 May 2022 08:08:48 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyemfL+4xKdX8ASaLUEDrPvWxSWigGFv+/SoWVTCc5P4TEem/qKmwuDwfuAEBHhJQFdhsx4xw==
-X-Received: by 2002:a05:6000:1689:b0:20e:6de0:a578 with SMTP id y9-20020a056000168900b0020e6de0a578mr21835290wrd.85.1653404928155;
-        Tue, 24 May 2022 08:08:48 -0700 (PDT)
-Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id p13-20020adfba8d000000b0020cdcb0efa2sm13400711wrg.34.2022.05.24.08.08.46
+        bh=oPCAh/MbNJ7vTzTZ4OICpOYd9k58HhsAFhhZYJpObms=;
+        b=wCud1rNMQQUw5GpiL/jRQlBOEo/ZV+5YGnBEv6pPCp5uxNtHEJzZ5UkOLo8xkVu9xG
+         qtKy8GP3Wpf/qrhB8FGesJVFnhKxknUoZkU7SBscUuAWjSgsbh1AcFiMMwQdfZdbvoF9
+         3K/ZIn/f92V9ZMrGiIOlihMhCxEEL0pjL0rlitP8wGb6ZURrlqu+R4k/XbLYUFc6xjaj
+         2sv29dipuygBju9LqFTLIJ5JyzZ8ZffZNqy/ljBrN1mmber2Tv989HyGODdh3GdvrOIN
+         yIHUJgXKk+Nc3I2W+517mtSJ5awh+Jeyj7fd/9h2fyTafP1kwLV72JjPpgtd9CaeLMAy
+         DQag==
+X-Gm-Message-State: AOAM5312B4q4JvQq3NVdBSDemrIiAZMk+qHMD+w0OeSHz0ekvgzax3Ec
+        LzZkW8p5+VjinuJmLq5MPKBm8A==
+X-Google-Smtp-Source: ABdhPJy6HF1goWkqu/fQqtmL0KamjoLObtK9Bu/HN/WxBuE04sk+qxQqHp02nRL9NMAISKf3ZyQt9g==
+X-Received: by 2002:a05:6808:248:b0:32b:6aa:6cbd with SMTP id m8-20020a056808024800b0032b06aa6cbdmr2437182oie.34.1653405413669;
+        Tue, 24 May 2022 08:16:53 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id x26-20020a056830245a00b0060afe803e5bsm3972666otr.35.2022.05.24.08.16.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 May 2022 08:08:47 -0700 (PDT)
-Message-ID: <e917386a-1901-3412-1e7b-537e1cd42b2e@redhat.com>
-Date:   Tue, 24 May 2022 17:08:46 +0200
+        Tue, 24 May 2022 08:16:53 -0700 (PDT)
+Subject: Re: [GIT PULL] KUnit update for Linux 5.19-rc1
+To:     linux-kselftest@vger.kernel.org
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        shuah <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <76e8af6c-9757-4367-1407-84fbad96cc8d@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <cee5ce2e-faa0-4acf-35b9-1c16c890c040@linuxfoundation.org>
+Date:   Tue, 24 May 2022 09:16:51 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v2 3/3] selftests/filesystems: add a vfat RENAME_EXCHANGE
- test
+In-Reply-To: <76e8af6c-9757-4367-1407-84fbad96cc8d@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Chung-Chiang Cheng <cccheng@synology.com>,
-        Lennart Poettering <lennart@poettering.net>,
-        Colin Walters <walters@verbum.org>,
-        Peter Jones <pjones@redhat.com>,
-        Alexander Larsson <alexl@redhat.com>,
-        Alberto Ruiz <aruiz@redhat.com>,
-        Christian Kellner <ckellner@redhat.com>,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-References: <20220524073604.247790-1-javierm@redhat.com>
- <20220524073604.247790-4-javierm@redhat.com>
- <170151f7-9d46-6b01-e281-0f675a3b523f@collabora.com>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <170151f7-9d46-6b01-e281-0f675a3b523f@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello Muhammad,
-
-Thanks a lot for your feedback.
-
-On 5/24/22 16:54, Muhammad Usama Anjum wrote:
-> On 5/24/22 12:36 PM, Javier Martinez Canillas wrote:
->> diff --git a/tools/testing/selftests/filesystems/fat/Makefile b/tools/testing/selftests/filesystems/fat/Makefile
->> new file mode 100644
->> index 000000000000..93ee73c16828
->> --- /dev/null
->> +++ b/tools/testing/selftests/filesystems/fat/Makefile
->> @@ -0,0 +1,7 @@
->> +# SPDX-License-Identifier: GPL-2.0
->> +
->> +TEST_PROGS := run_fat_tests.sh
->> +TEST_GEN_PROGS_EXTENDED := rename_exchange
-> Please create a .gitignore file and add rename_exchange to it.
->
-
-Sorry, you mentioned that in the first revision but I missed.
-
-Yes, I'll do it that on v3.
- 
->> +CFLAGS += -O2 -g -Wall -I../../../../usr/include/
-> Build may fail if kernel on which this test is being build has old
-> headers. Always use $(KHDR_INCLUDES) instead of
-> "-I../../../../usr/include/" to use the kernel headers from the kernel
-> source instead of the natively installed headers.
+On 5/23/22 12:21 PM, Shuah Khan wrote:
+> Hi Linus,
+> 
+> Please pull the following KUnit update for Linux 5.19-rc1.
+> 
+> This KUnit update for Linux 5.19-rc1 consists of several fixes, cleanups,
+> and enhancements to tests and framework:
+> 
+> - introduces _NULL and _NOT_NULL macros to pointer error checks
+> 
+> - reworks kunit_resource allocation policy to fix memory leaks when
+>    caller doesn't specify free() function to be used when allocating
+>    memory using kunit_add_resource() and kunit_alloc_resource() funcs.
+> 
+> - adds ability to specify suite-level init and exit functions
+> 
+> diff is attached.
+> 
+> thanks,
+> -- Shuah
 > 
 
-Sure, I'll do that as well.
+This bounced from linux-kselftest list  as the diff exceeded the message
+size. Sorry for the noise for others that are seeing this twice (minus
+the diff).
 
--- 
-Best regards,
+FYI that the following KUnit pull request has been sent for Linux 5.19-rc1
 
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+thanks,
+-- Shuah
+
+> ----------------------------------------------------------------
+> The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+> 
+>    Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+> 
+> are available in the Git repository at:
+> 
+>    git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-5.19-rc1
+> 
+> for you to fetch changes up to e7eaffce47b7db72b077630dbe836f0c4132496d:
+> 
+>    kunit: tool: Use qemu-system-i386 for i386 runs (2022-05-18 17:03:54 -0600)
+> 
+> ----------------------------------------------------------------
+> linux-kselftest-kunit-5.19-rc1
+> 
+> This KUnit update for Linux 5.19-rc1 consists of several fixes, cleanups,
+> and enhancements to tests and framework:
+> 
+> - introduces _NULL and _NOT_NULL macros to pointer error checks
+> 
+> - reworks kunit_resource allocation policy to fix memory leaks when
+>    caller doesn't specify free() function to be used when allocating
+>    memory using kunit_add_resource() and kunit_alloc_resource() funcs.
+> 
+> - adds ability to specify suite-level init and exit functions
+> 
+> ----------------------------------------------------------------
+> Brendan Higgins (2):
+>        kunit: add support for kunit_suites that reference init code
+>        kunit: tool: update riscv QEMU config with new serial dependency
+> 
+> Daniel Latypov (25):
+>        kunit: tool: make --json handling a bit clearer
+>        kunit: tool: drop unused KernelDirectoryPath var
+>        kunit: tool: drop last uses of collections.namedtuple
+>        kunit: tool: simplify code since build_dir can't be None
+>        kunit: tool: readability tweaks in KernelCI json generation logic
+>        kunit: tool: refactor how we plumb metadata into JSON
+>        kunit: tool: properly report the used arch for --json, or '' if not known
+>        kunit: tool: more descriptive metavars/--help output
+>        kunit: split resource API from test.h into new resource.h
+>        kunit: split resource API impl from test.c into new resource.c
+>        Documentation: kunit: update kconfig options needed for UML coverage
+>        kunit: rename print_subtest_{start,end} for clarity (s/subtest/suite)
+>        kunit: add ability to specify suite-level init and exit functions
+>        kfence: test: use new suite_{init/exit} support, add .kunitconfig
+>        kunit: fix debugfs code to use enum kunit_status, not bool
+>        lib/Kconfig.debug: change KUnit tests to default to KUNIT_ALL_TESTS
+>        kunit: bail out of test filtering logic quicker if OOM
+>        kunit: tool: update test counts summary line format
+>        kunit: tool: stop using a shell to run kernel under QEMU
+>        kunit: tool: print clearer error message when there's no TAP output
+>        kunit: tool: remove dead parse_crash_in_log() logic
+>        kunit: tool: make parser stop overwriting status of suites w/ no_tests
+>        kunit: tool: minor cosmetic cleanups in kunit_parser.py
+>        kunit: tool: misc cleanups
+>        kunit: fix executor OOM error handling logic on non-UML
+> 
+> David Gow (5):
+>        list: test: Test the hlist structure
+>        kunit: Make kunit_remove_resource() idempotent
+>        kunit: Rework kunit_resource allocation policy
+>        kunit: tool: Add list of all valid test configs on UML
+>        kunit: tool: Use qemu-system-i386 for i386 runs
+> 
+> Kees Cook (1):
+>        kunit: tool: Do not colorize output when redirected
+> 
+> Marco Elver (1):
+>        kcsan: test: use new suite_{init,exit} support
+> 
+> Miguel Ojeda (1):
+>        kunit: take `kunit_assert` as `const`
+> 
+> Ricardo Ribalda (6):
+>        kunit: Introduce _NULL and _NOT_NULL macros
+>        kunit: use NULL macros
+>        thunderbolt: test: use NULL macros
+>        kasan: test: Use NULL macros
+>        mctp: test: Use NULL macros
+>        apparmor: test: Use NULL macros
+> 
+> 
+>   Documentation/dev-tools/kunit/api/index.rst        |   5 +
+>   Documentation/dev-tools/kunit/api/resource.rst     |  13 +
+>   Documentation/dev-tools/kunit/running_tips.rst     |   3 +-
+>   Documentation/dev-tools/kunit/usage.rst            |  19 +-
+>   drivers/thunderbolt/test.c                         | 134 +++----
+>   include/kunit/resource.h                           | 406 ++++++++++++++++++++
+>   include/kunit/test.h                               | 418 ++++++---------------
+>   kernel/kcsan/kcsan_test.c                          |  31 +-
+>   lib/Kconfig.debug                                  |  15 +-
+>   lib/kunit/Makefile                                 |   1 +
+>   lib/kunit/debugfs.c                                |   2 +-
+>   lib/kunit/executor.c                               |  32 +-
+>   lib/kunit/executor_test.c                          |   4 +-
+>   lib/kunit/kunit-example-test.c                     |  16 +
+>   lib/kunit/kunit-test.c                             |  37 +-
+>   lib/kunit/resource.c                               |  79 ++++
+>   lib/kunit/test.c                                   | 145 ++-----
+>   lib/list-test.c                                    | 397 ++++++++++++++++++-
+>   lib/test_kasan.c                                   |   2 +-
+>   mm/kfence/.kunitconfig                             |   6 +
+>   mm/kfence/kfence_test.c                            |  31 +-
+>   net/mctp/test/route-test.c                         |   4 +-
+>   security/apparmor/policy_unpack_test.c             |   6 +-
+>   tools/testing/kunit/configs/all_tests_uml.config   |  37 ++
+>   tools/testing/kunit/kunit.py                       |  63 ++--
+>   tools/testing/kunit/kunit_config.py                |  21 +-
+>   tools/testing/kunit/kunit_json.py                  |  66 ++--
+>   tools/testing/kunit/kunit_kernel.py                |  81 ++--
+>   tools/testing/kunit/kunit_parser.py                | 154 +++-----
+>   tools/testing/kunit/kunit_tool_test.py             |  44 +--
+>   tools/testing/kunit/qemu_config.py                 |  17 +-
+>   tools/testing/kunit/qemu_configs/alpha.py          |   2 +-
+>   tools/testing/kunit/qemu_configs/arm.py            |   2 +-
+>   tools/testing/kunit/qemu_configs/arm64.py          |   2 +-
+>   tools/testing/kunit/qemu_configs/i386.py           |   4 +-
+>   tools/testing/kunit/qemu_configs/powerpc.py        |   2 +-
+>   tools/testing/kunit/qemu_configs/riscv.py          |   7 +-
+>   tools/testing/kunit/qemu_configs/s390.py           |   4 +-
+>   tools/testing/kunit/qemu_configs/sparc.py          |   2 +-
+>   tools/testing/kunit/qemu_configs/x86_64.py         |   2 +-
+>   tools/testing/kunit/run_checks.py                  |   2 +-
+>   .../kunit/test_data/test_is_test_passed-crash.log  |  70 ----
+>   .../test_is_test_passed-no_tests_no_plan.log       |   2 +-
+>   43 files changed, 1499 insertions(+), 891 deletions(-)
+>   create mode 100644 Documentation/dev-tools/kunit/api/resource.rst
+>   create mode 100644 include/kunit/resource.h
+>   create mode 100644 lib/kunit/resource.c
+>   create mode 100644 mm/kfence/.kunitconfig
+>   create mode 100644 tools/testing/kunit/configs/all_tests_uml.config
+>   delete mode 100644 tools/testing/kunit/test_data/test_is_test_passed-crash.log
+> ----------------------------------------------------------------
 
