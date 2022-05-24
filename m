@@ -2,163 +2,55 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57D1CC433FE
-	for <linux-kselftest@archiver.kernel.org>; Tue, 24 May 2022 11:05:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55D9CC433F5
+	for <linux-kselftest@archiver.kernel.org>; Tue, 24 May 2022 11:15:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233730AbiEXLF3 (ORCPT
+        id S236505AbiEXLPp (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 24 May 2022 07:05:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35426 "EHLO
+        Tue, 24 May 2022 07:15:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233361AbiEXLF2 (ORCPT
+        with ESMTP id S236488AbiEXLPh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 May 2022 07:05:28 -0400
-Received: from a48-37.smtp-out.amazonses.com (a48-37.smtp-out.amazonses.com [54.240.48.37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D2074DE7;
-        Tue, 24 May 2022 04:05:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1653390325;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=iCVv0HQG+I2p0iamvcAJap0aqR6e6Ae3Ce4H8XOmrKY=;
-        b=IlS4Y06uUD88GLuA8HOSmy9zthDll/bsD6eTE+kDt5S3/Woz1RDlWguAwe3axS51
-        9YAwsyEfWgT42NZ/cG24Xw1MVfisg5Z64tBzj8NkaeYQEiLexnHmVRuwdG7QVSlF6+c
-        JkuWzXhVdCvQ4fDgWPA266hP/8e9p/T2pPx9PDqk=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=6gbrjpgwjskckoa6a5zn6fwqkn67xbtw; d=amazonses.com; t=1653390325;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=iCVv0HQG+I2p0iamvcAJap0aqR6e6Ae3Ce4H8XOmrKY=;
-        b=iwTDULtCN6clQ2uKKcF77UoFjoaYVXqraVI/HgKeGaHi8QIDdMrBBnWsGXoVHiox
-        gnJYRxdqIYOqcIah3MmfczNYLmqKXXcdned667irwTT9PpenBfTrz3uVSn/1RwtToGZ
-        u714eJJRPQa8eqWZkmpb1L0esbsu3JWcWFUs3eTA=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        linux-next@vger.kernel.org, shuah@kernel.org
-Subject: [REGRESSION] lkft kselftest for next-20220523
+        Tue, 24 May 2022 07:15:37 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F236FA0D;
+        Tue, 24 May 2022 04:15:36 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L6s7X3Nb6z4ySs;
+        Tue, 24 May 2022 21:15:36 +1000 (AEST)
+From:   Michael Ellerman <patch-notifications@ellerman.id.au>
+To:     Shuah Khan <shuah@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linux-kselftest@vger.kernel.org,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        Colin Ian King <colin.i.king@gmail.com>
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20220319232025.22067-1-colin.i.king@gmail.com>
+References: <20220319232025.22067-1-colin.i.king@gmail.com>
+Subject: Re: [PATCH] selftests/powerpc/pmu: fix spelling mistake "mis-match" -> "mismatch"
+Message-Id: <165339059358.1718562.6902647637823996518.b4-ty@ellerman.id.au>
+Date:   Tue, 24 May 2022 21:09:53 +1000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Message-ID: <01000180f5be359d-1937280e-1193-4195-9757-74d4bf0a8083-000000@email.amazonses.com>
-Date:   Tue, 24 May 2022 11:05:25 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2022.05.24-54.240.48.37
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-## Build
-* kernel: 5.18.0
-* git: ['', 'https://gitlab.com/Linaro/lkft/mirrors/next/linux-next']
-* git branch: master
-* git commit: cc63e8e92cb872081f249ea16e6c460642f3e4fb
-* git describe: next-20220523
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220523
+On Sat, 19 Mar 2022 23:20:25 +0000, Colin Ian King wrote:
+> There are a few spelling mistakes in error messages. Fix them.
+> 
+> 
 
-## Test Regressions (compared to next-20220520)
-* dragonboard-845c, kselftest-cgroup
-  - cgroup.test_freezer
-  - cgroup.test_freezer.test_cgfreezer_ptrace
+Applied to powerpc/next.
 
-* dragonboard-845c, kselftest-rtc
-  - rtc.rtctest.rtc.uie_select
+[1/1] selftests/powerpc/pmu: fix spelling mistake "mis-match" -> "mismatch"
+      https://git.kernel.org/powerpc/c/7801cb1dc60f7348687ca1c3aa03a944687563f0
 
-
-## Metric Regressions (compared to next-20220520)
-No metric regressions found.
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-
-## Test Fixes (compared to next-20220520)
-* dragonboard-845c, kselftest-timers
-  - timers.rtcpie
-
-* qemu-arm64-gic-version2, kselftest-cgroup
-  - cgroup.test_freezer
-
-* qemu-arm64-gic-version2, kselftest-timers
-  - timers.rtcpie
-
-* qemu-arm64-gic-version3, kselftest-timers
-  - timers.rtcpie
-
-* qemu-arm64-mte, kselftest-cgroup
-  - cgroup.test_freezer
-
-* qemu-arm64-mte, kselftest-timers
-  - timers.rtcpie
-
-* qemu_arm, kselftest-timers
-  - timers.rtcpie
-
-* qemu_arm64, kselftest-timers
-  - timers.rtcpie
-
-
-## Metric Fixes (compared to next-20220520)
-No metric fixes found.
-
-## Test result summary
-total: 5547, pass: 2993, fail: 526, skip: 2028, xfail: 0
-
-## Build Summary
-
-## Test suites summary
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-
---
-Linaro LKFT
-https://lkft.linaro.org
+cheers
