@@ -2,91 +2,72 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78DEDC433EF
-	for <linux-kselftest@archiver.kernel.org>; Wed, 25 May 2022 18:11:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 056C4C433EF
+	for <linux-kselftest@archiver.kernel.org>; Wed, 25 May 2022 18:37:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238981AbiEYSLk (ORCPT
+        id S237806AbiEYShy (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 25 May 2022 14:11:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60818 "EHLO
+        Wed, 25 May 2022 14:37:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229707AbiEYSLj (ORCPT
+        with ESMTP id S1343970AbiEYShx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 25 May 2022 14:11:39 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1EEB36150;
-        Wed, 25 May 2022 11:11:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=IzBNdpoK6rQ9t3eD/Vrcougov8ztUF0Tuvm1p+muAlM=; b=AbkeM+u3a96EGti69YYmAfMTaH
-        txW7t1WdtlkrGx9frT4Pjpi2wk9I6g2xKOqupqJIwlmAvLnoMC6jzEaA6qnDa4hZharsP97SWpGcU
-        HucXNzkmnIqD1hIsYQQUTaChTHeVgoXTFR5uToIv1EYDQelCM3pfRGHe0f8FSfRJo5cIyyLdZxZyP
-        1+T2QfoFrTVGzIL8k/fJ9lF5VPXOTQmmFTNVi/82b+1e5nj1r+sMFdrY+SU32Zx3p2aWmV09CF7Hp
-        DOxaBnNOh84mY7J5WXvJWGRHY+q2hQo2VVIxH6QTMOs4bxHLfBMpIwi2PVE6nNWHDhN+poSI0uqO8
-        FpPx7ZwA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ntvTj-00C5lz-F9; Wed, 25 May 2022 18:11:27 +0000
-Date:   Wed, 25 May 2022 11:11:27 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     "Bird, Tim" <Tim.Bird@sony.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Richard Fontana <fontana@sharpeleven.org>,
-        "tj@kernel.org" <tj@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "jeyu@kernel.org" <jeyu@kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "joe@perches.com" <joe@perches.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "minchan@kernel.org" <minchan@kernel.org>,
-        "linux-spdx@vger.kernel.org" <linux-spdx@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Goldwyn Rodrigues <rgoldwyn@suse.com>,
-        Kuno Woudt <kuno@frob.nl>,
-        "copyleft-next@lists.fedorahosted.org" 
-        <copyleft-next@lists.fedorahosted.org>,
-        Ciaran Farrell <Ciaran.Farrell@suse.com>,
-        Christopher De Nicolo <Christopher.DeNicolo@suse.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thorsten Leemhuis <linux@leemhuis.info>
-Subject: Re: [PATCH v9 1/6] LICENSES: Add the copyleft-next-0.3.1 license
-Message-ID: <Yo5xTwGLmbsgJhfM@bombadil.infradead.org>
-References: <20211029184500.2821444-1-mcgrof@kernel.org>
- <20211029184500.2821444-2-mcgrof@kernel.org>
- <87bkvo0wjd.ffs@tglx>
- <Yo5cxWghV/v2Fnzf@bombadil.infradead.org>
- <BN7PR13MB24998CAFCFB973C80549F308FDD69@BN7PR13MB2499.namprd13.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BN7PR13MB24998CAFCFB973C80549F308FDD69@BN7PR13MB2499.namprd13.prod.outlook.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+        Wed, 25 May 2022 14:37:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9117BB8BC8;
+        Wed, 25 May 2022 11:37:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 21060618D5;
+        Wed, 25 May 2022 18:37:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 880D3C34117;
+        Wed, 25 May 2022 18:37:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653503857;
+        bh=JJ7SNvRNw6d5RG0y1pp2M4hVPW74mYFMePRx0hXsCUw=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=tl3w2bPIJ+bswz/gKaoGkTaY1C/t6/zU4j0n9joWYvMXFspkfBx6EJgYFnPHGgkUL
+         1X489hG+BAjfGZPMTjg/BJkmZ12FuHoMjdd8FgmyK5SOF2EJgXss1eHm3GH7BiHiWj
+         /FfdYEneT/AbLQZJz/3xJJHvy2L8YdyWIdJm5C7spYOeCAPdg3eP8VuepQR0INODKb
+         s504RJ2f7dGBMHDQcdm8WXS66RarWySAwwR/hC8E34KzFIUjdDqEwKTC8dnJcdbhGA
+         nfwKzxJulOWi/W+3m+A67eeVSExWv6BTehPZZ7b+/1Pc3B5N9Sz/CreS8/S9Y4JjYd
+         5xdGwyMk0EkLg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 706DFE8DBDA;
+        Wed, 25 May 2022 18:37:37 +0000 (UTC)
+Subject: Re: [GIT PULL] KUnit update for Linux 5.19-rc1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <76e8af6c-9757-4367-1407-84fbad96cc8d@linuxfoundation.org>
+References: <76e8af6c-9757-4367-1407-84fbad96cc8d@linuxfoundation.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <76e8af6c-9757-4367-1407-84fbad96cc8d@linuxfoundation.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-5.19-rc1
+X-PR-Tracked-Commit-Id: e7eaffce47b7db72b077630dbe836f0c4132496d
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 64e34b50d7aeee7082287ec39f9d34d4e60f3a04
+Message-Id: <165350385745.15754.7197891709928038387.pr-tracker-bot@kernel.org>
+Date:   Wed, 25 May 2022 18:37:37 +0000
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        shuah <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 25, 2022 at 05:05:54PM +0000, Bird, Tim wrote:
-> I know it's being submitted as an OR, but I question
-> the value of introducing another license into the kernel's licensing mix.
+The pull request you sent on Mon, 23 May 2022 12:21:27 -0600:
 
-As a free software hacker *I* value the evolution of copyleft and copyleft-next
-does just that. Some may have thought that it may not have been possible to
-evolve copyleft and work with an evolved license on Linux, but copyleft-next
-shows it is possible. Here in lies the value I see in it.
+> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-5.19-rc1
 
-I agree that we want to keep the number of licenses as small as
-possible but we cannot really dictate which dual licensing options a
-submitter selects unless the license is GPL-2.0-only incompatible,
-which copyleft-next is not.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/64e34b50d7aeee7082287ec39f9d34d4e60f3a04
 
-  Luis
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
