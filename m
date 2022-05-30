@@ -2,48 +2,49 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3129C433EF
-	for <linux-kselftest@archiver.kernel.org>; Mon, 30 May 2022 13:53:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D2F4C38A2B
+	for <linux-kselftest@archiver.kernel.org>; Mon, 30 May 2022 13:57:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238391AbiE3Nxf (ORCPT
+        id S235331AbiE3N5a (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 30 May 2022 09:53:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39916 "EHLO
+        Mon, 30 May 2022 09:57:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238411AbiE3NwT (ORCPT
+        with ESMTP id S239428AbiE3N4h (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 30 May 2022 09:52:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C42212609;
-        Mon, 30 May 2022 06:37:21 -0700 (PDT)
+        Mon, 30 May 2022 09:56:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17BB495DC4;
+        Mon, 30 May 2022 06:38:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1D80DB80D89;
-        Mon, 30 May 2022 13:37:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9417FC3411C;
-        Mon, 30 May 2022 13:37:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9712460F7B;
+        Mon, 30 May 2022 13:38:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3739DC385B8;
+        Mon, 30 May 2022 13:38:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653917838;
-        bh=xRzVVb9dp3AfJuQgs6IuBJGSwSqg0aexqaH6UBZReSc=;
+        s=k20201202; t=1653917902;
+        bh=cYbqQ0dMuwCZflYozzYeRbTkmB9Hzvvc14PryXL08Gw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NPbR0MH836BOLpvr94nweT/plOaYETOHZZ0ScIa07hD3FYIaCB6oR+0MWF76FwwBD
-         FI1m7VR3IVoF7y4RFjytMd9iD1DwVtQfmiMVntzqALZ1BDvwXwzAceWO9S8fmhOaVk
-         pfo6PIgi3PXiPD3r9Lmb+/S7ba0XNQJzsc8dVtJw4c5PqxyFo5vy0Tn2SQcyNRFkaI
-         FudWgyuu6KZzfne9nwFaQs6Wmo1vhwLjx4Z6FOIIVtyTQH8+rpBB/Tzq58nDtA2IY2
-         YxmE2TU+eVYkgFOERDURj5gF569DuFgPIeq5F2eY1TVyhQnksBMj5P/KX5jQhKFM2z
-         zUX1Z0l8M2g4Q==
+        b=GUHhJ6KAF70VyGGHb4xkxBm/kIufPH+BnaT57GbFGMMJ7GN9wI7UJQ4jAmS36eSlT
+         7Hrp8faOumS4WVHEQXIKobm7KRXVKZ0IO50FDMRrrVO3X6ecEg0T3I5b/xuUpOrMVp
+         nxp6WYb5/JIfJlLcCnsOZtIH9+GG4zhx/W2LBPFgrn1YG196bx/uxiwAs97UffUeRg
+         kZGWPi5gJULZKcJjA9yWu/WWBnRr/LDBHa8KxWy0iLHZgZ4AK8tcp54pugJM5s8yjZ
+         uNGqeaVwjr4hImZAInFU78EhBmF2TL46T+vZ3bTFYwtYLYYnJt6bG3LTpWzMYcNyDV
+         A9j/LUo0oj+/w==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Daniel Latypov <dlatypov@google.com>,
-        David Gow <davidgow@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Subject: [PATCH AUTOSEL 5.17 111/135] kunit: tool: make parser stop overwriting status of suites w/ no_tests
-Date:   Mon, 30 May 2022 09:31:09 -0400
-Message-Id: <20220530133133.1931716-111-sashal@kernel.org>
+Cc:     Yonghong Song <yhs@fb.com>, Mykola Lysenko <mykolal@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, nathan@kernel.org,
+        ndesaulniers@google.com, sunyucong@gmail.com,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 5.17 134/135] selftests/bpf: fix btf_dump/btf_dump due to recent clang change
+Date:   Mon, 30 May 2022 09:31:32 -0400
+Message-Id: <20220530133133.1931716-134-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220530133133.1931716-1-sashal@kernel.org>
 References: <20220530133133.1931716-1-sashal@kernel.org>
@@ -55,82 +56,87 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Daniel Latypov <dlatypov@google.com>
+From: Yonghong Song <yhs@fb.com>
 
-[ Upstream commit dbf0b0d53a2b5afa6ef7372dcedf52302669fc2c ]
+[ Upstream commit 4050764cbaa25760aab40857f723393c07898474 ]
 
-Consider this invocation
-$ ./tools/testing/kunit/kunit.py parse <<EOF
-  TAP version 14
-  1..2
-  ok 1 - suite
-    # Subtest: no_tests_suite
-    # catastrophic error!
-  not ok 1 - no_tests_suite
-EOF
+Latest llvm-project upstream had a change of behavior
+related to qualifiers on function return type ([1]).
+This caused selftests btf_dump/btf_dump failure.
+The following example shows what changed.
 
-It will have a 0 exit code even though there's a "not ok".
+  $ cat t.c
+  typedef const char * const (* const (* const fn_ptr_arr2_t[5])())(char * (*)(int));
+  struct t {
+    int a;
+    fn_ptr_arr2_t l;
+  };
+  int foo(struct t *arg) {
+    return arg->a;
+  }
 
-Consider this one:
-$ ./tools/testing/kunit/kunit.py parse <<EOF
-  TAP version 14
-  1..2
-  ok 1 - suite
-  not ok 1 - no_tests_suite
-EOF
+Compiled with latest upstream llvm15,
+  $ clang -O2 -g -target bpf -S -emit-llvm t.c
+The related generated debuginfo IR looks like:
+  !16 = !DIDerivedType(tag: DW_TAG_typedef, name: "fn_ptr_arr2_t", file: !1, line: 1, baseType: !17)
+  !17 = !DICompositeType(tag: DW_TAG_array_type, baseType: !18, size: 320, elements: !32)
+  !18 = !DIDerivedType(tag: DW_TAG_const_type, baseType: !19)
+  !19 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !20, size: 64)
+  !20 = !DISubroutineType(types: !21)
+  !21 = !{!22, null}
+  !22 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !23, size: 64)
+  !23 = !DISubroutineType(types: !24)
+  !24 = !{!25, !28}
+  !25 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !26, size: 64)
+  !26 = !DIDerivedType(tag: DW_TAG_const_type, baseType: !27)
+  !27 = !DIBasicType(name: "char", size: 8, encoding: DW_ATE_signed_char)
+You can see two intermediate const qualifier to pointer are dropped in debuginfo IR.
 
-It will a non-zero exit code.
+With llvm14, we have following debuginfo IR:
+  !16 = !DIDerivedType(tag: DW_TAG_typedef, name: "fn_ptr_arr2_t", file: !1, line: 1, baseType: !17)
+  !17 = !DICompositeType(tag: DW_TAG_array_type, baseType: !18, size: 320, elements: !34)
+  !18 = !DIDerivedType(tag: DW_TAG_const_type, baseType: !19)
+  !19 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !20, size: 64)
+  !20 = !DISubroutineType(types: !21)
+  !21 = !{!22, null}
+  !22 = !DIDerivedType(tag: DW_TAG_const_type, baseType: !23)
+  !23 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !24, size: 64)
+  !24 = !DISubroutineType(types: !25)
+  !25 = !{!26, !30}
+  !26 = !DIDerivedType(tag: DW_TAG_const_type, baseType: !27)
+  !27 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !28, size: 64)
+  !28 = !DIDerivedType(tag: DW_TAG_const_type, baseType: !29)
+  !29 = !DIBasicType(name: "char", size: 8, encoding: DW_ATE_signed_char)
+All const qualifiers are preserved.
 
-Why?
-We have this line in the kunit_parser.py
-> parent_test = parse_test_header(lines, test)
-where we have special handling when we see "# Subtest" and we ignore the
-explicit reported "not ok 1" status!
+To adapt the selftest to both old and new llvm, this patch removed
+the intermediate const qualifier in const-to-ptr types, to make the
+test succeed again.
 
-Also, NO_TESTS at a suite-level only results in a non-zero status code
-where then there's only one suite atm.
+  [1] https://reviews.llvm.org/D125919
 
-This change is the minimal one to make sure we don't overwrite it.
-
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
-Reviewed-by: David Gow <davidgow@google.com>
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Reported-by: Mykola Lysenko <mykolal@fb.com>
+Signed-off-by: Yonghong Song <yhs@fb.com>
+Link: https://lore.kernel.org/r/20220523152044.3905809-1-yhs@fb.com
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/kunit/kunit_parser.py                        | 7 +++++--
- .../test_data/test_is_test_passed-no_tests_no_plan.log     | 2 +-
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
-index 05ff334761dd..2f93ed1d7f99 100644
---- a/tools/testing/kunit/kunit_parser.py
-+++ b/tools/testing/kunit/kunit_parser.py
-@@ -789,8 +789,11 @@ def parse_test(lines: LineStream, expected_num: int, log: List[str]) -> Test:
+diff --git a/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c b/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
+index 1c7105fcae3c..4ee4748133fe 100644
+--- a/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
++++ b/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
+@@ -94,7 +94,7 @@ typedef void (* (*signal_t)(int, void (*)(int)))(int);
  
- 	# Check for there being no tests
- 	if parent_test and len(subtests) == 0:
--		test.status = TestStatus.NO_TESTS
--		test.add_error('0 tests run!')
-+		# Don't override a bad status if this test had one reported.
-+		# Assumption: no subtests means CRASHED is from Test.__init__()
-+		if test.status in (TestStatus.TEST_CRASHED, TestStatus.SUCCESS):
-+			test.status = TestStatus.NO_TESTS
-+			test.add_error('0 tests run!')
+ typedef char * (*fn_ptr_arr1_t[10])(int **);
  
- 	# Add statuses to TestCounts attribute in Test object
- 	bubble_up_test_results(test)
-diff --git a/tools/testing/kunit/test_data/test_is_test_passed-no_tests_no_plan.log b/tools/testing/kunit/test_data/test_is_test_passed-no_tests_no_plan.log
-index dd873c981108..4f81876ee6f1 100644
---- a/tools/testing/kunit/test_data/test_is_test_passed-no_tests_no_plan.log
-+++ b/tools/testing/kunit/test_data/test_is_test_passed-no_tests_no_plan.log
-@@ -3,5 +3,5 @@ TAP version 14
-   # Subtest: suite
-   1..1
-     # Subtest: case
--  ok 1 - case # SKIP
-+  ok 1 - case
- ok 1 - suite
+-typedef char * (* const (* const fn_ptr_arr2_t[5])())(char * (*)(int));
++typedef char * (* (* const fn_ptr_arr2_t[5])())(char * (*)(int));
+ 
+ struct struct_w_typedefs {
+ 	int_t a;
 -- 
 2.35.1
 
