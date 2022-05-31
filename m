@@ -2,163 +2,126 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC02FC433F5
-	for <linux-kselftest@archiver.kernel.org>; Tue, 31 May 2022 10:16:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07D3CC433EF
+	for <linux-kselftest@archiver.kernel.org>; Tue, 31 May 2022 10:19:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245641AbiEaKQf (ORCPT
+        id S241124AbiEaKTc (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 31 May 2022 06:16:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50528 "EHLO
+        Tue, 31 May 2022 06:19:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245602AbiEaKQT (ORCPT
+        with ESMTP id S232936AbiEaKTb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 31 May 2022 06:16:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6FB366B029
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 May 2022 03:16:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653992171;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ER0G70Vk6MSxrCw6Q2vx2/PtAgU/EHIeDkdZtqawsiY=;
-        b=e52AGGX2sZ+y9PycAP5KFmx4DtKXpYb5q+6kQfo/llNvCT5U/kFBblpkD7WFTyaPFnALvr
-        DRPVqUyvYmKIfKRX+uzWAbHbJQ0va0LKCxn02DB3d2FF6zxf2HE3tYntaxwJDc9xx2VVq6
-        dBo3gGh38eht02EVJU0JUdmj2tvgq/o=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-637-l8s_VTNkOHyOPwvQYzTJ2Q-1; Tue, 31 May 2022 06:16:08 -0400
-X-MC-Unique: l8s_VTNkOHyOPwvQYzTJ2Q-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BF2D71C08976;
-        Tue, 31 May 2022 10:16:07 +0000 (UTC)
-Received: from thuth.com (unknown [10.39.194.45])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 79931492C3B;
-        Tue, 31 May 2022 10:16:05 +0000 (UTC)
-From:   Thomas Huth <thuth@redhat.com>
-To:     kvm@vger.kernel.org,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        linux-s390@vger.kernel.org
-Subject: [PATCH v4 3/4] KVM: s390: selftests: Use TAP interface in the tprot test
-Date:   Tue, 31 May 2022 12:15:53 +0200
-Message-Id: <20220531101554.36844-4-thuth@redhat.com>
-In-Reply-To: <20220531101554.36844-1-thuth@redhat.com>
-References: <20220531101554.36844-1-thuth@redhat.com>
+        Tue, 31 May 2022 06:19:31 -0400
+Received: from a8-81.smtp-out.amazonses.com (a8-81.smtp-out.amazonses.com [54.240.8.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 581238D693;
+        Tue, 31 May 2022 03:19:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=r5f3hr7pzmhv6xwu5spgpns3mj2fddpz; d=linaro.org; t=1653992369;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=a3aOFmgkqy81ADLTe0+YNqiBLGk3o3QNrG8FV8LAgXY=;
+        b=Qj8NZiGi0Fxm0U/x+NcDk1XliAx47fJ4ON5cWZfljZ92D1EcCJCyJKBAsIOpzExk
+        HHYVwgibq9OrECxrfXYs0WW0KFTHM+G3yzj8f4JuxujZDdhBRZNlGrS7sLDfHlvLCrJ
+        Xygy2z+KUwuST6NvzsAYxQeNJx5tujSHtlUsbF0Q=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=6gbrjpgwjskckoa6a5zn6fwqkn67xbtw; d=amazonses.com; t=1653992369;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=a3aOFmgkqy81ADLTe0+YNqiBLGk3o3QNrG8FV8LAgXY=;
+        b=jPBn5MRoTnLmfqmcwYiv0sTx8PmfF1RWBdUJ8NnbtCKI9CzzoEqOvJeI9XFHbH+x
+        3ClL/OnWtQcZcnIjiYSEaCcRFD5n84omIBO0kALfrzpuw76kFPfO0pap+sIyHmYG+QV
+        YJW51VGTTjJVlBcJVUEQ+7pVfiTVQe4K/S8Mj9X8=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        linux-next@vger.kernel.org, shuah@kernel.org
+Subject: lkft kselftest for next-20220531
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Message-ID: <0100018119a0abfb-d49f87eb-b4f1-4b17-b086-37eea9088f67-000000@email.amazonses.com>
+Date:   Tue, 31 May 2022 10:19:29 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2022.05.31-54.240.8.81
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The tprot test currently does not have any output (unless one of
-the TEST_ASSERT statement fails), so it's hard to say for a user
-whether a certain new sub-test has been included in the binary or
-not. Let's make this a little bit more user-friendly and include
-some TAP output via the kselftests.h interface.
+## Build
+* kernel: 5.18.0
+* git: ['', 'https://gitlab.com/Linaro/lkft/mirrors/next/linux-next']
+* git branch: master
+* git commit: 3b46e4e4418027a622c17d1b7c40c3f565115d03
+* git describe: next-20220531
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220531
 
-Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
-Reviewed-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-Signed-off-by: Thomas Huth <thuth@redhat.com>
----
- tools/testing/selftests/kvm/s390x/tprot.c | 29 +++++++++++++++++++----
- 1 file changed, 24 insertions(+), 5 deletions(-)
+## Test Regressions (compared to next-20220527)
+No test regressions found.
 
-diff --git a/tools/testing/selftests/kvm/s390x/tprot.c b/tools/testing/selftests/kvm/s390x/tprot.c
-index c097b9db495e..14d74a9e7b3d 100644
---- a/tools/testing/selftests/kvm/s390x/tprot.c
-+++ b/tools/testing/selftests/kvm/s390x/tprot.c
-@@ -8,6 +8,7 @@
- #include <sys/mman.h>
- #include "test_util.h"
- #include "kvm_util.h"
-+#include "kselftest.h"
- 
- #define PAGE_SHIFT 12
- #define PAGE_SIZE (1 << PAGE_SHIFT)
-@@ -63,12 +64,12 @@ static enum permission test_protection(void *addr, uint8_t key)
- }
- 
- enum stage {
--	STAGE_END,
- 	STAGE_INIT_SIMPLE,
- 	TEST_SIMPLE,
- 	STAGE_INIT_FETCH_PROT_OVERRIDE,
- 	TEST_FETCH_PROT_OVERRIDE,
- 	TEST_STORAGE_PROT_OVERRIDE,
-+	STAGE_END	/* must be the last entry (it's the amount of tests) */
- };
- 
- struct test {
-@@ -182,7 +183,7 @@ static void guest_code(void)
- 	GUEST_SYNC(perform_next_stage(&i, mapped_0));
- }
- 
--#define HOST_SYNC(vmp, stage)							\
-+#define HOST_SYNC_NO_TAP(vmp, stage)						\
- ({										\
- 	struct kvm_vm *__vm = (vmp);						\
- 	struct ucall uc;							\
-@@ -198,12 +199,21 @@ static void guest_code(void)
- 	ASSERT_EQ(uc.args[1], __stage);						\
- })
- 
-+#define HOST_SYNC(vmp, stage)			\
-+({						\
-+	HOST_SYNC_NO_TAP(vmp, stage);		\
-+	ksft_test_result_pass("" #stage "\n");	\
-+})
-+
- int main(int argc, char *argv[])
- {
- 	struct kvm_vm *vm;
- 	struct kvm_run *run;
- 	vm_vaddr_t guest_0_page;
- 
-+	ksft_print_header();
-+	ksft_set_plan(STAGE_END);
-+
- 	vm = vm_create_default(VCPU_ID, 0, guest_code);
- 	run = vcpu_state(vm, VCPU_ID);
- 
-@@ -212,9 +222,14 @@ int main(int argc, char *argv[])
- 	HOST_SYNC(vm, TEST_SIMPLE);
- 
- 	guest_0_page = vm_vaddr_alloc(vm, PAGE_SIZE, 0);
--	if (guest_0_page != 0)
--		print_skip("Did not allocate page at 0 for fetch protection override tests");
--	HOST_SYNC(vm, STAGE_INIT_FETCH_PROT_OVERRIDE);
-+	if (guest_0_page != 0) {
-+		/* Use NO_TAP so we don't get a PASS print */
-+		HOST_SYNC_NO_TAP(vm, STAGE_INIT_FETCH_PROT_OVERRIDE);
-+		ksft_test_result_skip("STAGE_INIT_FETCH_PROT_OVERRIDE - "
-+				      "Did not allocate page at 0\n");
-+	} else {
-+		HOST_SYNC(vm, STAGE_INIT_FETCH_PROT_OVERRIDE);
-+	}
- 	if (guest_0_page == 0)
- 		mprotect(addr_gva2hva(vm, (vm_vaddr_t)0), PAGE_SIZE, PROT_READ);
- 	run->s.regs.crs[0] |= CR0_FETCH_PROTECTION_OVERRIDE;
-@@ -224,4 +239,8 @@ int main(int argc, char *argv[])
- 	run->s.regs.crs[0] |= CR0_STORAGE_PROTECTION_OVERRIDE;
- 	run->kvm_dirty_regs = KVM_SYNC_CRS;
- 	HOST_SYNC(vm, TEST_STORAGE_PROT_OVERRIDE);
-+
-+	kvm_vm_free(vm);
-+
-+	ksft_finished();	/* Print results and exit() accordingly */
- }
--- 
-2.31.1
+## Metric Regressions (compared to next-20220527)
+No metric regressions found.
 
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+
+## Test Fixes (compared to next-20220527)
+* qemu_arm, kselftest-timers
+  - timers.rtcpie
+
+* qemu_arm, kselftest-user
+  - user.test_user_copy.sh
+
+
+## Metric Fixes (compared to next-20220527)
+No metric fixes found.
+
+## Test result summary
+total: 523, pass: 261, fail: 105, skip: 157, xfail: 0
+
+## Build Summary
+
+## Test suites summary
+* kselftest-android
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-gpio
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kvm
+* kselftest-lib
+* kselftest-membarrier
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-zram
+
+--
+Linaro LKFT
+https://lkft.linaro.org
