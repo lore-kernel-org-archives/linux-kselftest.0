@@ -2,58 +2,58 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B9ABCCA47A
-	for <linux-kselftest@archiver.kernel.org>; Wed,  1 Jun 2022 21:10:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A440BCCA47C
+	for <linux-kselftest@archiver.kernel.org>; Wed,  1 Jun 2022 21:10:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231185AbiFAVKZ (ORCPT
+        id S231315AbiFAVK0 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 1 Jun 2022 17:10:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54686 "EHLO
+        Wed, 1 Jun 2022 17:10:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231317AbiFAVKK (ORCPT
+        with ESMTP id S231297AbiFAVKH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 1 Jun 2022 17:10:10 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E3CA25C47
-        for <linux-kselftest@vger.kernel.org>; Wed,  1 Jun 2022 14:10:06 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 84-20020a250557000000b0065bb92955a2so2468152ybf.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 01 Jun 2022 14:10:06 -0700 (PDT)
+        Wed, 1 Jun 2022 17:10:07 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53F48396BE
+        for <linux-kselftest@vger.kernel.org>; Wed,  1 Jun 2022 14:10:02 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-30974094b5cso25508057b3.20
+        for <linux-kselftest@vger.kernel.org>; Wed, 01 Jun 2022 14:10:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=dcDBeY/HLlNXef9d9FAHPxWe/EV2aZU1witDOt2KoeY=;
-        b=KaDwHX79CJbASDMmgXRlKLc/huskW7utSclJ0kfppbnZS1T/syXXX0OOqqco2+9elP
-         5EBfVeZWFsTr/FQRRajBdxKDD8WMBg7o9fiYLOlSBVHnkUMU6qLlmQ8wbxRiy97vjj1n
-         d1MHsEJH+Fi8Yb2ErPHvZ95O8Pno4nEVoSdAmNwSrCbw8KI+39rmeI321hQC0x1VXEWa
-         VizEGAex47VEQ4UJzuGfcJgV8KzlCSFFPFdauODxm1cORxr0QYeWj8tzyU2u86tekVow
-         Y2TOE/hImTDvfKNFRWfSNAw6WFb0njnagrXm1EE2xQotfnLtM0lz0f8/yYojMTbYOQce
-         HPJQ==
+        bh=GEuH7v2hm8gPbs+X2v5W8KutfNkKgsCF+/5mNPJwBK0=;
+        b=NeP/OeNWbhVp3hYIumiRRFBaPXdgXyAjdD7Zj0iRpLOZr9GndhZskF8GFrI0+0V7jy
+         UN8+h16HnW6rKS6i3HCFhE+iWsyJjtYRQW2in2IqUsCcb3Qwky5IW2whpRmS441F3S2C
+         FxHMvZZe/UEWlqji0Ii/+wf3NDCs73ENyGUtGHUqrxfp0B7MbA8Omg4W5On4qYlsLGPy
+         sp9/TGzUmEa5ZQIxOm6KVUET5G5/zTqvPFKuPvalDfVXTeP66q18+53RNjMKYeRRNw2I
+         3z58aWIWYSn4SGF4HorICFDufV7uC0oZ6W8Ws9D9zWp/n+KcdLIyLZuJb78wLY1gcDuL
+         FsHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=dcDBeY/HLlNXef9d9FAHPxWe/EV2aZU1witDOt2KoeY=;
-        b=buOdHJg061vvb2EBnE9n5ekvVngYeAW+DzqayUaGSU2qChYjN8UEEnvNLY3Q8j4RUd
-         q1BsPUOZrhFYe2b6WeXbo6GULLnd5tF2NA5FqROSHje6ASQQDvEwYqLPFlUFM8T4fcLX
-         BCsHvZspaLIRg+pHwqEDR4B+yDbbPQc9ZQciz6+IF/i61kyrLvUJSv9iMKMmfNSvWR13
-         DteXY67ATTa1o5R94X1E1U309ai4RU3xXMfvRoDKjrIn+rLL6PchwY8N0k+ShKPOpmkY
-         O6XViVjniYRpNUXazDnC4EcCscFjFXANLWpPBuSKdm9pZvZN6MDW4D/jAx8aQE/o7dr6
-         vbkw==
-X-Gm-Message-State: AOAM530Pkdj31Wf/w9YzXNZq6Erm0mQB31ORped7CuSLcOV6d1Gxo/Im
-        dO94R1SOeFa2ICytQI+FopcaRvubA9n7MDGQ11NE
-X-Google-Smtp-Source: ABdhPJykmwhlBXZrVDl0pEafra93LcclZ+yr17pnesiatozzZ/fWqR+h2P6cAMloCLCsdJazTqo9524d106wb6pcRX79
+        bh=GEuH7v2hm8gPbs+X2v5W8KutfNkKgsCF+/5mNPJwBK0=;
+        b=kSuw7eqYT0bGXBQdnt5NUxPB4Hv0oUuKOk2Yw0UfVOSTZ+VHs0Cd8xzi+OghTWbCe1
+         TXbTsVFbs3UELoBgTZA3SSq7T3zzyzBykXOEHEkZYl50kGwfR4uSHjeW0u8W6KveDV+h
+         wBc2oBYBkI0PwyrhLFBwDAN0hXfYyspJrXqvcc0gUBEPjsuwJh8XT3J+yxr+vACXQJCE
+         VL2gFZazWb0vOWEa2KJiw904fNKo54E0kNnWMqQmQxjU0LxwI9JiLG6LMbO8GmhHZTbg
+         VHgTgOLbFIIA40pjnetUfrbQo8GtUgToMxNR5leD7rRcfJHrGumijVHBkd4VEe3qz1Fe
+         lqYA==
+X-Gm-Message-State: AOAM5326wFOWgtpKtAe0bCbDAimAcsN4nsiUtepA1KDfKaGme57Kl8Oj
+        EXmVJ0BmYq50310W3vBcjTO36Bk+uULNrIv3sYAq
+X-Google-Smtp-Source: ABdhPJxLYxJTU4wKWdQdJErOlnXgmFSzr5QQlaHudjQxgiYWQ/To+IWy0QKQkX1/fZdej8cYja73KHAsf5mUjbmiy+G7
 X-Received: from ajr0.svl.corp.google.com ([2620:15c:2cd:203:aaec:e358:9f0e:2b26])
- (user=axelrasmussen job=sendgmr) by 2002:a25:744:0:b0:64f:79e5:6528 with SMTP
- id 65-20020a250744000000b0064f79e56528mr1969376ybh.104.1654117805867; Wed, 01
- Jun 2022 14:10:05 -0700 (PDT)
-Date:   Wed,  1 Jun 2022 14:09:50 -0700
+ (user=axelrasmussen job=sendgmr) by 2002:a25:9ac1:0:b0:65c:bf5a:ce24 with
+ SMTP id t1-20020a259ac1000000b0065cbf5ace24mr1913952ybo.378.1654117801445;
+ Wed, 01 Jun 2022 14:10:01 -0700 (PDT)
+Date:   Wed,  1 Jun 2022 14:09:48 -0700
 In-Reply-To: <20220601210951.3916598-1-axelrasmussen@google.com>
-Message-Id: <20220601210951.3916598-6-axelrasmussen@google.com>
+Message-Id: <20220601210951.3916598-4-axelrasmussen@google.com>
 Mime-Version: 1.0
 References: <20220601210951.3916598-1-axelrasmussen@google.com>
 X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
-Subject: [PATCH v3 5/6] userfaultfd: selftests: make /dev/userfaultfd testing configurable
+Subject: [PATCH v3 3/6] userfaultfd: selftests: modify selftest to use /dev/userfaultfd
 From:   Axel Rasmussen <axelrasmussen@google.com>
 To:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -78,113 +78,90 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Instead of always testing both userfaultfd(2) and /dev/userfaultfd,
-let the user choose which to test.
-
-As with other test features, change the behavior based on a new
-command line flag. Introduce the idea of "test mods", which are
-generic (not specific to a test type) modifications to the behavior of
-the test. This is sort of borrowed from this RFC patch series [1], but
-simplified a bit.
-
-The benefit is, in "typical" configurations this test is somewhat slow
-(say, 30sec or something). Testing both clearly doubles it, so it may
-not always be desirable, as users are likely to use one or the other,
-but never both, in the "real world".
-
-[1]: https://patchwork.kernel.org/project/linux-mm/patch/20201129004548.1619714-14-namit@vmware.com/
+We clearly want to ensure both userfaultfd(2) and /dev/userfaultfd keep
+working into the future, so just run the test twice, using each
+interface.
 
 Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
 ---
- tools/testing/selftests/vm/userfaultfd.c | 41 +++++++++++++++++-------
- 1 file changed, 30 insertions(+), 11 deletions(-)
+ tools/testing/selftests/vm/userfaultfd.c | 37 +++++++++++++++++++++---
+ 1 file changed, 33 insertions(+), 4 deletions(-)
 
 diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
-index 1badb5d31bf9..aeee6f1ad8ef 100644
+index 0bdfc1955229..1badb5d31bf9 100644
 --- a/tools/testing/selftests/vm/userfaultfd.c
 +++ b/tools/testing/selftests/vm/userfaultfd.c
-@@ -128,6 +128,8 @@ struct uffd_stats {
- const char *examples =
-     "# Run anonymous memory test on 100MiB region with 99999 bounces:\n"
-     "./userfaultfd anon 100 99999\n\n"
-+    "# Run the same anonymous memory test, but using /dev/userfaultfd:\n"
-+    "./userfaultfd anon:dev 100 99999\n\n"
-     "# Run share memory test on 1GiB region with 99 bounces:\n"
-     "./userfaultfd shmem 1000 99\n\n"
-     "# Run hugetlb memory test on 256MiB region with 50 bounces:\n"
-@@ -144,6 +146,13 @@ static void usage(void)
- 		"[hugetlbfs_file]\n\n");
- 	fprintf(stderr, "Supported <test type>: anon, hugetlb, "
- 		"hugetlb_shared, shmem\n\n");
-+	fprintf(stderr, "'Test mods' can be joined to the test type string with a ':'. "
-+		"Supported mods:\n");
-+	fprintf(stderr, "\tdev - Use /dev/userfaultfd instead of userfaultfd(2)\n");
-+	fprintf(stderr, "\nExample test mod usage:\n");
-+	fprintf(stderr, "# Run anonymous memory test with /dev/userfaultfd:\n");
-+	fprintf(stderr, "./userfaultfd anon:dev 100 99999\n\n");
-+
- 	fprintf(stderr, "Examples:\n\n");
- 	fprintf(stderr, "%s", examples);
- 	exit(1);
-@@ -1607,8 +1616,6 @@ unsigned long default_huge_page_size(void)
+@@ -77,6 +77,9 @@ static int bounces;
+ #define TEST_SHMEM	3
+ static int test_type;
  
- static void set_test_type(const char *type)
++/* test using /dev/userfaultfd, instead of userfaultfd(2) */
++static bool test_dev_userfaultfd;
++
+ /* exercise the test_uffdio_*_eexist every ALARM_INTERVAL_SECS */
+ #define ALARM_INTERVAL_SECS 10
+ static volatile bool test_uffdio_copy_eexist = true;
+@@ -154,12 +157,14 @@ static void usage(void)
+ 			ret, __LINE__);				\
+ 	} while (0)
+ 
+-#define err(fmt, ...)				\
++#define errexit(exitcode, fmt, ...)		\
+ 	do {					\
+ 		_err(fmt, ##__VA_ARGS__);	\
+-		exit(1);			\
++		exit(exitcode);			\
+ 	} while (0)
+ 
++#define err(fmt, ...) errexit(1, fmt, ##__VA_ARGS__)
++
+ static void uffd_stats_reset(struct uffd_stats *uffd_stats,
+ 			     unsigned long n_cpus)
  {
--	uint64_t features = UFFD_API_FEATURES;
--
- 	if (!strcmp(type, "anon")) {
- 		test_type = TEST_ANON;
- 		uffd_test_ops = &anon_uffd_test_ops;
-@@ -1626,10 +1633,28 @@ static void set_test_type(const char *type)
- 		test_type = TEST_SHMEM;
- 		uffd_test_ops = &shmem_uffd_test_ops;
- 		test_uffdio_minor = true;
--	} else {
--		err("Unknown test type: %s", type);
-+	}
+@@ -383,13 +388,31 @@ static void assert_expected_ioctls_present(uint64_t mode, uint64_t ioctls)
+ 	}
+ }
+ 
++static void __userfaultfd_open_dev(void)
++{
++	int fd;
++
++	uffd = -1;
++	fd = open("/dev/userfaultfd", O_RDWR | O_CLOEXEC);
++	if (fd < 0)
++		return;
++
++	uffd = ioctl(fd, USERFAULTFD_IOC_NEW,
++		     O_CLOEXEC | O_NONBLOCK | UFFD_USER_MODE_ONLY);
++	close(fd);
 +}
 +
-+static void parse_test_type_arg(const char *raw_type)
-+{
-+	char *buf = strdup(raw_type);
-+	uint64_t features = UFFD_API_FEATURES;
-+
-+	while (buf) {
-+		const char *token = strsep(&buf, ":");
-+
-+		if (!test_type)
-+			set_test_type(token);
-+		else if (!strcmp(token, "dev"))
-+			test_dev_userfaultfd = true;
-+		else
-+			err("unrecognized test mod '%s'", token);
- 	}
+ static void userfaultfd_open(uint64_t *features)
+ {
+ 	struct uffdio_api uffdio_api;
  
-+	if (!test_type)
-+		err("failed to parse test type argument: '%s'", raw_type);
-+
- 	if (test_type == TEST_HUGETLB)
- 		page_size = default_huge_page_size();
- 	else
-@@ -1676,7 +1701,7 @@ int main(int argc, char **argv)
- 		err("failed to arm SIGALRM");
- 	alarm(ALARM_INTERVAL_SECS);
+-	uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK | UFFD_USER_MODE_ONLY);
++	if (test_dev_userfaultfd)
++		__userfaultfd_open_dev();
++	else
++		uffd = syscall(__NR_userfaultfd,
++			       O_CLOEXEC | O_NONBLOCK | UFFD_USER_MODE_ONLY);
+ 	if (uffd < 0)
+-		err("userfaultfd syscall not available in this kernel");
++		errexit(KSFT_SKIP, "creating userfaultfd failed");
+ 	uffd_flags = fcntl(uffd, F_GETFD, NULL);
  
--	set_test_type(argv[1]);
-+	parse_test_type_arg(argv[1]);
- 
- 	nr_cpus = sysconf(_SC_NPROCESSORS_ONLN);
- 	nr_pages_per_cpu = atol(argv[2]) * 1024*1024 / page_size /
-@@ -1714,12 +1739,6 @@ int main(int argc, char **argv)
+ 	uffdio_api.api = UFFD_API;
+@@ -1691,6 +1714,12 @@ int main(int argc, char **argv)
  	}
  	printf("nr_pages: %lu, nr_pages_per_cpu: %lu\n",
  	       nr_pages, nr_pages_per_cpu);
--
--	test_dev_userfaultfd = false;
--	if (userfaultfd_stress())
--		return 1;
--
--	test_dev_userfaultfd = true;
++
++	test_dev_userfaultfd = false;
++	if (userfaultfd_stress())
++		return 1;
++
++	test_dev_userfaultfd = true;
  	return userfaultfd_stress();
  }
  
