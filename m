@@ -2,113 +2,186 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43720C43334
-	for <linux-kselftest@archiver.kernel.org>; Wed,  1 Jun 2022 21:10:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D546AC433EF
+	for <linux-kselftest@archiver.kernel.org>; Wed,  1 Jun 2022 21:36:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231359AbiFAVK2 (ORCPT
+        id S231622AbiFAVgn (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 1 Jun 2022 17:10:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54296 "EHLO
+        Wed, 1 Jun 2022 17:36:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231219AbiFAVJ7 (ORCPT
+        with ESMTP id S231578AbiFAVgm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 1 Jun 2022 17:09:59 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EEF1396B8
-        for <linux-kselftest@vger.kernel.org>; Wed,  1 Jun 2022 14:09:58 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 84-20020a250557000000b0065bb92955a2so2468225ybf.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 01 Jun 2022 14:09:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=kk1kl2p/g3Lg3sGUGGyiVv3dYTdsKPpPMBPxg1a8NQs=;
-        b=fCqYWeX5V2UAR6CwDd1WwVkx3nRbWoxq+i5xyuQYRpLuf0Idp6IKcChFZX/d1mGPZa
-         wZJhNzo1ICxiw03yrG17zNvxeU/gt4XldskATEVn3qYus+EBAdrY62rsfcD40sYP7ZrX
-         igXgB45R6xlblsq1J3+7HLWq0D7FHjeEccdGgPATYEG27fmiy5xS6olETvuNNrcqmkET
-         CeeuEs1LWViL+Kl2RWA6FUcmNKliAcGPMy3chE3EZPK2ANXrTqk3lk3J9/9XTb5021lB
-         diS31DsFxp7coKuQWeAxr68utYOwsJ9ksZ4/IluHlLeghUUS59fRs6MgqNyQ+1D8i2L/
-         j7tA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=kk1kl2p/g3Lg3sGUGGyiVv3dYTdsKPpPMBPxg1a8NQs=;
-        b=PzEx4Vh22f5GyD3kAHF9QEJNOuHEngoY0pYF9qbcnTTN6TtclJfVLmXQuegsS3M25R
-         xKugbWPncdceLgMc06iowEd7erZ5pOMwgmSz2JUbThXd2XUuUw0sEjNatgsu0X3XGVS5
-         OWJfjCXFlitozDvqEzbNRtw2cKOOr7T2pszDc80edL+AxbzDrat8X7JCeHihku8NKzKC
-         w0jPW8P1x8g9mInXILAzCHLbuJLJR1YgsGoYD1JiT4vVoobNSrgrofHq6lqSyj8dKGPt
-         Crt/P601udXq7Tv3t7iECFhM55yGv3bm8WaCLKsR2pFGAmb0GSXAtTacc36EsLoIlyVB
-         BOWg==
-X-Gm-Message-State: AOAM532es6N7fhsZrpgHs0j24/l5iarQKASxqnhxGqw3V79FaPjGE40Q
-        cjmvuD9V2hQGCCWt7B/DfHb02Ptq9OTMXlcOdhJ/
-X-Google-Smtp-Source: ABdhPJy7KiJc6d2+d7s0OkiwmpYfryNL4lT4rDOmPy5rS9SoXCCHdlUkPE20eNU2mwq5x8ofn4egdPxMllMcAtmZ8mur
-X-Received: from ajr0.svl.corp.google.com ([2620:15c:2cd:203:aaec:e358:9f0e:2b26])
- (user=axelrasmussen job=sendgmr) by 2002:a81:47d4:0:b0:2ff:c3d1:c158 with
- SMTP id u203-20020a8147d4000000b002ffc3d1c158mr1702500ywa.388.1654117797191;
- Wed, 01 Jun 2022 14:09:57 -0700 (PDT)
-Date:   Wed,  1 Jun 2022 14:09:46 -0700
-In-Reply-To: <20220601210951.3916598-1-axelrasmussen@google.com>
-Message-Id: <20220601210951.3916598-2-axelrasmussen@google.com>
-Mime-Version: 1.0
-References: <20220601210951.3916598-1-axelrasmussen@google.com>
-X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
-Subject: [PATCH v3 1/6] selftests: vm: add hugetlb_shared userfaultfd test to run_vmtests.sh
-From:   Axel Rasmussen <axelrasmussen@google.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Charan Teja Reddy <charante@codeaurora.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Dmitry V . Levin" <ldv@altlinux.org>,
-        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>, zhangyi <yi.zhang@huawei.com>
-Cc:     Axel Rasmussen <axelrasmussen@google.com>,
-        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Wed, 1 Jun 2022 17:36:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4339B1C2D79;
+        Wed,  1 Jun 2022 14:36:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C97AF61331;
+        Wed,  1 Jun 2022 21:36:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DBA7C385A5;
+        Wed,  1 Jun 2022 21:36:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1654119400;
+        bh=N11gAQiSefrt49HoG+VdPLrSyzJ8gsx80XzIVHABxP8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Iptty91BhQzTEYnVSDH/IZ1dLjBE84XzIfhYEZ4yix6nJ70yTApfoXwFDuNibyU2c
+         OzOgEScmNBKLWnNjw2lL5oH5TiIqUDcpVFGkdmBwA2cc/Z9n1ZE8PTfvzwTwpqFg8I
+         xCQGqthWF9NNimTpr9X6/Oaf26/JBGAyITBOvO68=
+Date:   Wed, 1 Jun 2022 14:36:38 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     mhocko@suse.com, rientjes@google.com, willy@infradead.org,
+        hannes@cmpxchg.org, guro@fb.com, minchan@kernel.org,
+        kirill@shutemov.name, aarcange@redhat.com, brauner@kernel.org,
+        hch@infradead.org, oleg@redhat.com, david@redhat.com,
+        jannh@google.com, shakeelb@google.com, peterx@redhat.com,
+        jhubbard@nvidia.com, shuah@kernel.org,
         linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+        linux-kselftest@vger.kernel.org, kernel-team@android.com,
+        Liam Howlett <liam.howlett@oracle.com>
+Subject: Re: [PATCH RESEND v2 1/2] mm: drop oom code from exit_mmap
+Message-Id: <20220601143638.9e78c470d2c980053cc8059a@linux-foundation.org>
+In-Reply-To: <20220531223100.510392-1-surenb@google.com>
+References: <20220531223100.510392-1-surenb@google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This not being included was just a simple oversight. There are certain
-features (like minor fault support) which are only enabled on shared
-mappings, so without including hugetlb_shared we actually lose a
-significant amount of test coverage.
+On Tue, 31 May 2022 15:30:59 -0700 Suren Baghdasaryan <surenb@google.com> wrote:
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-Reviewed-by: Peter Xu <peterx@redhat.com>
-Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
----
- tools/testing/selftests/vm/run_vmtests.sh | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+> The primary reason to invoke the oom reaper from the exit_mmap path used
+> to be a prevention of an excessive oom killing if the oom victim exit
+> races with the oom reaper (see [1] for more details). The invocation has
+> moved around since then because of the interaction with the munlock
+> logic but the underlying reason has remained the same (see [2]).
+> 
+> Munlock code is no longer a problem since [3] and there shouldn't be
+> any blocking operation before the memory is unmapped by exit_mmap so
+> the oom reaper invocation can be dropped. The unmapping part can be done
+> with the non-exclusive mmap_sem and the exclusive one is only required
+> when page tables are freed.
+> 
+> Remove the oom_reaper from exit_mmap which will make the code easier to
+> read. This is really unlikely to make any observable difference although
+> some microbenchmarks could benefit from one less branch that needs to be
+> evaluated even though it almost never is true.
+> 
+> [1] 212925802454 ("mm: oom: let oom_reap_task and exit_mmap run concurrently")
+> [2] 27ae357fa82b ("mm, oom: fix concurrent munlock and oom reaper unmap, v3")
+> [3] a213e5cf71cb ("mm/munlock: delete munlock_vma_pages_all(), allow oomreap")
+> 
 
-diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
-index 54a0c28f810c..7e102246dd9f 100755
---- a/tools/testing/selftests/vm/run_vmtests.sh
-+++ b/tools/testing/selftests/vm/run_vmtests.sh
-@@ -121,9 +121,11 @@ run_test ./gup_test -a
- run_test ./gup_test -ct -F 0x1 0 19 0x1000
- 
- run_test ./userfaultfd anon 20 16
--# Test requires source and destination huge pages.  Size of source
--# (half_ufd_size_MB) is passed as argument to test.
-+# Hugetlb tests require source and destination huge pages. Pass in half the
-+# size ($half_ufd_size_MB), which is used for *each*.
- run_test ./userfaultfd hugetlb "$half_ufd_size_MB" 32
-+run_test ./userfaultfd hugetlb_shared "$half_ufd_size_MB" 32 "$mnt"/uffd-test
-+rm -f "$mnt"/uffd-test
- run_test ./userfaultfd shmem 20 16
- 
- #cleanup
--- 
-2.36.1.255.ge46751e96f-goog
+I've just reinstated the mapletree patchset so there are some
+conflicting changes.
+
+> --- a/include/linux/oom.h
+> +++ b/include/linux/oom.h
+> @@ -106,8 +106,6 @@ static inline vm_fault_t check_stable_address_space(struct mm_struct *mm)
+>  	return 0;
+>  }
+>  
+> -bool __oom_reap_task_mm(struct mm_struct *mm);
+> -
+>  long oom_badness(struct task_struct *p,
+>  		unsigned long totalpages);
+>  
+> diff --git a/mm/mmap.c b/mm/mmap.c
+> index 2b9305ed0dda..b7918e6bb0db 100644
+> --- a/mm/mmap.c
+> +++ b/mm/mmap.c
+> @@ -3110,30 +3110,13 @@ void exit_mmap(struct mm_struct *mm)
+>  	/* mm's last user has gone, and its about to be pulled down */
+>  	mmu_notifier_release(mm);
+>  
+> -	if (unlikely(mm_is_oom_victim(mm))) {
+> -		/*
+> -		 * Manually reap the mm to free as much memory as possible.
+> -		 * Then, as the oom reaper does, set MMF_OOM_SKIP to disregard
+> -		 * this mm from further consideration.  Taking mm->mmap_lock for
+> -		 * write after setting MMF_OOM_SKIP will guarantee that the oom
+> -		 * reaper will not run on this mm again after mmap_lock is
+> -		 * dropped.
+> -		 *
+> -		 * Nothing can be holding mm->mmap_lock here and the above call
+> -		 * to mmu_notifier_release(mm) ensures mmu notifier callbacks in
+> -		 * __oom_reap_task_mm() will not block.
+> -		 */
+> -		(void)__oom_reap_task_mm(mm);
+> -		set_bit(MMF_OOM_SKIP, &mm->flags);
+> -	}
+> -
+> -	mmap_write_lock(mm);
+> +	mmap_read_lock(mm);
+
+Unclear why this patch fiddles with the mm_struct locking in this
+fashion - changelogging that would have been helpful.
+
+But iirc mapletree wants to retain a write_lock here, so I ended up with
+
+void exit_mmap(struct mm_struct *mm)
+{
+	struct mmu_gather tlb;
+	struct vm_area_struct *vma;
+	unsigned long nr_accounted = 0;
+	MA_STATE(mas, &mm->mm_mt, 0, 0);
+	int count = 0;
+
+	/* mm's last user has gone, and its about to be pulled down */
+	mmu_notifier_release(mm);
+
+	mmap_write_lock(mm);
+	arch_exit_mmap(mm);
+
+	vma = mas_find(&mas, ULONG_MAX);
+	if (!vma) {
+		/* Can happen if dup_mmap() received an OOM */
+		mmap_write_unlock(mm);
+		return;
+	}
+
+	lru_add_drain();
+	flush_cache_mm(mm);
+	tlb_gather_mmu_fullmm(&tlb, mm);
+	/* update_hiwater_rss(mm) here? but nobody should be looking */
+	/* Use ULONG_MAX here to ensure all VMAs in the mm are unmapped */
+	unmap_vmas(&tlb, &mm->mm_mt, vma, 0, ULONG_MAX);
+
+	/*
+	 * Set MMF_OOM_SKIP to hide this task from the oom killer/reaper
+	 * because the memory has been already freed. Do not bother checking
+	 * mm_is_oom_victim because setting a bit unconditionally is cheaper.
+	 */
+	set_bit(MMF_OOM_SKIP, &mm->flags);
+	free_pgtables(&tlb, &mm->mm_mt, vma, FIRST_USER_ADDRESS,
+		      USER_PGTABLES_CEILING);
+	tlb_finish_mmu(&tlb);
+
+	/*
+	 * Walk the list again, actually closing and freeing it, with preemption
+	 * enabled, without holding any MM locks besides the unreachable
+	 * mmap_write_lock.
+	 */
+	do {
+		if (vma->vm_flags & VM_ACCOUNT)
+			nr_accounted += vma_pages(vma);
+		remove_vma(vma);
+		count++;
+		cond_resched();
+	} while ((vma = mas_find(&mas, ULONG_MAX)) != NULL);
+
+	BUG_ON(count != mm->map_count);
+
+	trace_exit_mmap(mm);
+	__mt_destroy(&mm->mm_mt);
+	mm->mmap = NULL;
+	mmap_write_unlock(mm);
+	vm_unacct_memory(nr_accounted);
+}
 
