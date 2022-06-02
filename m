@@ -2,150 +2,115 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A169C433EF
-	for <linux-kselftest@archiver.kernel.org>; Thu,  2 Jun 2022 14:08:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 41C8BC433EF
+	for <linux-kselftest@archiver.kernel.org>; Thu,  2 Jun 2022 14:38:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235555AbiFBOIg (ORCPT
+        id S236071AbiFBOiQ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 2 Jun 2022 10:08:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39500 "EHLO
+        Thu, 2 Jun 2022 10:38:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234646AbiFBOIf (ORCPT
+        with ESMTP id S235647AbiFBOiN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 2 Jun 2022 10:08:35 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8536925A828;
-        Thu,  2 Jun 2022 07:08:33 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 9AAF81FAB0;
-        Thu,  2 Jun 2022 14:08:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1654178912; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=E9GYSg9893wN4Ro2r9KqU0gItNuuvsAEYl19XmHlH5w=;
-        b=LlYDtBL794UbyhC9iECAT33wFvBbF4CTjyT8Lh3OmmdZG+H/sJNQMFoej04mFF3AQq96xq
-        v5E5gXeogAQJ5sO3tjoZr9AKtfqhIDjYuOKSiUqSPzatrnqZz07nglwonJANx80+TyujqS
-        10lrAkDfHbqOFQBgxqa8dOlECK24CcY=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 429BC2C141;
-        Thu,  2 Jun 2022 14:08:32 +0000 (UTC)
-Date:   Thu, 2 Jun 2022 16:08:29 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     Suren Baghdasaryan <surenb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <guro@fb.com>, Minchan Kim <minchan@kernel.org>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jann Horn <jannh@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Peter Xu <peterx@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        kernel-team <kernel-team@android.com>
-Subject: Re: [PATCH RESEND v2 1/2] mm: drop oom code from exit_mmap
-Message-ID: <YpjEXU5uyd0s7lC+@dhcp22.suse.cz>
-References: <20220531223100.510392-1-surenb@google.com>
- <20220601143638.9e78c470d2c980053cc8059a@linux-foundation.org>
- <CAJuCfpHcPhDYTpLj8Vo+W9Q6KkWdT_BOTaEfJW6_PDCPx5kD-A@mail.gmail.com>
- <YpheVjLQj5ili7ZJ@dhcp22.suse.cz>
- <20220602133121.p6uytrcde3schym6@revolver>
+        Thu, 2 Jun 2022 10:38:13 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A2B14478C;
+        Thu,  2 Jun 2022 07:38:07 -0700 (PDT)
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LDT9x3gzxz684y4;
+        Thu,  2 Jun 2022 22:37:09 +0800 (CST)
+Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 2 Jun 2022 16:38:05 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <kpsingh@kernel.org>
+CC:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v2 2/9] libbpf: Introduce bpf_obj_get_flags()
+Date:   Thu, 2 Jun 2022 16:37:41 +0200
+Message-ID: <20220602143748.673971-3-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220602143748.673971-1-roberto.sassu@huawei.com>
+References: <20220602143748.673971-1-roberto.sassu@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220602133121.p6uytrcde3schym6@revolver>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.204.63.22]
+X-ClientProxiedBy: lhreml754-chm.china.huawei.com (10.201.108.204) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu 02-06-22 13:31:27, Liam Howlett wrote:
-> * Michal Hocko <mhocko@suse.com> [220602 02:53]:
-> > On Wed 01-06-22 14:47:41, Suren Baghdasaryan wrote:
-> > > On Wed, Jun 1, 2022 at 2:36 PM Andrew Morton <akpm@linux-foundation.org> wrote:
-> > [...]
-> > > > But iirc mapletree wants to retain a write_lock here, so I ended up with
-> > > >
-> > > > void exit_mmap(struct mm_struct *mm)
-> > > > {
-> > > >         struct mmu_gather tlb;
-> > > >         struct vm_area_struct *vma;
-> > > >         unsigned long nr_accounted = 0;
-> > > >         MA_STATE(mas, &mm->mm_mt, 0, 0);
-> > > >         int count = 0;
-> > > >
-> > > >         /* mm's last user has gone, and its about to be pulled down */
-> > > >         mmu_notifier_release(mm);
-> > > >
-> > > >         mmap_write_lock(mm);
-> > > >         arch_exit_mmap(mm);
-> > > >
-> > > >         vma = mas_find(&mas, ULONG_MAX);
-> > > >         if (!vma) {
-> > > >                 /* Can happen if dup_mmap() received an OOM */
-> > > >                 mmap_write_unlock(mm);
-> > > >                 return;
-> > > >         }
-> > > >
-> > > >         lru_add_drain();
-> > > >         flush_cache_mm(mm);
-> > > >         tlb_gather_mmu_fullmm(&tlb, mm);
-> > > >         /* update_hiwater_rss(mm) here? but nobody should be looking */
-> > > >         /* Use ULONG_MAX here to ensure all VMAs in the mm are unmapped */
-> > > >         unmap_vmas(&tlb, &mm->mm_mt, vma, 0, ULONG_MAX);
-> > > >
-> > > >         /*
-> > > >          * Set MMF_OOM_SKIP to hide this task from the oom killer/reaper
-> > > >          * because the memory has been already freed. Do not bother checking
-> > > >          * mm_is_oom_victim because setting a bit unconditionally is cheaper.
-> > > >          */
-> > > >         set_bit(MMF_OOM_SKIP, &mm->flags);
-> > > >         free_pgtables(&tlb, &mm->mm_mt, vma, FIRST_USER_ADDRESS,
-> > > >                       USER_PGTABLES_CEILING);
-> > > >         tlb_finish_mmu(&tlb);
-> > > >
-> > > >         /*
-> > > >          * Walk the list again, actually closing and freeing it, with preemption
-> > > >          * enabled, without holding any MM locks besides the unreachable
-> > > >          * mmap_write_lock.
-> > > >          */
-> > > >         do {
-> > > >                 if (vma->vm_flags & VM_ACCOUNT)
-> > > >                         nr_accounted += vma_pages(vma);
-> > > >                 remove_vma(vma);
-> > > >                 count++;
-> > > >                 cond_resched();
-> > > >         } while ((vma = mas_find(&mas, ULONG_MAX)) != NULL);
-> > > >
-> > > >         BUG_ON(count != mm->map_count);
-> > > >
-> > > >         trace_exit_mmap(mm);
-> > > >         __mt_destroy(&mm->mm_mt);
-> > > >         mm->mmap = NULL;
-> > > 
-> > > ^^^ this line above needs to be removed when the patch is applied over
-> > > the maple tree patchset.
-> > 
-> > I am not fully up to date on the maple tree changes. Could you explain
-> > why resetting mm->mmap is not needed anymore please?
-> 
-> The maple tree patch set removes the linked list, including mm->mmap.
-> The call to __mt_destroy() means none of the old VMAs can be found in
-> the race condition that mm->mmap = NULL was solving.
+Introduce the bpf_obj_get_flags() function, so that it is possible to
+specify the needed permissions for obtaining a file descriptor from a
+pinned object.
 
-Thanks for the clarification, Liam.
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+---
+ tools/lib/bpf/bpf.c      | 8 +++++++-
+ tools/lib/bpf/bpf.h      | 1 +
+ tools/lib/bpf/libbpf.map | 1 +
+ 3 files changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index 33bac2006043..a5fc40f6ce13 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -670,18 +670,24 @@ int bpf_obj_pin(int fd, const char *pathname)
+ 	return libbpf_err_errno(ret);
+ }
+ 
+-int bpf_obj_get(const char *pathname)
++int bpf_obj_get_flags(const char *pathname, __u32 flags)
+ {
+ 	union bpf_attr attr;
+ 	int fd;
+ 
+ 	memset(&attr, 0, sizeof(attr));
+ 	attr.pathname = ptr_to_u64((void *)pathname);
++	attr.file_flags = flags;
+ 
+ 	fd = sys_bpf_fd(BPF_OBJ_GET, &attr, sizeof(attr));
+ 	return libbpf_err_errno(fd);
+ }
+ 
++int bpf_obj_get(const char *pathname)
++{
++	return bpf_obj_get_flags(pathname, 0);
++}
++
+ int bpf_prog_attach(int prog_fd, int target_fd, enum bpf_attach_type type,
+ 		    unsigned int flags)
+ {
+diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+index 20e4c852362d..6d0ceb2e90c4 100644
+--- a/tools/lib/bpf/bpf.h
++++ b/tools/lib/bpf/bpf.h
+@@ -339,6 +339,7 @@ LIBBPF_API int bpf_map_update_batch(int fd, const void *keys, const void *values
+ 				    const struct bpf_map_batch_opts *opts);
+ 
+ LIBBPF_API int bpf_obj_pin(int fd, const char *pathname);
++LIBBPF_API int bpf_obj_get_flags(const char *pathname, __u32 flags);
+ LIBBPF_API int bpf_obj_get(const char *pathname);
+ 
+ struct bpf_prog_attach_opts {
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 019278e66836..6c3ace12b27b 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -467,6 +467,7 @@ LIBBPF_1.0.0 {
+ 		libbpf_bpf_map_type_str;
+ 		libbpf_bpf_prog_type_str;
+ 		bpf_map_get_fd_by_id_flags;
++		bpf_obj_get_flags;
+ 
+ 	local: *;
+ };
 -- 
-Michal Hocko
-SUSE Labs
+2.25.1
+
