@@ -2,168 +2,130 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DA15FCCA488
-	for <linux-kselftest@archiver.kernel.org>; Wed,  8 Jun 2022 01:09:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8185C43334
+	for <linux-kselftest@archiver.kernel.org>; Wed,  8 Jun 2022 01:09:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348138AbiFHBIs (ORCPT
+        id S1348058AbiFHBIs (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Tue, 7 Jun 2022 21:08:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60826 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1839311AbiFHAC5 (ORCPT
+        with ESMTP id S1579260AbiFGXjr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Jun 2022 20:02:57 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2ED511CB7F;
-        Tue,  7 Jun 2022 16:52:07 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso16851699pjg.0;
-        Tue, 07 Jun 2022 16:52:07 -0700 (PDT)
+        Tue, 7 Jun 2022 19:39:47 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B4D40BA5E
+        for <linux-kselftest@vger.kernel.org>; Tue,  7 Jun 2022 14:39:25 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id r200so10988482iod.5
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Jun 2022 14:39:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=b3NZKzwwnS36QL4ucaqxtIuHPEUyyTomuKdcLQyEKAY=;
-        b=Gf7bKdJ2hUOr/LphELuKt2o2il5QdNDO4rPQYRQp+1RKXfjR13N6bKmp5cYllzWRT1
-         xhWgDv9jhC081rAPWRyoHtai4YiXoOEshYmG98xEi3wfEpFCM2PDCdIuy+YcJ0chYvKT
-         atBYZkLGl8/N43pToDTwRSTpFzFaMaAypJvvAQf+dndtlcYidM4/cRGYnwFcXWEtFEWi
-         Tcg9DoCiNNhHm/4hSnGnujiO9+rEPF9ieyuGMobYFn67e4mR2wStVhet3fN/z1EhPV1t
-         aMmWf/7BmFv9yBtn8Iwp64KBjrIImavp8mV1C3jBkHuJyJPrwDy+v+PnhrbQjoGDC5sB
-         2t0Q==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=DMYMqyjnC+Pa1f9t3aRd7d9q29f2hRwNi8wYEpJotmk=;
+        b=h4EOnSJW5qlumjyDRpOGgdjQoOyB4Q+O6l59N39UQahjkhxDl4VSySl01hMTwc9zRT
+         EfuDzgEVqg/pBp3s4lQPkvko7HQkMiBmLEgZ1AEo0N7Phwb0v+fDY90LCrvAPcCNaH2r
+         O3L623yMARWhJhFoBgQ8IewDspFlSDu0Jp5ag=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=b3NZKzwwnS36QL4ucaqxtIuHPEUyyTomuKdcLQyEKAY=;
-        b=PMNOqZv0gYYje7LKbxAyJDyL+ZlHZfMhp5bM+Gk/YtCO37w6dt/stbuRPAuHeIQxEU
-         W/9lu/ToLXXewh7L2Dp0vLRwzv3rrH3vq7aHe/XbS947qmv4b9OyOVqtmqtUaiNXoMnT
-         0VC86ADX/oAYxpXqrBh0FK1wBuYB/5BebDWAs10wjvToBJt151B9sM6ZuoHGamjimXMw
-         rdeJTuxFqN88UTCvNS7E4h8+EPKJYxzxiXiDNkjJYNJSMScfxEHhelqBPQC9dcXiOwWi
-         9qAnrgYpRHQ7b7/V4xZPg5i4FfbQf4Zc1Qs2zXqvXmSbfbK+/iKTsGAhg90+IKW4mdqC
-         rwjA==
-X-Gm-Message-State: AOAM533xkF3DKvaZ61c7W0Rhme3N5NdJlRfA9RnL3Pf0QGFDFR7ZHWue
-        lk613blWefXo7l5Xb85Ya34=
-X-Google-Smtp-Source: ABdhPJxccdrile2mSoYxkExBirNwrH/WiEDWbZeQDdUwJ0Lkq9krO4qFXX5rn/DFlb/QY2Iq77CWPw==
-X-Received: by 2002:a17:902:ce11:b0:167:7d4a:964b with SMTP id k17-20020a170902ce1100b001677d4a964bmr12617889plg.37.1654645927119;
-        Tue, 07 Jun 2022 16:52:07 -0700 (PDT)
-Received: from google.com ([2620:15c:211:201:f30f:4d03:66e6:b121])
-        by smtp.gmail.com with ESMTPSA id t9-20020a1709027fc900b00167863f0e68sm4026924plb.237.2022.06.07.16.52.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 16:52:06 -0700 (PDT)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Tue, 7 Jun 2022 16:52:04 -0700
-From:   Minchan Kim <minchan@kernel.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        regressions@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Nitin Gupta <ngupta@vflare.org>
-Subject: Re: qemu-arm: zram: mkfs.ext4 : Unable to handle kernel NULL pointer
- dereference at virtual address 00000140
-Message-ID: <Yp/kpPA7GdbArXDo@google.com>
-References: <CA+G9fYtVOfWWpx96fa3zzKzBPKiNu1w3FOD4j++G8MOG3Vs0EA@mail.gmail.com>
- <Yp47DODPCz0kNgE8@google.com>
- <CA+G9fYsjn0zySHU4YYNJWAgkABuJuKtHty7ELHmN-+30VYgCDA@mail.gmail.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=DMYMqyjnC+Pa1f9t3aRd7d9q29f2hRwNi8wYEpJotmk=;
+        b=3cbTEb6e6nFNMkfFlFHRpv18p1qEVSxDvC9+j87wJcGiGCXI1XoIlkxGSFc3oWyl6W
+         RjS+UVVVZkQCRsZJXTbptsku8Yktq663DgxRteC8VlO3xsSf0fXF5j4Ovx+dJeFAazrd
+         pudFEG+xWnt8AqbpUIRsOQ43jnboMq1LnEsCo6MVaUmGPO4YfhIz+6Qa7aFz5ig8kqcJ
+         PnXBupm66DB8pFFmGnimw1rw+Ttnj+GBWsN+uM9H8xHlSADEl1+TqMQ8D2td06ZdEGBO
+         Jn5m6YuS3qYSAFA+6oSykEr7LieqElwgNl7JS6cNd5orCW5x82MbN1HyTiKZe8eRu4HY
+         ZMww==
+X-Gm-Message-State: AOAM532uRzBmGpUboT6yQwm+riLuEAWR4GoJx6SV4Va6sGKILZbNQAEK
+        yd5e9wkunpZPxk8HuY2HRKL/Gw==
+X-Google-Smtp-Source: ABdhPJx4JWLAS1RWT5TFeTIfGK6vW9bn00rsuVLiTtAdQU1cno64ZEk4yj+YCiecaRL9yWnI7GLMpg==
+X-Received: by 2002:a05:6638:1495:b0:331:c58a:301 with SMTP id j21-20020a056638149500b00331c58a0301mr4212898jak.134.1654637962472;
+        Tue, 07 Jun 2022 14:39:22 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id e1-20020a022101000000b0032b3a78179csm7086269jaa.96.2022.06.07.14.39.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Jun 2022 14:39:22 -0700 (PDT)
+Subject: Re: [Bug Report] - kselftest build fails if output directory is first
+ level sub-directory
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        KERNEL SELFTEST FRAMEWORK <linux-kselftest@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "kernelci@groups.io" <kernelci@groups.io>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <c25d7ea7-4f72-4a2b-d8c3-d317e64fcbbb@collabora.com>
+ <CAK7LNATL4nMmKgrjS8meavnpn=HisD30QxuPUKDqtWWgbGcSZw@mail.gmail.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <a9470bfc-bddc-6aa6-0043-d49eb57611fe@linuxfoundation.org>
+Date:   Tue, 7 Jun 2022 15:39:20 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYsjn0zySHU4YYNJWAgkABuJuKtHty7ELHmN-+30VYgCDA@mail.gmail.com>
+In-Reply-To: <CAK7LNATL4nMmKgrjS8meavnpn=HisD30QxuPUKDqtWWgbGcSZw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jun 07, 2022 at 06:51:27AM +0530, Naresh Kamboju wrote:
-> On Mon, 6 Jun 2022 at 23:06, Minchan Kim <minchan@kernel.org> wrote:
-> >
-> > On Thu, Jun 02, 2022 at 02:19:34PM +0530, Naresh Kamboju wrote:
-> > > The following kernel crash reported while running selftests: zram: zram.sh
-> > > test case on qemu-arm with Linux mainline v5.18.0 kernel version.
-> > >
-> > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > >
-> > > Started noticing from kernel crash from
-> > > BAD: git_sha: cdeffe87f790dfd1baa193020411ce9a538446d7
-> > > GOOD:   git_sha: babf0bb978e3c9fce6c4eba6b744c8754fd43d8e
-> > >
-> > > # git log  --oneline
-> > > babf0bb978e3c9fce6c4eba6b744c8754fd43d8e..cdeffe87f790dfd1baa193020411ce9a538446d7
-> > >   -- drivers/block/
-> > > 98931dd95fd4 Merge tag 'mm-stable-2022-05-25' of
-> > > git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
-> > > 6140ae41effe zram: fix Kconfig dependency warning
-> > > b3fbd58fcbb1 mm: Kconfig: simplify zswap configuration
-> > > e7be8d1dd983 zram: remove double compression logic
-> > > a2ad63daa88b VFS: add FMODE_CAN_ODIRECT file flag
-> > > 30226b69f876 zram: add a huge_idle writeback mode
-> >
-> > Hi Nalesh,
-> >
-> > Thanks for the reporting the bug!
-> >
-> > I locally ran the test in my x86 KVM machine but couldn't reproduce it.
-> > How is it easy to reproduce?  Could you help to bisect it?
+On 5/22/22 11:15 AM, Masahiro Yamada wrote:
+> On Sat, May 21, 2022 at 3:44 PM Muhammad Usama Anjum
+> <usama.anjum@collabora.com> wrote:
+>>
+>> Hello,
+>>
+>> kselftest can be built using the kernel's top most Makefile without
+>> using kselftest's Makefile directly. But there is bug in the top most
+>> Makefile. The build fails if the specified output directory is first
+>> level sub-directory. Here is a example to reproduce this bug:
+>>
+>> make kselftest-all O=build
+>>
+>> "The Make is working in a wrong directory, that is why the relative path
+>> does not work." Masahiro Yamada. Feel free to fix it if someone pin the bug.
+>>
+>> It should be noted that the build works in some other combinations:
+>> make kselftest-all (works)
+>> make kselftest-all O=/tmp (works)
+>> make kselftest-all O=build/build2 (works)
+>>
+>> My unsuccessful attempt to fix this bug can be found here:
+>> https://lore.kernel.org/lkml/20220223191016.1658728-1-usama.anjum@collabora.com/
+>>
+>> Thanks,
+>> Muhammad Usama Anjum
 > 
-> It works on qemu_x86-64
-> It is always reproducible in qemu arm32 environment.
 > 
-> steps to reproduce:
-> # Please download and use this rootfs and kernel zImage
+> This problem starts from the bad design of the kselftest framework.
+> I did some research before. I think I can fix the root cause but
+> currently I do not have enough time to do it.
 > 
-> rootfs: https://oebuilds.tuxbuild.com/29zhlbEc3EWq2wod9Uy964Bp27q/images/am57xx-evm/rpb-console-image-lkft-am57xx-evm-20220601222434.rootfs.ext4.gz
-> kernel: https://builds.tuxbuild.com/29zhqJJizU2Y7Ka7ArhryUOrNDC/zImage
 > 
-> Boot command,
->  /usr/bin/qemu-system-aarch64 -cpu host,aarch64=off -machine
-> virt-2.10,accel=kvm -nographic -net
-> nic,model=virtio,maaacaddr=BA:DD:AD:CC:09:04 -net tap -m 2048 -monitor
-> none -kernel kernel/zImage --append "console=ttyAMA0 root=/dev/vda rw"
-> -hda rootfs/rpb-console-image-lkft-am57xx-evm-20220601222434.rootfs.ext4
-> -m 4096 -smp 2
+> KBUILD_ABS_SRCTREE is a user-interface to request
+> Kbuild to use the absolute path.
+> If it is forced in the top Makefile, users have no way to
+> negate it.
+> It is true that using the absolute path is a quick work-around
+> because you do not need to care about the current working directory.
 > 
-> # cd /opt/kselftests/default-in-kernel/zram
-> # ./zram.sh
+> If you insist on it,  just go ahead.  It is just two line changes.
+> Once the issue is fixed in a better way, your patch can be reverted easily.
 > 
-> Allow me sometime I will try to bisect this problem.
+> 
+> 
 
-Thanks for sharing the info. 
+Why don't we work on fixing it the wright way? I would rather go that
+route than using short rem fixes.
 
-I managed to work your rootfs with my local arm build
-based on the problematic git tip. 
-However, I couldn't suceed to reproduce it.
+Usama, would you be interested in working on a proper fix as recommended
+by Masahiro?
 
-I needed to build zsmalloc/zram built-in instead of modules
-Is it related? Hmm,
-
-Yeah, It would be very helpful if you could help to bisect it.
-Thanks!
-
-=== &< ====
-create '1' zram device(s)
-zram modules already loaded, kernel supports zram-control interface
-[  936.188541] zram: Added device: zram1
-all zram devices (/dev/zram1~1 successfully created
-set max_comp_streams to zram device(s)
-The device attribute max_comp_streams was deprecated in 4.7
-set disk size to zram device(s)
-/sys/block/zram1/disksize = '1048576'
-zram set disksizes: OK
-set memory limit to zram device(s)
-[  936.214438] zram1: detected capacity change from 0 to 2048
-/sys/block/zram1/mem_limit = '1M'
-zram set memory limit: OK
-make swap with zram device(s)
-[  936.608854] Adding 1020k swap on /dev/zram1.  Priority:-2 extents:1 across:1020k SS
-done with /dev/zram1
-zram making zram mkswap and swapon: OK
-zram swapoff: OK
-zram cleanup
-[  937.063416] zram1: detected capacity change from 2048 to 0
-[  937.189223] zram: Removed device: zram1
-zram02 : [PASS]
-root@am57xx-evm:/opt/kselftests/default-in-kernel/zram# uname -r
-5.18.0-11934-g54eb8462f21f
-
+thanks,
+-- Shuah
