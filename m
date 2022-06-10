@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DF2DFCCA47B
-	for <linux-kselftest@archiver.kernel.org>; Fri, 10 Jun 2022 23:36:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7498CCA481
+	for <linux-kselftest@archiver.kernel.org>; Fri, 10 Jun 2022 23:36:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350951AbiFJXgS (ORCPT
+        id S1350318AbiFJXgV (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 10 Jun 2022 19:36:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57476 "EHLO
+        Fri, 10 Jun 2022 19:36:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350715AbiFJXgF (ORCPT
+        with ESMTP id S1350236AbiFJXgJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Jun 2022 19:36:05 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D80A7289A1C;
-        Fri, 10 Jun 2022 16:35:38 -0700 (PDT)
+        Fri, 10 Jun 2022 19:36:09 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F583289F25;
+        Fri, 10 Jun 2022 16:35:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654904139; x=1686440139;
+  t=1654904142; x=1686440142;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=qDvqVZ/A3fM/nZiMoOHgbdE/phpXdySZH6n5Muy9S6I=;
-  b=l4ioGq080zDA2Ztv/LGQc+OC6/O79VljpHbjTmBkMBZKvvK9P81Y4VrX
-   espfeU34hWlCbrtLp4vQlHtUjuq0RHjpZd6oo8WfCIWrEWVVPiZRATqOu
-   Ey0JF1JCJ9X8aW+OYUnSoujIAvZl/YcFGAO7bfCHZuNhGgVRNnPpKIXcY
-   P4gR51RVZO1cdtfa+vIKzy6oYPSxmI4vonO1EuZyC3sPv/yb668vnSPIx
-   Ls1L3rqXwj2PMptq2Rjxago0Tbi3aKScUbdBu1IYBF+N3RYg3uMvPbWlV
-   aG87CoYdfmegfjxjJViDWs10xI6ukG8cFpdLUcunaWimYwNunnxwq3tVX
+  bh=XfSsZjEZ1l0M6Je8ux0RlvZeHHKfZHKU8L8K8HX1yVc=;
+  b=KLIDghy+2mwQ4ZQ1m6ILXDXs+ttds2s6KsWK39jGuLDWkNl2IjGrBWNu
+   6or3H8zeWVHBcnrgo0J3OUcu8wObuDWE01Ms9E70jk6fTjkGgZ8nsJE5Z
+   eziUBFuY6oc4Gm1Zhu8BFSJDdAH9Anz7A4pb41PCtBIWF8ztJjdGuxmvN
+   BJbT7jIaAb+4JZquAsd+mSth/6HHZFBszgf/xbVcy+QYHoI8HxMBPf29k
+   jQtAFb/wn7WmuTiGi/8Yivi6fY+JFv9awj6fzZadP2Hglo8dfXd1B6XCt
+   UbF3q4Zw8ksqQ/nEsrA481oFn7Qcpp8hbqLwubT5bw8w1xcoOVhQa/dU5
    A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10374"; a="278579377"
+X-IronPort-AV: E=McAfee;i="6400,9594,10374"; a="258214176"
 X-IronPort-AV: E=Sophos;i="5.91,291,1647327600"; 
-   d="scan'208";a="278579377"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 16:35:38 -0700
+   d="scan'208";a="258214176"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 16:35:41 -0700
 X-IronPort-AV: E=Sophos;i="5.91,291,1647327600"; 
-   d="scan'208";a="828500280"
+   d="scan'208";a="760716868"
 Received: from pleung-mobl1.amr.corp.intel.com (HELO localhost) ([10.212.33.34])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 16:35:37 -0700
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 16:35:41 -0700
 From:   ira.weiny@intel.com
 To:     linux-api@vger.kernel.org
 Cc:     Ira Weiny <ira.weiny@intel.com>,
@@ -46,9 +46,9 @@ Cc:     Ira Weiny <ira.weiny@intel.com>,
         Sohil Mehta <sohil.mehta@intel.com>, x86@kernel.org,
         linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: [RFC PATCH 3/6] testing/pkeys: Add additional test for pkey_alloc()
-Date:   Fri, 10 Jun 2022 16:35:30 -0700
-Message-Id: <20220610233533.3649584-4-ira.weiny@intel.com>
+Subject: [RFC PATCH 6/6] pkeys: Change mm_pkey_free() to void
+Date:   Fri, 10 Jun 2022 16:35:33 -0700
+Message-Id: <20220610233533.3649584-7-ira.weiny@intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220610233533.3649584-1-ira.weiny@intel.com>
 References: <20220610233533.3649584-1-ira.weiny@intel.com>
@@ -60,48 +60,89 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Ira Weiny <ira.weiny@intel.com>
 
-When pkeys are not available on the hardware pkey_alloc() has specific
-behavior which was previously untested.
+Now that the pkey arch support is no longer checked in mm_pkey_free()
+there is no reason to have it return int.
 
-Add test for this.
+Change the return value to void.
 
 Cc: Dave Hansen <dave.hansen@linux.intel.com>
 Cc: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+Suggested-by: Sohil Mehta <sohil.mehta@intel.com>
 Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 ---
- tools/testing/selftests/vm/protection_keys.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ arch/powerpc/include/asm/pkeys.h | 4 +---
+ arch/x86/include/asm/pkeys.h     | 4 +---
+ include/linux/pkeys.h            | 5 +----
+ mm/mprotect.c                    | 6 ++++--
+ 4 files changed, 7 insertions(+), 12 deletions(-)
 
-diff --git a/tools/testing/selftests/vm/protection_keys.c b/tools/testing/selftests/vm/protection_keys.c
-index 43e47de19c0d..4b733a75606f 100644
---- a/tools/testing/selftests/vm/protection_keys.c
-+++ b/tools/testing/selftests/vm/protection_keys.c
-@@ -1554,6 +1554,16 @@ void test_implicit_mprotect_exec_only_memory(int *ptr, u16 pkey)
- 	do_not_expect_pkey_fault("plain read on recently PROT_EXEC area");
+diff --git a/arch/powerpc/include/asm/pkeys.h b/arch/powerpc/include/asm/pkeys.h
+index e96aa91f817b..4d01a48ab941 100644
+--- a/arch/powerpc/include/asm/pkeys.h
++++ b/arch/powerpc/include/asm/pkeys.h
+@@ -105,11 +105,9 @@ static inline int mm_pkey_alloc(struct mm_struct *mm)
+ 	return ret;
  }
  
-+void test_pkey_alloc_on_unsupported_cpu(void)
-+{
-+	int test_pkey = sys_pkey_alloc(0, 0);
-+
-+	dprintf1("pkey_alloc: %d (%d %s)\n", test_pkey, errno,
-+		 strerror(errno));
-+	pkey_assert(test_pkey < 0);
-+	pkey_assert(errno == ENOSPC);
-+}
-+
- void test_mprotect_pkey_on_unsupported_cpu(int *ptr, u16 pkey)
+-static inline int mm_pkey_free(struct mm_struct *mm, int pkey)
++static inline void mm_pkey_free(struct mm_struct *mm, int pkey)
  {
- 	int size = PAGE_SIZE;
-@@ -1688,6 +1698,8 @@ int main(int argc, char *argv[])
+ 	__mm_pkey_free(mm, pkey);
+-
+-	return 0;
+ }
  
- 		printf("running PKEY tests for unsupported CPU/OS\n");
+ /*
+diff --git a/arch/x86/include/asm/pkeys.h b/arch/x86/include/asm/pkeys.h
+index da02737cc4d1..1f408f46fa9a 100644
+--- a/arch/x86/include/asm/pkeys.h
++++ b/arch/x86/include/asm/pkeys.h
+@@ -105,11 +105,9 @@ int mm_pkey_alloc(struct mm_struct *mm)
+ }
  
-+		test_pkey_alloc_on_unsupported_cpu();
-+
- 		ptr  = mmap(NULL, size, PROT_NONE, MAP_ANONYMOUS|MAP_PRIVATE, -1, 0);
- 		assert(ptr != (void *)-1);
- 		test_mprotect_pkey_on_unsupported_cpu(ptr, 1);
+ static inline
+-int mm_pkey_free(struct mm_struct *mm, int pkey)
++void mm_pkey_free(struct mm_struct *mm, int pkey)
+ {
+ 	mm_set_pkey_free(mm, pkey);
+-
+-	return 0;
+ }
+ 
+ static inline int vma_pkey(struct vm_area_struct *vma)
+diff --git a/include/linux/pkeys.h b/include/linux/pkeys.h
+index 86be8bf27b41..bf98c50a3437 100644
+--- a/include/linux/pkeys.h
++++ b/include/linux/pkeys.h
+@@ -30,10 +30,7 @@ static inline int mm_pkey_alloc(struct mm_struct *mm)
+ 	return -1;
+ }
+ 
+-static inline int mm_pkey_free(struct mm_struct *mm, int pkey)
+-{
+-	return -EINVAL;
+-}
++static inline void mm_pkey_free(struct mm_struct *mm, int pkey) { }
+ 
+ static inline int arch_set_user_pkey_access(struct task_struct *tsk, int pkey,
+ 			unsigned long init_val)
+diff --git a/mm/mprotect.c b/mm/mprotect.c
+index 41458e729c27..e872bdd2e228 100644
+--- a/mm/mprotect.c
++++ b/mm/mprotect.c
+@@ -809,8 +809,10 @@ SYSCALL_DEFINE1(pkey_free, int, pkey)
+ 		return ret;
+ 
+ 	mmap_write_lock(current->mm);
+-	if (mm_pkey_is_allocated(current->mm, pkey))
+-		ret = mm_pkey_free(current->mm, pkey);
++	if (mm_pkey_is_allocated(current->mm, pkey)) {
++		mm_pkey_free(current->mm, pkey);
++		ret = 0;
++	}
+ 	mmap_write_unlock(current->mm);
+ 
+ 	/*
 -- 
 2.35.1
 
