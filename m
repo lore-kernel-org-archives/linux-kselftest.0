@@ -2,94 +2,117 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23AF1C43334
-	for <linux-kselftest@archiver.kernel.org>; Tue, 14 Jun 2022 11:52:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 288DDC433EF
+	for <linux-kselftest@archiver.kernel.org>; Tue, 14 Jun 2022 11:53:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236054AbiFNLwe (ORCPT
+        id S243641AbiFNLxw (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 14 Jun 2022 07:52:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41258 "EHLO
+        Tue, 14 Jun 2022 07:53:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243542AbiFNLwd (ORCPT
+        with ESMTP id S241585AbiFNLxu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Jun 2022 07:52:33 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE5F2F5A3;
-        Tue, 14 Jun 2022 04:52:30 -0700 (PDT)
-Received: from dggpeml500024.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LMmtb2SLNz9sv6;
-        Tue, 14 Jun 2022 19:49:11 +0800 (CST)
-Received: from dggpeml500003.china.huawei.com (7.185.36.200) by
- dggpeml500024.china.huawei.com (7.185.36.10) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 14 Jun 2022 19:52:28 +0800
-Received: from huawei.com (10.175.103.91) by dggpeml500003.china.huawei.com
- (7.185.36.200) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 14 Jun
- 2022 19:52:28 +0800
-From:   Yu Liao <liaoyu15@huawei.com>
-To:     <chenxiang66@hisilicon.com>, <song.bao.hua@hisilicon.com>,
-        <tiantao6@hisilicon.com>, <shuah@kernel.org>
-CC:     <liaoyu15@huawei.com>, <liwei391@huawei.com>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: [PATCH] selftests dma: fix compile error for dma_map_benchmark
-Date:   Tue, 14 Jun 2022 20:02:35 +0800
-Message-ID: <20220614120235.1557825-1-liaoyu15@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 14 Jun 2022 07:53:50 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35E3B366BA;
+        Tue, 14 Jun 2022 04:53:49 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D43451F953;
+        Tue, 14 Jun 2022 11:53:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1655207627; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=enED3+mwpyEj3HYd1xYYpNVTbgUm7frMywot5/XVq7k=;
+        b=MKNAdTBQZJDywcGSMhM7eKVDS9hIFTqkt9SPhb/KumTuThcjnWgew5g35qS1WfIN35FvMH
+        +jmoTfwK7Sml47xjNTXbVEOEhtfUIjQJ3l2yz4rYR/B37fK1VH4zw9FonngffORHliRegZ
+        t1BTLwB3rgE1pXUmN+ycYXWzqtGXp5U=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 53F0D139EC;
+        Tue, 14 Jun 2022 11:53:47 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id OdGjE8t2qGJdfAAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Tue, 14 Jun 2022 11:53:47 +0000
+Date:   Tue, 14 Jun 2022 13:53:45 +0200
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Waiman Long <longman@redhat.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Subject: Re: [PATCH v11 7/8] cgroup/cpuset: Update description of
+ cpuset.cpus.partition in cgroup-v2.rst
+Message-ID: <20220614115345.GA6771@blackbody.suse.cz>
+References: <20220510153413.400020-1-longman@redhat.com>
+ <20220510153413.400020-8-longman@redhat.com>
+ <YqYnQ4U4t6j/3UaL@slm.duckdns.org>
+ <404171dc-0da3-21f2-5003-9718f875e967@redhat.com>
+ <YqarMyNo9oHxhZFh@slm.duckdns.org>
+ <20220613142452.GB6910@blackbody.suse.cz>
+ <YqdzuSQuAeiPXQvy@slm.duckdns.org>
+ <20220613175548.GB21665@blackbody.suse.cz>
+ <Yqd7WMFj6AEyV3Cy@slm.duckdns.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml500003.china.huawei.com (7.185.36.200)
-X-CFilter-Loop: Reflected
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="3V7upXqbjpZ4EhLz"
+Content-Disposition: inline
+In-Reply-To: <Yqd7WMFj6AEyV3Cy@slm.duckdns.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When building selftests/dma:
-$ make -C tools/testing/selftests TARGETS=dma
-I hit the following compilation error:
 
-dma_map_benchmark.c:13:10: fatal error: linux/map_benchmark.h: No such file or directory
- #include <linux/map_benchmark.h>
-          ^~~~~~~~~~~~~~~~~~~~~~~
+--3V7upXqbjpZ4EhLz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-dma/Makefile does not include the map_benchmark.h path, so add
-more including path, and fix include order in dma_map_benchmark.c
+On Mon, Jun 13, 2022 at 08:00:56AM -1000, Tejun Heo <tj@kernel.org> wrote:
+> Yeah, I don't know why this part is different from any other errors that the
+> parent can make.
 
-Fixes: 8ddde07a3d28 ("dma-mapping: benchmark: extract a common header file for map_benchmark definition")
-Signed-off-by: Yu Liao <liaoyu15@huawei.com>
----
- tools/testing/selftests/dma/Makefile            | 1 +
- tools/testing/selftests/dma/dma_map_benchmark.c | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+It's different because a write to parent's cpuset.cpus is independent of
+whether cpuset.cpus of its children are exclusive or not.
+In an extreme case the children may be non-exclusive
 
-diff --git a/tools/testing/selftests/dma/Makefile b/tools/testing/selftests/dma/Makefile
-index aa8e8b5b3864..cd8c5ece1cba 100644
---- a/tools/testing/selftests/dma/Makefile
-+++ b/tools/testing/selftests/dma/Makefile
-@@ -1,5 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- CFLAGS += -I../../../../usr/include/
-+CFLAGS += -I../../../../include/
- 
- TEST_GEN_PROGS := dma_map_benchmark
- 
-diff --git a/tools/testing/selftests/dma/dma_map_benchmark.c b/tools/testing/selftests/dma/dma_map_benchmark.c
-index c3b3c09e995e..5c997f17fcbd 100644
---- a/tools/testing/selftests/dma/dma_map_benchmark.c
-+++ b/tools/testing/selftests/dma/dma_map_benchmark.c
-@@ -10,8 +10,8 @@
- #include <unistd.h>
- #include <sys/ioctl.h>
- #include <sys/mman.h>
--#include <linux/map_benchmark.h>
- #include <linux/types.h>
-+#include <linux/map_benchmark.h>
- 
- #define NSEC_PER_MSEC	1000000L
- 
--- 
-2.25.1
+    parent	cpuset.cpus=0-3 //   valid partition
+    `- child_1	cpuset.cpus=0-1	// invalid partition
+    `- child_2	cpuset.cpus=1-2 // invalid partition
 
+but the parent can still be a valid partition (thanks to cpu no. 3 in
+the example above).
+
+Do I miss anything?
+
+Thanks,
+Michal
+
+--3V7upXqbjpZ4EhLz
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYIAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCYqh2xwAKCRAkDQmsBEOq
+uYpOAQCf85csUj8650NOSj8/SYGx1Rke2TaokzgsJH1Dl9CDigD9GRFyEDBK4gUH
+O3ICbyDSHByTv2ncDcIRjpX6QGMWSAM=
+=mVZv
+-----END PGP SIGNATURE-----
+
+--3V7upXqbjpZ4EhLz--
