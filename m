@@ -2,166 +2,118 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 721A6C43334
-	for <linux-kselftest@archiver.kernel.org>; Fri, 17 Jun 2022 03:46:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7A52C43334
+	for <linux-kselftest@archiver.kernel.org>; Fri, 17 Jun 2022 03:52:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233339AbiFQDqX (ORCPT
+        id S1379488AbiFQDwj (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 16 Jun 2022 23:46:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43452 "EHLO
+        Thu, 16 Jun 2022 23:52:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbiFQDqX (ORCPT
+        with ESMTP id S1379820AbiFQDwi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Jun 2022 23:46:23 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6241665D09;
-        Thu, 16 Jun 2022 20:46:22 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id w29so2984586pgl.8;
-        Thu, 16 Jun 2022 20:46:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=zMFxF1dps3FFy1Csp9JLYJx8ndjCnJRCu+jFZkoArKo=;
-        b=HtTeHOo9BHWbZoHy/pEv3QUVXbb9ShKGBsOT1QulYweyqQk7hyNpRHeLGVzEKQ98rT
-         JhESAdD0IYdJimorX5NKxFe9s6hye5CCDY+Un/+vEUROS708QRbZQOWC2o1kxdgBm5pw
-         /1N7/Vr/YANbYYjYq5vlCVzOMKTQtofoHcFL64hezXuz71Jh1eggkn7SEzeQE//zfp9k
-         zahhZYHZSTE3gj/+a9dVJcp2gKFmaz+hr2BGMB8vFcDAfknHXgxOxQkWh88KN3cQYEZm
-         E68Iy9ragbxNdALvT5l1T1dp6Djpv3d8Ah6/mgAt/V+4/F9An7m5PMKOLg4TpxbXyobD
-         Tb7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=zMFxF1dps3FFy1Csp9JLYJx8ndjCnJRCu+jFZkoArKo=;
-        b=yCoKoAYxIN7UgG3dH5PnLkJ4jVsdqg4kg1Sxy9+gIabcAcJbgKc9zV0sGozys2WGDS
-         ug8rdX971vMXnQVLJ3eok0ToWp+SBv5GMKC7xCYRDJwfig3mP0Y5kurph8h5lfPb6UA9
-         X2p089iuW/reVuTSIWEesYvssyOUjLaltZqgzd8fvytQXfCLYO/S+6WyIbIql9/1vcyY
-         fohpRv8hoCBapMPen34vMogZXbBlhzzS0pJ49oPp4ydpisCUTd5jqxIgo7EXB10gWs/v
-         YpiWgFdIctAMByGZkQPfi4zWSSHKslRT/JZpUc3gITLEJ7RJKnN7CT8LYw27bbCMv8I4
-         YPHg==
-X-Gm-Message-State: AJIora/DcD6qmYPKR3m4MJJ8A+DKMNRyRO+Bsm+6M3OO6Udh8RGlN4b3
-        tiuExH8+sxdLFJZJcZbeTzM=
-X-Google-Smtp-Source: AGRyM1tNfMAJ6rxox42YsjqzmdmTHXZxY7Lk4uwn4jVj4c3LfYwcHs1HZUCuTQFAQRMDLD1Wm8zIzA==
-X-Received: by 2002:a05:6a00:24c1:b0:518:c52f:f5 with SMTP id d1-20020a056a0024c100b00518c52f00f5mr8045022pfv.15.1655437581704;
-        Thu, 16 Jun 2022 20:46:21 -0700 (PDT)
-Received: from MacBook-Pro-3.local ([2620:10d:c090:400::5:29cb])
-        by smtp.gmail.com with ESMTPSA id i135-20020a62878d000000b0051baeb06c0bsm2481532pfe.168.2022.06.16.20.46.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jun 2022 20:46:20 -0700 (PDT)
-Date:   Thu, 16 Jun 2022 20:46:17 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kpsingh@kernel.org, john.fastabend@gmail.com,
-        songliubraving@fb.com, kafai@fb.com, yhs@fb.com,
-        bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RESEND][PATCH v4 2/4] bpf: Add bpf_request_key_by_id() helper
-Message-ID: <20220617034617.db23phfavuhqx4vi@MacBook-Pro-3.local>
-References: <20220614130621.1976089-1-roberto.sassu@huawei.com>
- <20220614130621.1976089-3-roberto.sassu@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220614130621.1976089-3-roberto.sassu@huawei.com>
+        Thu, 16 Jun 2022 23:52:38 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AC911BB;
+        Thu, 16 Jun 2022 20:52:30 -0700 (PDT)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25H2Il8n013995;
+        Fri, 17 Jun 2022 03:51:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : in-reply-to : references : content-type : mime-version :
+ date : content-transfer-encoding; s=pp1;
+ bh=CXxs8+WhIUl3U8lU7Qeuh+7j6KZHP8StgkoSzdoFeqI=;
+ b=glOV6CVsKdaWUcxk//dcNwKvPZhscAgrx4325MsfegJVeT6bmfjzUUiFz/NSoybN4PJB
+ PyclC7vJGxNnl7LP1pYuiTJmbqV+kXQ3I8y+XkkmyJRD4hPYmboA3Ml/fnsTBYx+TPay
+ rhEGmaWuY1KALBbBOJXAtaFu5rj3BNXJo8u6JXFug9A8U8wR8FM2FR5I7F3uYhOCo6eI
+ LN/90YL+DpOu/bw837FGHkBWKtveRtzggWNhDm1J4sJ/fV6aeHjsB/fL1sP4cBRbaTIf
+ D/tOmtcrcziSjGQtJgra+vSkH1xA8MCWbg16x655bPDG776OrPVrkK29+7+yBdo1tdq6 eg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gqw83xnp1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Jun 2022 03:51:32 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25H3ZbrG017222;
+        Fri, 17 Jun 2022 03:51:31 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gqw83xnnn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Jun 2022 03:51:31 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25H3p0lj020732;
+        Fri, 17 Jun 2022 03:51:29 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma01fra.de.ibm.com with ESMTP id 3gmjp8xc6h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Jun 2022 03:51:29 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25H3pRtJ18678188
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Jun 2022 03:51:27 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 159174C046;
+        Fri, 17 Jun 2022 03:51:27 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 982C74C040;
+        Fri, 17 Jun 2022 03:51:25 +0000 (GMT)
+Received: from sig-9-65-64-10.ibm.com (unknown [9.65.64.10])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 17 Jun 2022 03:51:25 +0000 (GMT)
+Message-ID: <dba0cbb3e516ce715939be3638d2b5639608f2c1.camel@linux.ibm.com>
+Subject: Re: [RFC PATCH 1/2] selftests/kexec: remove broken EFI_VARS secure
+ boot fallback check
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org
+Cc:     Matthew Garrett <mjg59@srcf.ucam.org>,
+        Peter Jones <pjones@redhat.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>
+In-Reply-To: <20220616124740.580708-2-ardb@kernel.org>
+References: <20220616124740.580708-1-ardb@kernel.org>
+         <20220616124740.580708-2-ardb@kernel.org>
+Content-Type: text/plain; charset="ISO-8859-15"
+Mime-Version: 1.0
+Date:   Thu, 16 Jun 2022 14:08:56 -0400
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 4InHe3smSIPxZBcxxyoelLs9sVfQeoNo
+X-Proofpoint-ORIG-GUID: mKzpx9LRGCWb-ISX2aC0oL-oxHzRhU8z
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-17_02,2022-06-16_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=947
+ mlxscore=0 spamscore=0 suspectscore=0 impostorscore=0 clxscore=1011
+ priorityscore=1501 adultscore=0 phishscore=0 malwarescore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206170015
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 03:06:19PM +0200, Roberto Sassu wrote:
-> Add the bpf_request_key_by_id() helper, so that an eBPF program can obtain
-> a suitable key pointer to pass to the bpf_verify_pkcs7_signature() helper,
-> to be introduced in a later patch.
+On Thu, 2022-06-16 at 14:47 +0200, Ard Biesheuvel wrote:
+> Commit b433a52aa28733e0 ("selftests/kexec: update get_secureboot_mode")
+> refactored the code that discovers the EFI secure boot mode so it only
+> depends on either the efivars pseudo filesystem or the efivars sysfs
+> interface, but never both.
 > 
-> The passed identifier can have the following values: 0 for the primary
-> keyring (immutable keyring of system keys); 1 for both the primary and
-> secondary keyring (where keys can be added only if they are vouched for by
-> existing keys in those keyrings); 2 for the platform keyring (primarily
-> used by the integrity subsystem to verify a kexec'ed kerned image and,
-> possibly, the initramfs signature); ULONG_MAX for the session keyring (for
-> testing purposes).
+> However, the latter version was not implemented correctly, given the
+> fact that the local 'efi_vars' variable never assumes a value. This
+> means the fallback has been dead code ever since it was introduced.
 > 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
->  include/uapi/linux/bpf.h       | 17 +++++++++++++++++
->  kernel/bpf/bpf_lsm.c           | 30 ++++++++++++++++++++++++++++++
->  scripts/bpf_doc.py             |  2 ++
->  tools/include/uapi/linux/bpf.h | 17 +++++++++++++++++
->  4 files changed, 66 insertions(+)
+> So let's drop the fallback altogether. The sysfs interface has been
+> deprecated for ~10 years now, and is only enabled on x86 to begin with,
+> so it is time to get rid of it entirely.
 > 
-> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> index f4009dbdf62d..dfd93e0e0759 100644
-> --- a/include/uapi/linux/bpf.h
-> +++ b/include/uapi/linux/bpf.h
-> @@ -5249,6 +5249,22 @@ union bpf_attr {
->   *		Pointer to the underlying dynptr data, NULL if the dynptr is
->   *		read-only, if the dynptr is invalid, or if the offset and length
->   *		is out of bounds.
-> + *
-> + * struct key *bpf_request_key_by_id(unsigned long id)
-> + *	Description
-> + *		Request a keyring by *id*.
-> + *
-> + *		*id* can have the following values (some defined in
-> + *		verification.h): 0 for the primary keyring (immutable keyring of
-> + *		system keys); 1 for both the primary and secondary keyring
-> + *		(where keys can be added only if they are vouched for by
-> + *		existing keys in those keyrings); 2 for the platform keyring
-> + *		(primarily used by the integrity subsystem to verify a kexec'ed
-> + *		kerned image and, possibly, the initramfs signature); ULONG_MAX
-> + *		for the session keyring (for testing purposes).
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: Mimi Zohar <zohar@linux.ibm.com>
+> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 
-It's never ok to add something like this to uapi 'for testing purposes'.
-If it's not useful in general it should not be a part of api.
+Thanks, Ard.
 
-> + *	Return
-> + *		A non-NULL pointer if *id* is valid and not 0, a NULL pointer
-> + *		otherwise.
->   */
->  #define __BPF_FUNC_MAPPER(FN)		\
->  	FN(unspec),			\
-> @@ -5455,6 +5471,7 @@ union bpf_attr {
->  	FN(dynptr_read),		\
->  	FN(dynptr_write),		\
->  	FN(dynptr_data),		\
-> +	FN(request_key_by_id),		\
->  	/* */
->  
->  /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-> diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
-> index c1351df9f7ee..e1911812398b 100644
-> --- a/kernel/bpf/bpf_lsm.c
-> +++ b/kernel/bpf/bpf_lsm.c
-> @@ -16,6 +16,7 @@
->  #include <linux/bpf_local_storage.h>
->  #include <linux/btf_ids.h>
->  #include <linux/ima.h>
-> +#include <linux/verification.h>
->  
->  /* For every LSM hook that allows attachment of BPF programs, declare a nop
->   * function where a BPF program can be attached.
-> @@ -132,6 +133,31 @@ static const struct bpf_func_proto bpf_get_attach_cookie_proto = {
->  	.arg1_type	= ARG_PTR_TO_CTX,
->  };
->  
-> +#ifdef CONFIG_KEYS
-> +BTF_ID_LIST_SINGLE(bpf_request_key_by_id_btf_ids, struct, key)
-> +
-> +BPF_CALL_1(bpf_request_key_by_id, unsigned long, id)
-> +{
-> +	const struct cred *cred = current_cred();
-> +
-> +	if (id > (unsigned long)VERIFY_USE_PLATFORM_KEYRING && id != ULONG_MAX)
-> +		return (unsigned long)NULL;
-> +
-> +	if (id == ULONG_MAX)
-> +		return (unsigned long)cred->session_keyring;
-> +
-> +	return id;
+Reviewed-by:  Mimi Zohar <zohar@linux.ibm.com>
 
-It needs to do a proper lookup.
-Why cannot it do lookup_user_key ?
-The helper needs 'flags' arg too.
-Please think hard of extensibility and long term usefulness of api.
-At present this api feels like it was 'let me just hack something quickly'. Not ok.
