@@ -2,118 +2,149 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7A52C43334
-	for <linux-kselftest@archiver.kernel.org>; Fri, 17 Jun 2022 03:52:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A203DC43334
+	for <linux-kselftest@archiver.kernel.org>; Fri, 17 Jun 2022 03:59:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379488AbiFQDwj (ORCPT
+        id S1379821AbiFQD7O (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 16 Jun 2022 23:52:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49514 "EHLO
+        Thu, 16 Jun 2022 23:59:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379820AbiFQDwi (ORCPT
+        with ESMTP id S1379395AbiFQD7N (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Jun 2022 23:52:38 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AC911BB;
-        Thu, 16 Jun 2022 20:52:30 -0700 (PDT)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25H2Il8n013995;
-        Fri, 17 Jun 2022 03:51:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : in-reply-to : references : content-type : mime-version :
- date : content-transfer-encoding; s=pp1;
- bh=CXxs8+WhIUl3U8lU7Qeuh+7j6KZHP8StgkoSzdoFeqI=;
- b=glOV6CVsKdaWUcxk//dcNwKvPZhscAgrx4325MsfegJVeT6bmfjzUUiFz/NSoybN4PJB
- PyclC7vJGxNnl7LP1pYuiTJmbqV+kXQ3I8y+XkkmyJRD4hPYmboA3Ml/fnsTBYx+TPay
- rhEGmaWuY1KALBbBOJXAtaFu5rj3BNXJo8u6JXFug9A8U8wR8FM2FR5I7F3uYhOCo6eI
- LN/90YL+DpOu/bw837FGHkBWKtveRtzggWNhDm1J4sJ/fV6aeHjsB/fL1sP4cBRbaTIf
- D/tOmtcrcziSjGQtJgra+vSkH1xA8MCWbg16x655bPDG776OrPVrkK29+7+yBdo1tdq6 eg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gqw83xnp1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Jun 2022 03:51:32 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25H3ZbrG017222;
-        Fri, 17 Jun 2022 03:51:31 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gqw83xnnn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Jun 2022 03:51:31 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25H3p0lj020732;
-        Fri, 17 Jun 2022 03:51:29 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma01fra.de.ibm.com with ESMTP id 3gmjp8xc6h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Jun 2022 03:51:29 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25H3pRtJ18678188
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 Jun 2022 03:51:27 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 159174C046;
-        Fri, 17 Jun 2022 03:51:27 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 982C74C040;
-        Fri, 17 Jun 2022 03:51:25 +0000 (GMT)
-Received: from sig-9-65-64-10.ibm.com (unknown [9.65.64.10])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 17 Jun 2022 03:51:25 +0000 (GMT)
-Message-ID: <dba0cbb3e516ce715939be3638d2b5639608f2c1.camel@linux.ibm.com>
-Subject: Re: [RFC PATCH 1/2] selftests/kexec: remove broken EFI_VARS secure
- boot fallback check
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org
-Cc:     Matthew Garrett <mjg59@srcf.ucam.org>,
-        Peter Jones <pjones@redhat.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>
-In-Reply-To: <20220616124740.580708-2-ardb@kernel.org>
-References: <20220616124740.580708-1-ardb@kernel.org>
-         <20220616124740.580708-2-ardb@kernel.org>
-Content-Type: text/plain; charset="ISO-8859-15"
-Mime-Version: 1.0
-Date:   Thu, 16 Jun 2022 14:08:56 -0400
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 4InHe3smSIPxZBcxxyoelLs9sVfQeoNo
-X-Proofpoint-ORIG-GUID: mKzpx9LRGCWb-ISX2aC0oL-oxHzRhU8z
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-17_02,2022-06-16_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=947
- mlxscore=0 spamscore=0 suspectscore=0 impostorscore=0 clxscore=1011
- priorityscore=1501 adultscore=0 phishscore=0 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206170015
+        Thu, 16 Jun 2022 23:59:13 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E8D66688;
+        Thu, 16 Jun 2022 20:59:12 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id 184so2996666pga.12;
+        Thu, 16 Jun 2022 20:59:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=0W/HagJonywK7ZJ69fI6hX0gZNSYy1J0766XYUBnWpk=;
+        b=Nvg1C8j395PzqVMZnx7Pj7fKKRISIC9UVVzrpnpRJTkWrg/GeiXEoHYLleP8PgtdO3
+         ue0ZDjtp9W4ASVbp+E2+uL8kpw9jDv6oT5cqQDt1HQfKY8QUNNC1pA3xeCMjGRQKJv/a
+         xMgxd7N9YDtp65T23zwrOpasD8RV3eunaCc5Iunf7nFnnnuCZjivH01djAnKKCyM3Mmm
+         mZbSZ2BqtLWnSIApdds3cMEMtK+pXGWVM3uZyOQmVoOlRJ9x84nYFC1GrkSd2fB+DaUg
+         6Z0cpc8VJete8mRvSkx4IQH+xf7V15Ec1TI2DQ5mUpb8MKF5OP3nl2BIaT+CK7MLAtCU
+         RHLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=0W/HagJonywK7ZJ69fI6hX0gZNSYy1J0766XYUBnWpk=;
+        b=oteqYV5z5Bx7N1fMbLiYDGcN6Ltm3yl2rBocursT6I7ixBS6YrHqISJ6++Gefv3GS6
+         47NyvQKYX58IIVn93NzXFbkKsShXxnqHG4R54GNvQa2KnHnxbl0QmiFZwQdqY4J0jJmy
+         P/g2cN07kTgI7BTiFjAEw7DtYUGCckFm6GEXnjmCeCdOas7MVjJwIKjPl4DeXT/2xlSu
+         i0gRFcoFR1Ay/l0wWzkObG07I1kshDKlENvNJj72q4rYVhMN+SXcnrsY11fCrM6k0bXN
+         n/WVHkw9wbUlbRVHw/Kz0K3YMEldOfGCOAZXtCBSTeFBteqydtBViVImLCz2biabGFZx
+         Lgfg==
+X-Gm-Message-State: AJIora8f5wOP0DWwIbL1GiAQDfm3Tq1iW34K7s/qLJPDEsy6IUatJ+vX
+        99vEGB7U7z4PGzWhgup4+H8=
+X-Google-Smtp-Source: AGRyM1vVl/dKUvpt/f8eeQsaxDmxmSSgcVkCHsMH8j6ipARrJnfgTrUyJ/gnAnfCrqd0Dt9fJRq5nw==
+X-Received: by 2002:a63:3e0b:0:b0:40c:42db:6601 with SMTP id l11-20020a633e0b000000b0040c42db6601mr3050057pga.586.1655438351515;
+        Thu, 16 Jun 2022 20:59:11 -0700 (PDT)
+Received: from MacBook-Pro-3.local ([2620:10d:c090:400::5:29cb])
+        by smtp.gmail.com with ESMTPSA id u11-20020a170902e80b00b0016a0858b25dsm39168plg.152.2022.06.16.20.59.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jun 2022 20:59:11 -0700 (PDT)
+Date:   Thu, 16 Jun 2022 20:59:08 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kpsingh@kernel.org, john.fastabend@gmail.com,
+        songliubraving@fb.com, kafai@fb.com, yhs@fb.com,
+        bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RESEND][PATCH v4 4/4] selftests/bpf: Add test for
+ bpf_verify_pkcs7_signature() helper
+Message-ID: <20220617035908.iw4426f3h4ecpvvp@MacBook-Pro-3.local>
+References: <20220614130621.1976089-1-roberto.sassu@huawei.com>
+ <20220614130621.1976089-5-roberto.sassu@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220614130621.1976089-5-roberto.sassu@huawei.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 2022-06-16 at 14:47 +0200, Ard Biesheuvel wrote:
-> Commit b433a52aa28733e0 ("selftests/kexec: update get_secureboot_mode")
-> refactored the code that discovers the EFI secure boot mode so it only
-> depends on either the efivars pseudo filesystem or the efivars sysfs
-> interface, but never both.
-> 
-> However, the latter version was not implemented correctly, given the
-> fact that the local 'efi_vars' variable never assumes a value. This
-> means the fallback has been dead code ever since it was introduced.
-> 
-> So let's drop the fallback altogether. The sysfs interface has been
-> deprecated for ~10 years now, and is only enabled on x86 to begin with,
-> so it is time to get rid of it entirely.
-> 
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: Mimi Zohar <zohar@linux.ibm.com>
-> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+On Tue, Jun 14, 2022 at 03:06:21PM +0200, Roberto Sassu wrote:
+> +
+> +	if (child_pid == 0) {
+> +		snprintf(path, sizeof(path), "%s/signing_key.pem", tmp_dir);
+> +
+> +		return execlp("./sign-file", "./sign-file", "sha256",
+> +			      path, path, signed_file_template, NULL);
 
-Thanks, Ard.
+Please use sign_only option,
+so it saves the signature and doesn't do 'struct module_signature' append.
+Parsing of that is unnecessary for the purpose of the helper.
+Checking MODULE_SIG_STRING is unnecessary, etc, etc.
+Long term we won't be following mod sig approach anyway.
+bpf maps and progs will have a different format.
 
-Reviewed-by:  Mimi Zohar <zohar@linux.ibm.com>
+> +	}
+> +
+> +	waitpid(child_pid, &child_status, 0);
+> +
+> +	ret = WEXITSTATUS(child_status);
+> +	if (ret)
+> +		goto out;
+> +
+> +	ret = stat(signed_file_template, &st);
+> +	if (ret == -1) {
+> +		ret = -errno;
+> +		goto out;
+> +	}
+> +
+> +	if (st.st_size > sizeof(data_item->payload) - sizeof(u32)) {
+> +		ret = -EINVAL;
+> +		goto out;
+> +	}
+> +
+> +	*(u32 *)data_item->payload = __cpu_to_be32(st.st_size);
+> +
+> +	fd = open(signed_file_template, O_RDONLY);
+> +	if (fd == -1) {
+> +		ret = -errno;
+> +		goto out;
+> +	}
+> +
+> +	ret = read(fd, data_item->payload + sizeof(u32), st.st_size);
+> +
+> +	close(fd);
+> +
+> +	if (ret != st.st_size) {
+> +		ret = -EIO;
+> +		goto out;
+> +	}
+> +
+> +	ret = 0;
+> +out:
+> +	unlink(signed_file_template);
+> +	return ret;
+> +}
+> +
+> +void test_verify_pkcs7_sig(void)
+> +{
+> +	char tmp_dir_template[] = "/tmp/verify_sigXXXXXX";
+> +	char *tmp_dir;
+> +	char *buf = NULL;
+> +	struct test_verify_pkcs7_sig *skel = NULL;
+> +	struct bpf_map *map;
+> +	struct data data;
+> +	u32 saved_len;
+> +	int ret, zero = 0;
+> +
+> +	LIBBPF_OPTS(bpf_object_open_opts, opts);
+> +
+> +	/* Trigger creation of session keyring. */
+> +	syscall(__NR_request_key, "keyring", "_uid.0", NULL,
+> +		KEY_SPEC_SESSION_KEYRING);
+
+My understanding that user space can receive a specific id here.
+It should pass it to bpf prog via global variable and prog
+should use that id instead of max_ulong hack.
 
