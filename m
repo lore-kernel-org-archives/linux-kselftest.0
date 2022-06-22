@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BDA1C433EF
-	for <linux-kselftest@archiver.kernel.org>; Wed, 22 Jun 2022 14:34:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C517DCCA47D
+	for <linux-kselftest@archiver.kernel.org>; Wed, 22 Jun 2022 14:34:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358608AbiFVOeA (ORCPT
+        id S1358613AbiFVOeB (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 22 Jun 2022 10:34:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59882 "EHLO
+        Wed, 22 Jun 2022 10:34:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358337AbiFVOdu (ORCPT
+        with ESMTP id S1358551AbiFVOd4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 22 Jun 2022 10:33:50 -0400
+        Wed, 22 Jun 2022 10:33:56 -0400
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A1B1FD16;
-        Wed, 22 Jun 2022 07:33:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B2D2ED64;
+        Wed, 22 Jun 2022 07:33:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655908429; x=1687444429;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=aXLF+dVyOqByhAMWSuHsqHusLn0tcw4Nn2wxRn7aL6U=;
-  b=eSsAOf7o3JdYNYrv9XVaAAP5fTfG8LxpPaYkzIgmJPerOGdVtIWQNvIi
-   j8OciQROyfm2Dfx5eXhDSUp75cXUBYJTYzDahSeKBuq/w8THW04Qp8W6X
-   cqSpajjTjyCGYnRjwzUgr+Zb74H3Np/jS2ps2f5DYOZl88pF/2sacn1nG
-   iqkCHOPvUEcwzoPOrDLg/fNdbKa+bWZjy1oUqvQTCQ7Ai/hLEm27iRios
-   M6UEYL7b0v3U3CTF5fCq4znMO3hLyXMFTY3OODjFBoI+Mafg3Vy60kDKF
-   2jTbObHixV1m46PrGmgXCwogknMKQtgxDU7Vt0e0v07X4+czflD/imRbs
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="279200077"
+  t=1655908435; x=1687444435;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=/WUAZrN1zyWhIxKQEqmG7Ipp9FUtpkQKAS8q9yj5bhQ=;
+  b=E+sGlAx/K+3Nhy3DeyYlfIB+15yCbZEYOf5SY7U0NYmPl4Y4omnuryAC
+   Y+gVA/ZkPrZMSMNPOy3dDJNmU/HOHUlT33DnCLZfE0pVC5M4qysYsexxZ
+   oXLPBdfHJeVkr5Oe04Y0GBhp604P2fIbFfMOqwOjyjeWvvIdRFbNO6mXz
+   4S9H+ihqX6QfwE6Y9OUDCNZPBHkxi2na99nJeXDREsL6m7sQ5iom8vmCM
+   cPGz4pR2wWEwZv+zCQxrrElorx5/6IlxwCCHnIuDwqaUS1/MI6vt/b2hC
+   eb89r5xhlC0jhzvhZ6RBczwAEYDq/4VqUA5BnoGNk0FneZ1HdwJjz74c9
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="279200100"
 X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="279200077"
+   d="scan'208";a="279200100"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 07:33:49 -0700
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 07:33:55 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="644225480"
+   d="scan'208";a="644225513"
 Received: from xpf.sh.intel.com ([10.239.182.112])
-  by fmsmga008.fm.intel.com with ESMTP; 22 Jun 2022 07:33:46 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 22 Jun 2022 07:33:52 -0700
 From:   Pengfei Xu <pengfei.xu@intel.com>
 To:     Shuah Khan <skhan@linuxfoundation.org>,
         linux-kselftest <linux-kselftest@vger.kernel.org>,
@@ -52,131 +52,187 @@ Cc:     Pengfei Xu <pengfei.xu@intel.com>, Heng Su <heng.su@intel.com>,
         Borislav Petkov <bp@suse.de>,
         Thomas Gleixner <tglx@linutronix.de>,
         Bae Chang Seok <chang.seok.bae@intel.com>
-Subject: [PATCH v10 0/2] Introduce XSAVE feature self-test
-Date:   Wed, 22 Jun 2022 22:33:11 +0800
-Message-Id: <cover.1655906573.git.pengfei.xu@intel.com>
+Subject: [PATCH v10 2/2] selftests/x86/xstate: Add xstate fork test for XSAVE feature
+Date:   Wed, 22 Jun 2022 22:33:13 +0800
+Message-Id: <39f3d46f7731617cb84e6c9f16698e369aa5fd77.1655906573.git.pengfei.xu@intel.com>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <cover.1655906573.git.pengfei.xu@intel.com>
+References: <cover.1655906573.git.pengfei.xu@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The XSAVE feature set supports the saving and restoring of xstate components.
-XSAVE feature has been used for process context switching. XSAVE components
-include x87 state for FP execution environment, SSE state, AVX state and so on.
-
-In order to ensure that XSAVE works correctly, add XSAVE most basic test for
-XSAVE architecture functionality.
-
-This patch tests "FP, SSE(XMM), AVX2(YMM), AVX512_OPMASK/AVX512_ZMM_Hi256/
-AVX512_Hi16_ZMM and PKRU parts" xstates with following cases:
-1. The contents of these xstates in the process should not change after the
-   signal handling.
-2. The contents of these xstates in the child process should be the same as
+In order to ensure that XSAVE works correctly, add XSAVE most basic fork
+test:
+1. The contents of these xstates in the child process should be the same as
    the contents of the xstate in the parent process after the fork syscall.
-3. The contents of xstates in the parent process should not change after
+2. The contents of xstates in the parent process should not change after
    the context switch.
 
-Because xstate like XMM will not be preserved across function calls, fork() and
-raise() are implemented and inlined.
-To prevent GCC from generating any FP/SSE(XMM)/AVX/PKRU code, add
-"-mno-sse -mno-mmx -mno-sse2 -mno-avx -mno-pku" compiler arguments. stdlib.h
-can not be used because of the "-mno-sse" option.
-Thanks Dave, Hansen for the above suggestion!
-Thanks Chen Yu; Shuah Khan; Chatre Reinette and Tony Luck's comments!
-Thanks to Bae, Chang Seok for a bunch of comments!
+  [ Dave Hansen; Chang S. Bae; Shuah Khan: bunches of cleanups ]
 
-========
-- Change from v9 to v10
-  - Remove the small function if the function will be called once and there
-    is no good reason. (Shuah Khan)
+Reviewed-by: Chang S. Bae <chang.seok.bae@intel.com>
+Signed-off-by: Pengfei Xu <pengfei.xu@intel.com>
+---
+ tools/testing/selftests/x86/xstate.c         | 22 ++++++-
+ tools/testing/selftests/x86/xstate.h         |  1 +
+ tools/testing/selftests/x86/xstate_helpers.c | 67 ++++++++++++++++++++
+ tools/testing/selftests/x86/xstate_helpers.h |  2 +
+ 4 files changed, 91 insertions(+), 1 deletion(-)
 
-- Change from v8 to v9
-  - Use function pointers to make it more structured. (Hansen, Dave)
-  - Improve the function name: xstate_tested -> xstate_in_test. (Chang S. Bae)
-  - Break this test up into two pieces: keep the xstate key test steps with
-    "-mno-sse" and no stdlib.h, keep others in xstate.c file. (Hansen, Dave)
-  - Use kselftest infrastructure for xstate.c file. (Hansen, Dave)
-  - Use instruction back to populate fp xstate buffer. (Hansen, Dave)
-  - Will skip the test if cpu could not support xsave. (Chang S. Bae)
-  - Use __cpuid_count() helper in kselftest.h. (Reinette, Chatre)
-
-- Change from v7 to v8
-  Many thanks to Bae, Chang Seok for a bunch of comments as follow:
-  - Use the filling buffer way to prepare the xstate buffer, and use xrstor
-    instruction way to load the tested xstates.
-  - Remove useless dump_buffer, compare_buffer functions.
-  - Improve the struct of xstate_info.
-  - Added AVX512_ZMM_Hi256 and AVX512_Hi16_ZMM components in xstate test.
-  - Remove redundant xstate_info.xstate_mask, xstate_flag[], and
-    xfeature_test_mask, use xstate_info.mask instead.
-  - Check if xfeature is supported outside of fill_xstate_buf() , this change
-    is easier to read and understand.
-  - Remove useless wrpkru, only use filling all tested xstate buffer in
-    fill_xstates_buf().
-  - Improve a bunch of function names and variable names.
-  - Improve test steps flow for readability.
-
-- Change from v6 to v7:
-  - Added the error number and error description of the reason for the
-    failure, thanks Shuah Khan's suggestion.
-  - Added a description of what these tests are doing in the head comments.
-  - Added changes update in the head comments.
-  - Added description of the purpose of the function. thanks Shuah Khan.
-
-- Change from v5 to v6:
-  - In order to prevent GCC from generating any FP code by mistake,
-    "-mno-sse -mno-mmx -mno-sse2 -mno-avx -mno-pku" compiler parameter was
-    added, it's referred to the parameters for compiling the x86 kernel. Thanks
-    Dave Hansen's suggestion.
-  - Removed the use of "kselftest.h", because kselftest.h included <stdlib.h>,
-    and "stdlib.h" would use sse instructions in it's libc, and this *XSAVE*
-    test needed to be compiled without libc sse instructions(-mno-sse).
-  - Improved the description in commit header, thanks Chen Yu's suggestion.
-  - Becasue test code could not use buildin xsave64 in libc without sse, added
-    xsave function by instruction way.
-  - Every key test action would not use libc(like printf) except syscall until
-    it's failed or done. If it's failed, then it would print the failed reason.
-  - Used __cpuid_count() instead of native_cpuid(), becasue __cpuid_count()
-    was a macro definition function with one instruction in libc and did not
-    change xstate. Thanks Chatre Reinette, Shuah Khan.
-    https://lore.kernel.org/linux-sgx/8b7c98f4-f050-bc1c-5699-fa598ecc66a2@linuxfoundation.org/
-
-- Change from v4 to v5:
-  - Moved code files into tools/testing/selftests/x86.
-  - Delete xsave instruction test, becaue it's not related to kernel.
-  - Improved case description.
-  - Added AVX512 opmask change and related XSAVE content verification.
-  - Added PKRU part xstate test into instruction and signal handling test.
-  - Added XSAVE process swich test for FPU, AVX2, AVX512 opmask and PKRU part.
-
-- Change from v3 to v4:
-  - Improve the comment in patch 1.
-
-- Change from v2 to v3:
-  - Improve the description of patch 2 git log.
-
-- Change from v1 to v2:
-  - Improve the cover-letter. Thanks Dave Hansen's suggestion.
-
-Pengfei Xu (2):
-  selftests/x86/xstate: Add xstate signal handling test for XSAVE
-    feature
-  selftests/x86/xstate: Add xstate fork test for XSAVE feature
-
- tools/testing/selftests/x86/.gitignore       |   1 +
- tools/testing/selftests/x86/Makefile         |  11 +-
- tools/testing/selftests/x86/xstate.c         | 208 +++++++++++++++
- tools/testing/selftests/x86/xstate.h         | 262 +++++++++++++++++++
- tools/testing/selftests/x86/xstate_helpers.c | 209 +++++++++++++++
- tools/testing/selftests/x86/xstate_helpers.h |  10 +
- 6 files changed, 699 insertions(+), 2 deletions(-)
- create mode 100644 tools/testing/selftests/x86/xstate.c
- create mode 100644 tools/testing/selftests/x86/xstate.h
- create mode 100644 tools/testing/selftests/x86/xstate_helpers.c
- create mode 100644 tools/testing/selftests/x86/xstate_helpers.h
-
+diff --git a/tools/testing/selftests/x86/xstate.c b/tools/testing/selftests/x86/xstate.c
+index 4eff539e783d..4abb46fe40dc 100644
+--- a/tools/testing/selftests/x86/xstate.c
++++ b/tools/testing/selftests/x86/xstate.c
+@@ -39,7 +39,7 @@
+ #include "xstate_helpers.h"
+ #include "../kselftest.h"
+ 
+-#define NUM_TESTS	1
++#define NUM_TESTS	3
+ #define xstate_test_array_init(idx, init_opt, fill_opt)	\
+ 	do {						\
+ 		xstate_tests[idx].init = init_opt;	\
+@@ -106,6 +106,25 @@ static void test_xstate_sig_handle(void)
+ 	compare_buf_result(valid_xbuf, compared_xbuf, case_name1);
+ }
+ 
++static void test_xstate_fork(void)
++{
++	const char *case_name2 = "xstate of child process should be same as xstate of parent";
++	const char *case_name3 = "parent xstate should be same after context switch";
++
++	ksft_print_msg("[RUN]\tParent pid:%d check xstate around fork test.\n",
++		       getpid());
++	/* Child process xstate should be same as the parent process xstate. */
++	if (xstate_fork(valid_xbuf, compared_xbuf, xstate_info.mask,
++	    xstate_size)) {
++		ksft_test_result_pass("The case: %s.\n", case_name2);
++	} else {
++		ksft_test_result_fail("The case: %s.\n", case_name2);
++	}
++
++	/* The parent process xstate should not change after context switch. */
++	compare_buf_result(valid_xbuf, compared_xbuf, case_name3);
++}
++
+ static void prepare_xstate_test(void)
+ {
+ 	xstate_test_array_init(XFEATURE_FP, init_legacy_info,
+@@ -124,6 +143,7 @@ static void prepare_xstate_test(void)
+ 			       fill_pkru_xstate_buf);
+ 
+ 	xstate_tests[XSTATE_CASE_SIG].xstate_case = test_xstate_sig_handle;
++	xstate_tests[XSTATE_CASE_FORK].xstate_case = test_xstate_fork;
+ }
+ 
+ static void test_xstate(void)
+diff --git a/tools/testing/selftests/x86/xstate.h b/tools/testing/selftests/x86/xstate.h
+index 92c853d64e99..c9ec4cbf141e 100644
+--- a/tools/testing/selftests/x86/xstate.h
++++ b/tools/testing/selftests/x86/xstate.h
+@@ -82,6 +82,7 @@ enum xfeature {
+ 
+ enum xstate_case {
+ 	XSTATE_CASE_SIG,
++	XSTATE_CASE_FORK,
+ 	XSTATE_CASE_MAX,
+ };
+ 
+diff --git a/tools/testing/selftests/x86/xstate_helpers.c b/tools/testing/selftests/x86/xstate_helpers.c
+index 93838c95aaea..e06b07a662b5 100644
+--- a/tools/testing/selftests/x86/xstate_helpers.c
++++ b/tools/testing/selftests/x86/xstate_helpers.c
+@@ -73,6 +73,22 @@ inline void fill_fp_mxcsr_xstate_buf(void *buf, int xfeature_num,
+ 	__xsave(buf, MASK_FP_SSE);
+ }
+ 
++/*
++ * Because xstate like XMM, YMM registers are not preserved across function
++ * calls, so use inline function with assembly code only for fork syscall.
++ */
++static inline long __fork(void)
++{
++	long ret, nr = SYS_fork;
++
++	asm volatile("syscall"
++		     : "=a" (ret)
++		     : "a" (nr), "b" (nr)
++		     : "rcx", "r11", "memory", "cc");
++
++	return ret;
++}
++
+ /*
+  * Because xstate like XMM, YMM registers are not preserved across function
+  * calls, so use inline function with assembly code only to raise signal.
+@@ -140,3 +156,54 @@ bool xstate_sig_handle(void *valid_xbuf, void *compared_xbuf, uint64_t mask,
+ 
+ 	return sigusr1_done;
+ }
++
++bool xstate_fork(void *valid_xbuf, void *compared_xbuf, uint64_t mask,
++		 uint32_t xstate_size)
++{
++	pid_t child;
++	int status, fd[2];
++	bool child_result;
++
++	memset(compared_xbuf, 0, xstate_size);
++	/* Use pipe to transfer test result to parent process. */
++	if (pipe(fd) < 0)
++		fatal_error("create pipe failed");
++	/*
++	 * Xrstor the valid_xbuf and call syscall assembly instruction, then
++	 * save the xstate to compared_xbuf in child process for comparison.
++	 */
++	__xrstor(valid_xbuf, mask);
++	child = __fork();
++	if (child < 0) {
++		/* Fork syscall failed */
++		fatal_error("fork failed");
++	} else if (child == 0) {
++		/* Fork syscall succeeded, now in the child. */
++		__xsave(compared_xbuf, mask);
++
++		if (memcmp(valid_xbuf, compared_xbuf, xstate_size))
++			child_result = false;
++		else
++			child_result = true;
++
++		/*
++		 * Transfer the child process test result to
++		 * the parent process for aggregation.
++		 */
++		close(fd[0]);
++		if (!write(fd[1], &child_result, sizeof(child_result)))
++			fatal_error("write fd failed");
++		_exit(0);
++	} else {
++		/* Fork syscall succeeded, now in the parent. */
++		__xsave(compared_xbuf, mask);
++		if (waitpid(child, &status, 0) != child || !WIFEXITED(status)) {
++			fatal_error("Child exit with error status");
++		} else {
++			close(fd[1]);
++			if (!read(fd[0], &child_result, sizeof(child_result)))
++				fatal_error("read fd failed");
++			return child_result;
++		}
++	}
++}
+diff --git a/tools/testing/selftests/x86/xstate_helpers.h b/tools/testing/selftests/x86/xstate_helpers.h
+index 1806c0bf484b..307781708ffa 100644
+--- a/tools/testing/selftests/x86/xstate_helpers.h
++++ b/tools/testing/selftests/x86/xstate_helpers.h
+@@ -6,3 +6,5 @@ extern void fill_fp_mxcsr_xstate_buf(void *buf, int xfeature_num,
+ 				     uint8_t ui8_fp);
+ extern bool xstate_sig_handle(void *valid_xbuf, void *compared_xbuf,
+ 			      uint64_t mask, uint32_t xstate_size);
++extern bool xstate_fork(void *valid_xbuf, void *compared_xbuf,
++			uint64_t mask, uint32_t xstate_size);
 -- 
 2.31.1
 
