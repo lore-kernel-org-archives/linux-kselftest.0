@@ -2,41 +2,41 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22105C43334
-	for <linux-kselftest@archiver.kernel.org>; Thu, 23 Jun 2022 08:58:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DF262C433EF
+	for <linux-kselftest@archiver.kernel.org>; Thu, 23 Jun 2022 10:17:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230350AbiFWI6i (ORCPT
+        id S231320AbiFWKRs (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 23 Jun 2022 04:58:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39054 "EHLO
+        Thu, 23 Jun 2022 06:17:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231160AbiFWI6h (ORCPT
+        with ESMTP id S231315AbiFWKRq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 Jun 2022 04:58:37 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D46BF140CD;
-        Thu, 23 Jun 2022 01:58:34 -0700 (PDT)
+        Thu, 23 Jun 2022 06:17:46 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32B24A3C1;
+        Thu, 23 Jun 2022 03:17:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655974716; x=1687510716;
+  t=1655979458; x=1687515458;
   h=from:to:cc:subject:date:message-id;
-  bh=laL22yp//q+jqKuq9HA61KLZ09Gii3voigcEHYG+ZkM=;
-  b=D6UOZ7LHelyj1iaBASzURzopv7CdF8cKjx32XJk5woO6eQbX1/JFNmHt
-   DDgOOtP0E4yF4bYuZhU6kTZHjYJzoyPWCVKr7sjRIvFk8m05ATryrF5fe
-   0TrbhyC4oNaSPcDJCK2Z79NPQyHDscD+1YpOA5J8eD6sI/zF4FHDhFW3g
-   cV5RF/TjIz0y0ohAzGpUHHUj9Wfyohv05rGQCd3viNB4QLvmFJ78NViUP
-   MXkXyF3eaqj38L637dJ0QbmWmgOZegvH+twR1lZuuaDpHJHvQuaLKjsyb
-   eM97e5FLA2ro56WLxxWj1P5kcSl2G5ekr5IP86BymumQrJHBqSC5mhmIK
+  bh=NeJur9sIZ5lmTLg5cdWYNoS4OW5zTNJwPnCWv1GQGJQ=;
+  b=RKbywVx9PMGvPw04y8SV1yu8BppdGdSsdSPqWH2pmMt2bOt+zOwpHRSz
+   j27UOlgsLMdPwsDBfZM/fWHHcy/KB04hylR3pT6b8XzSbn6oRE7r3OdnX
+   ofvUoVbk3tCPPUdhSsCx7xo7eUwH8ogYXZ8rXZpbzqnF4TCNxvZFaE0Z5
+   Quih5e7b4xY3EHJl06xvQxR/0aU+5rHwRxVrMHvceYkX63jBV/aP6p0jw
+   y3CkAob2tUldRyB8xzI9zZ6NQHYnd1hZal0eHKntVusS/qtUwAM0dkQa9
+   6rGMiADDQguAfQTVhOQVLPuWYdG0c22mbQVruqOFQ1QQzwKTr4oGsTVWs
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="344656350"
+X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="269405571"
 X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
-   d="scan'208";a="344656350"
+   d="scan'208";a="269405571"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 01:58:34 -0700
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 03:17:35 -0700
 X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
-   d="scan'208";a="644642226"
+   d="scan'208";a="644669573"
 Received: from arthur-vostro-3668.sh.intel.com ([10.239.13.120])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 01:58:32 -0700
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 03:17:33 -0700
 From:   Zeng Guang <guang.zeng@intel.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>,
         Sean Christopherson <seanjc@google.com>,
@@ -44,9 +44,9 @@ To:     Paolo Bonzini <pbonzini@redhat.com>,
         linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Zeng Guang <guang.zeng@intel.com>
-Subject: [PATCH] KVM: selftest: Enhance handling WRMSR ICR register in x2APIC mode
-Date:   Thu, 23 Jun 2022 16:26:01 +0800
-Message-Id: <20220623082601.25588-1-guang.zeng@intel.com>
+Subject: [PATCH v2] KVM: selftest: Enhance handling WRMSR ICR register in x2APIC mode
+Date:   Thu, 23 Jun 2022 17:45:11 +0800
+Message-Id: <20220623094511.26066-1-guang.zeng@intel.com>
 X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
@@ -71,7 +71,7 @@ Signed-off-by: Zeng Guang <guang.zeng@intel.com>
  1 file changed, 17 insertions(+), 3 deletions(-)
 
 diff --git a/tools/testing/selftests/kvm/x86_64/xapic_state_test.c b/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
-index 0792334ba243..062d2e1adeb7 100644
+index 0792334ba243..df916c6f53f9 100644
 --- a/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
 +++ b/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
 @@ -70,13 +70,27 @@ static void ____test_icr(struct kvm_vm *vm, struct kvm_vcpu *vcpu, uint64_t val)
@@ -84,7 +84,7 @@ index 0792334ba243..062d2e1adeb7 100644
 -	ASSERT_EQ(icr, val & ~APIC_ICR_BUSY);
 +		ASSERT_EQ(icr, val & ~APIC_ICR_BUSY);
 +	} else {
-+		ASSERT_EQ(icr, val);
++		ASSERT_EQ(icr & ~APIC_ICR_BUSY, val & ~APIC_ICR_BUSY);
 +	}
  }
  
