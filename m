@@ -2,37 +2,37 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38422CCA481
-	for <linux-kselftest@archiver.kernel.org>; Tue, 28 Jun 2022 18:03:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F1C1CCA481
+	for <linux-kselftest@archiver.kernel.org>; Tue, 28 Jun 2022 18:03:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234031AbiF1SDD (ORCPT
+        id S234003AbiF1SDB (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 28 Jun 2022 14:03:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47854 "EHLO
+        Tue, 28 Jun 2022 14:03:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232430AbiF1SC1 (ORCPT
+        with ESMTP id S233949AbiF1SCt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 Jun 2022 14:02:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1369213CC2;
-        Tue, 28 Jun 2022 11:02:27 -0700 (PDT)
+        Tue, 28 Jun 2022 14:02:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4932613CCD;
+        Tue, 28 Jun 2022 11:02:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A3C0761A7B;
-        Tue, 28 Jun 2022 18:02:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C5F9C341CA;
-        Tue, 28 Jun 2022 18:02:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DC42861A7B;
+        Tue, 28 Jun 2022 18:02:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E5ACC3411D;
+        Tue, 28 Jun 2022 18:02:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656439346;
-        bh=Q9TQo1YpqN5c0AN7PcviO9s8yzNZpGDadJSGpTvGND8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uKiiaPzf2ZvHFLudRBkGB21dFDVzVaSbQQHMWq0KyyzxdxN871GhxPOoIK0ZjgIaI
-         xjGSO0xKxWknDuxYwa0rK0HcYswkrrUUVcHBZ29G5uC3R4vnyKpDpxvXjproBWDJIH
-         /L7DuPZE4pWblmD2QiBgnSmfGclV5jQ5NFOKnO0Jrh1dAFcMCwVAYXV35c7fMvgohr
-         vFmI74CAVk+Mb2omqoTl83GdIpB+1U1p4dhZo/oeYREiwY5KgQZqvJ5xKWsLeHwpLZ
-         gAgAVOufdBYK3UJlKLIERiVA++LWOsinbqwoNuELI4PD6bcDMd4YRrjzgJX71gdXAK
-         +h7jenDRStdZA==
+        s=k20201202; t=1656439368;
+        bh=wRLfI31WrZ59IkEj+z6Z5ZZev9x2pVNmX2cjKkCxs74=;
+        h=From:To:Cc:Subject:Date:From;
+        b=mUAs0OXyMYCIQY+Msh4eCdQKG4n6S+0XnOPFWmVF8o7i/P3HdnPp3ztOq460HhKbh
+         z+4AU3aTT8sSp/+SugH8e9oKVSUODPhdljVc1jzoKwR84n3zv0SFzUwv3Z40dyWfCQ
+         CQ43H3wyelPh8uy27ir9wYUVZURadbwrtd3MbdLzlUyEkeUfmW1QyjIjAUAcshJEUh
+         ov7upuSRIxL4woC018to8h/6XRZ97YV+FHTv9uGFkbb/c/CyC1mvHxaKErBwrNczxh
+         jjD4Yu5AYnPNc3yUVZWizCQi+aAxNIqcufobbiX0VBO8LFk6WskKnVoPjiOsrqRcQi
+         A5xzoIWS/aMJA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Raghavendra Rao Ananta <rananta@google.com>,
@@ -45,12 +45,10 @@ Cc:     Raghavendra Rao Ananta <rananta@google.com>,
         linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
         kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
         llvm@lists.linux.dev
-Subject: [PATCH MANUALSEL 5.18 2/3] selftests: KVM: Handle compiler optimizations in ucall
-Date:   Tue, 28 Jun 2022 14:02:16 -0400
-Message-Id: <20220628180220.621172-2-sashal@kernel.org>
+Subject: [PATCH MANUALSEL 5.4] selftests: KVM: Handle compiler optimizations in ucall
+Date:   Tue, 28 Jun 2022 14:02:44 -0400
+Message-Id: <20220628180244.621315-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220628180220.621172-1-sashal@kernel.org>
-References: <20220628180220.621172-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -84,7 +82,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 4 insertions(+), 5 deletions(-)
 
 diff --git a/tools/testing/selftests/kvm/lib/aarch64/ucall.c b/tools/testing/selftests/kvm/lib/aarch64/ucall.c
-index e0b0164e9af8..be1d9728c4ce 100644
+index 6cd91970fbad..3b2a426070c4 100644
 --- a/tools/testing/selftests/kvm/lib/aarch64/ucall.c
 +++ b/tools/testing/selftests/kvm/lib/aarch64/ucall.c
 @@ -73,20 +73,19 @@ void ucall_uninit(struct kvm_vm *vm)
