@@ -2,228 +2,750 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF1EBC433EF
-	for <linux-kselftest@archiver.kernel.org>; Tue, 28 Jun 2022 10:38:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4345C433EF
+	for <linux-kselftest@archiver.kernel.org>; Tue, 28 Jun 2022 11:47:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345000AbiF1Kik (ORCPT
+        id S1344358AbiF1Lrt (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 28 Jun 2022 06:38:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41252 "EHLO
+        Tue, 28 Jun 2022 07:47:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343767AbiF1Kij (ORCPT
+        with ESMTP id S1345343AbiF1LrY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 Jun 2022 06:38:39 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2050.outbound.protection.outlook.com [40.107.92.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8714510546;
-        Tue, 28 Jun 2022 03:38:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fd9Jr2Lw8h8j5Y7fp5/zfe3LkOA5fy4h1uh+eMj7otu4nztGgCE+i6zC0l+W+wOoL+xYkHymqGGNoBsydXXcfb6G1ptxUldcykh0H+D2w+5JwN9UUIzl49aE44KTfgazX++jiS8YafuIqcr9W6DdxplPpY0GqAVqR1KA2vq4FNcqaJrF1UMbUUTrzMtYD0f9MQXSyoVQBJA3EiCMzbyU7pz5QZwo8ysmaD6OUMLCCjaVCXMBvoY6iP15XB7TYLDZIJ3g6ZBeOVLXZ71iKlSHOoapUI/iyqUcO0maWVt67+NtyS4Se4U5+xxq88AXvFIXyYFXNW3BqgH5txDrsXK13w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vrzsN/IbPGs0RyNyU7wBMc4OxtCdSfJiP46j5mrJ7dQ=;
- b=UgTwbTDY1Xj8zziUnwZsXGug2iTwOKPrfzS26PJub0v8PAvxKZ7pepqC+U+xtoR2HOzHw57PJKc+14GpcAKfmwSg0acsGeTk8NuUI6p9vFRirWPUdBg1N+bWzhOxiB0BkrhQiQcDCS+vB6Kq372qYsSw7uo92zzpzNXWLHIQs84/SziOvK02GOSmWAM3e5yEXDs7JRLJYfcj501S+B+2er9NlrFjbZ4fSkL6M7ovulv8ZAhgx4y5WrwtBUJXv4uiVU0LmLKFkVFxKZBtP2z3hn8ngjagKz9Gq9pKOCAEoEP9WzyiEFebIGFwp+MFkMz2emz7ZODitjW1qgiWPYHp6A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.236) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vrzsN/IbPGs0RyNyU7wBMc4OxtCdSfJiP46j5mrJ7dQ=;
- b=KjANjbVIsia47KhrPZ93DXvyVtgJatdJZIXtinGU8D3/Ht91HTvMN0bmWyaMHxKmLqquw+kfs1EQ/kteh6hchj1O07HFd6kmD9cG0LOJoQg4JhTKeISwWevODrVfCWd1f+xEtLAsI0ndXDco8MpwEuokNb/B/4VntJqXY8hURv3uRuGNWIG+xs97pFy+GqIt16AdxW5FL9ZJBCtGOTUqpTQ/f2F2hCDyJ+finbO2eR+MPds/S+F0FTcS776FFw58BmjOIgxtqMK0EwjMGiwXLxo/MEaFuyPn/KxCeVzkhkfWLs5mS79x9iyMRFgVDYqTzLzK2EbnN5l6m0CfmNmRrQ==
-Received: from BN8PR04CA0059.namprd04.prod.outlook.com (2603:10b6:408:d4::33)
- by BYAPR12MB4759.namprd12.prod.outlook.com (2603:10b6:a03:9d::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.18; Tue, 28 Jun
- 2022 10:38:32 +0000
-Received: from BN8NAM11FT016.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:d4:cafe::20) by BN8PR04CA0059.outlook.office365.com
- (2603:10b6:408:d4::33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.16 via Frontend
- Transport; Tue, 28 Jun 2022 10:38:31 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.236; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (12.22.5.236) by
- BN8NAM11FT016.mail.protection.outlook.com (10.13.176.97) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5373.15 via Frontend Transport; Tue, 28 Jun 2022 10:38:31 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL109.nvidia.com
- (10.27.9.19) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Tue, 28 Jun
- 2022 10:38:30 +0000
-Received: from localhost.localdomain (10.126.230.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Tue, 28 Jun
- 2022 03:38:27 -0700
-From:   Petr Machata <petrm@nvidia.com>
-To:     <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-CC:     <mlxsw@nvidia.com>, Petr Machata <petrm@nvidia.com>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <shuah@kernel.org>,
-        Amit Cohen <amcohen@nvidia.com>
-Subject: [PATCH net-next] selftests: forwarding: ethtool_extended_state: Convert to busywait
-Date:   Tue, 28 Jun 2022 12:37:44 +0200
-Message-ID: <b3f4a264c0270f3e4e22e291ee843fbf72d3fc7f.1656412324.git.petrm@nvidia.com>
-X-Mailer: git-send-email 2.36.1
+        Tue, 28 Jun 2022 07:47:24 -0400
+Received: from smtp.uniroma2.it (smtp.uniroma2.it [160.80.6.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA733138B
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Jun 2022 04:46:41 -0700 (PDT)
+Received: from localhost.localdomain ([160.80.103.126])
+        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 25SBbSQY010288
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 28 Jun 2022 13:37:29 +0200
+From:   Andrea Mayer <andrea.mayer@uniroma2.it>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Anton Makarov <anton.makarov11235@gmail.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     Stefano Salsano <stefano.salsano@uniroma2.it>,
+        Paolo Lungaroni <paolo.lungaroni@uniroma2.it>,
+        Ahmed Abdelsalam <ahabdels.dev@gmail.com>,
+        Andrea Mayer <andrea.mayer@uniroma2.it>
+Subject: [net-next v3 4/4] selftests: seg6: add selftest for SRv6 H.L2Encaps.Red behavior
+Date:   Tue, 28 Jun 2022 13:36:42 +0200
+Message-Id: <20220628113642.3223-5-andrea.mayer@uniroma2.it>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20220628113642.3223-1-andrea.mayer@uniroma2.it>
+References: <20220628113642.3223-1-andrea.mayer@uniroma2.it>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.126.230.35]
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: dd083c5a-dfa9-49c9-f569-08da58f25882
-X-MS-TrafficTypeDiagnostic: BYAPR12MB4759:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0d6WZgLVO3k/rpS3/+mZBJS3k4Fc+c2Vx5wDSh6+Vkv7vOIkxw/r7fslIOH8LrPZi8m+B90Z+MJazKydzHlg3stoOEfRcEALxu8oPKJ26PlF0Qrl7Fx7iKkOT7JK0VomYmkR19W/EK3jGRbNVWpfFHo1jhSeSDLMv5p4tH3PF4GlhLu2jMGUGZSaycpJHR/Ad9isa9IKZH+5G8tH+0gARIddQWte/uU07vWasZKtyhV4FOCXYrAJjMVsj2La5n7ouNnlJuv4R8xU1BNHHgOVW24Oc5Figu1VNl8QjCsAwZDk0JNaxyC5NTNrDLFGQK0SFgpEb83kOR/nGXTw0EggV3NxzsH5P2uEhG2hzhxLntvbRnKKhW3j6sm+VP8tGNPt7AZaPZsf2W+8h/kMhOx7L4ccHjGSl28OZdiYUQfP0yVPnnSuKS8y6CPXFpTTsycJg13HCdZO06qP3tqsh9uOSWtfk0T2lhYC8OJ0Tnz5bRPeGzPN/EHymWvcgMTiJahszxJPz2W2383C+7pGWjGPb/kKV1ZGlkkvVTgLmh8hn8EtXXekhKFTTjLpJUXAtioNuo6I7vzS41nZyuiRnu60+qgHzpxwCLMkzOQmi251jpcsqCXerXKDuiAjet/h1uPOoviIO5yvChL+hgmA7MEJzDPbhmcq2cWkg+V/VnyhdH+Od+jytscTAgmmLimqva/gF8i8kFezsft6DIhw/9z8v8ZvcZKT4O5woILDWqJF5Ze92MIbN442NnUyCf0ZO9+T8Ac7bmmdoXBgIMuadSOfOIHuy0XtProtcVKoQnuy/Ec/NChxZ0sVX/HknIadjVTEDVXSaQKsEmeOklcc8ZJWwA==
-X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(376002)(346002)(39860400002)(136003)(396003)(46966006)(40470700004)(36840700001)(186003)(83380400001)(336012)(41300700001)(8676002)(16526019)(6666004)(107886003)(26005)(426003)(47076005)(2616005)(54906003)(70586007)(36860700001)(81166007)(356005)(82740400003)(4326008)(36756003)(82310400005)(2906002)(5660300002)(86362001)(478600001)(110136005)(40480700001)(8936002)(70206006)(316002)(40460700003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jun 2022 10:38:31.4935
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: dd083c5a-dfa9-49c9-f569-08da58f25882
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT016.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB4759
+X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
+X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently, this script sets up the test scenario, which is supposed to end
-in an inability of the system to negotiate a link. It then waits for a bit,
-and verifies that the system can diagnose why the link was not established.
+This selftest is designed for testing the H.L2Encaps.Red behavior. It
+instantiates a virtual network composed of several nodes: hosts and SRv6
+routers. Each node is realized using a network namespace that is
+properly interconnected to others through veth pairs.
+The test considers SRv6 routers implementing a L2 VPN leveraged by hosts
+for communicating with each other. Such routers make use of the SRv6
+H.L2Encaps.Red behavior for applying SRv6 policies to L2 traffic coming
+from hosts.
 
-The wait time for the scenario where different link speeds are forced on
-the two ends of a loopback cable, was set to 4 seconds, which exactly
-covered it. As of a recent mlxsw firmware update, this time gets longer,
-and this test starts failing.
+The correct execution of the behavior is verified through reachability
+tests carried out between hosts belonging to the same VPN.
 
-The time that selftests currently wait for links to be established is
-currently $WAIT_TIMEOUT, or 20 seconds. It seems reasonable that if this is
-the time necessary to establish and bring up a link, it should also be
-enough to determine that a link cannot be established and why.
-
-Therefore in this patch, convert the sleeps to busywaits, so that if a
-failure is established sooner (as is expected), the test runs quicker. And
-use $WAIT_TIMEOUT as the time to wait.
-
-Signed-off-by: Petr Machata <petrm@nvidia.com>
-Reviewed-by: Amit Cohen <amcohen@nvidia.com>
+Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
 ---
- .../net/forwarding/ethtool_extended_state.sh  | 43 ++++++++++++-------
- 1 file changed, 28 insertions(+), 15 deletions(-)
+ .../net/srv6_hl2encap_red_l2vpn_test.sh       | 674 ++++++++++++++++++
+ 1 file changed, 674 insertions(+)
+ create mode 100755 tools/testing/selftests/net/srv6_hl2encap_red_l2vpn_test.sh
 
-diff --git a/tools/testing/selftests/net/forwarding/ethtool_extended_state.sh b/tools/testing/selftests/net/forwarding/ethtool_extended_state.sh
-index 4b42dfd4efd1..072faa77f53b 100755
---- a/tools/testing/selftests/net/forwarding/ethtool_extended_state.sh
-+++ b/tools/testing/selftests/net/forwarding/ethtool_extended_state.sh
-@@ -11,6 +11,8 @@ NUM_NETIFS=2
- source lib.sh
- source ethtool_lib.sh
- 
-+TIMEOUT=$((WAIT_TIMEOUT * 1000)) # ms
+diff --git a/tools/testing/selftests/net/srv6_hl2encap_red_l2vpn_test.sh b/tools/testing/selftests/net/srv6_hl2encap_red_l2vpn_test.sh
+new file mode 100755
+index 000000000000..77e4c945b540
+--- /dev/null
++++ b/tools/testing/selftests/net/srv6_hl2encap_red_l2vpn_test.sh
+@@ -0,0 +1,674 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++#
++# author: Andrea Mayer <andrea.mayer@uniroma2.it>
++#
++# This script is designed for testing the SRv6 H.L2Encaps.Red behavior.
++#
++# Below is depicted the IPv6 network of an operator which offers L2 VPN
++# services to hosts, enabling them to communicate with each other.
++# In this example, hosts hs-1 and hs-2 are connected through an L2 VPN service.
++# Currently, the SRv6 subsystem in Linux allows hosts hs-1 and hs-2 to exchange
++# full L2 frames as long as they carry IPv4/IPv6.
++#
++# Routers rt-1,rt-2,rt-3 and rt-4 implement L2 VPN services
++# leveraging the SRv6 architecture. The key components for such VPNs are:
++#
++#   i) The SRv6 H.L2Encaps.Red behavior applies SRv6 Policies on traffic
++#      received by connected hosts, initiating the VPN tunnel. Such a behavior
++#      is an optimization of the SRv6 H.L2Encap aiming to reduce the
++#      length of the SID List carried in the pushed SRH. Specifically, the
++#      H.L2Encaps.Red removes the first SID contained in the SID List (i.e. SRv6
++#      Policy) by storing it into the IPv6 Destination Address. When a SRv6
++#      Policy is made of only one SID, the SRv6 H.L2Encaps.Red behavior omits
++#      the SRH at all and pushes that SID directly into the IPv6 DA;
++#
++#  ii) The SRv6 End behavior advances the active SID in the SID List
++#      carried by the SRH;
++#
++# iii) The SRv6 End.DX2 behavior is used for removing the SRv6 Policy
++#      and, thus, it terminates the VPN tunnel. The decapsulated L2 frame is
++#      sent over the interface connected with the destination host.
++#
++#               cafe::1                      cafe::2
++#              10.0.0.1                     10.0.0.2
++#             +--------+                   +--------+
++#             |        |                   |        |
++#             |  hs-1  |                   |  hs-2  |
++#             |        |                   |        |
++#             +---+----+                   +--- +---+
++#    cafe::/64    |                             |      cafe::/64
++#  10.0.0.0/24    |                             |    10.0.0.0/24
++#             +---+----+                   +----+---+
++#             |        |  fcf0:0:1:2::/64  |        |
++#             |  rt-1  +-------------------+  rt-2  |
++#             |        |                   |        |
++#             +---+----+                   +----+---+
++#                 |      .               .      |
++#                 |  fcf0:0:1:3::/64   .        |
++#                 |          .       .          |
++#                 |            .   .            |
++# fcf0:0:1:4::/64 |              .              | fcf0:0:2:3::/64
++#                 |            .   .            |
++#                 |          .       .          |
++#                 |  fcf0:0:2:4::/64   .        |
++#                 |      .               .      |
++#             +---+----+                   +----+---+
++#             |        |                   |        |
++#             |  rt-4  +-------------------+  rt-3  |
++#             |        |  fcf0:0:3:4::/64  |        |
++#             +---+----+                   +----+---+
++#
++#
++# Every fcf0:0:x:y::/64 network interconnects the SRv6 routers rt-x with rt-y
++# in the IPv6 operator network.
++#
++# Local SID table
++# ===============
++#
++# Each SRv6 router is configured with a Local SID table in which SIDs are
++# stored. Considering the given SRv6 router rt-x, at least two SIDs are
++# configured in the Local SID table:
++#
++#   Local SID table for SRv6 router rt-x
++#   +----------------------------------------------------------+
++#   |fcff:x:e is associated with the SRv6 End behavior         |
++#   |fcff:x:d2 is associated with the SRv6 End.DX2 behavior    |
++#   +----------------------------------------------------------+
++#
++# The fcff:/16 prefix is reserved by the operator for implementing SRv6 VPN
++# services. Reachability of SIDs is ensured by proper configuration of the IPv6
++# operator's network and SRv6 routers.
++#
++# SRv6 Policies
++# =============
++#
++# An SRv6 ingress router applies SRv6 policies to the traffic received from a
++# connected host. SRv6 policy enforcement consists of encapsulating the
++# received traffic into a new IPv6 packet with a given SID List contained in
++# the SRH.
++#
++# L2 VPN between hs-1 and hs-2
++# ----------------------------
++#
++# Hosts hs-1 and hs-2 are connected using a dedicated L2 VPN.
++# Specifically, packets generated from hs-1 and directed towards hs-2 are
++# handled by rt-1 which applies the following SRv6 Policies:
++#
++#   i.a) L2 traffic, SID List=fcff:2::d2
++#
++# Policy (i.a) steers tunneled L2 traffic through SRv6 router rt-2.
++# The H.L2Encaps.Red omits the presence of SRH at all, since the SID List
++# consists of only one SID (fcff:2::d2) that can be stored directly in the IPv6
++# DA.
++#
++# On the reverse path (i.e. from hs-2 to hs-1), rt-2 applies the following
++# policies:
++#
++#   i.b) L2 traffic, SID List=fcff:4::e,fcff:3::e,fcff:1::d2
++#
++# Policy (i.b) steers tunneled L2 traffic through the SRv6 routers
++# rt-4,rt-3,rt2. The H.L2Encaps.Red reduces the SID List in the SRH by removing
++# the first SID (fcff:4::e) and pushing it into the IPv6 DA.
++#
++# In summary:
++#  * hs-1 -> hs-2 |IPv6 DA=fcff:2::d2|eth|...|                              (i.a)
++#  * hs-2 -> hs-1 |IPv6 DA=fcff:4::e|SRH SIDs=fcff:3::e,fcff:1::d2|eth|...| (i.b)
++#
 +
- setup_prepare()
- {
- 	swp1=${NETIFS[p1]}
-@@ -18,7 +20,7 @@ setup_prepare()
- 	swp3=$NETIF_NO_CABLE
- }
- 
--ethtool_extended_state_check()
-+ethtool_ext_state()
- {
- 	local dev=$1; shift
- 	local expected_ext_state=$1; shift
-@@ -30,21 +32,27 @@ ethtool_extended_state_check()
- 		| sed -e 's/^[[:space:]]*//')
- 	ext_state=$(echo $ext_state | cut -d "," -f1)
- 
--	[[ $ext_state == $expected_ext_state ]]
--	check_err $? "Expected \"$expected_ext_state\", got \"$ext_state\""
--
--	[[ $ext_substate == $expected_ext_substate ]]
--	check_err $? "Expected \"$expected_ext_substate\", got \"$ext_substate\""
-+	if [[ $ext_state != $expected_ext_state ]]; then
-+		echo "Expected \"$expected_ext_state\", got \"$ext_state\""
-+		return 1
++# Kselftest framework requirement - SKIP code is 4.
++ksft_skip=4
++
++readonly LOCALSID_TABLE_ID=90
++readonly IPv6_RT_NETWORK=fcf0:0
++readonly IPv6_HS_NETWORK=cafe
++readonly IPv4_HS_NETWORK=10.0.0
++readonly VPN_LOCATOR_SERVICE=fcff
++readonly MAC_PREFIX=00:00:00:c0:01
++readonly END_FUNC=000e
++readonly DX2_FUNC=00d2
++PING_TIMEOUT_SEC=4
++
++# global vars initialized during the setup of the selftest network
++ROUTERS=''
++HOSTS=''
++
++ret=0
++
++PAUSE_ON_FAIL=${PAUSE_ON_FAIL:=no}
++
++log_test()
++{
++	local rc=$1
++	local expected=$2
++	local msg="$3"
++
++	if [ ${rc} -eq ${expected} ]; then
++		nsuccess=$((nsuccess+1))
++		printf "\n    TEST: %-60s  [ OK ]\n" "${msg}"
++	else
++		ret=1
++		nfail=$((nfail+1))
++		printf "\n    TEST: %-60s  [FAIL]\n" "${msg}"
++		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
++			echo
++			echo "hit enter to continue, 'q' to quit"
++			read a
++			[ "$a" = "q" ] && exit 1
++		fi
 +	fi
-+	if [[ $ext_substate != $expected_ext_substate ]]; then
-+		echo "Expected \"$expected_ext_substate\", got \"$ext_substate\""
-+		return 1
++}
++
++print_log_test_results()
++{
++	if [ "$TESTS" != "none" ]; then
++		printf "\nTests passed: %3d\n" ${nsuccess}
++		printf "Tests failed: %3d\n"   ${nfail}
 +	fi
- }
- 
- autoneg()
- {
-+	local msg
++}
 +
- 	RET=0
- 
- 	ip link set dev $swp1 up
- 
--	sleep 4
--	ethtool_extended_state_check $swp1 "Autoneg" "No partner detected"
-+	msg=$(busywait $TIMEOUT ethtool_ext_state $swp1 \
-+			"Autoneg" "No partner detected")
-+	check_err $? "$msg"
- 
- 	log_test "Autoneg, No partner detected"
- 
-@@ -53,6 +61,8 @@ autoneg()
- 
- autoneg_force_mode()
- {
-+	local msg
++log_section()
++{
++	echo
++	echo "################################################################################"
++	echo "TEST SECTION: $*"
++	echo "################################################################################"
++}
 +
- 	RET=0
- 
- 	ip link set dev $swp1 up
-@@ -65,12 +75,13 @@ autoneg_force_mode()
- 	ethtool_set $swp1 speed $speed1 autoneg off
- 	ethtool_set $swp2 speed $speed2 autoneg off
- 
--	sleep 4
--	ethtool_extended_state_check $swp1 "Autoneg" \
--		"No partner detected during force mode"
-+	msg=$(busywait $TIMEOUT ethtool_ext_state $swp1 \
-+			"Autoneg" "No partner detected during force mode")
-+	check_err $? "$msg"
- 
--	ethtool_extended_state_check $swp2 "Autoneg" \
--		"No partner detected during force mode"
-+	msg=$(busywait $TIMEOUT ethtool_ext_state $swp2 \
-+			"Autoneg" "No partner detected during force mode")
-+	check_err $? "$msg"
- 
- 	log_test "Autoneg, No partner detected during force mode"
- 
-@@ -83,12 +94,14 @@ autoneg_force_mode()
- 
- no_cable()
- {
-+	local msg
++test_command_or_ksft_skip()
++{
++	local cmd="$1"
 +
- 	RET=0
- 
- 	ip link set dev $swp3 up
- 
--	sleep 1
--	ethtool_extended_state_check $swp3 "No cable"
-+	msg=$(busywait $TIMEOUT ethtool_ext_state $swp3 "No cable")
-+	check_err $? "$msg"
- 
- 	log_test "No cable"
- 
++	if [ ! -x "$(command -v "${cmd}")" ]; then
++		echo "SKIP: Could not run test without \"${cmd}\" tool";
++		exit ${ksft_skip}
++	fi
++}
++
++cleanup()
++{
++	local ifnames
++	local dev
++
++	ifnames="$(ip -o link show | grep -oE "veth-rt-[0-9]+-[0-9]" | sort -n | uniq)"
++
++	# destroy any pending device
++	for dev in ${ifnames}; do
++		ip link del ${dev} || true
++	done
++
++	# destroy routers rt-* and hosts hs-*
++	for ns in $(ip netns show | grep -E 'rt-*|hs-*'); do
++		ip netns del ${ns} || true
++	done
++
++	ip link del pdum0 &>/dev/null || true
++}
++
++add_link_rt_pairs()
++{
++	local rt=$1
++	local rt_neighs="$2"
++	local neigh
++
++	for neigh in ${rt_neighs}; do
++		ip link add veth-rt-${rt}-${neigh} type veth \
++			peer name veth-rt-${neigh}-${rt}
++	done
++}
++
++get_network_prefix()
++{
++	local rt=$1
++	local neigh=$2
++	local p=${rt}
++	local q=${neigh}
++
++	if [ "${p}" -gt "${q}" ]; then
++		p=${q}; q=${rt};
++	fi
++
++	echo "${IPv6_RT_NETWORK}:${p}:${q}"
++}
++
++# Setup the basic networking for the routers
++setup_rt_networking()
++{
++	local rt=$1
++	local rt_neighs="$2"
++	local nsname=rt-${rt}
++	local net_prefix
++	local devname
++	local neigh
++
++	ip netns add ${nsname}
++
++	ip -netns ${nsname} link add dum0 type dummy
++
++	for neigh in ${rt_neighs}; do
++		devname=veth-rt-${rt}-${neigh}
++		ip link set ${devname} netns ${nsname}
++
++		net_prefix="$(get_network_prefix ${rt} ${neigh})"
++
++		ip -netns ${nsname} addr add ${net_prefix}::${rt}/64 \
++			dev ${devname} nodad
++
++		ip -netns ${nsname} link set ${devname} up
++	done
++
++	ip -netns ${nsname} link set dum0 up
++	ip -netns ${nsname} link set lo up
++
++	ip netns exec ${nsname} sysctl -wq net.ipv6.conf.all.accept_dad=0
++	ip netns exec ${nsname} sysctl -wq net.ipv6.conf.default.accept_dad=0
++	ip netns exec ${nsname} sysctl -wq net.ipv6.conf.all.forwarding=1
++
++	ip netns exec ${nsname} sysctl -wq net.ipv4.conf.all.rp_filter=0
++	ip netns exec ${nsname} sysctl -wq net.ipv4.conf.default.rp_filter=0
++	ip netns exec ${nsname} sysctl -wq net.ipv4.ip_forward=1
++}
++
++# Setup local SIDs for an SRv6 router
++setup_rt_local_sids()
++{
++	local rt=$1
++	local rt_neighs="$2"
++	local nsname=rt-${rt}
++	local rtveth=veth-host
++	local net_prefix
++	local devname
++	local neigh
++
++	for neigh in ${rt_neighs}; do
++		devname=veth-rt-${rt}-${neigh}
++
++		net_prefix="$(get_network_prefix ${rt} ${neigh})"
++
++		# set underlay network routes for SIDs reachability
++		ip -netns ${nsname} -6 route add ${VPN_LOCATOR_SERVICE}:${neigh}::/32 \
++			table ${LOCALSID_TABLE_ID} \
++			via ${net_prefix}::${neigh} dev ${devname}
++	done
++
++	# Local End behavior (note that "dev" is dummy and the VRF is chosen
++	# for the sake of simplicity).
++	ip -netns ${nsname} -6 route add ${VPN_LOCATOR_SERVICE}:${rt}::${END_FUNC} \
++		table ${LOCALSID_TABLE_ID} \
++		encap seg6local action End count dev dum0
++
++	# all SIDs for VPNs start with a common locator. Routes and SRv6
++	# Endpoint behaviors instaces are grouped together in the 'localsid'
++	# table.
++	ip -netns ${nsname} -6 rule add \
++			to ${VPN_LOCATOR_SERVICE}::/16 \
++			lookup ${LOCALSID_TABLE_ID} prio 999
++}
++
++# build and install the SRv6 policy into the ingress SRv6 router.
++# args:
++#  $1 - destination host (i.e. cafe::x host)
++#  $2 - SRv6 router configured for enforcing the SRv6 Policy
++#  $3 - SRv6 routers configured for steering traffic (End behaviors)
++#  $4 - SRv6 router configured for removing the SRv6 Policy (router connected
++#       to the destination host)
++#  $5 - encap mode (full or red)
++#  $6 - traffic type (IPv6 or IPv4)
++__setup_rt_policy()
++{
++	local dst=$1
++	local encap=$2
++	local end_rts="$3"
++	local dec_rt=$4
++	local mode="$5"
++	local traffic=$6
++	local nsname=rt-${encap}
++	local rtveth=veth-host
++	local policy=''
++	local n
++
++	for n in ${end_rts}; do
++		policy=${policy}"${VPN_LOCATOR_SERVICE}:${n}::${END_FUNC},"
++	done
++
++	policy=${policy}"${VPN_LOCATOR_SERVICE}:${dec_rt}::${DX2_FUNC}"
++
++	# add SRv6 policy to incoming traffic sent by attached hosts
++	if [ "${traffic}" -eq 6 ]; then
++		ip -netns ${nsname} -6 route add ${IPv6_HS_NETWORK}::${dst} \
++			encap seg6 mode ${mode} segs ${policy} dev dum0
++	else
++		ip -netns ${nsname} -4 route add ${IPv4_HS_NETWORK}.${dst} \
++			encap seg6 mode ${mode} segs ${policy} dev dum0
++	fi
++}
++
++# see __setup_rt_policy
++setup_rt_policy_ipv6()
++{
++	__setup_rt_policy "$1" "$2" "$3" "$4" "$5" 6
++}
++
++#see __setup_rt_policy
++setup_rt_policy_ipv4()
++{
++	__setup_rt_policy "$1" "$2" "$3" "$4" "$5" 4
++}
++
++setup_decap()
++{
++	local rt=$1
++	local nsname=rt-${rt}
++	local rtveth=veth-host
++
++	# Local End.DX2 behavior
++	ip -netns ${nsname} -6 route add ${VPN_LOCATOR_SERVICE}:${rt}::${DX2_FUNC} \
++		table ${LOCALSID_TABLE_ID} \
++		encap seg6local action End.DX2 oif ${rtveth} count dev ${rtveth}
++}
++
++setup_hs()
++{
++	local hs=$1
++	local rt=$2
++	local hsname=hs-${hs}
++	local rtname=rt-${rt}
++	local rtveth=veth-host
++
++	# set the networking for the host
++	ip netns add ${hsname}
++
++	ip netns exec ${hsname} sysctl -wq net.ipv6.conf.all.accept_dad=0
++	ip netns exec ${hsname} sysctl -wq net.ipv6.conf.default.accept_dad=0
++
++	ip -netns ${hsname} link add veth0 type veth peer name ${rtveth}
++	ip -netns ${hsname} link set ${rtveth} netns ${rtname}
++	ip -netns ${hsname} addr add ${IPv6_HS_NETWORK}::${hs}/64 dev veth0 nodad
++	ip -netns ${hsname} addr add ${IPv4_HS_NETWORK}.${hs}/24 dev veth0
++	ip -netns ${hsname} link set veth0 up
++	ip -netns ${hsname} link set lo up
++
++	ip -netns ${rtname} addr add ${IPv6_HS_NETWORK}::254/64 dev ${rtveth} nodad
++	ip -netns ${rtname} addr add ${IPv4_HS_NETWORK}.254/24 dev ${rtveth}
++	ip -netns ${rtname} link set ${rtveth} up
++
++	# disable the rp_filter otherwise the kernel gets confused about how
++	# to route decap ipv4 packets.
++	ip netns exec ${rtname} sysctl -wq net.ipv4.conf.${rtveth}.rp_filter=0
++}
++
++# set an auto-generated mac address
++# args:
++#  $1 - name of the node (e.g.: hs-1, rt-3, etc)
++#  $2 - id of the node (e.g.: 1 for hs-1, 3 for rt-3, etc)
++#  $3 - host part of the IPv6 network address
++#  $4 - name of the network interface to which the generated mac address must
++#       be set.
++set_mac_address()
++{
++	local nodename=$1
++	local nodeid=$2
++	local host=$3
++	local ifname=$4
++
++	ip -netns ${nodename} link set dev ${ifname} down
++	ip -netns ${nodename} link set address ${MAC_PREFIX}:${nodeid} \
++		dev ${ifname}
++
++	# the IPv6 address must be set once again after the MAC address has
++	# been changed.
++	ip -netns ${nodename} addr add ${IPv6_HS_NETWORK}::${host}/64 \
++		dev ${ifname} nodad
++
++	ip -netns ${nodename} link set dev ${ifname} up
++}
++
++set_host_l2peer()
++{
++	local hssrc=$1
++	local hsdst=$2
++	local ipprefix=$3
++	local proto=$4
++	local hssrc_name=hs-${hssrc}
++	local ipaddr
++
++	if [ ${proto} -eq 6 ]; then
++		ipaddr=${ipprefix}::${hsdst}
++	else
++		ipaddr=${ipprefix}.${hsdst}
++	fi
++
++	ip -netns ${hssrc_name} route add ${ipaddr} dev veth0
++	ip -netns ${hssrc_name} neigh add ${ipaddr} \
++		lladdr ${MAC_PREFIX}:${hsdst} dev veth0
++}
++
++# setup an SRv6 L2 VPN between host hs-x and hs-y (currently, the SRv6
++# subsystem only supports L2 frames whose layer-3 is IPv4/IPv6).
++# args:
++#  $1 - source host
++#  $2 - SRv6 routers configured for steering tunneled traffic
++#  $3 - destination host
++setup_l2vpn()
++{
++	local hssrc=$1
++	local end_rts=$2
++	local hsdst=$3
++	local rtsrc=${hssrc}
++	local rtdst=${hsdst}
++	local rtveth=veth-host
++
++	# set fixed mac for source node and the neigh MAC address
++	set_mac_address hs-${hssrc} ${hssrc} ${hssrc} veth0
++	set_host_l2peer ${hssrc} ${hsdst} ${IPv6_HS_NETWORK} 6
++	set_host_l2peer ${hssrc} ${hsdst} ${IPv4_HS_NETWORK} 4
++
++	# we have to set the mac address of the veth-host (on ingress router)
++	# to the mac address of the remote peer (L2 VPN destination host).
++	# Otherwise, traffic coming from the source host is dropped at the
++	# ingress router.
++	set_mac_address rt-${rtsrc} ${hsdst} 254 ${rtveth}
++
++	# set the SRv6 Policies at the ingress router
++	setup_rt_policy_ipv6 ${hsdst} ${rtsrc} "${end_rts}" ${rtdst} l2encap.red 6
++	setup_rt_policy_ipv4 ${hsdst} ${rtsrc} "${end_rts}" ${rtdst} l2encap.red 4
++
++	# set the decap behavior at the egress router
++	setup_decap ${rtsrc}
++}
++
++setup()
++{
++	# set up the links for connecting routers
++	add_link_rt_pairs 1 "2 3 4"
++	add_link_rt_pairs 2 "3 4"
++	add_link_rt_pairs 3 "4"
++
++	# set up the basic connectivity of routers and routes required for
++	# reachability of SIDs.
++	ROUTERS="1 2 3 4"
++	setup_rt_networking 1 "2 3 4"
++	setup_rt_networking 2 "1 3 4"
++	setup_rt_networking 3 "1 2 4"
++	setup_rt_networking 4 "1 2 3"
++
++	# set up the hosts connected to routers
++	HOSTS="1 2"
++	setup_hs 1 1
++	setup_hs 2 2
++
++	# set up default SRv6 Endpoints (i.e. SRv6 End and SRv6 End.DX2)
++	setup_rt_local_sids 1 "2 3 4"
++	setup_rt_local_sids 2 "1 3 4"
++	setup_rt_local_sids 3 "1 2 4"
++	setup_rt_local_sids 4 "1 2 3"
++
++	# create a L2 VPN between hs-1 and hs-2.
++	# NB: currently, H.L2Encap* enables tunneling of L2 frames whose
++	# layer-3 is IPv4/IPv6.
++	#
++	# the network path between hs-1 and hs-2 traverses several routers
++	# depending on the direction of traffic.
++	#
++	# Direction hs-1 -> hs-2 (H.L2Encaps.Red)
++	# - rt-2 (SRv6 End.DX2 behavior)
++	#
++	# Direction hs-2 -> hs-1 (H.L2Encaps.Red)
++	#  - rt-4,rt-3 (SRv6 End behaviors)
++	#  - rt-1 (SRv6 End.DX2 behavior)
++	setup_l2vpn 1 "" 2
++	setup_l2vpn 2 "4 3" 1
++}
++
++check_rt_connectivity()
++{
++	local rtsrc=$1
++	local rtdst=$2
++	local prefix
++
++	prefix="$(get_network_prefix ${rtsrc} ${rtdst})"
++
++	ip netns exec rt-${rtsrc} ping -c 1 -W 1 ${prefix}::${rtdst} \
++		>/dev/null 2>&1
++}
++
++check_and_log_rt_connectivity()
++{
++	local rtsrc=$1
++	local rtdst=$2
++
++	check_rt_connectivity ${rtsrc} ${rtdst}
++	log_test $? 0 "Routers connectivity: rt-${rtsrc} -> rt-${rtdst}"
++}
++
++check_hs_ipv6_connectivity()
++{
++	local hssrc=$1
++	local hsdst=$2
++
++	ip netns exec hs-${hssrc} ping -c 1 -W ${PING_TIMEOUT_SEC} \
++		${IPv6_HS_NETWORK}::${hsdst} >/dev/null 2>&1
++}
++
++check_hs_ipv4_connectivity()
++{
++	local hssrc=$1
++	local hsdst=$2
++
++	ip netns exec hs-${hssrc} ping -c 1 -W ${PING_TIMEOUT_SEC} \
++		${IPv4_HS_NETWORK}.${hsdst} >/dev/null 2>&1
++}
++
++check_and_log_hs2gw_connectivity()
++{
++	local hssrc=$1
++
++	check_hs_ipv6_connectivity ${hssrc} 254
++	log_test $? 0 "IPv6 Hosts connectivity: hs-${hssrc} -> gw"
++
++	check_hs_ipv4_connectivity ${hssrc} 254
++	log_test $? 0 "IPv4 Hosts connectivity: hs-${hssrc} -> gw"
++}
++
++check_and_log_hs_ipv6_connectivity()
++{
++	local hssrc=$1
++	local hsdst=$2
++
++	check_hs_ipv6_connectivity ${hssrc} ${hsdst}
++	log_test $? 0 "IPv6 Hosts connectivity: hs-${hssrc} -> hs-${hsdst}"
++}
++
++check_and_log_hs_ipv4_connectivity()
++{
++	local hssrc=$1
++	local hsdst=$2
++
++	check_hs_ipv4_connectivity ${hssrc} ${hsdst}
++	log_test $? 0 "IPv4 Hosts connectivity: hs-${hssrc} -> hs-${hsdst}"
++}
++
++check_and_log_hs_connectivity()
++{
++	local hssrc=$1
++	local hsdst=$2
++
++	check_and_log_hs_ipv4_connectivity ${hssrc} ${hsdst}
++	check_and_log_hs_ipv6_connectivity ${hssrc} ${hsdst}
++}
++
++router_tests()
++{
++	local i
++	local j
++
++	log_section "IPv6 routers connectivity test"
++
++	for i in ${ROUTERS}; do
++		for j in ${ROUTERS}; do
++			if [ ${i} -eq ${j} ]; then
++				continue
++			fi
++
++			check_and_log_rt_connectivity ${i} ${j}
++		done
++	done
++}
++
++host2gateway_tests()
++{
++	local hs
++
++	log_section "IPv4/IPv6 connectivity test among hosts and gateways"
++
++	for hs in ${HOSTS}; do
++		check_and_log_hs2gw_connectivity ${hs}
++	done
++}
++
++host_vpn_tests()
++{
++	log_section "SRv6 L2 VPN connectivity test hosts (h1 <-> h2)"
++
++	check_and_log_hs_connectivity 1 2
++	check_and_log_hs_connectivity 2 1
++}
++
++test_dummy_or_ksft_skip()
++{
++	modprobe dummy &>/dev/null
++	ip link add pdum0 type dummy
++	if [ $? -ne 0 ]; then
++		echo "SKIP: dummy not supported"
++		exit ${ksft_skip}
++	fi
++
++	ip link del dev pdum0
++}
++
++if [ "$(id -u)" -ne 0 ];then
++	echo "SKIP: Need root privileges"
++	exit ${ksft_skip}
++fi
++
++# required programs to carry out this selftest
++test_command_or_ksft_skip ip
++test_command_or_ksft_skip grep
++test_command_or_ksft_skip sort
++test_command_or_ksft_skip uniq
++
++test_dummy_or_ksft_skip
++
++cleanup &>/dev/null
++
++setup
++
++router_tests
++host2gateway_tests
++host_vpn_tests
++
++print_log_test_results
++
++cleanup &>/dev/null
++
++exit ${ret}
 -- 
-2.35.3
+2.20.1
 
