@@ -2,108 +2,141 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DF0ACCA482
-	for <linux-kselftest@archiver.kernel.org>; Sat,  2 Jul 2022 11:08:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7ED9BC43334
+	for <linux-kselftest@archiver.kernel.org>; Sat,  2 Jul 2022 11:33:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232340AbiGBLH7 (ORCPT
+        id S230180AbiGBLdB (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 2 Jul 2022 07:07:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37530 "EHLO
+        Sat, 2 Jul 2022 07:33:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232083AbiGBLHw (ORCPT
+        with ESMTP id S229446AbiGBLdA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 2 Jul 2022 07:07:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9029615A39;
-        Sat,  2 Jul 2022 04:07:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 23BA760DF2;
-        Sat,  2 Jul 2022 11:07:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E09AC341D9;
-        Sat,  2 Jul 2022 11:07:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656760068;
-        bh=GXTCFNGJ/qi6q84KgPXHTPGckjOATtaMykjkvdiZ8ns=;
-        h=From:To:Cc:Subject:Date:From;
-        b=DrrTnbY+g/95s2OoeUYPgsUS7r9KhEaNN9bCC94hZDu/RhdENgPzZoSE1bFGIeu8f
-         A7Y7GS2fdeuCvgSTgrN/C3Xk/UA4AOOR8PKrhHb1bqaCJDPjmbmDyW0ool3TYK7/Hd
-         CxINUJxSqKohLK3IuucJQULpCltifiDOZOyZyfbIOGyhrjN6eL4nHdwjPVWdsBmNQr
-         m10KGXrSflXIA+909EoSQweUfDbpYP0KDii/iawMcZOW08nSgdAA6iekKm5+xmvGOt
-         qZOWRpYYA6Df/o1E/Rs8oS6M9Sd+dj4RU3q++vdjNLnLFq1bzTTJ2BD2bq9KC1xlYu
-         xlTWaJKAO8emw==
-Received: from mchehab by mail.kernel.org with local (Exim 4.95)
-        (envelope-from <mchehab@kernel.org>)
-        id 1o7ayX-007gro-J8;
-        Sat, 02 Jul 2022 12:07:45 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        "Theodore Ts'o" <tytso@mit.edu>, Alasdair Kergon <agk@redhat.com>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Dipen Patel <dipenp@nvidia.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Takashi Iwai <tiwai@suse.com>,
-        alsa-devel@alsa-project.org, dm-devel@redhat.com,
-        kunit-dev@googlegroups.com, kvm@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH 00/12] Fix several documentation build warnings with Sphinx 2.4.4
-Date:   Sat,  2 Jul 2022 12:07:32 +0100
-Message-Id: <cover.1656759988.git.mchehab@kernel.org>
-X-Mailer: git-send-email 2.36.1
+        Sat, 2 Jul 2022 07:33:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 10B0516595
+        for <linux-kselftest@vger.kernel.org>; Sat,  2 Jul 2022 04:32:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656761578;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+/CG7OlSvFtvPwBtKbOScoNNsNb5w33jEJ9roT+riGE=;
+        b=VsUd/B49SlrdiGK42tiBiJpcMNKKBFJtato26awWSp3sZ31ctBiTvNdq9sKdlm8+/w5UqN
+        sZYFO4w0YUQ4gyabDDKdCE1OpzqsqZrKHu9cNlIgvumrfeVU32IlUPy5EceaSrI32f/7lS
+        TMS/0tpscPAFPPJ2gB1CM9lmGk/bCjg=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-625-a_DCUPPEPqeUvX_lbI_9gA-1; Sat, 02 Jul 2022 07:32:56 -0400
+X-MC-Unique: a_DCUPPEPqeUvX_lbI_9gA-1
+Received: by mail-wm1-f71.google.com with SMTP id i5-20020a1c3b05000000b003a02b027e53so4373589wma.7
+        for <linux-kselftest@vger.kernel.org>; Sat, 02 Jul 2022 04:32:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=+/CG7OlSvFtvPwBtKbOScoNNsNb5w33jEJ9roT+riGE=;
+        b=TMGPwzuMiq/RcMafKO3TMD/zLnFRO1VauSbHb2/5SUqoFSS2lgr5gz9vmSN+4fTyNU
+         ZeGYuYr6qHEIiNIi/bRB+lnBipQ/oqIYBPj7S0Vbe4gG1YQFG1gphDD21fpA3E7CxNoC
+         Vit+nqF3I1V0P6ewNUEO4lyf+ikH/9t7f9Bl4N9YxJDawvokHVzq2LQ2BGfPApl3qQNm
+         lzQ1xxD98TyeIxKrv/F8AZBwSxYXrONRm0R/DBdgd8w5/1xzdLcx8gE3Obo8bp6ad+xm
+         uBICUHyjCz/ty10tys/d2PRN9Fs1jPpQ+iXpMpjNlrkfNbItgedfJ8BP7dMxmreW2Ow2
+         Y0Tg==
+X-Gm-Message-State: AJIora96HHqxDxhcgCfEtKlqZ50RGYNYNotJL1G6W1zjJJe6tkJniAFH
+        sNicygTgoJTROzaI2L/DdOFK2OwMqlph/fi853XajZLs4q9Slecdss2RB2nJQ+DoqervsqqCg9o
+        lNyYuq8YYgUVTnDTJX5IevrS4Tsy5
+X-Received: by 2002:a05:600c:2051:b0:3a0:3c58:6ff6 with SMTP id p17-20020a05600c205100b003a03c586ff6mr22334051wmg.98.1656761575581;
+        Sat, 02 Jul 2022 04:32:55 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uK7lyTTBd7+vx/Qhs8VIxakL50jdfDusliR+VYkqGsWVRmfyQsHe77h/XIU94xnlgnS61zoQ==
+X-Received: by 2002:a05:600c:2051:b0:3a0:3c58:6ff6 with SMTP id p17-20020a05600c205100b003a03c586ff6mr22334016wmg.98.1656761575330;
+        Sat, 02 Jul 2022 04:32:55 -0700 (PDT)
+Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id y15-20020adff14f000000b0021d2f322e50sm9308324wro.41.2022.07.02.04.32.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 02 Jul 2022 04:32:54 -0700 (PDT)
+Message-ID: <ff375c95-96e9-6bcf-66ea-f70a44d0a5d1@redhat.com>
+Date:   Sat, 2 Jul 2022 13:32:52 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3 1/9] drm: selftest: convert drm_damage_helper selftest
+ to KUnit
+Content-Language: en-US
+To:     =?UTF-8?Q?Ma=c3=adra_Canal?= <maira.canal@usp.br>,
+        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
+        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
+        siqueirajordao@riseup.net, Trevor Woerner <twoerner@gmail.com>,
+        leandro.ribeiro@collabora.com, n@nfraprado.net,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        michal.winiarski@intel.com,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        David Gow <davidgow@google.com>,
+        Daniel Latypov <dlatypov@google.com>, brendanhiggins@google.com
+Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Arthur Grillo <arthur.grillo@usp.br>
+References: <20220630004611.114441-1-maira.canal@usp.br>
+ <20220630004611.114441-2-maira.canal@usp.br>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <20220630004611.114441-2-maira.canal@usp.br>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This series is against next-20220701. It fixes several warnings
-that are currently produced while building html docs.
+Hello Maíra,
 
-Each patch in this series is independent from the others, as
-each one touches a different file.
+Thanks a lot for your patch.
 
-Mauro Carvalho Chehab (12):
-  docs: ext4: blockmap.rst: fix a broken table
-  docs: tegra194-hte.rst: don't include gpiolib.c twice
-  docs: device-mapper: add a blank line at writecache.rst
-  docs: PCI: pci-vntb-function.rst: Properly include ascii artwork
-  docs: PCI: pci-vntb-howto.rst: fix a title markup
-  docs: virt: kvm: fix a title markup at api.rst
-  docs: ABI: sysfs-bus-nvdimm
-  kunit: test.h: fix a kernel-doc markup
-  net: mac80211: fix a kernel-doc markup
-  docs: alsa: alsa-driver-api.rst: remove a kernel-doc file
-  docs: arm: index.rst: add google/chromebook-boot-flow
-  docs: leds: index.rst: add leds-qcom-lpg to it
+On 6/30/22 02:46, Maíra Canal wrote:
+> Considering the current adoption of the KUnit framework, convert the
+> DRM damage helper selftest to the KUnit API.
+> 
+> Acked-by: Daniel Latypov <dlatypov@google.com>
+> Tested-by: David Gow <davidgow@google.com>
+> Co-developed-by: Arthur Grillo <arthur.grillo@usp.br>
+> Signed-off-by: Arthur Grillo <arthur.grillo@usp.br>
+> Signed-off-by: Maíra Canal <maira.canal@usp.br>
 
- Documentation/ABI/testing/sysfs-bus-nvdimm             | 2 ++
- Documentation/PCI/endpoint/pci-vntb-function.rst       | 2 +-
- Documentation/PCI/endpoint/pci-vntb-howto.rst          | 2 +-
- Documentation/admin-guide/device-mapper/writecache.rst | 1 +
- Documentation/arm/index.rst                            | 2 ++
- Documentation/driver-api/hte/tegra194-hte.rst          | 3 +--
- Documentation/filesystems/ext4/blockmap.rst            | 2 +-
- Documentation/leds/index.rst                           | 1 +
- Documentation/sound/kernel-api/alsa-driver-api.rst     | 1 -
- Documentation/virt/kvm/api.rst                         | 6 +++---
- include/kunit/test.h                                   | 2 +-
- include/net/mac80211.h                                 | 2 +-
- 12 files changed, 15 insertions(+), 11 deletions(-)
+I believe the order of the tags should be chronological. That is, Daniel and
+David tags should be after your Co-developed-by and Signed-off-by tags.
+
+[...]
+
+> +++ b/drivers/gpu/drm/tests/drm_damage_helper_test.c
+> @@ -0,0 +1,634 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Test case for drm_damage_helper functions
+> + */
+> +
+> +#include <kunit/test.h>
+
+Please add a blank line here to separate non-DRM headers include from DRM headers.
+
+> +#include <drm/drm_damage_helper.h>
+> +#include <drm/drm_framebuffer.h>
+> +#include <drm/drm_plane.h>
+> +#include <drm/drm_drv.h>
+> +
+
+I haven't looked at the KUnits tests in detail since Daniel and David already
+reviewed them. But from a quick glance, the tests look good to me as well.
+
+Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
 
 -- 
-2.36.1
+Best regards,
 
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 
