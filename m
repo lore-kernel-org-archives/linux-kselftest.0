@@ -2,167 +2,99 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D57BCCA47F
-	for <linux-kselftest@archiver.kernel.org>; Sun,  3 Jul 2022 22:16:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D162DC43334
+	for <linux-kselftest@archiver.kernel.org>; Mon,  4 Jul 2022 07:54:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbiGCWQF (ORCPT
+        id S230505AbiGDHyp (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 3 Jul 2022 18:16:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55030 "EHLO
+        Mon, 4 Jul 2022 03:54:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbiGCWQE (ORCPT
+        with ESMTP id S229710AbiGDHyo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 3 Jul 2022 18:16:04 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 269852DE5
-        for <linux-kselftest@vger.kernel.org>; Sun,  3 Jul 2022 15:16:04 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id a15so857492pjs.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 03 Jul 2022 15:16:04 -0700 (PDT)
+        Mon, 4 Jul 2022 03:54:44 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C81619FE2;
+        Mon,  4 Jul 2022 00:54:43 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id l40-20020a05600c1d2800b003a18adff308so5149061wms.5;
+        Mon, 04 Jul 2022 00:54:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=j9/LhblNYIv/AuedoZ6G1vU7VrvKdln0GMcvhVg3AdE=;
-        b=l44jsVuO8DPonDNP0YADAQC+H6aUmcaptAAJew55Z5Cor9w8l8IPafBkye1A6CRCU6
-         I//PD7SkYQSZCO9txwtgFtKsRC3XAXsVQxUhQSbIX6agoFGKUr45fkTDppQrOkjsEbwu
-         shJf/NFywcRsIL94kk1b4SUttJpo5yjOhcyvSx54xUrF881XOUN0e6Ey21wx1DeCyH5X
-         qGUAhMUGoZ8mktn3mzO5GiGhlA2/JRkGviUnX7siiWs48waCGxEKQ/UeY4G3seHsFOOg
-         91zariVRhhyUR+xPJgwSwL0FRFfDO8fFLeAwGEKuCx8FLOJUr2FTp+J95F2qztku6KmA
-         wDPA==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kBt8UkN3aWCTiSF8Lh8xZQRr6v5h00YtDHTaqSFljec=;
+        b=cC7gFTPZu/aPJz87RZe/z5TpXDPurO2A6Cb/+oswtY3Sx2RhvcCJBPKJ/+T2UF17J1
+         RBMUfv1aH45VHiF5kxJprtroCBFRVGeGdSdeApWbVy7NJryexftlPSVOR+aZTfDNcScP
+         FL0egZZgY9fTZaAka+QZ/S6AwirONIg1sycBSUdTAVi18Q/q4ojoXEPnCuJbE6UOJJsd
+         okRmwOIlFkHHVuCSV0qwt1rdwRwk1JEuTgJsazs3DSjIfZxNyZCcCcLBTC/ISt8Fcioc
+         r+YKMeRKDYfSIV0PCSYSlUYta8wsU8jgiqsefwiPxfIpGzd1FocS4pOAW3vC0jxUtQNJ
+         KSQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=j9/LhblNYIv/AuedoZ6G1vU7VrvKdln0GMcvhVg3AdE=;
-        b=V09/2Ihpe68HMFK25G5Ws0vCvWzC+zIMdM24ZGppkOkRlgTzTQkjFg4nv22D39zYNA
-         OGs9saaKHwW7SyoQjBscVBMcY690ol26aHnRVr2nC3qkIt+EPvLR6WGTMzQ18YdTid+i
-         ZBahhvlZNhnBqEgBNf5bc6WpNvdgSC72FHgwJU89JToTqLK+V1pn6G/k3ktE5raVRm+u
-         MfoX9f+cyazRtaPQwX4LQkRc1MKg6IuN9bAZQNtJV6oSyvWvVddZSX5szpEdHTImH2qM
-         LKzxKunXb0643+GDky4wiLwMVchUCcfTCtI09w1ZDiUAVySUG7HDAMl303cMfZ2trl9s
-         dpmw==
-X-Gm-Message-State: AJIora/sM3XFcYsOEwSvrIjvVbJ5FUwEbBp/qmFihwHu5PlzqHcAHaJm
-        u4/ga8Z5vhEAoxqdVxniGU11ng==
-X-Google-Smtp-Source: AGRyM1sAxV896pcKqQRHtx9yB6NFsw+fCULS3QBISRbfEChj2hh7ZjtxDXYqC4EPv6fJBQy4gSr2Ww==
-X-Received: by 2002:a17:90b:4d84:b0:1ec:aa85:b8ea with SMTP id oj4-20020a17090b4d8400b001ecaa85b8eamr30785548pjb.194.1656886563677;
-        Sun, 03 Jul 2022 15:16:03 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id f15-20020a63e30f000000b0040d376ea100sm19124271pgh.73.2022.07.03.15.16.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Jul 2022 15:16:03 -0700 (PDT)
-Message-ID: <62c21523.1c69fb81.858b2.b083@mx.google.com>
-Date:   Sun, 03 Jul 2022 15:16:03 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kBt8UkN3aWCTiSF8Lh8xZQRr6v5h00YtDHTaqSFljec=;
+        b=zYKCGTUe9fuX1dBg2ASlxG9Wc28uKhB9one4nh0tAe8Gi+4o8Hv2XgiiF9b1SlLhv2
+         pE3eE2/q54ZXVg+Nv5lwiKhCL2Dz0bIic+CRNvlq9r+lmfxyA9qQr1FXIPveAUTEHRcX
+         A1dYzORZccRUTzhjXqa7nDjQo7qmCqvG8rIhJ9NhpKcRJPybJyNuStfMIuVpSieuEDsf
+         4OH521iBKdrP6/T70c7q7nN2jab42GzCA3sD//dbeVVRZURGmk/nwZKnwzA7byVzjMD7
+         gIXoG2tdbpVV9c+hv2xdbJ+wqw8bGfVn+q30NHHScsDg38+5ovH64XnNUtf9xTugPKxn
+         WLgQ==
+X-Gm-Message-State: AJIora+5RZtAPoBfRz2ISSwy8rAn64w0DcNHRzHtZXUnuGwAXeDZVYAm
+        CBMFb57SLnH38q6o7YWgKX8BoMMfMWzMGd8UzrA=
+X-Google-Smtp-Source: AGRyM1tbwq5EsVddzD4ybXz0zJM+EtGcKfP76YCqwP4/9Q5UwkGkjPekVIXrT0y3XzQLeRWbRQnkzHnvn1Gwxl91xVU=
+X-Received: by 2002:a05:600c:4f81:b0:3a1:a8e7:235b with SMTP id
+ n1-20020a05600c4f8100b003a1a8e7235bmr4385163wmq.149.1656921282262; Mon, 04
+ Jul 2022 00:54:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v5.19-rc4-7-gb7ecce6800eb
-X-Kernelci-Branch: next
-X-Kernelci-Tree: kselftest
-Subject: kselftest/next kselftest-seccomp: 5 runs,
- 2 regressions (v5.19-rc4-7-gb7ecce6800eb)
-To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+References: <20220630111634.610320-1-hans@kapio-technology.com>
+ <Yr2LFI1dx6Oc7QBo@shredder> <CAKUejP6LTFuw7d_1C18VvxXDuYaboD-PvSkk_ANSFjjfhyDGkg@mail.gmail.com>
+ <Yr778K/7L7Wqwws2@shredder> <CAKUejP5w0Dn8y9gyDryNYy7LOUytqZsG+qqqC8JhRcvyC13=hQ@mail.gmail.com>
+ <Yr8oPba83rpJE3GV@shredder> <CAKUejP4_05E0hfFp-ceXLgPuid=MwrAoHyQ-nYE3qx3Tisb4uA@mail.gmail.com>
+ <YsE+hreRa0REAG3g@shredder>
+In-Reply-To: <YsE+hreRa0REAG3g@shredder>
+From:   Hans S <schultz.hans@gmail.com>
+Date:   Mon, 4 Jul 2022 09:54:31 +0200
+Message-ID: <CAKUejP4H4yKu6LaLUUUWypt7EPuYDK-5UdUDHPF8F2U5hGnzOQ@mail.gmail.com>
+Subject: Re: [PATCH net-next v1 1/1] net: bridge: ensure that link-local
+ traffic cannot unlock a locked port
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Hans Schultz <schultz.hans+netdev@gmail.com>,
+        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kselftest/next kselftest-seccomp: 5 runs, 2 regressions (v5.19-rc4-7-gb7ecc=
-e6800eb)
+>
+> IIUC, with mv88e6xxx, when the port is locked and learning is disabled:
+>
+> 1. You do not get miss violation interrupts. Meaning, you can't report
+> 'locked' entries to the bridge driver.
+>
+> 2. You do not get aged-out interrupts. Meaning, you can't tell the
+> bridge driver to remove aged-out entries.
+>
+> My point is that this should happen regardless if learning is enabled on
+> the bridge driver or not. Just make sure it is always enabled in
+> mv88e6xxx when the port is locked. Learning in the bridge driver itself
+> can be off, thereby eliminating the need to disable learning from
+> link-local packets.
 
-Regressions Summary
--------------------
-
-platform                     | arch  | lab          | compiler | defconfig =
-          | regressions
------------------------------+-------+--------------+----------+-----------=
-----------+------------
-meson-gxl-s905x-libretech-cc | arm64 | lab-baylibre | clang-14 | defconfig+=
-kselftest | 1          =
-
-meson-gxl-s905x-libretech-cc | arm64 | lab-baylibre | gcc-10   | defconfig+=
-kselftest | 1          =
-
-
-  Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/v5.1=
-9-rc4-7-gb7ecce6800eb/plan/kselftest-seccomp/
-
-  Test:     kselftest-seccomp
-  Tree:     kselftest
-  Branch:   next
-  Describe: v5.19-rc4-7-gb7ecce6800eb
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
-lftest.git
-  SHA:      b7ecce6800eb1aa97c486c1aabf64659193d5a4c =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                     | arch  | lab          | compiler | defconfig =
-          | regressions
------------------------------+-------+--------------+----------+-----------=
-----------+------------
-meson-gxl-s905x-libretech-cc | arm64 | lab-baylibre | clang-14 | defconfig+=
-kselftest | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/62c206014c894b87a2a39bcd
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest
-  Compiler:    clang-14 (Debian clang version 14.0.6-++20220622053050+f28c0=
-06a5895-1~exp1~20220622173135.152)
-  Plain log:   https://storage.kernelci.org//kselftest/next/v5.19-rc4-7-gb7=
-ecce6800eb/arm64/defconfig+kselftest/clang-14/lab-baylibre/kselftest-seccom=
-p-meson-gxl-s905x-libretech-cc.txt
-  HTML log:    https://storage.kernelci.org//kselftest/next/v5.19-rc4-7-gb7=
-ecce6800eb/arm64/defconfig+kselftest/clang-14/lab-baylibre/kselftest-seccom=
-p-meson-gxl-s905x-libretech-cc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20220624.0/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-seccomp.login: https://kernelci.org/test/case/id/62c206014c89=
-4b87a2a39bce
-        new failure (last pass: v5.19-rc1) =
-
- =
-
-
-
-platform                     | arch  | lab          | compiler | defconfig =
-          | regressions
------------------------------+-------+--------------+----------+-----------=
-----------+------------
-meson-gxl-s905x-libretech-cc | arm64 | lab-baylibre | gcc-10   | defconfig+=
-kselftest | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/62c2045daa2c8e653ea39bcd
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//kselftest/next/v5.19-rc4-7-gb7=
-ecce6800eb/arm64/defconfig+kselftest/gcc-10/lab-baylibre/kselftest-seccomp-=
-meson-gxl-s905x-libretech-cc.txt
-  HTML log:    https://storage.kernelci.org//kselftest/next/v5.19-rc4-7-gb7=
-ecce6800eb/arm64/defconfig+kselftest/gcc-10/lab-baylibre/kselftest-seccomp-=
-meson-gxl-s905x-libretech-cc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20220624.0/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-seccomp.login: https://kernelci.org/test/case/id/62c2045daa2c=
-8e653ea39bce
-        failing since 5 days (last pass: v5.19-rc1, first fail: v5.19-rc4-4=
--g43fe0cc46b62) =
-
- =20
+So you suggest that we enable learning in the driver when locking the
+port and document that learning should be turned off from user space
+before locking the port?
