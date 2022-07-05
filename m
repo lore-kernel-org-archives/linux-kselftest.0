@@ -2,46 +2,46 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2BC0C433EF
-	for <linux-kselftest@archiver.kernel.org>; Tue,  5 Jul 2022 23:59:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DEA34C43334
+	for <linux-kselftest@archiver.kernel.org>; Tue,  5 Jul 2022 23:59:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230445AbiGEX7h (ORCPT
+        id S230324AbiGEX7i (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 5 Jul 2022 19:59:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53996 "EHLO
+        Tue, 5 Jul 2022 19:59:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiGEX7g (ORCPT
+        with ESMTP id S230476AbiGEX7h (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Jul 2022 19:59:36 -0400
+        Tue, 5 Jul 2022 19:59:37 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 316DB183BE;
-        Tue,  5 Jul 2022 16:59:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38E75183BE;
+        Tue,  5 Jul 2022 16:59:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BBF4261180;
-        Tue,  5 Jul 2022 23:59:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBB49C341C8;
-        Tue,  5 Jul 2022 23:59:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C723161180;
+        Tue,  5 Jul 2022 23:59:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45840C341CB;
+        Tue,  5 Jul 2022 23:59:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657065575;
-        bh=Ln0FurXcuUKBrZCr4kEssdaqud7WJg9xDuXtLI2q/0o=;
+        s=k20201202; t=1657065576;
+        bh=TrH56UL/QeqbrnEZBublNVut2fy8/OJX5zbLk8R9wGg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IVL0Gt9b7RgB7pScq8//jVJsGNCgegV9JS/v2TEr5qb5a1YXhKaTmc2evzMV7S4AV
-         9d4cAEYTj305cluRcWOjukai7h8xFGwIC69oq4qMl7+m8ZbTm/9mYrrVdNA0DEnheU
-         ho3PVoNLJvsrnFgdArQBINPIAjVhk7jQSQux0yrbiwc8hhFIU9Cyk2+BNP5WdzYKlO
-         V7W96c7JmVqWV8sInQQsLnclmliaytUBAJ17mGjVvk0sa9HbXdQ9BslE7da6apUHfw
-         29RNNiF9S/0m51s1ge+fF8PL6DJlfrleP20K/OIE2QeWExawiRmMyAcUMzQpp98/K8
-         3d0OuNiAp9hqA==
+        b=Nf4TZx2UTV7n7pDHCG7g+A8ZWGgN2Cq3NxMZfl3FU454FnvZRni+LbOY8X7ni7ok1
+         XeBnhJHfAPscqXTQl87tdy3+THwwXwKE9SSmiwfhQqOuTAUbFV0kLLWLOZL/KJbdyv
+         FD5NvHBTNz0yEvxPGrmuUqbcXO0mNWERDG9PWsBKc18yiHSw2WfGNWy/1KHW4omvsF
+         EPkcjhtTUa1GZ7KrVNdvj4p7/GqCr18SIjZCXgbdYZpASrHAVG4wJK6/GxImK1NvJa
+         /X4E5+GTpY38GICp0L+v8/4Ts+1IGWqHXtMmGTlGJZb/PYgqRmzlSJdzZy6GbXIcOn
+         bZpe4sfp8H0OQ==
 From:   Jakub Kicinski <kuba@kernel.org>
 To:     davem@davemloft.net
 Cc:     netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
         john.fastabend@gmail.com, borisp@nvidia.com,
         linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
         maximmi@nvidia.com, Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next 1/5] tls: rx: don't include tail size in data_len
-Date:   Tue,  5 Jul 2022 16:59:22 -0700
-Message-Id: <20220705235926.1035407-2-kuba@kernel.org>
+Subject: [PATCH net-next 4/5] selftests: tls: add selftest variant for pad
+Date:   Tue,  5 Jul 2022 16:59:25 -0700
+Message-Id: <20220705235926.1035407-5-kuba@kernel.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220705235926.1035407-1-kuba@kernel.org>
 References: <20220705235926.1035407-1-kuba@kernel.org>
@@ -51,47 +51,56 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-To make future patches easier to review make data_len
-contain the length of the data, without the tail.
+Add a self-test variant with TLS 1.3 nopad set.
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
- net/tls/tls_sw.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ tools/testing/selftests/net/tls.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
-index 0513f82b8537..7fcb54e43a08 100644
---- a/net/tls/tls_sw.c
-+++ b/net/tls/tls_sw.c
-@@ -1423,8 +1423,7 @@ static int decrypt_internal(struct sock *sk, struct sk_buff *skb,
- 	u8 *aad, *iv, *mem = NULL;
- 	struct scatterlist *sgin = NULL;
- 	struct scatterlist *sgout = NULL;
--	const int data_len = rxm->full_len - prot->overhead_size +
--			     prot->tail_size;
-+	const int data_len = rxm->full_len - prot->overhead_size;
- 	int iv_offset = 0;
+diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftests/net/tls.c
+index 5a149ee94330..51d84f7fe3be 100644
+--- a/tools/testing/selftests/net/tls.c
++++ b/tools/testing/selftests/net/tls.c
+@@ -235,6 +235,7 @@ FIXTURE_VARIANT(tls)
+ {
+ 	uint16_t tls_version;
+ 	uint16_t cipher_type;
++	bool nopad;
+ };
  
- 	if (darg->zc && (out_iov || out_sg)) {
-@@ -1519,7 +1518,8 @@ static int decrypt_internal(struct sock *sk, struct sk_buff *skb,
- 			sg_init_table(sgout, n_sgout);
- 			sg_set_buf(&sgout[0], aad, prot->aad_size);
+ FIXTURE_VARIANT_ADD(tls, 12_aes_gcm)
+@@ -297,9 +298,17 @@ FIXTURE_VARIANT_ADD(tls, 13_aes_gcm_256)
+ 	.cipher_type = TLS_CIPHER_AES_GCM_256,
+ };
  
--			err = tls_setup_from_iter(out_iov, data_len,
-+			err = tls_setup_from_iter(out_iov,
-+						  data_len + prot->tail_size,
- 						  &pages, &sgout[1],
- 						  (n_sgout - 1));
- 			if (err < 0)
-@@ -1538,7 +1538,7 @@ static int decrypt_internal(struct sock *sk, struct sk_buff *skb,
++FIXTURE_VARIANT_ADD(tls, 13_nopad)
++{
++	.tls_version = TLS_1_3_VERSION,
++	.cipher_type = TLS_CIPHER_AES_GCM_128,
++	.nopad = true,
++};
++
+ FIXTURE_SETUP(tls)
+ {
+ 	struct tls_crypto_info_keys tls12;
++	int one = 1;
+ 	int ret;
  
- 	/* Prepare and submit AEAD request */
- 	err = tls_do_decryption(sk, skb, sgin, sgout, iv,
--				data_len, aead_req, darg);
-+				data_len + prot->tail_size, aead_req, darg);
- 	if (darg->async)
- 		return 0;
+ 	tls_crypto_info_init(variant->tls_version, variant->cipher_type,
+@@ -315,6 +324,12 @@ FIXTURE_SETUP(tls)
  
+ 	ret = setsockopt(self->cfd, SOL_TLS, TLS_RX, &tls12, tls12.len);
+ 	ASSERT_EQ(ret, 0);
++
++	if (variant->nopad) {
++		ret = setsockopt(self->cfd, SOL_TLS, TLS_RX_EXPECT_NO_PAD,
++				 (void *)&one, sizeof(one));
++		ASSERT_EQ(ret, 0);
++	}
+ }
+ 
+ FIXTURE_TEARDOWN(tls)
 -- 
 2.36.1
 
