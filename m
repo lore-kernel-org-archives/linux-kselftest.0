@@ -2,32 +2,32 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8B84CCA47F
-	for <linux-kselftest@archiver.kernel.org>; Thu,  7 Jul 2022 15:30:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E640C43334
+	for <linux-kselftest@archiver.kernel.org>; Thu,  7 Jul 2022 15:30:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236181AbiGGPaL (ORCPT
+        id S236232AbiGGPaR (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 7 Jul 2022 11:30:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51036 "EHLO
+        Thu, 7 Jul 2022 11:30:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236054AbiGGP3y (ORCPT
+        with ESMTP id S236171AbiGGPaL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 7 Jul 2022 11:29:54 -0400
+        Thu, 7 Jul 2022 11:30:11 -0400
 Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC851902A;
-        Thu,  7 Jul 2022 08:29:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CCD62E9EF;
+        Thu,  7 Jul 2022 08:29:59 -0700 (PDT)
 Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 961281886E77;
-        Thu,  7 Jul 2022 15:29:52 +0000 (UTC)
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id AE4091886E7B;
+        Thu,  7 Jul 2022 15:29:57 +0000 (UTC)
 Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 8D1CF25032B7;
-        Thu,  7 Jul 2022 15:29:52 +0000 (UTC)
+        by mailout.gigahost.dk (Postfix) with ESMTP id A0CA025032B7;
+        Thu,  7 Jul 2022 15:29:57 +0000 (UTC)
 Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 88EA3A1E00B9; Thu,  7 Jul 2022 15:29:52 +0000 (UTC)
+        id 842CFA1E00B8; Thu,  7 Jul 2022 15:29:57 +0000 (UTC)
 X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 Received: from wse-c0127.vestervang (unknown [208.127.141.28])
-        by smtp.gigahost.dk (Postfix) with ESMTPSA id 2E5869120FED;
-        Thu,  7 Jul 2022 15:29:51 +0000 (UTC)
+        by smtp.gigahost.dk (Postfix) with ESMTPSA id D38979120FED;
+        Thu,  7 Jul 2022 15:29:55 +0000 (UTC)
 From:   Hans Schultz <netdev@kapio-technology.com>
 To:     davem@davemloft.net, kuba@kernel.org
 Cc:     netdev@vger.kernel.org, Hans Schultz <netdev@kapio-technology.com>,
@@ -44,9 +44,9 @@ Cc:     netdev@vger.kernel.org, Hans Schultz <netdev@kapio-technology.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
         bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v4 net-next 4/6] net: dsa: mv88e6xxx: allow reading FID when handling ATU violations
-Date:   Thu,  7 Jul 2022 17:29:28 +0200
-Message-Id: <20220707152930.1789437-5-netdev@kapio-technology.com>
+Subject: [PATCH v4 net-next 6/6] selftests: forwarding: add test of MAC-Auth Bypass to locked port tests
+Date:   Thu,  7 Jul 2022 17:29:30 +0200
+Message-Id: <20220707152930.1789437-7-netdev@kapio-technology.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220707152930.1789437-1-netdev@kapio-technology.com>
 References: <20220707152930.1789437-1-netdev@kapio-technology.com>
@@ -57,52 +57,63 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-For convenience the function mv88e6xxx_g1_atu_op() has been used to read
-ATU violations, but the function has other purposes and does not enable
-the possibility to read the FID when reading ATU violations.
-
-The FID is needed to get hold of which VID was involved in the violation,
-thus the need to be able to read the FID.
+Verify that the MAC-Auth mechanism works by adding a FDB entry with the
+locked flag set, denying access until the FDB entry is replaced with a
+FDB entry without the locked flag set.
 
 Signed-off-by: Hans Schultz <netdev@kapio-technology.com>
 ---
- drivers/net/dsa/mv88e6xxx/global1_atu.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+ .../net/forwarding/bridge_locked_port.sh      | 30 ++++++++++++++++++-
+ 1 file changed, 29 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/dsa/mv88e6xxx/global1_atu.c b/drivers/net/dsa/mv88e6xxx/global1_atu.c
-index 40bd67a5c8e9..5d120d53823c 100644
---- a/drivers/net/dsa/mv88e6xxx/global1_atu.c
-+++ b/drivers/net/dsa/mv88e6xxx/global1_atu.c
-@@ -114,6 +114,19 @@ static int mv88e6xxx_g1_atu_op_wait(struct mv88e6xxx_chip *chip)
- 	return mv88e6xxx_g1_wait_bit(chip, MV88E6XXX_G1_ATU_OP, bit, 0);
+diff --git a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
+index 5b02b6b60ce7..1ee12d7b5c8b 100755
+--- a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
++++ b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
+@@ -1,7 +1,7 @@
+ #!/bin/bash
+ # SPDX-License-Identifier: GPL-2.0
+ 
+-ALL_TESTS="locked_port_ipv4 locked_port_ipv6 locked_port_vlan"
++ALL_TESTS="locked_port_ipv4 locked_port_ipv6 locked_port_vlan locked_port_mab"
+ NUM_NETIFS=4
+ CHECK_TC="no"
+ source lib.sh
+@@ -166,6 +166,34 @@ locked_port_ipv6()
+ 	log_test "Locked port ipv6"
  }
  
-+static int mv88e6xxx_g1_read_atu_violation(struct mv88e6xxx_chip *chip)
++locked_port_mab()
 +{
-+	int err;
++	RET=0
++	check_locked_port_support || return 0
 +
-+	err = mv88e6xxx_g1_write(chip, MV88E6XXX_G1_ATU_OP,
-+				 MV88E6XXX_G1_ATU_OP_BUSY |
-+				 MV88E6XXX_G1_ATU_OP_GET_CLR_VIOLATION);
-+	if (err)
-+		return err;
++	ping_do $h1 192.0.2.2
++	check_err $? "MAB: Ping did not work before locking port"
 +
-+	return mv88e6xxx_g1_atu_op_wait(chip);
++	bridge link set dev $swp1 locked on
++	bridge link set dev $swp1 learning on
++
++	ping_do $h1 192.0.2.2
++	check_fail $? "MAB: Ping worked on locked port without FDB entry"
++
++	bridge fdb show | grep `mac_get $h1` | grep -q "locked"
++	check_err $? "MAB: No locked fdb entry after ping on locked port"
++
++	bridge fdb replace `mac_get $h1` dev $swp1 master static
++
++	ping_do $h1 192.0.2.2
++	check_err $? "MAB: Ping did not work with fdb entry without locked flag"
++
++	bridge fdb del `mac_get $h1` dev $swp1 master
++	bridge link set dev $swp1 learning off
++	bridge link set dev $swp1 locked off
++
++	log_test "Locked port MAB"
 +}
-+
- static int mv88e6xxx_g1_atu_op(struct mv88e6xxx_chip *chip, u16 fid, u16 op)
- {
- 	u16 val;
-@@ -359,8 +372,7 @@ static irqreturn_t mv88e6xxx_g1_atu_prob_irq_thread_fn(int irq, void *dev_id)
+ trap cleanup EXIT
  
- 	mv88e6xxx_reg_lock(chip);
- 
--	err = mv88e6xxx_g1_atu_op(chip, 0,
--				  MV88E6XXX_G1_ATU_OP_GET_CLR_VIOLATION);
-+	err = mv88e6xxx_g1_read_atu_violation(chip);
- 	if (err)
- 		goto out;
- 
+ setup_prepare
 -- 
 2.30.2
 
