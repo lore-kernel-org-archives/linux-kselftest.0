@@ -2,37 +2,37 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ABE14CCA47B
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CA25CCCA482
 	for <linux-kselftest@archiver.kernel.org>; Fri,  8 Jul 2022 16:24:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239052AbiGHQYg (ORCPT
+        id S239237AbiGHQYh (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 8 Jul 2022 12:24:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34806 "EHLO
+        Fri, 8 Jul 2022 12:24:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239238AbiGHQYL (ORCPT
+        with ESMTP id S239160AbiGHQYL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Fri, 8 Jul 2022 12:24:11 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47D187478E;
-        Fri,  8 Jul 2022 09:23:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB131AE58;
+        Fri,  8 Jul 2022 09:23:47 -0700 (PDT)
 Received: from tincan.cable.virginm.net (cpc108961-cmbg20-2-0-cust263.5-4.cable.virginm.net [80.5.129.8])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: gtucker)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 574C766019F6;
-        Fri,  8 Jul 2022 17:23:47 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 16DF766019F3;
+        Fri,  8 Jul 2022 17:23:45 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1657297427;
-        bh=RtHf1/AU2+6S1ap2rXy/J91zOx/U7sO3/mkFTHGpcc8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MDbEVsqBLi2BgozARkMGt2PGJia0ar+RHeN0n0Q9j4oKPiMz4KOzZg4s610rBNrdM
-         JSRKoe02MF83PFiBLJuGdr9fftG6rSilHaVy6rG2Ys3QwU3lCcHxkiLaRqLq0Y5nE5
-         zms//DuEiu+XYNSfjY1iU4D9yYFdI8TPvsdgTLYV22VOE2LnOtLkNLTxjqf4iaHfmO
-         rcuSroC//B/mOnRKxR0XGKacVjQCRJkG/vNsdV5A2SHSFscRvwtFoO6GPjqhQSCAcm
-         fQBcq153aE0v5L+i7k4orHgVmq/6TpTKuT4XLXKVnua/WLdHhLKeT1rkG5K7AqsZ4Y
-         C4yCoahLCd3CQ==
+        s=mail; t=1657297425;
+        bh=MaXFu1tKZOwP1LeucQexBwcWTHfcFcFnbU/l5Ct8xJo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=LL5h5IjWO828ebhQIhKSjVOk+p+BjboJEHUOhzdBFmPAH1FrXV1M+tnOF+T1b+kRN
+         cMAV3iXSZhugeCR+vlora1klamzJz2EOSyiv5Tfp06cRP1T0V6IUv6EzZlQ8RjB2Gi
+         ssG8blELTt5Mo/x1Buee0oxrAwngCzORYjvvt2WJUDdBmyeET1AtROLlfbV4V6pje0
+         9HRS4hMAezmGW4uF5Wj7M9pjo3xWWpT781LEZ5JZW+JbHqLdM+mJbwM2Smy4ODKttI
+         LJI3zYiHCdzzMk4p01EieduPi8Nv/hHbJm3aRfkkOkPQD+4uyVdC+foE+tlI8sO85w
+         zMCCtFmZ+3nUA==
 From:   Guillaume Tucker <guillaume.tucker@collabora.com>
 To:     Masahiro Yamada <masahiroy@kernel.org>,
         Michal Marek <michal.lkml@markovi.net>,
@@ -41,57 +41,60 @@ To:     Masahiro Yamada <masahiroy@kernel.org>,
         Kees Cook <keescook@chromium.org>
 Cc:     kernel@collabora.com, linux-kbuild@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH 4/4] Makefile: add headers_install to kselftest targets
-Date:   Fri,  8 Jul 2022 17:23:30 +0100
-Message-Id: <4d34d06baf945dc31c78f873771cef3a75b60067.1657296695.git.guillaume.tucker@collabora.com>
+Subject: [PATCH 0/4] Fix kselftest build with sub-directory
+Date:   Fri,  8 Jul 2022 17:23:26 +0100
+Message-Id: <cover.1657296695.git.guillaume.tucker@collabora.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <cover.1657296695.git.guillaume.tucker@collabora.com>
-References: <cover.1657296695.git.guillaume.tucker@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add headers_install as a dependency to kselftest targets so that they
-can be run directly from the top of the tree.  The kselftest Makefile
-used to try to call headers_install "backwards" but failed due to the
-relative path not being consistent.
+Earlier attempts to get "make O=build kselftest-all" to work were
+not successful as they made undesirable changes to some functions
+in the top-level Makefile.  This series takes a different
+approach by removing the root cause of the problem within
+kselftest, which is when the sub-Makefile tries to install kernel
+headers "backwards" by calling make with the top-level Makefile.
+The actual issue comes from the fact that $(srctree) is ".." when
+building in a sub-directory with "O=build" which then obviously
+makes "-C $(top_srcdir)" point outside of the real source tree.
 
-Now we can either run this directly:
+With this series, the generic kselftest targets work as expected
+from the top level with or without a build directory e.g.:
+
+  $ make kselftest-all
 
   $ make O=build kselftest-all
 
-or this:
+Then in order to build using the sub-Makefile explicitly, the
+headers have to be installed first.  This is arguably a valid
+requirement to have when building a tool from a sub-Makefile.
+For example, "make -C tools/testing/nvdimm/" fails in a similar
+way until <asm/rwonce.h> has been generated by a kernel build.
 
-  $ make O=build headers_install
-  $ make O=build -C tools/testing/selftest all
+Guillaume Tucker (4):
+  selftests: drop khdr make target
+  selftests: stop using KSFT_KHDR_INSTALL
+  selftests: drop KSFT_KHDR_INSTALL make target
+  Makefile: add headers_install to kselftest targets
 
-The same commands work as well when building directly in the source
-tree (no O=) or any arbitrary path (relative or absolute).
+ Makefile                                      |  4 +-
+ tools/testing/selftests/Makefile              | 28 +-------------
+ tools/testing/selftests/arm64/mte/Makefile    |  1 -
+ tools/testing/selftests/arm64/signal/Makefile |  1 -
+ .../selftests/arm64/signal/test_signals.h     |  4 +-
+ .../selftests/drivers/s390x/uvdevice/Makefile |  1 -
+ .../selftests/futex/functional/Makefile       |  1 -
+ tools/testing/selftests/kvm/Makefile          |  1 -
+ tools/testing/selftests/landlock/Makefile     |  1 -
+ tools/testing/selftests/lib.mk                | 38 -------------------
+ tools/testing/selftests/net/Makefile          |  1 -
+ tools/testing/selftests/net/mptcp/Makefile    |  1 -
+ tools/testing/selftests/tc-testing/Makefile   |  1 -
+ tools/testing/selftests/vm/Makefile           |  1 -
+ 14 files changed, 5 insertions(+), 79 deletions(-)
 
-Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
----
- Makefile | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index 1a6678d817bd..afc9d739ba44 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1347,10 +1347,10 @@ tools/%: FORCE
- # Kernel selftest
- 
- PHONY += kselftest
--kselftest:
-+kselftest: headers_install
- 	$(Q)$(MAKE) -C $(srctree)/tools/testing/selftests run_tests
- 
--kselftest-%: FORCE
-+kselftest-%: headers_install FORCE
- 	$(Q)$(MAKE) -C $(srctree)/tools/testing/selftests $*
- 
- PHONY += kselftest-merge
--- 
+--
 2.30.2
-
