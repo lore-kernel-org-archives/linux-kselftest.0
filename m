@@ -2,133 +2,62 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0312CCA482
-	for <linux-kselftest@archiver.kernel.org>; Tue, 12 Jul 2022 10:03:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 52788C433EF
+	for <linux-kselftest@archiver.kernel.org>; Tue, 12 Jul 2022 10:14:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232413AbiGLKDK (ORCPT
+        id S231899AbiGLKO1 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 12 Jul 2022 06:03:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51074 "EHLO
+        Tue, 12 Jul 2022 06:14:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232711AbiGLKCt (ORCPT
+        with ESMTP id S230316AbiGLKOY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 12 Jul 2022 06:02:49 -0400
-Received: from smtpservice.6wind.com (unknown [185.13.181.2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A6E0C31DC7
-        for <linux-kselftest@vger.kernel.org>; Tue, 12 Jul 2022 03:02:48 -0700 (PDT)
-Received: from bretzel (bretzel.dev.6wind.com [10.17.1.57])
-        by smtpservice.6wind.com (Postfix) with ESMTPS id D1E1460046;
-        Tue, 12 Jul 2022 11:55:52 +0200 (CEST)
-Received: from dichtel by bretzel with local (Exim 4.92)
-        (envelope-from <dichtel@6wind.com>)
-        id 1oBCcS-0002qt-PF; Tue, 12 Jul 2022 11:55:52 +0200
-From:   Nicolas Dichtel <nicolas.dichtel@6wind.com>
-To:     "David S . Miller" <davem@davemloft.net>,
+        Tue, 12 Jul 2022 06:14:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8241D2B259;
+        Tue, 12 Jul 2022 03:14:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 17634617E0;
+        Tue, 12 Jul 2022 10:14:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD079C3411C;
+        Tue, 12 Jul 2022 10:14:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657620860;
+        bh=1Hk1K7MIGQQ/NBBXYMYfhRGqqYMTuBwZrjD/ggEX+lQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UB6gGI542whMEVgjsO8vJ7TUzstubiDd+if3KpmcMFjILhp2KnNjkk7VU1oj62dw7
+         39FPAovqvSCrlQoAVNZRxDXsIJQyj01qLkrQN0ostsymUkgs6J6yy7he4//QoFNVrs
+         /exXB157g3jO6M+b2tBzzyC/lj7L5iXvzTCa/Kmc=
+Date:   Tue, 12 Jul 2022 12:14:17 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Nicolas Dichtel <nicolas.dichtel@6wind.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
         Eric Dumazet <edumazet@google.com>,
-        David Ahern <dsahern@kernel.org>
-Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
-        stable@vger.kernel.org, Edwin Brossette <edwin.brossette@6wind.com>
-Subject: [PATCH net v2 1/2] ip: fix dflt addr selection for connected nexthop
-Date:   Tue, 12 Jul 2022 11:55:44 +0200
-Message-Id: <20220712095545.10947-1-nicolas.dichtel@6wind.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <9fb5e3df069db50396799a250c4db761b1505dd3.camel@redhat.com>
+        David Ahern <dsahern@kernel.org>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net v2 2/2] selftests/net: test nexthop without gw
+Message-ID: <Ys1JefI+co1IFda4@kroah.com>
 References: <9fb5e3df069db50396799a250c4db761b1505dd3.camel@redhat.com>
+ <20220712095545.10947-1-nicolas.dichtel@6wind.com>
+ <20220712095545.10947-2-nicolas.dichtel@6wind.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220712095545.10947-2-nicolas.dichtel@6wind.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When a nexthop is added, without a gw address, the default scope was set
-to 'host'. Thus, when a source address is selected, 127.0.0.1 may be chosen
-but rejected when the route is used.
+On Tue, Jul 12, 2022 at 11:55:45AM +0200, Nicolas Dichtel wrote:
+> This test implement the scenario described in the previous patch.
 
-When using a route without a nexthop id, the scope can be configured in the
-route, thus the problem doesn't exist.
+"previous patch" does not work well when things are committed to the
+kernel tree.  Please be descriptive.
 
-To explain more deeply: when a user creates a nexthop, it cannot specify
-the scope. To create it, the function nh_create_ipv4() calls fib_check_nh()
-with scope set to 0. fib_check_nh() calls fib_check_nh_nongw() wich was
-setting scope to 'host'. Then, nh_create_ipv4() calls
-fib_info_update_nhc_saddr() with scope set to 'host'. The src addr is
-chosen before the route is inserted.
+thanks,
 
-When a 'standard' route (ie without a reference to a nexthop) is added,
-fib_create_info() calls fib_info_update_nhc_saddr() with the scope set by
-the user. iproute2 set the scope to 'link' by default.
-
-Here is a way to reproduce the problem:
-ip netns add foo
-ip -n foo link set lo up
-ip netns add bar
-ip -n bar link set lo up
-sleep 1
-
-ip -n foo link add name eth0 type dummy
-ip -n foo link set eth0 up
-ip -n foo address add 192.168.0.1/24 dev eth0
-
-ip -n foo link add name veth0 type veth peer name veth1 netns bar
-ip -n foo link set veth0 up
-ip -n bar link set veth1 up
-
-ip -n bar address add 192.168.1.1/32 dev veth1
-ip -n bar route add default dev veth1
-
-ip -n foo nexthop add id 1 dev veth0
-ip -n foo route add 192.168.1.1 nhid 1
-
-Try to get/use the route:
-> $ ip -n foo route get 192.168.1.1
-> RTNETLINK answers: Invalid argument
-> $ ip netns exec foo ping -c1 192.168.1.1
-> ping: connect: Invalid argument
-
-Try without nexthop group (iproute2 sets scope to 'link' by dflt):
-ip -n foo route del 192.168.1.1
-ip -n foo route add 192.168.1.1 dev veth0
-
-Try to get/use the route:
-> $ ip -n foo route get 192.168.1.1
-> 192.168.1.1 dev veth0 src 192.168.0.1 uid 0
->     cache
-> $ ip netns exec foo ping -c1 192.168.1.1
-> PING 192.168.1.1 (192.168.1.1) 56(84) bytes of data.
-> 64 bytes from 192.168.1.1: icmp_seq=1 ttl=64 time=0.039 ms
->
-> --- 192.168.1.1 ping statistics ---
-> 1 packets transmitted, 1 received, 0% packet loss, time 0ms
-> rtt min/avg/max/mdev = 0.039/0.039/0.039/0.000 ms
-
-CC: stable@vger.kernel.org
-Fixes: 597cfe4fc339 ("nexthop: Add support for IPv4 nexthops")
-Reported-by: Edwin Brossette <edwin.brossette@6wind.com>
-Signed-off-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
----
-
-v1 -> v2:
- - remove useless arp off / fixed mac settings in the description
-
- net/ipv4/fib_semantics.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/net/ipv4/fib_semantics.c b/net/ipv4/fib_semantics.c
-index a57ba23571c9..20177ecf5bdd 100644
---- a/net/ipv4/fib_semantics.c
-+++ b/net/ipv4/fib_semantics.c
-@@ -1230,7 +1230,7 @@ static int fib_check_nh_nongw(struct net *net, struct fib_nh *nh,
- 
- 	nh->fib_nh_dev = in_dev->dev;
- 	dev_hold_track(nh->fib_nh_dev, &nh->fib_nh_dev_tracker, GFP_ATOMIC);
--	nh->fib_nh_scope = RT_SCOPE_HOST;
-+	nh->fib_nh_scope = RT_SCOPE_LINK;
- 	if (!netif_carrier_ok(nh->fib_nh_dev))
- 		nh->fib_nh_flags |= RTNH_F_LINKDOWN;
- 	err = 0;
--- 
-2.33.0
-
+greg k-h
