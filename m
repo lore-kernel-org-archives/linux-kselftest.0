@@ -2,109 +2,93 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB561C43334
-	for <linux-kselftest@archiver.kernel.org>; Thu, 14 Jul 2022 08:28:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BACAC433EF
+	for <linux-kselftest@archiver.kernel.org>; Thu, 14 Jul 2022 11:32:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234314AbiGNI2B (ORCPT
+        id S238870AbiGNLci (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 14 Jul 2022 04:28:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52430 "EHLO
+        Thu, 14 Jul 2022 07:32:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233625AbiGNI2A (ORCPT
+        with ESMTP id S238857AbiGNLci (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 Jul 2022 04:28:00 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85CB93AE40;
-        Thu, 14 Jul 2022 01:27:59 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id t1so1593102lft.8;
-        Thu, 14 Jul 2022 01:27:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=2pK5vnd3CztnzTkE+rNKn5a3mKucIwku8ySPesIgYDQ=;
-        b=ZaBl6ghxvOoCi15XY7qnZBNcwSAQq29ipWDnkOjW6Sp5EsSr7uOPMemPswdqcPWkYp
-         6MZiFNq9PAhKgbk0xizQDei8rGueEFZCLniFzvjS2ugzK8lo6oQWrcqd5KgCliZfdO9+
-         12EozpOMgeZApBKc02vGMBtiEoYOGUEuZIh7VrniCktqlKIgt5niU1W2xTXyf1eW4UcO
-         nf7W5NgqChCM9CKHYbWOnpxdX8ncjlitS7vuPeFs9hoMx6ztcL+EON+bB6bSwdJhlOd2
-         CQFNzcgW8kmbUMyica39G2XhqPWzRRcfv/VKFsP1V6D9ivzhgCjyRSLtMdG8T+cWFG7X
-         mS7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=2pK5vnd3CztnzTkE+rNKn5a3mKucIwku8ySPesIgYDQ=;
-        b=LVpkF89vUI+RzafkCY50kCZK/r/ua+9PjUkzxLYuResSIpDRWlqcyoz2GUDZNxFxpS
-         16oIF5hPLXhykjGT4R+tntizW0b341QGBKg6T7GdE4SIsuTYSaQS6QKwiZ0OFYdQkdNx
-         95GVlp3YxKIeCRguFTAQ/JaXfWjMGLC+lTnbv0PC/HYCca8QZo59I+IidPfM3iJqN/na
-         yS2AJNcseKwpY0TlY/LsJLAzkbJuf1IRkojUiQ9FJyTh7hLeWX1VGyItWEVtwqb7ZbkK
-         3UitlltlQIJfMsiXA4JE81UKm6tJbwMlKxieI6W4GgMXpjR8TjHQZctNQCck7EUJwZOt
-         Puaw==
-X-Gm-Message-State: AJIora8ZDuQK10mB39InRvt/Wi54rorRCAk3oRyIW5lqGvsRWgs6ei/0
-        U8G4DD7vAGjrs4yPWgsKusfAV14c6Xk=
-X-Google-Smtp-Source: AGRyM1t+uRyJiclu/xiFS5ssRkQcD6WpY+R19402VHqaEJtkQFqVPRddhHNT4oZ92QGEmNDMBxg3nA==
-X-Received: by 2002:a05:6512:ea1:b0:489:2930:9f1a with SMTP id bi33-20020a0565120ea100b0048929309f1amr4760060lfb.291.1657787277443;
-        Thu, 14 Jul 2022 01:27:57 -0700 (PDT)
-Received: from [192.168.1.103] ([178.176.79.77])
-        by smtp.gmail.com with ESMTPSA id j18-20020a056512345200b00489f0c8bddesm234621lfr.207.2022.07.14.01.27.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Jul 2022 01:27:56 -0700 (PDT)
-Subject: Re: [PATCH 8/9] selftests: timers: clocksource-switch: add 'runtime'
- command line parameter
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-renesas-soc@vger.kernel.org
-Cc:     John Stultz <jstultz@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+        Thu, 14 Jul 2022 07:32:38 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B239A1B7B8
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Jul 2022 04:32:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=QF7MlNUqjT2UfEW9YfPAvRYW4tsr
+        xdKIhmgnJ6AkEkI=; b=HKqMpM1AKn0Tjl/qDOcLHPQOUidWaHe+loZMDcxOQeX+
+        Wh39vQfXsMS7VYRoizVYeD//Y4Ncuxn466bnL7pCYxwA1uwDqAOhGwg4uonMMxfC
+        MvNh5oed9JluTbYfh3oYmIE6CO08IIjnp8xVWiecPo5vroo9zhhTVCZ4BP/0eeM=
+Received: (qmail 578448 invoked from network); 14 Jul 2022 13:32:33 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 Jul 2022 13:32:33 +0200
+X-UD-Smtp-Session: l3s3148p1@QgjvQcLjvKQgAwDtxwdRAEXXn+yo/Rze
+Date:   Thu, 14 Jul 2022 13:32:32 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     John Stultz <jstultz@google.com>
+Cc:     linux-renesas-soc@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH 0/9] selftests: timers: fixes and improvements
+Message-ID: <Ys/+0CVwtTpBNfws@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        John Stultz <jstultz@google.com>, linux-renesas-soc@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <shuah@kernel.org>
 References: <20220713204623.5443-1-wsa+renesas@sang-engineering.com>
- <20220713204623.5443-9-wsa+renesas@sang-engineering.com>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <23526df7-b77d-4223-71ee-51c456dbc236@gmail.com>
-Date:   Thu, 14 Jul 2022 11:27:54 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+ <CANDhNCp3KhGjXSrS4xmqrdPJfxStZOOn+FQxJEEoiXZ39CxDpg@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20220713204623.5443-9-wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="en0QinxNUHwiuF7U"
+Content-Disposition: inline
+In-Reply-To: <CANDhNCp3KhGjXSrS4xmqrdPJfxStZOOn+FQxJEEoiXZ39CxDpg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello!
 
-On 7/13/22 11:46 PM, Wolfram Sang wrote:
+--en0QinxNUHwiuF7U
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> So the user can decide how long the test should run.
-> 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
->  tools/testing/selftests/timers/clocksource-switch.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/timers/clocksource-switch.c b/tools/testing/selftests/timers/clocksource-switch.c
-> index 5256e6215980..a1d0d33738b6 100644
-> --- a/tools/testing/selftests/timers/clocksource-switch.c
-> +++ b/tools/testing/selftests/timers/clocksource-switch.c
-[...]
-> -	while ((opt = getopt(argc, argv, "s")) != -1) {
-> +	while ((opt = getopt(argc, argv, "st:")) != -1) {
->  		switch (opt) {
->  		case 's':
->  			do_sanity_check = 0;
->  			break;
-> +		case 't':
-> +			runtime = atoi(optarg);
-> +			break;
->  		default:
->  			printf("Usage: %s [-s]\n", argv[0]);
->  			printf("	-s: skip sanity checks\n");
+Hey John,
 
-   Hm, you probably forgot to update the usage msg?
+> Acked-by: John Stultz <jstultz@google.com>
+>=20
+> Thanks so much for submitting these.
 
-[...]
+Glad you like this series. I will wait some more to see if there are
+further review comments. But surely, I will add the missing parameter to
+the help output and add your tags to v2.
 
-MBR, Sergey
+Thank you for doing these tools :)
+
+   Wolfram
+
+
+--en0QinxNUHwiuF7U
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmLP/tAACgkQFA3kzBSg
+KbZgqBAAl9r+En2Z/stzjSCSrZw83Tb7y+Kjgj2SlsEp37lxn5mIS1nAQa0N+yvL
+3S5zkE1Hj9yJagC7eIcDEv/oFX8zf3SJIAfJQ4NkfDO5ZhRUsiOyUhm81ywgbBCB
+xF4t5upcE7iJ7oeaxqaMEW26eQJOz7bRNec1SzX/jz3mZazfua+PD4ShhyTAaXzn
+xNJn7C3um2ySdmOS8wiLrFLVKqm7LIXmQy9eYzNnbfVf27n8/kM17co7xvYjeARG
+JxBGfhuMBBcayAVeTr2PlTtWzbSkaZkz1S+38KAeQDsJaPJbi8DcHxfBfnPgE88N
+1OabM1TUhN7qohy7VaAooWBL7JJt92aQkB5c0Os2ftHoCmmSELXEgQZz5clnsMD5
++OWzNxOgCX1YNb6aVufraIUxtJhql1HveE84Q014uAUYob+HnY39bGFyruqc7EK2
+QCXCrqjzV0wJjxjxZ8b4Gpo6nIrei9PgxU6TFy1pDvJ6HJypQz2YnbJ5Tx5IXuc3
+c1EIjYfQlODtryWANoqhvyaUQZy4L1Is7UM5iuVXsYhzL/DazqItoBl5dQf5+pmu
+n7h3lNVKThnYUJdXzEujtuMITFTfWW1Y/cyLhthdTnhiBbmFlKktc/9nOf3ykMD6
+1xF7ilgQYOGnyk3VD36Ov7ZtPtYXh2eTyezgquP9+EMsMmYSS7I=
+=ZXu/
+-----END PGP SIGNATURE-----
+
+--en0QinxNUHwiuF7U--
