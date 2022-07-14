@@ -2,129 +2,121 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F0419C433EF
-	for <linux-kselftest@archiver.kernel.org>; Thu, 14 Jul 2022 06:07:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B4AEC433EF
+	for <linux-kselftest@archiver.kernel.org>; Thu, 14 Jul 2022 06:21:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230080AbiGNGHQ (ORCPT
+        id S234446AbiGNGVQ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 14 Jul 2022 02:07:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35290 "EHLO
+        Thu, 14 Jul 2022 02:21:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230061AbiGNGHP (ORCPT
+        with ESMTP id S233455AbiGNGVP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 Jul 2022 02:07:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A86652F641
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 Jul 2022 23:07:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657778833;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=0Iv/of2lWJhY6Wq6eUx2wF1MOm6COuhI4THcs0fOz4c=;
-        b=SLOmKZ/D3dNyVJtXl80Aci7SbhuuHQnWtquf6/YZerSZuzh9LBWrj11fwdfaRMUaiOWxuD
-        8qrQaYc5VnQPtTcp0jNFTv4U2HjeZzuPKz4Gs2HniNUZM85MIYVj8slnxv88VTHO77wDHz
-        Y5oTjR78EYMiHl4b3xJ2TTM2A3HiGqA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-568-xg7vNdqMMFWLrvckPTivMg-1; Thu, 14 Jul 2022 02:07:10 -0400
-X-MC-Unique: xg7vNdqMMFWLrvckPTivMg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B956E802D1C;
-        Thu, 14 Jul 2022 06:07:09 +0000 (UTC)
-Received: from gshan.redhat.com (vpn2-54-37.bne.redhat.com [10.64.54.37])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6237140E80E0;
-        Thu, 14 Jul 2022 06:07:05 +0000 (UTC)
-From:   Gavin Shan <gshan@redhat.com>
-To:     kvmarm@lists.cs.columbia.edu
-Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, seanjc@google.com,
-        mathieu.desnoyers@efficios.com, shuah@kernel.org, maz@kernel.org,
-        oliver.upton@linux.dev, pbonzini@redhat.com, shan.gavin@gmail.com
-Subject: [PATCH] KVM: selftests: Double check on the current CPU in rseq_test
-Date:   Thu, 14 Jul 2022 16:06:42 +0800
-Message-Id: <20220714080642.3376618-1-gshan@redhat.com>
+        Thu, 14 Jul 2022 02:21:15 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A959F1EED1;
+        Wed, 13 Jul 2022 23:21:14 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id ez10so1529280ejc.13;
+        Wed, 13 Jul 2022 23:21:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pq95ND8BDQIHwxsqfPmYBdAOr2LWRGPXUOS7G88vYNI=;
+        b=mc0niwUHgxn7oIC9eFaGWNcnvDu1V+as79Nu5JgwbKfVSmLi+rtAzf2GVzshoZ28kq
+         9Q48QZiUjhjsCECE6In9OsDA0k926V5Gb4qKamyvRF5PdT83Od9BrFw9CnQtKppSplGv
+         3XNOy2MF3ARw+5Pf0AGPJ+hz4tR0EWDknQTCcPCnBpEOa/ec1nmyyloMwjnYAsT7lXt3
+         kHtxOGVr4c1Bms88ujUUsJwTKX+NokAOqAnrCOpcKoZBZnGRG508NvJezPLFGSgkGNPE
+         761In9b79cciRBpogVK+fuFR6ndymTYq8zj9MMdyX0ZKnKvnH/ohDy1yVo8MMi11Yr13
+         tIjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pq95ND8BDQIHwxsqfPmYBdAOr2LWRGPXUOS7G88vYNI=;
+        b=jeOrTaO7DPJgYymFBY1C1wu/LlCjch2pAMYnWLYhv66o8qq8WLaS/7KVgdIMwfTtDz
+         FQOs1iBHoK+3w0pPIUvUwqCl2dSrGWYTh62q6YSBw37F2LXQTy8BLbWzO5stob6rgGdS
+         4elfxg8mrT1wr2z7y/LIbes3Y36QRLMzpMq9P6MBKDMI2Rvy7duaaVuX4gyOMCkiA00K
+         QrexM9NFQgOGSUFdHFUpsiaKXdtwh9mHhXmu7jgwK+B17pHyGIFsJxzxFC+LDalawfeP
+         DMRz6Ok1YxX5UfterPe4PFLCW68+pAO4/6t7TE5GQIwrkseo3WClIAiX0D4Y8asSpK/X
+         Re4g==
+X-Gm-Message-State: AJIora9FIz8AEtxh5zorLJpXwwlSfkdtluFYf4UApLlkk2zcA5UXKTbN
+        ptIBPTGxjvBSAQX5CUi5EN7b5r93c9yYZSIrXXQ=
+X-Google-Smtp-Source: AGRyM1thXSIGIJL+S9pfG4Jcto8eU8bl95TqWCff70xLa+xLFkC2RH9LBJ5EQL/XyoX+FpumrxKtVs2t6vyYY/7l2wc=
+X-Received: by 2002:a17:906:cc0c:b0:72b:68df:8aff with SMTP id
+ ml12-20020a170906cc0c00b0072b68df8affmr7264433ejb.226.1657779673195; Wed, 13
+ Jul 2022 23:21:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+References: <20220714015647.25074-1-xiaolinkui@kylinos.cn> <CAKH8qBuj=7HXF2xTRWqso9o56t5Tpg68C+r5PnHVnEyu129UmA@mail.gmail.com>
+In-Reply-To: <CAKH8qBuj=7HXF2xTRWqso9o56t5Tpg68C+r5PnHVnEyu129UmA@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 13 Jul 2022 23:21:01 -0700
+Message-ID: <CAEf4BzY5ncGXcnFVGgdQp_wMrJ4dsgae2s95BXr4PkL2oMURnQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Return true/false (not 1/0) from
+ bool functions
+To:     Stanislav Fomichev <sdf@google.com>
+Cc:     xiaolinkui <xiaolinkui@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        john fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, xiaolinkui@kylinos.cn,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-In rseq_test, there are two threads created. Those two threads are
-'main' and 'migration_thread' separately. We also have the assumption
-that non-migration status on 'migration-worker' thread guarantees the
-same non-migration status on 'main' thread. Unfortunately, the assumption
-isn't true. The 'main' thread can be migrated from one CPU to another
-one between the calls to sched_getcpu() and READ_ONCE(__rseq.cpu_id).
-The following assert is raised eventually because of the mismatched
-CPU numbers.
+On Wed, Jul 13, 2022 at 8:37 PM Stanislav Fomichev <sdf@google.com> wrote:
+>
+> On Wed, Jul 13, 2022 at 6:57 PM xiaolinkui <xiaolinkui@gmail.com> wrote:
+> >
+> > From: Linkui Xiao <xiaolinkui@kylinos.cn>
+> >
+> > Return boolean values ("true" or "false") instead of 1 or 0 from bool
+> > functions.  This fixes the following warnings from coccicheck:
+> >
+> > tools/testing/selftests/bpf/progs/test_xdp_noinline.c:407:9-10: WARNING:
+> > return of 0/1 in function 'decap_v4' with return type bool
+> > tools/testing/selftests/bpf/progs/test_xdp_noinline.c:389:9-10: WARNING:
+> > return of 0/1 in function 'decap_v6' with return type bool
+> > tools/testing/selftests/bpf/progs/test_xdp_noinline.c:290:9-10: WARNING:
+> > return of 0/1 in function 'encap_v6' with return type bool
+> > tools/testing/selftests/bpf/progs/test_xdp_noinline.c:264:9-10: WARNING:
+> > return of 0/1 in function 'parse_tcp' with return type bool
+> > tools/testing/selftests/bpf/progs/test_xdp_noinline.c:242:9-10: WARNING:
+> > return of 0/1 in function 'parse_udp' with return type bool
+> >
+> > Generated by: scripts/coccinelle/misc/boolreturn.cocci
+> >
+> > Signed-off-by: Linkui Xiao <xiaolinkui@kylinos.cn>
+> Reviewed-by: Stanislav Fomichev <sdf@google.com>
+>
+> > Suggested-by: Stanislav Fomichev <sdf@google.com>
+> That shouldn't be here :-) I didn't suggest the patch, you're
+> suggesting it, I'm just suggesting to properly format it.
+> Probably not worth a respin, I hope whoever gets to apply it can drop
+> that line (or maybe keep it, I don't mind).
 
-The issue can be reproduced on arm64 system occasionally.
+Dropped Suggested-by, applied to bpf-next.
 
-  host# uname -r
-  5.19.0-rc6-gavin+
-  host# # cat /proc/cpuinfo | grep processor | tail -n 1
-  processor    : 223
-  host# pwd
-  /home/gavin/sandbox/linux.main/tools/testing/selftests/kvm
-  host# for i in `seq 1 100`;   \
-        do echo "--------> $i"; \
-        ./rseq_test; sleep 3;   \
-        done
-  --------> 1
-  --------> 2
-  --------> 3
-  --------> 4
-  --------> 5
-  --------> 6
-  ==== Test Assertion Failure ====
-    rseq_test.c:265: rseq_cpu == cpu
-    pid=3925 tid=3925 errno=4 - Interrupted system call
-       1  0x0000000000401963: main at rseq_test.c:265 (discriminator 2)
-       2  0x0000ffffb044affb: ?? ??:0
-       3  0x0000ffffb044b0c7: ?? ??:0
-       4  0x0000000000401a6f: _start at ??:?
-    rseq CPU = 4, sched CPU = 27
+>
+> > ---
+> >  .../selftests/bpf/progs/test_xdp_noinline.c   | 30 +++++++++----------
+> >  1 file changed, 15 insertions(+), 15 deletions(-)
+> >
 
-This fixes the issue by double-checking on the current CPU after
-call to READ_ONCE(__rseq.cpu_id) and restarting the test if the
-two consecutive CPU numbers aren't euqal.
-
-Fixes: 61e52f1630f5 ("KVM: selftests: Add a test for KVM_RUN+rseq to detect task migration bugs")
-Signed-off-by: Gavin Shan <gshan@redhat.com>
----
- tools/testing/selftests/kvm/rseq_test.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/kvm/rseq_test.c b/tools/testing/selftests/kvm/rseq_test.c
-index 4158da0da2bb..74709dd9f5b2 100644
---- a/tools/testing/selftests/kvm/rseq_test.c
-+++ b/tools/testing/selftests/kvm/rseq_test.c
-@@ -207,7 +207,7 @@ int main(int argc, char *argv[])
- {
- 	int r, i, snapshot;
- 	struct kvm_vm *vm;
--	u32 cpu, rseq_cpu;
-+	u32 cpu, rseq_cpu, last_cpu;
- 
- 	/* Tell stdout not to buffer its content */
- 	setbuf(stdout, NULL);
-@@ -259,8 +259,9 @@ int main(int argc, char *argv[])
- 			smp_rmb();
- 			cpu = sched_getcpu();
- 			rseq_cpu = READ_ONCE(__rseq.cpu_id);
-+			last_cpu = sched_getcpu();
- 			smp_rmb();
--		} while (snapshot != atomic_read(&seq_cnt));
-+		} while (snapshot != atomic_read(&seq_cnt) || cpu != last_cpu);
- 
- 		TEST_ASSERT(rseq_cpu == cpu,
- 			    "rseq CPU = %d, sched CPU = %d\n", rseq_cpu, cpu);
--- 
-2.23.0
-
+[...]
