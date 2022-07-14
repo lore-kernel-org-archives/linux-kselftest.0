@@ -2,101 +2,109 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB746C43334
-	for <linux-kselftest@archiver.kernel.org>; Thu, 14 Jul 2022 07:09:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB561C43334
+	for <linux-kselftest@archiver.kernel.org>; Thu, 14 Jul 2022 08:28:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234878AbiGNHJL (ORCPT
+        id S234314AbiGNI2B (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 14 Jul 2022 03:09:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47372 "EHLO
+        Thu, 14 Jul 2022 04:28:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235364AbiGNHJE (ORCPT
+        with ESMTP id S233625AbiGNI2A (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 Jul 2022 03:09:04 -0400
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B501903F;
-        Thu, 14 Jul 2022 00:09:03 -0700 (PDT)
-Received: by mail-qv1-f47.google.com with SMTP id r12so847975qvm.3;
-        Thu, 14 Jul 2022 00:09:03 -0700 (PDT)
+        Thu, 14 Jul 2022 04:28:00 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85CB93AE40;
+        Thu, 14 Jul 2022 01:27:59 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id t1so1593102lft.8;
+        Thu, 14 Jul 2022 01:27:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=2pK5vnd3CztnzTkE+rNKn5a3mKucIwku8ySPesIgYDQ=;
+        b=ZaBl6ghxvOoCi15XY7qnZBNcwSAQq29ipWDnkOjW6Sp5EsSr7uOPMemPswdqcPWkYp
+         6MZiFNq9PAhKgbk0xizQDei8rGueEFZCLniFzvjS2ugzK8lo6oQWrcqd5KgCliZfdO9+
+         12EozpOMgeZApBKc02vGMBtiEoYOGUEuZIh7VrniCktqlKIgt5niU1W2xTXyf1eW4UcO
+         nf7W5NgqChCM9CKHYbWOnpxdX8ncjlitS7vuPeFs9hoMx6ztcL+EON+bB6bSwdJhlOd2
+         CQFNzcgW8kmbUMyica39G2XhqPWzRRcfv/VKFsP1V6D9ivzhgCjyRSLtMdG8T+cWFG7X
+         mS7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=T0TGzHJ/d88sjvucmzrmHfr2w3pyHWB6L9OYmNBsm0w=;
-        b=O2nHyfeeyJtoK+5rSSf9i1yQuTds1Fi3By82z54ItHDp1b/KD3f8tLFmExu8gK7hkT
-         1NdxsX04JPsSuPp2B3xh8HpIGWNzWnaNhRXrumRoOmH4R0H1tdKSCXIC9qqO5JKXVMke
-         JHT2CJz1HIrqe8vsg3fmi6ffwaLkHpZgYYPVou6n78MTrQUZcilkrX2H0ZisVUd/JbL4
-         x2+BDxTyY68LrKoEQ48c0NXE51KYJMh2wiA2AoZg8g63ORkPQTOXkNVSyogadwk0wm7V
-         jfXZNnk1cZiE9y5vgTO4NnODKdn7wL23CEa2A73kaGwFLWWuEBDzsFXOdx7b7pO6lK3m
-         Bz5A==
-X-Gm-Message-State: AJIora/9M8/e+BXHt7GQfThBEPfncHzrNWnH1qjjtJkEOQETyZSGWSrS
-        puYJmI38YHPpN/tr8az6FPW1p8B2oDJpXQ==
-X-Google-Smtp-Source: AGRyM1tnClzyP0ypUH6cJ/Q1DKTs5xvyrdwVNH4AjfK3QF1RIbxw3yLvV9ABmkEA+h2vnqwAqshjhA==
-X-Received: by 2002:ad4:596f:0:b0:473:2ebe:db7e with SMTP id eq15-20020ad4596f000000b004732ebedb7emr6643117qvb.106.1657782542296;
-        Thu, 14 Jul 2022 00:09:02 -0700 (PDT)
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
-        by smtp.gmail.com with ESMTPSA id k19-20020ac84793000000b0031ece8b6666sm901796qtq.43.2022.07.14.00.09.01
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=2pK5vnd3CztnzTkE+rNKn5a3mKucIwku8ySPesIgYDQ=;
+        b=LVpkF89vUI+RzafkCY50kCZK/r/ua+9PjUkzxLYuResSIpDRWlqcyoz2GUDZNxFxpS
+         16oIF5hPLXhykjGT4R+tntizW0b341QGBKg6T7GdE4SIsuTYSaQS6QKwiZ0OFYdQkdNx
+         95GVlp3YxKIeCRguFTAQ/JaXfWjMGLC+lTnbv0PC/HYCca8QZo59I+IidPfM3iJqN/na
+         yS2AJNcseKwpY0TlY/LsJLAzkbJuf1IRkojUiQ9FJyTh7hLeWX1VGyItWEVtwqb7ZbkK
+         3UitlltlQIJfMsiXA4JE81UKm6tJbwMlKxieI6W4GgMXpjR8TjHQZctNQCck7EUJwZOt
+         Puaw==
+X-Gm-Message-State: AJIora8ZDuQK10mB39InRvt/Wi54rorRCAk3oRyIW5lqGvsRWgs6ei/0
+        U8G4DD7vAGjrs4yPWgsKusfAV14c6Xk=
+X-Google-Smtp-Source: AGRyM1t+uRyJiclu/xiFS5ssRkQcD6WpY+R19402VHqaEJtkQFqVPRddhHNT4oZ92QGEmNDMBxg3nA==
+X-Received: by 2002:a05:6512:ea1:b0:489:2930:9f1a with SMTP id bi33-20020a0565120ea100b0048929309f1amr4760060lfb.291.1657787277443;
+        Thu, 14 Jul 2022 01:27:57 -0700 (PDT)
+Received: from [192.168.1.103] ([178.176.79.77])
+        by smtp.gmail.com with ESMTPSA id j18-20020a056512345200b00489f0c8bddesm234621lfr.207.2022.07.14.01.27.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Jul 2022 00:09:01 -0700 (PDT)
-Received: by mail-yb1-f173.google.com with SMTP id y195so1817054yby.0;
-        Thu, 14 Jul 2022 00:09:01 -0700 (PDT)
-X-Received: by 2002:a05:6902:a:b0:65c:b38e:6d9f with SMTP id
- l10-20020a056902000a00b0065cb38e6d9fmr7497019ybh.36.1657782541422; Thu, 14
- Jul 2022 00:09:01 -0700 (PDT)
+        Thu, 14 Jul 2022 01:27:56 -0700 (PDT)
+Subject: Re: [PATCH 8/9] selftests: timers: clocksource-switch: add 'runtime'
+ command line parameter
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-renesas-soc@vger.kernel.org
+Cc:     John Stultz <jstultz@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20220713204623.5443-1-wsa+renesas@sang-engineering.com>
+ <20220713204623.5443-9-wsa+renesas@sang-engineering.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <23526df7-b77d-4223-71ee-51c456dbc236@gmail.com>
+Date:   Thu, 14 Jul 2022 11:27:54 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-References: <20220714042221.281187-1-sashal@kernel.org> <20220714042221.281187-39-sashal@kernel.org>
-In-Reply-To: <20220714042221.281187-39-sashal@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 14 Jul 2022 09:08:49 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWumKeJmsOsd7_=F-+8znY=0YtH-CbeLN7knSJ1LDOR_w@mail.gmail.com>
-Message-ID: <CAMuHMdWumKeJmsOsd7_=F-+8znY=0YtH-CbeLN7knSJ1LDOR_w@mail.gmail.com>
-Subject: Re: [PATCH AUTOSEL 5.18 39/41] wireguard: selftests: use virt machine
- on m68k
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        stable <stable@vger.kernel.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, wireguard@lists.zx2c4.com,
-        netdev <netdev@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20220713204623.5443-9-wsa+renesas@sang-engineering.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Sasha,
+Hello!
 
-On Thu, Jul 14, 2022 at 6:29 AM Sasha Levin <sashal@kernel.org> wrote:
-> From: "Jason A. Donenfeld" <Jason@zx2c4.com>
->
-> [ Upstream commit 1f2f341a62639c7066ee4c76b7d9ebe867e0a1d5 ]
->
-> This should be a bit more stable hopefully.
->
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+On 7/13/22 11:46 PM, Wolfram Sang wrote:
 
-Thanks for your patch!
+> So the user can decide how long the test should run.
+> 
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+>  tools/testing/selftests/timers/clocksource-switch.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/timers/clocksource-switch.c b/tools/testing/selftests/timers/clocksource-switch.c
+> index 5256e6215980..a1d0d33738b6 100644
+> --- a/tools/testing/selftests/timers/clocksource-switch.c
+> +++ b/tools/testing/selftests/timers/clocksource-switch.c
+[...]
+> -	while ((opt = getopt(argc, argv, "s")) != -1) {
+> +	while ((opt = getopt(argc, argv, "st:")) != -1) {
+>  		switch (opt) {
+>  		case 's':
+>  			do_sanity_check = 0;
+>  			break;
+> +		case 't':
+> +			runtime = atoi(optarg);
+> +			break;
+>  		default:
+>  			printf("Usage: %s [-s]\n", argv[0]);
+>  			printf("	-s: skip sanity checks\n");
 
-> --- a/tools/testing/selftests/wireguard/qemu/arch/m68k.config
-> +++ b/tools/testing/selftests/wireguard/qemu/arch/m68k.config
-> @@ -1,10 +1,7 @@
->  CONFIG_MMU=y
-> +CONFIG_VIRT=y
+   Hm, you probably forgot to update the usage msg?
 
-The m68k virt machine was introduced in v5.19-rc1, so this patch
-must not be backported to v5.18 and earlier.
+[...]
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+MBR, Sergey
