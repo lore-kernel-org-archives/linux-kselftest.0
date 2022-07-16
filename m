@@ -2,187 +2,130 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16664C43334
-	for <linux-kselftest@archiver.kernel.org>; Sat, 16 Jul 2022 12:42:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC03AC43334
+	for <linux-kselftest@archiver.kernel.org>; Sat, 16 Jul 2022 12:46:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231651AbiGPMmY (ORCPT
+        id S232014AbiGPMqU (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 16 Jul 2022 08:42:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44006 "EHLO
+        Sat, 16 Jul 2022 08:46:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbiGPMmX (ORCPT
+        with ESMTP id S229548AbiGPMqS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 16 Jul 2022 08:42:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 981DF18385;
-        Sat, 16 Jul 2022 05:42:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sat, 16 Jul 2022 08:46:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 09F5C1FCCA
+        for <linux-kselftest@vger.kernel.org>; Sat, 16 Jul 2022 05:46:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657975577;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=6jdgBr8qPyYQ7wIItqpQ8nbtb9ewBI0uvepqAzRBm0w=;
+        b=iKRmnKrQ/8yPPNDKsbrVC/Mywnnz3IZfHIQuTpiWySU+saORem6mLA/ryqXmluMztYxEhn
+        9Sdn/4cuzC5QPA4e+r9VOs7yCxAvVdM3RbDaCqdZ7L7sPTL0advkL/AwAFT2XPJy+NW18n
+        suv8n4oW1zT41xFrw2y23UW+VtBLeW4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-649-jVl0NklINweQDDm3TzrjdQ-1; Sat, 16 Jul 2022 08:46:15 -0400
+X-MC-Unique: jVl0NklINweQDDm3TzrjdQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 50BDCB80108;
-        Sat, 16 Jul 2022 12:42:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6CBCC34114;
-        Sat, 16 Jul 2022 12:42:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657975340;
-        bh=HjF+NeyLSXs/BPREprBA9T9P63b0wfvdyRWiqF26LnM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=u23P2EU6qRL1vu6U1ohiYHNRckhBNC8KYLKdsiszyMvWP2H18PzeER3z0ZoCqs8Oz
-         jcDv58i75lMPxVsyThQIDpuusbS1ggqazOvkBjc0XIBMWOOCt6FhnBOHk0SQrwKruJ
-         XSo7j0jgJemcDPs9KTaC7peucwxSOMt4rJMAHkA5uwdtU7P3TVe7D9jWyfRcSJNhkk
-         ZBSZAiI0ucFmL1fK5Dskz6B94ZFS2WZrK5KXL25yE+Q8WIfgxDRTt01tLNXdu4Q7N8
-         DZobomePyEVsHwva8L8DkFKlH7VjnXfoKcEaNJxI9vUeO+aItFS6E/0zfWyfDmlOhH
-         6F5kuracHfOdw==
-From:   Conor Dooley <conor@kernel.org>
-To:     ojeda@kernel.org
-Cc:     gregkh@linuxfoundation.org, jarkko@kernel.org,
-        kunit-dev@googlegroups.com, linux-arm-kernel@lists.infradead.org,
-        linux-doc@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-um@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, live-patching@vger.kernel.org,
-        rust-for-linux@vger.kernel.org, torvalds@linux-foundation.org
-Subject: Re: [PATCH v7 00/25] Rust support
-Date:   Sat, 16 Jul 2022 13:42:14 +0100
-Message-Id: <20220716124214.329949-1-conor@kernel.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220523020209.11810-1-ojeda@kernel.org>
-References: <20220523020209.11810-1-ojeda@kernel.org>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A4A358037B7;
+        Sat, 16 Jul 2022 12:46:14 +0000 (UTC)
+Received: from gshan.redhat.com (vpn2-54-37.bne.redhat.com [10.64.54.37])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id ED01E492C3B;
+        Sat, 16 Jul 2022 12:46:10 +0000 (UTC)
+From:   Gavin Shan <gshan@redhat.com>
+To:     kvmarm@lists.cs.columbia.edu
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, seanjc@google.com,
+        pbonzini@redhat.com, maz@kernel.org, shuah@kernel.org,
+        oliver.upton@linux.dev, shan.gavin@gmail.com
+Subject: [PATCH v2] KVM: selftests: Fix target thread to be migrated in rseq_test
+Date:   Sat, 16 Jul 2022 22:45:37 +0800
+Message-Id: <20220716144537.3436743-1-gshan@redhat.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hey,
+In rseq_test, there are two threads, which are thread group leader
+and migration worker. The migration worker relies on sched_setaffinity()
+to force migration on the thread group leader. Unfortunately, we
+have wrong parameter (0) passed to sched_getaffinity(). It's actually
+forcing migration on the migration worker instead of the thread group
+leader. It also means migration can happen on the thread group leader
+at any time, which eventually leads to failure as the following logs
+show.
 
-Maybe I am just missing something blatantly obvious here, but trying
-to build rust support in -next fails for me. I am using ClangBuiltLinux
-clang version 15.0.0 5b0788fef86ed7008a11f6ee19b9d86d42b6fcfa and LLD
-15.0.0. Is it just expected that building -next with rust support is
-not a good idea?
-My defconfig is the default RISC-V one plus:
-CONFIG_RUST=y
-CONFIG_SAMPLES=y
-CONFIG_SAMPLES_RUST=y
-CONFIG_SAMPLE_RUST_MINIMAL=y
+  host# uname -r
+  5.19.0-rc6-gavin+
+  host# # cat /proc/cpuinfo | grep processor | tail -n 1
+  processor    : 223
+  host# pwd
+  /home/gavin/sandbox/linux.main/tools/testing/selftests/kvm
+  host# for i in `seq 1 100`;                \
+        do echo "--------> $i"; ./rseq_test; done
+  --------> 1
+  --------> 2
+  --------> 3
+  --------> 4
+  --------> 5
+  --------> 6
+  ==== Test Assertion Failure ====
+    rseq_test.c:265: rseq_cpu == cpu
+    pid=3925 tid=3925 errno=4 - Interrupted system call
+       1  0x0000000000401963: main at rseq_test.c:265 (discriminator 2)
+       2  0x0000ffffb044affb: ?? ??:0
+       3  0x0000ffffb044b0c7: ?? ??:0
+       4  0x0000000000401a6f: _start at ??:?
+    rseq CPU = 4, sched CPU = 27
 
-Thanks,
-Conor.
+This fixes the issue by passing correct parameter, tid of the group
+thread leader, to sched_setaffinity().
 
-Fail log:
-  UPD     rust/target.json
-  BINDGEN rust/bindings_generated.rs
-  BINDGEN rust/bindings_helpers_generated.rs
-  RUSTC L rust/core.o
-  EXPORTS rust/exports_core_generated.h
-  RUSTC P rust/libmacros.so
-  RUSTC L rust/compiler_builtins.o
-  RUSTC L rust/alloc.o
-  RUSTC L rust/build_error.o
-  EXPORTS rust/exports_alloc_generated.h
-  RUSTC L rust/kernel.o
-error[E0428]: the name `maple_enode` is defined multiple times
-     --> linux/rust/bindings_generated.rs:18009:1
-      |
-18006 | pub struct maple_enode {
-      | ---------------------- previous definition of the type `maple_enode` here
-...
-18009 | pub type maple_enode = *mut maple_enode;
-      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `maple_enode` redefined here
-      |
-      = note: `maple_enode` must be defined only once in the type namespace of this module
+Fixes: 61e52f1630f5 ("KVM: selftests: Add a test for KVM_RUN+rseq to detect task migration bugs")
+Signed-off-by: Gavin Shan <gshan@redhat.com>
+---
+ tools/testing/selftests/kvm/rseq_test.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-error[E0428]: the name `maple_pnode` is defined multiple times
-     --> linux/rust/bindings_generated.rs:18015:1
-      |
-18012 | pub struct maple_pnode {
-      | ---------------------- previous definition of the type `maple_pnode` here
-...
-18015 | pub type maple_pnode = *mut maple_pnode;
-      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `maple_pnode` redefined here
-      |
-      = note: `maple_pnode` must be defined only once in the type namespace of this module
+diff --git a/tools/testing/selftests/kvm/rseq_test.c b/tools/testing/selftests/kvm/rseq_test.c
+index 4158da0da2bb..c83ac7b467f8 100644
+--- a/tools/testing/selftests/kvm/rseq_test.c
++++ b/tools/testing/selftests/kvm/rseq_test.c
+@@ -38,6 +38,7 @@ static __thread volatile struct rseq __rseq = {
+  */
+ #define NR_TASK_MIGRATIONS 100000
+ 
++static pid_t rseq_tid;
+ static pthread_t migration_thread;
+ static cpu_set_t possible_mask;
+ static int min_cpu, max_cpu;
+@@ -106,7 +107,8 @@ static void *migration_worker(void *ign)
+ 		 * stable, i.e. while changing affinity is in-progress.
+ 		 */
+ 		smp_wmb();
+-		r = sched_setaffinity(0, sizeof(allowed_mask), &allowed_mask);
++		r = sched_setaffinity(rseq_tid, sizeof(allowed_mask),
++				      &allowed_mask);
+ 		TEST_ASSERT(!r, "sched_setaffinity failed, errno = %d (%s)",
+ 			    errno, strerror(errno));
+ 		smp_wmb();
+@@ -231,6 +233,7 @@ int main(int argc, char *argv[])
+ 	vm = vm_create_default(VCPU_ID, 0, guest_code);
+ 	ucall_init(vm, NULL);
+ 
++	rseq_tid = gettid();
+ 	pthread_create(&migration_thread, NULL, migration_worker, 0);
+ 
+ 	for (i = 0; !done; i++) {
+-- 
+2.23.0
 
-error[E0391]: cycle detected when expanding type alias `bindings::bindings_raw::maple_pnode`
-     --> linux/rust/bindings_generated.rs:18015:29
-      |
-18015 | pub type maple_pnode = *mut maple_pnode;
-      |                             ^^^^^^^^^^^
-      |
-      = note: ...which immediately requires expanding type alias `bindings::bindings_raw::maple_pnode` again
-      = note: type aliases cannot be recursive
-      = help: consider using a struct, enum, or union instead to break the cycle
-      = help: see <https://doc.rust-lang.org/reference/types.html#recursive-types> for more information
-note: cycle used when computing type of `bindings::bindings_raw::maple_range_64::parent`
-     --> linux/rust/bindings_generated.rs:18058:22
-      |
-18058 |     pub parent: *mut maple_pnode,
-      |                      ^^^^^^^^^^^
-
-error[E0391]: cycle detected when expanding type alias `bindings::bindings_raw::maple_enode`
-     --> linux/rust/bindings_generated.rs:18009:29
-      |
-18009 | pub type maple_enode = *mut maple_enode;
-      |                             ^^^^^^^^^^^
-      |
-      = note: ...which immediately requires expanding type alias `bindings::bindings_raw::maple_enode` again
-      = note: type aliases cannot be recursive
-      = help: consider using a struct, enum, or union instead to break the cycle
-      = help: see <https://doc.rust-lang.org/reference/types.html#recursive-types> for more information
-note: cycle used when computing type of `bindings::bindings_raw::maple_topiary::next`
-     --> linux/rust/bindings_generated.rs:18340:20
-      |
-18340 |     pub next: *mut maple_enode,
-      |                    ^^^^^^^^^^^
-
-error[E0117]: only traits defined in the current crate can be implemented for arbitrary types
-     --> linux/rust/bindings_generated.rs:18005:10
-      |
-18005 | #[derive(Copy, Clone)]
-      |          ^^^^
-      |          |
-      |          impl doesn't use only types from inside the current crate
-      |          `*mut [type error]` is not defined in the current crate
-      |
-      = note: define and implement a trait or new type instead
-      = note: this error originates in the derive macro `Copy` (in Nightly builds, run with -Z macro-backtrace for more info)
-
-error[E0117]: only traits defined in the current crate can be implemented for arbitrary types
-     --> linux/rust/bindings_generated.rs:18011:10
-      |
-18011 | #[derive(Copy, Clone)]
-      |          ^^^^
-      |          |
-      |          impl doesn't use only types from inside the current crate
-      |          `*mut [type error]` is not defined in the current crate
-      |
-      = note: define and implement a trait or new type instead
-      = note: this error originates in the derive macro `Copy` (in Nightly builds, run with -Z macro-backtrace for more info)
-
-error[E0117]: only traits defined in the current crate can be implemented for arbitrary types
-     --> linux/rust/bindings_generated.rs:18005:16
-      |
-18005 | #[derive(Copy, Clone)]
-      |                ^^^^^
-      |                |
-      |                impl doesn't use only types from inside the current crate
-      |                `*mut [type error]` is not defined in the current crate
-      |
-      = note: define and implement a trait or new type instead
-      = note: this error originates in the derive macro `Clone` (in Nightly builds, run with -Z macro-backtrace for more info)
-
-error[E0117]: only traits defined in the current crate can be implemented for arbitrary types
-     --> linux/rust/bindings_generated.rs:18011:16
-      |
-18011 | #[derive(Copy, Clone)]
-      |                ^^^^^
-      |                |
-      |                impl doesn't use only types from inside the current crate
-      |                `*mut [type error]` is not defined in the current crate
-      |
-      = note: define and implement a trait or new type instead
-      = note: this error originates in the derive macro `Clone` (in Nightly builds, run with -Z macro-backtrace for more info)
-
-error: aborting due to 8 previous errors
