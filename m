@@ -2,96 +2,167 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EFEFC43334
-	for <linux-kselftest@archiver.kernel.org>; Sat, 16 Jul 2022 13:56:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 710E2C433EF
+	for <linux-kselftest@archiver.kernel.org>; Sat, 16 Jul 2022 19:48:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230332AbiGPN4N (ORCPT
+        id S229648AbiGPTsO (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 16 Jul 2022 09:56:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55368 "EHLO
+        Sat, 16 Jul 2022 15:48:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbiGPN4M (ORCPT
+        with ESMTP id S229457AbiGPTsO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 16 Jul 2022 09:56:12 -0400
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E751F2EE;
-        Sat, 16 Jul 2022 06:56:11 -0700 (PDT)
-Received: by mail-il1-x134.google.com with SMTP id a12so3809440ilp.13;
-        Sat, 16 Jul 2022 06:56:11 -0700 (PDT)
+        Sat, 16 Jul 2022 15:48:14 -0400
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 786D81C101;
+        Sat, 16 Jul 2022 12:48:13 -0700 (PDT)
+Received: by mail-io1-xd43.google.com with SMTP id q14so6355838iod.3;
+        Sat, 16 Jul 2022 12:48:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=V4FhIyepvRr1gXawjyEQpzIVadAC7ZxwCjKEzgRh/bc=;
-        b=KdWH1PfnFwqpPxd7W0PxapNamksI04N1J1pzzmASbjhZAa3HLxSSk5HwzaEAseuXpW
-         nNsgKAEAxGvztay7gho66xNc2QCxWwEyGXbCv5lAz3EAhFpFJfuIeY7K76/0vq1k3vCQ
-         2A4ZeWEkN4IZQH1TYyqAVV2R0ANWdmP2osXk1QbS92RBijpvBQo0R3fnlJ87Bav+p7xf
-         FSAfrCYfgPPgpP/Eo2QbIXBrRk5zd4AvPDHrzOq47USph/a5huS67TiBDFyW8noTS6Uh
-         Rr0qFvkmBG2Rj2WAofY8yIfRhbQByw8ah0SxA+yZ2h9GNamE5b2FqVNxaZBPSBZiccV0
-         aKAg==
+        bh=Z4ccNBeWVPImDHLuhSMEUl7P2+XfQAkGMxLoWz9oAMs=;
+        b=MUcMO0HxCUG8TxgkJwIYYDjnnhga6jwBaNEk+33XIZA/VZBrDlaagvC7/mqfvpZPKY
+         JwbKX4IYv+fLX4r6G7vMdsRPWxsAXAWhfBrb/8ILE1ao3wIRSypWUbIsSkOt1/6tO3qq
+         d1h8Qqxreamtd2ofvtDs30XdLopmcGPSHmoYV08ZUMywF1/W5sNpQNrKt5HRADzVWGXa
+         q40uqgT9rQIAAP/+B4ZsYiZFjkDcPRtejv+Vlq9HXsavSsA6OX+WgqU99QkiJ3J6WUFZ
+         iYjqJwqy66cujVD2cX7q7sIrziw3eYnY4ahHXDU6hmiDGCM+NJ7l8s89orPQmgEFUmO9
+         jgDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=V4FhIyepvRr1gXawjyEQpzIVadAC7ZxwCjKEzgRh/bc=;
-        b=OmqNJv4F79HDKtzmwqhBTenlD/euEtgNobwW+wx4fV4suX3whDRHJavCu8Clg7/Bjv
-         oQ/vo6f2efo/WEd6qOyufXnEhlAY4eMlYk+tsDNXMilShiuj6wvtWTxKCbKUsC4yVo3f
-         U5eqQnsH3TRUSdlp7xdBL3/dHthS9ee0r7bnZV9VCUSLvzonZmyhll8BCPhiuBzeOiKs
-         XIhuKGHQRM6ZQEt+7+6IKuSbgBkIISgPgJoNDobLbtKJfpHfRhwOupyiiecx+dlOVfH3
-         MOMGdC9xK4TiFubxMiQshLT+/q/RiaGjnXY1H+6cQgcILTngiTbuQ/vYZuA4915IBlFF
-         rnOw==
-X-Gm-Message-State: AJIora/8kkXUzBujRAWsrzQjiNnPsNm5ORPpe31GQ2tqYIeY2DcdtGyc
-        oJTCaaVEWcwq0bRDwwXd5pslV8Pv+n9c04/pwXRwI0N6RaQ=
-X-Google-Smtp-Source: AGRyM1tr+wIQ9WPj4ffi06adPAclHl6+H10vOy21nRYCi1+gt6eZYnfIg0TqG8PTuM+GqMyjQgVFJxK/0/WWZ5rGrRw=
-X-Received: by 2002:a05:6e02:1c2a:b0:2dc:621e:df15 with SMTP id
- m10-20020a056e021c2a00b002dc621edf15mr9816280ilh.151.1657979771086; Sat, 16
- Jul 2022 06:56:11 -0700 (PDT)
+        bh=Z4ccNBeWVPImDHLuhSMEUl7P2+XfQAkGMxLoWz9oAMs=;
+        b=8MXIKCegq2cXSg7b7hH/gxr59tjp6BEaeu7zvC9rymRabXBV/3hi/jj4u70TdSiBFh
+         WUrBaS1EhoLF4MnKmTAY4ELG16Lsw/0ggoRy74sWqoGvzG3nLDZGdsO846eSHLTxDwDQ
+         Ao7dSNN6Eayw/g5q87+vL/dDx9A8UAXi5bDRxyJyj4duQ3WGPutMNaMF4pfMPbBdqZ+5
+         9Mnu4n4dG2WgbFQjm8RoeEEVUqtOjPhZOrnwDVqnvicJNMchvFCGDWoB7W4Jt/LKy2By
+         x+h99dQSYf4QlfwxbpYYowpAcnCtjflLqtVagTiLfK2D3Rrkda3junlPxBJF7MJQ995g
+         68cw==
+X-Gm-Message-State: AJIora/vUtQ7BUE7SumghXTLduI6qpyTfSlZtQ/lQ/wPFJxunWzCGOxG
+        f/fGeOy5joQiDdxBraGxXtEG57YsOedHu8FB74U=
+X-Google-Smtp-Source: AGRyM1ubmKtb+ja3MY58pjJ8vWMuna7mCIPAwIZwJhkaPNF9GrWbontMdfo8GJHALPm0jw5FkTNANCvte0Mvl9WC5Nw=
+X-Received: by 2002:a05:6602:2e8d:b0:64f:b683:c70d with SMTP id
+ m13-20020a0566022e8d00b0064fb683c70dmr9534049iow.62.1658000892752; Sat, 16
+ Jul 2022 12:48:12 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220523020209.11810-1-ojeda@kernel.org> <20220716124214.329949-1-conor@kernel.org>
- <CANiq72nYRkHV6N2bGpTz3td=2Vto21apvZW0igTT-mV8TZtB2g@mail.gmail.com> <4a6240da-9003-cd74-cd47-f95ba2d9e7ae@microchip.com>
-In-Reply-To: <4a6240da-9003-cd74-cd47-f95ba2d9e7ae@microchip.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Sat, 16 Jul 2022 15:56:00 +0200
-Message-ID: <CANiq72nDcJLSB3pLhkdqGdLitfmqqCUVVfkY5EjP9AcwVv9B4A@mail.gmail.com>
-Subject: Re: [PATCH v7 00/25] Rust support
-To:     Conor.Dooley@microchip.com
-Cc:     Conor Dooley <conor@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-um@lists.infradead.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        live-patching@vger.kernel.org,
-        rust-for-linux <rust-for-linux@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
+References: <20220712145850.599666-1-benjamin.tissoires@redhat.com> <20220712145850.599666-3-benjamin.tissoires@redhat.com>
+In-Reply-To: <20220712145850.599666-3-benjamin.tissoires@redhat.com>
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date:   Sat, 16 Jul 2022 21:47:34 +0200
+Message-ID: <CAP01T766-JGd=6twHYhWDmjVBk7wuuvWMLFyDZ656fka6GW8Cw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v6 02/23] bpf/verifier: allow kfunc to read user
+ provided context
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Jul 16, 2022 at 3:51 PM <Conor.Dooley@microchip.com> wrote:
+On Tue, 12 Jul 2022 at 17:02, Benjamin Tissoires
+<benjamin.tissoires@redhat.com> wrote:
 >
-> Ah right, sorry for the noise so. I checked the ml but didn't see a
-> report there.
+> When a kfunc was trying to access data from context in a syscall eBPF
+> program, the verifier was rejecting the call.
+> This is because the syscall context is not known at compile time, and
+> so we need to check this when actually accessing it.
+>
+> Check for the valid memory access and allow such situation to happen.
+>
+> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+>
+> ---
+>
+> new in v6
+> ---
+>  kernel/bpf/verifier.c | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 328cfab3af60..f6af57a84247 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -248,6 +248,7 @@ struct bpf_call_arg_meta {
+>         struct bpf_map *map_ptr;
+>         bool raw_mode;
+>         bool pkt_access;
+> +       bool is_kfunc;
+>         u8 release_regno;
+>         int regno;
+>         int access_size;
+> @@ -5170,6 +5171,7 @@ static int check_helper_mem_access(struct bpf_verifier_env *env, int regno,
+>                                    struct bpf_call_arg_meta *meta)
+>  {
+>         struct bpf_reg_state *regs = cur_regs(env), *reg = &regs[regno];
+> +       enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
+>         u32 *max_access;
+>
+>         switch (base_type(reg->type)) {
+> @@ -5223,6 +5225,19 @@ static int check_helper_mem_access(struct bpf_verifier_env *env, int regno,
+>                                 env,
+>                                 regno, reg->off, access_size,
+>                                 zero_size_allowed, ACCESS_HELPER, meta);
+> +       case PTR_TO_CTX:
+> +               /* in case of a kfunc called in a program of type SYSCALL, the context is
+> +                * user supplied, so not computed statically.
+> +                * Dynamically check it now
+> +                */
+> +               if (prog_type == BPF_PROG_TYPE_SYSCALL && meta && meta->is_kfunc) {
+> +                       enum bpf_access_type access_t = meta->raw_mode ? BPF_WRITE : BPF_READ;
 
-No apologies needed -- thanks to you for the report, instead! :)
+small nit: _t suffix is used for types, so you could probably rename
+this. maybe atype?
 
-> Thanks Miguel, good to know! I'll just wait around for a new version.
-> Just been trying to get my CI etc in order for when rust support lands,
-> but it sounds like I should be okay as it's a known problem & not some
-> only-broken-on-riscv thing.
+> +
+> +                       return check_mem_access(env, env->insn_idx, regno, access_size, BPF_B,
+> +                                               access_t, -1, false);
 
-Yeah, it is a simple `bindgen` issue. Thanks a lot for making the
-effort to prepare your CI in advance!
+If I read the code correctly, this makes the max_ctx_offset of prog
+access_size + 1 (off + size_to_bytes(BPF_B)), which is 1 more than the
+actual size being accessed.
 
-Cheers,
-Miguel
+This also messes up check_helper_mem_access when it allows NULL, 0
+pair to pass (because check is against actual size + 1). We do allow
+passing NULL when size is 0 for kfuncs (see zero_size_allowed is true
+in check_mem_size_reg), so your hid_hw_request function is missing
+that NULL check for buf too.
+
+In the selftest that checks for failure in loading
++ bpf_kfunc_call_test_mem_len_pass1(&args->data, sizeof(*args) + 1);
+so it will still fail with just sizeof(*args).
+
+Also please add coverage for this case in the next version.
+
+> +               }
+> +
+> +               fallthrough;
+>         default: /* scalar_value or invalid ptr */
+>                 /* Allow zero-byte read from NULL, regardless of pointer type */
+>                 if (zero_size_allowed && access_size == 0 &&
+> @@ -5335,6 +5350,7 @@ int check_kfunc_mem_size_reg(struct bpf_verifier_env *env, struct bpf_reg_state
+>         WARN_ON_ONCE(regno < BPF_REG_2 || regno > BPF_REG_5);
+>
+>         memset(&meta, 0, sizeof(meta));
+> +       meta.is_kfunc = true;
+>
+>         if (may_be_null) {
+>                 saved_reg = *mem_reg;
+> --
+> 2.36.1
+>
