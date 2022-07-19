@@ -2,23 +2,23 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B0D1CCA47F
-	for <linux-kselftest@archiver.kernel.org>; Tue, 19 Jul 2022 21:45:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5597DC433EF
+	for <linux-kselftest@archiver.kernel.org>; Tue, 19 Jul 2022 21:45:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240172AbiGSVpX (ORCPT
+        id S240320AbiGSVpj (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 19 Jul 2022 17:45:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51408 "EHLO
+        Tue, 19 Jul 2022 17:45:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240074AbiGSVpU (ORCPT
+        with ESMTP id S240225AbiGSVp0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Jul 2022 17:45:20 -0400
+        Tue, 19 Jul 2022 17:45:26 -0400
 Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DA5FDE0A0;
-        Tue, 19 Jul 2022 14:45:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3C0B3F58B;
+        Tue, 19 Jul 2022 14:45:25 -0700 (PDT)
 Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 26JLj5ZR002592;
-        Tue, 19 Jul 2022 23:45:05 +0200
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 26JLj4NQ002582;
+        Tue, 19 Jul 2022 23:45:04 +0200
 From:   Willy Tarreau <w@1wt.eu>
 To:     "Paul E . McKenney" <paulmck@kernel.org>
 Cc:     Pranith Kumar <bobby.prani@gmail.com>,
@@ -29,9 +29,9 @@ Cc:     Pranith Kumar <bobby.prani@gmail.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org, Willy Tarreau <w@1wt.eu>
-Subject: [PATCH 11/17] selftests/nolibc: condition some tests on /proc existence
-Date:   Tue, 19 Jul 2022 23:44:43 +0200
-Message-Id: <20220719214449.2520-13-w@1wt.eu>
+Subject: [PATCH 02/17] tools/nolibc: fix build warning in sys_mmap() when my_syscall6 is not defined
+Date:   Tue, 19 Jul 2022 23:44:33 +0200
+Message-Id: <20220719214449.2520-3-w@1wt.eu>
 X-Mailer: git-send-email 2.17.5
 In-Reply-To: <20220719214449.2520-1-w@1wt.eu>
 References: <20220719214449.2520-1-w@1wt.eu>
@@ -39,62 +39,27 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-If /proc is not available (program run inside a chroot or without
-sufficient permissions), it's better to disable the associated tests.
-Some will be preserved like the ones which check for a failure to
-create some entries there since they're still supposed to fail.
+We return -ENOSYS when there's no syscall6() operation, but we must cast
+it to void* to avoid a warning.
 
 Signed-off-by: Willy Tarreau <w@1wt.eu>
 ---
- tools/testing/selftests/nolibc/nolibc-test.c | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+ tools/include/nolibc/sys.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 0bbfe0b3b648..26d61ec910c1 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -413,11 +413,15 @@ int test_getdents64(const char *dir)
- int run_syscall(int min, int max)
+diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+index 08491070387b..b8c96878c9ce 100644
+--- a/tools/include/nolibc/sys.h
++++ b/tools/include/nolibc/sys.h
+@@ -692,7 +692,7 @@ void *sys_mmap(void *addr, size_t length, int prot, int flags, int fd,
  {
- 	struct stat stat_buf;
-+	int proc;
- 	int test;
- 	int tmp;
- 	int ret = 0;
- 	void *p1, *p2;
+ #ifndef my_syscall6
+ 	/* Function not implemented. */
+-	return -ENOSYS;
++	return (void *)-ENOSYS;
+ #else
  
-+	/* <proc> indicates whether or not /proc is mounted */
-+	proc = stat("/proc", &stat_buf) == 0;
-+
- 	for (test = min; test >= 0 && test <= max; test++) {
- 		int llen = 0; // line length
- 
-@@ -438,12 +442,12 @@ int run_syscall(int min, int max)
- 		CASE_TEST(chdir_root);        EXPECT_SYSZR(1, chdir("/")); break;
- 		CASE_TEST(chdir_dot);         EXPECT_SYSZR(1, chdir(".")); break;
- 		CASE_TEST(chdir_blah);        EXPECT_SYSER(1, chdir("/blah"), -1, ENOENT); break;
--		CASE_TEST(chmod_net);         EXPECT_SYSZR(1, chmod("/proc/self/net", 0555)); break;
--		CASE_TEST(chmod_self);        EXPECT_SYSER(1, chmod("/proc/self", 0555), -1, EPERM); break;
--		CASE_TEST(chown_self);        EXPECT_SYSER(1, chown("/proc/self", 0, 0), -1, EPERM); break;
-+		CASE_TEST(chmod_net);         EXPECT_SYSZR(proc, chmod("/proc/self/net", 0555)); break;
-+		CASE_TEST(chmod_self);        EXPECT_SYSER(proc, chmod("/proc/self", 0555), -1, EPERM); break;
-+		CASE_TEST(chown_self);        EXPECT_SYSER(proc, chown("/proc/self", 0, 0), -1, EPERM); break;
- 		CASE_TEST(chroot_root);       EXPECT_SYSZR(1, chroot("/")); break;
- 		CASE_TEST(chroot_blah);       EXPECT_SYSER(1, chroot("/proc/self/blah"), -1, ENOENT); break;
--		CASE_TEST(chroot_exe);        EXPECT_SYSER(1, chroot("/proc/self/exe"), -1, ENOTDIR); break;
-+		CASE_TEST(chroot_exe);        EXPECT_SYSER(proc, chroot("/proc/self/exe"), -1, ENOTDIR); break;
- 		CASE_TEST(close_m1);          EXPECT_SYSER(1, close(-1), -1, EBADF); break;
- 		CASE_TEST(close_dup);         EXPECT_SYSZR(1, close(dup(0))); break;
- 		CASE_TEST(dup_0);             tmp = dup(0);  EXPECT_SYSNE(1, tmp, -1); close(tmp); break;
-@@ -464,7 +468,7 @@ int run_syscall(int min, int max)
- 		CASE_TEST(link_root1);        EXPECT_SYSER(1, link("/", "/"), -1, EEXIST); break;
- 		CASE_TEST(link_blah);         EXPECT_SYSER(1, link("/proc/self/blah", "/blah"), -1, ENOENT); break;
- 		CASE_TEST(link_dir);          EXPECT_SYSER(1, link("/", "/blah"), -1, EPERM); break;
--		CASE_TEST(link_cross);        EXPECT_SYSER(1, link("/proc/self/net", "/blah"), -1, EXDEV); break;
-+		CASE_TEST(link_cross);        EXPECT_SYSER(proc, link("/proc/self/net", "/blah"), -1, EXDEV); break;
- 		CASE_TEST(lseek_m1);          EXPECT_SYSER(1, lseek(-1, 0, SEEK_SET), -1, EBADF); break;
- 		CASE_TEST(lseek_0);           EXPECT_SYSER(1, lseek(0, 0, SEEK_SET), -1, ESPIPE); break;
- 		CASE_TEST(mkdir_root);        EXPECT_SYSER(1, mkdir("/", 0755), -1, EEXIST); break;
+ 	int n;
 -- 
 2.17.5
 
