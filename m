@@ -2,23 +2,23 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93DBBC433EF
-	for <linux-kselftest@archiver.kernel.org>; Tue, 19 Jul 2022 21:46:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33731C43334
+	for <linux-kselftest@archiver.kernel.org>; Tue, 19 Jul 2022 21:47:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240586AbiGSVqw (ORCPT
+        id S240539AbiGSVrB (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 19 Jul 2022 17:46:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52910 "EHLO
+        Tue, 19 Jul 2022 17:47:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240551AbiGSVq3 (ORCPT
+        with ESMTP id S240343AbiGSVql (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Jul 2022 17:46:29 -0400
+        Tue, 19 Jul 2022 17:46:41 -0400
 Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7671761DBA;
-        Tue, 19 Jul 2022 14:46:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 067F862A54;
+        Tue, 19 Jul 2022 14:46:21 -0700 (PDT)
 Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 26JLj4wC002587;
-        Tue, 19 Jul 2022 23:45:04 +0200
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 26JLj5OT002590;
+        Tue, 19 Jul 2022 23:45:05 +0200
 From:   Willy Tarreau <w@1wt.eu>
 To:     "Paul E . McKenney" <paulmck@kernel.org>
 Cc:     Pranith Kumar <bobby.prani@gmail.com>,
@@ -29,9 +29,9 @@ Cc:     Pranith Kumar <bobby.prani@gmail.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org, Willy Tarreau <w@1wt.eu>
-Subject: [PATCH 07/17] selftests/nolibc: add a few tests for some libc functions
-Date:   Tue, 19 Jul 2022 23:44:38 +0200
-Message-Id: <20220719214449.2520-8-w@1wt.eu>
+Subject: [PATCH 09/17] selftests/nolibc: on x86, support exiting with isa-debug-exit
+Date:   Tue, 19 Jul 2022 23:44:41 +0200
+Message-Id: <20220719214449.2520-11-w@1wt.eu>
 X-Mailer: git-send-email 2.17.5
 In-Reply-To: <20220719214449.2520-1-w@1wt.eu>
 References: <20220719214449.2520-1-w@1wt.eu>
@@ -39,66 +39,38 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The test series called "stdlib" covers some libc functions (string,
-stdlib etc). By default they are automatically run after "syscall"
-but may be requested in argument or in variable NOLIBC_TEST.
+QEMU, when started with "-device isa-debug-exit -no-reboot" will exit
+with status code 2N+1 when N is written to 0x501. This is particularly
+convenient for automated tests but this is not portable. As such we
+only enable this on x86_64 when pid==1. In addition, this requires an
+ioperm() call but in order not to have to define arch-specific syscalls
+we just perform the syscall by hand there.
 
 Signed-off-by: Willy Tarreau <w@1wt.eu>
 ---
- tools/testing/selftests/nolibc/nolibc-test.c | 35 ++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ tools/testing/selftests/nolibc/nolibc-test.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
 diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index dc87832912ce..b928f099431f 100644
+index 5f2173610d03..45793b6f2244 100644
 --- a/tools/testing/selftests/nolibc/nolibc-test.c
 +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -496,11 +496,46 @@ int run_syscall(int min, int max)
- 	return ret;
- }
- 
-+int run_stdlib(int min, int max)
-+{
-+	int test;
-+	int tmp;
-+	int ret = 0;
-+	void *p1, *p2;
-+
-+	for (test = min; test >= 0 && test <= max; test++) {
-+		int llen = 0; // line length
-+
-+		/* avoid leaving empty lines below, this will insert holes into
-+		 * test numbers.
+@@ -638,6 +638,15 @@ int main(int argc, char **argv, char **envp)
+ 		printf("Leaving init with final status: %d\n", !!ret);
+ 		if (ret == 0)
+ 			reboot(LINUX_REBOOT_CMD_POWER_OFF);
++#if defined(__x86_64__)
++		/* QEMU started with "-device isa-debug-exit -no-reboot" will
++		 * exit with status code 2N+1 when N is written to 0x501. We
++		 * hard-code the syscall here as it's arch-dependent.
 +		 */
-+		switch (test + __LINE__ + 1) {
-+		CASE_TEST(getenv_TERM);        EXPECT_STRNZ(1, getenv("TERM")); break;
-+		CASE_TEST(getenv_blah);        EXPECT_STRZR(1, getenv("blah")); break;
-+		CASE_TEST(setcmp_blah_blah);   EXPECT_EQ(1, strcmp("blah", "blah"), 0); break;
-+		CASE_TEST(setcmp_blah_blah2);  EXPECT_NE(1, strcmp("blah", "blah2"), 0); break;
-+		CASE_TEST(setncmp_blah_blah);  EXPECT_EQ(1, strncmp("blah", "blah", 10), 0); break;
-+		CASE_TEST(setncmp_blah_blah4); EXPECT_EQ(1, strncmp("blah", "blah4", 4), 0); break;
-+		CASE_TEST(setncmp_blah_blah5); EXPECT_NE(1, strncmp("blah", "blah5", 5), 0); break;
-+		CASE_TEST(setncmp_blah_blah6); EXPECT_NE(1, strncmp("blah", "blah6", 6), 0); break;
-+		CASE_TEST(strchr_foobar_o);    EXPECT_STREQ(1, strchr("foobar", 'o'), "oobar"); break;
-+		CASE_TEST(strchr_foobar_z);    EXPECT_STRZR(1, strchr("foobar", 'z')); break;
-+		CASE_TEST(strrchr_foobar_o);   EXPECT_STREQ(1, strrchr("foobar", 'o'), "obar"); break;
-+		CASE_TEST(strrchr_foobar_z);   EXPECT_STRZR(1, strrchr("foobar", 'z')); break;
-+		case __LINE__:
-+			return ret; /* must be last */
-+		/* note: do not set any defaults so as to permit holes above */
-+		}
-+	}
-+	return ret;
-+}
-+
++		else if (my_syscall3(__NR_ioperm, 0x501, 1, 1) == 0)
++			asm volatile ("outb %%al, %%dx" :: "d"(0x501), "a"(0));
++		/* if it does nothing, fall back to the regular panic */
++#endif
+ 	}
  
- /* This is the definition of known test names, with their functions */
- static struct test test_names[] = {
- 	/* add new tests here */
- 	{ .name = "syscall",   .func = run_syscall  },
-+	{ .name = "stdlib",    .func = run_stdlib   },
- 	{ 0 }
- };
- 
+ 	printf("Exiting with status %d\n", !!ret);
 -- 
 2.17.5
 
