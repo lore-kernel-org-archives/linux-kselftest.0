@@ -2,23 +2,23 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25A76C433EF
-	for <linux-kselftest@archiver.kernel.org>; Tue, 19 Jul 2022 21:45:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49B97C43334
+	for <linux-kselftest@archiver.kernel.org>; Tue, 19 Jul 2022 21:45:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240148AbiGSVpV (ORCPT
+        id S240126AbiGSVpW (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 19 Jul 2022 17:45:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51052 "EHLO
+        Tue, 19 Jul 2022 17:45:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240127AbiGSVpT (ORCPT
+        with ESMTP id S240133AbiGSVpU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Jul 2022 17:45:19 -0400
+        Tue, 19 Jul 2022 17:45:20 -0400
 Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 371111120;
-        Tue, 19 Jul 2022 14:45:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EAA65B7E2;
+        Tue, 19 Jul 2022 14:45:16 -0700 (PDT)
 Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 26JLj3pg002581;
-        Tue, 19 Jul 2022 23:45:03 +0200
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 26JLj5qH002591;
+        Tue, 19 Jul 2022 23:45:05 +0200
 From:   Willy Tarreau <w@1wt.eu>
 To:     "Paul E . McKenney" <paulmck@kernel.org>
 Cc:     Pranith Kumar <bobby.prani@gmail.com>,
@@ -29,9 +29,9 @@ Cc:     Pranith Kumar <bobby.prani@gmail.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org, Willy Tarreau <w@1wt.eu>
-Subject: [PATCH 01/17] tools/nolibc: make argc 32-bit in riscv startup code
-Date:   Tue, 19 Jul 2022 23:44:32 +0200
-Message-Id: <20220719214449.2520-2-w@1wt.eu>
+Subject: [PATCH 10/17] selftests/nolibc: recreate and populate /dev and /proc if missing
+Date:   Tue, 19 Jul 2022 23:44:42 +0200
+Message-Id: <20220719214449.2520-12-w@1wt.eu>
 X-Mailer: git-send-email 2.17.5
 In-Reply-To: <20220719214449.2520-1-w@1wt.eu>
 References: <20220719214449.2520-1-w@1wt.eu>
@@ -39,30 +39,97 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The "ld a0, 0(sp)" instruction doesn't build on RISCV32 because that
-would load a 64-bit value into a 32-bit register. But argc 32-bit,
-not 64, so we ought to use "lw" here. Tested on both RISCV32 and
-RISCV64.
+Most of the time the program will be run alone in an initramfs. There
+is no value in requiring the user to populate /dev and /proc for such
+tests, we can do it ourselves, and it participates to the tests at the
+same time.
 
-Cc: Pranith Kumar <bobby.prani@gmail.com>
+What's done here is that when called as init (getpid()==1) we check
+if /dev exists or create it, if /dev/console and /dev/null exists,
+otherwise we try to mount a devtmpfs there, and if it fails we fall
+back to mknod. The console is reopened if stdout was closed. Finally
+/proc is created and mounted if /proc/self cannot be found. This is
+sufficient for most tests.
+
 Signed-off-by: Willy Tarreau <w@1wt.eu>
 ---
- tools/include/nolibc/arch-riscv.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/nolibc/nolibc-test.c | 56 ++++++++++++++++++++
+ 1 file changed, 56 insertions(+)
 
-diff --git a/tools/include/nolibc/arch-riscv.h b/tools/include/nolibc/arch-riscv.h
-index 95e2b7924925..ba04771cb3a3 100644
---- a/tools/include/nolibc/arch-riscv.h
-+++ b/tools/include/nolibc/arch-riscv.h
-@@ -190,7 +190,7 @@ __asm__ (".section .text\n"
-     ".option norelax\n"
-     "lla   gp, __global_pointer$\n"
-     ".option pop\n"
--    "ld    a0, 0(sp)\n"          // argc (a0) was in the stack
-+    "lw    a0, 0(sp)\n"          // argc (a0) was in the stack
-     "add   a1, sp, "SZREG"\n"    // argv (a1) = sp
-     "slli  a2, a0, "PTRLOG"\n"   // envp (a2) = SZREG*argc ...
-     "add   a2, a2, "SZREG"\n"    //             + SZREG (skip null)
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index 45793b6f2244..0bbfe0b3b648 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -530,6 +530,54 @@ int run_stdlib(int min, int max)
+ 	return ret;
+ }
+ 
++/* prepare what needs to be prepared for pid 1 (stdio, /dev, /proc, etc) */
++int prepare(void)
++{
++	struct stat stat_buf;
++
++	/* It's possible that /dev doesn't even exist or was not mounted, so
++	 * we'll try to create it, mount it, or create minimal entries into it.
++	 * We want at least /dev/null and /dev/console.
++	 */
++	if (stat("/dev/.", &stat_buf) == 0 || mkdir("/dev", 0755) == 0) {
++		if (stat("/dev/console", &stat_buf) != 0 ||
++		    stat("/dev/null", &stat_buf) != 0) {
++			/* try devtmpfs first, otherwise fall back to manual creation */
++			if (mount("/dev", "/dev", "devtmpfs", 0, 0) != 0) {
++				mknod("/dev/console", 0600 | S_IFCHR, makedev(5, 1));
++				mknod("/dev/null",    0666 | S_IFCHR, makedev(1, 3));
++			}
++		}
++	}
++
++	/* If no /dev/console was found before calling init, stdio is closed so
++	 * we need to reopen it from /dev/console. If it failed above, it will
++	 * still fail here and we cannot emit a message anyway.
++	 */
++	if (close(dup(1)) == -1) {
++		int fd = open("/dev/console", O_RDWR);
++
++		if (fd >= 0) {
++			if (fd != 0)
++				dup2(fd, 0);
++			if (fd != 1)
++				dup2(fd, 1);
++			if (fd != 2)
++				dup2(fd, 2);
++			if (fd > 2)
++				close(fd);
++			puts("\nSuccessfully reopened /dev/console.");
++		}
++	}
++
++	/* try to mount /proc if not mounted. Silently fail otherwise */
++	if (stat("/proc/.", &stat_buf) == 0 || mkdir("/proc", 0755) == 0) {
++		if (stat("/proc/self", &stat_buf) != 0)
++			mount("/proc", "/proc", "proc", 0, 0);
++	}
++
++	return 0;
++}
+ 
+ /* This is the definition of known test names, with their functions */
+ static struct test test_names[] = {
+@@ -550,6 +598,14 @@ int main(int argc, char **argv, char **envp)
+ 
+ 	environ = envp;
+ 
++	/* when called as init, it's possible that no console was opened, for
++	 * example if no /dev file system was provided. We'll check that fd#1
++	 * was opened, and if not we'll attempt to create and open /dev/console
++	 * and /dev/null that we'll use for later tests.
++	 */
++	if (getpid() == 1)
++		prepare();
++
+ 	/* the definition of a series of tests comes from either argv[1] or the
+ 	 * "NOLIBC_TEST" environment variable. It's made of a comma-delimited
+ 	 * series of test names and optional ranges:
 -- 
 2.17.5
 
