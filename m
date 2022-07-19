@@ -2,23 +2,23 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B38ECCA47F
-	for <linux-kselftest@archiver.kernel.org>; Tue, 19 Jul 2022 21:46:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93DBBC433EF
+	for <linux-kselftest@archiver.kernel.org>; Tue, 19 Jul 2022 21:46:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240491AbiGSVqf (ORCPT
+        id S240586AbiGSVqw (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 19 Jul 2022 17:46:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53000 "EHLO
+        Tue, 19 Jul 2022 17:46:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240494AbiGSVqM (ORCPT
+        with ESMTP id S240551AbiGSVq3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Jul 2022 17:46:12 -0400
+        Tue, 19 Jul 2022 17:46:29 -0400
 Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 78D321C939;
-        Tue, 19 Jul 2022 14:45:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7671761DBA;
+        Tue, 19 Jul 2022 14:46:06 -0700 (PDT)
 Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 26JLj6Vg002597;
-        Tue, 19 Jul 2022 23:45:06 +0200
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 26JLj4wC002587;
+        Tue, 19 Jul 2022 23:45:04 +0200
 From:   Willy Tarreau <w@1wt.eu>
 To:     "Paul E . McKenney" <paulmck@kernel.org>
 Cc:     Pranith Kumar <bobby.prani@gmail.com>,
@@ -29,9 +29,9 @@ Cc:     Pranith Kumar <bobby.prani@gmail.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org, Willy Tarreau <w@1wt.eu>
-Subject: [PATCH 16/17] selftests/nolibc: "sysroot" target installs a local copy of the sysroot
-Date:   Tue, 19 Jul 2022 23:44:48 +0200
-Message-Id: <20220719214449.2520-18-w@1wt.eu>
+Subject: [PATCH 07/17] selftests/nolibc: add a few tests for some libc functions
+Date:   Tue, 19 Jul 2022 23:44:38 +0200
+Message-Id: <20220719214449.2520-8-w@1wt.eu>
 X-Mailer: git-send-email 2.17.5
 In-Reply-To: <20220719214449.2520-1-w@1wt.eu>
 References: <20220719214449.2520-1-w@1wt.eu>
@@ -39,53 +39,66 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-It's not convenient to rely on a sysroot built in another directory,
-especially when running cross-compilation tests, where one has to
-switch back and forth between directories.
-
-Let's make it possible to install the sysroot directly in the test
-directory. It's not big and even benefits from being copied by arch
-so that it's easier to switch between archs if needed. The new
-"sysroot" target does this, it just calls "headers_standalone" from
-nolibc to install the sysroot right here.
+The test series called "stdlib" covers some libc functions (string,
+stdlib etc). By default they are automatically run after "syscall"
+but may be requested in argument or in variable NOLIBC_TEST.
 
 Signed-off-by: Willy Tarreau <w@1wt.eu>
 ---
- tools/testing/selftests/nolibc/Makefile | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+ tools/testing/selftests/nolibc/nolibc-test.c | 35 ++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index 7c1f5360f454..210f5369fdfc 100644
---- a/tools/testing/selftests/nolibc/Makefile
-+++ b/tools/testing/selftests/nolibc/Makefile
-@@ -67,9 +67,16 @@ LDFLAGS := -s
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index dc87832912ce..b928f099431f 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -496,11 +496,46 @@ int run_syscall(int min, int max)
+ 	return ret;
+ }
  
- all: nolibc-test
- 
--nolibc-test: nolibc-test.c
-+sysroot: sysroot/$(ARCH)/include
++int run_stdlib(int min, int max)
++{
++	int test;
++	int tmp;
++	int ret = 0;
++	void *p1, *p2;
 +
-+sysroot/$(ARCH)/include:
-+	$(QUIET_MKDIR)mkdir -p sysroot
-+	$(Q)$(MAKE) -C ../../../include/nolibc ARCH=$(ARCH) OUTPUT=$(CURDIR)/sysroot/ headers_standalone
-+	$(Q)mv sysroot/sysroot sysroot/$(ARCH)
++	for (test = min; test >= 0 && test <= max; test++) {
++		int llen = 0; // line length
 +
-+nolibc-test: nolibc-test.c sysroot/$(ARCH)/include
- 	$(QUIET_CC)$(CC) $(CFLAGS) $(LDFLAGS) -o $@ \
--	  -nostdlib -static -include ../../../include/nolibc/nolibc.h $^ -lgcc
-+	  -nostdlib -static -Isysroot/$(ARCH)/include $< -lgcc
++		/* avoid leaving empty lines below, this will insert holes into
++		 * test numbers.
++		 */
++		switch (test + __LINE__ + 1) {
++		CASE_TEST(getenv_TERM);        EXPECT_STRNZ(1, getenv("TERM")); break;
++		CASE_TEST(getenv_blah);        EXPECT_STRZR(1, getenv("blah")); break;
++		CASE_TEST(setcmp_blah_blah);   EXPECT_EQ(1, strcmp("blah", "blah"), 0); break;
++		CASE_TEST(setcmp_blah_blah2);  EXPECT_NE(1, strcmp("blah", "blah2"), 0); break;
++		CASE_TEST(setncmp_blah_blah);  EXPECT_EQ(1, strncmp("blah", "blah", 10), 0); break;
++		CASE_TEST(setncmp_blah_blah4); EXPECT_EQ(1, strncmp("blah", "blah4", 4), 0); break;
++		CASE_TEST(setncmp_blah_blah5); EXPECT_NE(1, strncmp("blah", "blah5", 5), 0); break;
++		CASE_TEST(setncmp_blah_blah6); EXPECT_NE(1, strncmp("blah", "blah6", 6), 0); break;
++		CASE_TEST(strchr_foobar_o);    EXPECT_STREQ(1, strchr("foobar", 'o'), "oobar"); break;
++		CASE_TEST(strchr_foobar_z);    EXPECT_STRZR(1, strchr("foobar", 'z')); break;
++		CASE_TEST(strrchr_foobar_o);   EXPECT_STREQ(1, strrchr("foobar", 'o'), "obar"); break;
++		CASE_TEST(strrchr_foobar_z);   EXPECT_STRZR(1, strrchr("foobar", 'z')); break;
++		case __LINE__:
++			return ret; /* must be last */
++		/* note: do not set any defaults so as to permit holes above */
++		}
++	}
++	return ret;
++}
++
  
- initramfs: nolibc-test
- 	$(QUIET_MKDIR)mkdir -p initramfs
-@@ -93,6 +100,8 @@ rerun:
- 	$(Q)grep -w FAIL "$(CURDIR)/run.out" && echo "See all results in $(CURDIR)/run.out" || echo "$$(grep -c ^[0-9].*OK $(CURDIR)/run.out) test(s) passed."
+ /* This is the definition of known test names, with their functions */
+ static struct test test_names[] = {
+ 	/* add new tests here */
+ 	{ .name = "syscall",   .func = run_syscall  },
++	{ .name = "stdlib",    .func = run_stdlib   },
+ 	{ 0 }
+ };
  
- clean:
-+	$(call QUIET_CLEAN, sysroot)
-+	$(Q)rm -rf sysroot
- 	$(call QUIET_CLEAN, nolibc-test)
- 	$(Q)rm -f nolibc-test
- 	$(call QUIET_CLEAN, initramfs)
 -- 
 2.17.5
 
