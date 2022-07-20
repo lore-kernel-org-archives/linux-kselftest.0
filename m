@@ -2,37 +2,37 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0471BC43334
-	for <linux-kselftest@archiver.kernel.org>; Wed, 20 Jul 2022 20:53:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00E1CC43334
+	for <linux-kselftest@archiver.kernel.org>; Wed, 20 Jul 2022 20:53:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbiGTUxc (ORCPT
+        id S229819AbiGTUxe (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 20 Jul 2022 16:53:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33490 "EHLO
+        Wed, 20 Jul 2022 16:53:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiGTUxb (ORCPT
+        with ESMTP id S229452AbiGTUxd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Jul 2022 16:53:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF965073C
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jul 2022 13:53:30 -0700 (PDT)
+        Wed, 20 Jul 2022 16:53:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 004E250720
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jul 2022 13:53:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 941AFB821FC
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jul 2022 20:53:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 438E4C341CB;
-        Wed, 20 Jul 2022 20:53:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E37B61CD8
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jul 2022 20:53:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C67DC341CB;
+        Wed, 20 Jul 2022 20:53:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658350407;
-        bh=I+iJlcg1R3+8kZpSRC/n6qtGReBtslazilklAayOT/M=;
+        s=k20201202; t=1658350412;
+        bh=xI9/ziBwA/RxA1BzIzLCj2TiKjYRcBC95soNIqe1ahk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GllCerdx//tASznRlmaxykm+kHuzVvf9X7kz1aXLk/w2JLFV9dPGNspBJ+Zj/Srrd
-         56KSDW0gvZbo9aHyW0jxYyk4QdYoO75GJ3bmyG2yca8IpPKgD2OdC1NDxm3xzM+aUD
-         PlSt/fStWJ7pFmPKXl8mOXKNJiTRY7bTYlVrLG1UNzRmwm2BOjLKjqOyyad6MOOr8U
-         sEAjuA75GdWXPhPpCSisHJ/GlOKwoCree0dz/UEv6b9cqEJGt9yoGwwkCVJkn7t/8/
-         GHFZWP1m4++GU4jog0yPOuY7+RQrqjHzbQlwD4Mz12LeSCFtgMNmC7v/6Yn436ZAwU
-         MTzDiB0QBkMsQ==
+        b=LpVFWjao4Li5OK/N7UOq2B//R9oU/wnN8zSqNnp2Hdqj/X1FgQknDukq3VMsFDauy
+         Qnm1uq6tUw58uHusnVKph6efC4YVfmKH3p3/e23pKDUhhCPzPqReU45Im2/gCQI+t0
+         V8g03SUzFzc8y7ChLZWVmQ3bABrzoVVAe6FUFBCkXLelmh5vK0BwuieSiCgiD4RzmN
+         CVhAwL0MB96unnGL6yDxH7Rw/NGE1bXUC2MDpglk9nL8MaNZ34FebH1wQ+eHnCcPxB
+         H/jMqpoCPFHHEOfR3CebzeqoPvirD+bn0PTbmgmmt9Ou6F6Qx5MojluCYPko3R2sfD
+         KanbiZvwod8Hw==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
@@ -41,48 +41,123 @@ Cc:     Marc Zyngier <maz@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
         linux-kselftest@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v1 1/3] kselftest/arm64: Correct buffer allocation for SVE Z registers
-Date:   Wed, 20 Jul 2022 21:50:11 +0100
-Message-Id: <20220720205013.890942-2-broonie@kernel.org>
+Subject: [PATCH v1 3/3] kselftest/arm64: Enforce actual ABI for SVE syscalls
+Date:   Wed, 20 Jul 2022 21:50:13 +0100
+Message-Id: <20220720205013.890942-4-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220720205013.890942-1-broonie@kernel.org>
 References: <20220720205013.890942-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1407; h=from:subject; bh=I+iJlcg1R3+8kZpSRC/n6qtGReBtslazilklAayOT/M=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBi2GqDSwZmFtzJGfQYVzXb1gw/Qngx5RLEW76UtsEo wbOQg2mJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYthqgwAKCRAk1otyXVSH0OYdB/ 0RCEulwYlgOQMWHqsEa6M4OTHADL1Nht6LkWXgFEEkWfbgI7El9AhyVlTv0P+7ioQWsah8vn+YlBzx 0IbkLeVk7jO/7eUnMY7nFhYfIBDvrwSsoO+CBLjyuROCR/YUtfN5r96M4Z1cpv6tpyCq6iOE49wFVX wrKM/5YqExhGvGDkdLzkh0XkvZ40ezqkmDbrKn0xBrefsdTZj4Jd1RLKzyqvfQ3cfuo2D8jyZetgHQ i6WwMu9YVTmDqQxv8+AhYhfoIfheoEOypmKqPNLmIRPe3SR5htnUGFq4Jpi8ssh98oLO2Fkx2daJFy 5W3yRJ5eT86E4h5a3YrhBfmzSqRnow
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3807; h=from:subject; bh=xI9/ziBwA/RxA1BzIzLCj2TiKjYRcBC95soNIqe1ahk=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBi2GqE9yoz9T+w5w8Op1zqjlELGHagINF6z1B7kxU/ cQ5PpLKJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYthqhAAKCRAk1otyXVSH0PUpB/ 9M8wVPKL8aDFzwi+rV1IoIYGDWImCax9JeFQTmPCJUpLGS+TO1FfKNy5JqkfjLp+wf1u6EnmzmuyGj qKeJAPt5uQYz49odpkxGqMbNDRRWq8VA3mAwwRbBN7ElDszHcWN1oIpTPqXEU4ziFuHpowN1jer80s PVmLIkhxzavmG4499PyMP/CM+bDZ8P3g5/QUR/9MGKRWygMUAqvtBceP0Y84RnIdgT1Y1LqgkqFxLV Ie2+1SY5ArDcSKN3xvX4MDbniPXxB61tWrjOymrGyKFVNZ7e9U4pohEcK2lqpK6c/9mREgGYy3LPzM NGetX7xvbCwnWtNMvGtVW39yOxghZv
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The buffer used for verifying SVE Z registers allocated enough space for
-16 maximally sized registers rather than 32 due to using the macro for the
-number of P registers. In practice this didn't matter since for historical
-reasons the maximum VQ defined in the ABI is greater the architectural
-maximum so we will always allocate more space than is needed even with
-emulated platforms implementing the architectural maximum. Still, we should
-use the right define.
+Currently syscall-abi permits the bits in Z registers not shared with the
+V registers as well as all of the predicate registers to be preserved on
+syscall but the actual implementation has always cleared them and our
+documentation has now been updated to make that the documented ABI so
+update the syscall-abi test to match.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- tools/testing/selftests/arm64/abi/syscall-abi.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ .../testing/selftests/arm64/abi/syscall-abi.c | 57 ++++++++++++-------
+ 1 file changed, 38 insertions(+), 19 deletions(-)
 
 diff --git a/tools/testing/selftests/arm64/abi/syscall-abi.c b/tools/testing/selftests/arm64/abi/syscall-abi.c
-index b632bfe9e022..95229fa73232 100644
+index 95229fa73232..dd7ebe536d05 100644
 --- a/tools/testing/selftests/arm64/abi/syscall-abi.c
 +++ b/tools/testing/selftests/arm64/abi/syscall-abi.c
-@@ -113,8 +113,8 @@ static int check_fpr(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
+@@ -112,6 +112,8 @@ static int check_fpr(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
+ 	return errors;
  }
  
++#define SVE_Z_SHARED_BYTES (128 / 8)
++
  static uint8_t z_zero[__SVE_ZREG_SIZE(SVE_VQ_MAX)];
--uint8_t z_in[SVE_NUM_PREGS * __SVE_ZREG_SIZE(SVE_VQ_MAX)];
--uint8_t z_out[SVE_NUM_PREGS * __SVE_ZREG_SIZE(SVE_VQ_MAX)];
-+uint8_t z_in[SVE_NUM_ZREGS * __SVE_ZREG_SIZE(SVE_VQ_MAX)];
-+uint8_t z_out[SVE_NUM_ZREGS * __SVE_ZREG_SIZE(SVE_VQ_MAX)];
+ uint8_t z_in[SVE_NUM_ZREGS * __SVE_ZREG_SIZE(SVE_VQ_MAX)];
+ uint8_t z_out[SVE_NUM_ZREGS * __SVE_ZREG_SIZE(SVE_VQ_MAX)];
+@@ -133,22 +135,39 @@ static int check_z(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
+ 	if (!sve_vl)
+ 		return 0;
  
- static void setup_z(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
- 		    uint64_t svcr)
+-	/*
+-	 * After a syscall the low 128 bits of the Z registers should
+-	 * be preserved and the rest be zeroed or preserved, except if
+-	 * we were in streaming mode in which case the low 128 bits may
+-	 * also be cleared by the transition out of streaming mode.
+-	 */
+ 	for (i = 0; i < SVE_NUM_ZREGS; i++) {
+-		void *in = &z_in[reg_size * i];
+-		void *out = &z_out[reg_size * i];
+-
+-		if ((memcmp(in, out, SVE_VQ_BYTES) != 0) &&
+-		    !((svcr & SVCR_SM_MASK) &&
+-		      memcmp(z_zero, out, SVE_VQ_BYTES) == 0)) {
+-			ksft_print_msg("%s SVE VL %d Z%d low 128 bits changed\n",
+-				       cfg->name, sve_vl, i);
+-			errors++;
++		uint8_t *in = &z_in[reg_size * i];
++		uint8_t *out = &z_out[reg_size * i];
++
++		if (svcr & SVCR_SM_MASK) {
++			/*
++			 * In streaming mode the whole register should
++			 * be cleared by the transition out of
++			 * streaming mode.
++			 */
++			if (memcmp(z_zero, out, reg_size) != 0) {
++				ksft_print_msg("%s SVE VL %d Z%d non-zero\n",
++					       cfg->name, sve_vl, i);
++				errors++;
++			}
++		} else {
++			/*
++			 * For standard SVE the low 128 bits should be
++			 * preserved and any additional bits cleared.
++			 */
++			if (memcmp(in, out, SVE_Z_SHARED_BYTES) != 0) {
++				ksft_print_msg("%s SVE VL %d Z%d low 128 bits changed\n",
++					       cfg->name, sve_vl, i);
++				errors++;
++			}
++
++			if (reg_size > SVE_Z_SHARED_BYTES &&
++			    (memcmp(z_zero, out + SVE_Z_SHARED_BYTES,
++				    reg_size - SVE_Z_SHARED_BYTES) != 0)) {
++				ksft_print_msg("%s SVE VL %d Z%d high bits non-zero\n",
++					       cfg->name, sve_vl, i);
++				errors++;
++			}
+ 		}
+ 	}
+ 
+@@ -176,9 +195,9 @@ static int check_p(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
+ 	if (!sve_vl)
+ 		return 0;
+ 
+-	/* After a syscall the P registers should be preserved or zeroed */
++	/* After a syscall the P registers should be zeroed */
+ 	for (i = 0; i < SVE_NUM_PREGS * reg_size; i++)
+-		if (p_out[i] && (p_in[i] != p_out[i]))
++		if (p_out[i])
+ 			errors++;
+ 	if (errors)
+ 		ksft_print_msg("%s SVE VL %d predicate registers non-zero\n",
+@@ -226,9 +245,9 @@ static int check_ffr(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
+ 	    !(getauxval(AT_HWCAP2) & HWCAP2_SME_FA64))
+ 		return 0;
+ 
+-	/* After a syscall the P registers should be preserved or zeroed */
++	/* After a syscall FFR should be zeroed */
+ 	for (i = 0; i < reg_size; i++)
+-		if (ffr_out[i] && (ffr_in[i] != ffr_out[i]))
++		if (ffr_out[i])
+ 			errors++;
+ 	if (errors)
+ 		ksft_print_msg("%s SVE VL %d FFR non-zero\n",
 -- 
 2.30.2
 
