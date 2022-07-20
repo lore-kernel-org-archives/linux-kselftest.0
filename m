@@ -2,37 +2,37 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B896CCA485
-	for <linux-kselftest@archiver.kernel.org>; Wed, 20 Jul 2022 20:53:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BCA6BC433EF
+	for <linux-kselftest@archiver.kernel.org>; Wed, 20 Jul 2022 20:53:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbiGTUx1 (ORCPT
+        id S229722AbiGTUxc (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 20 Jul 2022 16:53:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33428 "EHLO
+        Wed, 20 Jul 2022 16:53:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiGTUx0 (ORCPT
+        with ESMTP id S229562AbiGTUxb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Jul 2022 16:53:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3DC4501AC
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jul 2022 13:53:25 -0700 (PDT)
+        Wed, 20 Jul 2022 16:53:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D0CA509E3
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jul 2022 13:53:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 633C661CCF
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jul 2022 20:53:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3498C341C7;
-        Wed, 20 Jul 2022 20:53:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C47561CD6
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jul 2022 20:53:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1B9CC341D0;
+        Wed, 20 Jul 2022 20:53:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658350404;
-        bh=YSKR+0WQX7Mq/SCbbuEVAq76XcSFDwV4GjHw5zpQ0kU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=UVjY/dbkeGDpbWCo4StI4S8gb8boPhiEAMQucMLlbTLOjiuX3m5xOEtgVC/9Ks7Nm
-         1vYQx+9VNRYhRrohzUcJwOJ25xXBGwBZKkiPZOOEae2treKY0NxFSznyTgRAbjFlL2
-         4sYFXoBy5+S7YS+oAA9pbHpuFC6JbFH+gCzo229HrE8q0YJFCZjYfuKJUg02x/EFtu
-         42jxivZpVnK1t9StYnJoNPDF0WK+5g2vTQgtf2ZjNNF9xcceN6mX3Sn74jfG/n+4mW
-         dhUR9UiXs5rpMtvGdoSysg628Und+piAyPEezDG972DyvI1ihxB40FUPKEsk1lqBKN
-         biHQ+0lS7pSsA==
+        s=k20201202; t=1658350409;
+        bh=v1nBfypExpear5ix8uSNG5xgtD+EqsEMaRjYhEBegiQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=DVn//bBAYdiZ2pegsvZLW4zdYe7J72VrOtgeet308+NJZROEm/LD1uJMFhd4pkjeO
+         35iTzmWnR48awQ8qNfXP3VF5sGGPl1Ez6BSCXPgXH7TOA5miG9rnTD2UKsLgfhthrV
+         UbSgQ3sBT/rkF3Qw3Ft8hb99WWB36IJc68xXZ3IAETwCALJcEs3MfbI9HrqXnciRWd
+         vlROW58A4k2FjRWiMEUgH9lgIZlwutr1PzhVBzgvjWjyEtFNTUPHhJqMMjaR5DIOTp
+         dxyBObvhhagHKo+EbPg3VagWykTMUxJr4f6g7XX+x74IEd8itUffrPcPMbfYqHgdvL
+         BH+VPse9uon1A==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
@@ -41,43 +41,50 @@ Cc:     Marc Zyngier <maz@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
         linux-kselftest@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v1 0/3] arm64/sve: Document our actual SVE syscall ABI
-Date:   Wed, 20 Jul 2022 21:50:10 +0100
-Message-Id: <20220720205013.890942-1-broonie@kernel.org>
+Subject: [PATCH v1 2/3] arm64/sve: Document our actual ABI for clearing registers on syscall
+Date:   Wed, 20 Jul 2022 21:50:12 +0100
+Message-Id: <20220720205013.890942-3-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220720205013.890942-1-broonie@kernel.org>
+References: <20220720205013.890942-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1257; h=from:subject; bh=YSKR+0WQX7Mq/SCbbuEVAq76XcSFDwV4GjHw5zpQ0kU=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBi2GqCaUN7YliFgf8CYHR6UgHSNz4XqUEJESFAKm3x YKohRe6JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYthqggAKCRAk1otyXVSH0O/5B/ 9QtVh9u4Ax+Oh8zWGvAGCwcK+isBH0Feons5uKX09WOTv6uDn0poHP/A6BzeTjvEPt8mjw/FfjOn6v olTmiki/uZZHi50dbiS1W2HaB3QRbpP+ry3IF7hY4+UlU981P4MPKZfw0nFeN3/FD9VMLBKBHYjOg9 N/JsvccNc3WDGED0aX0PAmYS0/kg1GmxlyC1f8F82oSYosNBuF9RDZVAQAN/KuIeJf6qlWUWlFNh/X 5Z7MqjxRckK9kUeWYQ+6HZdrgyPjc/HK7Tl/oRyDL72HOVpz25PqB241u3fVB7qcpDKC8jzJp2d5bS +nZRTaicRIfhG5oImWH4CuFolwRnGT
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1393; h=from:subject; bh=v1nBfypExpear5ix8uSNG5xgtD+EqsEMaRjYhEBegiQ=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBi2GqDsQ+vD7tilJtRkbOpvpdpEQ0RWqtUd2af422n gFAa0WKJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYthqgwAKCRAk1otyXVSH0IbEB/ wPjuwKXPmdGQePmD83FyRrE990GJ/UOao0m+Z4a8qm9HlY+9sBvYN9SevbSessXQ6/gkxja+y6DfQ6 X5J/aphn/tfdkA9oMc1n7MxqFmBkpsq8TRdqjLV3+3ai6M1cErEEuGcAy4pY778+6sy2ajy9PE4ZF8 bUNkQBHsYMrtFF0gc3C/iCDK08jgOAj7NXM2cTA2NwLrxv6gHT+PLj76ufLfDXfyKoawGvQJx06DCc +1t8eNB12NVpINFHsS3i0DwgHzgLfJ6Dn1ELRVkdtxgJ83z3s08BJf9OIC/r7aLt7q3lektwdrR84u DyKaldX6sMa4eKh8f/FxG3q2z10+ah
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently our SVE syscall ABI documentation does not reflect the actual
-implemented ABI, it says that register state not shared with FPSIMD
-becomes undefined on syscall when in reality we always clear it. Since
-changing this would cause a change in the observed kernel behaviour
-there is a substantial desire to avoid taking advantage of the
-documented ABI so instead let's document what we actually do so it's
-clear that it is in reality an ABI.
+Currently our ABI documentation says that the state of the bits in the Z
+registers not shared with the V registers becomes undefined on syscall but
+our actual implementation unconditionally clears these bits. Taking
+advantage of the flexibility of our documented ABI would be a change in the
+observable ABI so there is concern around doing so, instead document the
+actual behaviour so that it is more discoverable for userspace programmers
+who might be able to take advantage of it and to record our decision about
+not changing the kernel ABI.
 
-There has been some pushback on tightening the documentation in the past
-but it is hard to see who that helps, it makes the implementation
-decisions less clear and makes it harder for people to discover and make
-use of the actual ABI. The main practical concern is that qemu's user
-mode does not currently flush the registers.
+This makes qemu's user mode implementation buggy since it does not clear
+these bits.
 
-Mark Brown (3):
-  kselftest/arm64: Correct buffer allocation for SVE Z registers
-  arm64/sve: Document our actual ABI for clearing registers on syscall
-  kselftest/arm64: Enforce actual ABI for SVE syscalls
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ Documentation/arm64/sve.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- Documentation/arm64/sve.rst                   |  2 +-
- .../testing/selftests/arm64/abi/syscall-abi.c | 61 ++++++++++++-------
- 2 files changed, 41 insertions(+), 22 deletions(-)
-
-
-base-commit: a111daf0c53ae91e71fd2bfe7497862d14132e3e
+diff --git a/Documentation/arm64/sve.rst b/Documentation/arm64/sve.rst
+index 93c2c2990584..e39acf95d157 100644
+--- a/Documentation/arm64/sve.rst
++++ b/Documentation/arm64/sve.rst
+@@ -111,7 +111,7 @@ the SVE instruction set architecture.
+ 
+ * On syscall, V0..V31 are preserved (as without SVE).  Thus, bits [127:0] of
+   Z0..Z31 are preserved.  All other bits of Z0..Z31, and all of P0..P15 and FFR
+-  become unspecified on return from a syscall.
++  become zero on return from a syscall.
+ 
+ * The SVE registers are not used to pass arguments to or receive results from
+   any syscall.
 -- 
 2.30.2
 
