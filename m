@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4C69CCA48A
-	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Jul 2022 15:41:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 814F2CCA487
+	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Jul 2022 15:41:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232657AbiGUPlE (ORCPT
+        id S232715AbiGUPlF (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 21 Jul 2022 11:41:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52840 "EHLO
+        Thu, 21 Jul 2022 11:41:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232483AbiGUPi0 (ORCPT
+        with ESMTP id S233158AbiGUPjO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Jul 2022 11:38:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EBBF988E2F
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Jul 2022 08:37:23 -0700 (PDT)
+        Thu, 21 Jul 2022 11:39:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DE36388F38
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Jul 2022 08:37:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658417842;
+        s=mimecast20190719; t=1658417857;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=CTXOqz6zICJFSaFGA/ApHo6EX3Vnr2pJ/lheNomvy8g=;
-        b=b/FwLgIUVjrdRmHen6EWK7r/1vueu8WoP6uOlLlWd6QsttypKbjqnczBYPjIXlGkntqpeI
-        FvpJmeemTpFilihn47MYzyKpw0Dp0Ad//aBZE9GVW7r8LlMagPi26zrIVzLoobqPymba2J
-        mxOHbhhqVBtsH/5ItNyIfX5l9FdFnjQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=vify1U5iv82G1fm+ChkZxzfmFBEexw0Hrql3Fr2HtPg=;
+        b=VComY2NtJUSzIN4yUPb7R2bHJcjPgum9z1mo8cLra1PLs72cpqeXwFqeWS16hJieoHf+dp
+        SOBw4vXX82bziIW1ZPEXnbqPUZjganystqLPJ/eweBjv/E34CYRgOLsJHk8TlyQO0M44gs
+        Ch55QuV00AvBWl8KKxxHbdf0K4SWNBU=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-563-URK2OKCFPnehalNzP4nMjw-1; Thu, 21 Jul 2022 11:37:14 -0400
-X-MC-Unique: URK2OKCFPnehalNzP4nMjw-1
+ us-mta-428-5z0ACsk7On-Xa9ETFdWTkQ-1; Thu, 21 Jul 2022 11:37:34 -0400
+X-MC-Unique: 5z0ACsk7On-Xa9ETFdWTkQ-1
 Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D910585A584;
-        Thu, 21 Jul 2022 15:37:12 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 70D912804061;
+        Thu, 21 Jul 2022 15:37:33 +0000 (UTC)
 Received: from plouf.redhat.com (unknown [10.39.194.200])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BA7912166B26;
-        Thu, 21 Jul 2022 15:37:09 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5D44F2166B26;
+        Thu, 21 Jul 2022 15:37:30 +0000 (UTC)
 From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
 To:     Greg KH <gregkh@linuxfoundation.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -57,9 +57,9 @@ Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH bpf-next v7 12/24] HID: Kconfig: split HID support and hid-core compilation
-Date:   Thu, 21 Jul 2022 17:36:13 +0200
-Message-Id: <20220721153625.1282007-13-benjamin.tissoires@redhat.com>
+Subject: [PATCH bpf-next v7 18/24] selftests/bpf: add tests for bpf_hid_hw_request
+Date:   Thu, 21 Jul 2022 17:36:19 +0200
+Message-Id: <20220721153625.1282007-19-benjamin.tissoires@redhat.com>
 In-Reply-To: <20220721153625.1282007-1-benjamin.tissoires@redhat.com>
 References: <20220721153625.1282007-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
@@ -69,93 +69,277 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently, we step into drivers/hid/ based on the value of
-CONFIG_HID.
-
-However, that value is a tristate, meaning that it can be a module.
-
-As per the documentation, if we jump into the subdirectory by
-following an obj-m, we can not compile anything inside that
-subdirectory in vmlinux. It is considered as a bug.
-
-To make things more friendly to HID-BPF, split HID (the HID core
-parameter) from HID_SUPPORT (do we want any kind of HID support in the
-system?), and make this new config a boolean.
+Add tests for the newly implemented function.
+We test here only the GET_REPORT part because the other calls are pure
+HID protocol and won't infer the result of the test of the bpf hook.
 
 Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
 ---
 
-new in v7
----
- drivers/Makefile    |  2 +-
- drivers/hid/Kconfig | 20 +++++++++++---------
- 2 files changed, 12 insertions(+), 10 deletions(-)
+no changes in v7
 
-diff --git a/drivers/Makefile b/drivers/Makefile
-index 9a30842b22c5..7832431aa173 100644
---- a/drivers/Makefile
-+++ b/drivers/Makefile
-@@ -137,7 +137,7 @@ obj-$(CONFIG_CRYPTO)		+= crypto/
- obj-$(CONFIG_SUPERH)		+= sh/
- obj-y				+= clocksource/
- obj-$(CONFIG_DCA)		+= dca/
--obj-$(CONFIG_HID)		+= hid/
-+obj-$(CONFIG_HID_SUPPORT)	+= hid/
- obj-$(CONFIG_PPC_PS3)		+= ps3/
- obj-$(CONFIG_OF)		+= of/
- obj-$(CONFIG_SSB)		+= ssb/
-diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
-index 70da5931082f..9fa21583c709 100644
---- a/drivers/hid/Kconfig
-+++ b/drivers/hid/Kconfig
-@@ -2,12 +2,18 @@
- #
- # HID driver configuration
- #
--menu "HID support"
--     depends on INPUT
-+menuconfig HID_SUPPORT
-+	bool "HID bus support"
-+	default y
-+	depends on INPUT
-+	help
-+	  This option adds core support for human interface device (HID).
-+	  You will also need drivers from the following menu to make use of it.
+changes in v6:
+- fixed copy/paste in prog_tests when calling ASSERT_OK
+- removed the need for memcpy now that kfuncs can access ctx
+
+changes in v5:
+- use the new hid_bpf_allocate_context() API
+- remove the need for ctx_in for syscall TEST_RUN
+
+changes in v3:
+- use the new hid_get_data API
+- directly use HID_FEATURE_REPORT and HID_REQ_GET_REPORT from uapi
+
+changes in v2:
+- split the series by bpf/libbpf/hid/selftests and samples
+---
+ tools/testing/selftests/bpf/prog_tests/hid.c | 114 ++++++++++++++++---
+ tools/testing/selftests/bpf/progs/hid.c      |  43 +++++++
+ 2 files changed, 139 insertions(+), 18 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/hid.c b/tools/testing/selftests/bpf/prog_tests/hid.c
+index 47bc0a30c275..19172d3e0f44 100644
+--- a/tools/testing/selftests/bpf/prog_tests/hid.c
++++ b/tools/testing/selftests/bpf/prog_tests/hid.c
+@@ -77,12 +77,23 @@ static unsigned char rdesc[] = {
+ 	0xc0,			/* END_COLLECTION */
+ };
+ 
++static u8 feature_data[] = { 1, 2 };
 +
-+if HID_SUPPORT
+ struct attach_prog_args {
+ 	int prog_fd;
+ 	unsigned int hid;
+ 	int retval;
+ };
  
- config HID
--	tristate "HID bus support"
--	depends on INPUT
-+	tristate "HID bus core support"
- 	default y
- 	help
- 	  A human interface device (HID) is a type of computer device that
-@@ -24,8 +30,6 @@ config HID
++struct hid_hw_request_syscall_args {
++	__u8 data[10];
++	unsigned int hid;
++	int retval;
++	size_t size;
++	enum hid_report_type type;
++	__u8 request_type;
++};
++
+ static pthread_mutex_t uhid_started_mtx = PTHREAD_MUTEX_INITIALIZER;
+ static pthread_cond_t uhid_started = PTHREAD_COND_INITIALIZER;
  
- 	  If unsure, say Y.
+@@ -142,7 +153,7 @@ static void destroy(int fd)
  
--if HID
--
- config HID_BATTERY_STRENGTH
- 	bool "Battery level reporting for HID devices"
- 	depends on HID
-@@ -1308,8 +1312,6 @@ config HID_MCP2221
+ static int uhid_event(int fd)
+ {
+-	struct uhid_event ev;
++	struct uhid_event ev, answer;
+ 	ssize_t ret;
  
- endmenu
+ 	memset(&ev, 0, sizeof(ev));
+@@ -183,6 +194,15 @@ static int uhid_event(int fd)
+ 		break;
+ 	case UHID_GET_REPORT:
+ 		fprintf(stderr, "UHID_GET_REPORT from uhid-dev\n");
++
++		answer.type = UHID_GET_REPORT_REPLY;
++		answer.u.get_report_reply.id = ev.u.get_report.id;
++		answer.u.get_report_reply.err = ev.u.get_report.rnum == 1 ? 0 : -EIO;
++		answer.u.get_report_reply.size = sizeof(feature_data);
++		memcpy(answer.u.get_report_reply.data, feature_data, sizeof(feature_data));
++
++		uhid_write(fd, &answer);
++
+ 		break;
+ 	case UHID_SET_REPORT:
+ 		fprintf(stderr, "UHID_SET_REPORT from uhid-dev\n");
+@@ -391,6 +411,7 @@ static int open_hidraw(int dev_id)
+ struct test_params {
+ 	struct hid *skel;
+ 	int hidraw_fd;
++	int hid_id;
+ };
  
--endif # HID
--
- source "drivers/hid/usbhid/Kconfig"
+ static int prep_test(int dev_id, const char *prog_name, struct test_params *test_data)
+@@ -419,27 +440,33 @@ static int prep_test(int dev_id, const char *prog_name, struct test_params *test
+ 	if (!ASSERT_OK_PTR(hid_skel, "hid_skel_open"))
+ 		goto cleanup;
  
- source "drivers/hid/i2c-hid/Kconfig"
-@@ -1320,4 +1322,4 @@ source "drivers/hid/amd-sfh-hid/Kconfig"
+-	prog = bpf_object__find_program_by_name(*hid_skel->skeleton->obj, prog_name);
+-	if (!ASSERT_OK_PTR(prog, "find_prog_by_name"))
+-		goto cleanup;
++	if (prog_name) {
++		prog = bpf_object__find_program_by_name(*hid_skel->skeleton->obj, prog_name);
++		if (!ASSERT_OK_PTR(prog, "find_prog_by_name"))
++			goto cleanup;
  
- source "drivers/hid/surface-hid/Kconfig"
+-	bpf_program__set_autoload(prog, true);
++		bpf_program__set_autoload(prog, true);
  
--endmenu
-+endif # HID_SUPPORT
+-	err = hid__load(hid_skel);
+-	if (!ASSERT_OK(err, "hid_skel_load"))
+-		goto cleanup;
++		err = hid__load(hid_skel);
++		if (!ASSERT_OK(err, "hid_skel_load"))
++			goto cleanup;
+ 
+-	attach_fd = bpf_program__fd(hid_skel->progs.attach_prog);
+-	if (!ASSERT_GE(attach_fd, 0, "locate attach_prog")) {
+-		err = attach_fd;
+-		goto cleanup;
+-	}
++		attach_fd = bpf_program__fd(hid_skel->progs.attach_prog);
++		if (!ASSERT_GE(attach_fd, 0, "locate attach_prog")) {
++			err = attach_fd;
++			goto cleanup;
++		}
+ 
+-	args.prog_fd = bpf_program__fd(prog);
+-	err = bpf_prog_test_run_opts(attach_fd, &tattr);
+-	snprintf(buf, sizeof(buf), "attach_hid(%s)", prog_name);
+-	if (!ASSERT_EQ(args.retval, 0, buf))
+-		goto cleanup;
++		args.prog_fd = bpf_program__fd(prog);
++		err = bpf_prog_test_run_opts(attach_fd, &tattr);
++		snprintf(buf, sizeof(buf), "attach_hid(%s)", prog_name);
++		if (!ASSERT_EQ(args.retval, 0, buf))
++			goto cleanup;
++	} else {
++		err = hid__load(hid_skel);
++		if (!ASSERT_OK(err, "hid_skel_load"))
++			goto cleanup;
++	}
+ 
+ 	hidraw_fd = open_hidraw(dev_id);
+ 	if (!ASSERT_GE(hidraw_fd, 0, "open_hidraw"))
+@@ -447,6 +474,7 @@ static int prep_test(int dev_id, const char *prog_name, struct test_params *test
+ 
+ 	test_data->skel = hid_skel;
+ 	test_data->hidraw_fd = hidraw_fd;
++	test_data->hid_id = hid_id;
+ 
+ 	return 0;
+ 
+@@ -693,6 +721,54 @@ static int test_hid_change_report(int uhid_fd, int dev_id)
+ 	return ret;
+ }
+ 
++/*
++ * Attach hid_user_raw_request to the given uhid device,
++ * call the bpf program from userspace
++ * check that the program is called and does the expected.
++ */
++static int test_hid_user_raw_request_call(int uhid_fd, int dev_id)
++{
++	struct test_params params;
++	int err, prog_fd;
++	int ret = -1;
++	struct hid_hw_request_syscall_args args = {
++		.retval = -1,
++		.type = HID_FEATURE_REPORT,
++		.request_type = HID_REQ_GET_REPORT,
++		.size = 10,
++	};
++	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, tattrs,
++			    .ctx_in = &args,
++			    .ctx_size_in = sizeof(args),
++	);
++
++	err = prep_test(dev_id, NULL, &params);
++	if (!ASSERT_EQ(err, 0, "prep_test()"))
++		goto cleanup;
++
++	args.hid = params.hid_id;
++	args.data[0] = 1; /* report ID */
++
++	prog_fd = bpf_program__fd(params.skel->progs.hid_user_raw_request);
++
++	err = bpf_prog_test_run_opts(prog_fd, &tattrs);
++	if (!ASSERT_EQ(err, 0, "bpf_prog_test_run_opts"))
++		goto cleanup;
++
++	if (!ASSERT_EQ(args.retval, 2, "bpf_prog_test_run_opts_retval"))
++		goto cleanup;
++
++	if (!ASSERT_EQ(args.data[1], 2, "hid_user_raw_request_check_in"))
++		goto cleanup;
++
++	ret = 0;
++
++cleanup:
++	cleanup_test(&params);
++
++	return ret;
++}
++
+ void serial_test_hid_bpf(void)
+ {
+ 	int err, uhid_fd;
+@@ -720,6 +796,8 @@ void serial_test_hid_bpf(void)
+ 	ASSERT_OK(err, "hid_attach_detach");
+ 	err = test_hid_change_report(uhid_fd, dev_id);
+ 	ASSERT_OK(err, "hid_change_report");
++	err = test_hid_user_raw_request_call(uhid_fd, dev_id);
++	ASSERT_OK(err, "hid_user_raw_request");
+ 
+ 	destroy(uhid_fd);
+ 
+diff --git a/tools/testing/selftests/bpf/progs/hid.c b/tools/testing/selftests/bpf/progs/hid.c
+index ee7529c47ad8..0be319c11575 100644
+--- a/tools/testing/selftests/bpf/progs/hid.c
++++ b/tools/testing/selftests/bpf/progs/hid.c
+@@ -10,6 +10,13 @@ extern __u8 *hid_bpf_get_data(struct hid_bpf_ctx *ctx,
+ 			      unsigned int offset,
+ 			      const size_t __sz) __ksym;
+ extern int hid_bpf_attach_prog(unsigned int hid_id, int prog_fd, u32 flags) __ksym;
++extern struct hid_bpf_ctx *hid_bpf_allocate_context(unsigned int hid_id) __ksym;
++extern void hid_bpf_release_context(struct hid_bpf_ctx *ctx) __ksym;
++extern int hid_bpf_hw_request(struct hid_bpf_ctx *ctx,
++			      __u8 *data,
++			      size_t buf__sz,
++			      enum hid_report_type type,
++			      enum hid_class_request reqtype) __ksym;
+ 
+ struct attach_prog_args {
+ 	int prog_fd;
+@@ -56,3 +63,39 @@ int attach_prog(struct attach_prog_args *ctx)
+ 					  0);
+ 	return 0;
+ }
++
++struct hid_hw_request_syscall_args {
++	/* data needs to come at offset 0 so we can do a memcpy into it */
++	__u8 data[10];
++	unsigned int hid;
++	int retval;
++	size_t size;
++	enum hid_report_type type;
++	__u8 request_type;
++};
++
++SEC("syscall")
++int hid_user_raw_request(struct hid_hw_request_syscall_args *args)
++{
++	struct hid_bpf_ctx *ctx;
++	const size_t size = args->size;
++	int i, ret = 0;
++
++	if (size > sizeof(args->data))
++		return -7; /* -E2BIG */
++
++	ctx = hid_bpf_allocate_context(args->hid);
++	if (!ctx)
++		return -1; /* EPERM check */
++
++	ret = hid_bpf_hw_request(ctx,
++				 args->data,
++				 size,
++				 args->type,
++				 args->request_type);
++	args->retval = ret;
++
++	hid_bpf_release_context(ctx);
++
++	return 0;
++}
 -- 
 2.36.1
 
