@@ -2,159 +2,295 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24F33C19F2B
-	for <linux-kselftest@archiver.kernel.org>; Fri, 29 Jul 2022 13:19:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61FD8C00144
+	for <linux-kselftest@archiver.kernel.org>; Fri, 29 Jul 2022 14:15:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236644AbiG2NTl (ORCPT
+        id S236946AbiG2OPq (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 29 Jul 2022 09:19:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41618 "EHLO
+        Fri, 29 Jul 2022 10:15:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236564AbiG2NTj (ORCPT
+        with ESMTP id S236483AbiG2OPj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 29 Jul 2022 09:19:39 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A3A26170B;
-        Fri, 29 Jul 2022 06:19:34 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 79FB620F96;
-        Fri, 29 Jul 2022 13:19:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1659100772; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0NOHoO5pDnDM2VrGEVv3dHZSyGwX/afdE0gaL3Yb6WQ=;
-        b=V9y8qH/RiFKTyzdqVyEddKjvrmZ90LYQDkM4SxcLkxz4EQcyZsevCt1D5PaSiUh0T8u6V8
-        0X8W5SA54RhWf/XoNoyM8rAaKbWfmpo61o3GHHMoj4lOZ2wawq4af7OC024XXFFbqy99pf
-        aegMhqQl4sT0wxZAniprTt43g6La4fs=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 504B02C141;
-        Fri, 29 Jul 2022 13:19:32 +0000 (UTC)
-Date:   Fri, 29 Jul 2022 15:19:31 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Joe Lawrence <joe.lawrence@redhat.com>
-Cc:     Marcos Paulo de Souza <mpdesouza@suse.com>,
-        live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org, jpoimboe@redhat.com, mbenes@suse.cz
-Subject: Re: [PATCH v2 2/2] selftests: livepatch: Test livepatching a heavily
- called syscall
-Message-ID: <YuPeY6hZCPI+Kh/t@alley>
-References: <20220630141226.2802-1-mpdesouza@suse.com>
- <20220630141226.2802-3-mpdesouza@suse.com>
- <Ys2Li9ilYtpmJhN3@redhat.com>
+        Fri, 29 Jul 2022 10:15:39 -0400
+X-Greylist: delayed 1528 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 29 Jul 2022 07:15:37 PDT
+Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [IPv6:2a0c:5a00:149::25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E27743C1
+        for <linux-kselftest@vger.kernel.org>; Fri, 29 Jul 2022 07:15:37 -0700 (PDT)
+Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
+        by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <mhal@rbox.co>)
+        id 1oHQNm-004MP4-V5; Fri, 29 Jul 2022 15:50:26 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+        s=selector1; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
+        Message-Id:Date:Subject:Cc:To:From;
+        bh=hMw5w0EPif8FZOb6nZWrBE2MciY2imMiWQdD6+Ag/JU=; b=Pk3UDt93B+3EWuyx34lGybLHZX
+        90bqJRslq8t+o2E8O1LOtgnO+lCOl3oqsYPrNnMVbDbHr6npwd8WeVxAKV4NfGAIKyU3gDgZwgoRq
+        D5dErLiCgEQHEjfRVHU7IXjpjbGaQKEYhhqlUa0bL/EP6+KFdKba1ZEt87LnQHTUgovplYJFYYVr7
+        BFDt+DPulBtEyeWUv2ONkCFDTO3Sullmyu8CP5QLhpdeM8fOqFsXqDCWLbCgmTUWWeWZJrzZKmCsw
+        RIteNZa2WnqmYukJ9etkjsjMdq4sUf+b9E0pDbSHhTEjJIBkk4u3kmlEViSbXbbu2JTGV0ZFlqWmQ
+        LN0oDk+g==;
+Received: from [10.9.9.72] (helo=submission01.runbox)
+        by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+        (envelope-from <mhal@rbox.co>)
+        id 1oHQNm-0006Ir-Gj; Fri, 29 Jul 2022 15:50:26 +0200
+Received: by submission01.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.90_1)
+        id 1oHQNV-0001bD-K1; Fri, 29 Jul 2022 15:50:09 +0200
+From:   Michal Luczaj <mhal@rbox.co>
+To:     kvm@vger.kernel.org
+Cc:     linux-kselftest@vger.kernel.org, seanjc@google.com,
+        pbonzini@redhat.com, shuah@kernel.org, Michal Luczaj <mhal@rbox.co>
+Subject: [PATCH 2/2] KVM: selftests: x86: Test illegal LEA handling
+Date:   Fri, 29 Jul 2022 15:48:03 +0200
+Message-Id: <20220729134801.1120-2-mhal@rbox.co>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220729134801.1120-1-mhal@rbox.co>
+References: <20220729134801.1120-1-mhal@rbox.co>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ys2Li9ilYtpmJhN3@redhat.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue 2022-07-12 10:56:11, Joe Lawrence wrote:
-> On Thu, Jun 30, 2022 at 11:12:26AM -0300, Marcos Paulo de Souza wrote:
-> > Syscalls are called a tricky way. Some architectures add a prefix to the
-> > syscall name (SYSCALL_WRAPPER).
-> > 
-> > This new test creates one userspace process per online cpu calling getpid
-> > continuously and tries to livepatch the getpid function. Add the correct
-> > function prefix for all archs that select HAS_SYSCALL_WRAPPER.
-> > 
-> > Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
-> 
-> Hi Marcos,
-> 
-> Thanks for working on this and sorry for the delayed reply.  I gave it a
-> spin yesterday and have a few comments below...
-> 
-> > diff --git a/tools/testing/selftests/livepatch/Makefile b/tools/testing/selftests/livepatch/Makefile
-> > index 5ef492b87bb1..35014197184e 100644
-> > --- a/tools/testing/selftests/livepatch/Makefile
-> > +++ b/tools/testing/selftests/livepatch/Makefile
-> > @@ -1,10 +1,14 @@
-> >  # SPDX-License-Identifier: GPL-2.0
-> > +include ../../../build/Build.include
-> > +include ../../../scripts/Makefile.arch
-> > +include ../../../scripts/Makefile.include
+Check if the emulator reveals host's kernel memory address.
 
-This looks bad. It is outside of tools/tests/selftests/. It would
-mean that the tests are not self-contained any longer.
+Signed-off-by: Michal Luczaj <mhal@rbox.co>
+---
+Although checkpatch complains about the use of `extern`, I am sending this
+as it is. Let me know if you need it in some better form.
 
-The tests should support all scenarios described in
-Documentation/dev-tools/kselftest.rst.
+[unpatched]$ ./tools/testing/selftests/kvm/x86_64/emulator_illegal_lea
+==== Test Assertion Failure ====
+  x86_64/emulator_illegal_lea.c:129: uc->args[0] == 0
+  pid=957 tid=957 errno=4 - Interrupted system call
+     1	: check_state at emulator_illegal_lea.c:129
+     2	: main at emulator_illegal_lea.c:169 (discriminator 1)
+     3	: ?? ??:0
+     4	: ?? ??:0
+     5	: _start at ??:?
+  Host's address leaked: 0xffff88811a5d3620 (2)
 
-Note that it allows to install them and run them from
-the installed copy. I guess that this is useful if you
-want to package the selftests.
+[patched]$ ./tools/testing/selftests/kvm/x86_64/emulator_illegal_lea
+[patched]$
 
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   1 +
+ .../kvm/x86_64/emulator_illegal_lea.c         | 180 ++++++++++++++++++
+ 3 files changed, 182 insertions(+)
+ create mode 100644 tools/testing/selftests/kvm/x86_64/emulator_illegal_lea.c
 
-> Final note, kbuild is probably my weakest area, so I'm of limited help
-> review-wise there.  In trying out the code, I wasn't sure exactly how to
-> run things.  I did:
-> 
->   $ make -C tools/testing/selftests/livepatch/ run_tests
-> 
-> and that built everything and ran the tests (good).  I changed a few .c
-> files and tried again, but they didn't rebuild.  Then from
-> tools/testing/selftests/livepatch/test_modules/ I ran `make` and it only
-> ran the clean target (not good, I think).
->
-> What is the typical workflow supposed to be in this combined setup?
+diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
+index 4509a3a7eeae..8977458080b9 100644
+--- a/tools/testing/selftests/kvm/.gitignore
++++ b/tools/testing/selftests/kvm/.gitignore
+@@ -17,6 +17,7 @@
+ /x86_64/debug_regs
+ /x86_64/evmcs_test
+ /x86_64/emulator_error_test
++/x86_64/emulator_illegal_lea
+ /x86_64/fix_hypercall_test
+ /x86_64/get_msr_index_features
+ /x86_64/kvm_clock_test
+diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+index 22423c871ed6..453cd34e1fde 100644
+--- a/tools/testing/selftests/kvm/Makefile
++++ b/tools/testing/selftests/kvm/Makefile
+@@ -75,6 +75,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/cr4_cpuid_sync_test
+ TEST_GEN_PROGS_x86_64 += x86_64/get_msr_index_features
+ TEST_GEN_PROGS_x86_64 += x86_64/evmcs_test
+ TEST_GEN_PROGS_x86_64 += x86_64/emulator_error_test
++TEST_GEN_PROGS_x86_64 += x86_64/emulator_illegal_lea
+ TEST_GEN_PROGS_x86_64 += x86_64/fix_hypercall_test
+ TEST_GEN_PROGS_x86_64 += x86_64/hyperv_clock
+ TEST_GEN_PROGS_x86_64 += x86_64/hyperv_cpuid
+diff --git a/tools/testing/selftests/kvm/x86_64/emulator_illegal_lea.c b/tools/testing/selftests/kvm/x86_64/emulator_illegal_lea.c
+new file mode 100644
+index 000000000000..5f0704e04fac
+--- /dev/null
++++ b/tools/testing/selftests/kvm/x86_64/emulator_illegal_lea.c
+@@ -0,0 +1,180 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Test for handling of illegal (ModRM mod = 3) LEA.
++ *
++ * To trigger the emulator and feed it with LEA, we VM-exit on IO (with a
++ * single OUTS), then race decoder's instruction fetch - hoping to replace the
++ * initial IO op with an illegal LEA.
++ */
++
++#include "test_util.h"
++#include "kvm_util.h"
++#include "processor.h"
++
++#include <string.h>
++#include <pthread.h>
++#include <sys/mman.h>
++
++/* defined in tools/testing/selftests/kvm/lib/x86_64/ucall.c */
++#define UCALL_PIO_PORT ((uint16_t)0x1000)
++
++#define VCPU_ID 0
++#define NOT_UCALL_PORT ((uint16_t)~UCALL_PIO_PORT)
++#define MAX_ATTEMPTS 0x10000
++#define MAYBE_KERNEL(addr) ((int64_t)(addr) < 0)
++
++extern uint32_t race_op;
++
++static void guest_ud_handler(struct ex_regs *regs)
++{
++	GUEST_ASSERT(regs->rip == (uint64_t)&race_op);
++	regs->rip += 4;
++}
++
++__aligned(0x1000) __attribute__((naked)) static void guest_code(void)
++{
++	uint32_t n = 1;
++	void *readable;
++	uint64_t rax;
++
++	do {
++		rax = 0;
++		readable = &guest_code;
++		/*
++		 * This is where
++		 *   3e 3e 3e 6f    outsl (%rsi), %dx
++		 * will be turned into
++		 *   3e 48 8d c0    lea rax (!), rax
++		 * Both instructions padded to 32 bits with DS prefixes.
++		 */
++		asm volatile(".align 8\n\t"
++			     "race_op:\n\t"
++			     "ds\n\t"
++			     "ds\n\t"
++			     "ds\n\t"
++			     "outsl (%[readable]), %[port]\n\t"
++			     ".fill 8, 1, 0x90"
++			     : [rax] "=a" (rax)
++			     : [readable] "S" (readable),
++			       [port] "d" (NOT_UCALL_PORT));
++	} while (!MAYBE_KERNEL(rax) && n++ < MAX_ATTEMPTS);
++
++	ucall(UCALL_DONE, 2, rax, n);
++}
++
++__attribute__((naked)) static void asm_lea(void)
++{
++	asm volatile("ds\n\t"
++		     "lea (%rax), %rax");
++}
++
++__attribute__((naked)) static void asm_outs(void)
++{
++	asm volatile("ds\n\t"
++		     "ds\n\t"
++		     "ds\n\t"
++		     "outsl (%rsi), %dx");
++}
++
++void *racer(void *arg)
++{
++	uint32_t *ptr = arg;
++	uint32_t lea, outs;
++
++	memcpy(&lea, &asm_lea, sizeof(lea));
++	/* set modrm mod = 3 */
++	lea |= 0xc0000000;
++
++	memcpy(&outs, &asm_outs, sizeof(outs));
++
++	while (true) {
++		*ptr = outs;
++		sched_yield();
++		*ptr = lea;
++		sched_yield();
++		pthread_testcancel();
++	};
++}
++
++int check_exit_reason(struct kvm_run *run)
++{
++	switch (run->exit_reason) {
++	case KVM_EXIT_IO:
++		/* race lost: OUTS was executed; ignore and retry */
++		TEST_ASSERT(run->io.port == NOT_UCALL_PORT,
++			    "Unexpected IO port: %u",
++			    run->io.port);
++		return 1;
++	case KVM_EXIT_INTERNAL_ERROR:
++		/* emulator hit bad LEA and bailed out; well done */
++		ASSERT_EQ(*(uint32_t *)&run->emulation_failure.insn_bytes,
++			  *(uint32_t *)&asm_lea | 0xc0000000);
++		TEST_ASSERT(run->internal.suberror == KVM_INTERNAL_ERROR_EMULATION,
++			    "Unexpected suberror: %u",
++			    run->internal.suberror);
++		return 0;
++	default:
++		TEST_FAIL("Unexpected VM exit: %s",
++			  exit_reason_str(run->exit_reason));
++	}
++
++	__builtin_unreachable();
++}
++
++int check_state(struct kvm_run *run, struct ucall *uc)
++{
++	switch (uc->cmd) {
++	case UCALL_NONE:
++		return check_exit_reason(run);
++	case UCALL_DONE:
++		TEST_ASSERT(uc->args[0] == 0,
++			    "Host's address leaked: %#lx (%lu)",
++			    uc->args[0], uc->args[1]);
++		return 0;
++	case UCALL_ABORT:
++		TEST_FAIL("UCALL_ABORT: %s, line %ld\n",
++			  (char *)uc->args[0], uc->args[1]);
++	case UCALL_UNHANDLED:
++		TEST_FAIL("UCALL_UNHANDLED: #%ld\n", uc->args[0]);
++	default:
++		TEST_FAIL("Unexpected ucall");
++	}
++
++	__builtin_unreachable();
++}
++
++int main(int argc, char *argv[])
++{
++	struct kvm_run *run;
++	struct kvm_vm *vm;
++	pthread_t thread;
++	struct ucall uc;
++	int ret;
++
++	ret = mprotect(&guest_code, 0x1000, PROT_READ | PROT_WRITE | PROT_EXEC);
++	TEST_ASSERT(ret == 0, "mprotect() failed: %s", strerror(errno));
++
++	vm = vm_create_default(VCPU_ID, 0, (void *)guest_code);
++	run = vcpu_state(vm, VCPU_ID);
++
++	vm_init_descriptor_tables(vm);
++	vcpu_init_descriptor_tables(vm, VCPU_ID);
++	vm_install_exception_handler(vm, UD_VECTOR, guest_ud_handler);
++
++	ret = pthread_create(&thread, 0, racer, addr_gva2hva(vm, (vm_vaddr_t)&race_op));
++	TEST_ASSERT(ret == 0, "pthread_create() failed: %s", strerror(ret));
++
++	do {
++		vcpu_run(vm, VCPU_ID);
++		get_ucall(vm, VCPU_ID, &uc);
++	} while (check_state(run, &uc));
++
++	ret = pthread_cancel(thread);
++	TEST_ASSERT(ret == 0, "pthread_cancel() failed: %s", strerror(ret));
++
++	ret = pthread_join(thread, 0);
++	TEST_ASSERT(ret == 0, "pthread_join() failed: %s", strerror(ret));
++
++	kvm_vm_free(vm);
++	return 0;
++}
+-- 
+2.32.0
 
-I personally test the mainline kernels the following way:
-
-workstation> make binrpm-pkg
-
-test-system-qemu# sshfs workstation:/path/to/packages /mnt
-test-system-qemu# rpm -ivh /mnt/RPMS/x86_64/kernel-xxxx.rpm
-test-system-qemu# reboot
-
-test-system-qemu# sshfs workstation:/path/to/sources /mnt
-test-system-qemu# cd /mnt/linux/tools/tests/selftests/livepatch
-test-system-qemu# make run_tests
-
-With this patchset I get:
-
-test-system-qemu:/mnt/kernel/linux/tools/testing/selftests/livepatch # make run_tests 
-make -C test_modules test_klp_atomic_replace.ko
-make[1]: Entering directory '/mnt/kernel/linux/tools/testing/selftests/livepatch/test_modules'
-make -C /lib/modules/5.19.0-rc8-default+/build M=/mnt/kernel/linux/tools/testing/selftests/livepatch/test_modules test_klp_atomic_replace.ko
-make[2]: Entering directory '/mnt/kernel/linux/tools/testing/selftests/livepatch/test_modules'
-make[2]: *** /lib/modules/5.19.0-rc8-default+/build: No such file or directory.  Stop.
-make[2]: Leaving directory '/mnt/kernel/linux/tools/testing/selftests/livepatch/test_modules'
-make[1]: *** [Makefile:17: test_klp_atomic_replace.ko] Error 2
-make[1]: Leaving directory '/mnt/kernel/linux/tools/testing/selftests/livepatch/test_modules'
-make: *** [Makefile:44: /mnt/kernel/linux/tools/testing/selftests/livepatch/test_modules/test_klp_atomic_replace.ko] Error 2
-
-
-I get the same when I try it from the top level directory:
-
-test-system-qemu:/mnt/kernel/linux # make -C tools/testing/selftests TARGETS=livepatch run_tests
-make: Entering directory '/mnt/kernel/linux/tools/testing/selftests'
-make --no-builtin-rules ARCH=x86 -C ../../.. headers_install
-make[1]: Entering directory '/mnt/kernel/linux'
-  INSTALL ./usr/include
-make[1]: Leaving directory '/mnt/kernel/linux'
-make[1]: Entering directory '/mnt/kernel/linux/tools/testing/selftests/livepatch'
-make -C test_modules test_klp_atomic_replace.ko
-make[2]: Entering directory '/mnt/kernel/linux/tools/testing/selftests/livepatch/test_modules'
-make -C /lib/modules/5.19.0-rc8-default+/build M=/mnt/kernel/linux/tools/testing/selftests/livepatch/test_modules test_klp_atomic_replace.ko
-make[3]: Entering directory '/mnt/kernel/linux/tools/testing/selftests/livepatch/test_modules'
-make[3]: *** /lib/modules/5.19.0-rc8-default+/build: No such file or directory.  Stop.
-make[3]: Leaving directory '/mnt/kernel/linux/tools/testing/selftests/livepatch/test_modules'
-make[2]: *** [Makefile:17: test_klp_atomic_replace.ko] Error 2
-make[2]: Leaving directory '/mnt/kernel/linux/tools/testing/selftests/livepatch/test_modules'
-make[1]: *** [Makefile:44: /mnt/kernel/linux/tools/testing/selftests/livepatch/test_modules/test_klp_atomic_replace.ko] Error 2
-make[1]: Leaving directory '/mnt/kernel/linux/tools/testing/selftests/livepatch'
-make: *** [Makefile:178: all] Error 2
-make: Leaving directory '/mnt/kernel/linux/tools/testing/selftests'
-
-
-I am not sure if this is exactly the process described in
-Documentation/dev-tools/kselftest.rst. But it looks to me that
-it is the way how to test "any" kernel with selftests
-from an up-to-date kernel sources.
-
-Best Regards,
-Petr
