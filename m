@@ -2,225 +2,122 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0557C00140
-	for <linux-kselftest@archiver.kernel.org>; Wed,  3 Aug 2022 03:23:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13B12C19F28
+	for <linux-kselftest@archiver.kernel.org>; Wed,  3 Aug 2022 04:44:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236063AbiHCDXv (ORCPT
+        id S233872AbiHCEoK (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 2 Aug 2022 23:23:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49418 "EHLO
+        Wed, 3 Aug 2022 00:44:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237568AbiHCDXp (ORCPT
+        with ESMTP id S229457AbiHCEoJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 2 Aug 2022 23:23:45 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD0551A05;
-        Tue,  2 Aug 2022 20:23:40 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id b133so15334110pfb.6;
-        Tue, 02 Aug 2022 20:23:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hQ/MHL3AvHE6awMttMKHegw9J9rY4eAGNJ5s9dewrd8=;
-        b=CHPXie25jR2yWr9q5odc83pPNnA80K0CM8v9EuqtArCTlfixskGUqP5vwCjZClW/QS
-         GfR6JSopZS+FH/bzKW/g2bL5z0clGf/22+e0F9Z2eQIb74nGjanx4AKahht+Ouu0OBs8
-         dEpg+ur6KU8Zv4ZEbgF5JBzpT5hQSWG5GI4aNsCzR3R3D8As8ne+iLXa7mFAWZVgvsAJ
-         wqfm3DWlOnODenQn0n0wb/6L3PtnZ3UlOwLj8XXo8VEpl4x1sG30qi+POOPaD63ADxlO
-         pXzI5WrL1kXH41AkH6Hq+k2ych93SEJr9RlfaUy8OwlODbzsOImZKh415RlHhdYM0Fpi
-         Yvdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hQ/MHL3AvHE6awMttMKHegw9J9rY4eAGNJ5s9dewrd8=;
-        b=Yvj0SDBoRKXLXFHyzEP43d15g25MrMqrMPCwad12Fu4qUtF7c+BgKVqV/d1QzY6z48
-         kK+owOrrYpbMfwVe/gdGMGT3b1kEuRFCbrPuRwhlHJXtn8oybRNZRGF6IY3q1nFuLLnw
-         VwnljDNqYrxBlEobFCi4rKdjG+fCLxwX0EZIrMLyOxiJxAXJDQwJbB4cRnVdqilkwq8l
-         kHblXFdpYr5KDVcBc759KHPyHXWdzQjVbqKgZDFeKYm325V+fEiI+7ufwGIplT4MthjC
-         iGVVGpiGPc6u8ZLjcUfPRWoNpGQa7tYwec/ZNawn4rryB8qXild8VM5po9yN57st14YO
-         gdow==
-X-Gm-Message-State: AJIora9/5LHZ8+uYLnFiC0G/1fA1HzgPLX/24wNhkQdQW720acjxoJF1
-        QZ/mmUr/6LppxfIg1fYRSn0=
-X-Google-Smtp-Source: AGRyM1sCSz0Ss42sowkoQjXeEl16MwPxdyBbyTUiA1CDxjKiO/EnKpC5aN4upe+iDII6riEw+RVOMw==
-X-Received: by 2002:a63:f502:0:b0:415:ee58:b22b with SMTP id w2-20020a63f502000000b00415ee58b22bmr19076904pgh.349.1659497019088;
-        Tue, 02 Aug 2022 20:23:39 -0700 (PDT)
-Received: from biggie.. ([103.230.148.189])
-        by smtp.gmail.com with ESMTPSA id b9-20020a170902d50900b0016dbdf7b97bsm458620plg.266.2022.08.02.20.23.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Aug 2022 20:23:38 -0700 (PDT)
-From:   Gautam Menghani <gautammenghani201@gmail.com>
-To:     steffen.klassert@secunet.com, herbert@gondor.apana.org.au,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, shuah@kernel.org
-Cc:     Gautam Menghani <gautammenghani201@gmail.com>,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Subject: [PATCH v2] selftests/net: Refactor xfrm_fill_key() to use array of structs
-Date:   Wed,  3 Aug 2022 08:53:12 +0530
-Message-Id: <20220803032312.3939-1-gautammenghani201@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 3 Aug 2022 00:44:09 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCDB231377;
+        Tue,  2 Aug 2022 21:44:07 -0700 (PDT)
+Received: from [192.168.43.224] (92.40.178.41.threembb.co.uk [92.40.178.41])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: gtucker)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 544F76601B45;
+        Wed,  3 Aug 2022 05:44:05 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1659501845;
+        bh=7yGjpM0HgyH1Sv1LbDc+Kr8ogiOCMctPl1YxkMRebl0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=TPf1Y9FH1Nbix3eA+tAq+62JUvC/jvDXV+65YgYFVJZp+vEJVhAEsmGbU2BLxOtut
+         mW2sJjAot/PTOW3P2mZI8bZ9gFN/JuP5mLuAusw2RAPty7pNHtU/k8siKIZQYOlNb/
+         0XgL5c5VADYtEYNYIfo24/NmnZmyFzYPXuCe+TOAuR+Kf5iZ5rRURghlfth9r4iDF3
+         MbTWTGNhj27cmg83jfkdTTR/mm/mAoz4gWichyBFDIM9p6wXjkEE8CuX4i5CiFmH3p
+         JWwQn4XySe3inmwSaMjsk3YvcNBtlCAjbsTSVolzCUD6qjNewl16Rxu1lMxNTibA52
+         j5ShCAFIAH47g==
+Message-ID: <fa7fb9b3-169a-199f-22da-006777a14e03@collabora.com>
+Date:   Wed, 3 Aug 2022 06:44:06 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [GIT PULL] Kselftest update for Linux 5.20-rc1
+Content-Language: en-US
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8?= =?UTF-8?Q?n?= <mic@digikod.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-security-module <linux-security-module@vger.kernel.org>
+References: <430ef132-2ac7-e1be-68ed-3d9c27382143@linuxfoundation.org>
+ <2838c247-0648-3828-efb3-e11d7a0616b2@digikod.net>
+ <84560b65-12ed-da24-3698-45484f80802a@linuxfoundation.org>
+From:   Guillaume Tucker <guillaume.tucker@collabora.com>
+In-Reply-To: <84560b65-12ed-da24-3698-45484f80802a@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-A TODO in net/ipsec.c asks to refactor the code in xfrm_fill_key() to
-use set/map to avoid manually comparing each algorithm with the "name" 
-parameter passed to the function as an argument. This patch refactors 
-the code to create an array of structs where each struct contains the 
-algorithm name and its corresponding key length.
+On 02/08/2022 15:29, Shuah Khan wrote:
+> On 8/2/22 3:51 AM, Mickaël Salaün wrote:
+>> Hi,
+>>
+>> This change breaks the Landlock test build when performed on the tools/testing/selftests/landlock directory because the (non-system/up-to-date) kernel headers aren't found. Looking at the use of top_srcdir and HDR_PATH, it seems that multiple subsystems are using this feature. I consider this change a regression.
+>>
+> 
+> I did a build test from the top level before sending the pull request
+> and didn't catch this breakage as a result. This breaks when build is
+> run from the test directory.
+> 
+> We have had several problems related to khdr_dir and target and decided
+> to move away from it with this change.
+> 
+>> It also removes the check on up-to-date kernel headers (thanks to the Makefile's target timestamp).
+>>
+>> I wasn't CCed for this change impacting Landlock [1]. Please keep in mind to add at least maintainers and related mailing-lists for changes on related subsystems.
+>>
+> 
+> That is the usual practice and if I notice missing maintainers, I add
+> them. We missed this one.
+> 
+>> The following patch almost revert commit a917dd94b832 ("selftests/landlock: drop deprecated headers dependency") and partially fixes commit 49de12ba06ef ("selftests: drop KSFT_KHDR_INSTALL make target"):
+>>
+> 
+> Guillaume,
+> 
+> Will you be able to look at this and send a patch on top? I will
+> send another pull request before merge window closes?
 
-Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
----
-changes in v2:
-1. Fix the compilation warnings for struct and variable declaration
+Sure, I'll take a look today.
 
- tools/testing/selftests/net/ipsec.c | 108 +++++++++++++---------------
- 1 file changed, 49 insertions(+), 59 deletions(-)
+Also I'll see if we can add some extra build tests in KernelCI
+for the kselftest tree to catch issues like these automatically.
 
-diff --git a/tools/testing/selftests/net/ipsec.c b/tools/testing/selftests/net/ipsec.c
-index cc10c10c5ed9..4a0eeb5b71d2 100644
---- a/tools/testing/selftests/net/ipsec.c
-+++ b/tools/testing/selftests/net/ipsec.c
-@@ -58,6 +58,8 @@
- #define VETH_FMT	"ktst-%d"
- #define VETH_LEN	12
- 
-+#define XFRM_ALGO_NR_KEYS 29
-+
- static int nsfd_parent	= -1;
- static int nsfd_childa	= -1;
- static int nsfd_childb	= -1;
-@@ -75,6 +77,46 @@ const unsigned int ping_timeout		= 300;
- const unsigned int ping_count		= 100;
- const unsigned int ping_success		= 80;
- 
-+struct xfrm_key_entry {
-+	char algo_name[35];
-+	int key_len;
-+};
-+
-+struct xfrm_key_entry xfrm_key_entries[XFRM_ALGO_NR_KEYS];
-+
-+static void init_xfrm_algo_keys(void)
-+{
-+	xfrm_key_entries[0] = (struct xfrm_key_entry) {"digest_null", 0};
-+	xfrm_key_entries[1] = (struct xfrm_key_entry) {"ecb(cipher_null)", 0};
-+	xfrm_key_entries[2] = (struct xfrm_key_entry) {"cbc(des)", 64};
-+	xfrm_key_entries[3] = (struct xfrm_key_entry) {"hmac(md5)", 128};
-+	xfrm_key_entries[4] = (struct xfrm_key_entry) {"cmac(aes)", 128};
-+	xfrm_key_entries[5] = (struct xfrm_key_entry) {"xcbc(aes)", 128};
-+	xfrm_key_entries[6] = (struct xfrm_key_entry) {"cbc(cast5)", 128};
-+	xfrm_key_entries[7] = (struct xfrm_key_entry) {"cbc(serpent)", 128};
-+	xfrm_key_entries[8] = (struct xfrm_key_entry) {"hmac(sha1)", 160};
-+	xfrm_key_entries[9] = (struct xfrm_key_entry) {"hmac(rmd160)", 160};
-+	xfrm_key_entries[10] = (struct xfrm_key_entry) {"cbc(des3_ede)", 192};
-+	xfrm_key_entries[11] = (struct xfrm_key_entry) {"hmac(sha256)", 256};
-+	xfrm_key_entries[12] = (struct xfrm_key_entry) {"cbc(aes)", 256};
-+	xfrm_key_entries[13] = (struct xfrm_key_entry) {"cbc(camellia)", 256};
-+	xfrm_key_entries[14] = (struct xfrm_key_entry) {"cbc(twofish)", 256};
-+	xfrm_key_entries[15] = (struct xfrm_key_entry) {"rfc3686(ctr(aes))", 288};
-+	xfrm_key_entries[16] = (struct xfrm_key_entry) {"hmac(sha384)", 384};
-+	xfrm_key_entries[17] = (struct xfrm_key_entry) {"cbc(blowfish)", 448};
-+	xfrm_key_entries[18] = (struct xfrm_key_entry) {"hmac(sha512)", 512};
-+	xfrm_key_entries[19] = (struct xfrm_key_entry) {"rfc4106(gcm(aes))-128", 160};
-+	xfrm_key_entries[20] = (struct xfrm_key_entry) {"rfc4543(gcm(aes))-128", 160};
-+	xfrm_key_entries[21] = (struct xfrm_key_entry) {"rfc4309(ccm(aes))-128", 152};
-+	xfrm_key_entries[22] = (struct xfrm_key_entry) {"rfc4106(gcm(aes))-192", 224};
-+	xfrm_key_entries[23] = (struct xfrm_key_entry) {"rfc4543(gcm(aes))-192", 224};
-+	xfrm_key_entries[24] = (struct xfrm_key_entry) {"rfc4309(ccm(aes))-192", 216};
-+	xfrm_key_entries[25] = (struct xfrm_key_entry) {"rfc4106(gcm(aes))-256", 288};
-+	xfrm_key_entries[26] = (struct xfrm_key_entry) {"rfc4543(gcm(aes))-256", 288};
-+	xfrm_key_entries[27] = (struct xfrm_key_entry) {"rfc4309(ccm(aes))-256", 280};
-+	xfrm_key_entries[28] = (struct xfrm_key_entry) {"rfc7539(chacha20,poly1305)-128", 0};
-+}
-+
- static void randomize_buffer(void *buf, size_t buflen)
- {
- 	int *p = (int *)buf;
-@@ -767,65 +809,12 @@ static int do_ping(int cmd_fd, char *buf, size_t buf_len, struct in_addr from,
- static int xfrm_fill_key(char *name, char *buf,
- 		size_t buf_len, unsigned int *key_len)
- {
--	/* TODO: use set/map instead */
--	if (strncmp(name, "digest_null", ALGO_LEN) == 0)
--		*key_len = 0;
--	else if (strncmp(name, "ecb(cipher_null)", ALGO_LEN) == 0)
--		*key_len = 0;
--	else if (strncmp(name, "cbc(des)", ALGO_LEN) == 0)
--		*key_len = 64;
--	else if (strncmp(name, "hmac(md5)", ALGO_LEN) == 0)
--		*key_len = 128;
--	else if (strncmp(name, "cmac(aes)", ALGO_LEN) == 0)
--		*key_len = 128;
--	else if (strncmp(name, "xcbc(aes)", ALGO_LEN) == 0)
--		*key_len = 128;
--	else if (strncmp(name, "cbc(cast5)", ALGO_LEN) == 0)
--		*key_len = 128;
--	else if (strncmp(name, "cbc(serpent)", ALGO_LEN) == 0)
--		*key_len = 128;
--	else if (strncmp(name, "hmac(sha1)", ALGO_LEN) == 0)
--		*key_len = 160;
--	else if (strncmp(name, "hmac(rmd160)", ALGO_LEN) == 0)
--		*key_len = 160;
--	else if (strncmp(name, "cbc(des3_ede)", ALGO_LEN) == 0)
--		*key_len = 192;
--	else if (strncmp(name, "hmac(sha256)", ALGO_LEN) == 0)
--		*key_len = 256;
--	else if (strncmp(name, "cbc(aes)", ALGO_LEN) == 0)
--		*key_len = 256;
--	else if (strncmp(name, "cbc(camellia)", ALGO_LEN) == 0)
--		*key_len = 256;
--	else if (strncmp(name, "cbc(twofish)", ALGO_LEN) == 0)
--		*key_len = 256;
--	else if (strncmp(name, "rfc3686(ctr(aes))", ALGO_LEN) == 0)
--		*key_len = 288;
--	else if (strncmp(name, "hmac(sha384)", ALGO_LEN) == 0)
--		*key_len = 384;
--	else if (strncmp(name, "cbc(blowfish)", ALGO_LEN) == 0)
--		*key_len = 448;
--	else if (strncmp(name, "hmac(sha512)", ALGO_LEN) == 0)
--		*key_len = 512;
--	else if (strncmp(name, "rfc4106(gcm(aes))-128", ALGO_LEN) == 0)
--		*key_len = 160;
--	else if (strncmp(name, "rfc4543(gcm(aes))-128", ALGO_LEN) == 0)
--		*key_len = 160;
--	else if (strncmp(name, "rfc4309(ccm(aes))-128", ALGO_LEN) == 0)
--		*key_len = 152;
--	else if (strncmp(name, "rfc4106(gcm(aes))-192", ALGO_LEN) == 0)
--		*key_len = 224;
--	else if (strncmp(name, "rfc4543(gcm(aes))-192", ALGO_LEN) == 0)
--		*key_len = 224;
--	else if (strncmp(name, "rfc4309(ccm(aes))-192", ALGO_LEN) == 0)
--		*key_len = 216;
--	else if (strncmp(name, "rfc4106(gcm(aes))-256", ALGO_LEN) == 0)
--		*key_len = 288;
--	else if (strncmp(name, "rfc4543(gcm(aes))-256", ALGO_LEN) == 0)
--		*key_len = 288;
--	else if (strncmp(name, "rfc4309(ccm(aes))-256", ALGO_LEN) == 0)
--		*key_len = 280;
--	else if (strncmp(name, "rfc7539(chacha20,poly1305)-128", ALGO_LEN) == 0)
--		*key_len = 0;
-+	int i;
-+
-+	for (i = 0; i < XFRM_ALGO_NR_KEYS; i++) {
-+		if (strncmp(name, xfrm_key_entries[i].algo_name, ALGO_LEN) == 0)
-+			*key_len = xfrm_key_entries[i].key_len;
-+	}
- 
- 	if (*key_len > buf_len) {
- 		printk("Can't pack a key - too big for buffer");
-@@ -2305,6 +2294,7 @@ int main(int argc, char **argv)
- 		}
- 	}
- 
-+	init_xfrm_algo_keys();
- 	srand(time(NULL));
- 	page_size = sysconf(_SC_PAGESIZE);
- 	if (page_size < 1)
--- 
-2.34.1
+Best wishes,
+Guillaume
+
+>> --- a/tools/testing/selftests/landlock/Makefile
+>> +++ b/tools/testing/selftests/landlock/Makefile
+>> @@ -9,10 +9,13 @@ TEST_GEN_PROGS := $(src_test:.c=)
+>>   TEST_GEN_PROGS_EXTENDED := true
+>>
+>>   OVERRIDE_TARGETS := 1
+>> +top_srcdir = ../../../..
+>>   include ../lib.mk
+>>
+>> +khdr_dir = $(top_srcdir)/usr/include
+>> +
+>>   $(OUTPUT)/true: true.c
+>>       $(LINK.c) $< $(LDLIBS) -o $@ -static
+>>
+>> -$(OUTPUT)/%_test: %_test.c ../kselftest_harness.h common.h
+>> -    $(LINK.c) $< $(LDLIBS) -o $@ -lcap
+>> +$(OUTPUT)/%_test: %_test.c $(khdr_dir)/linux/landlock.h ../kselftest_harness.h common.h
+>> +    $(LINK.c) $< $(LDLIBS) -o $@ -lcap -I$(khdr_dir)
+>>
+>>
+>> This doesn't fix the header timestamp check though.
+>>
+> 
+> thanks,
+> -- Shuah
 
