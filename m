@@ -2,58 +2,58 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC8EDC25B08
-	for <linux-kselftest@archiver.kernel.org>; Fri,  5 Aug 2022 22:21:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FFA8C00140
+	for <linux-kselftest@archiver.kernel.org>; Fri,  5 Aug 2022 22:22:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241755AbiHEWV6 (ORCPT
+        id S241688AbiHEWWA (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 5 Aug 2022 18:21:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36346 "EHLO
+        Fri, 5 Aug 2022 18:22:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241845AbiHEWVv (ORCPT
+        with ESMTP id S241813AbiHEWV7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 5 Aug 2022 18:21:51 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1331C920
-        for <linux-kselftest@vger.kernel.org>; Fri,  5 Aug 2022 15:21:50 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-31f4e870a17so31513517b3.9
-        for <linux-kselftest@vger.kernel.org>; Fri, 05 Aug 2022 15:21:50 -0700 (PDT)
+        Fri, 5 Aug 2022 18:21:59 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39BDA1BEB9
+        for <linux-kselftest@vger.kernel.org>; Fri,  5 Aug 2022 15:21:58 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id k13-20020a056902024d00b0066fa7f50b97so3103125ybs.6
+        for <linux-kselftest@vger.kernel.org>; Fri, 05 Aug 2022 15:21:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=5E4PGAWMReAFHkj0eA7xzWpJk8N5M4FgV4LT8CvMVPA=;
-        b=TDuzZmP48qciezv1MXsf3LVuEa0sxCTwiXmz3GaFb6bY9Qtk1DrEr4hk/hgSUCSU9D
-         AfNdO6ggJ2vgmMWeMOlX/leMgSXGcQVjNK0zYR0phfm+32xYcPAHGvQSYoqPiNbxudnk
-         HvE2bkCtTLZ4+b3Ay+j53c5ejYOvr0jzKdc8h62ng9xyA/YGHmq7HQjrLzA1ZaYH+BV9
-         0FZ6JoFGedju30kgJTOIXqXWVdCHFjQ55uchR5QBZO9lhMl46oSxaKE6Z0a+P78bLdDl
-         tNj+/17Hexg7tUbRBM+OCbb+sqB6gZJt9lxBqysd3REOSfOgCXMUXOEiZd1Awo0K8DSt
-         9wmQ==
+        bh=p3xudRLR9dNuWUK9U/ylm6O3b8FVaNLRrb9pQqFzR0w=;
+        b=tEC+w7ZCMSi41gOV32xpW1cs0vFZd0pjxoK1AeJyyH01noSX4dLvRhywvBcccI9kdU
+         JKFh83XKg1Si8IMewvVtmvDTWjRKjw3vuzZtx6w3xA2KeuXUxoU/6vRz//098kabUzjE
+         eFwl26ps6MG+nYqCcCI1foMbFHepHOTyrxI0z85iwM8dIVVGbzs366K/ASaVu+V0zPT/
+         uJ/lsElcVWzYS8YYewDpoOAwFTi+w1gRSdsGaOWMYHEI+AEzCyag0hQVzUs3cU93g+T8
+         p0Ut/ZVPUs8LdBcNe3+7UfinveQxYxEtWF7YFesMt+DabZUIKwIYMEaR3aoNOvIbKV0C
+         8E5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=5E4PGAWMReAFHkj0eA7xzWpJk8N5M4FgV4LT8CvMVPA=;
-        b=rOW/jHzWE8qvBu3UFLpsDYdnBr3APbHLW/uC3BbyziUxLzp3JIfHYNKW5GWxj3T/cu
-         qRUiUYF/SyWNvKM4YbP7+2PIEQ448giht6SdXxMc8foZU4cZV8H4zgqvryNvyq3hryFD
-         PNTUYbaAxy9+1qE1UIpPfilMvJYY8kDghLDqNAAiPk1tC47DXBLMvz5gnCVWLBmLnUXR
-         ga8d9uMw1l3D46TOUMvzlZBii2zahrjnxyy7GSY1tMHmUMhDgcN+7eKvBXb7cVXSSXVj
-         G690AmppyoHG9XkRxGfOOfxYEMTLAd/wjhjDcwwH+6Y/d/S6nTdglPG9msQpZYUZiz7H
-         ip/w==
-X-Gm-Message-State: ACgBeo0toGgEVHGOsHkSYT6AQYu9pH/P9cYZnEVwkbicZSfKz0EsnNHz
-        BqaVx/SyGmZ9PcRn4YT5KVu33x56DZE=
-X-Google-Smtp-Source: AA6agR55Nd+GF+Zicb9UzLXVsBAJG/nkDrQRMgHX77YRUR2vsXmmAEpB7Hc955x1MuY3F3Ah7dc0fEbCssM=
+        bh=p3xudRLR9dNuWUK9U/ylm6O3b8FVaNLRrb9pQqFzR0w=;
+        b=mwISkIe/97Sy6/c1xmVJjiBWdRt4clOSCZZjPi0NrxNK7WtG1Re7yud6GFBVpRPMWo
+         AKhnH1Bratp0xyAWKfXZyuhABy9wWfnouq0oxZf3bkjQPelZ9bDNWRkNzQdHYdj7OZET
+         +hXOTMYl+scG04CqTkvOXuiBix4D8pSeJVrBSVcdjj2YVgUJKj8Z8LEV86X+UdV0+JTw
+         UNQzX2G5bziIeKaEXPk28qNHUU2j1NZb8K/ljm4ZZTD0BqDeiJfJVBMT2XexCzhU8NK4
+         mlusOhaAurMwy6he4g4YFwjrtCGKSGYBnCWYY4rG7nrmif+p8Pj7t4twnoL7HODBGmdY
+         WCSg==
+X-Gm-Message-State: ACgBeo1nYiBt4KG1ppOjFmFzJKkoH5kx86aRgKEVIv3kdbYRyYvBKF7x
+        oml8esnDI55/5SZ1vuySqI1xRws5Oy8=
+X-Google-Smtp-Source: AA6agR7Pdt67CAVIWF/fYp+P3xXpceR93JSbt9+i7cJEfvpa+CoelR+6dqwVhJxpBe3viA/07hQjowUu1E0=
 X-Received: from jeffxud.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:e37])
- (user=jeffxu job=sendgmr) by 2002:a25:9c87:0:b0:671:82fd:9106 with SMTP id
- y7-20020a259c87000000b0067182fd9106mr7167620ybo.546.1659738110679; Fri, 05
- Aug 2022 15:21:50 -0700 (PDT)
-Date:   Fri,  5 Aug 2022 22:21:23 +0000
+ (user=jeffxu job=sendgmr) by 2002:a25:33c5:0:b0:67a:6950:c188 with SMTP id
+ z188-20020a2533c5000000b0067a6950c188mr7334020ybz.175.1659738117501; Fri, 05
+ Aug 2022 15:21:57 -0700 (PDT)
+Date:   Fri,  5 Aug 2022 22:21:26 +0000
 In-Reply-To: <20220805222126.142525-1-jeffxu@google.com>
-Message-Id: <20220805222126.142525-3-jeffxu@google.com>
+Message-Id: <20220805222126.142525-6-jeffxu@google.com>
 Mime-Version: 1.0
 References: <20220805222126.142525-1-jeffxu@google.com>
 X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
-Subject: [PATCH v2 2/5] mm/memfd: add MFD_NOEXEC flag to memfd_create
+Subject: [PATCH v2 5/5] sysctl: add support for mfd_noexec
 From:   <jeffxu@google.com>
 To:     skhan@linuxfoundation.org
 Cc:     akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
@@ -67,69 +67,106 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Daniel Verkamp <dverkamp@chromium.org>
+From: Jeff Xu <jeffxu@chromium.org>
 
-The new MFD_NOEXEC flag allows the creation of a permanently
-non-executable memfd. This is accomplished by creating it with a
-different set of file mode bits (0666) than the default (0777) and
-applying the F_SEAL_EXEC seal at creation time, so there is no window
-between memfd creation and seal application.
+Add vm.mfd_noexec.  When the value is 1 (enabled),
+memfd_create syscall will created non-executable memfd.
 
-Unfortunately, the default for memfd must remain executable, since
-changing this would be an API break, and some programs depend on being
-able to exec code from a memfd directly. However, this new flag will
-allow programs to create non-executable memfds, and a distribution may
-choose to enforce use of this flag in memfd_create calls via other
-security mechanisms.
+The default value is 0 (disabled), admin can change the
+setting from 0 => 1, however 1 => 0 is not allowed,
+unless reboot.
 
-Co-developed-by: Jeff Xu <jeffxu@chromium.org>
 Signed-off-by: Jeff Xu <jeffxu@chromium.org>
-Signed-off-by: Daniel Verkamp <dverkamp@chromium.org>
 ---
- include/uapi/linux/memfd.h |  1 +
- mm/memfd.c                 | 10 +++++++++-
- 2 files changed, 10 insertions(+), 1 deletion(-)
+ include/linux/mm.h |  4 ++++
+ kernel/sysctl.c    |  9 +++++++++
+ mm/memfd.c         | 27 +++++++++++++++++++++++++++
+ 3 files changed, 40 insertions(+)
 
-diff --git a/include/uapi/linux/memfd.h b/include/uapi/linux/memfd.h
-index 7a8a26751c23..140e125c9f65 100644
---- a/include/uapi/linux/memfd.h
-+++ b/include/uapi/linux/memfd.h
-@@ -8,6 +8,7 @@
- #define MFD_CLOEXEC		0x0001U
- #define MFD_ALLOW_SEALING	0x0002U
- #define MFD_HUGETLB		0x0004U
-+#define MFD_NOEXEC              0x0008U
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 7898e29bcfb5..1c66cf4aca11 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -203,6 +203,10 @@ extern int sysctl_overcommit_memory;
+ extern int sysctl_overcommit_ratio;
+ extern unsigned long sysctl_overcommit_kbytes;
  
- /*
-  * Huge page size encoding when MFD_HUGETLB is specified, and a huge page
++extern int sysctl_mfd_noexec_scope;
++extern int mfd_noexec_dointvec_minmax(struct ctl_table *table, int write,
++		void *buffer, size_t *lenp, loff_t *ppos);
++
+ int overcommit_ratio_handler(struct ctl_table *, int, void *, size_t *,
+ 		loff_t *);
+ int overcommit_kbytes_handler(struct ctl_table *, int, void *, size_t *,
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index b233714a1c78..54510da007ff 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -2362,6 +2362,15 @@ static struct ctl_table vm_table[] = {
+ 		.mode		= 0644,
+ 		.proc_handler	= mmap_min_addr_handler,
+ 	},
++	{
++		.procname       = "mfd_noexec",
++		.data           = &sysctl_mfd_noexec_scope,
++		.maxlen         = sizeof(sysctl_mfd_noexec_scope),
++		.mode           = 0644,
++		.proc_handler   = mfd_noexec_dointvec_minmax,
++		.extra1         = SYSCTL_ZERO,
++		.extra2         = SYSCTL_ONE,
++	},
+ #endif
+ #ifdef CONFIG_NUMA
+ 	{
 diff --git a/mm/memfd.c b/mm/memfd.c
-index 4ebeab94aa74..b841514eb0fd 100644
+index b841514eb0fd..c6ccb8481ed2 100644
 --- a/mm/memfd.c
 +++ b/mm/memfd.c
-@@ -263,7 +263,7 @@ long memfd_fcntl(struct file *file, unsigned int cmd, unsigned long arg)
- #define MFD_NAME_PREFIX_LEN (sizeof(MFD_NAME_PREFIX) - 1)
- #define MFD_NAME_MAX_LEN (NAME_MAX - MFD_NAME_PREFIX_LEN)
+@@ -20,6 +20,11 @@
+ #include <linux/memfd.h>
+ #include <uapi/linux/memfd.h>
  
--#define MFD_ALL_FLAGS (MFD_CLOEXEC | MFD_ALLOW_SEALING | MFD_HUGETLB)
-+#define MFD_ALL_FLAGS (MFD_CLOEXEC | MFD_ALLOW_SEALING | MFD_HUGETLB | MFD_NOEXEC)
- 
- SYSCALL_DEFINE2(memfd_create,
- 		const char __user *, uname,
-@@ -333,6 +333,14 @@ SYSCALL_DEFINE2(memfd_create,
- 		*file_seals &= ~F_SEAL_SEAL;
- 	}
- 
-+	if (flags & MFD_NOEXEC) {
-+		struct inode *inode = file_inode(file);
++#define MFD_NOEXEC_SCOPE_DISABLED	0
++#define MFD_NOEXEC_SCOPE_ENABLED	1
 +
-+		inode->i_mode &= ~0111;
-+		file_seals = memfd_file_seals_ptr(file);
-+		*file_seals |= F_SEAL_EXEC;
++int sysctl_mfd_noexec_scope __read_mostly = MFD_NOEXEC_SCOPE_DISABLED;
++
+ /*
+  * We need a tag: a new tag would expand every xa_node by 8 bytes,
+  * so reuse a tag which we firmly believe is never set or cleared on tmpfs
+@@ -275,6 +280,10 @@ SYSCALL_DEFINE2(memfd_create,
+ 	char *name;
+ 	long len;
+ 
++	if (sysctl_mfd_noexec_scope == MFD_NOEXEC_SCOPE_ENABLED) {
++		flags |= MFD_NOEXEC;
 +	}
 +
- 	fd_install(fd, file);
+ 	if (!(flags & MFD_HUGETLB)) {
+ 		if (flags & ~(unsigned int)MFD_ALL_FLAGS)
+ 			return -EINVAL;
+@@ -351,3 +360,21 @@ SYSCALL_DEFINE2(memfd_create,
  	kfree(name);
- 	return fd;
+ 	return error;
+ }
++
++#ifdef CONFIG_SYSCTL
++int mfd_noexec_dointvec_minmax(struct ctl_table *table, int write,
++		void *buffer, size_t *lenp, loff_t *ppos)
++{
++	struct ctl_table table_copy;
++
++	if (write && !capable(CAP_SYS_ADMIN))
++		return -EPERM;
++
++	/* Lock the max value if it ever gets set. */
++	table_copy = *table;
++	if (*(int *)table_copy.data == *(int *)table_copy.extra2)
++		table_copy.extra1 = table_copy.extra2;
++
++	return proc_dointvec_minmax(&table_copy, write, buffer, lenp, ppos);
++}
++#endif
 -- 
 2.37.1.559.g78731f0fdb-goog
 
