@@ -2,237 +2,240 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 506DDC00140
-	for <linux-kselftest@archiver.kernel.org>; Wed, 10 Aug 2022 07:22:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 373D3C00140
+	for <linux-kselftest@archiver.kernel.org>; Wed, 10 Aug 2022 08:10:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231174AbiHJHWW (ORCPT
+        id S230282AbiHJIKc (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 10 Aug 2022 03:22:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48106 "EHLO
+        Wed, 10 Aug 2022 04:10:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231187AbiHJHVz (ORCPT
+        with ESMTP id S229969AbiHJIKb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 10 Aug 2022 03:21:55 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2044.outbound.protection.outlook.com [40.107.95.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E3D9B1D7;
-        Wed, 10 Aug 2022 00:21:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fi5NHlrflHNMoj+pBSMKz3779g2b7uf41RegPz1+Rc8g0Comck9HK5S2Bscsu5uSy11aRzGhRsyXzKZ/F4jDzuOTCNmpqP6iwDSBFzHm0wzzKpvtQgv40d+17gkBzZyDMX1vgO5NWKF8v7v26rtuFZusT+4EpGM9NvGsIGA29quF0I87VR9UzQDwSpD5KcfvtpxQu1WvYreDW1y8VwJT/R5u8dGPM+wNLnQLi6Tnolig+I+8GSZV3o36yEmOiKOzx6ikzqLeTAQUuqk8NCGoj3RKNl6MhxY7E3uWklzPtJIfle6mYj3WC4dRJnNk3RUX2NdTqbjLbEbP7kNghSEpkA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pR1ZoXn+Mt5+8rp8p0AVp1PaxgJ8XEDZT/1qTU0Kq3k=;
- b=aZ8CidNko/gD5DFqGSkBTpGXIb5AWXIAZsXWdoL/2C6qVnKNsejuSOKUdr3KIBjEgrWOlWwzJ/23eEAjyJqKP2BUGKSiSqRZ8GiVNAyOAo2+NxxG47v2SdIZaOsfLEJ/Rtkzi2VNx8HGH84m3shKhUka6xdwl5sAGmYAR1KHRHnKbpqSV2/mfjyzw2aOC4eD1JQfL1K/7ix8hzl4IBNJr9oBYjDK31IWc/iQ/1BngF0ed3K1LsGR2ANb+TJiLYxZ4SqBhSZ8g7btG+1V5rT+iFIPhEVngx35sflQUPUrl+31bxkXd/cs/q/melCTG5w2dLqOihN+35E8qpovQ9klLQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pR1ZoXn+Mt5+8rp8p0AVp1PaxgJ8XEDZT/1qTU0Kq3k=;
- b=mVkOBpvjlRKxEDHuypnGrPKcpsfkZYzjPBaW1QEwtCYbFkF9pGmzlN+pMtJcR9t6qntV07YlD0tU1Ifkx+8O7sF1I9g3ZXL1y0/o0v0NVRBAbwA3+oAHuJoExmEYCLiJ8jjJyUh+qLr3bGouOs7ZpVOks3aO9Lky2WX1HhfpVtQEYK70dm86grloI0dPzHM7HMwHpGfPYO9K0wHmN+vITMSLmg/WG+osopnBI6mBXAkFBVU1ZtTeraVnQh9/qCpZruZ18T2ma/I4zhX5fq8eOoGYFKXCUyGKIwUpfjxcSh443adG4tlvyOWIuN2QpeVVEk0c79GEi0fRqhEzB2vSmg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from IA1PR12MB6163.namprd12.prod.outlook.com (2603:10b6:208:3e9::22)
- by DM5PR12MB2423.namprd12.prod.outlook.com (2603:10b6:4:b3::30) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.17; Wed, 10 Aug
- 2022 07:21:52 +0000
-Received: from IA1PR12MB6163.namprd12.prod.outlook.com
- ([fe80::a52c:c6f5:f9f4:59cc]) by IA1PR12MB6163.namprd12.prod.outlook.com
- ([fe80::a52c:c6f5:f9f4:59cc%5]) with mapi id 15.20.5504.014; Wed, 10 Aug 2022
- 07:21:52 +0000
-Date:   Wed, 10 Aug 2022 10:21:46 +0300
-From:   Ido Schimmel <idosch@nvidia.com>
-To:     netdev@kapio-technology.com
-Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
- flag to drivers
-Message-ID: <YvNcitNnyFxTw8bs@shredder>
-References: <20220708091550.2qcu3tyqkhgiudjg@skbuf>
- <e3ea3c0d72c2417430e601a150c7f0dd@kapio-technology.com>
- <20220708115624.rrjzjtidlhcqczjv@skbuf>
- <723e2995314b41ff323272536ef27341@kapio-technology.com>
- <YsqPWK67U0+Iw2Ru@shredder>
- <d3f674dc6b4f92f2fda3601685c78ced@kapio-technology.com>
- <Ys69DiAwT0Md+6ai@shredder>
- <79683d9cf122e22b66b5da3bbbb0ee1f@kapio-technology.com>
- <YvIm+OvXvxbH6POv@shredder>
- <6c6fe135ce7b5b118289dc370135b0d3@kapio-technology.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6c6fe135ce7b5b118289dc370135b0d3@kapio-technology.com>
-X-ClientProxiedBy: VI1PR0501CA0032.eurprd05.prod.outlook.com
- (2603:10a6:800:60::18) To IA1PR12MB6163.namprd12.prod.outlook.com
- (2603:10b6:208:3e9::22)
+        Wed, 10 Aug 2022 04:10:31 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA220422C1;
+        Wed, 10 Aug 2022 01:10:28 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4M2jGW6VKgzfZ4q;
+        Wed, 10 Aug 2022 16:07:31 +0800 (CST)
+Received: from [10.67.111.192] (10.67.111.192) by
+ kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 10 Aug 2022 16:10:23 +0800
+Message-ID: <e8c82119-e443-2557-a7e9-bf6a5d5a7ea9@huawei.com>
+Date:   Wed, 10 Aug 2022 16:10:23 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f1b77a14-3ec9-4fe5-ab5d-08da7aa0ff23
-X-MS-TrafficTypeDiagnostic: DM5PR12MB2423:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: MyeyyE3hSaOYim7Snv/3DRC0yotZ3hLBj0xoTpnmrzB+s9G/YJoH+lCJSbUOUC2srUIsQf2C9B/ZZbuyDyn2v1l7cjXTZVobAj7b11oCrDGQUfR3cVKutYsqSJlYj8Kk+WZcDmF+vO3bBk3gCElVMSFqysctENCriWj3V/Nhm6T2kGLd1XBGH5jsrJJ+FXGAibOOlIoutr3Ck+VBScjZjKxHKHQ6G8zrJXg2BZOnbzWEUIHJUUEGZwIbb+wtRzpMXU2mXkRXm/RQ0h4B7EZoncPolsl5cRGyX9jgtO6vgwjqD5vqgcxgt0HWF0zIqbMOHzALVoN9KKNZN8S4uGFi6WQdf6l+HxVqUgbMXwkhOcXy2VoooKE9tlni6/HXRePD2W+RuA/280bzfJdqZ8dAK4WiJ34oj83Kw2dG2uLFJ0gKdM/j+IHHVbR4y3BprWG1hpGBCkcg85IgFHLLFfrDPbDU07ywL42KpbImqm5LPy3HaKGi4a9lDF46N32xMv0gV68qvq66ZpvQQDkzeS+VHglrhQFPKcAoekyyPwsznrW7oywnSw/H9XzSlBiLvFPG+Pd/k0CR/lxMhhpttTWDdlu0iCNT2klfA5K9awk0IKGThNqz6Li4rzxfepexNqreaWhj5sVdUgzlv4ssIH2wJ16SEsBQsELeat0neuSlH6H+TwAzstP3qpAxr4u7cNaryoaanlD9j4ty9ObdKrj8mhFBZPGzhUKy7+DVBJ5SYHM7f4blpD4RJM57cv+T7heW
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR12MB6163.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(7916004)(346002)(136003)(376002)(39860400002)(396003)(366004)(38100700002)(53546011)(6666004)(6486002)(478600001)(26005)(186003)(6512007)(41300700001)(9686003)(6506007)(33716001)(86362001)(5660300002)(66476007)(6916009)(66556008)(54906003)(8676002)(66946007)(4326008)(316002)(83380400001)(2906002)(8936002)(7416002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?gGCOBlTa7Vn9R1fQ/z1ltF8gyr4gJVoChOsyGhoEigs89pndKvQllYjoyOyX?=
- =?us-ascii?Q?p6EiEtmPe4pe6qrFarhVpybaJSdjZh7IAevjq630kkhkkoovyLTSv+VsH12O?=
- =?us-ascii?Q?6vYSnK6tqm57XkLzZ1MAgqXcJmRXVj9QqYnD5VUfA0f2CkKvw7bEqKAOfzwK?=
- =?us-ascii?Q?I4+cGH8tIYsd6RAm2aKkRCxIPO0feOZqz3p+uFNL/1O2rpycWw4BeabgZeCa?=
- =?us-ascii?Q?YO1sD6cQIb2WRL50kYoHyOsfB9G0hyaZuDj7p5epdGpMhRC7w9XLqCcSCfiO?=
- =?us-ascii?Q?NmcjGXXeq1XfSvLAKOKTGpmuYQiYTE7OW8HCRg9jAuOaV0uhmgV0MqJEHUnf?=
- =?us-ascii?Q?99dB1CGcsbkOuHh5gpRBtLIouxJ+OTKNoQfctuu2hAFHPoM0o0TBKSriECUq?=
- =?us-ascii?Q?+BRRkR/tzi8y2g3hK9YIlK0Q3ha948ZHB4CR0IXenkVpPP/vXhYv7wnflh51?=
- =?us-ascii?Q?ZqoJsvtXY/BPeQZRDiVUjquhCPg5OFc2RZITsIezR6t4E0h3k8LIQC33dzHd?=
- =?us-ascii?Q?xC8f0kDbvphJwnnbbAFACSe9D5Uo54CLhzkCQTqOvFfsOnYxuFnRuCBTwFA1?=
- =?us-ascii?Q?cREdFVnZyY+uc/HHSTPyMNZVRSjJPyBTDIf9NHIPUJW4s1fDjUwmCu/0KLh4?=
- =?us-ascii?Q?XKauXlIHd4qY/LUzoqUyA3+sq1vE4isVouWu9KYRPrTL0WARDQi4eCuRmj0U?=
- =?us-ascii?Q?rsiiCXAqKd0zI4HjVYEO3iRJlf9nRBm0Mz0Zk4nybFuzDaXEn5pHDv7EdrdK?=
- =?us-ascii?Q?ghMDj2KokmyXAYFOuQ5RqQmaV1qh+smJR9+jv3Cjf37osIFQ9wCu9eCCvR5Y?=
- =?us-ascii?Q?ceLSCmZ3WMPAldtHIkF0Qxb2UWf3WKzdb/ydiyQsrEBMS2ffhnbhlgs/15QO?=
- =?us-ascii?Q?FUeNyJK27OFHcQe1ZrRHhbjJdKWU4UKCx87/X8keLFjNZWkVeu5hLqKxuKKs?=
- =?us-ascii?Q?WaAOXfxM4uRvlySMyPxrA6+PIrKiCUfkekJhNd69zmZaBFn6jopE9HcBvSve?=
- =?us-ascii?Q?ZqdmL7SiVvdz/LSwNSnKAUYkNGYZ5pIdy3jXL0+iIPyKiAr6cZZFJn2E3buw?=
- =?us-ascii?Q?Ko+bJ2/P4UHdngHBqdRw4ZUlPY29nmUazlPnh2qx9JUsKyyhnEqCkUa5OTya?=
- =?us-ascii?Q?l1DDPaWa6Uh9Oppo4D3updiO8PPRqwtPPSStBdJiIbk8H/9aabzYneltUPD4?=
- =?us-ascii?Q?mSZMRX7rqSECS6X/vYB5qPt29Qg2dodQ0nmEuJFM9+8uVXZIz+u2Z7dzmPiY?=
- =?us-ascii?Q?tTji3ougQ7lP93tM/qVYXYS26Qs+qRtwPOvj7/DCiyKmwSSXunOFj6spyICo?=
- =?us-ascii?Q?1Th5TQu0UgLm00qeNkPo1SJh2dIk0ULNivo3BLyeLJwZc0KHbXvmDhTRU6DV?=
- =?us-ascii?Q?ftrLvw3+5dvIW2wlyPT07IAI7hApcIaFZl9dUPbi6tnXlX84ZCpyrtMPTkdz?=
- =?us-ascii?Q?RR9ym2z0M3X4QVJNg0mGjCAcyJ21qoIHhfRm05JlmuHtNu/ExIO2eYWq3/gE?=
- =?us-ascii?Q?x7ciK6knN6LlwjlVXmYB/xEP7j64NGCDQOrLnxUIeCPq/dQ0Fb6msGuTy4wj?=
- =?us-ascii?Q?JDXClAMbt3nchgwH3Gk9Wztxqo/Z6+SUiTOok5bK?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f1b77a14-3ec9-4fe5-ab5d-08da7aa0ff23
-X-MS-Exchange-CrossTenant-AuthSource: IA1PR12MB6163.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Aug 2022 07:21:52.1636
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Y+eAx5XQOkEBFd0Cpsjsbrk44I+Vc7JvlE/3+lpI4VTgJs5gSYXb+g5Ddm1/Hqqzm11QqcRAIE1MIrCERcujsA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB2423
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH bpf-next v5 1/6] arm64: ftrace: Add ftrace direct call
+ support
+Content-Language: en-US
+To:     Florent Revest <revest@chromium.org>
+CC:     Mark Rutland <mark.rutland@arm.com>, <bpf@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Daniel Kiss <daniel.kiss@arm.com>,
+        Steven Price <steven.price@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Mark Brown <broonie@kernel.org>,
+        Delyan Kratunov <delyank@fb.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Wang ShaoBo <bobo.shaobowang@huawei.com>,
+        <cj.chengjian@huawei.com>, <huawei.libin@huawei.com>,
+        <xiexiuqi@huawei.com>, <liwei391@huawei.com>
+References: <Yo4xb2w+FHhUtJNw@FVFF77S0Q05N>
+ <0f8fe661-c450-ccd8-761f-dbfff449c533@huawei.com>
+ <Yo9REdx3nsgbZunE@FVFF77S0Q05N>
+ <40fda0b0-0efc-ea1b-96d5-e51a4d1593dd@huawei.com>
+ <Yp4s7eNGvb2CNtPp@FVFF77S0Q05N.cambridge.arm.com>
+ <55c1b9d6-1d53-9752-fb03-00f60ed15db7@huawei.com>
+ <CABRcYmKEn7eajowROwZKerngf0eo0jddNzYgFp82tAqgu0BAxg@mail.gmail.com>
+From:   Xu Kuohai <xukuohai@huawei.com>
+In-Reply-To: <CABRcYmKEn7eajowROwZKerngf0eo0jddNzYgFp82tAqgu0BAxg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.111.192]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Aug 09, 2022 at 10:00:49PM +0200, netdev@kapio-technology.com wrote:
-> On 2022-08-09 11:20, Ido Schimmel wrote:
-> > On Mon, Aug 01, 2022 at 05:33:49PM +0200, netdev@kapio-technology.com
-> > wrote:
-> > > On 2022-07-13 14:39, Ido Schimmel wrote:
-> > > 
-> > > >
-> > > > What are "Storm Prevention" and "zero-DPV" FDB entries?
-> > > >
-> > > 
-> > > For the zero-DPV entries, I can summarize:
-> > > 
-> > > Since a CPU can become saturated from constant SA Miss Violations
-> > > from a
-> > > denied source, source MAC address are masked by loading a zero-DPV
-> > > (Destination Port Vector) entry in the ATU. As the address now
-> > > appears in
-> > > the database it will not cause more Miss Violations. ANY port trying
-> > > to send
-> > > a frame to this unauthorized address is discarded. Any locked port
-> > > trying to
-> > > use this unauthorized address has its frames discarded too (as the
-> > > ports SA
-> > > bit is not set in the ATU entry).
-> > 
-> > What happens to unlocked ports that have learning enabled and are trying
-> > to use this address as SMAC? AFAICT, at least in the bridge driver, the
-> > locked entry will roam, but will keep the "locked" flag, which is
-> > probably not what we want. Let's see if we can agree on these semantics
-> > for a "locked" entry:
+On 8/10/2022 1:03 AM, Florent Revest wrote:
+> On Thu, Jun 9, 2022 at 6:27 AM Xu Kuohai <xukuohai@huawei.com> wrote:
+>> On 6/7/2022 12:35 AM, Mark Rutland wrote:
+>>> On Thu, May 26, 2022 at 10:48:05PM +0800, Xu Kuohai wrote:
+>>>> On 5/26/2022 6:06 PM, Mark Rutland wrote:
+>>>>> On Thu, May 26, 2022 at 05:45:03PM +0800, Xu Kuohai wrote:
+>>>>>> On 5/25/2022 9:38 PM, Mark Rutland wrote:
+>>>>>>> On Wed, May 18, 2022 at 09:16:33AM -0400, Xu Kuohai wrote:
+>>>>>>>> As noted in that thread, I have a few concerns which equally apply here:
+>>>>>>>
+>>>>>>> * Due to the limited range of BL instructions, it's not always possible to
+>>>>>>>    patch an ftrace call-site to branch to an arbitrary trampoline. The way this
+>>>>>>>    works for ftrace today relies upon knowingthe set of trampolines at
+>>>>>>>    compile-time, and allocating module PLTs for those, and that approach cannot
+>>>>>>>    work reliably for dynanically allocated trampolines.
+>>>>>>
+>>>>>> Currently patch 5 returns -ENOTSUPP when long jump is detected, so no
+>>>>>> bpf trampoline is constructed for out of range patch-site:
+>>>>>>
+>>>>>> if (is_long_jump(orig_call, image))
+>>>>>>     return -ENOTSUPP;
+>>>>>
+>>>>> Sure, my point is that in practice that means that (from the user's PoV) this
+>>>>> may randomly fail to work, and I'd like something that we can ensure works
+>>>>> consistently.
+>>>>>
+>>>>
+>>>> OK, should I suspend this work until you finish refactoring ftrace?
+>>>
+>>> Yes; I'd appreciate if we could hold on this for a bit.
+>>>
+>>> I think with some ground work we can avoid most of the painful edge cases and
+>>> might be able to avoid the need for custom trampolines.
+>>>
+>>
+>> I'v read your WIP code, but unfortunately I didn't find any mechanism to
+>> replace bpf trampoline in your code, sorry.
+>>
+>> It looks like bpf trampoline and ftrace works can be done at the same
+>> time. I think for now we can just attach bpf trampoline to bpf prog.
+>> Once your ftrace work is done, we can add support for attaching bpf
+>> trampoline to regular kernel function. Is this OK?
 > 
-> The next version of this will block forwarding to locked entries in the
-> bridge, so they will behave like the zero-DPV entries.
-
-I'm talking about roaming, not forwarding. Let's say you have a locked
-entry with MAC X pointing to port Y. Now you get a packet with SMAC X
-from port Z which is unlocked. Will the FDB entry roam to port Z? I
-think it should, but at least in current implementation it seems that
-the "locked" flag will not be reset and having locked entries pointing
-to an unlocked port looks like a bug.
-
+> Hey Mark and Xu! :)
 > 
-> > 
-> > 1. It discards packets with matching DMAC, regardless of ingress port. I
-> > read the document [1] you linked to in a different reply and could not
-> > find anything against this approach, so this might be fine or at least
-> > not very significant.
-> > 
-> > Note that this means that "locked" entries need to be notified to device
-> > drivers so that they will install a matching entry in the HW FDB.
+> I'm interested in this feature too and would be happy to help.
 > 
-> Okay, so as V4 does (just without the error noted).
+> I've been trying to understand what you both have in mind to figure out a way
+> forward, please correct me if I got anything wrong! :)
 > 
-> > 
-> > 2. It is not refreshed and has ageing enabled. That is, after initial
-> > installation it will be removed by the bridge driver after configured
-> > ageing time unless converted to a regular (unlocked) entry.
-> > 
-> > I assume this allows you to remove the timer implementation from your
-> > driver and let the bridge driver notify you about the removal of this
-> > entry.
 > 
-> Okay, but only if the scheme is not so that the driver creates the locked
-> entries itself, unless you indicate that the driver notifies the bridge,
-> which then notifies back to the driver and installs the zero-DPV entry? If
-> not I think the current implementation for the mv88e6xxx is fine.
-
-I don't see a problem in having the driver notifying the bridge about
-the installation of this entry and the bridge notifying the driver that
-the entry needs to be removed. It removes complexity from device drivers
-like mv88e6xxx and doesn't add extra complexity to the bridge driver.
-
-Actually, there is one complication, 'SWITCHDEV_FDB_ADD_TO_BRIDGE' will
-add the locked entry as externally learned, which means the bridge will
-not age it. Might need something like this:
-
-diff --git a/net/bridge/br_fdb.c b/net/bridge/br_fdb.c
-index e7f4fccb6adb..5f73d0b44ed9 100644
---- a/net/bridge/br_fdb.c
-+++ b/net/bridge/br_fdb.c
-@@ -530,7 +530,8 @@ void br_fdb_cleanup(struct work_struct *work)
- 		unsigned long this_timer = f->updated + delay;
- 
- 		if (test_bit(BR_FDB_STATIC, &f->flags) ||
--		    test_bit(BR_FDB_ADDED_BY_EXT_LEARN, &f->flags)) {
-+		    (test_bit(BR_FDB_ADDED_BY_EXT_LEARN, &f->flags) &&
-+		     !test_bit(BR_FDB_ENTRY_LOCKED, &f->flags))) {
- 			if (test_bit(BR_FDB_NOTIFY, &f->flags)) {
- 				if (time_after(this_timer, now))
- 					work_delay = min(work_delay,
-
+> It looks like, currently, there are three places where an indirection to BPF is
+> technically possible. Chronologically these are:
 > 
-> > 
-> > 3. With regards to roaming, the entry cannot roam between locked ports
-> > (they need to have learning disabled anyway), but can roam to an
-> > unlocked port, in which case it becomes a regular entry that can roam
-> > and age.
-> > 
-> > If we agree on these semantics, then I can try to verify that at least
-> > Spectrum can support them (it seems mv88e6xxx can).
+> - the function's patchsite (currently there are 2 nops, this could become 4
+>    nops with Mark's series on per call-site ops)
 > 
-> The consensus here is that at least for the mv88e6xxx, learning should be on
-> and link local learning should be blocked by the userspace setting you
-> pointed to earlier.
+> - the ftrace ops (currently called by iterating over a global list but could be
+>    called more directly with Mark's series on per-call-site ops or by
+>    dynamically generated branches with Wang's series on dynamic trampolines)
+> 
+> - a ftrace trampoline tail call (currently, this is after restoring a full
+>    pt_regs but this could become an args only restoration with Mark's series on
+>    DYNAMIC_FTRACE_WITH_ARGS)
+> 
+> 
+> If we first consider the situation when only a BPF program is attached to a
+> kernel function:
+> - Using the patchsite for indirection (proposed by Xu, same as on x86)
+>     Pros:
+>     - We have BPF trampolines anyway because they are required for orthogonal
+>       features such as calling BPF programs as functions, so jumping into that
+>       existing JITed code is straightforward
+>     - This has the minimum overhead (eg: these trampolines only save the actual
+>       number of args used by the function in ctx and avoid indirect calls)
+>     Cons:
+>     - If the BPF trampoline is JITed outside BL's limits, attachment can
+>       randomly fail
+> 
+> - Using a ftrace op for indirection (proposed by Mark)
+>    Pros:
+>    - BPF doesn't need to care about BL's range, ftrace_caller will be in range
+>    Cons:
+>    - The ftrace trampoline would first save all args in an ftrace_regs only for
+>      the BPF op to then re-save them in a BPF ctx array (as per BPF calling
+>      convention) so we'd effectively have to do the work of saving args twice
+>    - BPF currently uses DYNAMIC_FTRACE_WITH_DIRECT_CALLS APIs. Either arm64
+>      should implement DIRECT_CALLS with... an indirect call :) (that is, the
+>      arch_ftrace_set_direct_caller op would turn back its ftrace_regs into
+>      arguments for the BPF trampoline) or BPF would need to use a different
+>      ftrace API just on arm64 (to define new ops, which, unless if they would be
+>      dynamically JITed, wouldn't be as performant as the existing BPF
+>      trampolines)
+> 
+> - Using a ftrace trampoline tail call for indirection (not discussed yet iiuc)
+>    Pros:
+>    - BPF also doesn't need to care about BL's range
+>    - This also leverages the existing BPF trampolines
+>    Cons:
+>    - This also does the work of saving/restoring arguments twice
+>    - DYNAMIC_FTRACE_WITH_DIRECT_CALLS depends on DYNAMIC_FTRACE_WITH_REGS now
+>      although in practice the registers kept by DYNAMIC_FTRACE_WITH_ARGS
+>      should be enough to call BPF trampolines
+> 
+> If we consider the situation when both ftrace ops and BPF programs are attached
+> to a kernel function:
+> - Using the patchsite for indirection can't solve this
+> 
+> - Using a ftrace op for indirection (proposed by Mark) or using a ftrace
+>    trampoline tail call as an indirection (proposed by Xu, same as on x86) have
+>    the same pros & cons as in the BPF only situation except that this time we
+>    pay the cost of registers saving twice for good reasons (we need args in both
+>    ftrace_regs and the BPF ctx array formats anyway)
+> 
+> 
+> Unless I'm missing something, it sounds like the following approach would work:
+> - Always patch patchsites with calls to ftrace trampolines (within BL ranges)
+> - Always go through ops and have arch_ftrace_set_direct_caller set
+>    ftrace_regs->direct_call (instead of pt_regs->orig_x0 in this patch)
+> - If ftrace_regs->direct_call != 0 at the end of the ftrace trampoline, tail
+>    call it
+> 
+> Once Mark's series on DYNAMIC_FTRACE_WITH_ARGS is merged, we would need to have
+> DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+>    depend on DYNAMIC_FTRACE_WITH_REGS || DYNAMIC_FTRACE_WITH_ARGS
+> BPF trampolines (the only users of this API now) only care about args to the
+> attachment point anyway so I think this would work transparently ?
+> 
+> Once Mark's series on per-callsite ops is merged, the second step (going
+> through ops) would be significantly faster in the situation where only one
+> program is used, therefore one arch_ftrace_set_direct_caller op.
+> 
+> Once Wang's series on dynamic trampolines is merged, the second step (going
+> through ops) would also be significantly faster in the case when multiple ops
+> are attached.
+> 
+> 
+> What are your thoughts? If this sounds somewhat sane, I'm happy to help out
+> with the implementation as well :)
+> 
 
-Why learning needs to be on in the bridge (not mv88e6xxx) driver?
+Hi Florent,
+
+I'm struggling with how to attach bpf trampoline to regular kernel functions. I
+think your suggestion is fine. Thanks for the help!
+
+> Thanks!
+> Florent
+> .
+
