@@ -2,80 +2,84 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C5C9EC28B2B
-	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Aug 2022 09:22:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 04EDBC00140
+	for <linux-kselftest@archiver.kernel.org>; Mon, 15 Aug 2022 13:03:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241635AbiHOJWX (ORCPT
+        id S231407AbiHONDs (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 15 Aug 2022 05:22:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46970 "EHLO
+        Mon, 15 Aug 2022 09:03:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241986AbiHOJWA (ORCPT
+        with ESMTP id S232311AbiHONDq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 15 Aug 2022 05:22:00 -0400
-Received: from a8-35.smtp-out.amazonses.com (a8-35.smtp-out.amazonses.com [54.240.8.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C873C2A7;
-        Mon, 15 Aug 2022 02:21:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=r5f3hr7pzmhv6xwu5spgpns3mj2fddpz; d=linaro.org; t=1660555316;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=xFqraFA6lGmUu0wYMye/OBvTkGaFcGmFu9hbEp/wo44=;
-        b=Gncdjke6xFirgu+vxM5ciR105bzITV0i01UzWOa2vTwjMiLSAVIlpd8alPGE0mH+
-        LswfP8SJWiXEcIhL9Y+nzrQ8P7dL8dVVyxKevnusDHUNGejDzJhLeTNTRHeDCMzUTZi
-        zF+NpaP8CFnKCGLBWmwV1YNlt2zWk4Fl3ADyKu90=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=6gbrjpgwjskckoa6a5zn6fwqkn67xbtw; d=amazonses.com; t=1660555316;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=xFqraFA6lGmUu0wYMye/OBvTkGaFcGmFu9hbEp/wo44=;
-        b=Uvfz+oldhTD9PkJn3Bxry/aRBMLXlfO7xVy6WeqxQOq0b8F0vKPJB0nCDGLqFsIj
-        WLB0jx4OWxBFzT9Bwkq4yVIORLPxWuKVGAdUGImP3MxQEKkTcy+Yl9SWv9E6hAxeSbz
-        jwkvA1bhzEgvAcrnTzFx1yVurBQBcF51i6l6TWAo=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        linux-next@vger.kernel.org, shuah@kernel.org
-Subject: lkft kselftest for next-20220815
+        Mon, 15 Aug 2022 09:03:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C51313E9D
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Aug 2022 06:03:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 940CC611E2
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Aug 2022 13:03:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56D67C433D7;
+        Mon, 15 Aug 2022 13:03:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660568625;
+        bh=fBxL1nzlY8qeFhnm7QsFfEvtJ4Mb/hUggbozRGaqApM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Tzk31dkPHQHIqOiaMwF+Od9jyIr7rGURSi8XTaukDkYKMkQsDU4Fty4YY4Rv2O7md
+         7vYiBZP2eUg8ZyHNm29h/dwu4Sq8itXi/CaYdTcI2U9dNvKkvBa/BsekOrwLOHPxxj
+         cVNYeyRZpvi89ixQ7WCkZYtDmrAKxWH1iaDaBlH4e+vIpPoYJr/v9FyByYGHoR6bdh
+         g6+6zUJp2Fp++R4wlaSAqPOXMcvUrgK25Ktojg4ibEs1d2A5QijGbonPUJsXCDM7/u
+         SaLDGIlwsEwhdhkXEEYyI5zYU8hDDoWAclrZf7z87z7koxb/ifUP9+X3yBYFc7/rG/
+         BD71dWzEFyiTw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: [PATCH v1 1/4] kselftest/arm64: Always encourage preemption for za-test
+Date:   Mon, 15 Aug 2022 14:01:59 +0100
+Message-Id: <20220815130202.204725-2-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220815130202.204725-1-broonie@kernel.org>
+References: <20220815130202.204725-1-broonie@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Message-ID: <01000182a0cf4b92-f1608483-7e1c-4b32-93c9-5c1dfe12c9c2-000000@email.amazonses.com>
-Date:   Mon, 15 Aug 2022 09:21:56 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2022.08.15-54.240.8.35
+X-Developer-Signature: v=1; a=openpgp-sha256; l=916; i=broonie@kernel.org; h=from:subject; bh=fBxL1nzlY8qeFhnm7QsFfEvtJ4Mb/hUggbozRGaqApM=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBi+kPG88WNfyOa5FHhYX6WLftaPWxS0aXpEVmXAFKj 1ozMyeaJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYvpDxgAKCRAk1otyXVSH0CpJB/ wIchtUHNu4PC/w/hx4mTcEBymSlZJlJvk5BS8zdhAHk8NknM3bDf1Hcy+FoHGfuxcU0zlIh3oCJzpt FNGmqB95PsAz+o4PTZaFFIBg62pAxpDkqhmnlr+/7eWKNUfYi9BD9nEUjtfsOYmzDsG+WX34nq3Syu EYSigvVkMBc52ONHEQGrwIICmCjykDQjWx466UUl5DU28bPUxWD5FPsml6R0AuzBKpH1f2S7DVJANt DcKIiqSNsJ74kRMKLHq2D4CClPM8ubZdiPEf2SkLPeaXFvqjkOSXhBB7Wj1w177We2lsxR3kY2QRR+ jfNgrL9FILO1L3u/H1XDtaW53Ob0Cx
+X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-## Build
-* kernel: 5.19.0
-* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-* git branch: master
-* git commit: fa96acf505e0e5f4774e273d97cee65fffcf53e6
-* git describe: next-20220815
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220815
+Since we now have an explicit test for the syscall ABI there is no need for
+za-test to cover getpid() so just unconditionally do sched_yield() like we
+do in fpsimd-test.
 
-## Test Regressions (compared to next-20220812)
-No test regressions found.
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ tools/testing/selftests/arm64/fp/za-test.S | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-## Metric Regressions (compared to next-20220812)
-No metric regressions found.
+diff --git a/tools/testing/selftests/arm64/fp/za-test.S b/tools/testing/selftests/arm64/fp/za-test.S
+index 9ab6f9cd9623..2dd358f9edf2 100644
+--- a/tools/testing/selftests/arm64/fp/za-test.S
++++ b/tools/testing/selftests/arm64/fp/za-test.S
+@@ -287,12 +287,7 @@ _start:
+ 	subs	x21, x21, #1
+ 	b.ne	0b
+ 
+-	and	x8, x22, #127		// Every 128 interations...
+-	cbz	x8, 0f
+-	mov	x8, #__NR_getpid	// (otherwise minimal syscall)
+-	b	1f
+-0:
+-	mov	x8, #__NR_sched_yield	// ...encourage preemption
++	mov	x8, #__NR_sched_yield	// encourage preemption
+ 1:
+ 	svc	#0
+ 
+-- 
+2.30.2
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-
-## Test Fixes (compared to next-20220812)
-No test fixes found.
-
-## Metric Fixes (compared to next-20220812)
-No metric fixes found.
-
-## Test result summary
-total: 0, pass: 0, fail: 0, skip: 0, xfail: 0
-
-## Build Summary
-
-## Test suites summary
-
---
-Linaro LKFT
-https://lkft.linaro.org
