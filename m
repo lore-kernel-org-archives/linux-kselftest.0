@@ -2,359 +2,119 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6BD6C2BB41
-	for <linux-kselftest@archiver.kernel.org>; Tue, 16 Aug 2022 12:18:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98045C32774
+	for <linux-kselftest@archiver.kernel.org>; Tue, 16 Aug 2022 12:22:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233448AbiHPMS0 (ORCPT
+        id S230237AbiHPMWI (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 16 Aug 2022 08:18:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46460 "EHLO
+        Tue, 16 Aug 2022 08:22:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234889AbiHPMSH (ORCPT
+        with ESMTP id S230007AbiHPMWF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 16 Aug 2022 08:18:07 -0400
-Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:12e:520::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8020C3134B;
-        Tue, 16 Aug 2022 05:15:40 -0700 (PDT)
-Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
-        (envelope-from <fw@breakpoint.cc>)
-        id 1oNvTu-0000oi-Ol; Tue, 16 Aug 2022 14:15:38 +0200
-From:   Florian Westphal <fw@strlen.de>
-To:     <netfilter-devel@vger.kernel.org>
-Cc:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        Florian Westphal <fw@strlen.de>
-Subject: [PATCH nf 2/2] testing: selftests: nft_flowtable.sh: rework test to detect offload failure
-Date:   Tue, 16 Aug 2022 14:15:22 +0200
-Message-Id: <20220816121522.14278-3-fw@strlen.de>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220816121522.14278-1-fw@strlen.de>
-References: <20220816121522.14278-1-fw@strlen.de>
+        Tue, 16 Aug 2022 08:22:05 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B4CA25C68;
+        Tue, 16 Aug 2022 05:22:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660652525; x=1692188525;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=B3uUd/yG6wpuTb/aR5iTfAme30Qm6tQlD5VU32Fh/CI=;
+  b=Tifp/ISUfjpNRaPP/CY94u94leOZ91YRfJkuv3BDszBornbMs5Q6XRQ7
+   Ixcw0xfxSGlJ1Jg0hiYU0p5uFCXRilB6YP1Oef6lmkw0edqQbDB88Z1Zk
+   92hPzlG/ufTn1JT3E+1Bor79jl97sbJHqhdZcxEGuqk0Z1IAVbJxaAgBF
+   8TkLB0HHACBU+bOr/uWseGqjadJawZfkVjkgEF0OV/8Hm9kAqrgBq7FeF
+   TucuT2O8paNDEBJxQExyYRDVCGdFPd1jsimk54wcpS0qKHTZDzhCHAQ47
+   lhhOfV7Q2m5H6OH4cSsSeil9POTww0F/BnV3p9UUmF5ySbm27HvydlkBK
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="289773234"
+X-IronPort-AV: E=Sophos;i="5.93,241,1654585200"; 
+   d="scan'208";a="289773234"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 05:22:03 -0700
+X-IronPort-AV: E=Sophos;i="5.93,241,1654585200"; 
+   d="scan'208";a="675194031"
+Received: from damianos-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.40.45])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2022 05:21:54 -0700
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 4FB31104A4E; Tue, 16 Aug 2022 15:24:57 +0300 (+03)
+Date:   Tue, 16 Aug 2022 15:24:57 +0300
+From:   "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+To:     "Gupta, Pankaj" <pankaj.gupta@amd.com>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>,
+        "Nikunj A. Dadhania" <nikunj@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, bharata@amd.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
+ guest private memory
+Message-ID: <20220816122457.2fjyd4uz5hp5cani@box.shutemov.name>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <b21f41e5-0322-bbfb-b9c2-db102488592d@amd.com>
+ <9e86daea-5619-a216-fe02-0562cf14c501@amd.com>
+ <9dc91ce8-4cb6-37e6-4c25-27a72dc11dd0@amd.com>
+ <422b9f97-fdf5-54bf-6c56-3c45eff5e174@amd.com>
+ <1407c70c-0c0b-6955-10bb-d44c5928f2d9@amd.com>
+ <1136925c-2e37-6af4-acac-be8bed9f6ed5@amd.com>
+ <1b02db9d-f2f1-94dd-6f37-59481525abff@amd.com>
+ <20220815130411.GA1073443@chaop.bj.intel.com>
+ <f0094f31-9669-47b5-eb52-6754a13ce757@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f0094f31-9669-47b5-eb52-6754a13ce757@amd.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This test fails on current kernel releases because the flotwable path
-now calls dst_check from packet path and will then remove the offload.
+On Tue, Aug 16, 2022 at 01:33:00PM +0200, Gupta, Pankaj wrote:
+> Hi Chao,
+> 
+> > 
+> > Actually the current version allows you to delay the allocation to a
+> > later time (e.g. page fault time) if you don't call fallocate() on the
+> > private fd. fallocate() is necessary in previous versions because we
+> > treat the existense in the fd as 'private' but in this version we track
+> > private/shared info in KVM so we don't rely on that fact from memory
+> > backstores.
+> 
+> Does this also mean reservation of guest physical memory with secure
+> processor (both for SEV-SNP & TDX) will also happen at page fault time?
+> 
+> Do we plan to keep it this way?
 
-Test script has two purposes:
-1. check that file (random content) can be sent to other netns (and vv)
-2. check that the flow is offloaded (rather than handled by classic
-   forwarding path).
+If you are talking about accepting memory by the guest, it is initiated by
+the guest and has nothing to do with page fault time vs fallocate()
+allocation of host memory. I mean acceptance happens after host memory
+allocation but they are not in lockstep, acceptance can happen much later.
 
-Since dst_check is in place, 2) fails because the nftables ruleset in
-router namespace 1 intentionally blocks traffic under the assumption
-that packets are not passed via classic path at all.
-
-Rework this: Instead of blocking traffic, create two named counters, one
-for original and one for reverse direction.
-
-The first three test cases are handled by classic forwarding path
-(path mtu discovery is disabled and packets exceed MTU).
-
-But all other tests enable PMTUD, so the originator and responder are
-expected to lower packet size and flowtable is expected to do the packet
-forwarding.
-
-For those tests, check that the packet counters (which are only
-incremented for packets that are passed up to classic forward path)
-are significantly lower than the file size transferred.
-
-I've tested that the counter-checks fail as expected when the 'flow add'
-statement is removed from the ruleset.
-
-Signed-off-by: Florian Westphal <fw@strlen.de>
----
- .../selftests/netfilter/nft_flowtable.sh      | 141 +++++++++++-------
- 1 file changed, 84 insertions(+), 57 deletions(-)
-
-diff --git a/tools/testing/selftests/netfilter/nft_flowtable.sh b/tools/testing/selftests/netfilter/nft_flowtable.sh
-index c336e6c148d1..e31d3d68a251 100755
---- a/tools/testing/selftests/netfilter/nft_flowtable.sh
-+++ b/tools/testing/selftests/netfilter/nft_flowtable.sh
-@@ -24,8 +24,7 @@ nsr2="nsr2-$sfx"
- ksft_skip=4
- ret=0
- 
--ns1in=""
--ns2in=""
-+nsin=""
- ns1out=""
- ns2out=""
- 
-@@ -53,8 +52,7 @@ cleanup() {
- 	ip netns del $nsr1
- 	ip netns del $nsr2
- 
--	rm -f "$ns1in" "$ns1out"
--	rm -f "$ns2in" "$ns2out"
-+	rm -f "$nsin" "$ns1out"
- 
- 	[ $log_netns -eq 0 ] && sysctl -q net.netfilter.nf_log_all_netns=$log_netns
- }
-@@ -165,36 +163,20 @@ table inet filter {
-      devices = { veth0, veth1 }
-    }
- 
-+   counter routed_orig { }
-+   counter routed_repl { }
-+
-    chain forward {
-       type filter hook forward priority 0; policy drop;
- 
-       # flow offloaded? Tag ct with mark 1, so we can detect when it fails.
--      meta oif "veth1" tcp dport 12345 flow offload @f1 counter
--
--      # use packet size to trigger 'should be offloaded by now'.
--      # otherwise, if 'flow offload' expression never offloads, the
--      # test will pass.
--      tcp dport 12345 meta length gt 200 ct mark set 1 counter
--
--      # this turns off flow offloading internally, so expect packets again
--      tcp flags fin,rst ct mark set 0 accept
--
--      # this allows large packets from responder, we need this as long
--      # as PMTUd is off.
--      # This rule is deleted for the last test, when we expect PMTUd
--      # to kick in and ensure all packets meet mtu requirements.
--      meta length gt $lmtu accept comment something-to-grep-for
-+      meta oif "veth1" tcp dport 12345 ct mark set 1 flow add @f1 counter name routed_orig accept
- 
--      # next line blocks connection w.o. working offload.
--      # we only do this for reverse dir, because we expect packets to
--      # enter slow path due to MTU mismatch of veth0 and veth1.
--      tcp sport 12345 ct mark 1 counter log prefix "mark failure " drop
-+      # count packets supposedly offloaded as per direction.
-+      ct mark 1 counter name ct direction map { original : routed_orig, reply : routed_repl } accept
- 
-       ct state established,related accept
- 
--      # for packets that we can't offload yet, i.e. SYN (any ct that is not confirmed)
--      meta length lt 200 oif "veth1" tcp dport 12345 counter accept
--
-       meta nfproto ipv4 meta l4proto icmp accept
-       meta nfproto ipv6 meta l4proto icmpv6 accept
-    }
-@@ -221,16 +203,16 @@ if [ $ret -eq 0 ];then
- 	echo "PASS: netns routing/connectivity: $ns1 can reach $ns2"
- fi
- 
--ns1in=$(mktemp)
-+nsin=$(mktemp)
- ns1out=$(mktemp)
--ns2in=$(mktemp)
- ns2out=$(mktemp)
- 
- make_file()
- {
- 	name=$1
- 
--	SIZE=$((RANDOM % (1024 * 8)))
-+	SIZE=$((RANDOM % (1024 * 128)))
-+	SIZE=$((SIZE + (1024 * 8)))
- 	TSIZE=$((SIZE * 1024))
- 
- 	dd if=/dev/urandom of="$name" bs=1024 count=$SIZE 2> /dev/null
-@@ -241,6 +223,38 @@ make_file()
- 	dd if=/dev/urandom conf=notrunc of="$name" bs=1 count=$SIZE 2> /dev/null
- }
- 
-+check_counters()
-+{
-+	local what=$1
-+	local ok=1
-+
-+	local orig=$(ip netns exec $nsr1 nft reset counter inet filter routed_orig | grep packets)
-+	local repl=$(ip netns exec $nsr1 nft reset counter inet filter routed_repl | grep packets)
-+
-+	local orig_cnt=${orig#*bytes}
-+	local repl_cnt=${repl#*bytes}
-+
-+	local fs=$(du -sb $nsin)
-+	local max_orig=${fs%%/*}
-+	local max_repl=$((max_orig/4))
-+
-+	if [ $orig_cnt -gt $max_orig ];then
-+		echo "FAIL: $what: original counter $orig_cnt exceeds expected value $max_orig" 1>&2
-+		ret=1
-+		ok=0
-+	fi
-+
-+	if [ $repl_cnt -gt $max_repl ];then
-+		echo "FAIL: $what: reply counter $repl_cnt exceeds expected value $max_repl" 1>&2
-+		ret=1
-+		ok=0
-+	fi
-+
-+	if [ $ok -eq 1 ]; then
-+		echo "PASS: $what"
-+	fi
-+}
-+
- check_transfer()
- {
- 	in=$1
-@@ -265,11 +279,11 @@ test_tcp_forwarding_ip()
- 	local dstport=$4
- 	local lret=0
- 
--	ip netns exec $nsb nc -w 5 -l -p 12345 < "$ns2in" > "$ns2out" &
-+	ip netns exec $nsb nc -w 5 -l -p 12345 < "$nsin" > "$ns2out" &
- 	lpid=$!
- 
- 	sleep 1
--	ip netns exec $nsa nc -w 4 "$dstip" "$dstport" < "$ns1in" > "$ns1out" &
-+	ip netns exec $nsa nc -w 4 "$dstip" "$dstport" < "$nsin" > "$ns1out" &
- 	cpid=$!
- 
- 	sleep 3
-@@ -284,11 +298,11 @@ test_tcp_forwarding_ip()
- 
- 	wait
- 
--	if ! check_transfer "$ns1in" "$ns2out" "ns1 -> ns2"; then
-+	if ! check_transfer "$nsin" "$ns2out" "ns1 -> ns2"; then
- 		lret=1
- 	fi
- 
--	if ! check_transfer "$ns2in" "$ns1out" "ns1 <- ns2"; then
-+	if ! check_transfer "$nsin" "$ns1out" "ns1 <- ns2"; then
- 		lret=1
- 	fi
- 
-@@ -305,23 +319,40 @@ test_tcp_forwarding()
- test_tcp_forwarding_nat()
- {
- 	local lret
-+	local pmtu
- 
- 	test_tcp_forwarding_ip "$1" "$2" 10.0.2.99 12345
- 	lret=$?
- 
-+	pmtu=$3
-+	what=$4
-+
- 	if [ $lret -eq 0 ] ; then
-+		if [ $pmtu -eq 1 ] ;then
-+			check_counters "flow offload for ns1/ns2 with masquerade and pmtu discovery $what"
-+		else
-+			echo "PASS: flow offload for ns1/ns2 with masquerade $what"
-+		fi
-+
- 		test_tcp_forwarding_ip "$1" "$2" 10.6.6.6 1666
- 		lret=$?
-+		if [ $pmtu -eq 1 ] ;then
-+			check_counters "flow offload for ns1/ns2 with dnat and pmtu discovery $what"
-+		elif [ $lret -eq 0 ] ; then
-+			echo "PASS: flow offload for ns1/ns2 with dnat $what"
-+		fi
- 	fi
- 
- 	return $lret
- }
- 
--make_file "$ns1in"
--make_file "$ns2in"
-+make_file "$nsin"
- 
- # First test:
- # No PMTU discovery, nsr1 is expected to fragment packets from ns1 to ns2 as needed.
-+# Due to MTU mismatch in both directions, all packets (except small packets like pure
-+# acks) have to be handled by normal forwarding path.  Therefore, packet counters
-+# are not checked.
- if test_tcp_forwarding $ns1 $ns2; then
- 	echo "PASS: flow offloaded for ns1/ns2"
- else
-@@ -338,7 +369,8 @@ ip -net $ns2 route del default via dead:2::1
- ip -net $ns2 route add 192.168.10.1 via 10.0.2.1
- 
- # Second test:
--# Same, but with NAT enabled.
-+# Same, but with NAT enabled.  Same as in first test: we expect normal forward path
-+# to handle most packets.
- ip netns exec $nsr1 nft -f - <<EOF
- table ip nat {
-    chain prerouting {
-@@ -353,29 +385,27 @@ table ip nat {
- }
- EOF
- 
--if test_tcp_forwarding_nat $ns1 $ns2; then
--	echo "PASS: flow offloaded for ns1/ns2 with NAT"
--else
-+if ! test_tcp_forwarding_nat $ns1 $ns2 0 ""; then
- 	echo "FAIL: flow offload for ns1/ns2 with NAT" 1>&2
- 	ip netns exec $nsr1 nft list ruleset
- 	ret=1
- fi
- 
- # Third test:
--# Same as second test, but with PMTU discovery enabled.
--handle=$(ip netns exec $nsr1 nft -a list table inet filter | grep something-to-grep-for | cut -d \# -f 2)
--
--if ! ip netns exec $nsr1 nft delete rule inet filter forward $handle; then
--	echo "FAIL: Could not delete large-packet accept rule"
--	exit 1
--fi
--
-+# Same as second test, but with PMTU discovery enabled. This
-+# means that we expect the fastpath to handle packets as soon
-+# as the endpoints adjust the packet size.
- ip netns exec $ns1 sysctl net.ipv4.ip_no_pmtu_disc=0 > /dev/null
- ip netns exec $ns2 sysctl net.ipv4.ip_no_pmtu_disc=0 > /dev/null
- 
--if test_tcp_forwarding_nat $ns1 $ns2; then
--	echo "PASS: flow offloaded for ns1/ns2 with NAT and pmtu discovery"
--else
-+# reset counters.
-+# With pmtu in-place we'll also check that nft counters
-+# are lower than file size and packets were forwarded via flowtable layer.
-+# For earlier tests (large mtus), packets cannot be handled via flowtable
-+# (except pure acks and other small packets).
-+ip netns exec $nsr1 nft reset counters table inet filter >/dev/null
-+
-+if ! test_tcp_forwarding_nat $ns1 $ns2 1 ""; then
- 	echo "FAIL: flow offload for ns1/ns2 with NAT and pmtu discovery" 1>&2
- 	ip netns exec $nsr1 nft list ruleset
- fi
-@@ -408,14 +438,13 @@ table ip nat {
- }
- EOF
- 
--if test_tcp_forwarding_nat $ns1 $ns2; then
--	echo "PASS: flow offloaded for ns1/ns2 with bridge NAT"
--else
-+if ! test_tcp_forwarding_nat $ns1 $ns2 1 "on bridge"; then
- 	echo "FAIL: flow offload for ns1/ns2 with bridge NAT" 1>&2
- 	ip netns exec $nsr1 nft list ruleset
- 	ret=1
- fi
- 
-+
- # Another test:
- # Add bridge interface br0 to Router1, with NAT and VLAN.
- ip -net $nsr1 link set veth0 nomaster
-@@ -433,9 +462,7 @@ ip -net $ns1 addr add 10.0.1.99/24 dev eth0.10
- ip -net $ns1 route add default via 10.0.1.1
- ip -net $ns1 addr add dead:1::99/64 dev eth0.10
- 
--if test_tcp_forwarding_nat $ns1 $ns2; then
--	echo "PASS: flow offloaded for ns1/ns2 with bridge NAT and VLAN"
--else
-+if ! test_tcp_forwarding_nat $ns1 $ns2 1 "bridge and VLAN"; then
- 	echo "FAIL: flow offload for ns1/ns2 with bridge NAT and VLAN" 1>&2
- 	ip netns exec $nsr1 nft list ruleset
- 	ret=1
-@@ -502,7 +529,7 @@ ip -net $ns2 route add default via 10.0.2.1
- ip -net $ns2 route add default via dead:2::1
- 
- if test_tcp_forwarding $ns1 $ns2; then
--	echo "PASS: ipsec tunnel mode for ns1/ns2"
-+	check_counters "ipsec tunnel mode for ns1/ns2"
- else
- 	echo "FAIL: ipsec tunnel mode for ns1/ns2"
- 	ip netns exec $nsr1 nft list ruleset 1>&2
 -- 
-2.35.1
-
+  Kiryl Shutsemau / Kirill A. Shutemov
