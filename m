@@ -2,80 +2,103 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 967EDC25B0E
-	for <linux-kselftest@archiver.kernel.org>; Tue, 16 Aug 2022 11:22:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DBE4AC25B0E
+	for <linux-kselftest@archiver.kernel.org>; Tue, 16 Aug 2022 11:32:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234334AbiHPLWc (ORCPT
+        id S234591AbiHPLcu (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 16 Aug 2022 07:22:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52236 "EHLO
+        Tue, 16 Aug 2022 07:32:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232478AbiHPLWN (ORCPT
+        with ESMTP id S234594AbiHPLce (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 16 Aug 2022 07:22:13 -0400
-Received: from a48-34.smtp-out.amazonses.com (a48-34.smtp-out.amazonses.com [54.240.48.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E0A672856;
-        Tue, 16 Aug 2022 02:47:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=r5f3hr7pzmhv6xwu5spgpns3mj2fddpz; d=linaro.org; t=1660643226;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=LYFlOcIVFvdivR+Rwv4swHLZ+p+fNNlm7UpWjDH28P4=;
-        b=pWkD0bKjhyrsyvJamg7OV9fsdJAB7HYvfYhMadYGHuKtT9Kz4pRYHot2mKamqgQ2
-        6vww6H9KRwXqtARGI/RjyyKl1zM74ECmPeONAdmdTgh3aeewUcf0PUydk2hTwq+aC+x
-        uSjoeZhn5kOe+tNb3s3K+/hqB5J1V/sFt/uuW6Js=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=6gbrjpgwjskckoa6a5zn6fwqkn67xbtw; d=amazonses.com; t=1660643226;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=LYFlOcIVFvdivR+Rwv4swHLZ+p+fNNlm7UpWjDH28P4=;
-        b=ObfIDbhq36ejjM4cqn3gvYQbnfWsUx6UYg+o+hdiaHffZQsfW/IJII689ltwAsly
-        ZLiZsGisb95MyzwltdDMSqnvezOanfRWB2cf+larapr0bEJh1qCL7yYPKTI1jRtEYpI
-        b6jlstxDhs+cCSFz2Cp7LhiWgtjNKUVWwLqpf2ts=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        linux-next@vger.kernel.org, shuah@kernel.org
-Subject: lkft kselftest for next-20220816
+        Tue, 16 Aug 2022 07:32:34 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF01FC9251
+        for <linux-kselftest@vger.kernel.org>; Tue, 16 Aug 2022 03:51:12 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id 73so8891551pgb.9
+        for <linux-kselftest@vger.kernel.org>; Tue, 16 Aug 2022 03:51:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=dkLR8fLUAaEMxniDx/rOllCA2y+wrv1MyJ10xgDHyXs=;
+        b=je2t0lBRccO0CZFPvmYYe0IawIh5rA/NUsFftbJAdVjvzp3nh1DtWrY4gDx66RwN4s
+         HYarmuM9g1C4e7BFLf+TUQvI6FvsxXobHgPAgQrMzEYxXTRgtNptruNyns4szzQD0ZKI
+         VXgc16WqUyTE5zfXrBuPcIW+gwPsG73TBQ5jxb1bsyn8nG5aFLWbDMCvmAS+TNUppMLE
+         ByZB/1etSdsJ9qhy58qM8AMjypUWfy4dDotyUmECEG68/abU5x1Ue0HzanTV7YRrO5k+
+         0IHaEO7OPdip1x80XQ4zF/WAyFYRdZY0/eaTxncr+Hm+vorqzrnMznwKuPzrxdzqSQ4x
+         lrZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=dkLR8fLUAaEMxniDx/rOllCA2y+wrv1MyJ10xgDHyXs=;
+        b=U+ISHRDU7EAbTyXU/dfF0u9CjcHZcZslItCWRX57SKFVNP3PrJBC1N3ZQ/QtqWD1t9
+         +jDxgdSwzO2pBSejCuNEdI0jYwwFVDz/4nlEOkPYfIOVEsmiEYuc6sSl8I/OotoeB80H
+         PQop65dXvbCmjHD0CG0aOE4+R8VZDZZqY/49fmZGdJejBNq1PsbuQKa0wtgSZFmKJjT/
+         d8/HuIGELhZnwg/hjYliPTOhYUdOqU49GyVGv14AWLV6XhMVw++0cSG+wipB437gMJpY
+         tx9FdsXYqHH5Q+PIDigT5Dd+G1fsx1Yt2gW3gXgVU/pG5bB4fKsesCRLwAVma22jI1G1
+         kfjg==
+X-Gm-Message-State: ACgBeo2d2F6AKva7dlYP2/rdCohT8QXfJn0/2UqKW+zjqicnvj1GNP2s
+        28IsvFVp0un37E8ZAGNrcYvxqFvV0jU=
+X-Google-Smtp-Source: AA6agR4k9yj/1XclGGrkEeI442gXbD5Zs9aCtj+m+d0HpDkDKyn40rFU5AuW79e476nNfIPNRQ9aOA==
+X-Received: by 2002:a05:6a00:e85:b0:52b:5db8:f3df with SMTP id bo5-20020a056a000e8500b0052b5db8f3dfmr20741399pfb.14.1660647072147;
+        Tue, 16 Aug 2022 03:51:12 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id c15-20020a170903234f00b0016d6c939332sm8717447plh.279.2022.08.16.03.51.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Aug 2022 03:51:11 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: ye.xingchen@zte.com.cn
+To:     mpe@ellerman.id.au
+Cc:     npiggin@gmail.com, christophe.leroy@csgroup.eu, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH linux-next] powerpc/selftests:Use timersub() for gettimeofday()
+Date:   Tue, 16 Aug 2022 10:51:06 +0000
+Message-Id: <20220816105106.82666-1-ye.xingchen@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Message-ID: <01000182a60cb1e3-4ebc4ee4-d176-4411-948b-0e06c37c9875-000000@email.amazonses.com>
-Date:   Tue, 16 Aug 2022 09:47:06 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2022.08.16-54.240.48.34
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-## Build
-* kernel: 6.0.0-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-* git branch: master
-* git commit: e1084bacab44f570691c0fdaa1259acf93ed0098
-* git describe: next-20220816
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220816
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-## Test Regressions (compared to next-20220815)
-No test regressions found.
+Use timersub() function to simplify the code.
 
-## Metric Regressions (compared to next-20220815)
-No metric regressions found.
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+---
+ tools/testing/selftests/powerpc/benchmarks/gettimeofday.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-
-## Test Fixes (compared to next-20220815)
-No test fixes found.
-
-## Metric Fixes (compared to next-20220815)
-No metric fixes found.
-
-## Test result summary
-total: 0, pass: 0, fail: 0, skip: 0, xfail: 0
-
-## Build Summary
-
-## Test suites summary
-
---
-Linaro LKFT
-https://lkft.linaro.org
+diff --git a/tools/testing/selftests/powerpc/benchmarks/gettimeofday.c b/tools/testing/selftests/powerpc/benchmarks/gettimeofday.c
+index 6b415683357b..580fcac0a09f 100644
+--- a/tools/testing/selftests/powerpc/benchmarks/gettimeofday.c
++++ b/tools/testing/selftests/powerpc/benchmarks/gettimeofday.c
+@@ -12,7 +12,7 @@ static int test_gettimeofday(void)
+ {
+ 	int i;
+ 
+-	struct timeval tv_start, tv_end;
++	struct timeval tv_start, tv_end, tv_diff;
+ 
+ 	gettimeofday(&tv_start, NULL);
+ 
+@@ -20,7 +20,9 @@ static int test_gettimeofday(void)
+ 		gettimeofday(&tv_end, NULL);
+ 	}
+ 
+-	printf("time = %.6f\n", tv_end.tv_sec - tv_start.tv_sec + (tv_end.tv_usec - tv_start.tv_usec) * 1e-6);
++	timersub(&tv_start, &tv_end, &tv_diff);
++
++	printf("time = %.6f\n", tv_diff.tv_sec + (tv_diff.tv_usec) * 1e-6);
+ 
+ 	return 0;
+ }
+-- 
+2.25.1
