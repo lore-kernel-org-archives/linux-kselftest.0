@@ -2,144 +2,164 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC232C25B0E
-	for <linux-kselftest@archiver.kernel.org>; Tue, 16 Aug 2022 18:12:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F315C3F6B0
+	for <linux-kselftest@archiver.kernel.org>; Tue, 16 Aug 2022 18:12:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236881AbiHPSMU (ORCPT
+        id S236924AbiHPSMW (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 16 Aug 2022 14:12:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45922 "EHLO
+        Tue, 16 Aug 2022 14:12:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236955AbiHPSME (ORCPT
+        with ESMTP id S236989AbiHPSMI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 16 Aug 2022 14:12:04 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C5958604A;
-        Tue, 16 Aug 2022 11:12:02 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 202so9920497pgc.8;
-        Tue, 16 Aug 2022 11:12:02 -0700 (PDT)
+        Tue, 16 Aug 2022 14:12:08 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A8083F19;
+        Tue, 16 Aug 2022 11:12:07 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id d71so9906336pgc.13;
+        Tue, 16 Aug 2022 11:12:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=liFs8n6Lu/HzFlGmuOa4aEOuz72eCnja5P6CZ/iawUM=;
-        b=aV4JihLkSCrkWQ2WWHYbPCPzv7n3RSeOUJaHn7iVLr+xNzx29iKuztxQrcZA/xsIgA
-         nU2JJ0B7zHIyzixGHxr4d36Y9zxRvrID2K+3+mOV1QcvxStJb6OGYLyV5gyKfIkydEpa
-         79SAIfFYaB6VPpm50coHxQkaPECf7fUoCKi+azbuvZyjUdMmFLcC1bYs59gIyYVF7bWS
-         icEvSnQOz67E3peRWmriGZTWCZ6ld8QHkZAvDNGVUoku6aigVaqzfanBY4u+WkQ8AfvQ
-         dC6/tIg47f0BkBhrVar9vCOprGTuqcNVaEl3SMnTU51S/ueynAMrRvyaB/MQvNHSu1K0
-         4c4A==
+        bh=Kwg0Gxnft/pxS4kgXDydNW4k2vrq3EyTloWOdq0PXAc=;
+        b=d4XRPHcDXJwTFcTDqVpTvjX02HXEH090I2x0YBrTSDu4Th3PTz4K/4BiUaMosTCWuc
+         yh/hKxTp99qX7TkkGsLAVHMZ5geUpXom67+mtBW6HXOzvia8Xk//VeMancAqCZz80GoU
+         jwoCUGmRE6+kBtMJgLi+tz4qf4XI8HmJEQ4owNs6EYFXAdydkVRUZns5dFqBBypsKgJF
+         j6gCaKSwm6JdY/PByP0dshg1pJUpiMEmsJCE3mL6f+T2JTlQiNumFn7/hJF+bSsqhZke
+         QqPU53NrKA1YAxYDZ9fYuEWaEZEm23RVoEv4m0b5q57cT18AU5Jc0cl5yLZsiSJ9cxLd
+         NQEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=liFs8n6Lu/HzFlGmuOa4aEOuz72eCnja5P6CZ/iawUM=;
-        b=hqAciZr0D98dw4ieoyWHWj2E6MkDLhrj1VLb/GFFy7hyvJyMPWy/uftAreNjArCPIw
-         bbzzSatPtzd9hh0Kj3L1KcE75hGy31f8O20z0DvYwsQE30LA8etsuOE5ibxPkmwf5kjk
-         7Ojgm3BcPIph9w+fPcYgoDGxNE2EMR9lc2D8B+7+us/AMJid41R9qRpxqF3qypU3a6CH
-         VuM4VEFiz1RG56eX7lUzH9sJnQDd9X1gKO1Cbb1Z9q82Duo2TyQQypGiVTupGtfma6+8
-         6tA0fQwTkuLdTr/+x5s+fybDuv+yreDMk09/QoQllxp+eIa1GjMZ0Uh0tsjgCQaNngpr
-         u9sA==
-X-Gm-Message-State: ACgBeo1cBGsGMTAg9CVdx6zW+6MGYw079lTQKSsZmaYjR7c6U5+Pf8eq
-        l5h+OC5Ko3Dzl8gE7mCY1oE=
-X-Google-Smtp-Source: AA6agR5ILd5+mXTO48PnM3UaXgY2+suY+krd3+eqTRDJt/8MkJAX66nEdnNAC9xU9nFoZkaatrsoYw==
-X-Received: by 2002:a63:e25:0:b0:41c:30f7:c39c with SMTP id d37-20020a630e25000000b0041c30f7c39cmr18672757pgl.147.1660673522381;
-        Tue, 16 Aug 2022 11:12:02 -0700 (PDT)
-Received: from localhost (fwdproxy-prn-008.fbsv.net. [2a03:2880:ff:8::face:b00c])
-        by smtp.gmail.com with ESMTPSA id f6-20020aa79686000000b0052a198c2046sm8751989pfk.203.2022.08.16.11.12.01
+        bh=Kwg0Gxnft/pxS4kgXDydNW4k2vrq3EyTloWOdq0PXAc=;
+        b=wFpB1sk7skp1eyTQ65FkRyQa8P/euJ8KXwrwlsql3pD9saEuDnxXcF5BQLHl3D3yE9
+         Hc9Wv6q0cOfeKDfVkfqn2UiCkBS1WJCFWcZLJOXLWPYuR+y/HZLA2xUC/KuIMmWFeTkD
+         A/Uyo4wVIx+7Tea60Otu8+mS2wmdlofa1s0/bbz3Y0PVbQ6HIyCHpeJaalsgrSunbLHe
+         MF+RSq7PdbhuEG1MssSnUDbw9Ygjd3gay7uL0vCTa4+GChAokoIf2Te/YCFjslGp4ocA
+         lX3isb2cVDY9OeHQr7dtO7sJGqBu3X+nddC347IRcdt9mF6WgcemnBJnecs1iYU2Uq7B
+         enHg==
+X-Gm-Message-State: ACgBeo1nu27JYho+TzrZRdYkhNXmbFHVJ8xGicz0dRE6WsYfJBJWMFtl
+        5a2xPtJ4ZeRpVQMoZrFOluk=
+X-Google-Smtp-Source: AA6agR4b7vY9FRGyzaz5mzZcsmD7HM3hcoQ0Wb8Wlml/Dg8M6UHkpILaOKpfKaplz4PkzvMlu+SMKw==
+X-Received: by 2002:a62:3086:0:b0:52b:fd6c:a49d with SMTP id w128-20020a623086000000b0052bfd6ca49dmr21544920pfw.26.1660673527088;
+        Tue, 16 Aug 2022 11:12:07 -0700 (PDT)
+Received: from localhost (fwdproxy-prn-009.fbsv.net. [2a03:2880:ff:9::face:b00c])
+        by smtp.gmail.com with ESMTPSA id b13-20020a170903228d00b001714fa07b74sm9491956plh.108.2022.08.16.11.12.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 11:12:01 -0700 (PDT)
+        Tue, 16 Aug 2022 11:12:06 -0700 (PDT)
 From:   Adel Abouchaev <adel.abushaev@gmail.com>
 To:     kuba@kernel.org
 Cc:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
         corbet@lwn.net, dsahern@kernel.org, shuah@kernel.org,
         imagedong@tencent.com, netdev@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [net-next 0/6] net: support QUIC crypto
-Date:   Tue, 16 Aug 2022 11:11:44 -0700
-Message-Id: <20220816181150.3507444-1-adel.abushaev@gmail.com>
+Subject: [net-next 2/6] Define QUIC specific constants, control and data plane structures
+Date:   Tue, 16 Aug 2022 11:11:46 -0700
+Message-Id: <20220816181150.3507444-3-adel.abushaev@gmail.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <Adel Abouchaev <adel.abushaev@gmail.com>
+In-Reply-To: <20220816181150.3507444-1-adel.abushaev@gmail.com>
 References: <Adel Abouchaev <adel.abushaev@gmail.com>
+ <20220816181150.3507444-1-adel.abushaev@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-QUIC requires end to end encryption of the data. The application usually
-prepares the data in clear text, encrypts and calls send() which implies
-multiple copies of the data before the packets hit the networking stack.
-Similar to kTLS, QUIC kernel offload of cryptography reduces the memory
-pressure by reducing the number of copies.
+Define control and data plane structures to pass in control plane for
+flow add/remove and during packet send within ancillary data. Define
+constants to use within SOL_UDP to program QUIC sockets.
 
-The scope of kernel support is limited to the symmetric cryptography,
-leaving the handshake to the user space library. For QUIC in particular,
-the application packets that require symmetric cryptography are the 1RTT
-packets with short headers. Kernel will encrypt the application packets
-on transmission and decrypt on receive. This series implements Tx only,
-because in QUIC server applications Tx outweighs Rx by orders of
-magnitude.
-
-Supporting the combination of QUIC and GSO requires the application to
-correctly place the data and the kernel to correctly slice it. The
-encryption process appends an arbitrary number of bytes (tag) to the end
-of the message to authenticate it. The GSO value should include this
-overhead, the offload would then subtract the tag size to parse the
-input on Tx before chunking and encrypting it.
-
-With the kernel cryptography, the buffer copy operation is conjoined
-with the encryption operation. The memory bandwidth is reduced by 5-8%.
-When devices supporting QUIC encryption in hardware come to the market,
-we will be able to free further 7% of CPU utilization which is used
-today for crypto operations.
-
-*** BLURB HERE ***
-
-Adel Abouchaev (6):
-  Documentation on QUIC kernel Tx crypto.
-  Define QUIC specific constants, control and data plane structures
-  Add UDP ULP operations, initialization and handling prototype
-    functions.
-  Implement QUIC offload functions
-  Add flow counters and Tx processing error counter
-  Add self tests for ULP operations, flow setup and crypto tests
-
- Documentation/networking/index.rst     |    1 +
- Documentation/networking/quic.rst      |  186 ++++
- include/net/inet_sock.h                |    2 +
- include/net/netns/mib.h                |    3 +
- include/net/quic.h                     |   63 ++
- include/net/snmp.h                     |    6 +
- include/net/udp.h                      |   33 +
- include/uapi/linux/quic.h              |   61 +
- include/uapi/linux/snmp.h              |    9 +
- include/uapi/linux/udp.h               |    4 +
- net/Kconfig                            |    1 +
- net/Makefile                           |    1 +
- net/ipv4/Makefile                      |    3 +-
- net/ipv4/udp.c                         |   15 +
- net/ipv4/udp_ulp.c                     |  192 ++++
- net/quic/Kconfig                       |   16 +
- net/quic/Makefile                      |    8 +
- net/quic/quic_main.c                   | 1417 ++++++++++++++++++++++++
- net/quic/quic_proc.c                   |   45 +
- tools/testing/selftests/net/.gitignore |    3 +-
- tools/testing/selftests/net/Makefile   |    3 +-
- tools/testing/selftests/net/quic.c     | 1153 +++++++++++++++++++
- tools/testing/selftests/net/quic.sh    |   46 +
- 23 files changed, 3268 insertions(+), 3 deletions(-)
- create mode 100644 Documentation/networking/quic.rst
- create mode 100644 include/net/quic.h
+Signed-off-by: Adel Abouchaev <adel.abushaev@gmail.com>
+---
+ include/uapi/linux/quic.h | 61 +++++++++++++++++++++++++++++++++++++++
+ include/uapi/linux/udp.h  |  3 ++
+ 2 files changed, 64 insertions(+)
  create mode 100644 include/uapi/linux/quic.h
- create mode 100644 net/ipv4/udp_ulp.c
- create mode 100644 net/quic/Kconfig
- create mode 100644 net/quic/Makefile
- create mode 100644 net/quic/quic_main.c
- create mode 100644 net/quic/quic_proc.c
- create mode 100644 tools/testing/selftests/net/quic.c
- create mode 100755 tools/testing/selftests/net/quic.sh
 
---
+diff --git a/include/uapi/linux/quic.h b/include/uapi/linux/quic.h
+new file mode 100644
+index 000000000000..79680b8b18a6
+--- /dev/null
++++ b/include/uapi/linux/quic.h
+@@ -0,0 +1,61 @@
++/* SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) */
++
++#ifndef _UAPI_LINUX_QUIC_H
++#define _UAPI_LINUX_QUIC_H
++
++#include <linux/types.h>
++#include <linux/tls.h>
++
++#define QUIC_MAX_CONNECTION_ID_SIZE 20
++
++/* Side by side data for QUIC egress operations */
++#define QUIC_BYPASS_ENCRYPTION 0x01
++
++struct quic_tx_ancillary_data {
++	__aligned_u64	next_pkt_num;
++	__u8	flags;
++	__u8	conn_id_length;
++};
++
++struct quic_connection_info_key {
++	__u8	conn_id[QUIC_MAX_CONNECTION_ID_SIZE];
++	__u8	conn_id_length;
++};
++
++struct quic_aes_gcm_128 {
++	__u8	header_key[TLS_CIPHER_AES_GCM_128_KEY_SIZE];
++	__u8	payload_key[TLS_CIPHER_AES_GCM_128_KEY_SIZE];
++	__u8	payload_iv[TLS_CIPHER_AES_GCM_128_IV_SIZE];
++};
++
++struct quic_aes_gcm_256 {
++	__u8	header_key[TLS_CIPHER_AES_GCM_256_KEY_SIZE];
++	__u8	payload_key[TLS_CIPHER_AES_GCM_256_KEY_SIZE];
++	__u8	payload_iv[TLS_CIPHER_AES_GCM_256_IV_SIZE];
++};
++
++struct quic_aes_ccm_128 {
++	__u8	header_key[TLS_CIPHER_AES_CCM_128_KEY_SIZE];
++	__u8	payload_key[TLS_CIPHER_AES_CCM_128_KEY_SIZE];
++	__u8	payload_iv[TLS_CIPHER_AES_CCM_128_IV_SIZE];
++};
++
++struct quic_chacha20_poly1305 {
++	__u8	header_key[TLS_CIPHER_CHACHA20_POLY1305_KEY_SIZE];
++	__u8	payload_key[TLS_CIPHER_CHACHA20_POLY1305_KEY_SIZE];
++	__u8	payload_iv[TLS_CIPHER_CHACHA20_POLY1305_IV_SIZE];
++};
++
++struct quic_connection_info {
++	__u16	cipher_type;
++	struct quic_connection_info_key		key;
++	union {
++		struct quic_aes_gcm_128 aes_gcm_128;
++		struct quic_aes_gcm_256 aes_gcm_256;
++		struct quic_aes_ccm_128 aes_ccm_128;
++		struct quic_chacha20_poly1305 chacha20_poly1305;
++	};
++};
++
++#endif
++
+diff --git a/include/uapi/linux/udp.h b/include/uapi/linux/udp.h
+index 4828794efcf8..0ee4c598e70b 100644
+--- a/include/uapi/linux/udp.h
++++ b/include/uapi/linux/udp.h
+@@ -34,6 +34,9 @@ struct udphdr {
+ #define UDP_NO_CHECK6_RX 102	/* Disable accpeting checksum for UDP6 */
+ #define UDP_SEGMENT	103	/* Set GSO segmentation size */
+ #define UDP_GRO		104	/* This socket can receive UDP GRO packets */
++#define UDP_QUIC_ADD_TX_CONNECTION	106 /* Add QUIC Tx crypto offload */
++#define UDP_QUIC_DEL_TX_CONNECTION	107 /* Del QUIC Tx crypto offload */
++#define UDP_QUIC_ENCRYPT		108 /* QUIC encryption parameters */
+ 
+ /* UDP encapsulation types */
+ #define UDP_ENCAP_ESPINUDP_NON_IKE	1 /* draft-ietf-ipsec-nat-t-ike-00/01 */
+-- 
 2.30.2
 
