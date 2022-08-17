@@ -2,164 +2,96 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D04D3C32771
-	for <linux-kselftest@archiver.kernel.org>; Wed, 17 Aug 2022 16:49:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7820BC32771
+	for <linux-kselftest@archiver.kernel.org>; Wed, 17 Aug 2022 17:34:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240793AbiHQQtM (ORCPT
+        id S240161AbiHQReu (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 17 Aug 2022 12:49:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40508 "EHLO
+        Wed, 17 Aug 2022 13:34:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240834AbiHQQtI (ORCPT
+        with ESMTP id S236240AbiHQRer (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 17 Aug 2022 12:49:08 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39FF42E69D
-        for <linux-kselftest@vger.kernel.org>; Wed, 17 Aug 2022 09:49:00 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id z5-20020a056a001d8500b0052e691eed53so5240314pfw.13
-        for <linux-kselftest@vger.kernel.org>; Wed, 17 Aug 2022 09:49:00 -0700 (PDT)
+        Wed, 17 Aug 2022 13:34:47 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED419F0E5;
+        Wed, 17 Aug 2022 10:34:46 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id gp7so13087473pjb.4;
+        Wed, 17 Aug 2022 10:34:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc;
-        bh=6fi31d4oZFoiAlastJlr4uk2tud8gMSfIkLdTl5R4Po=;
-        b=G6j6HwTSiblMTLD+qy/eK+MFUxGp81drgLLb6HCNJxAB8kfdio9xzGsQPZXkzx1yD/
-         f1i1B8dgDjaWt5f1m3rAwltz6vxpIdt85v7IziML9SHAnslSWa62rNYQWxFSNemcsli9
-         1q56ph3nHqVm89d8urWS8CuZaceQWEi8B8b/qJGVSvosPuPK8qCQN4T4wSKvb//9lkx9
-         zN83+N34psHqYCzpRUF/t8TiqCmss6FGJegeMqdytyzJROeA63ns60PgXTf++4+MH1Vp
-         OiSL+oIwQhlxp/jcZTlptzlZlAHxXUfdrauMbl1ABU6HJPs7nP1E46Zhasxm4Gc4saSR
-         U8hg==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=284A91xJpS6nwRvx67VF7YSoP83e6JuEnTUJYB3raPg=;
+        b=bYb4QUNP3jcTW6w5gDojVQgeXieFUswJifAM9vhjd5FVyK6aT/pZ1TVAJ5dVh0bdGC
+         aXbTIhrFz+1A2lDCIfmBaGWPy8SxJvhCvjNoezyYG4Mxudr+RR03FBD6SfcLo2zT+jxd
+         bOzysazjUG8D7hoyV8Wfb3h+0ZUi+pi/+pb3NqUns1qH2tYAbaoUi/xMg2KnOaV6HIwl
+         wF7ggN2pke5cdFaWc1/ty05TbtcDMG4kSYFLdAWr9uCNaZNKf3y65ww6hZPkZvMVi5Rx
+         2cuBoB1OrziAclyREuyqHWWBhEsrhutWB0p7R6xLN54BMQf6fnHp5yV3xuzvmyCEhqwh
+         0GRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc;
-        bh=6fi31d4oZFoiAlastJlr4uk2tud8gMSfIkLdTl5R4Po=;
-        b=ea9g2F1oZKAyKGsL3K6IVEw22yvEB7i+wI1ONiIPWKGlKtUny8+BXlKIvvBA/mAyTX
-         J+KRgrFTKNGMo5tZgyZNNOo7kv5A4QltEC6uR7RgfBAKxdEw54RIbcrpu8blAn5Qu9+C
-         5xi2R5a8M8YNMthphZWOoaE0R1KGRcmqLcXVpOEH6QUlxmpFC1qIrPX0UcnaUFsH0Fgo
-         nmvhdl22PcRU1RnR2EtDrM9Yc56e9mshhF89Vp3/Gz92q0jjauMJkbabiUon/8Q+vBEH
-         b7vijt7/B7mL6mZ51zaECQ7MyCfv0f4s3ndqw35A9/XmyiSVhdFLXRx+FjfGzVWkZhgx
-         mBJg==
-X-Gm-Message-State: ACgBeo0vO1eC4gz8hl1QRHkcEoaGpzlwTWy1Tz8W30UvEAcnRvSyQabu
-        ckSErQT6kO6SZowEmzWtslYTBEUiuB0MHgo=
-X-Google-Smtp-Source: AA6agR6BoEu8ZqNocP5kwKnBOuHffos9GZHKSREHvPSsPi4apunzh92jlUDI6Q6uAnuks6uBbKSAG8Ngm42Ejcg2
-X-Received: from joefradley-custom-96.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:831])
- (user=joefradley job=sendgmr) by 2002:a05:6a00:1d2a:b0:535:2aea:e8ea with
- SMTP id a42-20020a056a001d2a00b005352aeae8eamr8927987pfx.29.1660754940093;
- Wed, 17 Aug 2022 09:49:00 -0700 (PDT)
-Date:   Wed, 17 Aug 2022 09:48:49 -0700
-In-Reply-To: <20220817164851.3574140-1-joefradley@google.com>
-Message-Id: <20220817164851.3574140-2-joefradley@google.com>
-Mime-Version: 1.0
-References: <20220817164851.3574140-1-joefradley@google.com>
-X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
-Subject: [PATCH 1/2] kunit: add kunit.enable to enable/disable KUnit test
-From:   Joe Fradley <joefradley@google.com>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>
-Cc:     Joe Fradley <joefradley@google.com>, kernel-team@android.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=284A91xJpS6nwRvx67VF7YSoP83e6JuEnTUJYB3raPg=;
+        b=30oH6tvq8eCxVXJirTuaQYp7WLN0zMOtRadKL5F2ztr8Ye9fZjoxKQrfkxdFuvej+Y
+         FMlE5U0Zl5OX2/R6oOrghZItLLIhtBJ53D8jfUwPKONo/r5G4MIX4L0GOHa+s+RkK+Jk
+         zUBY3huinCGJjAO5KrwOAzQl+XTz8nJ6zXBlDANMk6I+nkaOnXNIGHV5LZ4FNn9t/mvg
+         HG1TzTB/BV1unCqwqDoSJfM5S3VPgNiUWuyQdYRUrsHrTqAGLAAQRQKmQEAjxkKGC4hA
+         SFjw7fst5O3Bt5GNXEv6a6F2V/BBuoyVoetGXhDNm6QeC/iyZX5yDL+x4sh609HcYnDZ
+         oi3A==
+X-Gm-Message-State: ACgBeo3xqpqLXsK2QOVMeiuMMV1KKI3KramEiO3A838AsNVWKo3R7pDL
+        oEZ4DedyvtYksNXM5Iz3rMohYxSQGZo=
+X-Google-Smtp-Source: AA6agR77E6Bi90PS6CwHLsHj14t+4aZgUalGnRDUpaOb2EZ4IhtQuUC4Pu11YPiVtnY2Q5XTCJifMg==
+X-Received: by 2002:a17:90a:5517:b0:1f8:a7ce:ac33 with SMTP id b23-20020a17090a551700b001f8a7ceac33mr4870074pji.83.1660757686216;
+        Wed, 17 Aug 2022 10:34:46 -0700 (PDT)
+Received: from biggie ([103.230.148.189])
+        by smtp.gmail.com with ESMTPSA id i190-20020a6254c7000000b0052d4f2e2f6asm10696208pfb.119.2022.08.17.10.34.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Aug 2022 10:34:45 -0700 (PDT)
+Date:   Wed, 17 Aug 2022 23:04:39 +0530
+From:   Gautam Menghani <gautammenghani201@gmail.com>
+To:     chenxiang66@hisilicon.com, shuah@kernel.org, liaoyu15@huawei.com
+Cc:     song.bao.hua@hisilicon.com, tiantao6@hisilicon.com,
+        iommu@lists.linux.dev, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Subject: Re: [PATCH] selftests/dma: Add a .gitignore file containing name of
+ executable
+Message-ID: <Yv0mr+vGANGYcxio@biggie>
+References: <20220724145931.32556-1-gautammenghani201@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220724145931.32556-1-gautammenghani201@gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch adds the kunit.enable module parameter that will need to be
-set to true in addition to KUNIT being enabled for KUnit tests to run.
-The default value is true giving backwards compatibility. However, for
-the production+testing use case the new config option
-KUNIT_ENABLE_DEFAULT_DISABLED can be enabled to default kunit.enable to
-false requiring the tester to opt-in by passing kunit.enable=1 to
-the kernel.
+On Sun, Jul 24, 2022 at 08:29:31PM +0530, Gautam Menghani wrote:
+> The dma tests in kselftests are missing a .gitignore file, which leads
+> to the dma_map_benchmark executable file showing up in "git status".
+> This patch adds a .gitignore file containing the executable name.
+> 
+> Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
+> ---
+>  tools/testing/selftests/dma/.gitignore | 1 +
+>  1 file changed, 1 insertion(+)
+>  create mode 100644 tools/testing/selftests/dma/.gitignore
+> 
+> diff --git a/tools/testing/selftests/dma/.gitignore b/tools/testing/selftests/dma/.gitignore
+> new file mode 100644
+> index 000000000000..668e2f8be2f7
+> --- /dev/null
+> +++ b/tools/testing/selftests/dma/.gitignore
+> @@ -0,0 +1 @@
+> +dma_map_benchmark
+> -- 
+> 2.34.1
+> 
+Hi,
 
-Signed-off-by: Joe Fradley <joefradley@google.com>
----
- .../admin-guide/kernel-parameters.txt         |  6 ++++++
- lib/kunit/Kconfig                             |  8 ++++++++
- lib/kunit/test.c                              | 20 +++++++++++++++++++
- 3 files changed, 34 insertions(+)
+Please review the above patch and let me know if any changes are required.
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index d7f30902fda0..ab4c7d133c38 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -2436,6 +2436,12 @@
- 			0: force disabled
- 			1: force enabled
- 
-+	kunit.enable=	[KUNIT] Enable executing KUnit tests. Requires
-+			CONFIG_KUNIT to be set to be fully enabled. The
-+			default value can be overridden to disabled via
-+			KUNIT_ENABLE_DEFAULT_DISABLED.
-+			Default is 1 (enabled)
-+
- 	kvm.ignore_msrs=[KVM] Ignore guest accesses to unhandled MSRs.
- 			Default is 0 (don't ignore, but inject #GP)
- 
-diff --git a/lib/kunit/Kconfig b/lib/kunit/Kconfig
-index 0b5dfb001bac..5d6db58dbe9b 100644
---- a/lib/kunit/Kconfig
-+++ b/lib/kunit/Kconfig
-@@ -59,4 +59,12 @@ config KUNIT_ALL_TESTS
- 
- 	  If unsure, say N.
- 
-+config KUNIT_ENABLE_DEFAULT_DISABLED
-+	bool "Require boot parameter to enable KUnit test execution"
-+	help
-+	  Sets the default value of the kernel parameter kunit.enable to 0
-+	  (disabled). This means to fully enable kunit, config KUNIT needs
-+	  to be enabled along with `kunit.enable=1` passed to the kernel. This
-+	  allows KUnit to be opt-in at boot time.
-+
- endif # KUNIT
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index b73d5bb5c473..e6f98e16e8ae 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -54,6 +54,17 @@ void __kunit_fail_current_test(const char *file, int line, const char *fmt, ...)
- EXPORT_SYMBOL_GPL(__kunit_fail_current_test);
- #endif
- 
-+/*
-+ * Enable KUnit tests to run.
-+ */
-+#ifdef CONFIG_KUNIT_ENABLE_DEFAULT_DISABLED
-+static bool enable_param;
-+#else
-+static bool enable_param = true;
-+#endif
-+module_param_named(enable, enable_param, bool, 0);
-+MODULE_PARM_DESC(enable, "Enable KUnit tests to run");
-+
- /*
-  * KUnit statistic mode:
-  * 0 - disabled
-@@ -590,6 +601,12 @@ int __kunit_test_suites_init(struct kunit_suite * const * const suites, int num_
- {
- 	unsigned int i;
- 
-+	if (!enable_param && num_suites > 0) {
-+		pr_info("kunit: deactivated, cannot load %s\n",
-+			suites != NULL && suites[0] != NULL ? suites[0]->name : "NULL");
-+		return -EPERM;
-+	}
-+
- 	for (i = 0; i < num_suites; i++) {
- 		kunit_init_suite(suites[i]);
- 		kunit_run_tests(suites[i]);
-@@ -607,6 +624,9 @@ void __kunit_test_suites_exit(struct kunit_suite **suites, int num_suites)
- {
- 	unsigned int i;
- 
-+	if (!enable_param)
-+		return;
-+
- 	for (i = 0; i < num_suites; i++)
- 		kunit_exit_suite(suites[i]);
- 
--- 
-2.37.1.595.g718a3a8f04-goog
-
+Thanks,
+Gautam
