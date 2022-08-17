@@ -2,175 +2,131 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E92F8C32772
-	for <linux-kselftest@archiver.kernel.org>; Wed, 17 Aug 2022 21:48:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0512C25B08
+	for <linux-kselftest@archiver.kernel.org>; Wed, 17 Aug 2022 21:51:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242340AbiHQVsQ (ORCPT
+        id S242377AbiHQVvO (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 17 Aug 2022 17:48:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49084 "EHLO
+        Wed, 17 Aug 2022 17:51:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242344AbiHQVrx (ORCPT
+        with ESMTP id S242350AbiHQVvN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 17 Aug 2022 17:47:53 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC1FFAB42D
-        for <linux-kselftest@vger.kernel.org>; Wed, 17 Aug 2022 14:47:42 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-3339532b6a8so94292747b3.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 17 Aug 2022 14:47:42 -0700 (PDT)
+        Wed, 17 Aug 2022 17:51:13 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2735E31EE9
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Aug 2022 14:51:11 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-11c5505dba2so3134578fac.13
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Aug 2022 14:51:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc;
-        bh=jMyZorWE6E22hV3NDdjIMErSuhZAX9bJlMRQ4lfwoQk=;
-        b=kmf5TPe5TDihxUks/W6HE9xnDr7EKu9fX5X/rvsm0Ya68c0awpeJBVGH0nzmUKuYJ8
-         rE8tjpC3S/ed1CEBFsuxhHdeIjP56/BSB5drqGzrmIJXsqSJBNKymt6+K0z6vPXyWx3i
-         0tBuuyCs3uyC0x5ddlwxY2lKwN7wUGTezJaC4PMmelE9aNTy46ALdXCVGFD99eosR85J
-         gV9LNz5Sca6lRKdL7jFoNuTCrfmAaL+Lx/NKNp5PuCO/vmUdvXCvKOciNBepvGWehlrZ
-         8nDB0O42+9TdWUts8kxMGVRvWkzlxt6ohWl6fGZIeamEURvXy40mRJONvGqeYX0aNkb3
-         QEog==
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=/CTcFk+7lIOz0f66/sW+yd0rIladiacxraDVQHveddU=;
+        b=Z37nNyL7fO7ofqzBqhsC8MAbzHXk1QozG1ARlNgf2r4n9sGA4oerk97YgCUalxM2mT
+         fhO9INMD4HzzQ1aPLW8N0XehhCLxHPUPhhB2ZRsd51SQdMmoonliVtb6BNO3XaXqioUP
+         yEQ/n8yVyhV7BjCADUL3h32ZxYj9GekLs3//TVqThFKgw9sZdbJf86XYIr1DAlZ8bmwG
+         xzmKfuAuIDGZVS8TsOPgiMbuIvDri9visdfG8qtZqt2pulyENYyUXIOotM2uhDYmrwUt
+         GN+YjefZ6mInoiQ6Eclx15Ltm0cQmwqruPbM5Tyh00SFGnU2OPWk4LHlvYLnPX/vMlx7
+         IPbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc;
-        bh=jMyZorWE6E22hV3NDdjIMErSuhZAX9bJlMRQ4lfwoQk=;
-        b=qWex1Uff6hnUgMmo/HlxDdxBqiCuu2YJIMkhEUATL7m3T3SvERWFDKaT1az6+feXHZ
-         DCQv0aILz/xSoQ9lAwR1qHeuF2L5v9MfTfDL6Xy3HfwOpk/8z9IEgRrb8PMXVTc5k/vi
-         xwTyPGQo8EP+9rR34Kc/YQtAc3dmtYWeLH/Iza83BqHveyWkEXuR78zXSZwhtWbx4ph4
-         pC1yXfNEoaOLhc0IFXeaTz+jcGR4jQJ32Bkt76+vbqAzFJ2LcIRLye9xY9IfBbzs0JO1
-         5xC8cLYPeMGOg11a4LGlvngSXiMqZ4T7KRslCgbTg3b+Kqpy1UPzyhe31hnTQj5AE2Qc
-         zTHg==
-X-Gm-Message-State: ACgBeo0AoUfTRogJQ/d7cd00yIleq9mOxUCd+liJAVDaVQ+jQEKyDZXg
-        INWfSxOcx5USWqiSdCX3CRuIsWZYpKSKFo4zqAtU
-X-Google-Smtp-Source: AA6agR6aBMm/RqNkrbkKOZWC8FO8iRne3LMJ4YFzZ+fs5wAz7NO45vvRzpcivQOY2FdD/cwWt1QvlitSsbytGa9Pxd0v
-X-Received: from ajr0.svl.corp.google.com ([2620:15c:2d4:203:2f41:f176:4bac:b729])
- (user=axelrasmussen job=sendgmr) by 2002:a81:1dd1:0:b0:335:dd05:372c with
- SMTP id d200-20020a811dd1000000b00335dd05372cmr159548ywd.342.1660772862105;
- Wed, 17 Aug 2022 14:47:42 -0700 (PDT)
-Date:   Wed, 17 Aug 2022 14:47:27 -0700
-In-Reply-To: <20220817214728.489904-1-axelrasmussen@google.com>
-Message-Id: <20220817214728.489904-5-axelrasmussen@google.com>
-Mime-Version: 1.0
-References: <20220817214728.489904-1-axelrasmussen@google.com>
-X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
-Subject: [PATCH v6 4/5] userfaultfd: update documentation to describe /dev/userfaultfd
-From:   Axel Rasmussen <axelrasmussen@google.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Dmitry V . Levin" <ldv@altlinux.org>,
-        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>, zhangyi <yi.zhang@huawei.com>
-Cc:     Axel Rasmussen <axelrasmussen@google.com>,
-        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, linux-security-module@vger.kernel.org
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=/CTcFk+7lIOz0f66/sW+yd0rIladiacxraDVQHveddU=;
+        b=s8ji1ZYxyQLGtnVzHDC24/VknU7yVPL4tYOrQGz+BEnIHT1ZIgmQBibINUUVCi18xf
+         B/481GramJdCv6P4b3wm5RjGKjD/cmpXWd5EpBIJZaJ9Y7XhZQdFuWvBsgCaomgUfyY/
+         ZMZieB/BpT9Zvs1ZiKHkk2qG3l4j0PVcCQeugbsGwBBVhipGdgIbCAfl/2M57qmcmbUH
+         XhGap9OcZ/E4Zxm6lo/7D7iaEDc/FNf4jmdreTA+oimVe+Vbb3k2X91UJZNEzcqPekW4
+         CRIbEh2kHdeKgz0d4Zq1VDEwx1CM8ot12eYRlU4wOoASE9MIZ2YDm6f/4z2lAIYPndCQ
+         u5GQ==
+X-Gm-Message-State: ACgBeo0pQnusIJ4YZ8b0n4nChy8WTSloAa+C5zyM8nNZ2ZAzxD43cpBx
+        ozVQySdCdl4rU7SLEzOJIx3JjrzC4vtrjMGZIQ9r
+X-Google-Smtp-Source: AA6agR50Tcanb0vgcmzi8OeuXVsdfxGnJyO8cUD9VxdPHwqqDOjJ8rNBXuNdMQ+4DIsaFAJLlr1YMLOTZC7fMkQtyMY=
+X-Received: by 2002:a05:6870:9588:b0:101:c003:bfe6 with SMTP id
+ k8-20020a056870958800b00101c003bfe6mr2769479oao.41.1660773070428; Wed, 17 Aug
+ 2022 14:51:10 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220815162028.926858-1-fred@cloudflare.com> <CAHC9VhTuxxRfJg=Ax5z87Jz6tq1oVRcppB444dHM2gP-FZrkTQ@mail.gmail.com>
+ <8735dux60p.fsf@email.froward.int.ebiederm.org> <CAHC9VhSHJNLS-KJ-Rz1R12PQbqACSksLYLbymF78d5hMkSGc-g@mail.gmail.com>
+ <871qte8wy3.fsf@email.froward.int.ebiederm.org> <CAHC9VhSU_sqMQwdoh0nAFdURqs_cVFbva8=otjcZUo8s+xyC9A@mail.gmail.com>
+ <8735du7fnp.fsf@email.froward.int.ebiederm.org> <CAHC9VhQuRNxzgVeNhDy=p5+RHz5+bTH6zFdU=UvvEhyH1e962A@mail.gmail.com>
+ <87tu6a4l83.fsf@email.froward.int.ebiederm.org>
+In-Reply-To: <87tu6a4l83.fsf@email.froward.int.ebiederm.org>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 17 Aug 2022 17:50:59 -0400
+Message-ID: <CAHC9VhQnPAsmjmKo-e84XDJ1wmaOFkTKPjjztsOa9Yrq+AeAQA@mail.gmail.com>
+Subject: Re: [PATCH v5 0/4] Introduce security_create_user_ns()
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org,
+        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        jmorris@namei.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
+        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        kernel-team@cloudflare.com, cgzones@googlemail.com,
+        karl@bigbadwolfsecurity.com, tixxdz@gmail.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Explain the different ways to create a new userfaultfd, and how access
-control works for each way.
+On Wed, Aug 17, 2022 at 5:24 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+> I object to adding the new system configuration knob.
+>
+> Especially when I don't see people explaining why such a knob is a good
+> idea.  What is userspace going to do with this new feature that makes it
+> worth maintaining in the kernel?
 
-Acked-by: Peter Xu <peterx@redhat.com>
-Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
----
- Documentation/admin-guide/mm/userfaultfd.rst | 41 ++++++++++++++++++--
- Documentation/admin-guide/sysctl/vm.rst      |  3 ++
- 2 files changed, 41 insertions(+), 3 deletions(-)
+From https://lore.kernel.org/all/CAEiveUdPhEPAk7Y0ZXjPsD=Vb5hn453CHzS9aG-tkyRa8bf_eg@mail.gmail.com/
 
-diff --git a/Documentation/admin-guide/mm/userfaultfd.rst b/Documentation/admin-guide/mm/userfaultfd.rst
-index 6528036093e1..83f31919ebb3 100644
---- a/Documentation/admin-guide/mm/userfaultfd.rst
-+++ b/Documentation/admin-guide/mm/userfaultfd.rst
-@@ -17,7 +17,10 @@ of the ``PROT_NONE+SIGSEGV`` trick.
- Design
- ======
- 
--Userfaults are delivered and resolved through the ``userfaultfd`` syscall.
-+Userspace creates a new userfaultfd, initializes it, and registers one or more
-+regions of virtual memory with it. Then, any page faults which occur within the
-+region(s) result in a message being delivered to the userfaultfd, notifying
-+userspace of the fault.
- 
- The ``userfaultfd`` (aside from registering and unregistering virtual
- memory ranges) provides two primary functionalities:
-@@ -34,12 +37,11 @@ The real advantage of userfaults if compared to regular virtual memory
- management of mremap/mprotect is that the userfaults in all their
- operations never involve heavyweight structures like vmas (in fact the
- ``userfaultfd`` runtime load never takes the mmap_lock for writing).
--
- Vmas are not suitable for page- (or hugepage) granular fault tracking
- when dealing with virtual address spaces that could span
- Terabytes. Too many vmas would be needed for that.
- 
--The ``userfaultfd`` once opened by invoking the syscall, can also be
-+The ``userfaultfd``, once created, can also be
- passed using unix domain sockets to a manager process, so the same
- manager process could handle the userfaults of a multitude of
- different processes without them being aware about what is going on
-@@ -50,6 +52,39 @@ is a corner case that would currently return ``-EBUSY``).
- API
- ===
- 
-+Creating a userfaultfd
-+----------------------
-+
-+There are two ways to create a new userfaultfd, each of which provide ways to
-+restrict access to this functionality (since historically userfaultfds which
-+handle kernel page faults have been a useful tool for exploiting the kernel).
-+
-+The first way, supported since userfaultfd was introduced, is the
-+userfaultfd(2) syscall. Access to this is controlled in several ways:
-+
-+- Any user can always create a userfaultfd which traps userspace page faults
-+  only. Such a userfaultfd can be created using the userfaultfd(2) syscall
-+  with the flag UFFD_USER_MODE_ONLY.
-+
-+- In order to also trap kernel page faults for the address space, either the
-+  process needs the CAP_SYS_PTRACE capability, or the system must have
-+  vm.unprivileged_userfaultfd set to 1. By default, vm.unprivileged_userfaultfd
-+  is set to 0.
-+
-+The second way, added to the kernel more recently, is by opening
-+/dev/userfaultfd and issuing a USERFAULTFD_IOC_NEW ioctl to it. This method
-+yields equivalent userfaultfds to the userfaultfd(2) syscall.
-+
-+Unlike userfaultfd(2), access to /dev/userfaultfd is controlled via normal
-+filesystem permissions (user/group/mode), which gives fine grained access to
-+userfaultfd specifically, without also granting other unrelated privileges at
-+the same time (as e.g. granting CAP_SYS_PTRACE would do). Users who have access
-+to /dev/userfaultfd can always create userfaultfds that trap kernel page faults;
-+vm.unprivileged_userfaultfd is not considered.
-+
-+Initializing a userfaultfd
-+--------------------------
-+
- When first opened the ``userfaultfd`` must be enabled invoking the
- ``UFFDIO_API`` ioctl specifying a ``uffdio_api.api`` value set to ``UFFD_API`` (or
- a later API version) which will specify the ``read/POLLIN`` protocol
-diff --git a/Documentation/admin-guide/sysctl/vm.rst b/Documentation/admin-guide/sysctl/vm.rst
-index 9b833e439f09..988f6a4c8084 100644
---- a/Documentation/admin-guide/sysctl/vm.rst
-+++ b/Documentation/admin-guide/sysctl/vm.rst
-@@ -926,6 +926,9 @@ calls without any restrictions.
- 
- The default value is 0.
- 
-+Another way to control permissions for userfaultfd is to use
-+/dev/userfaultfd instead of userfaultfd(2). See
-+Documentation/admin-guide/mm/userfaultfd.rst.
- 
- user_reserve_kbytes
- ===================
+ "We have valid use cases not specifically related to the
+  attack surface, but go into the middle from bpf observability
+  to enforcement. As we want to track namespace creation, changes,
+  nesting and per task creds context depending on the nature of
+  the workload."
+ -Djalal Harouni
+
+From https://lore.kernel.org/linux-security-module/CALrw=nGT0kcHh4wyBwUF-Q8+v8DgnyEJM55vfmABwfU67EQn=g@mail.gmail.com/
+
+ "[W]e do want to embrace user namespaces in our code and some of
+  our workloads already depend on it. Hence we didn't agree to
+  Debian's approach of just having a global sysctl. But there is
+  "our code" and there is "third party" code, which might not even
+  be open source due to various reasons. And while the path exists
+  for that code to do something bad - we want to block it."
+ -Ignat Korchagin
+
+From https://lore.kernel.org/linux-security-module/CAHC9VhSKmqn5wxF3BZ67Z+-CV7sZzdnO+JODq48rZJ4WAe8ULA@mail.gmail.com/
+
+ "I've heard you talk about bugs being the only reason why people
+  would want to ever block user namespaces, but I think we've all
+  seen use cases now where it goes beyond that.  However, even if
+  it didn't, the need to build high confidence/assurance systems
+  where big chunks of functionality can be disabled based on a
+  security policy is a very real use case, and this patchset would
+  help enable that."
+ -Paul Moore (with apologies for self-quoting)
+
+From https://lore.kernel.org/linux-security-module/CAHC9VhRSCXCM51xpOT95G_WVi=UQ44gNV=uvvG23p8wn16uYSA@mail.gmail.com/
+
+ "One of the selling points of the BPF LSM is that it allows for
+  various different ways of reporting and logging beyond audit.
+  However, even if it was limited to just audit I believe that
+  provides some useful justification as auditing fork()/clone()
+  isn't quite the same and could be difficult to do at scale in
+  some configurations."
+ -Paul Moore (my apologies again)
+
+From https://lore.kernel.org/linux-security-module/20220722082159.jgvw7jgds3qwfyqk@wittgenstein/
+
+ "Nice and straightforward."
+ -Christian Brauner
+
 -- 
-2.37.1.595.g718a3a8f04-goog
-
+paul-moore.com
