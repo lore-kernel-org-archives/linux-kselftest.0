@@ -2,129 +2,121 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 411D4C32773
-	for <linux-kselftest@archiver.kernel.org>; Fri, 19 Aug 2022 20:12:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37E8BC25B08
+	for <linux-kselftest@archiver.kernel.org>; Wed, 17 Aug 2022 19:00:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351759AbiHSUMw (ORCPT
+        id S238309AbiHQTAw (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 19 Aug 2022 16:12:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55386 "EHLO
+        Wed, 17 Aug 2022 15:00:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351749AbiHSUMu (ORCPT
+        with ESMTP id S230051AbiHQTAt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 Aug 2022 16:12:50 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A3910650F
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Aug 2022 13:12:48 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id c4so3288937iof.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Aug 2022 13:12:48 -0700 (PDT)
+        Wed, 17 Aug 2022 15:00:49 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31F8960539;
+        Wed, 17 Aug 2022 12:00:48 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id f8so3545813wru.13;
+        Wed, 17 Aug 2022 12:00:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=TWnGx0tsPzDsYWN5IvwyG0/F4n3/lHDuvrydVsnCdTg=;
-        b=FamF99POPr6PtKGcfiAFaDyK/px9/QEUZ9jAWq0VuRMjBQuH/SIEycINUXdEisf8wJ
-         GB5Fp0sV/9jsr8SHRoKkycJAodjombPVpppk1giNuh7jurYysChORzMPgyHKQdBRx6Yi
-         bMQ8CZykRl92tAcPu+aCfb2R1BHuyiGBmYyICNbj6NOdCbqR0y056zBRI5sucULdSXWP
-         iBSs6go4YjTUccStqlOuQrHTd0ys3ntGBcGxqR0SgI4W+Fz4sL7vOXN4324d30h8iu/T
-         k8P9H+ggVIlKLOTUU3V6HrleaFRS/uGb9Vw8lQ57cl7kluTFPaNsmbjckIsP6sE3O2xR
-         GObw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:to:from:references
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=XcG5s3Tfu/W3kHM07ebvHVaTnvwR81AmUKWeI5aXt/I=;
+        b=kB+XCl9vZ8QZcqlhRAxdBsHv0PxTVMb2z2fovbL5/BONHI6IdHkbBIvwP4XAmsTBkS
+         UCPey/jc+ObjQh7xCscH6ph27nKrK83ItPZ2jSmRPKy6+w94DHL5NoVARJ+UDdqfpUwq
+         /v6egD3ftjaleMwWo6aPiUc7I3SAAKnd81eHY3W02WX2NbABUTfhBiTpaqi4uRTWq+wp
+         5WIM8jaRb5btjaF+kY4uTOSh8w6K8DYut4IMCJYF1/dZHLKNXRXo7/8tnaXF0gtTAqNJ
+         PNk4LrcHXm+R6e0VaytvjqeqZnfpI6JbDo3FO580nYjw2Y8t/2dciFOh7rucyt7VHJ2U
+         WQog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=TWnGx0tsPzDsYWN5IvwyG0/F4n3/lHDuvrydVsnCdTg=;
-        b=pNuABZzUKCi/hHkBV6ZnU9FGfI99KpMDJAGBjpumSGIaGZNbVM66P+eFMblX9pXM6x
-         YhH41dOA6AKQpemvyRjgtQuvez3xjeY2w8Hq3zET+QpSPS0l1ALHDSdlCGAxOWIDs5MZ
-         LilOR7qpBAQHo+qqMixnlDuJJT65VmORpuVMxhmb+vLYbhw+aBqY9/lF99SYXmD3qyJO
-         IznehdtzZ2jhTyJ/0bljzL7T5oeWj600bsTmkZkUGgIn9QPbycR0X9AeV61VlCCSBg99
-         bH0lulV98ETwbY64XtAS6gYOefKPwNnsVz6avK/6EE5yiVM5+gQTjIg172c2ON79jhQR
-         QnaQ==
-X-Gm-Message-State: ACgBeo0v5MSbfGcLNO5CoL/JV2vkEFcXmZMINB8SO9hzomoa0XSj/edI
-        911EEovwohPrbNCakDANCxg+HrJlq4yYFk/51vjoqg==
-X-Google-Smtp-Source: AA6agR7vH6bU/CcMRlqauAdte2pei9jmt+xQRqGJlV8ch8ekID2WY8/GjnEURxqW3LnsWWhfJJAGPXkSfSDz0FeaHIw=
-X-Received: by 2002:a05:6638:34a8:b0:343:4d0a:5984 with SMTP id
- t40-20020a05663834a800b003434d0a5984mr4292780jal.167.1660939967732; Fri, 19
- Aug 2022 13:12:47 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:to:from:references
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=XcG5s3Tfu/W3kHM07ebvHVaTnvwR81AmUKWeI5aXt/I=;
+        b=rJOKBjew/Uh5Iwzxe+C5QDMuz406Whv5ojzLAOKqTJWFyL5UG8M2HZIV++1RBQFbAF
+         DNrSbEDcmoz8ZNHN5QdHJRjPDqLbSPtQVi1fwwejteavH+ppne7nf448MJysXgvkavH2
+         16c+cXhh/51R+ycpD10+eD/H0BejLB19jKzLyD3rf0pbYzzTdxv5Lgdl7QYlNesazjz8
+         xxayEKTYXe7UBOFC7vHdVvwJHTF1k3lBclSuu34aOyL7+o/vOzvab/9fH7SHhBxan5xC
+         PXX+yugE3QWAiMnOjntKK8HV9kREP5vY1yE5KIuTJzv3KZu6e6f9NDvhAbvkM/pIX2XL
+         iiwQ==
+X-Gm-Message-State: ACgBeo0usGP/ea43VtDmnJWzN7VwE4NukMpaoBt77jCKoB2tDEQbgU1w
+        ajQeR+/rP7PxGdHL1IWp6l4=
+X-Google-Smtp-Source: AA6agR4eWLv0XfY/Im9zh+uIyg0eqPnNknRq2/DocmyKhIE5F4AvzB+tnF+JoJYgqsptaRFsiIG+ow==
+X-Received: by 2002:adf:f909:0:b0:225:c35:8242 with SMTP id b9-20020adff909000000b002250c358242mr7915907wrr.550.1660762846612;
+        Wed, 17 Aug 2022 12:00:46 -0700 (PDT)
+Received: from [192.168.0.209] (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.googlemail.com with ESMTPSA id ay29-20020a05600c1e1d00b003a5fa79005csm3276453wmb.11.2022.08.17.12.00.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 Aug 2022 12:00:46 -0700 (PDT)
+Message-ID: <ce90b1a4-777f-9cd7-48bc-7d85150d8dcc@gmail.com>
+Date:   Wed, 17 Aug 2022 20:00:44 +0100
 MIME-Version: 1.0
-References: <20220817214728.489904-1-axelrasmussen@google.com>
- <20220817214728.489904-3-axelrasmussen@google.com> <Yv3bnouKb7242Ama@kroah.com>
-In-Reply-To: <Yv3bnouKb7242Ama@kroah.com>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Fri, 19 Aug 2022 13:12:10 -0700
-Message-ID: <CAJHvVcjd3GtjJ2yr0gNDGHCqc8RZUYXCYaj8eEgo1TTLBjNYSQ@mail.gmail.com>
-Subject: Re: [PATCH v6 2/5] userfaultfd: add /dev/userfaultfd for fine grained
- access control
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Dmitry V . Levin" <ldv@altlinux.org>,
-        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        zhangyi <yi.zhang@huawei.com>, linux-doc@vger.kernel.org,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        linux-security-module@vger.kernel.org,
-        Mike Rapoport <rppt@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH][next] selftests/bpf: Fix spelling mistake "succesful" ->
+ "successful"
+Content-Language: en-US
+References: <20220817083417.50884-1-colin.i.king@gmail.com>
+ <818C5CC9-31CA-4DED-90E8-455B03AA9352@fb.com>
+From:   "Colin King (gmail)" <colin.i.king@gmail.com>
+To:     undisclosed-recipients:;
+In-Reply-To: <818C5CC9-31CA-4DED-90E8-455B03AA9352@fb.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 11:26 PM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Wed, Aug 17, 2022 at 02:47:25PM -0700, Axel Rasmussen wrote:
-> > +static int userfaultfd_dev_open(struct inode *inode, struct file *file)
-> > +{
-> > +     return 0;
->
-> If your open does nothing, no need to list it here at all, right?
->
-> > +}
-> > +
-> > +static long userfaultfd_dev_ioctl(struct file *file, unsigned int cmd, unsigned long flags)
-> > +{
-> > +     if (cmd != USERFAULTFD_IOC_NEW)
-> > +             return -EINVAL;
-> > +
-> > +     return new_userfaultfd(flags);
-> > +}
-> > +
-> > +static const struct file_operations userfaultfd_dev_fops = {
-> > +     .open = userfaultfd_dev_open,
-> > +     .unlocked_ioctl = userfaultfd_dev_ioctl,
-> > +     .compat_ioctl = userfaultfd_dev_ioctl,
->
-> Why do you need to set compat_ioctl?  Shouldn't it just default to the
-> existing one?
+On 17/08/2022 19:46, Mykola Lysenko wrote:
+> Hi Colin,
+> 
+> Thanks for your patch!
+> 
+> Can you change patch title to "[PATCH bpf-next] selftests/bpf: Fix spelling mistake "succesful” (kfunc_call.c)”?
 
-I took some more time looking at this today, and I think it actually
-has to be the way it is.
+Personally I think the kfunc_call.c part in the title is extraneous, 
+it's clear it's patching that file from the diff and it's not the style
+I've used of the 3,900+ patches I've had accepted in the kernel.
 
-I didn't find anywhere we noticed compat_ioctl unset, and default to
-the "normal" one (e.g. see the compat ioctl syscall definition in
-fs/ioctl.c). It looks to me like it really does need some value. It's
-common to use compat_ptr_ioctl for this, but since we're interpreting
-the arg as a scalar not as a pointer, doing that here would be
-incorrect.
+Colin
 
-It looks like there are other existing examples that do it the same
-way, e.g. seccomp_notify_ops in linux/seccomp.c.
 
->
-> And why is this a device node at all?  Shouldn't the syscall handle all
-> of this (to be honest, I didn't read anything but the misc code, sorry.)
->
-> thanks,
->
-> greg k-h
+> 
+> Regards,
+> Mykola
+> 
+>> On Aug 17, 2022, at 1:34 AM, Colin Ian King <colin.i.king@gmail.com> wrote:
+>>
+>> !-------------------------------------------------------------------|
+>>   This Message Is From an External Sender
+>>
+>> |-------------------------------------------------------------------!
+>>
+>> There is a spelling mistake in an ASSERT_OK literal string. Fix it.
+>>
+>> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+>> ---
+>> tools/testing/selftests/bpf/prog_tests/kfunc_call.c | 2 +-
+>> 1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
+>> index 351fafa006fb..eede7c304f86 100644
+>> --- a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
+>> +++ b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
+>> @@ -109,7 +109,7 @@ static void test_destructive(void)
+>> {
+>> 	__u64 save_caps = 0;
+>>
+>> -	ASSERT_OK(test_destructive_open_and_load(), "succesful_load");
+>> +	ASSERT_OK(test_destructive_open_and_load(), "successful_load");
+>>
+>> 	if (!ASSERT_OK(cap_disable_effective(1ULL << CAP_SYS_BOOT, &save_caps), "drop_caps"))
+>> 		return;
+>> -- 
+>> 2.37.1
+>>
+> 
+
