@@ -2,53 +2,53 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83B1EC00140
-	for <linux-kselftest@archiver.kernel.org>; Thu, 18 Aug 2022 20:00:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60B76C00140
+	for <linux-kselftest@archiver.kernel.org>; Thu, 18 Aug 2022 20:00:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235080AbiHRUAU (ORCPT
+        id S1345624AbiHRUAp (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 18 Aug 2022 16:00:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54612 "EHLO
+        Thu, 18 Aug 2022 16:00:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232582AbiHRUAT (ORCPT
+        with ESMTP id S1345650AbiHRUAo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 18 Aug 2022 16:00:19 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F38CD11D4;
-        Thu, 18 Aug 2022 13:00:18 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id gk3so5172672ejb.8;
-        Thu, 18 Aug 2022 13:00:17 -0700 (PDT)
+        Thu, 18 Aug 2022 16:00:44 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 849EBD11C6;
+        Thu, 18 Aug 2022 13:00:42 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id o22so3187816edc.10;
+        Thu, 18 Aug 2022 13:00:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=CQ3cDlGI20sRjmx6kJdbD0nMrqU8+ddkQlKCP8IAvlo=;
-        b=i7nDM1U/d2W4Mj6IVQWh68CpwhGrUx9cvCRih2I0B2NA2pYMmpDb33Z8U/BX4ebbIo
-         A0t3JyWjXZuI3iN8gJHbenOzAuwHNJgzpTWu+S/8+5Ls5Ipa29vPVFU2kedOoRXZ6FfC
-         0rtcWyRf1wdgiboM/TIg/HaQLXM93ffNso9sw+e3T6Puy4GgoKzGpSXD33RtJxEAuE5X
-         wExX8C+higvLRzbqZiPCQw+xyAsxlAWc5Q2b7KAReJv/ra2b6tf53il9D4teoW+ofNUz
-         DGGyJxDBhB3BjRfjx658nnLqSc+7Qv9EwspYmieq1CwUES4MIohSBcR71RbLIfqPieOg
-         HGKQ==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=ETS4rz/SqLJLeYcVdtmRbgs5a88+lIdO+e6i/D2p730=;
+        b=aZoC+li/WZLDQIl8Tb2bVZOBNOdGNwpehoVvGFlpPq+kwYkqyJWf12To/7jiJ78o72
+         fKlflY4qcWFc6/sz+MvYS8LbymtxHH1QnDpb/W/hXwh8EARkevKs9jCUOvDvmXYLaqVq
+         VKlFaSJb8WQ6zCPjjObvmD8bmF/0DVArQVc4rMhP4jqCyw/hSY3XU0Ec4U+njJTtBQUs
+         9VHjDg7JvBXdjFt1iG0l67XpRja/xrEhuyn34/ga7mrkVxHWoc+MUFURvnScMO8LG6iM
+         zOKSsrE4UPV+ovDEm1fuH6ELNXT6Kbjx8xUvzlsOYWhodauUv7fKnsfeDCzHEcdd0gw1
+         PEtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=CQ3cDlGI20sRjmx6kJdbD0nMrqU8+ddkQlKCP8IAvlo=;
-        b=T33OWqxCWZZBrkEsyfXCwtG9AM80LTiI9PXDxG49W9otvdEFZNH3NyzO9vcN/VCYO9
-         wQOqmi3VJxcxP+umOvBw+LtBtFN6Zg9MlczlksXvmj1DtbQiPJgIwvTJDJNMw2SurLGd
-         pJBIIQMWguP8z/4jnbzSFvxkXNLwuHkofwOFDZbq7vNRAzsRH9zl6CJsgKAGVEpkv5HY
-         f1qJD28IB7EaU4YctqTjWAnRdoiel1q7NVZfeDkDF2cadLLMTnFzYtCG+XDmLNsOtPFe
-         eMlruLbgSB7Jm9bwzPdSerROVnQ5BfWSFyTCPhsc5Rs2MZk0hw6o0tSEMXaZKlk9o+0G
-         0+mg==
-X-Gm-Message-State: ACgBeo3MaaS2AXgw3ZNjkb+9KwiF/aWkCrD/ZD02ZlLoqK9BIbAUu/yc
-        lyGRSM1lDW7kE445KvBPEM0=
-X-Google-Smtp-Source: AA6agR6DBJSOFPFV9C3+zzpYb3fGnr25rPZ7eYoCfzT373gilfHVuB+uO6KFwAKQvz0FfDHMpENMCA==
-X-Received: by 2002:a17:907:284a:b0:731:5a2f:655a with SMTP id el10-20020a170907284a00b007315a2f655amr2768527ejc.403.1660852816455;
-        Thu, 18 Aug 2022 13:00:16 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=ETS4rz/SqLJLeYcVdtmRbgs5a88+lIdO+e6i/D2p730=;
+        b=iQBo8hC/a3SYcWZM8NjBzuj8yPlRNaZznvKateH1BzkRnN7rdQVZtFi1DYw6y18Cbo
+         CURFs+wdfIiTlA9g/qPdj+qTihF2xdFCT/Ihyo2enqTYyQ5EZZ/lfyQfEpU4XbsRU4jK
+         So3dX21KyQPBOJLhR2ANNoVRRl/PeeqwTO5TrjAq6PaEm5cZKWs24lCHrxHgBxLWLCfM
+         ssGlJLUZPWLp5ibzasQwkoTlqBM4Tax0fBd6ZBsUR8yJzIjfwKIqhgiJBahKWTFi0TVx
+         uXsDd7fscBujXqX22Af2Gv0voTAIVMO+YslHxkBApbBqhyrv43SjcxH2zOSQrzKKWmuU
+         9UBg==
+X-Gm-Message-State: ACgBeo1spcjHkkH72AT999aXN/KQcODh18c7nB0v5SX6G1H8F83LPLky
+        uHtHxxgEm+k9b8bKtzp0KrH2NNkRkjw=
+X-Google-Smtp-Source: AA6agR4+rCSA+oy7H4teaA8AcKRtYz4AtU6exYHd9LTIXUMN/ALqeI0Yqw0INVv71EV4Gn5ZfEhPpw==
+X-Received: by 2002:a05:6402:1e8c:b0:43d:db52:78a8 with SMTP id f12-20020a0564021e8c00b0043ddb5278a8mr3386910edf.324.1660852841034;
+        Thu, 18 Aug 2022 13:00:41 -0700 (PDT)
 Received: from localhost.localdomain ([2a04:241e:502:a080:17c8:ba1c:b6f3:3fe0])
-        by smtp.gmail.com with ESMTPSA id fw30-20020a170907501e00b00722e4bab163sm1215087ejc.200.2022.08.18.13.00.14
+        by smtp.gmail.com with ESMTPSA id fw30-20020a170907501e00b00722e4bab163sm1215087ejc.200.2022.08.18.13.00.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 13:00:15 -0700 (PDT)
+        Thu, 18 Aug 2022 13:00:40 -0700 (PDT)
 From:   Leonard Crestez <cdleonard@gmail.com>
 To:     David Ahern <dsahern@kernel.org>,
         Eric Dumazet <edumazet@google.com>,
@@ -69,304 +69,440 @@ Cc:     Dmitry Safonov <0x7f454c46@gmail.com>,
         Priyaranjan Jha <priyarjha@google.com>, netdev@vger.kernel.org,
         linux-crypto@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v7 00/26] tcp: Initial support for RFC5925 auth option
-Date:   Thu, 18 Aug 2022 22:59:34 +0300
-Message-Id: <cover.1660852705.git.cdleonard@gmail.com>
+Subject: [PATCH v7 13/26] tcp: authopt: Add key selection controls
+Date:   Thu, 18 Aug 2022 22:59:47 +0300
+Message-Id: <2956d99e7fbf9ff2a8cc720c67baaef35bc32343.1660852705.git.cdleonard@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1660852705.git.cdleonard@gmail.com>
+References: <cover.1660852705.git.cdleonard@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This is similar to TCP-MD5 in functionality but it's sufficiently
-different that packet formats and interfaces are incompatible.
-Compared to TCP-MD5 more algorithms are supported and multiple keys
-can be used on the same connection but there is still no negotiation
-mechanism.
+The RFC requires that TCP can report the keyid and rnextkeyid values
+being sent or received, implement this via getsockopt values.
 
-Expected use-case is protecting long-duration BGP/LDP connections
-between routers using pre-shared keys. The goal of this series is to
-allow routers using the Linux TCP stack to interoperate with vendors
-such as Cisco and Juniper. An fully-featured userspace implementation
-using this patchset exists but it is not going to be published.
+The RFC also requires that user can select the sending key and that the
+sending key is automatically switched based on rnextkeyid. These
+requirements can conflict so we implement both and add a flag which
+specifies if user or peer request takes priority.
 
-A completely unrelated series that implements the same features was posted
-recently: https://lore.kernel.org/netdev/20220818170005.747015-1-dima@arista.com/
+Also add an option to control rnextkeyid explicitly from userspace.
 
-Despite receiving a few review comments from the people that worked on
-that series I had no idea that they had their own implementation. I never
-ran into an issue of conflicting patches before so don't know what to do
-about it. Maybe I should have moved faster?
+Signed-off-by: Leonard Crestez <cdleonard@gmail.com>
+---
+ Documentation/networking/tcp_authopt.rst |  25 ++++++
+ include/net/tcp_authopt.h                |  40 ++++++++-
+ include/uapi/linux/tcp.h                 |  31 +++++++
+ net/ipv4/tcp_authopt.c                   | 107 ++++++++++++++++++++++-
+ net/ipv4/tcp_ipv4.c                      |   2 +-
+ net/ipv6/tcp_ipv6.c                      |   2 +-
+ 6 files changed, 200 insertions(+), 7 deletions(-)
 
-
-I've recently been talking with Phillip Paeps who is working on an BSD
-implementation of the same standard and he suggested sharing ABI in
-order to make userspace compatibility easier. The current ABI is
-entirely made up by me alone.
-
-A key difference versus MD5 is that keys are global rather than
-per-socket. Older versions had per-socket keys but in practice
-applications want to always use a consistent set of keys for communication
-with a specific peer and keeping those keys in sync from userspace is
-difficult and prone to races. The implementation from Arista uses
-per-socket keys and dumps additional difficulty on userspace, I consider
-both choices to be valid.
-
-Other vendors supporting TCP-AO implement a notion of a "key chain"
-roughly similar to what is described in RFC8177. The current ABI is
-sufficient to do the same but it requires a bunch of userspace work
-to add and delete keys at the appropriate time or mark them as "NOSEND"
-and "NORECV". Userspace also has to insert a "dummy" key when all other
-keys are expired in order to prevent unsigned traffic going through. This
-feature might be considerably easier to use from userspace if validity
-times were added in the kernel for each key.
-
-
-Here are some known flaws and limitations:
-
-* Crypto API is used with buffers on the stack and inside struct sock,
-this might not work on all arches. I'm currently only testing x64 VMs
-* Interaction with FASTOPEN not tested and unlikely to work because
-sequence number assumptions for syn/ack.
-* Traffic key is not cached (reducing performance)
-* No caching or hashing for key lookups so this will scale poorly with
-many keys
-* Overlaping MKTs can be configured despite what RFC5925 says
-* Current key can be deleted. RFC says this shouldn't be allowed but
-enforcing this belongs at an admin shell rather than in the kernel.
-* If multiple keys are valid for a destination the kernel picks one
-in an unpredictable manner (this can be overridden).
-
-There is deliberately very little code sharing with the TCP_MD5SIG
-feature because I wanted to avoid complex unrelated refactoring.
-
-Some testing support is included in nettest and fcnal-test.sh, similar
-to the current level of tcp-md5 testing.
-
-A more elaborate test suite using pytest and scapy is available out of
-tree: https://github.com/cdleonard/tcp-authopt-test
-There is an automatic system that runs that test suite in vagrant in
-gitlab-ci: https://gitlab.com/cdleonard/vagrantcpao
-That test suite fully covers the ABI of this patchset.
-
-Changes for frr (obsolete): https://github.com/FRRouting/frr/pull/9442
-That PR was made early for ABI feedback, it has many issues.
-
-Changes for yabgp (obsolete): https://github.com/cdleonard/yabgp/commits/tcp_authopt
-This was used for interoperability testing with cisco.
-Would need updates for global keys to avoid leaks.
-
-Changes since PATCH v6:
-* Squash "remove unused noops" patch (forgot to do this before v5 send).
-* Make TCP_REPAIR_AUTHOPT fail if (!tp->repair)
-* Add {snd,rcv}_seq to struct tcp_repair_authopt next to {snd,rcv}_sne.
-The fact that internally snd_sne is maintained as a 64-bit extension of
-sne_nxt is a problem for TCP_REPAIR implementation in userspace which might
-not have access to snd_nxt during live traffic. By exposing a full 64-bit
-“recent sequence number” to userspace it's possible to ignore which exact
-SEQ number the SNE value is an extension of.
-* Fix ipv6_addr_is_prefix helper; it was incorrect and dependant on
-uninitialized stack memory. This was caught by test suite after many rebases.
-* Implement ipv4-mapped-ipv6 support, request by Eric Dumazet
-Link: https://lore.kernel.org/netdev/cover.1658815925.git.cdleonard@gmail.com/
-
-Changes since PATCH v5:
-* Rebased on recent net-next, including recent changes refactoring md5
-* Use to skb_drop_reason
-* Fix using sock_kmalloc for key alloc but regular kfree for free. Use kmalloc
-because keys are global
-* Fix mentioning non-existent copy_from_sockopt in doc for _copy_from_sockptr_tolerant
-* If no valid keys are available for a destination then report a socket error
-instead of sending unsigned traffic
-* Remove several noop implementations which are always called from ifdef
-* Fix build issues in all scenarios, including -Werror at every point.
-* Split "tcp: Refactor tcp_inbound_md5_hash into tcp_inbound_sig_hash" into a separate commit.
-* Add TCP_AUTHOPT_FLAG_ACTIVE to distinguish between "keys configured for socket"
-and "connection authenticated". A listen socket with authentication enabled will return
-other sockets with authentication enabled on accept() but if no key is configured for the
-peer then authentication will be inactive.
-* Add support for TCP_REPAIR_AUTHOPT new sockopts which loads/saves the AO-specific
-information.
-Link: https://lore.kernel.org/netdev/cover.1643026076.git.cdleonard@gmail.com/
-
-Changes since PATCH v4:
-* Move the traffic_key context_bytes header to stack. If it's a constant
-string then ahash can fail unexpectedly.
-* Fix allowing unsigned traffic if all keys are marked norecv.
-* Fix crashing in __tcp_authopt_alg_init on failure.
-* Try to respect the rnextkeyid from SYN on SYNACK (new patch)
-* Fix incorrect check for TCP_AUTHOPT_KEY_DEL in __tcp_authopt_select_key
-* Improve docs on __tcp_authopt_select_key
-* Fix build with CONFIG_PROC_FS=n (kernel build robot)
-* Fix build with CONFIG_IPV6=n (kernel build robot)
-Link: https://lore.kernel.org/netdev/cover.1640273966.git.cdleonard@gmail.com/
-
-Changes since PATCH v3:
-* Made keys global (per-netns rather than per-sock).
-* Add /proc/net/tcp_authopt with a table of keys (not sockets).
-* Fix part of the shash/ahash conversion having slipped from patch 3 to patch 5
-* Fix tcp_parse_sig_options assigning NULL incorrectly when both MD5 and AO
-are disabled (kernel build robot)
-* Fix sparse endianness warnings in prefix match (kernel build robot)
-* Fix several incorrect RCU annotations reported by sparse (kernel build robot)
-Link: https://lore.kernel.org/netdev/cover.1638962992.git.cdleonard@gmail.com/
-
-Changes since PATCH v2:
-* Protect tcp_authopt_alg_get/put_tfm with local_bh_disable instead of
-preempt_disable. This caused signature corruption when send path executing
-with BH enabled was interrupted by recv.
-* Fix accepted keyids not configured locally as "unexpected". If any key
-is configured that matches the peer then traffic MUST be signed.
-* Fix issues related to sne rollover during handshake itself. (Francesco)
-* Implement and test prefixlen (David)
-* Replace shash with ahash and reuse some of the MD5 code (Dmitry)
-* Parse md5+ao options only once in the same function (Dmitry)
-* Pass tcp_authopt_info into inbound check path, this avoids second rcu
-dereference for same packet.
-* Pass tcp_request_socket into inbound check path instead of just listen
-socket. This is required for SNE rollover during handshake and clearifies
-ISN handling.
-* Do not allow disabling via sysctl after enabling once, this is difficult
-to support well (David)
-* Verbose check for sysctl_tcp_authopt (Dmitry)
-* Use netif_index_is_l3_master (David)
-* Cleanup ipvx_addr_match (David)
-* Add a #define tcp_authopt_needed to wrap static key usage because it looks
-nicer.
-* Replace rcu_read_lock with rcu_dereference_protected in SNE updates (Eric)
-* Remove test suite
-Link: https://lore.kernel.org/netdev/cover.1635784253.git.cdleonard@gmail.com/
-
-Changes since PATCH v1:
-* Implement Sequence Number Extension
-* Implement l3index for vrf: TCP_AUTHOPT_KEY_IFINDEX as equivalent of
-TCP_MD5SIG_FLAG_IFINDEX
-* Expand TCP-AO tests in fcnal-test.sh to near-parity with md5.
-* Show addr/port on failure similar to md5
-* Remove tox dependency from test suite (create venv directly)
-* Switch default pytest output format to TAP (kselftest standard)
-* Fix _copy_from_sockptr_tolerant stack corruption on short sockopts.
-This was covered in test but error was invisible without STACKPROTECTOR=y
-* Fix sysctl_tcp_authopt check in tcp_get_authopt_val before memset. This
-was harmless because error code is checked in getsockopt anyway.
-* Fix dropping md5 packets on all sockets with AO enabled
-* Fix checking (key->recv_id & TCP_AUTHOPT_KEY_ADDR_BIND) instead of
-key->flags in tcp_authopt_key_match_exact
-* Fix PATCH 1/19 not compiling due to missing "int err" declaration
-* Add ratelimited message for AO and MD5 both present
-* Export all symbols required by CONFIG_IPV6=m (again)
-* Fix compilation with CONFIG_TCP_AUTHOPT=y CONFIG_TCP_MD5SIG=n
-* Fix checkpatch issues
-* Pass -rrequirements.txt to tox to avoid dependency variation.
-Link: https://lore.kernel.org/netdev/cover.1632240523.git.cdleonard@gmail.com/
-
-Changes since RFCv3:
-* Implement TCP_AUTHOPT handling for timewait and reset replies. Write
-tests to execute these paths by injecting packets with scapy
-* Handle combining md5 and authopt: if both are configured use authopt.
-* Fix locking issues around send_key, introduced in on of the later patches.
-* Handle IPv4-mapped-IPv6 addresses: it used to be that an ipv4 SYN sent
-to an ipv6 socket with TCP-AO triggered WARN
-* Implement un-namespaced sysctl disabled this feature by default
-* Allocate new key before removing any old one in setsockopt (Dmitry)
-* Remove tcp_authopt_key_info.local_id because it's no longer used (Dmitry)
-* Propagate errors from TCP_AUTHOPT getsockopt (Dmitry)
-* Fix no-longer-correct TCP_AUTHOPT_KEY_DEL docs (Dmitry)
-* Simplify crypto allocation (Eric)
-* Use kzmalloc instead of __GFP_ZERO (Eric)
-* Add static_key_false tcp_authopt_needed (Eric)
-* Clear authopt_info copied from oldsk in __tcp_authopt_openreq (Eric)
-* Replace memcmp in ipv4 and ipv6 addr comparisons (Eric)
-* Export symbols for CONFIG_IPV6=m (kernel test robot)
-* Mark more functions static (kernel test robot)
-* Fix build with CONFIG_PROVE_RCU_LIST=y (kernel test robot)
-Link: https://lore.kernel.org/netdev/cover.1629840814.git.cdleonard@gmail.com/
-
-Changes since RFCv2:
-* Removed local_id from ABI and match on send_id/recv_id/addr
-* Add all relevant out-of-tree tests to tools/testing/selftests
-* Return an error instead of ignoring unknown flags, hopefully this makes
-it easier to extend.
-* Check sk_family before __tcp_authopt_info_get_or_create in tcp_set_authopt_key
-* Use sock_owned_by_me instead of WARN_ON(!lockdep_sock_is_held(sk))
-* Fix some intermediate build failures reported by kbuild robot
-* Improve documentation
-Link: https://lore.kernel.org/netdev/cover.1628544649.git.cdleonard@gmail.com/
-
-Changes since RFC:
-* Split into per-topic commits for ease of review. The intermediate
-commits compile with a few "unused function" warnings and don't do
-anything useful by themselves.
-* Add ABI documention including kernel-doc on uapi
-* Fix lockdep warnings from crypto by creating pools with one shash for
-each cpu
-* Accept short options to setsockopt by padding with zeros; this
-approach allows increasing the size of the structs in the future.
-* Support for aes-128-cmac-96
-* Support for binding addresses to keys in a way similar to old tcp_md5
-* Add support for retrieving received keyid/rnextkeyid and controling
-the keyid/rnextkeyid being sent.
-Link: https://lore.kernel.org/netdev/01383a8751e97ef826ef2adf93bfde3a08195a43.1626693859.git.cdleonard@gmail.com/
-
-Leonard Crestez (26):
-  tcp: authopt: Initial support and key management
-  docs: Add user documentation for tcp_authopt
-  tcp: authopt: Add crypto initialization
-  tcp: Refactor tcp_sig_hash_skb_data for AO
-  tcp: authopt: Compute packet signatures
-  tcp: Refactor tcp_inbound_md5_hash into tcp_inbound_sig_hash
-  tcp: authopt: Hook into tcp core
-  tcp: authopt: Disable via sysctl by default
-  tcp: authopt: Implement Sequence Number Extension
-  tcp: ipv6: Add AO signing for tcp_v6_send_response
-  tcp: authopt: Add support for signing skb-less replies
-  tcp: ipv4: Add AO signing for skb-less replies
-  tcp: authopt: Add key selection controls
-  tcp: authopt: Add initial l3index support
-  tcp: authopt: Add NOSEND/NORECV flags
-  tcp: authopt: Add prefixlen support
-  tcp: authopt: Add v4mapped ipv6 address support
-  tcp: authopt: Add /proc/net/tcp_authopt listing all keys
-  selftests: nettest: Rename md5_prefix to key_addr_prefix
-  selftests: nettest: Initial tcp_authopt support
-  selftests: net/fcnal: Initial tcp_authopt support
-  tcp: authopt: Try to respect rnextkeyid from SYN on SYNACK
-  tcp: authopt: tcp_authopt_lookup_send: Add anykey output param
-  tcp: authopt: Initial support for TCP_AUTHOPT_FLAG_ACTIVE
-  tcp: authopt: If no keys are valid for send report an error
-  tcp: authopt: Initial implementation of TCP_REPAIR_AUTHOPT
-
- Documentation/networking/index.rst        |    1 +
- Documentation/networking/ip-sysctl.rst    |    6 +
- Documentation/networking/tcp_authopt.rst  |   88 +
- include/linux/tcp.h                       |   15 +
- include/net/dropreason.h                  |   16 +
- include/net/net_namespace.h               |    4 +
- include/net/netns/tcp_authopt.h           |   12 +
- include/net/tcp.h                         |   55 +-
- include/net/tcp_authopt.h                 |  264 +++
- include/uapi/linux/snmp.h                 |    1 +
- include/uapi/linux/tcp.h                  |  169 ++
- net/ipv4/Kconfig                          |   14 +
- net/ipv4/Makefile                         |    1 +
- net/ipv4/proc.c                           |    1 +
- net/ipv4/sysctl_net_ipv4.c                |   39 +
- net/ipv4/tcp.c                            |  126 +-
- net/ipv4/tcp_authopt.c                    | 1980 +++++++++++++++++++++
- net/ipv4/tcp_input.c                      |   55 +-
- net/ipv4/tcp_ipv4.c                       |  100 +-
- net/ipv4/tcp_minisocks.c                  |   12 +
- net/ipv4/tcp_output.c                     |  106 +-
- net/ipv6/tcp_ipv6.c                       |   70 +-
- tools/testing/selftests/net/fcnal-test.sh |  329 +++-
- tools/testing/selftests/net/nettest.c     |  204 ++-
- 24 files changed, 3580 insertions(+), 88 deletions(-)
- create mode 100644 Documentation/networking/tcp_authopt.rst
- create mode 100644 include/net/netns/tcp_authopt.h
- create mode 100644 include/net/tcp_authopt.h
- create mode 100644 net/ipv4/tcp_authopt.c
-
---
+diff --git a/Documentation/networking/tcp_authopt.rst b/Documentation/networking/tcp_authopt.rst
+index 72adb7a891ce..f29fdea7769f 100644
+--- a/Documentation/networking/tcp_authopt.rst
++++ b/Documentation/networking/tcp_authopt.rst
+@@ -42,10 +42,35 @@ new flags.
+ 
+ RFC5925 requires that key ids do not overlap when tcp identifiers (addr/port)
+ overlap. This is not enforced by linux, configuring ambiguous keys will result
+ in packet drops and lost connections.
+ 
++Key selection
++-------------
++
++On getsockopt(TCP_AUTHOPT) information is provided about keyid/rnextkeyid in
++the last send packet and about the keyid/rnextkeyd in the last valid received
++packet.
++
++By default the sending keyid is selected to match the rnextkeyid value sent by
++the remote side. If that keyid is not available (or for new connections) a
++random matching key is selected.
++
++If the ``TCP_AUTHOPT_LOCK_KEYID`` flag is set then the sending key is selected
++by the `tcp_authopt.send_local_id` field and recv_rnextkeyid is ignored. If no
++key with local_id == send_local_id is configured then a random matching key is
++selected.
++
++The current sending key is cached in the socket and will not change unless
++requested by remote rnextkeyid or by setsockopt.
++
++The rnextkeyid value sent on the wire is usually the recv_id of the current
++key used for sending. If the TCP_AUTHOPT_LOCK_RNEXTKEY flag is set in
++`tcp_authopt.flags` the value of `tcp_authopt.send_rnextkeyid` is send
++instead.  This can be used to implement smooth rollover: the peer will switch
++its keyid to the received rnextkeyid when it is available.
++
+ ABI Reference
+ =============
+ 
+ .. kernel-doc:: include/uapi/linux/tcp.h
+    :identifiers: tcp_authopt tcp_authopt_flag tcp_authopt_key tcp_authopt_key_flag tcp_authopt_alg
+diff --git a/include/net/tcp_authopt.h b/include/net/tcp_authopt.h
+index 9bc0f58a78cb..6b4329a18a1f 100644
+--- a/include/net/tcp_authopt.h
++++ b/include/net/tcp_authopt.h
+@@ -70,10 +70,45 @@ struct tcp_authopt_info {
+ 	u32 dst_isn;
+ 	/** @rcv_sne: Recv-side Sequence Number Extension tracking tcp_sock.rcv_nxt */
+ 	u32 rcv_sne;
+ 	/** @snd_sne: Send-side Sequence Number Extension tracking tcp_sock.snd_nxt */
+ 	u32 snd_sne;
++
++	/**
++	 * @send_keyid: keyid currently being sent
++	 *
++	 * This is controlled by userspace by userspace if
++	 * TCP_AUTHOPT_FLAG_LOCK_KEYID, otherwise we try to match recv_rnextkeyid
++	 */
++	u8 send_keyid;
++	/**
++	 * @send_rnextkeyid: rnextkeyid currently being sent
++	 *
++	 * This is controlled by userspace if TCP_AUTHOPT_FLAG_LOCK_RNEXTKEYID is set
++	 */
++	u8 send_rnextkeyid;
++	/**
++	 * @recv_keyid: last keyid received from remote
++	 *
++	 * This is reported to userspace but has no other special behavior attached.
++	 */
++	u8 recv_keyid;
++	/**
++	 * @recv_rnextkeyid: last rnextkeyid received from remote
++	 *
++	 * Linux tries to honor this unless TCP_AUTHOPT_FLAG_LOCK_KEYID is set
++	 */
++	u8 recv_rnextkeyid;
++
++	/**
++	 * @send_key: Current key used for sending, cached.
++	 *
++	 * Once a key is found it only changes by user or remote request.
++	 *
++	 * Field is protected by the socket lock and holds a kref to the key.
++	 */
++	struct tcp_authopt_key_info __rcu *send_key;
+ };
+ 
+ /* TCP authopt as found in header */
+ struct tcphdr_authopt {
+ 	u8 num;
+@@ -94,22 +129,23 @@ int tcp_get_authopt_val(struct sock *sk, struct tcp_authopt *key);
+ int tcp_set_authopt_key(struct sock *sk, sockptr_t optval, unsigned int optlen);
+ struct tcp_authopt_key_info *__tcp_authopt_select_key(
+ 		const struct sock *sk,
+ 		struct tcp_authopt_info *info,
+ 		const struct sock *addr_sk,
+-		u8 *rnextkeyid);
++		u8 *rnextkeyid,
++		bool locked);
+ static inline struct tcp_authopt_key_info *tcp_authopt_select_key(
+ 		const struct sock *sk,
+ 		const struct sock *addr_sk,
+ 		struct tcp_authopt_info **info,
+ 		u8 *rnextkeyid)
+ {
+ 	if (tcp_authopt_needed) {
+ 		*info = rcu_dereference(tcp_sk(sk)->authopt_info);
+ 
+ 		if (*info)
+-			return __tcp_authopt_select_key(sk, *info, addr_sk, rnextkeyid);
++			return __tcp_authopt_select_key(sk, *info, addr_sk, rnextkeyid, true);
+ 	}
+ 	return NULL;
+ }
+ int tcp_authopt_hash(
+ 		char *hash_location,
+diff --git a/include/uapi/linux/tcp.h b/include/uapi/linux/tcp.h
+index 76d7be6b27f4..e02176390519 100644
+--- a/include/uapi/linux/tcp.h
++++ b/include/uapi/linux/tcp.h
+@@ -346,10 +346,24 @@ struct tcp_diag_md5sig {
+ 
+ /**
+  * enum tcp_authopt_flag - flags for `tcp_authopt.flags`
+  */
+ enum tcp_authopt_flag {
++	/**
++	 * @TCP_AUTHOPT_FLAG_LOCK_KEYID: keyid controlled by sockopt
++	 *
++	 * If this is set `tcp_authopt.send_keyid` is used to determined sending
++	 * key. Otherwise a key with send_id == recv_rnextkeyid is preferred.
++	 */
++	TCP_AUTHOPT_FLAG_LOCK_KEYID = (1 << 0),
++	/**
++	 * @TCP_AUTHOPT_FLAG_LOCK_RNEXTKEYID: Override rnextkeyid from userspace
++	 *
++	 * If this is set then `tcp_authopt.send_rnextkeyid` is sent on outbound
++	 * packets. Other the recv_id of the current sending key is sent.
++	 */
++	TCP_AUTHOPT_FLAG_LOCK_RNEXTKEYID = (1 << 1),
+ 	/**
+ 	 * @TCP_AUTHOPT_FLAG_REJECT_UNEXPECTED:
+ 	 *	Configure behavior of segments with TCP-AO coming from hosts for which no
+ 	 *	key is configured. The default recommended by RFC is to silently accept
+ 	 *	such connections.
+@@ -361,10 +375,27 @@ enum tcp_authopt_flag {
+  * struct tcp_authopt - Per-socket options related to TCP Authentication Option
+  */
+ struct tcp_authopt {
+ 	/** @flags: Combination of &enum tcp_authopt_flag */
+ 	__u32	flags;
++	/**
++	 * @send_keyid: `tcp_authopt_key.send_id` of preferred send key
++	 *
++	 * This is only used if `TCP_AUTHOPT_FLAG_LOCK_KEYID` is set.
++	 */
++	__u8	send_keyid;
++	/**
++	 * @send_rnextkeyid: The rnextkeyid to send in packets
++	 *
++	 * This is controlled by the user iff TCP_AUTHOPT_FLAG_LOCK_RNEXTKEYID is
++	 * set. Otherwise rnextkeyid is the recv_id of the current key.
++	 */
++	__u8	send_rnextkeyid;
++	/** @recv_keyid: A recently-received keyid value. Only for getsockopt. */
++	__u8	recv_keyid;
++	/** @recv_rnextkeyid: A recently-received rnextkeyid value. Only for getsockopt. */
++	__u8	recv_rnextkeyid;
+ };
+ 
+ /**
+  * enum tcp_authopt_key_flag - flags for `tcp_authopt.flags`
+  *
+diff --git a/net/ipv4/tcp_authopt.c b/net/ipv4/tcp_authopt.c
+index f7635a37b972..c4c7a9a0057d 100644
+--- a/net/ipv4/tcp_authopt.c
++++ b/net/ipv4/tcp_authopt.c
+@@ -372,22 +372,89 @@ static struct tcp_authopt_key_info *tcp_authopt_lookup_send(struct netns_tcp_aut
+  *
+  * @sk: socket
+  * @info: socket's tcp_authopt_info
+  * @addr_sk: socket used for address lookup. Same as sk except for synack case
+  * @rnextkeyid: value of rnextkeyid caller should write in packet
++ * @locked: If we're holding the socket lock. This is false for some timewait and reset cases
+  *
+  * Result is protected by RCU and can't be stored, it may only be passed to
+  * tcp_authopt_hash and only under a single rcu_read_lock.
+  */
+ struct tcp_authopt_key_info *__tcp_authopt_select_key(const struct sock *sk,
+ 						      struct tcp_authopt_info *info,
+ 						      const struct sock *addr_sk,
+-						      u8 *rnextkeyid)
++						      u8 *rnextkeyid,
++						      bool locked)
+ {
++	struct tcp_authopt_key_info *key, *new_key = NULL;
+ 	struct netns_tcp_authopt *net = sock_net_tcp_authopt(sk);
+ 
+-	return tcp_authopt_lookup_send(net, addr_sk, -1);
++	/* Listen sockets don't refer to any specific connection so we don't try
++	 * to keep using the same key and ignore any received keyids.
++	 */
++	if (sk->sk_state == TCP_LISTEN) {
++		int send_keyid = -1;
++
++		if (info->flags & TCP_AUTHOPT_FLAG_LOCK_KEYID)
++			send_keyid = info->send_keyid;
++		key = tcp_authopt_lookup_send(net, addr_sk, send_keyid);
++		if (key)
++			*rnextkeyid = key->recv_id;
++
++		return key;
++	}
++
++	if (locked) {
++		sock_owned_by_me(sk);
++		key = rcu_dereference_protected(info->send_key, lockdep_sock_is_held(sk));
++		if (key && (key->flags & TCP_AUTHOPT_KEY_DEL) == TCP_AUTHOPT_KEY_DEL) {
++			info->send_key = NULL;
++			tcp_authopt_key_put(key);
++			key = NULL;
++		}
++	} else {
++		key = NULL;
++	}
++
++	/* Try to keep the same sending key unless user or peer requires a different key
++	 * User request (via TCP_AUTHOPT_FLAG_LOCK_KEYID) always overrides peer request.
++	 */
++	if (info->flags & TCP_AUTHOPT_FLAG_LOCK_KEYID) {
++		int send_keyid = info->send_keyid;
++
++		if (!key || key->send_id != send_keyid)
++			new_key = tcp_authopt_lookup_send(net, addr_sk, send_keyid);
++	} else {
++		if (!key || key->send_id != info->recv_rnextkeyid)
++			new_key = tcp_authopt_lookup_send(net, addr_sk, info->recv_rnextkeyid);
++	}
++	/* If no key found with specific send_id try anything else. */
++	if (!key && !new_key)
++		new_key = tcp_authopt_lookup_send(net, addr_sk, -1);
++
++	/* Update current key only if we hold the socket lock. */
++	if (new_key && key != new_key) {
++		if (locked) {
++			if (kref_get_unless_zero(&new_key->ref)) {
++				rcu_assign_pointer(info->send_key, new_key);
++				tcp_authopt_key_put(key);
++			}
++			/* If key was deleted it's still valid until the end of
++			 * the RCU grace period.
++			 */
++		}
++		key = new_key;
++	}
++
++	if (key) {
++		if (info->flags & TCP_AUTHOPT_FLAG_LOCK_RNEXTKEYID)
++			*rnextkeyid = info->send_rnextkeyid;
++		else
++			*rnextkeyid = info->send_rnextkeyid = key->recv_id;
++	}
++
++	return key;
+ }
+ EXPORT_SYMBOL(__tcp_authopt_select_key);
+ 
+ static struct tcp_authopt_info *__tcp_authopt_info_get_or_create(struct sock *sk)
+ {
+@@ -409,10 +476,12 @@ static struct tcp_authopt_info *__tcp_authopt_info_get_or_create(struct sock *sk
+ 
+ 	return info;
+ }
+ 
+ #define TCP_AUTHOPT_KNOWN_FLAGS ( \
++	TCP_AUTHOPT_FLAG_LOCK_KEYID | \
++	TCP_AUTHOPT_FLAG_LOCK_RNEXTKEYID | \
+ 	TCP_AUTHOPT_FLAG_REJECT_UNEXPECTED)
+ 
+ /* Like copy_from_sockptr except tolerate different optlen for compatibility reasons
+  *
+  * If the src is shorter then it's from an old userspace and the rest of dst is
+@@ -480,18 +549,23 @@ int tcp_set_authopt(struct sock *sk, sockptr_t optval, unsigned int optlen)
+ 	info = __tcp_authopt_info_get_or_create(sk);
+ 	if (IS_ERR(info))
+ 		return PTR_ERR(info);
+ 
+ 	info->flags = opt.flags & TCP_AUTHOPT_KNOWN_FLAGS;
++	if (opt.flags & TCP_AUTHOPT_FLAG_LOCK_KEYID)
++		info->send_keyid = opt.send_keyid;
++	if (opt.flags & TCP_AUTHOPT_FLAG_LOCK_RNEXTKEYID)
++		info->send_rnextkeyid = opt.send_rnextkeyid;
+ 
+ 	return 0;
+ }
+ 
+ int tcp_get_authopt_val(struct sock *sk, struct tcp_authopt *opt)
+ {
+ 	struct tcp_sock *tp = tcp_sk(sk);
+ 	struct tcp_authopt_info *info;
++	struct tcp_authopt_key_info *send_key;
+ 	int err;
+ 
+ 	memset(opt, 0, sizeof(*opt));
+ 	sock_owned_by_me(sk);
+ 	err = check_sysctl_tcp_authopt();
+@@ -501,10 +575,22 @@ int tcp_get_authopt_val(struct sock *sk, struct tcp_authopt *opt)
+ 	info = rcu_dereference_check(tp->authopt_info, lockdep_sock_is_held(sk));
+ 	if (!info)
+ 		return -ENOENT;
+ 
+ 	opt->flags = info->flags & TCP_AUTHOPT_KNOWN_FLAGS;
++	/* These keyids might be undefined, for example before connect.
++	 * Reporting zero is not strictly correct because there are no reserved
++	 * values.
++	 */
++	send_key = rcu_dereference_check(info->send_key, lockdep_sock_is_held(sk));
++	if (send_key)
++		opt->send_keyid = send_key->send_id;
++	else
++		opt->send_keyid = 0;
++	opt->send_rnextkeyid = info->send_rnextkeyid;
++	opt->recv_keyid = info->recv_keyid;
++	opt->recv_rnextkeyid = info->recv_rnextkeyid;
+ 
+ 	return 0;
+ }
+ 
+ #define TCP_AUTHOPT_KEY_KNOWN_FLAGS ( \
+@@ -1465,11 +1551,11 @@ int __tcp_authopt_inbound_check(struct sock *sk, struct sk_buff *skb,
+ 			NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPAUTHOPTFAILURE);
+ 			print_tcpao_notice("TCP Authentication Unexpected: Rejected", skb);
+ 			return -SKB_DROP_REASON_TCP_AOUNEXPECTED;
+ 		}
+ 		print_tcpao_notice("TCP Authentication Unexpected: Accepted", skb);
+-		return 0;
++		goto accept;
+ 	}
+ 	if (opt && !key) {
+ 		/* Keys are configured for peer but with different keyid than packet */
+ 		NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPAUTHOPTFAILURE);
+ 		print_tcpao_notice("TCP Authentication Failed", skb);
+@@ -1488,10 +1574,25 @@ int __tcp_authopt_inbound_check(struct sock *sk, struct sk_buff *skb,
+ 		NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPAUTHOPTFAILURE);
+ 		print_tcpao_notice("TCP Authentication Failed", skb);
+ 		return -SKB_DROP_REASON_TCP_AOFAILURE;
+ 	}
+ 
++accept:
++	/* Doing this for all valid packets will results in keyids temporarily
++	 * flipping back and forth if packets are reordered or retransmitted
++	 * but keys should eventually stabilize.
++	 *
++	 * This is connection-specific so don't store for listen sockets.
++	 *
++	 * We could store rnextkeyid from SYN in a request sock and use it for
++	 * the SYNACK but we don't.
++	 */
++	if (sk->sk_state != TCP_LISTEN) {
++		info->recv_keyid = opt->keyid;
++		info->recv_rnextkeyid = opt->rnextkeyid;
++	}
++
+ 	return 1;
+ }
+ EXPORT_SYMBOL(__tcp_authopt_inbound_check);
+ 
+ static int tcp_authopt_init_net(struct net *full_net)
+diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
+index acce593bb7c9..720ae16303c4 100644
+--- a/net/ipv4/tcp_ipv4.c
++++ b/net/ipv4/tcp_ipv4.c
+@@ -665,11 +665,11 @@ static int tcp_v4_authopt_handle_reply(const struct sock *sk,
+ 		info = tcp_twsk(sk)->tw_authopt_info;
+ 	else
+ 		info = rcu_dereference_check(tcp_sk(sk)->authopt_info, lockdep_sock_is_held(sk));
+ 	if (!info)
+ 		return 0;
+-	key_info = __tcp_authopt_select_key(sk, info, sk, &rnextkeyid);
++	key_info = __tcp_authopt_select_key(sk, info, sk, &rnextkeyid, false);
+ 	if (!key_info)
+ 		return 0;
+ 	*optptr = htonl((TCPOPT_AUTHOPT << 24) |
+ 			(TCPOLEN_AUTHOPT_OUTPUT << 16) |
+ 			(key_info->send_id << 8) |
+diff --git a/net/ipv6/tcp_ipv6.c b/net/ipv6/tcp_ipv6.c
+index 151254345dee..e983a0e680ae 100644
+--- a/net/ipv6/tcp_ipv6.c
++++ b/net/ipv6/tcp_ipv6.c
+@@ -852,11 +852,11 @@ static int tcp_v6_send_response_init_authopt(const struct sock *sk,
+ 		*info = tcp_twsk(sk)->tw_authopt_info;
+ 	else
+ 		*info = rcu_dereference(tcp_sk(sk)->authopt_info);
+ 	if (!*info)
+ 		return 0;
+-	*key = __tcp_authopt_select_key(sk, *info, sk, rnextkeyid);
++	*key = __tcp_authopt_select_key(sk, *info, sk, rnextkeyid, false);
+ 	if (*key)
+ 		return TCPOLEN_AUTHOPT_OUTPUT;
+ 	return 0;
+ }
+ 
+-- 
 2.25.1
+
