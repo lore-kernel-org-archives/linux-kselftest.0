@@ -2,37 +2,37 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE973C00140
-	for <linux-kselftest@archiver.kernel.org>; Thu, 18 Aug 2022 17:07:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E733C00140
+	for <linux-kselftest@archiver.kernel.org>; Thu, 18 Aug 2022 17:09:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345413AbiHRRH3 (ORCPT
+        id S1345329AbiHRRJD (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 18 Aug 2022 13:07:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48100 "EHLO
+        Thu, 18 Aug 2022 13:09:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345533AbiHRRF2 (ORCPT
+        with ESMTP id S1343967AbiHRRHD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 18 Aug 2022 13:05:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22A15CCE0A
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 Aug 2022 10:01:57 -0700 (PDT)
+        Thu, 18 Aug 2022 13:07:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E043CCD521
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 Aug 2022 10:02:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 42E58B821F3
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 Aug 2022 17:01:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10CEFC4314B;
-        Thu, 18 Aug 2022 17:01:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B2C96168E
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 Aug 2022 17:02:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCD53C4347C;
+        Thu, 18 Aug 2022 17:01:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660842115;
-        bh=0SDRjlUj0I9V3lB4e8go1XrPWs95giQhpLEhoSJP9+c=;
+        s=k20201202; t=1660842119;
+        bh=2FRY03mI0lys9sGvaqOL1d+m6IEPqOMSpUOGBSMSQvQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sOI5qPeAWuGueIaTKaUHBuVdGAofa6/xFBe6mxqr4GM+nW2rT8N/2b1pRbnHBhuPB
-         kG3zHliPVZSuKjhztx5TtFu6fBOGg763QBOq8ex7hY5QrWkvxMMCrj+rmxIQEy0Zf3
-         Ou7Op3mrPNVDkhUGE3ZQ14GBSWoQMH40g53lq+rptVLldd63Grty7BL9OxgWYMfSg+
-         UTgugQ22GzY2VSGjBkdhMOosZp70iuJVi97HFSNwopPSrwHrCZvDeFAiCvfDsjj6bv
-         Ba5/CrMyia1Gd/rgOLGiroVPTFwAeCYKlDdsMycHLfvzbaAE137UMDXlIE095jJyXG
-         WmjGWSPrUoNCw==
+        b=IjaiVxjvHaN03NFwnWJy7poX6ByIpFJVZr1JlxHLvKOTL1JP5ALyzeaOYYJMNNwPG
+         qFHZEX0hHg3TT6sDtHl1aG5bNasXaOzQZRifN5gtuKtmyn+QxUvnOJpotWBBfor18Q
+         p4a5z68vSZ5JRhLj+eDi0ls5daH2h57GoN4ciFiS1XyztsRp/hPWc9IYPRQ0rQEPu6
+         HFurjAN6ddxHVWphunoWTZCzYXHBgelvDU3MuY0FZ4DfiqpfTACZJuf6jbfiD19D9U
+         vnBebAduALY3vgTNPuphO94CGEMKwKS4Xpsdf+lLS9/m7YYx3mBQgGTjMDWWealVJQ
+         6ux9xvszgGYMA==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
@@ -42,225 +42,93 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         Luis Machado <luis.machado@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v3 1/4] kselftest/arm64: Add test coverage for NT_ARM_TLS
-Date:   Thu, 18 Aug 2022 18:01:08 +0100
-Message-Id: <20220818170111.351889-2-broonie@kernel.org>
+Subject: [PATCH v3 3/4] arm64/ptrace: Support access to TPIDR2_EL0
+Date:   Thu, 18 Aug 2022 18:01:10 +0100
+Message-Id: <20220818170111.351889-4-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220818170111.351889-1-broonie@kernel.org>
 References: <20220818170111.351889-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5050; i=broonie@kernel.org; h=from:subject; bh=0SDRjlUj0I9V3lB4e8go1XrPWs95giQhpLEhoSJP9+c=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBi/nBTnrKLY3N+9Hy5wGkFDa19ikgbLAommVjyLu9q LHimnBaJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYv5wUwAKCRAk1otyXVSH0J1KB/ 0ZxdyYo2oiUAsAmcp1IVoWMyQmdwunCF3lCgVYFSSgxqcPt1m7zVo2HN44F81mcBy9O3gJ6ztFJDcR JwXAALBoDjWl8BJAvnJXJU5G7bXOYURD2ZnIud7YGCLXJQ7G5OXIB9B9KQw8liiQKMVTfPzUjoKnKR zfZE9R18Z7MKRYO5pJu7rRCG/Pqpl6E9giVqwS32xmXYlOS2Nmw/h/qpATdhbfUTwID6Zgj+xDDMXy 3SNkZLSVKrxhV2Ej8qR1pdqwoVEhuth1TkPyazgzGfFXXC/X+IF5FKEKe6VIdQ7w/f1FFaURCFc4ra Qd3MxWF4QNyG/QOJDwJgSMA2nO7nb4
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2582; i=broonie@kernel.org; h=from:subject; bh=2FRY03mI0lys9sGvaqOL1d+m6IEPqOMSpUOGBSMSQvQ=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBi/nBVQMafCiH+QCdldmhTo64O7Q+ILMFCMDTFcI+g htpp3pWJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYv5wVQAKCRAk1otyXVSH0HcuB/ oC/dZU+eNN95c5lhQxi1/VTmS1mi5YAGvCnXGnWud2T0GgAkoWzH8biGXzLXH1IvxIsZLyHxF51t++ PaCaaJvXZAYlQ3nAg/rZfMda8opkjGTbprTYBnF4og0dPnuRcunUH8D/oDuJmnPjZz+PAQY2arj14Y lT76wvK9bjJS4URfVuZHJPCXZrIz/Q+3cPGVwfOuwG0rYIrTsTaMA/+y57pLU243BVpNBARaCJUYnW aQ7K9gYsG9qqflkr+2Yczjcb4FhvgV3y8b6wXpa8msJMzFPMhVQP20Mdr0wP1HiK5hU6Jg/l7K8/6Z Lgg3G+0GG+4xqS+xqBjHQ0vpGJMr6R
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-In preparation for extending support for NT_ARM_TLS to cover additional
-TPIDRs add some tests for the existing interface. Do this in a generic
-ptrace test program to provide a place to collect additional tests in
-the future.
+SME introduces an additional EL0 register, TPIDR2_EL0, intended for use
+by userspace as part of the SME. Provide ptrace access to it through the
+existing NT_ARM_TLS regset used for TPIDR_EL0 by expanding it to two
+registers with TPIDR2_EL0 being the second one.
+
+Existing programs that query the size of the register set will be able
+to observe the increased size of the register set. Programs that assume
+the register set is single register will see no change. On systems that
+do not support SME TPIDR2_EL0 will read as 0 and writes will be ignored,
+support for SME should be queried via hwcaps as normal.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- tools/testing/selftests/arm64/abi/.gitignore |   1 +
- tools/testing/selftests/arm64/abi/Makefile   |   2 +-
- tools/testing/selftests/arm64/abi/ptrace.c   | 165 +++++++++++++++++++
- 3 files changed, 167 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/arm64/abi/ptrace.c
+ arch/arm64/kernel/ptrace.c | 25 ++++++++++++++++++++-----
+ 1 file changed, 20 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/arm64/abi/.gitignore b/tools/testing/selftests/arm64/abi/.gitignore
-index b9e54417250d..12607c4580c6 100644
---- a/tools/testing/selftests/arm64/abi/.gitignore
-+++ b/tools/testing/selftests/arm64/abi/.gitignore
-@@ -1,2 +1,3 @@
-+ptrace
- syscall-abi
- tpidr2
-diff --git a/tools/testing/selftests/arm64/abi/Makefile b/tools/testing/selftests/arm64/abi/Makefile
-index c8d7f2495eb2..445ac2dac4ee 100644
---- a/tools/testing/selftests/arm64/abi/Makefile
-+++ b/tools/testing/selftests/arm64/abi/Makefile
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- # Copyright (C) 2021 ARM Limited
- 
--TEST_GEN_PROGS := syscall-abi tpidr2
-+TEST_GEN_PROGS := ptrace syscall-abi tpidr2
- 
- include ../../lib.mk
- 
-diff --git a/tools/testing/selftests/arm64/abi/ptrace.c b/tools/testing/selftests/arm64/abi/ptrace.c
-new file mode 100644
-index 000000000000..a74157dcc4fc
---- /dev/null
-+++ b/tools/testing/selftests/arm64/abi/ptrace.c
-@@ -0,0 +1,165 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2022 ARM Limited.
-+ */
-+#include <errno.h>
-+#include <stdbool.h>
-+#include <stddef.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <sys/auxv.h>
-+#include <sys/prctl.h>
-+#include <sys/ptrace.h>
-+#include <sys/types.h>
-+#include <sys/uio.h>
-+#include <sys/wait.h>
-+#include <asm/sigcontext.h>
-+#include <asm/ptrace.h>
-+
-+#include "../../kselftest.h"
-+
-+#define EXPECTED_TESTS 3
-+
-+#define MAX_TPIDRS 1
-+
-+static bool have_sme(void)
-+{
-+	return getauxval(AT_HWCAP2) & HWCAP2_SME;
-+}
-+
-+static void test_tpidr(pid_t child)
-+{
-+	uint64_t read_val[MAX_TPIDRS];
-+	uint64_t write_val[MAX_TPIDRS];
-+	struct iovec read_iov, write_iov;
+diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
+index 21da83187a60..82feabba3911 100644
+--- a/arch/arm64/kernel/ptrace.c
++++ b/arch/arm64/kernel/ptrace.c
+@@ -666,10 +666,18 @@ static int fpr_set(struct task_struct *target, const struct user_regset *regset,
+ static int tls_get(struct task_struct *target, const struct user_regset *regset,
+ 		   struct membuf to)
+ {
 +	int ret;
 +
-+	read_iov.iov_base = read_val;
-+	write_iov.iov_base = write_val;
-+
-+	/* Should be able to read a single TPIDR... */
-+	read_iov.iov_len = sizeof(uint64_t);
-+	ret = ptrace(PTRACE_GETREGSET, child, NT_ARM_TLS, &read_iov);
-+	ksft_test_result(ret == 0, "read_tpidr_one\n");
-+
-+	/* ...write a new value.. */
-+	write_iov.iov_len = sizeof(uint64_t);
-+	write_val[0] = read_val[0]++;
-+	ret = ptrace(PTRACE_SETREGSET, child, NT_ARM_TLS, &write_iov);
-+	ksft_test_result(ret == 0, "write_tpidr_one\n");
-+
-+	/* ...then read it back */
-+	ret = ptrace(PTRACE_GETREGSET, child, NT_ARM_TLS, &read_iov);
-+	ksft_test_result(ret == 0 && write_val[0] == read_val[0],
-+			 "verify_tpidr_one\n");
-+}
-+
-+static int do_child(void)
-+{
-+	if (ptrace(PTRACE_TRACEME, -1, NULL, NULL))
-+		ksft_exit_fail_msg("PTRACE_TRACEME", strerror(errno));
-+
-+	if (raise(SIGSTOP))
-+		ksft_exit_fail_msg("raise(SIGSTOP)", strerror(errno));
-+
-+	return EXIT_SUCCESS;
-+}
-+
-+static int do_parent(pid_t child)
-+{
-+	int ret = EXIT_FAILURE;
-+	pid_t pid;
-+	int status;
-+	siginfo_t si;
-+
-+	/* Attach to the child */
-+	while (1) {
-+		int sig;
-+
-+		pid = wait(&status);
-+		if (pid == -1) {
-+			perror("wait");
-+			goto error;
-+		}
-+
-+		/*
-+		 * This should never happen but it's hard to flag in
-+		 * the framework.
-+		 */
-+		if (pid != child)
-+			continue;
-+
-+		if (WIFEXITED(status) || WIFSIGNALED(status))
-+			ksft_exit_fail_msg("Child died unexpectedly\n");
-+
-+		if (!WIFSTOPPED(status))
-+			goto error;
-+
-+		sig = WSTOPSIG(status);
-+
-+		if (ptrace(PTRACE_GETSIGINFO, pid, NULL, &si)) {
-+			if (errno == ESRCH)
-+				goto disappeared;
-+
-+			if (errno == EINVAL) {
-+				sig = 0; /* bust group-stop */
-+				goto cont;
-+			}
-+
-+			ksft_test_result_fail("PTRACE_GETSIGINFO: %s\n",
-+					      strerror(errno));
-+			goto error;
-+		}
-+
-+		if (sig == SIGSTOP && si.si_code == SI_TKILL &&
-+		    si.si_pid == pid)
-+			break;
-+
-+	cont:
-+		if (ptrace(PTRACE_CONT, pid, NULL, sig)) {
-+			if (errno == ESRCH)
-+				goto disappeared;
-+
-+			ksft_test_result_fail("PTRACE_CONT: %s\n",
-+					      strerror(errno));
-+			goto error;
-+		}
-+	}
-+
-+	ksft_print_msg("Parent is %d, child is %d\n", getpid(), child);
-+
-+	test_tpidr(child);
-+
-+	ret = EXIT_SUCCESS;
-+
-+error:
-+	kill(child, SIGKILL);
-+
-+disappeared:
-+	return ret;
-+}
-+
-+int main(void)
-+{
-+	int ret = EXIT_SUCCESS;
-+	pid_t child;
-+
-+	srandom(getpid());
-+
-+	ksft_print_header();
-+
-+	ksft_set_plan(EXPECTED_TESTS);
-+
-+	child = fork();
-+	if (!child)
-+		return do_child();
-+
-+	if (do_parent(child))
-+		ret = EXIT_FAILURE;
-+
-+	ksft_print_cnts();
+ 	if (target == current)
+ 		tls_preserve_current_state();
+ 
+-	return membuf_store(&to, target->thread.uw.tp_value);
++	ret = membuf_store(&to, target->thread.uw.tp_value);
++	if (system_supports_tpidr2())
++		ret = membuf_store(&to, target->thread.tpidr2_el0);
++	else
++		ret = membuf_zero(&to, sizeof(u64));
 +
 +	return ret;
-+}
+ }
+ 
+ static int tls_set(struct task_struct *target, const struct user_regset *regset,
+@@ -677,13 +685,20 @@ static int tls_set(struct task_struct *target, const struct user_regset *regset,
+ 		   const void *kbuf, const void __user *ubuf)
+ {
+ 	int ret;
+-	unsigned long tls = target->thread.uw.tp_value;
++	unsigned long tls[2];
+ 
+-	ret = user_regset_copyin(&pos, &count, &kbuf, &ubuf, &tls, 0, -1);
++	tls[0] = target->thread.uw.tp_value;
++	if (system_supports_sme())
++		tls[1] = target->thread.tpidr2_el0;
++
++	ret = user_regset_copyin(&pos, &count, &kbuf, &ubuf, tls, 0, count);
+ 	if (ret)
+ 		return ret;
+ 
+-	target->thread.uw.tp_value = tls;
++	target->thread.uw.tp_value = tls[0];
++	if (system_supports_sme())
++		target->thread.tpidr2_el0 = tls[1];
++
+ 	return ret;
+ }
+ 
+@@ -1392,7 +1407,7 @@ static const struct user_regset aarch64_regsets[] = {
+ 	},
+ 	[REGSET_TLS] = {
+ 		.core_note_type = NT_ARM_TLS,
+-		.n = 1,
++		.n = 2,
+ 		.size = sizeof(void *),
+ 		.align = sizeof(void *),
+ 		.regset_get = tls_get,
 -- 
 2.30.2
 
