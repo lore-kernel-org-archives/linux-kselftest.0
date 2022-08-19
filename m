@@ -2,58 +2,55 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1478C3F6B0
-	for <linux-kselftest@archiver.kernel.org>; Fri, 19 Aug 2022 18:01:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DBE08C28B2B
+	for <linux-kselftest@archiver.kernel.org>; Fri, 19 Aug 2022 18:01:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350062AbiHSSBC (ORCPT
+        id S1350162AbiHSSBD (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 19 Aug 2022 14:01:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53206 "EHLO
+        Fri, 19 Aug 2022 14:01:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351283AbiHSSAf (ORCPT
+        with ESMTP id S1350829AbiHSSA1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 Aug 2022 14:00:35 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A60E853D25
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Aug 2022 10:47:41 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id z8-20020a17090a014800b001fac4204c7eso2893766pje.8
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Aug 2022 10:47:41 -0700 (PDT)
+        Fri, 19 Aug 2022 14:00:27 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28C37108F18
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Aug 2022 10:47:23 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-334228502a8so88298387b3.20
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Aug 2022 10:47:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc;
-        bh=LIUZkMGvJXcpbhNGmft6GGfIK9I8bm9L0jfGUffk13c=;
-        b=pmlvaUHfcF+wVO68CerVhstzSi3CVnWjbp+gMTXQu0l84Wt+2u2oUzVK3BmNftGaGy
-         GGpXVCc6+D3MKSACJA2PQVYerbIIezKmekA9B2YvDRShnOKiEElGzMG8v4DxoQHOhABK
-         HweEyOo4EvgA7V8ak8DJaDLAmWol6w+mYSfN9HRk14EFe+YFuE2loXeJNPVTk3yWPrTD
-         8VHpJBLpndjnsDMVDERfw4XqucQJOyYPEZEzW9F2ZLWcosWIIeOzuSuxCfKLDMLvjgSJ
-         IkmOy93ixKWhH8IJU9b7w73iIomz6HzL7w3V64W2f94zV3bIIKWKYIk2A4mUT6KakL6o
-         OEeQ==
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
+        bh=68jCmlJPTWjEgDH8dkKvsN/Vy+R3D5xwsjHMw72NqNI=;
+        b=NM4HyjtIBQ7etrlOFPYIvVk5AscNC7t026h95x4fzfrTKG/0tt7n8peKjYT7elXEKv
+         5BSLtW4bMFgrN6ymudRaSc7o4eyszTLMILhkqSMcAqk71Belo4theQvOvFbAcyBdR8mT
+         Y4QMGBFg2QZjPAMu4HURM9fZg+m22w7PyufoX4YXFtboyXUAJdt/ZV6gs285xyx7Iike
+         tRhpzNBUbMUhjBe3WxyNncJ8Cs5trM/tdh/JmemktXFM6HyhKPNUeUbtacvl39ZlCxvi
+         kXY9fTvnMgGaNeXrmCP5Z0gVeTtDXo8zc32GSnUCNmN2PrGd8kbdZhvTHmfWN1cMv30n
+         VbMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc;
-        bh=LIUZkMGvJXcpbhNGmft6GGfIK9I8bm9L0jfGUffk13c=;
-        b=rejI2fsUg4dlc3kNUDH9votjaXrC6NmEj+nNJRymIpKGSFuAExPS+U+6eEcWWCmJ7l
-         ca165K69VuZ1fKKNOpHvHAeXJJEI+wt7xpz+qIzjY8ua+WWJVc4eofQK01striQLWnu+
-         sxUIytgyLQqyLfNi580z95dBXetQWjrdc0/4XE+48TvS36GVYjyiaBNJLpyRavSJ5vS1
-         A8+LV4Tevuis9bum11WOaq+gety7p2JmzOYMzjqwO3v9hYGWyV5CvybxPD3q8DHPFI2l
-         5SSIIi4gpOdngWbtIeAgwP3hgx7JMKRciTwlqu37s2HCJ71o3GCv6Z8vVNpyRbL5cvJf
-         Quwg==
-X-Gm-Message-State: ACgBeo1CyB9osW5y1tfao06Sr0ef6tvGdv3cFqz2OKIpjuubMjzAiEDs
-        meKoZibPzIPzbA2R+vdenPp7UfOAw+os7l9X
-X-Google-Smtp-Source: AA6agR7+aPOAfBVTAgSiy0DQ+nj1se+5Ibd8vZgJ3AwtFXKOvN/xwr/424n5dK411hPKuJHKjJRV/84SpeDaBz07
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc;
+        bh=68jCmlJPTWjEgDH8dkKvsN/Vy+R3D5xwsjHMw72NqNI=;
+        b=7lTZEorL0fjGJ+bjdwd/ncPZMIMOr084M750xDXcTtEwBGOg6Wr+LpBlyDb0w7uPm1
+         uC8FpmoXEJRnix7/nsxjLjpEzsESL3I6lQBkAfFmUlzrYbeXsIfPx3ugURwdiJXbrBe6
+         /jrTQX8fksU59Q6RXB9aR03QOO3VXAp1dw0cG8ni+UHgRj1r8tNc7Vrc2igR/jv143kK
+         7mv4luf3D/Hzbb5PQ5HEty7qXWfWo4bu/S/GJZE5w/TXbVQdBWl/943hrDxrqGft4XhC
+         w5Cq8yVUbJs+izND64XNahi+SpH+hwW8CJW2ErxNDUGHEcPpolHxtRlA0x/GOaFsuvAc
+         AH1w==
+X-Gm-Message-State: ACgBeo1ZcHXkANPAzdjNl+6avBfok0+CLngO+DgyCtBxvgVPq1ptUhl4
+        pONg/UT9W+8KMvwWviJa1KbN55YbrFQ1WiwE
+X-Google-Smtp-Source: AA6agR6DIUG9NXvjt9p2KBgUlc6EhGutVC6loa8Jf8FHQddKVVlyc1IRm//fxEaRXHCuyKWYVdFq1MWl3jfvMPqb
 X-Received: from vannapurve2.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:41f8])
- (user=vannapurve job=sendgmr) by 2002:a17:902:ab41:b0:171:54ae:624c with SMTP
- id ij1-20020a170902ab4100b0017154ae624cmr8313760plb.157.1660931261144; Fri,
- 19 Aug 2022 10:47:41 -0700 (PDT)
-Date:   Fri, 19 Aug 2022 17:46:55 +0000
-In-Reply-To: <20220819174659.2427983-1-vannapurve@google.com>
-Message-Id: <20220819174659.2427983-3-vannapurve@google.com>
+ (user=vannapurve job=sendgmr) by 2002:a25:bd3:0:b0:691:d47a:be78 with SMTP id
+ 202-20020a250bd3000000b00691d47abe78mr8120620ybl.574.1660931242410; Fri, 19
+ Aug 2022 10:47:22 -0700 (PDT)
+Date:   Fri, 19 Aug 2022 17:46:53 +0000
+Message-Id: <20220819174659.2427983-1-vannapurve@google.com>
 Mime-Version: 1.0
-References: <20220819174659.2427983-1-vannapurve@google.com>
 X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
-Subject: [RFC V3 PATCH 2/6] selftests: kvm: Add support for private memory
+Subject: [RFC V3 PATCH 0/6] selftests: KVM: selftests for fd-based private memory
 From:   Vishal Annapurve <vannapurve@google.com>
 To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
@@ -80,141 +77,65 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add support for registering private memory with kvm using
-KVM_SET_USER_MEMORY_REGION ioctl.
+This v3 series implements selftests targeting the feature floated by Chao
+via:
+https://lore.kernel.org/linux-mm/20220706082016.2603916-12-chao.p.peng@linux.intel.com/T/
 
-Helper function to query extended userspace mem region is introduced to
-allow memory conversion.
+Below changes aim to test the fd based approach for guest private memory
+in context of normal (non-confidential) VMs executing on non-confidential
+platforms.
 
-Signed-off-by: Vishal Annapurve <vannapurve@google.com>
----
- .../selftests/kvm/include/kvm_util_base.h     | 12 +++++-
- tools/testing/selftests/kvm/lib/kvm_util.c    | 40 ++++++++++++++++++-
- 2 files changed, 49 insertions(+), 3 deletions(-)
+private_mem_test.c file adds selftest to access private memory from the
+guest via private/shared accesses and checking if the contents can be
+leaked to/accessed by vmm via shared memory view before/after conversions.
 
-diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-index ff2533a32af9..dfe454f228e7 100644
---- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-@@ -30,7 +30,10 @@ typedef uint64_t vm_paddr_t; /* Virtual Machine (Guest) physical address */
- typedef uint64_t vm_vaddr_t; /* Virtual Machine (Guest) virtual address */
- 
- struct userspace_mem_region {
--	struct kvm_userspace_memory_region region;
-+	union {
-+		struct kvm_userspace_memory_region region;
-+		struct kvm_userspace_memory_region_ext region_ext;
-+	};
- 	struct sparsebit *unused_phy_pages;
- 	struct sparsebit *encrypted_phy_pages;
- 	int fd;
-@@ -200,7 +203,7 @@ static inline bool kvm_has_cap(long cap)
- 
- #define kvm_do_ioctl(fd, cmd, arg)						\
- ({										\
--	static_assert(!_IOC_SIZE(cmd) || sizeof(*arg) == _IOC_SIZE(cmd), "");	\
-+	static_assert(!_IOC_SIZE(cmd) || sizeof(*arg) >= _IOC_SIZE(cmd), "");	\
- 	ioctl(fd, cmd, arg);							\
- })
- 
-@@ -388,6 +391,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
- void vm_mem_region_set_flags(struct kvm_vm *vm, uint32_t slot, uint32_t flags);
- void vm_mem_region_move(struct kvm_vm *vm, uint32_t slot, uint64_t new_gpa);
- void vm_mem_region_delete(struct kvm_vm *vm, uint32_t slot);
-+
- struct kvm_vcpu *__vm_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id);
- vm_vaddr_t vm_vaddr_alloc(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min);
- vm_vaddr_t vm_vaddr_alloc_shared(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min);
-@@ -717,6 +721,10 @@ struct kvm_userspace_memory_region *
- kvm_userspace_memory_region_find(struct kvm_vm *vm, uint64_t start,
- 				 uint64_t end);
- 
-+struct kvm_userspace_memory_region_ext *
-+kvm_userspace_memory_region_ext_find(struct kvm_vm *vm, uint64_t start,
-+				 uint64_t end);
-+
- #define sync_global_to_guest(vm, g) ({				\
- 	typeof(g) *_p = addr_gva2hva(vm, (vm_vaddr_t)&(g));	\
- 	memcpy(_p, &(g), sizeof(g));				\
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index 171bc20a097a..f153c71d6988 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -17,6 +17,7 @@
- #include <unistd.h>
- #include <linux/kernel.h>
- 
-+#define MFD_INACCESSIBLE  0x0008U
- #define KVM_UTIL_MIN_PFN	2
- 
- static int vcpu_mmap_sz(void);
-@@ -466,6 +467,35 @@ kvm_userspace_memory_region_find(struct kvm_vm *vm, uint64_t start,
- 	return &region->region;
- }
- 
-+/*
-+ * KVM Userspace Memory Region Ext Find
-+ *
-+ * Input Args:
-+ *   vm - Virtual Machine
-+ *   start - Starting VM physical address
-+ *   end - Ending VM physical address, inclusive.
-+ *
-+ * Output Args: None
-+ *
-+ * Return:
-+ *   Pointer to overlapping ext region, NULL if no such region.
-+ *
-+ * Public interface to userspace_mem_region_find. Allows tests to look up
-+ * the memslot datastructure for a given range of guest physical memory.
-+ */
-+struct kvm_userspace_memory_region_ext *
-+kvm_userspace_memory_region_ext_find(struct kvm_vm *vm, uint64_t start,
-+				 uint64_t end)
-+{
-+	struct userspace_mem_region *region;
-+
-+	region = userspace_mem_region_find(vm, start, end);
-+	if (!region)
-+		return NULL;
-+
-+	return &region->region_ext;
-+}
-+
- /*
-  * VM VCPU Remove
-  *
-@@ -764,6 +794,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
- 	struct userspace_mem_region *region;
- 	size_t backing_src_pagesz = get_backing_src_pagesz(src_type);
- 	size_t alignment;
-+	int priv_memfd = -1;
- 
- 	TEST_ASSERT(vm_adjust_num_guest_pages(vm->mode, npages) == npages,
- 		"Number of guest pages is not compatible with the host. "
-@@ -869,6 +900,11 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
- 			    vm_mem_backing_src_alias(src_type)->name);
- 	}
- 
-+	if (flags & KVM_MEM_PRIVATE) {
-+		priv_memfd = memfd_create("vm_private_mem_", MFD_INACCESSIBLE);
-+		TEST_ASSERT(priv_memfd != -1, "Failed to create private memfd");
-+	}
-+
- 	region->unused_phy_pages = sparsebit_alloc();
- 	region->encrypted_phy_pages = sparsebit_alloc();
- 	sparsebit_set_num(region->unused_phy_pages,
-@@ -878,7 +914,9 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
- 	region->region.guest_phys_addr = guest_paddr;
- 	region->region.memory_size = npages * vm->page_size;
- 	region->region.userspace_addr = (uintptr_t) region->host_mem;
--	ret = __vm_ioctl(vm, KVM_SET_USER_MEMORY_REGION, &region->region);
-+	region->region_ext.private_fd = priv_memfd;
-+	region->region_ext.private_offset = 0;
-+	ret = ioctl(vm->fd, KVM_SET_USER_MEMORY_REGION, &region->region_ext);
- 	TEST_ASSERT(ret == 0, "KVM_SET_USER_MEMORY_REGION IOCTL failed,\n"
- 		"  rc: %i errno: %i\n"
- 		"  slot: %u flags: 0x%x\n"
+Updates in V3:
+1) Series is based on v7 series from Chao
+2) Changes are introduced in KVM to help execute private mem selftests
+3) Selftests are executing from private memory
+4) Test implementation is simplified to contain implicit/explicit memory
+conversion paths according to feedback from Sean.
+5) Addressed comments from Sean and Shuah.
+
+This series has dependency on following patches:
+1) V7 series patches from Chao mentioned above.
+2) https://lore.kernel.org/lkml/20220810152033.946942-1-pgonda@google.com/T/#u
+  - Series posted by Peter containing patches from Michael and Sean.
+
+Github link for the patches posted as part of this series:
+https://github.com/vishals4gh/linux/commits/priv_memfd_selftests_rfc_v3
+
+Vishal Annapurve (6):
+  kvm: x86: Add support for testing private memory
+  selftests: kvm: Add support for private memory
+  selftests: kvm: ucall: Allow querying ucall pool gpa
+  selftests: kvm: x86: Execute hypercall as per the cpu
+  selftests: kvm: x86: Execute VMs with private memory
+  sefltests: kvm: x86: Add selftest for private memory
+
+ arch/x86/include/uapi/asm/kvm_para.h          |   2 +
+ arch/x86/kvm/Kconfig                          |   1 +
+ arch/x86/kvm/mmu/mmu.c                        |  19 ++
+ arch/x86/kvm/mmu/mmu_internal.h               |   2 +-
+ arch/x86/kvm/x86.c                            |  67 +++-
+ include/linux/kvm_host.h                      |  12 +
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   2 +
+ .../selftests/kvm/include/kvm_util_base.h     |  12 +-
+ .../selftests/kvm/include/ucall_common.h      |   2 +
+ .../kvm/include/x86_64/private_mem.h          |  51 +++
+ tools/testing/selftests/kvm/lib/kvm_util.c    |  40 ++-
+ .../testing/selftests/kvm/lib/ucall_common.c  |  12 +
+ .../selftests/kvm/lib/x86_64/private_mem.c    | 297 ++++++++++++++++++
+ .../selftests/kvm/lib/x86_64/processor.c      |  15 +-
+ .../selftests/kvm/x86_64/private_mem_test.c   | 262 +++++++++++++++
+ virt/kvm/Kconfig                              |   9 +
+ virt/kvm/kvm_main.c                           |  90 +++++-
+ 18 files changed, 887 insertions(+), 9 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/include/x86_64/private_mem.h
+ create mode 100644 tools/testing/selftests/kvm/lib/x86_64/private_mem.c
+ create mode 100644 tools/testing/selftests/kvm/x86_64/private_mem_test.c
+
 -- 
 2.37.1.595.g718a3a8f04-goog
 
