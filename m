@@ -2,30 +2,30 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F732C28B2B
-	for <linux-kselftest@archiver.kernel.org>; Fri, 19 Aug 2022 16:56:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E973C32771
+	for <linux-kselftest@archiver.kernel.org>; Fri, 19 Aug 2022 17:01:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354292AbiHSQ4y (ORCPT
+        id S1350368AbiHSRBd (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 19 Aug 2022 12:56:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40696 "EHLO
+        Fri, 19 Aug 2022 13:01:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354493AbiHSQz1 (ORCPT
+        with ESMTP id S1354564AbiHSRA1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 Aug 2022 12:55:27 -0400
+        Fri, 19 Aug 2022 13:00:27 -0400
 Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71644D91D0;
-        Fri, 19 Aug 2022 09:16:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E429133A62;
+        Fri, 19 Aug 2022 09:21:12 -0700 (PDT)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1660925708;
+        t=1660926070;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding;
-        bh=k0xkptv3Zqc9QB1iW0tg7GYz6w0QjKzvT8qQb1OUOvo=;
-        b=HpdH+BTYOAHCdvv2kpRE5FYFGRD1GQes+Zjko16lbijJL3vTVXF105i/Vx5mGXmZ/FBrRk
-        aIlt61jYoi38RhDvxwQffosCtoQDzbVPtv8eUtSMW/PUkgCxtM9EqMTD0+kt+bUDf8i2f2
-        3NYNJqjwKBr5L45AWadau0UwHvlGNc0=
+        bh=5hkt6s+kNeBeIfkMLCBhtmNEE4XpaiKh/lt918dPnd0=;
+        b=kmyW5NALJA/IWF7+aNqifmKM6VmbO+VGRyI/MIPPXjd+bLP4ePxgJ183oed0sF7O2Lb6ly
+        l5z7FG+AO5zZVOL30StU6yxtit8hfukRfFjfeIIc8R4pS4AvVtpcPpf+ztLKq0g65toIEI
+        JF8kPoVkWCToADVBuyrfQbKrO6ZKcMo=
 From:   Oliver Upton <oliver.upton@linux.dev>
 To:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
         Alexandru Elisei <alexandru.elisei@arm.com>,
@@ -37,9 +37,9 @@ Cc:     Reiji Watanabe <reijiw@google.com>,
         linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
         kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: selftests: Update top-of-file comment in psci_test
-Date:   Fri, 19 Aug 2022 16:14:11 +0000
-Message-Id: <20220819161411.212530-1-oliver.upton@linux.dev>
+Subject: [RESEND PATCH] KVM: selftests: Update top-of-file comment in psci_test
+Date:   Fri, 19 Aug 2022 16:21:00 +0000
+Message-Id: <20220819162100.213854-1-oliver.upton@linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
@@ -59,11 +59,14 @@ reflect what had changed.
 Reported-by: Reiji Watanabe <reijiw@google.com>
 Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
 ---
+
+Forgetting the name of the darned UAPI event. Tsk tsk.
+
  tools/testing/selftests/kvm/aarch64/psci_test.c | 10 ++++++----
  1 file changed, 6 insertions(+), 4 deletions(-)
 
 diff --git a/tools/testing/selftests/kvm/aarch64/psci_test.c b/tools/testing/selftests/kvm/aarch64/psci_test.c
-index f7621f6e938e..8a77bd06427c 100644
+index f7621f6e938e..e0b9e81a3e09 100644
 --- a/tools/testing/selftests/kvm/aarch64/psci_test.c
 +++ b/tools/testing/selftests/kvm/aarch64/psci_test.c
 @@ -1,12 +1,14 @@
@@ -81,7 +84,7 @@ index f7621f6e938e..8a77bd06427c 100644
 + *  - A regression test for a race between KVM servicing the PSCI CPU_ON call
 + *    and userspace reading the targeted vCPU's registers.
 + *  - A test for KVM's handling of PSCI SYSTEM_SUSPEND and the associated
-+ *    KVM_EXIT_SYSTEM_SUSPEND UAPI.
++ *    KVM_SYSTEM_EVENT_SUSPEND UAPI.
   */
  
  #define _GNU_SOURCE
