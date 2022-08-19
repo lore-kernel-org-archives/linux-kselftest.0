@@ -2,100 +2,135 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39B75C32771
-	for <linux-kselftest@archiver.kernel.org>; Fri, 19 Aug 2022 11:28:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CF7AC32771
+	for <linux-kselftest@archiver.kernel.org>; Fri, 19 Aug 2022 12:19:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348695AbiHSL2q (ORCPT
+        id S1347971AbiHSMTK (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 19 Aug 2022 07:28:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33956 "EHLO
+        Fri, 19 Aug 2022 08:19:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348241AbiHSL2p (ORCPT
+        with ESMTP id S1347929AbiHSMTI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 Aug 2022 07:28:45 -0400
-Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BFB5B514B;
-        Fri, 19 Aug 2022 04:28:44 -0700 (PDT)
-Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx1.riseup.net (Postfix) with ESMTPS id 4M8KJW631TzDrR3;
-        Fri, 19 Aug 2022 11:28:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1660908524; bh=HtTFlUxYhMXKADnhF9mXs30RyZIzn/W5VJYsvu6FAWY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=oNE1KfuQvtHc6iPUUoq7FSpjOkKEPrc/+RR6cYSgcJxHZ9z8/8ccbHuB+sKb98nqQ
-         aoYWA88GUFWtbXCLjG4psT0qZVNooAuaAOMK4D4UxqvFwhz1DbNC0wRWgEhZKObksV
-         TxaV7riL7BmM91aLXMkes37L28oiNzpYdwxIrnpw=
-X-Riseup-User-ID: 0F8265F3B5B153B0BB085616B6910490B77EA1389FDF561D07126609569FEFE3
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews1.riseup.net (Postfix) with ESMTPSA id 4M8KJR1sMPz5vQt;
-        Fri, 19 Aug 2022 11:28:38 +0000 (UTC)
-Message-ID: <ff728926-22e4-e65b-ee94-2ed958c92993@riseup.net>
-Date:   Fri, 19 Aug 2022 08:28:36 -0300
+        Fri, 19 Aug 2022 08:19:08 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC5BFE9A99;
+        Fri, 19 Aug 2022 05:19:06 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 6AB43188488D;
+        Fri, 19 Aug 2022 12:18:34 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id B357F2503313;
+        Fri, 19 Aug 2022 12:18:23 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 02302A1A5E40; Fri, 19 Aug 2022 09:51:11 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-Subject: Re: [PATCH 5/8] Documentation: KUnit: add intro to the
- getting-started page
-Content-Language: en-US
-To:     Tales Aparecida <tales.aparecida@gmail.com>,
-        Sadiya Kazi <sadiyakazi@google.com>
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        davidgow@google.com, corbet@lwn.net, brendan.higgins@linux.dev,
-        Trevor Woerner <twoerner@gmail.com>, siqueirajordao@riseup.net,
-        mwen@igalia.com, andrealmeid@riseup.net,
-        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com
-References: <20220819053234.241501-1-tales.aparecida@gmail.com>
- <20220819053234.241501-6-tales.aparecida@gmail.com>
-From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
-In-Reply-To: <20220819053234.241501-6-tales.aparecida@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Date:   Fri, 19 Aug 2022 11:51:11 +0200
+From:   netdev@kapio-technology.com
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
+ flag to drivers
+In-Reply-To: <YvkM7UJ0SX+jkts2@shredder>
+References: <5a4cfc6246f621d006af69d4d1f61ed1@kapio-technology.com>
+ <YvkM7UJ0SX+jkts2@shredder>
+User-Agent: Gigahost Webmail
+Message-ID: <34dd1318a878494e7ab595f8727c7d7d@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Tales
+On 2022-08-14 16:55, Ido Schimmel wrote:
+> On Fri, Aug 12, 2022 at 02:29:48PM +0200, netdev@kapio-technology.com 
+> wrote:
+>> On 2022-08-11 13:28, Ido Schimmel wrote:
+>> 
+>> > > > I'm talking about roaming, not forwarding. Let's say you have a locked
+>> > > > entry with MAC X pointing to port Y. Now you get a packet with SMAC X
+>> > > > from port Z which is unlocked. Will the FDB entry roam to port Z? I
+>> > > > think it should, but at least in current implementation it seems that
+>> > > > the "locked" flag will not be reset and having locked entries pointing
+>> > > > to an unlocked port looks like a bug.
 
-On 8/19/22 02:32, Tales Aparecida wrote:
-> Describe the objective of the Getting Started page, which should be a
-> brief and beginner-friendly walkthrough for running and writing tests,
-> showing the reader where to find detailed instructions in other pages.
+I have made the locked entries sticky in the bridge, so that they don't 
+move to other ports.
+
+>> > > >
+>> > >
+>> 
+>> In general I have been thinking that the said setup is a network
+>> configuration error as I was arguing in an earlier conversation with
+>> Vladimir. In this setup we must remember that SMAC X becomes DMAC X in 
+>> the
+>> return traffic on the open port. But the question arises to me why MAC 
+>> X
+>> would be behind the locked port without getting authed while being 
+>> behind an
+>> open port too?
+>> In a real life setup, I don't think you would want random hosts behind 
+>> a
+>> locked port in the MAB case, but only the hosts you will let through. 
+>> Other
+>> hosts should be regarded as intruders.
+>> 
+>> If we are talking about a station move, then the locked entry will age 
+>> out
+>> and MAC X will function normally on the open port after the timeout, 
+>> which
+>> was a case that was taken up in earlier discussions.
+>> 
+>> But I will anyhow do some testing with this 'edge case' (of being 
+>> behind
+>> both a locked and an unlocked port) if I may call it so, and see to 
+>> that the
+>> offloaded and non-offloaded cases correspond to each other, and will 
+>> work
+>> satisfactory.
 > 
-> Signed-off-by: Tales Aparecida <tales.aparecida@gmail.com>
-> ---
->  Documentation/dev-tools/kunit/start.rst | 5 +++++
->  1 file changed, 5 insertions(+)
+> It would be best to implement these as additional test cases in the
+> current selftest. Then you can easily test with both veth pairs and
+> loopbacks and see that the hardware and software data paths behave the
+> same.
 > 
-> diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
-> index f0ec64207bd3..3855402a5b3e 100644
-> --- a/Documentation/dev-tools/kunit/start.rst
-> +++ b/Documentation/dev-tools/kunit/start.rst
-> @@ -4,6 +4,11 @@
->  Getting Started
->  ===============
->  
-> +This page contains an overview about the kunit_tool and Kunit framework,
-> +teaching how to run existent tests and then how to write a simple test-case,
-> +and covering common problems users face when using Kunit for the first time.
-> +It is recommended that the reader had compiled the Kernel at least once before.
 
-Some grammar nits:
-- s/an overview about/an overview of
-- s/Kunit/KUnit for consistency
-- s/existent/existing
-- s/covering/covers
+How many loops would be needed to have a selftest with a HUB and a MAC 
+on both a locked and an unlocked port?
 
-Other than this small nits,
+>> 
+>> I think it will be good to have a flag to enable the mac-auth/MAB 
+>> feature,
+>> and I suggest just calling the flag 'mab', as it is short.
 
-Reviewed-by: Maíra Canal <mairacanal@riseup.net>
+I have now created the flag to enable Mac-Auth/MAB with iproute2:
+bridge link set dev DEV macauth on|off
 
-Best Regards,
-- Maíra Canal
+with the example output from 'bridge -d link show dev DEV' when macauth 
+is enabled:
+1: ethX: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 master br0 state 
+forwarding priority 32 cost 19
+     hairpin off guard off root_block off fastleave off learning on flood 
+off mcast_flood on bcast_flood on mcast_router 1 mcast_to_unicast off 
+neigh_suppress off vlan_tunnel off isolated off locked mab on
 
-> +
->  Installing Dependencies
->  =======================
->  KUnit has the same dependencies as the Linux kernel. As long as you can
+The flag itself in the code is called BR_PORT_MACAUTH.
+
+> 
+> Fine by me, but I'm not sure everyone agrees.
