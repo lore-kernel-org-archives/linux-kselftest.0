@@ -2,415 +2,354 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4630FC32771
-	for <linux-kselftest@archiver.kernel.org>; Fri, 19 Aug 2022 12:34:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DAB85C32771
+	for <linux-kselftest@archiver.kernel.org>; Fri, 19 Aug 2022 12:44:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348521AbiHSMeD (ORCPT
+        id S1348742AbiHSMoD (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 19 Aug 2022 08:34:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41964 "EHLO
+        Fri, 19 Aug 2022 08:44:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348481AbiHSMeC (ORCPT
+        with ESMTP id S1348487AbiHSMoC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 Aug 2022 08:34:02 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA95961B28
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Aug 2022 05:34:00 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id v10so4381950ljh.9
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Aug 2022 05:34:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=NZ2a/CLKJIs4lmdXrW3UiRmiAr4+TW2WhgSNxOGzccA=;
-        b=daMwtJbKHJ61v5sf8VR7TC5uSa0rwHZ5W0gVzElMX9oJVSe9W7bBDvKUCZTJbQ9ozW
-         33BR3WdXynzMxZ81mkppceDeuCtkGmjCOKGM6G/SYtVP91LVsdVmcpTeWpv8LVaPD0DA
-         wxtCN+kwW5SL1jzMNoVuSVzPLg+ztQh/sFYEYMiaE29up+77vyn9qkZROsFcEHgyPzRN
-         7Blaqd/boZ5LQVIE7Quc6epJJUkQXaRs5ff/Xc1jgHkZAOfUDCa+tcFUNHeE/+6/x0Bm
-         YSbrIiP+QTvn8gicSUuaLJutFj7z04wtM0iXz5pu/ushTYDoVb5VKpzt3wIEKYXxe22g
-         XYVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=NZ2a/CLKJIs4lmdXrW3UiRmiAr4+TW2WhgSNxOGzccA=;
-        b=Mb2C1qpCZyUVa+7PJ7LMTA9JTnbGrJPjbyVJBKlDHreNcFDvzJHVzwTqT4uLPtjpIN
-         jQYSOrYv1rKIXGS72kAe5zmK9HtpSDql88fTmoZkxwBer0n8JFaGT/rwoOcBI+Zw9ejV
-         tfGSpOLJnQXAVneRvkYTny1yHGk5Ea6ga3dlPgLKl2MSmfc0CYGxz3zFRzk8WPW1YL0B
-         VLLrqhfCzshFredh6Q49GJCFm3LLqRWCXc/Y41Inm09dIDldVx/UOqh1O51DwUOc6yqE
-         3lodqmB+D1WiHVE2Fq9GbF4V5CdI7xMDiOxroi3MBK9oMQmE4welyRbcL+bduUw6sUBt
-         zUgg==
-X-Gm-Message-State: ACgBeo0Y72Rx4puXbcnbF/MW6iSQJ4b3cck5RkvSarv5eqWW4Le5feet
-        nOEeyprDTU+HqV9sm9s43vKVtgHCWZFEc4OpGeVmsQ==
-X-Google-Smtp-Source: AA6agR5jhs1yh7KPRbY65asU6KWhzCzjs3Ki1+AluIKvIb8QFo+TO+AkXMZ7l8p0rd2isfUXBta7pRZbnJDAMfvAVkw=
-X-Received: by 2002:a05:651c:1695:b0:261:b5d4:371a with SMTP id
- bd21-20020a05651c169500b00261b5d4371amr1716631ljb.154.1660912438814; Fri, 19
- Aug 2022 05:33:58 -0700 (PDT)
+        Fri, 19 Aug 2022 08:44:02 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A272C2E9C6;
+        Fri, 19 Aug 2022 05:43:56 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id D00811884F89;
+        Fri, 19 Aug 2022 12:43:27 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 980F72503314;
+        Fri, 19 Aug 2022 12:43:24 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 18BE8A1A5528; Fri, 19 Aug 2022 08:28:10 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-References: <20220819053234.241501-1-tales.aparecida@gmail.com> <20220819053234.241501-2-tales.aparecida@gmail.com>
-In-Reply-To: <20220819053234.241501-2-tales.aparecida@gmail.com>
-From:   Sadiya Kazi <sadiyakazi@google.com>
-Date:   Fri, 19 Aug 2022 18:03:47 +0530
-Message-ID: <CAO2JNKUByc9FcvqcmKe+N7NoJDU8+1U7S5PC-HfkptheeTq-Ww@mail.gmail.com>
-Subject: Re: [PATCH 1/8] Documentation: KUnit: remove duplicated docs for kunit_tool
-To:     Tales Aparecida <tales.aparecida@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        David Gow <davidgow@google.com>, corbet@lwn.net,
-        brendan.higgins@linux.dev, Trevor Woerner <twoerner@gmail.com>,
-        siqueirajordao@riseup.net, mwen@igalia.com, andrealmeid@riseup.net,
-        mairacanal@riseup.net, Isabella Basso <isabbasso@riseup.net>,
-        magalilemes00@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Date:   Fri, 19 Aug 2022 10:28:09 +0200
+From:   netdev@kapio-technology.com
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 net-next 5/6] net: dsa: mv88e6xxx: mac-auth/MAB
+ implementation
+In-Reply-To: <20220717004725.ngix64ou2mz566is@skbuf>
+References: <20220707152930.1789437-1-netdev@kapio-technology.com>
+ <20220707152930.1789437-6-netdev@kapio-technology.com>
+ <20220717004725.ngix64ou2mz566is@skbuf>
+User-Agent: Gigahost Webmail
+Message-ID: <b6d95362926772bb513022ad8a45282d@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 11:02 AM Tales Aparecida
-<tales.aparecida@gmail.com> wrote:
->
-> Delete "kunit-tool.rst" to remove repeated info from KUnit docs.
-> "What is kunit_tool?" was integrated into index.rst, the remaining
-> sections were moved into run_wrapper.rst and renamed as follows:
->
-> "What is a .kunitconfig?" -> "Create a ``.kunitconfig`` File"
-> "Getting Started with kunit_tool" -> "Run Tests with kunit_tool"
-> "Configuring, Building, and Running Tests" ->
->   "Configure, Build, and Run Tests"
-> "Running Tests on QEMU" -> "Run Tests on QEMU"
-> "Parsing Test Results" -> "Parse Test Results"
-> "Filtering Tests" -> "Run Selected Test Suites"
-> "Other Useful Options" -> "Command-Line Arguments"
->
-> Signed-off-by: Tales Aparecida <tales.aparecida@gmail.com>
-> ---
+On 2022-07-17 02:47, Vladimir Oltean wrote:
+>> @@ -1721,11 +1735,11 @@ static int mv88e6xxx_vtu_get(struct 
+>> mv88e6xxx_chip *chip, u16 vid,
+>>  	return err;
+>>  }
+>> 
+>>  int mv88e6xxx_port_set_lock(struct mv88e6xxx_chip *chip, int port,
+>>  			    bool locked)
+>>  {
+>> @@ -1257,13 +1270,18 @@ int mv88e6xxx_port_set_lock(struct 
+>> mv88e6xxx_chip *chip, int port,
+>>  	if (err)
+>>  		return err;
+>> 
+>> -	err = mv88e6xxx_port_read(chip, port, MV88E6XXX_PORT_ASSOC_VECTOR, 
+>> &reg);
+>> -	if (err)
+>> -		return err;
+>> +	if (!locked) {
+>> +		err = mv88e6xxx_atu_locked_entry_flush(chip->ds, port);
+> 
+> Did you re-run the selftest with v4? Because this deadlocks due to the
+> double reg_lock illustrated below:
 
-Hi Tales,
-Thank you for removing repeated content from the docs. It definitely
-helps. You could change the headings as follows:
+I did some selftest, but I didn't experience the problem of the double 
+chip lock as it only happens on unlock which is only called where the 
+MAB test ends.
 
-"What is a .kunitconfig?" -> "Create a ``.kunitconfig`` File". Keep it
-as "Creating a ``.kunitconfig`` file".
-"Getting Started with kunit_tool" -> "Run Tests with kunit_tool". Keep
-it as "Running tests with kunit_tool".
- "Configuring, Building, and Running Tests" ->
- "Configure, Build, and Run Tests". Keep it as "Configuring, building,
-and running tests"
-"Running Tests on QEMU" -> "Run Tests on QEMU". Keep it as "Running
-tests on QEMU"
-"Parsing Test Results" -> "Parse Test Results".  Keep it as "Parsing
-test results"
-"Filtering Tests" -> "Run Selected Test Suites".  Keep it as "Filtering tests"
-"Other Useful Options" -> "Command-Line Arguments".  Keep it as
-"Running command-line arguments". This would help to display the right
-results when any user is searching with the keyword command-line.
-Makes the document more discoverable.
+> 
+> + vrf_name=vlan1
+> + ip vrf exec vlan1 ping 192.0.2.2 -c 10 -i 0.1 -w 5
+> + check_err 1 'Ping did not work after locking port and adding FDB 
+> entry'
+> + local err=1
+> + local 'msg=Ping did not work after locking port and adding FDB entry'
+> + [[ 0 -eq 0 ]]
+> + [[ 1 -ne 0 ]]
+> + RET=1
+> + retmsg='Ping did not work after locking port and adding FDB entry'
+> + bridge link set dev lan2 locked off
+> [  733.273994]
+> [  733.275515] ============================================
+> [  733.280823] WARNING: possible recursive locking detected
+> [  733.286133] 5.19.0-rc6-07010-ga9b9500ffaac-dirty #3293 Not tainted
+> [  733.292311] --------------------------------------------
+> [  733.297613] kworker/0:0/601 is trying to acquire lock:
+> [  733.302751] ffff00000213c110 (&chip->reg_lock){+.+.}-{4:4}, at:
+> mv88e6xxx_atu_locked_entry_purge+0x70/0x1a4
+> [  733.312524]
+> [  733.312524] but task is already holding lock:
+> [  733.318351] ffff00000213c110 (&chip->reg_lock){+.+.}-{4:4}, at:
+> mv88e6xxx_port_bridge_flags+0x48/0x234
+> [  733.327674]
+> [  733.327674] other info that might help us debug this:
+> [  733.334198]  Possible unsafe locking scenario:
+> [  733.334198]
+> [  733.340109]        CPU0
+> [  733.342549]        ----
+> [  733.344990]   lock(&chip->reg_lock);
+> [  733.348567]   lock(&chip->reg_lock);
+> [  733.352149]
+> [  733.352149]  *** DEADLOCK ***
+> [  733.352149]
+> [  733.358063]  May be due to missing lock nesting notation
+> [  733.358063]
+> [  733.364846] 6 locks held by kworker/0:0/601:
+> [  733.369115]  #0: ffff00000000b748
+> ((wq_completion)events){+.+.}-{0:0}, at: process_one_work+0x1f4/0x6c4
+> [  733.378541]  #1: ffff80000c43bdc8
+> (deferred_process_work){+.+.}-{0:0}, at: process_one_work+0x1f4/0x6c4
+> [  733.387966]  #2: ffff80000b020cb0 (rtnl_mutex){+.+.}-{4:4}, at:
+> rtnl_lock+0x1c/0x30
+> [  733.395660]  #3: ffff80000b073370
+> ((switchdev_blocking_notif_chain).rwsem){++++}-{4:4}, at:
+> blocking_notifier_call_chain+0x34/0xa0
+> [  733.407432]  #4: ffff00000213c110 (&chip->reg_lock){+.+.}-{4:4},
+> at: mv88e6xxx_port_bridge_flags+0x48/0x234
+> [  733.417202]  #5: ffff00000213e0f0 (&p->ale_list_lock){+.+.}-{4:4},
+> at: mv88e6xxx_atu_locked_entry_flush+0x4c/0xc0
+> [  733.427495]
+> [  733.427495] stack backtrace:
+> [  733.431858] CPU: 0 PID: 601 Comm: kworker/0:0 Not tainted
+> 5.19.0-rc6-07010-ga9b9500ffaac-dirty #3293
+> [  733.440992] Hardware name: CZ.NIC Turris Mox Board (DT)
+> [  733.446219] Workqueue: events switchdev_deferred_process_work
+> [  733.451982] Call trace:
+> [  733.454424]  dump_backtrace.part.0+0xcc/0xe0
+> [  733.458702]  show_stack+0x18/0x6c
+> [  733.462028]  dump_stack_lvl+0x8c/0xb8
+> [  733.465703]  dump_stack+0x18/0x34
+> [  733.469029]  __lock_acquire+0x1074/0x1fd0
+> [  733.473052]  lock_acquire.part.0+0xe4/0x220
+> [  733.477244]  lock_acquire+0x68/0x8c
+> [  733.480744]  __mutex_lock+0x9c/0x460
+> [  733.484332]  mutex_lock_nested+0x40/0x50
+> [  733.488268]  mv88e6xxx_atu_locked_entry_purge+0x70/0x1a4
+> [  733.493592]  mv88e6xxx_atu_locked_entry_flush+0x7c/0xc0
+> [  733.498827]  mv88e6xxx_port_set_lock+0xfc/0x10c
+> [  733.503374]  mv88e6xxx_port_bridge_flags+0x200/0x234
+> [  733.508351]  dsa_port_bridge_flags+0x44/0xe0
+> [  733.512635]  dsa_slave_port_attr_set+0x1ec/0x230
+> [  733.517268]  __switchdev_handle_port_attr_set+0x58/0x100
+> [  733.522594]  switchdev_handle_port_attr_set+0x10/0x24
+> [  733.527659]  dsa_slave_switchdev_blocking_event+0x8c/0xd4
+> [  733.533074]  blocking_notifier_call_chain+0x6c/0xa0
+> [  733.537968]  switchdev_port_attr_notify.constprop.0+0x4c/0xb0
+> [  733.543729]  switchdev_port_attr_set_deferred+0x24/0x80
+> [  733.548967]  switchdev_deferred_process+0x90/0x164
+> [  733.553774]  switchdev_deferred_process_work+0x14/0x2c
+> [  733.558926]  process_one_work+0x28c/0x6c4
+> [  733.562949]  worker_thread+0x74/0x450
+> [  733.566623]  kthread+0x118/0x11c
+> [  733.569860]  ret_from_fork+0x10/0x20
+> ++ mac_get lan1
+> ++ local if_name=lan1
+> ++ jq -r '.[]["address"]'
+> ++ ip -j link show dev lan1
+> 
+> I've tentatively fixed this in my tree by taking the register lock more
+> localized to the sub-functions of mv88e6xxx_port_bridge_flags(), and 
+> not
+> taking it at caller side for mv88e6xxx_port_set_lock(), but rather
+> letting the callee take it:
 
+Yes, the double chip lock came from calling 
+mv88e6xxx_atu_locked_entry_flush() in mv88e6xxx_port_set_lock() that is 
+called from mv88e6xxx_port_bridge_flags() whic has the lock taken. I 
+have fixed this now, but when I unlock a port with locked entries, I 
+cannot have notify the bridge to clear the same locked entries by having 
+mv88e6xxx_atu_locked_entry_flush() calling with the notify on, thus 
+taking the rtnl lock, as this also results in a double lock.
+To remove the locked entries in the bridge FDB it is then necessary as I 
+see it, to take the link down or have a userspace daemon clear them. I 
+hope that is okay if documented?
 
-Reviewed-by: Sadiya Kazi <sadiyakazi@google.com>
-
-Regards,
-Sadiya Kazi
-
->  Documentation/dev-tools/kunit/index.rst       |   3 -
->  Documentation/dev-tools/kunit/kunit-tool.rst  | 232 ------------------
->  Documentation/dev-tools/kunit/run_wrapper.rst |   4 +-
->  Documentation/dev-tools/kunit/start.rst       |   2 -
->  4 files changed, 2 insertions(+), 239 deletions(-)
->  delete mode 100644 Documentation/dev-tools/kunit/kunit-tool.rst
->
-> diff --git a/Documentation/dev-tools/kunit/index.rst b/Documentation/dev-tools/kunit/index.rst
-> index bc91ad7b8961..d7187282ba28 100644
-> --- a/Documentation/dev-tools/kunit/index.rst
-> +++ b/Documentation/dev-tools/kunit/index.rst
-> @@ -13,7 +13,6 @@ KUnit - Linux Kernel Unit Testing
->         run_wrapper
->         run_manual
->         usage
-> -       kunit-tool
->         api/index
->         style
->         faq
-> @@ -109,7 +108,5 @@ How do I use it?
->      examples.
->  *   Documentation/dev-tools/kunit/api/index.rst - KUnit APIs
->      used for testing.
-> -*   Documentation/dev-tools/kunit/kunit-tool.rst - kunit_tool helper
-> -    script.
->  *   Documentation/dev-tools/kunit/faq.rst - KUnit common questions and
->      answers.
-> diff --git a/Documentation/dev-tools/kunit/kunit-tool.rst b/Documentation/dev-tools/kunit/kunit-tool.rst
-> deleted file mode 100644
-> index ae52e0f489f9..000000000000
-> --- a/Documentation/dev-tools/kunit/kunit-tool.rst
-> +++ /dev/null
-> @@ -1,232 +0,0 @@
-> -.. SPDX-License-Identifier: GPL-2.0
-> -
-> -=================
-> -kunit_tool How-To
-> -=================
-> -
-> -What is kunit_tool?
-> -===================
-> -
-> -kunit_tool is a script (``tools/testing/kunit/kunit.py``) that aids in building
-> -the Linux kernel as UML (`User Mode Linux
-> -<http://user-mode-linux.sourceforge.net/>`_), running KUnit tests, parsing
-> -the test results and displaying them in a user friendly manner.
-> -
-> -kunit_tool addresses the problem of being able to run tests without needing a
-> -virtual machine or actual hardware with User Mode Linux. User Mode Linux is a
-> -Linux architecture, like ARM or x86; however, unlike other architectures it
-> -compiles the kernel as a standalone Linux executable that can be run like any
-> -other program directly inside of a host operating system. To be clear, it does
-> -not require any virtualization support: it is just a regular program.
-> -
-> -What is a .kunitconfig?
-> -=======================
-> -
-> -It's just a defconfig that kunit_tool looks for in the build directory
-> -(``.kunit`` by default).  kunit_tool uses it to generate a .config as you might
-> -expect. In addition, it verifies that the generated .config contains the CONFIG
-> -options in the .kunitconfig; the reason it does this is so that it is easy to
-> -be sure that a CONFIG that enables a test actually ends up in the .config.
-> -
-> -It's also possible to pass a separate .kunitconfig fragment to kunit_tool,
-> -which is useful if you have several different groups of tests you wish
-> -to run independently, or if you want to use pre-defined test configs for
-> -certain subsystems.
-> -
-> -Getting Started with kunit_tool
-> -===============================
-> -
-> -If a kunitconfig is present at the root directory, all you have to do is:
-> -
-> -.. code-block:: bash
-> -
-> -       ./tools/testing/kunit/kunit.py run
-> -
-> -However, you most likely want to use it with the following options:
-> -
-> -.. code-block:: bash
-> -
-> -       ./tools/testing/kunit/kunit.py run --timeout=30 --jobs=`nproc --all`
-> -
-> -- ``--timeout`` sets a maximum amount of time to allow tests to run.
-> -- ``--jobs`` sets the number of threads to use to build the kernel.
-> -
-> -.. note::
-> -       This command will work even without a .kunitconfig file: if no
-> -       .kunitconfig is present, a default one will be used instead.
-> -
-> -If you wish to use a different .kunitconfig file (such as one provided for
-> -testing a particular subsystem), you can pass it as an option.
-> -
-> -.. code-block:: bash
-> -
-> -       ./tools/testing/kunit/kunit.py run --kunitconfig=fs/ext4/.kunitconfig
-> -
-> -For a list of all the flags supported by kunit_tool, you can run:
-> -
-> -.. code-block:: bash
-> -
-> -       ./tools/testing/kunit/kunit.py run --help
-> -
-> -Configuring, Building, and Running Tests
-> -========================================
-> -
-> -It's also possible to run just parts of the KUnit build process independently,
-> -which is useful if you want to make manual changes to part of the process.
-> -
-> -A .config can be generated from a .kunitconfig by using the ``config`` argument
-> -when running kunit_tool:
-> -
-> -.. code-block:: bash
-> -
-> -       ./tools/testing/kunit/kunit.py config
-> -
-> -Similarly, if you just want to build a KUnit kernel from the current .config,
-> -you can use the ``build`` argument:
-> -
-> -.. code-block:: bash
-> -
-> -       ./tools/testing/kunit/kunit.py build
-> -
-> -And, if you already have a built UML kernel with built-in KUnit tests, you can
-> -run the kernel and display the test results with the ``exec`` argument:
-> -
-> -.. code-block:: bash
-> -
-> -       ./tools/testing/kunit/kunit.py exec
-> -
-> -The ``run`` command which is discussed above is equivalent to running all three
-> -of these in sequence.
-> -
-> -All of these commands accept a number of optional command-line arguments. The
-> -``--help`` flag will give a complete list of these, or keep reading this page
-> -for a guide to some of the more useful ones.
-> -
-> -Parsing Test Results
-> -====================
-> -
-> -KUnit tests output their results in TAP (Test Anything Protocol) format.
-> -kunit_tool will, when running tests, parse this output and print a summary
-> -which is much more pleasant to read. If you wish to look at the raw test
-> -results in TAP format, you can pass the ``--raw_output`` argument.
-> -
-> -.. code-block:: bash
-> -
-> -       ./tools/testing/kunit/kunit.py run --raw_output
-> -
-> -The raw output from test runs may contain other, non-KUnit kernel log
-> -lines. You can see just KUnit output with ``--raw_output=kunit``:
-> -
-> -.. code-block:: bash
-> -
-> -       ./tools/testing/kunit/kunit.py run --raw_output=kunit
-> -
-> -If you have KUnit results in their raw TAP format, you can parse them and print
-> -the human-readable summary with the ``parse`` command for kunit_tool. This
-> -accepts a filename for an argument, or will read from standard input.
-> -
-> -.. code-block:: bash
-> -
-> -       # Reading from a file
-> -       ./tools/testing/kunit/kunit.py parse /var/log/dmesg
-> -       # Reading from stdin
-> -       dmesg | ./tools/testing/kunit/kunit.py parse
-> -
-> -This is very useful if you wish to run tests in a configuration not supported
-> -by kunit_tool (such as on real hardware, or an unsupported architecture).
-> -
-> -Filtering Tests
-> -===============
-> -
-> -It's possible to run only a subset of the tests built into a kernel by passing
-> -a filter to the ``exec`` or ``run`` commands. For example, if you only wanted
-> -to run KUnit resource tests, you could use:
-> -
-> -.. code-block:: bash
-> -
-> -       ./tools/testing/kunit/kunit.py run 'kunit-resource*'
-> -
-> -This uses the standard glob format for wildcards.
-> -
-> -Running Tests on QEMU
-> -=====================
-> -
-> -kunit_tool supports running tests on QEMU as well as via UML (as mentioned
-> -elsewhere). The default way of running tests on QEMU requires two flags:
-> -
-> -``--arch``
-> -       Selects a collection of configs (Kconfig as well as QEMU configs
-> -       options, etc) that allow KUnit tests to be run on the specified
-> -       architecture in a minimal way; this is usually not much slower than
-> -       using UML. The architecture argument is the same as the name of the
-> -       option passed to the ``ARCH`` variable used by Kbuild. Not all
-> -       architectures are currently supported by this flag, but can be handled
-> -       by the ``--qemu_config`` discussed later. If ``um`` is passed (or this
-> -       this flag is ignored) the tests will run via UML. Non-UML architectures,
-> -       e.g. i386, x86_64, arm, um, etc. Non-UML run on QEMU.
-> -
-> -``--cross_compile``
-> -       Specifies the use of a toolchain by Kbuild. The argument passed here is
-> -       the same passed to the ``CROSS_COMPILE`` variable used by Kbuild. As a
-> -       reminder this will be the prefix for the toolchain binaries such as gcc
-> -       for example ``sparc64-linux-gnu-`` if you have the sparc toolchain
-> -       installed on your system, or
-> -       ``$HOME/toolchains/microblaze/gcc-9.2.0-nolibc/microblaze-linux/bin/microblaze-linux-``
-> -       if you have downloaded the microblaze toolchain from the 0-day website
-> -       to a directory in your home directory called ``toolchains``.
-> -
-> -In many cases it is likely that you may want to run an architecture which is
-> -not supported by the ``--arch`` flag, or you may want to just run KUnit tests
-> -on QEMU using a non-default configuration. For this use case, you can write
-> -your own QemuConfig. These QemuConfigs are written in Python. They must have an
-> -import line ``from ..qemu_config import QemuArchParams`` at the top of the file
-> -and the file must contain a variable called ``QEMU_ARCH`` that has an instance
-> -of ``QemuArchParams`` assigned to it. An example can be seen in
-> -``tools/testing/kunit/qemu_configs/x86_64.py``.
-> -
-> -Once you have a QemuConfig you can pass it into kunit_tool using the
-> -``--qemu_config`` flag; when used this flag replaces the ``--arch`` flag. If we
-> -were to do this with the ``x86_64.py`` example from above, the invocation would
-> -look something like this:
-> -
-> -.. code-block:: bash
-> -
-> -       ./tools/testing/kunit/kunit.py run \
-> -               --timeout=60 \
-> -               --jobs=12 \
-> -               --qemu_config=./tools/testing/kunit/qemu_configs/x86_64.py
-> -
-> -Other Useful Options
-> -====================
-> -
-> -kunit_tool has a number of other command-line arguments which can be useful
-> -when adapting it to fit your environment or needs.
-> -
-> -Some of the more useful ones are:
-> -
-> -``--help``
-> -       Lists all of the available options. Note that different commands
-> -       (``config``, ``build``, ``run``, etc) will have different supported
-> -       options. Place ``--help`` before the command to list common options,
-> -       and after the command for options specific to that command.
-> -
-> -``--build_dir``
-> -       Specifies the build directory that kunit_tool will use. This is where
-> -       the .kunitconfig file is located, as well as where the .config and
-> -       compiled kernel will be placed. Defaults to ``.kunit``.
-> -
-> -``--make_options``
-> -       Specifies additional options to pass to ``make`` when compiling a
-> -       kernel (with the ``build`` or ``run`` commands). For example, to enable
-> -       compiler warnings, you can pass ``--make_options W=1``.
-> -
-> -``--alltests``
-> -        Builds a UML kernel with all config options enabled using ``make
-> -        allyesconfig``. This allows you to run as many tests as is possible,
-> -        but is very slow and prone to breakage as new options are added or
-> -        modified. In most cases, enabling all tests which have satisfied
-> -        dependencies by adding ``CONFIG_KUNIT_ALL_TESTS=1`` to your
-> -        .kunitconfig is preferable.
-> -
-> -There are several other options (and new ones are often added), so do check
-> -``--help`` if you're looking for something not mentioned here.
-> diff --git a/Documentation/dev-tools/kunit/run_wrapper.rst b/Documentation/dev-tools/kunit/run_wrapper.rst
-> index a1070def284f..24373db26f9d 100644
-> --- a/Documentation/dev-tools/kunit/run_wrapper.rst
-> +++ b/Documentation/dev-tools/kunit/run_wrapper.rst
-> @@ -58,7 +58,7 @@ To view kunit_tool flags (optional command-line arguments), run:
->
->         ./tools/testing/kunit/kunit.py run --help
->
-> -Create a  ``.kunitconfig`` File
-> +Create a ``.kunitconfig`` File
->  ===============================
->
->  If we want to run a specific set of tests (rather than those listed
-> @@ -167,7 +167,7 @@ This uses the standard glob format with wildcard characters.
->
->  .. _kunit-on-qemu:
->
-> -Run Tests on qemu
-> +Run Tests on QEMU
->  =================
->
->  kunit_tool supports running tests on  qemu as well as
-> diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
-> index 867a4bba6bf6..e730df1f468e 100644
-> --- a/Documentation/dev-tools/kunit/start.rst
-> +++ b/Documentation/dev-tools/kunit/start.rst
-> @@ -254,7 +254,5 @@ Next Steps
->      examples.
->  *   Documentation/dev-tools/kunit/api/index.rst - KUnit APIs
->      used for testing.
-> -*   Documentation/dev-tools/kunit/kunit-tool.rst - kunit_tool helper
-> -    script.
->  *   Documentation/dev-tools/kunit/faq.rst - KUnit common questions and
->      answers.
-> --
-> 2.37.1
->
+> 
+> diff --git a/drivers/net/dsa/mv88e6xxx/chip.c 
+> b/drivers/net/dsa/mv88e6xxx/chip.c
+> index 7b57ac121589..ec5954f32774 100644
+> --- a/drivers/net/dsa/mv88e6xxx/chip.c
+> +++ b/drivers/net/dsa/mv88e6xxx/chip.c
+> @@ -6557,41 +6557,47 @@ static int mv88e6xxx_port_bridge_flags(struct
+> dsa_switch *ds, int port,
+>  	struct mv88e6xxx_chip *chip = ds->priv;
+>  	int err = -EOPNOTSUPP;
+> 
+> -	mv88e6xxx_reg_lock(chip);
+> -
+>  	if (flags.mask & BR_LEARNING) {
+>  		bool learning = !!(flags.val & BR_LEARNING);
+>  		u16 pav = learning ? (1 << port) : 0;
+> 
+> +		mv88e6xxx_reg_lock(chip);
+>  		err = mv88e6xxx_port_set_assoc_vector(chip, port, pav);
+> +		mv88e6xxx_reg_unlock(chip);
+>  		if (err)
+> -			goto out;
+> +			return err;
+>  	}
+> 
+>  	if (flags.mask & BR_FLOOD) {
+>  		bool unicast = !!(flags.val & BR_FLOOD);
+> 
+> +		mv88e6xxx_reg_lock(chip);
+>  		err = chip->info->ops->port_set_ucast_flood(chip, port,
+>  							    unicast);
+> +		mv88e6xxx_reg_unlock(chip);
+>  		if (err)
+> -			goto out;
+> +			return err;
+>  	}
+> 
+>  	if (flags.mask & BR_MCAST_FLOOD) {
+>  		bool multicast = !!(flags.val & BR_MCAST_FLOOD);
+> 
+> +		mv88e6xxx_reg_lock(chip);
+>  		err = chip->info->ops->port_set_mcast_flood(chip, port,
+>  							    multicast);
+> +		mv88e6xxx_reg_unlock(chip);
+>  		if (err)
+> -			goto out;
+> +			return err;
+>  	}
+> 
+>  	if (flags.mask & BR_BCAST_FLOOD) {
+>  		bool broadcast = !!(flags.val & BR_BCAST_FLOOD);
+> 
+> +		mv88e6xxx_reg_lock(chip);
+>  		err = mv88e6xxx_port_broadcast_sync(chip, port, broadcast);
+> +		mv88e6xxx_reg_unlock(chip);
+>  		if (err)
+> -			goto out;
+> +			return err;
+>  	}
+> 
+>  	if (flags.mask & BR_PORT_LOCKED) {
+> @@ -6599,10 +6605,8 @@ static int mv88e6xxx_port_bridge_flags(struct
+> dsa_switch *ds, int port,
+> 
+>  		err = mv88e6xxx_port_set_lock(chip, port, locked);
+>  		if (err)
+> -			goto out;
+> +			return err;
+>  	}
+> -out:
+> -	mv88e6xxx_reg_unlock(chip);
+> 
+>  	return err;
+>  }
+> diff --git a/drivers/net/dsa/mv88e6xxx/port.c 
+> b/drivers/net/dsa/mv88e6xxx/port.c
+> index 5e4d5e9265a4..2a60aded6fbe 100644
+> --- a/drivers/net/dsa/mv88e6xxx/port.c
+> +++ b/drivers/net/dsa/mv88e6xxx/port.c
+> @@ -1222,15 +1222,19 @@ int mv88e6xxx_port_set_lock(struct
+> mv88e6xxx_chip *chip, int port,
+>  	u16 reg;
+>  	int err;
+> 
+> +	mv88e6xxx_reg_lock(chip);
+>  	err = mv88e6xxx_port_read(chip, port, MV88E6XXX_PORT_CTL0, &reg);
+> -	if (err)
+> +	if (err) {
+> +		mv88e6xxx_reg_unlock(chip);
+>  		return err;
+> +	}
+> 
+>  	reg &= ~MV88E6XXX_PORT_CTL0_SA_FILT_MASK;
+>  	if (locked)
+>  		reg |= MV88E6XXX_PORT_CTL0_SA_FILT_DROP_ON_LOCK;
+> 
+>  	err = mv88e6xxx_port_write(chip, port, MV88E6XXX_PORT_CTL0, reg);
+> +	mv88e6xxx_reg_unlock(chip);
+>  	if (err)
+>  		return err;
+> 
+> @@ -1247,7 +1251,11 @@ int mv88e6xxx_port_set_lock(struct
+> mv88e6xxx_chip *chip, int port,
+>  			MV88E6XXX_PORT_ASSOC_VECTOR_LOCKED_PORT;
+>  	}
+> 
+> -	return mv88e6xxx_port_write(chip, port, MV88E6XXX_PORT_ASSOC_VECTOR, 
+> reg);
+> +	mv88e6xxx_reg_lock(chip);
+> +	err = mv88e6xxx_port_write(chip, port, MV88E6XXX_PORT_ASSOC_VECTOR, 
+> reg);
+> +	mv88e6xxx_reg_unlock(chip);
+> +
+> +	return err;
+>  }
+> 
+>  int mv88e6xxx_port_set_8021q_mode(struct mv88e6xxx_chip *chip, int 
+> port,
+> 
+>> +		if (err)
+>> +			return err;
+>> +	}
+>> 
+>> -	reg &= ~MV88E6XXX_PORT_ASSOC_VECTOR_LOCKED_PORT;
+>> -	if (locked)
+>> -		reg |= MV88E6XXX_PORT_ASSOC_VECTOR_LOCKED_PORT;
+>> +	reg = 0;
+>> +	if (locked) {
+>> +		reg = (1 << port);
+>> +		reg |= MV88E6XXX_PORT_ASSOC_VECTOR_IGNORE_WRONG |
+>> +			MV88E6XXX_PORT_ASSOC_VECTOR_LOCKED_PORT;
+>> +	}
+>> 
+>>  	return mv88e6xxx_port_write(chip, port, MV88E6XXX_PORT_ASSOC_VECTOR, 
+>> reg);
+>>  }
+>> diff --git a/drivers/net/dsa/mv88e6xxx/port.h 
+>> b/drivers/net/dsa/mv88e6xxx/port.h
+>> index e0a705d82019..5c1d485e7442 100644
+>> --- a/drivers/net/dsa/mv88e6xxx/port.h
+>> +++ b/drivers/net/dsa/mv88e6xxx/port.h
+>> @@ -231,6 +231,7 @@
+>>  #define MV88E6XXX_PORT_ASSOC_VECTOR_LOCKED_PORT		0x2000
+>>  #define MV88E6XXX_PORT_ASSOC_VECTOR_IGNORE_WRONG	0x1000
+>>  #define MV88E6XXX_PORT_ASSOC_VECTOR_REFRESH_LOCKED	0x0800
+>> +#define MV88E6XXX_PORT_ASSOC_VECTOR_PAV_MASK		0x07ff
+>> 
+>>  /* Offset 0x0C: Port ATU Control */
+>>  #define MV88E6XXX_PORT_ATU_CTL		0x0c
+>> @@ -374,6 +375,7 @@ int mv88e6xxx_port_set_fid(struct mv88e6xxx_chip 
+>> *chip, int port, u16 fid);
+>>  int mv88e6xxx_port_get_pvid(struct mv88e6xxx_chip *chip, int port, 
+>> u16 *pvid);
+>>  int mv88e6xxx_port_set_pvid(struct mv88e6xxx_chip *chip, int port, 
+>> u16 pvid);
+>> 
+>> +bool mv88e6xxx_port_is_locked(struct mv88e6xxx_chip *chip, int port);
+>>  int mv88e6xxx_port_set_lock(struct mv88e6xxx_chip *chip, int port,
+>>  			    bool locked);
+>> 
