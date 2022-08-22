@@ -2,134 +2,131 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B4D5C28D13
-	for <linux-kselftest@archiver.kernel.org>; Mon, 22 Aug 2022 06:30:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A6DFC28D13
+	for <linux-kselftest@archiver.kernel.org>; Mon, 22 Aug 2022 07:49:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232974AbiHVGaL (ORCPT
+        id S233273AbiHVHtl (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 22 Aug 2022 02:30:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50496 "EHLO
+        Mon, 22 Aug 2022 03:49:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231382AbiHVGaK (ORCPT
+        with ESMTP id S233288AbiHVHtj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 22 Aug 2022 02:30:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3574315FC8
-        for <linux-kselftest@vger.kernel.org>; Sun, 21 Aug 2022 23:30:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661149809;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=igi6SCsR/ObSuD1+1UNbW/kz76/mLSNsS0/F0XSJRwQ=;
-        b=Z0ep5JfX/iVtZN0Bq1b2I3ddAh2PzIkJ4XyLxjG+OfJDsi4lXBIlZT6VEfiwwiYewM7s8R
-        dTaFq94GBmGjva4om+g2knpc2obC8OQbbPHpvgFTUUTFsx2xaGqviTrMbI6LU8Wbk911Fk
-        53NtWrKFbQACMED6uUbaqUNTYh0HffI=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-629-MWAu8DFOPdeT1R7mPJoJIQ-1; Mon, 22 Aug 2022 02:30:05 -0400
-X-MC-Unique: MWAu8DFOPdeT1R7mPJoJIQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F3D7D1C01B20;
-        Mon, 22 Aug 2022 06:30:03 +0000 (UTC)
-Received: from [10.64.54.16] (vpn2-54-16.bne.redhat.com [10.64.54.16])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 08EE12026D4C;
-        Mon, 22 Aug 2022 06:29:54 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH v1 3/5] KVM: selftests: Dirty host pages in dirty_log_test
-To:     Andrew Jones <andrew.jones@linux.dev>
-Cc:     kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        peterx@redhat.com, pbonzini@redhat.com, corbet@lwn.net,
-        maz@kernel.org, james.morse@arm.com, alexandru.elisei@arm.com,
-        suzuki.poulose@arm.com, oliver.upton@linux.dev,
-        catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org,
-        seanjc@google.com, drjones@redhat.com, dmatlack@google.com,
-        bgardon@google.com, ricarkol@google.com, zhenyzha@redhat.com,
-        shan.gavin@gmail.com
-References: <20220819005601.198436-1-gshan@redhat.com>
- <20220819005601.198436-4-gshan@redhat.com>
- <20220819052805.qnhw2d3arxixzvhl@kamzik>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <3abb690f-e616-630f-ba40-e590ec8bb5c1@redhat.com>
-Date:   Mon, 22 Aug 2022 16:29:52 +1000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+        Mon, 22 Aug 2022 03:49:39 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69D7416586;
+        Mon, 22 Aug 2022 00:49:32 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id F28C81884643;
+        Mon, 22 Aug 2022 07:49:28 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id E1D1E25032B7;
+        Mon, 22 Aug 2022 07:49:28 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id BB1D4A1A0048; Mon, 22 Aug 2022 07:49:28 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-In-Reply-To: <20220819052805.qnhw2d3arxixzvhl@kamzik>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Date:   Mon, 22 Aug 2022 09:49:28 +0200
+From:   netdev@kapio-technology.com
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
+ flag to drivers
+In-Reply-To: <YwMW4iGccDu6jpaZ@shredder>
+References: <5a4cfc6246f621d006af69d4d1f61ed1@kapio-technology.com>
+ <YvkM7UJ0SX+jkts2@shredder>
+ <34dd1318a878494e7ab595f8727c7d7d@kapio-technology.com>
+ <YwHZ1J9DZW00aJDU@shredder>
+ <ce4266571b2b47ae8d56bd1f790cb82a@kapio-technology.com>
+ <YwMW4iGccDu6jpaZ@shredder>
+User-Agent: Gigahost Webmail
+Message-ID: <c2822d6dd66a1239ff8b7bfd06019008@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Drew,
-
-On 8/19/22 3:28 PM, Andrew Jones wrote:
-> On Fri, Aug 19, 2022 at 08:55:59AM +0800, Gavin Shan wrote:
->> It's assumed that 1024 host pages, instead of guest pages, are dirtied
->> in each iteration in guest_code(). The current implementation misses
->> the case of mismatched page sizes in host and guest. For example,
->> ARM64 could have 64KB page size in guest, but 4KB page size in host.
->> (TEST_PAGES_PER_LOOP / 16), instead of TEST_PAGES_PER_LOOP, host pages
->> are dirtied in every iteration.
->>
->> Fix the issue by touching all sub-pages when we have mismatched
->> page sizes in host and guest.
+On 2022-08-22 07:40, Ido Schimmel wrote:
+> On Sun, Aug 21, 2022 at 03:43:04PM +0200, netdev@kapio-technology.com 
+> wrote:
 > 
-> I'll let the dirty-log test authors decide what's best to do for this
-> test, but I'd think we should let the guest continue dirtying its
-> pages without knowledge of the host pages. Then, adjust the host test
-> code to assert all sub-pages, other than the ones it expects the guest
-> to have written, remain untouched.
+> I personally think that the mv88e6xxx semantics are very weird (e.g., 
+> no
+> roaming, traffic blackhole) and I don't want them to determine how the
+> feature works in the pure software bridge or other hardware
+> implementations. On the other hand, I understand your constraints and I
+> don't want to create a situation where user space is unable to
+> understand how the data path works from the bridge FDB dump with
+> mv88e6xxx.
+> 
+> My suggestion is to have mv88e6xxx report the "locked" entry to the
+> bridge driver with additional flags that describe its behavior in terms
+> of roaming, ageing and forwarding.
+> 
+> In terms of roaming, since in mv88e6xxx the entry can't roam you should
+> report the entry with the "sticky" flag.
+
+As I am not familiar with roaming in this context, I need to know how 
+the SW bridge should behave in this case. In this I am assuming that 
+roaming is regarding unauthorized entries.
+In this case, is the roaming only between locked ports or does the 
+roaming include that the entry can move to a unlocked port, resulting in 
+the locked flag getting removed?
+
+> In terms of ageing, since
+> mv88e6xxx is the one doing the ageing and not the bridge driver, report
+> the entry with the "extern_learn" flag.
+
+Just for the record, I see that entries coming from the driver to the 
+bridge will always have the "extern learn" flag set as can be seen from 
+the SWITCHDEV_FDB_ADD_TO_BRIDGE events handling in br_switchdev_event() 
+in br.c, which I think is the correct behavior.
+
+> In terms of forwarding, in
+> mv88e6xxx the entry discards all matching packets. We can introduce a
+> new FDB flag that instructs the entry to silently discard all matching
+> packets. Like we have with blackhole routes and nexthops.
+
+Any suggestions to the name of this flag?
+
+> 
+> I believe that the above suggestion allows you to fully describe how
+> these entries work in mv88e6xxx while keeping the bridge driver in sync
+> with complete visibility towards user space.
+> 
+> It also frees the pure software implementation from the constraints of
+> mv88e6xxx, allowing "locked" entries to behave like any other
+> dynamically learned entries modulo the fact that they cannot "unlock" a
+> locked port.
+> 
+> Yes, it does mean that user space will get a bit different behavior 
+> with
+> mv88e6xxx compared to a pure software solution, but a) It's only the
+> corner cases that act a bit differently. As a whole, the feature works
+> largely the same. b) User space has complete visibility to understand
+> the behavior of the offloaded data path.
 > 
 
-I don't think what is clarified in the change log is correct. The current
-implementation already had the logic to handle the mismatched page sizes
-in vm_dirty_log_verify() where 'step' is used for it by fetching value
-from vm_num_host_pages(mode, 1). Please ignore this patch for now, as
-explained below.
+>> 
+>> I will change it in iproute2 to:
+>> bridge link set dev DEV mab on|off
+> 
+> And s/BR_PORT_MACAUTH/BR_PORT_MAB/ ?
 
-The issue I have is the 'dirty_log_test' hangs when I have 4KB host page size
-and 64KB guest page size. It seems the vcpu doesn't exit due to full ring
-buffer state or kick-off. I will have more investigations to figure out the
-root cause.
-
-# ./dirty_log_test -M dirty-ring -m 7
-Setting log mode to: 'dirty-ring'
-Test iterations: 32, interval: 10 (ms)
-Testing guest mode: PA-bits:40,  VA-bits:48, 64K pages
-guest physical test memory offset: 0xffbffc0000
-vcpu stops because vcpu is kicked out...
-Notifying vcpu to continue
-vcpu continues now.
-Iteration 1 collected 1903 pages
-<no more output>
-
-'dirty_lot_test' works well when both host and guest have 4KB page size.
-
-# ./dirty_log_test -M dirty-ring -m 5
-Setting log mode to: 'dirty-ring'
-Test iterations: 32, interval: 10 (ms)
-Testing guest mode: PA-bits:40,  VA-bits:48,  4K pages
-guest physical test memory offset: 0xffbfffc000
-vcpu stops because vcpu is kicked out...
-Notifying vcpu to continue
-vcpu continues now.
-   :
-Dirtied 1006592 pages
-Total bits checked: dirty (1020487), clear (7106070), track_next (974104)
-
-Thanks,
-Gavin
-
-
-
+Sure, I will do that. :-)
