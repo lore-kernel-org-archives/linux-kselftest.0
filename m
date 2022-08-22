@@ -2,53 +2,53 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF50AC00140
-	for <linux-kselftest@archiver.kernel.org>; Mon, 22 Aug 2022 02:30:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD631C32793
+	for <linux-kselftest@archiver.kernel.org>; Mon, 22 Aug 2022 02:30:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232479AbiHVCae (ORCPT
+        id S232216AbiHVCaf (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 21 Aug 2022 22:30:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34198 "EHLO
+        Sun, 21 Aug 2022 22:30:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232199AbiHVCaV (ORCPT
+        with ESMTP id S232446AbiHVCa3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 21 Aug 2022 22:30:21 -0400
-Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C8B120BD4;
-        Sun, 21 Aug 2022 19:30:20 -0700 (PDT)
-Received: by mail-ua1-x92b.google.com with SMTP id a10so3819584uas.7;
-        Sun, 21 Aug 2022 19:30:20 -0700 (PDT)
+        Sun, 21 Aug 2022 22:30:29 -0400
+Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2202520BD4;
+        Sun, 21 Aug 2022 19:30:28 -0700 (PDT)
+Received: by mail-vk1-xa35.google.com with SMTP id o198so1117245vko.4;
+        Sun, 21 Aug 2022 19:30:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=9bmUDAeYwYNk7Lncy4qn1xUrVgxGePb5aTQwwrrNPmQ=;
-        b=NE3inPhDNx3gdUKcuM+tPMg+JUMuH1247ytZb8zccgs4NtyzyjgLmtFhykXBEMYz2U
-         6WgYdpj0PrKFmF5D89cWm9fAdR3HNDr2bp1ALAWYSzSDRQARmHaoi13LQVd7CzBRFR5x
-         sRnstKwOjNAboq4d6LWVGdA/Q86Xr8CqNZGMAjsu7E6bjvO//7p8SYJcTf6omnKjoVP2
-         zbWNwnNxn9gNUbzTuxmlKCnZ+7NYa3xhP1apfSUstVH8Z0XT2KNHtJmm7/1+VlSRLvDx
-         o2n2RSdmLvqGnHfKIXP2KizE2FLK1fMrN3tP4BjDxm9uA8CMAGrpcYzzhnbivMmbZuhn
-         h8qg==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=ASKzNR3OVr0x/auTLjHZPWrTcHhp/uvCLAxf9+B1KJY=;
+        b=UDsAnzPXw283JlQUcitS9QnSZsILv9uj16dtK+BvvdxBHgylz1PESQwpnP6RR4Y78T
+         J6IZcg2CWZHbndDWcBjldrz3nWEp3Yjadf43698DtIWiNY7WFGY1VsU1aNKPIIrZ2c1G
+         TJOib7hiqBg3KD+wlXtdWvUc3PcLb3uxRox+YPnCA57H7EWq02lpsgnf9+RRG8NfdYY4
+         vF34ERaKLkuHttgc5KnJ6Ju1+lvKxviuB384WAQgTeYAwo7BWfjBCfXawVRm2qsYGyOJ
+         fG/jhUgQyd34eP+cjVYqaGGXXxVstCCYHwwOR3vv18eV05qibKMfOEAzvCpu1aCGmShL
+         6vzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=9bmUDAeYwYNk7Lncy4qn1xUrVgxGePb5aTQwwrrNPmQ=;
-        b=O+w2Xs1Zq4Cj8LxduBLp75oPHPUQuwRIXzO+01R4A22FIBGfpczUjxFK9dhgQ1Njgj
-         cnW8Ez13VvwypiII9rSCF7vaxVkOPl3ZgQUoT/fpsvPpnSA9x86rcXyzlt4ZaaiR5LZg
-         S7kVi36u7u+e3bAne2pBuLM1HUauOYoL/TQSSAoQPOG6tFEEY8pfUA+iGtVSvC8IY2C9
-         oDlUFTGsQgHmIFqJ9LlBcwG5aU1XTIRqW4T5q5xTV0slvGvz45Hva5OT9qGKSUJPpFas
-         2grdVeuRdjnzjhk4UijWi3BEkvxmneBRzPnfMOJOsIV+l+gKGfOVAxgGe8orRIS2iy55
-         uR7A==
-X-Gm-Message-State: ACgBeo2/bTL0GT5Qom1mZbg3QWoXuVXpNfslHsmpqMuMWDPw304FjPdW
-        hBOaDf4Md9GGjXvjFNUMm7hmwfp3BaHLWQ==
-X-Google-Smtp-Source: AA6agR4qhRBZubNlPLUdvrgppeNgtv4/VVy6ftdTKy7n/whZbDUXhZFI7ne3SDfMCYRq+5a4JZKBKA==
-X-Received: by 2002:ab0:23c9:0:b0:39b:52f0:810d with SMTP id c9-20020ab023c9000000b0039b52f0810dmr5666296uan.46.1661135419616;
-        Sun, 21 Aug 2022 19:30:19 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=ASKzNR3OVr0x/auTLjHZPWrTcHhp/uvCLAxf9+B1KJY=;
+        b=nZRR4A8mNO/5/9We2b41UPfBXGrZJUNJWC1ZCd4AZ43OssqmSgQ+JvFLn+7s19A9tX
+         ru0KDHgjcUlc3a/NNm8o3+3MDd9D3mTW91MC8ZNDTeat62O/OSZPMzjexvGUzErNOvM4
+         JWOAc/2SIwIAa2YzomqlvYgyMCYe6A4Xtw8OwAo3iqLcrSKrHJKg9egqh480Q/VgIxE/
+         +RZN/wsCouDOyIivLabNnP4/gUOjKSVSB8Kvu8abin4Yj//ndpU7lbuNqO8ncBIX7B1P
+         KqShcd5aRGnaTUHjHEbOKkUsSNUiS9ZWOBMm6/5ifR1UpnRR+k3J/8Ei9vHF7/XQ0fZE
+         ajPw==
+X-Gm-Message-State: ACgBeo1cPP9gjkc1LJTBFgPD3D9WLoqKWy3+tapmFTnP2PjMZF8Meyin
+        MyGu0ONVYk0WkrM97gC/jCE=
+X-Google-Smtp-Source: AA6agR60IQ0+5Kgby8Gfqv4jS5SE/LjLzFRcDfSQeDi+FRI40t2fkA9fFctG9FyaxKVti2SZIfEwGg==
+X-Received: by 2002:a1f:adc7:0:b0:377:c12:78ef with SMTP id w190-20020a1fadc7000000b003770c1278efmr6669359vke.19.1661135427212;
+        Sun, 21 Aug 2022 19:30:27 -0700 (PDT)
 Received: from localhost.localdomain ([2804:14c:4c2:8202::1001])
-        by smtp.gmail.com with ESMTPSA id y125-20020a1f3283000000b00378fe8518dcsm8330853vky.51.2022.08.21.19.30.15
+        by smtp.gmail.com with ESMTPSA id y125-20020a1f3283000000b00378fe8518dcsm8330853vky.51.2022.08.21.19.30.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Aug 2022 19:30:19 -0700 (PDT)
+        Sun, 21 Aug 2022 19:30:26 -0700 (PDT)
 From:   Tales Aparecida <tales.aparecida@gmail.com>
 To:     Sadiya Kazi <sadiyakazi@google.com>
 Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
@@ -58,10 +58,12 @@ Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
         mwen@igalia.com, andrealmeid@riseup.net, mairacanal@riseup.net,
         Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
         tales.aparecida@gmail.com
-Subject: [PATCH v2 0/8] Documentation: Kunit: clean kunit-tool.rst and start.rst
-Date:   Sun, 21 Aug 2022 23:26:38 -0300
-Message-Id: <20220822022646.98581-1-tales.aparecida@gmail.com>
+Subject: [PATCH v2 2/8] Documentation: KUnit: avoid repeating "kunit.py run" in start.rst
+Date:   Sun, 21 Aug 2022 23:26:40 -0300
+Message-Id: <20220822022646.98581-3-tales.aparecida@gmail.com>
 X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20220822022646.98581-1-tales.aparecida@gmail.com>
+References: <20220822022646.98581-1-tales.aparecida@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -69,57 +71,92 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
+Combine two sections mentioning "kunit.py run" to streamline the
+getting-started guide. Update "kunit.py run" expected output in
+the guide and run_wrapper.
 
-Continuing the documentation refactoring started by Harinder Singh[1],
-removes kunit-tool.rst, which had its information rearranged into run_wrapper,
-and employs further work in the index and the getting-started guide.
+Signed-off-by: Tales Aparecida <tales.aparecida@gmail.com>
 
-This series was written on top of another[2] that haven't got applied yet,
-but the only dependency it has is the "kunit-on-qemu" anchor used in start.rst.
+---
+Notes:
+    Update the expected output and the note that follows it (Maíra Canal and
+    Sadiya Kazi). The output was updated on the commit: 45ba7a893ad8
+    ("kunit: kunit_tool: Separate out config/build/exec/parse")
+    Add word "step" to note and fix the case of "kernel".
+---
+ Documentation/dev-tools/kunit/run_wrapper.rst |  2 +-
+ Documentation/dev-tools/kunit/start.rst       | 38 ++++++++-----------
+ 2 files changed, 16 insertions(+), 24 deletions(-)
 
-Changelog:
-
-v1 -> v2:
-
-- Update expected output for `kunit.py run` from "Generating .config ..." to
-"Configuring KUnit Kernel ..."
-- Update run_wrapper titles as suggested by Sadiya Kazi
-- Remove confusing recommendation from start.rst intro, highlighted by Tim Bird
-- Fix grammars nits pointed by Maíra Canal and Sadiya Kazi
-- Add some reviewed-by
-
-Thanks again for your feedbacks,
-Tales
-
-[1] https://lore.kernel.org/r/20211217044911.798817-1-sharinder@google.com/
-[2] https://lore.kernel.org/r/20220813042055.136832-1-tales.aparecida@gmail.com/
-
-Tales Aparecida (8):
-  Documentation: KUnit: remove duplicated docs for kunit_tool
-  Documentation: KUnit: avoid repeating "kunit.py run" in start.rst
-  Documentation: KUnit: add note about mrproper in start.rst
-  Documentation: KUnit: Reword start guide for selecting tests
-  Documentation: KUnit: add intro to the getting-started page
-  Documentation: KUnit: update links in the index page
-  lib: overflow: update reference to kunit-tool
-  lib: stackinit: update reference to kunit-tool
-
- Documentation/dev-tools/kunit/index.rst       |  16 +-
- Documentation/dev-tools/kunit/kunit-tool.rst  | 232 ------------------
- Documentation/dev-tools/kunit/run_wrapper.rst |  34 +--
- Documentation/dev-tools/kunit/start.rst       | 136 ++++++----
- lib/overflow_kunit.c                          |   2 +-
- lib/stackinit_kunit.c                         |   2 +-
- 6 files changed, 117 insertions(+), 305 deletions(-)
- delete mode 100644 Documentation/dev-tools/kunit/kunit-tool.rst
-
-
-base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
-prerequisite-patch-id: b794218cd939a6644aaf5fb2a73997c56a624c80
-prerequisite-patch-id: ccd24491ae99152ebdc6dcb8ddb9499d3456a4a0
-prerequisite-patch-id: cc17b80d42fd5f5049e144da5c04e922036a33eb
-prerequisite-patch-id: ba7edd270c6f285352e0e17bfe65ff6119192113
+diff --git a/Documentation/dev-tools/kunit/run_wrapper.rst b/Documentation/dev-tools/kunit/run_wrapper.rst
+index 518cf87ea732..6b33caf6c8ab 100644
+--- a/Documentation/dev-tools/kunit/run_wrapper.rst
++++ b/Documentation/dev-tools/kunit/run_wrapper.rst
+@@ -22,7 +22,7 @@ We should see the following:
+ 
+ .. code-block::
+ 
+-	Generating .config...
++	Configuring KUnit Kernel ...
+ 	Building KUnit kernel...
+ 	Starting KUnit kernel...
+ 
+diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
+index e730df1f468e..2e31350a85e1 100644
+--- a/Documentation/dev-tools/kunit/start.rst
++++ b/Documentation/dev-tools/kunit/start.rst
+@@ -19,7 +19,21 @@ can run kunit_tool:
+ 
+ 	./tools/testing/kunit/kunit.py run
+ 
+-For more information on this wrapper, see:
++If everything worked correctly, you should see the following:
++
++.. code-block::
++
++	Configuring KUnit Kernel ...
++	Building KUnit Kernel ...
++	Starting KUnit Kernel ...
++
++The tests will pass or fail.
++
++.. note ::
++   Because it is building a lot of sources for the first time,
++   the ``Building KUnit Kernel`` step may take a while.
++
++For detailed information on this wrapper, see:
+ Documentation/dev-tools/kunit/run_wrapper.rst.
+ 
+ Creating a ``.kunitconfig``
+@@ -74,28 +88,6 @@ you if you have not included dependencies for the options used.
+    tools like ``make menuconfig O=.kunit``. As long as its a superset of
+    ``.kunitconfig``, kunit.py won't overwrite your changes.
+ 
+-Running Tests (KUnit Wrapper)
+------------------------------
+-1. To make sure that everything is set up correctly, invoke the Python
+-   wrapper from your kernel repository:
+-
+-.. code-block:: bash
+-
+-	./tools/testing/kunit/kunit.py run
+-
+-If everything worked correctly, you should see the following:
+-
+-.. code-block::
+-
+-	Generating .config ...
+-	Building KUnit Kernel ...
+-	Starting KUnit Kernel ...
+-
+-The tests will pass or fail.
+-
+-.. note ::
+-   Because it is building a lot of sources for the first time, the
+-   ``Building KUnit kernel`` may take a while.
+ 
+ Running Tests without the KUnit Wrapper
+ =======================================
 -- 
 2.37.2
 
