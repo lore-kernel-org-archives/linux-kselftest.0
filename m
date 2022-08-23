@@ -2,227 +2,160 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53B64C32772
-	for <linux-kselftest@archiver.kernel.org>; Tue, 23 Aug 2022 16:47:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BBB90C32789
+	for <linux-kselftest@archiver.kernel.org>; Tue, 23 Aug 2022 17:11:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243792AbiHWQrK (ORCPT
+        id S1343981AbiHWRLv (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 23 Aug 2022 12:47:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39170 "EHLO
+        Tue, 23 Aug 2022 13:11:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344137AbiHWQqu (ORCPT
+        with ESMTP id S1344865AbiHWRLY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 23 Aug 2022 12:46:50 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F206C6EA6
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Aug 2022 07:25:05 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id b25-20020aa78119000000b00536a929d8e4so2548389pfi.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Aug 2022 07:25:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc;
-        bh=pCH+0+WgsyXCYOEIW3yqb1d5hzYj9lEXIljmIvf1UF4=;
-        b=GKnHlleymq6aVUseYQkCkYJTcj3+Hllew3xD3cBBcATPMgtQht5r0zd6CNdNPkGZ2E
-         cIuhwPujGAJbEIybRkp5h8BCUG05Ni7Aqy5hlvyeV7ytytijPlGF0ML4yLsdbnxBlT7O
-         v/Q4vYjT27cq8xCAfXaMxibDaCtMD0R+Wg8Xg6fxszjEq+5wNeGHhC8zjOk5uvyfOqWx
-         ekWKec3iTLIBe1ko+sjdYz7CP8xzuVD0fcU/rY0CuNqyMJxQWRUIVOZfQDeldrSLAVCe
-         KMOYtyEW1xBRTqndO+xaq0kjGZY0s5akiv1QJ/rF2MLw2HQZL7Ju5l7pMQIyVe7WlRjl
-         6/CA==
+        Tue, 23 Aug 2022 13:11:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04AD5150155
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Aug 2022 06:58:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661263104;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YHVefDGXU83xWUJyLerizfLITJD1h0bvpZUJLhnlk24=;
+        b=AXO1SNmNaxNAq3ngFOkjpwKd9OjFxUtQlCxgejQIg8YZhdDKJzOyAzsl0mGVGXKUuO3hpU
+        dxBSGLCI7QSqq5QwrWgBYdTx5HvdDZpa7Fm4cD8qFL0wMh389YJCml7DFA11upm7Hy0FHT
+        o9nsIdQoVq8WoDhDI1ANKETuLGKrX5A=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-263-Z_n2z4tfPQ6y6jKbggQFyQ-1; Tue, 23 Aug 2022 09:58:23 -0400
+X-MC-Unique: Z_n2z4tfPQ6y6jKbggQFyQ-1
+Received: by mail-qt1-f200.google.com with SMTP id cj19-20020a05622a259300b003446920ea91so10681894qtb.10
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Aug 2022 06:58:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc;
-        bh=pCH+0+WgsyXCYOEIW3yqb1d5hzYj9lEXIljmIvf1UF4=;
-        b=zMj4t1DPABMmPV1LxpuYyBQydSxhKLDJ0TVcj7mWCVx7J7JYwOZnLrAx4n4d6e9Re5
-         N4NYHqr5xh7zMsXEgrMP5tbmYOS3CFaEKp2sSZUdgwy1ZIgMvRvkkE6Ix51jzfvkVykl
-         sd3EIBl3h7jx6PFNo3Dn5WJ2tOJmhbklqvHPc3cC2E6ObzZc8hL+z9LWBslCRGyyVZC4
-         e85IUm4Fm7dYA7mYmrHxCPkLRzjjYs+hkGwjinZQ8n5qEpf8MW6XoRD62ROn+imxPEfv
-         7D3m9OecTauiIN2BK4JQjcLb4/hjdXxTCnzVYsxOsksKlXBhhAdy6A0sz6GHxhGpvXhp
-         tuUA==
-X-Gm-Message-State: ACgBeo0lBK+49ahVb2KGxt1onlGeCUQkfW072uk3VqMRdttBF6Nbbdyc
-        05QLQSLj27biysFWZJAxAMkvvxTiBgZTmBQ=
-X-Google-Smtp-Source: AA6agR6nYNAxXcwgvNFnFPYMJnYjm6NiVtfJwycgVCE4j79759ovERhuyFxKEVo91melnqmvoQrKMdCuAiJDSamH
-X-Received: from joefradley-custom-96.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:831])
- (user=joefradley job=sendgmr) by 2002:aa7:8430:0:b0:536:5173:a2c6 with SMTP
- id q16-20020aa78430000000b005365173a2c6mr15526807pfn.4.1661264704758; Tue, 23
- Aug 2022 07:25:04 -0700 (PDT)
-Date:   Tue, 23 Aug 2022 07:24:54 -0700
-In-Reply-To: <20220823142456.3977086-1-joefradley@google.com>
-Message-Id: <20220823142456.3977086-2-joefradley@google.com>
-Mime-Version: 1.0
-References: <20220823142456.3977086-1-joefradley@google.com>
-X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
-Subject: [PATCH v2 1/2] kunit: add kunit.enable to enable/disable KUnit test
-From:   Joe Fradley <joefradley@google.com>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>
-Cc:     Joe Fradley <joefradley@google.com>, kernel-team@android.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=YHVefDGXU83xWUJyLerizfLITJD1h0bvpZUJLhnlk24=;
+        b=yzz6ZzFAuXWf+tixLZ607UhvXX33ytDUx0W2UiMDn3Lr+gIyfQ3uglEVRogmtBTl4u
+         pGuLgumkCsDsHG1jqitoSHpCAKRArKqlPfedJWWNPxo0NZ4o4j/3LnPeb26J01vsdo3k
+         LUYLj2JZi3wsS2nyQ1o9JPUzwbJemZHCAHtuUaw6n/b/61a5Vx338OzY1KU6zitQkW7p
+         jUPbbCvpeKQpq1u90CtFi6nXp8U1qzV6wIILxyOR5VheYOStPG6B+efzlq/Kkri33feX
+         3L3fazyHHwBMbIcOCEIjEy89niaXVenLqnjSAE9DTW+GcfkRstaicnj6DZKMFN0Pcu2x
+         r/xA==
+X-Gm-Message-State: ACgBeo12eWMN9rehBQpvjo7XLqoE1eYJir6d6LiPCgEAabftgBw2pcpQ
+        LlIF+3w6yqtptXt2tkufl4mhzk3GcbImMl2FoYxBlByRMUsybfh8rWPxNU84gW+nm1RlKoZzhxc
+        CcmbZPUxA4iEbrDTIh6nXdRppviuv
+X-Received: by 2002:ac8:5b15:0:b0:343:6789:193a with SMTP id m21-20020ac85b15000000b003436789193amr19117263qtw.647.1661263102661;
+        Tue, 23 Aug 2022 06:58:22 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7gd2yWDFVr17SP2RU0l4eAn5No/A726n2hPHBkND28yI2ySau6/YWpTWAdi0/4trPHGWQO6g==
+X-Received: by 2002:ac8:5b15:0:b0:343:6789:193a with SMTP id m21-20020ac85b15000000b003436789193amr19117247qtw.647.1661263102418;
+        Tue, 23 Aug 2022 06:58:22 -0700 (PDT)
+Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
+        by smtp.gmail.com with ESMTPSA id g7-20020a05620a40c700b006a6ebde4799sm12544646qko.90.2022.08.23.06.58.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Aug 2022 06:58:21 -0700 (PDT)
+Date:   Tue, 23 Aug 2022 09:58:19 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Gavin Shan <gshan@redhat.com>
+Cc:     Marc Zyngier <maz@kernel.org>, kvmarm@lists.cs.columbia.edu,
+        linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        corbet@lwn.net, james.morse@arm.com, alexandru.elisei@arm.com,
+        suzuki.poulose@arm.com, oliver.upton@linux.dev,
+        catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org,
+        seanjc@google.com, drjones@redhat.com, dmatlack@google.com,
+        bgardon@google.com, ricarkol@google.com, zhenyzha@redhat.com,
+        shan.gavin@gmail.com
+Subject: Re: [PATCH v1 1/5] KVM: arm64: Enable ring-based dirty memory
+ tracking
+Message-ID: <YwTc++Lz6lh3aR4F@xz-m1.local>
+References: <20220819005601.198436-1-gshan@redhat.com>
+ <20220819005601.198436-2-gshan@redhat.com>
+ <87lerkwtm5.wl-maz@kernel.org>
+ <41fb5a1f-29a9-e6bb-9fab-4c83a2a8fce5@redhat.com>
+ <87fshovtu0.wl-maz@kernel.org>
+ <171d0159-4698-354b-8b2f-49d920d03b1b@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <171d0159-4698-354b-8b2f-49d920d03b1b@redhat.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch adds the kunit.enable module parameter that will need to be
-set to true in addition to KUNIT being enabled for KUnit tests to run.
-The default value is true giving backwards compatibility. However, for
-the production+testing use case the new config option
-KUNIT_DEFAULT_ENABLED can be set to N requiring the tester to opt-in
-by passing kunit.enable=1 to the kernel.
+On Tue, Aug 23, 2022 at 03:22:17PM +1000, Gavin Shan wrote:
+> > diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> > index 986cee6fbc7f..0b41feb6fb7d 100644
+> > --- a/arch/arm64/kvm/arm.c
+> > +++ b/arch/arm64/kvm/arm.c
+> > @@ -747,6 +747,12 @@ static int check_vcpu_requests(struct kvm_vcpu *vcpu)
+> >   		if (kvm_check_request(KVM_REQ_SUSPEND, vcpu))
+> >   			return kvm_vcpu_suspend(vcpu);
+> > +
+> > +		if (kvm_check_request(KVM_REQ_RING_SOFT_FULL, vcpu)) {
+> > +			vcpu->run->exit_reason = KVM_EXIT_DIRTY_RING_FULL;
+> > +			trace_kvm_dirty_ring_exit(vcpu);
+> > +			return 0;
+> > +		}
+> >   	}
+> >   	return 1;
+> > diff --git a/virt/kvm/dirty_ring.c b/virt/kvm/dirty_ring.c
+> > index f4c2a6eb1666..08b2f01164fa 100644
+> > --- a/virt/kvm/dirty_ring.c
+> > +++ b/virt/kvm/dirty_ring.c
+> > @@ -149,6 +149,7 @@ int kvm_dirty_ring_reset(struct kvm *kvm, struct kvm_dirty_ring *ring)
+> >   void kvm_dirty_ring_push(struct kvm_dirty_ring *ring, u32 slot, u64 offset)
+> >   {
+> > +	struct kvm_vcpu *vcpu = container_of(ring, struct kvm_vcpu, dirty_ring);
+> >   	struct kvm_dirty_gfn *entry;
+> >   	/* It should never get full */
+> > @@ -166,6 +167,9 @@ void kvm_dirty_ring_push(struct kvm_dirty_ring *ring, u32 slot, u64 offset)
+> >   	kvm_dirty_gfn_set_dirtied(entry);
+> >   	ring->dirty_index++;
+> >   	trace_kvm_dirty_ring_push(ring, slot, offset);
+> > +
+> > +	if (kvm_dirty_ring_soft_full(vcpu))
+> > +		kvm_make_request(KVM_REQ_RING_SOFT_FULL, vcpu);
+> >   }
+> >   struct page *kvm_dirty_ring_get_page(struct kvm_dirty_ring *ring, u32 offset)
+> > 
+> 
+> Ok, thanks for the details, Marc. I will adopt your code in next revision :)
 
-Signed-off-by: Joe Fradley <joefradley@google.com>
----
-Changes since v1:
-- Created a function to get kunit enable state
-- Check kunit enable state in kunit_run_all_tests() in executor.c
-- Load test module even if KUnit is disabled but still don't execute
-  tests
-- Simplified kunit disable message and kunit.enable parameter
-  description
-- Flipped around logic of new config to be KUNIT_DEFAULT_ENABLED
-- kunit_tool.py now passes kunit.enable=1 to kernel
+Note that there can be a slight difference with the old/new code, in that
+an (especially malicious) userapp can logically ignore the DIRTY_RING_FULL
+vmexit and keep kicking VCPU_RUN with the new code.
 
- .../admin-guide/kernel-parameters.txt         |  6 +++++
- include/kunit/test.h                          |  2 ++
- lib/kunit/Kconfig                             | 11 +++++++++
- lib/kunit/executor.c                          |  4 ++++
- lib/kunit/test.c                              | 24 +++++++++++++++++++
- tools/testing/kunit/kunit_kernel.py           |  1 +
- 6 files changed, 48 insertions(+)
+Unlike the old code, the 2nd/3rd/... KVM_RUN will still run in the new code
+until the next dirty pfn being pushed to the ring, then it'll request ring
+full exit again.
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index adfda56b2691..7aa3abd7f1c5 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -2432,6 +2432,12 @@
- 			0: force disabled
- 			1: force enabled
- 
-+	kunit.enable=	[KUNIT] Enable executing KUnit tests. Requires
-+			CONFIG_KUNIT to be set to be fully enabled. The
-+			default value can be overridden via
-+			KUNIT_DEFAULT_ENABLED.
-+			Default is 1 (enabled)
-+
- 	kvm.ignore_msrs=[KVM] Ignore guest accesses to unhandled MSRs.
- 			Default is 0 (don't ignore, but inject #GP)
- 
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index c958855681cc..ee6bf4ecbd89 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -228,6 +228,8 @@ static inline void kunit_set_failure(struct kunit *test)
- 	WRITE_ONCE(test->status, KUNIT_FAILURE);
- }
- 
-+bool kunit_enabled(void);
-+
- void kunit_init_test(struct kunit *test, const char *name, char *log);
- 
- int kunit_run_tests(struct kunit_suite *suite);
-diff --git a/lib/kunit/Kconfig b/lib/kunit/Kconfig
-index 0b5dfb001bac..626719b95bad 100644
---- a/lib/kunit/Kconfig
-+++ b/lib/kunit/Kconfig
-@@ -59,4 +59,15 @@ config KUNIT_ALL_TESTS
- 
- 	  If unsure, say N.
- 
-+config KUNIT_DEFAULT_ENABLED
-+	bool "Default value of kunit.enable"
-+	default y
-+	help
-+	  Sets the default value of kunit.enable. If set to N then KUnit
-+	  tests will not execute unless kunit.enable=1 is passed to the
-+	  kernel command line.
-+
-+	  In most cases this should be left as Y. Only if additional opt-in
-+	  behavior is needed should this be set to N.
-+
- endif # KUNIT
-diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-index 5e223327196a..9bbc422c284b 100644
---- a/lib/kunit/executor.c
-+++ b/lib/kunit/executor.c
-@@ -190,6 +190,10 @@ int kunit_run_all_tests(void)
- {
- 	struct suite_set suite_set = {__kunit_suites_start, __kunit_suites_end};
- 	int err = 0;
-+	if (!kunit_enabled()) {
-+		pr_info("kunit: disabled\n");
-+		goto out;
-+	}
- 
- 	if (filter_glob_param) {
- 		suite_set = kunit_filter_suites(&suite_set, filter_glob_param, &err);
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index b73d5bb5c473..1e54373309a4 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -54,6 +54,17 @@ void __kunit_fail_current_test(const char *file, int line, const char *fmt, ...)
- EXPORT_SYMBOL_GPL(__kunit_fail_current_test);
- #endif
- 
-+/*
-+ * Enable KUnit tests to run.
-+ */
-+#ifdef CONFIG_KUNIT_DEFAULT_ENABLED
-+static bool enable_param = true;
-+#else
-+static bool enable_param;
-+#endif
-+module_param_named(enable, enable_param, bool, 0);
-+MODULE_PARM_DESC(enable, "Enable KUnit tests");
-+
- /*
-  * KUnit statistic mode:
-  * 0 - disabled
-@@ -586,10 +597,20 @@ static void kunit_init_suite(struct kunit_suite *suite)
- 	suite->suite_init_err = 0;
- }
- 
-+bool kunit_enabled(void)
-+{
-+	return enable_param;
-+}
-+
- int __kunit_test_suites_init(struct kunit_suite * const * const suites, int num_suites)
- {
- 	unsigned int i;
- 
-+	if (!kunit_enabled() && num_suites > 0) {
-+		pr_info("kunit: disabled\n");
-+		return 0;
-+	}
-+
- 	for (i = 0; i < num_suites; i++) {
- 		kunit_init_suite(suites[i]);
- 		kunit_run_tests(suites[i]);
-@@ -607,6 +628,9 @@ void __kunit_test_suites_exit(struct kunit_suite **suites, int num_suites)
- {
- 	unsigned int i;
- 
-+	if (!kunit_enabled())
-+		return;
-+
- 	for (i = 0; i < num_suites; i++)
- 		kunit_exit_suite(suites[i]);
- 
-diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-index f5c26ea89714..ef794da420d7 100644
---- a/tools/testing/kunit/kunit_kernel.py
-+++ b/tools/testing/kunit/kunit_kernel.py
-@@ -359,6 +359,7 @@ class LinuxSourceTree:
- 			args = []
- 		if filter_glob:
- 			args.append('kunit.filter_glob='+filter_glob)
-+		args.append('kunit.enable=1')
- 
- 		process = self._ops.start(args, build_dir)
- 		assert process.stdout is not None  # tell mypy it's set
+Each time it exits the ring grows 1.
+
+At last iiuc it can easily hit the ring full and trigger the warning at the
+entry of kvm_dirty_ring_push():
+
+	/* It should never get full */
+	WARN_ON_ONCE(kvm_dirty_ring_full(ring));
+
+We did that because kvm_dirty_ring_push() was previously designed to not be
+able to fail at all (e.g., in the old bitmap world we never will fail too).
+We can't because we can't lose any dirty page or migration could silently
+fail too (consider when we do user exit due to ring full and migration just
+completed; there could be unsynced pages on src/dst).
+
+So even though the old approach will need to read kvm->dirty_ring_size for
+every entrance which is a pity, it will avoid issue above.
+
+Side note: for x86 the dirty ring check was put at the entrance not because
+it needs to be the highest priority - it should really be the same when
+check kvm requests. It's just that it'll be the fastest way to fail
+properly if needed before loading mmu, disabling preemption/irq, etc.
+
+Thanks,
+
 -- 
-2.37.1.595.g718a3a8f04-goog
+Peter Xu
 
