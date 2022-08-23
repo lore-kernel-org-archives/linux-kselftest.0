@@ -2,160 +2,93 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BBB90C32789
-	for <linux-kselftest@archiver.kernel.org>; Tue, 23 Aug 2022 17:11:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D4ACC32774
+	for <linux-kselftest@archiver.kernel.org>; Tue, 23 Aug 2022 17:26:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343981AbiHWRLv (ORCPT
+        id S231363AbiHWR0K (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 23 Aug 2022 13:11:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42292 "EHLO
+        Tue, 23 Aug 2022 13:26:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344865AbiHWRLY (ORCPT
+        with ESMTP id S234824AbiHWRZh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 23 Aug 2022 13:11:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04AD5150155
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Aug 2022 06:58:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661263104;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YHVefDGXU83xWUJyLerizfLITJD1h0bvpZUJLhnlk24=;
-        b=AXO1SNmNaxNAq3ngFOkjpwKd9OjFxUtQlCxgejQIg8YZhdDKJzOyAzsl0mGVGXKUuO3hpU
-        dxBSGLCI7QSqq5QwrWgBYdTx5HvdDZpa7Fm4cD8qFL0wMh389YJCml7DFA11upm7Hy0FHT
-        o9nsIdQoVq8WoDhDI1ANKETuLGKrX5A=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-263-Z_n2z4tfPQ6y6jKbggQFyQ-1; Tue, 23 Aug 2022 09:58:23 -0400
-X-MC-Unique: Z_n2z4tfPQ6y6jKbggQFyQ-1
-Received: by mail-qt1-f200.google.com with SMTP id cj19-20020a05622a259300b003446920ea91so10681894qtb.10
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Aug 2022 06:58:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=YHVefDGXU83xWUJyLerizfLITJD1h0bvpZUJLhnlk24=;
-        b=yzz6ZzFAuXWf+tixLZ607UhvXX33ytDUx0W2UiMDn3Lr+gIyfQ3uglEVRogmtBTl4u
-         pGuLgumkCsDsHG1jqitoSHpCAKRArKqlPfedJWWNPxo0NZ4o4j/3LnPeb26J01vsdo3k
-         LUYLj2JZi3wsS2nyQ1o9JPUzwbJemZHCAHtuUaw6n/b/61a5Vx338OzY1KU6zitQkW7p
-         jUPbbCvpeKQpq1u90CtFi6nXp8U1qzV6wIILxyOR5VheYOStPG6B+efzlq/Kkri33feX
-         3L3fazyHHwBMbIcOCEIjEy89niaXVenLqnjSAE9DTW+GcfkRstaicnj6DZKMFN0Pcu2x
-         r/xA==
-X-Gm-Message-State: ACgBeo12eWMN9rehBQpvjo7XLqoE1eYJir6d6LiPCgEAabftgBw2pcpQ
-        LlIF+3w6yqtptXt2tkufl4mhzk3GcbImMl2FoYxBlByRMUsybfh8rWPxNU84gW+nm1RlKoZzhxc
-        CcmbZPUxA4iEbrDTIh6nXdRppviuv
-X-Received: by 2002:ac8:5b15:0:b0:343:6789:193a with SMTP id m21-20020ac85b15000000b003436789193amr19117263qtw.647.1661263102661;
-        Tue, 23 Aug 2022 06:58:22 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7gd2yWDFVr17SP2RU0l4eAn5No/A726n2hPHBkND28yI2ySau6/YWpTWAdi0/4trPHGWQO6g==
-X-Received: by 2002:ac8:5b15:0:b0:343:6789:193a with SMTP id m21-20020ac85b15000000b003436789193amr19117247qtw.647.1661263102418;
-        Tue, 23 Aug 2022 06:58:22 -0700 (PDT)
-Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
-        by smtp.gmail.com with ESMTPSA id g7-20020a05620a40c700b006a6ebde4799sm12544646qko.90.2022.08.23.06.58.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 06:58:21 -0700 (PDT)
-Date:   Tue, 23 Aug 2022 09:58:19 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Gavin Shan <gshan@redhat.com>
-Cc:     Marc Zyngier <maz@kernel.org>, kvmarm@lists.cs.columbia.edu,
-        linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        corbet@lwn.net, james.morse@arm.com, alexandru.elisei@arm.com,
-        suzuki.poulose@arm.com, oliver.upton@linux.dev,
-        catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org,
-        seanjc@google.com, drjones@redhat.com, dmatlack@google.com,
-        bgardon@google.com, ricarkol@google.com, zhenyzha@redhat.com,
-        shan.gavin@gmail.com
-Subject: Re: [PATCH v1 1/5] KVM: arm64: Enable ring-based dirty memory
- tracking
-Message-ID: <YwTc++Lz6lh3aR4F@xz-m1.local>
-References: <20220819005601.198436-1-gshan@redhat.com>
- <20220819005601.198436-2-gshan@redhat.com>
- <87lerkwtm5.wl-maz@kernel.org>
- <41fb5a1f-29a9-e6bb-9fab-4c83a2a8fce5@redhat.com>
- <87fshovtu0.wl-maz@kernel.org>
- <171d0159-4698-354b-8b2f-49d920d03b1b@redhat.com>
+        Tue, 23 Aug 2022 13:25:37 -0400
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D984B2D8A;
+        Tue, 23 Aug 2022 08:01:40 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4MBsm52syVz9v7P7;
+        Tue, 23 Aug 2022 22:57:57 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwBnIhqd6wRjjU5GAA--.52413S3;
+        Tue, 23 Aug 2022 16:01:12 +0100 (CET)
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        corbet@lwn.net, dhowells@redhat.com, jarkko@kernel.org,
+        rostedt@goodmis.org, mingo@redhat.com, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com, shuah@kernel.org
+Cc:     bpf@vger.kernel.org, linux-doc@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        deso@posteo.net, Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v13 01/10] bpf: Allow kfuncs to be used in LSM programs
+Date:   Tue, 23 Aug 2022 17:00:26 +0200
+Message-Id: <20220823150035.711534-2-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220823150035.711534-1-roberto.sassu@huaweicloud.com>
+References: <20220823150035.711534-1-roberto.sassu@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <171d0159-4698-354b-8b2f-49d920d03b1b@redhat.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: GxC2BwBnIhqd6wRjjU5GAA--.52413S3
+X-Coremail-Antispam: 1UD129KBjvdXoWruF15tF4kCFWUGF1kZFyxXwb_yoWfXrX_Cw
+        4jg3WxArn8CFWIqa10kF4Sqry7Ka45tFn5uwn8KrZ3Jwn8G3yDAw1F9Fy3tFykX3y8Xw43
+        tFn3CrZxtr17XjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbfkYFVCjjxCrM7AC8VAFwI0_Wr0E3s1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_JrC_JFWl1IIY67AEw4v_Jr0_Jr4l82xGYIkIc2x26280x7IE14v26r18M2
+        8IrcIa0xkI8VCY1x0267AKxVW5JVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK
+        021l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F
+        4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8
+        JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx
+        0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWU
+        JVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0EwI
+        xGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480
+        Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7
+        IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK
+        8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I
+        0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFOJ5UUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgANBF1jj347dwACsK
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 03:22:17PM +1000, Gavin Shan wrote:
-> > diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-> > index 986cee6fbc7f..0b41feb6fb7d 100644
-> > --- a/arch/arm64/kvm/arm.c
-> > +++ b/arch/arm64/kvm/arm.c
-> > @@ -747,6 +747,12 @@ static int check_vcpu_requests(struct kvm_vcpu *vcpu)
-> >   		if (kvm_check_request(KVM_REQ_SUSPEND, vcpu))
-> >   			return kvm_vcpu_suspend(vcpu);
-> > +
-> > +		if (kvm_check_request(KVM_REQ_RING_SOFT_FULL, vcpu)) {
-> > +			vcpu->run->exit_reason = KVM_EXIT_DIRTY_RING_FULL;
-> > +			trace_kvm_dirty_ring_exit(vcpu);
-> > +			return 0;
-> > +		}
-> >   	}
-> >   	return 1;
-> > diff --git a/virt/kvm/dirty_ring.c b/virt/kvm/dirty_ring.c
-> > index f4c2a6eb1666..08b2f01164fa 100644
-> > --- a/virt/kvm/dirty_ring.c
-> > +++ b/virt/kvm/dirty_ring.c
-> > @@ -149,6 +149,7 @@ int kvm_dirty_ring_reset(struct kvm *kvm, struct kvm_dirty_ring *ring)
-> >   void kvm_dirty_ring_push(struct kvm_dirty_ring *ring, u32 slot, u64 offset)
-> >   {
-> > +	struct kvm_vcpu *vcpu = container_of(ring, struct kvm_vcpu, dirty_ring);
-> >   	struct kvm_dirty_gfn *entry;
-> >   	/* It should never get full */
-> > @@ -166,6 +167,9 @@ void kvm_dirty_ring_push(struct kvm_dirty_ring *ring, u32 slot, u64 offset)
-> >   	kvm_dirty_gfn_set_dirtied(entry);
-> >   	ring->dirty_index++;
-> >   	trace_kvm_dirty_ring_push(ring, slot, offset);
-> > +
-> > +	if (kvm_dirty_ring_soft_full(vcpu))
-> > +		kvm_make_request(KVM_REQ_RING_SOFT_FULL, vcpu);
-> >   }
-> >   struct page *kvm_dirty_ring_get_page(struct kvm_dirty_ring *ring, u32 offset)
-> > 
-> 
-> Ok, thanks for the details, Marc. I will adopt your code in next revision :)
+From: KP Singh <kpsingh@kernel.org>
 
-Note that there can be a slight difference with the old/new code, in that
-an (especially malicious) userapp can logically ignore the DIRTY_RING_FULL
-vmexit and keep kicking VCPU_RUN with the new code.
+In preparation for the addition of new kfuncs, allow kfuncs defined in the
+tracing subsystem to be used in LSM programs by mapping the LSM program
+type to the TRACING hook.
 
-Unlike the old code, the 2nd/3rd/... KVM_RUN will still run in the new code
-until the next dirty pfn being pushed to the ring, then it'll request ring
-full exit again.
+Signed-off-by: KP Singh <kpsingh@kernel.org>
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+---
+ kernel/bpf/btf.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Each time it exits the ring grows 1.
-
-At last iiuc it can easily hit the ring full and trigger the warning at the
-entry of kvm_dirty_ring_push():
-
-	/* It should never get full */
-	WARN_ON_ONCE(kvm_dirty_ring_full(ring));
-
-We did that because kvm_dirty_ring_push() was previously designed to not be
-able to fail at all (e.g., in the old bitmap world we never will fail too).
-We can't because we can't lose any dirty page or migration could silently
-fail too (consider when we do user exit due to ring full and migration just
-completed; there could be unsynced pages on src/dst).
-
-So even though the old approach will need to read kvm->dirty_ring_size for
-every entrance which is a pity, it will avoid issue above.
-
-Side note: for x86 the dirty ring check was put at the entrance not because
-it needs to be the highest priority - it should really be the same when
-check kvm requests. It's just that it'll be the fastest way to fail
-properly if needed before loading mmu, disabling preemption/irq, etc.
-
-Thanks,
-
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 903719b89238..e49b3b6d48ad 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -7243,6 +7243,7 @@ static int bpf_prog_type_to_kfunc_hook(enum bpf_prog_type prog_type)
+ 	case BPF_PROG_TYPE_STRUCT_OPS:
+ 		return BTF_KFUNC_HOOK_STRUCT_OPS;
+ 	case BPF_PROG_TYPE_TRACING:
++	case BPF_PROG_TYPE_LSM:
+ 		return BTF_KFUNC_HOOK_TRACING;
+ 	case BPF_PROG_TYPE_SYSCALL:
+ 		return BTF_KFUNC_HOOK_SYSCALL;
 -- 
-Peter Xu
+2.25.1
 
