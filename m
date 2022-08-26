@@ -2,37 +2,37 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF42FECAAD2
-	for <linux-kselftest@archiver.kernel.org>; Fri, 26 Aug 2022 06:46:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9585AECAAD2
+	for <linux-kselftest@archiver.kernel.org>; Fri, 26 Aug 2022 06:46:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245171AbiHZGqW (ORCPT
+        id S245187AbiHZGqb (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 26 Aug 2022 02:46:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49824 "EHLO
+        Fri, 26 Aug 2022 02:46:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245108AbiHZGqR (ORCPT
+        with ESMTP id S236722AbiHZGqS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 26 Aug 2022 02:46:17 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B3A1D1E2D;
-        Thu, 25 Aug 2022 23:46:03 -0700 (PDT)
+        Fri, 26 Aug 2022 02:46:18 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C634D21D2;
+        Thu, 25 Aug 2022 23:46:10 -0700 (PDT)
 Received: from lenovo.Home (unknown [39.53.61.43])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id CF8946601EC8;
-        Fri, 26 Aug 2022 07:45:58 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 28ACA6601EC7;
+        Fri, 26 Aug 2022 07:46:05 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1661496362;
-        bh=1jHw5sa9fTu8NOc1dlqFzISRY1ZlcDb3kYV3xpKJeTk=;
+        s=mail; t=1661496369;
+        bh=qFwfAW+YdGQMEoUt1Jsqu4meeyL+SBRRa4jSpOBxxag=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XfGOdhKFwYd0TiLxAexIHGbGSvw0lmUiYdoKcDv2Ecga3r6OM2J0nZ+xn8dRa9o6H
-         /NDzorWLIIy0X8arNr1NM3PIqLhghL14q7iJouwp0AMDvqr6aV8iN8UzX2H+0XvPhx
-         by0zS13MJKFrMhmuelxfwedd56Rf+BNi/AtbYqsJb1cKpeHJJ9LwKhJmRNijjOZM5P
-         3x6LrWPI6EPfnPy4bBuxyCcsJVH17Hg7QHcxB8bPqOYFcdct47ysc0/Euj4pAZ71IU
-         Um744KAE7cSeuGbrftvVPQCAhpvhRv9AqHeHbfQaMHe+RptUAzwMKjr9yOjV/g70Sm
-         2VY2kuxPXtB9w==
+        b=MqLhLBD000uR8bos55kq6B0zd6KcI+zVA3+3+1lh9CHVeLA7Xtm5TlApu0RsP5K6Q
+         GaTS146h+PQSc60dfjK0trnYUuQOrRDaO9xp9SZwkO26Fwo6/AXsB68X7nL6ejn2xN
+         sbI/9tPhriK2OPjmRvSqjE99pvEhHSjGwslyTNLwsJ3HTxVrAQVWKYgarxEMYKm+0l
+         Sgty4ZQl62sAs2T9NeauCEYI6N5UOeifcCNSLx+EGyN5ZtKTej96u354C53osstFIm
+         3A8U9UByjTVrOhh56q9iP0+NkyA9dw5QqnJ9qx6XihHoVtVxicMbVyfE8C40X1Q7TP
+         ampV4YcnPyCtg==
 From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
 To:     Jonathan Corbet <corbet@lwn.net>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -49,9 +49,9 @@ Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
         David Hildenbrand <david@redhat.com>,
         Peter Enderborg <peter.enderborg@sony.com>,
         Greg KH <gregkh@linuxfoundation.org>
-Subject: [PATCH v3 2/4] fs/proc/task_mmu: Implement IOCTL to get and clear soft dirty PTE bit
-Date:   Fri, 26 Aug 2022 11:45:33 +0500
-Message-Id: <20220826064535.1941190-3-usama.anjum@collabora.com>
+Subject: [PATCH v3 4/4] mm: add documentation of the new ioctl on pagemap
+Date:   Fri, 26 Aug 2022 11:45:35 +0500
+Message-Id: <20220826064535.1941190-5-usama.anjum@collabora.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220826064535.1941190-1-usama.anjum@collabora.com>
 References: <20220826064535.1941190-1-usama.anjum@collabora.com>
@@ -61,388 +61,78 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This ioctl can be used to watch the process's memory and perform
-atomic operations which aren't possible through procfs. Three
-operations have been implemented:
-
-- PAGEMAP_SD_GET gets the soft dirty pages in a address range.
-- PAGEMAP_SD_CLEAR clears the soft dirty bit from dirty pages in a
-  address range.
-- PAGEMAP_SD_GET_AND_CLEAR gets and clears the soft dirty bit in a
-  address range.
-
-struct pagemap_sd_args is used as the argument of the IOCTL. In this
-struct:
-- The range is specified through start and len.
-- The output buffer and size is specified as vec and vec_len.
-- The flags can be specified in the flags field. Currently only one
-  PAGEMAP_SD_NO_REUSED_REGIONS is supported which can be specified to
-  ignore the VMA dirty flags.
-
-This is based on a patch from Gabriel Krisman Bertazi.
+Add the explanation of the added ioctl on pagemap file. It can be used
+to get, clear or both soft-dirty PTE bit of the specified range.
+or both at the same time.
 
 Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 ---
-Changes in v3:
-- Tighten the user-kernel interface by using explicit types and add more
-  error checking
-
 Changes in v2:
-- Convert the interface from syscall to ioctl
-- Remove pidfd support as it doesn't make sense in ioctl
+- Update documentation to mention ioctl instead of the syscall
 ---
- fs/proc/task_mmu.c            | 260 ++++++++++++++++++++++++++++++++++
- include/uapi/linux/fs.h       |  23 +++
- tools/include/uapi/linux/fs.h |  23 +++
- 3 files changed, 306 insertions(+)
+ Documentation/admin-guide/mm/soft-dirty.rst | 42 ++++++++++++++++++++-
+ 1 file changed, 41 insertions(+), 1 deletion(-)
 
-diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-index f66674033207..33d3d5c2ab40 100644
---- a/fs/proc/task_mmu.c
-+++ b/fs/proc/task_mmu.c
-@@ -19,6 +19,8 @@
- #include <linux/shmem_fs.h>
- #include <linux/uaccess.h>
- #include <linux/pkeys.h>
-+#include <uapi/linux/fs.h>
-+#include <linux/vmalloc.h>
+diff --git a/Documentation/admin-guide/mm/soft-dirty.rst b/Documentation/admin-guide/mm/soft-dirty.rst
+index cb0cfd6672fa..d3d33e63a965 100644
+--- a/Documentation/admin-guide/mm/soft-dirty.rst
++++ b/Documentation/admin-guide/mm/soft-dirty.rst
+@@ -5,7 +5,12 @@ Soft-Dirty PTEs
+ ===============
  
- #include <asm/elf.h>
- #include <asm/tlb.h>
-@@ -1775,11 +1777,269 @@ static int pagemap_release(struct inode *inode, struct file *file)
- 	return 0;
- }
+ The soft-dirty is a bit on a PTE which helps to track which pages a task
+-writes to. In order to do this tracking one should
++writes to.
++
++Using Proc FS
++-------------
++
++In order to do this tracking one should
  
-+#ifdef CONFIG_MEM_SOFT_DIRTY
-+#define IS_CLEAR_SD_OP(op) (op == PAGEMAP_SD_CLEAR || op == PAGEMAP_SD_GET_AND_CLEAR)
-+#define IS_GET_SD_OP(op) (op == PAGEMAP_SD_GET || op == PAGEMAP_SD_GET_AND_CLEAR)
-+#define PAGEMAP_SD_FLAGS_MASK (PAGEMAP_SD_NO_REUSED_REGIONS)
-+
-+struct pagemap_sd_private {
-+	unsigned long start;
-+	__u64 *vec;
-+	unsigned long vec_len;
-+	unsigned long index;
-+	unsigned int op;
-+	unsigned int flags;
-+};
-+
-+static int pagemap_sd_pmd_entry(pmd_t *pmd, unsigned long addr,
-+				unsigned long end, struct mm_walk *walk)
-+{
-+	struct pagemap_sd_private *p = walk->private;
-+	struct vm_area_struct *vma = walk->vma;
-+	unsigned long start = addr;
-+	spinlock_t *ptl;
-+	pte_t *pte;
-+	int dirty;
-+	bool dirty_vma = (p->flags & PAGEMAP_SD_NO_REUSED_REGIONS) ? 0 :
-+			 (vma->vm_flags & VM_SOFTDIRTY);
-+
-+	end = min(end, walk->vma->vm_end);
-+	ptl = pmd_trans_huge_lock(pmd, vma);
-+	if (ptl) {
-+		if (dirty_vma || check_soft_dirty_pmd(vma, addr, pmd, false)) {
-+			/*
-+			 * Break huge page into small pages if operation needs to be performed is
-+			 * on a portion of the huge page or the return buffer cannot store complete
-+			 * data. Then process this PMD as having normal pages.
-+			 */
-+			if ((IS_CLEAR_SD_OP(p->op) && (end - addr < HPAGE_SIZE)) ||
-+			    (IS_GET_SD_OP(p->op) && (p->index + HPAGE_SIZE/PAGE_SIZE > p->vec_len))) {
-+				spin_unlock(ptl);
-+				split_huge_pmd(vma, pmd, addr);
-+				goto process_smaller_pages;
-+			} else {
-+				dirty = check_soft_dirty_pmd(vma, addr, pmd, IS_CLEAR_SD_OP(p->op));
-+				if (IS_GET_SD_OP(p->op) && (dirty_vma || dirty)) {
-+					for (; addr != end && p->index < p->vec_len;
-+					     addr += PAGE_SIZE)
-+						p->vec[p->index++] = addr - p->start;
-+				}
-+			}
-+		}
-+		spin_unlock(ptl);
-+		return 0;
-+	}
-+
-+process_smaller_pages:
-+	if (pmd_trans_unstable(pmd))
-+		return 0;
-+
-+	pte = pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
-+	for (; addr != end; pte++, addr += PAGE_SIZE) {
-+		dirty = check_soft_dirty(vma, addr, pte, IS_CLEAR_SD_OP(p->op));
-+
-+		if (IS_GET_SD_OP(p->op) && (dirty_vma || dirty)) {
-+			p->vec[p->index++] = addr - p->start;
-+			WARN_ON(p->index > p->vec_len);
-+		}
-+	}
-+	pte_unmap_unlock(pte - 1, ptl);
-+	cond_resched();
-+
-+	if (IS_CLEAR_SD_OP(p->op))
-+		flush_tlb_mm_range(vma->vm_mm, start, end, PAGE_SHIFT, false);
-+
-+	return 0;
-+}
-+
-+static int pagemap_sd_pte_hole(unsigned long addr, unsigned long end, int depth,
-+			       struct mm_walk *walk)
-+{
-+	struct pagemap_sd_private *p = walk->private;
-+	struct vm_area_struct *vma = walk->vma;
-+
-+	if (p->flags & PAGEMAP_SD_NO_REUSED_REGIONS)
-+		return 0;
-+
-+	if (vma && (vma->vm_flags & VM_SOFTDIRTY) && IS_GET_SD_OP(p->op)) {
-+		for (; addr != end && p->index < p->vec_len; addr += PAGE_SIZE)
-+			p->vec[p->index++] = addr - p->start;
-+	}
-+
-+	return 0;
-+}
-+
-+static int pagemap_sd_pre_vma(unsigned long start, unsigned long end, struct mm_walk *walk)
-+{
-+	struct pagemap_sd_private *p = walk->private;
-+	struct vm_area_struct *vma = walk->vma;
-+	int ret;
-+	unsigned long end_cut = end;
-+
-+	if (p->flags & PAGEMAP_SD_NO_REUSED_REGIONS)
-+		return 0;
-+
-+	if (IS_CLEAR_SD_OP(p->op) && (vma->vm_flags & VM_SOFTDIRTY)) {
-+		if (vma->vm_start < start) {
-+			ret = split_vma(vma->vm_mm, vma, start, 1);
-+			if (ret)
-+				return ret;
-+		}
-+
-+		if (IS_GET_SD_OP(p->op))
-+			end_cut = min(start + p->vec_len * PAGE_SIZE, end);
-+
-+		if (vma->vm_end > end_cut) {
-+			ret = split_vma(vma->vm_mm, vma, end_cut, 0);
-+			if (ret)
-+				return ret;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static void pagemap_sd_post_vma(struct mm_walk *walk)
-+{
-+	struct pagemap_sd_private *p = walk->private;
-+	struct vm_area_struct *vma = walk->vma;
-+
-+	if (p->flags & PAGEMAP_SD_NO_REUSED_REGIONS)
-+		return;
-+
-+	if (IS_CLEAR_SD_OP(p->op) && (vma->vm_flags & VM_SOFTDIRTY)) {
-+		vma->vm_flags &= ~VM_SOFTDIRTY;
-+		vma_set_page_prot(vma);
-+	}
-+}
-+
-+static int pagemap_sd_pmd_test_walk(unsigned long start, unsigned long end,
-+				    struct mm_walk *walk)
-+{
-+	struct pagemap_sd_private *p = walk->private;
-+	struct vm_area_struct *vma = walk->vma;
-+
-+	if (IS_GET_SD_OP(p->op) && (p->index == p->vec_len))
-+		return -1;
-+
-+	if (vma->vm_flags & VM_PFNMAP)
-+		return 1;
-+
-+	return 0;
-+}
-+
-+static const struct mm_walk_ops pagemap_sd_ops = {
-+	.test_walk = pagemap_sd_pmd_test_walk,
-+	.pre_vma = pagemap_sd_pre_vma,
-+	.pmd_entry = pagemap_sd_pmd_entry,
-+	.pte_hole = pagemap_sd_pte_hole,
-+	.post_vma = pagemap_sd_post_vma,
-+};
-+
-+static long do_pagemap_sd_cmd(struct mm_struct *mm, unsigned int cmd, struct pagemap_sd_args *arg)
-+{
-+	struct pagemap_sd_private sd_data;
-+	struct mmu_notifier_range range;
-+	unsigned long start, end;
-+	int ret;
-+
-+	start = (unsigned long)untagged_addr(arg->start);
-+	if ((!IS_ALIGNED(start, PAGE_SIZE)) || (!access_ok((void __user *)start, arg->len)))
-+		return -EINVAL;
-+
-+	if (IS_GET_SD_OP(cmd) &&
-+	    ((arg->vec_len == 0) || (!arg->vec) || (!access_ok((loff_t *)arg->vec, arg->vec_len))))
-+		return -EINVAL;
-+
-+	if ((arg->flags & ~PAGEMAP_SD_FLAGS_MASK) || (arg->__reserved))
-+		return -EINVAL;
-+
-+	end = start + arg->len;
-+	sd_data.start = start;
-+	sd_data.op = cmd;
-+	sd_data.flags = arg->flags;
-+	sd_data.index = 0;
-+	sd_data.vec_len = arg->vec_len;
-+
-+	if (IS_GET_SD_OP(cmd)) {
-+		sd_data.vec = vzalloc(arg->vec_len * sizeof(loff_t));
-+		if (!sd_data.vec)
-+			return -ENOMEM;
-+	}
-+
-+	if (IS_CLEAR_SD_OP(cmd)) {
-+		mmap_write_lock(mm);
-+
-+		mmu_notifier_range_init(&range, MMU_NOTIFY_SOFT_DIRTY, 0, NULL,
-+					mm, start, end);
-+		mmu_notifier_invalidate_range_start(&range);
-+		inc_tlb_flush_pending(mm);
-+	} else {
-+		mmap_read_lock(mm);
-+	}
-+
-+	ret = walk_page_range(mm, start, end, &pagemap_sd_ops, &sd_data);
-+
-+	if (IS_CLEAR_SD_OP(cmd)) {
-+		mmu_notifier_invalidate_range_end(&range);
-+		dec_tlb_flush_pending(mm);
-+
-+		mmap_write_unlock(mm);
-+	} else {
-+		mmap_read_unlock(mm);
-+	}
-+
-+	if (ret < 0)
-+		goto free_sd_data;
-+
-+	if (IS_GET_SD_OP(cmd)) {
-+		ret = copy_to_user((loff_t *)arg->vec, sd_data.vec, sd_data.index * sizeof(loff_t));
-+		if (ret) {
-+			ret = -EIO;
-+			goto free_sd_data;
-+		}
-+		ret = sd_data.index;
-+	} else {
-+		ret = 0;
-+	}
-+
-+free_sd_data:
-+	if (IS_GET_SD_OP(cmd))
-+		vfree(sd_data.vec);
-+
-+	return ret;
-+}
-+
-+static long pagemap_sd_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
-+{
-+	struct pagemap_sd_args __user *uarg = (struct pagemap_sd_args __user *)arg;
-+	struct mm_struct *mm = file->private_data;
-+	struct pagemap_sd_args arguments;
-+
-+	switch (cmd) {
-+	case PAGEMAP_SD_GET:
-+		fallthrough;
-+	case PAGEMAP_SD_CLEAR:
-+		fallthrough;
-+	case PAGEMAP_SD_GET_AND_CLEAR:
-+		if (copy_from_user(&arguments, uarg, sizeof(struct pagemap_sd_args)))
-+			return -EFAULT;
-+		return do_pagemap_sd_cmd(mm, cmd, &arguments);
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+#endif /* CONFIG_MEM_SOFT_DIRTY */
-+
- const struct file_operations proc_pagemap_operations = {
- 	.llseek		= mem_lseek, /* borrow this */
- 	.read		= pagemap_read,
- 	.open		= pagemap_open,
- 	.release	= pagemap_release,
-+#ifdef CONFIG_MEM_SOFT_DIRTY
-+	.unlocked_ioctl = pagemap_sd_ioctl,
-+	.compat_ioctl = pagemap_sd_ioctl,
-+#endif /* CONFIG_MEM_SOFT_DIRTY */
- };
- #endif /* CONFIG_PROC_PAGE_MONITOR */
+   1. Clear soft-dirty bits from the task's PTEs.
  
-diff --git a/include/uapi/linux/fs.h b/include/uapi/linux/fs.h
-index b7b56871029c..4f6d1c0ae524 100644
---- a/include/uapi/linux/fs.h
-+++ b/include/uapi/linux/fs.h
-@@ -305,4 +305,27 @@ typedef int __bitwise __kernel_rwf_t;
- #define RWF_SUPPORTED	(RWF_HIPRI | RWF_DSYNC | RWF_SYNC | RWF_NOWAIT |\
- 			 RWF_APPEND)
+@@ -20,6 +25,41 @@ writes to. In order to do this tracking one should
+      64-bit qword is the soft-dirty one. If set, the respective PTE was
+      written to since step 1.
  
-+/**
-+ * struct pagemap_sd_args - Soft-dirty IOCTL argument
-+ * @start:	Starting address
-+ * @len:	Length of the region
-+ * @vec:	Output buffer address
-+ * @vec_len:	Length of the output buffer
-+ * @flags:	Special flags for the IOCTL
-+ * @__reserved:	Reserved member to preserve data alignment. Should be 0.
-+ */
-+struct pagemap_sd_args {
-+	__u64 __user start;
-+	__u64 len;
-+	__u64 __user vec;
-+	__u64 vec_len;
-+	__u32 flags;
-+	__u32 __reserved;
-+};
++Using IOCTL
++-----------
 +
-+#define PAGEMAP_SD_GET			_IOWR('f', 16, struct pagemap_sd_args)
-+#define PAGEMAP_SD_CLEAR		_IOWR('f', 17, struct pagemap_sd_args)
-+#define PAGEMAP_SD_GET_AND_CLEAR	_IOWR('f', 18, struct pagemap_sd_args)
-+#define PAGEMAP_SD_NO_REUSED_REGIONS	0x1
++The IOCTL on the ``/proc/PID/pagemap`` can be can be used to find the dirty pages
++atomically. The following commands are supported::
 +
- #endif /* _UAPI_LINUX_FS_H */
-diff --git a/tools/include/uapi/linux/fs.h b/tools/include/uapi/linux/fs.h
-index b7b56871029c..4f6d1c0ae524 100644
---- a/tools/include/uapi/linux/fs.h
-+++ b/tools/include/uapi/linux/fs.h
-@@ -305,4 +305,27 @@ typedef int __bitwise __kernel_rwf_t;
- #define RWF_SUPPORTED	(RWF_HIPRI | RWF_DSYNC | RWF_SYNC | RWF_NOWAIT |\
- 			 RWF_APPEND)
++	MEMWATCH_SD_GET
++		Get the page offsets which are soft dirty.
++
++	MEMWATCH_SD_CLEAR
++		Clear the pages which are soft dirty.
++
++	MEMWATCH_SD_GET_AND_CLEAR
++		Get and clear the pages which are soft dirty.
++
++The struct :c:type:`pagemap_sd_args` is used as the argument. In this struct:
++
++  1. The range is specified through start and len. The len argument need not be
++     the multiple of the page size, but since the information is returned for the
++     whole pages, len is effectively rounded up to the next multiple of the page
++     size.
++
++  2. The output buffer and size is specified in vec and vec_len. The offsets of
++     the dirty pages from start are returned in vec. The ioctl returns when the
++     whole range has been searched or vec is completely filled. The whole range
++     isn't cleared if vec fills up completely.
++
++  3. The flags can be specified in flags field. Currently only one flag,
++     PAGEMAP_SD_NO_REUSED_REGIONS is supported which can be specified to ignore
++     the VMA dirty flags for better performance. This flag shows only those pages
++     dirty which have been written to by the user. All new allocations aren't returned
++     to be dirty.
++
++Explanation
++-----------
  
-+/**
-+ * struct pagemap_sd_args - Soft-dirty IOCTL argument
-+ * @start:	Starting address
-+ * @len:	Length of the region
-+ * @vec:	Output buffer address
-+ * @vec_len:	Length of the output buffer
-+ * @flags:	Special flags for the IOCTL
-+ * @__reserved:	Reserved member to preserve data alignment. Should be 0.
-+ */
-+struct pagemap_sd_args {
-+	__u64 __user start;
-+	__u64 len;
-+	__u64 __user vec;
-+	__u64 vec_len;
-+	__u32 flags;
-+	__u32 __reserved;
-+};
-+
-+#define PAGEMAP_SD_GET			_IOWR('f', 16, struct pagemap_sd_args)
-+#define PAGEMAP_SD_CLEAR		_IOWR('f', 17, struct pagemap_sd_args)
-+#define PAGEMAP_SD_GET_AND_CLEAR	_IOWR('f', 18, struct pagemap_sd_args)
-+#define PAGEMAP_SD_NO_REUSED_REGIONS	0x1
-+
- #endif /* _UAPI_LINUX_FS_H */
+ Internally, to do this tracking, the writable bit is cleared from PTEs
+ when the soft-dirty bit is cleared. So, after this, when the task tries to
 -- 
 2.30.2
 
