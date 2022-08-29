@@ -2,107 +2,167 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DA7BC0502E
-	for <linux-kselftest@archiver.kernel.org>; Mon, 29 Aug 2022 01:52:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B475ECAAA2
+	for <linux-kselftest@archiver.kernel.org>; Mon, 29 Aug 2022 02:50:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbiH2Bw6 (ORCPT
+        id S229463AbiH2Cuh (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 28 Aug 2022 21:52:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59542 "EHLO
+        Sun, 28 Aug 2022 22:50:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiH2Bw5 (ORCPT
+        with ESMTP id S229379AbiH2Cuf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 28 Aug 2022 21:52:57 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEE4C2F3AA;
-        Sun, 28 Aug 2022 18:52:56 -0700 (PDT)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MGD0k6ky5znTmr;
-        Mon, 29 Aug 2022 09:50:30 +0800 (CST)
-Received: from [10.67.110.112] (10.67.110.112) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 29 Aug 2022 09:52:54 +0800
-Subject: Re: [PATCH -next v2 6/6] landlock: update chmod and chown support in
- document
-To:     =?UTF-8?Q?G=c3=bcnther_Noack?= <gnoack3000@gmail.com>
-CC:     <mic@digikod.net>, <paul@paul-moore.com>, <jmorris@namei.org>,
-        <serge@hallyn.com>, <shuah@kernel.org>, <corbet@lwn.net>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>
-References: <20220827111215.131442-1-xiujianfeng@huawei.com>
- <20220827111215.131442-7-xiujianfeng@huawei.com> <YwpUU+DZKfD/lV/g@nuc>
-From:   xiujianfeng <xiujianfeng@huawei.com>
-Message-ID: <9e278dc5-35e6-2872-3255-52f38d1670e5@huawei.com>
-Date:   Mon, 29 Aug 2022 09:52:54 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.1
+        Sun, 28 Aug 2022 22:50:35 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB7F6428;
+        Sun, 28 Aug 2022 19:50:35 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id 76so6914219pfy.3;
+        Sun, 28 Aug 2022 19:50:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=tgcW/JyKa8S3I89n0K6qJX6Ukxx8gVo0k/7A+pboipQ=;
+        b=TwjWDc9bC0k5aSO5/UMZ3q+zEBbJnil/P8zwqBQwUwsVlyH/+ISOalqHobz3CC8Ipp
+         bZ+JDiK2B8ChHTwI6LlM1VcnxpcLCgNaUdmQ3Yv6AWLyKrKN56FYJ7R/rCQlOCXEeOz3
+         SfgQ66ZFHyXZ3AK8onoU+tg86z73Lz6jVBJK2cOtmUo/m4UKH7o5PkF37PmE+2S5xW7L
+         bAtoF4fod84P3Hq27YBuh1eoh/mJvxH67EjjNpc7PiUSOxYgdqS8vTwPt26B+9KV2rje
+         Q/Ukr2mHAtczdTh2MiRNDerz6JPqAYbIDwoE6+1SQIb0v6yUXVJ6zgP6uApPwq/WDs2s
+         ZHlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=tgcW/JyKa8S3I89n0K6qJX6Ukxx8gVo0k/7A+pboipQ=;
+        b=QU+N0A/S1ZrmDfVs+hmet1DifpoyS8i0he1fz99SNnAu4Fjpi9cYXqIEQvZHfYHatY
+         Ds5poSEcMvVzkdjZ1TH9or7OKTRi4A3vRdPj79Mm2qYUBEBFl7RL5MPMtNdXeHLrdDJ8
+         siuOo6IsGxL6rQSWXZk46IRtS+IrjQ6Ul8k2JofBm2zlN7E+hxv4keqgRj1CNStHj0kB
+         OU9sr43860oZkdEoIsc5TciKw6rI15oLn6Z65SsHxVZoJw7VxnIRY9ug4uw8QuN4MoJ+
+         S/0Izq850Ou/NEjQwJQK2S0tiiYWjJytAqru7PhYnLCiezrFCyrA+G5m0ZYnAEsF8sNY
+         OAXQ==
+X-Gm-Message-State: ACgBeo2hrNkKdmWCXwgMHB3aw7BTMb5IiPtXxNSBoAKuJCQrtTGGQafs
+        QvRB6qi7EhqmngF4Nxb8D48=
+X-Google-Smtp-Source: AA6agR5ubpJosJsqdZGRbztGjY5oSq+h0Xm0Dq+kK3BXb6c/CMy8aNIkHl9Cfs3Fsp4qBTrnDPp0fQ==
+X-Received: by 2002:aa7:8653:0:b0:52d:6fc3:1e41 with SMTP id a19-20020aa78653000000b0052d6fc31e41mr14632242pfo.13.1661741434583;
+        Sun, 28 Aug 2022 19:50:34 -0700 (PDT)
+Received: from debian.me (subs09a-223-255-225-73.three.co.id. [223.255.225.73])
+        by smtp.gmail.com with ESMTPSA id y10-20020a17090aca8a00b001fb53587166sm2999416pjt.28.2022.08.28.19.50.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 Aug 2022 19:50:34 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 9A5961039BD; Mon, 29 Aug 2022 09:50:30 +0700 (WIB)
+Date:   Mon, 29 Aug 2022 09:50:30 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH v11 3/3] Documentation/x86: Document TDX attestation
+ process
+Message-ID: <YwwpdsNazNBjRnVU@debian.me>
+References: <20220826150638.2397576-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220826150638.2397576-3-sathyanarayanan.kuppuswamy@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <YwpUU+DZKfD/lV/g@nuc>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.112]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Jup6ckWXqdQaixmU"
+Content-Disposition: inline
+In-Reply-To: <20220826150638.2397576-3-sathyanarayanan.kuppuswamy@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+
+--Jup6ckWXqdQaixmU
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Aug 26, 2022 at 08:06:38AM -0700, Kuppuswamy Sathyanarayanan wrote:
+> +Input parameters: Parameters passed to the IOCTL and related details.
+> +Output          : Details about output data and return value (with detai=
+ls
+> +                  about the non common error values).
+> +
+> +TDX_CMD_GET_REPORT
+> +------------------
+> +
+> +:Input parameters: struct tdx_report_req
+> +:Output          : Upon successful execution, TDREPORT data is copied to
+> +                   tdx_report_req.tdreport and returns 0 or returns
+> +                   -EIO on TDCALL failure and standard error number on
+> +                   other common failures.
+
 Hi,
 
-ÔÚ 2022/8/28 1:28, G¨¹nther Noack Ð´µÀ:
-> On Sat, Aug 27, 2022 at 07:12:15PM +0800, Xiu Jianfeng wrote:
->> update LANDLOCK_ACCESS_FS_{CHMOD, CHGRP} support and add abi change
->> in the document.
->>
->> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
->> ---
->>   Documentation/userspace-api/landlock.rst | 9 ++++++++-
->>   1 file changed, 8 insertions(+), 1 deletion(-)
->>
->> diff --git a/Documentation/userspace-api/landlock.rst b/Documentation/userspace-api/landlock.rst
->> index 2509c2fbf98f..0e97a7998fa1 100644
->> --- a/Documentation/userspace-api/landlock.rst
->> +++ b/Documentation/userspace-api/landlock.rst
->> @@ -61,7 +61,9 @@ the need to be explicit about the denied-by-default access rights.
->>               LANDLOCK_ACCESS_FS_MAKE_BLOCK |
->>               LANDLOCK_ACCESS_FS_MAKE_SYM |
->>               LANDLOCK_ACCESS_FS_REFER |
->> -            LANDLOCK_ACCESS_FS_TRUNCATE,
->> +            LANDLOCK_ACCESS_FS_TRUNCATE |
->> +            LANDLOCK_ACCESS_FS_CHMOD |
->> +            LANDLOCK_ACCESS_FS_CHGRP
->>       };
->>
->>   Because we may not know on which kernel version an application will be
->> @@ -90,6 +92,11 @@ the ABI.
->>       case 2:
->>               /* Removes LANDLOCK_ACCESS_FS_TRUNCATE for ABI < 3 */
->>               ruleset_attr.handled_access_fs &= ~LANDLOCK_ACCESS_FS_TRUNCATE;
->> +            __attribute__((fallthrough));
->> +    case 3:
->> +            /* Removes LANDLOCK_ACCESS_FS_{CHMOD, CHGRP} for ABI < 4 */
->> +            ruleset_attr.handled_access_fs &= ~(LANDLOCK_ACCESS_FS_CHMOD |
->> +                                                LANDLOCK_ACCESS_FS_CHGRP);
->>       }
->>
->>   This enables to create an inclusive ruleset that will contain our rules.
-> 
-> There is a sentence just above this code example that neesd updating as well.
-> 
+The field lists above trigger htmldocs warnings:
 
-Get it, it's the follwing sentence, thanks.
-...
-Let's check if we should
-remove the `LANDLOCK_ACCESS_FS_REFER` or `LANDLOCK_ACCESS_FS_TRUNCATE` 
-access
-rights, which are only supported starting with the second and third 
-version of
-the ABI.
-...
+Documentation/x86/tdx.rst:269: WARNING: Unexpected indentation.
+Documentation/x86/tdx.rst:275: WARNING: Field list ends without a blank lin=
+e; unexpected unindent.
 
-> --
-> .
-> 
+I have applied the fixup:
+
+---- >8 ----
+diff --git a/Documentation/x86/tdx.rst b/Documentation/x86/tdx.rst
+index 45db1201b62433..c9e3ecf86e0b43 100644
+--- a/Documentation/x86/tdx.rst
++++ b/Documentation/x86/tdx.rst
+@@ -264,18 +264,18 @@ device to allow user space to get certain TDX guest s=
+pecific details
+ In this section, for each supported IOCTL, following information is
+ provided along with generic description.
+=20
+-Input parameters: Parameters passed to the IOCTL and related details.
+-Output          : Details about output data and return value (with details
+-                  about the non common error values).
++:Input parameters: Parameters passed to the IOCTL and related details.
++:Output: Details about output data and return value (with details
++         about the non common error values).
+=20
+ TDX_CMD_GET_REPORT
+ ------------------
+=20
+ :Input parameters: struct tdx_report_req
+-:Output          : Upon successful execution, TDREPORT data is copied to
+-                   tdx_report_req.tdreport and returns 0 or returns
+-                   -EIO on TDCALL failure and standard error number on
+-                   other common failures.
++:Output: Upon successful execution, TDREPORT data is copied to
++         tdx_report_req.tdreport and returns 0 or returns
++         -EIO on TDCALL failure and standard error number on
++         other common failures.
+=20
+ The TDX_CMD_GET_REPORT IOCTL can be used by the attestation software to
+ get the TDX guest measurements data (with few other info) in the format
+
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--Jup6ckWXqdQaixmU
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCYwwpcQAKCRD2uYlJVVFO
+owSyAQDog//bC7RKmB123p8NFiowbcFGeiy/wnOgpmTL/ebmXwEA0us8PCWLJwE0
+FztebS9qhcrg4OH5Fb/OEmPWZtKLfQA=
+=igal
+-----END PGP SIGNATURE-----
+
+--Jup6ckWXqdQaixmU--
