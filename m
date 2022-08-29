@@ -2,207 +2,207 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3089EECAAD2
-	for <linux-kselftest@archiver.kernel.org>; Mon, 29 Aug 2022 16:38:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AAB05ECAAA4
+	for <linux-kselftest@archiver.kernel.org>; Mon, 29 Aug 2022 17:54:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230512AbiH2QiG (ORCPT
+        id S230062AbiH2Rym (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 29 Aug 2022 12:38:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51974 "EHLO
+        Mon, 29 Aug 2022 13:54:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbiH2QiE (ORCPT
+        with ESMTP id S229690AbiH2Ryl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 29 Aug 2022 12:38:04 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A6972FE0;
-        Mon, 29 Aug 2022 09:38:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661791082; x=1693327082;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=ojePtwk4DKFWlMS7jqKVqTyPcBJTssA2BelkXh7kDvA=;
-  b=TODmqxL+ugZzu/9Hj1Kb16QMKfbUmiMnxgxJR/lzs8HOeh5wiQ0jSoDs
-   ew5gaspK3Sg8oRa+hfN79dMFW6EXBGHio0cHIxfO7sgBATppvFw3rtMO1
-   IKiL0ewzTJ5KjFcPtQ10fS674TDXk3lM21EHGB0EzGI1K5D+TS6xXD2yC
-   8BDxqdzYuSdj9HIeKlHCD3KN3FSQhjr2OH2IkTSGdPJjWBgs9YXx9rAEc
-   sNgIEVNw3Np+LeiSIU/JYy5+ZcxUY71gUwrXqsnB5x76EfWnjrt7GbYbM
-   UJ9DlZJ8FKNyem4MZ7PQ83y1nPFQ9VAkZJKnBDVjbnRzFwwFzJ63myDXY
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="292501808"
-X-IronPort-AV: E=Sophos;i="5.93,272,1654585200"; 
-   d="scan'208";a="292501808"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 08:23:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,272,1654585200"; 
-   d="scan'208";a="640972615"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
-  by orsmga008.jf.intel.com with ESMTP; 29 Aug 2022 08:23:11 -0700
-Date:   Mon, 29 Aug 2022 23:18:30 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Fuad Tabba <tabba@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: Re: [PATCH v7 01/14] mm: Add F_SEAL_AUTO_ALLOCATE seal to memfd
-Message-ID: <20220829151830.GC1586678@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <20220706082016.2603916-2-chao.p.peng@linux.intel.com>
- <CA+EHjTzRcEQcZRJixBa=fBXd4=-oZK=unmBLwBAFVixCPfY-dQ@mail.gmail.com>
-MIME-Version: 1.0
+        Mon, 29 Aug 2022 13:54:41 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 965367DF63;
+        Mon, 29 Aug 2022 10:54:40 -0700 (PDT)
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27THg77d025816;
+        Mon, 29 Aug 2022 10:54:21 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=facebook; bh=/pdVDPhY96mMMN97cGa+Y4Pf8LI/M4/5VbwGCG8qeGU=;
+ b=gE2GtaHC+QTCygm3o9GMVtanP7L09xP10g9/iaSDHzp2dWWeyWYgXGuCWvyAqutdE+An
+ vBLmqR1KWvPJ+DjTNVsUGbM/zgQFxBMeA5xiDTHN1ISLe+hzSkOU67E42KXsy98IM+ig
+ qq6LKQCXtUHutZRBGODWq273zoQalUa0p58= 
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2169.outbound.protection.outlook.com [104.47.58.169])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3j7ekn3khk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 29 Aug 2022 10:54:21 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lvDLDxAD6GZwCo5lsjyHoB6CEaLNAR9mucoEVwk+YtHMDJIEjwq06mQZsFQW7gsYEdB92MXYmu2YpL26bMcjju6FuU142jkDNBF0lVLiwthBjmL+upBXXYVJ/KgMUa48OHmWkgyUD/Qb3OS4tdO01tDaPVpnTh0qd/lu/KITJkX8v0F05asXtv+a9+yFIrM6VeG4HXYOq9La1KwLQn3VOD1FDysdDb5xd8UGLE/lkMQMHtqs/SqYIZFM7AWwMpzM6s9fy9ei07OQUwlyg6vsVbGaCfuxNLoD3jdtnij5blIDtDf2GY4gqV4+AEyONqC50aogmlp+bDvkrbt2DeHwvg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/pdVDPhY96mMMN97cGa+Y4Pf8LI/M4/5VbwGCG8qeGU=;
+ b=b8qOCJV+0L8h4Un8W1JpJ0i0EiZsTiPpHDB2mpHi5006vw7s135l4YUJav8cehyIqWGyYPsuFCJGiuR6Mcw0BU+lA23zHFH0hzmdHYwqGsZ8uwFYM3foUMNGmpF1IYAP1PwnJmJD7UwK4k5Ll5nS0uOj2cw5Vf+1LF/08Bjqi7WMh1Ydi2r6MPGbo6O3YkUszhaNXue5+PAx2jxD3PXz2LMtTxxnfqx0CTzESGvi6NBfBzcd6HfYajDM4ZAYEr428fs8oBybf0pssHmxjmuvqNUubJ4hHKcV2mPKllsEAOatHvOl9yv60Xx3LmayoG2dFYthre9sb2i6bjOVsxzLRw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Received: from MW4PR15MB4475.namprd15.prod.outlook.com (2603:10b6:303:104::16)
+ by DM6PR15MB2730.namprd15.prod.outlook.com (2603:10b6:5:1b1::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.21; Mon, 29 Aug
+ 2022 17:54:17 +0000
+Received: from MW4PR15MB4475.namprd15.prod.outlook.com
+ ([fe80::1858:f420:93d2:4b5e]) by MW4PR15MB4475.namprd15.prod.outlook.com
+ ([fe80::1858:f420:93d2:4b5e%4]) with mapi id 15.20.5566.021; Mon, 29 Aug 2022
+ 17:54:17 +0000
+Date:   Mon, 29 Aug 2022 10:54:13 -0700
+From:   Martin KaFai Lau <kafai@fb.com>
+To:     "Jose E. Marchesi" <jose.marchesi@oracle.com>
+Cc:     James Hilliard <james.hilliard1@gmail.com>, bpf@vger.kernel.org,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/bpf: Fix bind{4,6} tcp/socket header type
+ conflict
+Message-ID: <20220829175413.h2335oivqcg34pw3@kafai-mbp.dhcp.thefacebook.com>
+References: <20220825221751.258958-1-james.hilliard1@gmail.com>
+ <20220826051630.glhrbdhiybtqwc4p@kafai-mbp.dhcp.thefacebook.com>
+ <CADvTj4rQdnd=V0tENFGCTtpTESwSCcwK+h3i9nZ75M+TywNWzA@mail.gmail.com>
+ <20220826054944.5bcx7unsyx4ts6ok@kafai-mbp.dhcp.thefacebook.com>
+ <CADvTj4qNR+m2fQMMf9+=hMruhon8G_7yFC2_43-qhZ9X7ZW=8A@mail.gmail.com>
+ <20220826171741.pdiqa4n4mls56bw3@kafai-mbp.dhcp.thefacebook.com>
+ <CADvTj4qg6R9udazmGFoFhn9pXN6HOqLGEsQOhCAELi1LxzoTmw@mail.gmail.com>
+ <20220826212550.mgugz6fomoqpgdbb@kafai-mbp.dhcp.thefacebook.com>
+ <87k06ubi9m.fsf@oracle.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+EHjTzRcEQcZRJixBa=fBXd4=-oZK=unmBLwBAFVixCPfY-dQ@mail.gmail.com>
+In-Reply-To: <87k06ubi9m.fsf@oracle.com>
+X-ClientProxiedBy: SJ0PR03CA0173.namprd03.prod.outlook.com
+ (2603:10b6:a03:338::28) To MW4PR15MB4475.namprd15.prod.outlook.com
+ (2603:10b6:303:104::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: a3edeb90-0c8b-400d-e8d7-08da89e77dd8
+X-MS-TrafficTypeDiagnostic: DM6PR15MB2730:EE_
+X-FB-Source: Internal
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: vGk3Qrk1/WpDHgQTc1XB9tuiuiIQHYZXLLsLV2jZPnVmTjxCZVS4Jv9nDj5QNo3Paz52C2i0fbb7mWwWyaJ7flfus3HhhY00Opoqbrhlxk4iBancjT/4sgj9YmGqUGCbqoQKaofNZXeGZM/Lg15cjO+LGNnaiGXggSshUJXjuozHB0sqSz8YqKgQoCwGNQGgGwO02QJZ/bIK+JjikNzRMWvidJcXzTujWIcxzztMF7Qyn8HeopkgVK9w+xnv0B0/ZFRzJCTcufa5gvt7v1JZ+dpssIyOrn5YtmZ12mzqlO0A2+l4QItzelQAgNia5hmxY57PUz98KBmBadk/P/jnyO1nCKEH/iRztDt7fqjl/xeyz/hg7gfqP6IcPH3KMwALoHrhuwWHs1BCcnuYZ+7aJeE2/ZkPl0CRozcb7btZYxkYlHLUwKtEdZNnJeezFqksTZimL36rZ37dOyJ99WNppflwCuZwq+yFWnIcNnWpcqbbLW0qFIQX2vSCl8Xp+fDoV/K3SOnPUmrECD5TOzOsz1uOPf/fbs/zD6/rQpTu0rtaO49ulQJavF5T8mPZrHYHv4oJWEohAcHOVADexHzWFNKCXwlaeblSe9wYUfaBAUdFHqaTHeoB+XpdDEXg3/pPFVUSW6IFV35JHyCyIKlPmHErTICPmLChI9oMmK07BmFOo9qc4rfwDJ/nqNjBQAg59eO0Yt6LGWAfIyDyoBA83A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR15MB4475.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(366004)(136003)(346002)(39860400002)(376002)(54906003)(2906002)(66476007)(6486002)(8676002)(6506007)(52116002)(66556008)(66946007)(1076003)(83380400001)(6916009)(4326008)(186003)(316002)(38100700002)(6512007)(5660300002)(9686003)(86362001)(8936002)(478600001)(41300700001)(7416002)(6666004);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Xp+QCuOoWyw3bZWMRn0ECqqI+s7cOQebx1Zrjl1orWnS8e+zVmQfGVMb2tt2?=
+ =?us-ascii?Q?buxxgZkhff1+Gxg6sIVIuCd8WootHL9tIgmnPWROh9EOormMXPVIBYCagsJP?=
+ =?us-ascii?Q?SIiIeQWY1HHGcjzsECL5M7bETwuaMDqFU0Hhl9cijaiK7sODgH1Y7ReN10Cu?=
+ =?us-ascii?Q?QEFL+aMf7Gp6uVtVC+3kQTn2lpTmmg7JtI84fjlqvJLqjQERC3TKoCKvPFvD?=
+ =?us-ascii?Q?shB8n2uJjgDxcS0PEkOgI8jxEzq8kAyHozf8cU0qekmu0W/9z3ydn//bg0Yd?=
+ =?us-ascii?Q?BElz9eyH5txQmH4ddOX4jZFlLo5cRKt5lHBKATCsiUB2WIplwroYoEm+eXV8?=
+ =?us-ascii?Q?tEr9Ih69zJfU8V1qKKuVcPgfsu+zgytKC9m3+Sg+CgsivHrdT+ecn9fv8jpN?=
+ =?us-ascii?Q?GMfVSHkK0Scmfx2sq08vwO0iSmklO0mnsDvlFJDANDnlxc6nHFK1y1vLqWld?=
+ =?us-ascii?Q?E/2r/ROH1sFdXPmkF8OPYWOqXgZwFPqaJRicEXqeiIlYDYo3xqH7BU3BNTvD?=
+ =?us-ascii?Q?HpPMDPkNPyrCtDqhIEaZ+1RjtbvXDbiylCHOD2K+BppDN8pHjewBO6ypiLgm?=
+ =?us-ascii?Q?8piWtHAz79xxVZocNRoQFYuGZX3dSjmvWqtFxRBy43Te4hZilb+QB3neh3Jb?=
+ =?us-ascii?Q?DvCT8s609X/JUCuh0xiAYlDPmla4GL15dEcVJ0r2z2dggUymMXoWxLs4Krc4?=
+ =?us-ascii?Q?E7ijIIXU+IFieaZrfqxg7lLo0KjwHhWJJXaBBil0x4WwAShCalUK6DBKxbgB?=
+ =?us-ascii?Q?JOFPClPdKZ0/rKoc0XDbvinK3ME7nqZnEGzxbsMgxvuicLpikBVmIHM7ZZXG?=
+ =?us-ascii?Q?ix15r6lW+2rMGxw6KAzMP0CVm3nmaRPSA94t83agpf8BfkN7XnXsc4bblHqw?=
+ =?us-ascii?Q?jbSsRS4ip1A+JnnTh/sjemhmnug9i+yyzsgk8xt7F9IZLm9yIMK0JT7AY2xq?=
+ =?us-ascii?Q?VbD77ro7n1z9ynV0c+yuTAg9BD2/VmrlPYVN9ZlQ7PUC309nEir9yLUUJemQ?=
+ =?us-ascii?Q?mpEvOrcdVig33rvvEXNs3dRIEV+qo7oYpUsnHsAL84+nL2T+Jdx6LKVf9bkd?=
+ =?us-ascii?Q?+YGB28/xmRFYWi2xgQbrPxpwv7NsiTN8ElXVwcD946CE0CrA5JmqqUzzJPfc?=
+ =?us-ascii?Q?DnpoOTTPX8I1u13UUXAXrNQ/wVrlX59+pWeYXTt7ou+hIRysotLqJZ7vPOEB?=
+ =?us-ascii?Q?Wr0lglJ2EvGzvC/xwbr9C1rmX3zfAkou8G278W+2IKpT7bfBlRrkkyKtcO69?=
+ =?us-ascii?Q?LWpId+sD8RrE0ZpPo9rxmSlFCTTo98Y9uU/BI5OIspxX8m5QrncZIFQCnguQ?=
+ =?us-ascii?Q?HLdDrznphGbDCTuRGUMvujiZfNsXSu1esfYR2ea3wZYChHxwvuqEK8IOeXfN?=
+ =?us-ascii?Q?jvA5V4J257ZBxMUZYoSjeDsPbmySWgGCFkmj6s1e3WUBGY3oVhCW0k69d8U1?=
+ =?us-ascii?Q?Ac6xpXUG5+Mp3iZX5h+pZutWM9k15+ElyXZ8hyjy3QpKI3qsMAY2LVeoH87h?=
+ =?us-ascii?Q?ljjc9lPwalznkToVAQlznlC2xlqZhezsACxnsef7hjKQKrOviIU/IFATZVCR?=
+ =?us-ascii?Q?bpLo2YIlQWpuBiyIQjBieh/R3w4UFHbb3Hsgs+5hQKd1bSPr784bZ/UG0pOt?=
+ =?us-ascii?Q?ug=3D=3D?=
+X-OriginatorOrg: fb.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a3edeb90-0c8b-400d-e8d7-08da89e77dd8
+X-MS-Exchange-CrossTenant-AuthSource: MW4PR15MB4475.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Aug 2022 17:54:17.0365
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: YnuDIdlNjYtUfn/7MG37Tb62Ru0tFMMS5wHbbxe2fBsmAdOV+igvJaM1i4G60SQT
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR15MB2730
+X-Proofpoint-ORIG-GUID: f8JOkGPfsmNU8oFMGHoBKTuMKkhX2J8i
+X-Proofpoint-GUID: f8JOkGPfsmNU8oFMGHoBKTuMKkhX2J8i
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-29_09,2022-08-25_01,2022-06-22_01
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 04:19:32PM +0100, Fuad Tabba wrote:
-> Hi Chao,
+On Sat, Aug 27, 2022 at 03:13:41AM +0200, Jose E. Marchesi wrote:
+> >> Users can migrate away from libc headers over time, migrating away
+> > imo, not without a good reason.
 > 
-> On Wed, Jul 6, 2022 at 9:25 AM Chao Peng <chao.p.peng@linux.intel.com> wrote:
-> >
-> > Normally, a write to unallocated space of a file or the hole of a sparse
-> > file automatically causes space allocation, for memfd, this equals to
-> > memory allocation. This new seal prevents such automatically allocating,
-> > either this is from a direct write() or a write on the previously
-> > mmap-ed area. The seal does not prevent fallocate() so an explicit
-> > fallocate() can still cause allocating and can be used to reserve
-> > memory.
-> >
-> > This is used to prevent unintentional allocation from userspace on a
-> > stray or careless write and any intentional allocation should use an
-> > explicit fallocate(). One of the main usecases is to avoid memory double
-> > allocation for confidential computing usage where we use two memfds to
-> > back guest memory and at a single point only one memfd is alive and we
-> > want to prevent memory allocation for the other memfd which may have
-> > been mmap-ed previously. More discussion can be found at:
-> >
-> >   https://lkml.org/lkml/2022/6/14/1255
-> >
-> > Suggested-by: Sean Christopherson <seanjc@google.com>
-> > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
-> > ---
-> >  include/uapi/linux/fcntl.h |  1 +
-> >  mm/memfd.c                 |  3 ++-
-> >  mm/shmem.c                 | 16 ++++++++++++++--
-> >  3 files changed, 17 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/include/uapi/linux/fcntl.h b/include/uapi/linux/fcntl.h
-> > index 2f86b2ad6d7e..98bdabc8e309 100644
-> > --- a/include/uapi/linux/fcntl.h
-> > +++ b/include/uapi/linux/fcntl.h
-> > @@ -43,6 +43,7 @@
-> >  #define F_SEAL_GROW    0x0004  /* prevent file from growing */
-> >  #define F_SEAL_WRITE   0x0008  /* prevent writes */
-> >  #define F_SEAL_FUTURE_WRITE    0x0010  /* prevent future writes while mapped */
-> > +#define F_SEAL_AUTO_ALLOCATE   0x0020  /* prevent allocation for writes */
+> Something that may be a good reason is that there is no BPF port of
+> glibc (nor of musl, nor of newlib.)  And given BPF's restrictions as an
+> architecture (no more than 5 arguments supported in function calls, etc)
+> it is very unlikely that there will ever be one.
 > 
-> I think this should also be added to tools/include/uapi/linux/fcntl.h
+> Including certain libc headers may work well enough, but in general when
+> including libc headers you risk dragging in x86, or aarch64, or whatever
+> architecture-specific headers as well, directly or indirectly.  C
+> libraries (and system libraries in general) are targetted at particular
+> architectures/ABIs/OSes.
+> 
+> This means that the same BPF program may be using different data
+> structures depending on the system where you build it.
+Note that the data structure difference is not unique to
+different arch.  A more common case can already happen across
+different kernel versions or different kconfig of the same arch.
+BPF CO-RE is there to handle this case.
 
-Yes, thanks.
+> In the worst
+> case, it may choke on assembler snippets.
+> 
+> Thats why the GCC port offers certain headers to provide standard C,
+> like stdint.h.  That's the usual way to go for bare-metal targets where
+> no libc is available.
+> 
+> Again, we will be happy to change that if that's what you want.  In that
+> case, it will be up to the user to provide the standard definitions, be
+> it by including glibc headers targetted at some other architecture, or
+> by some other mean.  Not that I would personally recommend that, but it
+> is up to you.
+Not sure if the user can always stay with vmlinux.h + a few bpf_tracing_*.h
+and if that is enough to avoid knowing this difference between GCC
+and LLVM bpf on libc-vs-gcc stdint...etc.
 
-Chao
-> 
-> Cheers,
-> /fuad
-> 
-> 
-> >  /* (1U << 31) is reserved for signed error codes */
+The header changes is hard to swim through to make it compile
+in GCC BPF.  In this case, it is because netinet/tcp.h brought in a
+different int8_t from gcc than the sys/socket.h.  My preference is
+not to have to dive into this kind of header details.
+I would like to hear how others think about it.
+
 > >
-> >  /*
-> > diff --git a/mm/memfd.c b/mm/memfd.c
-> > index 08f5f8304746..2afd898798e4 100644
-> > --- a/mm/memfd.c
-> > +++ b/mm/memfd.c
-> > @@ -150,7 +150,8 @@ static unsigned int *memfd_file_seals_ptr(struct file *file)
-> >                      F_SEAL_SHRINK | \
-> >                      F_SEAL_GROW | \
-> >                      F_SEAL_WRITE | \
-> > -                    F_SEAL_FUTURE_WRITE)
-> > +                    F_SEAL_FUTURE_WRITE | \
-> > +                    F_SEAL_AUTO_ALLOCATE)
+> >> shouldn't cause regressions and should improve reliability.
+> > May be I am missing something.  I also don't understand the reliability
+> > part.
 > >
-> >  static int memfd_add_seals(struct file *file, unsigned int seals)
-> >  {
-> > diff --git a/mm/shmem.c b/mm/shmem.c
-> > index a6f565308133..6c8aef15a17d 100644
-> > --- a/mm/shmem.c
-> > +++ b/mm/shmem.c
-> > @@ -2051,6 +2051,8 @@ static vm_fault_t shmem_fault(struct vm_fault *vmf)
-> >         struct vm_area_struct *vma = vmf->vma;
-> >         struct inode *inode = file_inode(vma->vm_file);
-> >         gfp_t gfp = mapping_gfp_mask(inode->i_mapping);
-> > +       struct shmem_inode_info *info = SHMEM_I(inode);
-> > +       enum sgp_type sgp;
-> >         int err;
-> >         vm_fault_t ret = VM_FAULT_LOCKED;
+> > In this sys/socket.h as an example, what is wrong in using
+> > "'int8_t' {aka 'signed char'}" from libc and the one from
+> > gcc "'int8_t'; have 'char'" must be used instead.
 > >
-> > @@ -2113,7 +2115,12 @@ static vm_fault_t shmem_fault(struct vm_fault *vmf)
-> >                 spin_unlock(&inode->i_lock);
-> >         }
+> > Why LLVM bpf does not have issue ?
 > >
-> > -       err = shmem_getpage_gfp(inode, vmf->pgoff, &vmf->page, SGP_CACHE,
-> > +       if (unlikely(info->seals & F_SEAL_AUTO_ALLOCATE))
-> > +               sgp = SGP_NOALLOC;
-> > +       else
-> > +               sgp = SGP_CACHE;
-> > +
-> > +       err = shmem_getpage_gfp(inode, vmf->pgoff, &vmf->page, sgp,
-> >                                   gfp, vma, vmf, &ret);
-> >         if (err)
-> >                 return vmf_error(err);
-> > @@ -2459,6 +2466,7 @@ shmem_write_begin(struct file *file, struct address_space *mapping,
-> >         struct inode *inode = mapping->host;
-> >         struct shmem_inode_info *info = SHMEM_I(inode);
-> >         pgoff_t index = pos >> PAGE_SHIFT;
-> > +       enum sgp_type sgp;
-> >         int ret = 0;
-> >
-> >         /* i_rwsem is held by caller */
-> > @@ -2470,7 +2478,11 @@ shmem_write_begin(struct file *file, struct address_space *mapping,
-> >                         return -EPERM;
-> >         }
-> >
-> > -       ret = shmem_getpage(inode, index, pagep, SGP_WRITE);
-> > +       if (unlikely(info->seals & F_SEAL_AUTO_ALLOCATE))
-> > +               sgp = SGP_NOALLOC;
-> > +       else
-> > +               sgp = SGP_WRITE;
-> > +       ret = shmem_getpage(inode, index, pagep, sgp);
-> >
-> >         if (ret)
-> >                 return ret;
-> > --
-> > 2.25.1
-> >
+> >> 
+> >> > The solution should be on the GCC-BPF side instead of changing
+> >> > all bpf progs.
+> >> 
+> >> I mean, GCC doesn't really control which libc is available, it seems to
+> >> be a bad idea to use libc headers in general as they are developed
+> >> separately from GCC and the kernel/libbpf.
+> >> 
+> >> I'm not really sure how one would fix this on the GCC-BPF side without
+> >> introducing more potential header conflicts.
