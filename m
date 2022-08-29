@@ -2,82 +2,110 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74FEBECAAD5
-	for <linux-kselftest@archiver.kernel.org>; Mon, 29 Aug 2022 12:32:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86AADECAAD2
+	for <linux-kselftest@archiver.kernel.org>; Mon, 29 Aug 2022 12:40:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbiH2Mcg (ORCPT
+        id S229970AbiH2MkL (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 29 Aug 2022 08:32:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50852 "EHLO
+        Mon, 29 Aug 2022 08:40:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbiH2McG (ORCPT
+        with ESMTP id S230080AbiH2Mjm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 29 Aug 2022 08:32:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53A3A8C036;
-        Mon, 29 Aug 2022 05:15:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 50F4961199;
-        Mon, 29 Aug 2022 12:15:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60BB2C433D7;
-        Mon, 29 Aug 2022 12:15:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661775338;
-        bh=7Urql1E5XDxhVb8MTBNbpYyK+YMAUNovIVIRoaYnK5U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ovf4b4rrY7jDp4P2Fo6D6lw72zZM8qV/FkZnvS3c+EPLkH6Upxl2k3Boaw1OGZafX
-         oSevbWijQv4eAHsPzvMT2Wv0FuxY7r0Yz+l+lVDBezjhxHaAwkNBbHQZVmrnDXcxmA
-         JOGqm//Y8feSgrrSeSmeYLfm0CxTOX5xR7OhV5xG7Z8677Xdhj4IaWXACwK4HlT3Nz
-         SmdGf1lOzr7egQD9EZzXJi9U+yzxGJdky6e6VgPKRI3LfuXnbpM+PvdGKXD33Q/EAT
-         jwBJQOAEaQwrR7/pF8sKN/9GOeSjtJITK7+rrKfm5oV9T7rNcvEWL2/D9jGYtwtQy2
-         e97CBc2s57N1g==
-Date:   Mon, 29 Aug 2022 15:15:30 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Dhanuka Warusadura <wdnuka@gmail.com>
-Cc:     dave.hansen@linux.intel.com, shuah@kernel.org,
-        linux-sgx@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/sgx: Fix OpenSSL deprecated warning for
- ERR_get_error_line
-Message-ID: <Ywyt4tvHrK4r48RK@kernel.org>
-References: <20220828061859.181061-1-wdnuka@gmail.com>
+        Mon, 29 Aug 2022 08:39:42 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD9882ED65;
+        Mon, 29 Aug 2022 05:23:38 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 38ADC18839D6;
+        Mon, 29 Aug 2022 11:09:13 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 137FC25032B8;
+        Mon, 29 Aug 2022 11:09:13 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id E69209EC0002; Mon, 29 Aug 2022 11:09:12 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220828061859.181061-1-wdnuka@gmail.com>
+Date:   Mon, 29 Aug 2022 13:09:12 +0200
+From:   netdev@kapio-technology.com
+To:     Nikolay Aleksandrov <razor@blackwall.org>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 net-next 1/6] net: bridge: add locked entry fdb flag to
+ extend locked port feature
+In-Reply-To: <e9eb5b72-073a-f182-13b7-37fc53611d5f@blackwall.org>
+References: <20220826114538.705433-1-netdev@kapio-technology.com>
+ <20220826114538.705433-2-netdev@kapio-technology.com>
+ <e9eb5b72-073a-f182-13b7-37fc53611d5f@blackwall.org>
+User-Agent: Gigahost Webmail
+Message-ID: <d90a67c5ca6035f7ae75b7bada430e03@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Aug 28, 2022 at 11:48:59AM +0530, Dhanuka Warusadura wrote:
-> These changes fix the "error: ‘ERR_get_error_line’ is deprecated:
-> Since OpenSSL 3.0" warning.
-> 
-> Signed-off-by: Dhanuka Warusadura <wdnuka@gmail.com>
-> ---
->  tools/testing/selftests/sgx/sigstruct.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/sgx/sigstruct.c b/tools/testing/selftests/sgx/sigstruct.c
-> index 50c5ab1aa6fa..671d9b58e274 100644
-> --- a/tools/testing/selftests/sgx/sigstruct.c
-> +++ b/tools/testing/selftests/sgx/sigstruct.c
-> @@ -136,7 +136,7 @@ static bool check_crypto_errors(void)
->  			break;
->  
->  		had_errors = true;
-> -		err = ERR_get_error_line(&filename, &line);
-> +		err = ERR_peek_last_error_line(&filename, &line);
->  		ERR_error_string_n(err, str, sizeof(str));
->  		fprintf(stderr, "crypto: %s: %s:%d\n", str, filename, line);
->  	}
-> -- 
-> 2.37.2
+> On 2022-08-27 13:30, Nikolay Aleksandrov wrote:
+
+>> @@ -879,6 +888,10 @@ void br_fdb_update(struct net_bridge *br, struct 
+>> net_bridge_port *source,
+>>  						      &fdb->flags)))
+>>  					clear_bit(BR_FDB_ADDED_BY_EXT_LEARN,
+>>  						  &fdb->flags);
+>> +				if (source->flags & BR_PORT_MAB)
+>> +					set_bit(BR_FDB_ENTRY_LOCKED, &fdb->flags);
+>> +				else
+>> +					clear_bit(BR_FDB_ENTRY_LOCKED, &fdb->flags);
+> Please add a test for that bit and only then change it.
 > 
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Something like this?
 
-BR, Jarkko
+@@ -749,6 +756,12 @@ void br_fdb_update(struct net_bridge *br, struct 
+net_bridge_port *source,
+                                                       &fdb->flags)))
+                                         
+clear_bit(BR_FDB_ADDED_BY_EXT_LEARN,
+                                                   &fdb->flags);
++                               if 
+(unlikely(test_bit(BR_FDB_ENTRY_LOCKED, &fdb->flags))) {
++                                       if (!(source->flags & 
+BR_PORT_MAB))
++                                               
+clear_bit(BR_FDB_ENTRY_LOCKED, &fdb->flags);
++                               } else
++                                       if (source->flags & BR_PORT_MAB)
++                                               
+set_bit(BR_FDB_ENTRY_LOCKED, &fdb->flags);
+                         }
+
+                         if (unlikely(test_bit(BR_FDB_ADDED_BY_USER, 
+&flags)))
+
+
