@@ -2,58 +2,59 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B56A3C0502A
-	for <linux-kselftest@archiver.kernel.org>; Tue, 30 Aug 2022 22:43:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2AA91ECAAD4
+	for <linux-kselftest@archiver.kernel.org>; Tue, 30 Aug 2022 22:44:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231617AbiH3Wnq (ORCPT
+        id S232460AbiH3Wn5 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 30 Aug 2022 18:43:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39256 "EHLO
+        Tue, 30 Aug 2022 18:43:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231788AbiH3Wn2 (ORCPT
+        with ESMTP id S232468AbiH3Wno (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 30 Aug 2022 18:43:28 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E8F7FFA7
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Aug 2022 15:43:25 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id n18-20020a25d612000000b0069661a1dc48so811263ybg.20
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Aug 2022 15:43:24 -0700 (PDT)
+        Tue, 30 Aug 2022 18:43:44 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB9D380B76
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 Aug 2022 15:43:31 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id z14-20020a170903018e00b00174fff57d17so2918128plg.14
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 Aug 2022 15:43:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc;
-        bh=FnC2MODp1Ilbo/3qVuV673Djb8hUYYAKXHPp7uV/l3U=;
-        b=QPd795t1C0ahrsS55brxetoonol6V2jAppY01knmBO6dTEexYKdxvNbkTSQcIcPS0g
-         2kVquW8pntnzZ8ayf2KGc74LWg1ImA0LODvDVKrQ5RNE9iPAZqoluWZufVPBUn48fc67
-         kW1IFw4yDbnloy5QQ/STgOmCIxz9plIKPFM0HDvfvRd0xIR/a+XXnVcrsaDE4dXMXlvp
-         2IrquyFJf8Ta/3dM4DHzEUE06trbxbXXW3PUtdEzPpNE9l9jhx85/6oghBZ5fuiPnSIa
-         HihGAukLvraBpoNRHwoZwUflCiTPtuG2KVmnc5uUF0aSGnXsPpEIuWMW3HwQM/7lAwtJ
-         qghA==
+        bh=EVXb2yKFUQIy1Xc2nGSh/Bz10UhUMA0E75xzrEY47PY=;
+        b=q+XH7fUvfPeID0YJ7U49n0ESnUIAi9/wL4R5kzkpECScWmPDnLOQ/WFkvPK9NZIkMN
+         U0SEt6cWlTUnHi/iUEFTFIZKLTMLr/g66walLDBWob5x7/No9VET34rSMUeEutZVfjSw
+         1X4jn74tCUPffUvNTJaoBJdXk+wLiycEDfOfX8+Bnj3GX6VZozfHxOkjKprKfKh/Dsxk
+         Scj5SGIzJZcaNJPtTIH5WLZ56op9vjZngNgpFaD143XaT/6NLYCtjH9NEXb5im9+S6Mj
+         wPygBXNh4ZUo4Qdctl45gYcfalT/KzL68lPiECZGR5YXE1+9cnHJa/LMw9/wM9MEqof4
+         JmCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc;
-        bh=FnC2MODp1Ilbo/3qVuV673Djb8hUYYAKXHPp7uV/l3U=;
-        b=BKIHvrSwwBndBF8uvi1ZasQkg9u4jO8/iNF/O++7pkFRcaXNQrSVSWa6sEZ6sb3wr6
-         NchOpmrO4gi8qTZtisX5qmJQgFgiQO+ehJ4JuPm2cfcZgU4CaG5+NcI39nnlGmQlsnNf
-         QIhlAIVqHtSm+0VmxHvamD45QbvXMbPF4K6fAXYP4KNy2q0dOxX/yq5gzZW8HGpYohzD
-         76PuGz9pnpHaV2Q5LWak2HRB+hnom5xoGI/kMnvE7yNLZZtdpuIQUyJWuTivf4ShXUpu
-         dvo/lexh3HkgwUNGuy7oZzI4c1hP7xcw6xWKBNpfJ2sXtZHYXanbztyaw3plVCJR6GVi
-         FDZA==
-X-Gm-Message-State: ACgBeo0jfxMdeWY3RzVdOFNBCTgkvM8w/ZP8AsrPqYXxyCbVJIhAkynm
-        FrFqAMTBx+0FxSaEFJERMsrgIR/p7KwxSj+y
-X-Google-Smtp-Source: AA6agR7J2g4yWWCjTXSW8bJGJNJQDF4Q6cZWWSd4WOmEIBPpC8PfIDGdBXAbKzkcTBd8rZjpqBovURMzodQSv4dn
+        bh=EVXb2yKFUQIy1Xc2nGSh/Bz10UhUMA0E75xzrEY47PY=;
+        b=5wJYIAK5Ud+WCSakoajzQb0knbHoisgCXLoiSBVJjs/Du9ul/YUSaH7y1qEu1AagSh
+         fgN9XcZMHJB2EZI0tGXpcSBnumMvaZDRA8hLuzTVZXtyB7wpCMjKLF66vcjY9x2+GCaA
+         jng5HMqKe0TcuYhVUH4uy9iDk11rfKCXaZjGzXComBtDjm3cJP1MW82JqqxDZmyEHLyX
+         IQNewA55Xf+8IMfJJJZ2HGbQ9Q8Kvg8klBJlz81ikNhhib735mQwURHYABphhLIfid4l
+         Z/qCWJ8Z3L3XntYZmIdkg75fl8EvULwkN/fV6twKU0W0XpdBqWzKJ8FljxTz1MpDgXni
+         Azxg==
+X-Gm-Message-State: ACgBeo21A0tROQHcrUbyBKpFaPBlmTzC4hm5PjOAbMaAuQwMCdasZsGR
+        yH+/5o9MvzBZHodizYokJrASSTNkICsevopg
+X-Google-Smtp-Source: AA6agR68oFvGPoyeb4Zbkf7izlnNfsd6sBNLwkNFBgmYKu6sYs9AXZrWGe6F9IAzmiul6hm4bS858itrP23BXUnL
 X-Received: from vannapurve2.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:41f8])
- (user=vannapurve job=sendgmr) by 2002:a81:bb43:0:b0:33d:cdd9:aa56 with SMTP
- id a3-20020a81bb43000000b0033dcdd9aa56mr15659487ywl.240.1661899403835; Tue,
- 30 Aug 2022 15:43:23 -0700 (PDT)
-Date:   Tue, 30 Aug 2022 22:42:55 +0000
+ (user=vannapurve job=sendgmr) by 2002:a17:90a:e558:b0:1fb:c4b7:1a24 with SMTP
+ id ei24-20020a17090ae55800b001fbc4b71a24mr5289pjb.1.1661899410287; Tue, 30
+ Aug 2022 15:43:30 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 22:42:57 +0000
 In-Reply-To: <20220830224259.412342-1-vannapurve@google.com>
 Mime-Version: 1.0
 References: <20220830224259.412342-1-vannapurve@google.com>
 X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Message-ID: <20220830224259.412342-5-vannapurve@google.com>
-Subject: [RFC V2 PATCH 4/8] selftests: kvm: sev: Support memslots with private memory
+Message-ID: <20220830224259.412342-7-vannapurve@google.com>
+Subject: [RFC V2 PATCH 6/8] selftests: kvm: Support executing SEV VMs with
+ private memory
 From:   Vishal Annapurve <vannapurve@google.com>
 To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
@@ -80,69 +81,120 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Introduce an additional helper API to create a SEV VM with private
-memory memslots.
+Add support of executing SEV VMs for testing private memory conversion
+scenarios.
 
 Signed-off-by: Vishal Annapurve <vannapurve@google.com>
 ---
- tools/testing/selftests/kvm/include/x86_64/sev.h |  2 ++
- tools/testing/selftests/kvm/lib/x86_64/sev.c     | 15 ++++++++++++---
- 2 files changed, 14 insertions(+), 3 deletions(-)
+ .../kvm/include/x86_64/private_mem.h          |  1 +
+ .../selftests/kvm/lib/x86_64/private_mem.c    | 86 +++++++++++++++++++
+ 2 files changed, 87 insertions(+)
 
-diff --git a/tools/testing/selftests/kvm/include/x86_64/sev.h b/tools/testing/selftests/kvm/include/x86_64/sev.h
-index b6552ea1c716..628801707917 100644
---- a/tools/testing/selftests/kvm/include/x86_64/sev.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/sev.h
-@@ -38,6 +38,8 @@ void kvm_sev_ioctl(struct sev_vm *sev, int cmd, void *data);
- struct kvm_vm *sev_get_vm(struct sev_vm *sev);
- uint8_t sev_get_enc_bit(struct sev_vm *sev);
+diff --git a/tools/testing/selftests/kvm/include/x86_64/private_mem.h b/tools/testing/selftests/kvm/include/x86_64/private_mem.h
+index 183b53b8c486..d3ef88da837c 100644
+--- a/tools/testing/selftests/kvm/include/x86_64/private_mem.h
++++ b/tools/testing/selftests/kvm/include/x86_64/private_mem.h
+@@ -49,5 +49,6 @@ struct vm_setup_info {
+ };
  
-+struct sev_vm *sev_vm_create_with_flags(uint32_t policy, uint64_t npages,
-+	uint32_t memslot_flags);
- struct sev_vm *sev_vm_create(uint32_t policy, uint64_t npages);
- void sev_vm_free(struct sev_vm *sev);
- void sev_vm_launch(struct sev_vm *sev);
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/sev.c b/tools/testing/selftests/kvm/lib/x86_64/sev.c
-index 44b5ce5cd8db..6a329ea17f9f 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/sev.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/sev.c
-@@ -171,7 +171,8 @@ void sev_vm_free(struct sev_vm *sev)
- 	free(sev);
+ void execute_vm_with_private_mem(struct vm_setup_info *info);
++void execute_sev_vm_with_private_mem(struct vm_setup_info *info);
+ 
+ #endif /* SELFTEST_KVM_PRIVATE_MEM_H */
+diff --git a/tools/testing/selftests/kvm/lib/x86_64/private_mem.c b/tools/testing/selftests/kvm/lib/x86_64/private_mem.c
+index 28d93754e1f2..0eb8f92d19e8 100644
+--- a/tools/testing/selftests/kvm/lib/x86_64/private_mem.c
++++ b/tools/testing/selftests/kvm/lib/x86_64/private_mem.c
+@@ -348,3 +348,89 @@ void execute_vm_with_private_mem(struct vm_setup_info *info)
+ 	ucall_uninit(vm);
+ 	kvm_vm_free(vm);
  }
- 
--struct sev_vm *sev_vm_create(uint32_t policy, uint64_t npages)
-+struct sev_vm *sev_vm_create_with_flags(uint32_t policy, uint64_t npages,
-+	uint32_t memslot_flags)
- {
- 	struct sev_vm *sev;
- 	struct kvm_vm *vm;
-@@ -188,9 +189,12 @@ struct sev_vm *sev_vm_create(uint32_t policy, uint64_t npages)
- 	vm->vpages_mapped = sparsebit_alloc();
- 	vm_set_memory_encryption(vm, true, true, sev->enc_bit);
- 	pr_info("SEV cbit: %d\n", sev->enc_bit);
--	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, 0, 0, npages, 0);
--	sev_register_user_region(sev, addr_gpa2hva(vm, 0),
-+	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, 0, 0, npages,
-+		memslot_flags);
-+	if (!(memslot_flags & KVM_MEM_PRIVATE)) {
-+		sev_register_user_region(sev, addr_gpa2hva(vm, 0),
- 				 npages * vm->page_size);
-+	}
- 
- 	pr_info("SEV guest created, policy: 0x%x, size: %lu KB\n",
- 		sev->sev_policy, npages * vm->page_size / 1024);
-@@ -198,6 +202,11 @@ struct sev_vm *sev_vm_create(uint32_t policy, uint64_t npages)
- 	return sev;
- }
- 
-+struct sev_vm *sev_vm_create(uint32_t policy, uint64_t npages)
-+{
-+	return sev_vm_create_with_flags(policy, npages, 0);
-+}
 +
- void sev_vm_launch(struct sev_vm *sev)
- {
- 	struct kvm_sev_launch_start ksev_launch_start = {0};
++/*
++ * Execute Sev vm with private memory memslots.
++ *
++ * Input Args:
++ *   info - pointer to a structure containing information about setting up a SEV
++ *   VM with private memslots
++ *
++ * Output Args: None
++ *
++ * Return: None
++ *
++ * Function called by host userspace logic in selftests to execute SEV vm
++ * logic. It will install two memslots:
++ * 1) memslot 0 : containing all the boot code/stack pages
++ * 2) test_mem_slot : containing the region of memory that would be used to test
++ *   private/shared memory accesses to a memory backed by private memslots
++ */
++void execute_sev_vm_with_private_mem(struct vm_setup_info *info)
++{
++	uint8_t measurement[512];
++	struct sev_vm *sev;
++	struct kvm_vm *vm;
++	struct kvm_enable_cap cap;
++	struct kvm_vcpu *vcpu;
++	uint32_t memslot0_pages = info->memslot0_pages;
++	uint64_t test_area_gpa, test_area_size;
++	struct test_setup_info *test_info = &info->test_info;
++
++	sev = sev_vm_create_with_flags(info->policy, memslot0_pages, KVM_MEM_PRIVATE);
++	TEST_ASSERT(sev, "Sev VM creation failed");
++	vm = sev_get_vm(sev);
++	vm->use_ucall_pool = true;
++	vm_set_pgt_alloc_tracking(vm);
++	vm_create_irqchip(vm);
++
++	TEST_ASSERT(info->guest_fn, "guest_fn not present");
++	vcpu = vm_vcpu_add(vm, 0, info->guest_fn);
++	kvm_vm_elf_load(vm, program_invocation_name);
++
++	vm_check_cap(vm, KVM_CAP_EXIT_HYPERCALL);
++	cap.cap = KVM_CAP_EXIT_HYPERCALL;
++	cap.flags = 0;
++	cap.args[0] = (1 << KVM_HC_MAP_GPA_RANGE);
++	vm_ioctl(vm, KVM_ENABLE_CAP, &cap);
++
++	TEST_ASSERT(test_info->test_area_size, "Test mem size not present");
++
++	test_area_size = test_info->test_area_size;
++	test_area_gpa = test_info->test_area_gpa;
++	vm_userspace_mem_region_add(vm, test_info->test_area_mem_src, test_area_gpa,
++		test_info->test_area_slot, test_area_size / vm->page_size,
++		KVM_MEM_PRIVATE);
++	vm_update_private_mem(vm, test_area_gpa, test_area_size, ALLOCATE_MEM);
++
++	virt_map(vm, test_area_gpa, test_area_gpa, test_area_size/vm->page_size);
++
++	vm_map_page_table(vm, GUEST_PGT_MIN_VADDR);
++	sev_gpgt_info = (struct guest_pgt_info *)vm_setup_pgt_info_buf(vm,
++			GUEST_PGT_MIN_VADDR);
++	sev_enc_bit = sev_get_enc_bit(sev);
++	is_sev_vm = true;
++	sync_global_to_guest(vm, sev_enc_bit);
++	sync_global_to_guest(vm, sev_gpgt_info);
++	sync_global_to_guest(vm, is_sev_vm);
++
++	vm_update_private_mem_internal(vm, 0, (memslot0_pages << MIN_PAGE_SHIFT),
++		ALLOCATE_MEM, false);
++
++	/* Allocations/setup done. Encrypt initial guest payload. */
++	sev_vm_launch(sev);
++
++	/* Dump the initial measurement. A test to actually verify it would be nice. */
++	sev_vm_launch_measure(sev, measurement);
++	pr_info("guest measurement: ");
++	for (uint32_t i = 0; i < 32; ++i)
++		pr_info("%02x", measurement[i]);
++	pr_info("\n");
++
++	sev_vm_launch_finish(sev);
++
++	vcpu_work(vm, vcpu, info);
++
++	sev_vm_free(sev);
++	is_sev_vm = false;
++}
 -- 
 2.37.2.672.g94769d06f0-goog
 
