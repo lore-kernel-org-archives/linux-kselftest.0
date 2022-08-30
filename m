@@ -2,59 +2,59 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95E49ECAAA1
-	for <linux-kselftest@archiver.kernel.org>; Tue, 30 Aug 2022 22:21:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD6B1ECAAA1
+	for <linux-kselftest@archiver.kernel.org>; Tue, 30 Aug 2022 22:21:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232208AbiH3WVd (ORCPT
+        id S232323AbiH3WVq (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 30 Aug 2022 18:21:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53836 "EHLO
+        Tue, 30 Aug 2022 18:21:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232313AbiH3WVN (ORCPT
+        with ESMTP id S231906AbiH3WVO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 30 Aug 2022 18:21:13 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28CE071997
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Aug 2022 15:20:29 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id e187-20020a6369c4000000b0041c8dfb8447so6156529pgc.23
+        Tue, 30 Aug 2022 18:21:14 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 002A67172F
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 Aug 2022 15:20:28 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id k16-20020a635a50000000b0042986056df6so6063322pgm.2
         for <linux-kselftest@vger.kernel.org>; Tue, 30 Aug 2022 15:20:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date;
-        bh=DuyfC69i2OMiSbHTPcw/27B1qgcnYyIWftYisyD6nW0=;
-        b=dtazo0Jod0alN8kOX/Wvf4oqimm+UjA9lpCOaevAhUcab0kjuhjNKNvP/PcgFpAp7R
-         POn5YpMjv+n4Tg9a6bXeEm297lTYF2PoEjG7xBzS9qHB5DnR/gY8oO3+FGmJF/4dJJUN
-         MtL/CpKNS5OTm66QU16pFanQDbguYR4TlknvcVAvWVuENScXV4RH784UXWkqoPHFUEMW
-         hPLLKTAaF6Qm/Em1LBJIECpQkvyloywGf9eFsDcjMaTF1QRBQUk9YxWJ/4UjlGZ3ViEe
-         spVsVb5BOhpDOOfBvvP2ou3Ynoyovelels5MaTc5eGNWNFnGKk8BxAahixARrespjyNl
-         kMtg==
+        bh=XGisEg3sosGxno0TvjO4HvwWJUc+batMd9qgnL8cNT4=;
+        b=NgGqwZ0Dhnd8/j3B3dmrOklRqoBSjTYgA7gn7uLdXSt7kjVtMudI2I2ruWAaUEzK5v
+         zCx59Yw9f0nxh4YXMD0mqG7F6iscqIrcKkv8NAHP7Kbwy137aLKwp9QDEgTpgQBpyL4i
+         siB79DFI3sqHIu3oY7Bj2EcGo1cZ9ZHPoupvdnF7n+vZug3yoTAV53b4UlO+hFpCWXoR
+         uDMJxLSJg8XTjV/ggBxC2baL8GCIkJkQDssYuLNSQCwrcpW9L4bTtoYbEAlYxj8b6DS3
+         Mm8Tavwzglvn4ef64onkfu1qvM0gvv5DP7SMTP1CrwufJeuJQSlO7caypcXhWeBu/NXT
+         kSAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=DuyfC69i2OMiSbHTPcw/27B1qgcnYyIWftYisyD6nW0=;
-        b=Uyw77sgu13T2LaCpOsTMh87cif19YC2u/VHuCH3mXgRbLMzB0N1Q5AwEapc9q6PqZ1
-         ZGhHwLG4w0Kdg/Sd4aARXZ2oAhsO7TrjRM0fj/ryhr/LxbaD6HLvCpe6BZN4OJaLj4wd
-         iS2e9mnJDghEzwI5gUglzmueGzjMD7GW+9AgfKQloP26WCnBBKNEF6WnzEXkHdkKSvPr
-         MZFglMR2M/BgfvUzgSSTb0fDVx8VHqdOyZG2jjPsBHrbI/FJn6FuBo1uwAF1KLzykOqA
-         5ftGnJPRkel3rSd52waClQ4UUeaZIJu22+6IyZ/ahxYOM/euzITH3CDOLWnR4zcT8qjz
-         8xLg==
-X-Gm-Message-State: ACgBeo2OPLc6S738P0fQzA5E45tedGGTDly+klq9CZ843SBLjuU8bhe7
-        kMnu8QEfKaMIYGH6ln4FEn14ZZNWiaiYOUgfmTR/irclaQgUr9QuYnXGn1abwgjd7EPJxEllPkE
-        zlaMVLiHHvcSSWQzi7oPm36DukoamVlRqzY7QgDUov8HL6R/9ck0JFUood4rUTkITPaMuuuU=
-X-Google-Smtp-Source: AA6agR5Cvo6pmJ9dCM7qTMudSGq7bZQddkeaa+H5ytT2CwJ8GCWxD9HIqhxgpXFTE/KP+c8Lsl01EWbR3A==
+        bh=XGisEg3sosGxno0TvjO4HvwWJUc+batMd9qgnL8cNT4=;
+        b=knJ6GYQ39UkMJol5z+PMBVtmoZ5216DgNFVSzh+TfCuZtZCSJ9GLxCzyGIjfWPHhEr
+         fID+VUJO8Fk9+f9gEpoU+D7nk3yVaXM7BJXWSvAEFoNktok64p+VxHO8wXIjijvW6VFF
+         sRgIh0+wWgTmAcBlTSyatQjUDfyxpFiA8YT0RrMxvr98SM1r+0zunAADWQuDhTN4FlMp
+         6w5L/GOyD6y8hhQbSlzB1ZkzYASZTWgEmn626dsM/6TFxze6DkorVoxkGJGCcqOJaihs
+         C4lsx5HXTAzB9qqobCBXOWwc2baoGKyXVM7siF3wOLg4oLf5DsVVSbK/RZ6HxTpGU9w0
+         fRjg==
+X-Gm-Message-State: ACgBeo1Ewxwyu8YVySMsUDOu3NuWJOFM+ZjedfOmiSfn7zSqjG9Hiku/
+        OUq3+Hd7qVaffFWHVIWXNSSc8baw509DaEtn79pVzLQJKf3zTh/0nh/567KwdejKSbEvVZ3JaXe
+        Q7vuwkkld+HTUbop81Kftm9u8HoO3ONKiwBzvrfJqLfbDMBaCSkQOsjNUoROkU6P0Jg+gNGU=
+X-Google-Smtp-Source: AA6agR58PpzfkJaOKL5P3VkvrvMgUaV+8am7rwtsdMFdVRE98wNWCH+lEhFt7dOUm8PMABuN3S3LxXL6AQ==
 X-Received: from sagi.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:241b])
- (user=sagis job=sendgmr) by 2002:a05:6a00:1309:b0:535:d421:1347 with SMTP id
- j9-20020a056a00130900b00535d4211347mr23761516pfu.5.1661898025004; Tue, 30 Aug
- 2022 15:20:25 -0700 (PDT)
-Date:   Tue, 30 Aug 2022 22:19:54 +0000
+ (user=sagis job=sendgmr) by 2002:a05:6a00:16c4:b0:535:890:d52 with SMTP id
+ l4-20020a056a0016c400b0053508900d52mr23444002pfc.9.1661898028220; Tue, 30 Aug
+ 2022 15:20:28 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 22:19:56 +0000
 In-Reply-To: <20220830222000.709028-1-sagis@google.com>
 Mime-Version: 1.0
 References: <20220830222000.709028-1-sagis@google.com>
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220830222000.709028-12-sagis@google.com>
-Subject: [RFC PATCH v2 11/17] KVM: selftest: TDX: Add TDX HLT exit test
+Message-ID: <20220830222000.709028-14-sagis@google.com>
+Subject: [RFC PATCH v2 13/17] KVM: selftest: TDX: Add TDX MMIO writes test
 From:   Sagi Shahar <sagis@google.com>
 To:     linux-kselftest@vger.kernel.org
 Cc:     Paolo Bonzini <pbonzini@redhat.com>,
@@ -92,43 +92,36 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The test verifies that the guest runs TDVMCALL<INSTRUCTION.HLT> and the
-guest vCPU enters to the halted state.
+The test verifies MMIO writes of various sizes from the guest to the host.
 
-Signed-off-by: Erdem Aktas <erdemaktas@google.com>
 Signed-off-by: Sagi Shahar <sagis@google.com>
 ---
- tools/testing/selftests/kvm/lib/x86_64/tdx.h  | 16 ++++
- .../selftests/kvm/x86_64/tdx_vm_tests.c       | 88 +++++++++++++++++++
- 2 files changed, 104 insertions(+)
+ tools/testing/selftests/kvm/lib/x86_64/tdx.h  | 18 ++++
+ .../selftests/kvm/x86_64/tdx_vm_tests.c       | 92 +++++++++++++++++++
+ 2 files changed, 110 insertions(+)
 
 diff --git a/tools/testing/selftests/kvm/lib/x86_64/tdx.h b/tools/testing/selftests/kvm/lib/x86_64/tdx.h
-index 263834979727..b11200028546 100644
+index 7045d617dd78..17e3649e5729 100644
 --- a/tools/testing/selftests/kvm/lib/x86_64/tdx.h
 +++ b/tools/testing/selftests/kvm/lib/x86_64/tdx.h
-@@ -56,6 +56,7 @@
- 
- #define TDX_GET_TD_VM_CALL_INFO 0x10000
- #define TDX_REPORT_FATAL_ERROR 0x10003
-+#define TDX_INSTRUCTION_HLT 12
- #define TDX_INSTRUCTION_IO 30
- #define TDX_INSTRUCTION_RDMSR 31
- #define TDX_INSTRUCTION_WRMSR 32
-@@ -292,6 +293,21 @@ static inline uint64_t tdvmcall_wrmsr(uint64_t index, uint64_t value)
+@@ -329,6 +329,24 @@ static inline uint64_t tdvmcall_mmio_read(uint64_t address, uint64_t size, uint6
  	return regs.r10;
  }
  
 +/*
-+ * Execute HLT instruction.
++ * Execute MMIO request instruction for write.
 + */
-+static inline uint64_t tdvmcall_hlt(uint64_t interrupt_blocked_flag)
++static inline uint64_t tdvmcall_mmio_write(uint64_t address, uint64_t size, uint64_t data_in)
 +{
 +	struct kvm_regs regs;
 +
 +	memset(&regs, 0, sizeof(regs));
-+	regs.r11 = TDX_INSTRUCTION_HLT;
-+	regs.r12 = interrupt_blocked_flag;
-+	regs.rcx = 0x1C00;
++	regs.r11 = TDX_INSTRUCTION_VE_REQUEST_MMIO;
++	regs.r12 = size;
++	regs.r13 = TDX_MMIO_WRITE;
++	regs.r14 = address;
++	regs.r15 = data_in;
++	regs.rcx = 0xFC00;
 +	tdcall(&regs);
 +	return regs.r10;
 +}
@@ -137,69 +130,54 @@ index 263834979727..b11200028546 100644
   * Reports a 32 bit value from the guest to user space using a TDVM IO call.
   * Data is reported on port TDX_DATA_REPORT_PORT.
 diff --git a/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c b/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c
-index fb3b8de7e5cd..39604aac54bd 100644
+index 963e4feae31a..382119bd444b 100644
 --- a/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c
 +++ b/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c
-@@ -883,6 +883,93 @@ void verify_guest_msr_writes(void)
+@@ -1082,6 +1082,97 @@ void verify_mmio_reads(void)
  	printf("\t ... PASSED\n");
  }
  
-+/*
-+ * Verifies HLT functionality.
-+ */
-+TDX_GUEST_FUNCTION(guest_hlt)
++TDX_GUEST_FUNCTION(guest_mmio_writes)
 +{
 +	uint64_t ret;
-+	uint64_t interrupt_blocked_flag;
 +
-+	interrupt_blocked_flag = 0;
-+	ret = tdvmcall_hlt(interrupt_blocked_flag);
++	ret = tdvmcall_mmio_write(MMIO_VALID_ADDRESS, 1, 0x12);
++	if (ret)
++		tdvmcall_fatal(ret);
++
++	ret = tdvmcall_mmio_write(MMIO_VALID_ADDRESS, 2, 0x1234);
++	if (ret)
++		tdvmcall_fatal(ret);
++
++	ret = tdvmcall_mmio_write(MMIO_VALID_ADDRESS, 4, 0x12345678);
++	if (ret)
++		tdvmcall_fatal(ret);
++
++	ret = tdvmcall_mmio_write(MMIO_VALID_ADDRESS, 8, 0x1234567890ABCDEF);
++	if (ret)
++		tdvmcall_fatal(ret);
++
++	// Write across page boundary.
++	ret = tdvmcall_mmio_write(PAGE_SIZE - 1, 8, 0);
 +	if (ret)
 +		tdvmcall_fatal(ret);
 +
 +	tdvmcall_success();
 +}
 +
-+void _verify_guest_hlt(int signum);
-+
-+void wake_me(int interval)
++/*
++ * Varifies guest MMIO writes.
++ */
++void verify_mmio_writes(void)
 +{
-+	struct sigaction action;
-+
-+	action.sa_handler = _verify_guest_hlt;
-+	sigemptyset(&action.sa_mask);
-+	action.sa_flags = 0;
-+
-+	TEST_ASSERT(sigaction(SIGALRM, &action, NULL) == 0,
-+		    "Could not set the alarm handler!");
-+
-+	alarm(interval);
-+}
-+
-+void _verify_guest_hlt(int signum)
-+{
-+	static struct kvm_vcpu *vcpu;
++	struct kvm_vcpu *vcpu;
 +	struct kvm_vm *vm;
++	uint8_t byte_1;
++	uint16_t byte_2;
++	uint32_t byte_4;
++	uint64_t byte_8;
 +
-+	/*
-+	 * This function will also be called by SIGALRM handler to check the
-+	 * vCPU MP State. If vm has been initialized, then we are in the signal
-+	 * handler. Check the MP state and let the guest run again.
-+	 */
-+	if (vcpu != NULL) {
-+		struct kvm_mp_state mp_state;
-+
-+		vcpu_mp_state_get(vcpu, &mp_state);
-+		ASSERT_EQ(mp_state.mp_state, KVM_MP_STATE_HALTED);
-+
-+		/* Let the guest to run and finish the test.*/
-+		mp_state.mp_state = KVM_MP_STATE_RUNNABLE;
-+		vcpu_mp_state_set(vcpu, &mp_state);
-+		return;
-+	}
-+
-+	printf("Verifying HLT:\n");
-+
++	printf("Verifying TD MMIO writes:\n");
 +	/* Create a TD VM with no memory.*/
 +	vm = vm_create_tdx();
 +
@@ -210,35 +188,54 @@ index fb3b8de7e5cd..39604aac54bd 100644
 +	vcpu = vm_vcpu_add_tdx(vm, 0);
 +
 +	/* Setup and initialize VM memory */
-+	prepare_source_image(vm, guest_hlt,
-+			     TDX_FUNCTION_SIZE(guest_hlt), 0);
++	prepare_source_image(vm, guest_mmio_writes,
++			     TDX_FUNCTION_SIZE(guest_mmio_writes), 0);
 +	finalize_td_memory(vm);
 +
-+	printf("\t ... Running guest\n");
-+
-+	/* Wait 1 second for guest to execute HLT */
-+	wake_me(1);
 +	vcpu_run(vcpu);
++	CHECK_GUEST_FAILURE(vcpu);
++	CHECK_MMIO(vcpu, MMIO_VALID_ADDRESS, 1, TDX_MMIO_WRITE);
++	byte_1 = *(uint8_t *)(vcpu->run->mmio.data);
 +
++	vcpu_run(vcpu);
++	CHECK_GUEST_FAILURE(vcpu);
++	CHECK_MMIO(vcpu, MMIO_VALID_ADDRESS, 2, TDX_MMIO_WRITE);
++	byte_2 = *(uint16_t *)(vcpu->run->mmio.data);
++
++	vcpu_run(vcpu);
++	CHECK_GUEST_FAILURE(vcpu);
++	CHECK_MMIO(vcpu, MMIO_VALID_ADDRESS, 4, TDX_MMIO_WRITE);
++	byte_4 = *(uint32_t *)(vcpu->run->mmio.data);
++
++	vcpu_run(vcpu);
++	CHECK_GUEST_FAILURE(vcpu);
++	CHECK_MMIO(vcpu, MMIO_VALID_ADDRESS, 8, TDX_MMIO_WRITE);
++	byte_8 = *(uint64_t *)(vcpu->run->mmio.data);
++
++	ASSERT_EQ(byte_1, 0x12);
++	ASSERT_EQ(byte_2, 0x1234);
++	ASSERT_EQ(byte_4, 0x12345678);
++	ASSERT_EQ(byte_8, 0x1234567890ABCDEF);
++
++	vcpu_run(vcpu);
++	ASSERT_EQ(vcpu->run->exit_reason, KVM_EXIT_SYSTEM_EVENT);
++	ASSERT_EQ(vcpu->run->system_event.data[1], TDX_VMCALL_INVALID_OPERAND);
++
++	vcpu_run(vcpu);
 +	CHECK_GUEST_COMPLETION(vcpu);
 +
 +	kvm_vm_free(vm);
 +	printf("\t ... PASSED\n");
 +}
 +
-+void verify_guest_hlt(void)
-+{
-+	_verify_guest_hlt(0);
-+}
-+
  int main(int argc, char **argv)
  {
  	if (!is_tdx_enabled()) {
-@@ -899,6 +986,7 @@ int main(int argc, char **argv)
- 	run_in_new_process(&verify_guest_reads);
- 	run_in_new_process(&verify_guest_msr_reads);
+@@ -1100,6 +1191,7 @@ int main(int argc, char **argv)
  	run_in_new_process(&verify_guest_msr_writes);
-+	run_in_new_process(&verify_guest_hlt);
+ 	run_in_new_process(&verify_guest_hlt);
+ 	run_in_new_process(&verify_mmio_reads);
++	run_in_new_process(&verify_mmio_writes);
  
  	return 0;
  }
