@@ -2,91 +2,141 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BF7DC54EE9
-	for <linux-kselftest@archiver.kernel.org>; Thu,  1 Sep 2022 06:59:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B85A4C54EE9
+	for <linux-kselftest@archiver.kernel.org>; Thu,  1 Sep 2022 07:02:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232649AbiIAG7j (ORCPT
+        id S233455AbiIAHCB (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 1 Sep 2022 02:59:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47094 "EHLO
+        Thu, 1 Sep 2022 03:02:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233341AbiIAG7g (ORCPT
+        with ESMTP id S232891AbiIAHBA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 1 Sep 2022 02:59:36 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FBEF122058
-        for <linux-kselftest@vger.kernel.org>; Wed, 31 Aug 2022 23:59:22 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso1586821pjk.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 31 Aug 2022 23:59:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=SVF6PLCQYqQfDJ1mbN1yYxWEY7a8snySanblxKa0G2g=;
-        b=EQ/HtONlIP3lRAqKj+jLTa8iFP06eGdSTaZLe5lHLgIDfq9K7upKcsMHo7HNyzsSkF
-         0ZLJjdRLAFIchTJ6/V08SQ7BFOgs+yr6wqZgVTTZbPc60qYf6bUBktAdTV0xCmLO8+rb
-         TYtDclkULIsMF+oVCmKnFv6cIQg8YhK8pUZys=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=SVF6PLCQYqQfDJ1mbN1yYxWEY7a8snySanblxKa0G2g=;
-        b=A1/A3MdBag12A2CumXRSd6rTWr19X8v2GkPcSDIiLPEBHlczLWIysSR555iOORhXDf
-         y3rnYvcKLdjuVFO0ncoT9sL/bYRjXyWvL1LL4H+cZae9uvWQLK4mwF/W98O28C0A2MpM
-         FoXVa6f59vixAQ52kXPFjQgNjS30NZe71mAz66yt8KKYqxmm6TmXspP+hTy52oZueywi
-         4lkjCe4rppOU6gG3vQHncJORdL+vEsE7hePJcdtzrQZOgUFmCGzsDFwQeZy2AYuOgnIa
-         Pv8WFIRTYM0Uarm6JfK6BGUUDyCXgIVVxl6gyYCumbA9FMnOY4ZcU/Wje41ZUup1rL1C
-         vLAg==
-X-Gm-Message-State: ACgBeo3jGjID0LI5qUHdA8YI5MrX0gesSbRVA3V4YPcHzj/dHpbjJg26
-        KbCRVNdOzhCBRfqivXHkSYGY6g==
-X-Google-Smtp-Source: AA6agR5ZHgeSnW5XK+mgnShl1BdOSPwjqbKb94qG4dgHKo3KiQskBMRdrJtDtsttOZ30SOZ9HrF0LA==
-X-Received: by 2002:a17:90b:1b0d:b0:1fe:3993:2a82 with SMTP id nu13-20020a17090b1b0d00b001fe39932a82mr5096208pjb.155.1662015559648;
-        Wed, 31 Aug 2022 23:59:19 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id d65-20020a623644000000b0052d40c4c06esm12497770pfa.39.2022.08.31.23.59.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Aug 2022 23:59:17 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: [PATCH 0/2] fortify: Add run-time WARN for cross-field memcpy()
-Date:   Wed, 31 Aug 2022 23:59:12 -0700
-Message-Id: <20220901065914.1417829-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.34.1
+        Thu, 1 Sep 2022 03:01:00 -0400
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 237221928D;
+        Thu,  1 Sep 2022 00:00:45 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4MJBcz4dNGz9v7HB;
+        Thu,  1 Sep 2022 14:55:15 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwD3n5N0WBBjL7ITAA--.38593S2;
+        Thu, 01 Sep 2022 08:00:16 +0100 (CET)
+Message-ID: <af509503e534dfbb5b4943d97fbdb27f3e8914fc.camel@huaweicloud.com>
+Subject: Re: [PATCH v15 05/12] KEYS: Move KEY_LOOKUP_ to include/linux/key.h
+ and define KEY_LOOKUP_ALL
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        dhowells@redhat.com, jarkko@kernel.org, rostedt@goodmis.org,
+        mingo@redhat.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, shuah@kernel.org
+Cc:     bpf@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        deso@posteo.net, memxor@gmail.com,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Thu, 01 Sep 2022 09:00:00 +0200
+In-Reply-To: <20220831165445.1071641-6-roberto.sassu@huaweicloud.com>
+References: <20220831165445.1071641-1-roberto.sassu@huaweicloud.com>
+         <20220831165445.1071641-6-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=713; h=from:subject; bh=LeTil4IEruxaVe7mWfrPpEi0Vfjy7lWn1LjQi8mvjkw=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjEFhCZb05sz6D+GQp3RqFe9s96Vb19uXf8nu3+B/3 K+EZyvaJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYxBYQgAKCRCJcvTf3G3AJi02D/ 9A5CVWpB/R+rtBo9Hz69xc6KVgu9rGAbBRmVMjtYWVn4jtOxiPSLL8QvW0t+F8vkIgPS+RUnSfjZ/0 hAU1oLluzNcqNPSj+L+o3ZE3lT5Xiyqcr8goXd36TwOHZWUaEmUTsNqpOyacfC2URgDVGGv3f81HXC m5U4bxfDPCb5BT8oEEhXs+EnMqs5M71OKC4aVhtwv9NPX9Ah4fm2tSgVrp56GMEu+7maQGY0qwBxhB dW7MjQ4glVMJHiL+cIr1k4cv8G6rbH5Gim5R1TBsLDoalZws0NMeanliOh2uEJVju/0SPCvE/48Opw t/00snJqhXKOz5vO1+BvO58eGBDmkPVMKt9wNfagz81UM8FIZ00SJJdt4bHPvKyFFBJF4MbBUOLZTI cjc9glqVRIUaXO3FKCtPshmj8y8mIyieEWgi6QjZfK71EmSGyLVJK98BR5QnRZL08xI+iVEy0oqVSV HwoOnj8kFFns7arwq/q0lqlZhNBcVyS0WEI/gJ89LxMimKXuzoPesmuYtiHxx2HhJH+k2TRQpQpLE3 LbkkMEsGVvNwFnbEAFH/vrV+nAv7gFgoI/ncQT3bBwBjeZRSG12fXhXZrpT+j66OTFoxqr5kh09A1F 4ckTG6O2Wm6QL3oG/QSk+zkNQMRReyyLNpOsiB4/UEAF9Bmss0e2PtJ6+GBQ==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: LxC2BwD3n5N0WBBjL7ITAA--.38593S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7uF1DurW8Zr4DXrW5KrWkCrg_yoW8KryrpF
+        WDC3WFkryjyry293s7GanFya1Fk398Gr12kF9Fgwn0vFsag34xtr1xKF4ruF1FyrW7ur12
+        grsF9ayUuw4DA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26r4j6r4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
+        7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
+        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
+        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1lIxAIcV
+        CF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUOlksDUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQACBF1jj4J80AAAsY
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
+On Wed, 2022-08-31 at 18:54 +0200, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+> In preparation for the patch that introduces the
+> bpf_lookup_user_key() eBPF
+> kfunc, move KEY_LOOKUP_ definitions to include/linux/key.h, to be
+> able to
+> validate the kfunc parameters. Add them to enum key_lookup_flag, so
+> that
+> all the current ones and the ones defined in the future are
+> automatically
+> exported through BTF and available to eBPF programs.
+> 
+> Also, add KEY_LOOKUP_ALL to the enum, to facilitate checking whether
+> a
+> variable contains only defined flags.
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Reviewed-by: KP Singh <kpsingh@kernel.org>
+> Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-I'm hoping to at least get this into -next to see how noisy it ends up
-being. I've tracked down several false positives that are getting fixed,
-but I'd like to see this get wider testing. For details, see patch 1,
-but this is the run-time half of the recent FORTIFY_SOURCE memcpy()
-bounds checking work.
+Jarkko, I kept your ack although the code slightly changed to use the
+enum instead of #define.
 
--Kees
+If you have more comments/suggestions, please let me know.
 
-Kees Cook (2):
-  fortify: Add run-time WARN for cross-field memcpy()
-  lkdtm: Update tests for memcpy() run-time warnings
+Thanks
 
- drivers/misc/lkdtm/fortify.c            | 96 +++++++++++++++++++++----
- include/linux/fortify-string.h          | 70 +++++++++++++++++-
- tools/testing/selftests/lkdtm/tests.txt |  8 ++-
- 3 files changed, 155 insertions(+), 19 deletions(-)
+Roberto
 
--- 
-2.34.1
+> ---
+>  include/linux/key.h      | 6 ++++++
+>  security/keys/internal.h | 2 --
+>  2 files changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/linux/key.h b/include/linux/key.h
+> index 7febc4881363..d84171f90cbd 100644
+> --- a/include/linux/key.h
+> +++ b/include/linux/key.h
+> @@ -88,6 +88,12 @@ enum key_need_perm {
+>  	KEY_DEFER_PERM_CHECK,	/* Special: permission check is
+> deferred */
+>  };
+>  
+> +enum key_lookup_flag {
+> +	KEY_LOOKUP_CREATE = 0x01,	/* Create special keyrings if they
+> don't exist */
+> +	KEY_LOOKUP_PARTIAL = 0x02,	/* Permit partially
+> constructed keys to be found */
+> +	KEY_LOOKUP_ALL = (KEY_LOOKUP_CREATE | KEY_LOOKUP_PARTIAL), /*
+> OR of previous flags */
+> +};
+> +
+>  struct seq_file;
+>  struct user_struct;
+>  struct signal_struct;
+> diff --git a/security/keys/internal.h b/security/keys/internal.h
+> index 9b9cf3b6fcbb..3c1e7122076b 100644
+> --- a/security/keys/internal.h
+> +++ b/security/keys/internal.h
+> @@ -165,8 +165,6 @@ extern struct key *request_key_and_link(struct
+> key_type *type,
+>  
+>  extern bool lookup_user_key_possessed(const struct key *key,
+>  				      const struct key_match_data
+> *match_data);
+> -#define KEY_LOOKUP_CREATE	0x01
+> -#define KEY_LOOKUP_PARTIAL	0x02
+>  
+>  extern long join_session_keyring(const char *name);
+>  extern void key_change_session_keyring(struct callback_head *twork);
 
