@@ -2,291 +2,263 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0C7DECAAD2
-	for <linux-kselftest@archiver.kernel.org>; Thu,  1 Sep 2022 06:58:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CA3B1ECAAD2
+	for <linux-kselftest@archiver.kernel.org>; Thu,  1 Sep 2022 06:59:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233027AbiIAG6X (ORCPT
+        id S233271AbiIAG7d (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 1 Sep 2022 02:58:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45648 "EHLO
+        Thu, 1 Sep 2022 02:59:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233038AbiIAG6V (ORCPT
+        with ESMTP id S233038AbiIAG7c (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 1 Sep 2022 02:58:21 -0400
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FC7AD11E5;
-        Wed, 31 Aug 2022 23:58:18 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4MJBZ93wPyz9v7Hg;
-        Thu,  1 Sep 2022 14:52:49 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwA3s13fVxBjZcATAA--.7637S2;
-        Thu, 01 Sep 2022 07:57:48 +0100 (CET)
-Message-ID: <2b2242f8d09378fbec49d4f7e29960d5e50d0a68.camel@huaweicloud.com>
-Subject: Re: [PATCH v15 12/12] selftests/bpf: Add tests for dynamic pointers
- parameters in kfuncs
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
-        dhowells@redhat.com, jarkko@kernel.org, rostedt@goodmis.org,
-        mingo@redhat.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, shuah@kernel.org
-Cc:     bpf@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        deso@posteo.net, memxor@gmail.com,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Thu, 01 Sep 2022 08:57:30 +0200
-In-Reply-To: <20220831165445.1071641-13-roberto.sassu@huaweicloud.com>
-References: <20220831165445.1071641-1-roberto.sassu@huaweicloud.com>
-         <20220831165445.1071641-13-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Thu, 1 Sep 2022 02:59:32 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3813122056
+        for <linux-kselftest@vger.kernel.org>; Wed, 31 Aug 2022 23:59:19 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id u22so16240143plq.12
+        for <linux-kselftest@vger.kernel.org>; Wed, 31 Aug 2022 23:59:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=5zD63//05MgDrU1w2Zt/sYyNIOeJWPHdLsrxWSODUj8=;
+        b=HQ6lKT5/JNpOCSjvFQwqq00+XvPUxGpOvaNcglNbskGo44IxmXcllioc/YL57N/QAn
+         7TspqWbtM/e9SKH9BKSCQEU2CElxpJBiU4AQMiVmQOFQxDIeSxHgClcwubT6Hn+DMA61
+         HsHhVtFcb2M81RxDwQzlbQfXdPUn7vdVbIT2E=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=5zD63//05MgDrU1w2Zt/sYyNIOeJWPHdLsrxWSODUj8=;
+        b=WlpY95OAaz9RZrxxua4E+MVNyJro1zaDWEGGRJ3P0lhCSKYgNi9FpbKMEYn0dbVe3s
+         sMetJD15PSKoQ/CFlACppyiXa5Vzi+GLo4+BEoo9Qf+nszDRJU1htY4NTpaUWYgNngLD
+         e0x055d4ishCk0MZBNs9/zNJlyf7IWCUK9o3P0wqSEny0T5XPUr0c3B41GnkuW7TMokF
+         FRb5PHv5FjXeyjRcNmEng/p9JXvcb8BxFqvWjDZ8pqF8QXe3GSTn5NuDXOqFcZdWnXyZ
+         X34cAS70lDDD2GB8RizcsjQRBxgr2oTHmCN7QABpgY1Zbcb0IQcLaLR7nE2znj11mh4C
+         /Hfw==
+X-Gm-Message-State: ACgBeo1BfpolndvXCDFypWIngtuUrvepT37W+8VZRIzW5Q20kertpRBj
+        Dh9ff1nbVBMftc+lNUZfLL0BUg==
+X-Google-Smtp-Source: AA6agR79zSsv1/U0SFzruYx6/A01jNuVR2BpWmQ8aUjcwvh+CcCv4tLcaj4m9F4AB6asLudvZSc8bQ==
+X-Received: by 2002:a17:903:189:b0:175:4643:f862 with SMTP id z9-20020a170903018900b001754643f862mr5762738plg.5.1662015558557;
+        Wed, 31 Aug 2022 23:59:18 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id g16-20020aa796b0000000b005385555e647sm6755525pfk.155.2022.08.31.23.59.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Aug 2022 23:59:17 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: [PATCH 1/2] fortify: Add run-time WARN for cross-field memcpy()
+Date:   Wed, 31 Aug 2022 23:59:13 -0700
+Message-Id: <20220901065914.1417829-2-keescook@chromium.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220901065914.1417829-1-keescook@chromium.org>
+References: <20220901065914.1417829-1-keescook@chromium.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwA3s13fVxBjZcATAA--.7637S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3AF4kCF18Zr4UJrWUKr1kAFb_yoWxGF13pa
-        yrGFy29rWIq3W7Wr13XF4IvF4fKr48Zr1akrZFq34xAr1DXryxWF48Kr45Jwn5K395Xw45
-        Zw1Sgr4rCr4Uta7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UAkuxUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgACBF1jj3589gAEsF
-X-CFilter-Loop: Reflected
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7128; h=from:subject; bh=OPwd1urZjnL/sFRYREYgKX+k6ufc3hbn/XSHlj88wUI=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjEFhCSODVZ7smkPYeLq9P5OfRFSY7/eAHjZtzAi0c 9ubXhbeJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYxBYQgAKCRCJcvTf3G3AJkegD/ 42Irslmz7F4CdoTT2NyeRtfSgtC1K1407SWEtirPWZccQIc+N6GUB80PLbQJjmmiAt2/NFD33QnF0G 0az0JfTpknG/8+KzwK0rElQigW7Q59NMGBvPBEHYyAwKGNk020gCYhBkxjoIfUG5pSYlNu4GlhxZaI ibXhD3X8y7O6MPgetoZmWPytbvBY0cOAekj1kOVl2+RzBlTO5aHfsgPNeWrk3Beol6WzvRnRNoKEQe R7kbNQ0mW+HMo7Ya220KgkOgKWpGw6esRQCUT2yiqMXBLvNAjx7plsVdDoRmW4cG3milj6YUil8hIO Z+XhKduxTaZtTstV89QNNejf72Qs73zWLw3BVPTu4Z49MgHe7dPjlTtWDsdLMOCIxXWScGxgPi8CvO rJAGEg/f3t0mViDRlm3h0OvDINW0sZkWVm4nB8mMYLdI2td3FBJQhQt0fYWf6sqoC8UYQoBeRR2TmR Nn665Gh0RROl2PZadPeZ7nl3oSO8/RLY6hme9C419x3DxY3zLt3yoI1E0QapHuCiR5nywYwXSj4125 Yr3Qx0BH3eG2n0I4EOCWwww9KjJW0F34DP196a4S6hHvDI/9D6upT3WhtPdcLTsn8FBofeS8pKiWEm A9rSpJyqMB/k1glXp6qUElRYNHTfmzLECKreOXE2mYXTOb8UKU/rDWG2DblA==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 2022-08-31 at 18:54 +0200, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
-> 
-> Add tests to ensure that only supported dynamic pointer types are
-> accepted,
-> that the passed argument is actually a dynamic pointer, and that the
-> passed
-> argument is a pointer to the stack.
+Enable run-time checking of dynamic memcpy() and memmove() lengths,
+issuing a WARN when a write would exceed the size of the target struct
+member, when built with CONFIG_FORTIFY_SOURCE=y. This would have
+caught all of the memcpy()-based buffer overflows in the last 3 years,
+specifically covering all the cases where the destination buffer size
+is known at compile time.
 
-Sorry, forgot to add this test to the deny list of s390.
+This change ONLY adds a run-time warning. As false positives are currently
+still expected, this will not block the overflow. The new warnings will
+look like this:
 
-I also rebased to the latest commit.
+  memcpy: detected field-spanning write (size N) of single field "var->dest" (size M)
+  WARNING: CPU: n PID: pppp at source/file/path.c:nr function+0xXX/0xXX [module]
 
-Let me know if I should resend.
+There may be false positives in the kernel where intentional
+field-spanning writes are happening. These need to be addressed
+similarly to how the compile-time cases were addressed: add a
+struct_group(), split the memcpy(), or some other refactoring.
 
-Thanks
+In order to make counting/investigating instances of added runtime checks
+easier, each instance includes the destination variable name as a WARN
+argument, prefixed with 'field "'. Therefore, on an x86_64 defconfig
+build, it is trivial to inspect the build artifacts to find instances.
+For example on an x86_64 defconfig build, there are 78 new run-time
+memcpy() bounds checks added:
 
-Roberto
+  $ for i in vmlinux $(find . -name '*.ko'); do \
+      strings "$i" | grep '^field "'; done | wc -l
+  78
 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
->  .../bpf/prog_tests/kfunc_dynptr_param.c       | 102
-> ++++++++++++++++++
->  .../bpf/progs/test_kfunc_dynptr_param.c       |  57 ++++++++++
->  2 files changed, 159 insertions(+)
->  create mode 100644
-> tools/testing/selftests/bpf/prog_tests/kfunc_dynptr_param.c
->  create mode 100644
-> tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c
-> 
-> diff --git
-> a/tools/testing/selftests/bpf/prog_tests/kfunc_dynptr_param.c
-> b/tools/testing/selftests/bpf/prog_tests/kfunc_dynptr_param.c
-> new file mode 100644
-> index 000000000000..732897faf36b
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/kfunc_dynptr_param.c
-> @@ -0,0 +1,102 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2022 Facebook
-> + * Copyright (C) 2022 Huawei Technologies Duesseldorf GmbH
-> + *
-> + * Author: Roberto Sassu <roberto.sassu@huawei.com>
-> + */
-> +
-> +#include <test_progs.h>
-> +#include "test_kfunc_dynptr_param.skel.h"
-> +
-> +static size_t log_buf_sz = 1048576; /* 1 MB */
-> +static char obj_log_buf[1048576];
-> +
-> +static struct {
-> +	const char *prog_name;
-> +	const char *expected_err_msg;
-> +} kfunc_dynptr_tests[] = {
-> +	{"dynptr_type_not_supp",
-> +	 "arg#0 pointer type STRUCT bpf_dynptr_kern points to
-> unsupported dynamic pointer type"},
-> +	{"not_valid_dynptr",
-> +	 "arg#0 pointer type STRUCT bpf_dynptr_kern must be valid and
-> initialized"},
-> +	{"not_ptr_to_stack", "arg#0 pointer type STRUCT bpf_dynptr_kern
-> not to stack"},
-> +};
-> +
-> +static bool kfunc_not_supported;
-> +
-> +static int libbpf_print_cb(enum libbpf_print_level level, const char
-> *fmt,
-> +			   va_list args)
-> +{
-> +	if (strcmp(fmt, "libbpf: extern (func ksym) '%s': not found in
-> kernel or module BTFs\n"))
-> +		return 0;
-> +
-> +	if (strcmp(va_arg(args, char *), "bpf_verify_pkcs7_signature"))
-> +		return 0;
-> +
-> +	kfunc_not_supported = true;
-> +	return 0;
-> +}
-> +
-> +static void verify_fail(const char *prog_name, const char
-> *expected_err_msg)
-> +{
-> +	struct test_kfunc_dynptr_param *skel;
-> +	LIBBPF_OPTS(bpf_object_open_opts, opts);
-> +	libbpf_print_fn_t old_print_cb;
-> +	struct bpf_program *prog;
-> +	int err;
-> +
-> +	opts.kernel_log_buf = obj_log_buf;
-> +	opts.kernel_log_size = log_buf_sz;
-> +	opts.kernel_log_level = 1;
-> +
-> +	skel = test_kfunc_dynptr_param__open_opts(&opts);
-> +	if (!ASSERT_OK_PTR(skel, "test_kfunc_dynptr_param__open_opts"))
-> +		goto cleanup;
-> +
-> +	prog = bpf_object__find_program_by_name(skel->obj, prog_name);
-> +	if (!ASSERT_OK_PTR(prog, "bpf_object__find_program_by_name"))
-> +		goto cleanup;
-> +
-> +	bpf_program__set_autoload(prog, true);
-> +
-> +	bpf_map__set_max_entries(skel->maps.ringbuf, getpagesize());
-> +
-> +	kfunc_not_supported = false;
-> +
-> +	old_print_cb = libbpf_set_print(libbpf_print_cb);
-> +	err = test_kfunc_dynptr_param__load(skel);
-> +	libbpf_set_print(old_print_cb);
-> +
-> +	if (err < 0 && kfunc_not_supported) {
-> +		fprintf(stderr,
-> +		  "%s:SKIP:bpf_verify_pkcs7_signature() kfunc not
-> supported\n",
-> +		  __func__);
-> +		test__skip();
-> +		goto cleanup;
-> +	}
-> +
-> +	if (!ASSERT_ERR(err, "unexpected load success"))
-> +		goto cleanup;
-> +
-> +	if (!ASSERT_OK_PTR(strstr(obj_log_buf, expected_err_msg),
-> "expected_err_msg")) {
-> +		fprintf(stderr, "Expected err_msg: %s\n",
-> expected_err_msg);
-> +		fprintf(stderr, "Verifier output: %s\n", obj_log_buf);
-> +	}
-> +
-> +cleanup:
-> +	test_kfunc_dynptr_param__destroy(skel);
-> +}
-> +
-> +void test_kfunc_dynptr_param(void)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(kfunc_dynptr_tests); i++) {
-> +		if
-> (!test__start_subtest(kfunc_dynptr_tests[i].prog_name))
-> +			continue;
-> +
-> +		verify_fail(kfunc_dynptr_tests[i].prog_name,
-> +			    kfunc_dynptr_tests[i].expected_err_msg);
-> +	}
-> +}
-> diff --git
-> a/tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c
-> b/tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c
-> new file mode 100644
-> index 000000000000..2f09f91a1576
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c
-> @@ -0,0 +1,57 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +/*
-> + * Copyright (C) 2022 Huawei Technologies Duesseldorf GmbH
-> + *
-> + * Author: Roberto Sassu <roberto.sassu@huawei.com>
-> + */
-> +
-> +#include "vmlinux.h"
-> +#include <errno.h>
-> +#include <bpf/bpf_helpers.h>
-> +#include <bpf/bpf_tracing.h>
-> +
-> +struct bpf_dynptr {
-> +	__u64 :64;
-> +	__u64 :64;
-> +} __attribute__((aligned(8)));
-> +
-> +extern int bpf_verify_pkcs7_signature(struct bpf_dynptr *data_ptr,
-> +				      struct bpf_dynptr *sig_ptr,
-> +				      struct bpf_key *trusted_keyring)
-> __ksym;
-> +
-> +struct {
-> +	__uint(type, BPF_MAP_TYPE_RINGBUF);
-> +} ringbuf SEC(".maps");
-> +
-> +char _license[] SEC("license") = "GPL";
-> +
-> +SEC("?lsm.s/bpf")
-> +int BPF_PROG(dynptr_type_not_supp, int cmd, union bpf_attr *attr,
-> +	     unsigned int size)
-> +{
-> +	char write_data[64] = "hello there, world!!";
-> +	struct bpf_dynptr ptr;
-> +
-> +	bpf_ringbuf_reserve_dynptr(&ringbuf, sizeof(write_data), 0,
-> &ptr);
-> +
-> +	return bpf_verify_pkcs7_signature(&ptr, &ptr, NULL);
-> +}
-> +
-> +SEC("?lsm.s/bpf")
-> +int BPF_PROG(not_valid_dynptr, int cmd, union bpf_attr *attr,
-> unsigned int size)
-> +{
-> +	unsigned long val;
-> +
-> +	return bpf_verify_pkcs7_signature((struct bpf_dynptr *)&val,
-> +					  (struct bpf_dynptr *)&val,
-> NULL);
-> +}
-> +
-> +SEC("?lsm.s/bpf")
-> +int BPF_PROG(not_ptr_to_stack, int cmd, union bpf_attr *attr,
-> unsigned int size)
-> +{
-> +	unsigned long val;
-> +
-> +	return bpf_verify_pkcs7_signature((struct bpf_dynptr *)val,
-> +					  (struct bpf_dynptr *)val,
-> NULL);
-> +}
+Simple cases where a destination buffer is known to be a dynamic size
+do not generate a WARN. For example:
+
+struct normal_flex_array {
+	void *a;
+	int b;
+	u32 c;
+	size_t array_size;
+	u8 flex_array[];
+};
+
+struct normal_flex_array *instance;
+...
+/* These will be ignored for run-time bounds checking. */
+memcpy(instance, src, len);
+memcpy(instance->flex_array, src, len);
+
+However, one of the dynamic-sized destination cases is irritatingly
+unable to be detected by the compiler: when using memcpy() to target
+a composite struct member which contains a trailing flexible array
+struct. For example:
+
+struct wrapper {
+	int foo;
+	char bar;
+	struct normal_flex_array embedded;
+};
+
+struct wrapper *instance;
+...
+/* This will incorrectly WARN when len > sizeof(instance->embedded) */
+memcpy(&instance->embedded, src, len);
+
+These cases end up appearing to the compiler to be sized as if the
+flexible array had 0 elements. :( For more details see:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101832
+https://godbolt.org/z/vW6x8vh4P
+
+These "composite flexible array structure destination" cases will be
+need to be flushed out and addressed on a case-by-case basis.
+
+Regardless, for the general case of using memcpy() on flexible array
+destinations, future APIs will be created to handle common cases. Those
+can be used to migrate away from open-coded memcpy() so that proper
+error handling (instead of trapping) can be used.
+
+As mentioned, none of these bounds checks block any overflows
+currently. For users that have tested their workloads, do not encounter
+any warnings, and wish to make these checks stop any overflows, they
+can use a big hammer and set the sysctl panic_on_warn=1.
+
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ include/linux/fortify-string.h | 70 ++++++++++++++++++++++++++++++++--
+ 1 file changed, 67 insertions(+), 3 deletions(-)
+
+diff --git a/include/linux/fortify-string.h b/include/linux/fortify-string.h
+index 3b401fa0f374..ca3626c41785 100644
+--- a/include/linux/fortify-string.h
++++ b/include/linux/fortify-string.h
+@@ -3,6 +3,7 @@
+ #define _LINUX_FORTIFY_STRING_H_
+ 
+ #include <linux/const.h>
++#include <linux/bug.h>
+ 
+ #define __FORTIFY_INLINE extern __always_inline __gnu_inline __overloadable
+ #define __RENAME(x) __asm__(#x)
+@@ -319,7 +320,7 @@ __FORTIFY_INLINE void fortify_memset_chk(__kernel_size_t size,
+  * V = vulnerable to run-time overflow (will need refactoring to solve)
+  *
+  */
+-__FORTIFY_INLINE void fortify_memcpy_chk(__kernel_size_t size,
++__FORTIFY_INLINE bool fortify_memcpy_chk(__kernel_size_t size,
+ 					 const size_t p_size,
+ 					 const size_t q_size,
+ 					 const size_t p_size_field,
+@@ -368,16 +369,79 @@ __FORTIFY_INLINE void fortify_memcpy_chk(__kernel_size_t size,
+ 	if ((p_size != (size_t)(-1) && p_size < size) ||
+ 	    (q_size != (size_t)(-1) && q_size < size))
+ 		fortify_panic(func);
++
++	/*
++	 * Warn when writing beyond destination field size.
++	 *
++	 * We must ignore p_size_field == 0 for existing 0-element
++	 * fake flexible arrays, until they are all converted to
++	 * proper flexible arrays.
++	 *
++	 * The implementation of __builtin_object_size() behaves
++	 * like sizeof() when not directly referencing a flexible
++	 * array member, which means there will be many bounds checks
++	 * that will appear at run-time, without a way for them to be
++	 * detected at compile-time (as can be done when the destination
++	 * is specifically the flexible array member).
++	 * https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101832
++	 */
++	if (p_size_field != 0 && p_size_field != (size_t)(-1) &&
++	    p_size != p_size_field && p_size_field < size)
++		return true;
++
++	return false;
+ }
+ 
+ #define __fortify_memcpy_chk(p, q, size, p_size, q_size,		\
+ 			     p_size_field, q_size_field, op) ({		\
+ 	size_t __fortify_size = (size_t)(size);				\
+-	fortify_memcpy_chk(__fortify_size, p_size, q_size,		\
+-			   p_size_field, q_size_field, #op);		\
++	WARN_ONCE(fortify_memcpy_chk(__fortify_size, p_size, q_size,	\
++				     p_size_field, q_size_field, #op),	\
++		  #op ": detected field-spanning write (size %zu) of single %s (size %zu)\n", \
++		  __fortify_size,					\
++		  "field \"" #p "\" at " __FILE__ ":" __stringify(__LINE__), \
++		  p_size_field);					\
+ 	__underlying_##op(p, q, __fortify_size);			\
+ })
+ 
++/*
++ * Notes about compile-time buffer size detection:
++ *
++ * With these types...
++ *
++ *	struct middle {
++ *		u16 a;
++ *		u8 middle_buf[16];
++ *		int b;
++ *	};
++ *	struct end {
++ *		u16 a;
++ *		u8 end_buf[16];
++ *	};
++ *	struct flex {
++ *		int a;
++ *		u8 flex_buf[];
++ *	};
++ *
++ *	void func(TYPE *ptr) { ... }
++ *
++ * Cases where destination size cannot be currently detected:
++ * - the size of ptr's object (seemingly by design, gcc & clang fail):
++ *	__builtin_object_size(ptr, 1) == -1
++ * - the size of flexible arrays in ptr's obj (by design, dynamic size):
++ *	__builtin_object_size(ptr->flex_buf, 1) == -1
++ * - the size of ANY array at the end of ptr's obj (gcc and clang bug):
++ *	__builtin_object_size(ptr->end_buf, 1) == -1
++ *	https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101836
++ *
++ * Cases where destination size is currently detected:
++ * - the size of non-array members within ptr's object:
++ *	__builtin_object_size(ptr->a, 1) == 2
++ * - the size of non-flexible-array in the middle of ptr's obj:
++ *	__builtin_object_size(ptr->middle_buf, 1) == 16
++ *
++ */
++
+ /*
+  * __builtin_object_size() must be captured here to avoid evaluating argument
+  * side-effects further into the macro layers.
+-- 
+2.34.1
 
