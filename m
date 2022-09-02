@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B473C38145
-	for <linux-kselftest@archiver.kernel.org>; Fri,  2 Sep 2022 14:01:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 42A18C38145
+	for <linux-kselftest@archiver.kernel.org>; Fri,  2 Sep 2022 14:01:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238861AbiIBOB1 (ORCPT
+        id S238413AbiIBOBx (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 2 Sep 2022 10:01:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38032 "EHLO
+        Fri, 2 Sep 2022 10:01:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238922AbiIBN7W (ORCPT
+        with ESMTP id S238551AbiIBN7o (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Sep 2022 09:59:22 -0400
+        Fri, 2 Sep 2022 09:59:44 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B8061403E7
-        for <linux-kselftest@vger.kernel.org>; Fri,  2 Sep 2022 06:31:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE7F66F57C
+        for <linux-kselftest@vger.kernel.org>; Fri,  2 Sep 2022 06:31:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662125471;
+        s=mimecast20190719; t=1662125419;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=c/JXn9nRI881aEzm+1dO0moEwYjgXFCa8N44x/9G0hs=;
-        b=KGcHdU/Gzfv6yI8dfEIEFgTxB2dvpUeGvdCMB9ze0fUyvU8BvSNm3aPH8nKgXd8qqQWGa5
-        F3+7NBh5GWOiUZHz76+OZ6OdBBt2a09kD8MT++lKFxiuOCjnmWxiYqJkJakymrmwwKaUgl
-        MO+tN7gmE5HMGfgm6YxsF/LfYUQrXs8=
+        bh=1pceN/reEy6W1dhR2JsqTpMwghob87xpvrMYVrihi74=;
+        b=K7pUmJ9Qv8Fz4sVun08Tk5dQNuvDduw/XPtd/MdgQmacVVcVFE0NdNWDqIDaaQmjLX6KsV
+        8QVh1FLlOM1vVVeE6nw8VV+pUBLRaVLo9jHulHcNbbmfua+Jda/xEg8UMQ8p3nw4In05YW
+        Gaz21GQ0YhLC6Zjb6QU+b27AOPkxRmc=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-529-0sWtvqnjMs-qO2Q_PFVgXg-1; Fri, 02 Sep 2022 09:31:05 -0400
-X-MC-Unique: 0sWtvqnjMs-qO2Q_PFVgXg-1
+ us-mta-283-rLQeVlcFPh2IQzebM1E06A-1; Fri, 02 Sep 2022 09:30:14 -0400
+X-MC-Unique: rLQeVlcFPh2IQzebM1E06A-1
 Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C24D3811E80;
-        Fri,  2 Sep 2022 13:31:03 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 854F0101E167;
+        Fri,  2 Sep 2022 13:30:11 +0000 (UTC)
 Received: from plouf.redhat.com (unknown [10.39.193.218])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9B007492C3B;
-        Fri,  2 Sep 2022 13:30:59 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id F3445492C3B;
+        Fri,  2 Sep 2022 13:30:07 +0000 (UTC)
 From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
 To:     Greg KH <gregkh@linuxfoundation.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -57,9 +57,9 @@ Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH bpf-next v10 20/23] selftests/bpf: Add a test for BPF_F_INSERT_HEAD
-Date:   Fri,  2 Sep 2022 15:29:35 +0200
-Message-Id: <20220902132938.2409206-21-benjamin.tissoires@redhat.com>
+Subject: [PATCH bpf-next v10 07/23] selftests/bpf: Add tests for kfunc returning a memory pointer
+Date:   Fri,  2 Sep 2022 15:29:22 +0200
+Message-Id: <20220902132938.2409206-8-benjamin.tissoires@redhat.com>
 In-Reply-To: <20220902132938.2409206-1-benjamin.tissoires@redhat.com>
 References: <20220902132938.2409206-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
@@ -69,253 +69,309 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Insert 3 programs to check that we are doing the correct thing:
-'2', '1', '3' are inserted, but '1' is supposed to be executed first.
+We add 2 new kfuncs that are following the RET_PTR_TO_MEM
+capability from the previous commit.
+Then we test them in selftests:
+the first tests are testing valid case, and are not failing,
+and the later ones are actually preventing the program to be loaded
+because they are wrong.
+
+To work around that, we mark the failing ones as not autoloaded
+(with SEC("?tc")), and we manually enable them one by one, ensuring
+the verifier rejects them.
 
 Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
 ---
 
-no changes in v10
+changes in v10:
+- use new definition for tests
+- remove the Makefile change, it was done before
+- renamed the failed tests to be more explicit
+- add 2 more test cases for return mem: oob access and non const access
+- add one more test case for an invalid acquire function returning an
+  int pointer
 
-no changes in v9
+changes in v9:
+- updated to match upstream (net/bpf/test_run.c id sets is now using
+  flags)
 
 no changes in v8
 
-no changes in v7
+changes in v7:
+- removed stray include/linux/btf.h change
 
-changes in v6:
-- fixed copy/paste in ASSERT_OK and test execution order
-
-changes in v5:
-- use the new API
-
-not in v4
-
-changes in v3:
-- use the new hid_get_data API
-
-new in v2
+new in v6
 ---
- tools/testing/selftests/bpf/prog_tests/hid.c | 107 +++++++++++++++++++
- tools/testing/selftests/bpf/progs/hid.c      |  54 +++++++++-
- 2 files changed, 160 insertions(+), 1 deletion(-)
+ net/bpf/test_run.c                            |  36 ++++++
+ .../selftests/bpf/prog_tests/kfunc_call.c     |   6 +
+ .../selftests/bpf/progs/kfunc_call_fail.c     | 121 ++++++++++++++++++
+ .../selftests/bpf/progs/kfunc_call_test.c     |  33 +++++
+ 4 files changed, 196 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/hid.c b/tools/testing/selftests/bpf/prog_tests/hid.c
-index 9dc5f0038472..a86e16554e68 100644
---- a/tools/testing/selftests/bpf/prog_tests/hid.c
-+++ b/tools/testing/selftests/bpf/prog_tests/hid.c
-@@ -9,6 +9,7 @@
- #include <dirent.h>
- #include <poll.h>
- #include <stdbool.h>
-+#include <linux/hid_bpf.h>
- #include <linux/hidraw.h>
- #include <linux/uhid.h>
- 
-@@ -83,6 +84,7 @@ static u8 feature_data[] = { 1, 2 };
- struct attach_prog_args {
- 	int prog_fd;
- 	unsigned int hid;
-+	unsigned int flags;
- 	int retval;
- };
- 
-@@ -770,6 +772,109 @@ static int test_hid_user_raw_request_call(int uhid_fd, int dev_id)
- 	return ret;
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index f16baf977a21..13d578ce2a09 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -606,6 +606,38 @@ noinline void bpf_kfunc_call_memb1_release(struct prog_test_member1 *p)
+ 	WARN_ON_ONCE(1);
  }
  
-+/*
-+ * Attach hid_insert{0,1,2} to the given uhid device,
-+ * retrieve and open the matching hidraw node,
-+ * inject one event in the uhid device,
-+ * check that the programs have been inserted in the correct order.
-+ */
-+static int test_hid_attach_flags(int uhid_fd, int dev_id)
++static int *__bpf_kfunc_call_test_get_mem(struct prog_test_ref_kfunc *p, const int size)
 +{
-+	struct hid *hid_skel = NULL;
-+	u8 buf[64] = {0};
-+	int hidraw_fd = -1;
-+	int hid_id, attach_fd, err = -EINVAL;
-+	struct attach_prog_args args = {
-+		.retval = -1,
-+	};
-+	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, tattr,
-+			    .ctx_in = &args,
-+			    .ctx_size_in = sizeof(args),
-+	);
++	if (size > 2 * sizeof(int))
++		return NULL;
 +
-+	/* locate the uevent file of the created device */
-+	hid_id = get_hid_id(dev_id);
-+	if (!ASSERT_GE(hid_id, 0, "locate uhid device id"))
-+		goto cleanup;
-+
-+	args.hid = hid_id;
-+
-+	hid_skel = hid__open();
-+	if (!ASSERT_OK_PTR(hid_skel, "hid_skel_open"))
-+		goto cleanup;
-+
-+	bpf_program__set_autoload(hid_skel->progs.hid_test_insert1, true);
-+	bpf_program__set_autoload(hid_skel->progs.hid_test_insert2, true);
-+	bpf_program__set_autoload(hid_skel->progs.hid_test_insert3, true);
-+
-+	err = hid__load(hid_skel);
-+	if (!ASSERT_OK(err, "hid_skel_load"))
-+		goto cleanup;
-+
-+	attach_fd = bpf_program__fd(hid_skel->progs.attach_prog);
-+	if (!ASSERT_GE(attach_fd, 0, "locate attach_prog")) {
-+		err = attach_fd;
-+		goto cleanup;
-+	}
-+
-+	/* attach hid_test_insert2 program */
-+	args.prog_fd = bpf_program__fd(hid_skel->progs.hid_test_insert2);
-+	args.flags = HID_BPF_FLAG_NONE;
-+	args.retval = 1;
-+	err = bpf_prog_test_run_opts(attach_fd, &tattr);
-+	if (!ASSERT_EQ(args.retval, 0, "attach_hid_test_insert2"))
-+		goto cleanup;
-+
-+	/* then attach hid_test_insert1 program before the previous*/
-+	args.prog_fd = bpf_program__fd(hid_skel->progs.hid_test_insert1);
-+	args.flags = HID_BPF_FLAG_INSERT_HEAD;
-+	args.retval = 1;
-+	err = bpf_prog_test_run_opts(attach_fd, &tattr);
-+	if (!ASSERT_EQ(args.retval, 0, "attach_hid_test_insert1"))
-+		goto cleanup;
-+
-+	/* finally attach hid_test_insert3 at the end */
-+	args.prog_fd = bpf_program__fd(hid_skel->progs.hid_test_insert3);
-+	args.flags = HID_BPF_FLAG_NONE;
-+	args.retval = 1;
-+	err = bpf_prog_test_run_opts(attach_fd, &tattr);
-+	if (!ASSERT_EQ(args.retval, 0, "attach_hid_test_insert3"))
-+		goto cleanup;
-+
-+	hidraw_fd = open_hidraw(dev_id);
-+	if (!ASSERT_GE(hidraw_fd, 0, "open_hidraw"))
-+		goto cleanup;
-+
-+	/* inject one event */
-+	buf[0] = 1;
-+	send_event(uhid_fd, buf, 6);
-+
-+	/* read the data from hidraw */
-+	memset(buf, 0, sizeof(buf));
-+	err = read(hidraw_fd, buf, sizeof(buf));
-+	if (!ASSERT_EQ(err, 6, "read_hidraw"))
-+		goto cleanup;
-+
-+	if (!ASSERT_EQ(buf[1], 1, "hid_test_insert1"))
-+		goto cleanup;
-+
-+	if (!ASSERT_EQ(buf[2], 2, "hid_test_insert2"))
-+		goto cleanup;
-+
-+	if (!ASSERT_EQ(buf[3], 3, "hid_test_insert3"))
-+		goto cleanup;
-+
-+	err = 0;
-+
-+ cleanup:
-+	if (hidraw_fd >= 0)
-+		close(hidraw_fd);
-+
-+	hid__destroy(hid_skel);
-+
-+	return err;
++	return (int *)p;
 +}
 +
- /*
-  * Attach hid_rdesc_fixup to the given uhid device,
-  * retrieve and open the matching hidraw node,
-@@ -866,6 +971,8 @@ void serial_test_hid_bpf(void)
- 	ASSERT_OK(err, "hid_change_report");
- 	err = test_hid_user_raw_request_call(uhid_fd, dev_id);
- 	ASSERT_OK(err, "hid_user_raw_request");
-+	err = test_hid_attach_flags(uhid_fd, dev_id);
-+	ASSERT_OK(err, "hid_attach_flags");
- 
- 	/*
- 	 * this test should be run last because we disconnect/reconnect
-diff --git a/tools/testing/selftests/bpf/progs/hid.c b/tools/testing/selftests/bpf/progs/hid.c
-index 815ff94321c9..eb869a80c254 100644
---- a/tools/testing/selftests/bpf/progs/hid.c
-+++ b/tools/testing/selftests/bpf/progs/hid.c
-@@ -21,6 +21,7 @@ extern int hid_bpf_hw_request(struct hid_bpf_ctx *ctx,
- struct attach_prog_args {
- 	int prog_fd;
- 	unsigned int hid;
-+	unsigned int flags;
- 	int retval;
- };
- 
-@@ -60,7 +61,7 @@ int attach_prog(struct attach_prog_args *ctx)
++noinline int *bpf_kfunc_call_test_get_rdwr_mem(struct prog_test_ref_kfunc *p, const int rdwr_buf_size)
++{
++	return __bpf_kfunc_call_test_get_mem(p, rdwr_buf_size);
++}
++
++noinline int *bpf_kfunc_call_test_get_rdonly_mem(struct prog_test_ref_kfunc *p, const int rdonly_buf_size)
++{
++	return __bpf_kfunc_call_test_get_mem(p, rdonly_buf_size);
++}
++
++/* the next 2 ones can't be really used for testing expect to ensure
++ * that the verifier rejects the call.
++ * Acquire functions must return struct pointers, so these ones are
++ * failing.
++ */
++noinline int *bpf_kfunc_call_test_acq_rdonly_mem(struct prog_test_ref_kfunc *p, const int rdonly_buf_size)
++{
++	return __bpf_kfunc_call_test_get_mem(p, rdonly_buf_size);
++}
++
++noinline void bpf_kfunc_call_int_mem_release(int *p)
++{
++}
++
+ noinline struct prog_test_ref_kfunc *
+ bpf_kfunc_call_test_kptr_get(struct prog_test_ref_kfunc **pp, int a, int b)
  {
- 	ctx->retval = hid_bpf_attach_prog(ctx->hid,
- 					  ctx->prog_fd,
--					  0);
-+					  ctx->flags);
+@@ -712,6 +744,10 @@ BTF_ID_FLAGS(func, bpf_kfunc_call_memb_acquire, KF_ACQUIRE | KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_release, KF_RELEASE)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_memb_release, KF_RELEASE)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_memb1_release, KF_RELEASE)
++BTF_ID_FLAGS(func, bpf_kfunc_call_test_get_rdwr_mem, KF_RET_NULL)
++BTF_ID_FLAGS(func, bpf_kfunc_call_test_get_rdonly_mem, KF_RET_NULL)
++BTF_ID_FLAGS(func, bpf_kfunc_call_test_acq_rdonly_mem, KF_ACQUIRE | KF_RET_NULL)
++BTF_ID_FLAGS(func, bpf_kfunc_call_int_mem_release, KF_RELEASE)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_kptr_get, KF_ACQUIRE | KF_RET_NULL | KF_KPTR_GET)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_pass_ctx)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_pass1)
+diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
+index 84798979f3a7..f3e5cc53a6d8 100644
+--- a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
++++ b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
+@@ -35,11 +35,17 @@ static struct kfunc_test_params kfunc_tests[] = {
+ 	 */
+ 	{"kfunc_syscall_test_fail", -EINVAL, syscall_null_ctx_test, "processed 4 insns"},
+ 	{"kfunc_syscall_test_null_fail", -EINVAL, syscall_null_ctx_test, "processed 4 insns"},
++	{"kfunc_call_test_get_mem_fail_rdonly", 0, tc_test, "R0 cannot write into rdonly_mem"},
++	{"kfunc_call_test_get_mem_fail_use_after_free", 0, tc_test, "invalid mem access 'scalar'"},
++	{"kfunc_call_test_get_mem_fail_oob", 0, tc_test, "min value is outside of the allowed memory range"},
++	{"kfunc_call_test_get_mem_fail_not_const", 0, tc_test, "is not a const"},
++	{"kfunc_call_test_mem_acquire_fail", 0, tc_test, "acquire kernel function does not return PTR_TO_BTF_ID"},
+ 
+ 	/* success cases */
+ 	{"kfunc_call_test1", 12, tc_test, NULL},
+ 	{"kfunc_call_test2", 3, tc_test, NULL},
+ 	{"kfunc_call_test_ref_btf_id", 0, tc_test, NULL},
++	{"kfunc_call_test_get_mem", 42, tc_test, NULL},
+ 	{"kfunc_syscall_test", 0, syscall_test, NULL},
+ 	{"kfunc_syscall_test_null", 0, syscall_null_ctx_test, NULL},
+ };
+diff --git a/tools/testing/selftests/bpf/progs/kfunc_call_fail.c b/tools/testing/selftests/bpf/progs/kfunc_call_fail.c
+index 4168027f2ab1..b98313d391c6 100644
+--- a/tools/testing/selftests/bpf/progs/kfunc_call_fail.c
++++ b/tools/testing/selftests/bpf/progs/kfunc_call_fail.c
+@@ -3,7 +3,13 @@
+ #include <vmlinux.h>
+ #include <bpf/bpf_helpers.h>
+ 
++extern struct prog_test_ref_kfunc *bpf_kfunc_call_test_acquire(unsigned long *sp) __ksym;
++extern void bpf_kfunc_call_test_release(struct prog_test_ref_kfunc *p) __ksym;
+ extern void bpf_kfunc_call_test_mem_len_pass1(void *mem, int len) __ksym;
++extern int *bpf_kfunc_call_test_get_rdwr_mem(struct prog_test_ref_kfunc *p, const int rdwr_buf_size) __ksym;
++extern int *bpf_kfunc_call_test_get_rdonly_mem(struct prog_test_ref_kfunc *p, const int rdonly_buf_size) __ksym;
++extern int *bpf_kfunc_call_test_acq_rdonly_mem(struct prog_test_ref_kfunc *p, const int rdonly_buf_size) __ksym;
++extern void bpf_kfunc_call_int_mem_release(int *p) __ksym;
+ 
+ struct syscall_test_args {
+ 	__u8 data[16];
+@@ -36,4 +42,119 @@ int kfunc_syscall_test_null_fail(struct syscall_test_args *args)
  	return 0;
  }
  
-@@ -152,3 +153,54 @@ int BPF_PROG(hid_rdesc_fixup, struct hid_bpf_ctx *hid_ctx)
++SEC("?tc")
++int kfunc_call_test_get_mem_fail_rdonly(struct __sk_buff *skb)
++{
++	struct prog_test_ref_kfunc *pt;
++	unsigned long s = 0;
++	int *p = NULL;
++	int ret = 0;
++
++	pt = bpf_kfunc_call_test_acquire(&s);
++	if (pt) {
++		p = bpf_kfunc_call_test_get_rdonly_mem(pt, 2 * sizeof(int));
++		if (p)
++			p[0] = 42; /* this is a read-only buffer, so -EACCES */
++		else
++			ret = -1;
++
++		bpf_kfunc_call_test_release(pt);
++	}
++	return ret;
++}
++
++SEC("?tc")
++int kfunc_call_test_get_mem_fail_use_after_free(struct __sk_buff *skb)
++{
++	struct prog_test_ref_kfunc *pt;
++	unsigned long s = 0;
++	int *p = NULL;
++	int ret = 0;
++
++	pt = bpf_kfunc_call_test_acquire(&s);
++	if (pt) {
++		p = bpf_kfunc_call_test_get_rdwr_mem(pt, 2 * sizeof(int));
++		if (p) {
++			p[0] = 42;
++			ret = p[1]; /* 108 */
++		} else {
++			ret = -1;
++		}
++
++		bpf_kfunc_call_test_release(pt);
++	}
++	if (p)
++		ret = p[0]; /* p is not valid anymore */
++
++	return ret;
++}
++
++SEC("?tc")
++int kfunc_call_test_get_mem_fail_oob(struct __sk_buff *skb)
++{
++	struct prog_test_ref_kfunc *pt;
++	unsigned long s = 0;
++	int *p = NULL;
++	int ret = 0;
++
++	pt = bpf_kfunc_call_test_acquire(&s);
++	if (pt) {
++		p = bpf_kfunc_call_test_get_rdonly_mem(pt, 2 * sizeof(int));
++		if (p)
++			ret = p[2 * sizeof(int)]; /* oob access, so -EACCES */
++		else
++			ret = -1;
++
++		bpf_kfunc_call_test_release(pt);
++	}
++	return ret;
++}
++
++int not_const_size = 2 * sizeof(int);
++
++SEC("?tc")
++int kfunc_call_test_get_mem_fail_not_const(struct __sk_buff *skb)
++{
++	struct prog_test_ref_kfunc *pt;
++	unsigned long s = 0;
++	int *p = NULL;
++	int ret = 0;
++
++	pt = bpf_kfunc_call_test_acquire(&s);
++	if (pt) {
++		p = bpf_kfunc_call_test_get_rdonly_mem(pt, not_const_size); /* non const size, -EINVAL */
++		if (p)
++			ret = p[0];
++		else
++			ret = -1;
++
++		bpf_kfunc_call_test_release(pt);
++	}
++	return ret;
++}
++
++SEC("?tc")
++int kfunc_call_test_mem_acquire_fail(struct __sk_buff *skb)
++{
++	struct prog_test_ref_kfunc *pt;
++	unsigned long s = 0;
++	int *p = NULL;
++	int ret = 0;
++
++	pt = bpf_kfunc_call_test_acquire(&s);
++	if (pt) {
++		/* we are failing on this one, because we are not acquiring a PTR_TO_BTF_ID (a struct ptr) */
++		p = bpf_kfunc_call_test_acq_rdonly_mem(pt, 2 * sizeof(int));
++		if (p)
++			ret = p[0];
++		else
++			ret = -1;
++
++		bpf_kfunc_call_int_mem_release(p);
++
++		bpf_kfunc_call_test_release(pt);
++	}
++	return ret;
++}
++
+ char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/kfunc_call_test.c b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
+index 94c05267e5e7..56c96f7969f0 100644
+--- a/tools/testing/selftests/bpf/progs/kfunc_call_test.c
++++ b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
+@@ -14,6 +14,8 @@ extern void bpf_kfunc_call_test_pass1(struct prog_test_pass1 *p) __ksym;
+ extern void bpf_kfunc_call_test_pass2(struct prog_test_pass2 *p) __ksym;
+ extern void bpf_kfunc_call_test_mem_len_pass1(void *mem, int len) __ksym;
+ extern void bpf_kfunc_call_test_mem_len_fail2(__u64 *mem, int len) __ksym;
++extern int *bpf_kfunc_call_test_get_rdwr_mem(struct prog_test_ref_kfunc *p, const int rdwr_buf_size) __ksym;
++extern int *bpf_kfunc_call_test_get_rdonly_mem(struct prog_test_ref_kfunc *p, const int rdonly_buf_size) __ksym;
  
- 	return sizeof(rdesc) + 73;
+ SEC("tc")
+ int kfunc_call_test2(struct __sk_buff *skb)
+@@ -130,4 +132,35 @@ int kfunc_syscall_test_null(struct syscall_test_args *args)
+ 	return 0;
  }
-+
-+SEC("?fmod_ret/hid_bpf_device_event")
-+int BPF_PROG(hid_test_insert1, struct hid_bpf_ctx *hid_ctx)
+ 
++SEC("tc")
++int kfunc_call_test_get_mem(struct __sk_buff *skb)
 +{
-+	__u8 *data = hid_bpf_get_data(hid_ctx, 0 /* offset */, 4 /* size */);
++	struct prog_test_ref_kfunc *pt;
++	unsigned long s = 0;
++	int *p = NULL;
++	int ret = 0;
 +
-+	if (!data)
-+		return 0; /* EPERM check */
++	pt = bpf_kfunc_call_test_acquire(&s);
++	if (pt) {
++		p = bpf_kfunc_call_test_get_rdwr_mem(pt, 2 * sizeof(int));
++		if (p) {
++			p[0] = 42;
++			ret = p[1]; /* 108 */
++		} else {
++			ret = -1;
++		}
 +
-+	/* we need to be run first */
-+	if (data[2] || data[3])
-+		return -1;
++		if (ret >= 0) {
++			p = bpf_kfunc_call_test_get_rdonly_mem(pt, 2 * sizeof(int));
++			if (p)
++				ret = p[0]; /* 42 */
++			else
++				ret = -1;
++		}
 +
-+	data[1] = 1;
-+
-+	return 0;
++		bpf_kfunc_call_test_release(pt);
++	}
++	return ret;
 +}
 +
-+SEC("?fmod_ret/hid_bpf_device_event")
-+int BPF_PROG(hid_test_insert2, struct hid_bpf_ctx *hid_ctx)
-+{
-+	__u8 *data = hid_bpf_get_data(hid_ctx, 0 /* offset */, 4 /* size */);
-+
-+	if (!data)
-+		return 0; /* EPERM check */
-+
-+	/* after insert0 and before insert2 */
-+	if (!data[1] || data[3])
-+		return -1;
-+
-+	data[2] = 2;
-+
-+	return 0;
-+}
-+
-+SEC("?fmod_ret/hid_bpf_device_event")
-+int BPF_PROG(hid_test_insert3, struct hid_bpf_ctx *hid_ctx)
-+{
-+	__u8 *data = hid_bpf_get_data(hid_ctx, 0 /* offset */, 4 /* size */);
-+
-+	if (!data)
-+		return 0; /* EPERM check */
-+
-+	/* at the end */
-+	if (!data[1] || !data[2])
-+		return -1;
-+
-+	data[3] = 3;
-+
-+	return 0;
-+}
+ char _license[] SEC("license") = "GPL";
 -- 
 2.36.1
 
