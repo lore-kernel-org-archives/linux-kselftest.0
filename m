@@ -2,255 +2,84 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A6E4C54EE9
-	for <linux-kselftest@archiver.kernel.org>; Fri,  2 Sep 2022 14:10:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 396A5C38145
+	for <linux-kselftest@archiver.kernel.org>; Fri,  2 Sep 2022 14:40:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238946AbiIBOKi (ORCPT
+        id S236766AbiIBOkt (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 2 Sep 2022 10:10:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43932 "EHLO
+        Fri, 2 Sep 2022 10:40:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238936AbiIBOKH (ORCPT
+        with ESMTP id S236881AbiIBOkG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Sep 2022 10:10:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F236F31349
-        for <linux-kselftest@vger.kernel.org>; Fri,  2 Sep 2022 06:37:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662125820;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mUIlNK2rA96IyytNgoYJrxTqfnhDywitiW4OmrkZv8o=;
-        b=DtKo5oGgj25r3i62be+4kUmbWwPz9FziBcBztCEG5XorO7zjWXa2Z6x4UjF8q62h1nzm1h
-        L3EkyJVSoAWrmS3KPiW8EwaKQ1MjvvNPPvKSrkV7wODLh0yV6sK+NEGScB9LF9W+aoK22k
-        cItIo3pH6Bx0t7FM5DJykmlNVesdZ7A=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-9-stroSBnfPZqidsLKrjg2kA-1; Fri, 02 Sep 2022 09:30:20 -0400
-X-MC-Unique: stroSBnfPZqidsLKrjg2kA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 2 Sep 2022 10:40:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7401C12484B;
+        Fri,  2 Sep 2022 07:00:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3CDB2823F1E;
-        Fri,  2 Sep 2022 13:30:19 +0000 (UTC)
-Received: from plouf.redhat.com (unknown [10.39.193.218])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6A3EB492C3B;
-        Fri,  2 Sep 2022 13:30:15 +0000 (UTC)
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>
-Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH bpf-next v10 09/23] HID: export hid_report_type to uapi
-Date:   Fri,  2 Sep 2022 15:29:24 +0200
-Message-Id: <20220902132938.2409206-10-benjamin.tissoires@redhat.com>
-In-Reply-To: <20220902132938.2409206-1-benjamin.tissoires@redhat.com>
-References: <20220902132938.2409206-1-benjamin.tissoires@redhat.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 64F8CB82C03;
+        Fri,  2 Sep 2022 14:00:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1AE3CC433D7;
+        Fri,  2 Sep 2022 14:00:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662127216;
+        bh=6FkOE0V4Xl0gp19KmvjJh3tYe8TXuJxNaJXe5cYKWtY=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=QwevnPlVKT8sKyLUXOmFC3g8jLH3mwyfHt2ULozsHipTdWaNetXQIgZLubI6v789S
+         by009iQSOMS11/xX/tVlKUyTnYoqRxIITAu7X9eTVFk/nuftkOx96+aeIsQhor1MHz
+         l6yhZ1vEnPAOGFFVfk//OweyVjp+oU8gPOszu9XLwvdUHQUzMy++UmTGTgtbxPZDlU
+         JsGMsul8wM8KStocJnEwWeya+1aAN4brXciTrlpRiktODdhG0Mv7GvJAVhmdYASBT5
+         24H1WRL/J0eieDR18h5zDUYU0li3u9TMEKadsYyzB0s7RaD4XNDx+qmlWrwbyjWVhR
+         ihxU86cWFOJmg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EFF0DC4166F;
+        Fri,  2 Sep 2022 14:00:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+Subject: Re: [PATCH v1] selftests/xsk: Avoid use-after-free on ctx
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166212721597.8214.1758586217041951809.git-patchwork-notify@kernel.org>
+Date:   Fri, 02 Sep 2022 14:00:15 +0000
+References: <20220901202645.1463552-1-irogers@google.com>
+In-Reply-To: <20220901202645.1463552-1-irogers@google.com>
+To:     Ian Rogers <irogers@google.com>
+Cc:     bjorn@kernel.org, magnus.karlsson@intel.com,
+        maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        shuah@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When we are dealing with eBPF, we need to have access to the report type.
-Currently our implementation differs from the USB standard, making it
-impossible for users to know the exact value besides hardcoding it
-themselves.
+Hello:
 
-And instead of a blank define, convert it as an enum.
+This patch was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-Note that we need to also do change in the ll_driver API, but given
-that this will have a wider impact outside of this tree, we leave this
-as a TODO for the future.
+On Thu,  1 Sep 2022 13:26:45 -0700 you wrote:
+> The put lowers the reference count to 0 and frees ctx, reading it
+> afterwards is invalid. Move the put after the uses and determine the
+> last use by the reference count being 1.
+> 
+> Fixes: 39e940d4abfa ("selftests/xsk: Destroy BPF resources only when ctx refcount drops to 0")
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> 
+> [...]
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Here is the summary with links:
+  - [v1] selftests/xsk: Avoid use-after-free on ctx
+    https://git.kernel.org/bpf/bpf-next/c/af515a5587b8
 
----
-
-no changes in v10
-
-no changes in v9
-
-no changes in v8
-
-no changes in v7
-
-changes in v6:
-- add missing change for hid_hw_raw_request()
-
-new in v5
----
- drivers/hid/hid-core.c   | 13 +++++++------
- include/linux/hid.h      | 24 ++++++++----------------
- include/uapi/linux/hid.h | 12 ++++++++++++
- 3 files changed, 27 insertions(+), 22 deletions(-)
-
-diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
-index a00dd43db8bf..ab98754522d9 100644
---- a/drivers/hid/hid-core.c
-+++ b/drivers/hid/hid-core.c
-@@ -55,7 +55,7 @@ MODULE_PARM_DESC(ignore_special_drivers, "Ignore any special drivers and handle
-  */
- 
- struct hid_report *hid_register_report(struct hid_device *device,
--				       unsigned int type, unsigned int id,
-+				       enum hid_report_type type, unsigned int id,
- 				       unsigned int application)
- {
- 	struct hid_report_enum *report_enum = device->report_enum + type;
-@@ -967,7 +967,7 @@ static const char * const hid_report_names[] = {
-  * parsing.
-  */
- struct hid_report *hid_validate_values(struct hid_device *hid,
--				       unsigned int type, unsigned int id,
-+				       enum hid_report_type type, unsigned int id,
- 				       unsigned int field_index,
- 				       unsigned int report_counts)
- {
-@@ -1954,8 +1954,8 @@ int __hid_request(struct hid_device *hid, struct hid_report *report,
- }
- EXPORT_SYMBOL_GPL(__hid_request);
- 
--int hid_report_raw_event(struct hid_device *hid, int type, u8 *data, u32 size,
--		int interrupt)
-+int hid_report_raw_event(struct hid_device *hid, enum hid_report_type type, u8 *data, u32 size,
-+			 int interrupt)
- {
- 	struct hid_report_enum *report_enum = hid->report_enum + type;
- 	struct hid_report *report;
-@@ -2019,7 +2019,8 @@ EXPORT_SYMBOL_GPL(hid_report_raw_event);
-  *
-  * This is data entry for lower layers.
-  */
--int hid_input_report(struct hid_device *hid, int type, u8 *data, u32 size, int interrupt)
-+int hid_input_report(struct hid_device *hid, enum hid_report_type type, u8 *data, u32 size,
-+		     int interrupt)
- {
- 	struct hid_report_enum *report_enum;
- 	struct hid_driver *hdrv;
-@@ -2377,7 +2378,7 @@ EXPORT_SYMBOL_GPL(hid_hw_request);
-  */
- int hid_hw_raw_request(struct hid_device *hdev,
- 		       unsigned char reportnum, __u8 *buf,
--		       size_t len, unsigned char rtype, int reqtype)
-+		       size_t len, enum hid_report_type rtype, int reqtype)
- {
- 	if (len < 1 || len > HID_MAX_BUFFER_SIZE || !buf)
- 		return -EINVAL;
-diff --git a/include/linux/hid.h b/include/linux/hid.h
-index a43dd17bc78f..b1a33dbbc78e 100644
---- a/include/linux/hid.h
-+++ b/include/linux/hid.h
-@@ -314,15 +314,6 @@ struct hid_item {
- #define HID_BAT_ABSOLUTESTATEOFCHARGE	0x00850065
- 
- #define HID_VD_ASUS_CUSTOM_MEDIA_KEYS	0xff310076
--/*
-- * HID report types --- Ouch! HID spec says 1 2 3!
-- */
--
--#define HID_INPUT_REPORT	0
--#define HID_OUTPUT_REPORT	1
--#define HID_FEATURE_REPORT	2
--
--#define HID_REPORT_TYPES	3
- 
- /*
-  * HID connect requests
-@@ -509,7 +500,7 @@ struct hid_report {
- 	struct list_head hidinput_list;
- 	struct list_head field_entry_list;		/* ordered list of input fields */
- 	unsigned int id;				/* id of this report */
--	unsigned int type;				/* report type */
-+	enum hid_report_type type;			/* report type */
- 	unsigned int application;			/* application usage for this report */
- 	struct hid_field *field[HID_MAX_FIELDS];	/* fields of the report */
- 	struct hid_field_entry *field_entries;		/* allocated memory of input field_entry */
-@@ -926,7 +917,8 @@ extern int hidinput_connect(struct hid_device *hid, unsigned int force);
- extern void hidinput_disconnect(struct hid_device *);
- 
- int hid_set_field(struct hid_field *, unsigned, __s32);
--int hid_input_report(struct hid_device *, int type, u8 *, u32, int);
-+int hid_input_report(struct hid_device *hid, enum hid_report_type type, u8 *data, u32 size,
-+		     int interrupt);
- struct hid_field *hidinput_get_led_field(struct hid_device *hid);
- unsigned int hidinput_count_leds(struct hid_device *hid);
- __s32 hidinput_calc_abs_res(const struct hid_field *field, __u16 code);
-@@ -935,11 +927,11 @@ int __hid_request(struct hid_device *hid, struct hid_report *rep, int reqtype);
- u8 *hid_alloc_report_buf(struct hid_report *report, gfp_t flags);
- struct hid_device *hid_allocate_device(void);
- struct hid_report *hid_register_report(struct hid_device *device,
--				       unsigned int type, unsigned int id,
-+				       enum hid_report_type type, unsigned int id,
- 				       unsigned int application);
- int hid_parse_report(struct hid_device *hid, __u8 *start, unsigned size);
- struct hid_report *hid_validate_values(struct hid_device *hid,
--				       unsigned int type, unsigned int id,
-+				       enum hid_report_type type, unsigned int id,
- 				       unsigned int field_index,
- 				       unsigned int report_counts);
- 
-@@ -1111,7 +1103,7 @@ void hid_hw_request(struct hid_device *hdev,
- 		    struct hid_report *report, int reqtype);
- int hid_hw_raw_request(struct hid_device *hdev,
- 		       unsigned char reportnum, __u8 *buf,
--		       size_t len, unsigned char rtype, int reqtype);
-+		       size_t len, enum hid_report_type rtype, int reqtype);
- int hid_hw_output_report(struct hid_device *hdev, __u8 *buf, size_t len);
- 
- /**
-@@ -1184,8 +1176,8 @@ static inline u32 hid_report_len(struct hid_report *report)
- 	return DIV_ROUND_UP(report->size, 8) + (report->id > 0);
- }
- 
--int hid_report_raw_event(struct hid_device *hid, int type, u8 *data, u32 size,
--		int interrupt);
-+int hid_report_raw_event(struct hid_device *hid, enum hid_report_type type, u8 *data, u32 size,
-+			 int interrupt);
- 
- /* HID quirks API */
- unsigned long hid_lookup_quirk(const struct hid_device *hdev);
-diff --git a/include/uapi/linux/hid.h b/include/uapi/linux/hid.h
-index b34492a87a8a..b25b0bacaff2 100644
---- a/include/uapi/linux/hid.h
-+++ b/include/uapi/linux/hid.h
-@@ -42,6 +42,18 @@
- #define USB_INTERFACE_PROTOCOL_KEYBOARD	1
- #define USB_INTERFACE_PROTOCOL_MOUSE	2
- 
-+/*
-+ * HID report types --- Ouch! HID spec says 1 2 3!
-+ */
-+
-+enum hid_report_type {
-+	HID_INPUT_REPORT		= 0,
-+	HID_OUTPUT_REPORT		= 1,
-+	HID_FEATURE_REPORT		= 2,
-+
-+	HID_REPORT_TYPES,
-+};
-+
- /*
-  * HID class requests
-  */
+You are awesome, thank you!
 -- 
-2.36.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
