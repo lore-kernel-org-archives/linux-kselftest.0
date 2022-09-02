@@ -2,42 +2,43 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D6739C38145
-	for <linux-kselftest@archiver.kernel.org>; Fri,  2 Sep 2022 13:57:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DF352C38145
+	for <linux-kselftest@archiver.kernel.org>; Fri,  2 Sep 2022 13:57:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236065AbiIBN5L (ORCPT
+        id S236260AbiIBN5d (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 2 Sep 2022 09:57:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60298 "EHLO
+        Fri, 2 Sep 2022 09:57:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238494AbiIBN4t (ORCPT
+        with ESMTP id S236281AbiIBN5B (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Sep 2022 09:56:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 881A65808F
-        for <linux-kselftest@vger.kernel.org>; Fri,  2 Sep 2022 06:30:38 -0700 (PDT)
+        Fri, 2 Sep 2022 09:57:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E19482865
+        for <linux-kselftest@vger.kernel.org>; Fri,  2 Sep 2022 06:30:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662125389;
+        s=mimecast20190719; t=1662125408;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=lzxLFwuf/sIbhXE8ylkRHPZIoLPKTHRY8OYjNIVtYi0=;
-        b=Fg8QTDDablTwYBBafVUx7jaALAdV0gRTDYdlt5S/4TH/O4rcn0iSXSBW2oDOOYi1z+u5ij
-        6xnBjvJSw3RrMSKgYl84AUz/FHkjok/tD5HEfplyBCqpIWQbRmajnma3PmaL7k/tOykbnQ
-        32jGG+T4KB8cPnyjfPv/L/P7mdyBiT8=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VUKUUQjEeN9deUgONQ69Pygk6MyShH73lTMPk6bWnlU=;
+        b=U5FyaHsY/1Ge6FUevAOwquxs7KuPk/w2NJpZHz/neM8TGZxG95qX1K7Apazh7p2ibYpf3u
+        maMHIHVfSFpvphypyVDr11VLlxmcfcDe5OvoJKFU4ekBGj7QwadnJa7UfB7nYWayhRPlGp
+        4pkNbRyB+8J5vf1iB3bW5k3aYuHNrLE=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-326-rU2S2oHGPvalT-aTdDn89g-1; Fri, 02 Sep 2022 09:29:45 -0400
-X-MC-Unique: rU2S2oHGPvalT-aTdDn89g-1
+ us-mta-483-Zxgn3Cl-NRmBb9C41GflPQ-1; Fri, 02 Sep 2022 09:30:05 -0400
+X-MC-Unique: Zxgn3Cl-NRmBb9C41GflPQ-1
 Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id ECC3E1C05AC2;
-        Fri,  2 Sep 2022 13:29:44 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0D5C22919EC0;
+        Fri,  2 Sep 2022 13:30:04 +0000 (UTC)
 Received: from plouf.redhat.com (unknown [10.39.193.218])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8F39D492C3B;
-        Fri,  2 Sep 2022 13:29:41 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E9E64492C3B;
+        Fri,  2 Sep 2022 13:29:59 +0000 (UTC)
 From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
 To:     Greg KH <gregkh@linuxfoundation.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -56,9 +57,11 @@ Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH bpf-next v10 00/23] Introduce eBPF support for HID devices
-Date:   Fri,  2 Sep 2022 15:29:15 +0200
-Message-Id: <20220902132938.2409206-1-benjamin.tissoires@redhat.com>
+Subject: [PATCH bpf-next v10 05/23] bpf/btf: bump BTF_KFUNC_SET_MAX_CNT
+Date:   Fri,  2 Sep 2022 15:29:20 +0200
+Message-Id: <20220902132938.2409206-6-benjamin.tissoires@redhat.com>
+In-Reply-To: <20220902132938.2409206-1-benjamin.tissoires@redhat.com>
+References: <20220902132938.2409206-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
@@ -66,121 +69,36 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
+net/bpf/test_run.c is already presenting 20 kfuncs.
+net/netfilter/nf_conntrack_bpf.c is also presenting an extra 10 kfuncs.
 
-here comes the v10 of the HID-BPF series.
+Given that all the kfuncs are regrouped into one unique set, having
+only 2 space left prevent us to add more selftests.
 
-Again, for a full explanation of HID-BPF, please refer to the last patch
-in this series (23/23).
+Bump it to 64 for now.
 
-Hopefully we are getting closer to merging the bpf-core changes that
-are pre-requesite of the HID work.
+Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
-This revision of the series focused on those bpf-core changes with
-a hopefully proper way of fixing access to ctx pointers, and a few more
-selftests to cover those changes.
+---
 
-Once those bpf changes are in, the HID changes are pretty much self
-consistent, which is a good thing, but I still wonder how we are going
-to merge the selftests. I'd rather have the selftests in the bpf tree to
-prevent any regression on bpf-core changes, but that might require some
-coordination between the HID and bpf trees.
+new in v10
+---
+ kernel/bpf/btf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Anyway, let's hope we are getting closer to the end of those revisions :)
-
-Cheers,
-Benjamin
-
-
-Benjamin Tissoires (23):
-  selftests/bpf: regroup and declare similar kfuncs selftests in an
-    array
-  bpf: split btf_check_subprog_arg_match in two
-  bpf/verifier: allow all functions to read user provided context
-  selftests/bpf: add test for accessing ctx from syscall program type
-  bpf/btf: bump BTF_KFUNC_SET_MAX_CNT
-  bpf/verifier: allow kfunc to return an allocated mem
-  selftests/bpf: Add tests for kfunc returning a memory pointer
-  HID: core: store the unique system identifier in hid_device
-  HID: export hid_report_type to uapi
-  HID: convert defines of HID class requests into a proper enum
-  HID: Kconfig: split HID support and hid-core compilation
-  HID: initial BPF implementation
-  selftests/bpf: add tests for the HID-bpf initial implementation
-  HID: bpf: allocate data memory for device_event BPF programs
-  selftests/bpf/hid: add test to change the report size
-  HID: bpf: introduce hid_hw_request()
-  selftests/bpf: add tests for bpf_hid_hw_request
-  HID: bpf: allow to change the report descriptor
-  selftests/bpf: add report descriptor fixup tests
-  selftests/bpf: Add a test for BPF_F_INSERT_HEAD
-  samples/bpf: HID: add new hid_mouse example
-  samples/bpf: HID: add Surface Dial example
-  Documentation: add HID-BPF docs
-
- Documentation/hid/hid-bpf.rst                 | 513 +++++++++
- Documentation/hid/index.rst                   |   1 +
- drivers/Makefile                              |   2 +-
- drivers/hid/Kconfig                           |  20 +-
- drivers/hid/Makefile                          |   2 +
- drivers/hid/bpf/Kconfig                       |  17 +
- drivers/hid/bpf/Makefile                      |  11 +
- drivers/hid/bpf/entrypoints/Makefile          |  93 ++
- drivers/hid/bpf/entrypoints/README            |   4 +
- drivers/hid/bpf/entrypoints/entrypoints.bpf.c |  66 ++
- .../hid/bpf/entrypoints/entrypoints.lskel.h   | 682 ++++++++++++
- drivers/hid/bpf/hid_bpf_dispatch.c            | 526 ++++++++++
- drivers/hid/bpf/hid_bpf_dispatch.h            |  28 +
- drivers/hid/bpf/hid_bpf_jmp_table.c           | 577 ++++++++++
- drivers/hid/hid-core.c                        |  49 +-
- include/linux/bpf.h                           |  11 +-
- include/linux/bpf_verifier.h                  |   2 +
- include/linux/btf.h                           |  10 +
- include/linux/hid.h                           |  38 +-
- include/linux/hid_bpf.h                       | 148 +++
- include/uapi/linux/hid.h                      |  26 +-
- include/uapi/linux/hid_bpf.h                  |  25 +
- kernel/bpf/btf.c                              | 149 ++-
- kernel/bpf/verifier.c                         |  66 +-
- net/bpf/test_run.c                            |  37 +
- samples/bpf/.gitignore                        |   2 +
- samples/bpf/Makefile                          |  27 +
- samples/bpf/hid_mouse.bpf.c                   | 134 +++
- samples/bpf/hid_mouse.c                       | 161 +++
- samples/bpf/hid_surface_dial.bpf.c            | 161 +++
- samples/bpf/hid_surface_dial.c                | 232 ++++
- tools/include/uapi/linux/hid.h                |  62 ++
- tools/include/uapi/linux/hid_bpf.h            |  25 +
- tools/testing/selftests/bpf/Makefile          |   2 +-
- tools/testing/selftests/bpf/config            |   3 +
- tools/testing/selftests/bpf/prog_tests/hid.c  | 990 ++++++++++++++++++
- .../selftests/bpf/prog_tests/kfunc_call.c     | 182 +++-
- tools/testing/selftests/bpf/progs/hid.c       | 206 ++++
- .../selftests/bpf/progs/kfunc_call_fail.c     | 160 +++
- .../selftests/bpf/progs/kfunc_call_test.c     |  71 ++
- 40 files changed, 5416 insertions(+), 105 deletions(-)
- create mode 100644 Documentation/hid/hid-bpf.rst
- create mode 100644 drivers/hid/bpf/Kconfig
- create mode 100644 drivers/hid/bpf/Makefile
- create mode 100644 drivers/hid/bpf/entrypoints/Makefile
- create mode 100644 drivers/hid/bpf/entrypoints/README
- create mode 100644 drivers/hid/bpf/entrypoints/entrypoints.bpf.c
- create mode 100644 drivers/hid/bpf/entrypoints/entrypoints.lskel.h
- create mode 100644 drivers/hid/bpf/hid_bpf_dispatch.c
- create mode 100644 drivers/hid/bpf/hid_bpf_dispatch.h
- create mode 100644 drivers/hid/bpf/hid_bpf_jmp_table.c
- create mode 100644 include/linux/hid_bpf.h
- create mode 100644 include/uapi/linux/hid_bpf.h
- create mode 100644 samples/bpf/hid_mouse.bpf.c
- create mode 100644 samples/bpf/hid_mouse.c
- create mode 100644 samples/bpf/hid_surface_dial.bpf.c
- create mode 100644 samples/bpf/hid_surface_dial.c
- create mode 100644 tools/include/uapi/linux/hid.h
- create mode 100644 tools/include/uapi/linux/hid_bpf.h
- create mode 100644 tools/testing/selftests/bpf/prog_tests/hid.c
- create mode 100644 tools/testing/selftests/bpf/progs/hid.c
- create mode 100644 tools/testing/selftests/bpf/progs/kfunc_call_fail.c
-
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index eca9ea78ee5f..8280c1a8dbce 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -208,7 +208,7 @@ enum btf_kfunc_hook {
+ };
+ 
+ enum {
+-	BTF_KFUNC_SET_MAX_CNT = 32,
++	BTF_KFUNC_SET_MAX_CNT = 64,
+ 	BTF_DTOR_KFUNC_MAX_CNT = 256,
+ };
+ 
 -- 
 2.36.1
 
