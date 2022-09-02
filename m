@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25CD0C38145
-	for <linux-kselftest@archiver.kernel.org>; Fri,  2 Sep 2022 14:10:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A6E4C54EE9
+	for <linux-kselftest@archiver.kernel.org>; Fri,  2 Sep 2022 14:10:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238757AbiIBOKN (ORCPT
+        id S238946AbiIBOKi (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 2 Sep 2022 10:10:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38836 "EHLO
+        Fri, 2 Sep 2022 10:10:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238777AbiIBOJq (ORCPT
+        with ESMTP id S238936AbiIBOKH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Sep 2022 10:09:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06AA016EECF
-        for <linux-kselftest@vger.kernel.org>; Fri,  2 Sep 2022 06:37:52 -0700 (PDT)
+        Fri, 2 Sep 2022 10:10:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F236F31349
+        for <linux-kselftest@vger.kernel.org>; Fri,  2 Sep 2022 06:37:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
         s=mimecast20190719; t=1662125820;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=pFPTkaV5QEOOCDZuDIgNNW4oe2wUZaGR5B39/sfYpGQ=;
-        b=HDHSiPmfCIl/pwEUGyrfl70QbqUuvPjqsp7M5DvBPTAPSTx5xNxgsrpwEAz4948hEzXE0e
-        HX65HeE2NP88BWLjXXavSdBuDNcwp5W09bKtovf1LTE27y8utLygD9VPHn+0vDrByzcuKH
-        twPFmtcdWBLRAbTRxVVWatp1KC1PCsI=
+        bh=mUIlNK2rA96IyytNgoYJrxTqfnhDywitiW4OmrkZv8o=;
+        b=DtKo5oGgj25r3i62be+4kUmbWwPz9FziBcBztCEG5XorO7zjWXa2Z6x4UjF8q62h1nzm1h
+        L3EkyJVSoAWrmS3KPiW8EwaKQ1MjvvNPPvKSrkV7wODLh0yV6sK+NEGScB9LF9W+aoK22k
+        cItIo3pH6Bx0t7FM5DJykmlNVesdZ7A=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-493-G33Z5gUoMvGFRP2AiihJGQ-1; Fri, 02 Sep 2022 09:30:46 -0400
-X-MC-Unique: G33Z5gUoMvGFRP2AiihJGQ-1
+ us-mta-9-stroSBnfPZqidsLKrjg2kA-1; Fri, 02 Sep 2022 09:30:20 -0400
+X-MC-Unique: stroSBnfPZqidsLKrjg2kA-1
 Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1A4DA103942C;
-        Fri,  2 Sep 2022 13:30:45 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3CDB2823F1E;
+        Fri,  2 Sep 2022 13:30:19 +0000 (UTC)
 Received: from plouf.redhat.com (unknown [10.39.193.218])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 02A79492CA7;
-        Fri,  2 Sep 2022 13:30:40 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6A3EB492C3B;
+        Fri,  2 Sep 2022 13:30:15 +0000 (UTC)
 From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
 To:     Greg KH <gregkh@linuxfoundation.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -57,9 +57,9 @@ Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH bpf-next v10 15/23] selftests/bpf/hid: add test to change the report size
-Date:   Fri,  2 Sep 2022 15:29:30 +0200
-Message-Id: <20220902132938.2409206-16-benjamin.tissoires@redhat.com>
+Subject: [PATCH bpf-next v10 09/23] HID: export hid_report_type to uapi
+Date:   Fri,  2 Sep 2022 15:29:24 +0200
+Message-Id: <20220902132938.2409206-10-benjamin.tissoires@redhat.com>
 In-Reply-To: <20220902132938.2409206-1-benjamin.tissoires@redhat.com>
 References: <20220902132938.2409206-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
@@ -69,9 +69,18 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Use a different report with a bigger size and ensures we are doing
-things properly.
+When we are dealing with eBPF, we need to have access to the report type.
+Currently our implementation differs from the USB standard, making it
+impossible for users to know the exact value besides hardcoding it
+themselves.
 
+And instead of a blank define, convert it as an enum.
+
+Note that we need to also do change in the ll_driver API, but given
+that this will have a wider impact outside of this tree, we leave this
+as a TODO for the future.
+
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
 ---
@@ -84,125 +93,164 @@ no changes in v8
 
 no changes in v7
 
-no changes in v6
+changes in v6:
+- add missing change for hid_hw_raw_request()
 
 new in v5
 ---
- tools/testing/selftests/bpf/prog_tests/hid.c | 60 ++++++++++++++++++++
- tools/testing/selftests/bpf/progs/hid.c      | 15 ++++-
- 2 files changed, 74 insertions(+), 1 deletion(-)
+ drivers/hid/hid-core.c   | 13 +++++++------
+ include/linux/hid.h      | 24 ++++++++----------------
+ include/uapi/linux/hid.h | 12 ++++++++++++
+ 3 files changed, 27 insertions(+), 22 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/hid.c b/tools/testing/selftests/bpf/prog_tests/hid.c
-index 719d220c8d86..47bc0a30c275 100644
---- a/tools/testing/selftests/bpf/prog_tests/hid.c
-+++ b/tools/testing/selftests/bpf/prog_tests/hid.c
-@@ -17,6 +17,17 @@ static unsigned char rdesc[] = {
- 	0xa1, 0x01,		/* COLLECTION (Application) */
- 	0x09, 0x01,			/* Usage (Vendor Usage 0x01) */
- 	0xa1, 0x00,			/* COLLECTION (Physical) */
-+	0x85, 0x02,				/* REPORT_ID (2) */
-+	0x19, 0x01,				/* USAGE_MINIMUM (1) */
-+	0x29, 0x08,				/* USAGE_MAXIMUM (3) */
-+	0x15, 0x00,				/* LOGICAL_MINIMUM (0) */
-+	0x25, 0xff,				/* LOGICAL_MAXIMUM (255) */
-+	0x95, 0x08,				/* REPORT_COUNT (8) */
-+	0x75, 0x08,				/* REPORT_SIZE (8) */
-+	0x81, 0x02,				/* INPUT (Data,Var,Abs) */
-+	0xc0,				/* END_COLLECTION */
-+	0x09, 0x01,			/* Usage (Vendor Usage 0x01) */
-+	0xa1, 0x00,			/* COLLECTION (Physical) */
- 	0x85, 0x01,				/* REPORT_ID (1) */
- 	0x06, 0x00, 0xff,			/* Usage Page (Vendor Defined Page 1) */
- 	0x19, 0x01,				/* USAGE_MINIMUM (1) */
-@@ -635,6 +646,53 @@ static int test_attach_detach(int uhid_fd, int dev_id)
- 	return ret;
+diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
+index a00dd43db8bf..ab98754522d9 100644
+--- a/drivers/hid/hid-core.c
++++ b/drivers/hid/hid-core.c
+@@ -55,7 +55,7 @@ MODULE_PARM_DESC(ignore_special_drivers, "Ignore any special drivers and handle
+  */
+ 
+ struct hid_report *hid_register_report(struct hid_device *device,
+-				       unsigned int type, unsigned int id,
++				       enum hid_report_type type, unsigned int id,
+ 				       unsigned int application)
+ {
+ 	struct hid_report_enum *report_enum = device->report_enum + type;
+@@ -967,7 +967,7 @@ static const char * const hid_report_names[] = {
+  * parsing.
+  */
+ struct hid_report *hid_validate_values(struct hid_device *hid,
+-				       unsigned int type, unsigned int id,
++				       enum hid_report_type type, unsigned int id,
+ 				       unsigned int field_index,
+ 				       unsigned int report_counts)
+ {
+@@ -1954,8 +1954,8 @@ int __hid_request(struct hid_device *hid, struct hid_report *report,
  }
+ EXPORT_SYMBOL_GPL(__hid_request);
+ 
+-int hid_report_raw_event(struct hid_device *hid, int type, u8 *data, u32 size,
+-		int interrupt)
++int hid_report_raw_event(struct hid_device *hid, enum hid_report_type type, u8 *data, u32 size,
++			 int interrupt)
+ {
+ 	struct hid_report_enum *report_enum = hid->report_enum + type;
+ 	struct hid_report *report;
+@@ -2019,7 +2019,8 @@ EXPORT_SYMBOL_GPL(hid_report_raw_event);
+  *
+  * This is data entry for lower layers.
+  */
+-int hid_input_report(struct hid_device *hid, int type, u8 *data, u32 size, int interrupt)
++int hid_input_report(struct hid_device *hid, enum hid_report_type type, u8 *data, u32 size,
++		     int interrupt)
+ {
+ 	struct hid_report_enum *report_enum;
+ 	struct hid_driver *hdrv;
+@@ -2377,7 +2378,7 @@ EXPORT_SYMBOL_GPL(hid_hw_request);
+  */
+ int hid_hw_raw_request(struct hid_device *hdev,
+ 		       unsigned char reportnum, __u8 *buf,
+-		       size_t len, unsigned char rtype, int reqtype)
++		       size_t len, enum hid_report_type rtype, int reqtype)
+ {
+ 	if (len < 1 || len > HID_MAX_BUFFER_SIZE || !buf)
+ 		return -EINVAL;
+diff --git a/include/linux/hid.h b/include/linux/hid.h
+index a43dd17bc78f..b1a33dbbc78e 100644
+--- a/include/linux/hid.h
++++ b/include/linux/hid.h
+@@ -314,15 +314,6 @@ struct hid_item {
+ #define HID_BAT_ABSOLUTESTATEOFCHARGE	0x00850065
+ 
+ #define HID_VD_ASUS_CUSTOM_MEDIA_KEYS	0xff310076
+-/*
+- * HID report types --- Ouch! HID spec says 1 2 3!
+- */
+-
+-#define HID_INPUT_REPORT	0
+-#define HID_OUTPUT_REPORT	1
+-#define HID_FEATURE_REPORT	2
+-
+-#define HID_REPORT_TYPES	3
+ 
+ /*
+  * HID connect requests
+@@ -509,7 +500,7 @@ struct hid_report {
+ 	struct list_head hidinput_list;
+ 	struct list_head field_entry_list;		/* ordered list of input fields */
+ 	unsigned int id;				/* id of this report */
+-	unsigned int type;				/* report type */
++	enum hid_report_type type;			/* report type */
+ 	unsigned int application;			/* application usage for this report */
+ 	struct hid_field *field[HID_MAX_FIELDS];	/* fields of the report */
+ 	struct hid_field_entry *field_entries;		/* allocated memory of input field_entry */
+@@ -926,7 +917,8 @@ extern int hidinput_connect(struct hid_device *hid, unsigned int force);
+ extern void hidinput_disconnect(struct hid_device *);
+ 
+ int hid_set_field(struct hid_field *, unsigned, __s32);
+-int hid_input_report(struct hid_device *, int type, u8 *, u32, int);
++int hid_input_report(struct hid_device *hid, enum hid_report_type type, u8 *data, u32 size,
++		     int interrupt);
+ struct hid_field *hidinput_get_led_field(struct hid_device *hid);
+ unsigned int hidinput_count_leds(struct hid_device *hid);
+ __s32 hidinput_calc_abs_res(const struct hid_field *field, __u16 code);
+@@ -935,11 +927,11 @@ int __hid_request(struct hid_device *hid, struct hid_report *rep, int reqtype);
+ u8 *hid_alloc_report_buf(struct hid_report *report, gfp_t flags);
+ struct hid_device *hid_allocate_device(void);
+ struct hid_report *hid_register_report(struct hid_device *device,
+-				       unsigned int type, unsigned int id,
++				       enum hid_report_type type, unsigned int id,
+ 				       unsigned int application);
+ int hid_parse_report(struct hid_device *hid, __u8 *start, unsigned size);
+ struct hid_report *hid_validate_values(struct hid_device *hid,
+-				       unsigned int type, unsigned int id,
++				       enum hid_report_type type, unsigned int id,
+ 				       unsigned int field_index,
+ 				       unsigned int report_counts);
+ 
+@@ -1111,7 +1103,7 @@ void hid_hw_request(struct hid_device *hdev,
+ 		    struct hid_report *report, int reqtype);
+ int hid_hw_raw_request(struct hid_device *hdev,
+ 		       unsigned char reportnum, __u8 *buf,
+-		       size_t len, unsigned char rtype, int reqtype);
++		       size_t len, enum hid_report_type rtype, int reqtype);
+ int hid_hw_output_report(struct hid_device *hdev, __u8 *buf, size_t len);
+ 
+ /**
+@@ -1184,8 +1176,8 @@ static inline u32 hid_report_len(struct hid_report *report)
+ 	return DIV_ROUND_UP(report->size, 8) + (report->id > 0);
+ }
+ 
+-int hid_report_raw_event(struct hid_device *hid, int type, u8 *data, u32 size,
+-		int interrupt);
++int hid_report_raw_event(struct hid_device *hid, enum hid_report_type type, u8 *data, u32 size,
++			 int interrupt);
+ 
+ /* HID quirks API */
+ unsigned long hid_lookup_quirk(const struct hid_device *hdev);
+diff --git a/include/uapi/linux/hid.h b/include/uapi/linux/hid.h
+index b34492a87a8a..b25b0bacaff2 100644
+--- a/include/uapi/linux/hid.h
++++ b/include/uapi/linux/hid.h
+@@ -42,6 +42,18 @@
+ #define USB_INTERFACE_PROTOCOL_KEYBOARD	1
+ #define USB_INTERFACE_PROTOCOL_MOUSE	2
  
 +/*
-+ * Attach hid_change_report_id to the given uhid device,
-+ * retrieve and open the matching hidraw node,
-+ * inject one event in the uhid device,
-+ * check that the program sees it and can change the data
++ * HID report types --- Ouch! HID spec says 1 2 3!
 + */
-+static int test_hid_change_report(int uhid_fd, int dev_id)
-+{
-+	struct test_params params;
-+	int err, hidraw_fd = -1;
-+	u8 buf[10] = {0};
-+	int ret = -1;
 +
-+	err = prep_test(dev_id, "hid_change_report_id", &params);
-+	if (!ASSERT_EQ(err, 0, "prep_test(hid_change_report_id)"))
-+		goto cleanup;
++enum hid_report_type {
++	HID_INPUT_REPORT		= 0,
++	HID_OUTPUT_REPORT		= 1,
++	HID_FEATURE_REPORT		= 2,
 +
-+	hidraw_fd = params.hidraw_fd;
++	HID_REPORT_TYPES,
++};
 +
-+	/* inject one event */
-+	buf[0] = 1;
-+	buf[1] = 42;
-+	send_event(uhid_fd, buf, 6);
-+
-+	/* read the data from hidraw */
-+	memset(buf, 0, sizeof(buf));
-+	err = read(hidraw_fd, buf, sizeof(buf));
-+	if (!ASSERT_EQ(err, 9, "read_hidraw"))
-+		goto cleanup;
-+
-+	if (!ASSERT_EQ(buf[0], 2, "hid_change_report_id"))
-+		goto cleanup;
-+
-+	if (!ASSERT_EQ(buf[1], 42, "hid_change_report_id"))
-+		goto cleanup;
-+
-+	if (!ASSERT_EQ(buf[2], 0, "leftovers_from_previous_test"))
-+		goto cleanup;
-+
-+	ret = 0;
-+
-+cleanup:
-+	cleanup_test(&params);
-+
-+	return ret;
-+}
-+
- void serial_test_hid_bpf(void)
- {
- 	int err, uhid_fd;
-@@ -660,6 +718,8 @@ void serial_test_hid_bpf(void)
- 	ASSERT_OK(err, "hid");
- 	err = test_attach_detach(uhid_fd, dev_id);
- 	ASSERT_OK(err, "hid_attach_detach");
-+	err = test_hid_change_report(uhid_fd, dev_id);
-+	ASSERT_OK(err, "hid_change_report");
- 
- 	destroy(uhid_fd);
- 
-diff --git a/tools/testing/selftests/bpf/progs/hid.c b/tools/testing/selftests/bpf/progs/hid.c
-index fc0a4241643a..ee7529c47ad8 100644
---- a/tools/testing/selftests/bpf/progs/hid.c
-+++ b/tools/testing/selftests/bpf/progs/hid.c
-@@ -32,7 +32,20 @@ int BPF_PROG(hid_first_event, struct hid_bpf_ctx *hid_ctx)
- 
- 	rw_data[2] = rw_data[1] + 5;
- 
--	return 0;
-+	return hid_ctx->size;
-+}
-+
-+SEC("?fmod_ret/hid_bpf_device_event")
-+int BPF_PROG(hid_change_report_id, struct hid_bpf_ctx *hid_ctx)
-+{
-+	__u8 *rw_data = hid_bpf_get_data(hid_ctx, 0 /* offset */, 3 /* size */);
-+
-+	if (!rw_data)
-+		return 0; /* EPERM check */
-+
-+	rw_data[0] = 2;
-+
-+	return 9;
- }
- 
- SEC("syscall")
+ /*
+  * HID class requests
+  */
 -- 
 2.36.1
 
