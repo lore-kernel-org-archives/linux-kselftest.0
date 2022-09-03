@@ -2,58 +2,58 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DEE57ECAAA1
-	for <linux-kselftest@archiver.kernel.org>; Sat,  3 Sep 2022 01:29:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E432ECAAA1
+	for <linux-kselftest@archiver.kernel.org>; Sat,  3 Sep 2022 01:29:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231361AbiICB3U (ORCPT
+        id S231203AbiICB3Y (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 2 Sep 2022 21:29:20 -0400
+        Fri, 2 Sep 2022 21:29:24 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231207AbiICB3T (ORCPT
+        with ESMTP id S231280AbiICB3U (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Sep 2022 21:29:19 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E4DFF0757
-        for <linux-kselftest@vger.kernel.org>; Fri,  2 Sep 2022 18:29:12 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id a17-20020a17090abe1100b001fda49516e2so3927798pjs.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 02 Sep 2022 18:29:12 -0700 (PDT)
+        Fri, 2 Sep 2022 21:29:20 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A51BF243B
+        for <linux-kselftest@vger.kernel.org>; Fri,  2 Sep 2022 18:29:17 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id w1-20020a63d741000000b0042c254a4ccdso1938496pgi.15
+        for <linux-kselftest@vger.kernel.org>; Fri, 02 Sep 2022 18:29:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date;
-        bh=IaGyK4Cmoeqm5Ji0W1YNBahEYicrSC3f7mSHsYNJtKM=;
-        b=FpKrvAobSwsF4v0aTq0S77F1NIiFYOnF38UePy6mvwRkyZmLSMutiLKgJGAKkcAy6e
-         cEYuH7JVRMQpp68ZFFDTUqDWHfxsKN0LL/oijxe9JR9VMHCUMAgCkykJ+FFbExkjQZqs
-         i1HzfT4x6w/M6+SwuiATa5QzIy2ENHXt0SRS9IkK9xBTxH3w3dfvK6KRppCh/tSkPuZx
-         3X7Z8dKE4OCPsOiJo6SFXwx1e63dEao+QD1fa1ykBynAkZNg2xUHTZRUdAWseHxkyx0a
-         MFqSlWiy3iVblH0UsSgMshbjMhhRPVr0X+szwkrfYI6cMvf3S3JzG4LkdAwhg3NZcJtP
-         GUPw==
+        bh=cqeY+grZVEhRguTUUeqvYOSdNQfIs+sWu8vr9QDoht8=;
+        b=ew3oq0QlDXeiga/a4o56WUnaQoA8tSTqzn6P1h8N6KPD89ud1VuUwgt5JT9RjNTrxy
+         spZz2ZjUU7FIz9kSFWwKFN3Tbzcn4ZXJ/lArwvHaD6jhpGy5oMG1Mcxl5S7D0Mm4p8Eb
+         4mXCQeugDAU5S4k2eNGNfJg0oESlkeLaSjr2TLebe7AyWXgG0xRPBTLdVMEUXhZLuqpH
+         /KXXPC3EoWn9PWeHm07i6wSW64sPQ15pLDPOVrrtf8rCrmsFlkO45MvO6uLIaBgGPS9C
+         4Lm9EpFvdNaPvYzA2jMjqIrLqZ9F/zU3EYvi+5/7dTzThWq3/idXzvDlbe5lWFKrRqWw
+         i73w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=IaGyK4Cmoeqm5Ji0W1YNBahEYicrSC3f7mSHsYNJtKM=;
-        b=RiYLEW3x29G/endzCpDCEn+7qFDD43Cio+4p0exS6yPIhN4FbvheYaC7LUnnhufxdo
-         ilwEUpW7Czi4CfH4PqWglzAPEcCVmP5RX8N23g3DjPdsHjlY1m3ml0LIxCtd8wnDOToc
-         QvijyGhnMVCuNuKsP8+e3kMtm/s5xyNgPN9nh5MnGvSKlbQYQ6GWV6UG/3HTZ7c4Ifwi
-         rj+KhxkcyBPYdlvEurUn+wCzh7BWnOCNSuNiK3+tbYedK8rZ99Vb9d4YW5fO/pz2HWl+
-         K+M3nedN+zO4UaDS8PTNJEBvGfmeOEzXqPLWdAU2qiEMyX4m5WKpiDDIkkRfRC++CSGQ
-         5z/A==
-X-Gm-Message-State: ACgBeo2GMpy5cGSrTarfJa+yOON/xifgbv1lQdm509gYuJCaGea7xD2B
-        YrmaEAxXAinPUJlZvpIoQQA/4gtmFtncLHVZ
-X-Google-Smtp-Source: AA6agR7nkWudbpvipKjy/b0H43cozN9u/M79LMGTTv4qY7Q7a28LiXCWjVh9B1W7+DNdqOZCp16JXhB5FN2Wba5k
+        bh=cqeY+grZVEhRguTUUeqvYOSdNQfIs+sWu8vr9QDoht8=;
+        b=byYF9n8tpON+8gKB/xZG1beMPzlCJWFv884PGrTVoKbigqd2cDNBbyf784foYLfmDI
+         gBK+83adcOMQL7h8nGIUEwFTDkoEFB+MHwB5uy+tGNxRjOzHHF0oNgFDNRBkD/C6oUgU
+         1JrIf+sfPA3vl5Jy3ykjBKrumKknpngWm19uemXak0LueQYvQiSFNHYJYQJ4VJwaVz/o
+         +pHxh0cuERei/cW3zqv7TCELTGZOTpeBJMoqaXROxKpHhm0d1qNLCrZdjtvha+nub2IS
+         BtLvxS0nYXOZWpZjmuuibBjhkI6REVhIIFP+6YPzMFPdFeAIt4D2rUbNc9ycQPDlv7uA
+         ZW3g==
+X-Gm-Message-State: ACgBeo1prpBSUTEdPPtXQFFNvYwDU7k4HV5CDl1yw7Fu4myxKrozl0O5
+        mbAyc7Bug+ZkniSZHjLiD3jURA7VeZN2S/QA
+X-Google-Smtp-Source: AA6agR7JimEDwH6PgWfw9vo/qKMh6zueekKuIUqRudZGwvAdv0ECioREghixSWr/yuoL6YAjN4V3M6wVKdCrxlHi
 X-Received: from vannapurve2.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:41f8])
- (user=vannapurve job=sendgmr) by 2002:a17:90a:e558:b0:1fb:c4b7:1a24 with SMTP
- id ei24-20020a17090ae55800b001fbc4b71a24mr44453pjb.1.1662168551705; Fri, 02
- Sep 2022 18:29:11 -0700 (PDT)
-Date:   Sat,  3 Sep 2022 01:28:46 +0000
+ (user=vannapurve job=sendgmr) by 2002:aa7:9098:0:b0:538:58ab:8fee with SMTP
+ id i24-20020aa79098000000b0053858ab8feemr25172507pfa.7.1662168557132; Fri, 02
+ Sep 2022 18:29:17 -0700 (PDT)
+Date:   Sat,  3 Sep 2022 01:28:48 +0000
 In-Reply-To: <20220903012849.938069-1-vannapurve@google.com>
 Mime-Version: 1.0
 References: <20220903012849.938069-1-vannapurve@google.com>
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220903012849.938069-3-vannapurve@google.com>
-Subject: [V1 PATCH 2/5] selftests: kvm: Introduce kvm_arch_main and helpers
+Message-ID: <20220903012849.938069-5-vannapurve@google.com>
+Subject: [V1 PATCH 4/5] selftests: kvm: delete svm_vmcall_test
 From:   Vishal Annapurve <vannapurve@google.com>
 To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
@@ -66,132 +66,107 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Introduce following APIs:
-1) kvm_arch_main : to be called at the startup of each test.
-2) kvm_arch_post_vm_load: called after guest elf image is loaded into
-   memory to populate any global state in guest memory.
+svm_vmcall_test is superseded by fix_hypercall_test.
 
 Suggested-by: Sean Christopherson <seanjc@google.com>
 Signed-off-by: Vishal Annapurve <vannapurve@google.com>
 ---
- tools/testing/selftests/kvm/include/kvm_util_base.h | 10 ++++++++++
- tools/testing/selftests/kvm/lib/aarch64/processor.c |  8 ++++++++
- tools/testing/selftests/kvm/lib/elf.c               |  2 ++
- tools/testing/selftests/kvm/lib/kvm_util.c          |  2 ++
- tools/testing/selftests/kvm/lib/riscv/processor.c   |  8 ++++++++
- tools/testing/selftests/kvm/lib/s390x/processor.c   |  8 ++++++++
- tools/testing/selftests/kvm/lib/x86_64/processor.c  |  8 ++++++++
- 7 files changed, 46 insertions(+)
+ tools/testing/selftests/kvm/.gitignore        |  1 -
+ .../selftests/kvm/x86_64/svm_vmcall_test.c    | 73 -------------------
+ 2 files changed, 74 deletions(-)
+ delete mode 100644 tools/testing/selftests/kvm/x86_64/svm_vmcall_test.c
 
-diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-index 9e521d1c8afe..301bef6376a5 100644
---- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-@@ -834,6 +834,16 @@ static inline int __vm_disable_nx_huge_pages(struct kvm_vm *vm)
- 	return __vm_enable_cap(vm, KVM_CAP_VM_DISABLE_NX_HUGE_PAGES, 0);
- }
- 
-+/*
-+ * API to execute architecture specific setup before executing selftest logic.
-+ */
-+void kvm_arch_main(void);
-+
-+/*
-+ * API to execute architecture specific setup after loading VMs.
-+ */
-+void kvm_arch_post_vm_load(struct kvm_vm *vm);
-+
- /*
-  * API to be implemented by all the selftests.
-  */
-diff --git a/tools/testing/selftests/kvm/lib/aarch64/processor.c b/tools/testing/selftests/kvm/lib/aarch64/processor.c
-index 6f5551368944..a7ca1947d574 100644
---- a/tools/testing/selftests/kvm/lib/aarch64/processor.c
-+++ b/tools/testing/selftests/kvm/lib/aarch64/processor.c
-@@ -528,3 +528,11 @@ void smccc_hvc(uint32_t function_id, uint64_t arg0, uint64_t arg1,
- 		       [arg4] "r"(arg4), [arg5] "r"(arg5), [arg6] "r"(arg6)
- 		     : "x0", "x1", "x2", "x3", "x4", "x5", "x6", "x7");
- }
-+
-+void kvm_arch_main(void)
-+{
-+}
-+
-+void kvm_arch_post_vm_load(struct kvm_vm *vm)
-+{
-+}
-diff --git a/tools/testing/selftests/kvm/lib/elf.c b/tools/testing/selftests/kvm/lib/elf.c
-index 9f54c098d9d0..f56f9279e703 100644
---- a/tools/testing/selftests/kvm/lib/elf.c
-+++ b/tools/testing/selftests/kvm/lib/elf.c
-@@ -189,4 +189,6 @@ void kvm_vm_elf_load(struct kvm_vm *vm, const char *filename)
- 				phdr.p_filesz);
- 		}
- 	}
-+
-+	kvm_arch_post_vm_load(vm);
- }
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index 2e611a021c6e..b778dc684e30 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -1985,6 +1985,8 @@ int main(int argc, char *argv[])
- 	/* Tell stdout not to buffer its content */
- 	setbuf(stdout, NULL);
- 
-+	kvm_arch_main();
-+
- 	__main(argc, argv);
- 
- 	return 0;
-diff --git a/tools/testing/selftests/kvm/lib/riscv/processor.c b/tools/testing/selftests/kvm/lib/riscv/processor.c
-index 604478151212..d992ad5b5771 100644
---- a/tools/testing/selftests/kvm/lib/riscv/processor.c
-+++ b/tools/testing/selftests/kvm/lib/riscv/processor.c
-@@ -362,3 +362,11 @@ void vcpu_args_set(struct kvm_vcpu *vcpu, unsigned int num, ...)
- void assert_on_unhandled_exception(struct kvm_vcpu *vcpu)
- {
- }
-+
-+void kvm_arch_main(void)
-+{
-+}
-+
-+void kvm_arch_post_vm_load(struct kvm_vm *vm)
-+{
-+}
-diff --git a/tools/testing/selftests/kvm/lib/s390x/processor.c b/tools/testing/selftests/kvm/lib/s390x/processor.c
-index 89d7340d9cbd..3a249783b3fe 100644
---- a/tools/testing/selftests/kvm/lib/s390x/processor.c
-+++ b/tools/testing/selftests/kvm/lib/s390x/processor.c
-@@ -218,3 +218,11 @@ void vcpu_arch_dump(FILE *stream, struct kvm_vcpu *vcpu, uint8_t indent)
- void assert_on_unhandled_exception(struct kvm_vcpu *vcpu)
- {
- }
-+
-+void kvm_arch_main(void)
-+{
-+}
-+
-+void kvm_arch_post_vm_load(struct kvm_vm *vm)
-+{
-+}
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-index 2e6e61bbe81b..e22cfc4bf284 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-@@ -1311,3 +1311,11 @@ bool vm_is_unrestricted_guest(struct kvm_vm *vm)
- 
- 	return val == 'Y';
- }
-+
-+void kvm_arch_main(void)
-+{
-+}
-+
-+void kvm_arch_post_vm_load(struct kvm_vm *vm)
-+{
-+}
+diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
+index d625a3f83780..22e9a5b5488c 100644
+--- a/tools/testing/selftests/kvm/.gitignore
++++ b/tools/testing/selftests/kvm/.gitignore
+@@ -36,7 +36,6 @@
+ /x86_64/sev_migrate_tests
+ /x86_64/smm_test
+ /x86_64/state_test
+-/x86_64/svm_vmcall_test
+ /x86_64/svm_int_ctl_test
+ /x86_64/svm_nested_soft_inject_test
+ /x86_64/sync_regs_test
+diff --git a/tools/testing/selftests/kvm/x86_64/svm_vmcall_test.c b/tools/testing/selftests/kvm/x86_64/svm_vmcall_test.c
+deleted file mode 100644
+index 95ddc2bff332..000000000000
+--- a/tools/testing/selftests/kvm/x86_64/svm_vmcall_test.c
++++ /dev/null
+@@ -1,73 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/*
+- * svm_vmcall_test
+- *
+- * Copyright (C) 2020, Red Hat, Inc.
+- *
+- * Nested SVM testing: VMCALL
+- */
+-
+-#include "test_util.h"
+-#include "kvm_util.h"
+-#include "processor.h"
+-#include "svm_util.h"
+-
+-static void l2_guest_code(struct svm_test_data *svm)
+-{
+-	__asm__ __volatile__("vmcall");
+-}
+-
+-static void l1_guest_code(struct svm_test_data *svm)
+-{
+-	#define L2_GUEST_STACK_SIZE 64
+-	unsigned long l2_guest_stack[L2_GUEST_STACK_SIZE];
+-	struct vmcb *vmcb = svm->vmcb;
+-
+-	/* Prepare for L2 execution. */
+-	generic_svm_setup(svm, l2_guest_code,
+-			  &l2_guest_stack[L2_GUEST_STACK_SIZE]);
+-
+-	run_guest(vmcb, svm->vmcb_gpa);
+-
+-	GUEST_ASSERT(vmcb->control.exit_code == SVM_EXIT_VMMCALL);
+-	GUEST_DONE();
+-}
+-
+-void __main(int argc, char *argv[])
+-{
+-	struct kvm_vcpu *vcpu;
+-	vm_vaddr_t svm_gva;
+-	struct kvm_vm *vm;
+-
+-	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_SVM));
+-
+-	vm = vm_create_with_one_vcpu(&vcpu, l1_guest_code);
+-
+-	vcpu_alloc_svm(vm, &svm_gva);
+-	vcpu_args_set(vcpu, 1, svm_gva);
+-
+-	for (;;) {
+-		volatile struct kvm_run *run = vcpu->run;
+-		struct ucall uc;
+-
+-		vcpu_run(vcpu);
+-		TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
+-			    "Got exit_reason other than KVM_EXIT_IO: %u (%s)\n",
+-			    run->exit_reason,
+-			    exit_reason_str(run->exit_reason));
+-
+-		switch (get_ucall(vcpu, &uc)) {
+-		case UCALL_ABORT:
+-			REPORT_GUEST_ASSERT(uc);
+-			/* NOT REACHED */
+-		case UCALL_SYNC:
+-			break;
+-		case UCALL_DONE:
+-			goto done;
+-		default:
+-			TEST_FAIL("Unknown ucall 0x%lx.", uc.cmd);
+-		}
+-	}
+-done:
+-	kvm_vm_free(vm);
+-}
 -- 
 2.37.2.789.g6183377224-goog
 
