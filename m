@@ -2,186 +2,214 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3B76C6FA86
-	for <linux-kselftest@archiver.kernel.org>; Sun,  4 Sep 2022 07:54:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9EDCC6FA82
+	for <linux-kselftest@archiver.kernel.org>; Sun,  4 Sep 2022 08:27:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233448AbiIDHyt (ORCPT
+        id S233210AbiIDI1P (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 4 Sep 2022 03:54:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51928 "EHLO
+        Sun, 4 Sep 2022 04:27:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233507AbiIDHyn (ORCPT
+        with ESMTP id S229537AbiIDI1L (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 4 Sep 2022 03:54:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D563DDB;
-        Sun,  4 Sep 2022 00:54:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0819C60E84;
-        Sun,  4 Sep 2022 07:54:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BB41C433C1;
-        Sun,  4 Sep 2022 07:54:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662278062;
-        bh=/y4U+7PnZTbeKfXf+LRde+nSBvUuT66dww+jNyXTXHU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JIq7WnNNMyLMFrTdlGYYZRn0RG4ewvHSxAUMrH7qSzlqnEmRwRVgGIHr8Iy0GNQNN
-         4+OsPjqSuP7c7FQTIIKY4EzXY0cW9naxkgV6+n99OEoLraUE730ef757zu9/MbQO32
-         E7KahPcLP2T5Q1AW8QrtLQBM+K0pjHWxf6DErrjOcA6w1RJdWZ0hq6hQ9yn2iWfx9x
-         OKo0NdpsmJipFKH2SSWZCnE9d7B8EK//cfop2ZgBqCm7i+lPEYr4/DX0zcrtwOzriL
-         81sfn7MKqJZgmJ2Fwn99Lr77XlzHMn/20TyuPWjiMOyW3ywu//E6gJcKXmeJfchEN1
-         mZRdcpOwwzmWw==
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     linux-sgx@vger.kernel.org
-Cc:     Haitao Huang <haitao.huang@linux.intel.com>,
-        Vijay Dhanraj <vijay.dhanraj@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 4/5] selftests/sgx: Include the dynamic heap size to the ELRANGE calculation
-Date:   Sun,  4 Sep 2022 10:53:57 +0300
-Message-Id: <20220904075358.7727-5-jarkko@kernel.org>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220904075358.7727-1-jarkko@kernel.org>
-References: <20220904075358.7727-1-jarkko@kernel.org>
+        Sun, 4 Sep 2022 04:27:11 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0608941D1C;
+        Sun,  4 Sep 2022 01:27:09 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id s14-20020a17090a6e4e00b0020057c70943so231627pjm.1;
+        Sun, 04 Sep 2022 01:27:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=zfiWejN/Bz3YBQupNom1bcY/9klYVsjCN66XEd476z0=;
+        b=SBEuv7blCe057KcuIJdNRyj3g2VOPTQq1llrfLNFf289npI8wf/m4D6m8V6XY3lUXp
+         Re5/g1GMCzHeowzixKLlyMxv657lA13nPeZhWWJ2OC266RIOX72T1P7U1QIAkGITZTkZ
+         OhFiv4GP/cj1MqfFk/e6TYkNwyKqbZZknzVH95RjMeoEs2gWuzEfbEQyCHG1wbtuLJHO
+         pjSg3+fSIKJmTcugr2ndTCmihpEGjkt8TbVpopZ7zzVFWdZ8gYe+YJI8gXqyPjNVYdVK
+         Rz3pc71J6gK/cLFZWzrR+DMSWgYikjoU/F8/eqeKn7KVfwAFofKX6tJeywPhCEF2HQqP
+         7Blw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=zfiWejN/Bz3YBQupNom1bcY/9klYVsjCN66XEd476z0=;
+        b=gkb7W3gUoeEZxpMzzIclRYJJa2pHcrDJ+1jVRnHM2CW9ehjuYjXLvAXk6f/LWQb/K5
+         VnOhJPAnq8O8UqR0vEOTUFMCOShg/+m/xcIjS6uvCMGab9ZRsKTvVHpColDVJzNfa4uc
+         tvlaon62fjei1jT4JBZYBkAS23qpNVmVUKhXZpGFjnC5nqmVpcoNmelufXN5fagunMAR
+         H85xuZPrRESC7pYcv4vtle8yGqol89VEH7rBp0rN4TiSxwiFDr0cUcs8+LK5tsfxsnkD
+         xIcOws+M/Xl/x1RgyzSiJWKEgoRj138U8/jLYdQi3I/9GaVSY1JlpSQIoiR8zA93ufPN
+         VkiQ==
+X-Gm-Message-State: ACgBeo1vymS+0VUVjsXKMdixhPKv8I96PsIXcpdcmcC7EBnIG372qad4
+        vlAvFdvAggwFOiiKybqZmyo=
+X-Google-Smtp-Source: AA6agR6p1vnEmVhMR4O8lPoCRt91HpCjcE3g3bJe1rFhs/kMi/uJluoc3/u+nZq0YPRXXKdaBaDdUg==
+X-Received: by 2002:a17:90b:3a81:b0:1fd:c490:4f08 with SMTP id om1-20020a17090b3a8100b001fdc4904f08mr13328363pjb.105.1662280028369;
+        Sun, 04 Sep 2022 01:27:08 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-16.three.co.id. [180.214.232.16])
+        by smtp.gmail.com with ESMTPSA id y11-20020a17090322cb00b001744018def7sm4901806plg.90.2022.09.04.01.27.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 04 Sep 2022 01:27:08 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 521D0102D35; Sun,  4 Sep 2022 15:20:28 +0700 (WIB)
+Date:   Sun, 4 Sep 2022 15:20:27 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+Subject: Re: [PATCH v12 09/10] cgroup/cpuset: Update description of
+ cpuset.cpus.partition in cgroup-v2.rst
+Message-ID: <YxRfy/SaKkJSm5jY@debian.me>
+References: <20220901205745.323326-1-longman@redhat.com>
+ <20220901205745.323326-10-longman@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="oIHDfZi7tkZKklmK"
+Content-Disposition: inline
+In-Reply-To: <20220901205745.323326-10-longman@redhat.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When calculating ELRANGE, i.e. the address range defined for an enclave,
-and represented by encl->encl_size, also dynamic memory should be taken
-into account. Implement setup_test_encl_dynamic() with dynamic_size
-parameter for the dynamic heap size, and use it in 'augment_via_eaccept'
-and 'augment' tests.
 
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
----
- tools/testing/selftests/sgx/load.c |  5 +++--
- tools/testing/selftests/sgx/main.c | 24 +++++++++++++++++-------
- tools/testing/selftests/sgx/main.h |  3 ++-
- 3 files changed, 22 insertions(+), 10 deletions(-)
+--oIHDfZi7tkZKklmK
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/tools/testing/selftests/sgx/load.c b/tools/testing/selftests/sgx/load.c
-index 3b4e2422fb09..963a5c6bbbdc 100644
---- a/tools/testing/selftests/sgx/load.c
-+++ b/tools/testing/selftests/sgx/load.c
-@@ -171,7 +171,8 @@ uint64_t encl_get_entry(struct encl *encl, const char *symbol)
- 	return 0;
- }
- 
--bool encl_load(const char *path, struct encl *encl, unsigned long heap_size)
-+bool encl_load(const char *path, struct encl *encl, unsigned long heap_size,
-+	       unsigned long dynamic_size)
- {
- 	const char device_path[] = "/dev/sgx_enclave";
- 	unsigned long contents_size;
-@@ -299,7 +300,7 @@ bool encl_load(const char *path, struct encl *encl, unsigned long heap_size)
- 	if (seg->src == MAP_FAILED)
- 		goto err;
- 
--	contents_size = encl->segment_tbl[j].offset + encl->segment_tbl[j].size;
-+	contents_size = encl->segment_tbl[j].offset + encl->segment_tbl[j].size + dynamic_size;
- 
- 	for (encl->encl_size = 4096; encl->encl_size < contents_size; )
- 		encl->encl_size <<= 1;
-diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
-index a1850e139c99..4feffe7cd8fb 100644
---- a/tools/testing/selftests/sgx/main.c
-+++ b/tools/testing/selftests/sgx/main.c
-@@ -22,6 +22,7 @@
- #include "main.h"
- 
- static const size_t ENCL_HEAP_SIZE_DEFAULT = PAGE_SIZE;
-+static const size_t ENCL_DYNAMIC_SIZE_DEFAULT = PAGE_SIZE;
- static const uint64_t MAGIC = 0x1122334455667788ULL;
- static const uint64_t MAGIC2 = 0x8877665544332211ULL;
- vdso_sgx_enter_enclave_t vdso_sgx_enter_enclave;
-@@ -173,8 +174,8 @@ FIXTURE(enclave) {
- 	struct sgx_enclave_run run;
- };
- 
--static bool setup_test_encl(unsigned long heap_size, struct encl *encl,
--			    struct __test_metadata *_metadata)
-+static bool setup_test_encl_dynamic(unsigned long heap_size, unsigned long dynamic_size,
-+				    struct encl *encl, struct __test_metadata *_metadata)
- {
- 	Elf64_Sym *sgx_enter_enclave_sym = NULL;
- 	struct vdso_symtab symtab;
-@@ -184,7 +185,7 @@ static bool setup_test_encl(unsigned long heap_size, struct encl *encl,
- 	unsigned int i;
- 	void *addr;
- 
--	if (!encl_load("test_encl.elf", encl, heap_size)) {
-+	if (!encl_load("test_encl.elf", encl, heap_size, dynamic_size)) {
- 		encl_delete(encl);
- 		TH_LOG("Failed to load the test enclave.");
- 		return false;
-@@ -251,6 +252,12 @@ static bool setup_test_encl(unsigned long heap_size, struct encl *encl,
- 	return false;
- }
- 
-+static bool setup_test_encl(unsigned long heap_size, struct encl *encl,
-+			    struct __test_metadata *_metadata)
-+{
-+	return setup_test_encl_dynamic(heap_size, 0, encl, _metadata);
-+}
-+
- FIXTURE_SETUP(enclave)
- {
- }
-@@ -1013,7 +1020,9 @@ TEST_F(enclave, augment)
- 	if (!sgx2_supported())
- 		SKIP(return, "SGX2 not supported");
- 
--	ASSERT_TRUE(setup_test_encl(ENCL_HEAP_SIZE_DEFAULT, &self->encl, _metadata));
-+	ASSERT_TRUE(setup_test_encl_dynamic(ENCL_HEAP_SIZE_DEFAULT,
-+					    ENCL_DYNAMIC_SIZE_DEFAULT,
-+					    &self->encl, _metadata));
- 
- 	memset(&self->run, 0, sizeof(self->run));
- 	self->run.tcs = self->encl.encl_base;
-@@ -1143,7 +1152,9 @@ TEST_F(enclave, augment_via_eaccept)
- 	if (!sgx2_supported())
- 		SKIP(return, "SGX2 not supported");
- 
--	ASSERT_TRUE(setup_test_encl(ENCL_HEAP_SIZE_DEFAULT, &self->encl, _metadata));
-+	ASSERT_TRUE(setup_test_encl_dynamic(ENCL_HEAP_SIZE_DEFAULT,
-+					    ENCL_DYNAMIC_SIZE_DEFAULT,
-+					    &self->encl, _metadata));
- 
- 	memset(&self->run, 0, sizeof(self->run));
- 	self->run.tcs = self->encl.encl_base;
-@@ -1264,8 +1275,7 @@ TEST_F(enclave, tcs_create)
- 	int errno_save;
- 	int ret, i;
- 
--	ASSERT_TRUE(setup_test_encl(ENCL_HEAP_SIZE_DEFAULT, &self->encl,
--				    _metadata));
-+	ASSERT_TRUE(setup_test_encl(ENCL_HEAP_SIZE_DEFAULT, &self->encl, _metadata));
- 
- 	memset(&self->run, 0, sizeof(self->run));
- 	self->run.tcs = self->encl.encl_base;
-diff --git a/tools/testing/selftests/sgx/main.h b/tools/testing/selftests/sgx/main.h
-index 9c1bc0d9b43c..8f77ce56ad09 100644
---- a/tools/testing/selftests/sgx/main.h
-+++ b/tools/testing/selftests/sgx/main.h
-@@ -32,7 +32,8 @@ extern unsigned char sign_key[];
- extern unsigned char sign_key_end[];
- 
- void encl_delete(struct encl *ctx);
--bool encl_load(const char *path, struct encl *encl, unsigned long heap_size);
-+bool encl_load(const char *path, struct encl *encl, unsigned long heap_size,
-+	       unsigned long dynamic_size);
- bool encl_measure(struct encl *encl);
- bool encl_build(struct encl *encl);
- uint64_t encl_get_entry(struct encl *encl, const char *symbol);
--- 
-2.37.2
+On Thu, Sep 01, 2022 at 04:57:44PM -0400, Waiman Long wrote:
+>  	It accepts only the following input values when written to.
+> =20
+>  	  =3D=3D=3D=3D=3D=3D=3D=3D	=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> -	  "root"	a partition root
+> -	  "member"	a non-root member of a partition
+> +	  "member"	Non-root member of a partition
+> +	  "root"	Partition root
+> +	  "isolated"	Partition root without load balancing
+>  	  =3D=3D=3D=3D=3D=3D=3D=3D	=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> =20
+><snipped>
+> +	On read, the "cpuset.cpus.partition" file can show the following
+> +	values.
+> +
+> +	  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D	=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+> +	  "member"			Non-root member of a partition
+> +	  "root"			Partition root
+> +	  "isolated"			Partition root without load balancing
+> +	  "root invalid (<reason>)"	Invalid partition root
+> +	  "isolated invalid (<reason>)"	Invalid isolated partition root
+> +	  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D	=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+> +
 
+These tables above produced htmldocs warnings:
+
+Documentation/admin-guide/cgroup-v2.rst:2191: WARNING: Malformed table.
+Text in column margin in table line 4.
+
+=3D=3D=3D=3D=3D=3D=3D=3D      =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+"member"      Non-root member of a partition
+"root"        Partition root
+"isolated"    Partition root without load balancing
+=3D=3D=3D=3D=3D=3D=3D=3D      =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+Documentation/admin-guide/cgroup-v2.rst:2229: WARNING: Malformed table.
+Text in column margin in table line 5.
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D        =
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+"member"                      Non-root member of a partition
+"root"                        Partition root
+"isolated"                    Partition root without load balancing
+"root invalid (<reason>)"     Invalid partition root
+"isolated invalid (<reason>)" Invalid isolated partition root
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D        =
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+I have applied the fixup:
+
+---- >8 ----
+
+diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-=
+guide/cgroup-v2.rst
+index 76b3ea9fd5c560..77b6faecf066cb 100644
+--- a/Documentation/admin-guide/cgroup-v2.rst
++++ b/Documentation/admin-guide/cgroup-v2.rst
+@@ -2185,11 +2185,11 @@ Cpuset Interface Files
+=20
+ 	It accepts only the following input values when written to.
+=20
+-	  =3D=3D=3D=3D=3D=3D=3D=3D	=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++	  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D	=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+ 	  "member"	Non-root member of a partition
+ 	  "root"	Partition root
+ 	  "isolated"	Partition root without load balancing
+-	  =3D=3D=3D=3D=3D=3D=3D=3D	=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++	  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D	=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+=20
+ 	The root cgroup is always a partition root and its state
+ 	cannot be changed.  All other non-root cgroups start out as
+@@ -2222,13 +2222,13 @@ Cpuset Interface Files
+ 	On read, the "cpuset.cpus.partition" file can show the following
+ 	values.
+=20
+-	  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D	=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D
++	  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D	=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+ 	  "member"			Non-root member of a partition
+ 	  "root"			Partition root
+ 	  "isolated"			Partition root without load balancing
+ 	  "root invalid (<reason>)"	Invalid partition root
+ 	  "isolated invalid (<reason>)"	Invalid isolated partition root
+-	  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D	=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D
++	  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D	=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+=20
+ 	In the case of an invalid partition root, a descriptive string on
+ 	why the partition is invalid is included within parentheses.
+
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--oIHDfZi7tkZKklmK
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCYxRfxAAKCRD2uYlJVVFO
+o3SHAQClBqZgslhw004gM4yBhkfde6wdEJ2nw/MXorNJ8fTClQD+JtUvFXJzGoUu
+rSAT7jqqrPGSs2nO4gsLQKWjeu/V6gQ=
+=Tjsc
+-----END PGP SIGNATURE-----
+
+--oIHDfZi7tkZKklmK--
