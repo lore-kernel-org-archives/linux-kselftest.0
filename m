@@ -2,37 +2,37 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 92F0DC54EE9
-	for <linux-kselftest@archiver.kernel.org>; Mon,  5 Sep 2022 12:49:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B647ECAAD5
+	for <linux-kselftest@archiver.kernel.org>; Mon,  5 Sep 2022 13:39:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236987AbiIEMtf (ORCPT
+        id S237528AbiIENj6 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 5 Sep 2022 08:49:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47728 "EHLO
+        Mon, 5 Sep 2022 09:39:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237087AbiIEMtW (ORCPT
+        with ESMTP id S231187AbiIENj4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 5 Sep 2022 08:49:22 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E646F6362;
-        Mon,  5 Sep 2022 05:49:18 -0700 (PDT)
-Received: from canpemm500005.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MLpCX67yjzjXbk;
-        Mon,  5 Sep 2022 20:45:44 +0800 (CST)
+        Mon, 5 Sep 2022 09:39:56 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7BE81A83E;
+        Mon,  5 Sep 2022 06:39:52 -0700 (PDT)
+Received: from canpemm500005.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MLqM250N1znV57;
+        Mon,  5 Sep 2022 21:37:18 +0800 (CST)
 Received: from ubuntu1804.huawei.com (10.67.174.63) by
  canpemm500005.china.huawei.com (7.192.104.229) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 5 Sep 2022 20:49:16 +0800
+ 15.1.2375.24; Mon, 5 Sep 2022 21:39:50 +0800
 From:   Zhao Gongyi <zhaogongyi@huawei.com>
 To:     <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
 CC:     <shuah@kernel.org>, <akpm@linux-foundation.org>,
         <akinobu.mita@gmail.com>, Zhao Gongyi <zhaogongyi@huawei.com>
-Subject: [PATCH -next v2 4/5] selftests/cpu-hotplug: Reserve one cpu online at least
-Date:   Mon, 5 Sep 2022 20:45:24 +0800
-Message-ID: <20220905124525.130067-5-zhaogongyi@huawei.com>
+Subject: [PATCH -next v3 4/5] selftests/cpu-hotplug: Reserve one cpu online at least
+Date:   Mon, 5 Sep 2022 21:36:14 +0800
+Message-ID: <20220905133615.139026-5-zhaogongyi@huawei.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220905124525.130067-1-zhaogongyi@huawei.com>
-References: <20220905124525.130067-1-zhaogongyi@huawei.com>
+In-Reply-To: <20220905133615.139026-1-zhaogongyi@huawei.com>
+References: <20220905133615.139026-1-zhaogongyi@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.67.174.63]
