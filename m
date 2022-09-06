@@ -2,31 +2,31 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7C23C6FA86
-	for <linux-kselftest@archiver.kernel.org>; Tue,  6 Sep 2022 20:05:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A7BC7ECAAA1
+	for <linux-kselftest@archiver.kernel.org>; Tue,  6 Sep 2022 20:10:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231199AbiIFUFz (ORCPT
+        id S231200AbiIFUKi (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 6 Sep 2022 16:05:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44220 "EHLO
+        Tue, 6 Sep 2022 16:10:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231166AbiIFUFf (ORCPT
+        with ESMTP id S230332AbiIFUKO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Sep 2022 16:05:35 -0400
+        Tue, 6 Sep 2022 16:10:14 -0400
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 71F82BD296;
-        Tue,  6 Sep 2022 13:01:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 010781083;
+        Tue,  6 Sep 2022 13:05:13 -0700 (PDT)
 Received: from pwmachine.numericable.fr (85-170-34-72.rev.numericable.fr [85.170.34.72])
-        by linux.microsoft.com (Postfix) with ESMTPSA id A4272204A0FA;
-        Tue,  6 Sep 2022 12:59:13 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A4272204A0FA
+        by linux.microsoft.com (Postfix) with ESMTPSA id 9EE5D2049BAF;
+        Tue,  6 Sep 2022 12:58:36 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9EE5D2049BAF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1662494358;
-        bh=nWaEkFlsTxoT2qCkLeEAAJWZstzNd2OmaAn1xDktTx8=;
+        s=default; t=1662494321;
+        bh=5lDK7It259RN4ymtCiet+4wq5JdclQetrfA0fw0WV64=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fXuGmpIIuRaK5ubeN/epmC7TP0PdLKlpXY6ps9ZJc116zqiws8ot0O0RNd5tCNba3
-         nTYBgwtzJqVdSySys+DMBGlf7Ye4e0bvbxvoIvh34iROJgnSn0hI8Xs6QI1KFL697Q
-         I/d/d2hdG5YcMHwma37GhE4IYAs24Y5qdcdCgrAY=
+        b=n4pfBsr8YWPyT8jTqgIQ0DuqftZrl5YeBbvTauX+bmGr6Oi5Og9mJq+BFVDiKjYRZ
+         +28qWwbzGIlpkEiLF16UdzsP9MLefcnk+gN0iBPjiPS68hMTZENletySVI9taNLRSI
+         zMDXto3nHyBx3sfB03NjnyOBkFLegNVD8mPIMfA8=
 From:   Francis Laniel <flaniel@linux.microsoft.com>
 To:     bpf@vger.kernel.org
 Cc:     Francis Laniel <flaniel@linux.microsoft.com>,
@@ -49,9 +49,9 @@ Cc:     Francis Laniel <flaniel@linux.microsoft.com>,
         "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [RFC PATCH v2 4/5] libbpf: Add implementation to consume overwritable BPF ring buffer.
-Date:   Tue,  6 Sep 2022 21:56:45 +0200
-Message-Id: <20220906195656.33021-5-flaniel@linux.microsoft.com>
+Subject: [RFC PATCH v2 2/5] selftests: Add BPF overwritable ring buffer self tests.
+Date:   Tue,  6 Sep 2022 21:56:43 +0200
+Message-Id: <20220906195656.33021-3-flaniel@linux.microsoft.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220906195656.33021-1-flaniel@linux.microsoft.com>
 References: <20220906195656.33021-1-flaniel@linux.microsoft.com>
@@ -61,179 +61,265 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-If the BPF ring buffer is overwritable, ringbuf_process_overwritable_ring() will
-be called to handle the data consumption.
-All the available data will be consumed but some checks will be performed:
-* check we do not read data we already read, if there is no new data, nothing
-happens.
-* check we do not read more than the buffer size.
-* check we do not read invalid data by checking they fit the buffer size.
+Add tests to confirm behavior of overwritable BPF ring buffer, particularly the
+oldest data being overwritten by newest ones.
 
 Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
 ---
- tools/include/uapi/linux/bpf.h |   3 +
- tools/lib/bpf/ringbuf.c        | 106 +++++++++++++++++++++++++++++++++
- 2 files changed, 109 insertions(+)
+ tools/testing/selftests/bpf/Makefile          |   5 +-
+ .../bpf/prog_tests/ringbuf_overwritable.c     | 158 ++++++++++++++++++
+ .../bpf/progs/test_ringbuf_overwritable.c     |  61 +++++++
+ 3 files changed, 222 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/ringbuf_overwritable.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_ringbuf_overwritable.c
 
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 59a217ca2dfd..cd73a89e8ead 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -1227,6 +1227,9 @@ enum {
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 8d59ec7f4c2d..96e95dcfc982 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -351,8 +351,9 @@ LINKED_SKELS := test_static_linked.skel.h linked_funcs.skel.h		\
+ 		test_usdt.skel.h
  
- /* Create a map that is suitable to be an inner map with dynamic max entries */
- 	BPF_F_INNER_MAP		= (1U << 12),
+ LSKELS := kfunc_call_test.c fentry_test.c fexit_test.c fexit_sleep.c \
+-	test_ringbuf.c atomics.c trace_printk.c trace_vprintk.c \
+-	map_ptr_kern.c core_kern.c core_kern_overflow.c
++	test_ringbuf.c test_ringbuf_overwritable.c atomics.c \
++	trace_printk.c trace_vprintk.c map_ptr_kern.c \
++	core_kern.c core_kern_overflow.c
+ # Generate both light skeleton and libbpf skeleton for these
+ LSKELS_EXTRA := test_ksyms_module.c test_ksyms_weak.c kfunc_call_test_subprog.c
+ SKEL_BLACKLIST += $$(LSKELS)
+diff --git a/tools/testing/selftests/bpf/prog_tests/ringbuf_overwritable.c b/tools/testing/selftests/bpf/prog_tests/ringbuf_overwritable.c
+new file mode 100644
+index 000000000000..b5ec1e62f761
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/ringbuf_overwritable.c
+@@ -0,0 +1,158 @@
++// SPDX-License-Identifier: GPL-2.0
++#define _GNU_SOURCE
++#include <linux/compiler.h>
++#include <asm/barrier.h>
++#include <test_progs.h>
++#include <sys/mman.h>
++#include <sys/epoll.h>
++#include <time.h>
++#include <sched.h>
++#include <signal.h>
++#include <pthread.h>
++#include <sys/sysinfo.h>
++#include <linux/perf_event.h>
++#include <linux/ring_buffer.h>
++#include "test_ringbuf_overwritable.lskel.h"
 +
-+/* Create an over writable BPF_RINGBUF */
-+	BFP_F_RB_OVERWRITABLE	= (1U << 13),
- };
- 
- /* Flags for BPF_PROG_QUERY. */
-diff --git a/tools/lib/bpf/ringbuf.c b/tools/lib/bpf/ringbuf.c
-index 8bc117bcc7bc..2362a6280fc5 100644
---- a/tools/lib/bpf/ringbuf.c
-+++ b/tools/lib/bpf/ringbuf.c
-@@ -23,6 +23,8 @@
- 
- struct ring {
- 	ring_buffer_sample_fn sample_cb;
++struct sample {
++	int count;
++	/*
++	 * filler size will be computed to have 8 samples in a 4096 bytes long
++	 * buffer.
++	 */
++	char filler[4096 / 8 - sizeof(int) - 8];
++};
++
++struct ring {
++	ring_buffer_sample_fn sample_cb;
 +	__u8 overwritable: 1,
 +	     __reserved:   7;
- 	void *ctx;
- 	void *data;
- 	unsigned long *consumer_pos;
-@@ -51,6 +53,11 @@ static void ringbuf_unmap_ring(struct ring_buffer *rb, struct ring *r)
- 	}
- }
- 
-+static inline bool is_overwritable(struct ring *r)
++	void *ctx;
++	void *data;
++	unsigned long *consumer_pos;
++	unsigned long *producer_pos;
++	unsigned long mask;
++	int map_fd;
++};
++
++struct ring_buffer {
++	struct epoll_event *events;
++	struct ring *rings;
++	size_t page_size;
++	int epoll_fd;
++	int ring_cnt;
++};
++
++static int duration;
++static struct test_ringbuf_overwritable_lskel *skel;
++
++void test_ringbuf_overwritable(void)
 +{
-+	return !!r->overwritable;
-+}
++	const size_t rec_sz = BPF_RINGBUF_HDR_SZ + sizeof(struct sample);
++	int page_size = getpagesize();
++	int sample_cnt = 0, sample_read = 0;
++	unsigned long mask = page_size - 1;
++	struct ring_buffer *ringbuf;
++	int err, *len_ptr, len;
++	struct sample *sample;
++	long read_pos;
++	void *data_ptr;
 +
- /* Add extra RINGBUF maps to this ring buffer manager */
- int ring_buffer__add(struct ring_buffer *rb, int map_fd,
- 		     ring_buffer_sample_fn sample_cb, void *ctx)
-@@ -95,6 +102,7 @@ int ring_buffer__add(struct ring_buffer *rb, int map_fd,
- 	r->sample_cb = sample_cb;
- 	r->ctx = ctx;
- 	r->mask = info.max_entries - 1;
-+	r->overwritable = !!(info.map_flags & BFP_F_RB_OVERWRITABLE);
- 
- 	/* Map writable consumer page */
- 	tmp = mmap(NULL, rb->page_size, PROT_READ | PROT_WRITE, MAP_SHARED,
-@@ -202,6 +210,101 @@ static inline int roundup_len(__u32 len)
- 	return (len + 7) / 8 * 8;
- }
- 
++	skel = test_ringbuf_overwritable_lskel__open();
++	if (CHECK(!skel, "skel_open", "skeleton open failed\n"))
++		return;
 +
-+static int64_t ringbuf_process_overwritable_ring(struct ring *r)
-+{
-+	/* 64-bit to avoid overflow in case of extreme application behavior */
-+	int64_t cnt = 0;
-+	unsigned long read_pos, prod_pos, previous_prod_pos;
++	skel->maps.ringbuf.max_entries = page_size;
 +
-+	prod_pos = smp_load_acquire(r->producer_pos);
-+	previous_prod_pos = smp_load_acquire(r->consumer_pos);
++	err = test_ringbuf_overwritable_lskel__load(skel);
++	if (CHECK(err != 0, "skel_load", "skeleton load failed\n"))
++		goto cleanup;
 +
-+	/*
-+	 * For overwritable ring buffer, we use consumer_pos as the previous
-+	 * producer_pos.
-+	 * So, if between two calls to this function, the prod_pos did not move,
-+	 * it means there is no new data, so we can return right now rather than
-+	 * dealing with data we already proceeded.
-+	 * NOTE the kernel space does not care about consumer_pos to reserve()
-+	 * in overwritable ring buffers, hence we can hijack this field.
-+	 */
-+	if (previous_prod_pos == prod_pos)
-+		return 0;
++	/* only trigger BPF program for current process */
++	skel->bss->pid = getpid();
 +
-+	/*
-+	 * BPF ring buffer is over writable, we start reading from
-+	 * producer position.
-+	 */
-+	read_pos = prod_pos;
-+	while (read_pos - prod_pos < r->mask) {
-+		int *len_ptr, len;
++	ringbuf = ring_buffer__new(skel->maps.ringbuf.map_fd, NULL, NULL, NULL);
++	if (CHECK(!ringbuf, "ringbuf_create", "failed to create ringbuf\n"))
++		goto cleanup;
 +
-+		len_ptr = r->data + (read_pos & r->mask);
-+		len = smp_load_acquire(len_ptr);
++	/* There is only one ring in this ringbuf. */
++	data_ptr = ringbuf->rings[0].data;
 +
-+		/* sample not committed yet, bail out for now */
-+		if (len & BPF_RINGBUF_BUSY_BIT)
-+			break;
++	err = test_ringbuf_overwritable_lskel__attach(skel);
++	if (CHECK(err, "skel_attach", "skeleton attachment failed: %d\n", err))
++		goto cleanup;
 +
-+		/*
-+		 * If len is 0, it means we read all the data
-+		 * available in the buffer and jump on 0 data:
-+		 *
-+		 * prod_pos                         read_pos
-+		 *     |                                |
-+		 *     V                                V
-+		 * +---+------+----------+-------+------+
-+		 * |   |D....D|C........C|B.....B|A....A|
-+		 * +---+------+----------+-------+------+
-+		 */
-+		if (!len)
-+			break;
++	/* Trigger one sample. */
++	syscall(__NR_getpgid);
++	sample_cnt++;
 +
-+		/*
-+		 * If adding the event len to the current
-+		 * consumer position makes us wrap the buffer,
-+		 * it means we already did "one loop" around the
-+		 * buffer.
-+		 * So, the pointed data would not be usable:
-+		 *
-+		 *                               prod_pos
-+		 *                   read_pos----+   |
-+		 *                               |   |
-+		 *                               V   V
-+		 * +---+------+----------+-------+---+--+
-+		 * |..E|D....D|C........C|B.....B|A..|E.|
-+		 * +---+------+----------+-------+---+--+
-+		 */
-+		if (read_pos - prod_pos + len > r->mask)
-+			break;
++	CHECK(skel->bss->avail_data != -EINVAL,
++	      "err_avail_size", "exp %d, got %ld\n",
++	      -EINVAL, skel->bss->avail_data);
++	CHECK(skel->bss->ring_size != page_size,
++	      "err_ring_size", "exp %ld, got %ld\n",
++	      (long)page_size, skel->bss->ring_size);
++	CHECK(skel->bss->cons_pos != -EINVAL,
++	      "err_cons_pos", "exp %d, got %ld\n",
++	      -EINVAL, skel->bss->cons_pos);
++	CHECK(skel->bss->prod_pos != sample_cnt * -rec_sz,
++	      "err_prod_pos", "exp %ld, got %ld\n",
++	      sample_cnt * -rec_sz, skel->bss->prod_pos);
 +
-+		read_pos += roundup_len(len);
++	len_ptr = data_ptr + (skel->bss->prod_pos & mask);
++	len = smp_load_acquire(len_ptr);
 +
-+		if ((len & BPF_RINGBUF_DISCARD_BIT) == 0) {
-+			void *sample;
-+			int err;
++	CHECK(len != sizeof(struct sample),
++	      "err_sample_len", "exp %ld, got %d\n",
++	      sizeof(struct sample), len);
 +
-+			sample = (void *)len_ptr + BPF_RINGBUF_HDR_SZ;
-+			err = r->sample_cb(r->ctx, sample, len);
-+			if (err < 0) {
-+				/* update consumer pos and bail out */
-+				smp_store_release(r->consumer_pos,
-+						  prod_pos);
-+				return err;
-+			}
-+			cnt++;
-+		}
++	sample = (void *)len_ptr + BPF_RINGBUF_HDR_SZ;
 +
-+		/* This prevents reading data we already processed. */
-+		if (previous_prod_pos && read_pos >= previous_prod_pos)
-+			break;
++	CHECK(sample->count != sample_cnt,
++	      "err_sample_cnt", "exp %d, got %d",
++	      sample_cnt, sample->count);
++
++	/* Trigger many samples, so we overwrite data */
++	for (int i = 0; i < 16; i++) {
++		syscall(__NR_getpgid);
++		sample_cnt++;
 +	}
 +
-+	smp_store_release(r->consumer_pos, prod_pos);
-+	return cnt;
++	CHECK(skel->bss->avail_data != -EINVAL,
++	      "err_avail_size", "exp %d, got %ld\n",
++	      -EINVAL, skel->bss->avail_data);
++	CHECK(skel->bss->ring_size != page_size,
++	      "err_ring_size", "exp %ld, got %ld\n",
++	      (long)page_size, skel->bss->ring_size);
++	CHECK(skel->bss->cons_pos != -EINVAL,
++	      "err_cons_pos", "exp %d, got %ld\n",
++	      -EINVAL, skel->bss->cons_pos);
++	CHECK(skel->bss->prod_pos != sample_cnt * -rec_sz,
++	      "err_prod_pos", "exp %ld, got %ld\n",
++	      sample_cnt * -rec_sz, skel->bss->prod_pos);
++
++	read_pos = skel->bss->prod_pos;
++	sample_read = 0;
++	while (read_pos - skel->bss->prod_pos < mask) {
++		len_ptr = data_ptr + (read_pos & mask);
++		len = smp_load_acquire(len_ptr);
++
++		sample = (void *)len_ptr + BPF_RINGBUF_HDR_SZ;
++
++		CHECK(sample->count != sample_cnt - sample_read,
++		      "err_sample_cnt", "exp %d, got %d",
++		      sample_cnt - sample_read, sample->count);
++
++		sample_read++;
++		read_pos += round_up(len + BPF_RINGBUF_HDR_SZ, 8);
++	}
++
++	CHECK(sample_read != page_size / rec_sz,
++	      "err_sample_read", "exp %ld, got %d",
++	      page_size / rec_sz, sample_read);
++
++	test_ringbuf_overwritable_lskel__detach(skel);
++cleanup:
++	ring_buffer__free(ringbuf);
++	test_ringbuf_overwritable_lskel__destroy(skel);
 +}
+diff --git a/tools/testing/selftests/bpf/progs/test_ringbuf_overwritable.c b/tools/testing/selftests/bpf/progs/test_ringbuf_overwritable.c
+new file mode 100644
+index 000000000000..e28be35059b7
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_ringbuf_overwritable.c
+@@ -0,0 +1,61 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (c) 2020 Facebook
 +
- static int64_t ringbuf_process_ring(struct ring* r)
- {
- 	int *len_ptr, len, err;
-@@ -211,6 +314,9 @@ static int64_t ringbuf_process_ring(struct ring* r)
- 	bool got_new_data;
- 	void *sample;
- 
-+	if (is_overwritable(r))
-+		return ringbuf_process_overwritable_ring(r);
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
 +
- 	cons_pos = smp_load_acquire(r->consumer_pos);
- 	do {
- 		got_new_data = false;
++char _license[] SEC("license") = "GPL";
++
++struct sample {
++	int count;
++	/*
++	 * filler size will be computed to have 8 samples in a 4096 bytes long
++	 * buffer.
++	 */
++	char filler[4096 / 8 - sizeof(int) - BPF_RINGBUF_HDR_SZ];
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_RINGBUF);
++	__uint(map_flags, BFP_F_RB_OVERWRITABLE);
++} ringbuf SEC(".maps");
++
++/* inputs */
++int pid = 0;
++
++/* outputs */
++long avail_data = 0;
++long ring_size = 0;
++long cons_pos = 0;
++long prod_pos = 0;
++
++static int count;
++
++SEC("fentry/" SYS_PREFIX "sys_getpgid")
++int test_ringbuf_overwritable(void *ctx)
++{
++	int cur_pid = bpf_get_current_pid_tgid() >> 32;
++	struct sample *sample;
++
++	if (cur_pid != pid)
++		return 0;
++
++	sample = bpf_ringbuf_reserve(&ringbuf, sizeof(*sample), 0);
++	if (!sample)
++		return 0;
++
++	__sync_fetch_and_add(&count, 1);
++	sample->count = count;
++
++	bpf_printk("count: %d\n", count);
++
++	bpf_ringbuf_submit(sample, 0);
++
++	avail_data = bpf_ringbuf_query(&ringbuf, BPF_RB_AVAIL_DATA);
++	ring_size = bpf_ringbuf_query(&ringbuf, BPF_RB_RING_SIZE);
++	cons_pos = bpf_ringbuf_query(&ringbuf, BPF_RB_CONS_POS);
++	prod_pos = bpf_ringbuf_query(&ringbuf, BPF_RB_PROD_POS);
++
++	return 0;
++}
 -- 
 2.25.1
 
