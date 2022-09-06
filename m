@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6086AECAAA1
-	for <linux-kselftest@archiver.kernel.org>; Tue,  6 Sep 2022 15:55:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A987C6FA89
+	for <linux-kselftest@archiver.kernel.org>; Tue,  6 Sep 2022 15:55:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233158AbiIFPzo (ORCPT
+        id S238444AbiIFPzn (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 6 Sep 2022 11:55:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52766 "EHLO
+        Tue, 6 Sep 2022 11:55:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234525AbiIFPzW (ORCPT
+        with ESMTP id S232655AbiIFPzT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Sep 2022 11:55:22 -0400
+        Tue, 6 Sep 2022 11:55:19 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD3B58E0C5
-        for <linux-kselftest@vger.kernel.org>; Tue,  6 Sep 2022 08:13:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82EE48E0C9
+        for <linux-kselftest@vger.kernel.org>; Tue,  6 Sep 2022 08:13:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662477204;
+        s=mimecast20190719; t=1662477201;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=EN0gZ7KX3l2ofZoDtpWQPp8Bi3n6Z9ichaklbTKAD6Q=;
-        b=h4ug5WhQ7ohHbvVm32L1AA8cQjRqqX1E9deRHsKZTwWNgUQkqF35P+ReqMHjy2fse+D4KA
-        OtABIOGaxu0GeYrBUCM+cobYWDJYfoqzCyGjvIh0tzWxzSVtQcJyxYfwYqPeLDiqFIUPLl
-        wrNojcF4YsHGk2Gjczxa8SzPxP78h1Y=
+        bh=T1YLpg5hiMnuMea1FLzrzVbnfy32mxSqZlIxRFNjEdA=;
+        b=HjoisD2awoBm8LpJi7masjmou+6Q66h5LzD3/RXEa/1nIZa8z0n9j8+HJCYKEe+7ZY2y7V
+        msjW2KUlrC4M5WfISGck7h55C7G7nXNMfs/MNceREHsSiNtCw2bRO65fDWK98vZzM9TNmY
+        nqQxRyDMOeCnic25JMBOnDVqnb09AoM=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-628-Efo7MM1UNLaxIWQUg9MRVA-1; Tue, 06 Sep 2022 11:13:21 -0400
-X-MC-Unique: Efo7MM1UNLaxIWQUg9MRVA-1
+ us-mta-112-HXU70OF3NhSAqZxuUBtH-g-1; Tue, 06 Sep 2022 11:13:16 -0400
+X-MC-Unique: HXU70OF3NhSAqZxuUBtH-g-1
 Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 92252805B9A;
-        Tue,  6 Sep 2022 15:13:20 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A094A811E90;
+        Tue,  6 Sep 2022 15:13:15 +0000 (UTC)
 Received: from plouf.redhat.com (unknown [10.39.192.236])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5801A40D296C;
-        Tue,  6 Sep 2022 15:13:18 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7064D40D296C;
+        Tue,  6 Sep 2022 15:13:13 +0000 (UTC)
 From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -51,9 +51,9 @@ To:     Alexei Starovoitov <ast@kernel.org>,
 Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH bpf-next v11 3/7] bpf/verifier: allow all functions to read user provided context
-Date:   Tue,  6 Sep 2022 17:12:59 +0200
-Message-Id: <20220906151303.2780789-4-benjamin.tissoires@redhat.com>
+Subject: [PATCH bpf-next v11 1/7] selftests/bpf: regroup and declare similar kfuncs selftests in an array
+Date:   Tue,  6 Sep 2022 17:12:57 +0200
+Message-Id: <20220906151303.2780789-2-benjamin.tissoires@redhat.com>
 In-Reply-To: <20220906151303.2780789-1-benjamin.tissoires@redhat.com>
 References: <20220906151303.2780789-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
@@ -63,84 +63,172 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When a function was trying to access data from context in a syscall eBPF
-program, the verifier was rejecting the call unless it was accessing the
-first element.
-This is because the syscall context is not known at compile time, and
-so we need to check this when actually accessing it.
+Similar to tools/testing/selftests/bpf/prog_tests/dynptr.c:
+we declare an array of tests that we run one by one in a for loop.
 
-Check for the valid memory access if there is no convert_ctx callback,
-and allow such situation to happen.
+Followup patches will add more similar-ish tests, so avoid a lot of copy
+paste by grouping the declaration in an array.
 
-There is a slight hiccup with subprogs. btf_check_subprog_arg_match()
-will check that the types are matching, which is a good thing, but to
-have an accurate result, it hides the fact that the context register may
-be null. This makes env->prog->aux->max_ctx_offset being set to the size
-of the context, which is incompatible with a NULL context.
+For light skeletons, we have to rely on the offsetof() macro so we can
+statically declare which program we are using.
+In the libbpf case, we can rely on bpf_object__find_program_by_name().
+So also change the Makefile to generate both light skeletons and normal
+ones.
 
-Solve that last problem by storing max_ctx_offset before the type check
-and restoring it after.
-
-Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
 ---
 
-no changes in v11
+changes in v11:
+- use of both light skeletons and normal libbpf
 
-changes in v10:
-- dropped the hunk in btf.c saving/restoring max_ctx_offset
-
-changes in v9:
-- rewrote the commit title and description
-- made it so all functions can make use of context even if there is
-  no convert_ctx
-- remove the is_kfunc field in bpf_call_arg_meta
-
-changes in v8:
-- fixup comment
-- return -EACCESS instead of -EINVAL for consistency
-
-changes in v7:
-- renamed access_t into atype
-- allow zero-byte read
-- check_mem_access() to the correct offset/size
-
-new in v6
+new in v10
 ---
- kernel/bpf/verifier.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ tools/testing/selftests/bpf/Makefile          |  5 +-
+ .../selftests/bpf/prog_tests/kfunc_call.c     | 81 +++++++++++++++----
+ 2 files changed, 68 insertions(+), 18 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index d27fae3ce949..3f9e6fa92cde 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -5233,6 +5233,25 @@ static int check_helper_mem_access(struct bpf_verifier_env *env, int regno,
- 				env,
- 				regno, reg->off, access_size,
- 				zero_size_allowed, ACCESS_HELPER, meta);
-+	case PTR_TO_CTX:
-+		/* in case the function doesn't know how to access the context,
-+		 * (because we are in a program of type SYSCALL for example), we
-+		 * can not statically check its size.
-+		 * Dynamically check it now.
-+		 */
-+		if (!env->ops->convert_ctx_access) {
-+			enum bpf_access_type atype = meta && meta->raw_mode ? BPF_WRITE : BPF_READ;
-+			int offset = access_size - 1;
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index eecad99f1735..314216d77b8d 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -351,11 +351,12 @@ LINKED_SKELS := test_static_linked.skel.h linked_funcs.skel.h		\
+ 		test_subskeleton.skel.h test_subskeleton_lib.skel.h	\
+ 		test_usdt.skel.h
+ 
+-LSKELS := kfunc_call_test.c fentry_test.c fexit_test.c fexit_sleep.c \
++LSKELS := fentry_test.c fexit_test.c fexit_sleep.c \
+ 	test_ringbuf.c atomics.c trace_printk.c trace_vprintk.c \
+ 	map_ptr_kern.c core_kern.c core_kern_overflow.c
+ # Generate both light skeleton and libbpf skeleton for these
+-LSKELS_EXTRA := test_ksyms_module.c test_ksyms_weak.c kfunc_call_test_subprog.c
++LSKELS_EXTRA := test_ksyms_module.c test_ksyms_weak.c kfunc_call_test.c \
++	kfunc_call_test_subprog.c
+ SKEL_BLACKLIST += $$(LSKELS)
+ 
+ test_static_linked.skel.h-deps := test_static_linked1.o test_static_linked2.o
+diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
+index eede7c304f86..9dfbe5355a2d 100644
+--- a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
++++ b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
+@@ -2,6 +2,7 @@
+ /* Copyright (c) 2021 Facebook */
+ #include <test_progs.h>
+ #include <network_helpers.h>
++#include "kfunc_call_test.skel.h"
+ #include "kfunc_call_test.lskel.h"
+ #include "kfunc_call_test_subprog.skel.h"
+ #include "kfunc_call_test_subprog.lskel.h"
+@@ -9,9 +10,31 @@
+ 
+ #include "cap_helpers.h"
+ 
+-static void test_main(void)
++struct kfunc_test_params {
++	const char *prog_name;
++	unsigned long lskel_prog_desc_offset;
++	int retval;
++};
 +
-+			/* Allow zero-byte read from PTR_TO_CTX */
-+			if (access_size == 0)
-+				return zero_size_allowed ? 0 : -EACCES;
++#define TC_TEST(name, __retval) \
++	{ \
++	  .prog_name = #name, \
++	  .lskel_prog_desc_offset = offsetof(struct kfunc_call_test_lskel, progs.name), \
++	  .retval = __retval, \
++	}
 +
-+			return check_mem_access(env, env->insn_idx, regno, offset, BPF_B,
-+						atype, -1, false);
-+		}
++static struct kfunc_test_params kfunc_tests[] = {
++	TC_TEST(kfunc_call_test1, 12),
++	TC_TEST(kfunc_call_test2, 3),
++	TC_TEST(kfunc_call_test_ref_btf_id, 0),
++};
 +
-+		fallthrough;
- 	default: /* scalar_value or invalid ptr */
- 		/* Allow zero-byte read from NULL, regardless of pointer type */
- 		if (zero_size_allowed && access_size == 0 &&
++static void verify_success(struct kfunc_test_params *param)
+ {
+-	struct kfunc_call_test_lskel *skel;
++	struct kfunc_call_test_lskel *lskel = NULL;
++	struct bpf_prog_desc *lskel_prog;
++	struct kfunc_call_test *skel;
++	struct bpf_program *prog;
+ 	int prog_fd, err;
+ 	LIBBPF_OPTS(bpf_test_run_opts, topts,
+ 		.data_in = &pkt_v4,
+@@ -19,26 +42,53 @@ static void test_main(void)
+ 		.repeat = 1,
+ 	);
+ 
+-	skel = kfunc_call_test_lskel__open_and_load();
++	/* first test with normal libbpf */
++	skel = kfunc_call_test__open_and_load();
+ 	if (!ASSERT_OK_PTR(skel, "skel"))
+ 		return;
+ 
+-	prog_fd = skel->progs.kfunc_call_test1.prog_fd;
+-	err = bpf_prog_test_run_opts(prog_fd, &topts);
+-	ASSERT_OK(err, "bpf_prog_test_run(test1)");
+-	ASSERT_EQ(topts.retval, 12, "test1-retval");
++	prog = bpf_object__find_program_by_name(skel->obj, param->prog_name);
++	if (!ASSERT_OK_PTR(prog, "bpf_object__find_program_by_name"))
++		goto cleanup;
+ 
+-	prog_fd = skel->progs.kfunc_call_test2.prog_fd;
++	prog_fd = bpf_program__fd(prog);
+ 	err = bpf_prog_test_run_opts(prog_fd, &topts);
+-	ASSERT_OK(err, "bpf_prog_test_run(test2)");
+-	ASSERT_EQ(topts.retval, 3, "test2-retval");
++	if (!ASSERT_OK(err, param->prog_name))
++		goto cleanup;
++
++	if (!ASSERT_EQ(topts.retval, param->retval, "retval"))
++		goto cleanup;
++
++	/* second test with light skeletons */
++	lskel = kfunc_call_test_lskel__open_and_load();
++	if (!ASSERT_OK_PTR(lskel, "lskel"))
++		goto cleanup;
++
++	lskel_prog = (struct bpf_prog_desc *)((char *)lskel + param->lskel_prog_desc_offset);
+ 
+-	prog_fd = skel->progs.kfunc_call_test_ref_btf_id.prog_fd;
++	prog_fd = lskel_prog->prog_fd;
+ 	err = bpf_prog_test_run_opts(prog_fd, &topts);
+-	ASSERT_OK(err, "bpf_prog_test_run(test_ref_btf_id)");
+-	ASSERT_EQ(topts.retval, 0, "test_ref_btf_id-retval");
++	if (!ASSERT_OK(err, param->prog_name))
++		goto cleanup;
++
++	ASSERT_EQ(topts.retval, param->retval, "retval");
++
++cleanup:
++	kfunc_call_test__destroy(skel);
++	if (lskel)
++		kfunc_call_test_lskel__destroy(lskel);
++}
++
++static void test_main(void)
++{
++	int i;
++
++	for (i = 0; i < ARRAY_SIZE(kfunc_tests); i++) {
++		if (!test__start_subtest(kfunc_tests[i].prog_name))
++			continue;
+ 
+-	kfunc_call_test_lskel__destroy(skel);
++		verify_success(&kfunc_tests[i]);
++	}
+ }
+ 
+ static void test_subprog(void)
+@@ -121,8 +171,7 @@ static void test_destructive(void)
+ 
+ void test_kfunc_call(void)
+ {
+-	if (test__start_subtest("main"))
+-		test_main();
++	test_main();
+ 
+ 	if (test__start_subtest("subprog"))
+ 		test_subprog();
 -- 
 2.36.1
 
