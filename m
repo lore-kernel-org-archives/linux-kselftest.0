@@ -2,46 +2,46 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB51FECAAD3
-	for <linux-kselftest@archiver.kernel.org>; Wed,  7 Sep 2022 08:00:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 42692C6FA83
+	for <linux-kselftest@archiver.kernel.org>; Wed,  7 Sep 2022 08:00:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230125AbiIGIAt (ORCPT
+        id S230192AbiIGIAx (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 7 Sep 2022 04:00:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46886 "EHLO
+        Wed, 7 Sep 2022 04:00:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230115AbiIGIAi (ORCPT
+        with ESMTP id S229958AbiIGIAn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 7 Sep 2022 04:00:38 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2063.outbound.protection.outlook.com [40.107.237.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0BDE4A124;
-        Wed,  7 Sep 2022 01:00:32 -0700 (PDT)
+        Wed, 7 Sep 2022 04:00:43 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2075.outbound.protection.outlook.com [40.107.237.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D87257F26F;
+        Wed,  7 Sep 2022 01:00:41 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WG0q1NnziZvfJ2hYNczlqYhm7+zfPRcaGKSj7Wu6/Oxq6unxrIWPXCcU9jkrrrc7rwIh8caYgu1E9/GyQhZZFyDDEDVRuYCYCXAAy0G0DB0TqFjNmLaVEM4WP1Y+aS9FpCkjiO52xmT/32GQmzWvx4EpwwU5Np/jv+Gb0/It64eQWOE8cC1xHKQFJA7rbFY6ooMKpNBV4wnfSRPrEvAjyaGiX9FyMiJDInO214Ujn1oNzgxlJnLCFyZiNXtJhpOqunRg1ZhrHuCrtZuisUQqYjs/+BvwmSFTzQxw8Jl+gc4h7Bq25PfMGJP13Z7hY5F454Vbhoe5wkRUKueMpQ8brw==
+ b=P2IRqjageziJ+h2f1199hAkb2ImX8hx9gxHyvS+R5kHkzHsagzpaPbBYxuscnF+m9yb1A9eOlNr3g4o4WS3q9zIt5Pq2X2FDbocYi9h0wD6uxhXT9Yp23DxLgCtG2zRz2haRP9R6gitx1tgxT191eLOrB9GS4V57H7URWDAdjD/+lv2LUw7tIEyrBe8BY+c/0+v55soq7+/tKWitDsLE1MtopxtGImNflVuLmXUUHeaDIcM+o63lHnpkanxddomH5gpCzYWxl7do2e3EA5orfHRN2LtkLHQ3ToLfiPjGeSYS+1PeHXN6Fi5v4AVdpM5atsHAqJA/1I5jHQc/b8gNQQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/tNg58DSCLZ2F3Wk2SxnoEgj1muFl9F8pIQIAJ4BCHc=;
- b=YdTXsVJCqQlpRlFTffUkgbXgzbjcHTTOBZFosW/mMHMZ9+U0baFPGtQbNh/7dUtRNhtQUdVaKB21ah0cCKC4O1TarbUNVFxJ16fXuR3MDnzSf+kS3mVmVl4xCAKWqTBw/9ZqqPWTMUqzNqtI4vzEPy/8I4rXu+OA8uP3N6cxRJwTds4Mblwczc5+HB2FJdG/QBNuI1UlsMlqn3bpm7A53X4k4TVmrHp3v446o4xDA9ICbcNf+9R/P88uVYEz+Im9L1Q6vPtdirt/ZzWUV+OLXkcpgDbkEYzEA9f/Zvw/ehE50Qs+I/X5kj2nyVFdUtQHWlvGzTJIhqawoQYDPuLxbw==
+ bh=7N2g3lNAUJyf6++63BNdZhHL+ljWXgh+vkLh2LfrlXQ=;
+ b=nb372AmsxBhAzVGXP0WLDp7ax8q0PVRjkYKfRf0aCOknySy+jR+9eNzaVvvYTyddMnUqmp81D0CHnlQWJWHKSNzpNgoKHDDlkMmiQTjkzLGTDyBxQ4aWgV+PFtCEJBKvJhjnTVoajEGBavzGAififIIYnWa0t0IaRNkLGRfcxoTjLZD8qUa92vk/R9pRizA1g2CvMIhUkAjW+y7vXddZMMZP1Z4aAlbs/95vHeSf6AD5h/LUfBjFEa4Bas+Cs7vhy4+t+y3DRjzdSDck2w43NzA7wglttWVEaURpywDWq4fEeIrsi31G/6xYOMxv4F4T8aq8MhXKosDQbo0AEJGPgQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/tNg58DSCLZ2F3Wk2SxnoEgj1muFl9F8pIQIAJ4BCHc=;
- b=WJLVpdsf7J+uCAVSAX2gtclShX/kF+cL6mGGjNuxPWWTmwB3PM7CbhVpvzX7SefPeU/1QrMqS9Ik2wTadzCxaEyMDH7+YqBPETYbcpRvac3VS2iNn/GdKnmoAA4sBQbNYBkMelhbHbHTFdG/MIKUDJfMIRjU9px1hffeFpa3z6hl9TLmYb3A4rhGM4oF0fBjMxTpnELZpi+WudH8L6ei3O/DFMLUCpszsUIZpDWxn2Tohf2GmSYFRKsBhid4bHuzj0xYpNxDTZ3gR/L8xhqGWQe3oMnJyisdEKtV/VdJNMCwB7AJLF2XkNUte7eREa/CP7SeQwnMBwJN0T3p+K5mrQ==
+ bh=7N2g3lNAUJyf6++63BNdZhHL+ljWXgh+vkLh2LfrlXQ=;
+ b=iZLUw9vaqTjejB67Yihmy+QaHlgDY54osww4I8wCSF9KGIjVkva7Dj/drBvc/9y9oTgxWpijT4d+lLabuHT4Yriy6ABwupsvadKMkEpCK4TWvJScyh5vEL1JlJ6kX1e1A9Q1ELnDdhIYjNUBVLETYuyKXDUozmObCciG0J4T64/q5CxV3fLOssdJtbbLhr/CoBmJskyM0OIUKFP4THbeDF9h+uE/z6i7/y+EgpJBIfIjIkxH2sEs503drHIP5wiFvnL7rGnPE9146QX0goSrbsRR4sqky5y5EEqNExGOnKxezz+8jsLXQ3iy8thPQthAJhAhjUBStieIoGWxSNmn2Q==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from MN2PR12MB4373.namprd12.prod.outlook.com (2603:10b6:208:261::8)
  by SA0PR12MB4495.namprd12.prod.outlook.com (2603:10b6:806:70::13) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.12; Wed, 7 Sep
- 2022 08:00:30 +0000
+ 2022 08:00:40 +0000
 Received: from MN2PR12MB4373.namprd12.prod.outlook.com
  ([fe80::51f3:15f4:a31a:7406]) by MN2PR12MB4373.namprd12.prod.outlook.com
  ([fe80::51f3:15f4:a31a:7406%5]) with mapi id 15.20.5588.018; Wed, 7 Sep 2022
- 08:00:30 +0000
+ 08:00:40 +0000
 From:   Benjamin Poirier <bpoirier@nvidia.com>
 To:     netdev@vger.kernel.org
 Cc:     Jay Vosburgh <j.vosburgh@gmail.com>,
@@ -54,109 +54,196 @@ Cc:     Jay Vosburgh <j.vosburgh@gmail.com>,
         Shuah Khan <shuah@kernel.org>,
         Jonathan Toppins <jtoppins@redhat.com>,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH net v3 0/4] Unsync addresses from ports when stopping aggregated devices
-Date:   Wed,  7 Sep 2022 16:56:38 +0900
-Message-Id: <20220907075642.475236-1-bpoirier@nvidia.com>
+Subject: [PATCH net v3 2/4] net: bonding: Unsync device addresses on ndo_stop
+Date:   Wed,  7 Sep 2022 16:56:40 +0900
+Message-Id: <20220907075642.475236-3-bpoirier@nvidia.com>
 X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20220907075642.475236-1-bpoirier@nvidia.com>
+References: <20220907075642.475236-1-bpoirier@nvidia.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: TYWPR01CA0030.jpnprd01.prod.outlook.com
- (2603:1096:400:aa::17) To MN2PR12MB4373.namprd12.prod.outlook.com
+X-ClientProxiedBy: TYWPR01CA0015.jpnprd01.prod.outlook.com
+ (2603:1096:400:a9::20) To MN2PR12MB4373.namprd12.prod.outlook.com
  (2603:10b6:208:261::8)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9abcfad3-1d33-456a-38f0-08da90a708c5
+X-MS-Office365-Filtering-Correlation-Id: 5a001035-6ff9-4c03-234d-08da90a70e68
 X-MS-TrafficTypeDiagnostic: SA0PR12MB4495:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BBphhzRazDw0h/UhpyfB5OiOkzsdNGvE/lRhiSZ+gb18X4glkmlg0r0Ue+TXpVj0vBu8YG3x/YtbAs69yxdDE1lZsvbs7Dgpjkktu0FeE0TEb36PVsPIes5tzpuGavqcHrCFdVYgwD9nwShbgzYazThdTPrSwKRygdBUfGDf+MixJ8+tQ7Z/nyT6+ZJSt9Wp3riv4GyRkGsXCpwxWSzamEoDQLKNUulcX7jEDtyflwyorx3hGyzW4b3CvZeqYqaz5nWB+WfBW8oTyXZMKhLIec2pZgIZNx+CMcNfeRCYWqs75P67W6PPIPQOyZyDXavvQRrFdGZIkZNopXsW/sHXKzGpwvsVe3Zf2wSgpNmaTxT6pm7n8cI50O5mmIYs+EYTdGS/sj7NiRjKaXUgXXwNLIpC58he1sh2Z9JorkY2Znb8Ah5mTV3UVPX7BVjOasUHm/2Rbuea/frjo/tTPuQmqKj1uocBfc7wdtUF7XXhEwhGeZdskHqeTEUzvK/RrRHKohIn6YmchcyphRgM685wBsJlGPGUx8xsqgUQWdtAtZtcCZPMfybDJU2InLxK+Uz7WvQiqRngqIcn1PVgZnpQcee8CPyeaNuidJejYnlorduCjpg5niP/AFvubM/T/39QloNLm0PWLSL3XPiVmwlcPJVsXH6C+4+oJ8mgDCYSMx42KTxKWLD1eWps5GbtvKhaPQgtK4uwFpV6gi/H/jqLug==
+X-Microsoft-Antispam-Message-Info: pwbpQu6kbV9QoseFyhfStyLR5c+n35IJJ7EvmrNMpaK9yHGwV0AMd59tNXows4IQyXWP91RVmDe2IvFZSe6FpYiJcDiY5yTA7IvPByu1pzydEdt0+/qDua51AKdFwanzSjk5PpSQT6peNNq/Odhtz630IDBsAXNv1g/OkyCCS1pgKbjmi1XpGTTjVThurHKxvJ98szgcS5DukyrVsH28w3+WXu/4KJ5EraxbI6Lw+OZp7frJ1dR0jf2LwNLUoxGzG+gXuwqgKFe7iWmlmBOZzOKNhmIzoEfxY1D3DBsGNx8AW0FcrRonjbnPRBWRkIpmykgbmsBRyhrvJo/sCxVn+/cr+xHCQtogXIh4A7QTmiSwTi8oSHOZpWbPHnz6MNCc54SoGY+Wsa7WWSd22yu3ttVYNfMmlQlORp6KshFDPbQ+Ks73VpM3nIiGURN8najywYtUr1u5gkDCLoumo12QgQ/GAVVHhhKCgFbYOsuPSQIdGUvc23q5FycyXFuKghSoOuxsElnM9ETkI9t8PoSHPLKM0ywSDHIGi8cJRJr8jzHLif+Mq/huuYe6DsEQpSeDA1CW2yQOhBr9LUkFae2O/gUoAPqRQISC594vtPTipkRkq31e6yQE+ihXZv8752S5UIUKYKcw515C4f7RwDBGwk4tewCMxHH48o4LESpaM0CeE1gAToMKKUguyE2+XrOKCleRevA8q8Yq552UwLr8HA==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4373.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(346002)(366004)(376002)(39860400002)(396003)(2906002)(5660300002)(7416002)(38100700002)(6486002)(8936002)(478600001)(6506007)(41300700001)(316002)(6916009)(54906003)(4326008)(66556008)(83380400001)(66946007)(66476007)(8676002)(1076003)(26005)(6512007)(186003)(2616005)(86362001)(36756003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?eh+mnpWEzRkkre0ilhpBjW5FTnzs6HpNLYk/nYu4Idb1uBcEvbMst8aXdqqE?=
- =?us-ascii?Q?3iOjUq5g1ydqiBwlx5NCBC1vRC7BKPKuZzbooYqYGqmquwAozG4FORM+IFxG?=
- =?us-ascii?Q?NrCEHYJcRFchpVAuyMEQiAgR+tgSdxjNjD/0GVe485WnVDLYP2Pg2YyuwAtW?=
- =?us-ascii?Q?lKC0PUkITWQIoI4XShjAb9luFaJHw2HDxCwWHH1h5dhxmkT3N7l8b3Zu6uuF?=
- =?us-ascii?Q?FZO/kZ5uw+x+OwOd7YoD+lmOxD8b0i1nCLcNKNNuSr/1m6l0IzAdA5pr7vST?=
- =?us-ascii?Q?RhBl3SqgGzPyjL9OLDtgJGduFkxCAdSAPsXvEswzGAWdTHivf7GYuVgJDynf?=
- =?us-ascii?Q?dBdhdYwjREPyHd2Irn8yEsd93rivu+pfDqPk/1SlSu4oKIubDqQ94ETp1OmC?=
- =?us-ascii?Q?khqbtgG68t14kNJJ0UxPMjJHvMbS8d6cnSDqHoyIfltHzZSUWaktbc4nfRRC?=
- =?us-ascii?Q?4arsO6JpG0SXQGfYMhBUsXLC17RHRlGB0+oC10CLYf5jrTrNKrGTDDEquBjQ?=
- =?us-ascii?Q?ysFHbzGBf2JydvC6U4MUocxYgi1MtiLaYmOi9IjQq/mrKFxFqQxgPiOUapYD?=
- =?us-ascii?Q?WEW/aWh6DiSf/M9IchhmRQHGUuts8Lxax9jRn+4glPY+Rhem8ZbPOM+exm7g?=
- =?us-ascii?Q?i02cpMXFCa1XYL3IbF8Jb+TUW7HvFaEKHbGIlUBWSkSitIi3pt+PNT3dbEMV?=
- =?us-ascii?Q?WAG+JLWvHEuaDZZ/AGq5ti6cCrS5vqSraY1kzZQ4B5AKJSNTCoRUE7EoWBOP?=
- =?us-ascii?Q?owJrY7nvJ/H3PuvR675KW4dQQH1ZPyc26fJ5d8wyYu4c7kP7IuHRMaWU+9ph?=
- =?us-ascii?Q?J/w++oDLCtGVi1Sj6rNUCtMycsrcNEJzEI+EYD3BkGz7kbCOBE/DYDSkryj6?=
- =?us-ascii?Q?Vr/cWrapHtnxRWagV7vA0F298qRJHobOx3ou+cI+mF72bQioi/2TlhUIeboO?=
- =?us-ascii?Q?0PRE/V7+iTEOKWPXfhwQA84/C/jthbIOUJfo+SKjCOwlFqckOAJXqmClsZYe?=
- =?us-ascii?Q?gk5YDMQI1vVUHFyhgsueseFe1fG+MZ8Xj9ZuBA0HlHKPyfviICr5mGnzYi4B?=
- =?us-ascii?Q?Ja5coydcFRb/RmVrqniSTnh+oFFx952q9rCGgWfKkpONyrlVLZ21EKRJrVMH?=
- =?us-ascii?Q?5dQOBgVJMZyOjyv6WWfjf8WjrjNrQFhLJDAQj+cEvGFctbEf1/6iTJWlK8Ew?=
- =?us-ascii?Q?7//WuRI2JvyQaK9R8mdn0WQ80a59mSf9EQfydL4hxXvDa0jU+mYYizfZ9pyq?=
- =?us-ascii?Q?kwygBiPDhgAei4VRpGJ0NXl45GfY5dxY7IGA0jiaZVOwUoS3Y9QQFxe3CGfw?=
- =?us-ascii?Q?hvOp9tYfrt7finMrvgeNr87GyTXA3jZjmzxNPwqK4gbvSLAdrW27O4WS2TBY?=
- =?us-ascii?Q?5M7Uuqg6EKx6srhMYBc/C+chuWwcxe7YNonrQ7UwgBXynpY/3wOu4jK+43cb?=
- =?us-ascii?Q?vBkvxbbEnNyilnCH1fJlr4RQ8vjcrxRo0E32a2Haz1kMEGJdc2quWWTDUygS?=
- =?us-ascii?Q?x1V0vh0Fc6AUrYziKoWeOnYLy1mMUc44pxlYchwjoM+cPKLkVe/bAxi7XxKk?=
- =?us-ascii?Q?t2Jib4kTyws3ZhmYVeK0Wv/8WyzDxfs8U1Zt2zu+?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?iQxCLrnGgGe+hgaMRmwjV2tD5iBxPdkXq7qjqCWU9uIYBXv2zRwFwF54/DCO?=
+ =?us-ascii?Q?fX0OFp38sIeuPNZdQnuKvQqfJJOhJWvSPufHgrl+vqVBixAn6EC7k+bTbWRc?=
+ =?us-ascii?Q?llnRGYpytHIkfaV/DUYbpQm4bW7FgTpWzjVeJzorV6zRA7VnhBPGJcAUqL4t?=
+ =?us-ascii?Q?PySZTpr8dorseLEZ/6uoDIj9dW+4CFVzD/FOhcq/YhhFDLLE0Nbh6sqlK2ZG?=
+ =?us-ascii?Q?Ssy5h1+L70QJ7x16rUlyYylFidtBgAh8skq7H9acyV1pgTzk9UEP/PzaeI5D?=
+ =?us-ascii?Q?YE8zufYvt0ec4efy4UEMC25hL61N3JtpJH1+YcrNC2OV/MNY79Y3+ffde0VN?=
+ =?us-ascii?Q?USbQU9gTAT80VBl9vvgbvpRt54TCClArjPeiuaFb9Flawq6/sUIc311yZH6N?=
+ =?us-ascii?Q?ggn9Sayz+AkkcirR2+VUCh7h902lPD4qDK2j8LNWo2TFH51WRlZSJDCJI9/E?=
+ =?us-ascii?Q?rvyigNwdmNtARzFOgLPXy8YL988yaBCPh18cV+W7h71b7TSPufI0hVhDMgo1?=
+ =?us-ascii?Q?x1jfcTGZqa5zRRWPiKvawp+b0wdi/2NxRfinrge/1XNVaNjh4L2XRwDVJBqF?=
+ =?us-ascii?Q?yNdizc5Algfm3nDkD7lj2BN6BCZEyilb+0yFAnCFcoioCtGiqR4iEE99Yyt7?=
+ =?us-ascii?Q?nlZ3UI+j7VK0Jtwv4lBkGZkGvdHIvfr/VaQDBYfj6aEXFVA7OUWHALQ7xqyv?=
+ =?us-ascii?Q?KePawuKm0Ki9ITnt2R0byy1xbF7MmNQUuQrt4Y8/cPtlQ6IckRWgM/1uBVn6?=
+ =?us-ascii?Q?IkdKh6/xY6WJuzPOABzQOO3QcP2QI9w8wrJN7T8nzqgkqWUGJO2l97Qx0cLm?=
+ =?us-ascii?Q?KIsZq6SzFUCxGVaMx1pmNCgIOTcxCHiwBx+2FJBDWmvGrwKTSpbx52sWE69R?=
+ =?us-ascii?Q?2aO+Rtl3Qx8o1YAF+92T7trpdgc0mtQM9InBjaZwm34f3yfS7hVh+eleGLpG?=
+ =?us-ascii?Q?qIffmdo/zG3XKmwwocIUYSMdjTkStFh0tPtvcs2ckyGUXlTx5IG1V0rPisXX?=
+ =?us-ascii?Q?k59lDln5ZKM9FZpzat53TCaE+GQEexMWE4jg7PvKrIQNtuXHjb+LqwhqV7OF?=
+ =?us-ascii?Q?A9P4zRvEalQAjkuF2/GneXsr/KYItVGynX/jHqhYBDx3XLkYJB5AbVvqDczm?=
+ =?us-ascii?Q?AEKY1KXxkY8AAR3KFLG7g1EWTLkd3pMYTaNZ0qUCukSyRQi05BEn2d99UuU1?=
+ =?us-ascii?Q?AERkFDOWDCd3nvlKti2TDz+WHyE+4JlKzsW/aPHUnSAn0Bzb9zyy3JRaEm2M?=
+ =?us-ascii?Q?pxXsFAkMLBsZUw/sHICWWZ0RnpddeYPhVYuMV6zpapVPm7ea02HlTosg7S9a?=
+ =?us-ascii?Q?I7SgTUwr9fMRGR9ayDVFTX9fcP6JiGVZ4gaChkYxRliVwoq14dyHCw7o5ZSD?=
+ =?us-ascii?Q?+DU4zrIugptNrqUtsifkoL7WaMVkGdNsqCOEx/Gfn+b/9R8gHG54XrOLf8d7?=
+ =?us-ascii?Q?gdihwcYeGiHJ+DZKpZ8rqphn8Vw81koi6NtL5giMVabuM1pK5FjkzrnP5Be/?=
+ =?us-ascii?Q?Py5gCbKikbgKKMkhDYlwElTT4gAwCNN50oUZkA9Hlv7KXgdbkg7oQB9JP5r0?=
+ =?us-ascii?Q?G7jVwc5GExnIxeo5mdmIAFeh29VptmUl3XjZgnqQ?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9abcfad3-1d33-456a-38f0-08da90a708c5
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5a001035-6ff9-4c03-234d-08da90a70e68
 X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4373.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Sep 2022 08:00:30.8364
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Sep 2022 08:00:40.2785
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: lsrJnLJ2ZGfQmuXRWRbi1y9cchmbzMk9E5VcSvS7tR/nTTa2g/wplzZ6tP9AhdNJ9oW4HtxL5+gOizb7JXZdXw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: xDmgB/autkY+XuByqfbBQOyI41+xyQd0e9NY5WMsy9cHleSZZrOthNkQQ2UiogL55U/js7/coWZZQk1DkCk8hA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4495
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This series fixes similar problems in the bonding and team drivers.
+Netdev drivers are expected to call dev_{uc,mc}_sync() in their
+ndo_set_rx_mode method and dev_{uc,mc}_unsync() in their ndo_stop method.
+This is mentioned in the kerneldoc for those dev_* functions.
 
-Because of missing dev_{uc,mc}_unsync() calls, addresses added to
-underlying devices may be leftover after the aggregated device is deleted.
-Add the missing calls and a few related tests.
+The bonding driver calls dev_{uc,mc}_unsync() during ndo_uninit instead of
+ndo_stop. This is ineffective because address lists (dev->{uc,mc}) have
+already been emptied in unregister_netdevice_many() before ndo_uninit is
+called. This mistake can result in addresses being leftover on former bond
+slaves after a bond has been deleted; see test_LAG_cleanup() in the last
+patch in this series.
 
-v2:
-* fix selftest installation, see patch 3
+Add unsync calls, via bond_hw_addr_flush(), at their expected location,
+bond_close().
+Add dev_mc_add() call to bond_open() to match the above change.
 
 v3:
-* Split lacpdu_multicast changes to their own patch, #1
-* In ndo_{add,del}_slave methods, only perform address list changes when
-  the aggregated device is up (patches 2 & 3)
-* Add selftest function related to the above change (patch 4)
+* When adding or deleting a slave, only sync/unsync, add/del addresses if
+  the bond is up. In other cases, it is taken care of at the right time by
+  ndo_open/ndo_set_rx_mode/ndo_stop.
 
-Benjamin Poirier (4):
-  net: bonding: Share lacpdu_mcast_addr definition
-  net: bonding: Unsync device addresses on ndo_stop
-  net: team: Unsync device addresses on ndo_stop
-  net: Add tests for bonding and team address list management
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Benjamin Poirier <bpoirier@nvidia.com>
+---
+ drivers/net/bonding/bond_main.c | 47 ++++++++++++++++++++++++---------
+ 1 file changed, 35 insertions(+), 12 deletions(-)
 
- MAINTAINERS                                   |   1 +
- drivers/net/bonding/bond_3ad.c                |   5 +-
- drivers/net/bonding/bond_main.c               |  57 +++++----
- drivers/net/team/team.c                       |  24 +++-
- include/net/bond_3ad.h                        |   2 -
- include/net/bonding.h                         |   3 +
- tools/testing/selftests/Makefile              |   1 +
- .../selftests/drivers/net/bonding/Makefile    |   5 +-
- .../selftests/drivers/net/bonding/config      |   1 +
- .../drivers/net/bonding/dev_addr_lists.sh     | 109 ++++++++++++++++++
- .../selftests/drivers/net/bonding/lag_lib.sh  |  61 ++++++++++
- .../selftests/drivers/net/team/Makefile       |   6 +
- .../testing/selftests/drivers/net/team/config |   3 +
- .../drivers/net/team/dev_addr_lists.sh        |  51 ++++++++
- 14 files changed, 297 insertions(+), 32 deletions(-)
- create mode 100755 tools/testing/selftests/drivers/net/bonding/dev_addr_lists.sh
- create mode 100644 tools/testing/selftests/drivers/net/bonding/lag_lib.sh
- create mode 100644 tools/testing/selftests/drivers/net/team/Makefile
- create mode 100644 tools/testing/selftests/drivers/net/team/config
- create mode 100755 tools/testing/selftests/drivers/net/team/dev_addr_lists.sh
-
+diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+index faced8ae4edd..bc6d8b0aa6fb 100644
+--- a/drivers/net/bonding/bond_main.c
++++ b/drivers/net/bonding/bond_main.c
+@@ -886,7 +886,8 @@ static void bond_hw_addr_swap(struct bonding *bond, struct slave *new_active,
+ 		if (bond->dev->flags & IFF_ALLMULTI)
+ 			dev_set_allmulti(old_active->dev, -1);
+ 
+-		bond_hw_addr_flush(bond->dev, old_active->dev);
++		if (bond->dev->flags & IFF_UP)
++			bond_hw_addr_flush(bond->dev, old_active->dev);
+ 	}
+ 
+ 	if (new_active) {
+@@ -897,10 +898,12 @@ static void bond_hw_addr_swap(struct bonding *bond, struct slave *new_active,
+ 		if (bond->dev->flags & IFF_ALLMULTI)
+ 			dev_set_allmulti(new_active->dev, 1);
+ 
+-		netif_addr_lock_bh(bond->dev);
+-		dev_uc_sync(new_active->dev, bond->dev);
+-		dev_mc_sync(new_active->dev, bond->dev);
+-		netif_addr_unlock_bh(bond->dev);
++		if (bond->dev->flags & IFF_UP) {
++			netif_addr_lock_bh(bond->dev);
++			dev_uc_sync(new_active->dev, bond->dev);
++			dev_mc_sync(new_active->dev, bond->dev);
++			netif_addr_unlock_bh(bond->dev);
++		}
+ 	}
+ }
+ 
+@@ -2162,13 +2165,15 @@ int bond_enslave(struct net_device *bond_dev, struct net_device *slave_dev,
+ 			}
+ 		}
+ 
+-		netif_addr_lock_bh(bond_dev);
+-		dev_mc_sync_multiple(slave_dev, bond_dev);
+-		dev_uc_sync_multiple(slave_dev, bond_dev);
+-		netif_addr_unlock_bh(bond_dev);
++		if (bond_dev->flags & IFF_UP) {
++			netif_addr_lock_bh(bond_dev);
++			dev_mc_sync_multiple(slave_dev, bond_dev);
++			dev_uc_sync_multiple(slave_dev, bond_dev);
++			netif_addr_unlock_bh(bond_dev);
+ 
+-		if (BOND_MODE(bond) == BOND_MODE_8023AD)
+-			dev_mc_add(slave_dev, lacpdu_mcast_addr);
++			if (BOND_MODE(bond) == BOND_MODE_8023AD)
++				dev_mc_add(slave_dev, lacpdu_mcast_addr);
++		}
+ 	}
+ 
+ 	bond->slave_cnt++;
+@@ -2439,7 +2444,8 @@ static int __bond_release_one(struct net_device *bond_dev,
+ 		if (old_flags & IFF_ALLMULTI)
+ 			dev_set_allmulti(slave_dev, -1);
+ 
+-		bond_hw_addr_flush(bond_dev, slave_dev);
++		if (old_flags & IFF_UP)
++			bond_hw_addr_flush(bond_dev, slave_dev);
+ 	}
+ 
+ 	slave_disable_netpoll(slave);
+@@ -4213,6 +4219,9 @@ static int bond_open(struct net_device *bond_dev)
+ 		/* register to receive LACPDUs */
+ 		bond->recv_probe = bond_3ad_lacpdu_recv;
+ 		bond_3ad_initiate_agg_selection(bond, 1);
++
++		bond_for_each_slave(bond, slave, iter)
++			dev_mc_add(slave->dev, lacpdu_mcast_addr);
+ 	}
+ 
+ 	if (bond_mode_can_use_xmit_hash(bond))
+@@ -4224,6 +4233,7 @@ static int bond_open(struct net_device *bond_dev)
+ static int bond_close(struct net_device *bond_dev)
+ {
+ 	struct bonding *bond = netdev_priv(bond_dev);
++	struct slave *slave;
+ 
+ 	bond_work_cancel_all(bond);
+ 	bond->send_peer_notif = 0;
+@@ -4231,6 +4241,19 @@ static int bond_close(struct net_device *bond_dev)
+ 		bond_alb_deinitialize(bond);
+ 	bond->recv_probe = NULL;
+ 
++	if (bond_uses_primary(bond)) {
++		rcu_read_lock();
++		slave = rcu_dereference(bond->curr_active_slave);
++		if (slave)
++			bond_hw_addr_flush(bond_dev, slave->dev);
++		rcu_read_unlock();
++	} else {
++		struct list_head *iter;
++
++		bond_for_each_slave(bond, slave, iter)
++			bond_hw_addr_flush(bond_dev, slave->dev);
++	}
++
+ 	return 0;
+ }
+ 
 -- 
 2.37.2
 
