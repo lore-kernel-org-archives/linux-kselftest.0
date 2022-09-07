@@ -2,154 +2,204 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F220EC6FA89
-	for <linux-kselftest@archiver.kernel.org>; Wed,  7 Sep 2022 16:56:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA763C6FA86
+	for <linux-kselftest@archiver.kernel.org>; Wed,  7 Sep 2022 17:04:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230027AbiIGQ4T (ORCPT
+        id S229495AbiIGREp (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 7 Sep 2022 12:56:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45788 "EHLO
+        Wed, 7 Sep 2022 13:04:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230118AbiIGQ4L (ORCPT
+        with ESMTP id S229744AbiIGREo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 7 Sep 2022 12:56:11 -0400
-X-Greylist: delayed 1200 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 07 Sep 2022 09:56:06 PDT
-Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C1E3AB29;
-        Wed,  7 Sep 2022 09:56:06 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.west.internal (Postfix) with ESMTP id 865F22B05B86;
-        Wed,  7 Sep 2022 12:18:35 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Wed, 07 Sep 2022 12:18:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1662567515; x=1662574715; bh=5D
-        ZtFrVdqR12nN7HSUlbgO9Phu3Lj4gHCeI3MI0eXEs=; b=gKjMSLcGKU47Bpx6uQ
-        gZ+Ahn/J6pmAu6Fk54tOUPmkt4ySG4YQ4tNtCsXNooyXqDQdnB0p/CITTV1m34mq
-        s+LAYPRNp7umaA0DS2tD6Bl9cL2UPuUH1NnFqt+Hujshubfu6tpdqxXryN7Jif7b
-        wFcbM6hQx1KAluzks24vm6vt401JXycrXk/U1TxhftI2k9a3Qr1m/7eQrpEGaUoY
-        dMxR1PpNXaxHCUiB+IzNfCTcZdKp74OQaJyZNKu9NNG2Kd9Cty0VZ7c37OqmpmGx
-        91qSQwwUWpUuKrGDcjIKulD3bI5YIyxjctZu6ma29GlM+OIwXDzKYX0fO8UNhgKu
-        Ok5g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1662567515; x=1662574715; bh=5DZtFrVdqR12nN7HSUlbgO9Phu3L
-        j4gHCeI3MI0eXEs=; b=OZJQAUW2is2zfDT/Ce2aXyZmrMSXobT3OZMp5q6fVpQ/
-        iVRiwH1zHSZcVtLQ2DkHlpUlqbEffGM1fAmWod1B2oWsgEDoe///wEj9f9lghrAo
-        QmF2m0YsiHOKiN8AKnZz/6f5uUQMq/9NAYeyhYKiSfFb9Dz+qoavKwdvW7oRiyhC
-        EATCi/71d3py5lcq99u7ST/c6PkyOa3KHXiwFRYH2JEiXVa1izqMZLW3QFlYIdsy
-        XqD1Q0zUyBwkxx7SuUl6U3WVue4FTTdJB8uWCgJhcTDbXLhEkyIR5uYLz6VpaFwh
-        96XgrgE3i0bQPirExWJbzFosbfLoZt7t6DTe9rF30A==
-X-ME-Sender: <xms:V8QYYw_o5DzFzVn-nsNBEVd-FS_D_oEsE0Ni1kSDm-EDmUqf7t5RYw>
-    <xme:V8QYY4tkvs0qarp3milgqkj-QnUfLwCvr9jPsDhMl_JVoMp1Uawemvudn2tTZjoFP
-    RKollyj_THPCycU494>
-X-ME-Received: <xmr:V8QYY2AJ6tnceeMtt6ze-9Y21GxOCHjfGO0Uaic1_Z0sgkplNSGu4E0Lv93m0HLV2ntwuQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedttddgleelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpeelgffhfeetlefhveffleevfffgtefffeelfedu
-    udfhjeduteeggfeiheefteehjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuve
-    hluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepkhhirhhilhhl
-    sehshhhuthgvmhhovhdrnhgrmhgv
-X-ME-Proxy: <xmx:V8QYYweqdTZRL4Hql-Il9ILHjXYOl5I2TLxUmx4tUf2irEd7UWrODA>
-    <xmx:V8QYY1Nzk_PUNIp2LKA55MR0G9GVC8m4bLDpu3YSj4OFMB6ygSASzg>
-    <xmx:V8QYY6lIz_r5CyIgsFG97LMd1GcuCvwSFmdupTCv8XNGm0jAThrJpw>
-    <xmx:W8QYYyKr-0dAl_rNZ4o-w_sGm3XfXyNXiJWuDL3a0JOCCopTLRQCg_cdsds>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 7 Sep 2022 12:18:31 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id CAD3C103799; Wed,  7 Sep 2022 19:18:27 +0300 (+03)
-Date:   Wed, 7 Sep 2022 19:18:27 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: Re: [PATCH v7 05/14] mm/memfd: Introduce MFD_INACCESSIBLE flag
-Message-ID: <20220907161827.klbscalq5lk66rco@box.shutemov.name>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <20220706082016.2603916-6-chao.p.peng@linux.intel.com>
- <203c752f-9439-b5ae-056c-27b2631dcb81@redhat.com>
+        Wed, 7 Sep 2022 13:04:44 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D178D10575
+        for <linux-kselftest@vger.kernel.org>; Wed,  7 Sep 2022 10:04:40 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-3454e58fe53so78050087b3.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 07 Sep 2022 10:04:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=hLyrjDAXFGcKrBQvO2vsySR9eSdav05DqWhM1DrTM6w=;
+        b=kzTpMwICMFv0pmARBUEcUnfZg1NJ3terhdZgPs0jgweZObfTivz+51xhwcI+eGtziI
+         SPo4Vt3ENKnX06k7No8dIPawE+AXH8ekiD5rpIOH5Tah0qXfmTbVx6ip1lP8sNcTD0bw
+         tDJ2CbO0PAu9y4Y4mAfjPn/5Ve7iQ+LwEhahTG3JUP2t6Xnze7VGpnyD+Kh35+Hvn/vl
+         wIQhj/fLXTyoj/SR5oczmY0rKeQvGC4mROOVeES80WaiTiNcSSNP8ux08F4+S9FTpfiF
+         6a0e7HrNRcWPh3UEylSZYZGNb2wKeE/KFU3tU+qHsBjwoKot5MHwRb83I8G5IHuxrC3f
+         ft7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=hLyrjDAXFGcKrBQvO2vsySR9eSdav05DqWhM1DrTM6w=;
+        b=PfkZk5extYLMXG7KeVHCSfhGf8zdAdn2Jn4wmjStGz8MU0g28/G5VlAlnOhzPRCCnA
+         E+pFOtn5uFEy5Yn7uoboh2B+fA3DhUMC6neAkiARaUUqoLFSCevU8axy22ROnDUkgAnn
+         Cq/w9rBHEbBgf6jC7FczHLmmTQuazbcLAWluMd18Xpw7HLYelna9paEFeR6CRUNw0g3O
+         lIIGG55j4lCKWdgAOxSBK7HaU3TTUWAjwcjKmQWlbocBo16IV8zgxi7/2JtLxQjNErZh
+         pwY1Z0fYptLGRYwWS9RtOjU0Yl6gib/LYuigIyRXISUDrgtOfz+hYyT7yqzX8wsxus1e
+         u/PA==
+X-Gm-Message-State: ACgBeo1wnCPOhSJlv18kcTg0Z2IqU/SoUWO0g2vIGkyCQRoAuf3tESMG
+        wNPsnlNXEJp1XWrfhHT6qcqgBHmXoZYHmWTLp8a8KA==
+X-Google-Smtp-Source: AA6agR7jgcXkTjKkoU/wI+WaEwUj+8Y4DmQn8qZkFiDWBQX8ngt7el8mfF55JYy4izxDZLf8Q0ntXsx1UWAci0wEAxE=
+X-Received: by 2002:a81:4fce:0:b0:344:fba8:cb88 with SMTP id
+ d197-20020a814fce000000b00344fba8cb88mr4110212ywb.278.1662570279401; Wed, 07
+ Sep 2022 10:04:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <203c752f-9439-b5ae-056c-27b2631dcb81@redhat.com>
+References: <cover.1662361354.git.cdleonard@gmail.com> <298e4e87ce3a822b4217b309438483959082e6bb.1662361354.git.cdleonard@gmail.com>
+ <CANn89iKq4rUkCwSSD-35u+Lb8s9u-8t5bj1=aZuQ8+oYwuC-Eg@mail.gmail.com> <b951b8fb-f2b3-bcbb-8b7f-868b1f78f9bb@gmail.com>
+In-Reply-To: <b951b8fb-f2b3-bcbb-8b7f-868b1f78f9bb@gmail.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Wed, 7 Sep 2022 10:04:28 -0700
+Message-ID: <CANn89iJ9XGKHV1F1uhKmWqyOdDjiBebo0FOb6SfCxcvE5XzJPQ@mail.gmail.com>
+Subject: Re: [PATCH v8 08/26] tcp: authopt: Disable via sysctl by default
+To:     Leonard Crestez <cdleonard@gmail.com>
+Cc:     David Ahern <dsahern@kernel.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Francesco Ruggeri <fruggeri@arista.com>,
+        Salam Noureddine <noureddine@arista.com>,
+        Philip Paeps <philip@trouble.is>,
+        Shuah Khan <shuah@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Yuchung Cheng <ycheng@google.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Christoph Paasch <cpaasch@apple.com>,
+        Ivan Delalande <colona@arista.com>,
+        Caowangbao <caowangbao@huawei.com>,
+        Priyaranjan Jha <priyarjha@google.com>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Aug 05, 2022 at 03:28:50PM +0200, David Hildenbrand wrote:
-> On 06.07.22 10:20, Chao Peng wrote:
-> > Introduce a new memfd_create() flag indicating the content of the
-> > created memfd is inaccessible from userspace through ordinary MMU
-> > access (e.g., read/write/mmap). However, the file content can be
-> > accessed via a different mechanism (e.g. KVM MMU) indirectly.
-> > 
-> > It provides semantics required for KVM guest private memory support
-> > that a file descriptor with this flag set is going to be used as the
-> > source of guest memory in confidential computing environments such
-> > as Intel TDX/AMD SEV but may not be accessible from host userspace.
-> > 
-> > The flag can not coexist with MFD_ALLOW_SEALING, future sealing is
-> > also impossible for a memfd created with this flag.
-> 
-> It's kind of weird to have it that way. Why should the user have to
-> care? It's the notifier requirement to have that, no?
-> 
-> Why can't we handle that when register a notifier? If anything is
-> already mapped, fail registering the notifier if the notifier has these
-> demands. If registering succeeds, block it internally.
-> 
-> Or what am I missing? We might not need the memfile set flag semantics
-> eventually and would not have to expose such a flag to user space.
+On Wed, Sep 7, 2022 at 9:53 AM Leonard Crestez <cdleonard@gmail.com> wrote:
+>
+> On 9/7/22 02:11, Eric Dumazet wrote:
+> > On Mon, Sep 5, 2022 at 12:06 AM Leonard Crestez <cdleonard@gmail.com> wrote:
+> >>
+> >> This is mainly intended to protect against local privilege escalations
+> >> through a rarely used feature so it is deliberately not namespaced.
+> >>
+> >> Enforcement is only at the setsockopt level, this should be enough to
+> >> ensure that the tcp_authopt_needed static key never turns on.
+> >>
+> >> No effort is made to handle disabling when the feature is already in
+> >> use.
+> >>
+> >> Signed-off-by: Leonard Crestez <cdleonard@gmail.com>
+> >> ---
+> >>   Documentation/networking/ip-sysctl.rst |  6 ++++
+> >>   include/net/tcp_authopt.h              |  1 +
+> >>   net/ipv4/sysctl_net_ipv4.c             | 39 ++++++++++++++++++++++++++
+> >>   net/ipv4/tcp_authopt.c                 | 25 +++++++++++++++++
+> >>   4 files changed, 71 insertions(+)
+> >>
+> >> diff --git a/Documentation/networking/ip-sysctl.rst b/Documentation/networking/ip-sysctl.rst
+> >> index a759872a2883..41be0e69d767 100644
+> >> --- a/Documentation/networking/ip-sysctl.rst
+> >> +++ b/Documentation/networking/ip-sysctl.rst
+> >> @@ -1038,10 +1038,16 @@ tcp_challenge_ack_limit - INTEGER
+> >>          Note that this per netns rate limit can allow some side channel
+> >>          attacks and probably should not be enabled.
+> >>          TCP stack implements per TCP socket limits anyway.
+> >>          Default: INT_MAX (unlimited)
+> >>
+> >> +tcp_authopt - BOOLEAN
+> >> +       Enable the TCP Authentication Option (RFC5925), a replacement for TCP
+> >> +       MD5 Signatures (RFC2835).
+> >> +
+> >> +       Default: 0
+> >> +
+>
+> ...
+>
+> >> +#ifdef CONFIG_TCP_AUTHOPT
+> >> +static int proc_tcp_authopt(struct ctl_table *ctl,
+> >> +                           int write, void *buffer, size_t *lenp,
+> >> +                           loff_t *ppos)
+> >> +{
+> >> +       int val = sysctl_tcp_authopt;
+> >
+> > val = READ_ONCE(sysctl_tcp_authopt);
+> >
+> >> +       struct ctl_table tmp = {
+> >> +               .data = &val,
+> >> +               .mode = ctl->mode,
+> >> +               .maxlen = sizeof(val),
+> >> +               .extra1 = SYSCTL_ZERO,
+> >> +               .extra2 = SYSCTL_ONE,
+> >> +       };
+> >> +       int err;
+> >> +
+> >> +       err = proc_dointvec_minmax(&tmp, write, buffer, lenp, ppos);
+> >> +       if (err)
+> >> +               return err;
+> >> +       if (sysctl_tcp_authopt && !val) {
+> >
+> > READ_ONCE(sysctl_tcp_authopt)
+> >
+> > Note that this test would still be racy, because another cpu might
+> > change sysctl_tcp_authopt right after the read.
+>
+> What meaningful races are possible here? This is a variable that changes
+> from 0 to 1 at most once.
 
-Well, with the new shim-based[1] implementation the approach without uAPI
-does not work.
+Two cpus can issue writes of 0 and 1 values at the same time.
 
-We now have two struct file, one is a normal accessible memfd and the
-other one is wrapper around that hides the memfd from userspace and
-filters allowed operations. If we first create an accessible memfd that
-userspace see it would be hard to hide it as by the time userspace may
-have multiple fds in different processes that point to the same struct
-file.
+Depending on scheduling writing the 0 can 'win' the race and overwrite
+the value back to 0.
 
-[1] https://lore.kernel.org/all/20220831142439.65q2gi4g2d2z4ofh@box.shutemov.name
+This is in clear violation of the claim you are making (that the
+sysctl can only go once from 0 to 1)
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+>
+> In theory if two processes attempt to assign "non-zero" at the same time
+> then one will "win" and the other will get an error but races between
+> userspace writing different values are possible for any sysctl. The
+> solution seems to be "write sysctls from a single place".
+>
+> All the checks are in sockopts - in theory if the sysctl is written on
+> one CPU then a sockopt can still fail on another CPU until caches are
+> flushed. Is this what you're worried about?
+>
+> In theory doing READ_ONCE might incur a slight penalty on sockopt but
+> not noticeable.
+
+Not at all. There is _no_ penalty using READ_ONCE(). Unless it is done
+in a loop and this prevents some compiler optimization.
+
+Please use WRITE_ONCE() and READ_ONCE() for all sysctl values used in
+TCP stack (and elsewhere)
+
+See all the silly patches we had recently.
+
+>
+> >
+> >> +               net_warn_ratelimited("Enabling TCP Authentication Option is permanent\n");
+> >> +               return -EINVAL;
+> >> +       }
+> >> +       sysctl_tcp_authopt = val;
+> >
+> > WRITE_ONCE(sysctl_tcp_authopt, val),  or even better:
+> >
+> > if (val)
+> >       cmpxchg(&sysctl_tcp_authopt, 0, val);
+> >
+> >> +       return 0;
+> >> +}
+> >> +#endif
+> >> +
+>
+> This would be useful if we did any sort of initialization here but we
+> don't. Crypto is initialized somewhere completely different.
