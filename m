@@ -2,108 +2,93 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78DC1C6FA86
-	for <linux-kselftest@archiver.kernel.org>; Wed,  7 Sep 2022 16:01:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8555DC38145
+	for <linux-kselftest@archiver.kernel.org>; Wed,  7 Sep 2022 16:05:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbiIGQBa (ORCPT
+        id S230376AbiIGQFY (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 7 Sep 2022 12:01:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49258 "EHLO
+        Wed, 7 Sep 2022 12:05:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbiIGQAl (ORCPT
+        with ESMTP id S229604AbiIGQFE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 7 Sep 2022 12:00:41 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5B3798C87
-        for <linux-kselftest@vger.kernel.org>; Wed,  7 Sep 2022 09:00:10 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id x1-20020a17090ab00100b001fda21bbc90so18767683pjq.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 07 Sep 2022 09:00:10 -0700 (PDT)
+        Wed, 7 Sep 2022 12:05:04 -0400
+Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5DDDBCCF6;
+        Wed,  7 Sep 2022 09:03:28 -0700 (PDT)
+Received: by mail-il1-x141.google.com with SMTP id l6so7793906ilk.13;
+        Wed, 07 Sep 2022 09:03:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=PL/6JU5/S/Tf9t3nW0OZ+zGEXKtZtWIWZJ+MGwDWvKo=;
-        b=s5UCZOMsmd5CJ/0ibgGJoBMIhIOKHPfxUqfLFaw0BrWFbR/vCSFUO4H2XJfXJ0RC1E
-         6mrliQVV4WgBaaMwtK+qAeQA2v5jWr6H145fYBtxg9M+pCbQRWCjufsGfAsZIiblZWQb
-         2stqcyKY70rBuZrftxCGmMLFAO9ookNLT4cdrLKnQjVkeMHuRO+VnM4RUTLrZfraQg4A
-         GoBJzRZUs4G9ARpJvd8mnJFunPi0NMNhk/XZeJmFkdrf75jyz8x/iNMFa7hoFFEJTDqF
-         vWNpPFpA3HYTUMwtmcaYsHv6PUL66X+kvzvjKFUz1REJ9DxARePelhu+KA89fJJ+Drsc
-         p2Dw==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=lt1bpJM6pHMY/em4ZNsqZVuYS7ky1YDSS0Zv0T/sQCI=;
+        b=jFrMQnAJyokhbea+zJXMZUcpgYdRpW6ftt5X8yDsUmyx2A4f77acUmlMItitO1FogO
+         p0bEzPpuqSiuwlKsN8tybJJDylxM59F++Xmxy4P5f+e6/5m4LATaktIUyoghbJvS/faC
+         CDzGmAW/QicbE8j6KYbsmSE/J19AMses1La/f2fg44SktusCjr2xneuPqsjpMAfBYCHn
+         UPS3zWSx7vbgypW+5wJGwA5biGU+ZHb3LlbUMkkmWNyZuckczS+nu1IFmU/tfN0xIuBc
+         7vbypb3c16FPIyTdjo2byYrd5Ce7ap9CY+J4YhWRm52GoiEDxedVnkj+Cfx53cDUSmrj
+         CPoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=PL/6JU5/S/Tf9t3nW0OZ+zGEXKtZtWIWZJ+MGwDWvKo=;
-        b=LpZc/ltY0+BWkoia5Y52eTiX/IVlbyDvwkRNQkxxIgtQLQ87rf5MGk6o86HURmGnhb
-         BxNVHuqqAA9OiuJPisk5wG8z6Fsyec8yqWVXhaMSd7Krd8lGRlLMS8cWH+FaAqXZR7Da
-         0iefBKCGVPdBMJHVrCkecz31BC8cjlYK0KmlZ975CNLkGJC7buXR7d2csR/tXFT6pxUd
-         iJRe+YRKFA300QVAaPvwblY05XuAdfnyx4bczU05bDS3GyLT+G10WwMn5ZMsM6iGUq2/
-         X2z4wkrRqn8OJo0es0M22OFYtkhsdb9DsRtBmMz7O5uVErCgWdeG1oCmV0EPQsChY3Tg
-         1WNQ==
-X-Gm-Message-State: ACgBeo2lzpcy5ewftSFQs7Ns403NCFgwPhRH9sZWmL9+hWFM1dJaAINe
-        dV+d+kOxyyFacawycfzD09/BEA==
-X-Google-Smtp-Source: AA6agR56CQhwCqSpoZP4Zph0Vr2bsCdeyy0cU2fY/92R2g5nd3RRETckjU1gFJlsT743h83Hf+KK0w==
-X-Received: by 2002:a17:902:d2cd:b0:177:4940:cc03 with SMTP id n13-20020a170902d2cd00b001774940cc03mr2886666plc.98.1662566408299;
-        Wed, 07 Sep 2022 09:00:08 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id a16-20020a621a10000000b00537a6b81bb7sm13147646pfa.148.2022.09.07.09.00.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Sep 2022 09:00:07 -0700 (PDT)
-Date:   Wed, 7 Sep 2022 16:00:04 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Liam Merwick <liam.merwick@oracle.com>
-Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        pbonzini@redhat.com, gshan@redhat.com, oliver.upton@linux.dev,
-        andrew.jones@linux.dev
-Subject: Re: [PATCH] KVM: selftests: Make rseq compatible with versions prior
- to glibc-2.30
-Message-ID: <YxjABH3Fw7W+NE8J@google.com>
-References: <20220907155510.968666-1-liam.merwick@oracle.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=lt1bpJM6pHMY/em4ZNsqZVuYS7ky1YDSS0Zv0T/sQCI=;
+        b=ze3Uc7zSJMaPjpVWvF1ztWN3mPjlJO61CQcR8BRJFtNNlhnAQtmIwo0phdrZCDxVtn
+         LiS4aTiGt9tyM7YL8gVaKhD8QP8IdK1EYdh5WtkWaZh3v3EcS1tnMNCWCZmUN8gJXu5C
+         Wn25edvZdPa6QkErAB3ctgO8KskxcYsWH8tamQl7BOUF32xXuYKzpiGCVbh9w8lz16fy
+         B1aQfQITjb4S9VKOXhlvTmumfsLao4vk+rfFm+7jnT+qvE4wNb5z8jCU3LfMeBFoXIza
+         jBxeJ2VH/00qa7nkCy2YbKwayzB+4F7vdzIQKj69R8d2o76BS5r2YjsQRwf7AdNfZXnZ
+         b2Dg==
+X-Gm-Message-State: ACgBeo1Z2lQomAOkdqp/Uqxp8PGSCWRDaMtjOLtJVj6OZ1xJk815Ycd0
+        OLWteix1QeUpVx3OdqUJ73FGvlqouVHQNc42U0Q=
+X-Google-Smtp-Source: AA6agR5D0yaJMaMJfVkyP7yo0j3n7J4Q2NxUTHD4GglycqC1kGl3Kap+m8RkpO7wuD2gzZZFsAnPWsgP2IfD+vK5xbs=
+X-Received: by 2002:a05:6e02:1489:b0:2f1:a985:853 with SMTP id
+ n9-20020a056e02148900b002f1a9850853mr2320169ilk.68.1662566607972; Wed, 07 Sep
+ 2022 09:03:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220907155510.968666-1-liam.merwick@oracle.com>
+References: <CAP01T74L7C+F7oiBx3fL9SahdvU-9rHpQ=GaLTj0XAfeOKaXrA@mail.gmail.com>
+ <20220907145939.489784-1-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20220907145939.489784-1-roberto.sassu@huaweicloud.com>
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date:   Wed, 7 Sep 2022 18:02:51 +0200
+Message-ID: <CAP01T77rgLz-ApBoXfegLCmensukK59-9=jh2CmuWsC0VVMzWw@mail.gmail.com>
+Subject: Re: [PATCH v17 12/12] selftests/bpf: Add tests for dynamic pointers
+ parameters in kfuncs
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, deso@posteo.net, dhowells@redhat.com,
+        haoluo@google.com, jarkko@kernel.org, jmorris@namei.org,
+        john.fastabend@gmail.com, jolsa@kernel.org,
+        keyrings@vger.kernel.org, kpsingh@kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, martin.lau@linux.dev,
+        mingo@redhat.com, mykolal@fb.com, paul@paul-moore.com,
+        roberto.sassu@huawei.com, rostedt@goodmis.org, sdf@google.com,
+        serge@hallyn.com, shuah@kernel.org, song@kernel.org, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Sep 07, 2022, Liam Merwick wrote:
-> The fix for commit e923b0537d28 ("KVM: selftests: Fix target thread to be migrated in rseq_test")
-> added a call to gettid() which was only added to glibc-2.30 and fails to
-> compile with older glibc versions.
-> 
-> rseq_test.c: In function 'main':
-> rseq_test.c:230:33: warning: implicit declaration of function 'gettid'; did you mean 'getgid'? [-Wimplicit-function-declaration]
->           (void *)(unsigned long)gettid());
->                                  ^~~~~~
->                                  getgid
-> 
-> Switch the call to syscall(SYS_gettid) which was the original advice in the
-> gettid(2) NOTES section and which works with both new and older glibc versions.
-> 
-> Fixes: e923b0537d28 ("KVM: selftests: Fix target thread to be migrated in rseq_test")
-> Cc: stable@vger.kernel.org # v5.15
-> Signed-off-by: Liam Merwick <liam.merwick@oracle.com>
+On Wed, 7 Sept 2022 at 17:00, Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+>
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+>
+> Add tests to ensure that only supported dynamic pointer types are accepted,
+> that the passed argument is actually a dynamic pointer, that the passed
+> argument is a pointer to the stack, and that bpf_verify_pkcs7_signature()
+> correctly handles dynamic pointers with data set to NULL.
+>
+> The tests are currently in the deny list for s390x (JIT does not support
+> calling kernel function).
+>
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 > ---
-> 
-> Verified with glibc-2.28 and glibc-2.34 and ensured test case from e923b0537d28 still passes.
-> 
->  tools/testing/selftests/kvm/rseq_test.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/rseq_test.c b/tools/testing/selftests/kvm/rseq_test.c
-> index fac248a43666..6f88da7e60be 100644
-> --- a/tools/testing/selftests/kvm/rseq_test.c
-> +++ b/tools/testing/selftests/kvm/rseq_test.c
-> @@ -227,7 +227,7 @@ int main(int argc, char *argv[])
->  	ucall_init(vm, NULL);
->  
->  	pthread_create(&migration_thread, NULL, migration_worker,
-> -		       (void *)(unsigned long)gettid());
-> +		       (void *)(unsigned long)syscall(SYS_gettid));
 
-This exact fix was already posted[*], but we rat-holed a bit on coming up with an
-elegant solution and the patch never got applied.  I'll poke that thread to see if
-Paolo wants to take it for 6.0.
+Just a minor nit: you could probably use invalid flags value other
+than 1, since most likely the next valid flag value will be 1, which
+will require changing this again. LGTM otherwise.
 
-[*] https://lore.kernel.org/all/20220802071240.84626-1-cloudliang@tencent.com
+Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
