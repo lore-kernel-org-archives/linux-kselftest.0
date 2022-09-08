@@ -2,387 +2,501 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7CF7C54EE9
-	for <linux-kselftest@archiver.kernel.org>; Thu,  8 Sep 2022 00:27:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EA9DECAAD3
+	for <linux-kselftest@archiver.kernel.org>; Thu,  8 Sep 2022 01:11:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbiIHA1z (ORCPT
+        id S230382AbiIHBLD (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 7 Sep 2022 20:27:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36692 "EHLO
+        Wed, 7 Sep 2022 21:11:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229957AbiIHA1v (ORCPT
+        with ESMTP id S230376AbiIHBK7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 7 Sep 2022 20:27:51 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D187ED0219;
-        Wed,  7 Sep 2022 17:27:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662596869; x=1694132869;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=FHE9ZqI8QTE6ZdVezgOACANoE76xUFWJvqwsEjdzs9Y=;
-  b=S8aD87OHHXcjvXMWxfTKKHuDM4Plzu4NTu8x/6W7IlUlWrNVfqKvXRE7
-   yMLY9fvakgyzBukJ1oZw68dQLUtGYrv0FtNEIdwKsK1075BfxssycVRZV
-   ZC0HUd1ZBXwXmMUJsDU5mQR+mA/mMoouwd+EbgMb/Gmua1DRcJu4p8Nus
-   d8pXJvoFdwrDa3OjstHdP3637dH2Q2pIRvvkYFsdE/IuBHWT96azVFdHN
-   4MNTOqRYM9uYcz+m/ArTtSzd/tNQEGGTEAb6kdGtz72FFNq/otk4ecMeF
-   x9ZUGDQeaJ4iSdwEWfiFVauvg1ssG2iIVBv6d8EsoPf5Nj6BfFnp5hRZp
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="360993120"
-X-IronPort-AV: E=Sophos;i="5.93,298,1654585200"; 
-   d="scan'208";a="360993120"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 17:27:49 -0700
-X-IronPort-AV: E=Sophos;i="5.93,298,1654585200"; 
-   d="scan'208";a="676440346"
-Received: from pbarrios-mobl1.amr.corp.intel.com (HELO skuppusw-desk1.amr.corp.intel.com) ([10.252.133.9])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 17:27:48 -0700
-From:   Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
+        Wed, 7 Sep 2022 21:10:59 -0400
+Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2409F77F;
+        Wed,  7 Sep 2022 18:10:44 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id EF1F95801B3;
+        Wed,  7 Sep 2022 21:10:41 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Wed, 07 Sep 2022 21:10:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1662599441; x=1662606641; bh=Q9
+        hIHxnztdrv2DGM0OCPF0EfEIaLl1Vb4zaFETp2jBc=; b=loAkZvnd5HfKJq6/AA
+        GuBtz9kINMyRm1mBTpBpF3tOQ4hh9lLscYbv1235Np1SpXXKRjqvfLLwiy97xYuR
+        4BsHMrnJq6PMSncX4l63CNvXwhceC69UKdTFNsGmfVIn0To+xYedDSwd/dmH3FEG
+        jmAZucJiJt5QnPAiEr+oErEVEWiS5OgkayL73ZYl7Wyhp8SB3TTW+Jak8kO7H6+D
+        DMCUPVTlEGxRqE6eTEXFazoVMXdeSSpsNOgZJNKEPeusK+t72wBfBth06fcbVjSX
+        E7qiUEgk9pKxXXUZQeFp67BwOrk4F+hmJ6bQXtloMTIkWkJ4m/A7rOSZwVwTnckr
+        NoGg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1662599441; x=1662606641; bh=Q9hIHxnztdrv2DGM0OCPF0EfEIaL
+        l1Vb4zaFETp2jBc=; b=zDv52f77k8N+7UfTUeedQOTyTkKg7Yd3L/FPIfaqPKrQ
+        cV1i5GZRJ026Z2njd33uwUnlIbcK+d6EmDfUCTP/7yzEOh1IUPYZKTh4xpbGgVnW
+        bI/YAO/buxDkKd3FuBrFrGmF4U/38W0b/KvrVABNwpXanYN7d3KBe+VVROgJatvb
+        bhwbfqqIG2VtVgN3e7hghMbgRpUqpy134BI3cEcNkHkuwBJMaQaf46Iwgu1eVqF4
+        hSZiJCIMiiMXc9tlBqx4AsKX5javeSb5us011DZcOmav15CpjEPq9fmY+UM694Fz
+        UGNXmHvoQv4gjV/iz//iHXuFHhmpopXb5ISCIWd+qw==
+X-ME-Sender: <xms:D0EZY191ykx22sa3eH6qYCga0lxMQJuj16B97IRTtlyzqOgdn-U-MA>
+    <xme:D0EZY5tvMXWyIIzPaoFzF1_XFJ6i4D5Ke9B9EYbY9rKdVJmWzrYtAyFpEqB8nWXnW
+    C0wH7pgtn-zmlRsoBk>
+X-ME-Received: <xmr:D0EZYzAflpQ9SHYHbRne24v4IUMRUm0l2mnZeupWr0HuSs36CF0gdwkRdDFCKNyGB7AD2w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedtuddggeehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
+    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
+X-ME-Proxy: <xmx:D0EZY5fTE8lZVpB7V8xTRuN8Ys7_xwAKjzJV8d0CEn1C_SfgPr_o6w>
+    <xmx:D0EZY6OFAqs8Xf4YzDaIR_Lpdx0acaKLM5XXiDeyHQ11yzbGPfMoCA>
+    <xmx:D0EZY7n0TSGGg_ECIC9-h3n7rnPgvQHsohEwhsGCBZg20lXZt7KBVg>
+    <xmx:EUEZY97fbsA5PmNBNpF2CPdmBJoUhmNwBcRhKo7kY6f0hGwIF7LvDw>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 7 Sep 2022 21:10:39 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 199AE103799; Thu,  8 Sep 2022 04:10:37 +0300 (+03)
+Date:   Thu, 8 Sep 2022 04:10:37 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Hugh Dickins <hughd@google.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: [PATCH v12 2/3] selftests: tdx: Test TDX attestation GetReport support
-Date:   Wed,  7 Sep 2022 17:27:21 -0700
-Message-Id: <20220908002723.923241-3-sathyanarayanan.kuppuswamy@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220908002723.923241-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-References: <20220908002723.923241-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>,
+        "Gupta, Pankaj" <pankaj.gupta@amd.com>,
+        Elena Reshetova <elena.reshetova@intel.com>
+Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
+ guest private memory
+Message-ID: <20220908011037.ez2cdorthqxkerwk@box.shutemov.name>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <ff5c5b97-acdf-9745-ebe5-c6609dd6322e@google.com>
+ <20220818132421.6xmjqduempmxnnu2@box>
+ <c6ccbb96-5849-2e2f-3b49-4ea711af525d@google.com>
+ <20220820002700.6yflrxklmpsavdzi@box.shutemov.name>
+ <c194262b-b634-4baf-abf0-dc727e8f1d7@google.com>
+ <20220831142439.65q2gi4g2d2z4ofh@box.shutemov.name>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220831142439.65q2gi4g2d2z4ofh@box.shutemov.name>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Attestation is used to verify the trustworthiness of a TDX guest.
-During the guest bring-up, Intel TDX module measures and records
-the initial contents and configuration of the guest, and at runtime,
-guest software uses runtime measurement registers (RMTRs) to measure
-and record details related to kernel image, command line params, ACPI
-tables, initrd, etc. At TDX guest runtime, Intel SGX attestation
-infrastructure is re-used to attest to these measurement data.
+On Wed, Aug 31, 2022 at 05:24:39PM +0300, Kirill A . Shutemov wrote:
+> On Sat, Aug 20, 2022 at 10:15:32PM -0700, Hugh Dickins wrote:
+> > > I will try next week to rework it as shim to top of shmem. Does it work
+> > > for you?
+> > 
+> > Yes, please do, thanks.  It's a compromise between us: the initial TDX
+> > case has no justification to use shmem at all, but doing it that way
+> > will help you with some of the infrastructure, and will probably be
+> > easiest for KVM to extend to other more relaxed fd cases later.
+> 
+> Okay, below is my take on the shim approach.
+> 
+> I don't hate how it turned out. It is easier to understand without
+> callback exchange thing.
+> 
+> The only caveat is I had to introduce external lock to protect against
+> race between lookup and truncate. Otherwise, looks pretty reasonable to me.
+> 
+> I did very limited testing. And it lacks integration with KVM, but API
+> changed not substantially, any it should be easy to adopt.
+> 
+> Any comments?
 
-First step in the TDX attestation process is to get the TDREPORT data.
-It is a fixed size data structure generated by the TDX module which
-includes the above mentioned measurements data, a MAC to protect the
-integerity of the TDREPORT, and a 64-Byte of user specified data passed
-during TDREPORT request which can uniquely identify the TDREPORT.
+Updated version below. Nothing major. Some simplification and cleanups.
 
-Intel's TDX guest driver exposes TDX_CMD_GET_REPORT IOCTL interface to
-get the TDREPORT from the user space.
-
-Add a kernel selftest module to test this ABI and verify the validity
-of generated TDREPORT.
-
-Reviewed-by: Tony Luck <tony.luck@intel.com>
-Reviewed-by: Andi Kleen <ak@linux.intel.com>
-Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
----
-
-Changes since v11:
- * Renamed devname with TDX_GUEST_DEVNAME.
-
-Changes since v10:
- * Replaced TD/TD Guest usage with guest or TDX guest.
- * Reworded the subject line.
-
-Changes since v9:
- * Copied arch/x86/include/uapi/asm/tdx.h to tools/arch/x86/include to
-   decouple header dependency between kernel source and tools dir.
- * Fixed Makefile to adapt to above change.
- * Fixed commit log and comments.
- * Added __packed to hardware structs.
-
-Changes since v8:
- * Please refer to https://lore.kernel.org/all/ \
-   20220728034420.648314-1-sathyanarayanan.kuppuswamy@linux.intel.com/
-
- tools/arch/x86/include/uapi/asm/tdx.h         |  54 ++++++
- tools/testing/selftests/Makefile              |   1 +
- tools/testing/selftests/tdx/Makefile          |  11 ++
- tools/testing/selftests/tdx/config            |   1 +
- tools/testing/selftests/tdx/tdx_attest_test.c | 155 ++++++++++++++++++
- 5 files changed, 222 insertions(+)
- create mode 100644 tools/arch/x86/include/uapi/asm/tdx.h
- create mode 100644 tools/testing/selftests/tdx/Makefile
- create mode 100644 tools/testing/selftests/tdx/config
- create mode 100644 tools/testing/selftests/tdx/tdx_attest_test.c
-
-diff --git a/tools/arch/x86/include/uapi/asm/tdx.h b/tools/arch/x86/include/uapi/asm/tdx.h
-new file mode 100644
-index 000000000000..29d8e38f226a
---- /dev/null
-+++ b/tools/arch/x86/include/uapi/asm/tdx.h
-@@ -0,0 +1,54 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-+#ifndef _UAPI_ASM_X86_TDX_H
-+#define _UAPI_ASM_X86_TDX_H
+diff --git a/include/linux/memfd.h b/include/linux/memfd.h
+index 4f1600413f91..334ddff08377 100644
+--- a/include/linux/memfd.h
++++ b/include/linux/memfd.h
+@@ -3,6 +3,7 @@
+ #define __LINUX_MEMFD_H
+ 
+ #include <linux/file.h>
++#include <linux/pfn_t.h>
+ 
+ #ifdef CONFIG_MEMFD_CREATE
+ extern long memfd_fcntl(struct file *file, unsigned int cmd, unsigned long arg);
+@@ -13,4 +14,27 @@ static inline long memfd_fcntl(struct file *f, unsigned int c, unsigned long a)
+ }
+ #endif
+ 
++struct inaccessible_notifier;
 +
-+#include <linux/types.h>
-+#include <linux/ioctl.h>
-+
-+#define TDX_GUEST_DEVICE		"tdx-guest"
-+
-+/* Length of the REPORTDATA used in TDG.MR.REPORT TDCALL */
-+#define TDX_REPORTDATA_LEN              64
-+
-+/* Length of TDREPORT used in TDG.MR.REPORT TDCALL */
-+#define TDX_REPORT_LEN                  1024
-+
-+/**
-+ * struct tdx_report_req: Get TDREPORT using REPORTDATA as input.
-+ *
-+ * @reportdata     : User-defined REPORTDATA to be included into
-+ *                   TDREPORT. Typically it can be some nonce
-+ *                   provided by attestation service, so the
-+ *                   generated TDREPORT can be uniquely verified.
-+ * @tdreport       : TDREPORT output from TDCALL[TDG.MR.REPORT].
-+ * @rpd_len        : Length of the REPORTDATA (fixed as 64 bytes by
-+ *                   the TDX Module specification, but parameter is
-+ *                   added to handle future extension).
-+ * @tdr_len        : Length of the TDREPORT (fixed as 1024 bytes by
-+ *                   the TDX Module specification, but a parameter
-+ *                   is added to accommodate future extension).
-+ * @subtype        : Subtype of TDREPORT (fixed as 0 by TDX Module
-+ *                   specification, but added a parameter to handle
-+ *                   future extension).
-+ *
-+ * Used in TDX_CMD_GET_REPORT IOCTL request.
-+ */
-+struct tdx_report_req {
-+	__u64 reportdata;
-+	__u64 tdreport;
-+	__u32 rpd_len;
-+	__u32 tdr_len;
-+	__u8  subtype;
-+	__u8 reserved[7];
++struct inaccessible_notifier_ops {
++	void (*invalidate)(struct inaccessible_notifier *notifier,
++			   pgoff_t start, pgoff_t end);
 +};
 +
-+/*
-+ * TDX_CMD_GET_REPORT - Get TDREPORT using TDCALL[TDG.MR.REPORT]
-+ *
-+ * Return 0 on success, -EIO on TDCALL execution failure, and
-+ * standard errno on other general error cases.
-+ *
-+ */
-+#define TDX_CMD_GET_REPORT		_IOWR('T', 0x01, __u64)
++struct inaccessible_notifier {
++	struct list_head list;
++	const struct inaccessible_notifier_ops *ops;
++};
 +
-+#endif /* _UAPI_ASM_X86_TDX_H */
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 10b34bb03bc1..22bdb3d848f5 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -70,6 +70,7 @@ TARGETS += sync
- TARGETS += syscall_user_dispatch
- TARGETS += sysctl
- TARGETS += tc-testing
-+TARGETS += tdx
- TARGETS += timens
- ifneq (1, $(quicktest))
- TARGETS += timers
-diff --git a/tools/testing/selftests/tdx/Makefile b/tools/testing/selftests/tdx/Makefile
-new file mode 100644
-index 000000000000..014795420184
---- /dev/null
-+++ b/tools/testing/selftests/tdx/Makefile
-@@ -0,0 +1,11 @@
-+# SPDX-License-Identifier: GPL-2.0
++void inaccessible_register_notifier(struct file *file,
++				    struct inaccessible_notifier *notifier);
++void inaccessible_unregister_notifier(struct file *file,
++				      struct inaccessible_notifier *notifier);
 +
-+top_srcdir = ../../../..
++int inaccessible_get_pfn(struct file *file, pgoff_t offset, pfn_t *pfn,
++			 int *order);
++void inaccessible_put_pfn(struct file *file, pfn_t pfn);
 +
-+LINUX_TOOL_ARCH_INCLUDE = $(top_srcdir)/tools/arch/x86/include
++struct file *memfd_mkinaccessible(struct file *memfd);
 +
-+CFLAGS += -O3 -Wl,-no-as-needed -Wall -static -I$(LINUX_TOOL_ARCH_INCLUDE)
+ #endif /* __LINUX_MEMFD_H */
+diff --git a/include/uapi/linux/magic.h b/include/uapi/linux/magic.h
+index 6325d1d0e90f..9d066be3d7e8 100644
+--- a/include/uapi/linux/magic.h
++++ b/include/uapi/linux/magic.h
+@@ -101,5 +101,6 @@
+ #define DMA_BUF_MAGIC		0x444d4142	/* "DMAB" */
+ #define DEVMEM_MAGIC		0x454d444d	/* "DMEM" */
+ #define SECRETMEM_MAGIC		0x5345434d	/* "SECM" */
++#define INACCESSIBLE_MAGIC	0x494e4143	/* "INAC" */
+ 
+ #endif /* __LINUX_MAGIC_H__ */
+diff --git a/include/uapi/linux/memfd.h b/include/uapi/linux/memfd.h
+index 7a8a26751c23..48750474b904 100644
+--- a/include/uapi/linux/memfd.h
++++ b/include/uapi/linux/memfd.h
+@@ -8,6 +8,7 @@
+ #define MFD_CLOEXEC		0x0001U
+ #define MFD_ALLOW_SEALING	0x0002U
+ #define MFD_HUGETLB		0x0004U
++#define MFD_INACCESSIBLE	0x0008U
+ 
+ /*
+  * Huge page size encoding when MFD_HUGETLB is specified, and a huge page
+diff --git a/mm/Makefile b/mm/Makefile
+index 9a564f836403..f82e5d4b4388 100644
+--- a/mm/Makefile
++++ b/mm/Makefile
+@@ -126,7 +126,7 @@ obj-$(CONFIG_HARDENED_USERCOPY) += usercopy.o
+ obj-$(CONFIG_PERCPU_STATS) += percpu-stats.o
+ obj-$(CONFIG_ZONE_DEVICE) += memremap.o
+ obj-$(CONFIG_HMM_MIRROR) += hmm.o
+-obj-$(CONFIG_MEMFD_CREATE) += memfd.o
++obj-$(CONFIG_MEMFD_CREATE) += memfd.o memfd_inaccessible.o
+ obj-$(CONFIG_MAPPING_DIRTY_HELPERS) += mapping_dirty_helpers.o
+ obj-$(CONFIG_PTDUMP_CORE) += ptdump.o
+ obj-$(CONFIG_PAGE_REPORTING) += page_reporting.o
+diff --git a/mm/memfd.c b/mm/memfd.c
+index 08f5f8304746..1853a90f49ff 100644
+--- a/mm/memfd.c
++++ b/mm/memfd.c
+@@ -261,7 +261,8 @@ long memfd_fcntl(struct file *file, unsigned int cmd, unsigned long arg)
+ #define MFD_NAME_PREFIX_LEN (sizeof(MFD_NAME_PREFIX) - 1)
+ #define MFD_NAME_MAX_LEN (NAME_MAX - MFD_NAME_PREFIX_LEN)
+ 
+-#define MFD_ALL_FLAGS (MFD_CLOEXEC | MFD_ALLOW_SEALING | MFD_HUGETLB)
++#define MFD_ALL_FLAGS (MFD_CLOEXEC | MFD_ALLOW_SEALING | MFD_HUGETLB | \
++		       MFD_INACCESSIBLE)
+ 
+ SYSCALL_DEFINE2(memfd_create,
+ 		const char __user *, uname,
+@@ -283,6 +284,14 @@ SYSCALL_DEFINE2(memfd_create,
+ 			return -EINVAL;
+ 	}
+ 
++	/* Disallow sealing when MFD_INACCESSIBLE is set. */
++	if ((flags & MFD_INACCESSIBLE) && (flags & MFD_ALLOW_SEALING))
++		return -EINVAL;
 +
-+TEST_GEN_PROGS := tdx_attest_test
++	/* TODO: add hugetlb support */
++	if ((flags & MFD_INACCESSIBLE) && (flags & MFD_HUGETLB))
++		return -EINVAL;
 +
-+include ../lib.mk
-diff --git a/tools/testing/selftests/tdx/config b/tools/testing/selftests/tdx/config
-new file mode 100644
-index 000000000000..1340073a4abf
---- /dev/null
-+++ b/tools/testing/selftests/tdx/config
-@@ -0,0 +1 @@
-+CONFIG_INTEL_TDX_GUEST=y
-diff --git a/tools/testing/selftests/tdx/tdx_attest_test.c b/tools/testing/selftests/tdx/tdx_attest_test.c
-new file mode 100644
-index 000000000000..b7974050e3cf
---- /dev/null
-+++ b/tools/testing/selftests/tdx/tdx_attest_test.c
-@@ -0,0 +1,155 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Test TDX attestation
-+ *
-+ * Copyright (C) 2022 Intel Corporation. All rights reserved.
-+ *
-+ * Author: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-+ */
+ 	/* length includes terminating zero */
+ 	len = strnlen_user(uname, MFD_NAME_MAX_LEN + 1);
+ 	if (len <= 0)
+@@ -331,10 +340,24 @@ SYSCALL_DEFINE2(memfd_create,
+ 		*file_seals &= ~F_SEAL_SEAL;
+ 	}
+ 
++	if (flags & MFD_INACCESSIBLE) {
++		struct file *inaccessible_file;
 +
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <sys/ioctl.h>
-+#include <sys/types.h>
-+#include <uapi/asm/tdx.h>
++		inaccessible_file = memfd_mkinaccessible(file);
++		if (IS_ERR(inaccessible_file)) {
++			error = PTR_ERR(inaccessible_file);
++			goto err_file;
++		}
 +
-+#include "../kselftest_harness.h"
-+
-+#define TDX_GUEST_DEVNAME "/dev/"TDX_GUEST_DEVICE
-+#define HEX_DUMP_SIZE	8
-+#define __packed       __attribute__((packed))
-+
-+/*
-+ * Trusted Execution Environment (TEE) report (TDREPORT_STRUCT) type,
-+ * sub type and version. More details can be found in TDX v1.0 Module
-+ * specification, sec titled "REPORTTYPE".
-+ */
-+struct tdreport_type {
-+	/* 0 - SGX, 81 -TDX, rest are reserved */
-+	__u8 type;
-+	/* Default value is 0 */
-+	__u8 sub_type;
-+	/* Default value is 0 */
-+	__u8 version;
-+	__u8 reserved;
-+}  __packed;
-+
-+/*
-+ * struct reportmac - First field in the TRDREPORT_STRUCT. It is common
-+ * to Intel’s TEE's e.g., SGX and TDX. It is MAC-protected and contains
-+ * hashes of the remainder of the report structure which includes the
-+ * TEE’s measurements, and where applicable, the measurements of additional
-+ * TCB elements not reflected in CPUSVN – e.g., a SEAM’s measurements.
-+ * More details can be found in TDX v1.0 Module specification, sec titled
-+ * "REPORTMACSTRUCT"
-+ */
-+struct reportmac {
-+	struct tdreport_type type;
-+	__u8 reserved1[12];
-+	/* CPU security version */
-+	__u8 cpu_svn[16];
-+	/* SHA384 hash of TEE TCB INFO */
-+	__u8 tee_tcb_info_hash[48];
-+	/* SHA384 hash of TDINFO_STRUCT */
-+	__u8 tee_td_info_hash[48];
-+	/* User defined unique data passed in TDG.MR.REPORT request */
-+	__u8 reportdata[64];
-+	__u8 reserved2[32];
-+	__u8 mac[32];
-+}  __packed;
-+
-+/*
-+ * struct td_info - It contains the measurements and initial configuration
-+ * of the TDX Guest that was locked at initialization and a set of measurement
-+ * registers that are run-time extendable. These values are copied from
-+ * the TDCS by the TDG.MR.REPORT function. More details can be found in
-+ * TDX v1.0 Module specification, sec titled "TDINFO_STRUCT".
-+ */
-+struct td_info {
-+	/* TDX Guest attributes (like debug, spet_disable, etc) */
-+	__u8 attr[8];
-+	__u64 xfam;
-+	/* Measurement registers */
-+	__u64 mrtd[6];
-+	__u64 mrconfigid[6];
-+	__u64 mrowner[6];
-+	__u64 mrownerconfig[6];
-+	/* Runtime measurement registers */
-+	__u64 rtmr[24];
-+	__u64 reserved[14];
-+} __packed;
-+
-+struct tdreport {
-+	/* Common to TDX/SGX of size 256 bytes */
-+	struct reportmac reportmac;
-+	__u8 tee_tcb_info[239];
-+	__u8 reserved[17];
-+	/* Measurements and configuration data of size 512 byes */
-+	struct td_info tdinfo;
-+}  __packed;
-+
-+#ifdef DEBUG
-+static void print_array_hex(const char *title, const char *prefix_str,
-+		const void *buf, int len)
-+{
-+	const __u8 *ptr = buf;
-+	int i, rowsize = HEX_DUMP_SIZE;
-+
-+	if (!len || !buf)
-+		return;
-+
-+	printf("\t\t%s", title);
-+
-+	for (i = 0; i < len; i++) {
-+		if (!(i % rowsize))
-+			printf("\n%s%.8x:", prefix_str, i);
-+		printf(" %.2x", ptr[i]);
++		file = inaccessible_file;
 +	}
 +
-+	printf("\n");
-+}
-+#endif
+ 	fd_install(fd, file);
+ 	kfree(name);
+ 	return fd;
+ 
++err_file:
++	fput(file);
+ err_fd:
+ 	put_unused_fd(fd);
+ err_name:
+diff --git a/mm/memfd_inaccessible.c b/mm/memfd_inaccessible.c
+new file mode 100644
+index 000000000000..dc79988a49d0
+--- /dev/null
++++ b/mm/memfd_inaccessible.c
+@@ -0,0 +1,219 @@
++#include "linux/sbitmap.h"
++#include <linux/memfd.h>
++#include <linux/pagemap.h>
++#include <linux/pseudo_fs.h>
++#include <linux/shmem_fs.h>
++#include <uapi/linux/falloc.h>
++#include <uapi/linux/magic.h>
 +
-+TEST(verify_report)
++struct inaccessible_data {
++	struct mutex lock;
++	struct file *memfd;
++	struct list_head notifiers;
++};
++
++static void inaccessible_notifier_invalidate(struct inaccessible_data *data,
++				 pgoff_t start, pgoff_t end)
 +{
-+	__u8 reportdata[TDX_REPORTDATA_LEN];
-+	struct tdreport tdreport;
-+	struct tdx_report_req req;
-+	int devfd, i;
++	struct inaccessible_notifier *notifier;
 +
-+	devfd = open(TDX_GUEST_DEVNAME, O_RDWR | O_SYNC);
-+
-+	ASSERT_LT(0, devfd);
-+
-+	/* Generate sample report data */
-+	for (i = 0; i < TDX_REPORTDATA_LEN; i++)
-+		reportdata[i] = i;
-+
-+	/* Initialize IOCTL request */
-+	req.subtype     = 0;
-+	req.reportdata  = (__u64)reportdata;
-+	req.rpd_len     = TDX_REPORTDATA_LEN;
-+	req.tdreport    = (__u64)&tdreport;
-+	req.tdr_len     = sizeof(tdreport);
-+
-+	/* Get TDREPORT */
-+	ASSERT_EQ(0, ioctl(devfd, TDX_CMD_GET_REPORT, &req));
-+
-+#ifdef DEBUG
-+	print_array_hex("\n\t\tTDX report data\n", "",
-+			reportdata, sizeof(reportdata));
-+
-+	print_array_hex("\n\t\tTDX tdreport data\n", "",
-+			&tdreport, sizeof(tdreport));
-+#endif
-+
-+	/* Make sure TDREPORT data includes the REPORTDATA passed */
-+	ASSERT_EQ(0, memcmp(&tdreport.reportmac.reportdata[0],
-+			    reportdata, sizeof(reportdata)));
-+
-+	ASSERT_EQ(0, close(devfd));
++	mutex_lock(&data->lock);
++	list_for_each_entry(notifier, &data->notifiers, list) {
++		notifier->ops->invalidate(notifier, start, end);
++	}
++	mutex_unlock(&data->lock);
 +}
 +
-+TEST_HARNESS_MAIN
++static int inaccessible_release(struct inode *inode, struct file *file)
++{
++	struct inaccessible_data *data = inode->i_mapping->private_data;
++
++	fput(data->memfd);
++	kfree(data);
++	return 0;
++}
++
++static long inaccessible_fallocate(struct file *file, int mode,
++				   loff_t offset, loff_t len)
++{
++	struct inaccessible_data *data = file->f_mapping->private_data;
++	struct file *memfd = data->memfd;
++	int ret;
++
++	if (mode & FALLOC_FL_PUNCH_HOLE) {
++		if (!PAGE_ALIGNED(offset) || !PAGE_ALIGNED(len)) {
++			return -EINVAL;
++		}
++	}
++
++	ret = memfd->f_op->fallocate(memfd, mode, offset, len);
++	inaccessible_notifier_invalidate(data, offset, offset + len);
++	return ret;
++}
++
++static const struct file_operations inaccessible_fops = {
++	.release = inaccessible_release,
++	.fallocate = inaccessible_fallocate,
++};
++
++static int inaccessible_getattr(struct user_namespace *mnt_userns,
++				const struct path *path, struct kstat *stat,
++				u32 request_mask, unsigned int query_flags)
++{
++	struct inode *inode = d_inode(path->dentry);
++	struct inaccessible_data *data = inode->i_mapping->private_data;
++	struct file *memfd = data->memfd;
++
++	return memfd->f_inode->i_op->getattr(mnt_userns, path, stat,
++					     request_mask, query_flags);
++}
++
++static int inaccessible_setattr(struct user_namespace *mnt_userns,
++				struct dentry *dentry, struct iattr *attr)
++{
++	struct inode *inode = d_inode(dentry);
++	struct inaccessible_data *data = inode->i_mapping->private_data;
++	struct file *memfd = data->memfd;
++	int ret;
++
++	if (attr->ia_valid & ATTR_SIZE) {
++		if (memfd->f_inode->i_size)
++			return -EPERM;
++
++		if (!PAGE_ALIGNED(attr->ia_size))
++			return -EINVAL;
++	}
++
++	ret = memfd->f_inode->i_op->setattr(mnt_userns,
++					    file_dentry(memfd), attr);
++	return ret;
++}
++
++static const struct inode_operations inaccessible_iops = {
++	.getattr = inaccessible_getattr,
++	.setattr = inaccessible_setattr,
++};
++
++static int inaccessible_init_fs_context(struct fs_context *fc)
++{
++	if (!init_pseudo(fc, INACCESSIBLE_MAGIC))
++		return -ENOMEM;
++
++	fc->s_iflags |= SB_I_NOEXEC;
++	return 0;
++}
++
++static struct file_system_type inaccessible_fs = {
++	.owner		= THIS_MODULE,
++	.name		= "[inaccessible]",
++	.init_fs_context = inaccessible_init_fs_context,
++	.kill_sb	= kill_anon_super,
++};
++
++static struct vfsmount *inaccessible_mnt;
++
++static __init int inaccessible_init(void)
++{
++	inaccessible_mnt = kern_mount(&inaccessible_fs);
++	if (IS_ERR(inaccessible_mnt))
++		return PTR_ERR(inaccessible_mnt);
++	return 0;
++}
++fs_initcall(inaccessible_init);
++
++struct file *memfd_mkinaccessible(struct file *memfd)
++{
++	struct inaccessible_data *data;
++	struct address_space *mapping;
++	struct inode *inode;
++	struct file *file;
++
++	data = kzalloc(sizeof(*data), GFP_KERNEL);
++	if (!data)
++		return ERR_PTR(-ENOMEM);
++
++	data->memfd = memfd;
++	mutex_init(&data->lock);
++	INIT_LIST_HEAD(&data->notifiers);
++
++	inode = alloc_anon_inode(inaccessible_mnt->mnt_sb);
++	if (IS_ERR(inode)) {
++		kfree(data);
++		return ERR_CAST(inode);
++	}
++
++	inode->i_mode |= S_IFREG;
++	inode->i_op = &inaccessible_iops;
++	inode->i_mapping->private_data = data;
++
++	file = alloc_file_pseudo(inode, inaccessible_mnt,
++				 "[memfd:inaccessible]", O_RDWR,
++				 &inaccessible_fops);
++	if (IS_ERR(file)) {
++		iput(inode);
++		kfree(data);
++	}
++
++	file->f_flags |= O_LARGEFILE;
++
++	mapping = memfd->f_mapping;
++	mapping_set_unevictable(mapping);
++	mapping_set_gfp_mask(mapping,
++			     mapping_gfp_mask(mapping) & ~__GFP_MOVABLE);
++
++	return file;
++}
++
++void inaccessible_register_notifier(struct file *file,
++				    struct inaccessible_notifier *notifier)
++{
++	struct inaccessible_data *data = file->f_mapping->private_data;
++
++	mutex_lock(&data->lock);
++	list_add(&notifier->list, &data->notifiers);
++	mutex_unlock(&data->lock);
++}
++EXPORT_SYMBOL_GPL(inaccessible_register_notifier);
++
++void inaccessible_unregister_notifier(struct file *file,
++				      struct inaccessible_notifier *notifier)
++{
++	struct inaccessible_data *data = file->f_mapping->private_data;
++
++	mutex_lock(&data->lock);
++	list_del(&notifier->list);
++	mutex_unlock(&data->lock);
++}
++EXPORT_SYMBOL_GPL(inaccessible_unregister_notifier);
++
++int inaccessible_get_pfn(struct file *file, pgoff_t offset, pfn_t *pfn,
++			 int *order)
++{
++	struct inaccessible_data *data = file->f_mapping->private_data;
++	struct file *memfd = data->memfd;
++	struct page *page;
++	int ret;
++
++	ret = shmem_getpage(file_inode(memfd), offset, &page, SGP_WRITE);
++	if (ret)
++		return ret;
++
++	*pfn = page_to_pfn_t(page);
++	*order = thp_order(compound_head(page));
++	SetPageUptodate(page);
++	unlock_page(page);
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(inaccessible_get_pfn);
++
++void inaccessible_put_pfn(struct file *file, pfn_t pfn)
++{
++	struct page *page = pfn_t_to_page(pfn);
++
++	if (WARN_ON_ONCE(!page))
++		return;
++
++	put_page(page);
++}
++EXPORT_SYMBOL_GPL(inaccessible_put_pfn);
 -- 
-2.34.1
-
+  Kiryl Shutsemau / Kirill A. Shutemov
