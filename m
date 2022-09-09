@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C17FEC6FA8E
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5AC42C6FA8D
 	for <linux-kselftest@archiver.kernel.org>; Fri,  9 Sep 2022 07:57:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230380AbiIIH5U (ORCPT
+        id S231337AbiIIH5T (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 9 Sep 2022 03:57:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44634 "EHLO
+        Fri, 9 Sep 2022 03:57:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230032AbiIIH4z (ORCPT
+        with ESMTP id S231289AbiIIH4y (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 9 Sep 2022 03:56:55 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C46A511E6E4;
-        Fri,  9 Sep 2022 00:55:40 -0700 (PDT)
-Received: from canpemm500005.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MP7VW5ywJz14QWx;
-        Fri,  9 Sep 2022 15:51:47 +0800 (CST)
+        Fri, 9 Sep 2022 03:56:54 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8800410B567;
+        Fri,  9 Sep 2022 00:55:38 -0700 (PDT)
+Received: from canpemm500005.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MP7Xh0fJvzHnfF;
+        Fri,  9 Sep 2022 15:53:40 +0800 (CST)
 Received: from ubuntu1804.huawei.com (10.67.174.63) by
  canpemm500005.china.huawei.com (7.192.104.229) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 9 Sep 2022 15:55:38 +0800
+ 15.1.2375.24; Fri, 9 Sep 2022 15:55:36 +0800
 From:   Zhao Gongyi <zhaogongyi@huawei.com>
 To:     <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>
 CC:     <akinobu.mita@gmail.com>, <corbet@lwn.net>, <david@redhat.com>,
         <osalvador@suse.de>, <shuah@kernel.org>,
         Zhao Gongyi <zhaogongyi@huawei.com>
-Subject: [PATCH -next 4/5] selftests/memory-hotplug: Restore memory before exit
-Date:   Fri, 9 Sep 2022 15:51:59 +0800
-Message-ID: <20220909075200.198363-5-zhaogongyi@huawei.com>
+Subject: [PATCH -next 2/5] selftests/memory-hotplug: Use 'printf' instead of 'echo'
+Date:   Fri, 9 Sep 2022 15:51:57 +0800
+Message-ID: <20220909075200.198363-3-zhaogongyi@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220909075200.198363-1-zhaogongyi@huawei.com>
 References: <20220909075200.198363-1-zhaogongyi@huawei.com>
@@ -45,61 +45,46 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Some momory will be left in offline state when calling
-offline_memory_expect_fail() failed. Restore it before exit.
+Fault injection uses debugfs in a way that the provided values via
+sysfs are interpreted as u64. Providing negative numbers results
+in errors:
+
+  # sh mem-on-off-test.sh
+  ...
+  mem-on-off-test.sh: line 267: echo: write error: Invalid argument
+  ...
+  mem-on-off-test.sh: line 283: echo: write error: Invalid argument
+  ...
+  #
 
 Signed-off-by: Zhao Gongyi <zhaogongyi@huawei.com>
 ---
- .../memory-hotplug/mem-on-off-test.sh         | 24 +++++++++++++------
- 1 file changed, 17 insertions(+), 7 deletions(-)
+ tools/testing/selftests/memory-hotplug/mem-on-off-test.sh | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh b/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh
-index 3bdf3c4d6d06..259fd8978639 100755
+index 46a97f318f58..f1a9d81b934c 100755
 --- a/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh
 +++ b/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh
-@@ -134,6 +134,17 @@ offline_memory_expect_fail()
- 	return 0
- }
-
-+online_all_hot_pluggable_memory()
-+{
-+
-+	for memory in `hotpluggable_offline_memory`; do
-+		online_memory_expect_success $memory || {
-+			echo "online memory $memory: unexpected fail"
-+			retval=1
-+		}
-+	done
-+}
-+
- error=-12
- priority=0
- # Run with default of ratio=2 for Kselftest run
-@@ -278,13 +289,7 @@ done
- # Online all hot-pluggable memory
+@@ -264,7 +264,8 @@ done
  #
- echo 0 > $NOTIFIER_ERR_INJECT_DIR/actions/MEM_GOING_ONLINE/error
--for memory in `hotpluggable_offline_memory`; do
--	online_memory_expect_success $memory || {
--		echo "online memory $memory: unexpected fail"
--		retval=1
--	}
--
--done
-+online_all_hot_pluggable_memory
-
+ # Test memory hot-add error handling (offline => online)
+ #
+-echo $error > $NOTIFIER_ERR_INJECT_DIR/actions/MEM_GOING_ONLINE/error
++printf %#x $error > $NOTIFIER_ERR_INJECT_DIR/actions/MEM_GOING_ONLINE/erro
++
+ for memory in `hotpluggable_offline_memory`; do
+ 	online_memory_expect_fail $memory
+ done
+@@ -280,7 +281,7 @@ done
  #
  # Test memory hot-remove error handling (online => offline)
-@@ -303,4 +308,9 @@ done
- echo 0 > $NOTIFIER_ERR_INJECT_DIR/actions/MEM_GOING_OFFLINE/error
- /sbin/modprobe -q -r memory-notifier-error-inject
-
-+#
-+# Restore memory before exit
-+#
-+online_all_hot_pluggable_memory
-+
- exit $retval
+ #
+-echo $error > $NOTIFIER_ERR_INJECT_DIR/actions/MEM_GOING_OFFLINE/error
++printf %#x $error > $NOTIFIER_ERR_INJECT_DIR/actions/MEM_GOING_OFFLINE/error
+ for memory in `hotpluggable_online_memory`; do
+ 	if [ $((RANDOM % 100)) -lt $ratio ]; then
+ 		offline_memory_expect_fail $memory
 --
 2.17.1
 
