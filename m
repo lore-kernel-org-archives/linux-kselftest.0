@@ -2,215 +2,449 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 577B3ECAAA1
-	for <linux-kselftest@archiver.kernel.org>; Fri,  9 Sep 2022 23:02:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 56965C6FA82
+	for <linux-kselftest@archiver.kernel.org>; Sat, 10 Sep 2022 21:35:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231269AbiIIXCP (ORCPT
+        id S230142AbiIJVf1 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 9 Sep 2022 19:02:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40616 "EHLO
+        Sat, 10 Sep 2022 17:35:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiIIXCN (ORCPT
+        with ESMTP id S230257AbiIJVfJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 9 Sep 2022 19:02:13 -0400
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18959D4BD4;
-        Fri,  9 Sep 2022 16:02:12 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 7A8C95806ED;
-        Fri,  9 Sep 2022 19:02:09 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Fri, 09 Sep 2022 19:02:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1662764529; x=1662771729; bh=LZ
-        qIYAsRBDLHzzFlN7g+AhI2hMyU/ynXCZmSXJx2o4o=; b=Fd9GWSBue9IWHe503e
-        u6NjmzZkClyF2iQ1lgniAHchY/0TuAinaS2NWLg6kXBU39151pE1ovKNVS25Z/eq
-        IFGfoDCZdfi9vsheNiozUhWQhBFe09NjS0fOO3MHFGf7ZJIdFE7URE2+4T8ry1tP
-        Nbg2/Rj0tE3Ek4flC4ACTOcql6PzwfFTME2lnOV+B3N/lL/hnKnCQ6GH5+XhazC2
-        Nmlg33RcE4W1FIQN8y/vZurktFXXaUv+E4bgIUTmtxklpt0y22GN9mlaZnVA1HvP
-        jkswfdiKSGu/tJLd7oZD/eoKEIjjf2SfU40zdSq1rOcMST2//OkJ9MhjZ2EdQs+x
-        twzA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1662764529; x=1662771729; bh=LZqIYAsRBDLHzzFlN7g+AhI2hMyU
-        /ynXCZmSXJx2o4o=; b=R0rm0u9Q8CX9dbZ2DhuKZkJyLwqDkiL/bcQEMyyhRDy3
-        DKn59ZmnL3PU6DmHyrEOtbWOQxV0Jvh3Grnr7NnwLKmBBu1OqZr7MHMw5AF8nOc3
-        yZwD78eLbs+PQ7ZV3R0sH3zp40EzNkJRkYIFQoQD0TzJshF7fsO77EIAhb/np+v5
-        fD3+R4uPoMhtBl6YFx1Id+vdQVHvRNN3JNjDEgZx0z97eg2UtW70uB3fK3NPtcQq
-        YXJKLKjalf08E+dU2zl2hDz2uNpIpr6InQLeo3pXVpi6p5g0dYXSjFu2qp7lvcHO
-        z/6UG76BNmJ0JLKn+JDTKA1iOr5MetWJtzkldsMOKw==
-X-ME-Sender: <xms:7sUbY3rI1KJg6T2GIL1QERVjHifgXO5lm0MnxXu08ZpG7b3CagZfXw>
-    <xme:7sUbYxoUJWW56KV29pr_aHSFZMDTg3SRysBUXhQlGa9zL3CR6D-tSmooacFF6F7T4
-    vngwaKGwj26JDXPHtA>
-X-ME-Received: <xmr:7sUbY0NDMWxhzD2mgtmpwtlR72xtvAmgXhoiiyjc53F64CGLIQNkCJkgvMmlVTESiy-95w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedtiedgudekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutecurdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrd
-    hnrghmvgeqnecuggftrfgrthhtvghrnhepvdekkeelteduteduledtgfevledtgeekjeeu
-    ieehgeeltdduteeuueekhffhledvnecuffhomhgrihhnpehinhhtvghlrdgtohhmpdhmvg
-    hmrdhprghgvgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhr
-    ohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:7sUbY65BD7T0lBkv38MIfA5C7WIcBVzxQYY2iqyB0VQfm1zOuugzwQ>
-    <xmx:7sUbY24PLQzdG8vOj0k1OQ385SW1ySugRFGwv36hbK-YXtzdMEgHpA>
-    <xmx:7sUbYygCW8klPbx4kDGz3VpnpXvXc5mSI7G4ZJw8EFDOAiv-qLQgWA>
-    <xmx:8cUbY7VMkXPqPikJg5h1mEfMk_BDtkjgyhUL44T0t1A43JkcVR9sBQ>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 9 Sep 2022 19:02:06 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 2DAF3104A9B; Sat, 10 Sep 2022 02:02:03 +0300 (+03)
-Date:   Sat, 10 Sep 2022 02:02:03 +0300
-From:   "Kirill A . Shutemov" <kirill@shutemov.name>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        kvm list <kvm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        "Gupta, Pankaj" <pankaj.gupta@amd.com>
-Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
- guest private memory
-Message-ID: <20220909230203.czdpronokk3lxses@box.shutemov.name>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <ff5c5b97-acdf-9745-ebe5-c6609dd6322e@google.com>
- <20220818132421.6xmjqduempmxnnu2@box>
- <c6ccbb96-5849-2e2f-3b49-4ea711af525d@google.com>
- <20220820002700.6yflrxklmpsavdzi@box.shutemov.name>
- <95bd287b-d17f-fda8-58c9-20700b1e0c72@kernel.org>
- <20220909143236.sznwzkpedldrlnn5@box.shutemov.name>
- <762581e4-a6bf-41d1-b0d3-72543153ffb1@www.fastmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <762581e4-a6bf-41d1-b0d3-72543153ffb1@www.fastmail.com>
+        Sat, 10 Sep 2022 17:35:09 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC286451
+        for <linux-kselftest@vger.kernel.org>; Sat, 10 Sep 2022 14:29:45 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id 2-20020a17090a0b8200b001fdb8fd5f29so2444890pjr.8
+        for <linux-kselftest@vger.kernel.org>; Sat, 10 Sep 2022 14:29:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date;
+        bh=AQSKyyxRM/1kBel8Rm51NXzepcXl8uNiWvzYLoszy5E=;
+        b=n8OGXovB5FHB+F5y6rDvwNqMdhfVoc1TSoNm0hOcpRnXTtlPzq2bayYdR+A9cMdZio
+         KzyfVxHd48bdOQBiBR6VMQl/YshnLy4Nt08kEGf4tXpgHmJKz0kji3szP+cs4QEY/7T5
+         vMMTXKIaMxuGLG8F+Qvxn6bEgP54oMvFXngPhfAJC61y8MvABZ8TN8OInHiGys5UqzmD
+         ZJkC11cu/9/nAL7vaiOOGl+kPhcDxwLB0+81dPY9BNES9qz0IM4Ffoz1siCz4I/uOQ4+
+         2Lr5zelrdp3ZS9ZJ/fc4e2RAgEkSusp+mb3plWyFIvnCafW5NRMYRRQhPa+ky2lZBVyA
+         NjzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date;
+        bh=AQSKyyxRM/1kBel8Rm51NXzepcXl8uNiWvzYLoszy5E=;
+        b=DOvCvi6mVhn+a6dYLM7PZ2bu6As+nxgryp+FTsCOPu1ddgbvVAIpGDyn3ylHESoHLa
+         wezt4veD19EWFa1HZ5Y2kY9mhNQ3ie3KhYqks+bvHh6zycrtvJFZe8dihAJfZ5Y383O9
+         hBNCbKu7XgrG7Ygc7Y2cwFnYEs/GRB6SDdFtGE3NHBc3G1vPgMRTgkGGIacaQFGf2L2b
+         mlyDcpmBVJqbZnL3F9TZ7DATNzLQLxlczZQTOaMlWgrhbyuStyWNzpUwPKxAgProHi2c
+         1dRhqvH3JpAwAFOYy9RBcz5MjmCMCFMrvWxaCxyt3la9VRqcCfFp61nqKdi1r3ibd3BE
+         N4LQ==
+X-Gm-Message-State: ACgBeo3JuaHqns9eUqBpcsfJvHvuDp88V0WDpZHArPqfu0sZSC2kpFvf
+        expZq6zem1zKx4zFevHcGG4fI2z5cnj6iA==
+X-Google-Smtp-Source: AA6agR5UOnOMtfBD2Sy2mmTQLFHHhyx4dWygs7y/DUkF0UU+Tvj4ZAiQ9ZW9GNd+yLu6S9cS/z5liRDBLG640w==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a17:902:7602:b0:172:a064:4a2f with SMTP
+ id k2-20020a170902760200b00172a0644a2fmr19529716pll.56.1662845303343; Sat, 10
+ Sep 2022 14:28:23 -0700 (PDT)
+Date:   Sun, 11 Sep 2022 05:28:03 +0800
+In-Reply-To: <20220910212804.670622-1-davidgow@google.com>
+Mime-Version: 1.0
+References: <20220910212804.670622-1-davidgow@google.com>
+X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
+Message-ID: <20220910212804.670622-2-davidgow@google.com>
+Subject: [RFC PATCH v2 1/2] kunit: Expose 'static stub' API to redirect functions
+From:   David Gow <davidgow@google.com>
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Joe Fradley <joefradley@google.com>
+Cc:     Steve Muckle <smuckle@google.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Gow <davidgow@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 12:11:05PM -0700, Andy Lutomirski wrote:
-> 
-> 
-> On Fri, Sep 9, 2022, at 7:32 AM, Kirill A . Shutemov wrote:
-> > On Thu, Sep 08, 2022 at 09:48:35PM -0700, Andy Lutomirski wrote:
-> >> On 8/19/22 17:27, Kirill A. Shutemov wrote:
-> >> > On Thu, Aug 18, 2022 at 08:00:41PM -0700, Hugh Dickins wrote:
-> >> > > On Thu, 18 Aug 2022, Kirill A . Shutemov wrote:
-> >> > > > On Wed, Aug 17, 2022 at 10:40:12PM -0700, Hugh Dickins wrote:
-> >> > > > > 
-> >> > > > > If your memory could be swapped, that would be enough of a good reason
-> >> > > > > to make use of shmem.c: but it cannot be swapped; and although there
-> >> > > > > are some references in the mailthreads to it perhaps being swappable
-> >> > > > > in future, I get the impression that will not happen soon if ever.
-> >> > > > > 
-> >> > > > > If your memory could be migrated, that would be some reason to use
-> >> > > > > filesystem page cache (because page migration happens to understand
-> >> > > > > that type of memory): but it cannot be migrated.
-> >> > > > 
-> >> > > > Migration support is in pipeline. It is part of TDX 1.5 [1]. And swapping
-> >> > > > theoretically possible, but I'm not aware of any plans as of now.
-> >> > > > 
-> >> > > > [1] https://www.intel.com/content/www/us/en/developer/articles/technical/intel-trust-domain-extensions.html
-> >> > > 
-> >> > > I always forget, migration means different things to different audiences.
-> >> > > As an mm person, I was meaning page migration, whereas a virtualization
-> >> > > person thinks VM live migration (which that reference appears to be about),
-> >> > > a scheduler person task migration, an ornithologist bird migration, etc.
-> >> > > 
-> >> > > But you're an mm person too: you may have cited that reference in the
-> >> > > knowledge that TDX 1.5 Live Migration will entail page migration of the
-> >> > > kind I'm thinking of.  (Anyway, it's not important to clarify that here.)
-> >> > 
-> >> > TDX 1.5 brings both.
-> >> > 
-> >> > In TDX speak, mm migration called relocation. See TDH.MEM.PAGE.RELOCATE.
-> >> > 
-> >> 
-> >> This seems to be a pretty bad fit for the way that the core mm migrates
-> >> pages.  The core mm unmaps the page, then moves (in software) the contents
-> >> to a new address, then faults it in.  TDH.MEM.PAGE.RELOCATE doesn't fit into
-> >> that workflow very well.  I'm not saying it can't be done, but it won't just
-> >> work.
-> >
-> > Hm. From what I see we have all necessary infrastructure in place.
-> >
-> > Unmaping is NOP for inaccessible pages as it is never mapped and we have
-> > mapping->a_ops->migrate_folio() callback that allows to replace software
-> > copying with whatever is needed, like TDH.MEM.PAGE.RELOCATE.
-> >
-> > What do I miss?
-> 
-> Hmm, maybe this isn't as bad as I thought.
-> 
-> Right now, unless I've missed something, the migration workflow is to
-> unmap (via try_to_migrate) all mappings, then migrate the backing store
-> (with ->migrate_folio(), although it seems like most callers expect the
-> actual copy to happen outside of ->migrate_folio(),
+Add a simple way of redirecting calls to functions by including a
+special prologue in the "real" function which checks to see if the
+replacement function should be called (and, if so, calls it).
 
-Most? I guess you are talking about MIGRATE_SYNC_NO_COPY, right? AFAICS,
-it is HMM thing and not a common thing.
+To redirect calls to a function, make the first (non-declaration) line
+of the function:
 
-> and then make new
-> mappings.  With the *current* (vma-based, not fd-based) model for KVM
-> memory, this won't work -- we can't unmap before calling
-> TDH.MEM.PAGE.RELOCATE.
+	KUNIT_STATIC_STUB_REDIRECT(function_name, [function arguments]);
 
-We don't need to unmap. The page is not mapped from core-mm PoV.
+(This will compile away to nothing if KUnit is not enabled, otherwise it
+will check if a redirection is active, call the replacement function,
+and return.)
 
-> But maybe it's actually okay with some care or maybe mild modifications
-> with the fd-based model.  We don't have any mmaps, per se, to unmap for
-> secret / INACCESSIBLE memory.  So maybe we can get all the way to
-> ->migrate_folio() without zapping anything in the secure EPT and just
-> call TDH-MEM.PAGE.RELOCATE from inside migrate_folio().  And there will
-> be nothing to fault back in.  From the core code's perspective, it's
-> like migrating a memfd that doesn't happen to have my mappings at the
-> time.
+Calls to the real function can be redirected to a replacement using:
 
-Modifications needed if we want to initiate migation from userspace. IIRC,
-we don't have any API that can initiate page migration for file ranges,
-without mapping the file.
+	kunit_activate_static_stub(test, real_fn, replacement_fn);
 
-But kernel can do it fine for own housekeeping, like compaction doesn't
-need any VMA. And we need compaction working for long term stability of
-the system.
+The redirection will only affect calls made from within the kthread of
+the current test, and will be automatically disabled when the test
+completes. It can also be manually disabled with
+kunit_deactivate_static_stub().
 
+The 'example' KUnit test suite has a more complete example.
+
+This is intended to be an alternative to ftrace-based stubbing (see the
+next patch), with different tradeoffs.
+
+In particular:
+- 'static stubs' work on all architectures, and don't have any
+  dependencies.
+  - There's no separate Kconfig option to enable them, they always
+    exist.
+- They must be explicitly opted-into by the function being replaced
+  (which can be good or bad depending on your POV)
+- They have a greater performance penalty when not in active use (as
+  every call to the real function must check to see if the stub is
+  enabled)
+- They could more easily be extended to pass additional context to
+  replacement functions.
+
+Co-developed-by: Daniel Latypov <dlatypov@google.com>
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+Signed-off-by: David Gow <davidgow@google.com>
+---
+
+Changes since RFC v1:
+https://lore.kernel.org/lkml/20220318021314.3225240-2-davidgow@google.com/
+- Use typecheck_fn() to fix typechecking in some cases (thanks Brendan)
+
+---
+ include/kunit/static_stub.h    | 106 ++++++++++++++++++++++++++++
+ lib/kunit/Makefile             |   1 +
+ lib/kunit/kunit-example-test.c |  38 ++++++++++
+ lib/kunit/static_stub.c        | 125 +++++++++++++++++++++++++++++++++
+ 4 files changed, 270 insertions(+)
+ create mode 100644 include/kunit/static_stub.h
+ create mode 100644 lib/kunit/static_stub.c
+
+diff --git a/include/kunit/static_stub.h b/include/kunit/static_stub.h
+new file mode 100644
+index 000000000000..7417ba8efdbb
+--- /dev/null
++++ b/include/kunit/static_stub.h
+@@ -0,0 +1,106 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * KUnit function redirection (static stubbing) API.
++ *
++ * Copyright (C) 2022, Google LLC.
++ * Author: David Gow <davidgow@google.com>
++ */
++#ifndef _KUNIT_STATIC_STUB_H
++#define _KUNIT_STATIC_STUB_H
++
++#if !IS_REACHABLE(CONFIG_KUNIT)
++
++/* If CONFIG_KUNIT is not enabled, these stubs quietly disappear. */
++#define KUNIT_TRIGGER_STATIC_STUB(real_fn_name, args...) do {} while (0)
++
++#else
++
++#include <kunit/test.h>
++
++#include <linux/compiler.h> /* for {un,}likely() */
++#include <linux/sched.h> /* for task_struct */
++
++/* Returns the address of the replacement function. */
++void *__kunit_get_static_stub_address(struct kunit *test, void *real_fn_addr);
++
++/**
++ * KUNIT_STATIC_STUB_REDIRECT() - call a replacement 'static stub' if one exists
++ * @real_fn_name: The name of this function (as an identifier, not a string)
++ * @args: All of the arguments passed to this function
++ *
++ * This is a function prologue which is used to allow calls to the current
++ * function to be redirected by a KUnit test. KUnit tests can call
++ * kunit_activate_static_stub() to pass a replacement function in. The
++ * replacement function will be called by KUNIT_TRIGGER_STATIC_STUB(), which
++ * will then return from the function. If the caller is not in a KUnit context,
++ * the function will continue execution as normal.
++ *
++ * Example:
++ *
++ * .. code-block:: c
++ *	int real_func(int n)
++ *	{
++ *		KUNIT_STATIC_STUB_REDIRECT(real_func, n);
++ *		return 0;
++ *	}
++ *
++ *	void replacement_func(int n)
++ *	{
++ *		return 42;
++ *	}
++ *
++ *	void example_test(struct kunit *test)
++ *	{
++ *		kunit_activate_static_stub(test, real_func, replacement_func);
++ *		KUNIT_EXPECT_EQ(test, real_func(1), 42);
++ *	}
++ *
++ */
++#define KUNIT_STATIC_STUB_REDIRECT(real_fn_name, args...)		\
++do {									\
++	typeof(&real_fn_name) replacement;				\
++	struct kunit *current_test = current->kunit_test;		\
++									\
++	if (likely(!current_test))					\
++		break;							\
++									\
++	KUNIT_ASSERT_STREQ_MSG(current_test, __func__, #real_fn_name,	\
++			       "Static stub function name mismatch");	\
++									\
++	replacement = __kunit_get_static_stub_address(current_test,	\
++							&real_fn_name);	\
++									\
++	if (unlikely(replacement))					\
++		return replacement(args);				\
++} while (0)
++
++/* Helper function for kunit_activate_static_stub(). The macro does
++ * typechecking, so use it instead.
++ */
++void __kunit_activate_static_stub(struct kunit *test,
++				  void *real_fn_addr,
++				  void *replacement_addr);
++
++/**
++ * kunit_activate_static_stub() - replace a function using static stubs.
++ * @test: A pointer to the 'struct kunit' test context for the current test.
++ * @real_fn_addr: The address of the function to replace.
++ * @replacement_addr: The address of the function to replace it with.
++ *
++ * When activated, calls to real_fn_addr from within this test (even if called
++ * indirectly) will instead call replacement_addr. The function pointed to by
++ * real_fn_addr must begin with the static stub prologue in
++ * KUNIT_TRIGGER_STATIC_STUB() for this to work. real_fn_addr and
++ * replacement_addr must have the same type.
++ *
++ * The redirection can be disabled again with kunit_deactivate_static_stub().
++ */
++#define kunit_activate_static_stub(test, real_fn_addr, replacement_addr) do {	\
++	typecheck_fn(typeof(&real_fn_addr), replacement_addr);			\
++	__kunit_activate_static_stub(test, real_fn_addr, replacement_addr);	\
++} while (0)
++
++void kunit_deactivate_static_stub(struct kunit *test, void *real_fn_addr);
++
++#endif
++#endif
+diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
+index 29aff6562b42..78d9d3414b67 100644
+--- a/lib/kunit/Makefile
++++ b/lib/kunit/Makefile
+@@ -2,6 +2,7 @@ obj-$(CONFIG_KUNIT) +=			kunit.o
+ 
+ kunit-objs +=				test.o \
+ 					resource.o \
++					static_stub.o \
+ 					string-stream.o \
+ 					assert.o \
+ 					try-catch.o \
+diff --git a/lib/kunit/kunit-example-test.c b/lib/kunit/kunit-example-test.c
+index f8fe582c9e36..a065dd0ae332 100644
+--- a/lib/kunit/kunit-example-test.c
++++ b/lib/kunit/kunit-example-test.c
+@@ -7,6 +7,7 @@
+  */
+ 
+ #include <kunit/test.h>
++#include <kunit/static_stub.h>
+ 
+ /*
+  * This is the most fundamental element of KUnit, the test case. A test case
+@@ -123,6 +124,42 @@ static void example_all_expect_macros_test(struct kunit *test)
+ 	KUNIT_ASSERT_GT_MSG(test, sizeof(int), 0, "Your ints are 0-bit?!");
+ }
+ 
++/* This is a function we'll replace with static stubs. */
++static int add_one(int i)
++{
++	/* This will trigger the stub if active. */
++	KUNIT_STATIC_STUB_REDIRECT(add_one, i);
++
++	return i + 1;
++}
++
++/* This is used as a replacement for the above function. */
++static int subtract_one(int i)
++{
++	/* We don't need to trigger the stub from the replacement. */
++
++	return i - 1;
++}
++
++/*
++ * This test shows the use of static stubs.
++ */
++static void example_static_stub_test(struct kunit *test)
++{
++	/* By default, function is not stubbed. */
++	KUNIT_EXPECT_EQ(test, add_one(1), 2);
++
++	/* Replace add_one() with subtract_one(). */
++	kunit_activate_static_stub(test, add_one, subtract_one);
++
++	/* add_one() is now replaced. */
++	KUNIT_EXPECT_EQ(test, add_one(1), 0);
++
++	/* Return add_one() to normal. */
++	kunit_deactivate_static_stub(test, add_one);
++	KUNIT_EXPECT_EQ(test, add_one(1), 2);
++}
++
+ /*
+  * Here we make a list of all the test cases we want to add to the test suite
+  * below.
+@@ -138,6 +175,7 @@ static struct kunit_case example_test_cases[] = {
+ 	KUNIT_CASE(example_skip_test),
+ 	KUNIT_CASE(example_mark_skipped_test),
+ 	KUNIT_CASE(example_all_expect_macros_test),
++	KUNIT_CASE(example_static_stub_test),
+ 	{}
+ };
+ 
+diff --git a/lib/kunit/static_stub.c b/lib/kunit/static_stub.c
+new file mode 100644
+index 000000000000..b06b88f82dd7
+--- /dev/null
++++ b/lib/kunit/static_stub.c
+@@ -0,0 +1,125 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * KUnit function redirection (static stubbing) API.
++ *
++ * Copyright (C) 2022, Google LLC.
++ * Author: David Gow <davidgow@google.com>
++ */
++
++#include <kunit/test.h>
++#include <kunit/static_stub.h>
++
++
++/* Context for a static stub. This is stored in the resource data. */
++struct kunit_static_stub_ctx {
++	void *real_fn_addr;
++	void *replacement_addr;
++};
++
++static void __kunit_static_stub_resource_free(struct kunit_resource *res)
++{
++	kfree(res->data);
++}
++
++/* Matching function for kunit_find_resource(). match_data is real_fn_addr. */
++static bool __kunit_static_stub_resource_match(struct kunit *test,
++						struct kunit_resource *res,
++						void *match_real_fn_addr)
++{
++	/* This pointer is only valid if res is a static stub resource. */
++	struct kunit_static_stub_ctx *ctx = res->data;
++
++	/* Make sure the resource is a static stub resource. */
++	if (res->free != &__kunit_static_stub_resource_free)
++		return false;
++
++	return ctx->real_fn_addr == match_real_fn_addr;
++}
++
++/* Returns the address of the replacement function. */
++void *__kunit_get_static_stub_address(struct kunit *test, void *real_fn_addr)
++{
++	struct kunit_resource *res;
++	struct kunit_static_stub_ctx *ctx;
++	void *replacement_addr;
++
++	res = kunit_find_resource(test,
++				  __kunit_static_stub_resource_match,
++				  real_fn_addr);
++
++	if (!res)
++		return NULL;
++
++	ctx = res->data;
++	replacement_addr = ctx->replacement_addr;
++	kunit_put_resource(res);
++	return replacement_addr;
++}
++EXPORT_SYMBOL_GPL(__kunit_get_static_stub_address);
++
++void kunit_deactivate_static_stub(struct kunit *test, void *real_fn_addr)
++{
++	struct kunit_resource *res;
++
++	KUNIT_ASSERT_PTR_NE_MSG(test, real_fn_addr, NULL,
++				"Tried to deactivate a NULL stub.");
++
++	/* Look up the existing stub for this function. */
++	res = kunit_find_resource(test,
++				  __kunit_static_stub_resource_match,
++				  real_fn_addr);
++
++	/* Error out if the stub doesn't exist. */
++	KUNIT_ASSERT_PTR_NE_MSG(test, res, NULL,
++				"Tried to deactivate a nonexistent stub.");
++
++	/* Free the stub. We 'put' twice, as we got a reference
++	 * from kunit_find_resource()
++	 */
++	kunit_remove_resource(test, res);
++	kunit_put_resource(res);
++}
++EXPORT_SYMBOL_GPL(kunit_deactivate_static_stub);
++
++/* Helper function for kunit_activate_static_stub(). The macro does
++ * typechecking, so use it instead.
++ */
++void __kunit_activate_static_stub(struct kunit *test,
++				  void *real_fn_addr,
++				  void *replacement_addr)
++{
++	struct kunit_static_stub_ctx *ctx;
++	struct kunit_resource *res;
++
++	KUNIT_ASSERT_PTR_NE_MSG(test, real_fn_addr, NULL,
++				"Tried to activate a stub for function NULL");
++
++	/* If the replacement address is NULL, deactivate the stub. */
++	if (!replacement_addr) {
++		kunit_deactivate_static_stub(test, replacement_addr);
++		return;
++	}
++
++	/* Look up any existing stubs for this function, and replace them. */
++	res = kunit_find_resource(test,
++				  __kunit_static_stub_resource_match,
++				  real_fn_addr);
++	if (res) {
++		ctx = res->data;
++		ctx->replacement_addr = replacement_addr;
++
++		/* We got an extra reference from find_resource(), so put it. */
++		kunit_put_resource(res);
++	} else {
++		ctx = kmalloc(sizeof(*ctx), GFP_KERNEL);
++		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx);
++		ctx->real_fn_addr = real_fn_addr;
++		ctx->replacement_addr = replacement_addr;
++		res = kunit_alloc_resource(test, NULL,
++				     &__kunit_static_stub_resource_free,
++				     GFP_KERNEL, ctx);
++	}
++}
++EXPORT_SYMBOL_GPL(__kunit_activate_static_stub);
++
++
 -- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+2.37.2.789.g6183377224-goog
+
