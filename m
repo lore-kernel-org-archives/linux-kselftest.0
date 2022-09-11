@@ -2,162 +2,125 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D124ECAAD3
-	for <linux-kselftest@archiver.kernel.org>; Sat, 10 Sep 2022 21:42:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 64678ECAAD5
+	for <linux-kselftest@archiver.kernel.org>; Sun, 11 Sep 2022 00:13:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230125AbiIJVme (ORCPT
+        id S229582AbiIKANy (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 10 Sep 2022 17:42:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40116 "EHLO
+        Sat, 10 Sep 2022 20:13:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230156AbiIJVmQ (ORCPT
+        with ESMTP id S229459AbiIKANx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 10 Sep 2022 17:42:16 -0400
-Received: from mail-ua1-x94a.google.com (mail-ua1-x94a.google.com [IPv6:2607:f8b0:4864:20::94a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFCA34D176
-        for <linux-kselftest@vger.kernel.org>; Sat, 10 Sep 2022 14:38:02 -0700 (PDT)
-Received: by mail-ua1-x94a.google.com with SMTP id a8-20020ab04948000000b003b5de1448d2so1950097uad.11
-        for <linux-kselftest@vger.kernel.org>; Sat, 10 Sep 2022 14:38:02 -0700 (PDT)
+        Sat, 10 Sep 2022 20:13:53 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8DEA2E694;
+        Sat, 10 Sep 2022 17:13:52 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id z21so7886441edi.1;
+        Sat, 10 Sep 2022 17:13:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date;
-        bh=AtmQOz4cqU5AlOnIxEScnXs2STqQsi71nD797NpxF7g=;
-        b=ONMGnunKNz4gp6pmKkYtXjmszONPlJmgdmvIFMNIH+l1kH1hr624Pikj7usUwyBpKa
-         jdsHPH0YixHNFhP/yHhRREK/X8wkkfqH6qk8dp5aGV6QebWO+f6XMb2QvPYteCi4E4Uc
-         T8M/1/I05+yqj5lcEBqf6Xk3mm1+GqkhSuJGBcWXiIU6f3W+6QjI9nzceAR+tOPaenBz
-         UTSW3y14Yxlk4TNZ/Wl7n2dP7gYAOGOoyxN1CHYmrWybYD+5sZdz4CQLci8yoJ9emYSc
-         Nctku8l/YvfTuqjQV/j26hSEz3mpU5iS7q0UtrBp4MSk+XbJ2haQ1nySY5D37C0eYdQx
-         +vRg==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=bppXW6VDR+pb+O0s/GBMgHjeo0dyk4Z19CwR9nRdUqY=;
+        b=I/dbdccpmFyof6NN2fUQMmS80Kye7WCB0cQOnWsCWr6kbYBSqsVNXYvpajN4WTXs5N
+         PXhbKdVGq8qaZvgMB0u24QvcgieMU5sZBUZfzJF2amKkSCjUsiAOitoc/N3eYjx4+nbU
+         UkvrRIvjsJnsPK6sjy/HtdP6xSLhmtUOAOXnyRclsyX3fiW0yb7AKTCDLDXVMQdlnFWk
+         mil8xpZZTzvqkglqCqTqsMJxVx8FC4xg6utVXrjwvfOZdCzMwfSKP+sa1fb1IAQfgDPQ
+         pESQws6EXy9LgJ4AVvyxftq7I/HfsvAzi5cWrDfXOlqoYDBtxh9cVpuCsIrL0Hca4ds+
+         PlOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=AtmQOz4cqU5AlOnIxEScnXs2STqQsi71nD797NpxF7g=;
-        b=PXe+W7fmP3S14DSQ2ot8VwT6c1+Q96y71EIxZMupWVE/bQ0dmsdunjM6BFgMIIfXTf
-         O7SdssBSjbjqPcSCy+Vjl1hPaYwgZbwl4kMC1TIEhco3lbE+4v798LTZAJmEZxIdTanZ
-         fuYPbzhpiC6CazZ0ZwCcS2qR4JgnZyklskVGBm6kesTXn2hFD83hewCGaL7xkrWhpj/z
-         W7AvFp+pv+h4qTqZWuRPwkIqczP2z1BWqd446z7FC6cds2M0mC1L/Q649R8DIkAhFwG/
-         7GMpm725w+T4ZogS6MbT/SjovAkiP7U5wB03e4RfuC4neFEICP2Gl9keIXGsTZHBgztS
-         wOaw==
-X-Gm-Message-State: ACgBeo2bWeFQhIaEAW6VMBzI8Pd8I6E80mAVfQb9P2EpyKy2cXEn3OOl
-        qKsOY0TPcsViKWoCaDp88L3ogg0tL9SLbA==
-X-Google-Smtp-Source: AA6agR4gR+/yHl1fMdZOru1FjRTOUUGrDSviK2l/4Yh1aEqbh8B3ViYymnNaCdL+DMqLzyFefh9vmEOz/DnoEA==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a17:902:bd48:b0:172:bb9d:d6d5 with SMTP
- id b8-20020a170902bd4800b00172bb9dd6d5mr19190501plx.59.1662845297768; Sat, 10
- Sep 2022 14:28:17 -0700 (PDT)
-Date:   Sun, 11 Sep 2022 05:28:02 +0800
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220910212804.670622-1-davidgow@google.com>
-Subject: [RFC PATCH v2 0/2] kunit: Support redirecting function calls
-From:   David Gow <davidgow@google.com>
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Joe Fradley <joefradley@google.com>
-Cc:     Steve Muckle <smuckle@google.com>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Gow <davidgow@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=bppXW6VDR+pb+O0s/GBMgHjeo0dyk4Z19CwR9nRdUqY=;
+        b=6i5RrHr4AIjiu4minWhu7eZ3nuHOj7o92JMK4qN0UHDPI3qEhDpsuZmmvOC10eq96p
+         CDxef1LzefhJQeCAmB+MPtgJW3oYtVZhM+Ql02YwQLJObKFwreCz27ofFuYKrOCIXSa+
+         mZxnuYpCqDoFcmzylb+M9BO69FYizlAgzTDK0Qlif+X0snQQNJFD8z/4bPz2dhtZVxmq
+         YO0ljaIEYU35jF+desU79zF/PKg7miDpU8SlfSSLnB0wPfevHlx4/id0wMzU1EE2qEUe
+         xjWLdPDfneSXNEK2ILQkNawYHHBMrKzeCfhH7AuJLtHXswTgS/uNrnj6/lZTxmvWbEzi
+         V0yA==
+X-Gm-Message-State: ACgBeo30soNkELZdwX8mfJ8aAYH+NLM4S0JjGspeaDm2n4Q1YVWOW20p
+        J26aeEtDTIXhsdq9WpbAPys=
+X-Google-Smtp-Source: AA6agR52fycHpO9WU3O4tQqWIpSfhUKG2OMNd9yKS0R5NgefgysDjUnyzSr5YsGH9u2uheidlYIZ6Q==
+X-Received: by 2002:a05:6402:110d:b0:451:9fc5:fe7f with SMTP id u13-20020a056402110d00b004519fc5fe7fmr346191edv.200.1662855231160;
+        Sat, 10 Sep 2022 17:13:51 -0700 (PDT)
+Received: from skbuf ([188.27.184.197])
+        by smtp.gmail.com with ESMTPSA id c18-20020a17090618b200b00773f3ccd989sm2265945ejf.68.2022.09.10.17.13.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 10 Sep 2022 17:13:50 -0700 (PDT)
+Date:   Sun, 11 Sep 2022 03:13:46 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     netdev@kapio-technology.com
+Cc:     Ido Schimmel <idosch@nvidia.com>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 net-next 6/6] selftests: forwarding: add test of
+ MAC-Auth Bypass to locked port tests
+Message-ID: <20220911001346.qno33l47i6nvgiwy@skbuf>
+References: <YwzPJ2oCYJQHOsXD@shredder>
+ <69db7606896c77924c11a6c175c4b1a6@kapio-technology.com>
+ <YwzjPcQjfLPk3q/k@shredder>
+ <f1a17512266ac8b61444e7f0e568aca7@kapio-technology.com>
+ <YxNo/0+/Sbg9svid@shredder>
+ <5cee059b65f6f7671e099150f9da79c1@kapio-technology.com>
+ <Yxmgs7Du62V1zyjK@shredder>
+ <8dfc9b525f084fa5ad55019f4418a35e@kapio-technology.com>
+ <20220908112044.czjh3xkzb4r27ohq@skbuf>
+ <152c0ceadefbd742331c340bec2f50c0@kapio-technology.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <152c0ceadefbd742331c340bec2f50c0@kapio-technology.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When writing tests, it'd often be very useful to be able to intercept
-calls to a function in the code being tested and replace it with a
-test-specific stub. This has always been an obviously missing piece of
-KUnit, and the solutions always involve some tradeoffs with cleanliness,
-performance, or impact on non-test code. See the folowing document for
-some of the challenges:
-https://kunit.dev/mocking.html
+On Fri, Sep 09, 2022 at 03:11:56PM +0200, netdev@kapio-technology.com wrote:
+> > > > On Wed, Sep 07, 2022 at 11:10:07PM +0200, netdev@kapio-technology.com wrote:
+> > > > > I am at the blackhole driver implementation now, as I suppose that the
+> > > > > iproute2 command should work with the mv88e6xxx driver when adding blackhole
+> > > > > entries (with a added selftest)?
+> > > > > I decided to add the blackhole feature as new ops for drivers with functions
+> > > > > blackhole_fdb_add() and blackhole_fdb_del(). Do you agree with that approach?
+> > > >
+> > > > I assume you are talking about extending 'dsa_switch_ops'?
+> > > 
+> > > Yes, that is the idea.
+> > > 
+> > > > If so, it's up to the DSA maintainers to decide.
+> > 
+> > What will be the usefulness of adding a blackhole FDB entry from user
+> > space?
+> 
+> With the software bridge it could be used to signal a untrusted host in
+> connection with a locked port entry attempt. I don't see so much use other
+> that test purposes with the driver though.
 
-This series consists of two prototype patches which add support for this
-sort of redirection to KUnit tests:
-
-1: static_stub: Any function which might want to be intercepted adds a
-call to a macro which checks if a test has redirected calls to it, and
-calls the corresponding replacement.
-
-2: ftrace_stub: Functions are intercepted using ftrace.
-This doesn't require adding a new prologue to each function being
-replaced, but does have more dependencies (which restricts it to a small
-number of architectures, not including UML), and doesn't work well with
-inline functions.
-
-The API for both implementations is very similar, so it should be easy
-to migrate from one to the other if necessary.  Both of these
-implementations restrict the redirection to the test context: it is
-automatically undone after the KUnit test completes, and does not affect
-calls in other threads. If CONFIG_KUNIT is not enabled, there should be
-no overhead in either implementation.
-
-Does either (or both) of these features sound useful, and is this
-sort-of API the right model? (Personally, I think there's a reasonable
-scope for both.) Is anything obviously missing or wrong? Do the names,
-descriptions etc. make any sense?
-
-Note that these patches are definitely still at the "prototype" level,
-and things like error-handling, documentation, and testing are still
-pretty sparse. There is also quite a bit of room for optimisation.
-These'll all be improved for v1 if the concept seems good.
-
-We're going to be talking about this again at LPC, so it's worth having
-another look before then if you're interested and/or will be attending:
-https://lpc.events/event/16/contributions/1308/
-
-Cheers,
--- David
-
----
-
-Changes since RFC v1:
-https://lore.kernel.org/lkml/20220318021314.3225240-1-davidgow@google.com/
-- Fix some typos (thanks Daniel)
-- Use typecheck_fn() to fix typechecking in some cases (thanks Brendan)
-- Use ftrace_instruction_pointer_set() in place of kernel livepatch,
-  which seems to have disappeared:
-  https://lore.kernel.org/lkml/0a76550d-008d-0364-8244-4dae2981ea05@csgroup.eu/T/
-- Fix a copy-paste name error in the resource finding function.
-- Rebase on top of torvalds/master, as it wasn't applying cleanly.
-
-Note that the Kernel Livepatch -> ftrace change seems to allow more
-architectures to work, but while they compile, there still seems to be
-issues. So, this will compile on (e.g.) arm64, but fails:
-$ ./tools/testing/kunit/kunit.py run 'example*' --kunitconfig lib/kunit/stubs_example.kunitconfig --arch arm64 --make_options LLVM=1
-[05:00:13] # example_ftrace_stub_test: initializing
-[05:00:13] # example_ftrace_stub_test: EXPECTATION FAILED at lib/kunit/kunit-example-test.c:179
-[05:00:13] Expected add_one(1) == 0, but
-[05:00:13] add_one(1) == 2 
-[05:00:13] not ok 6 - example_ftrace_stub_test                                                                                                                                                                                              
-[05:00:13] [FAILED] example_ftrace_stub_test                                                                                                                                                                                                
-
-
-
-Daniel Latypov (1):
-  kunit: expose ftrace-based API for stubbing out functions during tests
-
-David Gow (1):
-  kunit: Expose 'static stub' API to redirect functions
-
- include/kunit/ftrace_stub.h         |  84 +++++++++++++++++
- include/kunit/static_stub.h         | 106 +++++++++++++++++++++
- lib/kunit/Kconfig                   |  11 +++
- lib/kunit/Makefile                  |   5 +
- lib/kunit/ftrace_stub.c             | 137 ++++++++++++++++++++++++++++
- lib/kunit/kunit-example-test.c      |  63 +++++++++++++
- lib/kunit/static_stub.c             | 125 +++++++++++++++++++++++++
- lib/kunit/stubs_example.kunitconfig |  10 ++
- 8 files changed, 541 insertions(+)
- create mode 100644 include/kunit/ftrace_stub.h
- create mode 100644 include/kunit/static_stub.h
- create mode 100644 lib/kunit/ftrace_stub.c
- create mode 100644 lib/kunit/static_stub.c
- create mode 100644 lib/kunit/stubs_example.kunitconfig
-
--- 
-2.37.2.789.g6183377224-goog
-
+Not a huge selling point, to be honest. Can't the blackhole flag remain
+settable only in the device -> bridge direction, with user space just
+reading it?
