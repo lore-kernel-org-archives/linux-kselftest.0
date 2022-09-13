@@ -2,70 +2,105 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 34E16C6FA82
-	for <linux-kselftest@archiver.kernel.org>; Tue, 13 Sep 2022 14:20:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72877ECAAD8
+	for <linux-kselftest@archiver.kernel.org>; Tue, 13 Sep 2022 16:28:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233030AbiIMOUO (ORCPT
+        id S231570AbiIMQ2Y (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 13 Sep 2022 10:20:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52724 "EHLO
+        Tue, 13 Sep 2022 12:28:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233450AbiIMOTF (ORCPT
+        with ESMTP id S232009AbiIMQ15 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:19:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FB47642E6
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Sep 2022 07:13:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3BF3EB80F02
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Sep 2022 14:11:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23B96C433D7;
-        Tue, 13 Sep 2022 14:11:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663078308;
-        bh=XbuMF/e0sBc4Kp8DlVrMfNZibyp0UP0902gYdkyg8R0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=goC0MYDXBipz6EZusFrcilAHHHDuqqOrRPONylsyc5wGGLf7lEUDO1X8hCtf+hYKv
-         Alf+IByggdMNh433OGFRFRQjY0I4ntMD8qh71j8cDlfocmSw7EBLFwqgTCYfK6RwKK
-         U6stqHnNDTiQib2C6MIwSPeMeGhWfSiI+wQGavhGC2zLAjWwMaOdj23qM7xvwk2ZYY
-         +hUY9n4JPNNFtE3ledmq1VjpHG+rEiJy5t//YS+OGLNJCDjJQuWsTJC7gijPZS3BKO
-         elJgJ4NFb3bJMq2oNEK7uMUiLIOzGdh1s5ZwMlQ3w5FNEQZszUz7GnMexmU0dpch3z
-         sIGgL5BVvHLUw==
-From:   Mark Brown <broonie@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v1 0/3] kselftest/arm64: Updates to the hwcaps test
-Date:   Tue, 13 Sep 2022 15:10:58 +0100
-Message-Id: <20220913141101.151400-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        Tue, 13 Sep 2022 12:27:57 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AC80AE208;
+        Tue, 13 Sep 2022 08:23:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663082615; x=1694618615;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Xv3LSLJmI60OwaQZNgO6wmG3l4up4OQb63JFCEM8X4Q=;
+  b=J7nmIPvcJmoGibWc1aqkwUtC6QNghmadigMSA6jhq/wl8GHQzgcPjVAV
+   QZSGS3NMJtxkts268Y3y7L9bs0UkSyKesx/aBX0qIiWugVhM93J4Tr0wN
+   SOO22aUGtfH2m6SfM4ese9D3llYXqNK+ecsZyUuIb6v3E2yQiu+uR4QIf
+   AehfrUA6iFjiQn8ivPxLPYYSUPcsPoKYGQpwBCIuc4NAJX4bM4//3kqvd
+   RerbOZQgfbDkB8NWU0pofa+XxhFd0sCYd32LPGi1jlwewvEQ8GdgXoUUO
+   vQC6DANfR64EQvVtkKGPSfsoytbS6smHF9GH4blh8xp0/ATLasyjognjt
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10469"; a="277897879"
+X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
+   d="scan'208";a="277897879"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2022 08:21:23 -0700
+X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
+   d="scan'208";a="646969211"
+Received: from liweian-mobl.amr.corp.intel.com (HELO [10.209.26.112]) ([10.209.26.112])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2022 08:21:22 -0700
+Message-ID: <11c9a594-4012-c648-829b-6bd410d2415d@linux.intel.com>
+Date:   Tue, 13 Sep 2022 08:21:22 -0700
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=575; i=broonie@kernel.org; h=from:subject; bh=XbuMF/e0sBc4Kp8DlVrMfNZibyp0UP0902gYdkyg8R0=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjII9yVIo15BLAHDrBxo+W2it6vWt9rtCqYWxJtogq r6zSftGJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYyCPcgAKCRAk1otyXVSH0LOMB/ 9FSDstufZwRMQ8AgOseUZSt+cJ67usq7eVYnlP8if6WZGF8LKnBfxJVcShAnnvGqSOci8kj5ngsrTe 8gBca0DwyVvmIekfv0KY3JQeP5bIXR+nm1PgE8kq2QUefmtzZvf8FBLonHw1JuWZjdOFCqUdLAtsZL Rf/FGPbromR7RnglsH8GF6TC4QUJqwq51l79uRCWOFuvvNV51LJbHbEJtcwjIBNRppNUKoRbFIxmO5 vDY5emr+goie5JUcWyQ7PQz2eBsAcQKMB/4OUQKfESfqwChhRSCZZqN15f9neL9WuTC48m5DWFgVxe U9v1cemJpIAr7qqFqWXQvjd3Xs+Can
-X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v13 1/3] x86/tdx: Add TDX Guest attestation interface
+ driver
+Content-Language: en-US
+To:     Dave Hansen <dave.hansen@intel.com>,
+        "Huang, Kai" <kai.huang@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>, "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "wander@redhat.com" <wander@redhat.com>,
+        "tim.gardner@canonical.com" <tim.gardner@canonical.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "khalid.elmously@canonical.com" <khalid.elmously@canonical.com>,
+        "marcelo.cerri@canonical.com" <marcelo.cerri@canonical.com>,
+        "Cox, Philip" <philip.cox@canonical.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+References: <20220909192708.1113126-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220909192708.1113126-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <f85dbb3636ad199ff5f6ea9bdf5e17261f66945d.camel@intel.com>
+ <d67b4273-e0a6-6b24-b96c-7a3193ae52f9@linux.intel.com>
+ <4a4ed638-d505-6f30-bf0f-a16a32d494a4@intel.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <4a4ed638-d505-6f30-bf0f-a16a32d494a4@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This series fixes an output formatting issue then adds a bunch
-more hwcaps to the hwcaps test.  This includes the recently added
-SVE EBF16 hwcap so this requires both for-next/kselftest and
-for-next/sve.
+Hi,
 
-Mark Brown (3):
-  kselftest/arm64: Add missing newline in hwcap output
-  kselftest/arm64: Add SVE 2 to the tested hwcaps
-  kselftest/arm64: Add hwcap test for RNG
+On 9/13/22 2:01 AM, Dave Hansen wrote:
+> On 9/12/22 19:44, Sathyanarayanan Kuppuswamy wrote:
+>>> and include the header (<linux/string.h> ?) for memchr_inv()?
+>> One of the previous headers includes linux/string.h (I am not sure which one).
+>> So why include it explicitly?
+> Because it's a best practice.  What happens is that you ride along on
+> the coat tails of another #include, someone sees that include is no
+> longer used and removes it.  Then, your code is busted on some weird
+> .config.
+> 
+> *OR*, the header itself changes and doesn't #include the dependency you
+> need.
+> 
+> I guess you can go add this advice to Documentation/ if it's not there
+> already somewhere.
 
- tools/testing/selftests/arm64/abi/hwcap.c | 150 +++++++++++++++++++++-
- 1 file changed, 149 insertions(+), 1 deletion(-)
+Ok. I will include it explicitly.
 
-
-base-commit: daecb3077f330058d1c53de32d272bc23ff61a25
 -- 
-2.30.2
-
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
