@@ -2,157 +2,219 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8BE69C54EE9
-	for <linux-kselftest@archiver.kernel.org>; Tue, 13 Sep 2022 13:28:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BDCFC6FA8A
+	for <linux-kselftest@archiver.kernel.org>; Tue, 13 Sep 2022 14:18:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232137AbiIMN2h (ORCPT
+        id S233208AbiIMOR7 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 13 Sep 2022 09:28:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60374 "EHLO
+        Tue, 13 Sep 2022 10:17:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232239AbiIMN23 (ORCPT
+        with ESMTP id S233171AbiIMORW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 13 Sep 2022 09:28:29 -0400
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5694857264;
-        Tue, 13 Sep 2022 06:28:28 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 6452758125D;
-        Tue, 13 Sep 2022 09:28:27 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Tue, 13 Sep 2022 09:28:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1663075707; x=1663082907; bh=n3
-        5h590WgdUt3xeeXXEzHszlHEJbyzJQQXGzriv2Bdw=; b=lKhOb1x+8VXpLkYPJq
-        dQl5YvKDsVrJ3pc1cddIuP6OhdRr8PsWyp/A/vRSqdBGYijU98a2laOVKR84OdSY
-        CdujPPGE0VZNBRb8AFY5Y5Bx1hpN0K9qsML8ipAktp7Q4dsDv5hCzrn+3fKsf/oU
-        AhorqLE+1pGl42TcXBgEa1DEL85Fj/o6hRRyojZPC9K2zjk3pPIL5621K5ST63O8
-        QfX/As62Z9kgVwLF1Vd52L/j0ZbsibgzX3lP1nE0p6SlvlCfHzYP8Y99DMnqszRU
-        4kZiWacNgNvCjeHG/gHZIM3PEyq5YzCWaFwJxZ8RsSsTMQSpviggfPNqbX84abPQ
-        SlkA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1663075707; x=1663082907; bh=n35h590WgdUt3xeeXXEzHszlHEJb
-        yzJQQXGzriv2Bdw=; b=ZZUXlLMBCwce09seR6ZzZnhVx7X63lDnrSq7QexCOwba
-        A9401e3wLEjkdxebo61so4SM6Eq2+gBV02DerWOkmkljGlX/8BrYO0KifPKbfmud
-        tQGaxOuowW4z8g5wT/UeLXR8rB2bnERzrbHJwJ5umSz5EJnMO4J9NxfjkUcDN41W
-        ISvaKFiU8znaJRomeYO0cB8ZVXsFHA6uardhWbtNSZOWNtG8CTvsDtlB8FinOjfN
-        45PNRNVCpZA3g1XU+QLYkHfi3HSFsluN4GdXXUFeq8Zm+Jgw+zf2yo/okKDpCwuQ
-        Wv9geoz6xdCGPVhJGhJCSQxqRkadFT8yTRz4LL3O3A==
-X-ME-Sender: <xms:eYUgY8CjLPKuTLErxJ4o7QqNakfFEyw9cYv848faCnzZPxniWs4lwg>
-    <xme:eYUgY-hUFvVKwy38mKzxfqEfSEJ3tEM_VA5Gzsp_f_5cZePwaLvxqDi6bkNeJt1XW
-    CueKAX56_RWW-j6RfE>
-X-ME-Received: <xmr:eYUgY_nuCtjj0RQRFpPvX2-WFSAdAlgNrUl5Hj9r4PSXpqEMl-Z2eKx-upeysHMSG2w3RQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedugedgieeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
-    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:eYUgYyziyk8GEwFDdH5XLuijt9yUa6rzCS1KLcOm2ep5cIGYKtwNtw>
-    <xmx:eYUgYxSZaSXMPQyjTS7T6QD290vjxjCsvaAjVUPK4mcC-Dgg1cdtuw>
-    <xmx:eYUgY9bB1MRIgbGNWw19SQsAqBeUUHmJgRlp1QnEzC7DGx9oHYpRvg>
-    <xmx:e4UgY4Oc1dwdLRHEd5XIz0WqilcnByyzA9-tDEQ_CmYKJfC235yyYQ>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 13 Sep 2022 09:28:25 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 9C1AC10458D; Tue, 13 Sep 2022 16:28:21 +0300 (+03)
-Date:   Tue, 13 Sep 2022 16:28:21 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>,
-        "Gupta, Pankaj" <pankaj.gupta@amd.com>,
-        Elena Reshetova <elena.reshetova@intel.com>
-Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
- guest private memory
-Message-ID: <20220913132821.3ch5cv3rgdxqgz3i@box.shutemov.name>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <ff5c5b97-acdf-9745-ebe5-c6609dd6322e@google.com>
- <20220818132421.6xmjqduempmxnnu2@box>
- <c6ccbb96-5849-2e2f-3b49-4ea711af525d@google.com>
- <20220820002700.6yflrxklmpsavdzi@box.shutemov.name>
- <c194262b-b634-4baf-abf0-dc727e8f1d7@google.com>
- <20220831142439.65q2gi4g2d2z4ofh@box.shutemov.name>
- <20220908011037.ez2cdorthqxkerwk@box.shutemov.name>
- <YyBQ+wzPtGwwRB/U@google.com>
+        Tue, 13 Sep 2022 10:17:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB5120F43
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Sep 2022 07:12:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DEB95B80F2B
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Sep 2022 14:11:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3F72C433D6;
+        Tue, 13 Sep 2022 14:11:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663078313;
+        bh=7g35m2Y1NFhV51gn2Q8xiBWqGn+MvC9Px03amMMepCw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=XaZMUHoWc5RqVIXhx6f/Tq968UWMUQkwwLwskQESTT2O1TvKMz9ldfFFbSxgRQMh3
+         KLKXYJs0hLWITdzAXjP9Bien4jQVyt4P0FpnBIdSA3yD0jKXt1Jqpz9xlc6FJbSYU1
+         wUIjWudOst/OW/ldUHPeC50gjVuNdGvvDcNb/KcuccASnkjHOkgu89zTgxp5qZP5ZS
+         iPvXdjIB5HAkShE7GJkfWjaIfUMj08nkLFjQJ+Hb0LAHgSFY1azHBSW8ifar5HdHVs
+         GQRqU/kPejXBkg+1wjPQJ4I70mzlYZU/ASWnz6UVd1VZQ98x9GSkGmzP0L2Qt1zhL+
+         6PqBwBbnuov3g==
+From:   Mark Brown <broonie@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: [PATCH v1 2/3] kselftest/arm64: Add SVE 2 to the tested hwcaps
+Date:   Tue, 13 Sep 2022 15:11:00 +0100
+Message-Id: <20220913141101.151400-3-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220913141101.151400-1-broonie@kernel.org>
+References: <20220913141101.151400-1-broonie@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YyBQ+wzPtGwwRB/U@google.com>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3789; i=broonie@kernel.org; h=from:subject; bh=7g35m2Y1NFhV51gn2Q8xiBWqGn+MvC9Px03amMMepCw=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjII90cyuFhWS0iXI7AYg7Aw7BQ2RLjo6ZoU+t4App 14bNJDmJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYyCPdAAKCRAk1otyXVSH0MHJB/ 96L1uZi+Doy7dfximEYA9qH/BWBkihGrIrUM8lMfn6NDe+x/5QnODZtOtOtiRjTS5AfgJ7SKPFZVsP SOSoX3kdRmDhPuueaFHR0L/Ea19k1DY5500klvPsDDv/A4hhwonepX6Na5sx6pKvBR50p5EBBq55bm 8dtjvvlragEv6OXLuE8fHmr6ra55u3Nz/rZ3gKQDM++K4dyn5rZjZsYztfk5QslQhqRvSIsRIYjyQy 8afhHAWwmieZ0GZTYLNiO6wrMWBK685eTyoQTTOBn1cVLoT1eAq6dF8u8FBBtDS0YYASJ9e7l276EM XmfZA8HaKHB1uWJu1V9xypqitUWhwI
+X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 09:44:27AM +0000, Sean Christopherson wrote:
-> On Thu, Sep 08, 2022, Kirill A. Shutemov wrote:
-> > On Wed, Aug 31, 2022 at 05:24:39PM +0300, Kirill A . Shutemov wrote:
-> > > On Sat, Aug 20, 2022 at 10:15:32PM -0700, Hugh Dickins wrote:
-> > > > > I will try next week to rework it as shim to top of shmem. Does it work
-> > > > > for you?
-> > > > 
-> > > > Yes, please do, thanks.  It's a compromise between us: the initial TDX
-> > > > case has no justification to use shmem at all, but doing it that way
-> > > > will help you with some of the infrastructure, and will probably be
-> > > > easiest for KVM to extend to other more relaxed fd cases later.
-> > > 
-> > > Okay, below is my take on the shim approach.
-> > > 
-> > > I don't hate how it turned out. It is easier to understand without
-> > > callback exchange thing.
-> > > 
-> > > The only caveat is I had to introduce external lock to protect against
-> > > race between lookup and truncate.
-> 
-> As before, I think this lock is unnecessary.  Or at least it's unnessary to hold
-> the lock across get/put.  The ->invalidate() call will ensure that the pfn is
-> never actually used if get() races with truncation.
+Include SVE 2 and the various subfeatures it adds in the set of
+hwcaps we check for.
 
-The updated version you replying to does not use the lock to protect
-against truncation anymore. The lock protect notifier list.
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ tools/testing/selftests/arm64/abi/hwcap.c | 136 ++++++++++++++++++++++
+ 1 file changed, 136 insertions(+)
 
-> Switching topics, what actually prevents mmapp() on the shim?  I tried to follow,
-> but I don't know these areas well enough.
-
-It has no f_op->mmap, so mmap() will fail with -ENODEV. See do_mmap().
-(I did not read the switch statement correctly at first. Note there are
-two 'fallthrough' there.)
-
+diff --git a/tools/testing/selftests/arm64/abi/hwcap.c b/tools/testing/selftests/arm64/abi/hwcap.c
+index 04e4a81dd159..6c91b4a0987e 100644
+--- a/tools/testing/selftests/arm64/abi/hwcap.c
++++ b/tools/testing/selftests/arm64/abi/hwcap.c
+@@ -45,6 +45,66 @@ static void sve_sigill(void)
+ 	asm volatile(".inst 0x04bf5000" : : : "x0");
+ }
+ 
++static void sve2_sigill(void)
++{
++	/* SQABS Z0.b, P0/M, Z0.B */
++	asm volatile(".inst 0x4408A000" : : : "z0");
++}
++
++static void sveaes_sigill(void)
++{
++	/* AESD z0.b, z0.b, z0.b */
++	asm volatile(".inst 0x4522e400" : : : "z0");
++}
++
++static void svepmull_sigill(void)
++{
++	/* PMULLB Z0.Q, Z0.D, Z0.D */
++	asm volatile(".inst 0x45006800" : : : "z0");
++}
++
++static void svebitperm_sigill(void)
++{
++	/* BDEP Z0.B, Z0.B, Z0.B */
++	asm volatile(".inst 0x4500b400" : : : "z0");
++}
++
++static void svesha3_sigill(void)
++{
++	/* EOR3 Z0.D, Z0.D, Z0.D, Z0.D */
++	asm volatile(".inst 0x4203800" : : : "z0");
++}
++
++static void svesm4_sigill(void)
++{
++	/* SM4E Z0.S, Z0.S, Z0.S */
++	asm volatile(".inst 0x4523e000" : : : "z0");
++}
++
++static void svei8mm_sigill(void)
++{
++	/* USDOT Z0.S, Z0.B, Z0.B[0] */
++	asm volatile(".inst 0x44a01800" : : : "z0");
++}
++
++static void svef32mm_sigill(void)
++{
++	/* FMMLA Z0.S, Z0.S, Z0.S */
++	asm volatile(".inst 0x64a0e400" : : : "z0");
++}
++
++static void svef64mm_sigill(void)
++{
++	/* FMMLA Z0.D, Z0.D, Z0.D */
++	asm volatile(".inst 0x64e0e400" : : : "z0");
++}
++
++static void svebf16_sigill(void)
++{
++	/* BFCVT Z0.H, P0/M, Z0.S */
++	asm volatile(".inst 0x658aa000" : : : "z0");
++}
++
+ static const struct hwcap_data {
+ 	const char *name;
+ 	unsigned long at_hwcap;
+@@ -69,6 +129,82 @@ static const struct hwcap_data {
+ 		.sigill_fn = sve_sigill,
+ 		.sigill_reliable = true,
+ 	},
++	{
++		.name = "SVE 2",
++		.at_hwcap = AT_HWCAP2,
++		.hwcap_bit = HWCAP2_SVE2,
++		.cpuinfo = "sve2",
++		.sigill_fn = sve2_sigill,
++	},
++	{
++		.name = "SVE AES",
++		.at_hwcap = AT_HWCAP2,
++		.hwcap_bit = HWCAP2_SVEAES,
++		.cpuinfo = "sveaes",
++		.sigill_fn = sveaes_sigill,
++	},
++	{
++		.name = "SVE2 PMULL",
++		.at_hwcap = AT_HWCAP2,
++		.hwcap_bit = HWCAP2_SVEPMULL,
++		.cpuinfo = "svepmull",
++		.sigill_fn = svepmull_sigill,
++	},
++	{
++		.name = "SVE2 BITPERM",
++		.at_hwcap = AT_HWCAP2,
++		.hwcap_bit = HWCAP2_SVEBITPERM,
++		.cpuinfo = "svebitperm",
++		.sigill_fn = svebitperm_sigill,
++	},
++	{
++		.name = "SVE2 SHA3",
++		.at_hwcap = AT_HWCAP2,
++		.hwcap_bit = HWCAP2_SVESHA3,
++		.cpuinfo = "svesha3",
++		.sigill_fn = svesha3_sigill,
++	},
++	{
++		.name = "SVE2 SM4",
++		.at_hwcap = AT_HWCAP2,
++		.hwcap_bit = HWCAP2_SVESM4,
++		.cpuinfo = "svesm4",
++		.sigill_fn = svesm4_sigill,
++	},
++	{
++		.name = "SVE2 I8MM",
++		.at_hwcap = AT_HWCAP2,
++		.hwcap_bit = HWCAP2_SVEI8MM,
++		.cpuinfo = "svei8mm",
++		.sigill_fn = svei8mm_sigill,
++	},
++	{
++		.name = "SVE2 F32MM",
++		.at_hwcap = AT_HWCAP2,
++		.hwcap_bit = HWCAP2_SVEF32MM,
++		.cpuinfo = "svef32mm",
++		.sigill_fn = svef32mm_sigill,
++	},
++	{
++		.name = "SVE2 F64MM",
++		.at_hwcap = AT_HWCAP2,
++		.hwcap_bit = HWCAP2_SVEF64MM,
++		.cpuinfo = "svef64mm",
++		.sigill_fn = svef64mm_sigill,
++	},
++	{
++		.name = "SVE2 BF16",
++		.at_hwcap = AT_HWCAP2,
++		.hwcap_bit = HWCAP2_SVEBF16,
++		.cpuinfo = "svebf16",
++		.sigill_fn = svebf16_sigill,
++	},
++	{
++		.name = "SVE2 EBF16",
++		.at_hwcap = AT_HWCAP2,
++		.hwcap_bit = HWCAP2_SVE_EBF16,
++		.cpuinfo = "sveebf16",
++	},
+ };
+ 
+ static bool seen_sigill;
 -- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+2.30.2
+
