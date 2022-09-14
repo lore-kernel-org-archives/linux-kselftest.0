@@ -2,103 +2,88 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D448AECAAD8
-	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Sep 2022 09:55:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A38DBC6FA86
+	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Sep 2022 10:00:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231639AbiINJz2 (ORCPT
+        id S229796AbiINKAn (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 14 Sep 2022 05:55:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52846 "EHLO
+        Wed, 14 Sep 2022 06:00:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231651AbiINJzI (ORCPT
+        with ESMTP id S229990AbiINKAl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 14 Sep 2022 05:55:08 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 963077B281
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Sep 2022 02:53:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:Message-ID:References:
-        In-Reply-To:Subject:Cc:To:From:Date:MIME-Version:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=ehWrl3y+Wg0GBs71Zw1RTQVPegiwwGzXZB7B3+J31M4=; b=GoCZBoHDlBqjwKvlvWd3vM1L3A
-        MY6KakRZZGOgIUc2Y5H9Qll9TMTR+4U77XWJ5pCYd0vNd5U2UVw5LvMVkv19/v2EwoUIJWSbT+Q0t
-        aABfdhFSbz1il9WczLXUctN8SnUTYqvSGH56ul0rAt+NNv3Q9jggeQzq0/zEm28/r48LZe3kpUJD4
-        Bxn1a60ybz7BFd0LmUOQ9Gu8cLG4W+vPNqHofH4AyD069vyE14SvwbCNelkaEjRsMEb7YEeRzZ8jQ
-        Pma7K7Y3t+zDrG1QV/giQwDia6LHee/X4IYLaD13d/krsPWsZnnRFGJIutNVKMRmrafea1LTEO5Rf
-        0JjTlWVQ==;
-Received: from maestria.local.igalia.com ([192.168.10.14] helo=mail.igalia.com)
-        by fanzine2.igalia.com with esmtps 
-        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1oYP5N-000Bqj-UQ; Wed, 14 Sep 2022 11:53:37 +0200
-Received: from webmail.service.igalia.com ([192.168.21.45])
-        by mail.igalia.com with esmtp (Exim)
-        id 1oYP5L-000QAS-7S; Wed, 14 Sep 2022 11:53:37 +0200
-Received: from localhost ([127.0.0.1] helo=webmail.igalia.com)
-        by webmail.service.igalia.com with esmtp (Exim 4.94.2)
-        (envelope-from <andrealmeid@igalia.com>)
-        id 1oYP5K-0003Dj-BI; Wed, 14 Sep 2022 11:53:34 +0200
+        Wed, 14 Sep 2022 06:00:41 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A9C659D6;
+        Wed, 14 Sep 2022 03:00:41 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MSG2K69Csz14QNB;
+        Wed, 14 Sep 2022 17:56:41 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
+ (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 14 Sep
+ 2022 18:00:38 +0800
+From:   Zhengchao Shao <shaozhengchao@huawei.com>
+To:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <jhs@mojatatu.com>,
+        <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <shuah@kernel.org>
+CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
+        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
+        <haoluo@google.com>, <jolsa@kernel.org>, <weiyongjun1@huawei.com>,
+        <yuehaibing@huawei.com>, <shaozhengchao@huawei.com>
+Subject: [PATCH net-next,v2 1/9] net/sched: cls_api: add helper for tc cls walker stats updating
+Date:   Wed, 14 Sep 2022 18:02:13 +0800
+Message-ID: <20220914100221.386855-2-shaozhengchao@huawei.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220914100221.386855-1-shaozhengchao@huawei.com>
+References: <20220914100221.386855-1-shaozhengchao@huawei.com>
 MIME-Version: 1.0
-Date:   Wed, 14 Sep 2022 11:53:34 +0200
-From:   =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
-To:     =?UTF-8?Q?Ricardo_Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>
-Cc:     linux-kselftest@vger.kernel.org, dvhart@infradead.org,
-        shuah@kernel.org, kernel@collabora.com
-Subject: Re: [PATCH] selftests/futex: fix build for clang
-In-Reply-To: <20220909110709.1827374-1-ricardo.canuelo@collabora.com>
-References: <20220909110709.1827374-1-ricardo.canuelo@collabora.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <a5f6b1da7df0784536c7d7b70a0bc44e@igalia.com>
-X-Sender: andrealmeid@igalia.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpeml500026.china.huawei.com (7.185.36.106)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Ricardo :)
+The walk implementation of most tc cls modules is basically the same.
+That is, the values of count and skip are checked first. If count is
+greater than or equal to skip, the registered fn function is executed.
+Otherwise, increase the value of count. So we can reconstruct them.
 
-On 2022-09-09 13:07, Ricardo Cañuelo wrote:
-> Don't use the test-specific header files as source files to force a
-> target dependency, as clang will complain if more than one source file
-> is used for a compile command with a single '-o' flag.
-> 
-> Use the proper Makefile variables instead as defined in
-> tools/testing/selftests/lib.mk.
+Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+---
+ include/net/pkt_cls.h | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-Could you share how I can test this patch?
+diff --git a/include/net/pkt_cls.h b/include/net/pkt_cls.h
+index d9d90e6925e1..d3cbbabf7592 100644
+--- a/include/net/pkt_cls.h
++++ b/include/net/pkt_cls.h
+@@ -81,6 +81,19 @@ int tcf_classify(struct sk_buff *skb,
+ 		 const struct tcf_proto *tp, struct tcf_result *res,
+ 		 bool compat_mode);
+ 
++static inline bool tc_cls_stats_update(struct tcf_proto *tp,
++				       struct tcf_walker *arg,
++				       void *filter)
++{
++	if (arg->count >= arg->skip && arg->fn(tp, filter, arg) < 0) {
++		arg->stop = 1;
++		return false;
++	}
++
++	arg->count++;
++	return true;
++}
++
+ #else
+ static inline bool tcf_block_shared(struct tcf_block *block)
+ {
+-- 
+2.17.1
 
-> 
-> Signed-off-by: Ricardo Cañuelo <ricardo.canuelo@collabora.com>
-> ---
->  tools/testing/selftests/futex/functional/Makefile | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/futex/functional/Makefile
-> b/tools/testing/selftests/futex/functional/Makefile
-> index 732149011692..5a0e0df8de9b 100644
-> --- a/tools/testing/selftests/futex/functional/Makefile
-> +++ b/tools/testing/selftests/futex/functional/Makefile
-> @@ -3,11 +3,11 @@ INCLUDES := -I../include -I../../
-> -I../../../../../usr/include/
->  CFLAGS := $(CFLAGS) -g -O2 -Wall -D_GNU_SOURCE -pthread $(INCLUDES)
-> $(KHDR_INCLUDES)
->  LDLIBS := -lpthread -lrt
->  
-> -HEADERS := \
-> +LOCAL_HDRS := \
->  	../include/futextest.h \
->  	../include/atomic.h \
->  	../include/logging.h
-> -TEST_GEN_FILES := \
-> +TEST_GEN_PROGS := \
->  	futex_wait_timeout \
->  	futex_wait_wouldblock \
->  	futex_requeue_pi \
-> @@ -24,5 +24,3 @@ TEST_PROGS := run.sh
->  top_srcdir = ../../../../..
->  DEFAULT_INSTALL_HDR_PATH := 1
->  include ../../lib.mk
-> -
-> -$(TEST_GEN_FILES): $(HEADERS)
