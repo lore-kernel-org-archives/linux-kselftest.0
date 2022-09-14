@@ -2,54 +2,43 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F139CECAAD3
-	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Sep 2022 06:02:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7D5BECAAD3
+	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Sep 2022 06:02:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229931AbiINGCH (ORCPT
+        id S229822AbiINGCL (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 14 Sep 2022 02:02:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37234 "EHLO
+        Wed, 14 Sep 2022 02:02:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbiINGCD (ORCPT
+        with ESMTP id S229773AbiINGCD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Wed, 14 Sep 2022 02:02:03 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C3861DB7;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D6AC61DB6;
         Tue, 13 Sep 2022 23:01:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
-        Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=/AdvcLB/6Lq62F25dpNZjPyf+RkXKrtfVHPO5PSE7Z8=; b=YvwcNsYU3EvAkZm9GfLxM+lM+t
-        HXOtQOv+4Jx2cMnFleGlhr69M3+KXaO7vS3jOxN5ZlkVX34tIyl7rjzD9U4DkBOX2FLRlkU/LZ5TI
-        7Av1xS2jZQmW4Q/gtB/Dto8WjESCYp2jULocXq3Sb9OQiGUrnyf/bgKgV8h1Q09amwu2+3Yxq/U7e
-        cYxi8Lm0uBnFPcmXe+oWHMzlQw2coiYY4yufW4KsMWHKpDuMKTrzDBLYs+CuhzvUcHSfqL/l0SxMK
-        AGxUOS+iObhsF3iBOphHEyYTw73Wyvc/WOnhnnaeBqkbnNDjnHh0uxJzRiaya03YucdIXOE8VGL8Z
-        ZsXenlOw==;
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=zXyGOtjB5RSZuyz9uuyrmx8YbIOe3i8LfT2A7vrECsQ=; b=IeJ49Ndbg/qRyON3k1AyApFlMH
+        5RWnKolWg65mwqsBnlt98vDFeABM4VVVLsnIGA0txfvBVNtAPMYGpvbTzJ6EmwqqNvl4/p+vdI1w+
+        Ppjm7yaFKNmJ8SsHkLF5kTlfLdga2Cx8C3DwK2S7715ybf+9GNR7pS/PsMdhvejPAOh71W6sjyK1d
+        BhnLBsC5BGJxGBGMmb2c0YdCxcJe5gR2bwshNn+xw4wnp3SvisyL0D/7sABDDGJTYHYWcngphDBMA
+        9kr41VInNV9ORayxXZN6Q/8srXOKqIi7cbuu4J/xvm/QlRcV/BucQMDZyDfe9tV6et5mQ3SARRV6y
+        jSNvq5cg==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oYLT2-00879w-Dz; Wed, 14 Sep 2022 06:01:48 +0000
+        id 1oYLT2-00879r-9l; Wed, 14 Sep 2022 06:01:48 +0000
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     tglx@linutronix.de, gregkh@linuxfoundation.org,
         akpm@linux-foundation.org, shuah@kernel.org
 Cc:     joe@perches.com, mcgrof@kernel.org, keescook@chromium.org,
         rostedt@goodmis.org, linux-spdx@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Goldwyn Rodrigues <rgoldwyn@suse.com>,
-        Kuno Woudt <kuno@frob.nl>,
-        Richard Fontana <fontana@sharpeleven.org>,
-        copyleft-next@lists.fedorahosted.org,
-        Ciaran Farrell <Ciaran.Farrell@suse.com>,
-        Christopher De Nicolo <Christopher.DeNicolo@suse.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thorsten Leemhuis <linux@leemhuis.info>
-Subject: [PATCH v10 2/2] testing: use the copyleft-next-0.3.1 SPDX tag
-Date:   Tue, 13 Sep 2022 23:01:47 -0700
-Message-Id: <20220914060147.1934064-3-mcgrof@kernel.org>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v10 0/2] SPDX: add copyleft-next-0.3.1
+Date:   Tue, 13 Sep 2022 23:01:45 -0700
+Message-Id: <20220914060147.1934064-1-mcgrof@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220914060147.1934064-1-mcgrof@kernel.org>
-References: <20220914060147.1934064-1-mcgrof@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Luis Chamberlain <mcgrof@infradead.org>
@@ -57,125 +46,36 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Two selftests drivers exist under the copyleft-next license.
-These drivers were added prior to SPDX practice taking full swing
-in the kernel. Now that we have an SPDX tag for copylef-next-0.3.1
-documented, embrace it and remove the boiler plate.
+As suggested by Thomas Gleixner, I'm following up to move on with
+the SPDX tag needed for copyleft-next-0.3.1. I've split this out
+from the test_sysfs selftest so to separate review from that.
 
-Cc: Goldwyn Rodrigues <rgoldwyn@suse.com>
-Cc: Kuno Woudt <kuno@frob.nl>
-Cc: Richard Fontana <fontana@sharpeleven.org>
-Cc: copyleft-next@lists.fedorahosted.org
-Cc: Ciaran Farrell <Ciaran.Farrell@suse.com>
-Cc: Christopher De Nicolo <Christopher.DeNicolo@suse.com>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Thorsten Leemhuis <linux@leemhuis.info>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
----
- lib/test_kmod.c                          | 12 +-----------
- lib/test_sysctl.c                        | 12 +-----------
- tools/testing/selftests/kmod/kmod.sh     | 13 +------------
- tools/testing/selftests/sysctl/sysctl.sh | 12 +-----------
- 4 files changed, 4 insertions(+), 45 deletions(-)
+Changes on this v10:
 
-diff --git a/lib/test_kmod.c b/lib/test_kmod.c
-index cb800b1d0d99..6423df9fa8dd 100644
---- a/lib/test_kmod.c
-+++ b/lib/test_kmod.c
-@@ -1,18 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR copyleft-next-0.3.1
- /*
-  * kmod stress test driver
-  *
-  * Copyright (C) 2017 Luis R. Rodriguez <mcgrof@kernel.org>
-- *
-- * This program is free software; you can redistribute it and/or modify it
-- * under the terms of the GNU General Public License as published by the Free
-- * Software Foundation; either version 2 of the License, or at your option any
-- * later version; or, when distributed separately from the Linux kernel or
-- * when incorporated into other software packages, subject to the following
-- * license:
-- *
-- * This program is free software; you can redistribute it and/or modify it
-- * under the terms of copyleft-next (version 0.3.1 or later) as published
-- * at http://copyleft-next.org/.
-  */
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
-diff --git a/lib/test_sysctl.c b/lib/test_sysctl.c
-index 9a564971f539..e2a816d85ea2 100644
---- a/lib/test_sysctl.c
-+++ b/lib/test_sysctl.c
-@@ -1,18 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR copyleft-next-0.3.1
- /*
-  * proc sysctl test driver
-  *
-  * Copyright (C) 2017 Luis R. Rodriguez <mcgrof@kernel.org>
-- *
-- * This program is free software; you can redistribute it and/or modify it
-- * under the terms of the GNU General Public License as published by the Free
-- * Software Foundation; either version 2 of the License, or at your option any
-- * later version; or, when distributed separately from the Linux kernel or
-- * when incorporated into other software packages, subject to the following
-- * license:
-- *
-- * This program is free software; you can redistribute it and/or modify it
-- * under the terms of copyleft-next (version 0.3.1 or later) as published
-- * at http://copyleft-next.org/.
-  */
- 
- /*
-diff --git a/tools/testing/selftests/kmod/kmod.sh b/tools/testing/selftests/kmod/kmod.sh
-index afd42387e8b2..7189715d7960 100755
---- a/tools/testing/selftests/kmod/kmod.sh
-+++ b/tools/testing/selftests/kmod/kmod.sh
-@@ -1,18 +1,7 @@
- #!/bin/bash
--#
-+# SPDX-License-Identifier: GPL-2.0-or-later OR copyleft-next-0.3.1
- # Copyright (C) 2017 Luis R. Rodriguez <mcgrof@kernel.org>
- #
--# This program is free software; you can redistribute it and/or modify it
--# under the terms of the GNU General Public License as published by the Free
--# Software Foundation; either version 2 of the License, or at your option any
--# later version; or, when distributed separately from the Linux kernel or
--# when incorporated into other software packages, subject to the following
--# license:
--#
--# This program is free software; you can redistribute it and/or modify it
--# under the terms of copyleft-next (version 0.3.1 or later) as published
--# at http://copyleft-next.org/.
--
- # This is a stress test script for kmod, the kernel module loader. It uses
- # test_kmod which exposes a series of knobs for the API for us so we can
- # tweak each test in userspace rather than in kernelspace.
-diff --git a/tools/testing/selftests/sysctl/sysctl.sh b/tools/testing/selftests/sysctl/sysctl.sh
-index f50778a3d744..bfc54b422f25 100755
---- a/tools/testing/selftests/sysctl/sysctl.sh
-+++ b/tools/testing/selftests/sysctl/sysctl.sh
-@@ -1,16 +1,6 @@
- #!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-or-later OR copyleft-next-0.3.1
- # Copyright (C) 2017 Luis R. Rodriguez <mcgrof@kernel.org>
--#
--# This program is free software; you can redistribute it and/or modify it
--# under the terms of the GNU General Public License as published by the Free
--# Software Foundation; either version 2 of the License, or at your option any
--# later version; or, when distributed separately from the Linux kernel or
--# when incorporated into other software packages, subject to the following
--# license:
--#
--# This program is free software; you can redistribute it and/or modify it
--# under the terms of copyleft-next (version 0.3.1 or later) as published
--# at http://copyleft-next.org/.
- 
- # This performs a series tests against the proc sysctl interface.
- 
+  o embraced paragraph from Thomas Gleixner which helps explain why             
+    the OR operator in the SPDX license name
+  o dropped the GPL-2.0 and GPL-2.0+ tags as suggested by Thomas Gleixner
+    as these are outdated (still valid) in the SPDX spec
+  o trimmed the Cc list to remove the test_sysfs / block layer / fs folks as
+    the test_sysfs stuff is now dropped from consideration in this series
+
+The last series was at v9 but it also had the test_sysfs and its
+changes, its history can be found here:
+
+https://lore.kernel.org/all/20211029184500.2821444-1-mcgrof@kernel.org/
+
+Luis Chamberlain (2):
+  LICENSES: Add the copyleft-next-0.3.1 license
+  testing: use the copyleft-next-0.3.1 SPDX tag
+
+ LICENSES/dual/copyleft-next-0.3.1        | 236 +++++++++++++++++++++++
+ lib/test_kmod.c                          |  12 +-
+ lib/test_sysctl.c                        |  12 +-
+ tools/testing/selftests/kmod/kmod.sh     |  13 +-
+ tools/testing/selftests/sysctl/sysctl.sh |  12 +-
+ 5 files changed, 240 insertions(+), 45 deletions(-)
+ create mode 100644 LICENSES/dual/copyleft-next-0.3.1
+
 -- 
 2.35.1
 
