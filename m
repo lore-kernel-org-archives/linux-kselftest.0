@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E47E3C32771
-	for <linux-kselftest@archiver.kernel.org>; Fri, 16 Sep 2022 03:04:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 875E3C32771
+	for <linux-kselftest@archiver.kernel.org>; Fri, 16 Sep 2022 03:04:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbiIPDEu (ORCPT
+        id S230039AbiIPDEy (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 15 Sep 2022 23:04:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47406 "EHLO
+        Thu, 15 Sep 2022 23:04:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229952AbiIPDES (ORCPT
+        with ESMTP id S229961AbiIPDEb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 15 Sep 2022 23:04:18 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C18E99DF82;
-        Thu, 15 Sep 2022 20:04:11 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MTJhn46JkzlVjJ;
-        Fri, 16 Sep 2022 11:00:09 +0800 (CST)
+        Thu, 15 Sep 2022 23:04:31 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E2439E0D0;
+        Thu, 15 Sep 2022 20:04:14 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MTJhr3m10z14Qcr;
+        Fri, 16 Sep 2022 11:00:12 +0800 (CST)
 Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
  (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 16 Sep
- 2022 11:04:09 +0800
+ 2022 11:04:11 +0800
 From:   Zhengchao Shao <shaozhengchao@huawei.com>
 To:     <netdev@vger.kernel.org>, <cake@lists.bufferbloat.net>,
         <linux-kselftest@vger.kernel.org>, <jhs@mojatatu.com>,
@@ -33,9 +33,9 @@ To:     <netdev@vger.kernel.org>, <cake@lists.bufferbloat.net>,
         <victor@mojatatu.com>
 CC:     <zhijianx.li@intel.com>, <weiyongjun1@huawei.com>,
         <yuehaibing@huawei.com>, <shaozhengchao@huawei.com>
-Subject: [PATCH net-next 08/18] selftests/tc-testings: add selftests for fq_codel qdisc
-Date:   Fri, 16 Sep 2022 11:05:34 +0800
-Message-ID: <20220916030544.228274-9-shaozhengchao@huawei.com>
+Subject: [PATCH net-next 11/18] selftests/tc-testings: add selftests for mqprio qdisc
+Date:   Fri, 16 Sep 2022 11:05:37 +0800
+Message-ID: <20220916030544.228274-12-shaozhengchao@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220916030544.228274-1-shaozhengchao@huawei.com>
 References: <20220916030544.228274-1-shaozhengchao@huawei.com>
@@ -49,355 +49,135 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Test 4957: Create FQ_CODEL with default setting
-Test 7621: Create FQ_CODEL with limit setting
-Test 6872: Create FQ_CODEL with memory_limit setting
-Test 5636: Create FQ_CODEL with target setting
-Test 630a: Create FQ_CODEL with interval setting
-Test 4324: Create FQ_CODEL with quantum setting
-Test b190: Create FQ_CODEL with noecn flag
-Test c9d2: Create FQ_CODEL with ce_threshold setting
-Test 523b: Create FQ_CODEL with multiple setting
-Test 9283: Replace FQ_CODEL with noecn setting
-Test 3459: Change FQ_CODEL with limit setting
-Test 0128: Delete FQ_CODEL with handle
-Test 0435: Show FQ_CODEL class
+Test 9903: Add mqprio Qdisc to multi-queue device (8 queues)
+Test 453a: Delete nonexistent mqprio Qdisc
+Test 5294: Delete mqprio Qdisc twice
+Test 45a9: Add mqprio Qdisc to single-queue device
+Test 2ba9: Show mqprio class
 
 Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
 ---
- .../tc-testing/tc-tests/qdiscs/fq_codel.json  | 326 ++++++++++++++++++
- 1 file changed, 326 insertions(+)
- create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq_codel.json
+ .../tc-testing/tc-tests/qdiscs/mqprio.json    | 114 ++++++++++++++++++
+ 1 file changed, 114 insertions(+)
+ create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/mqprio.json
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq_codel.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq_codel.json
+diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/mqprio.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/mqprio.json
 new file mode 100644
-index 000000000000..09608677cfee
+index 000000000000..eb598658161c
 --- /dev/null
-+++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq_codel.json
-@@ -0,0 +1,326 @@
++++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/mqprio.json
+@@ -0,0 +1,114 @@
 +[
 +    {
-+        "id": "4957",
-+        "name": "Create FQ_CODEL with default setting",
++        "id": "9903",
++        "name": "Add mqprio Qdisc to multi-queue device (8 queues)",
 +        "category": [
 +            "qdisc",
-+            "fq_codel"
++            "mqprio"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
 +        },
 +        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
++            "echo \"1 1 8\" > /sys/bus/netdevsim/new_device"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq_codel",
++        "cmdUnderTest": "$TC qdisc add dev $ETH root handle 1: mqprio num_tc 8 map 0 1 2 3 4 5 6 7 queues 1@0 1@1 1@2 1@3 1@4 1@5 1@6 1@7 hw 0",
 +        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc fq_codel 1: root refcnt [0-9]+ limit 10240p flows 1024 quantum.*target 5ms interval 100ms memory_limit 32Mb ecn drop_batch 64",
++        "verifyCmd": "$TC qdisc show dev $ETH",
++        "matchPattern": "qdisc mqprio 1: root tc 8 map 0 1 2 3 4 5 6 7 0 0 0 0 0 0 0 0.*queues:\\(0:0\\) \\(1:1\\) \\(2:2\\) \\(3:3\\) \\(4:4\\) \\(5:5\\) \\(6:6\\) \\(7:7\\)",
 +        "matchCount": "1",
 +        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
++            "echo \"1\" > /sys/bus/netdevsim/del_device"
 +        ]
 +    },
 +    {
-+        "id": "7621",
-+        "name": "Create FQ_CODEL with limit setting",
++        "id": "453a",
++        "name": "Delete nonexistent mqprio Qdisc",
 +        "category": [
 +            "qdisc",
-+            "fq_codel"
++            "mqprio"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
 +        },
 +        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
++            "echo \"1 1 4\" > /sys/bus/netdevsim/new_device"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq_codel limit 1000",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc fq_codel 1: root refcnt [0-9]+ limit 1000p flows 1024 quantum.*target 5ms interval 100ms memory_limit 32Mb ecn drop_batch 64",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "6872",
-+        "name": "Create FQ_CODEL with memory_limit setting",
-+        "category": [
-+            "qdisc",
-+            "fq_codel"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq_codel memory_limit 100000",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc fq_codel 1: root refcnt [0-9]+ limit 10240p flows 1024 quantum.*target 5ms interval 100ms memory_limit 100000b ecn drop_batch 64",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "5636",
-+        "name": "Create FQ_CODEL with target setting",
-+        "category": [
-+            "qdisc",
-+            "fq_codel"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq_codel target 2000",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc fq_codel 1: root refcnt [0-9]+ limit 10240p flows 1024 quantum.*target 2ms interval 100ms memory_limit 32Mb ecn drop_batch 64",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "630a",
-+        "name": "Create FQ_CODEL with interval setting",
-+        "category": [
-+            "qdisc",
-+            "fq_codel"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq_codel interval 5000",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc fq_codel 1: root refcnt [0-9]+ limit 10240p flows 1024 quantum.*target 5ms interval 5ms memory_limit 32Mb ecn drop_batch 64",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "4324",
-+        "name": "Create FQ_CODEL with quantum setting",
-+        "category": [
-+            "qdisc",
-+            "fq_codel"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq_codel quantum 9000",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc fq_codel 1: root refcnt [0-9]+ limit 10240p flows 1024 quantum 9000 target 5ms interval 100ms memory_limit 32Mb ecn drop_batch 64",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "b190",
-+        "name": "Create FQ_CODEL with noecn flag",
-+        "category": [
-+            "qdisc",
-+            "fq_codel"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq_codel noecn",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc fq_codel 1: root refcnt [0-9]+ limit 10240p flows 1024 quantum.*target 5ms interval 100ms memory_limit 32Mb drop_batch 64",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "c9d2",
-+        "name": "Create FQ_CODEL with ce_threshold setting",
-+        "category": [
-+            "qdisc",
-+            "fq_codel"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq_codel ce_threshold 1024000",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc fq_codel 1: root refcnt [0-9]+ limit 10240p flows 1024 quantum.*target 5ms ce_threshold 1.02s interval 100ms memory_limit 32Mb ecn drop_batch 64",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "c9d2",
-+        "name": "Create FQ_CODEL with drop_batch setting",
-+        "category": [
-+            "qdisc",
-+            "fq_codel"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq_codel drop_batch 100",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc fq_codel 1: root refcnt [0-9]+ limit 10240p flows 1024 quantum.*target 5ms interval 100ms memory_limit 32Mb ecn drop_batch 100",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "523b",
-+        "name": "Create FQ_CODEL with multiple setting",
-+        "category": [
-+            "qdisc",
-+            "fq_codel"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq_codel limit 1000 flows 256 drop_batch 100",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc fq_codel 1: root refcnt [0-9]+ limit 1000p flows 256 quantum.*target 5ms interval 100ms memory_limit 32Mb ecn drop_batch 100",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "9283",
-+        "name": "Replace FQ_CODEL with noecn setting",
-+        "category": [
-+            "qdisc",
-+            "fq_codel"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true",
-+            "$TC qdisc add dev $DUMMY handle 1: root fq_codel limit 1000 flows 256 drop_batch 100"
-+        ],
-+        "cmdUnderTest": "$TC qdisc replace dev $DUMMY handle 1: root fq_codel noecn",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc fq_codel 1: root refcnt [0-9]+ limit 1000p flows 256 quantum.*target 5ms interval 100ms memory_limit 32Mb drop_batch 100",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "3459",
-+        "name": "Change FQ_CODEL with limit setting",
-+        "category": [
-+            "qdisc",
-+            "fq_codel"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true",
-+            "$TC qdisc add dev $DUMMY handle 1: root fq_codel limit 1000 flows 256 drop_batch 100"
-+        ],
-+        "cmdUnderTest": "$TC qdisc change dev $DUMMY handle 1: root fq_codel limit 2000",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc fq_codel 1: root refcnt [0-9]+ limit 2000p flows 256 quantum.*target 5ms interval 100ms memory_limit 32Mb ecn drop_batch 100",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "0128",
-+        "name": "Delete FQ_CODEL with handle",
-+        "category": [
-+            "qdisc",
-+            "fq_codel"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true",
-+            "$TC qdisc add dev $DUMMY handle 1: root fq_codel limit 1000 flows 256 drop_batch 100"
-+        ],
-+        "cmdUnderTest": "$TC qdisc del dev $DUMMY handle 1: root",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc fq_codel 1: root refcnt [0-9]+ limit 1000p flows 256 quantum.*target 5ms interval 100ms memory_limit 32Mb noecn drop_batch 100",
++        "cmdUnderTest": "$TC qdisc del dev $ETH root handle 1: mqprio",
++        "expExitCode": "2",
++        "verifyCmd": "$TC qdisc show dev $ETH",
++        "matchPattern": "qdisc mqprio 1: root",
 +        "matchCount": "0",
 +        "teardown": [
-+            "$IP link del dev $DUMMY type dummy"
++            "echo \"1\" > /sys/bus/netdevsim/del_device"
 +        ]
 +    },
 +    {
-+        "id": "0435",
-+        "name": "Show FQ_CODEL class",
++        "id": "5294",
++        "name": "Delete mqprio Qdisc twice",
 +        "category": [
 +            "qdisc",
-+            "fq_codel"
++            "mqprio"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
 +        },
 +        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
++            "echo \"1 1 8\" > /sys/bus/netdevsim/new_device",
++            "$TC qdisc add dev $ETH root handle 1: mqprio num_tc 8 map 0 1 2 3 4 5 6 7 queues 1@0 1@1 1@2 1@3 1@4 1@5 1@6 1@7 hw 0",
++            "$TC qdisc del dev $ETH root handle 1:"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq_codel",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC class show dev $DUMMY",
-+        "matchPattern": "class fq_codel 1:",
++        "cmdUnderTest": "$TC qdisc del dev $ETH root handle 1:",
++        "expExitCode": "2",
++        "verifyCmd": "$TC qdisc show dev $ETH",
++        "matchPattern": "qdisc mqprio 1: root",
 +        "matchCount": "0",
 +        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
++            "echo \"1\" > /sys/bus/netdevsim/del_device"
++        ]
++    },
++    {
++        "id": "45a9",
++        "name": "Add mqprio Qdisc to single-queue device",
++        "category": [
++            "qdisc",
++            "mqprio"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "echo \"1 1\" > /sys/bus/netdevsim/new_device"
++        ],
++        "cmdUnderTest": "$TC qdisc add dev $ETH root handle 1: mqprio num_tc 8 map 0 1 2 3 4 5 6 7 queues 1@0 1@1 1@2 1@3 1@4 1@5 1@6 1@7 hw 0",
++        "expExitCode": "2",
++        "verifyCmd": "$TC qdisc show dev $ETH",
++        "matchPattern": "qdisc mqprio 1: root",
++        "matchCount": "0",
++        "teardown": [
++            "echo \"1\" > /sys/bus/netdevsim/del_device"
++        ]
++    },
++    {
++        "id": "2ba9",
++        "name": "Show mqprio class",
++        "category": [
++            "qdisc",
++            "mqprio"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "echo \"1 1 8\" > /sys/bus/netdevsim/new_device"
++        ],
++        "cmdUnderTest": "$TC qdisc add dev $ETH root handle 1: mqprio num_tc 8 map 0 1 2 3 4 5 6 7 queues 1@0 1@1 1@2 1@3 1@4 1@5 1@6 1@7 hw 0",
++        "expExitCode": "0",
++        "verifyCmd": "$TC class show dev $ETH",
++        "matchPattern": "class mqprio 1:",
++        "matchCount": "16",
++        "teardown": [
++            "echo \"1\" > /sys/bus/netdevsim/del_device"
 +        ]
 +    }
 +]
