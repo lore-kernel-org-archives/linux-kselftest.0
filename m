@@ -2,363 +2,111 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 999E2ECAAD3
-	for <linux-kselftest@archiver.kernel.org>; Fri, 16 Sep 2022 03:05:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C184C6FA91
+	for <linux-kselftest@archiver.kernel.org>; Fri, 16 Sep 2022 04:51:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbiIPDFw (ORCPT
+        id S229669AbiIPEv4 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 15 Sep 2022 23:05:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48368 "EHLO
+        Fri, 16 Sep 2022 00:51:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbiIPDEy (ORCPT
+        with ESMTP id S229531AbiIPEvz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 15 Sep 2022 23:04:54 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 004459E0F9;
-        Thu, 15 Sep 2022 20:04:18 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MTJh61tgkzNmGT;
-        Fri, 16 Sep 2022 10:59:34 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
- (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 16 Sep
- 2022 11:04:10 +0800
-From:   Zhengchao Shao <shaozhengchao@huawei.com>
-To:     <netdev@vger.kernel.org>, <cake@lists.bufferbloat.net>,
-        <linux-kselftest@vger.kernel.org>, <jhs@mojatatu.com>,
-        <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <toke@toke.dk>, <vinicius.gomes@intel.com>,
-        <stephen@networkplumber.org>, <shuah@kernel.org>,
-        <victor@mojatatu.com>
-CC:     <zhijianx.li@intel.com>, <weiyongjun1@huawei.com>,
-        <yuehaibing@huawei.com>, <shaozhengchao@huawei.com>
-Subject: [PATCH net-next 10/18] selftests/tc-testings: add selftests for htb qdisc
-Date:   Fri, 16 Sep 2022 11:05:36 +0800
-Message-ID: <20220916030544.228274-11-shaozhengchao@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220916030544.228274-1-shaozhengchao@huawei.com>
-References: <20220916030544.228274-1-shaozhengchao@huawei.com>
+        Fri, 16 Sep 2022 00:51:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D514A9FA89
+        for <linux-kselftest@vger.kernel.org>; Thu, 15 Sep 2022 21:51:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663303911;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ZrlYoSR0t0sSR123GOVAJxEfCWOvnKpItP6M0/Vrog0=;
+        b=L8Q8pVkXAXlyhc9bJidMelrqFDxcdqbCODQBFo2Un4S05cguVx6JiT2QLqwKkCdS7BffZn
+        bp85BLxcrrOgTzZY2a9G+pYInUj5hkb+4ly6cZD3HkuMbpLfrUR9Nwka8adlMoEawm75vD
+        HnWgJeUrhdgY5DC0yjU/OSDsNShaLNM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-495-HQsuENMbNjO1T32TYAyMaA-1; Fri, 16 Sep 2022 00:51:48 -0400
+X-MC-Unique: HQsuENMbNjO1T32TYAyMaA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BFB52862FDF;
+        Fri, 16 Sep 2022 04:51:47 +0000 (UTC)
+Received: from gshan.redhat.com (vpn2-54-126.bne.redhat.com [10.64.54.126])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2795D140EBF3;
+        Fri, 16 Sep 2022 04:51:40 +0000 (UTC)
+From:   Gavin Shan <gshan@redhat.com>
+To:     kvmarm@lists.cs.columbia.edu
+Cc:     kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+        catalin.marinas@arm.com, linux-kselftest@vger.kernel.org,
+        bgardon@google.com, shuah@kernel.org, corbet@lwn.net,
+        maz@kernel.org, drjones@redhat.com, will@kernel.org,
+        zhenyzha@redhat.com, dmatlack@google.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        pbonzini@redhat.com, peterx@redhat.com, oliver.upton@linux.dev,
+        shan.gavin@gmail.com
+Subject: [PATCH v2 0/5] KVM: arm64: Enable ring-based dirty memory tracking
+Date:   Fri, 16 Sep 2022 12:51:30 +0800
+Message-Id: <20220916045135.154505-1-gshan@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500026.china.huawei.com (7.185.36.106)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Test 0904: Create HTB with default setting
-Test 3906: Create HTB with default-N setting
-Test 8492: Create HTB with r2q setting
-Test 9502: Create HTB with direct_qlen setting
-Test b924: Create HTB with class rate and burst setting
-Test 4359: Create HTB with class mpu setting
-Test 9048: Create HTB with class prio setting
-Test 4994: Create HTB with class ceil setting
-Test 9523: Create HTB with class cburst setting
-Test 5353: Create HTB with class mtu setting
-Test 346a: Create HTB with class quantum setting
-Test 303a: Delete HTB with handle
+This series enables the ring-based dirty memory tracking for ARM64.
+The feature has been available and enabled on x86 for a while. It
+is beneficial when the number of dirty pages is small in a checkpointing
+system or live migration scenario. More details can be found from
+fb04a1eddb1a ("KVM: X86: Implement ring-based dirty memory tracking").
 
-Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
----
- .../tc-testing/tc-tests/qdiscs/htb.json       | 285 ++++++++++++++++++
- 1 file changed, 285 insertions(+)
- create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/htb.json
+The generic part has been comprehensive, meaning there isn't too much
+work, needed to extend it to ARM64.
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/htb.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/htb.json
-new file mode 100644
-index 000000000000..9529899482e0
---- /dev/null
-+++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/htb.json
-@@ -0,0 +1,285 @@
-+[
-+    {
-+        "id": "0904",
-+        "name": "Create HTB with default setting",
-+        "category": [
-+            "qdisc",
-+            "htb"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root htb",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc htb 1: root refcnt [0-9]+ r2q 10 default 0 direct_packets_stat.*direct_qlen",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "3906",
-+        "name": "Create HTB with default-N setting",
-+        "category": [
-+            "qdisc",
-+            "htb"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root htb default 10",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc htb 1: root refcnt [0-9]+ r2q 10 default 0x10 direct_packets_stat.* direct_qlen",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "8492",
-+        "name": "Create HTB with r2q setting",
-+        "category": [
-+            "qdisc",
-+            "htb"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root htb r2q 5",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc htb 1: root refcnt [0-9]+ r2q 5 default 0 direct_packets_stat.*direct_qlen",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "9502",
-+        "name": "Create HTB with direct_qlen setting",
-+        "category": [
-+            "qdisc",
-+            "htb"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root htb direct_qlen 1024",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc htb 1: root refcnt [0-9]+ r2q 10 default 0 direct_packets_stat.*direct_qlen 1024",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "b924",
-+        "name": "Create HTB with class rate and burst setting",
-+        "category": [
-+            "qdisc",
-+            "htb"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true",
-+            "$TC qdisc add dev $DUMMY handle 1: root htb"
-+        ],
-+        "cmdUnderTest": "$TC class add dev $DUMMY parent 1: classid 1:1 htb rate 20kbit burst 1000",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC class show dev $DUMMY",
-+        "matchPattern": "class htb 1:1 root prio 0 rate 20Kbit ceil 20Kbit burst 1000b cburst 1600b",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "4359",
-+        "name": "Create HTB with class mpu setting",
-+        "category": [
-+            "qdisc",
-+            "htb"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true",
-+            "$TC qdisc add dev $DUMMY handle 1: root htb"
-+        ],
-+        "cmdUnderTest": "$TC class add dev $DUMMY parent 1: classid 1:1 htb rate 20Kbit mpu 64",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC class show dev $DUMMY",
-+        "matchPattern": "class htb 1:1 root prio 0 rate 20Kbit ceil 20Kbit burst 1600b cburst 1600b",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "9048",
-+        "name": "Create HTB with class prio setting",
-+        "category": [
-+            "qdisc",
-+            "htb"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true",
-+            "$TC qdisc add dev $DUMMY handle 1: root htb"
-+        ],
-+        "cmdUnderTest": "$TC class add dev $DUMMY parent 1: classid 1:1 htb rate 20Kbit prio 1",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC class show dev $DUMMY",
-+        "matchPattern": "class htb 1:1 root prio 1 rate 20Kbit ceil 20Kbit burst 1600b cburst 1600b",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "4994",
-+        "name": "Create HTB with class ceil setting",
-+        "category": [
-+            "qdisc",
-+            "htb"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true",
-+            "$TC qdisc add dev $DUMMY handle 1: root htb"
-+        ],
-+        "cmdUnderTest": "$TC class add dev $DUMMY parent 1: classid 1:1 htb rate 20Kbit ceil 10Kbit",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC class show dev $DUMMY",
-+        "matchPattern": "class htb 1:1 root prio 0 rate 20Kbit ceil 10Kbit burst 1600b cburst 1600b",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "9523",
-+        "name": "Create HTB with class cburst setting",
-+        "category": [
-+            "qdisc",
-+            "htb"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true",
-+            "$TC qdisc add dev $DUMMY handle 1: root htb"
-+        ],
-+        "cmdUnderTest": "$TC class add dev $DUMMY parent 1: classid 1:1 htb rate 20Kbit cburst 2000",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC class show dev $DUMMY",
-+        "matchPattern": "class htb 1:1 root prio 0 rate 20Kbit ceil 20Kbit burst 1600b cburst 2000b",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "5353",
-+        "name": "Create HTB with class mtu setting",
-+        "category": [
-+            "qdisc",
-+            "htb"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true",
-+            "$TC qdisc add dev $DUMMY handle 1: root htb"
-+        ],
-+        "cmdUnderTest": "$TC class add dev $DUMMY parent 1: classid 1:1 htb rate 20Kbit mtu 2048",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC class show dev $DUMMY",
-+        "matchPattern": "class htb 1:1 root prio 0 rate 20Kbit ceil 20Kbit burst 2Kb cburst 2Kb",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "346a",
-+        "name": "Create HTB with class quantum setting",
-+        "category": [
-+            "qdisc",
-+            "htb"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true",
-+            "$TC qdisc add dev $DUMMY handle 1: root htb"
-+        ],
-+        "cmdUnderTest": "$TC class add dev $DUMMY parent 1: classid 1:1 htb rate 20Kbit quantum 2048",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC class show dev $DUMMY",
-+        "matchPattern": "class htb 1:1 root prio 0 rate 20Kbit ceil 20Kbit burst 1600b cburst 1600b",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "303a",
-+        "name": "Delete HTB with handle",
-+        "category": [
-+            "qdisc",
-+            "htb"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true",
-+            "$TC qdisc add dev $DUMMY handle 1: root htb r2q 5"
-+        ],
-+        "cmdUnderTest": "$TC qdisc del dev $DUMMY handle 1: root",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc htb 1: root refcnt [0-9]+",
-+        "matchCount": "0",
-+        "teardown": [
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    }
-+]
+- PATCH[1]   introduces KVM_REQ_RING_SOFT_FULL for x86
+- PATCH[2]   enables the feature on ARM64
+- PATCH[3-5] improves kvm/selftests/dirty_log_test
+
+v1: https://lore.kernel.org/lkml/20220819005601.198436-1-gshan@redhat.com
+
+Testing
+=======
+
+(1) kvm/selftests/dirty_log_test
+(2) Live migration by QEMU
+
+Changelog
+=========
+v2:
+  * Introduce KVM_REQ_RING_SOFT_FULL                         (Marc)
+  * Changelog improvement                                    (Marc)
+  * Fix dirty_log_test without knowing host page size        (Drew)
+
+Gavin Shan (5):
+  KVM: x86: Introduce KVM_REQ_RING_SOFT_FULL
+  KVM: arm64: Enable ring-based dirty memory tracking
+  KVM: selftests: Use host page size to map ring buffer in
+    dirty_log_test
+  KVM: selftests: Clear dirty ring states between two modes in
+    dirty_log_test
+  KVM: selftests: Automate choosing dirty ring size in dirty_log_test
+
+ Documentation/virt/kvm/api.rst               |  2 +-
+ arch/arm64/include/uapi/asm/kvm.h            |  1 +
+ arch/arm64/kvm/Kconfig                       |  1 +
+ arch/arm64/kvm/arm.c                         |  8 +++
+ arch/x86/kvm/x86.c                           |  5 +-
+ include/linux/kvm_host.h                     |  1 +
+ tools/testing/selftests/kvm/dirty_log_test.c | 53 ++++++++++++++------
+ tools/testing/selftests/kvm/lib/kvm_util.c   |  2 +-
+ virt/kvm/dirty_ring.c                        |  4 ++
+ 9 files changed, 59 insertions(+), 18 deletions(-)
+
 -- 
-2.17.1
+2.23.0
 
