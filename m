@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38793C32771
-	for <linux-kselftest@archiver.kernel.org>; Fri, 16 Sep 2022 03:04:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BBF27C6FA86
+	for <linux-kselftest@archiver.kernel.org>; Fri, 16 Sep 2022 03:04:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbiIPDET (ORCPT
+        id S229957AbiIPDEX (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 15 Sep 2022 23:04:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47150 "EHLO
+        Thu, 15 Sep 2022 23:04:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbiIPDEM (ORCPT
+        with ESMTP id S229911AbiIPDEN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 15 Sep 2022 23:04:12 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3FEA98D16;
-        Thu, 15 Sep 2022 20:04:08 -0700 (PDT)
+        Thu, 15 Sep 2022 23:04:13 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F3831352;
+        Thu, 15 Sep 2022 20:04:09 -0700 (PDT)
 Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MTJhk3zZjz14QcG;
-        Fri, 16 Sep 2022 11:00:06 +0800 (CST)
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MTJj01fskzmVRX;
+        Fri, 16 Sep 2022 11:00:20 +0800 (CST)
 Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
  (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 16 Sep
- 2022 11:04:05 +0800
+ 2022 11:04:07 +0800
 From:   Zhengchao Shao <shaozhengchao@huawei.com>
 To:     <netdev@vger.kernel.org>, <cake@lists.bufferbloat.net>,
         <linux-kselftest@vger.kernel.org>, <jhs@mojatatu.com>,
@@ -33,9 +33,9 @@ To:     <netdev@vger.kernel.org>, <cake@lists.bufferbloat.net>,
         <victor@mojatatu.com>
 CC:     <zhijianx.li@intel.com>, <weiyongjun1@huawei.com>,
         <yuehaibing@huawei.com>, <shaozhengchao@huawei.com>
-Subject: [PATCH net-next 04/18] selftests/tc-testings: add selftests for cbq qdisc
-Date:   Fri, 16 Sep 2022 11:05:30 +0800
-Message-ID: <20220916030544.228274-5-shaozhengchao@huawei.com>
+Subject: [PATCH net-next 06/18] selftests/tc-testings: add selftests for drr qdisc
+Date:   Fri, 16 Sep 2022 11:05:32 +0800
+Message-ID: <20220916030544.228274-7-shaozhengchao@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220916030544.228274-1-shaozhengchao@huawei.com>
 References: <20220916030544.228274-1-shaozhengchao@huawei.com>
@@ -49,34 +49,29 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Test 3460: Create CBQ with default setting
-Test 0592: Create CBQ with mpu
-Test 4684: Create CBQ with valid cell num
-Test 4345: Create CBQ with invalid cell num
-Test 4525: Create CBQ with valid ewma
-Test 6784: Create CBQ with invalid ewma
-Test 5468: Delete CBQ with handle
-Test 492a: Show CBQ class
+Test 0385: Create DRR with default setting
+Test 2375: Delete DRR with handle
+Test 3092: Show DRR class
 
 Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
 ---
- .../tc-testing/tc-tests/qdiscs/cbq.json       | 184 ++++++++++++++++++
- 1 file changed, 184 insertions(+)
- create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/cbq.json
+ .../tc-testing/tc-tests/qdiscs/drr.json       | 71 +++++++++++++++++++
+ 1 file changed, 71 insertions(+)
+ create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/drr.json
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/cbq.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/cbq.json
+diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/drr.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/drr.json
 new file mode 100644
-index 000000000000..1ab21c83a122
+index 000000000000..486a425b3c1c
 --- /dev/null
-+++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/cbq.json
-@@ -0,0 +1,184 @@
++++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/drr.json
+@@ -0,0 +1,71 @@
 +[
 +    {
-+        "id": "3460",
-+        "name": "Create CBQ with default setting",
++        "id": "0385",
++        "name": "Create DRR with default setting",
 +        "category": [
 +            "qdisc",
-+            "cbq"
++            "drr"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
@@ -84,10 +79,10 @@ index 000000000000..1ab21c83a122
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cbq bandwidth 10000 avpkt 9000",
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root drr",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc cbq 1: root refcnt [0-9]+ rate 10Kbit \\(bounded,isolated\\) prio no-transmit",
++        "matchPattern": "qdisc drr 1: root refcnt [0-9]+",
 +        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -95,147 +90,34 @@ index 000000000000..1ab21c83a122
 +        ]
 +    },
 +    {
-+        "id": "0592",
-+        "name": "Create CBQ with mpu",
++        "id": "2375",
++        "name": "Delete DRR with handle",
 +        "category": [
 +            "qdisc",
-+            "cbq"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cbq bandwidth 10000 avpkt 9000 mpu 1000",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc cbq 1: root refcnt [0-9]+ rate 10Kbit \\(bounded,isolated\\) prio no-transmit",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "4684",
-+        "name": "Create CBQ with valid cell num",
-+        "category": [
-+            "qdisc",
-+            "cbq"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cbq bandwidth 10000 avpkt 9000 cell 128",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc cbq 1: root refcnt [0-9]+ rate 10Kbit \\(bounded,isolated\\) prio no-transmit",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "4345",
-+        "name": "Create CBQ with invalid cell num",
-+        "category": [
-+            "qdisc",
-+            "cbq"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cbq bandwidth 10000 avpkt 9000 cell 100",
-+        "expExitCode": "1",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc cbq 1: root refcnt [0-9]+ rate 10Kbit \\(bounded,isolated\\) prio no-transmit",
-+        "matchCount": "0",
-+        "teardown": [
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "4525",
-+        "name": "Create CBQ with valid ewma",
-+        "category": [
-+            "qdisc",
-+            "cbq"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cbq bandwidth 10000 avpkt 9000 ewma 16",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc cbq 1: root refcnt [0-9]+ rate 10Kbit \\(bounded,isolated\\) prio no-transmit",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "6784",
-+        "name": "Create CBQ with invalid ewma",
-+        "category": [
-+            "qdisc",
-+            "cbq"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cbq bandwidth 10000 avpkt 9000 ewma 128",
-+        "expExitCode": "1",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc cbq 1: root refcnt [0-9]+ rate 10Kbit \\(bounded,isolated\\) prio no-transmit",
-+        "matchCount": "0",
-+        "teardown": [
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "5468",
-+        "name": "Delete CBQ with handle",
-+        "category": [
-+            "qdisc",
-+            "cbq"
++            "drr"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
 +        },
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true",
-+            "$TC qdisc add dev $DUMMY handle 1: root cbq bandwidth 10000 avpkt 9000"
++            "$TC qdisc add dev $DUMMY handle 1: root drr"
 +        ],
 +        "cmdUnderTest": "$TC qdisc del dev $DUMMY handle 1: root",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc cbq 1: root refcnt [0-9]+ rate 10Kbit \\(bounded,isolated\\) prio no-transmit",
++        "matchPattern": "qdisc drr 1: root refcnt [0-9]+",
 +        "matchCount": "0",
 +        "teardown": [
 +            "$IP link del dev $DUMMY type dummy"
 +        ]
 +    },
 +    {
-+        "id": "492a",
-+        "name": "Show CBQ class",
++        "id": "3092",
++        "name": "Show DRR class",
 +        "category": [
 +            "qdisc",
-+            "cbq"
++            "drr"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
@@ -243,11 +125,11 @@ index 000000000000..1ab21c83a122
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cbq bandwidth 10000 avpkt 9000",
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root drr",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC class show dev $DUMMY",
-+        "matchPattern": "class cbq 1: root rate 10Kbit \\(bounded,isolated\\) prio no-transmit",
-+        "matchCount": "1",
++        "matchPattern": "class drr 1:",
++        "matchCount": "0",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
 +            "$IP link del dev $DUMMY type dummy"
