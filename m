@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 54380C6FA90
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7D00C6FA91
 	for <linux-kselftest@archiver.kernel.org>; Fri, 16 Sep 2022 03:04:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230009AbiIPDEm (ORCPT
+        id S230017AbiIPDEm (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Thu, 15 Sep 2022 23:04:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47388 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbiIPDER (ORCPT
+        with ESMTP id S229863AbiIPDER (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Thu, 15 Sep 2022 23:04:17 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 096639DB62;
-        Thu, 15 Sep 2022 20:04:10 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MTJkF52V5znVBg;
-        Fri, 16 Sep 2022 11:01:25 +0800 (CST)
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE89D9AF8D;
+        Thu, 15 Sep 2022 20:04:12 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MTJhp5vz5z14Qb1;
+        Fri, 16 Sep 2022 11:00:10 +0800 (CST)
 Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
  (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 16 Sep
- 2022 11:04:08 +0800
+ 2022 11:04:09 +0800
 From:   Zhengchao Shao <shaozhengchao@huawei.com>
 To:     <netdev@vger.kernel.org>, <cake@lists.bufferbloat.net>,
         <linux-kselftest@vger.kernel.org>, <jhs@mojatatu.com>,
@@ -33,9 +33,9 @@ To:     <netdev@vger.kernel.org>, <cake@lists.bufferbloat.net>,
         <victor@mojatatu.com>
 CC:     <zhijianx.li@intel.com>, <weiyongjun1@huawei.com>,
         <yuehaibing@huawei.com>, <shaozhengchao@huawei.com>
-Subject: [PATCH net-next 07/18] selftests/tc-testings: add selftests for dsmark qdisc
-Date:   Fri, 16 Sep 2022 11:05:33 +0800
-Message-ID: <20220916030544.228274-8-shaozhengchao@huawei.com>
+Subject: [PATCH net-next 09/18] selftests/tc-testings: add selftests for hfsc qdisc
+Date:   Fri, 16 Sep 2022 11:05:35 +0800
+Message-ID: <20220916030544.228274-10-shaozhengchao@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220916030544.228274-1-shaozhengchao@huawei.com>
 References: <20220916030544.228274-1-shaozhengchao@huawei.com>
@@ -49,32 +49,33 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Test 6345: Create DSMARK with default setting
-Test 3462: Create DSMARK with default_index setting
-Test ca95: Create DSMARK with set_tc_index flag
-Test a950: Create DSMARK with multiple setting
-Test 4092: Delete DSMARK with handle
-Test 5930: Show DSMARK class
+Test 3254: Create HFSC with default setting
+Test 0289: Create HFSC with class sc and ul rate setting
+Test 846a: Create HFSC with class sc umax and dmax setting
+Test 5413: Create HFSC with class rt and ls rate setting
+Test 9312: Create HFSC with class rt umax and dmax setting
+Test 6931: Delete HFSC with handle
+Test 8436: Show HFSC class
 
 Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
 ---
- .../tc-testing/tc-tests/qdiscs/dsmark.json    | 140 ++++++++++++++++++
- 1 file changed, 140 insertions(+)
- create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/dsmark.json
+ .../tc-testing/tc-tests/qdiscs/hfsc.json      | 167 ++++++++++++++++++
+ 1 file changed, 167 insertions(+)
+ create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/hfsc.json
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/dsmark.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/dsmark.json
+diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/hfsc.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/hfsc.json
 new file mode 100644
-index 000000000000..c030795f9c37
+index 000000000000..af27b2c20e17
 --- /dev/null
-+++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/dsmark.json
-@@ -0,0 +1,140 @@
++++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/hfsc.json
+@@ -0,0 +1,167 @@
 +[
 +    {
-+        "id": "6345",
-+        "name": "Create DSMARK with default setting",
++        "id": "3254",
++        "name": "Create HFSC with default setting",
 +        "category": [
 +            "qdisc",
-+            "dsmark"
++            "hfsc"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
@@ -82,10 +83,10 @@ index 000000000000..c030795f9c37
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root dsmark indices 1024",
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root hfsc",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc dsmark 1: root refcnt [0-9]+ indices 0x0400",
++        "matchPattern": "qdisc hfsc 1: root refcnt [0-9]+",
 +        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -93,103 +94,130 @@ index 000000000000..c030795f9c37
 +        ]
 +    },
 +    {
-+        "id": "3462",
-+        "name": "Create DSMARK with default_index setting",
++        "id": "0289",
++        "name": "Create HFSC with class sc and ul rate setting",
 +        "category": [
 +            "qdisc",
-+            "dsmark"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root dsmark indices 1024 default_index 512",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc dsmark 1: root refcnt [0-9]+ indices 0x0400 default_index 0x0200",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "ca95",
-+        "name": "Create DSMARK with set_tc_index flag",
-+        "category": [
-+            "qdisc",
-+            "dsmark"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root dsmark indices 1024 set_tc_index",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc dsmark 1: root refcnt [0-9]+ indices 0x0400 set_tc_index",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "a950",
-+        "name": "Create DSMARK with multiple setting",
-+        "category": [
-+            "qdisc",
-+            "dsmark"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root dsmark indices 1024 default_index 1024 set_tc_index",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc dsmark 1: root refcnt [0-9]+ indices 0x0400 default_index 0x0400 set_tc_index",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "4092",
-+        "name": "Delete DSMARK with handle",
-+        "category": [
-+            "qdisc",
-+            "dsmark"
++            "hfsc"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
 +        },
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true",
-+            "$TC qdisc add dev $DUMMY handle 1: root dsmark indices 1024 default_index 1024"
++            "$TC qdisc add dev $DUMMY handle 1: root hfsc default 11"
++        ],
++        "cmdUnderTest": "$TC class add dev $DUMMY parent 1: classid 1:1 hfsc sc rate 20000 ul rate 10000",
++        "expExitCode": "0",
++        "verifyCmd": "$TC class show dev $DUMMY",
++        "matchPattern": "class hfsc 1:1 parent 1: sc m1 0bit d 0us m2 20Kbit ul m1 0bit d 0us m2 10Kbit",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DUMMY handle 1: root",
++            "$IP link del dev $DUMMY type dummy"
++        ]
++    },
++    {
++        "id": "846a",
++        "name": "Create HFSC with class sc umax and dmax setting",
++        "category": [
++            "qdisc",
++            "hfsc"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$IP link add dev $DUMMY type dummy || /bin/true",
++            "$TC qdisc add dev $DUMMY handle 1: root hfsc default 11"
++        ],
++        "cmdUnderTest": "$TC class add dev $DUMMY parent 1: classid 1:1 hfsc sc umax 1540 dmax 5ms rate 10000 ul rate 10000",
++        "expExitCode": "0",
++        "verifyCmd": "$TC class show dev $DUMMY",
++        "matchPattern": "class hfsc 1:1 parent 1: sc m1 2464Kbit d 5ms m2 10Kbit ul m1 0bit d 0us m2 10Kbit",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DUMMY handle 1: root",
++            "$IP link del dev $DUMMY type dummy"
++        ]
++    },
++    {
++        "id": "5413",
++        "name": "Create HFSC with class rt and ls rate setting",
++        "category": [
++            "qdisc",
++            "hfsc"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$IP link add dev $DUMMY type dummy || /bin/true",
++            "$TC qdisc add dev $DUMMY handle 1: root hfsc default 11"
++        ],
++        "cmdUnderTest": "$TC class add dev $DUMMY parent 1: classid 1:1 hfsc rt rate 20000 ls rate 10000",
++        "expExitCode": "0",
++        "verifyCmd": "$TC class show dev $DUMMY",
++        "matchPattern": "class hfsc 1:1 parent 1: rt m1 0bit d 0us m2 20Kbit ls m1 0bit d 0us m2 10Kbit",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DUMMY handle 1: root",
++            "$IP link del dev $DUMMY type dummy"
++        ]
++    },
++    {
++        "id": "9312",
++        "name": "Create HFSC with class rt umax and dmax setting",
++        "category": [
++            "qdisc",
++            "hfsc"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$IP link add dev $DUMMY type dummy || /bin/true",
++            "$TC qdisc add dev $DUMMY handle 1: root hfsc default 11"
++        ],
++        "cmdUnderTest": "$TC class add dev $DUMMY parent 1: classid 1:1 hfsc rt umax 1540 dmax 5ms rate 10000 ls rate 10000",
++        "expExitCode": "0",
++        "verifyCmd": "$TC class show dev $DUMMY",
++        "matchPattern": "class hfsc 1:1 parent 1: rt m1 2464Kbit d 5ms m2 10Kbit ls m1 0bit d 0us m2 10Kbit",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DUMMY handle 1: root",
++            "$IP link del dev $DUMMY type dummy"
++        ]
++    },
++    {
++        "id": "6931",
++        "name": "Delete HFSC with handle",
++        "category": [
++            "qdisc",
++            "hfsc"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$IP link add dev $DUMMY type dummy || /bin/true",
++            "$TC qdisc add dev $DUMMY handle 1: root hfsc default 11"
 +        ],
 +        "cmdUnderTest": "$TC qdisc del dev $DUMMY handle 1: root",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc dsmark 1: root refcnt [0-9]+ indices 0x0400",
++        "matchPattern": "qdisc hfsc 1: root refcnt [0-9]+",
 +        "matchCount": "0",
 +        "teardown": [
 +            "$IP link del dev $DUMMY type dummy"
 +        ]
 +    },
 +    {
-+        "id": "5930",
-+        "name": "Show DSMARK class",
++        "id": "8436",
++        "name": "Show HFSC class",
 +        "category": [
 +            "qdisc",
-+            "dsmark"
++            "hfsc"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
@@ -197,11 +225,11 @@ index 000000000000..c030795f9c37
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root dsmark indices 1024",
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root hfsc",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC class show dev $DUMMY",
-+        "matchPattern": "class dsmark 1:",
-+        "matchCount": "0",
++        "matchPattern": "class hfsc 1: root",
++        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
 +            "$IP link del dev $DUMMY type dummy"
