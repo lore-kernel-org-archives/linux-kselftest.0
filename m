@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC3EEECAAD3
-	for <linux-kselftest@archiver.kernel.org>; Fri, 16 Sep 2022 03:05:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 999E2ECAAD3
+	for <linux-kselftest@archiver.kernel.org>; Fri, 16 Sep 2022 03:05:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230084AbiIPDFR (ORCPT
+        id S230106AbiIPDFw (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 15 Sep 2022 23:05:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48050 "EHLO
+        Thu, 15 Sep 2022 23:05:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230022AbiIPDEu (ORCPT
+        with ESMTP id S230036AbiIPDEy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 15 Sep 2022 23:04:50 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E089C8D9;
-        Thu, 15 Sep 2022 20:04:17 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MTJht53vNzlVvx;
-        Fri, 16 Sep 2022 11:00:14 +0800 (CST)
+        Thu, 15 Sep 2022 23:04:54 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 004459E0F9;
+        Thu, 15 Sep 2022 20:04:18 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MTJh61tgkzNmGT;
+        Fri, 16 Sep 2022 10:59:34 +0800 (CST)
 Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
  (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 16 Sep
- 2022 11:04:14 +0800
+ 2022 11:04:10 +0800
 From:   Zhengchao Shao <shaozhengchao@huawei.com>
 To:     <netdev@vger.kernel.org>, <cake@lists.bufferbloat.net>,
         <linux-kselftest@vger.kernel.org>, <jhs@mojatatu.com>,
@@ -33,9 +33,9 @@ To:     <netdev@vger.kernel.org>, <cake@lists.bufferbloat.net>,
         <victor@mojatatu.com>
 CC:     <zhijianx.li@intel.com>, <weiyongjun1@huawei.com>,
         <yuehaibing@huawei.com>, <shaozhengchao@huawei.com>
-Subject: [PATCH net-next 14/18] selftests/tc-testings: add selftests for qfq qdisc
-Date:   Fri, 16 Sep 2022 11:05:40 +0800
-Message-ID: <20220916030544.228274-15-shaozhengchao@huawei.com>
+Subject: [PATCH net-next 10/18] selftests/tc-testings: add selftests for htb qdisc
+Date:   Fri, 16 Sep 2022 11:05:36 +0800
+Message-ID: <20220916030544.228274-11-shaozhengchao@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220916030544.228274-1-shaozhengchao@huawei.com>
 References: <20220916030544.228274-1-shaozhengchao@huawei.com>
@@ -49,32 +49,38 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Test 0582: Create QFQ with default setting
-Test c9a3: Create QFQ with class weight setting
-Test 8452: Create QFQ with class maxpkt setting
-Test d920: Create QFQ with multiple class setting
-Test 0548: Delete QFQ with handle
-Test 5901: Show QFQ class
+Test 0904: Create HTB with default setting
+Test 3906: Create HTB with default-N setting
+Test 8492: Create HTB with r2q setting
+Test 9502: Create HTB with direct_qlen setting
+Test b924: Create HTB with class rate and burst setting
+Test 4359: Create HTB with class mpu setting
+Test 9048: Create HTB with class prio setting
+Test 4994: Create HTB with class ceil setting
+Test 9523: Create HTB with class cburst setting
+Test 5353: Create HTB with class mtu setting
+Test 346a: Create HTB with class quantum setting
+Test 303a: Delete HTB with handle
 
 Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
 ---
- .../tc-testing/tc-tests/qdiscs/qfq.json       | 145 ++++++++++++++++++
- 1 file changed, 145 insertions(+)
- create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/qfq.json
+ .../tc-testing/tc-tests/qdiscs/htb.json       | 285 ++++++++++++++++++
+ 1 file changed, 285 insertions(+)
+ create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/htb.json
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/qfq.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/qfq.json
+diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/htb.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/htb.json
 new file mode 100644
-index 000000000000..330f1a25e0ab
+index 000000000000..9529899482e0
 --- /dev/null
-+++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/qfq.json
-@@ -0,0 +1,145 @@
++++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/htb.json
+@@ -0,0 +1,285 @@
 +[
 +    {
-+        "id": "0582",
-+        "name": "Create QFQ with default setting",
++        "id": "0904",
++        "name": "Create HTB with default setting",
 +        "category": [
 +            "qdisc",
-+            "qfq"
++            "htb"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
@@ -82,10 +88,10 @@ index 000000000000..330f1a25e0ab
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root qfq",
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root htb",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc qfq 1: root refcnt [0-9]+",
++        "matchPattern": "qdisc htb 1: root refcnt [0-9]+ r2q 10 default 0 direct_packets_stat.*direct_qlen",
 +        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -93,23 +99,22 @@ index 000000000000..330f1a25e0ab
 +        ]
 +    },
 +    {
-+        "id": "c9a3",
-+        "name": "Create QFQ with class weight setting",
++        "id": "3906",
++        "name": "Create HTB with default-N setting",
 +        "category": [
 +            "qdisc",
-+            "qfq"
++            "htb"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
 +        },
 +        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true",
-+            "$TC qdisc add dev $DUMMY handle 1: root qfq"
++            "$IP link add dev $DUMMY type dummy || /bin/true"
 +        ],
-+        "cmdUnderTest": "$TC class add dev $DUMMY parent 1: classid 1:1 qfq weight 100",
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root htb default 10",
 +        "expExitCode": "0",
-+        "verifyCmd": "$TC class show dev $DUMMY",
-+        "matchPattern": "class qfq 1:1 root weight 100 maxpkt",
++        "verifyCmd": "$TC qdisc show dev $DUMMY",
++        "matchPattern": "qdisc htb 1: root refcnt [0-9]+ r2q 10 default 0x10 direct_packets_stat.* direct_qlen",
 +        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -117,23 +122,22 @@ index 000000000000..330f1a25e0ab
 +        ]
 +    },
 +    {
-+        "id": "8452",
-+        "name": "Create QFQ with class maxpkt setting",
++        "id": "8492",
++        "name": "Create HTB with r2q setting",
 +        "category": [
 +            "qdisc",
-+            "qfq"
++            "htb"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
 +        },
 +        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true",
-+            "$TC qdisc add dev $DUMMY handle 1: root qfq"
++            "$IP link add dev $DUMMY type dummy || /bin/true"
 +        ],
-+        "cmdUnderTest": "$TC class add dev $DUMMY parent 1: classid 1:1 qfq maxpkt 2000",
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root htb r2q 5",
 +        "expExitCode": "0",
-+        "verifyCmd": "$TC class show dev $DUMMY",
-+        "matchPattern": "class qfq 1:1 root weight 1 maxpkt 2000",
++        "verifyCmd": "$TC qdisc show dev $DUMMY",
++        "matchPattern": "qdisc htb 1: root refcnt [0-9]+ r2q 5 default 0 direct_packets_stat.*direct_qlen",
 +        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -141,74 +145,216 @@ index 000000000000..330f1a25e0ab
 +        ]
 +    },
 +    {
-+        "id": "d920",
-+        "name": "Create QFQ with multiple class setting",
++        "id": "9502",
++        "name": "Create HTB with direct_qlen setting",
 +        "category": [
 +            "qdisc",
-+            "qfq"
++            "htb"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
 +        },
 +        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true",
-+            "$TC qdisc add dev $DUMMY handle 1: root qfq",
-+            "$TC class add dev $DUMMY parent 1: classid 1:1 qfq weight 100"
++            "$IP link add dev $DUMMY type dummy || /bin/true"
 +        ],
-+        "cmdUnderTest": "$TC class add dev $DUMMY parent 1: classid 1:2 qfq weight 200",
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root htb direct_qlen 1024",
 +        "expExitCode": "0",
-+        "verifyCmd": "$TC class show dev $DUMMY",
-+        "matchPattern": "class qfq 1:[0-9]+ root weight [0-9]+00 maxpkt",
-+        "matchCount": "2",
++        "verifyCmd": "$TC qdisc show dev $DUMMY",
++        "matchPattern": "qdisc htb 1: root refcnt [0-9]+ r2q 10 default 0 direct_packets_stat.*direct_qlen 1024",
++        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
 +            "$IP link del dev $DUMMY type dummy"
 +        ]
 +    },
 +    {
-+        "id": "0548",
-+        "name": "Delete QFQ with handle",
++        "id": "b924",
++        "name": "Create HTB with class rate and burst setting",
 +        "category": [
 +            "qdisc",
-+            "qfq"
++            "htb"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
 +        },
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true",
-+            "$TC qdisc add dev $DUMMY handle 1: root qfq",
-+            "$TC class add dev $DUMMY parent 1: classid 1:1 qfq weight 100"
++            "$TC qdisc add dev $DUMMY handle 1: root htb"
++        ],
++        "cmdUnderTest": "$TC class add dev $DUMMY parent 1: classid 1:1 htb rate 20kbit burst 1000",
++        "expExitCode": "0",
++        "verifyCmd": "$TC class show dev $DUMMY",
++        "matchPattern": "class htb 1:1 root prio 0 rate 20Kbit ceil 20Kbit burst 1000b cburst 1600b",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DUMMY handle 1: root",
++            "$IP link del dev $DUMMY type dummy"
++        ]
++    },
++    {
++        "id": "4359",
++        "name": "Create HTB with class mpu setting",
++        "category": [
++            "qdisc",
++            "htb"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$IP link add dev $DUMMY type dummy || /bin/true",
++            "$TC qdisc add dev $DUMMY handle 1: root htb"
++        ],
++        "cmdUnderTest": "$TC class add dev $DUMMY parent 1: classid 1:1 htb rate 20Kbit mpu 64",
++        "expExitCode": "0",
++        "verifyCmd": "$TC class show dev $DUMMY",
++        "matchPattern": "class htb 1:1 root prio 0 rate 20Kbit ceil 20Kbit burst 1600b cburst 1600b",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DUMMY handle 1: root",
++            "$IP link del dev $DUMMY type dummy"
++        ]
++    },
++    {
++        "id": "9048",
++        "name": "Create HTB with class prio setting",
++        "category": [
++            "qdisc",
++            "htb"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$IP link add dev $DUMMY type dummy || /bin/true",
++            "$TC qdisc add dev $DUMMY handle 1: root htb"
++        ],
++        "cmdUnderTest": "$TC class add dev $DUMMY parent 1: classid 1:1 htb rate 20Kbit prio 1",
++        "expExitCode": "0",
++        "verifyCmd": "$TC class show dev $DUMMY",
++        "matchPattern": "class htb 1:1 root prio 1 rate 20Kbit ceil 20Kbit burst 1600b cburst 1600b",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DUMMY handle 1: root",
++            "$IP link del dev $DUMMY type dummy"
++        ]
++    },
++    {
++        "id": "4994",
++        "name": "Create HTB with class ceil setting",
++        "category": [
++            "qdisc",
++            "htb"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$IP link add dev $DUMMY type dummy || /bin/true",
++            "$TC qdisc add dev $DUMMY handle 1: root htb"
++        ],
++        "cmdUnderTest": "$TC class add dev $DUMMY parent 1: classid 1:1 htb rate 20Kbit ceil 10Kbit",
++        "expExitCode": "0",
++        "verifyCmd": "$TC class show dev $DUMMY",
++        "matchPattern": "class htb 1:1 root prio 0 rate 20Kbit ceil 10Kbit burst 1600b cburst 1600b",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DUMMY handle 1: root",
++            "$IP link del dev $DUMMY type dummy"
++        ]
++    },
++    {
++        "id": "9523",
++        "name": "Create HTB with class cburst setting",
++        "category": [
++            "qdisc",
++            "htb"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$IP link add dev $DUMMY type dummy || /bin/true",
++            "$TC qdisc add dev $DUMMY handle 1: root htb"
++        ],
++        "cmdUnderTest": "$TC class add dev $DUMMY parent 1: classid 1:1 htb rate 20Kbit cburst 2000",
++        "expExitCode": "0",
++        "verifyCmd": "$TC class show dev $DUMMY",
++        "matchPattern": "class htb 1:1 root prio 0 rate 20Kbit ceil 20Kbit burst 1600b cburst 2000b",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DUMMY handle 1: root",
++            "$IP link del dev $DUMMY type dummy"
++        ]
++    },
++    {
++        "id": "5353",
++        "name": "Create HTB with class mtu setting",
++        "category": [
++            "qdisc",
++            "htb"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$IP link add dev $DUMMY type dummy || /bin/true",
++            "$TC qdisc add dev $DUMMY handle 1: root htb"
++        ],
++        "cmdUnderTest": "$TC class add dev $DUMMY parent 1: classid 1:1 htb rate 20Kbit mtu 2048",
++        "expExitCode": "0",
++        "verifyCmd": "$TC class show dev $DUMMY",
++        "matchPattern": "class htb 1:1 root prio 0 rate 20Kbit ceil 20Kbit burst 2Kb cburst 2Kb",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DUMMY handle 1: root",
++            "$IP link del dev $DUMMY type dummy"
++        ]
++    },
++    {
++        "id": "346a",
++        "name": "Create HTB with class quantum setting",
++        "category": [
++            "qdisc",
++            "htb"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$IP link add dev $DUMMY type dummy || /bin/true",
++            "$TC qdisc add dev $DUMMY handle 1: root htb"
++        ],
++        "cmdUnderTest": "$TC class add dev $DUMMY parent 1: classid 1:1 htb rate 20Kbit quantum 2048",
++        "expExitCode": "0",
++        "verifyCmd": "$TC class show dev $DUMMY",
++        "matchPattern": "class htb 1:1 root prio 0 rate 20Kbit ceil 20Kbit burst 1600b cburst 1600b",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DUMMY handle 1: root",
++            "$IP link del dev $DUMMY type dummy"
++        ]
++    },
++    {
++        "id": "303a",
++        "name": "Delete HTB with handle",
++        "category": [
++            "qdisc",
++            "htb"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$IP link add dev $DUMMY type dummy || /bin/true",
++            "$TC qdisc add dev $DUMMY handle 1: root htb r2q 5"
 +        ],
 +        "cmdUnderTest": "$TC qdisc del dev $DUMMY handle 1: root",
 +        "expExitCode": "0",
-+        "verifyCmd": "$TC class show dev $DUMMY",
-+        "matchPattern": "qdisc qfq 1: root refcnt [0-9]+",
++        "verifyCmd": "$TC qdisc show dev $DUMMY",
++        "matchPattern": "qdisc htb 1: root refcnt [0-9]+",
 +        "matchCount": "0",
 +        "teardown": [
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "5901",
-+        "name": "Show QFQ class",
-+        "category": [
-+            "qdisc",
-+            "qfq"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root qfq",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC class show dev $DUMMY",
-+        "matchPattern": "class qfq 1:",
-+        "matchCount": "0",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
 +            "$IP link del dev $DUMMY type dummy"
 +        ]
 +    }
