@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1981ECAAD3
-	for <linux-kselftest@archiver.kernel.org>; Mon, 19 Sep 2022 11:10:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B402EC54EE9
+	for <linux-kselftest@archiver.kernel.org>; Mon, 19 Sep 2022 11:10:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230191AbiISLKp (ORCPT
+        id S230200AbiISLKu (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 19 Sep 2022 07:10:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48324 "EHLO
+        Mon, 19 Sep 2022 07:10:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230197AbiISLKb (ORCPT
+        with ESMTP id S230108AbiISLKd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 19 Sep 2022 07:10:31 -0400
+        Mon, 19 Sep 2022 07:10:33 -0400
 Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EDE616586;
-        Mon, 19 Sep 2022 04:10:27 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MWMLP081hzlW0d;
-        Mon, 19 Sep 2022 19:06:21 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D61CB140DC;
+        Mon, 19 Sep 2022 04:10:28 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MWMMw027LzpSyH;
+        Mon, 19 Sep 2022 19:07:39 +0800 (CST)
 Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
  (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 19 Sep
- 2022 19:10:24 +0800
+ 2022 19:10:26 +0800
 From:   Zhengchao Shao <shaozhengchao@huawei.com>
 To:     <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
         <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
         <shuah@kernel.org>, <victor@mojatatu.com>
 CC:     <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>,
         <shaozhengchao@huawei.com>
-Subject: [PATCH net-next 05/15] selftests/tc-testings: add selftests for fq qdisc
-Date:   Mon, 19 Sep 2022 19:11:49 +0800
-Message-ID: <20220919111159.86998-6-shaozhengchao@huawei.com>
+Subject: [PATCH net-next 07/15] selftests/tc-testings: add selftests for hhf qdisc
+Date:   Mon, 19 Sep 2022 19:11:51 +0800
+Message-ID: <20220919111159.86998-8-shaozhengchao@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220919111159.86998-1-shaozhengchao@huawei.com>
 References: <20220919111159.86998-1-shaozhengchao@huawei.com>
@@ -45,43 +45,35 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Test 983b: Create FQ with default setting
-Test 38a1: Create FQ with limit packet setting
-Test 0a18: Create FQ with flow_limit setting
-Test 2390: Create FQ with quantum setting
-Test 845b: Create FQ with initial_quantum setting
-Test 9398: Create FQ with maxrate setting
-Test 342c: Create FQ with nopacing setting
-Test 6391: Create FQ with refill_delay setting
-Test 238b: Create FQ with low_rate_threshold setting
-Test 7582: Create FQ with orphan_mask setting
-Test 4894: Create FQ with timer_slack setting
-Test 324c: Create FQ with ce_threshold setting
-Test 424a: Create FQ with horizon time setting
-Test 89e1: Create FQ with horizon_cap setting
-Test 32e1: Delete FQ with valid handle
-Test 49b0: Replace FQ with limit setting
-Test 9478: Change FQ with limit setting
+Test 4812: Create HHF with default setting
+Test 8a92: Create HHF with limit setting
+Test 3491: Create HHF with quantum setting
+Test ba04: Create HHF with reset_timeout setting
+Test 4238: Create HHF with admit_bytes setting
+Test 839f: Create HHF with evict_timeout setting
+Test a044: Create HHF with non_hh_weight setting
+Test 32f9: Change HHF with limit setting
+Test 385e: Show HHF class
 
 Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
 ---
- .../tc-testing/tc-tests/qdiscs/fq.json        | 395 ++++++++++++++++++
- 1 file changed, 395 insertions(+)
- create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq.json
+ .../tc-testing/tc-tests/qdiscs/hhf.json       | 210 ++++++++++++++++++
+ 1 file changed, 210 insertions(+)
+ create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/hhf.json
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq.json
+diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/hhf.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/hhf.json
 new file mode 100644
-index 000000000000..8acb904d1419
+index 000000000000..949f6e5de902
 --- /dev/null
-+++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq.json
-@@ -0,0 +1,395 @@
++++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/hhf.json
+@@ -0,0 +1,210 @@
 +[
 +    {
-+        "id": "983b",
-+        "name": "Create FQ with default setting",
++        "id": "4812",
++        "name": "Create HHF with default setting",
 +        "category": [
 +            "qdisc",
-+            "fq"
++            "hhf"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
@@ -89,10 +81,10 @@ index 000000000000..8acb904d1419
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq",
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root hhf",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc fq 1: root refcnt [0-9]+ limit",
++        "matchPattern": "qdisc hhf 1: root refcnt [0-9]+.*hh_limit 2048 reset_timeout 40ms admit_bytes 128Kb evict_timeout 1s non_hh_weight 2",
 +        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -100,11 +92,11 @@ index 000000000000..8acb904d1419
 +        ]
 +    },
 +    {
-+        "id": "38a1",
-+        "name": "Create FQ with limit packet setting",
++        "id": "8a92",
++        "name": "Create HHF with limit setting",
 +        "category": [
 +            "qdisc",
-+            "fq"
++            "hhf"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
@@ -112,10 +104,10 @@ index 000000000000..8acb904d1419
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq limit 3000",
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root hhf limit 1500",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc fq 1: root refcnt [0-9]+ limit 3000p",
++        "matchPattern": "qdisc hhf 1: root refcnt [0-9]+ limit 1500p.*hh_limit 2048 reset_timeout 40ms admit_bytes 128Kb evict_timeout 1s non_hh_weight 2",
 +        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -123,11 +115,11 @@ index 000000000000..8acb904d1419
 +        ]
 +    },
 +    {
-+        "id": "0a18",
-+        "name": "Create FQ with flow_limit setting",
++        "id": "3491",
++        "name": "Create HHF with quantum setting",
 +        "category": [
 +            "qdisc",
-+            "fq"
++            "hhf"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
@@ -135,10 +127,10 @@ index 000000000000..8acb904d1419
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq flow_limit 300",
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root hhf quantum 9000",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc fq 1: root refcnt [0-9]+ limit 10000p flow_limit 300p",
++        "matchPattern": "qdisc hhf 1: root refcnt [0-9]+.*quantum 9000b hh_limit 2048 reset_timeout 40ms admit_bytes 128Kb evict_timeout 1s non_hh_weight 2",
 +        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -146,11 +138,11 @@ index 000000000000..8acb904d1419
 +        ]
 +    },
 +    {
-+        "id": "2390",
-+        "name": "Create FQ with quantum setting",
++        "id": "ba04",
++        "name": "Create HHF with reset_timeout setting",
 +        "category": [
 +            "qdisc",
-+            "fq"
++            "hhf"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
@@ -158,10 +150,10 @@ index 000000000000..8acb904d1419
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq quantum 9000",
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root hhf reset_timeout 100ms",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc fq 1: root refcnt [0-9]+ limit 10000p flow_limit 100p buckets.*orphan_mask 1023 quantum 9000b",
++        "matchPattern": "qdisc hhf 1: root refcnt [0-9]+.*hh_limit 2048 reset_timeout 100ms admit_bytes 128Kb evict_timeout 1s non_hh_weight 2",
 +        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -169,11 +161,11 @@ index 000000000000..8acb904d1419
 +        ]
 +    },
 +    {
-+        "id": "845b",
-+        "name": "Create FQ with initial_quantum setting",
++        "id": "4238",
++        "name": "Create HHF with admit_bytes setting",
 +        "category": [
 +            "qdisc",
-+            "fq"
++            "hhf"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
@@ -181,10 +173,10 @@ index 000000000000..8acb904d1419
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq initial_quantum 900000",
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root hhf admit_bytes 100000",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc fq 1: root refcnt [0-9]+ limit 10000p flow_limit 100p buckets.*initial_quantum 900000b",
++        "matchPattern": "qdisc hhf 1: root refcnt [0-9]+.*hh_limit 2048 reset_timeout 40ms admit_bytes 100000b evict_timeout 1s non_hh_weight 2",
 +        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -192,11 +184,11 @@ index 000000000000..8acb904d1419
 +        ]
 +    },
 +    {
-+        "id": "9398",
-+        "name": "Create FQ with maxrate setting",
++        "id": "839f",
++        "name": "Create HHF with evict_timeout setting",
 +        "category": [
 +            "qdisc",
-+            "fq"
++            "hhf"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
@@ -204,10 +196,10 @@ index 000000000000..8acb904d1419
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq maxrate 100000",
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root hhf evict_timeout 0.5s",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc fq 1: root refcnt [0-9]+ limit 10000p flow_limit 100p buckets.*maxrate 100Kbit",
++        "matchPattern": "qdisc hhf 1: root refcnt [0-9]+.*hh_limit 2048 reset_timeout 40ms admit_bytes 128Kb evict_timeout 500ms non_hh_weight 2",
 +        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -215,11 +207,11 @@ index 000000000000..8acb904d1419
 +        ]
 +    },
 +    {
-+        "id": "342c",
-+        "name": "Create FQ with nopacing setting",
++        "id": "a044",
++        "name": "Create HHF with non_hh_weight setting",
 +        "category": [
 +            "qdisc",
-+            "fq"
++            "hhf"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
@@ -227,10 +219,10 @@ index 000000000000..8acb904d1419
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq nopacing",
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root hhf non_hh_weight 10",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc fq 1: root refcnt [0-9]+ limit 10000p flow_limit 100p.*nopacing",
++        "matchPattern": "qdisc hhf 1: root refcnt [0-9]+.*hh_limit 2048 reset_timeout 40ms admit_bytes 128Kb evict_timeout 1s non_hh_weight 10",
 +        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -238,232 +230,47 @@ index 000000000000..8acb904d1419
 +        ]
 +    },
 +    {
-+        "id": "6391",
-+        "name": "Create FQ with refill_delay setting",
++        "id": "32f9",
++        "name": "Change HHF with limit setting",
 +        "category": [
 +            "qdisc",
-+            "fq"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq refill_delay 100ms",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc fq 1: root refcnt [0-9]+ limit 10000p flow_limit 100p.*refill_delay 100ms",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "238b",
-+        "name": "Create FQ with low_rate_threshold setting",
-+        "category": [
-+            "qdisc",
-+            "fq"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq low_rate_threshold 10000",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc fq 1: root refcnt [0-9]+ limit 10000p flow_limit 100p.*low_rate_threshold 10Kbit",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "7582",
-+        "name": "Create FQ with orphan_mask setting",
-+        "category": [
-+            "qdisc",
-+            "fq"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq orphan_mask 255",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc fq 1: root refcnt [0-9]+ limit 10000p flow_limit 100p.*orphan_mask 255",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "4894",
-+        "name": "Create FQ with timer_slack setting",
-+        "category": [
-+            "qdisc",
-+            "fq"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq timer_slack 100",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc fq 1: root refcnt [0-9]+ limit 10000p flow_limit 100p.*timer_slack 100ns",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "324c",
-+        "name": "Create FQ with ce_threshold setting",
-+        "category": [
-+            "qdisc",
-+            "fq"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq ce_threshold 100",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc fq 1: root refcnt [0-9]+ limit 10000p flow_limit 100p",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "424a",
-+        "name": "Create FQ with horizon time setting",
-+        "category": [
-+            "qdisc",
-+            "fq"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq horizon 100",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc fq 1: root refcnt [0-9]+ limit 10000p flow_limit 100p.*horizon 100us",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "89e1",
-+        "name": "Create FQ with horizon_cap setting",
-+        "category": [
-+            "qdisc",
-+            "fq"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq horizon_cap",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc fq 1: root refcnt [0-9]+ limit 10000p flow_limit 100p.*horizon_cap",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "32e1",
-+        "name": "Delete FQ with valid handle",
-+        "category": [
-+            "qdisc",
-+            "fq"
++            "hhf"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
 +        },
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true",
-+            "$TC qdisc add dev $DUMMY handle 1: root fq"
++            "$TC qdisc add dev $DUMMY handle 1: root hhf"
 +        ],
-+        "cmdUnderTest": "$TC qdisc del dev $DUMMY handle 1: root",
++        "cmdUnderTest": "$TC qdisc change dev $DUMMY handle 1: root hhf limit 1500",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc fq 1: root refcnt [0-9]+ limit 10000p",
++        "matchPattern": "qdisc hhf 1: root refcnt [0-9]+ limit 1500p.*hh_limit 2048 reset_timeout 40ms admit_bytes 128Kb evict_timeout 1s non_hh_weight 2",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DUMMY handle 1: root",
++            "$IP link del dev $DUMMY type dummy"
++        ]
++    },
++    {
++        "id": "385e",
++        "name": "Show HHF class",
++        "category": [
++            "qdisc",
++            "hhf"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$IP link add dev $DUMMY type dummy || /bin/true"
++        ],
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root hhf",
++        "expExitCode": "0",
++        "verifyCmd": "$TC class show dev $DUMMY",
++        "matchPattern": "class hhf 1:",
 +        "matchCount": "0",
-+        "teardown": [
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "49b0",
-+        "name": "Replace FQ with limit setting",
-+        "category": [
-+            "qdisc",
-+            "fq"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true",
-+            "$TC qdisc add dev $DUMMY handle 1: root fq"
-+        ],
-+        "cmdUnderTest": "$TC qdisc replace dev $DUMMY handle 1: root fq limit 5000",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc fq 1: root refcnt [0-9]+ limit 5000p",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "9478",
-+        "name": "Change FQ with limit setting",
-+        "category": [
-+            "qdisc",
-+            "fq"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true",
-+            "$TC qdisc add dev $DUMMY handle 1: root fq"
-+        ],
-+        "cmdUnderTest": "$TC qdisc change dev $DUMMY handle 1: root fq limit 100",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc fq 1: root refcnt [0-9]+ limit 100p",
-+        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
 +            "$IP link del dev $DUMMY type dummy"
