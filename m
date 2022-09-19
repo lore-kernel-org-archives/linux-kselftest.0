@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98F6CC6FA82
-	for <linux-kselftest@archiver.kernel.org>; Mon, 19 Sep 2022 11:11:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 849DDC54EE9
+	for <linux-kselftest@archiver.kernel.org>; Mon, 19 Sep 2022 11:11:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230053AbiISLLF (ORCPT
+        id S230288AbiISLLG (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 19 Sep 2022 07:11:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48574 "EHLO
+        Mon, 19 Sep 2022 07:11:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230208AbiISLKe (ORCPT
+        with ESMTP id S230207AbiISLKe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Mon, 19 Sep 2022 07:10:34 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98FD314D2F;
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FE3715806;
         Mon, 19 Sep 2022 04:10:30 -0700 (PDT)
 Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MWMKm68XfzMn0l;
-        Mon, 19 Sep 2022 19:05:48 +0800 (CST)
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MWMLR4YHkz14Qg9;
+        Mon, 19 Sep 2022 19:06:23 +0800 (CST)
 Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
  (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 19 Sep
- 2022 19:10:28 +0800
+ 2022 19:10:27 +0800
 From:   Zhengchao Shao <shaozhengchao@huawei.com>
 To:     <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
         <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
         <shuah@kernel.org>, <victor@mojatatu.com>
 CC:     <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>,
         <shaozhengchao@huawei.com>
-Subject: [PATCH net-next 11/15] selftests/tc-testings: add selftests for sfq qdisc
-Date:   Mon, 19 Sep 2022 19:11:55 +0800
-Message-ID: <20220919111159.86998-12-shaozhengchao@huawei.com>
+Subject: [PATCH net-next 09/15] selftests/tc-testings: add selftests for plug qdisc
+Date:   Mon, 19 Sep 2022 19:11:53 +0800
+Message-ID: <20220919111159.86998-10-shaozhengchao@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220919111159.86998-1-shaozhengchao@huawei.com>
 References: <20220919111159.86998-1-shaozhengchao@huawei.com>
@@ -45,36 +45,34 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Test 7482: Create SFQ with default setting
-Test c186: Create SFQ with limit setting
-Test ae23: Create SFQ with perturb setting
-Test a430: Create SFQ with quantum setting
-Test 4539: Create SFQ with divisor setting
-Test b089: Create SFQ with flows setting
-Test 99a0: Create SFQ with depth setting
-Test 7389: Create SFQ with headdrop setting
-Test 6472: Create SFQ with redflowlimit setting
-Test 8929: Show SFQ class
+Test 3289: Create PLUG with default setting
+Test 0917: Create PLUG with block setting
+Test 483b: Create PLUG with release setting
+Test 4995: Create PLUG with release_indefinite setting
+Test 389c: Create PLUG with limit setting
+Test 384a: Delete PLUG with valid handle
+Test 439a: Replace PLUG with limit setting
+Test 9831: Change PLUG with limit setting
 
 Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
 ---
- .../tc-testing/tc-tests/qdiscs/sfq.json       | 232 ++++++++++++++++++
- 1 file changed, 232 insertions(+)
- create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/sfq.json
+ .../tc-testing/tc-tests/qdiscs/plug.json      | 188 ++++++++++++++++++
+ 1 file changed, 188 insertions(+)
+ create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/plug.json
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/sfq.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/sfq.json
+diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/plug.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/plug.json
 new file mode 100644
-index 000000000000..b6be718a174a
+index 000000000000..6454518af178
 --- /dev/null
-+++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/sfq.json
-@@ -0,0 +1,232 @@
++++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/plug.json
+@@ -0,0 +1,188 @@
 +[
 +    {
-+        "id": "7482",
-+        "name": "Create SFQ with default setting",
++        "id": "3289",
++        "name": "Create PLUG with default setting",
 +        "category": [
 +            "qdisc",
-+            "sfq"
++            "plug"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
@@ -82,10 +80,10 @@ index 000000000000..b6be718a174a
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root sfq",
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root plug",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc sfq 1: root refcnt [0-9]+ limit 127p quantum.*depth 127 divisor 1024",
++        "matchPattern": "qdisc plug 1: root refcnt",
 +        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -93,11 +91,11 @@ index 000000000000..b6be718a174a
 +        ]
 +    },
 +    {
-+        "id": "c186",
-+        "name": "Create SFQ with limit setting",
++        "id": "0917",
++        "name": "Create PLUG with block setting",
 +        "category": [
 +            "qdisc",
-+            "sfq"
++            "plug"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
@@ -105,10 +103,10 @@ index 000000000000..b6be718a174a
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root sfq limit 8",
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root plug block",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc sfq 1: root refcnt [0-9]+ limit 8p",
++        "matchPattern": "qdisc plug 1: root refcnt",
 +        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -116,11 +114,11 @@ index 000000000000..b6be718a174a
 +        ]
 +    },
 +    {
-+        "id": "ae23",
-+        "name": "Create SFQ with perturb setting",
++        "id": "483b",
++        "name": "Create PLUG with release setting",
 +        "category": [
 +            "qdisc",
-+            "sfq"
++            "plug"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
@@ -128,10 +126,10 @@ index 000000000000..b6be718a174a
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root sfq perturb 10",
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root plug release",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "depth 127 divisor 1024 perturb 10sec",
++        "matchPattern": "qdisc plug 1: root refcnt",
 +        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -139,11 +137,11 @@ index 000000000000..b6be718a174a
 +        ]
 +    },
 +    {
-+        "id": "a430",
-+        "name": "Create SFQ with quantum setting",
++        "id": "4995",
++        "name": "Create PLUG with release_indefinite setting",
 +        "category": [
 +            "qdisc",
-+            "sfq"
++            "plug"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
@@ -151,10 +149,10 @@ index 000000000000..b6be718a174a
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root sfq quantum 9000",
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root plug release_indefinite",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc sfq 1: root refcnt [0-9]+ limit 127p quantum 9000b depth 127 divisor 1024",
++        "matchPattern": "qdisc plug 1: root refcnt",
 +        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -162,11 +160,11 @@ index 000000000000..b6be718a174a
 +        ]
 +    },
 +    {
-+        "id": "4539",
-+        "name": "Create SFQ with divisor setting",
++        "id": "389c",
++        "name": "Create PLUG with limit setting",
 +        "category": [
 +            "qdisc",
-+            "sfq"
++            "plug"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
@@ -174,10 +172,10 @@ index 000000000000..b6be718a174a
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root sfq divisor 512",
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root plug limit 100",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc sfq 1: root refcnt [0-9]+ limit 127p quantum 1514b depth 127 divisor 512",
++        "matchPattern": "qdisc plug 1: root refcnt",
 +        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -185,115 +183,71 @@ index 000000000000..b6be718a174a
 +        ]
 +    },
 +    {
-+        "id": "b089",
-+        "name": "Create SFQ with flows setting",
++        "id": "384a",
++        "name": "Delete PLUG with valid handle",
 +        "category": [
 +            "qdisc",
-+            "sfq"
++            "plug"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
 +        },
 +        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
++            "$IP link add dev $DUMMY type dummy || /bin/true",
++            "$TC qdisc add dev $DUMMY handle 1: root plug"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root sfq flows 20",
++        "cmdUnderTest": "$TC qdisc del dev $DUMMY handle 1: root",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc sfq 1: root refcnt",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "99a0",
-+        "name": "Create SFQ with depth setting",
-+        "category": [
-+            "qdisc",
-+            "sfq"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root sfq depth 64",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc sfq 1: root refcnt [0-9]+ limit 127p quantum 1514b depth 64 divisor 1024",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "7389",
-+        "name": "Create SFQ with headdrop setting",
-+        "category": [
-+            "qdisc",
-+            "sfq"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root sfq headdrop",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc sfq 1: root refcnt [0-9]+ limit 127p quantum 1514b depth 127 headdrop divisor 1024",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "6472",
-+        "name": "Create SFQ with redflowlimit setting",
-+        "category": [
-+            "qdisc",
-+            "sfq"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root sfq redflowlimit 100000 min 8000 max 60000 probability 0.20 ecn headdrop",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc sfq 1: root refcnt [0-9]+ limit 127p quantum 1514b depth 127 headdrop divisor 1024 ewma 6 min 8000b max 60000b probability 0.2 ecn",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "8929",
-+        "name": "Show SFQ class",
-+        "category": [
-+            "qdisc",
-+            "sfq"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root sfq",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC class show dev $DUMMY",
-+        "matchPattern": "class sfq 1:",
++        "matchPattern": "qdisc plug 1: root refcnt",
 +        "matchCount": "0",
++        "teardown": [
++            "$IP link del dev $DUMMY type dummy"
++        ]
++    },
++    {
++        "id": "439a",
++        "name": "Replace PLUG with limit setting",
++        "category": [
++            "qdisc",
++            "plug"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$IP link add dev $DUMMY type dummy || /bin/true",
++            "$TC qdisc add dev $DUMMY handle 1: root plug"
++        ],
++        "cmdUnderTest": "$TC qdisc replace dev $DUMMY handle 1: root plug limit 1000",
++        "expExitCode": "0",
++        "verifyCmd": "$TC qdisc show dev $DUMMY",
++        "matchPattern": "qdisc plug 1: root refcnt",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DUMMY handle 1: root",
++            "$IP link del dev $DUMMY type dummy"
++        ]
++    },
++    {
++        "id": "9831",
++        "name": "Change PLUG with limit setting",
++        "category": [
++            "qdisc",
++            "plug"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$IP link add dev $DUMMY type dummy || /bin/true",
++            "$TC qdisc add dev $DUMMY handle 1: root plug"
++        ],
++        "cmdUnderTest": "$TC qdisc change dev $DUMMY handle 1: root plug limit 1000",
++        "expExitCode": "0",
++        "verifyCmd": "$TC qdisc show dev $DUMMY",
++        "matchPattern": "qdisc plug 1: root refcnt",
++        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
 +            "$IP link del dev $DUMMY type dummy"
