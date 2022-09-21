@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E334BC6FA91
-	for <linux-kselftest@archiver.kernel.org>; Wed, 21 Sep 2022 02:49:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81C56C54EE9
+	for <linux-kselftest@archiver.kernel.org>; Wed, 21 Sep 2022 02:49:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbiIUCti (ORCPT
+        id S230461AbiIUCtk (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 20 Sep 2022 22:49:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44048 "EHLO
+        Tue, 20 Sep 2022 22:49:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbiIUCte (ORCPT
+        with ESMTP id S230391AbiIUCte (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Tue, 20 Sep 2022 22:49:34 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BCEEB58;
-        Tue, 20 Sep 2022 19:49:30 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MXN7Q2pBTz14RP4;
-        Wed, 21 Sep 2022 10:45:22 +0800 (CST)
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C06EB87;
+        Tue, 20 Sep 2022 19:49:32 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MXN6n0K13zMnmc;
+        Wed, 21 Sep 2022 10:44:49 +0800 (CST)
 Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
  (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 21 Sep
- 2022 10:49:28 +0800
+ 2022 10:49:29 +0800
 From:   Zhengchao Shao <shaozhengchao@huawei.com>
 To:     <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
         <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
         <shuah@kernel.org>, <victor@mojatatu.com>
 CC:     <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>,
         <shaozhengchao@huawei.com>
-Subject: [PATCH net-next,v2 06/15] selftests/tc-testing: add selftests for gred qdisc
-Date:   Wed, 21 Sep 2022 10:50:43 +0800
-Message-ID: <20220921025052.23465-7-shaozhengchao@huawei.com>
+Subject: [PATCH net-next,v2 09/15] selftests/tc-testing: add selftests for plug qdisc
+Date:   Wed, 21 Sep 2022 10:50:46 +0800
+Message-ID: <20220921025052.23465-10-shaozhengchao@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220921025052.23465-1-shaozhengchao@huawei.com>
 References: <20220921025052.23465-1-shaozhengchao@huawei.com>
@@ -45,32 +45,34 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Test 8942: Create GRED with default setting
-Test 5783: Create GRED with grio setting
-Test 8a09: Create GRED with limit setting
-Test 48cb: Create GRED with ecn setting
-Test 763a: Change GRED setting
-Test 8309: Show GRED class
+Test 3289: Create PLUG with default setting
+Test 0917: Create PLUG with block setting
+Test 483b: Create PLUG with release setting
+Test 4995: Create PLUG with release_indefinite setting
+Test 389c: Create PLUG with limit setting
+Test 384a: Delete PLUG with valid handle
+Test 439a: Replace PLUG with limit setting
+Test 9831: Change PLUG with limit setting
 
 Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
 ---
- .../tc-testing/tc-tests/qdiscs/gred.json      | 164 ++++++++++++++++++
- 1 file changed, 164 insertions(+)
- create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/gred.json
+ .../tc-testing/tc-tests/qdiscs/plug.json      | 188 ++++++++++++++++++
+ 1 file changed, 188 insertions(+)
+ create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/plug.json
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/gred.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/gred.json
+diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/plug.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/plug.json
 new file mode 100644
-index 000000000000..013c8ee037a4
+index 000000000000..6454518af178
 --- /dev/null
-+++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/gred.json
-@@ -0,0 +1,164 @@
++++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/plug.json
+@@ -0,0 +1,188 @@
 +[
 +    {
-+        "id": "8942",
-+        "name": "Create GRED with default setting",
++        "id": "3289",
++        "name": "Create PLUG with default setting",
 +        "category": [
 +            "qdisc",
-+            "gred"
++            "plug"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
@@ -78,10 +80,10 @@ index 000000000000..013c8ee037a4
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root gred setup vqs 10 default 1",
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root plug",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc gred 1: root refcnt [0-9]+ vqs 10 default 1",
++        "matchPattern": "qdisc plug 1: root refcnt",
 +        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -89,11 +91,11 @@ index 000000000000..013c8ee037a4
 +        ]
 +    },
 +    {
-+        "id": "5783",
-+        "name": "Create GRED with grio setting",
++        "id": "0917",
++        "name": "Create PLUG with block setting",
 +        "category": [
 +            "qdisc",
-+            "gred"
++            "plug"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
@@ -101,10 +103,10 @@ index 000000000000..013c8ee037a4
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root gred setup vqs 10 default 1 grio",
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root plug block",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc gred 1: root refcnt [0-9]+ vqs 10 default 1.*grio",
++        "matchPattern": "qdisc plug 1: root refcnt",
 +        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -112,11 +114,11 @@ index 000000000000..013c8ee037a4
 +        ]
 +    },
 +    {
-+        "id": "8a09",
-+        "name": "Create GRED with limit setting",
++        "id": "483b",
++        "name": "Create PLUG with release setting",
 +        "category": [
 +            "qdisc",
-+            "gred"
++            "plug"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
@@ -124,10 +126,10 @@ index 000000000000..013c8ee037a4
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root gred setup vqs 10 default 1 limit 1000",
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root plug release",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc gred 1: root refcnt [0-9]+ vqs 10 default 1 limit 1000b",
++        "matchPattern": "qdisc plug 1: root refcnt",
 +        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -135,11 +137,11 @@ index 000000000000..013c8ee037a4
 +        ]
 +    },
 +    {
-+        "id": "48ca",
-+        "name": "Create GRED with ecn setting",
++        "id": "4995",
++        "name": "Create PLUG with release_indefinite setting",
 +        "category": [
 +            "qdisc",
-+            "gred"
++            "plug"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
@@ -147,10 +149,10 @@ index 000000000000..013c8ee037a4
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root gred setup vqs 10 default 2 ecn",
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root plug release_indefinite",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc gred 1: root refcnt [0-9]+ vqs 10 default 2.*ecn",
++        "matchPattern": "qdisc plug 1: root refcnt",
 +        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -158,11 +160,11 @@ index 000000000000..013c8ee037a4
 +        ]
 +    },
 +    {
-+        "id": "48cb",
-+        "name": "Create GRED with harddrop setting",
++        "id": "389c",
++        "name": "Create PLUG with limit setting",
 +        "category": [
 +            "qdisc",
-+            "gred"
++            "plug"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
@@ -170,10 +172,10 @@ index 000000000000..013c8ee037a4
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root gred setup vqs 10 default 2 harddrop",
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root plug limit 100",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc gred 1: root refcnt [0-9]+ vqs 10 default 2.*harddrop",
++        "matchPattern": "qdisc plug 1: root refcnt",
 +        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -181,23 +183,46 @@ index 000000000000..013c8ee037a4
 +        ]
 +    },
 +    {
-+        "id": "763a",
-+        "name": "Change GRED setting",
++        "id": "384a",
++        "name": "Delete PLUG with valid handle",
 +        "category": [
 +            "qdisc",
-+            "gred"
++            "plug"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
 +        },
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true",
-+            "$TC qdisc add dev $DUMMY handle 1: root gred setup vqs 10 default 1"
++            "$TC qdisc add dev $DUMMY handle 1: root plug"
 +        ],
-+        "cmdUnderTest": "$TC qdisc change dev $DUMMY handle 1: root gred limit 60KB min 15K max 25K burst 64 avpkt 1500 bandwidth 10Mbit DP 1 probability 0.1",
++        "cmdUnderTest": "$TC qdisc del dev $DUMMY handle 1: root",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc gred 1: root refcnt [0-9]+ vqs 10 default 1 limit.*vq 1 prio [0-9]+ limit 60Kb min 15Kb max 25Kb",
++        "matchPattern": "qdisc plug 1: root refcnt",
++        "matchCount": "0",
++        "teardown": [
++            "$IP link del dev $DUMMY type dummy"
++        ]
++    },
++    {
++        "id": "439a",
++        "name": "Replace PLUG with limit setting",
++        "category": [
++            "qdisc",
++            "plug"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$IP link add dev $DUMMY type dummy || /bin/true",
++            "$TC qdisc add dev $DUMMY handle 1: root plug"
++        ],
++        "cmdUnderTest": "$TC qdisc replace dev $DUMMY handle 1: root plug limit 1000",
++        "expExitCode": "0",
++        "verifyCmd": "$TC qdisc show dev $DUMMY",
++        "matchPattern": "qdisc plug 1: root refcnt",
 +        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -205,23 +230,24 @@ index 000000000000..013c8ee037a4
 +        ]
 +    },
 +    {
-+        "id": "8309",
-+        "name": "Show GRED class",
++        "id": "9831",
++        "name": "Change PLUG with limit setting",
 +        "category": [
 +            "qdisc",
-+            "gred"
++            "plug"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
 +        },
 +        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
++            "$IP link add dev $DUMMY type dummy || /bin/true",
++            "$TC qdisc add dev $DUMMY handle 1: root plug"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root gred setup vqs 10 default 1",
++        "cmdUnderTest": "$TC qdisc change dev $DUMMY handle 1: root plug limit 1000",
 +        "expExitCode": "0",
-+        "verifyCmd": "$TC class show dev $DUMMY",
-+        "matchPattern": "class gred 1:",
-+        "matchCount": "0",
++        "verifyCmd": "$TC qdisc show dev $DUMMY",
++        "matchPattern": "qdisc plug 1: root refcnt",
++        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
 +            "$IP link del dev $DUMMY type dummy"
