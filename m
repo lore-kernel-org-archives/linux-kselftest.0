@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 17C45C32771
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DE72ECAAD8
 	for <linux-kselftest@archiver.kernel.org>; Wed, 21 Sep 2022 12:32:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230188AbiIUMcu (ORCPT
+        id S230196AbiIUMcw (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 21 Sep 2022 08:32:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60170 "EHLO
+        Wed, 21 Sep 2022 08:32:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230063AbiIUMcd (ORCPT
+        with ESMTP id S230057AbiIUMce (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 21 Sep 2022 08:32:33 -0400
+        Wed, 21 Sep 2022 08:32:34 -0400
 Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAA3183BE8;
-        Wed, 21 Sep 2022 05:32:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F38A1844D9;
+        Wed, 21 Sep 2022 05:32:32 -0700 (PDT)
 Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MXd4L2KZFzmVQG;
-        Wed, 21 Sep 2022 20:28:34 +0800 (CST)
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MXd3T3BPFzMnkq;
+        Wed, 21 Sep 2022 20:27:49 +0800 (CST)
 Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
  (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 21 Sep
- 2022 20:32:29 +0800
+ 2022 20:32:30 +0800
 From:   Zhengchao Shao <shaozhengchao@huawei.com>
 To:     <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
         <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
         <shuah@kernel.org>, <victor@mojatatu.com>
 CC:     <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>,
         <shaozhengchao@huawei.com>
-Subject: [PATCH -next, v3 08/10] net: hinic: remove unused enumerated value
-Date:   Wed, 21 Sep 2022 20:33:56 +0800
-Message-ID: <20220921123358.63442-9-shaozhengchao@huawei.com>
+Subject: [PATCH -next, v3 10/10] net: hinic: remove the unused input parameter prod_idx in sq_prepare_ctrl()
+Date:   Wed, 21 Sep 2022 20:33:58 +0800
+Message-ID: <20220921123358.63442-11-shaozhengchao@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220921123358.63442-1-shaozhengchao@huawei.com>
 References: <20220921123358.63442-1-shaozhengchao@huawei.com>
@@ -45,94 +45,89 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-remove unused enumerated value.
+The input parameter prod_idx is not used in sq_prepare_ctrl(), remove it.
 
 Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
 ---
- .../net/ethernet/huawei/hinic/hinic_hw_cmdq.c |  5 ----
- .../net/ethernet/huawei/hinic/hinic_hw_dev.c  |  5 ----
- .../net/ethernet/huawei/hinic/hinic_hw_wqe.h  | 25 -------------------
- 3 files changed, 35 deletions(-)
+ drivers/net/ethernet/huawei/hinic/hinic_hw_qp.c | 11 ++++-------
+ drivers/net/ethernet/huawei/hinic/hinic_hw_qp.h |  5 ++---
+ drivers/net/ethernet/huawei/hinic/hinic_tx.c    |  4 ++--
+ 3 files changed, 8 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/net/ethernet/huawei/hinic/hinic_hw_cmdq.c b/drivers/net/ethernet/huawei/hinic/hinic_hw_cmdq.c
-index 6bd06602deee..78190e88cd75 100644
---- a/drivers/net/ethernet/huawei/hinic/hinic_hw_cmdq.c
-+++ b/drivers/net/ethernet/huawei/hinic/hinic_hw_cmdq.c
-@@ -82,11 +82,6 @@
- 						     struct hinic_func_to_io, \
- 						     cmdqs)
+diff --git a/drivers/net/ethernet/huawei/hinic/hinic_hw_qp.c b/drivers/net/ethernet/huawei/hinic/hinic_hw_qp.c
+index 336248aa2e48..537a8098bc4e 100644
+--- a/drivers/net/ethernet/huawei/hinic/hinic_hw_qp.c
++++ b/drivers/net/ethernet/huawei/hinic/hinic_hw_qp.c
+@@ -472,8 +472,7 @@ int hinic_get_rq_free_wqebbs(struct hinic_rq *rq)
+ 	return atomic_read(&wq->delta) - 1;
+ }
  
--enum cmdq_wqe_type {
--	WQE_LCMD_TYPE = 0,
--	WQE_SCMD_TYPE = 1,
--};
--
- enum completion_format {
- 	COMPLETE_DIRECT = 0,
- 	COMPLETE_SGE    = 1,
-diff --git a/drivers/net/ethernet/huawei/hinic/hinic_hw_dev.c b/drivers/net/ethernet/huawei/hinic/hinic_hw_dev.c
-index 8d5c02905d9d..94f470556295 100644
---- a/drivers/net/ethernet/huawei/hinic/hinic_hw_dev.c
-+++ b/drivers/net/ethernet/huawei/hinic/hinic_hw_dev.c
-@@ -41,11 +41,6 @@ enum intr_type {
- 	INTR_MSIX_TYPE,
- };
+-static void sq_prepare_ctrl(struct hinic_sq_ctrl *ctrl, u16 prod_idx,
+-			    int nr_descs)
++static void sq_prepare_ctrl(struct hinic_sq_ctrl *ctrl, int nr_descs)
+ {
+ 	u32 ctrl_size, task_size, bufdesc_size;
  
--enum io_status {
--	IO_STOPPED = 0,
--	IO_RUNNING = 1,
--};
--
+@@ -588,18 +587,16 @@ void hinic_set_tso_inner_l4(struct hinic_sq_task *task, u32 *queue_info,
  /**
-  * parse_capability - convert device capabilities to NIC capabilities
-  * @hwdev: the HW device to set and convert device capabilities for
-diff --git a/drivers/net/ethernet/huawei/hinic/hinic_hw_wqe.h b/drivers/net/ethernet/huawei/hinic/hinic_hw_wqe.h
-index f4b6d2c1061f..c6bdeed5606e 100644
---- a/drivers/net/ethernet/huawei/hinic/hinic_hw_wqe.h
-+++ b/drivers/net/ethernet/huawei/hinic/hinic_hw_wqe.h
-@@ -261,23 +261,6 @@
- #define HINIC_RSS_TYPE_GET(val, member)                        \
- 		(((u32)(val) >> HINIC_RSS_TYPE_##member##_SHIFT) & 0x1)
+  * hinic_sq_prepare_wqe - prepare wqe before insert to the queue
+  * @sq: send queue
+- * @prod_idx: pi value
+  * @sq_wqe: wqe to prepare
+  * @sges: sges for use by the wqe for send for buf addresses
+  * @nr_sges: number of sges
+  **/
+-void hinic_sq_prepare_wqe(struct hinic_sq *sq, u16 prod_idx,
+-			  struct hinic_sq_wqe *sq_wqe, struct hinic_sge *sges,
+-			  int nr_sges)
++void hinic_sq_prepare_wqe(struct hinic_sq *sq, struct hinic_sq_wqe *sq_wqe,
++			  struct hinic_sge *sges, int nr_sges)
+ {
+ 	int i;
  
--enum hinic_l4offload_type {
--	HINIC_L4_OFF_DISABLE            = 0,
--	HINIC_TCP_OFFLOAD_ENABLE        = 1,
--	HINIC_SCTP_OFFLOAD_ENABLE       = 2,
--	HINIC_UDP_OFFLOAD_ENABLE        = 3,
--};
--
--enum hinic_vlan_offload {
--	HINIC_VLAN_OFF_DISABLE = 0,
--	HINIC_VLAN_OFF_ENABLE  = 1,
--};
--
--enum hinic_pkt_parsed {
--	HINIC_PKT_NOT_PARSED = 0,
--	HINIC_PKT_PARSED     = 1,
--};
--
- enum hinic_l3_offload_type {
- 	L3TYPE_UNKNOWN = 0,
- 	IPV6_PKT = 1,
-@@ -305,18 +288,10 @@ enum hinic_outer_l3type {
- 	HINIC_OUTER_L3TYPE_IPV4_CHKSUM          = 3,
- };
+-	sq_prepare_ctrl(&sq_wqe->ctrl, prod_idx, nr_sges);
++	sq_prepare_ctrl(&sq_wqe->ctrl, nr_sges);
  
--enum hinic_media_type {
--	HINIC_MEDIA_UNKNOWN = 0,
--};
--
- enum hinic_l2type {
- 	HINIC_L2TYPE_ETH = 0,
- };
+ 	sq_prepare_task(&sq_wqe->task);
  
--enum hinc_tunnel_l4type {
--	HINIC_TUNNEL_L4TYPE_UNKNOWN = 0,
--};
--
- struct hinic_cmdq_header {
- 	u32     header_info;
- 	u32     saved_data;
+diff --git a/drivers/net/ethernet/huawei/hinic/hinic_hw_qp.h b/drivers/net/ethernet/huawei/hinic/hinic_hw_qp.h
+index 0dfa51ad5855..178dcc874370 100644
+--- a/drivers/net/ethernet/huawei/hinic/hinic_hw_qp.h
++++ b/drivers/net/ethernet/huawei/hinic/hinic_hw_qp.h
+@@ -175,9 +175,8 @@ void hinic_set_tso_inner_l4(struct hinic_sq_task *task,
+ 			    u32 l4_len,
+ 			    u32 offset, u32 ip_ident, u32 mss);
+ 
+-void hinic_sq_prepare_wqe(struct hinic_sq *sq, u16 prod_idx,
+-			  struct hinic_sq_wqe *wqe, struct hinic_sge *sges,
+-			  int nr_sges);
++void hinic_sq_prepare_wqe(struct hinic_sq *sq, struct hinic_sq_wqe *wqe,
++			  struct hinic_sge *sges, int nr_sges);
+ 
+ void hinic_sq_write_db(struct hinic_sq *sq, u16 prod_idx, unsigned int wqe_size,
+ 		       unsigned int cos);
+diff --git a/drivers/net/ethernet/huawei/hinic/hinic_tx.c b/drivers/net/ethernet/huawei/hinic/hinic_tx.c
+index 7f9d32860895..e91476c8ff8b 100644
+--- a/drivers/net/ethernet/huawei/hinic/hinic_tx.c
++++ b/drivers/net/ethernet/huawei/hinic/hinic_tx.c
+@@ -530,7 +530,7 @@ netdev_tx_t hinic_lb_xmit_frame(struct sk_buff *skb, struct net_device *netdev)
+ 	}
+ 
+ process_sq_wqe:
+-	hinic_sq_prepare_wqe(txq->sq, prod_idx, sq_wqe, txq->sges, nr_sges);
++	hinic_sq_prepare_wqe(txq->sq, sq_wqe, txq->sges, nr_sges);
+ 	hinic_sq_write_wqe(txq->sq, prod_idx, sq_wqe, skb, wqe_size);
+ 
+ flush_skbs:
+@@ -614,7 +614,7 @@ netdev_tx_t hinic_xmit_frame(struct sk_buff *skb, struct net_device *netdev)
+ 	}
+ 
+ process_sq_wqe:
+-	hinic_sq_prepare_wqe(txq->sq, prod_idx, sq_wqe, txq->sges, nr_sges);
++	hinic_sq_prepare_wqe(txq->sq, sq_wqe, txq->sges, nr_sges);
+ 
+ 	err = hinic_tx_offload(skb, &sq_wqe->task, &sq_wqe->ctrl.queue_info);
+ 	if (err)
 -- 
 2.17.1
 
