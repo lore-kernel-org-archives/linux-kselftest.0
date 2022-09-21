@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 558AFC6FA82
-	for <linux-kselftest@archiver.kernel.org>; Wed, 21 Sep 2022 02:49:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05703C6FA90
+	for <linux-kselftest@archiver.kernel.org>; Wed, 21 Sep 2022 02:49:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbiIUCto (ORCPT
+        id S230312AbiIUCtp (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 20 Sep 2022 22:49:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44046 "EHLO
+        Tue, 20 Sep 2022 22:49:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230366AbiIUCtg (ORCPT
+        with ESMTP id S230447AbiIUCtg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Tue, 20 Sep 2022 22:49:36 -0400
 Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA2199;
-        Tue, 20 Sep 2022 19:49:34 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MXN6p0ybKzMngP;
-        Wed, 21 Sep 2022 10:44:50 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F697B58;
+        Tue, 20 Sep 2022 19:49:35 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MXN6r21bmzMnmf;
+        Wed, 21 Sep 2022 10:44:52 +0800 (CST)
 Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
  (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 21 Sep
- 2022 10:49:31 +0800
+ 2022 10:49:33 +0800
 From:   Zhengchao Shao <shaozhengchao@huawei.com>
 To:     <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
         <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
         <shuah@kernel.org>, <victor@mojatatu.com>
 CC:     <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>,
         <shaozhengchao@huawei.com>
-Subject: [PATCH net-next,v2 11/15] selftests/tc-testing: add selftests for sfq qdisc
-Date:   Wed, 21 Sep 2022 10:50:48 +0800
-Message-ID: <20220921025052.23465-12-shaozhengchao@huawei.com>
+Subject: [PATCH net-next,v2 15/15] selftests/tc-testing: add selftests for teql qdisc
+Date:   Wed, 21 Sep 2022 10:50:52 +0800
+Message-ID: <20220921025052.23465-16-shaozhengchao@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220921025052.23465-1-shaozhengchao@huawei.com>
 References: <20220921025052.23465-1-shaozhengchao@huawei.com>
@@ -45,36 +45,30 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Test 7482: Create SFQ with default setting
-Test c186: Create SFQ with limit setting
-Test ae23: Create SFQ with perturb setting
-Test a430: Create SFQ with quantum setting
-Test 4539: Create SFQ with divisor setting
-Test b089: Create SFQ with flows setting
-Test 99a0: Create SFQ with depth setting
-Test 7389: Create SFQ with headdrop setting
-Test 6472: Create SFQ with redflowlimit setting
-Test 8929: Show SFQ class
+Test 84a0: Create TEQL with default setting
+Test 7734: Create TEQL with multiple device
+Test 34a9: Delete TEQL with valid handle
+Test 6289: Show TEQL stats
 
 Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
 ---
- .../tc-testing/tc-tests/qdiscs/sfq.json       | 232 ++++++++++++++++++
- 1 file changed, 232 insertions(+)
- create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/sfq.json
+ .../tc-testing/tc-tests/qdiscs/teql.json      | 97 +++++++++++++++++++
+ 1 file changed, 97 insertions(+)
+ create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/teql.json
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/sfq.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/sfq.json
+diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/teql.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/teql.json
 new file mode 100644
-index 000000000000..b6be718a174a
+index 000000000000..0082be0e93ac
 --- /dev/null
-+++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/sfq.json
-@@ -0,0 +1,232 @@
++++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/teql.json
+@@ -0,0 +1,97 @@
 +[
 +    {
-+        "id": "7482",
-+        "name": "Create SFQ with default setting",
++        "id": "84a0",
++        "name": "Create TEQL with default setting",
 +        "category": [
 +            "qdisc",
-+            "sfq"
++            "teql"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
@@ -82,10 +76,10 @@ index 000000000000..b6be718a174a
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root sfq",
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root teql0",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc sfq 1: root refcnt [0-9]+ limit 127p quantum.*depth 127 divisor 1024",
++        "matchPattern": "qdisc teql0 1: root refcnt",
 +        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -93,207 +87,72 @@ index 000000000000..b6be718a174a
 +        ]
 +    },
 +    {
-+        "id": "c186",
-+        "name": "Create SFQ with limit setting",
++        "id": "7734",
++        "name": "Create TEQL with multiple device",
 +        "category": [
 +            "qdisc",
-+            "sfq"
++            "teql"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
 +        },
 +        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
++            "$IP link add dev $DUMMY type dummy || /bin/true",
++            "echo \"1 1 4\" > /sys/bus/netdevsim/new_device",
++            "$TC qdisc add dev $ETH root handle 1: teql0"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root sfq limit 8",
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root teql0",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc sfq 1: root refcnt [0-9]+ limit 8p",
++        "matchPattern": "qdisc teql0 1: root refcnt",
 +        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
++            "echo \"1\" > /sys/bus/netdevsim/del_device",
 +            "$IP link del dev $DUMMY type dummy"
 +        ]
 +    },
 +    {
-+        "id": "ae23",
-+        "name": "Create SFQ with perturb setting",
++        "id": "34a9",
++        "name": "Delete TEQL with valid handle",
 +        "category": [
 +            "qdisc",
-+            "sfq"
++            "teql"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
 +        },
 +        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
++            "$IP link add dev $DUMMY type dummy || /bin/true",
++            "$TC qdisc add dev $DUMMY handle 1: root teql0"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root sfq perturb 10",
++        "cmdUnderTest": "$TC qdisc del dev $DUMMY handle 1: root",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "depth 127 divisor 1024 perturb 10sec",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "a430",
-+        "name": "Create SFQ with quantum setting",
-+        "category": [
-+            "qdisc",
-+            "sfq"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root sfq quantum 9000",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc sfq 1: root refcnt [0-9]+ limit 127p quantum 9000b depth 127 divisor 1024",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "4539",
-+        "name": "Create SFQ with divisor setting",
-+        "category": [
-+            "qdisc",
-+            "sfq"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root sfq divisor 512",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc sfq 1: root refcnt [0-9]+ limit 127p quantum 1514b depth 127 divisor 512",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "b089",
-+        "name": "Create SFQ with flows setting",
-+        "category": [
-+            "qdisc",
-+            "sfq"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root sfq flows 20",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc sfq 1: root refcnt",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "99a0",
-+        "name": "Create SFQ with depth setting",
-+        "category": [
-+            "qdisc",
-+            "sfq"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root sfq depth 64",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc sfq 1: root refcnt [0-9]+ limit 127p quantum 1514b depth 64 divisor 1024",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "7389",
-+        "name": "Create SFQ with headdrop setting",
-+        "category": [
-+            "qdisc",
-+            "sfq"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root sfq headdrop",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc sfq 1: root refcnt [0-9]+ limit 127p quantum 1514b depth 127 headdrop divisor 1024",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "6472",
-+        "name": "Create SFQ with redflowlimit setting",
-+        "category": [
-+            "qdisc",
-+            "sfq"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root sfq redflowlimit 100000 min 8000 max 60000 probability 0.20 ecn headdrop",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc sfq 1: root refcnt [0-9]+ limit 127p quantum 1514b depth 127 headdrop divisor 1024 ewma 6 min 8000b max 60000b probability 0.2 ecn",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "8929",
-+        "name": "Show SFQ class",
-+        "category": [
-+            "qdisc",
-+            "sfq"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root sfq",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC class show dev $DUMMY",
-+        "matchPattern": "class sfq 1:",
++        "matchPattern": "qdisc teql0 1: root refcnt",
 +        "matchCount": "0",
++        "teardown": [
++            "$IP link del dev $DUMMY type dummy"
++        ]
++    },
++    {
++        "id": "6289",
++        "name": "Show TEQL stats",
++        "category": [
++            "qdisc",
++            "teql"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$IP link add dev $DUMMY type dummy || /bin/true"
++        ],
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root teql0",
++        "expExitCode": "0",
++        "verifyCmd": "$TC -s qdisc show dev $DUMMY",
++        "matchPattern": "qdisc teql0 1: root refcnt",
++        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
 +            "$IP link del dev $DUMMY type dummy"
