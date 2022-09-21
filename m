@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 577B0C6FA82
-	for <linux-kselftest@archiver.kernel.org>; Wed, 21 Sep 2022 02:42:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12A62C6FA82
+	for <linux-kselftest@archiver.kernel.org>; Wed, 21 Sep 2022 02:43:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbiIUCm4 (ORCPT
+        id S229811AbiIUCm6 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 20 Sep 2022 22:42:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36388 "EHLO
+        Tue, 20 Sep 2022 22:42:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230293AbiIUCmo (ORCPT
+        with ESMTP id S229676AbiIUCmy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 20 Sep 2022 22:42:44 -0400
+        Tue, 20 Sep 2022 22:42:54 -0400
 Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E359606BF;
-        Tue, 20 Sep 2022 19:42:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4945E7D784;
+        Tue, 20 Sep 2022 19:42:53 -0700 (PDT)
 Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MXMzp3ZrSzmVTy;
-        Wed, 21 Sep 2022 10:38:46 +0800 (CST)
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MXMz62YXmzMn66;
+        Wed, 21 Sep 2022 10:38:10 +0800 (CST)
 Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
  (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 21 Sep
- 2022 10:42:40 +0800
+ 2022 10:42:51 +0800
 From:   Zhengchao Shao <shaozhengchao@huawei.com>
 To:     <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
         <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
@@ -32,55 +32,58 @@ To:     <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
         <victor@mojatatu.com>
 CC:     <zhijianx.li@intel.com>, <weiyongjun1@huawei.com>,
         <yuehaibing@huawei.com>, <shaozhengchao@huawei.com>
-Subject: [PATCH net-next,v3 17/18] selftests/tc-testing: add show class case for prio qdisc
-Date:   Wed, 21 Sep 2022 10:44:15 +0800
-Message-ID: <20220921024415.392411-1-shaozhengchao@huawei.com>
+Subject: [PATCH net-next,v3 18/18] selftests/tc-testing: add show class case for red qdisc
+Date:   Wed, 21 Sep 2022 10:44:25 +0800
+Message-ID: <20220921024425.392748-1-shaozhengchao@huawei.com>
 X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
  dggpeml500026.china.huawei.com (7.185.36.106)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Test 2410: Show prio class
+Test 290a: Show RED class
 
 Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
 Reviewed-by: Victor Nogueira <victor@mojatatu.com>
 Tested-by: Victor Nogueira <victor@mojatatu.com>
 ---
- .../tc-testing/tc-tests/qdiscs/prio.json      | 20 +++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ .../tc-testing/tc-tests/qdiscs/red.json       | 23 +++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/prio.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/prio.json
-index 3076c02d08d6..8186de2f0dcf 100644
---- a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/prio.json
-+++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/prio.json
-@@ -272,5 +272,25 @@
-         "teardown": [
+diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/red.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/red.json
+index 0703a2a255eb..4b3e449857f2 100644
+--- a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/red.json
++++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/red.json
+@@ -181,5 +181,28 @@
+             "$TC qdisc del dev $DUMMY handle 1: root",
              "$IP link del dev $DUMMY type dummy"
          ]
 +    },
 +    {
-+        "id": "2410",
-+        "name": "Show prio class",
++        "id": "290a",
++        "name": "Show RED class",
 +        "category": [
 +            "qdisc",
-+            "prio"
++            "red"
 +        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root prio",
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root red limit 1M avpkt 1500 min 100K max 300K",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC class show dev $DUMMY",
-+        "matchPattern": "class prio 1:[0-9]+ parent 1:",
-+        "matchCount": "3",
++        "matchPattern": "class red 1:[0-9]+ parent 1:",
++        "matchCount": "1",
 +        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root prio",
++            "$TC qdisc del dev $DUMMY handle 1: root",
 +            "$IP link del dev $DUMMY type dummy"
 +        ]
      }
