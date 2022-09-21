@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81B98C6FA90
-	for <linux-kselftest@archiver.kernel.org>; Wed, 21 Sep 2022 02:49:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75B17C6FA94
+	for <linux-kselftest@archiver.kernel.org>; Wed, 21 Sep 2022 02:49:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230511AbiIUCtn (ORCPT
+        id S230520AbiIUCto (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 20 Sep 2022 22:49:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44142 "EHLO
+        Tue, 20 Sep 2022 22:49:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230398AbiIUCte (ORCPT
+        with ESMTP id S230415AbiIUCte (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Tue, 20 Sep 2022 22:49:34 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEEA6C66;
-        Tue, 20 Sep 2022 19:49:32 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MXN6n4DDBzMnml;
-        Wed, 21 Sep 2022 10:44:49 +0800 (CST)
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D6DF35;
+        Tue, 20 Sep 2022 19:49:33 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MXN7T2fdVzlWYY;
+        Wed, 21 Sep 2022 10:45:25 +0800 (CST)
 Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
  (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 21 Sep
- 2022 10:49:30 +0800
+ 2022 10:49:31 +0800
 From:   Zhengchao Shao <shaozhengchao@huawei.com>
 To:     <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
         <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
         <shuah@kernel.org>, <victor@mojatatu.com>
 CC:     <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>,
         <shaozhengchao@huawei.com>
-Subject: [PATCH net-next,v2 10/15] selftests/tc-testing: add selftests for sfb qdisc
-Date:   Wed, 21 Sep 2022 10:50:47 +0800
-Message-ID: <20220921025052.23465-11-shaozhengchao@huawei.com>
+Subject: [PATCH net-next,v2 12/15] selftests/tc-testing: add selftests for skbprio qdisc
+Date:   Wed, 21 Sep 2022 10:50:49 +0800
+Message-ID: <20220921025052.23465-13-shaozhengchao@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220921025052.23465-1-shaozhengchao@huawei.com>
 References: <20220921025052.23465-1-shaozhengchao@huawei.com>
@@ -45,38 +45,30 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Test 3294: Create SFB with default setting
-Test 430a: Create SFB with rehash setting
-Test 3410: Create SFB with db setting
-Test 49a0: Create SFB with limit setting
-Test 1241: Create SFB with max setting
-Test 3249: Create SFB with target setting
-Test 30a9: Create SFB with increment setting
-Test 239a: Create SFB with decrement setting
-Test 9301: Create SFB with penalty_rate setting
-Test 2a01: Create SFB with penalty_burst setting
-Test 3209: Change SFB with rehash setting
-Test 5447: Show SFB class
+Test 283e: Create skbprio with default setting
+Test c086: Create skbprio with limit setting
+Test 6733: Change skbprio with limit setting
+Test 2958: Show skbprio class
 
 Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
 ---
- .../tc-testing/tc-tests/qdiscs/sfb.json       | 279 ++++++++++++++++++
- 1 file changed, 279 insertions(+)
- create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/sfb.json
+ .../tc-testing/tc-tests/qdiscs/skbprio.json   | 95 +++++++++++++++++++
+ 1 file changed, 95 insertions(+)
+ create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/skbprio.json
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/sfb.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/sfb.json
+diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/skbprio.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/skbprio.json
 new file mode 100644
-index 000000000000..ba2f5e79cdbf
+index 000000000000..5766045c9d33
 --- /dev/null
-+++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/sfb.json
-@@ -0,0 +1,279 @@
++++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/skbprio.json
+@@ -0,0 +1,95 @@
 +[
 +    {
-+        "id": "3294",
-+        "name": "Create SFB with default setting",
++        "id": "283e",
++        "name": "Create skbprio with default setting",
 +        "category": [
 +            "qdisc",
-+            "sfb"
++            "skbprio"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
@@ -84,10 +76,10 @@ index 000000000000..ba2f5e79cdbf
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root sfb",
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root skbprio",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc sfb 1: root refcnt [0-9]+ rehash 600s db 60s",
++        "matchPattern": "qdisc skbprio 1: root refcnt [0-9]+ limit 64",
 +        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -95,11 +87,11 @@ index 000000000000..ba2f5e79cdbf
 +        ]
 +    },
 +    {
-+        "id": "430a",
-+        "name": "Create SFB with rehash setting",
++        "id": "c086",
++        "name": "Create skbprio with limit setting",
 +        "category": [
 +            "qdisc",
-+            "sfb"
++            "skbprio"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
@@ -107,10 +99,10 @@ index 000000000000..ba2f5e79cdbf
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root sfb rehash 60",
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root skbprio limit 1",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc sfb 1: root refcnt [0-9]+ rehash 60ms db 60s",
++        "matchPattern": "qdisc skbprio 1: root refcnt [0-9]+ limit 1",
 +        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -118,207 +110,23 @@ index 000000000000..ba2f5e79cdbf
 +        ]
 +    },
 +    {
-+        "id": "3410",
-+        "name": "Create SFB with db setting",
++        "id": "6733",
++        "name": "Change skbprio with limit setting",
 +        "category": [
 +            "qdisc",
-+            "sfb"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root sfb db 10",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc sfb 1: root refcnt [0-9]+ rehash 600s db 10ms",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "49a0",
-+        "name": "Create SFB with limit setting",
-+        "category": [
-+            "qdisc",
-+            "sfb"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root sfb limit 100",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc sfb 1: root refcnt [0-9]+ rehash 600s db 60s limit 100p",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "1241",
-+        "name": "Create SFB with max setting",
-+        "category": [
-+            "qdisc",
-+            "sfb"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root sfb max 100",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc sfb 1: root refcnt 2 rehash 600s db 60s.*max 100p",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "3249",
-+        "name": "Create SFB with target setting",
-+        "category": [
-+            "qdisc",
-+            "sfb"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root sfb target 100",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc sfb 1: root refcnt 2 rehash 600s db 60s.*target 100p",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "30a9",
-+        "name": "Create SFB with increment setting",
-+        "category": [
-+            "qdisc",
-+            "sfb"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root sfb increment 0.1",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc sfb 1: root refcnt 2 rehash 600s db 60s.*increment 0.1",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "239a",
-+        "name": "Create SFB with decrement setting",
-+        "category": [
-+            "qdisc",
-+            "sfb"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root sfb decrement 0.1",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc sfb 1: root refcnt 2 rehash 600s db 60s.*decrement 0.1",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "9301",
-+        "name": "Create SFB with penalty_rate setting",
-+        "category": [
-+            "qdisc",
-+            "sfb"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root sfb penalty_rate 4000",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc sfb 1: root refcnt 2 rehash 600s db 60s.*penalty_rate 4000pps",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "2a01",
-+        "name": "Create SFB with penalty_burst setting",
-+        "category": [
-+            "qdisc",
-+            "sfb"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root sfb penalty_burst 64",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc sfb 1: root refcnt 2 rehash 600s db 60s.*penalty_burst 64p",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    },
-+    {
-+        "id": "3209",
-+        "name": "Change SFB with rehash setting",
-+        "category": [
-+            "qdisc",
-+            "sfb"
++            "skbprio"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
 +        },
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true",
-+            "$TC qdisc add dev $DUMMY handle 1: root sfb penalty_burst 64"
++            "$TC qdisc add dev $DUMMY handle 1: root skbprio"
 +        ],
-+        "cmdUnderTest": "$TC qdisc change dev $DUMMY handle 1: root sfb rehash 100",
++        "cmdUnderTest": "$TC qdisc change dev $DUMMY handle 1: root skbprio limit 32",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc sfb 1: root refcnt 2 rehash 100ms db 60s",
++        "matchPattern": "qdisc skbprio 1: root refcnt [0-9]+ limit 32",
 +        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -326,11 +134,11 @@ index 000000000000..ba2f5e79cdbf
 +        ]
 +    },
 +    {
-+        "id": "5447",
-+        "name": "Show SFB class",
++        "id": "2958",
++        "name": "Show skbprio class",
 +        "category": [
 +            "qdisc",
-+            "sfb"
++            "skbprio"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
@@ -338,11 +146,11 @@ index 000000000000..ba2f5e79cdbf
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root sfb",
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root skbprio",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC class show dev $DUMMY",
-+        "matchPattern": "class sfb 1:",
-+        "matchCount": "0",
++        "matchPattern": "class skbprio 1:",
++        "matchCount": "64",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
 +            "$IP link del dev $DUMMY type dummy"
