@@ -2,299 +2,197 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FFAAECAAD8
-	for <linux-kselftest@archiver.kernel.org>; Thu, 22 Sep 2022 20:10:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BC25C54EE9
+	for <linux-kselftest@archiver.kernel.org>; Thu, 22 Sep 2022 20:35:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232671AbiIVUKl (ORCPT
+        id S229677AbiIVUfO (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 22 Sep 2022 16:10:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58540 "EHLO
+        Thu, 22 Sep 2022 16:35:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232646AbiIVUKk (ORCPT
+        with ESMTP id S229551AbiIVUfM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 22 Sep 2022 16:10:40 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84FECEC559;
-        Thu, 22 Sep 2022 13:10:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663877439; x=1695413439;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=x0W/PWlKVH4Kg6RVdCR6J9PqSt//9vhZDuFOnyIkMK4=;
-  b=MGYNCtWcwpfvank2u+uIVTkMIU9en41DEO9oIrkOaY1m6JXQoRElyv0J
-   6Nmak0Pno7y9shvuVAkRFSEGidllSOunHeOwojnctlBUBgE3/wwpeWxsu
-   CBKO3mT3iiGsjupkha4Kzqm3txFidZ7jRaw6Iq25De3GNKZ2ssJBIzWLz
-   wB3dhRo0g7NshC97mUvYtN/47ajgQ0HDAx4hincQuAyZY3pJ4UYYDEGjd
-   HeAfFspt5xlHjRZpGr0RYysiMQnuKqR4jcSFX9cFv8cJ1TQ/oSdxDCy/B
-   tEXWgZ3C7Z/5mtC2/SJ1UxWr1CvlAG7rO+GsBb0ITCoKC4cPeezgk3FCG
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10478"; a="300404294"
-X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="300404294"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2022 13:10:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,337,1654585200"; 
-   d="scan'208";a="597592004"
-Received: from chang-linux-3.sc.intel.com ([172.25.66.173])
-  by orsmga006.jf.intel.com with ESMTP; 22 Sep 2022 13:10:37 -0700
-From:   "Chang S. Bae" <chang.seok.bae@intel.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     x86@kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, avagin@gmail.com,
-        seanjc@google.com, chang.seok.bae@intel.com,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 2/4] selftests/x86/mxcsr: Test the MXCSR state write via ptrace
-Date:   Thu, 22 Sep 2022 13:00:32 -0700
-Message-Id: <20220922200034.23759-3-chang.seok.bae@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220922200034.23759-1-chang.seok.bae@intel.com>
-References: <20220922200034.23759-1-chang.seok.bae@intel.com>
+        Thu, 22 Sep 2022 16:35:12 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3C22F67E;
+        Thu, 22 Sep 2022 13:35:05 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 26825188497F;
+        Thu, 22 Sep 2022 20:35:03 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 18FB6250007B;
+        Thu, 22 Sep 2022 20:35:03 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id ECB6C9EC0002; Thu, 22 Sep 2022 20:35:02 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+MIME-Version: 1.0
+Date:   Thu, 22 Sep 2022 22:35:02 +0200
+From:   netdev@kapio-technology.com
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 net-next 6/6] selftests: forwarding: add test of
+ MAC-Auth Bypass to locked port tests
+In-Reply-To: <Yyq6BnUfctLeerqE@shredder>
+References: <YxNo/0+/Sbg9svid@shredder>
+ <5cee059b65f6f7671e099150f9da79c1@kapio-technology.com>
+ <Yxmgs7Du62V1zyjK@shredder>
+ <8dfc9b525f084fa5ad55019f4418a35e@kapio-technology.com>
+ <20220908112044.czjh3xkzb4r27ohq@skbuf>
+ <152c0ceadefbd742331c340bec2f50c0@kapio-technology.com>
+ <20220911001346.qno33l47i6nvgiwy@skbuf>
+ <15ee472a68beca4a151118179da5e663@kapio-technology.com>
+ <Yx73FOpN5uhPQhFl@shredder>
+ <086704ce7f323cc1b3cca78670b42095@kapio-technology.com>
+ <Yyq6BnUfctLeerqE@shredder>
+User-Agent: Gigahost Webmail
+Message-ID: <d559df70d75b3f5db2815f3038be3e3a@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The ptrace buffer is in the non-compacted format. The MXCSR state should be
-written to the target thread when either SSE or AVX component is enabled.
+On 2022-09-21 09:15, Ido Schimmel wrote:
+> On Tue, Sep 20, 2022 at 11:29:12PM +0200, netdev@kapio-technology.com 
+> wrote:
+>> I have made a blackhole selftest, which looks like this:
+>> 
+>> test_blackhole_fdb()
+>> {
+>>         RET=0
+>> 
+>>         check_blackhole_fdb_support || return 0
+>> 
+>>         tcpdump_start $h2
+>>         $MZ $h1 -q -t udp -a $h1 -b $h2
+> 
+> I don't think you can give an interface name to '-a' and '-b'?
+> 
+>>         tcpdump_stop
+>>         tcpdump_show | grep -q udp
+>>         check_err $? "test_blackhole_fdb: No packet seen on initial"
+>>         tcpdump_cleanup
+>> 
+>>         bridge fdb add `mac_get $h2` dev br0 blackhole
+>>         bridge fdb show dev br0 | grep -q "blackhole"
+> 
+> Make this grep more specific so that we are sure it is the entry user
+> space installed. Something like this:
+> 
+> bridge fdb get `mac_get $h2` br br0 | grep -q blackhole
+> 
+>>         check_err $? "test_blackhole_fdb: No blackhole FDB entry 
+>> found"
+>> 
+>>         tcpdump_start $h2
+>>         $MZ $h1 -q -t udp -a $h1 -b $h2
+>>         tcpdump_stop
+>>         tcpdump_show | grep -q udp
+>>         check_fail $? "test_blackhole_fdb: packet seen with blackhole 
+>> fdb
+>> entry"
+>>         tcpdump_cleanup
+> 
+> The tcpdump filter is not specific enough. It can catch other UDP
+> packets (e.g., multicast) being received by $h2. Anyway, to be sure the
+> feature works as expected we need to make sure that the packets are not
+> even egressing $swp2. Checking that they are not received by $h2 is not
+> enough. See this (untested) suggestion [1] that uses a tc filter on the
+> egress of $swp2.
+> 
+>> 
+>>         bridge fdb del `mac_get $h2` dev br0 blackhole
+>>         bridge fdb show dev br0 | grep -q "blackhole"
+>>         check_fail $? "test_blackhole_fdb: Blackhole FDB entry not 
+>> deleted"
+>> 
+>>         tcpdump_start $h2
+>>         $MZ $h1 -q -t udp -a $h1 -b $h2
+>>         tcpdump_stop
+>>         tcpdump_show | grep -q udp
+>>         check_err $? "test_blackhole_fdb: No packet seen after 
+>> removing
+>> blackhole FDB entry"
+>>         tcpdump_cleanup
+>> 
+>>         log_test "Blackhole FDB entry test"
+>> }
+>> 
+>> the setup is simple and is the same as in bridge_sticky_fdb.sh.
+>> 
+>> Does the test look sound or is there obvious mistakes?
+> 
+> [1]
+> blackhole_fdb()
+> {
+> 	RET=0
+> 
+> 	tc filter add dev $swp2 egress protocol ip pref 1 handle 1 flower \
+> 		dst_ip 192.0.2.2 ip_proto udp dst_port 12345 action pass
+> 
+> 	$MZ $h1 -c 1 -p 128 -t udp "sp=54321,dp=12345" \
+> 		-a own -b `mac_get $h2` -A 192.0.2.1 -B 192.0.2.2 -q
+> 
+> 	tc_check_packets "dev $swp2 egress" 1 1
+> 	check_err $? "Packet not seen on egress before adding blackhole entry"
+> 
+> 	bridge fdb add `mac_get $h2` dev br0 blackhole
+> 	bridge fdb get `mac_get $h2` br br0 | grep -q blackhole
+> 	check_err $? "Blackhole entry not found"
+> 
+> 	$MZ $h1 -c 1 -p 128 -t udp "sp=54321,dp=12345" \
+> 		-a own -b `mac_get $h2` -A 192.0.2.1 -B 192.0.2.2 -q
+> 
+> 	tc_check_packets "dev $swp2 egress" 1 1
+> 	check_err $? "Packet seen on egress after adding blackhole entry"
+> 
+> 	# Check blackhole entries can be replaced.
+> 	bridge fdb replace `mac_get $h2` dev $swp2 master static
+> 	bridge fdb get `mac_get $h2` br br0 | grep -q blackhole
+> 	check_fail $? "Blackhole entry found after replacement"
+> 
+> 	$MZ $h1 -c 1 -p 128 -t udp "sp=54321,dp=12345" \
+> 		-a own -b `mac_get $h2` -A 192.0.2.1 -B 192.0.2.2 -q
+> 
+> 	tc_check_packets "dev $swp2 egress" 1 2
+> 	check_err $? "Packet not seen on egress after replacing blackhole 
+> entry"
+> 
+> 	bridge fdb del `mac_get $h2` dev $swp2 master static
+> 	tc filter del dev $swp2 egress protocol ip pref 1 handle 1 flower
+> 
+> 	log_test "Blackhole FDB entry"
+> }
 
-Write an MXCSR value to the target and read back. Then it is validated with
-the XRSTOR/XSAVE result on the current.
-
-Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
-Cc: x86@kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
----
-
-If this is acceptable, I will also follow up to move some of the helper
-functions to a .h file from this and other test cases because duplicating
-what is shareable should be avoided.
----
- tools/testing/selftests/x86/Makefile |   2 +-
- tools/testing/selftests/x86/mxcsr.c  | 200 +++++++++++++++++++++++++++
- 2 files changed, 201 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/x86/mxcsr.c
-
-diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
-index 0388c4d60af0..621c47960be3 100644
---- a/tools/testing/selftests/x86/Makefile
-+++ b/tools/testing/selftests/x86/Makefile
-@@ -13,7 +13,7 @@ CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh "$(CC)" trivial_program.c -no-pie)
- TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
- 			check_initial_reg_state sigreturn iopl ioperm \
- 			test_vsyscall mov_ss_trap \
--			syscall_arg_fault fsgsbase_restore sigaltstack
-+			syscall_arg_fault fsgsbase_restore sigaltstack mxcsr
- TARGETS_C_32BIT_ONLY := entry_from_vm86 test_syscall_vdso unwind_vdso \
- 			test_FCMOV test_FCOMI test_FISTTP \
- 			vdso_restorer
-diff --git a/tools/testing/selftests/x86/mxcsr.c b/tools/testing/selftests/x86/mxcsr.c
-new file mode 100644
-index 000000000000..7c318c48b4be
---- /dev/null
-+++ b/tools/testing/selftests/x86/mxcsr.c
-@@ -0,0 +1,200 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#define _GNU_SOURCE
-+#include <err.h>
-+#include <elf.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <x86intrin.h>
-+
-+#include <sys/ptrace.h>
-+#include <sys/syscall.h>
-+#include <sys/wait.h>
-+#include <sys/uio.h>
-+
-+#include "../kselftest.h" /* For __cpuid_count() */
-+
-+#define LEGACY_STATE_SIZE	24
-+#define MXCSR_SIZE		8
-+#define STSTATE_SIZE		8*16
-+#define XMM_SIZE		16*16
-+#define PADDING_SIZE		96
-+#define XSAVE_HDR_SIZE		64
-+
-+struct xsave_buffer {
-+	uint8_t		legacy_state[LEGACY_STATE_SIZE];
-+	uint8_t		mxcsr[MXCSR_SIZE];
-+	uint8_t		st_state[STSTATE_SIZE];
-+	uint8_t		xmm_state[XMM_SIZE];
-+	uint8_t		padding[PADDING_SIZE];
-+	uint8_t		header[XSAVE_HDR_SIZE];
-+	uint8_t		extended[0];
-+};
-+
-+#ifdef __x86_64__
-+#define REX_PREFIX	"0x48, "
-+#else
-+#define REX_PREFIX
-+#endif
-+
-+#define XSAVE		".byte " REX_PREFIX "0x0f,0xae,0x27"
-+#define XRSTOR		".byte " REX_PREFIX "0x0f,0xae,0x2f"
-+
-+static inline uint64_t xgetbv(uint32_t index)
-+{
-+	uint32_t eax, edx;
-+
-+	asm volatile("xgetbv"
-+		     : "=a" (eax), "=d" (edx)
-+		     : "c" (index));
-+	return eax + ((uint64_t)edx << 32);
-+}
-+
-+static inline void xsave(struct xsave_buffer *xbuf, uint64_t rfbm)
-+{
-+	uint32_t rfbm_lo = rfbm;
-+	uint32_t rfbm_hi = rfbm >> 32;
-+
-+	asm volatile(XSAVE :: "D" (xbuf), "a" (rfbm_lo), "d" (rfbm_hi) : "memory");
-+}
-+
-+static inline void xrstor(struct xsave_buffer *xbuf, uint64_t rfbm)
-+{
-+	uint32_t rfbm_lo = rfbm;
-+	uint32_t rfbm_hi = rfbm >> 32;
-+
-+	asm volatile(XRSTOR :: "D" (xbuf), "a" (rfbm_lo), "d" (rfbm_hi));
-+}
-+
-+static inline void clear_xstate_header(struct xsave_buffer *xbuf)
-+{
-+	memset(&xbuf->header, 0, sizeof(xbuf->header));
-+}
-+
-+static inline uint32_t get_mxcsr(struct xsave_buffer *xbuf)
-+{
-+	return *((uint32_t *)xbuf->mxcsr);
-+}
-+
-+static inline void set_mxcsr(struct xsave_buffer *xbuf, uint32_t val)
-+{
-+	*((uint32_t *)xbuf->mxcsr) = val;
-+}
-+
-+#define XFEATURE_MASK_SSE		0x2
-+#define XFEATURE_MASK_YMM		0x4
-+
-+#define CPUID_LEAF1_ECX_XSAVE_MASK	(1 << 26)
-+#define CPUID_LEAF1_ECX_OSXSAVE_MASK	(1 << 27)
-+#define CPUID_LEAF_XSTATE		0xd
-+#define CPUID_SUBLEAF_XSTATE_USER	0x0
-+#define CPUID_SUBLEAF_XSTATE_EXT	0x1
-+
-+static bool xsave_availability(void)
-+{
-+	uint32_t eax, ebx, ecx, edx;
-+
-+	__cpuid_count(1, 0, eax, ebx, ecx, edx);
-+	if (!(ecx & CPUID_LEAF1_ECX_XSAVE_MASK))
-+		return false;
-+	if (!(ecx & CPUID_LEAF1_ECX_OSXSAVE_MASK))
-+		return false;
-+	return true;
-+}
-+
-+static uint32_t get_xbuf_size(void)
-+{
-+	uint32_t eax, ebx, ecx, edx;
-+
-+	__cpuid_count(CPUID_LEAF_XSTATE, CPUID_SUBLEAF_XSTATE_USER,
-+		      eax, ebx, ecx, edx);
-+	return ebx;
-+}
-+
-+static void ptrace_get(pid_t pid, struct iovec *iov)
-+{
-+	memset(iov->iov_base, 0, iov->iov_len);
-+
-+	if (ptrace(PTRACE_GETREGSET, pid, (uint32_t)NT_X86_XSTATE, iov))
-+		err(1, "TRACE_GETREGSET");
-+}
-+
-+static void ptrace_set(pid_t pid, struct iovec *iov)
-+{
-+	if (ptrace(PTRACE_SETREGSET, pid, (uint32_t)NT_X86_XSTATE, iov))
-+		err(1, "TRACE_SETREGSET");
-+}
-+
-+int main(void)
-+{
-+	struct xsave_buffer *xbuf;
-+	uint32_t xbuf_size;
-+	struct iovec iov;
-+	uint32_t mxcsr;
-+	pid_t child;
-+	int status;
-+
-+	if (!xsave_availability())
-+		printf("[SKIP]\tSkip as XSAVE not available.\n");
-+
-+	xbuf_size = get_xbuf_size();
-+	if (!xbuf_size)
-+		printf("[SKIP]\tSkip as XSAVE not available.\n");
-+
-+	if (!(xgetbv(0) & (XFEATURE_MASK_SSE | XFEATURE_MASK_YMM)))
-+		printf("[SKIP]\tSkip as SSE state not available.\n");
-+
-+	xbuf = aligned_alloc(64, xbuf_size);
-+	if (!xbuf)
-+		err(1, "aligned_alloc()");
-+
-+	iov.iov_base = xbuf;
-+	iov.iov_len = xbuf_size;
-+
-+	child = fork();
-+	if (child < 0) {
-+		err(1, "fork()");
-+	} else if (!child) {
-+		if (ptrace(PTRACE_TRACEME, 0, NULL, NULL))
-+			err(1, "PTRACE_TRACEME");
-+
-+		raise(SIGTRAP);
-+		_exit(0);
-+	}
-+
-+	wait(&status);
-+
-+	if (WSTOPSIG(status) != SIGTRAP)
-+		err(1, "raise(SIGTRAP)");
-+
-+	printf("[RUN]\tTest the MXCSR state write via ptrace().\n");
-+
-+	/* Set a benign value */
-+	set_mxcsr(xbuf, 0xabc);
-+	/* The MXCSR state should be loaded regardless of XSTATE_BV */
-+	clear_xstate_header(xbuf);
-+
-+	/* Write the MXCSR state both locally and remotely. */
-+	xrstor(xbuf, XFEATURE_MASK_SSE);
-+	ptrace_set(child, &iov);
-+
-+	/* Read the MXCSR state back for both */
-+	xsave(xbuf, XFEATURE_MASK_SSE);
-+	mxcsr = get_mxcsr(xbuf);
-+	ptrace_get(child, &iov);
-+
-+	/* Cross-check with each other */
-+	if (mxcsr == get_mxcsr(xbuf))
-+		printf("[OK]\tThe written state was read back correctly.\n");
-+	else
-+		printf("[FAIL]\tThe write (or read) was incorrect.\n");
-+
-+	ptrace(PTRACE_DETACH, child, NULL, NULL);
-+	wait(&status);
-+	if (!WIFEXITED(status) || WEXITSTATUS(status))
-+		err(1, "PTRACE_DETACH");
-+
-+	free(xbuf);
-+}
--- 
-2.17.1
-
+Thx, looks good.
+I have tried to run the test as far as I can manually, but I don't seem 
+to have 'busywait' in the system, which tc_check_packets() depends on, 
+and I couldn't find any 'busywait' in Buildroot.
