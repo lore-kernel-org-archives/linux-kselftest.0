@@ -2,63 +2,106 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E924ECAAD8
-	for <linux-kselftest@archiver.kernel.org>; Thu, 22 Sep 2022 21:11:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 110ABC54EE9
+	for <linux-kselftest@archiver.kernel.org>; Fri, 23 Sep 2022 01:11:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230469AbiIVVLB (ORCPT
+        id S231972AbiIWBLS (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 22 Sep 2022 17:11:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58450 "EHLO
+        Thu, 22 Sep 2022 21:11:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230441AbiIVVK6 (ORCPT
+        with ESMTP id S231996AbiIWBK6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 22 Sep 2022 17:10:58 -0400
+        Thu, 22 Sep 2022 21:10:58 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7ED7DF3A5;
-        Thu, 22 Sep 2022 14:10:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B037F9629;
+        Thu, 22 Sep 2022 18:10:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8AE1FB8363F;
-        Thu, 22 Sep 2022 21:10:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CCB2C43147;
-        Thu, 22 Sep 2022 21:10:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 07906B834F3;
+        Fri, 23 Sep 2022 01:10:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AC34EC433C1;
+        Fri, 23 Sep 2022 01:10:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663881055;
-        bh=vOnHpA7v0NQdgKtqzTW4AbDF2VWJrUVSTU54rbJj8fE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=NZGvz7TTug6LiiFSDLoNGbcq1n4vFvhSBtiCePTWV1zvFJMo8Q3xn8M7T6heVbMBa
-         mUoLfv+vppX2DfjZ0R21iI94QahBkNMBBlgrM9zNZuY5znbvXZ4+hxD1CAK5sDz9VR
-         fXtL54En7nYJmh/ONluz56hlwqKL/I6QlX3OaxPpb3gsA/++3eYLUN+OfI0vGr9EWO
-         elFu2i2RKbgagzVoQfNh4O3j6LT1/vH5NkrnSrQ41+clGDYKA7ysjvirYCdUPJFIA0
-         0BLQYXhqHIKu6x+xE5IKqOAe2GNJypCWKsG/Iq5DM6L8LuC6fCl4wplOj+VxyYoRaO
-         QMxAPlDkMBvew==
-Date:   Thu, 22 Sep 2022 14:10:53 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Jamal Hadi Salim <jhs@mojatatu.com>
-Cc:     Zhengchao Shao <shaozhengchao@huawei.com>, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, xiyou.wangcong@gmail.com,
-        jiri@resnulli.us, shuah@kernel.org, victor@mojatatu.com,
-        weiyongjun1@huawei.com, yuehaibing@huawei.com
-Subject: Re: [PATCH net-next,v2 00/15] add tc-testing qdisc test cases
-Message-ID: <20220922141053.245273df@kernel.org>
-In-Reply-To: <CAM0EoMmxHniuywoLOAJmVX7F6mJ30+A1=S0uqDQhJw9qiU2S0Q@mail.gmail.com>
-References: <20220921025052.23465-1-shaozhengchao@huawei.com>
-        <20220922133956.46005009@kernel.org>
-        <CAM0EoMmxHniuywoLOAJmVX7F6mJ30+A1=S0uqDQhJw9qiU2S0Q@mail.gmail.com>
+        s=k20201202; t=1663895422;
+        bh=op7+9L67dqlaF5pksxSU+uimTe+RF2SRZi+xWANH2NI=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=UPYkIWELE/ahQh1qQMbRUpL0CZMurPrXkdwo362V4058WzSVE7eDh5MlpOlNGAe4V
+         lk7695MPJeG3f12MBVT3L/dw9NIIumrmz/HlUn+NMwZAM/HKPf5FV/sVfTHVqlewvK
+         t2wbiiiSR2ObMvcSRZzPGCCHa65/wVksncPtYPSB24VWWRiQqYllX8xPQ4R1Kyw6g6
+         OOGz/XhgsH3xe3pIuk4gS8y6fadWuUitVnXPbobVmd543yOeZOnAwMm0t+B3mu7Pq9
+         27cf7MhlxWsVfoD/HBTiL9kSfBVVv1oRZYureamZLF7jqYq4tt1v8nLvg7fv1nM1Ax
+         hG+cWhUK3NNeA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8A1DFE4D03C;
+        Fri, 23 Sep 2022 01:10:22 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH -next, v3 00/10] cleanup in Huawei hinic driver
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166389542255.15244.1888532276548956272.git-patchwork-notify@kernel.org>
+Date:   Fri, 23 Sep 2022 01:10:22 +0000
+References: <20220921123358.63442-1-shaozhengchao@huawei.com>
+In-Reply-To: <20220921123358.63442-1-shaozhengchao@huawei.com>
+To:     Zhengchao Shao <shaozhengchao@huawei.com>
+Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
+        shuah@kernel.org, victor@mojatatu.com, weiyongjun1@huawei.com,
+        yuehaibing@huawei.com
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 22 Sep 2022 17:06:02 -0400 Jamal Hadi Salim wrote:
-> There's some issue with this patchset - something was oopsing; could be
-> an issue on our setup. Victor is looking into it.
-> 
-> Tests are good though - and we do review them and run them before
-> acking...
+Hello:
 
-Roger that, I'll take the 18 part set since it looks acked 
-and hold off on these.
+This series was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Wed, 21 Sep 2022 20:33:48 +0800 you wrote:
+> Do code cleanup in Huawei hinic driver.
+> 
+> Zhengchao Shao (10):
+>   net: hinic: modify kernel doc comments
+>   net: hinic: change type of function to be static
+>   net: hinic: remove unused functions
+>   net: hinic: remove unused macro
+>   net: hinic: remove duplicate macro definition
+>   net: hinic: simplify code logic
+>   net: hinic: change hinic_deinit_vf_hw() to void
+>   net: hinic: remove unused enumerated value
+>   net: hinic: replace magic numbers with macro
+>   net: hinic: remove the unused input parameter prod_idx in
+>     sq_prepare_ctrl()
+> 
+> [...]
+
+Here is the summary with links:
+  - [-next,v3,01/10] net: hinic: modify kernel doc comments
+    https://git.kernel.org/netdev/net-next/c/15b209cde263
+  - [-next,v3,02/10] net: hinic: change type of function to be static
+    https://git.kernel.org/netdev/net-next/c/73f25f16cc3c
+  - [-next,v3,03/10] net: hinic: remove unused functions
+    https://git.kernel.org/netdev/net-next/c/2b291ee6dd6e
+  - [-next,v3,04/10] net: hinic: remove unused macro
+    https://git.kernel.org/netdev/net-next/c/2fa1cd3b4a0d
+  - [-next,v3,05/10] net: hinic: remove duplicate macro definition
+    https://git.kernel.org/netdev/net-next/c/97d6a3e642bf
+  - [-next,v3,06/10] net: hinic: simplify code logic
+    https://git.kernel.org/netdev/net-next/c/4f304250c39b
+  - [-next,v3,07/10] net: hinic: change hinic_deinit_vf_hw() to void
+    https://git.kernel.org/netdev/net-next/c/dcbe72d25594
+  - [-next,v3,08/10] net: hinic: remove unused enumerated value
+    https://git.kernel.org/netdev/net-next/c/566ad0ed6b12
+  - [-next,v3,09/10] net: hinic: replace magic numbers with macro
+    https://git.kernel.org/netdev/net-next/c/57ac57154d83
+  - [-next,v3,10/10] net: hinic: remove the unused input parameter prod_idx in sq_prepare_ctrl()
+    https://git.kernel.org/netdev/net-next/c/c706df6d8f6e
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
