@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BA9B1C04A95
-	for <linux-kselftest@archiver.kernel.org>; Sat, 24 Sep 2022 02:51:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D4CDC6FA90
+	for <linux-kselftest@archiver.kernel.org>; Sat, 24 Sep 2022 02:51:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233304AbiIXCvQ (ORCPT
+        id S233308AbiIXCvS (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 23 Sep 2022 22:51:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33328 "EHLO
+        Fri, 23 Sep 2022 22:51:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233213AbiIXCvB (ORCPT
+        with ESMTP id S233247AbiIXCvC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 23 Sep 2022 22:51:01 -0400
+        Fri, 23 Sep 2022 22:51:02 -0400
 Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B77139F58;
-        Fri, 23 Sep 2022 19:51:00 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MZD1h2DWGzlWbQ;
-        Sat, 24 Sep 2022 10:46:48 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A824913A952;
+        Fri, 23 Sep 2022 19:51:01 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MZD3D389PzpTlm;
+        Sat, 24 Sep 2022 10:48:08 +0800 (CST)
 Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
  (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sat, 24 Sep
- 2022 10:50:58 +0800
+ 2022 10:50:59 +0800
 From:   Zhengchao Shao <shaozhengchao@huawei.com>
 To:     <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
         <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
         <shuah@kernel.org>, <victor@mojatatu.com>
 CC:     <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>,
         <shaozhengchao@huawei.com>
-Subject: [PATCH net-next,v3 04/15] selftests/tc-testing: add selftests for etf qdisc
-Date:   Sat, 24 Sep 2022 10:51:46 +0800
-Message-ID: <20220924025157.331635-5-shaozhengchao@huawei.com>
+Subject: [PATCH net-next,v3 06/15] selftests/tc-testing: add selftests for gred qdisc
+Date:   Sat, 24 Sep 2022 10:51:48 +0800
+Message-ID: <20220924025157.331635-7-shaozhengchao@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220924025157.331635-1-shaozhengchao@huawei.com>
 References: <20220924025157.331635-1-shaozhengchao@huawei.com>
@@ -45,44 +45,45 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Test 34ba: Create ETF with default setting
-Test 438f: Create ETF with delta nanos setting
-Test 9041: Create ETF with deadline_mode setting
-Test 9a0c: Create ETF with skip_sock_check setting
-Test 2093: Delete ETF with valid handle
+Test 8942: Create GRED with default setting
+Test 5783: Create GRED with grio setting
+Test 8a09: Create GRED with limit setting
+Test 48cb: Create GRED with ecn setting
+Test 763a: Change GRED setting
+Test 8309: Show GRED class
 
 Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
 ---
  tools/testing/selftests/tc-testing/config     |   1 +
- .../tc-testing/tc-tests/qdiscs/etf.json       | 117 ++++++++++++++++++
- 2 files changed, 118 insertions(+)
- create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/etf.json
+ .../tc-testing/tc-tests/qdiscs/gred.json      | 164 ++++++++++++++++++
+ 2 files changed, 165 insertions(+)
+ create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/gred.json
 
 diff --git a/tools/testing/selftests/tc-testing/config b/tools/testing/selftests/tc-testing/config
-index a02f959abe66..058ef0bf9dad 100644
+index eea77f9d6ba1..d8db68440395 100644
 --- a/tools/testing/selftests/tc-testing/config
 +++ b/tools/testing/selftests/tc-testing/config
-@@ -15,6 +15,7 @@ CONFIG_NET_SCHED=y
- CONFIG_NET_SCH_ATM=m
- CONFIG_NET_SCH_CHOKE=m
+@@ -17,6 +17,7 @@ CONFIG_NET_SCH_CHOKE=m
  CONFIG_NET_SCH_CODEL=m
-+CONFIG_NET_SCH_ETF=m
+ CONFIG_NET_SCH_ETF=m
+ CONFIG_NET_SCH_FQ=m
++CONFIG_NET_SCH_GRED=m
  CONFIG_NET_SCH_PRIO=m
  CONFIG_NET_SCH_INGRESS=m
  
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/etf.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/etf.json
+diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/gred.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/gred.json
 new file mode 100644
-index 000000000000..0046d44bcd93
+index 000000000000..013c8ee037a4
 --- /dev/null
-+++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/etf.json
-@@ -0,0 +1,117 @@
++++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/gred.json
+@@ -0,0 +1,164 @@
 +[
 +    {
-+        "id": "34ba",
-+        "name": "Create ETF with default setting",
++        "id": "8942",
++        "name": "Create GRED with default setting",
 +        "category": [
 +            "qdisc",
-+            "etf"
++            "gred"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
@@ -90,10 +91,10 @@ index 000000000000..0046d44bcd93
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root etf clockid CLOCK_TAI",
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root gred setup vqs 10 default 1",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc etf 1: root refcnt [0-9]+ clockid TAI delta 0 offload off deadline_mode off skip_sock_check off",
++        "matchPattern": "qdisc gred 1: root refcnt [0-9]+ vqs 10 default 1",
 +        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -101,11 +102,11 @@ index 000000000000..0046d44bcd93
 +        ]
 +    },
 +    {
-+        "id": "438f",
-+        "name": "Create ETF with delta nanos setting",
++        "id": "5783",
++        "name": "Create GRED with grio setting",
 +        "category": [
 +            "qdisc",
-+            "etf"
++            "gred"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
@@ -113,10 +114,10 @@ index 000000000000..0046d44bcd93
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root etf delta 100 clockid CLOCK_TAI",
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root gred setup vqs 10 default 1 grio",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc etf 1: root refcnt [0-9]+ clockid TAI delta 100 offload off deadline_mode off skip_sock_check off",
++        "matchPattern": "qdisc gred 1: root refcnt [0-9]+ vqs 10 default 1.*grio",
 +        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -124,11 +125,11 @@ index 000000000000..0046d44bcd93
 +        ]
 +    },
 +    {
-+        "id": "9041",
-+        "name": "Create ETF with deadline_mode setting",
++        "id": "8a09",
++        "name": "Create GRED with limit setting",
 +        "category": [
 +            "qdisc",
-+            "etf"
++            "gred"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
@@ -136,10 +137,10 @@ index 000000000000..0046d44bcd93
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root etf clockid CLOCK_TAI deadline_mode",
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root gred setup vqs 10 default 1 limit 1000",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc etf 1: root refcnt [0-9]+ clockid TAI delta 0 offload off deadline_mode on skip_sock_check off",
++        "matchPattern": "qdisc gred 1: root refcnt [0-9]+ vqs 10 default 1 limit 1000b",
 +        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -147,11 +148,11 @@ index 000000000000..0046d44bcd93
 +        ]
 +    },
 +    {
-+        "id": "9a0c",
-+        "name": "Create ETF with skip_sock_check setting",
++        "id": "48ca",
++        "name": "Create GRED with ecn setting",
 +        "category": [
 +            "qdisc",
-+            "etf"
++            "gred"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
@@ -159,10 +160,10 @@ index 000000000000..0046d44bcd93
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root etf clockid CLOCK_TAI skip_sock_check",
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root gred setup vqs 10 default 2 ecn",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc etf 1: root refcnt [0-9]+ clockid TAI delta 0 offload off deadline_mode off skip_sock_check on",
++        "matchPattern": "qdisc gred 1: root refcnt [0-9]+ vqs 10 default 2.*ecn",
 +        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -170,25 +171,72 @@ index 000000000000..0046d44bcd93
 +        ]
 +    },
 +    {
-+        "id": "2093",
-+        "name": "Delete ETF with valid handle",
++        "id": "48cb",
++        "name": "Create GRED with harddrop setting",
 +        "category": [
 +            "qdisc",
-+            "etf"
++            "gred"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$IP link add dev $DUMMY type dummy || /bin/true"
++        ],
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root gred setup vqs 10 default 2 harddrop",
++        "expExitCode": "0",
++        "verifyCmd": "$TC qdisc show dev $DUMMY",
++        "matchPattern": "qdisc gred 1: root refcnt [0-9]+ vqs 10 default 2.*harddrop",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DUMMY handle 1: root",
++            "$IP link del dev $DUMMY type dummy"
++        ]
++    },
++    {
++        "id": "763a",
++        "name": "Change GRED setting",
++        "category": [
++            "qdisc",
++            "gred"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
 +        },
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true",
-+            "$TC qdisc add dev $DUMMY handle 1: root etf clockid CLOCK_TAI"
++            "$TC qdisc add dev $DUMMY handle 1: root gred setup vqs 10 default 1"
 +        ],
-+        "cmdUnderTest": "$TC qdisc del dev $DUMMY handle 1: root",
++        "cmdUnderTest": "$TC qdisc change dev $DUMMY handle 1: root gred limit 60KB min 15K max 25K burst 64 avpkt 1500 bandwidth 10Mbit DP 1 probability 0.1",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc etf 1: root refcnt [0-9]+ clockid TAI delta 0 offload off deadline_mode off skip_sock_check off",
++        "matchPattern": "qdisc gred 1: root refcnt [0-9]+ vqs 10 default 1 limit.*vq 1 prio [0-9]+ limit 60Kb min 15Kb max 25Kb",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DUMMY handle 1: root",
++            "$IP link del dev $DUMMY type dummy"
++        ]
++    },
++    {
++        "id": "8309",
++        "name": "Show GRED class",
++        "category": [
++            "qdisc",
++            "gred"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$IP link add dev $DUMMY type dummy || /bin/true"
++        ],
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root gred setup vqs 10 default 1",
++        "expExitCode": "0",
++        "verifyCmd": "$TC class show dev $DUMMY",
++        "matchPattern": "class gred 1:",
 +        "matchCount": "0",
 +        "teardown": [
++            "$TC qdisc del dev $DUMMY handle 1: root",
 +            "$IP link del dev $DUMMY type dummy"
 +        ]
 +    }
