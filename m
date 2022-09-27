@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F43AC07E9D
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B0D3C54EE9
 	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Sep 2022 11:02:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231778AbiI0LC4 (ORCPT
+        id S231643AbiI0LC6 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 27 Sep 2022 07:02:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55876 "EHLO
+        Tue, 27 Sep 2022 07:02:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231706AbiI0LCU (ORCPT
+        with ESMTP id S231425AbiI0LCV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Sep 2022 07:02:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D429F5AC70
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Sep 2022 04:01:45 -0700 (PDT)
+        Tue, 27 Sep 2022 07:02:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4662D1E80
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Sep 2022 04:01:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664276504;
+        s=mimecast20190719; t=1664276507;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=67MQdpq3rsEztUFgas8DeaT4UznxvUWpJMHF+tOYoio=;
-        b=b+ndT44dxfGtgflhi390jcSBEJIgHwcLXOGaYwBSu/zUwwWfeNezfJU/PBUKMS6+lTmrn2
-        KUACN211k3R8RvgxX1TAF9zSL8alZ9RjDj+N9GL8Y8pzhY2Ipx3O4kWQpYN0QMhibXzLpg
-        iNGvdjpXHJwK2n1NePC2PJ5M5gAY4Wo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=a6ppzU8NrJ3mYSPxoJruC+SRfOuYeuv/ezC2v1fvuK4=;
+        b=bCLMABtaJ2uUtZAl83P1n7Zq0P7fH4nAXMWHXaH/n4+1hiQEVje4XNjY/GCz06c7LTWmIS
+        ynHGIgfksdRpb1z2YxBDEpdDR1VwimE8Xv58d3+ZSQ/fKv95G6CcEh2iZQnxSAggUx046Q
+        O5oEbeNoQQJPak/WMdzLMavq52gUQWE=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-294-1I8snYYfN7S5Cgya_yiFww-1; Tue, 27 Sep 2022 07:01:39 -0400
-X-MC-Unique: 1I8snYYfN7S5Cgya_yiFww-1
+ us-mta-607-K67q5aYpPl6RfXIYoCfxYQ-1; Tue, 27 Sep 2022 07:01:45 -0400
+X-MC-Unique: K67q5aYpPl6RfXIYoCfxYQ-1
 Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BFB381019C89;
-        Tue, 27 Sep 2022 11:01:38 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DC6B63C01D86;
+        Tue, 27 Sep 2022 11:01:44 +0000 (UTC)
 Received: from t480s.redhat.com (unknown [10.39.194.14])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 31B41C15BB2;
-        Tue, 27 Sep 2022 11:01:36 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2C77CC15E76;
+        Tue, 27 Sep 2022 11:01:42 +0000 (UTC)
 From:   David Hildenbrand <david@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
@@ -53,9 +53,9 @@ Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
         Mike Rapoport <rppt@kernel.org>,
         Christoph von Recklinghausen <crecklin@redhat.com>,
         Don Dutile <ddutile@redhat.com>
-Subject: [PATCH v1 4/7] selftests/vm: anon_cow: hugetlb tests
-Date:   Tue, 27 Sep 2022 13:01:17 +0200
-Message-Id: <20220927110120.106906-5-david@redhat.com>
+Subject: [PATCH v1 6/7] mm/gup_test: start/stop/read functionality for PIN LONGTERM test
+Date:   Tue, 27 Sep 2022 13:01:19 +0200
+Message-Id: <20220927110120.106906-7-david@redhat.com>
 In-Reply-To: <20220927110120.106906-1-david@redhat.com>
 References: <20220927110120.106906-1-david@redhat.com>
 MIME-Version: 1.0
@@ -65,154 +65,212 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Let's run all existing test cases with all hugetlb sizes we're able to
-detect.
-
-Note that some tests cases still fail. This will, for example, be fixed
-once vmsplice properly uses FOLL_PIN instead of FOLL_GET for pinning.
-With 2 MiB and 1 GiB hugetlb on x86_64, the expected failures are:
-
- # [RUN] vmsplice() + unmap in child ... with hugetlb (2048 kB)
- not ok 23 No leak from parent into child
- # [RUN] vmsplice() + unmap in child ... with hugetlb (1048576 kB)
- not ok 24 No leak from parent into child
- # [RUN] vmsplice() before fork(), unmap in parent after fork() ... with hugetlb (2048 kB)
- not ok 35 No leak from child into parent
- # [RUN] vmsplice() before fork(), unmap in parent after fork() ... with hugetlb (1048576 kB)
- not ok 36 No leak from child into parent
- # [RUN] vmsplice() + unmap in parent after fork() ... with hugetlb (2048 kB)
- not ok 47 No leak from child into parent
- # [RUN] vmsplice() + unmap in parent after fork() ... with hugetlb (1048576 kB)
- not ok 48 No leak from child into parent
+We want an easy way to take a R/O or R/W longterm pin on a range and be
+able to observe the content of the pinned pages, so we can properly test
+how longterm puns interact with our COW logic.
 
 Signed-off-by: David Hildenbrand <david@redhat.com>
 ---
- tools/testing/selftests/vm/anon_cow.c | 70 ++++++++++++++++++++++++++-
- 1 file changed, 69 insertions(+), 1 deletion(-)
+ mm/gup_test.c | 140 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ mm/gup_test.h |  12 +++++
+ 2 files changed, 152 insertions(+)
 
-diff --git a/tools/testing/selftests/vm/anon_cow.c b/tools/testing/selftests/vm/anon_cow.c
-index 9244c8551a95..06fd046bf1f2 100644
---- a/tools/testing/selftests/vm/anon_cow.c
-+++ b/tools/testing/selftests/vm/anon_cow.c
-@@ -25,6 +25,8 @@
- static size_t pagesize;
- static int pagemap_fd;
- static size_t thpsize;
-+static int nr_hugetlbsizes;
-+static size_t hugetlbsizes[10];
- 
- static void detect_thpsize(void)
- {
-@@ -54,6 +56,31 @@ static void detect_thpsize(void)
- 	close(fd);
+diff --git a/mm/gup_test.c b/mm/gup_test.c
+index 12b0a91767d3..2bbfacd31f5a 100644
+--- a/mm/gup_test.c
++++ b/mm/gup_test.c
+@@ -203,6 +203,134 @@ static int __gup_test_ioctl(unsigned int cmd,
+ 	return ret;
  }
  
-+static void detect_hugetlbsizes(void)
++static DEFINE_MUTEX(pin_longterm_test_mutex);
++static struct page **pin_longterm_test_pages;
++static unsigned long pin_longterm_test_nr_pages;
++
++static inline void pin_longterm_test_stop(void)
 +{
-+	DIR *dir = opendir("/sys/kernel/mm/hugepages/");
++	if (pin_longterm_test_pages) {
++		if (pin_longterm_test_nr_pages)
++			unpin_user_pages(pin_longterm_test_pages,
++					 pin_longterm_test_nr_pages);
++		kfree(pin_longterm_test_pages);
++		pin_longterm_test_pages = NULL;
++		pin_longterm_test_nr_pages = 0;
++	}
++}
 +
-+	if (!dir)
-+		return;
++static inline int pin_longterm_test_start(unsigned long arg)
++{
++	long nr_pages, cur_pages, addr, remaining_pages;
++	int gup_flags = FOLL_LONGTERM;
++	struct pin_longterm_test args;
++	struct page **pages;
++	int ret = 0;
++	bool fast;
 +
-+	while (nr_hugetlbsizes < ARRAY_SIZE(hugetlbsizes)) {
-+		struct dirent *entry = readdir(dir);
-+		size_t kb;
++	if (pin_longterm_test_pages)
++		return -EINVAL;
 +
-+		if (!entry)
++	if (copy_from_user(&args, (void __user *)arg, sizeof(args)))
++		return -EFAULT;
++
++	if (args.flags &
++	    ~(PIN_LONGTERM_TEST_FLAG_USE_WRITE|PIN_LONGTERM_TEST_FLAG_USE_FAST))
++		return -EINVAL;
++	if (!IS_ALIGNED(args.addr | args.size, PAGE_SIZE))
++		return -EINVAL;
++	if (args.size > LONG_MAX)
++		return -EINVAL;
++	nr_pages = args.size / PAGE_SIZE;
++	if (!nr_pages)
++		return -EINVAL;
++
++	pages = kvcalloc(nr_pages, sizeof(void *), GFP_KERNEL);
++	if (!pages)
++		return -ENOMEM;
++
++	if (args.flags & PIN_LONGTERM_TEST_FLAG_USE_WRITE)
++		gup_flags |= FOLL_WRITE;
++	fast = !!(args.flags & PIN_LONGTERM_TEST_FLAG_USE_FAST);
++
++	if (!fast && mmap_read_lock_killable(current->mm)) {
++		kfree(pages);
++		return -EINTR;
++	}
++
++	pin_longterm_test_pages = pages;
++	pin_longterm_test_nr_pages = 0;
++
++	while (nr_pages - pin_longterm_test_nr_pages) {
++		remaining_pages = nr_pages - pin_longterm_test_nr_pages;
++		addr = args.addr + pin_longterm_test_nr_pages * PAGE_SIZE;
++
++		if (fast)
++			cur_pages = pin_user_pages_fast(addr, remaining_pages,
++							gup_flags, pages);
++		else
++			cur_pages = pin_user_pages(addr, remaining_pages,
++						   gup_flags, pages, NULL);
++		if (cur_pages < 0) {
++			pin_longterm_test_stop();
++			ret = cur_pages;
 +			break;
-+		if (entry->d_type != DT_DIR)
-+			continue;
-+		if (sscanf(entry->d_name, "hugepages-%zukB", &kb) != 1)
-+			continue;
-+		hugetlbsizes[nr_hugetlbsizes] = kb * 1024;
-+		nr_hugetlbsizes++;
-+		ksft_print_msg("[INFO] detected hugetlb size: %zu KiB\n",
-+			       kb);
-+	}
-+	closedir(dir);
++		}
++		pin_longterm_test_nr_pages += cur_pages;
++		pages += cur_pages;
++	};
++
++	if (!fast)
++		mmap_read_unlock(current->mm);
++	return ret;
 +}
 +
- static bool range_is_swapped(void *addr, size_t size)
- {
- 	for (; size; addr += pagesize, size -= pagesize)
-@@ -556,6 +583,41 @@ static void run_with_partial_shared_thp(test_fn fn, const char *desc)
- 	do_run_with_thp(fn, THP_RUN_PARTIAL_SHARED);
- }
- 
-+static void run_with_hugetlb(test_fn fn, const char *desc, size_t hugetlbsize)
++static inline int pin_longterm_test_read(unsigned long arg)
 +{
-+	int flags = MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB;
-+	char *mem, *dummy;
++	__u64 user_addr;
++	unsigned long i;
 +
-+	ksft_print_msg("[RUN] %s ... with hugetlb (%zu kB)\n", desc,
-+		       hugetlbsize / 1024);
++	if (!pin_longterm_test_pages)
++		return -EINVAL;
 +
-+	flags |= __builtin_ctzll(hugetlbsize) << MAP_HUGE_SHIFT;
++	if (copy_from_user(&user_addr, (void __user *)arg, sizeof(user_addr)))
++		return -EFAULT;
 +
-+	mem = mmap(NULL, hugetlbsize, PROT_READ | PROT_WRITE, flags, -1, 0);
-+	if (mem == MAP_FAILED) {
-+		ksft_test_result_skip("need more free huge pages\n");
-+		return;
++	for (i = 0; i < pin_longterm_test_nr_pages; i++) {
++		void *addr = page_to_virt(pin_longterm_test_pages[i]);
++
++		if (copy_to_user((void __user *)user_addr, addr, PAGE_SIZE))
++			return -EFAULT;
++		user_addr += PAGE_SIZE;
 +	}
-+
-+	/* Populate an huge page. */
-+	memset(mem, 0, hugetlbsize);
-+
-+	/*
-+	 * We need a total of two hugetlb pages to handle COW/unsharing
-+	 * properly, otherwise we might get zapped by a SIGBUS.
-+	 */
-+	dummy = mmap(NULL, hugetlbsize, PROT_READ | PROT_WRITE, flags, -1, 0);
-+	if (dummy == MAP_FAILED) {
-+		ksft_test_result_skip("need more free huge pages\n");
-+		goto munmap;
-+	}
-+	munmap(dummy, hugetlbsize);
-+
-+	fn(mem, hugetlbsize);
-+munmap:
-+	munmap(mem, hugetlbsize);
++	return 0;
 +}
 +
- struct test_case {
- 	const char *desc;
- 	test_fn fn;
-@@ -602,6 +664,8 @@ static const struct test_case test_cases[] = {
- 
- static void run_test_case(struct test_case const *test_case)
- {
-+	int i;
++static long pin_longterm_test_ioctl(struct file *filep, unsigned int cmd,
++				    unsigned long arg)
++{
++	int ret = -EINVAL;
 +
- 	run_with_base_page(test_case->fn, test_case->desc);
- 	run_with_base_page_swap(test_case->fn, test_case->desc);
- 	if (thpsize) {
-@@ -614,6 +678,9 @@ static void run_test_case(struct test_case const *test_case)
- 		run_with_partial_mremap_thp(test_case->fn, test_case->desc);
- 		run_with_partial_shared_thp(test_case->fn, test_case->desc);
++	if (mutex_lock_killable(&pin_longterm_test_mutex))
++		return -EINTR;
++
++	switch (cmd) {
++	case PIN_LONGTERM_TEST_START:
++		ret = pin_longterm_test_start(arg);
++		break;
++	case PIN_LONGTERM_TEST_STOP:
++		pin_longterm_test_stop();
++		ret = 0;
++		break;
++	case PIN_LONGTERM_TEST_READ:
++		ret = pin_longterm_test_read(arg);
++		break;
++	}
++
++	mutex_unlock(&pin_longterm_test_mutex);
++	return ret;
++}
++
+ static long gup_test_ioctl(struct file *filep, unsigned int cmd,
+ 		unsigned long arg)
+ {
+@@ -217,6 +345,10 @@ static long gup_test_ioctl(struct file *filep, unsigned int cmd,
+ 	case PIN_BASIC_TEST:
+ 	case DUMP_USER_PAGES_TEST:
+ 		break;
++	case PIN_LONGTERM_TEST_START:
++	case PIN_LONGTERM_TEST_STOP:
++	case PIN_LONGTERM_TEST_READ:
++		return pin_longterm_test_ioctl(filep, cmd, arg);
+ 	default:
+ 		return -EINVAL;
  	}
-+	for (i = 0; i < nr_hugetlbsizes; i++)
-+		run_with_hugetlb(test_case->fn, test_case->desc,
-+				 hugetlbsizes[i]);
+@@ -234,9 +366,17 @@ static long gup_test_ioctl(struct file *filep, unsigned int cmd,
+ 	return 0;
  }
  
- static void run_test_cases(void)
-@@ -626,7 +693,7 @@ static void run_test_cases(void)
++static int gup_test_release(struct inode *inode, struct file *file)
++{
++	pin_longterm_test_stop();
++
++	return 0;
++}
++
+ static const struct file_operations gup_test_fops = {
+ 	.open = nonseekable_open,
+ 	.unlocked_ioctl = gup_test_ioctl,
++	.release = gup_test_release,
+ };
  
- static int tests_per_test_case(void)
- {
--	int tests = 2;
-+	int tests = 2 + nr_hugetlbsizes;
+ static int __init gup_test_init(void)
+diff --git a/mm/gup_test.h b/mm/gup_test.h
+index 887ac1d5f5bc..5b37b54e8bea 100644
+--- a/mm/gup_test.h
++++ b/mm/gup_test.h
+@@ -10,6 +10,9 @@
+ #define GUP_BASIC_TEST		_IOWR('g', 4, struct gup_test)
+ #define PIN_BASIC_TEST		_IOWR('g', 5, struct gup_test)
+ #define DUMP_USER_PAGES_TEST	_IOWR('g', 6, struct gup_test)
++#define PIN_LONGTERM_TEST_START	_IOW('g', 7, struct pin_longterm_test)
++#define PIN_LONGTERM_TEST_STOP	_IO('g', 8)
++#define PIN_LONGTERM_TEST_READ	_IOW('g', 9, __u64)
  
- 	if (thpsize)
- 		tests += 8;
-@@ -640,6 +707,7 @@ int main(int argc, char **argv)
+ #define GUP_TEST_MAX_PAGES_TO_DUMP		8
  
- 	pagesize = getpagesize();
- 	detect_thpsize();
-+	detect_hugetlbsizes();
+@@ -30,4 +33,13 @@ struct gup_test {
+ 	__u32 which_pages[GUP_TEST_MAX_PAGES_TO_DUMP];
+ };
  
- 	ksft_print_header();
- 	ksft_set_plan(nr_test_cases * tests_per_test_case());
++#define PIN_LONGTERM_TEST_FLAG_USE_WRITE	1
++#define PIN_LONGTERM_TEST_FLAG_USE_FAST		2
++
++struct pin_longterm_test {
++	__u64 addr;
++	__u64 size;
++	__u32 flags;
++};
++
+ #endif	/* __GUP_TEST_H */
 -- 
 2.37.3
 
