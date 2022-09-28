@@ -2,32 +2,32 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D18BC04A95
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A157C6FA86
 	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Sep 2022 18:16:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234566AbiI1SQF (ORCPT
+        id S234419AbiI1SQG (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 28 Sep 2022 14:16:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48524 "EHLO
+        Wed, 28 Sep 2022 14:16:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234315AbiI1SPw (ORCPT
+        with ESMTP id S234316AbiI1SPw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Wed, 28 Sep 2022 14:15:52 -0400
 Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 707F7DED6F;
-        Wed, 28 Sep 2022 11:15:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD61AED9C;
+        Wed, 28 Sep 2022 11:15:49 -0700 (PDT)
 Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id ADE2A1884BC7;
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 828BB1884BD2;
         Wed, 28 Sep 2022 18:15:41 +0000 (UTC)
 Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 962D62500709;
+        by mailout.gigahost.dk (Postfix) with ESMTP id 6E77B2500370;
         Wed, 28 Sep 2022 18:15:41 +0000 (UTC)
 Received: by smtp.gigahost.dk (Postfix, from userid 0)
-        id 7613E9EC000D; Wed, 28 Sep 2022 18:15:41 +0000 (UTC)
+        id 383439EC000A; Wed, 28 Sep 2022 18:15:41 +0000 (UTC)
 X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 Received: from fujitsu.vestervang (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
-        by smtp.gigahost.dk (Postfix) with ESMTPSA id C4F429120FED;
-        Wed, 28 Sep 2022 17:52:03 +0000 (UTC)
+        by smtp.gigahost.dk (Postfix) with ESMTPSA id 1D24A9120FED;
+        Wed, 28 Sep 2022 15:06:27 +0000 (UTC)
 From:   Hans Schultz <netdev@kapio-technology.com>
 To:     davem@davemloft.net, kuba@kernel.org
 Cc:     netdev@vger.kernel.org,
@@ -65,10 +65,12 @@ Cc:     netdev@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org,
         bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v6 net-next 8/9] net: dsa: mv88e6xxx: add blackhole ATU entries
-Date:   Wed, 28 Sep 2022 19:48:54 +0200
-Message-Id: <20220928174854.117101-1-netdev@kapio-technology.com>
+Subject: [PATCH v6 net-next 6/9] net: dsa: mv88e6xxx: allow reading FID when handling ATU violations
+Date:   Wed, 28 Sep 2022 17:02:53 +0200
+Message-Id: <20220928150256.115248-7-netdev@kapio-technology.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220928150256.115248-1-netdev@kapio-technology.com>
+References: <20220928150256.115248-1-netdev@kapio-technology.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -77,119 +79,114 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: "Hans J. Schultz" <netdev@kapio-technology.com>
 
-Blackhole FDB entries can now be added, deleted or replaced in the
-driver ATU.
+The FID is needed to get hold of which VID was involved in a violation,
+thus the need to be able to read the FID.
+
+For convenience the function mv88e6xxx_g1_atu_op() has been used to read
+ATU violations, but the function invalidates reading the fid, so to both
+read ATU violations without zeroing the fid, and read the fid, functions
+have been added to ensure both are done correctly.
 
 Signed-off-by: Hans J. Schultz <netdev@kapio-technology.com>
 ---
- drivers/net/dsa/mv88e6xxx/chip.c | 78 ++++++++++++++++++++++++++++++--
- 1 file changed, 74 insertions(+), 4 deletions(-)
+ drivers/net/dsa/mv88e6xxx/global1_atu.c | 60 ++++++++++++++++++++++---
+ 1 file changed, 55 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
-index 71843fe87f77..a17f30e5d4a6 100644
---- a/drivers/net/dsa/mv88e6xxx/chip.c
-+++ b/drivers/net/dsa/mv88e6xxx/chip.c
-@@ -2735,6 +2735,72 @@ static int mv88e6xxx_vlan_msti_set(struct dsa_switch *ds,
- 	return err;
+diff --git a/drivers/net/dsa/mv88e6xxx/global1_atu.c b/drivers/net/dsa/mv88e6xxx/global1_atu.c
+index 40bd67a5c8e9..d9dfa1159cde 100644
+--- a/drivers/net/dsa/mv88e6xxx/global1_atu.c
++++ b/drivers/net/dsa/mv88e6xxx/global1_atu.c
+@@ -114,6 +114,19 @@ static int mv88e6xxx_g1_atu_op_wait(struct mv88e6xxx_chip *chip)
+ 	return mv88e6xxx_g1_wait_bit(chip, MV88E6XXX_G1_ATU_OP, bit, 0);
  }
  
-+struct mv88e6xxx_vid_search_ctx {
-+	u16 vid_search;
-+	u16 fid_found;
-+};
-+
-+static int mv88e6xxx_find_fid_on_matching_vid(struct mv88e6xxx_chip *chip,
-+					      const struct mv88e6xxx_vtu_entry *entry,
-+					      void *priv)
++static int mv88e6xxx_g1_read_atu_violation(struct mv88e6xxx_chip *chip)
 +{
-+	struct mv88e6xxx_vid_search_ctx *ctx = priv;
-+
-+	if (ctx->vid_search == entry->vid) {
-+		ctx->fid_found = entry->fid;
-+		return 1;
-+	}
-+
-+	return 0;
-+}
-+
-+static int mv88e6xxx_blackhole_fdb_loadpurge(struct dsa_switch *ds,
-+					     const unsigned char *addr, u16 vid, u8 state)
-+{
-+	struct mv88e6xxx_chip *chip = ds->priv;
-+	struct mv88e6xxx_vid_search_ctx ctx;
-+	struct mv88e6xxx_atu_entry entry;
-+	u16 fid = 0;
 +	int err;
 +
-+	ether_addr_copy(entry.mac, addr);
-+	entry.portvec = MV88E6XXX_G1_ATU_DATA_PORT_VECTOR_NO_EGRESS;
-+	entry.state = state;
-+	entry.trunk = false;
-+
-+	ctx.vid_search = vid;
-+	mv88e6xxx_reg_lock(chip);
-+	err = mv88e6xxx_vtu_walk(chip, mv88e6xxx_find_fid_on_matching_vid, &ctx);
-+	mv88e6xxx_reg_unlock(chip);
-+	if (err < 0)
++	err = mv88e6xxx_g1_write(chip, MV88E6XXX_G1_ATU_OP,
++				 MV88E6XXX_G1_ATU_OP_BUSY |
++				 MV88E6XXX_G1_ATU_OP_GET_CLR_VIOLATION);
++	if (err)
 +		return err;
-+	if (err == 1)
-+		fid = ctx.fid_found;
-+	else
-+		return -ENODATA;
 +
-+	if (!fid)
-+		return -ENODATA;
++	return mv88e6xxx_g1_atu_op_wait(chip);
++}
 +
-+	mv88e6xxx_reg_lock(chip);
-+	err = mv88e6xxx_g1_atu_loadpurge(chip, fid, &entry);
-+	mv88e6xxx_reg_unlock(chip);
+ static int mv88e6xxx_g1_atu_op(struct mv88e6xxx_chip *chip, u16 fid, u16 op)
+ {
+ 	u16 val;
+@@ -159,6 +172,41 @@ int mv88e6xxx_g1_atu_get_next(struct mv88e6xxx_chip *chip, u16 fid)
+ 	return mv88e6xxx_g1_atu_op(chip, fid, MV88E6XXX_G1_ATU_OP_GET_NEXT_DB);
+ }
+ 
++static int mv88e6xxx_g1_atu_fid_read(struct mv88e6xxx_chip *chip, u16 *fid)
++{
++	u16 val = 0, upper = 0, op = 0;
++	int err = -EOPNOTSUPP;
++
++	if (mv88e6xxx_num_databases(chip) > 256) {
++		err = mv88e6xxx_g1_read(chip, MV88E6352_G1_ATU_FID, &val);
++		val &= 0xfff;
++		if (err)
++			return err;
++	} else {
++		err = mv88e6xxx_g1_read(chip, MV88E6XXX_G1_ATU_OP, &op);
++		if (err)
++			return err;
++		if (mv88e6xxx_num_databases(chip) > 64) {
++			/* ATU DBNum[7:4] are located in ATU Control 15:12 */
++			err = mv88e6xxx_g1_read(chip, MV88E6XXX_G1_ATU_CTL, &upper);
++			if (err)
++				return err;
++
++			upper = (upper >> 8) & 0x00f0;
++		} else if (mv88e6xxx_num_databases(chip) > 16) {
++			/* ATU DBNum[5:4] are located in ATU Operation 9:8 */
++
++			upper = (op >> 4) & 0x30;
++		}
++		/* ATU DBNum[3:0] are located in ATU Operation 3:0 */
++
++		val = (op & 0xf) | upper;
++	}
++	*fid = val;
 +
 +	return err;
 +}
 +
-+int mv88e6xxx_blackhole_fdb_add(struct dsa_switch *ds, const unsigned char *addr, u16 vid)
-+{
-+	return mv88e6xxx_blackhole_fdb_loadpurge(ds, addr, vid,
-+						 MV88E6XXX_G1_ATU_DATA_STATE_UC_STATIC);
-+}
+ /* Offset 0x0C: ATU Data Register */
+ 
+ static int mv88e6xxx_g1_atu_data_read(struct mv88e6xxx_chip *chip,
+@@ -353,14 +401,12 @@ static irqreturn_t mv88e6xxx_g1_atu_prob_irq_thread_fn(int irq, void *dev_id)
+ {
+ 	struct mv88e6xxx_chip *chip = dev_id;
+ 	struct mv88e6xxx_atu_entry entry;
+-	int spid;
+-	int err;
+-	u16 val;
++	int err, spid;
++	u16 val, fid;
+ 
+ 	mv88e6xxx_reg_lock(chip);
+ 
+-	err = mv88e6xxx_g1_atu_op(chip, 0,
+-				  MV88E6XXX_G1_ATU_OP_GET_CLR_VIOLATION);
++	err = mv88e6xxx_g1_read_atu_violation(chip);
+ 	if (err)
+ 		goto out;
+ 
+@@ -368,6 +414,10 @@ static irqreturn_t mv88e6xxx_g1_atu_prob_irq_thread_fn(int irq, void *dev_id)
+ 	if (err)
+ 		goto out;
+ 
++	err = mv88e6xxx_g1_atu_fid_read(chip, &fid);
++	if (err)
++		goto out;
 +
-+int mv88e6xxx_blackhole_fdb_del(struct dsa_switch *ds, const unsigned char *addr, u16 vid)
-+{
-+	return mv88e6xxx_blackhole_fdb_loadpurge(ds, addr, vid,
-+						 MV88E6XXX_G1_ATU_DATA_STATE_UC_UNUSED);
-+}
-+
- static int mv88e6xxx_port_fdb_add(struct dsa_switch *ds, int port,
- 				  const unsigned char *addr, u16 vid,
- 				  u16 fdb_flags, struct dsa_db db)
-@@ -2742,9 +2808,12 @@ static int mv88e6xxx_port_fdb_add(struct dsa_switch *ds, int port,
- 	struct mv88e6xxx_chip *chip = ds->priv;
- 	int err;
- 
--	/* Ignore entries with flags set */
--	if (fdb_flags)
-+	if (fdb_flags & DSA_FDB_FLAG_LOCKED)
- 		return 0;
-+	if (fdb_flags & DSA_FDB_FLAG_BLACKHOLE) {
-+		mv88e6xxx_blackhole_fdb_del(ds, addr, vid);
-+		return mv88e6xxx_blackhole_fdb_add(ds, addr, vid);
-+	}
- 
- 	if (mv88e6xxx_port_is_locked(chip, port))
- 		mv88e6xxx_atu_locked_entry_find_purge(ds, port, addr, vid);
-@@ -2765,9 +2834,10 @@ static int mv88e6xxx_port_fdb_del(struct dsa_switch *ds, int port,
- 	bool locked_found = false;
- 	int err = 0;
- 
--	/* Ignore entries with flags set */
--	if (fdb_flags)
-+	if (fdb_flags & DSA_FDB_FLAG_LOCKED)
- 		return 0;
-+	if (fdb_flags & DSA_FDB_FLAG_BLACKHOLE)
-+		return mv88e6xxx_blackhole_fdb_del(ds, addr, vid);
- 
- 	if (mv88e6xxx_port_is_locked(chip, port))
- 		locked_found = mv88e6xxx_atu_locked_entry_find_purge(ds, port, addr, vid);
+ 	err = mv88e6xxx_g1_atu_data_read(chip, &entry);
+ 	if (err)
+ 		goto out;
 -- 
 2.34.1
 
