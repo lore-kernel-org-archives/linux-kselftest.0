@@ -2,63 +2,63 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 50A2BC43217
-	for <linux-kselftest@archiver.kernel.org>; Fri, 30 Sep 2022 21:08:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E78CC41535
+	for <linux-kselftest@archiver.kernel.org>; Fri, 30 Sep 2022 21:08:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232356AbiI3VIJ (ORCPT
+        id S232386AbiI3VIL (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 30 Sep 2022 17:08:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39754 "EHLO
+        Fri, 30 Sep 2022 17:08:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbiI3VII (ORCPT
+        with ESMTP id S230240AbiI3VII (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Fri, 30 Sep 2022 17:08:08 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48DAD1B0E0A;
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0988A1A9A68;
         Fri, 30 Sep 2022 14:08:07 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28UKPMMK014444;
-        Fri, 30 Sep 2022 21:08:03 GMT
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28UIr4Li035844;
+        Fri, 30 Sep 2022 21:08:04 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=jk1zeu+5loEGTFgs/Ym2Z5yREa/H9PEm+xC1Xp4u/HE=;
- b=jfDifOgZAzI5jPIAnRstBeyaOzWh5n4w974M+IwjgwvID1iAz0cMYYGzh1xJLWgpo1qy
- IeBPrkRfKoSZKsAoZlmgcJfrxWCwqWO00pRIi/E8TCYxHlm/JoVYjGbA5RShKqhwuJVB
- TdqAkRo7VfnX6IQgW+0YE1AtZ2cn6xweNZsOP3OrcRLP/z7mC12xq+Q6OlyFXBTUA5l0
- Q1Rw+XeK66pP4rwsK29SgNjCgqX2zU9AKa8NZvnVRZZuZZ6ontO+4uEosLtjisU0Fzv7
- mSES8kt/nk/DGrO4szR6iKdhLhUV+weYZwlu+zz4HbClODv/Bc7CFNpSgbqSM1L5lKVf KQ== 
+ bh=Vgu4PmT0iIBhqrHzLbhUPLUh6ZNPHDvATcyS2Zynq3g=;
+ b=hyQIAGX9Hrc/stjoTfpP4VEiE9Ahwf0sRcj30QSn0Ro+JwYC154h4sVV+TT3V/yn4Pd1
+ VLBiI88DDotmVsvG73hy1iDO6qRkMcbL8Nb9uP0U03RtE6R8r2CDrm+ZhsTfxxt/eJjN
+ wHS7F0dWrasz3o+wyoZShISLoF4NfzfmgsY2bgqJNxUs6mhVyW5M3xZYeVSJmHuBnPaD
+ cMA42qlHPQkZka+bm3mSUNE3VqbDRYChGz+YhmPIaFLpfzQouFhyIECnXQPc+GDcLIKx
+ qmIPREWvwKPubSboVPNrl8oU44u/tI/RlIfWDVVz+GhWg9Udish+anRRSS7oXJGR9U9S ZA== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3jx7fu0vwk-1
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jx64kkk5n-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Sep 2022 21:08:02 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28UL6I1q016040;
-        Fri, 30 Sep 2022 21:08:02 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3jx7fu0vvm-1
+        Fri, 30 Sep 2022 21:08:04 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28UKwoST020661;
+        Fri, 30 Sep 2022 21:08:03 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jx64kkk4x-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Sep 2022 21:08:02 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28UL6mH5013512;
-        Fri, 30 Sep 2022 21:08:00 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma05fra.de.ibm.com with ESMTP id 3jssh8xecx-1
+        Fri, 30 Sep 2022 21:08:03 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28UL5mmA001205;
+        Fri, 30 Sep 2022 21:08:01 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma06ams.nl.ibm.com with ESMTP id 3jss5j8mcg-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Sep 2022 21:07:59 +0000
+        Fri, 30 Sep 2022 21:08:01 +0000
 Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28UL7uXZ51249492
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28UL7wut61145548
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 30 Sep 2022 21:07:56 GMT
+        Fri, 30 Sep 2022 21:07:58 GMT
 Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C6424A405B;
-        Fri, 30 Sep 2022 21:07:56 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 4A73DA4062;
+        Fri, 30 Sep 2022 21:07:58 +0000 (GMT)
 Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4F5CDA405F;
-        Fri, 30 Sep 2022 21:07:56 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id D1DB4A405C;
+        Fri, 30 Sep 2022 21:07:57 +0000 (GMT)
 Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
         by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 30 Sep 2022 21:07:56 +0000 (GMT)
+        Fri, 30 Sep 2022 21:07:57 +0000 (GMT)
 From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
 To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
         Janosch Frank <frankja@linux.ibm.com>,
@@ -74,255 +74,124 @@ Cc:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Shuah Khan <shuah@kernel.org>,
         Sven Schnelle <svens@linux.ibm.com>
-Subject: [PATCH v1 1/9] s390/uaccess: Add storage key checked cmpxchg access to user space
-Date:   Fri, 30 Sep 2022 23:07:43 +0200
-Message-Id: <20220930210751.225873-2-scgl@linux.ibm.com>
+Subject: [PATCH v1 4/9] KVM: s390: selftest: memop: Pass mop_desc via pointer
+Date:   Fri, 30 Sep 2022 23:07:46 +0200
+Message-Id: <20220930210751.225873-5-scgl@linux.ibm.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220930210751.225873-1-scgl@linux.ibm.com>
 References: <20220930210751.225873-1-scgl@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: TV5rZKglr--WDSt1gJEGP5LEOCEFp6K4
-X-Proofpoint-ORIG-GUID: tIcY3nhQ7nPiDic3myE1MDs76I_IFret
+X-Proofpoint-ORIG-GUID: Q20Y3gA6pPRrrLcq-uWC3i4On1qoKfCb
+X-Proofpoint-GUID: BtIPHOiYHSVYdmGv6M5_7EhC7zprgB8U
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
  definitions=2022-09-30_04,2022-09-29_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- lowpriorityscore=0 impostorscore=0 malwarescore=0 clxscore=1015
- bulkscore=0 mlxscore=0 mlxlogscore=999 phishscore=0 suspectscore=0
- priorityscore=1501 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2209130000 definitions=main-2209300131
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ lowpriorityscore=0 adultscore=0 clxscore=1015 malwarescore=0 bulkscore=0
+ impostorscore=0 phishscore=0 mlxscore=0 spamscore=0 mlxlogscore=999
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209300131
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add cmpxchg functionality similar to that in cmpxchg.h except that the
-target is a user space address and that the address' storage key is
-matched with the access_key argument in order to honor key-controlled
-protection.
-The access is performed by changing to the secondary-spaces mode and
-setting the PSW key for the duration of the compare and swap.
+The struct is quite large, so this seems nicer.
 
 Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
 ---
+ tools/testing/selftests/kvm/s390x/memop.c | 44 +++++++++++------------
+ 1 file changed, 22 insertions(+), 22 deletions(-)
 
-
-Possible variations:
-  * check the assumptions made in cmpxchg_user_key_size and error out
-  * call functions called by copy_to_user
-     * access_ok? is a nop
-     * should_fail_usercopy?
-     * instrument_copy_to_user? doesn't make sense IMO
-  * don't be overly strict in cmpxchg_user_key
-
-
- arch/s390/include/asm/uaccess.h | 187 ++++++++++++++++++++++++++++++++
- 1 file changed, 187 insertions(+)
-
-diff --git a/arch/s390/include/asm/uaccess.h b/arch/s390/include/asm/uaccess.h
-index f7038b800cc3..0ce90b7e2b75 100644
---- a/arch/s390/include/asm/uaccess.h
-+++ b/arch/s390/include/asm/uaccess.h
-@@ -19,6 +19,8 @@
- #include <asm/extable.h>
- #include <asm/facility.h>
- #include <asm-generic/access_ok.h>
-+#include <asm/page.h>
-+#include <linux/log2.h>
+diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
+index 9113696d5178..69869c7e2ab1 100644
+--- a/tools/testing/selftests/kvm/s390x/memop.c
++++ b/tools/testing/selftests/kvm/s390x/memop.c
+@@ -48,53 +48,53 @@ struct mop_desc {
+ 	uint8_t key;
+ };
  
- void debug_user_asce(int exit);
+-static struct kvm_s390_mem_op ksmo_from_desc(struct mop_desc desc)
++static struct kvm_s390_mem_op ksmo_from_desc(const struct mop_desc *desc)
+ {
+ 	struct kvm_s390_mem_op ksmo = {
+-		.gaddr = (uintptr_t)desc.gaddr,
+-		.size = desc.size,
+-		.buf = ((uintptr_t)desc.buf),
++		.gaddr = (uintptr_t)desc->gaddr,
++		.size = desc->size,
++		.buf = ((uintptr_t)desc->buf),
+ 		.reserved = "ignored_ignored_ignored_ignored"
+ 	};
  
-@@ -390,4 +392,189 @@ do {									\
- 		goto err_label;						\
- } while (0)
+-	switch (desc.target) {
++	switch (desc->target) {
+ 	case LOGICAL:
+-		if (desc.mode == READ)
++		if (desc->mode == READ)
+ 			ksmo.op = KVM_S390_MEMOP_LOGICAL_READ;
+-		if (desc.mode == WRITE)
++		if (desc->mode == WRITE)
+ 			ksmo.op = KVM_S390_MEMOP_LOGICAL_WRITE;
+ 		break;
+ 	case SIDA:
+-		if (desc.mode == READ)
++		if (desc->mode == READ)
+ 			ksmo.op = KVM_S390_MEMOP_SIDA_READ;
+-		if (desc.mode == WRITE)
++		if (desc->mode == WRITE)
+ 			ksmo.op = KVM_S390_MEMOP_SIDA_WRITE;
+ 		break;
+ 	case ABSOLUTE:
+-		if (desc.mode == READ)
++		if (desc->mode == READ)
+ 			ksmo.op = KVM_S390_MEMOP_ABSOLUTE_READ;
+-		if (desc.mode == WRITE)
++		if (desc->mode == WRITE)
+ 			ksmo.op = KVM_S390_MEMOP_ABSOLUTE_WRITE;
+ 		break;
+ 	case INVALID:
+ 		ksmo.op = -1;
+ 	}
+-	if (desc.f_check)
++	if (desc->f_check)
+ 		ksmo.flags |= KVM_S390_MEMOP_F_CHECK_ONLY;
+-	if (desc.f_inject)
++	if (desc->f_inject)
+ 		ksmo.flags |= KVM_S390_MEMOP_F_INJECT_EXCEPTION;
+-	if (desc._set_flags)
+-		ksmo.flags = desc.set_flags;
+-	if (desc.f_key) {
++	if (desc->_set_flags)
++		ksmo.flags = desc->set_flags;
++	if (desc->f_key) {
+ 		ksmo.flags |= KVM_S390_MEMOP_F_SKEY_PROTECTION;
+-		ksmo.key = desc.key;
++		ksmo.key = desc->key;
+ 	}
+-	if (desc._ar)
+-		ksmo.ar = desc.ar;
++	if (desc->_ar)
++		ksmo.ar = desc->ar;
+ 	else
+ 		ksmo.ar = 0;
+-	if (desc._sida_offset)
+-		ksmo.sida_offset = desc.sida_offset;
++	if (desc->_sida_offset)
++		ksmo.sida_offset = desc->sida_offset;
  
-+static __always_inline int __cmpxchg_user_key_small(int size, u64 address,
-+						    unsigned __int128 *old_p,
-+						    unsigned __int128 new, u8 access_key)
-+{
-+	u32 shift, mask, old_word, new_word, align_mask, tmp, diff;
-+	u64 aligned;
-+	int ret = -EFAULT;
-+
-+	switch (size) {
-+	case 2:
-+		align_mask = 2;
-+		aligned = (address ^ (address & align_mask));
-+		shift = (sizeof(u32) - (address & align_mask) - size) * 8;
-+		mask = 0xffff << shift;
-+		old_word = ((u16)*old_p) << shift;
-+		new_word = ((u16)new) << shift;
-+		break;
-+	case 1:
-+		align_mask = 3;
-+		aligned = (address ^ (address & align_mask));
-+		shift = (sizeof(u32) - (address & align_mask) - size) * 8;
-+		mask = 0xff << shift;
-+		old_word = ((u8)*old_p) << shift;
-+		new_word = ((u8)new) << shift;
-+		break;
-+	}
-+	asm volatile(
-+		       "spka	0(%[access_key])\n"
-+		"	sacf	256\n"
-+		"0:	l	%[tmp],%[aligned]\n"
-+		"1:	nr	%[tmp],%[hole_mask]\n"
-+		"	or	%[new_word],%[tmp]\n"
-+		"	or	%[old_word],%[tmp]\n"
-+		"	lr	%[tmp],%[old_word]\n"
-+		"2:	cs	%[tmp],%[new_word],%[aligned]\n"
-+		"3:	jnl	4f\n"
-+		"	xrk	%[diff],%[tmp],%[old_word]\n"
-+		"	nr	%[diff],%[hole_mask]\n"
-+		"	xr	%[new_word],%[diff]\n"
-+		"	xr	%[old_word],%[diff]\n"
-+		"	xrk	%[diff],%[tmp],%[old_word]\n"
-+		"	jz	2b\n"
-+		"4:	ipm	%[ret]\n"
-+		"	srl	%[ret],28\n"
-+		"5:	sacf	768\n"
-+		"	spka	%[default_key]\n"
-+		EX_TABLE(0b, 5b) EX_TABLE(1b, 5b)
-+		EX_TABLE(2b, 5b) EX_TABLE(3b, 5b)
-+		: [old_word] "+&d" (old_word),
-+		  [new_word] "+&d" (new_word),
-+		  [tmp] "=&d" (tmp),
-+		  [aligned] "+Q" (*(u32 *)aligned),
-+		  [diff] "=&d" (diff),
-+		  [ret] "+d" (ret)
-+		: [access_key] "a" (access_key << 4),
-+		  [hole_mask] "d" (~mask),
-+		  [default_key] "J" (PAGE_DEFAULT_KEY)
-+		: "cc"
-+	);
-+	*old_p = (tmp & mask) >> shift;
-+	return ret;
-+}
-+
-+/**
-+ * cmpxchg_user_key_size() - cmpxchg with user space target, honoring storage keys
-+ * @size: Size of the value being cmpxchg'ed, one of 1,2,4,8,16.
-+ * @address: User space address of value to compare to *@old_p and exchange with
-+ *           *@new. Must be aligned to @size.
-+ * @old_p: Pointer to old value. Interpreted as a @size byte integer and compared
-+ *         to the content pointed to by @address in order to determine if the
-+ *         exchange occurs. The value read from @address is written back to *@old_p.
-+ * @new: New value to place at @address, interpreted as a @size byte integer.
-+ * @access_key: Access key to use for checking storage key protection.
-+ *
-+ * Perform a cmpxchg on a user space target, honoring storage key protection.
-+ * @access_key alone determines how key checking is performed, neither
-+ * storage-protection-override nor fetch-protection-override apply.
-+ *
-+ * Return:	0: successful exchange
-+ *		1: exchange failed
-+ *		-EFAULT: @address not accessible or not naturally aligned
-+ *		-EINVAL: invalid @size
-+ */
-+static __always_inline int cmpxchg_user_key_size(int size, void __user *address,
-+						 unsigned __int128 *old_p,
-+						 unsigned __int128 new, u8 access_key)
-+{
-+	union {
-+		u32 word;
-+		u64 doubleword;
-+	} old;
-+	int ret = -EFAULT;
-+
-+	/*
-+	 * The following assumes that:
-+	 *  * the current psw key is the default key
-+	 *  * no storage protection overrides are in effect
-+	 */
-+	might_fault();
-+	switch (size) {
-+	case 16:
-+		asm volatile(
-+			       "spka	0(%[access_key])\n"
-+			"	sacf	256\n"
-+			"0:	cdsg	%[old],%[new],%[target]\n"
-+			"1:	ipm	%[ret]\n"
-+			"	srl	%[ret],28\n"
-+			"2:	sacf	768\n"
-+			"	spka	%[default_key]\n"
-+			EX_TABLE(0b, 2b) EX_TABLE(1b, 2b)
-+			: [old] "+d" (*old_p),
-+			  [target] "+Q" (*(unsigned __int128 __user *)address),
-+			  [ret] "+d" (ret)
-+			: [access_key] "a" (access_key << 4),
-+			  [new] "d" (new),
-+			  [default_key] "J" (PAGE_DEFAULT_KEY)
-+			: "cc"
-+		);
-+		return ret;
-+	case 8:
-+		old.doubleword = *old_p;
-+		asm volatile(
-+			       "spka	0(%[access_key])\n"
-+			"	sacf	256\n"
-+			"0:	csg	%[old],%[new],%[target]\n"
-+			"1:	ipm	%[ret]\n"
-+			"	srl	%[ret],28\n"
-+			"2:	sacf	768\n"
-+			"	spka	%[default_key]\n"
-+			EX_TABLE(0b, 2b) EX_TABLE(1b, 2b)
-+			: [old] "+d" (old.doubleword),
-+			  [target] "+Q" (*(u64 __user *)address),
-+			  [ret] "+d" (ret)
-+			: [access_key] "a" (access_key << 4),
-+			  [new] "d" ((u64)new),
-+			  [default_key] "J" (PAGE_DEFAULT_KEY)
-+			: "cc"
-+		);
-+		*old_p = old.doubleword;
-+		return ret;
-+	case 4:
-+		old.word = *old_p;
-+		asm volatile(
-+			       "spka	0(%[access_key])\n"
-+			"	sacf	256\n"
-+			"0:	cs	%[old],%[new],%[target]\n"
-+			"1:	ipm	%[ret]\n"
-+			"	srl	%[ret],28\n"
-+			"2:	sacf	768\n"
-+			"	spka	%[default_key]\n"
-+			EX_TABLE(0b, 2b) EX_TABLE(1b, 2b)
-+			: [old] "+d" (old.word),
-+			  [target] "+Q" (*(u32 __user *)address),
-+			  [ret] "+d" (ret)
-+			: [access_key] "a" (access_key << 4),
-+			  [new] "d" ((u32)new),
-+			  [default_key] "J" (PAGE_DEFAULT_KEY)
-+			: "cc"
-+		);
-+		*old_p = old.word;
-+		return ret;
-+	case 2:
-+	case 1:
-+		return __cmpxchg_user_key_small(size, (u64)address, old_p, new, access_key);
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+#define cmpxchg_user_key(target_p, old_p, new, access_key)			\
-+({										\
-+	__typeof__(old_p) __old_p = (old_p);					\
-+	unsigned __int128 __old = *__old_p;					\
-+	size_t __size = sizeof(*(target_p));					\
-+	int __ret;								\
-+										\
-+	BUILD_BUG_ON(__size != sizeof(*__old_p));				\
-+	BUILD_BUG_ON(__size != sizeof(new));					\
-+	BUILD_BUG_ON(__size > 16 || !is_power_of_2(__size));			\
-+	__ret = cmpxchg_user_key_size(__size, (target_p), &__old, (new),	\
-+				      (access_key));				\
-+	*__old_p = __old;							\
-+	__ret;									\
-+})
-+
- #endif /* __S390_UACCESS_H */
+ 	return ksmo;
+ }
+@@ -183,7 +183,7 @@ static int err_memop_ioctl(struct test_info info, struct kvm_s390_mem_op *ksmo)
+ 		else								\
+ 			__desc.gaddr = __desc.gaddr_v;				\
+ 	}									\
+-	__ksmo = ksmo_from_desc(__desc);					\
++	__ksmo = ksmo_from_desc(&__desc);					\
+ 	print_memop(__info.vcpu, &__ksmo);					\
+ 	err##memop_ioctl(__info, &__ksmo);					\
+ })
 -- 
 2.34.1
 
