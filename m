@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48CC2C433FE
-	for <linux-kselftest@archiver.kernel.org>; Fri, 30 Sep 2022 14:21:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FCD1C4332F
+	for <linux-kselftest@archiver.kernel.org>; Fri, 30 Sep 2022 14:21:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231932AbiI3OV1 (ORCPT
+        id S231948AbiI3OVh (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 30 Sep 2022 10:21:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45758 "EHLO
+        Fri, 30 Sep 2022 10:21:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231955AbiI3OVA (ORCPT
+        with ESMTP id S231985AbiI3OVF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 30 Sep 2022 10:21:00 -0400
+        Fri, 30 Sep 2022 10:21:05 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA924129FEF
-        for <linux-kselftest@vger.kernel.org>; Fri, 30 Sep 2022 07:20:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A511A1EB9
+        for <linux-kselftest@vger.kernel.org>; Fri, 30 Sep 2022 07:21:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664547658;
+        s=mimecast20190719; t=1664547660;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=5Os3ebntrNckY9ikYeoLSgVh4tT4cYPUxPafC1slc+E=;
-        b=dy/ugYIt+LnElsYP/PUIUw22n0+LFPdAZ/cwS2dz9Eq3dTT/RRwSbUbRLZ6Ah+os1UbOU5
-        aeRjnSLE+mDUqArZKvFXrbqU1G5w65AdJbqCf9brHQ8MsVSGftaSswnWpz8MYlIQS7g8pL
-        6Upo6C4GZaO17Yk43jSZ2y3YS93FsMo=
+        bh=NRwNrzzGpz8bO60Pn63vXNqmewRV7ohymI+Kzy3OQVY=;
+        b=LOyetPor1pjK/1INiyl7VTQQkf4tNUmRZnUVuKdyxnxwVCOKWv1QuRUZ7gC2Y6wMP3tbbd
+        bOLWQrmsrhFwrGzapmD1/gh3e9otO2YjCbTxUdTcEWl1my3UDBZwe4m00QUCMz9/yrFy9a
+        C3/CNN5F/pD1gK4fb0dt9nRtUef9xSQ=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-168-gjvSGRHeOl-RFUWtXhoFUQ-1; Fri, 30 Sep 2022 10:20:33 -0400
-X-MC-Unique: gjvSGRHeOl-RFUWtXhoFUQ-1
+ us-mta-192-ced8YZfqPOWKMAfTZSCfpQ-1; Fri, 30 Sep 2022 10:20:56 -0400
+X-MC-Unique: ced8YZfqPOWKMAfTZSCfpQ-1
 Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C1544101E150;
-        Fri, 30 Sep 2022 14:20:32 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 03AAE855305;
+        Fri, 30 Sep 2022 14:20:56 +0000 (UTC)
 Received: from t480s.redhat.com (unknown [10.39.194.187])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 92C461121315;
-        Fri, 30 Sep 2022 14:20:30 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DE74A112132C;
+        Fri, 30 Sep 2022 14:20:46 +0000 (UTC)
 From:   David Hildenbrand <david@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
@@ -50,9 +50,9 @@ Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
         "Matthew Wilcox (Oracle)" <willy@infradead.org>,
         Jason Gunthorpe <jgg@nvidia.com>,
         John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH v1 5/7] mm/pagewalk: add walk_page_range_vma()
-Date:   Fri, 30 Sep 2022 16:19:29 +0200
-Message-Id: <20220930141931.174362-6-david@redhat.com>
+Subject: [PATCH v1 7/7] mm/gup: remove FOLL_MIGRATION
+Date:   Fri, 30 Sep 2022 16:19:31 +0200
+Message-Id: <20220930141931.174362-8-david@redhat.com>
 In-Reply-To: <20220930141931.174362-1-david@redhat.com>
 References: <20220930141931.174362-1-david@redhat.com>
 MIME-Version: 1.0
@@ -62,69 +62,117 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Let's add walk_page_range_vma(), which is similar to walk_page_vma(),
-however, is only interested in a subset of the VMA range.
-
-To be used in KSM code to stop using follow_page() next.
+Fortunately, the last user (KSM) is gone, so let's just remove this
+rather special code from generic GUP handling -- especially because KSM
+never required the PMD handling as KSM only deals with individual base
+pages.
 
 Signed-off-by: David Hildenbrand <david@redhat.com>
 ---
- include/linux/pagewalk.h |  3 +++
- mm/pagewalk.c            | 27 +++++++++++++++++++++++++++
- 2 files changed, 30 insertions(+)
+ include/linux/mm.h |  1 -
+ mm/gup.c           | 55 +++++-----------------------------------------
+ 2 files changed, 5 insertions(+), 51 deletions(-)
 
-diff --git a/include/linux/pagewalk.h b/include/linux/pagewalk.h
-index f3fafb731ffd..2f8f6cc980b4 100644
---- a/include/linux/pagewalk.h
-+++ b/include/linux/pagewalk.h
-@@ -99,6 +99,9 @@ int walk_page_range_novma(struct mm_struct *mm, unsigned long start,
- 			  unsigned long end, const struct mm_walk_ops *ops,
- 			  pgd_t *pgd,
- 			  void *private);
-+int walk_page_range_vma(struct vm_area_struct *vma, unsigned long start,
-+			unsigned long end, const struct mm_walk_ops *ops,
-+			void *private);
- int walk_page_vma(struct vm_area_struct *vma, const struct mm_walk_ops *ops,
- 		void *private);
- int walk_page_mapping(struct address_space *mapping, pgoff_t first_index,
-diff --git a/mm/pagewalk.c b/mm/pagewalk.c
-index 131b2b335b2c..757c075da231 100644
---- a/mm/pagewalk.c
-+++ b/mm/pagewalk.c
-@@ -514,6 +514,33 @@ int walk_page_range_novma(struct mm_struct *mm, unsigned long start,
- 	return __walk_page_range(start, end, &walk);
- }
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index e56dd8f7eae1..4c176e308ead 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -2942,7 +2942,6 @@ struct page *follow_page(struct vm_area_struct *vma, unsigned long address,
+ 				 * and return without waiting upon it */
+ #define FOLL_NOFAULT	0x80	/* do not fault in pages */
+ #define FOLL_HWPOISON	0x100	/* check page is hwpoisoned */
+-#define FOLL_MIGRATION	0x400	/* wait for page to replace migration entry */
+ #define FOLL_TRIED	0x800	/* a retry, previous pass started an IO */
+ #define FOLL_REMOTE	0x2000	/* we are working on non-current tsk/mm */
+ #define FOLL_ANON	0x8000	/* don't do file mappings */
+diff --git a/mm/gup.c b/mm/gup.c
+index ce00a4c40da8..37195c549f68 100644
+--- a/mm/gup.c
++++ b/mm/gup.c
+@@ -537,30 +537,13 @@ static struct page *follow_page_pte(struct vm_area_struct *vma,
+ 	if (WARN_ON_ONCE((flags & (FOLL_PIN | FOLL_GET)) ==
+ 			 (FOLL_PIN | FOLL_GET)))
+ 		return ERR_PTR(-EINVAL);
+-retry:
+ 	if (unlikely(pmd_bad(*pmd)))
+ 		return no_page_table(vma, flags);
  
-+int walk_page_range_vma(struct vm_area_struct *vma, unsigned long start,
-+			unsigned long end, const struct mm_walk_ops *ops,
-+			void *private)
-+{
-+	struct mm_walk walk = {
-+		.ops		= ops,
-+		.mm		= vma->vm_mm,
-+		.vma		= vma,
-+		.private	= private,
-+	};
-+	int err;
-+
-+	if (start >= end || !walk.mm)
-+		return -EINVAL;
-+	if (start < vma->vm_start || end > vma->vm_end)
-+		return -EINVAL;
-+
-+	mmap_assert_locked(walk.mm);
-+
-+	err = walk_page_test(start, end, &walk);
-+	if (err > 0)
-+		return 0;
-+	if (err < 0)
-+		return err;
-+	return __walk_page_range(start, end, &walk);
-+}
-+
- int walk_page_vma(struct vm_area_struct *vma, const struct mm_walk_ops *ops,
- 		void *private)
- {
+ 	ptep = pte_offset_map_lock(mm, pmd, address, &ptl);
+ 	pte = *ptep;
+-	if (!pte_present(pte)) {
+-		swp_entry_t entry;
+-		/*
+-		 * KSM's break_ksm() relies upon recognizing a ksm page
+-		 * even while it is being migrated, so for that case we
+-		 * need migration_entry_wait().
+-		 */
+-		if (likely(!(flags & FOLL_MIGRATION)))
+-			goto no_page;
+-		if (pte_none(pte))
+-			goto no_page;
+-		entry = pte_to_swp_entry(pte);
+-		if (!is_migration_entry(entry))
+-			goto no_page;
+-		pte_unmap_unlock(ptep, ptl);
+-		migration_entry_wait(mm, pmd, address);
+-		goto retry;
+-	}
++	if (!pte_present(pte))
++		goto no_page;
+ 	if (pte_protnone(pte) && !gup_can_follow_protnone(flags))
+ 		goto no_page;
+ 
+@@ -682,28 +665,8 @@ static struct page *follow_pmd_mask(struct vm_area_struct *vma,
+ 			return page;
+ 		return no_page_table(vma, flags);
+ 	}
+-retry:
+-	if (!pmd_present(pmdval)) {
+-		/*
+-		 * Should never reach here, if thp migration is not supported;
+-		 * Otherwise, it must be a thp migration entry.
+-		 */
+-		VM_BUG_ON(!thp_migration_supported() ||
+-				  !is_pmd_migration_entry(pmdval));
+-
+-		if (likely(!(flags & FOLL_MIGRATION)))
+-			return no_page_table(vma, flags);
+-
+-		pmd_migration_entry_wait(mm, pmd);
+-		pmdval = READ_ONCE(*pmd);
+-		/*
+-		 * MADV_DONTNEED may convert the pmd to null because
+-		 * mmap_lock is held in read mode
+-		 */
+-		if (pmd_none(pmdval))
+-			return no_page_table(vma, flags);
+-		goto retry;
+-	}
++	if (!pmd_present(pmdval))
++		return no_page_table(vma, flags);
+ 	if (pmd_devmap(pmdval)) {
+ 		ptl = pmd_lock(mm, pmd);
+ 		page = follow_devmap_pmd(vma, address, pmd, flags, &ctx->pgmap);
+@@ -717,18 +680,10 @@ static struct page *follow_pmd_mask(struct vm_area_struct *vma,
+ 	if (pmd_protnone(pmdval) && !gup_can_follow_protnone(flags))
+ 		return no_page_table(vma, flags);
+ 
+-retry_locked:
+ 	ptl = pmd_lock(mm, pmd);
+-	if (unlikely(pmd_none(*pmd))) {
+-		spin_unlock(ptl);
+-		return no_page_table(vma, flags);
+-	}
+ 	if (unlikely(!pmd_present(*pmd))) {
+ 		spin_unlock(ptl);
+-		if (likely(!(flags & FOLL_MIGRATION)))
+-			return no_page_table(vma, flags);
+-		pmd_migration_entry_wait(mm, pmd);
+-		goto retry_locked;
++		return no_page_table(vma, flags);
+ 	}
+ 	if (unlikely(!pmd_trans_huge(*pmd))) {
+ 		spin_unlock(ptl);
 -- 
 2.37.3
 
