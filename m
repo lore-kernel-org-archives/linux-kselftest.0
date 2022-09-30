@@ -2,157 +2,94 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD2ECC433F5
-	for <linux-kselftest@archiver.kernel.org>; Fri, 30 Sep 2022 05:42:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7F26C433F5
+	for <linux-kselftest@archiver.kernel.org>; Fri, 30 Sep 2022 06:39:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229534AbiI3Fmn (ORCPT
+        id S229797AbiI3Gjo (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 30 Sep 2022 01:42:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58928 "EHLO
+        Fri, 30 Sep 2022 02:39:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiI3Fmm (ORCPT
+        with ESMTP id S229620AbiI3Gjn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 30 Sep 2022 01:42:42 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9468718A49A;
-        Thu, 29 Sep 2022 22:42:40 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id D4E701884C74;
-        Fri, 30 Sep 2022 05:42:37 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id CC22E2500370;
-        Fri, 30 Sep 2022 05:42:37 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id BB3929EC0010; Fri, 30 Sep 2022 05:42:37 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Fri, 30 Sep 2022 02:39:43 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E679EFAFD;
+        Thu, 29 Sep 2022 23:39:40 -0700 (PDT)
+Received: from canpemm500005.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Mf0pc0ZFGzlVkt;
+        Fri, 30 Sep 2022 14:35:20 +0800 (CST)
+Received: from ubuntu1804.huawei.com (10.67.174.63) by
+ canpemm500005.china.huawei.com (7.192.104.229) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 30 Sep 2022 14:39:38 +0800
+From:   Zhao Gongyi <zhaogongyi@huawei.com>
+To:     <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>
+CC:     <akinobu.mita@gmail.com>, <corbet@lwn.net>, <david@redhat.com>,
+        <osalvador@suse.de>, <shuah@kernel.org>, <zhaogongyi@huawei.com>
+Subject: [PATCH -next v5 1/4] selftests/memory-hotplug: Add checking after online or offline
+Date:   Fri, 30 Sep 2022 14:35:24 +0800
+Message-ID: <20220930063527.108389-2-zhaogongyi@huawei.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220930063527.108389-1-zhaogongyi@huawei.com>
+References: <20220930063527.108389-1-zhaogongyi@huawei.com>
 MIME-Version: 1.0
-Date:   Fri, 30 Sep 2022 07:42:37 +0200
-From:   netdev@kapio-technology.com
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v6 net-next 0/9] Extend locked port feature with FDB
- locked flag (MAC-Auth/MAB)
-In-Reply-To: <20220929112744.27cc969b@kernel.org>
-References: <20220928150256.115248-1-netdev@kapio-technology.com>
- <20220929091036.3812327f@kernel.org>
- <12587604af1ed79be4d3a1607987483a@kapio-technology.com>
- <20220929112744.27cc969b@kernel.org>
-User-Agent: Gigahost Webmail
-Message-ID: <ab488e3d1b9d456ae96cfd84b724d939@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.67.174.63]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500005.china.huawei.com (7.192.104.229)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2022-09-29 20:27, Jakub Kicinski wrote:
-> On Thu, 29 Sep 2022 18:37:09 +0200 netdev@kapio-technology.com wrote:
->> On 2022-09-29 18:10, Jakub Kicinski wrote:
->> > On Wed, 28 Sep 2022 17:02:47 +0200 Hans Schultz wrote:
->> >> From: "Hans J. Schultz" <netdev@kapio-technology.com>
->> >>
->> >> This patch set extends the locked port feature for devices
->> >> that are behind a locked port, but do not have the ability to
->> >> authorize themselves as a supplicant using IEEE 802.1X.
->> >> Such devices can be printers, meters or anything related to
->> >> fixed installations. Instead of 802.1X authorization, devices
->> >> can get access based on their MAC addresses being whitelisted.
->> >
->> > Try a allmodconfig build on latest net-next, seems broken.
+Add checking for online_memory_expect_success()/
+offline_memory_expect_success()/offline_memory_expect_fail(), or
+the test would exit 0 although the functions return 1.
 
-Obviously my method of selecting all switchcore drivers with sub-options 
-under menuconfig was not sufficient, and I didn't know of the 
-allmodconfig option, otherwise I would have used it.
+Signed-off-by: Zhao Gongyi <zhaogongyi@huawei.com>
+---
+ .../selftests/memory-hotplug/mem-on-off-test.sh      | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-So the question is if I should repost the fixed patch-set or I need to 
-make a new version?
+diff --git a/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh b/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh
+index 46a97f318f58..1d87611a7d52 100755
+--- a/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh
++++ b/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh
+@@ -266,7 +266,9 @@ done
+ #
+ echo $error > $NOTIFIER_ERR_INJECT_DIR/actions/MEM_GOING_ONLINE/error
+ for memory in `hotpluggable_offline_memory`; do
+-	online_memory_expect_fail $memory
++	if ! online_memory_expect_fail $memory; then
++		retval=1
++	fi
+ done
 
-Anyhow I hope that there will not be problems when running the 
-selftests, as I have not been able to do so with my system, so there can 
-be more that needs to be changed.
+ #
+@@ -274,7 +276,9 @@ done
+ #
+ echo 0 > $NOTIFIER_ERR_INJECT_DIR/actions/MEM_GOING_ONLINE/error
+ for memory in `hotpluggable_offline_memory`; do
+-	online_memory_expect_success $memory
++	if ! online_memory_expect_success $memory; then
++		retval=1
++	fi
+ done
 
-If anyone needs it, here is the compile fix patch:
+ #
+@@ -283,7 +287,9 @@ done
+ echo $error > $NOTIFIER_ERR_INJECT_DIR/actions/MEM_GOING_OFFLINE/error
+ for memory in `hotpluggable_online_memory`; do
+ 	if [ $((RANDOM % 100)) -lt $ratio ]; then
+-		offline_memory_expect_fail $memory
++		if ! offline_memory_expect_fail $memory; then
++			retval=1
++		fi
+ 	fi
+ done
 
-diff --git a/drivers/net/dsa/qca/qca8k-common.c 
-b/drivers/net/dsa/qca/qca8k-common.c
-index 0c5f49de6729..e26a9a483955 100644
---- a/drivers/net/dsa/qca/qca8k-common.c
-+++ b/drivers/net/dsa/qca/qca8k-common.c
-@@ -809,7 +809,7 @@ int qca8k_port_fdb_add(struct dsa_switch *ds, int 
-port,
+--
+2.17.1
 
-  int qca8k_port_fdb_del(struct dsa_switch *ds, int port,
-  		       const unsigned char *addr, u16 vid,
--		       struct dsa_db db)
-+		       u16 fdb_flags, struct dsa_db db)
-  {
-  	struct qca8k_priv *priv = (struct qca8k_priv *)ds->priv;
-  	u16 port_mask = BIT(port);
-diff --git a/drivers/net/dsa/sja1105/sja1105_main.c 
-b/drivers/net/dsa/sja1105/sja1105_main.c
-index 1f12a5b89c91..526177813d53 100644
---- a/drivers/net/dsa/sja1105/sja1105_main.c
-+++ b/drivers/net/dsa/sja1105/sja1105_main.c
-@@ -1938,7 +1938,7 @@ static void sja1105_fast_age(struct dsa_switch 
-*ds, int port)
-
-  		u64_to_ether_addr(l2_lookup.macaddr, macaddr);
-
--		rc = sja1105_fdb_del(ds, port, macaddr, l2_lookup.vlanid, db);
-+		rc = sja1105_fdb_del(ds, port, macaddr, l2_lookup.vlanid, 0, db);
-  		if (rc) {
-  			dev_err(ds->dev,
-  				"Failed to delete FDB entry %pM vid %lld: %pe\n",
-@@ -1952,14 +1952,14 @@ static int sja1105_mdb_add(struct dsa_switch 
-*ds, int port,
-  			   const struct switchdev_obj_port_mdb *mdb,
-  			   struct dsa_db db)
-  {
--	return sja1105_fdb_add(ds, port, mdb->addr, mdb->vid, false, db);
-+	return sja1105_fdb_add(ds, port, mdb->addr, mdb->vid, 0, db);
-  }
-
-  static int sja1105_mdb_del(struct dsa_switch *ds, int port,
-  			   const struct switchdev_obj_port_mdb *mdb,
-  			   struct dsa_db db)
-  {
--	return sja1105_fdb_del(ds, port, mdb->addr, mdb->vid, db);
-+	return sja1105_fdb_del(ds, port, mdb->addr, mdb->vid, 0, db);
-  }
-
-  /* Common function for unicast and broadcast flood configuration.
