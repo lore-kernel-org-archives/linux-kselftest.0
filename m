@@ -2,111 +2,80 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95008C433FE
-	for <linux-kselftest@archiver.kernel.org>; Tue,  4 Oct 2022 08:21:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1D0CC433F5
+	for <linux-kselftest@archiver.kernel.org>; Tue,  4 Oct 2022 09:39:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230019AbiJDIVT (ORCPT
+        id S230055AbiJDJjJ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 4 Oct 2022 04:21:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53108 "EHLO
+        Tue, 4 Oct 2022 05:39:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiJDIVR (ORCPT
+        with ESMTP id S231414AbiJDJir (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 4 Oct 2022 04:21:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C71D1B9F2
-        for <linux-kselftest@vger.kernel.org>; Tue,  4 Oct 2022 01:21:16 -0700 (PDT)
+        Tue, 4 Oct 2022 05:38:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2F615A1E
+        for <linux-kselftest@vger.kernel.org>; Tue,  4 Oct 2022 02:35:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664871675;
+        s=mimecast20190719; t=1664876101;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ey2tkE+Uksmp2pmcaxq0Z3p4VeNfOuZjcREwwMwZJB8=;
-        b=SzRWaNvy8vQLBNN4xzJmQPa/GhEZaKMLoBSdUzlfS89NqmoWgv84+/B1PjSvvO1s3bvTGD
-        f9NwA4LC6Kp7pbDCwPVtF5cktf/fXakylAeSYvCdul6YaRGiGdhW+0RVOx0EjoRF3f/Z8t
-        41qrAFi1vK45pRIDsSyv38dpeEOQK2A=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-375-ohEL88UiO66aCr1fs-BYRg-1; Tue, 04 Oct 2022 04:21:14 -0400
-X-MC-Unique: ohEL88UiO66aCr1fs-BYRg-1
-Received: by mail-wr1-f69.google.com with SMTP id p7-20020adfba87000000b0022cc6f805b1so3806452wrg.21
-        for <linux-kselftest@vger.kernel.org>; Tue, 04 Oct 2022 01:21:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=ey2tkE+Uksmp2pmcaxq0Z3p4VeNfOuZjcREwwMwZJB8=;
-        b=j56V+KI46vtECYUUbajl8NmHqlteBRZgRaIAsD3KBXeYre517l/S+NDzGYag34j5ET
-         m+cRifU7Uof+7TSa+E7D36qIH2tXxxtejC4qssKn90JcRixdYs9h7ukhVW22ZWKfFz4g
-         +o6qR1NxVSGVOZ9zNgiHu0CspK6nqqfkSk6GW1vpnAIeMeBjdr6c7Os+Brzh33XeVumZ
-         zZ8EU53SoNKfA5OaU6e+Gg18QU9LwV5Dm7US3UIptQLIjZu8DpIl5ZgCarfYXzhSFOh4
-         3pGAPUMwsNqasWM4w8rwR23zh9Lc/285RnbCG9+Bnwv8XoVQItC9hxsXyRcd3drMfYUI
-         QAWA==
-X-Gm-Message-State: ACrzQf1k3NgkWOaCrcW2QaHecPqbctf/dgvFhVoMGNulc12/OJfTZodx
-        tClAr5IK4zuBvPGdQB0ObwphSgZynJYMVL6WxOSjtX5KOQxDYFU2nSbDsgt1juHfwVgfld24mXp
-        QtU7t/zc9SCeiwv+0SUoy2gac6Hiw
-X-Received: by 2002:a05:600c:474a:b0:3b4:cb93:7d57 with SMTP id w10-20020a05600c474a00b003b4cb937d57mr9507753wmo.41.1664871673642;
-        Tue, 04 Oct 2022 01:21:13 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7t7/WnQ/rPAxDlAuMCud8gO/JdRg8ZGL5c/bT8KDb0P6rlWds0eGi2vsKOLBXUv0PFtCmybw==
-X-Received: by 2002:a05:600c:474a:b0:3b4:cb93:7d57 with SMTP id w10-20020a05600c474a00b003b4cb937d57mr9507735wmo.41.1664871673457;
-        Tue, 04 Oct 2022 01:21:13 -0700 (PDT)
-Received: from [192.168.0.5] (ip-109-43-178-246.web.vodafone.de. [109.43.178.246])
-        by smtp.gmail.com with ESMTPSA id x24-20020a05600c189800b003b4727d199asm13080082wmp.15.2022.10.04.01.21.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Oct 2022 01:21:12 -0700 (PDT)
-Message-ID: <3762a3e2-07f8-0048-6b3e-6b0417aff781@redhat.com>
-Date:   Tue, 4 Oct 2022 10:21:10 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v1 8/9] KVM: s390: selftest: memop: Fix typo
-Content-Language: en-US
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>
-References: <20220930210751.225873-1-scgl@linux.ibm.com>
- <20220930210751.225873-9-scgl@linux.ibm.com>
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=nTkCQ2u/hk2Qw23dtQU+Mt7xL3eUScwz3JvpzjfBuoU=;
+        b=INZKf4A4O5Hme/breTnvA2GEWDUUqiYy7sybzs9Joib6xFRR/xBNi4lRHdufuK+881ACbD
+        D/8oqgd8BhP81OVTiOFpC9u+GfbuAx0Y9+MkK4QaiXMaNHsJ8ck3m+LpAM+6KUoNMLBuuD
+        f0zrQEQ/c7in7rLRgNtjxTcQdnfD97Y=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-237-k9AG00p4OEqwo6WqU1VaVg-1; Tue, 04 Oct 2022 05:31:36 -0400
+X-MC-Unique: k9AG00p4OEqwo6WqU1VaVg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4C984862FE2;
+        Tue,  4 Oct 2022 09:31:36 +0000 (UTC)
+Received: from thuth.com (unknown [10.39.193.115])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id BA9F52166B26;
+        Tue,  4 Oct 2022 09:31:34 +0000 (UTC)
 From:   Thomas Huth <thuth@redhat.com>
-In-Reply-To: <20220930210751.225873-9-scgl@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [RFC PATCH 0/3] Use TAP in some more KVM selftests
+Date:   Tue,  4 Oct 2022 11:31:28 +0200
+Message-Id: <20221004093131.40392-1-thuth@redhat.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 30/09/2022 23.07, Janis Schoetterl-Glausch wrote:
-> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-> ---
->   tools/testing/selftests/kvm/s390x/memop.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
-> index 3a160ab0415b..1887685b41d2 100644
-> --- a/tools/testing/selftests/kvm/s390x/memop.c
-> +++ b/tools/testing/selftests/kvm/s390x/memop.c
-> @@ -970,7 +970,7 @@ static void test_errors_key_fetch_prot_override_enabled(void)
->   
->   	/*
->   	 * vcpu, mismatching keys on fetch,
-> -	 * fetch protection override does not apply because memory range acceeded
-> +	 * fetch protection override does not apply because memory range exceeded
->   	 */
->   	CHECK_N_DO(ERR_PROT_MOP, t.vcpu, LOGICAL, READ, mem2, 2048 + 1, GADDR_V(0), KEY(2));
->   	CHECK_N_DO(ERR_PROT_MOP, t.vcpu, LOGICAL, READ, mem2, PAGE_SIZE + 2048 + 1,
+Many KVM selftests are completely silent. This has the disadvantage
+for the users that they do not know what's going on here. For example,
+some time ago, a tester asked me how to know whether a certain new
+sub-test has been added to one of the s390x test binaries or not (which
+he didn't compile on his own), which is hard to judge when there is no
+output. So I finally went ahead and implemented TAP output in the
+s390x-specific tests some months ago.
 
-Reviewed-by: Thomas Huth <thuth@redhat.com>
+Now I wonder whether that could be a good strategy for the x86 and
+generic tests, too? As a little RFC patch series, I've converted
+three more KVM selftests to use TAP output. If we decide that this
+is the right way to go, I can work on other tests later, too.
+
+Thomas Huth (3):
+  KVM: selftests: Use TAP interface in the kvm_binary_stats_test
+  KVM: selftests: x86: Use TAP interface in the sync_regs test
+  KVM: selftests: x86: Use TAP interface in the tsc_msrs_test
+
+ .../selftests/kvm/kvm_binary_stats_test.c     |  11 +-
+ .../selftests/kvm/x86_64/sync_regs_test.c     | 113 ++++++++++++++----
+ .../selftests/kvm/x86_64/tsc_msrs_test.c      |  16 ++-
+ 3 files changed, 114 insertions(+), 26 deletions(-)
+
+-- 
+2.31.1
 
