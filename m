@@ -2,119 +2,99 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5756AC433F5
-	for <linux-kselftest@archiver.kernel.org>; Tue,  4 Oct 2022 09:39:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F028DC433FE
+	for <linux-kselftest@archiver.kernel.org>; Tue,  4 Oct 2022 11:49:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231182AbiJDJjL (ORCPT
+        id S229489AbiJDLtW (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 4 Oct 2022 05:39:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47970 "EHLO
+        Tue, 4 Oct 2022 07:49:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231388AbiJDJim (ORCPT
+        with ESMTP id S229436AbiJDLtV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 4 Oct 2022 05:38:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8670B13F2C
-        for <linux-kselftest@vger.kernel.org>; Tue,  4 Oct 2022 02:35:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664876100;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7EwjtAnCSSogBERoUZ3lJ8M5cI4G7abMk9q+5QMG9rM=;
-        b=VxncabA7wx6lCkUx5jhdlqmwmoGPM2B/wx84qHl2HpSUiTTuk9TiP31ARB0XXFKsS1Pgo2
-        WTd+1lg9YD5rwV+7Omu63p7bgco8WRTumoWhYCl7XMhJOA6sGLF1EQ4lcr5jIDYrQXfYDj
-        xe40/8yrg3MPlEiUzmE9LTnm6UKOmaM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-347-kFDnajenPauDs4F2uTW4HQ-1; Tue, 04 Oct 2022 05:31:38 -0400
-X-MC-Unique: kFDnajenPauDs4F2uTW4HQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2B0ED185A7AB;
-        Tue,  4 Oct 2022 09:31:38 +0000 (UTC)
-Received: from thuth.com (unknown [10.39.193.115])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 93F172166B26;
-        Tue,  4 Oct 2022 09:31:36 +0000 (UTC)
-From:   Thomas Huth <thuth@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 1/3] KVM: selftests: Use TAP interface in the kvm_binary_stats_test
-Date:   Tue,  4 Oct 2022 11:31:29 +0200
-Message-Id: <20221004093131.40392-2-thuth@redhat.com>
-In-Reply-To: <20221004093131.40392-1-thuth@redhat.com>
-References: <20221004093131.40392-1-thuth@redhat.com>
+        Tue, 4 Oct 2022 07:49:21 -0400
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED1A34D818;
+        Tue,  4 Oct 2022 04:49:18 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4MhbS30z51z9v7H2;
+        Tue,  4 Oct 2022 19:43:15 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwDXU16kHTxjYVKaAA--.62750S2;
+        Tue, 04 Oct 2022 12:49:00 +0100 (CET)
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        shuah@kernel.org
+Cc:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH 0/6] Add _opts variant for bpf_*_get_fd_by_id()
+Date:   Tue,  4 Oct 2022 13:48:33 +0200
+Message-Id: <20221004114839.2302206-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-CM-TRANSID: GxC2BwDXU16kHTxjYVKaAA--.62750S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7tF45Ar4ktFy5Xr17AF48tFb_yoW8Wr1Up3
+        9xGryFkr1FgFyxu3sxJayFyrn5Ga4xWw1UC3Z7Jr15Zr9YqF4DZry8WF45WF9xu395Ganx
+        Zr4Yyr1DGw1UAFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvGb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x
+        0267AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02
+        F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4I
+        kC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7Cj
+        xVAaw2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2
+        IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v2
+        6r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2
+        IY6xkF7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvE
+        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa
+        73UjIFyTuYvjxUxo7KDUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAPBF1jj4POugAAsM
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The kvm_binary_stats_test test currently does not have any output (unless
-one of the TEST_ASSERT statement fails), so it's hard to say for a user
-how far it did proceed already. Thus let's make this a little bit more
-user-friendly and include some TAP output via the kselftest.h interface.
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Signed-off-by: Thomas Huth <thuth@redhat.com>
----
- tools/testing/selftests/kvm/kvm_binary_stats_test.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+Add the _opts variant for bpf_*_get_fd_by_id() functions, to be able to
+pass to the kernel more options, when requesting a fd of an eBPF object to
+the kernel.
 
-diff --git a/tools/testing/selftests/kvm/kvm_binary_stats_test.c b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
-index 0b45ac593387..894417c96f70 100644
---- a/tools/testing/selftests/kvm/kvm_binary_stats_test.c
-+++ b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
-@@ -19,6 +19,7 @@
- #include "kvm_util.h"
- #include "asm/kvm.h"
- #include "linux/kvm.h"
-+#include "kselftest.h"
- 
- static void stats_test(int stats_fd)
- {
-@@ -51,7 +52,7 @@ static void stats_test(int stats_fd)
- 
- 	/* Sanity check for other fields in header */
- 	if (header.num_desc == 0) {
--		printf("No KVM stats defined!");
-+		ksft_print_msg("No KVM stats defined!\n");
- 		return;
- 	}
- 	/*
-@@ -224,9 +225,13 @@ int main(int argc, char *argv[])
- 			max_vcpu = DEFAULT_NUM_VCPU;
- 	}
- 
-+	ksft_print_header();
-+
- 	/* Check the extension for binary stats */
- 	TEST_REQUIRE(kvm_has_cap(KVM_CAP_BINARY_STATS_FD));
- 
-+	ksft_set_plan(max_vm);
-+
- 	/* Create VMs and VCPUs */
- 	vms = malloc(sizeof(vms[0]) * max_vm);
- 	TEST_ASSERT(vms, "Allocate memory for storing VM pointers");
-@@ -245,10 +250,12 @@ int main(int argc, char *argv[])
- 		vm_stats_test(vms[i]);
- 		for (j = 0; j < max_vcpu; ++j)
- 			vcpu_stats_test(vcpus[i * max_vcpu + j]);
-+		ksft_test_result_pass("vm%i\n", i);
- 	}
- 
- 	for (i = 0; i < max_vm; ++i)
- 		kvm_vm_free(vms[i]);
- 	free(vms);
--	return 0;
-+
-+	ksft_finished();	/* Print results and exit() accordingly */
- }
+Pass the options through a newly introduced structure, bpf_get_fd_opts,
+which currently contains open_flags (the other two members are for
+compatibility and for padding).
+
+open_flags allows the caller to request specific permissions to access a
+map (e.g. read-only). This is useful for example in the situation where a
+map is write-protected.
+
+Besides patches 2-6, which introduce the new variants and the data
+structure, patch 1 fixes the LIBBPF_1.0.0 declaration in libbpf.map.
+
+Roberto Sassu (6):
+  libbpf: Fix LIBBPF_1.0.0 declaration in libbpf.map
+  libbpf: Define bpf_get_fd_opts and introduce
+    bpf_map_get_fd_by_id_opts()
+  libbpf: Introduce bpf_prog_get_fd_by_id_opts()
+  libbpf: Introduce bpf_btf_get_fd_by_id_opts()
+  libbpf: Introduce bpf_link_get_fd_by_id_opts()
+  selftests/bpf: Add tests for _opts variants of bpf_*_get_fd_by_id()
+
+ tools/lib/bpf/bpf.c                           | 47 +++++++++-
+ tools/lib/bpf/bpf.h                           | 16 ++++
+ tools/lib/bpf/libbpf.map                      |  6 +-
+ .../bpf/prog_tests/libbpf_get_fd_opts.c       | 88 +++++++++++++++++++
+ .../bpf/progs/test_libbpf_get_fd_opts.c       | 36 ++++++++
+ 5 files changed, 188 insertions(+), 5 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/libbpf_get_fd_opts.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_libbpf_get_fd_opts.c
+
 -- 
-2.31.1
+2.25.1
 
