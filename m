@@ -2,44 +2,43 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D0E9C4332F
-	for <linux-kselftest@archiver.kernel.org>; Wed,  5 Oct 2022 01:44:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD442C433FE
+	for <linux-kselftest@archiver.kernel.org>; Wed,  5 Oct 2022 01:44:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbiJEBou (ORCPT
+        id S229760AbiJEBoy (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 4 Oct 2022 21:44:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48838 "EHLO
+        Tue, 4 Oct 2022 21:44:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbiJEBot (ORCPT
+        with ESMTP id S229772AbiJEBox (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 4 Oct 2022 21:44:49 -0400
-X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 04 Oct 2022 18:44:46 PDT
+        Tue, 4 Oct 2022 21:44:53 -0400
 Received: from esa11.hc1455-7.c3s2.iphmx.com (esa11.hc1455-7.c3s2.iphmx.com [207.54.90.137])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2CF9DEC3;
-        Tue,  4 Oct 2022 18:44:46 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="70500942"
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C859912D14;
+        Tue,  4 Oct 2022 18:44:49 -0700 (PDT)
+X-IronPort-AV: E=McAfee;i="6500,9779,10490"; a="70500946"
 X-IronPort-AV: E=Sophos;i="5.95,159,1661785200"; 
-   d="scan'208";a="70500942"
-Received: from unknown (HELO oym-r3.gw.nic.fujitsu.com) ([210.162.30.91])
-  by esa11.hc1455-7.c3s2.iphmx.com with ESMTP; 05 Oct 2022 10:43:41 +0900
-Received: from oym-m4.gw.nic.fujitsu.com (oym-nat-oym-m4.gw.nic.fujitsu.com [192.168.87.61])
-        by oym-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id CDC65D63B9;
-        Wed,  5 Oct 2022 10:43:39 +0900 (JST)
+   d="scan'208";a="70500946"
+Received: from unknown (HELO oym-r4.gw.nic.fujitsu.com) ([210.162.30.92])
+  by esa11.hc1455-7.c3s2.iphmx.com with ESMTP; 05 Oct 2022 10:43:43 +0900
+Received: from oym-m1.gw.nic.fujitsu.com (oym-nat-oym-m1.gw.nic.fujitsu.com [192.168.87.58])
+        by oym-r4.gw.nic.fujitsu.com (Postfix) with ESMTP id 128CADA68A;
+        Wed,  5 Oct 2022 10:43:42 +0900 (JST)
 Received: from yto-om1.fujitsu.com (yto-om1.o.css.fujitsu.com [10.128.89.162])
-        by oym-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id 19031E1297;
-        Wed,  5 Oct 2022 10:43:39 +0900 (JST)
+        by oym-m1.gw.nic.fujitsu.com (Postfix) with ESMTP id 4F806D9940;
+        Wed,  5 Oct 2022 10:43:41 +0900 (JST)
 Received: from cn-r05-10.example.com (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
-        by yto-om1.fujitsu.com (Postfix) with ESMTP id D9C26405D4705;
-        Wed,  5 Oct 2022 10:43:38 +0900 (JST)
+        by yto-om1.fujitsu.com (Postfix) with ESMTP id 1C0F0405D4705;
+        Wed,  5 Oct 2022 10:43:41 +0900 (JST)
 From:   Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
 To:     Fenghua Yu <fenghua.yu@intel.com>,
         Reinette Chatre <reinette.chatre@intel.com>,
         Shuah Khan <shuah@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         tan.shaopeng@jp.fujitsu.com
-Subject: [PATCH v2 2/4] selftests/resctrl: Return MBA check result and make it to output message
-Date:   Wed,  5 Oct 2022 10:39:31 +0900
-Message-Id: <20221005013933.1486054-3-tan.shaopeng@jp.fujitsu.com>
+Subject: [PATCH v2 4/4] selftests/resctrl: Flush stdout file buffer before executing fork()
+Date:   Wed,  5 Oct 2022 10:39:33 +0900
+Message-Id: <20221005013933.1486054-5-tan.shaopeng@jp.fujitsu.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20221005013933.1486054-1-tan.shaopeng@jp.fujitsu.com>
 References: <20221005013933.1486054-1-tan.shaopeng@jp.fujitsu.com>
@@ -50,51 +49,56 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Since MBA check result is not returned, the MBA test result message
-is always output as "ok" regardless of whether the MBA check result is
-true or false.
+When a process has buffered output, a child process created by fork()
+will also copy buffered output. When using kselftest framework,
+the output (resctrl test result message) will be printed multiple times.
 
-Make output message to be "not ok" if MBA check result is failed.
+Add fflush() to flush out the buffered output before executing fork().
 
 Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
 Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
 ---
- tools/testing/selftests/resctrl/mba_test.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ tools/testing/selftests/resctrl/cat_test.c    | 1 +
+ tools/testing/selftests/resctrl/resctrl_val.c | 1 +
+ tools/testing/selftests/resctrl/resctrlfs.c   | 1 +
+ 3 files changed, 3 insertions(+)
 
-diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
-index 1a1bdb6180cf..5d14802add4d 100644
---- a/tools/testing/selftests/resctrl/mba_test.c
-+++ b/tools/testing/selftests/resctrl/mba_test.c
-@@ -51,7 +51,7 @@ static int mba_setup(int num, ...)
- 	return 0;
- }
+diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
+index 1c5e90c63254..6a8306b0a109 100644
+--- a/tools/testing/selftests/resctrl/cat_test.c
++++ b/tools/testing/selftests/resctrl/cat_test.c
+@@ -167,6 +167,7 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
+ 		return errno;
+ 	}
  
--static void show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
-+static bool show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
- {
- 	int allocation, runs;
- 	bool failed = false;
-@@ -97,6 +97,8 @@ static void show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
- 		       failed ? "Fail:" : "Pass:");
- 	if (failed)
- 		ksft_print_msg("At least one test failed\n");
-+
-+	return failed;
- }
++	fflush(stdout);
+ 	bm_pid = fork();
  
- static int check_results(void)
-@@ -132,9 +134,7 @@ static int check_results(void)
- 
- 	fclose(fp);
- 
--	show_mba_info(bw_imc, bw_resc);
--
--	return 0;
-+	return show_mba_info(bw_imc, bw_resc);
- }
- 
- void mba_test_cleanup(void)
+ 	/* Set param values for child thread which will be allocated bitmask
+diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
+index b32b96356ec7..6948843bf995 100644
+--- a/tools/testing/selftests/resctrl/resctrl_val.c
++++ b/tools/testing/selftests/resctrl/resctrl_val.c
+@@ -629,6 +629,7 @@ int resctrl_val(char **benchmark_cmd, struct resctrl_val_param *param)
+ 	 * Fork to start benchmark, save child's pid so that it can be killed
+ 	 * when needed
+ 	 */
++	fflush(stdout);
+ 	bm_pid = fork();
+ 	if (bm_pid == -1) {
+ 		perror("# Unable to fork");
+diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
+index 6f543e470ad4..c7447cd2a25f 100644
+--- a/tools/testing/selftests/resctrl/resctrlfs.c
++++ b/tools/testing/selftests/resctrl/resctrlfs.c
+@@ -676,6 +676,7 @@ int filter_dmesg(void)
+ 		perror("pipe");
+ 		return ret;
+ 	}
++	fflush(stdout);
+ 	pid = fork();
+ 	if (pid == 0) {
+ 		close(pipefds[0]);
 -- 
 2.27.0
 
