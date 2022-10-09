@@ -2,37 +2,37 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42488C433FE
-	for <linux-kselftest@archiver.kernel.org>; Sun,  9 Oct 2022 22:31:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3149EC4332F
+	for <linux-kselftest@archiver.kernel.org>; Sun,  9 Oct 2022 22:31:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232486AbiJIWa7 (ORCPT
+        id S232492AbiJIWbA (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 9 Oct 2022 18:30:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42056 "EHLO
+        Sun, 9 Oct 2022 18:31:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232062AbiJIW1C (ORCPT
+        with ESMTP id S232033AbiJIW0r (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 9 Oct 2022 18:27:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2232A31366;
-        Sun,  9 Oct 2022 15:18:48 -0700 (PDT)
+        Sun, 9 Oct 2022 18:26:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C493E74E;
+        Sun,  9 Oct 2022 15:18:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C8402B80D36;
-        Sun,  9 Oct 2022 22:18:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6134CC433C1;
-        Sun,  9 Oct 2022 22:18:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 74CD9B80DE5;
+        Sun,  9 Oct 2022 22:12:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 140B3C433D6;
+        Sun,  9 Oct 2022 22:12:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665353898;
+        s=k20201202; t=1665353572;
         bh=sExncP2vEI4lKfEjoGTg9PlosArh89bqCxfpK8p7bwI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NyoXti6/SB03WGlWNe5/Ucn49k0HXui268Et6tUoU5QXf3gUk0LsPLv/it1BKz6s5
-         2RAs8hZVpMkjFrc9kbmsENU9KjQ2UCdPGyNYUwAu7cqQeU59kAJwqDVgaUH3eXOQ5z
-         Uy5P9JwBqEZUeSygc/HccZ7Gce2JUUzV7gKuATpcu8Q336FfJGqnIxx13f3VsITVO3
-         UEaB5rtrJ0N2yL4R9y1NmA9PUiwoO17Ak7yL1OKL2AFQSv4RDaQ5fMBsBOJjvgIcg0
-         PO4vPeLvMwE2M2pIU1Rumz21VK1v7gcODHkAmA1Ox/YsMy7hsFTrzg0mGau3uBMMey
-         J0nhh07Z8ry1Q==
+        b=euG/T1SHw94FydHc/EbXWD5QGfhaWtjrBPPlZ74qwc5UGXsr/uJEqST/5pHyQaTTD
+         3zC2LY2Tv+Yp9eqqivzoxsjLboMWxgQ9IE3TVltX6qYZlbeEmmH4PYvf76bEaiXoC3
+         DUkm/4pjAfQwO/kBwYBAnydwauTyVGla4hMH9+fNI4ZchmLfTK8cYX8XpkReHgMShA
+         0PRBF3/0LYScW0Te9g+BYB1ALE77tj/H/Lawkx+Gfb0huKChIUU8bFc2nhnlyfiMvM
+         1Zvys+9dxtygSYMN3sw594M2dTICOc29G4uAm//uNfkAcX0C2IRbZqm8Lmbve02JHA
+         cZkIZDL9k7aHw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Hou Tao <houtao1@huawei.com>,
@@ -40,12 +40,12 @@ Cc:     Hou Tao <houtao1@huawei.com>,
         Sasha Levin <sashal@kernel.org>, ast@kernel.org,
         daniel@iogearbox.net, andrii@kernel.org, shuah@kernel.org,
         bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.19 56/73] selftests/bpf: Free the allocated resources after test case succeeds
-Date:   Sun,  9 Oct 2022 18:14:34 -0400
-Message-Id: <20221009221453.1216158-56-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.0 60/77] selftests/bpf: Free the allocated resources after test case succeeds
+Date:   Sun,  9 Oct 2022 18:07:37 -0400
+Message-Id: <20221009220754.1214186-60-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221009221453.1216158-1-sashal@kernel.org>
-References: <20221009221453.1216158-1-sashal@kernel.org>
+In-Reply-To: <20221009220754.1214186-1-sashal@kernel.org>
+References: <20221009220754.1214186-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
