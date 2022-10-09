@@ -2,124 +2,80 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5F84C43219
-	for <linux-kselftest@archiver.kernel.org>; Sun,  9 Oct 2022 13:01:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 09A05C433FE
+	for <linux-kselftest@archiver.kernel.org>; Sun,  9 Oct 2022 15:19:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbiJINBF (ORCPT
+        id S230034AbiJIPTa (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 9 Oct 2022 09:01:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60176 "EHLO
+        Sun, 9 Oct 2022 11:19:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230164AbiJINA6 (ORCPT
+        with ESMTP id S230022AbiJIPT3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 9 Oct 2022 09:00:58 -0400
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF882A95E;
-        Sun,  9 Oct 2022 06:00:56 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Mlhtn1Ytyz6PmS3;
-        Sun,  9 Oct 2022 20:58:41 +0800 (CST)
-Received: from k01.huawei.com (unknown [10.67.174.197])
-        by APP2 (Coremail) with SMTP id Syh0CgDHX9T6xUJjwRQEAA--.16593S6;
-        Sun, 09 Oct 2022 21:00:54 +0800 (CST)
-From:   Xu Kuohai <xukuohai@huaweicloud.com>
-To:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Hou Tao <houtao1@huawei.com>,
-        Dmitrii Dolgov <9erthalion6@gmail.com>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Kui-Feng Lee <kuifeng@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: [PATCH bpf-next 4/5] selftest/bpf: Fix memory leak in kprobe_multi_test
-Date:   Sun,  9 Oct 2022 09:18:29 -0400
-Message-Id: <20221009131830.395569-5-xukuohai@huaweicloud.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221009131830.395569-1-xukuohai@huaweicloud.com>
-References: <20221009131830.395569-1-xukuohai@huaweicloud.com>
+        Sun, 9 Oct 2022 11:19:29 -0400
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AED5B2A973;
+        Sun,  9 Oct 2022 08:19:26 -0700 (PDT)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 299FJ5YN028180;
+        Sun, 9 Oct 2022 17:19:05 +0200
+Date:   Sun, 9 Oct 2022 17:19:05 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     kernel test robot <yujie.liu@intel.com>
+Cc:     lkp@lists.01.org, lkp@intel.com,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [selftests/nolibc] 362aecb2d8: kernel-selftests.nolibc.make_fail
+Message-ID: <20221009151905.GA28148@1wt.eu>
+References: <202210081618.754a77db-yujie.liu@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgDHX9T6xUJjwRQEAA--.16593S6
-X-Coremail-Antispam: 1UD129KBjvJXoW7uFyfZw1xZw17Aw4kXw18Krg_yoW8WF43pF
-        W0yw4Yka4xAr13X3W3GF48WFyrursrZ34UurWYvw15Cwn8Xw18GF4xKFW3KF95GrZ5Zw43
-        u3W5tr95Ga1UXFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBSb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-        Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-        rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-        AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E
-        14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
-        xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
-        z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2
-        Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
-        6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0x
-        vE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1lIxAI
-        cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2js
-        IEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUFgAwUUUUU
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202210081618.754a77db-yujie.liu@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Xu Kuohai <xukuohai@huawei.com>
+Hi,
 
-The get_syms() function in kprobe_multi_test.c does not free the string
-memory allocated by sscanf correctly. Fix it.
+On Sat, Oct 08, 2022 at 04:57:43PM +0800, kernel test robot wrote:
+(...)
+> 2022-10-02 10:04:53 make TARGETS=nolibc
+> make[1]: Entering directory '/usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-362aecb2d8cfad0268d6c0ae5f448e9b6eee7ffb/tools/testing/selftests/nolibc'
+>   CC      nolibc-test
+> /usr/bin/ld: /tmp/cccOWbdp.o: in function `printf':
+> nolibc-test.c:(.text+0x369): undefined reference to `strlen'
+> collect2: error: ld returned 1 exit status
+> make[1]: *** [Makefile:31: nolibc-test] Error 1
+> make[1]: Leaving directory '/usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-362aecb2d8cfad0268d6c0ae5f448e9b6eee7ffb/tools/testing/selftests/nolibc'
+> make: *** [Makefile:155: all] Error 2
+> 2022-10-02 10:04:53 make -C nolibc
+> make: Entering directory '/usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-362aecb2d8cfad0268d6c0ae5f448e9b6eee7ffb/tools/testing/selftests/nolibc'
+>   CC      nolibc-test
+> /usr/bin/ld: /tmp/lkp/ccP4fovP.o: in function `printf':
+> nolibc-test.c:(.text+0x369): undefined reference to `strlen'
+> collect2: error: ld returned 1 exit status
+> make: *** [Makefile:31: nolibc-test] Error 1
+> make: Leaving directory '/usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-362aecb2d8cfad0268d6c0ae5f448e9b6eee7ffb/tools/testing/selftests/nolibc'
+> 2022-10-02 10:04:54 make quicktest=1 run_tests -C nolibc
+> make: Entering directory '/usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-362aecb2d8cfad0268d6c0ae5f448e9b6eee7ffb/tools/testing/selftests/nolibc'
+> make: *** No rule to make target 'run_tests'.  Stop.
+> make: Leaving directory '/usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-362aecb2d8cfad0268d6c0ae5f448e9b6eee7ffb/tools/testing/selftests/nolibc'
+> 
+> 
+> This error only happens when build with gcc-12, while gcc-11 and gcc-9
+> build fine. We are not sure whether this is a compiler issue or a kernel
+> code issue, so we send this report FYI. Below link may be helpful for
+> analysis:
+> 
+> https://www.spinics.net/lists/fedora-devel/msg296395.html
+(...)
 
-Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
----
- .../bpf/prog_tests/kprobe_multi_test.c          | 17 ++++++++---------
- 1 file changed, 8 insertions(+), 9 deletions(-)
+Many thanks for the detailed report and hints. Since we're only providing
+include files we don't always have the luxury of enforcing build options
+on the caller, so it took me quite some trial and error but I finally
+found a way around it. I'm sending a updated patch to Paul for merging.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-index d457a55ff408..07dd2c5b7f98 100644
---- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-+++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-@@ -360,15 +360,14 @@ static int get_syms(char ***symsp, size_t *cntp)
- 		 * to them. Filter out the current culprits - arch_cpu_idle
- 		 * and rcu_* functions.
- 		 */
--		if (!strcmp(name, "arch_cpu_idle"))
--			continue;
--		if (!strncmp(name, "rcu_", 4))
--			continue;
--		if (!strcmp(name, "bpf_dispatcher_xdp_func"))
--			continue;
--		if (!strncmp(name, "__ftrace_invalid_address__",
--			     sizeof("__ftrace_invalid_address__") - 1))
-+		if (!strcmp(name, "arch_cpu_idle") ||
-+			!strncmp(name, "rcu_", 4) ||
-+			!strcmp(name, "bpf_dispatcher_xdp_func") ||
-+			!strncmp(name, "__ftrace_invalid_address__",
-+				 sizeof("__ftrace_invalid_address__") - 1)) {
-+			free(name);
- 			continue;
-+		}
- 		err = hashmap__add(map, name, NULL);
- 		if (err) {
- 			free(name);
-@@ -394,7 +393,7 @@ static int get_syms(char ***symsp, size_t *cntp)
- 	hashmap__free(map);
- 	if (err) {
- 		for (i = 0; i < cnt; i++)
--			free(syms[cnt]);
-+			free(syms[i]);
- 		free(syms);
- 	}
- 	return err;
--- 
-2.25.1
-
+Thanks again,
+Willy
