@@ -2,49 +2,49 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A6F7C4167B
-	for <linux-kselftest@archiver.kernel.org>; Tue, 11 Oct 2022 15:00:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 54D94C433F5
+	for <linux-kselftest@archiver.kernel.org>; Tue, 11 Oct 2022 15:00:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231169AbiJKPAW (ORCPT
+        id S231261AbiJKPAm (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 11 Oct 2022 11:00:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54224 "EHLO
+        Tue, 11 Oct 2022 11:00:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231315AbiJKO6u (ORCPT
+        with ESMTP id S231558AbiJKO7i (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 11 Oct 2022 10:58:50 -0400
+        Tue, 11 Oct 2022 10:59:38 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E849E6B7;
-        Tue, 11 Oct 2022 07:52:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60FA961B0E;
+        Tue, 11 Oct 2022 07:55:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AD0D8611B1;
-        Tue, 11 Oct 2022 14:52:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59606C433D6;
-        Tue, 11 Oct 2022 14:52:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DA0FE611ED;
+        Tue, 11 Oct 2022 14:54:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87871C433D6;
+        Tue, 11 Oct 2022 14:54:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665499953;
+        s=k20201202; t=1665500054;
         bh=ojCmeGHkofBLPO9rvISVcCUKCRfazna5eqPo7nU17v0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=j7DROpI1HTpPJ/RPIIIduv5ZLctAg0KT0J/piNwCQn0c9c80xmQJVE5j9XjDyLasS
-         0zCUi8FVjiKevYGZAG9Nh2rdwpmXr9cuQd/z9j95HJBntKnuwI8USXD/Gost8JGhZf
-         uJMDeBVq6ZtbALTeln4aHpC/9FA1PViosS4+p1J1cHw0IXr+yztYh2fetFNGWX7GWN
-         joqhEox24QOeLBSFBmlUnIpAob6WgGLNy4qKPCFQ9RKvKOrpVfIg59xV6eRbumBru+
-         77chLi2Q62XF32Y8e49G+35/oxP1ow2/R5AGYGGDbsTXx13+kCLTamsKnfBgstXX9L
-         Ehn8tSrZkifSQ==
+        b=jrn8XNPMiLJv/k+BUOXAMQJelcTTWHO0yMwT2+OFlKfQlXFwkjMLUewFDSbIYRygI
+         Ltm5j+RC254NUVkEeVbLFP3K15d6Y38iarEwbx5bXzn1BaeHMDnoJULPmwwp0zGfrx
+         cZWTQB9f8XVkvMMz/KaPGT/ZUb42CxVV54eCWgbP3COhMwSZ1GX7ww0o+xUICWILgC
+         d7KguEt50gdG4QazvhF7ZBki+vz8W5zF/ZtvNpDlYBMjhZsDMoUciaCOXY3X0iccBz
+         +7sSVlpUvyKDLwVICgLhj+Twz8XphRKLylCNEgiHqPP7oc2RW3Se12goep2RO2qFQC
+         bWDZcLyV5uE7A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Zhao Gongyi <zhaogongyi@huawei.com>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.19 40/40] selftests/cpu-hotplug: Use return instead of exit
-Date:   Tue, 11 Oct 2022 10:51:29 -0400
-Message-Id: <20221011145129.1623487-40-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 11/11] selftests/cpu-hotplug: Use return instead of exit
+Date:   Tue, 11 Oct 2022 10:53:58 -0400
+Message-Id: <20221011145358.1624959-11-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221011145129.1623487-1-sashal@kernel.org>
-References: <20221011145129.1623487-1-sashal@kernel.org>
+In-Reply-To: <20221011145358.1624959-1-sashal@kernel.org>
+References: <20221011145358.1624959-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
