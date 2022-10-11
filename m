@@ -2,125 +2,90 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 354F7C433FE
-	for <linux-kselftest@archiver.kernel.org>; Tue, 11 Oct 2022 15:06:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CB8DC4332F
+	for <linux-kselftest@archiver.kernel.org>; Tue, 11 Oct 2022 15:26:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231550AbiJKPGv (ORCPT
+        id S231128AbiJKP0g (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 11 Oct 2022 11:06:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44658 "EHLO
+        Tue, 11 Oct 2022 11:26:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231577AbiJKPGX (ORCPT
+        with ESMTP id S231133AbiJKP0H (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 11 Oct 2022 11:06:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC65B41D30;
-        Tue, 11 Oct 2022 07:59:56 -0700 (PDT)
+        Tue, 11 Oct 2022 11:26:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA2B4DB767;
+        Tue, 11 Oct 2022 08:17:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 56A83B81632;
-        Tue, 11 Oct 2022 14:53:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B760C433C1;
-        Tue, 11 Oct 2022 14:53:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F3865B8136F;
+        Tue, 11 Oct 2022 15:04:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5680C433B5;
+        Tue, 11 Oct 2022 15:04:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665499992;
-        bh=ojCmeGHkofBLPO9rvISVcCUKCRfazna5eqPo7nU17v0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ENTD9QJJIonOXqUnyIaZM0BofS5NtLnsm3z0iI2wsl79HvSe4HViaph7OY02XsREq
-         X4+rUhFKcc6EShrHx+niAlbYJnPWPc36R1BOYIRX60x7idfSXu14Payi0UvKUl9Uwo
-         U4GsoJlFC8kA37TlO5zHkxPyaOSw0qinlD02YpnF9iIYExKXd0SQLleHRe5Xc9wqRJ
-         UdVTT4g9eCXv8l7IFkxiF9hLWQYUrcfcILPwGoDqk05JDfMOG03zTzifsjX62QYapY
-         TUb8iNvnOiD565/iCn3JSbAHP0G1Z1BmYHls8+qRuMpdKKdQOS/nMzKVQrSQlEV204
-         /jW+DKn+D4JPA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Zhao Gongyi <zhaogongyi@huawei.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
+        s=k20201202; t=1665500687;
+        bh=n7jP6tXz9ptPp7fQFOYcwp6XPTxuRhGbK+fN6cHhBhc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dReV+Hp//vdyymJcPPt2oz+mvhKJpMhgwTCoVslc6Zg266GXgE6+fzGOFxAlVpVou
+         FriXPXGSPKLU2xe1NzGP94w+mpEgRnI/eajv0ijyse7W16RZWbPhy3q/Gcj7OD6eib
+         GDNyCrZmwO8Hg0uGhgXGRNPHttIci3octka66gFsOmibm0F8ZNdHINVLjE640OVaUY
+         1V4+VcBDS5S16YeAEMuh7jbWrX/8mkZc7AcOkYiT3LM9hDdScSXw4U6/vgbitRViyY
+         1jAl/Gdvpck4S1wQZ/ggLWx000INrWFixrNCwIc0VQZksPkwVfujcFTquBi0xe29VG
+         fuM7agerep7Gg==
+Date:   Tue, 11 Oct 2022 16:04:42 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>, will@kernel.org,
+        shuah@kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 26/26] selftests/cpu-hotplug: Use return instead of exit
-Date:   Tue, 11 Oct 2022 10:52:33 -0400
-Message-Id: <20221011145233.1624013-26-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221011145233.1624013-1-sashal@kernel.org>
-References: <20221011145233.1624013-1-sashal@kernel.org>
+Subject: Re: [PATCH AUTOSEL 6.0 15/46] kselftest/arm64: Allow larger buffers
+ in get_signal_context()
+Message-ID: <Y0WGCuHDriRctkeL@sirena.org.uk>
+References: <20221011145015.1622882-1-sashal@kernel.org>
+ <20221011145015.1622882-15-sashal@kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ZXVbpL80mW+WN6mn"
+Content-Disposition: inline
+In-Reply-To: <20221011145015.1622882-15-sashal@kernel.org>
+X-Cookie: I had pancake makeup for brunch!
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Zhao Gongyi <zhaogongyi@huawei.com>
 
-[ Upstream commit 972cf4ce51ef5532d56822af17defb148aac0ccb ]
+--ZXVbpL80mW+WN6mn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Some cpus will be left in offline state when online
-function exits in some error conditions. Use return
-instead of exit to fix it.
+On Tue, Oct 11, 2022 at 10:49:43AM -0400, Sasha Levin wrote:
+> From: Mark Brown <broonie@kernel.org>
+>=20
+> [ Upstream commit 38150a6204c731a4846786682e500d132571fd82 ]
+>=20
+> In order to allow testing of signal contexts that overflow the base signal
+> frame allow callers to pass the buffer size for the user context into
+> get_signal_context(). No functional change.
 
-Signed-off-by: Zhao Gongyi <zhaogongyi@huawei.com>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- .../selftests/cpu-hotplug/cpu-on-off-test.sh        | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+This doesn't obviously make sense independently, even by the relaxed
+standards stable uses these days?
 
-diff --git a/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh b/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
-index 0d26b5e3f966..940b68c940bb 100755
---- a/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
-+++ b/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
-@@ -4,6 +4,7 @@
- SYSFS=
- # Kselftest framework requirement - SKIP code is 4.
- ksft_skip=4
-+retval=0
- 
- prerequisite()
- {
-@@ -102,10 +103,10 @@ online_cpu_expect_success()
- 
- 	if ! online_cpu $cpu; then
- 		echo $FUNCNAME $cpu: unexpected fail >&2
--		exit 1
-+		retval=1
- 	elif ! cpu_is_online $cpu; then
- 		echo $FUNCNAME $cpu: unexpected offline >&2
--		exit 1
-+		retval=1
- 	fi
- }
- 
-@@ -128,10 +129,10 @@ offline_cpu_expect_success()
- 
- 	if ! offline_cpu $cpu; then
- 		echo $FUNCNAME $cpu: unexpected fail >&2
--		exit 1
-+		retval=1
- 	elif ! cpu_is_offline $cpu; then
- 		echo $FUNCNAME $cpu: unexpected offline >&2
--		exit 1
-+		retval=1
- 	fi
- }
- 
-@@ -201,7 +202,7 @@ if [ $allcpus -eq 0 ]; then
- 		offline_cpu_expect_success $present_max
- 		online_cpu $present_max
- 	fi
--	exit 0
-+	exit $retval
- else
- 	echo "Full scope test: all hotplug cpus"
- 	echo -e "\t online all offline cpus"
-@@ -291,3 +292,5 @@ done
- 
- echo 0 > $NOTIFIER_ERR_INJECT_DIR/actions/CPU_DOWN_PREPARE/error
- /sbin/modprobe -q -r cpu-notifier-error-inject
-+
-+exit $retval
--- 
-2.35.1
+--ZXVbpL80mW+WN6mn
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNFhgkACgkQJNaLcl1U
+h9B99Af+J61/eNy1lXZrZld4WN7Zff8TQf6QIsHw0uhVuMdtgiiS0YOHH45HzaSh
+FkSNR7bkWv42XQMeLONOVCISMuy93stVc0lFZuzfTW2ByxUSLJ8FwICVZxRc8azL
+LVhH4xLAQCVq1NVzNEhhA1P9xQlvEIgDh2IN+Pg7Fxnp4uLRSNWu1ngdm0r1Tsm2
+qTAZfaCDnJ6jza1IphzUtN6QyKyvyq7mNVVBpW4tPHGdwD+/dXtwppfckrEC4aiP
+dNPnCr/OW1RNrMgVvt+1KNt6cnNfdUf5lnxYGKjsmTAxEf7e0JZ2o6Pdp5oGPmNv
+qBlr5Gf8L8WTFTAdx/MXePRE+LrjxQ==
+=mPaI
+-----END PGP SIGNATURE-----
+
+--ZXVbpL80mW+WN6mn--
