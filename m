@@ -2,71 +2,61 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A925C4332F
-	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Oct 2022 19:21:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE44CC433FE
+	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Oct 2022 19:38:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbiJMTVG (ORCPT
+        id S229518AbiJMTik (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 13 Oct 2022 15:21:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59974 "EHLO
+        Thu, 13 Oct 2022 15:38:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbiJMTVE (ORCPT
+        with ESMTP id S229791AbiJMTib (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Oct 2022 15:21:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A97751633AC
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Oct 2022 12:21:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665688860;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wEGx5CxM6rpR8PQ0ecVuxQZMdvNqcMcjoURLAU2YH94=;
-        b=DU+VVrWhgNTEXsbZ+or2Q88TFbDCqqSEBp2NYbC27VzWYZpRHlj2WYSXnZX7ENakMA2M9q
-        C7v4ul2XkGgmC+Hf7fF5B7LnR+rtokem6QJesJnRqzugMxlrgK7sRSmwfVUz+nlbfvpwHw
-        /5jmvy+KtcrMjDtCVsmT4WIrXMTX3iE=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-5-84oNMhhrNuaD0CMvCoQSyw-1; Thu, 13 Oct 2022 14:01:03 -0400
-X-MC-Unique: 84oNMhhrNuaD0CMvCoQSyw-1
-Received: by mail-wr1-f70.google.com with SMTP id u20-20020adfc654000000b0022cc05e9119so870113wrg.16
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Oct 2022 11:01:02 -0700 (PDT)
+        Thu, 13 Oct 2022 15:38:31 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7FCA183DAB
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Oct 2022 12:38:26 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id r142so2225217iod.11
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Oct 2022 12:38:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=f/qPChDMs0oj8qrjGozguno+4qFo0qn/A0exuIvNQrY=;
+        b=KkWHiT9dlNw9P6CEdY5QNtQ63vDUnz7Xd7/usAAnCerQAn2hChTNNy805ga3ZBL251
+         +pnWzGpx2ywYhJe0W2axPKtfMKuykSSfhfynjiXhnG2gcenn8T5K6oqgHAFUt/WjMYIR
+         hquxRCW/QOKbpSPMn12hjNQ3NZ32Dpy3KobTU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wEGx5CxM6rpR8PQ0ecVuxQZMdvNqcMcjoURLAU2YH94=;
-        b=nGXn8WIkwmh5A4FvNQuqL7gJ4vt4YcrRFcqfSuih33lxPMZqX8S6uahQzstzzAZWP/
-         ZoXi//yqrygxvv1IWmUOAKz94a2TYzqIKq3zLC8Iidn7FV6vcvvBOXfDKpkUnG9tsOVd
-         irjUODHXx7SqCrIUGn++yCJIv60Y4fy9AzhIT9atfhZh7CSblerS/YERw+Bs0v1TZF5x
-         VrpDv9YLuQ86Qyj1W7ff3dTJhP9g2JnlASUsAl1aNPR47Bv2fg492rExpnwrKNP/RR8H
-         08coBLgGD5Ri++ZV60+/72TXexe4IafHl22yCxiWlmFsYulAJRgGTBvBK89eWuTcTZi/
-         Xapw==
-X-Gm-Message-State: ACrzQf06ua7s01qEiGg8jDM5L6CtFDLiwLZa85ZxGwhR2qgm8KW2V3L4
-        RIY+4BotRNwCcveG/VyWZdu+nVBBNtafcDOVtKR/rZd2YZrMJn8yOfjsxmSvNrSlWBbp3j0Jvyb
-        5G0ukrQ3Vucn6ZFMlZp5s/ZZ9JIWp
-X-Received: by 2002:a5d:6a42:0:b0:22e:6706:647b with SMTP id t2-20020a5d6a42000000b0022e6706647bmr837009wrw.58.1665684062025;
-        Thu, 13 Oct 2022 11:01:02 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5vu77l91naDrv/zj84WtHXXF0kGYEVxWW41KqI+56KRQvt1K79CigI/pQK1IShqdnmbvj9vw==
-X-Received: by 2002:a5d:6a42:0:b0:22e:6706:647b with SMTP id t2-20020a5d6a42000000b0022e6706647bmr836990wrw.58.1665684061725;
-        Thu, 13 Oct 2022 11:01:01 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c706:9d00:a34c:e448:d59b:831? (p200300cbc7069d00a34ce448d59b0831.dip0.t-ipconnect.de. [2003:cb:c706:9d00:a34c:e448:d59b:831])
-        by smtp.gmail.com with ESMTPSA id x17-20020adff0d1000000b00231ed902a4esm231362wro.5.2022.10.13.11.01.00
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=f/qPChDMs0oj8qrjGozguno+4qFo0qn/A0exuIvNQrY=;
+        b=HX7pfTWwQV/cGdul7EUtlhq7asTcg9nKyan9RCHHm7jMocRw8UmO0Vz+//IbpfGyJv
+         86RLRCuv/ImHlMQWpsQ99SlVxb0bsC/H3zbon5Xb75P/kUVr7jdP+jLXROrwYZ7E63DG
+         EXFWKZz1P2vmYgYDwEwSzk6/2gA57hv6orpDlKTJb6K2rcizSUXrp/Jpm7crk9MjPa7y
+         e/1PZ+JXdJ0HTuDcUiIEe5RyEj/fQYVw107qvMxHG6oDkUqLqo+iSFS2pzddtLfICGMV
+         OZDmJKiSQ/hxuI0lhoch9TFc39bBSVUivXA7Dg4Fq70pLqVNj1D0y+pUIQyynaKUWfQp
+         YBRQ==
+X-Gm-Message-State: ACrzQf2sMOCfUfLg/9y/dpknuWyllnQrzUPBV54E2KdEHY7jSGks2UmJ
+        E6/GuJqu2e4skhTICtWmmIm8Mg==
+X-Google-Smtp-Source: AMsMyM7/usZtdj1fRr63VhfBK9sMSkZn/jAa7j6TZUtdkqI3+B/FVihyhgYSjPNfFgJNFyhxVBXUrA==
+X-Received: by 2002:a05:6602:3c7:b0:6a4:334d:3344 with SMTP id g7-20020a05660203c700b006a4334d3344mr673987iov.21.1665689904625;
+        Thu, 13 Oct 2022 12:38:24 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id h5-20020a92d845000000b002fa7b6e9cf5sm184013ilq.31.2022.10.13.12.38.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Oct 2022 11:01:01 -0700 (PDT)
-Message-ID: <ecebc355-eff8-0046-3749-8738ed1954de@redhat.com>
-Date:   Thu, 13 Oct 2022 20:00:59 +0200
+        Thu, 13 Oct 2022 12:38:24 -0700 (PDT)
+Message-ID: <a7b3cf86-4578-c23d-7326-4ddf7dcda043@linuxfoundation.org>
+Date:   Thu, 13 Oct 2022 13:38:23 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
+ Thunderbird/102.2.2
 Subject: Re: hmm_test issues with latest mainline
 Content-Language: en-US
-To:     Vlastimil Babka <vbabka@suse.cz>,
-        Shuah Khan <skhan@linuxfoundation.org>,
+To:     David Hildenbrand <david@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
         Alex Sierra <alex.sierra@amd.com>,
         Alistair Popple <apopple@nvidia.com>
 Cc:     Jason Gunthorpe <jgg@nvidia.com>,
@@ -76,53 +66,60 @@ Cc:     Jason Gunthorpe <jgg@nvidia.com>,
         Jerome Glisse <jglisse@redhat.com>,
         "linux-mm@kvack.org" <linux-mm@kvack.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
 References: <26017fe3-5ad7-6946-57db-e5ec48063ceb@suse.cz>
  <7e2e6679-3205-3540-f522-9eaed2940559@redhat.com>
  <44fcecda-31a4-7288-1848-63003dfe0a7d@linuxfoundation.org>
  <04114304-7b35-d42f-0155-087e3b6237c6@suse.cz>
  <0e02ace6-2fad-47d2-03b9-d8a46f256097@suse.cz>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <0e02ace6-2fad-47d2-03b9-d8a46f256097@suse.cz>
+ <ecebc355-eff8-0046-3749-8738ed1954de@redhat.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <ecebc355-eff8-0046-3749-8738ed1954de@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
->>>> When did that test start failing? Was it still ok for 6.0?
+On 10/13/22 12:00, David Hildenbrand wrote:
+>>>>> When did that test start failing? Was it still ok for 6.0?
+>>>
+>>> Didn't test yet, will try, in case it's my system/config specific thing.
 >>
->> Didn't test yet, will try, in case it's my system/config specific thing.
+>> So it's actually all the same with v6.0 for me. The infinite loops, the test
+>> failures, the misreported SKIPs.
+>>
+
+I am not seeing infinite loops and seeing 25 failures which could
+be skips.
+
 > 
-> So it's actually all the same with v6.0 for me. The infinite loops, the test
-> failures, the misreported SKIPs.
-> 
-> #  RUN           hmm.hmm_device_private.exclusive ...
-> # hmm-tests.c:1673:exclusive:Expected ret (-16) == 0 (0)
-> hmm close returned (-1) fd is (3)
-> # exclusive: Test failed at step #1
-> #          FAIL  hmm.hmm_device_private.exclusive
-> not ok 20 hmm.hmm_device_private.exclusive
-> #  RUN           hmm.hmm_device_private.exclusive_mprotect ...
-> # hmm-tests.c:1727:exclusive_mprotect:Expected ret (-16) == 0 (0)
-> hmm close returned (-1) fd is (3)
-> # exclusive_mprotect: Test failed at step #1
-> #          FAIL  hmm.hmm_device_private.exclusive_mprotect
-> not ok 21 hmm.hmm_device_private.exclusive_mprotect
-> #  RUN           hmm.hmm_device_private.exclusive_cow ...
-> # hmm-tests.c:1780:exclusive_cow:Expected ret (-16) == 0 (0)
-> hmm close returned (-1) fd is (3)
-> # exclusive_cow: Test failed at step #1
-> #          FAIL  hmm.hmm_device_private.exclusive_cow
-> not ok 22 hmm.hmm_device_private.exclusive_cow
+> Is the kernel compiled with support. I have the feeling that we might simply miss kernel support and it's not handled gracefully ...
 > 
 
-Is the kernel compiled with support. I have the feeling that we might 
-simply miss kernel support and it's not handled gracefully ...
+Here is my config
+CONFIG_HMM_MIRROR=y
+# CONFIG_TEST_HMM is not set
 
--- 
-Thanks,
+Okay here is what is going on - hmm_tests are supposed to be run
+from test_hmm.sh script. When I run this I see a message that tells
+me what to do.
 
-David / dhildenb
+sudo ./test_hmm.sh
+./test_hmm.sh: You must have the following enabled in your kernel:
+CONFIG_TEST_HMM=m
+
+Running ./hmm_tests gives me all the failures. So it appears running
+hmm_tests executable won't work. This is expected as test_hmm.sh does
+the right setup before running the test. We have several tests that do
+that.
+
+Vlastimil, can you try this and let me know what you see. I will compile
+with CONFIG_TEST_HMM=m and let you know what I see on my system.
+
+thanks,
+-- Shuah
+
+
 
