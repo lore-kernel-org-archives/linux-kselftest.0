@@ -2,69 +2,80 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7280EC433FE
-	for <linux-kselftest@archiver.kernel.org>; Mon, 17 Oct 2022 14:48:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7810DC433FE
+	for <linux-kselftest@archiver.kernel.org>; Mon, 17 Oct 2022 14:48:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbiJQOsI (ORCPT
+        id S229782AbiJQOsQ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 17 Oct 2022 10:48:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44254 "EHLO
+        Mon, 17 Oct 2022 10:48:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbiJQOsA (ORCPT
+        with ESMTP id S229748AbiJQOsF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 Oct 2022 10:48:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 491636746C
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Oct 2022 07:47:55 -0700 (PDT)
+        Mon, 17 Oct 2022 10:48:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B4996717D
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Oct 2022 07:47:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CBD93B818FB
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Oct 2022 14:47:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03557C433D6;
-        Mon, 17 Oct 2022 14:47:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DDD061008
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Oct 2022 14:47:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AEC9C433D6;
+        Mon, 17 Oct 2022 14:47:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666018071;
-        bh=HGaaOG41CsTwNR9I7wZCx6rAFooKsdSBQ3AEemjzm4k=;
-        h=From:To:Cc:Subject:Date:From;
-        b=rux0VwR9rOyzFDEpMgK/c6JJQ7MIKR7f+6VmDt7+FfsyHyE7ncFHtYZ9Ub5LZ1qk4
-         WlJ+EwzrD9LE1HhHX86SL8TJbkCBKg3FjTtuO4fGTeFFB2dEgrijrT3vFWhl8KxBiF
-         hwMyhN9KRrTf2Izd2qrHnPnVIIMNe8+5GJW0r9S2UGxdgXbLDA/qATwdAXkEdjxauH
-         ZbkWWz9nalbKlKm3l2py2ZUa/b26yYBPsZD9sX32HDcCi8LjyHm6ZgxLjzKIACteR7
-         EXVZf8kgbUu7CPVdwF1qxlUeh/LjU5UicxMt/LzHnL7VgBDUX5ONKLNGISayW+6t6F
-         NpSq6nkOhEuvA==
+        s=k20201202; t=1666018075;
+        bh=ZVvUXIhqJm/uKkg8FYlsvUX5mawG4++l48pgUS7RNAg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ib0Dbq95q9MYm2X4+E8MXBefbS/Acs6dLG2xCE1YUQeXpb8Wa4M2cXF2zcD9ocrkh
+         qctb3ZmlX6+Lcrbb51taIh1q7NC7rWV9gMztg7q0YvqmROMnMMbMhNPZpf78pIeT+n
+         KwDKWaZO9ZArpcgd6TSfEJyRqPC9dxnh+XG7YOmdyE6sUKlkHwm1HM16I3tOmkgLl8
+         mj1N6+4MBEdxBepavEJIyG8Y3Kz1x4ev3BVXidHf/vHwx3RG3wxsadXxUD8fHwe4Rz
+         lWYItFY0Q7Nxc3XxkbdJOh5G98B1Rw3PQ8MSMkI4xLarHNHShy2rptr5hRMUdbErer
+         B/UCUsYI8rLQg==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>
 Cc:     linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v1 0/2] kselftest/arm64: fp-stress output clarity improvements
-Date:   Mon, 17 Oct 2022 15:45:51 +0100
-Message-Id: <20221017144553.773176-1-broonie@kernel.org>
+Subject: [PATCH v1 2/2] kselftest/arm64: Provide progress messages when signalling children
+Date:   Mon, 17 Oct 2022 15:45:53 +0100
+Message-Id: <20221017144553.773176-3-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20221017144553.773176-1-broonie@kernel.org>
+References: <20221017144553.773176-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=527; i=broonie@kernel.org; h=from:subject; bh=HGaaOG41CsTwNR9I7wZCx6rAFooKsdSBQ3AEemjzm4k=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjTWqeuHot/R5u37Q8NLJWqlCfa8ViAIM0JmZLi03W 1TrgYciJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY01qngAKCRAk1otyXVSH0DSGCA CDdj8xx6rzv+kVDaOJ3kJHsFGxIvuZoWJQtoblpJDeV7ikdvQd0HcxM/mouhjaCxWrF/vMHczj2FU3 QWVod+riNbDYEq3l57GoDaVIJ2nW+s3TTW4zE9RY84Ygrd8D5CVDG0IViJc55cWAC9u00pjUzYvrox Lc6n4EuwS8FR9b0MmYnfqwY4uJSdAOXLAYuafL5QRG2/l6C4eBlCNCFX+X8G4Q/9G/35uGj7rhIwSQ ewUcKkBNL6a/iZOEW1Q+VWo5jqkAIHCkb/MIk/GRLOVLhqFv/iTRUCrFFcCYjfWKh40ZTsTWz1qF0Z vIxL+/5H097ZbJszHJqNJ09dRJ52Sm
+X-Developer-Signature: v=1; a=openpgp-sha256; l=881; i=broonie@kernel.org; h=from:subject; bh=ZVvUXIhqJm/uKkg8FYlsvUX5mawG4++l48pgUS7RNAg=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjTWqgKpbpn9mD2/oWFeT8NrlwFf72qX5bXgX624Ai oiY7OByJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY01qoAAKCRAk1otyXVSH0GMuB/ wNONKQXc4DRqN0tD1qzhDuGmXpsll0OQyQ40XO73E3XUXN1Zv1sjO+i1WHI1aX+q/DFmc8QmeCjlVp xbiYxAXhJmqlcvMwZ0SDlTFu7tCLVx1BFA62YxN3tGDm8uSUekFGbQg9KxZT5SCzSo7qXa36HCaZ/R 7YgXt6tCrKEIMOcCZvSEeoyPD8mM9yod9T51bgi4jBIT967utFNkHtJZ5RKW3O9XqFjIu87BHlRFeY P3pnOcNZhJ12zJAXn/BiVDff5pehdsuWK0Gni8Q6UATJ8VDlFQHFBCLfM8/A7Xzb6/nD1t2ghj6j7W KwxnVJtv9RKRk2Ebx0rRUqgu+R1M7X
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This series provides a couple of improvements to the output of
-fp-stress, making it easier to follow what's going on and our
-application of the timeout a bit more even.
+Especially when the test is configured to run for a longer time it can be
+reassuring to users to see that the supervising program is running OK so
+provide a message every second when the output timer expires.
 
-Mark Brown (2):
-  kselftest/arm64: Check that all children are producing output in
-    fp-stress
-  kselftest/arm64: Provide progress messages when signalling children
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ tools/testing/selftests/arm64/fp/fp-stress.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
- tools/testing/selftests/arm64/fp/fp-stress.c | 26 ++++++++++++++++++++
- 1 file changed, 26 insertions(+)
-
-
-base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
+diff --git a/tools/testing/selftests/arm64/fp/fp-stress.c b/tools/testing/selftests/arm64/fp/fp-stress.c
+index 35dc07648d52..ccbfcf847d96 100644
+--- a/tools/testing/selftests/arm64/fp/fp-stress.c
++++ b/tools/testing/selftests/arm64/fp/fp-stress.c
+@@ -549,6 +549,9 @@ int main(int argc, char **argv)
+ 			all_children_started = true;
+ 		}
+ 
++		ksft_print_msg("Sending signals, timeout remaining: %d\n",
++			       timeout);
++
+ 		for (i = 0; i < num_children; i++)
+ 			child_tickle(&children[i]);
+ 
 -- 
 2.30.2
 
