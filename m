@@ -2,37 +2,37 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F09AC4332F
-	for <linux-kselftest@archiver.kernel.org>; Mon, 17 Oct 2022 15:26:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A3E2C433FE
+	for <linux-kselftest@archiver.kernel.org>; Mon, 17 Oct 2022 15:27:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230326AbiJQP06 (ORCPT
+        id S230171AbiJQP07 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 17 Oct 2022 11:26:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52778 "EHLO
+        Mon, 17 Oct 2022 11:26:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230171AbiJQP04 (ORCPT
+        with ESMTP id S230294AbiJQP05 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 Oct 2022 11:26:56 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 245135FF5E
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Oct 2022 08:26:52 -0700 (PDT)
+        Mon, 17 Oct 2022 11:26:57 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C1AC647CE
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Oct 2022 08:26:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 84540CE14A0
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Oct 2022 15:26:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49DD0C43470;
-        Mon, 17 Oct 2022 15:26:47 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A502ECE1784
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Oct 2022 15:26:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DB4CC43470;
+        Mon, 17 Oct 2022 15:26:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666020408;
-        bh=/BpcIVyo9bzysBlJmI2fdJmkg66MdNxjcBf92h+/Hu4=;
+        s=k20201202; t=1666020412;
+        bh=8V2GhJ4jVvqw3eI18z+SJ7d6N8Yl/q31zrS4myMV8vk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ip78g48reMynF7K+XwEnxkZbSeiyOFutcA25X/d4p38PqJ/LCWHrkmqGfI323EtX7
-         7guubtuVmUWWrglHHHICwtsvcX5jlw88dQJL7veEHndG2PQ/R4gkLru0gw3iG84wfM
-         Kjr/ywz1/zrpN/Cny3vmsoEdc2d4nov6M/QrwddJDB/yLyixnxcz+3PT5lwdAgCbfr
-         6br4ZtLPTN9xWgVu2ViFukQshYWUc+JpAYuA9DCnPb/r8AEbGD5O8pybFdPaBCgYNR
-         RdzvpHYYLKx9fUXhwnSckGY5rHKTx6RjBNfcymI7RliKbyN2Zs60np7QelBUaHWzQz
-         G72klpHNer3CA==
+        b=TNwTaKuzQMFSMkUXMF2t8C0fzjC/+BEEgQrbVTqgS4y6h2iEdPJ/Hq3Q4upmC987u
+         l+LsYbbF8yYQsHaKhSclTjKvrDYH3PLq5rLSDGQO1sD55W1EmhQ4uKilrdH4myD9/B
+         ttG3rIKGFfsNkWozQtdTf128GsosrrdBQZjNreyrFmJ1EqvWvkDhHFhLZa9+kQWEZG
+         UKVjI9zPmtntqFBU/1Kh+wyIt4ZUiF1jZy30/a0Avtmd41VCud477ZaXpRPVn0WP30
+         B7E7O/46ZbzqIBv9y/TAHVeUbqg4uIVA0L3hSpGttqzOq0Ox3LICVQVVPaajIKZM38
+         Cp6DKwGJpGcyA==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
@@ -40,44 +40,57 @@ To:     Catalin Marinas <catalin.marinas@arm.com>,
         Shuah Khan <shuah@kernel.org>
 Cc:     linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v1 4/6] kselftest/arm64: Add FEAT_RPRFM to the hwcap test
-Date:   Mon, 17 Oct 2022 16:25:18 +0100
-Message-Id: <20221017152520.1039165-5-broonie@kernel.org>
+Subject: [PATCH v1 6/6] kselftest/arm64: Add SVE 2.1 to hwcap test
+Date:   Mon, 17 Oct 2022 16:25:20 +0100
+Message-Id: <20221017152520.1039165-7-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221017152520.1039165-1-broonie@kernel.org>
 References: <20221017152520.1039165-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=788; i=broonie@kernel.org; h=from:subject; bh=/BpcIVyo9bzysBlJmI2fdJmkg66MdNxjcBf92h+/Hu4=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjTXPd7GJTI7gG+rKzBJHx+VkNAPi9VEBmMS16Vpvk oLWt3qSJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY01z3QAKCRAk1otyXVSH0K7bB/ 4ikC5urC0sb7g63B6duWtUdmDAgZnP9ebgO45m6UYGtTyms3qfvulBBoEc0aAOipT/z8duB5kziX9n X6MznGaVhn+VchxamYHNHUBniyaD7oP0uVKJ8S+wHTWTdJNcJXyimtLe9/yWPYtKqMktrOZXaRDjWL NXRPCkPQa9M3/MEuBM0AVD8W+WbP7QcpA6vOHhkp9qJLlghbEjYs909gt+Z+qaqUSYLgMhg54b92Qg VXfxxPSH3NJ6gubwZW4TVkriWCREfbh5yRG3+wyCHZ2V2R9HM0dIwHI1I54Q7ilbVxh1VNQfYDOOj8 oMeAjJUn1aA+wQbtYycUQqLJ2HTooL
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1056; i=broonie@kernel.org; h=from:subject; bh=8V2GhJ4jVvqw3eI18z+SJ7d6N8Yl/q31zrS4myMV8vk=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjTXPf6xaAYBc8ox07be/LQezNNjaZrSJSfXzeNFrs NI2S2W+JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY01z3wAKCRAk1otyXVSH0DWoB/ kBvdAdNKDU24CwLcJlPAK2c/k2LbL/WWQ3tbnt0GWNWllgljr1Ds88CnR6EKIzo3hmBI8yaG6dbaAf Z4NEkr73TuOsM4pQe2WUW1ECBnYt0uBQzJY/Bnsm0qiSwY3ILC5MM8VwadT2ZeZx6Hj7UOwm2Wksxg 5F8t2RC/lvVmHTnQtoWOQZPaKUM823CCO/eeDfw1jT3AlbjUOTIhgbpVxozmuvK48s1mE787d9uFon k0LbUF+86RP14uppzmQpSv61Izyql+1vh1VD06eWWuMxVNrohnbYn15FzmPUR6mgE/jZYApnJWgK6F nTIR5TMgZUM7lQF5uGezDN7z1pzIr+
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Since the newly added instruction is in the HINT space we can't reasonably
-test for it actually being present.
+Add coverage for FEAT_SVE2p1.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- tools/testing/selftests/arm64/abi/hwcap.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ tools/testing/selftests/arm64/abi/hwcap.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
 diff --git a/tools/testing/selftests/arm64/abi/hwcap.c b/tools/testing/selftests/arm64/abi/hwcap.c
-index c7a6b327a7d0..30f87dfd634e 100644
+index 30f87dfd634e..9f255bc5f31c 100644
 --- a/tools/testing/selftests/arm64/abi/hwcap.c
 +++ b/tools/testing/selftests/arm64/abi/hwcap.c
-@@ -138,6 +138,12 @@ static const struct hwcap_data {
- 		.cpuinfo = "rng",
- 		.sigill_fn = rng_sigill,
+@@ -62,6 +62,12 @@ static void sve2_sigill(void)
+ 	asm volatile(".inst 0x4408A000" : : : "z0");
+ }
+ 
++static void sve2p1_sigill(void)
++{
++	/* BFADD Z0.H, Z0.H, Z0.H */
++	asm volatile(".inst 0x65000000" : : : "z0");
++}
++
+ static void sveaes_sigill(void)
+ {
+ 	/* AESD z0.b, z0.b, z0.b */
+@@ -167,6 +173,13 @@ static const struct hwcap_data {
+ 		.cpuinfo = "sve2",
+ 		.sigill_fn = sve2_sigill,
  	},
 +	{
-+		.name = "RPRFM",
++		.name = "SVE 2.1",
 +		.at_hwcap = AT_HWCAP2,
-+		.hwcap_bit = HWCAP2_RPRFM,
-+		.cpuinfo = "rprfm",
++		.hwcap_bit = HWCAP2_SVE2P1,
++		.cpuinfo = "sve2p1",
++		.sigill_fn = sve2p1_sigill,
 +	},
  	{
- 		.name = "SME",
+ 		.name = "SVE AES",
  		.at_hwcap = AT_HWCAP2,
 -- 
 2.30.2
