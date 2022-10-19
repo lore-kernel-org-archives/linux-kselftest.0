@@ -2,95 +2,95 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E921FC43217
-	for <linux-kselftest@archiver.kernel.org>; Wed, 19 Oct 2022 18:31:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DB29C4332F
+	for <linux-kselftest@archiver.kernel.org>; Wed, 19 Oct 2022 18:58:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230507AbiJSSbH (ORCPT
+        id S230084AbiJSS6T (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 19 Oct 2022 14:31:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41976 "EHLO
+        Wed, 19 Oct 2022 14:58:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230329AbiJSSbE (ORCPT
+        with ESMTP id S229592AbiJSS6S (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 Oct 2022 14:31:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 105C215F31E
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 Oct 2022 11:31:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666204262;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cRgh4VHZmDgEae/Ku6y8nsOB6SGNPgo//uwmO2M4VHY=;
-        b=e3GNgg1+CXvGTFHXJWRaltRR14vm2kE6JzKpLB+shsdCiwGnt/uxF4ZilG6DH1oKAiIe3s
-        3uY/+7dq8oXVSxKVB9UTDs2jaf/mFCIsnTtdjl0MVLsyV4nMAFXfkL/FIpbadAka4LLDSH
-        hDlh052OvSgkEMcU/DZNjXByDoW4Z+M=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-133-EgBaib-yN7muDCqz1b-bow-1; Wed, 19 Oct 2022 14:30:56 -0400
-X-MC-Unique: EgBaib-yN7muDCqz1b-bow-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 19 Oct 2022 14:58:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139251BF861;
+        Wed, 19 Oct 2022 11:58:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F2EA0185A7A9;
-        Wed, 19 Oct 2022 18:30:55 +0000 (UTC)
-Received: from RHTPC1VM0NT.redhat.com (unknown [10.22.8.238])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6FC6149BB63;
-        Wed, 19 Oct 2022 18:30:55 +0000 (UTC)
-From:   Aaron Conole <aconole@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     Pravin B Shelar <pshelar@ovn.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
+        by ams.source.kernel.org (Postfix) with ESMTPS id 097A1B825AF;
+        Wed, 19 Oct 2022 18:58:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74F1BC433C1;
+        Wed, 19 Oct 2022 18:58:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666205891;
+        bh=onZg9bkGpyLkmJj2Fk6FDBy22LakxbtW4dE3qVAG/38=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=s/QRSEYU6CfqIOUb1Rd8FcgomGAdkwREiqcsrf0LmVB9BwF9/81d8Y1hYeN2s3s/Y
+         VoD8ADpfMfOiR0hdz4/cPi94E1+bLqNMVKT3J3vpLIc8aXADo8Vb56zjYqOzZIHQwm
+         Q/38SLzyoFqo+T2vN+Dfl2YnHovoF/ZOdzxqgukeU0G4xJlnQ2zpVco6wuhLDrMUFm
+         x1INfQdLxkSsRmgDATky2yE9RbY+tdV1L5uYXxmL7MoWBO6cUCPVPiaEIaejaYJt2X
+         WiE0FZaJ76F0pnzhQxC5KrFNPUpv4xh85ymDN5KCcuWPKeVTpLc3sRp4Qbnax2+ZFj
+         iBmEGWQCRlBLg==
+Date:   Wed, 19 Oct 2022 11:58:09 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     "Hans J. Schultz" <netdev@kapio-technology.com>
+Cc:     davem@davemloft.net, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
         Eric Dumazet <edumazet@google.com>,
-        Thomas Graf <tgraf@suug.ch>,
-        Kevin Sprague <ksprague0711@gmail.com>, dev@openvswitch.org,
-        Eelco Chaudron <echaudro@redhat.com>,
-        Ilya Maximets <i.maximets@ovn.org>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH net 1/2] openvswitch: switch from WARN to pr_warn
-Date:   Wed, 19 Oct 2022 14:30:53 -0400
-Message-Id: <20221019183054.105815-2-aconole@redhat.com>
-In-Reply-To: <20221019183054.105815-1-aconole@redhat.com>
-References: <20221019183054.105815-1-aconole@redhat.com>
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Florent Fourcot <florent.fourcot@wifirst.fr>,
+        Hans Schultz <schultz.hans@gmail.com>,
+        Joachim Wiberg <troglobit@gmail.com>,
+        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v8 net-next 00/12] Extend locked port feature with FDB
+ locked flag (MAC-Auth/MAB)
+Message-ID: <20221019115809.552812a5@kernel.org>
+In-Reply-To: <20221018165619.134535-1-netdev@kapio-technology.com>
+References: <20221018165619.134535-1-netdev@kapio-technology.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-As noted by Paolo Abeni, pr_warn doesn't generate any splat and can still
-preserve the warning to the user that feature downgrade occurred.  We
-likely cannot introduce other kinds of checks / enforcement here because
-syzbot can generate different genl versions to the datapath.
+On Tue, 18 Oct 2022 18:56:07 +0200 Hans J. Schultz wrote:
+> This patch set extends the locked port feature for devices
+> that are behind a locked port, but do not have the ability to
+> authorize themselves as a supplicant using IEEE 802.1X.
+> Such devices can be printers, meters or anything related to
+> fixed installations. Instead of 802.1X authorization, devices
+> can get access based on their MAC addresses being whitelisted.
 
-Reported-by: syzbot+31cde0bef4bbf8ba2d86@syzkaller.appspotmail.com
-Fixes: 44da5ae5fbea ("openvswitch: Drop user features if old user space attempted to create datapath")
-Cc: Thomas Graf <tgraf@suug.ch>
-Signed-off-by: Aaron Conole <aconole@redhat.com>
----
- net/openvswitch/datapath.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/net/openvswitch/datapath.c b/net/openvswitch/datapath.c
-index c8a9075ddd0a..155263e73512 100644
---- a/net/openvswitch/datapath.c
-+++ b/net/openvswitch/datapath.c
-@@ -1616,7 +1616,8 @@ static void ovs_dp_reset_user_features(struct sk_buff *skb,
- 	if (IS_ERR(dp))
- 		return;
- 
--	WARN(dp->user_features, "Dropping previously announced user features\n");
-+	pr_warn("%s: Dropping previously announced user features\n",
-+		ovs_dp_name(dp));
- 	dp->user_features = 0;
- }
- 
--- 
-2.34.3
-
+FWIW half of this posting got stuck on the "email pipes" for a day..
+somehow. Let's give Ido and others a chance to have a look but you'll
+need to repost even if it's flawless because the build bots can't deal
+with a delay that long :(
