@@ -2,114 +2,139 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77499C4332F
-	for <linux-kselftest@archiver.kernel.org>; Fri, 21 Oct 2022 06:47:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0AB7C433FE
+	for <linux-kselftest@archiver.kernel.org>; Fri, 21 Oct 2022 07:14:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229991AbiJUGrs (ORCPT
+        id S229776AbiJUHOa (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 21 Oct 2022 02:47:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59126 "EHLO
+        Fri, 21 Oct 2022 03:14:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiJUGrq (ORCPT
+        with ESMTP id S229679AbiJUHO3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 21 Oct 2022 02:47:46 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B492413ED;
-        Thu, 20 Oct 2022 23:47:44 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id A3C711884AB0;
-        Fri, 21 Oct 2022 06:47:42 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 9C2CF250007B;
-        Fri, 21 Oct 2022 06:47:42 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 87CB39EC000B; Fri, 21 Oct 2022 06:47:42 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Fri, 21 Oct 2022 03:14:29 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C726627B;
+        Fri, 21 Oct 2022 00:14:23 -0700 (PDT)
+Received: from canpemm500005.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MtwZQ6P4Lz15Lx3;
+        Fri, 21 Oct 2022 15:09:34 +0800 (CST)
+Received: from ubuntu1804.huawei.com (10.67.174.63) by
+ canpemm500005.china.huawei.com (7.192.104.229) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 21 Oct 2022 15:14:20 +0800
+From:   Zhao Gongyi <zhaogongyi@huawei.com>
+To:     <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <keescook@chromium.org>, <luto@amacapital.net>, <wad@chromium.org>,
+        <shuah@kernel.org>, <zhaogongyi@huawei.com>,
+        <cristian.marussi@arm.com>
+Subject: [PATCH -next 1/2] selftests/mincore: Add checking of block dev for TEST(check_file_mmap)
+Date:   Fri, 21 Oct 2022 15:10:51 +0800
+Message-ID: <20221021071052.143393-1-zhaogongyi@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Date:   Fri, 21 Oct 2022 08:47:42 +0200
-From:   netdev@kapio-technology.com
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v8 net-next 10/12] net: dsa: mv88e6xxx: mac-auth/MAB
- implementation
-In-Reply-To: <20221020225719.l5iw6vndmm7gvjo3@skbuf>
-References: <20221018165619.134535-1-netdev@kapio-technology.com>
- <20221018165619.134535-1-netdev@kapio-technology.com>
- <20221018165619.134535-11-netdev@kapio-technology.com>
- <20221018165619.134535-11-netdev@kapio-technology.com>
- <20221020132538.reirrskemcjwih2m@skbuf>
- <2565c09bb95d69142522c3c3bcaa599e@kapio-technology.com>
- <20221020225719.l5iw6vndmm7gvjo3@skbuf>
-User-Agent: Gigahost Webmail
-Message-ID: <82d23b100b8d2c9e4647b8a134d5cbbf@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.67.174.63]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500005.china.huawei.com (7.192.104.229)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2022-10-21 00:57, Vladimir Oltean wrote:
-> On Thu, Oct 20, 2022 at 10:20:50PM +0200, netdev@kapio-technology.com 
-> wrote:
->> In general locked ports block traffic from a host based on if there is 
->> a
->> FDB entry or not. In the non-offloaded case, there is only CPU 
->> assisted
->> learning, so the normal learning mechanism has to be disabled as any
->> learned entry will open the port for the learned MAC,vlan.
-> 
-> Does it have to be that way? Why can't BR_LEARNING on a BR_PORT_LOCKED
-> cause the learned FDB entries to have BR_FDB_LOCKED, and everything
-> would be ok in that case (the port will not be opened for the learned
-> MAC/VLAN)?
-> 
+TEST(check_file_mmap) will fail when we run the test on tmpfs and report:
+  mincore_selftest.c:261:check_file_mmap:Expected ra_pages (0) > 0 (0)
+  mincore_selftest.c:262:check_file_mmap:No read-ahead pages found in memory
 
-I suppose you are right that basing it solely on BR_FDB_LOCKED is 
-possible.
+For some embaded system, maybe there is only tmpfs file system exist,
+run the test will fail, or we install the test on a filesystem that
+has no backend, also it will fail as unepected.
 
-The question is then maybe if the common case where you don't need 
-learned
-entries for the scheme to work, e.g. with EAPOL link local packets, 
-requires
-less CPU load to work and is cleaner than if using BR_FDB_LOCKED 
-entries?
+So add a checking of block dev for the filesystem at first.
 
->> Thus learning is off for locked ports, which of course includes MAB.
->> 
->> So the 'learning' is based on authorizing MAC,vlan addresses, which
->> is done by userspace daemons, e.g. hostapd or what could be called
->> mabd.
+Signed-off-by: Zhao Gongyi <zhaogongyi@huawei.com>
+---
+ .../selftests/mincore/mincore_selftest.c      | 53 +++++++++++++++++++
+ 1 file changed, 53 insertions(+)
+
+diff --git a/tools/testing/selftests/mincore/mincore_selftest.c b/tools/testing/selftests/mincore/mincore_selftest.c
+index 4c88238fc8f0..287351a599a2 100644
+--- a/tools/testing/selftests/mincore/mincore_selftest.c
++++ b/tools/testing/selftests/mincore/mincore_selftest.c
+@@ -14,6 +14,9 @@
+ #include <sys/mman.h>
+ #include <string.h>
+ #include <fcntl.h>
++#include <mntent.h>
++#include <sys/stat.h>
++#include <linux/fs.h>
+
+ #include "../kselftest.h"
+ #include "../kselftest_harness.h"
+@@ -173,6 +176,43 @@ TEST(check_huge_pages)
+ 	munmap(addr, page_size);
+ }
+
++static struct mntent* find_mount_point(const char *name)
++{
++	struct stat s;
++	FILE *mtab_fp;
++	struct mntent *mountEntry;
++	dev_t devno_of_name;
++
++	if (stat(name, &s) != 0)
++		return NULL;
++
++	devno_of_name = s.st_dev;
++
++	mtab_fp = setmntent("/proc/mounts", "r");
++	if (!mtab_fp)
++		return NULL;
++
++	while ((mountEntry = getmntent(mtab_fp)) != NULL) {
++		if (strcmp(name, mountEntry->mnt_dir) == 0
++			|| strcmp(name, mountEntry->mnt_fsname) == 0) {
++			break;
++		}
++
++		if (mountEntry->mnt_fsname[0] == '/'
++			&& stat(mountEntry->mnt_fsname, &s) == 0
++			&& s.st_rdev == devno_of_name) {
++			break;
++		}
++
++		if (stat(mountEntry->mnt_dir, &s) == 0
++				&& s.st_dev == devno_of_name) {
++			break;
++		}
++	}
++	endmntent(mtab_fp);
++
++	return mountEntry;
++}
+
+ /*
+  * Test mincore() behavior on a file-backed page.
+@@ -194,6 +234,19 @@ TEST(check_file_mmap)
+ 	int fd;
+ 	int i;
+ 	int ra_pages = 0;
++	struct stat s;
++	struct mntent *mount_entry;
++
++	mount_entry = find_mount_point(".");
++	ASSERT_NE(NULL, mount_entry) {
++		TH_LOG("Find mount point of '.' failed");
++	}
++
++	ASSERT_EQ(0, (stat(mount_entry->mnt_fsname, &s) != 0
++		|| !S_ISBLK(s.st_mode))) {
++		TH_LOG("There is no a block dev on mount point, "
++			"test is not supported");
++	}
+
+ 	page_size = sysconf(_SC_PAGESIZE);
+ 	vec_size = FILE_SIZE / page_size;
+--
+2.17.1
+
