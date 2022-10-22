@@ -2,99 +2,98 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28E35C433FE
-	for <linux-kselftest@archiver.kernel.org>; Sat, 22 Oct 2022 10:58:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99CD5C04A95
+	for <linux-kselftest@archiver.kernel.org>; Sat, 22 Oct 2022 11:37:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbiJVK6O (ORCPT
+        id S230238AbiJVLhU (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 22 Oct 2022 06:58:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43282 "EHLO
+        Sat, 22 Oct 2022 07:37:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230446AbiJVK5x (ORCPT
+        with ESMTP id S230253AbiJVLhF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 22 Oct 2022 06:57:53 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC14C319B88;
-        Sat, 22 Oct 2022 03:16:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A3E46CE2CB3;
-        Sat, 22 Oct 2022 07:59:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 609DBC433D6;
-        Sat, 22 Oct 2022 07:59:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666425548;
-        bh=X1wE11PrAAWw40XctTtBRMrMg9csj3krl4R38bk5NqQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pnufLew+vBVIRbhblDTV5C8t1OhIkXxHDh703gR1UrZDT5Z+YWHuBAkFeE0Q7LmGP
-         NiSJGA2FzvpcDA96TcQz1j2pQlJssvEnfpM6LIz2HapvTPOLg67pKfr7HdRHyyl3uE
-         P7ITTgN3v7Ll5NnKZ/uGa7NOnEZmFOaOGiqtxmUQ=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 538/717] selftest: tpm2: Add Client.__del__() to close /dev/tpm* handle
-Date:   Sat, 22 Oct 2022 09:26:57 +0200
-Message-Id: <20221022072522.125914615@linuxfoundation.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221022072415.034382448@linuxfoundation.org>
-References: <20221022072415.034382448@linuxfoundation.org>
-User-Agent: quilt/0.67
+        Sat, 22 Oct 2022 07:37:05 -0400
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7BE9C176B8F;
+        Sat, 22 Oct 2022 04:22:42 -0700 (PDT)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 29MBMStf030728;
+        Sat, 22 Oct 2022 13:22:28 +0200
+Date:   Sat, 22 Oct 2022 13:22:28 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/nolibc: add 7 tests for memcmp()
+Message-ID: <20221022112228.GB30596@1wt.eu>
+References: <20221021060340.7515-1-w@1wt.eu>
+ <20221021155645.GK5600@paulmck-ThinkPad-P17-Gen-1>
+ <20221021170134.GB8420@1wt.eu>
+ <20221021170738.GM5600@paulmck-ThinkPad-P17-Gen-1>
+ <20221021172026.GC8420@1wt.eu>
+ <20221021180040.GN5600@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221021180040.GN5600@paulmck-ThinkPad-P17-Gen-1>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Stefan Berger <stefanb@linux.ibm.com>
+On Fri, Oct 21, 2022 at 11:00:40AM -0700, Paul E. McKenney wrote:
+> > It's even easier, you don't even need the clean phase in include/nolibc.
+> > I'm doing this and it's sufficient:
+> > 
+> >   make -C tools/testing/selftests/nolibc clean
+> >   make -C tools/testing/selftests/nolibc nolibc-test
+> >   tools/testing/selftests/nolibc/nolibc-test
+> > 
+> > Or for the test under QEMU, which involves a kernel build:
+> > 
+> >   make -C tools/testing/selftests/nolibc clean
+> >   make -C tools/testing/selftests/nolibc -j $(nproc) run
+> > 
+> > Where would you first look for such a hint ? Maybe the help output of
+> > the default "make" command could send as a hint that a clean is needed
+> > after patching nolibc and that could be sufficient ? I just want to make
+> > sure users don't waste their time trying to find what they could be doing
+> > wrong.
+> 
+> Maybe it suffices for the near term for me to put this information in
+> the signed tag for the pull request?
 
-[ Upstream commit 2d869f0b458547386fbcd8cf3004b271b7347b7f ]
+It can be sufficient for short term indeed, but it can be easy as well
+for me to mention it in the make output.
 
-The following output can bee seen when the test is executed:
+> Another approach would be to remind about "make clean" in the case of
+> a test failure.  Or make test failure combined with a detected change
+> trigger an automatic "make clean" and a retry.
 
-  test_flush_context (tpm2_tests.SpaceTest) ... \
-    /usr/lib64/python3.6/unittest/case.py:605: ResourceWarning: \
-    unclosed file <_io.FileIO name='/dev/tpmrm0' mode='rb+' closefd=True>
+In fact failures are not the only case. For me it was the opposite. I
+applied Rasmus' fix, then I developed the test, verified that it worked,
+then reverted Rasmus' fix... to find that the test didn't catch the
+failure. I had a second look at the original patch and figured that
+the -192..+192 values were really not possible with a char so I
+concluded that a clean was needed. But leaving something in a claimed
+working state while it's not can be sufficiently misleading and make
+one waste significant time, because in such cases we rarely search why
+it works.
 
-An instance of Client does not implicitly close /dev/tpm* handle, once it
-gets destroyed. Close the file handle in the class destructor
-Client.__del__().
+> Or other schemes of increasing complexity and fragility.  ;-)
 
-Fixes: 6ea3dfe1e0732 ("selftests: add TPM 2.0 tests")
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org
-Cc: Jarkko Sakkinen <jarkko@kernel.org>
-Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/tpm2/tpm2.py | 4 ++++
- 1 file changed, 4 insertions(+)
+That's exactly what I'd like to avoid with such a lightweight component.
+If it takes more time to figure why something is going wrong than to
+write a test, we'll all give up. I think that a clean for QEMU is worth
+it because the kernel is rebuilt and its dependencies are quite robust,
+so that one would be a surprise. For other tests, probably leaving it
+explicit with a hint that it's needed should suffice. I'll recheck what
+conditions the installation of uapi headers because that's really what
+I don't want to see happening all the time. The rest is discrete, it's
+just a few files being copied, maybe it can be done every time.
 
-diff --git a/tools/testing/selftests/tpm2/tpm2.py b/tools/testing/selftests/tpm2/tpm2.py
-index 057a4f49c79d..c7363c6764fc 100644
---- a/tools/testing/selftests/tpm2/tpm2.py
-+++ b/tools/testing/selftests/tpm2/tpm2.py
-@@ -371,6 +371,10 @@ class Client:
-             fcntl.fcntl(self.tpm, fcntl.F_SETFL, flags)
-             self.tpm_poll = select.poll()
- 
-+    def __del__(self):
-+        if self.tpm:
-+            self.tpm.close()
-+
-     def close(self):
-         self.tpm.close()
- 
--- 
-2.35.1
+Will keep thinking about it and hopefully propose a patch to make the
+tests easier to use before we're too far in the 6.1 release.
 
-
-
+Thanks for keeping the conversation flowing, that helps me!
+Willy
