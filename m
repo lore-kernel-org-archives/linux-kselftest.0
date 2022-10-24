@@ -2,140 +2,70 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E0AAECAAA1
-	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Oct 2022 18:43:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D9AFC67871
+	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Oct 2022 22:03:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230446AbiJXSnj (ORCPT
+        id S231812AbiJXWDT (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 24 Oct 2022 14:43:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42074 "EHLO
+        Mon, 24 Oct 2022 18:03:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230025AbiJXSnZ (ORCPT
+        with ESMTP id S230274AbiJXWCr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Oct 2022 14:43:25 -0400
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1583108252
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Oct 2022 10:25:30 -0700 (PDT)
-Received: by mail-pf1-f179.google.com with SMTP id m6so9578556pfb.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Oct 2022 10:25:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:from:cc:to:content-language:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=/KDE+ZSByxuwvp2Mh5tqtliS1mJsjNthfkvCjtjqWOc=;
-        b=VR70NOdmonY9xti+I2mftN/fO5MSCOEqOMQdyXu9zkTVzTpBpjogLNZx8Fpy1CX3WG
-         Xof1GvwLdr9TOIwoFww+uPjBElVHHdeQ5J0KVEFNHf6ieSOglmrnNMK8gRzC1vnES/ki
-         WH8UChPriwQx6YjdhH0x4iNga1Qh55tCl5u1k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=subject:from:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/KDE+ZSByxuwvp2Mh5tqtliS1mJsjNthfkvCjtjqWOc=;
-        b=wOohf/6Fys/CxuGBvjRzrLFx4PJ2DmNP11W4L04l/u7a+8uIv4BumLlEEfDxSgX5/S
-         rhLeiJi9EMR6ZxES2QUgJYpLvYgXPzARMqAhPwExzjUQBY8ZiiI9/VZ5edpq9X0gsx5y
-         TmdRRLk+4+VNaGV/yUhcE+pH8s5zCQLZUE/FhRXo3HxGIiFNfHzrfs3QLIFwfHMImEKC
-         vBYHYothzFnxUpQ31c1XBrASIFQxFElKcWORVfVLcqeKqyFNGhopr0V52t8s2ZZ0O9+z
-         R3f8mn7U+TEKS/96a1wy80Cmoj+xuom/shROJqDICrPIqnirmPT00coAitQUGS2Ae2Ck
-         PQjA==
-X-Gm-Message-State: ACrzQf3zvRQcBzac27GYQ2Jqb8EZtYdR2Im5DpMdMfpsPwGYxGN8nIfu
-        aZ8+dCh8IXahfHnhNlf+w477c5266DpKVg==
-X-Google-Smtp-Source: AMsMyM4s91x+KgOQrSOXBLmvilHsV0EQlDIBoGj6O1GMTz1aa1gRlmyEPkx1kemaKziqOIyLVtlSbg==
-X-Received: by 2002:a05:6e02:1aab:b0:2fa:80c2:8375 with SMTP id l11-20020a056e021aab00b002fa80c28375mr21505543ilv.72.1666630149909;
-        Mon, 24 Oct 2022 09:49:09 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id h18-20020a056602155200b006bbddd49984sm109429iow.9.2022.10.24.09.49.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 09:49:09 -0700 (PDT)
-Content-Type: multipart/mixed; boundary="------------RcXPsDbTzYcGigJSsyMdly3r"
-Message-ID: <f2934916-9b69-9603-9ae3-580b0c3eb97d@linuxfoundation.org>
-Date:   Mon, 24 Oct 2022 10:49:08 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        David Gow <davidgow@google.com>,
+        Mon, 24 Oct 2022 18:02:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC0302F9C00;
+        Mon, 24 Oct 2022 13:16:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8998C615BA;
+        Mon, 24 Oct 2022 20:06:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EAFF0C433C1;
+        Mon, 24 Oct 2022 20:06:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666642018;
+        bh=ZHu+cqAeK1kalG/F9/zzh8eMHDvcM1A6oI6sYTcXkLk=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=fgc2rZAr0pi+Oc+QC/tA1mY4TXYbCFrf2Nmzgn4/H9CO5znxUjNtHlbM2mTVuR3fl
+         6MGQx5H0biEIeRWXsQt30J97bs+ri6OuJiE1tQdpNKAd6duqZag73PTAnBSItZ4PTu
+         l/LNedPp9hMnXRVWTfCC+2c1dKKArBxUalZJrcDKj1oUy+c5ILtmSCQYAkX6SioHNg
+         mSv+lh2DUMxAV+NrHv7mYeesea8KGZ3XX/no9moGmYpfmWdEuePWzGg5D5R35AIMp9
+         MfAr05xgTRHyaDnJAfiPJr+rVjFXd43J/NAf64l4L+qMzVB27nbmnZqzbD52k37Gj2
+         eIxQnN0Ai2wpA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D6277E29F30;
+        Mon, 24 Oct 2022 20:06:57 +0000 (UTC)
+Subject: Re: [GIT PULL] Kselftest fixes update for Linux 6.1-rc3
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <b9c14ec8-b410-c742-3cb4-0067e2bf7100@linuxfoundation.org>
+References: <b9c14ec8-b410-c742-3cb4-0067e2bf7100@linuxfoundation.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <b9c14ec8-b410-c742-3cb4-0067e2bf7100@linuxfoundation.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-fixes-6.1-rc3
+X-PR-Tracked-Commit-Id: cb05c81ada76a30a25a5f79b249375e33473af33
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 21c92498e9b86b5b3e91818e13ce7943da8496a4
+Message-Id: <166664201787.4311.1201622408202250233.pr-tracker-bot@kernel.org>
+Date:   Mon, 24 Oct 2022 20:06:57 +0000
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Subject: [GIT PULL] KUnit fixes update for Linux 6.1-rc3
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------RcXPsDbTzYcGigJSsyMdly3r
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+The pull request you sent on Mon, 24 Oct 2022 10:35:43 -0600:
 
-Hi Linus,
+> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-fixes-6.1-rc3
 
-Please pull the following KUnit fixes update for Linux 6.1-rc3.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/21c92498e9b86b5b3e91818e13ce7943da8496a4
 
-This KUnit fixes update for Linux 6.1-rc3 consists of one single fix
-to update alloc_string_stream() callers to check for IS_ERR() instead
-of NULL to be in sync with alloc_string_stream() returning IS_ERR().
+Thank you!
 
-diff for this pull request is attached.
-
-thanks,
--- Shuah
-
-----------------------------------------------------------------
-The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
-
-   Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
-
-are available in the Git repository at:
-
-   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-fixes-6.1-rc3
-
-for you to fetch changes up to 618887768bb71f0a475334fa5a4fba7dc98d7ab5:
-
-   kunit: update NULL vs IS_ERR() tests (2022-10-18 15:08:42 -0600)
-
-----------------------------------------------------------------
-linux-kselftest-kunit-fixes-6.1-rc3
-
-This KUnit fixes update for Linux 6.1-rc3 consists of one single fix
-to update alloc_string_stream() callers to check for IS_ERR() instead
-of NULL to be in sync with alloc_string_stream() returning IS_ERR().
-
-----------------------------------------------------------------
-Dan Carpenter (1):
-       kunit: update NULL vs IS_ERR() tests
-
-  lib/kunit/string-stream.c | 4 ++--
-  lib/kunit/test.c          | 2 +-
-  2 files changed, 3 insertions(+), 3 deletions(-)
-----------------------------------------------------------------
---------------RcXPsDbTzYcGigJSsyMdly3r
-Content-Type: text/x-patch; charset=UTF-8;
- name="linux-kselftest-kunit-fixes-6.1-rc3.diff"
-Content-Disposition: attachment;
- filename="linux-kselftest-kunit-fixes-6.1-rc3.diff"
-Content-Transfer-Encoding: base64
-
-ZGlmZiAtLWdpdCBhL2xpYi9rdW5pdC9zdHJpbmctc3RyZWFtLmMgYi9saWIva3VuaXQvc3Ry
-aW5nLXN0cmVhbS5jCmluZGV4IGY1YWU3OWMzNzQwMC4uYTYwODc0NjAyMGE5IDEwMDY0NAot
-LS0gYS9saWIva3VuaXQvc3RyaW5nLXN0cmVhbS5jCisrKyBiL2xpYi9rdW5pdC9zdHJpbmct
-c3RyZWFtLmMKQEAgLTU2LDggKzU2LDggQEAgaW50IHN0cmluZ19zdHJlYW1fdmFkZChzdHJ1
-Y3Qgc3RyaW5nX3N0cmVhbSAqc3RyZWFtLAogCWZyYWdfY29udGFpbmVyID0gYWxsb2Nfc3Ry
-aW5nX3N0cmVhbV9mcmFnbWVudChzdHJlYW0tPnRlc3QsCiAJCQkJCQkgICAgICBsZW4sCiAJ
-CQkJCQkgICAgICBzdHJlYW0tPmdmcCk7Ci0JaWYgKCFmcmFnX2NvbnRhaW5lcikKLQkJcmV0
-dXJuIC1FTk9NRU07CisJaWYgKElTX0VSUihmcmFnX2NvbnRhaW5lcikpCisJCXJldHVybiBQ
-VFJfRVJSKGZyYWdfY29udGFpbmVyKTsKIAogCWxlbiA9IHZzbnByaW50ZihmcmFnX2NvbnRh
-aW5lci0+ZnJhZ21lbnQsIGxlbiwgZm10LCBhcmdzKTsKIAlzcGluX2xvY2soJnN0cmVhbS0+
-bG9jayk7CmRpZmYgLS1naXQgYS9saWIva3VuaXQvdGVzdC5jIGIvbGliL2t1bml0L3Rlc3Qu
-YwppbmRleCA5MDY0MGE0M2NmNjIuLjJhNjk5MmZlN2MzZSAxMDA2NDQKLS0tIGEvbGliL2t1
-bml0L3Rlc3QuYworKysgYi9saWIva3VuaXQvdGVzdC5jCkBAIC0yNjUsNyArMjY1LDcgQEAg
-c3RhdGljIHZvaWQga3VuaXRfZmFpbChzdHJ1Y3Qga3VuaXQgKnRlc3QsIGNvbnN0IHN0cnVj
-dCBrdW5pdF9sb2MgKmxvYywKIAlrdW5pdF9zZXRfZmFpbHVyZSh0ZXN0KTsKIAogCXN0cmVh
-bSA9IGFsbG9jX3N0cmluZ19zdHJlYW0odGVzdCwgR0ZQX0tFUk5FTCk7Ci0JaWYgKCFzdHJl
-YW0pIHsKKwlpZiAoSVNfRVJSKHN0cmVhbSkpIHsKIAkJV0FSTih0cnVlLAogCQkgICAgICJD
-b3VsZCBub3QgYWxsb2NhdGUgc3RyZWFtIHRvIHByaW50IGZhaWxlZCBhc3NlcnRpb24gaW4g
-JXM6JWRcbiIsCiAJCSAgICAgbG9jLT5maWxlLAo=
-
---------------RcXPsDbTzYcGigJSsyMdly3r--
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
