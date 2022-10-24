@@ -2,109 +2,140 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3EF4C38A2D
-	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Oct 2022 18:37:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E0AAECAAA1
+	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Oct 2022 18:43:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230421AbiJXShF (ORCPT
+        id S230446AbiJXSnj (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 24 Oct 2022 14:37:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42610 "EHLO
+        Mon, 24 Oct 2022 14:43:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230422AbiJXSgi (ORCPT
+        with ESMTP id S230025AbiJXSnZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Oct 2022 14:36:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C27E8201AC;
-        Mon, 24 Oct 2022 10:18:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 62B00B81888;
-        Mon, 24 Oct 2022 17:08:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0086C433C1;
-        Mon, 24 Oct 2022 17:08:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666631284;
-        bh=qWgfUtE4UN4/iCrWAyctAyzwt74lHMnUej7miAfWozs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Zu+kqShRcjC8nRPj+ZPavRcjYG48rUxYr/xtUKVxq/tVD3qP4BQ8938gc4JRHh+sQ
-         wUEoCQstYbywkycJbXo1Gx9NudXpA31ePGv1ymKF7AziAkUafYLdFNwgeHV1QImOEK
-         JFwJgG3tBQ+MqnkxeUpIBTBFzGPMlWiBuQYZJPplfyUZSfiekZhXplF9BCf4TEz5cR
-         BoSuO18xOEhTlK5W4tnJUnjIc+5268Ad/+OGpyLVWX/qO+ewTt1u6BRu/hvzFkn3Kl
-         CbW0He1dZ/toR97u7dANoXILUr18MDMSTzT2iOWvvh3xihpjn8Gr15icEr7MzFt17l
-         NwXsJuVW8BO6Q==
-Date:   Mon, 24 Oct 2022 10:08:01 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     netdev@kapio-technology.com
-Cc:     Ido Schimmel <idosch@nvidia.com>, davem@davemloft.net,
-        netdev@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v8 net-next 02/12] net: bridge: add blackhole fdb entry
- flag
-Message-ID: <20221024100801.6c391ff9@kernel.org>
-In-Reply-To: <7690b7f836b144b60f60b3b68d3bf784@kapio-technology.com>
-References: <20221018165619.134535-1-netdev@kapio-technology.com>
-        <20221018165619.134535-3-netdev@kapio-technology.com>
-        <Y1FHuXE+X/V9aRvh@shredder>
-        <7690b7f836b144b60f60b3b68d3bf784@kapio-technology.com>
+        Mon, 24 Oct 2022 14:43:25 -0400
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1583108252
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 Oct 2022 10:25:30 -0700 (PDT)
+Received: by mail-pf1-f179.google.com with SMTP id m6so9578556pfb.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 Oct 2022 10:25:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=/KDE+ZSByxuwvp2Mh5tqtliS1mJsjNthfkvCjtjqWOc=;
+        b=VR70NOdmonY9xti+I2mftN/fO5MSCOEqOMQdyXu9zkTVzTpBpjogLNZx8Fpy1CX3WG
+         Xof1GvwLdr9TOIwoFww+uPjBElVHHdeQ5J0KVEFNHf6ieSOglmrnNMK8gRzC1vnES/ki
+         WH8UChPriwQx6YjdhH0x4iNga1Qh55tCl5u1k=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/KDE+ZSByxuwvp2Mh5tqtliS1mJsjNthfkvCjtjqWOc=;
+        b=wOohf/6Fys/CxuGBvjRzrLFx4PJ2DmNP11W4L04l/u7a+8uIv4BumLlEEfDxSgX5/S
+         rhLeiJi9EMR6ZxES2QUgJYpLvYgXPzARMqAhPwExzjUQBY8ZiiI9/VZ5edpq9X0gsx5y
+         TmdRRLk+4+VNaGV/yUhcE+pH8s5zCQLZUE/FhRXo3HxGIiFNfHzrfs3QLIFwfHMImEKC
+         vBYHYothzFnxUpQ31c1XBrASIFQxFElKcWORVfVLcqeKqyFNGhopr0V52t8s2ZZ0O9+z
+         R3f8mn7U+TEKS/96a1wy80Cmoj+xuom/shROJqDICrPIqnirmPT00coAitQUGS2Ae2Ck
+         PQjA==
+X-Gm-Message-State: ACrzQf3zvRQcBzac27GYQ2Jqb8EZtYdR2Im5DpMdMfpsPwGYxGN8nIfu
+        aZ8+dCh8IXahfHnhNlf+w477c5266DpKVg==
+X-Google-Smtp-Source: AMsMyM4s91x+KgOQrSOXBLmvilHsV0EQlDIBoGj6O1GMTz1aa1gRlmyEPkx1kemaKziqOIyLVtlSbg==
+X-Received: by 2002:a05:6e02:1aab:b0:2fa:80c2:8375 with SMTP id l11-20020a056e021aab00b002fa80c28375mr21505543ilv.72.1666630149909;
+        Mon, 24 Oct 2022 09:49:09 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id h18-20020a056602155200b006bbddd49984sm109429iow.9.2022.10.24.09.49.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Oct 2022 09:49:09 -0700 (PDT)
+Content-Type: multipart/mixed; boundary="------------RcXPsDbTzYcGigJSsyMdly3r"
+Message-ID: <f2934916-9b69-9603-9ae3-580b0c3eb97d@linuxfoundation.org>
+Date:   Mon, 24 Oct 2022 10:49:08 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Subject: [GIT PULL] KUnit fixes update for Linux 6.1-rc3
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, 23 Oct 2022 07:32:02 +0200 netdev@kapio-technology.com wrote:
-> >> @@ -1140,7 +1148,7 @@ static int __br_fdb_add(struct ndmsg *ndm, 
-> >> struct net_bridge *br,
-> >>  		err = br_fdb_external_learn_add(br, p, addr, vid, true);
-> >>  	} else {
-> >>  		spin_lock_bh(&br->hash_lock);
-> >> -		err = fdb_add_entry(br, p, addr, ndm, nlh_flags, vid, nfea_tb);
-> >> +		err = fdb_add_entry(br, p, addr, ndm, nlh_flags, vid, ext_flags, 
-> >> nfea_tb);  
-> > 
-> > I believe the preference is to wrap to 80 columns when possible.  
-> 
-> Very strange... since I ran checkpatch.pl from the net-next kernel 
-> itself and it did not
-> give me any warnings about 80 columns, but rather said 'patch is ready 
-> for submission'.
-> 
-> As this is silent, could it be some missing python plugins or something 
-> to do with perl?
+This is a multi-part message in MIME format.
+--------------RcXPsDbTzYcGigJSsyMdly3r
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-I run:
+Hi Linus,
 
-./scripts/checkpatch.pl --strict --max-line-length=80
+Please pull the following KUnit fixes update for Linux 6.1-rc3.
 
+This KUnit fixes update for Linux 6.1-rc3 consists of one single fix
+to update alloc_string_stream() callers to check for IS_ERR() instead
+of NULL to be in sync with alloc_string_stream() returning IS_ERR().
+
+diff for this pull request is attached.
+
+thanks,
+-- Shuah
+
+----------------------------------------------------------------
+The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
+
+   Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-fixes-6.1-rc3
+
+for you to fetch changes up to 618887768bb71f0a475334fa5a4fba7dc98d7ab5:
+
+   kunit: update NULL vs IS_ERR() tests (2022-10-18 15:08:42 -0600)
+
+----------------------------------------------------------------
+linux-kselftest-kunit-fixes-6.1-rc3
+
+This KUnit fixes update for Linux 6.1-rc3 consists of one single fix
+to update alloc_string_stream() callers to check for IS_ERR() instead
+of NULL to be in sync with alloc_string_stream() returning IS_ERR().
+
+----------------------------------------------------------------
+Dan Carpenter (1):
+       kunit: update NULL vs IS_ERR() tests
+
+  lib/kunit/string-stream.c | 4 ++--
+  lib/kunit/test.c          | 2 +-
+  2 files changed, 3 insertions(+), 3 deletions(-)
+----------------------------------------------------------------
+--------------RcXPsDbTzYcGigJSsyMdly3r
+Content-Type: text/x-patch; charset=UTF-8;
+ name="linux-kselftest-kunit-fixes-6.1-rc3.diff"
+Content-Disposition: attachment;
+ filename="linux-kselftest-kunit-fixes-6.1-rc3.diff"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL2xpYi9rdW5pdC9zdHJpbmctc3RyZWFtLmMgYi9saWIva3VuaXQvc3Ry
+aW5nLXN0cmVhbS5jCmluZGV4IGY1YWU3OWMzNzQwMC4uYTYwODc0NjAyMGE5IDEwMDY0NAot
+LS0gYS9saWIva3VuaXQvc3RyaW5nLXN0cmVhbS5jCisrKyBiL2xpYi9rdW5pdC9zdHJpbmct
+c3RyZWFtLmMKQEAgLTU2LDggKzU2LDggQEAgaW50IHN0cmluZ19zdHJlYW1fdmFkZChzdHJ1
+Y3Qgc3RyaW5nX3N0cmVhbSAqc3RyZWFtLAogCWZyYWdfY29udGFpbmVyID0gYWxsb2Nfc3Ry
+aW5nX3N0cmVhbV9mcmFnbWVudChzdHJlYW0tPnRlc3QsCiAJCQkJCQkgICAgICBsZW4sCiAJ
+CQkJCQkgICAgICBzdHJlYW0tPmdmcCk7Ci0JaWYgKCFmcmFnX2NvbnRhaW5lcikKLQkJcmV0
+dXJuIC1FTk9NRU07CisJaWYgKElTX0VSUihmcmFnX2NvbnRhaW5lcikpCisJCXJldHVybiBQ
+VFJfRVJSKGZyYWdfY29udGFpbmVyKTsKIAogCWxlbiA9IHZzbnByaW50ZihmcmFnX2NvbnRh
+aW5lci0+ZnJhZ21lbnQsIGxlbiwgZm10LCBhcmdzKTsKIAlzcGluX2xvY2soJnN0cmVhbS0+
+bG9jayk7CmRpZmYgLS1naXQgYS9saWIva3VuaXQvdGVzdC5jIGIvbGliL2t1bml0L3Rlc3Qu
+YwppbmRleCA5MDY0MGE0M2NmNjIuLjJhNjk5MmZlN2MzZSAxMDA2NDQKLS0tIGEvbGliL2t1
+bml0L3Rlc3QuYworKysgYi9saWIva3VuaXQvdGVzdC5jCkBAIC0yNjUsNyArMjY1LDcgQEAg
+c3RhdGljIHZvaWQga3VuaXRfZmFpbChzdHJ1Y3Qga3VuaXQgKnRlc3QsIGNvbnN0IHN0cnVj
+dCBrdW5pdF9sb2MgKmxvYywKIAlrdW5pdF9zZXRfZmFpbHVyZSh0ZXN0KTsKIAogCXN0cmVh
+bSA9IGFsbG9jX3N0cmluZ19zdHJlYW0odGVzdCwgR0ZQX0tFUk5FTCk7Ci0JaWYgKCFzdHJl
+YW0pIHsKKwlpZiAoSVNfRVJSKHN0cmVhbSkpIHsKIAkJV0FSTih0cnVlLAogCQkgICAgICJD
+b3VsZCBub3QgYWxsb2NhdGUgc3RyZWFtIHRvIHByaW50IGZhaWxlZCBhc3NlcnRpb24gaW4g
+JXM6JWRcbiIsCiAJCSAgICAgbG9jLT5maWxlLAo=
+
+--------------RcXPsDbTzYcGigJSsyMdly3r--
