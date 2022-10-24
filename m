@@ -2,107 +2,131 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B925ECAAA1
-	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Oct 2022 14:33:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ACD61C38A2D
+	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Oct 2022 17:20:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236948AbiJXOdR (ORCPT
+        id S232167AbiJXRUu (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 24 Oct 2022 10:33:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60900 "EHLO
+        Mon, 24 Oct 2022 13:20:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237088AbiJXOc5 (ORCPT
+        with ESMTP id S233496AbiJXRUW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Oct 2022 10:32:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 859B1D018F
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Oct 2022 06:06:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666616665;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=trlf8J9SEf2L59s+RkYAnLixFP1fn9n6wg9XCVdSXj8=;
-        b=KTnqJ1gsR9QLYHGm6XHhWJFX0R3vxIxDdQvWFiBCwFqWHsapJrmJzMQB1y254vao52q+Ra
-        M7sS05IJh9cIs4+KeRVWftHQ3JkM6/2WIKLlgvme3re9jn/u0O3wPSbOsuCI+sDZvemT89
-        nSsQCzrFKxqvhLGkluqb1bqIrRSCJy4=
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com
- [209.85.216.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-661-cOxQpbUyM6mTqyRZ5RWHvw-1; Mon, 24 Oct 2022 08:58:05 -0400
-X-MC-Unique: cOxQpbUyM6mTqyRZ5RWHvw-1
-Received: by mail-pj1-f70.google.com with SMTP id my9-20020a17090b4c8900b002130d29fd7cso1954641pjb.7
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Oct 2022 05:58:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=trlf8J9SEf2L59s+RkYAnLixFP1fn9n6wg9XCVdSXj8=;
-        b=NcXfGiBL+ORmHMgsqApmR8Up9GRUZQ7trBPbUNGD0e1Do+4Dt7A24xMr/QlmE0uc1m
-         VZB096VNUfEWGTfFvrh+os1aaA9J6Nc76UNy8658+f4A2pVbEegGgDMYTDWO7iLtIPQQ
-         7GwBeSSnaK+/FPkUtS61KCMzm4BD1H/6DAf5h89fUkwFqHwzljB54ZIcUsfkAhCCEjoH
-         p8stWDc6R44rLSRD7pn/33sp56shUYTVYgOydNAw1ktrVjdZ7hZrv5nTjquXz5PS/wha
-         J6eX2fH7Q0RxvsDV0pbOfcKTp0D8aVf0bzrLu4qqHGC88+1D+NDUpNqAmRpe4oqXjqz9
-         XUZQ==
-X-Gm-Message-State: ACrzQf2ED9QQPrVxEqmMGiwaJYqb4CN5Bj7Cy4C0h5cxc00yrqssnkd8
-        5m5bYp9MUriOPjr4f+36XIAfzG8sYT/mUbh34zXHqOrsis1V2KdUu5q4DpRTQOUvpcjkmcO+rj1
-        1ZRdT4tUcc80zTmtbrZPNOVJeTa+0FzE0/A9DMg+mtrcy
-X-Received: by 2002:aa7:8895:0:b0:565:e8b7:8494 with SMTP id z21-20020aa78895000000b00565e8b78494mr33933492pfe.82.1666616284948;
-        Mon, 24 Oct 2022 05:58:04 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6ATKwMjs8fR874pMc+dAGC/SR7UmEe44jSAvTRPQT9j1GVtVWmlm5v8nZMryXEA7LvlnBtw+wBsTve+EXGjdg=
-X-Received: by 2002:aa7:8895:0:b0:565:e8b7:8494 with SMTP id
- z21-20020aa78895000000b00565e8b78494mr33933461pfe.82.1666616284691; Mon, 24
- Oct 2022 05:58:04 -0700 (PDT)
+        Mon, 24 Oct 2022 13:20:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61775B488B;
+        Mon, 24 Oct 2022 08:55:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A6DFC6147E;
+        Mon, 24 Oct 2022 15:53:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 067D6C433D6;
+        Mon, 24 Oct 2022 15:53:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666626838;
+        bh=xl7mmNiO+KxU9FEr9SMbHT7CAElv66IlG802OmzTKPE=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=pMRB0LGkQxnFaxDpwo1v3IlmbV0LH16sYA2TjYzugCN6v9vJotr4/dBhOpAZ5+cyZ
+         1NwWMBR3MjLGMIB5kTrK4QeH8O/x8A6LWSJzpctvpd+b9cdHbYUYmPJjmgsCd/mkso
+         f/b9jEdU172T6uCv1rhv6mJ0bDqy2HhToMf6d6VV+OkXLxaQMlIRJZ+0+/baTBGzJ+
+         crHuND076LW/0gU7mwx/62q+NNoqG7eE9SuUKfdde7vBWsmt5pfla7HOL9hQZSDDqt
+         w3l5K7Ox9uqxgB/qJUuObnKZa3fnJPjlgiBIHELiNAkQDihpxj12AVa0tHv5QAtl5F
+         rAAprsrcNMHhw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 932C95C06CD; Mon, 24 Oct 2022 08:53:57 -0700 (PDT)
+Date:   Mon, 24 Oct 2022 08:53:57 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/nolibc: add 7 tests for memcmp()
+Message-ID: <20221024155357.GZ5600@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221021060340.7515-1-w@1wt.eu>
+ <20221021155645.GK5600@paulmck-ThinkPad-P17-Gen-1>
+ <20221021170134.GB8420@1wt.eu>
+ <20221021170738.GM5600@paulmck-ThinkPad-P17-Gen-1>
+ <20221021172026.GC8420@1wt.eu>
+ <20221021180040.GN5600@paulmck-ThinkPad-P17-Gen-1>
+ <20221022112228.GB30596@1wt.eu>
 MIME-Version: 1.0
-References: <20221020045828.2354731-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20221020045828.2354731-3-sathyanarayanan.kuppuswamy@linux.intel.com>
- <Y1De4IyAB6n2qs4V@kroah.com> <34ef18d6-69f8-853a-d1ba-7023822e17ff@linux.intel.com>
- <Y1Iimg0WItgIGq6/@kroah.com> <c09184e3-ac15-b230-6dea-d6718f6f0ab0@linux.intel.com>
-In-Reply-To: <c09184e3-ac15-b230-6dea-d6718f6f0ab0@linux.intel.com>
-From:   Wander Lairson Costa <wander@redhat.com>
-Date:   Mon, 24 Oct 2022 09:57:53 -0300
-Message-ID: <CAAq0SU=w-upGGstmQgTh63zGqLZnEy1OpF+9FwAjSWMuyYyXTg@mail.gmail.com>
-Subject: Re: [PATCH v15 2/3] virt: Add TDX guest driver
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221022112228.GB30596@1wt.eu>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Oct 23, 2022 at 1:13 PM Sathyanarayanan Kuppuswamy
-<sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
->
->
->
-> On 10/20/22 9:39 PM, Greg Kroah-Hartman wrote:
-> >>> You are allowing userspace to spam the kernel logs, please do not do
-> >>> that.
-> >> Added it to help userspace understand the reason for the failure (only for
-> >> the cases like request param issues and TDCALL failure). Boris recommended
-> >> adding it in the previous review.
-> > Again, you just created a vector for userspace to spam the kernel log.
-> > No kernel driver should ever do that.
-> >
->
-> Brois, any comments? Do you also agree?
->
+On Sat, Oct 22, 2022 at 01:22:28PM +0200, Willy Tarreau wrote:
+> On Fri, Oct 21, 2022 at 11:00:40AM -0700, Paul E. McKenney wrote:
+> > > It's even easier, you don't even need the clean phase in include/nolibc.
+> > > I'm doing this and it's sufficient:
+> > > 
+> > >   make -C tools/testing/selftests/nolibc clean
+> > >   make -C tools/testing/selftests/nolibc nolibc-test
+> > >   tools/testing/selftests/nolibc/nolibc-test
+> > > 
+> > > Or for the test under QEMU, which involves a kernel build:
+> > > 
+> > >   make -C tools/testing/selftests/nolibc clean
+> > >   make -C tools/testing/selftests/nolibc -j $(nproc) run
+> > > 
+> > > Where would you first look for such a hint ? Maybe the help output of
+> > > the default "make" command could send as a hint that a clean is needed
+> > > after patching nolibc and that could be sufficient ? I just want to make
+> > > sure users don't waste their time trying to find what they could be doing
+> > > wrong.
+> > 
+> > Maybe it suffices for the near term for me to put this information in
+> > the signed tag for the pull request?
+> 
+> It can be sufficient for short term indeed, but it can be easy as well
+> for me to mention it in the make output.
 
-Maybe dev_err_once() does the job?
+Why not both?  ;-)
 
+> > Another approach would be to remind about "make clean" in the case of
+> > a test failure.  Or make test failure combined with a detected change
+> > trigger an automatic "make clean" and a retry.
+> 
+> In fact failures are not the only case. For me it was the opposite. I
+> applied Rasmus' fix, then I developed the test, verified that it worked,
+> then reverted Rasmus' fix... to find that the test didn't catch the
+> failure. I had a second look at the original patch and figured that
+> the -192..+192 values were really not possible with a char so I
+> concluded that a clean was needed. But leaving something in a claimed
+> working state while it's not can be sufficiently misleading and make
+> one waste significant time, because in such cases we rarely search why
+> it works.
+
+Fair point!  False negatives can be quite annoying as well.
+
+> > Or other schemes of increasing complexity and fragility.  ;-)
+> 
+> That's exactly what I'd like to avoid with such a lightweight component.
+> If it takes more time to figure why something is going wrong than to
+> write a test, we'll all give up. I think that a clean for QEMU is worth
+> it because the kernel is rebuilt and its dependencies are quite robust,
+> so that one would be a surprise. For other tests, probably leaving it
+> explicit with a hint that it's needed should suffice. I'll recheck what
+> conditions the installation of uapi headers because that's really what
+> I don't want to see happening all the time. The rest is discrete, it's
+> just a few files being copied, maybe it can be done every time.
+> 
+> Will keep thinking about it and hopefully propose a patch to make the
+> tests easier to use before we're too far in the 6.1 release.
+
+Another possibility is to have a separate developers' and maintainers'
+option.  Linus and I do "make whatever" for some value of "whatever"
+that builds from scratch, doing whatever cleaning that might be required.
+Developers use targets that are faster but have the possibility of false
+positives and false negatives.
+
+But maybe you have something better in mind.
+
+> Thanks for keeping the conversation flowing, that helps me!
+
+Looking forward to seeing what you come up with!
+
+							Thanx, Paul
