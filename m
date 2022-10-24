@@ -2,99 +2,72 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85B73C38A2D
-	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Oct 2022 23:07:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3B65C38A2D
+	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Oct 2022 23:30:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbiJXXHU (ORCPT
+        id S230037AbiJXXax (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 24 Oct 2022 19:07:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55828 "EHLO
+        Mon, 24 Oct 2022 19:30:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230408AbiJXXHC (ORCPT
+        with ESMTP id S230358AbiJXXaR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Oct 2022 19:07:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEDF45A815;
-        Mon, 24 Oct 2022 14:28:13 -0700 (PDT)
+        Mon, 24 Oct 2022 19:30:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3BACF864;
+        Mon, 24 Oct 2022 14:51:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 506E86136E;
-        Mon, 24 Oct 2022 13:53:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39E71C433D7;
-        Mon, 24 Oct 2022 13:53:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666619595;
-        bh=eQhpkWuxYO6xU1NVTJ5iMfsh38Ej4102Y8qOohSGKQ0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jP2if4R4CABPqOwD8Pfhi1AYLkGQTfZA5g6iSAZFd1Zv7tfuz3e4/6hctCWKdcYgS
-         8Gn0cTiJ27vXC0S9Vy2MpBrHVfyU+dFMns1bfTlaTtFAZZlYqmZoUkKk/3/axEcmEW
-         VH5aGrWnc2tNRPQ5v4TLoCyDkKBJMTBm1YSBYKDI=
-Date:   Mon, 24 Oct 2022 15:54:07 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Wander Lairson Costa <wander@redhat.com>
-Cc:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH v15 2/3] virt: Add TDX guest driver
-Message-ID: <Y1aY/4SWwuDENigJ@kroah.com>
-References: <20221020045828.2354731-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20221020045828.2354731-3-sathyanarayanan.kuppuswamy@linux.intel.com>
- <Y1De4IyAB6n2qs4V@kroah.com>
- <34ef18d6-69f8-853a-d1ba-7023822e17ff@linux.intel.com>
- <Y1Iimg0WItgIGq6/@kroah.com>
- <c09184e3-ac15-b230-6dea-d6718f6f0ab0@linux.intel.com>
- <CAAq0SU=w-upGGstmQgTh63zGqLZnEy1OpF+9FwAjSWMuyYyXTg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAAq0SU=w-upGGstmQgTh63zGqLZnEy1OpF+9FwAjSWMuyYyXTg@mail.gmail.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 553E7B811F2;
+        Mon, 24 Oct 2022 20:06:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0EC91C433B5;
+        Mon, 24 Oct 2022 20:06:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666642018;
+        bh=3S5hiFhvcjejjJEBiIjk2JUBGQpO0l+zlfJvpwMCaLI=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=XVNFKP5bPz2hJM6LYKdigT1JaLJo5WZPHXPu89RLoUYmwpN5u5NY/p+ebZkUvdv2P
+         qPIQagqHv3do0KgxV0DkvAiZbOTB9gHjHV51qeP9quw1oVGB/sMt0xc136bUFSY+7M
+         JWS8faOOBqnw+fqbDdRzhorNwQML0L2c31j900o51mgt6ThT2l9GRG5oWglmHrSE6m
+         li1AMqqUGcr2zeRW6kAkjyDyszmrKXe0NQgbMoeQV9hU5L8hH3ZfuTlMIwXrUMRzFo
+         pSoSsL0Ez8ap2Z1nTq2f1iB4qR9vy9QoGEl8ywVzagXTBge93rZGiqkTJbty8Mi96A
+         0z09kMAwYoC9Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EA8BEC4166D;
+        Mon, 24 Oct 2022 20:06:57 +0000 (UTC)
+Subject: Re: [GIT PULL] KUnit fixes update for Linux 6.1-rc3
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <f2934916-9b69-9603-9ae3-580b0c3eb97d@linuxfoundation.org>
+References: <f2934916-9b69-9603-9ae3-580b0c3eb97d@linuxfoundation.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <f2934916-9b69-9603-9ae3-580b0c3eb97d@linuxfoundation.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-fixes-6.1-rc3
+X-PR-Tracked-Commit-Id: 618887768bb71f0a475334fa5a4fba7dc98d7ab5
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 2a91e897c0e199f5d4cdc1a15f948133b15ec1f3
+Message-Id: <166664201795.4311.8265466644045694797.pr-tracker-bot@kernel.org>
+Date:   Mon, 24 Oct 2022 20:06:57 +0000
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 09:57:53AM -0300, Wander Lairson Costa wrote:
-> On Sun, Oct 23, 2022 at 1:13 PM Sathyanarayanan Kuppuswamy
-> <sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
-> >
-> >
-> >
-> > On 10/20/22 9:39 PM, Greg Kroah-Hartman wrote:
-> > >>> You are allowing userspace to spam the kernel logs, please do not do
-> > >>> that.
-> > >> Added it to help userspace understand the reason for the failure (only for
-> > >> the cases like request param issues and TDCALL failure). Boris recommended
-> > >> adding it in the previous review.
-> > > Again, you just created a vector for userspace to spam the kernel log.
-> > > No kernel driver should ever do that.
-> > >
-> >
-> > Brois, any comments? Do you also agree?
-> >
-> 
-> Maybe dev_err_once() does the job?
+The pull request you sent on Mon, 24 Oct 2022 10:49:08 -0600:
 
-That does not make any sense when the userspace input can be different
-each time.
+> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-fixes-6.1-rc3
 
-This is just yet-another-ioctl, there's nothing special about it.
-Return an error for invalid input and don't log anything.  Worst case,
-make it a dev_dbg() call if you really really really want to see it.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/2a91e897c0e199f5d4cdc1a15f948133b15ec1f3
 
-thanks,
+Thank you!
 
-greg k-h
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
