@@ -2,167 +2,160 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E685FFA373E
-	for <linux-kselftest@archiver.kernel.org>; Tue, 25 Oct 2022 09:13:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13DEAFA373D
+	for <linux-kselftest@archiver.kernel.org>; Tue, 25 Oct 2022 09:35:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231759AbiJYJNv (ORCPT
+        id S231744AbiJYJfT (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 25 Oct 2022 05:13:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39312 "EHLO
+        Tue, 25 Oct 2022 05:35:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231854AbiJYJNi (ORCPT
+        with ESMTP id S231528AbiJYJfR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Oct 2022 05:13:38 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B84A17650D;
-        Tue, 25 Oct 2022 02:07:13 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id DC3A11FDAB;
-        Tue, 25 Oct 2022 09:07:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1666688823; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Tue, 25 Oct 2022 05:35:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B95ECA8B2
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Oct 2022 02:35:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666690509;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=YetzJ42X/TiFjkjg0wNAE3EFsDAzc7c8MsipxnbCcxE=;
-        b=IkqV6NNEd0j9tEUH8n8P5TVYq8QJcf2qkkSZvtymyDkC0UHOtNJyMFPc1+Nz7jmv3G2JWK
-        3Y4SbGFuVysX2qUopbLtx8JqMj7S4N8Kred7MqPi7Lalf47QOfVbpe9q7yuK97Ts76YBD3
-        0LthdTBMm+u1MkbQEQE/azZglriD4Yk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1666688823;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YetzJ42X/TiFjkjg0wNAE3EFsDAzc7c8MsipxnbCcxE=;
-        b=bjHzj+RmUQN889rrCKhbHre+JjtU2MXgeAiJQesFc1MOfiqGUlqdHWmNFq1GxdPrI/zTV5
-        kzxoeEfEn3/pvFCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        bh=VGbtfkMEb8GyCHz72Cj7Hj6kcmjTcDTxFhyd1w3lCf0=;
+        b=VKXhtOfFY/jGIVLyLnBHKTkVGi86X4edwCpJq0eSsGhwXpwDWc8/Y7CtCq5sS3bMCWhVpK
+        VE05HRQtIyiw3vg6em4Forh7piwLwGucZ48F2iBLreHmCO3/FCglg0yAxBEV2tBLAc/9Rr
+        pZDetGVCmc4zAZqtFISPs+1D0aKhHpw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-629-yBcCjRxGPb2AQ560Y73EQA-1; Tue, 25 Oct 2022 05:35:06 -0400
+X-MC-Unique: yBcCjRxGPb2AQ560Y73EQA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A4EBD134CA;
-        Tue, 25 Oct 2022 09:07:03 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id BGB8JzenV2NbNQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 25 Oct 2022 09:07:03 +0000
-Message-ID: <9cfaed63-b72f-3fc8-bdc0-c6d7b09ca782@suse.cz>
-Date:   Tue, 25 Oct 2022 11:07:03 +0200
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4A7A5185A78B;
+        Tue, 25 Oct 2022 09:35:05 +0000 (UTC)
+Received: from plouf.redhat.com (unknown [10.39.195.44])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8E5C149BB65;
+        Tue, 25 Oct 2022 09:35:03 +0000 (UTC)
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
+Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: [PATCH hid v11 01/14] HID: Kconfig: split HID support and hid-core compilation
+Date:   Tue, 25 Oct 2022 11:34:45 +0200
+Message-Id: <20221025093458.457089-2-benjamin.tissoires@redhat.com>
+In-Reply-To: <20221025093458.457089-1-benjamin.tissoires@redhat.com>
+References: <20221025093458.457089-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v2 3/3] mm: slub: test: Use the kunit_get_current_test()
- function
-To:     David Gow <davidgow@google.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        Oliver Glitta <glittao@gmail.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20221025071907.1251820-1-davidgow@google.com>
- <20221025071907.1251820-3-davidgow@google.com>
-Content-Language: en-US
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20221025071907.1251820-3-davidgow@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 10/25/22 09:19, David Gow wrote:
-> Use the newly-added function kunit_get_current_test() instead of
-> accessing current->kunit_test directly. This function uses a static key
-> to return more quickly when KUnit is enabled, but no tests are actively
-> running. There should therefore be a negligible performance impact to
-> enabling the slub KUnit tests.
-> 
-> Other than the performance improvement, this should be a no-op.
-> 
-> Cc: Oliver Glitta <glittao@gmail.com>
-> Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-> Cc: Christoph Lameter <cl@linux.com>
-> Cc: Vlastimil Babka <vbabka@suse.cz>
-> Cc: David Rientjes <rientjes@google.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Signed-off-by: David Gow <davidgow@google.com>
+Currently, we step into drivers/hid/ based on the value of
+CONFIG_HID.
 
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
+However, that value is a tristate, meaning that it can be a module.
 
-> ---
-> 
-> This is intended as an example use of the new function. Other users
-> (such as KASAN) will be updated separately, as there would otherwise be
-> conflicts.
-> 
-> Assuming there are no objections, we'll take this whole series via the
-> kselftest/kunit tree.
+As per the documentation, if we jump into the subdirectory by
+following an obj-m, we can not compile anything inside that
+subdirectory in vmlinux. It is considered as a bug.
 
-OK, please do.
+To make things more friendly to HID-BPF, split HID (the HID core
+parameter) from HID_SUPPORT (do we want any kind of HID support in the
+system?), and make this new config a boolean.
 
-Some possible improvements below:
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
-> There was no v1 of this patch. v1 of the series can be found here:
-> https://lore.kernel.org/linux-kselftest/20221021072854.333010-1-davidgow@google.com/T/#u
-> 
-> ---
->  lib/slub_kunit.c | 1 +
->  mm/slub.c        | 5 +++--
->  2 files changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/lib/slub_kunit.c b/lib/slub_kunit.c
-> index 7a0564d7cb7a..8fd19c8301ad 100644
-> --- a/lib/slub_kunit.c
-> +++ b/lib/slub_kunit.c
-> @@ -1,5 +1,6 @@
->  // SPDX-License-Identifier: GPL-2.0
->  #include <kunit/test.h>
-> +#include <kunit/test-bug.h>
->  #include <linux/mm.h>
->  #include <linux/slab.h>
->  #include <linux/module.h>
-> diff --git a/mm/slub.c b/mm/slub.c
-> index 157527d7101b..15d10d250ef2 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -39,6 +39,7 @@
->  #include <linux/memcontrol.h>
->  #include <linux/random.h>
->  #include <kunit/test.h>
-> +#include <kunit/test-bug.h>
->  #include <linux/sort.h>
->  
->  #include <linux/debugfs.h>
-> @@ -603,10 +604,10 @@ static bool slab_add_kunit_errors(void)
->  {
->  	struct kunit_resource *resource;
->  
-> -	if (likely(!current->kunit_test))
-> +	if (likely(!kunit_get_current_test()))
+---
 
-Given that kunit_get_current_test() is basically an inline
-!static_branch_unlikely(), IMHO the likely() here doesn't add anything and
-could be removed?
+no changes in v11
 
->  		return false;
->  
-> -	resource = kunit_find_named_resource(current->kunit_test, "slab_errors");
-> +	resource = kunit_find_named_resource(kunit_get_current_test(), "slab_errors");
+no changes in v10
 
-We just passed kunit_get_current_test() above so maybe we could just keep
-using current->kunit_test here? Seems unnecessary adding another jump label.
+no changes in v9
 
->  	if (!resource)
->  		return false;
->  
+no changes in v8
+
+new in v7
+---
+ drivers/Makefile    |  2 +-
+ drivers/hid/Kconfig | 20 +++++++++++---------
+ 2 files changed, 12 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/Makefile b/drivers/Makefile
+index bdf1c66141c9..cf5d8b86da8f 100644
+--- a/drivers/Makefile
++++ b/drivers/Makefile
+@@ -137,7 +137,7 @@ obj-$(CONFIG_CRYPTO)		+= crypto/
+ obj-$(CONFIG_SUPERH)		+= sh/
+ obj-y				+= clocksource/
+ obj-$(CONFIG_DCA)		+= dca/
+-obj-$(CONFIG_HID)		+= hid/
++obj-$(CONFIG_HID_SUPPORT)	+= hid/
+ obj-$(CONFIG_PPC_PS3)		+= ps3/
+ obj-$(CONFIG_OF)		+= of/
+ obj-$(CONFIG_SSB)		+= ssb/
+diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
+index 185a077d59cd..ad767955ee62 100644
+--- a/drivers/hid/Kconfig
++++ b/drivers/hid/Kconfig
+@@ -2,12 +2,18 @@
+ #
+ # HID driver configuration
+ #
+-menu "HID support"
+-     depends on INPUT
++menuconfig HID_SUPPORT
++	bool "HID bus support"
++	default y
++	depends on INPUT
++	help
++	  This option adds core support for human interface device (HID).
++	  You will also need drivers from the following menu to make use of it.
++
++if HID_SUPPORT
+ 
+ config HID
+-	tristate "HID bus support"
+-	depends on INPUT
++	tristate "HID bus core support"
+ 	default y
+ 	help
+ 	  A human interface device (HID) is a type of computer device that
+@@ -24,8 +30,6 @@ config HID
+ 
+ 	  If unsure, say Y.
+ 
+-if HID
+-
+ config HID_BATTERY_STRENGTH
+ 	bool "Battery level reporting for HID devices"
+ 	select POWER_SUPPLY
+@@ -1278,8 +1282,6 @@ config HID_KUNIT_TEST
+ 
+ endmenu
+ 
+-endif # HID
+-
+ source "drivers/hid/usbhid/Kconfig"
+ 
+ source "drivers/hid/i2c-hid/Kconfig"
+@@ -1290,4 +1292,4 @@ source "drivers/hid/amd-sfh-hid/Kconfig"
+ 
+ source "drivers/hid/surface-hid/Kconfig"
+ 
+-endmenu
++endif # HID_SUPPORT
+-- 
+2.36.1
 
