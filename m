@@ -2,164 +2,80 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78891FA3743
-	for <linux-kselftest@archiver.kernel.org>; Tue, 25 Oct 2022 12:53:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DBFACC04A95
+	for <linux-kselftest@archiver.kernel.org>; Tue, 25 Oct 2022 13:25:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232677AbiJYMxF (ORCPT
+        id S232730AbiJYNZ2 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 25 Oct 2022 08:53:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60630 "EHLO
+        Tue, 25 Oct 2022 09:25:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232383AbiJYMwC (ORCPT
+        with ESMTP id S232348AbiJYNZ1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Oct 2022 08:52:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBA682F38C
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Oct 2022 05:49:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666702153;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6XIV1duGsHRLFQBOC75+bp4A+Ap8BBETzdKM8HqPsZ0=;
-        b=HF+GjjhqyXKn3N4Ec68aooUz7XiLZnyIOQyuodUsDLfZkqIu7FEN0lWJvRElA+qRJoph4U
-        RqoW/XbSE/L+kw0QseU7rpYQqrDT8mEvNhDVplL89M9DpdeTCNEOOsIcTL8GhEpqU+zlhH
-        ebf/l89p+5YKg7Vpnarl9XvDkswrOh4=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-292-pJm1eYbyNWKwJi37SakTWw-1; Tue, 25 Oct 2022 08:49:09 -0400
-X-MC-Unique: pJm1eYbyNWKwJi37SakTWw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BADEC38164C5;
-        Tue, 25 Oct 2022 12:49:08 +0000 (UTC)
-Received: from amdlaptop.tlv.redhat.com (dhcp-4-238.tlv.redhat.com [10.35.4.238])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6528840C6EC6;
-        Tue, 25 Oct 2022 12:49:05 +0000 (UTC)
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     kvm@vger.kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Yang Zhong <yang.zhong@intel.com>, x86@kernel.org,
-        Jim Mattson <jmattson@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Guang Zeng <guang.zeng@intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-kselftest@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Wei Wang <wei.w.wang@intel.com>,
-        Borislav Petkov <bp@alien8.de>
-Subject: [PATCH RESEND v4 21/23] KVM: x86: SVM: use smram structs
-Date:   Tue, 25 Oct 2022 15:47:39 +0300
-Message-Id: <20221025124741.228045-22-mlevitsk@redhat.com>
-In-Reply-To: <20221025124741.228045-1-mlevitsk@redhat.com>
-References: <20221025124741.228045-1-mlevitsk@redhat.com>
+        Tue, 25 Oct 2022 09:25:27 -0400
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A8275AC57;
+        Tue, 25 Oct 2022 06:25:24 -0700 (PDT)
+Received: (Authenticated sender: i.maximets@ovn.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id 53C0760011;
+        Tue, 25 Oct 2022 13:25:18 +0000 (UTC)
+Message-ID: <580ec147-d295-eab4-baeb-35551f27746e@ovn.org>
+Date:   Tue, 25 Oct 2022 15:25:18 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Cc:     i.maximets@ovn.org, Pravin B Shelar <pshelar@ovn.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Thomas Graf <tgraf@suug.ch>,
+        Kevin Sprague <ksprague0711@gmail.com>, dev@openvswitch.org,
+        Eelco Chaudron <echaudro@redhat.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 net 1/2] openvswitch: switch from WARN to pr_warn
+Content-Language: en-US
+To:     Aaron Conole <aconole@redhat.com>, netdev@vger.kernel.org
+References: <20221025105018.466157-1-aconole@redhat.com>
+ <20221025105018.466157-2-aconole@redhat.com>
+From:   Ilya Maximets <i.maximets@ovn.org>
+In-Reply-To: <20221025105018.466157-2-aconole@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Use SMM structs in the SVM code as well, which removes the last user of
-put_smstate/GET_SMSTATE so remove these macros as well.
+On 10/25/22 12:50, Aaron Conole wrote:
+> As noted by Paolo Abeni, pr_warn doesn't generate any splat and can still
+> preserve the warning to the user that feature downgrade occurred.  We
+> likely cannot introduce other kinds of checks / enforcement here because
+> syzbot can generate different genl versions to the datapath.
+> 
+> Reported-by: syzbot+31cde0bef4bbf8ba2d86@syzkaller.appspotmail.com
+> Fixes: 44da5ae5fbea ("openvswitch: Drop user features if old user space attempted to create datapath")
+> Cc: Thomas Graf <tgraf@suug.ch>
+> Signed-off-by: Aaron Conole <aconole@redhat.com>
+> ---
+>  net/openvswitch/datapath.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/net/openvswitch/datapath.c b/net/openvswitch/datapath.c
+> index c8a9075ddd0a..155263e73512 100644
+> --- a/net/openvswitch/datapath.c
+> +++ b/net/openvswitch/datapath.c
+> @@ -1616,7 +1616,8 @@ static void ovs_dp_reset_user_features(struct sk_buff *skb,
+>  	if (IS_ERR(dp))
+>  		return;
+>  
+> -	WARN(dp->user_features, "Dropping previously announced user features\n");
+> +	pr_warn("%s: Dropping previously announced user features\n",
+> +		ovs_dp_name(dp));
+>  	dp->user_features = 0;
+>  }
+>  
 
-Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
----
- arch/x86/kvm/smm.h     |  6 ------
- arch/x86/kvm/svm/svm.c | 21 +++++++--------------
- 2 files changed, 7 insertions(+), 20 deletions(-)
+Nothing changed here since v1, so
 
-diff --git a/arch/x86/kvm/smm.h b/arch/x86/kvm/smm.h
-index bf5c7ffeb11efc..8d96bff3f4d54f 100644
---- a/arch/x86/kvm/smm.h
-+++ b/arch/x86/kvm/smm.h
-@@ -4,12 +4,6 @@
- 
- #include <linux/build_bug.h>
- 
--#define GET_SMSTATE(type, buf, offset)		\
--	(*(type *)((buf) + (offset) - 0x7e00))
--
--#define PUT_SMSTATE(type, buf, offset, val)                      \
--	*(type *)((buf) + (offset) - 0x7e00) = val
--
- #ifdef CONFIG_KVM_SMM
- 
- 
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index b49e3f5c921c99..3004a5ff3fbf79 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -4442,15 +4442,11 @@ static int svm_enter_smm(struct kvm_vcpu *vcpu, union kvm_smram *smram)
- 	struct kvm_host_map map_save;
- 	int ret;
- 
--	char *smstate = (char *)smram;
--
- 	if (!is_guest_mode(vcpu))
- 		return 0;
- 
--	/* FED8h - SVM Guest */
--	PUT_SMSTATE(u64, smstate, 0x7ed8, 1);
--	/* FEE0h - SVM Guest VMCB Physical Address */
--	PUT_SMSTATE(u64, smstate, 0x7ee0, svm->nested.vmcb12_gpa);
-+	smram->smram64.svm_guest_flag = 1;
-+	smram->smram64.svm_guest_vmcb_gpa = svm->nested.vmcb12_gpa;
- 
- 	svm->vmcb->save.rax = vcpu->arch.regs[VCPU_REGS_RAX];
- 	svm->vmcb->save.rsp = vcpu->arch.regs[VCPU_REGS_RSP];
-@@ -4488,28 +4484,25 @@ static int svm_leave_smm(struct kvm_vcpu *vcpu, const union kvm_smram *smram)
- {
- 	struct vcpu_svm *svm = to_svm(vcpu);
- 	struct kvm_host_map map, map_save;
--	u64 saved_efer, vmcb12_gpa;
- 	struct vmcb *vmcb12;
- 	int ret;
- 
--	const char *smstate = (const char *)smram;
-+	const struct kvm_smram_state_64 *smram64 = &smram->smram64;
- 
- 	if (!guest_cpuid_has(vcpu, X86_FEATURE_LM))
- 		return 0;
- 
- 	/* Non-zero if SMI arrived while vCPU was in guest mode. */
--	if (!GET_SMSTATE(u64, smstate, 0x7ed8))
-+	if (!smram64->svm_guest_flag)
- 		return 0;
- 
- 	if (!guest_cpuid_has(vcpu, X86_FEATURE_SVM))
- 		return 1;
- 
--	saved_efer = GET_SMSTATE(u64, smstate, 0x7ed0);
--	if (!(saved_efer & EFER_SVME))
-+	if (!(smram64->efer & EFER_SVME))
- 		return 1;
- 
--	vmcb12_gpa = GET_SMSTATE(u64, smstate, 0x7ee0);
--	if (kvm_vcpu_map(vcpu, gpa_to_gfn(vmcb12_gpa), &map))
-+	if (kvm_vcpu_map(vcpu, gpa_to_gfn(smram64->svm_guest_vmcb_gpa), &map))
- 		return 1;
- 
- 	ret = 1;
-@@ -4535,7 +4528,7 @@ static int svm_leave_smm(struct kvm_vcpu *vcpu, const union kvm_smram *smram)
- 	vmcb12 = map.hva;
- 	nested_copy_vmcb_control_to_cache(svm, &vmcb12->control);
- 	nested_copy_vmcb_save_to_cache(svm, &vmcb12->save);
--	ret = enter_svm_guest_mode(vcpu, vmcb12_gpa, vmcb12, false);
-+	ret = enter_svm_guest_mode(vcpu, smram64->svm_guest_vmcb_gpa, vmcb12, false);
- 
- 	if (ret)
- 		goto unmap_save;
--- 
-2.34.3
-
+Acked-by: Ilya Maximets <i.maximets@ovn.org>
