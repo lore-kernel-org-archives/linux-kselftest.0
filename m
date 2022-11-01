@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 607E0FA373D
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D0753FA3743
 	for <linux-kselftest@archiver.kernel.org>; Tue,  1 Nov 2022 09:49:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230400AbiKAJtY (ORCPT
+        id S230437AbiKAJtZ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 1 Nov 2022 05:49:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55588 "EHLO
+        Tue, 1 Nov 2022 05:49:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbiKAJsx (ORCPT
+        with ESMTP id S229511AbiKAJsy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Nov 2022 05:48:53 -0400
+        Tue, 1 Nov 2022 05:48:54 -0400
 Received: from esa2.hc1455-7.c3s2.iphmx.com (esa2.hc1455-7.c3s2.iphmx.com [207.54.90.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 073EF2EA;
-        Tue,  1 Nov 2022 02:48:51 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="94348495"
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E72E1902A;
+        Tue,  1 Nov 2022 02:48:53 -0700 (PDT)
+X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="94348500"
 X-IronPort-AV: E=Sophos;i="5.95,230,1661785200"; 
-   d="scan'208";a="94348495"
-Received: from unknown (HELO oym-r4.gw.nic.fujitsu.com) ([210.162.30.92])
-  by esa2.hc1455-7.c3s2.iphmx.com with ESMTP; 01 Nov 2022 18:48:50 +0900
-Received: from oym-m4.gw.nic.fujitsu.com (oym-nat-oym-m4.gw.nic.fujitsu.com [192.168.87.61])
-        by oym-r4.gw.nic.fujitsu.com (Postfix) with ESMTP id 689A810E8C;
-        Tue,  1 Nov 2022 18:48:48 +0900 (JST)
+   d="scan'208";a="94348500"
+Received: from unknown (HELO yto-r2.gw.nic.fujitsu.com) ([218.44.52.218])
+  by esa2.hc1455-7.c3s2.iphmx.com with ESMTP; 01 Nov 2022 18:48:51 +0900
+Received: from yto-m2.gw.nic.fujitsu.com (yto-nat-yto-m2.gw.nic.fujitsu.com [192.168.83.65])
+        by yto-r2.gw.nic.fujitsu.com (Postfix) with ESMTP id F2A59D63B6;
+        Tue,  1 Nov 2022 18:48:49 +0900 (JST)
 Received: from oym-om4.fujitsu.com (oym-om4.o.css.fujitsu.com [10.85.58.164])
-        by oym-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id 7F1C3D55EB;
-        Tue,  1 Nov 2022 18:48:47 +0900 (JST)
+        by yto-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id 587B1D35F3;
+        Tue,  1 Nov 2022 18:48:49 +0900 (JST)
 Received: from cn-r05-10.example.com (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
-        by oym-om4.fujitsu.com (Postfix) with ESMTP id 6B43940164011;
-        Tue,  1 Nov 2022 18:48:47 +0900 (JST)
+        by oym-om4.fujitsu.com (Postfix) with ESMTP id 376CF40164011;
+        Tue,  1 Nov 2022 18:48:49 +0900 (JST)
 From:   Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
 To:     Fenghua Yu <fenghua.yu@intel.com>,
         Reinette Chatre <reinette.chatre@intel.com>,
         Shuah Khan <shuah@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         tan.shaopeng@jp.fujitsu.com
-Subject: [PATCH v3 3/5] selftests/resctrl: Flush stdout file buffer before executing fork()
-Date:   Tue,  1 Nov 2022 18:43:39 +0900
-Message-Id: <20221101094341.3383073-4-tan.shaopeng@jp.fujitsu.com>
+Subject: [PATCH v3 5/5] selftests/resctrl: Remove duplicate codes that clear each test result file
+Date:   Tue,  1 Nov 2022 18:43:41 +0900
+Message-Id: <20221101094341.3383073-6-tan.shaopeng@jp.fujitsu.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20221101094341.3383073-1-tan.shaopeng@jp.fujitsu.com>
 References: <20221101094341.3383073-1-tan.shaopeng@jp.fujitsu.com>
@@ -49,56 +49,61 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When a process has buffered output, a child process created by fork()
-will also copy buffered output. When using kselftest framework,
-the output (resctrl test result message) will be printed multiple times.
+Before exiting each test function(run_cmt/cat/mbm/mba_test()),
+test results("ok","not ok") are printed by ksft_test_result() and then
+temporary result files are cleaned by function
+cmt/cat/mbm/mba_test_cleanup().
+However, before running ksft_test_result(),
+function cmt/cat/mbm/mba_test_cleanup()
+has been run in each test function as follows:
+  cmt_resctrl_val()
+  cat_perf_miss_val()
+  mba_schemata_change()
+  mbm_bw_change()
 
-Add fflush() to flush out the buffered output before executing fork().
+Remove duplicate codes that clear each test result file.
 
-Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
 Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
 ---
- tools/testing/selftests/resctrl/cat_test.c    | 1 +
- tools/testing/selftests/resctrl/resctrl_val.c | 1 +
- tools/testing/selftests/resctrl/resctrlfs.c   | 1 +
- 3 files changed, 3 insertions(+)
+ tools/testing/selftests/resctrl/resctrl_tests.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-index 1c5e90c63254..6a8306b0a109 100644
---- a/tools/testing/selftests/resctrl/cat_test.c
-+++ b/tools/testing/selftests/resctrl/cat_test.c
-@@ -167,6 +167,7 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
- 		return errno;
- 	}
+diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
+index df0d8d8526fc..8732cf736528 100644
+--- a/tools/testing/selftests/resctrl/resctrl_tests.c
++++ b/tools/testing/selftests/resctrl/resctrl_tests.c
+@@ -88,7 +88,6 @@ static void run_mbm_test(bool has_ben, char **benchmark_cmd, int span,
+ 	ksft_test_result(!res, "MBM: bw change\n");
+ 	if ((get_vendor() == ARCH_INTEL) && res)
+ 		ksft_print_msg("Intel MBM may be inaccurate when Sub-NUMA Clustering is enabled. Check BIOS configuration.\n");
+-	mbm_test_cleanup();
+ }
  
-+	fflush(stdout);
- 	bm_pid = fork();
+ static void run_mba_test(bool has_ben, char **benchmark_cmd, int span,
+@@ -107,7 +106,6 @@ static void run_mba_test(bool has_ben, char **benchmark_cmd, int span,
+ 		sprintf(benchmark_cmd[1], "%d", span);
+ 	res = mba_schemata_change(cpu_no, bw_report, benchmark_cmd);
+ 	ksft_test_result(!res, "MBA: schemata change\n");
+-	mba_test_cleanup();
+ }
  
- 	/* Set param values for child thread which will be allocated bitmask
-diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
-index b32b96356ec7..6948843bf995 100644
---- a/tools/testing/selftests/resctrl/resctrl_val.c
-+++ b/tools/testing/selftests/resctrl/resctrl_val.c
-@@ -629,6 +629,7 @@ int resctrl_val(char **benchmark_cmd, struct resctrl_val_param *param)
- 	 * Fork to start benchmark, save child's pid so that it can be killed
- 	 * when needed
- 	 */
-+	fflush(stdout);
- 	bm_pid = fork();
- 	if (bm_pid == -1) {
- 		perror("# Unable to fork");
-diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
-index 8546bc9f1786..d95688298469 100644
---- a/tools/testing/selftests/resctrl/resctrlfs.c
-+++ b/tools/testing/selftests/resctrl/resctrlfs.c
-@@ -678,6 +678,7 @@ int filter_dmesg(void)
- 		perror("pipe");
- 		return ret;
- 	}
-+	fflush(stdout);
- 	pid = fork();
- 	if (pid == 0) {
- 		close(pipefds[0]);
+ static void run_cmt_test(bool has_ben, char **benchmark_cmd, int cpu_no)
+@@ -126,7 +124,6 @@ static void run_cmt_test(bool has_ben, char **benchmark_cmd, int cpu_no)
+ 	ksft_test_result(!res, "CMT: test\n");
+ 	if ((get_vendor() == ARCH_INTEL) && res)
+ 		ksft_print_msg("Intel CMT may be inaccurate when Sub-NUMA Clustering is enabled. Check BIOS configuration.\n");
+-	cmt_test_cleanup();
+ }
+ 
+ static void run_cat_test(int cpu_no, int no_of_bits)
+@@ -142,7 +139,6 @@ static void run_cat_test(int cpu_no, int no_of_bits)
+ 
+ 	res = cat_perf_miss_val(cpu_no, no_of_bits, "L3");
+ 	ksft_test_result(!res, "CAT: test\n");
+-	cat_test_cleanup();
+ }
+ 
+ int main(int argc, char **argv)
 -- 
 2.27.0
 
