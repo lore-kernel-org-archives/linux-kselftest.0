@@ -2,139 +2,125 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 177C1C433FE
-	for <linux-kselftest@archiver.kernel.org>; Wed,  2 Nov 2022 17:18:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 880A6C4332F
+	for <linux-kselftest@archiver.kernel.org>; Wed,  2 Nov 2022 18:03:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230292AbiKBRS0 (ORCPT
+        id S230005AbiKBSCs (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 2 Nov 2022 13:18:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44476 "EHLO
+        Wed, 2 Nov 2022 14:02:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230314AbiKBRSW (ORCPT
+        with ESMTP id S231264AbiKBSCl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Nov 2022 13:18:22 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE37192
-        for <linux-kselftest@vger.kernel.org>; Wed,  2 Nov 2022 10:18:20 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id d3so25966423ljl.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 02 Nov 2022 10:18:20 -0700 (PDT)
+        Wed, 2 Nov 2022 14:02:41 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8343421278
+        for <linux-kselftest@vger.kernel.org>; Wed,  2 Nov 2022 11:02:40 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id e8-20020a5b0cc8000000b006bca0fa3ab6so16853724ybr.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 02 Nov 2022 11:02:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=RknuEqUoiunPXi2OLjUbhlEwq60lRe2RTsR6hdfQJ0Y=;
-        b=RRnZ2dze/6CLhyKFhxGEw08Ckp4XwE8DWxZ0rZxAOcMdf5vdt9kUpYu0i/LLqPGehj
-         pYwLBE+/5Qto0rQ3PGtpUP8z7cfs5Z97tOSErjIiA7F6Gr0KhuXI0VS03iRzDSRFYUNa
-         ZtYLM10ihngzyi4eQW3AMFVgmfH2JF5B4VVzM=
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=CAYN6r+yTQvu28IFOFbzBkKteLNKvCbZnYXbZl6k2DY=;
+        b=FrgvbWPhRA4VD87zdgqKKiY5UHCDYtYfe7CjaP2xgmEOG1Y05NjZSf3gzQWW8T0Uct
+         kwK/a9hcGw0YEYKVOJVFR5P9iNYw89sCx6ZHsJggC73BExIAmjho5Pbue4CgNBI3QOgO
+         FoPe42kXbj+qL8yjM5/fdOTg+3rYiSOtiXyjG+vM72l5OUaB8j+A2cgCkgbbQKnrcMOV
+         vjVP5OOJMItX52jvTtAXnPZObQ6EUQSPLAa0t1h0Rw23k0Jw4oAggVMoBX89jk82PyRN
+         zVVthy9iTThict8/JGXYxe/C830qJ3olt0/g7iLirWIKcLukRfjGALBtlSWm2uBgHMk7
+         3wwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RknuEqUoiunPXi2OLjUbhlEwq60lRe2RTsR6hdfQJ0Y=;
-        b=DGYVmD/Ue7/ZrErrDGV58ZgMLW7S5b+BANe3S4Z53SQ1kOOX7IaKDrUSjrGGwPKtSC
-         a1LlAdofdHXv7sGhh7U1z0CGw0aMYZbFkogHJEpfnWBK0gMBJjkl92R7N5IzFnkJIGyF
-         9ufs/sq6PzFT3LerWWZBwXx7jBw6yAgSy1N5j8y9DANDVDnaIOk8p9kiuycXgfb7aol0
-         pqiQKPqehYx7BstMxtcrQ/L7oQRRqPiKilv8pLfJ6W80446DkBq2g+50q5vfWrVwMZyh
-         d6BYs56sKY+A99W7lYIVA/Er7SXOv0Gp2EGVDP+Ce/1SPrlZdpP+nMvyOc9pDuC1/UJS
-         2xow==
-X-Gm-Message-State: ACrzQf0dGQISEi7uw9wjk35aZyBaWTH7OoTCNfsCEnN82+kB+ZLYTRyv
-        NC79GKoXyYzar6bSVbStDvi7Fqm7rT7syAJLqnJSAg==
-X-Google-Smtp-Source: AMsMyM7GIYG7A4ghgZ0+aS8SyddPotFMK2d1/uL5kMGl7GKycv3x9BCqeqPj62YF1UHA3B/H7CEDTV/OSueDj54yRvU=
-X-Received: by 2002:a05:651c:19a8:b0:277:3cb2:d9f9 with SMTP id
- bx40-20020a05651c19a800b002773cb2d9f9mr9918004ljb.278.1667409498411; Wed, 02
- Nov 2022 10:18:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220805222126.142525-1-jeffxu@google.com> <202208081018.9C782F184C@keescook>
- <CABi2SkVXMUVhSTJezfHt_BKxyKP+x++9oveuB3qJZL7N672UKw@mail.gmail.com> <202211011933.DD0979338@keescook>
-In-Reply-To: <202211011933.DD0979338@keescook>
-From:   Jeff Xu <jeffxu@chromium.org>
-Date:   Wed, 2 Nov 2022 10:18:07 -0700
-Message-ID: <CABi2SkWGo9Jrd=i1e2PoDWYGenGhR=pG=yGsQP5VLmizTmg-iA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/5] mm/memfd: MFD_NOEXEC for memfd_create
-To:     Kees Cook <keescook@chromium.org>
-Cc:     jeffxu@google.com, skhan@linuxfoundation.org,
-        akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
-        dverkamp@chromium.org, hughd@google.com, jorgelo@chromium.org,
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CAYN6r+yTQvu28IFOFbzBkKteLNKvCbZnYXbZl6k2DY=;
+        b=q9gc6GPz36ytAXYKt3DecKsxby8L3hTtBN0uv/sZ5eDE6+ayCaThQ32ZLpAihWjwME
+         z3uYunEXc4batZHlBYKA64Mvgxsbm0HjNpdHqIo/1WcG0KVPKPsjONWbld5vo7jTTiaW
+         wEfrV8XDQg2dQr+MMjkkAz9uHytvnbGvHN7YthsSwBoq+npFJWHDeDENUAufvej5/z2D
+         5IcgHo8re8vKaTUoJ8RpBLMitnXx3gWAtm5ylI3jFQYImQGfu5Wy7HPuHzC/LQtWKwWp
+         Un4Eg/9Vde8p17xpm/g77OJpKpqv17dUSUC44xKjgjsvwrldEiIVhw3aWh/WbEp/b1Fl
+         jGnw==
+X-Gm-Message-State: ACrzQf01Z/d8WBs2Fx0Oq22IIMD2yljZXtaWztI3BwA2TyAHEEeJmPha
+        K6Woz/DWenD4sZUOEM0uXFM1VHzmmQ==
+X-Google-Smtp-Source: AMsMyM64HlkRFhAbArKDmM55aNm5YRW0BBSHLMBYENZZs5lf+VgK/ijoO38lHLz2MMzG8f46iR30Y68UQQ==
+X-Received: from rmoar.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:4259])
+ (user=rmoar job=sendgmr) by 2002:a05:6902:1247:b0:6ca:88e8:6f43 with SMTP id
+ t7-20020a056902124700b006ca88e86f43mr24295801ybu.289.1667412159822; Wed, 02
+ Nov 2022 11:02:39 -0700 (PDT)
+Date:   Wed,  2 Nov 2022 17:59:58 +0000
+In-Reply-To: <20221102175959.2921063-1-rmoar@google.com>
+Mime-Version: 1.0
+References: <20221102175959.2921063-1-rmoar@google.com>
+X-Mailer: git-send-email 2.38.1.273.g43a17bfeac-goog
+Message-ID: <20221102175959.2921063-2-rmoar@google.com>
+Subject: [PATCH v1 1/2] kunit: add macro to allow conditionally exposing
+ static symbols to tests
+From:   Rae Moar <rmoar@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com, dlatypov@google.com
+Cc:     skhan@linuxfoundation.org, tales.aparecida@gmail.com,
+        john.johansen@canonical.com, kunit-dev@googlegroups.com,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, mnissler@chromium.org, jannh@google.com,
-        linux-hardening@vger.kernel.org, Aleksa Sarai <cyphar@cyphar.com>,
-        dev@opencontainers.org, Christian Brauner <brauner@kernel.org>
+        apparmor@lists.ubuntu.com, Rae Moar <rmoar@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Nov 1, 2022 at 7:45 PM Kees Cook <keescook@chromium.org> wrote:
->
-> On Tue, Nov 01, 2022 at 04:14:39PM -0700, Jeff Xu wrote:
-> > Sorry for the long overdue reply.
->
-> No worries! I am a fan of thread necromancy. :)
->
-> > [...]
-> > 1> memfd_create:
-> > Add two flags:
-> > #define MFD_EXEC                      0x0008
-> > #define MFD_NOEXEC_SEAL    0x0010
-> > This lets application to set executable bit explicitly.
-> > (If application set both, it will be rejected)
->
-> So no MFD_NOEXEC without seal? (I'm fine with that.)
->
-no MFD_NOEXEC because memfd can be chmod to add x after creation,
-it is not secure.
+Create two macros:
 
-no MFD_EXEC_SEAL because it is better to apply both w and x seal
-within the same function call, and w seal can't be applied at creation time.
+VISIBLE_IF_KUNIT - A macro that sets symbols to be static if CONFIG_KUNIT
+is not enabled. Otherwise if CONFIG_KUNIT is enabled there is no change
+to the symbol definition.
 
-> > 2> For old application that doesn't set executable bit:
-> > Add a pid name-spaced sysctl.kernel.pid_mfd_noexec, with:
->
-> bikeshed: vm.memfd_noexec
-> (doesn't belong in "kernel", and seems better suited to "vm" than "fs")
->
-SG, will use vm.memfd_noexec
+EXPORT_SYMBOL_IF_KUNIT(symbol) - Exports symbol into
+EXPORTED_FOR_KUNIT_TESTING namespace only if CONFIG_KUNIT is enabled. Must
+use MODULE_IMPORT_NS(EXPORTED_FOR_KUNIT_TESTING) in test file in order to
+use symbols.
 
-> > value = 0: Default_EXEC
-> >      Honor MFD_EXEC and MFD_NOEXEC_SEAL
-> >      When none is set, will fall back to original behavior (EXEC)
->
-> Yeah. Rephrasing for myself to understand more clearly:
->
-> "memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL act like MFD_EXEC
-> was set."
->
-> > value = 1: Default_NOEXEC_SEAL
-> >       Honor MFD_EXEC and MFD_NOEXEC_SEAL
-> >       When none is set, will default to MFD_NOEXEC_SEAL
->
-> "memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL act like
-> MFD_NOEXEC_SEAL was set."
->
-Copy, this is clearer. Thanks.
+Signed-off-by: Rae Moar <rmoar@google.com>
+---
+ include/kunit/visibility.h | 32 ++++++++++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+ create mode 100644 include/kunit/visibility.h
 
-> Also, I think there should be a pr_warn_ratelimited() when
-> memfd_create() is used without either bit, so that there is some
-> pressure to please adjust their API calls to explicitly set a bit.
->
-Sure
+diff --git a/include/kunit/visibility.h b/include/kunit/visibility.h
+new file mode 100644
+index 000000000000..eb22c9e6b4eb
+--- /dev/null
++++ b/include/kunit/visibility.h
+@@ -0,0 +1,32 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * KUnit API to allow symbols to be conditionally visible during KUnit
++ * testing
++ *
++ * Copyright (C) 2019, Google LLC.
++ * Author: Brendan Higgins <brendanhiggins@google.com>
++ */
++
++#ifndef _KUNIT_VISIBILITY_H
++#define _KUNIT_VISIBILITY_H
++
++/**
++ * VISIBLE_IF_KUNIT - A macro that sets symbols to be static if CONFIG_KUNIT
++ * is not enabled. Otherwise if CONFIG_KUNIT is enabled there is no change
++ * to the symbol definition.
++ *
++ * EXPORT_SYMBOL_IF_KUNIT(symbol) - Exports symbol into
++ * EXPORTED_FOR_KUNIT_TESTING namespace only if CONFIG_KUNIT is
++ * enabled. Must use MODULE_IMPORT_NS(EXPORTED_FOR_KUNIT_TESTING)
++ * in test file in order to use symbols.
++ */
++#if IS_ENABLED(CONFIG_KUNIT)
++    #define VISIBLE_IF_KUNIT
++    #define EXPORT_SYMBOL_IF_KUNIT(symbol) EXPORT_SYMBOL_NS(symbol, \
++	    EXPORTED_FOR_KUNIT_TESTING)
++#else
++    #define VISIBLE_IF_KUNIT static
++    #define EXPORT_SYMBOL_IF_KUNIT(symbol)
++#endif
++
++#endif /* _KUNIT_VISIBILITY_H */
+-- 
+2.38.1.273.g43a17bfeac-goog
 
-> > 3> Add a pid name-spaced sysctl kernel.pid_mfd_noexec_enforced: with:
-> > value = 0: default, not enforced.
-> > value = 1: enforce NOEXEC_SEAL (overwrite everything)
->
-> How about making this just mode "value 2" for the first sysctl?
-> "memfd_create() without MFD_NOEXEC_SEAL will be rejected."
->
-Good point. Kernel overwriting  might not be a good practice.
-I will add to vm.mfd_noexec.
-value = 2: "memfd_create() without MFD_NOEXEC_SEAL will be rejected."
-
-Thanks!
-Jeff
-
-> -Kees
->
-> --
-> Kees Cook
