@@ -2,57 +2,64 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16332C433FE
-	for <linux-kselftest@archiver.kernel.org>; Thu,  3 Nov 2022 14:52:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ADCC3C433FE
+	for <linux-kselftest@archiver.kernel.org>; Thu,  3 Nov 2022 14:52:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231802AbiKCOv6 (ORCPT
+        id S231801AbiKCOwA (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 3 Nov 2022 10:51:58 -0400
+        Thu, 3 Nov 2022 10:52:00 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231732AbiKCOvr (ORCPT
+        with ESMTP id S231789AbiKCOvt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Nov 2022 10:51:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF0AD19280;
-        Thu,  3 Nov 2022 07:51:45 -0700 (PDT)
+        Thu, 3 Nov 2022 10:51:49 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A2F19291;
+        Thu,  3 Nov 2022 07:51:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7E4C0B828A3;
-        Thu,  3 Nov 2022 14:51:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B011C433D6;
+        by sin.source.kernel.org (Postfix) with ESMTPS id 3F4CDCE2784;
+        Thu,  3 Nov 2022 14:51:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31C1CC43141;
         Thu,  3 Nov 2022 14:51:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1667487103;
-        bh=aBiqaKM+JH7n4Gr1RSbFfPLj/Tspjy42oxH/2AtYZuI=;
+        bh=uKx5CM4Wo7SGIbjuqLDYwkAKVGcbP3XPEVY3Uc4z03g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PP8D6vwogDrReAZBrJYHfHbN3jPMgkwi0GC7tzE4b9IRuXDaDUuqHYaeCcN530tOe
-         PyvNLDEV0NFmWvGqPxyGAMECDo5Lt7AvoSA3W+c6+XTl1n7H4+OhnbbJvthYt/4PFy
-         6pnuhVSRNApVh7R/N1J7FvSd4loBmbFkXDMSsaSvuYoBMg877oxTWEHsvW2I2qQDtX
-         4OD8Ii7cKGxmJuuZFi1OjZXSl3Qvx9/Rn3aYjn3s3jvpHQpmqCI9KyWn9qdQaQ0duO
-         m+OhBzFHhUpZGsyLN80DWjoS5V1yP3QBNGuwhwcIaCsQcVyoELKsCRB4uFUJ4XCHdO
-         wvw6tu6AwLDSQ==
+        b=b5RTy+HjAvar0v3LCPg/cTbvaP4h/XLMEVtpU8WzJDpdiaLMGFjXTs8OfKoX4Up+P
+         iZkvpGfG/E7KYN9NdcloKydjq5kl9zLTOZoH74+e4AFoGN50cTUffTsg2OGfhqzBqH
+         k6rUTxAZVPgeConXquQyjjobB71LqZSZiLQY7TiP0fmjZbywAWcLO7UNgrbW4Ezd/c
+         odWRxPW5EZedodPgE9m9jr3gWuFBCfl1qFKGL67PK+X1Lpio50bnTp4ZdTikY5B401
+         V4hmAL8XGkcR96YNO7tzu87SOf5MCoMohosXFCIwwxWxdN4FlUNBgFzI7oSNHFpfW9
+         wNkzH4bFG8Y9Q==
 Received: from mchehab by mail.kernel.org with local (Exim 4.96)
         (envelope-from <mchehab@kernel.org>)
-        id 1oqbZE-0076b7-0O;
+        id 1oqbZE-0076av-08;
         Thu, 03 Nov 2022 14:51:40 +0000
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         "Daniel Latypov" <dlatypov@google.com>,
         "Isabella Basso" <isabbasso@riseup.net>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>,
+        Andi Shyti <andi.shyti@linux.intel.com>,
         Daniel Vetter <daniel@ffwll.ch>,
         David Airlie <airlied@gmail.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
         Jani Nikula <jani.nikula@linux.intel.com>,
         Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Matt Roper <matthew.d.roper@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
         Rodrigo Vivi <rodrigo.vivi@intel.com>,
         Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
         dri-devel@lists.freedesktop.org, igt-dev@lists.freedesktop.org,
         intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
-Subject: [PATCH RFC v2 6/8] drm/i915: add perf selftests to KUnit
-Date:   Thu,  3 Nov 2022 14:51:36 +0000
-Message-Id: <048d54e7e5718ba6c7606be61482cedd7cb92dfd.1667486144.git.mchehab@kernel.org>
+Subject: [PATCH RFC v2 2/8] drm/i915: place selftest preparation on a separate function
+Date:   Thu,  3 Nov 2022 14:51:32 +0000
+Message-Id: <71391c51dc48300e4dac3b762abed9201d508302.1667486144.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <cover.1667486144.git.mchehab@kernel.org>
 References: <cover.1667486144.git.mchehab@kernel.org>
@@ -63,7 +70,8 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Now that i915 KUnit has PCI support, add perf tests as well.
+The selftest preparation logic should also be used by KUnit. So,
+place it on a separate function and export it.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
@@ -71,64 +79,73 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
 See [PATCH RFC v2 0/8] at: https://lore.kernel.org/all/cover.1667486144.git.mchehab@kernel.org/
 
- drivers/gpu/drm/i915/selftests/i915_kunit.c | 34 ++++++++++++++++++++-
- 1 file changed, 33 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/i915/i915_selftest.h          |  2 ++
+ .../gpu/drm/i915/selftests/i915_selftest.c    | 22 ++++++++++++-------
+ 2 files changed, 16 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/gpu/drm/i915/selftests/i915_kunit.c b/drivers/gpu/drm/i915/selftests/i915_kunit.c
-index f5281c866d75..6de5d3fa8920 100644
---- a/drivers/gpu/drm/i915/selftests/i915_kunit.c
-+++ b/drivers/gpu/drm/i915/selftests/i915_kunit.c
-@@ -202,6 +202,30 @@ static struct kunit_case i915_live_tests[] = {
- };
- #undef selftest
+diff --git a/drivers/gpu/drm/i915/i915_selftest.h b/drivers/gpu/drm/i915/i915_selftest.h
+index f54de0499be7..7fab96a42a62 100644
+--- a/drivers/gpu/drm/i915/i915_selftest.h
++++ b/drivers/gpu/drm/i915/i915_selftest.h
+@@ -44,6 +44,7 @@ struct i915_selftest {
  
-+/*
-+ * Suite 3: live selftests
-+ */
-+
-+#define selftest(x, __y) int __y(struct drm_i915_private *i915);
-+#include "i915_perf_selftests.h"
-+#undef selftest
-+
-+/* Create selftest functions */
-+#define selftest(__x, __y)				\
-+	static void perf_##__x(struct kunit *test) {	\
-+		run_pci_test(test, __y);		\
-+	}
-+#include "i915_perf_selftests.h"
-+#undef selftest
-+
-+/* Fill tests array */
-+#define selftest(__x, __y) KUNIT_CASE(perf_##__x),
-+static struct kunit_case i915_perf_tests[] = {
-+#include "i915_perf_selftests.h"
-+	{}
-+};
-+#undef selftest
-+
- /*
-  * Declare test suites
-  */
-@@ -219,10 +243,18 @@ static struct kunit_suite i915_test_suites[] = {
- 		.suite_init = i915_pci_init_suite,
- 		.suite_exit = i915_pci_exit_suite,
- 	},
-+	{
-+		.name = "i915 perf selftests",
-+		.test_cases = i915_perf_tests,
-+		.init = initialize_i915_selftests,
-+		.suite_init = i915_pci_init_suite,
-+		.suite_exit = i915_pci_exit_suite,
-+	},
- };
+ extern struct i915_selftest i915_selftest;
  
- kunit_test_suites(&i915_test_suites[0],
--		  &i915_test_suites[1]);
-+		  &i915_test_suites[1],
-+		  &i915_test_suites[2]);
++void i915_prepare_selftests(const char *name);
+ int i915_mock_selftests(void);
+ int i915_live_selftests(struct pci_dev *pdev);
+ int i915_perf_selftests(struct pci_dev *pdev);
+@@ -111,6 +112,7 @@ int __i915_subtests(const char *caller,
  
- MODULE_LICENSE("GPL v2");
- MODULE_IMPORT_NS(I915_SELFTEST);
+ #else /* !IS_ENABLED(CONFIG_DRM_I915_SELFTEST) */
+ 
++static inline void i915_prepare_selftests(const char *) {};
+ static inline int i915_mock_selftests(void) { return 0; }
+ static inline int i915_live_selftests(struct pci_dev *pdev) { return 0; }
+ static inline int i915_perf_selftests(struct pci_dev *pdev) { return 0; }
+diff --git a/drivers/gpu/drm/i915/selftests/i915_selftest.c b/drivers/gpu/drm/i915/selftests/i915_selftest.c
+index 571c9021bd2c..011f7b1f7ff5 100644
+--- a/drivers/gpu/drm/i915/selftests/i915_selftest.c
++++ b/drivers/gpu/drm/i915/selftests/i915_selftest.c
+@@ -129,13 +129,8 @@ static void set_default_test_all(struct selftest *st, unsigned int count)
+ 		st[i].enabled = true;
+ }
+ 
+-static int __run_selftests(const char *name,
+-			   struct selftest *st,
+-			   unsigned int count,
+-			   void *data)
++void i915_prepare_selftests(const char *name)
+ {
+-	int err = 0;
+-
+ 	while (!i915_selftest.random_seed)
+ 		i915_selftest.random_seed = get_random_u32();
+ 
+@@ -144,10 +139,21 @@ static int __run_selftests(const char *name,
+ 		msecs_to_jiffies_timeout(i915_selftest.timeout_ms) :
+ 		MAX_SCHEDULE_TIMEOUT;
+ 
+-	set_default_test_all(st, count);
+-
+ 	pr_info(DRIVER_NAME ": Performing %s selftests with st_random_seed=0x%x st_timeout=%u\n",
+ 		name, i915_selftest.random_seed, i915_selftest.timeout_ms);
++}
++EXPORT_SYMBOL_NS_GPL(i915_prepare_selftests, I915_SELFTEST);
++
++static int __run_selftests(const char *name,
++			   struct selftest *st,
++			   unsigned int count,
++			   void *data)
++{
++	int err = 0;
++
++	i915_prepare_selftests(name);
++
++	set_default_test_all(st, count);
+ 
+ 	/* Tests are listed in order in i915_*_selftests.h */
+ 	for (; count--; st++) {
 -- 
 2.38.1
 
