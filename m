@@ -2,121 +2,86 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 599FCC43217
-	for <linux-kselftest@archiver.kernel.org>; Thu,  3 Nov 2022 08:05:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10A04C4332F
+	for <linux-kselftest@archiver.kernel.org>; Thu,  3 Nov 2022 08:36:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbiKCIFL (ORCPT
+        id S230292AbiKCIgO (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 3 Nov 2022 04:05:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53326 "EHLO
+        Thu, 3 Nov 2022 04:36:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbiKCIFL (ORCPT
+        with ESMTP id S230041AbiKCIgN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Nov 2022 04:05:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C26C116C;
-        Thu,  3 Nov 2022 01:05:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5061CB82695;
-        Thu,  3 Nov 2022 08:05:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 663D7C433C1;
-        Thu,  3 Nov 2022 08:04:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667462704;
-        bh=0H/9grb2h1ZdT4tEjfsYpds+m01aFKc77P1+gyy/5Kc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=S61gmKRQeL/qIkrXM6DcGZ60Mxme4miDWVTrAJLek6OczOIhvnd3ew4OSq5qsaaL6
-         QCFj8EkymGXHCVM61erCNj1zxqL5YMlqVvPStNdgVP83D9/7ZK56YCYt/U4BjP2BSS
-         u3zyHDqNoR9v3t3j3Fu7WRK74jq05iIa7w0y61otsQCG88GQeofE5K2WqATIXiA7uh
-         L9dsUv/FkjxM3VGXui2WiADK5oC9wGa0auHfjlsgw4a6isUYRaf0fXtvFbEOwn+U1C
-         1ktyawcdNc1bXSFZIqfhUE+iDE1XG7Xaiwd+DpQrXJ0AUfhrVkCR2DX5jyH6zdB5YK
-         fuQs6j5P68noQ==
-From:   guoren@kernel.org
-To:     arnd@arndb.de, guoren@kernel.org, shuah@kernel.org,
-        skhan@linuxfoundation.org
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org,
-        "haocheng . zy" <haocheng.zy@linux.alibaba.com>,
-        Mao Han <han_mao@linux.alibaba.com>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Elliott Hughes <enh@google.com>
-Subject: [PATCH V2] selftests/vDSO: Add riscv getcpu & gettimeofday test
-Date:   Thu,  3 Nov 2022 04:04:51 -0400
-Message-Id: <20221103080451.1642500-1-guoren@kernel.org>
-X-Mailer: git-send-email 2.36.1
+        Thu, 3 Nov 2022 04:36:13 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF8D26FA;
+        Thu,  3 Nov 2022 01:36:13 -0700 (PDT)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N2xtG2Y5hzmV6r;
+        Thu,  3 Nov 2022 16:36:06 +0800 (CST)
+Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 3 Nov 2022 16:36:11 +0800
+Received: from ubuntu1804.huawei.com (10.67.174.61) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 3 Nov 2022 16:36:10 +0800
+From:   Yang Jihong <yangjihong1@huawei.com>
+To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
+        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
+        <haoluo@google.com>, <jolsa@kernel.org>,
+        <illusionist.neo@gmail.com>, <linux@armlinux.org.uk>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <mykolal@fb.com>, <shuah@kernel.org>,
+        <benjamin.tissoires@redhat.com>, <memxor@gmail.com>,
+        <delyank@fb.com>, <asavkov@redhat.com>, <colin.i.king@gmail.com>,
+        <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>
+CC:     <yangjihong1@huawei.com>
+Subject: [PATCH 1/4] bpf: Adapt 32-bit return value kfunc for 32-bit ARM when zext extension
+Date:   Thu, 3 Nov 2022 16:32:51 +0800
+Message-ID: <20221103083254.237646-2-yangjihong1@huawei.com>
+X-Mailer: git-send-email 2.30.GIT
+In-Reply-To: <20221103083254.237646-1-yangjihong1@huawei.com>
+References: <20221103083254.237646-1-yangjihong1@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.61]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Guo Ren <guoren@kernel.org>
+For ARM32 architecture, if data width of kfunc return value is 32 bits,
+need to do explicit zero extension for high 32-bit, insn_def_regno should
+return dst_reg for BPF_JMP type of BPF_PSEUDO_KFUNC_CALL. Otherwise,
+opt_subreg_zext_lo32_rnd_hi32 returns -EFAULT, resulting in BPF failure.
 
-Enable vDSO getcpu & gettimeofday test for riscv. But only riscv64
-supports __vdso_gettimeofday and riscv32 is under development.
-
-VERSION
-{
-        LINUX_4.15 {
-        global:
-                __vdso_rt_sigreturn;
-                __vdso_gettimeofday;
-                __vdso_clock_gettime;
-                __vdso_clock_getres;
-                __vdso_getcpu;
-                __vdso_flush_icache;
-        local: *;
-        };
-}
-
-Co-developed-by: haocheng.zy <haocheng.zy@linux.alibaba.com>
-Signed-off-by: haocheng.zy <haocheng.zy@linux.alibaba.com>
-Suggested-by: Mao Han <han_mao@linux.alibaba.com>
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>
-Cc: Elliott Hughes <enh@google.com>
+Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
 ---
- tools/testing/selftests/vDSO/vdso_test_getcpu.c       | 4 ++++
- tools/testing/selftests/vDSO/vdso_test_gettimeofday.c | 3 +++
- 2 files changed, 7 insertions(+)
+ kernel/bpf/verifier.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/tools/testing/selftests/vDSO/vdso_test_getcpu.c b/tools/testing/selftests/vDSO/vdso_test_getcpu.c
-index fc25ede131b8..1df5d057d79f 100644
---- a/tools/testing/selftests/vDSO/vdso_test_getcpu.c
-+++ b/tools/testing/selftests/vDSO/vdso_test_getcpu.c
-@@ -14,7 +14,11 @@
- #include "../kselftest.h"
- #include "parse_vdso.h"
- 
-+#if defined(__riscv)
-+const char *version = "LINUX_4.15";
-+#else
- const char *version = "LINUX_2.6";
-+#endif
- const char *name = "__vdso_getcpu";
- 
- struct getcpu_cache;
-diff --git a/tools/testing/selftests/vDSO/vdso_test_gettimeofday.c b/tools/testing/selftests/vDSO/vdso_test_gettimeofday.c
-index 8ccc73ed8240..e411f287a426 100644
---- a/tools/testing/selftests/vDSO/vdso_test_gettimeofday.c
-+++ b/tools/testing/selftests/vDSO/vdso_test_gettimeofday.c
-@@ -27,6 +27,9 @@
- #if defined(__aarch64__)
- const char *version = "LINUX_2.6.39";
- const char *name = "__kernel_gettimeofday";
-+#elif defined(__riscv)
-+const char *version = "LINUX_4.15";
-+const char *name = "__vdso_gettimeofday";
- #else
- const char *version = "LINUX_2.6";
- const char *name = "__vdso_gettimeofday";
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 7f0a9f6cb889..bac37757ffca 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -2404,6 +2404,9 @@ static int insn_def_regno(const struct bpf_insn *insn)
+ {
+ 	switch (BPF_CLASS(insn->code)) {
+ 	case BPF_JMP:
++		if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL)
++			return insn->dst_reg;
++		fallthrough;
+ 	case BPF_JMP32:
+ 	case BPF_ST:
+ 		return -1;
 -- 
-2.36.1
+2.30.GIT
 
