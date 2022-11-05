@@ -2,79 +2,68 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22B3DC433FE
-	for <linux-kselftest@archiver.kernel.org>; Sat,  5 Nov 2022 11:07:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B1C8EC433FE
+	for <linux-kselftest@archiver.kernel.org>; Sat,  5 Nov 2022 15:35:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229601AbiKELHm (ORCPT
+        id S229694AbiKEPfT (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 5 Nov 2022 07:07:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49344 "EHLO
+        Sat, 5 Nov 2022 11:35:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiKELHl (ORCPT
+        with ESMTP id S229603AbiKEPfS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 5 Nov 2022 07:07:41 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FE09FCE3;
-        Sat,  5 Nov 2022 04:07:41 -0700 (PDT)
-Received: from canpemm500007.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N4F432pPLzpW8R;
-        Sat,  5 Nov 2022 19:04:03 +0800 (CST)
-Received: from [10.174.179.215] (10.174.179.215) by
- canpemm500007.china.huawei.com (7.192.104.62) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 5 Nov 2022 19:07:38 +0800
-Subject: Re: [PATCH] selftests/xsk: Fix unsigned comparison with less than
- zero
-To:     <bjorn@kernel.org>, <magnus.karlsson@intel.com>,
-        <maciej.fijalkowski@intel.com>, <jonathan.lemon@gmail.com>,
-        <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
-        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
-        <haoluo@google.com>, <jolsa@kernel.org>, <mykolal@fb.com>,
-        <shuah@kernel.org>, <shibin.koikkara.reeny@intel.com>
-CC:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20221105110443.23872-1-yuehaibing@huawei.com>
-From:   YueHaibing <yuehaibing@huawei.com>
-Message-ID: <de5cae26-cc6a-0c07-8bab-40296f9598a8@huawei.com>
-Date:   Sat, 5 Nov 2022 19:07:37 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+        Sat, 5 Nov 2022 11:35:18 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E35C76D;
+        Sat,  5 Nov 2022 08:35:14 -0700 (PDT)
+X-QQ-mid: bizesmtp87t1667662506tmjcg99l
+Received: from localhost.localdomain ( [182.148.13.29])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sat, 05 Nov 2022 23:34:58 +0800 (CST)
+X-QQ-SSF: 01000000002000D0E000B00A0000000
+X-QQ-FEAT: 3adAc7TLCXYUBMAV1nn3K5AMUFdiqLsuGFYml9+EkoHBGpNkwgXmAUGnK6TWk
+        LZ7t+oeMTWB9W66CwuV29DfXx2z+jwaid80G+iGwladtelTZRHmyog9pa8kYVOgeKnZ+2ju
+        N7Q8Cu6Zj90wCunSNKt7BFATXX8mQs87EQN2+j1X4r60v3Cn4ypjeFTrZcaBv1i3JnDx0QE
+        jjvoCtg4Gza2VQGbI1IlMHM1Nz68nk+5ZTpRlQUhaWn+KYaREZFofkvO6eJ1pZwGt0B4MJO
+        tE1ibg2dVFNZ0xSKUibsLXxqSkm/OLtVwc0V4BXJH2xt1I04JvJgEb6Hh6xSHZaIvZlLi66
+        X+zd3ojxaCirapZ70n6ddNpRqoUBjtUJs+3A4azzR1zlTpSeRBVeeYqWp6/uQ==
+X-QQ-GoodBg: 0
+From:   Shaomin Deng <dengshaomin@cdjrlc.com>
+To:     jstultz@google.com, tglx@linutronix.de, shuah@kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc:     Shaomin Deng <dengshaomin@cdjrlc.com>
+Subject: [PATCH] selftests: timers: Drop the rebundant semicolon
+Date:   Sat,  5 Nov 2022 11:34:57 -0400
+Message-Id: <20221105153457.7001-1-dengshaomin@cdjrlc.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-In-Reply-To: <20221105110443.23872-1-yuehaibing@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.174.179.215]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500007.china.huawei.com (7.192.104.62)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-someone has post a fix, pls ignore this.
+Drop the unneeded semicolon.
 
-On 2022/11/5 19:04, YueHaibing wrote:
-> poll() may return negative on error, 'ret' should be int.
->
-> Fixes: 3143d10b0945 ("selftests/xsk: Update poll test cases")
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
-> ---
->  tools/testing/selftests/bpf/xskxceiver.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
-> index 681a5db80dae..162d3a516f2c 100644
-> --- a/tools/testing/selftests/bpf/xskxceiver.c
-> +++ b/tools/testing/selftests/bpf/xskxceiver.c
-> @@ -1006,7 +1006,8 @@ static int __send_pkts(struct ifobject *ifobject, u32 *pkt_nb, struct pollfd *fd
->  {
->  	struct xsk_socket_info *xsk = ifobject->xsk;
->  	bool use_poll = ifobject->use_poll;
-> -	u32 i, idx = 0, ret, valid_pkts = 0;
-> +	u32 i, idx = 0, valid_pkts = 0;
-> +	int ret;
->  
->  	while (xsk_ring_prod__reserve(&xsk->tx, BATCH_SIZE, &idx) < BATCH_SIZE) {
->  		if (use_poll) {
+Signed-off-by: Shaomin Deng <dengshaomin@cdjrlc.com>
+---
+ tools/testing/selftests/timers/set-timer-lat.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/timers/set-timer-lat.c b/tools/testing/selftests/timers/set-timer-lat.c
+index 50da45437daa..d60bbcad487f 100644
+--- a/tools/testing/selftests/timers/set-timer-lat.c
++++ b/tools/testing/selftests/timers/set-timer-lat.c
+@@ -80,7 +80,7 @@ char *clockstring(int clockid)
+ 		return "CLOCK_BOOTTIME_ALARM";
+ 	case CLOCK_TAI:
+ 		return "CLOCK_TAI";
+-	};
++	}
+ 	return "UNKNOWN_CLOCKID";
+ }
+ 
+-- 
+2.35.1
+
