@@ -2,109 +2,120 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 30D4FC433FE
-	for <linux-kselftest@archiver.kernel.org>; Mon,  7 Nov 2022 20:53:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7244BC433FE
+	for <linux-kselftest@archiver.kernel.org>; Mon,  7 Nov 2022 21:25:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231450AbiKGUx3 (ORCPT
+        id S233370AbiKGVZp (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 7 Nov 2022 15:53:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43318 "EHLO
+        Mon, 7 Nov 2022 16:25:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233023AbiKGUxZ (ORCPT
+        with ESMTP id S233227AbiKGVZX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Nov 2022 15:53:25 -0500
-X-Greylist: delayed 200 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Nov 2022 12:53:23 PST
-Received: from 005.lax.mailroute.net (005.lax.mailroute.net [199.89.1.8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A12B11000
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Nov 2022 12:53:22 -0800 (PST)
-Received: from 014.lax.mailroute.net (014.lax.mailroute.net [199.89.1.17])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by 005.lax.mailroute.net (Postfix) with ESMTPS id 4N5jzG2lwbz1T5Mn
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Nov 2022 20:50:02 +0000 (UTC)
-Received: from localhost (014.lax.mailroute.net [127.0.0.1])
-        by 014.lax.mailroute.net (Postfix) with ESMTP id 4N5jzF6Yz1z3G0H9
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Nov 2022 20:50:01 +0000 (UTC)
-X-Virus-Scanned: by MailRoute
-Received: from 014.lax.mailroute.net ([199.89.1.17])
-        by localhost (014.lax [127.0.0.1]) (mroute_mailscanner, port 10026)
-        with LMTP id PKTZxTzS8ZRb for <linux-kselftest@vger.kernel.org>;
-        Mon,  7 Nov 2022 20:50:00 +0000 (UTC)
-Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by 014.lax.mailroute.net (Postfix) with ESMTPS id 4N5jzD6gLMz3G02C
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Nov 2022 20:50:00 +0000 (UTC)
-Received: by mail-pf1-f200.google.com with SMTP id m6-20020aa79006000000b0056bc283f477so6090501pfo.19
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Nov 2022 12:50:00 -0800 (PST)
+        Mon, 7 Nov 2022 16:25:23 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2F255AE;
+        Mon,  7 Nov 2022 13:25:19 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id u8-20020a17090a5e4800b002106dcdd4a0so15956267pji.1;
+        Mon, 07 Nov 2022 13:25:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sladewatkins.net; s=googled;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=7C2AzLoIXAOHTIa3Ey64y5Lcd9pKKsuRkuQWS8S5h84=;
-        b=EAFy6Ne/R1g5VTzYbERV/rFcUG1RncvMunzz4ZfDLEkndNaa8881m/x/wOgeArPhb8
-         J3+9RZPJ7DZCR0zR5GE5SKdmHmuXmSsNRV78mzdhuv158Vfa3dJupI7cGBZKBC9UnLhN
-         npNSENOVtuPiCJGBaFz+6wvkF9cZXdQ1h6hY9v6AV7d6Ikyher73i7x6lf1qMvFJPskw
-         kUmnYWKWvCLf9aSHHb2bIwwMpTKX2QV/+JnHWFN/VcmGCPZxhbrSj6vmGeeS09rzPsfZ
-         KhWmZXtsDF0ASL4eEmRjZxzJ5IfT0A10PDkZuexcZmkmokRfjt5i19eYHEA8fO8NJHe5
-         D+lg==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8wNv+1Bf4cquI/EHzjAENJoFB1/c9LVYJtIsCgpVko8=;
+        b=Jw6IIZMnJN8JA5mVqxvAC/JS5MSwwZq9MH1YW0YXr+YI0Rn6aZf1ylYXIhcjfGpccl
+         OnVT9b1yKNxTh+141tJniQkx5kDbL8zOpBv/yMPmWyshQfk7LWXZlbtDaFYtvo4yli6P
+         FUeV920E7vf0PUFor8tH/A4oRy2wFuwbOJNsCtXsBJv/12VxaLKNU1EHFvhkfK5UrpG/
+         LgrybxTGYFB6O04yCAKoC5C2gqQoyWiK+l2CP0N0bCfGC03iZT09c4Sf51xAAJyOQfBo
+         NqCjOnKXglh04J9KD7ui9eoSmj+50jYivPazBST1fT0HFTzn+qUcQAvCi1RiI75GHVbm
+         yi9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7C2AzLoIXAOHTIa3Ey64y5Lcd9pKKsuRkuQWS8S5h84=;
-        b=mSQ+bHDgDg6Z/08uaNwlJs+G6KOCSQzZ9wc3ny6Zl9SSpXcHLxx9u/GZsHjHWueTU8
-         Il+NzqnSWZofJu7/QOJtcZ/ucF/ujLrGcKRdTNZuRL+tICuM6/uv108ORg4pQFSo3U16
-         ziNZ0rEU/GXvg0jnQMvXuBu81mgZTOqrYqwJDWDkR/77ofq43ApVDpUjpHYPf9pjrMy3
-         1abaB1p5cM6/zbP9hJABV11P+4iG1xvE7I7OhW8apNuxZSMsQPrGlwxvVjO3hHg1dCIu
-         fDlEj0xz/hJ1vfQ4nRPhOZZRvED089B89yXRPKkh9t+eFtl2fGYohvVEvRikz/u0bnG+
-         4PLw==
-X-Gm-Message-State: ACrzQf0adff91hx9JGX3ZP2yNQ2AMDvNLga91n08QHcacbpn99ZBx8G+
-        nnhPHJPoV22MktbYLU8cZn7n033YisUx3fBDkJp1G+THoU118VzSqYjJwiHKNsiXhVqvnwNgoeq
-        tz1GeznU+bSvV68eWA6J95/5uxEY5eIhylXxZPAeqN4Bko7ybPzDRYHRCyTM=
-X-Received: by 2002:a17:902:9b88:b0:188:620d:90fc with SMTP id y8-20020a1709029b8800b00188620d90fcmr22192410plp.61.1667854200193;
-        Mon, 07 Nov 2022 12:50:00 -0800 (PST)
-X-Google-Smtp-Source: AMsMyM7xWEFMd05xK8hyJabZq53YX527qoS3pncq2Cf2MdeoKWmeTkDLEGqQ331usKklxWYzqf9H26GDfE4z++eeLjE=
-X-Received: by 2002:a17:902:9b88:b0:188:620d:90fc with SMTP id
- y8-20020a1709029b8800b00188620d90fcmr22192381plp.61.1667854199868; Mon, 07
- Nov 2022 12:49:59 -0800 (PST)
-MIME-Version: 1.0
-References: <20221107063807.81774-1-khuey@kylehuey.com>
-In-Reply-To: <20221107063807.81774-1-khuey@kylehuey.com>
-From:   Slade Watkins <srw@sladewatkins.net>
-Date:   Mon, 7 Nov 2022 15:49:48 -0500
-Message-ID: <CA+pv=HNPDvr_SV0f6RSBz2A3qBQQLBXaaxTPPT4FABQhwQwuHw@mail.gmail.com>
-Subject: Re: [RESEND PATCH v6] x86/fpu: Trying to fix writing PKRU through ptrace
-To:     Kyle Huey <me@kylehuey.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sean Christopherson <seanjc@google.com>,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8wNv+1Bf4cquI/EHzjAENJoFB1/c9LVYJtIsCgpVko8=;
+        b=YsZ2uN+7sHlichWjjLhGPD/DqWHvW45btO/69z8PsrX5bxy/+aHQ5tzOqMarMAiVRN
+         KCnESU70GWjDJkam6HEEYVnhMLKcKEkGljKH4IY13aKQOpfpQiJzHwWzW9EPAnA0ZR1U
+         8qz6Bb6FrnRTS5x5J1skE8Qc29V4GE46lO7ftZw7Ihv3H23utBlhxHrVKe7gCEZK1oWN
+         zxyHrJcz2cibjcNrLqEH8f1rpRx44PxAlM1TqmZS+ntTiqIDD9NCMz2sSBu2VUI3FQ8q
+         xZcPrIwFQ/1/JY05b4OolJ6tGsW6AokGkrcOYx0vC+eiNGF3tIvGODIRozMXxsj7aIGR
+         jQZw==
+X-Gm-Message-State: ACrzQf0JVpF7H+rtrAWWz76zuYxB1N3soMkGn/UpsimPW14o6V20WKV2
+        L1dqJ7kyVLAymey2/DmZOxw=
+X-Google-Smtp-Source: AMsMyM6pg7jfZjs5E3oG1Xo6bI3H420NG+af23uX8ad0Qpws6uAeEJnrSoNhYF1g+EVi5zjcrRskjg==
+X-Received: by 2002:a17:90a:7e10:b0:213:9e81:87e2 with SMTP id i16-20020a17090a7e1000b002139e8187e2mr56152275pjl.1.1667856319181;
+        Mon, 07 Nov 2022 13:25:19 -0800 (PST)
+Received: from google.com ([2620:15c:211:201:594a:f636:e461:590b])
+        by smtp.gmail.com with ESMTPSA id h20-20020aa796d4000000b00560a25fae1fsm4887216pfq.206.2022.11.07.13.25.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Nov 2022 13:25:18 -0800 (PST)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Mon, 7 Nov 2022 13:25:16 -0800
+From:   Minchan Kim <minchan@kernel.org>
+To:     Petr Vorel <pvorel@suse.cz>
+Cc:     ltp@lists.linux.it, linux-block@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        "Robert O'Callahan" <robert@ocallahan.org>,
-        David Manouchehri <david.manouchehri@riseup.net>
-Content-Type: text/plain; charset="UTF-8"
+        Nitin Gupta <ngupta@vflare.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
+        Martin Doucha <mdoucha@suse.cz>,
+        Yang Xu <xuyang2018.jy@fujitsu.com>
+Subject: Re: [PATCH 0/1] Possible bug in zram on ppc64le on vfat
+Message-ID: <Y2l3vJb1y2Jynf50@google.com>
+References: <20221107191136.18048-1-pvorel@suse.cz>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221107191136.18048-1-pvorel@suse.cz>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Nov 7, 2022 at 1:38 AM Kyle Huey <me@kylehuey.com> wrote:
-> I've been trying since July to get this regression that was introduced in
-> 5.14 fixed. This is my third time submitting this version of the patch in the
-> last two months. Both prior submissions have not received any comments from
-> (nor have they been applied by) the x86 maintainers. I don't really know
-> what else to do at this point beyond "complain to the management" as it
-> were.
->
-> I appreciate anything you can do to unjam things here.
+On Mon, Nov 07, 2022 at 08:11:35PM +0100, Petr Vorel wrote:
+> Hi all,
+> 
+> following bug is trying to workaround an error on ppc64le, where
+> zram01.sh LTP test (there is also kernel selftest
+> tools/testing/selftests/zram/zram01.sh, but LTP test got further
+> updates) has often mem_used_total 0 although zram is already filled.
 
-Maintainers: is there any reason why this hasn't been applied, or
-received comments? I'm confused and a bit worried.
+Hi, Petr,
 
--srw
+Is it happening on only ppc64le?
+
+Is it a new regression? What kernel version did you use?
+
+Actually, mem_used_total indicates how many *physical memory* were
+currently used to keep original data size.
+
+However, if the test data is repeated pattern of unsigned long
+(https://github.com/torvalds/linux/blob/master/drivers/block/zram/zram_drv.c#L210)
+zram doesn't allocate the physical memory but just mark the unsigned long's value
+in meta area for decompression later.
+
+Not sure you hit the this case.
+
+> 
+> Patch tries to repeatedly read /sys/block/zram*/mm_stat for 1 sec,
+> waiting for mem_used_total > 0. The question if this is expected and
+> should be workarounded or a bug which should be fixed.
+> 
+> REPRODUCE THE ISSUE
+> Quickest way to install only zram tests and their dependencies:
+> make autotools && ./configure && for i in testcases/lib/ testcases/kernel/device-drivers/zram/; do cd $i && make -j$(getconf _NPROCESSORS_ONLN) && make install && cd -; done
+> 
+> Run the test (only on vfat)
+> PATH="/opt/ltp/testcases/bin:$PATH" LTP_SINGLE_FS_TYPE=vfat zram01.sh
+> 
+> Petr Vorel (1):
+>   zram01.sh: Workaround division by 0 on vfat on ppc64le
+> 
+>  .../kernel/device-drivers/zram/zram01.sh      | 27 +++++++++++++++++--
+>  1 file changed, 25 insertions(+), 2 deletions(-)
+> 
+> -- 
+> 2.38.0
+> 
