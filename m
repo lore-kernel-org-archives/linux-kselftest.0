@@ -2,107 +2,74 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70A95C433FE
-	for <linux-kselftest@archiver.kernel.org>; Mon,  7 Nov 2022 16:21:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 449EEC43219
+	for <linux-kselftest@archiver.kernel.org>; Mon,  7 Nov 2022 16:50:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232776AbiKGQVm (ORCPT
+        id S232694AbiKGQuJ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 7 Nov 2022 11:21:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41476 "EHLO
+        Mon, 7 Nov 2022 11:50:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232077AbiKGQVJ (ORCPT
+        with ESMTP id S232604AbiKGQuG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Nov 2022 11:21:09 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78FF0636D
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Nov 2022 08:19:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667837995;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DuB2xXWo7LwhnuotOHRyBqnGxRkaEWf9/y+D6i6uzJ8=;
-        b=iF2m074pQqLtr42QaBMxeq1L6tZ5T1qLWVopIuD4fC2fpUtEOKl4BWObEBly6Rpr16QF59
-        jSJ4XJkFKqFei99ep4TrQJD/nRVvCP1u8NxSo6ygsrlo6iH16S+e/bIAVVtNwFpoOEbzp/
-        T/j3OSVvAJl3T9VBl65SnF90MVtXeCE=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-17-Jw4agQGfPwGSW7qMCb5CiQ-1; Mon, 07 Nov 2022 11:19:51 -0500
-X-MC-Unique: Jw4agQGfPwGSW7qMCb5CiQ-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 7 Nov 2022 11:50:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BEDE20340;
+        Mon,  7 Nov 2022 08:50:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7457B296A60A;
-        Mon,  7 Nov 2022 16:19:49 +0000 (UTC)
-Received: from t480s.redhat.com (unknown [10.39.195.106])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DFEFE4B3FC6;
-        Mon,  7 Nov 2022 16:19:43 +0000 (UTC)
-From:   David Hildenbrand <david@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, etnaviv@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Peter Xu <peterx@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Oded Gabbay <ogabbay@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH RFC 19/19] habanalabs: remove FOLL_FORCE usage
-Date:   Mon,  7 Nov 2022 17:17:40 +0100
-Message-Id: <20221107161740.144456-20-david@redhat.com>
-In-Reply-To: <20221107161740.144456-1-david@redhat.com>
-References: <20221107161740.144456-1-david@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 17FC0611BD;
+        Mon,  7 Nov 2022 16:50:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D389C43148;
+        Mon,  7 Nov 2022 16:50:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667839804;
+        bh=XqrOKcVsJ+boRrvDno7gBUrja/HWLI37DpoaBs9pWC0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=myvoQ3iqA5MefMAxdVw8To6/c08n8axdkoYs+/ZOHzGAxHn9l8Gxp/ypQZkhtsvXo
+         cThcewflV54JJdQGp8/TFJg+X9KLWh1hMbIe3DHuWsie8f8SRuPLsMkDCg68wbw7K4
+         BtG3Xf5zfIqFFh/zWK1KMi8C1Y8mOhn/P+sMFXZcEpZWGnN6wb+oSUXdq7c6jQCT/p
+         jieRwpdbGeMJ3H446Z+GY/l8zULzVJlFdAcUJYPCEwR3wNPfkMo5xxAtQ2Zs1PeBFK
+         XiaG6hS58IceS7q4qB4P1VQsoPPk4HvQXJFN42X8v9rd4ni/8vDwjkm92M3DzAxLs9
+         oSNzBINXerClg==
+From:   SeongJae Park <sj@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     SeongJae Park <sj@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        damon@lists.linux.dev, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] Fix slab-out-of-bounds Write in dbgfs_rm_context_write
+Date:   Mon,  7 Nov 2022 16:49:59 +0000
+Message-Id: <20221107165001.5717-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-FOLL_FORCE is really only for debugger access. As we unpin the pinned pages
-using unpin_user_pages_dirty_lock(true), the assumption is that all these
-pages are writable.
+Changes from v1
+(https://lore.kernel.org/damon/20221031182554.7882-1-sj@kernel.org/)
+- Rebase on latest mm-unstable
 
-FOLL_FORCE in this case seems to be due to copy-and-past from other
-drivers. Let's just remove it.
-
-Cc: Oded Gabbay <ogabbay@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: David Hildenbrand <david@redhat.com>
 ---
- drivers/misc/habanalabs/common/memory.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/misc/habanalabs/common/memory.c b/drivers/misc/habanalabs/common/memory.c
-index ef28f3b37b93..e35cca96bbef 100644
---- a/drivers/misc/habanalabs/common/memory.c
-+++ b/drivers/misc/habanalabs/common/memory.c
-@@ -2312,8 +2312,7 @@ static int get_user_memory(struct hl_device *hdev, u64 addr, u64 size,
- 	if (!userptr->pages)
- 		return -ENOMEM;
- 
--	rc = pin_user_pages_fast(start, npages,
--				 FOLL_FORCE | FOLL_WRITE | FOLL_LONGTERM,
-+	rc = pin_user_pages_fast(start, npages, FOLL_WRITE | FOLL_LONGTERM,
- 				 userptr->pages);
- 
- 	if (rc != npages) {
+This patchset is for fixing (patch 1) the syzbot-reported
+slab-out-of-bounds write in dbgfs_rm_context_write[1], and adding a
+selftest for the bug (patch 2).
+
+[1] https://lore.kernel.org/damon/000000000000ede3ac05ec4abf8e@google.com/
+
+SeongJae Park (2):
+  mm/damon/dbgfs: check if rm_contexts input is for a real context
+  selftests/damon: test non-context inputs to rm_contexts file
+
+ mm/damon/dbgfs.c                              |  7 +++++++
+ tools/testing/selftests/damon/Makefile        |  1 +
+ .../damon/debugfs_rm_non_contexts.sh          | 19 +++++++++++++++++++
+ 3 files changed, 27 insertions(+)
+ create mode 100755 tools/testing/selftests/damon/debugfs_rm_non_contexts.sh
+
 -- 
-2.38.1
+2.25.1
 
