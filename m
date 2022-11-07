@@ -2,241 +2,213 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E22AC4167D
-	for <linux-kselftest@archiver.kernel.org>; Mon,  7 Nov 2022 09:24:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7E9FC433FE
+	for <linux-kselftest@archiver.kernel.org>; Mon,  7 Nov 2022 12:27:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231803AbiKGJYA (ORCPT
+        id S232252AbiKGM1P (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 7 Nov 2022 04:24:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49932 "EHLO
+        Mon, 7 Nov 2022 07:27:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231707AbiKGJXw (ORCPT
+        with ESMTP id S232246AbiKGM1N (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Nov 2022 04:23:52 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26DC5167CF;
-        Mon,  7 Nov 2022 01:23:51 -0800 (PST)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N5QlM1vJpzRp50;
-        Mon,  7 Nov 2022 17:23:43 +0800 (CST)
-Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 7 Nov 2022 17:23:49 +0800
-Received: from ubuntu1804.huawei.com (10.67.174.61) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 7 Nov 2022 17:23:48 +0800
-From:   Yang Jihong <yangjihong1@huawei.com>
-To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
-        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
-        <haoluo@google.com>, <jolsa@kernel.org>,
-        <illusionist.neo@gmail.com>, <linux@armlinux.org.uk>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <mykolal@fb.com>, <shuah@kernel.org>,
-        <benjamin.tissoires@redhat.com>, <memxor@gmail.com>,
-        <asavkov@redhat.com>, <delyank@fb.com>, <bpf@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>
-CC:     <yangjihong1@huawei.com>
-Subject: [PATCH bpf v2 4/5] bpf: Add kernel function call support in 32-bit ARM for EABI
-Date:   Mon, 7 Nov 2022 17:20:31 +0800
-Message-ID: <20221107092032.178235-5-yangjihong1@huawei.com>
-X-Mailer: git-send-email 2.30.GIT
-In-Reply-To: <20221107092032.178235-1-yangjihong1@huawei.com>
-References: <20221107092032.178235-1-yangjihong1@huawei.com>
+        Mon, 7 Nov 2022 07:27:13 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 430D914D05
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Nov 2022 04:27:12 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id v27so17302051eda.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 07 Nov 2022 04:27:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Spa9i7ZZi/PqL0mkZcklMgIzofmfvMGIgf+WKCkXIMQ=;
+        b=jLvnLgvlxGE5ngnjopyA4a2yysB33if8in8kuEiUGZz0XMRPhT3N3XX2UU0Z02SjJa
+         FE7atSEyVzKKdtrwY0PVb8zYTIeaOgJnpezWILnMIUcd6Q6BvMdB5Blys/Sk+si0wdoi
+         cxJWltzEJODEgrR6eSFlCqNwS9ZFIsMPbmeuGAi4XjatM6S9lPMiOqDUaJXOEPV65I5q
+         6nYIe3M7IkieIO++K+hxKwvxBHwyObk4oDxX+GtHhKVKU5ifHEuRcpYBBaF/NJWhWQo2
+         wxtsM5/WVBHfJTmKg1iAMoZWyNIEo94nUZkVDFxVJGHi00fgYNWEYCMAvqPlT6szNE4i
+         pocw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Spa9i7ZZi/PqL0mkZcklMgIzofmfvMGIgf+WKCkXIMQ=;
+        b=asYUPPoGTAcMjNrrnmGcLwsWmkSdEgRAnIkufoLrrSsfMasN6KHoLMtWczmXUn56V/
+         TYIZ4AMQeisHTPoV9RBnez6ZUHOOYka8LKMj/doAF1mPw9udv+jLr0wdTbmtiiFM5wwg
+         Mg7GJ4laUnl+Z6ZVdtYa/OrC853TM1s/7CD0uJZ/Oy13BNniv/ippYr00zjMpPikb0lQ
+         vGCV2yer8Hy8OlsmefxDzzqv1ysyQQbcjf2BEHHnf3nRQhE2d0S61cA2AvQqF/TLwyf5
+         QNjOTqsaxrOAfH3+OP+9wB8lR9BpRvcW42JKVXXrLi8VsXoEmuWWT3iESszycFbBMOXy
+         vMbA==
+X-Gm-Message-State: ACrzQf0zzO2Ke9YeShyMclJ5IgEl7VMevYa0c8B16pF27/FkE28LlUjv
+        3dpNQmOQHUI9yyWDKx038eOeo64ciWuKfJReaRw8Lw==
+X-Google-Smtp-Source: AMsMyM6P4MUoGjkj6W0BuOtOqQhVLj9fCKtgk0YVH9i2+0GMg02EXI0DnuuovMLuo6xJlqXa24LIp4zGDBEoY6Qo63g=
+X-Received: by 2002:a05:6402:386:b0:463:c43f:6628 with SMTP id
+ o6-20020a056402038600b00463c43f6628mr32856779edv.53.1667824030610; Mon, 07
+ Nov 2022 04:27:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.61]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
+References: <20221103145353.3049303-1-usama.anjum@collabora.com> <20221103145353.3049303-3-usama.anjum@collabora.com>
+In-Reply-To: <20221103145353.3049303-3-usama.anjum@collabora.com>
+From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+Date:   Mon, 7 Nov 2022 13:26:59 +0100
+Message-ID: <CABb0KFFaYZG62TS+iM3Y92+hDyB35XR8dTX-5hDgWrXCcDQx7Q@mail.gmail.com>
+Subject: Re: [PATCH v5 2/3] fs/proc/task_mmu: Implement IOCTL to get and/or
+ the clear info about PTEs
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Peter Xu <peterx@redhat.com>, Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Zach O'Keefe" <zokeefe@google.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>, kernel@collabora.com,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        David Hildenbrand <david@redhat.com>,
+        Peter Enderborg <peter.enderborg@sony.com>,
+        "open list : KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list : PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>,
+        "open list : MEMORY MANAGEMENT" <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch adds kernel function call support to 32-bit ARM bpf jit for
-EABI.
+On Thu, 3 Nov 2022 at 15:54, Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+> This IOCTL, PAGEMAP_SCAN can be used to get and/or clear the info about
+> page table entries. The following operations are supported in this ioctl:
+> - Get the information if the pages are soft-dirty, file mapped, present
+>   or swapped.
+> - Clear the soft-dirty PTE bit of the pages.
+> - Get and clear the soft-dirty PTE bit of the pages.
+>
+> Only the soft-dirty bit can be read and cleared atomically. struct
+> pagemap_sd_args is used as the argument of the IOCTL. In this struct:
+> - The range is specified through start and len.
+> - The output buffer and size is specified as vec and vec_len.
+> - The optional maximum requested pages are specified in the max_pages.
+> - The flags can be specified in the flags field. The PAGEMAP_SD_CLEAR
+>   and PAGEMAP_SD_NO_REUSED_REGIONS are supported.
+> - The masks are specified in rmask, amask, emask and return_mask.
+[...]
+> --- a/include/uapi/linux/fs.h
+> +++ b/include/uapi/linux/fs.h
+> @@ -305,4 +305,57 @@ typedef int __bitwise __kernel_rwf_t;
+>  #define RWF_SUPPORTED  (RWF_HIPRI | RWF_DSYNC | RWF_SYNC | RWF_NOWAIT |\
+>                          RWF_APPEND)
+>
+> +/* PAGEMAP IOCTL */
+> +#define PAGEMAP_SCAN   _IOWR('f', 16, struct pagemap_scan_arg)
+> +
+> +/* Bits are set in the bitmap of the page_region and masks in pagemap_sd=
+_args */
+> +#define PAGE_IS_SD     (1 << 0)
 
-Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
----
- arch/arm/net/bpf_jit_32.c | 142 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 142 insertions(+)
+Can we name it PAGE_IS_SOFTDIRTY? "SD" can mean so many things.
 
-diff --git a/arch/arm/net/bpf_jit_32.c b/arch/arm/net/bpf_jit_32.c
-index 6a1c9fca5260..9c0e1c22dc37 100644
---- a/arch/arm/net/bpf_jit_32.c
-+++ b/arch/arm/net/bpf_jit_32.c
-@@ -1337,6 +1337,130 @@ static void build_epilogue(struct jit_ctx *ctx)
- #endif
- }
- 
-+/*
-+ * Input parameters of function in 32-bit ARM architecture:
-+ * The first four word-sized parameters passed to a function will be
-+ * transferred in registers R0-R3. Sub-word sized arguments, for example,
-+ * char, will still use a whole register.
-+ * Arguments larger than a word will be passed in multiple registers.
-+ * If more arguments are passed, the fifth and subsequent words will be passed
-+ * on the stack.
-+ *
-+ * The first for args of a function will be considered for
-+ * putting into the 32bit register R1, R2, R3 and R4.
-+ *
-+ * Two 32bit registers are used to pass a 64bit arg.
-+ *
-+ * For example,
-+ * void foo(u32 a, u32 b, u32 c, u32 d, u32 e):
-+ *      u32 a: R0
-+ *      u32 b: R1
-+ *      u32 c: R2
-+ *      u32 d: R3
-+ *      u32 e: stack
-+ *
-+ * void foo(u64 a, u32 b, u32 c, u32 d):
-+ *      u64 a: R0 (lo32) R1 (hi32)
-+ *      u32 b: R2
-+ *      u32 c: R3
-+ *      u32 d: stack
-+ *
-+ * void foo(u32 a, u64 b, u32 c, u32 d):
-+ *       u32 a: R0
-+ *       u64 b: R2 (lo32) R3 (hi32)
-+ *       u32 c: stack
-+ *       u32 d: stack
-+ *
-+ * void foo(u32 a, u32 b, u64 c, u32 d):
-+ *       u32 a: R0
-+ *       u32 b: R1
-+ *       u64 c: R2 (lo32) R3 (hi32)
-+ *       u32 d: stack
-+ *
-+ * void foo(u64 a, u64 b):
-+ *       u64 a: R0 (lo32) R1 (hi32)
-+ *       u64 b: R2 (lo32) R3 (hi32)
-+ *
-+ * The return value will be stored in the R0 (and R1 for 64bit value).
-+ *
-+ * For example,
-+ * u32 foo(u32 a, u32 b, u32 c):
-+ *      return value: R0
-+ *
-+ * u64 foo(u32 a, u32 b, u32 c):
-+ *      return value: R0 (lo32) R1 (hi32)
-+ *
-+ * The above is for AEABI only, OABI does not support this function.
-+ */
-+static int emit_kfunc_call(const struct bpf_insn *insn, struct jit_ctx *ctx, const u32 func)
-+{
-+	int i;
-+	const struct btf_func_model *fm;
-+	const s8 *tmp = bpf2a32[TMP_REG_1];
-+	const u8 arg_regs[] = { ARM_R0, ARM_R1, ARM_R2, ARM_R3 };
-+	int nr_arg_regs = ARRAY_SIZE(arg_regs);
-+	int arg_regs_idx = 0, stack_off = 0;
-+	const s8 *rd;
-+	s8 rt;
-+
-+	if (!IS_ENABLED(CONFIG_AEABI)) {
-+		pr_info_once("kfunc call only support for AEABI in 32-bit arm\n");
-+		return -EINVAL;
-+	}
-+
-+	fm = bpf_jit_find_kfunc_model(ctx->prog, insn);
-+	if (!fm)
-+		return -EINVAL;
-+
-+	for (i = 0; i < fm->nr_args; i++) {
-+		if (fm->arg_size[i] > sizeof(u32)) {
-+			rd = arm_bpf_get_reg64(bpf2a32[BPF_REG_1 + i], tmp, ctx);
-+
-+			if (arg_regs_idx + 1 < nr_arg_regs) {
-+				/*
-+				 * AAPCS states:
-+				 * A double-word sized type is passed in two
-+				 * consecutive registers (e.g., r0 and r1, or
-+				 * r2 and r3). The content of the registers is
-+				 * as if the value had been loaded from memory
-+				 * representation with a single LDM instruction.
-+				 */
-+				if (arg_regs_idx & 1)
-+					arg_regs_idx++;
-+
-+				emit(ARM_MOV_R(arg_regs[arg_regs_idx++], rd[1]), ctx);
-+				emit(ARM_MOV_R(arg_regs[arg_regs_idx++], rd[0]), ctx);
-+			} else {
-+				stack_off = ALIGN(stack_off, STACK_ALIGNMENT);
-+
-+				if (__LINUX_ARM_ARCH__ >= 6 ||
-+				    ctx->cpu_architecture >= CPU_ARCH_ARMv5TE) {
-+					emit(ARM_STRD_I(rd[1], ARM_SP, stack_off), ctx);
-+				} else {
-+					emit(ARM_STR_I(rd[1], ARM_SP, stack_off), ctx);
-+					emit(ARM_STR_I(rd[0], ARM_SP, stack_off), ctx);
-+				}
-+
-+				stack_off += 8;
-+			}
-+		} else {
-+			rt = arm_bpf_get_reg32(bpf2a32[BPF_REG_1 + i][1], tmp[1], ctx);
-+
-+			if (arg_regs_idx  < nr_arg_regs) {
-+				emit(ARM_MOV_R(arg_regs[arg_regs_idx++], rt), ctx);
-+			} else {
-+				emit(ARM_STR_I(rt, ARM_SP, stack_off), ctx);
-+				stack_off += 4;
-+			}
-+		}
-+	}
-+
-+	emit_a32_mov_i(tmp[1], func, ctx);
-+	emit_blx_r(tmp[1], ctx);
-+
-+	return 0;
-+}
-+
- /*
-  * Convert an eBPF instruction to native instruction, i.e
-  * JITs an eBPF instruction.
-@@ -1603,6 +1727,10 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx)
- 	case BPF_LDX | BPF_MEM | BPF_H:
- 	case BPF_LDX | BPF_MEM | BPF_B:
- 	case BPF_LDX | BPF_MEM | BPF_DW:
-+	case BPF_LDX | BPF_PROBE_MEM | BPF_W:
-+	case BPF_LDX | BPF_PROBE_MEM | BPF_H:
-+	case BPF_LDX | BPF_PROBE_MEM | BPF_B:
-+	case BPF_LDX | BPF_PROBE_MEM | BPF_DW:
- 		rn = arm_bpf_get_reg32(src_lo, tmp2[1], ctx);
- 		emit_ldx_r(dst, rn, off, ctx, BPF_SIZE(code));
- 		break;
-@@ -1785,6 +1913,16 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx)
- 		const s8 *r5 = bpf2a32[BPF_REG_5];
- 		const u32 func = (u32)__bpf_call_base + (u32)imm;
- 
-+		if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL) {
-+			int err;
-+
-+			err = emit_kfunc_call(insn, ctx, func);
-+
-+			if (err)
-+				return err;
-+			break;
-+		}
-+
- 		emit_a32_mov_r64(true, r0, r1, ctx);
- 		emit_a32_mov_r64(true, r1, r2, ctx);
- 		emit_push_r64(r5, ctx);
-@@ -2022,3 +2160,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
- 	return prog;
- }
- 
-+bool bpf_jit_supports_kfunc_call(void)
-+{
-+	return true;
-+}
--- 
-2.30.GIT
+> +#define PAGE_IS_FILE   (1 << 1)
+> +#define PAGE_IS_PRESENT        (1 << 2)
+> +#define PAGE_IS_SWAPED (1 << 3)
 
+PAGE_IS_SWAPPED?
+
+> +
+> +/*
+> + * struct page_region - Page region with bitmap flags
+> + * @start:     Start of the region
+> + * @len:       Length of the region
+> + * bitmap:     Bits sets for the region
+> + */
+> +struct page_region {
+> +       __u64 start;
+> +       __u64 len;
+> +       __u32 bitmap;
+> +       __u32 __reserved;
+
+"u64 flags"? If an extension is needed it would already require a new
+ioctl or something in the `arg` struct.
+
+> +
+> +/*
+> + * struct pagemap_scan_arg - Soft-dirty IOCTL argument
+
+Since this is no longer a soft-dirty-specific call, it might be better
+to describe it as "VM scan ioctl" or similar. BTW, the implementation
+is currently guarded by CONFIG_MEM_SOFT_DIRTY, but CRIU doesn't need
+that but needs the other bits handling.
+
+> + * @start:             Starting address of the region
+> + * @len:               Length of the region (All the pages in this lengt=
+h are included)
+> + * @vec:               Address of page_region struct array for output
+> + * @vec_len:           Length of the page_region struct array
+> + * @max_pages:         Optional max return pages (It must be less than v=
+ec_len if specified)
+
+I think we discussed that this is not counting the same things as
+vec_len, so there should not be a reference between the two. The limit
+is whatever fits under both conditions (IOW: n_vecs <=3D vec_len &&
+(!max_pages || n_pages <=3D max_pages).
+
+> + * @flags:             Special flags for the IOCTL
+
+Just "Flags for the IOCTL".
+
+> + * @rmask:             Required mask - All of these bits have to be set =
+in the PTE
+> + * @amask:             Any mask - Any of these bits are set in the PTE
+> + * @emask:             Exclude mask - None of these bits are set in the =
+PTE
+
+It might be easier for developers if those were named e.g.
+"required_mask", "anyof_mask", "excluded_mask".
+
+> + * @return_mask:       Bits that have to be reported to the user in page=
+_region
+
+"Bits that are to be reported in page_region"?
+
+> + */
+> +struct pagemap_scan_arg {
+> +       __u64 start;
+> +       __u64 len;
+> +       __u64 vec;
+> +       __u64 vec_len;
+> +       __u32 max_pages;
+> +       __u32 flags;
+> +       __u32 rmask;
+> +       __u32 amask;
+> +       __u32 emask;
+> +       __u32 return_mask;
+> +};
+> +
+> +/* Special flags */
+> +#define PAGEMAP_SD_CLEAR               (1 << 0)
+
+SD -> SOFTDIRTY
+
+> +/* Check the individual pages if they are soft-dirty to find dirty pages=
+ faster. */
+> +#define PAGEMAP_NO_REUSED_REGIONS      (1 << 1)
+
+Please include the description from commitmsg of what this flag does
+(i.e. how the behaviour differs because of the flag). I'd drop the
+part about it being faster, as if so - why have the flag at all
+instead of just always using the faster way?
+
+(I only reviewed the API now. The implementation I think could be
+simpler, but let's leave that to after the API is agreed on.)
+
+Best Regards
+Micha=C5=82 Miros=C5=82aw
