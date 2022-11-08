@@ -2,138 +2,215 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EB40C4332F
-	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Nov 2022 00:30:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BAD2BC4332F
+	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Nov 2022 00:49:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232926AbiKHAaW (ORCPT
+        id S232391AbiKHAtP (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 7 Nov 2022 19:30:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51354 "EHLO
+        Mon, 7 Nov 2022 19:49:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232897AbiKHAaV (ORCPT
+        with ESMTP id S232060AbiKHAtN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Nov 2022 19:30:21 -0500
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09C151D668
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Nov 2022 16:30:19 -0800 (PST)
-Received: by mail-qt1-x82b.google.com with SMTP id z6so7910540qtv.5
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Nov 2022 16:30:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NF/Xjl4bGX60sTFdSkyJB0iuEuG5H4mSvhGQEhyFFsE=;
-        b=optWeMbKrLwYAP5/SViogLQxgNk3k+gmgqGwknY4DN9tkcLWh/wvnIQA+FvQ1HWubL
-         ZUGbEfIdlQ6roFAuBmalgMPoCEwLMx34IM7LoPms25sDGh628s9gpq5i9RLxDfaixGTU
-         HwZs2Y2ovr7Mf+NT6Zg9yF8PNLTUueIQPRqwEUgvtZBAJ8GSjpel3OIpP/3ZGSV4+dZJ
-         STzKJL5Ltpd393Ba/7QUFPAHknZdU5y9VPwMUpD+4ho6bTlyRs0E7jhXJ8UIr4UWK/1o
-         4obrgLwAFMea8d1x0oAIP/x9Ht9EJN3vCkqLweHFlubiHgVaa0+b0O5cOd3vawaAJbGc
-         wYfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NF/Xjl4bGX60sTFdSkyJB0iuEuG5H4mSvhGQEhyFFsE=;
-        b=6TBhrs9jG+8uZvzuSu1G2fIpC9+GhvhHNZsAD/hPtmX+FAqPgGQ2+//0rX6hOxB/FQ
-         VxhyXqMks/s+ZPWvjpSXyY4jRkKlJJL77Bre3n61IiWGroTeNd8nXzEGBljeMTRv4E9R
-         h3xSqUdiCtmWwFow7cZlKrTtZa5U6v4G6OqtrLYvbyurf5LyGYOUjd1aNxZUJSnEeDV3
-         Aap8PkPj1d/9VW4NXgHDjezd0Kz13v24BHfuWAuMiGKMNWJhGaBPmangAGZLjZZdSaEF
-         xJb1Z+k7/HiN/OSmEUELEJzdxKr0XMmhBhWUw6/GYHJoAzsG0vjBo7FhExBEFPV44lLn
-         xSnA==
-X-Gm-Message-State: ACrzQf2K8jrL2OEzhr84j1oAQivzB5wet4JEFUIY32xSD6vGnSNjVBFd
-        sPsy8Er7xE5iEjHqC6Q7YSWhXGQ4AzPR00MG2rrUfQ==
-X-Google-Smtp-Source: AMsMyM538Rf/rIwE958s8XEtxsLIOx6qcDRgjIB13zeIqU/f+VnJBFogAjCSAOLfk1E604oXa+bK0vYgoMmVMC45ISI=
-X-Received: by 2002:a05:622a:a05:b0:3a5:2c5f:9a66 with SMTP id
- bv5-20020a05622a0a0500b003a52c5f9a66mr32343641qtb.508.1667867418139; Mon, 07
- Nov 2022 16:30:18 -0800 (PST)
-MIME-Version: 1.0
-References: <20221105025146.238209-1-horenchuang@bytedance.com> <CAADnVQK5t0YWGgdWmjiWX6vA0SjANrnf5x=yzu7PtDKpoK6cJQ@mail.gmail.com>
-In-Reply-To: <CAADnVQK5t0YWGgdWmjiWX6vA0SjANrnf5x=yzu7PtDKpoK6cJQ@mail.gmail.com>
-From:   "Hao Xiang ." <hao.xiang@bytedance.com>
-Date:   Mon, 7 Nov 2022 16:30:08 -0800
-Message-ID: <CAAYibXiHRg3C3tk=wbiHdaUgJD6AfJf7gX3w0gTJ2nsJ=DnY4g@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH bpf-next v1 0/4] Add BPF htab map's used
- size for monitoring
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     "Ho-Ren (Jack) Chuang" <horenchuang@bytedance.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Jiri Olsa <olsajiri@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Mon, 7 Nov 2022 19:49:13 -0500
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2067.outbound.protection.outlook.com [40.107.101.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CB241F2C4;
+        Mon,  7 Nov 2022 16:49:12 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kvcgy9yYJyvKU1CmPh7BuhZXtWlD+0114f4k4iz+hMoIgFeY1VJJeIsNNlEb9xNzjfYEDoGadEeWdOKuHIV5y0KHixfFYMkgUtXqQMNMu4bUm2m9G0p7Aj6E90nC3MkAQXsrIrxrO7c+liOMrKE+XWLVWX3fml/0/HHQvc/XcsPjaSYadKf4XXyo4ms0SUiCJWVBF0nJSupJk9usYaCKbOmcvczWCLKKZxQlclTNl5yPj/hVHNKBFjA4B5DqiM8vpnz5ieZevWr3ZOiNXMCC4l02es6c1pXO/kbU9elRlxtYolM0wyc/KipS4iN5Zg6GBvWuOgXzxUeGBW42yTjxCQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=W89ELSrT2sbv+QarvfmuTntLl8jGIhpFjsXbcqb1eyc=;
+ b=FlCY+O0gV7n5EH3reAGeMtG9svcaJL+Vxpl2qsPHY7Xb0BSSyClXs2YMB4hAsQ2aPe3o0/bh8ZU2/GXHuElpPpGNdXL/w3yKZe4OIBA6zgKi7kVbBlvacB1+ylM9goM8/bmylGyiZIr9vYAOYvEqYTNEBiISGECY6YITTcBvML7PzhSHXq84+w1HOGboKe6jtA+mmXjRq9dqzjx/Rbd++G4yB0ut5ODNYLxEksCQGV8fjcmE37dF5Dz9FUdTMiTQqtK0Qu/aKe28j8GGVpca3PPjiR0DrqhNONNCM/zsX3vHWz3rJ+1sdCuToMoRRkT7u7AdImdN23+U+A0u4KUTLA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=W89ELSrT2sbv+QarvfmuTntLl8jGIhpFjsXbcqb1eyc=;
+ b=sfBjIP+U2ApgklZKyfJRst2zjcVWoVfmRkzMMYNiUcTKnLAnDXWQoE2XWCBY1WTBgJDaDhVYkN7e2kUwjZTbsNm7yPSb+yG1ygcnB2uHEBCkTCxxeKGrnMsnGcjgHdxy3S1jawH/OPvQf37TmoDjn7kBgt6RYWsoexSScXRXQuJg+gziYGxQivlsdCIesUikGGlKUjP49elp2aYE1QgHhciEv6g69+fagjmG7tCDEnjXoDSCFgdGfevfVbH5o3u+dcgwi+/YG2s0tJGTsmmpMSd2OEnJn8b8rQpPkr9lrJXP0dVXci7ToylcxAhMfrMAkil2wNwxmotLTiQKdabySA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by BN9PR12MB5212.namprd12.prod.outlook.com (2603:10b6:408:11d::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.26; Tue, 8 Nov
+ 2022 00:49:11 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::7a81:a4e4:bb9c:d1de]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::7a81:a4e4:bb9c:d1de%6]) with mapi id 15.20.5791.026; Tue, 8 Nov 2022
+ 00:49:11 +0000
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     bpf@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        David Woodhouse <dwmw2@infradead.org>, iommu@lists.linux.dev,
+        Joerg Roedel <joro@8bytes.org>,
+        Kevin Tian <kevin.tian@intel.com>, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
         Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Joanne Koong <joannelkoong@gmail.com>,
-        Kui-Feng Lee <kuifeng@fb.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Maxim Mikityanskiy <maximmi@nvidia.com>,
-        Punit Agrawal <punit.agrawal@bytedance.com>,
-        Yifei Ma <yifeima@bytedance.com>,
-        Xiaoning Ding <xiaoning.ding@bytedance.com>,
-        bpf <bpf@vger.kernel.org>, Ho-Ren Chuang <horenc@vt.edu>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+        Miguel Ojeda <ojeda@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>
+Cc:     Alex Williamson <alex.williamson@redhat.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Daniel Jordan <daniel.m.jordan@oracle.com>,
+        David Gibson <david@gibson.dropbear.id.au>,
+        Eric Auger <eric.auger@redhat.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Joao Martins <joao.m.martins@oracle.com>, kvm@vger.kernel.org,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Nicolin Chen <nicolinc@nvidia.com>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Shameerali Kolothum Thodi 
+        <shameerali.kolothum.thodi@huawei.com>,
+        Yi Liu <yi.l.liu@intel.com>, Keqian Zhu <zhukeqian1@huawei.com>
+Subject: [PATCH v4 01/17] iommu: Add IOMMU_CAP_ENFORCE_CACHE_COHERENCY
+Date:   Mon,  7 Nov 2022 20:48:54 -0400
+Message-Id: <1-v4-0de2f6c78ed0+9d1-iommufd_jgg@nvidia.com>
+In-Reply-To: <0-v4-0de2f6c78ed0+9d1-iommufd_jgg@nvidia.com>
+References: 
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BL1PR13CA0438.namprd13.prod.outlook.com
+ (2603:10b6:208:2c3::23) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|BN9PR12MB5212:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9220ab46-6123-4676-b1b6-08dac1230cac
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: gKjIQnGMPRKtOkHsjW6aBRi88oQRYcLBX8Jv5Pl6MYpoiwH+WR5xEwh7UsZC5ck8SEkNGTZaaRlQhKK1VIKK31UaJc9pPwlSsRJTSHsnSQZQ6l9A+bJeho0yQzFbu75fsvHRn2NDJKCz5xhov4z225VAYM6Wz/aSdgpxXgXn8cURnopPvZSBNFI77ARghah3N/W/lHKuW/V/QwawvyaPVUuAuBJLCHMpxh3kNxvRcOoE3QOB9fXx0WcVmf3tJ05DRWz4lwPyOZcNLsQ8U3jeBWR0LXnC5wGT08Qv5ZBgFa74Eqga7mAenBucDLl9K/rZP5614Ua35r/P1RizPNL/TUrMhyqYSQUdVbGu2mR1X+CaBIjZLGZtqQLH4GT+gd2RrC3GdfgIA1ud4f3TkBUYmAygol45oJQcGQpWKi/v7iUzFpsfRKgNvV//S9VwR7HX4227XZUrzXkIK6somcYR4pFTa24JhJ9BongsCUOvGvPpvsVk3pgB3egzhG9R+OszJwKHbbGUJdg0X5jtlKlXeUScQWQ3pi123dH3gR/ce1wfakooB2PlOReQfxcse758Jiq9t1D1AQ4ESirfQij+FrKt3LAdCLbtcW+tdhvQ77HOH4JIa6lUSSB1kjF6ziPaS43GdDI2ocNTKof9w06wCbJAnbeau7NCqTLXievm7FEN1PoqTr1GouG4Uk4vwA1EPvH3Z8b0eNsBMUkzgH371cjM0MSxSoFnCYr0huf1hfmTCq+mM9oodS2lksTk/bbXNzEI+vbsp850UmUREmA7HA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(346002)(396003)(366004)(39860400002)(451199015)(83380400001)(36756003)(86362001)(478600001)(2906002)(6486002)(38100700002)(921005)(26005)(186003)(6512007)(2616005)(54906003)(316002)(4326008)(66476007)(6666004)(6506007)(110136005)(41300700001)(8676002)(8936002)(7416002)(7406005)(66946007)(66556008)(5660300002)(4216001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?uxamuUdY7ZMjMRqD7E/gr+S5zvHUeeuRabxEvwHHUuWa7X9oyPopm3Qg71wy?=
+ =?us-ascii?Q?E68fYjVZwghXQYRBgHQxCTP7NctKJ/EfgxfYNdDNo092u/eCvuEas9hpzJEd?=
+ =?us-ascii?Q?aEcFUBEUKnkkay1ovQNjbGvAICDeyKKx6WOC9cWVPWx/Kib3aW5YwHm1nMyv?=
+ =?us-ascii?Q?hNQIUqJm0xWkSW8ZhhsrE2Oca/zD4YhqSLHydezEJKtj2SbPorOySPih4VjR?=
+ =?us-ascii?Q?ZhjHjKLEAn77sxWpVRmw26fSaLC6LJAUpxKk3oFZJOFbluwzDF5gxZ3wOuqK?=
+ =?us-ascii?Q?vTaMbxGtjwDtNV8NpF4Zl0CCI+grCYp4y8A2163+MY4b0yJgAq7vRrFUnMvz?=
+ =?us-ascii?Q?j9Kd89L6YhFanawbTA+jSRw0PdYkvuodt/86vXj/7IlnLpFY7qLBlEND7ynh?=
+ =?us-ascii?Q?cIPqiXrWPyg5+HCNudQGfxxKM9mzWwSvUCfhuApzPJfer6BvssAsW+sAnG28?=
+ =?us-ascii?Q?v2+MtkdPb4gP2420wlF9nJ/JPGRHTpgBLTqm/npXw48HXTGdFtpyki+kzXLK?=
+ =?us-ascii?Q?8vePwVg7bVlZjMxK/ipdzTl+w7WWRonOUqnqzl4Y+CHoCygnkua0p5rU7uBG?=
+ =?us-ascii?Q?aRAm1+TnIul/oGHrIwDi/jCu/ZiZSBiVqN6NkZqQAqOKiyWW/h8wuysDb/MO?=
+ =?us-ascii?Q?nQaOiSGETsxLUwW2xNsHmU3lxaLMVyx5t27pecp7ed4hHlsi9TfhorPWQ+0s?=
+ =?us-ascii?Q?4yKy9rq4o+9gAgUPv89SllYXe2eANj3gWK3uee/eWTMfZw2qteI5ODWopKfG?=
+ =?us-ascii?Q?aGb2eVZzWDX2X20fEI7q9uMTqYF298BlQzt+2rWFOrzU9L1ISmHT1J2kMhiq?=
+ =?us-ascii?Q?xaOIl9QM2j+z+P5XVTUKByCh8LAYF7CMhciouDVG8Giyx7tSDLU04V4lX1fO?=
+ =?us-ascii?Q?uvQ56tLyI3X1R+prxYHaRnCRKq1rA4jD5NMF2jikvXu7B9+Wq80m1yAW/WOj?=
+ =?us-ascii?Q?TRFgjT0vIjhCIBeaO4Uh8lU0MagLopcHSNE+uOUj6F+ZLKwuLejFKFy/1OeH?=
+ =?us-ascii?Q?nihbNp4EwKmfV7NgA5pLDwRcRtDa1gPeKClErDeurdmP4zEQ89kyD+eDZCps?=
+ =?us-ascii?Q?hshumg/9QMypN5yJ2ceWSx4qimoKB8xrOyOw2/85upMDNvqYF3PbitjA/f6o?=
+ =?us-ascii?Q?6k3SdlMtM/YpiUzIUaGNI+pRRu5c4Qx9q5C6+VAlITItuSYYjm9iOIUw38lY?=
+ =?us-ascii?Q?B03idg3q8vJMX3waB+YutBtImCT6S8+jVazdHC6ajQ3893hV0pKDfYqGlKzy?=
+ =?us-ascii?Q?y/5N0OkRtT1vsYSfAd/E1jv29cnayA3Sf85gK+U+iyuruzLxu6dv9Pn16lKY?=
+ =?us-ascii?Q?lwUpKsPVrt2xFRKakQTZps9S5GakCXLDzqUBQflbESww2SC0pwGkjaGe2BgY?=
+ =?us-ascii?Q?aVqVyUamfOCo7ihmMgngGxWq3/eVbInISJeKqE4Hl+fC/u+mstzmWlllL3JL?=
+ =?us-ascii?Q?SbujQufcJJQQqQXWEfFjyXqRty6jCkAYBVXYATYQKtui2aN9Dgqbd5G7XZkm?=
+ =?us-ascii?Q?vkUeywOhU7TGegru4Srys69y75I0lKkZCVvLvr3dJBYpr9N8n0wc8pOBFMRa?=
+ =?us-ascii?Q?tI990naqnBixD7B8uJs=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9220ab46-6123-4676-b1b6-08dac1230cac
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Nov 2022 00:49:10.8726
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jnhGyQ8zMhg5IDP9+8K/SoG0O0So/whH8HxEkZ5N/NEPcAC+kkH19O35X2QvSREd
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5212
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Alexei,
+This queries if a domain linked to a device should expect to support
+enforce_cache_coherency() so iommufd can negotiate the rules for when a
+domain should be shared or not.
 
-We understand the concern on added performance overhead. We had some
-discussion about this while working on the patch and decided to give
-it a try (my bad).
+For iommufd a device that declares IOMMU_CAP_ENFORCE_CACHE_COHERENCY will
+not be attached to a domain that does not support it.
 
-Adding some more context. We are leveraging the BPF_OBJ_GET_INFO_BY_FD
-syscall to trace CPU usage per prog and memory usage per map. We would
-like to use this patch to add an interface for map types to return its
-internal "count". For instance, we are thinking of having the below
-map types to report the "count" and those won't add overhead to the
-hot path.
-1. ringbuf to return its "count" by calculating the distance between
-producer_pos and consumer_pos
-2. queue and stack to return its "count" from the head's position
-3. dev map hash to returns its "count" from items
+Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
+Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+Tested-by: Nicolin Chen <nicolinc@nvidia.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+---
+ drivers/iommu/amd/iommu.c   |  2 ++
+ drivers/iommu/intel/iommu.c | 16 +++++++++++-----
+ include/linux/iommu.h       |  5 +++++
+ 3 files changed, 18 insertions(+), 5 deletions(-)
 
-There are other map types, similar to the hashtab pre-allocation case,
-will introduce overhead in the hot path in order to count the stats. I
-think we can find alternative solutions for those (eg, iterate the map
-and count, count only if bpf_stats_enabled switch is on, etc). There
-are cases where this can't be done at the application level because
-applications don't see the internal stats in order to do the right
-counting.
+diff --git a/drivers/iommu/amd/iommu.c b/drivers/iommu/amd/iommu.c
+index 45299eb7e8e306..240c535e317cc7 100644
+--- a/drivers/iommu/amd/iommu.c
++++ b/drivers/iommu/amd/iommu.c
+@@ -2278,6 +2278,8 @@ static bool amd_iommu_capable(struct device *dev, enum iommu_cap cap)
+ 		return false;
+ 	case IOMMU_CAP_PRE_BOOT_PROTECTION:
+ 		return amdr_ivrs_remap_support;
++	case IOMMU_CAP_ENFORCE_CACHE_COHERENCY:
++		return true;
+ 	default:
+ 		break;
+ 	}
+diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+index f298e51d5aa67a..157c9727411076 100644
+--- a/drivers/iommu/intel/iommu.c
++++ b/drivers/iommu/intel/iommu.c
+@@ -4450,14 +4450,20 @@ static bool intel_iommu_enforce_cache_coherency(struct iommu_domain *domain)
+ 
+ static bool intel_iommu_capable(struct device *dev, enum iommu_cap cap)
+ {
+-	if (cap == IOMMU_CAP_CACHE_COHERENCY)
++	struct device_domain_info *info = dev_iommu_priv_get(dev);
++
++	switch (cap) {
++	case IOMMU_CAP_CACHE_COHERENCY:
+ 		return true;
+-	if (cap == IOMMU_CAP_INTR_REMAP)
++	case IOMMU_CAP_INTR_REMAP:
+ 		return irq_remapping_enabled == 1;
+-	if (cap == IOMMU_CAP_PRE_BOOT_PROTECTION)
++	case IOMMU_CAP_PRE_BOOT_PROTECTION:
+ 		return dmar_platform_optin();
+-
+-	return false;
++	case IOMMU_CAP_ENFORCE_CACHE_COHERENCY:
++		return ecap_sc_support(info->iommu->ecap);
++	default:
++		return false;
++	}
+ }
+ 
+ static struct iommu_device *intel_iommu_probe_device(struct device *dev)
+diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+index 68d7d304cdb761..a09fd32d8cc273 100644
+--- a/include/linux/iommu.h
++++ b/include/linux/iommu.h
+@@ -124,6 +124,11 @@ enum iommu_cap {
+ 	IOMMU_CAP_NOEXEC,		/* IOMMU_NOEXEC flag */
+ 	IOMMU_CAP_PRE_BOOT_PROTECTION,	/* Firmware says it used the IOMMU for
+ 					   DMA protection and we should too */
++	/*
++	 * Per-device flag indicating if enforce_cache_coherency() will work on
++	 * this device.
++	 */
++	IOMMU_CAP_ENFORCE_CACHE_COHERENCY,
+ };
+ 
+ /* These are the possible reserved region types */
+-- 
+2.38.1
 
-We can remove the counting for the pre-allocated case in this patch.
-Please let us know what you think.
-
-Thanks, Hao
-
-On Sat, Nov 5, 2022 at 9:20 AM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Fri, Nov 4, 2022 at 7:52 PM Ho-Ren (Jack) Chuang
-> <horenchuang@bytedance.com> wrote:
-> >
-> > Hello everyone,
-> >
-> > We have prepared patches to address an issue from a previous discussion.
-> > The previous discussion email thread is here: https://lore.kernel.org/all/CAADnVQLBt0snxv4bKwg1WKQ9wDFbaDCtZ03v1-LjOTYtsKPckQ@mail.gmail.com/
->
-> Rephrasing what was said earlier.
-> We're not keeping the count of elements in a preallocated hash map
-> and we are not going to add one.
-> The bpf prog needs to do the accounting on its own if it needs
-> this kind of statistics.
-> Keeping the count for non-prealloc is already significant performance
-> overhead. We don't trade performance for stats.
