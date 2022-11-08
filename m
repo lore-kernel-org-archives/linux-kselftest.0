@@ -2,199 +2,154 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B4F34C4321E
-	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Nov 2022 14:47:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8455C433FE
+	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Nov 2022 16:00:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233859AbiKHOq7 (ORCPT
+        id S234486AbiKHQA2 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 8 Nov 2022 09:46:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51150 "EHLO
+        Tue, 8 Nov 2022 11:00:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232940AbiKHOq0 (ORCPT
+        with ESMTP id S234492AbiKHQA1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Nov 2022 09:46:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E512CA
-        for <linux-kselftest@vger.kernel.org>; Tue,  8 Nov 2022 06:46:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5209D615E6
-        for <linux-kselftest@vger.kernel.org>; Tue,  8 Nov 2022 14:46:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51C24C433D6;
-        Tue,  8 Nov 2022 14:46:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667918784;
-        bh=5gwYFOVGF4mpjIAIeDXcm5vGvJBWzCTEf0IjQbFWZEA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FzH1qXQnkEGUUP7fss8g1QQ5kV4xMlp3hi8uLJAqbGqMVIbGQpfRok1Oa3ZCYHMa5
-         xOqG2T1tnhMVE63yVbz070A2eFC3W4uHMR1nEKHLnL1YRErPi6E6w+Kv8uSBLbTZA6
-         3IdE4fXPgcQhmtsKtcKCG/ZPJpdlmxKhq3hBGckMOx4zg9W9s6q50bwziyQ3iWlfcm
-         /T0MqTlJXDe+rGBlgDSdMLKYp32N4+wbFOydfEjoJTBcSrAXiH6e1LqfyMQ09LO7+C
-         lc9n37PIKYIUsnmBvViMnQ5W+YG3LRwo9kNM5Hcr1BLLQHxMyq1QXeao/8qTqP2CcB
-         M4zgEgR1jVTDw==
-Date:   Tue, 8 Nov 2022 14:46:19 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Jaroslav Kysela <perex@perex.cz>
-Cc:     ALSA development <alsa-devel@alsa-project.org>,
-        Takashi Iwai <tiwai@suse.de>,
-        Pierre-Louis Bossart <pierre-louis.bossart@intel.com>,
-        Liam Girdwood <liam.r.girdwood@intel.com>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Jimmy Cheng-Yi Chiang <cychiang@google.com>,
-        Curtis Malainey <cujomalainey@google.com>,
-        Brian Norris <briannorris@chromium.org>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2] [RFC] selftests: alsa - add PCM test
-Message-ID: <Y2pru8JLAGSjkDiJ@sirena.org.uk>
-References: <20221108115914.3751090-1-perex@perex.cz>
+        Tue, 8 Nov 2022 11:00:27 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86B295C769
+        for <linux-kselftest@vger.kernel.org>; Tue,  8 Nov 2022 08:00:26 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id a5so23140856edb.11
+        for <linux-kselftest@vger.kernel.org>; Tue, 08 Nov 2022 08:00:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VFfZ5Bl5zhnH71PaGJAYrI//Xb3WWbjWoqFqkYPKW30=;
+        b=C7OwW3FUJWQ9TsMP4XtJFWdFbq3CIFU6pSqTzLUuNeB55sqBurNd9+lK+4O64ax5nw
+         sLHuW2BZWPNwW/HcxRsLULIhKy0426zbG2SmHFYjzexcTd9nih+dAA6GOaJuqGPnIlJp
+         1nZOK9263PPnD7jUo2SElcu0BQprg/+ggeWhc9GM9gBFv6XxZxODbXJ1OOSJG0De8TjU
+         TFUI9lToIWmJ9FDoEL1WLfETPa3grArpG45+0E7aAGCcNp9vSy2/3HGJfReROVxd2Utw
+         XtSCF2zhCxlopPVvcacqaaSX4KJXfXQIedEUmZeOJLbdqt2wlmR4FMQ9nuaDqYZybzye
+         Bucw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VFfZ5Bl5zhnH71PaGJAYrI//Xb3WWbjWoqFqkYPKW30=;
+        b=stYenZeTD5Y5dBUrQFJ6U2qEW41doRJgZxzDXdQgruzJ+2FV1GAzyTXWgHkM33SG3B
+         IYj+kcgRfl8ef7FGa90iJEPcqemCHZC0cO0ypy6kOmvlCPMrUe83rJiw8kZL6J7gA2Z6
+         u9KO8JJbLPxzB7VowFP/Wc5Cd1u7aO+Le2RfnVuT1K2+6WE/OuJKuVf+HasHiiUSaG/q
+         BnHOVEfSBPjUiABc/Dxp3Bxy0mD5nQxsqORPFDANP8954J0CDxVgW4YEmkezSqMHGnZ2
+         P8vqRd1Vf3vgYK/nJ/LM30ZFPggn66cPuarHTugzyH15JTNLo+reTZQcEmr6CULzsBAU
+         gZFA==
+X-Gm-Message-State: ACrzQf2bUtS02yHi71LwuHfCf6E9JNGoZ1NhuRC+8A4aqThJUlGPIXFy
+        DEVDBfMQ7FUUtS6drJcyUqYD6Ps6z4heAq4s4AMkaQ==
+X-Google-Smtp-Source: AMsMyM764Q6z1uaMrpLCjAMUVJWnIa32kDHXvdKz3wR3PYoFGk/3nY8ikLUuVdV2GstlG+PMkGKaZX23fir9c7kMHtY=
+X-Received: by 2002:a05:6402:386:b0:463:c43f:6628 with SMTP id
+ o6-20020a056402038600b00463c43f6628mr39052165edv.53.1667923224985; Tue, 08
+ Nov 2022 08:00:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xRL3iVwIhEqKXGUP"
-Content-Disposition: inline
-In-Reply-To: <20221108115914.3751090-1-perex@perex.cz>
-X-Cookie: Fortune favors the lucky.
+References: <20221103145353.3049303-1-usama.anjum@collabora.com>
+ <20221103145353.3049303-3-usama.anjum@collabora.com> <CABb0KFFaYZG62TS+iM3Y92+hDyB35XR8dTX-5hDgWrXCcDQx7Q@mail.gmail.com>
+ <f394de31-b9c1-5a6c-eab2-74b84f2b3ba3@collabora.com>
+In-Reply-To: <f394de31-b9c1-5a6c-eab2-74b84f2b3ba3@collabora.com>
+From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+Date:   Tue, 8 Nov 2022 17:00:14 +0100
+Message-ID: <CABb0KFGbhM8V6qeDEzq7Lc_3cseScbK3zvfLndRdJfLstTO=2g@mail.gmail.com>
+Subject: Re: [PATCH v5 2/3] fs/proc/task_mmu: Implement IOCTL to get and/or
+ the clear info about PTEs
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Peter Xu <peterx@redhat.com>, Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Zach O'Keefe" <zokeefe@google.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>, kernel@collabora.com,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        David Hildenbrand <david@redhat.com>,
+        Peter Enderborg <peter.enderborg@sony.com>,
+        "open list : KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list : PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>,
+        "open list : MEMORY MANAGEMENT" <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Tue, 8 Nov 2022 at 15:25, Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+>
+> Hi Micha=C5=82,
+>
+> Thank you so much for reviewing.
+>
+> On 11/7/22 5:26 PM, Micha=C5=82 Miros=C5=82aw wrote:
+> >> +
+> >> +/*
+> >> + * struct page_region - Page region with bitmap flags
+> >> + * @start:     Start of the region
+> >> + * @len:       Length of the region
+> >> + * bitmap:     Bits sets for the region
+> >> + */
+> >> +struct page_region {
+> >> +       __u64 start;
+> >> +       __u64 len;
+> >> +       __u32 bitmap;
+> >> +       __u32 __reserved;
+> >
+> > "u64 flags"? If an extension is needed it would already require a new
+> > ioctl or something in the `arg` struct.
+> I feel like the masks must have the same type as this bitmap variable as
+> the return_mask specifies the flags to be returned in bitmap. All the
+> masks are of type __u32. This is why I'd kept the bitmap of type _u32 as
+> well. I've kept them of 32 bit size as currently we are adding support
+> for 4 flags and there is still room to add 28 more bits in the future.
+> Do you still think that I should update the masks and bitmap to _u64?
 
---xRL3iVwIhEqKXGUP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I agree that the `bitmap` (I'd rather call it `flags` though) should
+have the type matching the masks in the request. But the size I'm not
+sure about if u32 is enough compared to what is used (or will be in
+the future) for page flags in MM code. I suppose the ioctl() is not
+expected to be a fast path, so I would go with u64 and assume that
+overhead of the extra bytes read by the kernel won't matter.
 
-On Tue, Nov 08, 2022 at 12:59:14PM +0100, Jaroslav Kysela wrote:
-> This initial code does a simple sample transfer tests. By default,
-> all PCM devices are detected and tested with short and long
-> buffering parameters for 4 seconds. If the sample transfer timing
-> is not in a +-100ms boundary, the test fails. Only the interleaved
-> buffering scheme is supported in this version.
+> >> + * @start:             Starting address of the region
+> >> + * @len:               Length of the region (All the pages in this le=
+ngth are included)
+> >> + * @vec:               Address of page_region struct array for output
+> >> + * @vec_len:           Length of the page_region struct array
+> >> + * @max_pages:         Optional max return pages (It must be less tha=
+n vec_len if specified)
+> >
+> > I think we discussed that this is not counting the same things as
+> > vec_len, so there should not be a reference between the two. The limit
+> > is whatever fits under both conditions (IOW: n_vecs <=3D vec_len &&
+> > (!max_pages || n_pages <=3D max_pages).
+> In worse case when pages cannot be folded into the page_region, the one
+> page_region may have information of only one page. This is why I've
+> compared them. I want to communicate to the user that if max_pages is
+> used, the vec_len should be of equal or greater size (to cater worse
+> case which can happen at any time). Otherwise in worse case, the api can
+> return without finding the max_pages number of pages. I don't know how
+> should I put this in the comment.
 
-Oh, thanks for picking this up - something like this has been on my mind
-for ages!  This should probably be copied to Shuah and the kselftest
-list as well, I've added them.  This looks basically good to me, I've
-got a bunch of comments below but I'm not sure any of them except
-possibly the one about not putting values in the configuration file by
-default should block getting this merged so:
+I'm not sure you need to, as this conclusion follows from the range vs
+page distinction.
+A user who wants to cater for the worst case will provide big-enough
+`vec` array, but another, who might be memory-constrained, could
+instead just retry the call with `start` updated to just after the
+last returned page until the ioctl() returns less ranges than
+`vec_len` allows.
 
-Reviewed-by: Mark Brown <broonie@kernel.org>
-
-> The configuration may be modified with the configuration files.
-> A specific hardware configuration is detected and activated
-> using the sysfs regex matching. This allows to use the DMI string
-> (/sys/class/dmi/id/* tree) or any other system parameters
-> exposed in sysfs for the matching for the CI automation.
-
-> The configuration file may also specify the PCM device list to detect
-> the missing PCM devices.
-
->  create mode 100644 tools/testing/selftests/alsa/alsa-local.h
->  create mode 100644 tools/testing/selftests/alsa/conf.c
->  create mode 100644 tools/testing/selftests/alsa/conf.d/Lenovo_ThinkPad_P1_Gen2.conf
->  create mode 100644 tools/testing/selftests/alsa/pcm-test.c
-
-This is a bit unusual for kselftest and might create a bit of churn but
-does seem sensible and reasonable to me, it's on the edge of what
-kselftest usually covers but seems close enough in scope.  I worry
-a bit about ending up needing to add a config fragment as a result but
-perhaps we can get away without.
-
-> index 000000000000..0a83f35d43eb
-> --- /dev/null
-> +++ b/tools/testing/selftests/alsa/conf.d/Lenovo_ThinkPad_P1_Gen2.conf
-
-> +       pcm.0.0 {
-> +               PLAYBACK {
-> +                       test.time1 {
-> +                               access RW_INTERLEAVED   # can be omitted - default
-> +                               format S16_LE           # can be omitted - default
-> +                               rate 48000              # can be omitted - default
-> +                               channels 2              # can be omitted - default
-> +                               period_size 512
-> +                               buffer_size 4096
-
-I think it'd be better to leave these commented by default, especially
-if/once we improve the enumeration.  That way the coverage will default
-to whatever the tool does by default on the system (including any
-checking of constraints for example).  I guess we might want to add a
-way of saying "here's what I expect the constraints to be" but that's
-very much future work.
-
-> +#ifdef SND_LIB_VER
-> +#if SND_LIB_VERSION >= SND_LIB_VER(1, 2, 6)
-> +#define LIB_HAS_LOAD_STRING
-> +#endif
-> +#endif
-> +
-> +#ifndef LIB_HAS_LOAD_STRING
-> +static int snd_config_load_string(snd_config_t **config, const char *s,
-> +				  size_t size)
-> +{
-
-This is also in mixer-test, we should pull it into a helper library too.
-Something that could be done separately/incrementally.
-
-> +	for (i = 0; i < 4; i++) {
-
-> +
-> +	snd_pcm_drain(handle);
-> +	ms = timestamp_diff_ms(&tstamp);
-> +	if (ms < 3900 || ms > 4100) {
-
-It feels like the runtime might be usefully parameterised here - there's
-a tradeoff with detecting inaccurate clocks and runtime that people
-might want to make.
-
-> +	ksft_set_plan(num_missing + num_pcms * TESTS_PER_PCM);
-
-> +	for (pcm = pcm_missing; pcm != NULL; pcm = pcm->next) {
-> +		ksft_test_result(false, "test.missing.%d.%d.%d.%s\n",
-> +				 pcm->card, pcm->device, pcm->subdevice,
-> +				 snd_pcm_stream_name(pcm->stream));
-> +	}
-
-We don't seem to report a successful test.missing anywhere like
-find_pcms() so if we ever hit a test.missing then it'll look like a new
-test, old test runs won't have logged the failure.  That can change how
-people look at any failures that crop up, "it's new and never worked" is
-different to "this used to work" and people are likely to just be
-running kselftest rather than specifically know this test.  It'd be
-better if we counted the cards in the config and used that for our
-expected number of test.missings, logging cards that we find here as
-well.
-
-> +	for (pcm = pcm_list; pcm != NULL; pcm = pcm->next) {
-> +		test_pcm_time1(pcm, "test.time1", "S16_LE", 48000, 2, 512, 4096);
-> +		test_pcm_time1(pcm, "test.time2", "S16_LE", 48000, 2, 24000, 192000);
-> +	}
-
-It does feel like especially in the case where no configuration is
-specified we should be eumerating what the card can do and both
-potentially doing more tests (though there's obviously an execution time
-tradeoff with going overboard there) and skipping configurations that
-the card never claimed to support in the first place.  In particular I'm
-expecting we'll see some cards that only do either 44.1kHz or 48kHz and
-will get spurious fails by default, and I'd like to see coverage of mono
-playback on cards that claim to support it because I suspect there's a
-bunch of them that don't actually do the right thing.
-
-Like I say most of this could be done incrementally if we decide it
-needs to get done at all though, we shouldn't let perfect be the enemy
-of good.
-
---xRL3iVwIhEqKXGUP
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNqa7oACgkQJNaLcl1U
-h9BTLgf+OYAlhB9FKMmF6Sa4xThE/JjnVMVg+DPOCzb4ZocUXPCrIEys+nY4RHis
-mOSfiWmqB2jtrg5LBaDpfKCnsIs8zyVgiLlKFh8GU5dAgmipgptX/0DMr0BuhqaT
-6SrF19S8Dm4GJbnIlfBfHYuLJ/H6y7S3lvT4qmD8bN8CTeImvIKBYeiwk2Ge3wSC
-06/QbS3IPs2zTObC3NhHhGl31xQ2RgtPBEncD/CFLvyoUr9BUbu9rxsyAiM0ZwBz
-A8sEmdXBwpO6o32tgmemlN6MBaeEv0ikZFoEEmTLImNCV9ljXwUBp7cooIXahdyy
-NOidsMw6Za1+QSPeS/UKZ3mmRPuLBw==
-=o4V8
------END PGP SIGNATURE-----
-
---xRL3iVwIhEqKXGUP--
+Best Regards
+Micha=C5=82 Miros=C5=82aw
