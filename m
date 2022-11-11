@@ -2,98 +2,127 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 848FDC4332F
-	for <linux-kselftest@archiver.kernel.org>; Fri, 11 Nov 2022 03:11:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 46BE2C4332F
+	for <linux-kselftest@archiver.kernel.org>; Fri, 11 Nov 2022 03:19:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232229AbiKKDLx (ORCPT
+        id S231802AbiKKDTK (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 10 Nov 2022 22:11:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49554 "EHLO
+        Thu, 10 Nov 2022 22:19:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231167AbiKKDLu (ORCPT
+        with ESMTP id S230181AbiKKDTK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Nov 2022 22:11:50 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB3B72EF78;
-        Thu, 10 Nov 2022 19:11:49 -0800 (PST)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N7kJ52Dnpz15MX1;
-        Fri, 11 Nov 2022 11:11:33 +0800 (CST)
-Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 11 Nov 2022 11:11:47 +0800
-Received: from ubuntu1804.huawei.com (10.67.174.61) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 11 Nov 2022 11:11:46 +0800
-From:   Yang Jihong <yangjihong1@huawei.com>
-To:     <ast@kernel.org>, <daniel@iogearbox.net>, <davem@davemloft.net>,
-        <kuba@kernel.org>, <hawk@kernel.org>, <john.fastabend@gmail.com>,
-        <andrii@kernel.org>, <martin.lau@linux.dev>, <song@kernel.org>,
-        <yhs@fb.com>, <kpsingh@kernel.org>, <sdf@google.com>,
-        <haoluo@google.com>, <jolsa@kernel.org>, <mykolal@fb.com>,
-        <shuah@kernel.org>, <tariqt@nvidia.com>, <maximmi@nvidia.com>,
-        <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <yangjihong1@huawei.com>
-Subject: [PATCH bpf v2] selftests/bpf: Fix xdp_synproxy compilation failure in 32-bit arch
-Date:   Fri, 11 Nov 2022 11:08:36 +0800
-Message-ID: <20221111030836.37632-1-yangjihong1@huawei.com>
-X-Mailer: git-send-email 2.30.GIT
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.61]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
+        Thu, 10 Nov 2022 22:19:10 -0500
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028EB4AF25
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Nov 2022 19:19:09 -0800 (PST)
+Received: by mail-pg1-x54a.google.com with SMTP id v18-20020a637a12000000b0046ed84b94efso1967773pgc.6
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Nov 2022 19:19:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=foIAt/XU3J4YtladZObByH9iI4esGYWbfPnco3Gtlh8=;
+        b=DWw+ys9/MKUB3OxGlZx0Iw6WbQKNXkzY4m9MMOsvP3vZyq5Cx+1OyUQJgOrW9Sesxy
+         vUHefMbhl3+Z9wMBF65/0Nbs7Q/pD2tO00AXUVxGyLJ4aP7i9/mRD/OKBJ64ZS//OSim
+         NU6I62czrtHqu+WDtgP1KEsMdQ/6cv3+vyx46QjCf4gxR9VXaFQZ7nfrQyRgQj1FoFPo
+         L2eXPM9NkbqjIdwgfEH4f6Zlsz1MG1IBiK/hAxSOzZboiIli7h2IWHyiRbTdEJ3nsoog
+         zLbQSZR/DXEZofYHQoATjjzs0rJS2Otj6l7RNzIlYqWFmBZK/6sjwqcCMt6+I1LXOq1C
+         VqEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=foIAt/XU3J4YtladZObByH9iI4esGYWbfPnco3Gtlh8=;
+        b=de6D42gGz67iLasCW6P3c3pGrGnuJwzThRHFOiOrZ9W7JIwbUwU3/+0uHDb26vHvII
+         OGTiMfZW19pYIyHLlCwRfWQZtnc8xYBef78Q6HjWBBCOzzaMef7UP6A2rqe9L80jmpMn
+         kUg0js7dF8lKo0ibtCyygYJ3ZxVUoP35BohlCGIU6/iy/m6ik3FyIrbWMHLpE9IgNM3d
+         KAOCU59dRrKnx3XRNAZuDmbtC/g3eSWPgbvxJUK0UFxSNZWOg9uTxDDL3zHXGZ1yRIk0
+         MEdNi3gg/uoTs57jX7NnudsJVQ0wK+czoyRUgmTfcdwt5SiI1WjKcFqMWd+OrlBrsogO
+         R6Qg==
+X-Gm-Message-State: ANoB5pmb6e3up/KE6BEVg67g82xBs2TobriUPkHU/pelIZYSvBffQtxS
+        5vMe+S4h7emiNOJbbvRQMuG+mYZJ90AdxQ==
+X-Google-Smtp-Source: AA0mqf47VP+wsHzGM8MLOSTnOnfeRzrOAe9St0LPMxr2gCgCXQNvuIGrPZMHM9E1cG1tGgWIhPf+hHgR3PE8PQ==
+X-Received: from dlatypov-spec.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3f35])
+ (user=dlatypov job=sendgmr) by 2002:a62:e412:0:b0:56d:a1fc:7000 with SMTP id
+ r18-20020a62e412000000b0056da1fc7000mr659752pfh.35.1668136748495; Thu, 10 Nov
+ 2022 19:19:08 -0800 (PST)
+Date:   Thu, 10 Nov 2022 19:18:55 -0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
+Message-ID: <20221111031855.592333-1-dlatypov@google.com>
+Subject: [PATCH] kunit: tool: tweak error message when no KTAP found
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     rmoar@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org, Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-xdp_synproxy fails to be compiled in the 32-bit arch, log is as follows:
+We currently tell people we "couldn't find any KTAP output" with no
+indication as to what this might mean.
 
-  xdp_synproxy.c: In function 'parse_options':
-  xdp_synproxy.c:175:36: error: left shift count >= width of type [-Werror=shift-count-overflow]
-    175 |                 *tcpipopts = (mss6 << 32) | (ttl << 24) | (wscale << 16) | mss4;
-        |                                    ^~
-  xdp_synproxy.c: In function 'syncookie_open_bpf_maps':
-  xdp_synproxy.c:289:28: error: cast from pointer to integer of different size [-Werror=pointer-to-int-cast]
-    289 |                 .map_ids = (__u64)map_ids,
-        |                            ^
+After this patch, we get:
 
-Fix it.
+$ ./tools/testing/kunit/kunit.py parse /dev/null
+============================================================
+[ERROR] Test: <missing>: Could not find any KTAP output. Did any KUnit tests run?
+============================================================
+Testing complete. Ran 0 tests: errors: 1
 
-Fixes: fb5cd0ce70d4 ("selftests/bpf: Add selftests for raw syncookie helpers")
-Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+Note: we could try and generate a more verbose message like
+> Please check .kunit/test.log to see the raw kernel output.
+or the like, but we'd need to know what the build dir was to know where
+test.log actually lives.
+
+This patch tries to make a more minimal improvement.
+
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
 ---
- tools/testing/selftests/bpf/xdp_synproxy.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ tools/testing/kunit/kunit_parser.py    | 2 +-
+ tools/testing/kunit/kunit_tool_test.py | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/xdp_synproxy.c b/tools/testing/selftests/bpf/xdp_synproxy.c
-index ff35320d2be9..410a1385a01d 100644
---- a/tools/testing/selftests/bpf/xdp_synproxy.c
-+++ b/tools/testing/selftests/bpf/xdp_synproxy.c
-@@ -104,7 +104,8 @@ static void parse_options(int argc, char *argv[], unsigned int *ifindex, __u32 *
- 		{ "tc", no_argument, NULL, 'c' },
- 		{ NULL, 0, NULL, 0 },
- 	};
--	unsigned long mss4, mss6, wscale, ttl;
-+	unsigned long mss4, wscale, ttl;
-+	unsigned long long mss6;
- 	unsigned int tcpipopts_mask = 0;
+diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+index a56c75a973b5..d0ed5dd5cfc4 100644
+--- a/tools/testing/kunit/kunit_parser.py
++++ b/tools/testing/kunit/kunit_parser.py
+@@ -782,7 +782,7 @@ def parse_run_tests(kernel_output: Iterable[str]) -> Test:
+ 	test = Test()
+ 	if not lines:
+ 		test.name = '<missing>'
+-		test.add_error('could not find any KTAP output!')
++		test.add_error('Could not find any KTAP output. Did any KUnit tests run?')
+ 		test.status = TestStatus.FAILURE_TO_PARSE_TESTS
+ 	else:
+ 		test = parse_test(lines, 0, [])
+diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+index 90c65b072be9..84a08cf07242 100755
+--- a/tools/testing/kunit/kunit_tool_test.py
++++ b/tools/testing/kunit/kunit_tool_test.py
+@@ -207,7 +207,7 @@ class KUnitParserTest(unittest.TestCase):
+ 		with open(crash_log) as file:
+ 			result = kunit_parser.parse_run_tests(
+ 				kunit_parser.extract_tap_lines(file.readlines()))
+-		print_mock.assert_any_call(StrContains('could not find any KTAP output!'))
++		print_mock.assert_any_call(StrContains('Could not find any KTAP output.'))
+ 		print_mock.stop()
+ 		self.assertEqual(0, len(result.subtests))
+ 		self.assertEqual(result.counts.errors, 1)
+@@ -588,7 +588,7 @@ class KUnitMainTest(unittest.TestCase):
+ 		self.assertEqual(e.exception.code, 1)
+ 		self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 1)
+ 		self.assertEqual(self.linux_source_mock.run_kernel.call_count, 1)
+-		self.print_mock.assert_any_call(StrContains('could not find any KTAP output!'))
++		self.print_mock.assert_any_call(StrContains('Could not find any KTAP output.'))
  
- 	if (argc < 2)
-@@ -286,7 +287,7 @@ static int syncookie_open_bpf_maps(__u32 prog_id, int *values_map_fd, int *ports
- 
- 	prog_info = (struct bpf_prog_info) {
- 		.nr_map_ids = 8,
--		.map_ids = (__u64)map_ids,
-+		.map_ids = (__u64)(unsigned long)map_ids,
- 	};
- 	info_len = sizeof(prog_info);
- 
+ 	def test_exec_no_tests(self):
+ 		self.linux_source_mock.run_kernel = mock.Mock(return_value=['TAP version 14', '1..0'])
+
+base-commit: 870f63b7cd78d0055902d839a60408f7428b4e84
 -- 
-2.30.GIT
+2.38.1.431.g37b22c650d-goog
 
