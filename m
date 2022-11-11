@@ -2,37 +2,37 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48369C43217
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97A84C4167B
 	for <linux-kselftest@archiver.kernel.org>; Fri, 11 Nov 2022 21:52:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230105AbiKKVwD (ORCPT
+        id S233899AbiKKVwH (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 11 Nov 2022 16:52:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58064 "EHLO
+        Fri, 11 Nov 2022 16:52:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230303AbiKKVvm (ORCPT
+        with ESMTP id S233943AbiKKVvw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Nov 2022 16:51:42 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2782B6B203
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Nov 2022 13:51:41 -0800 (PST)
+        Fri, 11 Nov 2022 16:51:52 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 854766B203
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Nov 2022 13:51:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CD50CB82802
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Nov 2022 21:51:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64085C433C1;
-        Fri, 11 Nov 2022 21:51:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 42C69B82802
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Nov 2022 21:51:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B55A3C43140;
+        Fri, 11 Nov 2022 21:51:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668203498;
-        bh=aPsajbZlJ1Devthnun/HjJFRIhZ8YHh4Fs+22T7Mvjg=;
+        s=k20201202; t=1668203508;
+        bh=XUlhSyM6tPYEzd0+yzz/l7oRBHYxosNeBw9c71QvHWc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z5UmNB9/x9g7lsbR4j+XCgNw4JNktfgxfY1J5iywH8mVqUdlmuAXROlVinWvsOmqM
-         0pS5q8mPx4nmOlS1vs4Kq+Ww28BnDiNCrM6JECM4noNyAHORJLhtJgss9N5nNC2mXZ
-         ph5HcMOh1xXcJ4NhYAbTFGe6A7uCj4UEQhEyrF1TR6ShAsa5exEy9r5SatO2t4qqSD
-         gVjSGxOngOv5o2PGUHs2El+2hnGI9PadV7l04FBmQrMD5NJebYrQYYdLkDxYwPSprG
-         exTbFtLmfKy1O4QIegNGt9TlmaGGDnrHiLr4ck88Dpn0k3oWbXaIZwSnfDpGKEgASN
-         opK4CYvVaZtxQ==
+        b=E2cqmvb7RR7jM2gAE2qBLXHBkeARYrbJqaki9f/saur9wE5zXNQ5YFYa9DeaDn7md
+         tQ17Mew8359YbKdZEXJkvSICM5CjVP+u8DeiGC7nD8wXes8Lu2ypXSgyYWJ12cthnJ
+         g974mcEL6iaLqbq9LsBm/gHfDl6t6mFe1ZtykxPAi6bRSujGts/V3/yL9IrFEsc2CW
+         DH0f+e0jCF8LNzWEVyH4HBzoHmnCi+WZ4IS2gY8q9FBa9niewy1++5UtOjqc46P85D
+         hcPE34Kew7jDbiYUnL3LRfLShRnV0lAhx5KhwFliobtlP53zLCddNb0z2/bj02O0dY
+         EhEkd9aos8oxQ==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
@@ -43,116 +43,160 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         Szabolcs Nagy <szabolcs.nagy@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v3 17/21] kselftest/arm64: Teach the generic signal context validation about ZT
-Date:   Fri, 11 Nov 2022 21:50:22 +0000
-Message-Id: <20221111215026.813348-18-broonie@kernel.org>
+Subject: [PATCH v3 21/21] kselftest/arm64: Add coverage of SME 2 and 2.1 hwcaps
+Date:   Fri, 11 Nov 2022 21:50:26 +0000
+Message-Id: <20221111215026.813348-22-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221111215026.813348-1-broonie@kernel.org>
 References: <20221111215026.813348-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3158; i=broonie@kernel.org; h=from:subject; bh=aPsajbZlJ1Devthnun/HjJFRIhZ8YHh4Fs+22T7Mvjg=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjbsOdXpzWh18ZBwJu4MPVDW/1fV1ztVbBSwc1IDgW xTnzFKiJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY27DnQAKCRAk1otyXVSH0BFsB/ 95NZS0Q5fJYDwEO1IQ5DiNLp7/Ekr9uQ+4KvnwQVG38/WR1n3uh0TyvqJc2e6vGF49jsx0zCRJsszb 2MTiHcw5Wm+TvRaiUErnG2EHj7asj/lwXqKWEamWjvRJAv4cDvsys/X/IozlN3udlkF1T8qHcxO7rx Fyi6/OhgA43X2/aDwBck7K3Q8Az1EiTr851m+06VOnTFcPtz7RTxa65VpMiaAOd5nUIYGdRZ2UDx2p nz0SNLujIsjtix4bjfem4vhY2gKGmtuK+MCV5N9GI/CKM0x1wCRQPI1LagyPBVRahKk2iGjDmPdLDz IiOP+HCBCgzjvunnDJKEAiwghCWCah
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3403; i=broonie@kernel.org; h=from:subject; bh=XUlhSyM6tPYEzd0+yzz/l7oRBHYxosNeBw9c71QvHWc=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjbsOhg9X6ib0ecYw1DQ9l67C7OI2vVG2uACZQB5k4 8ahxlbeJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY27DoQAKCRAk1otyXVSH0MDCCA CD63BiV8AaRQC8iFH4KWPiXqqlOeGC1WfwDVAHrswmHQyeXLD+cLaXcdMsY7ZXKiZriyb8cpttM3ws OS3r31Ly5tIdvbxMGNQMwGCt4su7HHR645qLEM9mc5O1maen/npkkRUuOHAY225G9aTJIH88I5w9mi VJJo51WRMvxmgvYohpja5wm9OBYd3slAUS0XJyNx2hqfG+FvAaTCk7xYyftxRhrMSLF1emduW5cdky i6M2pD0Fpuq3Avqe//Bmp4kXZ9CRP/YBBB7f23aJ2FHzjlcNFrAvQcKhkC8M+YDbfwFugj4RuakILA rpsX9QO/QBc2gi74LKQGoJdH/BVWh1
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add ZT to the set of signal contexts that the shared code understands and
-validates the form of.
+Add the hwcaps defined by SME 2 and 2.1 to the hwcaps test.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- .../arm64/signal/testcases/testcases.c        | 36 +++++++++++++++++++
- .../arm64/signal/testcases/testcases.h        |  1 +
- 2 files changed, 37 insertions(+)
+ tools/testing/selftests/arm64/abi/hwcap.c | 115 ++++++++++++++++++++++
+ 1 file changed, 115 insertions(+)
 
-diff --git a/tools/testing/selftests/arm64/signal/testcases/testcases.c b/tools/testing/selftests/arm64/signal/testcases/testcases.c
-index e1c625b20ac4..9bee976aff55 100644
---- a/tools/testing/selftests/arm64/signal/testcases/testcases.c
-+++ b/tools/testing/selftests/arm64/signal/testcases/testcases.c
-@@ -104,6 +104,26 @@ bool validate_za_context(struct za_context *za, char **err)
- 	return true;
+diff --git a/tools/testing/selftests/arm64/abi/hwcap.c b/tools/testing/selftests/arm64/abi/hwcap.c
+index 9f255bc5f31c..832bb10d282c 100644
+--- a/tools/testing/selftests/arm64/abi/hwcap.c
++++ b/tools/testing/selftests/arm64/abi/hwcap.c
+@@ -50,6 +50,78 @@ static void sme_sigill(void)
+ 	asm volatile(".inst 0x04bf5800" : : : "x0");
  }
  
-+bool validate_zt_context(struct zt_context *zt, char **err)
++static void sme2_sigill(void)
 +{
-+	if (!zt || !err)
-+		return false;
++	/* SMSTART ZA */
++	asm volatile("msr S0_3_C4_C5_3, xzr" : : : );
 +
-+	/* If the context is present there should be at least one register */
-+	if (zt->nregs == 0) {
-+		*err = "no registers";
-+		return false;
-+	}
++	/* ZERO ZT0 */
++	asm volatile(".inst 0xc0480001" : : : );
 +
-+	/* Size should agree with the number of registers */
-+	if (zt->head.size != ZT_SIG_CONTEXT_SIZE(zt->nregs)) {
-+		*err = "register count does not match size";
-+		return false;
-+	}
-+
-+	return true;
++	/* SMSTOP */
++	asm volatile("msr S0_3_C4_C6_3, xzr" : : : );
 +}
 +
- bool validate_reserved(ucontext_t *uc, size_t resv_sz, char **err)
- {
- 	bool terminated = false;
-@@ -113,6 +133,7 @@ bool validate_reserved(ucontext_t *uc, size_t resv_sz, char **err)
- 	struct extra_context *extra = NULL;
- 	struct sve_context *sve = NULL;
- 	struct za_context *za = NULL;
-+	struct zt_context *zt = NULL;
- 	struct _aarch64_ctx *head =
- 		(struct _aarch64_ctx *)uc->uc_mcontext.__reserved;
- 	void *extra_data = NULL;
-@@ -172,6 +193,13 @@ bool validate_reserved(ucontext_t *uc, size_t resv_sz, char **err)
- 			za = (struct za_context *)head;
- 			new_flags |= ZA_CTX;
- 			break;
-+		case ZT_MAGIC:
-+			if (flags & ZT_CTX)
-+				*err = "Multiple ZT_MAGIC";
-+			/* Size is validated in validate_za_context() */
-+			zt = (struct zt_context *)head;
-+			new_flags |= ZT_CTX;
-+			break;
- 		case EXTRA_MAGIC:
- 			if (flags & EXTRA_CTX)
- 				*err = "Multiple EXTRA_MAGIC";
-@@ -221,6 +249,9 @@ bool validate_reserved(ucontext_t *uc, size_t resv_sz, char **err)
- 		if (new_flags & ZA_CTX)
- 			if (!validate_za_context(za, err))
- 				return false;
-+		if (new_flags & ZT_CTX)
-+			if (!validate_zt_context(zt, err))
-+				return false;
- 
- 		flags |= new_flags;
- 
-@@ -232,6 +263,11 @@ bool validate_reserved(ucontext_t *uc, size_t resv_sz, char **err)
- 		return false;
- 	}
- 
-+	if (terminated && (flags & ZT_CTX) && !(flags & ZA_CTX)) {
-+		*err = "ZT context but no ZA context";
-+		return false;
-+	}
++static void sme2p1_sigill(void)
++{
++	/* SMSTART SM */
++	asm volatile("msr S0_3_C4_C3_3, xzr" : : : );
 +
- 	return true;
- }
- 
-diff --git a/tools/testing/selftests/arm64/signal/testcases/testcases.h b/tools/testing/selftests/arm64/signal/testcases/testcases.h
-index 040afded0b76..a08ab0d6207a 100644
---- a/tools/testing/selftests/arm64/signal/testcases/testcases.h
-+++ b/tools/testing/selftests/arm64/signal/testcases/testcases.h
-@@ -18,6 +18,7 @@
- #define SVE_CTX		(1 << 1)
- #define ZA_CTX		(1 << 2)
- #define EXTRA_CTX	(1 << 3)
-+#define ZT_CTX		(1 << 4)
- 
- #define KSFT_BAD_MAGIC	0xdeadbeef
- 
++	/* BFCLAMP { Z0.H - Z1.H }, Z0.H, Z0.H */
++	asm volatile(".inst 0xc120C000" : : : );
++
++	/* SMSTOP */
++	asm volatile("msr S0_3_C4_C6_3, xzr" : : : );
++}
++
++static void smei16i32_sigill(void)
++{
++	/* SMSTART SM */
++	asm volatile("msr S0_3_C4_C3_3, xzr" : : : );
++
++	/* SMOPA ZA0.S, P0/M, P0/M, Z0.B, Z0.B */
++	asm volatile(".inst 0xa0800000" : : : );
++
++	/* SMSTOP */
++	asm volatile("msr S0_3_C4_C6_3, xzr" : : : );
++}
++
++static void smebi32i32_sigill(void)
++{
++	/* SMSTART SM */
++	asm volatile("msr S0_3_C4_C3_3, xzr" : : : );
++
++	/* BMOPA ZA0.S, P0/M, P0/M, Z0.B, Z0.B */
++	asm volatile(".inst 0x80800008" : : : );
++
++	/* SMSTOP */
++	asm volatile("msr S0_3_C4_C6_3, xzr" : : : );
++}
++
++static void smeb16b16_sigill(void)
++{
++	/* SMSTART SM */
++	asm volatile("msr S0_3_C4_C3_3, xzr" : : : );
++
++	/* BFADD ZA.H[W0, 0], {Z0.H-Z1.H} */
++	asm volatile(".inst 0xC1E41C00" : : : );
++
++	/* SMSTOP */
++	asm volatile("msr S0_3_C4_C6_3, xzr" : : : );
++}
++
++static void smef16f16_sigill(void)
++{
++	/* SMSTART SM */
++	asm volatile("msr S0_3_C4_C3_3, xzr" : : : );
++
++	/* FADD ZA.H[W0, 0], { Z0.H-Z1.H } */
++	asm volatile(".inst 0xc1a41C00" : : : );
++
++	/* SMSTOP */
++	asm volatile("msr S0_3_C4_C6_3, xzr" : : : );
++}
++
+ static void sve_sigill(void)
+ {
+ 	/* RDVL x0, #0 */
+@@ -158,6 +230,49 @@ static const struct hwcap_data {
+ 		.sigill_fn = sme_sigill,
+ 		.sigill_reliable = true,
+ 	},
++	{
++		.name = "SME2",
++		.at_hwcap = AT_HWCAP2,
++		.hwcap_bit = HWCAP2_SME2,
++		.cpuinfo = "sme2",
++		.sigill_fn = sme2_sigill,
++		.sigill_reliable = true,
++	},
++	{
++		.name = "SME 2.1",
++		.at_hwcap = AT_HWCAP2,
++		.hwcap_bit = HWCAP2_SME2P1,
++		.cpuinfo = "sme2p1",
++		.sigill_fn = sme2p1_sigill,
++	},
++	{
++		.name = "SME I16I32",
++		.at_hwcap = AT_HWCAP2,
++		.hwcap_bit = HWCAP2_SME_I16I32,
++		.cpuinfo = "smei16i32",
++		.sigill_fn = smei16i32_sigill,
++	},
++	{
++		.name = "SME BI32I32",
++		.at_hwcap = AT_HWCAP2,
++		.hwcap_bit = HWCAP2_SME_BI32I32,
++		.cpuinfo = "smebi32i32",
++		.sigill_fn = smebi32i32_sigill,
++	},
++	{
++		.name = "SME B16B16",
++		.at_hwcap = AT_HWCAP2,
++		.hwcap_bit = HWCAP2_SME_B16B16,
++		.cpuinfo = "smeb16b16",
++		.sigill_fn = smeb16b16_sigill,
++	},
++	{
++		.name = "SME F16F16",
++		.at_hwcap = AT_HWCAP2,
++		.hwcap_bit = HWCAP2_SME_F16F16,
++		.cpuinfo = "smef16f16",
++		.sigill_fn = smef16f16_sigill,
++	},
+ 	{
+ 		.name = "SVE",
+ 		.at_hwcap = AT_HWCAP,
 -- 
 2.30.2
 
