@@ -2,37 +2,37 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BDB15C43219
-	for <linux-kselftest@archiver.kernel.org>; Fri, 11 Nov 2022 21:51:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AA16C4167D
+	for <linux-kselftest@archiver.kernel.org>; Fri, 11 Nov 2022 21:52:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233551AbiKKVvd (ORCPT
+        id S231300AbiKKVv7 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 11 Nov 2022 16:51:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58028 "EHLO
+        Fri, 11 Nov 2022 16:51:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233859AbiKKVvZ (ORCPT
+        with ESMTP id S233542AbiKKVvc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Nov 2022 16:51:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B946B203
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Nov 2022 13:51:24 -0800 (PST)
+        Fri, 11 Nov 2022 16:51:32 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D96286B203
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Nov 2022 13:51:30 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C97C962103
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Nov 2022 21:51:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D9DEC43470;
-        Fri, 11 Nov 2022 21:51:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 93E00B827F1
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Nov 2022 21:51:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32854C433C1;
+        Fri, 11 Nov 2022 21:51:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668203483;
-        bh=gqqU9mq6qOVcKT2rPaWnupV2Z7inErUAfg5WJJ3Pu+o=;
+        s=k20201202; t=1668203488;
+        bh=vPYzsNjtJTSrcRndtJjAv6zm4FdNQ4M6zDgeHljobWI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d2LOHxgFkE9erPxaIf0m/0NMQVXjqv4UNDJEppVBJVCUlyULJ5HwGyxKdr4wCaz7h
-         IkWb8pxz9Ncb1s9g8pNN1NxjyAO1shvMdqKPbImyzjURM9inee+j/iDGtK9tJaYDL8
-         vRnNJM6jKUQDXrJhaj6zoAc+y4IFil74IJn3tUsEfjqESbAu+ldVOZXR6bcdaayAff
-         wn48ABP1wcdCNpzAteZLqbUAbKf0IxvDYOAYu8E5HFpSyjJvW3J2ZCcPSRLFbZz4Ma
-         26Xs8bQHEaC5Je6SSgbTtEbV8VWV+Hpwr1mfxlckhUuzTZ1zLKeAvVam82OnvznezE
-         MSY3zxpnoDfzQ==
+        b=aJTIwW0a1iVZ0F5dLrtY5rH+Z8+AyRZreUWopoOy1LrCJkBp/pYPTBt1W5Iqg1kUp
+         A2R/PBURK1OuaY9nPZAl+IY2RADQIDGFbGfPvOG2tepNI4MsBgy59jpEmDFnczXQju
+         TMwLn332iGlERDcF/vp7hgJkCH/hpbRHRNS1xiK7XNf77OHqfZNmqdLFjFwx2CuKQK
+         by3b9F7i3wFnQIg9iabMiSRgfnPhH/gOMUQL2tICylQFZsYKtp9cxejXCg9P+0obNh
+         /OEZ3MebJhv+u+7R895v8BfqTL9e0NuZHY8iYhX28Z75tADYifgF8rBHkw3CeSdqyi
+         ZtR41kVPFsBhg==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
@@ -43,255 +43,153 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         Szabolcs Nagy <szabolcs.nagy@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v3 11/21] arm64/sme: Implement signal handling for ZT
-Date:   Fri, 11 Nov 2022 21:50:16 +0000
-Message-Id: <20221111215026.813348-12-broonie@kernel.org>
+Subject: [PATCH v3 13/21] arm64/sme: Add hwcaps for SME 2 and 2.1 features
+Date:   Fri, 11 Nov 2022 21:50:18 +0000
+Message-Id: <20221111215026.813348-14-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221111215026.813348-1-broonie@kernel.org>
 References: <20221111215026.813348-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7263; i=broonie@kernel.org; h=from:subject; bh=gqqU9mq6qOVcKT2rPaWnupV2Z7inErUAfg5WJJ3Pu+o=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjbsOXBawn7KIyMoylCz7Pt9d+wpnURM7Al75/pdUm ZnSrM+iJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY27DlwAKCRAk1otyXVSH0BbOB/ 94QtAoPR4hPoi/GSQq3CtHV4JggrT62jeoAdQgeUA48fWgDuI7AnCg5y+bRY9F/TEb4pyG4LGTyrqe 6GwRGv8lY8BCNJPwH2fuM86vUS7f2SsxI2M2+Vknbd2nFdgoIcOQvV4NueTfmO11t7+kJyyhNFoKDl 38N/Z7Uf1QJGQRO4/ZobR0qHvAiuMkC/0sZXh8zh2eILDlGsZQZDqo4GqQAjqEJhSVYMu3Gg/jkU+3 YSHPecwjCB44eWVU2vRdyg+H3Kmk5daBEexabhiDadR3OMfc7zOzRg/RPMAGdakLiQLS0p4p1M0ubs y3MMsACnnWiEnw+Y1jW5v2JTYBenha
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7092; i=broonie@kernel.org; h=from:subject; bh=vPYzsNjtJTSrcRndtJjAv6zm4FdNQ4M6zDgeHljobWI=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjbsOZ13bfukO5EhwINQon5yT727+0B7x0J//3/Ji6 Xjopj3uJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY27DmQAKCRAk1otyXVSH0FTfB/ 9kkzGnGVEKuw2WogGWqQVhqbHY5ngNMlAVnm0nJbtLhfnEdRxG8W02N43n+B+M3Tz0EW99r8fxdSri Zwd9ztjikEcm4v2Rbv8wzdById7i93vHrySvxYmJgFLDKgPdQ44C1f38SljeWuj2N98q3IkwD1gOUj wuDdBarwrMcLjFgA4L+V4fPVlYx/l9eN32zcNX/aTPGWTr4Ir/v0fILKayXhjZL2FZPsNNDEZZoEj8 /c1cZa82UCwBdQqRa5kD2m40SqN8EkBovON2A8tP0fQIsGkrWUii5sXoGYxOAgBijy8jr/CM3+qol+ E2cDBW9btBHHPsySqyDEwoS7YPRC5B
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a new signal context type for ZT which is present in the signal frame
-when ZA is enabled and ZT is supported by the system. In order to account
-for the possible addition of further ZT registers in the future we make the
-number of registers variable in the ABI, though currently the only possible
-number is 1. We could just use a bare list head for the context since the
-number of registers can be inferred from the size of the context but for
-usability and future extensibility we define a header with the number of
-registers and some reserved fields in it.
+In order to allow userspace to discover the presence of the new SME features
+add hwcaps for them.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/include/asm/fpsimd.h          |   3 -
- arch/arm64/include/uapi/asm/sigcontext.h |  19 ++++
- arch/arm64/kernel/signal.c               | 105 +++++++++++++++++++++++
- 3 files changed, 124 insertions(+), 3 deletions(-)
+ Documentation/arm64/elf_hwcaps.rst  | 18 ++++++++++++++++++
+ arch/arm64/include/asm/hwcap.h      |  6 ++++++
+ arch/arm64/include/uapi/asm/hwcap.h |  6 ++++++
+ arch/arm64/kernel/cpufeature.c      | 13 +++++++++++++
+ arch/arm64/kernel/cpuinfo.c         |  6 ++++++
+ 5 files changed, 49 insertions(+)
 
-diff --git a/arch/arm64/include/asm/fpsimd.h b/arch/arm64/include/asm/fpsimd.h
-index 42c019936dfd..5c93cb5337c9 100644
---- a/arch/arm64/include/asm/fpsimd.h
-+++ b/arch/arm64/include/asm/fpsimd.h
-@@ -352,9 +352,6 @@ extern unsigned int sme_get_vl(void);
- extern int sme_set_current_vl(unsigned long arg);
- extern int sme_get_current_vl(void);
+diff --git a/Documentation/arm64/elf_hwcaps.rst b/Documentation/arm64/elf_hwcaps.rst
+index 6fed84f935df..29a3dd1b8f5a 100644
+--- a/Documentation/arm64/elf_hwcaps.rst
++++ b/Documentation/arm64/elf_hwcaps.rst
+@@ -284,6 +284,24 @@ HWCAP2_RPRFM
+ HWCAP2_SVE2P1
+     Functionality implied by ID_AA64ZFR0_EL1.SVEver == 0b0010.
  
--/* Will move with signal support */
--#define ZT_SIG_REG_SIZE 512
--
++HWCAP2_SME2
++    Functionality implied by ID_AA64SMFR0_EL1.SMEver == 0b0001.
++
++HWCAP2_SME2P1
++    Functionality implied by ID_AA64SMFR0_EL1.SMEver == 0b0010.
++
++HWCAP2_SMEI16I32
++    Functionality implied by ID_AA64SMFR0_EL1.I16I32 == 0b0101
++
++HWCAP2_SMEBI32I32
++    Functionality implied by ID_AA64SMFR0_EL1.I32I32 == 0b1
++
++HWCAP2_SMEB16B16
++    Functionality implied by ID_AA64SMFR0_EL1.B16B16 == 0b1
++
++HWCAP2_SMEF16F16
++    Functionality implied by ID_AA64SMFR0_EL1.F16F16 == 0b1
++
+ 4. Unused AT_HWCAP bits
+ -----------------------
+ 
+diff --git a/arch/arm64/include/asm/hwcap.h b/arch/arm64/include/asm/hwcap.h
+index 06dd12c514e6..475c803ecf42 100644
+--- a/arch/arm64/include/asm/hwcap.h
++++ b/arch/arm64/include/asm/hwcap.h
+@@ -123,6 +123,12 @@
+ #define KERNEL_HWCAP_CSSC		__khwcap2_feature(CSSC)
+ #define KERNEL_HWCAP_RPRFM		__khwcap2_feature(RPRFM)
+ #define KERNEL_HWCAP_SVE2P1		__khwcap2_feature(SVE2P1)
++#define KERNEL_HWCAP_SME2		__khwcap2_feature(SME2)
++#define KERNEL_HWCAP_SME2P1		__khwcap2_feature(SME2P1)
++#define KERNEL_HWCAP_SME_I16I32		__khwcap2_feature(SME_I16I32)
++#define KERNEL_HWCAP_SME_BI32I32	__khwcap2_feature(SME_BI32I32)
++#define KERNEL_HWCAP_SME_B16B16		__khwcap2_feature(SME_B16B16)
++#define KERNEL_HWCAP_SME_F16F16		__khwcap2_feature(SME_F16F16)
+ 
  /*
-  * Return how many bytes of memory are required to store the full SME
-  * specific state for task, given task's currently configured vector
-diff --git a/arch/arm64/include/uapi/asm/sigcontext.h b/arch/arm64/include/uapi/asm/sigcontext.h
-index 4aaf31e3bf16..177f16cc96b8 100644
---- a/arch/arm64/include/uapi/asm/sigcontext.h
-+++ b/arch/arm64/include/uapi/asm/sigcontext.h
-@@ -148,6 +148,14 @@ struct za_context {
- 	__u16 __reserved[3];
+  * This yields a mask that user programs can use to figure out what
+diff --git a/arch/arm64/include/uapi/asm/hwcap.h b/arch/arm64/include/uapi/asm/hwcap.h
+index b713d30544f1..69a4fb749c65 100644
+--- a/arch/arm64/include/uapi/asm/hwcap.h
++++ b/arch/arm64/include/uapi/asm/hwcap.h
+@@ -96,5 +96,11 @@
+ #define HWCAP2_CSSC		(1UL << 34)
+ #define HWCAP2_RPRFM		(1UL << 35)
+ #define HWCAP2_SVE2P1		(1UL << 36)
++#define HWCAP2_SME2		(1UL << 37)
++#define HWCAP2_SME2P1		(1UL << 38)
++#define HWCAP2_SME_I16I32	(1UL << 39)
++#define HWCAP2_SME_BI32I32	(1UL << 40)
++#define HWCAP2_SME_B16B16	(1UL << 41)
++#define HWCAP2_SME_F16F16	(1UL << 42)
+ 
+ #endif /* _UAPI__ASM_HWCAP_H */
+diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+index 5b0d79f026aa..efb980ea7653 100644
+--- a/arch/arm64/kernel/cpufeature.c
++++ b/arch/arm64/kernel/cpufeature.c
+@@ -288,12 +288,20 @@ static const struct arm64_ftr_bits ftr_id_aa64smfr0[] = {
+ 		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_EL1_I16I64_SHIFT, 4, 0),
+ 	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_SME),
+ 		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_EL1_F64F64_SHIFT, 1, 0),
++	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_SME),
++		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_EL1_I16I32_SHIFT, 4, 0),
++	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_SME),
++		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_EL1_B16B16_SHIFT, 1, 0),
++	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_SME),
++		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_EL1_F16F16_SHIFT, 1, 0),
+ 	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_SME),
+ 		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_EL1_I8I32_SHIFT, 4, 0),
+ 	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_SME),
+ 		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_EL1_F16F32_SHIFT, 1, 0),
+ 	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_SME),
+ 		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_EL1_B16F32_SHIFT, 1, 0),
++	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_SME),
++		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_EL1_BI32I32_SHIFT, 1, 0),
+ 	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_SME),
+ 		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_EL1_F32F32_SHIFT, 1, 0),
+ 	ARM64_FTR_END,
+@@ -2839,11 +2847,16 @@ static const struct arm64_cpu_capabilities arm64_elf_hwcaps[] = {
+ #ifdef CONFIG_ARM64_SME
+ 	HWCAP_CAP(SYS_ID_AA64PFR1_EL1, ID_AA64PFR1_EL1_SME_SHIFT, 4, FTR_UNSIGNED, ID_AA64PFR1_EL1_SME_IMP, CAP_HWCAP, KERNEL_HWCAP_SME),
+ 	HWCAP_CAP(SYS_ID_AA64SMFR0_EL1, ID_AA64SMFR0_EL1_FA64_SHIFT, 1, FTR_UNSIGNED, ID_AA64SMFR0_EL1_FA64_IMP, CAP_HWCAP, KERNEL_HWCAP_SME_FA64),
++	HWCAP_CAP(SYS_ID_AA64SMFR0_EL1, ID_AA64SMFR0_EL1_SMEver_SHIFT, 4, FTR_UNSIGNED, ID_AA64SMFR0_EL1_SMEver_SME2p1, CAP_HWCAP, KERNEL_HWCAP_SME2P1),
++	HWCAP_CAP(SYS_ID_AA64SMFR0_EL1, ID_AA64SMFR0_EL1_SMEver_SHIFT, 4, FTR_UNSIGNED, ID_AA64SMFR0_EL1_SMEver_SME2, CAP_HWCAP, KERNEL_HWCAP_SME2),
+ 	HWCAP_CAP(SYS_ID_AA64SMFR0_EL1, ID_AA64SMFR0_EL1_I16I64_SHIFT, 4, FTR_UNSIGNED, ID_AA64SMFR0_EL1_I16I64_IMP, CAP_HWCAP, KERNEL_HWCAP_SME_I16I64),
+ 	HWCAP_CAP(SYS_ID_AA64SMFR0_EL1, ID_AA64SMFR0_EL1_F64F64_SHIFT, 1, FTR_UNSIGNED, ID_AA64SMFR0_EL1_F64F64_IMP, CAP_HWCAP, KERNEL_HWCAP_SME_F64F64),
++	HWCAP_CAP(SYS_ID_AA64SMFR0_EL1, ID_AA64SMFR0_EL1_F64F64_SHIFT, 1, FTR_UNSIGNED, ID_AA64SMFR0_EL1_B16B16_IMP, CAP_HWCAP, KERNEL_HWCAP_SME_B16B16),
++	HWCAP_CAP(SYS_ID_AA64SMFR0_EL1, ID_AA64SMFR0_EL1_F64F64_SHIFT, 1, FTR_UNSIGNED, ID_AA64SMFR0_EL1_F16F16_IMP, CAP_HWCAP, KERNEL_HWCAP_SME_F16F16),
+ 	HWCAP_CAP(SYS_ID_AA64SMFR0_EL1, ID_AA64SMFR0_EL1_I8I32_SHIFT, 4, FTR_UNSIGNED, ID_AA64SMFR0_EL1_I8I32_IMP, CAP_HWCAP, KERNEL_HWCAP_SME_I8I32),
+ 	HWCAP_CAP(SYS_ID_AA64SMFR0_EL1, ID_AA64SMFR0_EL1_F16F32_SHIFT, 1, FTR_UNSIGNED, ID_AA64SMFR0_EL1_F16F32_IMP, CAP_HWCAP, KERNEL_HWCAP_SME_F16F32),
+ 	HWCAP_CAP(SYS_ID_AA64SMFR0_EL1, ID_AA64SMFR0_EL1_B16F32_SHIFT, 1, FTR_UNSIGNED, ID_AA64SMFR0_EL1_B16F32_IMP, CAP_HWCAP, KERNEL_HWCAP_SME_B16F32),
++	HWCAP_CAP(SYS_ID_AA64SMFR0_EL1, ID_AA64SMFR0_EL1_B16F32_SHIFT, 1, FTR_UNSIGNED, ID_AA64SMFR0_EL1_BI32I32_IMP, CAP_HWCAP, KERNEL_HWCAP_SME_BI32I32),
+ 	HWCAP_CAP(SYS_ID_AA64SMFR0_EL1, ID_AA64SMFR0_EL1_F32F32_SHIFT, 1, FTR_UNSIGNED, ID_AA64SMFR0_EL1_F32F32_IMP, CAP_HWCAP, KERNEL_HWCAP_SME_F32F32),
+ #endif /* CONFIG_ARM64_SME */
+ 	{},
+diff --git a/arch/arm64/kernel/cpuinfo.c b/arch/arm64/kernel/cpuinfo.c
+index 379695262b77..85e54417d141 100644
+--- a/arch/arm64/kernel/cpuinfo.c
++++ b/arch/arm64/kernel/cpuinfo.c
+@@ -119,6 +119,12 @@ static const char *const hwcap_str[] = {
+ 	[KERNEL_HWCAP_CSSC]		= "cssc",
+ 	[KERNEL_HWCAP_RPRFM]		= "rprfm",
+ 	[KERNEL_HWCAP_SVE2P1]		= "sve2p1",
++	[KERNEL_HWCAP_SME2]		= "sme2",
++	[KERNEL_HWCAP_SME2P1]		= "sme2p1",
++	[KERNEL_HWCAP_SME_I16I32]	= "smei16i32",
++	[KERNEL_HWCAP_SME_BI32I32]	= "smebi32i32",
++	[KERNEL_HWCAP_SME_B16B16]	= "smeb16b16",
++	[KERNEL_HWCAP_SME_F16F16]	= "smef16f16",
  };
  
-+#define ZT_MAGIC	0x5a544e01
-+
-+struct zt_context {
-+	struct _aarch64_ctx head;
-+	__u16 nregs;
-+	__u16 __reserved[3];
-+};
-+
- #endif /* !__ASSEMBLY__ */
- 
- #include <asm/sve_context.h>
-@@ -300,4 +308,15 @@ struct za_context {
- #define ZA_SIG_CONTEXT_SIZE(vq) \
- 		(ZA_SIG_REGS_OFFSET + ZA_SIG_REGS_SIZE(vq))
- 
-+#define ZT_SIG_REG_SIZE 512
-+
-+#define ZT_SIG_REG_BYTES (ZT_SIG_REG_SIZE / 8)
-+
-+#define ZT_SIG_REGS_OFFSET sizeof(struct zt_context)
-+
-+#define ZT_SIG_REGS_SIZE(n) (ZT_SIG_REG_BYTES * n)
-+
-+#define ZT_SIG_CONTEXT_SIZE(n) \
-+	(sizeof(struct zt_context) + ZT_SIG_REGS_SIZE(n))
-+
- #endif /* _UAPI__ASM_SIGCONTEXT_H */
-diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
-index 335bc7294b3c..6e20f0b23d73 100644
---- a/arch/arm64/kernel/signal.c
-+++ b/arch/arm64/kernel/signal.c
-@@ -57,6 +57,7 @@ struct rt_sigframe_user_layout {
- 	unsigned long esr_offset;
- 	unsigned long sve_offset;
- 	unsigned long za_offset;
-+	unsigned long zt_offset;
- 	unsigned long extra_offset;
- 	unsigned long end_offset;
- };
-@@ -220,6 +221,7 @@ struct user_ctxs {
- 	struct fpsimd_context __user *fpsimd;
- 	struct sve_context __user *sve;
- 	struct za_context __user *za;
-+	struct zt_context __user *zt;
- };
- 
- #ifdef CONFIG_ARM64_SVE
-@@ -444,11 +446,81 @@ static int restore_za_context(struct user_ctxs *user)
- 
- 	return 0;
- }
-+
-+static int preserve_zt_context(struct zt_context __user *ctx)
-+{
-+	int err = 0;
-+	u16 reserved[ARRAY_SIZE(ctx->__reserved)];
-+
-+	if (WARN_ON(!thread_za_enabled(&current->thread)))
-+		return -EINVAL;
-+
-+	memset(reserved, 0, sizeof(reserved));
-+
-+	__put_user_error(ZT_MAGIC, &ctx->head.magic, err);
-+	__put_user_error(round_up(ZT_SIG_CONTEXT_SIZE(1), 16),
-+			 &ctx->head.size, err);
-+	__put_user_error(1, &ctx->nregs, err);
-+	BUILD_BUG_ON(sizeof(ctx->__reserved) != sizeof(reserved));
-+	err |= __copy_to_user(&ctx->__reserved, reserved, sizeof(reserved));
-+
-+	/*
-+	 * This assumes that the ZT state has already been saved to
-+	 * the task struct by calling the function
-+	 * fpsimd_signal_preserve_current_state().
-+	 */
-+	err |= __copy_to_user((char __user *)ctx + ZT_SIG_REGS_OFFSET,
-+			      thread_zt_state(&current->thread),
-+			      ZT_SIG_REGS_SIZE(1));
-+
-+	return err ? -EFAULT : 0;
-+}
-+
-+static int restore_zt_context(struct user_ctxs *user)
-+{
-+	int err;
-+	struct zt_context zt;
-+
-+	/* ZA must be restored first for this check to be valid */
-+	if (!thread_za_enabled(&current->thread))
-+		return -EINVAL;
-+
-+	if (__copy_from_user(&zt, user->zt, sizeof(zt)))
-+		return -EFAULT;
-+
-+	if (zt.nregs != 1)
-+		return -EINVAL;
-+
-+	if (zt.head.size != ZT_SIG_CONTEXT_SIZE(zt.nregs))
-+		return -EINVAL;
-+
-+	/*
-+	 * Careful: we are about __copy_from_user() directly into
-+	 * thread.zt_state with preemption enabled, so protection is
-+	 * needed to prevent a racing context switch from writing stale
-+	 * registers back over the new data.
-+	 */
-+
-+	fpsimd_flush_task_state(current);
-+	/* From now, fpsimd_thread_switch() won't touch ZT in thread state */
-+
-+	err = __copy_from_user(thread_zt_state(&current->thread),
-+			       (char __user const *)user->zt +
-+					ZT_SIG_REGS_OFFSET,
-+			       ZT_SIG_REGS_SIZE(1));
-+	if (err)
-+		return -EFAULT;
-+
-+	return 0;
-+}
-+
- #else /* ! CONFIG_ARM64_SME */
- 
- /* Turn any non-optimised out attempts to use these into a link error: */
- extern int preserve_za_context(void __user *ctx);
- extern int restore_za_context(struct user_ctxs *user);
-+extern int preserve_zt_context(void __user *ctx);
-+extern int restore_zt_context(struct user_ctxs *user);
- 
- #endif /* ! CONFIG_ARM64_SME */
- 
-@@ -466,6 +538,7 @@ static int parse_user_sigframe(struct user_ctxs *user,
- 	user->fpsimd = NULL;
- 	user->sve = NULL;
- 	user->za = NULL;
-+	user->zt = NULL;
- 
- 	if (!IS_ALIGNED((unsigned long)base, 16))
- 		goto invalid;
-@@ -544,6 +617,19 @@ static int parse_user_sigframe(struct user_ctxs *user,
- 			user->za = (struct za_context __user *)head;
- 			break;
- 
-+		case ZT_MAGIC:
-+			if (!system_supports_sme2())
-+				goto invalid;
-+
-+			if (user->zt)
-+				goto invalid;
-+
-+			if (size < sizeof(*user->zt))
-+				goto invalid;
-+
-+			user->zt = (struct zt_context __user *)head;
-+			break;
-+
- 		case EXTRA_MAGIC:
- 			if (have_extra_context)
- 				goto invalid;
-@@ -666,6 +752,9 @@ static int restore_sigframe(struct pt_regs *regs,
- 	if (err == 0 && system_supports_sme() && user.za)
- 		err = restore_za_context(&user);
- 
-+	if (err == 0 && system_supports_sme2() && user.zt)
-+		err = restore_zt_context(&user);
-+
- 	return err;
- }
- 
-@@ -766,6 +855,15 @@ static int setup_sigframe_layout(struct rt_sigframe_user_layout *user,
- 			return err;
- 	}
- 
-+	if (system_supports_sme2()) {
-+		if (add_all || thread_za_enabled(&current->thread)) {
-+			err = sigframe_alloc(user, &user->zt_offset,
-+					     ZT_SIG_CONTEXT_SIZE(1));
-+			if (err)
-+				return err;
-+		}
-+	}
-+
- 	return sigframe_alloc_end(user);
- }
- 
-@@ -821,6 +919,13 @@ static int setup_sigframe(struct rt_sigframe_user_layout *user,
- 		err |= preserve_za_context(za_ctx);
- 	}
- 
-+	/* ZT state if present */
-+	if (system_supports_sme2() && err == 0 && user->zt_offset) {
-+		struct zt_context __user *zt_ctx =
-+			apply_user_offset(user, user->zt_offset);
-+		err |= preserve_zt_context(zt_ctx);
-+	}
-+
- 	if (err == 0 && user->extra_offset) {
- 		char __user *sfp = (char __user *)user->sigframe;
- 		char __user *userp =
+ #ifdef CONFIG_COMPAT
 -- 
 2.30.2
 
