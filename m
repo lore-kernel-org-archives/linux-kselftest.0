@@ -2,151 +2,125 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59FC8C46467
-	for <linux-kselftest@archiver.kernel.org>; Fri, 11 Nov 2022 18:30:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 54520C4321E
+	for <linux-kselftest@archiver.kernel.org>; Fri, 11 Nov 2022 18:37:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234129AbiKKS3i (ORCPT
+        id S234202AbiKKShD (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 11 Nov 2022 13:29:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33398 "EHLO
+        Fri, 11 Nov 2022 13:37:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234145AbiKKS30 (ORCPT
+        with ESMTP id S234266AbiKKSgR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Nov 2022 13:29:26 -0500
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 551975CD11
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Nov 2022 10:29:25 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id o15-20020a17090aac0f00b00212e93524c0so5844493pjq.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Nov 2022 10:29:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=/XHe3/zCTpZWNceRA9RtU7Jdjy85jUuF1PtTziDeOJ4=;
-        b=SHWYMQw6kstMFCPeHdhZKyPK3U1w2EOYu+EfQeWTuTi4NJieEMZil99CRywaRL3QXr
-         M7ApzG4XLCYAg0PetxNjHSfwNLA3LxmKu8LWDFygNY1lctOOSshYpwuhWdWdEPG4cj6h
-         QWqck+Cp18gxDExvnjGBgUh7CGuL123P/8Sic7xH/4xHFrfRq9PyO6QZDjJ4xQ81rw8G
-         Mj7r+mHBVner9YkXBqCGbX7sD3i/SJKHNJEtf9od3zBTOZpkh1OElZCPLXu9Kh0yHr+g
-         5EMsCruUmvhnGFsKUm63rt7fbbaTOV3YvxO7RSu0ufBKSPyJZYCW9ZnNfdCPxDuX08e5
-         qhGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/XHe3/zCTpZWNceRA9RtU7Jdjy85jUuF1PtTziDeOJ4=;
-        b=gurh+D8Uwm+95WyP18uYtESjCrodeP8JcNfNoKOh5r+eJQzoJ5fHZ1UzHO3cBI/xT3
-         hcWPELfz4+xQaR1gjSlbmu/pLXsarIDBt7636fvlOYxM+c4efVkLZuWKOfYHKidCm9ej
-         ShAmAThKE9DE6W9tYoiAAy0JraQqcFs7AilpZ2Z1e0Ftp+/Am5xauXHTcKdK0r8QJxbq
-         9Pb9XMPd7yxlOGUynt5Xw84SemfQ6uXi35+ioMV7avJ1nnfnGguEmFB+0nfnLsdMjcp0
-         VSgGS5MSj/NY5EvBO4DYm5kY0bHz/LBjxp56zFispIR1cwHb2FIvijV2LxuteT5q/4T+
-         vYyg==
-X-Gm-Message-State: ANoB5pmf/8C5vSTdxwiUCJSjJA9OJh7sUjS2L91nyNumkMhHDGugUApy
-        v+SCoCDQCAC888FDkWBJsmAnKiQ735abUA==
-X-Google-Smtp-Source: AA0mqf6oRQTd26j/7lMqh+0QrNTk7PgW/u/hbIVY7qUTrqiyiF7iitQQrLw0zJAXHQI4fYDQUXP1Ip5tvZZY/g==
-X-Received: from dlatypov-spec.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3f35])
- (user=dlatypov job=sendgmr) by 2002:a17:90a:d01:b0:20a:fee1:8f69 with SMTP id
- t1-20020a17090a0d0100b0020afee18f69mr7707pja.0.1668191364606; Fri, 11 Nov
- 2022 10:29:24 -0800 (PST)
-Date:   Fri, 11 Nov 2022 10:29:04 -0800
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Message-ID: <20221111182906.1377191-1-dlatypov@google.com>
-Subject: [PATCH v3 1/3] Documentation: KUnit: make usage.rst a superset of
- tips.rst, remove duplication
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     rmoar@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, skhan@linuxfoundation.org,
-        Daniel Latypov <dlatypov@google.com>,
-        Sadiya Kazi <sadiyakazi@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Fri, 11 Nov 2022 13:36:17 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D87E63C6E2;
+        Fri, 11 Nov 2022 10:36:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668191776; x=1699727776;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=DOqa2OpJY5tyQ1/WvvYGJT74fyO9+N43ECB9nwSEed8=;
+  b=j82PPNe0a1cWIKPNO8kW7lPEH4nxz+YFy4c3j6TRa4YDOsTIVROEYMcA
+   WRcZ1VqJnUeNyyyOGrI3u4z5GyYDRh5m1D1lXKlubHszvol3VHzzjPGjX
+   gAxuuQvkatrjYrl/n4t8X7ShCdwwbOfAblMzDQarDTczUPc06OgPu6KeZ
+   EFDCHHQ7lxVcM++Jeh+AsQ1Hi599Mr1NQ0w2D2WFHuZ36Y6zK1eWu4K2K
+   KT9ZKTwjxpwFIxAy6zAzBNQtFBlYSCsKZJm8j6eZmenuQEch/musc5omj
+   rOAPwyQJd/DstLofi5pBFbi6TSb4I4qpFINEaH6aU+WjI085n9jsGSTlu
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10528"; a="312795369"
+X-IronPort-AV: E=Sophos;i="5.96,157,1665471600"; 
+   d="scan'208";a="312795369"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2022 10:35:56 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10528"; a="670819245"
+X-IronPort-AV: E=Sophos;i="5.96,157,1665471600"; 
+   d="scan'208";a="670819245"
+Received: from nmpoonaw-mobl1.amr.corp.intel.com (HELO [10.252.134.46]) ([10.252.134.46])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2022 10:35:55 -0800
+Message-ID: <115a87d7-144a-2828-8e4f-9c1f156b73ae@intel.com>
+Date:   Fri, 11 Nov 2022 10:35:54 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v17 1/3] x86/tdx: Add a wrapper to get TDREPORT from the
+ TDX Module
+Content-Language: en-US
+To:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20221104032355.227814-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20221104032355.227814-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20221104032355.227814-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-usage.rst had most of the content of the tips.rst page copied over.
-But it's missing https://www.kernel.org/doc/html/v6.0/dev-tools/kunit/tips.html#customizing-error-messages
-Copy it over so we can retire tips.rst w/o losing content.
+On 11/3/22 20:23, Kuppuswamy Sathyanarayanan wrote:
+> To support TDX attestation, the TDX guest driver exposes an IOCTL
+> interface to allow userspace to get the TDREPORT from the TDX module
+> via TDG.MR.TDREPORT TDCALL.
 
-And in that process, it also gained a duplicate section about how
-KUNIT_ASSERT_*() exit the test case early. Remove that.
+This all acts and is named like this is *THE* way to do a TD report.
+This is the only type of TD report.
 
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
-Reviewed-by: Sadiya Kazi <sadiyakazi@google.com>
----
- Documentation/dev-tools/kunit/usage.rst | 49 ++++++++++++++++---------
- 1 file changed, 31 insertions(+), 18 deletions(-)
+Is it?
 
-diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
-index 2737863ef365..b0a6c3bc0eeb 100644
---- a/Documentation/dev-tools/kunit/usage.rst
-+++ b/Documentation/dev-tools/kunit/usage.rst
-@@ -118,6 +118,37 @@ expectation could crash the test case. `ASSERT_NOT_ERR_OR_NULL(...)` allows us
- to bail out of the test case if the appropriate conditions are not satisfied to
- complete the test.
- 
-+Customizing error messages
-+--------------------------
-+
-+Each of the ``KUNIT_EXPECT`` and ``KUNIT_ASSERT`` macros have a ``_MSG``
-+variant.  These take a format string and arguments to provide additional
-+context to the automatically generated error messages.
-+
-+.. code-block:: c
-+
-+	char some_str[41];
-+	generate_sha1_hex_string(some_str);
-+
-+	/* Before. Not easy to tell why the test failed. */
-+	KUNIT_EXPECT_EQ(test, strlen(some_str), 40);
-+
-+	/* After. Now we see the offending string. */
-+	KUNIT_EXPECT_EQ_MSG(test, strlen(some_str), 40, "some_str='%s'", some_str);
-+
-+Alternatively, one can take full control over the error message by using
-+``KUNIT_FAIL()``, e.g.
-+
-+.. code-block:: c
-+
-+	/* Before */
-+	KUNIT_EXPECT_EQ(test, some_setup_function(), 0);
-+
-+	/* After: full control over the failure message. */
-+	if (some_setup_function())
-+		KUNIT_FAIL(test, "Failed to setup thing for testing");
-+
-+
- Test Suites
- ~~~~~~~~~~~
- 
-@@ -546,24 +577,6 @@ By reusing the same ``cases`` array from above, we can write the test as a
- 		{}
- 	};
- 
--Exiting Early on Failed Expectations
--------------------------------------
--
--We can use ``KUNIT_EXPECT_EQ`` to mark the test as failed and continue
--execution.  In some cases, it is unsafe to continue. We can use the
--``KUNIT_ASSERT`` variant to exit on failure.
--
--.. code-block:: c
--
--	void example_test_user_alloc_function(struct kunit *test)
--	{
--		void *object = alloc_some_object_for_me();
--
--		/* Make sure we got a valid pointer back. */
--		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, object);
--		do_something_with_object(object);
--	}
--
- Allocating Memory
- -----------------
- 
+If so, why is there a subtype in the TDX module ABI?  It's easy to miss
+in the kernel code, btw:
 
-base-commit: 870f63b7cd78d0055902d839a60408f7428b4e84
--- 
-2.38.1.431.g37b22c650d-goog
+> +int tdx_mcall_get_report(u8 *reportdata, u8 *tdreport)
+> +{
+> +	u64 ret;
+> +
+> +	ret = __tdx_module_call(TDX_GET_REPORT, virt_to_phys(tdreport),
+> +				virt_to_phys(reportdata), 0, 0, NULL);
+
+					     subtype here ^
+
+mixed in next to another magic 0.
+
+> +	if (ret) {
+> +		if (TDCALL_RETURN_CODE(ret) == TDCALL_INVALID_OPERAND)
+> +			return -EINVAL;
+> +		return -EIO;
+> +	}
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(tdx_mcall_get_report);
+
+What happens to this interface when subtype 1 is added?
+
+TDX_CMD_GET_REPORT can only get subtype 0.  So, we'll have, what, a new
+ioctl()?  TDX_CMD_GET_REPORT_SUBTYPE1?
+
+This is why I was pushing for a more generic ABI that would actually
+work for more than one subtype.  Other folks thought that was a bad
+idea.  I can live with that.  But, what I can't live with is just
+pretending that this is the one and only forever "tdreport" interface.
+
+This is *NOT* "a wrapper to get TDREPORT from the TDX Module", this is
+at best "a wrapper to get TDREPORT sub type 0 from the TDX Module".
+
+It also occurs to me that "sub type 0" could use an actual name.  Could
+we give it one, please?
 
