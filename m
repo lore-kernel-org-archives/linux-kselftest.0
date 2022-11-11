@@ -2,110 +2,108 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 29AAFC4332F
-	for <linux-kselftest@archiver.kernel.org>; Fri, 11 Nov 2022 02:49:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2B22C4332F
+	for <linux-kselftest@archiver.kernel.org>; Fri, 11 Nov 2022 03:11:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233147AbiKKCtD (ORCPT
+        id S231765AbiKKDLq (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 10 Nov 2022 21:49:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38302 "EHLO
+        Thu, 10 Nov 2022 22:11:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232711AbiKKCsk (ORCPT
+        with ESMTP id S231167AbiKKDLp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Nov 2022 21:48:40 -0500
-Received: from out203-205-221-239.mail.qq.com (out203-205-221-239.mail.qq.com [203.205.221.239])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E701E42;
-        Thu, 10 Nov 2022 18:43:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1668134590;
-        bh=BL3Df7T2fda2YYRMS2L+HCFmYgkJzAzwFsLU2JM9Hkw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=op116er2zCaFNKU2gJBwvP6wi2j3j4m/14zzKInq1OhzkFqgUn7nRYvVuKHEUIHpe
-         080wVBrV4wf4Y3iWecSpurBxHBJ0iNEUUuSpN5V7coMkwE/lHka7EiHODm3KtCPBdc
-         rBg70rIolxtvtYf5A2YSYlmjVxEBjBupqsOR+x6w=
-Received: from localhost.localdomain ([111.199.191.46])
-        by newxmesmtplogicsvrsza2-0.qq.com (NewEsmtp) with SMTP
-        id 95619E78; Fri, 11 Nov 2022 10:37:22 +0800
-X-QQ-mid: xmsmtpt1668134242to097gvqf
-Message-ID: <tencent_32CBE47252C5F69571B40751DE6054082D05@qq.com>
-X-QQ-XMAILINFO: NQR8mRxMnur9pmo2KIyz9dprN6UpTtnMoo5DdTsNsP5dbyXhL/Dto/WxKS/eji
-         yPnSz9aKaiLE8FYJd/UyyLYRg8KD7lbY5XwlDrzbMiMCFnXnziV/ouqi56ahVuJPpKDMYivtPHj7
-         hEdOKJu8hyeuPO0TJH1Am3Fyzi5WdqU+vL51uVMogq/cnZwMyqhoH5xeTR5a9Y1wwrCMjeyjYnAO
-         Kn3426Ha/lty+eUNfldE4meYk8g7blNbaGMvkA3SMPfUhayvMa0meed1BZUynFsz3g0Q8S0qaKts
-         mG3g3PZcvTbibyrAwYkUq1gwStRxoygKDFn6buaOLXjKHS0Tgp98MEHrUopCY/XDyxhrbHghf/If
-         E0NGyuFmAVJk89c6sJUEofJ6ffZXzjXXmQ0Wp5No8CxPFpwdmDHzOchxPS0Tf1LW4JkyqjwneM23
-         prUgJTFe5IFekbfM61Mkez1L+e9is4orQr0EDJWQLs1FETG0T7kVCgbIAkRRpKQeEwbZGRAMICd6
-         cO2PfCcGo+g90Sx+bQyGvLmyRHFN4Trt65w7tC87SBtrogIaPZew20LJXFFaRpk0Laf1sG44Ycw/
-         xoQ3Qp/dnjOeOakhdrEOUeCtjBOvLdixMSyB02RD4naS8WW/q9mw35sY9oKeU004o4vGfGG7xfDF
-         //txyYHrQalcHVOQF7G60c76Qou3cw6ulBmX6y3Z/ReGmJx97+ILWOzsP4oybqtA6UiNjm9bIIBk
-         fIZsuCq7SU+2a4WMXx6LuO24Zyl17TrAQnvIabW4zGOxjYpdEbT8VrsNVCbmRkncq8wQ0W7eeIET
-         vHUHsOl3YMe5lAiGdM4TbHRL7VG/xUwYD9NcvgLeSd2UlYB6mD/yFI66ZcMskfsDaEevjZnJBv3E
-         W7bcBMkjoCsNezWV17gi7vqMzqoqfK5IzMGePHJdyl4994IMru+xwppnN7Y0awKFbgPUyn2o1tYf
-         N8xrVY5VUhMHNpyNlQgrKiy7KzEkRIXrkckUDftwNGsJ3ZEkXBqLzOpIuE0CQbM+A4mAmBqHJjIM
-         CMBHVEQw==
-From:   Rong Tao <rtoax@foxmail.com>
-To:     sj@kernel.org
-Cc:     damon@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        rongtao@cestc.cn, rtoax@foxmail.com, shuah@kernel.org,
-        yuanchu@google.com
-Subject: [PATCH] selftests/damon: Fix unnecessary compilation warnings
-Date:   Fri, 11 Nov 2022 10:37:20 +0800
-X-OQ-MSGID: <20221111023720.15408-1-rtoax@foxmail.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20221110200939.101886-1-sj@kernel.org>
-References: <20221110200939.101886-1-sj@kernel.org>
+        Thu, 10 Nov 2022 22:11:45 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 260552EF48;
+        Thu, 10 Nov 2022 19:11:42 -0800 (PST)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4N7kDh5RrKzJnbh;
+        Fri, 11 Nov 2022 11:08:36 +0800 (CST)
+Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 11 Nov 2022 11:11:39 +0800
+Received: from [10.67.111.205] (10.67.111.205) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 11 Nov 2022 11:11:38 +0800
+Subject: Re: [PATCH bpf] selftests/bpf: Fix xdp_synproxy compilation failure
+ in 32-bit arch
+To:     Yonghong Song <yhs@meta.com>, <ast@kernel.org>,
+        <daniel@iogearbox.net>, <davem@davemloft.net>, <kuba@kernel.org>,
+        <hawk@kernel.org>, <john.fastabend@gmail.com>, <andrii@kernel.org>,
+        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
+        <kpsingh@kernel.org>, <sdf@google.com>, <haoluo@google.com>,
+        <jolsa@kernel.org>, <mykolal@fb.com>, <shuah@kernel.org>,
+        <tariqt@nvidia.com>, <maximmi@nvidia.com>,
+        <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20221108131242.17362-1-yangjihong1@huawei.com>
+ <c8bd9f3b-52fa-08bd-e5df-e87b68ffdbba@meta.com>
+From:   Yang Jihong <yangjihong1@huawei.com>
+Message-ID: <f5391830-352a-6daa-9233-a177db43ba71@huawei.com>
+Date:   Fri, 11 Nov 2022 11:11:37 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <c8bd9f3b-52fa-08bd-e5df-e87b68ffdbba@meta.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.111.205]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Rong Tao <rongtao@cestc.cn>
+Hello,
 
-When testing overflow and overread, there is no need to keep unnecessary
-compilation warnings, we should simply ignore them.
+On 2022/11/8 23:59, Yonghong Song wrote:
+> 
+> 
+> On 11/8/22 5:12 AM, Yang Jihong wrote:
+>> xdp_synproxy fails to be compiled in the 32-bit arch, log is as follows:
+>>
+>>    xdp_synproxy.c: In function 'parse_options':
+>>    xdp_synproxy.c:175:36: error: left shift count >= width of type 
+>> [-Werror=shift-count-overflow]
+>>      175 |                 *tcpipopts = (mss6 << 32) | (ttl << 24) | 
+>> (wscale << 16) | mss4;
+>>          |                                    ^~
+>>    xdp_synproxy.c: In function 'syncookie_open_bpf_maps':
+>>    xdp_synproxy.c:289:28: error: cast from pointer to integer of 
+>> different size [-Werror=pointer-to-int-cast]
+>>      289 |                 .map_ids = (__u64)map_ids,
+>>          |                            ^
+>>
+>> Fix it.
+>>
+>> Fixes: fb5cd0ce70d4 ("selftests/bpf: Add selftests for raw syncookie 
+>> helpers")
+>> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+>> ---
+>>   tools/testing/selftests/bpf/xdp_synproxy.c | 4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/bpf/xdp_synproxy.c 
+>> b/tools/testing/selftests/bpf/xdp_synproxy.c
+>> index ff35320d2be9..45fef01a87a8 100644
+>> --- a/tools/testing/selftests/bpf/xdp_synproxy.c
+>> +++ b/tools/testing/selftests/bpf/xdp_synproxy.c
+>> @@ -172,7 +172,7 @@ static void parse_options(int argc, char *argv[], 
+>> unsigned int *ifindex, __u32 *
+>>       if (tcpipopts_mask == 0xf) {
+>>           if (mss4 == 0 || mss6 == 0 || wscale == 0 || ttl == 0)
+>>               usage(argv[0]);
+>> -        *tcpipopts = (mss6 << 32) | (ttl << 24) | (wscale << 16) | mss4;
+>> +        *tcpipopts = ((unsigned long long)mss6 << 32) | (ttl << 24) | 
+>> (wscale << 16) | mss4;
+> 
+> This looks weird. Maybe we should define mss6 as unsigned long long to 
+> avoid this casting at all?
+OK, will fix in next version.
 
-How to reproduce the problem:
-
-    $ make -C tools/testing/selftests/
-    ...
-    warning: ‘write’ reading 4294967295 bytes from a region of size 1
-    [-Wstringop-overread]
-    warning: ‘read’ writing 4294967295 bytes into a region of size 25
-    overflows the destination [-Wstringop-overflow=]
-
-Signed-off-by: Rong Tao <rongtao@cestc.cn>
----
- tools/testing/selftests/damon/huge_count_read_write.c | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/tools/testing/selftests/damon/huge_count_read_write.c b/tools/testing/selftests/damon/huge_count_read_write.c
-index ad7a6b4cf338..8fbe276870e7 100644
---- a/tools/testing/selftests/damon/huge_count_read_write.c
-+++ b/tools/testing/selftests/damon/huge_count_read_write.c
-@@ -8,6 +8,11 @@
- #include <unistd.h>
- #include <stdio.h>
- 
-+#pragma GCC diagnostic push
-+/* Ignore read(2) overflow and write(2) overread compile warnings */
-+#pragma GCC diagnostic ignored "-Wstringop-overread"
-+#pragma GCC diagnostic ignored "-Wstringop-overflow"
-+
- void write_read_with_huge_count(char *file)
- {
- 	int filedesc = open(file, O_RDWR);
-@@ -27,6 +32,8 @@ void write_read_with_huge_count(char *file)
- 	close(filedesc);
- }
- 
-+#pragma GCC diagnostic pop
-+
- int main(int argc, char *argv[])
- {
- 	if (argc != 2) {
--- 
-2.31.1
-
+Thanks,
+Yang
