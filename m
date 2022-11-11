@@ -2,169 +2,110 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E17FC433FE
-	for <linux-kselftest@archiver.kernel.org>; Fri, 11 Nov 2022 18:12:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 492BBC38A02
+	for <linux-kselftest@archiver.kernel.org>; Fri, 11 Nov 2022 18:30:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233180AbiKKSMs (ORCPT
+        id S234018AbiKKS3i (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 11 Nov 2022 13:12:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55366 "EHLO
+        Fri, 11 Nov 2022 13:29:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231625AbiKKSMi (ORCPT
+        with ESMTP id S234160AbiKKS31 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Nov 2022 13:12:38 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281AE63BAD;
-        Fri, 11 Nov 2022 10:12:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D5B51B826C7;
-        Fri, 11 Nov 2022 18:12:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6BABC433C1;
-        Fri, 11 Nov 2022 18:12:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668190354;
-        bh=8e/RTvJUsWMsttv0bdTCoFlXV86DjbvOcbtUwMf1f7k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=d3XWKd6thOjnst/9+wq/TS2jqhP2vcPa/JozNYyKQogRn3AdbikTAKpCsXE/FeUJX
-         gHh/skBHCQWafH0rJ63En89BRIbccbJWozf6NUdRe+luQ49pO4GNfw3iwDxfsoL4vH
-         Gk85xDygOnofj2Fe8jVJs7DDQ0j8nlU4B32MzQC/brSNzQnUgRkjnxp/COsWVingWs
-         J/1OiZgZBa+idXbvO0knhX5WFBYHlP/7tFXvRxpjyeAZZ5Nrf95bMxYX8fS/p7ZK9l
-         m9I2ZClWXBgp6HnHCpdHumWTVSTTMOZi8+WUovsUMcb5o+1WbOOqfUnKNdxupWZKgs
-         8nEDGH6C405cA==
-Date:   Fri, 11 Nov 2022 19:12:30 +0100
-From:   Lorenzo Bianconi <lorenzo@kernel.org>
-To:     Stanislav Fomichev <sdf@google.com>
-Cc:     Rong Tao <rtoax@foxmail.com>, ast@kernel.org,
-        Rong Tao <rongtao@cestc.cn>, kernel test robot <lkp@intel.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Daniel Xu <dxu@dxuuu.xyz>,
-        "open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)" 
-        <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix error undeclared identifier
- 'NF_NAT_MANIP_SRC'
-Message-ID: <Y26QjqvVTosoCgPT@lore-desk>
-References: <tencent_29D7ABD1744417031AA1B52C914B61158E07@qq.com>
- <Y26FgIJLR3nVKjcb@google.com>
- <Y26MSS2twSskZ5J2@lore-desk>
- <CAKH8qBvxZBX7_GQYQzSrZ5j=P3rViyqNq3V3oo5CtEMR9BQepA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="RREGnsch0YAdzI4A"
-Content-Disposition: inline
-In-Reply-To: <CAKH8qBvxZBX7_GQYQzSrZ5j=P3rViyqNq3V3oo5CtEMR9BQepA@mail.gmail.com>
+        Fri, 11 Nov 2022 13:29:27 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB5A5B5A7
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Nov 2022 10:29:27 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id pq17-20020a17090b3d9100b0020a4c65c3a9so3105432pjb.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Nov 2022 10:29:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=KcgFgh+nSA6rGpYyKLAuOEZq9MjORsirblL9B+ChLi0=;
+        b=GN/K8LkzrC3Xi5m04YE/88CUGXGI57CIBf0CroPXanf1c2e6S7KaF1zLqjHRHaJxTx
+         GjvPAk0vMcz6bA+Z4e5AcNtwS8mrZeHu5LV1+rn9AUJ2buoMWZLYzv9ZOeqx8p90AClW
+         d6tTK9BSyqanwQ7lWbOgSTQgzJu5hJc6k6RH4Umsl2iyoKEsZeEo3LWxKjJAeFlbRGdn
+         t2T0hO+T2pQQWkpLB6mpYhu5eIgLgYbYKfQyVBtJ2LKCmwARyFYbzrW+mPnt/8U1HCuE
+         vfvziKXdQL3Iy3zXYcXgXULs2DiskUzS69Uezt504J3TOKAHeIuvc8XiNQcxhonzGESx
+         1eoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KcgFgh+nSA6rGpYyKLAuOEZq9MjORsirblL9B+ChLi0=;
+        b=2/dvlX3S62uYqx+iEMfdn7JpJUvlMx4N28wHqrqg72CTVYB6rlhA065qKlChoxFV90
+         wzXOFI0qfwtSkWfBbONd5IqhKexcpZWFOawKVGTS7gCVFDXc/GoYEDNLb/6GrearLCB3
+         6ETOyHqDnlzW2EihPIFppuGTxmhv9uZZUxO4mkzREQqsbm9cDNSCyF40l7PwQiUWZfWi
+         fXidjdtrG16SWTDg1nrsVzHVbZHcVcx5wHpbFsovgyU4CIxxpLG7eYva7KdysY9MP83l
+         xMQSXAZWrpCG08Z5viXvdKK+5oUzBzWxkBdJN3U7ZKR+X7ZKFBqtCBsRTAUQJ1fObpJF
+         MLvQ==
+X-Gm-Message-State: ANoB5pndshYPzS9R2uoxG4bycLd3JAdJ6ojCMHCVZKBd8YRbXRf0qjHD
+        azNWxTS1Zwl4flm8uuzNaQi/+kckP+cFhw==
+X-Google-Smtp-Source: AA0mqf4NpCqVqQb5VhOoQGCCFX1K81V4IUVGkY7iGc1jDIwrgceDHzDGMr97O9zfwN+WASG6WpOvW/XDWu9a6w==
+X-Received: from dlatypov-spec.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3f35])
+ (user=dlatypov job=sendgmr) by 2002:a17:902:9302:b0:187:3a43:3a9d with SMTP
+ id bc2-20020a170902930200b001873a433a9dmr3593182plb.152.1668191366583; Fri,
+ 11 Nov 2022 10:29:26 -0800 (PST)
+Date:   Fri, 11 Nov 2022 10:29:05 -0800
+In-Reply-To: <20221111182906.1377191-1-dlatypov@google.com>
+Mime-Version: 1.0
+References: <20221111182906.1377191-1-dlatypov@google.com>
+X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
+Message-ID: <20221111182906.1377191-2-dlatypov@google.com>
+Subject: [PATCH v3 2/3] Documentation: KUnit: reword description of assertions
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     rmoar@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>,
+        Sadiya Kazi <sadiyakazi@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+The existing wording implies that kunit_kmalloc_array() is "the method
+under test". We're actually testing the sort() function in that example.
+This is because the example was changed in commit 953574390634
+("Documentation: KUnit: Rework writing page to focus on writing tests"),
+but the wording was not.
 
---RREGnsch0YAdzI4A
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Also add a `note` telling people they can use the KUNIT_ASSERT_EQ()
+macros from any function. Some users might be coming from a framework
+like gUnit where that'll compile but silently do the wrong thing.
 
-> On Fri, Nov 11, 2022 at 9:54 AM Lorenzo Bianconi <lorenzo@kernel.org> wro=
-te:
-> >
-> > > On 11/11, Rong Tao wrote:
-> > > > From: Rong Tao <rongtao@cestc.cn>
-> > >
-> > > > commit 472caa69183f("netfilter: nat: un-export nf_nat_used_tuple")
-> > > > introduce NF_NAT_MANIP_SRC/DST enum in include/net/netfilter/nf_nat=
-=2Eh,
-> > > > and commit b06b45e82b59("selftests/bpf: add tests for bpf_ct_set_na=
-t_info
-> > > > kfunc") use NF_NAT_MANIP_SRC/DST in test_bpf_nf.c. We copy enum
-> > > > nf_nat_manip_type to test_bpf_nf.c fix this error.
-> > >
-> > > > How to reproduce the error:
-> > >
-> > > >      $ make -C tools/testing/selftests/bpf/
-> > > >      ...
-> > > >        CLNG-BPF [test_maps] test_bpf_nf.bpf.o
-> > > >        error: use of undeclared identifier 'NF_NAT_MANIP_SRC'
-> > > >              bpf_ct_set_nat_info(ct, &saddr, sport, NF_NAT_MANIP_SR=
-C);
-> > > >                                                             ^
-> > > >        error: use of undeclared identifier 'NF_NAT_MANIP_DST'
-> > > >              bpf_ct_set_nat_info(ct, &daddr, dport, NF_NAT_MANIP_DS=
-T);
-> > > >                                                             ^
-> > > >      2 errors generated.
-> > >
-> > > $ grep NF_NAT_MANIP_SRC
-> > > ./tools/testing/selftests/bpf/tools/include/vmlinux.h
-> > >         NF_NAT_MANIP_SRC =3D 0,
-> > >
-> > > Doesn't look like your kernel config compiles netfilter nat modules?
-> >
-> > yes, in bpf kself-test config (tools/testing/selftests/bpf/config) nf_n=
-at
-> > is compiled as built-in. This issue occurs just if it is compiled as mo=
-dule.
->=20
-> Right, but if we unconditionally define this enum, I think you'll
-> break the case where it's compiled as a built-in?
-> Since at least in my vmlinux.h I have all the defines and this test
-> includes vmlinux.h...
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+Reviewed-by: Sadiya Kazi <sadiyakazi@google.com>
+---
+ Documentation/dev-tools/kunit/usage.rst | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-yes, it is correct.
+diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
+index b0a6c3bc0eeb..22416ebb94ab 100644
+--- a/Documentation/dev-tools/kunit/usage.rst
++++ b/Documentation/dev-tools/kunit/usage.rst
+@@ -112,11 +112,14 @@ terminates the test case if the condition is not satisfied. For example:
+ 			KUNIT_EXPECT_LE(test, a[i], a[i + 1]);
+ 	}
+ 
+-In this example, the method under test should return pointer to a value. If the
+-pointer returns null or an errno, we want to stop the test since the following
+-expectation could crash the test case. `ASSERT_NOT_ERR_OR_NULL(...)` allows us
+-to bail out of the test case if the appropriate conditions are not satisfied to
+-complete the test.
++In this example, we need to be able to allocate an array to test the ``sort()``
++function. So we use ``KUNIT_ASSERT_NOT_ERR_OR_NULL()`` to abort the test if
++there's an allocation error.
++
++.. note::
++   In other test frameworks, ``ASSERT`` macros are often implemented by calling
++   ``return`` so they only work from the test function. In KUnit, we stop the
++   current kthread on failure, so you can call them from anywhere.
+ 
+ Customizing error messages
+ --------------------------
+-- 
+2.38.1.431.g37b22c650d-goog
 
->=20
-> > Regards,
-> > Lorenzo
-> >
-> > >
-> > > > Link: https://lore.kernel.org/lkml/202210280447.STsT1gvq-lkp@intel.=
-com/
-> > > > Reported-by: kernel test robot <lkp@intel.com>
-> > > > Signed-off-by: Rong Tao <rongtao@cestc.cn>
-> > > > ---
-> > > >   tools/testing/selftests/bpf/progs/test_bpf_nf.c | 5 +++++
-> > > >   1 file changed, 5 insertions(+)
-> > >
-> > > > diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-> > > > b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-> > > > index 227e85e85dda..307ca166ff34 100644
-> > > > --- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-> > > > +++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-> > > > @@ -3,6 +3,11 @@
-> > > >   #include <bpf/bpf_helpers.h>
-> > > >   #include <bpf/bpf_endian.h>
-> > >
-> > > > +enum nf_nat_manip_type {
-> > > > +   NF_NAT_MANIP_SRC,
-> > > > +   NF_NAT_MANIP_DST
-> > > > +};
-> > > > +
-> > > >   #define EAFNOSUPPORT 97
-> > > >   #define EPROTO 71
-> > > >   #define ENONET 64
-> > > > --
-> > > > 2.31.1
-> > >
-
---RREGnsch0YAdzI4A
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCY26QjgAKCRA6cBh0uS2t
-rHk5AP4qKv4HeJgc4FhLgnxgdpQCBOm8g3Mc5xObRZcWvlHFqAD7BNeUFMwaLLfl
-TxvON7agcBk0KFLjb/YFnU10Zk8+GwQ=
-=Hrtv
------END PGP SIGNATURE-----
-
---RREGnsch0YAdzI4A--
