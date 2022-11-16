@@ -2,241 +2,195 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DEC41C433FE
-	for <linux-kselftest@archiver.kernel.org>; Wed, 16 Nov 2022 19:47:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 31C84C43217
+	for <linux-kselftest@archiver.kernel.org>; Wed, 16 Nov 2022 21:02:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232527AbiKPTr6 (ORCPT
+        id S233057AbiKPVCs (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 16 Nov 2022 14:47:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53774 "EHLO
+        Wed, 16 Nov 2022 16:02:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbiKPTr5 (ORCPT
+        with ESMTP id S238884AbiKPVBz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Nov 2022 14:47:57 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC7262A413
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Nov 2022 11:47:56 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id v28so18457493pfi.12
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Nov 2022 11:47:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=9+f3m/A72CEroJxNrNDZ3TQSERW66XxzaRIVdgmvX58=;
-        b=UIOQsaYTZkMFZcTj8gstzqK2q/jqACbVIEjARAjaXn6c/lNbtx6geaLOSYwTdtm6/8
-         NyW/L3SIs8SjvyDpSdzcjzX8bG7KouwYCujdQ7n+pYHgDAzR3fl/5h0oIRXhlwhYka6/
-         IGsEAc3uqKKqIn/DWGz/Dvq2r4T3k1L1r70/g7wGhmJqiOAdCb5+a5d4JA3F+KYgVXZJ
-         27ES6CrxyUhTj+K8qaAQplWK7/lPvxA81OZNsqFBDu3RZb1qPdI5PznB5I3S1HgtVxZZ
-         /h0ZNA8G/UttTLzwSgW/HqLX54WIX+9q9tzbvZVStiI/Dtx3KgM1jv2RNOGpYJjW5ScS
-         RwqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9+f3m/A72CEroJxNrNDZ3TQSERW66XxzaRIVdgmvX58=;
-        b=byekoQ/jhCpfjj4VfASJzImL9BuOluXoIzGC2q/WVpUxrO9GOzOD33YH1DYJb7h98T
-         OhCk727k4gqMbLtpEgOTF8vSA5XtBQ7/3ZngkjlbixZAfcbTtBMDFy0SS9cOcswNlRbg
-         ed1UZtgFMSvP3WQAc4fexlDQnR09He0Pt9fHhMlMZdnBq9QyDrRcxFTwCpu3vsmtjgU1
-         MZe84NoAhHOKcfni+h+mq9xUe2E9W39lvngHFiGPBA7FDx7LxH5xiV2Id+Fa/qcu9Ipz
-         Tve6SzyLetZvC7OrSAF9fh6PXpYPTq6ZXSFc0synFNo3ZtSHJcLpPx98lHayPeUoYnGZ
-         Kv2w==
-X-Gm-Message-State: ANoB5pmxVbxThUfMgfpUpFHMo45QTXlPRSmaj06FzrRNp8io5Oyw4lNA
-        Mz2a/nmnKjxAafoKYgss8VZcM9YCSJPRvim5Gh8=
-X-Google-Smtp-Source: AA0mqf5qiGq8OhxXu5/PQigrNx70L5YB+2EQbk5MXRyZywEzbf3nCOmwMratB1unne8W8J/5SuUIaA==
-X-Received: by 2002:a63:656:0:b0:476:aad3:9122 with SMTP id 83-20020a630656000000b00476aad39122mr9756393pgg.402.1668628076372;
-        Wed, 16 Nov 2022 11:47:56 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id i34-20020a635862000000b0043b565cb57csm10042193pgm.73.2022.11.16.11.47.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 11:47:56 -0800 (PST)
-Message-ID: <63753e6c.630a0220.747e.f1f2@mx.google.com>
-Date:   Wed, 16 Nov 2022 11:47:56 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 16 Nov 2022 16:01:55 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2060.outbound.protection.outlook.com [40.107.220.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E41C69DFE;
+        Wed, 16 Nov 2022 13:01:00 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XDxxZ5cX3XmULXOuTjiFrhb2iM/7nneyW1kTuzkAxW6rL63viNnr3mGHjtueFGAVFSj85914a9S44Y2ejnhJsejbEGWuC1QGWiITLA+PF70vGL7U691Cxb2153vP2yIJOaPnnRDFl5wVSShw+gX8WcTXLHhCSFHf8EKCjxaGtlviyUfZfnhFhNFCX7QysuMxqS5PQNwAQDl2m+yZFFGlykL4oDlkYSHc/wv9Zv3RpEWOMvGG04YCXhXWWwnmkFmCs9/nV685gHuhy79/gKAV95xrNVD0JFEpVNUG9UT1NNZmqe9vk4Vswz+as1N9XG3kpSxf/MdwQ8RlwrXUZwXRbw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BpSK8NitrBGuN2uMXSNCg8qN3BsVzG7VaERgHA0bYRk=;
+ b=oQWyYV0Zbsm51wzf4siQqWC+hwSVykOeA88QikII/9214dj+QiGIZyucQr/KmBSQaLkxcBtfK5PmsTpGn1qlIaG59A9HdJV2tKi0fhFPKD5LlzHaKCq2gkwFdS0t4yg9vPrAh4GdNZ6uYmG9lfCnHhD6v7cKuRC61C+dNSEQwrU14Io+uMBB7WDMXTvbFD44M7IWsJTVcKkCGethnNFMx80eqHCkVHtDlmJlTHxOwpzjv4pF/5NK02+TssDXuVG0TfjxPBYAQtOmMnk7fFZlqnymqhAIavIURNnnWcnha3ahBxZ3iN1RXLbhXZ/xFSDT6F00LD5FXmW9URLxH9OKAw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BpSK8NitrBGuN2uMXSNCg8qN3BsVzG7VaERgHA0bYRk=;
+ b=oYUsdPqnnQASfl/2N0JxEdNq0tZ49csZHAnk8jTk+JyGGwtHKJVBFTAmHBrBcXnw0GeWQMsscWvN0wUJO17bGAPRLQ0IASKioPjeFU5gdrEib9Y36SP9qG6QzeUfABqoX1TKvrdh++P2PhGtkRT5L8EVQrIDk8QgJYF28Dkwa+O+EEgJ8jPiKy8NrEz4CZRi4Xq/EYq+PjbhjfVLkMFiX2oPjyV7246UsB6lMHYGhyIDFGvY8KY32Dl+ibhHBURvelHMy2HhTRLukvli5jKE5q4/bEmT5VGAY0k74d3hS86/+NXuaaKb1MaxkKXF8nq4aBnXCuSaDno1juAiVghkTg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by CY8PR12MB7682.namprd12.prod.outlook.com (2603:10b6:930:85::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.18; Wed, 16 Nov
+ 2022 21:00:58 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f8b0:df13:5f8d:12a]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f8b0:df13:5f8d:12a%7]) with mapi id 15.20.5813.017; Wed, 16 Nov 2022
+ 21:00:57 +0000
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     bpf@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        David Woodhouse <dwmw2@infradead.org>, iommu@lists.linux.dev,
+        Joerg Roedel <joro@8bytes.org>,
+        Kevin Tian <kevin.tian@intel.com>, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>
+Cc:     Anthony Krowiak <akrowiak@linux.ibm.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Daniel Jordan <daniel.m.jordan@oracle.com>,
+        David Gibson <david@gibson.dropbear.id.au>,
+        Eric Auger <eric.auger@redhat.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Jason Herne <jjherne@linux.ibm.com>,
+        Joao Martins <joao.m.martins@oracle.com>, kvm@vger.kernel.org,
+        Lixiao Yang <lixiao.yang@intel.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Nicolin Chen <nicolinc@nvidia.com>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Shameerali Kolothum Thodi 
+        <shameerali.kolothum.thodi@huawei.com>,
+        Yi Liu <yi.l.liu@intel.com>, Keqian Zhu <zhukeqian1@huawei.com>
+Subject: [PATCH v5 07/19] kernel/user: Allow user::locked_vm to be usable for iommufd
+Date:   Wed, 16 Nov 2022 17:00:43 -0400
+Message-Id: <7-v5-4001c2997bd0+30c-iommufd_jgg@nvidia.com>
+In-Reply-To: <0-v5-4001c2997bd0+30c-iommufd_jgg@nvidia.com>
+References: 
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: MN2PR19CA0007.namprd19.prod.outlook.com
+ (2603:10b6:208:178::20) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: next
-X-Kernelci-Kernel: v6.1-rc1-17-g2dfb010d2aaf
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: kselftest
-Subject: kselftest/next kselftest-seccomp: 5 runs,
- 4 regressions (v6.1-rc1-17-g2dfb010d2aaf)
-To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|CY8PR12MB7682:EE_
+X-MS-Office365-Filtering-Correlation-Id: c2755163-545f-45a6-aff9-08dac815a81a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ASOBWAEWMVMu2tDJGmqTZzdJZWGMhqD02KjMGVs57mdm4H/UmWCNYBt1N9gQ4M0UcevsU+vhe4z6n3hXFgUhW9IZooLiGEV6ztahpSpTbYqT+kndfHewLWN5LcevcesmeLPZBVobbZnVQaPdee71SfLq58btDS15fPHseyLxO4sIUmMJKe30yqMRUsVATwUPzuPRvlsTw7P3ick6BXNVq/AknLkiTkJ4ehF94GL+U92xpWjdYAZpl+aoaANnqDMGBMo4JZtCiqd5UgopX2cvfpX5fjLMnjvYLo/dA6mqypvECalmqcZpqvZ96aeZxpmmJ25dvrY4HaAVsZCraQpY9APjctipFT1dr1hNB/1dI+L9VXmF+CCjsCR34e3bt2Hke6l3kHEDw+zx/suA+XiJWraolzH4uMprEYtPdNwkQPRiZhWgcq6dZ/BssuFjiP1i/jFUPHOyHH0PI6rxSAg+zrUz1+oxfWHara4azHCWViu0pYDXzoYBO1tvD7BCo+I91GcZuVteg3XSrruV+ESRtlZVUlhqf5OKeHwI6iI13aBJ1NiErRpO1+uBgGcsvDQLtC4oe/eKCnhlM6SegVNvewiZQBvhxs/qAd226rL+D/6IzPO6pr7Z+6EZrX8ymYE1mzjnZPu/XogFyWpQVtGyVGgXa7EoGid3aWjIX+5fzeGCrm/loCENNCQlOa33Itl/03SKevxGa7IVpqSWqG50LmExa2ByFUbFLY/DrylDIdHDAf6cO/44oZS2F2yrmfBhCySLCA0ZAEe+Lpl0auNmCA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(136003)(396003)(366004)(376002)(451199015)(38100700002)(2616005)(86362001)(921005)(110136005)(7406005)(6666004)(478600001)(6486002)(7416002)(8936002)(66476007)(8676002)(4326008)(54906003)(66556008)(66946007)(316002)(41300700001)(83380400001)(2906002)(6506007)(186003)(5660300002)(6512007)(36756003)(26005)(4216001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0eWbHBRiNNePvwq5z6s57HzZQoF2B3NIcPxscyvcx54MsqxTksX/NmZ7SD+t?=
+ =?us-ascii?Q?NFHL83WpYNLtZpdKy5C/wiK3rBwIPqrQ2+7nyc1LC7Uy0EvLSOZh2G0eBpZg?=
+ =?us-ascii?Q?Wh1Ps6HuNtcj+A4xlUEkltHWlsn+dYewfLBEB0xBri6RHkdROviGqo0DI7Bl?=
+ =?us-ascii?Q?oISE+2+mC9uzTcHl0GYAqDPvkj4tNkC4kS38ilQeeU36bPGAI740FueMen/x?=
+ =?us-ascii?Q?gDLIHR0cKo+ucsgJ3sBeO5vWIpkorbH9oKnnZEqo5B8YZKx0ep4SCkUE2ULr?=
+ =?us-ascii?Q?U8jJF9HePy6EKFggcgxwGr2ghRwI+/9BV44cOCAYGlAm9ot5KqhCvqhm+mX6?=
+ =?us-ascii?Q?/Jl0tc/clSYZTb+9FVa6NX+Oq0NT5Mzj/iPXJ2xSWk/J7aqWT5e20rDUTCVY?=
+ =?us-ascii?Q?RHchgrH5cFs8uGjcX5pPPTyVwdAfIMaFrAxuo2ZzO5yZjr2/NBti1IyWHAQT?=
+ =?us-ascii?Q?7YQE/FoRNRIRn/pU6x9c/lwDd0B5NWets3MYOemBUngyvJ5K97Mccq0ZdWbl?=
+ =?us-ascii?Q?YoSwA4xw/fN/kMqhxJwmtuG1paXDGEZXqCRJIEWm3NzNoS8wD1SwdOAKvL4D?=
+ =?us-ascii?Q?Q76uz7ZzXP3riNa+/aF6bLGw3TQtn75dnQ0Ps/y0KwX+ScSSYCURu+MyBeJD?=
+ =?us-ascii?Q?RB83MH8cv9N4L9iqA6jyQKGV1F5J842uucsraSA3DM3RpChyubSBm6WEDiCg?=
+ =?us-ascii?Q?R54NOPDqnprfK+0z+f46ivAyXIpCDR9iu8CoagqDih8zwqs7DMUSxZIior7x?=
+ =?us-ascii?Q?bUEvlYBilhUvXXkGKJWt/nOi7eS+9fPEGC5ccug4nAiNt/ZSpOhkMjwB6IpL?=
+ =?us-ascii?Q?l8Grt2dPXMMeEf0EktSFHLKtMp9NGTGp7pWFDZOFzbMi/8bVz5qWzf/mdusC?=
+ =?us-ascii?Q?KXVOmEPiUFjU00IQihqg8V+0TZ9MLROD8x5m8TcrgHRj/PWPjzz0lCC+ZuZu?=
+ =?us-ascii?Q?Aaw0B6lrFtZ6ugp9TeWYKXbMs4TGFwcnyopPWUDwZ7J/uYeCZOGdG1SEpNi2?=
+ =?us-ascii?Q?OXKOoSWUIPb8dAmMpLvms8/9Mi9PH7AIOFCxafh77am0bg5z0sXyhvULMxKt?=
+ =?us-ascii?Q?K6IGFijACOStXKakTpEjI640B4ATNzOhqYMqzye9yqRgQOgnsvz4/lGzDyCb?=
+ =?us-ascii?Q?Qv7hizkIwCKS9S0XtQ7hNJW2red/jVj1MObwsFbWSap4cq7BzVcgM5onfi8k?=
+ =?us-ascii?Q?taCYHSzn5S/dD9H2P9Ck9IxaXZDdG4C45IgT+zmsIBxs9anRI/PFJf8gHebL?=
+ =?us-ascii?Q?WsIdaLC80476kwY0S9VgWW2aRHk73IwV5HBF/8bqzlosA5duV4BdpLEizaZb?=
+ =?us-ascii?Q?qMjgP1fwihilKUxQTl46DAoCqSzX7Fwonp3L/VoF0LYWBXrCO9LBw360HNFi?=
+ =?us-ascii?Q?iHmQAMPZAOcT8ZSORNYhZx4JXvHcfgSyZfyXnxHGLwjkF47U23P6ESkbUkyl?=
+ =?us-ascii?Q?MEN+5y1n/UNVKsCt7StuN4Hpsow2EW50kL+Q/3KuDA8os8dbNDTnJPp4hw38?=
+ =?us-ascii?Q?iSDU43BeVf64JMVRF31etQT36EGXSgnSq09xBcHufeFmi69FHoOEhBwRaWS8?=
+ =?us-ascii?Q?r/yOj26nu2il9qgk7PY=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c2755163-545f-45a6-aff9-08dac815a81a
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Nov 2022 21:00:56.9660
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: zNa/Fkp+iAxAoLDgdpNcga7QWkwmOYuDZqDAtsAonppPL4UTz+RxkxlmE5qz+D9+
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7682
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kselftest/next kselftest-seccomp: 5 runs, 4 regressions (v6.1-rc1-17-g2dfb0=
-10d2aaf)
+Following the pattern of io_uring, perf, skb, and bpf iommfd will use
+user->locked_vm for accounting pinned pages. Ensure the value is included
+in the struct and export free_uid() as iommufd is modular.
 
-Regressions Summary
--------------------
+user->locked_vm is the good accounting to use for ulimit because it is
+per-user, and the security sandboxing of locked pages is not supposed to
+be per-process. Other places (vfio, vdpa and infiniband) have used
+mm->pinned_vm and/or mm->locked_vm for accounting pinned pages, but this
+is only per-process and inconsistent with the new FOLL_LONGTERM users in
+the kernel.
 
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-mt8173-elm-hana              | arm64 | lab-collabora | clang-15 | defconfig=
-+kse...4-chromebook | 1          =
+Concurrent work is underway to try to put this in a cgroup, so everything
+can be consistent and the kernel can provide a FOLL_LONGTERM limit that
+actually provides security.
 
-mt8173-elm-hana              | arm64 | lab-collabora | gcc-10   | defconfig=
-+kse...4-chromebook | 1          =
+Tested-by: Nicolin Chen <nicolinc@nvidia.com>
+Tested-by: Yi Liu <yi.l.liu@intel.com>
+Tested-by: Lixiao Yang <lixiao.yang@intel.com>
+Tested-by: Matthew Rosato <mjrosato@linux.ibm.com>
+Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+---
+ include/linux/sched/user.h | 2 +-
+ kernel/user.c              | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | clang-15 | defconfig=
-+kse...4-chromebook | 1          =
+diff --git a/include/linux/sched/user.h b/include/linux/sched/user.h
+index f054d0360a7533..4cc52698e214e2 100644
+--- a/include/linux/sched/user.h
++++ b/include/linux/sched/user.h
+@@ -25,7 +25,7 @@ struct user_struct {
+ 
+ #if defined(CONFIG_PERF_EVENTS) || defined(CONFIG_BPF_SYSCALL) || \
+ 	defined(CONFIG_NET) || defined(CONFIG_IO_URING) || \
+-	defined(CONFIG_VFIO_PCI_ZDEV_KVM)
++	defined(CONFIG_VFIO_PCI_ZDEV_KVM) || IS_ENABLED(CONFIG_IOMMUFD)
+ 	atomic_long_t locked_vm;
+ #endif
+ #ifdef CONFIG_WATCH_QUEUE
+diff --git a/kernel/user.c b/kernel/user.c
+index e2cf8c22b539a7..d667debeafd609 100644
+--- a/kernel/user.c
++++ b/kernel/user.c
+@@ -185,6 +185,7 @@ void free_uid(struct user_struct *up)
+ 	if (refcount_dec_and_lock_irqsave(&up->__count, &uidhash_lock, &flags))
+ 		free_user(up, flags);
+ }
++EXPORT_SYMBOL_GPL(free_uid);
+ 
+ struct user_struct *alloc_uid(kuid_t uid)
+ {
+-- 
+2.38.1
 
-mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | gcc-10   | defconfig=
-+kse...4-chromebook | 1          =
-
-
-  Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/v6.1=
--rc1-17-g2dfb010d2aaf/plan/kselftest-seccomp/
-
-  Test:     kselftest-seccomp
-  Tree:     kselftest
-  Branch:   next
-  Describe: v6.1-rc1-17-g2dfb010d2aaf
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
-lftest.git
-  SHA:      2dfb010d2aafceeab23ccd502c77784006adedd7 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-mt8173-elm-hana              | arm64 | lab-collabora | clang-15 | defconfig=
-+kse...4-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6375318550ec96d3c22abd02
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest+arm64-chromebook
-  Compiler:    clang-15 (Debian clang version 15.0.4)
-  Plain log:   https://storage.kernelci.org//kselftest/next/v6.1-rc1-17-g2d=
-fb010d2aaf/arm64/defconfig+kselftest+arm64-chromebook/clang-15/lab-collabor=
-a/kselftest-seccomp-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//kselftest/next/v6.1-rc1-17-g2d=
-fb010d2aaf/arm64/defconfig+kselftest+arm64-chromebook/clang-15/lab-collabor=
-a/kselftest-seccomp-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20221107.1/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-seccomp.login: https://kernelci.org/test/case/id/6375318550ec=
-96d3c22abd03
-        failing since 29 days (last pass: linux-kselftest-next-6.0-rc2-11-g=
-144eeb2fc761, first fail: v6.1-rc1) =
-
- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-mt8173-elm-hana              | arm64 | lab-collabora | gcc-10   | defconfig=
-+kse...4-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/63752d7576627ab7152abd12
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest+arm64-chromebook
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//kselftest/next/v6.1-rc1-17-g2d=
-fb010d2aaf/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora/=
-kselftest-seccomp-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//kselftest/next/v6.1-rc1-17-g2d=
-fb010d2aaf/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora/=
-kselftest-seccomp-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20221107.1/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-seccomp.login: https://kernelci.org/test/case/id/63752d757662=
-7ab7152abd13
-        failing since 29 days (last pass: linux-kselftest-next-6.0-rc2-11-g=
-144eeb2fc761, first fail: v6.1-rc1) =
-
- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | clang-15 | defconfig=
-+kse...4-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6375319c3fc8d248242abcfa
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest+arm64-chromebook
-  Compiler:    clang-15 (Debian clang version 15.0.4)
-  Plain log:   https://storage.kernelci.org//kselftest/next/v6.1-rc1-17-g2d=
-fb010d2aaf/arm64/defconfig+kselftest+arm64-chromebook/clang-15/lab-collabor=
-a/kselftest-seccomp-mt8183-kukui-jacuzzi-juniper-sku16.txt
-  HTML log:    https://storage.kernelci.org//kselftest/next/v6.1-rc1-17-g2d=
-fb010d2aaf/arm64/defconfig+kselftest+arm64-chromebook/clang-15/lab-collabor=
-a/kselftest-seccomp-mt8183-kukui-jacuzzi-juniper-sku16.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20221107.1/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-seccomp.login: https://kernelci.org/test/case/id/6375319c3fc8=
-d248242abcfb
-        failing since 29 days (last pass: linux-kselftest-next-6.0-rc2-11-g=
-144eeb2fc761, first fail: v6.1-rc1) =
-
- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | gcc-10   | defconfig=
-+kse...4-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/63752d6076865d99092abcfc
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest+arm64-chromebook
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//kselftest/next/v6.1-rc1-17-g2d=
-fb010d2aaf/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora/=
-kselftest-seccomp-mt8183-kukui-jacuzzi-juniper-sku16.txt
-  HTML log:    https://storage.kernelci.org//kselftest/next/v6.1-rc1-17-g2d=
-fb010d2aaf/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora/=
-kselftest-seccomp-mt8183-kukui-jacuzzi-juniper-sku16.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20221107.1/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-seccomp.login: https://kernelci.org/test/case/id/63752d607686=
-5d99092abcfd
-        failing since 29 days (last pass: linux-kselftest-next-6.0-rc2-11-g=
-144eeb2fc761, first fail: v6.1-rc1) =
-
- =20
