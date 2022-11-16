@@ -2,46 +2,46 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D3E2C4167E
-	for <linux-kselftest@archiver.kernel.org>; Wed, 16 Nov 2022 21:02:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BB9E7C4708C
+	for <linux-kselftest@archiver.kernel.org>; Wed, 16 Nov 2022 21:02:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234788AbiKPVCv (ORCPT
+        id S234045AbiKPVCx (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 16 Nov 2022 16:02:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44304 "EHLO
+        Wed, 16 Nov 2022 16:02:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239200AbiKPVCE (ORCPT
+        with ESMTP id S239142AbiKPVB6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Nov 2022 16:02:04 -0500
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2060.outbound.protection.outlook.com [40.107.220.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A440B183B2;
-        Wed, 16 Nov 2022 13:01:07 -0800 (PST)
+        Wed, 16 Nov 2022 16:01:58 -0500
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2059.outbound.protection.outlook.com [40.107.96.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 288D96A6B3;
+        Wed, 16 Nov 2022 13:01:04 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ORdSFKLmjti/nJ65Rh9R1fkLzU2OnzxsCvjKjU65g5prMU/e5RUlophAB//Z2awlDJaHyLwr6IE9TGgnhM9vkw7wuUDIm+grqxczu1CmPwl8xoFwkL0KwQOqryzoYQMckhsMIZoKmFDphkfIOWOrdBQliUwziDDWXyFiTZoQkgOaiK6SSANKNcR20K/8o1GkR37bTku228z6C9X4TldDDx1db3V/cG91ykzRoBlGsxlX7XFaRcUnlBB15Hle4C8TlpwqM97cstIqFb9DBi217s+MPpoMQ2Be4/A5GqLmNAcEzAVLT4E/mkQ28MkpWmL15oIpJVOyK+USUD6x/IlG0w==
+ b=ORvtD2X2xvB3P5Aq2nIkNjjluL2vqRIpQB7+r5FDZkA2qpnNPmS3QteVy8Aja6IcawWelZl717d887AbJ3X4hCDoB7n5ra3szMxVkqDTlUyOeUUOEdgaHizbDU11nRaFiKED3/OZnu6OKFyrRTl9bj3BhKdSypqg24nrYxH5QDefJwWYjex+I64j6zAH5MBkuSJS9NmT/2rn9BbAe585hDCR+rP5XLbIkkqX/RSUju35J3Xv/T6P1zm9px7DuW6PVR5aVkQsUih/lBb+jFr6u+L9/kHXMEcHrAcn6+3Dwy/8gDBaFcWuQwBzDezlgx7s7Bpv1azV9dCCAKqUrAQ5Bw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fg/y5XOISbY7aMh5HOd5Q23eYMEF5jQCaqyUIS5HYoo=;
- b=Ek2RLm/kUXXuxUlV3/QSZGdAnBMGtiIHFSsxt87USoxLob3U2BIr6pxQ0OQ1aBdDRSSxwEgufkA57QaQA8x1hOFKKa3pKK4AQBCjdKyX//sXQEFz7DyMKQvV0OdBeeE/+a16YY/TSlYAzs2ArdIBSwW+9vqq5mje9lUEOVGfsjpGAOX1BFgZjJwTR8UwLYO/daUs+0c/Moqok3JePW6Pt4WTZPt0XT8+exPNqPbC/31vWL9JE0pYx+Gl+TiDRi+lFuqTpGb1rfDMWqhYzL3iN6e2x9c/mNm3pddxx0QFgLCYv1dAooP9NKWSRFJ7KZ4i7EpjQBOaRaturlI+nbtSZA==
+ bh=gM0J8I+cDDsR7EFJ2KWf9L5XHLZ6bTPo+155hHNKXoU=;
+ b=UXnLk1yrlJKLbknNjs//FiJQ0r6JlSa0ja35IubT4Ecc8JlpBetfofVd0StahSwQyW07I/ixF7/JLhLziNgFiQTDCIxFkMIp5/JVY4yeQf9VkQaU1ekBJ8x6f9N3/zihMbEDejVDv1p/a9G/irpWCpYK60YTjaYlVoOy5olVNvY9dxEViKy/YmjCtEZfNLZeqK4dXQS3njxjnvAaiZJmJ7G20NaboAofFqbTkcxFGlp9o5/7DEENzWlTbQNtvVoeLh3sjY3rQWKl24qVF1DhJVEXTXn9PgVPHj5jEtAx0hmlWYQoYnF+iJqv4A79DtpVXCbb/q+I5wxiZ2ECXpnnNg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fg/y5XOISbY7aMh5HOd5Q23eYMEF5jQCaqyUIS5HYoo=;
- b=D35NXJyuDC8eMpB7jV6dnRpxMYGzfZzOAzawuLpuAMnFuLswFJWIBnN0Iqh3/EkWZnwyqOg5AkhUTO8k1tWaRq7r0LU1hxIpRI+yn3GZBeDOjkqbYONgLY+Xi0RYK74O42dzkxvEv9xmOhQl8/YUW/+GkI8Rn04+3VZMtkoub1ikWMADiiqyIe8p11afw9usyg2pQJwdJaXEEKp/cdKkcH4xBFID5Sh1CvJicrU7P0+J2b4+uittvPuFx/Dch+NzuYqg+yO0pfONe8qJ255MQRclW+4ElfNMESF34Dcjkc5+9PoloXTg1HnrOiZAFn+NdBmcJZ48hFVeG1ecsqYzug==
+ bh=gM0J8I+cDDsR7EFJ2KWf9L5XHLZ6bTPo+155hHNKXoU=;
+ b=TbZYuhmvDbaq96BRaokjR1ieAzhlk5BBs4Ot+XDWRkPhw37SeEZytWybBL7JILyeStjwRQ9RUjW1ebHVHa1qNGepTBmg/Ffn67sUJaGbViFnizfSuU10Xn+lHtfNFfz0F05hMvQGDUkWhNXJKozfFD/yURPdNMkM6cD57LeX7f9XOIBt2DMjgdQWpIBqoCb+G9XFzQGn5BiFThb9tu84tVGTswEA3h9tf8SC9rCALBUkS1Bj90MQET6SX5oZ3X8v4ViaXrV/2tYNSNK4ZODkMX/Z3Rv6+Kc83+rJwpu/PhMgSddIuhnnIqljqqbitvRH1BYvyGLaXW8fjwuJUn9Zpg==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by CY8PR12MB7682.namprd12.prod.outlook.com (2603:10b6:930:85::15) with
+ by BY5PR12MB4936.namprd12.prod.outlook.com (2603:10b6:a03:1d4::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.18; Wed, 16 Nov
- 2022 21:00:59 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.19; Wed, 16 Nov
+ 2022 21:01:01 +0000
 Received: from LV2PR12MB5869.namprd12.prod.outlook.com
  ([fe80::f8b0:df13:5f8d:12a]) by LV2PR12MB5869.namprd12.prod.outlook.com
  ([fe80::f8b0:df13:5f8d:12a%7]) with mapi id 15.20.5813.017; Wed, 16 Nov 2022
- 21:00:59 +0000
+ 21:01:01 +0000
 From:   Jason Gunthorpe <jgg@nvidia.com>
 To:     bpf@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
         David Woodhouse <dwmw2@infradead.org>, iommu@lists.linux.dev,
@@ -78,125 +78,171 @@ Cc:     Anthony Krowiak <akrowiak@linux.ibm.com>,
         Shameerali Kolothum Thodi 
         <shameerali.kolothum.thodi@huawei.com>,
         Yi Liu <yi.l.liu@intel.com>, Keqian Zhu <zhukeqian1@huawei.com>
-Subject: [PATCH v5 04/19] scripts/kernel-doc: support EXPORT_SYMBOL_NS_GPL() with -export
-Date:   Wed, 16 Nov 2022 17:00:40 -0400
-Message-Id: <4-v5-4001c2997bd0+30c-iommufd_jgg@nvidia.com>
+Subject: [PATCH v5 17/19] iommufd: Add some fault injection points
+Date:   Wed, 16 Nov 2022 17:00:53 -0400
+Message-Id: <17-v5-4001c2997bd0+30c-iommufd_jgg@nvidia.com>
 In-Reply-To: <0-v5-4001c2997bd0+30c-iommufd_jgg@nvidia.com>
 References: 
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: MN2PR12CA0029.namprd12.prod.outlook.com
- (2603:10b6:208:a8::42) To LV2PR12MB5869.namprd12.prod.outlook.com
+X-ClientProxiedBy: MN2PR12CA0016.namprd12.prod.outlook.com
+ (2603:10b6:208:a8::29) To LV2PR12MB5869.namprd12.prod.outlook.com
  (2603:10b6:408:176::16)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|CY8PR12MB7682:EE_
-X-MS-Office365-Filtering-Correlation-Id: 628bead4-e55c-427b-23da-08dac815a886
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|BY5PR12MB4936:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2f882a76-b704-4733-2fce-08dac815a8d7
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2nnjXJSxUsBWIEg/W4DAY/+Ij2Q+b0KobNNDZwNzvv4kfocsNVegnwjSsgat/wetL8IqOJhT7FnptFGQ7fc5uQj5MY/iqCmTVpP+QbtugL/gr1QfTc/a+q8Z/db8mZVWav7N/wRHydhV1IACXJbhcSls1YRmNqmyTcAvJZIHjzxtM2x6yPSqDNLuhIjU4M8ZhMSadN1yOfVADY4i4LU2VrMg3zb/G9Zdety9gSOhBEEmcxIBELeMqmmj7FDX04IOu4yjr1twFb5KgPmZs2hpyLckh/WLirXWPRYdQBKZu2tqJNQHT7zK+yYW5yvSyeo4UIMHY7opW3eeEiVOOpx4SyptpUVeKKklYAZzQxdRY+TaDoGAewUJ2KzE592uuOoLWW8Gnsob2Tdzki6405a2Lv/uFJTOZv/t8SGWa6/MgbdG/oJuxNx/dYC9g/mH6gCruNKiGy6NdFB03u3BHLYL3Sxua06zVMTI2qHOGoz11yb81qUOKmZjvJkBB+4NLFvq86m9wkK8uB8ErG9dUE0czzpKmYmUvtkteeW2Y4UFjFgtAyCOrbVLD679yTSD7OBNN4vPyDyybgGN2nK2WdPtKk+UQO8rg9URvyUS0Duobu1yLA5GInUBdgqDsHU+YQ5z43ObHflrTK3PBi1VJOGBTqWjxWgojSot7EEYt2iVWi0rmpg2hmR9abb8rmvex4Lr8F0DUd8TcXR20ITUrA+5f94SUJgNiOrY5/VlIl0GtIKcAjrhyPU/we82CEqj5RK5
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(136003)(396003)(366004)(376002)(451199015)(38100700002)(2616005)(86362001)(921005)(110136005)(7406005)(6666004)(478600001)(6486002)(7416002)(8936002)(66476007)(8676002)(4326008)(54906003)(66556008)(66946007)(316002)(41300700001)(83380400001)(2906002)(6506007)(186003)(5660300002)(6512007)(36756003)(26005)(4216001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 5XPJP9iHnyUhgwoMbogEjhX3owrLd+1c7GpFEwEGguqikB8cTh3YpYjEV0A1wUa/ZhjgH73an0HCzbMSUcSHr+SxEJ1/QWd0R+IrW7R54IX84fwCrtkt1QLvukC8pnYcQlkyjoE5nE1oWfTCj38APMvNt+N/8R5xTtDf8zCsCQcfIyHzWnuhKIyPHuB82gOjpyOcy2YZfx51XK/mBO4MNQrTrYqStju1V4JONtZ7tc5zIn2XKjOdy/Olx7j/BoWwOVtSmAKAt9LzcXH0CWHiwLGWdsxQmpLphI51dUlrOHtTOgngTB06IITl+Z29TAFy3mVu97U3TTKDm9cVMAdPiq0tafLw9S2HgrhdujI96j+IFqbUpxvAIr0EP3+YraECjfGF9FN2S6NfjllksaCKgewhhUe7lqggOckJjyIszNrpf7of5Kn59uQc79n7E4WwidvSJgXVxAMCP/1+DYJRwFP5DI2L1suCoLaHvgJRj+zuXAvkquBC5Dp6z2PFYIW45EcECe+3F0pO0IMkiVOeqNGd5pbdQ/p9P//4N7j7ou9wWPFxbmbgdyfi08NWVfkA6+Yub4j7ybm57CyarIV+uG0FFlakyZaUznAOhJ06exC4/5M9uZemlLMBwBCVyi/4SInRn9mm5LFf1wFxNbhCyJruzCc6085Voc1FvfV4Tv9DZCYKg8LP/QgHvihT0fj74KZteU70/Y/noDdnF1Zyj9XEhZc/nTcy5YSPnga4kWgSwKnQggS4vnqeMO6Xsa6o
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(136003)(346002)(366004)(39860400002)(451199015)(478600001)(36756003)(38100700002)(6486002)(921005)(83380400001)(86362001)(7416002)(8936002)(6666004)(7406005)(5660300002)(186003)(2906002)(66476007)(4326008)(8676002)(66946007)(66556008)(110136005)(6506007)(2616005)(26005)(6512007)(316002)(54906003)(41300700001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?v6hOb1svaYoAXScIw4U30A3HdORfNIiKhyiJ/4ZYYrdt+vqlVMquGCW0wuou?=
- =?us-ascii?Q?yQ0qzHDVAMRy6izCwi/n4WzkRdpxsYH0k1MAHNZMCvbmNXuHzw5i8KKbP7YD?=
- =?us-ascii?Q?3gf37jqTmDukGd14j1CjKjeYq7DJdsWE79pj+pNGbd4K1n0aj6tPKhemhk/P?=
- =?us-ascii?Q?c7Bevt1fzxF1gU8RhOlnx5UBnMYQQ6Q39kmYkyhQIbHrE+VP+FwYKTrYrzzF?=
- =?us-ascii?Q?40bvFyZPQh8iJuq8gkNNUQ5fImL1anvrU5DprCiqtuqn1QMOc+grbgXqUKJx?=
- =?us-ascii?Q?H4T5KmYu5rJeBahiHoHLtWS1J0Pjfl2CyF77GxsWzoUflxoHdlreUdn2JCyk?=
- =?us-ascii?Q?TIQIszhkBJ0MGITbAC3iIXgxkv3iOW52hwWnq2e/61MHpWoIFhN2GwNY7POV?=
- =?us-ascii?Q?ic2l4JsmCDmNfKNdpQ5WMytntYHX5r8K39D94xbwnKuYw9awiA7wgur3NNSh?=
- =?us-ascii?Q?9eHwtoWTqcK8Y/7BMYZGih2hBEVhdkTeTxD662K8/f5UiMTRQlUxJEhDyYIg?=
- =?us-ascii?Q?M50GgfOzz31IgOSj6zY3Vxg/wjpK8ZILnecIUKcMInv6invd09EvPts3DPjY?=
- =?us-ascii?Q?Rrb3eNt4UqIX4DYTNqpybKatOYb+c0uL/mLZp0UPFHYFXP67cyQ7H0RpieG0?=
- =?us-ascii?Q?jRlrdbmMu9Y5DzfDDFdcCdL+4va4C+AFDeBUYX/SBsudH6RxlzH7V1dTBPIz?=
- =?us-ascii?Q?cAdR7dFr0w192CGyaW2h62Y+0dQx8lz+qA/t5KY0t5gyJeuWTxjcO0jR0l3L?=
- =?us-ascii?Q?J/CbZWPerXegk8/nHOoNDbyfTxjBEY+zcJzPVBO/ZUds88vkUynw/xcGNKtm?=
- =?us-ascii?Q?tn7VrxFifiqqWsTJIttUw60BND1xAgp1hBpfCR8EpWhLljBiBKM6Tw1YT3OZ?=
- =?us-ascii?Q?bCK7n64Ug//ygPnNug0IMXWlQt3oZRJKbidYYY/hvkGAixIVJZHsRXBP/G/T?=
- =?us-ascii?Q?e0wmRMWSXERjJ95+ARzHjqBeOUTDXD0oS2B5tMNV1YFM80awCm+NGmY8bZRV?=
- =?us-ascii?Q?L7oxHpiLKMiM2IzLtA+BT/CZAP+pTXJOB7SGHaLBe0HnMUdzNOOi3EmXlq9p?=
- =?us-ascii?Q?WGST4caStplrTJwEpO4ySK6Mx2fBnNqmFsNTSZZuenK5GRipTg4oGMetAPZZ?=
- =?us-ascii?Q?W1XBmjHFBTULUnHdnD3tHq+keARlY8BMVtub30LXeBGz9vBJeW1YDOj0C/LA?=
- =?us-ascii?Q?0VOS4Np8PGlBYXusiL+Rmyf2WEbQa8MOmpyq8MccgyzViMgRqxKsOr7oEokI?=
- =?us-ascii?Q?CCIENRdNLGE+25aIjjp1h8IzElzl/ENQ2lGvlYzPEr317FQMKzW3/S7uEhMu?=
- =?us-ascii?Q?BBJ8TD49raWv2/GLrtX7P9Emm/ZjewfzR1/Dqvyj9uasTyov6O5PbODBBjlU?=
- =?us-ascii?Q?Eb5UF7qFP5txTqokUhTdXsbjJc7wqoe3gaMaCsTr6iDueSNTxYKOXO0sAeTN?=
- =?us-ascii?Q?EJHFpV2nXFzl0ZAzpJSvGFq6S+u6lu1W5qCv/c7w6NasIgF2twvB7NTl4k1U?=
- =?us-ascii?Q?YCADuTJ1rkmGHljAfg0Zr30eRT+eoUU+pQ+0Fq55J9Qj4JSU6/nyEgTORF1o?=
- =?us-ascii?Q?iAc8yNSODjgdK+XdizY=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Tv5gu0IXQPDXq1Xyp6IWo1mMdmuaw2W/JqaCIgByA8WJcobW/y+Qjft9xaWq?=
+ =?us-ascii?Q?lIHz/7tdIGT2fZN0TB+WqVp32dg5Z5QJq1L3VfJxUnJf25u+NfYYcAPRxP21?=
+ =?us-ascii?Q?DcrqshpKE5vb7g++T4bZjYoWlelrOasFg0ENq3GqThNQcphRJxX5LdCuL69W?=
+ =?us-ascii?Q?PQ9yhMg8x7riD5cku8nDXjMycz/vy9j/DT5wUutaiPCfUMpM9TPiPLsZreIz?=
+ =?us-ascii?Q?8iopapI6yt5KnTByrEw39zlGrydDA2UPtqGITeju6ZY+EedzlI+1AVasEL/B?=
+ =?us-ascii?Q?3H3CpN+7a8E+KAbBiKg8hPjYe51Bp9klc2UWSYDB9XeAL8P61i79gR4Zqeit?=
+ =?us-ascii?Q?Qhkof8LxZqh7fS77ChPp+RQU+qs2QdBJDJk9/1MaldKdcR18KbUJHQxNZG9T?=
+ =?us-ascii?Q?ZiFrWwzsEfWiheYT6hRMjbZysuXBvbfjLMnTm5H3Ig7KfcEAyRCH3MKkzP+R?=
+ =?us-ascii?Q?OJqBtxIa4vq7zQ1qVeJSoo1/AKK0uqdeYDFSK91Gc7PUK+isgbktWqB69jY+?=
+ =?us-ascii?Q?fIpdkUCZ5Q1su1xaqi5+oIKoy5mYiy3RSbBd1N8v4rtKZb/mWH68Zx0UyJDS?=
+ =?us-ascii?Q?m4j6dzOF2agpbn9n2SBUN8nAvRtNJWDVylwhXrg/q1sOpxiTkAAleHp8pzQT?=
+ =?us-ascii?Q?cNS1R7JE0gTYQ68SsQtWzQJBGtTsLHG3E2j1Vum8QbceMJO8ozZ+WQZ0pFso?=
+ =?us-ascii?Q?80RLngnzXoOCsIyTwBI3r5nvOUS5SG7nORg+R/eYaQrH/28jUywXu1t5QtR5?=
+ =?us-ascii?Q?XGleveEBgT14hFTuhMHKRx21Ysnn2rQvZiBXsKJyD5LtVu4oI2PJaNOfdNA4?=
+ =?us-ascii?Q?0H+3n5hmLkhU5q2DqGGu/R1MLXkvp9nQYFPdMVUE+yaun4jeTHaLJ3FheBWk?=
+ =?us-ascii?Q?cRKfKRTjlovQmiaykQNbw3MHEGwv+VOArkDNmf7imws3Hkn/42rGb0x3w+Gk?=
+ =?us-ascii?Q?MplofOVlve/VOZGgteHjriniBaZ5ezl2QRDuk5x0rhTJ8vxFegg1FHgmAXNn?=
+ =?us-ascii?Q?htstoPQpXm4EvR7MYPgiybCqzoV+4oPWqwjJ6U/ORsLKd+aOEqJcNp5v5MgO?=
+ =?us-ascii?Q?PfTR7bZazm3aClggUKIJeA388K5JYmH+PNYtgu1rUyl14L8Q7dczemM+bt2f?=
+ =?us-ascii?Q?f12SBGAPqjXrNunuYfuY//j/Rn11B83D915kcNRuiyrwrYvCF41nUOowrYgg?=
+ =?us-ascii?Q?dVGk1eC5F8JoSeD5JzFLHlE/uy1BuDQDROr/8+ENaYNNWPWZfSVg6Rla+I+B?=
+ =?us-ascii?Q?QaIHf8weZfdiuh1v5RVNgXcXklHXJXm/J85Hoj3PtXeSDs6P5hZJ8dU5LON9?=
+ =?us-ascii?Q?UrHK7kVnHV9pWwUar3TaZpdrraDzOdJ56TXVFANV//p1+CkvxPqotNztgeGB?=
+ =?us-ascii?Q?hQgyq00Fy1iBQ2GSsbpKhL19KBk0TgIa6Bo6UPt6XvjRFcW4ffbJmnIGIaWx?=
+ =?us-ascii?Q?Ko2nAomQ+tWVts//KVwoK08yeD9Y5invkEbJxYANrpfPArrvlQHHouw4axYc?=
+ =?us-ascii?Q?8i4lWzDHQvE1UIDM8A/Lh1QrTBcLyaaUmbKGv1bnclNBNHZSJEdGjFmDc6J7?=
+ =?us-ascii?Q?2Dfqw8GhpmLw6iU8LBQ=3D?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 628bead4-e55c-427b-23da-08dac815a886
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2f882a76-b704-4733-2fce-08dac815a8d7
 X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Nov 2022 21:00:57.6702
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Nov 2022 21:00:58.2014
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rEl6hSssGvufSE65iCFayI4VLq0tvlhOekKMFyzARBEecMXyYj+op7ISDTGsqF3M
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7682
+X-MS-Exchange-CrossTenant-UserPrincipalName: OZ6ILNYt87Pjlw6ecqactw6bnfLaUWjyIyOJwWrdyvd0GqZb/rwdVnkezpt52f5+
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4936
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Parse EXPORT_SYMBOL_NS_GPL() in addition to EXPORT_SYMBOL_GPL() for use
-with the -export flag.
+This increases the coverage the fail_nth test gets, as well as via
+syzkaller.
 
-Acked-by: Jonathan Corbet <corbet@lwn.net>
+Tested-by: Matthew Rosato <mjrosato@linux.ibm.com> # s390
 Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 ---
- scripts/kernel-doc | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ drivers/iommu/iommufd/main.c  |  3 +++
+ drivers/iommu/iommufd/pages.c | 26 ++++++++++++++++++++++++++
+ 2 files changed, 29 insertions(+)
 
-diff --git a/scripts/kernel-doc b/scripts/kernel-doc
-index aea04365bc69d3..48e3feca31701a 100755
---- a/scripts/kernel-doc
-+++ b/scripts/kernel-doc
-@@ -256,6 +256,7 @@ my $doc_inline_sect = '\s*\*\s*(@\s*[\w][\w\.]*\s*):(.*)';
- my $doc_inline_end = '^\s*\*/\s*$';
- my $doc_inline_oneline = '^\s*/\*\*\s*(@[\w\s]+):\s*(.*)\s*\*/\s*$';
- my $export_symbol = '^\s*EXPORT_SYMBOL(_GPL)?\s*\(\s*(\w+)\s*\)\s*;';
-+my $export_symbol_ns = '^\s*EXPORT_SYMBOL_NS(_GPL)?\s*\(\s*(\w+)\s*,\s*\w+\)\s*;';
- my $function_pointer = qr{([^\(]*\(\*)\s*\)\s*\(([^\)]*)\)};
- my $attribute = qr{__attribute__\s*\(\([a-z0-9,_\*\s\(\)]*\)\)}i;
+diff --git a/drivers/iommu/iommufd/main.c b/drivers/iommu/iommufd/main.c
+index 7de0f95f2ee68a..ab3fa05f38505d 100644
+--- a/drivers/iommu/iommufd/main.c
++++ b/drivers/iommu/iommufd/main.c
+@@ -102,6 +102,9 @@ struct iommufd_object *iommufd_get_object(struct iommufd_ctx *ictx, u32 id,
+ {
+ 	struct iommufd_object *obj;
  
-@@ -1948,6 +1949,10 @@ sub process_export_file($) {
- 	    next if (defined($nosymbol_table{$2}));
- 	    $function_table{$2} = 1;
++	if (iommufd_should_fail())
++		return ERR_PTR(-ENOENT);
++
+ 	xa_lock(&ictx->objects);
+ 	obj = xa_load(&ictx->objects, id);
+ 	if (!obj || (type != IOMMUFD_OBJ_ANY && obj->type != type) ||
+diff --git a/drivers/iommu/iommufd/pages.c b/drivers/iommu/iommufd/pages.c
+index 640331b8a07919..c5d2d9a8c56203 100644
+--- a/drivers/iommu/iommufd/pages.c
++++ b/drivers/iommu/iommufd/pages.c
+@@ -80,6 +80,10 @@ static void *temp_kmalloc(size_t *size, void *backup, size_t backup_len)
+ 
+ 	if (*size < backup_len)
+ 		return backup;
++
++	if (!backup && iommufd_should_fail())
++		return NULL;
++
+ 	*size = min_t(size_t, *size, TEMP_MEMORY_LIMIT);
+ 	res = kmalloc(*size, GFP_KERNEL | __GFP_NOWARN | __GFP_NORETRY);
+ 	if (res)
+@@ -544,6 +548,7 @@ static int pages_to_xarray(struct xarray *xa, unsigned long start_index,
+ 			   unsigned long last_index, struct page **pages)
+ {
+ 	struct page **end_pages = pages + (last_index - start_index) + 1;
++	struct page **half_pages = pages + (end_pages - pages) / 2;
+ 	XA_STATE(xas, xa, start_index);
+ 
+ 	do {
+@@ -551,6 +556,15 @@ static int pages_to_xarray(struct xarray *xa, unsigned long start_index,
+ 
+ 		xas_lock(&xas);
+ 		while (pages != end_pages) {
++			/* xarray does not participate in fault injection */
++			if (pages == half_pages && iommufd_should_fail()) {
++				xas_set_err(&xas, -EINVAL);
++				xas_unlock(&xas);
++				/* aka xas_destroy() */
++				xas_nomem(&xas, GFP_KERNEL);
++				goto err_clear;
++			}
++
+ 			old = xas_store(&xas, xa_mk_value(page_to_pfn(*pages)));
+ 			if (xas_error(&xas))
+ 				break;
+@@ -561,6 +575,7 @@ static int pages_to_xarray(struct xarray *xa, unsigned long start_index,
+ 		xas_unlock(&xas);
+ 	} while (xas_nomem(&xas, GFP_KERNEL));
+ 
++err_clear:
+ 	if (xas_error(&xas)) {
+ 		if (xas.xa_index != start_index)
+ 			clear_xarray(xa, start_index, xas.xa_index - 1);
+@@ -728,6 +743,10 @@ static int pfn_reader_user_pin(struct pfn_reader_user *user,
+ 	npages = min_t(unsigned long, last_index - start_index + 1,
+ 		       user->upages_len / sizeof(*user->upages));
+ 
++
++	if (iommufd_should_fail())
++		return -EFAULT;
++
+ 	uptr = (uintptr_t)(pages->uptr + start_index * PAGE_SIZE);
+ 	if (!remote_mm)
+ 		rc = pin_user_pages_fast(uptr, npages, user->gup_flags,
+@@ -872,6 +891,8 @@ static int pfn_reader_user_update_pinned(struct pfn_reader_user *user,
+ 		npages = pages->last_npinned - pages->npinned;
+ 		inc = false;
+ 	} else {
++		if (iommufd_should_fail())
++			return -ENOMEM;
+ 		npages = pages->npinned - pages->last_npinned;
+ 		inc = true;
  	}
-+	if (/$export_symbol_ns/) {
-+	    next if (defined($nosymbol_table{$2}));
-+	    $function_table{$2} = 1;
+@@ -1721,6 +1742,11 @@ static int iopt_pages_rw_page(struct iopt_pages *pages, unsigned long index,
+ 		return iopt_pages_rw_slow(pages, index, index, offset, data,
+ 					  length, flags);
+ 
++	if (iommufd_should_fail()) {
++		rc = -EINVAL;
++		goto out_mmput;
 +	}
-     }
- 
-     close(IN);
-@@ -2419,12 +2424,12 @@ found on PATH.
- =item -export
- 
- Only output documentation for the symbols that have been exported using
--EXPORT_SYMBOL() or EXPORT_SYMBOL_GPL() in any input FILE or -export-file FILE.
-+EXPORT_SYMBOL() and related macros in any input FILE or -export-file FILE.
- 
- =item -internal
- 
- Only output documentation for the symbols that have NOT been exported using
--EXPORT_SYMBOL() or EXPORT_SYMBOL_GPL() in any input FILE or -export-file FILE.
-+EXPORT_SYMBOL() and related macros in any input FILE or -export-file FILE.
- 
- =item -function NAME
- 
-@@ -2451,8 +2456,7 @@ Do not output DOC: sections.
- 
- =item -export-file FILE
- 
--Specify an additional FILE in which to look for EXPORT_SYMBOL() and
--EXPORT_SYMBOL_GPL().
-+Specify an additional FILE in which to look for EXPORT_SYMBOL information.
- 
- To be used with -export or -internal.
- 
++
+ 	mmap_read_lock(pages->source_mm);
+ 	rc = pin_user_pages_remote(
+ 		pages->source_mm, (uintptr_t)(pages->uptr + index * PAGE_SIZE),
 -- 
 2.38.1
 
