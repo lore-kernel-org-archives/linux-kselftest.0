@@ -2,95 +2,125 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8BBD2C4332F
-	for <linux-kselftest@archiver.kernel.org>; Thu, 17 Nov 2022 00:47:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51F1CC4321E
+	for <linux-kselftest@archiver.kernel.org>; Thu, 17 Nov 2022 00:47:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234178AbiKQArB (ORCPT
+        id S239017AbiKQAre (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 16 Nov 2022 19:47:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39414 "EHLO
+        Wed, 16 Nov 2022 19:47:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238401AbiKQAq0 (ORCPT
+        with ESMTP id S234454AbiKQAqz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Nov 2022 19:46:26 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB23A6B3A3
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Nov 2022 16:45:24 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id 7so109239ybp.13
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Nov 2022 16:45:24 -0800 (PST)
+        Wed, 16 Nov 2022 19:46:55 -0500
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E5C670180
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Nov 2022 16:45:47 -0800 (PST)
+Received: by mail-qv1-xf32.google.com with SMTP id n18so198696qvt.11
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Nov 2022 16:45:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kylehuey.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2JYR5BkunF7jpGC9+e1gHhFjfq2CaWsh+JNLeA4cSow=;
-        b=VP6VReT7Ga2T8TkmdBXePIZp2IMDUoNlaF+CCECrl6DaKXkfgdOHApNymuj286JAmX
-         FF5OamIO5F26h84ltHBlsHynkyTvU3GiIl6z9x+tk7CSMCHkMkdDoe0gMKWlGwOHcjEt
-         CsE9r8zFoKzQT7cE12Gvqp9JTJ5thyGDXjtBqK52CERFLlo6giGIfjM8zwe8JzYI9/7t
-         YiRlNf22tSRkGfXHAe4thK6/CTx9ZYaAofQeO1HUnrTuu5NpyThUbqOFJSqz0SklL87D
-         2mPCoCAPj4ISUYAZzMyHWETvKcvb56p5njBEq7xecXke+GatbzepTA403ePN6qUwmtvW
-         onbA==
+        d=ziepe.ca; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6GmH5bBgQAPTYyWGM7n52ZkzuQiQsRGb4mBRnSjjrbs=;
+        b=l2lxIbefVRjdcatsHe8zxGxmcFT5QX0zkZlGmTA+6hS7woiLsGV9I6bNGV4zHN8kjb
+         l2p/UcY6CYSTNWmi7VujvEPDLopmeYV5y04nexmylfHHZLvrChhtK9ZoFHB8KXFnQm2L
+         u2KxlP3m/08gOzMOWFz7wJqhAgcRBAizzZiUHkaGNmUyt44/uIl+uDznkLyQC/8LtiyK
+         IYJyOaMVreNHxUrE7KnyIf6buUGiBVrXdyfdI9hycSXNdg6N07L9Zen1tNKJCn4NMx7j
+         3tR7ySmG4oePdK/F1paF+sUf2cgVO41erHwEOTLPwwAJA2UwmtpAOpPTOIoYWmh1mJkM
+         +oJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2JYR5BkunF7jpGC9+e1gHhFjfq2CaWsh+JNLeA4cSow=;
-        b=Bpk26RuT65NzpR/prbr9LLiAqYtJdYbIwF6hwOJwceUrnWkeiCjI++gdm+jKtP8QIJ
-         9MEBeVj/LvE0pOKGCyDYHXnXJZdDNwYZnghRVf66zyAytioCuPCNZZcmSrYw5WKtf4HR
-         rhX61RDBXTU3QkfG1Jg0BAFf0ML0GdDLm5Qo0ldwWSODsHD7S1pFlnqyiOoqwNvWJ+ED
-         okYzhVKEu0jD3uHJBw0E7tqYfq3oBwCAXD8bia6U2WTF3rh6qgEiBJcFUb/ME4iilf6+
-         wiFOmoTJ+Ve/KDzC4pDl+0oh4XnVXf20jt0A9HO1xPdPGyDER0Q4VoF2qiXfRQRHXGSl
-         ufgA==
-X-Gm-Message-State: ANoB5pkipgQAMhdEsCzGImKNDpQ9hO6zxAeVlVwucl3dJWEfQWVREvn/
-        E7tvIjzgAl5jqLsvHktHnBbWt6qxWIXZVQ3UV1hhLQ==
-X-Google-Smtp-Source: AA0mqf7BrP7X5qSPJf/drCclU/BXyNzvk2HB+KXaxPpnHS8wgJrAT3kxcJhlabI/OGYuuUGolXEGU///p9v0hEDsSWM=
-X-Received: by 2002:a25:40c4:0:b0:6cc:1a02:c338 with SMTP id
- n187-20020a2540c4000000b006cc1a02c338mr181599yba.413.1668645923794; Wed, 16
- Nov 2022 16:45:23 -0800 (PST)
-MIME-Version: 1.0
-References: <20221115230932.7126-1-khuey@kylehuey.com> <773a9deb-b017-20e5-cebe-d9c35ac4fd3d@intel.com>
-In-Reply-To: <773a9deb-b017-20e5-cebe-d9c35ac4fd3d@intel.com>
-From:   Kyle Huey <me@kylehuey.com>
-Date:   Wed, 16 Nov 2022 16:45:12 -0800
-Message-ID: <CAP045AozQWf8qKuusXy=1p7UynOHas7mNpMospCOHmMmP993=Q@mail.gmail.com>
-Subject: Re: [PATCH v7 0/6] x86/fpu: Allow PKRU to be (once again) written by ptrace
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6GmH5bBgQAPTYyWGM7n52ZkzuQiQsRGb4mBRnSjjrbs=;
+        b=msETiLwGz9qI84Wal+s3svS76BHT0LeRxAQ8y76dOpgUjuDTNWo9/1hUOxeXzbAJcV
+         XXzRrwrqhyKmYliy3yoSa51cbVvyijrF0+kI5d3IkkWouAT5ZX5WW6QyqOKPHIiUDvNQ
+         vGl7EHj9f9ye67oRj/PLe7tF0oueKEtvH5XBj0Xsbt3ESKaDd23Pa0/KVWEZLxrwo9Ya
+         C0L+8whKt5QWEi+RN2tgRdODUEZg3+yEvKKizTtsF7QQU5Wkl3aSwPA5Zq5plsiuPOXs
+         0Uu/vU2pg61UjW7LPWnqQW7+fCHhfQe0CfSMToVJLIbm/4NFOMHXvtbhNKtwOCquyCpe
+         tySA==
+X-Gm-Message-State: ANoB5pnetoZ6EzJUlYypIy7msBETBrarqcMmAoTB1R8/+v/72b1yco/y
+        7qRePPrqMBctaF2rzL2y2SYPgw==
+X-Google-Smtp-Source: AA0mqf6kOndX6mF3jdPV+JEPNJmYotlDtU6GG3yPlrdGFCMTOM0aazChCn63y+VS5Enp4BFgjok9CA==
+X-Received: by 2002:a05:6214:7f3:b0:4c6:5acc:1e24 with SMTP id bp19-20020a05621407f300b004c65acc1e24mr626072qvb.61.1668645946250;
+        Wed, 16 Nov 2022 16:45:46 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-47-55-122-23.dhcp-dynamic.fibreop.ns.bellaliant.net. [47.55.122.23])
+        by smtp.gmail.com with ESMTPSA id h2-20020ac85042000000b003a606428a59sm2189506qtm.91.2022.11.16.16.45.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 16:45:45 -0800 (PST)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1ovT2G-0066Tl-Ts;
+        Wed, 16 Nov 2022 20:45:44 -0400
+Date:   Wed, 16 Nov 2022 20:45:44 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, etnaviv@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-samsung-soc@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-perf-users@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
         Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sean Christopherson <seanjc@google.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        "Robert O'Callahan" <robert@ocallahan.org>,
-        David Manouchehri <david.manouchehri@riseup.net>
-Content-Type: text/plain; charset="UTF-8"
+        Andrew Morton <akpm@linux-foundation.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Peter Xu <peterx@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Christian Benvenuti <benve@cisco.com>,
+        Nelson Escobar <neescoba@cisco.com>,
+        Leon Romanovsky <leon@kernel.org>
+Subject: Re: [PATCH mm-unstable v1 11/20] RDMA/usnic: remove FOLL_FORCE usage
+Message-ID: <Y3WEONlxYkwrglYR@ziepe.ca>
+References: <20221116102659.70287-1-david@redhat.com>
+ <20221116102659.70287-12-david@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221116102659.70287-12-david@redhat.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 3:31 PM Dave Hansen <dave.hansen@intel.com> wrote:
->
-> On 11/15/22 15:09, Kyle Huey wrote:
-> > Following last week's discussion I've reorganized this patch. The goal
-> > remains to restore the pre-5.14 behavior of ptrace(PTRACE_SET_REGSET,
-> > NT_X86_XSTATE) for the PKRU register (which was equivalent to a hardware
-> > XRSTOR instruction).
->
-> The new version looks great.  I've applied it.
->
-> I did remove the stable@ tags for now.  There were a couple reasons for
-> that.  First, most of the x86 stuff marked for stable@ goes via our
-> tip/urgent branch and this doesn't seem super urgent.  It also touches
-> code that's exposed in at least three separate UABIs, so I want a bit
-> more soak time than x86/urgent normally provides.
->
-> I have zero objections if anyone wants to submit it to stable@ after it
-> hits Linus's tree.
+On Wed, Nov 16, 2022 at 11:26:50AM +0100, David Hildenbrand wrote:
+> GUP now supports reliable R/O long-term pinning in COW mappings, such
+> that we break COW early. MAP_SHARED VMAs only use the shared zeropage so
+> far in one corner case (DAXFS file with holes), which can be ignored
+> because GUP does not support long-term pinning in fsdax (see
+> check_vma_flags()).
+> 
+> Consequently, FOLL_FORCE | FOLL_WRITE | FOLL_LONGTERM is no longer required
+> for reliable R/O long-term pinning: FOLL_LONGTERM is sufficient. So stop
+> using FOLL_FORCE, which is really only for ptrace access.
+> 
+> Cc: Christian Benvenuti <benve@cisco.com>
+> Cc: Nelson Escobar <neescoba@cisco.com>
+> Cc: Jason Gunthorpe <jgg@ziepe.ca>
+> Cc: Leon Romanovsky <leon@kernel.org>
+> Signed-off-by: David Hildenbrand <david@redhat.com>
+> ---
+>  drivers/infiniband/hw/usnic/usnic_uiom.c | 9 ++++-----
+>  1 file changed, 4 insertions(+), 5 deletions(-)
 
-Works for me, thanks.
+Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 
-- Kyle
+Jason
