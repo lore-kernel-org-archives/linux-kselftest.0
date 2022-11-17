@@ -2,640 +2,216 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4723DC4167D
-	for <linux-kselftest@archiver.kernel.org>; Thu, 17 Nov 2022 22:19:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26BF9C433FE
+	for <linux-kselftest@archiver.kernel.org>; Thu, 17 Nov 2022 22:36:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240671AbiKQWTw (ORCPT
+        id S233679AbiKQWgb (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 17 Nov 2022 17:19:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56136 "EHLO
+        Thu, 17 Nov 2022 17:36:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240411AbiKQWTD (ORCPT
+        with ESMTP id S239647AbiKQWgP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Nov 2022 17:19:03 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF6FA898CE;
-        Thu, 17 Nov 2022 14:18:19 -0800 (PST)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AHM3xRg020482;
-        Thu, 17 Nov 2022 22:18:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=EMEh6zjm+yBYqhMuTSUoP/6jltijJapr73NkP2C9uFs=;
- b=sUxDZjSpjo5Uf0MpT+d2AkaBTEYp2KTOHtXP37TGL1on4C3ns3QGNmViibj1IWiPMkxE
- V79hWlEvHPkxYNZgqL3z+hDFPPfXCo3iRxxY4ynxHfTQfUzK4FNZcAYpa6WXChYPB7h2
- vGVAnTi3jHhgvhfo8i0nB71Svek8WaOLMlc+XTZ2yzJvAWdG+JpKyzo5mJzX4YA5esuu
- xTY4CmRVdRpyGEFCrVcs33ONNYiNmNwvt+Glwnk+Xvooo+zSLQeq/rJAOUyC5BqWCB20
- OZersMf0QSUv/R1IOTIq8di2Wg8JBy/sjfcNxk7bfcxo4WpEIKonRtlZahVg0+XWrrBu pQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kwtb0w2h5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Nov 2022 22:18:15 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AHMEd4k020007;
-        Thu, 17 Nov 2022 22:18:14 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kwtb0w2gh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Nov 2022 22:18:14 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AHM6Gv1012871;
-        Thu, 17 Nov 2022 22:18:12 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3kwthe05ws-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Nov 2022 22:18:12 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AHMInNJ52298110
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 17 Nov 2022 22:18:49 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A8C74A4051;
-        Thu, 17 Nov 2022 22:18:09 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2431AA4053;
-        Thu, 17 Nov 2022 22:18:09 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 17 Nov 2022 22:18:09 +0000 (GMT)
-From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>
-Subject: [PATCH v3 6/9] KVM: s390: selftest: memop: Add cmpxchg tests
-Date:   Thu, 17 Nov 2022 23:17:55 +0100
-Message-Id: <20221117221758.66326-7-scgl@linux.ibm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221117221758.66326-1-scgl@linux.ibm.com>
-References: <20221117221758.66326-1-scgl@linux.ibm.com>
+        Thu, 17 Nov 2022 17:36:15 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A6AD13F16;
+        Thu, 17 Nov 2022 14:36:13 -0800 (PST)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AHMZFWA009705;
+        Thu, 17 Nov 2022 22:36:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2022-7-12;
+ bh=lm/WYRwGpksgFWqXZFY7rDQZdMBX9Zcy+ngdvNoLJYU=;
+ b=Xi2jzwl4noJcerB8163A8WO0QnjJBycna8ZZB0VKWEJ9ZW11myW7Hj8JEI0crMDCwkjO
+ Ng6Lw6yJI6M3x5tFphCiKdnHdSUHESqJarA1okuolmyxId24WQphnkpJU7R4Yea1q/hV
+ ol7nu/jVWBhthB50wMl2jCblmkX0xSmgVFA7L/ssmbpQixq7bBpcJdmWR/31pFB9dgsm
+ gNFYgDvL4WSWkry7AZpqGZ9EWPmOLK1av77BHDtPAiydYIsNyY5gIMKQ5tfzoPpStx9Q
+ 8slZX7XRMVyU9qKqHujvZXsGs6E3KGp6dNxUJVsVvLDoEVc2+MOcMP7W9QeXlG9n8kqX pw== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3kwwvp801e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 17 Nov 2022 22:36:03 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2AHMS4fK008684;
+        Thu, 17 Nov 2022 22:36:02 GMT
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2107.outbound.protection.outlook.com [104.47.70.107])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3kt1xg3apm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 17 Nov 2022 22:36:02 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aX0RUfcAVE9KpuU+1nMOpEP4s0On+Nffno5edQ75hgpdOiDGRLey83cPDioa9l1cD7mFT2cjstQpLioLgSqHtaLhbe4hmXaGpRkn1MYpgZhCFpMNrAAq3PjW6KrhdsqZzSBLybIRhVJufkpOv+DJ2fBq69baPTbjabCvKpIzcyrTideK6obRV7lPyo1znB9xzcbFCYRbPDToxaSKX9f3AA7X60IzhlryGMJQUOpnwhIrCN93FBZHmQ+qOXCaey9eYeQmQWoYFWT3ZrnmRI7RzV9U0Cy8mfuHDqb4XRxdAQHfW138JOtYU7hpZ3K0RGYsupAACbvolTMO+zdGmEJ6QA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lm/WYRwGpksgFWqXZFY7rDQZdMBX9Zcy+ngdvNoLJYU=;
+ b=gczH4OAgOXoI0v2wot38TsPe6nGeSJSIvWgvA4R8sbDWL4JYMnGt6hZ8N0aStHpDYjq7/avJ15KcUGV2TfRR71hF7juKT64wm3u3NQIOsidxRlV/dOANpJPReK55ReH6eON5CVkNpyLYTSTbaZmjVKcZWBbST0t34wsvwv7lVZrHE8vbo/GigVD3ZsKj4dWZq15Oc7QGU5DDlSI9HFalV5vFnZM/KYzpnuoYYJvOSRcYar0ojpfJuCG5Fr9pfNF4N9PJ8wclgKiIQWIZyhhVr/vho6Wu+aFjv3hVNG8pw6BD/bwLmcfZdteda5d9Km4QC2uolmQZqySB53WURXK8Tg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lm/WYRwGpksgFWqXZFY7rDQZdMBX9Zcy+ngdvNoLJYU=;
+ b=BI/X3Nn8KkbW0KlPLlAVuK2epoZmJvGd53Lj9Hy6UTKutbzP+nbyCnafPmGWGLYQxtrmTMqB9ppLcETQnX8BKcJc77aN2m6Qo4yibTu5CA+6xhDTyw3iywPadyTWP104uiVqoPJbvjQosLeOXBDR3EmzRyHCT8r+PLiuhhYlUyg=
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
+ by IA1PR10MB6218.namprd10.prod.outlook.com (2603:10b6:208:3a5::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.19; Thu, 17 Nov
+ 2022 22:36:00 +0000
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::8d67:8c42:d124:3721]) by BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::8d67:8c42:d124:3721%4]) with mapi id 15.20.5813.020; Thu, 17 Nov 2022
+ 22:36:00 +0000
+Date:   Thu, 17 Nov 2022 14:35:57 -0800
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Joel Savitz <jsavitz@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        David Hildenbrand <dhildenb@redhat.com>,
+        Nico Pache <npache@redhat.com>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH linux-next] selftests/vm: calculate variables in correct
+ order
+Message-ID: <Y3a3TcM55a6RnpUA@monkey>
+References: <20221028132640.2791026-1-jsavitz@redhat.com>
+ <20221108163124.a54f932f8f79f9c1d6e63903@linux-foundation.org>
+ <CAL1p7m7Ar_DBbpLWuha8dPYKU3FjS6NyAROBa_PO6NKRgfuGxQ@mail.gmail.com>
+ <Y3aojfUC2nSwbCzB@x1n>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3aojfUC2nSwbCzB@x1n>
+X-ClientProxiedBy: MW4PR04CA0264.namprd04.prod.outlook.com
+ (2603:10b6:303:88::29) To BY5PR10MB4196.namprd10.prod.outlook.com
+ (2603:10b6:a03:20d::23)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Hp8Q4vKKz-5_K6jL3IdfFNnPm2MEDiQB
-X-Proofpoint-ORIG-GUID: MGQ1MD5KLnP5U2DxW26yszYFVRDlfCEi
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|IA1PR10MB6218:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7591411b-db94-4bcc-c422-08dac8ec1a19
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: T5k46+7iE+XjwQnsEssGt1HFqfcbuaxoAg5h/xVMfBaD3v2E3WH5J1OOu4+LwGfSIXkx3U/Z4uofsw8mhRFF9/LMs9LP4+js55rx+iIhSgYjo12jinXP9WNFZr4dPj6ir460ANqW56zrOKMPEF81x+egHP1rqvQ0PHNYw4CvSjWj6j/kr7LH9UERMrOe9WkNty7x+8FkUMhJai5P9rDx+m0Tqr+gYtm3bVfgR4gHDkFTNhp+EkysrOXSq+zXbSHUGtOaayUIyEgZDbc2PNyFIj9RGS+LGBe63NczyXqf3zDRlb7dzWtra9NE/EYVQNc/KYm9GSJFRdw6XGwzrczpn8Ur/jjp0NcU/pLj6esgeH+YvI/BE59vfLaOY3FJffkVaipZZpyb+3zLwnHdvNrimebNmRZrFyoJDJLNkvVB/+WSyzC7dgvDaxa6v8YVdweuAKwBjrR64dWl11OLKUY9z7LAGZA5I3b/jK6LCyKDWd6MEakQFlqDpwg71NNrWckGWV08RhqWo4o2+ZiLi7zAuC8irYGU9616e8HtNJqdBpbuoo3xr2Jl9qyavk3bMB+ktfUWXHpNZA6N4LGHTGs828OrNK2FgDWTauAmVLX0WddxsiVH0ehDOtlKEiBrAbBxWo3nd5njG1bQ2ZJnKxE3Mg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(346002)(136003)(366004)(39860400002)(376002)(396003)(451199015)(6486002)(44832011)(478600001)(5660300002)(86362001)(2906002)(186003)(8936002)(83380400001)(6916009)(41300700001)(54906003)(316002)(53546011)(6506007)(4326008)(6666004)(6512007)(26005)(66476007)(8676002)(66556008)(66946007)(9686003)(33716001)(38100700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?NAzl2Con9gFZ7bsqF6W6wp8aMAvNK7lRn3EcypbpArxW3EkUG+kHgUWHZKFw?=
+ =?us-ascii?Q?AhyV6gDQm+R3jCBnRbUSdJiwi4lO+QpHLFK5TkTDJ45lsJSWBli7orXnvYSV?=
+ =?us-ascii?Q?i1Toq2lDs7+7yIMU1ITw3EzFqDRvx+ORylbw0Y6+iz8RzaFLoQ7N7L7xLydq?=
+ =?us-ascii?Q?rlp8lRwlo/bRgAgv5B6ZNBrmQqIW+Nt/1RtsHBzjhnjSgv1ICxq3CmBjTmlJ?=
+ =?us-ascii?Q?6Hi0vETkDhwKNzM5sZRDWlZQgxUDhIDSynEeW9VCoFBIc5LIAC/4d35hz5uA?=
+ =?us-ascii?Q?WJe1uUg9WMGq/J4Ot4Lihy1UvR6ZDeXpLjw33NlSIXnjjvSkpZiPVPdKMmZK?=
+ =?us-ascii?Q?D8nXsqrOX0wT5x+f8gjAIssErp6W+eIAMdR/pUqFjFvtRk/vqmjcd3NYl2/T?=
+ =?us-ascii?Q?Kvx0SARXQJrt+9rokYQD1K0CMhx/4w8UBF7D9oqSj63KxrT+X6pqopw7ibUx?=
+ =?us-ascii?Q?g/zu5jj7jGY6UBmCuNDqO9Zi2XR3cD4sOcOfbTfks1RqjDN8EENSMNK1sGWr?=
+ =?us-ascii?Q?iDLkzC/dylVmpA7sIk/S5wHqKUvaIIA6p9bH5LmKYmVOMt+ruvpl21FFghxK?=
+ =?us-ascii?Q?RDX3YD7EJBb/Ta2Su0+xxAwDkQTNnhdPRbw1aR2sT+Nk20tiU1Kofb4gWNm4?=
+ =?us-ascii?Q?1voCqJryy7GBKmTxZ200sSeZLDRSe3/GGXuuzk3xBYJjmR/DU/uw3yWaPhkM?=
+ =?us-ascii?Q?IwNsElwEpMaWzLbpBEVaUCPVsQZYPXiYmyF1lbcWs+2p/0CkEKU6Y+1pkVJn?=
+ =?us-ascii?Q?Nq1I/0bdQggR5K5KV/ifAlje7t4BFtXRYOPPeEKHm/VsynFLTBxUWVXWUKSl?=
+ =?us-ascii?Q?30hBlejnch9lOZOB9Q+0v6LDQqO/zOhXbewxXhqz4w5U79fVpNwNPuicCJju?=
+ =?us-ascii?Q?rj3kLjNJ7A5ZdCe+4iXsGSUFGwdAH37KEYltB/8bGT553fINOqDuiYeuomp1?=
+ =?us-ascii?Q?8dz13ItaZXNYW2Nd/FSjRFL4gNfZTQ0ltUJoLhvJbYtnhqNAJqiHKpyIis38?=
+ =?us-ascii?Q?f1K6lvPzvBfTbl82Lf4EnQ6K3Za3cpDM5QLddgMP49aQbAePBHJIpnovljvM?=
+ =?us-ascii?Q?BaLVRzfm0+ENfFpNQH6Hnpo8s9yhhwrcLF3zsaFk2PQC1Ug7l794ZBLhquzN?=
+ =?us-ascii?Q?hTkQyrV1j8lL2FrOUC+2jlJpOD2KMR4y2FrUaCaTRsbEhd1pfiCVn2aUk8Kv?=
+ =?us-ascii?Q?9T8Tuz/LwWhCUilZsHoY1Zy5+/9wDS8H2gVq9tGPCNelxqAdwFE1MYwdgehd?=
+ =?us-ascii?Q?Z/CM1FatJ9WKoCZF2TZFTzAeBPu76RkMZ16h/HuS6c1H38K5qfeO4S+WiyRM?=
+ =?us-ascii?Q?j2BayK6gb6RE6k98PQDrVJ/2RVRCJQ3IqGWoRXxUWePSHPXjn1CUNUXi9Lt/?=
+ =?us-ascii?Q?dIr5AcDTHEHLHExA7yoyiCxUdtBQ57smTIrWAr07H3T2mNxj6/eO6QjvnvX6?=
+ =?us-ascii?Q?zQgoxmcdLii5IcWtzKXMLpyjo17UOdx7fxBb50gHogaYKQnRm95ulgM68m14?=
+ =?us-ascii?Q?oApt+hPcsatd0K35o+fEnDRNAg00qVojLhGhz+J2kgQaK4ZgEZrGSLdsoRUn?=
+ =?us-ascii?Q?I97gLeiyGWstHQqtz+/3bORiixIvG4A+2euj8X1meGoZyLvCbVc6s0WNklCM?=
+ =?us-ascii?Q?ZA=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?G8n/4ieTcBrJeO3Jc7TtCkZMef/6OR/jELDns6PVQ3VgvYakw/gAdqRaoBz2?=
+ =?us-ascii?Q?zhNZA/VfMlRgSP+fdiyni6daepeSh9qQ4mI+l/oCefQX9fgjFYchHI0BK3qK?=
+ =?us-ascii?Q?DrDbpU5cUVaFJMXs2kNzLxzTdnqjQym6S7ykHJIkgxoDLR9OCGRCU0rGL7Ag?=
+ =?us-ascii?Q?xaq2qz6EDU10z6BUByoOBhCiAO8c1fJJZKkxxqMAaQ4Iv+fywvecyP+x2fWR?=
+ =?us-ascii?Q?9NTfPrNEZVUwFD1f2umcuzJQBlSRj4LEscKbkRD4ksZ6g4nNHxRSU2VZiKmp?=
+ =?us-ascii?Q?FFi5YIfiuXHEteTRsG2VL5bD7E95ArrHUoMfCmhIKR5saHwX7WgRdEUC9bo+?=
+ =?us-ascii?Q?ubeMwfPuLxr3x8xm7M8T4+Fjbu5xTSLL7REqKRlaDSowamxqU9mOjUxY2q05?=
+ =?us-ascii?Q?07GHwd2dr6uJAIp0HTYK+iRHieILA8e6gdDyfjSKbi8p8Tk3Y2AZ99zWyykR?=
+ =?us-ascii?Q?w6WCZYS16N1VA8Ux3oueVWgOlB5av2RF5XEAc4Xdv9ZworB/592JcSqhg0IM?=
+ =?us-ascii?Q?sDkZhcKLcPtSJHMjXKU8qZalHDRPxwUQxrWGYjQ9K4wBcRNT4p35NaTW+KrU?=
+ =?us-ascii?Q?fNCPOfRDXgYT61XfEwRvqIiTQo8Vcql70Bdc3tRNpgiBasgCslVWDlas1Pls?=
+ =?us-ascii?Q?CA6D5nsIE2it6R2haTG52mVvsIz4FBWRHTPoX5d9FW4qB+FAoYUX98O+pvqv?=
+ =?us-ascii?Q?3Wl+d2wRuVdrpHW7cJsRNCX10aglwMHyvDW55NoTvuWzZvp4Nj8QUs4snvTu?=
+ =?us-ascii?Q?zTwZY3y7kNkdb0DY3qlx3fGGSF4+DvVDhQR5Nf7Cz8lZd2rGih/FSrUQtnz0?=
+ =?us-ascii?Q?d6OhRGpgMflRxLuL4MYDXhj8YRTkTzjtmRMbT+Vyrl+Jrb1H1K6uih3n0muo?=
+ =?us-ascii?Q?kaBd/tBlIux33U9rniGrQKWJY4GaVuCYVFvXNi4UkvD77MN4XKL6oXAFgZR/?=
+ =?us-ascii?Q?oSCogDNU8T5xZVF0gp+Ppk69t5n4+0sHtrlDopQIebkg1I9ACpE5Vh4oe0Bv?=
+ =?us-ascii?Q?HT6SH1C9F04N0bLHaKXEdgP8lJrAn5P5eE7zA2+94/EKhwE=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7591411b-db94-4bcc-c422-08dac8ec1a19
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Nov 2022 22:36:00.3641
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ck+M/NVz0VN5NDdJbi2ZYWlDZsX/gTYeryzB08V+rxRhrnc3JcBcjFmiJR6LpDd5rbRZ51Ug9q4qVPyeQ61/sA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR10MB6218
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-11-17_06,2022-11-17_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
- priorityscore=1501 mlxscore=0 malwarescore=0 lowpriorityscore=0
- adultscore=0 impostorscore=0 clxscore=1015 spamscore=0 mlxlogscore=999
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211170157
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 bulkscore=0 mlxscore=0
+ phishscore=0 suspectscore=0 spamscore=0 adultscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2211170160
+X-Proofpoint-GUID: 05W3FLSujCwAUicSwHZX1y258rO-n-3Y
+X-Proofpoint-ORIG-GUID: 05W3FLSujCwAUicSwHZX1y258rO-n-3Y
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Test successful exchange, unsuccessful exchange, storage key protection
-and invalid arguments.
+On 11/17/22 16:33, Peter Xu wrote:
+> On Wed, Nov 16, 2022 at 08:09:11PM -0400, Joel Savitz wrote:
+> > However, I noticed that on the mm-everything branch, the hugepage-mmap test
+> > fails:
+> > 
+> > # ./run_vmtests.sh -t "hugetlb"
+> > running: ./hugepage-mmap
+> > -----------------------
+> > running ./hugepage-mmap
+> > -----------------------
+> > Open failed: No such file or directory
+> > [FAIL]
+> > ...
+> > 
+> > It appears this is due to commit 0796c7b8be84 ("selftests/vm: drop mnt
+> > point for hugetlb in run_vmtests.sh")
+> > as the test still replies on the ./huge mountpoint removed in that commit.
+> > The test passes before that patchset is applied.
+> 
+> Oops, sorry I totally overlooked this hard-coded test case using the
+> mntpoint.
+> 
+> Fix is simple though, which is attached.
+> 
+> -- 
+> Peter Xu
 
-Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
----
- tools/testing/selftests/kvm/s390x/memop.c | 404 +++++++++++++++++++++-
- 1 file changed, 390 insertions(+), 14 deletions(-)
+> From 71da2480d4bac0fc598e4d1f05f71aba8b980bc4 Mon Sep 17 00:00:00 2001
+> From: Peter Xu <peterx@redhat.com>
+> Date: Thu, 17 Nov 2022 16:29:15 -0500
+> Subject: [PATCH] selftests/vm: use memfd for hugepage-mmap test
+> Content-type: text/plain
+> 
+> This test was overlooked with a hard-coded mntpoint path in test when we're
+> removing the hugetlb mntpoint in commit 0796c7b8be84.  Fix it up so the
+> test can keep running.
+> 
+> Reported-by: Joel Savitz <jsavitz@redhat.com>
+> Signed-off-by: Peter Xu <peterx@redhat.com>
+> ---
+>  tools/testing/selftests/vm/hugepage-mmap.c | 10 ++++------
+>  1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
-index 10f34c629cac..269b181731c8 100644
---- a/tools/testing/selftests/kvm/s390x/memop.c
-+++ b/tools/testing/selftests/kvm/s390x/memop.c
-@@ -9,6 +9,7 @@
- #include <stdlib.h>
- #include <string.h>
- #include <sys/ioctl.h>
-+#include <pthread.h>
- 
- #include <linux/bits.h>
- 
-@@ -44,6 +45,8 @@ struct mop_desc {
- 	enum mop_access_mode mode;
- 	void *buf;
- 	uint32_t sida_offset;
-+	void *old;
-+	bool *cmpxchg_success;
- 	uint8_t ar;
- 	uint8_t key;
- };
-@@ -91,6 +94,10 @@ static struct kvm_s390_mem_op ksmo_from_desc(const struct mop_desc *desc)
- 		ksmo.flags |= KVM_S390_MEMOP_F_SKEY_PROTECTION;
- 		ksmo.key = desc->key;
- 	}
-+	if (desc->old) {
-+		ksmo.flags |= KVM_S390_MEMOP_F_CMPXCHG;
-+		ksmo.old_p = (uint64_t)desc->old;
-+	}
- 	if (desc->_ar)
- 		ksmo.ar = desc->ar;
- 	else
-@@ -136,35 +143,45 @@ static void print_memop(struct kvm_vcpu *vcpu, const struct kvm_s390_mem_op *ksm
- 		printf("ABSOLUTE, WRITE, ");
- 		break;
- 	}
--	printf("gaddr=%llu, size=%u, buf=%llu, ar=%u, key=%u",
--	       ksmo->gaddr, ksmo->size, ksmo->buf, ksmo->ar, ksmo->key);
-+	printf("gaddr=%llu, size=%u, buf=%llu, ar=%u, key=%u, old_p=%llx",
-+	       ksmo->gaddr, ksmo->size, ksmo->buf, ksmo->ar, ksmo->key,
-+	       ksmo->old_p);
- 	if (ksmo->flags & KVM_S390_MEMOP_F_CHECK_ONLY)
- 		printf(", CHECK_ONLY");
- 	if (ksmo->flags & KVM_S390_MEMOP_F_INJECT_EXCEPTION)
- 		printf(", INJECT_EXCEPTION");
- 	if (ksmo->flags & KVM_S390_MEMOP_F_SKEY_PROTECTION)
- 		printf(", SKEY_PROTECTION");
-+	if (ksmo->flags & KVM_S390_MEMOP_F_CMPXCHG)
-+		printf(", CMPXCHG");
- 	puts(")");
- }
- 
--static void memop_ioctl(struct test_info info, struct kvm_s390_mem_op *ksmo)
-+static int err_memop_ioctl(struct test_info info, struct kvm_s390_mem_op *ksmo,
-+			   struct mop_desc *desc)
- {
- 	struct kvm_vcpu *vcpu = info.vcpu;
- 
- 	if (!vcpu)
--		vm_ioctl(info.vm, KVM_S390_MEM_OP, ksmo);
-+		return __vm_ioctl(info.vm, KVM_S390_MEM_OP, ksmo);
- 	else
--		vcpu_ioctl(vcpu, KVM_S390_MEM_OP, ksmo);
-+		return __vcpu_ioctl(vcpu, KVM_S390_MEM_OP, ksmo);
- }
- 
--static int err_memop_ioctl(struct test_info info, struct kvm_s390_mem_op *ksmo)
-+static void memop_ioctl(struct test_info info, struct kvm_s390_mem_op *ksmo,
-+			struct mop_desc *desc)
- {
--	struct kvm_vcpu *vcpu = info.vcpu;
-+	int r;
-+
-+	r = err_memop_ioctl(info, ksmo, desc);
-+	if (ksmo->flags & KVM_S390_MEMOP_F_CMPXCHG) {
-+		if (desc->cmpxchg_success)
-+			*desc->cmpxchg_success = !r;
-+		if (r == KVM_S390_MEMOP_R_NO_XCHG)
-+			r = 0;
-+	}
-+	TEST_ASSERT(!r, __KVM_IOCTL_ERROR("KVM_S390_MEM_OP", r));
- 
--	if (!vcpu)
--		return __vm_ioctl(info.vm, KVM_S390_MEM_OP, ksmo);
--	else
--		return __vcpu_ioctl(vcpu, KVM_S390_MEM_OP, ksmo);
- }
- 
- #define MEMOP(err, info_p, mop_target_p, access_mode_p, buf_p, size_p, ...)	\
-@@ -187,7 +204,7 @@ static int err_memop_ioctl(struct test_info info, struct kvm_s390_mem_op *ksmo)
- 	}									\
- 	__ksmo = ksmo_from_desc(&__desc);					\
- 	print_memop(__info.vcpu, &__ksmo);					\
--	err##memop_ioctl(__info, &__ksmo);					\
-+	err##memop_ioctl(__info, &__ksmo, &__desc);				\
- })
- 
- #define MOP(...) MEMOP(, __VA_ARGS__)
-@@ -201,6 +218,8 @@ static int err_memop_ioctl(struct test_info info, struct kvm_s390_mem_op *ksmo)
- #define AR(a) ._ar = 1, .ar = (a)
- #define KEY(a) .f_key = 1, .key = (a)
- #define INJECT .f_inject = 1
-+#define CMPXCHG_OLD(o) .old = (o)
-+#define CMPXCHG_SUCCESS(s) .cmpxchg_success = (s)
- 
- #define CHECK_N_DO(f, ...) ({ f(__VA_ARGS__, CHECK_ONLY); f(__VA_ARGS__); })
- 
-@@ -210,8 +229,8 @@ static int err_memop_ioctl(struct test_info info, struct kvm_s390_mem_op *ksmo)
- #define CR0_FETCH_PROTECTION_OVERRIDE	(1UL << (63 - 38))
- #define CR0_STORAGE_PROTECTION_OVERRIDE	(1UL << (63 - 39))
- 
--static uint8_t mem1[65536];
--static uint8_t mem2[65536];
-+static uint8_t __aligned(PAGE_SIZE) mem1[65536];
-+static uint8_t __aligned(PAGE_SIZE) mem2[65536];
- 
- struct test_default {
- 	struct kvm_vm *kvm_vm;
-@@ -243,6 +262,8 @@ enum stage {
- 	STAGE_SKEYS_SET,
- 	/* Guest copied memory (locations up to test case) */
- 	STAGE_COPIED,
-+	/* End of guest code reached */
-+	STAGE_DONE,
- };
- 
- #define HOST_SYNC(info_p, stage)					\
-@@ -254,6 +275,9 @@ enum stage {
- 									\
- 	vcpu_run(__vcpu);						\
- 	get_ucall(__vcpu, &uc);						\
-+	if (uc.cmd == UCALL_ABORT) {					\
-+		REPORT_GUEST_ASSERT_2(uc, "hints: %lu, %lu");		\
-+	}								\
- 	ASSERT_EQ(uc.cmd, UCALL_SYNC);					\
- 	ASSERT_EQ(uc.args[1], __stage);					\
- })									\
-@@ -293,6 +317,44 @@ static void default_read(struct test_info copy_cpu, struct test_info mop_cpu,
- 	ASSERT_MEM_EQ(mem1, mem2, size);
- }
- 
-+static void default_cmpxchg(struct test_default *test, uint8_t key)
-+{
-+	for (int size = 1; size <= 16; size *= 2) {
-+		for (int offset = 0; offset < 16; offset += size) {
-+			uint8_t __aligned(16) new[16] = {};
-+			uint8_t __aligned(16) old[16];
-+			bool succ;
-+
-+			prepare_mem12();
-+			default_write_read(test->vcpu, test->vcpu, LOGICAL, 16, NO_KEY);
-+
-+			memcpy(&old, mem1, 16);
-+			CHECK_N_DO(MOP, test->vm, ABSOLUTE, WRITE, new + offset,
-+				   size, GADDR_V(mem1 + offset),
-+				   CMPXCHG_OLD(old + offset),
-+				   CMPXCHG_SUCCESS(&succ), KEY(key));
-+			HOST_SYNC(test->vcpu, STAGE_COPIED);
-+			MOP(test->vm, ABSOLUTE, READ, mem2, 16, GADDR_V(mem2));
-+			TEST_ASSERT(succ, "exchange of values should succeed");
-+			memcpy(mem1 + offset, new + offset, size);
-+			ASSERT_MEM_EQ(mem1, mem2, 16);
-+
-+			memcpy(&old, mem1, 16);
-+			new[offset]++;
-+			old[offset]++;
-+			CHECK_N_DO(MOP, test->vm, ABSOLUTE, WRITE, new + offset,
-+				   size, GADDR_V(mem1 + offset),
-+				   CMPXCHG_OLD(old + offset),
-+				   CMPXCHG_SUCCESS(&succ), KEY(key));
-+			HOST_SYNC(test->vcpu, STAGE_COPIED);
-+			MOP(test->vm, ABSOLUTE, READ, mem2, 16, GADDR_V(mem2));
-+			TEST_ASSERT(!succ, "exchange of values should not succeed");
-+			ASSERT_MEM_EQ(mem1, mem2, 16);
-+			ASSERT_MEM_EQ(&old, mem1, 16);
-+		}
-+	}
-+}
-+
- static void guest_copy(void)
- {
- 	GUEST_SYNC(STAGE_INITED);
-@@ -377,6 +439,250 @@ static void test_copy_key(void)
- 	kvm_vm_free(t.kvm_vm);
- }
- 
-+static void test_cmpxchg_key(void)
-+{
-+	struct test_default t = test_default_init(guest_copy_key);
-+
-+	HOST_SYNC(t.vcpu, STAGE_SKEYS_SET);
-+
-+	default_cmpxchg(&t, NO_KEY);
-+	default_cmpxchg(&t, 0);
-+	default_cmpxchg(&t, 9);
-+
-+	kvm_vm_free(t.kvm_vm);
-+}
-+
-+static __uint128_t cut_to_size(int size, __uint128_t val)
-+{
-+	switch (size) {
-+	case 1:
-+		return (uint8_t)val;
-+	case 2:
-+		return (uint16_t)val;
-+	case 4:
-+		return (uint32_t)val;
-+	case 8:
-+		return (uint64_t)val;
-+	case 16:
-+		return val;
-+	}
-+	GUEST_ASSERT_1(false, "Invalid size");
-+	return 0;
-+}
-+
-+static bool popcount_eq(__uint128_t a, __uint128_t b)
-+{
-+	unsigned int count_a, count_b;
-+
-+	count_a = __builtin_popcountl((uint64_t)(a >> 64)) +
-+		  __builtin_popcountl((uint64_t)a);
-+	count_b = __builtin_popcountl((uint64_t)(b >> 64)) +
-+		  __builtin_popcountl((uint64_t)b);
-+	return count_a == count_b;
-+}
-+
-+static __uint128_t rotate(int size, __uint128_t val, int amount)
-+{
-+	unsigned int bits = size * 8;
-+
-+	amount = (amount + bits) % bits;
-+	val = cut_to_size(size, val);
-+	return (val << (bits - amount)) | (val >> amount);
-+}
-+
-+const unsigned int max_block = 16;
-+
-+static void choose_block(bool guest, int i, int *size, int *offset)
-+{
-+	unsigned int rand;
-+
-+	rand = i;
-+	if (guest) {
-+		rand = rand * 19 + 11;
-+		*size = 1 << ((rand % 3) + 2);
-+		rand = rand * 19 + 11;
-+		*offset = (rand % max_block) & ~(*size - 1);
-+	} else {
-+		rand = rand * 17 + 5;
-+		*size = 1 << (rand % 5);
-+		rand = rand * 17 + 5;
-+		*offset = (rand % max_block) & ~(*size - 1);
-+	}
-+}
-+
-+static __uint128_t permutate_bits(bool guest, int i, int size, __uint128_t old)
-+{
-+	unsigned int rand;
-+	bool swap;
-+
-+	rand = i;
-+	rand = rand * 3 + 1;
-+	if (guest)
-+		rand = rand * 3 + 1;
-+	swap = rand % 2 == 0;
-+	if (swap) {
-+		int i, j;
-+		__uint128_t new;
-+		uint8_t byte0, byte1;
-+
-+		rand = rand * 3 + 1;
-+		i = rand % size;
-+		rand = rand * 3 + 1;
-+		j = rand % size;
-+		if (i == j)
-+			return old;
-+		new = rotate(16, old, i * 8);
-+		byte0 = new & 0xff;
-+		new &= ~0xff;
-+		new = rotate(16, new, -i * 8);
-+		new = rotate(16, new, j * 8);
-+		byte1 = new & 0xff;
-+		new = (new & ~0xff) | byte0;
-+		new = rotate(16, new, -j * 8);
-+		new = rotate(16, new, i * 8);
-+		new = new | byte1;
-+		new = rotate(16, new, -i * 8);
-+		return new;
-+	} else {
-+		int amount;
-+
-+		rand = rand * 3 + 1;
-+		amount = rand % (size * 8);
-+		return rotate(size, old, amount);
-+	}
-+}
-+
-+static bool _cmpxchg(int size, void *target, __uint128_t *old_p, __uint128_t new)
-+{
-+	bool ret;
-+
-+	switch (size) {
-+	case 4: {
-+			uint32_t old = *old_p;
-+
-+			asm volatile ("cs %[old],%[new],%[address]"
-+			    : [old] "+d" (old),
-+			      [address] "+Q" (*(uint32_t *)(target))
-+			    : [new] "d" ((uint32_t)new)
-+			    : "cc"
-+			);
-+			ret = old == (uint32_t)*old_p;
-+			*old_p = old;
-+			return ret;
-+		}
-+	case 8: {
-+			uint64_t old = *old_p;
-+
-+			asm volatile ("csg %[old],%[new],%[address]"
-+			    : [old] "+d" (old),
-+			      [address] "+Q" (*(uint64_t *)(target))
-+			    : [new] "d" ((uint64_t)new)
-+			    : "cc"
-+			);
-+			ret = old == (uint64_t)*old_p;
-+			*old_p = old;
-+			return ret;
-+		}
-+	case 16: {
-+			__uint128_t old = *old_p;
-+
-+			asm volatile ("cdsg %[old],%[new],%[address]"
-+			    : [old] "+d" (old),
-+			      [address] "+Q" (*(__uint128_t *)(target))
-+			    : [new] "d" (new)
-+			    : "cc"
-+			);
-+			ret = old == *old_p;
-+			*old_p = old;
-+			return ret;
-+		}
-+	}
-+	GUEST_ASSERT_1(false, "Invalid size");
-+	return 0;
-+}
-+
-+const unsigned int cmpxchg_iter_outer = 100, cmpxchg_iter_inner = 10000;
-+
-+static void guest_cmpxchg_key(void)
-+{
-+	int size, offset;
-+	__uint128_t old, new;
-+
-+	set_storage_key_range(mem1, max_block, 0x10);
-+	set_storage_key_range(mem2, max_block, 0x10);
-+	GUEST_SYNC(STAGE_SKEYS_SET);
-+
-+	for (int i = 0; i < cmpxchg_iter_outer; i++) {
-+		do {
-+			old = 1;
-+		} while (!_cmpxchg(16, mem1, &old, 0));
-+		for (int j = 0; j < cmpxchg_iter_inner; j++) {
-+			choose_block(true, i + j, &size, &offset);
-+			do {
-+				new = permutate_bits(true, i + j, size, old);
-+			} while (!_cmpxchg(size, mem2 + offset, &old, new));
-+		}
-+	}
-+
-+	GUEST_SYNC(STAGE_DONE);
-+}
-+
-+static void *run_guest(void *data)
-+{
-+	struct test_info *info = data;
-+
-+	HOST_SYNC(*info, STAGE_DONE);
-+	return NULL;
-+}
-+
-+static char *quad_to_char(__uint128_t *quad, int size)
-+{
-+	return ((char *)quad) + (sizeof(*quad) - size);
-+}
-+
-+static void test_cmpxchg_key_concurrent(void)
-+{
-+	struct test_default t = test_default_init(guest_cmpxchg_key);
-+	int size, offset;
-+	__uint128_t old, new;
-+	bool success;
-+	pthread_t thread;
-+
-+	HOST_SYNC(t.vcpu, STAGE_SKEYS_SET);
-+	prepare_mem12();
-+	MOP(t.vcpu, LOGICAL, WRITE, mem1, max_block, GADDR_V(mem2));
-+	pthread_create(&thread, NULL, run_guest, &t.vcpu);
-+
-+	for (int i = 0; i < cmpxchg_iter_outer; i++) {
-+		do {
-+			old = 0;
-+			new = 1;
-+			MOP(t.vm, ABSOLUTE, WRITE, &new,
-+			    sizeof(new), GADDR_V(mem1),
-+			    CMPXCHG_OLD(&old),
-+			    CMPXCHG_SUCCESS(&success), KEY(1));
-+		} while (!success);
-+		for (int j = 0; j < cmpxchg_iter_inner; j++) {
-+			choose_block(false, i + j, &size, &offset);
-+			do {
-+				new = permutate_bits(false, i + j, size, old);
-+				MOP(t.vm, ABSOLUTE, WRITE, quad_to_char(&new, size),
-+				    size, GADDR_V(mem2 + offset),
-+				    CMPXCHG_OLD(quad_to_char(&old, size)),
-+				    CMPXCHG_SUCCESS(&success), KEY(1));
-+			} while (!success);
-+		}
-+	}
-+
-+	pthread_join(thread, NULL);
-+
-+	MOP(t.vcpu, LOGICAL, READ, mem2, max_block, GADDR_V(mem2));
-+	TEST_ASSERT(popcount_eq(*(__uint128_t *)mem1, *(__uint128_t *)mem2),
-+		    "Must retain number of set bits");
-+
-+	kvm_vm_free(t.kvm_vm);
-+}
-+
- static void guest_copy_key_fetch_prot(void)
- {
- 	/*
-@@ -457,6 +763,24 @@ static void test_errors_key(void)
- 	kvm_vm_free(t.kvm_vm);
- }
- 
-+static void test_errors_cmpxchg_key(void)
-+{
-+	struct test_default t = test_default_init(guest_copy_key_fetch_prot);
-+	int i;
-+
-+	HOST_SYNC(t.vcpu, STAGE_INITED);
-+	HOST_SYNC(t.vcpu, STAGE_SKEYS_SET);
-+
-+	for (i = 1; i <= 16; i *= 2) {
-+		__uint128_t old = 0;
-+
-+		CHECK_N_DO(ERR_PROT_MOP, t.vm, ABSOLUTE, WRITE, mem2, i, GADDR_V(mem2),
-+			   CMPXCHG_OLD(&old), KEY(2));
-+	}
-+
-+	kvm_vm_free(t.kvm_vm);
-+}
-+
- static void test_termination(void)
- {
- 	struct test_default t = test_default_init(guest_error_key);
-@@ -690,6 +1014,38 @@ static void test_errors(void)
- 	kvm_vm_free(t.kvm_vm);
- }
- 
-+static void test_errors_cmpxchg(void)
-+{
-+	struct test_default t = test_default_init(guest_idle);
-+	__uint128_t old;
-+	int rv, i, power = 1;
-+
-+	HOST_SYNC(t.vcpu, STAGE_INITED);
-+
-+	for (i = 0; i < 32; i++) {
-+		if (i == power) {
-+			power *= 2;
-+			continue;
-+		}
-+		rv = ERR_MOP(t.vm, ABSOLUTE, WRITE, mem1, i, GADDR_V(mem1),
-+			     CMPXCHG_OLD(&old));
-+		TEST_ASSERT(rv == -1 && errno == EINVAL,
-+			    "ioctl allows bad size for cmpxchg");
-+	}
-+	for (i = 1; i <= 16; i *= 2) {
-+		rv = ERR_MOP(t.vm, ABSOLUTE, WRITE, mem1, i, GADDR((void *)~0xfffUL),
-+			     CMPXCHG_OLD(&old));
-+		TEST_ASSERT(rv > 0, "ioctl allows bad guest address for cmpxchg");
-+	}
-+	for (i = 2; i <= 16; i *= 2) {
-+		rv = ERR_MOP(t.vm, ABSOLUTE, WRITE, mem1, i, GADDR_V(mem1 + 1),
-+			     CMPXCHG_OLD(&old));
-+		TEST_ASSERT(rv == -1 && errno == EINVAL,
-+			    "ioctl allows bad alignment for cmpxchg");
-+	}
-+
-+	kvm_vm_free(t.kvm_vm);
-+}
- 
- int main(int argc, char *argv[])
- {
-@@ -719,6 +1075,16 @@ int main(int argc, char *argv[])
- 			.test = test_copy_key,
- 			.requirements_met = extension_cap > 0,
- 		},
-+		{
-+			.name = "cmpxchg with storage keys",
-+			.test = test_cmpxchg_key,
-+			.requirements_met = extension_cap & 0x2,
-+		},
-+		{
-+			.name = "concurrently cmpxchg with storage keys",
-+			.test = test_cmpxchg_key_concurrent,
-+			.requirements_met = extension_cap & 0x2,
-+		},
- 		{
- 			.name = "copy with key storage protection override",
- 			.test = test_copy_key_storage_prot_override,
-@@ -739,6 +1105,16 @@ int main(int argc, char *argv[])
- 			.test = test_errors_key,
- 			.requirements_met = extension_cap > 0,
- 		},
-+		{
-+			.name = "error checks for cmpxchg with key",
-+			.test = test_errors_cmpxchg_key,
-+			.requirements_met = extension_cap & 0x2,
-+		},
-+		{
-+			.name = "error checks for cmpxchg",
-+			.test = test_errors_cmpxchg,
-+			.requirements_met = extension_cap & 0x2,
-+		},
- 		{
- 			.name = "termination",
- 			.test = test_termination,
+Thanks Peter!
+That is also something I noticed and was on my todo list.
+
+Acked-by: Mike Kravetz <mike.kravetz@oracle.com>
 -- 
-2.34.1
-
+Mike Kravetz
