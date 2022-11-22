@@ -2,101 +2,157 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 63E69C43217
-	for <linux-kselftest@archiver.kernel.org>; Tue, 22 Nov 2022 14:06:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4121C4332F
+	for <linux-kselftest@archiver.kernel.org>; Tue, 22 Nov 2022 14:09:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233715AbiKVOGm (ORCPT
+        id S233202AbiKVOJp (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 22 Nov 2022 09:06:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55722 "EHLO
+        Tue, 22 Nov 2022 09:09:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233081AbiKVOGG (ORCPT
+        with ESMTP id S233725AbiKVOJV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Nov 2022 09:06:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B0820F5E
-        for <linux-kselftest@vger.kernel.org>; Tue, 22 Nov 2022 06:03:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669125801;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FiZt6CO0d2Q/fNRLdOiB+spVHV87735/SJe/WQ/NZzg=;
-        b=XW/UOn0+hG7VIE1Cg3AxvBMtkQzTXOl8vdr6Ouw04djBnnOTno2YUgjKCZHMrVhYGKBtMO
-        Vw4fMxxTWtbSswMbHWRYGqwrIHXrCR10B2iPlLgG6NkXyV5u1OONsQ2GLOZPa4S9Kzqmtm
-        lRTuhgyAKgHOZoLNc5JG5gBqmWk/vQY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-609-KbIRkdF1M_2eJfwfZ3i_ZA-1; Tue, 22 Nov 2022 09:03:14 -0500
-X-MC-Unique: KbIRkdF1M_2eJfwfZ3i_ZA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 22 Nov 2022 09:09:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAA5713D14;
+        Tue, 22 Nov 2022 06:07:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 73174801585;
-        Tue, 22 Nov 2022 14:03:13 +0000 (UTC)
-Received: from RHTPC1VM0NT.redhat.com (unknown [10.22.16.203])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DE54040C6EC6;
-        Tue, 22 Nov 2022 14:03:11 +0000 (UTC)
-From:   Aaron Conole <aconole@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     Pravin B Shelar <pshelar@ovn.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Thomas Graf <tgraf@suug.ch>, dev@openvswitch.org,
-        Eelco Chaudron <echaudro@redhat.com>,
-        Ilya Maximets <i.maximets@ovn.org>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [RFC net-next 4/6] selftests: openvswitch: adjust datapath NL message
-Date:   Tue, 22 Nov 2022 09:03:05 -0500
-Message-Id: <20221122140307.705112-5-aconole@redhat.com>
-In-Reply-To: <20221122140307.705112-1-aconole@redhat.com>
-References: <20221122140307.705112-1-aconole@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8002461724;
+        Tue, 22 Nov 2022 14:07:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B899AC433C1;
+        Tue, 22 Nov 2022 14:07:35 +0000 (UTC)
+Message-ID: <4d3ef082-f7b3-2b6e-6fcf-5f991ffe14e9@xs4all.nl>
+Date:   Tue, 22 Nov 2022 15:07:33 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH RFC 16/19] mm/frame-vector: remove FOLL_FORCE usage
+Content-Language: en-US
+To:     David Hildenbrand <david@redhat.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Peter Xu <peterx@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+References: <20221107161740.144456-1-david@redhat.com>
+ <20221107161740.144456-17-david@redhat.com>
+ <CAAFQd5C3Ba1WhjYJF_7tW06mgvzoz9KTakNo+Tz8h_f6dGKzHQ@mail.gmail.com>
+ <6175d780-3307-854c-448a-8e6c7ad0772c@xs4all.nl>
+ <6ace6cd4-3e13-8ec1-4c2a-49e2e14e81a6@redhat.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <6ace6cd4-3e13-8ec1-4c2a-49e2e14e81a6@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The netlink message for creating a new datapath takes an array
-of ports for the PID creation.  This shouldn't cause much issue
-but correct it for future messages where we need to do decode
-of datapath information that could include the per-cpu PID
-map
+On 11/22/22 13:38, David Hildenbrand wrote:
+> On 22.11.22 13:25, Hans Verkuil wrote:
+>> Hi Tomasz, David,
+>>
+>> On 11/8/22 05:45, Tomasz Figa wrote:
+>>> Hi David,
+>>>
+>>> On Tue, Nov 8, 2022 at 1:19 AM David Hildenbrand <david@redhat.com> wrote:
+>>>>
+>>>> FOLL_FORCE is really only for debugger access. According to commit
+>>>> 707947247e95 ("media: videobuf2-vmalloc: get_userptr: buffers are always
+>>>> writable"), the pinned pages are always writable.
+>>>
+>>> Actually that patch is only a workaround to temporarily disable
+>>> support for read-only pages as they seemed to suffer from some
+>>> corruption issues in the retrieved user pages. We expect to support
+>>> read-only pages as hardware input after. That said, FOLL_FORCE doesn't
+>>> sound like the right thing even in that case, but I don't know the
+>>> background behind it being added here in the first place. +Hans
+>>> Verkuil +Marek Szyprowski do you happen to remember anything about it?
+>>
+>> I tracked the use of 'force' all the way back to the first git commit
+>> (2.6.12-rc1) in the very old video-buf.c. So it is very, very old and the
+>> reason is lost in the mists of time.
+>>
+>> I'm not sure if the 'force' argument of get_user_pages() at that time
+>> even meant the same as FOLL_FORCE today. From what I can tell it has just
+>> been faithfully used ever since, but I have my doubt that anyone understands
+>> the reason behind it since it was never explained.
+>>
+>> Looking at this old LWN article https://lwn.net/Articles/28548/ suggests
+>> that it might be related to calling get_user_pages for write buffers
+>> (non-zero write argument) where you also want to be able to read from the
+>> buffer. That is certainly something that some drivers need to do post-capture
+>> fixups.
+>>
+>> But 'force' was also always set for read buffers, and I don't know if that
+>> was something that was actually needed, or just laziness.
+>>
+>> I assume that removing FOLL_FORCE from 'FOLL_FORCE|FOLL_WRITE' will still
+>> allow drivers to read from the buffer?
+> 
+> Yes. The only problematic corner case I can imagine is if someone has a 
+> VMA without write permissions (no PROT_WRITE/VM_WRITE) and wants to pin 
+> user space pages as a read buffer. We'd specify now FOLL_WRITE without 
+> FOLL_FORCE and GUP would reject that: write access without write 
+> permissions is invalid.
 
-Fixes: 25f16c873fb1 ("selftests: add openvswitch selftest suite")
-Signed-off-by: Aaron Conole <aconole@redhat.com>
----
- tools/testing/selftests/net/openvswitch/ovs-dpctl.py | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I do not believe this will be an issue.
 
-diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-index d654fe1fe4e6..fe14da358901 100644
---- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-+++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-@@ -71,7 +71,7 @@ class OvsDatapath(GenericNetlinkSocket):
-         nla_map = (
-             ("OVS_DP_ATTR_UNSPEC", "none"),
-             ("OVS_DP_ATTR_NAME", "asciiz"),
--            ("OVS_DP_ATTR_UPCALL_PID", "uint32"),
-+            ("OVS_DP_ATTR_UPCALL_PID", "array(uint32)"),
-             ("OVS_DP_ATTR_STATS", "dpstats"),
-             ("OVS_DP_ATTR_MEGAFLOW_STATS", "megaflowstats"),
-             ("OVS_DP_ATTR_USER_FEATURES", "uint32"),
-@@ -141,7 +141,7 @@ class OvsDatapath(GenericNetlinkSocket):
- 
-         msg["attrs"].append(["OVS_DP_ATTR_USER_FEATURES", dpfeatures])
-         if not shouldUpcall:
--            msg["attrs"].append(["OVS_DP_ATTR_UPCALL_PID", 0])
-+            msg["attrs"].append(["OVS_DP_ATTR_UPCALL_PID", [0]])
- 
-         try:
-             reply = self.nlm_request(
--- 
-2.34.3
+> 
+> There would be no way around "fixing" this implementation to not specify 
+> FOLL_WRITE when only reading from user-space pages. Not sure what the 
+> implications are regarding that corruption that was mentioned in 
+> 707947247e95.
 
+Before 707947247e95 the FOLL_WRITE flag was only set for write buffers
+(i.e. video capture, DMA_FROM_DEVICE), not for read buffers (video output,
+DMA_TO_DEVICE). In the video output case there should never be any need
+for drivers to write to the buffer to the best of my knowledge.
+
+But I have had some complaints about that commit that it causes problems
+in some scenarios, and it has been on my todo list for quite some time now
+to dig deeper into this. I probably should prioritize this for this or
+next week.
+
+> 
+> Having said that, I assume such a scenario is unlikely -- but you might 
+> know better how user space usually uses this interface. There would be 
+> three options:
+> 
+> 1) Leave the FOLL_FORCE hack in for now, which I *really* want to avoid.
+> 2) Remove FOLL_FORCE and see if anybody even notices (this patch) and
+>     leave the implementation as is for now.
+> 3) Remove FOLL_FORCE and fixup the implementation to only specify
+>     FOLL_WRITE if the pages will actually get written to.
+> 
+> 3) would most probably ideal, however, I am no expert on that code and 
+> can't do it (707947247e95 confuses me). So naive me would go with 2) first.
+> 
+
+Option 3 would be best. And 707947247e95 confuses me as well, and I actually
+wrote it :-) I am wondering whether it was addressed at the right level, but
+as I said, I need to dig a bit deeper into this.
+
+Regards,
+
+	Hans
