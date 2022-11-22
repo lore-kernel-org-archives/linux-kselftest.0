@@ -2,203 +2,95 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A408DC433FE
-	for <linux-kselftest@archiver.kernel.org>; Tue, 22 Nov 2022 20:19:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B268CC433FE
+	for <linux-kselftest@archiver.kernel.org>; Tue, 22 Nov 2022 20:26:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233709AbiKVUTn (ORCPT
+        id S233984AbiKVU0O (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 22 Nov 2022 15:19:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59988 "EHLO
+        Tue, 22 Nov 2022 15:26:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232419AbiKVUTm (ORCPT
+        with ESMTP id S232341AbiKVU0N (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Nov 2022 15:19:42 -0500
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F6428E08
-        for <linux-kselftest@vger.kernel.org>; Tue, 22 Nov 2022 12:19:41 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id e205so17002555oif.11
-        for <linux-kselftest@vger.kernel.org>; Tue, 22 Nov 2022 12:19:41 -0800 (PST)
+        Tue, 22 Nov 2022 15:26:13 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8448827DFF;
+        Tue, 22 Nov 2022 12:26:12 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id b1-20020a17090a7ac100b00213fde52d49so15356593pjl.3;
+        Tue, 22 Nov 2022 12:26:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JJeM2QZ9j6Bl1KYDD45QbX15tSP8xUPz8dxNHtRGie0=;
-        b=SJhuMMaSp6msJ0PsB556c5ah3uZu7a10YngHgwsZfuGDB8+IF/LJYOqzGIhX52Sqnh
-         acj5Uc5MxbBqHpuvgO/xmEsUWBOXnTL9JOwQmaT4jWTgAYV8Zf/vt4UFcQx7lPJOyCex
-         y81jzFq1ki8KZ+JPC9h/sjVY4plAq19ncn+IccWU0PzEpSNsk1FXhp44fZvll2ffWsRz
-         Vz1ZzxFiAIOh97C7LqM0knQbx+mo59/ByP/U7J5Q2HXKa8BzC9Mtu6NlEgAUR2+Tj2l9
-         OL2xSSxY6WsL0FGRgRLj6ByyizeMe1cqwJmp6pttKjVEFi5kchTfcPhiv3Vbu5CdOMOb
-         azww==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ql2FYZtChC8kHpVI2e9mEHckclAXpvmwn/fO5tPh578=;
+        b=elh+z0q1qqevOLCYpwBkrBAb6yjmtaCYgataLx2FY3l8CrqJmnwjYJWWkb5XE113YF
+         wt+kf4HIRlorudrICrtnK9/H2DPLaZSXNrbpt8G62NLJIKN8sfcQUFdKwfg06jc0C5+p
+         8Gtx4MymzEdA0l8pyQ1Cf2LPpu2Wp+22iPTyGXFjEnggAQxp1UPsc++daU16duq13EKY
+         a2VTX51iWrP73LKhnvgT0RVcYOFWdyJDccZ5b8xGiTGmp43Ls+jmMr1jHEkDDh3SyE1e
+         x8u9Div/D2HUKk1ec770Bu2vK+iXmlPe3ItbyjMQdRWapEXVc54OAKYChtCcD2e+K3ke
+         q0uQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JJeM2QZ9j6Bl1KYDD45QbX15tSP8xUPz8dxNHtRGie0=;
-        b=OjUpWwlaB6FX0M4G2ozEEKqwUBq/YwydWxPMq/kcOiKXPRfwsAamoYp+1oW7TE/dqZ
-         0gnZJjczUEHa6SiDYygMKvn/Ya7PcME95Tv6pzaUCnFotECKGef2icrmim352WsuPzuX
-         9BODj7im55hKBy67xhQ3eCWtGTKz2Px4OfZlifG/B4K2w/jCPlIRAj0jc3JAVYHnwcB8
-         XZkooDm6s1Gw/vJNcRs9KUaZAomhsY9sDsoyvQ5oXPzUpDB/WfMsZ2GNizjHecx1cAM6
-         5c0/CvFDyKmStJXYe7AM8F6xNc3/MyXgP/WfCyy6mzAjfP+3qd7tToa9bxk7hrFJizYi
-         cJzA==
-X-Gm-Message-State: ANoB5plLj7LAacUDIBnwSjA9nl24VMZb7h1TYGCkuh0igm5gF48+7HYW
-        zIsFBMzTZ0RXE6VDdFZgXjw9LiozJgFGKJ5CaifuIw==
-X-Google-Smtp-Source: AA0mqf6ZAbjJ7gQ7mlzp85IXiOHOKc/bQHBSbghmcmvRAlU5CeViWuctX+g7H3VZdwHKT6naUZDnNUpPqjg627seies=
-X-Received: by 2002:a54:441a:0:b0:35a:4390:1b8b with SMTP id
- k26-20020a54441a000000b0035a43901b8bmr2549926oiw.122.1669148380657; Tue, 22
- Nov 2022 12:19:40 -0800 (PST)
+        bh=Ql2FYZtChC8kHpVI2e9mEHckclAXpvmwn/fO5tPh578=;
+        b=gIYWqxh7EllkvI87XOFlwLSmIeriqzWfpu4BIGUyHEdSNj1JtcAxcqFWZT29iYZvCo
+         j+mHnEpVqub2wSmKr3+UyLKZ3EFMTlM04/wsXHEl9o03hHF4EUX38fqfc5fvvOJwZCSf
+         9yXDXVufuOHnev+ijO7Yr/9SC/7QKshIczxi0ZlM914dIpujX7KNBjuuMfjDPlinV9dQ
+         CgXJsd6Jw+J6VmZEtkTNvIpzgDzPrGvS6e6pqAKNkvAMLvu6eGX9f4ofPQRpE+TjBssZ
+         prECv+5W653qsjJ3Z/88T44zeaRqVQXzlBYz9vfl+DBKRkvthxDiQjetLeSq301ttCXg
+         XpiA==
+X-Gm-Message-State: ANoB5pmEc9g8U0mUYRd+KRe1AEb4MpwT8xYYUEUuDP6KMteOQMJHDqFb
+        NfhGKcmC+DWT8HW3W+9ouFo=
+X-Google-Smtp-Source: AA0mqf5oGIFMVmy9BowMY5qnMQENYrRn8wXpwe2NFMB9qFE6FmgU4Tc323G37NWDBgbwSvOoByvZwg==
+X-Received: by 2002:a17:90a:8a03:b0:218:9f92:d1a0 with SMTP id w3-20020a17090a8a0300b002189f92d1a0mr16072431pjn.53.1669148771369;
+        Tue, 22 Nov 2022 12:26:11 -0800 (PST)
+Received: from localhost ([2620:10d:c090:400::5:bb3])
+        by smtp.gmail.com with ESMTPSA id y10-20020a1709027c8a00b00186cf82717fsm12407693pll.165.2022.11.22.12.26.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Nov 2022 12:26:11 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 22 Nov 2022 10:26:09 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Kamalesh Babulal <kamalesh.babulal@oracle.com>
+Cc:     Waiman Long <longman@redhat.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Tom Hromatka <tom.hromatka@oracle.com>,
+        cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kselftest/cgroup: Add cleanup() to test_cpuset_prs.sh
+Message-ID: <Y30wYVzuCGK/0Zxp@slm.duckdns.org>
+References: <20221118101330.251332-1-kamalesh.babulal@oracle.com>
 MIME-Version: 1.0
-References: <20221121184743.1123556-1-rmoar@google.com> <20221121184743.1123556-2-rmoar@google.com>
- <CADYN=9KUBaOG52SRtseLTkgkMzvzyCzCs3tR1vOk4yvkMSTJ2A@mail.gmail.com> <CAGS_qxp7eLWJ+2DdzcdEezw067xxGO+v6VQwJD=jkBR-YKCefQ@mail.gmail.com>
-In-Reply-To: <CAGS_qxp7eLWJ+2DdzcdEezw067xxGO+v6VQwJD=jkBR-YKCefQ@mail.gmail.com>
-From:   Rae Moar <rmoar@google.com>
-Date:   Tue, 22 Nov 2022 15:19:28 -0500
-Message-ID: <CA+GJov7v8hbJ6A2ehfpZvG3+e181D0JrJRYDTQc9_QMM4G0HQA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] kunit: improve KTAP compliance of KUnit test output
-To:     Daniel Latypov <dlatypov@google.com>,
-        Anders Roxell <anders.roxell@linaro.org>
-Cc:     brendanhiggins@google.com, davidgow@google.com,
-        skhan@linuxfoundation.org, mauro.chehab@linux.intel.com,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, isabbasso@riseup.net
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221118101330.251332-1-kamalesh.babulal@oracle.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 12:14 PM Daniel Latypov <dlatypov@google.com> wrote=
-:
->
-> On Tue, Nov 22, 2022 at 1:17 AM Anders Roxell <anders.roxell@linaro.org> =
-wrote:
-> >
-> > On Mon, 21 Nov 2022 at 19:48, Rae Moar <rmoar@google.com> wrote:
-> > >
-> > > Change KUnit test output to better comply with KTAP v1 specifications
-> > > found here: https://kernel.org/doc/html/latest/dev-tools/ktap.html.
-> > > 1) Use "KTAP version 1" instead of "TAP version 14" as test output he=
-ader
-> > > 2) Remove '-' between test number and test name on test result lines
-> > > 2) Add KTAP version lines to each subtest header as well
-> > >
-> > > Note that the new KUnit output still includes the =E2=80=9C# Subtest=
-=E2=80=9D line now
-> > > located after the KTAP version line. This does not completely match t=
-he
-> > > KTAP v1 spec but since it is classified as a diagnostic line, it is n=
-ot
-> > > expected to be disruptive or break any existing parsers. This
-> > > =E2=80=9C# Subtest=E2=80=9D line comes from the TAP 14 spec
-> > > (https://testanything.org/tap-version-14-specification.html)
-> > > and it is used to define the test name before the results.
-> > >
-> > > Original output:
-> > >
-> > >  TAP version 14
-> > >  1..1
-> > >    # Subtest: kunit-test-suite
-> > >    1..3
-> > >    ok 1 - kunit_test_1
-> > >    ok 2 - kunit_test_2
-> > >    ok 3 - kunit_test_3
-> > >  # kunit-test-suite: pass:3 fail:0 skip:0 total:3
-> > >  # Totals: pass:3 fail:0 skip:0 total:3
-> > >  ok 1 - kunit-test-suite
-> > >
-> > > New output:
-> > >
-> > >  KTAP version 1
-> > >  1..1
-> > >    KTAP version 1
-> > >    # Subtest: kunit-test-suite
-> > >    1..3
-> > >    ok 1 kunit_test_1
-> > >    ok 2 kunit_test_2
-> > >    ok 3 kunit_test_3
-> > >  # kunit-test-suite: pass:3 fail:0 skip:0 total:3
-> > >  # Totals: pass:3 fail:0 skip:0 total:3
-> > >  ok 1 kunit-test-suite
-> > >
-> > > Signed-off-by: Rae Moar <rmoar@google.com>
-> > > Reviewed-by: Daniel Latypov <dlatypov@google.com>
-> > > Reviewed-by: David Gow <davidgow@google.com>
-> >
-> > I tried this patch, see the full boot log [1] and I can still see some
-> >  tests that output the "old" format with 'ok 1 - kunit_test_1', for exa=
-mple
-> >
-> > ok 1 - 1901-12-13 Lower bound of 32bit < 0 timestamp, no extra bits
-> >
-> > Isn't this something that should be converted too?
+On Fri, Nov 18, 2022 at 03:43:30PM +0530, Kamalesh Babulal wrote:
+> Install a cleanup function using the trap command for signals EXIT,
+> SIGINT, SIGQUIT and SIGABRT.  The cleanup function will perform:
+> 1. Online the CPUs that were made offline during the test.
+> 2. Removing the cgroups created.
+> 3. Restoring the original /sys/kernel/debug/sched/verbose value,
+>    currently it's left turned on, irrespective of the original
+>    configuration value.
+> 
+> the test performs steps 1 and 2, on the successful runs, but not during
+> all of the failed runs.  With the cleanup(), the system will perform all
+> three steps during failed/passed test runs.
+> 
+> Signed-off-by: Kamalesh Babulal <kamalesh.babulal@oracle.com>
 
-Hello! Sorry for missing that. You are definitely right. Those results shou=
-ld
-be converted as well.
+Applied cgroup/for-6.2.
 
->
-> Yes, thanks for catching that.
-> That's what I get from only looking over the diff this time since I
-> thought I remembered the code...
->
-> We also want this diff to fix a) debugfs, b) subtests.
->
-> diff --git a/lib/kunit/debugfs.c b/lib/kunit/debugfs.c
-> index 1048ef1b8d6e..de0ee2e03ed6 100644
-> --- a/lib/kunit/debugfs.c
-> +++ b/lib/kunit/debugfs.c
-> @@ -63,7 +63,7 @@ static int debugfs_print_results(struct seq_file
-> *seq, void *v)
->         kunit_suite_for_each_test_case(suite, test_case)
->                 debugfs_print_result(seq, suite, test_case);
->
-> -       seq_printf(seq, "%s %d - %s\n",
-> +       seq_printf(seq, "%s %d %s\n",
->                    kunit_status_to_ok_not_ok(success), 1, suite->name);
->         return 0;
->  }
-> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> index 19344cb501c5..c9d57a1d9524 100644
-> --- a/lib/kunit/test.c
-> +++ b/lib/kunit/test.c
-> @@ -556,7 +556,7 @@ int kunit_run_tests(struct kunit_suite *suite)
->
->                                 kunit_log(KERN_INFO, &test,
->                                           KUNIT_SUBTEST_INDENT
-> KUNIT_SUBTEST_INDENT
-> -                                         "%s %d - %s",
-> +                                         "%s %d %s",
->
-> kunit_status_to_ok_not_ok(test.status),
->                                           test.param_index + 1, param_des=
-c);
->
-> Daniel
+Thanks.
 
-Thanks Daniel!
-
-I think that should do the trick with the addition of adding the "KTAP
-version 1" line, which you can do with the following diff:
-
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index c9d57a1d9524..1c9d8d962d67 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -543,6 +543,8 @@ int kunit_run_tests(struct kunit_suite *suite)
-                        /* Get initial param. */
-                        param_desc[0] =3D '\0';
-                        test.param_value =3D
-test_case->generate_params(NULL, param_desc);
-+                       kunit_log(KERN_INFO, &test,
-KUNIT_SUBTEST_INDENT KUNIT_SUBTEST_INDENT
-+                                 "KTAP version 1\n");
-                        kunit_log(KERN_INFO, &test,
-KUNIT_SUBTEST_INDENT KUNIT_SUBTEST_INDENT
-                                  "# Subtest: %s", test_case->name);
-
-Going to run through some more examples to make sure this version
-works otherwise I will make a v3 with the addition of fixing any merge
-conflicts.
-
-Rae
+-- 
+tejun
