@@ -2,41 +2,41 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BE834C433FE
-	for <linux-kselftest@archiver.kernel.org>; Wed, 23 Nov 2022 01:03:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F889C46467
+	for <linux-kselftest@archiver.kernel.org>; Wed, 23 Nov 2022 01:03:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235221AbiKWBDt (ORCPT
+        id S232517AbiKWBDu (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 22 Nov 2022 20:03:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40612 "EHLO
+        Tue, 22 Nov 2022 20:03:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234891AbiKWBDq (ORCPT
+        with ESMTP id S235016AbiKWBDr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Nov 2022 20:03:46 -0500
+        Tue, 22 Nov 2022 20:03:47 -0500
 Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2F99ADA4F4;
-        Tue, 22 Nov 2022 17:03:44 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EF68BDA4D1;
+        Tue, 22 Nov 2022 17:03:45 -0800 (PST)
 Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8DxtfBvcX1jkyMAAA--.456S3;
-        Wed, 23 Nov 2022 09:03:43 +0800 (CST)
+        by gateway (Coremail) with SMTP id _____8DxM_BwcX1jmyMAAA--.434S3;
+        Wed, 23 Nov 2022 09:03:44 +0800 (CST)
 Received: from linux.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxJldqcX1js24YAA--.45400S6;
-        Wed, 23 Nov 2022 09:03:43 +0800 (CST)
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxJldqcX1js24YAA--.45400S8;
+        Wed, 23 Nov 2022 09:03:44 +0800 (CST)
 From:   Tiezhu Yang <yangtiezhu@loongson.cn>
 To:     Shuah Khan <shuah@kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>
 Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/6] selftests: gpio: Use "grep -E" instead of "egrep"
-Date:   Wed, 23 Nov 2022 09:03:31 +0800
-Message-Id: <1669165413-12035-5-git-send-email-yangtiezhu@loongson.cn>
+Subject: [PATCH v2 6/6] selftests: kselftest_deps: Use "grep -E" instead of "egrep"
+Date:   Wed, 23 Nov 2022 09:03:33 +0800
+Message-Id: <1669165413-12035-7-git-send-email-yangtiezhu@loongson.cn>
 X-Mailer: git-send-email 2.1.0
 In-Reply-To: <1669165413-12035-1-git-send-email-yangtiezhu@loongson.cn>
 References: <1669165413-12035-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf8CxJldqcX1js24YAA--.45400S6
+X-CM-TRANSID: AQAAf8CxJldqcX1js24YAA--.45400S8
 X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvdXoWruFWrur1kGFy3Gr1fJw17trb_yoWkKwbEvr
-        48tr4DA3yUZFyUur1xCFWakFn7C34UCrZ8AFWDJF13J34jva15CF4Durn8A3W5Ww15G3y2
-        qa18Jw1xKr42gjkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+X-Coremail-Antispam: 1Uk129KBjvdXoWruFWrur1kGFy3Gr1fJw17trb_yoWkKFXEvr
+        W8trykAr4UZF1DArWUua4UAFWkCw4jkF4UCryUGwnxt34jvF45GFs3ur1jy3WrWws8W3y2
+        va1kZ3WfKr1Y9jkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
         xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
         j7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
         AFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
@@ -59,7 +59,7 @@ now contains warnings that look like:
 	egrep: warning: egrep is obsolescent; using grep -E
 fix this up by moving the related file to use "grep -E" instead.
 
-  sed -i "s/egrep/grep -E/g" `grep egrep -rwl tools/testing/selftests/gpio`
+  sed -i "s/egrep/grep -E/g" `grep egrep -rwl tools/testing/selftests`
 
 Here are the steps to install the latest grep:
 
@@ -71,22 +71,22 @@ Here are the steps to install the latest grep:
 
 Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 ---
- tools/testing/selftests/gpio/gpio-sim.sh | 2 +-
+ tools/testing/selftests/kselftest_deps.sh | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/gpio/gpio-sim.sh b/tools/testing/selftests/gpio/gpio-sim.sh
-index 341e3de..9f539d4 100755
---- a/tools/testing/selftests/gpio/gpio-sim.sh
-+++ b/tools/testing/selftests/gpio/gpio-sim.sh
-@@ -27,7 +27,7 @@ remove_chip() {
- 			continue
- 		fi
+diff --git a/tools/testing/selftests/kselftest_deps.sh b/tools/testing/selftests/kselftest_deps.sh
+index 708cb54..7424a1f 100755
+--- a/tools/testing/selftests/kselftest_deps.sh
++++ b/tools/testing/selftests/kselftest_deps.sh
+@@ -90,7 +90,7 @@ pass_libs=()
+ pass_cnt=0
  
--		LINES=`ls $CONFIGFS_DIR/$CHIP/$BANK/ | egrep ^line`
-+		LINES=`ls $CONFIGFS_DIR/$CHIP/$BANK/ | grep -E ^line`
- 		if [ "$?" = 0 ]; then
- 			for LINE in $LINES; do
- 				if [ -e $CONFIGFS_DIR/$CHIP/$BANK/$LINE/hog ]; then
+ # Get all TARGETS from selftests Makefile
+-targets=$(egrep "^TARGETS +|^TARGETS =" Makefile | cut -d "=" -f2)
++targets=$(grep -E "^TARGETS +|^TARGETS =" Makefile | cut -d "=" -f2)
+ 
+ # Single test case
+ if [ $# -eq 2 ]
 -- 
 2.1.0
 
