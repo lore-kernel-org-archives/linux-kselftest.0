@@ -2,229 +2,167 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D54C9C4321E
-	for <linux-kselftest@archiver.kernel.org>; Fri, 25 Nov 2022 08:33:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C8EFDC4332F
+	for <linux-kselftest@archiver.kernel.org>; Fri, 25 Nov 2022 08:43:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbiKYId2 (ORCPT
+        id S229504AbiKYIna (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 25 Nov 2022 03:33:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50464 "EHLO
+        Fri, 25 Nov 2022 03:43:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiKYIdY (ORCPT
+        with ESMTP id S229766AbiKYInQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Nov 2022 03:33:24 -0500
-Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E430231357
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Nov 2022 00:33:23 -0800 (PST)
-Received: by mail-ua1-x92a.google.com with SMTP id x24so1318407uaf.4
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Nov 2022 00:33:23 -0800 (PST)
+        Fri, 25 Nov 2022 03:43:16 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2173421242
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Nov 2022 00:43:15 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id y6-20020a25b9c6000000b006c1c6161716so3295866ybj.8
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Nov 2022 00:43:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=a1xfDYPCqjhnOirhAgUNhzvQCH9Eq2waq7O3y2TwaHw=;
-        b=p4j7XAvzmQVbf+IC2SC5cZMuKNJH4cuy/NLax99hOeLNeVeANPYEJxlrE7E3g2NnHS
-         v3GiOMhjNDBLitClDrVZLrzAwe9rUklnjYCHESByewnnZk28/GghLN6obETtcHwoF/5U
-         HuoXb0Fr814pjoVmP7Q7rb2qE8WROAg0FatUVC50KysbLT/HAprbnhhRrhNOGpt1TAcK
-         AAalZ7qEHx+iDFtQHqEddX8KvzqtKRU8SBogNRrXKIDrjgUvP8lK0Q4r2+KTAFmCTAfs
-         U6AaebWbdu3x+f0KiAZSPslO5UGfBm9+1EJhn/D8bt78IB/vuTe/M43hY8nxwUv7XIeC
-         Si+g==
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=dehjIhc0oB2x/7qa8tpHLfPv+8ip2PCtDc/VgLdDFS0=;
+        b=U3tR0OVoZ0hHgA1k6gQVY26XcT3oNgQIup/uX30yKzUfLfrSKpvRJsmcSBuhiAXpTS
+         rTzQMGzMJNRsRtthJ4BxyoK+TidlhhFCJmjhxBf/o1FEDj74nyLKCXv3UoCsEVkyMOeU
+         364amPEiG2TPV7cF3TGX+tLLAPX4almhYT7NCNw9CXxbjzI0V/mb8zoOMitrJVRJA7dj
+         so3SRxWDXfqlFI3Uw6FkxsZS8mgE7neClxz6IKN1K/gUkQhbn5yotHy8A0DKQmNZGmod
+         UisNijbujJ0UGmHkgWBKaLdxRuxz2CsxSAWjZikzhuh6GNn9njbaHLDcXdeN0Mt/hTxE
+         23bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=a1xfDYPCqjhnOirhAgUNhzvQCH9Eq2waq7O3y2TwaHw=;
-        b=sJ6W9dqN+v5kJ9zBdplZNZ7rLKKOoJ7OMgbZ6eBnMqadRT+USxHCIMfJZW0g/FzDCT
-         xZCG3FoHkK+hnQnDa1qmh/bzOEDYfdHUAecIXiPI6mfOmXn4aelg+7NhTo6jbfdOjjRE
-         ASZtd2nmzSKXjfpOfIKNDdaWpZ7DcXx0/E/4JD5qYExFJsxkaJG2yafxYl2HwfWUMnqc
-         HqSuODrk8S0rvBH6HsgD4AvHxqndxsjpv4O1H5FrvoMgAFyOnLOhEsoZ0UoQckITbDV6
-         PPS/z4a//pB1YIrTktKDEm+GCVjxqF2AUPsVJsuqs7JG7QT4qSNAOH6iwykMZESrSTfs
-         i3Ig==
-X-Gm-Message-State: ANoB5pnwSCmQGTqgLdri6Jeae7DwOW+sjFfGqyuNuneZng5WXHWNHrYN
-        VxQUX3XWnFmUMA/trkXUfxOdiyd1/aw8DEXPn5bwcg==
-X-Google-Smtp-Source: AA0mqf6wmh2+DIDulwYb7PQy32QEgIJ3iYVaTQ4wAK6I8iWQQZlxgcXCPLYzZGYTu7+Ao+Q0XPCK02SwGWl4aS8e5c8=
-X-Received: by 2002:a05:6130:316:b0:418:b66a:6f26 with SMTP id
- ay22-20020a056130031600b00418b66a6f26mr11289425uab.21.1669365202876; Fri, 25
- Nov 2022 00:33:22 -0800 (PST)
-MIME-Version: 1.0
-References: <20221119081252.3864249-1-davidgow@google.com> <20221119081252.3864249-3-davidgow@google.com>
- <Y39Kz0hI3IOKoqrJ@hyeyoo>
-In-Reply-To: <Y39Kz0hI3IOKoqrJ@hyeyoo>
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dehjIhc0oB2x/7qa8tpHLfPv+8ip2PCtDc/VgLdDFS0=;
+        b=r+RsexCxj18IMd0dL87FEtBueFq3lmpTVWINVldAAHdE5Xo55vQxfte44mBC9vUQrs
+         Kh/CdA7/RGKNDnrXLNYHqsifBDZSaHQBxlpiFpsckxH/A/WfWY6ckoQPPuA3Zir0r8jH
+         3ZNldwB+TizG6pyWYcoDXngln5lAcKH0lYqnaRUeQ/G6mGW5UW2cajw40QO2YuIpSCwl
+         AlShxlOHhGVRQsYEA9zBeI+hgb3iuIMqB2o+bCaMJMjDnUY5yWvO3y9NYmw0xz4ItRmS
+         fC5r9zfz1lHFmVrrSnAYoCeAj4b3rQCym5zB2h+lAWtJtklhGdyrJDfu9ZJGPCYsoj+T
+         s8pA==
+X-Gm-Message-State: ANoB5pny6q5SnZ1fCuxw38u1o1os0lSULYIEQSjWt0jtQmJNyjBKGIw3
+        SneVWrS8EgkSYq1kLKTyWDwIfG8xp+0Dkw==
+X-Google-Smtp-Source: AA0mqf6SIG2nM06vCqr04rh+5zvembhI1If1NZodMNsjqU25om3zZ8oQIazCspuzdvbnHIuLg9UcLSc+CucUsg==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a05:6902:114b:b0:6e1:ce17:6c40 with SMTP
+ id p11-20020a056902114b00b006e1ce176c40mr9ybu.5.1669365793417; Fri, 25 Nov
+ 2022 00:43:13 -0800 (PST)
+Date:   Fri, 25 Nov 2022 16:43:04 +0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
+Message-ID: <20221125084306.1063074-1-davidgow@google.com>
+Subject: [PATCH v4 1/3] kunit: Provide a static key to check if KUnit is
+ actively running tests
 From:   David Gow <davidgow@google.com>
-Date:   Fri, 25 Nov 2022 16:33:11 +0800
-Message-ID: <CABVgOSmCdtnFatO+EU0T9fado1h7ZW0DAzO=Y2jPvt6mTmO57A@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] mm: slub: test: Use the kunit_get_current_test() function
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
+To:     Brendan Higgins <brendan.higgins@linux.dev>,
         Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        Oliver Glitta <glittao@gmail.com>,
-        Christoph Lameter <cl@linux.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Rientjes <rientjes@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000f039b705ee475f79"
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kees Cook <keescook@chromium.org>, linux-doc@vger.kernel.org,
+        linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---000000000000f039b705ee475f79
-Content-Type: text/plain; charset="UTF-8"
+KUnit does a few expensive things when enabled. This hasn't been a
+problem because KUnit was only enabled on test kernels, but with a few
+people enabling (but not _using_) KUnit on production systems, we need a
+runtime way of handling this.
 
-On Thu, Nov 24, 2022 at 6:43 PM Hyeonggon Yoo <42.hyeyoo@gmail.com> wrote:
->
-> On Sat, Nov 19, 2022 at 04:12:52PM +0800, David Gow wrote:
-> > Use the newly-added function kunit_get_current_test() instead of
-> > accessing current->kunit_test directly. This function uses a static key
-> > to return more quickly when KUnit is enabled, but no tests are actively
-> > running. There should therefore be a negligible performance impact to
-> > enabling the slub KUnit tests.
-> >
-> > Other than the performance improvement, this should be a no-op.
-> >
-> > Cc: Oliver Glitta <glittao@gmail.com>
-> > Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-> > Cc: Christoph Lameter <cl@linux.com>
-> > Cc: Vlastimil Babka <vbabka@suse.cz>
-> > Cc: David Rientjes <rientjes@google.com>
-> > Cc: Andrew Morton <akpm@linux-foundation.org>
-> > Signed-off-by: David Gow <davidgow@google.com>
-> > Acked-by: Vlastimil Babka <vbabka@suse.cz>
->
-> Acked-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-> with small comment:
->
+Provide a 'kunit_running' static key (defaulting to false), which allows
+us to hide any KUnit code behind a static branch. This should reduce the
+performance impact (on other code) of having KUnit enabled to a single
+NOP when no tests are running.
 
-Thanks very much!
+Note that, while it looks unintuitive, tests always run entirely within
+__kunit_test_suites_init(), so it's safe to decrement the static key at
+the end of this function, rather than in __kunit_test_suites_exit(),
+which is only there to clean up results in debugfs.
 
-> > ---
-> >
-> > This is intended as an example use of the new function. Other users
-> > (such as KASAN) will be updated separately, as there would otherwise be
-> > conflicts.
-> >
-> > We'll take this whole series via the kselftest/kunit tree.
-> >
-> > Changes since v2:
-> > https://lore.kernel.org/all/20221025071907.1251820-3-davidgow@google.com/
-> > - Get rid of a redundant 'likely' (Thanks Vlastimil Babka)
-> > - Use current->kunit_test directly when we already know a test is
-> >   running. (Thanks Vlastimil Babka)
-> > - Add Vlastimil's Acked-by.
-> >
-> > There was no v1 of this patch. v1 of the series can be found here:
-> > https://lore.kernel.org/linux-kselftest/20221021072854.333010-1-davidgow@google.com/T/#u
-> >
-> > Cheers,
-> > -- David
-> >
-> > ---
-> >  lib/slub_kunit.c | 1 +
-> >  mm/slub.c        | 3 ++-
-> >  2 files changed, 3 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/lib/slub_kunit.c b/lib/slub_kunit.c
-> > index 7a0564d7cb7a..8fd19c8301ad 100644
-> > --- a/lib/slub_kunit.c
-> > +++ b/lib/slub_kunit.c
-> > @@ -1,5 +1,6 @@
-> >  // SPDX-License-Identifier: GPL-2.0
-> >  #include <kunit/test.h>
-> > +#include <kunit/test-bug.h>
->
-> Is this #include needed in slub_kunit.c?
->
+Signed-off-by: David Gow <davidgow@google.com>
+Reviewed-by: Daniel Latypov <dlatypov@google.com>
+---
+This should be a no-op (other than a possible performance improvement)
+functionality-wise, and lays the groundwork for a more optimised static
+stub implementation.
 
-Yes: kunit_get_current_test() is defined in test-bug.h.
+The remaining patches in the series add a kunit_get_current_test()
+function which is a more friendly and performant wrapper around
+current->kunit_test, and use this in the slub test. They also improve
+the documentation a bit.
 
-This header contains functions which are always available, even when
-KUnit is not enabled.
+If there are no objections, we'll take the whole series via the KUnit
+tree.
 
-(It's name isn't great: we may rename/refactor it down the line...)
+Changes since v3:
+https://lore.kernel.org/linux-kselftest/20221119081252.3864249-1-davidgow@google.com/
+- Use DECLARE_STATIC_KEY_FALSE() -- thanks Daniel!
 
-Cheers,
--- David
+No changes since v2:
+https://lore.kernel.org/all/20221025071907.1251820-1-davidgow@google.com/
 
---000000000000f039b705ee475f79
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+Changes since v1:
+https://lore.kernel.org/linux-kselftest/20221021072854.333010-1-davidgow@google.com/
+- No changes in this patch.
+- Patch 2/3 is reworked, patch 3/3 is new.
 
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-N0A3bgltvER3q1cGraQJMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAxS21FdvRtCQVc
-jgEj+xxSnUr0N9reJlI5J9zRiBCWGxm5yhz965IDka3XVFEbj+beJj/gyHoxbaTGf2AjOufpcMqy
-p4mtqc2l4Csudl8QeiBaOUDx4VKADbgxqpjvwD5zRpSKVj4S9y3BJi9xrRdPOm1Z2ZZYxRUxUz7d
-2MXoxQsFucGJO5a4CwDBaGgJAqvwCXU5Q64rKVIUBk6mtcd3cDwX+PXqx4QrhHFGq6b6oi37YQ8B
-+bhlXqlkLrbPlPFk+4Rh4EaW92iD5g8kvtXCOwvIIvs+15Io0dbpIe2W5UKo2OcyDDFvrOACmUOE
-/GuEkhENcyDVyEs/4/N2u9WYMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCD/
-REs3LgjWnPyijJRNYhE0hnXx9xVprnQ+laPvvoEvNjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjExMjUwODMzMjNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAQgQ0/kNimCRUd8gQda0L
-9Rht9rpi9jPK58VEmWpy4zVD4gGAstmnBV0r4iET1TK9XzsJhlJ7X5hZSRfwRGIwYPCJ1JcJDyn9
-i+57n4gti5WUUfpdH5tD8ToHFoajXXKhYbNI9eNXQTNlBRMN9PqH4pnvEdAVTF/5S1BGV36MpiYl
-fZ5yxGlmPTkjLLbcminp4Q8Kc+F90706p1x9YSLxDPglmFLE6FT5d9zfTxRuMc+pKA26CxHbVMTV
-HPEY9sHLmWb9h+eVa9rMejVKZhPWzzMRak5u+1YF32eueQW6Mhc389AMYnG+h0A1k+JDxs1cn+tw
-P3XOMYM/o0XyVtXvjA==
---000000000000f039b705ee475f79--
+---
+ include/kunit/test.h | 4 ++++
+ lib/kunit/test.c     | 6 ++++++
+ 2 files changed, 10 insertions(+)
+
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index 4666a4d199ea..87ea90576b50 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -16,6 +16,7 @@
+ #include <linux/container_of.h>
+ #include <linux/err.h>
+ #include <linux/init.h>
++#include <linux/jump_label.h>
+ #include <linux/kconfig.h>
+ #include <linux/kref.h>
+ #include <linux/list.h>
+@@ -27,6 +28,9 @@
+ 
+ #include <asm/rwonce.h>
+ 
++/* Static key: true if any KUnit tests are currently running */
++DECLARE_STATIC_KEY_FALSE(kunit_running);
++
+ struct kunit;
+ 
+ /* Size of log associated with test. */
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index 1c9d8d962d67..87a5d795843b 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -20,6 +20,8 @@
+ #include "string-stream.h"
+ #include "try-catch-impl.h"
+ 
++DEFINE_STATIC_KEY_FALSE(kunit_running);
++
+ #if IS_BUILTIN(CONFIG_KUNIT)
+ /*
+  * Fail the current test and print an error message to the log.
+@@ -615,10 +617,14 @@ int __kunit_test_suites_init(struct kunit_suite * const * const suites, int num_
+ 		return 0;
+ 	}
+ 
++	static_branch_inc(&kunit_running);
++
+ 	for (i = 0; i < num_suites; i++) {
+ 		kunit_init_suite(suites[i]);
+ 		kunit_run_tests(suites[i]);
+ 	}
++
++	static_branch_dec(&kunit_running);
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(__kunit_test_suites_init);
+-- 
+2.38.1.584.g0f3c55d4c2-goog
+
