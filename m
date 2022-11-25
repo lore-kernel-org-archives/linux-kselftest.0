@@ -2,80 +2,78 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F03AC4332F
-	for <linux-kselftest@archiver.kernel.org>; Fri, 25 Nov 2022 15:51:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D30B7C43217
+	for <linux-kselftest@archiver.kernel.org>; Fri, 25 Nov 2022 15:51:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbiKYPvj (ORCPT
+        id S229668AbiKYPvu (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 25 Nov 2022 10:51:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38002 "EHLO
+        Fri, 25 Nov 2022 10:51:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbiKYPvb (ORCPT
+        with ESMTP id S229491AbiKYPvt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Nov 2022 10:51:31 -0500
-X-Greylist: delayed 611 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 25 Nov 2022 07:51:29 PST
-Received: from mail1.perex.cz (mail1.perex.cz [77.48.224.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A11DD4A590
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Nov 2022 07:51:29 -0800 (PST)
-Received: from mail1.perex.cz (localhost [127.0.0.1])
-        by smtp1.perex.cz (Perex's E-mail Delivery System) with ESMTP id B0582A003F;
-        Fri, 25 Nov 2022 16:41:15 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.perex.cz B0582A003F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=perex.cz; s=default;
-        t=1669390875; bh=Vr+slmbJDu/gySeRjOckDYc8ItlXrV4V89WNVv09bjs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=F5IqYe0VmL2Pg+f+GdhesoYTXi0TVOfCpIMeFQA0edEK+XxuDkzrGVAZkmBpRJypF
-         8e6Fl2XibL6jtddwrsUducBLe8NUHcM+lpRVBHXBa7T8myc6Q6cbfrUeFdd/YxPMvn
-         xsUmddY1W7/Zk1IoCQHEsWDK6JpWZ3+kjSP9Ld2o=
-Received: from [192.168.100.98] (unknown [192.168.100.98])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Fri, 25 Nov 2022 10:51:49 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A02E622BFB
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Nov 2022 07:51:48 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        (Authenticated sender: perex)
-        by mail1.perex.cz (Perex's E-mail Delivery System) with ESMTPSA;
-        Fri, 25 Nov 2022 16:41:10 +0100 (CET)
-Message-ID: <77485fea-8aa9-9c95-8d6a-7a35994d0a84@perex.cz>
-Date:   Fri, 25 Nov 2022 16:41:10 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] kselftest/alsa: Add a .gitignore for the newly added PCM
- test
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org
-References: <20221125153654.1037868-1-broonie@kernel.org>
-From:   Jaroslav Kysela <perex@perex.cz>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 4CF6E218FF;
+        Fri, 25 Nov 2022 15:51:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1669391507; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FVShjI70HfbsTi+FvyVrAtlQdjOepjLPWKcXzML0h8g=;
+        b=WhdhoX03TQgdSfRJD6+SdgcEfm218OxI6rvQl02RZoYicZgZzzzYFIHI4xSPBsrmcnOGcS
+        dOhZ0pUMpO4joAr6Iofw4STwVHtuk9cRLRydSMyu3/lNxp7pX/pQClMKQoT4vyJhNbxtt1
+        KgozcBfzUXyPQSoZpFcTyGE5qMH4Ntw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1669391507;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FVShjI70HfbsTi+FvyVrAtlQdjOepjLPWKcXzML0h8g=;
+        b=4BYuJfAqTh137xskX8J/9GKF4C9Hgjdc+NghM74+JOSiCMb2Xzr0G05J/r6xsxWL0y9q0k
+        Rl4k2BKMfC3ZYyBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1FBB11361C;
+        Fri, 25 Nov 2022 15:51:47 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id pZ0zBpPkgGN4FgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Fri, 25 Nov 2022 15:51:47 +0000
+Date:   Fri, 25 Nov 2022 16:51:46 +0100
+Message-ID: <87h6yn117x.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Shuah Khan <shuah@kernel.org>, alsa-devel@alsa-project.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] kselftest/alsa: Add a .gitignore for the newly added PCM test
 In-Reply-To: <20221125153654.1037868-1-broonie@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20221125153654.1037868-1-broonie@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 25. 11. 22 16:36, Mark Brown wrote:
+On Fri, 25 Nov 2022 16:36:54 +0100,
+Mark Brown wrote:
+> 
 > The newly added PCM test produces a binary which is not ignored by git
 > when built in tree, fix that.
 > 
 > Signed-off-by: Mark Brown <broonie@kernel.org>
 
-Thanks,
-
-Reviewed-by: Jaroslav Kysela <perex@perex.cz>
-
-> ---
->   tools/testing/selftests/alsa/.gitignore | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/tools/testing/selftests/alsa/.gitignore b/tools/testing/selftests/alsa/.gitignore
-> index 3bb7c41266a8..2b0d11797f25 100644
-> --- a/tools/testing/selftests/alsa/.gitignore
-> +++ b/tools/testing/selftests/alsa/.gitignore
-> @@ -1 +1,2 @@
->   mixer-test
-> +pcm-test
+Thanks, applied with Fixes tag.
 
 
--- 
-Jaroslav Kysela <perex@perex.cz>
-Linux Sound Maintainer; ALSA Project; Red Hat, Inc.
+Takashi
