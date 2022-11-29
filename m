@@ -2,143 +2,115 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9040AC4321E
-	for <linux-kselftest@archiver.kernel.org>; Tue, 29 Nov 2022 21:45:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 06DB9C433FE
+	for <linux-kselftest@archiver.kernel.org>; Tue, 29 Nov 2022 21:54:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236361AbiK2Vp2 (ORCPT
+        id S235700AbiK2Vyu (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 29 Nov 2022 16:45:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60918 "EHLO
+        Tue, 29 Nov 2022 16:54:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233312AbiK2Vp1 (ORCPT
+        with ESMTP id S237012AbiK2Vyt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 29 Nov 2022 16:45:27 -0500
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4E022B26E
-        for <linux-kselftest@vger.kernel.org>; Tue, 29 Nov 2022 13:45:25 -0800 (PST)
-Received: by mail-io1-xd2f.google.com with SMTP id p193so939176iod.6
-        for <linux-kselftest@vger.kernel.org>; Tue, 29 Nov 2022 13:45:25 -0800 (PST)
+        Tue, 29 Nov 2022 16:54:49 -0500
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B7950D5E
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Nov 2022 13:54:48 -0800 (PST)
+Received: by mail-io1-xd30.google.com with SMTP id h206so11099157iof.10
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Nov 2022 13:54:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=tL0jBoZ68wOuymTPlZ1IsGpQ4OkLFUq6glJ5F26fyto=;
-        b=P+BsYYU9L8jc2+iZ7bsg+CRAOVP+YxlZgbfG+ckOTS5BLkB3/FMtqdoymusRqHtJyV
-         4PCikHlD96Cem4VVBlIDaxwzAaTzeW0Zly/NVYWxB+cr8mPGf82O7K1tiWreTdKufP05
-         Dhn+7Y/1WSOMB5zZCYtdvBt4dw+RRcB/yCyAo=
+        bh=Ur6a/CzXJIypB8RYZUhojWApn7N1bPxeoQ/GZe4dipA=;
+        b=gzcqXxjvNW6BZ3wOYM5yYHr3eUcD+l8Qw/s4DjB26DCMtvo7UxZ7DmoJwVC5fA0lGp
+         HVtjdK7eTE11no/FnqNrxB4rOX88+GRSvf4RfZjf9a5mqSvRxhikadM6e7jIwlpDLQC+
+         iZFYPlxx3eAI8oNhhgr7OuWohSNVbuIq5JL8c=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tL0jBoZ68wOuymTPlZ1IsGpQ4OkLFUq6glJ5F26fyto=;
-        b=iU0XVhZw4fw8aKStnoSccZT6TiCDEdxLSsQIsRKMVx+VxaZ3y+q3KtP2fdE0aS9a68
-         58j/C6t2VYsArjw0jTA4vXnctCwgJxGjw7hzb7yJevxRqYwVGDEhLmNmnyzqa9M74EOm
-         5iuaVdHBcG3RjcSLoEq5F6MBx9rXpQjJgdLVG3BSQDg2NoSg5RUA/zjVRHUaAjjzuUwZ
-         vTk5xYGxXc2Ay9mKhv3dw84uozSusi29ENGZC9nYQkER7Y4sGnoedDiWVe35vZZxrTsm
-         ybniakMODmgu2o9DyTtomTbjhsdqeB1S939vXkS1vDHR6efm3rHeQfvAokBtmTCzwxYC
-         cL4g==
-X-Gm-Message-State: ANoB5plk9wrhdafKsC7BpHPuPbEbjK/V302oHhkKJOFK0vcBEtqI8x/d
-        MhOnnQdLS0BDD/vGDqOEK1bLQql7O0rpgQ==
-X-Google-Smtp-Source: AA0mqf6m73622bv1+JBh0FmfsWTMka4QhacodmL8HPMTHwXyGZN4mmZxQj3L1HQFsRQQPgjWHVR/Iw==
-X-Received: by 2002:a5e:c809:0:b0:6cf:8cf0:91ac with SMTP id y9-20020a5ec809000000b006cf8cf091acmr17911334iol.186.1669758325063;
-        Tue, 29 Nov 2022 13:45:25 -0800 (PST)
+        bh=Ur6a/CzXJIypB8RYZUhojWApn7N1bPxeoQ/GZe4dipA=;
+        b=SOg2moCF0sN2MSkZcjXyMTq8gprvwY2JBBoTLK20UovaAfAr80EqhoLZKziM38+R/J
+         52TctUWYlcJa5sezffSxxBhoe4lib8wvDfP0eEQ9sbHaQyspqpGQVPqIFZN429S++2VV
+         JOiZCA8muECcW7Efa5cvYZllkjPsyJ22Ezc6WONniLvJSVdKc4cCVW28tpK3/JkQmq5s
+         /87WcDv7c7cO58LVwcPNpb5iiDGrA0cdK+bxPr+J2ojjWpCofH2gFkJlu4X+heBQW6CL
+         U3E1/M4utN017Tax5iAll4Wp2KZuwHFZarPepS9kW3OICFv8ojcQAOlrtjliaq46/gKz
+         SXpA==
+X-Gm-Message-State: ANoB5plUrUgOQy6Psgp9v7FxHR6qvo/NCgu30UdsNF8/KqUSbxzwKBR4
+        UIcrYJcRsKOTiPn4l3BmYW/vlQ==
+X-Google-Smtp-Source: AA0mqf7LHtE52CmTARBNuYJtjnj/4Aq5OQqGdnW1PT00LdzNDs4Ib56U1AUEE6p4ZUYmZ0aWlAZiWA==
+X-Received: by 2002:a05:6638:1a98:b0:375:61b2:825a with SMTP id ce24-20020a0566381a9800b0037561b2825amr28405190jab.147.1669758887713;
+        Tue, 29 Nov 2022 13:54:47 -0800 (PST)
 Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id t8-20020a025408000000b0038a01eba60fsm44504jaa.69.2022.11.29.13.45.24
+        by smtp.gmail.com with ESMTPSA id b36-20020a0295a7000000b0037612be6830sm5491192jai.140.2022.11.29.13.54.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Nov 2022 13:45:24 -0800 (PST)
-Message-ID: <af72853d-d326-832e-247a-2397e83fa08e@linuxfoundation.org>
-Date:   Tue, 29 Nov 2022 14:45:23 -0700
+        Tue, 29 Nov 2022 13:54:46 -0800 (PST)
+Message-ID: <45793334-f890-d0e6-dd3a-6335ed0628f8@linuxfoundation.org>
+Date:   Tue, 29 Nov 2022 14:54:46 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH] selftests/tpm2: Split async tests call to separate shell
- script runner
+Subject: Re: [PATCH 3/3] selftests: Make a warning if getcpu is missing on
+ 32bit.
 Content-Language: en-US
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Shuah Khan <shuah@kernel.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        linux-kernel@vger.kernel.org, x86@kernel.org
+Cc:     Roland Mainz <roland.mainz@nrubsig.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
         Shuah Khan <skhan@linuxfoundation.org>
-References: <20221128220340.536558-1-nfraprado@collabora.com>
+References: <20221125094216.3663444-1-bigeasy@linutronix.de>
+ <20221125094216.3663444-4-bigeasy@linutronix.de>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20221128220340.536558-1-nfraprado@collabora.com>
+In-Reply-To: <20221125094216.3663444-4-bigeasy@linutronix.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11/28/22 15:03, Nícolas F. R. A. Prado wrote:
-> When the async test case was introduced, despite being a completely
-> independent test case, the command to run it was added to the same shell
-> script as the smoke test case. Since a shell script implicitly returns
-> the error code from the last run command, this effectively caused the
-> script to only return as error code the result from the async test case,
-> hiding the smoke test result (which could then only be seen from the
-> python unittest logs).
+On 11/25/22 02:42, Sebastian Andrzej Siewior wrote:
+> The vsyscall for getcpu has been wired up on 32bit so it can be warned
+> now if missing.
 > 
-> Move the async test case call to its own shell script runner to avoid
-> the aforementioned issue. This also makes the output clearer to read,
-> since each kselftest KTAP result now matches with one python unittest
-> report.
-> 
-> While at it, also make it so the async test case is skipped if
-> /dev/tpmrm0 doesn't exist, since commit 8335adb8f9d3 ("selftests: tpm:
-> add async space test with noneexisting handle") added a test that relies
-> on it.
-> 
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> 
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: linux-kselftest@vger.kernel.org
+> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 > ---
+>   tools/testing/selftests/x86/test_vsyscall.c | 7 ++-----
+>   1 file changed, 2 insertions(+), 5 deletions(-)
 > 
->   tools/testing/selftests/tpm2/Makefile      |  2 +-
->   tools/testing/selftests/tpm2/test_async.sh | 10 ++++++++++
->   tools/testing/selftests/tpm2/test_smoke.sh |  1 -
->   3 files changed, 11 insertions(+), 2 deletions(-)
->   create mode 100755 tools/testing/selftests/tpm2/test_async.sh
-> 
-> diff --git a/tools/testing/selftests/tpm2/Makefile b/tools/testing/selftests/tpm2/Makefile
-> index 1a5db1eb8ed5..a9bf9459fb25 100644
-> --- a/tools/testing/selftests/tpm2/Makefile
-> +++ b/tools/testing/selftests/tpm2/Makefile
-> @@ -1,5 +1,5 @@
->   # SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
->   include ../lib.mk
+> diff --git a/tools/testing/selftests/x86/test_vsyscall.c b/tools/testing/selftests/x86/test_vsyscall.c
+> index 5b45e6986aeab..47cab972807c4 100644
+> --- a/tools/testing/selftests/x86/test_vsyscall.c
+> +++ b/tools/testing/selftests/x86/test_vsyscall.c
+> @@ -92,11 +92,8 @@ static void init_vdso(void)
+>   		printf("[WARN]\tfailed to find time in vDSO\n");
 >   
-> -TEST_PROGS := test_smoke.sh test_space.sh
-> +TEST_PROGS := test_smoke.sh test_space.sh test_async.sh
->   TEST_PROGS_EXTENDED := tpm2.py tpm2_tests.py
-> diff --git a/tools/testing/selftests/tpm2/test_async.sh b/tools/testing/selftests/tpm2/test_async.sh
-> new file mode 100755
-> index 000000000000..43bf5bd772fd
-> --- /dev/null
-> +++ b/tools/testing/selftests/tpm2/test_async.sh
-> @@ -0,0 +1,10 @@
-> +#!/bin/sh
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
-> +
-> +# Kselftest framework requirement - SKIP code is 4.
-> +ksft_skip=4
-> +
-> +[ -e /dev/tpm0 ] || exit $ksft_skip
-> +[ -e /dev/tpmrm0 ] || exit $ksft_skip
-> +
-> +python3 -m unittest -v tpm2_tests.AsyncTest
-> diff --git a/tools/testing/selftests/tpm2/test_smoke.sh b/tools/testing/selftests/tpm2/test_smoke.sh
-> index 3e5ff29ee1dd..58af963e5b55 100755
-> --- a/tools/testing/selftests/tpm2/test_smoke.sh
-> +++ b/tools/testing/selftests/tpm2/test_smoke.sh
-> @@ -7,4 +7,3 @@ ksft_skip=4
->   [ -e /dev/tpm0 ] || exit $ksft_skip
+>   	vdso_getcpu = (getcpu_t)dlsym(vdso, "__vdso_getcpu");
+> -	if (!vdso_getcpu) {
+> -		/* getcpu() was never wired up in the 32-bit vDSO. */
+> -		printf("[%s]\tfailed to find getcpu in vDSO\n",
+> -		       sizeof(long) == 8 ? "WARN" : "NOTE");
+> -	}
+> +	if (!vdso_getcpu)
+> +		printf("[WARN]\tfailed to find getcpu in vDSO\n");
+>   }
 >   
->   python3 -m unittest -v tpm2_tests.SmokeTest
-> -python3 -m unittest -v tpm2_tests.AsyncTest
+>   static int init_vsys(void)
 
-Thank you for fixing the problem. Applied to linux-kselftest next
-for Linux 6.2-rc1
+Assuming this is going through x86 tree due to dependencies, here is
+my ack
+
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+
+Let me know if you would like to me pick this up.
 
 thanks,
 -- Shuah
