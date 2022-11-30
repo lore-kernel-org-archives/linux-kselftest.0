@@ -2,84 +2,78 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 739C8C4708A
-	for <linux-kselftest@archiver.kernel.org>; Wed, 30 Nov 2022 00:07:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2CEEC46467
+	for <linux-kselftest@archiver.kernel.org>; Wed, 30 Nov 2022 00:07:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbiK3AHO (ORCPT
+        id S229449AbiK3AHM (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 29 Nov 2022 19:07:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54338 "EHLO
+        Tue, 29 Nov 2022 19:07:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231408AbiK3AHE (ORCPT
+        with ESMTP id S229652AbiK3AG5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 29 Nov 2022 19:07:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979B27044E
-        for <linux-kselftest@vger.kernel.org>; Tue, 29 Nov 2022 16:07:03 -0800 (PST)
+        Tue, 29 Nov 2022 19:06:57 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16FF37044E
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Nov 2022 16:06:56 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3475D61981
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Nov 2022 00:07:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39566C43470;
-        Wed, 30 Nov 2022 00:07:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B7D64B819A0
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Nov 2022 00:06:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AEB7C433C1;
+        Wed, 30 Nov 2022 00:06:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669766822;
-        bh=kOi2ubrZvDe707/dHvl2mMsoj6BDmru6DBWUPvLaUxo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V76bYzMawZs2YAZJGTTI54SCy/ykzT/KViJgN1xRHteLpFJ4NMiP16Eu+ai6NkR9J
-         KqjYNfFxvQicyYObFWmw5mjE2Bn2sMAiR/U6I+TpayzrU1xXHxgStxeY/YYzvWjcIw
-         LA2P7bYO7U9xGtQVqwfGOEXHlMXaUoR9FI174M7iTCmJllRtbzG4CVYCjdjyn17usp
-         XtzoUuo2GMffADPV756TGO5MiNZ5RkvKjtBR3d5ZiOSVCKy8joNLAB2DWY1WYfi+kL
-         VTni1/k/QUM2NNDK4A6MX34ZDz6A8HYVJPppOyRWPuX+vdw1JVZD5HUVe8M+6Vd2aa
-         PHnk+g1XBq72w==
+        s=k20201202; t=1669766813;
+        bh=aYc5aiemDyUpwG5bKAXR2b2l5eCek4JVHOeT7Vm3QUc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ERl+c/rck6NYMeTx33GvpMUFguOgbaRkyvhzlcyfvgSamXuHvZMLudmp8fxi1Mxn/
+         gEQT8b1VzZj1vZXoQnCncsqhnC/Tk9e6ePbvrYxGqcYUEZhaMzfomA34/LsX5W3AmT
+         vVwjh9hU6XCnCycK+03+RoSmerPThAkuNa46MCd+R3W3xU0Xy5K0l9mUd+GVjVZZh4
+         Qi9PsBUJDyHtiJIqGt8bhUJzItzyAosJkiDz6Ez/FJwl8CFzHbgzHUahC8usVM3jQt
+         QwV9bmbXsDdN6Dbqh+74KCkfuWDexqrkgLrqVmTM7IWUutGI1gXuDMkod8okfNslM+
+         GLjzBjr8zIxQg==
 From:   Mark Brown <broonie@kernel.org>
 To:     Takashi Iwai <tiwai@suse.de>, Jaroslav Kysela <perex@perex.cz>,
         Shuah Khan <shuah@kernel.org>
 Cc:     alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v1 5/6] kselftest/alsa: Provide more meaningful names for tests
-Date:   Wed, 30 Nov 2022 00:06:07 +0000
-Message-Id: <20221130000608.519574-6-broonie@kernel.org>
+Subject: [PATCH v1 0/6] kselftest/alsa: pcm-test improvements
+Date:   Wed, 30 Nov 2022 00:06:02 +0000
+Message-Id: <20221130000608.519574-1-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221130000608.519574-1-broonie@kernel.org>
-References: <20221130000608.519574-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1263; i=broonie@kernel.org; h=from:subject; bh=kOi2ubrZvDe707/dHvl2mMsoj6BDmru6DBWUPvLaUxo=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjhp5vuot+YdREPb2LKHc+Hc4LtSKasB2J15HPSkKa bmmoyNiJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY4aebwAKCRAk1otyXVSH0CQdB/ 9cJAjFX1Xnft5g+5CfO4Y8lx+WCr3PDsQszQed6iptz7DARLlXwMxdtMkdd604CYcSD6AvJNAK3cw/ ZkkB/JMf5+ux/09aCxl/d6Cikp9UygL6YGghksGVo45g3IKRJ7S/KIYXpF1bYrEVgXJRsLnmLttiDD 9wKr3MxG14S+OUBmHArQDXpFX4GhRdrhcLo1mzq9C3uftSxkbei3787vsCNf/JprSYk0HBd5yJM7+4 st6OIHQjPQ6gRYIcR0pxe8EHnn6Sut3MNmakDNDvkKVduqSpX0u7GCcCQz2P/h1WkYXH9Lwx/rQ3KZ pSJVo6mFnGccacTrr/nPenPPeiap2E
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1257; i=broonie@kernel.org; h=from:subject; bh=aYc5aiemDyUpwG5bKAXR2b2l5eCek4JVHOeT7Vm3QUc=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjhp5qjNRezU/Mpw4j3O5oOuQVFFLw0IAr8wVZ1oRj h7Zhh6qJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY4aeagAKCRAk1otyXVSH0NVVB/ 9sVMOIsEYoMHcH6lLroIWJJ9AKZXLHbMN2tMgmxyM/xB7vkKUwqgJqb+mUdLEAWaECmzIWdy9f+LnH GVudsqYVUNXUwVfLuLi2Dq7nHzkq241ot0XO4ppNNjYkEEfKbX0chXoyx1IjtBZpmCVT3U7tRFKSZy ZeIqSTQHKNIUGo2jiAdDkuNqI15Ieb0wradK1FgHCmpcgwse2DresFowSka/kEgvyhZWxOmEshoFmJ X8nT0pB0hA9A2QbAP0OyQMuRVTVchVHubQ0ZL8OSW57bGbMSUn0w36cBy3huFJczA2tjreuJ/fvoI7 YZiAyrb1mj+5gYMNGBc8wVaisFJxLx
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Rather than just numbering the tests try to provide semi descriptive names
-for what the tests are trying to cover. This also has the advantage of
-meaning we can add more tests without having to keep the list of tests
-ordered by existing number which should make it easier to understand what
-we're testing and why.
+This series provides a bunch of quick updates which should make the
+coverage from pcm-test a bit more useful, it adds some support for
+skipping tests when the hardware/driver is unable to support the
+requested configuration and then expands the set of cases we cover to
+include more sample rates and channel counts.  This should exercise
+switching between 8kHz and 44.1kHz based rates and ensure that clocking
+doesn't get confused by non-stereo channel counts, both of which are I
+expect common real world errors, at least for embedded cards.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/alsa/pcm-test.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Mark Brown (6):
+  kselftest/alsa: Refactor pcm-test to list the tests to run in a struct
+  kselftest/alsa: Report failures to set the requested sample rate as
+    skips
+  kselftest/alsa: Report failures to set the requested channels as skips
+  kselftest/alsa: Don't any configuration in the sample config
+  kselftest/alsa: Provide more meaningful names for tests
+  kselftest/alsa: Add more coverage of sample rates and channel counts
 
-diff --git a/tools/testing/selftests/alsa/pcm-test.c b/tools/testing/selftests/alsa/pcm-test.c
-index bc0cb3c481f2..614ccc52cece 100644
---- a/tools/testing/selftests/alsa/pcm-test.c
-+++ b/tools/testing/selftests/alsa/pcm-test.c
-@@ -516,9 +516,9 @@ static void test_pcm_time1(struct pcm_data *data,
- }
- 
- static const struct time_test_def time_tests[] = {
--	/* name          format     rate   chan  period  buffer */
--	{ "test.time1",  "S16_LE",  48000, 2,      512,    4096 },
--	{ "test.time2",  "S16_LE",  48000, 2,    24000,  192000 },
-+	/* name              format     rate   chan  period  buffer */
-+	{ "S16.48k.2.small", "S16_LE",  48000, 2,      512,    4096 },
-+	{ "S16.48k.2.big",   "S16_LE",  48000, 2,    24000,  192000 },
- };
- 
- int main(void)
+ .../alsa/conf.d/Lenovo_ThinkPad_P1_Gen2.conf  | 35 ++++----
+ tools/testing/selftests/alsa/pcm-test.c       | 88 +++++++++++++------
+ 2 files changed, 81 insertions(+), 42 deletions(-)
+
+
+base-commit: 1d8025ec722d5e011f9299c46274eb21fb54a428
 -- 
 2.30.2
 
