@@ -2,56 +2,56 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD5F3C433FE
-	for <linux-kselftest@archiver.kernel.org>; Wed, 30 Nov 2022 13:39:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37227C46467
+	for <linux-kselftest@archiver.kernel.org>; Wed, 30 Nov 2022 13:39:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231512AbiK3NjE (ORCPT
+        id S230335AbiK3NjG (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 30 Nov 2022 08:39:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44242 "EHLO
+        Wed, 30 Nov 2022 08:39:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231190AbiK3Nit (ORCPT
+        with ESMTP id S231630AbiK3Nit (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Wed, 30 Nov 2022 08:38:49 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8794773B83
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Nov 2022 05:38:32 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id o12so7875761pjo.4
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Nov 2022 05:38:32 -0800 (PST)
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 200E230F75
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Nov 2022 05:38:34 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id 6so16056654pgm.6
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Nov 2022 05:38:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernelci-org.20210112.gappssmtp.com; s=20210112;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=KHZc/c4zAba4oep6LvsNgvscUR+W20M8agPDm1s9iOk=;
-        b=IFMgMgwP5NWAx+K7G6qOKCgiI/c8kKVdzzqnUHtlJpwN2w9uIcE9SjKQ/xPFAre1Dn
-         A/z8iYUoIWbve4WcSoR6z8n9t+9+QBo3uhc1WFCyvJx8XAVWa48SrPQoUJ0d73bjW2gv
-         yPVHhbpZyz2wL9TbKTiEzB4iMOBJem3bz9m5rzK4ea8MohgUYwTNwKH/tgCbDvjA+C9W
-         kGJX5wQV2IpGqqfArzdlxBzf9GGb6snm9IqBI0rgMlYloif9MXhizCI+SBMar4/iZq2M
-         b0WMN8yTP/8ZmUn9yU/ck7b/xiCU+bZuKHlMDxPaTUxEMBo8/NiaWPCMvQI6t6cAqVZR
-         GYXg==
+        bh=BfmF4B65p5UuhAQhHJ7HmdACdSjTQn/LxEMPbxk5ETQ=;
+        b=BTXjWofD0zto1dCXIc3gmZZacjM3eck82qRhDh66Yi3SgKOcRI9kWaqed1vNabJg9x
+         gNmrz5UIAqTX3DK0NX0j02h3q1KSkqTPufsNo7vET+O7GY5PEcVV/Ul+O55xk3W9xki5
+         IC95huhaXabCh2ce0dLk/32o1IhYcS+o5tJYgEvtI/vebmcBNlnFiaWAu5KoB0q9TlT8
+         3pw8/0NktBN9H63uSpDPubiB+xEz5ujtvim5pe6NUI0DUIqEAQVed3o8ratoVpgXhwZV
+         2mRbkSN/QhTZrvPvEWT2yYuBaegWLJXTdqWi7sMMkLHPVQ6y/XjRflLI+02g8XPg7GTi
+         J4fg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=KHZc/c4zAba4oep6LvsNgvscUR+W20M8agPDm1s9iOk=;
-        b=vN5Vbk+W7hyCPLkMa/kDpKtWNhAV9qmsHeiY8lDDIK8ILkLDx/IMera6Yeu0dvJaSd
-         jafOZDbMebzB01fVnleCM61jZk/CyFsL33BOj5p1S9sG3/8d029Mp06cBJj+AyEyfFRf
-         QECQ+Bnr/UT8HUMI/x8jJTe1+pYMgQn7f9r6ZvrMiQ6CYlhx+8dWktGIApJk2oYW7i3E
-         sgc6dhuCUHDB8eVhi2TYHSRLi4ZspJ/FDZV/4HL34N3+DSGUk8CVHCVOlisZ/gZhezeF
-         +t/qMyjaVO6KRMB72qLWe2zsxPHKwxrudX+nkBpa5EjceolwfYg2+TWPWtUSYXIdXtEd
-         8R0w==
-X-Gm-Message-State: ANoB5pksCdr7mLRT6pTRv3kSZHQXGGFUkP9pln2i+FECdHsv7io33ee7
-        k2wet/e7x+qs+s+ALaNES4OD0f4kKENoLaEjs8U=
-X-Google-Smtp-Source: AA0mqf6uQw/7Sm8x2PyyT0UFHbxQxedNX2KoPV3V/oqOEa4NRv168QwB7Ek7UN29ATk2wYiZ8WF4UQ==
-X-Received: by 2002:a17:902:f70c:b0:189:bee:65ee with SMTP id h12-20020a170902f70c00b001890bee65eemr43542544plo.107.1669815512080;
-        Wed, 30 Nov 2022 05:38:32 -0800 (PST)
+        bh=BfmF4B65p5UuhAQhHJ7HmdACdSjTQn/LxEMPbxk5ETQ=;
+        b=aT/q5k1KT3XARBAsiKYoHH7KfZP2xZIdzcH9DbU0lPS0xeErt/cEghgKCI3JNp+1hx
+         l6jPVKO41wmH+6IuuM+oTMoY8v5hb0dpl1n6IcN4YgJrJ73q9Z136zUWFK7Ogu8qNYUb
+         VeSF0NyLNekWHjTKBkktb14FDTGNXvG4n94ZaChFZ09J1PpYPSiFDJSZLvXNv2pNfoPm
+         Yj3QEDE4EEAuQbDtPBuy2kEoNQV3tz6sXpqj7LsU3IYOvWffpK9HTPcDXCcmchWeu0ks
+         F0TWXH2x5LLk4rGvvhx3jVF3avtsIQj2VSuRUk2+y6LGU7DJfyQvvD8X49YGsr3YYlM8
+         CQFQ==
+X-Gm-Message-State: ANoB5pmcSExwGCPQG0Y0BnLvIkzUWqiBRN142ggig1aNd3aoDvziKVkp
+        EBePmE7E0rZZdJ0t+WB9jGDTVtwJu61FRczpYNI=
+X-Google-Smtp-Source: AA0mqf7Ct3l7Zo/W9pRQchSA6x+DLz0mqjoKS8u/BywcPFeNjIBWLzi/ZVgeQ0efjjSveu0ZZZ0pNg==
+X-Received: by 2002:a63:110d:0:b0:46f:6225:c2f9 with SMTP id g13-20020a63110d000000b0046f6225c2f9mr54530432pgl.225.1669815513578;
+        Wed, 30 Nov 2022 05:38:33 -0800 (PST)
 Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id u4-20020a17090341c400b00174c0dd29f0sm1485623ple.144.2022.11.30.05.38.31
+        by smtp.gmail.com with ESMTPSA id b2-20020a62a102000000b005745635c5b5sm1386643pff.183.2022.11.30.05.38.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 05:38:31 -0800 (PST)
-Message-ID: <63875cd7.170a0220.1ccd7.20d6@mx.google.com>
-Date:   Wed, 30 Nov 2022 05:38:31 -0800 (PST)
+        Wed, 30 Nov 2022 05:38:33 -0800 (PST)
+Message-ID: <63875cd9.620a0220.9e91a.2314@mx.google.com>
+Date:   Wed, 30 Nov 2022 05:38:33 -0800 (PST)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
@@ -59,7 +59,7 @@ X-Kernelci-Branch: next
 X-Kernelci-Kernel: v6.1-rc1-23-g8008d88e6d16
 X-Kernelci-Report-Type: test
 X-Kernelci-Tree: kselftest
-Subject: kselftest/next kselftest-cpufreq: 1 runs,
+Subject: kselftest/next kselftest-livepatch: 2 runs,
  1 regressions (v6.1-rc1-23-g8008d88e6d16)
 To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
         shuah@kernel.org
@@ -68,8 +68,8 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kselftest/next kselftest-cpufreq: 1 runs, 1 regressions (v6.1-rc1-23-g8008d=
-88e6d16)
+kselftest/next kselftest-livepatch: 2 runs, 1 regressions (v6.1-rc1-23-g800=
+8d88e6d16)
 
 Regressions Summary
 -------------------
@@ -83,9 +83,9 @@ mebook | 1          =
 
 
   Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/v6.1=
--rc1-23-g8008d88e6d16/plan/kselftest-cpufreq/
+-rc1-23-g8008d88e6d16/plan/kselftest-livepatch/
 
-  Test:     kselftest-cpufreq
+  Test:     kselftest-livepatch
   Tree:     kselftest
   Branch:   next
   Describe: v6.1-rc1-23-g8008d88e6d16
@@ -108,24 +108,24 @@ mt8173-elm-hana | arm64 | lab-collabora | clang-15 | defconfig+kse...4-chro=
 mebook | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/6387504e08ab4e6dd52abd11
+  Details:     https://kernelci.org/test/plan/id/6387504e9b8d4fdce72abd27
 
   Results:     0 PASS, 1 FAIL, 0 SKIP
   Full config: defconfig+kselftest+arm64-chromebook
   Compiler:    clang-15 (Debian clang version 15.0.6)
   Plain log:   https://storage.kernelci.org//kselftest/next/v6.1-rc1-23-g80=
 08d88e6d16/arm64/defconfig+kselftest+arm64-chromebook/clang-15/lab-collabor=
-a/kselftest-cpufreq-mt8173-elm-hana.txt
+a/kselftest-livepatch-mt8173-elm-hana.txt
   HTML log:    https://storage.kernelci.org//kselftest/next/v6.1-rc1-23-g80=
 08d88e6d16/arm64/defconfig+kselftest+arm64-chromebook/clang-15/lab-collabor=
-a/kselftest-cpufreq-mt8173-elm-hana.html
+a/kselftest-livepatch-mt8173-elm-hana.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
 elftest/20221125.0/arm64/initrd.cpio.gz =
 
 
 
-  * kselftest-cpufreq.login: https://kernelci.org/test/case/id/6387504e08ab=
-4e6dd52abd12
+  * kselftest-livepatch.login: https://kernelci.org/test/case/id/6387504e9b=
+8d4fdce72abd28
         failing since 43 days (last pass: linux-kselftest-next-6.0-rc2-11-g=
 144eeb2fc761, first fail: v6.1-rc1) =
 
