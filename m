@@ -2,55 +2,55 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22452C433FE
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1052C4332F
 	for <linux-kselftest@archiver.kernel.org>; Wed, 30 Nov 2022 14:09:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbiK3OJE (ORCPT
+        id S229862AbiK3OJG (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 30 Nov 2022 09:09:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37814 "EHLO
+        Wed, 30 Nov 2022 09:09:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbiK3OHl (ORCPT
+        with ESMTP id S229868AbiK3OHk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 30 Nov 2022 09:07:41 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC238BD23
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Nov 2022 06:07:14 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id s12so24183077edd.5
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Nov 2022 06:07:14 -0800 (PST)
+        Wed, 30 Nov 2022 09:07:40 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77DA18BD1C
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Nov 2022 06:07:11 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id o13so3117809ejm.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Nov 2022 06:07:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=tessares.net; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xHXcuy6oLE+Bgau9uGaJ5XFA1fmV6aif/DsLUjpATIk=;
-        b=6pAl5L0VLYVXTiFnKW5E0skgWr5aO+z+xDFrjrFCoygUB9HiXC6ugck9ATxUopyWti
-         H8wqG8ibFuGqDbf4IxVAeG+MNjsB02sYm/XJbeaxKF+IZSNU1+5NIlmQlMshCEMMrDx3
-         LEJ9Fb9y+F9bLOtrqPFQ07p4zXiLA1tFbD4mnU+5cHobdfroCt9rehpFbgt1DeVNtU+G
-         cyXZM79AcPgsgUPEed9ODLeH0n14OrTVbrJUzxNPSz+thEi1umaCxayYXmLyegjTfds7
-         w1k4hD/aBdMHN4e4zelHwEEEqCnfdJnHIoAdgIlbQsP0O5tJ9n5Qjt/ssncXzjqO26aU
-         p+VQ==
+        bh=crtfe0BqYH7z6M5EdvzpYlnGHWPelxQYGarO1VmKQvw=;
+        b=otqhoCh8Mfyz+qmipWbuwC3TgoKxWSKZ0iHSVOuvBsvwv7W4AUrr0dof5qilNIYMcy
+         O5Db8C0CcRhQTQIYNzXaM2Vne0WAImxhNbYC6r/7Fx1/JRzV+QA2IV85FuFUefA1ZFI4
+         6Gk7jYT9ah0kMe5cV9LdmKNGaRlF113NP+fUuXmd8jkSnCRu0ejY9E44R3JXX7Ne+vuB
+         9vWqUc8KC+pFlSH1EtPDgCWNOHAMcZd3Q3x9E8so551HXFle6nHfS36G+RKgH9B90f81
+         5DP3NWvZMLcCnOi5syjz95eIXGgNcHi4PRIS7ceKYA4DIyHImvv2wcB6JQvVe5TeCc2A
+         DhPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xHXcuy6oLE+Bgau9uGaJ5XFA1fmV6aif/DsLUjpATIk=;
-        b=aiZwHdfoZTSHjZbc1abcSOS1ZGqvwrsdhLIhqJujBOWrfL3mD+TXUS3HyJn3ibaVrJ
-         gP0l5GFToBmz314h5PQ+U49enbtboSyWn6zO0UJryVZtJcdNXdbRr4EBEDNtnXJSt5/B
-         Lo2xQrJa3bSXKFMzERNnUwnVleTp+a+Uje4ROI6ANkS+8+jCddxzp/7KGtZMQNYgltj0
-         xSGhmGpMRfEgG0+XwO8X8XHB6LFhDWKx5kKremR0tCOyF143u//674J66NgBo9HXo8UD
-         6XORZyU164PFq4hWTwYcVIy8NtCuZMQiRNBjfLYq8oLlfkxfuemhDiBZAIrXvO+OlWra
-         /EqQ==
-X-Gm-Message-State: ANoB5pmk2GpC16XPSSu98G1dBvHc5eSLtJM+SWdYs8v3UZIC6yp1Pu2g
-        tm4SZvwMr2Bu1v9C2124D3hlWQ==
-X-Google-Smtp-Source: AA0mqf6ewQ3Wcmzfrxx1kg91XYTrJwaHBigrcJyyV4Am60DQzR9SUx1Bh1B7j8tYPPI+bjGnpvw8TA==
-X-Received: by 2002:a05:6402:2074:b0:46a:bb9e:40d1 with SMTP id bd20-20020a056402207400b0046abb9e40d1mr23210839edb.242.1669817232990;
-        Wed, 30 Nov 2022 06:07:12 -0800 (PST)
+        bh=crtfe0BqYH7z6M5EdvzpYlnGHWPelxQYGarO1VmKQvw=;
+        b=byBXOjNNhoIHHDPRwBz/Q6yLQI8SWpiJpjZ25kbidDKaJZ5l102lUz8/l49/8n8YLC
+         8yjZHwRnIQyzFHBY7bci/5wRkF0UEmNwPcQcnQYv4AcEtrz4RjQETrtXPQdYhF3GggbY
+         EFrF/BNCl8yW7GO2/0MEXFVtLvcurtbV8psyu6BTetLjUVsw6Rddi7qOB5RntvvpvQoe
+         IrMQZSeaLQp7g6+OHYq9yqBd3PAXb9nFkG905vfh1TIf8YlP7/0UKbvWCF3dcT1cnUwh
+         j2/6F5PSGWMqXB38n0rk1iESZox6LEhj3yaXBpI5MIa3bOnoi/ZzBevKQpgJCCO75E3f
+         Bwjg==
+X-Gm-Message-State: ANoB5pky8SH3I4zDvpIv8xZjL9xIYMmcFx2kQSa9H8YjqUVshGKew8NY
+        oDf+hU28SRP3iENIWY2BT9sXdQ==
+X-Google-Smtp-Source: AA0mqf6iuqR5tkTBTX5XDYNTW/0KzzHvEQ3V6EgUmFA7Rz6lbNnAK+pA/9/lcq7SWOrS/f/bV6hEjg==
+X-Received: by 2002:a17:907:cb83:b0:7ad:f43a:cb0a with SMTP id un3-20020a170907cb8300b007adf43acb0amr37990314ejc.560.1669817229960;
+        Wed, 30 Nov 2022 06:07:09 -0800 (PST)
 Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id mh1-20020a170906eb8100b0073d83f80b05sm692454ejb.94.2022.11.30.06.07.11
+        by smtp.gmail.com with ESMTPSA id mh1-20020a170906eb8100b0073d83f80b05sm692454ejb.94.2022.11.30.06.07.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 06:07:12 -0800 (PST)
+        Wed, 30 Nov 2022 06:07:09 -0800 (PST)
 From:   Matthieu Baerts <matthieu.baerts@tessares.net>
 To:     Mat Martineau <mathew.j.martineau@linux.intel.com>,
         Matthieu Baerts <matthieu.baerts@tessares.net>,
@@ -61,26 +61,26 @@ To:     Mat Martineau <mathew.j.martineau@linux.intel.com>,
 Cc:     Geliang Tang <geliang.tang@suse.com>, netdev@vger.kernel.org,
         mptcp@lists.linux.dev, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 11/11] selftests: mptcp: listener test for in-kernel PM
-Date:   Wed, 30 Nov 2022 15:06:33 +0100
-Message-Id: <20221130140637.409926-12-matthieu.baerts@tessares.net>
+Subject: [PATCH net-next 09/11] selftests: mptcp: listener test for userspace PM
+Date:   Wed, 30 Nov 2022 15:06:31 +0100
+Message-Id: <20221130140637.409926-10-matthieu.baerts@tessares.net>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20221130140637.409926-1-matthieu.baerts@tessares.net>
 References: <20221130140637.409926-1-matthieu.baerts@tessares.net>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3645; i=matthieu.baerts@tessares.net;
- h=from:subject; bh=GYVgZ0ERRFhrNn6nnoF5lHfo9sSALlgzV4tXPFj4Gfk=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBjh2NpDQZZlZIAutRRRraikXlvQ/bHo9/MRdBkQPGS
- nPdMgDOJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCY4djaQAKCRD2t4JPQmmgcyohD/
- 91r32UYsZ+REfGf2SMW49ZwRShsLHwi5nPmiCAvVMANuAb2Y3i5PhjtnNnJCQLYLvgWRTQsH4YTNUg
- GQFlLgIUEygrccr5MOayeQePm0fDejaZHUjk5CW39jGzXwvgOqRvS712fn6ozELABLwvGHbSJRJV5y
- 9D9u0mscDRn8umN+CLnKKDdAtgrOXXLUwqYlZ73AqhRy+TVWvzc0fNyXNpfhoHxyzFgM504MzfJlUH
- yS/qOmPKSFW7q20nRSRvkM4h1Uy/7McV7bSLsBXa4zMOruaYE0nYHOiFkOx3Bxk/3ZFvBe1DQlit6g
- MR8ml8BpXoh0BYUKpP0NWZrD4bahTKRaxMjQRl3ozG4brL1ox1RP0Bt69iT56TGf7kV2sNMB3mMr19
- q8UrJTPtBd4B7m1GeDmrGOUtaqjxyjRJXVSQvObhNfIO/V2RV1i9eIbziAgXUvQKslgRdFQz7F5qCB
- 8hVWKG+47EqvJ/FSMdgNjCy9nM1+x3CJXO25g/G6VL3qub3xE1ztOATl1vYR09TpSq1907TsZX5Fp8
- J98/rJGjupG6Q5k1qrnCVYSzZsD4ARUpH9Rm3kigqIyf9vGVnUwC6dVWMQde0yTYmnLNbCxZLHn1uU
- kUCTllIMXHZv7MTbvuurpLPDWpao7kRurC+kTPJg2jRU6+/mXJrna2SOKsrQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3985; i=matthieu.baerts@tessares.net;
+ h=from:subject; bh=bIIKO9xkuUAb1XnV8gcwknYCwBdI9wFkRM47L72h+T8=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBjh2NpubqDWHxbifXmvSXmneZrESd5I3dNUavydpFi
+ vSuR2UuJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCY4djaQAKCRD2t4JPQmmgc9hgD/
+ 9gnV2rgJgPZ2ofqd1SbpeZkNWzNpgzoPb8ErESeVWdk71fcLXgZ+aPqRwHdmktIV/ae171hvvvq4Mw
+ bWRxh6pFseApMksjLYPLIS89B0dzg8gCuPM+Mx0c66awI5L+2EpyC1Ni/Nc/zdNzsKPwjvohOzxfup
+ LMPttz+5fKjDvLarL1Pr0sCxy6/jtXNPNixh0np4WrkyHq+NWscotw7hJdf1G3pAaslOIzqFB5VNBX
+ L3vtsov4cVyuxOOahHUnJCjD9Xw6ax8FAadHBHbYCH3uthWIdCwzrn8lRk14he0lmpjKuZAY+FU6q7
+ So9yQOC5DBzt3X29uhxF8os/xfyN0oq8DF4bJhOu+EM5JrkhqjA7GdiSeimRoHDDxWrUlqFtyaRMgy
+ KosuhwU7RVhaWcECOvNrfy6XR2WBGvGWFHR+wsasvd6tWsa8thGiTiCz/krJ77uuVT+n8uiQSKFKAY
+ vhGbTajYFa65K2HG5esVQ19l7isnMsOE1U7rGDDrRawSZR1vz/R52yTecJGkL5B8PtgQjQ5zgQq32P
+ e1ddchz3HLom4dDLmx0zs2lMvLHtuQYJU2Ds1pq83DdJMxHIGTp4Gv7QRDX6c5fZM8B6BCng66wX+P
+ vtdq5ZMsSjv/y27Hd872amRcdE5WvdCbbKvxGivKs2mOQU+HO8r1i6uXx86A==
 X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp; fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -89,41 +89,43 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Geliang Tang <geliang.tang@suse.com>
 
-This patch adds test coverage for listening sockets created by the
-in-kernel path manager in mptcp_join.sh.
+This patch adds test coverage for listening sockets created by userspace
+processes.
 
-It adds the listener event checking in the existing "remove single
-address with port" test. The output looks like this:
+It adds a new test named test_listener() and a new verifying helper
+verify_listener_events(). The new output looks like this:
 
- 003 remove single address with port syn[ ok ] - synack[ ok ] - ack[ ok ]
-                                     add[ ok ] - echo  [ ok ] - pt [ ok ]
-                                     syn[ ok ] - synack[ ok ] - ack[ ok ]
-                                     syn[ ok ] - ack   [ ok ]
-                                     rm [ ok ] - rmsf  [ ok ]   invert
-                                     CREATE_LISTENER 10.0.2.1:10100[ ok ]
-                                     CLOSE_LISTENER 10.0.2.1:10100 [ ok ]
+ CREATE_SUBFLOW 10.0.2.2 (ns2) => 10.0.2.1 (ns1)              [OK]
+ DESTROY_SUBFLOW 10.0.2.2 (ns2) => 10.0.2.1 (ns1)             [OK]
+ MP_PRIO TX                                                   [OK]
+ MP_PRIO RX                                                   [OK]
+ CREATE_LISTENER 10.0.2.2:37106				      [OK]
+ CLOSE_LISTENER 10.0.2.2:37106				      [OK]
 
 Signed-off-by: Geliang Tang <geliang.tang@suse.com>
 Reviewed-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
 Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
 ---
- .../testing/selftests/net/mptcp/mptcp_join.sh | 58 ++++++++++++++++++-
- 1 file changed, 57 insertions(+), 1 deletion(-)
+ .../selftests/net/mptcp/userspace_pm.sh       | 76 +++++++++++++++++++
+ 1 file changed, 76 insertions(+)
 
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-index 32a3694c57fb..d11d3d566608 100755
---- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
-+++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-@@ -2513,6 +2513,57 @@ backup_tests()
+diff --git a/tools/testing/selftests/net/mptcp/userspace_pm.sh b/tools/testing/selftests/net/mptcp/userspace_pm.sh
+index 91d6f30e2fe4..a29deb9fa024 100755
+--- a/tools/testing/selftests/net/mptcp/userspace_pm.sh
++++ b/tools/testing/selftests/net/mptcp/userspace_pm.sh
+@@ -11,6 +11,8 @@ ANNOUNCED=6        # MPTCP_EVENT_ANNOUNCED
+ REMOVED=7          # MPTCP_EVENT_REMOVED
+ SUB_ESTABLISHED=10 # MPTCP_EVENT_SUB_ESTABLISHED
+ SUB_CLOSED=11      # MPTCP_EVENT_SUB_CLOSED
++LISTENER_CREATED=15 #MPTCP_EVENT_LISTENER_CREATED
++LISTENER_CLOSED=16  #MPTCP_EVENT_LISTENER_CLOSED
+ 
+ AF_INET=2
+ AF_INET6=10
+@@ -781,11 +783,85 @@ test_prio()
  	fi
  }
  
-+LISTENER_CREATED=15 #MPTCP_EVENT_LISTENER_CREATED
-+LISTENER_CLOSED=16  #MPTCP_EVENT_LISTENER_CLOSED
-+
-+AF_INET=2
-+AF_INET6=10
-+
 +verify_listener_events()
 +{
 +	local evt=$1
@@ -137,10 +139,10 @@ index 32a3694c57fb..d11d3d566608 100755
 +	local sport
 +
 +	if [ $e_type = $LISTENER_CREATED ]; then
-+		stdbuf -o0 -e0 printf "\t\t\t\t\t CREATE_LISTENER %s:%s"\
++		stdbuf -o0 -e0 printf "CREATE_LISTENER %s:%s\t\t\t\t\t"\
 +			$e_saddr $e_sport
 +	elif [ $e_type = $LISTENER_CLOSED ]; then
-+		stdbuf -o0 -e0 printf "\t\t\t\t\t CLOSE_LISTENER %s:%s "\
++		stdbuf -o0 -e0 printf "CLOSE_LISTENER %s:%s\t\t\t\t\t"\
 +			$e_saddr $e_sport
 +	fi
 +
@@ -162,37 +164,50 @@ index 32a3694c57fb..d11d3d566608 100755
 +	   [ $family ] && [ $family = $e_family ] &&
 +	   [ $saddr ] && [ $saddr = $e_saddr ] &&
 +	   [ $sport ] && [ $sport = $e_sport ]; then
-+		stdbuf -o0 -e0 printf "[ ok ]\n"
++		stdbuf -o0 -e0 printf "[OK]\n"
 +		return 0
 +	fi
-+	fail_test
-+	stdbuf -o0 -e0 printf "[fail]\n"
++	stdbuf -o0 -e0 printf "[FAIL]\n"
++	exit 1
 +}
 +
- add_addr_ports_tests()
- {
- 	# signal address with port
-@@ -2537,7 +2588,8 @@ add_addr_ports_tests()
- 	fi
- 
- 	# single address with port, remove
--	if reset "remove single address with port"; then
-+	# pm listener events
-+	if reset_with_events "remove single address with port"; then
- 		pm_nl_set_limits $ns1 0 1
- 		pm_nl_add_endpoint $ns1 10.0.2.1 flags signal port 10100
- 		pm_nl_set_limits $ns2 1 1
-@@ -2545,6 +2597,10 @@ add_addr_ports_tests()
- 		chk_join_nr 1 1 1
- 		chk_add_nr 1 1 1
- 		chk_rm_nr 1 1 invert
++test_listener()
++{
++	# Capture events on the network namespace running the client
++	:>$client_evts
 +
-+		verify_listener_events $evts_ns1 $LISTENER_CREATED $AF_INET 10.0.2.1 10100
-+		verify_listener_events $evts_ns1 $LISTENER_CLOSED $AF_INET 10.0.2.1 10100
-+		kill_events_pids
- 	fi
++	# Attempt to add a listener at 10.0.2.2:<subflow-port>
++	ip netns exec $ns2 ./pm_nl_ctl listen 10.0.2.2\
++		$client4_port > /dev/null 2>&1 &
++	local listener_pid=$!
++
++	verify_listener_events $client_evts $LISTENER_CREATED $AF_INET 10.0.2.2 $client4_port
++
++	# ADD_ADDR from client to server machine reusing the subflow port
++	ip netns exec $ns2 ./pm_nl_ctl ann 10.0.2.2 token $client4_token id\
++		$client_addr_id > /dev/null 2>&1
++	sleep 0.5
++
++	# CREATE_SUBFLOW from server to client machine
++	ip netns exec $ns1 ./pm_nl_ctl csf lip 10.0.2.1 lid 23 rip 10.0.2.2\
++		rport $client4_port token $server4_token > /dev/null 2>&1
++	sleep 0.5
++
++	# Delete the listener from the client ns, if one was created
++	kill_wait $listener_pid
++
++	verify_listener_events $client_evts $LISTENER_CLOSED $AF_INET 10.0.2.2 $client4_port
++}
++
+ make_connection
+ make_connection "v6"
+ test_announce
+ test_remove
+ test_subflows
+ test_prio
++test_listener
  
- 	# subflow and signal with port, remove
+ exit 0
 -- 
 2.37.2
 
