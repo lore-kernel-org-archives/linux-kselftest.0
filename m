@@ -2,68 +2,68 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DBB9CC4321E
-	for <linux-kselftest@archiver.kernel.org>; Wed, 30 Nov 2022 09:14:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6309CC47088
+	for <linux-kselftest@archiver.kernel.org>; Wed, 30 Nov 2022 09:29:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231733AbiK3JOj (ORCPT
+        id S233224AbiK3J3A (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 30 Nov 2022 04:14:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45578 "EHLO
+        Wed, 30 Nov 2022 04:29:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231643AbiK3JOi (ORCPT
+        with ESMTP id S233349AbiK3J27 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 30 Nov 2022 04:14:38 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0DF20F58
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Nov 2022 01:13:46 -0800 (PST)
+        Wed, 30 Nov 2022 04:28:59 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C77A237231
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Nov 2022 01:27:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669799625;
+        s=mimecast20190719; t=1669800476;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=H4kmVPYqwbxGU6PTsZRjCspb80cku12to9pgPPCu54U=;
-        b=FtuB+7YjciKqs9N6vLGULn+VHZxt9Ox2AZo6rFJPIogvUT6h0WMSpYMH/xCFhiBBgl3gK4
-        SY9BsyvJY0PkyVnBfsLKZ4PMtdFooa3JmMjqaWGN/OUu9gCG4r0WDysSlm68YrYND7/D1s
-        jxjk5reddvRAtdyZ/ZPqdMV35gmIJLo=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=Zpmq/XpiWXbMOZEg66Zy7jVIb78OWdpjdWyyx9Qsyt0=;
+        b=gKaEgE7SSHttqzJN8lMisT51+bpYyc1S9D31ehv/MSir8kheumjuYJdKYcMwLQ3Sai35K6
+        i+IZSz84KfoAio2/yMFSuIXt896LQtLG4k3JDsEZK383LwhQ59fRBU9XkEy/5c2rfeSD91
+        Uglutv45Pko5GX4FXxrI3od21ULxkVg=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-90-HiFYPaEHNPy6QhWNUj5opQ-1; Wed, 30 Nov 2022 04:13:43 -0500
-X-MC-Unique: HiFYPaEHNPy6QhWNUj5opQ-1
-Received: by mail-wm1-f71.google.com with SMTP id 8-20020a05600c228800b003d0376e42deso412314wmf.4
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Nov 2022 01:13:43 -0800 (PST)
+ us-mta-659-3no2mnttP-29uwbPTfKzAA-1; Wed, 30 Nov 2022 04:27:54 -0500
+X-MC-Unique: 3no2mnttP-29uwbPTfKzAA-1
+Received: by mail-wr1-f71.google.com with SMTP id l9-20020adfa389000000b00241f907e102so3342034wrb.8
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Nov 2022 01:27:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=H4kmVPYqwbxGU6PTsZRjCspb80cku12to9pgPPCu54U=;
-        b=LMitHHPf5Pran52iqZinxTQUMFPr1NJdwwwCEiKem343HBVFnPjbvd/Xzcc25Bqjce
-         Q9ituVWkJNi2pvV2dKzXGTWUTBmAHcthxConXo064DeHDImR9D6I+orD092uZEjDw9ou
-         lv24ezQSyLixKWJkR3jRuvU2iNwj0pzwqHKYGigzJwYzmB6NVCAlWKR4M2HW/vGJPmm/
-         vrbc121dbzt9WUBLYdd4ELTZVnOLfwMD0RvKt4y0a4jEakJc+lR7lihmYUPE11oTUUWR
-         geE/ON1Wld98Zju9nnE7hFfB9iXx5r56R+GlLzli2o9JiOWFpJg6jfhTlNwkrHQ0d0hn
-         Mg9A==
-X-Gm-Message-State: ANoB5pkJfKr8N3WnKVBtIOa1feXEPmG7HRVkV3gA/6yKv8dkFtOnafUJ
-        he51AuWiARhKiw8K4e7nqN25eHG2s9CayVi7Mn2ch0uTIv/szr1PXPXFzsazmmOaiRp2KTDEE+w
-        97Vu2hwPExi0bD+DbV+2IN7uxXCJw
-X-Received: by 2002:a1c:7513:0:b0:3cf:8896:e1c9 with SMTP id o19-20020a1c7513000000b003cf8896e1c9mr46817780wmc.119.1669799621487;
-        Wed, 30 Nov 2022 01:13:41 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5vvCv9O/1R9RXSG17BNuO4k/AT1pMos0jlXhZZ5YoVQ/8d1PLV/cKODBBZcjZF5bgcENOdFQ==
-X-Received: by 2002:a1c:7513:0:b0:3cf:8896:e1c9 with SMTP id o19-20020a1c7513000000b003cf8896e1c9mr46817770wmc.119.1669799621277;
-        Wed, 30 Nov 2022 01:13:41 -0800 (PST)
+        bh=Zpmq/XpiWXbMOZEg66Zy7jVIb78OWdpjdWyyx9Qsyt0=;
+        b=B/2Tpi87kS1WF/D4ZNq5pBohQ6gljjbUlU37AVkLiqrQpR9HvxVTzXz5hf9Ij+cvfG
+         +QdlWlxsbca5jpIgPX5ceAIhbLQERl2vkyrJjZsP+nRlv27ne6qbht27J/CKWIsX9LoW
+         5NMLkkxAAMFqGK6NrP+7+g1O1fknskJcq5hCsdokYgKIZNgCWl0u2xdgfXKOXc06vB/w
+         ZEgxd+QsCOsOYY8AqTjnTiMI7DRIaPhjSD8AraJ6laQ/4yCH0bqblHuC4aUyagzfMIgC
+         cZDkOP5BbtrzMY2ILTkBB0EnZgEa3Mfc6MLa7DS3R6LA4t0LabD29VHaaAO+J46CgFYn
+         2EjA==
+X-Gm-Message-State: ANoB5pmkEAR36S4bjkaRkYU/RhqCKRW+H1FchvQBYOCbEPAyl01sSLzR
+        cVC/bvBgSnH13lv/RT+tOgOMKvPbgHNusy3NaLt3p61DChfYgDZsHMEq9f7WkW5O4irT7nQJ7hw
+        ulIWrWL1ltA7o/L8YgWArEwzd5hyI
+X-Received: by 2002:a05:600c:3548:b0:3d0:4776:7b73 with SMTP id i8-20020a05600c354800b003d047767b73mr18743918wmq.40.1669800473518;
+        Wed, 30 Nov 2022 01:27:53 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5lMQdNez6CG3ydcQTzf9gZFREx6F1ll3xRE649QPAQacBdUj+444faNh8sCrwOukxHZKgLEw==
+X-Received: by 2002:a05:600c:3548:b0:3d0:4776:7b73 with SMTP id i8-20020a05600c354800b003d047767b73mr18743910wmq.40.1669800473261;
+        Wed, 30 Nov 2022 01:27:53 -0800 (PST)
 Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id h4-20020a5d5044000000b00241bc4880fesm905866wrt.111.2022.11.30.01.13.40
+        by smtp.gmail.com with ESMTPSA id n187-20020a1ca4c4000000b003d005aab31asm1684955wme.40.2022.11.30.01.27.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Nov 2022 01:13:40 -0800 (PST)
-Message-ID: <a86a67d8-59dc-1af8-4176-b3236ef0f0a1@redhat.com>
-Date:   Wed, 30 Nov 2022 10:13:39 +0100
+        Wed, 30 Nov 2022 01:27:52 -0800 (PST)
+Message-ID: <d2e3752d-ce25-2f79-7022-fc1f4cfacc07@redhat.com>
+Date:   Wed, 30 Nov 2022 10:27:51 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.1
-Subject: Re: [PATCH v2 08/17] drm/tests: helpers: Allow for a custom device
- struct to be allocated
+Subject: Re: [PATCH v2 09/17] drm/tests: helpers: Allow to pass a custom
+ drm_driver
 Content-Language: en-US
 To:     Maxime Ripard <maxime@cerno.tech>, Daniel Vetter <daniel@ffwll.ch>,
         Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
@@ -79,9 +79,9 @@ Cc:     dri-devel@lists.freedesktop.org,
         Dave Stevenson <dave.stevenson@raspberrypi.com>,
         linux-kernel@vger.kernel.org, David Gow <davidgow@google.com>
 References: <20221123-rpi-kunit-tests-v2-0-efe5ed518b63@cerno.tech>
- <20221123-rpi-kunit-tests-v2-8-efe5ed518b63@cerno.tech>
+ <20221123-rpi-kunit-tests-v2-9-efe5ed518b63@cerno.tech>
 From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20221123-rpi-kunit-tests-v2-8-efe5ed518b63@cerno.tech>
+In-Reply-To: <20221123-rpi-kunit-tests-v2-9-efe5ed518b63@cerno.tech>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
@@ -89,29 +89,14 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On 11/28/22 15:53, Maxime Ripard wrote:
-> The current helper to allocate a DRM device doesn't allow for any
-> subclassing by drivers, which is going to be troublesome as we work on
-> getting some kunit testing on atomic modesetting code.
-> 
-> Let's use a similar pattern to the other allocation helpers by providing
-> the structure size and offset as arguments.
+> Some tests will need to provide their own drm_driver instead of relying
+> on the dumb one in the helpers, so let's create a helper that allows to
+> do so.
 > 
 > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 > ---
 
-[...]
-
-> -EXPORT_SYMBOL(drm_kunit_helper_alloc_drm_device);
-> +EXPORT_SYMBOL(__drm_kunit_helper_alloc_drm_device);
->
-
-I'm not sure if I would add a __ prefix to exported symbols, but I see that
-this is a convention in the DRM subsystem so I'm OK with it. 
-
-Another thing that came to mind is if we want to use EXPORT_SYMBOL_GPL()
-instead for the DRM KUnit helpers. But that's not related to this series.
-
-Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>  
+Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
 
 -- 
 Best regards,
