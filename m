@@ -2,145 +2,85 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8BFFC43217
-	for <linux-kselftest@archiver.kernel.org>; Thu,  1 Dec 2022 17:08:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63BE5C43217
+	for <linux-kselftest@archiver.kernel.org>; Thu,  1 Dec 2022 17:10:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbiLARIj (ORCPT
+        id S229922AbiLARKw (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 1 Dec 2022 12:08:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59846 "EHLO
+        Thu, 1 Dec 2022 12:10:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbiLARIi (ORCPT
+        with ESMTP id S229447AbiLARKw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 1 Dec 2022 12:08:38 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D9C6A8964;
-        Thu,  1 Dec 2022 09:08:37 -0800 (PST)
+        Thu, 1 Dec 2022 12:10:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73EBAA897B
+        for <linux-kselftest@vger.kernel.org>; Thu,  1 Dec 2022 09:10:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 07F2462088;
-        Thu,  1 Dec 2022 17:08:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7FF8C433D6;
-        Thu,  1 Dec 2022 17:08:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 10B6462095
+        for <linux-kselftest@vger.kernel.org>; Thu,  1 Dec 2022 17:10:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07A77C433D6;
+        Thu,  1 Dec 2022 17:10:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669914516;
-        bh=bb/+qN0VW/7RqIAk2UofMX4wZlBJKhvkATUkAKF4jKA=;
+        s=k20201202; t=1669914650;
+        bh=4P1OLKqn7MEyXJREvUvZOjiyLHEARCRdaDxzVt3dJw0=;
         h=From:To:Cc:Subject:Date:From;
-        b=JEPpDNsnVhCGYyiDJ5cDyhqXikEiT0RcB4yxn/jMZ7fv7AVfeTgAjru54z8nLIWlj
-         lAIyUaV6PZMy+5Fv1lWEovXj6GTs93W4HzojUbUR0BYPYIXKR/vOReNYf1/0CZPmIQ
-         wuew5xRVU2m+sUCpgV5WNv6G6Z2J3jlGc7qcmprjxBuInSBhHRGP32eJYY7aF4Za2G
-         56suK4RbGZLd6mmSwWIYwg9qyB8O9M7lyENITC6vpJF6FRwJjPg8sma5TjMtdt7aKZ
-         7yqSitWsMo3wz5nKU6bvay1ypJPdwz4tqPzRDey44MYfHRMkmEwm5QPg6FyAu80ysJ
-         jxkhtpTDpBUSw==
-From:   SeongJae Park <sj@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     SeongJae Park <sj@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        damon@lists.linux.dev, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/damon: test removed scheme sysfs dir access bug
-Date:   Thu,  1 Dec 2022 17:08:34 +0000
-Message-Id: <20221201170834.62823-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        b=ZjHG9JnEdHwUAntAgA1QQcfj/qXN2VzzTvK4oOifait2ONvOQTnI2peiRxpVb8BUE
+         +ZCw6lh7sd9b+ypHaKKZtIfmLlLK1A+3y1Vkmo9SYbrXf+62NjQQW/BVVSRTkVZ7DO
+         IU8AGddDxTw+RLJ84Ae7JRjiqIzeDWyCRM55IE26QcpsubOWTJEYPmM9d/Sdj766pp
+         MaqndX0JhyVECWdP3XAqulbveA7qAqwtTn9UiIqRRx5CEzaciY2JfR89QYB8qA3hRc
+         HWUlPCw9pgUnp2gwJucEaiFX4jEwzbDdvM2iusRfGXDTn7PrJr+NyKRm9dCsav9R6C
+         Zn7jDyJJikF6g==
+From:   Mark Brown <broonie@kernel.org>
+To:     Takashi Iwai <tiwai@suse.de>, Jaroslav Kysela <perex@perex.cz>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH v2 0/6] kselftest/alsa: pcm-test improvements
+Date:   Thu,  1 Dec 2022 17:07:39 +0000
+Message-Id: <20221201170745.1111236-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1578; i=broonie@kernel.org; h=from:subject; bh=4P1OLKqn7MEyXJREvUvZOjiyLHEARCRdaDxzVt3dJw0=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjiN9bww8um6NZydnGG5sorVUm7m+rnEclQ+vSFJr6 lbAYyfaJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY4jfWwAKCRAk1otyXVSH0FxUB/ 9Euf2H6ndJuq2UJUTOJ31PfZ/zMDyjrSbntrThjHfj/F84K/FPcC+SgXXZnFeC9C4MtO59ThtK0yte E/Yz+EtaioW+Uvrwy968Ir6nGWaSBh4AdNvy3fijse6wtJEp4oI1Tw3nx0Ux1sozQD2rBEn/qseBYT QuOt+FhYLE+RyFUfkxhKVvKtshIv8PY7x81opuiZwEF6M4AJjHK9N4nSl6dxRGjE1LVkKaYVfTLtww ekX2hu5DlzNWBjO2WQ8Gzi6DD8LeOvjxfdx/fEtDmm6KYxSlJ19EUKMPwQoCafEAAgKSINpKaVxZeL +fV0N5S21HtNNd1iWGq5RyNUvrIWTa
+X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-A DAMON sysfs user could start DAMON with a scheme, remove the sysfs
-directory for the scheme, and then ask stats or schemes tried regions
-update.  The related logic were not aware of the already removed
-directory situation, so it was able to results in invalid memory
-accesses.  The fix has made with commit 8468b486612c
-("mm/damon/sysfs-schemes: skip stats update if the scheme directory is
-removed"), though.  Add a selftest to avoid such kind of bugs be
-introduced again.
+This series provides a bunch of quick updates which should make the
+coverage from pcm-test a bit more useful, it adds some support for
+skipping tests when the hardware/driver is unable to support the
+requested configuration and then expands the set of cases we cover to
+include more sample rates and channel counts.  This should exercise
+switching between 8kHz and 44.1kHz based rates and ensure that clocking
+doesn't get confused by non-stereo channel counts, both of which are I
+expect common real world errors, at least for embedded cards.
 
-Signed-off-by: SeongJae Park <sj@kernel.org>
----
- tools/testing/selftests/damon/Makefile        |  2 +-
- .../damon/sysfs_update_removed_scheme_dir.sh  | 58 +++++++++++++++++++
- 2 files changed, 59 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/damon/sysfs_update_removed_scheme_dir.sh
+v2:
+ - Rebase onto Takashi's current tree.
+ - Tweak the buffer sizes for the newly added cases, don't be quite
+   so ambitious in how big a buffer we request for 96kHz and don't
+   go quite so small for 8kHz since some devices start hitting lower
+   limits on period size and struggle to deliver accurate timing.
 
-diff --git a/tools/testing/selftests/damon/Makefile b/tools/testing/selftests/damon/Makefile
-index 838a8e49f77b..b71247ba7196 100644
---- a/tools/testing/selftests/damon/Makefile
-+++ b/tools/testing/selftests/damon/Makefile
-@@ -8,7 +8,7 @@ TEST_PROGS = debugfs_attrs.sh debugfs_schemes.sh debugfs_target_ids.sh
- TEST_PROGS += debugfs_empty_targets.sh debugfs_huge_count_read_write.sh
- TEST_PROGS += debugfs_duplicate_context_creation.sh
- TEST_PROGS += debugfs_rm_non_contexts.sh
--TEST_PROGS += sysfs.sh
-+TEST_PROGS += sysfs.sh sysfs_update_removed_scheme_dir.sh
- TEST_PROGS += reclaim.sh lru_sort.sh
- 
- include ../lib.mk
-diff --git a/tools/testing/selftests/damon/sysfs_update_removed_scheme_dir.sh b/tools/testing/selftests/damon/sysfs_update_removed_scheme_dir.sh
-new file mode 100644
-index 000000000000..ade35576e748
---- /dev/null
-+++ b/tools/testing/selftests/damon/sysfs_update_removed_scheme_dir.sh
-@@ -0,0 +1,58 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
-+if [ $EUID -ne 0 ]
-+then
-+	echo "Run as root"
-+	exit $ksft_skip
-+fi
-+
-+damon_sysfs="/sys/kernel/mm/damon/admin"
-+if [ ! -d "$damon_sysfs" ]
-+then
-+	echo "damon sysfs not found"
-+	exit $ksft_skip
-+fi
-+
-+# clear log
-+dmesg -C
-+
-+# start DAMON with a scheme
-+echo 1 > "$damon_sysfs/kdamonds/nr_kdamonds"
-+echo 1 > "$damon_sysfs/kdamonds/0/contexts/nr_contexts"
-+echo "vaddr" > "$damon_sysfs/kdamonds/0/contexts/0/operations"
-+echo 1 > "$damon_sysfs/kdamonds/0/contexts/0/targets/nr_targets"
-+echo $$ > "$damon_sysfs/kdamonds/0/contexts/0/targets/0/pid_target"
-+echo 1 > "$damon_sysfs/kdamonds/0/contexts/0/schemes/nr_schemes"
-+scheme_dir="$damon_sysfs/kdamonds/0/contexts/0/schemes/0"
-+echo 4096000 > "$scheme_dir/access_pattern/sz/max"
-+echo 20 > "$scheme_dir/access_pattern/nr_accesses/max"
-+echo 1024 > "$scheme_dir/access_pattern/age/max"
-+echo "on" > "$damon_sysfs/kdamonds/0/state"
-+sleep 0.3
-+
-+# remove scheme sysfs dir
-+echo 0 > "$damon_sysfs/kdamonds/0/contexts/0/schemes/nr_schemes"
-+
-+# try to update stat of already removed scheme sysfs dir
-+echo "update_schemes_stats" > "$damon_sysfs/kdamonds/0/state"
-+if dmesg | grep -q BUG
-+then
-+	echo "update_schemes_stats triggers a kernel bug"
-+	dmesg
-+	exit 1
-+fi
-+
-+# try to update tried regions of already removed scheme sysfs dir
-+echo "update_schemes_tried_regions" > "$damon_sysfs/kdamonds/0/state"
-+if dmesg | grep -q BUG
-+then
-+	echo "update_schemes_tried_regions triggers a kernel bug"
-+	dmesg
-+	exit 1
-+fi
-+
-+echo "off" > "$damon_sysfs/kdamonds/0/state"
+Mark Brown (6):
+  kselftest/alsa: Refactor pcm-test to list the tests to run in a struct
+  kselftest/alsa: Report failures to set the requested sample rate as
+    skips
+  kselftest/alsa: Report failures to set the requested channels as skips
+  kselftest/alsa: Don't any configuration in the sample config
+  kselftest/alsa: Provide more meaningful names for tests
+  kselftest/alsa: Add more coverage of sample rates and channel counts
+
+ .../alsa/conf.d/Lenovo_ThinkPad_P1_Gen2.conf  | 35 ++++----
+ tools/testing/selftests/alsa/pcm-test.c       | 88 +++++++++++++------
+ 2 files changed, 81 insertions(+), 42 deletions(-)
+
+
+base-commit: 2133dc91d6658242009177b564ac47c49e08668a
 -- 
-2.25.1
+2.30.2
 
