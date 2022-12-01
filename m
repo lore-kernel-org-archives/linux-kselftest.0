@@ -2,205 +2,91 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1548DC43217
-	for <linux-kselftest@archiver.kernel.org>; Thu,  1 Dec 2022 20:28:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3727CC43217
+	for <linux-kselftest@archiver.kernel.org>; Thu,  1 Dec 2022 20:29:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230209AbiLAU2L (ORCPT
+        id S230109AbiLAU36 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 1 Dec 2022 15:28:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56452 "EHLO
+        Thu, 1 Dec 2022 15:29:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229913AbiLAU2K (ORCPT
+        with ESMTP id S229623AbiLAU35 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 1 Dec 2022 15:28:10 -0500
-X-Greylist: delayed 550 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 01 Dec 2022 12:28:07 PST
-Received: from out-143.mta0.migadu.com (out-143.mta0.migadu.com [IPv6:2001:41d0:1004:224b::8f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8387CA1C03
-        for <linux-kselftest@vger.kernel.org>; Thu,  1 Dec 2022 12:28:07 -0800 (PST)
-Message-ID: <f4aa0e19-6c91-3d39-ca8a-7840bf46625d@linux.dev>
-Date:   Thu, 1 Dec 2022 12:18:45 -0800
+        Thu, 1 Dec 2022 15:29:57 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA675A1C23
+        for <linux-kselftest@vger.kernel.org>; Thu,  1 Dec 2022 12:29:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 55D5FB81F50
+        for <linux-kselftest@vger.kernel.org>; Thu,  1 Dec 2022 20:29:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1FA4C433C1;
+        Thu,  1 Dec 2022 20:29:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669926592;
+        bh=Od0AD5DBVzEiXrFV85VI5bd5miG2W796RKeGwL2sr/Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mOEws95xl5zLJaZb6aIAVA2mfdtDGM4Ib/f7wD/4DO0SiseRZQQSJ4nKQbO3N1+2c
+         Vwjzm/beXXkoikLJdNN6szSogF7JSYX5pmJOhMUzWQGXZ55okTJrHT046XiaU63zn0
+         21wEl9j4NLXYdHF7DsPzob28jBCqcSl6mlsluvztvS3zgUPTElAcIk/jDHVPqVQnUy
+         ZrFTPSAWlmjNbJSkaUjIl50DHSBTQ1y74Kz6mw77+pusQFvQwo+PofYZCZnagrODxl
+         TgU0yWG2yA1xlHhlho58lQiHEoYs1lKF/uZf1Ob+LxoZizVB5fjPx2oc24xxqxTgxa
+         J5NAit4zKf8Lw==
+Date:   Thu, 1 Dec 2022 20:29:48 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Shuah Khan <shuah@kernel.org>,
+        alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v1 0/6] kselftest/alsa: pcm-test improvements
+Message-ID: <Y4kOvNi5I8/GK1yU@sirena.org.uk>
+References: <20221130000608.519574-1-broonie@kernel.org>
+ <a55212fc-a676-2335-b861-94ba8d10f207@perex.cz>
+ <87359zlz9t.wl-tiwai@suse.de>
 MIME-Version: 1.0
-Subject: Re: [PATCH ipsec-next,v2 2/3] xfrm: interface: Add unstable helpers
- for setting/getting XFRM metadata from TC-BPF
-Content-Language: en-US
-To:     Eyal Birger <eyal.birger@gmail.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        steffen.klassert@secunet.com, herbert@gondor.apana.org.au,
-        andrii@kernel.org, daniel@iogearbox.net, nicolas.dichtel@6wind.com,
-        razor@blackwall.org, mykolal@fb.com, ast@kernel.org,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, shuah@kernel.org
-References: <20221129132018.985887-1-eyal.birger@gmail.com>
- <20221129132018.985887-3-eyal.birger@gmail.com>
- <b3306950-bea9-e914-0491-54048d6d55e4@linux.dev>
- <CAHsH6Gs4OajjoXauDw9zERx=+tUqpbpnP_8SxzmKKDQ3r8xmJA@mail.gmail.com>
- <CAHsH6Gv+WUDQvAL6jnzNFkNAKTk7ANahdbC_43y9x4t3AJZceA@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <CAHsH6Gv+WUDQvAL6jnzNFkNAKTk7ANahdbC_43y9x4t3AJZceA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="YYXR5ynsa7QqFwTf"
+Content-Disposition: inline
+In-Reply-To: <87359zlz9t.wl-tiwai@suse.de>
+X-Cookie: Leveraging always beats prototyping.
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/1/22 5:30 AM, Eyal Birger wrote:
-> Hi Martin,
-> 
-> On Thu, Dec 1, 2022 at 7:55 AM Eyal Birger <eyal.birger@gmail.com> wrote:
->>
->> Hi Martin,
->>
->> On Wed, Nov 30, 2022 at 8:15 PM Martin KaFai Lau <martin.lau@linux.dev> wrote:
->>>
->>> On 11/29/22 5:20 AM, Eyal Birger wrote:
->>>> diff --git a/net/xfrm/xfrm_interface_bpf.c b/net/xfrm/xfrm_interface_bpf.c
->>>> new file mode 100644
->>>> index 000000000000..757e15857dbf
->>>> --- /dev/null
->>>> +++ b/net/xfrm/xfrm_interface_bpf.c
->>>> @@ -0,0 +1,100 @@
->>>> +// SPDX-License-Identifier: GPL-2.0-only
->>>> +/* Unstable XFRM Helpers for TC-BPF hook
->>>> + *
->>>> + * These are called from SCHED_CLS BPF programs. Note that it is
->>>> + * allowed to break compatibility for these functions since the interface they
->>>> + * are exposed through to BPF programs is explicitly unstable.
->>>> + */
->>>> +
->>>> +#include <linux/bpf.h>
->>>> +#include <linux/btf_ids.h>
->>>> +
->>>> +#include <net/dst_metadata.h>
->>>> +#include <net/xfrm.h>
->>>> +
->>>> +struct bpf_xfrm_info {
->>> No need to introduce a bpf variant of the "struct xfrm_md_info" (more on this
->>> later).
->>>
->>>> +     u32 if_id;
->>>> +     int link;
->>>> +};
->>>> +
->>>> +static struct metadata_dst __percpu *xfrm_md_dst;
->>>> +__diag_push();
->>>> +__diag_ignore_all("-Wmissing-prototypes",
->>>> +               "Global functions as their definitions will be in xfrm_interface BTF");
->>>> +
->>>> +__used noinline
->>>> +int bpf_skb_get_xfrm_info(struct __sk_buff *skb_ctx, struct bpf_xfrm_info *to)
->>>
->>> This kfunc is not needed.  It only reads the skb->_skb_refdst.  The new kfunc
->>> bpf_rdonly_cast() can be used.  Take a look at the bpf_rdonly_cast() usages in
->>> the selftests/bpf/progs/type_cast.c.  It was in bpf-next only but should also be
->>> in net-next now.
->>
->> I'm somewhat concerned with this approach.
->> Indeed it would remove the kfunc, and the API is declared "unstable", but
->> still the implementation as dst isn't relevant to the user and would make
->> the programs less readable.
->>
->> Also note that the helper can be also used as it is to get the xfrm info at
->> egress from an lwt route (which stores the xfrm_info in the dst lwstate).
 
-Right, the whole skb_xfrm_md_info() can be implemented in bpf prog itself, like 
-checking lwtstate.
+--YYXR5ynsa7QqFwTf
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-If adding a kfunc, how about directly expose skb_xfrm_md_info() itself as a 
-kfunc to bpf prog and directly return a "struct xfrm_md_info *" instead.  Then 
-there is no need to copy if_id/link...etc.  The bpf prog has no need to 
-initialize the "to" also.  Something like this:
+On Thu, Dec 01, 2022 at 08:06:22PM +0100, Takashi Iwai wrote:
+> On Thu, 01 Dec 2022 18:42:22 +0100,
+> Jaroslav Kysela wrote:
+> >=20
+> > Let me know, if I can stack your changes on top, or perhaps, you may
+> > be willing to adapt them.
+>=20
+> As Mark has already sent a v2 series, I applied his v2 at first.
+> Could you rebase and resubmit on top of my for-next branch?
 
-__used noinline
-const struct xfrm_md_info *bpf_skb_xfrm_md_info(const struct __sk_buff *skb) { ... }
+Oh, this is getting a little confusing - I'd just picked Jaroslav's
+patch into my tree and was in the middle redoing my ideas on top of his
+code!  I might have something more later this evening...  I think we can
+converge here, let me continue taking a look.
 
-BTF_ID_FLAGS(func, bpf_skb_xfrm_md_info, KF_RET_NULL)
+--YYXR5ynsa7QqFwTf
+Content-Type: application/pgp-signature; name="signature.asc"
 
->>
->>>
->>>> +{
->>>> +     struct sk_buff *skb = (struct sk_buff *)skb_ctx;
->>>> +     struct xfrm_md_info *info;
->>>> +
->>>> +     memset(to, 0, sizeof(*to));
->>>> +
->>>> +     info = skb_xfrm_md_info(skb);
->>>> +     if (!info)
->>>> +             return -EINVAL;
->>>> +
->>>> +     to->if_id = info->if_id;
->>>> +     to->link = info->link;
->>>> +     return 0;
->>>> +}
->>>> +
->>>> +__used noinline
->>>> +int bpf_skb_set_xfrm_info(struct __sk_buff *skb_ctx,
->>>> +                       const struct bpf_xfrm_info *from)
->>>
->>> Directly use "const struct xfrm_md_info *from" instead.  This kfunc can check
->>> from->dst_orig != NULL and return -EINVAL.  It will then have a consistent API
->>> with the bpf_rdonly_cast() mentioned above.
->>
->> See above.
-> 
-> Also, when trying this approach with bpf_set_xfrm_info() accepting
-> "const struct xfrm_md_info *from" I fail to load the program:
-> 
-> libbpf: prog 'set_xfrm_info': BPF program load failed: Invalid argument
-> libbpf: prog 'set_xfrm_info': -- BEGIN PROG LOAD LOG --
-> 0: R1=ctx(off=0,imm=0) R10=fp0
-> ; int set_xfrm_info(struct __sk_buff *skb)
-> 0: (bf) r6 = r1                       ; R1=ctx(off=0,imm=0)
-> R6_w=ctx(off=0,imm=0)
-> 1: (b7) r1 = 0                        ; R1_w=0
-> ; struct xfrm_md_info info = {};
-> 2: (7b) *(u64 *)(r10 -8) = r1         ; R1_w=0 R10=fp0 fp-8_w=00000000
-> 3: (7b) *(u64 *)(r10 -16) = r1        ; R1_w=0 R10=fp0 fp-16_w=00000000
-> 4: (b4) w1 = 0                        ; R1_w=0
-> ; __u32 index = 0;
-> 5: (63) *(u32 *)(r10 -20) = r1        ; R1_w=0 R10=fp0 fp-24=0000????
-> 6: (bf) r2 = r10                      ; R2_w=fp0 R10=fp0
-> ;
-> 7: (07) r2 += -20                     ; R2_w=fp-20
-> ; if_id = bpf_map_lookup_elem(&dst_if_id_map, &index);
-> 8: (18) r1 = 0xffff888006751c00       ; R1_w=map_ptr(off=0,ks=4,vs=4,imm=0)
-> 10: (85) call bpf_map_lookup_elem#1   ;
-> R0_w=map_value_or_null(id=1,off=0,ks=4,vs=4,imm=0)
-> 11: (bf) r1 = r0                      ;
-> R0_w=map_value_or_null(id=1,off=0,ks=4,vs=4,imm=0)
-> R1_w=map_value_or_null(id=1,off=0,ks=4,vs=4,imm=0)
-> 12: (b4) w0 = 2                       ; R0_w=2
-> ; if (!if_id)
-> 13: (15) if r1 == 0x0 goto pc+10      ; R1_w=map_value(off=0,ks=4,vs=4,imm=0)
-> 14: (bf) r2 = r10                     ; R2_w=fp0 R10=fp0
-> ;
-> 15: (07) r2 += -16                    ; R2_w=fp-16
-> ; info.if_id = *if_id;
-> 16: (61) r1 = *(u32 *)(r1 +0)         ;
-> R1_w=scalar(umax=4294967295,var_off=(0x0; 0xffffffff))
-> ; info.if_id = *if_id;
-> 17: (63) *(u32 *)(r2 +0) = r1         ;
-> R1_w=scalar(umax=4294967295,var_off=(0x0; 0xffffffff)) R2_w=fp-16
-> fp-16_w=
-> ; ret = bpf_skb_set_xfrm_info(skb, &info);
-> 18: (bf) r1 = r6                      ; R1_w=ctx(off=0,imm=0)
-> R6_w=ctx(off=0,imm=0)
-> 19: (85) call bpf_skb_set_xfrm_info#81442
-> arg#1 pointer type STRUCT xfrm_md_info must point to scalar, or struct
-> with scalar
-> 
-> Is there some registration I need to do for this struct?
+-----BEGIN PGP SIGNATURE-----
 
-Ah, thanks for trying!
-hmm... it will need a change to the verifier.  likely tag the param with 
-something like "const struct xfrm_md_info *from__nonscalar_ok".
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmOJDrsACgkQJNaLcl1U
+h9C/WAf8CLgm6NcrQknYcMIw1V3IqwqHTcxlDhTiq4NYafIjUOMXWaNSJVtPgu1V
+TbroqPWv5McRKkXzB87ZKcwX6ITGMpDHbUjKqIBgt9Q9TrJF77GVYomDGPoQpHuz
+btGf+zLCPowAeW6X2PUeRkP43VFOvDNbnzePJULqc4YJCt4+0dNwy32y+gRQeu+1
+feYBc/B8GnmdzqKDZkFqtZfZN530GBDWJBAALk9E4OCrxGd/U4ZAk8Xk5rb+a5SM
+4nUx3ypoUWVA6QXvVTMmytD956ic5bYtbX/FqRpYs+Wmc9RBe6O40TAdhvMuw4D2
+z6UttiUWsHorXMYSBUhQvBCQX9kQYQ==
+=3940
+-----END PGP SIGNATURE-----
 
-The reason of my earlier suggestion was to avoid the need to duplicate future 
-changes in xfrm_md_info to bpf_xfrm_info and more importantly avoid creating 
-another __sk_buff vs sk_buff like usage confusion.
-
-For now, lets stay with bpf_xfrm_info.  This can be changed later.
-
+--YYXR5ynsa7QqFwTf--
