@@ -2,59 +2,65 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74FCDC63703
-	for <linux-kselftest@archiver.kernel.org>; Thu,  8 Dec 2022 12:50:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99F92C3A5A7
+	for <linux-kselftest@archiver.kernel.org>; Thu,  8 Dec 2022 13:11:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230245AbiLHMux (ORCPT
+        id S229601AbiLHNLJ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 8 Dec 2022 07:50:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48314 "EHLO
+        Thu, 8 Dec 2022 08:11:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230246AbiLHMuW (ORCPT
+        with ESMTP id S229558AbiLHNLJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 8 Dec 2022 07:50:22 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C1E8C6B5;
-        Thu,  8 Dec 2022 04:50:07 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NSYsB3cMNz4y42;
-        Thu,  8 Dec 2022 23:50:06 +1100 (AEDT)
-From:   Michael Ellerman <patch-notifications@ellerman.id.au>
-To:     Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Shuah Khan <shuah@kernel.org>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     linux-kselftest@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <1669862997-31335-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1669862997-31335-1-git-send-email-yangtiezhu@loongson.cn>
-Subject: Re: [PATCH] selftests: powerpc: Use "grep -E" instead of "egrep"
-Message-Id: <167050320175.1457988.16657172776968236622.b4-ty@ellerman.id.au>
-Date:   Thu, 08 Dec 2022 23:40:01 +1100
+        Thu, 8 Dec 2022 08:11:09 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 994E08AAFC;
+        Thu,  8 Dec 2022 05:11:07 -0800 (PST)
+Received: from canpemm500005.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NSZDZ5NMjzqSsR;
+        Thu,  8 Dec 2022 21:06:54 +0800 (CST)
+Received: from ubuntu1804.huawei.com (10.67.174.63) by
+ canpemm500005.china.huawei.com (7.192.104.229) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 8 Dec 2022 21:11:05 +0800
+From:   Zhao Gongyi <zhaogongyi@huawei.com>
+To:     <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <shuah@kernel.org>
+CC:     <zhaogongyi@huawei.com>
+Subject: [PATCH -next 2/2] selftests/intel_pstate: do cleanup at exit
+Date:   Thu, 8 Dec 2022 21:08:05 +0800
+Message-ID: <20221208130805.66660-3-zhaogongyi@huawei.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20221208130805.66660-1-zhaogongyi@huawei.com>
+References: <20221208130805.66660-1-zhaogongyi@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.67.174.63]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500005.china.huawei.com (7.192.104.229)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 1 Dec 2022 10:49:57 +0800, Tiezhu Yang wrote:
-> The latest version of grep claims the egrep is now obsolete so the build
-> now contains warnings that look like:
-> 	egrep: warning: egrep is obsolescent; using grep -E
-> fix this using "grep -E" instead.
-> 
->   sed -i "s/egrep/grep -E/g" `grep egrep -rwl tools/testing/selftests/powerpc`
-> 
-> [...]
+Remove the tmp files before the test exit.
 
-Applied to powerpc/next.
+Signed-off-by: Zhao Gongyi <zhaogongyi@huawei.com>
+---
+ tools/testing/selftests/intel_pstate/run.sh | 1 +
+ 1 file changed, 1 insertion(+)
 
-[1/1] selftests: powerpc: Use "grep -E" instead of "egrep"
-      https://git.kernel.org/powerpc/c/5921eb36d2a1b276b16a24e529788550e6a65449
+diff --git a/tools/testing/selftests/intel_pstate/run.sh b/tools/testing/selftests/intel_pstate/run.sh
+index ee78c61cccb9..3e187e54af16 100755
+--- a/tools/testing/selftests/intel_pstate/run.sh
++++ b/tools/testing/selftests/intel_pstate/run.sh
+@@ -140,5 +140,6 @@ do
+ done < /tmp/governor
 
-cheers
+ rm -f /tmp/governor
++rm -f /tmp/result\.*
+
+ exit 0
+--
+2.17.1
+
