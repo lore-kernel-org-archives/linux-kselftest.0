@@ -2,95 +2,117 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 941BEC63705
-	for <linux-kselftest@archiver.kernel.org>; Thu,  8 Dec 2022 00:06:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B7BEC63705
+	for <linux-kselftest@archiver.kernel.org>; Thu,  8 Dec 2022 00:18:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230228AbiLHAGK (ORCPT
+        id S229637AbiLHASA (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 7 Dec 2022 19:06:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38308 "EHLO
+        Wed, 7 Dec 2022 19:18:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230237AbiLHAGJ (ORCPT
+        with ESMTP id S229635AbiLHASA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 7 Dec 2022 19:06:09 -0500
-X-Greylist: delayed 544 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 07 Dec 2022 16:06:08 PST
-Received: from out-247.mta0.migadu.com (out-247.mta0.migadu.com [91.218.175.247])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8D1F813A7
-        for <linux-kselftest@vger.kernel.org>; Wed,  7 Dec 2022 16:06:08 -0800 (PST)
-Date:   Wed, 7 Dec 2022 23:56:55 +0000
+        Wed, 7 Dec 2022 19:18:00 -0500
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 172576150C;
+        Wed,  7 Dec 2022 16:17:59 -0800 (PST)
+Date:   Thu, 8 Dec 2022 00:17:53 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1670457420;
+        t=1670458677;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=qhIDkNMWFrw/BML2Cf6mgZzatycSfUupNCdq7V2NZos=;
-        b=HY/h51zVycRcdzDUCbof89MlN7kXyAU/yP5TMyU/lDpo22Zsbhk4m07HUlJcGgLvkJZRuT
-        dnCIhswOvG+6aBUJZjZpBj6GW3k6gPWAgy3Sx6sgU0O1Mx2JzoAXpnrU+WgXwKtoYSpZFJ
-        6PAe0dxx/BTffdNTRlRNW3m43RV1JmU=
+        bh=mM+RUREs8XNQIXR9OLpX5FpMS6Cj+6d+9P8d8/tGhYQ=;
+        b=ku/5sjzdHABEj1t0G+fh8i2C1G7TPlKULEuuL0AsGRUb9Ux6kV59QeDru18AX6//yF0gQQ
+        qi9glC8ovSUnX0pEdAH+zSKl6LwdATrWKndnT9rxxTgYbq5nvQ5YxEWiKGiwHKt1PKXK4y
+        q+b7skuzGcfVu+l+lCWV2z9h/98c+6U=
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From:   Oliver Upton <oliver.upton@linux.dev>
 To:     Sean Christopherson <seanjc@google.com>
 Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
         Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Shuah Khan <shuah@kernel.org>,
-        Andrew Jones <andrew.jones@linux.dev>,
-        Peter Gonda <pgonda@google.com>,
         linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
         kvm@vger.kernel.org, kvmarm@lists.linux.dev,
         Ricardo Koller <ricarkol@google.com>,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/4] KVM: selftests: Allocate ucall pool from
- MEM_REGION_DATA
-Message-ID: <Y5EoR9U/TjdtksHK@google.com>
+Subject: Re: [PATCH 2/4] KVM: selftests: Setup ucall after loading program
+ into guest memory
+Message-ID: <Y5EtMWuTaJk9I3Bd@google.com>
 References: <20221207214809.489070-1-oliver.upton@linux.dev>
- <20221207214809.489070-5-oliver.upton@linux.dev>
- <Y5ElcibE2CubONgm@google.com>
+ <20221207214809.489070-3-oliver.upton@linux.dev>
+ <Y5EoZ5uwrTF3eSKw@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y5ElcibE2CubONgm@google.com>
+In-Reply-To: <Y5EoZ5uwrTF3eSKw@google.com>
 X-Migadu-Flow: FLOW_OUT
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Dec 07, 2022 at 11:44:50PM +0000, Sean Christopherson wrote:
+On Wed, Dec 07, 2022 at 11:57:27PM +0000, Sean Christopherson wrote:
 > On Wed, Dec 07, 2022, Oliver Upton wrote:
-> > MEM_REGION_TEST_DATA is meant to hold data explicitly used by a
-> > selftest, not implicit allocations due to the selftests infrastructure.
-> > Allocate the ucall pool from MEM_REGION_DATA much like the rest of the
-> > selftests library allocations.
+> > The new ucall infrastructure needs to update a couple of guest globals
+> > to pass through the ucall MMIO addr and pool of ucall structs. A
+> > precondition of this actually working is to have the program image
+> > already loaded into guest memory.
+> 
+> Ouch.  Might be worth explicitly stating what goes wrong.  Even though it's super
+> obvious in hindsight, it still took me a few seconds to understand what
+> precondition you were referring to, e.g. I was trying to figure out how selecting
+> the MMIO address depended on the guest code being loaded...
+> 
 > > 
-> > Fixes: 426729b2cf2e ("KVM: selftests: Add ucall pool based implementation")
-> 
-> Not that it really matters because no one will backport this verbatim, but this
-> is the wrong commit to blame.  As of commit 426729b2cf2e, MEM_REGION_DATA does not
-> exist.  And similarly, the common ucall code didn't exist when Ricardo's series
-> introduced MEM_REGION_DATA.
-> 
->   $ git show 426729b2cf2e:tools/testing/selftests/kvm/include/kvm_util_base.h | grep MEM_REGION_DATA
->   $ git show 290c5b54012b7:tools/testing/selftests/kvm/lib/ucall_common.c
->   fatal: path 'tools/testing/selftests/kvm/lib/ucall_common.c' exists on disk, but not in '290c5b54012b7'
-> 
-> The commit where the two collided is:
-> 
-> Fixes: cc7544101eec ("Merge tag 'kvmarm-6.2' of https://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm into HEAD")
-
-Yeah, this Fixes is garbage, apologies.
-
-I imagine Paolo is going to squash some things into the kvmarm merge, so
-the Fixes tag ought to be dropped altogether.
-
+> > Call ucall_init() after kvm_vm_elf_load(). Continue to park the ucall
+> > MMIO addr after MEM_REGION_TEST_DATA.
+> > 
 > > Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
 > > ---
+> >  tools/testing/selftests/kvm/aarch64/page_fault_test.c | 8 +++++++-
+> >  1 file changed, 7 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/tools/testing/selftests/kvm/aarch64/page_fault_test.c b/tools/testing/selftests/kvm/aarch64/page_fault_test.c
+> > index 92d3a91153b6..95d22cfb7b41 100644
+> > --- a/tools/testing/selftests/kvm/aarch64/page_fault_test.c
+> > +++ b/tools/testing/selftests/kvm/aarch64/page_fault_test.c
+> > @@ -609,8 +609,13 @@ static void setup_memslots(struct kvm_vm *vm, struct test_params *p)
+> >  				    data_size / guest_page_size,
+> >  				    p->test_desc->data_memslot_flags);
+> >  	vm->memslots[MEM_REGION_TEST_DATA] = TEST_DATA_MEMSLOT;
+> > +}
+> > +
+> > +static void setup_ucall(struct kvm_vm *vm)
+> > +{
+> > +	struct userspace_mem_region *region = vm_get_mem_region(vm, MEM_REGION_TEST_DATA);
+> >  
+> > -	ucall_init(vm, data_gpa + data_size);
+> > +	ucall_init(vm, region->region.guest_phys_addr + region->region.memory_size);
 > 
-> Fixes nit aside,
-> 
-> Reviewed-by: Sean Christopherson <seanjc@google.com>
+> Isn't there a hole after CODE_AND_DATA_MEMSLOT?  I.e. after memslot 0?
 
-Thanks!
+Sure, but that's only guaranteed in the PA space.
+
+> The reason
+> I ask is because if so, then we can do the temporarily heinous, but hopefully forward
+> looking thing of adding a helper to wrap kvm_vm_elf_load() + ucall_init().
+> 
+> E.g. I think we can do this immediately, and then at some point in the 6.2 cycle
+> add a dedicated region+memslot for the ucall MMIO page.
+
+Even still, that's just a kludge to make ucalls work. We have other
+MMIO devices (GIC distributor, for example) that work by chance since
+nothing conflicts with the constant GPAs we've selected in the tests.
+
+I'd rather we go down the route of having an address allocator for the
+for both the VA and PA spaces to provide carveouts at runtime. There's
+another issue with the new ucall implementation where identity mapping
+could stomp on a program segment that I'm fighting with right now which
+only further highlights the problems with our (mis)management of address
+spaces in selftests.
 
 --
-Best,
+Thanks,
 Oliver
