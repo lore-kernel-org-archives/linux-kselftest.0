@@ -2,97 +2,256 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DA97C04FDE
-	for <linux-kselftest@archiver.kernel.org>; Fri,  9 Dec 2022 10:04:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2C63C4708D
+	for <linux-kselftest@archiver.kernel.org>; Fri,  9 Dec 2022 16:05:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbiLIKEi (ORCPT
+        id S229478AbiLIQFF (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 9 Dec 2022 05:04:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36470 "EHLO
+        Fri, 9 Dec 2022 11:05:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbiLIKEZ (ORCPT
+        with ESMTP id S230030AbiLIQFD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 9 Dec 2022 05:04:25 -0500
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EE8A63B8F;
-        Fri,  9 Dec 2022 02:04:23 -0800 (PST)
-Received: by mail-qt1-f176.google.com with SMTP id cg5so3186486qtb.12;
-        Fri, 09 Dec 2022 02:04:23 -0800 (PST)
+        Fri, 9 Dec 2022 11:05:03 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8340E554EA
+        for <linux-kselftest@vger.kernel.org>; Fri,  9 Dec 2022 08:05:02 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id x66so4008435pfx.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 09 Dec 2022 08:05:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vFajmLWzEheOspCEYhY0eo6ZhecGZeOzelViubfUiKU=;
+        b=dptKtOCdTYDRw1zV2LczU6Mn1xxfY3K7c4rFaFud5vbOoJLbaV53h863pAiKxktADU
+         hrt1ext9eD2TGdU12+Ynlfi3y5U15x8duzI8R0NoHOvfww3B8KJhixGy5q8AKCjevVIp
+         bMEZAl3CbIzNJxQFT7JG1kmnsDBR/bSc/JGm0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ihXtAUazn+V3lw4sgrM4dxPP4Vq6tOqT1cB+Rh/ZS30=;
-        b=oh9sOn+0WiGHB6Qnc5Vl0sxFgnEwskcnh2PQgNNVm/FJQGzACoOKyTtz5Ceyay6KXY
-         0n+rQg+2myxXsPg1Sptfty0+5Nuf1RSEdqP5yO7OJ/LdzrJPcBl3batFRuxAcWUyxyzc
-         dwGPJxx8chLE1Sq6hNifP5LvUQTbgoHlbgFxLT5th0SJNC5Z01wOabbBTxpR0XxIniS3
-         o+0+cpROku4wUO+AlV63lj0LUh/J43l6qe82dl5XbKcsSQ4vhL/+SeN6rX9/yBPwV6Mm
-         yY+mZaOw+/kjBVwOYhVJGPo17Cg0EFySq76aA70kas8FN04S2YkbsUvo3ZwDjhC5/xZU
-         Dc4g==
-X-Gm-Message-State: ANoB5pl1SLmzixsY0do3zdJ05fQzwnv6DadFj0aqVKRxIHrRfVtOeRWj
-        ubswzOzEwR6bNpUxyQzl6DB8KyeBDeYFBQ==
-X-Google-Smtp-Source: AA0mqf7W4C4jGHiKZqS9BqTop362HVzxLJhT37BW9EQaaAH6hCbf/1QKktWeh5JqTX5A8i81nQNn5g==
-X-Received: by 2002:a05:622a:4a0d:b0:3a5:3230:5e6f with SMTP id fv13-20020a05622a4a0d00b003a532305e6fmr7025383qtb.8.1670580262065;
-        Fri, 09 Dec 2022 02:04:22 -0800 (PST)
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com. [209.85.128.177])
-        by smtp.gmail.com with ESMTPSA id v7-20020ac87487000000b003a7ec97c882sm629924qtq.6.2022.12.09.02.04.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Dec 2022 02:04:21 -0800 (PST)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-3bf4ade3364so45993107b3.3;
-        Fri, 09 Dec 2022 02:04:21 -0800 (PST)
-X-Received: by 2002:a0d:cb4c:0:b0:38e:e541:d8ca with SMTP id
- n73-20020a0dcb4c000000b0038ee541d8camr22239587ywd.283.1670580260918; Fri, 09
- Dec 2022 02:04:20 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vFajmLWzEheOspCEYhY0eo6ZhecGZeOzelViubfUiKU=;
+        b=ZZXxBwEuDWaduq85oKhnLlYq2rL/7COL0d3bVOvg7nPwRL/ThdpUcs5yO5pFHc5CJ9
+         kwttZzazJiYNFhdtD1hlpGoZsqLmH9FaCULWrUGwqF08PxPb4Tt540e9KCJtRqvsGkqJ
+         i2JuEUZNz2wBMkfAV2ZpcoV4BImu5ymVtz4CuGTwxDAAMsc1PubZFSaz/SdIajOjSUP3
+         JvsuQEaTvBOZzu8zu8Pu5RVHTMGXaZgDijAgWweV+eVshZ/+TqEuTqZKkHbfcu75f67H
+         umySitRhi8Yfgx021h4+8p1c3HJwhp2uJK21PHn9kmYJfeviqZbKDbZA5e55iNKke0oi
+         yZLA==
+X-Gm-Message-State: ANoB5plOpTQ3Azia/JdKLYEjUDezucUuWg9TeDhRFQ97hY3SMFurLjQL
+        4P5rmK/c0O/+AYg0w0W50Jk5tw==
+X-Google-Smtp-Source: AA0mqf5RSyeDowJvRrBf4iGaBhxxnFa7YM+HB+hTS4k6TzbwOhELOjd9m1isGHeLLyQPZk1DCB/BOQ==
+X-Received: by 2002:a05:6a00:1d14:b0:578:1708:6416 with SMTP id a20-20020a056a001d1400b0057817086416mr113562pfx.11.1670601901687;
+        Fri, 09 Dec 2022 08:05:01 -0800 (PST)
+Received: from jeffxud.c.googlers.com.com (30.202.168.34.bc.googleusercontent.com. [34.168.202.30])
+        by smtp.gmail.com with ESMTPSA id a15-20020aa795af000000b00576670cc170sm1460504pfk.93.2022.12.09.08.05.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Dec 2022 08:05:01 -0800 (PST)
+From:   jeffxu@chromium.org
+To:     skhan@linuxfoundation.org, keescook@chromium.org
+Cc:     akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
+        dverkamp@chromium.org, hughd@google.com, jeffxu@google.com,
+        jorgelo@chromium.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        jannh@google.com, linux-hardening@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH v7 2/6] selftests/memfd: add tests for F_SEAL_EXEC
+Date:   Fri,  9 Dec 2022 16:04:49 +0000
+Message-Id: <20221209160453.3246150-3-jeffxu@google.com>
+X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
+In-Reply-To: <20221209160453.3246150-1-jeffxu@google.com>
+References: <20221209160453.3246150-1-jeffxu@google.com>
 MIME-Version: 1.0
-References: <4d07ad990740a5f1e426ce4566fb514f60ec9bdd.1670509558.git.geert+renesas@glider.be>
- <20221208145745.a0424a67725f431a28737b6a@linux-foundation.org>
-In-Reply-To: <20221208145745.a0424a67725f431a28737b6a@linux-foundation.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 9 Dec 2022 11:04:09 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXVkdmnKDobfZHkk+Lxradq238wAcaLOyW-cmS7J3MS4g@mail.gmail.com>
-Message-ID: <CAMuHMdXVkdmnKDobfZHkk+Lxradq238wAcaLOyW-cmS7J3MS4g@mail.gmail.com>
-Subject: Re: [PATCH] lib: Add Dhrystone benchmark test
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        David Gow <davidgow@google.com>, Arnd Bergmann <arnd@arndb.de>,
-        linux-kselftest@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Andrew,
+From: Daniel Verkamp <dverkamp@chromium.org>
 
-On Thu, Dec 8, 2022 at 11:57 PM Andrew Morton <akpm@linux-foundation.org> wrote:
-> On Thu,  8 Dec 2022 15:31:28 +0100 Geert Uytterhoeven <geert+renesas@glider.be> wrote:
->
-> > Hence make the classical Dhrystone 2.1 benchmark available as a Linux
-> > kernel test module, based on[1].
->
-> I can take a look at this after the merge window
+Basic tests to ensure that user/group/other execute bits cannot be
+changed after applying F_SEAL_EXEC to a memfd.
 
-Thanks!
+Signed-off-by: Daniel Verkamp <dverkamp@chromium.org>
+Co-developed-by: Jeff Xu <jeffxu@google.com>
+Signed-off-by: Jeff Xu <jeffxu@google.com>
+---
+ tools/testing/selftests/memfd/memfd_test.c | 123 ++++++++++++++++++++-
+ 1 file changed, 122 insertions(+), 1 deletion(-)
 
-> I'm not able to figure out the licensing of this.
-> https://netlib.org/benchmark/dhry-c appears to be silent on the topic?
+diff --git a/tools/testing/selftests/memfd/memfd_test.c b/tools/testing/selftests/memfd/memfd_test.c
+index 94df2692e6e4..f18a15a1f275 100644
+--- a/tools/testing/selftests/memfd/memfd_test.c
++++ b/tools/testing/selftests/memfd/memfd_test.c
+@@ -28,12 +28,38 @@
+ #define MFD_DEF_SIZE 8192
+ #define STACK_SIZE 65536
+ 
++#define F_SEAL_EXEC	0x0020
++
+ /*
+  * Default is not to test hugetlbfs
+  */
+ static size_t mfd_def_size = MFD_DEF_SIZE;
+ static const char *memfd_str = MEMFD_STR;
+ 
++static ssize_t fd2name(int fd, char *buf, size_t bufsize)
++{
++	char buf1[PATH_MAX];
++	int size;
++	ssize_t nbytes;
++
++	size = snprintf(buf1, PATH_MAX, "/proc/self/fd/%d", fd);
++	if (size < 0) {
++		printf("snprintf(%d) failed on %m\n", fd);
++		abort();
++	}
++
++	/*
++	 * reserver one byte for string termination.
++	 */
++	nbytes = readlink(buf1, buf, bufsize-1);
++	if (nbytes == -1) {
++		printf("readlink(%s) failed %m\n", buf1);
++		abort();
++	}
++	buf[nbytes] = '\0';
++	return nbytes;
++}
++
+ static int mfd_assert_new(const char *name, loff_t sz, unsigned int flags)
+ {
+ 	int r, fd;
+@@ -98,11 +124,14 @@ static unsigned int mfd_assert_get_seals(int fd)
+ 
+ static void mfd_assert_has_seals(int fd, unsigned int seals)
+ {
++	char buf[PATH_MAX];
++	int nbytes;
+ 	unsigned int s;
++	fd2name(fd, buf, PATH_MAX);
+ 
+ 	s = mfd_assert_get_seals(fd);
+ 	if (s != seals) {
+-		printf("%u != %u = GET_SEALS(%d)\n", seals, s, fd);
++		printf("%u != %u = GET_SEALS(%s)\n", seals, s, buf);
+ 		abort();
+ 	}
+ }
+@@ -594,6 +623,64 @@ static void mfd_fail_grow_write(int fd)
+ 	}
+ }
+ 
++static void mfd_assert_mode(int fd, int mode)
++{
++	struct stat st;
++	char buf[PATH_MAX];
++	int nbytes;
++
++	fd2name(fd, buf, PATH_MAX);
++
++	if (fstat(fd, &st) < 0) {
++		printf("fstat(%s) failed: %m\n", buf);
++		abort();
++	}
++
++	if ((st.st_mode & 07777) != mode) {
++		printf("fstat(%s) wrong file mode 0%04o, but expected 0%04o\n",
++		       buf, (int)st.st_mode & 07777, mode);
++		abort();
++	}
++}
++
++static void mfd_assert_chmod(int fd, int mode)
++{
++	char buf[PATH_MAX];
++	int nbytes;
++
++	fd2name(fd, buf, PATH_MAX);
++
++	if (fchmod(fd, mode) < 0) {
++		printf("fchmod(%s, 0%04o) failed: %m\n", buf, mode);
++		abort();
++	}
++
++	mfd_assert_mode(fd, mode);
++}
++
++static void mfd_fail_chmod(int fd, int mode)
++{
++	struct stat st;
++	char buf[PATH_MAX];
++	int nbytes;
++
++	fd2name(fd, buf, PATH_MAX);
++
++	if (fstat(fd, &st) < 0) {
++		printf("fstat(%s) failed: %m\n", buf);
++		abort();
++	}
++
++	if (fchmod(fd, mode) == 0) {
++		printf("fchmod(%s, 0%04o) didn't fail as expected\n",
++		       buf, mode);
++		abort();
++	}
++
++	/* verify that file mode bits did not change */
++	mfd_assert_mode(fd, st.st_mode & 07777);
++}
++
+ static int idle_thread_fn(void *arg)
+ {
+ 	sigset_t set;
+@@ -880,6 +967,39 @@ static void test_seal_resize(void)
+ 	close(fd);
+ }
+ 
++/*
++ * Test SEAL_EXEC
++ * Test that chmod() cannot change x bits after sealing
++ */
++static void test_seal_exec(void)
++{
++	int fd;
++
++	printf("%s SEAL-EXEC\n", memfd_str);
++
++	fd = mfd_assert_new("kern_memfd_seal_exec",
++			    mfd_def_size,
++			    MFD_CLOEXEC | MFD_ALLOW_SEALING);
++
++	mfd_assert_mode(fd, 0777);
++
++	mfd_assert_chmod(fd, 0644);
++
++	mfd_assert_has_seals(fd, 0);
++	mfd_assert_add_seals(fd, F_SEAL_EXEC);
++	mfd_assert_has_seals(fd, F_SEAL_EXEC);
++
++	mfd_assert_chmod(fd, 0600);
++	mfd_fail_chmod(fd, 0777);
++	mfd_fail_chmod(fd, 0670);
++	mfd_fail_chmod(fd, 0605);
++	mfd_fail_chmod(fd, 0700);
++	mfd_fail_chmod(fd, 0100);
++	mfd_assert_chmod(fd, 0666);
++
++	close(fd);
++}
++
+ /*
+  * Test sharing via dup()
+  * Test that seals are shared between dupped FDs and they're all equal.
+@@ -1059,6 +1179,7 @@ int main(int argc, char **argv)
+ 	test_seal_shrink();
+ 	test_seal_grow();
+ 	test_seal_resize();
++	test_seal_exec();
+ 
+ 	test_share_dup("SHARE-DUP", "");
+ 	test_share_mmap("SHARE-MMAP", "");
+-- 
+2.39.0.rc1.256.g54fd8350bd-goog
 
-Searching the internet, people claim it's just public domain...
-
-My topic/dhry-unsquashed branch has my rationale:
-
-    FreeBSD uses BSD-2-Clause for this, which is probably the closest to the
-    original intention of the authors.
-    Augment with GPL-2.0-only, as this now calls into internal Linux APIs.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
