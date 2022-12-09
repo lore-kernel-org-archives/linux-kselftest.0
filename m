@@ -2,52 +2,51 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D2C63C4708D
-	for <linux-kselftest@archiver.kernel.org>; Fri,  9 Dec 2022 16:05:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DA9B0C10F1E
+	for <linux-kselftest@archiver.kernel.org>; Fri,  9 Dec 2022 16:05:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229478AbiLIQFF (ORCPT
+        id S229894AbiLIQFD (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 9 Dec 2022 11:05:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49746 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230030AbiLIQFD (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
         Fri, 9 Dec 2022 11:05:03 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8340E554EA
-        for <linux-kselftest@vger.kernel.org>; Fri,  9 Dec 2022 08:05:02 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id x66so4008435pfx.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 09 Dec 2022 08:05:02 -0800 (PST)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49690 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229545AbiLIQFB (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 9 Dec 2022 11:05:01 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D65A511F2
+        for <linux-kselftest@vger.kernel.org>; Fri,  9 Dec 2022 08:05:00 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id 65so3992612pfx.9
+        for <linux-kselftest@vger.kernel.org>; Fri, 09 Dec 2022 08:05:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vFajmLWzEheOspCEYhY0eo6ZhecGZeOzelViubfUiKU=;
-        b=dptKtOCdTYDRw1zV2LczU6Mn1xxfY3K7c4rFaFud5vbOoJLbaV53h863pAiKxktADU
-         hrt1ext9eD2TGdU12+Ynlfi3y5U15x8duzI8R0NoHOvfww3B8KJhixGy5q8AKCjevVIp
-         bMEZAl3CbIzNJxQFT7JG1kmnsDBR/bSc/JGm0=
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ueWjZxTYbaDQuWzBrDeCTZV53qbvnkwWshi5C3odIuU=;
+        b=EWSu99laS2GBJK/j/npVWxjB2fyUhNZIb5ap7uGNrpmhSjYdFN/R5KpVoxG7XCsT28
+         eSKCiuIsD3XZsUYjZbzlb6EMTTSOe2j5irk0ak1/VsWmw5GdGbvIraYAA7d8py5Y9LVc
+         gc+Rh7B/MQTSKEPQllLXMnkWdzW6pKuiXnL2U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vFajmLWzEheOspCEYhY0eo6ZhecGZeOzelViubfUiKU=;
-        b=ZZXxBwEuDWaduq85oKhnLlYq2rL/7COL0d3bVOvg7nPwRL/ThdpUcs5yO5pFHc5CJ9
-         kwttZzazJiYNFhdtD1hlpGoZsqLmH9FaCULWrUGwqF08PxPb4Tt540e9KCJtRqvsGkqJ
-         i2JuEUZNz2wBMkfAV2ZpcoV4BImu5ymVtz4CuGTwxDAAMsc1PubZFSaz/SdIajOjSUP3
-         JvsuQEaTvBOZzu8zu8Pu5RVHTMGXaZgDijAgWweV+eVshZ/+TqEuTqZKkHbfcu75f67H
-         umySitRhi8Yfgx021h4+8p1c3HJwhp2uJK21PHn9kmYJfeviqZbKDbZA5e55iNKke0oi
-         yZLA==
-X-Gm-Message-State: ANoB5plOpTQ3Azia/JdKLYEjUDezucUuWg9TeDhRFQ97hY3SMFurLjQL
-        4P5rmK/c0O/+AYg0w0W50Jk5tw==
-X-Google-Smtp-Source: AA0mqf5RSyeDowJvRrBf4iGaBhxxnFa7YM+HB+hTS4k6TzbwOhELOjd9m1isGHeLLyQPZk1DCB/BOQ==
-X-Received: by 2002:a05:6a00:1d14:b0:578:1708:6416 with SMTP id a20-20020a056a001d1400b0057817086416mr113562pfx.11.1670601901687;
-        Fri, 09 Dec 2022 08:05:01 -0800 (PST)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ueWjZxTYbaDQuWzBrDeCTZV53qbvnkwWshi5C3odIuU=;
+        b=p8ZO4k98ahpH892gzpbcFLWXCaJTf93sbMckRh4olrvd4mfh7+yF+UP5Fj9YvEsT6h
+         yEdzxgxkAlO8y3Cw1HeFwEsso4PEwvlKQXLg7bxde+i7frSj7khmAPQTJkcgnjub3xaU
+         RRl1rSvLPWkyDDpch+EEXT/0chLOqTVmbOYujCJx2Zd/Vpm76yHzvxmM1OqPPFhRKoD7
+         UA1bMuA6I00aXnMS2Rsng8mdrenW7C1h6eIzJ6UTmwrAn+3/FF6Z/ynsYQfRHagpCnSN
+         2fRrNkkqDXS8hI6GmvIPizItSbXjJwZtH02S9VgVz8P8245JB+BLmSHBj7smwWwBRmza
+         SdHg==
+X-Gm-Message-State: ANoB5pnPavR3vW17BgKaQ24AuU0h+u7g9ClQahsqjD0qNyEvJcBUBs0X
+        hxbVr76a+JkKFBhcqPAFVuWvkw==
+X-Google-Smtp-Source: AA0mqf5i1xoBmEhRL9IDhhL+iKpEzBdOcNxUpPz5R22PuXbmHssMXjzHK5BBkv0qkIG7zHOA1PGhoA==
+X-Received: by 2002:a62:87cc:0:b0:576:dc40:6db9 with SMTP id i195-20020a6287cc000000b00576dc406db9mr6237516pfe.13.1670601899690;
+        Fri, 09 Dec 2022 08:04:59 -0800 (PST)
 Received: from jeffxud.c.googlers.com.com (30.202.168.34.bc.googleusercontent.com. [34.168.202.30])
-        by smtp.gmail.com with ESMTPSA id a15-20020aa795af000000b00576670cc170sm1460504pfk.93.2022.12.09.08.05.00
+        by smtp.gmail.com with ESMTPSA id a15-20020aa795af000000b00576670cc170sm1460504pfk.93.2022.12.09.08.04.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 08:05:01 -0800 (PST)
+        Fri, 09 Dec 2022 08:04:59 -0800 (PST)
 From:   jeffxu@chromium.org
 To:     skhan@linuxfoundation.org, keescook@chromium.org
 Cc:     akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
@@ -56,202 +55,106 @@ Cc:     akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
         linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
         jannh@google.com, linux-hardening@vger.kernel.org,
         linux-security-module@vger.kernel.org
-Subject: [PATCH v7 2/6] selftests/memfd: add tests for F_SEAL_EXEC
-Date:   Fri,  9 Dec 2022 16:04:49 +0000
-Message-Id: <20221209160453.3246150-3-jeffxu@google.com>
+Subject: [PATCH v7 0/6] mm/memfd: introduce MFD_NOEXEC_SEAL and MFD_EXEC
+Date:   Fri,  9 Dec 2022 16:04:47 +0000
+Message-Id: <20221209160453.3246150-1-jeffxu@google.com>
 X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
-In-Reply-To: <20221209160453.3246150-1-jeffxu@google.com>
-References: <20221209160453.3246150-1-jeffxu@google.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Daniel Verkamp <dverkamp@chromium.org>
+From: Jeff Xu <jeffxu@google.com>
 
-Basic tests to ensure that user/group/other execute bits cannot be
-changed after applying F_SEAL_EXEC to a memfd.
+Since Linux introduced the memfd feature, memfd have always had their
+execute bit set, and the memfd_create() syscall doesn't allow setting
+it differently.
 
-Signed-off-by: Daniel Verkamp <dverkamp@chromium.org>
-Co-developed-by: Jeff Xu <jeffxu@google.com>
-Signed-off-by: Jeff Xu <jeffxu@google.com>
----
- tools/testing/selftests/memfd/memfd_test.c | 123 ++++++++++++++++++++-
- 1 file changed, 122 insertions(+), 1 deletion(-)
+However, in a secure by default system, such as ChromeOS, (where all
+executables should come from the rootfs, which is protected by Verified
+boot), this executable nature of memfd opens a door for NoExec bypass
+and enables “confused deputy attack”.  E.g, in VRP bug [1]: cros_vm
+process created a memfd to share the content with an external process,
+however the memfd is overwritten and used for executing arbitrary code
+and root escalation. [2] lists more VRP in this kind.
 
-diff --git a/tools/testing/selftests/memfd/memfd_test.c b/tools/testing/selftests/memfd/memfd_test.c
-index 94df2692e6e4..f18a15a1f275 100644
---- a/tools/testing/selftests/memfd/memfd_test.c
-+++ b/tools/testing/selftests/memfd/memfd_test.c
-@@ -28,12 +28,38 @@
- #define MFD_DEF_SIZE 8192
- #define STACK_SIZE 65536
- 
-+#define F_SEAL_EXEC	0x0020
-+
- /*
-  * Default is not to test hugetlbfs
-  */
- static size_t mfd_def_size = MFD_DEF_SIZE;
- static const char *memfd_str = MEMFD_STR;
- 
-+static ssize_t fd2name(int fd, char *buf, size_t bufsize)
-+{
-+	char buf1[PATH_MAX];
-+	int size;
-+	ssize_t nbytes;
-+
-+	size = snprintf(buf1, PATH_MAX, "/proc/self/fd/%d", fd);
-+	if (size < 0) {
-+		printf("snprintf(%d) failed on %m\n", fd);
-+		abort();
-+	}
-+
-+	/*
-+	 * reserver one byte for string termination.
-+	 */
-+	nbytes = readlink(buf1, buf, bufsize-1);
-+	if (nbytes == -1) {
-+		printf("readlink(%s) failed %m\n", buf1);
-+		abort();
-+	}
-+	buf[nbytes] = '\0';
-+	return nbytes;
-+}
-+
- static int mfd_assert_new(const char *name, loff_t sz, unsigned int flags)
- {
- 	int r, fd;
-@@ -98,11 +124,14 @@ static unsigned int mfd_assert_get_seals(int fd)
- 
- static void mfd_assert_has_seals(int fd, unsigned int seals)
- {
-+	char buf[PATH_MAX];
-+	int nbytes;
- 	unsigned int s;
-+	fd2name(fd, buf, PATH_MAX);
- 
- 	s = mfd_assert_get_seals(fd);
- 	if (s != seals) {
--		printf("%u != %u = GET_SEALS(%d)\n", seals, s, fd);
-+		printf("%u != %u = GET_SEALS(%s)\n", seals, s, buf);
- 		abort();
- 	}
- }
-@@ -594,6 +623,64 @@ static void mfd_fail_grow_write(int fd)
- 	}
- }
- 
-+static void mfd_assert_mode(int fd, int mode)
-+{
-+	struct stat st;
-+	char buf[PATH_MAX];
-+	int nbytes;
-+
-+	fd2name(fd, buf, PATH_MAX);
-+
-+	if (fstat(fd, &st) < 0) {
-+		printf("fstat(%s) failed: %m\n", buf);
-+		abort();
-+	}
-+
-+	if ((st.st_mode & 07777) != mode) {
-+		printf("fstat(%s) wrong file mode 0%04o, but expected 0%04o\n",
-+		       buf, (int)st.st_mode & 07777, mode);
-+		abort();
-+	}
-+}
-+
-+static void mfd_assert_chmod(int fd, int mode)
-+{
-+	char buf[PATH_MAX];
-+	int nbytes;
-+
-+	fd2name(fd, buf, PATH_MAX);
-+
-+	if (fchmod(fd, mode) < 0) {
-+		printf("fchmod(%s, 0%04o) failed: %m\n", buf, mode);
-+		abort();
-+	}
-+
-+	mfd_assert_mode(fd, mode);
-+}
-+
-+static void mfd_fail_chmod(int fd, int mode)
-+{
-+	struct stat st;
-+	char buf[PATH_MAX];
-+	int nbytes;
-+
-+	fd2name(fd, buf, PATH_MAX);
-+
-+	if (fstat(fd, &st) < 0) {
-+		printf("fstat(%s) failed: %m\n", buf);
-+		abort();
-+	}
-+
-+	if (fchmod(fd, mode) == 0) {
-+		printf("fchmod(%s, 0%04o) didn't fail as expected\n",
-+		       buf, mode);
-+		abort();
-+	}
-+
-+	/* verify that file mode bits did not change */
-+	mfd_assert_mode(fd, st.st_mode & 07777);
-+}
-+
- static int idle_thread_fn(void *arg)
- {
- 	sigset_t set;
-@@ -880,6 +967,39 @@ static void test_seal_resize(void)
- 	close(fd);
- }
- 
-+/*
-+ * Test SEAL_EXEC
-+ * Test that chmod() cannot change x bits after sealing
-+ */
-+static void test_seal_exec(void)
-+{
-+	int fd;
-+
-+	printf("%s SEAL-EXEC\n", memfd_str);
-+
-+	fd = mfd_assert_new("kern_memfd_seal_exec",
-+			    mfd_def_size,
-+			    MFD_CLOEXEC | MFD_ALLOW_SEALING);
-+
-+	mfd_assert_mode(fd, 0777);
-+
-+	mfd_assert_chmod(fd, 0644);
-+
-+	mfd_assert_has_seals(fd, 0);
-+	mfd_assert_add_seals(fd, F_SEAL_EXEC);
-+	mfd_assert_has_seals(fd, F_SEAL_EXEC);
-+
-+	mfd_assert_chmod(fd, 0600);
-+	mfd_fail_chmod(fd, 0777);
-+	mfd_fail_chmod(fd, 0670);
-+	mfd_fail_chmod(fd, 0605);
-+	mfd_fail_chmod(fd, 0700);
-+	mfd_fail_chmod(fd, 0100);
-+	mfd_assert_chmod(fd, 0666);
-+
-+	close(fd);
-+}
-+
- /*
-  * Test sharing via dup()
-  * Test that seals are shared between dupped FDs and they're all equal.
-@@ -1059,6 +1179,7 @@ int main(int argc, char **argv)
- 	test_seal_shrink();
- 	test_seal_grow();
- 	test_seal_resize();
-+	test_seal_exec();
- 
- 	test_share_dup("SHARE-DUP", "");
- 	test_share_mmap("SHARE-MMAP", "");
+On the other hand, executable memfd has its legit use, runc uses memfd’s
+seal and executable feature to copy the contents of the binary then
+execute them, for such system, we need a solution to differentiate runc's
+use of  executable memfds and an attacker's [3].
+
+To address those above, this set of patches add following:
+1> Let memfd_create() set X bit at creation time.
+2> Let memfd to be sealed for modifying X bit.
+3> A new pid namespace sysctl: vm.memfd_noexec to control the behavior of
+   X bit.For example, if a container has vm.memfd_noexec=2, then
+   memfd_create() without MFD_NOEXEC_SEAL will be rejected.
+4> A new security hook in memfd_create(). This make it possible to a new
+LSM, which rejects or allows executable memfd based on its security policy.
+
+Change history:
+v7:
+- patch 2/6: remove #ifdef and MAX_PATH (memfd_test.c).
+- patch 3/6: check capability (CAP_SYS_ADMIN) from userns instead of
+		global ns (pid_sysctl.h). Add a tab (pid_namespace.h).
+- patch 5/6: remove #ifdef (memfd_test.c)
+- patch 6/6: remove unneeded security_move_mount(security.c).
+
+v6:https://lore.kernel.org/lkml/20221206150233.1963717-1-jeffxu@google.com/
+- Address comment and move "#ifdef CONFIG_" from .c file to pid_sysctl.h
+
+v5:https://lore.kernel.org/lkml/20221206152358.1966099-1-jeffxu@google.com/
+- Pass vm.memfd_noexec from current ns to child ns.
+- Fix build issue detected by kernel test robot.
+- Add missing security.c
+
+v3:https://lore.kernel.org/lkml/20221202013404.163143-1-jeffxu@google.com/
+- Address API design comments in v2.
+- Let memfd_create() to set X bit at creation time.
+- A new pid namespace sysctl: vm.memfd_noexec to control behavior of X bit.
+- A new security hook in memfd_create().
+
+v2:https://lore.kernel.org/lkml/20220805222126.142525-1-jeffxu@google.com/
+- address comments in V1.
+- add sysctl (vm.mfd_noexec) to set the default file permissions of
+  memfd_create to be non-executable.
+
+v1:https://lwn.net/Articles/890096/
+
+[1] https://crbug.com/1305411
+[2] https://bugs.chromium.org/p/chromium/issues/list?q=type%3Dbug-security%20memfd%20escalation&can=1
+[3] https://lwn.net/Articles/781013/
+
+Daniel Verkamp (2):
+  mm/memfd: add F_SEAL_EXEC
+  selftests/memfd: add tests for F_SEAL_EXEC
+
+Jeff Xu (4):
+  mm/memfd: add MFD_NOEXEC_SEAL and MFD_EXEC
+  mm/memfd: Add write seals when apply SEAL_EXEC to executable memfd
+  selftests/memfd: add tests for MFD_NOEXEC_SEAL MFD_EXEC
+  mm/memfd: security hook for memfd_create
+
+ include/linux/lsm_hook_defs.h              |   1 +
+ include/linux/lsm_hooks.h                  |   4 +
+ include/linux/pid_namespace.h              |  19 ++
+ include/linux/security.h                   |   6 +
+ include/uapi/linux/fcntl.h                 |   1 +
+ include/uapi/linux/memfd.h                 |   4 +
+ kernel/pid_namespace.c                     |   5 +
+ kernel/pid_sysctl.h                        |  59 ++++
+ mm/memfd.c                                 |  61 +++-
+ mm/shmem.c                                 |   6 +
+ security/security.c                        |   5 +
+ tools/testing/selftests/memfd/fuse_test.c  |   1 +
+ tools/testing/selftests/memfd/memfd_test.c | 341 ++++++++++++++++++++-
+ 13 files changed, 510 insertions(+), 3 deletions(-)
+ create mode 100644 kernel/pid_sysctl.h
+
+
+base-commit: eb7081409f94a9a8608593d0fb63a1aa3d6f95d8
 -- 
 2.39.0.rc1.256.g54fd8350bd-goog
 
