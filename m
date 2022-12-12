@@ -2,99 +2,98 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DD11C4332F
-	for <linux-kselftest@archiver.kernel.org>; Sun, 11 Dec 2022 09:43:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FFB0C25B04
+	for <linux-kselftest@archiver.kernel.org>; Mon, 12 Dec 2022 10:41:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbiLKJn4 (ORCPT
+        id S232179AbiLLKlx (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 11 Dec 2022 04:43:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34808 "EHLO
+        Mon, 12 Dec 2022 05:41:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiLKJn4 (ORCPT
+        with ESMTP id S232002AbiLLKk5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 11 Dec 2022 04:43:56 -0500
-X-Greylist: delayed 911 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 11 Dec 2022 01:43:53 PST
-Received: from sender-of-o50.zoho.in (sender-of-o50.zoho.in [103.117.158.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFED926FE
-        for <linux-kselftest@vger.kernel.org>; Sun, 11 Dec 2022 01:43:53 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1670750905; cv=none; 
-        d=zohomail.in; s=zohoarc; 
-        b=cQkedRHhiBcjvDmL5SSj3EN64o2w3Gdj4WQMOf5RefBfQMjq/+8+W3nedGE85dJreENyBpyyy6iC+XXF3/SDAC9xPJ9gtr/CoF5lM9hvftcJmTm/jQ6AxJyDO5OkK58+fUo9m5lalB1JrBySAs8sKfAAhQrEpIKVilEFcLSR2fc=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-        t=1670750905; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
-        bh=Xkq9oi0Kqa5o104HB6937If/FFeLhwwTtuDxZaE+Zqc=; 
-        b=BmvVCaLPZNXJPRRR8p8V21FhXHRjWLtxnX1kvMyxp67EI9JohzrjT6viQohiV0vLPJEizk59EokjXMnZ/BsQkjYFS9tsi077ahmtbcgizXDM6K/DmvVTWqTWZcYZYMxNgV3XAAM2jJU4U8WE2TU0CjTohBZs60HrGWgpw+VQy5w=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-        dkim=pass  header.i=siddh.me;
-        spf=pass  smtp.mailfrom=code@siddh.me;
-        dmarc=pass header.from=<code@siddh.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1670750905;
-        s=zmail; d=siddh.me; i=code@siddh.me;
-        h=From:From:To:To:Cc:Cc:Message-ID:Subject:Subject:Date:Date:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=Xkq9oi0Kqa5o104HB6937If/FFeLhwwTtuDxZaE+Zqc=;
-        b=JaFqXGITxG+8CXPDWBNTgz3m6SybcsAHvkQOzRwpwLfpjAZI6lGKfCwH6hIlbdAR
-        YyKYElShH/6sH2X1xmvZe5hyjtFmSYfcSY/C2fjGTOr4lx2S8TMV05mwBpvP1BjNcON
-        l6ZLI5y4f+pF6Wj+3mZuV2EVcggZE12q6iZd+VEU=
-Received: from kampyooter.. (110.226.31.37 [110.226.31.37]) by mx.zoho.in
-        with SMTPS id 1670750904303896.6418334535564; Sun, 11 Dec 2022 14:58:24 +0530 (IST)
-From:   Siddh Raman Pant <code@siddh.me>
-To:     Christian Brauner <brauner@kernel.org>,
-        Seth Forshee <sforshee@kernel.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-kselftests <linux-kselftest@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Message-ID: <20221211092820.85527-1-code@siddh.me>
-Subject: [PATCH] selftests/mount_setattr: Remove redefinition of struct mount_attr
-Date:   Sun, 11 Dec 2022 14:58:20 +0530
+        Mon, 12 Dec 2022 05:40:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E2511821;
+        Mon, 12 Dec 2022 02:35:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 516C760F97;
+        Mon, 12 Dec 2022 10:35:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD62DC433F1;
+        Mon, 12 Dec 2022 10:35:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670841314;
+        bh=HvNKuWYFW8umeX/fI6aXrzjdk4JcPKrYu3UMnlPw/N8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ETx9z1jFVQZxak2GQCaa2RqnOYgD+rS+4mKJmtNWGGvpu36BjRed4wvUqpmxn6HG6
+         rY4pJh0pRAsuMJ83ZeZY+6JtGueUr9ZBIkGHg7xU16+WMjJoEwcDFApNK1SlQgDE8g
+         BXAbpIbVA+3VpoDiTErQ0F+x+/EULy3+VcLgknwd+HNcM/2u0Ju0hyXSGYeGGeo7g2
+         KSdMxkdA1kfbFeyCgJUMvZ2l/pgys3HgqMAfzeXhg65Q8yKapkcJ4hmaQLZBnRMalP
+         bpDoEe3JBQ/GDG7SOJA8QNF0r7u9XUyorW6WBZGfLsk1I4nTxAa5DCVQeLHmlgPw4J
+         Gt3TQ/Nno3eMQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com, shuah@kernel.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.0 5/7] selftests: net: Use "grep -E" instead of "egrep"
+Date:   Mon, 12 Dec 2022 05:35:01 -0500
+Message-Id: <20221212103504.299281-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20221212103504.299281-1-sashal@kernel.org>
+References: <20221212103504.299281-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-ZohoMailClient: External
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-It is already included via sys/mount.h on line 10.
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
 
-GCC error reproducible by: make kselftest TARGETS=3D"mount_setattr"
+[ Upstream commit 6a30d3e3491dc562384e9f15b201a8a25b57439f ]
 
-mount_setattr_test.c:107:8: error: redefinition of =E2=80=98struct mount_at=
-tr=E2=80=99
-  107 | struct mount_attr {
-      |        ^~~~~~~~~~
-In file included from /usr/include/x86_64-linux-gnu/sys/mount.h:32,
-                 from mount_setattr_test.c:10:
-../../../../usr/include/linux/mount.h:129:8: note: originally defined here
-  129 | struct mount_attr {
-      |        ^~~~~~~~~~
+The latest version of grep claims the egrep is now obsolete so the build
+now contains warnings that look like:
+	egrep: warning: egrep is obsolescent; using grep -E
+fix this using "grep -E" instead.
 
-Signed-off-by: Siddh Raman Pant <code@siddh.me>
+  sed -i "s/egrep/grep -E/g" `grep egrep -rwl tools/testing/selftests/net`
+
+Here are the steps to install the latest grep:
+
+  wget http://ftp.gnu.org/gnu/grep/grep-3.8.tar.gz
+  tar xf grep-3.8.tar.gz
+  cd grep-3.8 && ./configure && make
+  sudo make install
+  export PATH=/usr/local/bin:$PATH
+
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+Link: https://lore.kernel.org/r/1669864248-829-1-git-send-email-yangtiezhu@loongson.cn
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/mount_setattr/mount_setattr_test.c | 7 -------
- 1 file changed, 7 deletions(-)
+ tools/testing/selftests/net/toeplitz.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/mount_setattr/mount_setattr_test.c b/t=
-ools/testing/selftests/mount_setattr/mount_setattr_test.c
-index 8c5fea68ae67..582669ca38e9 100644
---- a/tools/testing/selftests/mount_setattr/mount_setattr_test.c
-+++ b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
-@@ -103,13 +103,6 @@
- =09#else
- =09=09#define __NR_mount_setattr 442
- =09#endif
--
--struct mount_attr {
--=09__u64 attr_set;
--=09__u64 attr_clr;
--=09__u64 propagation;
--=09__u64 userns_fd;
--};
- #endif
-=20
- #ifndef __NR_open_tree
---=20
+diff --git a/tools/testing/selftests/net/toeplitz.sh b/tools/testing/selftests/net/toeplitz.sh
+index 0a49907cd4fe..da5bfd834eff 100755
+--- a/tools/testing/selftests/net/toeplitz.sh
++++ b/tools/testing/selftests/net/toeplitz.sh
+@@ -32,7 +32,7 @@ DEV="eth0"
+ # This is determined by reading the RSS indirection table using ethtool.
+ get_rss_cfg_num_rxqs() {
+ 	echo $(ethtool -x "${DEV}" |
+-		egrep [[:space:]]+[0-9]+:[[:space:]]+ |
++		grep -E [[:space:]]+[0-9]+:[[:space:]]+ |
+ 		cut -d: -f2- |
+ 		awk '{$1=$1};1' |
+ 		tr ' ' '\n' |
+-- 
 2.35.1
-
 
