@@ -2,143 +2,74 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D87DC4332F
-	for <linux-kselftest@archiver.kernel.org>; Mon, 12 Dec 2022 20:42:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B200C4332F
+	for <linux-kselftest@archiver.kernel.org>; Tue, 13 Dec 2022 00:52:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232096AbiLLUmW (ORCPT
+        id S233939AbiLMAwX (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 12 Dec 2022 15:42:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36678 "EHLO
+        Mon, 12 Dec 2022 19:52:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231770AbiLLUmV (ORCPT
+        with ESMTP id S233683AbiLMAwX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 12 Dec 2022 15:42:21 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E09E1836D;
-        Mon, 12 Dec 2022 12:42:20 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id j4so1591921lfk.0;
-        Mon, 12 Dec 2022 12:42:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yi/YU2j+x5BuBXWGZECLyVNnhDuHpoWKcj/4vAm5ZMM=;
-        b=oOgV5/nZXIJ7z3WGB87na/XQqphJaBwH31shYnYLgVsAkqnqGP9ANCU8XxSaVepA3F
-         H5X6wyIooFT+gM+QZRt1Sm3wMYug0br0sLn7OFHe7iIMjLzg+BD12k1r3o/na5erZ191
-         0U66+aW0w5kiobDV5Oc29ktK46VRPYzF9EJV9v7EWzTlaNtdFmWSsNMHn0QYapxi7m2p
-         D+hVIRibo7AOXbOIeHegP/A+wGZNFWMZea35DYiIfEZIarlhOoS61h68gyDvnfWY1CYe
-         wA09vaJyJFG7lGRLshcP4MGm4Oa2oC7v7kYK8ubAfqf0IOel2jbtKYpaQGnEMIAcMi+H
-         0Ujw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yi/YU2j+x5BuBXWGZECLyVNnhDuHpoWKcj/4vAm5ZMM=;
-        b=iVRmgA34Cs+wFW0G5X5yVLkL9xlKKO5TJZYiM9HF578d3ow/hfJfGeFEfXMq025zFU
-         RjPU/vPuWplUiacexkcZGn4PBCCnmKoihQtNl+67YvaY8MtgHcUtZhGPtqetKPgHXP6D
-         OakCdOKeDLP4rVGnkgWpvfx20oqolYEV9QY5Fn0RWQeDl2D53v9vGVkkkWmcwv/VDn2P
-         rEcV15dx+t2Z+C6xly21juU3yCvmEwO3lErVCq3N8lBJGd7MQ7oywJ4L6wbVznV2iFJl
-         Kw48qxjXRP9F2b7I9VwbSQZylpEWMtzzM4C0fbEIjzRo5vWOwImPU8AXxUy8zuLTUg3W
-         n38A==
-X-Gm-Message-State: ANoB5plp8CPYs0mX0wgnmByYhXkKO9FwE0FCOuyoOxp0ry2iv9WVHvjV
-        Pa6J6EpmPxJhyIR7fozKpPM=
-X-Google-Smtp-Source: AA0mqf7cXS2euKC0ZOav0ITrVzUpkE7E7dSgVR8pY+Nwymn7QVy/xAXhgqPGVfX4UK1gsbQPsCEu4w==
-X-Received: by 2002:a05:6512:281d:b0:4b0:38f1:1266 with SMTP id cf29-20020a056512281d00b004b038f11266mr6251017lfb.34.1670877738553;
-        Mon, 12 Dec 2022 12:42:18 -0800 (PST)
-Received: from grain.localdomain ([5.18.253.97])
-        by smtp.gmail.com with ESMTPSA id s16-20020a05651c049000b00279ee47099dsm81671ljc.116.2022.12.12.12.42.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 12:42:17 -0800 (PST)
-Received: by grain.localdomain (Postfix, from userid 1000)
-        id 46A275A0020; Mon, 12 Dec 2022 23:42:16 +0300 (MSK)
-Date:   Mon, 12 Dec 2022 23:42:16 +0300
-From:   Cyrill Gorcunov <gorcunov@gmail.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Peter Xu <peterx@redhat.com>, Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Zach O'Keefe <zokeefe@google.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>, kernel@collabora.com,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        David Hildenbrand <david@redhat.com>,
-        Peter Enderborg <peter.enderborg@sony.com>,
-        "open list : KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list : PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>,
-        "open list : MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        Paul Gofman <pgofman@codeweavers.com>
-Subject: Re: [PATCH v6 2/3] fs/proc/task_mmu: Implement IOCTL to get and/or
- the clear info about PTEs
-Message-ID: <Y5eSKBJ9hTtw9cbK@grain>
-References: <20221109102303.851281-1-usama.anjum@collabora.com>
- <20221109102303.851281-3-usama.anjum@collabora.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221109102303.851281-3-usama.anjum@collabora.com>
-User-Agent: Mutt/2.2.9 (2022-11-12)
+        Mon, 12 Dec 2022 19:52:23 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED4CF167DC;
+        Mon, 12 Dec 2022 16:52:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 883B5612DA;
+        Tue, 13 Dec 2022 00:52:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EBBCAC433F1;
+        Tue, 13 Dec 2022 00:52:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670892741;
+        bh=xYbKc7QOaSjwtVA3UU++51eUglbdcWfP3Zg64xtOuZc=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=b6bGmwPaTSn9b+Djmiv91Cx5Wi8Oqkd7EWDxXsWPl3FlJ661+0KOvv574JVFsV2+Z
+         GgE1784aNIYxBQTN76KomdCcWdgAhCahujfF6aAA1wEMM+1Ruk58Eou4F+G+GvBINX
+         D1fh1RFqvKTX6dFeLbsX+J0ZpwhH5fz5ZFTFvDgpYo76ShqN0m+wuTwSegh659oOv9
+         J4HNoSvQg3Fi+EAyy9Ujf8/8FVy0FivxCcAD0xxjMZdcZ1y4YzYo28SsU5IaDaMBs3
+         /YNcMrxk4dqn4adsDfETVf0R+SkReW3tom9hiSDhDWKY5223pmCkj+KA7R0WmGHIjX
+         jqy2bAaSP9KZg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D8F20C00445;
+        Tue, 13 Dec 2022 00:52:20 +0000 (UTC)
+Subject: Re: [GIT PULL] KUnit next update for Linux 6.2-rc1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <8b11b434-51a6-0e4f-ebb5-220d49ca5bc5@linuxfoundation.org>
+References: <8b11b434-51a6-0e4f-ebb5-220d49ca5bc5@linuxfoundation.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <8b11b434-51a6-0e4f-ebb5-220d49ca5bc5@linuxfoundation.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-next-6.2-rc1
+X-PR-Tracked-Commit-Id: 054be257f28ca8eeb8e3620766501b81ceb4b293
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: e2ed78d5d9ca07a2b9d158ebac366170a2d3083d
+Message-Id: <167089274088.13252.2216125299220610597.pr-tracker-bot@kernel.org>
+Date:   Tue, 13 Dec 2022 00:52:20 +0000
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>,
+        John Johansen <john.johansen@canonical.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Nov 09, 2022 at 03:23:02PM +0500, Muhammad Usama Anjum wrote:
-...
-> +
-> +static long do_pagemap_sd_cmd(struct mm_struct *mm, struct pagemap_scan_arg *arg)
-> +{
-> +	struct mmu_notifier_range range;
-> +	unsigned long __user start, end;
-> +	struct pagemap_scan_private p;
-> +	int ret;
-> +
-> +	start = (unsigned long)untagged_addr(arg->start);
-> +	if ((!IS_ALIGNED(start, PAGE_SIZE)) || (!access_ok((void __user *)start, arg->len)))
-> +		return -EINVAL;
-> +
-> +	if (IS_GET_OP(arg) &&
-> +	    ((arg->vec_len == 0) || (!access_ok((struct page_region *)arg->vec, arg->vec_len))))
-> +		return -ENOMEM;
-> +
-> +	if (IS_SD_OP(arg) && ((arg->required_mask & PAGEMAP_NONSD_OP_MASK) ||
-> +	     (arg->anyof_mask & PAGEMAP_NONSD_OP_MASK)))
-> +		return -EINVAL;
-> +
-> +	end = start + arg->len;
-> +	p.max_pages = arg->max_pages;
-> +	p.found_pages = 0;
-> +	p.flags = arg->flags;
-> +	p.required_mask = arg->required_mask;
-> +	p.anyof_mask = arg->anyof_mask;
-> +	p.excluded_mask = arg->excluded_mask;
-> +	p.return_mask = arg->return_mask;
-> +	p.vec_index = 0;
-> +	p.vec_len = arg->vec_len;
-> +
-> +	if (IS_GET_OP(arg)) {
-> +		p.vec = vzalloc(arg->vec_len * sizeof(struct page_region));
-> +		if (!p.vec)
-> +			return -ENOMEM;
-> +	} else {
-> +		p.vec = NULL;
-> +	}
+The pull request you sent on Mon, 12 Dec 2022 15:07:05 -0700:
 
-Hi Muhammad! I'm really sorry for diving in such late (unfortunatelly too busy to
-step in yet). Anyway, while in general such interface looks reasonable here are
-few moments which really bothers me: as far as I undertstand you don't need
-vzalloc here, plain vmalloc should works as well since you copy only filled
-results back to userspace. Next -- there is no restriction on vec_len parameter,
-is not here a door for DoS from userspace? Say I could start a number of ioctl
-on same pagemap and try to allocate very big amount of vec_len in summay causing
-big pressure on kernel's memory. Or I miss something obvious here?
+> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-next-6.2-rc1
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/e2ed78d5d9ca07a2b9d158ebac366170a2d3083d
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
