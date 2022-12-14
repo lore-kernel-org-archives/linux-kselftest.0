@@ -2,129 +2,123 @@ Return-Path: <linux-kselftest-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D4D65C46467
-	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Dec 2022 23:28:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5489C10F31
+	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Dec 2022 23:34:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbiLNX2i (ORCPT
+        id S229758AbiLNXeG (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 14 Dec 2022 18:28:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58656 "EHLO
+        Wed, 14 Dec 2022 18:34:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbiLNX2H (ORCPT
+        with ESMTP id S229877AbiLNXdk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 14 Dec 2022 18:28:07 -0500
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C53CB4B98A;
-        Wed, 14 Dec 2022 15:26:17 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 18413320046E;
-        Wed, 14 Dec 2022 18:26:16 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Wed, 14 Dec 2022 18:26:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1671060375; x=1671146775; bh=pd
-        7hPqCj1rehq8dhbnt6R5oY2ttXZHs4/Flb91zMciw=; b=L1GSh0Y2wzAAZIidc3
-        ymLqrA6lW80edFw11+ahwc+Qmtd8xkDNi0OS5rUjwEKP3zuEZ4C8+m1Id92jq4zE
-        0dLVz4+CDU3oZW8qozAIxJefisJ2nSnjDjLWLqm5VtLdf+1b4+OXIT8Iz1YzJyGe
-        xNjChP35Gq9rEmfyL6lR0qFIobM22nrpmV78sCa9LpXH5bpuPv2bvBoO6rZhwqvL
-        prRFGS8n6/6nhc94zskG+7kR55Q4fiBuFQyPGoPpm9L1sm7oeMnGcxMFOs5OAaES
-        9BSLVaCIKk8DnxNGMOZwDRob7LxwpePNH5WerLNsAPvQMh+0eu7edGP9du1kJYka
-        jWZg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1671060375; x=1671146775; bh=pd7hPqCj1rehq
-        8dhbnt6R5oY2ttXZHs4/Flb91zMciw=; b=DsPoClf0RQVxj54YXJw/qv0CQrrrn
-        LmN3WpfoJIgkwv81pLN+QHifyZLE+QdVOpI4t2PrKYEnxJfqp4bEqyQ8QHaBILyc
-        HJ+oRsMeYO/GkxEKNsFf4eT9dICKQIPOew+YG6Bw5AoXZaSczquzhGqCYnLyAU/C
-        w3nMIIae3zjNnxBp82GQEc0p/jD6+cSWTYSn4Go4KIgZu+RkP61SU4xt01PSp8fW
-        1HGQbqMjeL5Hpmoebjwwkmn2w9j2Y43JzUTpoPg9Ltc12AlABCZGxQQn/iR408jo
-        25E9V3MX5ah/AX03iQ+kWPfX54f/dGrSlxZtNl5IDENVip5uITuzOQumg==
-X-ME-Sender: <xms:l1uaYzOuuxHr5L3DTAuW2n7BHUkyR6V_LuelF0EQAYnthdrxflf_kw>
-    <xme:l1uaY98ZZUSOXoc_cxJaZJRvtSf71NNd-OQ2sbzv52oSEVmfHQvMFvsnePZVeljq5
-    rXGGLhFkIs-WSpjTw>
-X-ME-Received: <xmr:l1uaYyS2PifTTu_BhsQ_pGNtZHMYMdi_ZEexW1EfBPrgY2zSJD1jX8ANGgwO-QOtkwsXH4fGZfuBK2ZZeRa2d8IiuYVabnYCfs9AYmjIPS0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeggddtjecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenfg
-    hrlhcuvffnffculdejtddmnecujfgurhephffvvefufffkofgjfhgggfestdekredtredt
-    tdenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihusegugihuuhhurdighiiiqeenuc
-    ggtffrrghtthgvrhhnpefgfefggeejhfduieekvdeuteffleeifeeuvdfhheejleejjeek
-    gfffgefhtddtteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpegugihusegugihuuhhurdighiii
-X-ME-Proxy: <xmx:l1uaY3tRa3P-O_zJfAxl7kqFGOp7udvfCNZXRJe86GvNRhxj3BXSBA>
-    <xmx:l1uaY7f3jZO-v6X1pTKQmqbI9RTkEWWYKzgsBnvqtFNSwQtqQAqMaQ>
-    <xmx:l1uaYz1_m-9vd_6UNk0vZRjNrDpUA122y2sDbBXfoO_ZFW7bn_Lh9A>
-    <xmx:l1uaY2ujI-drrgDgpQVnnOuDVd_VrjKADwUndj7ddCX6ok-YkcUKig>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 14 Dec 2022 18:26:14 -0500 (EST)
-From:   Daniel Xu <dxu@dxuuu.xyz>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
-Cc:     ppenkov@aviatrix.com, dbird@aviatrix.com, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next 4/6] bpf: selftests: Support not connecting client socket
-Date:   Wed, 14 Dec 2022 16:25:31 -0700
-Message-Id: <3623f9fbdfe7e1be46ca6745312eb020329d23c9.1671049840.git.dxu@dxuuu.xyz>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <cover.1671049840.git.dxu@dxuuu.xyz>
-References: <cover.1671049840.git.dxu@dxuuu.xyz>
+        Wed, 14 Dec 2022 18:33:40 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADEE7111A
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Dec 2022 15:32:54 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id x66so5578531pfx.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Dec 2022 15:32:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EX38wRipK6YZXjwZPd7Su4K9Er1H54jvjyAx9rqRw1Q=;
+        b=PDEg3nH3xgHnheIK+JiFoLehsOV0gTUq21j4kLrRR1ZLvl25FbD7m8LX1fSIYwz/87
+         PIxzI5e9Pfn8V6aq1oOKcTbffZGDbFjXTXJhyLPaPkgFnINJjvhacuxaIOC1x6UwmVsZ
+         d3iVOkBRfgId+oB/p//Pexfh3cuN+6pDvx6QMWBzGeykcVt02UbhvWYbj5G/9VF1Mrgi
+         SOuvClJPMP6WbasvMUuLP1kVi84M3frkmNzV0VYdxvfWNm8RJXyMUXR2L9ZznH7S//1F
+         vMvSYMesxZ8hHbbrwxzlnOR/mS/6Ywx+ti6WoVXe+D/TlHqjypG2vGA+5YOFEjXALgM4
+         JWEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EX38wRipK6YZXjwZPd7Su4K9Er1H54jvjyAx9rqRw1Q=;
+        b=h8ix3UilFwFe0C1LjxGyEER/+pNTJNwgHycHROhbYSuVcsvbTkTibIAY2cL753R6nO
+         she8BbrqYshlsHhVYKCwPe3OVkBqPe4f41MkVvROnfqAhJGt0wbSzWXkoVbWJb0s4HlK
+         Xmhh8Fl2Lb6kdzz8NtOXC75lRP9Q83nwbrwRz3HG5TKF+Y2IMFaJvo7T5f63XgmmmFwt
+         ju12t+PsKgpg/tVRWK5HyjDy7aeSL1Yj+EotnTkzT7s9H2X7f+9KcUsN3u8gnmOProgD
+         M81dl+dSqLrWxZbVfrcSYPVX/xLWs6SUq+DCXljv/PTOEiD2TMhj/8M1lcUxfTAuGVMI
+         mgjg==
+X-Gm-Message-State: ANoB5pkhVJWs8l/Fwe4rZejkCOA4pqWDc0Aox/s/oLwFqjRxbyaf1EN3
+        I6TLjsCYzqYs+7t5EP42Zn2YzrPAAXbZn7KQteNIzl5iJ3FkU5uR
+X-Google-Smtp-Source: AA0mqf6FrLS1D7V7SRNCy3k8CyVO9nDpptYhTX527VVCoLeeGz/DIxUaHIqaRhNRIJVDOOmwzpQTEeBAzUWYmJerZnw=
+X-Received: by 2002:a63:f04d:0:b0:470:5d17:a62e with SMTP id
+ s13-20020a63f04d000000b004705d17a62emr68719053pgj.620.1671060773915; Wed, 14
+ Dec 2022 15:32:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20221209160453.3246150-1-jeffxu@google.com> <202212141053.7F5D1F6@keescook>
+In-Reply-To: <202212141053.7F5D1F6@keescook>
+From:   Jeff Xu <jeffxu@google.com>
+Date:   Wed, 14 Dec 2022 15:32:16 -0800
+Message-ID: <CALmYWFss4hGOgJaeah8p7q86xmE7AOwOazxggGCuY=A+ZUVWhQ@mail.gmail.com>
+Subject: Re: [PATCH v7 0/6] mm/memfd: introduce MFD_NOEXEC_SEAL and MFD_EXEC
+To:     Kees Cook <keescook@chromium.org>
+Cc:     jeffxu@chromium.org, skhan@linuxfoundation.org,
+        akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
+        dverkamp@chromium.org, hughd@google.com, jorgelo@chromium.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, jannh@google.com,
+        linux-hardening@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-For connectionless protocols or raw sockets we do not want to actually
-connect() to the server.
+On Wed, Dec 14, 2022 at 10:54 AM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Fri, Dec 09, 2022 at 04:04:47PM +0000, jeffxu@chromium.org wrote:
+> > From: Jeff Xu <jeffxu@google.com>
+> >
+> > Since Linux introduced the memfd feature, memfd have always had their
+> > execute bit set, and the memfd_create() syscall doesn't allow setting
+> > it differently.
+> >
+> > However, in a secure by default system, such as ChromeOS, (where all
+> > executables should come from the rootfs, which is protected by Verified
+> > boot), this executable nature of memfd opens a door for NoExec bypass
+> > and enables =E2=80=9Cconfused deputy attack=E2=80=9D.  E.g, in VRP bug =
+[1]: cros_vm
+> > process created a memfd to share the content with an external process,
+> > however the memfd is overwritten and used for executing arbitrary code
+> > and root escalation. [2] lists more VRP in this kind.
+> >
+> > On the other hand, executable memfd has its legit use, runc uses memfd=
+=E2=80=99s
+> > seal and executable feature to copy the contents of the binary then
+> > execute them, for such system, we need a solution to differentiate runc=
+'s
+> > use of  executable memfds and an attacker's [3].
+> >
+> > To address those above, this set of patches add following:
+> > 1> Let memfd_create() set X bit at creation time.
+> > 2> Let memfd to be sealed for modifying X bit.
+> > 3> A new pid namespace sysctl: vm.memfd_noexec to control the behavior =
+of
+> >    X bit.For example, if a container has vm.memfd_noexec=3D2, then
+> >    memfd_create() without MFD_NOEXEC_SEAL will be rejected.
+> > 4> A new security hook in memfd_create(). This make it possible to a ne=
+w
+> > LSM, which rejects or allows executable memfd based on its security pol=
+icy.
+>
+> I think patch 1-5 look good to land. The LSM hook seems separable, and
+> could continue on its own. Thoughts?
+>
+Agreed.
 
-Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
----
- tools/testing/selftests/bpf/network_helpers.c | 5 +++--
- tools/testing/selftests/bpf/network_helpers.h | 1 +
- 2 files changed, 4 insertions(+), 2 deletions(-)
+> (Which tree should memfd change go through?)
+>
+I'm not sure, is there a recommendation ?
 
-diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-index 01de33191226..24f5efebc7dd 100644
---- a/tools/testing/selftests/bpf/network_helpers.c
-+++ b/tools/testing/selftests/bpf/network_helpers.c
-@@ -301,8 +301,9 @@ int connect_to_fd_opts(int server_fd, const struct network_helper_opts *opts)
- 		       strlen(opts->cc) + 1))
- 		goto error_close;
- 
--	if (connect_fd_to_addr(fd, &addr, addrlen, opts->must_fail))
--		goto error_close;
-+	if (!opts->noconnect)
-+		if (connect_fd_to_addr(fd, &addr, addrlen, opts->must_fail))
-+			goto error_close;
- 
- 	return fd;
- 
-diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
-index f882c691b790..8be04cd76d8b 100644
---- a/tools/testing/selftests/bpf/network_helpers.h
-+++ b/tools/testing/selftests/bpf/network_helpers.h
-@@ -21,6 +21,7 @@ struct network_helper_opts {
- 	const char *cc;
- 	int timeout_ms;
- 	bool must_fail;
-+	bool noconnect;
- };
- 
- /* ipv4 test vector */
--- 
-2.39.0
+Thanks.
+Jeff
 
+> -Kees
+>
+> --
+> Kees Cook
