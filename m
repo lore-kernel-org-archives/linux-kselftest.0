@@ -2,28 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A36CEC4332F
-	for <linux-kselftest@archiver.kernel.org>; Fri, 23 Dec 2022 23:51:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DDDBC4332F
+	for <linux-kselftest@archiver.kernel.org>; Fri, 23 Dec 2022 23:51:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231512AbiLWXvS (ORCPT
+        id S231793AbiLWXvX (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 23 Dec 2022 18:51:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60690 "EHLO
+        Fri, 23 Dec 2022 18:51:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230490AbiLWXvR (ORCPT
+        with ESMTP id S230490AbiLWXvV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 23 Dec 2022 18:51:17 -0500
-X-Greylist: delayed 383 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 23 Dec 2022 15:51:16 PST
+        Fri, 23 Dec 2022 18:51:21 -0500
 Received: from 5.mo619.mail-out.ovh.net (5.mo619.mail-out.ovh.net [46.105.40.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A360265B
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 Dec 2022 15:51:15 -0800 (PST)
-Received: from ex4.mail.ovh.net (unknown [10.109.143.173])
-        by mo619.mail-out.ovh.net (Postfix) with ESMTPS id 8C1AD22E82;
-        Fri, 23 Dec 2022 23:44:49 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4FE265B
+        for <linux-kselftest@vger.kernel.org>; Fri, 23 Dec 2022 15:51:19 -0800 (PST)
+Received: from ex4.mail.ovh.net (unknown [10.111.208.157])
+        by mo619.mail-out.ovh.net (Postfix) with ESMTPS id DB864219BD;
+        Fri, 23 Dec 2022 23:51:16 +0000 (UTC)
 Received: from dev-fedora-x86-64.naccy.de (37.65.8.229) by
  DAG10EX1.indiv4.local (172.16.2.91) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Sat, 24 Dec 2022 00:44:48 +0100
+ 15.1.2507.16; Sat, 24 Dec 2022 00:51:15 +0100
 From:   Quentin Deslandes <qde@naccy.de>
 To:     <qde@naccy.de>
 CC:     <kernel-team@meta.com>, Dmitrii Banshchikov <me@ubique.spb.ru>,
@@ -43,9 +42,9 @@ CC:     <kernel-team@meta.com>, Dmitrii Banshchikov <me@ubique.spb.ru>,
         Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
         <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
         <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: [PATCH bpf-next v3 02/16] tools: add bpfilter usermode helper header
-Date:   Sat, 24 Dec 2022 00:40:10 +0100
-Message-ID: <20221223234127.474463-3-qde@naccy.de>
+Subject: [PATCH bpf-next v3 08/16] bpfilter: add match structure
+Date:   Sat, 24 Dec 2022 00:40:16 +0100
+Message-ID: <20221223234127.474463-9-qde@naccy.de>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221223234127.474463-1-qde@naccy.de>
 References: <20221223234127.474463-1-qde@naccy.de>
@@ -55,207 +54,368 @@ Content-Type:   text/plain; charset=US-ASCII
 X-Originating-IP: [37.65.8.229]
 X-ClientProxiedBy: CAS6.indiv4.local (172.16.1.6) To DAG10EX1.indiv4.local
  (172.16.2.91)
-X-Ovh-Tracer-Id: 4427601385733353079
+X-Ovh-Tracer-Id: 4536532202992299639
 X-VR-SPAMSTATE: OK
 X-VR-SPAMSCORE: -85
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrheefgddufecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogetfedtuddqtdduucdludehmdenucfjughrpefhvfevufffkffojghfggfgtghisehtkeertdertddtnecuhfhrohhmpefsuhgvnhhtihhnucffvghslhgrnhguvghsuceoqhguvgesnhgrtggthidruggvqeenucggtffrrghtthgvrhhnpeduledugfeileetvdelieeujedttedtvedtgfetteevfeejhfffkeeujeetfffgudenucfkphepuddvjedrtddrtddruddpfeejrdeihedrkedrvddvleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehquggvsehnrggttgihrdguvgeqpdhnsggprhgtphhtthhopedupdhrtghpthhtohepshgufhesghhoohhglhgvrdgtohhmpdgsphhfsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpshhhuhgrhheskhgvrhhnvghlrdhorhhgpdhmhihkohhlrghlsehfsgdrtghomhdpphgrsggvnhhisehrvgguhhgrthdrtghomhdpkhhusggrsehkvghrnhgvlhdrohhrghdpvgguuhhmrgiivghtsehgohhoghhlvgdrtghomhdpuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgvth
- dpjhholhhsrgeskhgvrhhnvghlrdhorhhgpdhhrgholhhuohesghhoohhglhgvrdgtohhmpdhlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhkphhsihhnghhhsehkvghrnhgvlhdrohhrghdpjhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhlrdgtohhmpdihhhhssehfsgdrtghomhdpshhonhhgsehkvghrnhgvlhdrohhrghdpmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpdgrnhgurhhiiheskhgvrhhnvghlrdhorhhgpdgurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprghstheskhgvrhhnvghlrdhorhhgpdhmvgesuhgsihhquhgvrdhsphgsrdhruhdpkhgvrhhnvghlqdhtvggrmhesmhgvthgrrdgtohhmpdhnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoieduledpmhhouggvpehsmhhtphhouhht
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrheefgdduhecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogetfedtuddqtdduucdludehmdenucfjughrpefhvfevufffkffojghfggfgtghisehtkeertdertddtnecuhfhrohhmpefsuhgvnhhtihhnucffvghslhgrnhguvghsuceoqhguvgesnhgrtggthidruggvqeenucggtffrrghtthgvrhhnpeffveejjeeiffekueefgfdvudffveetleehiedvheekkeejfedufedvieduudeiffenucffohhmrghinhepuhhsvghrrdhnrghmvgenucfkphepuddvjedrtddrtddruddpfeejrdeihedrkedrvddvleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehquggvsehnrggttgihrdguvgeqpdhnsggprhgtphhtthhopedupdhrtghpthhtohepshgufhesghhoohhglhgvrdgtohhmpdgsphhfsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpshhhuhgrhheskhgvrhhnvghlrdhorhhgpdhmhihkohhlrghlsehfsgdrtghomhdpphgrsggvnhhisehrvgguhhgrthdrtghomhdpkhhusggrsehkvghrnhgvlhdrohhrghdpvgguuhhmrgiivghtsehgohhoghhlvgdrtghomhdpug
+ grvhgvmhesuggrvhgvmhhlohhfthdrnhgvthdpjhholhhsrgeskhgvrhhnvghlrdhorhhgpdhhrgholhhuohesghhoohhglhgvrdgtohhmpdhlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhkphhsihhnghhhsehkvghrnhgvlhdrohhrghdpjhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhlrdgtohhmpdihhhhssehfsgdrtghomhdpshhonhhgsehkvghrnhgvlhdrohhrghdpmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpdgrnhgurhhiiheskhgvrhhnvghlrdhorhhgpdgurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprghstheskhgvrhhnvghlrdhorhhgpdhmvgesuhgsihhquhgvrdhsphgsrdhruhdpkhgvrhhnvghlqdhtvggrmhesmhgvthgrrdgtohhmpdhnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoieduledpmhhouggvpehsmhhtphhouhht
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add header containing bpfilter structures definitions, for test
-purposes.
+struct match_ops defines a polymorphic interface for matches. A match
+consists of pointers to struct match_ops and struct xt_entry_match which
+contains a payload for the match's type.
+
+The match interface supports the following operations:
+- check: validate a rule's match.
+- gen_inline: generate eBPF bytecode for the match.
+
+All match_ops structures are kept in a map by their name.
 
 Co-developed-by: Dmitrii Banshchikov <me@ubique.spb.ru>
 Signed-off-by: Dmitrii Banshchikov <me@ubique.spb.ru>
 Signed-off-by: Quentin Deslandes <qde@naccy.de>
 ---
- tools/include/uapi/linux/bpfilter.h | 175 ++++++++++++++++++++++++++++
- 1 file changed, 175 insertions(+)
- create mode 100644 tools/include/uapi/linux/bpfilter.h
+ net/bpfilter/Makefile                         |  1 +
+ net/bpfilter/context.c                        | 43 ++++++++++++
+ net/bpfilter/context.h                        |  3 +
+ net/bpfilter/match.c                          | 55 +++++++++++++++
+ net/bpfilter/match.h                          | 35 ++++++++++
+ .../testing/selftests/bpf/bpfilter/.gitignore |  1 +
+ tools/testing/selftests/bpf/bpfilter/Makefile |  7 ++
+ .../selftests/bpf/bpfilter/bpfilter_util.h    | 22 ++++++
+ .../selftests/bpf/bpfilter/test_match.c       | 69 +++++++++++++++++++
+ 9 files changed, 236 insertions(+)
+ create mode 100644 net/bpfilter/match.c
+ create mode 100644 net/bpfilter/match.h
+ create mode 100644 tools/testing/selftests/bpf/bpfilter/bpfilter_util.h
+ create mode 100644 tools/testing/selftests/bpf/bpfilter/test_match.c
 
-diff --git a/tools/include/uapi/linux/bpfilter.h b/tools/include/uapi/linux/bpfilter.h
+diff --git a/net/bpfilter/Makefile b/net/bpfilter/Makefile
+index ac039f1fac34..2f8d867a6038 100644
+--- a/net/bpfilter/Makefile
++++ b/net/bpfilter/Makefile
+@@ -13,6 +13,7 @@ $(LIBBPF_A):
+ userprogs := bpfilter_umh
+ bpfilter_umh-objs := main.o logger.o map-common.o
+ bpfilter_umh-objs += context.o codegen.o
++bpfilter_umh-objs += match.o
+ bpfilter_umh-userldlibs := $(LIBBPF_A) -lelf -lz
+ userccflags += -I $(srctree)/tools/include/ -I $(srctree)/tools/include/uapi
+ 
+diff --git a/net/bpfilter/context.c b/net/bpfilter/context.c
+index fdfd5fe78424..b5e172412fab 100644
+--- a/net/bpfilter/context.c
++++ b/net/bpfilter/context.c
+@@ -8,11 +8,54 @@
+ 
+ #include "context.h"
+ 
++#include <linux/kernel.h>
++
++#include <string.h>
++
++#include "logger.h"
++#include "map-common.h"
++#include "match.h"
++
++static const struct match_ops *match_ops[] = { };
++
++static int init_match_ops_map(struct context *ctx)
++{
++	int r;
++
++	r = create_map(&ctx->match_ops_map, ARRAY_SIZE(match_ops));
++	if (r) {
++		BFLOG_ERR("failed to create matches map: %s", STRERR(r));
++		return r;
++	}
++
++	for (int i = 0; i < ARRAY_SIZE(match_ops); ++i) {
++		const struct match_ops *m = match_ops[i];
++
++		r = map_upsert(&ctx->match_ops_map, m->name, (void *)m);
++		if (r) {
++			BFLOG_ERR("failed to upsert in matches map: %s",
++				  STRERR(r));
++			return r;
++		}
++	}
++
++	return 0;
++}
++
+ int create_context(struct context *ctx)
+ {
++	int r;
++
++	r = init_match_ops_map(ctx);
++	if (r) {
++		BFLOG_ERR("failed to initialize matches map: %s", STRERR(r));
++		return r;
++	}
++
+ 	return 0;
+ }
+ 
+ void free_context(struct context *ctx)
+ {
++	free_map(&ctx->match_ops_map);
+ }
+diff --git a/net/bpfilter/context.h b/net/bpfilter/context.h
+index df41b9707a81..e36aa8ebf57e 100644
+--- a/net/bpfilter/context.h
++++ b/net/bpfilter/context.h
+@@ -7,7 +7,10 @@
+ #ifndef NET_BPFILTER_CONTEXT_H
+ #define NET_BPFILTER_CONTEXT_H
+ 
++#include <search.h>
++
+ struct context {
++	struct hsearch_data match_ops_map;
+ };
+ 
+ int create_context(struct context *ctx);
+diff --git a/net/bpfilter/match.c b/net/bpfilter/match.c
 new file mode 100644
-index 000000000000..295fd9caa3c8
+index 000000000000..fdb0926442a8
 --- /dev/null
-+++ b/tools/include/uapi/linux/bpfilter.h
-@@ -0,0 +1,175 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-+#ifndef _UAPI_LINUX_BPFILTER_H
-+#define _UAPI_LINUX_BPFILTER_H
++++ b/net/bpfilter/match.c
+@@ -0,0 +1,55 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2021 Telegram FZ-LLC
++ * Copyright (c) 2022 Meta Platforms, Inc. and affiliates.
++ */
 +
-+#include <linux/if.h>
-+#include <linux/const.h>
++#define _GNU_SOURCE
 +
-+#define BPFILTER_STANDARD_TARGET        ""
-+#define BPFILTER_ERROR_TARGET           "ERROR"
++#include "match.h"
 +
-+enum {
-+	BPFILTER_IPT_SO_SET_REPLACE = 64,
-+	BPFILTER_IPT_SO_SET_ADD_COUNTERS = 65,
-+	BPFILTER_IPT_SET_MAX,
-+};
++#include <linux/err.h>
 +
-+enum {
-+	BPFILTER_IPT_SO_GET_INFO = 64,
-+	BPFILTER_IPT_SO_GET_ENTRIES = 65,
-+	BPFILTER_IPT_SO_GET_REVISION_MATCH = 66,
-+	BPFILTER_IPT_SO_GET_REVISION_TARGET = 67,
-+	BPFILTER_IPT_GET_MAX,
-+};
++#include <errno.h>
++#include <string.h>
 +
-+enum {
-+	BPFILTER_XT_TABLE_MAXNAMELEN = 32,
-+	BPFILTER_FUNCTION_MAXNAMELEN = 30,
-+	BPFILTER_EXTENSION_MAXNAMELEN = 29,
-+};
++#include "context.h"
++#include "logger.h"
++#include "map-common.h"
 +
-+enum {
-+	BPFILTER_NF_DROP = 0,
-+	BPFILTER_NF_ACCEPT = 1,
-+	BPFILTER_NF_STOLEN = 2,
-+	BPFILTER_NF_QUEUE = 3,
-+	BPFILTER_NF_REPEAT = 4,
-+	BPFILTER_NF_STOP = 5,
-+	BPFILTER_NF_MAX_VERDICT = BPFILTER_NF_STOP,
-+	BPFILTER_RETURN = (-BPFILTER_NF_REPEAT - 1),
-+};
++int init_match(struct context *ctx, const struct bpfilter_ipt_match *ipt_match,
++	       struct match *match)
++{
++	const size_t maxlen = sizeof(ipt_match->u.user.name);
++	const struct match_ops *found;
++	int r;
 +
-+enum {
-+	BPFILTER_INET_HOOK_PRE_ROUTING = 0,
-+	BPFILTER_INET_HOOK_LOCAL_IN = 1,
-+	BPFILTER_INET_HOOK_FORWARD = 2,
-+	BPFILTER_INET_HOOK_LOCAL_OUT = 3,
-+	BPFILTER_INET_HOOK_POST_ROUTING = 4,
-+	BPFILTER_INET_HOOK_MAX,
-+};
++	if (strnlen(ipt_match->u.user.name, maxlen) == maxlen) {
++		BFLOG_ERR("failed to init match: name too long");
++		return -EINVAL;
++	}
 +
-+enum {
-+	BPFILTER_IPT_F_MASK = 0x03,
-+	BPFILTER_IPT_INV_MASK = 0x7f
-+};
++	found = map_find(&ctx->match_ops_map, ipt_match->u.user.name);
++	if (IS_ERR(found)) {
++		BFLOG_ERR("failed to find match by name: '%s'",
++			  ipt_match->u.user.name);
++		return PTR_ERR(found);
++	}
 +
-+struct bpfilter_ipt_match {
-+	union {
-+		struct {
-+			__u16 match_size;
-+			char name[BPFILTER_EXTENSION_MAXNAMELEN];
-+			__u8 revision;
-+		} user;
-+		struct {
-+			__u16 match_size;
-+			void *match;
-+		} kernel;
-+		__u16 match_size;
-+	} u;
-+	unsigned char data[];
-+};
++	if (found->size + sizeof(*ipt_match) != ipt_match->u.match_size ||
++	    found->revision != ipt_match->u.user.revision) {
++		BFLOG_ERR("invalid match: '%s'", ipt_match->u.user.name);
++		return -EINVAL;
++	}
 +
-+struct bpfilter_ipt_target {
-+	union {
-+		struct {
-+			__u16 target_size;
-+			char name[BPFILTER_EXTENSION_MAXNAMELEN];
-+			__u8 revision;
-+		} user;
-+		struct {
-+			__u16 target_size;
-+			void *target;
-+		} kernel;
-+		__u16 target_size;
-+	} u;
-+	unsigned char data[];
-+};
++	r = found->check(ctx, ipt_match);
++	if (r) {
++		BFLOG_ERR("match check failed: %s", STRERR(r));
++		return r;
++	}
 +
-+struct bpfilter_ipt_standard_target {
-+	struct bpfilter_ipt_target target;
-+	int verdict;
-+};
++	match->match_ops = found;
++	match->ipt_match = ipt_match;
 +
-+struct bpfilter_ipt_error_target {
-+	struct bpfilter_ipt_target target;
-+	char error_name[BPFILTER_FUNCTION_MAXNAMELEN];
-+};
++	return 0;
++}
+diff --git a/net/bpfilter/match.h b/net/bpfilter/match.h
+new file mode 100644
+index 000000000000..c6541e6a6567
+--- /dev/null
++++ b/net/bpfilter/match.h
+@@ -0,0 +1,35 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (c) 2021 Telegram FZ-LLC
++ * Copyright (c) 2022 Meta Platforms, Inc. and affiliates.
++ */
 +
-+struct bpfilter_ipt_get_info {
-+	char name[BPFILTER_XT_TABLE_MAXNAMELEN];
-+	__u32 valid_hooks;
-+	__u32 hook_entry[BPFILTER_INET_HOOK_MAX];
-+	__u32 underflow[BPFILTER_INET_HOOK_MAX];
-+	__u32 num_entries;
-+	__u32 size;
-+};
++#ifndef NET_BPFILTER_MATCH_H
++#define NET_BPFILTER_MATCH_H
 +
-+struct bpfilter_ipt_counters {
-+	__u64 packet_cnt;
-+	__u64 byte_cnt;
-+};
++#include "../../include/uapi/linux/bpfilter.h"
 +
-+struct bpfilter_ipt_counters_info {
-+	char name[BPFILTER_XT_TABLE_MAXNAMELEN];
-+	__u32 num_counters;
-+	struct bpfilter_ipt_counters counters[];
-+};
++#include <stdint.h>
 +
-+struct bpfilter_ipt_get_revision {
++struct bpfilter_ipt_match;
++struct codegen;
++struct context;
++struct match;
++
++struct match_ops {
 +	char name[BPFILTER_EXTENSION_MAXNAMELEN];
-+	__u8 revision;
++	uint8_t revision;
++	uint16_t size;
++	int (*check)(struct context *ctx, const struct bpfilter_ipt_match *ipt_match);
++	int (*gen_inline)(struct codegen *ctx, const struct match *match);
 +};
 +
-+struct bpfilter_ipt_ip {
-+	__u32 src;
-+	__u32 dst;
-+	__u32 src_mask;
-+	__u32 dst_mask;
-+	char in_iface[IFNAMSIZ];
-+	char out_iface[IFNAMSIZ];
-+	__u8 in_iface_mask[IFNAMSIZ];
-+	__u8 out_iface_mask[IFNAMSIZ];
-+	__u16 protocol;
-+	__u8 flags;
-+	__u8 invflags;
++struct match {
++	const struct match_ops *match_ops;
++	const struct bpfilter_ipt_match *ipt_match;
 +};
 +
-+struct bpfilter_ipt_entry {
-+	struct bpfilter_ipt_ip ip;
-+	__u32 bfcache;
-+	__u16 target_offset;
-+	__u16 next_offset;
-+	__u32 comefrom;
-+	struct bpfilter_ipt_counters counters;
-+	__u8 elems[];
++int init_match(struct context *ctx, const struct bpfilter_ipt_match *ipt_match,
++	       struct match *match);
++
++#endif // NET_BPFILTER_MATCH_H
+diff --git a/tools/testing/selftests/bpf/bpfilter/.gitignore b/tools/testing/selftests/bpf/bpfilter/.gitignore
+index 39ec0c09dff4..9ac1b3caf246 100644
+--- a/tools/testing/selftests/bpf/bpfilter/.gitignore
++++ b/tools/testing/selftests/bpf/bpfilter/.gitignore
+@@ -1,3 +1,4 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ tools/**
+ test_map
++test_match
+diff --git a/tools/testing/selftests/bpf/bpfilter/Makefile b/tools/testing/selftests/bpf/bpfilter/Makefile
+index e3b8bf76a10c..10642c1d6a87 100644
+--- a/tools/testing/selftests/bpf/bpfilter/Makefile
++++ b/tools/testing/selftests/bpf/bpfilter/Makefile
+@@ -11,6 +11,7 @@ BPFDIR := $(LIBDIR)/bpf
+ CFLAGS += -Wall -g -pthread -I$(TOOLSINCDIR) -I$(APIDIR) -I$(BPFILTERSRCDIR)
+ 
+ TEST_GEN_PROGS += test_map
++TEST_GEN_PROGS += test_match
+ 
+ KSFT_KHDR_INSTALL := 1
+ 
+@@ -34,5 +35,11 @@ $(BPFOBJ): $(wildcard $(BPFDIR)/*.[ch] $(BPFDIR)/Makefile)			\
+ 
+ BPFILTER_MAP_SRCS := $(BPFILTERSRCDIR)/map-common.c
+ BPFILTER_CODEGEN_SRCS := $(BPFILTERSRCDIR)/codegen.c $(BPFOBJ) -lelf -lz
++BPFILTER_MATCH_SRCS := $(BPFILTERSRCDIR)/match.c
++
++BPFILTER_COMMON_SRCS := $(BPFILTER_MAP_SRCS)
++BPFILTER_COMMON_SRCS += $(BPFILTERSRCDIR)/context.c $(BPFILTERSRCDIR)/logger.c
++BPFILTER_COMMON_SRCS += $(BPFILTER_MATCH_SRCS)
+ 
+ $(OUTPUT)/test_map: test_map.c $(BPFILTER_MAP_SRCS)
++$(OUTPUT)/test_match: test_match.c $(BPFILTER_COMMON_SRCS)
+diff --git a/tools/testing/selftests/bpf/bpfilter/bpfilter_util.h b/tools/testing/selftests/bpf/bpfilter/bpfilter_util.h
+new file mode 100644
+index 000000000000..705fd1777a67
+--- /dev/null
++++ b/tools/testing/selftests/bpf/bpfilter/bpfilter_util.h
+@@ -0,0 +1,22 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#ifndef BPFILTER_UTIL_H
++#define BPFILTER_UTIL_H
++
++#include <linux/netfilter/x_tables.h>
++
++#include <stdio.h>
++#include <stdint.h>
++#include <string.h>
++
++static inline void init_entry_match(struct xt_entry_match *match,
++				    uint16_t size, uint8_t revision,
++				    const char *name)
++{
++	memset(match, 0, sizeof(*match));
++	sprintf(match->u.user.name, "%s", name);
++	match->u.user.match_size = size;
++	match->u.user.revision = revision;
++}
++
++#endif // BPFILTER_UTIL_H
+diff --git a/tools/testing/selftests/bpf/bpfilter/test_match.c b/tools/testing/selftests/bpf/bpfilter/test_match.c
+new file mode 100644
+index 000000000000..4a0dc1b14e4d
+--- /dev/null
++++ b/tools/testing/selftests/bpf/bpfilter/test_match.c
+@@ -0,0 +1,69 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#define _GNU_SOURCE
++
++#include <linux/netfilter/x_tables.h>
++#include <linux/netfilter/xt_tcpudp.h>
++
++#include "../../kselftest_harness.h"
++
++#include "context.h"
++#include "logger.h"
++#include "match.h"
++
++#include "bpfilter_util.h"
++
++/**
++ * struct udp_match - Dummy test structure.
++ *
++ * This structure provides enough space to allow for name too long, so it
++ * doesn't overwrite anything.
++ */
++struct udp_match {
++	struct xt_entry_match ipt_match;
++	char placeholder[32];
 +};
 +
-+struct bpfilter_ipt_standard_entry {
-+	struct bpfilter_ipt_entry entry;
-+	struct bpfilter_ipt_standard_target target;
++FIXTURE(test_match_init)
++{
++	struct context ctx;
++	struct udp_match udp_match;
++	struct match match;
 +};
 +
-+struct bpfilter_ipt_error_entry {
-+	struct bpfilter_ipt_entry entry;
-+	struct bpfilter_ipt_error_target target;
++FIXTURE_SETUP(test_match_init)
++{
++	logger_set_file(stderr);
++	ASSERT_EQ(0, create_context(&self->ctx));
 +};
 +
-+struct bpfilter_ipt_get_entries {
-+	char name[BPFILTER_XT_TABLE_MAXNAMELEN];
-+	__u32 size;
-+	struct bpfilter_ipt_entry entries[];
-+};
++FIXTURE_TEARDOWN(test_match_init)
++{
++	free_context(&self->ctx);
++}
 +
-+struct bpfilter_ipt_replace {
-+	char name[BPFILTER_XT_TABLE_MAXNAMELEN];
-+	__u32 valid_hooks;
-+	__u32 num_entries;
-+	__u32 size;
-+	__u32 hook_entry[BPFILTER_INET_HOOK_MAX];
-+	__u32 underflow[BPFILTER_INET_HOOK_MAX];
-+	__u32 num_counters;
-+	struct bpfilter_ipt_counters *cntrs;
-+	struct bpfilter_ipt_entry entries[];
-+};
++TEST_F(test_match_init, name_too_long)
++{
++	init_entry_match(&self->udp_match.ipt_match, sizeof(self->udp_match), 0,
++			 "this match name is supposed to be way too long...");
 +
-+#endif /* _UAPI_LINUX_BPFILTER_H */
++	ASSERT_EQ(init_match(&self->ctx,
++			     (const struct bpfilter_ipt_match *)&self->udp_match
++				     .ipt_match,
++			     &self->match),
++		  -EINVAL);
++}
++
++TEST_F(test_match_init, not_found)
++{
++	init_entry_match(&self->udp_match.ipt_match, sizeof(self->udp_match), 0,
++			 "doesn't exist");
++
++	ASSERT_EQ(init_match(&self->ctx,
++			     (const struct bpfilter_ipt_match *)&self->udp_match
++				     .ipt_match,
++			     &self->match),
++		  -ENOENT);
++}
++
++TEST_HARNESS_MAIN
 -- 
 2.38.1
 
