@@ -2,31 +2,31 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 36E21C3DA79
-	for <linux-kselftest@archiver.kernel.org>; Sat, 24 Dec 2022 00:06:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97CB6C3DA79
+	for <linux-kselftest@archiver.kernel.org>; Sat, 24 Dec 2022 00:09:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236485AbiLXAG1 (ORCPT
+        id S230510AbiLXAJS (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 23 Dec 2022 19:06:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38970 "EHLO
+        Fri, 23 Dec 2022 19:09:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236487AbiLXAFs (ORCPT
+        with ESMTP id S236444AbiLXAIt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 23 Dec 2022 19:05:48 -0500
-X-Greylist: delayed 457 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 23 Dec 2022 16:04:52 PST
-Received: from 9.mo511.mail-out.ovh.net (9.mo511.mail-out.ovh.net [213.32.43.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC1E91743E
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 Dec 2022 16:04:45 -0800 (PST)
-Received: from ex4.mail.ovh.net (unknown [10.110.171.195])
-        by mo511.mail-out.ovh.net (Postfix) with ESMTPS id 2B2A326733;
-        Sat, 24 Dec 2022 00:04:44 +0000 (UTC)
+        Fri, 23 Dec 2022 19:08:49 -0500
+Received: from smtpout2.r2.mail-out.ovh.net (smtpout2.r2.mail-out.ovh.net [54.36.141.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F9373B403
+        for <linux-kselftest@vger.kernel.org>; Fri, 23 Dec 2022 16:07:13 -0800 (PST)
+Received: from ex4.mail.ovh.net (unknown [10.110.115.38])
+        by mo511.mail-out.ovh.net (Postfix) with ESMTPS id 639DE26719;
+        Fri, 23 Dec 2022 23:50:12 +0000 (UTC)
 Received: from dev-fedora-x86-64.naccy.de (37.65.8.229) by
  DAG10EX1.indiv4.local (172.16.2.91) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Sat, 24 Dec 2022 01:04:42 +0100
+ 15.1.2507.16; Sat, 24 Dec 2022 00:50:10 +0100
 From:   Quentin Deslandes <qde@naccy.de>
 To:     <qde@naccy.de>
-CC:     Alexei Starovoitov <ast@kernel.org>,
+CC:     <kernel-team@meta.com>, Dmitrii Banshchikov <me@ubique.spb.ru>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <martin.lau@linux.dev>,
@@ -40,889 +40,221 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
         Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Dmitrii Banshchikov <me@ubique.spb.ru>,
         <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>,
-        Kernel Team <kernel-team@meta.com>
-Subject: [PATCH bpf-next v3 15/16] bpfilter: add filter table
-Date:   Sat, 24 Dec 2022 01:04:01 +0100
-Message-ID: <20221224000402.476079-16-qde@naccy.de>
+        <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+Subject: [PATCH bpf-next v3 07/16] bpfilter: add support for TC bytecode generation
+Date:   Sat, 24 Dec 2022 00:40:15 +0100
+Message-ID: <20221223234127.474463-8-qde@naccy.de>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221224000402.476079-1-qde@naccy.de>
-References: <20221224000402.476079-1-qde@naccy.de>
+In-Reply-To: <20221223234127.474463-1-qde@naccy.de>
+References: <20221223234127.474463-1-qde@naccy.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
 X-Originating-IP: [37.65.8.229]
 X-ClientProxiedBy: CAS6.indiv4.local (172.16.1.6) To DAG10EX1.indiv4.local
  (172.16.2.91)
-X-Ovh-Tracer-Id: 4763682507135774327
+X-Ovh-Tracer-Id: 4518236328503275127
 X-VR-SPAMSTATE: OK
 X-VR-SPAMSCORE: -85
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrheefgddujecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogetfedtuddqtdduucdludehmdenucfjughrpefhvfevufffkffojghfggfgtghisehtkeertdertddtnecuhfhrohhmpefsuhgvnhhtihhnucffvghslhgrnhguvghsuceoqhguvgesnhgrtggthidruggvqeenucggtffrrghtthgvrhhnpeeuveetteejieegkeehvdejkeeiieegudeghedttefgtdfgueelhfdvleeftdelieenucffohhmrghinhepthgvshhtrdgurghtrgenucfkphepuddvjedrtddrtddruddpfeejrdeihedrkedrvddvleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehquggvsehnrggttgihrdguvgeqpdhnsggprhgtphhtthhopedupdhrtghpthhtohepjhholhhsrgeskhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdgsphhfsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpmhgvsehusghiqhhuvgdrshhpsgdrrhhupdhshhhurghhsehkvghrnhgvlhdrohhrghdpmhihkhholhgrlhesfhgsrdgtohhmpdhprggsvg
- hnihesrhgvughhrghtrdgtohhmpdhkuhgsrgeskhgvrhhnvghlrdhorhhgpdgvughumhgriigvthesghhoohhglhgvrdgtohhmpdgurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhkvghrnhgvlhdqthgvrghmsehmvghtrgdrtghomhdphhgrohhluhhosehgohhoghhlvgdrtghomhdpshgufhesghhoohhglhgvrdgtohhmpdhkphhsihhnghhhsehkvghrnhgvlhdrohhrghdpjhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhlrdgtohhmpdihhhhssehfsgdrtghomhdpshhonhhgsehkvghrnhgvlhdrohhrghdpmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpdgrnhgurhhiiheskhgvrhhnvghlrdhorhhgpdgurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprghstheskhgvrhhnvghlrdhorhhgpdhnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheduuddpmhhouggvpehsmhhtphhouhht
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrheefgddugecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogetfedtuddqtdduucdludehmdenucfjughrpefhvfevufffkffojghfggfgtghisehtkeertdertddtnecuhfhrohhmpefsuhgvnhhtihhnucffvghslhgrnhguvghsuceoqhguvgesnhgrtggthidruggvqeenucggtffrrghtthgvrhhnpeduledugfeileetvdelieeujedttedtvedtgfetteevfeejhfffkeeujeetfffgudenucfkphepuddvjedrtddrtddruddpfeejrdeihedrkedrvddvleenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehquggvsehnrggttgihrdguvgeqpdhnsggprhgtphhtthhopedupdhrtghpthhtohepshgufhesghhoohhglhgvrdgtohhmpdgsphhfsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpshhhuhgrhheskhgvrhhnvghlrdhorhhgpdhmhihkohhlrghlsehfsgdrtghomhdpphgrsggvnhhisehrvgguhhgrthdrtghomhdpkhhusggrsehkvghrnhgvlhdrohhrghdpvgguuhhmrgiivghtsehgohhoghhlvgdrtghomhdpuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgvth
+ dpjhholhhsrgeskhgvrhhnvghlrdhorhhgpdhhrgholhhuohesghhoohhglhgvrdgtohhmpdhlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhkphhsihhnghhhsehkvghrnhgvlhdrohhrghdpjhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhlrdgtohhmpdihhhhssehfsgdrtghomhdpshhonhhgsehkvghrnhgvlhdrohhrghdpmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpdgrnhgurhhiiheskhgvrhhnvghlrdhorhhgpdgurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprghstheskhgvrhhnvghlrdhorhhgpdhmvgesuhgsihhquhgvrdhsphgsrdhruhdpkhgvrhhnvghlqdhtvggrmhesmhgvthgrrdgtohhmpdhnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheduuddpmhhouggvpehsmhhtphhouhht
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Introduce filter table support for INPUT, FORWARD, and OUTPUT chains.
-All those chains are supported by SCHED_CLS_BPF.
-
-INPUT and FORWARD programs are attached to TC_INGRESS hook and leverage
-generate_inline_forward_packet_assessment() to check whether they should
-or not process the incoming packet.
-
-OUTPUT program is attached to TC_EGRESS hook.
-
-create_filter_table() is used to create a default filter table
-(statically stored in filter_table_replace_blob). This table doesn't
-contain any rule and defaults to ACCEPTing packets on each chain.
+Add code generation support for TC hooks.
 
 Co-developed-by: Dmitrii Banshchikov <me@ubique.spb.ru>
 Signed-off-by: Dmitrii Banshchikov <me@ubique.spb.ru>
 Signed-off-by: Quentin Deslandes <qde@naccy.de>
 ---
- net/bpfilter/Makefile                         |   1 +
- net/bpfilter/context.c                        |   3 +-
- net/bpfilter/filter-table.c                   | 344 ++++++++++++++++++
- net/bpfilter/filter-table.h                   |  18 +
- .../testing/selftests/bpf/bpfilter/.gitignore |   1 +
- tools/testing/selftests/bpf/bpfilter/Makefile |   3 +
- .../selftests/bpf/bpfilter/bpfilter_util.h    |  27 ++
- .../selftests/bpf/bpfilter/test_codegen.c     | 338 +++++++++++++++++
- 8 files changed, 734 insertions(+), 1 deletion(-)
- create mode 100644 net/bpfilter/filter-table.c
- create mode 100644 net/bpfilter/filter-table.h
- create mode 100644 tools/testing/selftests/bpf/bpfilter/test_codegen.c
+ net/bpfilter/codegen.c | 151 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 151 insertions(+)
 
-diff --git a/net/bpfilter/Makefile b/net/bpfilter/Makefile
-index 4a78a665b3f1..7def305f0af3 100644
---- a/net/bpfilter/Makefile
-+++ b/net/bpfilter/Makefile
-@@ -15,6 +15,7 @@ bpfilter_umh-objs := main.o logger.o map-common.o
- bpfilter_umh-objs += context.o codegen.o
- bpfilter_umh-objs += match.o xt_udp.o target.o rule.o table.o
- bpfilter_umh-objs += sockopt.o
-+bpfilter_umh-objs += filter-table.o
- bpfilter_umh-userldlibs := $(LIBBPF_A) -lelf -lz
- userccflags += -I $(srctree)/tools/include/ -I $(srctree)/tools/include/uapi
+diff --git a/net/bpfilter/codegen.c b/net/bpfilter/codegen.c
+index 545bc7aeb77c..e7ae7dfa5118 100644
+--- a/net/bpfilter/codegen.c
++++ b/net/bpfilter/codegen.c
+@@ -8,6 +8,8 @@
  
-diff --git a/net/bpfilter/context.c b/net/bpfilter/context.c
-index 81c9751a2a2d..6bb0362a79c8 100644
---- a/net/bpfilter/context.c
-+++ b/net/bpfilter/context.c
-@@ -13,6 +13,7 @@
+ #include "../../include/uapi/linux/bpfilter.h"
  
++#include <linux/pkt_cls.h>
++
+ #include <unistd.h>
+ #include <sys/syscall.h>
+ 
+@@ -15,6 +17,8 @@
+ #include <stdlib.h>
  #include <string.h>
  
-+#include "filter-table.h"
++#include <bpf/libbpf.h>
++
  #include "logger.h"
- #include "map-common.h"
- #include "match.h"
-@@ -73,7 +74,7 @@ static int init_target_ops_map(struct context *ctx)
- 	return 0;
+ 
+ enum fixup_insn_type {
+@@ -390,6 +394,150 @@ static void unload_maps(struct codegen *codegen)
+ 	}
  }
  
--static const struct table_ops *table_ops[] = {};
-+static const struct table_ops *table_ops[] = { &filter_table_ops };
- 
- static int init_table_ops_map(struct context *ctx)
- {
-diff --git a/net/bpfilter/filter-table.c b/net/bpfilter/filter-table.c
-new file mode 100644
-index 000000000000..452a6d5b2fd0
---- /dev/null
-+++ b/net/bpfilter/filter-table.c
-@@ -0,0 +1,344 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2021 Telegram FZ-LLC
-+ * Copyright (c) 2022 Meta Platforms, Inc. and affiliates.
-+ */
-+
-+#define _GNU_SOURCE
-+
-+#include "filter-table.h"
-+
-+#include "../../include/uapi/linux/bpfilter.h"
-+
-+#include <linux/kernel.h>
-+#include <linux/err.h>
-+
-+#include <errno.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+
-+#include <bpf/bpf.h>
-+
-+#include "codegen.h"
-+#include "context.h"
-+#include "logger.h"
-+#include "msgfmt.h"
-+#include "rule.h"
-+#include "sockopt.h"
-+
-+struct filter_table_context {
-+	struct shared_codegen shared;
-+	struct codegen local_in;
-+	struct codegen forward;
-+	struct codegen local_out;
-+};
-+
-+static struct table *filter_table_create(struct context *ctx,
-+					 const struct bpfilter_ipt_replace *ipt_replace)
++static int tc_gen_inline_prologue(struct codegen *codegen)
 +{
-+	struct table *t = create_table(ctx, ipt_replace);
++	EMIT(codegen, BPF_MOV64_REG(CODEGEN_REG_CTX, BPF_REG_ARG1));
++	EMIT(codegen, BPF_MOV64_REG(CODEGEN_REG_RUNTIME_CTX, BPF_REG_FP));
++	EMIT(codegen, BPF_MOV32_IMM(CODEGEN_REG_RETVAL, TC_ACT_OK));
 +
-+	if (!IS_ERR_OR_NULL(t))
-+		t->table_ops = &filter_table_ops;
-+
-+	return t;
++	return 0;
 +}
 +
-+static int filter_table_codegen(struct context *ctx, struct table *table)
++static int tc_load_packet_data(struct codegen *codegen, int dst_reg)
 +{
-+	struct filter_table_context *table_ctx;
++	EMIT(codegen, BPF_LDX_MEM(BPF_W, dst_reg, CODEGEN_REG_CTX,
++				  offsetof(struct __sk_buff, data)));
++
++	return 0;
++}
++
++static int tc_load_packet_data_end(struct codegen *codegen, int dst_reg)
++{
++	EMIT(codegen, BPF_LDX_MEM(BPF_W, CODEGEN_REG_DATA_END, CODEGEN_REG_CTX,
++				  offsetof(struct __sk_buff, data_end)));
++
++	return 0;
++}
++
++static int tc_emit_ret_code(struct codegen *codegen, int ret_code)
++{
++	int tc_ret_code;
++
++	if (ret_code == BPFILTER_NF_ACCEPT)
++		tc_ret_code = TC_ACT_UNSPEC;
++	else if (ret_code == BPFILTER_NF_DROP)
++		tc_ret_code = TC_ACT_SHOT;
++	else
++		return -EINVAL;
++
++	EMIT(codegen, BPF_MOV32_IMM(BPF_REG_0, tc_ret_code));
++
++	return 0;
++}
++
++static int tc_gen_inline_epilogue(struct codegen *codegen)
++{
++	EMIT(codegen, BPF_EXIT_INSN());
++
++	return 0;
++}
++
++struct tc_img_ctx {
++	int fd;
++	struct bpf_tc_hook hook;
++	struct bpf_tc_opts opts;
++};
++
++static int tc_load_img(struct codegen *codegen)
++{
++	struct tc_img_ctx *img_ctx;
++	int fd;
 +	int r;
 +
-+	BUG_ON(table->table_ops != &filter_table_ops);
-+
-+	if (table->ctx) {
-+		BFLOG_ERR("filter table has no context");
++	if (codegen->img_ctx) {
++		BFLOG_ERR("TC context missing from codegen");
 +		return -EINVAL;
 +	}
 +
-+	table_ctx = calloc(1, sizeof(*table_ctx));
-+	if (!table_ctx) {
++	img_ctx = calloc(1, sizeof(*img_ctx));
++	if (!img_ctx) {
 +		BFLOG_ERR("out of memory");
 +		return -ENOMEM;
 +	}
 +
-+	create_shared_codegen(&table_ctx->shared);
++	img_ctx->hook.sz = sizeof(img_ctx->hook);
++	img_ctx->hook.ifindex = 2;
++	img_ctx->hook.attach_point = codegen->bpf_tc_hook;
 +
-+	// INPUT chain
-+	r = create_codegen(&table_ctx->local_in, BPF_PROG_TYPE_SCHED_CLS);
-+	if (r) {
-+		BFLOG_ERR("TC codegen for INPUT chain creation failed");
-+		goto err_free_table_ctx;
++	fd = load_img(codegen);
++	if (fd < 0) {
++		BFLOG_ERR("failed to load TC codegen image: %s", STRERR(fd));
++		r = fd;
++		goto err_free;
 +	}
 +
-+	table_ctx->local_in.ctx = ctx;
-+	table_ctx->local_in.shared_codegen = &table_ctx->shared;
-+	table_ctx->local_in.iptables_hook = BPFILTER_INET_HOOK_LOCAL_IN;
-+	table_ctx->local_in.bpf_tc_hook = BPF_TC_INGRESS;
-+
-+	r = try_codegen(&table_ctx->local_in, table);
-+	if (r) {
-+		BFLOG_ERR("failed to generate LOCAL_IN code");
-+		goto err_free_local_in;
++	r = bpf_tc_hook_create(&img_ctx->hook);
++	if (r && r != -EEXIST) {
++		BFLOG_ERR("failed to create TC hook: %s\n", STRERR(r));
++		goto err_free;
 +	}
 +
-+	// FORWARD chain
-+	r = create_codegen(&table_ctx->forward, BPF_PROG_TYPE_SCHED_CLS);
++	img_ctx->opts.sz = sizeof(img_ctx->opts);
++	img_ctx->opts.handle = codegen->iptables_hook;
++	img_ctx->opts.priority = 0;
++	img_ctx->opts.prog_fd = fd;
++	r = bpf_tc_attach(&img_ctx->hook, &img_ctx->opts);
 +	if (r) {
-+		BFLOG_ERR("TC codegen for FORWARD chain create failed");
-+		goto err_free_local_in;
++		BFLOG_ERR("failed to attach TC program: %s", STRERR(r));
++		goto err_free;
 +	}
 +
-+	table_ctx->forward.ctx = ctx;
-+	table_ctx->forward.shared_codegen = &table_ctx->shared;
-+	table_ctx->forward.iptables_hook = BPFILTER_INET_HOOK_FORWARD;
-+	table_ctx->forward.bpf_tc_hook = BPF_TC_INGRESS;
++	img_ctx->fd = fd;
++	codegen->img_ctx = img_ctx;
 +
-+	r = try_codegen(&table_ctx->forward, table);
-+	if (r) {
-+		BFLOG_ERR("failed to generate LOCAL_FORWARD code");
-+		goto err_free_local_fwd;
-+	}
++	return fd;
 +
-+	// OUTPUT chain
-+	r = create_codegen(&table_ctx->local_out, BPF_PROG_TYPE_SCHED_CLS);
-+	if (r) {
-+		BFLOG_ERR("TC codegen for OUTPUT chain creation failed");
-+		goto err_free_local_fwd;
-+	}
-+
-+	table_ctx->local_out.ctx = ctx;
-+	table_ctx->local_out.shared_codegen = &table_ctx->shared;
-+	table_ctx->local_out.iptables_hook = BPFILTER_INET_HOOK_LOCAL_OUT;
-+	table_ctx->local_out.bpf_tc_hook = BPF_TC_EGRESS;
-+
-+	r = try_codegen(&table_ctx->local_out, table);
-+	if (r) {
-+		BFLOG_ERR("failed to generate LOCAL_OUT code");
-+		goto err_free_local_out;
-+	}
-+
-+	table->ctx = table_ctx;
-+
-+	return 0;
-+
-+err_free_local_out:
-+	free_codegen(&table_ctx->local_out);
-+err_free_local_fwd:
-+	free_codegen(&table_ctx->forward);
-+err_free_local_in:
-+	free_codegen(&table_ctx->local_in);
-+err_free_table_ctx:
-+	free(table_ctx);
-+
++err_free:
++	if (fd > -1)
++		close(fd);
++	free(img_ctx);
 +	return r;
 +}
 +
-+static int filter_table_install(struct context *ctx, struct table *table)
++static void tc_unload_img(struct codegen *codegen)
 +{
-+	struct filter_table_context *table_ctx;
++	struct tc_img_ctx *img_ctx;
 +	int r;
 +
-+	if (!table->ctx)
-+		return -EINVAL;
++	BUG_ON(!codegen->img_ctx);
 +
-+	table_ctx = (struct filter_table_context *)table->ctx;
++	img_ctx = (struct tc_img_ctx *)codegen->img_ctx;
++	img_ctx->opts.flags = 0;
++	img_ctx->opts.prog_fd = 0;
++	img_ctx->opts.prog_id = 0;
++	r = bpf_tc_detach(&img_ctx->hook, &img_ctx->opts);
++	if (r)
++		BFLOG_EMERG("failed to detach TC program: %s", STRERR(r));
 +
-+	r = table_ctx->local_in.codegen_ops->load_img(&table_ctx->local_in);
-+	if (r < 0) {
-+		BFLOG_ERR("failed to load chain INPUT in table filter: %s",
-+			  table_ctx->local_in.log_buf);
-+		return r;
-+	}
++	BUG_ON(img_ctx->fd < 0);
++	close(img_ctx->fd);
++	free(img_ctx);
 +
-+	r = table_ctx->forward.codegen_ops->load_img(&table_ctx->forward);
-+	if (r < 0) {
-+		BFLOG_ERR("failed to load chain FORWARD in table filter: %s",
-+			  table_ctx->forward.log_buf);
-+		goto err_unload_local_in;
-+	}
++	codegen->img_ctx = NULL;
 +
-+	r = table_ctx->local_out.codegen_ops->load_img(&table_ctx->local_out);
-+	if (r < 0) {
-+		BFLOG_ERR("failed to load chain OUTPUT in table filter: %s",
-+			  table_ctx->local_out.log_buf);
-+		goto err_unload_forward;
-+	}
-+
-+	BFLOG_DBG("installed filter table");
-+
-+	return 0;
-+
-+err_unload_forward:
-+	table_ctx->forward.codegen_ops->unload_img(&table_ctx->forward);
-+err_unload_local_in:
-+	table_ctx->local_in.codegen_ops->unload_img(&table_ctx->local_in);
-+
-+	return r;
++	unload_img(codegen);
 +}
 +
-+static void filter_table_uninstall(struct context *ctx, struct table *table)
-+{
-+	struct filter_table_context *table_ctx;
-+
-+	BUG_ON(!table->ctx);
-+
-+	table_ctx = (struct filter_table_context *)table->ctx;
-+
-+	table_ctx->local_in.codegen_ops->unload_img(&table_ctx->local_in);
-+	table_ctx->forward.codegen_ops->unload_img(&table_ctx->forward);
-+	table_ctx->local_out.codegen_ops->unload_img(&table_ctx->local_out);
-+}
-+
-+static void filter_table_free(struct table *table)
-+{
-+	if (table->ctx) {
-+		struct filter_table_context *table_ctx;
-+
-+		table_ctx = (struct filter_table_context *)table->ctx;
-+
-+		free_codegen(&table_ctx->local_in);
-+		free_codegen(&table_ctx->forward);
-+		free_codegen(&table_ctx->local_out);
-+		free(table_ctx);
-+	}
-+
-+	free_table(table);
-+}
-+
-+static void filter_table_update_counters(struct table *table)
-+{
-+	int r;
-+	struct rule *rule;
-+	struct filter_table_context *ctx = table->ctx;
-+	struct shared_codegen *shared = &ctx->shared;
-+	int map_fd = shared->maps_fd[CODEGEN_MAP_COUNTERS];
-+
-+	for (uint32_t i = 0; i < table->num_rules; ++i) {
-+		rule = &table->rules[i];
-+
-+		r = bpf_map_lookup_elem(map_fd, &rule->index,
-+					(void *)&rule->ipt_entry->counters);
-+		if (r < 0) {
-+			BFLOG_DBG("couldn't fetch counter for rule at %p",
-+				  rule);
-+		}
-+	}
-+}
-+
-+const struct table_ops filter_table_ops = {
-+	.name = "filter",
-+	.create = filter_table_create,
-+	.codegen = filter_table_codegen,
-+	.install = filter_table_install,
-+	.uninstall = filter_table_uninstall,
-+	.free = filter_table_free,
-+	.update_counters = filter_table_update_counters
++static const struct codegen_ops tc_codegen_ops = {
++	.gen_inline_prologue = tc_gen_inline_prologue,
++	.load_packet_data = tc_load_packet_data,
++	.load_packet_data_end = tc_load_packet_data_end,
++	.emit_ret_code = tc_emit_ret_code,
++	.gen_inline_epilogue = tc_gen_inline_epilogue,
++	.load_img = tc_load_img,
++	.unload_img = tc_unload_img,
 +};
 +
-+static uint8_t filter_table_replace_blob[] = {
-+	0x66, 0x69, 0x6c, 0x74, 0x65, 0x72, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x0e, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00,
-+	0x78, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x98, 0x00, 0x00, 0x00,
-+	0x30, 0x01, 0x00, 0x00,	0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x98, 0x00, 0x00, 0x00, 0x30, 0x01, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00,
-+	0x10, 0x32, 0x40, 0x36, 0x43, 0x56, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x70, 0x00, 0x98, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x28, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0xfe, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x70, 0x00, 0x98, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x28, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0xfe, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x70, 0x00, 0x98, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x28, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0xfe, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x70, 0x00, 0xb0, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x40, 0x00, 0x45, 0x52, 0x52, 0x4f, 0x52, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x45, 0x52, 0x52, 0x4f, 0x52, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-+};
-+
-+int create_filter_table(struct context *ctx)
-+{
-+	struct mbox_request req;
-+
-+	req.addr = (__u64)filter_table_replace_blob;
-+	req.len = ARRAY_SIZE(filter_table_replace_blob);
-+	req.is_set = 1;
-+	req.cmd = BPFILTER_IPT_SO_SET_REPLACE;
-+	req.pid = getpid();
-+
-+	return handle_sockopt_request(ctx, &req);
-+}
-diff --git a/net/bpfilter/filter-table.h b/net/bpfilter/filter-table.h
-new file mode 100644
-index 000000000000..7d5a8464456f
---- /dev/null
-+++ b/net/bpfilter/filter-table.h
-@@ -0,0 +1,18 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2021 Telegram FZ-LLC
-+ * Copyright (c) 2022 Meta Platforms, Inc. and affiliates.
-+ */
-+
-+#ifndef NET_BPFILTER_FILTER_TABLE_H
-+#define NET_BPFILTER_FILTER_TABLE_H
-+
-+#include "table.h"
-+
-+struct context;
-+
-+extern const struct table_ops filter_table_ops;
-+
-+int create_filter_table(struct context *ctx);
-+
-+#endif // NET_BPFILTER_FILTER_TABLE_H
-diff --git a/tools/testing/selftests/bpf/bpfilter/.gitignore b/tools/testing/selftests/bpf/bpfilter/.gitignore
-index a934ddef58d2..926cbb0cfb59 100644
---- a/tools/testing/selftests/bpf/bpfilter/.gitignore
-+++ b/tools/testing/selftests/bpf/bpfilter/.gitignore
-@@ -5,3 +5,4 @@ test_match
- test_xt_udp
- test_target
- test_rule
-+test_codegen
-diff --git a/tools/testing/selftests/bpf/bpfilter/Makefile b/tools/testing/selftests/bpf/bpfilter/Makefile
-index 53634699d427..9eb558dfc99a 100644
---- a/tools/testing/selftests/bpf/bpfilter/Makefile
-+++ b/tools/testing/selftests/bpf/bpfilter/Makefile
-@@ -15,6 +15,7 @@ TEST_GEN_PROGS += test_match
- TEST_GEN_PROGS += test_xt_udp
- TEST_GEN_PROGS += test_target
- TEST_GEN_PROGS += test_rule
-+TEST_GEN_PROGS += test_codegen
+ void create_shared_codegen(struct shared_codegen *shared_codegen)
+ {
+ 	shared_codegen->maps_refcnt = 0;
+@@ -413,6 +561,9 @@ int create_codegen(struct codegen *codegen, enum bpf_prog_type type)
+ 	memset(codegen, 0, sizeof(*codegen));
  
- KSFT_KHDR_INSTALL := 1
- 
-@@ -46,9 +47,11 @@ BPFILTER_COMMON_SRCS := $(BPFILTER_MAP_SRCS) $(BPFILTER_CODEGEN_SRCS)
- BPFILTER_COMMON_SRCS += $(BPFILTERSRCDIR)/context.c $(BPFILTERSRCDIR)/logger.c
- BPFILTER_COMMON_SRCS += $(BPFILTER_MATCH_SRCS) $(BPFILTER_TARGET_SRCS)
- BPFILTER_COMMON_SRCS += $(BPFILTER_RULE_SRCS) $(BPFILTERSRCDIR)/table.c
-+BPFILTER_COMMON_SRCS +=  $(BPFILTERSRCDIR)/filter-table.c $(BPFILTERSRCDIR)/sockopt.c
- 
- $(OUTPUT)/test_map: test_map.c $(BPFILTER_MAP_SRCS)
- $(OUTPUT)/test_match: test_match.c $(BPFILTER_COMMON_SRCS)
- $(OUTPUT)/test_xt_udp: test_xt_udp.c $(BPFILTER_COMMON_SRCS)
- $(OUTPUT)/test_target: test_target.c $(BPFILTER_COMMON_SRCS)
- $(OUTPUT)/test_rule: test_rule.c $(BPFILTER_COMMON_SRCS)
-+$(OUTPUT)/test_codegen: test_codegen.c $(BPFILTER_COMMON_SRCS)
-diff --git a/tools/testing/selftests/bpf/bpfilter/bpfilter_util.h b/tools/testing/selftests/bpf/bpfilter/bpfilter_util.h
-index 8dd7911fa06f..846b50bdab07 100644
---- a/tools/testing/selftests/bpf/bpfilter/bpfilter_util.h
-+++ b/tools/testing/selftests/bpf/bpfilter/bpfilter_util.h
-@@ -3,12 +3,39 @@
- #ifndef BPFILTER_UTIL_H
- #define BPFILTER_UTIL_H
- 
-+#include <linux/bpf.h>
- #include <linux/netfilter/x_tables.h>
- #include <linux/netfilter_ipv4/ip_tables.h>
- 
- #include <stdio.h>
- #include <stdint.h>
- #include <string.h>
-+#include <sys/syscall.h>
-+#include <unistd.h>
-+
-+static inline int sys_bpf(int cmd, union bpf_attr *attr, unsigned int size)
-+{
-+	return syscall(SYS_bpf, cmd, attr, size);
-+}
-+
-+static inline int bpf_prog_test_run(int fd, const void *data,
-+				    unsigned int data_size, uint32_t *retval)
-+{
-+	union bpf_attr attr = {};
-+	int r;
-+
-+	attr.test.prog_fd = fd;
-+	attr.test.data_in = (uintptr_t)data;
-+	attr.test.data_size_in = data_size;
-+	attr.test.repeat = 1000000;
-+
-+	r = sys_bpf(BPF_PROG_TEST_RUN, &attr, sizeof(attr));
-+
-+	if (retval)
-+		*retval = attr.test.retval;
-+
-+	return r;
-+}
- 
- static inline void init_entry_match(struct xt_entry_match *match,
- 				    uint16_t size, uint8_t revision,
-diff --git a/tools/testing/selftests/bpf/bpfilter/test_codegen.c b/tools/testing/selftests/bpf/bpfilter/test_codegen.c
-new file mode 100644
-index 000000000000..9f11b7b8a126
---- /dev/null
-+++ b/tools/testing/selftests/bpf/bpfilter/test_codegen.c
-@@ -0,0 +1,338 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#define _GNU_SOURCE
-+
-+#include <linux/bpf.h>
-+#include <linux/bpfilter.h>
-+
-+#include <linux/err.h>
-+#include <linux/pkt_cls.h>
-+
-+#include "../../kselftest_harness.h"
-+
-+#include <stdint.h>
-+
-+#include "codegen.h"
-+#include "context.h"
-+#include "filter-table.h"
-+#include "logger.h"
-+#include "table.h"
-+
-+#include "bpfilter_util.h"
-+
-+FIXTURE(test_codegen)
-+{
-+	struct context ctx;
-+	struct shared_codegen shared_codegen;
-+	struct codegen codegen;
-+	struct table *table;
-+	int prog_fd;
-+	uint32_t retval;
-+	union bpf_attr attr;
-+};
-+
-+FIXTURE_VARIANT(test_codegen)
-+{
-+	const struct bpfilter_ipt_replace *replace_blob;
-+	size_t replace_blob_size;
-+	const uint8_t *packet;
-+	size_t packet_size;
-+	enum bpf_prog_type prog_type;
-+	int hook;
-+	int expected_retval;
-+};
-+
-+/*
-+ *  Generated by iptables-save v1.8.2 on Sat May  8 05:22:41 2021
-+ * *filter
-+ * :INPUT ACCEPT [0:0]
-+ * :FORWARD ACCEPT [0:0]
-+ * :OUTPUT ACCEPT [0:0]
-+ * -A INPUT -s 1.1.1.1/32 -d 2.2.2.2/32 -j DROP
-+ * -A INPUT -s 2.2.0.0/16 -d 3.0.0.0/8 -j DROP
-+ * -A INPUT -p udp -m udp --sport 100 --dport 500 -j DROP
-+ * COMMIT
-+ */
-+
-+static const uint8_t user_defined_chain_blob[] = {
-+	0x66, 0x69, 0x6c, 0x74, 0x65, 0x72, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x0e, 0x00, 0x00, 0x00, 0x07, 0x00, 0x00, 0x00,
-+	0x70, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x90, 0x02, 0x00, 0x00,
-+	0x28, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0xf8, 0x01, 0x00, 0x00,
-+	0x90, 0x02, 0x00, 0x00, 0x28, 0x03, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00,
-+	0xe0, 0x26, 0x99, 0xca, 0x67, 0x55, 0x00, 0x00,
-+	0x01, 0x01, 0x01, 0x01, 0x02, 0x02, 0x02, 0x02,
-+	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x70, 0x00, 0x98, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x28, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00,
-+	0x02, 0x02, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00,
-+	0xff, 0xff, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x70, 0x00, 0x98, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x28, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0xa0, 0x00, 0xc8, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x30, 0x00, 0x75, 0x64, 0x70, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x64, 0x00, 0x64, 0x00, 0xf4, 0x01, 0xf4, 0x01,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x28, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x70, 0x00, 0x98, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x28, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0xfe, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x70, 0x00, 0x98, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x28, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0xfe, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x70, 0x00, 0x98, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x28, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0xfe, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x70, 0x00, 0xb0, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x40, 0x00, 0x45, 0x52, 0x52, 0x4f, 0x52, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x45, 0x52, 0x52, 0x4f, 0x52, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-+};
-+
-+// Generated by scapy
-+// Ether(src='00:11:22:33:44:55',dst='66:77:88:99:aa:bb')/IP(src='1.1.1.1',dst='2.2.2.2')/UDP(sport=100,dport=200)
-+static const uint8_t udp_packet_1[] = {
-+	0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb, 0x00, 0x11,
-+	0x22, 0x33, 0x44, 0x55, 0x08, 0x00, 0x45, 0x00,
-+	0x00, 0x1c, 0x00, 0x01, 0x00, 0x00, 0x40, 0x11,
-+	0x74, 0xcb, 0x01, 0x01, 0x01, 0x01, 0x02, 0x02,
-+	0x02, 0x02, 0x00, 0x64, 0x00, 0xc8, 0x00, 0x08,
-+	0xf8, 0xac,
-+};
-+
-+// Ether(src='00:11:22:33:44:55',dst='66:77:88:99:aa:bb')/IP(src='2.2.2.2',dst='3.1.4.1')/UDP(sport=100,dport=200)
-+static const uint8_t udp_packet_2[] = {
-+	0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb, 0x00, 0x11,
-+	0x22, 0x33, 0x44, 0x55, 0x08, 0x00, 0x45, 0x00,
-+	0x00, 0x1c, 0x00, 0x01, 0x00, 0x00, 0x40, 0x11,
-+	0x6f, 0xcb, 0x02, 0x02, 0x02, 0x02, 0x03, 0x01,
-+	0x04, 0x01, 0x00, 0x64, 0x00, 0xc8, 0x00, 0x08,
-+	0xf3, 0xac,
-+};
-+
-+// Ether(src='00:11:22:33:44:55',dst='66:77:88:99:aa:bb')/IP(src='2.7.1.8',dst='3.1.4.1')/UDP(sport=100,dport=500)
-+static const uint8_t udp_packet_3[] = {
-+	0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb, 0x00, 0x11,
-+	0x22, 0x33, 0x44, 0x55, 0x08, 0x00, 0x45, 0x00,
-+	0x00, 0x1c, 0x00, 0x01, 0x00, 0x00, 0x40, 0x11,
-+	0x70, 0xc0, 0x02, 0x07, 0x01, 0x08, 0x03, 0x01,
-+	0x04, 0x01, 0x00, 0x64, 0x01, 0xf4, 0x00, 0x08,
-+	0xf3, 0x75,
-+};
-+
-+// Ether(src='00:11:22:33:44:55',dst='66:77:88:99:aa:bb')/IP(src='5.5.5.5',dst='5.5.5.5')/UDP(sport=300,dport=300)
-+static const uint8_t udp_packet_4[] = {
-+	0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb, 0x00, 0x11,
-+	0x22, 0x33, 0x44, 0x55, 0x08, 0x00, 0x45, 0x00,
-+	0x00, 0x1c, 0x00, 0x01, 0x00, 0x00, 0x40, 0x11,
-+	0x66, 0xbd, 0x05, 0x05, 0x05, 0x05, 0x05, 0x05,
-+	0x05, 0x05, 0x01, 0x2c, 0x01, 0x2c, 0x00, 0x08,
-+	0xe9, 0x72,
-+};
-+
-+FIXTURE_VARIANT_ADD(test_codegen, drop_by_ip_tc) {
-+	.replace_blob = (const struct bpfilter_ipt_replace *)user_defined_chain_blob,
-+	.replace_blob_size = ARRAY_SIZE(user_defined_chain_blob),
-+	.packet = udp_packet_1,
-+	.packet_size = ARRAY_SIZE(udp_packet_1),
-+	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
-+	.hook = BPFILTER_INET_HOOK_LOCAL_IN,
-+	.expected_retval = TC_ACT_SHOT,
-+};
-+
-+FIXTURE_VARIANT_ADD(test_codegen, drop_by_net_tc) {
-+	.replace_blob = (const struct bpfilter_ipt_replace *)user_defined_chain_blob,
-+	.replace_blob_size = ARRAY_SIZE(user_defined_chain_blob),
-+	.packet = udp_packet_2,
-+	.packet_size = ARRAY_SIZE(udp_packet_2),
-+	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
-+	.hook = BPFILTER_INET_HOOK_LOCAL_IN,
-+	.expected_retval = TC_ACT_SHOT,
-+};
-+
-+FIXTURE_VARIANT_ADD(test_codegen, drop_by_udp_port_tc) {
-+	.replace_blob = (const struct bpfilter_ipt_replace *)user_defined_chain_blob,
-+	.replace_blob_size = ARRAY_SIZE(user_defined_chain_blob),
-+	.packet = udp_packet_3,
-+	.packet_size = ARRAY_SIZE(udp_packet_3),
-+	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
-+	.hook = BPFILTER_INET_HOOK_LOCAL_IN,
-+	.expected_retval = TC_ACT_SHOT,
-+};
-+
-+FIXTURE_VARIANT_ADD(test_codegen, accept_tc) {
-+	.replace_blob = (const struct bpfilter_ipt_replace *)user_defined_chain_blob,
-+	.replace_blob_size = ARRAY_SIZE(user_defined_chain_blob),
-+	.packet = udp_packet_4,
-+	.packet_size = ARRAY_SIZE(udp_packet_4),
-+	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
-+	.hook = BPFILTER_INET_HOOK_LOCAL_IN,
-+	.expected_retval = TC_ACT_UNSPEC,
-+};
-+
-+FIXTURE_SETUP(test_codegen)
-+{
-+	logger_set_file(stderr);
-+	ASSERT_EQ(create_context(&self->ctx), 0);
-+
-+	create_shared_codegen(&self->shared_codegen);
-+	ASSERT_EQ(0, create_codegen(&self->codegen, variant->prog_type));
-+
-+	self->codegen.ctx = &self->ctx;
-+	self->codegen.shared_codegen = &self->shared_codegen;
-+	self->codegen.iptables_hook = variant->hook;
-+
-+	self->table = filter_table_ops.create(&self->ctx, variant->replace_blob);
-+	ASSERT_FALSE(IS_ERR_OR_NULL(self->table));
-+
-+	ASSERT_EQ(0, try_codegen(&self->codegen, self->table));
-+
-+	self->prog_fd = load_img(&self->codegen);
-+	ASSERT_GT(self->prog_fd, -1)
-+	TH_LOG("load_img(): '%s': %s", STRERR(self->prog_fd),
-+	       self->codegen.log_buf);
-+};
-+
-+FIXTURE_TEARDOWN(test_codegen)
-+{
-+	filter_table_ops.free(self->table);
-+	unload_img(&self->codegen);
-+	free_codegen(&self->codegen);
-+	free_context(&self->ctx);
-+	if (self->prog_fd > -1)
-+		close(self->prog_fd);
-+};
-+
-+TEST_F(test_codegen, test_run)
-+{
-+	EXPECT_EQ(0, bpf_prog_test_run(self->prog_fd, variant->packet,
-+				       variant->packet_size, &self->retval))
-+	TH_LOG("cannot bpf_prog_test_run(): '%s'", STRERR(errno));
-+	EXPECT_EQ(self->retval, variant->expected_retval)
-+	TH_LOG("expected: %d, actual: %d\n", variant->expected_retval,
-+	       self->retval);
-+}
-+
-+TEST_HARNESS_MAIN
+ 	switch (type) {
++	case BPF_PROG_TYPE_SCHED_CLS:
++		codegen->codegen_ops = &tc_codegen_ops;
++		break;
+ 	default:
+ 		BFLOG_ERR("unsupported BPF program type %d", type);
+ 		return -EINVAL;
 -- 
 2.38.1
 
