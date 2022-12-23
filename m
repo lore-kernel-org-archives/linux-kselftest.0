@@ -2,98 +2,142 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D930C4332F
-	for <linux-kselftest@archiver.kernel.org>; Fri, 23 Dec 2022 11:37:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A45AC46467
+	for <linux-kselftest@archiver.kernel.org>; Fri, 23 Dec 2022 15:02:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230230AbiLWLhS (ORCPT
+        id S236454AbiLWPCm (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 23 Dec 2022 06:37:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50212 "EHLO
+        Fri, 23 Dec 2022 10:02:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbiLWLhP (ORCPT
+        with ESMTP id S236430AbiLWPCl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 23 Dec 2022 06:37:15 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97622BF64
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 Dec 2022 03:36:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671795387;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qZVGgPTNWGADuWoZI7HOeF7SAOUCre/9YcTHNf70vXc=;
-        b=H6HHVdQnzUe1ZS7vtRza/lStOFKvYvS6BCIk6E0UKQyP3HVwWhKUlWsu2aRkeo+lbjCRK7
-        r/vFjMOo/f9CbbP+AZADBrGNa4sf+H4J014hLt2uBmOMEzfmrCEBMIyiBofNLQ3ZqrMETJ
-        4SN0d0ZOa35oITRCSfjvb7biTC/FJgw=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-516-4TK-Uv-nPae-zuK6MI5CHw-1; Fri, 23 Dec 2022 06:36:26 -0500
-X-MC-Unique: 4TK-Uv-nPae-zuK6MI5CHw-1
-Received: by mail-wm1-f70.google.com with SMTP id f20-20020a7bc8d4000000b003d1cda5bd6fso1087235wml.9
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 Dec 2022 03:36:26 -0800 (PST)
+        Fri, 23 Dec 2022 10:02:41 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D35FF23E9E
+        for <linux-kselftest@vger.kernel.org>; Fri, 23 Dec 2022 07:02:40 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id l10so5179236plb.8
+        for <linux-kselftest@vger.kernel.org>; Fri, 23 Dec 2022 07:02:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=hym9I/8Zx2heqtzvbjDG8T0F+0F1WrxSB82+3fgXrCs=;
+        b=RkCDOqxRJ5Xj+NtiaIuQ7fE0ZtalDZpwA/P+90rf5TxBXdVQ443U5LuxQLa9Tm/iJR
+         D9+DuWqGVaV85SXh7UOEIQqZgr2KHx5o/sV6sXxpfT1o0iGRqjGE42Ojx2a6zsOF9nAX
+         ZCWcdCbbLudnqN/jTnwkQFRzR4UiohqVkiiBkoesaQ/2+N+tZYqORIU239tmSqGQzZlG
+         I5zWinTF/XhOZOTYXqVRVxrNGNR1ONpTXfaUWaSSKoIsAG/U7WQCfm1F0saKWyYo1ytZ
+         1Vg9kpU1Jun115p3Nk0259QS97eHycTJta0AofuqIzWsclScrcV6zBjVABn8EeTmNImK
+         vqhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qZVGgPTNWGADuWoZI7HOeF7SAOUCre/9YcTHNf70vXc=;
-        b=usRkrzdcrQwqhLJD7wNNdrzxMkwrOCYvGjECVRbKBZ1UWTlyv0jQTyK+LzQKgaXrNT
-         EYgpIeIb7oNLqPseetxg1Z3bILMSguFektqEEu4615BNhYwv45ZG1A8YgjC2SOUF5WUa
-         hG+Qrrn/WOTrmoCzjMUXePYlH/sgUqdh0gicVOLpSFyI+KEJ7FUFcWMKOBSQEQMIHrmf
-         gIu926RzU9m10lTvTgUYuEiQd9s6vl4QWcbagun0qhigmERTPdfRWaOtRh/pb5g/jxMu
-         ij7gBuOOKvHjXP0v82Pyhf3hEwWObmlDxBS/lwrOWBA1tIoQN253vW1bgLQBDlgZRazI
-         +JOA==
-X-Gm-Message-State: AFqh2kojJW4OP0UQQgK9gQcm2CFi7nTSHPHzF0nXsOQKo47dO2BKhHRh
-        ronl6cUqqQQnYdbB9CsPl7D75O6fyeMPLflPFvq1HToqQ3XvWasHkareb00uETsCxbpucWHpAAk
-        jYHhGs2fPZgdm5jY0szdGXSe/qVnO
-X-Received: by 2002:a05:600c:35d1:b0:3d3:58d1:2588 with SMTP id r17-20020a05600c35d100b003d358d12588mr6708987wmq.41.1671795385326;
-        Fri, 23 Dec 2022 03:36:25 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtkPN6eEWxTrC7lLZcH+iG3j7l0iPTvyPOAXtFD27IisrlURCW2ZiUXzav5J0iZsvhIwf0Ndw==
-X-Received: by 2002:a05:600c:35d1:b0:3d3:58d1:2588 with SMTP id r17-20020a05600c35d100b003d358d12588mr6708968wmq.41.1671795385026;
-        Fri, 23 Dec 2022 03:36:25 -0800 (PST)
-Received: from ?IPV6:2003:cb:c707:ab00:3d8e:16c4:a38d:2827? (p200300cbc707ab003d8e16c4a38d2827.dip0.t-ipconnect.de. [2003:cb:c707:ab00:3d8e:16c4:a38d:2827])
-        by smtp.gmail.com with ESMTPSA id x15-20020a1c7c0f000000b003c6bbe910fdsm11462465wmc.9.2022.12.23.03.36.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Dec 2022 03:36:24 -0800 (PST)
-Message-ID: <199991ec-bcd4-35b4-6835-0f1f13e11457@redhat.com>
-Date:   Fri, 23 Dec 2022 12:36:23 +0100
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hym9I/8Zx2heqtzvbjDG8T0F+0F1WrxSB82+3fgXrCs=;
+        b=fQxAVKGFxBDY62tQJl56b9ImvY/bbFAWKFSsFq3qBTuDR6IO44y37oCU5sYoLP/HcA
+         uoVnc11Zl0bFKzS8YVJl/HQVoWsVnTs9cKfLf+zyuWs/itrnbH31IWodsvHTIuVsCc45
+         H8I0KHeCxfHxIhzTBVMTeHR1WEUDFKdhBysC/rvjZjhbNgzV04wthuFnuyY5p3EhgDFI
+         ZxlQUU8WYFJIXOHjU7IuUjf9jniq13jFMgP2BSxoxSIUqbRt/CEPFxJqpSKter60J5GA
+         WzChHIgUcV6IHgIo4EsMN41PQLyGe/gTZe/SPSKwglWr7nl2Id1uV4keWE2w7mWImnr0
+         43Cg==
+X-Gm-Message-State: AFqh2kpM8V3zIegk3hkFTqHCVRMgj/EbauEHgp3FvKVU/Nfo3FZCJwcj
+        7mytWXSrSZGG1MS+o7t+uifb
+X-Google-Smtp-Source: AMrXdXtsYyuhBmpwbDlQIl+Ry+zm4L2NR4g7iB8qu6wucOubA3roxo2rzNv7BgX/Hpk+rfDsHjmOOA==
+X-Received: by 2002:a17:90a:ce8c:b0:223:f6c2:f21a with SMTP id g12-20020a17090ace8c00b00223f6c2f21amr10749315pju.35.1671807760314;
+        Fri, 23 Dec 2022 07:02:40 -0800 (PST)
+Received: from thinkpad ([27.111.75.82])
+        by smtp.gmail.com with ESMTPSA id 3-20020a17090a034300b002191e769546sm2373891pjf.4.2022.12.23.07.02.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Dec 2022 07:02:39 -0800 (PST)
+Date:   Fri, 23 Dec 2022 20:32:11 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Aman Gupta <aman1.gupta@samsung.com>, shradha.t@samsung.com,
+        pankaj.dubey@samsung.com, kishon@ti.com, lpieralisi@kernel.org,
+        kw@linux.com, shuah@kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
+        linux-pci@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
+Subject: Re: [PATCH] selftests: pci: pci-selftest: add support for PCI
+ endpoint driver test
+Message-ID: <20221223150211.GC4587@thinkpad>
+References: <CGME20221007053726epcas5p357c35abb79327fee6327bc6493e0178c@epcas5p3.samsung.com>
+ <20221007053934.5188-1-aman1.gupta@samsung.com>
+ <641d1e50-a9d0-dc15-be76-07b8ace25dae@linuxfoundation.org>
+ <20221222174532.GA59500@thinkpad>
+ <b2a5db97-dc59-33ab-71cd-f591e0b1b34d@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH linux-next] selftests/vm: ksm_functional_tests: fix a typo
- in comment
-Content-Language: en-US
-To:     yang.yang29@zte.com.cn, akpm@linux-foundation.org
-Cc:     shuah@kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xu.panda@zte.com.cn, xu.xin16@zte.com.cn
-References: <202212231050245952617@zte.com.cn>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <202212231050245952617@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b2a5db97-dc59-33ab-71cd-f591e0b1b34d@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 23.12.22 03:50, yang.yang29@zte.com.cn wrote:
-> From: Xu Panda <xu.panda@zte.com.cn>
+On Thu, Dec 22, 2022 at 10:49:48AM -0700, Shuah Khan wrote:
+> On 12/22/22 10:45, Manivannan Sadhasivam wrote:
+> > On Thu, Dec 22, 2022 at 09:58:30AM -0700, Shuah Khan wrote:
+> > > On 10/6/22 23:39, Aman Gupta wrote:
+> > > > This patch enables the support to perform selftest on PCIe endpoint
+> > > > driver present in the system. The following tests are currently
+> > > > performed by the selftest utility
+> > > > 
+> > > > 1. BAR Tests (BAR0 to BAR5)
+> > > > 2. MSI Interrupt Tests (MSI1 to MSI32)
+> > > > 3. Read Tests (For 1, 1024, 1025, 1024000, 1024001 Bytes)
+> > > > 4. Write Tests (For 1, 1024, 1025, 1024000, 1024001 Bytes)
+> > > > 5. Copy Tests (For 1, 1024, 1025, 1024000, 1024001 Bytes)
+> > > > 
+> > > > Signed-off-by: Aman Gupta <aman1.gupta@samsung.com>
+> > > > Signed-off-by: Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
+> > > 
+> > > Adding Bjorn Helgaas to the thread.
+> > > 
+> > > Adding pcit test under selftests is good. There is another pcitest
+> > > under tools/pci. I would like to see if the existing code in
+> > > tools/pci/pcitest.c can be leveraged.
+> > > 
+> > > As part of this test work, also look into removing tools/pci so
+> > > we don't have to maintain duplicate code in two places.
+> > > 
+> > 
+> > It has been agreed in a thread with Greg [1] to {re}move the tests under
+> > tools/pci and utilize the kselftest.
+> > 
 > 
-> Fix a typo of "comaring" which should be "comparing".
+> Inline with what I am suggesting. However, I don't see either move or
+> delete of tools/pci in the patch?
 > 
-> Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
-> Signed-off-by: xu xin <xu.xin16@zte.com.cn>
+> The first patch could start with git mv of the existing files and then
+> make changes to preserver the history.
+> 
 
-Two people to fix a typo, wow. :)
+Right. This patch was posted independently of the series [1] that I submitted to
+fix the return values of IOCTL calls used in drivers/misc/pci_endpoint_test.c
+driver.
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+Then in that series, it was decided to move the existing test to kselftest. So,
+I suggested Aman Gupta [2] to integrate my latest patches, add the kselftest
+patch on top, then remove the existing test under tools/pci.
+
+The kselftest patch can also move the driver first and then make the change as
+you suggested. Either way it is fine by me.
+
+Thanks,
+Mani
+
+[1] https://lore.kernel.org/lkml/20220824123010.51763-1-manivannan.sadhasivam@linaro.org/
+[2] https://lore.kernel.org/linux-pci/20221221072423.GC2922@thinkpad/ 
+
+> > 
+> > [1] https://lore.kernel.org/lkml/Y2FTWLw0tKuZ9Cdl@kroah.com/
+> > 
+> 
+> thanks,
+> -- Shuah
+> 
 
 -- 
-Thanks,
-
-David / dhildenb
-
+மணிவண்ணன் சதாசிவம்
