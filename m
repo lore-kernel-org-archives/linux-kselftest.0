@@ -2,28 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 044D1C4332F
-	for <linux-kselftest@archiver.kernel.org>; Sat, 24 Dec 2022 00:20:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CEBEC4332F
+	for <linux-kselftest@archiver.kernel.org>; Sat, 24 Dec 2022 00:20:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230510AbiLXAU0 (ORCPT
+        id S230131AbiLXAU1 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 23 Dec 2022 19:20:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45188 "EHLO
+        Fri, 23 Dec 2022 19:20:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230445AbiLXAUZ (ORCPT
+        with ESMTP id S230522AbiLXAU0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 23 Dec 2022 19:20:25 -0500
-X-Greylist: delayed 941 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 23 Dec 2022 16:20:23 PST
+        Fri, 23 Dec 2022 19:20:26 -0500
 Received: from 9.mo547.mail-out.ovh.net (9.mo547.mail-out.ovh.net [46.105.78.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F22817420
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 Dec 2022 16:20:22 -0800 (PST)
-Received: from ex4.mail.ovh.net (unknown [10.110.171.74])
-        by mo547.mail-out.ovh.net (Postfix) with ESMTPS id D5B3820ED6;
-        Sat, 24 Dec 2022 00:04:41 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54DEA1742E
+        for <linux-kselftest@vger.kernel.org>; Fri, 23 Dec 2022 16:20:24 -0800 (PST)
+Received: from ex4.mail.ovh.net (unknown [10.110.208.143])
+        by mo547.mail-out.ovh.net (Postfix) with ESMTPS id 3FDE820ED3;
+        Sat, 24 Dec 2022 00:04:38 +0000 (UTC)
 Received: from dev-fedora-x86-64.naccy.de (37.65.8.229) by
  DAG10EX1.indiv4.local (172.16.2.91) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Sat, 24 Dec 2022 01:04:40 +0100
+ 15.1.2507.16; Sat, 24 Dec 2022 01:04:36 +0100
 From:   Quentin Deslandes <qde@naccy.de>
 To:     <qde@naccy.de>
 CC:     Alexei Starovoitov <ast@kernel.org>,
@@ -44,9 +43,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
         <linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>,
         Kernel Team <kernel-team@meta.com>
-Subject: [PATCH bpf-next v3 13/16] bpfilter: add table code generation
-Date:   Sat, 24 Dec 2022 01:03:59 +0100
-Message-ID: <20221224000402.476079-14-qde@naccy.de>
+Subject: [PATCH bpf-next v3 10/16] bpfilter: add target structure
+Date:   Sat, 24 Dec 2022 01:03:56 +0100
+Message-ID: <20221224000402.476079-11-qde@naccy.de>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221224000402.476079-1-qde@naccy.de>
 References: <20221224000402.476079-1-qde@naccy.de>
@@ -56,448 +55,568 @@ Content-Type:   text/plain; charset=US-ASCII
 X-Originating-IP: [37.65.8.229]
 X-ClientProxiedBy: CAS6.indiv4.local (172.16.1.6) To DAG10EX1.indiv4.local
  (172.16.2.91)
-X-Ovh-Tracer-Id: 4763119556604259959
+X-Ovh-Tracer-Id: 4761993658134752887
 X-VR-SPAMSTATE: OK
 X-VR-SPAMSCORE: -85
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrheefgddujecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogetfedtuddqtdduucdludehmdenucfjughrpefhvfevufffkffojghfggfgtghisehtkeertdertddtnecuhfhrohhmpefsuhgvnhhtihhnucffvghslhgrnhguvghsuceoqhguvgesnhgrtggthidruggvqeenucggtffrrghtthgvrhhnpeduledugfeileetvdelieeujedttedtvedtgfetteevfeejhfffkeeujeetfffgudenucfkphepuddvjedrtddrtddruddpfeejrdeihedrkedrvddvleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehquggvsehnrggttgihrdguvgeqpdhnsggprhgtphhtthhopedupdhrtghpthhtohepjhholhhsrgeskhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdgsphhfsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpmhgvsehusghiqhhuvgdrshhpsgdrrhhupdhshhhurghhsehkvghrnhgvlhdrohhrghdpmhihkhholhgrlhesfhgsrdgtohhmpdhprggsvghnihesrhgvughhrghtrdgtohhmpdhkuhgsrg
- eskhgvrhhnvghlrdhorhhgpdgvughumhgriigvthesghhoohhglhgvrdgtohhmpdgurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhkvghrnhgvlhdqthgvrghmsehmvghtrgdrtghomhdphhgrohhluhhosehgohhoghhlvgdrtghomhdpshgufhesghhoohhglhgvrdgtohhmpdhkphhsihhnghhhsehkvghrnhgvlhdrohhrghdpjhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhlrdgtohhmpdihhhhssehfsgdrtghomhdpshhonhhgsehkvghrnhgvlhdrohhrghdpmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpdgrnhgurhhiiheskhgvrhhnvghlrdhorhhgpdgurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprghstheskhgvrhhnvghlrdhorhhgpdhnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheegjedpmhhouggvpehsmhhtphhouhht
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrheefgddujecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogetfedtuddqtdduucdludehmdenucfjughrpefhvfevufffkffojghfggfgtghisehtkeertdertddtnecuhfhrohhmpefsuhgvnhhtihhnucffvghslhgrnhguvghsuceoqhguvgesnhgrtggthidruggvqeenucggtffrrghtthgvrhhnpeetfeejvefgueejfeduhfegudduffelffetffffteelueeileeiudduvedugfeufeenucffohhmrghinhepuhhsvghrrdhnrghmvgdpuhhsvghrrdhtrghrghgvthenucfkphepuddvjedrtddrtddruddpfeejrdeihedrkedrvddvleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehquggvsehnrggttgihrdguvgeqpdhnsggprhgtphhtthhopedupdhrtghpthhtohepjhholhhsrgeskhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdgsphhfsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpmhgvsehusghiqhhuvgdrshhpsgdrrhhupdhshhhurghhsehkvghrnhgvlhdrohhrghdpmhihkhholhgrlh
+ esfhgsrdgtohhmpdhprggsvghnihesrhgvughhrghtrdgtohhmpdhkuhgsrgeskhgvrhhnvghlrdhorhhgpdgvughumhgriigvthesghhoohhglhgvrdgtohhmpdgurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhkvghrnhgvlhdqthgvrghmsehmvghtrgdrtghomhdphhgrohhluhhosehgohhoghhlvgdrtghomhdpshgufhesghhoohhglhgvrdgtohhmpdhkphhsihhnghhhsehkvghrnhgvlhdrohhrghdpjhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhlrdgtohhmpdihhhhssehfsgdrtghomhdpshhonhhgsehkvghrnhgvlhdrohhrghdpmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpdgrnhgurhhiiheskhgvrhhnvghlrdhorhhgpdgurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprghstheskhgvrhhnvghlrdhorhhgpdhnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheegjedpmhhouggvpehsmhhtphhouhht
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Table code generation consists of multiple steps:
-  1) Find front and last rules for the supplied table and hook.
-  2) Try to generate code for each rule in [front rule; last rule].
-  3) Try to generate each remaining subprog by its type.
+Add target structure, containing a pointer to a target_ops structure and
+a pointer to an xt_entry_target structure. The later containing the
+payload for the target's type.
+
+target_ops structure provides two operations:
+- check: validates the target.
+- gen_inline: generate the eBPF bytecode for the target.
+
+All target_ops are kept in a map by their name.
 
 Co-developed-by: Dmitrii Banshchikov <me@ubique.spb.ru>
 Signed-off-by: Dmitrii Banshchikov <me@ubique.spb.ru>
 Signed-off-by: Quentin Deslandes <qde@naccy.de>
 ---
- net/bpfilter/codegen.c | 359 +++++++++++++++++++++++++++++++++++++++++
- net/bpfilter/codegen.h |   2 +
- 2 files changed, 361 insertions(+)
+ net/bpfilter/Makefile                         |   2 +-
+ net/bpfilter/context.c                        |  42 ++++
+ net/bpfilter/context.h                        |   1 +
+ net/bpfilter/target.c                         | 203 ++++++++++++++++++
+ net/bpfilter/target.h                         |  57 +++++
+ .../testing/selftests/bpf/bpfilter/.gitignore |   1 +
+ tools/testing/selftests/bpf/bpfilter/Makefile |   5 +-
+ .../selftests/bpf/bpfilter/bpfilter_util.h    |  23 ++
+ .../selftests/bpf/bpfilter/test_target.c      |  83 +++++++
+ 9 files changed, 415 insertions(+), 2 deletions(-)
+ create mode 100644 net/bpfilter/target.c
+ create mode 100644 net/bpfilter/target.h
+ create mode 100644 tools/testing/selftests/bpf/bpfilter/test_target.c
 
-diff --git a/net/bpfilter/codegen.c b/net/bpfilter/codegen.c
-index e7ae7dfa5118..db0a20b378b5 100644
---- a/net/bpfilter/codegen.c
-+++ b/net/bpfilter/codegen.c
-@@ -4,15 +4,22 @@
-  * Copyright (c) 2022 Meta Platforms, Inc. and affiliates.
-  */
+diff --git a/net/bpfilter/Makefile b/net/bpfilter/Makefile
+index 345341a9ee30..7e642e0ae932 100644
+--- a/net/bpfilter/Makefile
++++ b/net/bpfilter/Makefile
+@@ -13,7 +13,7 @@ $(LIBBPF_A):
+ userprogs := bpfilter_umh
+ bpfilter_umh-objs := main.o logger.o map-common.o
+ bpfilter_umh-objs += context.o codegen.o
+-bpfilter_umh-objs += match.o xt_udp.o
++bpfilter_umh-objs += match.o xt_udp.o target.o
+ bpfilter_umh-userldlibs := $(LIBBPF_A) -lelf -lz
+ userccflags += -I $(srctree)/tools/include/ -I $(srctree)/tools/include/uapi
  
-+#define _GNU_SOURCE
-+
- #include "codegen.h"
- 
- #include "../../include/uapi/linux/bpfilter.h"
- 
-+#include <linux/if_ether.h>
-+#include <linux/ip.h>
- #include <linux/pkt_cls.h>
- 
-+#include <bpf/bpf_endian.h>
-+
- #include <unistd.h>
- #include <sys/syscall.h>
- 
-+#include <search.h>
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
-@@ -20,6 +27,8 @@
- #include <bpf/libbpf.h>
- 
+diff --git a/net/bpfilter/context.c b/net/bpfilter/context.c
+index f420fb8b6507..ac07b678baa7 100644
+--- a/net/bpfilter/context.c
++++ b/net/bpfilter/context.c
+@@ -15,6 +15,7 @@
  #include "logger.h"
-+#include "rule.h"
-+#include "table.h"
+ #include "map-common.h"
+ #include "match.h"
++#include "target.h"
  
- enum fixup_insn_type {
- 	FIXUP_INSN_OFF,
-@@ -53,6 +62,65 @@ static int subprog_desc_comparator(const void *x, const void *y)
- 	return -1;
+ static const struct match_ops *match_ops[] = { &xt_udp };
+ 
+@@ -42,6 +43,35 @@ static int init_match_ops_map(struct context *ctx)
+ 	return 0;
  }
  
-+/**
-+ * codegen_inline_memset_zero_64() - Generate eBPF bytecode to initialise a
-+ *	contiguous memory area with 0.
-+ * @ctx: codegen context.
-+ * @addr_reg: register containing the address of the memory area to initialise.
-+ *	The caller need to initialise the register properly before calling this
-+ *	function.
-+ * @size: size of the memory area. As this function initialises 64 bits at a
-+ *	time, @size needs to be a multiple of 64 bits. If it doesn't, the
-+ *	function return without intialising the memory and an error message is
-+ *	printed out.
-+ *
-+ * Return: 0 on success, negative errno value on error.
-+ */
-+static int codegen_inline_memset_zero_64(struct codegen *ctx, int reg,
-+					 size_t size)
++static const struct target_ops *target_ops[] = {
++	&standard_target_ops,
++	&error_target_ops
++};
++
++static int init_target_ops_map(struct context *ctx)
 +{
-+	if (size % 8) {
-+		BFLOG_ERR("codegen_memset_zero_64() called with size %ld, size must be a multiple of 8",
-+			  size);
-+		return -EINVAL;
++	int r;
++
++	r = create_map(&ctx->target_ops_map, ARRAY_SIZE(target_ops));
++	if (r) {
++		BFLOG_ERR("failed to create targets map: %s", STRERR(r));
++		return r;
 +	}
 +
-+	for (size_t i = 0; i * 8 < size; ++i)
-+		EMIT(ctx, BPF_ST_MEM(BPF_DW, reg, i * 8, 0));
++	for (int i = 0; i < ARRAY_SIZE(target_ops); ++i) {
++		const struct target_ops *t = target_ops[i];
++
++		r = map_upsert(&ctx->target_ops_map, t->name, (void *)t);
++		if (r) {
++			BFLOG_ERR("failed to upsert in targets map: %s",
++				  STRERR(r));
++			return r;
++		}
++	}
 +
 +	return 0;
 +}
 +
-+static int codegen_push_subprog(struct codegen *codegen,
-+				struct codegen_subprog_desc *subprog)
+ int create_context(struct context *ctx)
+ {
+ 	int r;
+@@ -52,10 +82,22 @@ int create_context(struct context *ctx)
+ 		return r;
+ 	}
+ 
++	r = init_target_ops_map(ctx);
++	if (r) {
++		BFLOG_ERR("failed to initialize targets map: %s", STRERR(r));
++		goto err_free_match_ops_map;
++	}
++
+ 	return 0;
++
++err_free_match_ops_map:
++	free_map(&ctx->match_ops_map);
++
++	return r;
+ }
+ 
+ void free_context(struct context *ctx)
+ {
++	free_map(&ctx->target_ops_map);
+ 	free_map(&ctx->match_ops_map);
+ }
+diff --git a/net/bpfilter/context.h b/net/bpfilter/context.h
+index e36aa8ebf57e..f9c34a9968b8 100644
+--- a/net/bpfilter/context.h
++++ b/net/bpfilter/context.h
+@@ -11,6 +11,7 @@
+ 
+ struct context {
+ 	struct hsearch_data match_ops_map;
++	struct hsearch_data target_ops_map;
+ };
+ 
+ int create_context(struct context *ctx);
+diff --git a/net/bpfilter/target.c b/net/bpfilter/target.c
+new file mode 100644
+index 000000000000..a96ec7735c0e
+--- /dev/null
++++ b/net/bpfilter/target.c
+@@ -0,0 +1,203 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2021 Telegram FZ-LLC
++ * Copyright (c) 2022 Meta Platforms, Inc. and affiliates.
++ */
++
++#define _GNU_SOURCE
++
++#include "target.h"
++
++#include <linux/err.h>
++#include <linux/filter.h>
++#include <linux/list.h>
++#include <linux/netfilter/x_tables.h>
++
++#include <errno.h>
++#include <string.h>
++
++#include "codegen.h"
++#include "context.h"
++#include "logger.h"
++#include "map-common.h"
++
++static const struct target_ops *target_ops_map_find(struct hsearch_data *map,
++						    const char *name)
 +{
-+	// TODO: merge this with codegen_fixup_push.
++	const size_t len = strnlen(name, BPFILTER_EXTENSION_MAXNAMELEN);
 +
-+	if (codegen->subprogs_cur == codegen->subprogs_max) {
-+		struct codegen_subprog_desc **subprogs;
-+		uint16_t subprogs_max;
++	if (len < BPFILTER_EXTENSION_MAXNAMELEN)
++		return map_find(map, name);
 +
-+		subprogs_max = codegen->subprogs_cur ?
-+			       2 * codegen->subprogs_cur : 1;
-+		subprogs = reallocarray(codegen->subprogs, subprogs_max,
-+					sizeof(codegen->subprogs[0]));
-+		if (!subprogs) {
++	return ERR_PTR(-EINVAL);
++}
++
++static int standard_target_check(struct context *ctx,
++				 const struct bpfilter_ipt_target *ipt_target)
++{
++	const struct bpfilter_ipt_standard_target *standard_target;
++
++	standard_target = (const struct bpfilter_ipt_standard_target *)ipt_target;
++
++	// Positive values of verdict denote a jump offset into a blob.
++	if (standard_target->verdict > 0)
++		return 0;
++
++	// Special values like ACCEPT, DROP, RETURN are encoded as negative values.
++	if (standard_target->verdict < 0) {
++		if (standard_target->verdict == BPFILTER_RETURN)
++			return 0;
++
++		switch (convert_verdict(standard_target->verdict)) {
++		case BPFILTER_NF_ACCEPT:
++		case BPFILTER_NF_DROP:
++		case BPFILTER_NF_QUEUE:
++			return 0;
++		}
++	}
++
++	BFLOG_ERR("unsupported verdict: %d", standard_target->verdict);
++
++	return -EINVAL;
++}
++
++static int standard_target_gen_inline(struct codegen *ctx,
++				      const struct target *target)
++{
++	const struct bpfilter_ipt_standard_target *standard_target;
++	int r;
++
++	standard_target = (const struct bpfilter_ipt_standard_target *)target->ipt_target;
++
++	if (standard_target->verdict >= 0) {
++		struct codegen_subprog_desc *subprog;
++		struct codegen_fixup_desc *fixup;
++
++		subprog = malloc(sizeof(*subprog));
++		if (!subprog) {
 +			BFLOG_ERR("out of memory");
 +			return -ENOMEM;
 +		}
 +
-+		codegen->subprogs_max = subprogs_max;
-+		codegen->subprogs = subprogs;
++		INIT_LIST_HEAD(&subprog->list);
++		subprog->type = CODEGEN_SUBPROG_USER_CHAIN;
++		subprog->insn = 0;
++		subprog->offset = standard_target->verdict;
++
++		fixup = malloc(sizeof(*fixup));
++		if (!fixup) {
++			BFLOG_ERR("out of memory");
++			free(subprog);
++			return -ENOMEM;
++		}
++
++		INIT_LIST_HEAD(&fixup->list);
++		fixup->type = CODEGEN_FIXUP_JUMP_TO_CHAIN;
++		fixup->insn = ctx->len_cur;
++		fixup->offset = standard_target->verdict;
++
++		list_add_tail(&fixup->list, &ctx->fixup);
++
++		r = codegen_push_awaiting_subprog(ctx, subprog);
++		if (r) {
++			BFLOG_ERR("failed to push awaiting subprog: %s",
++				  STRERR(r));
++			return r;
++		}
++
++		EMIT(ctx, BPF_JMP_IMM(BPF_JA, 0, 0, 0));
++
++		return 0;
 +	}
 +
-+	codegen->subprogs[codegen->subprogs_cur++] = subprog;
++	if (standard_target->verdict == BPFILTER_RETURN) {
++		EMIT(ctx, BPF_EXIT_INSN());
++		return 0;
++	}
 +
-+	qsort(codegen->subprogs, codegen->subprogs_cur,
-+	      sizeof(codegen->subprogs[0]), subprog_desc_comparator);
++	r = ctx->codegen_ops->emit_ret_code(ctx, convert_verdict(standard_target->verdict));
++	if (r) {
++		BFLOG_ERR("failed to emit return code: %s", STRERR(r));
++		return r;
++	}
++
++	EMIT(ctx, BPF_EXIT_INSN());
 +
 +	return 0;
 +}
 +
- static const struct codegen_subprog_desc *codegen_find_subprog(struct codegen *codegen,
- 							       const struct codegen_subprog_desc **subprog)
- {
-@@ -601,6 +669,297 @@ int create_codegen(struct codegen *codegen, enum bpf_prog_type type)
- 	return r;
++const struct target_ops standard_target_ops = {
++	.name = "",
++	.revision = 0,
++	.size = sizeof(struct xt_standard_target),
++	.check = standard_target_check,
++	.gen_inline = standard_target_gen_inline,
++};
++
++static int error_target_check(struct context *ctx,
++			      const struct bpfilter_ipt_target *ipt_target)
++{
++	const struct bpfilter_ipt_error_target *error_target;
++	size_t maxlen;
++
++	error_target = (const struct bpfilter_ipt_error_target *)ipt_target;
++	maxlen = sizeof(error_target->error_name);
++	if (strnlen(error_target->error_name, maxlen) == maxlen) {
++		BFLOG_ERR("failed to check error target: too long errorname");
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++static int error_target_gen_inline(struct codegen *ctx,
++				   const struct target *target)
++{
++	return -EINVAL;
++}
++
++const struct target_ops error_target_ops = {
++	.name = "ERROR",
++	.revision = 0,
++	.size = sizeof(struct xt_error_target),
++	.check = error_target_check,
++	.gen_inline = error_target_gen_inline,
++};
++
++int init_target(struct context *ctx,
++		const struct bpfilter_ipt_target *ipt_target,
++		struct target *target)
++{
++	const size_t maxlen = sizeof(ipt_target->u.user.name);
++	const struct target_ops *found;
++	int r;
++
++	if (strnlen(ipt_target->u.user.name, maxlen) == maxlen) {
++		BFLOG_ERR("cannot init target: too long target name '%s'",
++			  ipt_target->u.user.name);
++		return -EINVAL;
++	}
++
++	found = target_ops_map_find(&ctx->target_ops_map,
++				    ipt_target->u.user.name);
++	if (IS_ERR(found)) {
++		BFLOG_ERR("cannot find target by name '%s' in map",
++			  ipt_target->u.user.name);
++		return PTR_ERR(found);
++	}
++
++	if (found->size != ipt_target->u.target_size ||
++	    found->revision != ipt_target->u.user.revision) {
++		BFLOG_ERR("invalid target size: '%s'", ipt_target->u.user.name);
++		return -EINVAL;
++	}
++
++	r = found->check(ctx, ipt_target);
++	if (r)
++		return r;
++
++	target->target_ops = found;
++	target->ipt_target = ipt_target;
++
++	return 0;
++}
+diff --git a/net/bpfilter/target.h b/net/bpfilter/target.h
+new file mode 100644
+index 000000000000..57bae658b6a2
+--- /dev/null
++++ b/net/bpfilter/target.h
+@@ -0,0 +1,57 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (c) 2021 Telegram FZ-LLC
++ * Copyright (c) 2022 Meta Platforms, Inc. and affiliates.
++ */
++
++#ifndef NET_BPFILTER_TARGET_H
++#define NET_BPFILTER_TARGET_H
++
++#include "../../include/uapi/linux/bpfilter.h"
++
++#include <stdint.h>
++
++struct codegen;
++struct context;
++struct target;
++struct target_ops_map;
++
++struct target_ops {
++	char name[BPFILTER_EXTENSION_MAXNAMELEN];
++	uint8_t revision;
++	uint16_t size;
++	int (*check)(struct context *ctx,
++		     const struct bpfilter_ipt_target *ipt_target);
++	int (*gen_inline)(struct codegen *ctx, const struct target *target);
++};
++
++struct target {
++	const struct target_ops *target_ops;
++	const struct bpfilter_ipt_target *ipt_target;
++};
++
++extern const struct target_ops standard_target_ops;
++extern const struct target_ops error_target_ops;
++
++/* Restore verdict's special value(ACCEPT, DROP, etc.) from its negative
++ * representation.
++ */
++static inline int convert_verdict(int verdict)
++{
++	return -verdict - 1;
++}
++
++static inline int standard_target_verdict(const struct bpfilter_ipt_target *ipt_target)
++{
++	const struct bpfilter_ipt_standard_target *standard_target;
++
++	standard_target = (const struct bpfilter_ipt_standard_target *)ipt_target;
++
++	return standard_target->verdict;
++}
++
++int init_target(struct context *ctx,
++		const struct bpfilter_ipt_target *ipt_target,
++		struct target *target);
++
++#endif // NET_BPFILTER_TARGET_H
+diff --git a/tools/testing/selftests/bpf/bpfilter/.gitignore b/tools/testing/selftests/bpf/bpfilter/.gitignore
+index f84cc86493df..89912a44109f 100644
+--- a/tools/testing/selftests/bpf/bpfilter/.gitignore
++++ b/tools/testing/selftests/bpf/bpfilter/.gitignore
+@@ -3,3 +3,4 @@ tools/**
+ test_map
+ test_match
+ test_xt_udp
++test_target
+diff --git a/tools/testing/selftests/bpf/bpfilter/Makefile b/tools/testing/selftests/bpf/bpfilter/Makefile
+index 97f8d596de36..587951d14c0c 100644
+--- a/tools/testing/selftests/bpf/bpfilter/Makefile
++++ b/tools/testing/selftests/bpf/bpfilter/Makefile
+@@ -13,6 +13,7 @@ CFLAGS += -Wall -g -pthread -I$(TOOLSINCDIR) -I$(APIDIR) -I$(BPFILTERSRCDIR)
+ TEST_GEN_PROGS += test_map
+ TEST_GEN_PROGS += test_match
+ TEST_GEN_PROGS += test_xt_udp
++TEST_GEN_PROGS += test_target
+ 
+ KSFT_KHDR_INSTALL := 1
+ 
+@@ -37,11 +38,13 @@ $(BPFOBJ): $(wildcard $(BPFDIR)/*.[ch] $(BPFDIR)/Makefile)			\
+ BPFILTER_MAP_SRCS := $(BPFILTERSRCDIR)/map-common.c
+ BPFILTER_CODEGEN_SRCS := $(BPFILTERSRCDIR)/codegen.c $(BPFOBJ) -lelf -lz
+ BPFILTER_MATCH_SRCS := $(BPFILTERSRCDIR)/match.c $(BPFILTERSRCDIR)/xt_udp.c
++BPFILTER_TARGET_SRCS := $(BPFILTERSRCDIR)/target.c
+ 
+ BPFILTER_COMMON_SRCS := $(BPFILTER_MAP_SRCS) $(BPFILTER_CODEGEN_SRCS)
+ BPFILTER_COMMON_SRCS += $(BPFILTERSRCDIR)/context.c $(BPFILTERSRCDIR)/logger.c
+-BPFILTER_COMMON_SRCS += $(BPFILTER_MATCH_SRCS)
++BPFILTER_COMMON_SRCS += $(BPFILTER_MATCH_SRCS) $(BPFILTER_TARGET_SRCS)
+ 
+ $(OUTPUT)/test_map: test_map.c $(BPFILTER_MAP_SRCS)
+ $(OUTPUT)/test_match: test_match.c $(BPFILTER_COMMON_SRCS)
+ $(OUTPUT)/test_xt_udp: test_xt_udp.c $(BPFILTER_COMMON_SRCS)
++$(OUTPUT)/test_target: test_target.c $(BPFILTER_COMMON_SRCS)
+diff --git a/tools/testing/selftests/bpf/bpfilter/bpfilter_util.h b/tools/testing/selftests/bpf/bpfilter/bpfilter_util.h
+index 705fd1777a67..0d6a6bee5514 100644
+--- a/tools/testing/selftests/bpf/bpfilter/bpfilter_util.h
++++ b/tools/testing/selftests/bpf/bpfilter/bpfilter_util.h
+@@ -19,4 +19,27 @@ static inline void init_entry_match(struct xt_entry_match *match,
+ 	match->u.user.revision = revision;
  }
  
-+static int try_codegen_rules(struct codegen *codegen, struct rule *rule_front,
-+			     struct rule *rule_last)
++static inline void init_standard_target(struct xt_standard_target *ipt_target,
++					int revision, int verdict)
 +{
-+	int r;
-+
-+	for (; rule_front <= rule_last; ++rule_front, ++codegen->rule_index) {
-+		rule_front->index = codegen->rule_index;
-+		r = gen_inline_rule(codegen, rule_front);
-+		if (r) {
-+			BFLOG_ERR("failed to generate inline rule: %s",
-+				  STRERR(r));
-+			return r;
-+		}
-+
-+		r = codegen_fixup(codegen, CODEGEN_FIXUP_NEXT_RULE);
-+		if (r) {
-+			BFLOG_ERR("failed to generate next rule fixups: %s",
-+				  STRERR(r));
-+			return r;
-+		}
-+
-+		r = codegen_fixup(codegen, CODEGEN_FIXUP_COUNTERS_INDEX);
-+		if (r) {
-+			BFLOG_ERR("failed to generate counters fixups: %s",
-+				  STRERR(r));
-+			return r;
-+		}
-+	}
-+
-+	r = codegen_fixup(codegen, CODEGEN_FIXUP_END_OF_CHAIN);
-+	if (r) {
-+		BFLOG_ERR("failed to generate end of chain fixups: %s",
-+			  STRERR(r));
-+		return r;
-+	}
-+
-+	return 0;
++	snprintf(ipt_target->target.u.user.name,
++		 sizeof(ipt_target->target.u.user.name), "%s",
++		 BPFILTER_STANDARD_TARGET);
++	ipt_target->target.u.user.revision = revision;
++	ipt_target->target.u.user.target_size = sizeof(*ipt_target);
++	ipt_target->verdict = verdict;
 +}
 +
-+static struct rule *table_find_last_rule(const struct table *table,
-+					 struct rule *rule_front)
++static inline void init_error_target(struct xt_error_target *ipt_target,
++				     int revision, const char *error_name)
 +{
-+	for (; rule_front; ++rule_front) {
-+		if (!rule_is_unconditional(rule_front))
-+			continue;
-+
-+		if (!rule_has_standard_target(rule_front))
-+			continue;
-+
-+		if (standard_target_verdict(rule_front->target.ipt_target) >= 0)
-+			continue;
-+
-+		return rule_front;
-+	}
-+
-+	return rule_front;
++	snprintf(ipt_target->target.u.user.name,
++		 sizeof(ipt_target->target.u.user.name), "%s",
++		 BPFILTER_ERROR_TARGET);
++	ipt_target->target.u.user.revision = revision;
++	ipt_target->target.u.user.target_size = sizeof(*ipt_target);
++	snprintf(ipt_target->errorname, sizeof(ipt_target->errorname), "%s",
++		 error_name);
 +}
 +
-+static int try_codegen_user_chain_subprog(struct codegen *codegen,
-+					  const struct table *table,
-+					  struct codegen_subprog_desc *subprog)
+ #endif // BPFILTER_UTIL_H
+diff --git a/tools/testing/selftests/bpf/bpfilter/test_target.c b/tools/testing/selftests/bpf/bpfilter/test_target.c
+new file mode 100644
+index 000000000000..0ebe4b052a9b
+--- /dev/null
++++ b/tools/testing/selftests/bpf/bpfilter/test_target.c
+@@ -0,0 +1,83 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#define _GNU_SOURCE
++
++#include <linux/bpfilter.h>
++#include <linux/netfilter/x_tables.h>
++
++#include "../../kselftest_harness.h"
++
++#include "context.h"
++#include "logger.h"
++#include "target.h"
++
++#include "bpfilter_util.h"
++
++FIXTURE(test_standard_target)
 +{
-+	struct rule *rule_front;
-+	struct rule *rule_last;
-+	int r;
++	struct context ctx;
++	struct xt_standard_target ipt_target;
++	struct target target;
++};
 +
-+	rule_front = table_find_rule_by_offset(table, subprog->offset);
-+	if (!rule_front) {
-+		BFLOG_ERR("failed to get rule at offset %d", subprog->offset);
-+		return -EINVAL;
-+	}
++FIXTURE_VARIANT(test_standard_target)
++{
++	int verdict;
++};
 +
-+	rule_last = table_find_last_rule(table, rule_front);
-+	if (!rule_last) {
-+		BFLOG_ERR("failed to find last rule");
-+		return -EINVAL;
-+	}
++FIXTURE_VARIANT_ADD(test_standard_target, accept) {
++	.verdict = -BPFILTER_NF_ACCEPT - 1,
++};
 +
-+	subprog->insn = codegen->len_cur;
-+	codegen->rule_index = rule_front - table->rules;
-+	r = try_codegen_rules(codegen, rule_front, rule_last);
-+	if (r) {
-+		BFLOG_ERR("failed to generate rules");
-+		return r;
-+	}
++FIXTURE_VARIANT_ADD(test_standard_target, drop) {
++	.verdict = -BPFILTER_NF_DROP - 1,
++};
 +
-+	return codegen_push_subprog(codegen, subprog);
++FIXTURE_SETUP(test_standard_target)
++{
++	logger_set_file(stderr);
++	ASSERT_EQ(0, create_context(&self->ctx));
++
++	memset(&self->ipt_target, 0, sizeof(self->ipt_target));
++	init_standard_target(&self->ipt_target, 0, variant->verdict);
 +}
 +
-+static int try_codegen_subprogs(struct codegen *codegen, const struct table *table)
++FIXTURE_TEARDOWN(test_standard_target)
 +{
-+	while (!list_empty(&codegen->awaiting_subprogs)) {
-+		struct codegen_subprog_desc *subprog;
-+		int r = -EINVAL;
-+
-+		subprog = list_entry(codegen->awaiting_subprogs.next,
-+				     struct codegen_subprog_desc,
-+				     list);
-+
-+		if (subprog->type == CODEGEN_SUBPROG_USER_CHAIN) {
-+			r = try_codegen_user_chain_subprog(codegen, table,
-+							   subprog);
-+			if (r < 0) {
-+				BFLOG_ERR("failed to generate code for user defined chain: %s",
-+					  STRERR(r));
-+				return r;
-+			}
-+		} else {
-+			BFLOG_ERR("code generation for subprogram of type %d is not supported",
-+				  subprog->type);
-+			return -EINVAL;
-+		}
-+
-+		list_del(&subprog->list);
-+	}
-+
-+	return 0;
++	free_context(&self->ctx);
 +}
 +
-+/**
-+ * generate_inline_forward_packet_assessment() - Add eBPF bytecode to assess
-+ *	whether the current packet is to be forwarded or not.
-+ * @ctx: context to add the bytecode to.
-+ *
-+ * Use bpf_fib_lookup() to find out whether the current packet is to be
-+ * forwarded or not. bpf_fib_lookup() requires a struct bpf_fib_lookup to be
-+ * filled with data from the packet.
-+ * The outcome of the bytecode will depend on the actual iptables hook used:
-+ * BPFILTER_INET_HOOK_FORWARD's chain will be processed if the packet is to be
-+ * forwarded, or will be skipped otherwise and jump to the next chain. The
-+ * opposite behaviour apply if hook is BPFILTER_INET_HOOK_LOCAL_IN.
-+ *
-+ * Return: 0 on success, negative errno value on error.
-+ */
-+static int generate_inline_forward_packet_assessment(struct codegen *ctx)
++TEST_F(test_standard_target, init)
 +{
-+	// Set ARG2 to contain the address of the struct bpf_fib_lookup.
-+	EMIT(ctx, BPF_MOV64_REG(BPF_REG_ARG2, BPF_REG_10));
-+	EMIT(ctx, BPF_ALU64_IMM(BPF_ADD, BPF_REG_ARG2,
-+				(-(unsigned int)sizeof(struct bpf_fib_lookup)) - sizeof(struct runtime_context)));
-+
-+	codegen_inline_memset_zero_64(ctx, BPF_REG_ARG2,
-+				      sizeof(struct bpf_fib_lookup));
-+
-+	// Store h_proto for further decision
-+	EMIT(ctx, BPF_LDX_MEM(BPF_H, CODEGEN_REG_SCRATCH3, CODEGEN_REG_L3,
-+			      -(short int)(ETH_HLEN) + (short int)offsetof(struct ethhdr, h_proto)));
-+	EMIT(ctx, BPF_JMP_IMM(BPF_JEQ, CODEGEN_REG_SCRATCH3,
-+			      bpf_htons(ETH_P_IP), 2));
-+
-+	// Not IPv4? Then do no process any FORWARD rule and move to the next chain (program).
-+	EMIT(ctx, BPF_MOV64_IMM(CODEGEN_REG_RETVAL, TC_ACT_UNSPEC));
-+	EMIT_FIXUP(ctx, CODEGEN_FIXUP_END_OF_CHAIN, BPF_JMP_A(0));
-+
-+	// bpf_fib_lookup.family field
-+	EMIT(ctx, BPF_ST_MEM(BPF_B, BPF_REG_ARG2,
-+			     offsetof(struct bpf_fib_lookup, family), AF_INET));
-+
-+	// bpf_fib_lookup.l4_protocol field
-+	EMIT(ctx, BPF_LDX_MEM(BPF_B, CODEGEN_REG_SCRATCH3, CODEGEN_REG_L3,
-+			      offsetof(struct iphdr, protocol)));
-+	EMIT(ctx, BPF_STX_MEM(BPF_B, BPF_REG_ARG2, CODEGEN_REG_SCRATCH3,
-+			      offsetof(struct bpf_fib_lookup, l4_protocol)));
-+
-+	// bpf_fib_lookup.tot_len field
-+	EMIT(ctx, BPF_LDX_MEM(BPF_H, CODEGEN_REG_SCRATCH3, CODEGEN_REG_L3,
-+			      offsetof(struct iphdr, tot_len)));
-+	EMIT(ctx, BPF_STX_MEM(BPF_H, BPF_REG_ARG2, CODEGEN_REG_SCRATCH3,
-+			      offsetof(struct bpf_fib_lookup, tot_len)));
-+
-+	// bpf_fib_lookup.ifindex field
-+	EMIT(ctx, BPF_LDX_MEM(BPF_W, CODEGEN_REG_SCRATCH3, CODEGEN_REG_CTX,
-+			      offsetof(struct __sk_buff, ingress_ifindex)));
-+	EMIT(ctx, BPF_STX_MEM(BPF_W, BPF_REG_ARG2, CODEGEN_REG_SCRATCH3,
-+			      offsetof(struct bpf_fib_lookup, ifindex)));
-+
-+	// bpf_fib_lookup.tos field
-+	EMIT(ctx, BPF_LDX_MEM(BPF_B, CODEGEN_REG_SCRATCH3, CODEGEN_REG_L3,
-+			      offsetof(struct iphdr, tos)));
-+	EMIT(ctx, BPF_STX_MEM(BPF_B, BPF_REG_ARG2, CODEGEN_REG_SCRATCH3,
-+			      offsetof(struct bpf_fib_lookup, tos)));
-+
-+	// bpf_fib_lookup.ipv4_src and bpf_fib_lookup.ipv4_dst fields
-+	EMIT(ctx, BPF_LDX_MEM(BPF_W, CODEGEN_REG_SCRATCH3, CODEGEN_REG_L3,
-+			      offsetof(struct iphdr, saddr)));
-+	EMIT(ctx, BPF_STX_MEM(BPF_W, BPF_REG_ARG2, CODEGEN_REG_SCRATCH3,
-+			      offsetof(struct bpf_fib_lookup, ipv4_src)));
-+	EMIT(ctx, BPF_LDX_MEM(BPF_W, CODEGEN_REG_SCRATCH3, CODEGEN_REG_L3,
-+			      offsetof(struct iphdr, daddr)));
-+	EMIT(ctx, BPF_STX_MEM(BPF_W, BPF_REG_ARG2, CODEGEN_REG_SCRATCH3,
-+			      offsetof(struct bpf_fib_lookup, ipv4_dst)));
-+
-+	EMIT(ctx, BPF_MOV64_REG(BPF_REG_ARG1, CODEGEN_REG_CTX));
-+	EMIT(ctx, BPF_MOV64_IMM(BPF_REG_ARG3, sizeof(struct bpf_fib_lookup)));
-+	EMIT(ctx, BPF_MOV64_IMM(BPF_REG_ARG4, 0));
-+
-+	EMIT(ctx, BPF_EMIT_CALL(BPF_FUNC_fib_lookup));
-+	EMIT(ctx, BPF_MOV64_REG(CODEGEN_REG_SCRATCH3, CODEGEN_REG_RETVAL));
-+	EMIT(ctx, BPF_MOV64_IMM(CODEGEN_REG_RETVAL, TC_ACT_UNSPEC));
-+	EMIT_FIXUP(ctx, CODEGEN_FIXUP_END_OF_CHAIN,
-+		   BPF_JMP_IMM(ctx->iptables_hook == BPFILTER_INET_HOOK_FORWARD ? BPF_JNE : BPF_JEQ,
-+			       CODEGEN_REG_SCRATCH3, BPF_FIB_LKUP_RET_SUCCESS, 0));
-+
-+	return 0;
++	ASSERT_EQ(0, init_target(&self->ctx, (const struct bpfilter_ipt_target *)&self->ipt_target,
++				 &self->target));
 +}
 +
-+int try_codegen(struct codegen *codegen, const struct table *table)
++FIXTURE(test_error_target)
 +{
-+	struct rule *rule_front;
-+	struct rule *rule_last;
-+	int r;
++	struct context ctx;
++	struct xt_error_target ipt_target;
++	struct target target;
++};
 +
-+	r = codegen->codegen_ops->gen_inline_prologue(codegen);
-+	if (r) {
-+		BFLOG_ERR("failed to generate inline prologue: %s", STRERR(r));
-+		return r;
-+	}
++FIXTURE_SETUP(test_error_target)
++{
++	logger_set_file(stderr);
++	ASSERT_EQ(0, create_context(&self->ctx));
 +
-+	r = codegen->codegen_ops->load_packet_data(codegen, CODEGEN_REG_L3);
-+	if (r) {
-+		BFLOG_ERR("failed to generate code to load packet data: %s",
-+			  STRERR(r));
-+		return r;
-+	}
-+
-+	r = codegen->codegen_ops->load_packet_data_end(codegen,
-+						       CODEGEN_REG_DATA_END);
-+	if (r) {
-+		BFLOG_ERR("failed to generate code to load packet data end: %s",
-+			  STRERR(r));
-+		return r;
-+	}
-+
-+	// save packet size once
-+	EMIT(codegen, BPF_MOV64_REG(CODEGEN_REG_SCRATCH2, CODEGEN_REG_DATA_END));
-+	EMIT(codegen, BPF_ALU64_REG(BPF_SUB, CODEGEN_REG_SCRATCH2, CODEGEN_REG_L3));
-+	EMIT(codegen, BPF_STX_MEM(BPF_W, CODEGEN_REG_RUNTIME_CTX, CODEGEN_REG_SCRATCH2,
-+				  STACK_RUNTIME_CONTEXT_OFFSET(data_size)));
-+
-+	EMIT(codegen, BPF_ALU64_IMM(BPF_ADD, CODEGEN_REG_L3, ETH_HLEN));
-+	EMIT_FIXUP(codegen, CODEGEN_FIXUP_END_OF_CHAIN,
-+		   BPF_JMP_REG(BPF_JGT, CODEGEN_REG_L3, CODEGEN_REG_DATA_END, 0));
-+	EMIT(codegen, BPF_MOV64_REG(CODEGEN_REG_SCRATCH1, CODEGEN_REG_L3));
-+	EMIT(codegen, BPF_ALU64_IMM(BPF_ADD, CODEGEN_REG_SCRATCH1, sizeof(struct iphdr)));
-+	EMIT_FIXUP(codegen, CODEGEN_FIXUP_END_OF_CHAIN,
-+		   BPF_JMP_REG(BPF_JGT, CODEGEN_REG_SCRATCH1, CODEGEN_REG_DATA_END, 0));
-+
-+	if (codegen->iptables_hook == BPFILTER_INET_HOOK_LOCAL_IN ||
-+	    codegen->iptables_hook == BPFILTER_INET_HOOK_FORWARD) {
-+		/* There is no XDP nor TC forward hook to attach to. So, we
-+		 * need to add code to assess whether a incoming packet it
-+		 * to be forwarded or not.
-+		 */
-+		BFLOG_NOTICE("generate forward packet assessment");
-+		generate_inline_forward_packet_assessment(codegen);
-+	}
-+
-+	rule_front = &table->rules[table->hook_entry[codegen->iptables_hook]];
-+	rule_last = &table->rules[table->underflow[codegen->iptables_hook]];
-+
-+	codegen->rule_index = rule_front - table->rules;
-+	r = try_codegen_rules(codegen, rule_front, rule_last);
-+	if (r) {
-+		BFLOG_ERR("failed to generate rules: %s", STRERR(r));
-+		return r;
-+	}
-+
-+	r = codegen->codegen_ops->gen_inline_epilogue(codegen);
-+	if (r) {
-+		BFLOG_ERR("failed to generate inline epilogue: %s",
-+			  STRERR(r));
-+		return r;
-+	}
-+
-+	r = try_codegen_subprogs(codegen, table);
-+	if (r) {
-+		BFLOG_ERR("failed to generate subprograms: %s", STRERR(r));
-+		return r;
-+	}
-+
-+	r = codegen_fixup(codegen, CODEGEN_FIXUP_JUMP_TO_CHAIN);
-+	if (r) {
-+		BFLOG_ERR("failed to generate fixups: %s", STRERR(r));
-+		return r;
-+	}
-+
-+	codegen->shared_codegen->maps[CODEGEN_RELOC_MAP].max_entries = table->num_rules;
-+
-+	return 0;
++	memset(&self->ipt_target, 0, sizeof(self->ipt_target));
++	init_error_target(&self->ipt_target, 0, "x");
 +}
 +
- int load_img(struct codegen *codegen)
- {
- 	union bpf_attr attr = {};
-diff --git a/net/bpfilter/codegen.h b/net/bpfilter/codegen.h
-index cca45a13c4aa..6cfd8e7a3692 100644
---- a/net/bpfilter/codegen.h
-+++ b/net/bpfilter/codegen.h
-@@ -18,6 +18,7 @@
- #include <stdint.h>
- 
- struct context;
-+struct table;
- 
- #define CODEGEN_REG_RETVAL	BPF_REG_0
- #define CODEGEN_REG_SCRATCH1	BPF_REG_1
-@@ -174,6 +175,7 @@ int codegen_fixup(struct codegen *codegen, enum codegen_fixup_type fixup_type);
- int emit_fixup(struct codegen *codegen, enum codegen_fixup_type fixup_type,
- 	       struct bpf_insn insn);
- int emit_add_counter(struct codegen *codegen);
-+int try_codegen(struct codegen *codegen, const struct table *table);
- int load_img(struct codegen *codegen);
- void unload_img(struct codegen *codegen);
- void free_codegen(struct codegen *codegen);
++FIXTURE_TEARDOWN(test_error_target)
++{
++	free_context(&self->ctx);
++}
++
++TEST_F(test_error_target, init)
++{
++	ASSERT_EQ(0, init_target(&self->ctx, (const struct bpfilter_ipt_target *)&self->ipt_target,
++				 &self->target));
++}
++
++TEST_HARNESS_MAIN
 -- 
 2.38.1
 
