@@ -2,142 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DE54C4332F
-	for <linux-kselftest@archiver.kernel.org>; Sat, 24 Dec 2022 01:22:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B346CC4332F
+	for <linux-kselftest@archiver.kernel.org>; Sun, 25 Dec 2022 03:34:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231137AbiLXBWc (ORCPT
+        id S230201AbiLYDeD (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 23 Dec 2022 20:22:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54886 "EHLO
+        Sat, 24 Dec 2022 22:34:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230152AbiLXBWa (ORCPT
+        with ESMTP id S229441AbiLYDeC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 23 Dec 2022 20:22:30 -0500
-X-Greylist: delayed 4199 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 23 Dec 2022 17:22:29 PST
-Received: from 6.mo545.mail-out.ovh.net (6.mo545.mail-out.ovh.net [46.105.48.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 961B813CE2
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 Dec 2022 17:22:29 -0800 (PST)
-Received: from ex4.mail.ovh.net (unknown [10.111.172.143])
-        by mo545.mail-out.ovh.net (Postfix) with ESMTPS id 205EE25F93;
-        Sat, 24 Dec 2022 00:04:32 +0000 (UTC)
-Received: from dev-fedora-x86-64.naccy.de (37.65.8.229) by
- DAG10EX1.indiv4.local (172.16.2.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Sat, 24 Dec 2022 01:04:30 +0100
-From:   Quentin Deslandes <qde@naccy.de>
-To:     <qde@naccy.de>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Dmitrii Banshchikov <me@ubique.spb.ru>,
-        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>,
-        Kernel Team <kernel-team@meta.com>
-Subject: [PATCH bpf-next v3 05/16] bpfilter: add runtime context
-Date:   Sat, 24 Dec 2022 01:03:51 +0100
-Message-ID: <20221224000402.476079-6-qde@naccy.de>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221224000402.476079-1-qde@naccy.de>
-References: <20221224000402.476079-1-qde@naccy.de>
+        Sat, 24 Dec 2022 22:34:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1408895A5;
+        Sat, 24 Dec 2022 19:33:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AF676B803F2;
+        Sun, 25 Dec 2022 03:33:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23FB0C433EF;
+        Sun, 25 Dec 2022 03:33:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671939236;
+        bh=HBs48LNTjteYim6wGJgPGSaGT7qA/LzlKBR3O8bHfls=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jtDumGesS6zPX7w7WZPcPtT9aQpJ0Wf/p4LZ5LMUQq7BKFDyf8Mx4Kx/gFXhel7u1
+         z+HQQETjQ6xeG5nYSoHtMEzwcZxoPOXgYNnezzrE+D+W9g+HVuh2tKIBJqK9eZZyle
+         yFlOu7MRBMIqIU3UiVAZHujhfdLej1Aivbo7TomFhwNqc41uhp+5gYn2vNRPFBvgcA
+         0E/E5xcrODfgxk8pa4QPkKLxliIHXETYKgzy1aL9HcY+VWB7vwN2U3/dn+5mVD3Ctw
+         XtkhDrdcl0KZSSTr8PIJHDg0+uWZNFdp7MdT0VPnGZddHWHUVmmTGtJwPzo1FS3f3v
+         h5Pb3hLVW+SsA==
+Date:   Sat, 24 Dec 2022 22:33:54 -0500
+From:   Sasha Levin <sashal@kernel.org>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Tyler Hicks <code@tyhicks.com>, gregkh@linuxfoundation.org,
+        stable@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Gavin Shan <gshan@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Karolina Drobnik <karolinadrobnik@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>
+Subject: Re: [PATCH 5.15 0/2] Fix kvm selftest build failures in linux-5.15.y
+Message-ID: <Y6fEohBcwosOVKch@sashalap>
+References: <20221223000958.729256-1-code@tyhicks.com>
+ <d0519826-79ae-38b4-5ec2-04c7e0874ef6@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [37.65.8.229]
-X-ClientProxiedBy: CAS6.indiv4.local (172.16.1.6) To DAG10EX1.indiv4.local
- (172.16.2.91)
-X-Ovh-Tracer-Id: 4760586282062114423
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -85
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrheefgddujecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogetfedtuddqtdduucdludehmdenucfjughrpefhvfevufffkffojghfggfgtghisehtkeertdertddtnecuhfhrohhmpefsuhgvnhhtihhnucffvghslhgrnhguvghsuceoqhguvgesnhgrtggthidruggvqeenucggtffrrghtthgvrhhnpeduledugfeileetvdelieeujedttedtvedtgfetteevfeejhfffkeeujeetfffgudenucfkphepuddvjedrtddrtddruddpfeejrdeihedrkedrvddvleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehquggvsehnrggttgihrdguvgeqpdhnsggprhgtphhtthhopedupdhrtghpthhtohepjhholhhsrgeskhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdgsphhfsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpmhgvsehusghiqhhuvgdrshhpsgdrrhhupdhshhhurghhsehkvghrnhgvlhdrohhrghdpmhihkhholhgrlhesfhgsrdgtohhmpdhprggsvghnihesrhgvughhrghtrdgtohhmpdhkuhgsrg
- eskhgvrhhnvghlrdhorhhgpdgvughumhgriigvthesghhoohhglhgvrdgtohhmpdgurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhkvghrnhgvlhdqthgvrghmsehmvghtrgdrtghomhdphhgrohhluhhosehgohhoghhlvgdrtghomhdpshgufhesghhoohhglhgvrdgtohhmpdhkphhsihhnghhhsehkvghrnhgvlhdrohhrghdpjhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhlrdgtohhmpdihhhhssehfsgdrtghomhdpshhonhhgsehkvghrnhgvlhdrohhrghdpmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpdgrnhgurhhiiheskhgvrhhnvghlrdhorhhgpdgurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprghstheskhgvrhhnvghlrdhorhhgpdhnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheeghedpmhhouggvpehsmhhtphhouhht
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <d0519826-79ae-38b4-5ec2-04c7e0874ef6@redhat.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Create struct context to store bpfilter's runtime context. Eventually,
-this structure will contain the maps/tables containing ops structures
-for matches, targets, tables...
+On Fri, Dec 23, 2022 at 05:45:44PM +0100, Paolo Bonzini wrote:
+>On 12/23/22 01:09, Tyler Hicks wrote:
+>>From: "Tyler Hicks" <code@tyhicks.com>
+>>
+>>The backport of commit 05c2224d4b04 ("KVM: selftests: Fix number of
+>>pages for memory slot in memslot_modification_stress_test") broke the
+>>build of the KVM selftest memslot_modification_stress_test.c source file
+>>in two ways:
+>>
+>>- Incorrectly assumed that max_t() was defined despite commit
+>>   5cf67a6051ea ("tools/include: Add _RET_IP_ and math definitions to
+>>   kernel.h") not being present
+>>- Incorrectly assumed that kvm_vm struct members could be directly
+>>   accessed despite b530eba14c70 ("KVM: selftests: Get rid of
+>>   kvm_util_internal.h") not being present
+>>
+>>Backport the first commit, as it is simple enough. Work around the lack
+>>of the second commit by using the accessors to get to the kvm_vm struct
+>>members.
+>>
+>>Note that the linux-6.0.y backport of commit 05c2224d4b04 ("KVM:
+>>selftests: Fix number of pages for memory slot in
+>>memslot_modification_stress_test") is fine because the two prerequisite
+>>commits, mentioned above, are both present in v6.0.
+>>
+>>Tyler
+>>
+>>Karolina Drobnik (1):
+>>   tools/include: Add _RET_IP_ and math definitions to kernel.h
+>>
+>>Tyler Hicks (Microsoft) (1):
+>>   KVM: selftests: Fix build regression by using accessor function
+>>
+>>  tools/include/linux/kernel.h                                | 6 ++++++
+>>  .../selftests/kvm/memslot_modification_stress_test.c        | 2 +-
+>>  2 files changed, 7 insertions(+), 1 deletion(-)
+>>
+>
+>Acked-by: Paolo Bonzini <pbonzini@redhat.com>
+>
 
-Co-developed-by: Dmitrii Banshchikov <me@ubique.spb.ru>
-Signed-off-by: Dmitrii Banshchikov <me@ubique.spb.ru>
-Signed-off-by: Quentin Deslandes <qde@naccy.de>
----
- net/bpfilter/Makefile  |  1 +
- net/bpfilter/context.c | 18 ++++++++++++++++++
- net/bpfilter/context.h | 16 ++++++++++++++++
- 3 files changed, 35 insertions(+)
- create mode 100644 net/bpfilter/context.c
- create mode 100644 net/bpfilter/context.h
+Queued up, thanks!
 
-diff --git a/net/bpfilter/Makefile b/net/bpfilter/Makefile
-index 1b0c399c19df..9878f5fd8152 100644
---- a/net/bpfilter/Makefile
-+++ b/net/bpfilter/Makefile
-@@ -5,6 +5,7 @@
- 
- userprogs := bpfilter_umh
- bpfilter_umh-objs := main.o logger.o map-common.o
-+bpfilter_umh-objs += context.o
- userccflags += -I $(srctree)/tools/include/ -I $(srctree)/tools/include/uapi
- 
- ifeq ($(CONFIG_BPFILTER_UMH), y)
-diff --git a/net/bpfilter/context.c b/net/bpfilter/context.c
-new file mode 100644
-index 000000000000..fdfd5fe78424
---- /dev/null
-+++ b/net/bpfilter/context.c
-@@ -0,0 +1,18 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2021 Telegram FZ-LLC
-+ * Copyright (c) 2022 Meta Platforms, Inc. and affiliates.
-+ */
-+
-+#define _GNU_SOURCE
-+
-+#include "context.h"
-+
-+int create_context(struct context *ctx)
-+{
-+	return 0;
-+}
-+
-+void free_context(struct context *ctx)
-+{
-+}
-diff --git a/net/bpfilter/context.h b/net/bpfilter/context.h
-new file mode 100644
-index 000000000000..df41b9707a81
---- /dev/null
-+++ b/net/bpfilter/context.h
-@@ -0,0 +1,16 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2021 Telegram FZ-LLC
-+ * Copyright (c) 2022 Meta Platforms, Inc. and affiliates.
-+ */
-+
-+#ifndef NET_BPFILTER_CONTEXT_H
-+#define NET_BPFILTER_CONTEXT_H
-+
-+struct context {
-+};
-+
-+int create_context(struct context *ctx);
-+void free_context(struct context *ctx);
-+
-+#endif // NET_BPFILTER_CONTEXT_H
 -- 
-2.38.1
-
+Thanks,
+Sasha
