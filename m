@@ -2,44 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F513C53210
-	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Dec 2022 13:07:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F306DC4167B
+	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Dec 2022 13:07:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231703AbiL0NHW (ORCPT
+        id S231718AbiL0NHX (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 27 Dec 2022 08:07:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51196 "EHLO
+        Tue, 27 Dec 2022 08:07:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231682AbiL0NG7 (ORCPT
+        with ESMTP id S231615AbiL0NHB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Dec 2022 08:06:59 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5ABA277;
-        Tue, 27 Dec 2022 05:06:57 -0800 (PST)
+        Tue, 27 Dec 2022 08:07:01 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A3D4277;
+        Tue, 27 Dec 2022 05:07:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3B31FB81012;
-        Tue, 27 Dec 2022 13:06:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54384C433F2;
-        Tue, 27 Dec 2022 13:06:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AF1D06115E;
+        Tue, 27 Dec 2022 13:06:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76D62C43392;
+        Tue, 27 Dec 2022 13:06:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672146415;
-        bh=VJMEgISdhkuI2X6kuXk2S8aABLEH627CtkUAogZE4Tc=;
+        s=k20201202; t=1672146419;
+        bh=ftKw9JxdN7OkfKbeAVWrxvHtpZk1v1+kLM5uE4WBFzg=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=mJKk0UNx/OIdNPYM8GRw/WPOppSiVJa2OVohLyHudDPLNYvjkINjpiwUHag2KOtrw
-         tzas5cjFO+8VmMBL9umYsngakpDdhJBlJJahSYX91NtpqDobzUCF2w7UwKjSGU3YY5
-         4HtuXvyA7hm1AUq5WMgRpfWMHd8aPr/XjioMnsA/RTclQiINW9WIbtpcmxeYzXzYNg
-         ++2yMgpFHdgHaREROSKccjyttcyAoRzlrVaPaAekUNZvb82cNklUTToPNTbYcn5YHs
-         9EAydbHuFVtQjnVXu6gSVy/2z0Si8QwYHc5QrQ6sJ8AS/Oxv6GKuRwSI0pAuMAWYfv
-         pbiYpKfPsdJfg==
+        b=J9jBpf7YpIT/KUPBfiL0ijOMl3up/EqOTWovYRw6AiDyR7ZiTWaN/IZV4HsfbVAj8
+         GNrb0VSw3cJAsithpiUHhWeGY+yeBW0hzhbOL3zdgOFSE0G56hqwnD7JHIqfnyXV0o
+         OSzveBmxCUQGzT2OSV9PGd7WnGt0otzMVFg5ywu0gHNFX7IVkGKRPgsQSEyxeEskKO
+         lFydyFgMn7Fsiy81AsVE+Tcpf8Mg/xBP69hYNlO8h8seZAnLBnYNWPR9i6E/XkXyGh
+         8hcMH+OhpXF7SjazH1HYRm5yHGJNNxDN17oeC3H/JknK8zltzkb+1JQ67GK+/t4Oxc
+         FEIRKZsi3nUuQ==
 From:   Mark Brown <broonie@kernel.org>
-Date:   Tue, 27 Dec 2022 13:06:36 +0000
-Subject: [PATCH 2/4] kselftest/arm64: Only enumerate VLs once in syscall-abi
+Date:   Tue, 27 Dec 2022 13:06:38 +0000
+Subject: [PATCH 4/4] kselftest/arm64: Only enumerate power of two VLs in syscall-abi
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20221223-arm64-syscall-abi-sme-only-v1-2-4fabfbd62087@kernel.org>
+Message-Id: <20221223-arm64-syscall-abi-sme-only-v1-4-4fabfbd62087@kernel.org>
 References: <20221223-arm64-syscall-abi-sme-only-v1-0-4fabfbd62087@kernel.org>
 In-Reply-To: <20221223-arm64-syscall-abi-sme-only-v1-0-4fabfbd62087@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
@@ -49,200 +49,66 @@ Cc:     Shuah Khan <skhan@linuxfoundation.org>,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.12-dev-7ab1d
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5137; i=broonie@kernel.org;
- h=from:subject:message-id; bh=VJMEgISdhkuI2X6kuXk2S8aABLEH627CtkUAogZE4Tc=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjqu3mz61xaauKwvQgXATjyBywjrmusGIaI+bDH6jL
- jEOhnDiJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY6rt5gAKCRAk1otyXVSH0FF9CA
- CC3vEIBMBUUVp08i5MrWy8tU+OyNRXzWG9ap5fvvDNhpEXmB66OPzHcCfWaCvUJLQp1Y2C+MNDcIrs
- eCFo8S4e32X1hXD+wo67LS6jF4vxIFq0vuarnOujWOIQEg254dA2ANvjD6XXia6EJ3Q70mqWZmPbRY
- i1mxyqLXplzcFIDnkp/dEk5J+k3mCmiBNo7QhDyTOYUV9okDkay1AnLNsRdUNLTKbV1/3xYpQCitGS
- kQfNCLva+cnuSsz1apSmtodvMpA4PzV2Sw0fMe8ZnZ9CK3W8tp1IWQJNTg0NtA93a1WNS1QtACJnNo
- ILlw6LFQshMJMD/cwqiJBGM6AlKKcy
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2013; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=ftKw9JxdN7OkfKbeAVWrxvHtpZk1v1+kLM5uE4WBFzg=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjqu3oGR4UZqgD9m8L8fGlfTnGhEn85EVEwGm03O0/
+ uGhK1kCJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY6rt6AAKCRAk1otyXVSH0GAxB/
+ 0UF4ItAsSeRKn4TpESZ/DpfbOEkcF+ZzIdEuMKfESo072yQk+0JjHZulbv6n7to3jH5QfL1oJrvquA
+ q4U/L7nbAOgaVe5C+9VYu4LDxNnfE7f9zmtCrT/9FrZTF+ZGxVpcerEcZ+nVWGYPWrOEKKQCDDaWf0
+ h3DMQXbxveAaw/7DmCZxddZ3joC9VaoJaoxi9bcwwkd74tlpJAFRfiqlQ7vlX5z616Tl9gF562mAyC
+ gAFVzJNTHKpRCE9J8PUzIOn0vteUImFQpCNFhjR60qeL59MkOscmVYIJlnPfLOmRkn9GLffkxIZNhs
+ jA0at65HqbaaqP3U7u7NQTcp7Cjjmk
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently syscall-abi not only enumerates the SVE VLs twice while working
-out how many tests are planned, it also repeats the enumeration process
-while doing the actual tests. Record the VLs when we enumerate and use that
-list when we are performing the tests, removing some duplicated logic.
+As documented in issue C215 in the known issues list for DDI0487I.a [1] Arm
+will be making a retroactive change to SVE to remove the possibility of
+selecting non power of two vector lengths. This has no impact on existing
+physical implementations but most virtual implementations have implemented
+the full range of permissible vector lengths.
+
+Since virtual implementations are noticeably slow in general and the larger
+vector lengths amplify the issue there's a useful improvement in runtime
+from only covering the vector lengths that will exist in practical systems,
+adjust our enumeration accordingly. We have other tests that aim to cover
+the enumeration interfaces.
+
+For symmetry we apply the same change to the eumeration for SME vector
+lengths, though the power of two restriction was already present for SME
+so there is no impact on the set of vector lengths tested.
+
+[1] https://developer.arm.com/documentation/102105/ia-00/
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- tools/testing/selftests/arm64/abi/syscall-abi.c | 95 +++++++++++--------------
- 1 file changed, 41 insertions(+), 54 deletions(-)
+ tools/testing/selftests/arm64/abi/syscall-abi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/tools/testing/selftests/arm64/abi/syscall-abi.c b/tools/testing/selftests/arm64/abi/syscall-abi.c
-index ffe719b50c21..45fdcbe3e909 100644
+index 7c9b6e947040..8afcbf6861fd 100644
 --- a/tools/testing/selftests/arm64/abi/syscall-abi.c
 +++ b/tools/testing/selftests/arm64/abi/syscall-abi.c
-@@ -24,6 +24,11 @@
- 
- static int default_sme_vl;
- 
-+static int sve_vl_count;
-+static unsigned int sve_vls[SVE_VQ_MAX];
-+static int sme_vl_count;
-+static unsigned int sme_vls[SVE_VQ_MAX];
-+
- extern void do_syscall(int sve_vl, int sme_vl);
- 
- static void fill_random(void *buf, size_t size)
-@@ -355,72 +360,55 @@ static bool do_test(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
- 
- static void test_one_syscall(struct syscall_cfg *cfg)
- {
--	int sve_vq, sve_vl;
--	int sme_vq, sme_vl;
-+	int sve, sme;
-+	int ret;
- 
- 	/* FPSIMD only case */
- 	ksft_test_result(do_test(cfg, 0, default_sme_vl, 0),
- 			 "%s FPSIMD\n", cfg->name);
- 
--	if (!(getauxval(AT_HWCAP) & HWCAP_SVE))
--		return;
--
--	for (sve_vq = SVE_VQ_MAX; sve_vq > 0; --sve_vq) {
--		sve_vl = prctl(PR_SVE_SET_VL, sve_vq * 16);
--		if (sve_vl == -1)
-+	for (sve = 0; sve < sve_vl_count; sve++) {
-+		ret = prctl(PR_SVE_SET_VL, sve_vls[sve]);
-+		if (ret == -1)
+@@ -444,7 +444,7 @@ void sve_count_vls(void)
+ 	/*
+ 	 * Enumerate up to SVE_VQ_MAX vector lengths
+ 	 */
+-	for (vq = SVE_VQ_MAX; vq > 0; --vq) {
++	for (vq = SVE_VQ_MAX; vq > 0; vq /= 2) {
+ 		vl = prctl(PR_SVE_SET_VL, vq * 16);
+ 		if (vl == -1)
  			ksft_exit_fail_msg("PR_SVE_SET_VL failed: %s (%d)\n",
- 					   strerror(errno), errno);
- 
--		sve_vl &= PR_SVE_VL_LEN_MASK;
--
--		if (sve_vq != sve_vq_from_vl(sve_vl))
--			sve_vq = sve_vq_from_vl(sve_vl);
-+		ksft_test_result(do_test(cfg, sve_vls[sve], default_sme_vl, 0),
-+				 "%s SVE VL %d\n", cfg->name, sve_vls[sve]);
- 
--		ksft_test_result(do_test(cfg, sve_vl, default_sme_vl, 0),
--				 "%s SVE VL %d\n", cfg->name, sve_vl);
--
--		if (!(getauxval(AT_HWCAP2) & HWCAP2_SME))
--			continue;
--
--		for (sme_vq = SVE_VQ_MAX; sme_vq > 0; --sme_vq) {
--			sme_vl = prctl(PR_SME_SET_VL, sme_vq * 16);
--			if (sme_vl == -1)
-+		for (sme = 0; sme < sme_vl_count; sme++) {
-+			ret = prctl(PR_SME_SET_VL, sme_vls[sme]);
-+			if (ret == -1)
- 				ksft_exit_fail_msg("PR_SME_SET_VL failed: %s (%d)\n",
- 						   strerror(errno), errno);
- 
--			sme_vl &= PR_SME_VL_LEN_MASK;
--
--			/* Found lowest VL */
--			if (sve_vq_from_vl(sme_vl) > sme_vq)
--				break;
--
--			if (sme_vq != sve_vq_from_vl(sme_vl))
--				sme_vq = sve_vq_from_vl(sme_vl);
--
--			ksft_test_result(do_test(cfg, sve_vl, sme_vl,
-+			ksft_test_result(do_test(cfg, sve_vls[sve],
-+						 sme_vls[sme],
- 						 SVCR_ZA_MASK | SVCR_SM_MASK),
- 					 "%s SVE VL %d/SME VL %d SM+ZA\n",
--					 cfg->name, sve_vl, sme_vl);
--			ksft_test_result(do_test(cfg, sve_vl, sme_vl,
--						 SVCR_SM_MASK),
-+					 cfg->name, sve_vls[sve],
-+					 sme_vls[sme]);
-+			ksft_test_result(do_test(cfg, sve_vls[sve],
-+						 sme_vls[sme], SVCR_SM_MASK),
- 					 "%s SVE VL %d/SME VL %d SM\n",
--					 cfg->name, sve_vl, sme_vl);
--			ksft_test_result(do_test(cfg, sve_vl, sme_vl,
--						 SVCR_ZA_MASK),
-+					 cfg->name, sve_vls[sve],
-+					 sme_vls[sme]);
-+			ksft_test_result(do_test(cfg, sve_vls[sve],
-+						 sme_vls[sme], SVCR_ZA_MASK),
- 					 "%s SVE VL %d/SME VL %d ZA\n",
--					 cfg->name, sve_vl, sme_vl);
-+					 cfg->name, sve_vls[sve],
-+					 sme_vls[sme]);
- 		}
- 	}
- }
- 
--int sve_count_vls(void)
-+void sve_count_vls(void)
- {
- 	unsigned int vq;
--	int vl_count = 0;
- 	int vl;
- 
- 	if (!(getauxval(AT_HWCAP) & HWCAP_SVE))
--		return 0;
-+		return;
- 
+@@ -470,7 +470,7 @@ void sme_count_vls(void)
  	/*
  	 * Enumerate up to SVE_VQ_MAX vector lengths
-@@ -436,23 +424,17 @@ int sve_count_vls(void)
- 		if (vq != sve_vq_from_vl(vl))
- 			vq = sve_vq_from_vl(vl);
- 
--		vl_count++;
-+		sve_vls[sve_vl_count++] = vl;
- 	}
--
--	return vl_count;
- }
- 
--int sme_count_vls(void)
-+void sme_count_vls(void)
- {
- 	unsigned int vq;
--	int vl_count = 0;
- 	int vl;
- 
- 	if (!(getauxval(AT_HWCAP2) & HWCAP2_SME))
--		return 0;
--
--	/* Ensure we configure a SME VL, used to flag if SVCR is set */
--	default_sme_vl = 16;
-+		return;
- 
- 	/*
- 	 * Enumerate up to SVE_VQ_MAX vector lengths
-@@ -472,10 +454,11 @@ int sme_count_vls(void)
- 		if (vq != sve_vq_from_vl(vl))
- 			vq = sve_vq_from_vl(vl);
- 
--		vl_count++;
-+		sme_vls[sme_vl_count++] = vl;
- 	}
- 
--	return vl_count;
-+	/* Ensure we configure a SME VL, used to flag if SVCR is set */
-+	default_sme_vl = sme_vls[0];
- }
- 
- int main(void)
-@@ -486,8 +469,12 @@ int main(void)
- 	srandom(getpid());
- 
- 	ksft_print_header();
--	tests += sve_count_vls();
--	tests += (sve_count_vls() * sme_count_vls()) * 3;
-+
-+	sve_count_vls();
-+	sme_count_vls();
-+
-+	tests += sve_vl_count;
-+	tests += (sve_vl_count * sme_vl_count) * 3;
- 	ksft_set_plan(ARRAY_SIZE(syscalls) * tests);
- 
- 	if (getauxval(AT_HWCAP2) & HWCAP2_SME_FA64)
+ 	 */
+-	for (vq = SVE_VQ_MAX; vq > 0; --vq) {
++	for (vq = SVE_VQ_MAX; vq > 0; vq /= 2) {
+ 		vl = prctl(PR_SME_SET_VL, vq * 16);
+ 		if (vl == -1)
+ 			ksft_exit_fail_msg("PR_SME_SET_VL failed: %s (%d)\n",
 
 -- 
 2.30.2
