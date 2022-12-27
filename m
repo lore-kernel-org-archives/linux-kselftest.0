@@ -2,186 +2,127 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2ECC2C46467
-	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Dec 2022 14:21:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF145C4167B
+	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Dec 2022 17:07:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231305AbiL0OVd (ORCPT
+        id S229679AbiL0RHW (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 27 Dec 2022 09:21:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43360 "EHLO
+        Tue, 27 Dec 2022 12:07:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231736AbiL0OVP (ORCPT
+        with ESMTP id S229608AbiL0RHV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Dec 2022 09:21:15 -0500
+        Tue, 27 Dec 2022 12:07:21 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AFFC64DD
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Dec 2022 06:21:12 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D87F4BD0;
+        Tue, 27 Dec 2022 09:07:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7575061174
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Dec 2022 14:21:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7DA1C433F2;
-        Tue, 27 Dec 2022 14:21:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6AD0D611BC;
+        Tue, 27 Dec 2022 17:07:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53395C433EF;
+        Tue, 27 Dec 2022 17:07:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672150871;
-        bh=w/aM5yPMx4Ph/CwKI7rsdx9fo77jVtrew5tIYC4hKYE=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=VflBJVrcIOo9fCmtHe0hVJnjXLjPjHtEg0Siumz/4G/xM3V4Hm708EinGWZGbylTB
-         USP5d7b6TsLjMMEeoI5kSX2gkF202Y0djjvhwWqbxetG1B5b5DwoBNmC8M+f1Pu+Ik
-         SGBly3Hw004gYu+0j9wRb39G/1vu6mfCPhcqgwB4gfJ0oS3kuFTsDP05CEta92phYm
-         nSzUgSmaQeQhEbO6Fd+mZ2OdgF/hg6yKkdG/geLMlS94cHbcgyCEMO7zxBns1ale8p
-         R9/9bImXv7rkqW6Xye2RLo/zXcdodz61dZUw3FoAsi7X5097pYo31hq4+rH5t1nzPP
-         AVEBAFVxYsCnA==
+        s=k20201202; t=1672160839;
+        bh=3ZqYhqiXtAyvi8Q7fMoUgAIsy3lZvzcW6OONX2fXOhU=;
+        h=From:Subject:Date:To:Cc:From;
+        b=CCaknGvMXwN9QPnEKLEEYTIwoZwLOm9b/S+FyHjOECokpkK0ktvN8jfx4ZrVqBEkg
+         iVyOyOBZTsEPkc3ve9nShbJYvTdmhb++em+HvtH3DJQUt5AGI3o/fwmTV+zdOFnHD8
+         8vM9bYrho0EGxPWpooiY6ssBZLGO2qDgufloiTERqC4YBYGDGFxu3y2aiVT+/665sw
+         A3xSCmLkr0mD8bVUCm1s08NA5te/fzcewn8afPl8eMHJXmXhmrvUwV48oNEY86bvJN
+         8fA8ePdI99cg0L6se1tvYsmp3tcq11KCNEY+yuEdoVBiEoVDB5gj3dt6gL+lEC3feW
+         7VmMA28ef6c+Q==
 From:   Mark Brown <broonie@kernel.org>
-Date:   Tue, 27 Dec 2022 14:20:43 +0000
-Subject: [PATCH v3 4/4] kselftest/arm64: Add test case for TPIDR2 signal frame records
+Subject: [PATCH v4 0/7] kselftest/alsa: pcm-test improvements
+Date:   Tue, 27 Dec 2022 17:06:46 +0000
+Message-Id: <20221208-alsa-pcm-test-hacks-v4-0-5a152e65b1e1@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20221208-arm64-tpidr2-sig-v3-4-c77c6c8775f4@kernel.org>
-References: <20221208-arm64-tpidr2-sig-v3-0-c77c6c8775f4@kernel.org>
-In-Reply-To: <20221208-arm64-tpidr2-sig-v3-0-c77c6c8775f4@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc:     Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
+X-B4-Tracking: v=1; b=H4sIACcmq2MC/02NQQ6CMBBFr0K6tkgHAujKexgXQxloA7RkhhgTw
+ t0trly+/Pz3diXEnkTds10xvb34GBJUl0xZh2Ek7fvECgoAA0WrcRbUq130RrJph3YSPdTWIDZ1
+ 14NV6dmhkO4Yg3XnN7IffbguKBvxua9Mg//8qs9X4oFj8jkm/G9BUZimuuVlCca0jYakjDF4ekz
+ EgeY88qiO4ws7P+6+wwAAAA==
+To:     Takashi Iwai <tiwai@suse.com>, Jaroslav Kysela <perex@perex.cz>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.12-dev-7ab1d
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3397; i=broonie@kernel.org;
- h=from:subject:message-id; bh=w/aM5yPMx4Ph/CwKI7rsdx9fo77jVtrew5tIYC4hKYE=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjqv9LOIFLTpBoh67/8PwNpZJ4mGT+7slfjlnYY/DV
- ySFM/oiJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY6r/SwAKCRAk1otyXVSH0LsJB/
- 0d7HryVSGW5pUlLtSB49mdsP20JUWUC+1SK8H9J/dsOYNqfL2guG22c5g1pUguyeVHiWWfBBYblB8l
- wEO7xtx8ebOF+zOvUEzNPvtirfXbv7DZakHJIuRTj58bgi/ac3CBUu59h/Yj/L+STSDDopqnjnAji8
- +UAJVpiGB7HJxVVsgXcU5VBlQJWAKI24hpBKhKKTqCH0B7cuSPbiDtXBYxrbgeUv9+3aA0K43a9vLY
- jrLsusZdOh7BizkdQLA9117ZSWT9Y5V66MmnHf7RPcDvHBgbVAXURx/w55dJ8SXTLYDbmBlDa7W3fT
- Nc8Z17nCPkKNLP4ko6qj+qNtQKnU4h
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2778; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=3ZqYhqiXtAyvi8Q7fMoUgAIsy3lZvzcW6OONX2fXOhU=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjqyY/pbutDd6Y4yp8LnfxN6ot/hPhK5ehtPpAM1Fe
+ kTbDSymJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY6smPwAKCRAk1otyXVSH0DnMB/
+ 9fT47XsKKQjVBcOm90UZTpz+kJQzTrKRetYFtwZIAFYJpitsPVIsv1KCVjdTj0q6ZWdSrujaA5YXWG
+ lngOh4K+/ZebTNX6G8fcIY2KkCa8PunjSCofxyDiNwZn8vdV7zXgWzCI4ahbapQkzqJHdSLm5qOrKI
+ Yd9swXb65dLOI1KxcsO/hD+MhMLFTX2UsFcn5Y7+9T6oDb2KBbPJB7Ozs7dBLLNbxwzq8DvDxm6drJ
+ 1AQtVOpkUe7n5lQRYqtrz6WmwnR/LXIXy+VAeOxEKA1tLiYwuLya+WHhGycrrQXgTWNC+C/7F3sOEb
+ wBf0bUiB/9vOa8fX+/IKZNV3fQyE+G
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Ensure that we get signal context for TPIDR2 if and only if SME is present
-on the system. Since TPIDR2 is owned by libc we merely validate that the
-value is whatever it was set to, this isn't ideal since it's likely to
-just be the default of 0 with current systems but it avoids future false
-positives.
+This series provides a bunch of quick updates which should make the
+coverage from pcm-test a bit more useful, it adds some support for
+skipping tests when the hardware/driver is unable to support the
+requested configuration, support for providing user visible descriptions
+and then expands the set of cases we cover to include more sample rates
+and channel counts.  This should exercise switching between 8kHz and
+44.1kHz based rates and ensure that clocking doesn't get confused by
+non-stereo channel counts, both of which are I expect common real world
+errors, at least for embedded cards.
 
+v4:
+ - Rebase onto v6.2-rc1.
+v3:
+ - "Rebase" onto Takashi's current tree (with a revert).
+ - Include Jaroslav's changes to specify all tests in the configuration
+   file parsing.
+ - Add a new "description" field to the configuration instead of trying
+   to name the tests.
+ - Always run both default and per-system tests, logging our success at
+   setting the per-system configurations as a separate test since they
+   shouldn't fail.
+v2:
+ - Rebase onto Takashi's current tree.
+ - Tweak the buffer sizes for the newly added cases, don't be quite
+   so ambitious in how big a buffer we request for 96kHz and don't
+   go quite so small for 8kHz since some devices start hitting lower
+   limits on period size and struggle to deliver accurate timing.
+
+To: Takashi Iwai <tiwai@suse.com>
+To: Jaroslav Kysela <perex@perex.cz>
+To: Shuah Khan <shuah@kernel.org>
+Cc: alsa-devel@alsa-project.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Mark Brown <broonie@kernel.org>
+
 ---
- tools/testing/selftests/arm64/signal/.gitignore    |  1 +
- .../arm64/signal/testcases/tpidr2_siginfo.c        | 90 ++++++++++++++++++++++
- 2 files changed, 91 insertions(+)
+Jaroslav Kysela (1):
+      kselftest/alsa: pcm - move more configuration to configuration files
 
-diff --git a/tools/testing/selftests/arm64/signal/.gitignore b/tools/testing/selftests/arm64/signal/.gitignore
-index e8d2b57f73ec..e1b6c4d961b5 100644
---- a/tools/testing/selftests/arm64/signal/.gitignore
-+++ b/tools/testing/selftests/arm64/signal/.gitignore
-@@ -4,5 +4,6 @@ fake_sigreturn_*
- sme_*
- ssve_*
- sve_*
-+tpidr2_siginfo
- za_*
- !*.[ch]
-diff --git a/tools/testing/selftests/arm64/signal/testcases/tpidr2_siginfo.c b/tools/testing/selftests/arm64/signal/testcases/tpidr2_siginfo.c
-new file mode 100644
-index 000000000000..6a2c82bf7ead
---- /dev/null
-+++ b/tools/testing/selftests/arm64/signal/testcases/tpidr2_siginfo.c
-@@ -0,0 +1,90 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2022 ARM Limited
-+ *
-+ * Verify that the TPIDR2 register context in signal frames is set up as
-+ * expected.
-+ */
-+
-+#include <signal.h>
-+#include <ucontext.h>
-+#include <sys/auxv.h>
-+#include <sys/prctl.h>
-+#include <unistd.h>
-+#include <asm/sigcontext.h>
-+
-+#include "test_signals_utils.h"
-+#include "testcases.h"
-+
-+static union {
-+	ucontext_t uc;
-+	char buf[1024 * 128];
-+} context;
-+
-+#define SYS_TPIDR2 "S3_3_C13_C0_5"
-+
-+static uint64_t get_tpidr2(void)
-+{
-+	uint64_t val;
-+
-+	asm volatile (
-+		"mrs	%0, " SYS_TPIDR2 "\n"
-+		: "=r"(val)
-+		:
-+		: "cc");
-+
-+	return val;
-+}
-+
-+int tpidr2_present(struct tdescr *td, siginfo_t *si, ucontext_t *uc)
-+{
-+	struct _aarch64_ctx *head = GET_BUF_RESV_HEAD(context);
-+	struct tpidr2_context *tpidr2_ctx;
-+	size_t offset;
-+	bool in_sigframe;
-+	bool have_sme;
-+	__u64 orig_tpidr2;
-+
-+	have_sme = getauxval(AT_HWCAP2) & HWCAP2_SME;
-+	if (have_sme)
-+		orig_tpidr2 = get_tpidr2();
-+
-+	if (!get_current_context(td, &context.uc, sizeof(context)))
-+		return 1;
-+
-+	tpidr2_ctx = (struct tpidr2_context *)
-+		get_header(head, TPIDR2_MAGIC, td->live_sz, &offset);
-+
-+	in_sigframe = tpidr2_ctx != NULL;
-+
-+	fprintf(stderr, "TPIDR2 sigframe %s on system %s SME\n",
-+		in_sigframe ? "present" : "absent",
-+		have_sme ? "with" : "without");
-+
-+	td->pass = (in_sigframe == have_sme);
-+
-+	/*
-+	 * Check that the value we read back was the one present at
-+	 * the time that the signal was triggered.  TPIDR2 is owned by
-+	 * libc so we can't safely choose the value and it is possible
-+	 * that we may need to revisit this in future if something
-+	 * starts deciding to set a new TPIDR2 between us reading and
-+	 * the signal.
-+	 */
-+	if (have_sme && tpidr2_ctx) {
-+		if (tpidr2_ctx->tpidr2 != orig_tpidr2) {
-+			fprintf(stderr, "TPIDR2 in frame is %llx, was %llx\n",
-+				tpidr2_ctx->tpidr2, orig_tpidr2);
-+			td->pass = false;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+struct tdescr tde = {
-+	.name = "TPIDR2",
-+	.descr = "Validate that TPIDR2 is present as expected",
-+	.timeout = 3,
-+	.run = tpidr2_present,
-+};
+Mark Brown (6):
+      kselftest/alsa: pcm - Drop recent coverage improvement changes
+      kselftest/alsa: pcm - Always run the default set of tests
+      kselftest/alsa: pcm - skip tests when we fail to set params
+      kselftest/alsa: pcm - Support optional description for tests
+      kselftest/alsa: pcm - Provide descriptions for the default tests
+      kselftest/alsa: pcm - Add more coverage by default
 
+ tools/testing/selftests/alsa/Makefile              |   2 +-
+ tools/testing/selftests/alsa/alsa-local.h          |   3 +
+ tools/testing/selftests/alsa/conf.c                |  26 ++-
+ .../alsa/conf.d/Lenovo_ThinkPad_P1_Gen2.conf       |  43 +++--
+ tools/testing/selftests/alsa/pcm-test.c            | 205 ++++++++++++++-------
+ tools/testing/selftests/alsa/pcm-test.conf         |  63 +++++++
+ 6 files changed, 250 insertions(+), 92 deletions(-)
+---
+base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
+change-id: 20221208-alsa-pcm-test-hacks-f6c1aa76bd2c
+
+Best regards,
 -- 
-2.30.2
+Mark Brown <broonie@kernel.org>
