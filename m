@@ -2,209 +2,112 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E0ECC4708E
-	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Dec 2022 13:07:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77D0FC4332F
+	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Dec 2022 13:08:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231720AbiL0NHX (ORCPT
+        id S231720AbiL0NIg (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 27 Dec 2022 08:07:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51244 "EHLO
+        Tue, 27 Dec 2022 08:08:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231689AbiL0NHB (ORCPT
+        with ESMTP id S232023AbiL0NIM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Dec 2022 08:07:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995CE65B5;
-        Tue, 27 Dec 2022 05:06:59 -0800 (PST)
+        Tue, 27 Dec 2022 08:08:12 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB2DBBC22
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Dec 2022 05:07:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 50BDBB8101B;
-        Tue, 27 Dec 2022 13:06:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66CECC433D2;
-        Tue, 27 Dec 2022 13:06:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 402ED61159
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Dec 2022 13:07:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A8D4C433D2;
+        Tue, 27 Dec 2022 13:07:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672146417;
-        bh=FkCT7CeF2shSYZvmS/axMpxelhP3SAvkHxuUZYWnJIE=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=k5a1Fp6k4JM/SAz6EHZrDATlGxVJpwAplKssCMN8O8AvebKyvYcCtAdUwC07qDSFm
-         vucAjfW5pj1FYVcWlZR6RPOdIzAX6GFyOI0HCLFBSde9yUMKZgS4DKXUcFmXsdJH3b
-         Qh9FLmMXSIgc6IJUXT1K8mVfYDl5KMhcB5Xn5EKgJaZUd2HFJZeeFZPd3ClO/xkwtm
-         zoylAD1FIhx2N8dI6+L/ojdFN5THEbKGvNttpEZmUDncIAsIjVYimf05mq2LjBOFRA
-         pFaBKBkwuOgZoQ4z2OnBaZ1GPqKcf1Ivf7LpqR6JMLQfxXpO7ZcaaqZrF+1e6FeQ7C
-         jErfN+/fycKoA==
+        s=k20201202; t=1672146470;
+        bh=xDyRSGoHuFrSYgE6BySpQvmHRd5fFKw0HhCRo1ANkdQ=;
+        h=From:Date:Subject:To:Cc:From;
+        b=lpYHhhQpdGO6t0fm727aOH62PysUs+PcFIESMuAbEAroUjx4WVN5Fj48rqq8crxeQ
+         Lvtvw8KUb1vau5FO7AUd5GaQE0yEadb7t6pzs0PnSw1jiUv/bfB2z2pYvfsIQFnsdJ
+         EXFYBXKIzf0CPUb3XReOcr6KzyJpAeNnIspFXXqRM2ZSOv9RtpZ0gItAZ9xgw6J0Gj
+         C76n9sCQVmy54dBlVRUydP2le4jznbamD6ff794vOi9JlSO1EsCHjNmuSMD5K9cNI2
+         Qz6fe7wzWfUdmqniNw2wbwv8amrDIaDdq4Fui7iv8k6S5LAxggImsEtoTVhvaFwpL+
+         D7Nlp44hvBtyA==
 From:   Mark Brown <broonie@kernel.org>
-Date:   Tue, 27 Dec 2022 13:06:37 +0000
-Subject: [PATCH 3/4] kselftest/arm64: Verify SME only ABI in syscall-abi
+Date:   Tue, 27 Dec 2022 13:07:45 +0000
+Subject: [PATCH] kselftest/arm64: Skip non-power of 2 SVE vector lengths in fp-stress
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20221223-arm64-syscall-abi-sme-only-v1-3-4fabfbd62087@kernel.org>
-References: <20221223-arm64-syscall-abi-sme-only-v1-0-4fabfbd62087@kernel.org>
-In-Reply-To: <20221223-arm64-syscall-abi-sme-only-v1-0-4fabfbd62087@kernel.org>
+Message-Id: <20221220-arm64-fp-stress-pow2-v1-1-d0ce756b57af@kernel.org>
+X-B4-Tracking: v=1; b=H4sIACHuqmMC/x2NQQqDMBAAvyJ77lKzBG37ldJDoqvuwSTsSlsQ/
+ 97Y4zAMs4OxChs8mh2U32KSUwV3aWBYQpoZZawM1BI5ohaDrp3HqaBtymZY8ocw3hxz53vn7wQ1
+ jcEYo4Y0LGecVWZJ1zXYxnr6ojzJ9799vo7jB5Pi7yuGAAAA
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.12-dev-7ab1d
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4483; i=broonie@kernel.org;
- h=from:subject:message-id; bh=FkCT7CeF2shSYZvmS/axMpxelhP3SAvkHxuUZYWnJIE=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjqu3nf73Pjz+vQrz9xDatgVaakTyMlwkVuTleA8yn
- QhrAwGeJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY6rt5wAKCRAk1otyXVSH0KlsB/
- 9L9rONe+nrYiKbLKgNfpatd8y4qUJPoHXKFp76EtFk1W2vOUxWJmGR8gQw7pv7ZA1BEgKHAZhq8ztl
- Oai4XIY5IbrihK2NWBelkV4ht9yR3KQmtmSDSys4igU/R1r1wFrHzZok9bfpHEqR913n5Iz3oELQrr
- RX64R5rO9svwK+m+N/IGk+oFKIDTli08lldm/CQdTpsNSlwgSJaMg/Gz1BXlSJh5v1gJyasiKdJymr
- ei2i1AvZXOAa8l2rliqSjs839jxsOuprm3cAmnlr8RWNeDtMvnAIDXP0OoxqYEaH7E1i2NeGdVrSET
- c6B9z4vGznErF5BMUsoeMTEiaQxa5C
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1805; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=xDyRSGoHuFrSYgE6BySpQvmHRd5fFKw0HhCRo1ANkdQ=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjqu4kzZW+osJBWLRnRJG2tHjFPO2kQXbFgnObJURI
+ 32NtFhGJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY6ruJAAKCRAk1otyXVSH0M5VB/
+ 4oKaYfrwEPMwiLaRdrfHUr7/xz8ImCGpQvXsgT80O/PuNAdwx2HSal2DWhAbMiqNuvw1Een/6hs/dh
+ TAtb0lt5x+O8GC7JF0l0ONuk02BHupCkADjt37/x1iP3jwEdZNPx42vqxZ9mY1OjCwUQhKWKFFCj/4
+ 2sOH8c2SYylHu5iAdhISQ/b7JHU153Zo1LKABwQnt+2FPOsDtItecL9WeE5/VNQc1Va73GQpcUM1h1
+ xqYOyVX2zPQQosesGEtAFu/2TdL1JItRCVf3TQNKs31B4NLTPaia29B0npYEpg1MN2IhWPwVVZpWmx
+ jZQjXaQfq+XqN1q+x1sxsorOIIbNQ1
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently syscall-abi only covers SME in the case where the system supports
-SVE however it is architecturally valid to support SME without SVE. Update
-the program to cover this case, this requires adjustments in the code to
-check for SVCR.SM being set when deciding if we're handling the FPSIMD or
-SVE registers and the addition of new test cases for the SME only case.
+As documented in issue C215 in the known issues list for DDI0487I.a [1] Arm
+will be making a retroactive change to SVE to remove the possibility of
+selecting non power of two vector lengths. This has no impact on existing
+physical implementations but most virtual implementations have implemented
+the full range of permissible vector lengths. Given how demanding fp-stress
+is for these implementations update to only attempt to enumerate the power
+of two vector lengths, reducing the load created on existing virtual
+implementations and only exercising the functionality that will be seen in
+physical implementations.
 
-Note that in the SME only case we should not save the SVE registers after a
-syscall since even if we were in streaming mode and therefore set them the
-syscall should have exited streaming mode, we check that we have done so by
-looking at SVCR.
+[1] https://developer.arm.com/documentation/102105/ia-00/
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- .../testing/selftests/arm64/abi/syscall-abi-asm.S  | 14 +++++----
- tools/testing/selftests/arm64/abi/syscall-abi.c    | 34 +++++++++++++++++++++-
- 2 files changed, 42 insertions(+), 6 deletions(-)
+ tools/testing/selftests/arm64/fp/fp-stress.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/arm64/abi/syscall-abi-asm.S b/tools/testing/selftests/arm64/abi/syscall-abi-asm.S
-index acd5e9f3bc0b..cdfafc939a9e 100644
---- a/tools/testing/selftests/arm64/abi/syscall-abi-asm.S
-+++ b/tools/testing/selftests/arm64/abi/syscall-abi-asm.S
-@@ -92,8 +92,11 @@ do_syscall:
- 	str	x29, [x2], #8		// FP
- 	str	x30, [x2], #8		// LR
+diff --git a/tools/testing/selftests/arm64/fp/fp-stress.c b/tools/testing/selftests/arm64/fp/fp-stress.c
+index f8b2f41aac36..2b95f9451b1b 100644
+--- a/tools/testing/selftests/arm64/fp/fp-stress.c
++++ b/tools/testing/selftests/arm64/fp/fp-stress.c
+@@ -377,7 +377,7 @@ static void probe_vls(int vls[], int *vl_count, int set_vl)
  
--	// Load FPRs if we're not doing SVE
-+	// Load FPRs if we're not doing neither SVE nor streaming SVE
- 	cbnz	x0, 1f
-+	ldr	x2, =svcr_in
-+	tbnz	x2, #SVCR_SM_SHIFT, 1f
+ 	*vl_count = 0;
+ 
+-	for (vq = SVE_VQ_MAX; vq > 0; --vq) {
++	for (vq = SVE_VQ_MAX; vq > 0; vq /= 2) {
+ 		vl = prctl(set_vl, vq * 16);
+ 		if (vl == -1)
+ 			ksft_exit_fail_msg("SET_VL failed: %s (%d)\n",
+@@ -385,6 +385,9 @@ static void probe_vls(int vls[], int *vl_count, int set_vl)
+ 
+ 		vl &= PR_SVE_VL_LEN_MASK;
+ 
++		if (*vl_count && (vl == vls[*vl_count - 1]))
++			break;
 +
- 	ldr	x2, =fpr_in
- 	ldp	q0, q1, [x2]
- 	ldp	q2, q3, [x2, #16 * 2]
-@@ -111,10 +114,11 @@ do_syscall:
- 	ldp	q26, q27, [x2, #16 * 26]
- 	ldp	q28, q29, [x2, #16 * 28]
- 	ldp	q30, q31, [x2, #16 * 30]
-+
-+	b	2f
- 1:
+ 		vq = sve_vq_from_vl(vl);
  
- 	// Load the SVE registers if we're doing SVE/SME
--	cbz	x0, 1f
- 
- 	ldr	x2, =z_in
- 	ldr	z0, [x2, #0, MUL VL]
-@@ -155,9 +159,9 @@ do_syscall:
- 	ldr	x2, =ffr_in
- 	ldr	p0, [x2]
- 	ldr	x2, [x2, #0]
--	cbz	x2, 2f
-+	cbz	x2, 1f
- 	wrffr	p0.b
--2:
-+1:
- 
- 	ldr	x2, =p_in
- 	ldr	p0, [x2, #0, MUL VL]
-@@ -176,7 +180,7 @@ do_syscall:
- 	ldr	p13, [x2, #13, MUL VL]
- 	ldr	p14, [x2, #14, MUL VL]
- 	ldr	p15, [x2, #15, MUL VL]
--1:
-+2:
- 
- 	// Do the syscall
- 	svc	#0
-diff --git a/tools/testing/selftests/arm64/abi/syscall-abi.c b/tools/testing/selftests/arm64/abi/syscall-abi.c
-index 45fdcbe3e909..7c9b6e947040 100644
---- a/tools/testing/selftests/arm64/abi/syscall-abi.c
-+++ b/tools/testing/selftests/arm64/abi/syscall-abi.c
-@@ -88,6 +88,7 @@ static int check_gpr(struct syscall_cfg *cfg, int sve_vl, int sme_vl, uint64_t s
- #define NUM_FPR 32
- uint64_t fpr_in[NUM_FPR * 2];
- uint64_t fpr_out[NUM_FPR * 2];
-+uint64_t fpr_zero[NUM_FPR * 2];
- 
- static void setup_fpr(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
- 		      uint64_t svcr)
-@@ -102,7 +103,7 @@ static int check_fpr(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
- 	int errors = 0;
- 	int i;
- 
--	if (!sve_vl) {
-+	if (!sve_vl && !(svcr & SVCR_SM_MASK)) {
- 		for (i = 0; i < ARRAY_SIZE(fpr_in); i++) {
- 			if (fpr_in[i] != fpr_out[i]) {
- 				ksft_print_msg("%s Q%d/%d mismatch %llx != %llx\n",
-@@ -114,6 +115,18 @@ static int check_fpr(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
- 		}
- 	}
- 
-+	/*
-+	 * In streaming mode the whole register set should be cleared
-+	 * by the transition out of streaming mode.
-+	 */
-+	if (svcr & SVCR_SM_MASK) {
-+		if (memcmp(fpr_zero, fpr_out, sizeof(fpr_out)) != 0) {
-+			ksft_print_msg("%s FPSIMD registers non-zero exiting SM\n",
-+				       cfg->name);
-+			errors++;
-+		}
-+	}
-+
- 	return errors;
- }
- 
-@@ -400,6 +413,24 @@ static void test_one_syscall(struct syscall_cfg *cfg)
- 					 sme_vls[sme]);
- 		}
- 	}
-+
-+	for (sme = 0; sme < sme_vl_count; sme++) {
-+		ret = prctl(PR_SME_SET_VL, sme_vls[sme]);
-+		if (ret == -1)
-+			ksft_exit_fail_msg("PR_SME_SET_VL failed: %s (%d)\n",
-+						   strerror(errno), errno);
-+
-+		ksft_test_result(do_test(cfg, 0, sme_vls[sme],
-+					 SVCR_ZA_MASK | SVCR_SM_MASK),
-+				 "%s SME VL %d SM+ZA\n",
-+				 cfg->name, sme_vls[sme]);
-+		ksft_test_result(do_test(cfg, 0, sme_vls[sme], SVCR_SM_MASK),
-+				 "%s SME VL %d SM\n",
-+				 cfg->name, sme_vls[sme]);
-+		ksft_test_result(do_test(cfg, 0, sme_vls[sme], SVCR_ZA_MASK),
-+				 "%s SME VL %d ZA\n",
-+				 cfg->name, sme_vls[sme]);
-+	}
- }
- 
- void sve_count_vls(void)
-@@ -474,6 +505,7 @@ int main(void)
- 	sme_count_vls();
- 
- 	tests += sve_vl_count;
-+	tests += sme_vl_count * 3;
- 	tests += (sve_vl_count * sme_vl_count) * 3;
- 	ksft_set_plan(ARRAY_SIZE(syscalls) * tests);
- 
+ 		vls[*vl_count] = vl;
 
+---
+base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
+change-id: 20221220-arm64-fp-stress-pow2-b81ee6471492
+
+Best regards,
 -- 
-2.30.2
+Mark Brown <broonie@kernel.org>
