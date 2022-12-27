@@ -2,44 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F306DC4167B
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD9DAC46467
 	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Dec 2022 13:07:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231718AbiL0NHX (ORCPT
+        id S229789AbiL0NHV (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 27 Dec 2022 08:07:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51246 "EHLO
+        Tue, 27 Dec 2022 08:07:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231615AbiL0NHB (ORCPT
+        with ESMTP id S231651AbiL0NG4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Dec 2022 08:07:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A3D4277;
-        Tue, 27 Dec 2022 05:07:00 -0800 (PST)
+        Tue, 27 Dec 2022 08:06:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BEF5277;
+        Tue, 27 Dec 2022 05:06:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AF1D06115E;
-        Tue, 27 Dec 2022 13:06:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76D62C43392;
-        Tue, 27 Dec 2022 13:06:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 32A9AB8101D;
+        Tue, 27 Dec 2022 13:06:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42AB9C43392;
+        Tue, 27 Dec 2022 13:06:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672146419;
-        bh=ftKw9JxdN7OkfKbeAVWrxvHtpZk1v1+kLM5uE4WBFzg=;
+        s=k20201202; t=1672146412;
+        bh=RNcNgyi+XWeNF+WSinst8npBEXg52AmbeM5w3G+O9YA=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=J9jBpf7YpIT/KUPBfiL0ijOMl3up/EqOTWovYRw6AiDyR7ZiTWaN/IZV4HsfbVAj8
-         GNrb0VSw3cJAsithpiUHhWeGY+yeBW0hzhbOL3zdgOFSE0G56hqwnD7JHIqfnyXV0o
-         OSzveBmxCUQGzT2OSV9PGd7WnGt0otzMVFg5ywu0gHNFX7IVkGKRPgsQSEyxeEskKO
-         lFydyFgMn7Fsiy81AsVE+Tcpf8Mg/xBP69hYNlO8h8seZAnLBnYNWPR9i6E/XkXyGh
-         8hcMH+OhpXF7SjazH1HYRm5yHGJNNxDN17oeC3H/JknK8zltzkb+1JQ67GK+/t4Oxc
-         FEIRKZsi3nUuQ==
+        b=X1mXjweTTYK8xa39s4cz6r7MbA+2CJZyqC5RKsj+ACMyyIOmfCUJUgL5+UZb4Dul4
+         fGaNKbhxAIXxZ+ZEXBOoJNXYEF9k/NwjmaM0AQeG8pu+yCkZDnSKbdQkmzN67B8M6M
+         zr0ZU/GH7tvTgK9IzBa920Xed5Yg1aC/tvnebchLf4X/ySqw8cl6suqVwi8fbgtXEd
+         WgStWeGtjRQlTEZ2P6Mxq8adIEM6LeAdXVIsGr5CoNAXy6oZWeMQR7aqv0aTvwQXYa
+         6S82w3JCzDnkXR4DTapI1NhW0/usghZ2naaIvpISx1gd/WgG9e436GGpwGDxwbcpym
+         lZ2jnAt0IvECA==
 From:   Mark Brown <broonie@kernel.org>
-Date:   Tue, 27 Dec 2022 13:06:38 +0000
-Subject: [PATCH 4/4] kselftest/arm64: Only enumerate power of two VLs in syscall-abi
+Date:   Tue, 27 Dec 2022 13:06:35 +0000
+Subject: [PATCH 1/4] kselftest/arm64: Fix syscall-abi for systems without 128 bit SME
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20221223-arm64-syscall-abi-sme-only-v1-4-4fabfbd62087@kernel.org>
+Message-Id: <20221223-arm64-syscall-abi-sme-only-v1-1-4fabfbd62087@kernel.org>
 References: <20221223-arm64-syscall-abi-sme-only-v1-0-4fabfbd62087@kernel.org>
 In-Reply-To: <20221223-arm64-syscall-abi-sme-only-v1-0-4fabfbd62087@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
@@ -49,66 +49,57 @@ Cc:     Shuah Khan <skhan@linuxfoundation.org>,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.12-dev-7ab1d
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2013; i=broonie@kernel.org;
- h=from:subject:message-id; bh=ftKw9JxdN7OkfKbeAVWrxvHtpZk1v1+kLM5uE4WBFzg=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjqu3oGR4UZqgD9m8L8fGlfTnGhEn85EVEwGm03O0/
- uGhK1kCJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY6rt6AAKCRAk1otyXVSH0GAxB/
- 0UF4ItAsSeRKn4TpESZ/DpfbOEkcF+ZzIdEuMKfESo072yQk+0JjHZulbv6n7to3jH5QfL1oJrvquA
- q4U/L7nbAOgaVe5C+9VYu4LDxNnfE7f9zmtCrT/9FrZTF+ZGxVpcerEcZ+nVWGYPWrOEKKQCDDaWf0
- h3DMQXbxveAaw/7DmCZxddZ3joC9VaoJaoxi9bcwwkd74tlpJAFRfiqlQ7vlX5z616Tl9gF562mAyC
- gAFVzJNTHKpRCE9J8PUzIOn0vteUImFQpCNFhjR60qeL59MkOscmVYIJlnPfLOmRkn9GLffkxIZNhs
- jA0at65HqbaaqP3U7u7NQTcp7Cjjmk
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1220; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=RNcNgyi+XWeNF+WSinst8npBEXg52AmbeM5w3G+O9YA=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjqu3l6Oy4cmr1i0AZdD7/l1h/+/8+rwatiqVG6BTH
+ CJpZJdKJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY6rt5QAKCRAk1otyXVSH0C0GB/
+ 41Fa+ye3U2Z+ujAnWV+Wyw58vmNFHQRwErFPW8ILHwKAurwod1ESbL3QB84c6oyxBY0Xm5akg63pKv
+ AHyoOJo0V7ylfEeo+KLhIUf+/j8g5TvTgL4Ao+wuUdR7FniW9n17Nup/g8NpAKE3zNNwK0gFZWBwZ2
+ K9w8Fh+LI8/LVusdHwE+3xf9EfObLOoFNTXDvrIR5XDFJkzX+shp7IFgdNLowymPJJHaeo4DQ+mAB5
+ UuFkn34rcrCOzQumrWH9SD6nD+PBk6SVn+K5J+RdJDkSWGj55n+FFmX+PBbUxyNLT4vHB3PnNqdJXG
+ HitVrnB+Lng5mN3x5qHOU90Q67lNzG
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-As documented in issue C215 in the known issues list for DDI0487I.a [1] Arm
-will be making a retroactive change to SVE to remove the possibility of
-selecting non power of two vector lengths. This has no impact on existing
-physical implementations but most virtual implementations have implemented
-the full range of permissible vector lengths.
+SME does not mandate any specific VL so we may not have 128 bit SME but
+the algorithm used for enumerating VLs assumes that we will. Add the
+required check to ensure that the algorithm terminates.
 
-Since virtual implementations are noticeably slow in general and the larger
-vector lengths amplify the issue there's a useful improvement in runtime
-from only covering the vector lengths that will exist in practical systems,
-adjust our enumeration accordingly. We have other tests that aim to cover
-the enumeration interfaces.
-
-For symmetry we apply the same change to the eumeration for SME vector
-lengths, though the power of two restriction was already present for SME
-so there is no impact on the set of vector lengths tested.
-
-[1] https://developer.arm.com/documentation/102105/ia-00/
-
+Fixes: 43e3f85523e4 ("kselftest/arm64: Add SME support to syscall ABI test")
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- tools/testing/selftests/arm64/abi/syscall-abi.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/arm64/abi/syscall-abi.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
 diff --git a/tools/testing/selftests/arm64/abi/syscall-abi.c b/tools/testing/selftests/arm64/abi/syscall-abi.c
-index 7c9b6e947040..8afcbf6861fd 100644
+index dd7ebe536d05..ffe719b50c21 100644
 --- a/tools/testing/selftests/arm64/abi/syscall-abi.c
 +++ b/tools/testing/selftests/arm64/abi/syscall-abi.c
-@@ -444,7 +444,7 @@ void sve_count_vls(void)
- 	/*
- 	 * Enumerate up to SVE_VQ_MAX vector lengths
- 	 */
--	for (vq = SVE_VQ_MAX; vq > 0; --vq) {
-+	for (vq = SVE_VQ_MAX; vq > 0; vq /= 2) {
- 		vl = prctl(PR_SVE_SET_VL, vq * 16);
- 		if (vl == -1)
- 			ksft_exit_fail_msg("PR_SVE_SET_VL failed: %s (%d)\n",
-@@ -470,7 +470,7 @@ void sme_count_vls(void)
- 	/*
- 	 * Enumerate up to SVE_VQ_MAX vector lengths
- 	 */
--	for (vq = SVE_VQ_MAX; vq > 0; --vq) {
-+	for (vq = SVE_VQ_MAX; vq > 0; vq /= 2) {
- 		vl = prctl(PR_SME_SET_VL, vq * 16);
- 		if (vl == -1)
- 			ksft_exit_fail_msg("PR_SME_SET_VL failed: %s (%d)\n",
+@@ -390,6 +390,10 @@ static void test_one_syscall(struct syscall_cfg *cfg)
+ 
+ 			sme_vl &= PR_SME_VL_LEN_MASK;
+ 
++			/* Found lowest VL */
++			if (sve_vq_from_vl(sme_vl) > sme_vq)
++				break;
++
+ 			if (sme_vq != sve_vq_from_vl(sme_vl))
+ 				sme_vq = sve_vq_from_vl(sme_vl);
+ 
+@@ -461,6 +465,10 @@ int sme_count_vls(void)
+ 
+ 		vl &= PR_SME_VL_LEN_MASK;
+ 
++		/* Found lowest VL */
++		if (sve_vq_from_vl(vl) > vq)
++			break;
++
+ 		if (vq != sve_vq_from_vl(vl))
+ 			vq = sve_vq_from_vl(vl);
+ 
 
 -- 
 2.30.2
