@@ -2,44 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D49ECC4332F
-	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Dec 2022 14:21:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10F3BC4167B
+	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Dec 2022 14:21:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229533AbiL0OVa (ORCPT
+        id S229635AbiL0OVa (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Tue, 27 Dec 2022 09:21:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43278 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231395AbiL0OVH (ORCPT
+        with ESMTP id S231636AbiL0OVK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Dec 2022 09:21:07 -0500
+        Tue, 27 Dec 2022 09:21:10 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E980065E8
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Dec 2022 06:21:06 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5478465E8
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Dec 2022 06:21:09 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8F600B81071
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Dec 2022 14:21:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC4EAC43392;
-        Tue, 27 Dec 2022 14:21:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 064B6B80D67
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Dec 2022 14:21:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0F00C433EF;
+        Tue, 27 Dec 2022 14:21:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672150864;
-        bh=M4Nq7DCPdliRWWQ+AnxkvH/6TKqPr78E3ulmX7bH0mU=;
+        s=k20201202; t=1672150866;
+        bh=ZCmjdtkfWzd3Gw1dWUOPCH2EpSFE/2OVt1eBFKH6lg0=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=PPlVG4Qx8X4Mc8N8u+Yc8nkP7ty4sYm+Pixmx+SdFdMH/h/PchI7YiU0/OjWEPdKx
-         zoJQdRGUWnURFPjLHI68EEWhiMlAX2UwSptYWg2sa0dsozMrXfm0iP91xgUDThAiar
-         aNDpKUbOFc/2b3xT52wwgtUR/6b9lVTUn4OFic8TiY39mlm3RIKst7MxGrsCJ+Nd2z
-         Rcux7K+bJLNnYPQ9wgZsQ1i+HOOCfVioJGC+q/PzX2x8Zje46fQFA+PA8aC3MVxxTk
-         xN2LaUkLZpMIr6OTDhYFYCr46+FJ7WwtwtuPaCmyFHUPQtufgNi49L7T8oK9CmYeHR
-         cFZnOfddNpFIw==
+        b=PdzYL9p4aAY4ZLT8FmsGuJBLnI2A/MafXbjT1uNxOP0FW859Faq3j55Vt6ieSIngD
+         cTh9ZmWkk6MuAMvrtJrNz7V+u2tciuCsaf+AsPwnl9aJCzn9BXP8gT4zDE0KM9QCkP
+         t9ep+Q3gjqbckMmPut/hadDHFZIAZus9IFXm9sJPq8PigMs0ah3guPwD5ZnJIz+FGP
+         oy/yctyaL1ewBq3h1wEZE8JIgINF8ps2/KxS3iF0Vj3Xdm/lHBf2Y/kJAMozaVWOCm
+         2f/z76Tsgmz9i3T6/oM10K9R2aeMizDoNquICY0DZV3qtOH9sgb2qJ5IKGR9Fndlgt
+         IAttqoKP3kcbA==
 From:   Mark Brown <broonie@kernel.org>
-Date:   Tue, 27 Dec 2022 14:20:40 +0000
-Subject: [PATCH v3 1/4] arm64/sme: Document ABI for TPIDR2 signal information
+Date:   Tue, 27 Dec 2022 14:20:41 +0000
+Subject: [PATCH v3 2/4] arm64/signal: Include TPIDR2 in the signal context
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20221208-arm64-tpidr2-sig-v3-1-c77c6c8775f4@kernel.org>
+Message-Id: <20221208-arm64-tpidr2-sig-v3-2-c77c6c8775f4@kernel.org>
 References: <20221208-arm64-tpidr2-sig-v3-0-c77c6c8775f4@kernel.org>
 In-Reply-To: <20221208-arm64-tpidr2-sig-v3-0-c77c6c8775f4@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
@@ -48,43 +48,178 @@ Cc:     Szabolcs Nagy <szabolcs.nagy@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.12-dev-7ab1d
-X-Developer-Signature: v=1; a=openpgp-sha256; l=817; i=broonie@kernel.org;
- h=from:subject:message-id; bh=M4Nq7DCPdliRWWQ+AnxkvH/6TKqPr78E3ulmX7bH0mU=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjqv9Juq5U/OSo5zIwcjdT4Ali6sNEo5vXiAOJVEaV
- YiS6JgaJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY6r/SQAKCRAk1otyXVSH0CgRB/
- 9CRyXmEjrNh6b8zk25LK3gHZmlDI2leVr8vgOAujsw+oJ3LJ54qrJkgAWUHLdynwQigv3tyYSAZgmj
- BpuLoml7omJDqVwH4hrCafH3fypoPhFQZR/CoIb8aqq0idlcT2gzOeC1P0wUJyWVps5iJriXc0hD3x
- Z27WQ6NKE7Ii2W/s+LswsEEFc9eVM9s00J8F2b7n8NouL+AiMifU4T43abNsQR61oQOqZ+SI0mGSoF
- xQvVziJZyR7vBwSyTRhzyVjNM+9c2xCPXxavf3yF+ntjFMqWF7aKRSfcYsUCfifucY7S+mNV2fIlZK
- DOUsCr/fhyBD63/CMMqgPSK//gTDLO
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4944; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=ZCmjdtkfWzd3Gw1dWUOPCH2EpSFE/2OVt1eBFKH6lg0=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjqv9K94Knp+yBtHOZkhdbQK5Z7xR78O43gzkmR06o
+ Q4v9z2eJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY6r/SgAKCRAk1otyXVSH0JheB/
+ sEbsWhR2elDImp2T/Vst0jIlYeXM6GhHwTORarD5ropQoPR7p06osC0ej1IJUNRBXphC+qrIq0fdz8
+ Lncl1QRqlBqWTjfdR9fWgoM3kZ9gXPCz+dVz8TiIGKSiB5HRRIt+OZz9f1zzDpTmnBqcGLuhHTbsyx
+ 4L0H7SABigNpLKSYe36hapuAIx7M8BT/MJAOWNtnXyGRJ9FeWXR3Q02uEoZV96I4Fu4ln5QfVkYXMl
+ Ym2uKHXZYrJcoFRKbz5U25uX6F3d4einNNicHLWgW07ey5HcgGomDdBb3Y8samK7gWJURAwLlGav00
+ TK25BA2dJw11xz/Mbinxp67T4ULBdd
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-In order to allow access to TPIDR2 from signal handlers we need to add it
-to the signal context, document that we are doing so.
+Add a new signal frame record for TPIDR2 using the same format as we
+already use for ESR with different magic, a header with the value from the
+register appended as the only data. If SME is supported then this record is
+always included.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
+Reviewed-by: Szabolcs Nagy <szabolcs.nagy@arm.com>
 ---
- Documentation/arm64/sme.rst | 3 +++
- 1 file changed, 3 insertions(+)
+ arch/arm64/include/uapi/asm/sigcontext.h |  8 +++++
+ arch/arm64/kernel/signal.c               | 59 ++++++++++++++++++++++++++++++++
+ 2 files changed, 67 insertions(+)
 
-diff --git a/Documentation/arm64/sme.rst b/Documentation/arm64/sme.rst
-index 16d2db4c2e2e..36b08a105dd1 100644
---- a/Documentation/arm64/sme.rst
-+++ b/Documentation/arm64/sme.rst
-@@ -111,6 +111,9 @@ be zeroed.
+diff --git a/arch/arm64/include/uapi/asm/sigcontext.h b/arch/arm64/include/uapi/asm/sigcontext.h
+index 9525041e4a14..4b4398d7fb2d 100644
+--- a/arch/arm64/include/uapi/asm/sigcontext.h
++++ b/arch/arm64/include/uapi/asm/sigcontext.h
+@@ -144,6 +144,14 @@ struct sve_context {
  
- * Signal handlers are invoked with streaming mode and ZA disabled.
+ #define SVE_SIG_FLAG_SM	0x1	/* Context describes streaming mode */
  
-+* A new signal frame record TPIDR2_MAGIC is added formatted as a struct
-+  tpidr2_context to allow access to TPIDR2_EL0 from signal handlers.
++/* TPIDR2_EL0 context */
++#define TPIDR2_MAGIC	0x54504902
 +
- * A new signal frame record za_context encodes the ZA register contents on
-   signal delivery. [1]
++struct tpidr2_context {
++	struct _aarch64_ctx head;
++	__u64 tpidr2;
++};
++
+ #define ZA_MAGIC	0x54366345
  
+ struct za_context {
+diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
+index e0d09bf5b01b..5fe45c7c5e4f 100644
+--- a/arch/arm64/kernel/signal.c
++++ b/arch/arm64/kernel/signal.c
+@@ -56,6 +56,7 @@ struct rt_sigframe_user_layout {
+ 	unsigned long fpsimd_offset;
+ 	unsigned long esr_offset;
+ 	unsigned long sve_offset;
++	unsigned long tpidr2_offset;
+ 	unsigned long za_offset;
+ 	unsigned long extra_offset;
+ 	unsigned long end_offset;
+@@ -220,6 +221,7 @@ static int restore_fpsimd_context(struct fpsimd_context __user *ctx)
+ struct user_ctxs {
+ 	struct fpsimd_context __user *fpsimd;
+ 	struct sve_context __user *sve;
++	struct tpidr2_context __user *tpidr2;
+ 	struct za_context __user *za;
+ };
+ 
+@@ -361,6 +363,32 @@ extern int preserve_sve_context(void __user *ctx);
+ 
+ #ifdef CONFIG_ARM64_SME
+ 
++static int preserve_tpidr2_context(struct tpidr2_context __user *ctx)
++{
++	int err = 0;
++
++	current->thread.tpidr2_el0 = read_sysreg_s(SYS_TPIDR2_EL0);
++
++	__put_user_error(TPIDR2_MAGIC, &ctx->head.magic, err);
++	__put_user_error(sizeof(*ctx), &ctx->head.size, err);
++	__put_user_error(current->thread.tpidr2_el0, &ctx->tpidr2, err);
++
++	return err;
++}
++
++static int restore_tpidr2_context(struct user_ctxs *user)
++{
++	u64 tpidr2_el0;
++	int err = 0;
++
++	/* Magic and size were validated deciding to call this function */
++	__get_user_error(tpidr2_el0, &user->tpidr2->tpidr2, err);
++	if (!err)
++		current->thread.tpidr2_el0 = tpidr2_el0;
++
++	return err;
++}
++
+ static int preserve_za_context(struct za_context __user *ctx)
+ {
+ 	int err = 0;
+@@ -450,6 +478,8 @@ static int restore_za_context(struct user_ctxs *user)
+ #else /* ! CONFIG_ARM64_SME */
+ 
+ /* Turn any non-optimised out attempts to use these into a link error: */
++extern int preserve_tpidr2_context(void __user *ctx);
++extern int restore_tpidr2_context(struct user_ctxs *user);
+ extern int preserve_za_context(void __user *ctx);
+ extern int restore_za_context(struct user_ctxs *user);
+ 
+@@ -468,6 +498,7 @@ static int parse_user_sigframe(struct user_ctxs *user,
+ 
+ 	user->fpsimd = NULL;
+ 	user->sve = NULL;
++	user->tpidr2 = NULL;
+ 	user->za = NULL;
+ 
+ 	if (!IS_ALIGNED((unsigned long)base, 16))
+@@ -534,6 +565,19 @@ static int parse_user_sigframe(struct user_ctxs *user,
+ 			user->sve = (struct sve_context __user *)head;
+ 			break;
+ 
++		case TPIDR2_MAGIC:
++			if (!system_supports_sme())
++				goto invalid;
++
++			if (user->tpidr2)
++				goto invalid;
++
++			if (size != sizeof(*user->tpidr2))
++				goto invalid;
++
++			user->tpidr2 = (struct tpidr2_context __user *)head;
++			break;
++
+ 		case ZA_MAGIC:
+ 			if (!system_supports_sme())
+ 				goto invalid;
+@@ -666,6 +710,9 @@ static int restore_sigframe(struct pt_regs *regs,
+ 			err = restore_fpsimd_context(user.fpsimd);
+ 	}
+ 
++	if (err == 0 && system_supports_sme() && user.tpidr2)
++		err = restore_tpidr2_context(&user);
++
+ 	if (err == 0 && system_supports_sme() && user.za)
+ 		err = restore_za_context(&user);
+ 
+@@ -760,6 +807,11 @@ static int setup_sigframe_layout(struct rt_sigframe_user_layout *user,
+ 		else
+ 			vl = task_get_sme_vl(current);
+ 
++		err = sigframe_alloc(user, &user->tpidr2_offset,
++				     sizeof(struct tpidr2_context));
++		if (err)
++			return err;
++
+ 		if (thread_za_enabled(&current->thread))
+ 			vq = sve_vq_from_vl(vl);
+ 
+@@ -817,6 +869,13 @@ static int setup_sigframe(struct rt_sigframe_user_layout *user,
+ 		err |= preserve_sve_context(sve_ctx);
+ 	}
+ 
++	/* TPIDR2 if supported */
++	if (system_supports_sme() && err == 0) {
++		struct tpidr2_context __user *tpidr2_ctx =
++			apply_user_offset(user, user->tpidr2_offset);
++		err |= preserve_tpidr2_context(tpidr2_ctx);
++	}
++
+ 	/* ZA state if present */
+ 	if (system_supports_sme() && err == 0 && user->za_offset) {
+ 		struct za_context __user *za_ctx =
 
 -- 
 2.30.2
