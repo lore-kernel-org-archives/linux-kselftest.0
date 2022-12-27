@@ -2,275 +2,221 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D4E6BC53210
-	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Dec 2022 01:18:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 729AEC10F1B
+	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Dec 2022 06:27:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232361AbiL0BSl (ORCPT
+        id S229601AbiL0G1D (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 26 Dec 2022 20:18:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45226 "EHLO
+        Tue, 27 Dec 2022 01:27:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232486AbiL0BSi (ORCPT
+        with ESMTP id S229496AbiL0G1B (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 26 Dec 2022 20:18:38 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC6432AFC
-        for <linux-kselftest@vger.kernel.org>; Mon, 26 Dec 2022 17:18:34 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id u7so11893151plq.11
-        for <linux-kselftest@vger.kernel.org>; Mon, 26 Dec 2022 17:18:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=cv0zRbfcsW5sJwUqq/DUwd/WiT2hXSww1W0mF2vXIRc=;
-        b=yR+BP7ZH9WYVOjmBD6CtqulUYPvw/3BsnKcmISXbyJ2RBeaIk2b4krGXMjScU5JMsn
-         waK0nk0TjkMqzHxj9OLLit1MC5BIn8GgKaHpE7iXGHxo6Yl4vi7JniLH+H7yAgh2nr6g
-         lc52OUj4ivsZVnpQtGAqAItrnVAd4sTE+CsLNvTW3YLFmQOBGU9uQ6GHboQGTBjkWAPX
-         oi7YN4ZhhF+Xdi0n86Ru4guRvE/NQ2abOF6ayQlKMfEmSP0xWKu8Yyz7799Bixrpvsd8
-         ZOp6tvdifBfbp1jDEnIcGNUuvKUQp6jh1J3TbWsRXgZyoYohHc58yGgsw+tO+0p/RGL7
-         ITTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cv0zRbfcsW5sJwUqq/DUwd/WiT2hXSww1W0mF2vXIRc=;
-        b=mQ68GJsvFM4qNFKv4mhwDMzbyNLifplL00vwefv7YqwGzrJXbjBxh9eL8IeicVQtFK
-         Hf+433MvR3TGQfL4EY54ggQIZec51kPI9xdGNnezN4IMF/EbCZMZbqgNihKcrXFxB/LF
-         wEiJ73NaPjduwt4K+C/vfU9ij2iH+1ECQoG3EKVdIh8rb5RunUwt4kTR6I3KozbErA0j
-         FLVB9jeybAdNf82oj2eB8JOshqFbacntIEtYI1WpMvXCiV969vjonPyB3AffIv+qH5VE
-         8v1n4MzR4IYdbJAt7+CL98cwIjQc7Jv3EXPxyLaVZlPQhPBcw8KCr91FPUFKP1K++W/o
-         CArA==
-X-Gm-Message-State: AFqh2kpLmB0RFmzJDeAQeP6Z7yl1p69lVy6UHZyM3tkSXOMgTV8y+k6B
-        lrkWqyH6cc3fputXICA+ZmZ7MIGW7EDmGG7ROlI=
-X-Google-Smtp-Source: AMrXdXsQ4XyjjzIbN1DSpXI1+0kbcZiCt38prxp2aMeDC6D+ldVlAdjvcG4ohetU6/iOCZlDjkkBBA==
-X-Received: by 2002:a17:902:d303:b0:189:b3bf:c0b5 with SMTP id b3-20020a170902d30300b00189b3bfc0b5mr22158636plc.34.1672103914221;
-        Mon, 26 Dec 2022 17:18:34 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id l2-20020a170902f68200b00177faf558b5sm7632428plg.250.2022.12.26.17.18.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Dec 2022 17:18:33 -0800 (PST)
-Message-ID: <63aa47e9.170a0220.5c798.de42@mx.google.com>
-Date:   Mon, 26 Dec 2022 17:18:33 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 27 Dec 2022 01:27:01 -0500
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EDA20BA1;
+        Mon, 26 Dec 2022 22:26:58 -0800 (PST)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 2BR6QemS005393;
+        Tue, 27 Dec 2022 07:26:40 +0100
+Date:   Tue, 27 Dec 2022 07:26:40 +0100
+From:   Willy Tarreau <w@1wt.eu>
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Gilang Fachrezy <gilang4321@gmail.com>,
+        VNLX Kernel Department <kernel@vnlx.org>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
+        Kanna Scarlet <knscarlet@gnuweeb.org>,
+        Muhammad Rizki <kiizuha@gnuweeb.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kselftest Mailing List 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [RFC PATCH v1 0/8] nolibc signal handling support
+Message-ID: <20221227062640.GA5337@1wt.eu>
+References: <20221222035134.3467659-1-ammar.faizi@intel.com>
+ <20221222043452.GB29086@1wt.eu>
+ <20221222134615.3535422-1-ammar.faizi@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v6.2-rc1
-X-Kernelci-Tree: kselftest
-X-Kernelci-Branch: fixes
-X-Kernelci-Report-Type: test
-Subject: kselftest/fixes kselftest-lkdtm: 5 runs, 5 regressions (v6.2-rc1)
-To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221222134615.3535422-1-ammar.faizi@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kselftest/fixes kselftest-lkdtm: 5 runs, 5 regressions (v6.2-rc1)
+Hi Ammar,
 
-Regressions Summary
--------------------
+On Thu, Dec 22, 2022 at 08:46:15PM +0700, Ammar Faizi wrote:
+> I agree with following the @envp pointer to get the auxv. I was
+> trying to wire up a new function '__start' (with double underscores)
+> written in C that accepts @argc, @argv and @envp. Then it calls 'main'.
+> Then we call '__start' instead of 'main' from '_start'. This way, we
+> can arrange nolibc-defined data without touching Assembly much in
+> '__start' (before main).
+> 
+> But then I noticed that it wouldn't work because we may have users
+> who define the 'main' function differently, e.g.:
+> 
+>     int main(void);
+>     int main(int argc, char **argv);
+>     int main(int argc, char **argv, char **envp);
+> 
+> So '__start' can't call main. We still need to call the main from the
+> inline Assembly (from '_start').
 
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-imx6q-sabrelite              | arm   | lab-collabora | gcc-10   | multi_v7_=
-defconfig+kselftest | 1          =
+Yes, and quite frankly I prefer to make that the least complicated.
+Doing just a simple loop in the _start code is trivial. The main
+concern was to store the data. Till now we had an optional .bss
+section, we didn't save environ and errno was optional. But let's
+be honest, while it does allow for writing the smallest programs,
+most programs will have at least one global variable and will get
+this section anyway, so we don't save anything in practice. This
+concern used to be valid when I was making tiny executables when
+running on floppies where each byte mattered, but now that's pointless.
 
-mt8173-elm-hana              | arm64 | lab-collabora | clang-15 | defconfig=
-+kse...4-chromebook | 1          =
+Thus what I'm proposing is to switch to weak symbol definitions for
+errno, environ, and auxv. I did a quick test to make sure that the same
+symbol was properly used when accessed from two units and that's OK, I'm
+seeing the same instance for all of them (which is better than the current
+situation where errno is static, hence per-unit).
 
-mt8173-elm-hana              | arm64 | lab-collabora | gcc-10   | defconfig=
-+kse...4-chromebook | 1          =
+My quick-and-dirty test looks like this:
 
-mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | clang-15 | defconfig=
-+kse...4-chromebook | 1          =
+diff --git a/arch-x86_64.h b/arch-x86_64.h
+index e780fdf..73f7b5f 100644
+--- a/arch-x86_64.h
++++ b/arch-x86_64.h
+@@ -209,6 +209,9 @@ struct sys_stat_struct {
+        _ret;                                                                 \
+ })
+ 
++char **environ __attribute__((weak,unused));
++long *auxv __attribute__((weak,unused));
++
+ /* startup code */
+ /*
+  * x86-64 System V ABI mandates:
+@@ -218,11 +221,17 @@ struct sys_stat_struct {
+  */
+ asm(".section .text\n"
+     ".weak _start\n"
+     "_start:\n"
+     "pop %rdi\n"                // argc   (first arg, %rdi)
+     "mov %rsp, %rsi\n"          // argv[] (second arg, %rsi)
+     "lea 8(%rsi,%rdi,8),%rdx\n" // then a NULL then envp (third arg, %rdx)
++    "mov %rdx, environ\n"       // save environ
+     "xor %ebp, %ebp\n"          // zero the stack frame
++    "mov %rdx, %rax\n"          // search for auxv (follows NULL after last en>
++    "0: add $8, %rax\n"
++    "   cmp -8(%rax), %rbp\n"
++    "   jnz 0b\n"
++    "mov %rax, auxv\n"          // save auxv
+     "and $-16, %rsp\n"          // x86 ABI : esp must be 16-byte aligned befor>
+     "call main\n"               // main() returns the status code, we'll exit >
+     "mov %eax, %edi\n"          // retrieve exit code (32 bit)
 
-mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | gcc-10   | defconfig=
-+kse...4-chromebook | 1          =
+diff --git a/errno.h b/errno.h
+index df0e473..9781077 100644
+--- a/errno.h
++++ b/errno.h
+@@ -29,7 +29,8 @@
+ #include <asm/errno.h>
+ 
+ /* this way it will be removed if unused */
+-static int errno;
++//static int errno;
++int errno __attribute__((weak));
+ 
+ #ifndef NOLIBC_IGNORE_ERRNO
+ #define SET_ERRNO(v) do { errno = (v); } while (0)
 
+$ cat a.c
+#include "nolibc.h"
 
-  Details:  https://kernelci.org/test/job/kselftest/branch/fixes/kernel/v6.=
-2-rc1/plan/kselftest-lkdtm/
+extern void b(void);
 
-  Test:     kselftest-lkdtm
-  Tree:     kselftest
-  Branch:   fixes
-  Describe: v6.2-rc1
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
-lftest.git
-  SHA:      1b929c02afd37871d5afb9d498426f83432e71c2 =
+int main(int argc, char **argv, char **envp)
+{
+        //environ = envp;
+        errno = 1234;
+        printf("main(): errno=%d env(TERM)=%s auxv=%p auxv[0].t=0x%lx auxv[0].v=0x%lx\n",
+               errno, getenv("TERM"), auxv, auxv?auxv[0]:0, auxv?auxv[1]:0);
+        b();
+        return 0;
+}
 
+$ cat b.c
+#include "nolibc.h"
 
+void b(void)
+{
+        long *v = auxv;
 
-Test Regressions
----------------- =
+        printf("b(): errno=%d env(TERM)=%s auxv=%p auxv[0].t=0x%lx auxv[0].v=0x%lx\n",
+               errno, getenv("TERM"), auxv, auxv?auxv[0]:0, auxv?auxv[1]:0);
 
+        printf("auxv:\n");
+        while (v && v[0]) {
+                printf("  0x%lx: 0x%lx\n", v[0], v[1]);
+                v += 2;
+        }
+}
 
+$ gcc -Os -fno-asynchronous-unwind-tables -include /g/public/nolibc/nolibc.h -Wall -nostdlib -static  -o ab a.c b.c
 
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-imx6q-sabrelite              | arm   | lab-collabora | gcc-10   | multi_v7_=
-defconfig+kselftest | 1          =
+$ nm --size ab
+0000000000000004 V errno
+0000000000000008 V auxv
+0000000000000008 V environ
+0000000000000014 W memset
+0000000000000018 W memcpy
+0000000000000018 W raise
+000000000000001b W abort
+0000000000000030 W memmove
+0000000000000053 t u64toa_r
+0000000000000053 t u64toa_r
+0000000000000082 T main
+00000000000000a4 T b
+0000000000000289 t printf
+000000000000028c t printf.constprop.0
 
+$ ./ab
+main(): errno=1234 env(TERM)=xterm auxv=0x7ffdd0c31df8 auxv[0].t=0x21 auxv[0].v=0x7ffdd0d56000
+b(): errno=1234 env(TERM)=xterm auxv=0x7ffdd0c31df8 auxv[0].t=0x21 auxv[0].v=0x7ffdd0d56000
+auxv:
+  0x21: 0x7ffdd0d56000
+  0x10: 0xbfebfbff
+  0x6: 0x1000
+  0x11: 0x64
+  0x3: 0x400040
+  0x4: 0x38
+  0x5: 0x7
+  0x7: 0x0
+  0x8: 0x0
+  0x9: 0x401082
+  0xb: 0x1fd
+  0xc: 0x1fd
+  0xd: 0x64
+  0xe: 0x64
+  0x17: 0x0
+  0x19: 0x7ffdd0c31f39
+  0x1a: 0x2
+  0x1f: 0x7ffdd0c33ff3
+  0xf: 0x7ffdd0c31f49
 
-  Details:     https://kernelci.org/test/plan/id/63aa36fc3f96cdff844eee1c
+Note that I could verify that some of the entries above are valid
+(e.g. "x86_64" in 0xf = AT_PLATFORM).
 
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+kselftest
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//kselftest/fixes/v6.2-rc1/arm/m=
-ulti_v7_defconfig+kselftest/gcc-10/lab-collabora/kselftest-lkdtm-imx6q-sabr=
-elite.txt
-  HTML log:    https://storage.kernelci.org//kselftest/fixes/v6.2-rc1/arm/m=
-ulti_v7_defconfig+kselftest/gcc-10/lab-collabora/kselftest-lkdtm-imx6q-sabr=
-elite.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20221216.0/armhf/initrd.cpio.gz =
+Thus now my focus will be on storing these variables where relevant
+for all archs, so that your getauxval() implementation works on top
+of it. It will be much cleaner and will also improve programs' ease
+of implementation and reliability.
 
+Cheers,
+Willy
 
+PS: maybe we should trim the Cc list for future exchanges.
 
-  * kselftest-lkdtm.login: https://kernelci.org/test/case/id/63aa36fc3f96cd=
-ff844eee1d
-        failing since 70 days (last pass: v6.0-rc1, first fail: v6.1-rc1) =
-
- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-mt8173-elm-hana              | arm64 | lab-collabora | clang-15 | defconfig=
-+kse...4-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/63aa3805f71b4940854eee1f
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest+arm64-chromebook
-  Compiler:    clang-15 (Debian clang version 15.0.6)
-  Plain log:   https://storage.kernelci.org//kselftest/fixes/v6.2-rc1/arm64=
-/defconfig+kselftest+arm64-chromebook/clang-15/lab-collabora/kselftest-lkdt=
-m-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//kselftest/fixes/v6.2-rc1/arm64=
-/defconfig+kselftest+arm64-chromebook/clang-15/lab-collabora/kselftest-lkdt=
-m-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20221216.0/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-lkdtm.login: https://kernelci.org/test/case/id/63aa3805f71b49=
-40854eee20
-        failing since 68 days (last pass: linux-kselftest-fixes-6.0-rc3, fi=
-rst fail: v6.1-rc1-5-gcb05c81ada76) =
-
- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-mt8173-elm-hana              | arm64 | lab-collabora | gcc-10   | defconfig=
-+kse...4-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/63aa3a2c24e09bc69d4eee22
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest+arm64-chromebook
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//kselftest/fixes/v6.2-rc1/arm64=
-/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora/kselftest-lkdtm-=
-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//kselftest/fixes/v6.2-rc1/arm64=
-/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora/kselftest-lkdtm-=
-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20221216.0/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-lkdtm.login: https://kernelci.org/test/case/id/63aa3a2c24e09b=
-c69d4eee23
-        failing since 68 days (last pass: linux-kselftest-fixes-6.0-rc3, fi=
-rst fail: v6.1-rc1-5-gcb05c81ada76) =
-
- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | clang-15 | defconfig=
-+kse...4-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/63aa380509a37c9c1b4eee37
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest+arm64-chromebook
-  Compiler:    clang-15 (Debian clang version 15.0.6)
-  Plain log:   https://storage.kernelci.org//kselftest/fixes/v6.2-rc1/arm64=
-/defconfig+kselftest+arm64-chromebook/clang-15/lab-collabora/kselftest-lkdt=
-m-mt8183-kukui-jacuzzi-juniper-sku16.txt
-  HTML log:    https://storage.kernelci.org//kselftest/fixes/v6.2-rc1/arm64=
-/defconfig+kselftest+arm64-chromebook/clang-15/lab-collabora/kselftest-lkdt=
-m-mt8183-kukui-jacuzzi-juniper-sku16.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20221216.0/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-lkdtm.login: https://kernelci.org/test/case/id/63aa380509a37c=
-9c1b4eee38
-        failing since 68 days (last pass: linux-kselftest-fixes-6.0-rc3, fi=
-rst fail: v6.1-rc1-5-gcb05c81ada76) =
-
- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | gcc-10   | defconfig=
-+kse...4-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/63aa3a360a0c1b68d74eee1d
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest+arm64-chromebook
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//kselftest/fixes/v6.2-rc1/arm64=
-/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora/kselftest-lkdtm-=
-mt8183-kukui-jacuzzi-juniper-sku16.txt
-  HTML log:    https://storage.kernelci.org//kselftest/fixes/v6.2-rc1/arm64=
-/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora/kselftest-lkdtm-=
-mt8183-kukui-jacuzzi-juniper-sku16.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20221216.0/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-lkdtm.login: https://kernelci.org/test/case/id/63aa3a360a0c1b=
-68d74eee1e
-        failing since 68 days (last pass: linux-kselftest-fixes-6.0-rc3, fi=
-rst fail: v6.1-rc1-5-gcb05c81ada76) =
-
- =20
