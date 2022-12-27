@@ -2,86 +2,114 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2720DC4332F
-	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Dec 2022 13:36:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 89492C4332F
+	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Dec 2022 14:21:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231221AbiL0Ngw (ORCPT
+        id S229445AbiL0OVG (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 27 Dec 2022 08:36:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59254 "EHLO
+        Tue, 27 Dec 2022 09:21:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231445AbiL0Ngs (ORCPT
+        with ESMTP id S231636AbiL0OVE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Dec 2022 08:36:48 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9021FB7C5;
-        Tue, 27 Dec 2022 05:36:47 -0800 (PST)
-Received: from [10.7.7.5] (unknown [182.253.183.184])
-        by gnuweeb.org (Postfix) with ESMTPSA id 016557E2BA;
-        Tue, 27 Dec 2022 13:36:43 +0000 (UTC)
-X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1672148207;
-        bh=EAmnj0RlIG0MGwi3OSqM2CbWUp31upcL4Rr7mE3BEzk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=m3vFWGgFos4CVm/6DKMfvLRN3lO3Hf8erFN7TuCBwpYdoRs5SfWZcewOZyO2yKniC
-         PhHPT0lNHM20h0JbVMUIz5AgtdblS2c/vDzoQcqw7sy3p1kBoMd/53NX+Z9S4weeul
-         WKhSisQDra81GMtPICtyInDEtD2enrqqqrhr48cbccPliJOU5u1veaQ+ffJm1B1zvm
-         jWk+ckJjVJgeG95ZIVAcdGqMAPg6sb9i6Vgb2m9/b/XxNZpYXl5R2M5hqpM9+fPTH1
-         7Ex289a63N1CVaG/s9F8wMDiRCuN9TPxoiATEeyktBNqg/PoJxHI4ze8Lnrpa5dXCM
-         54+J+p+MRtnRw==
-Message-ID: <d206f87d-2107-7cdb-ee2a-7fe718f06f3d@gnuweeb.org>
-Date:   Tue, 27 Dec 2022 20:36:41 +0700
+        Tue, 27 Dec 2022 09:21:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33F3A64DD
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Dec 2022 06:21:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C544861169
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Dec 2022 14:21:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF78CC433D2;
+        Tue, 27 Dec 2022 14:21:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672150862;
+        bh=1XAcrcfyXE2/83zp7bpH4uJkMg29hwlnxwK/pLrqMgA=;
+        h=From:Subject:Date:To:Cc:From;
+        b=uQ2TjkDEIkD5ajlmrnXihqMYDlNVaYovWmYitd13pgC6gcy/Kel1OyXt22Kh5b0kZ
+         LUzrQnd/ka/0IYxLTp3KfMYvAR6YaBYw6jyQ4TlEHBcR6hLlXj1CpYuIYqAeHK7Rqn
+         c8ZMIg7R2ey9cVUmyukW05W4fNNP5CcaDS+9YTW4Zb8Y4xPcpmf7Vb+MM0bu5an3C5
+         q5h8uiiasJriGAS1WDSDaRWuEmgZdxppOco44fQkljYCyUl4wT/zDFJqsiqSfptrpN
+         8t2nieBvcpvqAzxLq+BvqOBOvAKUSTurQQSLdADAFQ0INtcpjdYB7rAHYuaUL+dr0X
+         rGGIw3Lod61Rg==
+From:   Mark Brown <broonie@kernel.org>
+Subject: [PATCH v3 0/4] arm64/signal: Support TPIDR2
+Date:   Tue, 27 Dec 2022 14:20:40 +0000
+Message-Id: <20221208-arm64-tpidr2-sig-v3-0-c77c6c8775f4@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [RFC PATCH v1 0/8] nolibc signal handling support
-Content-Language: en-US
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Gilang Fachrezy <gilang4321@gmail.com>,
-        VNLX Kernel Department <kernel@vnlx.org>,
-        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
-        Kanna Scarlet <knscarlet@gnuweeb.org>,
-        Muhammad Rizki <kiizuha@gnuweeb.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kselftest Mailing List 
-        <linux-kselftest@vger.kernel.org>
-References: <20221222035134.3467659-1-ammar.faizi@intel.com>
- <20221222043452.GB29086@1wt.eu>
- <20221222134615.3535422-1-ammar.faizi@intel.com>
- <20221227062640.GA5337@1wt.eu>
- <00eee75f-59fa-83b2-c7e1-f0da347b2dde@gnuweeb.org>
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-In-Reply-To: <00eee75f-59fa-83b2-c7e1-f0da347b2dde@gnuweeb.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADj/qmMC/x2NQQ6CMBAAv2J6toBFFDwZ9QMc1XjYwlI2hpZsq
+ zEh/N3CcTKZzCQ8MqEXp80kGL/kydkI+XYjmh6sQUltZKEypXYqKyXwcNjLMFLLSnoysuy0rvKj
+ KtoSRcw0eJSawTb9EjomQzYdwAfkxY+MHf3W5fMVuWM3yNAzwjq650V9e1wgq83VplU4e2K0kDg
+ 2yect5vkPN3CyXrMAAAA=
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc:     Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.12-dev-7ab1d
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2008; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=1XAcrcfyXE2/83zp7bpH4uJkMg29hwlnxwK/pLrqMgA=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjqv9I1ajfhKPHbuSfIWwo/FtNl3/WTxuqFbHg2iQW
+ GxITssWJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY6r/SAAKCRAk1otyXVSH0O6aB/
+ 9tna8AmGTml1pxajctbY0HbmVtmfWHkvzr2xogaSFGQ2XGXkQ1c3oPE1sgO+X1U6CMzc41kfq0lROW
+ Ou7SJBRno5kBByHjPjTKqEr2uAsbFXup211ZJ1s8ZElIwzDoGTQGOgZgBTUXxYo0xekdM5dzUttkiS
+ f+/PdE13BtF5E77fBbXVaIr1vtGcLpS0TMN5gVTdNa+8636L4gR/MzPTMADIQGa8vPUlv1uFOj8yR2
+ 0M9E/dFMYBWZtWkQFasUFRe7icOD+RrSgUtZC/kv6hHqWxoJx/wcUxK4mLSr4nbYYTI7OS50ADHhY6
+ 0/c8uOL+cSEUwvsZYtxckEJ5Nwzsej
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/27/22 8:32 PM, Ammar Faizi wrote:
->> Thus now my focus will be on storing these variables where relevant
->> for all archs, so that your getauxval() implementation works on top
->> of it. It will be much cleaner and will also improve programs' ease
->> of implementation and reliability.
-> 
-> Are you going to wire up a patchset for it?
-> 
-> If so, I'll wait for it. When it's already committed, I'll base this
-> series on top it.
-> 
-> Or I take your series locally then submit your patches and mine in a
-> single series.
-> 
-> What do you prefer?
+When SME support was merged support for TPIDR2 in signal frames was
+omitted, meaning that it was not possible for signal handers to inspect
+or modify it. This will present an issue for programs using signals to
+implement lightweight threads so let's provide access to TPIDR2 in
+signal handlers.
 
-Side note:
-I only know x86 Assembly. So unfortunately, I can't get them working
-on all arch(s).
+Implement a new record type for TPIDR2 using the same format as we use
+for ESR and add coverage to make sure that this appears in the signal
+context as expected.  Due to TPIDR2 being reserved for libc we only
+validate that the value is unchanged, meaning we're likely to just be
+validating the default value of 0 on current systems. I have tested with
+a modified version that sets an explicit value.
 
+v3:
+ - Rebase onto v6.2-rc1.
+v2:
+ - Rebase onto v6.1-rc3.
+ - Change the signal frame magic to 0x54504902 (TPI).
+
+To: Catalin Marinas <catalin.marinas@arm.com>
+To: Will Deacon <will@kernel.org>
+To: Shuah Khan <shuah@kernel.org>
+Cc: Szabolcs Nagy <szabolcs.nagy@arm.com>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-kselftest@vger.kernel.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
+
+---
+Mark Brown (4):
+      arm64/sme: Document ABI for TPIDR2 signal information
+      arm64/signal: Include TPIDR2 in the signal context
+      kselftest/arm64: Add TPIDR2 to the set of known signal context records
+      kselftest/arm64: Add test case for TPIDR2 signal frame records
+
+ Documentation/arm64/sme.rst                        |  3 +
+ arch/arm64/include/uapi/asm/sigcontext.h           |  8 ++
+ arch/arm64/kernel/signal.c                         | 59 ++++++++++++++
+ tools/testing/selftests/arm64/signal/.gitignore    |  1 +
+ .../selftests/arm64/signal/testcases/testcases.c   |  4 +
+ .../arm64/signal/testcases/tpidr2_siginfo.c        | 90 ++++++++++++++++++++++
+ 6 files changed, 165 insertions(+)
+---
+base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
+change-id: 20221208-arm64-tpidr2-sig-8fbb93725d8e
+
+Best regards,
 -- 
-Ammar Faizi
-
+Mark Brown <broonie@kernel.org>
