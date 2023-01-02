@@ -2,70 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5639C3DA7A
-	for <linux-kselftest@archiver.kernel.org>; Mon,  2 Jan 2023 16:12:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C36A3C3DA7A
+	for <linux-kselftest@archiver.kernel.org>; Mon,  2 Jan 2023 16:16:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236364AbjABQMP (ORCPT
+        id S236479AbjABQQm (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 2 Jan 2023 11:12:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56540 "EHLO
+        Mon, 2 Jan 2023 11:16:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236369AbjABQMI (ORCPT
+        with ESMTP id S236705AbjABQQc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 2 Jan 2023 11:12:08 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A533E1FE
-        for <linux-kselftest@vger.kernel.org>; Mon,  2 Jan 2023 08:10:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672675845;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0NmhDSiaQrrVJCMvGRbMDi8tVjpwlzfwkqxg2mnsE2c=;
-        b=dDUJqyiTFnGuhoBgxOzTEOr11QmceXbZ4DU8aXAOAod11Gth5FC7U1XS15ots4jPvZ8rXl
-        SVhUozAwee83AS/Z7EXzwR78WWgSylLhzd9ROzYanIfsBwC1aZpg6debKmoIKzVHrk2XLd
-        ZRC49ItQ8ICIeSNbQIPQd5n4t0OkxBI=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-510-8DZhi4xpNeu02LE5UdbZww-1; Mon, 02 Jan 2023 11:10:43 -0500
-X-MC-Unique: 8DZhi4xpNeu02LE5UdbZww-1
-Received: by mail-wm1-f71.google.com with SMTP id bi18-20020a05600c3d9200b003d991844dbcso9168248wmb.4
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Jan 2023 08:10:43 -0800 (PST)
+        Mon, 2 Jan 2023 11:16:32 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ECE91088;
+        Mon,  2 Jan 2023 08:16:25 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id co23so26735748wrb.4;
+        Mon, 02 Jan 2023 08:16:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=RKIJPYaJSdM3GKsqUf/WtIlPO2sQ0/XB3Crq4Is/cNU=;
+        b=pjHG4gCV0CBN4TWnma/ku4nCxrXwnvh5BTC/fjr42Zaw3hXIKmiAoxAn/mykTGPb9K
+         yZUfPO5KrY0IN70tJ4dfSEIXVTvHM2WFKZCddKD1Ibnq9BMJKm/lNb+knAOXtvQUcNmK
+         eYxAFY6Ju3lIZiACzT4E6SUfEzvRi0momUwjXMcspqmNP/So0K3ju1r9DTBkpx1ecU2r
+         UPMOFBzPLsAd/Yne5j1VLJesK7SiXTzXDoaniLpBXnCGv+De11zTYg0flzNlkl1sTUKs
+         PdCW+GavwtBTAwMobxuHcLuqrT6M4rziSNuxF+qZ2yXoN/loHysAObx0YgPqPVHA+xLI
+         hKJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0NmhDSiaQrrVJCMvGRbMDi8tVjpwlzfwkqxg2mnsE2c=;
-        b=fiO0yBXThKL688tPDntAkmBKIKysURaci0rFGBlLez7oj9R72YW3usEeGM+JV2YE5T
-         qRDh7RrqZtd/tRk3CWzt9qTX28gdzdEy6K7lf2IX4ewh+LPW+S4H3p3gTpzyP1k4iNEO
-         dO1pF2z36090YU0xAX9e9p54nsYsUM0ogZuuqXR4p4FdiJjcpAsR9ufZg5r4tIGn+xST
-         WL+GhcfA35LZxxC1BSzLkKvoSp6ucpHTfKOowLLuxDkWgxKKDjf+18+ao8ZXGW1vlH5t
-         Xm/wYlHNPhMG05OtN+IwCB906BoMVINsOLUUar0czB8ZT+zIXpVWbv2EigglL731PhPr
-         llIg==
-X-Gm-Message-State: AFqh2koXLRwthwnnNlz8IKpWkNgi4Gdr9G8Afl489YNDmrC52Jd+/SCX
-        Jy4AlnvVR0S/Kctj0D9ttTHa8nX5RWi9EN2+wbg87gOy7qb3uAajv4jGHyZ1AjmBS0WbSoyrSiy
-        qACG3jGEOI4wy2pd5wjbd9KAf47py
-X-Received: by 2002:a05:600c:4920:b0:3cf:7514:a82e with SMTP id f32-20020a05600c492000b003cf7514a82emr29615535wmp.23.1672675842677;
-        Mon, 02 Jan 2023 08:10:42 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXskldjRSYhz4SR5xTIRDebGy49uwim8uWpYjsQBMgXFHdXu5r42wcRaBTeTwn2Jjj3Ngw9FZQ==
-X-Received: by 2002:a05:600c:4920:b0:3cf:7514:a82e with SMTP id f32-20020a05600c492000b003cf7514a82emr29615513wmp.23.1672675842475;
-        Mon, 02 Jan 2023 08:10:42 -0800 (PST)
-Received: from ?IPV6:2003:cb:c703:500:9382:2e5a:fea:8889? (p200300cbc703050093822e5a0fea8889.dip0.t-ipconnect.de. [2003:cb:c703:500:9382:2e5a:fea:8889])
-        by smtp.gmail.com with ESMTPSA id d9-20020a05600c3ac900b003d973d4fb28sm33175942wms.4.2023.01.02.08.10.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Jan 2023 08:10:42 -0800 (PST)
-Message-ID: <f29b6cb0-d46b-7d89-c8ad-12b9addf8ce8@redhat.com>
-Date:   Mon, 2 Jan 2023 17:10:40 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v3] selftest/vm: add mremap expand merge offset test
-Content-Language: en-US
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RKIJPYaJSdM3GKsqUf/WtIlPO2sQ0/XB3Crq4Is/cNU=;
+        b=nqiWD/UR3apGucCxnWxJWUsv3a0uPZMSxH5Iu0rxoesCy19rwnIMnHjVaCpwDddDO1
+         fVS0XzGMmkbuGOodweJnXerd1PtN6m3qb16lPuCl18/yX84N3f5J9uw1mIjzlggxr1aX
+         B1C0/pqHqBVkV4XZ/tYO6GbckBlogLnuDDqlXshCU0DPDRfjy06PqFI8SQggRrSTemki
+         +Xmged/FFkD5GZvujWjtyZVwSSGtZ0UQnamLyRe/HeoSGAUCPC63R9TP3D3TdL8We0Au
+         2W9mGef4AqMITyeVc7LieVC6YfII8U2a5684yvDR7hTZ8q7cJzsdfMsp+tHSkgy3r656
+         bItQ==
+X-Gm-Message-State: AFqh2koWzfCVjbnRQuLGnEUVAOTGflbYcuWiJLhQaOZ+XOMEqYlUYCjm
+        6yg0b7ZYSyM/wWn0FTYTQkOFzrsNioU=
+X-Google-Smtp-Source: AMrXdXtCovWSnecYarAiFHu4OIRig1uH9TEdmNmBgRP5jhe4tXLG9RYBuwHMpulTDEkbZ1CdO2cREQ==
+X-Received: by 2002:a5d:4f83:0:b0:28a:8f13:dee5 with SMTP id d3-20020a5d4f83000000b0028a8f13dee5mr12188409wru.40.1672676183747;
+        Mon, 02 Jan 2023 08:16:23 -0800 (PST)
+Received: from localhost ([2a01:4c8:469:341:d1e1:a149:58ed:f096])
+        by smtp.gmail.com with ESMTPSA id b2-20020adff242000000b0023662245d3csm29275446wrp.95.2023.01.02.08.16.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Jan 2023 08:16:22 -0800 (PST)
+Date:   Mon, 2 Jan 2023 16:16:21 +0000
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     David Hildenbrand <david@redhat.com>
 Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
         Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org, Vlastimil Babka <vbabka@suse.cz>,
@@ -73,33 +60,32 @@ Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
         Matthew Wilcox <willy@infradead.org>,
         Mel Gorman <mgorman@techsingularity.net>,
         Michal Hocko <mhocko@kernel.org>
+Subject: Re: [PATCH v3] selftest/vm: add mremap expand merge offset test
+Message-ID: <Y7MDVT4dO2pqxJwJ@lucifer>
 References: <420e491062db9151504aef5661c8a2d928ef6bd7.1672675224.git.lstoakes@gmail.com>
- <9d13393a-d203-23de-30ae-4d6476a94fd7@redhat.com> <Y7MBqfYv54rY48Wi@lucifer>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <Y7MBqfYv54rY48Wi@lucifer>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+ <9d13393a-d203-23de-30ae-4d6476a94fd7@redhat.com>
+ <Y7MBqfYv54rY48Wi@lucifer>
+ <f29b6cb0-d46b-7d89-c8ad-12b9addf8ce8@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f29b6cb0-d46b-7d89-c8ad-12b9addf8ce8@redhat.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 02.01.23 17:09, Lorenzo Stoakes wrote:
-> On Mon, Jan 02, 2023 at 05:03:31PM +0100, David Hildenbrand wrote:
-> 
->> With the exit() in place, the else branch is implicit and the else can be
->> dropped.
-> 
-> Good point, we'll go to a v4 then :) that does neaten things up
-> actually. Hopefully this should suffice!
+On Mon, Jan 02, 2023 at 05:10:40PM +0100, David Hildenbrand wrote:
+> Maybe wait until tomorrow for feedback from others. Make sure to include my
+> acked-by.
 
-Maybe wait until tomorrow for feedback from others. Make sure to include 
-my acked-by.
+Too late... I thought Andrew typically added these kind of things himself? As an
+Acked-by could be a reply to an unmodified patch for example. Though I guess
+it'd save you having to reply to the v4? Anyway sorry, already sent it!
 
-Thanks :)
+It's sat in the mailing list so others can review further if required, this is a
+bank holiday in the UK, and as a part-time contributor (and otherwise distracted
+by book work) it is a rare moment to be able to respond to feedback so will tend
+to get squashed into evenings/weekends/public holidays :) If people have further
+comments I will, of course, respond as + when I can!
 
--- 
-Thanks,
-
-David / dhildenb
-
+Cheers!
