@@ -2,28 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A743FC4708E
-	for <linux-kselftest@archiver.kernel.org>; Tue,  3 Jan 2023 11:39:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6145AC3DA7D
+	for <linux-kselftest@archiver.kernel.org>; Tue,  3 Jan 2023 11:46:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232875AbjACLjL (ORCPT
+        id S233119AbjACLp7 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 3 Jan 2023 06:39:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36488 "EHLO
+        Tue, 3 Jan 2023 06:45:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237428AbjACLiy (ORCPT
+        with ESMTP id S233312AbjACLpy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 3 Jan 2023 06:38:54 -0500
+        Tue, 3 Jan 2023 06:45:54 -0500
 Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:237:300::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA587DEC;
-        Tue,  3 Jan 2023 03:38:50 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE659A441;
+        Tue,  3 Jan 2023 03:45:53 -0800 (PST)
 Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
         (envelope-from <fw@strlen.de>)
-        id 1pCfcm-0003Qp-Vs; Tue, 03 Jan 2023 12:38:33 +0100
-Date:   Tue, 3 Jan 2023 12:38:32 +0100
+        id 1pCfjg-0003WK-LK; Tue, 03 Jan 2023 12:45:40 +0100
+Date:   Tue, 3 Jan 2023 12:45:40 +0100
 From:   Florian Westphal <fw@strlen.de>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Quentin Deslandes <qde@naccy.de>,
-        Alexei Starovoitov <ast@kernel.org>,
+To:     Quentin Deslandes <qde@naccy.de>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <martin.lau@linux.dev>,
@@ -40,23 +39,47 @@ Cc:     Quentin Deslandes <qde@naccy.de>,
         Dmitrii Banshchikov <me@ubique.spb.ru>,
         linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        Kernel Team <kernel-team@meta.com>, fw@strlen.de
+        Kernel Team <kernel-team@meta.com>
 Subject: Re: [PATCH bpf-next v3 00/16] bpfilter
-Message-ID: <20230103113832.GA13151@breakpoint.cc>
+Message-ID: <20230103114540.GB13151@breakpoint.cc>
 References: <20221224000402.476079-1-qde@naccy.de>
- <20221227182242.ozkc6u2lbwneoi4r@macbook-pro-6.dhcp.thefacebook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221227182242.ozkc6u2lbwneoi4r@macbook-pro-6.dhcp.thefacebook.com>
+In-Reply-To: <20221224000402.476079-1-qde@naccy.de>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
-> codegen and attach to Florian's bpf hooks exactly at netfilter.
-> See
-> https://git.breakpoint.cc/cgit/fw/nf-next.git/commit/?h=nf_hook_jit_bpf_29&id=0c1ec06503cb8a142d3ad9f760b72d94ea0091fa
+Quentin Deslandes <qde@naccy.de> wrote:
+> The patchset is based on the patches from David S. Miller [1],
+> Daniel Borkmann [2], and Dmitrii Banshchikov [3].
+> 
+> Note: I've partially sent this patchset earlier due to a
+> mistake on my side, sorry for then noise.
+> 
+> The main goal of the patchset is to prepare bpfilter for
+> iptables' configuration blob parsing and code generation.
+> 
+> The patchset introduces data structures and code for matches,
+> targets, rules and tables. Beside that the code generation
+> is introduced.
+> 
+> The first version of the code generation supports only "inline"
+> mode - all chains and their rules emit instructions in linear
+> approach.
+> 
+> Things that are not implemented yet:
+>   1) The process of switching from the previous BPF programs to the
+>      new set isn't atomic.
 
-FWIW I plan to submit this patchset for 6.2.
+You can't make this atomic from userspace perspective, the
+get/setsockopt API of iptables uses a read-modify-write model.
+
+Tentatively I'd try to extend libnftnl and generate bpf code there,
+since its used by both iptables(-nft) and nftables we'd automatically
+get support for both.
+
+I was planning to look into "attach bpf progs to raw netfilter hooks"
+in Q1 2023, once the initial nf-bpf-codegen is merged.
