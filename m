@@ -2,192 +2,392 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D37CC3DA7D
-	for <linux-kselftest@archiver.kernel.org>; Tue,  3 Jan 2023 23:47:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65FC7C53210
+	for <linux-kselftest@archiver.kernel.org>; Wed,  4 Jan 2023 14:50:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238056AbjACXrC (ORCPT
+        id S233142AbjADOuE (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 3 Jan 2023 18:47:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54142 "EHLO
+        Wed, 4 Jan 2023 09:50:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237815AbjACXq7 (ORCPT
+        with ESMTP id S233812AbjADOuA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 3 Jan 2023 18:46:59 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FBDD1004E;
-        Tue,  3 Jan 2023 15:46:58 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id u19so78606786ejm.8;
-        Tue, 03 Jan 2023 15:46:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3oSb7JXJVS/6HsFecUnGwQqOOB9BR+/FVmXe6sUvBjE=;
-        b=gTbDgWlCH4NUcCEHgth2YTnVqtz4s4PKz+5t3gYtxN5MZc/LvN+nJoGJJTISFRSwrs
-         w7pwymo+rn2BVMZudW2Xk6ZRv9sxlcO321RroJPRpATfUSEdl99e2+eBB6dFfFWEqyRr
-         KHR4OANaK7QgwTNcrf6CpPboBwZ+H3m74npjgBNekhmRjZBp5BDdZTG28bEyZEKLe1aj
-         LN0OAKAxx+3FOh4o6EhTjiNSXUmxihBDxy+xbXN2esrqPr8F88hN8W/l+k1QT4wDHM0C
-         ZU3GvFfRsG3VaXyuhXEpYQVBw0ikmucnv4PLXcvg0Gabb1PjMBYaokh3LO1pb323WZ+9
-         Z/AA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3oSb7JXJVS/6HsFecUnGwQqOOB9BR+/FVmXe6sUvBjE=;
-        b=57Q2UmTxvpuubDmxLNSh0wrvy9lWbT4yeOo87y3wZeDu/ld/x12HF5MFq5b4bJVCkf
-         MJtxCR3EWQZ5IV9rrdNmYDNqVTQn/LKcE0X296WayEKMAcCDqYdPjpdnxyKIKlcAMAGU
-         ecbhnMCAv0OfJQE0eDvC+aftYCDeuQUNnX5hUwGMgEQJfZ0VgXgFOBVdNq5JU4LgQvVS
-         rhFKioxrHMj6tIzyR/5XuzhpFeek23i270FXQhvh2Zo8MNKje9mUSMUBPr0AQZJq53BK
-         hlUzLc9GzS6XDNQtWUHOsiMDmd2+svcbVz6TjJjpa9OaUMug5d0hMRMJBykEgcOXZGTa
-         sSJg==
-X-Gm-Message-State: AFqh2kow8FDFah/O7bEibL4MExqnBpXI8ZZO/Z0+Hijqzve8o0cjnCXI
-        A6YP5tEibEKT2dUQ+6vWLV0T4ygYOLsXsxDojrM=
-X-Google-Smtp-Source: AMrXdXuhifcsN+8XoM8iEoIb5YJM9m8QkCS0hSkZA7F88v0P+GOkciVAILvtt3gP0l/69vPr+tvVBoIzvy8akGQX88U=
-X-Received: by 2002:a17:906:f43:b0:84c:95c7:304d with SMTP id
- h3-20020a1709060f4300b0084c95c7304dmr2153565ejj.545.1672789616772; Tue, 03
- Jan 2023 15:46:56 -0800 (PST)
+        Wed, 4 Jan 2023 09:50:00 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 144C117E2D
+        for <linux-kselftest@vger.kernel.org>; Wed,  4 Jan 2023 06:49:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1672843753;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=vYvLrxNyig4C2xqpvcE+0kFAae3psmSX82BXbPf3PXw=;
+        b=GR9MmgqtWlWjSfms4RWkgTug8w3YxaWmsHku4bVyNzsdF00N0ATlCjIK8EX/uwYX47Ydps
+        zF9CLlw/nqDakqWGMnSIUNOWFl0hDaJZJ2ruNDix0FsiZaIbbmCnJfNd5iqMmOKOEYADNw
+        2ytfEYdCFRNqtweS86JwWoxjX76n2Kk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-37-uZTwnicCP9GfYWq8ihQLrg-1; Wed, 04 Jan 2023 09:49:10 -0500
+X-MC-Unique: uZTwnicCP9GfYWq8ihQLrg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8414E858F09;
+        Wed,  4 Jan 2023 14:49:09 +0000 (UTC)
+Received: from t480s.fritz.box (unknown [10.39.193.90])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9FC66C15BA0;
+        Wed,  4 Jan 2023 14:49:06 +0000 (UTC)
+From:   David Hildenbrand <david@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Hugh Dickins <hughd@google.com>,
+        Peter Xu <peterx@redhat.com>, Vlastimil Babka <vbabka@suse.cz>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Zach O'Keefe <zokeefe@google.com>,
+        Andrea Arcangeli <aarcange@redhat.com>
+Subject: [PATCH mm-unstable v1] selftests/vm: cow: Add COW tests for collapsing of PTE-mapped anon THP
+Date:   Wed,  4 Jan 2023 15:49:05 +0100
+Message-Id: <20230104144905.460075-1-david@redhat.com>
 MIME-Version: 1.0
-References: <20221217223509.88254-1-changbin.du@gmail.com> <20221217223509.88254-2-changbin.du@gmail.com>
- <Y5/eE+ds+e+k3VJO@leoy-yangtze.lan> <20221220013114.zkkxkqh7orahxbzh@mail.google.com>
- <Y6GdofET0gHQzRX6@leoy-yangtze.lan> <CAEf4Bzb_XOEoG9anNdzQVJRqd3G4yKJTSa9Dgc9xkMXqn-xdFg@mail.gmail.com>
- <ea02357d-c5c7-aeff-e045-d639315d87e9@isovalent.com>
-In-Reply-To: <ea02357d-c5c7-aeff-e045-d639315d87e9@isovalent.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 3 Jan 2023 15:46:44 -0800
-Message-ID: <CAEf4BzZMJGrRhNeQeWB0fRsuRYUv01aZGhvDeFV2o5zdpRbR-w@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] libbpf: show error info about missing ".BTF" section
-To:     Quentin Monnet <quentin@isovalent.com>
-Cc:     Leo Yan <leo.yan@linaro.org>, Changbin Du <changbin.du@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jan 3, 2023 at 7:03 AM Quentin Monnet <quentin@isovalent.com> wrote:
->
-> 2022-12-20 16:13 UTC-0800 ~ Andrii Nakryiko <andrii.nakryiko@gmail.com>
-> > On Tue, Dec 20, 2022 at 3:34 AM Leo Yan <leo.yan@linaro.org> wrote:
-> >>
-> >> On Tue, Dec 20, 2022 at 09:31:14AM +0800, Changbin Du wrote:
-> >>
-> >> [...]
-> >>
-> >>>>> Now will print below info:
-> >>>>> libbpf: failed to find '.BTF' ELF section in /home/changbin/work/linux/vmlinux
-> >>>>
-> >>>> Recently I encountered the same issue, it could be caused by:
-> >>>> either missing to install tool pahole or missing to enable kernel
-> >>>> configuration CONFIG_DEBUG_INFO_BTF.
-> >>>>
-> >>>> Could we give explict info for reasoning failure?  Like:
-> >>>>
-> >>>> "libbpf: failed to find '.BTF' ELF section in /home/changbin/work/linux/vmlinux,
-> >>>> please install pahole and enable CONFIG_DEBUG_INFO_BTF=y for kernel building".
-> >>>>
-> >>> This is vmlinux special information and similar tips are removed from
-> >>> patch V2. libbpf is common for all ELFs.
-> >>
-> >> Okay, I see.  Sorry for noise.
-> >>
-> >>>>> Error: failed to load BTF from /home/changbin/work/linux/vmlinux: No such file or directory
-> >>>>
-> >>>> This log is confusing when we can find vmlinux file but without BTF
-> >>>> section.  Consider to use a separate patch to detect vmlinux not
-> >>>> found case and print out "No such file or directory"?
-> >>>>
-> >>> I think it's already there. If the file doesn't exist, open will fail.
-> >>
-> >> [...]
-> >>
-> >>>>> @@ -990,6 +990,7 @@ static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
-> >>>>>   err = 0;
-> >>>>>
-> >>>>>   if (!btf_data) {
-> >>>>> +         pr_warn("failed to find '%s' ELF section in %s\n", BTF_ELF_SEC, path);
-> >>>>>           err = -ENOENT;
-> >>
-> >> btf_parse_elf() returns -ENOENT when ELF file doesn't contain BTF
-> >> section, therefore, bpftool dumps error string "No such file or
-> >> directory".  It's confused that actually vmlinux is existed.
-> >>
-> >> I am wondering if we can use error -LIBBPF_ERRNO__FORMAT (or any
-> >> better choice?) to replace -ENOENT at here, this can avoid bpftool to
-> >> outputs "No such file or directory" in this case.
-> >
-> > The only really meaningful error code would be -ESRCH, which
-> > strerror() will translate to "No such process", which is also
-> > completely confusing.
-> >
-> > In general, I always found these strerror() messages extremely
-> > unhelpful and confusing. I wonder if we should make an effort to
-> > actually emit symbolic names of errors instead (literally, "-ENOENT"
-> > in this case). This is all tooling for engineers, I find -ENOENT or
-> > -ESRCH much more meaningful as an error message, compared to "No such
-> > file" seemingly human-readable interpretation.
-> >
-> > Quenting, what do you think about the above proposal for bpftool? We
-> > can have some libbpf helper internally and do it in libbpf error
-> > messages as well and just reuse the logic in bpftool, perhaps?
->
-> Apologies for the delay.
-> What you're proposing is to replace all messages currently looking like
-> this:
->
->         $ bpftool prog
->         Error: can't get next program: Operation not permitted
->
-> by:
->
->         $ bpftool prog
->         Error: can't get next program: -EPERM
->
-> Do I understand correctly?
+Currently, anonymous PTE-mapped THPs cannot be collapsed in-place:
+collapsing (e.g., via MADV_COLLAPSE) implies allocating a fresh THP and
+mapping that new THP via a PMD: as it's a fresh anon THP, it will get the
+exclusive flag set on the head page and everybody is happy.
 
-yep, that's what I had in mind
+However, if the kernel would ever support in-place collapse of anonymous
+THPs (replacing a page table mapping each sub-page of a THP via PTEs with a
+single PMD mapping the complete THP), exclusivity information stored for
+each sub-page would have to be collapsed accordingly:
 
->
-> I think the strerror() messages are helpful in some occasions (they
-> _are_ more human-friendly to many users), but it's also true that
-> they're not always precise. With bpftool, "Invalid argument" is a
-> classic when the program doesn't load, and may lead to confusion with
-> the args passed to bpftool on the command line. Then there are the other
-> corner cases like the one discussed in this thread. So, why not.
+(1) All PTEs map !exclusive anon sub-pages: the in-place collapsed THP
+    must not not have the exclusive flag set on the head page mapped by
+    the PMD. This is the easiest case to handle ("simply don't set any
+    exclusive flags").
 
-maybe the right approach would be to have both symbolic error name and
-its human-readable representation, so for example above
+(2) All PTEs map exclusive anon sub-pages: when collapsing, we have to
+    clear the exclusive flag from all tail pages and only leave the
+    exclusive flag set for the head page. Otherwise, fork() after
+    collapse would not clear the exclusive flags from the tail pages
+    and we'd be in trouble once PTE-mapping the shared THP when writing
+    to shared tail pages that still have the exclusive flag set. This
+    would effectively revert what the PTE-mapping code does when
+    propagating the exclusive flag to all sub-pages.
 
-Error: can't get next program: [-EPERM] Operation not permitted
+(3) PTEs map a mixture of exclusive and !exclusive anon sub-pages (can
+    happen e.g., due to MADV_DONTFORK before fork()). We must not
+    collapse the THP in-place, otherwise bad things may happen:
+    the exclusive flags of sub-pages would get ignored and the
+    exclusive flag of the head page would get used instead.
 
-or something like that? And if error value is unknown, just keep it as
-integer: "[-5555]" ?
+Now that we have MADV_COLLAPSE in place to trigger collapsing a THP,
+let's add some test cases that would bail out early, if we'd
+voluntarily/accidantially unlock in-place collapse for anon THPs and
+forget about taking proper care of exclusive flags.
 
->
-> If we do change, yeah I'd rather have as much of this handling in libbpf
-> itself, and then adjust bpftool to handle the remaining cases, for
-> consistency.
+Running the test on a kernel with MADV_COLLAPSE support:
+  # [INFO] Anonymous THP tests
+  # [RUN] Basic COW after fork() when collapsing before fork()
+  ok 169 No leak from parent into child
+  # [RUN] Basic COW after fork() when collapsing after fork() (fully shared)
+  ok 170 # SKIP MADV_COLLAPSE failed: Invalid argument
+  # [RUN] Basic COW after fork() when collapsing after fork() (lower shared)
+  ok 171 No leak from parent into child
+  # [RUN] Basic COW after fork() when collapsing after fork() (upper shared)
+  ok 172 No leak from parent into child
 
-we can teach libbpf_strerror_r() to do this and if bpftool is going to
-use it consistently then it would get the benefit automatically
+For now, MADV_COLLAPSE always seems to fail if all PTEs map shared
+sub-pages.
 
->
-> Quentin
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Hugh Dickins <hughd@google.com>
+Cc: Peter Xu <peterx@redhat.com>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: Nadav Amit <nadav.amit@gmail.com>
+Cc: Zach O'Keefe <zokeefe@google.com>
+Cc: Andrea Arcangeli <aarcange@redhat.com>
+Signed-off-by: David Hildenbrand <david@redhat.com>
+---
+
+A patch from Hugh made me explore the wonderful world of in-place collapse
+of THP, and I was briefly concerned that it would apply to anon THP as
+well. After thinking about it a bit, I decided to add test cases, to better
+be safe than sorry in any case, and to document how PG_anon_exclusive is to
+be handled in that case.
+
+---
+ tools/testing/selftests/vm/cow.c | 228 +++++++++++++++++++++++++++++++
+ 1 file changed, 228 insertions(+)
+
+diff --git a/tools/testing/selftests/vm/cow.c b/tools/testing/selftests/vm/cow.c
+index 26f6ea3079e2..16216d893d96 100644
+--- a/tools/testing/selftests/vm/cow.c
++++ b/tools/testing/selftests/vm/cow.c
+@@ -30,6 +30,10 @@
+ #include "../kselftest.h"
+ #include "vm_util.h"
+ 
++#ifndef MADV_COLLAPSE
++#define MADV_COLLAPSE 25
++#endif
++
+ static size_t pagesize;
+ static int pagemap_fd;
+ static size_t thpsize;
+@@ -1178,6 +1182,228 @@ static int tests_per_anon_test_case(void)
+ 	return tests;
+ }
+ 
++enum anon_thp_collapse_test {
++	ANON_THP_COLLAPSE_UNSHARED,
++	ANON_THP_COLLAPSE_FULLY_SHARED,
++	ANON_THP_COLLAPSE_LOWER_SHARED,
++	ANON_THP_COLLAPSE_UPPER_SHARED,
++};
++
++static void do_test_anon_thp_collapse(char *mem, size_t size,
++				      enum anon_thp_collapse_test test)
++{
++	struct comm_pipes comm_pipes;
++	char buf;
++	int ret;
++
++	ret = setup_comm_pipes(&comm_pipes);
++	if (ret) {
++		ksft_test_result_fail("pipe() failed\n");
++		return;
++	}
++
++	/*
++	 * Trigger PTE-mapping the THP by temporarily mapping a single subpage
++	 * R/O, such that we can try collapsing it later.
++	 */
++	ret = mprotect(mem + pagesize, pagesize, PROT_READ);
++	if (ret) {
++		ksft_test_result_fail("mprotect() failed\n");
++		goto close_comm_pipes;
++	}
++	ret = mprotect(mem + pagesize, pagesize, PROT_READ | PROT_WRITE);
++	if (ret) {
++		ksft_test_result_fail("mprotect() failed\n");
++		goto close_comm_pipes;
++	}
++
++	switch (test) {
++	case ANON_THP_COLLAPSE_UNSHARED:
++		/* Collapse before actually COW-sharing the page. */
++		ret = madvise(mem, size, MADV_COLLAPSE);
++		if (ret) {
++			ksft_test_result_skip("MADV_COLLAPSE failed: %s\n",
++					      strerror(errno));
++			goto close_comm_pipes;
++		}
++		break;
++	case ANON_THP_COLLAPSE_FULLY_SHARED:
++		/* COW-share the full PTE-mapped THP. */
++		break;
++	case ANON_THP_COLLAPSE_LOWER_SHARED:
++		/* Don't COW-share the upper part of the THP. */
++		ret = madvise(mem + size / 2, size / 2, MADV_DONTFORK);
++		if (ret) {
++			ksft_test_result_fail("MADV_DONTFORK failed\n");
++			goto close_comm_pipes;
++		}
++		break;
++	case ANON_THP_COLLAPSE_UPPER_SHARED:
++		/* Don't COW-share the lower part of the THP. */
++		ret = madvise(mem, size / 2, MADV_DONTFORK);
++		if (ret) {
++			ksft_test_result_fail("MADV_DONTFORK failed\n");
++			goto close_comm_pipes;
++		}
++		break;
++	default:
++		assert(false);
++	}
++
++	ret = fork();
++	if (ret < 0) {
++		ksft_test_result_fail("fork() failed\n");
++		goto close_comm_pipes;
++	} else if (!ret) {
++		switch (test) {
++		case ANON_THP_COLLAPSE_UNSHARED:
++		case ANON_THP_COLLAPSE_FULLY_SHARED:
++			exit(child_memcmp_fn(mem, size, &comm_pipes));
++			break;
++		case ANON_THP_COLLAPSE_LOWER_SHARED:
++			exit(child_memcmp_fn(mem, size / 2, &comm_pipes));
++			break;
++		case ANON_THP_COLLAPSE_UPPER_SHARED:
++			exit(child_memcmp_fn(mem + size / 2, size / 2,
++					     &comm_pipes));
++			break;
++		default:
++			assert(false);
++		}
++	}
++
++	while (read(comm_pipes.child_ready[0], &buf, 1) != 1)
++		;
++
++	switch (test) {
++	case ANON_THP_COLLAPSE_UNSHARED:
++		break;
++	case ANON_THP_COLLAPSE_UPPER_SHARED:
++	case ANON_THP_COLLAPSE_LOWER_SHARED:
++		/*
++		 * Revert MADV_DONTFORK such that we merge the VMAs and are
++		 * able to actually collapse.
++		 */
++		ret = madvise(mem, size, MADV_DOFORK);
++		if (ret) {
++			ksft_test_result_fail("MADV_DOFORK failed\n");
++			write(comm_pipes.parent_ready[1], "0", 1);
++			wait(&ret);
++			goto close_comm_pipes;
++		}
++		/* FALLTHROUGH */
++	case ANON_THP_COLLAPSE_FULLY_SHARED:
++		/* Collapse before anyone modified the COW-shared page. */
++		ret = madvise(mem, size, MADV_COLLAPSE);
++		if (ret) {
++			ksft_test_result_skip("MADV_COLLAPSE failed: %s\n",
++					      strerror(errno));
++			write(comm_pipes.parent_ready[1], "0", 1);
++			wait(&ret);
++			goto close_comm_pipes;
++		}
++		break;
++	default:
++		assert(false);
++	}
++
++	/* Modify the page. */
++	memset(mem, 0xff, size);
++	write(comm_pipes.parent_ready[1], "0", 1);
++
++	wait(&ret);
++	if (WIFEXITED(ret))
++		ret = WEXITSTATUS(ret);
++	else
++		ret = -EINVAL;
++
++	ksft_test_result(!ret, "No leak from parent into child\n");
++close_comm_pipes:
++	close_comm_pipes(&comm_pipes);
++}
++
++static void test_anon_thp_collapse_unshared(char *mem, size_t size)
++{
++	do_test_anon_thp_collapse(mem, size, ANON_THP_COLLAPSE_UNSHARED);
++}
++
++static void test_anon_thp_collapse_fully_shared(char *mem, size_t size)
++{
++	do_test_anon_thp_collapse(mem, size, ANON_THP_COLLAPSE_FULLY_SHARED);
++}
++
++static void test_anon_thp_collapse_lower_shared(char *mem, size_t size)
++{
++	do_test_anon_thp_collapse(mem, size, ANON_THP_COLLAPSE_LOWER_SHARED);
++}
++
++static void test_anon_thp_collapse_upper_shared(char *mem, size_t size)
++{
++	do_test_anon_thp_collapse(mem, size, ANON_THP_COLLAPSE_UPPER_SHARED);
++}
++
++/*
++ * Test cases that are specific to anonymous THP: pages in private mappings
++ * that may get shared via COW during fork().
++ */
++static const struct test_case anon_thp_test_cases[] = {
++	/*
++	 * Basic COW test for fork() without any GUP when collapsing a THP
++	 * before fork().
++	 *
++	 * Re-mapping a PTE-mapped anon THP using a single PMD ("in-place
++	 * collapse") might easily get COW handling wrong when not collapsing
++	 * exclusivity information properly.
++	 */
++	{
++		"Basic COW after fork() when collapsing before fork()",
++		test_anon_thp_collapse_unshared,
++	},
++	/* Basic COW test, but collapse after COW-sharing a full THP. */
++	{
++		"Basic COW after fork() when collapsing after fork() (fully shared)",
++		test_anon_thp_collapse_fully_shared,
++	},
++	/*
++	 * Basic COW test, but collapse after COW-sharing the lower half of a
++	 * THP.
++	 */
++	{
++		"Basic COW after fork() when collapsing after fork() (lower shared)",
++		test_anon_thp_collapse_lower_shared,
++	},
++	/*
++	 * Basic COW test, but collapse after COW-sharing the upper half of a
++	 * THP.
++	 */
++	{
++		"Basic COW after fork() when collapsing after fork() (upper shared)",
++		test_anon_thp_collapse_upper_shared,
++	},
++};
++
++static void run_anon_thp_test_cases(void)
++{
++	int i;
++
++	if (!thpsize)
++		return;
++
++	ksft_print_msg("[INFO] Anonymous THP tests\n");
++
++	for (i = 0; i < ARRAY_SIZE(anon_thp_test_cases); i++) {
++		struct test_case const *test_case = &anon_thp_test_cases[i];
++
++		ksft_print_msg("[RUN] %s\n", test_case->desc);
++		do_run_with_thp(test_case->fn, THP_RUN_PMD);
++	}
++}
++
++static int tests_per_anon_thp_test_case(void)
++{
++	return thpsize ? 1 : 0;
++}
++
+ typedef void (*non_anon_test_fn)(char *mem, const char *smem, size_t size);
+ 
+ static void test_cow(char *mem, const char *smem, size_t size)
+@@ -1518,6 +1744,7 @@ int main(int argc, char **argv)
+ 
+ 	ksft_print_header();
+ 	ksft_set_plan(ARRAY_SIZE(anon_test_cases) * tests_per_anon_test_case() +
++		      ARRAY_SIZE(anon_thp_test_cases) * tests_per_anon_thp_test_case() +
+ 		      ARRAY_SIZE(non_anon_test_cases) * tests_per_non_anon_test_case());
+ 
+ 	gup_fd = open("/sys/kernel/debug/gup_test", O_RDWR);
+@@ -1526,6 +1753,7 @@ int main(int argc, char **argv)
+ 		ksft_exit_fail_msg("opening pagemap failed\n");
+ 
+ 	run_anon_test_cases();
++	run_anon_thp_test_cases();
+ 	run_non_anon_test_cases();
+ 
+ 	err = ksft_get_fail_cnt();
+-- 
+2.39.0
+
