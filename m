@@ -2,158 +2,115 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB9BEC5479D
-	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Jan 2023 10:26:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CD4AC5479D
+	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Jan 2023 10:39:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231514AbjAFK0y (ORCPT
+        id S229547AbjAFKjf (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 6 Jan 2023 05:26:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33148 "EHLO
+        Fri, 6 Jan 2023 05:39:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230047AbjAFK0P (ORCPT
+        with ESMTP id S231297AbjAFKjZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 6 Jan 2023 05:26:15 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27DB27148C
-        for <linux-kselftest@vger.kernel.org>; Fri,  6 Jan 2023 02:24:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673000697;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3H/Euuxq7LIt7GwPww0Ivp2k4XBNQIOZw45JfduHe6c=;
-        b=jGUnWw8jdOHu1z3302RQC/cXEYkDc5FMmW+QS43EYjrg4FJbvTe6ab64msVVV/02mfwp1j
-        FgJ/KnAn7qzUlmgX12N/FhAxX/ol7s7aJh+kmQMuNZgDfXnYiwRRiRgF2uEh/hHUniRXDy
-        64zSW9HrBriCjut01vMf05KhngF3jr8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-62-VYt_rQIsME2M06_D17bI_w-1; Fri, 06 Jan 2023 05:23:52 -0500
-X-MC-Unique: VYt_rQIsME2M06_D17bI_w-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 617FF1871D94;
-        Fri,  6 Jan 2023 10:23:51 +0000 (UTC)
-Received: from plouf.redhat.com (unknown [10.39.192.97])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DFD14C15BAD;
-        Fri,  6 Jan 2023 10:23:48 +0000 (UTC)
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH HID for-next v1 5/9] selftests: hid: prepare tests for HID_BPF API change
-Date:   Fri,  6 Jan 2023 11:23:28 +0100
-Message-Id: <20230106102332.1019632-6-benjamin.tissoires@redhat.com>
-In-Reply-To: <20230106102332.1019632-1-benjamin.tissoires@redhat.com>
-References: <20230106102332.1019632-1-benjamin.tissoires@redhat.com>
+        Fri, 6 Jan 2023 05:39:25 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 722986C2BA;
+        Fri,  6 Jan 2023 02:39:24 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id c34so1781227edf.0;
+        Fri, 06 Jan 2023 02:39:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Io70r00Nt8uTv7+PmyuFC/gWUcP4KkaEJZvkCpWCaqQ=;
+        b=oFpy4Ra/8QxNX57dJDeFCaMr5GTpHTJ4l0xldBOSncrChQyGUwobaMBXkoffUTVxKX
+         BvY4zuUsrNTODkKqrswmmaErMDYY+ETN98bgoNz12eMivqqFgY0+B4AvzbIHhdww62GT
+         KKa0zLzmhCmBR86WtZpiESV+qn3lnxifkiBqVSJWauaUPXmCaRDeP5sPjvzNiTji/RHz
+         wseKhi3NC/ATQT+TQUyE/HnNCmAGZlJFr0UVQHPgZvMkOzeM5cZqQ9AZ108ZRiRbTWQF
+         exb61VyB3Nt6tWO2pDHzkU0Ei3HADVEnUk1sZYkeFjFgHvb9RHDlAIVnq3YWCNHTvIDm
+         h2Xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Io70r00Nt8uTv7+PmyuFC/gWUcP4KkaEJZvkCpWCaqQ=;
+        b=5PH+Hy2IAGpjsBpDGIX0Rxw5d07nEPl64crPE+uBoZXxOGFUATGoFn85uQGd+hzUcb
+         FaaSRYCyx219wLysKlKbA/Nx+mjEyr5gg2/tpC2wQvymGace/mEM5ylXOb/Fd8+ll0Pe
+         33SaxEAqEy9gz7xCpn++V5irsPjD4X5Lm+cPyZ3gQ7J+2FUSqVVwonJAWXMPMeXE5VVC
+         Lq6r027lj4UpXVt8iJtO861uk2Ow0PQ2+gVNg8BaFJWFZXZn5+NsYlHQhzEE0t0hfHy1
+         zsBIHlslxdc3r3BdYvJhq28A2/h7XabBSN+uf4jDqlGOnCX6EZBlH4guuaq44ASOcY/X
+         2Qqg==
+X-Gm-Message-State: AFqh2kq+y9jD/uOsD6rJvY/+BA0wnRkOnJXREOfXtyFNQ4XeWEP93s/o
+        Y30TrFV2jvKkLadLyj0x4Q==
+X-Google-Smtp-Source: AMrXdXvfYrea77To0XKr5bkGGgtW/QLQnQZnFbJP0UwISUZTUlVdxFoq68a40TZwdMS3GHqghNyFJA==
+X-Received: by 2002:a05:6402:3706:b0:472:9af1:163f with SMTP id ek6-20020a056402370600b004729af1163fmr48555537edb.37.1673001562912;
+        Fri, 06 Jan 2023 02:39:22 -0800 (PST)
+Received: from p183 ([46.53.252.178])
+        by smtp.gmail.com with ESMTPSA id fj20-20020a0564022b9400b0048ee88aa4d0sm363551edb.56.2023.01.06.02.39.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Jan 2023 02:39:22 -0800 (PST)
+Date:   Fri, 6 Jan 2023 13:39:20 +0300
+From:   Alexey Dobriyan <adobriyan@gmail.com>
+To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+Cc:     linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Brian Foster <bfoster@redhat.com>,
+        Guo Zhengkui <guozhengkui@vivo.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thorsten Leemhuis <regressions@leemhuis.info>
+Subject: Re: BUG: core dump in selftest of proc fs
+Message-ID: <Y7f6WBUXBz8tlr3b@p183>
+References: <fd9206f6-3ec4-cafc-e313-dfddf957bd5e@alu.unizg.hr>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <fd9206f6-3ec4-cafc-e313-dfddf957bd5e@alu.unizg.hr>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-We plan on changing the return value of hid_bpf_attach_prog().
-Instead of returning an error code, it will return an fd to a bpf_link.
-This bpf_link is responsible for the binding between the bpf program and
-the hid device.
+On Wed, Jan 04, 2023 at 07:27:40PM +0100, Mirsad Goran Todorovac wrote:
+> Dear all,
+> 
+> Trying to complete `make kselftest` for the first time, so maybe I'm doing something wrong?
+> 
+> Or we are having a regression in 6.2-rc2 release candidate ...
+> 
+> However, the output of selftest run is:
+> 
+> make[2]: Entering directory '.../linux_torvalds/tools/testing/selftests/proc'
+> TAP version 13
+> 1..21
+> # selftests: proc: fd-001-lookup
+> ok 1 selftests: proc: fd-001-lookup
+> # selftests: proc: fd-002-posix-eq
+> ok 2 selftests: proc: fd-002-posix-eq
+> # selftests: proc: fd-003-kthread
+> ok 3 selftests: proc: fd-003-kthread
+> # selftests: proc: proc-loadavg-001
+> ok 4 selftests: proc: proc-loadavg-001
+> # selftests: proc: proc-empty-vm
+> # proc-empty-vm: proc-empty-vm.c:184: test_proc_pid_maps: Assertion `rv == 0' failed.
+> # /usr/bin/timeout: the monitored command dumped core
+> # Aborted
+> not ok 5 selftests: proc: proc-empty-vm # exit=134
+> # selftests: proc: proc-pid-vm
+> # proc-pid-vm: proc-pid-vm.c:365: main: Assertion `rv == len' failed.
+> # /usr/bin/timeout: the monitored command dumped core
+> # Aborted
+> 
+> Please find attached lshw output, dmesg, config and lsmod.
+> 
+> I am available for further diagnostics.
+> 
+> The platform is Ubuntu 22.10 kinetic kudu on a Lenovo Ideapad 3 15ITL6 laptop.
 
-Add a fallback mechanism to not break bisections by pinning the program
-when we run this test against the non changed kernel.
+The "bug" is that "call rel32" instruction testing for executable
+vsyscall page which should be relocated to "call 0xffffffffff600000"
+is messed up. Ubuntu 22.10 ships with "vsyscall=xonly" so there should not be
+any faults when executing from it. But segfault happens with normal
+randomised userspace address.
 
-Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
----
- tools/testing/selftests/hid/hid_bpf.c | 29 +++++++++++++++++++++++----
- 1 file changed, 25 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/hid/hid_bpf.c b/tools/testing/selftests/hid/hid_bpf.c
-index 3b204a15e44b..9a262fe99b32 100644
---- a/tools/testing/selftests/hid/hid_bpf.c
-+++ b/tools/testing/selftests/hid/hid_bpf.c
-@@ -444,13 +444,21 @@ FIXTURE(hid_bpf) {
- 	int hid_id;
- 	pthread_t tid;
- 	struct hid *skel;
-+	int hid_links[3]; /* max number of programs loaded in a single test */
- };
- static void detach_bpf(FIXTURE_DATA(hid_bpf) * self)
- {
-+	int i;
-+
- 	if (self->hidraw_fd)
- 		close(self->hidraw_fd);
- 	self->hidraw_fd = 0;
- 
-+	for (i = 0; i < ARRAY_SIZE(self->hid_links); i++) {
-+		if (self->hid_links[i])
-+			close(self->hid_links[i]);
-+	}
-+
- 	hid__destroy(self->skel);
- 	self->skel = NULL;
- }
-@@ -512,6 +520,9 @@ static void load_programs(const struct test_program programs[],
- 			    .ctx_size_in = sizeof(args),
- 	);
- 
-+	ASSERT_LE(progs_count, ARRAY_SIZE(self->hid_links))
-+		TH_LOG("too many programs are to be loaded");
-+
- 	/* open the bpf file */
- 	self->skel = hid__open();
- 	ASSERT_OK_PTR(self->skel) TEARDOWN_LOG("Error while calling hid__open");
-@@ -543,7 +554,10 @@ static void load_programs(const struct test_program programs[],
- 		args.hid = self->hid_id;
- 		args.insert_head = programs[i].insert_head;
- 		err = bpf_prog_test_run_opts(attach_fd, &tattr);
--		ASSERT_OK(args.retval) TH_LOG("attach_hid(%s): %d", programs[i].name, args.retval);
-+		ASSERT_GE(args.retval, 0)
-+			TH_LOG("attach_hid(%s): %d", programs[i].name, args.retval);
-+
-+		self->hid_links[i] = args.retval;
- 	}
- 
- 	self->hidraw_fd = open_hidraw(self->dev_id);
-@@ -619,10 +633,17 @@ TEST_F(hid_bpf, test_attach_detach)
- 		{ .name = "hid_second_event" },
- 	};
- 	__u8 buf[10] = {0};
--	int err;
-+	int err, link;
- 
- 	LOAD_PROGRAMS(progs);
- 
-+	link = self->hid_links[0];
-+	/* we might not be using the new code path where hid_bpf_attach_prog()
-+	 * returns a link.
-+	 */
-+	if (!link)
-+		link = bpf_program__fd(self->skel->progs.hid_first_event);
-+
- 	/* inject one event */
- 	buf[0] = 1;
- 	buf[1] = 42;
-@@ -640,8 +661,8 @@ TEST_F(hid_bpf, test_attach_detach)
- 
- 	/* pin the first program and immediately unpin it */
- #define PIN_PATH "/sys/fs/bpf/hid_first_event"
--	err = bpf_program__pin(self->skel->progs.hid_first_event, PIN_PATH);
--	ASSERT_OK(err) TH_LOG("error while calling bpf_program__pin");
-+	err = bpf_obj_pin(link, PIN_PATH);
-+	ASSERT_OK(err) TH_LOG("error while calling bpf_obj_pin");
- 	remove(PIN_PATH);
- #undef PIN_PATH
- 	usleep(100000);
--- 
-2.38.1
-
+I'll change it to "call *rax" which should be more robust (and works)
+and free from relocations.
