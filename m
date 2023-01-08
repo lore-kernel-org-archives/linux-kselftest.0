@@ -2,173 +2,115 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8913EC53210
-	for <linux-kselftest@archiver.kernel.org>; Sun,  8 Jan 2023 14:05:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 27718C53210
+	for <linux-kselftest@archiver.kernel.org>; Sun,  8 Jan 2023 14:12:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230205AbjAHOFp (ORCPT
+        id S229627AbjAHOMf (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 8 Jan 2023 09:05:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55364 "EHLO
+        Sun, 8 Jan 2023 09:12:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233375AbjAHOFm (ORCPT
+        with ESMTP id S230478AbjAHN62 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 8 Jan 2023 09:05:42 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51839DEEB
-        for <linux-kselftest@vger.kernel.org>; Sun,  8 Jan 2023 06:04:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673186695;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bXflzFi1IY8CvdFuCK9K1db17KIG9ke2lGlsL5eBMpE=;
-        b=SvP8ekAIqcOgi1IwFNYhYd6TdupD/4X2ptAF0OQVZ2E1UrXxA+XANQCvSu/zbwLcEWMngx
-        h7JvKJsXNi4fTve6/UOMRZGNlRdimz/pSHsMuIFK4doJj8s1QbA6/SrqG3unA3EzKmZUsy
-        xCE1ncG8mp0EwsJj5gxq0pcMxRiam7k=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-96-ewaGx42ZNNeiTQZyQ1uoDw-1; Sun, 08 Jan 2023 09:04:54 -0500
-X-MC-Unique: ewaGx42ZNNeiTQZyQ1uoDw-1
-Received: by mail-qv1-f71.google.com with SMTP id mu2-20020a056214328200b00531cc0222faso3865739qvb.14
-        for <linux-kselftest@vger.kernel.org>; Sun, 08 Jan 2023 06:04:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bXflzFi1IY8CvdFuCK9K1db17KIG9ke2lGlsL5eBMpE=;
-        b=zmMS5+IwAv2XuUfTVT+lMo6NnsnCdMtO4S216G+0o7s3uYC3CD9gpOLjYIf8NQXGYy
-         /4XZhdRKNhJrS9mLE/4Bbv//75gc/Yd0vsIDPW08gJ6keATor+l/ce0a+hMmHHtlYG5U
-         39gLes7ouGZsubhX+9FzFgVVwj9SJaUDR5E8xVCDX6YW/FMYKJnQPsDjQrpRRYryKn/L
-         4ksP0DxnbjvEInDJ8eVuVi34eZ+aT1DZ4Se7Blv1/UA2nESlhqCMyUY3Ga4vn+foCejW
-         fsK9t7TnjpEX/blRj0i/K/bvNo+2wlQS9bihQhKTxMAvliueEFOuX1RJukVVbvFc6x2q
-         EbKw==
-X-Gm-Message-State: AFqh2kr1q4zk8PNMojKqBEyGoGqiVTyIAzpqB5vwKWavnuScA1PcsacH
-        trSdbR0+ioOUckV48Ojl1bho+vMdBhgij07QxIYMfsUIcnIM3qNAZHNU5t19j+BrNnPcoXrgRD3
-        aMX/+i6rwVZ+AQnJYddDoYUEP73Sm
-X-Received: by 2002:ac8:44d7:0:b0:3a5:4fa8:141c with SMTP id b23-20020ac844d7000000b003a54fa8141cmr95767666qto.23.1673186693557;
-        Sun, 08 Jan 2023 06:04:53 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtID8TsAZQOvN8rRZIxWPf6fGBYCJ6FbN75okARmRvpDMZM4heK3p03Na4clHPhQKpXQ2oNJw==
-X-Received: by 2002:ac8:44d7:0:b0:3a5:4fa8:141c with SMTP id b23-20020ac844d7000000b003a54fa8141cmr95767646qto.23.1673186693303;
-        Sun, 08 Jan 2023 06:04:53 -0800 (PST)
-Received: from debian (2a01cb058918ce0098fed9113971adae.ipv6.abo.wanadoo.fr. [2a01:cb05:8918:ce00:98fe:d911:3971:adae])
-        by smtp.gmail.com with ESMTPSA id jr49-20020a05622a803100b003ad373d04b6sm232494qtb.59.2023.01.08.06.04.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Jan 2023 06:04:52 -0800 (PST)
-Date:   Sun, 8 Jan 2023 15:04:48 +0100
-From:   Guillaume Nault <gnault@redhat.com>
-To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Cc:     linux-kselftest@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Matthias May <matthias.may@westermo.com>
-Subject: Re: BUG: tools/testing/selftests/net/l2_tos_ttl_inherit.sh hangs
- when selftest restarted
-Message-ID: <Y7rNgPj9WIroPcQ/@debian>
-References: <924f1062-ab59-9b88-3b43-c44e73a30387@alu.unizg.hr>
- <Y7i5cT1AlyC53hzN@debian>
- <5ef41d3c-8d81-86b3-c571-044636702342@alu.unizg.hr>
- <Y7lpO9IHtSIyHVej@debian>
- <81fdf2bc-4842-96d8-b124-43d0bd5ec124@alu.unizg.hr>
+        Sun, 8 Jan 2023 08:58:28 -0500
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38360DE9C;
+        Sun,  8 Jan 2023 05:58:28 -0800 (PST)
+Received: from localhost.localdomain (unknown [182.253.183.184])
+        by gnuweeb.org (Postfix) with ESMTPSA id 1C53C7E61F;
+        Sun,  8 Jan 2023 13:58:24 +0000 (UTC)
+X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1673186307;
+        bh=SazNQqasb5NDffj8zbg16H7pkfxoKFoWLz87QrnJBdU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=bcSsuAfHo67WOUFnhiq8eHVhb787Hgm64JZMtz/OxBww6bTtPscjT0DaBy9Oc6x1S
+         Wue43m5VgLF5WK78687/v2z11/AZiSAp3cSTzunPF4unfznhMdlf7Wor/QaZa7/5tc
+         nDFdj8IAyFKAysWUAz/tDiOWNUX2tTlFVDDswiMfZynUi6shmtxpW83LjxDD8OI4M1
+         ZMUwSU94x/QED6X666es6Ldd+Qxg0pL9m8IMmKyhAtRQxkJj4PZof9z2jVPGWQdEz6
+         kPrqvgAq08PTpB63cSANQGKo4zRmwpNY99ZZOaJ1TvPI16XRRaw0UsUK1OwN+fb148
+         /dxGnvrEC+nNA==
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kselftest Mailing List 
+        <linux-kselftest@vger.kernel.org>
+Subject: [RESEND PATCH v1 3/3] selftests/nolibc: Add `getpagesize(2)` selftest
+Date:   Sun,  8 Jan 2023 20:58:09 +0700
+Message-Id: <20230108135809.850210-4-ammar.faizi@intel.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230108135809.850210-1-ammar.faizi@intel.com>
+References: <20230108135809.850210-1-ammar.faizi@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <81fdf2bc-4842-96d8-b124-43d0bd5ec124@alu.unizg.hr>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Jan 08, 2023 at 10:11:25AM +0100, Mirsad Goran Todorovac wrote:
-> [root@pc-mtodorov marvin]# tcpdump --immediate-mode -p -v -i veth0 -n
-> dropped privs to tcpdump
-> tcpdump: listening on veth0, link-type EN10MB (Ethernet), capture size 262144 bytes
-> 08:30:22.835825 IP (tos 0x0, ttl 64, id 2490, offset 0, flags [none], proto UDP (17), length 78)
->     198.18.0.1.35195 > 198.18.0.2.vxlan: VXLAN, flags [I] (0x08), vni 100
-> ARP, Ethernet (len 6), IPv4 (len 4), Request who-has 198.19.0.2 tell 198.19.0.1, length 28
-> 08:30:22.835926 IP (tos 0x0, ttl 64, id 1388, offset 0, flags [none], proto UDP (17), length 78)
->     198.18.0.2.35195 > 198.18.0.1.vxlan: VXLAN, flags [I] (0x08), vni 100
-> ARP, Ethernet (len 6), IPv4 (len 4), Reply 198.19.0.2 is-at a6:45:d5:c4:93:1f, length 28
-> 08:30:22.835976 IP (tos 0xc0, ttl 64, id 29533, offset 0, flags [none], proto ICMP (1), length 106)
->     198.18.0.1 > 198.18.0.2: ICMP host 198.18.0.1 unreachable - admin prohibited filter, length 86
->         IP (tos 0x0, ttl 64, id 1388, offset 0, flags [none], proto UDP (17), length 78)
->     198.18.0.2.35195 > 198.18.0.1.vxlan: VXLAN, flags [I] (0x08), vni 100
-> ARP, Ethernet (len 6), IPv4 (len 4), Reply 198.19.0.2 is-at a6:45:d5:c4:93:1f, length 28
+From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 
-For some reasons, your host doesn't accept the VXLAN packets received
-over veth0. I guess there are some firewalling rules incompatible with
-this tests script.
+Test the getpagesize() function. Make sure it returns the correct
+value.
 
-> > -------- >8 --------
-> > 
-> > Isolate testing environment and ensure everything is cleaned up on
-> > exit.
-> > 
-> > diff --git a/tools/testing/selftests/net/l2_tos_ttl_inherit.sh b/tools/testing/selftests/net/l2_tos_ttl_inherit.sh
+Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+---
+ tools/testing/selftests/nolibc/nolibc-test.c | 30 ++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-> Wow, Guillaueme, this patch actually made things unstuck :)
-
-Great! The patch isolates the testing environment, making it less
-dependent from the host that runs it. So the routing and firewalling
-configurations don't interfere anymore.
-
-> The entire tools/tests/selftests/net section now had a PASS w "OK", save for a couple of tests here:
-> 
-> not ok 1 selftests: nci: nci_dev # exit=1
-> not ok 12 selftests: net: nat6to4.o
-> not ok 13 selftests: net: run_netsocktests # exit=1
-> not ok 29 selftests: net: udpgro_bench.sh # exit=255
-> not ok 30 selftests: net: udpgro.sh # exit=255
-> not ok 37 selftests: net: fcnal-test.sh # TIMEOUT 1500 seconds
-> not ok 38 selftests: net: l2tp.sh # exit=2
-> not ok 46 selftests: net: icmp_redirect.sh # exit=1
-> not ok 55 selftests: net: vrf_route_leaking.sh # exit=1
-> not ok 59 selftests: net: udpgro_fwd.sh # exit=1
-> not ok 60 selftests: net: udpgro_frglist.sh # exit=255
-> not ok 61 selftests: net: veth.sh # exit=1
-> not ok 68 selftests: net: srv6_end_dt46_l3vpn_test.sh # exit=1
-> not ok 69 selftests: net: srv6_end_dt4_l3vpn_test.sh # exit=1
-> not ok 75 selftests: net: arp_ndisc_evict_nocarrier.sh # exit=255
-> not ok 83 selftests: net: test_ingress_egress_chaining.sh # exit=1
-> not ok 1 selftests: net/hsr: hsr_ping.sh # TIMEOUT 45 seconds
-> not ok 3 selftests: net/mptcp: mptcp_join.sh # exit=1
-> 
-> If you are interested in additional diagnostics, this is a very interesting part of the
-> Linux kernel testing ...
-> 
-> There was apparent hang in selftest/net/fcnal-test.sh as well.
-> I can help you with the diagnostics if you wish? Thanks.
-> 
-> If I could make them all work both on Ubuntu 22.10 kinetic kudu and AlmaLinux 8.7
-> stone smilodon (CentOS fork), this would be a milestone for me :)
-
-I'm surprised you have so many failures. Feel free to report them
-individually. Don't forget to Cc the authors of the scripts. Just
-pay attention not to overwhelm people.
-
-I can probably help with the l2tp.sh failure and maybe with the
-fcnal-test.sh hang. Please report them in their own mail thread.
-
-> Have a nice day!
-> 
-> Regards,
-> Mirsad
-> 
-> -- 
-> Mirsad Goran Todorovac
-> Sistem inženjer
-> Grafički fakultet | Akademija likovnih umjetnosti
-> Sveučilište u Zagrebu
->  
-> System engineer
-> Faculty of Graphic Arts | Academy of Fine Arts
-> University of Zagreb, Republic of Croatia
-> The European Union
-> 
-> 
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index 6da17612251c..3a78399f4624 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -442,6 +442,35 @@ int test_getdents64(const char *dir)
+ 	return ret;
+ }
+ 
++static int test_getpagesize(void)
++{
++	long x = getpagesize();
++	int c;
++
++	if (x < 0)
++		return x;
++
++#if defined(__x86_64__) || defined(__i386__) || defined(__i486__) || defined(__i586__) || defined(__i686__)
++	/*
++	 * x86 family is always 4K page.
++	 */
++	c = (x == 4096);
++#elif defined(__aarch64__)
++	/*
++	 * Linux aarch64 supports three values of page size: 4K, 16K, and 64K
++	 * which are selected at kernel compilation time.
++	 */
++	c = (x == 4096 || x == (16 * 1024) || x == (64 * 1024));
++#else
++	/*
++	 * Assuming other architectures must have at least 4K page.
++	 */
++	c = (x >= 4096);
++#endif
++
++	return !c;
++}
++
+ /* Run syscall tests between IDs <min> and <max>.
+  * Return 0 on success, non-zero on failure.
+  */
+@@ -502,6 +531,7 @@ int run_syscall(int min, int max)
+ 		CASE_TEST(gettimeofday_bad2); EXPECT_SYSER(1, gettimeofday(NULL, (void *)1), -1, EFAULT); break;
+ 		CASE_TEST(gettimeofday_bad2); EXPECT_SYSER(1, gettimeofday(NULL, (void *)1), -1, EFAULT); break;
+ #endif
++		CASE_TEST(getpagesize);       EXPECT_SYSZR(1, test_getpagesize()); break;
+ 		CASE_TEST(ioctl_tiocinq);     EXPECT_SYSZR(1, ioctl(0, TIOCINQ, &tmp)); break;
+ 		CASE_TEST(ioctl_tiocinq);     EXPECT_SYSZR(1, ioctl(0, TIOCINQ, &tmp)); break;
+ 		CASE_TEST(link_root1);        EXPECT_SYSER(1, link("/", "/"), -1, EEXIST); break;
+-- 
+Ammar Faizi
 
