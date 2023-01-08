@@ -2,51 +2,49 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F3B6FC54EBD
-	for <linux-kselftest@archiver.kernel.org>; Sun,  8 Jan 2023 13:58:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6DFFC54EBD
+	for <linux-kselftest@archiver.kernel.org>; Sun,  8 Jan 2023 13:59:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233007AbjAHN60 (ORCPT
+        id S233070AbjAHN7O (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 8 Jan 2023 08:58:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50702 "EHLO
+        Sun, 8 Jan 2023 08:59:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232939AbjAHN6Z (ORCPT
+        with ESMTP id S231415AbjAHN7L (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 8 Jan 2023 08:58:25 -0500
+        Sun, 8 Jan 2023 08:59:11 -0500
 Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5935D2FF;
-        Sun,  8 Jan 2023 05:58:24 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E236DE99;
+        Sun,  8 Jan 2023 05:59:11 -0800 (PST)
 Received: from localhost.localdomain (unknown [182.253.183.184])
-        by gnuweeb.org (Postfix) with ESMTPSA id AF84E7E6D5;
-        Sun,  8 Jan 2023 13:58:21 +0000 (UTC)
+        by gnuweeb.org (Postfix) with ESMTPSA id 43D2B7E500;
+        Sun,  8 Jan 2023 13:59:08 +0000 (UTC)
 X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1673186304;
-        bh=wcpOgJmHUqHilg+MA55c94wnAlyf9zHTIyYePnjiqNM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EFXZkn/3XD4yXC9/kl1H5fo6KHZ5WXwvEzPwVJRY+oy6THg+LUcgqGZqjedoPNQVP
-         TPFcc8x8q2Om7FZ24wCiusqC9yie+y+0U8H9vZ/vsup2nKBvP1DG7gaAwnM7/K8vXO
-         ij5BA5kXIugK5sfb40wRTi6DImcbv+1WPBXy2QtfItgEH+JVpnl8xHqYpUay7jldol
-         AiTfAO63d2oM311mt9jRi3n9kqlvtGJTMC5s7p5KZBYtgw6HbN6MEMg+LG8V9Ot9jV
-         qmyuorbPFE/2C+bFOJz84vybWBitXC3OjpMOwi2TQgx7RHWePH0HxxXEmG/m6BQbQS
-         5zs909NZv8c8w==
+        s=default; t=1673186351;
+        bh=GTUZnCbGV/UWFXA7BcCYjMcKchB8a7OfQh/kkhPzwLA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=FVpcN3GUI1xGzqnS0IYPQevi4phQ4IgCjHI5gq/WhWwKGWLjgUxuPnpHuTt9GWZsV
+         +CEjy8ktVdHJb5xSYX8+e0ahe6H2f8pl7j6LInpZ59JhwwaRfTc6VldMChnCgFnuuA
+         IGK+5QxBUkVktnk6Qju37UZrZFYwhhiJ02eRYQmWT5HnBGIxB/QavIWvalOG+ChSPO
+         JWurRuoD9T5DSEwroXsVUaFbGisIJQ+qqBSp/O4kyQDBFpdLDDdtkaHj1J6yLCCKko
+         dcha1wlK/2IgpBvBNQZwZLjJW1d9sNol+c9EOvIylSVpub2VwZ1PJ3Yk6bYCGgqJ3a
+         q2XrSpnHaldOA==
 From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
 To:     Willy Tarreau <w@1wt.eu>
 Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
         Shuah Khan <shuah@kernel.org>,
         "Paul E. McKenney" <paulmck@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>,
+        Gilang Fachrezy <gilang4321@gmail.com>,
         Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
         GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Kselftest Mailing List 
         <linux-kselftest@vger.kernel.org>
-Subject: [RESEND PATCH v1 2/3] nolibc/sys: Implement `getpagesize(2)` function
-Date:   Sun,  8 Jan 2023 20:58:08 +0700
-Message-Id: <20230108135809.850210-3-ammar.faizi@intel.com>
+Subject: [PATCH v3 0/5] nolibc signal handling support
+Date:   Sun,  8 Jan 2023 20:58:59 +0700
+Message-Id: <20230108135904.851762-1-ammar.faizi@intel.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230108135809.850210-1-ammar.faizi@intel.com>
-References: <20230108135809.850210-1-ammar.faizi@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -55,65 +53,85 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 
-This function returns the page size used by the running kernel. The
-page size value is taken from the auxiliary vector at 'AT_PAGESZ' key.
+Hi Willy,
 
-'getpagesize(2)' is assumed as a syscall becuase the manpage placement
-of this function is in entry 2 ('man 2 getpagesize') despite there is
-no real 'getpagesize(2)' syscall in the Linux syscall table. Define
-this function in 'sys.h'.
+On top of the series titled "nolibc auxiliary vector retrieval support".
+The prerequisite patches of this series are in that series.
+
+This is v2 of nolibc signal handling support. It adds signal handling
+support to the nolibc subsystem:
+
+1)  Initial implementation of nolibc sigaction(2) function.
+
+    `sigaction()` needs an architecture-dependent "signal trampoline"
+    function that invokes __rt_sigreturn syscall to resume the process
+    after a signal gets handled.
+
+    The "signal trampoline" function is called `__restore_rt` in this
+    implementation. The naming `__restore_rt` is important for GDB. It
+    also has to be given a special optimization attribute
+    "omit-frame-pointer" to prevent the compiler from creating a stack
+    frame that makes the `%rsp` value no longer points to the `struct
+    rt_sigframe` that the kernel constructed.
+
+
+2)  signal(2) function.
+
+    signal() function is the simpler version of sigaction(). Unlike
+    sigaction(), which fully controls the struct sigaction, the caller
+    only cares about the sa_handler when calling the signal() function.
+    signal() internally calls sigaction().
+
+
+3)  More selftests.
+
+    This series also adds selftests for:
+      - fork(2)
+      - sigaction(2)
+      - signal(2)
+
+
+Side note for __restore_rt:
+This has been tested on x86-64 arch and `__restore_rt` generates the
+correct code. The `__restore_rt` codegen correctness on other
+architectures need to be evaluated as well. If it can't generate the
+correct code, it has to be written in inline Assembly.
+
+The current codegen for __restore_rt looks like this (gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0):
+
+  00000000004038e3 <__restore_rt>:
+    4038e3:  endbr64 
+    4038e7:  mov    $0xf,%eax
+    4038ec:  syscall
+
+## Changes since v2:
+  - Fix unintentionally squashed patch. The signal() selftest patch
+    was squashed into the sigaction selftest patch.
+
+## Changes since RFC v1:
+  - Separate getpagesize() series.
+  - Write __restore_rt function in C instead of in inline Assembly.
+
 
 Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 ---
 
-Side note:
-This function calls 'getauxval(3)' function that's defined in
-'stdlib.h', but since most functions in 'stdlib.h' needs 'sys.h', the
-'sys.h' is always included first. Therefore, we need a forward
-declaration of 'getauxval(3)' in sys.h.
+Ammar Faizi (5):
+  nolibc/sys: Implement `sigaction(2)` function
+  nolibc/sys: Implement `signal(2)` function
+  selftests/nolibc: Add `fork(2)` selftest
+  selftests/nolibc: Add `sigaction(2)` selftest
+  selftests/nolibc: Add `signal(2)` selftest
 
- tools/include/nolibc/sys.h | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+ tools/include/nolibc/sys.h                   |  97 +++++++++++
+ tools/testing/selftests/nolibc/nolibc-test.c | 172 +++++++++++++++++++
+ 2 files changed, 269 insertions(+)
 
-diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-index 3db1dd8c74ee..acf7cf438010 100644
---- a/tools/include/nolibc/sys.h
-+++ b/tools/include/nolibc/sys.h
-@@ -18,6 +18,7 @@
- #include <linux/fs.h>
- #include <linux/loop.h>
- #include <linux/time.h>
-+#include <linux/auxvec.h>
- 
- #include "arch.h"
- #include "errno.h"
-@@ -498,6 +499,26 @@ pid_t gettid(void)
- 	return sys_gettid();
- }
- 
-+static unsigned long getauxval(unsigned long key);
-+
-+/*
-+ * long getpagesize(void);
-+ */
-+
-+static __attribute__((unused))
-+long getpagesize(void)
-+{
-+	long ret;
-+
-+	ret = getauxval(AT_PAGESZ);
-+	if (!ret) {
-+		SET_ERRNO(ENOENT);
-+		return -1;
-+	}
-+
-+	return ret;
-+}
-+
- 
- /*
-  * int gettimeofday(struct timeval *tv, struct timezone *tz);
+
+base-commit: b6887ec8b0b0c78db414b78e329bf2ce234dedd5
+prerequisite-patch-id: 8dd0ca8ecee1732d8f5c0b233f8231dda6ab0d22
+prerequisite-patch-id: ff4c08615ebbdc1a04ce39f39f99387ee46b2b31
+prerequisite-patch-id: af837a829263849331eb6d73701afd7903146055
 -- 
 Ammar Faizi
 
