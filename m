@@ -2,84 +2,159 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CA109C5479D
-	for <linux-kselftest@archiver.kernel.org>; Mon,  9 Jan 2023 11:43:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A5D78C5479D
+	for <linux-kselftest@archiver.kernel.org>; Mon,  9 Jan 2023 13:09:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234042AbjAILnJ (ORCPT
+        id S234207AbjAINJ0 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 9 Jan 2023 06:43:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58038 "EHLO
+        Mon, 9 Jan 2023 08:09:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237012AbjAILnC (ORCPT
+        with ESMTP id S234815AbjAINJD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 9 Jan 2023 06:43:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 312FD20D;
-        Mon,  9 Jan 2023 03:43:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 9 Jan 2023 08:09:03 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E33222604
+        for <linux-kselftest@vger.kernel.org>; Mon,  9 Jan 2023 05:06:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673269572;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yqnAszpgy0KJ191Ho69gF9UoikTfczETJLDKhGuW5zw=;
+        b=DeNF5kJCbmCeHbtc9tHMng7m9JcG8TezVGo8cckAwCWQSI0vZBsfkBsED+tSB7eNAs/FOy
+        6vcC7PyNr8y4S8z6c7AC457y3/4pd5SbgK3Tsp0EMHw4tgoXBZ38anWPXLr2qnIfiUAmIV
+        wQgaYU2j0ANLMWrjOdBooiLz3pekW2c=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-495-yTRL9aU4O3yaIXCTW92jXQ-1; Mon, 09 Jan 2023 08:06:11 -0500
+X-MC-Unique: yTRL9aU4O3yaIXCTW92jXQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BCCDB6102E;
-        Mon,  9 Jan 2023 11:43:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D185CC433EF;
-        Mon,  9 Jan 2023 11:42:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673264580;
-        bh=k4VFwDwt+3kN+Vy2Mbffh4lRQPurzk1UNIus5/rXg4I=;
-        h=From:To:Cc:Subject:Date:From;
-        b=OQJWuHnAubh118bda8DEf94hNpg3w0eNF5RRtif1owHukw9rd0cUn3AgyQI36Xk/3
-         3GIUuSXDdGXXmC5CDcBCulDRftNEb6CXJuWqDy3dGUycik5Tbtf0jOv94JCl2xvbx0
-         TwCtP+vqyWBgI/eudylW2rAY8qnpTchD+KZ/hzFcM1KIGmWt+NiM5a82s60QWf16zf
-         pGGjPB6wIEKVvDWw+vtdiPOnXXZalE+wppcIhD/J5Ws0l8nx3jvDVKBikla4bhujHs
-         HzjGOcSXxsZapwlv/T5lRYNBnYlER6i14FVo66EiPiuKFJCDrKXV5kkSdit2ePg1j3
-         4YyIzTXrHneag==
-From:   =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
-Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: vm: Enable cross-compilation
-Date:   Mon,  9 Jan 2023 12:42:51 +0100
-Message-Id: <20230109114251.3349638-1-bjorn@kernel.org>
-X-Mailer: git-send-email 2.37.2
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0144E183B3CA;
+        Mon,  9 Jan 2023 13:06:10 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 91D53175AD;
+        Mon,  9 Jan 2023 13:06:09 +0000 (UTC)
+From:   Emanuele Giuseppe Esposito <eesposit@redhat.com>
+To:     kvm@vger.kernel.org
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
+        Gautam Menghani <gautammenghani201@gmail.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        Zeng Guang <guang.zeng@intel.com>,
+        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
+        Jim Mattson <jmattson@google.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [RFC PATCH 2/2] KVM: selftests: APIC_ID must be correctly updated when disabling x2apic
+Date:   Mon,  9 Jan 2023 08:06:05 -0500
+Message-Id: <20230109130605.2013555-3-eesposit@redhat.com>
+In-Reply-To: <20230109130605.2013555-1-eesposit@redhat.com>
+References: <20230109130605.2013555-1-eesposit@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Björn Töpel <bjorn@rivosinc.com>
+Make sure the APIC_ID is correctly shifted in the right bit positions
+when disabling x2APIC via KVM_SET_MSRS.
 
-Selftests vm builds break when doing cross-compilation. The Makefile
-MACHINE variable incorrectly picks upp the host machine architecture.
-
-If the CROSS_COMPILE variable is set, dig out the target host
-architecture from CROSS_COMPILE, instead of calling uname.
-
-Signed-off-by: Björn Töpel <bjorn@rivosinc.com>
+Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
 ---
- tools/testing/selftests/vm/Makefile | 4 ++++
- 1 file changed, 4 insertions(+)
+ .../selftests/kvm/x86_64/xapic_state_test.c   | 64 +++++++++++++++++++
+ 1 file changed, 64 insertions(+)
 
-diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-index 89c14e41bd43..1cded308dddf 100644
---- a/tools/testing/selftests/vm/Makefile
-+++ b/tools/testing/selftests/vm/Makefile
-@@ -5,7 +5,11 @@ LOCAL_HDRS += $(selfdir)/vm/local_config.h $(top_srcdir)/mm/gup_test.h
+diff --git a/tools/testing/selftests/kvm/x86_64/xapic_state_test.c b/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
+index d7d37dae3eeb..6ebda7162a25 100644
+--- a/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
++++ b/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
+@@ -132,6 +132,62 @@ static void test_icr(struct xapic_vcpu *x)
+ 	__test_icr(x, -1ull & ~APIC_DM_FIXED_MASK);
+ }
  
- include local_config.mk
++static void _test_lapic_id(struct kvm_vcpu *vcpu, bool x2apic_enabled,
++			   int expected_id)
++{
++	struct kvm_lapic_state xapic;
++
++	vcpu_ioctl(vcpu, KVM_GET_LAPIC, &xapic);
++	if (x2apic_enabled)
++		ASSERT_EQ(xapic.regs[APIC_ID], expected_id);
++	else
++		ASSERT_EQ(xapic.regs[0x23], expected_id);
++
++}
++
++static void test_apic_id(struct kvm_vcpu *vcpu, int id)
++{
++	int ret;
++	struct {
++		struct kvm_msrs info;
++		struct kvm_msr_entry entries[1];
++	} msr_data = {
++		.info.nmsrs = 1,
++		.entries[0].index = MSR_IA32_APICBASE,
++	};
++
++	/* vcpu is initialized with xAPIC enabled */
++	ret = __vcpu_ioctl(vcpu, KVM_GET_MSRS, &msr_data.info);
++	TEST_ASSERT(ret == 1, __KVM_IOCTL_ERROR("__vcpu_ioctl", ret));
++	ASSERT_EQ(msr_data.entries[0].data & MSR_IA32_APICBASE_ENABLE,
++		  MSR_IA32_APICBASE_ENABLE);
++	ASSERT_EQ(msr_data.entries[0].data & X2APIC_ENABLE, 0);
++	_test_lapic_id(vcpu, false, id);
++
++	/* enable x2APIC */
++	msr_data.entries[0].data |= X2APIC_ENABLE;
++	ret = __vcpu_ioctl(vcpu, KVM_SET_MSRS, &msr_data.info);
++	TEST_ASSERT(ret == 1, __KVM_IOCTL_ERROR("__vcpu_ioctl", ret));
++	ASSERT_EQ(msr_data.entries[0].data & MSR_IA32_APICBASE_ENABLE,
++		  MSR_IA32_APICBASE_ENABLE);
++	ASSERT_EQ(msr_data.entries[0].data & X2APIC_ENABLE, X2APIC_ENABLE);
++	_test_lapic_id(vcpu, true, id);
++
++	/*
++	 * Check that disabling x2APIC correctly updates the APIC ID to the
++	 * xAPIC format.
++	 */
++	msr_data.entries[0].data ^= X2APIC_ENABLE;
++	ret = __vcpu_ioctl(vcpu, KVM_SET_MSRS, &msr_data.info);
++	TEST_ASSERT(ret == 1, __KVM_IOCTL_ERROR("__vcpu_ioctl", ret));
++	ASSERT_EQ(msr_data.entries[0].data & MSR_IA32_APICBASE_ENABLE,
++		  MSR_IA32_APICBASE_ENABLE);
++	ASSERT_EQ(msr_data.entries[0].data & X2APIC_ENABLE, 0);
++	_test_lapic_id(vcpu, false, id);
++}
++
++#define NCPUS 3
++
+ int main(int argc, char *argv[])
+ {
+ 	struct xapic_vcpu x = {
+@@ -139,6 +195,14 @@ int main(int argc, char *argv[])
+ 		.is_x2apic = true,
+ 	};
+ 	struct kvm_vm *vm;
++	struct kvm_vcpu *vcpus[NCPUS] = { 0 };
++	int i;
++
++	vm = vm_create_with_vcpus(NCPUS, NULL, vcpus);
++	vm_enable_cap(vm, KVM_CAP_X2APIC_API, KVM_X2APIC_API_USE_32BIT_IDS);
++	for (i = 0; i < NCPUS; i++)
++		test_apic_id(vcpus[i], i);
++	kvm_vm_free(vm);
  
-+ifeq ($(CROSS_COMPILE),)
- uname_M := $(shell uname -m 2>/dev/null || echo not)
-+else
-+uname_M := $(shell echo $(CROSS_COMPILE) | grep -o '^[a-z0-9]\+')
-+endif
- MACHINE ?= $(shell echo $(uname_M) | sed -e 's/aarch64.*/arm64/' -e 's/ppc64.*/ppc64/')
- 
- # Without this, failed build products remain, with up-to-date timestamps,
-
-base-commit: 1fe4fd6f5cad346e598593af36caeadc4f5d4fa9
+ 	vm = vm_create_with_one_vcpu(&x.vcpu, x2apic_guest_code);
+ 	test_icr(&x);
 -- 
-2.37.2
+2.31.1
 
