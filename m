@@ -2,119 +2,93 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78826C54EBD
-	for <linux-kselftest@archiver.kernel.org>; Mon,  9 Jan 2023 18:10:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 202B8C54EBD
+	for <linux-kselftest@archiver.kernel.org>; Mon,  9 Jan 2023 18:17:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231777AbjAISKD (ORCPT
+        id S233422AbjAISRh (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 9 Jan 2023 13:10:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58390 "EHLO
+        Mon, 9 Jan 2023 13:17:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236966AbjAISIv (ORCPT
+        with ESMTP id S237833AbjAISRE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 9 Jan 2023 13:08:51 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C91FD3D9F6
-        for <linux-kselftest@vger.kernel.org>; Mon,  9 Jan 2023 10:07:46 -0800 (PST)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 309HJXMg029484;
-        Mon, 9 Jan 2023 18:07:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : content-transfer-encoding : mime-version; s=pp1;
- bh=b0omC51hQ9dIzKK7x5A+V5ONEtf1YUmVCXFhs5tfw2Q=;
- b=dZrh9QNB+KBEdlutI+rvAAWK4AOJAUzgjXaR5PHtSKfR0FvPzVm1rp1GUk7+w36B2xrI
- 4pHVqixvmpDxpw2NofEdsO1sTexI6+OmEG0sgs58WBkGkchGGxkJXmWzgPJshR/fq6mn
- t1xd/UnsJRZFLdO0HW/sBkuo33kjKyDwX/kW2ZKsTzTuXwrwGN/yzGfNop2SoWDahTb0
- F6987njhRIZULT5D+J6xXL4BplG4ssCPGTo5Xz4KvcCJDOvutYTCzl6s3meay++sLAQa
- h6NbSfb6ug01lqM/e6BKlgwaNu5M/ZJRI8IzgtfzMeeCxDSPiyAQkg7V39jA5/9W+KZW Qw== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3myjk7meua-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 09 Jan 2023 18:07:26 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3098vsjJ000654;
-        Mon, 9 Jan 2023 18:07:24 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3my0c6kahm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 09 Jan 2023 18:07:24 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 309I7MZv52560326
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 9 Jan 2023 18:07:22 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4A66720043;
-        Mon,  9 Jan 2023 18:07:22 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B9B8320049;
-        Mon,  9 Jan 2023 18:07:21 +0000 (GMT)
-Received: from dilbert5.fritz.box (unknown [9.171.48.140])
-        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Mon,  9 Jan 2023 18:07:21 +0000 (GMT)
-From:   Gerd Bayer <gbayer@linux.ibm.com>
-To:     Xiang Chen <chenxiang66@hisilicon.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Joerg Roedel <joro@8bytes.org>, iommu@lists.linux.dev,
-        linux-kselftest@vger.kernel.org,
-        Niklas Schnelle <schnelle@linux.ibm.com>
-Subject: [PATCH] selftests:dma: Fix compile error in user-space tool
-Date:   Mon,  9 Jan 2023 19:07:21 +0100
-Message-Id: <20230109180721.187324-1-gbayer@linux.ibm.com>
-X-Mailer: git-send-email 2.39.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 42Jb_o16O5jOZ8ExxC93aJlM8fsnyZpv
-X-Proofpoint-GUID: 42Jb_o16O5jOZ8ExxC93aJlM8fsnyZpv
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 9 Jan 2023 13:17:04 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A677FEDC
+        for <linux-kselftest@vger.kernel.org>; Mon,  9 Jan 2023 10:13:05 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id h7so2585335pfq.4
+        for <linux-kselftest@vger.kernel.org>; Mon, 09 Jan 2023 10:13:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Lpn7ULQKJRqA1WM0tl+JngZoSM5Eptcl4R1Du6qoFI4=;
+        b=AKN88fz1MiNhQ6ouB3BqRSNX7WRkDgF0tCX0XphKDMLbqHyhd6bv57i4iwXJZuPYM4
+         yngwuoJCvJdVD0bi+itrlOheBlmNUA2w740CjP7T7cfg8J7sJWGWDUgS5EDlGSdkWbE+
+         OgSn0CvLy3GKdnj8LOgsjyzqlxc04zc4QxsY1irNTx3WlvJo5iiroQPUHwpaoPxZs0oj
+         a2cHGVXtnL+MDWF5ONxUn9bUireONe2jrN3aSY/a5+o14bLrKG4X07Ka5X08lkYMgwHR
+         l99hXqTB/S4q+t1d2ZvRB+oUhmGysXIZWC8qr9sHmbEckp500IVfnt13Q0iMJVn7jrYQ
+         U0jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Lpn7ULQKJRqA1WM0tl+JngZoSM5Eptcl4R1Du6qoFI4=;
+        b=n5TIzUM8DoawNHvvewrpSsjPrd+uYk2fWFDkTFK6iMRBMFVSjQ6eZFMffwhGm6KE4c
+         Q9lRB5G6mYCCO46PfuBkc2jVPUkLNqjZ6TdeNOB0Fir+k/nXi3mpM98/fIMGakiH81VE
+         wO+9Sto4a2E9Ki3Kollkr85OPB6zPUaSTYyPO7FcFxGi/71KqcPBRgNB6aJ4bf5weg46
+         sedIt+FpC1uVXG7JESzGhdxRblCCqAg47hUn4kGZ9Uit1e8avdY66xIXx8eFv3qw8yrl
+         brUPpJBp+9u5+79TCv9qVpxxRC0Jn8LbyMQd1sxb8I+6GEZ5l2i9rCxENprODxFBSc3E
+         q3bA==
+X-Gm-Message-State: AFqh2koNKyIiP8NWlWamfPOShkn6Gz6kINZEn+l0U7WWL+f0zUuUZwu1
+        3bqHzFTiqcSgHj8OMjuPyn/vSA==
+X-Google-Smtp-Source: AMrXdXup4DR+qZjngNVx+JPw5c4h9yACEBJF6kWBNAK7bW2VPxRan8XLDCFWcPWHF/Qy1DAXlfuO+Q==
+X-Received: by 2002:a05:6a00:1948:b0:581:bfac:7a52 with SMTP id s8-20020a056a00194800b00581bfac7a52mr704444pfk.1.1673287984757;
+        Mon, 09 Jan 2023 10:13:04 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id b29-20020a62a11d000000b005769ccca18csm6321096pff.85.2023.01.09.10.13.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jan 2023 10:13:04 -0800 (PST)
+Date:   Mon, 9 Jan 2023 18:13:00 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vishal Annapurve <vannapurve@google.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        shuah@kernel.org, bgardon@google.com, oupton@google.com,
+        peterx@redhat.com, vkuznets@redhat.com, dmatlack@google.com
+Subject: Re: [V4 PATCH 2/4] KVM: selftests: x86: Add variables to store cpu
+ type
+Message-ID: <Y7xZLB+1isqZTJCj@google.com>
+References: <20221228192438.2835203-1-vannapurve@google.com>
+ <20221228192438.2835203-3-vannapurve@google.com>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-09_11,2023-01-09_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- mlxlogscore=999 impostorscore=0 suspectscore=0 spamscore=0 phishscore=0
- clxscore=1015 priorityscore=1501 mlxscore=0 bulkscore=0 malwarescore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301090125
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221228192438.2835203-3-vannapurve@google.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Since [1] the user-space program dma_map_benchmark shares the header file
-linux/map_benchmark.h with the kernel driver in kernel/dma/map_benchmark.c.
-With latest kernel version this does not compile anymore.
+In shortlogs and changelogs, try to provide a synopsis of the change, not a
+literal description of the change.  As suggested in the previous patch, this:
 
-While https://kernelnewbies.org/KernelHeaders suggests otherwise, allow it
-to use kernel headers through the uapi/ include directory. I assume we can
-do so safely, since the controlling user-space program is distributed with
-the kernel.
+  KVM: selftests: Cache host CPU vendor (AMD vs. Intel)
 
-With this change dma_map_benchmark compiles with just the obvious warning
-about uapi usage on ARCH=x86, arm64, and s390 and runs on ARCH=s390.
+is more precise (vendor instead of "cpu type") and hints at the intent (caching
+the information), whereas this doesn't capture the vendor part, nor does it provide
+any hint whatsoever as to (a) how the variables will be used or (b) why we want to
+add variables to store
 
-[1] commit 8ddde07a3d28 ("dma-mapping: benchmark: extract a common header
-file for map_benchmark definition")
+  KVM: selftests: x86: Add variables to store cpu type
 
-Signed-off-by: Gerd Bayer <gbayer@linux.ibm.com>
-Acked-by: Xiang Chen <chenxiang66@hisilicon.com>
----
- tools/testing/selftests/dma/dma_map_benchmark.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, Dec 28, 2022, Vishal Annapurve wrote:
+> Add variables to hold the cpu vendor type that are initialized early
+> during the selftest setup and later synced to guest vm post VM creation.
+> 
+> These variables will be used in later patches to avoid querying CPU
+> type multiple times.
 
-diff --git a/tools/testing/selftests/dma/dma_map_benchmark.c b/tools/testing/selftests/dma/dma_map_benchmark.c
-index 5c997f17fcbd..d49d7ea6a63e 100644
---- a/tools/testing/selftests/dma/dma_map_benchmark.c
-+++ b/tools/testing/selftests/dma/dma_map_benchmark.c
-@@ -10,7 +10,7 @@
- #include <unistd.h>
- #include <sys/ioctl.h>
- #include <sys/mman.h>
--#include <linux/types.h>
-+#include <uapi/linux/types.h>
- #include <linux/map_benchmark.h>
- 
- #define NSEC_PER_MSEC	1000000L
-
-base-commit: 1fe4fd6f5cad346e598593af36caeadc4f5d4fa9
--- 
-2.39.0
-
+Performance is a happy bonus, it is not the main reason for caching.  The main
+reason for caching is so that the guest can select the native hypercall instruction
+without having to make assumptions about guest vs. host CPUID information.
