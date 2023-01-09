@@ -2,55 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 94EF6C678D5
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B508DC678D6
 	for <linux-kselftest@archiver.kernel.org>; Mon,  9 Jan 2023 15:39:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233804AbjAIPiZ (ORCPT
+        id S234750AbjAIPi1 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 9 Jan 2023 10:38:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53012 "EHLO
+        Mon, 9 Jan 2023 10:38:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236511AbjAIPhh (ORCPT
+        with ESMTP id S235007AbjAIPhb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 9 Jan 2023 10:37:37 -0500
-Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A61C5C1ED;
-        Mon,  9 Jan 2023 07:34:14 -0800 (PST)
-Received: by mail-qt1-x842.google.com with SMTP id a25so957052qto.10;
-        Mon, 09 Jan 2023 07:34:14 -0800 (PST)
+        Mon, 9 Jan 2023 10:37:31 -0500
+Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96AE8564D6;
+        Mon,  9 Jan 2023 07:34:10 -0800 (PST)
+Received: by mail-qt1-x844.google.com with SMTP id x11so7956693qtv.13;
+        Mon, 09 Jan 2023 07:34:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5aL7JeVTqAwg/RXtwS8yjASi+//+/JwdZxNzAPAGgnY=;
-        b=lxflmllJcp9PPhY/2Pqsh0Zuo2eyUF/aulPZ2b+P6UZJY5JjeHhnpNfdBl4PRe+Z9k
-         PXk4oPeMHOV98ud1xN18UL7dSeQjwdiRKaDMmkkk332Nxj463ecjN31DntQKRDMcicnl
-         MEy28r+JnxX2k72+zpPSzogcrAtDUcjF4Vfirk4rEM/Le7oYGtlV8QJSdKoP3/waEQLH
-         QQmzny4aAgdkZEImY8gMqMHS7LGdbLK1UI5Ybq1ZQw1ModxVs0ckxo8vlmiP2SZEEdwa
-         QbT/2Pi+mCVQ2gSc7qH+7ZHtZ3oGoQ+Nbaz0e+NiV38+mYh8Ay8sIoeDgVW/BuTGA4sX
-         VZ+w==
+        bh=mpjXMcZ/7RudLTNZ8yQIMhedP7zu8/TzwLoOBtws8VI=;
+        b=PGgvb/o0mxa8qkP79RyhSNxzFBfMJkOqp2Yvbm/7U1WdFwFL77akyQnl11h4SMpCij
+         KARGsIgRzOk0uY3NMirowb5WiQc6mpr21mOf/gpFLZ/fP/JUmYDtbmLXSooFJoamXpsC
+         I8asgY8T02al9dovbSYDcGMb6WzfpUplgETs9onhDL1bqfAtq75TnzjwspwjGuSVGc3M
+         ZXpM3ACWJUHDKDA+yMzb8NGduIIRRscYEybRH0R2psgTiD/SpEH7fsQPN4vNYRbxMPNK
+         1vW6VsUE/Rf+tw+LKbB7UODQVHPb3i0MH6h6MoLX1BfaPfUoed8wFUki/gIPVvXmXBHN
+         n/qA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5aL7JeVTqAwg/RXtwS8yjASi+//+/JwdZxNzAPAGgnY=;
-        b=Wr2/0z0oCFcW/7+YbUsbfkT2PiNe0CJR4uiIrVTMoLIHc7QUke4CvRbIt3CF9k0u8R
-         j7tWr/n5BIf7FZfC64MRaT0be4L3CVV/T83wMN+gC3pgBjXz6zaZR+YtyQPHgA1y7bLt
-         JaWpvlO7vt2z34+YFNDjBrFziwqHyiMIxzG0Uw91L5g/f+j1LdNsuApxLHC+G8uJYFhD
-         ZTjXHl4eVCPib/7EvU6Q6E1KMt2iXuFPf7+PhjD/gHw8+cAWddYA/FFAhJtJhSafUEFw
-         fQdb5CJhkmT7uPLrV+mfp8mFGnM06Wzhg9VXq6Z6anrl4ldS94VQa12/rkx+1XkiTHgr
-         G3Bg==
-X-Gm-Message-State: AFqh2kpNpty1oZN+Ly81M2NzvaICy4aYY5KG24to0GC/TQo2wiqZ7nTX
-        77mVLvnyjew1kIcvowmpQ73msFTkWA==
-X-Google-Smtp-Source: AMrXdXsM7j5rXSNW5Wjc9Qg9ItWb7vUFxI7zM+ztcKxx9UyonVKCPXbpHCjg9c7eAAAkARc4oKG1Wg==
-X-Received: by 2002:ac8:4d83:0:b0:3a8:1600:e60f with SMTP id a3-20020ac84d83000000b003a81600e60fmr85708193qtw.14.1673278453096;
-        Mon, 09 Jan 2023 07:34:13 -0800 (PST)
+        bh=mpjXMcZ/7RudLTNZ8yQIMhedP7zu8/TzwLoOBtws8VI=;
+        b=NkZMAf8QqvdflKglc32NDHyNaCaqv0rlc3jNk6nejkAwKqWb/FnTZsEBus2dddsXQr
+         q2ObwoYQRgo0ls5MO2EAxHZZgrX1tzPLc6ONLrmDT/2IMeNQcRmKk6oX0LVcDpkrOAMO
+         kZvMp2bKZ/iQ6603Lf7bfn7OF8AI3TxlSpcsEURbcHg+3aH55VudwT8+HIbPWfCQ1Y4G
+         MPqQa3srYPMRSijzqM7CNGvE/nKzdkQgx3JEfjZRTJOXWZp+qWnpqi28htXz735lMKsf
+         bJAXHi2NZH3RCqka2FBu5saesVlq50HjCaC3WA5w9r7VqlDc/HvlbCsN5tl1/wfylTkr
+         iDlQ==
+X-Gm-Message-State: AFqh2kooNELeg9hfWoZeHizOvif/zDbTQBNHX+jMmWqBUovFyd56ieyn
+        tyg+jzLdt6Eftim9UrFbsNLGkcURUQ==
+X-Google-Smtp-Source: AMrXdXs02xojdZxQRNkUuff7oVgOR4Qth2e7eCNrl+Qy+s6+Ap4vnsTd7ye02979zfve3yRaAyZ7NQ==
+X-Received: by 2002:ac8:4403:0:b0:3a8:20fd:7111 with SMTP id j3-20020ac84403000000b003a820fd7111mr91263754qtn.39.1673278446359;
+        Mon, 09 Jan 2023 07:34:06 -0800 (PST)
 Received: from fedora.mshome.net (pool-173-79-56-208.washdc.fios.verizon.net. [173.79.56.208])
-        by smtp.gmail.com with ESMTPSA id f1-20020ac81341000000b003a6a19ee4f0sm4687236qtj.33.2023.01.09.07.34.11
+        by smtp.gmail.com with ESMTPSA id f1-20020ac81341000000b003a6a19ee4f0sm4687236qtj.33.2023.01.09.07.34.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jan 2023 07:34:12 -0800 (PST)
+        Mon, 09 Jan 2023 07:34:04 -0800 (PST)
 From:   Gregory Price <gourry.memverge@gmail.com>
 X-Google-Original-From: Gregory Price <gregory.price@memverge.com>
 To:     linux-kernel@vger.kernel.org
@@ -60,9 +60,9 @@ Cc:     linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
         peterz@infradead.org, ebiederm@xmission.com,
         akpm@linux-foundation.org, adobriyan@gmail.com, corbet@lwn.net,
         shuah@kernel.org, Gregory Price <gregory.price@memverge.com>
-Subject: [PATCH 3/3] prctl,syscall_user_dispatch: add a getter for configuration info
-Date:   Mon,  9 Jan 2023 10:33:48 -0500
-Message-Id: <20230109153348.5625-4-gregory.price@memverge.com>
+Subject: [PATCH 1/3] ptrace,syscall_user_dispatch: Implement Syscall User Dispatch Suspension
+Date:   Mon,  9 Jan 2023 10:33:46 -0500
+Message-Id: <20230109153348.5625-2-gregory.price@memverge.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20230109153348.5625-1-gregory.price@memverge.com>
 References: <20230109153348.5625-1-gregory.price@memverge.com>
@@ -72,212 +72,99 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch implements simple getter interface for syscall user dispatch
-configuration info.
+Adds PTRACE_O_SUSPEND_SYSCALL_USER_DISPATCH to ptrace options, and
+modify Syscall User Dispatch to suspend interception when enabled.
 
-To support checkpoint/resume of a syscall user dispatch process,
-the prctl settings for syscall user dispatch must be fetchable.
-Presently, these settings are write-only, making it impossible to
-implement transparent checkpoint (coordination with the software is
-required).
+This is modeled after the SUSPEND_SECCOMP feature, which suspends
+SECCOMP interposition.  Without doing this, software like CRIU will
+inject system calls into a process and be intercepted by Syscall
+User Dispatch, either causing a crash (due to blocked signals) or
+the delivery of those signals to a ptracer (not the intended behavior).
 
-As Syscall User Dispatch is explicitly not for secure-container
-development, exposing the configuration state via prctl does not
-violate the original design intent.
+Since Syscall User Dispatch is not a privileged feature, a check
+for permissions is not required, however attempting to set this
+option when CONFIG_CHECKPOINT_RESTORE it not supported should be
+disallowed, as its intended use is checkpoint/resume.
 
 Signed-off-by: Gregory Price <gregory.price@memverge.com>
 ---
- .../admin-guide/syscall-user-dispatch.rst     | 18 +++++++
- include/linux/syscall_user_dispatch.h         |  7 +++
- include/uapi/linux/prctl.h                    |  3 ++
- kernel/entry/syscall_user_dispatch.c          | 14 +++++
- kernel/sys.c                                  |  4 ++
- .../syscall_user_dispatch/sud_test.c          | 54 +++++++++++++++++++
- 6 files changed, 100 insertions(+)
+ include/linux/ptrace.h               | 2 ++
+ include/uapi/linux/ptrace.h          | 6 +++++-
+ kernel/entry/syscall_user_dispatch.c | 5 +++++
+ kernel/ptrace.c                      | 5 +++++
+ 4 files changed, 17 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/admin-guide/syscall-user-dispatch.rst b/Documentation/admin-guide/syscall-user-dispatch.rst
-index 60314953c728..8b2c8b6441b7 100644
---- a/Documentation/admin-guide/syscall-user-dispatch.rst
-+++ b/Documentation/admin-guide/syscall-user-dispatch.rst
-@@ -45,6 +45,10 @@ only the syscall dispatcher address and the userspace key.
- As the ABI of these intercepted syscalls is unknown to Linux, these
- syscalls are not instrumentable via ptrace or the syscall tracepoints.
+diff --git a/include/linux/ptrace.h b/include/linux/ptrace.h
+index eaaef3ffec22..461ae5c99d57 100644
+--- a/include/linux/ptrace.h
++++ b/include/linux/ptrace.h
+@@ -45,6 +45,8 @@ extern int ptrace_access_vm(struct task_struct *tsk, unsigned long addr,
  
-+A getter interface is supplied for the purpose of userland
-+checkpoint/restore software being able to suspend and restore the
-+current state of the system.
-+
- Interface
- ---------
+ #define PT_EXITKILL		(PTRACE_O_EXITKILL << PT_OPT_FLAG_SHIFT)
+ #define PT_SUSPEND_SECCOMP	(PTRACE_O_SUSPEND_SECCOMP << PT_OPT_FLAG_SHIFT)
++#define PT_SUSPEND_SYSCALL_USER_DISPATCH \
++	(PTRACE_O_SUSPEND_SYSCALL_USER_DISPATCH << PT_OPT_FLAG_SHIFT)
  
-@@ -73,6 +77,20 @@ thread-wide, without the need to invoke the kernel directly.  selector
- can be set to SYSCALL_DISPATCH_FILTER_ALLOW or SYSCALL_DISPATCH_FILTER_BLOCK.
- Any other value should terminate the program with a SIGSYS.
+ extern long arch_ptrace(struct task_struct *child, long request,
+ 			unsigned long addr, unsigned long data);
+diff --git a/include/uapi/linux/ptrace.h b/include/uapi/linux/ptrace.h
+index 195ae64a8c87..ba9e3f19a22c 100644
+--- a/include/uapi/linux/ptrace.h
++++ b/include/uapi/linux/ptrace.h
+@@ -146,9 +146,13 @@ struct ptrace_rseq_configuration {
+ /* eventless options */
+ #define PTRACE_O_EXITKILL		(1 << 20)
+ #define PTRACE_O_SUSPEND_SECCOMP	(1 << 21)
++#define PTRACE_O_SUSPEND_SYSCALL_USER_DISPATCH	(1 << 22)
  
-+
-+A thread can fetch the current Syscall User Dispatch configuration with the following prctl:
-+
-+  prctl(PR_GET_SYSCALL_USER_DISPATCH, <dispatch_config>))
-+
-+<dispatch_config> is a pointer to a ``struct syscall_user_dispatch`` as defined in ``linux/include/linux/syscall_user_dispatch.h``::
-+
-+  struct syscall_user_dispatch {
-+        char __user *selector;
-+        unsigned long offset;
-+        unsigned long len;
-+        bool    on_dispatch;
-+  };
-+
- Security Notes
- --------------
+ #define PTRACE_O_MASK		(\
+-	0x000000ff | PTRACE_O_EXITKILL | PTRACE_O_SUSPEND_SECCOMP)
++	0x000000ff | \
++	PTRACE_O_EXITKILL | \
++	PTRACE_O_SUSPEND_SECCOMP | \
++	PTRACE_O_SUSPEND_SYSCALL_USER_DISPATCH)
  
-diff --git a/include/linux/syscall_user_dispatch.h b/include/linux/syscall_user_dispatch.h
-index a0ae443fb7df..aab25e5b6496 100644
---- a/include/linux/syscall_user_dispatch.h
-+++ b/include/linux/syscall_user_dispatch.h
-@@ -16,6 +16,7 @@ struct syscall_user_dispatch {
- 	bool		on_dispatch;
- };
+ #include <asm/ptrace.h>
  
-+int get_syscall_user_dispatch(struct syscall_user_dispatch __user *usd);
- int set_syscall_user_dispatch(unsigned long mode, unsigned long offset,
- 			      unsigned long len, char __user *selector);
- 
-@@ -25,6 +26,12 @@ int set_syscall_user_dispatch(unsigned long mode, unsigned long offset,
- #else
- struct syscall_user_dispatch {};
- 
-+static inline int get_syscall_user_dispatch(
-+	struct syscall_user_dispatch __user *usd)
-+{
-+	return -EINVAL;
-+}
-+
- static inline int set_syscall_user_dispatch(unsigned long mode, unsigned long offset,
- 					    unsigned long len, char __user *selector)
- {
-diff --git a/include/uapi/linux/prctl.h b/include/uapi/linux/prctl.h
-index a5e06dcbba13..221c0e369cc0 100644
---- a/include/uapi/linux/prctl.h
-+++ b/include/uapi/linux/prctl.h
-@@ -284,4 +284,7 @@ struct prctl_mm_map {
- #define PR_SET_VMA		0x53564d41
- # define PR_SET_VMA_ANON_NAME		0
- 
-+/* Get Syscall User Dispatch configuraiton settings */
-+#define PR_GET_SYSCALL_USER_DISPATCH	65
-+
- #endif /* _LINUX_PRCTL_H */
 diff --git a/kernel/entry/syscall_user_dispatch.c b/kernel/entry/syscall_user_dispatch.c
-index f097c06224c9..71441664571a 100644
+index 0b6379adff6b..f097c06224c9 100644
 --- a/kernel/entry/syscall_user_dispatch.c
 +++ b/kernel/entry/syscall_user_dispatch.c
-@@ -73,6 +73,20 @@ bool syscall_user_dispatch(struct pt_regs *regs)
- 	return true;
- }
+@@ -8,6 +8,7 @@
+ #include <linux/uaccess.h>
+ #include <linux/signal.h>
+ #include <linux/elf.h>
++#include <linux/ptrace.h>
  
-+int get_syscall_user_dispatch(struct syscall_user_dispatch __user *usd)
-+{
-+	struct syscall_user_dispatch *sd = &current->syscall_dispatch;
-+
-+	if (usd) {
-+		if (copy_to_user(usd, sd, sizeof(*sd)))
-+			return -EFAULT;
-+	} else {
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
- int set_syscall_user_dispatch(unsigned long mode, unsigned long offset,
- 			      unsigned long len, char __user *selector)
- {
-diff --git a/kernel/sys.c b/kernel/sys.c
-index 5fd54bf0e886..b762c49fc424 100644
---- a/kernel/sys.c
-+++ b/kernel/sys.c
-@@ -2618,6 +2618,10 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
- 		error = set_syscall_user_dispatch(arg2, arg3, arg4,
- 						  (char __user *) arg5);
- 		break;
-+	case PR_GET_SYSCALL_USER_DISPATCH:
-+		error = get_syscall_user_dispatch(
-+			  (struct syscall_user_dispatch __user *) arg2);
-+		break;
- #ifdef CONFIG_SCHED_CORE
- 	case PR_SCHED_CORE:
- 		error = sched_core_share_pid(arg2, arg3, arg4, arg5);
-diff --git a/tools/testing/selftests/syscall_user_dispatch/sud_test.c b/tools/testing/selftests/syscall_user_dispatch/sud_test.c
-index b5d592d4099e..555912f3c192 100644
---- a/tools/testing/selftests/syscall_user_dispatch/sud_test.c
-+++ b/tools/testing/selftests/syscall_user_dispatch/sud_test.c
-@@ -35,6 +35,16 @@
- #define SYSCALL_DISPATCH_ON(x) ((x) = SYSCALL_DISPATCH_FILTER_BLOCK)
- #define SYSCALL_DISPATCH_OFF(x) ((x) = SYSCALL_DISPATCH_FILTER_ALLOW)
+ #include <linux/sched/signal.h>
+ #include <linux/sched/task_stack.h>
+@@ -36,6 +37,10 @@ bool syscall_user_dispatch(struct pt_regs *regs)
+ 	struct syscall_user_dispatch *sd = &current->syscall_dispatch;
+ 	char state;
  
-+#ifndef PR_GET_SYSCALL_USER_DISPATCH
-+#define PR_GET_SYSCALL_USER_DISPATCH 65
-+#endif
-+struct syscall_user_dispatch {
-+	char *selector;
-+	unsigned long offset;
-+	unsigned long len;
-+	bool    on_dispatch;
-+};
++	if (IS_ENABLED(CONFIG_CHECKPOINT_RESTORE) &&
++			unlikely(current->ptrace & PT_SUSPEND_SYSCALL_USER_DISPATCH))
++		return false;
 +
- /* Test Summary:
-  *
-  * - dispatch_trigger_sigsys: Verify if PR_SET_SYSCALL_USER_DISPATCH is
-@@ -309,4 +319,48 @@ TEST(direct_dispatch_range)
- 	}
- }
+ 	if (likely(instruction_pointer(regs) - sd->offset < sd->len))
+ 		return false;
  
-+
-+TEST(get_dispatch_settings)
-+{
-+	int ret = 0;
-+	struct syscall_user_dispatch usd;
-+
-+	glob_sel = SYSCALL_DISPATCH_FILTER_ALLOW;
-+
-+	/* Check the negative paths - bad user pointer */
-+	ret = prctl(PR_GET_SYSCALL_USER_DISPATCH, NULL);
-+	ASSERT_EQ(-1, ret) {
-+		TH_LOG("Kernel reported success to accessing a NULL pointer");
-+	}
-+	ASSERT_EQ(EINVAL, errno);
-+
-+	/* Get the settings prior to it being activated */
-+	ret = prctl(PR_GET_SYSCALL_USER_DISPATCH, &usd);
-+	ASSERT_EQ(0, ret) {
-+		TH_LOG("Kernel failed to fetch syscall user dispatch settings");
+diff --git a/kernel/ptrace.c b/kernel/ptrace.c
+index 54482193e1ed..a6ad815bd4be 100644
+--- a/kernel/ptrace.c
++++ b/kernel/ptrace.c
+@@ -370,6 +370,11 @@ static int check_ptrace_options(unsigned long data)
+ 	if (data & ~(unsigned long)PTRACE_O_MASK)
+ 		return -EINVAL;
+ 
++	if (unlikely(data & PTRACE_O_SUSPEND_SYSCALL_USER_DISPATCH)) {
++		if (!IS_ENABLED(CONFIG_CHECKPOINT_RESTART))
++			return -EINVAL;
 +	}
 +
-+	/* Make sure selector is off prior to prctl. */
-+	SYSCALL_DISPATCH_OFF(glob_sel);
-+	ret = prctl(PR_SET_SYSCALL_USER_DISPATCH, PR_SYS_DISPATCH_ON, 0, 0L, &glob_sel);
-+	ASSERT_EQ(0, ret) {
-+		TH_LOG("Failed to get Syscall User Dispatch settings");
-+	}
-+
-+	/* sanity check the settings */
-+	ret = prctl(PR_GET_SYSCALL_USER_DISPATCH, &usd);
-+	ASSERT_EQ(0, ret) {
-+		TH_LOG("Failed to get Syscall User Dispatch settings");
-+	}
-+	ASSERT_EQ(&glob_sel, usd.selector) {
-+		TH_LOG("Selector is an unexpected pointer");
-+	}
-+	ASSERT_EQ(0, usd.offset) {
-+		TH_LOG("Offset is an unexpected value");
-+	}
-+	ASSERT_EQ(0, usd.len) {
-+		TH_LOG("Length is an unexpected value");
-+	}
-+}
-+
- TEST_HARNESS_MAIN
+ 	if (unlikely(data & PTRACE_O_SUSPEND_SECCOMP)) {
+ 		if (!IS_ENABLED(CONFIG_CHECKPOINT_RESTORE) ||
+ 		    !IS_ENABLED(CONFIG_SECCOMP))
 -- 
 2.37.3
 
