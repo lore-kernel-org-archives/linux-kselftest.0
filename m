@@ -2,258 +2,644 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5110BC46467
-	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Jan 2023 19:09:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CE257C54EBE
+	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Jan 2023 20:27:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239565AbjAJTIu (ORCPT
+        id S231136AbjAJU1C (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 10 Jan 2023 14:08:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47878 "EHLO
+        Tue, 10 Jan 2023 15:27:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239764AbjAJTIQ (ORCPT
+        with ESMTP id S233498AbjAJU04 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 Jan 2023 14:08:16 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A9B62DF1
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Jan 2023 11:07:20 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id 17so14251009pll.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Jan 2023 11:07:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=P1yZ2rNXY9+OCT2MctvfeqyzaEmRMSdK9cnP/qUD3es=;
-        b=HulWpN3OqpO54u6cPuVDdQltxY/fxlzGQnBNBhw9p/WwPEBiviSDJ+JEav0A4p0BDi
-         nQClbKn2krzf5xzUUul+xfQ8+E1acsIqjE6fn5x3WvfOD+FBBySt0bobCk8SE4P1QA3v
-         3KIrMOnr1JuzERZButT5IVawEs1vynARr/7ba+m78yiqXzdckTfhlP731gneYD7nyujQ
-         paJALe1Nyup2BVE5u8lyjJ4J8N6Co38Yz/vlve8RoldnjQ2zltx+NygJ8UqCyheJkI8f
-         zVLNU/dttLt1LZsEOxDgd9Ha/N5pZTykObvqt+m8SFb27i765m8hmcimiImBfGOWVGH5
-         xzQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=P1yZ2rNXY9+OCT2MctvfeqyzaEmRMSdK9cnP/qUD3es=;
-        b=Zq91UvfQY/VWRZbIjr8REBIHZkX35hA9/WLveSZoOSUPVlXX6unoSXrwfgukbApB4y
-         0bYz4HT//jNNn7HGxc35eWvi5Lde0sLpEz58qMHxhVCmnq3FwuRf8IW2ZWcsS24bT0L9
-         JL0isJ7S2pS/JZuajjTt2/fH90IohHwPuRNVp3wXxdA90DHzl42Mg1lnvhFObYiP2c/+
-         qpp9W+NQ5ucUU0Zb0pCU5cEMG/NusGtM0JVgfm26PHYEu+GiK4k0OnJruXAj2b3gxD4T
-         rmXh+adqbmZOpAyS+3LxO0z9GFoiZltI5iTTc8OyQ1fXhe0Kes01v3hZ/KcBkFqVh8yv
-         dhrw==
-X-Gm-Message-State: AFqh2kobEDlG9q9elcxn/HzaPFjK9/4zkHzb+NZW4ItYjkfdEvU4eD/F
-        9CTQdP3nn57Hiu1Cs4ykQdzCQA==
-X-Google-Smtp-Source: AMrXdXvPJCjnKjpu/C3fOnUqxkmb0rowb3o4CPE21MAZXvaWlO9x+E+NcO57ODSh2Du+60yMYtseqQ==
-X-Received: by 2002:a05:6a20:1394:b0:b5:a970:8d5a with SMTP id w20-20020a056a20139400b000b5a9708d5amr152380pzh.0.1673377639322;
-        Tue, 10 Jan 2023 11:07:19 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id r4-20020aa79624000000b0056bd1bf4243sm8484018pfg.53.2023.01.10.11.07.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 11:07:18 -0800 (PST)
-Date:   Tue, 10 Jan 2023 19:07:15 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
-        Gautam Menghani <gautammenghani201@gmail.com>,
-        Zeng Guang <guang.zeng@intel.com>,
-        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
-        Jim Mattson <jmattson@google.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH 1/2] KVM: x86: update APIC_ID also when disabling
- x2APIC in kvm_lapic_set_baseg
-Message-ID: <Y723YwUj/0+U++jI@google.com>
-References: <20230109130605.2013555-1-eesposit@redhat.com>
- <20230109130605.2013555-2-eesposit@redhat.com>
- <c61ce1a6393a108c76e53cb99249aba5ab318e07.camel@redhat.com>
- <Y7w/bYP4VGqoVcjH@google.com>
- <5664d006-9452-2033-5605-48aa0ee77ca8@redhat.com>
- <fa0758f5-abd1-ad09-3878-adf296c7aac5@redhat.com>
+        Tue, 10 Jan 2023 15:26:56 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CFE550E42;
+        Tue, 10 Jan 2023 12:26:55 -0800 (PST)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30AIPHRR008664;
+        Tue, 10 Jan 2023 20:26:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=aQPNphswobQKXQl/bcOiACFS863VAHbnWlRpHelBbuI=;
+ b=IsLcfi59Fmvz0oq/Dy4aOOs6tcYdy0BLicczIWAWQvtvo5ZbKXfzOxAusJf7DgexlJcu
+ PMPvYZ5lKqJmxapTWHnCVx3RfPlLF/vUbqzjzd39hSQPoitck7zAdqYqomU1TP1GKYUq
+ 9sCyU8AzEuAj+sOQJ2h5l02zCl9uHoMgelerzA6q7aNFEjn8GSAoBR07Bih1agX9+vuH
+ 1xmSSjPjbWRCiT68cMSod/YuFNQCsZW8qXdbT40ddCMPxFmD6L5D+TcYpbtObVsavRJ+
+ uGRSeL3i5Eenxs6fn7U0/BuC6tPjKM/10a5Q+DBAHnDTsaDqBtJcZmk0gdpRd7yvZ1yv kg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3n1d9jjgcf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 Jan 2023 20:26:45 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30AIxn4O013547;
+        Tue, 10 Jan 2023 20:26:44 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3n1d9jjgbw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 Jan 2023 20:26:44 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30AJSBFK025135;
+        Tue, 10 Jan 2023 20:26:42 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3my0c6nd4y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 Jan 2023 20:26:42 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30AKQdEt38797614
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 10 Jan 2023 20:26:39 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2172B20040;
+        Tue, 10 Jan 2023 20:26:39 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8AFC120043;
+        Tue, 10 Jan 2023 20:26:38 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 10 Jan 2023 20:26:38 +0000 (GMT)
+From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+Cc:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>
+Subject: [PATCH v5 06/10] KVM: s390: selftest: memop: Add cmpxchg tests
+Date:   Tue, 10 Jan 2023 21:26:28 +0100
+Message-Id: <20230110202632.2533978-7-scgl@linux.ibm.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230110202632.2533978-1-scgl@linux.ibm.com>
+References: <20230110202632.2533978-1-scgl@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <fa0758f5-abd1-ad09-3878-adf296c7aac5@redhat.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Qpm038XrMOO4qizwb_j47e4vEs9nvJKK
+X-Proofpoint-ORIG-GUID: Ra4Csuo1Sal1rQTF0lIC38jy7p0CUNX4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-10_09,2023-01-10_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
+ mlxscore=0 priorityscore=1501 adultscore=0 lowpriorityscore=0
+ suspectscore=0 bulkscore=0 impostorscore=0 clxscore=1015 spamscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301100133
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jan 10, 2023, Paolo Bonzini wrote:
-> On 1/10/23 13:16, Emanuele Giuseppe Esposito wrote:
-> > I think the test in patch 2 I wrote gives a better idea on what I am
-> > trying to fix:
+Test successful exchange, unsuccessful exchange, storage key protection
+and invalid arguments.
 
-Tests and descriptions of expected s vs. actual behavior explain what _you_ think
-should happen, but don't help explain what higher level bug is being fixed.  IIUC,
-QEMU emulates RESET and expects the xAPIC ID to be re-initialized.  That's the
-info that should be provided in the changelog since it ties KVM behavior to a
-real world userspace emulating actual hardware behavior.
-
-> > if we are transitioning from x2APIC to xAPIC (RESET I
-> > would say, even though I am not sure if userspace really does it in the
-> > way I do it in the test, ie through KVM_SET_MSRS), the APIC_ID is not
-> > updated back in the right bits, and we can see that by querying the ID
-> > with KVM_GET_LAPIC after disabling x2APIC.
-> > 
-> > Now, if the way I reproduce this issue is correct, it is indeed a bug
-> > and needs to be fixed with the fix in patch 1 or something similar.
-> > I think it won't really make any difference if instead following what
-> > the doc says (x2APIC -> disabled -> xAPIC) we directly do x2APIC -> xAPIC.
-> 
-> Yes, the default value at reset is xAPIC mode, so a reset will do a
-> KVM_SET_MSRS that clears X2APIC_ENABLE but leaves
-> MSR_IA32_APICBASE_ENABLE set.
-> 
-> So, if I understand correctly...
-> 
-> > The test in patch 2 started being developed to test ef40757743b47 ("KVM:
-> > x86: fix APICv/x2AVIC disabled when vm reboot by itself") even though I
-> > honestly didn't really understand how to replicate that bug (see cover
-> > letter) and instead I found this other possibility that still manages to
-> > screw APIC_ID.
-> 
-> ... what you're saying is that there were two different bugs, but one
-> fixing any one of them was enough to prevent the symptoms shown by
-> commit ef40757743b47?  That is:
-> 
-> - the APICv inhibit was set by KVM_GET_LAPIC because it called
-> kvm_lapic_xapic_id_updated(), and the call was unnecessary as fixed in
-> commit ef40757743b47;
-> 
-> - however, there is no reason for the vCPU ID to be mismatched.  It
-> happened because the code didn't handle the host-initiated x2APIC->xAPIC
-> case and thus lacked a call to kvm_apic_set_xapic_id().
-> 
-> If so, I think the idea of the patch is fine.
-> 
-> Just one thing: your patch also changes the APIC_ID on the
-> x2APIC->disabled transition, not just the "forbidden" (i.e. host-
-> initiated only) x2APIC->xAPIC transition.  I think  this is okay too: the
-> manual says:
->
->    10.4.3 Enabling or Disabling the Local APIC
-> 
->    When IA32_APIC_BASE[11] is set to 0, prior initialization to the APIC
->    may be lost and the APIC may return to the state described in Section
->    10.4.7.1, “Local APIC State After Power-Up or Reset.”
-> 
->    10.4.7.1 Local APIC State After Power-Up or Reset
-> 
->    ... The local APIC ID register is set to a unique APIC ID. ...
-> 
-> (which must be an xAPIC ID) and this is what your patch does.
-
-Ugh, couldn't find that yesterday.  It's actually irrelevant though, KVM already
-stuffs the APIC ID when the APIC goes from DISABLED to ENABLED (xAPIC) since commit:
-
-  49bd29ba1dbd ("KVM: x86: reset APIC ID when enabling LAPIC")
-
-For giggles, and because I misread that like 5 times, I tested on hardware.  Intel
-CPUs since at least Haswell make the APIC ID read-only, i.e. it's a moot point on
-Intel these days.  But on AMD, the APIC ID is preserved across disabling => enabling
-xAPIC.
-
-> In fact perhaps you can change the code further to invoke
-> kvm_lapic_reset() after static_branch_inc(&apic_hw_disabled.key)?  It's
-> just a bit messy that you have a call back to kvm_lapic_set_base() in
-> there, so perhaps something like this can help:
-
-I'd rather not touch kvm_lapic_reset().  KVM doesn't emulate RESET, and I don't
-want to make assumptions about why userspace is forcing x2APIC => xAPIC.  If
-userspace wants to propery emulate RESET, it can use KVM_SET_LAPIC.
-
-My preference is to do a light tweak on the original patch, with a rewritten
-shortlog and changelog.  And because I spent way, way too much time digging into
-this, I went a bit overboard...
-
-From: Sean Christopherson <seanjc@google.com>
-Date: Tue, 10 Jan 2023 10:40:33 -0800
-Subject: [PATCH] KVM: x86: Reinitialize xAPIC ID when userspace forces x2APIC
- => xAPIC
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-
-Reinitialize the xAPIC ID to the vCPU ID when userspace forces the APIC
-to transition directly from x2APIC to xAPIC mode, e.g. to emulate RESET.
-KVM already stuffs the xAPIC ID when the APIC is transitioned from
-DISABLED to xAPIC (commit 49bd29ba1dbd ("KVM: x86: reset APIC ID when
-enabling LAPIC")), i.e. userspace is conditioned to expect KVM to update
-the xAPIC ID, but KVM doesn't handle the architecturally-impossible case
-where userspace forces x2APIC=>xAPIC via KVM_SET_MSRS.
-
-On its own, the "bug" is benign, as userspace emulation of RESET will also
-stuff APIC registers via KVM_SET_LAPIC, i.e. will manually set the xAPIC
-ID.  However, commit 3743c2f02517 ("KVM: x86: inhibit APICv/AVIC on
-changes to APIC ID or APIC base") introduced a bug, fixed by commit
-commit ef40757743b4 ("KVM: x86: fix APICv/x2AVIC disabled when vm reboot
-by itself"), that caused KVM to fail to properly update the xAPIC ID when
-handling KVM_SET_LAPIC.  Refresh the xAPIC ID even though it's not
-strictly necessary so that KVM provides consistent behavior.
-
-Note, KVM follows Intel architecture with regard to handling the xAPIC ID
-and x2APIC IDs across mode transitions.  For the APIC DISABLED case
-(commit 49bd29ba1dbd), Intel's SDM says the xAPIC ID _may_ be
-reinitialized
-
-    10.4.3 Enabling or Disabling the Local APIC
-
-    When IA32_APIC_BASE[11] is set to 0, prior initialization to the APIC
-    may be lost and the APIC may return to the state described in Section
-    10.4.7.1, “Local APIC State After Power-Up or Reset.”
-
-    10.4.7.1 Local APIC State After Power-Up or Reset
-
-    ... The local APIC ID register is set to a unique APIC ID. ...
-
-i.e. KVM's behavior is legal as per Intel's architecture.   In practice,
-Intel's behavior is N/A as modern Intel CPUs (since at least Haswell) make
-the xAPIC ID fully read-only.
-
-And for xAPIC => x2APIC transitions (commit 257b9a5faab5 ("KVM: x86: use
-correct APIC ID on x2APIC transition")), Intel's SDM says:
-
-  Any APIC ID value written to the memory-mapped local APIC ID register
-  is not preserved.
-
-AMD's APM says nothing (that I could find) about the xAPIC ID when the
-APIC is DISABLED, but testing on bare metal (Rome) shows that the xAPIC ID
-is preserved when the APIC is DISABLED and re-enabled in xAPIC mode.  AMD
-also preserves the xAPIC ID when the APIC is transitioned from xAPIC to
-x2APIC, i.e. allows a backdoor write of the x2APIC ID, which is again not
-emulated by KVM.
-
-Reported-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
+Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
 ---
- arch/x86/kvm/lapic.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ tools/testing/selftests/kvm/s390x/memop.c | 408 +++++++++++++++++++++-
+ 1 file changed, 394 insertions(+), 14 deletions(-)
 
-diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-index 80f92cbc4029..79141d76ad49 100644
---- a/arch/x86/kvm/lapic.c
-+++ b/arch/x86/kvm/lapic.c
-@@ -2485,8 +2485,12 @@ void kvm_lapic_set_base(struct kvm_vcpu *vcpu, u64 value)
- 		}
+diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
+index bbc191a13760..77cac3e502ec 100644
+--- a/tools/testing/selftests/kvm/s390x/memop.c
++++ b/tools/testing/selftests/kvm/s390x/memop.c
+@@ -9,6 +9,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <sys/ioctl.h>
++#include <pthread.h>
+ 
+ #include <linux/bits.h>
+ 
+@@ -44,6 +45,8 @@ struct mop_desc {
+ 	enum mop_access_mode mode;
+ 	void *buf;
+ 	uint32_t sida_offset;
++	void *old;
++	bool *cmpxchg_success;
+ 	uint8_t ar;
+ 	uint8_t key;
+ };
+@@ -91,6 +94,10 @@ static struct kvm_s390_mem_op ksmo_from_desc(const struct mop_desc *desc)
+ 		ksmo.flags |= KVM_S390_MEMOP_F_SKEY_PROTECTION;
+ 		ksmo.key = desc->key;
  	}
- 
--	if (((old_value ^ value) & X2APIC_ENABLE) && (value & X2APIC_ENABLE))
--		kvm_apic_set_x2apic_id(apic, vcpu->vcpu_id);
-+	if ((old_value ^ value) & X2APIC_ENABLE) {
-+		if (value & X2APIC_ENABLE)
-+			kvm_apic_set_x2apic_id(apic, vcpu->vcpu_id);
-+		else if (value & MSR_IA32_APICBASE_ENABLE)
-+			kvm_apic_set_xapic_id(apic, vcpu->vcpu_id);
++	if (desc->old) {
++		ksmo.flags |= KVM_S390_MEMOP_F_CMPXCHG;
++		ksmo.old_addr = (uint64_t)desc->old;
 +	}
+ 	if (desc->_ar)
+ 		ksmo.ar = desc->ar;
+ 	else
+@@ -136,35 +143,45 @@ static void print_memop(struct kvm_vcpu *vcpu, const struct kvm_s390_mem_op *ksm
+ 		printf("ABSOLUTE, WRITE, ");
+ 		break;
+ 	}
+-	printf("gaddr=%llu, size=%u, buf=%llu, ar=%u, key=%u",
+-	       ksmo->gaddr, ksmo->size, ksmo->buf, ksmo->ar, ksmo->key);
++	printf("gaddr=%llu, size=%u, buf=%llu, ar=%u, key=%u, old_addr=%llx",
++	       ksmo->gaddr, ksmo->size, ksmo->buf, ksmo->ar, ksmo->key,
++	       ksmo->old_addr);
+ 	if (ksmo->flags & KVM_S390_MEMOP_F_CHECK_ONLY)
+ 		printf(", CHECK_ONLY");
+ 	if (ksmo->flags & KVM_S390_MEMOP_F_INJECT_EXCEPTION)
+ 		printf(", INJECT_EXCEPTION");
+ 	if (ksmo->flags & KVM_S390_MEMOP_F_SKEY_PROTECTION)
+ 		printf(", SKEY_PROTECTION");
++	if (ksmo->flags & KVM_S390_MEMOP_F_CMPXCHG)
++		printf(", CMPXCHG");
+ 	puts(")");
+ }
  
- 	if ((old_value ^ value) & (MSR_IA32_APICBASE_ENABLE | X2APIC_ENABLE)) {
- 		kvm_make_request(KVM_REQ_APICV_UPDATE, vcpu);
-
-base-commit: 91dc252b0dbb6879e4067f614df1e397fec532a1
+-static void memop_ioctl(struct test_info info, struct kvm_s390_mem_op *ksmo)
++static int err_memop_ioctl(struct test_info info, struct kvm_s390_mem_op *ksmo,
++			   struct mop_desc *desc)
+ {
+ 	struct kvm_vcpu *vcpu = info.vcpu;
+ 
+ 	if (!vcpu)
+-		vm_ioctl(info.vm, KVM_S390_MEM_OP, ksmo);
++		return __vm_ioctl(info.vm, KVM_S390_MEM_OP, ksmo);
+ 	else
+-		vcpu_ioctl(vcpu, KVM_S390_MEM_OP, ksmo);
++		return __vcpu_ioctl(vcpu, KVM_S390_MEM_OP, ksmo);
+ }
+ 
+-static int err_memop_ioctl(struct test_info info, struct kvm_s390_mem_op *ksmo)
++static void memop_ioctl(struct test_info info, struct kvm_s390_mem_op *ksmo,
++			struct mop_desc *desc)
+ {
+-	struct kvm_vcpu *vcpu = info.vcpu;
++	int r;
++
++	r = err_memop_ioctl(info, ksmo, desc);
++	if (ksmo->flags & KVM_S390_MEMOP_F_CMPXCHG) {
++		if (desc->cmpxchg_success)
++			*desc->cmpxchg_success = !r;
++		if (r == KVM_S390_MEMOP_R_NO_XCHG)
++			r = 0;
++	}
++	TEST_ASSERT(!r, __KVM_IOCTL_ERROR("KVM_S390_MEM_OP", r));
+ 
+-	if (!vcpu)
+-		return __vm_ioctl(info.vm, KVM_S390_MEM_OP, ksmo);
+-	else
+-		return __vcpu_ioctl(vcpu, KVM_S390_MEM_OP, ksmo);
+ }
+ 
+ #define MEMOP(err, info_p, mop_target_p, access_mode_p, buf_p, size_p, ...)	\
+@@ -187,7 +204,7 @@ static int err_memop_ioctl(struct test_info info, struct kvm_s390_mem_op *ksmo)
+ 	}									\
+ 	__ksmo = ksmo_from_desc(&__desc);					\
+ 	print_memop(__info.vcpu, &__ksmo);					\
+-	err##memop_ioctl(__info, &__ksmo);					\
++	err##memop_ioctl(__info, &__ksmo, &__desc);				\
+ })
+ 
+ #define MOP(...) MEMOP(, __VA_ARGS__)
+@@ -201,6 +218,8 @@ static int err_memop_ioctl(struct test_info info, struct kvm_s390_mem_op *ksmo)
+ #define AR(a) ._ar = 1, .ar = (a)
+ #define KEY(a) .f_key = 1, .key = (a)
+ #define INJECT .f_inject = 1
++#define CMPXCHG_OLD(o) .old = (o)
++#define CMPXCHG_SUCCESS(s) .cmpxchg_success = (s)
+ 
+ #define CHECK_N_DO(f, ...) ({ f(__VA_ARGS__, CHECK_ONLY); f(__VA_ARGS__); })
+ 
+@@ -210,8 +229,8 @@ static int err_memop_ioctl(struct test_info info, struct kvm_s390_mem_op *ksmo)
+ #define CR0_FETCH_PROTECTION_OVERRIDE	(1UL << (63 - 38))
+ #define CR0_STORAGE_PROTECTION_OVERRIDE	(1UL << (63 - 39))
+ 
+-static uint8_t mem1[65536];
+-static uint8_t mem2[65536];
++static uint8_t __aligned(PAGE_SIZE) mem1[65536];
++static uint8_t __aligned(PAGE_SIZE) mem2[65536];
+ 
+ struct test_default {
+ 	struct kvm_vm *kvm_vm;
+@@ -243,6 +262,8 @@ enum stage {
+ 	STAGE_SKEYS_SET,
+ 	/* Guest copied memory (locations up to test case) */
+ 	STAGE_COPIED,
++	/* End of guest code reached */
++	STAGE_DONE,
+ };
+ 
+ #define HOST_SYNC(info_p, stage)					\
+@@ -254,6 +275,9 @@ enum stage {
+ 									\
+ 	vcpu_run(__vcpu);						\
+ 	get_ucall(__vcpu, &uc);						\
++	if (uc.cmd == UCALL_ABORT) {					\
++		REPORT_GUEST_ASSERT_2(uc, "hints: %lu, %lu");		\
++	}								\
+ 	ASSERT_EQ(uc.cmd, UCALL_SYNC);					\
+ 	ASSERT_EQ(uc.args[1], __stage);					\
+ })									\
+@@ -293,6 +317,44 @@ static void default_read(struct test_info copy_cpu, struct test_info mop_cpu,
+ 	ASSERT_MEM_EQ(mem1, mem2, size);
+ }
+ 
++static void default_cmpxchg(struct test_default *test, uint8_t key)
++{
++	for (int size = 1; size <= 16; size *= 2) {
++		for (int offset = 0; offset < 16; offset += size) {
++			uint8_t __aligned(16) new[16] = {};
++			uint8_t __aligned(16) old[16];
++			bool succ;
++
++			prepare_mem12();
++			default_write_read(test->vcpu, test->vcpu, LOGICAL, 16, NO_KEY);
++
++			memcpy(&old, mem1, 16);
++			CHECK_N_DO(MOP, test->vm, ABSOLUTE, WRITE, new + offset,
++				   size, GADDR_V(mem1 + offset),
++				   CMPXCHG_OLD(old + offset),
++				   CMPXCHG_SUCCESS(&succ), KEY(key));
++			HOST_SYNC(test->vcpu, STAGE_COPIED);
++			MOP(test->vm, ABSOLUTE, READ, mem2, 16, GADDR_V(mem2));
++			TEST_ASSERT(succ, "exchange of values should succeed");
++			memcpy(mem1 + offset, new + offset, size);
++			ASSERT_MEM_EQ(mem1, mem2, 16);
++
++			memcpy(&old, mem1, 16);
++			new[offset]++;
++			old[offset]++;
++			CHECK_N_DO(MOP, test->vm, ABSOLUTE, WRITE, new + offset,
++				   size, GADDR_V(mem1 + offset),
++				   CMPXCHG_OLD(old + offset),
++				   CMPXCHG_SUCCESS(&succ), KEY(key));
++			HOST_SYNC(test->vcpu, STAGE_COPIED);
++			MOP(test->vm, ABSOLUTE, READ, mem2, 16, GADDR_V(mem2));
++			TEST_ASSERT(!succ, "exchange of values should not succeed");
++			ASSERT_MEM_EQ(mem1, mem2, 16);
++			ASSERT_MEM_EQ(&old, mem1, 16);
++		}
++	}
++}
++
+ static void guest_copy(void)
+ {
+ 	GUEST_SYNC(STAGE_INITED);
+@@ -377,6 +439,250 @@ static void test_copy_key(void)
+ 	kvm_vm_free(t.kvm_vm);
+ }
+ 
++static void test_cmpxchg_key(void)
++{
++	struct test_default t = test_default_init(guest_copy_key);
++
++	HOST_SYNC(t.vcpu, STAGE_SKEYS_SET);
++
++	default_cmpxchg(&t, NO_KEY);
++	default_cmpxchg(&t, 0);
++	default_cmpxchg(&t, 9);
++
++	kvm_vm_free(t.kvm_vm);
++}
++
++static __uint128_t cut_to_size(int size, __uint128_t val)
++{
++	switch (size) {
++	case 1:
++		return (uint8_t)val;
++	case 2:
++		return (uint16_t)val;
++	case 4:
++		return (uint32_t)val;
++	case 8:
++		return (uint64_t)val;
++	case 16:
++		return val;
++	}
++	GUEST_ASSERT_1(false, "Invalid size");
++	return 0;
++}
++
++static bool popcount_eq(__uint128_t a, __uint128_t b)
++{
++	unsigned int count_a, count_b;
++
++	count_a = __builtin_popcountl((uint64_t)(a >> 64)) +
++		  __builtin_popcountl((uint64_t)a);
++	count_b = __builtin_popcountl((uint64_t)(b >> 64)) +
++		  __builtin_popcountl((uint64_t)b);
++	return count_a == count_b;
++}
++
++static __uint128_t rotate(int size, __uint128_t val, int amount)
++{
++	unsigned int bits = size * 8;
++
++	amount = (amount + bits) % bits;
++	val = cut_to_size(size, val);
++	return (val << (bits - amount)) | (val >> amount);
++}
++
++const unsigned int max_block = 16;
++
++static void choose_block(bool guest, int i, int *size, int *offset)
++{
++	unsigned int rand;
++
++	rand = i;
++	if (guest) {
++		rand = rand * 19 + 11;
++		*size = 1 << ((rand % 3) + 2);
++		rand = rand * 19 + 11;
++		*offset = (rand % max_block) & ~(*size - 1);
++	} else {
++		rand = rand * 17 + 5;
++		*size = 1 << (rand % 5);
++		rand = rand * 17 + 5;
++		*offset = (rand % max_block) & ~(*size - 1);
++	}
++}
++
++static __uint128_t permutate_bits(bool guest, int i, int size, __uint128_t old)
++{
++	unsigned int rand;
++	bool swap;
++
++	rand = i;
++	rand = rand * 3 + 1;
++	if (guest)
++		rand = rand * 3 + 1;
++	swap = rand % 2 == 0;
++	if (swap) {
++		int i, j;
++		__uint128_t new;
++		uint8_t byte0, byte1;
++
++		rand = rand * 3 + 1;
++		i = rand % size;
++		rand = rand * 3 + 1;
++		j = rand % size;
++		if (i == j)
++			return old;
++		new = rotate(16, old, i * 8);
++		byte0 = new & 0xff;
++		new &= ~0xff;
++		new = rotate(16, new, -i * 8);
++		new = rotate(16, new, j * 8);
++		byte1 = new & 0xff;
++		new = (new & ~0xff) | byte0;
++		new = rotate(16, new, -j * 8);
++		new = rotate(16, new, i * 8);
++		new = new | byte1;
++		new = rotate(16, new, -i * 8);
++		return new;
++	} else {
++		int amount;
++
++		rand = rand * 3 + 1;
++		amount = rand % (size * 8);
++		return rotate(size, old, amount);
++	}
++}
++
++static bool _cmpxchg(int size, void *target, __uint128_t *old_addr, __uint128_t new)
++{
++	bool ret;
++
++	switch (size) {
++	case 4: {
++			uint32_t old = *old_addr;
++
++			asm volatile ("cs %[old],%[new],%[address]"
++			    : [old] "+d" (old),
++			      [address] "+Q" (*(uint32_t *)(target))
++			    : [new] "d" ((uint32_t)new)
++			    : "cc"
++			);
++			ret = old == (uint32_t)*old_addr;
++			*old_addr = old;
++			return ret;
++		}
++	case 8: {
++			uint64_t old = *old_addr;
++
++			asm volatile ("csg %[old],%[new],%[address]"
++			    : [old] "+d" (old),
++			      [address] "+Q" (*(uint64_t *)(target))
++			    : [new] "d" ((uint64_t)new)
++			    : "cc"
++			);
++			ret = old == (uint64_t)*old_addr;
++			*old_addr = old;
++			return ret;
++		}
++	case 16: {
++			__uint128_t old = *old_addr;
++
++			asm volatile ("cdsg %[old],%[new],%[address]"
++			    : [old] "+d" (old),
++			      [address] "+Q" (*(__uint128_t *)(target))
++			    : [new] "d" (new)
++			    : "cc"
++			);
++			ret = old == *old_addr;
++			*old_addr = old;
++			return ret;
++		}
++	}
++	GUEST_ASSERT_1(false, "Invalid size");
++	return 0;
++}
++
++const unsigned int cmpxchg_iter_outer = 100, cmpxchg_iter_inner = 10000;
++
++static void guest_cmpxchg_key(void)
++{
++	int size, offset;
++	__uint128_t old, new;
++
++	set_storage_key_range(mem1, max_block, 0x10);
++	set_storage_key_range(mem2, max_block, 0x10);
++	GUEST_SYNC(STAGE_SKEYS_SET);
++
++	for (int i = 0; i < cmpxchg_iter_outer; i++) {
++		do {
++			old = 1;
++		} while (!_cmpxchg(16, mem1, &old, 0));
++		for (int j = 0; j < cmpxchg_iter_inner; j++) {
++			choose_block(true, i + j, &size, &offset);
++			do {
++				new = permutate_bits(true, i + j, size, old);
++			} while (!_cmpxchg(size, mem2 + offset, &old, new));
++		}
++	}
++
++	GUEST_SYNC(STAGE_DONE);
++}
++
++static void *run_guest(void *data)
++{
++	struct test_info *info = data;
++
++	HOST_SYNC(*info, STAGE_DONE);
++	return NULL;
++}
++
++static char *quad_to_char(__uint128_t *quad, int size)
++{
++	return ((char *)quad) + (sizeof(*quad) - size);
++}
++
++static void test_cmpxchg_key_concurrent(void)
++{
++	struct test_default t = test_default_init(guest_cmpxchg_key);
++	int size, offset;
++	__uint128_t old, new;
++	bool success;
++	pthread_t thread;
++
++	HOST_SYNC(t.vcpu, STAGE_SKEYS_SET);
++	prepare_mem12();
++	MOP(t.vcpu, LOGICAL, WRITE, mem1, max_block, GADDR_V(mem2));
++	pthread_create(&thread, NULL, run_guest, &t.vcpu);
++
++	for (int i = 0; i < cmpxchg_iter_outer; i++) {
++		do {
++			old = 0;
++			new = 1;
++			MOP(t.vm, ABSOLUTE, WRITE, &new,
++			    sizeof(new), GADDR_V(mem1),
++			    CMPXCHG_OLD(&old),
++			    CMPXCHG_SUCCESS(&success), KEY(1));
++		} while (!success);
++		for (int j = 0; j < cmpxchg_iter_inner; j++) {
++			choose_block(false, i + j, &size, &offset);
++			do {
++				new = permutate_bits(false, i + j, size, old);
++				MOP(t.vm, ABSOLUTE, WRITE, quad_to_char(&new, size),
++				    size, GADDR_V(mem2 + offset),
++				    CMPXCHG_OLD(quad_to_char(&old, size)),
++				    CMPXCHG_SUCCESS(&success), KEY(1));
++			} while (!success);
++		}
++	}
++
++	pthread_join(thread, NULL);
++
++	MOP(t.vcpu, LOGICAL, READ, mem2, max_block, GADDR_V(mem2));
++	TEST_ASSERT(popcount_eq(*(__uint128_t *)mem1, *(__uint128_t *)mem2),
++		    "Must retain number of set bits");
++
++	kvm_vm_free(t.kvm_vm);
++}
++
+ static void guest_copy_key_fetch_prot(void)
+ {
+ 	/*
+@@ -457,6 +763,24 @@ static void test_errors_key(void)
+ 	kvm_vm_free(t.kvm_vm);
+ }
+ 
++static void test_errors_cmpxchg_key(void)
++{
++	struct test_default t = test_default_init(guest_copy_key_fetch_prot);
++	int i;
++
++	HOST_SYNC(t.vcpu, STAGE_INITED);
++	HOST_SYNC(t.vcpu, STAGE_SKEYS_SET);
++
++	for (i = 1; i <= 16; i *= 2) {
++		__uint128_t old = 0;
++
++		CHECK_N_DO(ERR_PROT_MOP, t.vm, ABSOLUTE, WRITE, mem2, i, GADDR_V(mem2),
++			   CMPXCHG_OLD(&old), KEY(2));
++	}
++
++	kvm_vm_free(t.kvm_vm);
++}
++
+ static void test_termination(void)
+ {
+ 	struct test_default t = test_default_init(guest_error_key);
+@@ -690,6 +1014,42 @@ static void test_errors(void)
+ 	kvm_vm_free(t.kvm_vm);
+ }
+ 
++static void test_errors_cmpxchg(void)
++{
++	struct test_default t = test_default_init(guest_idle);
++	__uint128_t old;
++	int rv, i, power = 1;
++
++	HOST_SYNC(t.vcpu, STAGE_INITED);
++
++	for (i = 0; i < 32; i++) {
++		if (i == power) {
++			power *= 2;
++			continue;
++		}
++		rv = ERR_MOP(t.vm, ABSOLUTE, WRITE, mem1, i, GADDR_V(mem1),
++			     CMPXCHG_OLD(&old));
++		TEST_ASSERT(rv == -1 && errno == EINVAL,
++			    "ioctl allows bad size for cmpxchg");
++	}
++	for (i = 1; i <= 16; i *= 2) {
++		rv = ERR_MOP(t.vm, ABSOLUTE, WRITE, mem1, i, GADDR((void *)~0xfffUL),
++			     CMPXCHG_OLD(&old));
++		TEST_ASSERT(rv > 0, "ioctl allows bad guest address for cmpxchg");
++		rv = ERR_MOP(t.vm, ABSOLUTE, READ, mem1, i, GADDR_V(mem1),
++			     CMPXCHG_OLD(&old));
++		TEST_ASSERT(rv == -1 && errno == EINVAL,
++			    "ioctl allows read cmpxchg call");
++	}
++	for (i = 2; i <= 16; i *= 2) {
++		rv = ERR_MOP(t.vm, ABSOLUTE, WRITE, mem1, i, GADDR_V(mem1 + 1),
++			     CMPXCHG_OLD(&old));
++		TEST_ASSERT(rv == -1 && errno == EINVAL,
++			    "ioctl allows bad alignment for cmpxchg");
++	}
++
++	kvm_vm_free(t.kvm_vm);
++}
+ 
+ int main(int argc, char *argv[])
+ {
+@@ -718,6 +1078,16 @@ int main(int argc, char *argv[])
+ 			.test = test_copy_key,
+ 			.requirements_met = extension_cap > 0,
+ 		},
++		{
++			.name = "cmpxchg with storage keys",
++			.test = test_cmpxchg_key,
++			.requirements_met = extension_cap & 0x2,
++		},
++		{
++			.name = "concurrently cmpxchg with storage keys",
++			.test = test_cmpxchg_key_concurrent,
++			.requirements_met = extension_cap & 0x2,
++		},
+ 		{
+ 			.name = "copy with key storage protection override",
+ 			.test = test_copy_key_storage_prot_override,
+@@ -738,6 +1108,16 @@ int main(int argc, char *argv[])
+ 			.test = test_errors_key,
+ 			.requirements_met = extension_cap > 0,
+ 		},
++		{
++			.name = "error checks for cmpxchg with key",
++			.test = test_errors_cmpxchg_key,
++			.requirements_met = extension_cap & 0x2,
++		},
++		{
++			.name = "error checks for cmpxchg",
++			.test = test_errors_cmpxchg,
++			.requirements_met = extension_cap & 0x2,
++		},
+ 		{
+ 			.name = "termination",
+ 			.test = test_termination,
 -- 
+2.34.1
 
