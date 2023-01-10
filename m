@@ -2,60 +2,61 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AC33C678D9
-	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Jan 2023 18:59:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 52D6BC46467
+	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Jan 2023 19:00:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239227AbjAJS7L (ORCPT
+        id S239628AbjAJS7g (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 10 Jan 2023 13:59:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42492 "EHLO
+        Tue, 10 Jan 2023 13:59:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239783AbjAJS6g (ORCPT
+        with ESMTP id S239789AbjAJS6i (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 Jan 2023 13:58:36 -0500
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4336138BB
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Jan 2023 10:58:30 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id x8-20020a17090a1f8800b0022153149290so5259720pja.5
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Jan 2023 10:58:30 -0800 (PST)
+        Tue, 10 Jan 2023 13:58:38 -0500
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC4363B3
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Jan 2023 10:58:33 -0800 (PST)
+Received: by mail-pj1-x1049.google.com with SMTP id c2-20020a17090a8d0200b002269fb8d787so9753763pjo.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Jan 2023 10:58:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=3Kllhy+XCjHqoEtvfgHpVkDHrVNguIhBfnG2gA6pKcs=;
-        b=bePXYChwkQOZNK0AQ+5TcDEnhI5FHwYYdzXTv5PELbTA80AbZGfbPgADOF0yr/OMjf
-         H3g5h1RaztZ1SlWgdgAs1x/EmvJ819PgotnllZnKdfYLCGBhMh9MhVSQyBQCTypSE2tR
-         aV7mM1Zi3YO6IXtApA1uq2WW3PEfDn0U9AllV0N4aTqcRUsMZEC1MWVCSZqWJ8QOoOO+
-         PvItS+Cwhm24ba4DROZfoWv2w924oEmPULO2nDFF1vok3QsdEMF5yPTD4JopsLWWA7Kq
-         Rs/1aqJf1oac3hB/X/0kOTngPb97uywso+p8Qat27rZAgf4+9S2HaArrSz0cF1PRKGCm
-         l1bA==
+        bh=krYhVfxFdN/OVvO7sdngJN4LpQA8BhAq8fwbwKihSS8=;
+        b=O9ItegwgqSdf9S3Iv63GEthUTZhP5FUZI+MT3lb+9NWKW9t6zk8D2GR+Cw5akBAGQx
+         /iHGnhJSx/SKzNfYYeiI3TfWQN2bkIq7eqi/iYr/knX0VFHF9648QoLTNUACE+bfgFc8
+         YDKwXVbgjfk4keBM+zPZNwelyFjLMIgSTaA/Hlqkd2/+anDe3rtHSfwuGTdVBvpKMijM
+         2quqNB4PIlkQwBod0JYV9epuLONJF1sCYy6qu4OqOYlggpormasntRD18lHTetmoqV9+
+         XYORoo+Jswq68VuPP6dko7VH8zHAPO7ZMEKNZVC+L4L9yctXVw0UP2ucoeMPbmZ1f+he
+         r+HA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=3Kllhy+XCjHqoEtvfgHpVkDHrVNguIhBfnG2gA6pKcs=;
-        b=eFwsxKJrjUvv1HgmF0obKb+3RVKkS1omxY0x++aIRIt7BIhmfgs0x2m5bdYqf4R/kC
-         m75K3XLBZFDuOQ5Hmsb5ZWkTByD8nRTvli+Q13dnjcBCoOU7ROKF+SbVjGSZDPRMk8jT
-         owf6Cvm/N1vYl1vhQ9iuwje+CPVGQ4SdXYysQVPFvWbVxuH9of0MPCKcuj/pLhoGGSTr
-         boeXcxHJdZSaBRSWx+tcaZjtDoA+aXWQQdPFp6kCECr8CkdEh/rJo4/39jVJhLwgoJqO
-         9mC9Jh6xOs5v6hrPuiIpQAHf1gIxxRuIV+ek0Is6wJoHF5T1ChigzWyHEIq8TnBkElY6
-         BgaA==
-X-Gm-Message-State: AFqh2kokRal/6kuKoyAejel/FPgpjkeK3wN7Vxa9Vyir2TN1BgXqGG5n
-        9m8ZaeqDi/0VKnS12TM0zARAf8WTO2Vs
-X-Google-Smtp-Source: AMrXdXveAeZkWD48dEoeZW9phbriGh3x782ZfSYB3GzyNWru3H6hHA3HPgQplWv8D1OkeYRKd2NNsqJ/+O1f
+        bh=krYhVfxFdN/OVvO7sdngJN4LpQA8BhAq8fwbwKihSS8=;
+        b=VnRt6xn/ZV87gXsseEhNoqEluax14lZ2JvtnJjCK3W5VM5ocZZw9PQqR3y1MCBM0uc
+         kyvhcg1klUcQ/IuhGBX1HiMbpDU+/bolCZYz/lMMoWN+bOvz0+vkLtM4msHs9q3T1yK4
+         mWxm8NRLNsEA9eIBFx6uWXTJTjzssX6uuMutCDF7QqcNYBteh2xDI2soMr0hbiIBWzM3
+         tpCD/lgHqEt1txl15Cw2SYW3p/o6qS0vEZD4v45vCKnZTmdxX/Q2CtpxGlhn/aFjpKIa
+         rnabLdcoKYl/8imEfdlmmVp9N6HNVOo/q3aZo2eD4HvxtAKUaTcwUrOrOMM+l/3RmtBK
+         kVIg==
+X-Gm-Message-State: AFqh2kpvJ7nG5hTBvdCV2OdP+1fE7BiUY/fj0KnQOMw+TRQp7XmdfAPp
+        /dvCPgeMsjOhgGddZHzLKUOmeWGgIs2b
+X-Google-Smtp-Source: AMrXdXvCjmCa9O6/KeGFFD7GjOdnGSnZJ5JG8mXWNWnm2F7cqhMSqGBK4M+3Ys4LYImgNL219OzEklN6VRe5
 X-Received: from mizhang-super.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1071])
- (user=mizhang job=sendgmr) by 2002:a17:902:ef95:b0:192:97d1:a4d8 with SMTP id
- iz21-20020a170902ef9500b0019297d1a4d8mr3704144plb.74.1673377109836; Tue, 10
- Jan 2023 10:58:29 -0800 (PST)
+ (user=mizhang job=sendgmr) by 2002:a62:6487:0:b0:587:ca14:26ae with SMTP id
+ y129-20020a626487000000b00587ca1426aemr977638pfb.71.1673377113465; Tue, 10
+ Jan 2023 10:58:33 -0800 (PST)
 Reply-To: Mingwei Zhang <mizhang@google.com>
-Date:   Tue, 10 Jan 2023 18:58:21 +0000
+Date:   Tue, 10 Jan 2023 18:58:23 +0000
 In-Reply-To: <20230110185823.1856951-1-mizhang@google.com>
 Mime-Version: 1.0
 References: <20230110185823.1856951-1-mizhang@google.com>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20230110185823.1856951-3-mizhang@google.com>
-Subject: [PATCH 2/4] KVM: selftests: x86: Add check of IA32_XFD in amx_test
+Message-ID: <20230110185823.1856951-5-mizhang@google.com>
+Subject: [PATCH 4/4] KVM: selftests: x86: Repeat the checking of xheader when
+ IA32_XFD[18] is set in amx_test
 From:   Mingwei Zhang <mizhang@google.com>
 To:     kvm@vger.kernel.org
 Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -68,40 +69,38 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When #NM is triggered, the handler needs to ensure the exception is
-triggered by AMX by checking IA32_XFD_ERR and not because of CR0.TS[bit 3]
-is 1. Note that the value of IA32_XFD_ERR comes from "the logical AND of
-the IA32_XFD MSR and the bitmap corresponding to the state components
-required by the faulting instruction." (Intel SDM vol 1. Section 13.14)
-
-Add the missing check of CR0.TS before checking the value of IA32_XFD_ERR.
-In addition, add an extra check to IA32_XFD to ensure the behavior is
-consistent with the AMX archtecture. In addition, repeat the checks across
-context switch to ensure the values of IA32_XFD and IA32_XFD_ERR are well
-preserved.
+Repeat the checking of AMX component in xheader after xsavec when
+IA32_XFD[18] is set. This check calibrates the functionality scope of
+IA32_XFD: it does not intercept the XSAVE state management. Regardless of
+the values in IA32_XFD, AMX component state will still be managed by XSAVE*
+and XRSTOR* as long as XCR[18:17] are set.
 
 Signed-off-by: Mingwei Zhang <mizhang@google.com>
 ---
- tools/testing/selftests/kvm/x86_64/amx_test.c | 3 +++
- 1 file changed, 3 insertions(+)
+ tools/testing/selftests/kvm/x86_64/amx_test.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
 diff --git a/tools/testing/selftests/kvm/x86_64/amx_test.c b/tools/testing/selftests/kvm/x86_64/amx_test.c
-index 16533949a189..b2369f956fea 100644
+index 18203e399e9d..9a80a59b64e6 100644
 --- a/tools/testing/selftests/kvm/x86_64/amx_test.c
 +++ b/tools/testing/selftests/kvm/x86_64/amx_test.c
-@@ -226,9 +226,12 @@ void guest_nm_handler(struct ex_regs *regs)
- {
- 	/* Check if #NM is triggered by XFEATURE_MASK_XTILEDATA */
- 	GUEST_SYNC(7);
-+	GUEST_ASSERT((get_cr0() & X86_CR0_TS) == 0);
- 	GUEST_ASSERT(rdmsr(MSR_IA32_XFD_ERR) == XFEATURE_MASK_XTILEDATA);
-+	GUEST_ASSERT((rdmsr(MSR_IA32_XFD) & XFEATURE_MASK_XTILEDATA) == XFEATURE_MASK_XTILEDATA);
- 	GUEST_SYNC(8);
- 	GUEST_ASSERT(rdmsr(MSR_IA32_XFD_ERR) == XFEATURE_MASK_XTILEDATA);
-+	GUEST_ASSERT((rdmsr(MSR_IA32_XFD) & XFEATURE_MASK_XTILEDATA) == XFEATURE_MASK_XTILEDATA);
- 	/* Clear xfd_err */
- 	wrmsr(MSR_IA32_XFD_ERR, 0);
- 	/* xfd=0, enable amx */
+@@ -235,6 +235,16 @@ static void __attribute__((__flatten__)) guest_code(struct tile_config *amx_cfg,
+ 
+ 	/* xfd=0x40000, disable amx tiledata */
+ 	wrmsr(MSR_IA32_XFD, XFEATURE_MASK_XTILEDATA);
++
++	/*
++	 * Bit 18 is cleared in XSTATE_BV but set in XCOMP_BV, this property
++	 * remains the same even when IA32_XFD disables amx tiledata.
++	 */
++	set_xstatebv(xsave_data, XFEATURE_MASK_XTILEDATA);
++	__xsavec(xsave_data, XFEATURE_MASK_XTILEDATA);
++	GUEST_ASSERT((get_xstatebv(xsave_data) & XFEATURE_MASK_XTILEDATA) == 0);
++	GUEST_ASSERT((get_xcompbv(xsave_data) & XFEATURE_MASK_XTILEDATA) == XFEATURE_MASK_XTILEDATA);
++
+ 	GUEST_SYNC(6);
+ 	GUEST_ASSERT(rdmsr(MSR_IA32_XFD) == XFEATURE_MASK_XTILEDATA);
+ 	set_tilecfg(amx_cfg);
 -- 
 2.39.0.314.g84b9a713c41-goog
 
