@@ -2,105 +2,80 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5986C46467
-	for <linux-kselftest@archiver.kernel.org>; Wed, 11 Jan 2023 08:03:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 817DDC46467
+	for <linux-kselftest@archiver.kernel.org>; Wed, 11 Jan 2023 08:14:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235879AbjAKIDu (ORCPT
+        id S231171AbjAKIOi (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 11 Jan 2023 03:03:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59760 "EHLO
+        Wed, 11 Jan 2023 03:14:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235993AbjAKIDK (ORCPT
+        with ESMTP id S229814AbjAKIOh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 11 Jan 2023 03:03:10 -0500
-X-Greylist: delayed 123 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 11 Jan 2023 00:02:43 PST
-Received: from esa5.hc1455-7.c3s2.iphmx.com (esa5.hc1455-7.c3s2.iphmx.com [68.232.139.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B31D5FF1
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Jan 2023 00:02:42 -0800 (PST)
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="102257766"
-X-IronPort-AV: E=Sophos;i="5.96,315,1665414000"; 
-   d="scan'208";a="102257766"
-Received: from unknown (HELO yto-r1.gw.nic.fujitsu.com) ([218.44.52.217])
-  by esa5.hc1455-7.c3s2.iphmx.com with ESMTP; 11 Jan 2023 16:59:30 +0900
-Received: from yto-m3.gw.nic.fujitsu.com (yto-nat-yto-m3.gw.nic.fujitsu.com [192.168.83.66])
-        by yto-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id 5DC1CD66A0;
-        Wed, 11 Jan 2023 16:59:29 +0900 (JST)
-Received: from yto-om4.fujitsu.com (yto-om4.o.css.fujitsu.com [10.128.89.165])
-        by yto-m3.gw.nic.fujitsu.com (Postfix) with ESMTP id BB47C16E53;
-        Wed, 11 Jan 2023 16:59:28 +0900 (JST)
-Received: from cn-r05-10.example.com (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
-        by yto-om4.fujitsu.com (Postfix) with ESMTP id 940854007B0E5;
-        Wed, 11 Jan 2023 16:59:28 +0900 (JST)
-From:   Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
-To:     Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        tan.shaopeng@jp.fujitsu.com, Shuah Khan <skhan@linuxfoundation.org>
-Subject: [PATCH v5 3/5] selftests/resctrl: Flush stdout file buffer before executing fork()
-Date:   Wed, 11 Jan 2023 16:58:00 +0900
-Message-Id: <20230111075802.3556803-4-tan.shaopeng@jp.fujitsu.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20230111075802.3556803-1-tan.shaopeng@jp.fujitsu.com>
-References: <20230111075802.3556803-1-tan.shaopeng@jp.fujitsu.com>
+        Wed, 11 Jan 2023 03:14:37 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4409862F5;
+        Wed, 11 Jan 2023 00:14:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673424873; x=1704960873;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Ob/cAyWIyMqMT+iLEQuK2cLM0d9DsHAMtU1ZfVOlaV8=;
+  b=nzW6ilGCD/lX/cJE/ysY2gZ3K/LS0WZsJBCOOs6xbbMnQSyCeF6NL5J5
+   kghphZe8Hv7R8nncpSanPJnPBFajqKksB5Ywntnn9iVH8SN9qK4J+0tT6
+   1g8qnki4hdHVHCKRKLb1PyPZ9SdwFfVPWhM1nwrPjzOHfvEBkJziyZcH4
+   hCB0h/9XPbrKc5N3R1FdJyMeduO62fyajIqVlNW9Uowgbubr2Lxh+S1bK
+   E6iANuqH3EPDtjEYwro3J5VXWmPTOEzDMziOtH2OUMnHBFOtobIYaRtQO
+   mT6XCxe6fHDXKNbFyUt/JgJTDWh9F8pkG+VLH0FAj8hJuDOJHXN/B8xqM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="311167755"
+X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
+   d="scan'208";a="311167755"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 00:14:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="831272172"
+X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
+   d="scan'208";a="831272172"
+Received: from xpf.sh.intel.com ([10.239.182.130])
+  by orsmga005.jf.intel.com with ESMTP; 11 Jan 2023 00:14:30 -0800
+From:   Pengfei Xu <pengfei.xu@intel.com>
+To:     javierm@redhat.com, skhan@linuxfoundation.org, shuah@kernel.org
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Pengfei Xu <pengfei.xu@intel.com>, Heng Su <heng.su@intel.com>,
+        akpm@linux-foundation.org
+Subject: [PATCH v1 1/1] selftests/filesystems: Grant executable permission to run_fat_tests.sh
+Date:   Wed, 11 Jan 2023 16:15:31 +0800
+Message-Id: <dfdbba6df8a1ab34bb1e81cd8bd7ca3f9ed5c369.1673424747.git.pengfei.xu@intel.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <cover.1673424747.git.pengfei.xu@intel.com>
+References: <cover.1673424747.git.pengfei.xu@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When a process has buffered output, a child process created by fork()
-will also copy buffered output. When using kselftest framework,
-the output (resctrl test result message) will be printed multiple times.
+When use tools/testing/selftests/kselftest_install.sh to make the
+kselftest-list.txt under tools/testing/selftests/kselftest_install.
 
-Add fflush() to flush out the buffered output before executing fork().
+Then use tools/testing/selftests/kselftest_install/run_kselftest.sh to
+run all the kselftests in kselftest-list.txt, it will be blocked by
+case "filesystems/fat: run_fat_tests.sh" with "Warning: file run_fat_tests.sh
+is not executable", so grant executable permission to run_fat_tests.sh to
+fix this issue.
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
-Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+Fixes: dd7c9be330d8 ("selftests/filesystems: add a vfat RENAME_EXCHANGE test")
+Signed-off-by: Pengfei Xu <pengfei.xu@intel.com>
 ---
- tools/testing/selftests/resctrl/cat_test.c    | 1 +
- tools/testing/selftests/resctrl/resctrl_val.c | 1 +
- tools/testing/selftests/resctrl/resctrlfs.c   | 1 +
- 3 files changed, 3 insertions(+)
+ tools/testing/selftests/filesystems/fat/run_fat_tests.sh | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ mode change 100644 => 100755 tools/testing/selftests/filesystems/fat/run_fat_tests.sh
 
-diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-index 1c5e90c63254..6a8306b0a109 100644
---- a/tools/testing/selftests/resctrl/cat_test.c
-+++ b/tools/testing/selftests/resctrl/cat_test.c
-@@ -167,6 +167,7 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
- 		return errno;
- 	}
- 
-+	fflush(stdout);
- 	bm_pid = fork();
- 
- 	/* Set param values for child thread which will be allocated bitmask
-diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
-index b32b96356ec7..6948843bf995 100644
---- a/tools/testing/selftests/resctrl/resctrl_val.c
-+++ b/tools/testing/selftests/resctrl/resctrl_val.c
-@@ -629,6 +629,7 @@ int resctrl_val(char **benchmark_cmd, struct resctrl_val_param *param)
- 	 * Fork to start benchmark, save child's pid so that it can be killed
- 	 * when needed
- 	 */
-+	fflush(stdout);
- 	bm_pid = fork();
- 	if (bm_pid == -1) {
- 		perror("# Unable to fork");
-diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
-index 8546bc9f1786..d95688298469 100644
---- a/tools/testing/selftests/resctrl/resctrlfs.c
-+++ b/tools/testing/selftests/resctrl/resctrlfs.c
-@@ -678,6 +678,7 @@ int filter_dmesg(void)
- 		perror("pipe");
- 		return ret;
- 	}
-+	fflush(stdout);
- 	pid = fork();
- 	if (pid == 0) {
- 		close(pipefds[0]);
+diff --git a/tools/testing/selftests/filesystems/fat/run_fat_tests.sh b/tools/testing/selftests/filesystems/fat/run_fat_tests.sh
+old mode 100644
+new mode 100755
 -- 
-2.27.0
+2.31.1
 
