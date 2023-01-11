@@ -2,356 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB616C46467
-	for <linux-kselftest@archiver.kernel.org>; Wed, 11 Jan 2023 08:01:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 36275C46467
+	for <linux-kselftest@archiver.kernel.org>; Wed, 11 Jan 2023 08:03:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235838AbjAKIBX (ORCPT
+        id S231824AbjAKIDh (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 11 Jan 2023 03:01:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59388 "EHLO
+        Wed, 11 Jan 2023 03:03:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235876AbjAKIBA (ORCPT
+        with ESMTP id S235865AbjAKIDF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 11 Jan 2023 03:01:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8AC2F5B8
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Jan 2023 00:00:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673424002;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ryKP4Syb0QxMHTHezxVFEI/PQgexEWoWhCwUcUgI3Bs=;
-        b=HrRlBA5VKo9MbGx/wbnwz+8S5Lsjq4O5cNeY5TjGi3smoR/RKAIKvM1AAEIdgx8wuK6wy5
-        2LTMC+25OtSXVPcJkhO/SX1JzKpGt79hqJqefcgiQN/+s6MlG/TYaij2QCkkumc/s0Mcnn
-        ruD9stLpQLAM/mLU29ketCmh88ZQTKQ=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-573-JHjtBVgCMOKO56fMFjKR7Q-1; Wed, 11 Jan 2023 03:00:00 -0500
-X-MC-Unique: JHjtBVgCMOKO56fMFjKR7Q-1
-Received: by mail-qk1-f197.google.com with SMTP id bi3-20020a05620a318300b00702545f73d5so10374414qkb.8
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Jan 2023 00:00:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ryKP4Syb0QxMHTHezxVFEI/PQgexEWoWhCwUcUgI3Bs=;
-        b=yPiUrf9Ju/dQFNg6vFZSfaO55HZhqov9PeoAazeiMpt4Gv2GpjzrHWMRjENrztyr/F
-         8UFf9rs4LBYpa7DZ5+ZhqCwEoeH6yTxcllKZgDAFaoH5P2yU3vkF5v8+aQLonlxw5SBZ
-         1kH1j5L43eqpp/KgSR++wRYh+MVX42VW5lybvMYQv9t/rIyLNaFmMYJxzVpqozAH5Kos
-         I7WpPHdtvCV77KCESXGjuOW2Pm0ugvxZCfc6WuuzDBYhl7RuQ2Fqk3xhxXLoGLGTmv3E
-         0o07NIkSeUJeSJagYG2QNXYOgJA3AML0p+viZwNHrxYQ+u0kHYn+LAaVLyGAab6YZhui
-         vkBg==
-X-Gm-Message-State: AFqh2kqFzyeDfEeIMtazwm6qHPSfMM95cSEVkqLiHybqWvUI2K4kK871
-        MYWlOWokaGduzgnaY6HSRYA7LoD0zS8iruXsBmTMovPi11/3zS7fwXmnH4wZhp5715IlAhbpiEY
-        NDGpJHP5on7o9KUbztQuPhO9zgciY
-X-Received: by 2002:ac8:1386:0:b0:3ac:57b4:8af1 with SMTP id h6-20020ac81386000000b003ac57b48af1mr17407488qtj.48.1673424000207;
-        Wed, 11 Jan 2023 00:00:00 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXuCxMYAF0XtzpQS+jcWvPGgAusQLEHTTzEMCOqWd8k+VpNsYPzqN2dh6WTpHkbgSTx6FIB2Qw==
-X-Received: by 2002:ac8:1386:0:b0:3ac:57b4:8af1 with SMTP id h6-20020ac81386000000b003ac57b48af1mr17407472qtj.48.1673423999824;
-        Tue, 10 Jan 2023 23:59:59 -0800 (PST)
-Received: from [192.168.0.2] (ip-109-43-176-91.web.vodafone.de. [109.43.176.91])
-        by smtp.gmail.com with ESMTPSA id hj4-20020a05622a620400b003995f6513b9sm7141809qtb.95.2023.01.10.23.59.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 23:59:59 -0800 (PST)
-Message-ID: <d124764c-f221-98d8-a286-79efe176515c@redhat.com>
-Date:   Wed, 11 Jan 2023 08:59:55 +0100
+        Wed, 11 Jan 2023 03:03:05 -0500
+X-Greylist: delayed 123 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 11 Jan 2023 00:02:28 PST
+Received: from esa12.hc1455-7.c3s2.iphmx.com (esa12.hc1455-7.c3s2.iphmx.com [139.138.37.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 408A1C9
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Jan 2023 00:02:28 -0800 (PST)
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="82239538"
+X-IronPort-AV: E=Sophos;i="5.96,315,1665414000"; 
+   d="scan'208";a="82239538"
+Received: from unknown (HELO yto-r3.gw.nic.fujitsu.com) ([218.44.52.219])
+  by esa12.hc1455-7.c3s2.iphmx.com with ESMTP; 11 Jan 2023 16:59:16 +0900
+Received: from yto-m4.gw.nic.fujitsu.com (yto-nat-yto-m4.gw.nic.fujitsu.com [192.168.83.67])
+        by yto-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id 341DFE8520;
+        Wed, 11 Jan 2023 16:59:16 +0900 (JST)
+Received: from yto-om4.fujitsu.com (yto-om4.o.css.fujitsu.com [10.128.89.165])
+        by yto-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id 7D81AD5077;
+        Wed, 11 Jan 2023 16:59:15 +0900 (JST)
+Received: from cn-r05-10.example.com (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
+        by yto-om4.fujitsu.com (Postfix) with ESMTP id 584414007AF34;
+        Wed, 11 Jan 2023 16:59:15 +0900 (JST)
+From:   Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+To:     Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        tan.shaopeng@jp.fujitsu.com
+Subject: [PATCH v5 0/5] Some improvements of resctrl selftest
+Date:   Wed, 11 Jan 2023 16:57:57 +0900
+Message-Id: <20230111075802.3556803-1-tan.shaopeng@jp.fujitsu.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v5 01/10] KVM: s390: Extend MEM_OP ioctl by storage key
- checked cmpxchg
-Content-Language: en-US
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>
-References: <20230110202632.2533978-1-scgl@linux.ibm.com>
- <20230110202632.2533978-2-scgl@linux.ibm.com>
-From:   Thomas Huth <thuth@redhat.com>
-In-Reply-To: <20230110202632.2533978-2-scgl@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 10/01/2023 21.26, Janis Schoetterl-Glausch wrote:
-> User space can use the MEM_OP ioctl to make storage key checked reads
-> and writes to the guest, however, it has no way of performing atomic,
-> key checked, accesses to the guest.
-> Extend the MEM_OP ioctl in order to allow for this, by adding a cmpxchg
-> mode. For now, support this mode for absolute accesses only.
-> 
-> This mode can be use, for example, to set the device-state-change
-> indicator and the adapter-local-summary indicator atomically.
-> 
-> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-> ---
->   include/uapi/linux/kvm.h |   7 +++
->   arch/s390/kvm/gaccess.h  |   3 ++
->   arch/s390/kvm/gaccess.c  | 102 +++++++++++++++++++++++++++++++++++++++
->   arch/s390/kvm/kvm-s390.c |  41 +++++++++++++++-
->   4 files changed, 151 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-> index 55155e262646..452f43c1cc34 100644
-> --- a/include/uapi/linux/kvm.h
-> +++ b/include/uapi/linux/kvm.h
-> @@ -583,6 +583,8 @@ struct kvm_s390_mem_op {
->   		struct {
->   			__u8 ar;	/* the access register number */
->   			__u8 key;	/* access key, ignored if flag unset */
-> +			__u8 pad1[6];	/* ignored */
-> +			__u64 old_addr;	/* ignored if flag unset */
->   		};
->   		__u32 sida_offset; /* offset into the sida */
->   		__u8 reserved[32]; /* ignored */
-> @@ -599,6 +601,11 @@ struct kvm_s390_mem_op {
->   #define KVM_S390_MEMOP_F_CHECK_ONLY		(1ULL << 0)
->   #define KVM_S390_MEMOP_F_INJECT_EXCEPTION	(1ULL << 1)
->   #define KVM_S390_MEMOP_F_SKEY_PROTECTION	(1ULL << 2)
-> +#define KVM_S390_MEMOP_F_CMPXCHG		(1ULL << 3)
-> +/* flags specifying extension support */
-> +#define KVM_S390_MEMOP_EXTENSION_CAP_CMPXCHG 0x2
-> +/* Non program exception return codes (pgm codes are 16 bit) */
-> +#define KVM_S390_MEMOP_R_NO_XCHG		(1 << 16)
->   
->   /* for KVM_INTERRUPT */
->   struct kvm_interrupt {
-> diff --git a/arch/s390/kvm/gaccess.h b/arch/s390/kvm/gaccess.h
-> index 9408d6cc8e2c..92a3b9fb31ec 100644
-> --- a/arch/s390/kvm/gaccess.h
-> +++ b/arch/s390/kvm/gaccess.h
-> @@ -206,6 +206,9 @@ int access_guest_with_key(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar,
->   int access_guest_real(struct kvm_vcpu *vcpu, unsigned long gra,
->   		      void *data, unsigned long len, enum gacc_mode mode);
->   
-> +int cmpxchg_guest_abs_with_key(struct kvm *kvm, gpa_t gpa, int len,
-> +			       __uint128_t *old, __uint128_t new, u8 access_key);
-> +
->   /**
->    * write_guest_with_key - copy data from kernel space to guest space
->    * @vcpu: virtual cpu
-> diff --git a/arch/s390/kvm/gaccess.c b/arch/s390/kvm/gaccess.c
-> index 0243b6e38d36..6165e761a637 100644
-> --- a/arch/s390/kvm/gaccess.c
-> +++ b/arch/s390/kvm/gaccess.c
-> @@ -1161,6 +1161,108 @@ int access_guest_real(struct kvm_vcpu *vcpu, unsigned long gra,
->   	return rc;
->   }
->   
-> +/**
-> + * cmpxchg_guest_abs_with_key() - Perform cmpxchg on guest absolute address.
-> + * @kvm: Virtual machine instance.
-> + * @gpa: Absolute guest address of the location to be changed.
-> + * @len: Operand length of the cmpxchg, required: 1 <= len <= 16. Providing a
-> + *       non power of two will result in failure.
-> + * @old_addr: Pointer to old value. If the location at @gpa contains this value, the
-> + *         exchange will succeed. After calling cmpxchg_guest_abs_with_key() *@old
-> + *         contains the value at @gpa before the attempt to exchange the value.
-> + * @new: The value to place at @gpa.
-> + * @access_key: The access key to use for the guest access.
-> + *
-> + * Atomically exchange the value at @gpa by @new, if it contains *@old.
-> + * Honors storage keys.
-> + *
-> + * Return: * 0: successful exchange
-> + *         * 1: exchange unsuccessful
-> + *         * a program interruption code indicating the reason cmpxchg could
-> + *           not be attempted
+Hello,
 
-PGM_OPERATION has also the value 1 ... can we be sure that it never happens 
-here? ... maybe it would make sense to use KVM_S390_MEMOP_R_NO_XCHG for 
-return value here instead of 1, too, just to be on the safe side?
+The aim of this patch series is to improve the resctrl selftest.
+Without these fixes, some unnecessary processing will be executed
+and test results will be confusing. 
+There is no behavior change in test themselves.
 
-Apart from that, patch looks fine to me.
+[patch 1] Make write_schemata() run to set up shemata with 100% allocation
+	  on first run in MBM test.
+[patch 2] The MBA test result message is always output as "ok",
+	  make output message to be "not ok" if MBA check result is failed.
+[patch 3] When a child process is created by fork(), the buffer of the 
+	  parent process is also copied. Flush the buffer before
+	  executing fork().
+[patch 4] Add a signal handler to cleanup properly before exiting the 
+	  parent process if there is an error occurs after creating 
+	  a child process with fork() in the CAT test, and unregister
+	  signal handler when each test finished.
+[patch 5] Before exiting each test CMT/CAT/MBM/MBA, clear test result 
+	  files function cat/cmt/mbm/mba_test_cleanup() are called
+	  twice. Delete once.
 
-  Thomas
+This patch series is based on Linux v6.2-rc3.
 
+Difference from v4:
+[patch 4] 
+  - Reuse signal handler of other tests(MBM/MBA/CAT).
+  - Unregister signal handler when tests finished.
+  - Fix change log.
 
-> + *         * -EINVAL: address misaligned or len not power of two
-> + *         * -EAGAIN: transient failure (len 1 or 2)
-> + *         * -EOPNOTSUPP: read-only memslot (should never occur)
-> + */
-> +int cmpxchg_guest_abs_with_key(struct kvm *kvm, gpa_t gpa, int len,
-> +			       __uint128_t *old_addr, __uint128_t new,
-> +			       u8 access_key)
-> +{
-> +	gfn_t gfn = gpa >> PAGE_SHIFT;
-> +	struct kvm_memory_slot *slot = gfn_to_memslot(kvm, gfn);
-> +	bool writable;
-> +	hva_t hva;
-> +	int ret;
-> +
-> +	if (!IS_ALIGNED(gpa, len))
-> +		return -EINVAL;
-> +
-> +	hva = gfn_to_hva_memslot_prot(slot, gfn, &writable);
-> +	if (kvm_is_error_hva(hva))
-> +		return PGM_ADDRESSING;
-> +	/*
-> +	 * Check if it's a read-only memslot, even though that cannot occur
-> +	 * since those are unsupported.
-> +	 * Don't try to actually handle that case.
-> +	 */
-> +	if (!writable)
-> +		return -EOPNOTSUPP;
-> +
-> +	hva += offset_in_page(gpa);
-> +	switch (len) {
-> +	case 1: {
-> +		u8 old;
-> +
-> +		ret = cmpxchg_user_key((u8 *)hva, &old, *old_addr, new, access_key);
-> +		ret = ret < 0 ? ret : old != *old_addr;
-> +		*old_addr = old;
-> +		break;
-> +	}
-> +	case 2: {
-> +		u16 old;
-> +
-> +		ret = cmpxchg_user_key((u16 *)hva, &old, *old_addr, new, access_key);
-> +		ret = ret < 0 ? ret : old != *old_addr;
-> +		*old_addr = old;
-> +		break;
-> +	}
-> +	case 4: {
-> +		u32 old;
-> +
-> +		ret = cmpxchg_user_key((u32 *)hva, &old, *old_addr, new, access_key);
-> +		ret = ret < 0 ? ret : old != *old_addr;
-> +		*old_addr = old;
-> +		break;
-> +	}
-> +	case 8: {
-> +		u64 old;
-> +
-> +		ret = cmpxchg_user_key((u64 *)hva, &old, *old_addr, new, access_key);
-> +		ret = ret < 0 ? ret : old != *old_addr;
-> +		*old_addr = old;
-> +		break;
-> +	}
-> +	case 16: {
-> +		__uint128_t old;
-> +
-> +		ret = cmpxchg_user_key((__uint128_t *)hva, &old, *old_addr, new, access_key);
-> +		ret = ret < 0 ? ret : old != *old_addr;
-> +		*old_addr = old;
-> +		break;
-> +	}
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +	mark_page_dirty_in_slot(kvm, slot, gfn);
-> +	/*
-> +	 * Assume that the fault is caused by protection, either key protection
-> +	 * or user page write protection.
-> +	 */
-> +	if (ret == -EFAULT)
-> +		ret = PGM_PROTECTION;
-> +	return ret;
-> +}
-> +
->   /**
->    * guest_translate_address_with_key - translate guest logical into guest absolute address
->    * @vcpu: virtual cpu
-> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-> index e4890e04b210..56f4f6ddd5bb 100644
-> --- a/arch/s390/kvm/kvm-s390.c
-> +++ b/arch/s390/kvm/kvm-s390.c
-> @@ -584,7 +584,6 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
->   	case KVM_CAP_S390_VCPU_RESETS:
->   	case KVM_CAP_SET_GUEST_DEBUG:
->   	case KVM_CAP_S390_DIAG318:
-> -	case KVM_CAP_S390_MEM_OP_EXTENSION:
->   		r = 1;
->   		break;
->   	case KVM_CAP_SET_GUEST_DEBUG2:
-> @@ -598,6 +597,14 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
->   	case KVM_CAP_S390_MEM_OP:
->   		r = MEM_OP_MAX_SIZE;
->   		break;
-> +	case KVM_CAP_S390_MEM_OP_EXTENSION:
-> +		/*
-> +		 * Flag bits indicating which extensions are supported.
-> +		 * The first extension doesn't use a flag, but pretend it does,
-> +		 * this way that can be changed in the future.
-> +		 */
-> +		r = KVM_S390_MEMOP_EXTENSION_CAP_CMPXCHG | 1;
-> +		break;
->   	case KVM_CAP_NR_VCPUS:
->   	case KVM_CAP_MAX_VCPUS:
->   	case KVM_CAP_MAX_VCPU_ID:
-> @@ -2772,12 +2779,19 @@ static bool access_key_invalid(u8 access_key)
->   static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op *mop)
->   {
->   	void __user *uaddr = (void __user *)mop->buf;
-> +	void __user *old_addr = (void __user *)mop->old_addr;
-> +	union {
-> +		__uint128_t quad;
-> +		char raw[sizeof(__uint128_t)];
-> +	} old = { .quad = 0}, new = { .quad = 0 };
-> +	unsigned int off_in_quad = sizeof(new) - mop->size;
->   	u64 supported_flags;
->   	void *tmpbuf = NULL;
->   	int r, srcu_idx;
->   
->   	supported_flags = KVM_S390_MEMOP_F_SKEY_PROTECTION
-> -			  | KVM_S390_MEMOP_F_CHECK_ONLY;
-> +			  | KVM_S390_MEMOP_F_CHECK_ONLY
-> +			  | KVM_S390_MEMOP_F_CMPXCHG;
->   	if (mop->flags & ~supported_flags || !mop->size)
->   		return -EINVAL;
->   	if (mop->size > MEM_OP_MAX_SIZE)
-> @@ -2799,6 +2813,21 @@ static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op *mop)
->   	} else {
->   		mop->key = 0;
->   	}
-> +	if (mop->flags & KVM_S390_MEMOP_F_CMPXCHG) {
-> +		/*
-> +		 * This validates off_in_quad. Checking that size is a power
-> +		 * of two is not necessary, as cmpxchg_guest_abs_with_key
-> +		 * takes care of that
-> +		 */
-> +		if (mop->size > sizeof(new))
-> +			return -EINVAL;
-> +		if (mop->op != KVM_S390_MEMOP_ABSOLUTE_WRITE)
-> +			return -EINVAL;
-> +		if (copy_from_user(&new.raw[off_in_quad], uaddr, mop->size))
-> +			return -EFAULT;
-> +		if (copy_from_user(&old.raw[off_in_quad], old_addr, mop->size))
-> +			return -EFAULT;
-> +	}
->   	if (!(mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY)) {
->   		tmpbuf = vmalloc(mop->size);
->   		if (!tmpbuf)
-> @@ -2829,6 +2858,14 @@ static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op *mop)
->   	case KVM_S390_MEMOP_ABSOLUTE_WRITE: {
->   		if (mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY) {
->   			r = check_gpa_range(kvm, mop->gaddr, mop->size, GACC_STORE, mop->key);
-> +		} else if (mop->flags & KVM_S390_MEMOP_F_CMPXCHG) {
-> +			r = cmpxchg_guest_abs_with_key(kvm, mop->gaddr, mop->size,
-> +						       &old.quad, new.quad, mop->key);
-> +			if (r == 1) {
-> +				r = KVM_S390_MEMOP_R_NO_XCHG;
-> +				if (copy_to_user(old_addr, &old.raw[off_in_quad], mop->size))
-> +					r = -EFAULT;
-> +			}
->   		} else {
->   			if (copy_from_user(tmpbuf, uaddr, mop->size)) {
->   				r = -EFAULT;
+Pervious versions of this series:
+[v1] https://lore.kernel.org/lkml/20220914015147.3071025-1-tan.shaopeng@jp.fujitsu.com/
+[v2] https://lore.kernel.org/lkml/20221005013933.1486054-1-tan.shaopeng@jp.fujitsu.com/
+[v3] https://lore.kernel.org/lkml/20221101094341.3383073-1-tan.shaopeng@jp.fujitsu.com/
+[v4] https://lore.kernel.org/lkml/20221117010541.1014481-1-tan.shaopeng@jp.fujitsu.com/
+
+Shaopeng Tan (5):
+  selftests/resctrl: Fix set up schemata with 100% allocation on first
+    run in MBM test
+  selftests/resctrl: Return MBA check result and make it to output
+    message
+  selftests/resctrl: Flush stdout file buffer before executing fork()
+  selftests/resctrl: Cleanup properly when an error occurs in CAT test
+  selftests/resctrl: Remove duplicate codes that clear each test result
+    file
+
+ tools/testing/selftests/resctrl/cat_test.c    | 27 +++++----
+ tools/testing/selftests/resctrl/cmt_test.c    |  7 +--
+ tools/testing/selftests/resctrl/fill_buf.c    | 14 -----
+ tools/testing/selftests/resctrl/mba_test.c    | 23 ++++----
+ tools/testing/selftests/resctrl/mbm_test.c    | 20 +++----
+ tools/testing/selftests/resctrl/resctrl.h     |  2 +
+ .../testing/selftests/resctrl/resctrl_tests.c |  4 --
+ tools/testing/selftests/resctrl/resctrl_val.c | 57 ++++++++++++++-----
+ tools/testing/selftests/resctrl/resctrlfs.c   |  5 +-
+ 9 files changed, 89 insertions(+), 70 deletions(-)
+
+-- 
+2.27.0
 
