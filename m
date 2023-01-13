@@ -2,422 +2,199 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 144EAC54EBE
-	for <linux-kselftest@archiver.kernel.org>; Fri, 13 Jan 2023 09:14:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 012DFC61DB3
+	for <linux-kselftest@archiver.kernel.org>; Fri, 13 Jan 2023 09:41:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbjAMJOs (ORCPT
+        id S241228AbjAMJk7 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 13 Jan 2023 04:14:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44448 "EHLO
+        Fri, 13 Jan 2023 04:40:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241180AbjAMJM0 (ORCPT
+        with ESMTP id S235576AbjAMJkW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 13 Jan 2023 04:12:26 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91BF513D25
-        for <linux-kselftest@vger.kernel.org>; Fri, 13 Jan 2023 01:10:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673601005;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=b87icpl3/0I0/0SJoaZzj0USo5zmLgh57iacasFKKow=;
-        b=PiPMCX/7lCnw1iknJWt+RfcR5QOmW8fZl2+eHLYJcdfpu3LxPVobpIePMNNj01+sp8GEKA
-        QqaGAYADOvvzWLnkptwDqb1Ct0zlp5Z9cojhE73wMjW0w5NMwwmNaYre2LrcGTXnqfxrSe
-        vEaJs5WpzjVNmaDclVo+eryJaVXk/1w=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-501-tNsXq74rN16z675VHI6u0g-1; Fri, 13 Jan 2023 04:10:00 -0500
-X-MC-Unique: tNsXq74rN16z675VHI6u0g-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BD39985D064;
-        Fri, 13 Jan 2023 09:09:59 +0000 (UTC)
-Received: from plouf.redhat.com (ovpn-193-50.brq.redhat.com [10.40.193.50])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6B3161121314;
-        Fri, 13 Jan 2023 09:09:57 +0000 (UTC)
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH HID for-next v2 8/9] HID: bpf: clean up entrypoint
-Date:   Fri, 13 Jan 2023 10:09:34 +0100
-Message-Id: <20230113090935.1763477-9-benjamin.tissoires@redhat.com>
-In-Reply-To: <20230113090935.1763477-1-benjamin.tissoires@redhat.com>
-References: <20230113090935.1763477-1-benjamin.tissoires@redhat.com>
+        Fri, 13 Jan 2023 04:40:22 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F4517DE10;
+        Fri, 13 Jan 2023 01:30:11 -0800 (PST)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30D9JtIP022415;
+        Fri, 13 Jan 2023 09:29:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
+ to : cc : references : in-reply-to : message-id : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=WZTvblmpY68TQjitm8U4NNK91LqEDuZldw28DW+QwOc=;
+ b=EtG8i/f8k+8jBzuKi7OufnqvPV+suXX+eplGVu4PJDidlwhbGnXAuw31vbvm+X64j/CG
+ GcHCs7lZBhoHEW7OaivXGfVqgAfWFe27t9+j6nuuDzVdo0QsfQTJRaEdJEv1PqJV4tZE
+ B/069rndBP4yl4uHTzIt5Y7Ifn6tZb72AGdfzKjdC1jZRRsg5gdIEhe0BimsJv8scyXk
+ xsyj+vEJ0rpdzaAkMAbqNW5A9LCoPhsQCuK4JaLx/rIzIDJD14xyhXIQpSJJYjnuClVV
+ 7YdAdH4G7vHCbawLVx6XxtySFXGzCTy6gysNyLrAbguqhIWVexL7VPcpPL2PmAk8qo/H 2g== 
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n34jw06b3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 13 Jan 2023 09:29:58 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30D8YEFg022429;
+        Fri, 13 Jan 2023 09:29:56 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3n1k5uaqgc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 13 Jan 2023 09:29:56 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30D9Tsfd38863168
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 13 Jan 2023 09:29:54 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E4EE620043;
+        Fri, 13 Jan 2023 09:29:53 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 234F020040;
+        Fri, 13 Jan 2023 09:29:53 +0000 (GMT)
+Received: from localhost (unknown [9.43.72.151])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Fri, 13 Jan 2023 09:29:53 +0000 (GMT)
+Date:   Fri, 13 Jan 2023 14:59:51 +0530
+From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Subject: Re: [PATCH] selftests/ftrace: Extend multiple_kprobes.tc to add
+ multiple consecutive probes in a function
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Akanksha J N <akanksha@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, rostedt@goodmis.org,
+        shuah@kernel.org
+References: <20230112095600.37665-1-akanksha@linux.ibm.com>
+        <1673529279.3c5f8oes3z.naveen@linux.ibm.com>
+        <20230113005153.c6ca2f75b9d12627eb63308a@kernel.org>
+In-Reply-To: <20230113005153.c6ca2f75b9d12627eb63308a@kernel.org>
+User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
+Message-Id: <1673601511.tq30r5phea.naveen@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: TZwW9EIXUVaSyJHyMDBIzyEdXqpHOqc4
+X-Proofpoint-ORIG-GUID: TZwW9EIXUVaSyJHyMDBIzyEdXqpHOqc4
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-13_04,2023-01-12_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1011
+ impostorscore=0 adultscore=0 mlxlogscore=999 spamscore=0 mlxscore=0
+ bulkscore=0 phishscore=0 suspectscore=0 priorityscore=1501
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301130063
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-We don't need to watch for calls on bpf_prog_put_deferred(), so remove
-that from the entrypoints.bpf.c file.
+Masami Hiramatsu wrote:
+> On Thu, 12 Jan 2023 18:51:14 +0530
+> "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
+>=20
+>> Akanksha J N wrote:
+>> > Commit 97f88a3d723162 ("powerpc/kprobes: Fix null pointer reference in
+>> > arch_prepare_kprobe()") fixed a recent kernel oops that was caused as
+>> > ftrace-based kprobe does not generate kprobe::ainsn::insn and it gets
+>> > set to NULL.
+>> > Extend multiple kprobes test to add kprobes on first 256 bytes within a
+>> > function, to be able to test potential issues with kprobes on
+>> > successive instructions.
+>=20
+> What is the purpose of that test? If you intended to add a kprobe events
+> with some offset so that it becomes ftrace-based kprobe, it should be
+> a different test case, because
 
-Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+This is a follow up to:
+http://lore.kernel.org/1664530538.ke6dp49pwh.naveen@linux.ibm.com
 
----
+The intent is to add consecutive probes covering KPROBES_ON_FTRACE,=20
+vanilla trap-based kprobes as well as optprobes to ensure all of those=20
+and their interactions are good.
 
-changes in v2:
-- removed unused call_hid_bpf_prog_put_deferred()
-  Reported-by: kernel test robot <lkp@intel.com>
----
- drivers/hid/bpf/entrypoints/entrypoints.bpf.c |   9 -
- .../hid/bpf/entrypoints/entrypoints.lskel.h   | 188 +++++-------------
- drivers/hid/bpf/hid_bpf_dispatch.c            |   1 -
- drivers/hid/bpf/hid_bpf_dispatch.h            |   3 -
- drivers/hid/bpf/hid_bpf_jmp_table.c           |   5 -
- 5 files changed, 53 insertions(+), 153 deletions(-)
+>=20
+>  - This is a test case for checking multiple (at least 256) kprobe events
+>   can be defined and enabled.
+>=20
+>  - If you want to check the ftrace-based kprobe, it should be near the
+>    function entry, maybe within 16 bytes or so.
+>=20
+>  - Also, you don't need to enable it at once (and should not for this cas=
+e).
+>=20
+>> > The '|| true' is added with the echo statement to ignore errors that a=
+re
+>> > caused by trying to add kprobes to non probeable lines and continue wi=
+th
+>> > the test.
+>=20
+> Can you add another test case for that? (and send it to the MLs which Cc'd
+> to this mail)
+> e.g.=20
+>=20
+>    for i in `seq 0 16`; do
+>      echo p:testprobe $FUNCTION_FORK+${i} >> kprobe_events || continue
+>      echo 1 > events/kprobes/testprobe/enable
+>      ( echo "forked" )
+>      echo 0 > events/kprobes/testprobe/enable
+>      echo > kprobe_events
+>    done
 
-diff --git a/drivers/hid/bpf/entrypoints/entrypoints.bpf.c b/drivers/hid/bpf/entrypoints/entrypoints.bpf.c
-index 7c1895d9e5c0..c22921125a1a 100644
---- a/drivers/hid/bpf/entrypoints/entrypoints.bpf.c
-+++ b/drivers/hid/bpf/entrypoints/entrypoints.bpf.c
-@@ -7,8 +7,6 @@
- 
- #define HID_BPF_MAX_PROGS 1024
- 
--extern void call_hid_bpf_prog_put_deferred(struct work_struct *work) __ksym;
--
- struct {
- 	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
- 	__uint(max_entries, HID_BPF_MAX_PROGS);
-@@ -24,11 +22,4 @@ int BPF_PROG(hid_tail_call, struct hid_bpf_ctx *hctx)
- 	return 0;
- }
- 
--SEC("fentry/bpf_prog_put_deferred")
--int BPF_PROG(hid_bpf_prog_put_deferred, struct work_struct *work)
--{
--	call_hid_bpf_prog_put_deferred(work);
--	return 0;
--}
--
- char LICENSE[] SEC("license") = "GPL";
-diff --git a/drivers/hid/bpf/entrypoints/entrypoints.lskel.h b/drivers/hid/bpf/entrypoints/entrypoints.lskel.h
-index 9ffb991b3e6f..35618051598c 100644
---- a/drivers/hid/bpf/entrypoints/entrypoints.lskel.h
-+++ b/drivers/hid/bpf/entrypoints/entrypoints.lskel.h
-@@ -12,11 +12,9 @@ struct entrypoints_bpf {
- 	} maps;
- 	struct {
- 		struct bpf_prog_desc hid_tail_call;
--		struct bpf_prog_desc hid_bpf_prog_put_deferred;
- 	} progs;
- 	struct {
- 		int hid_tail_call_fd;
--		int hid_bpf_prog_put_deferred_fd;
- 	} links;
- };
- 
-@@ -31,24 +29,12 @@ entrypoints_bpf__hid_tail_call__attach(struct entrypoints_bpf *skel)
- 	return fd;
- }
- 
--static inline int
--entrypoints_bpf__hid_bpf_prog_put_deferred__attach(struct entrypoints_bpf *skel)
--{
--	int prog_fd = skel->progs.hid_bpf_prog_put_deferred.prog_fd;
--	int fd = skel_raw_tracepoint_open(NULL, prog_fd);
--
--	if (fd > 0)
--		skel->links.hid_bpf_prog_put_deferred_fd = fd;
--	return fd;
--}
--
- static inline int
- entrypoints_bpf__attach(struct entrypoints_bpf *skel)
- {
- 	int ret = 0;
- 
- 	ret = ret < 0 ? ret : entrypoints_bpf__hid_tail_call__attach(skel);
--	ret = ret < 0 ? ret : entrypoints_bpf__hid_bpf_prog_put_deferred__attach(skel);
- 	return ret < 0 ? ret : 0;
- }
- 
-@@ -56,7 +42,6 @@ static inline void
- entrypoints_bpf__detach(struct entrypoints_bpf *skel)
- {
- 	skel_closenz(skel->links.hid_tail_call_fd);
--	skel_closenz(skel->links.hid_bpf_prog_put_deferred_fd);
- }
- static void
- entrypoints_bpf__destroy(struct entrypoints_bpf *skel)
-@@ -65,7 +50,6 @@ entrypoints_bpf__destroy(struct entrypoints_bpf *skel)
- 		return;
- 	entrypoints_bpf__detach(skel);
- 	skel_closenz(skel->progs.hid_tail_call.prog_fd);
--	skel_closenz(skel->progs.hid_bpf_prog_put_deferred.prog_fd);
- 	skel_closenz(skel->maps.hid_jmp_table.map_fd);
- 	skel_free(skel);
- }
-@@ -91,7 +75,7 @@ entrypoints_bpf__load(struct entrypoints_bpf *skel)
- 	int err;
- 
- 	opts.ctx = (struct bpf_loader_ctx *)skel;
--	opts.data_sz = 3792;
-+	opts.data_sz = 2856;
- 	opts.data = (void *)"\
- \0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\
- \0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\
-@@ -126,7 +110,7 @@ entrypoints_bpf__load(struct entrypoints_bpf *skel)
- \0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\
- \0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\
- \0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x9f\xeb\x01\0\
--\x18\0\0\0\0\0\0\0\xa4\x03\0\0\xa4\x03\0\0\x54\x03\0\0\0\0\0\0\0\0\0\x02\x03\0\
-+\x18\0\0\0\0\0\0\0\x60\x02\0\0\x60\x02\0\0\x12\x02\0\0\0\0\0\0\0\0\0\x02\x03\0\
- \0\0\x01\0\0\0\0\0\0\x01\x04\0\0\0\x20\0\0\x01\0\0\0\0\0\0\0\x03\0\0\0\0\x02\0\
- \0\0\x04\0\0\0\x03\0\0\0\x05\0\0\0\0\0\0\x01\x04\0\0\0\x20\0\0\0\0\0\0\0\0\0\0\
- \x02\x06\0\0\0\0\0\0\0\0\0\0\x03\0\0\0\0\x02\0\0\0\x04\0\0\0\0\x04\0\0\0\0\0\0\
-@@ -139,25 +123,14 @@ entrypoints_bpf__load(struct entrypoints_bpf *skel)
- \0\0\0\0\0\0\0\x1b\x01\0\0\x12\0\0\0\x40\0\0\0\x1f\x01\0\0\x10\0\0\0\x80\0\0\0\
- \x2e\x01\0\0\x14\0\0\0\xa0\0\0\0\0\0\0\0\x15\0\0\0\xc0\0\0\0\x3a\x01\0\0\0\0\0\
- \x08\x11\0\0\0\x40\x01\0\0\0\0\0\x01\x04\0\0\0\x20\0\0\0\0\0\0\0\0\0\0\x02\x13\
--\0\0\0\0\0\0\0\0\0\0\x0a\x2d\0\0\0\x4d\x01\0\0\x04\0\0\x06\x04\0\0\0\x5d\x01\0\
-+\0\0\0\0\0\0\0\0\0\0\x0a\x1c\0\0\0\x4d\x01\0\0\x04\0\0\x06\x04\0\0\0\x5d\x01\0\
- \0\0\0\0\0\x6e\x01\0\0\x01\0\0\0\x80\x01\0\0\x02\0\0\0\x93\x01\0\0\x03\0\0\0\0\
- \0\0\0\x02\0\0\x05\x04\0\0\0\xa4\x01\0\0\x16\0\0\0\0\0\0\0\xab\x01\0\0\x16\0\0\
--\0\0\0\0\0\xb0\x01\0\0\0\0\0\x08\x02\0\0\0\0\0\0\0\x01\0\0\x0d\x02\0\0\0\x5f\0\
--\0\0\x0b\0\0\0\xec\x01\0\0\x01\0\0\x0c\x17\0\0\0\0\0\0\0\x01\0\0\x0d\0\0\0\0\
--\x49\x03\0\0\x1a\0\0\0\0\0\0\0\0\0\0\x02\x1b\0\0\0\x8c\x02\0\0\x03\0\0\x04\x20\
--\0\0\0\x98\x02\0\0\x1c\0\0\0\0\0\0\0\x9d\x02\0\0\x22\0\0\0\x40\0\0\0\xa3\x02\0\
--\0\x24\0\0\0\xc0\0\0\0\xa8\x02\0\0\0\0\0\x08\x1d\0\0\0\xb6\x02\0\0\0\0\0\x08\
--\x1e\0\0\0\0\0\0\0\x01\0\0\x04\x08\0\0\0\xc1\x02\0\0\x1f\0\0\0\0\0\0\0\xc9\x02\
--\0\0\0\0\0\x08\x20\0\0\0\xcd\x02\0\0\0\0\0\x08\x21\0\0\0\xd3\x02\0\0\0\0\0\x01\
--\x08\0\0\0\x40\0\0\x01\xdd\x02\0\0\x02\0\0\x04\x10\0\0\0\xe7\x02\0\0\x23\0\0\0\
--\0\0\0\0\xec\x02\0\0\x23\0\0\0\x40\0\0\0\0\0\0\0\0\0\0\x02\x22\0\0\0\xf1\x02\0\
--\0\0\0\0\x08\x25\0\0\0\0\0\0\0\0\0\0\x02\x19\0\0\0\xfd\x02\0\0\x01\0\0\x0c\x19\
--\0\0\0\x1c\x03\0\0\0\0\0\x01\x01\0\0\0\x08\0\0\x01\0\0\0\0\0\0\0\x03\0\0\0\0\
--\x27\0\0\0\x04\0\0\0\x04\0\0\0\x21\x03\0\0\0\0\0\x0e\x28\0\0\0\x01\0\0\0\x29\
--\x03\0\0\x01\0\0\x0f\x04\0\0\0\x2e\0\0\0\0\0\0\0\x04\0\0\0\x30\x03\0\0\x01\0\0\
--\x0f\x20\0\0\0\x0a\0\0\0\0\0\0\0\x20\0\0\0\x36\x03\0\0\x01\0\0\x0f\x04\0\0\0\
--\x29\0\0\0\0\0\0\0\x04\0\0\0\x3e\x03\0\0\0\0\0\x07\0\0\0\0\x49\x03\0\0\0\0\0\
--\x0e\x02\0\0\0\x01\0\0\0\0\x69\x6e\x74\0\x5f\x5f\x41\x52\x52\x41\x59\x5f\x53\
-+\0\0\0\0\0\xb0\x01\0\0\0\0\0\x08\x02\0\0\0\xec\x01\0\0\0\0\0\x01\x01\0\0\0\x08\
-+\0\0\x01\0\0\0\0\0\0\0\x03\0\0\0\0\x17\0\0\0\x04\0\0\0\x04\0\0\0\xf1\x01\0\0\0\
-+\0\0\x0e\x18\0\0\0\x01\0\0\0\xf9\x01\0\0\x01\0\0\x0f\x20\0\0\0\x0a\0\0\0\0\0\0\
-+\0\x20\0\0\0\xff\x01\0\0\x01\0\0\x0f\x04\0\0\0\x19\0\0\0\0\0\0\0\x04\0\0\0\x07\
-+\x02\0\0\0\0\0\x07\0\0\0\0\0\x69\x6e\x74\0\x5f\x5f\x41\x52\x52\x41\x59\x5f\x53\
- \x49\x5a\x45\x5f\x54\x59\x50\x45\x5f\x5f\0\x74\x79\x70\x65\0\x6d\x61\x78\x5f\
- \x65\x6e\x74\x72\x69\x65\x73\0\x6b\x65\x79\x5f\x73\x69\x7a\x65\0\x76\x61\x6c\
- \x75\x65\x5f\x73\x69\x7a\x65\0\x68\x69\x64\x5f\x6a\x6d\x70\x5f\x74\x61\x62\x6c\
-@@ -182,119 +155,64 @@ entrypoints_bpf__load(struct entrypoints_bpf *skel)
- \x5f\x5f\x73\x33\x32\0\x30\x3a\x30\0\x09\x62\x70\x66\x5f\x74\x61\x69\x6c\x5f\
- \x63\x61\x6c\x6c\x28\x63\x74\x78\x2c\x20\x26\x68\x69\x64\x5f\x6a\x6d\x70\x5f\
- \x74\x61\x62\x6c\x65\x2c\x20\x68\x63\x74\x78\x2d\x3e\x69\x6e\x64\x65\x78\x29\
--\x3b\0\x68\x69\x64\x5f\x62\x70\x66\x5f\x70\x72\x6f\x67\x5f\x70\x75\x74\x5f\x64\
--\x65\x66\x65\x72\x72\x65\x64\0\x66\x65\x6e\x74\x72\x79\x2f\x62\x70\x66\x5f\x70\
--\x72\x6f\x67\x5f\x70\x75\x74\x5f\x64\x65\x66\x65\x72\x72\x65\x64\0\x69\x6e\x74\
--\x20\x42\x50\x46\x5f\x50\x52\x4f\x47\x28\x68\x69\x64\x5f\x62\x70\x66\x5f\x70\
--\x72\x6f\x67\x5f\x70\x75\x74\x5f\x64\x65\x66\x65\x72\x72\x65\x64\x2c\x20\x73\
--\x74\x72\x75\x63\x74\x20\x77\x6f\x72\x6b\x5f\x73\x74\x72\x75\x63\x74\x20\x2a\
--\x77\x6f\x72\x6b\x29\0\x09\x63\x61\x6c\x6c\x5f\x68\x69\x64\x5f\x62\x70\x66\x5f\
--\x70\x72\x6f\x67\x5f\x70\x75\x74\x5f\x64\x65\x66\x65\x72\x72\x65\x64\x28\x77\
--\x6f\x72\x6b\x29\x3b\0\x77\x6f\x72\x6b\x5f\x73\x74\x72\x75\x63\x74\0\x64\x61\
--\x74\x61\0\x65\x6e\x74\x72\x79\0\x66\x75\x6e\x63\0\x61\x74\x6f\x6d\x69\x63\x5f\
--\x6c\x6f\x6e\x67\x5f\x74\0\x61\x74\x6f\x6d\x69\x63\x36\x34\x5f\x74\0\x63\x6f\
--\x75\x6e\x74\x65\x72\0\x73\x36\x34\0\x5f\x5f\x73\x36\x34\0\x6c\x6f\x6e\x67\x20\
--\x6c\x6f\x6e\x67\0\x6c\x69\x73\x74\x5f\x68\x65\x61\x64\0\x6e\x65\x78\x74\0\x70\
--\x72\x65\x76\0\x77\x6f\x72\x6b\x5f\x66\x75\x6e\x63\x5f\x74\0\x63\x61\x6c\x6c\
--\x5f\x68\x69\x64\x5f\x62\x70\x66\x5f\x70\x72\x6f\x67\x5f\x70\x75\x74\x5f\x64\
--\x65\x66\x65\x72\x72\x65\x64\0\x63\x68\x61\x72\0\x4c\x49\x43\x45\x4e\x53\x45\0\
--\x2e\x6b\x73\x79\x6d\x73\0\x2e\x6d\x61\x70\x73\0\x6c\x69\x63\x65\x6e\x73\x65\0\
--\x68\x69\x64\x5f\x64\x65\x76\x69\x63\x65\0\x64\x75\x6d\x6d\x79\x5f\x6b\x73\x79\
--\x6d\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x10\x07\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x03\
-+\x3b\0\x63\x68\x61\x72\0\x4c\x49\x43\x45\x4e\x53\x45\0\x2e\x6d\x61\x70\x73\0\
-+\x6c\x69\x63\x65\x6e\x73\x65\0\x68\x69\x64\x5f\x64\x65\x76\x69\x63\x65\0\0\0\0\
-+\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x8a\x04\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x03\
- \0\0\0\x04\0\0\0\x04\0\0\0\0\x04\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x68\x69\x64\x5f\
- \x6a\x6d\x70\x5f\x74\x61\x62\x6c\x65\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\
- \0\0\0\0\0\0\0\0\0\0\x47\x50\x4c\0\0\0\0\0\x79\x12\0\0\0\0\0\0\x61\x23\0\0\0\0\
- \0\0\x18\x52\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x85\0\0\0\x0c\0\0\0\xb7\0\0\0\0\0\0\0\
--\x95\0\0\0\0\0\0\0\0\0\0\0\x0e\0\0\0\0\0\0\0\x8e\0\0\0\xd3\0\0\0\x05\x50\0\0\
--\x01\0\0\0\x8e\0\0\0\xba\x01\0\0\x02\x58\0\0\x05\0\0\0\x8e\0\0\0\xd3\0\0\0\x05\
--\x50\0\0\x08\0\0\0\x0f\0\0\0\xb6\x01\0\0\0\0\0\0\x1a\0\0\0\x07\0\0\0\0\0\0\0\0\
-+\x95\0\0\0\0\0\0\0\0\0\0\0\x0e\0\0\0\0\0\0\0\x8e\0\0\0\xd3\0\0\0\x05\x48\0\0\
-+\x01\0\0\0\x8e\0\0\0\xba\x01\0\0\x02\x50\0\0\x05\0\0\0\x8e\0\0\0\xd3\0\0\0\x05\
-+\x48\0\0\x08\0\0\0\x0f\0\0\0\xb6\x01\0\0\0\0\0\0\x1a\0\0\0\x07\0\0\0\0\0\0\0\0\
- \0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x68\x69\
- \x64\x5f\x74\x61\x69\x6c\x5f\x63\x61\x6c\x6c\0\0\0\0\0\0\0\x1a\0\0\0\0\0\0\0\
- \x08\0\0\0\0\0\0\0\0\0\0\0\x01\0\0\0\x10\0\0\0\0\0\0\0\0\0\0\0\x03\0\0\0\x01\0\
- \0\0\0\0\0\0\x01\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x10\0\0\0\0\0\0\0\x5f\
- \x5f\x68\x69\x64\x5f\x62\x70\x66\x5f\x74\x61\x69\x6c\x5f\x63\x61\x6c\x6c\0\0\0\
--\0\0\x47\x50\x4c\0\0\0\0\0\x79\x11\0\0\0\0\0\0\x85\x20\0\0\0\0\0\0\xb7\0\0\0\0\
--\0\0\0\x95\0\0\0\0\0\0\0\0\0\0\0\x18\0\0\0\0\0\0\0\x8e\0\0\0\x23\x02\0\0\x05\
--\x70\0\0\x01\0\0\0\x8e\0\0\0\x65\x02\0\0\x02\x78\0\0\x02\0\0\0\x8e\0\0\0\x23\
--\x02\0\0\x05\x70\0\0\x1a\0\0\0\x04\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\
--\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x68\x69\x64\x5f\x62\x70\x66\x5f\x70\
--\x72\x6f\x67\x5f\x70\x75\0\0\0\0\0\x18\0\0\0\0\0\0\0\x08\0\0\0\0\0\0\0\0\0\0\0\
--\x01\0\0\0\x10\0\0\0\0\0\0\0\0\0\0\0\x03\0\0\0\x01\0\0\0\0\0\0\0\0\0\0\0\0\0\0\
--\0\0\0\0\0\0\0\0\0\0\0\0\0\x10\0\0\0\0\0\0\0\x62\x70\x66\x5f\x70\x72\x6f\x67\
--\x5f\x70\x75\x74\x5f\x64\x65\x66\x65\x72\x72\x65\x64\0\0\0\x63\x61\x6c\x6c\x5f\
--\x68\x69\x64\x5f\x62\x70\x66\x5f\x70\x72\x6f\x67\x5f\x70\x75\x74\x5f\x64\x65\
--\x66\x65\x72\x72\x65\x64\0\0";
--	opts.insns_sz = 2056;
-+\0\0";
-+	opts.insns_sz = 1192;
- 	opts.insns = (void *)"\
- \xbf\x16\0\0\0\0\0\0\xbf\xa1\0\0\0\0\0\0\x07\x01\0\0\x78\xff\xff\xff\xb7\x02\0\
--\0\x88\0\0\0\xb7\x03\0\0\0\0\0\0\x85\0\0\0\x71\0\0\0\x05\0\x14\0\0\0\0\0\x61\
-+\0\x88\0\0\0\xb7\x03\0\0\0\0\0\0\x85\0\0\0\x71\0\0\0\x05\0\x11\0\0\0\0\0\x61\
- \xa1\x78\xff\0\0\0\0\xd5\x01\x01\0\0\0\0\0\x85\0\0\0\xa8\0\0\0\x61\xa1\x7c\xff\
- \0\0\0\0\xd5\x01\x01\0\0\0\0\0\x85\0\0\0\xa8\0\0\0\x61\xa1\x80\xff\0\0\0\0\xd5\
--\x01\x01\0\0\0\0\0\x85\0\0\0\xa8\0\0\0\x61\xa1\x84\xff\0\0\0\0\xd5\x01\x01\0\0\
--\0\0\0\x85\0\0\0\xa8\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x61\x01\0\0\0\0\
--\0\0\xd5\x01\x02\0\0\0\0\0\xbf\x19\0\0\0\0\0\0\x85\0\0\0\xa8\0\0\0\xbf\x70\0\0\
--\0\0\0\0\x95\0\0\0\0\0\0\0\x61\x60\x08\0\0\0\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\
--\x28\x0c\0\0\x63\x01\0\0\0\0\0\0\x61\x60\x0c\0\0\0\0\0\x18\x61\0\0\0\0\0\0\0\0\
--\0\0\x24\x0c\0\0\x63\x01\0\0\0\0\0\0\x79\x60\x10\0\0\0\0\0\x18\x61\0\0\0\0\0\0\
--\0\0\0\0\x18\x0c\0\0\x7b\x01\0\0\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\0\x05\0\0\
--\x18\x61\0\0\0\0\0\0\0\0\0\0\x10\x0c\0\0\x7b\x01\0\0\0\0\0\0\xb7\x01\0\0\x12\0\
--\0\0\x18\x62\0\0\0\0\0\0\0\0\0\0\x10\x0c\0\0\xb7\x03\0\0\x1c\0\0\0\x85\0\0\0\
--\xa6\0\0\0\xbf\x07\0\0\0\0\0\0\xc5\x07\xd4\xff\0\0\0\0\x63\x7a\x78\xff\0\0\0\0\
--\x61\x60\x1c\0\0\0\0\0\x15\0\x03\0\0\0\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x3c\x0c\
--\0\0\x63\x01\0\0\0\0\0\0\xb7\x01\0\0\0\0\0\0\x18\x62\0\0\0\0\0\0\0\0\0\0\x30\
--\x0c\0\0\xb7\x03\0\0\x48\0\0\0\x85\0\0\0\xa6\0\0\0\xbf\x07\0\0\0\0\0\0\xc5\x07\
--\xc7\xff\0\0\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x63\x71\0\0\0\0\0\0\x18\
--\x60\0\0\0\0\0\0\0\0\0\0\x78\x0c\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x10\x0d\0\0\
--\x7b\x01\0\0\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\x80\x0c\0\0\x18\x61\0\0\0\0\0\
--\0\0\0\0\0\x08\x0d\0\0\x7b\x01\0\0\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\xb8\x0c\
--\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x50\x0d\0\0\x7b\x01\0\0\0\0\0\0\x18\x60\0\0\0\
--\0\0\0\0\0\0\0\xc0\x0c\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x60\x0d\0\0\x7b\x01\0\0\
--\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\xf0\x0c\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\
--\x80\x0d\0\0\x7b\x01\0\0\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x18\x61\0\
--\0\0\0\0\0\0\0\0\0\x78\x0d\0\0\x7b\x01\0\0\0\0\0\0\x61\x60\x08\0\0\0\0\0\x18\
--\x61\0\0\0\0\0\0\0\0\0\0\x18\x0d\0\0\x63\x01\0\0\0\0\0\0\x61\x60\x0c\0\0\0\0\0\
--\x18\x61\0\0\0\0\0\0\0\0\0\0\x1c\x0d\0\0\x63\x01\0\0\0\0\0\0\x79\x60\x10\0\0\0\
--\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x20\x0d\0\0\x7b\x01\0\0\0\0\0\0\x61\xa0\x78\
--\xff\0\0\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x48\x0d\0\0\x63\x01\0\0\0\0\0\0\x18\
--\x61\0\0\0\0\0\0\0\0\0\0\x90\x0d\0\0\xb7\x02\0\0\x14\0\0\0\xb7\x03\0\0\x0c\0\0\
--\0\xb7\x04\0\0\0\0\0\0\x85\0\0\0\xa7\0\0\0\xbf\x07\0\0\0\0\0\0\xc5\x07\x8e\xff\
--\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\0\x0d\0\0\x63\x70\x6c\0\0\0\0\0\x77\x07\0\
--\0\x20\0\0\0\x63\x70\x70\0\0\0\0\0\xb7\x01\0\0\x05\0\0\0\x18\x62\0\0\0\0\0\0\0\
--\0\0\0\0\x0d\0\0\xb7\x03\0\0\x8c\0\0\0\x85\0\0\0\xa6\0\0\0\xbf\x07\0\0\0\0\0\0\
--\x18\x60\0\0\0\0\0\0\0\0\0\0\x70\x0d\0\0\x61\x01\0\0\0\0\0\0\xd5\x01\x02\0\0\0\
--\0\0\xbf\x19\0\0\0\0\0\0\x85\0\0\0\xa8\0\0\0\xc5\x07\x7c\xff\0\0\0\0\x63\x7a\
--\x80\xff\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\xa8\x0d\0\0\x18\x61\0\0\0\0\0\0\0\
--\0\0\0\x18\x0e\0\0\x7b\x01\0\0\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\xb0\x0d\0\0\
--\x18\x61\0\0\0\0\0\0\0\0\0\0\x10\x0e\0\0\x7b\x01\0\0\0\0\0\0\x18\x60\0\0\0\0\0\
--\0\0\0\0\0\xd0\x0d\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x58\x0e\0\0\x7b\x01\0\0\0\0\
--\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\xd8\x0d\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x68\
--\x0e\0\0\x7b\x01\0\0\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\x08\x0e\0\0\x18\x61\0\
--\0\0\0\0\0\0\0\0\0\x88\x0e\0\0\x7b\x01\0\0\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\
--\0\0\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x80\x0e\0\0\x7b\x01\0\0\0\0\0\0\x61\x60\
--\x08\0\0\0\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x20\x0e\0\0\x63\x01\0\0\0\0\0\0\x61\
--\x60\x0c\0\0\0\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x24\x0e\0\0\x63\x01\0\0\0\0\0\0\
--\x79\x60\x10\0\0\0\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x28\x0e\0\0\x7b\x01\0\0\0\0\
--\0\0\x61\xa0\x78\xff\0\0\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x50\x0e\0\0\x63\x01\0\
--\0\0\0\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x98\x0e\0\0\xb7\x02\0\0\x16\0\0\0\xb7\
--\x03\0\0\x0c\0\0\0\xb7\x04\0\0\0\0\0\0\x85\0\0\0\xa7\0\0\0\xbf\x07\0\0\0\0\0\0\
--\xc5\x07\x45\xff\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\x08\x0e\0\0\x63\x70\x6c\0\
--\0\0\0\0\x77\x07\0\0\x20\0\0\0\x63\x70\x70\0\0\0\0\0\x18\x68\0\0\0\0\0\0\0\0\0\
--\0\xb8\x0d\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\xb0\x0e\0\0\xb7\x02\0\0\x1f\0\0\0\
--\xb7\x03\0\0\x0c\0\0\0\xb7\x04\0\0\0\0\0\0\x85\0\0\0\xa7\0\0\0\xbf\x07\0\0\0\0\
--\0\0\xc5\x07\x36\xff\0\0\0\0\x75\x07\x03\0\0\0\0\0\x62\x08\x04\0\0\0\0\0\x6a\
--\x08\x02\0\0\0\0\0\x05\0\x0a\0\0\0\0\0\x63\x78\x04\0\0\0\0\0\xbf\x79\0\0\0\0\0\
--\0\x77\x09\0\0\x20\0\0\0\x55\x09\x02\0\0\0\0\0\x6a\x08\x02\0\0\0\0\0\x05\0\x04\
--\0\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\0\x01\0\0\x63\x90\0\0\0\0\0\0\x6a\x08\
--\x02\0\x40\0\0\0\xb7\x01\0\0\x05\0\0\0\x18\x62\0\0\0\0\0\0\0\0\0\0\x08\x0e\0\0\
--\xb7\x03\0\0\x8c\0\0\0\x85\0\0\0\xa6\0\0\0\xbf\x07\0\0\0\0\0\0\x18\x60\0\0\0\0\
--\0\0\0\0\0\0\0\x01\0\0\x61\x01\0\0\0\0\0\0\xd5\x01\x02\0\0\0\0\0\xbf\x19\0\0\0\
--\0\0\0\x85\0\0\0\xa8\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\x78\x0e\0\0\x61\x01\0\0\
--\0\0\0\0\xd5\x01\x02\0\0\0\0\0\xbf\x19\0\0\0\0\0\0\x85\0\0\0\xa8\0\0\0\xc5\x07\
--\x15\xff\0\0\0\0\x63\x7a\x84\xff\0\0\0\0\x61\xa1\x78\xff\0\0\0\0\xd5\x01\x02\0\
--\0\0\0\0\xbf\x19\0\0\0\0\0\0\x85\0\0\0\xa8\0\0\0\x61\xa0\x80\xff\0\0\0\0\x63\
--\x06\x28\0\0\0\0\0\x61\xa0\x84\xff\0\0\0\0\x63\x06\x2c\0\0\0\0\0\x18\x61\0\0\0\
--\0\0\0\0\0\0\0\0\0\0\0\x61\x10\0\0\0\0\0\0\x63\x06\x18\0\0\0\0\0\xb7\0\0\0\0\0\
--\0\0\x95\0\0\0\0\0\0\0";
-+\x01\x01\0\0\0\0\0\x85\0\0\0\xa8\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x61\
-+\x01\0\0\0\0\0\0\xd5\x01\x02\0\0\0\0\0\xbf\x19\0\0\0\0\0\0\x85\0\0\0\xa8\0\0\0\
-+\xbf\x70\0\0\0\0\0\0\x95\0\0\0\0\0\0\0\x61\x60\x08\0\0\0\0\0\x18\x61\0\0\0\0\0\
-+\0\0\0\0\0\xa8\x09\0\0\x63\x01\0\0\0\0\0\0\x61\x60\x0c\0\0\0\0\0\x18\x61\0\0\0\
-+\0\0\0\0\0\0\0\xa4\x09\0\0\x63\x01\0\0\0\0\0\0\x79\x60\x10\0\0\0\0\0\x18\x61\0\
-+\0\0\0\0\0\0\0\0\0\x98\x09\0\0\x7b\x01\0\0\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\
-+\0\x05\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x90\x09\0\0\x7b\x01\0\0\0\0\0\0\xb7\x01\
-+\0\0\x12\0\0\0\x18\x62\0\0\0\0\0\0\0\0\0\0\x90\x09\0\0\xb7\x03\0\0\x1c\0\0\0\
-+\x85\0\0\0\xa6\0\0\0\xbf\x07\0\0\0\0\0\0\xc5\x07\xd7\xff\0\0\0\0\x63\x7a\x78\
-+\xff\0\0\0\0\x61\x60\x1c\0\0\0\0\0\x15\0\x03\0\0\0\0\0\x18\x61\0\0\0\0\0\0\0\0\
-+\0\0\xbc\x09\0\0\x63\x01\0\0\0\0\0\0\xb7\x01\0\0\0\0\0\0\x18\x62\0\0\0\0\0\0\0\
-+\0\0\0\xb0\x09\0\0\xb7\x03\0\0\x48\0\0\0\x85\0\0\0\xa6\0\0\0\xbf\x07\0\0\0\0\0\
-+\0\xc5\x07\xca\xff\0\0\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x63\x71\0\0\0\0\
-+\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\xf8\x09\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x90\
-+\x0a\0\0\x7b\x01\0\0\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\0\x0a\0\0\x18\x61\0\0\
-+\0\0\0\0\0\0\0\0\x88\x0a\0\0\x7b\x01\0\0\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\
-+\x38\x0a\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\xd0\x0a\0\0\x7b\x01\0\0\0\0\0\0\x18\
-+\x60\0\0\0\0\0\0\0\0\0\0\x40\x0a\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\xe0\x0a\0\0\
-+\x7b\x01\0\0\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\x70\x0a\0\0\x18\x61\0\0\0\0\0\
-+\0\0\0\0\0\0\x0b\0\0\x7b\x01\0\0\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\0\0\0\0\
-+\x18\x61\0\0\0\0\0\0\0\0\0\0\xf8\x0a\0\0\x7b\x01\0\0\0\0\0\0\x61\x60\x08\0\0\0\
-+\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x98\x0a\0\0\x63\x01\0\0\0\0\0\0\x61\x60\x0c\0\
-+\0\0\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x9c\x0a\0\0\x63\x01\0\0\0\0\0\0\x79\x60\
-+\x10\0\0\0\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\xa0\x0a\0\0\x7b\x01\0\0\0\0\0\0\x61\
-+\xa0\x78\xff\0\0\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\xc8\x0a\0\0\x63\x01\0\0\0\0\0\
-+\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x10\x0b\0\0\xb7\x02\0\0\x14\0\0\0\xb7\x03\0\0\
-+\x0c\0\0\0\xb7\x04\0\0\0\0\0\0\x85\0\0\0\xa7\0\0\0\xbf\x07\0\0\0\0\0\0\xc5\x07\
-+\x91\xff\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\x80\x0a\0\0\x63\x70\x6c\0\0\0\0\0\
-+\x77\x07\0\0\x20\0\0\0\x63\x70\x70\0\0\0\0\0\xb7\x01\0\0\x05\0\0\0\x18\x62\0\0\
-+\0\0\0\0\0\0\0\0\x80\x0a\0\0\xb7\x03\0\0\x8c\0\0\0\x85\0\0\0\xa6\0\0\0\xbf\x07\
-+\0\0\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\xf0\x0a\0\0\x61\x01\0\0\0\0\0\0\xd5\
-+\x01\x02\0\0\0\0\0\xbf\x19\0\0\0\0\0\0\x85\0\0\0\xa8\0\0\0\xc5\x07\x7f\xff\0\0\
-+\0\0\x63\x7a\x80\xff\0\0\0\0\x61\xa1\x78\xff\0\0\0\0\xd5\x01\x02\0\0\0\0\0\xbf\
-+\x19\0\0\0\0\0\0\x85\0\0\0\xa8\0\0\0\x61\xa0\x80\xff\0\0\0\0\x63\x06\x28\0\0\0\
-+\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x61\x10\0\0\0\0\0\0\x63\x06\x18\0\0\0\
-+\0\0\xb7\0\0\0\0\0\0\0\x95\0\0\0\0\0\0\0";
- 	err = bpf_load_and_run(&opts);
- 	if (err < 0)
- 		return err;
-diff --git a/drivers/hid/bpf/hid_bpf_dispatch.c b/drivers/hid/bpf/hid_bpf_dispatch.c
-index 8d29fd361ab9..26117b4ec016 100644
---- a/drivers/hid/bpf/hid_bpf_dispatch.c
-+++ b/drivers/hid/bpf/hid_bpf_dispatch.c
-@@ -173,7 +173,6 @@ hid_bpf_get_data(struct hid_bpf_ctx *ctx, unsigned int offset, const size_t rdwr
-  * can use.
-  */
- BTF_SET8_START(hid_bpf_kfunc_ids)
--BTF_ID_FLAGS(func, call_hid_bpf_prog_put_deferred)
- BTF_ID_FLAGS(func, hid_bpf_get_data, KF_RET_NULL)
- BTF_SET8_END(hid_bpf_kfunc_ids)
- 
-diff --git a/drivers/hid/bpf/hid_bpf_dispatch.h b/drivers/hid/bpf/hid_bpf_dispatch.h
-index 2eeab1f746dd..63dfc8605cd2 100644
---- a/drivers/hid/bpf/hid_bpf_dispatch.h
-+++ b/drivers/hid/bpf/hid_bpf_dispatch.h
-@@ -22,7 +22,4 @@ int hid_bpf_reconnect(struct hid_device *hdev);
- 
- struct bpf_prog;
- 
--/* HID-BPF internal kfuncs API */
--void call_hid_bpf_prog_put_deferred(struct work_struct *work);
--
- #endif
-diff --git a/drivers/hid/bpf/hid_bpf_jmp_table.c b/drivers/hid/bpf/hid_bpf_jmp_table.c
-index b7eb5c5e435f..eca34b7372f9 100644
---- a/drivers/hid/bpf/hid_bpf_jmp_table.c
-+++ b/drivers/hid/bpf/hid_bpf_jmp_table.c
-@@ -499,11 +499,6 @@ void __hid_bpf_destroy_device(struct hid_device *hdev)
- 	schedule_work(&release_work);
- }
- 
--void call_hid_bpf_prog_put_deferred(struct work_struct *work)
--{
--	/* kept around for patch readability, to be dropped in the next commmit */
--}
--
- #define HID_BPF_PROGS_COUNT 1
- 
- static struct bpf_link *links[HID_BPF_PROGS_COUNT];
--- 
-2.38.1
+The current test to add multiple kprobes within a function also falls=20
+under the purview of multiple_kprobes.tc, but it can be split into a=20
+separate multiple_kprobes_func.tc if you think that will be better.
 
+>=20
+>=20
+> BTW, after we introduce the fprobe event (https://lore.kernel.org/linux-t=
+race-kernel/166792255429.919356.14116090269057513181.stgit@devnote3/) that =
+test case may be
+> update to check fprobe events.
+
+Indeed, I suppose that can be a separate test.
+
+
+Thanks,
+Naveen
+
+>=20
+> Thank you,
+>=20
+>> >=20
+>> > Signed-off-by: Akanksha J N <akanksha@linux.ibm.com>
+>> > ---
+>> >  .../selftests/ftrace/test.d/kprobe/multiple_kprobes.tc        | 4 ++++
+>> >  1 file changed, 4 insertions(+)
+>>=20
+>> Thanks for adding this test!
+>>=20
+>> >=20
+>> > diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/multiple_kpr=
+obes.tc b/tools/testing/selftests/ftrace/test.d/kprobe/multiple_kprobes.tc
+>> > index be754f5bcf79..f005c2542baa 100644
+>> > --- a/tools/testing/selftests/ftrace/test.d/kprobe/multiple_kprobes.tc
+>> > +++ b/tools/testing/selftests/ftrace/test.d/kprobe/multiple_kprobes.tc
+>> > @@ -25,6 +25,10 @@ if [ $L -ne 256 ]; then
+>> >    exit_fail
+>> >  fi
+>> >=20
+>> > +for i in `seq 0 255`; do
+>> > +  echo p $FUNCTION_FORK+${i} >> kprobe_events || true
+>> > +done
+>> > +
+>> >  cat kprobe_events >> $testlog
+>> >=20
+>> >  echo 1 > events/kprobes/enable
+>>=20
+>> Thinking about this more, I wonder if we should add an explicit fork=20
+>> after enabling the events, similar to kprobe_args.tc:
+>> 	( echo "forked" )
+>>=20
+>> That will ensure we hit all the probes we added. With that change:
+>> Acked-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+>>=20
+>>=20
+>> - Naveen
+>=20
+>=20
+> --=20
+> Masami Hiramatsu (Google) <mhiramat@kernel.org>
+>=20
