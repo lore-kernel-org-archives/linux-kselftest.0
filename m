@@ -2,201 +2,197 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9A43C46467
-	for <linux-kselftest@archiver.kernel.org>; Mon, 16 Jan 2023 08:32:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9FDDC54EBE
+	for <linux-kselftest@archiver.kernel.org>; Mon, 16 Jan 2023 16:07:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231954AbjAPIcY (ORCPT
+        id S232487AbjAPQHf (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 16 Jan 2023 03:32:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49936 "EHLO
+        Mon, 16 Jan 2023 11:07:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232078AbjAPIcX (ORCPT
+        with ESMTP id S232244AbjAPQHB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 Jan 2023 03:32:23 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B1144B9;
-        Mon, 16 Jan 2023 00:32:22 -0800 (PST)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30G5phDE024176;
-        Mon, 16 Jan 2023 08:32:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : message-id : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=cNQBmWTp5okDMaJ+iwK67PR7Z6647nKho7OPtuocnEg=;
- b=rmQkgq4FopF4FF9X9XY43KAufTXiSsg6BcS4/VBr/h/xTFJjfI4QjIJ6f2M34zpWok/P
- TCdz5o1B3EpqHq10c5z9LG7JWjk2I0d7YDNsk21zS1+C0er0f6V4wm4nQ/aJsoMBzILn
- 43kHBSzzcosoiR/l9wW9vUq+DXU5CNu6y1zCy8H0+4F0dKwTJC8s9UlZ+k0WkCuyDrSx
- CHd00JZ6YWl+LCmm04jCnJtXsOYA/DDWe23kiKtcxMYCmzMAHYC3+16LgAwzf7Bbjvm8
- j+kodc26zEHDYqRQPYAMqIB3xinkxhEFvbLj4nscIy9OA/c94F/kSZTnxQJO7b5wa4ev KA== 
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n4fqpt8hd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 16 Jan 2023 08:32:11 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30FJjHvE007302;
-        Mon, 16 Jan 2023 08:32:08 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3n3m16hhwj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 16 Jan 2023 08:32:08 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30G8W6Ml30278002
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 16 Jan 2023 08:32:06 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 174A520043;
-        Mon, 16 Jan 2023 08:32:06 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BD57520040;
-        Mon, 16 Jan 2023 08:32:05 +0000 (GMT)
-Received: from localhost (unknown [9.124.31.239])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 16 Jan 2023 08:32:05 +0000 (GMT)
-Date:   Mon, 16 Jan 2023 14:02:04 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [PATCH] selftests/ftrace: Extend multiple_kprobes.tc to add
- multiple consecutive probes in a function
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Akanksha J N <akanksha@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, rostedt@goodmis.org,
-        shuah@kernel.org
-References: <20230112095600.37665-1-akanksha@linux.ibm.com>
-        <1673529279.3c5f8oes3z.naveen@linux.ibm.com>
-        <20230113005153.c6ca2f75b9d12627eb63308a@kernel.org>
-        <1673601511.tq30r5phea.naveen@linux.ibm.com>
-        <20230114002126.a37640f815b74e9e78259a9f@kernel.org>
-In-Reply-To: <20230114002126.a37640f815b74e9e78259a9f@kernel.org>
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1673856229.a7tekgas75.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: JnwrrQiQIEf4CwyE70Xus10rYvdQdGN8
-X-Proofpoint-GUID: JnwrrQiQIEf4CwyE70Xus10rYvdQdGN8
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 16 Jan 2023 11:07:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF9EE23DB8;
+        Mon, 16 Jan 2023 08:05:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 45456B81065;
+        Mon, 16 Jan 2023 16:05:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DC8EC433F0;
+        Mon, 16 Jan 2023 16:05:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673885113;
+        bh=Q3wktHXCI86PXr4+9EjWx1HljepbsTWh5wqI8kTDtCk=;
+        h=From:Subject:Date:To:Cc:From;
+        b=jvKaj8xJ34Z7shux/o6XMVFvIIV5o5M2TBaYFj2UUEiXq2DCFNPbUYzIt38nlPuWt
+         MWAH9CFGclQ6XbIZu4aB4zuyCi9czfDeN+U6IOABCp7dwAf9/spRmGFX+Wd4Xtq+yU
+         ff7mMtyWXjPot7sniFN3pS8+drd/NrFVPJLYWCEuXsUOf2lsejWlgx1syC1Ww6aXMY
+         Owx5CsOh0aOcnBh+nyIkB2Un5Tx7Ed5oDwOVOkXmusgG/CyxBB4/Ql54tICIk6uU4V
+         TU7yV8M61W/Ip4xV8IW2W8LM73Ecvj/3ROz25kUOeWCvpoKAJWPFeRA1qirnrWldgR
+         U/rKLJfhortsA==
+From:   Mark Brown <broonie@kernel.org>
+Subject: [PATCH v4 00/21] arm64/sme: Support SME 2 and SME 2.1
+Date:   Mon, 16 Jan 2023 16:04:36 +0000
+Message-Id: <20221208-arm64-sme2-v4-0-f2fa0aef982f@kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-16_06,2023-01-13_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- adultscore=0 lowpriorityscore=0 impostorscore=0 phishscore=0 spamscore=0
- suspectscore=0 malwarescore=0 clxscore=1015 mlxlogscore=958
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301160062
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJV1xWMC/0WOTQ6CMBCFr2K6tkinCMSV9zAuCg50ou2YKTEaw
+ t1t3fh2X17ez6oSCmFSp92qBF+UiGOGZr9To3dxRk23zApqAAN1r52EttEpIGjb2hE6gM5ZUDk
+ wuIR6EBdHXyIsNFM8BJcWlOI/BSd6/8Yu18yTcNCLF3T/iSwwxxraqjfWNr02uZE5Ep7vKBEfF
+ ctcyjylheVTjm/b9gUC7wQuyAAAAA==
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Oleg Nesterov <oleg@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Alan Hayward <alan.hayward@arm.com>,
+        Luis Machado <luis.machado@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.12-dev-77e06
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6123; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=Q3wktHXCI86PXr4+9EjWx1HljepbsTWh5wqI8kTDtCk=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjxXWh0+2OzptKAnHSt3axZTyIsKBsrLaFSjuZUWB9
+ 2sxec32JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY8V1oQAKCRAk1otyXVSH0MGUB/
+ 4/lmDcnV/trsUSXY+Sbr6erD7a1ZpFEvvHjM6KBNDvuOaA/fnKAKd9LJzw5+xd+AMAkOs4RTdZ3b3e
+ FILKaXD7qIFL/hdPaWnaWckzxURpDk2jU2b8zik+jo6MFJuOdhtR/ewGeq2H8jmlhdIfX8FVF5EsQ8
+ wmq0x4d3UEqG4Ii9WCzI437P7spMLQ/K1dTFoL9Orfua4k5fxU9BggFFObOlwZFYNjKwY8abvaiJjg
+ DeALM2vMAKXrRXDTzvYA9BHmev5kPGKgRNBbe3hfhluIjC0Omz3eXpkq+tkdG1GlgPFWPV54Ghg7IA
+ NKiB+31RkzrIyewmTGq0MiLypGDwq6
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Masami Hiramatsu wrote:
-> Hi Naveen,
->=20
-> On Fri, 13 Jan 2023 14:59:51 +0530
-> "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
->=20
->> Masami Hiramatsu wrote:
->> > On Thu, 12 Jan 2023 18:51:14 +0530
->> > "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
->> >=20
->> >> Akanksha J N wrote:
->> >> > Commit 97f88a3d723162 ("powerpc/kprobes: Fix null pointer reference=
- in
->> >> > arch_prepare_kprobe()") fixed a recent kernel oops that was caused =
-as
->> >> > ftrace-based kprobe does not generate kprobe::ainsn::insn and it ge=
-ts
->> >> > set to NULL.
->> >> > Extend multiple kprobes test to add kprobes on first 256 bytes with=
-in a
->> >> > function, to be able to test potential issues with kprobes on
->> >> > successive instructions.
->> >=20
->> > What is the purpose of that test? If you intended to add a kprobe even=
-ts
->> > with some offset so that it becomes ftrace-based kprobe, it should be
->> > a different test case, because
->>=20
->> This is a follow up to:
->> http://lore.kernel.org/1664530538.ke6dp49pwh.naveen@linux.ibm.com
->>=20
->> The intent is to add consecutive probes covering KPROBES_ON_FTRACE,=20
->> vanilla trap-based kprobes as well as optprobes to ensure all of those=20
->> and their interactions are good.
->=20
-> Hmm, that should be implemented for each architecture with specific
-> knowledge instead of random offset, so that we can ensure the kprobe
-> is on ftrace/optimized or using trap. Also, it should check the
-> debugfs/kprobes/list file.
+Arm have recently released versions 2 and 2.1 of the SME extension.
+Among the features introduced by SME 2 is some new architectural state,
+the ZT0 register. This series adds support for this and all the other
+features of the new SME versions.
 
-...
+Since the architecture has been designed with the possibility of adding
+further ZTn registers in mind the interfaces added for ZT0 are done with
+this possibility in mind. As ZT0 is a simple fixed size register these
+interfaces are all fairly simple, the main complication is that ZT0 is
+only accessible when PSTATE.ZA is enabled. The memory allocation that we
+already do for PSTATE.ZA is extended to include space for ZT0.
 
->=20
->>=20
->> >=20
->> >  - This is a test case for checking multiple (at least 256) kprobe eve=
-nts
->> >   can be defined and enabled.
->> >=20
->> >  - If you want to check the ftrace-based kprobe, it should be near the
->> >    function entry, maybe within 16 bytes or so.
->> >=20
->> >  - Also, you don't need to enable it at once (and should not for this =
-case).
->> >=20
->> >> > The '|| true' is added with the echo statement to ignore errors tha=
-t are
->> >> > caused by trying to add kprobes to non probeable lines and continue=
- with
->> >> > the test.
->> >=20
->> > Can you add another test case for that? (and send it to the MLs which =
-Cc'd
->> > to this mail)
->> > e.g.=20
->> >=20
->> >    for i in `seq 0 16`; do
->> >      echo p:testprobe $FUNCTION_FORK+${i} >> kprobe_events || continue
->> >      echo 1 > events/kprobes/testprobe/enable
->> >      ( echo "forked" )
->> >      echo 0 > events/kprobes/testprobe/enable
->> >      echo > kprobe_events
->> >    done
->>=20
->> The current test to add multiple kprobes within a function also falls=20
->> under the purview of multiple_kprobes.tc, but it can be split into a=20
->> separate multiple_kprobes_func.tc if you think that will be better.
->>=20
->=20
-> Yes, please make it separate, this test case is for checking whether
-> the ftrace can define/enable/disable multiple kprobe events. Not for
-> checking kprobe with different types, nor checking interactions among
-> different types of kprobes.
->=20
-> (BTW, if you want to test optprobe on x86, you can not put the probes
->  within the jump instruction (+5 bytes). It will unoptimize existing
->  optimized kprobe in that case)
+Due to textual collisions especially around the addition of hwcaps this
+is based on the recently merged series "arm64: Support for 2022 data
+processing instructions" but there is no meaningful interaction.  There
+will be collisions with "arm64/signal: Signal handling cleanups" if that
+is applied but again not super substantial.
 
-Ok, I can see why we won't be able to optimize any of the probes on x86=20
-with this approach. But, we should be able to do so on powerpc and arm,=20
-the only other architectures supporting OPTPROBES at this time. For x86,=20
-we may have to extend the test to check kprobes/list.
+v4:
+ - Rebase onto v6.2-rc3.
+ - Add SME2 value to ID_AA64PFR1_EL1.SME and move cpufeature to key off
+   it.
+ - Fix cut'n'paste errors and missing capability in hwcap table.
+ - Fix bitrot in za-test program.
+ - Typo and cut'n'paste fixes.
+v3:
+ - Rebase onto merged series for the 2022 architectur extensions.
+ - Clarifications and typo fixes in the ABI documentation.
+v2:
+ - Add missing initialisation of user->zt in signal context parsing.
+ - Change the magic for ZT signal frames to 0x5a544e01 (ZTN0).
 
-Crucially, I think trying to place a probe at each byte can still=20
-exercize interactions across KPROBES_ON_FTRACE and normal kprobes, so=20
-this test is still a good start. In addition, we get to ensure that=20
-kprobes infrastructure is rejecting placing probes at non-instruction=20
-boundaries.
+To: Catalin Marinas <catalin.marinas@arm.com>
+To: Will Deacon <will@kernel.org>
+To: Oleg Nesterov <oleg@redhat.com>
+To: Marc Zyngier <maz@kernel.org>
+To: James Morse <james.morse@arm.com>
+To: Alexandru Elisei <alexandru.elisei@arm.com>
+To: Suzuki K Poulose <suzuki.poulose@arm.com>
+To: Oliver Upton <oliver.upton@linux.dev>
+Cc: Alan Hayward <alan.hayward@arm.com>
+Cc: Luis Machado <luis.machado@arm.com>,
+Cc: Szabolcs Nagy <szabolcs.nagy@arm.com>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+Cc: kvmarm@lists.linux.dev
+To: Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org
 
->=20
-> And do you really need to run "multiple" kprobes at once?
-> I think what you need is 'kprobe_opt_types.tc'.
+---
+Mark Brown (21):
+      arm64/sme: Rename za_state to sme_state
+      arm64: Document boot requirements for SME 2
+      arm64/sysreg: Update system registers for SME 2 and 2.1
+      arm64/sme: Document SME 2 and SME 2.1 ABI
+      arm64/esr: Document ISS for ZT0 being disabled
+      arm64/sme: Manually encode ZT0 load and store instructions
+      arm64/sme: Enable host kernel to access ZT0
+      arm64/sme: Add basic enumeration for SME2
+      arm64/sme: Provide storage for ZT0
+      arm64/sme: Implement context switching for ZT0
+      arm64/sme: Implement signal handling for ZT
+      arm64/sme: Implement ZT0 ptrace support
+      arm64/sme: Add hwcaps for SME 2 and 2.1 features
+      kselftest/arm64: Add a stress test program for ZT0
+      kselftest/arm64: Cover ZT in the FP stress test
+      kselftest/arm64: Enumerate SME2 in the signal test utility code
+      kselftest/arm64: Teach the generic signal context validation about ZT
+      kselftest/arm64: Add test coverage for ZT register signal frames
+      kselftest/arm64: Add SME2 coverage to syscall-abi
+      kselftest/arm64: Add coverage of the ZT ptrace regset
+      kselftest/arm64: Add coverage of SME 2 and 2.1 hwcaps
 
-Yes, enabling those probes is a good stress test to ensure we are only=20
-accepting valid probe locations.
+ Documentation/arm64/booting.rst                    |  10 +
+ Documentation/arm64/elf_hwcaps.rst                 |  18 +
+ Documentation/arm64/sme.rst                        |  52 ++-
+ arch/arm64/include/asm/cpufeature.h                |   6 +
+ arch/arm64/include/asm/esr.h                       |   1 +
+ arch/arm64/include/asm/fpsimd.h                    |  30 +-
+ arch/arm64/include/asm/fpsimdmacros.h              |  22 ++
+ arch/arm64/include/asm/hwcap.h                     |   6 +
+ arch/arm64/include/asm/processor.h                 |   2 +-
+ arch/arm64/include/uapi/asm/hwcap.h                |   6 +
+ arch/arm64/include/uapi/asm/sigcontext.h           |  19 ++
+ arch/arm64/kernel/cpufeature.c                     |  28 ++
+ arch/arm64/kernel/cpuinfo.c                        |   6 +
+ arch/arm64/kernel/entry-fpsimd.S                   |  30 +-
+ arch/arm64/kernel/fpsimd.c                         |  47 ++-
+ arch/arm64/kernel/hyp-stub.S                       |   6 +
+ arch/arm64/kernel/idreg-override.c                 |   1 +
+ arch/arm64/kernel/process.c                        |  21 +-
+ arch/arm64/kernel/ptrace.c                         |  60 +++-
+ arch/arm64/kernel/signal.c                         | 113 ++++++-
+ arch/arm64/kvm/fpsimd.c                            |   2 +-
+ arch/arm64/tools/cpucaps                           |   1 +
+ arch/arm64/tools/sysreg                            |  27 +-
+ include/uapi/linux/elf.h                           |   1 +
+ tools/testing/selftests/arm64/abi/hwcap.c          | 115 +++++++
+ .../testing/selftests/arm64/abi/syscall-abi-asm.S  |  43 ++-
+ tools/testing/selftests/arm64/abi/syscall-abi.c    |  40 ++-
+ tools/testing/selftests/arm64/fp/.gitignore        |   2 +
+ tools/testing/selftests/arm64/fp/Makefile          |   5 +
+ tools/testing/selftests/arm64/fp/fp-stress.c       |  29 +-
+ tools/testing/selftests/arm64/fp/sme-inst.h        |  20 ++
+ tools/testing/selftests/arm64/fp/zt-ptrace.c       | 365 +++++++++++++++++++++
+ tools/testing/selftests/arm64/fp/zt-test.S         | 317 ++++++++++++++++++
+ tools/testing/selftests/arm64/signal/.gitignore    |   1 +
+ .../testing/selftests/arm64/signal/test_signals.h  |   2 +
+ .../selftests/arm64/signal/test_signals_utils.c    |   3 +
+ .../selftests/arm64/signal/testcases/testcases.c   |  36 ++
+ .../selftests/arm64/signal/testcases/testcases.h   |   1 +
+ .../selftests/arm64/signal/testcases/zt_no_regs.c  |  51 +++
+ .../selftests/arm64/signal/testcases/zt_regs.c     |  85 +++++
+ 40 files changed, 1558 insertions(+), 72 deletions(-)
+---
+base-commit: b7bfaa761d760e72a969d116517eaa12e404c262
+change-id: 20221208-arm64-sme2-363c27227a32
 
-multiple_kprobe_types.tc ? :)
-
-
-Thanks,
-Naveen
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
 
