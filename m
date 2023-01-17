@@ -2,169 +2,154 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FE33C3DA71
-	for <linux-kselftest@archiver.kernel.org>; Tue, 17 Jan 2023 22:11:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 21DF1C6379F
+	for <linux-kselftest@archiver.kernel.org>; Tue, 17 Jan 2023 22:11:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbjAQWLL (ORCPT
+        id S229897AbjAQWLt (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 17 Jan 2023 17:11:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48784 "EHLO
+        Tue, 17 Jan 2023 17:11:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229931AbjAQWJR (ORCPT
+        with ESMTP id S230263AbjAQWKb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Jan 2023 17:09:17 -0500
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B12313E090;
-        Tue, 17 Jan 2023 12:14:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1673986459;
-        bh=OYhFAr+sZ9bMx5kLoUnKqAkNLmvDquv/DxwJyciMtw4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=BWNfMQ5Wf2HQotqzGQWPRw9BiABduwCxGuKUy1T634WWxY7PLpEexdAPQ9EEZ5hY2
-         Cv0szpxLSASegmjJ/5yZs8bJlzGWY1r/yanmjhWmti0HhPcLIp6hbG8yADugZnhLlR
-         /A+5z3m2LYAhX94NqlNO2GHL6Ynw5HBgxzghuF+Ky8LkGZCfXLhW8VjN9t7g00wQOt
-         pPsyIDO9YV+r2awOowjL5/JObrKh8vEmh7UDSq2H2HMfOekGKZLpfP5RQbCe0/aiQp
-         uUf73AQS6P7lU0XyaedA+qkZil3PvkyHsJ4XZTSHDxnGDxMQ0i3QW0zmaVVWyLOuwN
-         CxhbNIlzdGnJg==
-Received: from [172.16.0.101] (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4NxKqH2CmGzh8w;
-        Tue, 17 Jan 2023 15:14:19 -0500 (EST)
-Message-ID: <378731e7-eec5-44ca-eded-3277792b061e@efficios.com>
-Date:   Tue, 17 Jan 2023 15:14:52 -0500
+        Tue, 17 Jan 2023 17:10:31 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CA2E1CF71
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Jan 2023 13:56:11 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id s67so23072283pgs.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Jan 2023 13:56:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=0cr0RPJmvb7n5x8XTwTIrboLTYQTJE656e9XjHwFqpY=;
+        b=G0rIt6F9KwPDQsFFiIGt4cbVtyXK3cjH3I/6w6TjsnFWU6bimnOonwGB/F3Ziyd4Jo
+         CyhhE546Qe7O1iA7p9B8kKZlu/AWuV7CnU32Yw4k40hOcYDvqJhYBQ+nxz8Qc/cZkJGm
+         C/JUyEfenjifeNDck9wpYBNhHfMbdFyMCvpcQi/taQef9Wb/G0r6Ev7Qb501lU08Z/T7
+         qiIcBaK3utVFfoZ19giKv7T5AzWW/hlMaiCleM8YGcEfHsMkrdnFPcQG43iDhM0+UgE/
+         +9ZnDQfh0eS25IiLuTdw1jR7ibasSX3wOpYn98VNTDn1wPE5WB1S0nln6hRKzAUjTaBm
+         mPSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0cr0RPJmvb7n5x8XTwTIrboLTYQTJE656e9XjHwFqpY=;
+        b=6KV8iBVVTAj+zeB0IZOu2FgBFyUaIhTK45Ib70vIjkxbDCaQ6shMhk8n8EmFjI15LM
+         TQRvYjZUEhmvGY7V06gI8b8X84OV7ILasyHZKckQJ/dz7xNnOtxNKuQzAVXXXiiPZ6Dj
+         ZQDVWEM9yXncp9uYJuhc5hezOWs+GMS8tRcbDlb21nVC8VMEsFqPmYehMnuSH24UH7m0
+         VbXoVbvaO5nGDwSOcuW20foxZ3KMvqYq+ews65Pz0/vjmzNu4QV2F6u/UgExkm0eCWDU
+         szWcfRiKgm6e29dWVHGxNDOZ22tP4YjlFgoRZ/EoSd/Kn64Dn0fC9yPPnJaqHQJ3otdd
+         irdw==
+X-Gm-Message-State: AFqh2kodhMEqQwGao7YieeLJ8C5IoyY7eHLUgxJ4iOHq21xz3vRY7T+2
+        EBnCygOVPbDX0kQBcSKQEBnutE7P+5jQFKLsNkTcvvyXVBRw8zPn
+X-Google-Smtp-Source: AMrXdXsDEy6zVf3HJhsimvTc4pp0ccSZvbDKcY38Skmwmg09mr+MZc6sLygEborMQ2w+qXbe4225XBigheJwqGgL4So=
+X-Received: by 2002:a63:500e:0:b0:4d0:6ad7:e5a9 with SMTP id
+ e14-20020a63500e000000b004d06ad7e5a9mr17902pgb.464.1673992570808; Tue, 17 Jan
+ 2023 13:56:10 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [tip:sched/core 7/28] rseq.c:139:37: error: 'AT_RSEQ_ALIGN'
- undeclared; did you mean 'R_SH_ALIGN'?
-Content-Language: en-US
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Ingo Molnar <mingo@kernel.org>
-Cc:     kernel test robot <lkp@intel.com>, Shuah Khan <shuah@kernel.org>,
-        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        x86@kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        linux-kselftest@vger.kernel.org
-References: <202301170348.7WLKH1pl-lkp@intel.com>
- <bfa719c3-bd1f-5fc4-40ab-6dc6822b7628@efficios.com>
- <4449d8b5-b7a5-0f09-5b42-7b70ba00f8f6@linuxfoundation.org>
- <Y8ZlKOsN1wGk9tTc@gmail.com>
- <37625f31-6ac2-1f90-d864-e4644820bba3@efficios.com>
- <1eed08d1-c100-6ca5-63f3-73487970b08e@linuxfoundation.org>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <1eed08d1-c100-6ca5-63f3-73487970b08e@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20230115210535.4085-1-apantykhin@gmail.com>
+In-Reply-To: <20230115210535.4085-1-apantykhin@gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Tue, 17 Jan 2023 13:55:59 -0800
+Message-ID: <CAGS_qxpoGCXAK=q+unFoYKN0GtH8V9Ojmntz0YZrae8zBeX-qw@mail.gmail.com>
+Subject: Re: [PATCH] tools/testing/kunit/kunit.py: remove redundant double check
+To:     Alexander Pantyukhin <apantykhin@gmail.com>
+Cc:     brendan.higgins@linux.dev, davidgow@google.com,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, akpm@linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2023-01-17 14:11, Shuah Khan wrote:
-> On 1/17/23 10:44, Mathieu Desnoyers wrote:
->> On 2023-01-17 04:06, Ingo Molnar wrote:
->>>
->>> * Shuah Khan <skhan@linuxfoundation.org> wrote:
->>>
->>>> On 1/16/23 13:18, Mathieu Desnoyers wrote:
->>>>> On 2023-01-16 14:40, kernel test robot wrote:
->>>>>> tree:   
->>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 
->>>>>> sched/core
->>>>>> head:   79ba1e607d68178db7d3fe4f6a4aa38f06805e7b
->>>>>> commit: 03f5c0272d1b59343144e199becc911dae52c37e [7/28] 
->>>>>> selftests/rseq: Use ELF auxiliary vector for extensible rseq
->>>>>> compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
->>>>>> reproduce:
->>>>>>           # 
->>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=03f5c0272d1b59343144e199becc911dae52c37e
->>>>>>           git remote add tip 
->>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
->>>>>>           git fetch --no-tags tip sched/core
->>>>>>           git checkout 03f5c0272d1b59343144e199becc911dae52c37e
->>>>>>           make O=/tmp/kselftest headers
->>>>>>           make O=/tmp/kselftest -C tools/testing/selftests
->>>>>>
->>>>>> If you fix the issue, kindly add following tag where applicable
->>>>>> | Reported-by: kernel test robot <lkp@intel.com>
->>>>>
->>>>> In order to fix this, I need to change -I../../../../usr/include/ 
->>>>> for $(KHDR_INCLUDES) in tools/testing/selftests/rseq/Makefile
->>>>>
->>>>> I can find 25 odd uses of the same pattern in the kernel selftests. 
->>>>> Should I fix them all in one go ?
->>>>
->>>> kselftest build depends on headers installed in the root directory.
->>
->> By "root directory", do you mean kernel sources root directory or 
->> build output root directory ?
->>
->>>> The main makefile enforces this dependency.
->>
->> How ? I figure that tools/testing/selftests/lib.mk overrides 
->> KHDR_INCLUDES if it is not defined yet:
->>
->> ifeq ($(KHDR_INCLUDES),)
->> KHDR_INCLUDES := -isystem $(top_srcdir)/usr/include
->> endif
->>
->> and selftests makefiles include ../lib.mk.
->>
->> This KHDR_INCLUDES can be modified by O=... when built from the kernel 
->> top level, thus using tools/testing/selftests/Makefile:
->>
->> ifneq ($(KBUILD_OUTPUT),)
->> [...]
->>    KHDR_INCLUDES := -isystem ${abs_objtree}/usr/include
->> else
->> [...]
->>    KHDR_INCLUDES := -isystem ${abs_srctree}/usr/include
->> endif
->>
->> But it's up to the individual selftests to actually use 
->> $(KHDR_INCLUDES). In many cases, they hardcode 
->> -I../../../../usr/include/ which is bogus when the build root (O=...) 
->> differs from the source root.
->>
->>   If this test is being
->>>> built without installing headers by itself, I think the scripts that
->>>> build individual tests have to makes sure headers are installed first.
->>
->> The headers were previously built by "make O=/tmp/kselftest headers", 
->> as it should, it's just that the selftest makefile uses a hardcoded 
->> path that is relative to the source directory, and it appears that 
->> this pattern is repeated all across the selftests.
->>
-> 
-> selftests Makefile used to install headers and there has been a recent
-> change to have mani Makefile (root) to install it. As a result individual
-> test builds (running make in the test directory) requires header install
-> now.
-> 
-> I think the hard-coded includes are a problem and we have to fix them for
-> all cases i.e make O=, individual test builds.
-> 
-> If you are still up for it, please send patch.
+On Sun, Jan 15, 2023 at 1:05 PM Alexander Pantyukhin
+<apantykhin@gmail.com> wrote:
+>
+> The build_tests function contained the doulbe checking for not success
 
-Sure.
+very nit: if we're fixing the "doulbe" typo, can we also do
+  "the doulbe" => "double" (drop the "the")
 
-Now that I dig a bit more, we could try using "-nostdinc" to tell the 
-compiler not to search the standard system directories, but I've noticed 
-that a few selftests depend on userspace library header files found in 
-the build environment.
+> result. It is fixed in the current patch. Additional small
+> simplifications of code like useing ternary if were applied (avoid use
+> the same operation by calculation times differ in two places).
+>
+> Signed-off-by: Alexander Pantyukhin <apantykhin@gmail.com>
 
-I'm not sure how we should approach this.
+Reviewed-by: Daniel Latypov <dlatypov@google.com>
 
-Thoughts ?
+Thanks!
+I can't believe we never noticed the duplicate `if not success` blocks
+before now.
 
-Thanks,
+Some minor suggestions below if we're already going to send a v2 out for typos.
 
-Mathieu
+> ---
+>  tools/testing/kunit/kunit.py | 17 +++++------------
+>  1 file changed, 5 insertions(+), 12 deletions(-)
+>
+> diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+> index 43fbe96318fe..481c213818bd 100755
+> --- a/tools/testing/kunit/kunit.py
+> +++ b/tools/testing/kunit/kunit.py
+> @@ -77,10 +77,8 @@ def config_tests(linux: kunit_kernel.LinuxSourceTree,
+>         config_start = time.time()
+>         success = linux.build_reconfig(request.build_dir, request.make_options)
+>         config_end = time.time()
+> -       if not success:
+> -               return KunitResult(KunitStatus.CONFIG_FAILURE,
+> -                                  config_end - config_start)
+> -       return KunitResult(KunitStatus.SUCCESS,
+> +       status = KunitStatus.SUCCESS if success else KunitStatus.CONFIG_FAILURE
+> +       return KunitResult(status,
+>                            config_end - config_start)
 
-> 
-> thanks,
-> -- Shuah
-> 
+nit: perhaps we can shorten this to one line, i.e.
+  return KunitResult(status, config_end - config_start)
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+>
+>  def build_tests(linux: kunit_kernel.LinuxSourceTree,
+> @@ -92,13 +90,8 @@ def build_tests(linux: kunit_kernel.LinuxSourceTree,
+>                                      request.build_dir,
+>                                      request.make_options)
+>         build_end = time.time()
+> -       if not success:
+> -               return KunitResult(KunitStatus.BUILD_FAILURE,
+> -                                  build_end - build_start)
+> -       if not success:
+> -               return KunitResult(KunitStatus.BUILD_FAILURE,
+> -                                  build_end - build_start)
 
+Oh huh, I guess this duplication comes from commit 45ba7a893ad8
+("kunit: kunit_tool: Separate out config/build/exec/parse")
+
+@@ -64,78 +84,167 @@ def run_tests(linux: kunit_kernel.LinuxSourceTree,
+        build_end = time.time()
+        if not success:
+                return KunitResult(KunitStatus.BUILD_FAILURE, 'could
+not build kernel')
++       if not success:
++               return KunitResult(KunitStatus.BUILD_FAILURE,
++                                  'could not build kernel',
+
+> -       return KunitResult(KunitStatus.SUCCESS,
+> +       status = KunitStatus.SUCCESS if success else KunitStatus.BUILD_FAILURE
+> +       return KunitResult(status,
+>                            build_end - build_start)
+
+ditto here,
+  return KunitResult(status, build_end - build_start)
+
+>
+>  def config_and_build_tests(linux: kunit_kernel.LinuxSourceTree,
+> @@ -145,7 +138,7 @@ def exec_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest) -
+>                 tests = _list_tests(linux, request)
+>                 if request.run_isolated == 'test':
+>                         filter_globs = tests
+> -               if request.run_isolated == 'suite':
+> +               elif request.run_isolated == 'suite':
+
+This is better, thanks.
+
+Daniel
