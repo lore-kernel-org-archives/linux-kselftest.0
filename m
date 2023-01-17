@@ -2,55 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B81DC00A5A
-	for <linux-kselftest@archiver.kernel.org>; Tue, 17 Jan 2023 22:58:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C32FC38142
+	for <linux-kselftest@archiver.kernel.org>; Tue, 17 Jan 2023 23:46:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbjAQW6I (ORCPT
+        id S229529AbjAQXqE (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 17 Jan 2023 17:58:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51380 "EHLO
+        Tue, 17 Jan 2023 18:46:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbjAQW5f (ORCPT
+        with ESMTP id S229748AbjAQXpk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Jan 2023 17:57:35 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF334392D
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Jan 2023 13:39:20 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id v23so29999667plo.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Jan 2023 13:39:20 -0800 (PST)
+        Tue, 17 Jan 2023 18:45:40 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E6BB4DE25
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Jan 2023 14:51:47 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso467047pjt.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Jan 2023 14:51:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hK7iCT/l53H8F02D5jWSmMF8OJg0mxY4hx/WOh8zXHQ=;
-        b=WeQcFSECVbAwjsxpoYAUDsDmT3LUgopGEqpjAQgQI1CIGKL0Aw2fjnbTlwHci2civl
-         f0Siy/nZinODvzTENbBnDhXli4GylTAUxiBI/VyHa82CtAxQ7gbT8igBoTEd5n4SA6vd
-         2VmR04LOt/8/0NYujHvKX8syEaz8kQJwSMYFMDQ4BPmRuvr2ZR8L8XlXcspW1n3KQlUu
-         tRz/LGOuU4EBu4uvrr8LdIIMT/ZsgrMo7ES4mwROwnXgemFdIR485MboWclY3XLZIjkF
-         MLFlKgyXOPpEStKfnPzGyUG5OnUhbxreOj1rEaGhEez7JwmuyyrERsC/ULIjoYV8fPbr
-         gPjQ==
+        bh=4dz4YSfpv2T4m79ecLVLYg/MjvlF/TKDxbBLqvBzZUw=;
+        b=sv78Dh2Q372NesG6fn9eLYR446uOhxqMw95J9Xmhrg1XZKK9E0pPqMndt5u6CFNZt+
+         wEx7TGifDWupQ1scvBA7o1nLOawl/DGYwQ/EpX3Vefiab0uJOUJG0SfBWAjtwQfs3Oym
+         9VvMWaizc8KXBH/FiUMj//KhicHS00IpGpo/4RCopkl9BMcYDeUnlsqv3wUtQA4yMTfT
+         wNZSSV1OQs2TLn+dbNinHZ4ZSqgEbAuy5evzUe8XBMKF4hNltMJPeY/gN0UC0FHD254Q
+         kF4s5VHwl6vpnWc2LRSEN9qEOrgZj2zH8YjY9UAxxNUdPIMuzjRJlkcQ1Sm03Mpvlryj
+         fAmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hK7iCT/l53H8F02D5jWSmMF8OJg0mxY4hx/WOh8zXHQ=;
-        b=M23LyTE4t/IztIbUOiVSjht7xZngEAkfuFbt5SZ3DWXRSnY/kr24fUbzGvroaHW17Q
-         3r11fR0XZvh0iAbpbvPP/c6kUz5GDqKhIQyVYzo9MZOm/jxxpJqdbm4I3KInOI2ulZPE
-         pA3lXSe7BPotkUbeb8kjIolpdNfn3Sqyz71ZmytTMUF48UXcp+nLhw2wvONSutqApHsq
-         EGpvWxgLSHTr3GDJZi5EZuYwc9hshXmWy3kOdPaAhYeVe+77TCDzz0ZSESz0lJsGSL2F
-         FA9Pixddf5Xoa/9ogsyLC/rRujKSUJnxjTQTjChnrzRYrp1IXDipwwK8XPj1iUKZV3vP
-         tYEg==
-X-Gm-Message-State: AFqh2koe2UFRKwtR2EjE5pPuPX8/rzx1kiqurOMsh6S4JnBbM++lIC8b
-        7SMtxFgNROOyCd/KbLhBdH6xRQ==
-X-Google-Smtp-Source: AMrXdXtz4++aL4Ab6dxo4T1C7BIxWZ7VFFwnA/Q6q1uy8e+3S2IXuSo+S89TSMhkxkMLQu5/dcJ+3g==
-X-Received: by 2002:a17:902:e808:b0:189:b910:c6d2 with SMTP id u8-20020a170902e80800b00189b910c6d2mr2989344plg.1.1673991560262;
-        Tue, 17 Jan 2023 13:39:20 -0800 (PST)
+        bh=4dz4YSfpv2T4m79ecLVLYg/MjvlF/TKDxbBLqvBzZUw=;
+        b=ZXE9rYN7OVhOann0CDzx4E3K4P16Ghi6VojqPkCzqXPTCMgRvFEGVKy4advRskGgNv
+         lxlCbiMSmlGz54/iqVWo4vtHu9KBtR2yiXjJ61Vly4ibCtXSIqoRkwnHigYNVtwR/hoS
+         zXJ+/ZEbfBPDSOwud88Jx2T5gNh1dmhHebXeA+t30hmQMxgX1XhtlV4jE2slmjeckvkP
+         Ky2Klol64CvOUACnDp+GMO6o4wHlHGpFYxEtBTIgOoqd5jgvFRbl4m2u58c6dNBbixlq
+         nDoO8mAxjZKvs/bP6SUyLm+kyG7ldiMQ4X1+RrfGKOuuvY6aaRT0SAZBVNXrPMJzZ73j
+         ihnQ==
+X-Gm-Message-State: AFqh2kppw5OeCIsb8c+NptuQ4ZI2F9roMMwYa15UJ4Ixcnj5JQMTUd2i
+        IGS7/u0vG6jX/HWUsYsPumkCMg==
+X-Google-Smtp-Source: AMrXdXtw6UInomjD3WXWYJY8U/YyUCazJws5E/fdEK6s0Kvi4UPULlGid2XrdO9gLfFWa2NS3d4S5A==
+X-Received: by 2002:a05:6a20:ce43:b0:b8:c3c0:e7f7 with SMTP id id3-20020a056a20ce4300b000b8c3c0e7f7mr395043pzb.1.1673995906357;
+        Tue, 17 Jan 2023 14:51:46 -0800 (PST)
 Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id c4-20020a170903234400b0019338ecad52sm16912238plh.190.2023.01.17.13.39.19
+        by smtp.gmail.com with ESMTPSA id z13-20020aa79e4d000000b0058bc1a13ffcsm7232252pfq.25.2023.01.17.14.51.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 13:39:19 -0800 (PST)
-Date:   Tue, 17 Jan 2023 21:39:16 +0000
+        Tue, 17 Jan 2023 14:51:45 -0800 (PST)
+Date:   Tue, 17 Jan 2023 22:51:42 +0000
 From:   Sean Christopherson <seanjc@google.com>
 To:     Vishal Annapurve <vannapurve@google.com>
 Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -71,41 +71,64 @@ Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
         diviness@google.com, maz@kernel.org, dmatlack@google.com,
         axelrasmussen@google.com, maciej.szmigiero@oracle.com,
         mizhang@google.com, bgardon@google.com, ackerleytng@google.com
-Subject: Re: [V2 PATCH 1/6] KVM: x86: Add support for testing private memory
-Message-ID: <Y8cVhFIM1EoLHO/V@google.com>
+Subject: Re: [V2 PATCH 4/6] KVM: selftests: x86: Add helpers to execute VMs
+ with private memory
+Message-ID: <Y8cmfjRIRp2EphTa@google.com>
 References: <20221205232341.4131240-1-vannapurve@google.com>
- <20221205232341.4131240-2-vannapurve@google.com>
+ <20221205232341.4131240-5-vannapurve@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221205232341.4131240-2-vannapurve@google.com>
+In-Reply-To: <20221205232341.4131240-5-vannapurve@google.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On Mon, Dec 05, 2022, Vishal Annapurve wrote:
-> Introduce HAVE_KVM_PRIVATE_MEM_TESTING config to be able to test fd based
-> @@ -272,13 +274,15 @@ static inline int kvm_mmu_do_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
->  		.rsvd = err & PFERR_RSVD_MASK,
->  		.user = err & PFERR_USER_MASK,
->  		.prefetch = prefetch,
-> -		.is_tdp = likely(vcpu->arch.mmu->page_fault == kvm_tdp_page_fault),
-> +		.is_tdp = is_tdp,
->  		.nx_huge_page_workaround_enabled =
->  			is_nx_huge_page_enabled(vcpu->kvm),
->  
->  		.max_level = KVM_MAX_HUGEPAGE_LEVEL,
->  		.req_level = PG_LEVEL_4K,
->  		.goal_level = PG_LEVEL_4K,
-> +		.is_private = IS_ENABLED(CONFIG_HAVE_KVM_PRIVATE_MEM_TESTING) && is_tdp &&
-> +				kvm_mem_is_private(vcpu->kvm, cr2_or_gpa >> PAGE_SHIFT),
+> +void vcpu_run_and_handle_mapgpa(struct kvm_vm *vm, struct kvm_vcpu *vcpu)
+> +{
+> +	/*
+> +	 * Loop until the guest exits with any reason other than
+> +	 * KVM_HC_MAP_GPA_RANGE hypercall.
+> +	 */
+> +
+> +	while (true) {
+> +		vcpu_run(vcpu);
+> +
+> +		if ((vcpu->run->exit_reason == KVM_EXIT_HYPERCALL) &&
+> +			(vcpu->run->hypercall.nr == KVM_HC_MAP_GPA_RANGE)) {
 
-After looking at the SNP+UPM series, I think we should forego a dedicated Kconfig
-for testing and instead add a new VM type for UPM-capable guests.  The new type,
-e.g. KVM_X86_PROTECTED_VM, can then be used to leverage UPM for "legacy" SEV and
-SEV-ES guests, as well as for UPM-capable guests that don't utilize per-VM
-memory encryption, e.g. KVM selftests.
+I get what you're trying to do, and I completely agree that we need better helpers
+and/or macros to reduce this type of boilerplate, but adding a one-off helper like
+this is going to be a net negative overall.  This helper services exactly one use
+case, and also obfuscates what a test does.
 
-Carrying test-only behavior is obviously never ideal, and it would pretty much have
-to be mutually exclusive with "real" usage of UPM, otherwise the KVM logics gets
-unnecessarily complex.
+In other words, this is yet another thing that needs broad, generic support
+(_vcpu_run() is a very special case).  E.g. something like this to make it easy
+for tests to run a guest and handle ucalls plus specific exits (just a strawman,
+I think we can do better for handling ucalls).
+
+#define vcpu_run_loop(vcpu, handlers, ucalls)				\
+do {									\
+	uint32_t __exit;						\
+	int __r = 0;							\
+									\
+	while (!r)  {							\
+		vcpu_run(vcpu);						\
+									\
+		__exit = vcpu->run->exit_reason;			\
+									\
+		if (__exit < ARRAY_SIZE(handlers) && handlers[__exit])	\
+			__r = handlers[__exit](vcpu);			\	
+		else if (__exit == KVM_EXIT_IO && ucalls)		\
+			__r = handle_exit_ucall(vcpu, ucalls,		\
+						ARRAY_SIZE(ucalls));	\
+		else							\
+			TEST_FAIL(...)					\
+	}								\
+} while (0)
+
+
+For this series, I think it makes sense to just open code yet another test.  It
+really doesn't end up being much code, which is partly why we haven't added
+helpers :-/
