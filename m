@@ -2,228 +2,469 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DE8C3C38142
-	for <linux-kselftest@archiver.kernel.org>; Tue, 17 Jan 2023 22:47:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 31716C00A5A
+	for <linux-kselftest@archiver.kernel.org>; Tue, 17 Jan 2023 22:49:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229957AbjAQWrO (ORCPT
+        id S229787AbjAQWtT (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 17 Jan 2023 17:47:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43186 "EHLO
+        Tue, 17 Jan 2023 17:49:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbjAQWqm (ORCPT
+        with ESMTP id S230002AbjAQWrQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Jan 2023 17:46:42 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D3A4DCEB
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Jan 2023 13:46:29 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id d8so2615030pjc.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Jan 2023 13:46:29 -0800 (PST)
+        Tue, 17 Jan 2023 17:47:16 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B29094F856
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Jan 2023 13:50:55 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id z17-20020a256651000000b007907852ca4dso35382688ybm.16
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Jan 2023 13:50:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rC8/tQUk41CuZwxwlH46s3W2aYILb1S2xKjt3FVwjWk=;
-        b=cgVGR5vSZjy20eYRrtrqp3/gNV7N5qRXpunzl2yBirUn0JTyXcu5pj0b67ubvvuZm3
-         ruZ51Q2QsAxw6Uk65xO3YnKjFDlnhAL+r0wRNQYgPdT3/+v7gX3AF8R4Tjbjwc3/laCp
-         2IY43BlasoahYjElBb5lir0+fGGPpL3VRiUqyk0M+ITHQSMuwaqVkWZGZsLHnuzuI2aY
-         NmissgdaoKJgTLZFraaEkoHeXOMdHQQj45gAnz2/a7B7G/Q9dxDQWSrm0BOwyldEJFul
-         22sQlEUQB1V9QUDV5ZKMg8fg7mie5PCtSLhFixnns23qpRHFuqZGUshwYsVPKiv/Nj47
-         sNTw==
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ULZLef51O7gy3vfZoZVDDimXgPQXe9qknUeKNZ9s4pw=;
+        b=A7+73cH9pLRt5aUzTfHuCReOyUryIJc8uZlQ+f09yKp2WRxxccaP+nZMY2ZQ3A8xXI
+         1ZX5cg4STGhBE5+t+J5tUNYQ4HpLjKDzIVpj7wIveCAGLdQCIJ6wqDsDpYZlLrTNJLHS
+         GAnbiZppqBEUBH4XBoxpNeSxwpIv+ItTNc5wFN4/RDwGl07Naf9b4Jt5D1W4R06M1Kbj
+         B4LZ30HGL4qOzHy3Q8lDzSYt5KXAu7RCLu3U9IgX/uOE4CSBAi+gE3YvUwWS/sxeY5j+
+         tzQyc4UQfn6wGtEn7AP2dY/GyAPx0RAXUmXdg5YMMVV7C6UNE9suohgUd0OKiFuEm+ew
+         OCUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rC8/tQUk41CuZwxwlH46s3W2aYILb1S2xKjt3FVwjWk=;
-        b=drd/VKAtR+TmpP4QfPnnwh7W++guUhmlWo+V8vyTpiDBDHw2h7s0kLyKJ4mV4VqdIr
-         TeieWZ2Qk352KVD8+fXxImvl3tuvXzi3lHqRCI2KxUk0uRG6zFv/dkPvyctPL4RHlSK6
-         SI3zIazxd5tLI1Dw/8tryJ+bgNxV6+JoKJjVre/0jriCuN9Z30lNvDx+6fPPFcZyjjBY
-         LlzoHSux0fV117tgrRcpt1NL8Jca9B2pnFGBfQS9dJJGMAA0sR+p+rmv1sBPG3QXh1YC
-         Rlq+WCp5XmsylPMAqCW7zuOqDOB9/LzJiHNMi3WddcplKxIzc3coHcPhI2kN8Ni+H2X2
-         PzAA==
-X-Gm-Message-State: AFqh2kpIXF2v0G+OLCsW0bY1NkDDixlFR2rPmTeApau7qf9P49Rr2gau
-        RRAzuLJTfUtNau4D2GG/sreLow==
-X-Google-Smtp-Source: AMrXdXvcjlIzPDJ2H/BqBCU66i//6UERLaf1dN+GVL16Z85jBzFgvROsbL8JNeDZ6Z/+o4RJ4ZSD6A==
-X-Received: by 2002:a05:6a20:c183:b0:b8:ca86:f3ab with SMTP id bg3-20020a056a20c18300b000b8ca86f3abmr359209pzb.2.1673991988781;
-        Tue, 17 Jan 2023 13:46:28 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id u127-20020a626085000000b00580fb018e4bsm16785535pfb.211.2023.01.17.13.46.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 13:46:28 -0800 (PST)
-Date:   Tue, 17 Jan 2023 21:46:24 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vishal Annapurve <vannapurve@google.com>
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        shuah@kernel.org, yang.zhong@intel.com, ricarkol@google.com,
-        aaronlewis@google.com, wei.w.wang@intel.com,
-        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
-        jlayton@kernel.org, bfields@fieldses.org,
-        akpm@linux-foundation.org, chao.p.peng@linux.intel.com,
-        yu.c.zhang@linux.intel.com, jun.nakajima@intel.com,
-        dave.hansen@intel.com, michael.roth@amd.com, qperret@google.com,
-        steven.price@arm.com, ak@linux.intel.com, david@redhat.com,
-        luto@kernel.org, vbabka@suse.cz, marcorr@google.com,
-        erdemaktas@google.com, pgonda@google.com, nikunj@amd.com,
-        diviness@google.com, maz@kernel.org, dmatlack@google.com,
-        axelrasmussen@google.com, maciej.szmigiero@oracle.com,
-        mizhang@google.com, bgardon@google.com, ackerleytng@google.com
-Subject: Re: [V2 PATCH 2/6] KVM: Selftests: Add support for private memory
-Message-ID: <Y8cXMCBzNcuzniXS@google.com>
-References: <20221205232341.4131240-1-vannapurve@google.com>
- <20221205232341.4131240-3-vannapurve@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221205232341.4131240-3-vannapurve@google.com>
+        bh=ULZLef51O7gy3vfZoZVDDimXgPQXe9qknUeKNZ9s4pw=;
+        b=AEnmtB5aSHtaC1WmeirMuv0zqQIFEfWEQCYaR47v9NgJSSMSWdybRfkCGACeJmyp4a
+         RK3Bo6OiAes6y5JC4GZAraGX94Bwyj5bimVRwYeTQiEvUAzQk45L1S3tK00XU0+mHfOY
+         x01MTMwXOtv44L3y9TfHpB/rdOrPwjo08/371wP7uHJPF5GHtrVi3LYYQMGDVJfGpsUe
+         dsDnnwHe4gELmZZaow1fgVmjsFsmYR0nN1+Eit9ssUxA0Haapn7ZE1eHdkYbVP+ZTn4E
+         pwGPEVpn3fcHC/QGLa9oz7kb5v8BNKotl5roYZDRITE1wrur2OjPEetmwoQfdMm3CJUJ
+         8gSw==
+X-Gm-Message-State: AFqh2kqatsl3fnf4FjMss+KF53PEbfOHoWi5HgTrNkvGEbJmmZuS1bp5
+        czAa7kzkR/4ZrXGYlAbt1WWIzAtw+Q==
+X-Google-Smtp-Source: AMrXdXsG+hLuSRc4mtzKUc4GQ8BYViNEH4AKKNO7VQHLs9NKiNduGuhY+GUVycSatXGuVoFUcBar6siYOg==
+X-Received: from rmoar-specialist.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:45d3])
+ (user=rmoar job=sendgmr) by 2002:a25:40ca:0:b0:7ae:2b0:d5c6 with SMTP id
+ n193-20020a2540ca000000b007ae02b0d5c6mr545169yba.627.1673992254928; Tue, 17
+ Jan 2023 13:50:54 -0800 (PST)
+Date:   Tue, 17 Jan 2023 21:50:46 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+Message-ID: <20230117215046.3734066-1-rmoar@google.com>
+Subject: [PATCH v2] lib/hashtable_test.c: add test for the hashtable structure
+From:   Rae Moar <rmoar@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com, dlatypov@google.com
+Cc:     skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Rae Moar <rmoar@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Dec 05, 2022, Vishal Annapurve wrote:
-> Add support for registering private memory with kvm using
-> KVM_SET_USER_MEMORY_REGION ioctl.
-> 
-> Helper function to query extended userspace mem region is introduced to
-> allow memory conversion.
-> 
-> vm_mem_backing_src types is extended to contain additional guest memory
-> source types to cover the cases where guest memory can be backed by both
-> anonymous memory and restricted memfd.
-> 
-> Signed-off-by: Vishal Annapurve <vannapurve@google.com>
-> ---
->  .../selftests/kvm/include/kvm_util_base.h     | 12 +++-
->  .../testing/selftests/kvm/include/test_util.h |  4 ++
->  tools/testing/selftests/kvm/lib/kvm_util.c    | 58 +++++++++++++++++--
->  tools/testing/selftests/kvm/lib/test_util.c   | 11 ++++
->  4 files changed, 78 insertions(+), 7 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> index c7685c7038ff..4ad99f295f2a 100644
-> --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-> +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> @@ -31,7 +31,10 @@ typedef uint64_t vm_paddr_t; /* Virtual Machine (Guest) physical address */
->  typedef uint64_t vm_vaddr_t; /* Virtual Machine (Guest) virtual address */
->  
->  struct userspace_mem_region {
-> -	struct kvm_userspace_memory_region region;
-> +	union {
-> +		struct kvm_userspace_memory_region region;
-> +		struct kvm_userspace_memory_region_ext region_ext;
+Add a KUnit test for the kernel hashtable implementation in
+include/linux/hashtable.h.
 
-As discussed in the UPM series, we're trending towards adding an entirely new
-struct+ioctl(), kvm_userspace_memory_region2, instead of extending the existing
-struct.  The == -> >= hack you had to add in kvm_do_ioctl() below is one of the
-reason for that change.
+Note that this version does not yet test each of the rcu
+alternative versions of functions.
 
-> +	};
->  	struct sparsebit *unused_phy_pages;
->  	int fd;
->  	off_t offset;
-> @@ -196,7 +199,7 @@ static inline bool kvm_has_cap(long cap)
->  
->  #define kvm_do_ioctl(fd, cmd, arg)						\
->  ({										\
-> -	static_assert(!_IOC_SIZE(cmd) || sizeof(*arg) == _IOC_SIZE(cmd), "");	\
-> +	static_assert(!_IOC_SIZE(cmd) || sizeof(*arg) >= _IOC_SIZE(cmd), "");	\
->  	ioctl(fd, cmd, arg);							\
->  })
->  
-> @@ -384,6 +387,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
->  void vm_mem_region_set_flags(struct kvm_vm *vm, uint32_t slot, uint32_t flags);
->  void vm_mem_region_move(struct kvm_vm *vm, uint32_t slot, uint64_t new_gpa);
->  void vm_mem_region_delete(struct kvm_vm *vm, uint32_t slot);
-> +
->  struct kvm_vcpu *__vm_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id);
->  vm_vaddr_t vm_vaddr_unused_gap(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min);
->  vm_vaddr_t vm_vaddr_alloc(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min);
-> @@ -715,6 +719,10 @@ struct kvm_userspace_memory_region *
->  kvm_userspace_memory_region_find(struct kvm_vm *vm, uint64_t start,
->  				 uint64_t end);
->  
-> +struct kvm_userspace_memory_region_ext *
-> +kvm_userspace_memory_region_ext_find(struct kvm_vm *vm, uint64_t start,
-> +				 uint64_t end);
-> +
->  #define sync_global_to_guest(vm, g) ({				\
->  	typeof(g) *_p = addr_gva2hva(vm, (vm_vaddr_t)&(g));	\
->  	memcpy(_p, &(g), sizeof(g));				\
-> diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
-> index 80d6416f3012..aea80071f2b8 100644
-> --- a/tools/testing/selftests/kvm/include/test_util.h
-> +++ b/tools/testing/selftests/kvm/include/test_util.h
-> @@ -103,6 +103,8 @@ enum vm_mem_backing_src_type {
->  	VM_MEM_SRC_ANONYMOUS_HUGETLB_16GB,
->  	VM_MEM_SRC_SHMEM,
->  	VM_MEM_SRC_SHARED_HUGETLB,
-> +	VM_MEM_SRC_ANONYMOUS_AND_RESTRICTED_MEMFD,
-> +	VM_MEM_SRC_ANON_HTLB2M_AND_RESTRICTED_MEMFD,
+Signed-off-by: Rae Moar <rmoar@google.com>
+---
 
-There's no need for a dedicated flag in the backing type, vm_userspace_mem_region_add()
-already takes the memslot's flags and can simply key off KVM_MEM_PRIVATE.
+Changes since v1:
+- Change Kconfig.debug message to be more succinct.
+- Directly increment current element's visited field rather than looking
+  up corresponding element.
+- Use KUNIT_EXPECT_=E2=80=A6 statements to check keys are within range rath=
+er
+  than using if statements.
+- Change hash_for_each_possible test to check buckets using a
+  hash_for_each method instead of calculating the bucket number using
+  hash_min.
 
-> @@ -881,6 +915,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
->  	struct userspace_mem_region *region;
->  	size_t backing_src_pagesz = get_backing_src_pagesz(src_type);
->  	size_t alignment;
-> +	int restricted_memfd = -1;
+Note: The check patch script is outputting open brace errors on lines
+158, 192, 247 of lib/hashtable_test.c. However, I think these errors are
+a mistake as the format of the braces on those lines seems consistent
+with the Linux Kernel style guide.
 
-No need to initialize to -1, KVM is supposed to ignore the restrictedmem fd if
-!KVM_MEM_PRIVATE, and if KVM_MEM_PRIVATE is set, selftests must provide a valid fd.
+ lib/Kconfig.debug    |  13 ++
+ lib/Makefile         |   1 +
+ lib/hashtable_test.c | 326 +++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 340 insertions(+)
+ create mode 100644 lib/hashtable_test.c
 
->  	TEST_ASSERT(vm_adjust_num_guest_pages(vm->mode, npages) == npages,
->  		"Number of guest pages is not compatible with the host. "
-
-This is what I ended up with after splitting out the conversion to
-KVM_SET_USER_MEMORY_REGION2 to a separate patch.
-
---
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index 7c1f81f93ba3..26c6830c1aa1 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -32,6 +32,11 @@ int open_path_or_exit(const char *path, int flags)
-        return fd;
- }
- 
-+static int memfd_restricted(unsigned int flags)
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 881c3f84e88a..69b1452a3eeb 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -2496,6 +2496,19 @@ config LIST_KUNIT_TEST
+=20
+ 	  If unsure, say N.
+=20
++config HASHTABLE_KUNIT_TEST
++	tristate "KUnit Test for Kernel Hashtable structures" if !KUNIT_ALL_TESTS
++	depends on KUNIT
++	default KUNIT_ALL_TESTS
++	help
++	  This builds the hashtable KUnit test suite.
++	  It tests the basic functionality of the API defined in
++	  include/linux/hashtable.h. For more information on KUnit and
++	  unit tests in general please refer to the KUnit documentation
++	  in Documentation/dev-tools/kunit/.
++
++	  If unsure, say N.
++
+ config LINEAR_RANGES_TEST
+ 	tristate "KUnit test for linear_ranges"
+ 	depends on KUNIT
+diff --git a/lib/Makefile b/lib/Makefile
+index 4d9461bfea42..5f8efbe8e97f 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -369,6 +369,7 @@ obj-$(CONFIG_PLDMFW) +=3D pldmfw/
+ CFLAGS_bitfield_kunit.o :=3D $(DISABLE_STRUCTLEAK_PLUGIN)
+ obj-$(CONFIG_BITFIELD_KUNIT) +=3D bitfield_kunit.o
+ obj-$(CONFIG_LIST_KUNIT_TEST) +=3D list-test.o
++obj-$(CONFIG_HASHTABLE_KUNIT_TEST) +=3D hashtable_test.o
+ obj-$(CONFIG_LINEAR_RANGES_TEST) +=3D test_linear_ranges.o
+ obj-$(CONFIG_BITS_TEST) +=3D test_bits.o
+ obj-$(CONFIG_CMDLINE_KUNIT_TEST) +=3D cmdline_kunit.o
+diff --git a/lib/hashtable_test.c b/lib/hashtable_test.c
+new file mode 100644
+index 000000000000..ab09b747d83d
+--- /dev/null
++++ b/lib/hashtable_test.c
+@@ -0,0 +1,326 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * KUnit test for the Kernel Hashtable structures.
++ *
++ * Copyright (C) 2022, Google LLC.
++ * Author: Rae Moar <rmoar@google.com>
++ */
++#include <kunit/test.h>
++
++#include <linux/hashtable.h>
++
++struct hashtable_test_entry {
++	int key;
++	int data;
++	struct hlist_node node;
++	int visited;
++};
++
++static void hashtable_test_hash_init(struct kunit *test)
 +{
-+       return syscall(__NR_memfd_restricted, flags);
++	/* Test the different ways of initialising a hashtable. */
++	DEFINE_HASHTABLE(hash1, 3);
++	DECLARE_HASHTABLE(hash2, 3);
++
++	hash_init(hash1);
++	hash_init(hash2);
++
++	KUNIT_EXPECT_TRUE(test, hash_empty(hash1));
++	KUNIT_EXPECT_TRUE(test, hash_empty(hash2));
 +}
 +
- /*
-  * Open KVM_DEV_PATH if available, otherwise exit the entire program.
-  *
-@@ -980,6 +985,15 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
-        }
- 
-        region->backing_src_type = src_type;
++static void hashtable_test_hash_empty(struct kunit *test)
++{
++	struct hashtable_test_entry a;
++	DEFINE_HASHTABLE(hash, 3);
 +
-+       if (flags & KVM_MEM_PRIVATE) {
-+               region->region.restricted_fd = memfd_restricted(0);
-+               region->region.restricted_offset = 0;
++	hash_init(hash);
++	KUNIT_EXPECT_TRUE(test, hash_empty(hash));
 +
-+               TEST_ASSERT(region->region.restricted_fd >= 0,
-+                           "Failed to create restricted memfd");
-+       }
++	a.key =3D 1;
++	a.data =3D 13;
++	hash_add(hash, &a.node, a.key);
 +
-        region->unused_phy_pages = sparsebit_alloc();
-        sparsebit_set_num(region->unused_phy_pages,
-                guest_paddr >> vm->page_shift, npages);
-@@ -992,9 +1006,10 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
-        TEST_ASSERT(ret == 0, "KVM_SET_USER_MEMORY_REGION2 IOCTL failed,\n"
-                "  rc: %i errno: %i\n"
-                "  slot: %u flags: 0x%x\n"
--               "  guest_phys_addr: 0x%lx size: 0x%lx",
-+               "  guest_phys_addr: 0x%lx size: 0x%lx restricted fd: %d\n",
-                ret, errno, slot, flags,
--               guest_paddr, (uint64_t) region->region.memory_size);
-+               guest_paddr, (uint64_t) region->region.memory_size,
-+               region->region.restricted_fd);
- 
-        /* Add to quick lookup data structures */
-        vm_userspace_mem_region_gpa_insert(&vm->regions.gpa_tree, region);
++	/* Hashtable should no longer be empty. */
++	KUNIT_EXPECT_FALSE(test, hash_empty(hash));
++}
++
++static void hashtable_test_hash_hashed(struct kunit *test)
++{
++	struct hashtable_test_entry a, b;
++	DEFINE_HASHTABLE(hash, 3);
++
++	hash_init(hash);
++	a.key =3D 1;
++	a.data =3D 13;
++	b.key =3D 1;
++	b.data =3D 2;
++
++	hash_add(hash, &a.node, a.key);
++	hash_add(hash, &b.node, b.key);
++
++	KUNIT_EXPECT_TRUE(test, hash_hashed(&a.node));
++	KUNIT_EXPECT_TRUE(test, hash_hashed(&b.node));
++}
++
++static void hashtable_test_hash_add(struct kunit *test)
++{
++	struct hashtable_test_entry a, b, *x;
++	int bkt;
++	DEFINE_HASHTABLE(hash, 3);
++
++	hash_init(hash);
++	a.key =3D 1;
++	a.data =3D 13;
++	a.visited =3D 0;
++	b.key =3D 2;
++	b.data =3D 10;
++	b.visited =3D 0;
++
++	hash_add(hash, &a.node, a.key);
++	hash_add(hash, &b.node, b.key);
++
++	hash_for_each(hash, bkt, x, node) {
++		x->visited++;
++		if (x->key =3D=3D a.key)
++			KUNIT_EXPECT_EQ(test, x->data, 13);
++		else if (x->key =3D=3D b.key)
++			KUNIT_EXPECT_EQ(test, x->data, 10);
++		else
++			KUNIT_FAIL(test, "Unexpected key in hashtable.");
++	}
++
++	/* Both entries should have been visited exactly once. */
++	KUNIT_EXPECT_EQ(test, a.visited, 1);
++	KUNIT_EXPECT_EQ(test, b.visited, 1);
++}
++
++static void hashtable_test_hash_del(struct kunit *test)
++{
++	struct hashtable_test_entry a, b, *x;
++	DEFINE_HASHTABLE(hash, 3);
++
++	hash_init(hash);
++	a.key =3D 1;
++	a.data =3D 13;
++	b.key =3D 2;
++	b.data =3D 10;
++	b.visited =3D 0;
++
++	hash_add(hash, &a.node, a.key);
++	hash_add(hash, &b.node, b.key);
++
++	hash_del(&b.node);
++	hash_for_each_possible(hash, x, node, b.key) {
++		x->visited++;
++		KUNIT_EXPECT_NE(test, x->key, b.key);
++	}
++
++	/* The deleted entry should not have been visited. */
++	KUNIT_EXPECT_EQ(test, b.visited, 0);
++
++	hash_del(&a.node);
++
++	/* The hashtable should be empty. */
++	KUNIT_EXPECT_TRUE(test, hash_empty(hash));
++}
++
++static void hashtable_test_hash_for_each(struct kunit *test)
++{
++	struct hashtable_test_entry entries[3];
++	struct hashtable_test_entry *x;
++	int bkt, i, j, count;
++	DEFINE_HASHTABLE(hash, 3);
++
++	/* Initialize a hashtable with three entries. */
++	hash_init(hash);
++	for (i =3D 0; i < 3; i++) {
++		entries[i].key =3D i;
++		entries[i].data =3D i + 10;
++		entries[i].visited =3D 0;
++		hash_add(hash, &entries[i].node, entries[i].key);
++	}
++
++	count =3D 0;
++	hash_for_each(hash, bkt, x, node) {
++		x->visited +=3D 1;
++		KUNIT_ASSERT_GE(test, x->key, 0);
++		KUNIT_ASSERT_LT(test, x->key, 3);
++		count++;
++	}
++
++	/* Should have visited each entry exactly once. */
++	KUNIT_EXPECT_EQ(test, count, 3);
++	for (j =3D 0; j < 3; j++)
++		KUNIT_EXPECT_EQ(test, entries[j].visited, 1);
++}
++
++static void hashtable_test_hash_for_each_safe(struct kunit *test)
++{
++	struct hashtable_test_entry entries[3];
++	struct hashtable_test_entry *x;
++	struct hlist_node *tmp;
++	int bkt, i, j, count;
++	DEFINE_HASHTABLE(hash, 3);
++
++	/* Initialize a hashtable with three entries. */
++	hash_init(hash);
++	for (i =3D 0; i < 3; i++) {
++		entries[i].key =3D i;
++		entries[i].data =3D i + 10;
++		entries[i].visited =3D 0;
++		hash_add(hash, &entries[i].node, entries[i].key);
++	}
++
++	count =3D 0;
++	hash_for_each_safe(hash, bkt, tmp, x, node) {
++		x->visited +=3D 1;
++		KUNIT_ASSERT_GE(test, x->key, 0);
++		KUNIT_ASSERT_LT(test, x->key, 3);
++		count++;
++
++		/* Delete entry during loop. */
++		hash_del(&x->node);
++	}
++
++	/* Should have visited each entry exactly once. */
++	KUNIT_EXPECT_EQ(test, count, 3);
++	for (j =3D 0; j < 3; j++)
++		KUNIT_EXPECT_EQ(test, entries[j].visited, 1);
++}
++
++static void hashtable_test_hash_for_each_possible(struct kunit *test)
++{
++	struct hashtable_test_entry entries[4];
++	struct hashtable_test_entry *x, *y;
++	int buckets[2];
++	int bkt, i, j, count;
++	DEFINE_HASHTABLE(hash, 3);
++
++	/* Initialize a hashtable with three entries with key =3D 0. */
++	hash_init(hash);
++	for (i =3D 0; i < 3; i++) {
++		entries[i].key =3D 0;
++		entries[i].data =3D i;
++		entries[i].visited =3D 0;
++		hash_add(hash, &entries[i].node, entries[i].key);
++	}
++
++	/* Add an entry with key =3D 1. */
++	entries[3].key =3D 1;
++	entries[3].data =3D 3;
++	entries[3].visited =3D 0;
++	hash_add(hash, &entries[3].node, entries[3].key);
++
++	count =3D 0;
++	hash_for_each_possible(hash, x, node, 0) {
++		x->visited +=3D 1;
++		KUNIT_ASSERT_GE(test, x->data, 0);
++		KUNIT_ASSERT_LT(test, x->data, 4);
++		count++;
++	}
++
++	/* Should have visited each entry with key =3D 0 exactly once. */
++	for (j =3D 0; j < 3; j++)
++		KUNIT_EXPECT_EQ(test, entries[j].visited, 1);
++
++	/* Save the buckets for the different keys. */
++	hash_for_each(hash, bkt, y, node) {
++		if (y->key < 0 || y->key > 1)
++			KUNIT_ASSERT_FAILURE(test, "Unexpected key in hashtable.");
++		buckets[y->key] =3D bkt;
++	}
++
++	/* If entry with key =3D 1 is in the same bucket as the entries with
++	 * key =3D 0, check it was visited. Otherwise ensure that only three
++	 * entries were visited.
++	 */
++	if (buckets[0] =3D=3D buckets[1]) {
++		KUNIT_EXPECT_EQ(test, count, 4);
++		KUNIT_EXPECT_EQ(test, entries[3].visited, 1);
++	} else {
++		KUNIT_EXPECT_EQ(test, count, 3);
++		KUNIT_EXPECT_EQ(test, entries[3].visited, 0);
++	}
++}
++
++static void hashtable_test_hash_for_each_possible_safe(struct kunit *test)
++{
++	struct hashtable_test_entry entries[4];
++	struct hashtable_test_entry *x, *y;
++	struct hlist_node *tmp;
++	int buckets[2];
++	int bkt, i, j, count;
++	DEFINE_HASHTABLE(hash, 3);
++
++	/* Initialize a hashtable with three entries with key =3D 0. */
++	hash_init(hash);
++	for (i =3D 0; i < 3; i++) {
++		entries[i].key =3D 0;
++		entries[i].data =3D i;
++		entries[i].visited =3D 0;
++		hash_add(hash, &entries[i].node, entries[i].key);
++	}
++
++	/* Add an entry with key =3D 1. */
++	entries[3].key =3D 1;
++	entries[3].data =3D 3;
++	entries[3].visited =3D 0;
++	hash_add(hash, &entries[3].node, entries[3].key);
++
++	count =3D 0;
++	hash_for_each_possible_safe(hash, x, tmp, node, 0) {
++		x->visited +=3D 1;
++		KUNIT_ASSERT_GE(test, x->data, 0);
++		KUNIT_ASSERT_LT(test, x->data, 4);
++		count++;
++
++		/* Delete entry during loop. */
++		hash_del(&x->node);
++	}
++
++	/* Should have visited each entry with key =3D 0 exactly once. */
++	for (j =3D 0; j < 3; j++)
++		KUNIT_EXPECT_EQ(test, entries[j].visited, 1);
++
++	/* Save the buckets for the different keys. */
++	hash_for_each(hash, bkt, y, node) {
++		if (y->key < 0 || y->key > 1)
++			KUNIT_ASSERT_FAILURE(test, "Unexpected key in hashtable.");
++		buckets[y->key] =3D bkt;
++	}
++
++	/* If entry with key =3D 1 is in the same bucket as the entries with
++	 * key =3D 0, check it was visited. Otherwise ensure that only three
++	 * entries were visited.
++	 */
++	if (buckets[0] =3D=3D buckets[1]) {
++		KUNIT_EXPECT_EQ(test, count, 4);
++		KUNIT_EXPECT_EQ(test, entries[3].visited, 1);
++	} else {
++		KUNIT_EXPECT_EQ(test, count, 3);
++		KUNIT_EXPECT_EQ(test, entries[3].visited, 0);
++	}
++}
++
++static struct kunit_case hashtable_test_cases[] =3D {
++	KUNIT_CASE(hashtable_test_hash_init),
++	KUNIT_CASE(hashtable_test_hash_empty),
++	KUNIT_CASE(hashtable_test_hash_hashed),
++	KUNIT_CASE(hashtable_test_hash_add),
++	KUNIT_CASE(hashtable_test_hash_del),
++	KUNIT_CASE(hashtable_test_hash_for_each),
++	KUNIT_CASE(hashtable_test_hash_for_each_safe),
++	KUNIT_CASE(hashtable_test_hash_for_each_possible),
++	KUNIT_CASE(hashtable_test_hash_for_each_possible_safe),
++	{},
++};
++
++static struct kunit_suite hashtable_test_module =3D {
++	.name =3D "hashtable",
++	.test_cases =3D hashtable_test_cases,
++};
++
++kunit_test_suites(&hashtable_test_module);
++
++MODULE_LICENSE("GPL");
+
+base-commit: 88603b6dc419445847923fcb7fe5080067a30f98
+--=20
+2.39.0.314.g84b9a713c41-goog
+
