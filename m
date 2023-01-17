@@ -2,55 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A1E1DC38142
-	for <linux-kselftest@archiver.kernel.org>; Tue, 17 Jan 2023 22:49:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B81DC00A5A
+	for <linux-kselftest@archiver.kernel.org>; Tue, 17 Jan 2023 22:58:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbjAQWtb (ORCPT
+        id S229715AbjAQW6I (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 17 Jan 2023 17:49:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46182 "EHLO
+        Tue, 17 Jan 2023 17:58:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229820AbjAQWrn (ORCPT
+        with ESMTP id S229728AbjAQW5f (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Jan 2023 17:47:43 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5720B4E09
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Jan 2023 13:48:49 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id r21so2836287plg.13
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Jan 2023 13:48:49 -0800 (PST)
+        Tue, 17 Jan 2023 17:57:35 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF334392D
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Jan 2023 13:39:20 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id v23so29999667plo.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Jan 2023 13:39:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kWE1pBRG4fQ1NY4iQchgCsAlYp+fjyZRHYiBxqI6Ppc=;
-        b=Ytivk0p3o3pKPR4jxRDApSW/X8kWJmOSU/vDUt9s1/F/HroGSdex4UY8cLNEMmie/M
-         SJHUrBNsemSTxj4PVT9ABl9rcmXciGL4VBfmkFcaTCLOmPzzeYKcSeCXZ4cAwgHiJimv
-         P5A/+mzpvc7I5IwbDpnNQroG3uEIK3/5pYOCtujUe/zOU4LXQdqgLIq9FP3Q8YhyADsX
-         +uLJ+IaHx9dxXMM7FC0nBUojSzt7FpQ0Vjr0BfWkXXwaMP20MrlXhoZvPgDK2Rf+cKY0
-         NsT2rt/S1e8PyBz8noED+BbjaMjl8Ndsq0XEF5oRKatjF9vLXme/E0dv/4FPKaUF6x7G
-         mc9A==
+        bh=hK7iCT/l53H8F02D5jWSmMF8OJg0mxY4hx/WOh8zXHQ=;
+        b=WeQcFSECVbAwjsxpoYAUDsDmT3LUgopGEqpjAQgQI1CIGKL0Aw2fjnbTlwHci2civl
+         f0Siy/nZinODvzTENbBnDhXli4GylTAUxiBI/VyHa82CtAxQ7gbT8igBoTEd5n4SA6vd
+         2VmR04LOt/8/0NYujHvKX8syEaz8kQJwSMYFMDQ4BPmRuvr2ZR8L8XlXcspW1n3KQlUu
+         tRz/LGOuU4EBu4uvrr8LdIIMT/ZsgrMo7ES4mwROwnXgemFdIR485MboWclY3XLZIjkF
+         MLFlKgyXOPpEStKfnPzGyUG5OnUhbxreOj1rEaGhEez7JwmuyyrERsC/ULIjoYV8fPbr
+         gPjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kWE1pBRG4fQ1NY4iQchgCsAlYp+fjyZRHYiBxqI6Ppc=;
-        b=oHMLJrX0oa5PLcmdG/85asc2/TXw93j4ufcMG0hX6K2w0d5Ud+YtQ0czhxiS6zUGb3
-         gYeZ6sqGVNCKV4JG6c66ImlTXUmRyH5set+hNtbNYSi6PI9Ykw6WYaMMYL/QfhaADdBu
-         gdJpNlbaW3FfXUDykZIENldEDcitGS1xLvjB6Tsg3WnPnN04FGNU5zn1SPa/vTW63Fq3
-         TO8lIaLB/ZKzXNHTTk8mzcURh/1p9/ZU5iZk6rVGdAlPGcBJe1Wjm0z/+BGmNtHf/Zzy
-         xLQzWns0qkqIuHxT9z6mxVLhnjcmswqa8eJiYttuNPHrLMY+J6EssmwR8SjirgJBeNZF
-         CMRA==
-X-Gm-Message-State: AFqh2kq+oc2mg9Opyqi0/T8IazUmanBtPYCJaw89gUgVMBfwc2e3VoOE
-        PPzW2EHztE49lQHEo2IB32TTpQ==
-X-Google-Smtp-Source: AMrXdXvPkZgs3rtHgy0SGs5XB8Ijo6KKK7MXq+jTg0acICkNfD3dp3J3EcjMZ9hdAQ+KOHkyvoqjTw==
-X-Received: by 2002:a17:90b:3941:b0:225:e761:6d2b with SMTP id oe1-20020a17090b394100b00225e7616d2bmr2761268pjb.1.1673992129057;
-        Tue, 17 Jan 2023 13:48:49 -0800 (PST)
+        bh=hK7iCT/l53H8F02D5jWSmMF8OJg0mxY4hx/WOh8zXHQ=;
+        b=M23LyTE4t/IztIbUOiVSjht7xZngEAkfuFbt5SZ3DWXRSnY/kr24fUbzGvroaHW17Q
+         3r11fR0XZvh0iAbpbvPP/c6kUz5GDqKhIQyVYzo9MZOm/jxxpJqdbm4I3KInOI2ulZPE
+         pA3lXSe7BPotkUbeb8kjIolpdNfn3Sqyz71ZmytTMUF48UXcp+nLhw2wvONSutqApHsq
+         EGpvWxgLSHTr3GDJZi5EZuYwc9hshXmWy3kOdPaAhYeVe+77TCDzz0ZSESz0lJsGSL2F
+         FA9Pixddf5Xoa/9ogsyLC/rRujKSUJnxjTQTjChnrzRYrp1IXDipwwK8XPj1iUKZV3vP
+         tYEg==
+X-Gm-Message-State: AFqh2koe2UFRKwtR2EjE5pPuPX8/rzx1kiqurOMsh6S4JnBbM++lIC8b
+        7SMtxFgNROOyCd/KbLhBdH6xRQ==
+X-Google-Smtp-Source: AMrXdXtz4++aL4Ab6dxo4T1C7BIxWZ7VFFwnA/Q6q1uy8e+3S2IXuSo+S89TSMhkxkMLQu5/dcJ+3g==
+X-Received: by 2002:a17:902:e808:b0:189:b910:c6d2 with SMTP id u8-20020a170902e80800b00189b910c6d2mr2989344plg.1.1673991560262;
+        Tue, 17 Jan 2023 13:39:20 -0800 (PST)
 Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id nk16-20020a17090b195000b00212e5068e17sm11884pjb.40.2023.01.17.13.48.48
+        by smtp.gmail.com with ESMTPSA id c4-20020a170903234400b0019338ecad52sm16912238plh.190.2023.01.17.13.39.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 13:48:48 -0800 (PST)
-Date:   Tue, 17 Jan 2023 21:48:45 +0000
+        Tue, 17 Jan 2023 13:39:19 -0800 (PST)
+Date:   Tue, 17 Jan 2023 21:39:16 +0000
 From:   Sean Christopherson <seanjc@google.com>
 To:     Vishal Annapurve <vannapurve@google.com>
 Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -71,63 +71,41 @@ Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
         diviness@google.com, maz@kernel.org, dmatlack@google.com,
         axelrasmussen@google.com, maciej.szmigiero@oracle.com,
         mizhang@google.com, bgardon@google.com, ackerleytng@google.com
-Subject: Re: [V2 PATCH 3/6] KVM: selftests: x86: Add
- IS_ALIGNED/IS_PAGE_ALIGNED helpers
-Message-ID: <Y8cXvS2gKcK8tU2D@google.com>
+Subject: Re: [V2 PATCH 1/6] KVM: x86: Add support for testing private memory
+Message-ID: <Y8cVhFIM1EoLHO/V@google.com>
 References: <20221205232341.4131240-1-vannapurve@google.com>
- <20221205232341.4131240-4-vannapurve@google.com>
+ <20221205232341.4131240-2-vannapurve@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221205232341.4131240-4-vannapurve@google.com>
+In-Reply-To: <20221205232341.4131240-2-vannapurve@google.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On Mon, Dec 05, 2022, Vishal Annapurve wrote:
-> Add IS_ALIGNED/IS_PAGE_ALIGNED helpers for selftests.
-> 
-> Signed-off-by: Vishal Annapurve <vannapurve@google.com>
-> ---
->  tools/testing/selftests/kvm/include/kvm_util_base.h    | 3 +++
->  tools/testing/selftests/kvm/include/x86_64/processor.h | 1 +
->  2 files changed, 4 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> index 4ad99f295f2a..7ba32471df50 100644
-> --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-> +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> @@ -170,6 +170,9 @@ extern enum vm_guest_mode vm_mode_default;
->  #define MIN_PAGE_SIZE		(1U << MIN_PAGE_SHIFT)
->  #define PTES_PER_MIN_PAGE	ptes_per_page(MIN_PAGE_SIZE)
+> Introduce HAVE_KVM_PRIVATE_MEM_TESTING config to be able to test fd based
+> @@ -272,13 +274,15 @@ static inline int kvm_mmu_do_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
+>  		.rsvd = err & PFERR_RSVD_MASK,
+>  		.user = err & PFERR_USER_MASK,
+>  		.prefetch = prefetch,
+> -		.is_tdp = likely(vcpu->arch.mmu->page_fault == kvm_tdp_page_fault),
+> +		.is_tdp = is_tdp,
+>  		.nx_huge_page_workaround_enabled =
+>  			is_nx_huge_page_enabled(vcpu->kvm),
 >  
-> +/* @a is a power of 2 value */
-> +#define IS_ALIGNED(x, a)		(((x) & ((typeof(x))(a) - 1)) == 0)
+>  		.max_level = KVM_MAX_HUGEPAGE_LEVEL,
+>  		.req_level = PG_LEVEL_4K,
+>  		.goal_level = PG_LEVEL_4K,
+> +		.is_private = IS_ENABLED(CONFIG_HAVE_KVM_PRIVATE_MEM_TESTING) && is_tdp &&
+> +				kvm_mem_is_private(vcpu->kvm, cr2_or_gpa >> PAGE_SHIFT),
 
-IS_ALIGNED() is provided by tools/include/linux/bitmap.h
+After looking at the SNP+UPM series, I think we should forego a dedicated Kconfig
+for testing and instead add a new VM type for UPM-capable guests.  The new type,
+e.g. KVM_X86_PROTECTED_VM, can then be used to leverage UPM for "legacy" SEV and
+SEV-ES guests, as well as for UPM-capable guests that don't utilize per-VM
+memory encryption, e.g. KVM selftests.
 
->  struct vm_guest_mode_params {
->  	unsigned int pa_bits;
->  	unsigned int va_bits;
-> diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-> index 5d310abe6c3f..4d5dd9a467e1 100644
-> --- a/tools/testing/selftests/kvm/include/x86_64/processor.h
-> +++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-> @@ -279,6 +279,7 @@ static inline unsigned int x86_model(unsigned int eax)
->  #define PAGE_SHIFT		12
->  #define PAGE_SIZE		(1ULL << PAGE_SHIFT)
->  #define PAGE_MASK		(~(PAGE_SIZE-1) & PHYSICAL_PAGE_MASK)
-> +#define IS_PAGE_ALIGNED(x)	IS_ALIGNED(x, PAGE_SIZE)
-
-I certainly don't object to adding IS_PAGE_ALIGNED(), but it's not needed for
-this series.  Verifying that KVM doesn't allow an unaligned page conversion during
-KVM_HC_MAP_GPA_RANGE belongs in a separate test+series, as that doesn't have a
-strict dependency on UPM.
-
-TL;DR: this patch can be dropped, for now at least.
-
->  #define HUGEPAGE_SHIFT(x)	(PAGE_SHIFT + (((x) - 1) * 9))
->  #define HUGEPAGE_SIZE(x)	(1UL << HUGEPAGE_SHIFT(x))
-> -- 
-> 2.39.0.rc0.267.gcb52ba06e7-goog
-> 
+Carrying test-only behavior is obviously never ideal, and it would pretty much have
+to be mutually exclusive with "real" usage of UPM, otherwise the KVM logics gets
+unnecessarily complex.
