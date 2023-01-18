@@ -2,252 +2,130 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 01C6DC32793
-	for <linux-kselftest@archiver.kernel.org>; Wed, 18 Jan 2023 20:11:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C84F2C38147
+	for <linux-kselftest@archiver.kernel.org>; Wed, 18 Jan 2023 20:29:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbjARUL2 (ORCPT
+        id S229995AbjARU32 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 18 Jan 2023 15:11:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55606 "EHLO
+        Wed, 18 Jan 2023 15:29:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbjARULU (ORCPT
+        with ESMTP id S229635AbjARU31 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 18 Jan 2023 15:11:20 -0500
-Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B59EA5DC26;
-        Wed, 18 Jan 2023 12:11:13 -0800 (PST)
-Received: by mail-il1-x142.google.com with SMTP id m7so94659ilh.7;
-        Wed, 18 Jan 2023 12:11:13 -0800 (PST)
+        Wed, 18 Jan 2023 15:29:27 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ECF95DC22
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Jan 2023 12:29:26 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id n20-20020a17090aab9400b00229ca6a4636so2808627pjq.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Jan 2023 12:29:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YIxZYj7eSsuia8WbIjlSg4jlVWCI9wmpVpaDv9bWJuY=;
-        b=b/AJv+Yz0q1aHUoMexookxY52jz6rwrer8JQEwBvKM1OA3S8B1iAt/vGbraek60Efa
-         4bN+I1rpbmNvvFi4xek9qblY+FR8M7LVJGAu5UU0mJA+blgMSkr9P9oSzaXOWEvlPRNR
-         SJwWaWuU6S971nI/1hrRhp0UhDpHN66C3wleauxdWY54REHxx9dC67Adihyeo3hzxmRR
-         jbcVfYulxn7lou8AD8k/pL/DgklVSsLK7yGdUUvjvzhlPHZeZfiiEhENL4K0dTadp3/5
-         6F0dVURwDmnIGZzhJR1wpeeZ2ZeJYanVT23L6jefBkdLHea0/Y7xC+LdtGIqR/QCb0Yp
-         lOdA==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Y8SspAPfkyjpo8sc8kHtR2b6FK9e6JUk9ZrRa3juDFE=;
+        b=f8rHo6PO4YO5TdnLBaE4J6q8/eQpi+BGKzSxfubcJh9QNGVWzsHzRWPXSgxj5N4Kf3
+         GX2EQVjBJjHaSu9WVwhJ3vT9nD2AfDKI/DmbCUsyAq3T3EYUtZaeCWiJAlqYRNkechJa
+         Tygs5lx2A69GxGBDZDA/W9G7NDGE8I5JLs6jXJYt7o5uNXrUeotsOy7aIjQlMnniw/h7
+         A/SS+mzACZG656qV6nSDglIaJ8aHNVGQqNgbCDOQN6yRDtohqgODdJy6mKVe7v5YK2cz
+         JJmcsSEc0iA5+obrcFQWa31ko9Y+WHOeQt50EuaF0WBdu9U6z132iMQfrCG+5W2lZBh7
+         4fsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=YIxZYj7eSsuia8WbIjlSg4jlVWCI9wmpVpaDv9bWJuY=;
-        b=8RZrDZcdRf+aJG8bpSoj3dAzSM5YttHvzEKVLLAj/GXklIY4PGZL2ZFaGKs8247rRt
-         3b8YWU+PGCOh+azdD2/DK5OqRfxv1hWRY6OP6xJ/Djz75NwLE56ZiCjoZW3kishEb27/
-         DZ/TKK2tc71NQ+SH3KdqIxBZAoAMP41cr44E1KOOoJD8qei9B8Z90kL6eoVtWLin/P4N
-         X8HvM4z47R1IqKuXlUDCRif6Pa5BFyz3OeMS6kY56tPxWnvxX4R0R3uiaUnqZhBis3ZC
-         iAA2HYYdEJQ3IwtS9b/AAJzZMfpxRJj3hVMtqSj+MQJbQ8aJgIBLYamTmZ7qzfWZ8qgb
-         npug==
-X-Gm-Message-State: AFqh2koo/s49ViH/LjfRTlQdSnFwhN0tliP9+1eRvMqENQWj9t7ibTBM
-        TlY1TBLKVMcvXOJpDr5WcI+d2i49cNvg
-X-Google-Smtp-Source: AMrXdXtwjaApDMB3XWr6gQZuBYEYUyZxG/xCEfNGBICQm7WT6cfXjB6YYAnLEpX8nXAPEcRN1aSQiQ==
-X-Received: by 2002:a92:7a0c:0:b0:30e:ecd7:d3fa with SMTP id v12-20020a927a0c000000b0030eecd7d3famr7499313ilc.12.1674072672995;
-        Wed, 18 Jan 2023 12:11:12 -0800 (PST)
-Received: from fedora.mshome.net ([104.184.156.161])
-        by smtp.gmail.com with ESMTPSA id i5-20020a92c945000000b0030bfbc121a1sm10299998ilq.79.2023.01.18.12.11.10
+        bh=Y8SspAPfkyjpo8sc8kHtR2b6FK9e6JUk9ZrRa3juDFE=;
+        b=WPY0swj4zoWz/xrHaZzpsfJLturzLJpUuWl9/n/bsAtYy+0NzW2595jd5qGeGh1qSQ
+         x1J2a1HcplVICODKWuvgnvCfEFUfseA9qf3fvyAD0jtz/myv6sBF0n7lW6yDi0uHVBtH
+         A+V6LVA5LwOA8plUut+c+0JdtXHMpJJeNbaiFEpVrWakCRJ/895eQ6CLnGwqPEutt76Q
+         23tD71UAq+W6mt7r6jBTZ5SPz/A1pP3t6esKKlhT56MmeTN2M0HI5T4PVvCzYpyACgrz
+         tlaJmza0idzKdPfzwfx91hlhMr7EdH+fFB98tH1yFFQkJzvJTzv/5WYLNDJAXTZtRvoN
+         UbFQ==
+X-Gm-Message-State: AFqh2krb+KrsH5CnuXBGGpp1SikRI2hl7wh+rWTNVKbazVYf1ZHULK6z
+        j2vBZK6tfB4ge4+E5jZxd2HFdw==
+X-Google-Smtp-Source: AMrXdXsJLK+EISYnk3NuapK9nUhIvsuTriY5KbmYTlcP0MQIsy0J7HnRgxhC/s4nRTR+zxmjrFzfdg==
+X-Received: by 2002:a17:90a:468d:b0:229:983:f3f9 with SMTP id z13-20020a17090a468d00b002290983f3f9mr25342454pjf.40.1674073765683;
+        Wed, 18 Jan 2023 12:29:25 -0800 (PST)
+Received: from [127.0.1.1] (c-73-164-155-12.hsd1.wa.comcast.net. [73.164.155.12])
+        by smtp.gmail.com with ESMTPSA id t13-20020a17090a3b4d00b002132f3e71c6sm1724948pjf.52.2023.01.18.12.29.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 12:11:12 -0800 (PST)
-From:   Gregory Price <gourry.memverge@gmail.com>
-X-Google-Original-From: Gregory Price <gregory.price@memverge.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, krisman@collabora.com,
-        tglx@linutronix.de, luto@kernel.org, oleg@redhat.com,
-        peterz@infradead.org, ebiederm@xmission.com,
-        akpm@linux-foundation.org, adobriyan@gmail.com, corbet@lwn.net,
-        shuah@kernel.org, Gregory Price <gregory.price@memverge.com>
-Subject: [PATCH 3/3] ptrace,syscall_user_dispatch: add a getter/setter for sud configuration
-Date:   Wed, 18 Jan 2023 15:10:55 -0500
-Message-Id: <20230118201055.147228-4-gregory.price@memverge.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230118201055.147228-1-gregory.price@memverge.com>
-References: <20230118201055.147228-1-gregory.price@memverge.com>
+        Wed, 18 Jan 2023 12:29:25 -0800 (PST)
+From:   Bobby Eshleman <bobby.eshleman@bytedance.com>
+Date:   Wed, 18 Jan 2023 12:27:40 -0800
+Subject: [PATCH RFC 2/3] selftests/bpf: add vsock to vmtest.sh
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230118-support-vsock-sockmap-connectible-v1-2-d47e6294827b@bytedance.com>
+References: <20230118-support-vsock-sockmap-connectible-v1-0-d47e6294827b@bytedance.com>
+In-Reply-To: <20230118-support-vsock-sockmap-connectible-v1-0-d47e6294827b@bytedance.com>
+To:     Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>
+X-Mailer: b4 0.11.2
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch implements ptrace getter and setter interface for syscall
-syscall user dispatch configuration info.
+Add the ability to use vsock in the vmtest.sh script and
+the test kernel config.
 
-Presently, these settings are write-only via prctl, making it impossible
-to implement transparent checkpoint.
-
-This is modeled after a similar interface for SECCOMP, which can have
-its configuration dumped by ptrace for software like CRIU.
-
-Signed-off-by: Gregory Price <gregory.price@memverge.com>
+Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
 ---
- .../admin-guide/syscall-user-dispatch.rst     |  5 +-
- include/linux/syscall_user_dispatch.h         | 19 +++++++
- include/uapi/linux/ptrace.h                   | 10 ++++
- kernel/entry/syscall_user_dispatch.c          | 49 +++++++++++++++++++
- kernel/ptrace.c                               |  9 ++++
- 5 files changed, 91 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/config.x86_64 | 4 ++++
+ tools/testing/selftests/bpf/vmtest.sh     | 1 +
+ 2 files changed, 5 insertions(+)
 
-diff --git a/Documentation/admin-guide/syscall-user-dispatch.rst b/Documentation/admin-guide/syscall-user-dispatch.rst
-index 60314953c728..a23ae21a1d5b 100644
---- a/Documentation/admin-guide/syscall-user-dispatch.rst
-+++ b/Documentation/admin-guide/syscall-user-dispatch.rst
-@@ -43,7 +43,10 @@ doesn't rely on any of the syscall ABI to make the filtering.  It uses
- only the syscall dispatcher address and the userspace key.
- 
- As the ABI of these intercepted syscalls is unknown to Linux, these
--syscalls are not instrumentable via ptrace or the syscall tracepoints.
-+syscalls are not instrumentable via ptrace or the syscall tracepoints,
-+however an interfaces to suspend, checkpoint, and restore syscall user
-+dispatch configuration has been added to ptrace to assist userland
-+checkpoint/restart software.
- 
- Interface
- ---------
-diff --git a/include/linux/syscall_user_dispatch.h b/include/linux/syscall_user_dispatch.h
-index a0ae443fb7df..dbf384b7a26e 100644
---- a/include/linux/syscall_user_dispatch.h
-+++ b/include/linux/syscall_user_dispatch.h
-@@ -22,6 +22,13 @@ int set_syscall_user_dispatch(unsigned long mode, unsigned long offset,
- #define clear_syscall_work_syscall_user_dispatch(tsk) \
- 	clear_task_syscall_work(tsk, SYSCALL_USER_DISPATCH)
- 
-+int syscall_user_dispatch_get_config(struct task_struct *task, unsigned long size,
-+	void __user *data);
-+
-+int syscall_user_dispatch_set_config(struct task_struct *task, unsigned long size,
-+	void __user *data);
-+
-+
- #else
- struct syscall_user_dispatch {};
- 
-@@ -35,6 +42,18 @@ static inline void clear_syscall_work_syscall_user_dispatch(struct task_struct *
- {
+diff --git a/tools/testing/selftests/bpf/config.x86_64 b/tools/testing/selftests/bpf/config.x86_64
+index dd97d61d325ca..db5e6b9a91711 100644
+--- a/tools/testing/selftests/bpf/config.x86_64
++++ b/tools/testing/selftests/bpf/config.x86_64
+@@ -234,7 +234,11 @@ CONFIG_VIRTIO_BLK=y
+ CONFIG_VIRTIO_CONSOLE=y
+ CONFIG_VIRTIO_NET=y
+ CONFIG_VIRTIO_PCI=y
++CONFIG_VIRTIO_VSOCKETS=y
++CONFIG_VIRTIO_VSOCKETS_COMMON=y
+ CONFIG_VLAN_8021Q=y
++CONFIG_VSOCKETS=y
++CONFIG_VSOCKETS_LOOPBACK=y
+ CONFIG_X86_ACPI_CPUFREQ=y
+ CONFIG_X86_CPUID=y
+ CONFIG_X86_MSR=y
+diff --git a/tools/testing/selftests/bpf/vmtest.sh b/tools/testing/selftests/bpf/vmtest.sh
+index 316a56d680f25..aad27ffd4ec68 100755
+--- a/tools/testing/selftests/bpf/vmtest.sh
++++ b/tools/testing/selftests/bpf/vmtest.sh
+@@ -250,6 +250,7 @@ EOF
+ 		-enable-kvm \
+ 		-m 4G \
+ 		-drive file="${rootfs_img}",format=raw,index=1,media=disk,if=virtio,cache=none \
++		-device vhost-vsock-pci,guest-cid=1234 \
+ 		-kernel "${kernel_bzimage}" \
+ 		-append "root=/dev/vda rw console=${QEMU_CONSOLE}"
  }
- 
-+int syscall_user_dispatch_get_config(struct task_struct *task, unsigned long size,
-+	void __user *data)
-+{
-+	return -EINVAL;
-+}
-+
-+int syscall_user_dispatch_set_config(struct task_struct *task, unsigned long size,
-+	void __user *data)
-+{
-+	return -EINVAL;
-+}
-+
- #endif /* CONFIG_GENERIC_ENTRY */
- 
- #endif /* _SYSCALL_USER_DISPATCH_H */
-diff --git a/include/uapi/linux/ptrace.h b/include/uapi/linux/ptrace.h
-index ba9e3f19a22c..8b93c78189b5 100644
---- a/include/uapi/linux/ptrace.h
-+++ b/include/uapi/linux/ptrace.h
-@@ -112,6 +112,16 @@ struct ptrace_rseq_configuration {
- 	__u32 pad;
- };
- 
-+#define PTRACE_SET_SYSCALL_USER_DISPATCH_CONFIG 0x4210
-+#define PTRACE_GET_SYSCALL_USER_DISPATCH_CONFIG 0x4211
-+struct syscall_user_dispatch_config {
-+	__u64 mode;
-+	__s8 *selector;
-+	__u64 offset;
-+	__u64 len;
-+	__u8 on_dispatch;
-+};
-+
- /*
-  * These values are stored in task->ptrace_message
-  * by ptrace_stop to describe the current syscall-stop.
-diff --git a/kernel/entry/syscall_user_dispatch.c b/kernel/entry/syscall_user_dispatch.c
-index 7607f4598dd8..ae4f9a4b96ac 100644
---- a/kernel/entry/syscall_user_dispatch.c
-+++ b/kernel/entry/syscall_user_dispatch.c
-@@ -111,3 +111,52 @@ int set_syscall_user_dispatch(unsigned long mode, unsigned long offset,
- 
- 	return 0;
- }
-+
-+int syscall_user_dispatch_get_config(struct task_struct *task, unsigned long size,
-+		void __user *data)
-+{
-+	struct syscall_user_dispatch *sd = &task->syscall_dispatch;
-+	struct syscall_user_dispatch_config config;
-+
-+	if (size != sizeof(struct syscall_user_dispatch_config))
-+		return -EINVAL;
-+
-+	if (sd->selector) {
-+		config.mode = PR_SYS_DISPATCH_ON;
-+		config.offset = sd->offset;
-+		config.len = sd->len;
-+		config.selector = sd->selector;
-+		config.on_dispatch = sd->on_dispatch;
-+	} else {
-+		config.mode = PR_SYS_DISPATCH_OFF;
-+		config.offset = 0;
-+		config.len = 0;
-+		config.selector = NULL;
-+		config.on_dispatch = false;
-+	}
-+	if (copy_to_user(data, &config, sizeof(config)))
-+		return -EFAULT;
-+
-+	return 0;
-+}
-+
-+int syscall_user_dispatch_set_config(struct task_struct *task, unsigned long size,
-+		void __user *data)
-+{
-+	struct syscall_user_dispatch_config config;
-+	int ret;
-+
-+	if (size != sizeof(struct syscall_user_dispatch_config))
-+		return -EINVAL;
-+
-+	if (copy_from_user(&config, data, sizeof(config)))
-+		return -EFAULT;
-+
-+	ret = set_syscall_user_dispatch(config.mode, config.offset, config.len,
-+			config.selector);
-+	if (ret)
-+		return ret;
-+
-+	task->syscall_dispatch.on_dispatch = config.on_dispatch;
-+	return 0;
-+}
-diff --git a/kernel/ptrace.c b/kernel/ptrace.c
-index a6ad815bd4be..0b210a1450e7 100644
---- a/kernel/ptrace.c
-+++ b/kernel/ptrace.c
-@@ -32,6 +32,7 @@
- #include <linux/compat.h>
- #include <linux/sched/signal.h>
- #include <linux/minmax.h>
-+#include <linux/syscall_user_dispatch.h>
- 
- #include <asm/syscall.h>	/* for syscall_get_* */
- 
-@@ -1264,6 +1265,14 @@ int ptrace_request(struct task_struct *child, long request,
- 		break;
- #endif
- 
-+	case PTRACE_SET_SYSCALL_USER_DISPATCH_CONFIG:
-+		ret = syscall_user_dispatch_set_config(child, addr, datavp);
-+		break;
-+
-+	case PTRACE_GET_SYSCALL_USER_DISPATCH_CONFIG:
-+		ret = syscall_user_dispatch_get_config(child, addr, datavp);
-+		break;
-+
- 	default:
- 		break;
- 	}
+
 -- 
-2.39.0
-
+2.30.2
