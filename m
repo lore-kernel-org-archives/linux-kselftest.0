@@ -2,34 +2,34 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FE6AC38147
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7273C677F1
 	for <linux-kselftest@archiver.kernel.org>; Wed, 18 Jan 2023 03:52:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229641AbjARDw5 (ORCPT
+        id S229650AbjARDw6 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 17 Jan 2023 22:52:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34492 "EHLO
+        Tue, 17 Jan 2023 22:52:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjARDw4 (ORCPT
+        with ESMTP id S229448AbjARDw4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Tue, 17 Jan 2023 22:52:56 -0500
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3655353B11;
-        Tue, 17 Jan 2023 19:52:54 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D83B53F81;
+        Tue, 17 Jan 2023 19:52:55 -0800 (PST)
 From:   Thomas =?utf-8?q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
         s=mail; t=1674013973;
-        bh=LeJ7gI3yR8MhBw3LdfOaYZv4aNx3sO+fd4js1DkSvTk=;
+        bh=1RCqqZydnDFaJZOYxPVplOG7gSvedFP5vnvPdym2MNk=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=aumQF/TcOjSY7DpoHL3bnZxTpOw/p54FeLWG97HAHPjnEQg+txWdK/gPtO0W6i45g
-         ttGko7iGFV+IRqIv/PWxgpsZFqZQVDNc4k2SWr8vmNOvUmmXwOINTXMuRB6Uib9wS+
-         +vs31as6Dd2UkdP8QgBGnOGSI94HSa1ddvleySLE=
-Date:   Wed, 18 Jan 2023 03:52:18 +0000
-Subject: [PATCH 1/3] selftests/bpf: align kbuild messages to standard
+        b=Oom12uDZEeK8c+uFQ7KYGYIyqHwcp2ZSwuXw7cXNu1ulczqYtzPUedbNlUtbhXorS
+         NNz13CSPU4OR/twlvI7sJU07iPrAerurNNi9NUFVMJhBO3SizaACCeic5Qa1PVyVQe
+         p2NrPcgUx+e3HFDPLrI3DnZ5Nv6JhUEReLHYoEx4=
+Date:   Wed, 18 Jan 2023 03:52:20 +0000
+Subject: [PATCH 3/3] tools/resolve_btfids: align kbuild messages to standard
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
-Message-Id: <20230118-kbuild-alignment-v1-1-eb5e9fd55c92@weissschuh.net>
+Message-Id: <20230118-kbuild-alignment-v1-3-eb5e9fd55c92@weissschuh.net>
 References: <20230118-kbuild-alignment-v1-0-eb5e9fd55c92@weissschuh.net>
 In-Reply-To: <20230118-kbuild-alignment-v1-0-eb5e9fd55c92@weissschuh.net>
 To:     Alexei Starovoitov <ast@kernel.org>,
@@ -47,11 +47,11 @@ Cc:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
         Thomas =?utf-8?q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.11.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1674013966; l=1017;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1674013966; l=957;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=LeJ7gI3yR8MhBw3LdfOaYZv4aNx3sO+fd4js1DkSvTk=;
- b=tBkx8uRJ5OT383z4h0Cc9/q/mtXjwWDwrQNqqqE2xzO28njGH8YjaQGfK9uXkZWjeYduZGVCJKh+
- gjzRUk+FDKlW2QIxzV1YJHjlJpynKpzqgtgWZbeHfRXVfDgDKrQT
+ bh=1RCqqZydnDFaJZOYxPVplOG7gSvedFP5vnvPdym2MNk=;
+ b=Obt7j+FeHbwpRmVExoT9rOQOGNSXFjjaJMIksWp8W4sLuwDgrtpS2uqhIZKLUmb7QDAzdQ95cWPM
+ 1Nksn1MlA61vBpCC2W73X/bGlu6pKqSBkOEDVsLjkbDgtHP1BCwG
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 Precedence: bulk
@@ -70,21 +70,21 @@ part, which leads to misalignments with the rest of kbuild.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- tools/testing/selftests/bpf/Makefile | 2 +-
+ tools/bpf/resolve_btfids/Makefile | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index c22c43bbee19..5190c19295d4 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -98,7 +98,7 @@ Q =
- msg =
- else
- Q = @
--msg = @printf '  %-8s%s %s%s\n' "$(1)" "$(if $(2), [$(2)])" "$(notdir $(3))" "$(if $(4), $(4))";
-+msg = @printf '  %-7s%s %s%s\n' "$(1)" "$(if $(2), [$(2)])" "$(notdir $(3))" "$(if $(4), $(4))";
- MAKEFLAGS += --no-print-directory
- submake_extras := feature_display=0
+diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
+index 19a3112e271a..f4106d514b9c 100644
+--- a/tools/bpf/resolve_btfids/Makefile
++++ b/tools/bpf/resolve_btfids/Makefile
+@@ -12,7 +12,7 @@ else
+   ifeq ($(silent),1)
+     msg =
+   else
+-    msg = @printf '  %-8s %s%s\n' "$(1)" "$(notdir $(2))" "$(if $(3), $(3))";
++    msg = @printf '  %-7s %s%s\n' "$(1)" "$(notdir $(2))" "$(if $(3), $(3))";
+   endif
+   MAKEFLAGS=--no-print-directory
  endif
 
 -- 
