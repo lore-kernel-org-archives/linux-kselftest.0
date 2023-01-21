@@ -2,246 +2,129 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED8CCC25B50
-	for <linux-kselftest@archiver.kernel.org>; Sat, 21 Jan 2023 00:30:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 52492C05027
+	for <linux-kselftest@archiver.kernel.org>; Sat, 21 Jan 2023 03:19:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230153AbjAUAaB (ORCPT
+        id S229684AbjAUDTC (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 20 Jan 2023 19:30:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41314 "EHLO
+        Fri, 20 Jan 2023 22:19:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230120AbjAUA3z (ORCPT
+        with ESMTP id S229568AbjAUDTC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 20 Jan 2023 19:29:55 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09951C4E83
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Jan 2023 16:29:22 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id y66-20020a253245000000b007cb4f1e3e57so7437005yby.8
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Jan 2023 16:29:21 -0800 (PST)
+        Fri, 20 Jan 2023 22:19:02 -0500
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A8A6AF45;
+        Fri, 20 Jan 2023 19:19:01 -0800 (PST)
+Received: by mail-il1-x132.google.com with SMTP id d10so3667184ilc.12;
+        Fri, 20 Jan 2023 19:19:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7DCwT0vOmg1kvE5C/ZmiO0Q3IunPA+bJBAyC1WliYPU=;
-        b=UKfUq51zNuwJ1s8RoAy4DKxdjfKNX60WlC3mQo2LPz454muDFSLBiSU6Lg104sdJ3h
-         1D2D4ZWi3MlujhpVjBeBYy/DVsxaYDDG/xY+ZTE6SUwCV/W5nixFHUH47KzNY5O5nMUd
-         +V6OnoU5yuGHvDak/bGBvLf4EfNcXGq08rHgjcTSGe3laadp8N3fU+rNhnJeBAx2V2wG
-         0s9W8l12xEGM1MZTkc4KzrpQeVEM2/HVoThePaCNd5+yBm2BAHcuk3v31tMnCgAr0uzB
-         x9w2hDFjNf1T0v4gBms5OXgjSUtaIvdZvNnZkKfqiru7e8/AXLVj/kDoihEnAvAM/ErV
-         nRLQ==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=BNEPDeyZy+520jJ70Z8ubzdZCaFZrMQI2bVBkEs12kU=;
+        b=E48zNa4BqUeY8ZRL/jlShcttii3p3GAN2DpMYV/mGhDlphOEpMmhtBcSxCnNGZDCtU
+         7auLdY5G1YL8mWCUFAjimglHJgz0JVzFrPQZJj0MFMa0lpUk/uZqKPWZvS0UfVXhhQ2y
+         mUwbYkc0PFd51QMQEUwBA8wsFCydxIVENehJb3J+Qrq7+GVZtAV6jYyKWrvKMVVEO1ts
+         inD8lqciLPw3ayITq6+jpY/N/n1UGrraSqfrSZxBjFimze1ZUhQt1lOL5opVl+6AfwbO
+         MpmzzqXLABam6kEYw95Lm3eytOYr4M3HzqGTS2vg9DNN4Q22H1QfAn20PsKY4cN8cFo/
+         FK9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7DCwT0vOmg1kvE5C/ZmiO0Q3IunPA+bJBAyC1WliYPU=;
-        b=xehhSQ0vaRphrNkB9dyouywI1yf9KzekGNgF1gmRJ69vfIshUSL6M6HZB06N5355H8
-         At1k3QLxOIcijgid0CRRQLc6KUkBqPtZA3W/45xfXWl/WHWvLtxKKl5RRiKwgwuqLLX1
-         /IEfY4zs/TrHj7qNTgS7ymc7r0OIGtWH1hHVzzglaqeEF2ADkeBsSoS7ad8GltueMFMW
-         HoYJZFALjqvDlEwEuRYl8V6/Kt88nosy8pl0j1Q1KeN5X/D8ruE5pyYWY2080u8/h+0V
-         OpeZBWegPbIEsuotldeWljVA/gXHsROZ8QFCtoBhzA55wwg4l+D6poFF2TFqaVmMupuH
-         kLnw==
-X-Gm-Message-State: AFqh2krc3WNFjW/xicKPkjadXOEBdrtyYm4uDPIM30k4mA39i8b40uQj
-        28KuALBftjEi9J1ghkql3pk/FAXTIthWooCa6e+TfuooeyNMwWFmNJewP52ppnkEKs6zMluot94
-        KzKFi2YTtl7B+DWYmYG1zSUNctoNQ0/Edau3Ess2SccWNoIGlT8BER1l8bgY0Xvsvj86BwC238y
-        dGeVJXjFMf2vA=
-X-Google-Smtp-Source: AMrXdXuLbmhgtGWdFAgKnD+yNqKI8Xaq12OTyFBCP0UJI16En+uZ/3BxfhP5lOEKrFWt/DwBqtrpjBp5AD2mFLoVxA==
-X-Received: from ackerleytng-cloudtop-sg.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:b30])
- (user=ackerleytng job=sendgmr) by 2002:a25:8d03:0:b0:7a0:7cd5:602d with SMTP
- id n3-20020a258d03000000b007a07cd5602dmr2002572ybl.426.1674260308219; Fri, 20
- Jan 2023 16:18:28 -0800 (PST)
-Date:   Sat, 21 Jan 2023 00:15:42 +0000
-In-Reply-To: <20230121001542.2472357-1-ackerleytng@google.com>
-Mime-Version: 1.0
-References: <20230121001542.2472357-1-ackerleytng@google.com>
-X-Mailer: git-send-email 2.39.0.246.g2a6d74b583-goog
-Message-ID: <20230121001542.2472357-32-ackerleytng@google.com>
-Subject: [RFC PATCH v3 31/31] KVM: selftests: TDX: Add TDX UPM selftests for
- implicit conversion
-From:   Ackerley Tng <ackerleytng@google.com>
-To:     linux-kselftest@vger.kernel.org
-Cc:     pbonzini@redhat.com, seanjc@google.com, isaku.yamahata@intel.com,
-        sagis@google.com, erdemaktas@google.com, afranji@google.com,
-        runanwang@google.com, shuah@kernel.org, drjones@redhat.com,
-        maz@kernel.org, bgardon@google.com, jmattson@google.com,
-        dmatlack@google.com, peterx@redhat.com, oupton@google.com,
-        ricarkol@google.com, yang.zhong@intel.com, wei.w.wang@intel.com,
-        xiaoyao.li@intel.com, pgonda@google.com, marcorr@google.com,
-        eesposit@redhat.com, borntraeger@de.ibm.com, eric.auger@redhat.com,
-        wangyanan55@huawei.com, aaronlewis@google.com, vkuznets@redhat.com,
-        pshier@google.com, axelrasmussen@google.com,
-        zhenzhong.duan@intel.com, maciej.szmigiero@oracle.com,
-        like.xu@linux.intel.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Ackerley Tng <ackerleytng@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BNEPDeyZy+520jJ70Z8ubzdZCaFZrMQI2bVBkEs12kU=;
+        b=AbiC7/J+Fb2JEAuv3cSmTbu+gchaKF5B2YYAz8taok8zLLFjCV9SiGPqA2wei7yTyp
+         i50oX1j/HTI/DtIecH0kTrw1+03hjMDrIx3Xsqheqixaof/IU4npdsE1Pamxh4+Sy8II
+         aUtWLym8nXSjprxnMPyCBn2nJQ55DWaO7PvoHGVypSFqDB/NtndHnMftKlYWZ9Tl5pgc
+         VAQNl+8+E0V0e3Cxa0E7j2EYAe9oZPIjCc9RUuJiXhw17XKg0fRKAzg/GUW9f7sJnN6u
+         kaR8fEdmRSgatgvhQKGSzGeLiIskSqXfuNmYZw5/JIB1LoFQuGradlovoh6/kYJUQJjd
+         FgxQ==
+X-Gm-Message-State: AFqh2koZSiF+zGzNkU1bXWZHMeMbi83dxqhxyYEby+LAra9Nb3IF+jy8
+        n7tyuGZa+K4m0+P1DqZDaNEZ7xkrLA0XbJUQSy8J6GdytRQ=
+X-Google-Smtp-Source: AMrXdXvfaALIHcVRYgfGgc9wNixFqvLW7HL6rErcMJV7rqwRwYXquOQcZheG2b0Z5jvuuiSMNnLIanOnFTRAgmav1nQ=
+X-Received: by 2002:a92:c70e:0:b0:30e:a789:f0f7 with SMTP id
+ a14-20020a92c70e000000b0030ea789f0f7mr1652606ilp.155.1674271140596; Fri, 20
+ Jan 2023 19:19:00 -0800 (PST)
+MIME-Version: 1.0
+References: <20230120144356.40717-1-gregory.price@memverge.com> <20230120144356.40717-4-gregory.price@memverge.com>
+In-Reply-To: <20230120144356.40717-4-gregory.price@memverge.com>
+From:   Andrei Vagin <avagin@gmail.com>
+Date:   Fri, 20 Jan 2023 19:18:49 -0800
+Message-ID: <CANaxB-zet4+S4saBHgYPP6feppBVHkCRJxTkL8R-OyXa_gXG3Q@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] ptrace,syscall_user_dispatch: add a getter/setter
+ for sud configuration
+To:     Gregory Price <gourry.memverge@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        krisman@collabora.com, tglx@linutronix.de, luto@kernel.org,
+        oleg@redhat.com, peterz@infradead.org, ebiederm@xmission.com,
+        akpm@linux-foundation.org, adobriyan@gmail.com, corbet@lwn.net,
+        shuah@kernel.org, Gregory Price <gregory.price@memverge.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This tests the use of restricted memory without explicit MapGPA calls.
+On Fri, Jan 20, 2023 at 7:05 AM Gregory Price <gourry.memverge@gmail.com> wrote:
+>
+> Implement ptrace getter/setter interface for syscall user dispatch.
+>
+> Presently, these settings are write-only via prctl, making it impossible
+> to implement transparent checkpoint (coordination with the software is
+> required).
+>
+> This is modeled after a similar interface for SECCOMP, which can have
+> its configuration dumped by ptrace for software like CRIU.
+>
+> Signed-off-by: Gregory Price <gregory.price@memverge.com>
+> ---
+>  .../admin-guide/syscall-user-dispatch.rst     |  5 +-
+>  include/linux/syscall_user_dispatch.h         | 19 +++++++
+>  include/uapi/linux/ptrace.h                   | 10 ++++
+>  kernel/entry/syscall_user_dispatch.c          | 49 +++++++++++++++++++
+>  kernel/ptrace.c                               |  9 ++++
+>  5 files changed, 91 insertions(+), 1 deletion(-)
+>
+> diff --git a/Documentation/admin-guide/syscall-user-dispatch.rst b/Documentation/admin-guide/syscall-user-dispatch.rst
+> index 60314953c728..a23ae21a1d5b 100644
+> --- a/Documentation/admin-guide/syscall-user-dispatch.rst
+> +++ b/Documentation/admin-guide/syscall-user-dispatch.rst
 
-Signed-off-by: Ackerley Tng <ackerleytng@google.com>
----
- .../selftests/kvm/x86_64/tdx_upm_test.c       | 88 ++++++++++++++++---
- 1 file changed, 78 insertions(+), 10 deletions(-)
+<snip>
 
-diff --git a/tools/testing/selftests/kvm/x86_64/tdx_upm_test.c b/tools/testing/selftests/kvm/x86_64/tdx_upm_test.c
-index 13914aebd7da7..56ba3d4fb15a5 100644
---- a/tools/testing/selftests/kvm/x86_64/tdx_upm_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/tdx_upm_test.c
-@@ -149,11 +149,18 @@ enum {
-  * Does vcpu_run, and also manages memory conversions if requested by the TD.
-  */
- void vcpu_run_and_manage_memory_conversions(struct kvm_vm *vm,
--					    struct kvm_vcpu *vcpu)
-+					    struct kvm_vcpu *vcpu, bool handle_conversions)
- {
- 	for (;;) {
- 		vcpu_run(vcpu);
--		if (
-+		if (handle_conversions &&
-+			vcpu->run->exit_reason == KVM_EXIT_MEMORY_FAULT) {
-+			handle_memory_conversion(
-+				vm, vcpu->run->memory.gpa,
-+				vcpu->run->memory.size,
-+				vcpu->run->memory.flags == KVM_MEMORY_EXIT_FLAG_PRIVATE);
-+			continue;
-+		} else if (
- 			vcpu->run->exit_reason == KVM_EXIT_IO &&
- 			vcpu->run->io.port == TDX_UPM_TEST_ACCEPT_PRINT_PORT) {
- 			uint64_t gpa = tdx_test_read_64bit(
-@@ -233,8 +240,53 @@ static void guest_upm_explicit(void)
- 	tdx_test_success();
- }
- 
-+static void guest_upm_implicit(void)
-+{
-+	struct tdx_upm_test_area *test_area_gva_private =
-+		(struct tdx_upm_test_area *)TDX_UPM_TEST_AREA_GVA_PRIVATE;
-+	struct tdx_upm_test_area *test_area_gva_shared =
-+		(struct tdx_upm_test_area *)TDX_UPM_TEST_AREA_GVA_SHARED;
-+
-+	/* Check: host reading private memory does not modify guest's view */
-+	fill_test_area(test_area_gva_private, PATTERN_GUEST_GENERAL);
-+
-+	tdx_test_report_to_user_space(SYNC_CHECK_READ_PRIVATE_MEMORY_FROM_HOST);
-+
-+	TDX_UPM_TEST_ASSERT(
-+		check_test_area(test_area_gva_private, PATTERN_GUEST_GENERAL));
-+
-+	/* Use focus area as shared */
-+	fill_focus_area(test_area_gva_shared, PATTERN_GUEST_FOCUS);
-+
-+	/* General areas should not be affected */
-+	TDX_UPM_TEST_ASSERT(
-+		check_general_areas(test_area_gva_private, PATTERN_GUEST_GENERAL));
-+
-+	tdx_test_report_to_user_space(SYNC_CHECK_READ_SHARED_MEMORY_FROM_HOST);
-+
-+	/* Check that guest has the same view of shared memory */
-+	TDX_UPM_TEST_ASSERT(
-+		check_focus_area(test_area_gva_shared, PATTERN_HOST_FOCUS));
-+
-+	/* Use focus area as private */
-+	fill_focus_area(test_area_gva_private, PATTERN_GUEST_FOCUS);
-+
-+	/* General areas should be unaffected by remapping */
-+	TDX_UPM_TEST_ASSERT(
-+		check_general_areas(test_area_gva_private, PATTERN_GUEST_GENERAL));
-+
-+	tdx_test_report_to_user_space(SYNC_CHECK_READ_PRIVATE_MEMORY_FROM_HOST_AGAIN);
-+
-+	/* Check that guest can use private memory after focus area is remapped as private */
-+	TDX_UPM_TEST_ASSERT(
-+		fill_and_check(test_area_gva_private, PATTERN_GUEST_GENERAL));
-+
-+	tdx_test_success();
-+}
-+
- static void run_selftest(struct kvm_vm *vm, struct kvm_vcpu *vcpu,
--			 struct tdx_upm_test_area *test_area_base_hva)
-+			 struct tdx_upm_test_area *test_area_base_hva,
-+			 bool implicit)
- {
- 	vcpu_run(vcpu);
- 	TDX_TEST_CHECK_GUEST_FAILURE(vcpu);
-@@ -253,7 +305,7 @@ static void run_selftest(struct kvm_vm *vm, struct kvm_vcpu *vcpu,
- 	TEST_ASSERT(check_test_area(test_area_base_hva, PATTERN_CONFIDENCE_CHECK),
- 		"Host should read PATTERN_CONFIDENCE_CHECK from guest's private memory.");
- 
--	vcpu_run_and_manage_memory_conversions(vm, vcpu);
-+	vcpu_run_and_manage_memory_conversions(vm, vcpu, implicit);
- 	TDX_TEST_CHECK_GUEST_FAILURE(vcpu);
- 	TDX_TEST_ASSERT_IO(vcpu, TDX_TEST_REPORT_PORT, TDX_TEST_REPORT_SIZE,
- 		 TDG_VP_VMCALL_INSTRUCTION_IO_WRITE);
-@@ -270,7 +322,7 @@ static void run_selftest(struct kvm_vm *vm, struct kvm_vcpu *vcpu,
- 	TEST_ASSERT(check_focus_area(test_area_base_hva, PATTERN_HOST_FOCUS),
- 		    "Host should be able to use shared memory.");
- 
--	vcpu_run_and_manage_memory_conversions(vm, vcpu);
-+	vcpu_run_and_manage_memory_conversions(vm, vcpu, implicit);
- 	TDX_TEST_CHECK_GUEST_FAILURE(vcpu);
- 	TDX_TEST_ASSERT_IO(vcpu, TDX_TEST_REPORT_PORT, TDX_TEST_REPORT_SIZE,
- 		 TDG_VP_VMCALL_INSTRUCTION_IO_WRITE);
-@@ -319,18 +371,20 @@ static void guest_ve_handler(struct ex_regs *regs)
- 	TDX_UPM_TEST_ASSERT(!ret);
- }
- 
--static void verify_upm_test(void)
-+static void verify_upm_test(bool implicit)
- {
- 	struct kvm_vm *vm;
- 	struct kvm_vcpu *vcpu;
- 
-+	void *guest_code;
- 	vm_vaddr_t test_area_gva_private;
- 	struct tdx_upm_test_area *test_area_base_hva;
- 	uint64_t test_area_npages;
- 
- 	vm = td_create();
- 	td_initialize(vm, VM_MEM_SRC_ANONYMOUS, 0);
--	vcpu = td_vcpu_add(vm, 0, guest_upm_explicit);
-+	guest_code = implicit ? guest_upm_implicit : guest_upm_explicit;
-+	vcpu = td_vcpu_add(vm, 0, guest_code);
- 
- 	vm_install_exception_handler(vm, VE_VECTOR, guest_ve_handler);
- 
-@@ -370,13 +424,26 @@ static void verify_upm_test(void)
- 
- 	td_finalize(vm);
- 
--	printf("Verifying UPM functionality: explicit MapGPA\n");
-+	if (implicit)
-+		printf("Verifying UPM functionality: implicit conversion\n");
-+	else
-+		printf("Verifying UPM functionality: explicit MapGPA\n");
- 
--	run_selftest(vm, vcpu, test_area_base_hva);
-+	run_selftest(vm, vcpu, test_area_base_hva, implicit);
- 
- 	kvm_vm_free(vm);
- }
- 
-+void verify_upm_test_explicit(void)
-+{
-+	verify_upm_test(false);
-+}
-+
-+void verify_upm_test_implicit(void)
-+{
-+	verify_upm_test(true);
-+}
-+
- int main(int argc, char **argv)
- {
- 	/* Disable stdout buffering */
-@@ -388,5 +455,6 @@ int main(int argc, char **argv)
- 		return 0;
- 	}
- 
--	run_in_new_process(&verify_upm_test);
-+	run_in_new_process(&verify_upm_test_explicit);
-+	run_in_new_process(&verify_upm_test_implicit);
- }
--- 
-2.39.0.246.g2a6d74b583-goog
+> +
+> +int syscall_user_dispatch_get_config(struct task_struct *task, unsigned long size,
+> +               void __user *data)
+> +{
+> +       struct syscall_user_dispatch *sd = &task->syscall_dispatch;
+> +       struct syscall_user_dispatch_config config;
+> +
+> +       if (size != sizeof(struct syscall_user_dispatch_config))
+> +               return -EINVAL;
+> +
+> +       if (sd->selector) {
+> +               config.mode = PR_SYS_DISPATCH_ON;
+> +               config.offset = sd->offset;
+> +               config.len = sd->len;
+> +               config.selector = sd->selector;
+> +               config.on_dispatch = sd->on_dispatch;
+> +       } else {
 
+This doesn't look right for me. selector is optional and if it is 0,
+it doesn't mean that
+mode is PR_SYS_DISPATCH_OFF, does it?
+
+> +               config.mode = PR_SYS_DISPATCH_OFF;
+> +               config.offset = 0;
+> +               config.len = 0;
+> +               config.selector = NULL;
+> +               config.on_dispatch = false;
+> +       }
+> +       if (copy_to_user(data, &config, sizeof(config)))
+> +               return -EFAULT;
+> +
+> +       return 0;
+> +}
+> +
