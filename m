@@ -2,60 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53606C05027
-	for <linux-kselftest@archiver.kernel.org>; Sat, 21 Jan 2023 00:18:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 09047C27C76
+	for <linux-kselftest@archiver.kernel.org>; Sat, 21 Jan 2023 00:18:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbjAUASC (ORCPT
+        id S230001AbjAUASF (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 20 Jan 2023 19:18:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54058 "EHLO
+        Fri, 20 Jan 2023 19:18:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230075AbjAUARp (ORCPT
+        with ESMTP id S230097AbjAUARw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 20 Jan 2023 19:17:45 -0500
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1349DCC5E7
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Jan 2023 16:17:21 -0800 (PST)
-Received: by mail-pf1-x44a.google.com with SMTP id 74-20020a62184d000000b0058b9f769609so3097573pfy.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Jan 2023 16:17:21 -0800 (PST)
+        Fri, 20 Jan 2023 19:17:52 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52A4195196
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Jan 2023 16:17:30 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id k204-20020a256fd5000000b007b8b040bc50so7397078ybc.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Jan 2023 16:17:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=i5oNII0+lLuKlf86/kD2DoUVJCXq3iLqKc12JrydmuE=;
-        b=LAEhu7IkGXJf2FuHkgdLDDQdJw5VBwJJZc2AEokK24pr3alf+8FDMjZ2pinHR4ciHa
-         +Oq98y722TU4COUPfEnyjM4uESO8QJBDHGnVB3w6Vsuux0DUHEz27ZW7Z3KKfc5LBvD8
-         TGs5+WTQPbgaRa5Y3/V8V2K514JbDDUqjQ3m39BfWJbauqvu05Mz8MsoZFqLp80t/lzN
-         p4XfjNXi14DaUj2JEj4WJHNZvW0x9dZZJWn3caDoDhkAbuVwAfoCkLVg3WZUCRoY9ahk
-         AK1EDaJ3UMuYTScpM3TZgKN1hKf76Im39SagK1u0d1eq13O6iYyZj6fK+iIYcqPVDZg6
-         FTKQ==
+        bh=WjO5rBwLb0cHzWThJNyOsO1URxlYZa7SL0LoJaae1iY=;
+        b=DbRKdnP4x88VQmpI73F5HtgUxWbJ2hsDEBYdUyvS8NBGoTwSGWDKbPvp6spCy61JKa
+         d8sCFnczxbj7XTIgC5qmDASbZuQUm4JaxsHKPw5mgwOTcf+5C7fOEgl8kKDjBaA5vDiL
+         BzUxepdz3NOVVwzTyUgqjRDacw06zOUCEiAMbmYtayKjQ0EKf8XNVzpsKuRHJcd9LAcB
+         0lu7xGF0zPGrHg+/e0vv+lW6RaM488sqw/EJEPXs421fhv5UocYR+waxt3sO+VYZy3tH
+         td827j6Sc07EQNlG9HbMRF7AN9NBjz6hjBomANw6zqJWyuma2V9QYMTIBwBpkZ12gUI3
+         a14Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=i5oNII0+lLuKlf86/kD2DoUVJCXq3iLqKc12JrydmuE=;
-        b=uZp0V0YD4gUYuiMb0ffEOYguthVidV/VKGQbWsoeRQJ9LVAESiZX1rJSutqLiE7Qxd
-         ZVuUrS8ma0t2Em7PJpap0Zgmlxzjh2NxgfFA9qVJojDbHgjaz2JeZDvmE/IOLJvXNrTS
-         rYsOjBqbhF+uw2oTPZDLTHG/OfY+Gv0tWdLGie64TMk7NzugrwdR68c/YtC7wAVOi4LQ
-         Zbw89PlvkBK9M3mikclD+V6/PWiKft6f0ARN/ZKE1+1+ppNv1NjIqh6i2pt5+oMWjdXY
-         /wE4QS8sDgOd7Uc/+NtQETrrbB/vVRlGfHlOfxiwU3WZn8ar3Vf3epHSaqb+cxSV8IgX
-         QYQA==
-X-Gm-Message-State: AFqh2kr4THHM4KfrlIztckBEPClLgqi5x2PdP8xdbm4sdqPIw7LtnY00
-        H88pLUT4rWmEqPQvPqgmwewZwYJOxo+/5aVbN9M4EHGNtKNoU5Aw0pHqPHNecje1XaseoWueNSJ
-        KKA1le0Kibq0smBrI8GNER/WpkBWsBw6HTLayW8/sWAYRs4iQb9zToGCvEK2h7dvfXga+1aitQz
-        0rut3+1EHrGQI=
-X-Google-Smtp-Source: AMrXdXuTfxIVAzTb1jlUYpnuT5J/zUqBDcX1N7GbIRzVdvA7coUgCHn/bU54/8cQLxM96lqf3TWWbP1uxHSoMjoYsA==
+        bh=WjO5rBwLb0cHzWThJNyOsO1URxlYZa7SL0LoJaae1iY=;
+        b=A2mUUiqGKzRZyIXQKHLiUEkYScxePH6D+dDMD92fdUvjbvlDU9zl1sgID94MeR/nzt
+         +wqprjOqIf6nS7v+XQIfNc3+ORApzyHiqApvIim8FbEgp7E02Lcuz00o7KuCFpndFg5J
+         9MzdODotXDBgdVTxdkOm5dvAFwOBdgT02lU8E/8zylzp2P6itht44r5XqUycem9s4ITA
+         CSqsoeWTLm1LTOkooPDiRdPEUsnKvS9+r+mnWnOM0RRZa8gaj0cXLLwVtslC3fvekrSG
+         escrMo/qjPHki4nER2VyWOmeUhARrb2KRyq5fy6xVGaNmQkVvj++BtoqwDfwIRB/ksVo
+         kQmA==
+X-Gm-Message-State: AFqh2krPgojuJ5MVjxPL1BptaC817r6zeAmanzryFC68nynDl3imSeyx
+        79zyitA18AwuSMyK8ZrZ47fksn9EQweyTiYoXJd3nCwEsxZgrIb7gopncyhm65Vf9ttf7wCftJu
+        Pn5eT7RAKp/2pIA9dDwvoESH5qfcW0IUWDLxNQKStHMeba6ufEdD7Tb22aXofvyf/5XjjRyE8mY
+        Na6YlPyOVvHCY=
+X-Google-Smtp-Source: AMrXdXs2Azizp8MgH3Huhhpq7IBWql1lWkjMllTIOkYSDytuaEr6jOkniKY65Y0teNdl7wi3iWIuU9V4MUkSE2rpow==
 X-Received: from ackerleytng-cloudtop-sg.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:b30])
- (user=ackerleytng job=sendgmr) by 2002:a62:ae10:0:b0:580:9b0b:4fde with SMTP
- id q16-20020a62ae10000000b005809b0b4fdemr1894341pff.49.1674260224601; Fri, 20
- Jan 2023 16:17:04 -0800 (PST)
-Date:   Sat, 21 Jan 2023 00:15:23 +0000
+ (user=ackerleytng job=sendgmr) by 2002:a81:648:0:b0:4ee:30ce:15e1 with SMTP
+ id 69-20020a810648000000b004ee30ce15e1mr2152793ywg.53.1674260249914; Fri, 20
+ Jan 2023 16:17:29 -0800 (PST)
+Date:   Sat, 21 Jan 2023 00:15:29 +0000
 In-Reply-To: <20230121001542.2472357-1-ackerleytng@google.com>
 Mime-Version: 1.0
 References: <20230121001542.2472357-1-ackerleytng@google.com>
 X-Mailer: git-send-email 2.39.0.246.g2a6d74b583-goog
-Message-ID: <20230121001542.2472357-13-ackerleytng@google.com>
-Subject: [RFC PATCH v3 12/31] KVM: selftests: TDX: Add basic TDX CPUID test
+Message-ID: <20230121001542.2472357-19-ackerleytng@google.com>
+Subject: [RFC PATCH v3 18/31] KVM: selftests: TDX: Add TDX MMIO reads test
 From:   Ackerley Tng <ackerleytng@google.com>
 To:     linux-kselftest@vger.kernel.org
 Cc:     pbonzini@redhat.com, seanjc@google.com, isaku.yamahata@intel.com,
@@ -78,186 +78,201 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Sagi Shahar <sagis@google.com>
 
-The test reads CPUID values from inside a TD VM and compare them
-to expected values.
-
-The test targets CPUID values which are virtualized as "As Configured",
-"As Configured (if Native)", "Calculated", "Fixed" and "Native"
-according to the TDX spec.
+The test verifies MMIO reads of various sizes from the host to the guest.
 
 Signed-off-by: Sagi Shahar <sagis@google.com>
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 ---
-Changes RFCv2 -> RFCv3
-+ Manually inlined cpuid function in cpuid test. This highlights the
-  purpose of this test - to test the result of the cpuid instruction.
-+ Replace find_cpuid_entry with kvm_get_supported_cpuid_entry from
-  tools/testing/selftests/kvm/lib/x86_64/processor.c
----
- .../kvm/include/x86_64/tdx/test_util.h        |   9 ++
- .../selftests/kvm/lib/x86_64/tdx/test_util.c  |  11 ++
- .../selftests/kvm/x86_64/tdx_vm_tests.c       | 106 ++++++++++++++++++
- 3 files changed, 126 insertions(+)
+ .../selftests/kvm/include/x86_64/tdx/tdcall.h |  2 +
+ .../selftests/kvm/include/x86_64/tdx/tdx.h    |  3 +
+ .../kvm/include/x86_64/tdx/test_util.h        | 23 +++++
+ .../selftests/kvm/lib/x86_64/tdx/tdx.c        | 19 ++++
+ .../selftests/kvm/x86_64/tdx_vm_tests.c       | 87 +++++++++++++++++++
+ 5 files changed, 134 insertions(+)
 
+diff --git a/tools/testing/selftests/kvm/include/x86_64/tdx/tdcall.h b/tools/testing/selftests/kvm/include/x86_64/tdx/tdcall.h
+index b5e94b7c48fa5..95fcdbd8404e9 100644
+--- a/tools/testing/selftests/kvm/include/x86_64/tdx/tdcall.h
++++ b/tools/testing/selftests/kvm/include/x86_64/tdx/tdcall.h
+@@ -9,6 +9,8 @@
+ 
+ #define TDG_VP_VMCALL_INSTRUCTION_IO_READ 0
+ #define TDG_VP_VMCALL_INSTRUCTION_IO_WRITE 1
++#define TDG_VP_VMCALL_VE_REQUEST_MMIO_READ 0
++#define TDG_VP_VMCALL_VE_REQUEST_MMIO_WRITE 1
+ 
+ #define TDG_VP_VMCALL_SUCCESS 0x0000000000000000
+ #define TDG_VP_VMCALL_INVALID_OPERAND 0x8000000000000000
+diff --git a/tools/testing/selftests/kvm/include/x86_64/tdx/tdx.h b/tools/testing/selftests/kvm/include/x86_64/tdx/tdx.h
+index 7eba9d80b3681..8dd6a65485260 100644
+--- a/tools/testing/selftests/kvm/include/x86_64/tdx/tdx.h
++++ b/tools/testing/selftests/kvm/include/x86_64/tdx/tdx.h
+@@ -11,6 +11,7 @@
+ #define TDG_VP_VMCALL_INSTRUCTION_IO 30
+ #define TDG_VP_VMCALL_INSTRUCTION_RDMSR 31
+ #define TDG_VP_VMCALL_INSTRUCTION_WRMSR 32
++#define TDG_VP_VMCALL_VE_REQUEST_MMIO 48
+ 
+ 
+ uint64_t tdg_vp_vmcall_instruction_io(uint64_t port, uint64_t size,
+@@ -21,5 +22,7 @@ uint64_t tdg_vp_vmcall_get_td_vmcall_info(uint64_t *r11, uint64_t *r12,
+ uint64_t tdg_vp_vmcall_instruction_rdmsr(uint64_t index, uint64_t *ret_value);
+ uint64_t tdg_vp_vmcall_instruction_wrmsr(uint64_t index, uint64_t value);
+ uint64_t tdg_vp_vmcall_instruction_hlt(uint64_t interrupt_blocked_flag);
++uint64_t tdg_vp_vmcall_ve_request_mmio_read(uint64_t address, uint64_t size,
++					uint64_t *data_out);
+ 
+ #endif // SELFTEST_TDX_TDX_H
 diff --git a/tools/testing/selftests/kvm/include/x86_64/tdx/test_util.h b/tools/testing/selftests/kvm/include/x86_64/tdx/test_util.h
-index 95a5d5be7f0bf..af0ddbfe8d71b 100644
+index 8a9b6a1bec3eb..af412b7646049 100644
 --- a/tools/testing/selftests/kvm/include/x86_64/tdx/test_util.h
 +++ b/tools/testing/selftests/kvm/include/x86_64/tdx/test_util.h
-@@ -9,6 +9,9 @@
- #define TDX_TEST_SUCCESS_PORT 0x30
- #define TDX_TEST_SUCCESS_SIZE 4
-
-+#define TDX_TEST_REPORT_PORT 0x31
-+#define TDX_TEST_REPORT_SIZE 4
+@@ -35,6 +35,29 @@
+ 			(VCPU)->run->io.direction);			\
+ 	} while (0)
+ 
++
++/**
++ * Assert that some MMIO operation involving TDG.VP.VMCALL <#VERequestMMIO> was
++ * called in the guest.
++ */
++#define TDX_TEST_ASSERT_MMIO(VCPU, ADDR, SIZE, DIR)			\
++	do {								\
++		TEST_ASSERT((VCPU)->run->exit_reason == KVM_EXIT_MMIO,	\
++			"Got exit_reason other than KVM_EXIT_MMIO: %u (%s)\n", \
++			(VCPU)->run->exit_reason,			\
++			exit_reason_str((VCPU)->run->exit_reason));	\
++									\
++		TEST_ASSERT(((VCPU)->run->exit_reason == KVM_EXIT_MMIO) && \
++			((VCPU)->run->mmio.phys_addr == (ADDR)) &&	\
++			((VCPU)->run->mmio.len == (SIZE)) &&		\
++			((VCPU)->run->mmio.is_write == (DIR)),		\
++			"Got an unexpected MMIO exit values: %u (%s) %llu %d %d\n", \
++			(VCPU)->run->exit_reason,			\
++			exit_reason_str((VCPU)->run->exit_reason),	\
++			(VCPU)->run->mmio.phys_addr, (VCPU)->run->mmio.len, \
++			(VCPU)->run->mmio.is_write);			\
++	} while (0)
 +
  /**
-  * Assert that some IO operation involving tdg_vp_vmcall_instruction_io() was
-  * called in the guest.
-@@ -102,4 +105,10 @@ void tdx_test_fatal(uint64_t error_code);
-  */
- void tdx_test_fatal_with_data(uint64_t error_code, uint64_t data_gpa);
-
-+/**
-+ * Report a 32 bit value from the guest to user space using TDG.VP.VMCALL
-+ * <Instruction.IO> call. Data is reported on port TDX_TEST_REPORT_PORT.
-+ */
-+uint64_t tdx_test_report_to_user_space(uint32_t data);
-+
- #endif // SELFTEST_TDX_TEST_UTIL_H
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/tdx/test_util.c b/tools/testing/selftests/kvm/lib/x86_64/tdx/test_util.c
-index 7f3cd8089cea3..55c5a1e634df7 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/tdx/test_util.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/tdx/test_util.c
-@@ -42,3 +42,14 @@ void tdx_test_fatal(uint64_t error_code)
- {
- 	tdx_test_fatal_with_data(error_code, 0);
+  * Check and report if there was some failure in the guest, either an exception
+  * like a triple fault, or if a tdx_test_fatal() was hit.
+diff --git a/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx.c b/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx.c
+index 1af0626c2a4ad..dcdacf08bcd60 100644
+--- a/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx.c
++++ b/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx.c
+@@ -103,3 +103,22 @@ uint64_t tdg_vp_vmcall_instruction_hlt(uint64_t interrupt_blocked_flag)
+ 
+ 	return __tdx_hypercall(&args, 0);
  }
 +
-+uint64_t tdx_test_report_to_user_space(uint32_t data)
++uint64_t tdg_vp_vmcall_ve_request_mmio_read(uint64_t address, uint64_t size,
++					uint64_t *data_out)
 +{
-+	/* Upcast data to match tdg_vp_vmcall_instruction_io signature */
-+	uint64_t data_64 = data;
++	uint64_t ret;
++	struct tdx_hypercall_args args = {
++		.r11 = TDG_VP_VMCALL_VE_REQUEST_MMIO,
++		.r12 = size,
++		.r13 = TDG_VP_VMCALL_VE_REQUEST_MMIO_READ,
++		.r14 = address,
++	};
 +
-+	return tdg_vp_vmcall_instruction_io(TDX_TEST_REPORT_PORT,
-+					TDX_TEST_REPORT_SIZE,
-+					TDG_VP_VMCALL_INSTRUCTION_IO_WRITE,
-+					&data_64);
++	ret = __tdx_hypercall(&args, TDX_HCALL_HAS_OUTPUT);
++
++	if (data_out)
++		*data_out = args.r11;
++
++	return ret;
 +}
 diff --git a/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c b/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c
-index 885c2b6bb1b96..b6072769967fa 100644
+index 346c1e07af9c0..88f0429db0176 100644
 --- a/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c
 +++ b/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c
-@@ -2,6 +2,7 @@
-
- #include <signal.h>
- #include "kvm_util_base.h"
-+#include "processor.h"
- #include "tdx/tdcall.h"
- #include "tdx/tdx.h"
- #include "tdx/tdx_util.h"
-@@ -154,6 +155,110 @@ void verify_td_ioexit(void)
- 	printf("\t ... PASSED\n");
+@@ -806,6 +806,92 @@ void verify_guest_hlt(void)
+ 	_verify_guest_hlt(0);
  }
-
-+/*
-+ * Verifies CPUID functionality by reading CPUID values in guest. The guest
-+ * will then send the values to userspace using an IO write to be checked
-+ * against the expected values.
-+ */
-+void guest_code_cpuid(void)
+ 
++/* Pick any address that was not mapped into the guest to test MMIO */
++#define TDX_MMIO_TEST_ADDR 0x200000000
++
++void guest_mmio_reads(void)
 +{
-+	uint64_t err;
-+	uint32_t ebx, ecx;
++	uint64_t data;
++	uint64_t ret;
 +
-+	/* Read CPUID leaf 0x1 */
-+	asm volatile (
-+		"cpuid"
-+		: "=b" (ebx), "=c" (ecx)
-+		: "a" (0x1)
-+		: "edx");
++	ret = tdg_vp_vmcall_ve_request_mmio_read(TDX_MMIO_TEST_ADDR, 1, &data);
++	if (ret)
++		tdx_test_fatal(ret);
++	if (data != 0x12)
++		tdx_test_fatal(1);
 +
-+	err = tdx_test_report_to_user_space(ebx);
-+	if (err)
-+		tdx_test_fatal(err);
++	ret = tdg_vp_vmcall_ve_request_mmio_read(TDX_MMIO_TEST_ADDR, 2, &data);
++	if (ret)
++		tdx_test_fatal(ret);
++	if (data != 0x1234)
++		tdx_test_fatal(2);
 +
-+	err = tdx_test_report_to_user_space(ecx);
-+	if (err)
-+		tdx_test_fatal(err);
++	ret = tdg_vp_vmcall_ve_request_mmio_read(TDX_MMIO_TEST_ADDR, 4, &data);
++	if (ret)
++		tdx_test_fatal(ret);
++	if (data != 0x12345678)
++		tdx_test_fatal(4);
++
++	ret = tdg_vp_vmcall_ve_request_mmio_read(TDX_MMIO_TEST_ADDR, 8, &data);
++	if (ret)
++		tdx_test_fatal(ret);
++	if (data != 0x1234567890ABCDEF)
++		tdx_test_fatal(8);
++
++	// Read an invalid number of bytes.
++	ret = tdg_vp_vmcall_ve_request_mmio_read(TDX_MMIO_TEST_ADDR, 10, &data);
++	if (ret)
++		tdx_test_fatal(ret);
 +
 +	tdx_test_success();
 +}
 +
-+void verify_td_cpuid(void)
++/*
++ * Varifies guest MMIO reads.
++ */
++void verify_mmio_reads(void)
 +{
 +	struct kvm_vm *vm;
 +	struct kvm_vcpu *vcpu;
 +
-+	uint32_t ebx, ecx;
-+	const struct kvm_cpuid_entry2 *cpuid_entry;
-+	uint32_t guest_clflush_line_size;
-+	uint32_t guest_max_addressable_ids, host_max_addressable_ids;
-+	uint32_t guest_sse3_enabled;
-+	uint32_t guest_fma_enabled;
-+	uint32_t guest_initial_apic_id;
-+
 +	vm = td_create();
 +	td_initialize(vm, VM_MEM_SRC_ANONYMOUS, 0);
-+	vcpu = td_vcpu_add(vm, 0, guest_code_cpuid);
++	vcpu = td_vcpu_add(vm, 0, guest_mmio_reads);
 +	td_finalize(vm);
 +
-+	printf("Verifying TD CPUID:\n");
++	printf("Verifying TD MMIO reads:\n");
 +
-+	/* Wait for guest to report ebx value */
 +	vcpu_run(vcpu);
 +	TDX_TEST_CHECK_GUEST_FAILURE(vcpu);
-+	TDX_TEST_ASSERT_IO(vcpu, TDX_TEST_REPORT_PORT, 4,
-+			TDG_VP_VMCALL_INSTRUCTION_IO_WRITE);
-+	ebx = *(uint32_t *)((void *)vcpu->run + vcpu->run->io.data_offset);
++	TDX_TEST_ASSERT_MMIO(vcpu, TDX_MMIO_TEST_ADDR, 1, TDG_VP_VMCALL_VE_REQUEST_MMIO_READ);
++	*(uint8_t *)vcpu->run->mmio.data = 0x12;
 +
-+	/* Wait for guest to report either ecx value or error */
 +	vcpu_run(vcpu);
 +	TDX_TEST_CHECK_GUEST_FAILURE(vcpu);
-+	TDX_TEST_ASSERT_IO(vcpu, TDX_TEST_REPORT_PORT, 4,
-+			TDG_VP_VMCALL_INSTRUCTION_IO_WRITE);
-+	ecx = *(uint32_t *)((void *)vcpu->run + vcpu->run->io.data_offset);
++	TDX_TEST_ASSERT_MMIO(vcpu, TDX_MMIO_TEST_ADDR, 2, TDG_VP_VMCALL_VE_REQUEST_MMIO_READ);
++	*(uint16_t *)vcpu->run->mmio.data = 0x1234;
 +
-+	/* Wait for guest to complete execution */
 +	vcpu_run(vcpu);
 +	TDX_TEST_CHECK_GUEST_FAILURE(vcpu);
++	TDX_TEST_ASSERT_MMIO(vcpu, TDX_MMIO_TEST_ADDR, 4, TDG_VP_VMCALL_VE_REQUEST_MMIO_READ);
++	*(uint32_t *)vcpu->run->mmio.data = 0x12345678;
++
++	vcpu_run(vcpu);
++	TDX_TEST_CHECK_GUEST_FAILURE(vcpu);
++	TDX_TEST_ASSERT_MMIO(vcpu, TDX_MMIO_TEST_ADDR, 8, TDG_VP_VMCALL_VE_REQUEST_MMIO_READ);
++	*(uint64_t *)vcpu->run->mmio.data = 0x1234567890ABCDEF;
++
++	vcpu_run(vcpu);
++	ASSERT_EQ(vcpu->run->exit_reason, KVM_EXIT_SYSTEM_EVENT);
++	ASSERT_EQ(vcpu->run->system_event.data[1], TDG_VP_VMCALL_INVALID_OPERAND);
++
++	vcpu_run(vcpu);
 +	TDX_TEST_ASSERT_SUCCESS(vcpu);
-+
-+	/* Verify the CPUID values we got from the guest. */
-+	printf("\t ... Verifying CPUID values from guest\n");
-+
-+	/* Get KVM CPUIDs for reference */
-+	cpuid_entry = kvm_get_supported_cpuid_entry(1);
-+	TEST_ASSERT(cpuid_entry, "CPUID entry missing\n");
-+
-+	host_max_addressable_ids = (cpuid_entry->ebx >> 16) & 0xFF;
-+
-+	guest_sse3_enabled = ecx & 0x1;  // Native
-+	guest_clflush_line_size = (ebx >> 8) & 0xFF;  // Fixed
-+	guest_max_addressable_ids = (ebx >> 16) & 0xFF;  // As Configured
-+	guest_fma_enabled = (ecx >> 12) & 0x1;  // As Configured (if Native)
-+	guest_initial_apic_id = (ebx >> 24) & 0xFF;  // Calculated
-+
-+	ASSERT_EQ(guest_sse3_enabled, 1);
-+	ASSERT_EQ(guest_clflush_line_size, 8);
-+	ASSERT_EQ(guest_max_addressable_ids, host_max_addressable_ids);
-+
-+	/* TODO: This only tests the native value. To properly test
-+	 * "As Configured (if Native)" we need to override this value
-+	 * in the TD params
-+	 */
-+	ASSERT_EQ(guest_fma_enabled, 1);
-+
-+	/* TODO: guest_initial_apic_id is calculated based on the number of
-+	 * VCPUs in the TD. From the spec: "Virtual CPU index, starting from 0
-+	 * and allocated sequentially on each successful TDH.VP.INIT"
-+	 * To test non-trivial values we either need a TD with multiple VCPUs
-+	 * or to pick a different calculated value.
-+	 */
-+	ASSERT_EQ(guest_initial_apic_id, 0);
 +
 +	kvm_vm_free(vm);
 +	printf("\t ... PASSED\n");
@@ -266,13 +281,14 @@ index 885c2b6bb1b96..b6072769967fa 100644
  int main(int argc, char **argv)
  {
  	setbuf(stdout, NULL);
-@@ -166,6 +271,7 @@ int main(int argc, char **argv)
- 	run_in_new_process(&verify_td_lifecycle);
- 	run_in_new_process(&verify_report_fatal_error);
- 	run_in_new_process(&verify_td_ioexit);
-+	run_in_new_process(&verify_td_cpuid);
-
+@@ -825,6 +911,7 @@ int main(int argc, char **argv)
+ 	run_in_new_process(&verify_guest_msr_writes);
+ 	run_in_new_process(&verify_guest_msr_reads);
+ 	run_in_new_process(&verify_guest_hlt);
++	run_in_new_process(&verify_mmio_reads);
+ 
  	return 0;
  }
---
+-- 
 2.39.0.246.g2a6d74b583-goog
+
