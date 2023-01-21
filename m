@@ -2,115 +2,80 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59A19C27C76
-	for <linux-kselftest@archiver.kernel.org>; Sat, 21 Jan 2023 08:54:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AB0FC004D4
+	for <linux-kselftest@archiver.kernel.org>; Sat, 21 Jan 2023 08:54:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbjAUIyC (ORCPT
+        id S229807AbjAUIyO (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 21 Jan 2023 03:54:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38640 "EHLO
+        Sat, 21 Jan 2023 03:54:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbjAUIyB (ORCPT
+        with ESMTP id S229735AbjAUIyI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 21 Jan 2023 03:54:01 -0500
+        Sat, 21 Jan 2023 03:54:08 -0500
 Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4D65765F00;
-        Sat, 21 Jan 2023 00:53:59 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BCD616E0E2;
+        Sat, 21 Jan 2023 00:54:06 -0800 (PST)
 Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 30L8rhbr011764;
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 30L8rhCt011766;
         Sat, 21 Jan 2023 09:53:43 +0100
 From:   Willy Tarreau <w@1wt.eu>
 To:     "Paul E. McKenney" <paulmck@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
         linux-kselftest@vger.kernel.org,
         Ammar Faizi <ammarfaizi2@gnuweeb.org>, Willy Tarreau <w@1wt.eu>
-Subject: [PATCH 0/2] selftests/nolibc: small simplification of test development phase
-Date:   Sat, 21 Jan 2023 09:53:18 +0100
-Message-Id: <20230121085320.11712-1-w@1wt.eu>
+Subject: [PATCH 2/2] selftests/nolibc: add a "run-user" target to test the program in user land
+Date:   Sat, 21 Jan 2023 09:53:20 +0100
+Message-Id: <20230121085320.11712-3-w@1wt.eu>
 X-Mailer: git-send-email 2.17.5
+In-Reply-To: <20230121085320.11712-1-w@1wt.eu>
+References: <20230121085320.11712-1-w@1wt.eu>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello Paul,
+I found that when developing tests I'm not that often building kernels,
+and instead I'm often using the much quicker QEMU Linux emulator instead
+of the system emulator. It is sufficient to test startup code, stdlib
+code and syscall calling convention. As such it is expected that other
+users will value this, so let's add a "run-user" target that immediately
+executes the prebuilt executable with the user's privilege (thus some
+tests may fail due to insufficient permissions or missing features in
+the local kernel).
 
-while developing and testing the recent changes for errno/environ/auxv, I
-found that I wasn't relying on the kernel that much and that I was mostly
-using qemu in userland only with my local kernel.
+Now running a userland test is as simple as issuing:
 
-I figured that it was more convenient for this purpose than rebuilding an
-initramfs and kernel for a quick test, and decided to make this approach
-easier to use for everyone by adding a "run-user" target to the Makefile
-to do exactly this. E.g:
+  make ARCH=xxx CROSS_COMPILE=xxx run-user
 
-Native build:
-  $ time make -C tools/testing/selftests/nolibc run-user
-  ...
-  make: Entering directory '/g/public/linux/master/tools/testing/selftests/nolibc'
-    MKDIR   sysroot/x86/include
-  make[1]: Entering directory '/g/public/linux/master/tools/include/nolibc'
-  make[2]: Entering directory '/g/public/linux/master'
-  make[2]: Leaving directory '/g/public/linux/master'
-  make[2]: Entering directory '/g/public/linux/master'
-    INSTALL /g/public/linux/master/tools/testing/selftests/nolibc/sysroot/sysroot/include
-  make[2]: Leaving directory '/g/public/linux/master'
-  make[1]: Leaving directory '/g/public/linux/master/tools/include/nolibc'
-    CC      nolibc-test
-  18 chroot_root = -1 EPERM               [FAIL]
-  43 link_dir = -1 EACCES  != (-1 EPERM)  [FAIL]
-  See all results in /g/public/linux/master/tools/testing/selftests/nolibc/run.out
-  make: Leaving directory '/g/public/linux/master/tools/testing/selftests/nolibc'
-
-  real    0m0.966s
-  user    0m0.731s
-  sys     0m0.164s
-
-Cross build:
-  $ time make -C tools/testing/selftests/nolibc run-user ARCH=s390 CROSS_COMPILE=/f/tc/nolibc/gcc-11.3.0-nolibc/s390-linux/bin/s390-linux-
-  make: Entering directory '/g/public/linux/master/tools/testing/selftests/nolibc'
-    MKDIR   sysroot/s390/include
-  make[1]: Entering directory '/g/public/linux/master/tools/include/nolibc'
-  make[2]: Entering directory '/g/public/linux/master'
-  make[2]: Leaving directory '/g/public/linux/master'
-  make[2]: Entering directory '/g/public/linux/master'
-    INSTALL /g/public/linux/master/tools/testing/selftests/nolibc/sysroot/sysroot/include
-  make[2]: Leaving directory '/g/public/linux/master'
-  make[1]: Leaving directory '/g/public/linux/master/tools/include/nolibc'
-    CC      nolibc-test
-  18 chroot_root = -1 EPERM               [FAIL]
-  43 link_dir = -1 EACCES  != (-1 EPERM)  [FAIL]
-  See all results in /g/public/linux/master/tools/testing/selftests/nolibc/run.out
-  make: Leaving directory '/g/public/linux/master/tools/testing/selftests/nolibc'
-
-  real    0m1.014s
-  user    0m0.732s
-  sys     0m0.183s
-
-In addition, the "x86_64" value for ARCH= is now supported as I got caught
-too many times with it not working in this subdir while it's used for the
-rest of the kernel ("x86" is used instead as coming from subarch.include).
-Generally you don't type it as x86_64 probably is the native build for most
-users, but when you start to test toolchains it's a different thing.
-
-There's no matter of urgency for these patches, they're just a bit of
-user-friendly stuff. As such, if you're fine with stacking them on top of
-what you already have for 6.3, that will be great, otherwise they can
-easily wait.
-
-Thank you!
-Willy
-
-[CCing Ammar who could benefit from this]
-
+Signed-off-by: Willy Tarreau <w@1wt.eu>
 ---
-Willy Tarreau (2):
-  selftests/nolibc: support "x86_64" for arch name
-  selftests/nolibc: add a "run-user" target to test the program in user
-    land
+ tools/testing/selftests/nolibc/Makefile | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
- tools/testing/selftests/nolibc/Makefile | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
+diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+index 423598045ff1..8fe61d3e3cce 100644
+--- a/tools/testing/selftests/nolibc/Makefile
++++ b/tools/testing/selftests/nolibc/Makefile
+@@ -80,6 +80,7 @@ help:
+ 	@echo "  help         this help"
+ 	@echo "  sysroot      create the nolibc sysroot here (uses \$$ARCH)"
+ 	@echo "  nolibc-test  build the executable (uses \$$CC and \$$CROSS_COMPILE)"
++	@echo "  run-user     runs the executable under QEMU (uses \$$ARCH, \$$TEST)"
+ 	@echo "  initramfs    prepare the initramfs with nolibc-test"
+ 	@echo "  defconfig    create a fresh new default config (uses \$$ARCH)"
+ 	@echo "  kernel       (re)build the kernel with the initramfs (uses \$$ARCH)"
+@@ -113,6 +114,11 @@ nolibc-test: nolibc-test.c sysroot/$(ARCH)/include
+ 	$(QUIET_CC)$(CC) $(CFLAGS) $(LDFLAGS) -o $@ \
+ 	  -nostdlib -static -Isysroot/$(ARCH)/include $< -lgcc
+ 
++# qemu user-land test
++run-user: nolibc-test
++	$(Q)qemu-$(QEMU_ARCH) ./nolibc-test > "$(CURDIR)/run.out" || :
++	$(Q)grep -w FAIL "$(CURDIR)/run.out" && echo "See all results in $(CURDIR)/run.out" || echo "$$(grep -c ^[0-9].*OK $(CURDIR)/run.out) test(s) passed."
++
+ initramfs: nolibc-test
+ 	$(QUIET_MKDIR)mkdir -p initramfs
+ 	$(call QUIET_INSTALL, initramfs/init)
 -- 
 2.17.5
 
