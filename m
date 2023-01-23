@@ -2,30 +2,30 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23936C05027
-	for <linux-kselftest@archiver.kernel.org>; Mon, 23 Jan 2023 17:59:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53F93C25B50
+	for <linux-kselftest@archiver.kernel.org>; Mon, 23 Jan 2023 17:59:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232340AbjAWR7n (ORCPT
+        id S233122AbjAWR74 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 23 Jan 2023 12:59:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37940 "EHLO
+        Mon, 23 Jan 2023 12:59:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233050AbjAWR7n (ORCPT
+        with ESMTP id S233128AbjAWR7y (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 23 Jan 2023 12:59:43 -0500
+        Mon, 23 Jan 2023 12:59:54 -0500
 Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8655D44BD
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Jan 2023 09:59:41 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C748D303C9
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Jan 2023 09:59:53 -0800 (PST)
 Received: by dev0134.prn3.facebook.com (Postfix, from userid 425415)
-        id 6B83A5616BE7; Mon, 23 Jan 2023 09:37:56 -0800 (PST)
+        id 45FC35616BD5; Mon, 23 Jan 2023 09:37:56 -0800 (PST)
 From:   Stefan Roesch <shr@devkernel.io>
 To:     linux-mm@kvack.org
 Cc:     shr@devkernel.io, linux-doc@vger.kernel.org,
         linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Subject: [RESEND RFC PATCH v1 11/20] mm: calculate ksm process profit metric
-Date:   Mon, 23 Jan 2023 09:37:39 -0800
-Message-Id: <20230123173748.1734238-12-shr@devkernel.io>
+Subject: [RESEND RFC PATCH v1 02/20] mm: add flag to __ksm_enter
+Date:   Mon, 23 Jan 2023 09:37:30 -0800
+Message-Id: <20230123173748.1734238-3-shr@devkernel.io>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230123173748.1734238-1-shr@devkernel.io>
 References: <20230123173748.1734238-1-shr@devkernel.io>
@@ -35,50 +35,74 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The ksm documentation mentions the process profit metric and how to
-calculate it. This adds the calculation of the metric.
+This change adds the flag parameter to __ksm_enter. This allows to
+distinguish if ksm was called by prctl or madvise.
 
 Signed-off-by: Stefan Roesch <shr@devkernel.io>
 ---
- include/linux/ksm.h | 4 ++++
- mm/ksm.c            | 8 ++++++++
- 2 files changed, 12 insertions(+)
+ include/linux/ksm.h | 6 ++++--
+ mm/ksm.c            | 9 +++++----
+ 2 files changed, 9 insertions(+), 6 deletions(-)
 
 diff --git a/include/linux/ksm.h b/include/linux/ksm.h
-index d38a05a36298..a18cd03efcfb 100644
+index 7e232ba59b86..50e6b56092f3 100644
 --- a/include/linux/ksm.h
 +++ b/include/linux/ksm.h
-@@ -55,6 +55,10 @@ struct page *ksm_might_need_to_copy(struct page *page,
- void rmap_walk_ksm(struct folio *folio, struct rmap_walk_control *rwc);
- void folio_migrate_ksm(struct folio *newfolio, struct folio *folio);
-=20
-+#ifdef CONFIG_PROC_FS
-+long ksm_process_profit(struct mm_struct *);
-+#endif /* CONFIG_PROC_FS */
-+
- #else  /* !CONFIG_KSM */
+@@ -18,13 +18,15 @@
+ #ifdef CONFIG_KSM
+ int ksm_madvise(struct vm_area_struct *vma, unsigned long start,
+ 		unsigned long end, int advice, unsigned long *vm_flags);
+-int __ksm_enter(struct mm_struct *mm);
+ void __ksm_exit(struct mm_struct *mm);
++int __ksm_enter(struct mm_struct *mm, int flag);
 =20
  static inline int ksm_fork(struct mm_struct *mm, struct mm_struct *oldmm=
 )
+ {
++	if (test_bit(MMF_VM_MERGE_ANY, &oldmm->flags))
++		return __ksm_enter(mm, MMF_VM_MERGE_ANY);
+ 	if (test_bit(MMF_VM_MERGEABLE, &oldmm->flags))
+-		return __ksm_enter(mm);
++		return __ksm_enter(mm, MMF_VM_MERGEABLE);
+ 	return 0;
+ }
+=20
 diff --git a/mm/ksm.c b/mm/ksm.c
-index d29454a802a0..288689b59527 100644
+index dd02780c387f..d84a244fe224 100644
 --- a/mm/ksm.c
 +++ b/mm/ksm.c
-@@ -2935,6 +2935,14 @@ static void wait_while_offlining(void)
- }
- #endif /* CONFIG_MEMORY_HOTREMOVE */
+@@ -2493,8 +2493,9 @@ int ksm_madvise(struct vm_area_struct *vma, unsigne=
+d long start,
+ 			return 0;
+ #endif
 =20
-+#ifdef CONFIG_PROC_FS
-+long ksm_process_profit(struct mm_struct *mm)
-+{
-+	return (long)mm->ksm_merging_pages * PAGE_SIZE -
-+		mm->ksm_rmap_items * sizeof(struct ksm_rmap_item);
-+}
-+#endif /* CONFIG_PROC_FS */
-+
- #ifdef CONFIG_SYSFS
- /*
-  * This all compiles without CONFIG_SYSFS, but is a waste of space.
+-		if (!test_bit(MMF_VM_MERGEABLE, &mm->flags)) {
+-			err =3D __ksm_enter(mm);
++		if (!test_bit(MMF_VM_MERGEABLE, &mm->flags) &&
++		    !test_bit(MMF_VM_MERGE_ANY, &mm->flags)) {
++			err =3D __ksm_enter(mm, MMF_VM_MERGEABLE);
+ 			if (err)
+ 				return err;
+ 		}
+@@ -2520,7 +2521,7 @@ int ksm_madvise(struct vm_area_struct *vma, unsigne=
+d long start,
+ }
+ EXPORT_SYMBOL_GPL(ksm_madvise);
+=20
+-int __ksm_enter(struct mm_struct *mm)
++int __ksm_enter(struct mm_struct *mm, int flag)
+ {
+ 	struct ksm_mm_slot *mm_slot;
+ 	struct mm_slot *slot;
+@@ -2553,7 +2554,7 @@ int __ksm_enter(struct mm_struct *mm)
+ 		list_add_tail(&slot->mm_node, &ksm_scan.mm_slot->slot.mm_node);
+ 	spin_unlock(&ksm_mmlist_lock);
+=20
+-	set_bit(MMF_VM_MERGEABLE, &mm->flags);
++	set_bit(flag, &mm->flags);
+ 	mmgrab(mm);
+=20
+ 	if (needs_wakeup)
 --=20
 2.30.2
 
