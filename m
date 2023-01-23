@@ -2,30 +2,30 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F1B2C38142
-	for <linux-kselftest@archiver.kernel.org>; Mon, 23 Jan 2023 18:06:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8491DC54EAA
+	for <linux-kselftest@archiver.kernel.org>; Mon, 23 Jan 2023 18:06:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233763AbjAWSGi (ORCPT
+        id S233784AbjAWSGz (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 23 Jan 2023 13:06:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47602 "EHLO
+        Mon, 23 Jan 2023 13:06:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233580AbjAWSGc (ORCPT
+        with ESMTP id S233753AbjAWSGx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 23 Jan 2023 13:06:32 -0500
+        Mon, 23 Jan 2023 13:06:53 -0500
 Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B5DF31E01
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Jan 2023 10:06:13 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D8430B3D
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Jan 2023 10:06:39 -0800 (PST)
 Received: by dev0134.prn3.facebook.com (Postfix, from userid 425415)
-        id 6F5EE5616BE9; Mon, 23 Jan 2023 09:37:56 -0800 (PST)
+        id 5F7EA5616BE1; Mon, 23 Jan 2023 09:37:56 -0800 (PST)
 From:   Stefan Roesch <shr@devkernel.io>
 To:     linux-mm@kvack.org
 Cc:     shr@devkernel.io, linux-doc@vger.kernel.org,
         linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Subject: [RESEND RFC PATCH v1 12/20] mm: add ksm_merge_type() function
-Date:   Mon, 23 Jan 2023 09:37:40 -0800
-Message-Id: <20230123173748.1734238-13-shr@devkernel.io>
+Subject: [RESEND RFC PATCH v1 08/20] mm: split off pages_volatile function
+Date:   Mon, 23 Jan 2023 09:37:36 -0800
+Message-Id: <20230123173748.1734238-9-shr@devkernel.io>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230123173748.1734238-1-shr@devkernel.io>
 References: <20230123173748.1734238-1-shr@devkernel.io>
@@ -35,51 +35,46 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This adds the ksm_merge_type function. The function returns the merge
-type for the process. For madvise it returns "madvise", for prctl it
-returns "process" and otherwise it returns "none".
+This splits off the pages_volatile function. The next patch will use
+this function.
 
 Signed-off-by: Stefan Roesch <shr@devkernel.io>
 ---
- include/linux/ksm.h |  1 +
- mm/ksm.c            | 11 +++++++++++
- 2 files changed, 12 insertions(+)
+ mm/ksm.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/ksm.h b/include/linux/ksm.h
-index a18cd03efcfb..d5f69f18ee5a 100644
---- a/include/linux/ksm.h
-+++ b/include/linux/ksm.h
-@@ -57,6 +57,7 @@ void folio_migrate_ksm(struct folio *newfolio, struct f=
-olio *folio);
-=20
- #ifdef CONFIG_PROC_FS
- long ksm_process_profit(struct mm_struct *);
-+const char *ksm_merge_type(struct mm_struct *mm);
- #endif /* CONFIG_PROC_FS */
-=20
- #else  /* !CONFIG_KSM */
 diff --git a/mm/ksm.c b/mm/ksm.c
-index 288689b59527..57183deaf529 100644
+index 88a969849955..19f434f97dc1 100644
 --- a/mm/ksm.c
 +++ b/mm/ksm.c
-@@ -2941,6 +2941,17 @@ long ksm_process_profit(struct mm_struct *mm)
- 	return (long)mm->ksm_merging_pages * PAGE_SIZE -
- 		mm->ksm_rmap_items * sizeof(struct ksm_rmap_item);
+@@ -3182,8 +3182,7 @@ static ssize_t pages_unshared_show(struct kobject *=
+kobj,
  }
-+
-+/* Return merge type name as string. */
-+const char *ksm_merge_type(struct mm_struct *mm)
-+{
-+	if (test_bit(MMF_VM_MERGE_ANY, &mm->flags))
-+		return "process";
-+	else if (test_bit(MMF_VM_MERGEABLE, &mm->flags))
-+		return "madvise";
-+	else
-+		return "none";
-+}
- #endif /* CONFIG_PROC_FS */
+ KSM_ATTR_RO(pages_unshared);
 =20
- #ifdef CONFIG_SYSFS
+-static ssize_t pages_volatile_show(struct kobject *kobj,
+-				   struct kobj_attribute *attr, char *buf)
++static long pages_volatile(void)
+ {
+ 	long ksm_pages_volatile;
+=20
+@@ -3195,7 +3194,14 @@ static ssize_t pages_volatile_show(struct kobject =
+*kobj,
+ 	 */
+ 	if (ksm_pages_volatile < 0)
+ 		ksm_pages_volatile =3D 0;
+-	return sysfs_emit(buf, "%ld\n", ksm_pages_volatile);
++
++	return ksm_pages_volatile;
++}
++
++static ssize_t pages_volatile_show(struct kobject *kobj,
++				   struct kobj_attribute *attr, char *buf)
++{
++	return sysfs_emit(buf, "%ld\n", pages_volatile());
+ }
+ KSM_ATTR_RO(pages_volatile);
+=20
 --=20
 2.30.2
 
