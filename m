@@ -2,30 +2,30 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB52AC25B50
-	for <linux-kselftest@archiver.kernel.org>; Mon, 23 Jan 2023 17:57:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE308C25B50
+	for <linux-kselftest@archiver.kernel.org>; Mon, 23 Jan 2023 17:58:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232877AbjAWR5d (ORCPT
+        id S232919AbjAWR6Q (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 23 Jan 2023 12:57:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35356 "EHLO
+        Mon, 23 Jan 2023 12:58:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232867AbjAWR5c (ORCPT
+        with ESMTP id S232903AbjAWR6Q (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 23 Jan 2023 12:57:32 -0500
+        Mon, 23 Jan 2023 12:58:16 -0500
 Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E80293028C
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Jan 2023 09:57:30 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CCDC233FC
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Jan 2023 09:58:15 -0800 (PST)
 Received: by dev0134.prn3.facebook.com (Postfix, from userid 425415)
-        id 636A05616BE3; Mon, 23 Jan 2023 09:37:56 -0800 (PST)
+        id 7BBE85616BF1; Mon, 23 Jan 2023 09:37:56 -0800 (PST)
 From:   Stefan Roesch <shr@devkernel.io>
 To:     linux-mm@kvack.org
 Cc:     shr@devkernel.io, linux-doc@vger.kernel.org,
         linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Subject: [RESEND RFC PATCH v1 09/20] mm: expose general_profit metric
-Date:   Mon, 23 Jan 2023 09:37:37 -0800
-Message-Id: <20230123173748.1734238-10-shr@devkernel.io>
+Subject: [RESEND RFC PATCH v1 15/20] docs: document new procfs ksm knobs
+Date:   Mon, 23 Jan 2023 09:37:43 -0800
+Message-Id: <20230123173748.1734238-16-shr@devkernel.io>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230123173748.1734238-1-shr@devkernel.io>
 References: <20230123173748.1734238-1-shr@devkernel.io>
@@ -35,50 +35,46 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The documentation mentions a general profit metric, however this metric
-is not calculated. In addition the formula depends on the size of
-internal structures, which makes it more difficult for an administrator
-to make the calculation. Adding the metric for a better user experience.
+This documents the ksm_process_profit and ksm_merge_type settings in
+ksm_stat.
 
 Signed-off-by: Stefan Roesch <shr@devkernel.io>
 ---
- mm/ksm.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ Documentation/admin-guide/mm/ksm.rst | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/mm/ksm.c b/mm/ksm.c
-index 19f434f97dc1..d29454a802a0 100644
---- a/mm/ksm.c
-+++ b/mm/ksm.c
-@@ -3205,6 +3205,21 @@ static ssize_t pages_volatile_show(struct kobject =
-*kobj,
- }
- KSM_ATTR_RO(pages_volatile);
+diff --git a/Documentation/admin-guide/mm/ksm.rst b/Documentation/admin-g=
+uide/mm/ksm.rst
+index 72189bf1283e..70896f01d641 100644
+--- a/Documentation/admin-guide/mm/ksm.rst
++++ b/Documentation/admin-guide/mm/ksm.rst
+@@ -211,7 +211,8 @@ several times, which are unprofitable memory consumed=
+.
+ 			  ksm_rmap_items * sizeof(rmap_item).
 =20
-+static ssize_t general_profit_show(struct kobject *kobj,
-+				   struct kobj_attribute *attr, char *buf)
-+{
-+	long general_profit;
-+	long all_rmap_items;
+    where ksm_merging_pages is shown under the directory ``/proc/<pid>/``=
+,
+-   and ksm_rmap_items is shown in ``/proc/<pid>/ksm_stat``.
++   and ksm_rmap_items is shown in ``/proc/<pid>/ksm_stat``. The process =
+profit
++   is also shown in ``/proc/<pid>/ksm_stat`` as ksm_process_profit.
+=20
+ From the perspective of application, a high ratio of ``ksm_rmap_items`` =
+to
+ ``ksm_merging_pages`` means a bad madvise-applied policy, so developers =
+or
+@@ -222,6 +223,9 @@ so if the ``ksm_rmap_items/ksm_merging_pages`` ratio =
+exceeds 64 on 64-bit CPU
+ or exceeds 128 on 32-bit CPU, then the app's madvise policy should be dr=
+opped,
+ because the ksm profit is approximately zero or negative.
+=20
++The ksm_merge_type in ``/proc/<pid>/ksm_stat`` shows the merge type of t=
+he
++process. Valid values are ``none``, ``madvise`` and ``process``.
 +
-+	all_rmap_items =3D ksm_max_page_sharing + ksm_pages_shared +
-+				ksm_pages_unshared + pages_volatile();
-+	general_profit =3D ksm_pages_sharing * PAGE_SIZE -
-+				all_rmap_items * sizeof(struct ksm_rmap_item);
-+
-+	return sysfs_emit(buf, "%ld\n", general_profit);
-+}
-+KSM_ATTR_RO(general_profit);
-+
- static ssize_t stable_node_dups_show(struct kobject *kobj,
- 				     struct kobj_attribute *attr, char *buf)
- {
-@@ -3269,6 +3284,7 @@ static struct attribute *ksm_attrs[] =3D {
- 	&stable_node_dups_attr.attr,
- 	&stable_node_chains_prune_millisecs_attr.attr,
- 	&use_zero_pages_attr.attr,
-+	&general_profit_attr.attr,
- 	NULL,
- };
+ Monitoring KSM events
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 =20
 --=20
 2.30.2
