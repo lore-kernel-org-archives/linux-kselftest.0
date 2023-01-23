@@ -2,30 +2,30 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A6074C05027
-	for <linux-kselftest@archiver.kernel.org>; Mon, 23 Jan 2023 18:00:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E79EC25B50
+	for <linux-kselftest@archiver.kernel.org>; Mon, 23 Jan 2023 18:01:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233223AbjAWSAn (ORCPT
+        id S231690AbjAWSBC (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 23 Jan 2023 13:00:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38750 "EHLO
+        Mon, 23 Jan 2023 13:01:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233196AbjAWSAi (ORCPT
+        with ESMTP id S231716AbjAWSBA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 23 Jan 2023 13:00:38 -0500
+        Mon, 23 Jan 2023 13:01:00 -0500
 Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1797D2FCC6
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Jan 2023 10:00:38 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82F102CFC5
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Jan 2023 10:00:59 -0800 (PST)
 Received: by dev0134.prn3.facebook.com (Postfix, from userid 425415)
-        id 572115616BDD; Mon, 23 Jan 2023 09:37:56 -0800 (PST)
+        id 8CE0B5616BF9; Mon, 23 Jan 2023 09:37:56 -0800 (PST)
 From:   Stefan Roesch <shr@devkernel.io>
 To:     linux-mm@kvack.org
 Cc:     shr@devkernel.io, linux-doc@vger.kernel.org,
         linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Subject: [RESEND RFC PATCH v1 06/20] mm: add new prctl option to get and set ksm for a process
-Date:   Mon, 23 Jan 2023 09:37:34 -0800
-Message-Id: <20230123173748.1734238-7-shr@devkernel.io>
+Subject: [RESEND RFC PATCH v1 19/20] selftests/vm: add KSM fork test
+Date:   Mon, 23 Jan 2023 09:37:47 -0800
+Message-Id: <20230123173748.1734238-20-shr@devkernel.io>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230123173748.1734238-1-shr@devkernel.io>
 References: <20230123173748.1734238-1-shr@devkernel.io>
@@ -35,75 +35,120 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This adds two new options to the prctl system call
-- enable ksm for all vmas of a process (if the vmas support it).
-- query if ksm has been enabled for a process.
+Add fork test to verify that the MMF_VM_MERGE_ANY flag is inherited by
+the child process.
 
 Signed-off-by: Stefan Roesch <shr@devkernel.io>
 ---
- include/uapi/linux/prctl.h |  2 ++
- kernel/sys.c               | 29 +++++++++++++++++++++++++++++
- 2 files changed, 31 insertions(+)
+ tools/testing/selftests/vm/ksm_tests.c | 53 +++++++++++++++++++++++++-
+ 1 file changed, 51 insertions(+), 2 deletions(-)
 
-diff --git a/include/uapi/linux/prctl.h b/include/uapi/linux/prctl.h
-index a5e06dcbba13..b8ba85f18e43 100644
---- a/include/uapi/linux/prctl.h
-+++ b/include/uapi/linux/prctl.h
-@@ -284,4 +284,6 @@ struct prctl_mm_map {
- #define PR_SET_VMA		0x53564d41
- # define PR_SET_VMA_ANON_NAME		0
+diff --git a/tools/testing/selftests/vm/ksm_tests.c b/tools/testing/selft=
+ests/vm/ksm_tests.c
+index 9667cb3b8c6a..a0a48ac43b29 100644
+--- a/tools/testing/selftests/vm/ksm_tests.c
++++ b/tools/testing/selftests/vm/ksm_tests.c
+@@ -44,6 +44,7 @@ enum ksm_merge_type {
 =20
-+#define PR_SET_MEMORY_MERGE		65
-+#define PR_GET_MEMORY_MERGE		66
- #endif /* _LINUX_PRCTL_H */
-diff --git a/kernel/sys.c b/kernel/sys.c
-index 5fd54bf0e886..de218e3b6f42 100644
---- a/kernel/sys.c
-+++ b/kernel/sys.c
-@@ -15,6 +15,7 @@
- #include <linux/highuid.h>
- #include <linux/fs.h>
- #include <linux/kmod.h>
-+#include <linux/ksm.h>
- #include <linux/perf_event.h>
- #include <linux/resource.h>
- #include <linux/kernel.h>
-@@ -2626,6 +2627,34 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long,=
- arg2, unsigned long, arg3,
- 	case PR_SET_VMA:
- 		error =3D prctl_set_vma(arg2, arg3, arg4, arg5);
+ enum ksm_test_name {
+ 	CHECK_KSM_MERGE,
++	CHECK_KSM_MERGE_FORK,
+ 	CHECK_KSM_UNMERGE,
+ 	CHECK_KSM_GET_MERGE_TYPE,
+ 	CHECK_KSM_ZERO_PAGE_MERGE,
+@@ -126,7 +127,8 @@ static void print_help(void)
+ 	       "    For this test, the size of duplicated memory area (in MiB)\=
+n"
+ 	       "    must be provided using -s option\n"
+ 	       " -C evaluate the time required to break COW of merged pages.\n"
+-	       " -G query merge mode\n\n");
++	       " -G query merge mode\n"
++	       " -F evaluate that the KSM process flag is inherited\n\n");
+=20
+ 	printf(" -a: specify the access protections of pages.\n"
+ 	       "     <prot> must be of the form [rwx].\n"
+@@ -325,6 +327,47 @@ static int check_ksm_merge(int merge_type, int mappi=
+ng, int prot,
+ 	return KSFT_FAIL;
+ }
+=20
++/* Verify that prctl ksm flag is inherited. */
++static int check_ksm_fork(void)
++{
++	int rc =3D KSFT_FAIL;
++	pid_t child_pid;
++
++	if (prctl(PR_SET_MEMORY_MERGE, 1)) {
++		perror("prctl");
++		return KSFT_FAIL;
++	}
++
++	child_pid =3D fork();
++	if (child_pid =3D=3D 0) {
++		int is_on =3D prctl(PR_GET_MEMORY_MERGE, 0);
++
++		if (!is_on)
++			exit(KSFT_FAIL);
++
++		exit(KSFT_PASS);
++	}
++
++	if (child_pid < 0)
++		goto out;
++
++	if (waitpid(child_pid, &rc, 0) < 0)
++		rc =3D KSFT_FAIL;
++
++	if (prctl(PR_SET_MEMORY_MERGE, 0)) {
++		perror("prctl");
++		rc =3D KSFT_FAIL;
++	}
++
++out:
++	if (rc =3D=3D KSFT_PASS)
++		printf("OK\n");
++	else
++		printf("Not OK\n");
++
++	return rc;
++}
++
+ static int check_ksm_get_merge_type(void)
+ {
+ 	if (prctl(PR_SET_MEMORY_MERGE, 1)) {
+@@ -760,7 +803,7 @@ int main(int argc, char *argv[])
+ 	bool merge_across_nodes =3D KSM_MERGE_ACROSS_NODES_DEFAULT;
+ 	long size_MB =3D 0;
+=20
+-	while ((opt =3D getopt(argc, argv, "ha:p:l:z:m:s:t:GMUZNPCHD")) !=3D -1=
+) {
++	while ((opt =3D getopt(argc, argv, "ha:p:l:z:m:s:t:FGMUZNPCHD")) !=3D -=
+1) {
+ 		switch (opt) {
+ 		case 'a':
+ 			prot =3D str_to_prot(optarg);
+@@ -811,6 +854,9 @@ int main(int argc, char *argv[])
+ 				merge_type =3D atoi(optarg);
+ 			}
+ 			break;
++		case 'F':
++			test_name =3D CHECK_KSM_MERGE_FORK;
++			break;
+ 		case 'M':
+ 			break;
+ 		case 'U':
+@@ -867,6 +913,9 @@ int main(int argc, char *argv[])
+ 		ret =3D check_ksm_merge(merge_type, MAP_PRIVATE | MAP_ANONYMOUS, prot,=
+ page_count,
+ 				      ksm_scan_limit_sec, page_size);
  		break;
-+#ifdef CONFIG_KSM
-+	case PR_SET_MEMORY_MERGE:
-+		if (!capable(CAP_SYS_RESOURCE))
-+			return -EPERM;
-+
-+		if (arg2) {
-+			if (mmap_write_lock_killable(me->mm))
-+				return -EINTR;
-+
-+			if (test_bit(MMF_VM_MERGEABLE, &me->mm->flags))
-+				error =3D -EINVAL;
-+			else if (!test_bit(MMF_VM_MERGE_ANY, &me->mm->flags))
-+				error =3D __ksm_enter(me->mm, MMF_VM_MERGE_ANY);
-+			mmap_write_unlock(me->mm);
-+		} else {
-+			__ksm_exit(me->mm, MMF_VM_MERGE_ANY);
-+		}
++	case CHECK_KSM_MERGE_FORK:
++		ret =3D check_ksm_fork();
 +		break;
-+	case PR_GET_MEMORY_MERGE:
-+		if (!capable(CAP_SYS_RESOURCE))
-+			return -EPERM;
-+
-+		if (arg2 || arg3 || arg4 || arg5)
-+			return -EINVAL;
-+
-+		error =3D !!test_bit(MMF_VM_MERGE_ANY, &me->mm->flags);
-+		break;
-+#endif
- 	default:
- 		error =3D -EINVAL;
- 		break;
+ 	case CHECK_KSM_UNMERGE:
+ 		ret =3D check_ksm_unmerge(merge_type, MAP_PRIVATE | MAP_ANONYMOUS, pro=
+t,
+ 					ksm_scan_limit_sec, page_size);
 --=20
 2.30.2
 
