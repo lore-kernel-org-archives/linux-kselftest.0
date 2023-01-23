@@ -2,30 +2,30 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE308C25B50
-	for <linux-kselftest@archiver.kernel.org>; Mon, 23 Jan 2023 17:58:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28AA3C05027
+	for <linux-kselftest@archiver.kernel.org>; Mon, 23 Jan 2023 17:58:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232919AbjAWR6Q (ORCPT
+        id S232954AbjAWR6R (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 23 Jan 2023 12:58:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36538 "EHLO
+        Mon, 23 Jan 2023 12:58:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232903AbjAWR6Q (ORCPT
+        with ESMTP id S232912AbjAWR6Q (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Mon, 23 Jan 2023 12:58:16 -0500
 Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CCDC233FC
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B65D23D88
         for <linux-kselftest@vger.kernel.org>; Mon, 23 Jan 2023 09:58:15 -0800 (PST)
 Received: by dev0134.prn3.facebook.com (Postfix, from userid 425415)
-        id 7BBE85616BF1; Mon, 23 Jan 2023 09:37:56 -0800 (PST)
+        id 76E965616BED; Mon, 23 Jan 2023 09:37:56 -0800 (PST)
 From:   Stefan Roesch <shr@devkernel.io>
 To:     linux-mm@kvack.org
 Cc:     shr@devkernel.io, linux-doc@vger.kernel.org,
         linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Subject: [RESEND RFC PATCH v1 15/20] docs: document new procfs ksm knobs
-Date:   Mon, 23 Jan 2023 09:37:43 -0800
-Message-Id: <20230123173748.1734238-16-shr@devkernel.io>
+Subject: [RESEND RFC PATCH v1 14/20] mm: expose ksm merge type in ksm_stat
+Date:   Mon, 23 Jan 2023 09:37:42 -0800
+Message-Id: <20230123173748.1734238-15-shr@devkernel.io>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230123173748.1734238-1-shr@devkernel.io>
 References: <20230123173748.1734238-1-shr@devkernel.io>
@@ -35,47 +35,37 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This documents the ksm_process_profit and ksm_merge_type settings in
-ksm_stat.
+This exposes the ksm process type in /proc/<pid>/ksm_stat. The name of
+the value is ksm_merge_type.
 
 Signed-off-by: Stefan Roesch <shr@devkernel.io>
 ---
- Documentation/admin-guide/mm/ksm.rst | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ fs/proc/base.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/admin-guide/mm/ksm.rst b/Documentation/admin-g=
-uide/mm/ksm.rst
-index 72189bf1283e..70896f01d641 100644
---- a/Documentation/admin-guide/mm/ksm.rst
-+++ b/Documentation/admin-guide/mm/ksm.rst
-@@ -211,7 +211,8 @@ several times, which are unprofitable memory consumed=
-.
- 			  ksm_rmap_items * sizeof(rmap_item).
+diff --git a/fs/proc/base.c b/fs/proc/base.c
+index a2b7779f76f6..2b63a70fb7a6 100644
+--- a/fs/proc/base.c
++++ b/fs/proc/base.c
+@@ -3200,6 +3200,7 @@ static int proc_pid_ksm_merging_pages(struct seq_fi=
+le *m, struct pid_namespace *
 =20
-    where ksm_merging_pages is shown under the directory ``/proc/<pid>/``=
-,
--   and ksm_rmap_items is shown in ``/proc/<pid>/ksm_stat``.
-+   and ksm_rmap_items is shown in ``/proc/<pid>/ksm_stat``. The process =
-profit
-+   is also shown in ``/proc/<pid>/ksm_stat`` as ksm_process_profit.
-=20
- From the perspective of application, a high ratio of ``ksm_rmap_items`` =
-to
- ``ksm_merging_pages`` means a bad madvise-applied policy, so developers =
-or
-@@ -222,6 +223,9 @@ so if the ``ksm_rmap_items/ksm_merging_pages`` ratio =
-exceeds 64 on 64-bit CPU
- or exceeds 128 on 32-bit CPU, then the app's madvise policy should be dr=
-opped,
- because the ksm profit is approximately zero or negative.
-=20
-+The ksm_merge_type in ``/proc/<pid>/ksm_stat`` shows the merge type of t=
-he
-+process. Valid values are ``none``, ``madvise`` and ``process``.
+ 	return 0;
+ }
 +
- Monitoring KSM events
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=20
+ static int proc_pid_ksm_stat(struct seq_file *m, struct pid_namespace *n=
+s,
+ 				struct pid *pid, struct task_struct *task)
+ {
+@@ -3209,6 +3210,7 @@ static int proc_pid_ksm_stat(struct seq_file *m, st=
+ruct pid_namespace *ns,
+ 	if (mm) {
+ 		seq_printf(m, "ksm_rmap_items %lu\n", mm->ksm_rmap_items);
+ 		seq_printf(m, "ksm_merging_pages %lu\n", mm->ksm_merging_pages);
++		seq_printf(m, "ksm_merge_type %s\n", ksm_merge_type(mm));
+ 		seq_printf(m, "ksm_process_profit %ld\n", ksm_process_profit(mm));
+ 		mmput(mm);
+ 	}
 --=20
 2.30.2
 
