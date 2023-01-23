@@ -2,133 +2,108 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2058EC54EAA
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6074C05027
 	for <linux-kselftest@archiver.kernel.org>; Mon, 23 Jan 2023 18:00:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233171AbjAWSAn (ORCPT
+        id S233223AbjAWSAn (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Mon, 23 Jan 2023 13:00:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38670 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233197AbjAWSAj (ORCPT
+        with ESMTP id S233196AbjAWSAi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 23 Jan 2023 13:00:39 -0500
+        Mon, 23 Jan 2023 13:00:38 -0500
 Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F14C302B6
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1797D2FCC6
         for <linux-kselftest@vger.kernel.org>; Mon, 23 Jan 2023 10:00:38 -0800 (PST)
 Received: by dev0134.prn3.facebook.com (Postfix, from userid 425415)
-        id 3F89A5616BD1; Mon, 23 Jan 2023 09:37:56 -0800 (PST)
+        id 572115616BDD; Mon, 23 Jan 2023 09:37:56 -0800 (PST)
 From:   Stefan Roesch <shr@devkernel.io>
 To:     linux-mm@kvack.org
 Cc:     shr@devkernel.io, linux-doc@vger.kernel.org,
         linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Subject: [RESEND RFC PATCH v1 00/20] mm: process/cgroup ksm support
-Date:   Mon, 23 Jan 2023 09:37:28 -0800
-Message-Id: <20230123173748.1734238-1-shr@devkernel.io>
+Subject: [RESEND RFC PATCH v1 06/20] mm: add new prctl option to get and set ksm for a process
+Date:   Mon, 23 Jan 2023 09:37:34 -0800
+Message-Id: <20230123173748.1734238-7-shr@devkernel.io>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230123173748.1734238-1-shr@devkernel.io>
+References: <20230123173748.1734238-1-shr@devkernel.io>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-So far KSM can only be enabled by calling madvise for memory regions. Wha=
-t is
-required to enable KSM for more workloads is to enable / disable it at th=
-e
-process / cgroup level.
+This adds two new options to the prctl system call
+- enable ksm for all vmas of a process (if the vmas support it).
+- query if ksm has been enabled for a process.
 
-1. New options for prctl system command
-This patch series adds two new options to the prctl system call. The firs=
-t
-one allows to enable KSM at the process level and the second one to query=
- the
-setting.
+Signed-off-by: Stefan Roesch <shr@devkernel.io>
+---
+ include/uapi/linux/prctl.h |  2 ++
+ kernel/sys.c               | 29 +++++++++++++++++++++++++++++
+ 2 files changed, 31 insertions(+)
 
-The setting will be inherited by child processes.
-
-With the above setting, KSM can be enabled for the seed process of a cgro=
-up
-and all processes in the cgroup will inherit the setting.
-
-2. Changes to KSM processing
-When KSM is enabled at the process level, the KSM code will iterate over =
-all
-the VMA's and enable KSM for the eligible VMA's.
-
-When forking a process that has KSM enabled, the setting will be inherite=
-d by
-the new child process.
-
-In addition when KSM is disabled for a process, KSM will be disabled for =
-the
-VMA's where KSM has been enabled.
-
-3. Add tracepoints to KSM
-Currently KSM has no tracepoints. This adds tracepoints to the key KSM fu=
-nctions
-to make it easier to debug KSM.
-
-4. Add general_profit metric
-The general_profit metric of KSM is specified in the documentation, but n=
-ot
-calculated. This adds the general profit metric to /sys/kernel/debug/mm/k=
-sm.
-
-5. Add more metrics to ksm_stat
-This adds the process profit and ksm type metric to /proc/<pid>/ksm_stat.
-
-6. Add more tests to ksm_tests
-This adds an option to specify the merge type to the ksm_tests. This allo=
-ws to
-test madvise and prctl KSM. It also adds a new option to query if prctl K=
-SM has
-been enabled. It adds a fork test to verify that the KSM process setting =
-is
-inherited by client processes.
-
-
-Stefan Roesch (20):
-  mm: add new flag to enable ksm per process
-  mm: add flag to __ksm_enter
-  mm: add flag to __ksm_exit call
-  mm: invoke madvise for all vmas in scan_get_next_rmap_item
-  mm: support disabling of ksm for a process
-  mm: add new prctl option to get and set ksm for a process
-  mm: add tracepoints to ksm
-  mm: split off pages_volatile function
-  mm: expose general_profit metric
-  docs: document general_profit sysfs knob
-  mm: calculate ksm process profit metric
-  mm: add ksm_merge_type() function
-  mm: expose ksm process profit metric in ksm_stat
-  mm: expose ksm merge type in ksm_stat
-  docs: document new procfs ksm knobs
-  tools: add new prctl flags to prctl in tools dir
-  selftests/vm: add KSM prctl merge test
-  selftests/vm: add KSM get merge type test
-  selftests/vm: add KSM fork test
-  selftests/vm: add two functions for debugging merge outcome
-
- Documentation/ABI/testing/sysfs-kernel-mm-ksm |   8 +
- Documentation/admin-guide/mm/ksm.rst          |   8 +-
- MAINTAINERS                                   |   1 +
- fs/proc/base.c                                |   5 +
- include/linux/ksm.h                           |  19 +-
- include/linux/sched/coredump.h                |   1 +
- include/trace/events/ksm.h                    | 257 ++++++++++++++++++
- include/uapi/linux/prctl.h                    |   2 +
- kernel/sys.c                                  |  29 ++
- mm/ksm.c                                      | 134 ++++++++-
- tools/include/uapi/linux/prctl.h              |   2 +
- tools/testing/selftests/vm/Makefile           |   3 +-
- tools/testing/selftests/vm/ksm_tests.c        | 254 ++++++++++++++---
- 13 files changed, 665 insertions(+), 58 deletions(-)
- create mode 100644 include/trace/events/ksm.h
-
-
-base-commit: c1649ec55708ae42091a2f1bca1ab49ecd722d55
+diff --git a/include/uapi/linux/prctl.h b/include/uapi/linux/prctl.h
+index a5e06dcbba13..b8ba85f18e43 100644
+--- a/include/uapi/linux/prctl.h
++++ b/include/uapi/linux/prctl.h
+@@ -284,4 +284,6 @@ struct prctl_mm_map {
+ #define PR_SET_VMA		0x53564d41
+ # define PR_SET_VMA_ANON_NAME		0
+=20
++#define PR_SET_MEMORY_MERGE		65
++#define PR_GET_MEMORY_MERGE		66
+ #endif /* _LINUX_PRCTL_H */
+diff --git a/kernel/sys.c b/kernel/sys.c
+index 5fd54bf0e886..de218e3b6f42 100644
+--- a/kernel/sys.c
++++ b/kernel/sys.c
+@@ -15,6 +15,7 @@
+ #include <linux/highuid.h>
+ #include <linux/fs.h>
+ #include <linux/kmod.h>
++#include <linux/ksm.h>
+ #include <linux/perf_event.h>
+ #include <linux/resource.h>
+ #include <linux/kernel.h>
+@@ -2626,6 +2627,34 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long,=
+ arg2, unsigned long, arg3,
+ 	case PR_SET_VMA:
+ 		error =3D prctl_set_vma(arg2, arg3, arg4, arg5);
+ 		break;
++#ifdef CONFIG_KSM
++	case PR_SET_MEMORY_MERGE:
++		if (!capable(CAP_SYS_RESOURCE))
++			return -EPERM;
++
++		if (arg2) {
++			if (mmap_write_lock_killable(me->mm))
++				return -EINTR;
++
++			if (test_bit(MMF_VM_MERGEABLE, &me->mm->flags))
++				error =3D -EINVAL;
++			else if (!test_bit(MMF_VM_MERGE_ANY, &me->mm->flags))
++				error =3D __ksm_enter(me->mm, MMF_VM_MERGE_ANY);
++			mmap_write_unlock(me->mm);
++		} else {
++			__ksm_exit(me->mm, MMF_VM_MERGE_ANY);
++		}
++		break;
++	case PR_GET_MEMORY_MERGE:
++		if (!capable(CAP_SYS_RESOURCE))
++			return -EPERM;
++
++		if (arg2 || arg3 || arg4 || arg5)
++			return -EINVAL;
++
++		error =3D !!test_bit(MMF_VM_MERGE_ANY, &me->mm->flags);
++		break;
++#endif
+ 	default:
+ 		error =3D -EINVAL;
+ 		break;
 --=20
 2.30.2
 
