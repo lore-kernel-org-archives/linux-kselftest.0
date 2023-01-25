@@ -2,63 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78CD5C54EED
-	for <linux-kselftest@archiver.kernel.org>; Wed, 25 Jan 2023 10:49:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D0F81C61DA0
+	for <linux-kselftest@archiver.kernel.org>; Wed, 25 Jan 2023 10:49:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235743AbjAYKtO (ORCPT
+        id S235751AbjAYKtS (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 25 Jan 2023 05:49:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50456 "EHLO
+        Wed, 25 Jan 2023 05:49:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235756AbjAYKsp (ORCPT
+        with ESMTP id S235251AbjAYKtN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 25 Jan 2023 05:48:45 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F925577D1
+        Wed, 25 Jan 2023 05:49:13 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96573568A2
         for <linux-kselftest@vger.kernel.org>; Wed, 25 Jan 2023 02:48:11 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id e19-20020a05600c439300b003db1cac0c1fso914333wmn.5
+Received: by mail-wm1-x32f.google.com with SMTP id d4-20020a05600c3ac400b003db1de2aef0so964896wms.2
         for <linux-kselftest@vger.kernel.org>; Wed, 25 Jan 2023 02:48:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=tessares.net; s=google;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=mjFauu1ty8EOKl/zKVHOIwAbYvDY0AH2ut63+GQyyss=;
-        b=HyC9KJ++wPd79JT3e3Qj+7xb4QbvFGvjgEC93RX+0LRO3IvjUyFbu98HL12BDWijfg
-         V9rl/j/+T+IRK2Au/LWPs6yPXW5rg1iKTb2mTnyL0MQ9CsZL5NjZumRMjqibqvQ0sMdB
-         q9z1+gUsTsHxOzHqvcFtVxhpESMuDzBdEX0bvLVnzflMiOI890oJvvOzO80me8t1dYBI
-         80JsEJZ+fF4xJ/JOR7UFgGAHlD8ZL7fIUdbujDrFEu2SG9NcsjRf5wxixv+TeZVg1WcI
-         cwaaZ/nVKUHfasrzFU78oY6xpJJjWfZ4LMsSdyYGGw1OX+3dtyuzt5t45E9EZELs1fda
-         a5aA==
+        bh=RV58zA+SCkILm0XZPHyNHRUHK+pvhsdLrbaM8qBjSmQ=;
+        b=OwVPRCZNbCTLA52WGubCMcVDU60TsNctH4H52salJ2Q7Gdz2w8Yt25Xon0pQtOB61H
+         D1NANQo8JZWdJHfJq79yGdGbMIgYZ+6HeUhFox+EDZLTwrQ0Yzjz0xo1VJzUyv+DTokM
+         NV33WouA/XJUizV94qleUrEpbUvcrfcBwd/3r+g1AXiHKHZAATqSbwLPjjwQz7xuyBEN
+         lcaMX/yIsxypXHrJHAlP5AnSMfRRDixWhcOCvHQkj1Qe8l2GQRbU7YOUf4Ul6I1dw28e
+         MoH++G9CZTTNjw6AfdxE7mnl0k1orQ2l6oEtMpRUyyBzlayJFaFnT36bpxhAOkLYpg80
+         zoNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mjFauu1ty8EOKl/zKVHOIwAbYvDY0AH2ut63+GQyyss=;
-        b=AMpUkJ103gKQy6M39Mwbj1sc3FgGk8JhIk+ONyHRGcDuOyL7Hn2el9Wj5lv/ytXC/F
-         zWEObEcJRVaOZQ/+yg6BUeBURBsE1BiAPvpU+ZzB2yY/J8oujJffb5Rr/6IsSDSr2EYg
-         SHX0MQNHz5vzN1E0RM+qpXlJRmx/Xpf3JQe1j8g6GWOgqh+U7IlpkPj3vNQNK1klRcWU
-         l1MlJmg0SqL5IQ7InY6goAr4SQB6tPyN+459l/5ewLww1LW3WkfubSoWvb7lvve5fEEo
-         5iVq5VWbVu6/w3m+k0saDHbnVEs5LzIQenC8mUhW5XddSwl1aAMAOY1ngwdH/HvYAB7E
-         xv2g==
-X-Gm-Message-State: AFqh2krsAjry4YRKP4eLJo0BBJzd/nzgasNNzaPuVb9wmYh439FMVDeo
-        oHZh5LeKpzO/HNNODWI/exdGfQ==
-X-Google-Smtp-Source: AMrXdXsm6QiSIL1qqdqKiXpYNpiBJkeGjOybgfRqpEtAKDjWn6+pasYOOg9Y/LTMg49h5Xho9eyrmQ==
-X-Received: by 2002:a05:600c:1c01:b0:3c6:e63e:23e9 with SMTP id j1-20020a05600c1c0100b003c6e63e23e9mr31559003wms.24.1674643682135;
-        Wed, 25 Jan 2023 02:48:02 -0800 (PST)
+        bh=RV58zA+SCkILm0XZPHyNHRUHK+pvhsdLrbaM8qBjSmQ=;
+        b=KQnErnGGpm16YStYHFwa/x+cSUWjTJwWsemK+kHFpBUNy6JqVy+LA73LxfsQ3A3yVN
+         fGcTobLHz3nodkg+bghAT7eLeG26M28GDuAetIZODNIq+gzHeTwO2iGxRJuqhhmKVOpB
+         a0l96Z4uBlCE7XQsK4x3IaL/K8wtoAsvkw0KiPmdzdN/pfTs5seFz4QoZqHS0i42nXd9
+         Aewx6WjKXkeThiiQm9kNLEv/UdEOcoPNJ5Gm9Pdh1jehW+OA9DklI+FjP0OoehGsrgau
+         uLPGUa6vlaRvA+iXs7Q4YJSuvzh8RbwuLO1jvahi+9pgiz6J28ajMiw21h4hKqrfC8Ik
+         vvsw==
+X-Gm-Message-State: AFqh2kqVRGtCtg6JSL0UxBx7AcNmUMD8jr0GGw22Zri8qMPOlZHuUCU/
+        XJztXERQ9SiTxMCgZ8nFinDwSA==
+X-Google-Smtp-Source: AMrXdXtLCWuwItXB+ckW/oTvPU1xdVUu7w/DaWjCAMc9Lv9MEwvEQhUGAEmBQ6t+gqOD9oZC/V4nGA==
+X-Received: by 2002:a05:600c:4248:b0:3d9:7667:c0e4 with SMTP id r8-20020a05600c424800b003d97667c0e4mr30794094wmm.31.1674643684026;
+        Wed, 25 Jan 2023 02:48:04 -0800 (PST)
 Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id r1-20020a05600c424100b003d9a86a13bfsm1423692wmm.28.2023.01.25.02.48.01
+        by smtp.gmail.com with ESMTPSA id r1-20020a05600c424100b003d9a86a13bfsm1423692wmm.28.2023.01.25.02.48.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 02:48:01 -0800 (PST)
+        Wed, 25 Jan 2023 02:48:03 -0800 (PST)
 From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-Date:   Wed, 25 Jan 2023 11:47:23 +0100
-Subject: [PATCH net-next 3/8] selftests: mptcp: add test-cases for mixed
- v4/v6 subflows
+Date:   Wed, 25 Jan 2023 11:47:25 +0100
+Subject: [PATCH net-next 5/8] selftests: mptcp: userspace: print titles
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230123-upstream-net-next-pm-v4-v6-v1-3-43fac502bfbf@tessares.net>
+Message-Id: <20230123-upstream-net-next-pm-v4-v6-v1-5-43fac502bfbf@tessares.net>
 References: <20230123-upstream-net-next-pm-v4-v6-v1-0-43fac502bfbf@tessares.net>
 In-Reply-To: <20230123-upstream-net-next-pm-v4-v6-v1-0-43fac502bfbf@tessares.net>
 To:     Mat Martineau <mathew.j.martineau@linux.intel.com>,
@@ -70,129 +69,143 @@ To:     Mat Martineau <mathew.j.martineau@linux.intel.com>,
 Cc:     netdev@vger.kernel.org, mptcp@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3323;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2983;
  i=matthieu.baerts@tessares.net; h=from:subject:message-id;
- bh=Svwm/hHROTGkPV1oEQjfcOQoXpkUYph8n6kw7hTzaOQ=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBj0QjdQmoYk+cbOI+cC/+J4PUVg46ofuGSiHtcZEX/
- 2OH+ZVyJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCY9EI3QAKCRD2t4JPQmmgc4oUEA
- C/7IaxF/dQF3FtSHdqXw/vY0N98/sb2efy3A1nA/RWfkRFiA3Zr2vLyXEkXk9JdxgeXWALgDAcivbJ
- r3hEBDiZ734LGnzYz4dq2jPNgn7PDJsR+ypB6fKRYWzGsoaBS0McHnwrEcLCowLsAVuS1jk9j4KuWq
- 73/X8JG/euwgYo86Ycs3HydoVaEjs4ngfIiO5Ut1vEkuqWoX4o8BLDkkh0YNHoq12XZ7JYyPgVi2+7
- vPM45W00RVk9ikMdgem+v1+xeTOgBC4F0kD2tod2IBfQEZ7vyH/i0jKMBXdTY8sjFTIz8vs1QvejT/
- xIunWCXjsoY4RGXjM3PZEUx2Vtk7rI+bEQnMOA2E4N4LtVEm3gvJSAuGCQvQ+53S4zxpCVRxNXm6T5
- dv20gWN83Aghk9QOdlut0H7NZ4UhZFTYTgF+BlMuiiUusg/P4G8IKllI+YN+ZrIeD5aS7ehUAX+3eX
- VXm/AMsMUJLRUH0LmC7YL76NvxMRX1xfoZ1CqgNpYlz/6rtdMT53lCd+0+q0kuxzLnJalTyABXEgy+
- DWEWwtvgH+G7OjU6jLdRCdhMcGkDyhQf9Va3Me5fzIHcamaF7kWXlpe5LnCDBT+fLTytTQ5KL2KSRe
- cbbQQzey8TYYXR27jPO2oT7btDBkPRXLePPxs1SCPWOkqr9L6eNdokQ+rhkA==
+ bh=P3VM/iCNu8iP43PEXa6tfD1YO3fGT98t37TeXBvPP7A=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBj0Qjdo0FMtsrErT4zXkcmyHJwfc9WvK2QpqSwU2eH
+ hOKZmn+JAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCY9EI3QAKCRD2t4JPQmmgc8JjD/
+ 4lpfj++M+BTlwMX8u0XpEr3FNE9Lw/PDWGnraa1zPHiOg1kW1k0lGMTalnWAvy+sPj9vECtXnJpIhN
+ Xd1JpH4+SoYGNdP6L8NxqYG68YusvEFWeIG1G/+Dk8Ok+1f09XloxVzDuAe05fqKNd3KxYtST42BSy
+ IrNBZTXsd/ifqVjBj1iBZwO+/EF9KDEJ/SPzsCIz5Be4Jj4iv3B1jMN0RgxoD6XsXFEz1LUT2YPiuM
+ +vo4h2i25DodmyPmPzYHqWWthDnqtSx+6GQZN3qDN1i+vS/iOKGkLII8HVbqyfXpX4BJmq+SE91Zb1
+ 6avWRahqKRWJSipYGHQ60QR/xtm7DZG3oeYyohT18/egCMoTb9ai2kmRLdWDEhohBUznchN7D+aDi6
+ ARzvH8K9nrLl7gAuj4EFPyufUDHq7Va30661tdV+x/s5js2yVIpEIIlIn4PP4ClJfACEVJEhsBHgP1
+ 6nsxAPVg7ijJzHyIEbViNdBR/NZ0gFRTasqyjSsMnf+fEXp15LXW3GCInoOLtRkdyVwZ8HJn86mXnd
+ +OXQcNfIZUM7+MiPIrRmFaZahsYZpSEUQzdtiguNaKWnSrCtChSPwF5xVO1PzTAj9iI8LRBXX7TNkq
+ qEm0DXd31HF6pfOQMfY6D0NQwPT+KkuwfE02/v3kfb5yw9maJefvEHaqJ6vQ==
 X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Paolo Abeni <pabeni@redhat.com>
+This script is running a few tests after having setup the environment.
 
-Note that we can't guess the listener family anymore based on the client
-target address: always use IPv6.
+Printing titles helps understand what is being tested.
 
-The fullmesh flag with endpoints from different families is also
-validated here.
-
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Reviewed-by: Matthieu Baerts <matthieu.baerts@tessares.net>
 Reviewed-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
 Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
 ---
- tools/testing/selftests/net/mptcp/mptcp_join.sh | 53 ++++++++++++++++++++-----
- 1 file changed, 44 insertions(+), 9 deletions(-)
+ tools/testing/selftests/net/mptcp/userspace_pm.sh | 24 ++++++++++++++++++++++-
+ 1 file changed, 23 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-index d11d3d566608..387abdcec011 100755
---- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
-+++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-@@ -774,24 +774,17 @@ do_transfer()
- 		addr_nr_ns2=${addr_nr_ns2:9}
- 	fi
+diff --git a/tools/testing/selftests/net/mptcp/userspace_pm.sh b/tools/testing/selftests/net/mptcp/userspace_pm.sh
+index ab2d581f28a1..7b06d9d0aa46 100755
+--- a/tools/testing/selftests/net/mptcp/userspace_pm.sh
++++ b/tools/testing/selftests/net/mptcp/userspace_pm.sh
+@@ -43,6 +43,11 @@ rndh=$(printf %x "$sec")-$(mktemp -u XXXXXX)
+ ns1="ns1-$rndh"
+ ns2="ns2-$rndh"
  
--	local local_addr
--	if is_v6 "${connect_addr}"; then
--		local_addr="::"
--	else
--		local_addr="0.0.0.0"
--	fi
--
- 	extra_srv_args="$extra_args $extra_srv_args"
- 	if [ "$test_link_fail" -gt 1 ];then
- 		timeout ${timeout_test} \
- 			ip netns exec ${listener_ns} \
- 				./mptcp_connect -t ${timeout_poll} -l -p $port -s ${srv_proto} \
--					$extra_srv_args ${local_addr} < "$sinfail" > "$sout" &
-+					$extra_srv_args "::" < "$sinfail" > "$sout" &
- 	else
- 		timeout ${timeout_test} \
- 			ip netns exec ${listener_ns} \
- 				./mptcp_connect -t ${timeout_poll} -l -p $port -s ${srv_proto} \
--					$extra_srv_args ${local_addr} < "$sin" > "$sout" &
-+					$extra_srv_args "::" < "$sin" > "$sout" &
- 	fi
- 	local spid=$!
- 
-@@ -2448,6 +2441,47 @@ v4mapped_tests()
- 	fi
- }
- 
-+mixed_tests()
++print_title()
 +{
-+	if reset "IPv4 sockets do not use IPv6 addresses"; then
-+		pm_nl_set_limits $ns1 0 1
-+		pm_nl_set_limits $ns2 1 1
-+		pm_nl_add_endpoint $ns1 dead:beef:2::1 flags signal
-+		run_tests $ns1 $ns2 10.0.1.1 0 0 0 slow
-+		chk_join_nr 0 0 0
-+	fi
-+
-+	# Need an IPv6 mptcp socket to allow subflows of both families
-+	if reset "simult IPv4 and IPv6 subflows"; then
-+		pm_nl_set_limits $ns1 0 1
-+		pm_nl_set_limits $ns2 1 1
-+		pm_nl_add_endpoint $ns1 10.0.1.1 flags signal
-+		run_tests $ns1 $ns2 dead:beef:2::1 0 0 0 slow
-+		chk_join_nr 1 1 1
-+	fi
-+
-+	# cross families subflows will not be created even in fullmesh mode
-+	if reset "simult IPv4 and IPv6 subflows, fullmesh 1x1"; then
-+		pm_nl_set_limits $ns1 0 4
-+		pm_nl_set_limits $ns2 1 4
-+		pm_nl_add_endpoint $ns2 dead:beef:2::2 flags subflow,fullmesh
-+		pm_nl_add_endpoint $ns1 10.0.1.1 flags signal
-+		run_tests $ns1 $ns2 dead:beef:2::1 0 0 0 slow
-+		chk_join_nr 1 1 1
-+	fi
-+
-+	# fullmesh still tries to create all the possibly subflows with
-+	# matching family
-+	if reset "simult IPv4 and IPv6 subflows, fullmesh 2x2"; then
-+		pm_nl_set_limits $ns1 0 4
-+		pm_nl_set_limits $ns2 2 4
-+		pm_nl_add_endpoint $ns1 10.0.2.1 flags signal
-+		pm_nl_add_endpoint $ns1 dead:beef:2::1 flags signal
-+		run_tests $ns1 $ns2 dead:beef:1::1 0 0 fullmesh_1 slow
-+		chk_join_nr 4 4 4
-+	fi
++	stdbuf -o0 -e0 printf "INFO: %s\n" "${1}"
 +}
 +
- backup_tests()
+ kill_wait()
  {
- 	# single subflow, backup
-@@ -3120,6 +3154,7 @@ all_tests_sorted=(
- 	a@add_tests
- 	6@ipv6_tests
- 	4@v4mapped_tests
-+	M@mixed_tests
- 	b@backup_tests
- 	p@add_addr_ports_tests
- 	k@syncookies_tests
+ 	kill $1 > /dev/null 2>&1
+@@ -51,7 +56,7 @@ kill_wait()
+ 
+ cleanup()
+ {
+-	echo "cleanup"
++	print_title "Cleanup"
+ 
+ 	rm -rf $file $client_evts $server_evts
+ 
+@@ -78,6 +83,8 @@ cleanup()
+ 	for netns in "$ns1" "$ns2" ;do
+ 		ip netns del "$netns"
+ 	done
++
++	stdbuf -o0 -e0 printf "Done\n"
+ }
+ 
+ trap cleanup EXIT
+@@ -108,6 +115,7 @@ ip -net "$ns2" addr add dead:beef:1::2/64 dev ns2eth1 nodad
+ ip -net "$ns2" addr add dead:beef:2::2/64 dev ns2eth1 nodad
+ ip -net "$ns2" link set ns2eth1 up
+ 
++print_title "Init"
+ stdbuf -o0 -e0 printf "Created network namespaces ns1, ns2         \t\t\t[OK]\n"
+ 
+ make_file()
+@@ -255,6 +263,8 @@ verify_announce_event()
+ 
+ test_announce()
+ {
++	print_title "Announce tests"
++
+ 	# Capture events on the network namespace running the server
+ 	:>"$server_evts"
+ 
+@@ -359,6 +369,8 @@ verify_remove_event()
+ 
+ test_remove()
+ {
++	print_title "Remove tests"
++
+ 	# Capture events on the network namespace running the server
+ 	:>"$server_evts"
+ 
+@@ -521,6 +533,8 @@ verify_subflow_events()
+ 
+ test_subflows()
+ {
++	print_title "Subflows v4 or v6 only tests"
++
+ 	# Capture events on the network namespace running the server
+ 	:>"$server_evts"
+ 
+@@ -754,6 +768,8 @@ test_subflows()
+ 
+ test_subflows_v4_v6_mix()
+ {
++	print_title "Subflows v4 and v6 mix tests"
++
+ 	# Attempt to add a listener at 10.0.2.1:<subflow-port>
+ 	ip netns exec "$ns1" ./pm_nl_ctl listen 10.0.2.1\
+ 	   $app6_port > /dev/null 2>&1 &
+@@ -800,6 +816,8 @@ test_subflows_v4_v6_mix()
+ 
+ test_prio()
+ {
++	print_title "Prio tests"
++
+ 	local count
+ 
+ 	# Send MP_PRIO signal from client to server machine
+@@ -876,6 +894,8 @@ verify_listener_events()
+ 
+ test_listener()
+ {
++	print_title "Listener tests"
++
+ 	# Capture events on the network namespace running the client
+ 	:>$client_evts
+ 
+@@ -902,8 +922,10 @@ test_listener()
+ 	verify_listener_events $client_evts $LISTENER_CLOSED $AF_INET 10.0.2.2 $client4_port
+ }
+ 
++print_title "Make connections"
+ make_connection
+ make_connection "v6"
++
+ test_announce
+ test_remove
+ test_subflows
 
 -- 
 2.38.1
