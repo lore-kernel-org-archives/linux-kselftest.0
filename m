@@ -2,103 +2,131 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1850DC54EED
-	for <linux-kselftest@archiver.kernel.org>; Wed, 25 Jan 2023 19:36:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 91341C54E94
+	for <linux-kselftest@archiver.kernel.org>; Wed, 25 Jan 2023 20:03:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234783AbjAYTgJ (ORCPT
+        id S236113AbjAYUDE (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 25 Jan 2023 14:36:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43628 "EHLO
+        Wed, 25 Jan 2023 15:03:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234613AbjAYTgJ (ORCPT
+        with ESMTP id S235776AbjAYUDE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 25 Jan 2023 14:36:09 -0500
-X-Greylist: delayed 1036 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 25 Jan 2023 11:36:07 PST
-Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C92FC4AA41;
-        Wed, 25 Jan 2023 11:36:07 -0800 (PST)
-Received: from imladris.home.surriel.com ([10.0.13.28] helo=imladris.surriel.com)
-        by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.96)
-        (envelope-from <riel@shelob.surriel.com>)
-        id 1pKkjm-0002iB-37;
-        Wed, 25 Jan 2023 13:43:10 -0500
-Message-ID: <4fe0e2eb6a3e2d7e0838f177706f1be13d61375c.camel@surriel.com>
-Subject: Re: [RESEND RFC PATCH v1 00/20] mm: process/cgroup ksm support
-From:   Rik van Riel <riel@surriel.com>
-To:     Michal Hocko <mhocko@suse.com>,
-        David Hildenbrand <david@redhat.com>
-Cc:     Stefan Roesch <shr@devkernel.io>, linux-mm@kvack.org,
-        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, CGEL <cgel.zte@gmail.com>,
-        Jann Horn <jannh@google.com>
-Date:   Wed, 25 Jan 2023 13:43:09 -0500
-In-Reply-To: <Y9EoJ0jlXMeuJzuY@dhcp22.suse.cz>
-References: <20230123173748.1734238-1-shr@devkernel.io>
-         <5844ee9f-1992-a62a-2141-3b694a1e1915@redhat.com>
-         <qvqwbkmnj014.fsf@dev0134.prn3.facebook.com>
-         <a391e98c-88af-886c-0426-c41c9980afa1@redhat.com>
-         <Y9EoJ0jlXMeuJzuY@dhcp22.suse.cz>
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-fHtooTLBHokjrlt3AOkT"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Wed, 25 Jan 2023 15:03:04 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECDFA298EF
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Jan 2023 12:03:02 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id h5-20020a17090a9c0500b0022bb85eb35dso3225034pjp.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Jan 2023 12:03:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=pQ151XbWFnzr6halobgCFdpUAA/DSGbRgqUMsW6d8jo=;
+        b=Sr7EbTbrG6bkrm/WeG1zrEtfx9WX1M1qgp4ZysVpliCvl/YE9SCnEGEVn+6R/ZhwZY
+         lkob7nm+HJZH2qgwV34IiOHab/aIlwTsVcFOFi2LLvwRG8Tp3EI8hpQBd8vXU2nhT+JI
+         YMLtAaMjaTpqVqrz03nOaowENbzuQ3Rc+Tlrz/3A0hYa8S0yDkaCUP6vWM1OcJspw5EI
+         zRnsxy6nsF1qGTC33T1U8fhttsEdRx4dc9DveB5Y1wmKD9ll5UuSxNgWWQL0ubOagICd
+         i8GpYEd6aDcOnRkHX5uOUQ+zGmJ/9wz/4czaF/04a7O4GPXH0kIt0oEMFsyLZUSszi+X
+         hf1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pQ151XbWFnzr6halobgCFdpUAA/DSGbRgqUMsW6d8jo=;
+        b=BnS6Erm9ZSH3FpgX1Fz9wmgKA7tAvUzBq5X3Rj5ljRa6sm0l0cE/8QMGf4VMGH6MG3
+         9hiIdTyeh54+KFWPdaty+F8WOyAx4Lj8fyYLf0gN/q/RD/kG/6YjjWD97zJurscorRFR
+         ShwQgYKYzGgSk3zNgD9zVIM1xuO7/lS5+rwO6wmmymua3aiH5SO7HHsfz6bgdlRwhypd
+         KS4RJO10D5nYOtiX7Q0Trw6zb28gUlfa5/MBXRBalFMI/2lDNRnxl/QDfMDH6R3hlb20
+         Qe4RUqyZc5AM4tQ+KPBLiHSBFX8LWEnB/fzkezSYA6AnFSonggguPya39bVgAaUCosHf
+         HOVQ==
+X-Gm-Message-State: AFqh2kptdcwJkVIja6recgLlqDBg2nFbxv0XJqmdQOqT26HKaDiJd3IA
+        IwNTxhJbP8EKphtL2wBs/Qkpy88cc5J0tAQaSVU/ew==
+X-Google-Smtp-Source: AMrXdXtfpn6DJtWMpLN5PLpeOsJ1uVt36ZNI2+cVbOHrxZPsbajPj+k50LqyihKjqinb6/RNdh/7HQ==
+X-Received: by 2002:a17:903:18f:b0:194:d5f7:847a with SMTP id z15-20020a170903018f00b00194d5f7847amr32947554plg.35.1674676982500;
+        Wed, 25 Jan 2023 12:03:02 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id iy3-20020a170903130300b001745662d568sm3974746plb.278.2023.01.25.12.03.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Jan 2023 12:03:02 -0800 (PST)
+Message-ID: <63d18af6.170a0220.c9aeb.76ce@mx.google.com>
+Date:   Wed, 25 Jan 2023 12:03:02 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Sender: riel@shelob.surriel.com
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Tree: kselftest
+X-Kernelci-Branch: fixes
+X-Kernelci-Kernel: linux-kselftest-fixes-6.2-rc5-1-ga49fb7218ed8
+X-Kernelci-Report-Type: test
+Subject: kselftest/fixes kselftest-cpufreq: 2 runs,
+ 1 regressions (linux-kselftest-fixes-6.2-rc5-1-ga49fb7218ed8)
+To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+kselftest/fixes kselftest-cpufreq: 2 runs, 1 regressions (linux-kselftest-f=
+ixes-6.2-rc5-1-ga49fb7218ed8)
 
---=-fHtooTLBHokjrlt3AOkT
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Regressions Summary
+-------------------
 
-On Wed, 2023-01-25 at 14:01 +0100, Michal Hocko wrote:
->=20
-> I have read through your cover letter and it talks about the
-> interface
-> but it doesn't really talk about usecases and how they are supposed
-> to
-> use this feature - except the prctl based flag gets inherited. So
-> could
-> you elaborate some more about those usecases please?
+platform        | arch  | lab           | compiler | defconfig             =
+       | regressions
+----------------+-------+---------------+----------+-----------------------=
+-------+------------
+mt8173-elm-hana | arm64 | lab-collabora | clang-15 | defconfig+kse...4-chro=
+mebook | 1          =
 
-I can explain a little about the use case. There are people
-who use forked (rather than threaded) servers for certain
-workloads, from a garbage collected language without pointers,
-which means madvise simply cannot be made available in that
-language.
 
-The people running that workload have experimented with uKSM
-in the past, and seen about a 20% capacity increase from
-doing that.
+  Details:  https://kernelci.org/test/job/kselftest/branch/fixes/kernel/lin=
+ux-kselftest-fixes-6.2-rc5-1-ga49fb7218ed8/plan/kselftest-cpufreq/
 
-Because madvise is not possible in that programming language,
-and the addresses of data keep moving around as things get
-garbage collected, KSM sharing needs to be enabled "from the
-outside" for that workload.
+  Test:     kselftest-cpufreq
+  Tree:     kselftest
+  Branch:   fixes
+  Describe: linux-kselftest-fixes-6.2-rc5-1-ga49fb7218ed8
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
+lftest.git
+  SHA:      a49fb7218ed84a4c5e6c56b9fd933498b9730912 =
 
-prctl seems like a good way to do that.
 
---=20
-All Rights Reversed.
 
---=-fHtooTLBHokjrlt3AOkT
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
+Test Regressions
+---------------- =
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAABCAAdFiEEKR73pCCtJ5Xj3yADznnekoTE3oMFAmPReD0ACgkQznnekoTE
-3oOf6Qf+OZdpabz5qPJU/62BiPgM4Iz1Ih3vwmzqU4gPC6zRlgHsqxQ9unGulcc5
-u9IIstoDUDaZRtbvJas1YO3wlaBgyIag+J0yR0Vflg6KWnBrYz+AKa0f8rfi4I0H
-MPavada+vlPdaIM/duOza4Je/nUkKenXaknZ3ng/j17JfWTPDNbtF/0Qne0t4nnf
-pM0i49ZgGNPAAqeT6FI1jf07BN+01QVjDKellwxGx5s8MjNKkEsmvpXT2ePTJQhK
-YXhsdf1sP3C9ftRKOBBzp0izIjvwnSuKcauOdhckdmX69SLbVSgxUgaTVxBUa2Ur
-RUUcMqJMaSgPERS3K+TdPHAaIJYY8Q==
-=k7TU
------END PGP SIGNATURE-----
 
---=-fHtooTLBHokjrlt3AOkT--
+platform        | arch  | lab           | compiler | defconfig             =
+       | regressions
+----------------+-------+---------------+----------+-----------------------=
+-------+------------
+mt8173-elm-hana | arm64 | lab-collabora | clang-15 | defconfig+kse...4-chro=
+mebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63d17ab1a4a612df5b915eeb
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest+arm64-chromebook
+  Compiler:    clang-15 (Debian clang version 15.0.7)
+  Plain log:   https://storage.kernelci.org//kselftest/fixes/linux-kselftes=
+t-fixes-6.2-rc5-1-ga49fb7218ed8/arm64/defconfig+kselftest+arm64-chromebook/=
+clang-15/lab-collabora/kselftest-cpufreq-mt8173-elm-hana.txt
+  HTML log:    https://storage.kernelci.org//kselftest/fixes/linux-kselftes=
+t-fixes-6.2-rc5-1-ga49fb7218ed8/arm64/defconfig+kselftest+arm64-chromebook/=
+clang-15/lab-collabora/kselftest-cpufreq-mt8173-elm-hana.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
+elftest/20230120.0/arm64/initrd.cpio.gz =
+
+
+
+  * kselftest-cpufreq.login: https://kernelci.org/test/case/id/63d17ab1a4a6=
+12df5b915eec
+        failing since 98 days (last pass: linux-kselftest-fixes-6.0-rc3, fi=
+rst fail: v6.1-rc1-5-gcb05c81ada76) =
+
+ =20
