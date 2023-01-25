@@ -2,63 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B545C636BD
-	for <linux-kselftest@archiver.kernel.org>; Wed, 25 Jan 2023 21:26:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12490C27C76
+	for <linux-kselftest@archiver.kernel.org>; Wed, 25 Jan 2023 21:26:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236808AbjAYV0k (ORCPT
+        id S236817AbjAYV0k (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Wed, 25 Jan 2023 16:26:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50448 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236744AbjAYV0c (ORCPT
+        with ESMTP id S236743AbjAYV0c (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Wed, 25 Jan 2023 16:26:32 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A2A46140;
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A78A46145;
         Wed, 25 Jan 2023 13:26:30 -0800 (PST)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30PL6ghM032428;
-        Wed, 25 Jan 2023 21:26:28 GMT
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30PKLcMg018369;
+        Wed, 25 Jan 2023 21:26:26 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=n04GatZv2GBEBT6LCklBpZQWzbFPv18RlDz9jvkoKac=;
- b=qeoXieuEIizu5q+pP7WsbviZQ0FeQ3ekohS2Qq5jO8QcXEN/Pg46ecZvIaxt9AMrQaEc
- bjq+UQQirJ+hQqMPNzMLaEuB89HxI67AriUsS2AoOcw1O5Fd+lBpzNqX9tWmDNrYlDYp
- XBUQJ/bEpgCXujen3Ce0NNJ/UtuHZc6o1ygCuKFuBbV3rtgi/R0ug28H4D1HGC/bLdZp
- USnHpnPmS82qCsHUvzDGzOPsozAOGcTPEQVs7gSFxlT5lny8+wU30Qhyu8vbFSDdRyHv
- fG8VqGshyGNjNKlTIwCfHv9cPrqk0zQPwIjRi1JtGa8FsCxYhxAOx6UbZPVSk8RJZCra Gg== 
+ bh=AKbHNW72K97ggo1P94yRrURlzuHrpT97rwi+FOZd9+A=;
+ b=NQCm32L4Lq+JGikbEw22eYnYNZ5M7zRU1jOX1QDaIEJv1YrBUdytanoZLTOqiVi22s4T
+ MfXayei1Yxs044vdt2a13KSal45DLIWsH7GORRubEBLnPglaz0e3kl9iBREEBb0S7skd
+ tIJetzc0Rxye9RVScTXbA4Io9bCyGXKpImHS0u49Lw4OFaajMNlSxuVSglW8IAPl24ZP
+ FFfmMuvGX8SuUoO4+4QaW8nVa/2bArDjhvCTiCKJIHtpyx1r9RIi9p/sEoITpLvY2Z6L
+ fFDiLv3LD7tsYBD3T6xRqv6EXYTfvTlZbDRByCdXHEZd8tYVGvPduEIUaKZ4z5MiKhr/ bw== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3na839fy6d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Jan 2023 21:26:27 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30PLAs14024441;
-        Wed, 25 Jan 2023 21:26:26 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3na839fy5n-1
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nb6c2aksa-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Wed, 25 Jan 2023 21:26:26 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30PGr9J4014837;
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30PLPTJB022765;
+        Wed, 25 Jan 2023 21:26:25 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nb6c2akrh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 Jan 2023 21:26:25 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30PFA5GT016231;
         Wed, 25 Jan 2023 21:26:24 GMT
 Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3n87afdkkb-1
+        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3n87p6c15k-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Jan 2023 21:26:24 +0000
+        Wed, 25 Jan 2023 21:26:23 +0000
 Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30PLQK2P52691392
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30PLQKM252691384
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Wed, 25 Jan 2023 21:26:20 GMT
 Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9441020040;
+        by IMSVA (Postfix) with ESMTP id 0E77120040;
         Wed, 25 Jan 2023 21:26:20 +0000 (GMT)
 Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4DC5120043;
-        Wed, 25 Jan 2023 21:26:20 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id C65DF20043;
+        Wed, 25 Jan 2023 21:26:19 +0000 (GMT)
 Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
         by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 25 Jan 2023 21:26:20 +0000 (GMT)
+        Wed, 25 Jan 2023 21:26:19 +0000 (GMT)
 From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
 To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
         Janosch Frank <frankja@linux.ibm.com>,
@@ -74,586 +74,293 @@ Cc:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Shuah Khan <shuah@kernel.org>,
         Sven Schnelle <svens@linux.ibm.com>
-Subject: [PATCH v6 14/14] KVM: s390: selftest: memop: Add cmpxchg tests
-Date:   Wed, 25 Jan 2023 22:26:08 +0100
-Message-Id: <20230125212608.1860251-15-scgl@linux.ibm.com>
+Subject: [PATCH v6 12/14] KVM: s390: Extend MEM_OP ioctl by storage key checked cmpxchg
+Date:   Wed, 25 Jan 2023 22:26:06 +0100
+Message-Id: <20230125212608.1860251-13-scgl@linux.ibm.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230125212608.1860251-1-scgl@linux.ibm.com>
 References: <20230125212608.1860251-1-scgl@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: U_cJtFyqqt1i2d7YJMPlWAelbP6FmJZ8
-X-Proofpoint-ORIG-GUID: 45cnEYKwaIpi0Je8sio0qUkoENHgfFaH
+X-Proofpoint-GUID: 9e9JhLF0MjPs_UlodDYxtaF5RZ5xsV2u
+X-Proofpoint-ORIG-GUID: rKT2Uq3RlCIJql0A0bRlX9ww44WgQkke
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
  definitions=2023-01-25_13,2023-01-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
- spamscore=0 mlxlogscore=999 adultscore=0 lowpriorityscore=0 bulkscore=0
- clxscore=1015 malwarescore=0 mlxscore=0 priorityscore=1501 suspectscore=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1015
+ mlxscore=0 priorityscore=1501 phishscore=0 bulkscore=0 mlxlogscore=999
+ malwarescore=0 spamscore=0 adultscore=0 lowpriorityscore=0 suspectscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
  definitions=main-2301250187
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Test successful exchange, unsuccessful exchange, storage key protection
-and invalid arguments.
+User space can use the MEM_OP ioctl to make storage key checked reads
+and writes to the guest, however, it has no way of performing atomic,
+key checked, accesses to the guest.
+Extend the MEM_OP ioctl in order to allow for this, by adding a cmpxchg
+op. For now, support this op for absolute accesses only.
+
+This op can be use, for example, to set the device-state-change
+indicator and the adapter-local-summary indicator atomically.
 
 Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
 ---
- tools/testing/selftests/kvm/s390x/memop.c | 410 +++++++++++++++++++++-
- 1 file changed, 395 insertions(+), 15 deletions(-)
+ include/uapi/linux/kvm.h |   8 +++
+ arch/s390/kvm/gaccess.h  |   3 ++
+ arch/s390/kvm/gaccess.c  | 103 +++++++++++++++++++++++++++++++++++++++
+ arch/s390/kvm/kvm-s390.c |  56 ++++++++++++++++++++-
+ 4 files changed, 169 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
-index 55b856c4d656..dfd97a7c7fe8 100644
---- a/tools/testing/selftests/kvm/s390x/memop.c
-+++ b/tools/testing/selftests/kvm/s390x/memop.c
-@@ -9,6 +9,7 @@
- #include <stdlib.h>
- #include <string.h>
- #include <sys/ioctl.h>
-+#include <pthread.h>
+diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+index 55155e262646..d2f30463c133 100644
+--- a/include/uapi/linux/kvm.h
++++ b/include/uapi/linux/kvm.h
+@@ -583,6 +583,8 @@ struct kvm_s390_mem_op {
+ 		struct {
+ 			__u8 ar;	/* the access register number */
+ 			__u8 key;	/* access key, ignored if flag unset */
++			__u8 pad1[6];	/* ignored */
++			__u64 old_addr;	/* ignored if cmpxchg flag unset */
+ 		};
+ 		__u32 sida_offset; /* offset into the sida */
+ 		__u8 reserved[32]; /* ignored */
+@@ -595,11 +597,17 @@ struct kvm_s390_mem_op {
+ #define KVM_S390_MEMOP_SIDA_WRITE	3
+ #define KVM_S390_MEMOP_ABSOLUTE_READ	4
+ #define KVM_S390_MEMOP_ABSOLUTE_WRITE	5
++#define KVM_S390_MEMOP_ABSOLUTE_CMPXCHG	6
++
+ /* flags for kvm_s390_mem_op->flags */
+ #define KVM_S390_MEMOP_F_CHECK_ONLY		(1ULL << 0)
+ #define KVM_S390_MEMOP_F_INJECT_EXCEPTION	(1ULL << 1)
+ #define KVM_S390_MEMOP_F_SKEY_PROTECTION	(1ULL << 2)
  
- #include <linux/bits.h>
++/* flags specifying extension support via KVM_CAP_S390_MEM_OP_EXTENSION */
++#define KVM_S390_MEMOP_EXTENSION_CAP_BASE	(1 << 0)
++#define KVM_S390_MEMOP_EXTENSION_CAP_CMPXCHG	(1 << 1)
++
+ /* for KVM_INTERRUPT */
+ struct kvm_interrupt {
+ 	/* in */
+diff --git a/arch/s390/kvm/gaccess.h b/arch/s390/kvm/gaccess.h
+index 9408d6cc8e2c..b320d12aa049 100644
+--- a/arch/s390/kvm/gaccess.h
++++ b/arch/s390/kvm/gaccess.h
+@@ -206,6 +206,9 @@ int access_guest_with_key(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar,
+ int access_guest_real(struct kvm_vcpu *vcpu, unsigned long gra,
+ 		      void *data, unsigned long len, enum gacc_mode mode);
  
-@@ -26,6 +27,7 @@ enum mop_target {
- enum mop_access_mode {
- 	READ,
- 	WRITE,
-+	CMPXCHG,
- };
++int cmpxchg_guest_abs_with_key(struct kvm *kvm, gpa_t gpa, int len, __uint128_t *old,
++			       __uint128_t new, u8 access_key, bool *success);
++
+ /**
+  * write_guest_with_key - copy data from kernel space to guest space
+  * @vcpu: virtual cpu
+diff --git a/arch/s390/kvm/gaccess.c b/arch/s390/kvm/gaccess.c
+index 0243b6e38d36..74cb728a0f24 100644
+--- a/arch/s390/kvm/gaccess.c
++++ b/arch/s390/kvm/gaccess.c
+@@ -1161,6 +1161,109 @@ int access_guest_real(struct kvm_vcpu *vcpu, unsigned long gra,
+ 	return rc;
+ }
  
- struct mop_desc {
-@@ -44,13 +46,16 @@ struct mop_desc {
- 	enum mop_access_mode mode;
- 	void *buf;
- 	uint32_t sida_offset;
-+	void *old;
-+	uint8_t old_value[16];
-+	bool *cmpxchg_success;
- 	uint8_t ar;
- 	uint8_t key;
- };
- 
- const uint8_t NO_KEY = 0xff;
- 
--static struct kvm_s390_mem_op ksmo_from_desc(const struct mop_desc *desc)
-+static struct kvm_s390_mem_op ksmo_from_desc(struct mop_desc *desc)
- {
- 	struct kvm_s390_mem_op ksmo = {
- 		.gaddr = (uintptr_t)desc->gaddr,
-@@ -77,6 +82,11 @@ static struct kvm_s390_mem_op ksmo_from_desc(const struct mop_desc *desc)
- 			ksmo.op = KVM_S390_MEMOP_ABSOLUTE_READ;
- 		if (desc->mode == WRITE)
- 			ksmo.op = KVM_S390_MEMOP_ABSOLUTE_WRITE;
-+		if (desc->mode == CMPXCHG) {
-+			ksmo.op = KVM_S390_MEMOP_ABSOLUTE_CMPXCHG;
-+			ksmo.old_addr = (uint64_t)desc->old;
-+			memcpy(desc->old_value, desc->old, desc->size);
-+		}
- 		break;
- 	case INVALID:
- 		ksmo.op = -1;
-@@ -135,9 +145,13 @@ static void print_memop(struct kvm_vcpu *vcpu, const struct kvm_s390_mem_op *ksm
- 	case KVM_S390_MEMOP_ABSOLUTE_WRITE:
- 		printf("ABSOLUTE, WRITE, ");
- 		break;
-+	case KVM_S390_MEMOP_ABSOLUTE_CMPXCHG:
-+		printf("ABSOLUTE, CMPXCHG, ");
++/**
++ * cmpxchg_guest_abs_with_key() - Perform cmpxchg on guest absolute address.
++ * @kvm: Virtual machine instance.
++ * @gpa: Absolute guest address of the location to be changed.
++ * @len: Operand length of the cmpxchg, required: 1 <= len <= 16. Providing a
++ *       non power of two will result in failure.
++ * @old_addr: Pointer to old value. If the location at @gpa contains this value,
++ *            the exchange will succeed. After calling cmpxchg_guest_abs_with_key()
++ *            *@old_addr contains the value at @gpa before the attempt to
++ *            exchange the value.
++ * @new: The value to place at @gpa.
++ * @access_key: The access key to use for the guest access.
++ * @success: output value indicating if an exchange occurred.
++ *
++ * Atomically exchange the value at @gpa by @new, if it contains *@old.
++ * Honors storage keys.
++ *
++ * Return: * 0: successful exchange
++ *         * a program interruption code indicating the reason cmpxchg could
++ *           not be attempted
++ *         * -EINVAL: address misaligned or len not power of two
++ *         * -EAGAIN: transient failure (len 1 or 2)
++ *         * -EOPNOTSUPP: read-only memslot (should never occur)
++ */
++int cmpxchg_guest_abs_with_key(struct kvm *kvm, gpa_t gpa, int len,
++			       __uint128_t *old_addr, __uint128_t new,
++			       u8 access_key, bool *success)
++{
++	gfn_t gfn = gpa >> PAGE_SHIFT;
++	struct kvm_memory_slot *slot = gfn_to_memslot(kvm, gfn);
++	bool writable;
++	hva_t hva;
++	int ret;
++
++	if (!IS_ALIGNED(gpa, len))
++		return -EINVAL;
++
++	hva = gfn_to_hva_memslot_prot(slot, gfn, &writable);
++	if (kvm_is_error_hva(hva))
++		return PGM_ADDRESSING;
++	/*
++	 * Check if it's a read-only memslot, even though that cannot occur
++	 * since those are unsupported.
++	 * Don't try to actually handle that case.
++	 */
++	if (!writable)
++		return -EOPNOTSUPP;
++
++	hva += offset_in_page(gpa);
++	switch (len) {
++	case 1: {
++		u8 old;
++
++		ret = cmpxchg_user_key((u8 *)hva, &old, *old_addr, new, access_key);
++		*success = !ret && old == *old_addr;
++		*old_addr = old;
 +		break;
- 	}
--	printf("gaddr=%llu, size=%u, buf=%llu, ar=%u, key=%u",
--	       ksmo->gaddr, ksmo->size, ksmo->buf, ksmo->ar, ksmo->key);
-+	printf("gaddr=%llu, size=%u, buf=%llu, ar=%u, key=%u, old_addr=%llx",
-+	       ksmo->gaddr, ksmo->size, ksmo->buf, ksmo->ar, ksmo->key,
-+	       ksmo->old_addr);
- 	if (ksmo->flags & KVM_S390_MEMOP_F_CHECK_ONLY)
- 		printf(", CHECK_ONLY");
- 	if (ksmo->flags & KVM_S390_MEMOP_F_INJECT_EXCEPTION)
-@@ -147,24 +161,31 @@ static void print_memop(struct kvm_vcpu *vcpu, const struct kvm_s390_mem_op *ksm
- 	puts(")");
- }
- 
--static void memop_ioctl(struct test_info info, struct kvm_s390_mem_op *ksmo)
-+static int err_memop_ioctl(struct test_info info, struct kvm_s390_mem_op *ksmo,
-+			   struct mop_desc *desc)
- {
- 	struct kvm_vcpu *vcpu = info.vcpu;
- 
- 	if (!vcpu)
--		vm_ioctl(info.vm, KVM_S390_MEM_OP, ksmo);
-+		return __vm_ioctl(info.vm, KVM_S390_MEM_OP, ksmo);
- 	else
--		vcpu_ioctl(vcpu, KVM_S390_MEM_OP, ksmo);
-+		return __vcpu_ioctl(vcpu, KVM_S390_MEM_OP, ksmo);
- }
- 
--static int err_memop_ioctl(struct test_info info, struct kvm_s390_mem_op *ksmo)
-+static void memop_ioctl(struct test_info info, struct kvm_s390_mem_op *ksmo,
-+			struct mop_desc *desc)
- {
--	struct kvm_vcpu *vcpu = info.vcpu;
-+	int r;
-+
-+	r = err_memop_ioctl(info, ksmo, desc);
-+	if (ksmo->op == KVM_S390_MEMOP_ABSOLUTE_CMPXCHG) {
-+		if (desc->cmpxchg_success) {
-+			int diff = memcmp(desc->old_value, desc->old, desc->size);
-+			*desc->cmpxchg_success = !diff;
-+		}
 +	}
-+	TEST_ASSERT(!r, __KVM_IOCTL_ERROR("KVM_S390_MEM_OP", r));
- 
--	if (!vcpu)
--		return __vm_ioctl(info.vm, KVM_S390_MEM_OP, ksmo);
--	else
--		return __vcpu_ioctl(vcpu, KVM_S390_MEM_OP, ksmo);
- }
- 
- #define MEMOP(err, info_p, mop_target_p, access_mode_p, buf_p, size_p, ...)	\
-@@ -187,7 +208,7 @@ static int err_memop_ioctl(struct test_info info, struct kvm_s390_mem_op *ksmo)
- 	}									\
- 	__ksmo = ksmo_from_desc(&__desc);					\
- 	print_memop(__info.vcpu, &__ksmo);					\
--	err##memop_ioctl(__info, &__ksmo);					\
-+	err##memop_ioctl(__info, &__ksmo, &__desc);				\
- })
- 
- #define MOP(...) MEMOP(, __VA_ARGS__)
-@@ -201,6 +222,8 @@ static int err_memop_ioctl(struct test_info info, struct kvm_s390_mem_op *ksmo)
- #define AR(a) ._ar = 1, .ar = (a)
- #define KEY(a) .f_key = 1, .key = (a)
- #define INJECT .f_inject = 1
-+#define CMPXCHG_OLD(o) .old = (o)
-+#define CMPXCHG_SUCCESS(s) .cmpxchg_success = (s)
- 
- #define CHECK_N_DO(f, ...) ({ f(__VA_ARGS__, CHECK_ONLY); f(__VA_ARGS__); })
- 
-@@ -210,8 +233,8 @@ static int err_memop_ioctl(struct test_info info, struct kvm_s390_mem_op *ksmo)
- #define CR0_FETCH_PROTECTION_OVERRIDE	(1UL << (63 - 38))
- #define CR0_STORAGE_PROTECTION_OVERRIDE	(1UL << (63 - 39))
- 
--static uint8_t mem1[65536];
--static uint8_t mem2[65536];
-+static uint8_t __aligned(PAGE_SIZE) mem1[65536];
-+static uint8_t __aligned(PAGE_SIZE) mem2[65536];
- 
- struct test_default {
- 	struct kvm_vm *kvm_vm;
-@@ -243,6 +266,8 @@ enum stage {
- 	STAGE_SKEYS_SET,
- 	/* Guest copied memory (locations up to test case) */
- 	STAGE_COPIED,
-+	/* End of guest code reached */
-+	STAGE_DONE,
- };
- 
- #define HOST_SYNC(info_p, stage)					\
-@@ -254,6 +279,9 @@ enum stage {
- 									\
- 	vcpu_run(__vcpu);						\
- 	get_ucall(__vcpu, &uc);						\
-+	if (uc.cmd == UCALL_ABORT) {					\
-+		REPORT_GUEST_ASSERT_2(uc, "hints: %lu, %lu");		\
-+	}								\
- 	ASSERT_EQ(uc.cmd, UCALL_SYNC);					\
- 	ASSERT_EQ(uc.args[1], __stage);					\
- })									\
-@@ -293,6 +321,44 @@ static void default_read(struct test_info copy_cpu, struct test_info mop_cpu,
- 	ASSERT_MEM_EQ(mem1, mem2, size);
- }
- 
-+static void default_cmpxchg(struct test_default *test, uint8_t key)
-+{
-+	for (int size = 1; size <= 16; size *= 2) {
-+		for (int offset = 0; offset < 16; offset += size) {
-+			uint8_t __aligned(16) new[16] = {};
-+			uint8_t __aligned(16) old[16];
-+			bool succ;
++	case 2: {
++		u16 old;
 +
-+			prepare_mem12();
-+			default_write_read(test->vcpu, test->vcpu, LOGICAL, 16, NO_KEY);
-+
-+			memcpy(&old, mem1, 16);
-+			MOP(test->vm, ABSOLUTE, CMPXCHG, new + offset,
-+			    size, GADDR_V(mem1 + offset),
-+			    CMPXCHG_OLD(old + offset),
-+			    CMPXCHG_SUCCESS(&succ), KEY(key));
-+			HOST_SYNC(test->vcpu, STAGE_COPIED);
-+			MOP(test->vm, ABSOLUTE, READ, mem2, 16, GADDR_V(mem2));
-+			TEST_ASSERT(succ, "exchange of values should succeed");
-+			memcpy(mem1 + offset, new + offset, size);
-+			ASSERT_MEM_EQ(mem1, mem2, 16);
-+
-+			memcpy(&old, mem1, 16);
-+			new[offset]++;
-+			old[offset]++;
-+			MOP(test->vm, ABSOLUTE, CMPXCHG, new + offset,
-+			    size, GADDR_V(mem1 + offset),
-+			    CMPXCHG_OLD(old + offset),
-+			    CMPXCHG_SUCCESS(&succ), KEY(key));
-+			HOST_SYNC(test->vcpu, STAGE_COPIED);
-+			MOP(test->vm, ABSOLUTE, READ, mem2, 16, GADDR_V(mem2));
-+			TEST_ASSERT(!succ, "exchange of values should not succeed");
-+			ASSERT_MEM_EQ(mem1, mem2, 16);
-+			ASSERT_MEM_EQ(&old, mem1, 16);
-+		}
++		ret = cmpxchg_user_key((u16 *)hva, &old, *old_addr, new, access_key);
++		*success = !ret && old == *old_addr;
++		*old_addr = old;
++		break;
 +	}
-+}
-+
- static void guest_copy(void)
- {
- 	GUEST_SYNC(STAGE_INITED);
-@@ -377,6 +443,250 @@ static void test_copy_key(void)
- 	kvm_vm_free(t.kvm_vm);
- }
- 
-+static void test_cmpxchg_key(void)
-+{
-+	struct test_default t = test_default_init(guest_copy_key);
-+
-+	HOST_SYNC(t.vcpu, STAGE_SKEYS_SET);
-+
-+	default_cmpxchg(&t, NO_KEY);
-+	default_cmpxchg(&t, 0);
-+	default_cmpxchg(&t, 9);
-+
-+	kvm_vm_free(t.kvm_vm);
-+}
-+
-+static __uint128_t cut_to_size(int size, __uint128_t val)
-+{
-+	switch (size) {
-+	case 1:
-+		return (uint8_t)val;
-+	case 2:
-+		return (uint16_t)val;
-+	case 4:
-+		return (uint32_t)val;
-+	case 8:
-+		return (uint64_t)val;
-+	case 16:
-+		return val;
-+	}
-+	GUEST_ASSERT_1(false, "Invalid size");
-+	return 0;
-+}
-+
-+static bool popcount_eq(__uint128_t a, __uint128_t b)
-+{
-+	unsigned int count_a, count_b;
-+
-+	count_a = __builtin_popcountl((uint64_t)(a >> 64)) +
-+		  __builtin_popcountl((uint64_t)a);
-+	count_b = __builtin_popcountl((uint64_t)(b >> 64)) +
-+		  __builtin_popcountl((uint64_t)b);
-+	return count_a == count_b;
-+}
-+
-+static __uint128_t rotate(int size, __uint128_t val, int amount)
-+{
-+	unsigned int bits = size * 8;
-+
-+	amount = (amount + bits) % bits;
-+	val = cut_to_size(size, val);
-+	return (val << (bits - amount)) | (val >> amount);
-+}
-+
-+const unsigned int max_block = 16;
-+
-+static void choose_block(bool guest, int i, int *size, int *offset)
-+{
-+	unsigned int rand;
-+
-+	rand = i;
-+	if (guest) {
-+		rand = rand * 19 + 11;
-+		*size = 1 << ((rand % 3) + 2);
-+		rand = rand * 19 + 11;
-+		*offset = (rand % max_block) & ~(*size - 1);
-+	} else {
-+		rand = rand * 17 + 5;
-+		*size = 1 << (rand % 5);
-+		rand = rand * 17 + 5;
-+		*offset = (rand % max_block) & ~(*size - 1);
-+	}
-+}
-+
-+static __uint128_t permutate_bits(bool guest, int i, int size, __uint128_t old)
-+{
-+	unsigned int rand;
-+	bool swap;
-+
-+	rand = i;
-+	rand = rand * 3 + 1;
-+	if (guest)
-+		rand = rand * 3 + 1;
-+	swap = rand % 2 == 0;
-+	if (swap) {
-+		int i, j;
-+		__uint128_t new;
-+		uint8_t byte0, byte1;
-+
-+		rand = rand * 3 + 1;
-+		i = rand % size;
-+		rand = rand * 3 + 1;
-+		j = rand % size;
-+		if (i == j)
-+			return old;
-+		new = rotate(16, old, i * 8);
-+		byte0 = new & 0xff;
-+		new &= ~0xff;
-+		new = rotate(16, new, -i * 8);
-+		new = rotate(16, new, j * 8);
-+		byte1 = new & 0xff;
-+		new = (new & ~0xff) | byte0;
-+		new = rotate(16, new, -j * 8);
-+		new = rotate(16, new, i * 8);
-+		new = new | byte1;
-+		new = rotate(16, new, -i * 8);
-+		return new;
-+	} else {
-+		int amount;
-+
-+		rand = rand * 3 + 1;
-+		amount = rand % (size * 8);
-+		return rotate(size, old, amount);
-+	}
-+}
-+
-+static bool _cmpxchg(int size, void *target, __uint128_t *old_addr, __uint128_t new)
-+{
-+	bool ret;
-+
-+	switch (size) {
 +	case 4: {
-+			uint32_t old = *old_addr;
++		u32 old;
 +
-+			asm volatile ("cs %[old],%[new],%[address]"
-+			    : [old] "+d" (old),
-+			      [address] "+Q" (*(uint32_t *)(target))
-+			    : [new] "d" ((uint32_t)new)
-+			    : "cc"
-+			);
-+			ret = old == (uint32_t)*old_addr;
-+			*old_addr = old;
-+			return ret;
-+		}
++		ret = cmpxchg_user_key((u32 *)hva, &old, *old_addr, new, access_key);
++		*success = !ret && old == *old_addr;
++		*old_addr = old;
++		break;
++	}
 +	case 8: {
-+			uint64_t old = *old_addr;
++		u64 old;
 +
-+			asm volatile ("csg %[old],%[new],%[address]"
-+			    : [old] "+d" (old),
-+			      [address] "+Q" (*(uint64_t *)(target))
-+			    : [new] "d" ((uint64_t)new)
-+			    : "cc"
-+			);
-+			ret = old == (uint64_t)*old_addr;
-+			*old_addr = old;
-+			return ret;
-+		}
++		ret = cmpxchg_user_key((u64 *)hva, &old, *old_addr, new, access_key);
++		*success = !ret && old == *old_addr;
++		*old_addr = old;
++		break;
++	}
 +	case 16: {
-+			__uint128_t old = *old_addr;
++		__uint128_t old;
 +
-+			asm volatile ("cdsg %[old],%[new],%[address]"
-+			    : [old] "+d" (old),
-+			      [address] "+Q" (*(__uint128_t *)(target))
-+			    : [new] "d" (new)
-+			    : "cc"
-+			);
-+			ret = old == *old_addr;
-+			*old_addr = old;
-+			return ret;
-+		}
++		ret = cmpxchg_user_key((__uint128_t *)hva, &old, *old_addr, new, access_key);
++		*success = !ret && old == *old_addr;
++		*old_addr = old;
++		break;
 +	}
-+	GUEST_ASSERT_1(false, "Invalid size");
-+	return 0;
-+}
-+
-+const unsigned int cmpxchg_iter_outer = 100, cmpxchg_iter_inner = 10000;
-+
-+static void guest_cmpxchg_key(void)
-+{
-+	int size, offset;
-+	__uint128_t old, new;
-+
-+	set_storage_key_range(mem1, max_block, 0x10);
-+	set_storage_key_range(mem2, max_block, 0x10);
-+	GUEST_SYNC(STAGE_SKEYS_SET);
-+
-+	for (int i = 0; i < cmpxchg_iter_outer; i++) {
-+		do {
-+			old = 1;
-+		} while (!_cmpxchg(16, mem1, &old, 0));
-+		for (int j = 0; j < cmpxchg_iter_inner; j++) {
-+			choose_block(true, i + j, &size, &offset);
-+			do {
-+				new = permutate_bits(true, i + j, size, old);
-+			} while (!_cmpxchg(size, mem2 + offset, &old, new));
-+		}
++	default:
++		return -EINVAL;
 +	}
-+
-+	GUEST_SYNC(STAGE_DONE);
++	mark_page_dirty_in_slot(kvm, slot, gfn);
++	/*
++	 * Assume that the fault is caused by protection, either key protection
++	 * or user page write protection.
++	 */
++	if (ret == -EFAULT)
++		ret = PGM_PROTECTION;
++	return ret;
 +}
 +
-+static void *run_guest(void *data)
+ /**
+  * guest_translate_address_with_key - translate guest logical into guest absolute address
+  * @vcpu: virtual cpu
+diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+index 4b8b41be7aed..86e9734d5782 100644
+--- a/arch/s390/kvm/kvm-s390.c
++++ b/arch/s390/kvm/kvm-s390.c
+@@ -584,7 +584,6 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+ 	case KVM_CAP_S390_VCPU_RESETS:
+ 	case KVM_CAP_SET_GUEST_DEBUG:
+ 	case KVM_CAP_S390_DIAG318:
+-	case KVM_CAP_S390_MEM_OP_EXTENSION:
+ 		r = 1;
+ 		break;
+ 	case KVM_CAP_SET_GUEST_DEBUG2:
+@@ -598,6 +597,15 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+ 	case KVM_CAP_S390_MEM_OP:
+ 		r = MEM_OP_MAX_SIZE;
+ 		break;
++	case KVM_CAP_S390_MEM_OP_EXTENSION:
++		/*
++		 * Flag bits indicating which extensions are supported.
++		 * If r > 0, the base extension must also be supported/indicated,
++		 * in order to maintain backwards compatibility.
++		 */
++		r = KVM_S390_MEMOP_EXTENSION_CAP_BASE |
++		    KVM_S390_MEMOP_EXTENSION_CAP_CMPXCHG;
++		break;
+ 	case KVM_CAP_NR_VCPUS:
+ 	case KVM_CAP_MAX_VCPUS:
+ 	case KVM_CAP_MAX_VCPU_ID:
+@@ -2840,6 +2848,50 @@ static int kvm_s390_vm_mem_op_abs(struct kvm *kvm, struct kvm_s390_mem_op *mop)
+ 	return r;
+ }
+ 
++static int kvm_s390_vm_mem_op_cmpxchg(struct kvm *kvm, struct kvm_s390_mem_op *mop)
 +{
-+	struct test_info *info = data;
-+
-+	HOST_SYNC(*info, STAGE_DONE);
-+	return NULL;
-+}
-+
-+static char *quad_to_char(__uint128_t *quad, int size)
-+{
-+	return ((char *)quad) + (sizeof(*quad) - size);
-+}
-+
-+static void test_cmpxchg_key_concurrent(void)
-+{
-+	struct test_default t = test_default_init(guest_cmpxchg_key);
-+	int size, offset;
-+	__uint128_t old, new;
++	void __user *uaddr = (void __user *)mop->buf;
++	void __user *old_addr = (void __user *)mop->old_addr;
++	union {
++		__uint128_t quad;
++		char raw[sizeof(__uint128_t)];
++	} old = { .quad = 0}, new = { .quad = 0 };
++	unsigned int off_in_quad = sizeof(new) - mop->size;
++	int r, srcu_idx;
 +	bool success;
-+	pthread_t thread;
 +
-+	HOST_SYNC(t.vcpu, STAGE_SKEYS_SET);
-+	prepare_mem12();
-+	MOP(t.vcpu, LOGICAL, WRITE, mem1, max_block, GADDR_V(mem2));
-+	pthread_create(&thread, NULL, run_guest, &t.vcpu);
++	r = mem_op_validate_common(mop, KVM_S390_MEMOP_F_SKEY_PROTECTION);
++	if (r)
++		return r;
++	/*
++	 * This validates off_in_quad. Checking that size is a power
++	 * of two is not necessary, as cmpxchg_guest_abs_with_key
++	 * takes care of that
++	 */
++	if (mop->size > sizeof(new))
++		return -EINVAL;
++	if (copy_from_user(&new.raw[off_in_quad], uaddr, mop->size))
++		return -EFAULT;
++	if (copy_from_user(&old.raw[off_in_quad], old_addr, mop->size))
++		return -EFAULT;
 +
-+	for (int i = 0; i < cmpxchg_iter_outer; i++) {
-+		do {
-+			old = 0;
-+			new = 1;
-+			MOP(t.vm, ABSOLUTE, CMPXCHG, &new,
-+			    sizeof(new), GADDR_V(mem1),
-+			    CMPXCHG_OLD(&old),
-+			    CMPXCHG_SUCCESS(&success), KEY(1));
-+		} while (!success);
-+		for (int j = 0; j < cmpxchg_iter_inner; j++) {
-+			choose_block(false, i + j, &size, &offset);
-+			do {
-+				new = permutate_bits(false, i + j, size, old);
-+				MOP(t.vm, ABSOLUTE, CMPXCHG, quad_to_char(&new, size),
-+				    size, GADDR_V(mem2 + offset),
-+				    CMPXCHG_OLD(quad_to_char(&old, size)),
-+				    CMPXCHG_SUCCESS(&success), KEY(1));
-+			} while (!success);
-+		}
++	srcu_idx = srcu_read_lock(&kvm->srcu);
++
++	if (kvm_is_error_gpa(kvm, mop->gaddr)) {
++		r = PGM_ADDRESSING;
++		goto out_unlock;
 +	}
 +
-+	pthread_join(thread, NULL);
++	r = cmpxchg_guest_abs_with_key(kvm, mop->gaddr, mop->size, &old.quad,
++				       new.quad, mop->key, &success);
++	if (!success && copy_to_user(old_addr, &old.raw[off_in_quad], mop->size))
++		r = -EFAULT;
 +
-+	MOP(t.vcpu, LOGICAL, READ, mem2, max_block, GADDR_V(mem2));
-+	TEST_ASSERT(popcount_eq(*(__uint128_t *)mem1, *(__uint128_t *)mem2),
-+		    "Must retain number of set bits");
-+
-+	kvm_vm_free(t.kvm_vm);
++out_unlock:
++	srcu_read_unlock(&kvm->srcu, srcu_idx);
++	return r;
 +}
 +
- static void guest_copy_key_fetch_prot(void)
+ static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op *mop)
  {
  	/*
-@@ -457,6 +767,24 @@ static void test_errors_key(void)
- 	kvm_vm_free(t.kvm_vm);
- }
- 
-+static void test_errors_cmpxchg_key(void)
-+{
-+	struct test_default t = test_default_init(guest_copy_key_fetch_prot);
-+	int i;
-+
-+	HOST_SYNC(t.vcpu, STAGE_INITED);
-+	HOST_SYNC(t.vcpu, STAGE_SKEYS_SET);
-+
-+	for (i = 1; i <= 16; i *= 2) {
-+		__uint128_t old = 0;
-+
-+		ERR_PROT_MOP(t.vm, ABSOLUTE, CMPXCHG, mem2, i, GADDR_V(mem2),
-+			     CMPXCHG_OLD(&old), KEY(2));
-+	}
-+
-+	kvm_vm_free(t.kvm_vm);
-+}
-+
- static void test_termination(void)
- {
- 	struct test_default t = test_default_init(guest_error_key);
-@@ -692,6 +1020,38 @@ static void test_errors(void)
- 	kvm_vm_free(t.kvm_vm);
- }
- 
-+static void test_errors_cmpxchg(void)
-+{
-+	struct test_default t = test_default_init(guest_idle);
-+	__uint128_t old;
-+	int rv, i, power = 1;
-+
-+	HOST_SYNC(t.vcpu, STAGE_INITED);
-+
-+	for (i = 0; i < 32; i++) {
-+		if (i == power) {
-+			power *= 2;
-+			continue;
-+		}
-+		rv = ERR_MOP(t.vm, ABSOLUTE, CMPXCHG, mem1, i, GADDR_V(mem1),
-+			     CMPXCHG_OLD(&old));
-+		TEST_ASSERT(rv == -1 && errno == EINVAL,
-+			    "ioctl allows bad size for cmpxchg");
-+	}
-+	for (i = 1; i <= 16; i *= 2) {
-+		rv = ERR_MOP(t.vm, ABSOLUTE, CMPXCHG, mem1, i, GADDR((void *)~0xfffUL),
-+			     CMPXCHG_OLD(&old));
-+		TEST_ASSERT(rv > 0, "ioctl allows bad guest address for cmpxchg");
-+	}
-+	for (i = 2; i <= 16; i *= 2) {
-+		rv = ERR_MOP(t.vm, ABSOLUTE, CMPXCHG, mem1, i, GADDR_V(mem1 + 1),
-+			     CMPXCHG_OLD(&old));
-+		TEST_ASSERT(rv == -1 && errno == EINVAL,
-+			    "ioctl allows bad alignment for cmpxchg");
-+	}
-+
-+	kvm_vm_free(t.kvm_vm);
-+}
- 
- int main(int argc, char *argv[])
- {
-@@ -720,6 +1080,16 @@ int main(int argc, char *argv[])
- 			.test = test_copy_key,
- 			.requirements_met = extension_cap > 0,
- 		},
-+		{
-+			.name = "cmpxchg with storage keys",
-+			.test = test_cmpxchg_key,
-+			.requirements_met = extension_cap & 0x2,
-+		},
-+		{
-+			.name = "concurrently cmpxchg with storage keys",
-+			.test = test_cmpxchg_key_concurrent,
-+			.requirements_met = extension_cap & 0x2,
-+		},
- 		{
- 			.name = "copy with key storage protection override",
- 			.test = test_copy_key_storage_prot_override,
-@@ -740,6 +1110,16 @@ int main(int argc, char *argv[])
- 			.test = test_errors_key,
- 			.requirements_met = extension_cap > 0,
- 		},
-+		{
-+			.name = "error checks for cmpxchg with key",
-+			.test = test_errors_cmpxchg_key,
-+			.requirements_met = extension_cap & 0x2,
-+		},
-+		{
-+			.name = "error checks for cmpxchg",
-+			.test = test_errors_cmpxchg,
-+			.requirements_met = extension_cap & 0x2,
-+		},
- 		{
- 			.name = "termination",
- 			.test = test_termination,
+@@ -2858,6 +2910,8 @@ static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op *mop)
+ 	case KVM_S390_MEMOP_ABSOLUTE_READ:
+ 	case KVM_S390_MEMOP_ABSOLUTE_WRITE:
+ 		return kvm_s390_vm_mem_op_abs(kvm, mop);
++	case KVM_S390_MEMOP_ABSOLUTE_CMPXCHG:
++		return kvm_s390_vm_mem_op_cmpxchg(kvm, mop);
+ 	default:
+ 		return -EINVAL;
+ 	}
 -- 
 2.34.1
 
