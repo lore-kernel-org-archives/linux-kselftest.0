@@ -2,32 +2,32 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83CE3C38142
-	for <linux-kselftest@archiver.kernel.org>; Fri, 27 Jan 2023 13:58:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E938EC54EAA
+	for <linux-kselftest@archiver.kernel.org>; Fri, 27 Jan 2023 13:58:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233535AbjA0N6L (ORCPT
+        id S233749AbjA0N6M (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 27 Jan 2023 08:58:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37420 "EHLO
+        Fri, 27 Jan 2023 08:58:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233618AbjA0N6J (ORCPT
+        with ESMTP id S233622AbjA0N6J (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Fri, 27 Jan 2023 08:58:09 -0500
 Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C670CC33;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C7FACDE7;
         Fri, 27 Jan 2023 05:58:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
         s=smtpout1; t=1674827882;
-        bh=O7TLRnBFvO2mHHa21PT6sPp6oCHu3V7ypNifZtvavPs=;
+        bh=XtGhJWHrIaWJmV8UD8TraYwxhka01PtAUbXZqWumiTg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZukGHJ6A7yYm6vWBR0x6cfQeDJ8DOdZTmdLGkp7msE5Wh4164c19x2crtPcxPqmKX
-         gwLw6MU42H2bTzJ87s8H8rdU03aGPZTfaUhOqd7iCCHLRxKjz3yIXwliEUG+DeZvNQ
-         lGFI70OLj2FMAsYtWOtSmeYBqOgBByvnpd75xBkdICM6NEefPvy/qbBAJL85c0tASM
-         rW7uvJg+Ke8ZoAdTu6JwUwsuS5O1RKa5AYGMWpCE0u6OPq8fikECrgi41ncg2IFXZ+
-         9A3poRmFvcQC8sm8WuUahTzU3FVLg8SUZRvh1ESR79lG19F/VZDhpLIwHtk54TghjW
-         ZeiwqRH7M9rfw==
+        b=nLsz4KzvjEDDAEPZ5TbIQgq61r+oyYiBsMCemJfhx/FMU9kMTNU1Sqkg1hsqczaBY
+         WI8a6n42m+9s0ytw0j7whkl3cYKR0cNLLNPJJmpqOQpeTrFpIQ3aggsHfnrW4qQB3v
+         8ckIU3tIBVB4mVdbyV3iH+KKVSrG19aC2h0B/cjZTsBLBBE4YIwhmUaa0fB3NctXuM
+         mlPnxH1ef8gIyXjZRLSt5VtPNKWnrpvIWdCl22EuRI4oV2REjSPNMO8SSzDyWfZ45b
+         AIcAatPvJLinPdUrTJFsSZCMjwCkIcoiaiSEgixM8m3enSXVOLRc06qSnLQBxEIXCz
+         93ymKr1Ds8KXA==
 Received: from localhost.localdomain (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4P3K0V2yJXzhff;
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4P3K0V5wCxzhxP;
         Fri, 27 Jan 2023 08:58:02 -0500 (EST)
 From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
@@ -35,9 +35,9 @@ To:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
 Cc:     linux-kernel@vger.kernel.org,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         stable@vger.kernel.org
-Subject: [PATCH 06/34] selftests: dmabuf-heaps: Fix incorrect kernel headers search path
-Date:   Fri, 27 Jan 2023 08:57:27 -0500
-Message-Id: <20230127135755.79929-7-mathieu.desnoyers@efficios.com>
+Subject: [PATCH 08/34] selftests: filesystems: Fix incorrect kernel headers search path
+Date:   Fri, 27 Jan 2023 08:57:29 -0500
+Message-Id: <20230127135755.79929-9-mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230127135755.79929-1-mathieu.desnoyers@efficios.com>
 References: <20230127135755.79929-1-mathieu.desnoyers@efficios.com>
@@ -58,37 +58,47 @@ Cc: linux-kselftest@vger.kernel.org
 Cc: Ingo Molnar <mingo@redhat.com>
 Cc: <stable@vger.kernel.org>    [5.18+]
 ---
- tools/testing/selftests/dmabuf-heaps/Makefile      | 2 +-
- tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c | 3 +--
- 2 files changed, 2 insertions(+), 3 deletions(-)
+ tools/testing/selftests/filesystems/Makefile          | 2 +-
+ tools/testing/selftests/filesystems/binderfs/Makefile | 2 +-
+ tools/testing/selftests/filesystems/epoll/Makefile    | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/dmabuf-heaps/Makefile b/tools/testing/selftests/dmabuf-heaps/Makefile
-index 604b43ece15f..9e7e158d5fa3 100644
---- a/tools/testing/selftests/dmabuf-heaps/Makefile
-+++ b/tools/testing/selftests/dmabuf-heaps/Makefile
-@@ -1,5 +1,5 @@
+diff --git a/tools/testing/selftests/filesystems/Makefile b/tools/testing/selftests/filesystems/Makefile
+index 129880fb42d3..c647fd6a0446 100644
+--- a/tools/testing/selftests/filesystems/Makefile
++++ b/tools/testing/selftests/filesystems/Makefile
+@@ -1,6 +1,6 @@
  # SPDX-License-Identifier: GPL-2.0
--CFLAGS += -static -O3 -Wl,-no-as-needed -Wall
-+CFLAGS += -static -O3 -Wl,-no-as-needed -Wall $(KHDR_INCLUDES)
  
- TEST_GEN_PROGS = dmabuf-heap
+-CFLAGS += -I../../../../usr/include/
++CFLAGS += $(KHDR_INCLUDES)
+ TEST_GEN_PROGS := devpts_pts
+ TEST_GEN_PROGS_EXTENDED := dnotify_test
  
-diff --git a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
-index 29af27acd40e..890a8236a8ba 100644
---- a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
-+++ b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
-@@ -13,10 +13,9 @@
- #include <sys/types.h>
+diff --git a/tools/testing/selftests/filesystems/binderfs/Makefile b/tools/testing/selftests/filesystems/binderfs/Makefile
+index 8af25ae96049..c2f7cef919c0 100644
+--- a/tools/testing/selftests/filesystems/binderfs/Makefile
++++ b/tools/testing/selftests/filesystems/binderfs/Makefile
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
  
- #include <linux/dma-buf.h>
-+#include <linux/dma-heap.h>
- #include <drm/drm.h>
+-CFLAGS += -I../../../../../usr/include/ -pthread
++CFLAGS += $(KHDR_INCLUDES) -pthread
+ TEST_GEN_PROGS := binderfs_test
  
--#include "../../../../include/uapi/linux/dma-heap.h"
--
- #define DEVPATH "/dev/dma_heap"
+ binderfs_test: binderfs_test.c ../../kselftest.h ../../kselftest_harness.h
+diff --git a/tools/testing/selftests/filesystems/epoll/Makefile b/tools/testing/selftests/filesystems/epoll/Makefile
+index 78ae4aaf7141..0788a7dc8004 100644
+--- a/tools/testing/selftests/filesystems/epoll/Makefile
++++ b/tools/testing/selftests/filesystems/epoll/Makefile
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
  
- static int check_vgem(int fd)
+-CFLAGS += -I../../../../../usr/include/
++CFLAGS += $(KHDR_INCLUDES)
+ LDLIBS += -lpthread
+ TEST_GEN_PROGS := epoll_wakeup_test
+ 
 -- 
 2.25.1
 
