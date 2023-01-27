@@ -2,41 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E46A2C54EAA
-	for <linux-kselftest@archiver.kernel.org>; Fri, 27 Jan 2023 13:58:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72DABC61DA3
+	for <linux-kselftest@archiver.kernel.org>; Fri, 27 Jan 2023 13:58:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234352AbjA0N6m (ORCPT
+        id S231522AbjA0N6n (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 27 Jan 2023 08:58:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37626 "EHLO
+        Fri, 27 Jan 2023 08:58:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233925AbjA0N62 (ORCPT
+        with ESMTP id S233690AbjA0N61 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 Jan 2023 08:58:28 -0500
-Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9AEA2312C;
+        Fri, 27 Jan 2023 08:58:27 -0500
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D432330D;
         Fri, 27 Jan 2023 05:58:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1674827888;
-        bh=7jIfTNCu7zpPLHJpUW3uli6pP+V4do4UcRBq1ufAji0=;
+        s=smtpout1; t=1674827887;
+        bh=j0/J2jgcMN5hRuwHVS3PfRhowqmRAWi4T67r4xbEwTI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mvURC9U1jZI6BZB0ToC7FIqkTyLlEnklVvuXSavwfDi5OJBDX8BbJXZTVE79Ro1y6
-         qjBz5USNdaQ2LoEooh45BZZu4u+Rq89a3B6BiCzSpKF/+cY2d24icng8W/rckilmVS
-         dEWIWRrHyG5u6e2QrwlYdQtH2dKLtY23jQ94Xl6RE5ByZ5jHlQFz4bvt3eduq19B1v
-         lHNALEEByemodJogrT+eLdLnV+a2Bt8Rd8QOcsEZuJvb8wBRZOB/5FMC3ms4pqhG8D
-         mLCtXVrL50YGcn2QL1btABgcOT7KTgpThZzkjbE9X5bsIV5Y6AMNERja4NMFJAr74T
-         WL6yOCtK/O26A==
+        b=g5Zga5tdO5JSw6QnfEUZ26+JP3uOhBoA3BuGJ3CVbx9vWS26fhhaC+yo8NxIn+I3J
+         WeeVZPQvl5aYTI7jz0B2VUikDtBkdR/IhBhPbR9uKbfcCL0PNTIIVtdMekDcFWV5NI
+         m05d40See0UrY0VcbHo0B3+ItVQJ1VRc1Hr6yGeqhPI6f4KnEmyejIwFf+IfpL8Gml
+         H3DuYDsxZ3Y0gy1WmwChq9tXUyJBfAmibJLoIVY8munkTuoVV+IpnMJmegaOw+Bm9V
+         kAhPIqQ4j1w1bASt8es6XM7omVPSljOnDM2OT6p+uHeNA0FqeoVPZdHJ6Bng0W+qc5
+         zbn41+l3sc5zA==
 Received: from localhost.localdomain (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4P3K0c1jKPzhd4;
-        Fri, 27 Jan 2023 08:58:08 -0500 (EST)
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4P3K0b1wn8zhcy;
+        Fri, 27 Jan 2023 08:58:07 -0500 (EST)
 From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
         Ingo Molnar <mingo@redhat.com>
 Cc:     linux-kernel@vger.kernel.org,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH 34/34] selftests: tdx: Use installed kernel headers search path
-Date:   Fri, 27 Jan 2023 08:57:55 -0500
-Message-Id: <20230127135755.79929-35-mathieu.desnoyers@efficios.com>
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        stable@vger.kernel.org
+Subject: [PATCH 29/34] selftests: x86: Fix incorrect kernel headers search path
+Date:   Fri, 27 Jan 2023 08:57:50 -0500
+Message-Id: <20230127135755.79929-30-mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230127135755.79929-1-mathieu.desnoyers@efficios.com>
 References: <20230127135755.79929-1-mathieu.desnoyers@efficios.com>
@@ -46,45 +47,33 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Use $(KHDR_INCLUDES) as lookup path for installed kernel headers rather
-than using kernel headers in include/uapi from the source kernel tree
-kernel headers.
+Use $(KHDR_INCLUDES) as lookup path for kernel headers. This prevents
+building against kernel headers from the build environment in scenarios
+where kernel headers are installed into a specific output directory
+(O=...).
 
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: Shuah Khan <shuah@kernel.org>
 Cc: linux-kselftest@vger.kernel.org
 Cc: Ingo Molnar <mingo@redhat.com>
+Cc: <stable@vger.kernel.org>    [5.18+]
 ---
- tools/testing/selftests/tdx/Makefile         | 2 +-
- tools/testing/selftests/tdx/tdx_guest_test.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/x86/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/tdx/Makefile b/tools/testing/selftests/tdx/Makefile
-index 8dd43517cd55..306e9c4d5ef7 100644
---- a/tools/testing/selftests/tdx/Makefile
-+++ b/tools/testing/selftests/tdx/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
+diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
+index 0388c4d60af0..ca9374b56ead 100644
+--- a/tools/testing/selftests/x86/Makefile
++++ b/tools/testing/selftests/x86/Makefile
+@@ -34,7 +34,7 @@ BINARIES_64 := $(TARGETS_C_64BIT_ALL:%=%_64)
+ BINARIES_32 := $(patsubst %,$(OUTPUT)/%,$(BINARIES_32))
+ BINARIES_64 := $(patsubst %,$(OUTPUT)/%,$(BINARIES_64))
  
--CFLAGS += -O3 -Wl,-no-as-needed -Wall -static
-+CFLAGS += -O3 -Wl,-no-as-needed -Wall $(KHDR_INCLUDES) -static
+-CFLAGS := -O2 -g -std=gnu99 -pthread -Wall
++CFLAGS := -O2 -g -std=gnu99 -pthread -Wall $(KHDR_INCLUDES)
  
- TEST_GEN_PROGS := tdx_guest_test
- 
-diff --git a/tools/testing/selftests/tdx/tdx_guest_test.c b/tools/testing/selftests/tdx/tdx_guest_test.c
-index 2a2afd856798..81d8cb88ea1a 100644
---- a/tools/testing/selftests/tdx/tdx_guest_test.c
-+++ b/tools/testing/selftests/tdx/tdx_guest_test.c
-@@ -12,8 +12,8 @@
- #include <errno.h>
- #include <fcntl.h>
- 
-+#include <linux/tdx-guest.h>
- #include "../kselftest_harness.h"
--#include "../../../../include/uapi/linux/tdx-guest.h"
- 
- #define TDX_GUEST_DEVNAME "/dev/tdx_guest"
- #define HEX_DUMP_SIZE 8
+ # call32_from_64 in thunks.S uses absolute addresses.
+ ifeq ($(CAN_BUILD_WITH_NOPIE),1)
 -- 
 2.25.1
 
