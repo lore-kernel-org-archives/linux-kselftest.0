@@ -2,41 +2,41 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 497D1C61DA4
-	for <linux-kselftest@archiver.kernel.org>; Fri, 27 Jan 2023 13:58:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E46A2C54EAA
+	for <linux-kselftest@archiver.kernel.org>; Fri, 27 Jan 2023 13:58:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234348AbjA0N6l (ORCPT
+        id S234352AbjA0N6m (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 27 Jan 2023 08:58:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37624 "EHLO
+        Fri, 27 Jan 2023 08:58:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233917AbjA0N62 (ORCPT
+        with ESMTP id S233925AbjA0N62 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Fri, 27 Jan 2023 08:58:28 -0500
 Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C94BF22A2D;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9AEA2312C;
         Fri, 27 Jan 2023 05:58:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1674827887;
-        bh=6EmQnswFj6lYa3iuQ9jXx4tuzOMzQcsG7VTPpMJ0uK0=;
+        s=smtpout1; t=1674827888;
+        bh=7jIfTNCu7zpPLHJpUW3uli6pP+V4do4UcRBq1ufAji0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=egGwYK11B2go2UrPsxHEmiyF+t/D82frZQ0me91eIRFDS45amBgD1+KWoOW6mCkcs
-         DNcv3CHhYXh8e2yjKbr+CX5xhIMYMic6+lz0/6ulUAwBhrPoAUjg4ZdeDXXznD4glL
-         FWl3u7+JEdDRIAx+dkuNgS9CyzUbyQAkG7gfPHai+OGAe6zk7eRDEmQHbyRzBVciTu
-         It14tq5mEu4BbS3qJ/HNJbkQCgllavQMPnCaXseiV4rx/CoKHI+CgVqJVBTDF79LFk
-         mvE9p3DFKANvMbcdmQ076hfMjDm3vu3kPQSEqBk/VJttmGpz7Y2qXDuLugqtYlNMAT
-         WBaCIbLFkibjA==
+        b=mvURC9U1jZI6BZB0ToC7FIqkTyLlEnklVvuXSavwfDi5OJBDX8BbJXZTVE79Ro1y6
+         qjBz5USNdaQ2LoEooh45BZZu4u+Rq89a3B6BiCzSpKF/+cY2d24icng8W/rckilmVS
+         dEWIWRrHyG5u6e2QrwlYdQtH2dKLtY23jQ94Xl6RE5ByZ5jHlQFz4bvt3eduq19B1v
+         lHNALEEByemodJogrT+eLdLnV+a2Bt8Rd8QOcsEZuJvb8wBRZOB/5FMC3ms4pqhG8D
+         mLCtXVrL50YGcn2QL1btABgcOT7KTgpThZzkjbE9X5bsIV5Y6AMNERja4NMFJAr74T
+         WL6yOCtK/O26A==
 Received: from localhost.localdomain (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4P3K0b3PlGzhd0;
-        Fri, 27 Jan 2023 08:58:07 -0500 (EST)
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4P3K0c1jKPzhd4;
+        Fri, 27 Jan 2023 08:58:08 -0500 (EST)
 From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
         Ingo Molnar <mingo@redhat.com>
 Cc:     linux-kernel@vger.kernel.org,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH 30/34] selftests: bpf docs: Use installed kernel headers search path
-Date:   Fri, 27 Jan 2023 08:57:51 -0500
-Message-Id: <20230127135755.79929-31-mathieu.desnoyers@efficios.com>
+Subject: [PATCH 34/34] selftests: tdx: Use installed kernel headers search path
+Date:   Fri, 27 Jan 2023 08:57:55 -0500
+Message-Id: <20230127135755.79929-35-mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230127135755.79929-1-mathieu.desnoyers@efficios.com>
 References: <20230127135755.79929-1-mathieu.desnoyers@efficios.com>
@@ -55,22 +55,36 @@ Cc: Shuah Khan <shuah@kernel.org>
 Cc: linux-kselftest@vger.kernel.org
 Cc: Ingo Molnar <mingo@redhat.com>
 ---
- tools/testing/selftests/bpf/Makefile.docs | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/tdx/Makefile         | 2 +-
+ tools/testing/selftests/tdx/tdx_guest_test.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/Makefile.docs b/tools/testing/selftests/bpf/Makefile.docs
-index eb6a4fea8c79..0a538d873def 100644
---- a/tools/testing/selftests/bpf/Makefile.docs
-+++ b/tools/testing/selftests/bpf/Makefile.docs
-@@ -44,7 +44,7 @@ RST2MAN_DEP := $(shell command -v rst2man 2>/dev/null)
- # $1 - target for scripts/bpf_doc.py
- # $2 - man page section to generate the troff file
- define DOCS_RULES =
--$(OUTPUT)bpf-$1.rst: ../../../../include/uapi/linux/bpf.h
-+$(OUTPUT)bpf-$1.rst: $(KHDR_INCLUDES)/linux/bpf.h
- 	$$(QUIET_GEN)../../../../scripts/bpf_doc.py $1 \
- 		--filename $$< > $$@
+diff --git a/tools/testing/selftests/tdx/Makefile b/tools/testing/selftests/tdx/Makefile
+index 8dd43517cd55..306e9c4d5ef7 100644
+--- a/tools/testing/selftests/tdx/Makefile
++++ b/tools/testing/selftests/tdx/Makefile
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
  
+-CFLAGS += -O3 -Wl,-no-as-needed -Wall -static
++CFLAGS += -O3 -Wl,-no-as-needed -Wall $(KHDR_INCLUDES) -static
+ 
+ TEST_GEN_PROGS := tdx_guest_test
+ 
+diff --git a/tools/testing/selftests/tdx/tdx_guest_test.c b/tools/testing/selftests/tdx/tdx_guest_test.c
+index 2a2afd856798..81d8cb88ea1a 100644
+--- a/tools/testing/selftests/tdx/tdx_guest_test.c
++++ b/tools/testing/selftests/tdx/tdx_guest_test.c
+@@ -12,8 +12,8 @@
+ #include <errno.h>
+ #include <fcntl.h>
+ 
++#include <linux/tdx-guest.h>
+ #include "../kselftest_harness.h"
+-#include "../../../../include/uapi/linux/tdx-guest.h"
+ 
+ #define TDX_GUEST_DEVNAME "/dev/tdx_guest"
+ #define HEX_DUMP_SIZE 8
 -- 
 2.25.1
 
