@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 201A4C636CC
-	for <linux-kselftest@archiver.kernel.org>; Fri, 27 Jan 2023 13:58:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 83CE3C38142
+	for <linux-kselftest@archiver.kernel.org>; Fri, 27 Jan 2023 13:58:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233686AbjA0N6K (ORCPT
+        id S233535AbjA0N6L (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 27 Jan 2023 08:58:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37512 "EHLO
+        Fri, 27 Jan 2023 08:58:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233625AbjA0N6J (ORCPT
+        with ESMTP id S233618AbjA0N6J (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Fri, 27 Jan 2023 08:58:09 -0500
 Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F008D537;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C670CC33;
         Fri, 27 Jan 2023 05:58:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1674827883;
-        bh=Vf6h/Rf3BvGRTZG9RMp4qPzreXRmHs4w6M44ZkRD1eE=;
+        s=smtpout1; t=1674827882;
+        bh=O7TLRnBFvO2mHHa21PT6sPp6oCHu3V7ypNifZtvavPs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iWZsomuvA4qjXFhNRr2IksfNnEHLneiCIcbAY8NWxKfyOx+B04UHol8toTkpmPnOy
-         u24jz5uK4QbXpD9U5+2tI69gMrQBl4nwRin/6XMfVF48nBVlknonQ4ZC/zgDInYAsK
-         niu3BHyEyncJcFBDoITBTI9s4yVBbJrzyN6KCQPkYiDDceJn89ORa1X8rpnU5sxjKm
-         sEQEcwCOJBNmCBT5VYLE7a1bm+ecMfBFP8JT0kFVPB2ZjXbU195p0PK/wHj+DoBCQD
-         VjB8bXs48TtH730IjCj6VckfRVEJx7BUoNqTWsTWR7cC4l0OraXhEYxDI8EPEyHyWI
-         0Ftl2b9kEceJw==
+        b=ZukGHJ6A7yYm6vWBR0x6cfQeDJ8DOdZTmdLGkp7msE5Wh4164c19x2crtPcxPqmKX
+         gwLw6MU42H2bTzJ87s8H8rdU03aGPZTfaUhOqd7iCCHLRxKjz3yIXwliEUG+DeZvNQ
+         lGFI70OLj2FMAsYtWOtSmeYBqOgBByvnpd75xBkdICM6NEefPvy/qbBAJL85c0tASM
+         rW7uvJg+Ke8ZoAdTu6JwUwsuS5O1RKa5AYGMWpCE0u6OPq8fikECrgi41ncg2IFXZ+
+         9A3poRmFvcQC8sm8WuUahTzU3FVLg8SUZRvh1ESR79lG19F/VZDhpLIwHtk54TghjW
+         ZeiwqRH7M9rfw==
 Received: from localhost.localdomain (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4P3K0W0F5mzhxQ;
-        Fri, 27 Jan 2023 08:58:03 -0500 (EST)
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4P3K0V2yJXzhff;
+        Fri, 27 Jan 2023 08:58:02 -0500 (EST)
 From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
         Ingo Molnar <mingo@redhat.com>
 Cc:     linux-kernel@vger.kernel.org,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         stable@vger.kernel.org
-Subject: [PATCH 09/34] selftests: futex: Fix incorrect kernel headers search path
-Date:   Fri, 27 Jan 2023 08:57:30 -0500
-Message-Id: <20230127135755.79929-10-mathieu.desnoyers@efficios.com>
+Subject: [PATCH 06/34] selftests: dmabuf-heaps: Fix incorrect kernel headers search path
+Date:   Fri, 27 Jan 2023 08:57:27 -0500
+Message-Id: <20230127135755.79929-7-mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230127135755.79929-1-mathieu.desnoyers@efficios.com>
 References: <20230127135755.79929-1-mathieu.desnoyers@efficios.com>
@@ -58,20 +58,37 @@ Cc: linux-kselftest@vger.kernel.org
 Cc: Ingo Molnar <mingo@redhat.com>
 Cc: <stable@vger.kernel.org>    [5.18+]
 ---
- tools/testing/selftests/futex/functional/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/dmabuf-heaps/Makefile      | 2 +-
+ tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c | 3 +--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/futex/functional/Makefile b/tools/testing/selftests/futex/functional/Makefile
-index 5a0e0df8de9b..a392d0917b4e 100644
---- a/tools/testing/selftests/futex/functional/Makefile
-+++ b/tools/testing/selftests/futex/functional/Makefile
+diff --git a/tools/testing/selftests/dmabuf-heaps/Makefile b/tools/testing/selftests/dmabuf-heaps/Makefile
+index 604b43ece15f..9e7e158d5fa3 100644
+--- a/tools/testing/selftests/dmabuf-heaps/Makefile
++++ b/tools/testing/selftests/dmabuf-heaps/Makefile
 @@ -1,5 +1,5 @@
  # SPDX-License-Identifier: GPL-2.0
--INCLUDES := -I../include -I../../ -I../../../../../usr/include/
-+INCLUDES := -I../include -I../../ $(KHDR_INCLUDES)
- CFLAGS := $(CFLAGS) -g -O2 -Wall -D_GNU_SOURCE -pthread $(INCLUDES) $(KHDR_INCLUDES)
- LDLIBS := -lpthread -lrt
+-CFLAGS += -static -O3 -Wl,-no-as-needed -Wall
++CFLAGS += -static -O3 -Wl,-no-as-needed -Wall $(KHDR_INCLUDES)
  
+ TEST_GEN_PROGS = dmabuf-heap
+ 
+diff --git a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
+index 29af27acd40e..890a8236a8ba 100644
+--- a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
++++ b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
+@@ -13,10 +13,9 @@
+ #include <sys/types.h>
+ 
+ #include <linux/dma-buf.h>
++#include <linux/dma-heap.h>
+ #include <drm/drm.h>
+ 
+-#include "../../../../include/uapi/linux/dma-heap.h"
+-
+ #define DEVPATH "/dev/dma_heap"
+ 
+ static int check_vgem(int fd)
 -- 
 2.25.1
 
