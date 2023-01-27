@@ -2,32 +2,32 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1650DC636CB
-	for <linux-kselftest@archiver.kernel.org>; Fri, 27 Jan 2023 13:58:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6390BC54EAA
+	for <linux-kselftest@archiver.kernel.org>; Fri, 27 Jan 2023 13:58:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234009AbjA0N63 (ORCPT
+        id S234083AbjA0N6a (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 27 Jan 2023 08:58:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37512 "EHLO
+        Fri, 27 Jan 2023 08:58:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233713AbjA0N6L (ORCPT
+        with ESMTP id S233526AbjA0N6L (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Fri, 27 Jan 2023 08:58:11 -0500
 Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6858F20D3D;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 688FE21A32;
         Fri, 27 Jan 2023 05:58:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1674827884;
-        bh=X6gVbqQlq737cstg892yXIS/G1E/XkRwPcbdp0ROAbU=;
+        s=smtpout1; t=1674827885;
+        bh=3GbxuVCI7xPWc+Ss2FtvtmM+sZMkYwBabD+f5z9dPoU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JjF8+kmJVrJNh1BuPF8a7WG26h8d0kqr13MoaFIKAQxS+OKmGP2p5Q2Z18JdIYP/S
-         d4wZYVM6AiQCAxCNOmh2AAnZ1WKr+Ev5VF6FYZkklNBnoTWrlW+DIDy0+P0lo2mTpL
-         KuixJarRjopu+5bsZr0viXpK1cZaOsR61fziFIq2aYXq5Jwa1dDEvRUCfIQUuiFWrA
-         7B3uoSO2lUc5qx1xdqbstzrBTc+/A0hrvo9YHGPyYjaOBOaIr1ED5l0p8PitV9s6ay
-         YcKByRqda2r1VH9ZEletCr4YSCL9fdCv4tdfUgiK+t/8LCv72a2SaL/IndmdJmHDCw
-         LHNZfQDYhgzXA==
+        b=Du2tcx85qTfnDknrb3uuH4hb7lRKYNkHwhdZvSM/4vtUT9PoFp6+Mg5Ts+Q82vB9h
+         yKJhOtrmSLnUDcSK7kAXkScMeRAiFDU9krBHsq0861F50gFFvUa9+Y098x4JCbsgq/
+         sdccnFfg+SOWVq0LLFQFXIcS6Pr+7YNrtFAACmpRiePzTslLuTRPfrMxjmJLoLREoA
+         t+Jq3cpT8H7KFvDKd1TAM/MpDACGwc6WmFn7ZKvNTMeu8vsbDIhDj2gfhZORRUKvI6
+         28LYLE/BM98Z8d3OIpL9DqWYFNTcQsYldyA7MP3hN1+m9mCewlF26hv6QDK6BTwJSW
+         AY5SmuFByTeow==
 Received: from localhost.localdomain (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4P3K0X2LMSzhWb;
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4P3K0X6zrgzhrh;
         Fri, 27 Jan 2023 08:58:04 -0500 (EST)
 From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
@@ -35,9 +35,9 @@ To:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
 Cc:     linux-kernel@vger.kernel.org,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         stable@vger.kernel.org
-Subject: [PATCH 15/34] selftests: mount_setattr: Fix incorrect kernel headers search path
-Date:   Fri, 27 Jan 2023 08:57:36 -0500
-Message-Id: <20230127135755.79929-16-mathieu.desnoyers@efficios.com>
+Subject: [PATCH 18/34] selftests: perf_events: Fix incorrect kernel headers search path
+Date:   Fri, 27 Jan 2023 08:57:39 -0500
+Message-Id: <20230127135755.79929-19-mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230127135755.79929-1-mathieu.desnoyers@efficios.com>
 References: <20230127135755.79929-1-mathieu.desnoyers@efficios.com>
@@ -58,21 +58,20 @@ Cc: linux-kselftest@vger.kernel.org
 Cc: Ingo Molnar <mingo@redhat.com>
 Cc: <stable@vger.kernel.org>    [5.18+]
 ---
- tools/testing/selftests/mount_setattr/Makefile | 2 +-
+ tools/testing/selftests/perf_events/Makefile | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/mount_setattr/Makefile b/tools/testing/selftests/mount_setattr/Makefile
-index 2250f7dcb81e..fde72df01b11 100644
---- a/tools/testing/selftests/mount_setattr/Makefile
-+++ b/tools/testing/selftests/mount_setattr/Makefile
-@@ -1,6 +1,6 @@
+diff --git a/tools/testing/selftests/perf_events/Makefile b/tools/testing/selftests/perf_events/Makefile
+index fcafa5f0d34c..db93c4ff081a 100644
+--- a/tools/testing/selftests/perf_events/Makefile
++++ b/tools/testing/selftests/perf_events/Makefile
+@@ -1,5 +1,5 @@
  # SPDX-License-Identifier: GPL-2.0
- # Makefile for mount selftests.
--CFLAGS = -g -I../../../../usr/include/ -Wall -O2 -pthread
-+CFLAGS = -g $(KHDR_INCLUDES) -Wall -O2 -pthread
+-CFLAGS += -Wl,-no-as-needed -Wall -I../../../../usr/include
++CFLAGS += -Wl,-no-as-needed -Wall $(KHDR_INCLUDES)
+ LDFLAGS += -lpthread
  
- TEST_GEN_FILES += mount_setattr_test
- 
+ TEST_GEN_PROGS := sigtrap_threads remove_on_exec
 -- 
 2.25.1
 
