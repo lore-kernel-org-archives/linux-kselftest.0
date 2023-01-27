@@ -2,121 +2,200 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 426B8C38142
-	for <linux-kselftest@archiver.kernel.org>; Fri, 27 Jan 2023 14:27:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 85907C54EAA
+	for <linux-kselftest@archiver.kernel.org>; Fri, 27 Jan 2023 14:33:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232966AbjA0O13 (ORCPT
+        id S233322AbjA0OdH (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 27 Jan 2023 09:27:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40218 "EHLO
+        Fri, 27 Jan 2023 09:33:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232974AbjA0O11 (ORCPT
+        with ESMTP id S233326AbjA0OdC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 Jan 2023 09:27:27 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 140E78000C;
-        Fri, 27 Jan 2023 06:27:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674829633; x=1706365633;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=tQHYwsHuQmv3UmxqSGxgXFuhINcA80Abo3LA82di77s=;
-  b=Y7pVM78jO0HE/dAFn2MC+n1QPcxTlf+t0PCaJgf3dKQnetze2zawxNAu
-   q69c0J2MEFcOOMiANVxtmQN2YSFCzI/yfSYFrFoL7gih1s6pI1UX1Lqaz
-   ebdR9lldf4LLky8ii0uGc63YhYJQVTcR9ws1tNEIry4m1eMLhDDqwUp5h
-   Dn9yFRdfhdeLgVSXSJmR1xO7oCDOs3QbxeZ123IW4PXfOd7qfIuuTudvF
-   iPudNFbwLbGMIXMiu/sYVEGsJEIRIYeTvL0d017HIw/NebZuJStEhhnyK
-   d7tN/yT832fJekgxfUe0dhJ/ea4EwWLWoVmk9sHsrPdEmlplLDFYsFgyp
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="310716130"
-X-IronPort-AV: E=Sophos;i="5.97,251,1669104000"; 
-   d="scan'208";a="310716130"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 06:27:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="731859354"
-X-IronPort-AV: E=Sophos;i="5.97,251,1669104000"; 
-   d="scan'208";a="731859354"
-Received: from skxmcp01.bj.intel.com ([10.240.193.86])
-  by fmsmga004.fm.intel.com with ESMTP; 27 Jan 2023 06:27:10 -0800
-From:   Yu Zhang <yu.c.zhang@linux.intel.com>
-To:     pbonzini@redhat.com, shuah@kernel.org, seanjc@google.com,
-        kvm@vger.kernel.org
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: selftest: Add dependency rules in makefile for C source code
-Date:   Fri, 27 Jan 2023 21:36:01 +0800
-Message-Id: <20230127133601.1165472-1-yu.c.zhang@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 27 Jan 2023 09:33:02 -0500
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08103EB62
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Jan 2023 06:32:57 -0800 (PST)
+Received: by mail-io1-xd32.google.com with SMTP id d22so1977068iof.5
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Jan 2023 06:32:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=4VJl1LFj78awaMi5u1yCyS89RCOFZobWhyD03Egy1dY=;
+        b=e2S+T+hw8P+2HOsuX++A4wB4qB0exNACPcbnqddJ1iayW63HOp3y7k999fxSY+GNQm
+         WKLwzxo9LrgQ4PKeLugPBdT2kFegxKKjrL89ZJRlHWpJz5DpUOJMwKwnwU76zfPBL+dk
+         6WwLjwPZZbN5HMkYP/crQbMNgnA2BVT4itYy3x2uRkx9Pk4Gq0BH85yZ2mj2BcPj1jEO
+         aJJmcVBgCyIXqiuCL8lYUX0UMRltMyYishf11RCDCu3PRHGmXkAHE7pc0DYCKJJUhXlj
+         K0s+xY04Wsu7L05JBk9Ic/1trtNjjF9ZB9iwVjsJsCqZ3WX1aNftxv5F80uLd4AWvgb7
+         Dvjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4VJl1LFj78awaMi5u1yCyS89RCOFZobWhyD03Egy1dY=;
+        b=oYm36OZfuNK875VrNLM/z7iDpT0IkmaR7oTgjUBa5K89v49Uhof3ArVIq7Rui03rOJ
+         ieTaRIc7IURsxIOrGa23dq0hIepwelJUpAoL1wlbPtQUmIKKzshwM7I6V/wMMAn4kKzf
+         5NVQ3OivnMbyzNMxLephnA7xYRyeYGULDkfTrCAFBI4+2JN9Lcau8CaM1lqnJuQuSuBJ
+         iuq1BubDsq5RA8TlkZTQNhH3uO90JWgeoh8lzOusack43pJjyiYYAKc/TaX48tfHUY+z
+         bpd0AZnYkRvUz22LmBqupI/QNdTUfm7TTXWMzssD1rEwmxwa1R6V5DmbPGzonDWz3y29
+         uGKQ==
+X-Gm-Message-State: AO0yUKWiHsKfyxcvsNbe9i9LIHyOOGXJ1kVqruaFgJ3qCA3HCQL4aCVd
+        1R2torMuZzbwx6BQtQUXG4qzIZsmR/5omewzHM0knw==
+X-Google-Smtp-Source: AK7set+3mZJkF8fkciCG6VzvikUhcMDERUzDhLStD/6poffAcfmiE2I8eb4RebH3huth4FaWurCefne/onY5y8p1T2A=
+X-Received: by 2002:a02:ad06:0:b0:3a9:5776:864 with SMTP id
+ s6-20020a02ad06000000b003a957760864mr1383179jan.67.1674829976842; Fri, 27 Jan
+ 2023 06:32:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230127140944.265135-1-andrei.gherzan@canonical.com> <20230127140944.265135-3-andrei.gherzan@canonical.com>
+In-Reply-To: <20230127140944.265135-3-andrei.gherzan@canonical.com>
+From:   =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
+Date:   Fri, 27 Jan 2023 06:32:44 -0800
+Message-ID: <CANP3RGchqLRLRAxgWU69DzWfa9R2d0AhgeBdpJhmaE+c-Sszjw@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] selftests: net: Fix udpgro_frglist.sh shellcheck
+ warnings and errors
+To:     Andrei Gherzan <andrei.gherzan@canonical.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Lina Wang <lina.wang@mediatek.com>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently, KVM selftests have to run "make clean && make" to rebuild the
-entire test suite each time a header file is modified. Define "-MD" as
-an EXTRA_CFLAGS, so we can generate the dependency rules for each target
-object, whose prerequisites contains the source file and the included header
-files as well. And including those dependency files in KVM selftests' makefile
-will release us from such annoyance.
+On Fri, Jan 27, 2023 at 6:09 AM Andrei Gherzan
+<andrei.gherzan@canonical.com> wrote:
+>
+> This change fixes the following shellcheck warnings and errors:
+>
+> * SC2155 (warning): Declare and assign separately to avoid masking return
+>   values.
+> * SC2124 (warning): Assigning an array to a string! Assign as array, or use
+>   instead of @ to concatenate.
+> * SC2034 (warning): ipv4_args appears unused. Verify use (or export if used
+>   externally).
+> * SC2242 (error): Can only exit with status 0-255. Other data should be
+>   written to stdout/stderr.
+> * SC2068 (error): Double quote array expansions to avoid re-splitting
+>   elements.
+>
+> Fixes: edae34a3ed92 ("selftests net: add UDP GRO fraglist + bpf self-tests")
+> Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
+> ---
+>  tools/testing/selftests/net/udpgro_frglist.sh | 20 +++++++++----------
+>  1 file changed, 10 insertions(+), 10 deletions(-)
+>
+> diff --git a/tools/testing/selftests/net/udpgro_frglist.sh b/tools/testing/selftests/net/udpgro_frglist.sh
+> index e1ca49de2491..97bf20e9afd8 100755
+> --- a/tools/testing/selftests/net/udpgro_frglist.sh
+> +++ b/tools/testing/selftests/net/udpgro_frglist.sh
+> @@ -3,7 +3,8 @@
+>  #
+>  # Run a series of udpgro benchmarks
+>
+> -readonly PEER_NS="ns-peer-$(mktemp -u XXXXXX)"
+> +PEER_NS="ns-peer-$(mktemp -u XXXXXX)"
+> +readonly PEER_NS
+>
+>  BPF_FILE="../bpf/xdp_dummy.bpf.o"
+>  BPF_NAT6TO4_FILE="nat6to4.o"
+> @@ -19,7 +20,7 @@ trap cleanup EXIT
+>
+>  run_one() {
+>         # use 'rx' as separator between sender args and receiver args
+> -       local -r all="$@"
+> +       local -r all="$*"
 
-Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
----
- tools/testing/selftests/kvm/Makefile | 21 ++++++++++++++++++---
- 1 file changed, 18 insertions(+), 3 deletions(-)
+this should technically use arrays, something like
 
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index 1750f91dd936..b329e0d1a460 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -180,6 +180,8 @@ TEST_GEN_PROGS += $(TEST_GEN_PROGS_$(ARCH_DIR))
- TEST_GEN_PROGS_EXTENDED += $(TEST_GEN_PROGS_EXTENDED_$(ARCH_DIR))
- LIBKVM += $(LIBKVM_$(ARCH_DIR))
- 
-+OVERRIDE_TARGETS = 1
-+
- # lib.mak defines $(OUTPUT), prepends $(OUTPUT)/ to $(TEST_GEN_PROGS), and most
- # importantly defines, i.e. overwrites, $(CC) (unless `make -e` or `make CC=`,
- # which causes the environment variable to override the makefile).
-@@ -198,9 +200,11 @@ CFLAGS += -Wall -Wstrict-prototypes -Wuninitialized -O2 -g -std=gnu99 \
- 	-fno-builtin-memcmp -fno-builtin-memcpy -fno-builtin-memset \
- 	-fno-stack-protector -fno-PIE -I$(LINUX_TOOL_INCLUDE) \
- 	-I$(LINUX_TOOL_ARCH_INCLUDE) -I$(LINUX_HDR_PATH) -Iinclude \
--	-I$(<D) -Iinclude/$(ARCH_DIR) -I ../rseq -I.. $(EXTRA_CFLAGS) \
-+	-I$(<D) -Iinclude/$(ARCH_DIR) -I ../rseq -I.. \
- 	$(KHDR_INCLUDES)
- 
-+EXTRA_CFLAGS += -MD
-+
- no-pie-option := $(call try-run, echo 'int main(void) { return 0; }' | \
-         $(CC) -Werror $(CFLAGS) -no-pie -x c - -o "$$TMP", -no-pie)
- 
-@@ -218,11 +222,22 @@ LIBKVM_S_OBJ := $(patsubst %.S, $(OUTPUT)/%.o, $(LIBKVM_S))
- LIBKVM_STRING_OBJ := $(patsubst %.c, $(OUTPUT)/%.o, $(LIBKVM_STRING))
- LIBKVM_OBJS = $(LIBKVM_C_OBJ) $(LIBKVM_S_OBJ) $(LIBKVM_STRING_OBJ)
- 
--EXTRA_CLEAN += $(LIBKVM_OBJS) cscope.*
-+TEST_GEN_OBJ = $(patsubst %, %.o, $(TEST_GEN_PROGS))
-+TEST_GEN_OBJ += $(patsubst %, %.o, $(TEST_GEN_PROGS_EXTENDED))
-+TEST_DEP_FILES = $(patsubst %.o, %.d, $(TEST_GEN_OBJ))
-+TEST_DEP_FILES += $(patsubst %.o, %.d, $(LIBKVM_OBJS))
-+-include $(TEST_DEP_FILES)
-+
-+$(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED): %: %.o
-+	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH) $< $(LIBKVM_OBJS) $(LDLIBS) -o $@
-+$(TEST_GEN_OBJ): %.o: %.c
-+	$(CC) $(CFLAGS) $(CPPFLAGS) $(EXTRA_CFLAGS) $(TARGET_ARCH) -c $< -o $@
-+
-+EXTRA_CLEAN += $(LIBKVM_OBJS) $(TEST_DEP_FILES) $(TEST_GEN_OBJ) cscope.*
- 
- x := $(shell mkdir -p $(sort $(dir $(LIBKVM_C_OBJ) $(LIBKVM_S_OBJ))))
- $(LIBKVM_C_OBJ): $(OUTPUT)/%.o: %.c
--	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
-+	$(CC) $(CFLAGS) $(CPPFLAGS) $(EXTRA_CFLAGS) $(TARGET_ARCH) -c $< -o $@
- 
- $(LIBKVM_S_OBJ): $(OUTPUT)/%.o: %.S
- 	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
--- 
-2.25.1
+local -a -r args=("$@")
 
+but perhaps just get rid of args and just use "$@" directly below
+
+>         local -r tx_args=${all%rx*}
+>         local rx_args=${all#*rx}
+>
+> @@ -56,13 +57,13 @@ run_one() {
+>  }
+>
+>  run_in_netns() {
+> -       local -r args=$@
+> +       local -r args="$*"
+>    echo ${args}
+>         ./in_netns.sh $0 __subprocess ${args}
+
+ie. here could just use "$@" directly twice instead of defining args.
+$0 should be doublequoted - though I guess it'll never be empty, and
+is unlikely to include spaces.
+>  }
+>
+>  run_udp() {
+> -       local -r args=$@
+> +       local -r args="$*"
+>
+>         echo "udp gso - over veth touching data"
+>         run_in_netns ${args} -u -S 0 rx -4 -v
+> @@ -72,7 +73,7 @@ run_udp() {
+>  }
+>
+>  run_tcp() {
+> -       local -r args=$@
+> +       local -r args="$*"
+>
+>         echo "tcp - over veth touching data"
+>         run_in_netns ${args} -t rx -4 -t
+> @@ -80,7 +81,6 @@ run_tcp() {
+>
+>  run_all() {
+>         local -r core_args="-l 4"
+
+is this still useful? embed directly in ipv6_args
+
+> -       local -r ipv4_args="${core_args} -4  -D 192.168.1.1"
+
+perhaps this should stay as a comment??
+
+>         local -r ipv6_args="${core_args} -6  -D 2001:db8::1"
+>
+>         echo "ipv6"
+> @@ -90,19 +90,19 @@ run_all() {
+>
+>  if [ ! -f ${BPF_FILE} ]; then
+
+double quote
+"${BPF_FILE}"
+in case space in file name
+
+>         echo "Missing ${BPF_FILE}. Build bpf selftest first"
+> -       exit -1
+> +       exit 1
+>  fi
+>
+>  if [ ! -f "$BPF_NAT6TO4_FILE" ]; then
+
+there seems to be inconsistency around [ vs [[, use [[ if relying on bash anyway
+
+>         echo "Missing nat6to4 helper. Build bpf nat6to4.o selftest first"
+> -       exit -1
+> +       exit 1
+>  fi
+>
+>  if [[ $# -eq 0 ]]; then
+>         run_all
+>  elif [[ $1 == "__subprocess" ]]; then
+
+while this does indeed work, imho $1 should be "$1" to be less confusing
+
+>         shift
+> -       run_one $@
+> +       run_one "$@"
+>  else
+> -       run_in_netns $@
+> +       run_in_netns "$@"
+>  fi
+> --
+> 2.34.1
