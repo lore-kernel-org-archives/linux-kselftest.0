@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BE4A6C61DB3
-	for <linux-kselftest@archiver.kernel.org>; Fri, 27 Jan 2023 13:58:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0704FC636CC
+	for <linux-kselftest@archiver.kernel.org>; Fri, 27 Jan 2023 13:58:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233786AbjA0N6S (ORCPT
+        id S233544AbjA0N6T (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 27 Jan 2023 08:58:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37530 "EHLO
+        Fri, 27 Jan 2023 08:58:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233632AbjA0N6J (ORCPT
+        with ESMTP id S233670AbjA0N6K (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 Jan 2023 08:58:09 -0500
+        Fri, 27 Jan 2023 08:58:10 -0500
 Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81068F744;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECBAE76B1;
         Fri, 27 Jan 2023 05:58:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1674827882;
-        bh=DQfwUmfs5iNfdjrcPzg0HaVMYofBtZ0lo/V3C+VzwwE=;
+        s=smtpout1; t=1674827884;
+        bh=Hovg2rLgtOn0+9QtiG9zIieTKyUfb4MTHQUMXrteeb8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R2FtjY5BDlGSDq3Tp9GCd33whMgy0KMIfA0rbcQs7ZIsF5T9IftAhcL5SrNlOPv6Q
-         tT6XCJh/7Dmx8xCBqEOLV5HgSqj8BOvTms9i8zhkjwlQAnpr+lBdz2BTjeM9KAQAlG
-         GSjzadjtZ6jd28/CP3LIqvgR6rcoDx3ehwKmOFBk2YUqEvHfDmKnT1RgxcuZC34f5R
-         q9cxhz7HaXL2Th/1LkRtksF4tZs1c0g+r7qbN0lzQljypuA95dFX/Sjc6ZEqw1nw+3
-         ARmRRn5d5qqf8UJqFBIqJ+wuxXUyeV6KvfhRFlz0WTGQfcDwHfef6hsgyEB57vbX6p
-         eNUfMINnAvz0w==
+        b=NUs6hHu6zSApBdm2LEHPcGuHogc7yhJt0t3IHrhVa78nTEkJSTZAh3uNXr6U8BevY
+         /4uN6/LAdnTsYXhnuwz7gqeD8+Sqa5KLyXohzV/Aj6zotBqRMAtE+WtTW3hmaPyyxz
+         C+UOSSAhLqdHKX9OX0cKSmezJFpHv6VhGqVWdEv65+3Yq8b9Bk3Kq6+6N/lRoulSz+
+         yB0mIGQ/tgRS327T/SUMVNDwCtI3kD4Y8MhDQnF/hxwREpYPfOTm9guCL8hKLNY+E5
+         rgKXQf0J/h/NgMd9lW3iH1ukG5NdwIXOwvVhTkWwN7ZxsWqvFfooIjZdi2hIsOzN1s
+         9tJB+V/Bd0iGA==
 Received: from localhost.localdomain (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4P3K0V1MFXzhWX;
-        Fri, 27 Jan 2023 08:58:02 -0500 (EST)
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4P3K0W6NG1zhWZ;
+        Fri, 27 Jan 2023 08:58:03 -0500 (EST)
 From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
         Ingo Molnar <mingo@redhat.com>
 Cc:     linux-kernel@vger.kernel.org,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         stable@vger.kernel.org
-Subject: [PATCH 05/34] selftests: dma: Fix incorrect kernel headers search path
-Date:   Fri, 27 Jan 2023 08:57:26 -0500
-Message-Id: <20230127135755.79929-6-mathieu.desnoyers@efficios.com>
+Subject: [PATCH 13/34] selftests: media_tests: Fix incorrect kernel headers search path
+Date:   Fri, 27 Jan 2023 08:57:34 -0500
+Message-Id: <20230127135755.79929-14-mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230127135755.79929-1-mathieu.desnoyers@efficios.com>
 References: <20230127135755.79929-1-mathieu.desnoyers@efficios.com>
@@ -58,20 +58,21 @@ Cc: linux-kselftest@vger.kernel.org
 Cc: Ingo Molnar <mingo@redhat.com>
 Cc: <stable@vger.kernel.org>    [5.18+]
 ---
- tools/testing/selftests/dma/Makefile | 2 +-
+ tools/testing/selftests/media_tests/Makefile | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/dma/Makefile b/tools/testing/selftests/dma/Makefile
-index cd8c5ece1cba..dd7f746f3e84 100644
---- a/tools/testing/selftests/dma/Makefile
-+++ b/tools/testing/selftests/dma/Makefile
-@@ -1,5 +1,5 @@
+diff --git a/tools/testing/selftests/media_tests/Makefile b/tools/testing/selftests/media_tests/Makefile
+index 60826d7d37d4..471d83e61d95 100644
+--- a/tools/testing/selftests/media_tests/Makefile
++++ b/tools/testing/selftests/media_tests/Makefile
+@@ -1,6 +1,6 @@
  # SPDX-License-Identifier: GPL-2.0
--CFLAGS += -I../../../../usr/include/
-+CFLAGS += $(KHDR_INCLUDES)
- CFLAGS += -I../../../../include/
+ #
+-CFLAGS += -I../ -I../../../../usr/include/
++CFLAGS += -I../ $(KHDR_INCLUDES)
+ TEST_GEN_PROGS := media_device_test media_device_open video_device_test
  
- TEST_GEN_PROGS := dma_map_benchmark
+ include ../lib.mk
 -- 
 2.25.1
 
