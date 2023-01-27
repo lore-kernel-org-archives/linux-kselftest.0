@@ -2,104 +2,184 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5C34C61DB3
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4A37C636CB
 	for <linux-kselftest@archiver.kernel.org>; Fri, 27 Jan 2023 14:09:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232124AbjA0OJ5 (ORCPT
+        id S233174AbjA0OJ5 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Fri, 27 Jan 2023 09:09:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53894 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233513AbjA0OJy (ORCPT
+        with ESMTP id S233747AbjA0OJz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 Jan 2023 09:09:54 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE091F497
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Jan 2023 06:09:52 -0800 (PST)
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com [209.85.128.72])
+        Fri, 27 Jan 2023 09:09:55 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7EC534C05
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Jan 2023 06:09:54 -0800 (PST)
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com [209.85.128.69])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id A5FD63FFF2
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Jan 2023 14:09:49 +0000 (UTC)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id D42163FFE1
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Jan 2023 14:09:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1674828589;
-        bh=ThPASxkQPa8akyDheX0+gKydQu/0488KOg7wyMg90UM=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=A33JDy0p+EiigmA0nSmGKWTc6sMGANHsNpIiRvSvACUez5uorViZAcZr+qCNx+eyA
-         DnIYKIfiwDMIpQi5kE0S6UXMnV13Ar/Mj4rmzmRQy0RcBND+C/m4qhuzVcHw4Mu0YB
-         Hn7wygLCAJBOpdHasq8Mn2W4B7JRSSk5/W+/jLLQEflWAhApkctbvT0lN6kWb30q6U
-         hHnwr6GQndB14Z0wsUr5k+w7nNWz4sCGoQh0VQdwPfYelJY6DLcdzQJ4tMWoueyza8
-         fkYry74/2cpkcA7scqAOUQYY+XaUrpw4/DndTOtnSQO8paByaVlYZ+VtFSxGPwB6Xo
-         pytVKfZX29ULg==
-Received: by mail-wm1-f72.google.com with SMTP id l8-20020a05600c1d0800b003dc25f6bb5dso2786327wms.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Jan 2023 06:09:49 -0800 (PST)
+        s=20210705; t=1674828590;
+        bh=nTK+Tg/yAxtPIIDooMityTGjVkS2yxq+KGHsQ1IbSWA=;
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+         MIME-Version;
+        b=I7oVur5gLqVs4SPsNhI1PX37a/WmeDtK3TV85pIW365JmB+n5n9ESJV5M/BllXkZ2
+         KDkoODBkxcDolFHi2RjYa3OV9mkbf9nVfMlZ/wlRoA7+lzTITGVfx1ic3o24HqqimG
+         SO/hzLUwQmhHaeeFTiRrllhyUG+/MpZXxNRAv5TxBnU3YOZr7IwkNP4FA7Qe8QZr4d
+         pWd3dlUAH23IIBJ7pnRQPjolscJuq5pfXPzuwBQOXyxhnpHjjrFCVjpf008EQoXS/u
+         fwwMyFvMa1TCxDL6tqbxRjWUh5ELStCD2/ISI2OnMu8bUMA7JMfJpn3wbK1FL6ct9e
+         K48wGDtR1L6SA==
+Received: by mail-wm1-f69.google.com with SMTP id m10-20020a05600c3b0a00b003dafe7451deso2839708wms.4
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Jan 2023 06:09:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ThPASxkQPa8akyDheX0+gKydQu/0488KOg7wyMg90UM=;
-        b=ueqUMuSwJhmQdBP0FVvQY088w46bsxUlsQbSpaJv/itNEh6+m5CpXWgcws6dKiSrfa
-         PCN2LnP2DhVPa36ejthMIm+3ebEyMy4FTBudFp404L7zjpgkeV+Ag54CvQHHex6nr2Nt
-         vZiwPDliGsYQYUs1eItQ6ESZX2ZFn43dsE2AEB8AJObgTtEBU926qZFoS/K3SHkMej83
-         YUhkVb9PuDQXOItQbvZXmwYmvewqhxxkIeW8lEkua4xqczGWQ57cBX3kDiUS2t2xjbk6
-         cR9uFfzAcN/v4n/FbCp76DiGpcTFrvHM57gLHLMa1DogiuB6n1S3jiNA8f8m7E2MKIkY
-         XH+A==
-X-Gm-Message-State: AFqh2krbjRJdrzCzWhj2QQn4wItdC3vqg7y87Qc0uQ+kXvHuIPUmP1bt
-        w13kpKcztka6JtW5uOWkDeYCQzvVFpWlfk5tdle6zECWDbPnlNwatTZpttgbg7eSfmGDwbyxtnu
-        rsd5XHc1/Qu17bStYx9yndVs6VqIduOYCJVNnlIVOs6aIdA==
-X-Received: by 2002:a05:600c:354a:b0:3da:1f6a:7b36 with SMTP id i10-20020a05600c354a00b003da1f6a7b36mr40128689wmq.0.1674828587912;
-        Fri, 27 Jan 2023 06:09:47 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXs7b7lhU/Xr193ycZjTx4N8Y9Ik+fcCC7Uk9va/piM6WqgeOvJzsU8QQFjACQP4jx7hH+udxQ==
-X-Received: by 2002:a05:600c:354a:b0:3da:1f6a:7b36 with SMTP id i10-20020a05600c354a00b003da1f6a7b36mr40128673wmq.0.1674828587759;
-        Fri, 27 Jan 2023 06:09:47 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nTK+Tg/yAxtPIIDooMityTGjVkS2yxq+KGHsQ1IbSWA=;
+        b=caISp1i5RdSLztCIQxHK6j3HFdQHp0mnNqRW5OYTAb5kXv52Q6LEgu2tctlqXINVxG
+         W3edKxLixa10ScgbwHH8ws2s+LWcjIWxmRVDg6QeJx5gM68V0jJ9bldkUeDtZxvQ3kLw
+         /vR3a30t26qlXewGKV5/AjE66U/esOwShk9Uu8m0tSFI0d2W8MXyV1yLLFWFR9F38RZ5
+         wiCT+bdtJqtyVlWbIisyXlLLNAYM75LFDkQBCrDeH0tuy31SmCi6kz2Sr/0ObUi3fT1E
+         3M5FRAeBU+9GUtfU8UUDmhDVJUp69eLbsySnAsCckGTChhKfBemnJ8gclIhz+7sMU4Zf
+         bRyQ==
+X-Gm-Message-State: AO0yUKU9lvqqK5FZTAo/H+NhMG8Hge7wn5zoTNpeK2AIRTrnnpyka5WY
+        yRcCUtXD2NyxKWYSX6eJGhOijpxR2iO13AWKSso9+Kqxc5WiFXMDVMhRd7171/b0jFDNFYHgFRf
+        A0KPgfX4tt9JHwxW8w4HXRx7SYCIuvLQCABXOXD9i+Nby7w==
+X-Received: by 2002:a5d:558a:0:b0:2bf:d6fc:580d with SMTP id i10-20020a5d558a000000b002bfd6fc580dmr1138179wrv.69.1674828590582;
+        Fri, 27 Jan 2023 06:09:50 -0800 (PST)
+X-Google-Smtp-Source: AK7set//BxCF5WT5hBFnMpYOxwv7KjXmz6dU/605p3j/UGBsQ9MaoqHMsAfSDxDHOCpDhi8SeEwdaQ==
+X-Received: by 2002:a5d:558a:0:b0:2bf:d6fc:580d with SMTP id i10-20020a5d558a000000b002bfd6fc580dmr1138149wrv.69.1674828590063;
+        Fri, 27 Jan 2023 06:09:50 -0800 (PST)
 Received: from qwirkle.internal ([81.2.157.149])
-        by smtp.gmail.com with ESMTPSA id f21-20020a5d58f5000000b00236883f2f5csm4105833wrd.94.2023.01.27.06.09.46
+        by smtp.gmail.com with ESMTPSA id f21-20020a5d58f5000000b00236883f2f5csm4105833wrd.94.2023.01.27.06.09.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 06:09:47 -0800 (PST)
+        Fri, 27 Jan 2023 06:09:49 -0800 (PST)
 From:   Andrei Gherzan <andrei.gherzan@canonical.com>
 To:     "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Lina Wang <lina.wang@mediatek.com>,
+        Maciej enczykowski <maze@google.com>
 Cc:     Andrei Gherzan <andrei.gherzan@canonical.com>,
         netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH v3 1/3] selftests: net: .gitignore the scratch directory of bpf
-Date:   Fri, 27 Jan 2023 14:09:42 +0000
-Message-Id: <20230127140944.265135-1-andrei.gherzan@canonical.com>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 3/3] selftests: net: Fix udpgro_frglist.sh shellcheck warnings and errors
+Date:   Fri, 27 Jan 2023 14:09:44 +0000
+Message-Id: <20230127140944.265135-3-andrei.gherzan@canonical.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230127140944.265135-1-andrei.gherzan@canonical.com>
+References: <20230127140944.265135-1-andrei.gherzan@canonical.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The net/bpf Makefile uses a similar build infrastructure to BPF[1] while
-building libbpf as a dependency of nat6to4. This change adds a .gitignore
-entry for SCRATCH_DIR where libbpf and its headers end up built/installed.
+This change fixes the following shellcheck warnings and errors:
 
-[1] Introduced in commit 837a3d66d698 ("selftests: net: Add
-cross-compilation support for BPF programs")
+* SC2155 (warning): Declare and assign separately to avoid masking return
+  values.
+* SC2124 (warning): Assigning an array to a string! Assign as array, or use
+  instead of @ to concatenate.
+* SC2034 (warning): ipv4_args appears unused. Verify use (or export if used
+  externally).
+* SC2242 (error): Can only exit with status 0-255. Other data should be
+  written to stdout/stderr.
+* SC2068 (error): Double quote array expansions to avoid re-splitting
+  elements.
 
+Fixes: edae34a3ed92 ("selftests net: add UDP GRO fraglist + bpf self-tests")
 Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
 ---
- tools/testing/selftests/net/.gitignore | 1 +
- 1 file changed, 1 insertion(+)
+ tools/testing/selftests/net/udpgro_frglist.sh | 20 +++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
-index a6911cae368c..0d07dd13c973 100644
---- a/tools/testing/selftests/net/.gitignore
-+++ b/tools/testing/selftests/net/.gitignore
-@@ -40,6 +40,7 @@ test_unix_oob
- timestamping
- tls
- toeplitz
-+/tools
- tun
- txring_overwrite
- txtimestamp
+diff --git a/tools/testing/selftests/net/udpgro_frglist.sh b/tools/testing/selftests/net/udpgro_frglist.sh
+index e1ca49de2491..97bf20e9afd8 100755
+--- a/tools/testing/selftests/net/udpgro_frglist.sh
++++ b/tools/testing/selftests/net/udpgro_frglist.sh
+@@ -3,7 +3,8 @@
+ #
+ # Run a series of udpgro benchmarks
+ 
+-readonly PEER_NS="ns-peer-$(mktemp -u XXXXXX)"
++PEER_NS="ns-peer-$(mktemp -u XXXXXX)"
++readonly PEER_NS
+ 
+ BPF_FILE="../bpf/xdp_dummy.bpf.o"
+ BPF_NAT6TO4_FILE="nat6to4.o"
+@@ -19,7 +20,7 @@ trap cleanup EXIT
+ 
+ run_one() {
+ 	# use 'rx' as separator between sender args and receiver args
+-	local -r all="$@"
++	local -r all="$*"
+ 	local -r tx_args=${all%rx*}
+ 	local rx_args=${all#*rx}
+ 
+@@ -56,13 +57,13 @@ run_one() {
+ }
+ 
+ run_in_netns() {
+-	local -r args=$@
++	local -r args="$*"
+   echo ${args}
+ 	./in_netns.sh $0 __subprocess ${args}
+ }
+ 
+ run_udp() {
+-	local -r args=$@
++	local -r args="$*"
+ 
+ 	echo "udp gso - over veth touching data"
+ 	run_in_netns ${args} -u -S 0 rx -4 -v
+@@ -72,7 +73,7 @@ run_udp() {
+ }
+ 
+ run_tcp() {
+-	local -r args=$@
++	local -r args="$*"
+ 
+ 	echo "tcp - over veth touching data"
+ 	run_in_netns ${args} -t rx -4 -t
+@@ -80,7 +81,6 @@ run_tcp() {
+ 
+ run_all() {
+ 	local -r core_args="-l 4"
+-	local -r ipv4_args="${core_args} -4  -D 192.168.1.1"
+ 	local -r ipv6_args="${core_args} -6  -D 2001:db8::1"
+ 
+ 	echo "ipv6"
+@@ -90,19 +90,19 @@ run_all() {
+ 
+ if [ ! -f ${BPF_FILE} ]; then
+ 	echo "Missing ${BPF_FILE}. Build bpf selftest first"
+-	exit -1
++	exit 1
+ fi
+ 
+ if [ ! -f "$BPF_NAT6TO4_FILE" ]; then
+ 	echo "Missing nat6to4 helper. Build bpf nat6to4.o selftest first"
+-	exit -1
++	exit 1
+ fi
+ 
+ if [[ $# -eq 0 ]]; then
+ 	run_all
+ elif [[ $1 == "__subprocess" ]]; then
+ 	shift
+-	run_one $@
++	run_one "$@"
+ else
+-	run_in_netns $@
++	run_in_netns "$@"
+ fi
 -- 
 2.34.1
 
