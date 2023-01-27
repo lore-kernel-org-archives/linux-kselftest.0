@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 90439C636CD
-	for <linux-kselftest@archiver.kernel.org>; Fri, 27 Jan 2023 13:58:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E183C636CB
+	for <linux-kselftest@archiver.kernel.org>; Fri, 27 Jan 2023 13:58:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234188AbjA0N6e (ORCPT
+        id S234212AbjA0N6f (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 27 Jan 2023 08:58:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37678 "EHLO
+        Fri, 27 Jan 2023 08:58:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233744AbjA0N6M (ORCPT
+        with ESMTP id S233625AbjA0N61 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 Jan 2023 08:58:12 -0500
+        Fri, 27 Jan 2023 08:58:27 -0500
 Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5204222D6;
-        Fri, 27 Jan 2023 05:58:09 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A687140ED;
+        Fri, 27 Jan 2023 05:58:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1674827885;
-        bh=Xbp5KzcrorO+aTVy5ft5VjJu1byFBs5Sa3jbbZp1vXo=;
+        s=smtpout1; t=1674827886;
+        bh=Kpc6EgpaTbmW+YdqJvHq6vs4zdrzeV9OyaROIUWeSCQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oVHmXurzNmglu93HtwBBBAsCOSaianGAd+AzEWyrbKeRnf6jH0Kt3vFsk6Y9Zg5Bv
-         cw81yKik2bvZHb3qBwcTtv/s0nZPmn1GUJIWynbu86vmNxq54pJV4ECjVEGo1AomAG
-         bMZExrBryqrRRk96dF7VpC3Xvo8ctbak8bVDpqZeEDhbUQ6ovNuQTzoiBZJJJpoGYa
-         kF7AB7PzQB7AShOQpOqVm6EoAUjyQeDdwzxxeqBXLPLCJMq3xLIImb8tTi2vU7OktB
-         PHGrZQH/BMWKbDYhsksIIkkTV5PyzpzCCs+IGk2Gr6wBTcB+LZjBlmF1j2szkVTSoX
-         vCbZI+fIJj//g==
+        b=JeX6khvpaJeYKm8GpuU8g3zTnt2TzGn4HFP9CmhNzbhKueYzAg4PzNOtYwgI6t7ne
+         m6B4CnsxJ1mJrubvpjUpywLDhFx4LHZwHNn2r1oDwWPdJGztRLMBR0Ivkfuimfe50v
+         BRwt5zElFGjxzUodC6MoVt4BvlXmxBhigyjpQy2RQcXtYT3rYF3vNad7Mq8Wy7yLW/
+         F937TxFg8j+2JvkE6PwXtphpcW45BoK/bQxld26X8745QwKgAJ6hFa8/Nk99bRTWcX
+         lsR8GHIeVdT+c9j7WXcSiq/Jl3oY8ClIeeNna+HQdvJWtGWVS8YGA0Iqv/A90yx4on
+         bWb1s7hPvBoYQ==
 Received: from localhost.localdomain (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4P3K0Y1McdzhWd;
-        Fri, 27 Jan 2023 08:58:05 -0500 (EST)
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4P3K0Z4YWRzhcw;
+        Fri, 27 Jan 2023 08:58:06 -0500 (EST)
 From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
         Ingo Molnar <mingo@redhat.com>
 Cc:     linux-kernel@vger.kernel.org,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         stable@vger.kernel.org
-Subject: [PATCH 19/34] selftests: pid_namespace: Fix incorrect kernel headers search path
-Date:   Fri, 27 Jan 2023 08:57:40 -0500
-Message-Id: <20230127135755.79929-20-mathieu.desnoyers@efficios.com>
+Subject: [PATCH 26/34] selftests: sync: Fix incorrect kernel headers search path
+Date:   Fri, 27 Jan 2023 08:57:47 -0500
+Message-Id: <20230127135755.79929-27-mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230127135755.79929-1-mathieu.desnoyers@efficios.com>
 References: <20230127135755.79929-1-mathieu.desnoyers@efficios.com>
@@ -58,20 +58,21 @@ Cc: linux-kselftest@vger.kernel.org
 Cc: Ingo Molnar <mingo@redhat.com>
 Cc: <stable@vger.kernel.org>    [5.18+]
 ---
- tools/testing/selftests/pid_namespace/Makefile | 2 +-
+ tools/testing/selftests/sync/Makefile | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/pid_namespace/Makefile b/tools/testing/selftests/pid_namespace/Makefile
-index edafaca1aeb3..9286a1d22cd3 100644
---- a/tools/testing/selftests/pid_namespace/Makefile
-+++ b/tools/testing/selftests/pid_namespace/Makefile
-@@ -1,5 +1,5 @@
+diff --git a/tools/testing/selftests/sync/Makefile b/tools/testing/selftests/sync/Makefile
+index d0121a8a3523..df0f91bf6890 100644
+--- a/tools/testing/selftests/sync/Makefile
++++ b/tools/testing/selftests/sync/Makefile
+@@ -1,6 +1,6 @@
  # SPDX-License-Identifier: GPL-2.0
--CFLAGS += -g -I../../../../usr/include/
-+CFLAGS += -g $(KHDR_INCLUDES)
+ CFLAGS += -O2 -g -std=gnu89 -pthread -Wall -Wextra
+-CFLAGS += -I../../../../usr/include/
++CFLAGS += $(KHDR_INCLUDES)
+ LDFLAGS += -pthread
  
- TEST_GEN_PROGS = regression_enomem
- 
+ .PHONY: all clean
 -- 
 2.25.1
 
