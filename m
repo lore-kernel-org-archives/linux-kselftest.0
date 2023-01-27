@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09090C61DA3
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DFD89C636BD
 	for <linux-kselftest@archiver.kernel.org>; Fri, 27 Jan 2023 13:58:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234132AbjA0N6a (ORCPT
+        id S234157AbjA0N6b (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 27 Jan 2023 08:58:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37642 "EHLO
+        Fri, 27 Jan 2023 08:58:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233715AbjA0N6L (ORCPT
+        with ESMTP id S231860AbjA0N6M (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 Jan 2023 08:58:11 -0500
-Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A3622012;
+        Fri, 27 Jan 2023 08:58:12 -0500
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B4D222CE;
         Fri, 27 Jan 2023 05:58:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1674827884;
-        bh=cTnlMtt/TSsCRchCKp67NRzjFc2OauBkH++SjQF+yLg=;
+        s=smtpout1; t=1674827885;
+        bh=37ZWsmROVaxpktT5dGfnB6ZjxRF1K5A4VH/tq4Quz1w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hZDmL7dy7O2Ch69odJb+uxDN1ztpocAPZgbInxLegCpGkBT2uIve++5ALcSwFTrt6
-         H6VC1ypiyuQcIoiJCMtTBjzjLDU3MkYjKtmE44KbilAT2V0+KGaeGfVJ5h2XWAj0SO
-         VNAxmOekgJ6exPS50DZMkInYwLF9ueZg4n4klwuHOEJI/5zu8trLaLIbYpkSmho7ll
-         fOAK4W8jDIyBdrBZcSzVc/yGGZjvQx+l03PY3IAtWd6kOVeSvxxDAMOf/WMGBjIlua
-         rO/atyofT5xpL0b02JWBfoeAMhhoJmo4f7tI9eedYMbz7ORHsfTRDxUG5gUyq60+dk
-         fkoavG7xVcpig==
+        b=sZLtmVJgOe7J/m5Vr7iZgv6UA1b0if24ikXZVlpvj/BcZPlzGB/wRwI9GquHaoExU
+         k62G10tkqSk5LgCHzCaYw3xbUfxfdsn0yRSzuUgtSUQ9Snanw5F2kHnQxp3trq/5tI
+         08nDEdixoXNqKXEP0pdT2aYfUKRtwMNIkzLpHvSqnmYxCzEXWvUQXEGpaUYOHGnbW7
+         e3Zj0ja6quxZvhJhJGVUIpbaJc7u3AJh+bTIZZ+OeOoMebx3Z9QHcw8v6oR2Qb5SiD
+         16pyvS17gpQ/6H2RRCPa9NbLZmEX55bnvWwtHkvCxMfV78UBD0UdnoXndzIDfaWusA
+         9Eelq7WycBTWQ==
 Received: from localhost.localdomain (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4P3K0X5QMGzhxV;
-        Fri, 27 Jan 2023 08:58:04 -0500 (EST)
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4P3K0Y2tsXzhrj;
+        Fri, 27 Jan 2023 08:58:05 -0500 (EST)
 From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
         Ingo Molnar <mingo@redhat.com>
 Cc:     linux-kernel@vger.kernel.org,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         stable@vger.kernel.org
-Subject: [PATCH 17/34] selftests: net: Fix incorrect kernel headers search path
-Date:   Fri, 27 Jan 2023 08:57:38 -0500
-Message-Id: <20230127135755.79929-18-mathieu.desnoyers@efficios.com>
+Subject: [PATCH 20/34] selftests: pidfd: Fix incorrect kernel headers search path
+Date:   Fri, 27 Jan 2023 08:57:41 -0500
+Message-Id: <20230127135755.79929-21-mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230127135755.79929-1-mathieu.desnoyers@efficios.com>
 References: <20230127135755.79929-1-mathieu.desnoyers@efficios.com>
@@ -58,64 +58,20 @@ Cc: linux-kselftest@vger.kernel.org
 Cc: Ingo Molnar <mingo@redhat.com>
 Cc: <stable@vger.kernel.org>    [5.18+]
 ---
- tools/testing/selftests/net/Makefile             | 2 +-
- tools/testing/selftests/net/bpf/Makefile         | 2 +-
- tools/testing/selftests/net/mptcp/Makefile       | 2 +-
- tools/testing/selftests/net/openvswitch/Makefile | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+ tools/testing/selftests/pidfd/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index 3007e98a6d64..bab1222c7d50 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -2,7 +2,7 @@
- # Makefile for net selftests
+diff --git a/tools/testing/selftests/pidfd/Makefile b/tools/testing/selftests/pidfd/Makefile
+index 778b6cdc8aed..d731e3e76d5b 100644
+--- a/tools/testing/selftests/pidfd/Makefile
++++ b/tools/testing/selftests/pidfd/Makefile
+@@ -1,5 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+-CFLAGS += -g -I../../../../usr/include/ -pthread -Wall
++CFLAGS += -g $(KHDR_INCLUDES) -pthread -Wall
  
- CFLAGS =  -Wall -Wl,--no-as-needed -O2 -g
--CFLAGS += -I../../../../usr/include/ $(KHDR_INCLUDES)
-+CFLAGS += $(KHDR_INCLUDES)
- 
- TEST_PROGS := run_netsocktests run_afpackettests test_bpf.sh netdevice.sh \
- 	      rtnetlink.sh xfrm_policy.sh test_blackhole_dev.sh
-diff --git a/tools/testing/selftests/net/bpf/Makefile b/tools/testing/selftests/net/bpf/Makefile
-index 4abaf16d2077..207b6b958f66 100644
---- a/tools/testing/selftests/net/bpf/Makefile
-+++ b/tools/testing/selftests/net/bpf/Makefile
-@@ -7,7 +7,7 @@ BPFDIR := $(abspath ../../../lib/bpf)
- APIDIR := $(abspath ../../../include/uapi)
- 
- CCINCLUDE += -I../../bpf
--CCINCLUDE += -I../../../../../usr/include/
-+CCINCLUDE += $(KHDR_INCLUDES)
- CCINCLUDE += -I$(SCRATCH_DIR)/include
- 
- BPFOBJ := $(BUILD_DIR)/libbpf/libbpf.a
-diff --git a/tools/testing/selftests/net/mptcp/Makefile b/tools/testing/selftests/net/mptcp/Makefile
-index 43a723626126..06bba013bcef 100644
---- a/tools/testing/selftests/net/mptcp/Makefile
-+++ b/tools/testing/selftests/net/mptcp/Makefile
-@@ -2,7 +2,7 @@
- 
- top_srcdir = ../../../../..
- 
--CFLAGS =  -Wall -Wl,--no-as-needed -O2 -g -I$(top_srcdir)/usr/include $(KHDR_INCLUDES)
-+CFLAGS =  -Wall -Wl,--no-as-needed -O2 -g $(KHDR_INCLUDES)
- 
- TEST_PROGS := mptcp_connect.sh pm_netlink.sh mptcp_join.sh diag.sh \
- 	      simult_flows.sh mptcp_sockopt.sh userspace_pm.sh
-diff --git a/tools/testing/selftests/net/openvswitch/Makefile b/tools/testing/selftests/net/openvswitch/Makefile
-index 2f1508abc826..41ddfa9fdd1d 100644
---- a/tools/testing/selftests/net/openvswitch/Makefile
-+++ b/tools/testing/selftests/net/openvswitch/Makefile
-@@ -2,7 +2,7 @@
- 
- top_srcdir = ../../../../..
- 
--CFLAGS =  -Wall -Wl,--no-as-needed -O2 -g -I$(top_srcdir)/usr/include $(KHDR_INCLUDES)
-+CFLAGS =  -Wall -Wl,--no-as-needed -O2 -g $(KHDR_INCLUDES)
- 
- TEST_PROGS := openvswitch.sh
- 
+ TEST_GEN_PROGS := pidfd_test pidfd_fdinfo_test pidfd_open_test \
+ 	pidfd_poll_test pidfd_wait pidfd_getfd_test pidfd_setns_test
 -- 
 2.25.1
 
