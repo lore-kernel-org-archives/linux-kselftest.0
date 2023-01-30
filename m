@@ -2,100 +2,176 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB3E1C61DA4
-	for <linux-kselftest@archiver.kernel.org>; Mon, 30 Jan 2023 09:10:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 009A9C54EAA
+	for <linux-kselftest@archiver.kernel.org>; Mon, 30 Jan 2023 09:38:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235799AbjA3JK0 (ORCPT
+        id S236375AbjA3JiC (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 30 Jan 2023 04:10:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49040 "EHLO
+        Mon, 30 Jan 2023 04:38:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235594AbjA3JKY (ORCPT
+        with ESMTP id S231340AbjA3Jhu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 30 Jan 2023 04:10:24 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763929F;
-        Mon, 30 Jan 2023 01:10:23 -0800 (PST)
-Received: from [192.168.10.12] (unknown [39.45.165.226])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 35DF06602E2A;
-        Mon, 30 Jan 2023 09:10:15 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1675069821;
-        bh=/l1ZA909PK+xOECy6RWevd3pYBOOmWKWLYoZHDERZd8=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=VXjvZz+hCCgMh9CNLBkp08d1EtF4OT//jWEFDvgnJuR54ryFfcB82MGaOOymQGIhq
-         k+VqrLhTOWhFgL9CRaE1GjOI4aXCfgyfQV00hwCQZgMu4qPbr5/CWcksAA8KRYgW0D
-         sD3jhX82/6V5IWZInIh23Ux3H5NY3DX8zJKYkfvMx8W4BbOdGg0VecV4A9xy3yGABr
-         K+QEJnPQMT4HN70Ue9QBllXQHdTyBSnzCdzBqh2KmM0/PxCh2Xr7lba5rvwKW2LMTk
-         p8g3hpdTWa4ZGQSVJIa4Ckj3RVgKIo2uuL/Bl9euykx3U94MW0kUUSXAsXUfrtsgKd
-         ntxb0+Jp+Kzgg==
-Message-ID: <c3cc49b6-1ad3-f5aa-50bb-a12f3bbb377a@collabora.com>
-Date:   Mon, 30 Jan 2023 14:10:11 +0500
+        Mon, 30 Jan 2023 04:37:50 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07734305DF
+        for <linux-kselftest@vger.kernel.org>; Mon, 30 Jan 2023 01:36:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675071369;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LZuPrOqnF+C8depmt/jN3f7zksAKoJMpdivybnIZgog=;
+        b=VegCrLD2Fg0HBfjL5S70y49OW8TrCvijQAAeZZ+1wV9FPZyb7htZBs1dIBvDQnReU4nDIk
+        0GqGT4cSEjr3tCjRsQ4fHgxgquaJoDr14OyfeeBx7v8bjnq/Gptj5u2YLs8Z/qK0UFA/yT
+        lW8F/2uUUy5mna5gXY2JrnBybgDXXM0=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-44-6txCo_YAMHOXiDCCLPaPfg-1; Mon, 30 Jan 2023 04:25:40 -0500
+X-MC-Unique: 6txCo_YAMHOXiDCCLPaPfg-1
+Received: by mail-qt1-f198.google.com with SMTP id z12-20020ac8710c000000b003b829a0eda2so2867353qto.21
+        for <linux-kselftest@vger.kernel.org>; Mon, 30 Jan 2023 01:25:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LZuPrOqnF+C8depmt/jN3f7zksAKoJMpdivybnIZgog=;
+        b=4DcjCcJCKgSrP2dCvI62qCDb4sfTSWz4NYWY97m9yAtz3/wZhLgcNCJMgcXsfftn4e
+         Ex8gpGGQueg3xvsn2kkI6GhS3NlvEVYczsrj1q1IKRwSAZW7NptzmL/25BMjWHGN9T5V
+         dhhrkuwHVzzcKi+VwdqZumeHT1lFiKcNjwKynh3cCOJj0+HK1TFnI4wXe+QlEcZH1XEA
+         HzA6iME7R2DBM0s64xldH3b/o5w2f4cPO+QG3MwwIsb93Jftbg3fBpoj3U6tNpwuHS19
+         hxQJjNL1dwFtglAo4Td0UNifi1WYE1zb6ApuzjFx4okjHYgHLdb/lJ9CSwZG/xwvEYBV
+         KkCg==
+X-Gm-Message-State: AO0yUKXuiDBilby4lDjea7WZbs6jRYckSoee78aez6TZukMTYxZxPIi2
+        NtC4eRZ9A6K4DXI1MVbi5T299yCS9TzDwYEXrBsJkLQPftrUGcS0Rf9T9ghaLfwa6je8pMQqFq6
+        dKfYf4kFz2qbabPYp4TxTQNXURhVx
+X-Received: by 2002:a05:622a:181d:b0:3b8:2e8b:d8af with SMTP id t29-20020a05622a181d00b003b82e8bd8afmr15551769qtc.55.1675070739709;
+        Mon, 30 Jan 2023 01:25:39 -0800 (PST)
+X-Google-Smtp-Source: AK7set+sOy41UT/ZDZMZ+wD1t8Z2kvoWXElgYvFvcoYAAmKffuSNPDnxwXj7d39+hiX6c43hfutP+w==
+X-Received: by 2002:a05:622a:181d:b0:3b8:2e8b:d8af with SMTP id t29-20020a05622a181d00b003b82e8bd8afmr15551748qtc.55.1675070739417;
+        Mon, 30 Jan 2023 01:25:39 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-113-28.dyn.eolo.it. [146.241.113.28])
+        by smtp.gmail.com with ESMTPSA id em7-20020a05622a438700b003b646123691sm7596192qtb.31.2023.01.30.01.25.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 01:25:38 -0800 (PST)
+Message-ID: <6758c48d926845ae323a68fb4649fb982e2321c4.camel@redhat.com>
+Subject: Re: [PATCH net-next v2 0/3] net: introduce rps_default_mask
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Saeed Mahameed <saeed@kernel.org>, netdev@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Date:   Mon, 30 Jan 2023 10:25:34 +0100
+In-Reply-To: <20201104114226.250a4e85@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+References: <cover.1604055792.git.pabeni@redhat.com>
+                <20201102145447.0074f272@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+         <86c37d881a93d5690faf20de3bccceca1493fd74.camel@redhat.com>
+            <20201103085245.3397defa@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+         <79c58e6cf23196b73887b20802daebd59fe89476.camel@redhat.com>
+         <20201104114226.250a4e85@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
-        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v8 2/4] userfaultfd: split mwriteprotect_range()
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-References: <20230124084323.1363825-1-usama.anjum@collabora.com>
- <20230124084323.1363825-3-usama.anjum@collabora.com> <Y9QEdbkZxOJ10oEJ@x1n>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <Y9QEdbkZxOJ10oEJ@x1n>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 1/27/23 10:05 PM, Peter Xu wrote:
-> On Tue, Jan 24, 2023 at 01:43:21PM +0500, Muhammad Usama Anjum wrote:
->> Split mwriteprotect_range() to create a unlocked version. This
->> will be used in the next patch to write protect a memory area.
->> Add a helper function, wp_range_async() as well.
->>
->> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> 
-> IIUC this patch is not needed.  You have a stable vma, so I think you can
-> directly use uffd_wp_range(), while most of the mwriteprotect_range() is
-> not needed.
-> 
-> There's one trivial detail of ignoring userfaultfd_ctx->mmap_changing when
-> it's set to true, but I don't think it applies here either because it was
-> used to resolve a problem in uffd non-cooperative mode on the predictable
-> behavior of events, here I don't think it matters a lot either.
-> 
-Thanks, I'll drop this patch and do direct wiring to uffd_wp_range().
+Hi all,
 
--- 
-BR,
-Muhammad Usama Anjum
+On Wed, 2020-11-04 at 12:42 -0700, Jakub Kicinski wrote:
+> On Wed, 04 Nov 2020 18:36:08 +0100 Paolo Abeni wrote:
+> > On Tue, 2020-11-03 at 08:52 -0800, Jakub Kicinski wrote:
+> > > On Tue, 03 Nov 2020 16:22:07 +0100 Paolo Abeni wrote: =20
+> > > > The relevant use case is an host running containers (with the relat=
+ed
+> > > > orchestration tools) in a RT environment. Virtual devices (veths, o=
+vs
+> > > > ports, etc.) are created by the orchestration tools at run-time.
+> > > > Critical processes are allowed to send packets/generate outgoing
+> > > > network traffic - but any interrupt is moved away from the related
+> > > > cores, so that usual incoming network traffic processing does not
+> > > > happen there.
+> > > >=20
+> > > > Still an xmit operation on a virtual devices may be transmitted via=
+ ovs
+> > > > or veth, with the relevant forwarding operation happening in a soft=
+irq
+> > > > on the same CPU originating the packet.=20
+> > > >=20
+> > > > RPS is configured (even) on such virtual devices to move away the
+> > > > forwarding from the relevant CPUs.
+> > > >=20
+> > > > As Saeed noted, such configuration could be possibly performed via =
+some
+> > > > user-space daemon monitoring network devices and network namespaces
+> > > > creation. That will be anyway prone to some race: the orchestation =
+tool
+> > > > may create and enable the netns and virtual devices before the daem=
+on
+> > > > has properly set the RPS mask.
+> > > >=20
+> > > > In the latter scenario some packet forwarding could still slip in t=
+he
+> > > > relevant CPU, causing measurable latency. In all non RT scenarios t=
+he
+> > > > above will be likely irrelevant, but in the RT context that is not
+> > > > acceptable - e.g. it causes in real environments latency above the
+> > > > defined limits, while the proposed patches avoid the issue.
+> > > >=20
+> > > > Do you see any other simple way to avoid the above race?
+> > > >=20
+> > > > Please let me know if the above answers your doubts, =20
+> > >=20
+> > > Thanks, that makes it clearer now.
+> > >=20
+> > > Depending on how RT-aware your container management is it may or may =
+not
+> > > be the right place to configure this, as it creates the veth interfac=
+e.
+> > > Presumably it's the container management which does the placement of
+> > > the tasks to cores, why is it not setting other attributes, like RPS?=
+ =20
+> >=20
+> > The container orchestration is quite complex, and I'm unsure isolation
+> > and networking configuration are performed (or can be performed) by the
+> > same precess (without an heavy refactor).
+> >=20
+> > On the flip hand, the global rps mask knob looked quite
+> > straightforward to me.
+>=20
+> I understand, but I can't shake the feeling this is a hack.
+>=20
+> Whatever sets the CPU isolation should take care of the RPS settings.
+
+Let me try for a moment to revive this old thread.
+
+Tha series proposed a new sysctl know to implement a global/default rps
+mask applying to all the network devices as a way to simplify some RT
+setups. It has been rejected as the required task is doable in user-
+space.
+
+Currently the orchestration infrastructure does that, setting the per
+device, per queue rps mask and CPU isolation.
+
+The above leads to a side problem: when there are lot of netns/devices
+with several queues, even a reasonably optimized user-space solution
+takes a relevant amount of time to traverse the relevant sysfs dirs and
+do I/O on them. Overall the additional time required is very
+measurable, easily ranging in seconds.
+
+The default_rps_mask would basically kill that overhead.
+
+Is the above a suitable use case?
+
+Thanks,
+
+Paolo
+
