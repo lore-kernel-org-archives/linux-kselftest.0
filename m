@@ -2,184 +2,98 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A01F1C61DA4
-	for <linux-kselftest@archiver.kernel.org>; Mon, 30 Jan 2023 16:23:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 953FCC54EAA
+	for <linux-kselftest@archiver.kernel.org>; Mon, 30 Jan 2023 16:26:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236319AbjA3QXP (ORCPT
+        id S235123AbjA3Q0n (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 30 Jan 2023 11:23:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56050 "EHLO
+        Mon, 30 Jan 2023 11:26:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236151AbjA3QXO (ORCPT
+        with ESMTP id S231538AbjA3Q0n (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 30 Jan 2023 11:23:14 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C1A3A854
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Jan 2023 08:23:13 -0800 (PST)
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com [209.85.128.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Mon, 30 Jan 2023 11:26:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73D6E3B0C3;
+        Mon, 30 Jan 2023 08:26:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id B6CE7414A7
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Jan 2023 16:23:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1675095791;
-        bh=EKh99Av2dVI8br/juDJKkzbI27Y8Tv0MgpqioM20Ax8=;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=d8qvpAuw3iuOJK5+LkUKDWhL0JS/Rb+wcI4C/JpdxK9uB6EHWHtKEUfkcsKeXwVT+
-         u5ac6TSWS6zAEcTi7BJcprR/a31NttZXlcCxiIR0YmQn4mj9VGheIaearPrmnBf2AW
-         LrjEOFF+BaP97LhKBChJBXQ+1mkFtusMxVmq0MxnhdEQRK2no9NreKRCC0J/04fsIa
-         g2k0PxDmvpGA5pQ7V17scsv/jJogNUz+tnsGM3B5/d4i53mxHwSEK+qQVQeouO6WKy
-         eyGLyFSOodhJYyzcz/KacczviL1g9j1SmXBY9iIUYdZGKVP5iqFrXrkZ972n7aZJMb
-         yd8h30aWaWZvQ==
-Received: by mail-wm1-f71.google.com with SMTP id l23-20020a7bc457000000b003db0cb8e543so4587779wmi.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Jan 2023 08:23:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EKh99Av2dVI8br/juDJKkzbI27Y8Tv0MgpqioM20Ax8=;
-        b=MmkMoWscdTlc1gdemzbBDoPkrra1/Fnw5+KCzh8soyYwCtoDK+ET663zCMvWTSXGS4
-         W6bTBIiwCEQVDyV2kTKFmpwDXNkA9R8CrDoXkC5Rs2DrHjQvrf2AXZYbwrVPrmdQ1e3+
-         Fx0747uVgTg65bu3jN2LYjZ2oOBCUKbplXW95xams4afUG/b99JVj6Ulca5esS0eJtTz
-         dF+ZZWH8npvc8uGjpZqneyew80W+LqPxha1QvVq+mLumlkdkF/XlNnWQ0WlxeTUT9bd8
-         K99Z5/U0E8Fq2RkOwkEnIVWVk0GQfioaBH7OjRuQoypdCAAJKkrYcMLN0xISl2AXD+44
-         hpUw==
-X-Gm-Message-State: AFqh2krGemkWGUbQO96yOlOgew3oLBHnwLgtma9iFIjH+TM+jPChbdIf
-        //DI9AX+iP02XoMz0QAPDhqM/yZJ6rLSaWk98G+nlP+x+lVDGlOPw376AwIDYK3EOpWZMSQUK4u
-        GFZcDALuaqD+qTLr+5HXFXQQssaDKTot4ZAGVrSIZeeneUw==
-X-Received: by 2002:a05:600c:34d1:b0:3db:1434:c51a with SMTP id d17-20020a05600c34d100b003db1434c51amr44052403wmq.40.1675095791480;
-        Mon, 30 Jan 2023 08:23:11 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXv94g3xcpSkCieUluATJV/IVwfPvR4IZ+IgwNWXiloi8TwBETu25mp6RUhJ8NieWs4+Q2LF9A==
-X-Received: by 2002:a05:600c:34d1:b0:3db:1434:c51a with SMTP id d17-20020a05600c34d100b003db1434c51amr44052387wmq.40.1675095791314;
-        Mon, 30 Jan 2023 08:23:11 -0800 (PST)
-Received: from qwirkle ([81.2.157.149])
-        by smtp.gmail.com with ESMTPSA id l10-20020a05600c47ca00b003dc58637163sm4063283wmo.45.2023.01.30.08.23.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 08:23:10 -0800 (PST)
-Date:   Mon, 30 Jan 2023 16:23:09 +0000
-From:   Andrei Gherzan <andrei.gherzan@canonical.com>
-To:     Willem de Bruijn <willemb@google.com>
-Cc:     Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests: net: udpgso_bench_tx: Introduce exponential
- back-off retries
-Message-ID: <Y9fu7TR5VC33j+EP@qwirkle>
-References: <20230127181625.286546-1-andrei.gherzan@canonical.com>
- <CA+FuTSewU6bjYLsyLzZ1Yne=6YBPDJZ=U1mZc+6cJVdr06BhiQ@mail.gmail.com>
- <a762638b06684cd63d212d1ce9f65236a08b78b1.camel@redhat.com>
- <Y9e9S3ENl0oszAH/@qwirkle>
- <CA+FuTSe_NMm6goSmCNfKjUWPGYtVnnBMv6W54a_GOeLJ2FqyOQ@mail.gmail.com>
- <Y9fT+LABhW+/3Nal@qwirkle>
- <CA+FuTScSfLG7gXS_YqJzsC-Teiryj3jeSQs9w0D1PWJs8sv5Rg@mail.gmail.com>
- <Y9ftL5c4klThCi9Q@qwirkle>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2043EB81257;
+        Mon, 30 Jan 2023 16:26:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB6A4C433EF;
+        Mon, 30 Jan 2023 16:26:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675095999;
+        bh=2/edSpatAbOcjKU7z4bnoHERt4ebGtnlgSVA1i9F/Qk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TnVjefY6nIit3aABg1sNDNhHGAUKRgyNq+kw6Ey0slvN/9oMXxaucu4gR/yioYQe/
+         DOfYyvnp8iKgH3VxaHbUdh6ZYnsflELdoUpF06fj02iKbgP+4K0Srg9e9wnP1TN39O
+         86AQ+h4ZUJ4O9/7nQbBpWBnvIC6+tYuNl7Nizuw6Jfbj4o9nIySU+y/NeUIX6/vjpu
+         xv5+8kVtEMvDPD5xdPsMRmhpsoM33EXV/gZSuD1voZIqz8jVKz0EAT4u/ZjkXD31eS
+         M7+MXmWQtyi+4tx+/WLtmHBVH5O1uyhtrCk+NXA4pI7ARKHuVYmS6TPjnpBXO3FuNR
+         TXiuITer8QOeQ==
+Date:   Mon, 30 Jan 2023 17:26:34 +0100
+From:   Christian Brauner <brauner@kernel.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH 03/34] selftests: clone3: Fix incorrect kernel headers
+ search path
+Message-ID: <20230130162634.mauiboxfoxrjg4ma@wittgenstein>
+References: <20230127135755.79929-1-mathieu.desnoyers@efficios.com>
+ <20230127135755.79929-4-mathieu.desnoyers@efficios.com>
+ <3e0af0da-a248-ea7a-e401-c1f3c01e7c75@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y9ftL5c4klThCi9Q@qwirkle>
+In-Reply-To: <3e0af0da-a248-ea7a-e401-c1f3c01e7c75@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 23/01/30 04:15PM, Andrei Gherzan wrote:
-> On 23/01/30 11:03AM, Willem de Bruijn wrote:
-> > On Mon, Jan 30, 2023 at 9:28 AM Andrei Gherzan
-> > <andrei.gherzan@canonical.com> wrote:
-> > >
-> > > On 23/01/30 08:35AM, Willem de Bruijn wrote:
-> > > > On Mon, Jan 30, 2023 at 7:51 AM Andrei Gherzan
-> > > > <andrei.gherzan@canonical.com> wrote:
-> > > > >
-> > > > > On 23/01/30 09:26AM, Paolo Abeni wrote:
-> > > > > > On Fri, 2023-01-27 at 17:03 -0500, Willem de Bruijn wrote:
-> > > > > > > On Fri, Jan 27, 2023 at 1:16 PM Andrei Gherzan
-> > > > > > > <andrei.gherzan@canonical.com> wrote:
-> > > > > > > >
-> > > > > > > > The tx and rx test programs are used in a couple of test scripts including
-> > > > > > > > "udpgro_bench.sh". Taking this as an example, when the rx/tx programs
-> > > > > > > > are invoked subsequently, there is a chance that the rx one is not ready to
-> > > > > > > > accept socket connections. This racing bug could fail the test with at
-> > > > > > > > least one of the following:
-> > > > > > > >
-> > > > > > > > ./udpgso_bench_tx: connect: Connection refused
-> > > > > > > > ./udpgso_bench_tx: sendmsg: Connection refused
-> > > > > > > > ./udpgso_bench_tx: write: Connection refused
-> > > > > > > >
-> > > > > > > > This change addresses this by adding routines that retry the socket
-> > > > > > > > operations with an exponential back off algorithm from 100ms to 2s.
-> > > > > > > >
-> > > > > > > > Fixes: 3a687bef148d ("selftests: udp gso benchmark")
-> > > > > > > > Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
-> > > > > > >
-> > > > > > > Synchronizing the two processes is indeed tricky.
-> > > > > > >
-> > > > > > > Perhaps more robust is opening an initial TCP connection, with
-> > > > > > > SO_RCVTIMEO to bound the waiting time. That covers all tests in one
-> > > > > > > go.
-> > > > > >
-> > > > > > Another option would be waiting for the listener(tcp)/receiver(udp)
-> > > > > > socket to show up in 'ss' output before firing-up the client - quite
-> > > > > > alike what mptcp self-tests are doing.
-> > > > >
-> > > > > I like this idea. I have tested it and it works as expected with the
-> > > > > exeception of:
-> > > > >
-> > > > > ./udpgso_bench_tx: sendmsg: No buffer space available
-> > > > >
-> > > > > Any ideas on how to handle this? I could retry and that works.
-> > > >
-> > > > This happens (also) without the zerocopy flag, right? That
-> > > >
-> > > > It might mean reaching the sndbuf limit, which can be adjusted with
-> > > > SO_SNDBUF (or SO_SNDBUFFORCE if CAP_NET_ADMIN). Though I would not
-> > > > expect this test to bump up against that limit.
-> > > >
-> > > > A few zerocopy specific reasons are captured in
-> > > > https://www.kernel.org/doc/html/latest/networking/msg_zerocopy.html#transmission.
-> > >
-> > > I have dug a bit more into this, and it does look like your hint was in
-> > > the right direction. The fails I'm seeing are only with the zerocopy
-> > > flag.
-> > >
-> > > From the reasons (doc) above I can only assume optmem limit as I've
-> > > reproduced it with unlimited locked pages and the fails are transient.
-> > > That leaves optmem limit. Bumping the value I have by default (20480) to
-> > > (2048000) made the sendmsg succeed as expected. On the other hand, the
-> > > tests started to fail with something like:
-> > >
-> > > ./udpgso_bench_tx: Unexpected number of Zerocopy completions:    774783
-> > > expected    773707 received
+On Mon, Jan 30, 2023 at 09:15:13AM -0700, Shuah Khan wrote:
+> On 1/27/23 06:57, Mathieu Desnoyers wrote:
+> > Use $(KHDR_INCLUDES) as lookup path for kernel headers. This prevents
+> > building against kernel headers from the build environment in scenarios
+> > where kernel headers are installed into a specific output directory
+> > (O=...).
 > > 
-> > More zerocopy completions than number of sends. I have not seen this before.
-> > 
-> > The completions are ranges of IDs, one per send call for datagram sockets.
-> > 
-> > Even with segmentation offload, the counter increases per call, not per segment.
-> > 
-> > Do you experience this without any other changes to udpgso_bench_tx.c.
-> > Or are there perhaps additional sendmsg calls somewhere (during
-> > initial sync) that are not accounted to num_sends?
-> 
-> Indeed, that looks off. No, I have run into this without any changes in
-> the tests (besides the retry routine in the shell script that waits for
-> rx to come up). Also, as a data point.
+> > Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> > Cc: Shuah Khan <shuah@kernel.org>
+> > Cc: linux-kselftest@vger.kernel.org
+> > Cc: Ingo Molnar <mingo@redhat.com>
+> > Cc: <stable@vger.kernel.org>    [5.18+]
+> > ---
 
-Actually wait. I don't think that is the case here. "expected" is the
-number of sends. In this case we sent 1076 more messages than
-completions. Am I missing something obvious?
+Looks good to me,
+Acked-by: Christian Brauner <brauner@kernel.org>
+
+> >   tools/testing/selftests/clone3/Makefile | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/tools/testing/selftests/clone3/Makefile b/tools/testing/selftests/clone3/Makefile
+> > index 79b19a2863a0..84832c369a2e 100644
+> > --- a/tools/testing/selftests/clone3/Makefile
+> > +++ b/tools/testing/selftests/clone3/Makefile
+> > @@ -1,5 +1,5 @@
+> >   # SPDX-License-Identifier: GPL-2.0
+> > -CFLAGS += -g -std=gnu99 -I../../../../usr/include/
+> > +CFLAGS += -g -std=gnu99 $(KHDR_INCLUDES)
+> >   LDLIBS += -lcap
+> >   TEST_GEN_PROGS := clone3 clone3_clear_sighand clone3_set_tid \
+> 
+> + brauner@kernel.org
+> 
+> Hi Christian,
+
+Hey Shuah,
 
 > 
-> As an additional data point, this was only seen on the IPv6 tests. I've
-> never been able to replicate it on the IPv4 run.
+> Would you me to take this patch through kselftest tree? If you
 
-I was also fast to send this but it is not correct. I managed to
-reproduce it on both IPv4 and IPv6.
 
--- 
-Andrei Gherzan
+Feel free to take it through the kselftest tree. Thank you!
+Christian
