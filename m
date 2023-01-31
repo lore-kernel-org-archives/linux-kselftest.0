@@ -2,148 +2,107 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DFF55C636D3
-	for <linux-kselftest@archiver.kernel.org>; Tue, 31 Jan 2023 04:36:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77DEFC38142
+	for <linux-kselftest@archiver.kernel.org>; Tue, 31 Jan 2023 05:50:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231224AbjAaEgj (ORCPT
+        id S230185AbjAaFud (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 30 Jan 2023 23:36:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43154 "EHLO
+        Tue, 31 Jan 2023 00:50:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230443AbjAaEgO (ORCPT
+        with ESMTP id S229608AbjAaFuc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 30 Jan 2023 23:36:14 -0500
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3856539CF6
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Jan 2023 20:35:47 -0800 (PST)
-Received: by mail-qt1-x82e.google.com with SMTP id v17so2440737qto.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Jan 2023 20:35:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9YmT560oTftw19JZaSdqN79G8win6E1yvXJ4AismDYA=;
-        b=fp+7E2dha4r9VCUXBWObySLYq0twxXrxh48Mf9108NaZCq1sgZ8EYxK6VLWxtguqha
-         RZPLT9YxdCKjMH/GgjC/F9BPJnPI6dGV3zK6pPrRvu50o9zV/YlXb7T5ZF+GO5E2e5N3
-         9KF0VXSdqC3UIfAZGW2K0hmZKfv55IR3jRlsK71WkguiVBTO0RhzVqst5vezPM93+S5y
-         j2HV/noeJj3G5rPnUrmxzXLCa877lUepPQj0KLQ2nwj6ra1a5Qa1VA5K/MkkD/BEifl8
-         PepRamh3hVU2kCeQ6vt730JFer0Sk8JuIJexTT7CG8uNGqYzSJ1OsEkiwVvyHW90kMcx
-         dDZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9YmT560oTftw19JZaSdqN79G8win6E1yvXJ4AismDYA=;
-        b=F0TaEoki0q2YL4Gs2JjwaxOqf8Lz08G9BPHO1/ccx9dv1V+Mc1+r3PQePltNmpuYqR
-         BAUsfTvwAvMKF0XfbivVp+GLFn6Lw8khUWGxYJXJlRJlqd4XTO/57nE76hA8ocpomUMK
-         23LA/FanVFEaloSbyUQ+hBmKddPCuEdBCfD3TUVuL041kwgZ/F7SnpzMF65ufmKUU+v8
-         ZzUqpD3aYpMdKSXrktWsJ1LndfZoA09euZBSh4peCd4q67I1/qlD/Q/NQNGNKrJHAvQ6
-         nQ+fAfezM//dPkxQ0yAJog2qTkd/adN0A6APDBl8B5P8D77SH4d+3Sxj+RuhUHAlcFIw
-         1aaw==
-X-Gm-Message-State: AO0yUKVs0fHnwNQD/exFgjpf6+tJeJhkzZ8LWv0K+IrR8HHWuYlLutRp
-        WjM+OX48HBx2fqB2iI4/LbdWcw==
-X-Google-Smtp-Source: AK7set+jOiGnB8wQtiTzhJPJ4pzCzwkUKNNkB6ogZiIUW7dzSxfuY4VlR3/gF3ab0rqhbOtSNk2zog==
-X-Received: by 2002:a05:622a:1016:b0:3b8:248b:a035 with SMTP id d22-20020a05622a101600b003b8248ba035mr27029137qte.19.1675139746210;
-        Mon, 30 Jan 2023 20:35:46 -0800 (PST)
-Received: from C02G8BMUMD6R.bytedance.net ([148.59.24.152])
-        by smtp.gmail.com with ESMTPSA id b13-20020ac801cd000000b003a6a19ee4f0sm9260682qtg.33.2023.01.30.20.35.37
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 30 Jan 2023 20:35:45 -0800 (PST)
-From:   Bobby Eshleman <bobby.eshleman@bytedance.com>
-To:     Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Tue, 31 Jan 2023 00:50:32 -0500
+Received: from esa9.hc1455-7.c3s2.iphmx.com (esa9.hc1455-7.c3s2.iphmx.com [139.138.36.223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 031593B0E6;
+        Mon, 30 Jan 2023 21:50:30 -0800 (PST)
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="93176204"
+X-IronPort-AV: E=Sophos;i="5.97,259,1669042800"; 
+   d="scan'208";a="93176204"
+Received: from unknown (HELO yto-r1.gw.nic.fujitsu.com) ([218.44.52.217])
+  by esa9.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 14:50:28 +0900
+Received: from yto-m2.gw.nic.fujitsu.com (yto-nat-yto-m2.gw.nic.fujitsu.com [192.168.83.65])
+        by yto-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id 64218D66A3;
+        Tue, 31 Jan 2023 14:50:26 +0900 (JST)
+Received: from yto-om3.fujitsu.com (yto-om3.o.css.fujitsu.com [10.128.89.164])
+        by yto-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id B104DD3552;
+        Tue, 31 Jan 2023 14:50:25 +0900 (JST)
+Received: from cn-r05-10.example.com (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
+        by yto-om3.fujitsu.com (Postfix) with ESMTP id 8D4374005E9BC;
+        Tue, 31 Jan 2023 14:50:25 +0900 (JST)
+From:   Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+To:     Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
         Shuah Khan <shuah@kernel.org>
-Cc:     Bobby Eshleman <bobbyeshleman@gmail.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        jakub@cloudflare.com, hdanton@sina.com, cong.wang@bytedance.com
-Subject: [PATCH RFC net-next v2 2/3] selftests/bpf: add vsock to vmtest.sh
-Date:   Mon, 30 Jan 2023 20:35:13 -0800
-Message-Id: <20230118-support-vsock-sockmap-connectible-v2-2-58ffafde0965@bytedance.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20230118-support-vsock-sockmap-connectible-v2-0-58ffafde0965@bytedance.com>
-References: <20230118-support-vsock-sockmap-connectible-v2-0-58ffafde0965@bytedance.com>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        tan.shaopeng@jp.fujitsu.com
+Subject: [PATCH v6 0/5] Some improvements of resctrl selftest
+Date:   Tue, 31 Jan 2023 14:46:50 +0900
+Message-Id: <20230131054655.396270-1-tan.shaopeng@jp.fujitsu.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Mailer: b4 0.12.1
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add vsock loopback to the test kernel.
+Hello,
 
-This allows sockmap for vsock to be tested.
+The aim of this patch series is to improve the resctrl selftest.
+Without these fixes, some unnecessary processing will be executed
+and test results will be confusing. 
+There is no behavior change in test themselves.
 
-Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
----
- tools/testing/selftests/bpf/config.aarch64 | 2 ++
- tools/testing/selftests/bpf/config.s390x   | 3 +++
- tools/testing/selftests/bpf/config.x86_64  | 3 +++
- 3 files changed, 8 insertions(+)
+[patch 1] Make write_schemata() run to set up shemata with 100% allocation
+	  on first run in MBM test.
+[patch 2] The MBA test result message is always output as "ok",
+	  make output message to be "not ok" if MBA check result is failed.
+[patch 3] When a child process is created by fork(), the buffer of the 
+	  parent process is also copied. Flush the buffer before
+	  executing fork().
+[patch 4] Add a signal handler to cleanup properly before exiting the 
+	  parent process if there is an error occurs after creating 
+	  a child process with fork() in the CAT test, and unregister
+	  signal handler when each test finished.
+[patch 5] Before exiting each test CMT/CAT/MBM/MBA, clear test result 
+	  files function cat/cmt/mbm/mba_test_cleanup() are called
+	  twice. Delete once.
 
-diff --git a/tools/testing/selftests/bpf/config.aarch64 b/tools/testing/selftests/bpf/config.aarch64
-index 1f0437644186..253821494884 100644
---- a/tools/testing/selftests/bpf/config.aarch64
-+++ b/tools/testing/selftests/bpf/config.aarch64
-@@ -176,6 +176,8 @@ CONFIG_VIRTIO_MMIO_CMDLINE_DEVICES=y
- CONFIG_VIRTIO_MMIO=y
- CONFIG_VIRTIO_NET=y
- CONFIG_VIRTIO_PCI=y
-+CONFIG_VIRTIO_VSOCKETS_COMMON=y
- CONFIG_VLAN_8021Q=y
- CONFIG_VSOCKETS=y
-+CONFIG_VSOCKETS_LOOPBACK=y
- CONFIG_XFRM_USER=y
-diff --git a/tools/testing/selftests/bpf/config.s390x b/tools/testing/selftests/bpf/config.s390x
-index d49f6170e7bd..2ba92167be35 100644
---- a/tools/testing/selftests/bpf/config.s390x
-+++ b/tools/testing/selftests/bpf/config.s390x
-@@ -140,5 +140,8 @@ CONFIG_VIRTIO_BALLOON=y
- CONFIG_VIRTIO_BLK=y
- CONFIG_VIRTIO_NET=y
- CONFIG_VIRTIO_PCI=y
-+CONFIG_VIRTIO_VSOCKETS_COMMON=y
- CONFIG_VLAN_8021Q=y
-+CONFIG_VSOCKETS=y
-+CONFIG_VSOCKETS_LOOPBACK=y
- CONFIG_XFRM_USER=y
-diff --git a/tools/testing/selftests/bpf/config.x86_64 b/tools/testing/selftests/bpf/config.x86_64
-index dd97d61d325c..b650b2e617b8 100644
---- a/tools/testing/selftests/bpf/config.x86_64
-+++ b/tools/testing/selftests/bpf/config.x86_64
-@@ -234,7 +234,10 @@ CONFIG_VIRTIO_BLK=y
- CONFIG_VIRTIO_CONSOLE=y
- CONFIG_VIRTIO_NET=y
- CONFIG_VIRTIO_PCI=y
-+CONFIG_VIRTIO_VSOCKETS_COMMON=y
- CONFIG_VLAN_8021Q=y
-+CONFIG_VSOCKETS=y
-+CONFIG_VSOCKETS_LOOPBACK=y
- CONFIG_X86_ACPI_CPUFREQ=y
- CONFIG_X86_CPUID=y
- CONFIG_X86_MSR=y
+This patch series is based on Linux v6.2-rc6.
+
+Difference from v5:
+[patch 4] 
+  - If an error occurs in signal_handler_register() return -1, 
+    and if an error occurs in signal_handler_unregister() does 
+    not return any value.
+  - If signal_handler_register() fails, stop the running
+    parents&child process.
+  - Ignore the result of signal_handler_unregister() 
+    so as not to overwrite earlier value of ret.
+  - Fix change log.
+
+Shaopeng Tan (5):
+  selftests/resctrl: Fix set up schemata with 100% allocation on first
+    run in MBM test
+  selftests/resctrl: Return MBA check result and make it to output
+    message
+  selftests/resctrl: Flush stdout file buffer before executing fork()
+  selftests/resctrl: Cleanup properly when an error occurs in CAT test
+  selftests/resctrl: Remove duplicate codes that clear each test result
+    file
+
+ tools/testing/selftests/resctrl/cat_test.c    | 29 ++++----
+ tools/testing/selftests/resctrl/cmt_test.c    |  7 +-
+ tools/testing/selftests/resctrl/fill_buf.c    | 14 ----
+ tools/testing/selftests/resctrl/mba_test.c    | 23 +++---
+ tools/testing/selftests/resctrl/mbm_test.c    | 20 +++---
+ tools/testing/selftests/resctrl/resctrl.h     |  2 +
+ .../testing/selftests/resctrl/resctrl_tests.c |  4 --
+ tools/testing/selftests/resctrl/resctrl_val.c | 71 +++++++++++++------
+ tools/testing/selftests/resctrl/resctrlfs.c   |  5 +-
+ 9 files changed, 98 insertions(+), 77 deletions(-)
 
 -- 
-2.35.1
+2.27.0
 
