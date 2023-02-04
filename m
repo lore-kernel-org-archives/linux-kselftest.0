@@ -2,114 +2,136 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2107AC636CC
-	for <linux-kselftest@archiver.kernel.org>; Sat,  4 Feb 2023 13:21:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC726C61DA4
+	for <linux-kselftest@archiver.kernel.org>; Sat,  4 Feb 2023 13:35:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233542AbjBDNVP (ORCPT
+        id S233722AbjBDNfz (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 4 Feb 2023 08:21:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33848 "EHLO
+        Sat, 4 Feb 2023 08:35:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233034AbjBDNVO (ORCPT
+        with ESMTP id S233713AbjBDNfx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 4 Feb 2023 08:21:14 -0500
+        Sat, 4 Feb 2023 08:35:53 -0500
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97C292E814;
-        Sat,  4 Feb 2023 05:21:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8359F1A5;
+        Sat,  4 Feb 2023 05:35:52 -0800 (PST)
 Received: from [151.216.142.144] (unknown [151.216.142.144])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: gtucker)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id B5A0966029A5;
-        Sat,  4 Feb 2023 13:21:08 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2503266029A5;
+        Sat,  4 Feb 2023 13:35:51 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1675516869;
-        bh=YBYs+Vt0MYtSPHbZNBXHf50wjrg2a1Ig8HzAhqon1og=;
+        s=mail; t=1675517751;
+        bh=aazq/Vh7j/hkkupZJNXPInbf51BnuvyG/TWDf8xxa60=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=QSbmWKXW4fFmgeOkN0y8T3aJfISWWMyyxyGpcJynyHCW1wTRew9QuP1zatGPML1UR
-         lnqiqNEEKcN4L+JLKiXZVFMeuTq6YoBp+CTRSIMRzx68FyLHxjPaH4+6p2PUFl/XW7
-         uDwKeO31sDjFI98MuRaE9j27iccN95/R9iD/eOdS5S9VVMODpKOxyTbFz7+F3br484
-         8C9NH17K7oxHlkW25aOdxGwaTrSDKw12s6Ac7zv6fb9Kyq6bzPpW6c7qG/GEAehEhi
-         dhbmEH+WuMwL/220iXON/rAfZofacuxhIAIbFtoeYHGJaoOL9TT8QLx8REpsqz2j2R
-         rXyMqrJWfoYRQ==
-Message-ID: <dae9314b-c99a-bb95-b0ed-f6a8c861d78d@collabora.com>
-Date:   Sat, 4 Feb 2023 14:19:48 +0100
+        b=J8dDdOCno3fqx7hJxu5iKusckWXFbwz7wcV47HKXG2KxwSXk6X6FrDIzl+EktCBKs
+         gbogHAZPx4eQeoPHDkb6JO8UVw7OAM2zH7WydtwP16L1GpSQ9P8pWpsqn3E/grVbKC
+         2mscPF8P4QufvPRZ4uG22BnEXejckbh+Mr4YUE7eL24AkKVd7nnPAGYgvyXI9hXCWM
+         tiMQYr6NEuKWDzDoXnU+bC3E4OIxSN2IxJq+hHl5NycwikF8LolLEJoxrOB/OrAn9F
+         0Hzywro6+UyBDP8allsO1a7m1ZDhfGrR0v02w00a6Hcmn4OaNMDTCG3OY3hwmhHWSL
+         liViOuU6UELKg==
+Message-ID: <51e62348-9e8e-2769-6372-f217f894a917@collabora.com>
+Date:   Sat, 4 Feb 2023 14:36:39 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
-Subject: Re: [PATCH] selftests: fix LLVM build for i386 and x86_64
+Subject: Re: [PATCH] selftests: find echo binary to use -ne options
 Content-Language: en-US
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Mark Brown <broonie@kernel.org>,
-        kernel@collabora.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-References: <20220809142231.2419274-1-guillaume.tucker@collabora.com>
- <YvKOV1L73Mv/Dc6P@dev-arch.thelio-3990X>
+To:     David Laight <David.Laight@ACULAB.COM>,
+        Shuah Khan <shuah@kernel.org>,
+        Gautam <gautammenghani201@gmail.com>
+Cc:     "kernel@collabora.com" <kernel@collabora.com>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernelci@lists.linux.dev" <kernelci@lists.linux.dev>
+References: <20230203152603.11450-1-guillaume.tucker@collabora.com>
+ <90ace4f466ee4f79bf2dd94c5830e57a@AcuMS.aculab.com>
 From:   Guillaume Tucker <guillaume.tucker@collabora.com>
-In-Reply-To: <YvKOV1L73Mv/Dc6P@dev-arch.thelio-3990X>
+In-Reply-To: <90ace4f466ee4f79bf2dd94c5830e57a@AcuMS.aculab.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Shuah, Nathan,
-
-On 09/08/2022 18:41, Nathan Chancellor wrote:
-> On Tue, Aug 09, 2022 at 04:22:31PM +0200, Guillaume Tucker wrote:
->> Add missing cases for the i386 and x86_64 architectures when
->> determining the LLVM target for building kselftest.
+On 04/02/2023 14:04, David Laight wrote:
+> From: Guillaume Tucker
+>> Sent: 03 February 2023 15:26
 >>
->> Fixes: 795285ef2425 ("selftests: Fix clang cross compilation")
->> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
+>> Find the actual echo binary using $(which echo) and use it for
+>> formatted output with -ne.  On some systems, the default echo command
+>> doesn't handle the -e option and the output looks like this (arm64
+>> build):
+>>
+>> -ne Emit Tests for alsa
+>>
+>> -ne Emit Tests for amd-pstate
+>>
+>> -ne Emit Tests for arm64
 > 
-> Right, I think this is the correct thing to do for the selftests. For
-> the main kernel build, we use CLANG_TARGETS_FLAGS_x86 because ARCH=i386
-> and ARCH=x86_64 are covered by SUBARCH=x86, which is what we switch on,
-> rather than ARCH. I do see a couple of references to SUBARCH in the
-> tools directory but I am not sure if that is usable for this part so:
+> Nack.
+> There is no reason to suppose that /bin/echo is any different from
+> the version of echo builtin to the shell that make uses.
 > 
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> Not only that 'which' is a horrid shell script that is trying to
+> emulate csh builtin.
+> The bourne shell equivalent is 'type' and the posix one 'command'.
+> 
+> In any case the portable way to fix this is to use printf.
+> This is a well defined program and is bultin to all modern shells.
 
-Thanks for the review.
+Ah great, thanks for the review.  Will send a v2 with printf.
 
-Could you please apply this patch?  It looks like it was
-forgotten like the one with the missing trailing ')' I sent
-around that time (now fixed with Mark's patch).
-
-Alternatively, please let me know if anything else needs to be
-done for it.
-
-Thanks,
 Guillaume
 
+>> This is for example the case with the KernelCI Docker images
+>> e.g. kernelci/gcc-10:x86-kselftest-kernelci.  With the actual echo
+>> binary (e.g. in /bin/echo), the output is formatted as expected (x86
+>> build this time):
+>>
+>> Emit Tests for alsa
+>> Emit Tests for amd-pstate
+>> Skipping non-existent dir: arm64
+>>
+>> Only the install target is using "echo -ne" so keep the $ECHO variable
+>> local to it.
+>>
+>> Reported-by: "kernelci.org bot" <bot@kernelci.org>
+>> Fixes: 3297a4df805d ("kselftests: Enable the echo command to print newlines in Makefile")
+>> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
 >> ---
->>  tools/testing/selftests/lib.mk | 2 ++
->>  1 file changed, 2 insertions(+)
+>>  tools/testing/selftests/Makefile | 5 +++--
+>>  1 file changed, 3 insertions(+), 2 deletions(-)
 >>
->> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
->> index b1c62914366b..cc4c443d5b14 100644
->> --- a/tools/testing/selftests/lib.mk
->> +++ b/tools/testing/selftests/lib.mk
->> @@ -10,12 +10,14 @@ endif
->>  CLANG_TARGET_FLAGS_arm          := arm-linux-gnueabi
->>  CLANG_TARGET_FLAGS_arm64        := aarch64-linux-gnu
->>  CLANG_TARGET_FLAGS_hexagon      := hexagon-linux-musl
->> +CLANG_TARGET_FLAGS_i386         := i386-linux-gnu
->>  CLANG_TARGET_FLAGS_m68k         := m68k-linux-gnu
->>  CLANG_TARGET_FLAGS_mips         := mipsel-linux-gnu
->>  CLANG_TARGET_FLAGS_powerpc      := powerpc64le-linux-gnu
->>  CLANG_TARGET_FLAGS_riscv        := riscv64-linux-gnu
->>  CLANG_TARGET_FLAGS_s390         := s390x-linux-gnu
->>  CLANG_TARGET_FLAGS_x86          := x86_64-linux-gnu
->> +CLANG_TARGET_FLAGS_x86_64       := x86_64-linux-gnu
->>  CLANG_TARGET_FLAGS              := $(CLANG_TARGET_FLAGS_$(ARCH))
->>  
->>  ifeq ($(CROSS_COMPILE),)
->> -- 
+>> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+>> index 41b649452560..9619d0f3b2ff 100644
+>> --- a/tools/testing/selftests/Makefile
+>> +++ b/tools/testing/selftests/Makefile
+>> @@ -234,10 +234,11 @@ ifdef INSTALL_PATH
+>>  	@# While building kselftest-list.text skip also non-existent TARGET dirs:
+>>  	@# they could be the result of a build failure and should NOT be
+>>  	@# included in the generated runlist.
+>> +	ECHO=`which echo`; \
+>>  	for TARGET in $(TARGETS); do \
+>>  		BUILD_TARGET=$$BUILD/$$TARGET;	\
+>> -		[ ! -d $(INSTALL_PATH)/$$TARGET ] && echo "Skipping non-existent dir: $$TARGET" &&
+>> continue; \
+>> -		echo -ne "Emit Tests for $$TARGET\n"; \
+>> +		[ ! -d $(INSTALL_PATH)/$$TARGET ] && $$ECHO "Skipping non-existent dir: $$TARGET" &&
+>> continue; \
+>> +		$$ECHO -ne "Emit Tests for $$TARGET\n"; \
+>>  		$(MAKE) -s --no-print-directory OUTPUT=$$BUILD_TARGET COLLECTION=$$TARGET \
+>>  			-C $$TARGET emit_tests >> $(TEST_LIST); \
+>>  	done;
+>> --
 >> 2.30.2
->>
+> 
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)
+> 
+> 
 
