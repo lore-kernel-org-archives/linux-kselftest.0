@@ -2,63 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1F0DC64EC3
-	for <linux-kselftest@archiver.kernel.org>; Mon,  6 Feb 2023 16:46:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D025C63797
+	for <linux-kselftest@archiver.kernel.org>; Mon,  6 Feb 2023 16:46:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230328AbjBFQqU (ORCPT
+        id S230448AbjBFQqY (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 6 Feb 2023 11:46:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52560 "EHLO
+        Mon, 6 Feb 2023 11:46:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230297AbjBFQqT (ORCPT
+        with ESMTP id S230352AbjBFQqV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 Feb 2023 11:46:19 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A83711D93F;
-        Mon,  6 Feb 2023 08:46:18 -0800 (PST)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 316GjPAM009493;
-        Mon, 6 Feb 2023 16:46:14 GMT
+        Mon, 6 Feb 2023 11:46:21 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5F832884D;
+        Mon,  6 Feb 2023 08:46:19 -0800 (PST)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 316Gk9pj001282;
+        Mon, 6 Feb 2023 16:46:12 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=lGd6NVjCuZeAkFsLSbx/PFZ9uVy5N6POGj4BCOeukGE=;
- b=gHDDahatp1MD57+duLPu+1AhDJjFfaybZA5eZxO/XC1kTFihSGGMk7xNCl4Zte9hhXww
- /sn3/yw8A9wM/03e//kfd2h4rRih+klq+Bs9T71UDv94tPXEusvOxPTOkzMQgvX2R7ae
- 5NaVzd2FDVnhvpmy6Iy5JtxmaY55ZzEJLPsJJU82KaNjJmb9lAowWr+JdfGrJg+U5dSU
- 2gTR1IdX2r76hu3Fj429Zh3rMbqmTBOJMFaOe32mH8xSRnz7U//iQpNpJflawTHBQ5rb
- 1QBV1N6fjBEgSaOvuwfL2rAXdSp/MBhkwEpi1PO6S7NNVKXr5P52nMEWKrRv9K2o7+c6 ZA== 
+ bh=O63EL2nVE0XoojtA41wT6iXaXKgqdbtdUQDq2wyErxE=;
+ b=mhGJZmQ7vpUKUUI0uN0p+O1xJVGPMhiZXQ/pimQpwwLqvssOSaUCcPqUzd++gfkxjcFc
+ tAUJNP03l084ZKv26ZGla1/xmp+/+/ISO97MTeK1IHZKnoMNp+UNnmRTujPUJnfIsjcQ
+ EWlJl7eWhZ8/2XzTEqWaHNBoUXfIsTkRART2jakmzkMpwWhpObCh5CJHWbNoK3aBX2fb
+ VUP+7jxEL9+licueNtnbz9aPaCyg2JfyBGEE6kXjOuYao06xqdaBxz/lJnWcOnCBOCeQ
+ EZcfuJhem/Da4wbhuJyDRB1nZkoMSkVMCul43UTM3ekStUe+WFISp219RkYaEXMVOoDm 7Q== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nk5aw81hf-1
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nk5c2r03j-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Feb 2023 16:46:14 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 316GkDhL012316;
-        Mon, 6 Feb 2023 16:46:13 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nk5aw81gq-1
+        Mon, 06 Feb 2023 16:46:12 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 316GkCG4001388;
+        Mon, 6 Feb 2023 16:46:12 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nk5c2r02g-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Feb 2023 16:46:13 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 316GSWME020984;
-        Mon, 6 Feb 2023 16:46:11 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3nhemfjms6-1
+        Mon, 06 Feb 2023 16:46:12 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 316Ed2r2026561;
+        Mon, 6 Feb 2023 16:46:10 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3nhf06sv6t-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Feb 2023 16:46:11 +0000
+        Mon, 06 Feb 2023 16:46:09 +0000
 Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 316Gk8kS22085972
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 316Gk6hl47907326
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 6 Feb 2023 16:46:08 GMT
+        Mon, 6 Feb 2023 16:46:06 GMT
 Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 12FCD20040;
-        Mon,  6 Feb 2023 16:46:08 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 6311020040;
+        Mon,  6 Feb 2023 16:46:06 +0000 (GMT)
 Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8D22F2004D;
-        Mon,  6 Feb 2023 16:46:07 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id DA37620043;
+        Mon,  6 Feb 2023 16:46:05 +0000 (GMT)
 Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
         by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Mon,  6 Feb 2023 16:46:07 +0000 (GMT)
+        Mon,  6 Feb 2023 16:46:05 +0000 (GMT)
 From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
 To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
         Janosch Frank <frankja@linux.ibm.com>,
@@ -74,53 +74,54 @@ Cc:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Shuah Khan <shuah@kernel.org>,
         Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Huth <thuth@redhat.com>
-Subject: [PATCH v7 07/14] KVM: s390: selftest: memop: Fix integer literal
-Date:   Mon,  6 Feb 2023 17:45:55 +0100
-Message-Id: <20230206164602.138068-8-scgl@linux.ibm.com>
+        Nico Boehr <nrb@linux.ibm.com>
+Subject: [PATCH v7 04/14] KVM: s390: selftest: memop: Add bad address test
+Date:   Mon,  6 Feb 2023 17:45:52 +0100
+Message-Id: <20230206164602.138068-5-scgl@linux.ibm.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230206164602.138068-1-scgl@linux.ibm.com>
 References: <20230206164602.138068-1-scgl@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: a8QoKZoIdYYVSs43QOhsv68OViBLs1xh
-X-Proofpoint-ORIG-GUID: UJEX56f8_nvuAvKplaUwcbHZ5VFpEnRd
+X-Proofpoint-GUID: 2jfJV1NDil-NuDnV-QuzXzTgHC-JeC9W
+X-Proofpoint-ORIG-GUID: ShSHD1LSOsdqg9L_DK0f_V0Znx9ucinY
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
  definitions=2023-02-06_07,2023-02-06_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
- priorityscore=1501 mlxscore=0 lowpriorityscore=0 mlxlogscore=999
- clxscore=1015 malwarescore=0 suspectscore=0 spamscore=0 bulkscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 suspectscore=0
+ impostorscore=0 malwarescore=0 priorityscore=1501 mlxscore=0
+ mlxlogscore=999 clxscore=1015 adultscore=0 bulkscore=0 lowpriorityscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2212070000 definitions=main-2302060144
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The address is a 64 bit value, specifying a 32 bit value can crash the
-guest. In this case things worked out with -O2 but not -O0.
+Add a test that tries a real write to a bad address.
+The existing CHECK_ONLY test doesn't cover all paths.
 
 Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-Fixes: 1bb873495a9e ("KVM: s390: selftests: Add more copy memop tests")
-Reviewed-by: Thomas Huth <thuth@redhat.com>
+Reviewed-by: Nico Boehr <nrb@linux.ibm.com>
 ---
- tools/testing/selftests/kvm/s390x/memop.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/kvm/s390x/memop.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
-index 1ae5c01f9904..c5fec84ef3c2 100644
+index bbc191a13760..00737cceacda 100644
 --- a/tools/testing/selftests/kvm/s390x/memop.c
 +++ b/tools/testing/selftests/kvm/s390x/memop.c
-@@ -514,7 +514,7 @@ static void guest_copy_key_fetch_prot_override(void)
- 	GUEST_SYNC(STAGE_INITED);
- 	set_storage_key_range(0, PAGE_SIZE, 0x18);
- 	set_storage_key_range((void *)last_page_addr, PAGE_SIZE, 0x0);
--	asm volatile ("sske %[key],%[addr]\n" :: [addr] "r"(0), [key] "r"(0x18) : "cc");
-+	asm volatile ("sske %[key],%[addr]\n" :: [addr] "r"(0L), [key] "r"(0x18) : "cc");
- 	GUEST_SYNC(STAGE_SKEYS_SET);
+@@ -641,7 +641,9 @@ static void _test_errors_common(struct test_info info, enum mop_target target, i
  
- 	for (;;) {
+ 	/* Bad guest address: */
+ 	rv = ERR_MOP(info, target, WRITE, mem1, size, GADDR((void *)~0xfffUL), CHECK_ONLY);
+-	TEST_ASSERT(rv > 0, "ioctl does not report bad guest memory access");
++	TEST_ASSERT(rv > 0, "ioctl does not report bad guest memory address with CHECK_ONLY");
++	rv = ERR_MOP(info, target, WRITE, mem1, size, GADDR((void *)~0xfffUL));
++	TEST_ASSERT(rv > 0, "ioctl does not report bad guest memory address on write");
+ 
+ 	/* Bad host address: */
+ 	rv = ERR_MOP(info, target, WRITE, 0, size, GADDR_V(mem1));
 -- 
 2.37.2
 
