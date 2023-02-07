@@ -2,208 +2,143 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13B87C636CD
-	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Feb 2023 13:03:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 207D3C636CC
+	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Feb 2023 13:04:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232060AbjBGNDt (ORCPT
+        id S232149AbjBGNE5 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 7 Feb 2023 08:03:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50268 "EHLO
+        Tue, 7 Feb 2023 08:04:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232046AbjBGNDs (ORCPT
+        with ESMTP id S232174AbjBGNEy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Feb 2023 08:03:48 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63452B2BE;
-        Tue,  7 Feb 2023 05:03:47 -0800 (PST)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 317CidBd008600;
-        Tue, 7 Feb 2023 13:03:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=yZgO0eM8LcpQcrcCMa03LeA0r6BeUXFzzF3c5L8rSZk=;
- b=N78/AMnYkCf8/BELFlvs3tMYivbOHoz3Cla2Dd/HXN0a5N7RuwWQDH0CLLDhoRqOItSZ
- pWK9iIVST4CKNwxU/RUkx0bfY889L+zJfjJT2Wni64l2ipqkQ9U9RBU9YVflA24zoSiv
- KuIMYDIbOz1hpWIjq6YNzmUuvn+qSYo/CHHq0wC4aw/GgyBOMplyE2F/6dovX2ixUoVz
- 1ey9CQPvF2RiM6nUD7zWdDSCuV+W8xmoGJpguj48dKjCJWHoXzxVLRhM6BWtUjtD8BCZ
- fxZ6YV1mvb1fdOzD/fvprBO1EP62epZTQKF/zl7AEqBs+CIhqZj1F9pNj4FHE0CEhn5G 6A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nkpwp0fnw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Feb 2023 13:03:40 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 317CjDPN009890;
-        Tue, 7 Feb 2023 13:03:40 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nkpwp0fmf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Feb 2023 13:03:40 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 316DmNTb017584;
-        Tue, 7 Feb 2023 13:03:37 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3nhemfjjyh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Feb 2023 13:03:37 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 317D3YrZ26083962
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 7 Feb 2023 13:03:34 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 07A122004B;
-        Tue,  7 Feb 2023 13:03:34 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 06CBA20043;
-        Tue,  7 Feb 2023 13:03:33 +0000 (GMT)
-Received: from [9.171.52.227] (unknown [9.171.52.227])
-        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue,  7 Feb 2023 13:03:32 +0000 (GMT)
-Message-ID: <ba65c1b9-910b-b298-926f-4a072f3de1e7@linux.ibm.com>
-Date:   Tue, 7 Feb 2023 14:03:32 +0100
+        Tue, 7 Feb 2023 08:04:54 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79EC83A588
+        for <linux-kselftest@vger.kernel.org>; Tue,  7 Feb 2023 05:04:45 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id k13so6077258wrh.8
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Feb 2023 05:04:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares.net; s=google;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=beGgM2LbSkA8IGAfTfFvAxgcywRr6/D7z4MyBTSCBrQ=;
+        b=SEx05llstpytJjDvzeR65GSYxlxUj4nkxDXeYbz8g1KVIb0Cb3MBtIJKUJTdBiSGxK
+         nqg0ItCQ7Y10GTLXSkh12lZ+pKIWyLIlQv/E46zBlTonmoKx2mWJYGMAuPKguy5a5s38
+         ZQHKK6D/KF5JrMs/GPFEYrGMjnpaaPp6NQEz/OFGb7kqUnpJ0ZHyAfb32uxjObStvn6m
+         AvLhx1z7UZJVeRMJ6b9cTBP631IM6ofU27EJO1XmaI6VT3fbl57PgjuIwMKP3QGJv9DM
+         jgAz++ZmB77D0h97Ncpwa2l56NdiiCnUQE9m07syabj0j+tTI9faAHNa78v1uHl7Odw9
+         KWTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=beGgM2LbSkA8IGAfTfFvAxgcywRr6/D7z4MyBTSCBrQ=;
+        b=yoLAtfBNIXAWs4Fjl3ikC5sGfb6QyWFO8ajZLLxuRiMAwPPKdjiSR+a5yKKoVLsOcn
+         rn3A92amQKqUZDRb23kpPNHY7xvVKSyTr+MrCWE6GGZP0GXEthMFSTQpwr3wHCa3kVML
+         /8aQMxHfPqnvBiWAGPnm7cf3xGZAE0JyV6mZC0oakThv2xopKS4CdRBXACDFNQoiaiLd
+         /SMEiFmDKlkuLBWyXJqoODcUcmFRO5jFh3GEla1l9AjKm7AG7n4sqofHmXLD5GRt99qi
+         5xiSqr3pD/C81HJc8rEdwebOZQfsaqLws2ELSTUGODhy377W0EMjFlEChimr8adykyTK
+         SVvw==
+X-Gm-Message-State: AO0yUKUsA3NX+1FuTjZ8/mGM1/n/610YoNc6o5l+Bquuhtwoig6sO99G
+        82waUM6efq5R5RkuLmO8OVM+bg==
+X-Google-Smtp-Source: AK7set8BACEuCqBdlUhOpzEs9iSk0+Ev3Cz0G1FqEtiOnCLMzuI5nG6VfPyZbe/GjrTiJIW17+B1OQ==
+X-Received: by 2002:a5d:6046:0:b0:2be:5ca0:a7f9 with SMTP id j6-20020a5d6046000000b002be5ca0a7f9mr2642129wrt.33.1675775083981;
+        Tue, 07 Feb 2023 05:04:43 -0800 (PST)
+Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
+        by smtp.gmail.com with ESMTPSA id n9-20020a5d5989000000b002bc7fcf08ddsm11645394wri.103.2023.02.07.05.04.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Feb 2023 05:04:43 -0800 (PST)
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+Date:   Tue, 07 Feb 2023 14:04:14 +0100
+Subject: [PATCH net 2/6] mptcp: fix locking for setsockopt corner-case
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v7 08/14] KVM: s390: Move common code of mem_op functions
- into function
-Content-Language: en-US
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>
-References: <20230206164602.138068-1-scgl@linux.ibm.com>
- <20230206164602.138068-9-scgl@linux.ibm.com>
-From:   Janosch Frank <frankja@linux.ibm.com>
-In-Reply-To: <20230206164602.138068-9-scgl@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: walVhawWM1DOoQjL54-ed3g3x58xCvkh
-X-Proofpoint-GUID: 4mFalkmlk0Nj13Rb-lhcQpOBFluFKRL3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-07_04,2023-02-06_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- spamscore=0 priorityscore=1501 phishscore=0 impostorscore=0 malwarescore=0
- clxscore=1015 bulkscore=0 mlxscore=0 mlxlogscore=999 adultscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302070111
+Message-Id: <20230207-upstream-net-20230207-various-fix-6-2-v1-2-2031b495c7cc@tessares.net>
+References: <20230207-upstream-net-20230207-various-fix-6-2-v1-0-2031b495c7cc@tessares.net>
+In-Reply-To: <20230207-upstream-net-20230207-various-fix-6-2-v1-0-2031b495c7cc@tessares.net>
+To:     mptcp@lists.linux.dev, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Davide Caratti <dcaratti@redhat.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Benjamin Hesmans <benjamin.hesmans@tessares.net>,
+        Geliang Tang <geliangtang@gmail.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        stable@vger.kernel.org
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1507;
+ i=matthieu.baerts@tessares.net; h=from:subject:message-id;
+ bh=tU92Z5FtU+rxP2x5Q9J2r5aQ+mvHt8iWMbRSULE+GL8=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBj4kxo3Fz3M6U+ZqFEqliFhKp6GfvWCWFMRgKtp
+ KfknMVgtAiJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCY+JMaAAKCRD2t4JPQmmg
+ c7XfD/43VLBXwdb+RbXPVii16WQ7mY2RSpjNlzgqZ3sBZup/f8WZGkVzNABwdXWm9QMzPNHwEnU
+ kBeYf+UtjhvF+f3lkdU0PZ756cNxJQkbS7VxrzFt5dpy9doA/i8xTeV7TNLnA5NaVR6BGSbXit6
+ UZzXqoPZRWErMWFN3jcTkiKsbGX2Z+CUSRdo0jh8YLXpZtLt3Slxi5x4Xr3xNv6cFKpUCzDGEAX
+ vPi8JFtfMzVzfQx3R1PK2kGGXE7qmzVJZVrQNwRba7s32pGuYOn4w1quZ9oALgBbNWw1YtxH+5y
+ ZK8JwgaGyxrVOyrREUKORoLrTVkzc8oDze9MGSxQ+Fynn2k+uy9PcEK5blZwGWIRP/ChPU8XZ2P
+ jANo1DCq5XrEqkTP2Qo3b3kwmoFggzZO5H6M9VBCWgjpl+OOF/zYTVZ+bi3RiD1yUWSlKDV4F27
+ mtE3FPGWfLBedr2gZnIBxjWDZBvaTQL51YgyuPKYMKW8y8lxu+LDG1ExexmXgoqLefI/63OeMdz
+ kRa9NAD2ineJZd5cChSQRpvDIlTcHKyDVUMciS14uuZwA76y37D5NgG8F37JBHZx+HUrymsYqDj
+ NCXByJtLbR0eu8vqlsd7DOGznFk5E8C8sRiVAcGnqjuObFdNHmv7kekqWhcoHGW30OFm78J9Scz
+ CJvs9L9o6bHugmA==
+X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/6/23 17:45, Janis Schoetterl-Glausch wrote:
-> The vcpu and vm mem_op ioctl implementations share some functionality.
-> Move argument checking into a function and call it from both
-> implementations. This allows code reuse in case of additional future
-> mem_op operations.
-> 
-> Suggested-by: Janosch Frank <frankja@linux.ibm.com>
-> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+From: Paolo Abeni <pabeni@redhat.com>
 
-Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
+We need to call the __mptcp_nmpc_socket(), and later subflow socket
+access under the msk socket lock, or e.g. a racing connect() could
+change the socket status under the hood, with unexpected results.
 
-> ---
->   arch/s390/kvm/kvm-s390.c | 52 +++++++++++++++++++---------------------
->   1 file changed, 24 insertions(+), 28 deletions(-)
-> 
-> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-> index e4890e04b210..0367c1a7e69a 100644
-> --- a/arch/s390/kvm/kvm-s390.c
-> +++ b/arch/s390/kvm/kvm-s390.c
-> @@ -2764,24 +2764,32 @@ static int kvm_s390_handle_pv(struct kvm *kvm, struct kvm_pv_cmd *cmd)
->   	return r;
->   }
->   
-> -static bool access_key_invalid(u8 access_key)
-> +static int mem_op_validate_common(struct kvm_s390_mem_op *mop, u64 supported_flags)
->   {
-> -	return access_key > 0xf;
-> +	if (mop->flags & ~supported_flags || !mop->size)
-> +		return -EINVAL;
-> +	if (mop->size > MEM_OP_MAX_SIZE)
-> +		return -E2BIG;
-> +	if (mop->flags & KVM_S390_MEMOP_F_SKEY_PROTECTION) {
-> +		if (mop->key > 0xf)
-> +			return -EINVAL;
-> +	} else {
-> +		mop->key = 0;
-> +	}
-> +	return 0;
->   }
->   
->   static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op *mop)
->   {
->   	void __user *uaddr = (void __user *)mop->buf;
-> -	u64 supported_flags;
->   	void *tmpbuf = NULL;
->   	int r, srcu_idx;
->   
-> -	supported_flags = KVM_S390_MEMOP_F_SKEY_PROTECTION
-> -			  | KVM_S390_MEMOP_F_CHECK_ONLY;
-> -	if (mop->flags & ~supported_flags || !mop->size)
-> -		return -EINVAL;
-> -	if (mop->size > MEM_OP_MAX_SIZE)
-> -		return -E2BIG;
-> +	r = mem_op_validate_common(mop, KVM_S390_MEMOP_F_SKEY_PROTECTION |
-> +					KVM_S390_MEMOP_F_CHECK_ONLY);
-> +	if (r)
-> +		return r;
-> +
->   	/*
->   	 * This is technically a heuristic only, if the kvm->lock is not
->   	 * taken, it is not guaranteed that the vm is/remains non-protected.
-> @@ -2793,12 +2801,6 @@ static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op *mop)
->   	 */
->   	if (kvm_s390_pv_get_handle(kvm))
->   		return -EINVAL;
-> -	if (mop->flags & KVM_S390_MEMOP_F_SKEY_PROTECTION) {
-> -		if (access_key_invalid(mop->key))
-> -			return -EINVAL;
-> -	} else {
-> -		mop->key = 0;
-> -	}
->   	if (!(mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY)) {
->   		tmpbuf = vmalloc(mop->size);
->   		if (!tmpbuf)
-> @@ -5250,23 +5252,17 @@ static long kvm_s390_vcpu_mem_op(struct kvm_vcpu *vcpu,
->   {
->   	void __user *uaddr = (void __user *)mop->buf;
->   	void *tmpbuf = NULL;
-> -	int r = 0;
-> -	const u64 supported_flags = KVM_S390_MEMOP_F_INJECT_EXCEPTION
-> -				    | KVM_S390_MEMOP_F_CHECK_ONLY
-> -				    | KVM_S390_MEMOP_F_SKEY_PROTECTION;
-> +	int r;
->   
-> -	if (mop->flags & ~supported_flags || mop->ar >= NUM_ACRS || !mop->size)
-> +	r = mem_op_validate_common(mop, KVM_S390_MEMOP_F_INJECT_EXCEPTION |
-> +					KVM_S390_MEMOP_F_CHECK_ONLY |
-> +					KVM_S390_MEMOP_F_SKEY_PROTECTION);
-> +	if (r)
-> +		return r;
-> +	if (mop->ar >= NUM_ACRS)
->   		return -EINVAL;
-> -	if (mop->size > MEM_OP_MAX_SIZE)
-> -		return -E2BIG;
->   	if (kvm_s390_pv_cpu_is_protected(vcpu))
->   		return -EINVAL;
-> -	if (mop->flags & KVM_S390_MEMOP_F_SKEY_PROTECTION) {
-> -		if (access_key_invalid(mop->key))
-> -			return -EINVAL;
-> -	} else {
-> -		mop->key = 0;
-> -	}
->   	if (!(mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY)) {
->   		tmpbuf = vmalloc(mop->size);
->   		if (!tmpbuf)
+Fixes: 54635bd04701 ("mptcp: add TCP_FASTOPEN_CONNECT socket option")
+Cc: stable@vger.kernel.org
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Reviewed-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+---
+ net/mptcp/sockopt.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/net/mptcp/sockopt.c b/net/mptcp/sockopt.c
+index d4b1e6ec1b36..7f2c3727ab23 100644
+--- a/net/mptcp/sockopt.c
++++ b/net/mptcp/sockopt.c
+@@ -760,14 +760,21 @@ static int mptcp_setsockopt_v4(struct mptcp_sock *msk, int optname,
+ static int mptcp_setsockopt_first_sf_only(struct mptcp_sock *msk, int level, int optname,
+ 					  sockptr_t optval, unsigned int optlen)
+ {
++	struct sock *sk = (struct sock *)msk;
+ 	struct socket *sock;
++	int ret = -EINVAL;
+ 
+ 	/* Limit to first subflow, before the connection establishment */
++	lock_sock(sk);
+ 	sock = __mptcp_nmpc_socket(msk);
+ 	if (!sock)
+-		return -EINVAL;
++		goto unlock;
+ 
+-	return tcp_setsockopt(sock->sk, level, optname, optval, optlen);
++	ret = tcp_setsockopt(sock->sk, level, optname, optval, optlen);
++
++unlock:
++	release_sock(sk);
++	return ret;
+ }
+ 
+ static int mptcp_setsockopt_sol_tcp(struct mptcp_sock *msk, int optname,
+
+-- 
+2.38.1
 
