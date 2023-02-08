@@ -2,88 +2,140 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6147C636CC
-	for <linux-kselftest@archiver.kernel.org>; Wed,  8 Feb 2023 14:46:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 104BCC05027
+	for <linux-kselftest@archiver.kernel.org>; Wed,  8 Feb 2023 14:48:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230185AbjBHOqB (ORCPT
+        id S231451AbjBHOsn (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 8 Feb 2023 09:46:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54564 "EHLO
+        Wed, 8 Feb 2023 09:48:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbjBHOqA (ORCPT
+        with ESMTP id S230416AbjBHOsj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Feb 2023 09:46:00 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C2D227AC
-        for <linux-kselftest@vger.kernel.org>; Wed,  8 Feb 2023 06:45:59 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id b5so19499423plz.5
-        for <linux-kselftest@vger.kernel.org>; Wed, 08 Feb 2023 06:45:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=D9APWzIV+7Bk+eMZXMnkea/loMWDb0j2eNn6crGTD7M=;
-        b=ZzbZBQeo7ockhhPlfg9a2V8MeTjZhGsnS0ea5DXCkI5R6D6KgPTXGSbRky5Gb8AsJH
-         /2mudNx8wLHe69wFIzg4gDl7z+7+b25Phwl8RVR7ESGVMp2CMetkxW8omZe82SQoy9aO
-         L9KDhWNJLpAkJmabs93q1ajZOPMt+3ceuBQisTjtgkoMAN67A0SreAB01Z4HCNC71zrK
-         4VfLSzWfIofvrtSx+aCS7g5VsGfs9GyAkbToQYUPgmErKkpb5Hcb26jVG2/kk5XH6ObO
-         MfyAkQzXuRPDY42gCXtpbeJXR1ZVuj9bc7WGTyly0DMxK2uTOG9Y6F/mlci2/Mol8bPN
-         9unQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=D9APWzIV+7Bk+eMZXMnkea/loMWDb0j2eNn6crGTD7M=;
-        b=7VJjwl32dNce7fZFhVfuIQQ1uwIegyK23DaLcdnl0L9qAZKD5W9HTrF1TTwr8qCzRN
-         +OuSQaEa/YQbE+GHKM77nJAQ2WDoZcokLSL6DwnnS8pXYJMqntvCo43IM1uSBdKFBqS8
-         TvyZXk7A5QZFWM2Gu2uG/WeM1nGDtr4+zRapui2YJ1oWPaJ2KU25Sq+qlRxeGUbxQt/l
-         y+D5W1xMgRlZVONOpJCRQlX/fdRk/ASiukX13qF+WMJtJwIZyTV687b3gt7APOOLdmRP
-         5bT+Wbrg4NzNbO03UHsvkhzV9grojlNHV/vVYENynQZyShhyO5VqCmCdCcSHb4YTKDKd
-         lxyw==
-X-Gm-Message-State: AO0yUKU47ixilHoxei6Mv4uXa9ANbZXzIyl/NgTiinQprVIKdQttJJXP
-        ryOctEl7RDHCrJw5mrdh8Yi49A==
-X-Google-Smtp-Source: AK7set/W/mntM9Gw7Sjb3X5zca5NiuZodd+vepBxl0Lxlr21DuWvj088eRFNvKzW4uTdJaxc1hQZAA==
-X-Received: by 2002:a17:903:404c:b0:198:af4f:de0d with SMTP id n12-20020a170903404c00b00198af4fde0dmr234228pla.13.1675867559188;
-        Wed, 08 Feb 2023 06:45:59 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id d3-20020a170902b70300b00193020e8a90sm11052055pls.294.2023.02.08.06.45.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 06:45:58 -0800 (PST)
-Date:   Wed, 8 Feb 2023 14:45:55 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     kvm@vger.kernel.org, shahuang@redhat.com
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] selftests: KVM: Replace optarg with arg in
- guest_modes_cmdline
-Message-ID: <Y+O1o4TvO1ajPsgi@google.com>
-References: <20230202025716.216323-1-shahuang@redhat.com>
- <167582135972.455074.6960378545703076467.b4-ty@google.com>
+        Wed, 8 Feb 2023 09:48:39 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CE9F7AB3;
+        Wed,  8 Feb 2023 06:48:38 -0800 (PST)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 318Ehlgw028660;
+        Wed, 8 Feb 2023 14:48:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=ICeFENhisv8WoXowshIf2/IPNIx8rmtewQQ52ecU1EQ=;
+ b=c3btpvxbOu9ah1fcU/OhxC8pBC7WYk+53cVy8mJUy0g5eFIIgARTAnq2szUubFAtEayD
+ BdnMr3ZhxJg6BOwiLT/I8UL3eXuayvWHcElIPxfSAS8RTqJlmJDOBn/O0fkCFj4aaiI8
+ YJ3fWBws9nN+MtWIKmaN4RbcaKp+k9v2PmH6IKc0waC7aYFjIxbU7g9+N/G63c8exUJ8
+ +qtKfSWuaFV0qGzZkDeHgfm92YjhrJeSdCzKcskU1/ixfWkknfwVDIOwhzhE3pFgysS+
+ ghsh85/59OYVHk3dcVtzeIkqdnl/pEbTd41298Fg48pywdBDlwLxC0DKM9f2+HLAbR6U bg== 
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nmdrmg3vp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Feb 2023 14:48:34 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 318CAvZv007449;
+        Wed, 8 Feb 2023 14:48:32 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3nhf06ujpw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Feb 2023 14:48:32 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 318EmSHZ25690464
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 8 Feb 2023 14:48:28 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D065920040;
+        Wed,  8 Feb 2023 14:48:28 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 88B502005A;
+        Wed,  8 Feb 2023 14:48:28 +0000 (GMT)
+Received: from t35lp63.lnxne.boe (unknown [9.152.108.100])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Wed,  8 Feb 2023 14:48:28 +0000 (GMT)
+From:   Nico Boehr <nrb@linux.ibm.com>
+To:     borntraeger@linux.ibm.com, frankja@linux.ibm.com,
+        imbrenda@linux.ibm.com, shuah@kernel.org
+Cc:     kvm@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH v1 2/2] KVM: s390: fix KVM_S390_GET_CMMA_BITS for GFNs in memslot holes
+Date:   Wed,  8 Feb 2023 15:48:26 +0100
+Message-Id: <20230208144827.131300-2-nrb@linux.ibm.com>
+X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230208144827.131300-1-nrb@linux.ibm.com>
+References: <20230208144827.131300-1-nrb@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <167582135972.455074.6960378545703076467.b4-ty@google.com>
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: MddtpfhFg4JC35cSAh6RJnVFjpaKY7GR
+X-Proofpoint-ORIG-GUID: MddtpfhFg4JC35cSAh6RJnVFjpaKY7GR
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-08_06,2023-02-08_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1011
+ priorityscore=1501 mlxlogscore=711 mlxscore=0 malwarescore=0 bulkscore=0
+ adultscore=0 lowpriorityscore=0 impostorscore=0 phishscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2302080128
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Feb 08, 2023, Sean Christopherson wrote:
-> On Thu, 02 Feb 2023 10:57:15 +0800, shahuang@redhat.com wrote:
-> > The parameter arg in guest_modes_cmdline not being used now, and the
-> > optarg should be replaced with arg in guest_modes_cmdline.
-> > 
-> > And this is the chance to change strtoul() to atoi_non_negative(), since
-> > guest mode ID will never be negative.
-> > 
-> > 
-> > [...]
-> 
-> Applied to kvm-x86 selftests, thanks!
-> 
-> [1/1] selftests: KVM: Replace optarg with arg in guest_modes_cmdline
->       https://github.com/kvm-x86/linux/commit/62f86202d76d
+The KVM_S390_GET_CMMA_BITS ioctl may return incorrect values when userspace
+specifies a start_gfn outside of memslots.
 
-I force pushed to selftests because of a goof on my end, new SHA-1 is:
+This can occur when a VM has multiple memslots with a hole in between:
 
-  https://github.com/kvm-x86/linux/commit/7ae69d7087a9
++-----+----------+--------+--------+
+| ... | Slot N-1 | <hole> | Slot N |
++-----+----------+--------+--------+
+      ^          ^        ^        ^
+      |          |        |        |
+GFN   A          A+B      |        |
+                          A+B+C    |
+			           A+B+C+D
+
+When userspace specifies a GFN in [A+B, A+B+C), it would expect to get the
+CMMA values of the first dirty page in Slot N. However, userspace may get a
+start_gfn of A+B+C+D with a count of 0, hence completely skipping over any
+dirty pages in slot N.
+
+The error is in kvm_s390_next_dirty_cmma(), which assumes
+gfn_to_memslot_approx() will return the memslot _below_ the specified GFN
+when the specified GFN lies outside a memslot. In reality it may return
+either the memslot below or above the specified GFN.
+
+When a memslot above the specified GFN is returned this happens:
+
+- ofs is calculated, but since the memslot's base_gfn is larger than the
+  specified cur_gfn, ofs will underflow to a huge number.
+- ofs is passed to find_next_bit(). Since ofs will exceed the memslot's
+  number of pages, the number of pages in the memslot is returned,
+  completely skipping over all bits in the memslot userspace would be
+  interested in.
+
+Fix this by resetting ofs to zero when a memslot _above_ cur_gfn is
+returned (cur_gfn < ms->base_gfn).
+
+Signed-off-by: Nico Boehr <nrb@linux.ibm.com>
+---
+ arch/s390/kvm/kvm-s390.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+index e4890e04b210..a171a66681b4 100644
+--- a/arch/s390/kvm/kvm-s390.c
++++ b/arch/s390/kvm/kvm-s390.c
+@@ -2158,6 +2158,10 @@ static unsigned long kvm_s390_next_dirty_cmma(struct kvm_memslots *slots,
+ 		ms = container_of(mnode, struct kvm_memory_slot, gfn_node[slots->node_idx]);
+ 		ofs = 0;
+ 	}
++
++	if (cur_gfn < ms->base_gfn)
++		ofs = 0;
++
+ 	ofs = find_next_bit(kvm_second_dirty_bitmap(ms), ms->npages, ofs);
+ 	while (ofs >= ms->npages && (mnode = rb_next(mnode))) {
+ 		ms = container_of(mnode, struct kvm_memory_slot, gfn_node[slots->node_idx]);
+-- 
+2.39.1
+
