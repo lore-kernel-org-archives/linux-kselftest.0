@@ -2,44 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80C6DC636D7
-	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Feb 2023 04:35:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C671AC6379F
+	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Feb 2023 04:35:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbjBIEfA (ORCPT
+        id S230166AbjBIEfB (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 8 Feb 2023 23:35:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46600 "EHLO
+        Wed, 8 Feb 2023 23:35:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230264AbjBIEdw (ORCPT
+        with ESMTP id S230182AbjBIEeA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Feb 2023 23:33:52 -0500
+        Wed, 8 Feb 2023 23:34:00 -0500
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37E8147438;
-        Wed,  8 Feb 2023 20:32:49 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0159A4FAC5;
+        Wed,  8 Feb 2023 20:32:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675917169; x=1707453169;
+  t=1675917174; x=1707453174;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=ja+t+nxs1FvQ3VSNmIfqBCGaB8PSH4Fy0AP9hils4l4=;
-  b=NHzfZHWVM9kKCABvKlMZx/1IvJMsit2/8FoAUzH0lwRIZuEAz5zc0sOk
-   9VC2a72ZbIISOKCy/umcg2tlOY8ycNB8lUWLj9GAi/2VTuq9GNb2XuNBi
-   4TWWlhKYx4VQdIQhNr2r0gOqR0YVu8BHAgv+h52JbX1L/VFFSNGk9O8Hv
-   uB+/QGfjQ750u44cDsonfN5N8+uKZ6eIuxT8BbplU615hWfPN5hm8aBfb
-   FUnas1ROCFukRtyy01S0LSAFl/eP1jg7zgm/l0ZafUBJPJ6/VNFZoZSiM
-   Pbg9T/jW27OOqapVgAPSznlLiI049bL/Rw/1iMyM/p106IWpT2InkrCMe
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="331298748"
+  bh=PBFJ6TbDlAcW3TvlfZUDDjiRVo3eS7ALVE66cynI8FM=;
+  b=YiTlofmF+vOoAKbBi3bDZqlqgg/GXlGYvioKY3nUZpeOyyp7aiMYaOxw
+   bvRxUyVSS6UrP86zuzQ6VUGWXZOXOqdoC/w6dUbxyZt3T0obWXfGkaaok
+   nfww7ZellMVLwfAVJKVlJSOmqKQhIQF9oCyR7znMcYBEF7MWgk4V31KVw
+   ipaCfEus+qShpxcp/0+ArMSwd+ZkhtIC3JqEciNIpV2wFgdIHcuNmf7eb
+   jHgNJh2jRM/zge8TYsSFP6gO1xwZHMlf48ZRss2zPOqKSHk390RC1rSLr
+   kjeb56dJn18b7s5sw5Mr4stX6VjzLMDOnJfFImRAWBt5GuJ4xAuHFEmgV
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="331298780"
 X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="331298748"
+   d="scan'208";a="331298780"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 20:32:13 -0800
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 20:32:17 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="669447547"
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="669447573"
 X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="669447547"
+   d="scan'208";a="669447573"
 Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by fmsmga007.fm.intel.com with ESMTP; 08 Feb 2023 20:32:12 -0800
+  by fmsmga007.fm.intel.com with ESMTP; 08 Feb 2023 20:32:16 -0800
 From:   Yi Liu <yi.l.liu@intel.com>
 To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
         kevin.tian@intel.com, robin.murphy@arm.com
@@ -51,9 +51,9 @@ Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
         suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         baolu.lu@linux.intel.com
-Subject: [PATCH 08/17] iommufd: Split iommufd_hw_pagetable_alloc()
-Date:   Wed,  8 Feb 2023 20:31:44 -0800
-Message-Id: <20230209043153.14964-9-yi.l.liu@intel.com>
+Subject: [PATCH 10/17] iommufd/device: Move IOAS attaching and detaching operations into helpers
+Date:   Wed,  8 Feb 2023 20:31:46 -0800
+Message-Id: <20230209043153.14964-11-yi.l.liu@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230209043153.14964-1-yi.l.liu@intel.com>
 References: <20230209043153.14964-1-yi.l.liu@intel.com>
@@ -63,87 +63,99 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-to a helper which accepts the parent hw_pagetable pointer and user_data
-pointer. This is a prepareation for supporting userspace hw_pagetable
-allocation as caller needs to pass the two parameters to domain_alloc_user
-op.
+From: Nicolin Chen <nicolinc@nvidia.com>
+
+When using a 2-stage nested hw_pagetable (hwpt) setup, the IOVA mappings
+or SW MSI are at the stage-2 hwpt, while the device will be attached to
+a stage-1 hwpt. And then the current do_attach() flow will fail to set up
+MSI, since it always uses the attaching hwpt pointer (i.e. stage-1 in such
+case).
+
+As a preparatory change for the following nesting support patch, move all
+related operations into a pair of separate functions, so we only need to
+redirect the hwpt pointer to its stage-2 hwpt, when using a nested setup.
 
 Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
 Signed-off-by: Yi Liu <yi.l.liu@intel.com>
 ---
- drivers/iommu/iommufd/hw_pagetable.c | 41 ++++++++++++++++++++--------
- 1 file changed, 29 insertions(+), 12 deletions(-)
+ drivers/iommu/iommufd/device.c | 40 +++++++++++++++++++++++++++-------
+ 1 file changed, 32 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/iommu/iommufd/hw_pagetable.c b/drivers/iommu/iommufd/hw_pagetable.c
-index bda21ec737cf..ee97d2f3cf43 100644
---- a/drivers/iommu/iommufd/hw_pagetable.c
-+++ b/drivers/iommu/iommufd/hw_pagetable.c
-@@ -22,24 +22,23 @@ void iommufd_hw_pagetable_destroy(struct iommufd_object *obj)
- 	mutex_destroy(&hwpt->devices_lock);
+diff --git a/drivers/iommu/iommufd/device.c b/drivers/iommu/iommufd/device.c
+index dd7943ff02e4..cdc4ab36f52d 100644
+--- a/drivers/iommu/iommufd/device.c
++++ b/drivers/iommu/iommufd/device.c
+@@ -294,6 +294,36 @@ static bool iommufd_hw_pagetable_has_group(struct iommufd_hw_pagetable *hwpt,
+ 	return false;
  }
  
--/**
-- * iommufd_hw_pagetable_alloc() - Get an iommu_domain for a device
-- * @ictx: iommufd context
-- * @ioas: IOAS to associate the domain with
-- * @dev: Device to get an iommu_domain for
-- *
-- * Allocate a new iommu_domain and return it as a hw_pagetable.
-- */
--struct iommufd_hw_pagetable *
--iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
--			   struct device *dev)
-+static struct iommufd_hw_pagetable *
-+__iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx,
-+			     struct iommufd_ioas *ioas,
-+			     struct device *dev,
-+			     struct iommufd_hw_pagetable *parent,
-+			     void *user_data)
++static int iommufd_device_attach_ioas(struct iommufd_device *idev,
++				      struct iommufd_hw_pagetable *hwpt)
++{
++	phys_addr_t sw_msi_start = PHYS_ADDR_MAX;
++	struct io_pagetable *iopt;
++	int rc;
++
++	iopt = &hwpt->ioas->iopt;
++
++	rc = iopt_table_enforce_group_resv_regions(iopt, idev->dev,
++						   idev->group, &sw_msi_start);
++	if (rc)
++		return rc;
++
++	rc = iommufd_device_setup_msi(idev, hwpt, sw_msi_start);
++	if (rc)
++		goto out_iova;
++
++	return 0;
++out_iova:
++	iopt_remove_reserved_iova(iopt, idev->group);
++	return rc;
++}
++
++static void iommufd_device_detach_ioas(struct iommufd_device *idev,
++				       struct iommufd_hw_pagetable *hwpt)
++{
++	iopt_remove_reserved_iova(&hwpt->ioas->iopt, idev->dev);
++}
++
+ /**
+  * __iommmufd_device_detach - Detach a device from idev->hwpt to new_hwpt
+  * @idev: device to detach
+@@ -323,7 +353,7 @@ static void __iommmufd_device_detach(struct iommufd_device *idev,
+ 
+ 	if (hwpt->ioas != new_ioas) {
+ 		mutex_lock(&hwpt->ioas->mutex);
+-		iopt_remove_reserved_iova(&hwpt->ioas->iopt, idev->dev);
++		iommufd_device_detach_ioas(idev, hwpt);
+ 		mutex_unlock(&hwpt->ioas->mutex);
+ 	}
+ 	mutex_unlock(&hwpt->devices_lock);
+@@ -342,7 +372,6 @@ static int iommufd_device_do_attach(struct iommufd_device *idev,
+ 				    struct iommufd_hw_pagetable *hwpt)
  {
- 	const struct iommu_ops *ops;
-+	struct iommu_domain *parent_domain = NULL;
- 	struct iommufd_hw_pagetable *hwpt;
+ 	struct iommufd_hw_pagetable *cur_hwpt = idev->hwpt;
+-	phys_addr_t sw_msi_start = PHYS_ADDR_MAX;
  	int rc;
  
- 	lockdep_assert_held(&ioas->mutex);
- 
-+	if (WARN_ON(!ioas && !parent))
-+		return ERR_PTR(-EINVAL);
-+
- 	hwpt = iommufd_object_alloc(ictx, hwpt, IOMMUFD_OBJ_HW_PAGETABLE);
- 	if (IS_ERR(hwpt))
- 		return hwpt;
-@@ -50,7 +49,10 @@ iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
- 		goto out_abort;
+ 	lockdep_assert_held(&hwpt->ioas->mutex);
+@@ -367,15 +396,10 @@ static int iommufd_device_do_attach(struct iommufd_device *idev,
+ 		}
  	}
  
--	hwpt->domain = ops->domain_alloc_user(dev, NULL, NULL);
-+	if (parent)
-+		parent_domain = parent->domain;
-+
-+	hwpt->domain = ops->domain_alloc_user(dev, parent_domain, user_data);
- 	if (!hwpt->domain) {
- 		rc = -ENOMEM;
- 		goto out_abort;
-@@ -75,3 +77,18 @@ iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
- 	iommufd_object_abort(ictx, &hwpt->obj);
- 	return ERR_PTR(rc);
- }
-+
-+/**
-+ * iommufd_hw_pagetable_alloc() - Get an iommu_domain for a device
-+ * @ictx: iommufd context
-+ * @ioas: IOAS to associate the domain with
-+ * @dev: Device to get an iommu_domain for
-+ *
-+ * Allocate a new iommu_domain and return it as a hw_pagetable.
-+ */
-+struct iommufd_hw_pagetable *
-+iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
-+			   struct device *dev)
-+{
-+	return __iommufd_hw_pagetable_alloc(ictx, ioas, dev, NULL, NULL);
-+}
+-	rc = iopt_table_enforce_group_resv_regions(&hwpt->ioas->iopt, idev->dev,
+-						   idev->group, &sw_msi_start);
++	rc = iommufd_device_attach_ioas(idev, hwpt);
+ 	if (rc)
+ 		goto out_unlock;
+ 
+-	rc = iommufd_device_setup_msi(idev, hwpt, sw_msi_start);
+-	if (rc)
+-		goto out_iova;
+-
+ 	/*
+ 	 * FIXME: Hack around missing a device-centric iommu api, only attach to
+ 	 * the group once for the first device that is in the group.
 -- 
 2.34.1
 
