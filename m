@@ -2,44 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DB29C61DA4
-	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Feb 2023 04:35:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E443C05027
+	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Feb 2023 04:35:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230356AbjBIEfG (ORCPT
+        id S230468AbjBIEfH (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 8 Feb 2023 23:35:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48274 "EHLO
+        Wed, 8 Feb 2023 23:35:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230291AbjBIEeC (ORCPT
+        with ESMTP id S230375AbjBIEez (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Feb 2023 23:34:02 -0500
+        Wed, 8 Feb 2023 23:34:55 -0500
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC2C4F85E;
-        Wed,  8 Feb 2023 20:32:55 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 337EF518F4;
+        Wed,  8 Feb 2023 20:33:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675917175; x=1707453175;
+  t=1675917185; x=1707453185;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=P/H8ZSKH2xgNyiyBa6YD1+wJavpzaKvy5wsbSiOu9Dw=;
-  b=aNiSEe61M6Dd/IbKeddxKwi1+CaQjd96V1s7rqUtWX9VUSeUm3/vD9zk
-   oaGbKQzvp6jzIoW+WNFeoWwHca1Nq7MsYGrpaESqrMkCN5JEqyRqWiGv4
-   9v+dFB+8I87Wr2L6C5AkquMBZGLa6ZRe+/p6KJTCwV6LcHBnidHoMJ7TD
-   Lasr/QzHPjt2EivB+zjVr4NdGqOyLtpYNI1Z338VspRvtW/5sAK1B1NkV
-   vPtsMs7rlKS2EpAKo64X991gGdPusnzb98vSnpp96lCEJXPXFhnnyCSCr
-   DWas+iJGfEcmWHF5jJmQMwY11oXfGEu18W+dZPwufisJbuxCPYvT03F+5
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="331298817"
+  bh=dlcR+UhuTmADspR4+oiL3WW4I/8TuCAOY+usI2kEQJs=;
+  b=dl4CrnpInnfB/CgOV3sCGlp5pQoFvOOqhpr8Kf8euXYo/gDGa5CoSyRk
+   RL/m1W59lTZ0PL8kInEFL42M1koA+3HvVyndT16uiuB6weaGJFYvncZdl
+   F5U7KrOMi+fksieh/4+EeCYU7F7egoK7AGQD3wsx7A0LLTua7S0Rux/mZ
+   NihIZavUf1KTfZPd6bmDJryOZWo/6RiJfrXK9i8Re1uvCNeyQ8Sir6GTV
+   5WiM1LE3xbRa/RJlhvjQ9gLs86B5VFAkLxbpw637CEhU/Sek+YNUJXPk4
+   8JEhO4TRNbqcUzpJuOEtM14B4qxbJczJi7iEhLWEgDwXczIsSk7IiFHiw
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="331298915"
 X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="331298817"
+   d="scan'208";a="331298915"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 20:32:20 -0800
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 20:32:30 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="669447587"
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="669447643"
 X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="669447587"
+   d="scan'208";a="669447643"
 Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by fmsmga007.fm.intel.com with ESMTP; 08 Feb 2023 20:32:19 -0800
+  by fmsmga007.fm.intel.com with ESMTP; 08 Feb 2023 20:32:29 -0800
 From:   Yi Liu <yi.l.liu@intel.com>
 To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
         kevin.tian@intel.com, robin.murphy@arm.com
@@ -51,9 +51,9 @@ Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
         suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         baolu.lu@linux.intel.com
-Subject: [PATCH 12/17] iommufd: Add user-managed hw_pagetable allocation
-Date:   Wed,  8 Feb 2023 20:31:48 -0800
-Message-Id: <20230209043153.14964-13-yi.l.liu@intel.com>
+Subject: [PATCH 17/17] iommufd/selftest: Add coverage for IOMMU_HWPT_INVALIDATE ioctl
+Date:   Wed,  8 Feb 2023 20:31:53 -0800
+Message-Id: <20230209043153.14964-18-yi.l.liu@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230209043153.14964-1-yi.l.liu@intel.com>
 References: <20230209043153.14964-1-yi.l.liu@intel.com>
@@ -63,254 +63,148 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-As the introduction of nested translation, there are page tables managed
-by userspace. hw_pagetables can be stage-1 pagetable, stage-2 pagetable or
-just standalone pagetable.
+From: Nicolin Chen <nicolinc@nvidia.com>
 
-Stage-2 page table and standalone pagetable are kernel-managed for security.
-iommufd has already supported it.
-
-Stage-1 pagetable is user-managed and needs to work with a stage-2 page table.
-Hence, userspace should provide a hw_pagetable ID that points to a stage-2
-hw_pagetable. Since stage-1 is user-managed, so an ioctl is added to sync
-the IOTLB when there is modification in the stage-1 page table.
-
-The first available user-managed hw_pagtable type is the Intel VT-d stage-1
-pagetable for nested translation.
+This only adds limited sanity.
 
 Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
 Signed-off-by: Yi Liu <yi.l.liu@intel.com>
 ---
- drivers/iommu/iommufd/device.c          |  3 +-
- drivers/iommu/iommufd/hw_pagetable.c    | 71 ++++++++++++++++++++++++-
- drivers/iommu/iommufd/iommufd_private.h |  1 +
- drivers/iommu/iommufd/main.c            |  8 +++
- include/uapi/linux/iommufd.h            | 34 ++++++++++++
- 5 files changed, 114 insertions(+), 3 deletions(-)
+ drivers/iommu/iommufd/hw_pagetable.c          |  7 ++++++-
+ drivers/iommu/iommufd/iommufd_test.h          | 10 +++++++++
+ drivers/iommu/iommufd/selftest.c              | 15 +++++++++++++
+ tools/testing/selftests/iommu/iommufd.c       |  8 +++++++
+ tools/testing/selftests/iommu/iommufd_utils.h | 21 +++++++++++++++++++
+ 5 files changed, 60 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/iommu/iommufd/device.c b/drivers/iommu/iommufd/device.c
-index 6d948fa418d5..c19e2f54a44f 100644
---- a/drivers/iommu/iommufd/device.c
-+++ b/drivers/iommu/iommufd/device.c
-@@ -164,7 +164,8 @@ struct device *iommufd_obj_dev(struct iommufd_object *obj)
-  * indexed by the members defined in enum iommu_device_data_type.
-  */
- const u64 iommufd_supported_pgtbl_types[] =  {
--	[IOMMU_DEVICE_DATA_INTEL_VTD] = BIT_ULL(IOMMU_PGTBL_DATA_NONE),
-+	[IOMMU_DEVICE_DATA_INTEL_VTD] = BIT_ULL(IOMMU_PGTBL_DATA_NONE) |
-+					BIT_ULL(IOMMU_PGTBL_DATA_VTD_S1),
- };
- 
- int iommufd_device_get_info(struct iommufd_ucmd *ucmd)
 diff --git a/drivers/iommu/iommufd/hw_pagetable.c b/drivers/iommu/iommufd/hw_pagetable.c
-index 02dee8e8d958..44a75ccc8e08 100644
+index 1f1940969b2b..86864a3e170e 100644
 --- a/drivers/iommu/iommufd/hw_pagetable.c
 +++ b/drivers/iommu/iommufd/hw_pagetable.c
-@@ -108,11 +108,12 @@ iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
-  */
- static const size_t iommufd_hwpt_info_size[] = {
- 	[IOMMU_PGTBL_DATA_NONE] = 0,
-+	[IOMMU_PGTBL_DATA_VTD_S1] = sizeof(struct iommu_hwpt_intel_vtd),
- };
- 
- int iommufd_hwpt_alloc(struct iommufd_ucmd *ucmd)
- {
--	struct iommufd_hw_pagetable *hwpt;
-+	struct iommufd_hw_pagetable *hwpt, *parent = NULL;
- 	struct iommu_hwpt_alloc *cmd = ucmd->cmd;
- 	struct iommufd_ctx *ictx = ucmd->ictx;
- 	struct iommufd_object *pt_obj = NULL;
-@@ -160,6 +161,19 @@ int iommufd_hwpt_alloc(struct iommufd_ucmd *ucmd)
+@@ -283,7 +283,12 @@ int iommufd_hwpt_invalidate(struct iommufd_ucmd *ucmd)
+ 		goto out_put_hwpt;
  	}
  
- 	switch (pt_obj->type) {
-+	case IOMMUFD_OBJ_HW_PAGETABLE:
-+		parent = container_of(pt_obj, struct iommufd_hw_pagetable, obj);
-+		/*
-+		 * Cannot allocate user-managed hwpt linking to auto_created
-+		 * hwpt. If the parent hwpt is already a user-managed hwpt,
-+		 * don't allocate another user-managed hwpt linking to it.
-+		 */
-+		if (parent->auto_domain || parent->parent) {
-+			rc = -EINVAL;
-+			goto out_put_pt;
-+		}
-+		ioas = parent->ioas;
-+		break;
- 	case IOMMUFD_OBJ_IOAS:
- 		ioas = container_of(pt_obj, struct iommufd_ioas, obj);
- 		break;
-@@ -189,7 +203,7 @@ int iommufd_hwpt_alloc(struct iommufd_ucmd *ucmd)
- 	}
- 
- 	mutex_lock(&ioas->mutex);
--	hwpt = __iommufd_hw_pagetable_alloc(ictx, ioas, dev, NULL, data);
-+	hwpt = __iommufd_hw_pagetable_alloc(ictx, ioas, dev, parent, data);
- 	mutex_unlock(&ioas->mutex);
- 	if (IS_ERR(hwpt)) {
- 		rc = PTR_ERR(hwpt);
-@@ -217,3 +231,56 @@ int iommufd_hwpt_alloc(struct iommufd_ucmd *ucmd)
- 	iommufd_put_object(dev_obj);
- 	return rc;
- }
-+
-+static u32 iommufd_hwpt_invalidate_info_size[] = {
-+	[IOMMU_PGTBL_DATA_VTD_S1] = sizeof(struct iommu_hwpt_invalidate_intel_vtd),
-+};
-+
-+int iommufd_hwpt_invalidate(struct iommufd_ucmd *ucmd)
-+{
-+	struct iommu_hwpt_invalidate *cmd = ucmd->cmd;
-+	struct iommufd_hw_pagetable *hwpt;
-+	u64 user_ptr;
-+	u32 user_data_len, klen;
-+	int rc = 0;
-+
-+	/*
-+	 * No invalidation needed for type==IOMMU_PGTBL_DATA_NONE.
-+	 * data_len should not exceed the size of iommufd_invalidate_buffer.
-+	 */
-+	if (cmd->data_type == IOMMU_PGTBL_DATA_NONE || !cmd->data_len)
-+		return -EOPNOTSUPP;
-+
-+	hwpt = iommufd_get_hwpt(ucmd, cmd->hwpt_id);
-+	if (IS_ERR(hwpt))
-+		return PTR_ERR(hwpt);
-+
-+	/* Do not allow any kernel-managed hw_pagetable */
-+	if (!hwpt->parent) {
-+		rc = -EINVAL;
-+		goto out_put_hwpt;
-+	}
-+
-+	klen = iommufd_hwpt_invalidate_info_size[cmd->data_type];
-+	if (!klen) {
-+		rc = -EINVAL;
-+		goto out_put_hwpt;
-+	}
-+
-+	/*
-+	 * copy the needed fields before reusing the ucmd buffer, this
-+	 * avoids memory allocation in this path.
-+	 */
-+	user_ptr = cmd->data_uptr;
-+	user_data_len = cmd->data_len;
-+
-+	rc = copy_struct_from_user(cmd, klen,
-+				   u64_to_user_ptr(user_ptr), user_data_len);
-+	if (rc)
-+		goto out_put_hwpt;
-+
-+	hwpt->domain->ops->iotlb_sync_user(hwpt->domain, cmd);
-+out_put_hwpt:
-+	iommufd_put_object(&hwpt->obj);
-+	return rc;
-+}
-diff --git a/drivers/iommu/iommufd/iommufd_private.h b/drivers/iommu/iommufd/iommufd_private.h
-index 5ef034451f4b..bb341e633c18 100644
---- a/drivers/iommu/iommufd/iommufd_private.h
-+++ b/drivers/iommu/iommufd/iommufd_private.h
-@@ -267,6 +267,7 @@ iommufd_get_hwpt(struct iommufd_ucmd *ucmd, u32 id)
- }
- 
- int iommufd_hwpt_alloc(struct iommufd_ucmd *ucmd);
-+int iommufd_hwpt_invalidate(struct iommufd_ucmd *ucmd);
- 
- struct device *iommufd_obj_dev(struct iommufd_object *obj);
- 
-diff --git a/drivers/iommu/iommufd/main.c b/drivers/iommu/iommufd/main.c
-index 831303d64abe..6e2d8805daf3 100644
---- a/drivers/iommu/iommufd/main.c
-+++ b/drivers/iommu/iommufd/main.c
-@@ -252,6 +252,12 @@ union ucmd_buffer {
- 	struct iommu_destroy destroy;
- 	struct iommu_device_info info;
- 	struct iommu_hwpt_alloc hwpt;
-+	struct iommu_hwpt_invalidate cache;
-+	/*
-+	 * data_type specific structure used in the cache invalidation
-+	 * path.
-+	 */
-+	struct iommu_hwpt_invalidate_intel_vtd vtd;
- 	struct iommu_ioas_alloc alloc;
- 	struct iommu_ioas_allow_iovas allow_iovas;
- 	struct iommu_ioas_copy ioas_copy;
-@@ -287,6 +293,8 @@ static const struct iommufd_ioctl_op iommufd_ioctl_ops[] = {
- 		 __reserved),
- 	IOCTL_OP(IOMMU_HWPT_ALLOC, iommufd_hwpt_alloc, struct iommu_hwpt_alloc,
- 		 __reserved),
-+	IOCTL_OP(IOMMU_HWPT_INVALIDATE, iommufd_hwpt_invalidate,
-+		 struct iommu_hwpt_invalidate, data_uptr),
- 	IOCTL_OP(IOMMU_IOAS_ALLOC, iommufd_ioas_alloc_ioctl,
- 		 struct iommu_ioas_alloc, out_ioas_id),
- 	IOCTL_OP(IOMMU_IOAS_ALLOW_IOVAS, iommufd_ioas_allow_iovas,
-diff --git a/include/uapi/linux/iommufd.h b/include/uapi/linux/iommufd.h
-index f501add5ffe9..cb6a9ee215f4 100644
---- a/include/uapi/linux/iommufd.h
-+++ b/include/uapi/linux/iommufd.h
-@@ -47,6 +47,7 @@ enum {
- 	IOMMUFD_CMD_VFIO_IOAS,
- 	IOMMUFD_CMD_DEVICE_GET_INFO,
- 	IOMMUFD_CMD_HWPT_ALLOC,
-+	IOMMUFD_CMD_HWPT_INVALIDATE,
+-	klen = iommufd_hwpt_invalidate_info_size[cmd->data_type];
++	if (cmd->data_type != IOMMU_PGTBL_DATA_SELFTTEST)
++		klen = iommufd_hwpt_invalidate_info_size[cmd->data_type];
++#ifdef CONFIG_IOMMUFD_TEST
++	else
++		klen = sizeof(struct iommu_hwpt_invalidate_selftest);
++#endif
+ 	if (!klen) {
+ 		rc = -EINVAL;
+ 		goto out_put_hwpt;
+diff --git a/drivers/iommu/iommufd/iommufd_test.h b/drivers/iommu/iommufd/iommufd_test.h
+index 5998c63a89f2..4913884a8b24 100644
+--- a/drivers/iommu/iommufd/iommufd_test.h
++++ b/drivers/iommu/iommufd/iommufd_test.h
+@@ -134,4 +134,14 @@ struct iommu_hwpt_selftest {
+ 	__u64 test_config;
  };
  
- /**
-@@ -377,9 +378,11 @@ struct iommu_device_info_vtd {
- /**
-  * enum iommu_pgtbl_data_type - IOMMU Page Table User Data type
-  * @IOMMU_PGTBL_DATA_NONE: no user data
-+ * @IOMMU_PGTBL_DATA_VTD_S1: Data for Intel VT-d stage-1 page table
-  */
- enum iommu_pgtbl_data_type {
- 	IOMMU_PGTBL_DATA_NONE,
-+	IOMMU_PGTBL_DATA_VTD_S1,
- };
- 
- /**
-@@ -495,6 +498,8 @@ struct iommu_hwpt_intel_vtd {
-  * +------------------------------+-------------------------------------+
-  * | IOMMU_PGTBL_DATA_NONE        |                 N/A                 |
-  * +------------------------------+-------------------------------------+
-+ * | IOMMU_PGTBL_DATA_VTD_S1      |      struct iommu_hwpt_intel_vtd    |
-+ * +------------------------------+-------------------------------------+
-  */
- struct iommu_hwpt_alloc {
- 	__u32 size;
-@@ -562,4 +567,33 @@ struct iommu_hwpt_invalidate_intel_vtd {
- 	__u64 granule_size;
- 	__u64 nb_granules;
- };
-+
 +/**
-+ * struct iommu_hwpt_invalidate - ioctl(IOMMU_HWPT_INVALIDATE)
-+ * @size: sizeof(struct iommu_hwpt_invalidate)
-+ * @hwpt_id: HWPT ID of target hardware page table for the invalidation
-+ * @data_type: One of enum iommu_pgtbl_data_type
-+ * @data_len: Length of the type specific data
-+ * @data_uptr: User pointer to the type specific data
++ * struct iommu_hwpt_invalidate_selftest
 + *
-+ * Invalidate the iommu cache for user-managed page table. Modifications
-+ * on user-managed page table should be followed with this operation to
-+ * sync the userspace with the kernel and underlying hardware. This operation
-+ * is only needed by user-managed hw_pagetables, so the @data_type should
-+ * never be IOMMU_PGTBL_DATA_NONE.
-+ *
-+ * +==============================+========================================+
-+ * | @data_type                   |     Data structure in @data_uptr       |
-+ * +------------------------------+----------------------------------------+
-+ * | IOMMU_PGTBL_DATA_VTD_S1      | struct iommu_hwpt_invalidate_intel_vtd |
-+ * +------------------------------+----------------------------------------+
++ * @flags: invalidate flags
 + */
-+struct iommu_hwpt_invalidate {
-+	__u32 size;
-+	__u32 hwpt_id;
-+	__u32 data_type;
-+	__u32 data_len;
-+	__aligned_u64 data_uptr;
++struct iommu_hwpt_invalidate_selftest {
++#define IOMMU_TEST_INVALIDATE_ALL	(1 << 0)
++	__u64 flags;
 +};
-+#define IOMMU_HWPT_INVALIDATE _IO(IOMMUFD_TYPE, IOMMUFD_CMD_HWPT_INVALIDATE)
++
  #endif
+diff --git a/drivers/iommu/iommufd/selftest.c b/drivers/iommu/iommufd/selftest.c
+index 21134000bc78..06b5e8829488 100644
+--- a/drivers/iommu/iommufd/selftest.c
++++ b/drivers/iommu/iommufd/selftest.c
+@@ -283,6 +283,20 @@ static phys_addr_t mock_domain_iova_to_phys(struct iommu_domain *domain,
+ 	return (xa_to_value(ent) & MOCK_PFN_MASK) * MOCK_IO_PAGE_SIZE;
+ }
+ 
++static void mock_domain_iotlb_sync_user(struct iommu_domain *domain,
++					void *user_data)
++{
++	struct iommu_hwpt_invalidate_selftest *inv_info = user_data;
++	struct mock_iommu_domain *mock =
++		container_of(domain, struct mock_iommu_domain, domain);
++
++	if (domain->type != IOMMU_DOMAIN_NESTED || !mock->parent)
++		return;
++
++	if (inv_info->flags & IOMMU_TEST_INVALIDATE_ALL)
++		mock->iotlb = 0;
++}
++
+ static const struct iommu_ops mock_ops = {
+ 	.owner = THIS_MODULE,
+ 	.pgsize_bitmap = MOCK_IO_PAGE_SIZE,
+@@ -301,6 +315,7 @@ static const struct iommu_ops mock_ops = {
+ 
+ static struct iommu_domain_ops domain_nested_ops = {
+ 	.free = mock_domain_free,
++	.iotlb_sync_user = mock_domain_iotlb_sync_user,
+ };
+ 
+ static inline struct iommufd_hw_pagetable *
+diff --git a/tools/testing/selftests/iommu/iommufd.c b/tools/testing/selftests/iommu/iommufd.c
+index ddd7c898fc50..3fc7a1cd8fef 100644
+--- a/tools/testing/selftests/iommu/iommufd.c
++++ b/tools/testing/selftests/iommu/iommufd.c
+@@ -126,6 +126,7 @@ TEST_F(iommufd, cmd_length)
+ 	TEST_LENGTH(iommu_vfio_ioas, IOMMU_VFIO_IOAS);
+ 	TEST_LENGTH(iommu_device_info, IOMMU_DEVICE_GET_INFO);
+ 	TEST_LENGTH(iommu_hwpt_alloc, IOMMU_HWPT_ALLOC);
++	TEST_LENGTH(iommu_hwpt_invalidate, IOMMU_HWPT_INVALIDATE);
+ #undef TEST_LENGTH
+ }
+ 
+@@ -312,6 +313,13 @@ TEST_F(iommufd_ioas, ioas_nested_hwpt)
+ 		EXPECT_ERRNO(EBUSY,
+ 			     _test_ioctl_destroy(self->fd, parent_hwpt_id));
+ 
++		/* hwpt_invalidate only supports a user-managed hwpt (nested) */
++		test_err_ioctl_hwpt_invalidate(EINVAL, parent_hwpt_id);
++		test_ioctl_hwpt_invalidate(nested_hwpt_id[0]);
++		test_ioctl_hwpt_check_iotlb(nested_hwpt_id[0], 0);
++		test_ioctl_hwpt_invalidate(nested_hwpt_id[1]);
++		test_ioctl_hwpt_check_iotlb(nested_hwpt_id[1], 0);
++
+ 		/* Attach device to nested_hwpt_id[0] that then will be busy */
+ 		test_cmd_mock_domain_replace(self->ioas_id, self->dev_id,
+ 					     nested_hwpt_id[0]);
+diff --git a/tools/testing/selftests/iommu/iommufd_utils.h b/tools/testing/selftests/iommu/iommufd_utils.h
+index ea61b81fbc52..73ba0bacbb9a 100644
+--- a/tools/testing/selftests/iommu/iommufd_utils.h
++++ b/tools/testing/selftests/iommu/iommufd_utils.h
+@@ -244,6 +244,27 @@ static int _test_ioctl_hwpt_alloc(int fd, __u32 pt_id, __u32 dev_id,
+ 		ASSERT_EQ(0, *(out_hwpt_id));                                 \
+ 	})
+ 
++static int _test_ioctl_hwpt_invalidate(int fd, __u32 hwpt_id)
++{
++	struct iommu_hwpt_invalidate_selftest data = {
++		.flags = IOMMU_TEST_INVALIDATE_ALL,
++	};
++	struct iommu_hwpt_invalidate cmd = {
++		.size = sizeof(cmd),
++		.hwpt_id = hwpt_id,
++		.data_type = IOMMU_PGTBL_DATA_SELFTTEST,
++		.data_len = sizeof(data),
++		.data_uptr = (uint64_t)&data,
++	};
++
++	return ioctl(fd, IOMMU_HWPT_INVALIDATE, &cmd);
++}
++
++#define test_ioctl_hwpt_invalidate(hwpt_id)	\
++	ASSERT_EQ(0, _test_ioctl_hwpt_invalidate(self->fd, hwpt_id))
++#define test_err_ioctl_hwpt_invalidate(_errno, hwpt_id)	\
++	EXPECT_ERRNO(_errno, _test_ioctl_hwpt_invalidate(self->fd, hwpt_id))
++
+ static int _test_ioctl_ioas_map(int fd, unsigned int ioas_id, void *buffer,
+ 				size_t length, __u64 *iova, unsigned int flags)
+ {
 -- 
 2.34.1
 
