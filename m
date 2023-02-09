@@ -2,44 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 528C1C636D3
-	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Feb 2023 04:35:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE0ABC61DA4
+	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Feb 2023 04:35:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230292AbjBIEfB (ORCPT
+        id S229831AbjBIEe7 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 8 Feb 2023 23:35:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47162 "EHLO
+        Wed, 8 Feb 2023 23:34:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230270AbjBIEeA (ORCPT
+        with ESMTP id S230257AbjBIEdt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Feb 2023 23:34:00 -0500
+        Wed, 8 Feb 2023 23:33:49 -0500
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C81944ED24;
-        Wed,  8 Feb 2023 20:32:54 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53820457F1;
+        Wed,  8 Feb 2023 20:32:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675917174; x=1707453174;
+  t=1675917160; x=1707453160;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=O06cP82mf2Ud/xjs3OV3gC0AxWz7oGEuUUE6NIRSTvA=;
-  b=eu0MvJQtqrPBJP9asPS7TEoaes4efgLUs7o4RmZjw/gn2rxNMoQWbZEl
-   oc5Akqx6JQMJ3yEjFKGtOqCe9jQ0C/rrVnaYFv7JehNVE1QmNm+u3nLyU
-   v72dPObSk0zDYZ95vcnf/0yW+dpD9E43NkViLPCVuptDYgwmxLesTm+nC
-   vDa6joUgUCZKKbROSeFdg2iivE1STj/UQYvlAK3KJ8RWIc965get1tuTC
-   g/yHsm8uJI0jIIJuBhfhJ/n3GlPhkKj4yrB9bNYh2kVBj+Vrbxz3uI8Zz
-   NCJwTh+7kcUmWa405+basJ0tvmjK5MIW+VRBB2pqi2d9oXTPTJ/o+p6r+
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="331298797"
+  bh=RfT4R/xTBwZsk8AEoHLAHBvK4hYBuXf+5pIwXQ6TqQw=;
+  b=nT9GYdMVpkOL5y2Y74N2jEJ8RvrkFcJM1Y2qgEtjSH4Z0dHdbpJOjceE
+   uBCHDNZp7kWrkCJevRc/hwELompD/r2oaWKpsYc4wIYRHciLZfsUu5TVV
+   U555ilUofG6ccxY/WnU9wM010fTrbKH1+R03S/QPEdriThmjK3lAsX5T7
+   h3Rae6Dix1aMQG3IKgcDAPE+P+PYhUcReREmZcIfbdQRrqicSUCJKPLiY
+   3owLTeviEMmljGKwM6XHb3j99YHeOVgE5zYic3gL8fXTnuG8z78t2K9Sd
+   KSMnNSafmVVc8j4eMAbfR3uv+PQkQHNSXExkUEhe/rxljzE+UOQqB5XSj
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="331298694"
 X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="331298797"
+   d="scan'208";a="331298694"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 20:32:19 -0800
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 20:32:09 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="669447580"
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="669447517"
 X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="669447580"
+   d="scan'208";a="669447517"
 Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by fmsmga007.fm.intel.com with ESMTP; 08 Feb 2023 20:32:18 -0800
+  by fmsmga007.fm.intel.com with ESMTP; 08 Feb 2023 20:32:08 -0800
 From:   Yi Liu <yi.l.liu@intel.com>
 To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
         kevin.tian@intel.com, robin.murphy@arm.com
@@ -51,9 +51,9 @@ Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
         suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         baolu.lu@linux.intel.com
-Subject: [PATCH 11/17] iommufd: Add infrastructure for user-managed hw_pagetable allocation
-Date:   Wed,  8 Feb 2023 20:31:47 -0800
-Message-Id: <20230209043153.14964-12-yi.l.liu@intel.com>
+Subject: [PATCH 06/17] iommufd/hw_pagetable: Use domain_alloc_user op for domain allocation
+Date:   Wed,  8 Feb 2023 20:31:42 -0800
+Message-Id: <20230209043153.14964-7-yi.l.liu@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230209043153.14964-1-yi.l.liu@intel.com>
 References: <20230209043153.14964-1-yi.l.liu@intel.com>
@@ -63,97 +63,43 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Nested translation has stage-1 and stage-2 hw_pagetables, and both needs
-userspace to allocate. Stage-1 hw_pagetable needs to work with a stage-2
-hw_pagetable. This adds a parent pointer in struct iommufd_hw_pagetable
-to link stage-1 hw_pagetable with a stage-2 hw_pagetable. Hence iommufd
-core can accept user-managed hw_pagetable allocation request.
+This converts iommufd to use iommu_domain_alloc_user() for iommu_domain
+creation.
 
+Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
 Signed-off-by: Yi Liu <yi.l.liu@intel.com>
 ---
- drivers/iommu/iommufd/device.c          |  5 +++++
- drivers/iommu/iommufd/hw_pagetable.c    | 21 +++++++++++++++------
- drivers/iommu/iommufd/iommufd_private.h |  1 +
- 3 files changed, 21 insertions(+), 6 deletions(-)
+ drivers/iommu/iommufd/hw_pagetable.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/iommu/iommufd/device.c b/drivers/iommu/iommufd/device.c
-index cdc4ab36f52d..6d948fa418d5 100644
---- a/drivers/iommu/iommufd/device.c
-+++ b/drivers/iommu/iommufd/device.c
-@@ -301,6 +301,9 @@ static int iommufd_device_attach_ioas(struct iommufd_device *idev,
- 	struct io_pagetable *iopt;
- 	int rc;
- 
-+	if (hwpt->parent)
-+		hwpt = hwpt->parent;
-+
- 	iopt = &hwpt->ioas->iopt;
- 
- 	rc = iopt_table_enforce_group_resv_regions(iopt, idev->dev,
-@@ -321,6 +324,8 @@ static int iommufd_device_attach_ioas(struct iommufd_device *idev,
- static void iommufd_device_detach_ioas(struct iommufd_device *idev,
- 				       struct iommufd_hw_pagetable *hwpt)
- {
-+	if (hwpt->parent)
-+		hwpt = hwpt->parent;
- 	iopt_remove_reserved_iova(&hwpt->ioas->iopt, idev->dev);
- }
- 
 diff --git a/drivers/iommu/iommufd/hw_pagetable.c b/drivers/iommu/iommufd/hw_pagetable.c
-index 998d01490a74..02dee8e8d958 100644
+index 43d473989a06..08d963ee38c7 100644
 --- a/drivers/iommu/iommufd/hw_pagetable.c
 +++ b/drivers/iommu/iommufd/hw_pagetable.c
-@@ -15,8 +15,12 @@ void iommufd_hw_pagetable_destroy(struct iommufd_object *obj)
+@@ -30,6 +30,7 @@ struct iommufd_hw_pagetable *
+ iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
+ 			   struct device *dev)
+ {
++	const struct iommu_ops *ops;
+ 	struct iommufd_hw_pagetable *hwpt;
+ 	int rc;
  
- 	WARN_ON(!list_empty(&hwpt->devices));
+@@ -37,7 +38,13 @@ iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
+ 	if (IS_ERR(hwpt))
+ 		return hwpt;
  
--	iopt_table_remove_domain(&hwpt->ioas->iopt, hwpt->domain);
--	list_del(&hwpt->hwpt_item);
-+	if (!hwpt->parent) {
-+		iopt_table_remove_domain(&hwpt->ioas->iopt, hwpt->domain);
-+		list_del(&hwpt->hwpt_item);
-+	} else {
-+		refcount_dec(&hwpt->parent->obj.users);
+-	hwpt->domain = iommu_domain_alloc(dev->bus);
++	ops = dev_iommu_ops(dev);
++	if (!ops || !ops->domain_alloc_user) {
++		rc = -EOPNOTSUPP;
++		goto out_abort;
 +	}
- 	iommu_domain_free(hwpt->domain);
- 	refcount_dec(&hwpt->ioas->obj.users);
- 	mutex_destroy(&hwpt->devices_lock);
-@@ -58,13 +62,18 @@ __iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx,
++
++	hwpt->domain = ops->domain_alloc_user(dev, NULL, NULL);
+ 	if (!hwpt->domain) {
+ 		rc = -ENOMEM;
  		goto out_abort;
- 	}
- 
-+	hwpt->parent = parent;
- 	INIT_LIST_HEAD(&hwpt->devices);
- 	INIT_LIST_HEAD(&hwpt->hwpt_item);
- 	mutex_init(&hwpt->devices_lock);
--	rc = iopt_table_add_domain(&ioas->iopt, hwpt->domain);
--	if (rc)
--		goto out_free_domain;
--	list_add_tail(&hwpt->hwpt_item, &ioas->hwpt_list);
-+	if (!parent) {
-+		rc = iopt_table_add_domain(&ioas->iopt, hwpt->domain);
-+		if (rc)
-+			goto out_free_domain;
-+		list_add_tail(&hwpt->hwpt_item, &ioas->hwpt_list);
-+	} else {
-+		refcount_inc(&parent->obj.users);
-+	}
- 
- 	/* Pairs with iommufd_hw_pagetable_destroy() */
- 	refcount_inc(&ioas->obj.users);
-diff --git a/drivers/iommu/iommufd/iommufd_private.h b/drivers/iommu/iommufd/iommufd_private.h
-index ee5344baf135..5ef034451f4b 100644
---- a/drivers/iommu/iommufd/iommufd_private.h
-+++ b/drivers/iommu/iommufd/iommufd_private.h
-@@ -241,6 +241,7 @@ int iommufd_vfio_ioas(struct iommufd_ucmd *ucmd);
-  */
- struct iommufd_hw_pagetable {
- 	struct iommufd_object obj;
-+	struct iommufd_hw_pagetable *parent;
- 	struct iommufd_ioas *ioas;
- 	struct iommu_domain *domain;
- 	bool auto_domain : 1;
 -- 
 2.34.1
 
