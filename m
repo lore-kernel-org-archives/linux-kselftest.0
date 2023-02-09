@@ -2,162 +2,133 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0955EC64EC4
-	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Feb 2023 16:20:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 663BCC61DA4
+	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Feb 2023 16:36:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230151AbjBIQT6 (ORCPT
+        id S229647AbjBIQgk (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 9 Feb 2023 11:19:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36930 "EHLO
+        Thu, 9 Feb 2023 11:36:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbjBIQTu (ORCPT
+        with ESMTP id S229671AbjBIQgj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Feb 2023 11:19:50 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2081.outbound.protection.outlook.com [40.107.94.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECBCF5CBC1;
-        Thu,  9 Feb 2023 08:19:40 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Rssut8R6XR08sLWN9OToOOXDu6xNQx5GC60bI+zFpm5HNz7XPlz/BH8zluv4v9Fuk6A4+IyP32FLBoo5kFMwOszbusMa7F7avantGRu/pjJ+nAR2mqSVo1nYHgB0VlxvsDhYxFb3IJR7gwV1lARAu9F3Xn8k2XGrqBmiQSFRLcWTEWr19Zo1MpbsNTpcxB0A2hlyzqrhf1TuKN1DOYYC0mufaOhICO9XXb5ovadQMP+VoCx4wxU1szEp93TKFpu4o4J6KQ8CRx0sk6aTyqp9l3BrmR9uqja8oTIXyVYQBs9XEaTAY4J8PL4IKA0lPaDiP05fy3RSyE/p0NhMLHg8bg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CO/ZXq5XATc6aa6+0Ckd/maHZ/f0WVz/Vql93RopThU=;
- b=KfvF8/B3SYszVEpSOJgDB60ij6jLKLVJFEUjPI5SH/5wnonwtb3GxPB8u6fl4vmIRn2tDCoBRTtCTpSilif4eDitsI27+ZelSF3kNP6M8PEHE9mb3DFCqOHArv2dt6qucFKAlIH29zb4fBU4/fi6EyyWPi/I8kgztnqGf3gMVttW+1opKb/sFljAW2KSyTGA9TwzRYoS7hJSsxdKou4Rn51HjY4q/Zm5hSBj/teQ59MCApZiOgJD109tLMKIzXn0ElW5GkUJ1zRJh8ZMK3NYPEK4AFPelcuyNegOPGCy1Fb8F1SfGJ+572RnZS7uq+PLo6yrRg52anEgfNO5xwS3TQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.232) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CO/ZXq5XATc6aa6+0Ckd/maHZ/f0WVz/Vql93RopThU=;
- b=YnAnsi8ukxFpy3x5d/Cb/iOAnx8L3Dmk8u0xFSzsWFr2eM7VoJQ9wQUBpZ1mYOwKxhTkfU/yrvDAfvpP/l6/nG1HOWSOvEGBSDw0Lg2whyE/ZSA8nGxCYBTCOcOq43dBsMUGV1UKzFgIn3JzunmV/r5wpGre74KWCwPTZa7ScDAzbFGMpXONpHrAu1V/PShisDCeJN4ExoT6lt9o1qOZm10LSZYokgnY9aMaQG8Z69A9a92FeyEYzWdLfM+x72nc/0ryGMvbpYFlehHIXDpXpq8BeW8US16F42sZ9/rqomA1qv0yBWzISIkHJy516N/wxs+aHZwPfMA38N/ljqDbdw==
-Received: from BN9PR03CA0339.namprd03.prod.outlook.com (2603:10b6:408:f6::14)
- by CH3PR12MB8281.namprd12.prod.outlook.com (2603:10b6:610:128::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.17; Thu, 9 Feb
- 2023 16:19:38 +0000
-Received: from BL02EPF000108E9.namprd05.prod.outlook.com
- (2603:10b6:408:f6:cafe::c) by BN9PR03CA0339.outlook.office365.com
- (2603:10b6:408:f6::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.19 via Frontend
- Transport; Thu, 9 Feb 2023 16:19:38 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.232) by
- BL02EPF000108E9.mail.protection.outlook.com (10.167.241.202) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6086.16 via Frontend Transport; Thu, 9 Feb 2023 16:19:37 +0000
-Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
- (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 9 Feb 2023
- 08:19:21 -0800
-Received: from drhqmail201.nvidia.com (10.126.190.180) by
- drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Thu, 9 Feb 2023 08:19:20 -0800
-Received: from Asurada-Nvidia (10.127.8.9) by mail.nvidia.com (10.126.190.180)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36 via Frontend
- Transport; Thu, 9 Feb 2023 08:19:20 -0800
-Date:   Thu, 9 Feb 2023 08:19:18 -0800
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-CC:     "Tian, Kevin" <kevin.tian@intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>
-Subject: Re: [PATCH v2 10/10] vfio: Do not allow !ops->dma_unmap in
- vfio_pin/unpin_pages()
-Message-ID: <Y+UdBvoSb90cCa40@Asurada-Nvidia>
-References: <cover.1675802050.git.nicolinc@nvidia.com>
- <59e5eeac675172ab1cb07236a3eb3e166553fe71.1675802050.git.nicolinc@nvidia.com>
- <BN9PR11MB527687E27FC35CD842E4EA7B8CD99@BN9PR11MB5276.namprd11.prod.outlook.com>
- <Y+T0d9ox3KnqMDIL@nvidia.com>
+        Thu, 9 Feb 2023 11:36:39 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9454060BA4
+        for <linux-kselftest@vger.kernel.org>; Thu,  9 Feb 2023 08:36:28 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id u9so3432845plf.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Feb 2023 08:36:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=iY3uRKwhFfCWuwUwhi+08QCo3PpICPwRsioQ65qL5sg=;
+        b=VI20u5uoBpf9UK7HeP3X9PWxRHyYcNmwbb70VwajQqkf4A/TbhP6zN+pvbSViyerKA
+         Yr9iXGCl7HIacfWhBmqh2+4DF8/Ynp80GNmeuI8c+OQLWyp7l8FJO1Wj/+yOEgHd8tvy
+         k6eMTzJRNmQ6iIt+i8IZUyQ2im7k/0F+EqUio=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iY3uRKwhFfCWuwUwhi+08QCo3PpICPwRsioQ65qL5sg=;
+        b=EkEly9Y4BlRThoAoquEHQpL9uXmWgCmDgGqcyXHdAlXGrxIvB4qQnpujix8sKmNNpb
+         wZ2W62OAgmlHyEw7lcif6LijAtlRFrED08nG3HrKopXOliStp2nY+JgQnCMPISOZGCQo
+         AHjkAJw/pHKAtOfn7K5QAoO9hhzsnw77rsjHN4XsiSe5QdBFIKIvI9fKB+A7Wz7vsvIu
+         1mUEq+jWqPpxI/zMk8S/HsMLqEZUvdcsckmyJTRuzon3rnWVAAlw6PGBRybn8OHHx6Ij
+         t5lFqb0bJThUAlzoGoxb4PZ3+m/jaoWjiRMu9+Hu7NiDHX1a3rrJ1QmmL80Vnety556n
+         yHvQ==
+X-Gm-Message-State: AO0yUKXWdNm59ngV/fgdjzm3qXp6rtGu486HLtjMJrq7pJjG0XMyahm4
+        0WB1KSqFB5aSMJ+XXPMlLtJbug==
+X-Google-Smtp-Source: AK7set8ois8OCnNC4k8umzsF3UAu3C8IbTzhjMPobTuOdqwAaSOkMwrUfCZEAH0rWkAprUP6HYjgIA==
+X-Received: by 2002:a17:90b:3ece:b0:22c:5241:b8e with SMTP id rm14-20020a17090b3ece00b0022c52410b8emr13839260pjb.25.1675960588110;
+        Thu, 09 Feb 2023 08:36:28 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id i10-20020a63bf4a000000b004fadb547d0csm1498660pgo.61.2023.02.09.08.36.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Feb 2023 08:36:27 -0800 (PST)
+Message-ID: <63e5210b.630a0220.c17be.27ff@mx.google.com>
+X-Google-Original-Message-ID: <202302090821.@keescook>
+Date:   Thu, 9 Feb 2023 08:36:27 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Stanislav Fomichev <sdf@google.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Haowen Bai <baihaowen@meizu.com>, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] bpf: Replace bpf_lpm_trie_key 0-length array with
+ flexible array
+References: <20230204183241.never.481-kees@kernel.org>
+ <CAKH8qBvqLeR3Wsbpb-v=EUY=Bw0jCP2OAaBn4tOqGmA1AqBZbA@mail.gmail.com>
+ <63e14abb.170a0220.ca425.b7bc@mx.google.com>
+ <CAKH8qBtX0HU4_YtnZ3hU4NhGHSQ9VU70niXFFoqf3k67a1+6aA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y+T0d9ox3KnqMDIL@nvidia.com>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF000108E9:EE_|CH3PR12MB8281:EE_
-X-MS-Office365-Filtering-Correlation-Id: f76cfd41-2942-48af-186a-08db0ab970f9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mmDaQRCo8hzKq/Q3D3iK2e/moQnKq4tsF+VKItaA5fP8LGZWpR5FSg3YVLvxqes6/XKjfXvVUN5kxLfUqjYKIybGQC3VCid54LtRaSk72G1eEDVH3B0xBEFhEst4W/7STJJ3VBmW7MgapHB6eOMDRV1sgqsqU/pjcsTbTHgwUKJ83c4nCTDE+ODk+AL3LTQZ8n8xVPihNfqJsHpveuuH5FheeJcri3BTYvHpYFI46HYqZ0kJbKOimWPVKH2FhFDYL4HdGEphjtfqqOtv1qABcKNyXUJkNzcl01cu6UP45AUUsOdnaTBfl1XeVY0lx5G4kTGVToxkLuPCOVcsHZuPCsNFVk2066f7r13Jgia6Po58zCcsFCFTqVuv0X6/g6pQOtBpL1XdTNZU7tfbLcCLG/STlNQcIUDoFrwPCc3woA6esIwVsoHBWtuaZ1NAjWG0Xqik6+dZT8gBGV5LI/IqtA6ht22nSKI2+oWSk4wQqOthGXhPEzv8OBAp4UW7PM3YoZUKaIriYC2P3/BynKRdQufJZbGAjLsySRPxwKYqWVGlGz9QzRhknhsqQ95xCrhFMn1mGJ9Qy8RBbfE7GWNAk28ir5Dz8LwmlSWhcB71y/2NRcwkFjiMK0WYnjXqnKNfuDOJDIpP0nkDc0knmBHJ9ZXXdlTnbCIqWiXIDF+h2YuDpP9JlzNQqAdYcBi7HWeJoV6OfivediN4m+OGUditg4yG4cJKhcoHcmsycHRngxk=
-X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(346002)(39860400002)(376002)(451199018)(46966006)(36840700001)(40470700004)(4326008)(70586007)(70206006)(8676002)(336012)(36860700001)(7636003)(316002)(33716001)(6636002)(40460700003)(83380400001)(54906003)(86362001)(426003)(5660300002)(7416002)(478600001)(356005)(186003)(26005)(9686003)(2906002)(47076005)(82740400003)(41300700001)(82310400005)(8936002)(6862004)(55016003)(40480700001)(67856001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2023 16:19:37.7876
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f76cfd41-2942-48af-186a-08db0ab970f9
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL02EPF000108E9.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8281
+In-Reply-To: <CAKH8qBtX0HU4_YtnZ3hU4NhGHSQ9VU70niXFFoqf3k67a1+6aA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Feb 09, 2023 at 09:26:15AM -0400, Jason Gunthorpe wrote:
-> On Thu, Feb 09, 2023 at 04:10:04AM +0000, Tian, Kevin wrote:
-> > > From: Nicolin Chen <nicolinc@nvidia.com>
-> > > Sent: Wednesday, February 8, 2023 5:18 AM
-> > > 
-> > > A driver that doesn't implement ops->dma_unmap shouldn't be allowed to
-> > > do
-> > > vfio_pin/unpin_pages(), though it can use vfio_dma_rw() to access an iova
-> > > range. Deny !ops->dma_unmap cases in vfio_pin/unpin_pages().
-> > > 
-> > > Suggested-by: Kevin Tian <kevin.tian@intel.com>
-> > > Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-> > > ---
-> > >  drivers/vfio/vfio_main.c | 4 ++++
-> > >  1 file changed, 4 insertions(+)
-> > > 
-> > > diff --git a/drivers/vfio/vfio_main.c b/drivers/vfio/vfio_main.c
-> > > index 8559c3dfb335..c7f3251ad6e5 100644
-> > > --- a/drivers/vfio/vfio_main.c
-> > > +++ b/drivers/vfio/vfio_main.c
-> > > @@ -1543,6 +1543,8 @@ int vfio_pin_pages(struct vfio_device *device,
-> > > dma_addr_t iova,
-> > > 
-> > >  		if (iova > ULONG_MAX)
-> > >  			return -EINVAL;
-> > > +		if (!device->ops->dma_unmap)
-> > > +			return -EINVAL;
-> > >  		/*
-> > >  		 * VFIO ignores the sub page offset, npages is from the start
-> > > of
-> > >  		 * a PAGE_SIZE chunk of IOVA. The caller is expected to
-> > > recover
-> > > @@ -1580,6 +1582,8 @@ void vfio_unpin_pages(struct vfio_device *device,
-> > > dma_addr_t iova, int npage)
-> > >  	if (device->iommufd_access) {
-> > >  		if (WARN_ON(iova > ULONG_MAX))
-> > >  			return;
-> > > +		if (!device->ops->dma_unmap)
-> > > +			return;
-> > 
-> > IMHO this restriction applies to both iommufd and legacy container.
+On Mon, Feb 06, 2023 at 11:17:06AM -0800, Stanislav Fomichev wrote:
+> It's my understanding that it's the intended use-case. Users are
+> expected to use this struct as a header; at least we've been using it
+> that way :-)
 > 
-> Yeah that makes sense
+> For me, both return the same:
+> sizeof(struct { __u32 prefix; __u8 data[0]; })
+> sizeof(struct { __u32 prefix; __u8 data[]; })
+> 
+> So let's do s/data[0]/data[]/ in the UAPI only? What's wrong with
+> using this struct as a header?
 
-Will move them to the beginning of vfio_pin_pages/vfio_unpin_pages.
+For the whole struct, yup, the above sizeof()s are correct. However:
 
-Thanks
-Nic
+sizeof(foo->data) == 0             // when data[0]
+sizeof(foo->data) == compile error // when data[]
+
+The [0]-array GNU extension doesn't have consistent behavior, so it's
+being removed from the kernel in favor of the proper C99 [] flexible
+arrays, so we can enable -fstrict-flex-arrays=3 to remove all the
+ambiguities with array bounds:
+https://docs.kernel.org/process/deprecated.html#zero-length-and-one-element-arrays
+https://people.kernel.org/kees/bounded-flexible-arrays-in-c
+
+As a header, this kind of overlap isn't well supported. Clang already
+warns, and GCC is going to be removing support for overlapping composite
+structs with a flex array in the middle (and also warns under -pedantic):
+https://godbolt.org/z/vWzqs41h6
+
+I talk about dealing with these specific cases in my recent write-up
+on array bounds checking -- see "Overlapping composite structure members"
+in the people.kernel.org post above.
+
+> > Perhaps better might be:
+> >
+> > struct bpf_lpm_trie_key {
+> >     __u32   prefixlen;      /* up to 32 for AF_INET, 128 for AF_INET6 */
+> > };
+> >
+> > struct bpf_lpm_trie_key_raw {
+> >     struct bpf_lpm_trie_key_prefix prefix;
+> >     u8 data[];
+> > };
+> >
+> > struct my_key {
+> >     struct bpf_lpm_trie_key_prefix prefix;
+> >     int a, b, c;
+> > };
+
+This approach is, perhaps, the best way to go? Besides the selftest,
+what things in userspace consumes struct bpf_lpm_trie_key?
+
+-- 
+Kees Cook
