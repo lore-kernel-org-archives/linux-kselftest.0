@@ -2,44 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28ECAC636D7
-	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Feb 2023 04:34:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AAE2AC05027
+	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Feb 2023 04:34:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbjBIEeL (ORCPT
+        id S229530AbjBIEe6 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 8 Feb 2023 23:34:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47668 "EHLO
+        Wed, 8 Feb 2023 23:34:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230204AbjBIEdo (ORCPT
+        with ESMTP id S230166AbjBIEdt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Feb 2023 23:33:44 -0500
+        Wed, 8 Feb 2023 23:33:49 -0500
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2447F4A223;
-        Wed,  8 Feb 2023 20:32:34 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D774C0FB;
+        Wed,  8 Feb 2023 20:32:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675917154; x=1707453154;
+  t=1675917160; x=1707453160;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=JZyEs44evN9cOVrCDDCu8xHdNGuyqbdYBUmmOSo2DX8=;
-  b=Pq0DPRWFhI79mxKHorqpuCR7v9nemf1ob+GrT5oB9iit6Du7D2Cp9urz
-   /EtBBiZNTnwfzOlax5sNnCY41UrElyOORFIdc47zkL2bygwDiEjwA4TGG
-   u5oZVz5tK0+8lAorF/qOb7kodjfRWyncdltR1vgguU3K2I+WOCg3z3tDn
-   6/l7weT9ZUyb3+X3OPQ4bTp6iHS0uDdzKxJj5vanL3XA64cdhUtz7EFKh
-   +O25QZO3KSjGa5FHn0BzJ1wbfmosR51vqMuMrmHu+Zaq0EH8uXSZZgELG
-   uMfcO8x21azQfJoj9CHmKSmDPzE45gsJ5aHHHQBkrfNNCMmNpsP1+zwfU
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="331298677"
+  bh=2KfonypPuxfAWElcJEc2WJ7TkQ9Vf7HGpR1uJgAGgAk=;
+  b=mhB9pUBXEP6tK0Ce/FGh1x4HO6j44aEFvSER4q9jHMTe/KdaDCRR3qIc
+   6AfnNp3NPvlPA9JYAjoK3Mty6OHOwbXDMgHRqtu/pwha3GmIixOPNaKKH
+   OZL3odDs1+BJCoQYQe14oyEfNdHKa4bU+BMCZ8i39ssu6NOgeUt8c1GPT
+   aEHrqhbH+6w/GD5dLIxU68t1XlXkYPLO/d6fL5J7R88uYUwj/lynJPKBq
+   QONm6e8Smm783T8YZ4o+bWFSQ+uGW0Ww3RCfqkDY6Sv1tNPc19IkfSCqa
+   qPXr6IA4Y9aP8+h5GxAP2sLgkSuTk30nfmZS3SSVR0un4bzr5VzePdO1e
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="331298726"
 X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="331298677"
+   d="scan'208";a="331298726"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 20:32:07 -0800
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 20:32:11 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="669447505"
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="669447536"
 X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="669447505"
+   d="scan'208";a="669447536"
 Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by fmsmga007.fm.intel.com with ESMTP; 08 Feb 2023 20:32:06 -0800
+  by fmsmga007.fm.intel.com with ESMTP; 08 Feb 2023 20:32:10 -0800
 From:   Yi Liu <yi.l.liu@intel.com>
 To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
         kevin.tian@intel.com, robin.murphy@arm.com
@@ -50,10 +50,10 @@ Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
         shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
         suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        baolu.lu@linux.intel.com, Jacob Pan <jacob.jun.pan@linux.intel.com>
-Subject: [PATCH 05/17] iommu/vt-d: Add nested domain support
-Date:   Wed,  8 Feb 2023 20:31:41 -0800
-Message-Id: <20230209043153.14964-6-yi.l.liu@intel.com>
+        baolu.lu@linux.intel.com
+Subject: [PATCH 07/17] iommufd: Add/del hwpt to IOAS at alloc/destroy()
+Date:   Wed,  8 Feb 2023 20:31:43 -0800
+Message-Id: <20230209043153.14964-8-yi.l.liu@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230209043153.14964-1-yi.l.liu@intel.com>
 References: <20230209043153.14964-1-yi.l.liu@intel.com>
@@ -63,401 +63,236 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Lu Baolu <baolu.lu@linux.intel.com>
+From: Nicolin Chen <nicolinc@nvidia.com>
 
-This adds nested domain support in the Intel IOMMU driver. It allows to
-allocate and free a nested domain, set the nested domain to a device,
-and synchronize the caches when the userspace managed page tables are
-updated.
+A hw_pagetable is allocated with an IOAS id, so it was supposed to link
+to the IOAS upon its allocation. But, previously with ARM SMMUv3 driver
+IOMMUFD fails to add a newly allocated hwpt to the IOAS, because SMMUv3
+driver "finalises" an iommu_domain (hwpt->domain) after it attaches to
+a device. This was because the existing domain_alloc op doesn't pass in
+a dev pointer, so the driver could not know which SMMU device to look
+for. Now, IOMMUFD allocates the hwpt->domain using domain_alloc_user op
+that passes in the dev pointer. So, there's no need to wait for a device
+attachment anymore.
 
-Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+Move iopt_table_add_domain() call, along with the list_add_tail call on
+the hwpt_item, to the iommufd_hw_pagetable_alloc() right after a domain
+allocation. Accordingly, move iopt_table_remove_domain() and list_del to
+the iommufd_hw_pagetable_destroy() routine.
+
+This simplifies the logic in the do_attach/detach(), by reducing the
+dependency on the device list and potential locking conundrum with the
+coming nesting feature.
+
+Similarly, drop the iopt_table_add/remove_domain() calls, for selftest,
+from the iommufd_device_selftest_attach/detach(). Also, allocate hwpts
+outside the iommufd_device_selftest_attach() to make it symmetric with
+the iommufd_device_selftest_detach().
+
 Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
 Signed-off-by: Yi Liu <yi.l.liu@intel.com>
 ---
- drivers/iommu/intel/Makefile |   2 +-
- drivers/iommu/intel/iommu.c  |  38 ++++++----
- drivers/iommu/intel/iommu.h  |  15 ++++
- drivers/iommu/intel/nested.c | 143 +++++++++++++++++++++++++++++++++++
- include/uapi/linux/iommufd.h |  54 +++++++++++++
- 5 files changed, 236 insertions(+), 16 deletions(-)
- create mode 100644 drivers/iommu/intel/nested.c
+ drivers/iommu/iommufd/device.c          | 54 ++++---------------------
+ drivers/iommu/iommufd/hw_pagetable.c    | 13 ++++++
+ drivers/iommu/iommufd/iommufd_private.h |  6 +--
+ drivers/iommu/iommufd/selftest.c        | 16 ++++++--
+ 4 files changed, 35 insertions(+), 54 deletions(-)
 
-diff --git a/drivers/iommu/intel/Makefile b/drivers/iommu/intel/Makefile
-index fa0dae16441c..8b324db03692 100644
---- a/drivers/iommu/intel/Makefile
-+++ b/drivers/iommu/intel/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- obj-$(CONFIG_DMAR_TABLE) += dmar.o
--obj-$(CONFIG_INTEL_IOMMU) += iommu.o pasid.o
-+obj-$(CONFIG_INTEL_IOMMU) += iommu.o pasid.o nested.o
- obj-$(CONFIG_DMAR_TABLE) += trace.o cap_audit.o
- obj-$(CONFIG_DMAR_PERF) += perf.o
- obj-$(CONFIG_INTEL_IOMMU_DEBUGFS) += debugfs.o
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 929f600cc350..ea42d169afa2 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -277,7 +277,6 @@ static LIST_HEAD(dmar_satc_units);
- #define for_each_rmrr_units(rmrr) \
- 	list_for_each_entry(rmrr, &dmar_rmrr_units, list)
+diff --git a/drivers/iommu/iommufd/device.c b/drivers/iommu/iommufd/device.c
+index 0e5d2bde7b3c..71a8c4f1c4a9 100644
+--- a/drivers/iommu/iommufd/device.c
++++ b/drivers/iommu/iommufd/device.c
+@@ -311,18 +311,11 @@ static void __iommmufd_device_detach(struct iommufd_device *idev,
  
--static void device_block_translation(struct device *dev);
- static void intel_iommu_domain_free(struct iommu_domain *domain);
+ 	mutex_lock(&hwpt->devices_lock);
+ 	list_del(&idev->devices_item);
+-	if (hwpt->ioas != new_ioas)
+-		mutex_lock(&hwpt->ioas->mutex);
+-	if (!iommufd_hw_pagetable_has_group(hwpt, idev->group)) {
+-		if (list_empty(&hwpt->devices)) {
+-			iopt_table_remove_domain(&hwpt->ioas->iopt,
+-						 hwpt->domain);
+-			list_del(&hwpt->hwpt_item);
+-		}
+-		if (detach_group)
+-			iommu_detach_group(hwpt->domain, idev->group);
+-	}
++	if (detach_group && !iommufd_hw_pagetable_has_group(hwpt, idev->group))
++		iommu_detach_group(hwpt->domain, idev->group);
++
+ 	if (hwpt->ioas != new_ioas) {
++		mutex_lock(&hwpt->ioas->mutex);
+ 		iopt_remove_reserved_iova(&hwpt->ioas->iopt, idev->dev);
+ 		mutex_unlock(&hwpt->ioas->mutex);
+ 	}
+@@ -384,14 +377,6 @@ static int iommufd_device_do_attach(struct iommufd_device *idev,
+ 		rc = iommu_group_replace_domain(idev->group, hwpt->domain);
+ 		if (rc)
+ 			goto out_iova;
+-
+-		if (list_empty(&hwpt->devices)) {
+-			rc = iopt_table_add_domain(&hwpt->ioas->iopt,
+-						   hwpt->domain);
+-			if (rc)
+-				goto out_detach;
+-			list_add_tail(&hwpt->hwpt_item, &hwpt->ioas->hwpt_list);
+-		}
+ 	}
  
- int dmar_disabled = !IS_ENABLED(CONFIG_INTEL_IOMMU_DEFAULT_ON);
-@@ -555,7 +554,7 @@ static unsigned long domain_super_pgsize_bitmap(struct dmar_domain *domain)
- }
+ 	/* Replace the cur_hwpt without iommu_detach_group() */
+@@ -404,11 +389,6 @@ static int iommufd_device_do_attach(struct iommufd_device *idev,
+ 	mutex_unlock(&hwpt->devices_lock);
+ 	return 0;
  
- /* Some capabilities may be different across iommus */
--static void domain_update_iommu_cap(struct dmar_domain *domain)
-+void domain_update_iommu_cap(struct dmar_domain *domain)
- {
- 	domain_update_iommu_coherency(domain);
- 	domain->iommu_superpage = domain_update_iommu_superpage(domain, NULL);
-@@ -1497,10 +1496,10 @@ static void iommu_flush_dev_iotlb(struct dmar_domain *domain,
- 	spin_unlock_irqrestore(&domain->lock, flags);
- }
- 
--static void iommu_flush_iotlb_psi(struct intel_iommu *iommu,
--				  struct dmar_domain *domain,
--				  unsigned long pfn, unsigned int pages,
--				  int ih, int map)
-+void iommu_flush_iotlb_psi(struct intel_iommu *iommu,
-+			   struct dmar_domain *domain,
-+			   unsigned long pfn, unsigned int pages,
-+			   int ih, int map)
- {
- 	unsigned int aligned_pages = __roundup_pow_of_two(pages);
- 	unsigned int mask = ilog2(aligned_pages);
-@@ -1572,7 +1571,7 @@ static inline void __mapping_notify_one(struct intel_iommu *iommu,
- 		iommu_flush_write_buffer(iommu);
- }
- 
--static void intel_flush_iotlb_all(struct iommu_domain *domain)
-+void intel_flush_iotlb_all(struct iommu_domain *domain)
- {
- 	struct dmar_domain *dmar_domain = to_dmar_domain(domain);
- 	struct iommu_domain_info *info;
-@@ -1764,8 +1763,7 @@ static struct dmar_domain *alloc_domain(unsigned int type)
- 	return domain;
- }
- 
--static int domain_attach_iommu(struct dmar_domain *domain,
--			       struct intel_iommu *iommu)
-+int domain_attach_iommu(struct dmar_domain *domain, struct intel_iommu *iommu)
- {
- 	struct iommu_domain_info *info, *curr;
- 	unsigned long ndomains;
-@@ -1814,8 +1812,7 @@ static int domain_attach_iommu(struct dmar_domain *domain,
- 	return ret;
- }
- 
--static void domain_detach_iommu(struct dmar_domain *domain,
--				struct intel_iommu *iommu)
-+void domain_detach_iommu(struct dmar_domain *domain, struct intel_iommu *iommu)
- {
- 	struct iommu_domain_info *info;
- 
-@@ -4096,7 +4093,7 @@ static void dmar_remove_one_dev_info(struct device *dev)
-  * all DMA requests without PASID from the device are blocked. If the page
-  * table has been set, clean up the data structures.
+-out_detach:
+-	if (cur_hwpt)
+-		iommu_group_replace_domain(idev->group, cur_hwpt->domain);
+-	else
+-		iommu_detach_group(hwpt->domain, idev->group);
+ out_iova:
+ 	iopt_remove_reserved_iova(&hwpt->ioas->iopt, idev->dev);
+ out_unlock:
+@@ -940,35 +920,17 @@ EXPORT_SYMBOL_NS_GPL(iommufd_access_rw, IOMMUFD);
+  * Creating a real iommufd_device is too hard, bypass creating a iommufd_device
+  * and go directly to attaching a domain.
   */
--static void device_block_translation(struct device *dev)
-+void device_block_translation(struct device *dev)
- {
- 	struct device_domain_info *info = dev_iommu_priv_get(dev);
- 	struct intel_iommu *iommu = info->iommu;
-@@ -4197,14 +4194,24 @@ static struct iommu_domain *intel_iommu_domain_alloc(unsigned type)
- 	return NULL;
- }
+-struct iommufd_hw_pagetable *
+-iommufd_device_selftest_attach(struct iommufd_ctx *ictx,
+-			       struct iommufd_ioas *ioas,
+-			       struct device *mock_dev)
+-{
+-	struct iommufd_hw_pagetable *hwpt;
+-	int rc;
+-
+-	hwpt = iommufd_hw_pagetable_alloc(ictx, ioas, mock_dev);
+-	if (IS_ERR(hwpt))
+-		return hwpt;
+-
+-	rc = iopt_table_add_domain(&hwpt->ioas->iopt, hwpt->domain);
+-	if (rc)
+-		goto out_hwpt;
  
-+static struct iommu_domain *
-+intel_iommu_domain_alloc_user(struct device *dev, struct iommu_domain *parent,
-+			      const void *user_data)
++int iommufd_device_selftest_attach(struct iommufd_ctx *ictx,
++				   struct iommufd_hw_pagetable *hwpt)
 +{
-+	if (parent)
-+		return intel_nested_domain_alloc(parent, user_data);
-+	else
-+		return iommu_domain_alloc(dev->bus);
-+}
-+
- static void intel_iommu_domain_free(struct iommu_domain *domain)
- {
- 	if (domain != &si_domain->domain && domain != &blocking_domain)
- 		domain_exit(to_dmar_domain(domain));
- }
- 
--static int prepare_domain_attach_device(struct iommu_domain *domain,
--					struct device *dev)
-+int prepare_domain_attach_device(struct iommu_domain *domain,
-+				 struct device *dev)
- {
- 	struct dmar_domain *dmar_domain = to_dmar_domain(domain);
- 	struct intel_iommu *iommu;
-@@ -4436,7 +4443,7 @@ static void domain_set_force_snooping(struct dmar_domain *domain)
- 						     PASID_RID2PASID);
- }
- 
--static bool intel_iommu_enforce_cache_coherency(struct iommu_domain *domain)
-+bool intel_iommu_enforce_cache_coherency(struct iommu_domain *domain)
- {
- 	struct dmar_domain *dmar_domain = to_dmar_domain(domain);
- 	unsigned long flags;
-@@ -4781,6 +4788,7 @@ const struct iommu_ops intel_iommu_ops = {
- 	.capable		= intel_iommu_capable,
- 	.hw_info		= intel_iommu_hw_info,
- 	.domain_alloc		= intel_iommu_domain_alloc,
-+	.domain_alloc_user	= intel_iommu_domain_alloc_user,
- 	.probe_device		= intel_iommu_probe_device,
- 	.probe_finalize		= intel_iommu_probe_finalize,
- 	.release_device		= intel_iommu_release_device,
-diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
-index 4fe74f217696..25d1c99fce40 100644
---- a/drivers/iommu/intel/iommu.h
-+++ b/drivers/iommu/intel/iommu.h
-@@ -753,6 +753,19 @@ void qi_flush_pasid_cache(struct intel_iommu *iommu, u16 did, u64 granu,
- 
- int qi_submit_sync(struct intel_iommu *iommu, struct qi_desc *desc,
- 		   unsigned int count, unsigned long options);
-+int domain_attach_iommu(struct dmar_domain *domain, struct intel_iommu *iommu);
-+void domain_detach_iommu(struct dmar_domain *domain, struct intel_iommu *iommu);
-+void device_block_translation(struct device *dev);
-+int prepare_domain_attach_device(struct iommu_domain *domain,
-+				 struct device *dev);
-+bool intel_iommu_enforce_cache_coherency(struct iommu_domain *domain);
-+void iommu_flush_iotlb_psi(struct intel_iommu *iommu,
-+			   struct dmar_domain *domain,
-+			   unsigned long pfn, unsigned int pages,
-+			   int ih, int map);
-+void intel_flush_iotlb_all(struct iommu_domain *domain);
-+void domain_update_iommu_cap(struct dmar_domain *domain);
-+
- /*
-  * Options used in qi_submit_sync:
-  * QI_OPT_WAIT_DRAIN - Wait for PRQ drain completion, spec 6.5.2.8.
-@@ -765,6 +778,8 @@ void *alloc_pgtable_page(int node);
- void free_pgtable_page(void *vaddr);
- void iommu_flush_write_buffer(struct intel_iommu *iommu);
- struct intel_iommu *device_to_iommu(struct device *dev, u8 *bus, u8 *devfn);
-+struct iommu_domain *intel_nested_domain_alloc(struct iommu_domain *s2_domain,
-+					       const void *data);
- 
- #ifdef CONFIG_INTEL_IOMMU_SVM
- extern void intel_svm_check(struct intel_iommu *iommu);
-diff --git a/drivers/iommu/intel/nested.c b/drivers/iommu/intel/nested.c
-new file mode 100644
-index 000000000000..7624a3dd4603
---- /dev/null
-+++ b/drivers/iommu/intel/nested.c
-@@ -0,0 +1,143 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * nested.c - nested mode translation support
-+ *
-+ * Copyright (C) 2023 Intel Corporation
-+ *
-+ * Author: Lu Baolu <baolu.lu@linux.intel.com>
-+ *         Jacob Pan <jacob.jun.pan@linux.intel.com>
-+ */
-+
-+#define pr_fmt(fmt)	"DMAR: " fmt
-+
-+#include <linux/iommu.h>
-+#include <linux/pci.h>
-+#include <linux/pci-ats.h>
-+
-+#include "iommu.h"
-+#include "pasid.h"
-+
-+static int intel_nested_attach_dev(struct iommu_domain *domain,
-+				   struct device *dev)
-+{
-+	struct device_domain_info *info = dev_iommu_priv_get(dev);
-+	struct dmar_domain *dmar_domain = to_dmar_domain(domain);
-+	struct intel_iommu *iommu = info->iommu;
-+	unsigned long flags;
-+	int ret = 0;
-+
-+	if (info->domain)
-+		device_block_translation(dev);
-+
-+	/* Is s2_domain compatible with this IOMMU? */
-+	ret = prepare_domain_attach_device(&dmar_domain->s2_domain->domain, dev);
-+	if (ret) {
-+		dev_err_ratelimited(dev, "s2 domain is not compatible\n");
-+		return ret;
-+	}
-+
-+	ret = domain_attach_iommu(dmar_domain, iommu);
-+	if (ret) {
-+		dev_err_ratelimited(dev, "Failed to attach domain to iommu\n");
-+		return ret;
-+	}
-+
-+	ret = intel_pasid_setup_nested(iommu, dev,
-+				       PASID_RID2PASID, dmar_domain);
-+	if (ret) {
-+		domain_detach_iommu(dmar_domain, iommu);
-+		dev_err_ratelimited(dev, "Failed to setup pasid entry\n");
-+		return ret;
-+	}
-+
-+	info->domain = dmar_domain;
-+	spin_lock_irqsave(&dmar_domain->lock, flags);
-+	list_add(&info->link, &dmar_domain->devices);
-+	spin_unlock_irqrestore(&dmar_domain->lock, flags);
-+	domain_update_iommu_cap(dmar_domain);
-+
+ 	refcount_inc(&hwpt->obj.users);
+-	iommufd_object_finalize(ictx, &hwpt->obj);
+-	return hwpt;
+-
+-out_hwpt:
+-	iommufd_object_abort_and_destroy(ictx, &hwpt->obj);
+-	return ERR_PTR(rc);
 +	return 0;
-+}
-+
-+static void intel_nested_domain_free(struct iommu_domain *domain)
-+{
-+	kfree(to_dmar_domain(domain));
-+}
-+
-+static void intel_nested_invalidate(struct device *dev,
-+				    struct dmar_domain *domain,
-+				    void *user_data)
-+{
-+	struct iommu_hwpt_invalidate_intel_vtd *inv_info = user_data;
-+	struct device_domain_info *info = dev_iommu_priv_get(dev);
-+	struct intel_iommu *iommu = info->iommu;
-+
-+	if (WARN_ON(!user_data))
-+		return;
-+
-+	switch (inv_info->granularity) {
-+	case IOMMU_VTD_QI_GRAN_ADDR:
-+		if (inv_info->granule_size != VTD_PAGE_SIZE ||
-+		    !IS_ALIGNED(inv_info->addr, VTD_PAGE_SIZE)) {
-+			dev_err_ratelimited(dev, "Invalid invalidation address 0x%llx\n",
-+					    inv_info->addr);
-+			return;
-+		}
-+
-+		iommu_flush_iotlb_psi(iommu, domain,
-+				      inv_info->addr >> VTD_PAGE_SHIFT,
-+				      inv_info->nb_granules, 1, 0);
-+		break;
-+	case IOMMU_VTD_QI_GRAN_DOMAIN:
-+		intel_flush_iotlb_all(&domain->domain);
-+		break;
-+	default:
-+		dev_err_ratelimited(dev, "Unsupported IOMMU invalidation type %d\n",
-+				    inv_info->granularity);
-+		break;
-+	}
-+}
-+
-+static void intel_nested_iotlb_sync_user(struct iommu_domain *domain,
-+					 void *user_data)
-+{
-+	struct dmar_domain *dmar_domain = to_dmar_domain(domain);
-+	struct device_domain_info *info;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&dmar_domain->lock, flags);
-+	list_for_each_entry(info, &dmar_domain->devices, link)
-+		intel_nested_invalidate(info->dev, dmar_domain,
-+					user_data);
-+	spin_unlock_irqrestore(&dmar_domain->lock, flags);
-+}
-+
-+static const struct iommu_domain_ops intel_nested_domain_ops = {
-+	.attach_dev		= intel_nested_attach_dev,
-+	.iotlb_sync_user	= intel_nested_iotlb_sync_user,
-+	.free			= intel_nested_domain_free,
-+	.enforce_cache_coherency = intel_iommu_enforce_cache_coherency,
-+};
-+
-+struct iommu_domain *intel_nested_domain_alloc(struct iommu_domain *s2_domain,
-+					       const void *user_data)
-+{
-+	const struct iommu_hwpt_intel_vtd *vtd = user_data;
-+	struct dmar_domain *domain;
-+
-+	domain = kzalloc(sizeof(*domain), GFP_KERNEL_ACCOUNT);
-+	if (!domain)
-+		return NULL;
-+
-+	domain->use_first_level = true;
-+	domain->s2_domain = to_dmar_domain(s2_domain);
-+	domain->s1_pgtbl = vtd->pgtbl_addr;
-+	domain->s1_cfg = *vtd;
-+	domain->domain.ops = &intel_nested_domain_ops;
-+	domain->domain.type = IOMMU_DOMAIN_NESTED;
-+	INIT_LIST_HEAD(&domain->devices);
-+	spin_lock_init(&domain->lock);
-+	xa_init(&domain->iommu_array);
-+
-+	return &domain->domain;
-+}
-diff --git a/include/uapi/linux/iommufd.h b/include/uapi/linux/iommufd.h
-index 0867900494c9..bbffb63d2513 100644
---- a/include/uapi/linux/iommufd.h
-+++ b/include/uapi/linux/iommufd.h
-@@ -460,4 +460,58 @@ struct iommu_hwpt_intel_vtd {
- 	__u32 addr_width;
- 	__u32 __reserved;
- };
-+
-+/**
-+ * enum iommu_vtd_qi_granularity - Intel VT-d specific granularity of
-+ *				   queued invalidation
-+ * @IOMMU_VTD_QI_GRAN_DOMAIN: domain-selective invalidation
-+ * @IOMMU_VTD_QI_GRAN_ADDR: page-selective invalidation
-+ */
-+enum iommu_vtd_qi_granularity {
-+	IOMMU_VTD_QI_GRAN_DOMAIN,
-+	IOMMU_VTD_QI_GRAN_ADDR,
-+};
-+
-+/**
-+ * enum iommu_hwpt_intel_vtd_invalidate_flags - Flags for Intel VT-d
-+ *						stage-1 page table cache
-+ *						invalidation
-+ * @IOMMU_VTD_QI_FLAGS_LEAF: The LEAF flag indicates whether only the
-+ *			     leaf PTE caching needs to be invalidated
-+ *			     and other paging structure caches can be
-+ *			     preserved.
-+ */
-+enum iommu_hwpt_intel_vtd_invalidate_flags {
-+	IOMMU_VTD_QI_FLAGS_LEAF = 1 << 0,
-+};
-+
-+/**
-+ * struct iommu_hwpt_invalidate_intel_vtd - Intel VT-d cache invalidation info
-+ * @granularity: One of enum iommu_vtd_qi_granularity.
-+ * @flags: Combination of enum iommu_hwpt_intel_vtd_invalidate_flags
-+ * @__reserved: Must be 0
-+ * @addr: The start address of the addresses to be invalidated.
-+ * @granule_size: Page/block size of the mapping in bytes. It is used to
-+ *		  compute the invalidation range togehter with @nb_granules.
-+ * @nb_granules: Number of contiguous granules to be invalidated.
-+ *
-+ * The Intel VT-d specific invalidation data for user-managed stage-1 cache
-+ * invalidation under nested translation. Userspace uses this structure to
-+ * tell host about the impacted caches after modifying the stage-1 page table.
-+ *
-+ * @addr, @granule_size and @nb_granules are meaningful when
-+ * @granularity==IOMMU_VTD_QI_GRAN_ADDR. Intel VT-d currently only supports
-+ * 4kB page size, so @granule_size should be 4KB. @addr should be aligned
-+ * with @granule_size * @nb_granules, otherwise invalidation won't take
-+ * effect.
-+ */
-+struct iommu_hwpt_invalidate_intel_vtd {
-+	__u8 granularity;
-+	__u8 padding[7];
-+	__u32 flags;
-+	__u32 __reserved;
-+	__u64 addr;
-+	__u64 granule_size;
-+	__u64 nb_granules;
-+};
+ }
+ 
+ void iommufd_device_selftest_detach(struct iommufd_ctx *ictx,
+ 				    struct iommufd_hw_pagetable *hwpt)
+ {
+-	iopt_table_remove_domain(&hwpt->ioas->iopt, hwpt->domain);
+ 	refcount_dec(&hwpt->obj.users);
+ }
  #endif
+diff --git a/drivers/iommu/iommufd/hw_pagetable.c b/drivers/iommu/iommufd/hw_pagetable.c
+index 08d963ee38c7..bda21ec737cf 100644
+--- a/drivers/iommu/iommufd/hw_pagetable.c
++++ b/drivers/iommu/iommufd/hw_pagetable.c
+@@ -11,8 +11,12 @@ void iommufd_hw_pagetable_destroy(struct iommufd_object *obj)
+ 	struct iommufd_hw_pagetable *hwpt =
+ 		container_of(obj, struct iommufd_hw_pagetable, obj);
+ 
++	lockdep_assert_held(&hwpt->ioas->mutex);
++
+ 	WARN_ON(!list_empty(&hwpt->devices));
+ 
++	iopt_table_remove_domain(&hwpt->ioas->iopt, hwpt->domain);
++	list_del(&hwpt->hwpt_item);
+ 	iommu_domain_free(hwpt->domain);
+ 	refcount_dec(&hwpt->ioas->obj.users);
+ 	mutex_destroy(&hwpt->devices_lock);
+@@ -34,6 +38,8 @@ iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
+ 	struct iommufd_hw_pagetable *hwpt;
+ 	int rc;
+ 
++	lockdep_assert_held(&ioas->mutex);
++
+ 	hwpt = iommufd_object_alloc(ictx, hwpt, IOMMUFD_OBJ_HW_PAGETABLE);
+ 	if (IS_ERR(hwpt))
+ 		return hwpt;
+@@ -53,11 +59,18 @@ iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
+ 	INIT_LIST_HEAD(&hwpt->devices);
+ 	INIT_LIST_HEAD(&hwpt->hwpt_item);
+ 	mutex_init(&hwpt->devices_lock);
++	rc = iopt_table_add_domain(&ioas->iopt, hwpt->domain);
++	if (rc)
++		goto out_free_domain;
++	list_add_tail(&hwpt->hwpt_item, &ioas->hwpt_list);
++
+ 	/* Pairs with iommufd_hw_pagetable_destroy() */
+ 	refcount_inc(&ioas->obj.users);
+ 	hwpt->ioas = ioas;
+ 	return hwpt;
+ 
++out_free_domain:
++	iommu_domain_free(hwpt->domain);
+ out_abort:
+ 	iommufd_object_abort(ictx, &hwpt->obj);
+ 	return ERR_PTR(rc);
+diff --git a/drivers/iommu/iommufd/iommufd_private.h b/drivers/iommu/iommufd/iommufd_private.h
+index 7748117e36f9..604ad29f87b8 100644
+--- a/drivers/iommu/iommufd/iommufd_private.h
++++ b/drivers/iommu/iommufd/iommufd_private.h
+@@ -278,10 +278,8 @@ void iopt_remove_access(struct io_pagetable *iopt,
+ void iommufd_access_destroy_object(struct iommufd_object *obj);
+ 
+ #ifdef CONFIG_IOMMUFD_TEST
+-struct iommufd_hw_pagetable *
+-iommufd_device_selftest_attach(struct iommufd_ctx *ictx,
+-			       struct iommufd_ioas *ioas,
+-			       struct device *mock_dev);
++int iommufd_device_selftest_attach(struct iommufd_ctx *ictx,
++				   struct iommufd_hw_pagetable *hwpt);
+ void iommufd_device_selftest_detach(struct iommufd_ctx *ictx,
+ 				    struct iommufd_hw_pagetable *hwpt);
+ struct device *iommufd_selftest_obj_to_dev(struct iommufd_object *obj);
+diff --git a/drivers/iommu/iommufd/selftest.c b/drivers/iommu/iommufd/selftest.c
+index 5013c8757f4b..5f841d1d9e96 100644
+--- a/drivers/iommu/iommufd/selftest.c
++++ b/drivers/iommu/iommufd/selftest.c
+@@ -311,22 +311,30 @@ static int iommufd_test_mock_domain(struct iommufd_ucmd *ucmd,
+ 	sobj->idev.mock_dev.bus = &mock_bus;
+ 	sobj->idev.mock_dev.iommu = &iommu;
+ 
+-	hwpt = iommufd_device_selftest_attach(ucmd->ictx, ioas,
+-					      &sobj->idev.mock_dev);
++	hwpt = iommufd_hw_pagetable_alloc(ucmd->ictx, ioas,
++					  &sobj->idev.mock_dev);
+ 	if (IS_ERR(hwpt)) {
+ 		rc = PTR_ERR(hwpt);
+-		goto out_sobj;
++		goto out_unlock;
+ 	}
+ 	sobj->idev.hwpt = hwpt;
+ 
++	rc = iommufd_device_selftest_attach(ucmd->ictx, hwpt);
++	if (rc)
++		goto out_free_hwpt;
++
+ 	/* Userspace must destroy both of these IDs to destroy the object */
+ 	cmd->mock_domain.out_hwpt_id = hwpt->obj.id;
+ 	cmd->mock_domain.out_device_id = sobj->obj.id;
+ 	iommufd_object_finalize(ucmd->ictx, &sobj->obj);
++	iommufd_object_finalize(ucmd->ictx, &hwpt->obj);
+ 	iommufd_put_object(&ioas->obj);
+ 	return iommufd_ucmd_respond(ucmd, sizeof(*cmd));
+ 
+-out_sobj:
++out_free_hwpt:
++	iommufd_object_abort_and_destroy(ucmd->ictx, &hwpt->obj);
++out_unlock:
++	mutex_unlock(&ioas->mutex);
+ 	iommufd_object_abort(ucmd->ictx, &sobj->obj);
+ out_ioas:
+ 	iommufd_put_object(&ioas->obj);
 -- 
 2.34.1
 
