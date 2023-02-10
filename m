@@ -2,30 +2,30 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8823EC05027
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D873FC6379F
 	for <linux-kselftest@archiver.kernel.org>; Fri, 10 Feb 2023 21:54:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233034AbjBJVyM (ORCPT
+        id S233152AbjBJVyM (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Fri, 10 Feb 2023 16:54:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38710 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233392AbjBJVxu (ORCPT
+        with ESMTP id S233552AbjBJVxx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Feb 2023 16:53:50 -0500
+        Fri, 10 Feb 2023 16:53:53 -0500
 Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2492D5AB1E
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Feb 2023 13:53:49 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 696975ACF2
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Feb 2023 13:53:51 -0800 (PST)
 Received: by dev0134.prn3.facebook.com (Postfix, from userid 425415)
-        id 7BD896BFC2D1; Fri, 10 Feb 2023 13:50:33 -0800 (PST)
+        id 849216BFC2D5; Fri, 10 Feb 2023 13:50:33 -0800 (PST)
 From:   Stefan Roesch <shr@devkernel.io>
 To:     kernel-team@fb.com
 Cc:     shr@devkernel.io, linux-mm@kvack.org, riel@surriel.com,
         mhocko@suse.com, david@redhat.com, linux-kselftest@vger.kernel.org,
         linux-doc@vger.kernel.org, akpm@linux-foundation.org
-Subject: [RFC PATCH v2 06/19] mm: add new prctl option to get and set ksm for a process
-Date:   Fri, 10 Feb 2023 13:50:10 -0800
-Message-Id: <20230210215023.2740545-7-shr@devkernel.io>
+Subject: [RFC PATCH v2 08/19] mm: expose general_profit metric
+Date:   Fri, 10 Feb 2023 13:50:12 -0800
+Message-Id: <20230210215023.2740545-9-shr@devkernel.io>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230210215023.2740545-1-shr@devkernel.io>
 References: <20230210215023.2740545-1-shr@devkernel.io>
@@ -35,75 +35,51 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This adds two new options to the prctl system call
-- enable ksm for all vmas of a process (if the vmas support it).
-- query if ksm has been enabled for a process.
+The documentation mentions a general profit metric, however this metric
+is not calculated. In addition the formula depends on the size of
+internal structures, which makes it more difficult for an administrator
+to make the calculation. Adding the metric for a better user experience.
 
 Signed-off-by: Stefan Roesch <shr@devkernel.io>
 ---
- include/uapi/linux/prctl.h |  2 ++
- kernel/sys.c               | 29 +++++++++++++++++++++++++++++
- 2 files changed, 31 insertions(+)
+ mm/ksm.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/include/uapi/linux/prctl.h b/include/uapi/linux/prctl.h
-index 1312a137f7fb..759b3f53e53f 100644
---- a/include/uapi/linux/prctl.h
-+++ b/include/uapi/linux/prctl.h
-@@ -290,4 +290,6 @@ struct prctl_mm_map {
- #define PR_SET_VMA		0x53564d41
- # define PR_SET_VMA_ANON_NAME		0
+diff --git a/mm/ksm.c b/mm/ksm.c
+index 7f3b28b7536e..a0b4611112c0 100644
+--- a/mm/ksm.c
++++ b/mm/ksm.c
+@@ -3301,6 +3301,21 @@ static ssize_t zero_pages_sharing_show(struct kobj=
+ect *kobj,
+ }
+ KSM_ATTR_RO(zero_pages_sharing);
 =20
-+#define PR_SET_MEMORY_MERGE		67
-+#define PR_GET_MEMORY_MERGE		68
- #endif /* _LINUX_PRCTL_H */
-diff --git a/kernel/sys.c b/kernel/sys.c
-index b3cab94545ed..495bab3ed2ad 100644
---- a/kernel/sys.c
-+++ b/kernel/sys.c
-@@ -15,6 +15,7 @@
- #include <linux/highuid.h>
- #include <linux/fs.h>
- #include <linux/kmod.h>
-+#include <linux/ksm.h>
- #include <linux/perf_event.h>
- #include <linux/resource.h>
- #include <linux/kernel.h>
-@@ -2659,6 +2660,34 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long,=
- arg2, unsigned long, arg3,
- 	case PR_SET_VMA:
- 		error =3D prctl_set_vma(arg2, arg3, arg4, arg5);
- 		break;
-+#ifdef CONFIG_KSM
-+	case PR_SET_MEMORY_MERGE:
-+		if (!capable(CAP_SYS_RESOURCE))
-+			return -EPERM;
++static ssize_t general_profit_show(struct kobject *kobj,
++				   struct kobj_attribute *attr, char *buf)
++{
++	long general_profit;
++	long all_rmap_items;
 +
-+		if (arg2) {
-+			if (mmap_write_lock_killable(me->mm))
-+				return -EINTR;
++	all_rmap_items =3D ksm_max_page_sharing + ksm_pages_shared +
++				ksm_pages_unshared + pages_volatile();
++	general_profit =3D ksm_pages_sharing * PAGE_SIZE -
++				all_rmap_items * sizeof(struct ksm_rmap_item);
 +
-+			if (test_bit(MMF_VM_MERGEABLE, &me->mm->flags))
-+				error =3D -EINVAL;
-+			else if (!test_bit(MMF_VM_MERGE_ANY, &me->mm->flags))
-+				error =3D __ksm_enter(me->mm, MMF_VM_MERGE_ANY);
-+			mmap_write_unlock(me->mm);
-+		} else {
-+			__ksm_exit(me->mm, MMF_VM_MERGE_ANY);
-+		}
-+		break;
-+	case PR_GET_MEMORY_MERGE:
-+		if (!capable(CAP_SYS_RESOURCE))
-+			return -EPERM;
++	return sysfs_emit(buf, "%ld\n", general_profit);
++}
++KSM_ATTR_RO(general_profit);
 +
-+		if (arg2 || arg3 || arg4 || arg5)
-+			return -EINVAL;
-+
-+		error =3D !!test_bit(MMF_VM_MERGE_ANY, &me->mm->flags);
-+		break;
-+#endif
- 	default:
- 		error =3D -EINVAL;
- 		break;
+ static ssize_t stable_node_dups_show(struct kobject *kobj,
+ 				     struct kobj_attribute *attr, char *buf)
+ {
+@@ -3366,6 +3381,7 @@ static struct attribute *ksm_attrs[] =3D {
+ 	&stable_node_dups_attr.attr,
+ 	&stable_node_chains_prune_millisecs_attr.attr,
+ 	&use_zero_pages_attr.attr,
++	&general_profit_attr.attr,
+ 	NULL,
+ };
+=20
 --=20
 2.30.2
 
