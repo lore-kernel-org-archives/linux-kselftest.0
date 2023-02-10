@@ -2,139 +2,133 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A670EC678D5
-	for <linux-kselftest@archiver.kernel.org>; Fri, 10 Feb 2023 22:04:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 46B25C05027
+	for <linux-kselftest@archiver.kernel.org>; Fri, 10 Feb 2023 22:45:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233392AbjBJWEC (ORCPT
+        id S233637AbjBJWpJ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 10 Feb 2023 17:04:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45514 "EHLO
+        Fri, 10 Feb 2023 17:45:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233769AbjBJWEC (ORCPT
+        with ESMTP id S233970AbjBJWpI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Feb 2023 17:04:02 -0500
-Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6920D7E025
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Feb 2023 14:04:01 -0800 (PST)
-Received: by dev0134.prn3.facebook.com (Postfix, from userid 425415)
-        id AC6A26BFC2EB; Fri, 10 Feb 2023 13:50:33 -0800 (PST)
-From:   Stefan Roesch <shr@devkernel.io>
-To:     kernel-team@fb.com
-Cc:     shr@devkernel.io, linux-mm@kvack.org, riel@surriel.com,
-        mhocko@suse.com, david@redhat.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, akpm@linux-foundation.org
-Subject: [RFC PATCH v2 17/19] selftests/vm: add KSM get merge type test
-Date:   Fri, 10 Feb 2023 13:50:21 -0800
-Message-Id: <20230210215023.2740545-18-shr@devkernel.io>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230210215023.2740545-1-shr@devkernel.io>
-References: <20230210215023.2740545-1-shr@devkernel.io>
+        Fri, 10 Feb 2023 17:45:08 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADEEC831EC
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Feb 2023 14:44:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676069054;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8VZLwEZ0VhiWmW6aalUpiTNY5oCQlCmFrf7N1T4iZuc=;
+        b=cgt/nRk9la+RvyddEagInq3UKLEkDd+OYfIYKq3t8udgrm3AOreQmGe2gt9b5M0Jt4iCVd
+        2opA5nGnyLw/X933I7FR9q69UV6SFvGmkfcSXed7EF3SfkhaNRCiDXwCbsm1kix5Hv9Pbg
+        sF/XB9myzbDyNTOMgWGKk9vFdLHThGY=
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
+ [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-182-7NzsSzX3NVygK6Yz3Bq3zQ-1; Fri, 10 Feb 2023 17:44:13 -0500
+X-MC-Unique: 7NzsSzX3NVygK6Yz3Bq3zQ-1
+Received: by mail-io1-f69.google.com with SMTP id y22-20020a5d94d6000000b007076e06ba3dso4390352ior.20
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Feb 2023 14:44:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8VZLwEZ0VhiWmW6aalUpiTNY5oCQlCmFrf7N1T4iZuc=;
+        b=VDOw46VuutJOi3GDeXbgfb/Lsbp5InPTmvDnSGyk3B2PS7a5SERuelDy3fgECudQ7R
+         q6uwciENpFUNWT4CNqljtbbz7hWeHp8VizftvdvraBPjVHH4H+l7jDaqjzxn6h2QNi2I
+         mbntdeyx0NN1xTlSYFK7oEUCO6xGOj25/4pEc3+2h4ieNV1dSX6urNv4ZfvA8UTf1Ei7
+         b5GqoUAHXTWGllUQwjADSmX+/MNyOgkrRgXDrwtoIFu6YHnxDcKDSx9eI6ZjyveRnIVN
+         0YbyDZnh/ksxrbaquLbhWCvvJRSd/6KphOp+AGX8eaOcg+Tj2Sapas2v4v6WKIF4oopl
+         H1Tw==
+X-Gm-Message-State: AO0yUKVP83HW/yO5+UpuouHN/TonFW/9PGa5rRmBQFe7UvIWpTZ+JH/r
+        +7zqOpsftmDeJQLhoP+s22Ot8XI4TspmK2v3D7hLpayz1KqN8w7adC+7067TPugZ738LwQ2f/6P
+        24okPFp6L8/nwEktvMz3XL/x7TSdk
+X-Received: by 2002:a05:6602:2acd:b0:722:827d:e6ac with SMTP id m13-20020a0566022acd00b00722827de6acmr17507148iov.6.1676069052821;
+        Fri, 10 Feb 2023 14:44:12 -0800 (PST)
+X-Google-Smtp-Source: AK7set/pYb5EOh/Drz42V1PJ5+VKWj6WP/ITUzBus6W3/LeQWRmoejvgCP3pyCdxFAjIjZZ39ARC1A==
+X-Received: by 2002:a05:6602:2acd:b0:722:827d:e6ac with SMTP id m13-20020a0566022acd00b00722827de6acmr17507122iov.6.1676069052584;
+        Fri, 10 Feb 2023 14:44:12 -0800 (PST)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id c11-20020a02a40b000000b003bf39936d1esm1666882jal.131.2023.02.10.14.44.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Feb 2023 14:44:11 -0800 (PST)
+Date:   Fri, 10 Feb 2023 15:44:10 -0700
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Yi Liu <yi.l.liu@intel.com>
+Cc:     joro@8bytes.org, jgg@nvidia.com, kevin.tian@intel.com,
+        robin.murphy@arm.com, cohuck@redhat.com, eric.auger@redhat.com,
+        nicolinc@nvidia.com, kvm@vger.kernel.org, mjrosato@linux.ibm.com,
+        chao.p.peng@linux.intel.com, yi.y.sun@linux.intel.com,
+        peterx@redhat.com, jasowang@redhat.com,
+        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
+        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        baolu.lu@linux.intel.com
+Subject: Re: [PATCH 2/6] iommu/vt-d: Implement hw_info for iommu capability
+ query
+Message-ID: <20230210154410.2b3b8296.alex.williamson@redhat.com>
+In-Reply-To: <20230209041642.9346-3-yi.l.liu@intel.com>
+References: <20230209041642.9346-1-yi.l.liu@intel.com>
+        <20230209041642.9346-3-yi.l.liu@intel.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This adds the -G flag to the ksm_tests to query if prctl has been used
-to enable ksm merging.
+On Wed,  8 Feb 2023 20:16:38 -0800
+Yi Liu <yi.l.liu@intel.com> wrote:
 
-Signed-off-by: Stefan Roesch <shr@devkernel.io>
----
- tools/testing/selftests/mm/ksm_tests.c | 37 ++++++++++++++++++++++++--
- 1 file changed, 35 insertions(+), 2 deletions(-)
+> From: Lu Baolu <baolu.lu@linux.intel.com>
+> 
+> To support nested translation in the userspace, it should check the
+> underlying hardware information for the capabilities.
+> 
+> Add intel_iommu_hw_info() to report cap_reg and ecap_reg information.
+> 
+> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+> Signed-off-by: Yi Liu <yi.l.liu@intel.com>
+> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+> Signed-off-by: Yi Sun <yi.y.sun@linux.intel.com>
+> ---
+>  drivers/iommu/intel/iommu.c  | 19 +++++++++++++++++++
+>  drivers/iommu/intel/iommu.h  |  1 +
+>  include/uapi/linux/iommufd.h | 21 +++++++++++++++++++++
+>  3 files changed, 41 insertions(+)
+> 
+> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+> index 59df7e42fd53..929f600cc350 100644
+> --- a/drivers/iommu/intel/iommu.c
+> +++ b/drivers/iommu/intel/iommu.c
+> @@ -4760,8 +4760,26 @@ static void intel_iommu_remove_dev_pasid(struct device *dev, ioasid_t pasid)
+>  	intel_pasid_tear_down_entry(iommu, dev, pasid, false);
+>  }
+>  
+> +static void *intel_iommu_hw_info(struct device *dev, u32 *length)
+> +{
+> +	struct device_domain_info *info = dev_iommu_priv_get(dev);
+> +	struct intel_iommu *iommu = info->iommu;
+> +	struct iommu_device_info_vtd *vtd;
+> +
+> +	vtd = kzalloc(sizeof(*vtd), GFP_KERNEL);
+> +	if (!vtd)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	vtd->cap_reg = iommu->cap;
+> +	vtd->ecap_reg = iommu->ecap;
 
-diff --git a/tools/testing/selftests/mm/ksm_tests.c b/tools/testing/selft=
-ests/mm/ksm_tests.c
-index 386a0929c8a3..9667cb3b8c6a 100644
---- a/tools/testing/selftests/mm/ksm_tests.c
-+++ b/tools/testing/selftests/mm/ksm_tests.c
-@@ -45,6 +45,7 @@ enum ksm_merge_type {
- enum ksm_test_name {
- 	CHECK_KSM_MERGE,
- 	CHECK_KSM_UNMERGE,
-+	CHECK_KSM_GET_MERGE_TYPE,
- 	CHECK_KSM_ZERO_PAGE_MERGE,
- 	CHECK_KSM_NUMA_MERGE,
- 	KSM_MERGE_TIME,
-@@ -124,7 +125,8 @@ static void print_help(void)
- 	       " -D evaluate unmerging time and speed when disabling KSM.\n"
- 	       "    For this test, the size of duplicated memory area (in MiB)\=
-n"
- 	       "    must be provided using -s option\n"
--	       " -C evaluate the time required to break COW of merged pages.\n\=
-n");
-+	       " -C evaluate the time required to break COW of merged pages.\n"
-+	       " -G query merge mode\n\n");
-=20
- 	printf(" -a: specify the access protections of pages.\n"
- 	       "     <prot> must be of the form [rwx].\n"
-@@ -323,6 +325,31 @@ static int check_ksm_merge(int merge_type, int mappi=
-ng, int prot,
- 	return KSFT_FAIL;
- }
-=20
-+static int check_ksm_get_merge_type(void)
-+{
-+	if (prctl(PR_SET_MEMORY_MERGE, 1)) {
-+		perror("prctl set");
-+		return 1;
-+	}
-+
-+	int is_on =3D prctl(PR_GET_MEMORY_MERGE, 0);
-+
-+	if (prctl(PR_SET_MEMORY_MERGE, 0)) {
-+		perror("prctl set");
-+		return 1;
-+	}
-+
-+	int is_off =3D prctl(PR_GET_MEMORY_MERGE, 0);
-+
-+	if (is_on && is_off) {
-+		printf("OK\n");
-+		return KSFT_PASS;
-+	}
-+
-+	printf("Not OK\n");
-+	return KSFT_FAIL;
-+}
-+
- static int check_ksm_unmerge(int merge_type, int mapping, int prot, int =
-timeout, size_t page_size)
- {
- 	void *map_ptr;
-@@ -733,7 +760,7 @@ int main(int argc, char *argv[])
- 	bool merge_across_nodes =3D KSM_MERGE_ACROSS_NODES_DEFAULT;
- 	long size_MB =3D 0;
-=20
--	while ((opt =3D getopt(argc, argv, "ha:p:l:z:m:s:t:MUZNPCHD")) !=3D -1)=
- {
-+	while ((opt =3D getopt(argc, argv, "ha:p:l:z:m:s:t:GMUZNPCHD")) !=3D -1=
-) {
- 		switch (opt) {
- 		case 'a':
- 			prot =3D str_to_prot(optarg);
-@@ -792,6 +819,9 @@ int main(int argc, char *argv[])
- 		case 'Z':
- 			test_name =3D CHECK_KSM_ZERO_PAGE_MERGE;
- 			break;
-+		case 'G':
-+			test_name =3D CHECK_KSM_GET_MERGE_TYPE;
-+			break;
- 		case 'N':
- 			test_name =3D CHECK_KSM_NUMA_MERGE;
- 			break;
-@@ -841,6 +871,9 @@ int main(int argc, char *argv[])
- 		ret =3D check_ksm_unmerge(merge_type, MAP_PRIVATE | MAP_ANONYMOUS, pro=
-t,
- 					ksm_scan_limit_sec, page_size);
- 		break;
-+	case CHECK_KSM_GET_MERGE_TYPE:
-+		ret =3D check_ksm_get_merge_type();
-+		break;
- 	case CHECK_KSM_ZERO_PAGE_MERGE:
- 		ret =3D check_ksm_zero_page_merge(merge_type, MAP_PRIVATE | MAP_ANONYM=
-OUS, prot,
- 						page_count, ksm_scan_limit_sec, use_zero_pages,
---=20
-2.30.2
+Just a friendly reminder that these registers are already exposed to
+userspace under /sys/class/iommu/ and each device has an iommu link
+back to their iommu device there.  This series doesn't really stand on
+its own without some discussion of why that interface is not sufficient
+for this use case.  Thanks,
+
+Alex
 
