@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42F9CC636D4
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EFBA3C636CC
 	for <linux-kselftest@archiver.kernel.org>; Mon, 13 Feb 2023 06:28:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbjBMG2p (ORCPT
+        id S229817AbjBMG2q (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 13 Feb 2023 01:28:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35092 "EHLO
+        Mon, 13 Feb 2023 01:28:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbjBMG2o (ORCPT
+        with ESMTP id S229769AbjBMG2n (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 13 Feb 2023 01:28:44 -0500
-Received: from esa1.hc1455-7.c3s2.iphmx.com (esa1.hc1455-7.c3s2.iphmx.com [207.54.90.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 921FFEB42;
-        Sun, 12 Feb 2023 22:28:34 -0800 (PST)
-X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="106341812"
+        Mon, 13 Feb 2023 01:28:43 -0500
+Received: from esa8.hc1455-7.c3s2.iphmx.com (esa8.hc1455-7.c3s2.iphmx.com [139.138.61.253])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE62EB5B;
+        Sun, 12 Feb 2023 22:28:32 -0800 (PST)
+X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="94505871"
 X-IronPort-AV: E=Sophos;i="5.97,293,1669042800"; 
-   d="scan'208";a="106341812"
-Received: from unknown (HELO oym-r1.gw.nic.fujitsu.com) ([210.162.30.89])
-  by esa1.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 15:28:32 +0900
-Received: from oym-m1.gw.nic.fujitsu.com (oym-nat-oym-m1.gw.nic.fujitsu.com [192.168.87.58])
-        by oym-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id E9E18DF10F;
-        Mon, 13 Feb 2023 15:28:29 +0900 (JST)
+   d="scan'208";a="94505871"
+Received: from unknown (HELO yto-r4.gw.nic.fujitsu.com) ([218.44.52.220])
+  by esa8.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 15:28:29 +0900
+Received: from yto-m1.gw.nic.fujitsu.com (yto-nat-yto-m1.gw.nic.fujitsu.com [192.168.83.64])
+        by yto-r4.gw.nic.fujitsu.com (Postfix) with ESMTP id D4A85D3EA3;
+        Mon, 13 Feb 2023 15:28:27 +0900 (JST)
 Received: from yto-om1.fujitsu.com (yto-om1.o.css.fujitsu.com [10.128.89.162])
-        by oym-m1.gw.nic.fujitsu.com (Postfix) with ESMTP id 35179D88B4;
-        Mon, 13 Feb 2023 15:28:29 +0900 (JST)
+        by yto-m1.gw.nic.fujitsu.com (Postfix) with ESMTP id 366ADCFBAF;
+        Mon, 13 Feb 2023 15:28:27 +0900 (JST)
 Received: from cn-r05-10.example.com (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
-        by yto-om1.fujitsu.com (Postfix) with ESMTP id 007D6404AF8A3;
-        Mon, 13 Feb 2023 15:28:28 +0900 (JST)
+        by yto-om1.fujitsu.com (Postfix) with ESMTP id 074E440418617;
+        Mon, 13 Feb 2023 15:28:27 +0900 (JST)
 From:   Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
 To:     Fenghua Yu <fenghua.yu@intel.com>,
         Reinette Chatre <reinette.chatre@intel.com>,
         Shuah Khan <shuah@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        tan.shaopeng@jp.fujitsu.com
-Subject: [PATCH v7 4/6] selftests/resctrl: Cleanup properly when an error occurs in CAT test
-Date:   Mon, 13 Feb 2023 15:24:26 +0900
-Message-Id: <20230213062428.1721572-5-tan.shaopeng@jp.fujitsu.com>
+        tan.shaopeng@jp.fujitsu.com, Shuah Khan <skhan@linuxfoundation.org>
+Subject: [PATCH v7 2/6] selftests/resctrl: Return MBA check result and make it to output message
+Date:   Mon, 13 Feb 2023 15:24:24 +0900
+Message-Id: <20230213062428.1721572-3-tan.shaopeng@jp.fujitsu.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20230213062428.1721572-1-tan.shaopeng@jp.fujitsu.com>
 References: <20230213062428.1721572-1-tan.shaopeng@jp.fujitsu.com>
@@ -49,65 +49,66 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-After creating a child process with fork() in CAT test, if an error
-occurs when parent process runs cat_val() or check_results(), the child
-process will not be killed and also resctrlfs is not unmounted. Also if
-an error occurs when child process runs cat_val() or check_results(),
-the child process is returned, but the parent process will wait pipe
-message from child.
+Since MBA check result is not returned, the MBA test result message
+is always output as "ok" regardless of whether the MBA check result is
+true or false.
 
-Synchronize the exits between the parent and child. An error occurs
-whether in parents process or child process, the parents process
-always kills child process and runs umount_resctrlfs(), and the
-child process always waits to be killed by the parent process.
+Make output message to be "not ok" if MBA check result is failed.
 
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
 Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
 ---
- tools/testing/selftests/resctrl/cat_test.c | 19 ++++++++-----------
- 1 file changed, 8 insertions(+), 11 deletions(-)
+ tools/testing/selftests/resctrl/mba_test.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-index 6a8306b0a109..477b62dac546 100644
---- a/tools/testing/selftests/resctrl/cat_test.c
-+++ b/tools/testing/selftests/resctrl/cat_test.c
-@@ -186,23 +186,20 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
- 	remove(param.filename);
+diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
+index 1a1bdb6180cf..e3a473976d74 100644
+--- a/tools/testing/selftests/resctrl/mba_test.c
++++ b/tools/testing/selftests/resctrl/mba_test.c
+@@ -51,10 +51,10 @@ static int mba_setup(int num, ...)
+ 	return 0;
+ }
  
- 	ret = cat_val(&param);
--	if (ret)
--		return ret;
--
--	ret = check_results(&param);
--	if (ret)
--		return ret;
-+	if (ret == 0)
-+		ret = check_results(&param);
+-static void show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
++static bool show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
+ {
+ 	int allocation, runs;
+-	bool failed = false;
++	bool ret = false;
  
- 	if (bm_pid == 0) {
- 		/* Tell parent that child is ready */
- 		close(pipefd[0]);
- 		pipe_message = 1;
- 		if (write(pipefd[1], &pipe_message, sizeof(pipe_message)) <
--		    sizeof(pipe_message)) {
--			close(pipefd[1]);
-+		    sizeof(pipe_message))
-+			/*
-+			 * Just print the error message.
-+			 * Let while(1) run and wait for itself to be killed.
-+			 */
- 			perror("# failed signaling parent process");
--			return errno;
--		}
+ 	ksft_print_msg("Results are displayed in (MB)\n");
+ 	/* Memory bandwidth from 100% down to 10% */
+@@ -90,13 +90,15 @@ static void show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
+ 		ksft_print_msg("avg_bw_imc: %lu\n", avg_bw_imc);
+ 		ksft_print_msg("avg_bw_resc: %lu\n", avg_bw_resc);
+ 		if (avg_diff_per > MAX_DIFF_PERCENT)
+-			failed = true;
++			ret = true;
+ 	}
  
- 		close(pipefd[1]);
- 		while (1)
-@@ -226,5 +223,5 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
- 	if (bm_pid)
- 		umount_resctrlfs();
- 
--	return 0;
+ 	ksft_print_msg("%s Check schemata change using MBA\n",
+-		       failed ? "Fail:" : "Pass:");
+-	if (failed)
++		       ret ? "Fail:" : "Pass:");
++	if (ret)
+ 		ksft_print_msg("At least one test failed\n");
++
 +	return ret;
  }
+ 
+ static int check_results(void)
+@@ -132,9 +134,7 @@ static int check_results(void)
+ 
+ 	fclose(fp);
+ 
+-	show_mba_info(bw_imc, bw_resc);
+-
+-	return 0;
++	return show_mba_info(bw_imc, bw_resc);
+ }
+ 
+ void mba_test_cleanup(void)
 -- 
 2.27.0
 
