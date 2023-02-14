@@ -2,33 +2,34 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 157A3C05027
-	for <linux-kselftest@archiver.kernel.org>; Tue, 14 Feb 2023 11:21:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A787C05027
+	for <linux-kselftest@archiver.kernel.org>; Tue, 14 Feb 2023 11:21:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232094AbjBNLVJ convert rfc822-to-8bit (ORCPT
+        id S231442AbjBNLVT convert rfc822-to-8bit (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 14 Feb 2023 06:21:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35590 "EHLO
+        Tue, 14 Feb 2023 06:21:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231442AbjBNLVI (ORCPT
+        with ESMTP id S231684AbjBNLVS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Feb 2023 06:21:08 -0500
-Received: from us-smtp-delivery-44.mimecast.com (us-smtp-delivery-44.mimecast.com [205.139.111.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A622BBAD
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Feb 2023 03:21:07 -0800 (PST)
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        Tue, 14 Feb 2023 06:21:18 -0500
+X-Greylist: delayed 81 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 14 Feb 2023 03:21:16 PST
+Received: from us-smtp-delivery-44.mimecast.com (unknown [207.211.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDA1EE3BA
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Feb 2023 03:21:16 -0800 (PST)
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-651-L-YJ208QNV6HWN_AQVUleA-1; Tue, 14 Feb 2023 06:19:46 -0500
-X-MC-Unique: L-YJ208QNV6HWN_AQVUleA-1
+ us-mta-543-FLWRN19fNa-K5-TYwAuV4Q-1; Tue, 14 Feb 2023 06:19:36 -0500
+X-MC-Unique: FLWRN19fNa-K5-TYwAuV4Q-1
 Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2C5B2800B24;
-        Tue, 14 Feb 2023 11:19:45 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E9EF51C05149;
+        Tue, 14 Feb 2023 11:19:35 +0000 (UTC)
 Received: from hog.localdomain (ovpn-195-113.brq.redhat.com [10.40.195.113])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D5B9A40C945A;
-        Tue, 14 Feb 2023 11:19:42 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5475B40C945A;
+        Tue, 14 Feb 2023 11:19:33 +0000 (UTC)
 From:   Sabrina Dubroca <sd@queasysnail.net>
 To:     netdev@vger.kernel.org
 Cc:     Sabrina Dubroca <sd@queasysnail.net>,
@@ -42,11 +43,9 @@ Cc:     Sabrina Dubroca <sd@queasysnail.net>,
         Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
         Gal Pressman <gal@nvidia.com>,
         Marcel Holtmann <marcel@holtmann.org>
-Subject: [PATCH net-next v2 4/5] selftests: tls: add key_generation argument to tls_crypto_info_init
-Date:   Tue, 14 Feb 2023 12:17:41 +0100
-Message-Id: <798855c710dcbead2a9d32edb61a64cb0054fe60.1676052788.git.sd@queasysnail.net>
-In-Reply-To: <cover.1676052788.git.sd@queasysnail.net>
-References: <cover.1676052788.git.sd@queasysnail.net>
+Subject: [PATCH net-next v2 0/5] tls: implement key updates for TLS1.3
+Date:   Tue, 14 Feb 2023 12:17:37 +0100
+Message-Id: <cover.1676052788.git.sd@queasysnail.net>
 MIME-Version: 1.0
 X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
 X-Mimecast-Spam-Score: 0
@@ -57,68 +56,77 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This allows us to generate different keys, so that we can test that
-rekey is using the correct one.
+This adds support for receiving KeyUpdate messages (RFC 8446, 4.6.3
+[1]). A sender transmits a KeyUpdate message and then changes its TX
+key. The receiver should react by updating its RX key before
+processing the next message.
 
-Signed-off-by: Sabrina Dubroca <sd@queasysnail.net>
----
- tools/testing/selftests/net/tls.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+This patchset implements key updates by:
+ 1. pausing decryption when a KeyUpdate message is received, to avoid
+    attempting to use the old key to decrypt a record encrypted with
+    the new key
+ 2. returning -EKEYEXPIRED to syscalls that cannot receive the
+    KeyUpdate message, until the rekey has been performed by userspace
+ 3. passing the KeyUpdate message to userspace as a control message
+ 4. allowing updates of the crypto_info via the TLS_TX/TLS_RX
+    setsockopts
 
-diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftests/net/tls.c
-index 2cbb12736596..5f3adb28fee1 100644
---- a/tools/testing/selftests/net/tls.c
-+++ b/tools/testing/selftests/net/tls.c
-@@ -38,9 +38,11 @@ struct tls_crypto_info_keys {
- };
- 
- static void tls_crypto_info_init(uint16_t tls_version, uint16_t cipher_type,
--				 struct tls_crypto_info_keys *tls12)
-+				 struct tls_crypto_info_keys *tls12,
-+				 char key_generation)
- {
--	memset(tls12, 0, sizeof(*tls12));
-+	memset(tls12, key_generation, sizeof(*tls12));
-+	memset(tls12, 0, sizeof(struct tls_crypto_info));
- 
- 	switch (cipher_type) {
- 	case TLS_CIPHER_CHACHA20_POLY1305:
-@@ -312,7 +314,7 @@ FIXTURE_SETUP(tls)
- 	int ret;
- 
- 	tls_crypto_info_init(variant->tls_version, variant->cipher_type,
--			     &tls12);
-+			     &tls12, 0);
- 
- 	ulp_sock_pair(_metadata, &self->fd, &self->cfd, &self->notls);
- 
-@@ -1071,7 +1073,7 @@ TEST_F(tls, bidir)
- 		struct tls_crypto_info_keys tls12;
- 
- 		tls_crypto_info_init(variant->tls_version, variant->cipher_type,
--				     &tls12);
-+				     &tls12, 0);
- 
- 		ret = setsockopt(self->fd, SOL_TLS, TLS_RX, &tls12,
- 				 tls12.len);
-@@ -1479,7 +1481,7 @@ FIXTURE_SETUP(tls_err)
- 	int ret;
- 
- 	tls_crypto_info_init(variant->tls_version, TLS_CIPHER_AES_GCM_128,
--			     &tls12);
-+			     &tls12, 0);
- 
- 	ulp_sock_pair(_metadata, &self->fd, &self->cfd, &self->notls);
- 	ulp_sock_pair(_metadata, &self->fd2, &self->cfd2, &self->notls);
-@@ -1771,7 +1773,7 @@ TEST(tls_v6ops) {
- 	int sfd, ret, fd;
- 	socklen_t len, len2;
- 
--	tls_crypto_info_init(TLS_1_2_VERSION, TLS_CIPHER_AES_GCM_128, &tls12);
-+	tls_crypto_info_init(TLS_1_2_VERSION, TLS_CIPHER_AES_GCM_128, &tls12, 0);
- 
- 	addr.sin6_family = AF_INET6;
- 	addr.sin6_addr = in6addr_any;
+This API has been tested with gnutls to make sure that it allows
+userspace libraries to implement key updates [2]. Thanks to Frantisek
+Krenzelok <fkrenzel@redhat.com> for providing the implementation in
+gnutls and testing the kernel patches.
+
+Note: in a future series, I'll clean up tls_set_sw_offload and
+eliminate the per-cipher copy-paste using tls_cipher_size_desc.
+
+[1] https://www.rfc-editor.org/rfc/rfc8446#section-4.6.3
+[2] https://gitlab.com/gnutls/gnutls/-/merge_requests/1625
+
+
+Changes in v2
+use reverse xmas tree ordering in tls_set_sw_offload and
+do_tls_setsockopt_conf
+turn the alt_crypto_info into an else if
+selftests: add rekey_fail test
+
+Vadim suggested simplifying tls_set_sw_offload by copying the new
+crypto_info in the context in do_tls_setsockopt_conf, and then
+detecting the rekey in tls_set_sw_offload based on whether the iv was
+already set, but I don't think we can have a common error path
+(otherwise we'd free the aead etc on rekey failure). I decided instead
+to reorganize tls_set_sw_offload so that the context is unmodified
+until we know the rekey cannot fail. Some fields will be touched
+during the rekey, but they will be set to the same value they had
+before the rekey (prot->rec_seq_size, etc).
+
+Apoorv suggested to name the struct tls_crypto_info_keys "tls13"
+rather than "tls12". Since we're using the same crypto_info data for
+TLS1.3 as for 1.2, even if the tests only run for TLS1.3, I'd rather
+keep the "tls12" name, in case we end up adding a
+"tls13_crypto_info_aes_gcm_128" type in the future.
+
+Kuniyuki and Apoorv also suggested preventing rekeys on RX when we
+haven't received a matching KeyUpdate message, but I'd rather let
+userspace handle this and have a symmetric API between TX and RX on
+the kernel side. It's a bit of a foot-gun, but we can't really stop a
+broken userspace from rolling back the rec_seq on an existing
+crypto_info either, and that seems like a worse possible breakage.
+
+Sabrina Dubroca (5):
+  tls: remove tls_context argument from tls_set_sw_offload
+  tls: block decryption when a rekey is pending
+  tls: implement rekey for TLS1.3
+  selftests: tls: add key_generation argument to tls_crypto_info_init
+  selftests: tls: add rekey tests
+
+ include/net/tls.h                 |   4 +
+ net/tls/tls.h                     |   3 +-
+ net/tls/tls_device.c              |   2 +-
+ net/tls/tls_main.c                |  37 +++-
+ net/tls/tls_sw.c                  | 189 +++++++++++++----
+ tools/testing/selftests/net/tls.c | 336 +++++++++++++++++++++++++++++-
+ 6 files changed, 511 insertions(+), 60 deletions(-)
+
 -- 
 2.38.1
 
