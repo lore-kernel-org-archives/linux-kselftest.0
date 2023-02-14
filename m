@@ -2,436 +2,246 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 34D43C05027
-	for <linux-kselftest@archiver.kernel.org>; Tue, 14 Feb 2023 11:23:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D08FFC05027
+	for <linux-kselftest@archiver.kernel.org>; Tue, 14 Feb 2023 15:29:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbjBNLWs convert rfc822-to-8bit (ORCPT
+        id S232902AbjBNP3H (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 14 Feb 2023 06:22:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36152 "EHLO
+        Tue, 14 Feb 2023 10:29:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232560AbjBNLWT (ORCPT
+        with ESMTP id S233224AbjBNP3G (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Feb 2023 06:22:19 -0500
-Received: from us-smtp-delivery-44.mimecast.com (unknown [207.211.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61CC3BBAD
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Feb 2023 03:22:17 -0800 (PST)
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-589-V7dIMDnTONirCgLvYhHXwg-1; Tue, 14 Feb 2023 06:19:43 -0500
-X-MC-Unique: V7dIMDnTONirCgLvYhHXwg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 957883C0F18C;
-        Tue, 14 Feb 2023 11:19:42 +0000 (UTC)
-Received: from hog.localdomain (ovpn-195-113.brq.redhat.com [10.40.195.113])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9E569408573E;
-        Tue, 14 Feb 2023 11:19:40 +0000 (UTC)
-From:   Sabrina Dubroca <sd@queasysnail.net>
-To:     netdev@vger.kernel.org
-Cc:     Sabrina Dubroca <sd@queasysnail.net>,
-        Vadim Fedorenko <vfedorenko@novek.ru>,
-        Frantisek Krenzelok <fkrenzel@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Apoorv Kothari <apoorvko@amazon.com>,
-        Boris Pismenny <borisp@nvidia.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        Gal Pressman <gal@nvidia.com>,
-        Marcel Holtmann <marcel@holtmann.org>
-Subject: [PATCH net-next v2 3/5] tls: implement rekey for TLS1.3
-Date:   Tue, 14 Feb 2023 12:17:40 +0100
-Message-Id: <c7e5a34fcc3759326a89713a392a807f3a5069a0.1676052788.git.sd@queasysnail.net>
-In-Reply-To: <cover.1676052788.git.sd@queasysnail.net>
-References: <cover.1676052788.git.sd@queasysnail.net>
+        Tue, 14 Feb 2023 10:29:06 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B98212B62E;
+        Tue, 14 Feb 2023 07:29:04 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id fu4-20020a17090ad18400b002341fadc370so4042519pjb.1;
+        Tue, 14 Feb 2023 07:29:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=AH28F6EvRrmywiD1UFCgKML+D/hgdDiHP7RyvKCIv6o=;
+        b=mszEtkZ23wN6ChBaQur90G5eacTgdRxgFreNZhq0JaehQZ+ilGRkH1uI2YMEt7+him
+         +qhVEc0BK2K4tB/0ZujTX7LAzH0pbU8X8MKXVKHQKtkW2oZOIJLeI7JIv6XgMWXEMmAJ
+         QSEaB9tcyn+YNNmbaPsbbM46pF/MwybZ+at3TzGptcA8Y2BGKAwGuBpfS6fhIaohaVL4
+         Lf8H9lFo56nxZ8fpo97UOCyo2NRNu+zBGjs+7CxKpxie5Rvsf22Cr738XX/CzijHGULT
+         +h/yDH+aLehjCDbOWJGCGuGc3UY22J62fsV2LEslhx+c8Y9UaMkdTaREVOIWL4svbnkb
+         TyTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AH28F6EvRrmywiD1UFCgKML+D/hgdDiHP7RyvKCIv6o=;
+        b=wPdzMMixG02pRoao95GRkClwmSRsLGz99vDTbowF6DLPbZ26kWoWkYnII8HN0RF3wK
+         SxNC/oZQWK7O154DIvPZpPlgAirv6zOpV1b2cEANtPFLJH0ElRf4rbPu9HbTYwPpyF1q
+         pcMPIutXg4f4ZFmbW1CEV9J8hOJ8zo6vjaavGbFci4nVmZQCPo4kcs+AEhowHlTwWD1b
+         CqXtaoBY2tnC2VvgWoKFcSWdmKShCSRZ/e4H2eYrDlGOU19PcboSOUG24dsungIWoryp
+         RRqH0UJCeIws9A80BQkcyu3awffS/BB+eYV4PGoFoGCHNw/LPAjGlTYH+A9vuEfa48cq
+         1rFw==
+X-Gm-Message-State: AO0yUKWDYkwcqSJXJ+p7CHNgHrePrx5Su14+fn/R/RlI69qQtIz3VnTW
+        Xv9DulqluAoB+8bb9pvm9hc=
+X-Google-Smtp-Source: AK7set/kfQcJ2vREWV4TZJILYW2ejomRx0Hkjx+WoxFlFaYZ76ocWF4naZkikrA93Luit6sEUzz6sw==
+X-Received: by 2002:a17:90b:1b0a:b0:234:190d:e655 with SMTP id nu10-20020a17090b1b0a00b00234190de655mr3025624pjb.44.1676388544071;
+        Tue, 14 Feb 2023 07:29:04 -0800 (PST)
+Received: from awkrail.localdomain.jp (p182177-ipngn200503kyoto.kyoto.ocn.ne.jp. [58.90.106.177])
+        by smtp.gmail.com with ESMTPSA id u4-20020a17090ae00400b00233ebab3770sm4248042pjy.23.2023.02.14.07.28.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Feb 2023 07:29:03 -0800 (PST)
+From:   Taichi Nishimura <awkrail01@gmail.com>
+To:     shuah@kernel.org, andrii@kernel.org, mykolal@fb.com,
+        ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        hawk@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
+        trix@redhat.com, awkrail01@gmail.com, ytcoode@gmail.com,
+        deso@posteo.net, joannelkoong@gmail.com
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, llvm@lists.linux.dev
+Subject: [PATCH] fixed typos on selftests/bpf
+Date:   Wed, 15 Feb 2023 00:28:50 +0900
+Message-Id: <20230214152850.389392-1-awkrail01@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: queasysnail.net
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset=WINDOWS-1252; x-default=true
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This adds the possibility to change the key and IV when using
-TLS1.3. Changing the cipher or TLS version is not supported.
+I run spell checker and found typos in selftest/bpf/ files.
+Fixed all of the detected typos.
 
-Once we have updated the RX key, we can unblock the receive side. If
-the rekey fails, the context is unmodified and userspace is free to
-retry the update or close the socket.
+This patch is an extra credit for kselftest task
+in the Linux kernel bug fixing spring unpaid 2023.
 
-This change only affects tls_sw, since 1.3 offload isn't supported.
+Best regards,
+Taichi Nishimura
 
-v2: reverse xmas tree
-    turn the alt_crypto_info into an else if
-    don't modify the context when rekey fails
-
-Signed-off-by: Sabrina Dubroca <sd@queasysnail.net>
+Signed-off-by: Taichi Nishimura <awkrail01@gmail.com>
 ---
- net/tls/tls.h        |   3 +-
- net/tls/tls_device.c |   2 +-
- net/tls/tls_main.c   |  37 +++++++++---
- net/tls/tls_sw.c     | 134 +++++++++++++++++++++++++++++++------------
- 4 files changed, 129 insertions(+), 47 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c    | 2 +-
+ tools/testing/selftests/bpf/prog_tests/trampoline_count.c     | 2 +-
+ tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c | 2 +-
+ tools/testing/selftests/bpf/progs/dynptr_fail.c               | 2 +-
+ tools/testing/selftests/bpf/progs/strobemeta.h                | 2 +-
+ tools/testing/selftests/bpf/progs/test_cls_redirect.c         | 4 ++--
+ tools/testing/selftests/bpf/progs/test_subprogs.c             | 2 +-
+ tools/testing/selftests/bpf/progs/test_xdp_vlan.c             | 2 +-
+ tools/testing/selftests/bpf/test_cpp.cpp                      | 2 +-
+ tools/testing/selftests/bpf/veristat.c                        | 4 ++--
+ 10 files changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/net/tls/tls.h b/net/tls/tls.h
-index 34d0fe814600..6f9c85eaa9c5 100644
---- a/net/tls/tls.h
-+++ b/net/tls/tls.h
-@@ -90,7 +90,8 @@ int tls_sk_attach(struct sock *sk, int optname, char __user *optval,
- 		  unsigned int optlen);
- void tls_err_abort(struct sock *sk, int err);
- 
--int tls_set_sw_offload(struct sock *sk, int tx);
-+int tls_set_sw_offload(struct sock *sk, int tx,
-+		       struct tls_crypto_info *new_crypto_info);
- void tls_update_rx_zc_capable(struct tls_context *tls_ctx);
- void tls_sw_strparser_arm(struct sock *sk, struct tls_context *ctx);
- void tls_sw_strparser_done(struct tls_context *tls_ctx);
-diff --git a/net/tls/tls_device.c b/net/tls/tls_device.c
-index c149f36b42ee..1ad50c253dfe 100644
---- a/net/tls/tls_device.c
-+++ b/net/tls/tls_device.c
-@@ -1291,7 +1291,7 @@ int tls_set_device_offload_rx(struct sock *sk, struct tls_context *ctx)
- 	context->resync_nh_reset = 1;
- 
- 	ctx->priv_ctx_rx = context;
--	rc = tls_set_sw_offload(sk, 0);
-+	rc = tls_set_sw_offload(sk, 0, NULL);
- 	if (rc)
- 		goto release_ctx;
- 
-diff --git a/net/tls/tls_main.c b/net/tls/tls_main.c
-index fb1da1780f50..24a4bdb54a53 100644
---- a/net/tls/tls_main.c
-+++ b/net/tls/tls_main.c
-@@ -669,9 +669,11 @@ static int tls_getsockopt(struct sock *sk, int level, int optname,
- static int do_tls_setsockopt_conf(struct sock *sk, sockptr_t optval,
- 				  unsigned int optlen, int tx)
- {
--	struct tls_crypto_info *crypto_info;
--	struct tls_crypto_info *alt_crypto_info;
-+	struct tls_crypto_info *crypto_info, *alt_crypto_info;
-+	struct tls_crypto_info *old_crypto_info = NULL;
- 	struct tls_context *ctx = tls_get_ctx(sk);
-+	union tls_crypto_context tmp = {};
-+	bool update = false;
- 	size_t optsize;
- 	int rc = 0;
- 	int conf;
-@@ -687,9 +689,17 @@ static int do_tls_setsockopt_conf(struct sock *sk, sockptr_t optval,
- 		alt_crypto_info = &ctx->crypto_send.info;
+diff --git a/tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c b/tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c
+index eb2feaac81fe..653b0a20fab9 100644
+--- a/tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c
++++ b/tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c
+@@ -488,7 +488,7 @@ static void run_test(struct migrate_reuseport_test_case *test_case,
+ 			goto close_servers;
  	}
  
--	/* Currently we don't support set crypto info more than one time */
--	if (TLS_CRYPTO_INFO_READY(crypto_info))
--		return -EBUSY;
-+	if (TLS_CRYPTO_INFO_READY(crypto_info)) {
-+		/* Currently we only support setting crypto info more
-+		 * than one time for TLS 1.3
-+		 */
-+		if (crypto_info->version != TLS_1_3_VERSION)
-+			return -EBUSY;
-+
-+		update = true;
-+		old_crypto_info = crypto_info;
-+		crypto_info = &tmp.info;
-+	}
+-	/* Tie requests to the first four listners */
++	/* Tie requests to the first four listeners */
+ 	err = start_clients(test_case);
+ 	if (!ASSERT_OK(err, "start_clients"))
+ 		goto close_clients;
+diff --git a/tools/testing/selftests/bpf/prog_tests/trampoline_count.c b/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
+index 564b75bc087f..353451a0c88c 100644
+--- a/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
++++ b/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
+@@ -74,7 +74,7 @@ void serial_test_trampoline_count(void)
+ 	if (!ASSERT_EQ(link, NULL, "ptr_is_null"))
+ 		goto cleanup;
  
- 	rc = copy_from_sockptr(crypto_info, optval, sizeof(*crypto_info));
- 	if (rc) {
-@@ -704,8 +714,15 @@ static int do_tls_setsockopt_conf(struct sock *sk, sockptr_t optval,
- 		goto err_crypto_info;
- 	}
- 
--	/* Ensure that TLS version and ciphers are same in both directions */
--	if (TLS_CRYPTO_INFO_READY(alt_crypto_info)) {
-+	if (update) {
-+		/* Ensure that TLS version and ciphers are not modified */
-+		if (crypto_info->version != old_crypto_info->version ||
-+		    crypto_info->cipher_type != old_crypto_info->cipher_type) {
-+			rc = -EINVAL;
-+			goto err_crypto_info;
-+		}
-+	} else if (TLS_CRYPTO_INFO_READY(alt_crypto_info)) {
-+		/* Ensure that TLS version and ciphers are same in both directions */
- 		if (alt_crypto_info->version != crypto_info->version ||
- 		    alt_crypto_info->cipher_type != crypto_info->cipher_type) {
- 			rc = -EINVAL;
-@@ -772,7 +789,8 @@ static int do_tls_setsockopt_conf(struct sock *sk, sockptr_t optval,
- 			TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSTXDEVICE);
- 			TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSCURRTXDEVICE);
- 		} else {
--			rc = tls_set_sw_offload(sk, 1);
-+			rc = tls_set_sw_offload(sk, 1,
-+						update ? crypto_info : NULL);
- 			if (rc)
- 				goto err_crypto_info;
- 			TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSTXSW);
-@@ -786,7 +804,8 @@ static int do_tls_setsockopt_conf(struct sock *sk, sockptr_t optval,
- 			TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSRXDEVICE);
- 			TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSCURRRXDEVICE);
- 		} else {
--			rc = tls_set_sw_offload(sk, 0);
-+			rc = tls_set_sw_offload(sk, 0,
-+						update ? crypto_info : NULL);
- 			if (rc)
- 				goto err_crypto_info;
- 			TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSRXSW);
-diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
-index 149a39d9a56a..a35b3bfe5b47 100644
---- a/net/tls/tls_sw.c
-+++ b/net/tls/tls_sw.c
-@@ -2508,23 +2508,50 @@ void tls_update_rx_zc_capable(struct tls_context *tls_ctx)
- 		tls_ctx->prot_info.version != TLS_1_3_VERSION;
+-	/* and finaly execute the probe */
++	/* and finally execute the probe */
+ 	prog_fd = bpf_program__fd(prog);
+ 	if (!ASSERT_GE(prog_fd, 0, "bpf_program__fd"))
+ 		goto cleanup;
+diff --git a/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c b/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
+index 4ee4748133fe..daa8753bb171 100644
+--- a/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
++++ b/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
+@@ -51,7 +51,7 @@ typedef void (*printf_fn_t)(const char *, ...);
+  *	typedef int (*fn_t)(int);
+  *	typedef char * const * (*fn_ptr2_t)(s_t, fn_t);
+  *
+- * - `fn_complext_t`: pointer to a function returning struct and accepting
++ * - `fn_complex_t`: pointer to a function returning struct and accepting
+  *   union and struct. All structs and enum are anonymous and defined inline.
+  *
+  * - `signal_t: pointer to a function accepting a pointer to a function as an
+diff --git a/tools/testing/selftests/bpf/progs/dynptr_fail.c b/tools/testing/selftests/bpf/progs/dynptr_fail.c
+index 78debc1b3820..b979ee9f5a37 100644
+--- a/tools/testing/selftests/bpf/progs/dynptr_fail.c
++++ b/tools/testing/selftests/bpf/progs/dynptr_fail.c
+@@ -623,7 +623,7 @@ static int release_twice_callback_fn(__u32 index, void *data)
  }
  
--int tls_set_sw_offload(struct sock *sk, int tx)
-+static void tls_finish_key_update(struct tls_context *tls_ctx)
-+{
-+	struct tls_sw_context_rx *ctx = tls_ctx->priv_ctx_rx;
-+
-+	ctx->key_update_pending = false;
-+}
-+
-+int tls_set_sw_offload(struct sock *sk, int tx,
-+		       struct tls_crypto_info *new_crypto_info)
- {
- 	u16 nonce_size, tag_size, iv_size, rec_seq_size, salt_size;
-+	struct tls_crypto_info *crypto_info, *src_crypto_info;
- 	char *iv, *rec_seq, *key, *salt, *cipher_name;
- 	struct tls_sw_context_tx *sw_ctx_tx = NULL;
- 	struct tls_sw_context_rx *sw_ctx_rx = NULL;
- 	struct tls_context *ctx = tls_get_ctx(sk);
--	struct tls_crypto_info *crypto_info;
-+	size_t keysize, crypto_info_size;
- 	struct cipher_context *cctx;
- 	struct tls_prot_info *prot;
- 	struct crypto_aead **aead;
- 	struct crypto_tfm *tfm;
--	size_t keysize;
- 	int rc = 0;
- 
- 	prot = &ctx->prot_info;
- 
-+	if (new_crypto_info) {
-+		/* non-NULL new_crypto_info means rekey */
-+		src_crypto_info = new_crypto_info;
-+		if (tx) {
-+			sw_ctx_tx = ctx->priv_ctx_tx;
-+			crypto_info = &ctx->crypto_send.info;
-+			cctx = &ctx->tx;
-+			aead = &sw_ctx_tx->aead_send;
-+			sw_ctx_tx = NULL;
-+		} else {
-+			sw_ctx_rx = ctx->priv_ctx_rx;
-+			crypto_info = &ctx->crypto_recv.info;
-+			cctx = &ctx->rx;
-+			aead = &sw_ctx_rx->aead_recv;
-+			sw_ctx_rx = NULL;
-+		}
-+		goto skip_init;
-+	}
-+
- 	if (tx) {
- 		if (!ctx->priv_ctx_tx) {
- 			sw_ctx_tx = kzalloc(sizeof(*sw_ctx_tx), GFP_KERNEL);
-@@ -2571,12 +2598,15 @@ int tls_set_sw_offload(struct sock *sk, int tx)
- 		aead = &sw_ctx_rx->aead_recv;
- 		sw_ctx_rx->key_update_pending = false;
- 	}
-+	src_crypto_info = crypto_info;
- 
-+skip_init:
- 	switch (crypto_info->cipher_type) {
- 	case TLS_CIPHER_AES_GCM_128: {
- 		struct tls12_crypto_info_aes_gcm_128 *gcm_128_info;
- 
--		gcm_128_info = (void *)crypto_info;
-+		crypto_info_size = sizeof(struct tls12_crypto_info_aes_gcm_128);
-+		gcm_128_info = (void *)src_crypto_info;
- 		nonce_size = TLS_CIPHER_AES_GCM_128_IV_SIZE;
- 		tag_size = TLS_CIPHER_AES_GCM_128_TAG_SIZE;
- 		iv_size = TLS_CIPHER_AES_GCM_128_IV_SIZE;
-@@ -2593,7 +2623,8 @@ int tls_set_sw_offload(struct sock *sk, int tx)
- 	case TLS_CIPHER_AES_GCM_256: {
- 		struct tls12_crypto_info_aes_gcm_256 *gcm_256_info;
- 
--		gcm_256_info = (void *)crypto_info;
-+		crypto_info_size = sizeof(struct tls12_crypto_info_aes_gcm_256);
-+		gcm_256_info = (void *)src_crypto_info;
- 		nonce_size = TLS_CIPHER_AES_GCM_256_IV_SIZE;
- 		tag_size = TLS_CIPHER_AES_GCM_256_TAG_SIZE;
- 		iv_size = TLS_CIPHER_AES_GCM_256_IV_SIZE;
-@@ -2610,7 +2641,8 @@ int tls_set_sw_offload(struct sock *sk, int tx)
- 	case TLS_CIPHER_AES_CCM_128: {
- 		struct tls12_crypto_info_aes_ccm_128 *ccm_128_info;
- 
--		ccm_128_info = (void *)crypto_info;
-+		crypto_info_size = sizeof(struct tls12_crypto_info_aes_ccm_128);
-+		ccm_128_info = (void *)src_crypto_info;
- 		nonce_size = TLS_CIPHER_AES_CCM_128_IV_SIZE;
- 		tag_size = TLS_CIPHER_AES_CCM_128_TAG_SIZE;
- 		iv_size = TLS_CIPHER_AES_CCM_128_IV_SIZE;
-@@ -2627,7 +2659,8 @@ int tls_set_sw_offload(struct sock *sk, int tx)
- 	case TLS_CIPHER_CHACHA20_POLY1305: {
- 		struct tls12_crypto_info_chacha20_poly1305 *chacha20_poly1305_info;
- 
--		chacha20_poly1305_info = (void *)crypto_info;
-+		crypto_info_size = sizeof(struct tls12_crypto_info_chacha20_poly1305);
-+		chacha20_poly1305_info = (void *)src_crypto_info;
- 		nonce_size = 0;
- 		tag_size = TLS_CIPHER_CHACHA20_POLY1305_TAG_SIZE;
- 		iv_size = TLS_CIPHER_CHACHA20_POLY1305_IV_SIZE;
-@@ -2644,7 +2677,8 @@ int tls_set_sw_offload(struct sock *sk, int tx)
- 	case TLS_CIPHER_SM4_GCM: {
- 		struct tls12_crypto_info_sm4_gcm *sm4_gcm_info;
- 
--		sm4_gcm_info = (void *)crypto_info;
-+		crypto_info_size = sizeof(struct tls12_crypto_info_sm4_gcm);
-+		sm4_gcm_info = (void *)src_crypto_info;
- 		nonce_size = TLS_CIPHER_SM4_GCM_IV_SIZE;
- 		tag_size = TLS_CIPHER_SM4_GCM_TAG_SIZE;
- 		iv_size = TLS_CIPHER_SM4_GCM_IV_SIZE;
-@@ -2661,7 +2695,8 @@ int tls_set_sw_offload(struct sock *sk, int tx)
- 	case TLS_CIPHER_SM4_CCM: {
- 		struct tls12_crypto_info_sm4_ccm *sm4_ccm_info;
- 
--		sm4_ccm_info = (void *)crypto_info;
-+		crypto_info_size = sizeof(struct tls12_crypto_info_sm4_ccm);
-+		sm4_ccm_info = (void *)src_crypto_info;
- 		nonce_size = TLS_CIPHER_SM4_CCM_IV_SIZE;
- 		tag_size = TLS_CIPHER_SM4_CCM_TAG_SIZE;
- 		iv_size = TLS_CIPHER_SM4_CCM_IV_SIZE;
-@@ -2678,7 +2713,8 @@ int tls_set_sw_offload(struct sock *sk, int tx)
- 	case TLS_CIPHER_ARIA_GCM_128: {
- 		struct tls12_crypto_info_aria_gcm_128 *aria_gcm_128_info;
- 
--		aria_gcm_128_info = (void *)crypto_info;
-+		crypto_info_size = sizeof(struct tls12_crypto_info_aria_gcm_128);
-+		aria_gcm_128_info = (void *)src_crypto_info;
- 		nonce_size = TLS_CIPHER_ARIA_GCM_128_IV_SIZE;
- 		tag_size = TLS_CIPHER_ARIA_GCM_128_TAG_SIZE;
- 		iv_size = TLS_CIPHER_ARIA_GCM_128_IV_SIZE;
-@@ -2695,7 +2731,8 @@ int tls_set_sw_offload(struct sock *sk, int tx)
- 	case TLS_CIPHER_ARIA_GCM_256: {
- 		struct tls12_crypto_info_aria_gcm_256 *gcm_256_info;
- 
--		gcm_256_info = (void *)crypto_info;
-+		crypto_info_size = sizeof(struct tls12_crypto_info_aria_gcm_256);
-+		gcm_256_info = (void *)src_crypto_info;
- 		nonce_size = TLS_CIPHER_ARIA_GCM_256_IV_SIZE;
- 		tag_size = TLS_CIPHER_ARIA_GCM_256_TAG_SIZE;
- 		iv_size = TLS_CIPHER_ARIA_GCM_256_IV_SIZE;
-@@ -2739,19 +2776,18 @@ int tls_set_sw_offload(struct sock *sk, int tx)
- 			      prot->tag_size + prot->tail_size;
- 	prot->iv_size = iv_size;
- 	prot->salt_size = salt_size;
--	cctx->iv = kmalloc(iv_size + salt_size, GFP_KERNEL);
--	if (!cctx->iv) {
--		rc = -ENOMEM;
--		goto free_priv;
--	}
--	/* Note: 128 & 256 bit salt are the same size */
--	prot->rec_seq_size = rec_seq_size;
--	memcpy(cctx->iv, salt, salt_size);
--	memcpy(cctx->iv + salt_size, iv, iv_size);
--	cctx->rec_seq = kmemdup(rec_seq, rec_seq_size, GFP_KERNEL);
--	if (!cctx->rec_seq) {
--		rc = -ENOMEM;
--		goto free_iv;
-+	if (!new_crypto_info) {
-+		cctx->iv = kmalloc(iv_size + salt_size, GFP_KERNEL);
-+		if (!cctx->iv) {
-+			rc = -ENOMEM;
-+			goto free_priv;
-+		}
-+
-+		cctx->rec_seq = kmemdup(rec_seq, rec_seq_size, GFP_KERNEL);
-+		if (!cctx->rec_seq) {
-+			rc = -ENOMEM;
-+			goto free_iv;
-+		}
+ /* Test that releasing a dynptr twice, where one of the releases happens
+- * within a calback function, fails
++ * within a callback function, fails
+  */
+ SEC("?raw_tp")
+ __failure __msg("arg 1 is an unacquired reference")
+diff --git a/tools/testing/selftests/bpf/progs/strobemeta.h b/tools/testing/selftests/bpf/progs/strobemeta.h
+index 753718595c26..e562be6356f3 100644
+--- a/tools/testing/selftests/bpf/progs/strobemeta.h
++++ b/tools/testing/selftests/bpf/progs/strobemeta.h
+@@ -135,7 +135,7 @@ struct strobe_value_loc {
+ 	 * tpidr_el0 for aarch64).
+ 	 * TLS_IMM_EXEC: absolute address of GOT entry containing offset
+ 	 * from thread pointer;
+-	 * TLS_GENERAL_DYN: absolute addres of double GOT entry
++	 * TLS_GENERAL_DYN: absolute address of double GOT entry
+ 	 * containing tls_index_t struct;
+ 	 */
+ 	int64_t offset;
+diff --git a/tools/testing/selftests/bpf/progs/test_cls_redirect.c b/tools/testing/selftests/bpf/progs/test_cls_redirect.c
+index 2833ad722cb7..a8ba39848bbf 100644
+--- a/tools/testing/selftests/bpf/progs/test_cls_redirect.c
++++ b/tools/testing/selftests/bpf/progs/test_cls_redirect.c
+@@ -600,7 +600,7 @@ static INLINING ret_t get_next_hop(buf_t *pkt, encap_headers_t *encap,
+ 		return TC_ACT_SHOT;
  	}
  
- 	if (!*aead) {
-@@ -2765,14 +2801,24 @@ int tls_set_sw_offload(struct sock *sk, int tx)
+-	/* Skip the remainig next hops (may be zero). */
++	/* Skip the remaining next hops (may be zero). */
+ 	return skip_next_hops(pkt, encap->unigue.hop_count -
+ 					   encap->unigue.next_hop - 1);
+ }
+@@ -610,7 +610,7 @@ static INLINING ret_t get_next_hop(buf_t *pkt, encap_headers_t *encap,
+  *
+  *    fill_tuple(&t, foo, sizeof(struct iphdr), 123, 321)
+  *
+- * clang will substitue a costant for sizeof, which allows the verifier
++ * clang will substitute a costant for sizeof, which allows the verifier
+  * to track it's value. Based on this, it can figure out the constant
+  * return value, and calling code works while still being "generic" to
+  * IPv4 and IPv6.
+diff --git a/tools/testing/selftests/bpf/progs/test_subprogs.c b/tools/testing/selftests/bpf/progs/test_subprogs.c
+index f8e9256cf18d..a8d602d7c88a 100644
+--- a/tools/testing/selftests/bpf/progs/test_subprogs.c
++++ b/tools/testing/selftests/bpf/progs/test_subprogs.c
+@@ -47,7 +47,7 @@ static __noinline int sub5(int v)
+ 	return sub1(v) - 1; /* compensates sub1()'s + 1 */
+ }
  
- 	ctx->push_pending_record = tls_sw_push_pending_record;
+-/* unfortunately verifier rejects `struct task_struct *t` as an unkown pointer
++/* unfortunately verifier rejects `struct task_struct *t` as an unknown pointer
+  * type, so we need to accept pointer as integer and then cast it inside the
+  * function
+  */
+diff --git a/tools/testing/selftests/bpf/progs/test_xdp_vlan.c b/tools/testing/selftests/bpf/progs/test_xdp_vlan.c
+index 134768f6b788..c19324f228a3 100644
+--- a/tools/testing/selftests/bpf/progs/test_xdp_vlan.c
++++ b/tools/testing/selftests/bpf/progs/test_xdp_vlan.c
+@@ -98,7 +98,7 @@ bool parse_eth_frame(struct ethhdr *eth, void *data_end, struct parse_pkt *pkt)
+ 	return true;
+ }
  
-+	/* setkey is the last operation that could fail during a
-+	 * rekey. if it succeeds, we can start modifying the
-+	 * context.
-+	 */
- 	rc = crypto_aead_setkey(*aead, key, keysize);
-+	if (rc) {
-+		if (new_crypto_info)
-+			goto out;
-+		else
-+			goto free_aead;
-+	}
+-/* Hint, VLANs are choosen to hit network-byte-order issues */
++/* Hint, VLANs are chosen to hit network-byte-order issues */
+ #define TESTVLAN 4011 /* 0xFAB */
+ // #define TO_VLAN  4000 /* 0xFA0 (hint 0xOA0 = 160) */
  
--	if (rc)
--		goto free_aead;
--
--	rc = crypto_aead_setauthsize(*aead, prot->tag_size);
--	if (rc)
--		goto free_aead;
-+	if (!new_crypto_info) {
-+		rc = crypto_aead_setauthsize(*aead, prot->tag_size);
-+		if (rc) {
-+			goto free_aead;
-+		}
-+	}
+diff --git a/tools/testing/selftests/bpf/test_cpp.cpp b/tools/testing/selftests/bpf/test_cpp.cpp
+index 0bd9990e83fa..f4936834f76f 100644
+--- a/tools/testing/selftests/bpf/test_cpp.cpp
++++ b/tools/testing/selftests/bpf/test_cpp.cpp
+@@ -91,7 +91,7 @@ static void try_skeleton_template()
  
- 	if (sw_ctx_rx) {
- 		tfm = crypto_aead_tfm(sw_ctx_rx->aead_recv);
-@@ -2787,6 +2833,20 @@ int tls_set_sw_offload(struct sock *sk, int tx)
- 			goto free_aead;
- 	}
+ 	skel.detach();
  
-+	/* Note: 128 & 256 bit salt are the same size */
-+	prot->rec_seq_size = rec_seq_size;
-+	memcpy(cctx->iv, salt, salt_size);
-+	memcpy(cctx->iv + salt_size, iv, iv_size);
-+
-+	if (new_crypto_info) {
-+		memcpy(cctx->rec_seq, rec_seq, rec_seq_size);
-+
-+		memcpy(crypto_info, new_crypto_info, crypto_info_size);
-+		memzero_explicit(new_crypto_info, crypto_info_size);
-+		if (!tx)
-+			tls_finish_key_update(ctx);
-+	}
-+
- 	goto out;
+-	/* destructor will destory underlying skeleton */
++	/* destructor will destroy underlying skeleton */
+ }
  
- free_aead:
-@@ -2799,12 +2859,14 @@ int tls_set_sw_offload(struct sock *sk, int tx)
- 	kfree(cctx->iv);
- 	cctx->iv = NULL;
- free_priv:
--	if (tx) {
--		kfree(ctx->priv_ctx_tx);
--		ctx->priv_ctx_tx = NULL;
--	} else {
--		kfree(ctx->priv_ctx_rx);
--		ctx->priv_ctx_rx = NULL;
-+	if (!new_crypto_info) {
-+		if (tx) {
-+			kfree(ctx->priv_ctx_tx);
-+			ctx->priv_ctx_tx = NULL;
-+		} else {
-+			kfree(ctx->priv_ctx_rx);
-+			ctx->priv_ctx_rx = NULL;
-+		}
- 	}
- out:
- 	return rc;
+ int main(int argc, char *argv[])
+diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selftests/bpf/veristat.c
+index f961b49b8ef4..83231456d3c5 100644
+--- a/tools/testing/selftests/bpf/veristat.c
++++ b/tools/testing/selftests/bpf/veristat.c
+@@ -144,7 +144,7 @@ static struct env {
+ 	struct verif_stats *prog_stats;
+ 	int prog_stat_cnt;
+ 
+-	/* baseline_stats is allocated and used only in comparsion mode */
++	/* baseline_stats is allocated and used only in comparison mode */
+ 	struct verif_stats *baseline_stats;
+ 	int baseline_stat_cnt;
+ 
+@@ -882,7 +882,7 @@ static int process_obj(const char *filename)
+ 		 * that BPF object file is incomplete and has to be statically
+ 		 * linked into a final BPF object file; instead of bailing
+ 		 * out, report it into stderr, mark it as skipped, and
+-		 * proceeed
++		 * proceed
+ 		 */
+ 		fprintf(stderr, "Failed to open '%s': %d\n", filename, -errno);
+ 		env.files_skipped++;
 -- 
-2.38.1
+2.25.1
 
