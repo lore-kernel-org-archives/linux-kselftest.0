@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97EE4C64EC7
-	for <linux-kselftest@archiver.kernel.org>; Wed, 15 Feb 2023 08:36:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7226EC636D4
+	for <linux-kselftest@archiver.kernel.org>; Wed, 15 Feb 2023 08:36:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233967AbjBOIgn (ORCPT
+        id S233974AbjBOIgr (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 15 Feb 2023 03:36:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36788 "EHLO
+        Wed, 15 Feb 2023 03:36:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233786AbjBOIgm (ORCPT
+        with ESMTP id S233971AbjBOIgp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Feb 2023 03:36:42 -0500
-Received: from esa2.hc1455-7.c3s2.iphmx.com (esa2.hc1455-7.c3s2.iphmx.com [207.54.90.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2421725B9C;
-        Wed, 15 Feb 2023 00:36:40 -0800 (PST)
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="106671294"
+        Wed, 15 Feb 2023 03:36:45 -0500
+Received: from esa6.hc1455-7.c3s2.iphmx.com (esa6.hc1455-7.c3s2.iphmx.com [68.232.139.139])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 274AA25B9C;
+        Wed, 15 Feb 2023 00:36:42 -0800 (PST)
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="107664990"
 X-IronPort-AV: E=Sophos;i="5.97,299,1669042800"; 
-   d="scan'208";a="106671294"
-Received: from unknown (HELO yto-r3.gw.nic.fujitsu.com) ([218.44.52.219])
-  by esa2.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 17:36:39 +0900
-Received: from yto-m1.gw.nic.fujitsu.com (yto-nat-yto-m1.gw.nic.fujitsu.com [192.168.83.64])
-        by yto-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id 5462BC3F94;
-        Wed, 15 Feb 2023 17:36:36 +0900 (JST)
+   d="scan'208";a="107664990"
+Received: from unknown (HELO yto-r2.gw.nic.fujitsu.com) ([218.44.52.218])
+  by esa6.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 17:36:40 +0900
+Received: from yto-m4.gw.nic.fujitsu.com (yto-nat-yto-m4.gw.nic.fujitsu.com [192.168.83.67])
+        by yto-r2.gw.nic.fujitsu.com (Postfix) with ESMTP id 42986D6246;
+        Wed, 15 Feb 2023 17:36:38 +0900 (JST)
 Received: from yto-om3.fujitsu.com (yto-om3.o.css.fujitsu.com [10.128.89.164])
-        by yto-m1.gw.nic.fujitsu.com (Postfix) with ESMTP id AC7D7CFF98;
-        Wed, 15 Feb 2023 17:36:35 +0900 (JST)
+        by yto-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id 90B46D3F21;
+        Wed, 15 Feb 2023 17:36:37 +0900 (JST)
 Received: from cn-r05-10.example.com (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
-        by yto-om3.fujitsu.com (Postfix) with ESMTP id 851C2400C029A;
-        Wed, 15 Feb 2023 17:36:35 +0900 (JST)
+        by yto-om3.fujitsu.com (Postfix) with ESMTP id 69252400C0299;
+        Wed, 15 Feb 2023 17:36:37 +0900 (JST)
 From:   Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
 To:     Fenghua Yu <fenghua.yu@intel.com>,
         Reinette Chatre <reinette.chatre@intel.com>,
         Shuah Khan <shuah@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        tan.shaopeng@jp.fujitsu.com, Shuah Khan <skhan@linuxfoundation.org>
-Subject: [PATCH v8 2/6] selftests/resctrl: Return MBA check result and make it to output message
-Date:   Wed, 15 Feb 2023 17:32:26 +0900
-Message-Id: <20230215083230.3155897-3-tan.shaopeng@jp.fujitsu.com>
+        tan.shaopeng@jp.fujitsu.com
+Subject: [PATCH v8 4/6] selftests/resctrl: Cleanup properly when an error occurs in CAT test
+Date:   Wed, 15 Feb 2023 17:32:28 +0900
+Message-Id: <20230215083230.3155897-5-tan.shaopeng@jp.fujitsu.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20230215083230.3155897-1-tan.shaopeng@jp.fujitsu.com>
 References: <20230215083230.3155897-1-tan.shaopeng@jp.fujitsu.com>
@@ -49,66 +49,67 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Since MBA check result is not returned, the MBA test result message
-is always output as "ok" regardless of whether the MBA check result is
-true or false.
+After creating a child process with fork() in CAT test, if an error
+occurs when parent process runs cat_val() or check_results(), the child
+process will not be killed and also resctrlfs is not unmounted. Also if
+an error occurs when child process runs cat_val() or check_results(),
+the parent process will wait for the pipe message from the child process
+which will never be sent by the child process and the parent process
+cannot proceed to unmount resctrlfs.
 
-Make output message to be "not ok" if MBA check result is failed.
+Synchronize the exits between the parent and child. An error could
+occur whether in parent process or child process. The parent process
+always kills the child process and runs umount_resctrlfs(). The
+child process always waits to be killed by the parent process.
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
 Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
 ---
- tools/testing/selftests/resctrl/mba_test.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ tools/testing/selftests/resctrl/cat_test.c | 19 ++++++++-----------
+ 1 file changed, 8 insertions(+), 11 deletions(-)
 
-diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
-index 1a1bdb6180cf..e3a473976d74 100644
---- a/tools/testing/selftests/resctrl/mba_test.c
-+++ b/tools/testing/selftests/resctrl/mba_test.c
-@@ -51,10 +51,10 @@ static int mba_setup(int num, ...)
- 	return 0;
- }
+diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
+index 6a8306b0a109..477b62dac546 100644
+--- a/tools/testing/selftests/resctrl/cat_test.c
++++ b/tools/testing/selftests/resctrl/cat_test.c
+@@ -186,23 +186,20 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
+ 	remove(param.filename);
  
--static void show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
-+static bool show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
- {
- 	int allocation, runs;
--	bool failed = false;
-+	bool ret = false;
+ 	ret = cat_val(&param);
+-	if (ret)
+-		return ret;
+-
+-	ret = check_results(&param);
+-	if (ret)
+-		return ret;
++	if (ret == 0)
++		ret = check_results(&param);
  
- 	ksft_print_msg("Results are displayed in (MB)\n");
- 	/* Memory bandwidth from 100% down to 10% */
-@@ -90,13 +90,15 @@ static void show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
- 		ksft_print_msg("avg_bw_imc: %lu\n", avg_bw_imc);
- 		ksft_print_msg("avg_bw_resc: %lu\n", avg_bw_resc);
- 		if (avg_diff_per > MAX_DIFF_PERCENT)
--			failed = true;
-+			ret = true;
- 	}
+ 	if (bm_pid == 0) {
+ 		/* Tell parent that child is ready */
+ 		close(pipefd[0]);
+ 		pipe_message = 1;
+ 		if (write(pipefd[1], &pipe_message, sizeof(pipe_message)) <
+-		    sizeof(pipe_message)) {
+-			close(pipefd[1]);
++		    sizeof(pipe_message))
++			/*
++			 * Just print the error message.
++			 * Let while(1) run and wait for itself to be killed.
++			 */
+ 			perror("# failed signaling parent process");
+-			return errno;
+-		}
  
- 	ksft_print_msg("%s Check schemata change using MBA\n",
--		       failed ? "Fail:" : "Pass:");
--	if (failed)
-+		       ret ? "Fail:" : "Pass:");
-+	if (ret)
- 		ksft_print_msg("At least one test failed\n");
-+
+ 		close(pipefd[1]);
+ 		while (1)
+@@ -226,5 +223,5 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
+ 	if (bm_pid)
+ 		umount_resctrlfs();
+ 
+-	return 0;
 +	return ret;
  }
- 
- static int check_results(void)
-@@ -132,9 +134,7 @@ static int check_results(void)
- 
- 	fclose(fp);
- 
--	show_mba_info(bw_imc, bw_resc);
--
--	return 0;
-+	return show_mba_info(bw_imc, bw_resc);
- }
- 
- void mba_test_cleanup(void)
 -- 
 2.27.0
 
