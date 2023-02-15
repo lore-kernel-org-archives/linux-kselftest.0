@@ -2,243 +2,117 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FBFBC61DA4
-	for <linux-kselftest@archiver.kernel.org>; Wed, 15 Feb 2023 00:16:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C5A7C05027
+	for <linux-kselftest@archiver.kernel.org>; Wed, 15 Feb 2023 00:33:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbjBOAQm (ORCPT
+        id S229510AbjBOAd2 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 14 Feb 2023 19:16:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55344 "EHLO
+        Tue, 14 Feb 2023 19:33:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbjBOAQi (ORCPT
+        with ESMTP id S229460AbjBOAd1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Feb 2023 19:16:38 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0FF30EA3
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Feb 2023 16:16:37 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id v23so18716436plo.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Feb 2023 16:16:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y2L03Xqsn/rtF/fxHEkzpIJk7Xe9IkrjMBdpgF0v3DY=;
-        b=R3OrKavrWzOWETleW+R4nmTcHvdKXk7xz4+vnZnOlm35hBNJ1nMp3+5S/VsQadcDrq
-         Rc1ZxrsyJMPS4xlOQLZn9JnRX2O01JAnB/BlLTt8WrBFcu5nJ0IJFS5k+muKDvOdcKdO
-         w4v3IgqGsRVVDv2JjuyICmjWE4xKYz5h50zsCtblCrQmOmxGOxlTVWWbUOSBp9q+C1jj
-         9QfwB4n3Y1YuCwzOqa4IYYe5yjz2tUi0snpCfsf7j5pAqcCha+2RQl1bT3VyL5e36GIx
-         MFJCHKVVrITquZ6PKFiK2xksBT9wLaZliMRtOQwNtUy7IqgiJZZ0tR1E4I19+IbYh2So
-         DkMw==
+        Tue, 14 Feb 2023 19:33:27 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E16FB23D84
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Feb 2023 16:32:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676421158;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0etdia8N+ECGaC0gAhXaKuBpC7aTnF6lYawwxL7alZU=;
+        b=XZAKRH1FvlNLU+FLKHa5Wr/wFzzcvpBYG19XW0RE8jXTD73gkGSiFb3UXdIGdH6ehL6nHr
+        1KFcaBtJtoAUTT3hMw8ztFeJDIWKdv6yB/FXcbgA8VUvGKFuUNsXizIrjRqGU4K1I9qICH
+        ovL4CMT5DLPzU/4JOioYYuSsf8/X17s=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-574-NQdvLHGQNOqXn1v1e9Uy3g-1; Tue, 14 Feb 2023 19:32:37 -0500
+X-MC-Unique: NQdvLHGQNOqXn1v1e9Uy3g-1
+Received: by mail-qt1-f200.google.com with SMTP id bz17-20020a05622a1e9100b003b9c1013018so10329882qtb.18
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Feb 2023 16:32:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Y2L03Xqsn/rtF/fxHEkzpIJk7Xe9IkrjMBdpgF0v3DY=;
-        b=SC6acT3tdkIZL8C9QbMxSBJYmgVouxA+wMMMV0+7IVwHtp0EaLLL3k/VFZI53ec9aN
-         e2xXFkxDzi6qlE0ZTiAxGzT16EV+wNTG/1bu3XIlcTNePxs/qyi1DshyxOmTFy3j9u/S
-         pPCfZj7BL3hEhbMn1X+ZGdwXnGcsPaIiPTCJTSRwYVxnFuExE77G1qzJUxNvGin/AqUf
-         ErtF+K21wiqPS7OS2XsIjTWxC6eO1M5h2XO+Nc873IyW8SS0YcjA7uKwTgUAvHpnruyB
-         E24cG+Wn7W8aJYhad1xlZNMzkDTvMh/cjedn3v4RB8KcZmpHMIZ8urppEbC4NOTtNljk
-         HBlg==
-X-Gm-Message-State: AO0yUKWYKGyQD9QQx7HZuEnz/lrxeTjHD/VvTV6dYImSwa6OHCL1IYmr
-        t84OfET5hCkwBkgL5OztDlRhJu6+t2Rkga3+bKg=
-X-Google-Smtp-Source: AK7set97NODdzrpxxb7svtXG0BkXWsLshFPLE+gJ1neAl98FKumpNd0g/5PaX0U2iu7qf/neMg7txw==
-X-Received: by 2002:a05:6a20:244b:b0:bd:15c8:7e38 with SMTP id t11-20020a056a20244b00b000bd15c87e38mr826822pzc.11.1676420196469;
-        Tue, 14 Feb 2023 16:16:36 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id y19-20020a62b513000000b00589a7824703sm10351982pfe.194.2023.02.14.16.16.35
+        d=1e100.net; s=20210112; t=1676421156;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0etdia8N+ECGaC0gAhXaKuBpC7aTnF6lYawwxL7alZU=;
+        b=mJuT7ClQCtr795NY+RjuCepk8xmj7DQOn3KI3kmCHghBrTSG29ZSd/+Uvhc80QfsPf
+         C9N7INFAcvv8AuZQQAxTVpUenMA2HwAOaCf9uy6NOruxq3oZfvdB+q+oabm6JCnI8lLb
+         KsuNUEnwODsYRL/l+TLJ0fqC9WvpKGs5em/XgW9zNFdOvcvmdut398f0+NGm1z7zqADO
+         vEJKNJZa6g2+DqpKOrmFSVPlo6pHYWDQRkouPMxaDMJUlrtThCtgBuONm8aMX6R2yOtu
+         wukjaWvYj3cwz/ObgGBGBXYN2CJc3HTvG7FudRuKsCsbSFyC621G9E0B1/nQwLLjWeST
+         MWAg==
+X-Gm-Message-State: AO0yUKU2d7v0W+uGut6yVoiuGHQ1+RCUSmqhF+qQWrRHpfGtF16D6nFJ
+        e3iphQINbPhVSrHwUhWGfkXNtpM2XExifESzvRDrZ170EwYWKDWH8GwsEr2ukt7oLmzwdOy2fJG
+        KsPOM9HNO6gAcHWrydj6JTo9XPKlMDVvXzg==
+X-Received: by 2002:a05:622a:5c7:b0:3b8:36f8:830e with SMTP id d7-20020a05622a05c700b003b836f8830emr338494qtb.6.1676421156142;
+        Tue, 14 Feb 2023 16:32:36 -0800 (PST)
+X-Google-Smtp-Source: AK7set9yOl2ngRxqcgHLXOhO5w1e7vPn8HhnvU3R6YCTj2Nylo/ep0JaoSfrJ2cQznmURLh3CZz7pw==
+X-Received: by 2002:a05:622a:5c7:b0:3b8:36f8:830e with SMTP id d7-20020a05622a05c700b003b836f8830emr338467qtb.6.1676421155789;
+        Tue, 14 Feb 2023 16:32:35 -0800 (PST)
+Received: from x1n ([70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id s6-20020a372c06000000b00727538eb831sm12902269qkh.86.2023.02.14.16.32.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Feb 2023 16:16:35 -0800 (PST)
-Message-ID: <63ec2463.620a0220.9567b.30d7@mx.google.com>
-Date:   Tue, 14 Feb 2023 16:16:35 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 14 Feb 2023 16:32:35 -0800 (PST)
+Date:   Tue, 14 Feb 2023 19:32:29 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     Axel Rasmussen <axelrasmussen@google.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>, Shuah Khan <shuah@kernel.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        James Houghton <jthoughton@google.com>
+Subject: Re: [PATCH] mm: userfaultfd: add UFFDIO_CONTINUE_MODE_WP to install
+ WP PTEs
+Message-ID: <Y+woHZ3AHe3quadT@x1n>
+References: <20230214215046.1187635-1-axelrasmussen@google.com>
+ <Y+wIdeu3Lw/3kmXg@casper.infradead.org>
+ <CAJHvVciR=inDaKnmCfCQsxgBsJB6eQVDXQw67o0Foc9ofgbuow@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: next
-X-Kernelci-Tree: kselftest
-X-Kernelci-Kernel: v6.2-rc5-40-g0eb15a47bf43
-X-Kernelci-Report-Type: test
-Subject: kselftest/next kselftest-seccomp: 7 runs,
- 4 regressions (v6.2-rc5-40-g0eb15a47bf43)
-To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAJHvVciR=inDaKnmCfCQsxgBsJB6eQVDXQw67o0Foc9ofgbuow@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kselftest/next kselftest-seccomp: 7 runs, 4 regressions (v6.2-rc5-40-g0eb15=
-a47bf43)
+On Tue, Feb 14, 2023 at 02:37:51PM -0800, Axel Rasmussen wrote:
+> Agreed, it would likely be a nice cleanup. Peter, any objections? I
+> wouldn't mind writing a commit to do this sort of refactor, and rebase
+> my change on top of that.
 
-Regressions Summary
--------------------
+No objection here.  Personally I actually prefer keeping the parameters
+around if possible because it's straightforward and no thinking of any
+possible indirect accesses all over the place. But maybe growing as long as
+8 is still a moot point..  It's just that I don't really know whether it'll
+look that good if we put everything into a struct*.
 
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-imx6q-sabrelite              | arm   | lab-collabora | gcc-10   | multi_v7_=
-defconfig+kselftest | 1          =
+Things like src_start/dst_start/.. do not look good to be there: each layer
+could loop over its own range of start/end/... so even if not in the
+function parameter we'll need a variable to hold them anyway.
 
-meson-gxl-s905x-libretech-cc | arm64 | lab-broonie   | gcc-10   | defconfig=
-+kselftest          | 1          =
+But I do see a few low hanging fruits:
 
-mt8173-elm-hana              | arm64 | lab-collabora | gcc-10   | defconfig=
-+kse...4-chromebook | 1          =
+  - I don't see why we need to pass over mmap_changing over all of the
+    __mcopy_atomic() callers.  One chance is we simply pass in the ctx* to
+    replace "dst_mm + mmap_changing".
 
-mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | gcc-10   | defconfig=
-+kse...4-chromebook | 1          =
+  - Merge mcopy_atomic_mode and mode, having last 2 bits for the existing
+    three modes, then bit 3 for WP, good enough to set it for the new case.
 
+  - Optionally, we can avoid passing over dst_mm/src_mm all around, when
+    dst_vma/src_vma is there?
 
-  Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/v6.2=
--rc5-40-g0eb15a47bf43/plan/kselftest-seccomp/
+How about we start from simple?
 
-  Test:     kselftest-seccomp
-  Tree:     kselftest
-  Branch:   next
-  Describe: v6.2-rc5-40-g0eb15a47bf43
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
-lftest.git
-  SHA:      0eb15a47bf437a268b69ab1a1a45fdf1f609b69f =
+-- 
+Peter Xu
 
-
-
-Test Regressions
----------------- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-imx6q-sabrelite              | arm   | lab-collabora | gcc-10   | multi_v7_=
-defconfig+kselftest | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/63ec0fb91ca4c907f68c8664
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+kselftest
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//kselftest/next/v6.2-rc5-40-g0e=
-b15a47bf43/arm/multi_v7_defconfig+kselftest/gcc-10/lab-collabora/kselftest-=
-seccomp-imx6q-sabrelite.txt
-  HTML log:    https://storage.kernelci.org//kselftest/next/v6.2-rc5-40-g0e=
-b15a47bf43/arm/multi_v7_defconfig+kselftest/gcc-10/lab-collabora/kselftest-=
-seccomp-imx6q-sabrelite.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20230211.0/armhf/initrd.cpio.gz =
-
-
-
-  * kselftest-seccomp.login: https://kernelci.org/test/case/id/63ec0fb91ca4=
-c907f68c8665
-        failing since 49 days (last pass: v6.1-rc1-24-gd5ba85d6d8be, first =
-fail: v6.2-rc1) =
-
- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-meson-gxl-s905x-libretech-cc | arm64 | lab-broonie   | gcc-10   | defconfig=
-+kselftest          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/63ec200c9aa73617538c8631
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//kselftest/next/v6.2-rc5-40-g0e=
-b15a47bf43/arm64/defconfig+kselftest/gcc-10/lab-broonie/kselftest-seccomp-m=
-eson-gxl-s905x-libretech-cc.txt
-  HTML log:    https://storage.kernelci.org//kselftest/next/v6.2-rc5-40-g0e=
-b15a47bf43/arm64/defconfig+kselftest/gcc-10/lab-broonie/kselftest-seccomp-m=
-eson-gxl-s905x-libretech-cc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20230211.0/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-seccomp.login: https://kernelci.org/test/case/id/63ec200c9aa7=
-3617538c8632
-        failing since 117 days (last pass: linux-kselftest-next-6.0-rc2-11-=
-g144eeb2fc761, first fail: v6.1-rc1-1-gde3ee3f63400a) =
-
- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-mt8173-elm-hana              | arm64 | lab-collabora | gcc-10   | defconfig=
-+kse...4-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/63ec14b9d68a0a1d8c8c86b0
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest+arm64-chromebook
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//kselftest/next/v6.2-rc5-40-g0e=
-b15a47bf43/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora/=
-kselftest-seccomp-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//kselftest/next/v6.2-rc5-40-g0e=
-b15a47bf43/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora/=
-kselftest-seccomp-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20230211.0/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-seccomp.login: https://kernelci.org/test/case/id/63ec14b9d68a=
-0a1d8c8c86b1
-        failing since 120 days (last pass: linux-kselftest-next-6.0-rc2-11-=
-g144eeb2fc761, first fail: v6.1-rc1) =
-
- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | gcc-10   | defconfig=
-+kse...4-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/63ec1492f62b1e4a268c86a6
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest+arm64-chromebook
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//kselftest/next/v6.2-rc5-40-g0e=
-b15a47bf43/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora/=
-kselftest-seccomp-mt8183-kukui-jacuzzi-juniper-sku16.txt
-  HTML log:    https://storage.kernelci.org//kselftest/next/v6.2-rc5-40-g0e=
-b15a47bf43/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora/=
-kselftest-seccomp-mt8183-kukui-jacuzzi-juniper-sku16.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20230211.0/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-seccomp.login: https://kernelci.org/test/case/id/63ec1492f62b=
-1e4a268c86a7
-        failing since 120 days (last pass: linux-kselftest-next-6.0-rc2-11-=
-g144eeb2fc761, first fail: v6.1-rc1) =
-
- =20
