@@ -2,730 +2,378 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 07D65C64ED8
-	for <linux-kselftest@archiver.kernel.org>; Thu, 23 Feb 2023 00:58:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DCFE1C636D7
+	for <linux-kselftest@archiver.kernel.org>; Thu, 23 Feb 2023 05:52:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232965AbjBWA6W (ORCPT
+        id S233216AbjBWFwC (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 22 Feb 2023 19:58:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40868 "EHLO
+        Thu, 23 Feb 2023 00:52:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233013AbjBWA6R (ORCPT
+        with ESMTP id S233210AbjBWFwB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 22 Feb 2023 19:58:17 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3BC2A16F
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Feb 2023 16:58:09 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-536eace862cso64294357b3.16
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Feb 2023 16:58:09 -0800 (PST)
+        Thu, 23 Feb 2023 00:52:01 -0500
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22990498AB
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Feb 2023 21:51:57 -0800 (PST)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-536be69eadfso161903047b3.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Feb 2023 21:51:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=K8FQyPesU3IM8Xyxdgy7hE3/aAbdVoh2d2AOuM8rS/k=;
-        b=MH24haHs66ANZC/2njuJJFBCMPmDGgRJSlIujEqe+yYL8lHpgmFbH0KOMVIguRyUxl
-         S6oHBFjBkEGikwtKvwZQUBkRdBvPuAWHs4UVI5JFVW989jC758XZ1p5JcFoCn4jTkG/q
-         UMJSORHfO7MyJCp2EsutmMb37xn1gcxHb06rNlomSc8eYRYrcYuxQtDvSffVHBg0lNd/
-         n7SR2mzCZSawD2kFarydvw8jaU23rRHXtH5fgnnLIxR0v4jX8fAc9FrDRf8/04t7X6ka
-         ke3jLZx9V8ksTd9sXb7BPSt4M4PBc/WCrh8a75psNPBrrQq4OLVjsybWuqRfguhBT4JD
-         9rxA==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rR0Y8hmOA8JMs7G+6t8ljnm4a8oPXVDJ9wsmZlKOvX0=;
+        b=da32qjlPzT+jT2GhuISdufryjmJ8ZTut8dlweo8Uaj2kdW0DOwDT5hp2S/Hp83nlIL
+         IayMW8Hey0IImoUhMhF0rx31FvxdzbsyGZKHHD/J/Awn5ZlGNga/7jI6YeG06fk5pAhQ
+         yCmZ93zi4BDdbeu+wl2I+rtIB34Ch0wb7uygGyTqPacnYJQuX7C6Xb2XYl1VvOALvjrj
+         6MpwK/862/Mk4dpFIl1gukMnToJTFHxxPM9SVjHruF8HfsL/j5MmvUIaewVeLct5n46D
+         aUv9swGCiOssJ+AkuBup6T/kHtopWiR24lRqsJDEGSoEjXzMUIinyNTfcLvxhYqicf4Q
+         Iwmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=K8FQyPesU3IM8Xyxdgy7hE3/aAbdVoh2d2AOuM8rS/k=;
-        b=Mrjlvbq4Frzjh2wR8tbwviZMaPE4Og6QQTxlgeBmXT92F4g+51bdSqPDs2gBupFNFl
-         TwP4KEFDpP3eiqRsKhhIbVNpfsDn4cmb3y3v9LZL2EMB2qgAvzrRGxEk2582sAT8C3nh
-         H1m3t4keCpytLaYQYJNGfs4SKxZvWCOR4WfRiSKfP9afPsOJHOH5C8k52kuc1WutnHwN
-         gOmPtiPMs8LF6mq3VD8E0a4fMNmzwgltNjMVm3Q01mnWKbvgjPqSe6SQlm2d5rzj5FEL
-         YJ7xfsTlugN4FWdC8y61hriAlvat9rsF8lMuYLSEmfTzhUTaKCrZHgUZtxl9L9Q61E8H
-         dBqw==
-X-Gm-Message-State: AO0yUKViTYFY0h83oy/vFHkIFxM1V37NjtqzkGJh0jWZmg2s3Zrf3fDs
-        lKzBNEE3qyEREtmF32niocD0Rzh1Ww02UT/AxMyU
-X-Google-Smtp-Source: AK7set8wp4yGZMgOays5+pSi3RF8Ujl8SpKIvNIFzTrvYcG579tM8EYd143/YQ3ZyBulHtFpvmgDLDJs6MMETOy9qoHv
-X-Received: from axel.svl.corp.google.com ([2620:15c:2d4:203:3e99:dd9e:9db9:449c])
- (user=axelrasmussen job=sendgmr) by 2002:a05:6902:10c9:b0:855:fdcb:4467 with
- SMTP id w9-20020a05690210c900b00855fdcb4467mr2164324ybu.0.1677113889120; Wed,
- 22 Feb 2023 16:58:09 -0800 (PST)
-Date:   Wed, 22 Feb 2023 16:57:53 -0800
-In-Reply-To: <20230223005754.2700663-1-axelrasmussen@google.com>
-Mime-Version: 1.0
-References: <20230223005754.2700663-1-axelrasmussen@google.com>
-X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
-Message-ID: <20230223005754.2700663-5-axelrasmussen@google.com>
-Subject: [PATCH v2 4/5] mm: userfaultfd: don't separate addr + len arguments
-From:   Axel Rasmussen <axelrasmussen@google.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Nadav Amit <namit@vmware.com>, Peter Xu <peterx@redhat.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     James Houghton <jthoughton@google.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Axel Rasmussen <axelrasmussen@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rR0Y8hmOA8JMs7G+6t8ljnm4a8oPXVDJ9wsmZlKOvX0=;
+        b=LYnTdIZhEwA249z78rQBOMOziQtQ9TimXTqlxOCv83XYgFCR6rJjeTdR4+rYeag2gQ
+         yWhckzMGjgKYiuacMnwnokZCNetasXxzDhUP7+DP3ZrGAiGRGn2zimhPuw6UVT7NGS0/
+         fT+7bZEGfmgcagPOPRq/aMb7dIPnG7jKbP4sPMmom3gaCPoiuHC7nB4Q5aS/FotqK7mu
+         X9PovVP6vMOzV7lZdjy6wXylF+SAc22C8oy8uUOu5tSUtCWHYIy/W//UEXe8q1aBSq2n
+         OfL5CcSH7V4r+gqNASErQ0KkfHLlbWjdm+vvQY8xB+JQS1Hesj+7Be6xACneeWMn+he5
+         yd3A==
+X-Gm-Message-State: AO0yUKUkAlj1W2HNrfnLe5J1yd6yCUWkV2kxV08fhfqc3CgBkMOOxcxI
+        qzcgAu45ex91uPwjbIf8GwzdFcWWf7GNggRoIOWtTQ==
+X-Google-Smtp-Source: AK7set9yP94TsxHgmStrTjYxH8JUMIy7slEkehmZ3t1r1LGaGvG7HPdrgCIllC3xNUhfhsqqMcHttjNfMpsHH4SJ1t8=
+X-Received: by 2002:a81:ae01:0:b0:533:9c5b:7278 with SMTP id
+ m1-20020a81ae01000000b005339c5b7278mr1869033ywh.0.1677131515952; Wed, 22 Feb
+ 2023 21:51:55 -0800 (PST)
+MIME-Version: 1.0
+References: <20230222182740.254087-1-rmoar@google.com> <20230222182740.254087-3-rmoar@google.com>
+In-Reply-To: <20230222182740.254087-3-rmoar@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Thu, 23 Feb 2023 13:51:43 +0800
+Message-ID: <CABVgOSmJRxCT=NZ7ZWMwCrpHJHnHBAa=XmuNcLAJd_FrBvMZBw@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] kunit: fix bug of extra newline characters in
+ debugfs logs
+To:     Rae Moar <rmoar@google.com>
+Cc:     brendanhiggins@google.com, dlatypov@google.com,
+        skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="00000000000046872305f5579c25"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-We have a lot of functions which take an address + length pair,
-currently passed as separate arguments. However, in our userspace API we
-already have struct uffdio_range, which is exactly this pair, and this
-is what we get from userspace when ioctls are called.
+--00000000000046872305f5579c25
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Instead of splitting the struct up into two separate arguments, just
-plumb the struct through to the functions which use it (once we get to
-the mfill_atomic_pte level, we're dealing with single (huge)pages, so we
-don't need both parts).
+On Thu, 23 Feb 2023 at 02:27, Rae Moar <rmoar@google.com> wrote:
+>
+> Fix bug of the extra newline characters in debugfs logs. When a line is
+> added to debugfs with a newline character at the end, an extra line appea=
+rs
+> in the debugfs log.
+>
+> This is due to a discrepancy between how the lines are printed and how th=
+ey
+> are added to the logs. Remove this discrepancy by checking if the a newli=
+ne
 
-Relatedly, for waking, just re-use this existing structure instead of
-defining a new "struct uffdio_wake_range".
+Nit: "if the a"?
 
-Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
----
- fs/userfaultfd.c              | 108 ++++++++++++++--------------------
- include/linux/userfaultfd_k.h |  17 +++---
- mm/userfaultfd.c              |  91 ++++++++++++++--------------
- 3 files changed, 97 insertions(+), 119 deletions(-)
+> character is present before adding a newline character to the log. This
+> should closely match the printk behavior.
+>
+> Add kunit_log_newline_test to provide test coverage for this issue. (Also=
+,
+> move kunit_log_test above suite definition to remove the unnecessary
+> declaration prior to the suite definition)
+>
+> As an example, say we add these two lines to the log:
+>
+> kunit_log(..., =E2=80=9CKTAP version 1\n=E2=80=9D);
+> kunit_log(..., =E2=80=9C1..1=E2=80=9D);
 
-diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-index 2db15a5e3224..f43d8b0ae47b 100644
---- a/fs/userfaultfd.c
-+++ b/fs/userfaultfd.c
-@@ -95,11 +95,6 @@ struct userfaultfd_wait_queue {
- 	bool waken;
- };
- 
--struct userfaultfd_wake_range {
--	unsigned long start;
--	unsigned long len;
--};
--
- /* internal indication that UFFD_API ioctl was successfully executed */
- #define UFFD_FEATURE_INITIALIZED		(1u << 31)
- 
-@@ -126,7 +121,7 @@ static void userfaultfd_set_vm_flags(struct vm_area_struct *vma,
- static int userfaultfd_wake_function(wait_queue_entry_t *wq, unsigned mode,
- 				     int wake_flags, void *key)
- {
--	struct userfaultfd_wake_range *range = key;
-+	struct uffdio_range *range = key;
- 	int ret;
- 	struct userfaultfd_wait_queue *uwq;
- 	unsigned long start, len;
-@@ -871,7 +866,7 @@ static int userfaultfd_release(struct inode *inode, struct file *file)
- 	struct mm_struct *mm = ctx->mm;
- 	struct vm_area_struct *vma, *prev;
- 	/* len == 0 means wake all */
--	struct userfaultfd_wake_range range = { .len = 0, };
-+	struct uffdio_range range = {0};
- 	unsigned long new_flags;
- 	MA_STATE(mas, &mm->mm_mt, 0, 0);
- 
-@@ -1217,7 +1212,7 @@ static ssize_t userfaultfd_read(struct file *file, char __user *buf,
- }
- 
- static void __wake_userfault(struct userfaultfd_ctx *ctx,
--			     struct userfaultfd_wake_range *range)
-+			     struct uffdio_range *range)
- {
- 	spin_lock_irq(&ctx->fault_pending_wqh.lock);
- 	/* wake all in the range and autoremove */
-@@ -1230,7 +1225,7 @@ static void __wake_userfault(struct userfaultfd_ctx *ctx,
- }
- 
- static __always_inline void wake_userfault(struct userfaultfd_ctx *ctx,
--					   struct userfaultfd_wake_range *range)
-+					   struct uffdio_range *range)
- {
- 	unsigned seq;
- 	bool need_wakeup;
-@@ -1261,21 +1256,21 @@ static __always_inline void wake_userfault(struct userfaultfd_ctx *ctx,
- }
- 
- static __always_inline int validate_range(struct mm_struct *mm,
--					  __u64 start, __u64 len)
-+					  const struct uffdio_range *range)
- {
- 	__u64 task_size = mm->task_size;
- 
--	if (start & ~PAGE_MASK)
-+	if (range->start & ~PAGE_MASK)
- 		return -EINVAL;
--	if (len & ~PAGE_MASK)
-+	if (range->len & ~PAGE_MASK)
- 		return -EINVAL;
--	if (!len)
-+	if (!range->len)
- 		return -EINVAL;
--	if (start < mmap_min_addr)
-+	if (range->start < mmap_min_addr)
- 		return -EINVAL;
--	if (start >= task_size)
-+	if (range->start >= task_size)
- 		return -EINVAL;
--	if (len > task_size - start)
-+	if (range->len > task_size - range->start)
- 		return -EINVAL;
- 	return 0;
- }
-@@ -1322,8 +1317,7 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
- 		vm_flags |= VM_UFFD_MINOR;
- 	}
- 
--	ret = validate_range(mm, uffdio_register.range.start,
--			     uffdio_register.range.len);
-+	ret = validate_range(mm, &uffdio_register.range);
- 	if (ret)
- 		goto out;
- 
-@@ -1539,11 +1533,11 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
- 	if (copy_from_user(&uffdio_unregister, buf, sizeof(uffdio_unregister)))
- 		goto out;
- 
--	ret = validate_range(mm, uffdio_unregister.start,
--			     uffdio_unregister.len);
-+	ret = validate_range(mm, &uffdio_unregister);
- 	if (ret)
- 		goto out;
- 
-+	/* Get rid of start + end in favor of range *? */
- 	start = uffdio_unregister.start;
- 	end = start + uffdio_unregister.len;
- 
-@@ -1605,6 +1599,8 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
- 
- 	ret = 0;
- 	do {
-+		struct uffdio_range range;
-+
- 		cond_resched();
- 
- 		BUG_ON(!vma_can_userfault(vma, vma->vm_flags));
-@@ -1622,6 +1618,8 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
- 			start = vma->vm_start;
- 		vma_end = min(end, vma->vm_end);
- 
-+		range.start = start;
-+		range.len = vma_end - start;
- 		if (userfaultfd_missing(vma)) {
- 			/*
- 			 * Wake any concurrent pending userfault while
-@@ -1629,15 +1627,12 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
- 			 * permanently and it avoids userland to call
- 			 * UFFDIO_WAKE explicitly.
- 			 */
--			struct userfaultfd_wake_range range;
--			range.start = start;
--			range.len = vma_end - start;
- 			wake_userfault(vma->vm_userfaultfd_ctx.ctx, &range);
- 		}
- 
- 		/* Reset ptes for the whole vma range if wr-protected */
- 		if (userfaultfd_wp(vma))
--			uffd_wp_range(vma, start, vma_end - start, false);
-+			uffd_wp_range(vma, &range, false);
- 
- 		new_flags = vma->vm_flags & ~__VM_UFFD_FLAGS;
- 		prev = vma_merge(mm, prev, start, vma_end, new_flags,
-@@ -1691,27 +1686,23 @@ static int userfaultfd_wake(struct userfaultfd_ctx *ctx,
- {
- 	int ret;
- 	struct uffdio_range uffdio_wake;
--	struct userfaultfd_wake_range range;
- 	const void __user *buf = (void __user *)arg;
- 
- 	ret = -EFAULT;
- 	if (copy_from_user(&uffdio_wake, buf, sizeof(uffdio_wake)))
- 		goto out;
- 
--	ret = validate_range(ctx->mm, uffdio_wake.start, uffdio_wake.len);
-+	ret = validate_range(ctx->mm, &uffdio_wake);
- 	if (ret)
- 		goto out;
- 
--	range.start = uffdio_wake.start;
--	range.len = uffdio_wake.len;
--
- 	/*
- 	 * len == 0 means wake all and we don't want to wake all here,
- 	 * so check it again to be sure.
- 	 */
--	VM_BUG_ON(!range.len);
-+	VM_BUG_ON(!uffdio_wake.len);
- 
--	wake_userfault(ctx, &range);
-+	wake_userfault(ctx, &uffdio_wake);
- 	ret = 0;
- 
- out:
-@@ -1724,7 +1715,7 @@ static int userfaultfd_copy(struct userfaultfd_ctx *ctx,
- 	__s64 ret;
- 	struct uffdio_copy uffdio_copy;
- 	struct uffdio_copy __user *user_uffdio_copy;
--	struct userfaultfd_wake_range range;
-+	struct uffdio_range range;
- 	int flags = 0;
- 
- 	user_uffdio_copy = (struct uffdio_copy __user *) arg;
-@@ -1739,7 +1730,9 @@ static int userfaultfd_copy(struct userfaultfd_ctx *ctx,
- 			   sizeof(uffdio_copy)-sizeof(__s64)))
- 		goto out;
- 
--	ret = validate_range(ctx->mm, uffdio_copy.dst, uffdio_copy.len);
-+	range.start = uffdio_copy.dst;
-+	range.len = uffdio_copy.len;
-+	ret = validate_range(ctx->mm, &range);
- 	if (ret)
- 		goto out;
- 	/*
-@@ -1755,9 +1748,8 @@ static int userfaultfd_copy(struct userfaultfd_ctx *ctx,
- 	if (uffdio_copy.mode & UFFDIO_COPY_MODE_WP)
- 		flags |= MFILL_ATOMIC_WP;
- 	if (mmget_not_zero(ctx->mm)) {
--		ret = mfill_atomic_copy(ctx->mm, uffdio_copy.dst, uffdio_copy.src,
--					uffdio_copy.len, &ctx->mmap_changing,
--					flags);
-+		ret = mfill_atomic_copy(ctx->mm, uffdio_copy.src, &range,
-+					&ctx->mmap_changing, flags);
- 		mmput(ctx->mm);
- 	} else {
- 		return -ESRCH;
-@@ -1769,10 +1761,8 @@ static int userfaultfd_copy(struct userfaultfd_ctx *ctx,
- 	BUG_ON(!ret);
- 	/* len == 0 would wake all */
- 	range.len = ret;
--	if (!(uffdio_copy.mode & UFFDIO_COPY_MODE_DONTWAKE)) {
--		range.start = uffdio_copy.dst;
-+	if (!(uffdio_copy.mode & UFFDIO_COPY_MODE_DONTWAKE))
- 		wake_userfault(ctx, &range);
--	}
- 	ret = range.len == uffdio_copy.len ? 0 : -EAGAIN;
- out:
- 	return ret;
-@@ -1784,7 +1774,7 @@ static int userfaultfd_zeropage(struct userfaultfd_ctx *ctx,
- 	__s64 ret;
- 	struct uffdio_zeropage uffdio_zeropage;
- 	struct uffdio_zeropage __user *user_uffdio_zeropage;
--	struct userfaultfd_wake_range range;
-+	struct uffdio_range range;
- 
- 	user_uffdio_zeropage = (struct uffdio_zeropage __user *) arg;
- 
-@@ -1798,8 +1788,8 @@ static int userfaultfd_zeropage(struct userfaultfd_ctx *ctx,
- 			   sizeof(uffdio_zeropage)-sizeof(__s64)))
- 		goto out;
- 
--	ret = validate_range(ctx->mm, uffdio_zeropage.range.start,
--			     uffdio_zeropage.range.len);
-+	range = uffdio_zeropage.range;
-+	ret = validate_range(ctx->mm, &range);
- 	if (ret)
- 		goto out;
- 	ret = -EINVAL;
-@@ -1807,8 +1797,7 @@ static int userfaultfd_zeropage(struct userfaultfd_ctx *ctx,
- 		goto out;
- 
- 	if (mmget_not_zero(ctx->mm)) {
--		ret = mfill_atomic_zeropage(ctx->mm, uffdio_zeropage.range.start,
--					   uffdio_zeropage.range.len,
-+		ret = mfill_atomic_zeropage(ctx->mm, &uffdio_zeropage.range,
- 					   &ctx->mmap_changing);
- 		mmput(ctx->mm);
- 	} else {
-@@ -1822,7 +1811,6 @@ static int userfaultfd_zeropage(struct userfaultfd_ctx *ctx,
- 	BUG_ON(!ret);
- 	range.len = ret;
- 	if (!(uffdio_zeropage.mode & UFFDIO_ZEROPAGE_MODE_DONTWAKE)) {
--		range.start = uffdio_zeropage.range.start;
- 		wake_userfault(ctx, &range);
- 	}
- 	ret = range.len == uffdio_zeropage.range.len ? 0 : -EAGAIN;
-@@ -1836,7 +1824,6 @@ static int userfaultfd_writeprotect(struct userfaultfd_ctx *ctx,
- 	int ret;
- 	struct uffdio_writeprotect uffdio_wp;
- 	struct uffdio_writeprotect __user *user_uffdio_wp;
--	struct userfaultfd_wake_range range;
- 	bool mode_wp, mode_dontwake;
- 
- 	if (atomic_read(&ctx->mmap_changing))
-@@ -1848,8 +1835,7 @@ static int userfaultfd_writeprotect(struct userfaultfd_ctx *ctx,
- 			   sizeof(struct uffdio_writeprotect)))
- 		return -EFAULT;
- 
--	ret = validate_range(ctx->mm, uffdio_wp.range.start,
--			     uffdio_wp.range.len);
-+	ret = validate_range(ctx->mm, &uffdio_wp.range);
- 	if (ret)
- 		return ret;
- 
-@@ -1864,9 +1850,8 @@ static int userfaultfd_writeprotect(struct userfaultfd_ctx *ctx,
- 		return -EINVAL;
- 
- 	if (mmget_not_zero(ctx->mm)) {
--		ret = mwriteprotect_range(ctx->mm, uffdio_wp.range.start,
--					  uffdio_wp.range.len, mode_wp,
--					  &ctx->mmap_changing);
-+		ret = mwriteprotect_range(ctx->mm, &uffdio_wp.range,
-+					  mode_wp, &ctx->mmap_changing);
- 		mmput(ctx->mm);
- 	} else {
- 		return -ESRCH;
-@@ -1875,11 +1860,8 @@ static int userfaultfd_writeprotect(struct userfaultfd_ctx *ctx,
- 	if (ret)
- 		return ret;
- 
--	if (!mode_wp && !mode_dontwake) {
--		range.start = uffdio_wp.range.start;
--		range.len = uffdio_wp.range.len;
--		wake_userfault(ctx, &range);
--	}
-+	if (!mode_wp && !mode_dontwake)
-+		wake_userfault(ctx, &uffdio_wp.range);
- 	return ret;
- }
- 
-@@ -1888,7 +1870,7 @@ static int userfaultfd_continue(struct userfaultfd_ctx *ctx, unsigned long arg)
- 	__s64 ret;
- 	struct uffdio_continue uffdio_continue;
- 	struct uffdio_continue __user *user_uffdio_continue;
--	struct userfaultfd_wake_range range;
-+	struct uffdio_range range;
- 
- 	user_uffdio_continue = (struct uffdio_continue __user *)arg;
- 
-@@ -1902,23 +1884,20 @@ static int userfaultfd_continue(struct userfaultfd_ctx *ctx, unsigned long arg)
- 			   sizeof(uffdio_continue) - (sizeof(__s64))))
- 		goto out;
- 
--	ret = validate_range(ctx->mm, uffdio_continue.range.start,
--			     uffdio_continue.range.len);
-+	range = uffdio_continue.range;
-+	ret = validate_range(ctx->mm, &range);
- 	if (ret)
- 		goto out;
- 
- 	ret = -EINVAL;
- 	/* double check for wraparound just in case. */
--	if (uffdio_continue.range.start + uffdio_continue.range.len <=
--	    uffdio_continue.range.start) {
-+	if (range.start + range.len <= range.start)
- 		goto out;
--	}
- 	if (uffdio_continue.mode & ~UFFDIO_CONTINUE_MODE_DONTWAKE)
- 		goto out;
- 
- 	if (mmget_not_zero(ctx->mm)) {
--		ret = mfill_atomic_continue(ctx->mm, uffdio_continue.range.start,
--					    uffdio_continue.range.len,
-+		ret = mfill_atomic_continue(ctx->mm, &range,
- 					    &ctx->mmap_changing);
- 		mmput(ctx->mm);
- 	} else {
-@@ -1934,7 +1913,6 @@ static int userfaultfd_continue(struct userfaultfd_ctx *ctx, unsigned long arg)
- 	BUG_ON(!ret);
- 	range.len = ret;
- 	if (!(uffdio_continue.mode & UFFDIO_CONTINUE_MODE_DONTWAKE)) {
--		range.start = uffdio_continue.range.start;
- 		wake_userfault(ctx, &range);
- 	}
- 	ret = range.len == uffdio_continue.range.len ? 0 : -EAGAIN;
-diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
-index 185024128e0f..3cf87f019db3 100644
---- a/include/linux/userfaultfd_k.h
-+++ b/include/linux/userfaultfd_k.h
-@@ -59,20 +59,21 @@ extern int mfill_atomic_install_pte(pmd_t *dst_pmd,
- 				    unsigned long dst_addr, struct page *page,
- 				    bool newly_allocated, int mode_flags);
- 
--extern ssize_t mfill_atomic_copy(struct mm_struct *dst_mm, unsigned long dst_start,
--				 unsigned long src_start, unsigned long len,
-+extern ssize_t mfill_atomic_copy(struct mm_struct *dst_mm, unsigned long src_start,
-+				 const struct uffdio_range *dst,
- 				 atomic_t *mmap_changing, int flags);
- extern ssize_t mfill_atomic_zeropage(struct mm_struct *dst_mm,
--				     unsigned long dst_start,
--				     unsigned long len,
-+				     const struct uffdio_range *dst,
- 				     atomic_t *mmap_changing);
--extern ssize_t mfill_atomic_continue(struct mm_struct *dst_mm, unsigned long dst_start,
--				     unsigned long len, atomic_t *mmap_changing);
-+extern ssize_t mfill_atomic_continue(struct mm_struct *dst_mm,
-+				     const struct uffdio_range *dst,
-+				    atomic_t *mmap_changing);
- extern int mwriteprotect_range(struct mm_struct *dst_mm,
--			       unsigned long start, unsigned long len,
-+			       const struct uffdio_range *range,
- 			       bool enable_wp, atomic_t *mmap_changing);
- extern void uffd_wp_range(struct vm_area_struct *vma,
--			  unsigned long start, unsigned long len, bool enable_wp);
-+			  const struct uffdio_range *range,
-+			  bool enable_wp);
- 
- /* mm helpers */
- static inline bool is_mergeable_vm_userfaultfd_ctx(struct vm_area_struct *vma,
-diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-index 7882e4c60f60..ebbba2b9f687 100644
---- a/mm/userfaultfd.c
-+++ b/mm/userfaultfd.c
-@@ -21,8 +21,7 @@
- 
- static __always_inline
- struct vm_area_struct *find_dst_vma(struct mm_struct *dst_mm,
--				    unsigned long dst_start,
--				    unsigned long len)
-+				    const struct uffdio_range *dst)
- {
- 	/*
- 	 * Make sure that the dst range is both valid and fully within a
-@@ -30,12 +29,12 @@ struct vm_area_struct *find_dst_vma(struct mm_struct *dst_mm,
- 	 */
- 	struct vm_area_struct *dst_vma;
- 
--	dst_vma = find_vma(dst_mm, dst_start);
-+	dst_vma = find_vma(dst_mm, dst->start);
- 	if (!dst_vma)
- 		return NULL;
- 
--	if (dst_start < dst_vma->vm_start ||
--	    dst_start + len > dst_vma->vm_end)
-+	if (dst->start < dst_vma->vm_start ||
-+	    dst->start + dst->len > dst_vma->vm_end)
- 		return NULL;
- 
- 	/*
-@@ -323,9 +322,8 @@ static pmd_t *mm_alloc_pmd(struct mm_struct *mm, unsigned long address)
-  */
- static __always_inline ssize_t mfill_atomic_hugetlb(
- 					      struct vm_area_struct *dst_vma,
--					      unsigned long dst_start,
- 					      unsigned long src_start,
--					      unsigned long len,
-+					      const struct uffdio_range *dst,
- 					      int mode_flags)
- {
- 	int mode = mode_flags & MFILL_ATOMIC_MODE_MASK;
-@@ -353,7 +351,7 @@ static __always_inline ssize_t mfill_atomic_hugetlb(
- 	}
- 
- 	src_addr = src_start;
--	dst_addr = dst_start;
-+	dst_addr = dst->start;
- 	copied = 0;
- 	page = NULL;
- 	vma_hpagesize = vma_kernel_pagesize(dst_vma);
-@@ -362,7 +360,7 @@ static __always_inline ssize_t mfill_atomic_hugetlb(
- 	 * Validate alignment based on huge page size
- 	 */
- 	err = -EINVAL;
--	if (dst_start & (vma_hpagesize - 1) || len & (vma_hpagesize - 1))
-+	if (dst->start & (vma_hpagesize - 1) || dst->len & (vma_hpagesize - 1))
- 		goto out_unlock;
- 
- retry:
-@@ -372,7 +370,7 @@ static __always_inline ssize_t mfill_atomic_hugetlb(
- 	 */
- 	if (!dst_vma) {
- 		err = -ENOENT;
--		dst_vma = find_dst_vma(dst_mm, dst_start, len);
-+		dst_vma = find_dst_vma(dst_mm, dst);
- 		if (!dst_vma || !is_vm_hugetlb_page(dst_vma))
- 			goto out_unlock;
- 
-@@ -392,8 +390,8 @@ static __always_inline ssize_t mfill_atomic_hugetlb(
- 			goto out_unlock;
- 	}
- 
--	while (src_addr < src_start + len) {
--		BUG_ON(dst_addr >= dst_start + len);
-+	while (src_addr < src_start + dst->len) {
-+		BUG_ON(dst_addr >= dst->start + dst->len);
- 
- 		/*
- 		 * Serialize via vma_lock and hugetlb_fault_mutex.
-@@ -475,9 +473,8 @@ static __always_inline ssize_t mfill_atomic_hugetlb(
- #else /* !CONFIG_HUGETLB_PAGE */
- /* fail at build time if gcc attempts to use this */
- extern ssize_t mfill_atomic_hugetlb(struct vm_area_struct *dst_vma,
--				    unsigned long dst_start,
- 				    unsigned long src_start,
--				    unsigned long len,
-+				    struct uffdio_range dst,
- 				    int mode_flags);
- #endif /* CONFIG_HUGETLB_PAGE */
- 
-@@ -524,9 +521,8 @@ static __always_inline ssize_t mfill_atomic_pte(pmd_t *dst_pmd,
- }
- 
- static __always_inline ssize_t mfill_atomic(struct mm_struct *dst_mm,
--					    unsigned long dst_start,
- 					    unsigned long src_start,
--					    unsigned long len,
-+					    const struct uffdio_range *dst,
- 					    atomic_t *mmap_changing,
- 					    int mode_flags)
- {
-@@ -540,15 +536,15 @@ static __always_inline ssize_t mfill_atomic(struct mm_struct *dst_mm,
- 	/*
- 	 * Sanitize the command parameters:
- 	 */
--	BUG_ON(dst_start & ~PAGE_MASK);
--	BUG_ON(len & ~PAGE_MASK);
-+	BUG_ON(dst->start & ~PAGE_MASK);
-+	BUG_ON(dst->len & ~PAGE_MASK);
- 
- 	/* Does the address range wrap, or is the span zero-sized? */
--	BUG_ON(src_start + len <= src_start);
--	BUG_ON(dst_start + len <= dst_start);
-+	BUG_ON(src_start + dst->len <= src_start);
-+	BUG_ON(dst->start + dst->len <= dst->start);
- 
- 	src_addr = src_start;
--	dst_addr = dst_start;
-+	dst_addr = dst->start;
- 	copied = 0;
- 	page = NULL;
- retry:
-@@ -568,7 +564,7 @@ static __always_inline ssize_t mfill_atomic(struct mm_struct *dst_mm,
- 	 * both valid and fully within a single existing vma.
- 	 */
- 	err = -ENOENT;
--	dst_vma = find_dst_vma(dst_mm, dst_start, len);
-+	dst_vma = find_dst_vma(dst_mm, dst);
- 	if (!dst_vma)
- 		goto out_unlock;
- 
-@@ -592,8 +588,8 @@ static __always_inline ssize_t mfill_atomic(struct mm_struct *dst_mm,
- 	 * If this is a HUGETLB vma, pass off to appropriate routine
- 	 */
- 	if (is_vm_hugetlb_page(dst_vma))
--		return  mfill_atomic_hugetlb(dst_vma, dst_start,
--					     src_start, len, mode_flags);
-+		return  mfill_atomic_hugetlb(dst_vma, src_start, dst,
-+					     mode_flags);
- 
- 	if (!vma_is_anonymous(dst_vma) && !vma_is_shmem(dst_vma))
- 		goto out_unlock;
-@@ -611,10 +607,10 @@ static __always_inline ssize_t mfill_atomic(struct mm_struct *dst_mm,
- 	    unlikely(anon_vma_prepare(dst_vma)))
- 		goto out_unlock;
- 
--	while (src_addr < src_start + len) {
-+	while (src_addr < src_start + dst->len) {
- 		pmd_t dst_pmdval;
- 
--		BUG_ON(dst_addr >= dst_start + len);
-+		BUG_ON(dst_addr >= dst->start + dst->len);
- 
- 		dst_pmd = mm_alloc_pmd(dst_mm, dst_addr);
- 		if (unlikely(!dst_pmd)) {
-@@ -692,30 +688,32 @@ static __always_inline ssize_t mfill_atomic(struct mm_struct *dst_mm,
- 	return copied ? copied : err;
- }
- 
--ssize_t mfill_atomic_copy(struct mm_struct *dst_mm, unsigned long dst_start,
--			  unsigned long src_start, unsigned long len,
-+ssize_t mfill_atomic_copy(struct mm_struct *dst_mm, unsigned long src_start,
-+			  const struct uffdio_range *dst,
- 			  atomic_t *mmap_changing, int flags)
- {
--	return mfill_atomic(dst_mm, dst_start, src_start, len,
-+	return mfill_atomic(dst_mm, src_start, dst,
- 			    mmap_changing, flags | MFILL_ATOMIC_COPY);
- }
- 
--ssize_t mfill_atomic_zeropage(struct mm_struct *dst_mm, unsigned long start,
--			      unsigned long len, atomic_t *mmap_changing)
-+ssize_t mfill_atomic_zeropage(struct mm_struct *dst_mm,
-+			      const struct uffdio_range *dst,
-+			      atomic_t *mmap_changing)
- {
--	return mfill_atomic(dst_mm, start, 0, len,
-+	return mfill_atomic(dst_mm, 0, dst,
- 			    mmap_changing, MFILL_ATOMIC_ZEROPAGE);
- }
- 
--ssize_t mfill_atomic_continue(struct mm_struct *dst_mm, unsigned long start,
--			      unsigned long len, atomic_t *mmap_changing)
-+ssize_t mfill_atomic_continue(struct mm_struct *dst_mm,
-+			      const struct uffdio_range *dst,
-+			      atomic_t *mmap_changing)
- {
--	return mfill_atomic(dst_mm, start, 0, len,
-+	return mfill_atomic(dst_mm, 0, dst,
- 			    mmap_changing, MFILL_ATOMIC_CONTINUE);
- }
- 
- void uffd_wp_range(struct vm_area_struct *dst_vma,
--		   unsigned long start, unsigned long len, bool enable_wp)
-+		   const struct uffdio_range *range, bool enable_wp)
- {
- 	struct mmu_gather tlb;
- 	pgprot_t newprot;
-@@ -726,14 +724,15 @@ void uffd_wp_range(struct vm_area_struct *dst_vma,
- 		newprot = vm_get_page_prot(dst_vma->vm_flags);
- 
- 	tlb_gather_mmu(&tlb, dst_vma->vm_mm);
--	change_protection(&tlb, dst_vma, start, start + len, newprot,
-+	change_protection(&tlb, dst_vma, range->start,
-+			  range->start + range->len, newprot,
- 			  enable_wp ? MM_CP_UFFD_WP : MM_CP_UFFD_WP_RESOLVE);
- 	tlb_finish_mmu(&tlb);
- }
- 
--int mwriteprotect_range(struct mm_struct *dst_mm, unsigned long start,
--			unsigned long len, bool enable_wp,
--			atomic_t *mmap_changing)
-+int mwriteprotect_range(struct mm_struct *dst_mm,
-+			const struct uffdio_range *dst,
-+			bool enable_wp, atomic_t *mmap_changing)
- {
- 	struct vm_area_struct *dst_vma;
- 	unsigned long page_mask;
-@@ -742,11 +741,11 @@ int mwriteprotect_range(struct mm_struct *dst_mm, unsigned long start,
- 	/*
- 	 * Sanitize the command parameters:
- 	 */
--	BUG_ON(start & ~PAGE_MASK);
--	BUG_ON(len & ~PAGE_MASK);
-+	BUG_ON(dst->start & ~PAGE_MASK);
-+	BUG_ON(dst->len & ~PAGE_MASK);
- 
- 	/* Does the address range wrap, or is the span zero-sized? */
--	BUG_ON(start + len <= start);
-+	BUG_ON(dst->start + dst->len <= dst->start);
- 
- 	mmap_read_lock(dst_mm);
- 
-@@ -760,7 +759,7 @@ int mwriteprotect_range(struct mm_struct *dst_mm, unsigned long start,
- 		goto out_unlock;
- 
- 	err = -ENOENT;
--	dst_vma = find_dst_vma(dst_mm, start, len);
-+	dst_vma = find_dst_vma(dst_mm, dst);
- 
- 	if (!dst_vma)
- 		goto out_unlock;
-@@ -772,11 +771,11 @@ int mwriteprotect_range(struct mm_struct *dst_mm, unsigned long start,
- 	if (is_vm_hugetlb_page(dst_vma)) {
- 		err = -EINVAL;
- 		page_mask = vma_kernel_pagesize(dst_vma) - 1;
--		if ((start & page_mask) || (len & page_mask))
-+		if ((dst->start & page_mask) || (dst->len & page_mask))
- 			goto out_unlock;
- 	}
- 
--	uffd_wp_range(dst_vma, start, len, enable_wp);
-+	uffd_wp_range(dst_vma, dst, enable_wp);
- 
- 	err = 0;
- out_unlock:
--- 
-2.39.2.637.g21b0678d19-goog
+Nit: Please use regular quotes here ("), rather than the "smart quotes" (=
+=E2=80=9C=E2=80=9D).
 
+>
+> The debugfs log before this fix:
+>
+>  KTAP version 1
+>
+>  1..1
+>
+> The debugfs log after this fix:
+>
+>  KTAP version 1
+>  1..1
+>
+> Signed-off-by: Rae Moar <rmoar@google.com>
+> ---
+>
+This overall seems better. I haven't finished reviewing the series
+yet, but there are a few obvious issues with this patch still...
+
+Most notably, kunit-log-test.kunit_log_test now fails.
+
+-- David
+
+> Changes from v1 -> v2:
+> - Changed the way extra newlines are removed. Instead of removing extra
+>   newline characters, add a newline if one is not present. This is a bit
+>   cleaner.
+> - Add before and after results to the commit message.
+> - Note: I looked into using KERN_CONT to match the printk behavior to
+>   vsnprintf but this could cause issues with KTAP printing on the same li=
+ne
+>   as interrupting kernel messages. I also looked at adding KERN_CONT
+>   functionality to kunit_log and I did get this to work but it was a bit
+>   messy because it required a few calls to kunit_log_newline in
+>   kunit_run_tests. If this is very desired functionality, happy to add th=
+is
+>   to version 3.
+>
+>  include/kunit/test.h   |  9 ++++++++-
+>  lib/kunit/kunit-test.c | 35 +++++++++++++++++++++++------------
+>  lib/kunit/test.c       | 14 ++++++++++++++
+>  3 files changed, 45 insertions(+), 13 deletions(-)
+>
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index 0668d29f3453..3031ad29718b 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -375,6 +375,13 @@ static inline void *kunit_kcalloc(struct kunit *test=
+, size_t n, size_t size, gfp
+>
+>  void kunit_cleanup(struct kunit *test);
+>
+> +/**
+> + * kunit_log_newline() - Add newline to the end of log if not already
+> + * present at the end of the log.
+> + * @log: The log to add the newline to.
+> + */
+> +void kunit_log_newline(char *log);
+> +
+
+I don't think this function needs to be public. Maybe keep it static
+and internal to test.c?
+
+>  void __printf(2, 3) kunit_log_append(char *log, const char *fmt, ...);
+>
+>  /**
+> @@ -420,7 +427,7 @@ void __printf(2, 3) kunit_log_append(char *log, const=
+ char *fmt, ...);
+>  #define kunit_log(lvl, test_or_suite, fmt, ...)                         =
+       \
+>         do {                                                            \
+>                 printk(lvl fmt, ##__VA_ARGS__);                         \
+> -               kunit_log_append((test_or_suite)->log,  fmt "\n",       \
+> +               kunit_log_append((test_or_suite)->log,  fmt,    \
+>                                  ##__VA_ARGS__);                        \
+>         } while (0)
+>
+> diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
+> index 4df0335d0d06..b63595d3e241 100644
+> --- a/lib/kunit/kunit-test.c
+> +++ b/lib/kunit/kunit-test.c
+> @@ -443,18 +443,6 @@ static struct kunit_suite kunit_resource_test_suite =
+=3D {
+>         .test_cases =3D kunit_resource_test_cases,
+>  };
+>
+> -static void kunit_log_test(struct kunit *test);
+> -
+> -static struct kunit_case kunit_log_test_cases[] =3D {
+> -       KUNIT_CASE(kunit_log_test),
+> -       {}
+> -};
+> -
+> -static struct kunit_suite kunit_log_test_suite =3D {
+> -       .name =3D "kunit-log-test",
+> -       .test_cases =3D kunit_log_test_cases,
+> -};
+> -
+>  static void kunit_log_test(struct kunit *test)
+>  {
+>         struct kunit_suite suite;
+> @@ -481,6 +469,29 @@ static void kunit_log_test(struct kunit *test)
+>  #endif
+>  }
+>
+> +static void kunit_log_newline_test(struct kunit *test)
+> +{
+> +       kunit_info(test, "Add newline\n");
+> +       if (test->log) {
+> +               KUNIT_ASSERT_NOT_NULL_MSG(test, strstr(test->log, "Add ne=
+wline\n"),
+> +                       "Missing log line, full log:\n%s", test->log);
+> +               KUNIT_EXPECT_NULL(test, strstr(test->log, "Add newline\n\=
+n"));
+> +       } else {
+> +               kunit_skip(test, "only useful when debugfs is enabled");
+> +       }
+> +}
+> +
+> +static struct kunit_case kunit_log_test_cases[] =3D {
+> +       KUNIT_CASE(kunit_log_test),
+
+This test is failing now:
+[13:42:51] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D kunit-log-test (2 =
+subtests) =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+[13:42:51] put this in log.
+[13:42:51] this too.
+[13:42:51] add to suite log.
+[13:42:51] along with this.
+[13:42:51]     # kunit_log_test: EXPECTATION FAILED at
+lib/kunit/kunit-test.c:459
+[13:42:51]     Expected strstr(test->log, "put this in log.") is not
+null, but is
+[13:42:51]     # kunit_log_test: EXPECTATION FAILED at
+lib/kunit/kunit-test.c:461
+[13:42:51]     Expected strstr(test->log, "this too.") is not null, but is
+[13:42:51]     # kunit_log_test: EXPECTATION FAILED at
+lib/kunit/kunit-test.c:463
+[13:42:51]     Expected strstr(suite.log, "add to suite log.") is not
+null, but is
+[13:42:51]     # kunit_log_test: EXPECTATION FAILED at
+lib/kunit/kunit-test.c:465
+[13:42:51]     Expected strstr(suite.log, "along with this.") is not
+null, but is
+[13:42:51] [FAILED] kunit_log_test
+[13:42:51] [PASSED] kunit_log_newline_test
+[13:42:51] # kunit-log-test: pass:1 fail:1 skip:0 total:2
+[13:42:51] # Totals: pass:1 fail:1 skip:0 total:2
+[13:42:51] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D [FAILED] kun=
+it-log-test =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+> +       KUNIT_CASE(kunit_log_newline_test),
+> +       {}
+> +};
+> +
+> +static struct kunit_suite kunit_log_test_suite =3D {
+> +       .name =3D "kunit-log-test",
+> +       .test_cases =3D kunit_log_test_cases,
+> +};
+> +
+>  static void kunit_status_set_failure_test(struct kunit *test)
+>  {
+>         struct kunit fake;
+> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> index fb6b39cca0ae..1ea981392af3 100644
+> --- a/lib/kunit/test.c
+> +++ b/lib/kunit/test.c
+> @@ -108,6 +108,17 @@ static void kunit_print_test_stats(struct kunit *tes=
+t,
+>                   stats.total);
+>  }
+>
+> +void kunit_log_newline(char *log)
+> +{
+> +       int log_len, len_left;
+> +
+> +       log_len =3D strlen(log);
+> +       len_left =3D KUNIT_LOG_SIZE - log_len - 1;
+> +
+> +       if (log_len > 0 && log[log_len - 1] !=3D '\n')
+> +               strncat(log, "\n", len_left);
+> +}
+> +
+>  /*
+>   * Append formatted message to log, size of which is limited to
+>   * KUNIT_LOG_SIZE bytes (including null terminating byte).
+> @@ -134,6 +145,9 @@ void kunit_log_append(char *log, const char *fmt, ...=
+)
+>         va_start(args, fmt);
+>         vsnprintf(log + log_len, min(len, len_left), fmt, args);
+>         va_end(args);
+> +
+> +       /* Add newline to end of log if not already present. */
+> +       kunit_log_newline(log);
+>  }
+>  EXPORT_SYMBOL_GPL(kunit_log_append);
+>
+> --
+> 2.39.2.637.g21b0678d19-goog
+>
+
+--00000000000046872305f5579c25
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+64VRg2IjDI2fJVE9RD6aMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQA2lZLYRLu7foeR
+cHo1VeNA974FZBiCm08Kd44/aCMEzdTJvxAE9xbUJf7hS1i6eW49qxuSp3/YLn6U7uatwAcmZcwp
+Zma19ftf3LH+9Hvffk+X8fbPKe6uHkJhR2LktrhRzF159jj67NvXyGQv8J4n7UNeEVP0d5ByvRwv
+tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
+m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
+c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCk
+FQI6/mSoy5LIh3lipH/nLYSH5z3FoRL2YkyKaEypCzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzAyMjMwNTUxNTZaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAQEoup9tNOt/B3QSwV2dH
+8qwlR/dABh5pwxHiH57Jv3yPvfNR4KaJvY8hSImYGy26oMFKAQCgfBuXE4f6eqzXYqFJl6OUorWX
+e+RFyoBKBoPVj9NWO+z8TjOpEYm9aCAx3eUVYxmdg6FACUAGuw3+gS1xYVWpd3irNtz+aCk+uobO
+IaAbQRx8LPRNh0YFdDJLRoFwCj8QMRd6cl7ouuab2SqQbDuasIWL6vz7rjDr+a7SAR4KI24ib5+O
+5m/dQ0XnoC0rmnLBSEJmmemMcKSoRNc1TLOEWRc4rZHpzjFo8yegtzoUpKSOA1W15GUq2JGaCpyD
+AB6UDgv+KsaZgr0avg==
+--00000000000046872305f5579c25--
