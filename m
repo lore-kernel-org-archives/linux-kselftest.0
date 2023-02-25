@@ -2,232 +2,231 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 69EB2C6FA8E
-	for <linux-kselftest@archiver.kernel.org>; Sat, 25 Feb 2023 00:25:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AD44C64ED8
+	for <linux-kselftest@archiver.kernel.org>; Sat, 25 Feb 2023 00:28:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229547AbjBYAZ1 (ORCPT
+        id S229566AbjBYA2G (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 24 Feb 2023 19:25:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42638 "EHLO
+        Fri, 24 Feb 2023 19:28:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjBYAZ1 (ORCPT
+        with ESMTP id S229477AbjBYA2F (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 Feb 2023 19:25:27 -0500
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D04A56F03A
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Feb 2023 16:25:23 -0800 (PST)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-536c02eea4dso24701607b3.4
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Feb 2023 16:25:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=G10G+2me8jWFCtUR2TsWKtrzVtOB9z/KQCFeBqx3WZs=;
-        b=SmUzAwfxei85wnPtFanS/PoR05mKkU6KxsFWRKPaLmlQsWkjdiptM0qfwu7tVifIrg
-         1RE/fZrs0oFl3V0yHcbwCx731CdqGB1pdu95B93CV2MxcACcsxe0dT4VzBsXY9cZn4H0
-         py3FQAurdJ152X6rbhQd2TMZeOAqIItH2BeIvhrr863huWWBblVEYnu4dAf8r6JnLtKU
-         pFq9672hWwg+BoS/5tjw0WQCjeXiM1QGsB+lkEd0dHOeaj2sHj4tXNyIplzFudghpnW4
-         yWO3mrrBeyXNPw8uSF+sNZC0CuIPxaQ0XN0/Dj24OsjiSd8ifpsFFPg//TzCIziMnsmm
-         kINA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=G10G+2me8jWFCtUR2TsWKtrzVtOB9z/KQCFeBqx3WZs=;
-        b=VJ6ABxiLWunkb6orhs8b/ujE2KBYQ0MgNVmOBcN2B3T5fsPI/RTRQJ6xjGacSP8X0E
-         8rQgomlrBOVuZ5WCFm+w8BvahSfWtH9mt0XpmFgmZTD3uocx8lZnRft8/iKoz1lFkA4n
-         GcLDFyTb2ChJ3eVivhGxeQZYk7Q27D0KiqPmfLEsCcJnPCq1RSaSSeKymLikZZuO6YIo
-         +V60TEBqRBsUaT1CvX5F2dTIhOepk1K7TEOloGvQxfsfaKsGi0l47CA1KjEPPjRUAgHy
-         jHqnfwBUEC4KsVI5ozyvrvizCAN9D3TfNJtGfsBrcLXJzg94KLTUs3KCSMaV7DfbSA9m
-         ZM5Q==
-X-Gm-Message-State: AO0yUKWFtCmYNnfxiIHgkQDKHBI8C2yABKCpa6SroRdDouT3o4tp9YwC
-        6UPiaqjUAjhSyhiF1zxKKjY79oZztlLssdBKlKbwtQ==
-X-Google-Smtp-Source: AK7set9/s6MqiL5vrYzNlW80C1p9m82ZTZ7l6K+tReN5z/8pigW+XUSm6O293ENFGUsTUi1mssyjE4IKHzYx7ehFHuI=
-X-Received: by 2002:a81:4425:0:b0:52f:69d:cc75 with SMTP id
- r37-20020a814425000000b0052f069dcc75mr5532545ywa.6.1677284722871; Fri, 24 Feb
- 2023 16:25:22 -0800 (PST)
+        Fri, 24 Feb 2023 19:28:05 -0500
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2073.outbound.protection.outlook.com [40.107.212.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EE3218B0B;
+        Fri, 24 Feb 2023 16:28:04 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hx2fUHfir+8Z3LMXvF2uL8C7U4a7/kkKvkcUT+UwuySal9c1tm98NHOsV25NfiVe9m7h662hD+t01FdoN1kNeG1jw6XXSRO3NPrsAo5keuAhU4gGqAgSgYrU15tukDWhUBL052S7BWMoisGw5+T37iog9LG1lvAEKYBg2ipe4srspBCufnOA4WQz8A7GjEHwx5D/X7uj+Ld28WAhNTzGvTIf2oGm++ftJ6G1lgC17OSN5zaMtRCIhJMEkTS9Lg7WL+5Fn/w+o0+4LXJrh01s59foR7dyhokTrZwMe6X5LVu0Y/DuFOF5iW/ZmTLxuLvc4RRvD06GiCVGytCcIeJzbA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=AnzJQh/4OPTkwchnBXPM9CMhIalhimwOA0CZalhAdmo=;
+ b=mSSaIK2eMfuBVQ3HXnLNq6azYFojGWysJJCHNWPwFguaWcs39yANmKbIewgk0fQmYK3IV9fcGVP/IG/gmUHIqGQrwnifbb+ulJFl+68EhWaMIPc6bhWNWCq6pM7v9zjy2oUQhc653fiLi8LPbbTmNFMT7L6XTkIv5GnMvLiUp0WSxbhG5QICg86TG0uj6v0Tqa5q/B3ih2v8zEbWijK+L7YKtDOX/Pce0JU+QG/NE3EiKw9RljDC3z1YuO/7UQFYn0eSZoBflYmuvNJKOaRyFDQbGLMPev5azDXWoogtfPDHU87qjBz/Vmz5+5/5p2F5M9NsLbs2OX42erR8U5iZ0g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=AnzJQh/4OPTkwchnBXPM9CMhIalhimwOA0CZalhAdmo=;
+ b=qF2eYTK/qQNZObzgSgksULJBVoXPM3Nyit7xmm+lEh2fU/aXVqaKnKzqcRme3tClau+zk8wd5liRsseysWmqbWOsJvvaq8oRgQiOjmvoqxbtJxkNIKaV5bX4HFob4jISJaq7ZeUjpv9rlQk2hliPrr4DlsWys5Jlkj35gRRSdIyL7g90eLS5mhKJmIO6JdN6adlQHbYE4vnsPohbH22W9TZLq9k+CD4bUP5jP98Tn+Bc531JGED8n26/Qmaql9BoSq95+dyL4FA50ybFMZyn37++vbsMm5Y8xZbE6G7lLiubfZ3MHotD4epY1I8d/31NX9IvFiCqCYQsz7lIlw+F6w==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by DS7PR12MB6096.namprd12.prod.outlook.com (2603:10b6:8:9b::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6134.21; Sat, 25 Feb 2023 00:28:01 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee%4]) with mapi id 15.20.6134.021; Sat, 25 Feb 2023
+ 00:28:01 +0000
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     iommu@lists.linux.dev, Kevin Tian <kevin.tian@intel.com>,
+        linux-kselftest@vger.kernel.org
+Cc:     kvm@vger.kernel.org, Nicolin Chen <nicolinc@nvidia.com>,
+        Yi Liu <yi.l.liu@intel.com>
+Subject: [PATCH 04/14] iommufd: Use the iommufd_group to avoid duplicate reserved groups and msi setup
+Date:   Fri, 24 Feb 2023 20:27:49 -0400
+Message-Id: <4-v1-7612f88c19f5+2f21-iommufd_alloc_jgg@nvidia.com>
+In-Reply-To: <0-v1-7612f88c19f5+2f21-iommufd_alloc_jgg@nvidia.com>
+References: 
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: MN2PR07CA0024.namprd07.prod.outlook.com
+ (2603:10b6:208:1a0::34) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-References: <02cf36b9-6526-576b-1fd3-a59b67c8c123@linuxfoundation.org> <CAHk-=wiEf7irTKwPJ0jTMOF3CS-13UXmF6Fns3wuWpOZ_wGyZQ@mail.gmail.com>
-In-Reply-To: <CAHk-=wiEf7irTKwPJ0jTMOF3CS-13UXmF6Fns3wuWpOZ_wGyZQ@mail.gmail.com>
-From:   David Gow <davidgow@google.com>
-Date:   Sat, 25 Feb 2023 08:25:11 +0800
-Message-ID: <CABVgOSnqZAuWZJpER4B_hPHorj3DZSpv+ygudC-wSVZ5-o14uQ@mail.gmail.com>
-Subject: Re: [GIT PULL] KUnit next update for Linux 6.3-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>, shuah <shuah@kernel.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000001e161005f57b48d4"
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DS7PR12MB6096:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7c4e75d0-c87c-437c-579f-08db16c726d3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: deCX8ufa9ebyFQGs2KM7AisEPaKfKH2qSnYfDQOMnKqs2+vhzjZG1exrjnMtljxpl5K69cP+TslKvm4VTBUhbOuA9bZpenRu0AHUEO8j+McQfgevbQetIqUDb99u1iHK9YxDxByoZwirJhwaMDWvWwgSYVPjYhDy4FblqXsiaD9YE2JRxvR0Wb3N6KjDTG13yXYSYZODjQkfYyGqW3us9Oe+1dcwER2k12KZml68znNC3neDiGKuPAu8mHfxh5CM0IedYjx5eOAybqPbWPB4WdXwdEPPOCNmolwyq6Ro37hf/F+e7x0JRLle762zw2TLYR3H90A2S2LRpyKM8GF3oXdta/wbhqg965Nz5tpn/br9vAovpRuZUJReoPh7XDsSmCCUvceetNQJmxYpA78O49R72s4mvlJL12qHXCmvp/Mt1nnV/0UkFBHGgKP/mfaLXzbY4i+RGXt+uRkQH+5DH4FQMwCY+/WUwyOFBy1mzu0ZAR9GwjUdmfPyYZ6CHQGi3FzErc1U34LdE5rxyjh8uz5EFdnbFprWvxJOM9eAV8te8KMHJI/0veQvgiMIK9gYZns6qaYUSuXjrQRZ87XCRm3J4MRt33t7C7GzTnaEWaHbWoLnFni1iVQyMHeXGun6YtjxAfVPMXcBIZhvEgi7hMRzHsHDTHZR5TrvkfKUa5q2nAO1CC5AUoZWWLs2euUo
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(346002)(366004)(396003)(376002)(39860400002)(451199018)(2616005)(41300700001)(83380400001)(5660300002)(54906003)(478600001)(8936002)(4326008)(38100700002)(26005)(186003)(86362001)(8676002)(66946007)(6506007)(6512007)(66556008)(316002)(66476007)(36756003)(6486002)(2906002)(6666004)(4216001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?hVJuPrRvO71Y8Bpn1Jp85LGlvDTE3cQUaNBH63x35q2xI01LZBrmAtryjict?=
+ =?us-ascii?Q?ho0b1Nv3/+MCr2CvyCMm34sclXRSle6s7Bki/qIXQ/aDARXzbG2oMhg3mGP+?=
+ =?us-ascii?Q?RCWc0W/FWn+pfY4VgLo9UMrylnuhjvyIOO3dQOYWapKabZxjl0vNVwRy6AwA?=
+ =?us-ascii?Q?bnsKe4t+YGMuNyw1/2jSFdxzMxuzYPIEyWyLTbS9NP26oXj5aE50EKh8VDee?=
+ =?us-ascii?Q?vUDTRQGFlw7g7SxanazbBqKfMnqflhP0CAXtGbLhZXxrm2MZJpA+F4iw7m5w?=
+ =?us-ascii?Q?HsyhzTl9UBxZxOBshSFe//Z3YbElm1IC38PMhafzaPz5b5g7mODnlPwR7WOi?=
+ =?us-ascii?Q?pxiTK3QKANC4EcfmKHqR9Q1uuMw1Ha+wBQbmbGsX+T3rbctuJEmfOx3/ogeV?=
+ =?us-ascii?Q?Ud7udCzVjtUA0+f95sLXx3QEgNS9d7iKmyH8j+Ez0B/9vH/D7HTRKaoc8VEg?=
+ =?us-ascii?Q?mcL5bPQoatlnnYBoOyv6DgQ6jm/lgXPbfxCCwRWDCTnWORlEg1MJpG8KK+sW?=
+ =?us-ascii?Q?T3k2XjBIGkjybPzdNXwG3n4ozfruEDX95bwHbQPw3K4fdG9VNbeRwZrBhhnz?=
+ =?us-ascii?Q?WnGCKsKjlJxUJN5EfURhZtFTGpKhT5CIAUcVSXWQyNADMNt92flvjZCg1zrX?=
+ =?us-ascii?Q?8H3A7GDqA3OkJZf1ffDL3qmiR7TGx91gU2xspBy3rR8APbcNyQUSW0bUKC+z?=
+ =?us-ascii?Q?Lo6+8HrcW/WUftVNImDrTYKwN6pPHV6ypNrwnGDYt/NiBoS3mxCx9q/Zrt4D?=
+ =?us-ascii?Q?6LWFmJJP86r69WvwevtbJftL8gDbtjHIDhBoksPZA39jjq5w+yDrA/muffLz?=
+ =?us-ascii?Q?NIi+yddAEFIYsDx4gEXWpi0AFFEnrEimZyBPlf4U+Na3y1hAXv5BPWgeBmGl?=
+ =?us-ascii?Q?HiRq6XtacF8ohf7itg00IgxSaj4Nf4qvU3FylOhCog1axYOQygt1j2C8qQc/?=
+ =?us-ascii?Q?/eRpVcRR9KEHcYsfkUgc/qWqgni5cJyRxDYHV8kKDXpm11d/fY/u/azTTtkL?=
+ =?us-ascii?Q?Y9QXqtKcoFoFCMeF+vMhNhZAjImjNwaT3DDP1wUcGXhTjKpiRS+yM8FRYi7L?=
+ =?us-ascii?Q?PfdUsr/aLtrS/L1z/9GKhzwbWR2I2jIwc142RMtbfkd8KuCYS4ssCRSoYgF1?=
+ =?us-ascii?Q?tOM0h9aiSWX5aYu5s+lvMHvFDzHSYpUHrywTEdMd3gnvn+09sboMB+VnLCzz?=
+ =?us-ascii?Q?xsQAVq64PQGdHO01cun7963ZTSKdAGO0oNZAEBzZXmMUV+mzPXpQxdKXCCfy?=
+ =?us-ascii?Q?wbGEcqBW1N9zVmIv55FWwT+2AYxUC1/WMeGkFDa0mrHStF98eY84+BjfVAX6?=
+ =?us-ascii?Q?IBA32oLP3eLvu8ZnzT4WPHWuXkSV8sCrZshyObJuRy0pNdJxCbXcirC9exJZ?=
+ =?us-ascii?Q?lBc21MsKqawd42wSawr0/hYblPXmHvzBdyL/hgiyquTjozoMyfAQel0kB0cp?=
+ =?us-ascii?Q?3a/OTEccuFeaRVkpEO9dFKGcylVasir6kCzHoT4GTHFAkGLeUWqAhmlwIpDW?=
+ =?us-ascii?Q?H/CUNfoCanB/i22q5Xo2FTty7LZ1xQA/aH2L7BaQUiorgh99LoyutE4gGgpL?=
+ =?us-ascii?Q?BA8rdzmyJ9QkMrDIfrF1Q0W6L4LLeel9fr+w0K+0?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7c4e75d0-c87c-437c-579f-08db16c726d3
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Feb 2023 00:28:01.0619
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: aUgZFyHoOYTy/9+802etF3mUBIHoCeZMw+kaQZ33DQ+LlJch4CVELAi0cNHp2fjp
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6096
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---0000000000001e161005f57b48d4
-Content-Type: text/plain; charset="UTF-8"
+These items only needs to be done once per group, not once per device. The
+once per device was a way to make the device list work. Since we are
+abandoning this we can optimize things a bit.
 
-On Sat, 25 Feb 2023 at 07:23, Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Tue, Feb 21, 2023 at 5:51 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
-> >
-> > This KUnit update for Linux 6.3-rc1 consists of cleanups, new features,
-> > and documentation updates:
->
-> Hmm. I have not actually bisected this or tried to otherwise figure
-> out exactly what is wrong, but the kunit code ends up being really
-> annoying for my build testing.
-
-This will be due to 7170b7ed6acb ("kunit: Add "hooks" to call into
-KUnit when it's built as a module").
-
-The "hooks.o" file is special in that it needs to be built-in even
-when the other KUnit files are built as a module, and clearly the
-kbuild hackery for that has fallen apart.
-
->
-> In particular, if I do
->
->      make
->
-> repeatedly - ie with no other changes in between - the kunit code ends
-> up re-building itself for no apparent reason.
->
-> Which then causes a re-link and makes it all really slow.
->
-> Maybe I'm barking up the wrong tree, but just do
->
->    make allmodconfig
->
-> and then do two plain "make"s in succession (feel free to add "-jXYZ"
-> to make it go much faster ;).
->
-> The second build - that shouldn't have to re-build anything - still does this:
->
->   CALL    scripts/checksyscalls.sh
->   DESCEND objtool
->   CHK     kernel/kheaders_data.tar.xz
->   CC      lib/kunit/hooks.o
->   AR      lib/built-in.a
->   CC      lib/kunit/hooks.o
->   AR      lib/kunit/lib.a
->   AR      built-in.a
->   AR      vmlinux.a
->   LD      vmlinux.o
->   ...
->
-> and it all takes much longer than an empty kernel build _should_ take.
-
-As best I can tell, this is kbuild getting very confused by the way
-we're adding lib/kunit/hooks.o directly in lib/Makefile (rather than
-going through lib/kunit/Makefile).
-
-Moving lib/kunit/hooks.c -> lib/kunit_hooks.c and adjusting the
-makefile to match _seems_ to fix it here:
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 ---
-diff --git a/lib/Makefile b/lib/Makefile
-index 469be6240523..bb87df427cff 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -131,10 +131,8 @@ obj-$(CONFIG_KUNIT) += kunit/
-# Include the KUnit hooks unconditionally. They'll compile to nothing if
-# CONFIG_KUNIT=n, otherwise will be a small table of static data (static key,
-# function pointers) which need to be built-in even when KUnit is a module.
--ifeq ($(CONFIG_KUNIT), m)
--obj-y += kunit/hooks.o
--else
--obj-$(CONFIG_KUNIT) += kunit/hooks.o
-+ifdef CONFIG_KUNIT
-+obj-y += kunit_hooks.o
-endif
----
+ drivers/iommu/iommufd/device.c          | 38 ++++++++++++++-----------
+ drivers/iommu/iommufd/io_pagetable.c    |  5 ++--
+ drivers/iommu/iommufd/iommufd_private.h |  1 -
+ 3 files changed, 23 insertions(+), 21 deletions(-)
 
-Splitting the KUnit code up like that is a little bit ugly, so I'm
-open to any suggestions of how better to structure it.
+diff --git a/drivers/iommu/iommufd/device.c b/drivers/iommu/iommufd/device.c
+index 264bfa2212481f..75e8d79678736f 100644
+--- a/drivers/iommu/iommufd/device.c
++++ b/drivers/iommu/iommufd/device.c
+@@ -298,9 +298,20 @@ int iommufd_hw_pagetable_attach(struct iommufd_hw_pagetable *hwpt,
+ 		}
+ 	}
+ 
+-	rc = iopt_table_enforce_group_resv_regions(&hwpt->ioas->iopt, idev->dev,
+-						   idev->igroup->group,
+-						   &sw_msi_start);
++	/*
++	 * The first device in the group to be attached will do all the work
++	 * to setup the hwpt and ioas. Every other device re-uses it through
++	 * the shared group attachment. Users are allowed/expected to attach
++	 * every device in the group to the same hwpt, that just turns into
++	 * a NOP.
++	 */
++	if (idev->igroup->devices) {
++		idev->igroup->devices++;
++		return 0;
++	}
++
++	rc = iopt_table_enforce_group_resv_regions(
++		&hwpt->ioas->iopt, idev->igroup->group, &sw_msi_start);
+ 	if (rc)
+ 		return rc;
+ 
+@@ -308,22 +319,15 @@ int iommufd_hw_pagetable_attach(struct iommufd_hw_pagetable *hwpt,
+ 	if (rc)
+ 		goto err_unresv;
+ 
+-	/*
+-	 * Only attach to the group once for the first device that is in the
+-	 * group. All the other devices will follow this attachment.
+-	 * The user can attach every device individually as well.
+-	 */
+-	if (!idev->igroup->devices) {
+-		rc = iommu_attach_group(hwpt->domain, idev->igroup->group);
+-		if (rc)
+-			goto err_unresv;
+-		idev->igroup->hwpt = hwpt;
+-		refcount_inc(&hwpt->obj.users);
+-	}
++	rc = iommu_attach_group(hwpt->domain, idev->igroup->group);
++	if (rc)
++		goto err_unresv;
++	idev->igroup->hwpt = hwpt;
++	refcount_inc(&hwpt->obj.users);
+ 	idev->igroup->devices++;
+ 	return 0;
+ err_unresv:
+-	iopt_remove_reserved_iova(&hwpt->ioas->iopt, idev->dev);
++	iopt_remove_reserved_iova(&hwpt->ioas->iopt, idev->igroup->group);
+ 	return rc;
+ }
+ 
+@@ -339,7 +343,7 @@ iommufd_hw_pagetable_detach(struct iommufd_device *idev)
+ 		iommu_detach_group(hwpt->domain, idev->igroup->group);
+ 		idev->igroup->hwpt = NULL;
+ 	}
+-	iopt_remove_reserved_iova(&hwpt->ioas->iopt, idev->dev);
++	iopt_remove_reserved_iova(&hwpt->ioas->iopt, idev->igroup->group);
+ 	return hwpt;
+ }
+ 
+diff --git a/drivers/iommu/iommufd/io_pagetable.c b/drivers/iommu/iommufd/io_pagetable.c
+index e0ae72b9e67f86..096491bbb5acf5 100644
+--- a/drivers/iommu/iommufd/io_pagetable.c
++++ b/drivers/iommu/iommufd/io_pagetable.c
+@@ -1163,7 +1163,6 @@ void iopt_remove_access(struct io_pagetable *iopt,
+ 
+ /* Narrow the valid_iova_itree to include reserved ranges from a group. */
+ int iopt_table_enforce_group_resv_regions(struct io_pagetable *iopt,
+-					  struct device *device,
+ 					  struct iommu_group *group,
+ 					  phys_addr_t *sw_msi_start)
+ {
+@@ -1191,7 +1190,7 @@ int iopt_table_enforce_group_resv_regions(struct io_pagetable *iopt,
+ 		}
+ 
+ 		rc = iopt_reserve_iova(iopt, resv->start,
+-				       resv->length - 1 + resv->start, device);
++				       resv->length - 1 + resv->start, group);
+ 		if (rc)
+ 			goto out_reserved;
+ 	}
+@@ -1206,7 +1205,7 @@ int iopt_table_enforce_group_resv_regions(struct io_pagetable *iopt,
+ 	goto out_free_resv;
+ 
+ out_reserved:
+-	__iopt_remove_reserved_iova(iopt, device);
++	__iopt_remove_reserved_iova(iopt, group);
+ out_free_resv:
+ 	list_for_each_entry_safe(resv, tmp, &group_resv_regions, list)
+ 		kfree(resv);
+diff --git a/drivers/iommu/iommufd/iommufd_private.h b/drivers/iommu/iommufd/iommufd_private.h
+index 5f3ad16da819e7..dbecdff013d082 100644
+--- a/drivers/iommu/iommufd/iommufd_private.h
++++ b/drivers/iommu/iommufd/iommufd_private.h
+@@ -77,7 +77,6 @@ int iopt_table_add_domain(struct io_pagetable *iopt,
+ void iopt_table_remove_domain(struct io_pagetable *iopt,
+ 			      struct iommu_domain *domain);
+ int iopt_table_enforce_group_resv_regions(struct io_pagetable *iopt,
+-					  struct device *device,
+ 					  struct iommu_group *group,
+ 					  phys_addr_t *sw_msi_start);
+ int iopt_set_allow_iova(struct io_pagetable *iopt,
+-- 
+2.39.1
 
-Regardless, I'll play around a bit and see if I can come up with
-anything better before sending that out.
-
-Sorry for the inconvenience!
-
--- David
-
---0000000000001e161005f57b48d4
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-64VRg2IjDI2fJVE9RD6aMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQA2lZLYRLu7foeR
-cHo1VeNA974FZBiCm08Kd44/aCMEzdTJvxAE9xbUJf7hS1i6eW49qxuSp3/YLn6U7uatwAcmZcwp
-Zma19ftf3LH+9Hvffk+X8fbPKe6uHkJhR2LktrhRzF159jj67NvXyGQv8J4n7UNeEVP0d5ByvRwv
-tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
-m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
-c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCp
-qKvRNH0Rzmfp2fP9sc+jV9m0OX00tN7SSCUhn2J5kTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzAyMjUwMDI1MjNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAPeDStx3iAnpH5IKWR4Mc
-OspuWCLheUSawkXqD06iO+1oRJDBQglNwSaiMXC9EmcdybOadEn4g83TRNSRWl4x1PTOcn/3FrVb
-yac78QAE/+VTmRhjaW4CQFbu/LzZuOLmLTscbe8tUhwBUH0uRQauWWjI2QrbB/9+9WbkZDbtw4Ie
-9fTpzwy0lp9MOt4wDY6TlO3+63eqJNlgxG7ct8Z7kJPg1/43pXy7Snwy6d1nVaO1DdxFI6Luvvjh
-NaIrASDpa7UA8EQ8uRxB/2yCak66Oha8zmDYMhjZKl6N3H9bwSpJeS/2oiwDwoUkxyrkTSPsSFfb
-A/GROgIbdvI3m2bd7w==
---0000000000001e161005f57b48d4--
