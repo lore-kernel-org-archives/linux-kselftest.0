@@ -2,93 +2,138 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EFF7FC7EE32
-	for <linux-kselftest@archiver.kernel.org>; Tue, 28 Feb 2023 10:31:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E656DC7EE31
+	for <linux-kselftest@archiver.kernel.org>; Tue, 28 Feb 2023 11:29:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230145AbjB1Kbo (ORCPT
+        id S231192AbjB1L3j (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 28 Feb 2023 05:31:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47918 "EHLO
+        Tue, 28 Feb 2023 06:29:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230193AbjB1Kbm (ORCPT
+        with ESMTP id S231569AbjB1L3g (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 Feb 2023 05:31:42 -0500
-Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A22336EBF
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Feb 2023 02:31:37 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed50:9202:974e:f0e0:414c])
-        by laurent.telenet-ops.be with bizsmtp
-        id SaXZ2900H1hKVeJ01aXZmY; Tue, 28 Feb 2023 11:31:35 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtp (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1pWxGC-00ANGn-K0;
-        Tue, 28 Feb 2023 11:31:33 +0100
-Received: from geert by rox.of.borg with local (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1pWxGf-00FbNK-4c;
-        Tue, 28 Feb 2023 11:31:33 +0100
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>
-Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-sh@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH 1/2] kunit: tool: Add support for overriding the QEMU serial port
-Date:   Tue, 28 Feb 2023 11:31:02 +0100
-Message-Id: <f12e6f606a2612fab4d1038d088959710a423a9f.1677579750.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1677579750.git.geert+renesas@glider.be>
-References: <cover.1677579750.git.geert+renesas@glider.be>
+        Tue, 28 Feb 2023 06:29:36 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79EA0526C
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Feb 2023 03:29:12 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id o15so35967832edr.13
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Feb 2023 03:29:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares.net; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GBj/GGcssUIPclJb9OaTVZJj6GUgJJTT+lDCTo9rCgQ=;
+        b=ev4Uj0zM8CDLMvFJ9N89gY8s6bTexBCziLfJ9y93h0GjAvOdGgRLYhyM7EWKpGSG/c
+         uBBFYWpQ+ShDHjIhAMAbtmkRcPG4oU1w/LTk+Xr4H+V/ZfQfiOsJm6yk5r2BuJ15vlic
+         wQiodG7MheSxV25r7YFRcY9iC1qE2jrqtB3l03dLuU8KG0QcEaJvbntY1ecSLelsUB6F
+         Z7Q3nrhzvpDTr0apjMYNKcvvhwD+geZ8bmraNLTfVIY2NphLF5ntsu0sIRC+8QB7Z+nB
+         fVaQ4mzqOaH5FDJQRt757SZpNXAlTZJ/iNhFbhpQbSdIJM0+QDLF5Ul/EQJq6KYRdE5h
+         gOVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GBj/GGcssUIPclJb9OaTVZJj6GUgJJTT+lDCTo9rCgQ=;
+        b=Ugpgzbw/FCOyr2R3e3R5IqQKoXiDWWf32zQU4MpRpB6Hzar/v0InqnjV1ZLCdHwBYl
+         gVBZ0xLBPuJn4aQH/6Y/+9gIiy5jn3fpYVoxgzRi0Jpec8D2rMBferiUtLmfMYTkCQCy
+         s0dch5xEMR9MCvBoHDmRpXU93QXq8ijeXskZrWfxmFwrPnJYHUAi9nmXWmvT9Vur846k
+         udp3sZGf2rSU9GGbFfCwIkx8xyPkv3o3v/MDn3rcTVcWVmoQL2Ech1PTpP8kv/7rKbAC
+         nWe2b1QIbRhvAzIHb3EXuSsqcfhBpP6Ddjd+qYnRS2S3sIEBkFXCMaWKdb8pxJmeHOZ6
+         /1bg==
+X-Gm-Message-State: AO0yUKU8CrjCFi2QnRA0/BS2VyraVDHAjqFDdoB1q7x9q4SNLj2k/Uhc
+        3cXQlRvIrtyVd1W4gSK0/Oc4SwafUA+Zlm3mXVo=
+X-Google-Smtp-Source: AK7set8RZDJ6WdOsfg3RtQ3zH7fB6FvZdtq4hk6RJEmyFYlX71IvTbbNpXsS2JtDUgI3CjxqD9hTNg==
+X-Received: by 2002:a17:907:ca14:b0:8b0:26b6:3f2b with SMTP id uk20-20020a170907ca1400b008b026b63f2bmr2016682ejc.53.1677583722973;
+        Tue, 28 Feb 2023 03:28:42 -0800 (PST)
+Received: from ?IPV6:2a02:578:8593:1200:5848:64ae:8a99:312a? ([2a02:578:8593:1200:5848:64ae:8a99:312a])
+        by smtp.gmail.com with ESMTPSA id r22-20020a50aad6000000b004af6a7e9131sm4223979edc.64.2023.02.28.03.28.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Feb 2023 03:28:42 -0800 (PST)
+Message-ID: <a0a76c20-4fd9-476b-3e32-06f7cc2bbf1b@tessares.net>
+Date:   Tue, 28 Feb 2023 12:28:41 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH net 0/7] mptcp: fixes for 6.3
+Content-Language: en-GB
+To:     mptcp@lists.linux.dev, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Menglong Dong <imagedong@tencent.com>,
+        Mengen Sun <mengensun@tencent.com>,
+        Shuah Khan <shuah@kernel.org>, Florian Westphal <fw@strlen.de>,
+        Jiang Biao <benbjiang@tencent.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
+        Christoph Paasch <cpaasch@apple.com>,
+        Geliang Tang <geliang.tang@suse.com>
+References: <20230227-upstream-net-20230227-mptcp-fixes-v1-0-070e30ae4a8e@tessares.net>
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+In-Reply-To: <20230227-upstream-net-20230227-mptcp-fixes-v1-0-070e30ae4a8e@tessares.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On some platforms, the console is not the first serial port.  To make
-this work, the first serial port in QEMU must be set to "null".
+Hello,
 
-Add support for this by adding an optional "serial" parameter, which
-defaults to "stdio", and can be overridden by platform-specific
-configuration.
+On 27/02/2023 18:29, Matthieu Baerts wrote:
+> Patch 1 fixes a possible deadlock in subflow_error_report() reported by
+> lockdep. The report was in fact a false positive but the modification
+> makes sense and silences lockdep to allow syzkaller to find real issues.
+> The regression has been introduced in v5.12.
+> 
+> Patch 2 is a refactoring needed to be able to fix the two next issues.
+> It improves the situation and can be backported up to v6.0.
+> 
+> Patches 3 and 4 fix UaF reported by KASAN. It fixes issues potentially
+> visible since v5.7 and v5.19 but only reproducible until recently
+> (v6.0). These two patches depend on patch 2/7.
+> 
+> Patch 5 fixes the order of the printed values: expected vs seen values.
+> The regression has been introduced recently: present in Linus' tree but
+> not in a tagged version yet.
+> 
+> Patch 6 adds missing ro_after_init flags. A previous patch added them
+> for other functions but these two have been missed. This previous patch
+> has been backported to stable versions (up to v5.12) so probably better
+> to do the same here.
+> 
+> Patch 7 fixes tcp_set_state() being called twice in a row since v5.10.
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- tools/testing/kunit/kunit_kernel.py | 3 ++-
- tools/testing/kunit/qemu_config.py  | 1 +
- 2 files changed, 3 insertions(+), 1 deletion(-)
+I'm sorry to ask for that but is it possible not to apply these patches?
 
-diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-index 53e90c3358348dbe..64262875993ff070 100644
---- a/tools/testing/kunit/kunit_kernel.py
-+++ b/tools/testing/kunit/kunit_kernel.py
-@@ -106,6 +106,7 @@ class LinuxSourceTreeOperationsQemu(LinuxSourceTreeOperations):
- 		self._kernel_path = qemu_arch_params.kernel_path
- 		self._kernel_command_line = qemu_arch_params.kernel_command_line + ' kunit_shutdown=reboot'
- 		self._extra_qemu_params = qemu_arch_params.extra_qemu_params
-+		self._serial = qemu_arch_params.serial
- 
- 	def make_arch_config(self, base_kunitconfig: kunit_config.Kconfig) -> kunit_config.Kconfig:
- 		kconfig = kunit_config.parse_from_string(self._kconfig)
-@@ -121,7 +122,7 @@ class LinuxSourceTreeOperationsQemu(LinuxSourceTreeOperations):
- 				'-append', ' '.join(params + [self._kernel_command_line]),
- 				'-no-reboot',
- 				'-nographic',
--				'-serial', 'stdio'] + self._extra_qemu_params
-+				'-serial', self._serial] + self._extra_qemu_params
- 		# Note: shlex.join() does what we want, but requires python 3.8+.
- 		print('Running tests with:\n$', ' '.join(shlex.quote(arg) for arg in qemu_command))
- 		return subprocess.Popen(qemu_command,
-diff --git a/tools/testing/kunit/qemu_config.py b/tools/testing/kunit/qemu_config.py
-index 0b6a80398cccb50f..b1fba9016eed00d0 100644
---- a/tools/testing/kunit/qemu_config.py
-+++ b/tools/testing/kunit/qemu_config.py
-@@ -17,3 +17,4 @@ class QemuArchParams:
-   kernel_path: str
-   kernel_command_line: str
-   extra_qemu_params: List[str]
-+  serial: str = 'stdio'
+> Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+> ---
+> Geliang Tang (1):
+>       mptcp: add ro_after_init for tcp{,v6}_prot_override
+> 
+> Matthieu Baerts (2):
+>       selftests: mptcp: userspace pm: fix printed values
+>       mptcp: avoid setting TCP_CLOSE state twice
+> 
+> Paolo Abeni (4):
+>       mptcp: fix possible deadlock in subflow_error_report
+>       mptcp: refactor passive socket initialization
+>       mptcp: use the workqueue to destroy unaccepted sockets
+
+After 3 weeks of validation, syzkaller found an issue with this patch:
+
+  https://github.com/multipath-tcp/mptcp_net-next/issues/366
+
+We then need to NAK this series. We will send a v2 with a fix for that.
+
+>       mptcp: fix UaF in listener shutdown
+
+The other patches of the series are either not very important or are
+linked to the "faulty" one: they can all wait as well.
+
+Cheers,
+Matt
 -- 
-2.34.1
-
+Tessares | Belgium | Hybrid Access Solutions
+www.tessares.net
