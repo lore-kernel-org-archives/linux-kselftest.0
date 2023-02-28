@@ -2,283 +2,588 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FF5DC64EC7
-	for <linux-kselftest@archiver.kernel.org>; Tue, 28 Feb 2023 17:21:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86AC0C64ED6
+	for <linux-kselftest@archiver.kernel.org>; Tue, 28 Feb 2023 19:06:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229527AbjB1RVa (ORCPT
+        id S229671AbjB1TGW (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 28 Feb 2023 12:21:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45294 "EHLO
+        Tue, 28 Feb 2023 14:06:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbjB1RV3 (ORCPT
+        with ESMTP id S229567AbjB1TGV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 Feb 2023 12:21:29 -0500
-Received: from CO1PR02CU002-vft-obe.outbound.protection.outlook.com (mail-westus2azon11010011.outbound.protection.outlook.com [52.101.46.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C0871CF4F;
-        Tue, 28 Feb 2023 09:21:24 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=W0GCoKQoJ+nNLmn5lv70D+QqCfI/M3CDTiLf6/f7Erxazwh4OS4JZ5D14ZP1/PnfrxFc2CqSwQntC+kcCLb0gvojCsjECA5uhI9fvME1MecQOFQEWEQNWir+LSipAsPHVZnPqqfda8igxgzPOetm7IU/C3OR6890X3jojns5y3d/I9dwlWrSocG+Y3TN5z1jiyVQT8vc29JoZYBXdlUhu/4IpSZhGXlAEh4XZH9nsjGPBohjqSp1t9+qBiGIpslo9/DoRl/J+PRSKWKgE3Is/SSRM8rc+ZdjkX73biN6sYK5y/KxZckvF5Q4jvU1qWxRJiMYNgNKNZTbXSb2ZocLcw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SugpBi/u+8RbtrANEaA+HziCHPMXUdOS5BzGO0Ea0Js=;
- b=Xyga5X0UnzyMmsKYv7GyE42d3ZSlpwVKkHWxEqOJbrNX+hTQk/6qFH9CZITshjdN9k3tAvYKgp/JWMfITIkSCRhpMply9o73zTyz1+g7Gok6reW4uvJVDW1uUTZOyWKKUkYfLcBBGzZ3cP6aWHS9gUeOeJxLnYCQuWbVuBUSLo07/2f7R1rI3Zg0FSHMG8yI09US+c2EGxs6Km45RLMo4NTSUwrRPTR/sPJGBG3FeQMqTljWisJCaRFgtxccKEgr3lgRjdnjKgaog1S40E5Yw5zYH4MLrsuD1V2uVlT/hayaV9uuHwiVf1/zNmr+zfW2AJtq38XOHuEnT51MD4ruOQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
- dkim=pass header.d=vmware.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SugpBi/u+8RbtrANEaA+HziCHPMXUdOS5BzGO0Ea0Js=;
- b=q/9MUvMqAC5cBE0DkgMKqVAu/XfUcNlqOd+e1xJApiGhj3n0TVAUyXgsZEIrIOhV5lhoYHMQHKlfjB1BKGYVf4VFdk6ezeBMNyGKylHP5pPAaBcT1bKXoEhTdoy2l+yzi9RUUqe6A80avNpwiMamFkOUaahcalGohU4cOcaRF+I=
-Received: from BY3PR05MB8531.namprd05.prod.outlook.com (2603:10b6:a03:3ce::6)
- by BY3PR05MB8161.namprd05.prod.outlook.com (2603:10b6:a03:3b4::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.29; Tue, 28 Feb
- 2023 17:21:21 +0000
-Received: from BY3PR05MB8531.namprd05.prod.outlook.com
- ([fe80::e9bd:ef2f:b71:8084]) by BY3PR05MB8531.namprd05.prod.outlook.com
- ([fe80::e9bd:ef2f:b71:8084%3]) with mapi id 15.20.6134.030; Tue, 28 Feb 2023
- 17:21:21 +0000
-From:   Nadav Amit <namit@vmware.com>
-To:     Peter Xu <peterx@redhat.com>
-CC:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "kernel@collabora.com" <kernel@collabora.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrei Vagin <avagin@gmail.com>
-Subject: Re: [PATCH v10 3/6] fs/proc/task_mmu: Implement IOCTL to get and/or
- the clear info about PTEs
-Thread-Topic: [PATCH v10 3/6] fs/proc/task_mmu: Implement IOCTL to get and/or
- the clear info about PTEs
-Thread-Index: AQHZNvnMjIrwR8b570Ch3VOm2txWlq7WZLkAgAGKnwCAA4VRAIAAyUIAgACnuwCABo50gIAAHuYAgAEZQgCAABfigA==
-Date:   Tue, 28 Feb 2023 17:21:20 +0000
-Message-ID: <C96B273F-31EE-4784-A614-B03DEE680462@vmware.com>
-References: <20230202112915.867409-1-usama.anjum@collabora.com>
- <20230202112915.867409-4-usama.anjum@collabora.com>
- <cf36b6ea-6268-deff-d9ed-6782de2bd0a7@gmail.com>
- <2fe790e5-89e0-d660-79cb-15160dffd907@collabora.com>
- <751CCD6C-BFD1-42BD-A651-AE8E9568568C@vmware.com>
- <c15446c5-eedd-690f-9dae-2bc12ee9eb78@collabora.com>
- <F73885A1-14AE-4820-876B-A8E6DC6D19CC@vmware.com> <Y/0eIUIh81jK9w2i@x1n>
- <5D5DEEED-55EB-457B-9EB7-C6D5B326FE99@vmware.com> <Y/4j/Nu1vp9sVI7N@x1n>
-In-Reply-To: <Y/4j/Nu1vp9sVI7N@x1n>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3731.400.51.1.1)
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vmware.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BY3PR05MB8531:EE_|BY3PR05MB8161:EE_
-x-ms-office365-filtering-correlation-id: fcfc068a-d414-4100-c8f7-08db19b035aa
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: T0iR4PQ4nxIdMbDkm/fi+3cjxDkkClPN3tcfAeivNhySZ4sZ8T7kIPTMbqB+ni4jhZu01X3Nq1b4rzNdjweeVUmbEzpUu/bwpOMZ2OS3zGD/PQ/wPjquth011zBwvWH8buYmAGNth6NqcjJ+sCw1grQe2+LaVvT0TKTsJDM5IiSqnPlQCTVaqO5fnfubMDlU3iWD7vSBi7/L965F7PlkxeLjLoY5RUty+id8bhK95zj1KpTGtIJGHWIaLM+3z4Adf6JLMHJkuW9mBLnC8ItHYXUm+xfrKSSl3md4f9UDDV1tilAhB3z6FBYM1RBaFijr4AYTRnMuUNlz3o/G2xtwUjKuc5yMPyEBlNQAnJ6QUi0FJ1U7HVOuf4EUUnW4Ge6gTV6YBEfFCvgr2Iom7mKXaYFXWMcctxLw9yPvegqMJzD13O1m4qfyb3oKSqEtiK5HXh+HZyTSlcsPOZrqHf1BgoRpOMc3vUJtyf1Mvye8oTliqXVMy0E9wROgso+0Ol2f7u57m6gNMf//HmYn8eQ8BzxejplAziSq+N2oHNpaHTPjEZbMUR2NAnaBEeGApLslffeWaiMYSGG1LFc593+nQhWRHZIWeKM1a97HxdE9iefP2oG3wHwnI5/0nMlTEbsSJJ2cGaQi794SAGH4GUkraaFm+EjCnLQF/UswhGSfLz1ySCZVsJPMCQqY5W4HvYAnlTKJOJCyw1qn2MdC1DlPCQ6DpcwAERhjQ5HUu6JCOq9pB9x3mYpHiespgM3AAwtmfFUAoZMsf/0vpffx7TichoF9oA+uXgbxEzYMjpB3xWGBeZPNzCstDnbZFPWDJSwq
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY3PR05MB8531.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(396003)(376002)(39860400002)(136003)(346002)(451199018)(38070700005)(2616005)(86362001)(66556008)(316002)(66476007)(6486002)(66446008)(6506007)(6916009)(76116006)(36756003)(33656002)(8676002)(71200400001)(54906003)(478600001)(64756008)(41300700001)(66946007)(186003)(4326008)(6512007)(53546011)(2906002)(122000001)(26005)(38100700002)(8936002)(66899018)(83380400001)(7416002)(7406005)(5660300002)(69594002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Nms2M3RNaXBkSllxcGlDcDhxUnYvS3RSSWUrdzhsZHBJeUdkVjEwNjM4RzJW?=
- =?utf-8?B?OU5jWWw4RWQyMm9FbWlwRUIzQW4rbDRVcDRYSmJJL3JYd2psb201NmRuU25P?=
- =?utf-8?B?MnZJYlNqeWJXRzA1b29FT2VNNCtpR2xGRjByMlg0cnMrWVhEbFhiLzUrS3BN?=
- =?utf-8?B?TUNtS2dYeUtxc3VPbWJZUkhMRWtWNHlvc240eXZHRWFhV05LaFBFL1RkbjE5?=
- =?utf-8?B?bjhRL0Nva1JSL2E5OXc1WHdlWFJqREwxbGRSZGhaMkVnQ1N5RGdSSG50UzU2?=
- =?utf-8?B?c3pzZ1VRdXFyeFNCV3FCZ1lMcVNzSzF3OU9VTVZEWlBsU01ROXcyMjFYR2hK?=
- =?utf-8?B?a0U5Yk9aWjgyK0FTNktJOGxubjJQaEFHV2V0b3lSNVd2WTFTL3VMTmg4RjJ2?=
- =?utf-8?B?Nys2YVdLZldNdWNQVElKVVNCRTBIb2pqTk1oYTJpU1dHdHREVC9jWVVHdzRn?=
- =?utf-8?B?S3ZEWlRjTEVPd0pqTVBvNGwvblFYbDUwSHM3VGxvcG9xZDI2emxnWFd1ell1?=
- =?utf-8?B?MjNMNFFUTEI3RHRSNnpwZVNxb0J6WEl3UjlFcU1tS3ZvZ3ZaNHhmSE9HN25B?=
- =?utf-8?B?TnRoa09qcEhYaGJXMXQ4dUU1Zy9kWFQyTEtuMWxFSjRrV3NvVGlaWGhOWkl5?=
- =?utf-8?B?WTg2OXZpYUIxTmFadmZpVHpiRjFNZzg1NXdNZkhoSnc5clBrLzl5UVpPUm5V?=
- =?utf-8?B?c0FiUDYvYTNoazVTWk1sT0hHbEpNeFBxa0Ntb3k4Y3MrTlFsL3Bhc1pMYTQr?=
- =?utf-8?B?aWVtZG1VUGJCUzhnaWJrcU5jQlR6dlJwMmx3NmkwdGpzc3hrbyszVGZCUTdu?=
- =?utf-8?B?MU81VVBsT1M3eTZUUk1NcFZrKysrWW1JK0k2YXRWS3FRbHZ5bEdvY2taOXhS?=
- =?utf-8?B?dFNhVms1Vkd4bTBGTDRwNWNpL01zS1hZSTlmQUlIVDRTeU9ibHF1VVlBM1Rq?=
- =?utf-8?B?dEdZVjB2cFg5SjhXS0FXTFU3T2EvNElJVno3Y1piWDhyRVE2V0E5UTBpakNL?=
- =?utf-8?B?WDc4MzJqcFFwOGEvQmFyZ25wVUZWMUhnTStXNnJkM0dueWRTWTJNc01VTDN2?=
- =?utf-8?B?QzhPMUpkMEQ5WXBVaXQ1YlB6dVFXd3F6cE1JRnJYU2k0VkFhM2Z0RzFYYlJE?=
- =?utf-8?B?N3NpeFJERktpcEpBSE52Wk1WaWloL1paWmhTcWtkS2I4TXFDTDV0eU5oTEFJ?=
- =?utf-8?B?YTdaUithTmxTbm0yUGxTN3ZuWDg3UkJKVWdaQ3U1eEdIRUNjTjJQV1didzc2?=
- =?utf-8?B?WkkyQkNsQlNCTmhkTXdJQW5rUFRKYmxDQ0l2WkJyenYwMEExUWZLcUZ0MHZo?=
- =?utf-8?B?OUF5bk5PaEZaU3VndVMrTko2c0FQcEE2SHJRUE1ick1UZ0RsZHlJTGloSEJU?=
- =?utf-8?B?aUpMdzFnV3FjdFlKZ0FyeUhzOFhQMnpXdjJkZmkyeTNxaFlpOWdSNWpMYzlo?=
- =?utf-8?B?cUI0R0lLTUYvbUpuOGJxeVhYeUM0Qk9YdHVqR2ZxanhyRGxLRklQVnVXQWk2?=
- =?utf-8?B?Z2FkVmJ3elFFdWpENHZLQkF2YTJ0YWRBT2ozZDg4akhsMm5DcEMrL0FuYzhi?=
- =?utf-8?B?T3E0VG96eFQ2T3F3RTRWRGw5NVRJNDhwNVExYWtwMVJ2MEZFck9PODR0RXdR?=
- =?utf-8?B?QVEyUWVHenh3YXdwSFU4ODFvVm9mKzgyR0NHUm5xNWwrRjdFeGlLVzZmQ1d0?=
- =?utf-8?B?MDNUVFR0enpOakJDL0xuUENCYWNmQVlMYkx2T0lqTTB6bUx3NDZhTHJ0TDVW?=
- =?utf-8?B?SHBHUHZoN2hyU1kzOGgyektJclRiWE84WUFYdEFzUTJmeHNVMTI0NUV4Y2JF?=
- =?utf-8?B?bUhxZmtOL0ttWHZmODZRVDBrMnFZQWVKRUJBOUlnNHR3VmNSTUxsSmV0WWQ1?=
- =?utf-8?B?ampBbkx5UkIrR2svNml3TnU1dG1oRWFvdEMweVlkWjBzdWt2d0xHeXovRUww?=
- =?utf-8?B?SDRCTVBEL0JFQWpDeGlTUHoybXU4WEQ4RldpTHYvTVhrYUQzMGY2VHVlYlNy?=
- =?utf-8?B?eHk5ekJaMkVXd200SUtUSUgzNkhnc0I1WHVtNzdEQWR2TE5NWkJiaW1Kempj?=
- =?utf-8?B?N1pxL2crRHRadGV6L3RmeXhWMHRIc2wwam9CTFRoaTcyaHdSNGhUYVBZM3Na?=
- =?utf-8?Q?SyVweYCeD2S3a+PfOixTcc14q?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <73D796B478668F48AF1E30588AB97CBE@namprd05.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Tue, 28 Feb 2023 14:06:21 -0500
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11937311DD
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Feb 2023 11:06:14 -0800 (PST)
+Received: by mail-qt1-x829.google.com with SMTP id h19so11733686qtk.7
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Feb 2023 11:06:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1677611172;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sOY0rGKnas8O9r673n0A283er4CCSnMkf+kB3MksdWo=;
+        b=i4IVZ9Vdh6q6fVKrdsPbSjIr658fkr16lTQMhAv6cDbi3VkqV3at4oDh20bW535Wlo
+         xvZTtXLtjISjIXXvrGpLq/9/5hGM6NMoW/yTJ/zLg0h81IYWkkp7cIegStEEFvng4pkR
+         f0CZoSo/lhz3DLyTh8oYA+CS9aJkdxVoCPzfbzEmhmFfXG5brAa1wbN+Aih9VmJCKs5K
+         mMJkTBH2nSu2VwlqeE+vdvcplIOkX4tZdRQvmNY7Qn2X6CYw0ikzq3CQ4P4qaP8fB7oZ
+         4D2Z//sEEKf6Am0UAUfDypFZ6jWQLlDrPAlsV1dGbbQK6KpleSQWNOz0ZjEZbD0AP1fh
+         mI4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677611173;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sOY0rGKnas8O9r673n0A283er4CCSnMkf+kB3MksdWo=;
+        b=CUyhTf8RRqw9H3Ln1I6QXm29icy+UcgQdDQHuIVqreOUh53u0lTmYU0qvJIV9s7f6w
+         nnhciwCdeugquEfKwynE9KSwZJEPm6ej0I1hRBBC0JzFLL6Dkhuto4SPtVF9AmBF6UBE
+         YMUETM7hkuifgUSSS7+oKItD2+z4GJo7RllvFIpGIhgct1F1d1iF3YO9Gd6n/XQTpOKu
+         klORIwuAEKmP8XalRpsRTVNJZ7GCkIuHKWaTzKzzQvIYDpfZrHiRsz9Gcsp4ykGf6jXT
+         TB326bAoynDe9BY0Q2eXwlh8j5dvwWpwm4xwmLAbvQCe1earo4gKD/2dFz5BbkgM9WnY
+         dGsQ==
+X-Gm-Message-State: AO0yUKV0L/2JVPWKjBBDwChl9gz6bsEWRABgAzz3cvQMj1UQKaj1Ohy2
+        dzAvJ7yvVMWQ0A6Usgp+iYPBsA==
+X-Google-Smtp-Source: AK7set/l10LIdwEu2bv9XEBPooIe7KLOSD2j479kj4lUCzlUSApXoLgCPq9XdTErQ8p0ir+dkEusnQ==
+X-Received: by 2002:ac8:5cc1:0:b0:3bf:e034:5f5e with SMTP id s1-20020ac85cc1000000b003bfe0345f5emr6422736qta.52.1677611172482;
+        Tue, 28 Feb 2023 11:06:12 -0800 (PST)
+Received: from n217-072-012.byted.org ([130.44.212.123])
+        by smtp.gmail.com with ESMTPSA id p13-20020a05620a15ed00b006fed58fc1a3sm7242810qkm.119.2023.02.28.11.06.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Feb 2023 11:06:12 -0800 (PST)
+From:   Bobby Eshleman <bobby.eshleman@bytedance.com>
+Date:   Tue, 28 Feb 2023 19:04:34 +0000
+Subject: [PATCH net-next v3 1/3] vsock: support sockmap
 MIME-Version: 1.0
-X-OriginatorOrg: vmware.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BY3PR05MB8531.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fcfc068a-d414-4100-c8f7-08db19b035aa
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Feb 2023 17:21:20.8068
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: cVs+X0toWScSM4KpJLm1QP+G8b/DRDfmvGmwKxMQuBI1/wRbkQhcAxQ/IZpbygFTBRQi/UzMQRT/R9g7EZVpwg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY3PR05MB8161
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230227-vsock-sockmap-upstream-v3-1-7e7f4ce623ee@bytedance.com>
+References: <20230227-vsock-sockmap-upstream-v3-0-7e7f4ce623ee@bytedance.com>
+In-Reply-To: <20230227-vsock-sockmap-upstream-v3-0-7e7f4ce623ee@bytedance.com>
+To:     Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Cong Wang <cong.wang@bytedance.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>
+X-Mailer: b4 0.12.1
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-DQoNCj4gT24gRmViIDI4LCAyMDIzLCBhdCA3OjU1IEFNLCBQZXRlciBYdSA8cGV0ZXJ4QHJlZGhh
-dC5jb20+IHdyb3RlOg0KPiANCj4gISEgRXh0ZXJuYWwgRW1haWwNCj4gDQo+IE9uIE1vbiwgRmVi
-IDI3LCAyMDIzIGF0IDExOjA5OjEyUE0gKzAwMDAsIE5hZGF2IEFtaXQgd3JvdGU6DQo+PiANCj4+
-IA0KPj4+IE9uIEZlYiAyNywgMjAyMywgYXQgMToxOCBQTSwgUGV0ZXIgWHUgPHBldGVyeEByZWRo
-YXQuY29tPiB3cm90ZToNCj4+PiANCj4+PiAhISBFeHRlcm5hbCBFbWFpbA0KPj4+IA0KPj4+IE9u
-IFRodSwgRmViIDIzLCAyMDIzIGF0IDA1OjExOjExUE0gKzAwMDAsIE5hZGF2IEFtaXQgd3JvdGU6
-DQo+Pj4+IEZyb20gbXkgZXhwZXJpZW5jZSB3aXRoIFVGRkQsIHByb3BlciBvcmRlcmluZyBvZiBl
-dmVudHMgIGlzIGNydWNpYWwsIGFsdGhvdWdoIGl0DQo+Pj4+IGlzIG5vdCBhbHdheXMgZG9uZSB3
-ZWxsLiBUaGVyZWZvcmUsIHdlIHNob3VsZCBhaW0gZm9yIGltcHJvdmVtZW50LCBub3QNCj4+Pj4g
-cmVncmVzc2lvbi4gSSBiZWxpZXZlIHRoYXQgdXRpbGl6aW5nIHRoZSBwYWdlbWFwLWJhc2VkIG1l
-Y2hhbmlzbSBmb3IgV1AnaW5nDQo+Pj4+IG1pZ2h0IGJlIGEgc3RlcCBpbiB0aGUgd3JvbmcgZGly
-ZWN0aW9uLiBJIHRoaW5rIHRoYXQgaXQgd291bGQgaGF2ZSBiZWVuIGJldHRlcg0KPj4+PiB0byBl
-bWl0IGEgJ1VGRkRfRkVBVFVSRV9XUF9BU1lOQycgV1AtbG9nIChhbmQgb3JkZXJlZCkgd2l0aCBV
-RkZEICNQRiBhbmQNCj4+Pj4gZXZlbnRzLiBUaGUgJ1VGRkRfRkVBVFVSRV9XUF9BU1lOQyctbG9n
-IG1heSBub3QgbmVlZCB0byB3YWtlIHdhaXRlcnMgb24gdGhlDQo+Pj4+IGZpbGUgZGVzY3JpcHRv
-ciB1bmxlc3MgdGhlIGxvZyBpcyBmdWxsLg0KPj4+IA0KPj4+IFllcyB0aGlzIGlzIGFuIGludGVy
-ZXN0aW5nIHF1ZXN0aW9uIHRvIHRoaW5rIGFib3V0Li4NCj4+PiANCj4+PiBLZWVwaW5nIHRoZSBk
-YXRhIGluIHRoZSBwZ3RhYmxlIGhhcyBvbmUgZ29vZCB0aGluZyB0aGF0IGl0IGRvZXNuJ3QgbmVl
-ZCBhbnkNCj4+PiBjb21wbGV4aXR5IG9uIG1haW50YWluaW5nIHRoZSBsb2csIGFuZCBubyBwb3Nz
-aWJpbGl0eSBvZiAibG9nIGZ1bGwiLg0KPj4gDQo+PiBJIHVuZGVyc3RhbmQgeW91ciBjb25jZXJu
-LCBidXQgSSB0aGluayB0aGF0IGV2ZW50dWFsbHkgaXQgbWlnaHQgYmUgc2ltcGxlcg0KPj4gdG8g
-bWFpbnRhaW4sIHNpbmNlIHRoZSBsb2dpYyBvZiBob3cgdG8gcHJvY2VzcyB0aGUgbG9nIGlzIG1v
-dmVkIHRvIHVzZXJzcGFjZS4NCj4+IA0KPj4gQXQgdGhlIHNhbWUgdGltZSwgaGFuZGxpbmcgaW5w
-dXRzIGZyb20gcGFnZW1hcCBhbmQgdWZmZCBoYW5kbGVycyBhbmQgc3luY+KAmWluZw0KPj4gdGhl
-bSB3b3VsZCBub3QgYmUgdG9vIGVhc3kgZm9yIHVzZXJzcGFjZS4NCj4gDQo+IEkgZG8gbm90IGV4
-cGVjdCBhIGNvbW1vbiB1ZmZkLXdwIGFzeW5jIHVzZXIgdG8gcHJvdmlkZSBhIGZhdWx0IGhhbmRs
-ZXIgYXQNCj4gYWxsLiAgSW4gbXkgaW1hZ2luYXRpb24gaXQncyBpbiBtb3N0IGNhc2VzIHVzZWQg
-c3RhbmRhbG9uZSBmcm9tIG90aGVyIHVmZmQNCj4gbW9kZXM7IGl0IG1lYW5zIGFsbCB0aGUgZmF1
-bHRzIHdpbGwgc3RpbGwgYmUgaGFuZGxlZCBieSB0aGUga2VybmVsLiAgSGVyZQ0KPiB3ZSBvbmx5
-IGxldmVyYWdlIHRoZSBhY2N1cmFjeSBvZiB1c2VyZmF1bHRmZCBjb21wYXJpbmcgdG8gc29mdC1k
-aXJ0eSwgc28NCj4gbm90IHJlYWxseSByZWFsICJ1c2VyIi1mYXVsdHMuDQoNCklmIHRoYXQgaXMg
-dGhlIG9ubHkgdXNlLWNhc2UsIGl0IG1pZ2h0IG1ha2Ugc2Vuc2UuIEJ1dCBJIGd1ZXNzIG1vc3Qg
-dXNlcnMgd291bGQNCm1vc3QgbGlrZWx5IHVzZSBzb21lIGxpYnJhcnkgKGFuZCBub3Qgc3lzY2Fs
-bHMgZGlyZWN0bHkpLiBTbyBzbGlnaHRseQ0KY29tcGxpY2F0aW5nIHRoZSBBUEkgZm9yIGJldHRl
-ciBnZW5lcmFsaXR5IG1heSBiZSByZWFzb25hYmxlLg0KDQo+IA0KPj4gDQo+PiBCdXQgeWVzLCBh
-bGxvY2F0aW9uIG9uIHRoZSBoZWFwIGZvciB1c2VyZmF1bHRmZF93YWl0X3F1ZXVlLWxpa2UgZW50
-cmllcyB3b3VsZA0KPj4gYmUgbmVlZGVkLCBhbmQgdGhlcmUgYXJlIHNvbWUgaXNzdWVzIG9mIG9y
-ZGVyaW5nIHRoZSBldmVudHMgKEkgdGhpbmsgYWxsICNQRg0KPj4gYW5kIG90aGVyIGV2ZW50cyBz
-aG91bGQgYmUgb3JkZXJlZCByZWdhcmRsZXNzKSBhbmQgaG93IG5vdCB0byB0cmF2ZXJzZSBhbGwN
-Cj4+IGFzeW5jLXVzZXJmYXVsdGZkX3dhaXRfcXVldWXigJlzIChleGNlcHQgdGhvc2UgdGhhdCBi
-bG9jayBpZiB0aGUgbG9nIGlzIGZ1bGwpDQo+PiB3aGVuIGEgd2FrZXVwIGlzIG5lZWRlZC4NCj4g
-DQo+IFdpbGwgdGhlcmUgYmUgYW4gb3JkZXJpbmcgcmVxdWlyZW1lbnQgZm9yIGFuIGFzeW5jIG1v
-ZGU/ICBDb25zaWRlcmluZyBpdA0KPiBzaG91bGQgYmUgYXN5bmMgdG8gd2hhdGV2ZXIgZWxzZSwg
-SSB3b3VsZCB0aGluayBpdCdzIG5vdCBhIHByb2JsZW0sIGJ1dA0KPiBtYXliZSBJIG1pc3NlZCBz
-b21ldGhpbmcuDQoNCllvdSBtYXkgYmUgcmlnaHQsIGJ1dCBJIGFtIG5vdCBzdXJlLiBJIGFtIHN0
-aWxsIG5vdCBzdXJlIHdoYXQgdXNlLWNhc2VzIGFyZQ0KdGFyZ2V0ZWQgaW4gdGhpcyBwYXRjaC1z
-ZXQuIEZvciBDUklVIGNoZWNrcG9pbnQgdXNlLWNhc2UgKHdoZW4gdGhlIGFwcCBpcw0Kbm90IHJ1
-bm5pbmcpLCBJIGd1ZXNzIHRoZSBjdXJyZW50IGludGVyZmFjZSBtYWtlcyBzZW5zZS4gQnV0IGlm
-IHRoZXJlIGFyZQ0KdXNlLWNhc2VzIGluIHdoaWNoIHRoaXMgeW91IGRvIGNhcmUgYWJvdXQgVUZG
-RC1ldmVudHMgdGhpcyBjYW4gYmVjb21lIGFuDQppc3N1ZS4NCg0KQnV0IGV2ZW4gaW4gc29tZSBv
-YnZpb3VzIHVzZS1jYXNlcywgdGhpcyBtaWdodCBiZSB0aGUgd3JvbmcgaW50ZXJmYWNlIGZvcg0K
-bWFqb3IgcGVyZm9ybWFuY2UgaXNzdWVzLiBJZiB3ZSB0aGluayBhYm91dCBzb21lIGluY3JlbWVu
-dGFsIGNvcHlpbmcgb2YNCm1vZGlmaWVkIHBhZ2VzIChhLWxhIHByZS1jb3B5IGxpdmUtbWlncmF0
-aW9uIG9yIHRvIGNyZWF0ZSBwb2ludC1pbi10aW1lDQpzbmFwc2hvdHMpLCBpdCBzZWVtcyB0byBt
-ZSBtdWNoIG1vcmUgZWZmaWNpZW50IGZvciBhcHBsaWNhdGlvbiB0byBoYXZlIGENCmxvZyB0aGFu
-IHRyYXZlcnNpbmcgYWxsIHRoZSBwYWdlLXRhYmxlcy4NCg0KDQo+PiANCj4+PiANCj4+PiBJZiB0
-aGVyZSdzIHBvc3NpYmxlICJsb2cgZnVsbCIgdGhlbiB0aGUgbmV4dCBxdWVzdGlvbiBpcyB3aGV0
-aGVyIHdlIHNob3VsZA0KPj4+IGxldCB0aGUgd29ya2VyIHdhaXQgdGhlIG1vbml0b3IgaWYgdGhl
-IG1vbml0b3IgaXMgbm90IGZhc3QgZW5vdWdoIHRvDQo+Pj4gY29sbGVjdCB0aG9zZSBkYXRhLiAg
-SXQgYWRkcyBzb21lIHNsaWdodCBkZXBlbmRlbmN5IG9uIHRoZSB0d28gdGhyZWFkcywgSQ0KPj4+
-IHRoaW5rIGl0IGNhbiBtYWtlIHRoZSB0cmFja2luZyBoYXJkZXIgb3IgaW1wb3NzaWJsZSBpbiBs
-YXRlbmN5IHNlbnNpdGl2ZQ0KPj4+IHdvcmtsb2Fkcy4NCj4+IA0KPj4gQWdhaW4sIEkgdW5kZXJz
-dGFuZCB5b3VyIGNvbmNlcm4uIEJ1dCB0aGlzIG1vZGVsIHRoYXQgSSBwcm9wb3NlIGlzIG5vdCBu
-ZXcuDQo+PiBJdCBpcyB1c2VkIHdpdGggUE1MIChwYWdlLW1vZGlmaWNhdGlvbiBsb2dnaW5nKSBh
-bmQgS1ZNLCBhbmQgSUlSQyB0aGVyZSBpcw0KPj4gYSBzaW1pbGFyIGludGVyZmFjZSBiZXR3ZWVu
-IEtWTSBhbmQgUUVNVSB0byBwcm92aWRlIHRoaXMgaW5mb3JtYXRpb24uIFRoZXJlDQo+PiBhcmUg
-ZW5kbGVzcyBvdGhlciBleGFtcGxlcyBmb3Igc2ltaWxhciBwcm9kdWNlci1jb25zdW1lciBtZWNo
-YW5pc21zIHRoYXQNCj4+IG1pZ2h0IGxlYWQgdG8gc3RhbGwgaW4gZXh0cmVtZSBjYXNlcy4NCj4g
-DQo+IFllcywgSSdtIG5vdCBhZ2FpbnN0IHRoaW5raW5nIG9mIHVzaW5nIHNpbWlsYXIgc3RydWN0
-dXJlcyBoZXJlLiAgSXQncyBqdXN0DQo+IHRoYXQgaXQncyBkZWZpbml0ZWx5IG1vcmUgY29tcGxp
-Y2F0ZWQgb24gdGhlIGludGVyZmFjZSwgYXQgbGVhc3Qgd2UgbmVlZA0KPiB5ZXQgb25lIG1vcmUg
-aW50ZXJmYWNlIHRvIHNldHVwIHRoZSByaW5ncyBhbmQgZGVmaW5lIGl0cyBpbnRlcmZhY2VzLg0K
-PiANCj4gTm90ZSB0aGF0IGFsdGhvdWdoIE11aGFtbXVkIGlzIGRlZmluaW5nIGFub3RoZXIgbmV3
-IGludGVyZmFjZSBoZXJlIHRvbyBmb3INCj4gcGFnZW1hcCwgSSBkb24ndCB0aGluayBpdCdzIHN0
-cmljdGx5IG5lZWRlZCBmb3IgdWZmZC13cCBhc3luYyBtb2RlLiAgT25lDQo+IGNhbiB1c2UgdWZm
-ZC13cCBhc3luYyBtb2RlIHdpdGggUE1fVUZGRF9XUCB3aGljaCBpcyB3aXRoIGN1cnJlbnQgcGFn
-ZW1hcA0KPiBpbnRlcmZhY2UgYWxyZWFkeS4NCj4gDQo+IFNvIHdoYXQgTXVoYW1tdWQgaXMgcHJv
-cG9zaW5nIGhlcmUgYXJlIHR3byB0aGluZ3MgdG8gbWU6ICgxKSB1ZmZkLXdwIGFzeW5jLA0KPiBw
-bHVzICgyKSBhIG5ldyBwYWdlbWFwIGludGVyZmFjZSAod2hpY2ggd2lsbCBjbG9zZWx5IHdvcmsg
-d2l0aCAoMSkgb25seSBpZg0KPiB3ZSBuZWVkIGF0b21pY2l0eSBvbiBnZXQtZGlydHkgYW5kIHJl
-cHJvdGVjdCkuDQo+IA0KPiBEZWZpbmluZyBuZXcgaW50ZXJmYWNlIGZvciB1ZmZkLXdwIGFzeW5j
-IG1vZGUgd2lsbCBiZSBzb21ldGhpbmcgZXh0cmEsIHNvDQo+IElNSE8gYmVzaWRlcyB0aGUgaGVh
-cCBhbGxvY2F0aW9uIG9uIHRoZSByaW5ncywgd2UgbmVlZCB0byBhbHNvIGp1c3RpZnkNCj4gd2hl
-dGhlciB0aGF0IGlzIG5lZWRlZC4gIFRoYXQncyB3aHkgSSB0aGluayBpdCdzIGZpbmUgdG8gZ28g
-d2l0aCB3aGF0DQo+IE11aGFtbXVkIHByb3Bvc2VkLCBiZWNhdXNlIGl0J3MgYSBtaW5pbXVtIGNo
-YW5nZXNldCBhdCBsZWFzdCBmb3IgdXNlcmZhdWx0DQo+IHRvIHN1cHBvcnQgYW4gYXN5bmMgbW9k
-ZSwgYW5kIGFueXRoaW5nIGVsc2UgY2FuIGJlIGRvbmUgb24gdG9wIGlmIG5lY2Vzc2FyeS4NCj4g
-DQo+IEdvaW5nIGEgYml0IGJhY2sgdG8gdGhlICJsZWFkIHRvIHN0YWxsIGluIGV4dHJlbWUgY2Fz
-ZXMiIGFib3ZlLCBqdXN0IGFsc28NCj4gd2FudCB0byBtZW50aW9uIHRoYXQgdGhlIFZNIHVzZSBj
-YXNlIGlzIHNsaWdodGx5IGRpZmZlcmVudCAtIGRpcnR5IHRyYWNraW5nDQo+IGlzIG9ubHkgaGVh
-dmlseSB1c2VkIGR1cmluZyBtaWdyYXRpb24gYWZhaWN0LCBhbmQgaXQncyBhIHNob3J0IHBlcmlv
-ZC4gIE5vdA0KPiBhIGxvdCBvZiBwZW9wbGUgd2lsbCBjb21wbGFpbiBwZXJmb3JtYW5jZSBkZWdy
-YWRlcyBkdXJpbmcgdGhhdCBwZXJpb2QNCj4gYmVjYXVzZSB0aGF0J3MganVzdCByYXJlLiAgQW5k
-LCBldmVuIHdpdGhvdXQgdGhlIHJpbmcgdGhlIHBlcmYgaXMgcmVhbGx5DQo+IGJhZCBkdXJpbmcg
-bWlncmF0aW9uIGFueXdheS4uLiBFc3BlY2lhbGx5IHdoZW4gaHVnZSBwYWdlcyBhcmUgdXNlZCB0
-byBiYWNrDQo+IHRoZSBndWVzdCBSQU0uDQo+IA0KPiBIZXJlIGl0J3Mgc2xpZ2h0bHkgZGlmZmVy
-ZW50IHRvIG1lOiBpdCdzIGFib3V0IHRyYWNraW5nIGRpcnR5IHBhZ2VzIGR1cmluZw0KPiBhbnkg
-cG9zc2libGUgd29ya2xvYWQsIGFuZCBpdCBjYW4gYmUgbW9uaXRvcmVkIHBlcmlvZGljYWxseSBh
-bmQgZnJlcXVlbnRseS4NCj4gU28gSU1ITyBzdHJpY3RlciB0aGFuIGEgVk0gdXNlIGNhc2Ugd2hl
-cmUgbWlncmF0aW9uIGlzIHRoZSBvbmx5IHBlcmlvZCB0bw0KPiB1c2UgaXQuDQoNCkkgc3RpbGwg
-ZG9u4oCZdCBnZXQgdGhlIHVzZS1jYXNlcy4gIm1vbml0b3JlZCBwZXJpb2RpY2FsbHkgYW5kIGZy
-ZXF1ZW50bHnigJ0gaXMNCm5vdCBhIHVzZS1jYXNlLiBBbmQgYXMgSSBzYWlkIGJlZm9yZSwgYWN0
-dWFsbHksIG1vbml0b3JpbmcgZnJlcXVlbnRseSBpcw0KbW9yZSBwZXJmb3JtYW50IHdpdGggYSBs
-b2cgdGhhbiB3aXRoIHNjYW5uaW5nIGFsbCB0aGUgcGFnZS10YWJsZXMuDQoNCj4gDQo+PiANCj4+
-PiANCj4+PiBUaGUgb3RoZXIgdGhpbmcgaXMgd2UgY2FuIGFsc28gbWFrZSB0aGUgbG9nICJuZXZl
-ciBnb25uYSBmdWxsIiBieSBtYWtpbmcgaXQNCj4+PiBhIGJpdG1hcCBjb3ZlcmluZyBhbnkgcmVn
-aXN0ZXJlZCByYW5nZXMsIGJ1dCBJIGRvbid0IGVpdGhlciBrbm93IHdoZXRoZXINCj4+PiBpdCds
-bCBiZSB3b3J0aCBpdCBmb3IgdGhlIGVmZm9ydC4NCj4+IA0KPj4gSSBkbyBub3Qgc2VlIGEgYmVu
-ZWZpdCBvZiBoYWxmLWxvZyBoYWxmLXNjYW4uIEl0IHRyaWVzIHRvIHRha2UgdGhlDQo+PiBkYXRh
-LXN0cnVjdHVyZSBvZiBvbmUgZm9ybWF0IGFuZCBjb21iaW5lIGl0IHdpdGggYW5vdGhlci4NCj4g
-DQo+IFdoYXQgSSdtIHNheWluZyBoZXJlIGlzIG5vdCBoYWxmLWxvZyAvIGhhbGYtc2NhbiwgYnV0
-IHVzZSBhIHNpbmdsZSBiaXRtYXANCj4gdG8gc3RvcmUgd2hhdCBwYWdlIGlzIGRpcnR5LCBqdXN0
-IGxpa2UgS1ZNX0dFVF9ESVJUWV9MT0cuICBJIHRoaW5rIGl0DQo+IGF2b2lkcyBhbnkgYWJvdmUg
-InN0YWxsIiBpc3N1ZS4NCg0KT2gsIEkgbmV2ZXIgd2VudCBpbnRvIHRoZSBLVk0gZGV0YWlscyBi
-ZWZvcmUgLSBzdHVwaWQgbWUuIElmIHRoYXTigJlzIHdoYXQNCmV2ZW50dWFsbHkgd2FzIHByb3Zl
-biB0byB3b3JrIGZvciBLVk0vUUVNVSwgdGhlbiBpdCByZWFsbHkgc291bmRzIGxpa2UNCnRoZSBw
-YWdlbWFwIHNvbHV0aW9uIHRoYXQgTXVoYW1tYWQgcHJvcG9zZWQuDQoNCkJ1dCBzdGlsbCBub3Qg
-Y29udm9sdXRpbmcgcGFnZW1hcCB3aXRoIHVzZXJmYXVsdGZkIChhbmQgZXNwZWNpYWxseQ0KdWZm
-ZC13cCkgY2FuIGJlIGJlbmVmaWNpYWwuIExpbnVzIGFscmVhZHkgdGhyZXcgc29tZSBjb21tZW50
-cyBoZXJlIGFuZA0KdGhlcmUgYWJvdXQgZGlzbGlraW5nIHVmZmQtd3AsIGFuZCBJ4oCZbSBub3Qg
-c3VyZSBhZGRpbmcgdWZmZC13cCBzcGVjaWZpYw0Kc3R1ZmYgdG8gcGFnZW1hcCB3b3VsZCBiZSB3
-ZWxjb21lZC4NCg0KQW55aG93LCB0aGFua3MgZm9yIGFsbCB0aGUgZXhwbGFuYXRpb25zLiBFdmVu
-dHVhbGx5LCBJIHVuZGVyc3RhbmQgdGhhdA0KdXNpbmcgYml0bWFwcyBjYW4gYmUgbW9yZSBlZmZp
-Y2llbnQgdGhhbiBhIGxvZyBpZiB0aGUgYml0cyBhcmUgY29uZGVuc2VkLg0KDQo=
+This patch adds sockmap support for vsock sockets. It is intended to be
+usable by all transports, but only the virtio transport is implemented.
+
+Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
+---
+ drivers/vhost/vsock.c                   |   1 +
+ include/linux/virtio_vsock.h            |   1 +
+ include/net/af_vsock.h                  |  17 ++++
+ net/vmw_vsock/Makefile                  |   1 +
+ net/vmw_vsock/af_vsock.c                |  55 ++++++++--
+ net/vmw_vsock/virtio_transport.c        |   2 +
+ net/vmw_vsock/virtio_transport_common.c |  25 +++++
+ net/vmw_vsock/vsock_bpf.c               | 174 ++++++++++++++++++++++++++++++++
+ net/vmw_vsock/vsock_loopback.c          |   2 +
+ 9 files changed, 272 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/vhost/vsock.c b/drivers/vhost/vsock.c
+index 1f3b89c885cc..3c6dc036b904 100644
+--- a/drivers/vhost/vsock.c
++++ b/drivers/vhost/vsock.c
+@@ -439,6 +439,7 @@ static struct virtio_transport vhost_transport = {
+ 		.notify_send_post_enqueue = virtio_transport_notify_send_post_enqueue,
+ 		.notify_buffer_size       = virtio_transport_notify_buffer_size,
+ 
++		.read_skb = virtio_transport_read_skb,
+ 	},
+ 
+ 	.send_pkt = vhost_transport_send_pkt,
+diff --git a/include/linux/virtio_vsock.h b/include/linux/virtio_vsock.h
+index 3f9c16611306..c58453699ee9 100644
+--- a/include/linux/virtio_vsock.h
++++ b/include/linux/virtio_vsock.h
+@@ -245,4 +245,5 @@ u32 virtio_transport_get_credit(struct virtio_vsock_sock *vvs, u32 wanted);
+ void virtio_transport_put_credit(struct virtio_vsock_sock *vvs, u32 credit);
+ void virtio_transport_deliver_tap_pkt(struct sk_buff *skb);
+ int virtio_transport_purge_skbs(void *vsk, struct sk_buff_head *list);
++int virtio_transport_read_skb(struct vsock_sock *vsk, skb_read_actor_t read_actor);
+ #endif /* _LINUX_VIRTIO_VSOCK_H */
+diff --git a/include/net/af_vsock.h b/include/net/af_vsock.h
+index 568a87c5e0d0..a73f5fbd296a 100644
+--- a/include/net/af_vsock.h
++++ b/include/net/af_vsock.h
+@@ -75,6 +75,7 @@ struct vsock_sock {
+ 	void *trans;
+ };
+ 
++s64 vsock_connectible_has_data(struct vsock_sock *vsk);
+ s64 vsock_stream_has_data(struct vsock_sock *vsk);
+ s64 vsock_stream_has_space(struct vsock_sock *vsk);
+ struct sock *vsock_create_connected(struct sock *parent);
+@@ -173,6 +174,9 @@ struct vsock_transport {
+ 
+ 	/* Addressing. */
+ 	u32 (*get_local_cid)(void);
++
++	/* Read a single skb */
++	int (*read_skb)(struct vsock_sock *, skb_read_actor_t);
+ };
+ 
+ /**** CORE ****/
+@@ -225,5 +229,18 @@ int vsock_init_tap(void);
+ int vsock_add_tap(struct vsock_tap *vt);
+ int vsock_remove_tap(struct vsock_tap *vt);
+ void vsock_deliver_tap(struct sk_buff *build_skb(void *opaque), void *opaque);
++int vsock_connectible_recvmsg(struct socket *sock, struct msghdr *msg, size_t len,
++			      int flags);
++int vsock_dgram_recvmsg(struct socket *sock, struct msghdr *msg,
++			       size_t len, int flags);
++
++#ifdef CONFIG_BPF_SYSCALL
++extern struct proto vsock_proto;
++int vsock_bpf_update_proto(struct sock *sk, struct sk_psock *psock, bool restore);
++void __init vsock_bpf_build_proto(void);
++#else
++static inline void __init vsock_bpf_build_proto(void)
++{}
++#endif
+ 
+ #endif /* __AF_VSOCK_H__ */
+diff --git a/net/vmw_vsock/Makefile b/net/vmw_vsock/Makefile
+index 6a943ec95c4a..5da74c4a9f1d 100644
+--- a/net/vmw_vsock/Makefile
++++ b/net/vmw_vsock/Makefile
+@@ -8,6 +8,7 @@ obj-$(CONFIG_HYPERV_VSOCKETS) += hv_sock.o
+ obj-$(CONFIG_VSOCKETS_LOOPBACK) += vsock_loopback.o
+ 
+ vsock-y += af_vsock.o af_vsock_tap.o vsock_addr.o
++vsock-$(CONFIG_BPF_SYSCALL) += vsock_bpf.o
+ 
+ vsock_diag-y += diag.o
+ 
+diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+index 19aea7cba26e..f2cc04fb8b13 100644
+--- a/net/vmw_vsock/af_vsock.c
++++ b/net/vmw_vsock/af_vsock.c
+@@ -116,10 +116,13 @@ static void vsock_sk_destruct(struct sock *sk);
+ static int vsock_queue_rcv_skb(struct sock *sk, struct sk_buff *skb);
+ 
+ /* Protocol family. */
+-static struct proto vsock_proto = {
++struct proto vsock_proto = {
+ 	.name = "AF_VSOCK",
+ 	.owner = THIS_MODULE,
+ 	.obj_size = sizeof(struct vsock_sock),
++#ifdef CONFIG_BPF_SYSCALL
++	.psock_update_sk_prot = vsock_bpf_update_proto,
++#endif
+ };
+ 
+ /* The default peer timeout indicates how long we will wait for a peer response
+@@ -865,7 +868,7 @@ s64 vsock_stream_has_data(struct vsock_sock *vsk)
+ }
+ EXPORT_SYMBOL_GPL(vsock_stream_has_data);
+ 
+-static s64 vsock_connectible_has_data(struct vsock_sock *vsk)
++s64 vsock_connectible_has_data(struct vsock_sock *vsk)
+ {
+ 	struct sock *sk = sk_vsock(vsk);
+ 
+@@ -874,6 +877,7 @@ static s64 vsock_connectible_has_data(struct vsock_sock *vsk)
+ 	else
+ 		return vsock_stream_has_data(vsk);
+ }
++EXPORT_SYMBOL_GPL(vsock_connectible_has_data);
+ 
+ s64 vsock_stream_has_space(struct vsock_sock *vsk)
+ {
+@@ -1131,6 +1135,13 @@ static __poll_t vsock_poll(struct file *file, struct socket *sock,
+ 	return mask;
+ }
+ 
++static int vsock_read_skb(struct sock *sk, skb_read_actor_t read_actor)
++{
++	struct vsock_sock *vsk = vsock_sk(sk);
++
++	return vsk->transport->read_skb(vsk, read_actor);
++}
++
+ static int vsock_dgram_sendmsg(struct socket *sock, struct msghdr *msg,
+ 			       size_t len)
+ {
+@@ -1241,19 +1252,34 @@ static int vsock_dgram_connect(struct socket *sock,
+ 
+ 	memcpy(&vsk->remote_addr, remote_addr, sizeof(vsk->remote_addr));
+ 	sock->state = SS_CONNECTED;
++	sk->sk_state = TCP_ESTABLISHED;
+ 
+ out:
+ 	release_sock(sk);
+ 	return err;
+ }
+ 
+-static int vsock_dgram_recvmsg(struct socket *sock, struct msghdr *msg,
+-			       size_t len, int flags)
++int vsock_dgram_recvmsg(struct socket *sock, struct msghdr *msg,
++			size_t len, int flags)
+ {
+-	struct vsock_sock *vsk = vsock_sk(sock->sk);
++#ifdef CONFIG_BPF_SYSCALL
++	const struct proto *prot;
++#endif
++	struct vsock_sock *vsk;
++	struct sock *sk;
++
++	sk = sock->sk;
++	vsk = vsock_sk(sk);
++
++#ifdef CONFIG_BPF_SYSCALL
++	prot = READ_ONCE(sk->sk_prot);
++	if (prot != &vsock_proto)
++		return prot->recvmsg(sk, msg, len, flags, NULL);
++#endif
+ 
+ 	return vsk->transport->dgram_dequeue(vsk, msg, len, flags);
+ }
++EXPORT_SYMBOL_GPL(vsock_dgram_recvmsg);
+ 
+ static const struct proto_ops vsock_dgram_ops = {
+ 	.family = PF_VSOCK,
+@@ -1272,6 +1298,7 @@ static const struct proto_ops vsock_dgram_ops = {
+ 	.recvmsg = vsock_dgram_recvmsg,
+ 	.mmap = sock_no_mmap,
+ 	.sendpage = sock_no_sendpage,
++	.read_skb = vsock_read_skb,
+ };
+ 
+ static int vsock_transport_cancel_pkt(struct vsock_sock *vsk)
+@@ -2086,13 +2113,16 @@ static int __vsock_seqpacket_recvmsg(struct sock *sk, struct msghdr *msg,
+ 	return err;
+ }
+ 
+-static int
++int
+ vsock_connectible_recvmsg(struct socket *sock, struct msghdr *msg, size_t len,
+ 			  int flags)
+ {
+ 	struct sock *sk;
+ 	struct vsock_sock *vsk;
+ 	const struct vsock_transport *transport;
++#ifdef CONFIG_BPF_SYSCALL
++	const struct proto *prot;
++#endif
+ 	int err;
+ 
+ 	sk = sock->sk;
+@@ -2139,6 +2169,14 @@ vsock_connectible_recvmsg(struct socket *sock, struct msghdr *msg, size_t len,
+ 		goto out;
+ 	}
+ 
++#ifdef CONFIG_BPF_SYSCALL
++	prot = READ_ONCE(sk->sk_prot);
++	if (prot != &vsock_proto) {
++		release_sock(sk);
++		return prot->recvmsg(sk, msg, len, flags, NULL);
++	}
++#endif
++
+ 	if (sk->sk_type == SOCK_STREAM)
+ 		err = __vsock_stream_recvmsg(sk, msg, len, flags);
+ 	else
+@@ -2148,6 +2186,7 @@ vsock_connectible_recvmsg(struct socket *sock, struct msghdr *msg, size_t len,
+ 	release_sock(sk);
+ 	return err;
+ }
++EXPORT_SYMBOL_GPL(vsock_connectible_recvmsg);
+ 
+ static int vsock_set_rcvlowat(struct sock *sk, int val)
+ {
+@@ -2188,6 +2227,7 @@ static const struct proto_ops vsock_stream_ops = {
+ 	.mmap = sock_no_mmap,
+ 	.sendpage = sock_no_sendpage,
+ 	.set_rcvlowat = vsock_set_rcvlowat,
++	.read_skb = vsock_read_skb,
+ };
+ 
+ static const struct proto_ops vsock_seqpacket_ops = {
+@@ -2209,6 +2249,7 @@ static const struct proto_ops vsock_seqpacket_ops = {
+ 	.recvmsg = vsock_connectible_recvmsg,
+ 	.mmap = sock_no_mmap,
+ 	.sendpage = sock_no_sendpage,
++	.read_skb = vsock_read_skb,
+ };
+ 
+ static int vsock_create(struct net *net, struct socket *sock,
+@@ -2348,6 +2389,8 @@ static int __init vsock_init(void)
+ 		goto err_unregister_proto;
+ 	}
+ 
++	vsock_bpf_build_proto();
++
+ 	return 0;
+ 
+ err_unregister_proto:
+diff --git a/net/vmw_vsock/virtio_transport.c b/net/vmw_vsock/virtio_transport.c
+index 28b5a8e8e094..e95df847176b 100644
+--- a/net/vmw_vsock/virtio_transport.c
++++ b/net/vmw_vsock/virtio_transport.c
+@@ -457,6 +457,8 @@ static struct virtio_transport virtio_transport = {
+ 		.notify_send_pre_enqueue  = virtio_transport_notify_send_pre_enqueue,
+ 		.notify_send_post_enqueue = virtio_transport_notify_send_post_enqueue,
+ 		.notify_buffer_size       = virtio_transport_notify_buffer_size,
++
++		.read_skb = virtio_transport_read_skb,
+ 	},
+ 
+ 	.send_pkt = virtio_transport_send_pkt,
+diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
+index a1581c77cf84..f64527f32385 100644
+--- a/net/vmw_vsock/virtio_transport_common.c
++++ b/net/vmw_vsock/virtio_transport_common.c
+@@ -1388,6 +1388,31 @@ int virtio_transport_purge_skbs(void *vsk, struct sk_buff_head *queue)
+ }
+ EXPORT_SYMBOL_GPL(virtio_transport_purge_skbs);
+ 
++int virtio_transport_read_skb(struct vsock_sock *vsk, skb_read_actor_t recv_actor)
++{
++	struct virtio_vsock_sock *vvs = vsk->trans;
++	struct sock *sk = sk_vsock(vsk);
++	struct sk_buff *skb;
++	int off = 0;
++	int copied;
++	int err;
++
++	spin_lock_bh(&vvs->rx_lock);
++	/* Use __skb_recv_datagram() for race-free handling of the receive. It
++	 * works for types other than dgrams.
++	 */
++	skb = __skb_recv_datagram(sk, &vvs->rx_queue, MSG_DONTWAIT, &off, &err);
++	spin_unlock_bh(&vvs->rx_lock);
++
++	if (!skb)
++		return err;
++
++	copied = recv_actor(sk, skb);
++	kfree_skb(skb);
++	return copied;
++}
++EXPORT_SYMBOL_GPL(virtio_transport_read_skb);
++
+ MODULE_LICENSE("GPL v2");
+ MODULE_AUTHOR("Asias He");
+ MODULE_DESCRIPTION("common code for virtio vsock");
+diff --git a/net/vmw_vsock/vsock_bpf.c b/net/vmw_vsock/vsock_bpf.c
+new file mode 100644
+index 000000000000..9c71c163c684
+--- /dev/null
++++ b/net/vmw_vsock/vsock_bpf.c
+@@ -0,0 +1,174 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2022 Bobby Eshleman <bobby.eshleman@bytedance.com>
++ *
++ * Based off of net/unix/unix_bpf.c
++ */
++
++#include <linux/bpf.h>
++#include <linux/module.h>
++#include <linux/skmsg.h>
++#include <linux/socket.h>
++#include <linux/wait.h>
++#include <net/af_vsock.h>
++#include <net/sock.h>
++
++#define vsock_sk_has_data(__sk, __psock)				\
++		({	!skb_queue_empty(&(__sk)->sk_receive_queue) ||	\
++			!skb_queue_empty(&(__psock)->ingress_skb) ||	\
++			!list_empty(&(__psock)->ingress_msg);		\
++		})
++
++static struct proto *vsock_prot_saved __read_mostly;
++static DEFINE_SPINLOCK(vsock_prot_lock);
++static struct proto vsock_bpf_prot;
++
++static bool vsock_has_data(struct sock *sk, struct sk_psock *psock)
++{
++	struct vsock_sock *vsk = vsock_sk(sk);
++	s64 ret;
++
++	ret = vsock_connectible_has_data(vsk);
++	if (ret > 0)
++		return true;
++
++	return vsock_sk_has_data(sk, psock);
++}
++
++static bool vsock_msg_wait_data(struct sock *sk, struct sk_psock *psock, long timeo)
++{
++	int ret;
++
++	DEFINE_WAIT_FUNC(wait, woken_wake_function);
++
++	if (sk->sk_shutdown & RCV_SHUTDOWN)
++		return true;
++
++	if (!timeo)
++		return false;
++
++	add_wait_queue(sk_sleep(sk), &wait);
++	sk_set_bit(SOCKWQ_ASYNC_WAITDATA, sk);
++	ret = vsock_has_data(sk, psock);
++	if (!ret) {
++		wait_woken(&wait, TASK_INTERRUPTIBLE, timeo);
++		ret = vsock_has_data(sk, psock);
++	}
++	sk_clear_bit(SOCKWQ_ASYNC_WAITDATA, sk);
++	remove_wait_queue(sk_sleep(sk), &wait);
++	return ret;
++}
++
++static int __vsock_recvmsg(struct sock *sk, struct msghdr *msg, size_t len, int flags)
++{
++	struct socket *sock = sk->sk_socket;
++	int err;
++
++	if (sk->sk_type == SOCK_STREAM || sk->sk_type == SOCK_SEQPACKET)
++		err = vsock_connectible_recvmsg(sock, msg, len, flags);
++	else if (sk->sk_type == SOCK_DGRAM)
++		err = vsock_dgram_recvmsg(sock, msg, len, flags);
++	else
++		err = -EPROTOTYPE;
++
++	return err;
++}
++
++static int vsock_bpf_recvmsg(struct sock *sk, struct msghdr *msg,
++			     size_t len, int flags, int *addr_len)
++{
++	struct sk_psock *psock;
++	int copied;
++
++	psock = sk_psock_get(sk);
++	if (unlikely(!psock))
++		return __vsock_recvmsg(sk, msg, len, flags);
++
++	lock_sock(sk);
++	if (vsock_has_data(sk, psock) && sk_psock_queue_empty(psock)) {
++		release_sock(sk);
++		sk_psock_put(sk, psock);
++		return __vsock_recvmsg(sk, msg, len, flags);
++	}
++
++	copied = sk_msg_recvmsg(sk, psock, msg, len, flags);
++	while (copied == 0) {
++		long timeo = sock_rcvtimeo(sk, flags & MSG_DONTWAIT);
++
++		if (!vsock_msg_wait_data(sk, psock, timeo)) {
++			copied = -EAGAIN;
++			break;
++		}
++
++		if (sk_psock_queue_empty(psock)) {
++			release_sock(sk);
++			sk_psock_put(sk, psock);
++			return __vsock_recvmsg(sk, msg, len, flags);
++		}
++
++		copied = sk_msg_recvmsg(sk, psock, msg, len, flags);
++	}
++
++	release_sock(sk);
++	sk_psock_put(sk, psock);
++
++	return copied;
++}
++
++/* Copy of original proto with updated sock_map methods */
++static struct proto vsock_bpf_prot = {
++	.close = sock_map_close,
++	.recvmsg = vsock_bpf_recvmsg,
++	.sock_is_readable = sk_msg_is_readable,
++	.unhash = sock_map_unhash,
++};
++
++static void vsock_bpf_rebuild_protos(struct proto *prot, const struct proto *base)
++{
++	*prot        = *base;
++	prot->close  = sock_map_close;
++	prot->recvmsg = vsock_bpf_recvmsg;
++	prot->sock_is_readable = sk_msg_is_readable;
++}
++
++static void vsock_bpf_check_needs_rebuild(struct proto *ops)
++{
++	/* Paired with the smp_store_release() below. */
++	if (unlikely(ops != smp_load_acquire(&vsock_prot_saved))) {
++		spin_lock_bh(&vsock_prot_lock);
++		if (likely(ops != vsock_prot_saved)) {
++			vsock_bpf_rebuild_protos(&vsock_bpf_prot, ops);
++			/* Make sure proto function pointers are updated before publishing the
++			 * pointer to the struct.
++			 */
++			smp_store_release(&vsock_prot_saved, ops);
++		}
++		spin_unlock_bh(&vsock_prot_lock);
++	}
++}
++
++int vsock_bpf_update_proto(struct sock *sk, struct sk_psock *psock, bool restore)
++{
++	struct vsock_sock *vsk;
++
++	if (restore) {
++		sk->sk_write_space = psock->saved_write_space;
++		sock_replace_proto(sk, psock->sk_proto);
++		return 0;
++	}
++
++	vsk = vsock_sk(sk);
++	if (!vsk->transport)
++		return -ENODEV;
++
++	if (!vsk->transport->read_skb)
++		return -EOPNOTSUPP;
++
++	vsock_bpf_check_needs_rebuild(psock->sk_proto);
++	sock_replace_proto(sk, &vsock_bpf_prot);
++	return 0;
++}
++
++void __init vsock_bpf_build_proto(void)
++{
++	vsock_bpf_rebuild_protos(&vsock_bpf_prot, &vsock_proto);
++}
+diff --git a/net/vmw_vsock/vsock_loopback.c b/net/vmw_vsock/vsock_loopback.c
+index 671e03240fc5..40753b661c13 100644
+--- a/net/vmw_vsock/vsock_loopback.c
++++ b/net/vmw_vsock/vsock_loopback.c
+@@ -94,6 +94,8 @@ static struct virtio_transport loopback_transport = {
+ 		.notify_send_pre_enqueue  = virtio_transport_notify_send_pre_enqueue,
+ 		.notify_send_post_enqueue = virtio_transport_notify_send_post_enqueue,
+ 		.notify_buffer_size       = virtio_transport_notify_buffer_size,
++
++		.read_skb = virtio_transport_read_skb,
+ 	},
+ 
+ 	.send_pkt = vsock_loopback_send_pkt,
+
+-- 
+2.30.2
+
