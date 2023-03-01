@@ -2,204 +2,169 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66F4EC7EE2F
-	for <linux-kselftest@archiver.kernel.org>; Wed,  1 Mar 2023 16:24:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97554C678D4
+	for <linux-kselftest@archiver.kernel.org>; Wed,  1 Mar 2023 19:30:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbjCAQYv (ORCPT
+        id S229523AbjCATaf (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 1 Mar 2023 11:24:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44950 "EHLO
+        Wed, 1 Mar 2023 14:30:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjCAQYv (ORCPT
+        with ESMTP id S229437AbjCATae (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 1 Mar 2023 11:24:51 -0500
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF0A3B0CC;
-        Wed,  1 Mar 2023 08:24:49 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 9FEDB3200406;
-        Wed,  1 Mar 2023 11:24:48 -0500 (EST)
-Received: from imap42 ([10.202.2.92])
-  by compute1.internal (MEProxy); Wed, 01 Mar 2023 11:24:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1677687887; x=
-        1677774287; bh=226yzvA64Kc8Q6zDrmuOtbs/tNXb1G/+qqLqVU0wHB4=; b=Q
-        gm5jFnpNqKyvfla6eRJrva3qhtbnUJ1RIrAD3Fl4JiCtqYtj9exaFLwkLlw/J9IW
-        CH4QA6HIR/xoP4kmwHX+Quq45QY2+BG57owtJDssVVSg9J6ywZsMsvyQgoFKrEgS
-        SdeJPePl7J5JnSy6cxPWai/Z5x97djayaPmn3chDhTlCSQP2dyGPXJ8Fr9uiXmPc
-        AeQEmvbKrXHwO0c3uf+qX19ctRMvJjK3HTZaJilwAgX3FuZkX/+feVMIWvvSTsCS
-        ZlDBn1IV98QliXyCLHUzr4OTb0u51LCeEVSOCSUnHnZRxiTGY1H4ajAWqpOO0SRb
-        FekUkcuHmCfk7w2AkxyPQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1677687887; x=
-        1677774287; bh=226yzvA64Kc8Q6zDrmuOtbs/tNXb1G/+qqLqVU0wHB4=; b=g
-        KUVlxshVdl0QmWZQ7o9s16OU/obw9EVg7TJH6NIcFJIOGon+kHQO3np8mwQh8L+C
-        oNtQSx9D1k7N4rzCkibBLQPez5jvubUR/795i1+KUFAz0GR5csS1rqXeem+1GBmc
-        UHjtCrjaX1o+1fr11Wmn64MbuyzMQY6NJ2XHsqDUOddD6OoFrgi80RKmUUMJHFPi
-        beYMpP0+JarS8tMdn2GvbBSCowbJMZnh2l7itK3kdcaEm1eQzWp4x6vS7kdH6Z58
-        YnJzaUto0FwpXgfpWFlOXEtYozK71YSNQIq9mb/6pDyX7MuzmmJ97FgADtJiXEtW
-        Pm79a7A+OrS8PPo+sCO/g==
-X-ME-Sender: <xms:T3z_Y0EdtiTqMRRrm0nISQVg-go1QHXe5OyKBmVt0Tqp9YuBwvXyVA>
-    <xme:T3z_Y9X2tN0pkEE8IfJC0y_rQn-ap8ClQ85giFB3DCMSNfn9cn2x0D8IakdH7yk0p
-    FuYDa-rqNwfMVAbiA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudelhedgkedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdlfeehmdenucfjughrpefofg
-    ggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedfffgrnhhivghlucgi
-    uhdfuceougiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepueefheduve
-    eiheeitdeufeekudfhuddukefghfeiieegveeufffhteejgeejgefgnecuffhomhgrihhn
-    pehgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
-    grihhlfhhrohhmpegugihusegugihuuhhurdighiii
-X-ME-Proxy: <xmx:T3z_Y-LOjDX5NAcX_e2_yOXzIl5-T-mMwH2h64PFb_kryXbrngQzVw>
-    <xmx:T3z_Y2GODkhDhWBRMvngm3F6bX4QqDp0lhWsYMVkZeTYP0ZaoefO5g>
-    <xmx:T3z_Y6WJzV186uOyIEsll2Qr3HcGPEUqb6SJLTPCjs7MNdkaE_fS5Q>
-    <xmx:T3z_Y5TaLAWcccpos6M2HlQWZG-ij7LEon31LhKw1CHcHERCe46vAw>
-Feedback-ID: i6a694271:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id C1FC7BC0078; Wed,  1 Mar 2023 11:24:47 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-183-gbf7d00f500-fm-20230220.001-gbf7d00f5
-Mime-Version: 1.0
-Message-Id: <e882b638-ab7e-4dde-b95b-c01c8e78e02a@app.fastmail.com>
-In-Reply-To: <cc4712f7-c723-89fc-dc9c-c8db3ff8c760@gmail.com>
-References: <cover.1677526810.git.dxu@dxuuu.xyz>
- <cf49a091-9b14-05b8-6a79-00e56f3019e1@gmail.com>
- <20230227220406.4x45jcigpnjjpdfy@kashmir.localdomain>
- <cc4712f7-c723-89fc-dc9c-c8db3ff8c760@gmail.com>
-Date:   Wed, 01 Mar 2023 09:24:25 -0700
-From:   "Daniel Xu" <dxu@dxuuu.xyz>
-To:     "Edward Cree" <ecree.xilinx@gmail.com>
-Cc:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 0/8] Support defragmenting IPv(4|6) packets in BPF
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+        Wed, 1 Mar 2023 14:30:34 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2062.outbound.protection.outlook.com [40.107.93.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D77DF5FCC
+        for <linux-kselftest@vger.kernel.org>; Wed,  1 Mar 2023 11:30:32 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gUPL00PKbZ3rlk64bB2ilcHutbfOszh37eVM5pWUnt4f27lLRpNiugn8BTKaeenrbXom3cSDcQcOgs94tUVD54XLhau7+7TGnb6AEDj5RW4Ei4kfUaPOoVAI43jIuansLeoL3uXnrm7PNWTX9vYvbqehoSX3wIWGENJ2fZ44B6G7uM8lNEvt7KIJLpMbOanfLNhb6Rp+ED2KFPDTqjFS6vCyWt3oMCH2+KHn4aCiW4SPiUIzGTPXUlMfySRDBs8YS0+cyo6zgJGo4dKWGlE4ZGaR9K8jiFHc2X4RMw58z+diGzfl4RZrrGQE0cataiADvgf2d4iqCwZ4vDOOmY2Wzw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=60gA5gvuE3y89wzlaXgX7fxwtUYaOAQtWTVh2/J7tMs=;
+ b=Q9B0i7afBpujP83re1CXFv8hDufIuU9YlPaCRfdEQMqzA6YkXG/2LTol2o6x3pstiITdXiRF//esbf2i5sAUOS3fmMqknf6qZ3h9ptHAFvEz5VqpziEWO6vm1JqL0q4PwS5ryPZbhwR/ufdS0Kn+FXbuc8muhy5K9pv22R5tB4xQHLOaIKWyA4+1hacs4LuJpb8O36P53IxSz422GIC7rrdeoMfvZuuA2+m5QLHdwVSoOhBO9+kjlutINHDWHD0o1NT8M88VyaD7A/Au9e7U/Sh3hMVf615OwIxcfAWeWGdkZC84AbudiRaHNJU7ckg32o9yt3WsH9sTNC3XWuYwoQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=60gA5gvuE3y89wzlaXgX7fxwtUYaOAQtWTVh2/J7tMs=;
+ b=DN+csh/maK5XHPaxOB1FTxXaMtiYuK7RFmsVQMTCI7sor+IH+KdIA+yTikyEZ6sNxaEKDMTiAqUCsotAHmWRUt+bDrZU8wfWfJDS36N6K+vW0s3JC+dfJcNWNNHQnFcPWV+ePt08CC2knzQKhgxY8a/N69uNKpNTOc9wdWIyv2YDqpsIHRGgyAdL1rXTN3Eb/v/N0MFIapYi9L/wLUJC2NMzaYYCo2jtE3JQnigQfd8zE7DqgDibw3BzXEzQYasLUwBz8nSTf7vYsSc208wvTSWEtQrozvazyTHT6cz7E+m6lpu3kR66va4irBDptkuCfy2FcUTNXxioS1B/OcgcgQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by IA0PR12MB8086.namprd12.prod.outlook.com (2603:10b6:208:403::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.30; Wed, 1 Mar
+ 2023 19:30:31 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee%4]) with mapi id 15.20.6134.029; Wed, 1 Mar 2023
+ 19:30:30 +0000
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     iommu@lists.linux.dev, Kevin Tian <kevin.tian@intel.com>,
+        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>
+Cc:     Nicolin Chen <nicolinc@nvidia.com>, Yi Liu <yi.l.liu@intel.com>
+Subject: [PATCH v3 00/12] Revise the hwpt lifetime model
+Date:   Wed,  1 Mar 2023 15:30:17 -0400
+Message-Id: <0-v3-ae9c2975a131+2e1e8-iommufd_hwpt_jgg@nvidia.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: YT4PR01CA0064.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:111::6) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|IA0PR12MB8086:EE_
+X-MS-Office365-Filtering-Correlation-Id: 72dc2285-7217-45ae-cb5b-08db1a8b6b57
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: i6EWIX78Uc0n5J465/H0JESgcSwK1Ie2hU4OlGRiJjdpuoa+5l/RbVS/2ViuTh5uQOhiaY5CZkLuFew5oJ3dA7pPLrTWCFDkgxu9cIN2L7kTcu08x6/x5QojG/uyuFWzMXs7DSA0Y8A4DrfUczZpTyhCcULCnheiWyL89yLIWxJJuQtedOdUWPrdNIijP2Un84NS/x4TsOQMLX9DB4X2TGLTc/yl4/HvTPzBsGY9Xmm0Ps89yJQULyo4IKDUrI+ZAN2MsSImzzf7TnQlm26nH5AGjwLUDPZv/97DrfKlNYQkxVn/CmsWgPhusgOnf4H6ul7phmGUd4l/mgtctWXsY6jyoHLYwY1D+DFG/2XMpxoqLs3houEjymUc9NeHolWToWJ5g7k/vB8g9CtZBj3F+Aho6BK3aJq1YDyt4ZVqoWEbRLMpa8GE4jcs9PWv5QjO9frUwyzU5Yd7FMqGsvovP3v75p16lk+RStzogWZ6C+YG5k8zXJhUqO+ts1Onqc100iWOI9KUh4sC5FQIA73Xy211S3HWhGLu0KDyHcqtiBQcOeXF4WcRwkNTGq9qU9GjmWJYVIQ2PaOvzve7beMSP5NeijVwm5WNjsqAjlQsrzDK5h/pZnDCSDOtUsFABAVPXF4+hfWwVznWqjszcUXORfd8yE2OLA64p3uGDsakKQ99evXDI7R6AFEtvIHmlp9zMOriJFcDGJmUSSZroG4lKXTQbzRpT6CRLqwwk3orvapyOVPTIoIgBeDN74oe1FU7qXJgHidnUSD8aVt9dQeHFQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(376002)(346002)(366004)(39860400002)(136003)(451199018)(186003)(2906002)(6512007)(5660300002)(38100700002)(26005)(6506007)(8936002)(4326008)(966005)(6486002)(41300700001)(86362001)(2616005)(8676002)(66946007)(66556008)(66476007)(6666004)(110136005)(36756003)(54906003)(83380400001)(316002)(478600001)(4216001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?kVrPaAhVu5FVP7caodl3vF+hykIn27WZyuYWdiQcN6b0ZBG8Ige7tDteC2sv?=
+ =?us-ascii?Q?VekWl+Jy4Om+yDwI9QaGCssHIJzqiWhwct6fcLs0I/tE6IBdCuP8CvO5/Pjx?=
+ =?us-ascii?Q?/kmciZGr/t8gaSaX5/IEemEhrCnvPkpeh+mYuYKnzejSUZIQNFPLbzZ41xtS?=
+ =?us-ascii?Q?UtZXNxAeyQF0jfNwoUyEK1FvekA4tb1IyLHGizEwO5tTv2HzExUHZqZHopF7?=
+ =?us-ascii?Q?o1mxTjsCzO9uAgAbBu2hCK738pOt4bx+DAAD5co3wEDSFpOKy4aXzh4b1uVu?=
+ =?us-ascii?Q?MsQb+oH6WmyKp9mqa6OajsOQ9DiJZYsw0z++mPOLB1AsB1kJIzdQvwtzTq+8?=
+ =?us-ascii?Q?17bn8CiI5Zq3eYxUExuiQYqSOPfrJZZRFGWUotU4w3n29B5RpSksEWEhPv2I?=
+ =?us-ascii?Q?tc6OnQPCBnF46cb6ch8bsI/+IGX/6B0MbbNvZIY1m27kJq/eFgXPG7Z4InXl?=
+ =?us-ascii?Q?aG78UlFmgKKdOZzBZAZ3OEj5RWKjagK6gOxntf8c4Gs36Kx52OnY0GUK6cHK?=
+ =?us-ascii?Q?Zru4mZAEOl+CroHo8I5R7aObxUyItjMtOqKFyZ6PDjjrVkiPQgcMlFiW2dsa?=
+ =?us-ascii?Q?FxuD8Qhe6jjMSEvrFv8hrA/apdVrRXZO+ABhwx3KlQChxHnjnxQ9nTxidtuo?=
+ =?us-ascii?Q?ZgFtF5Sqbtkbl3rujMhToy8dPm3SZJXqCsba6HHeid9ugdc94ZhxRCeAEuu+?=
+ =?us-ascii?Q?Fo08Havw1ckXcStFIFyg/zhenTG5HzVWtA61rgK8UYXFWOvcyroZYGJ4Gd43?=
+ =?us-ascii?Q?92aZv32HfHb9Mm3X1F4uZ8VDh2PEOEl6dNes7R/UIR71O9yOHazM70EEwRZ9?=
+ =?us-ascii?Q?w80KkYuFNBB7FV185u5kDtC82XAjuU3630/7eKUnn5rSxEIj/5oGWYODkcUr?=
+ =?us-ascii?Q?Xjq0w4XZAuT5ZzwrhVZGmn89f6FFu/QuMFzLBphRaT9kr7VygYCYwb4mmeC6?=
+ =?us-ascii?Q?Kw7fuc29ti53jQQ5TMG7sinOP72ZShnJDQ9yc7W7FLHGE2l2i2BGAC/lTrLI?=
+ =?us-ascii?Q?+gca/CeFo0MJ+Uq8brbc8s3bSuQQyufUemIBjREDvEU0tsW6HP8AWedUwFoh?=
+ =?us-ascii?Q?MwNAD/a/2uePxyw84H2gqm3oEtQowlUoRoqtgaMhDiRhdy33ezOX2LjPMTGX?=
+ =?us-ascii?Q?omCCblzdkh9YZqNU96s12uO52+k62GIA/pBHQx5pCusY/frde4AM02ii9Fbe?=
+ =?us-ascii?Q?0zriVeq1l1nNJ9F+98XD+0PMXy36FrGG4KyadWx7KQrU/300Uk0gOzVrrg2D?=
+ =?us-ascii?Q?PA7ZKXc/jGz7XrODYtC0alnHw6yoSxATpVM4X55OisHin/3QH4K8h0JPzqCK?=
+ =?us-ascii?Q?9DRnnK09vM/htl9XMRyyWo/+rxmLwHwqkr4DPveA3CPumJlixJil3Z3dYyUt?=
+ =?us-ascii?Q?iLzcQMm08JlFhbZcLKjZr3e9X8tgskwt8RvSkIUsYWbFfrG0fq/LNitR2uDS?=
+ =?us-ascii?Q?MQILCmIC8hAZfn1h+XStBc9PbqOjdVSEJmf3Q2UuEicKq8qApY68UfaAgr//?=
+ =?us-ascii?Q?Lt8M4Ax0EZ5jTufUGioqI/EM7/pDSArlJz2ICD8vKpS/fD3tgBzed/HZ6M9Y?=
+ =?us-ascii?Q?+8BckQMXnjZOVuxNe1y/oWsas7vQsqGZiqV1BQIy?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 72dc2285-7217-45ae-cb5b-08db1a8b6b57
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2023 19:30:30.7842
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: CxZoLFi5M2Jp0h9ijFoPqffBPsZXsUDxtzmBVFLVXaC7dM+J51DDeEa2U/P2fQqt
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8086
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Ed,
+As discussed here is a small series to address the confusing lifetime
+scheme for the hwpt. This was some leftover from prior rework that was
+never fully cleaned up.
 
-Had some trouble with email yesterday (forgot to renew domain
-registration) and this reply might not have made it out. Apologies
-if it's a repost.
+Make it clear that the ioas and ioas->hwpt_list are associated with the
+hwpt during creation and never changed until it is destroyed. A hwpt with
+a positive reference count is always valid for device attachment.
 
-On Mon, Feb 27, 2023 at 10:58:47PM +0000, Edward Cree wrote:
-> On 27/02/2023 22:04, Daniel Xu wrote:
-> > I don't believe full L4 headers are required in the first fragment.
-> > Sufficiently sneaky attackers can, I think, send a byte at a time to
-> > subvert your proposed algorithm. Storing skb data seems inevitable h=
-ere.
-> > Someone can correct me if I'm wrong here.
->=20
-> My thinking was that legitimate traffic would never do this and thus if
->  your first fragment doesn't have enough data to make a determination
->  then you just DROP the packet.
+This also improves the selftest handling of the mock domains so that we
+can implement more testing for the hwpt model.
 
-Right, that would be practical. I had some discussion with coworkers and
-the other option on the table is to drop all fragments. At least for us
-in the cloud, fragments are heavily frowned upon (where are they not..)
-anyways.
+This is a step toward the nesting and replace series.
 
-> > What I find valuable about this patch series is that we can
-> > leverage the well understood and battle hardened kernel facilities. =
-So
-> > avoid all the correctness and security issues that the kernel has sp=
-ent
-> > 20+ years fixing.
->=20
-> I can certainly see the argument here.  I guess it's a question of are
->  you more worried about the DoS from tricking the validator into think=
-ing
->  good fragments are bad (the reverse is irrelevant because if you can
->  trick a validator into thinking your bad fragment belongs to a previo=
-usly
->  seen good packet, then you can equally trick a reassembler into stitc=
-hing
->  your bad fragment into that packet), or are you more worried about the
->  DoS from tying lots of memory down in the reassembly cache.
+I have this on github:
 
-Equal balance of concerns on my side. Ideally there are no dropping of
-valid packets and DoS is very hard to achieve.
+https://github.com/jgunthorpe/linux/commits/iommufd_hwpt
 
-> Even with reordering handling, a data structure to record which ranges=
- of
->  a packet have been seen takes much less memory than storing the compl=
-ete
->  fragment bodies.  (Just a simple bitmap of 8-byte blocks =E2=80=94 th=
-e resolution
->  of iph->frag_off =E2=80=94 reduces size by a factor of 64, not counti=
-ng all the
->  overhead of a struct sk_buff for each fragment in the queue.  Or you
->  could re-use the rbtree-based code from the reassembler, just with a
->  freshly allocated node containing only offset & length, instead of the
->  whole SKB.)
+v3:
+ - Split patch to just make the hwpt_item handling consistent
+ - Remove two confusing comments
+ - Four new patches to clean up the confusing 'domain_id' in the selftest
+v2: https://lore.kernel.org/r/0-v2-406f7ac07936+6a-iommufd_hwpt_jgg@nvidia.com
+ - Basically completely different
+ - Add a test for HWPT cases by enhancing the mock iommu driver to be more
+   complete
+ - Move the device attachment as well into iommufd_hw_pagetable_alloc()
+   so destroy is more symmetric
+v1: https://lore.kernel.org/r/0-v1-4336b5cb2fe4+1d7-iommufd_hwpt_jgg@nvidia.com
 
-Yeah, now that you say that, it doesn't sound too bad on space side. But
-I do wonder -- how much code and complexity is that going to be? For
-example I think ipv6 frags have a 60s reassembly timeout which adds more
-stuff to consider. And probably even more I've already forgotten.
+Jason Gunthorpe (12):
+  iommufd: Assert devices_lock for iommufd_hw_pagetable_has_group()
+  iommufd: Add iommufd_lock_obj() around the auto-domains hwpts
+  iommufd: Consistently manage hwpt_item
+  iommufd: Move ioas related HWPT destruction into
+    iommufd_hw_pagetable_destroy()
+  iommufd: Move iommufd_device to iommufd_private.h
+  iommufd: Make iommufd_hw_pagetable_alloc() do iopt_table_add_domain()
+  iommufd/selftest: Rename the sefltest 'device_id' to 'stdev_id'
+  iommufd/selftest: Rename domain_id to stdev_id for FIXTURE
+    iommufd_ioas
+  iommufd/selftest: Rename domain_id to hwpt_id for FIXTURE
+    iommufd_mock_domain
+  iommufd/selftest: Rename the remaining mock device_id's to stdev_id
+  iommufd/selftest: Make selftest create a more complete mock device
+  iommufd/selftest: Add a selftest for iommufd_device_attach() with a
+    hwpt argument
 
-B/c at least on the kernel side, this series is 80% code for tests. And
-the kfunc wrappers are not very invasive at all.  Plus it's wrapping
-infra that hasn't changed much for decades.
+ drivers/iommu/iommufd/device.c                | 149 +++++--------
+ drivers/iommu/iommufd/hw_pagetable.c          |  70 ++++++-
+ drivers/iommu/iommufd/iommufd_private.h       |  35 +++-
+ drivers/iommu/iommufd/iommufd_test.h          |   2 +-
+ drivers/iommu/iommufd/selftest.c              | 198 +++++++++++++++---
+ tools/testing/selftests/iommu/iommufd.c       |  68 +++---
+ .../selftests/iommu/iommufd_fail_nth.c        |  38 ++--
+ tools/testing/selftests/iommu/iommufd_utils.h |  16 +-
+ 8 files changed, 368 insertions(+), 208 deletions(-)
 
 
-> And having a BPF helper effectively consume the skb is awkward, as you
->  noted; someone is likely to decide that skb_copy() is too slow, try to
->  add ctx invalidation, and thereby create a whole new swathe of potent=
-ial
->  correctness and security issues.
+base-commit: 8473685c99683f9e2c7e2a42ef3d3f14a79be274
+-- 
+2.39.2
 
-Yep. I did try that. While the verifier bits weren't too tricky, there
-are a lot of infra concerns to solve:
-
-* https://github.com/danobi/linux/commit/35a66af8d54cca647b0adfc7c1da710=
-5d2603dde
-* https://github.com/danobi/linux/commit/e8c86ea75e2ca8f0631632d54ef7633=
-81308711e
-* https://github.com/danobi/linux/commit/972bcf769f41fbfa7f84ce00faf06b5=
-b57bc6f7a
-
-But FWIW, fragmented packets are kinda a corner case anyways. I don't
-think it would be resonable to expect high perf when packets are in
-play.
-
-> Plus, imagine trying to support this in a hardware-offload XDP device.
->  They'd have to reimplement the entire frag cache, which is a much big=
-ger
->  attack surface than just a frag validator, and they couldn't leverage
->  the battle-hardened kernel implementation.
-
-Hmm, well this helper is restricted to TC progs for now. I don't quite
-see a path to enabling for XDP as there would have to be at a minimum
-quite a few allocations to handle frags. So not sure XDP is a factor at
-the moment.
-
->=20
-> > And make it trivial for the next person that comes
-> > along to do the right thing.
->=20
-> Fwiw the validator approach could *also* be a helper, it doesn't have =
-to
->  be something the BPF developer writes for themselves.
->=20
-> But if after thinking about the possibility you still prefer your way,=
- I
->  won't try to stop you =E2=80=94 I just wanted to ensure it had been c=
-onsidered.
-
-Thank you for the discussion. The thought had come to mind originally,
-but I shied away after seeing some of the reassembly details. Would be
-interested in hearing more from other folks.
-
-
-Thanks,
-Daniel
