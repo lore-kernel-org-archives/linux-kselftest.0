@@ -2,37 +2,37 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 69AC5C678D4
-	for <linux-kselftest@archiver.kernel.org>; Thu,  2 Mar 2023 01:38:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 38FC3C678D4
+	for <linux-kselftest@archiver.kernel.org>; Thu,  2 Mar 2023 01:38:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbjCBBie (ORCPT
+        id S229750AbjCBBin (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 1 Mar 2023 20:38:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40168 "EHLO
+        Wed, 1 Mar 2023 20:38:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229701AbjCBBib (ORCPT
+        with ESMTP id S229471AbjCBBif (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 1 Mar 2023 20:38:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E76305C4;
-        Wed,  1 Mar 2023 17:38:26 -0800 (PST)
+        Wed, 1 Mar 2023 20:38:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4506512BD7;
+        Wed,  1 Mar 2023 17:38:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 13DCDB811EC;
-        Thu,  2 Mar 2023 01:38:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04EACC433D2;
-        Thu,  2 Mar 2023 01:38:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D6876153E;
+        Thu,  2 Mar 2023 01:38:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 625B0C433D2;
+        Thu,  2 Mar 2023 01:38:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677721103;
-        bh=rKtcHDStlDpmev0wSqFyH2j1eZ3mNsvHeJTuTDd60rk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Oq0iRiKSGI3z/jJpMgBfNOss+Xzar8RB/Cw11ZHp3oGjPiMZ8vs68LTw4qreqA/VI
-         BpgpwOQ7uCgJEavC3zsKuuWBqfeTXaf9ydAm/THAWCV3L/MnQaQRKF4K2PxQx38FMG
-         jcAYlN7XG4iU1l4mUBLFCEkHlxhkRocvuUyFc+j6o0KrZPtq1MmHjxUqW90wYKbbFj
-         I5Uj9I+R30xd5TSwLaH39w3rJcKu8h482yW5Uh/XW/XHjBt9QXk2l5oOjQujJuMQYg
-         RXaTU21Its7pzaW8Z11gOGGd1A3RixrpdaW0goxxiLK0qu400p2dBU8NcuE0fOYvSB
-         rCqxUyZLJZKUg==
+        s=k20201202; t=1677721107;
+        bh=fvPrCAyBkgnxgijN1lTuag/4in6rKiEGnEPO+gbwEs4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=i8zopeNC1in3w5XGUJKY/LXKlzK5BRSdMPry4rWNbnjNE84GWR1xF+RINEeejLejd
+         gKJpd8LdNs0TePE9fGcx70fY9XJ9a1rnTqoXELutE5T7dWUUu0TvXclZsGcJKLA9Ta
+         TnaxwHXeO/1BPtBl6s09cfKsPnLL8/Qxj6LP+ZweOmzZPczLC4+iFKN4d6MB6t2ebM
+         XlyovDX82U6lPSCyKUlkFXAD6OHJcEi7K4N64x81/QZvn8Jn0WIlq4kosMjwoNMe3M
+         OV9ydVXq2h7mGhu/mlZ4GkHAYKEQSp5u/n9pe41izH+Ewj/iiX9TOcCMlYBIWrIxyC
+         X6lYxry87mTrw==
 From:   Stephen Boyd <sboyd@kernel.org>
 To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>
@@ -52,85 +52,298 @@ Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         devicetree@vger.kernel.org, linux-um@lists.infradead.org,
         linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Subject: [PATCH 0/8] clk: Add kunit tests for fixed rate and parent data
-Date:   Wed,  1 Mar 2023 17:38:13 -0800
-Message-Id: <20230302013822.1808711-1-sboyd@kernel.org>
+Subject: [PATCH 4/8] clk: Add test managed clk provider/consumer APIs
+Date:   Wed,  1 Mar 2023 17:38:17 -0800
+Message-Id: <20230302013822.1808711-5-sboyd@kernel.org>
 X-Mailer: git-send-email 2.39.2.722.g9855ee24e9-goog
+In-Reply-To: <20230302013822.1808711-1-sboyd@kernel.org>
+References: <20230302013822.1808711-1-sboyd@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch series adds unit tests for the clk fixed rate basic type and
-the clk registration functions that use struct clk_parent_data. To get
-there, we add support for loading a DTB into the UML kernel that's
-running the unit tests along with probing platform drivers to bind to
-device nodes specified in DT.
+Unit tests are more ergonomic and simpler to understand if they don't
+have to hoist a bunch of code into the test harness init and exit
+functions. Add some test managed wrappers for the clk APIs so that clk
+unit tests can write more code in the actual test and less code in the
+harness.
 
-With this series, we're able to exercise some of the code in the common
-clk framework that uses devicetree lookups to find parents and the fixed
-rate clk code that scans devicetree directly and creates clks. Please
-review.
+Only add APIs that are used for now. More wrappers can be added in the
+future as necessary.
 
-I Cced everyone to all the patches so they get the full context. I'm
-hoping I can take the whole pile through the clk tree as they almost all
-depend on each other. In the future I imagine it will be easy to add
-more test nodes to the clk.dtsi file and not need to go across various
-maintainer trees like this series does.
-
-Stephen Boyd (8):
-  dt-bindings: Add linux,kunit binding
-  of: Enable DTB loading on UML for KUnit tests
-  kunit: Add test managed platform_device/driver APIs
-  clk: Add test managed clk provider/consumer APIs
-  dt-bindings: kunit: Add fixed rate clk consumer test
-  clk: Add KUnit tests for clk fixed rate basic type
-  dt-bindings: clk: Add KUnit clk_parent_data test
-  clk: Add KUnit tests for clks registered with struct clk_parent_data
-
- .../clock/linux,clk-kunit-parent-data.yaml    |  47 ++
- .../kunit/linux,clk-kunit-fixed-rate.yaml     |  35 ++
- .../bindings/kunit/linux,kunit.yaml           |  24 +
- arch/um/kernel/dtb.c                          |  29 +-
- drivers/clk/.kunitconfig                      |   3 +
- drivers/clk/Kconfig                           |   7 +
- drivers/clk/Makefile                          |   6 +
- drivers/clk/clk-fixed-rate_test.c             | 296 ++++++++++++
- drivers/clk/clk-kunit.c                       | 204 ++++++++
- drivers/clk/clk-kunit.h                       |  28 ++
- drivers/clk/clk_test.c                        | 456 +++++++++++++++++-
- drivers/of/Kconfig                            |  26 +
- drivers/of/Makefile                           |   1 +
- drivers/of/kunit/.kunitconfig                 |   4 +
- drivers/of/kunit/Makefile                     |   4 +
- drivers/of/kunit/clk.dtsi                     |  30 ++
- drivers/of/kunit/kunit.dtsi                   |   9 +
- drivers/of/kunit/kunit.dtso                   |   4 +
- drivers/of/kunit/uml_dtb_test.c               |  55 +++
- include/kunit/platform_driver.h               |  15 +
- lib/kunit/Makefile                            |   6 +
- lib/kunit/platform_driver-test.c              | 107 ++++
- lib/kunit/platform_driver.c                   | 207 ++++++++
- 23 files changed, 1599 insertions(+), 4 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/clock/linux,clk-kunit-parent-data.yaml
- create mode 100644 Documentation/devicetree/bindings/kunit/linux,clk-kunit-fixed-rate.yaml
- create mode 100644 Documentation/devicetree/bindings/kunit/linux,kunit.yaml
- create mode 100644 drivers/clk/clk-fixed-rate_test.c
+Cc: Brendan Higgins <brendan.higgins@linux.dev>
+Cc: David Gow <davidgow@google.com>
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+---
+ drivers/clk/Makefile    |   5 +
+ drivers/clk/clk-kunit.c | 204 ++++++++++++++++++++++++++++++++++++++++
+ drivers/clk/clk-kunit.h |  28 ++++++
+ 3 files changed, 237 insertions(+)
  create mode 100644 drivers/clk/clk-kunit.c
  create mode 100644 drivers/clk/clk-kunit.h
- create mode 100644 drivers/of/kunit/.kunitconfig
- create mode 100644 drivers/of/kunit/Makefile
- create mode 100644 drivers/of/kunit/clk.dtsi
- create mode 100644 drivers/of/kunit/kunit.dtsi
- create mode 100644 drivers/of/kunit/kunit.dtso
- create mode 100644 drivers/of/kunit/uml_dtb_test.c
- create mode 100644 include/kunit/platform_driver.h
- create mode 100644 lib/kunit/platform_driver-test.c
- create mode 100644 lib/kunit/platform_driver.c
 
-
-base-commit: c9c3395d5e3dcc6daee66c6908354d47bf98cb0c
+diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
+index e3ca0d058a25..7efce649b0d3 100644
+--- a/drivers/clk/Makefile
++++ b/drivers/clk/Makefile
+@@ -17,6 +17,11 @@ ifeq ($(CONFIG_OF), y)
+ obj-$(CONFIG_COMMON_CLK)	+= clk-conf.o
+ endif
+ 
++# KUnit specific helpers
++ifeq ($(CONFIG_COMMON_CLK), y)
++obj-$(CONFIG_KUNIT)		+= clk-kunit.o
++endif
++
+ # hardware specific clock types
+ # please keep this section sorted lexicographically by file path name
+ obj-$(CONFIG_COMMON_CLK_APPLE_NCO)  	+= clk-apple-nco.o
+diff --git a/drivers/clk/clk-kunit.c b/drivers/clk/clk-kunit.c
+new file mode 100644
+index 000000000000..78d85b3a7a4a
+--- /dev/null
++++ b/drivers/clk/clk-kunit.c
+@@ -0,0 +1,204 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * KUnit helpers for clk tests
++ */
++#include <linux/clk.h>
++#include <linux/clk-provider.h>
++#include <linux/err.h>
++#include <linux/kernel.h>
++#include <linux/slab.h>
++
++#include <kunit/resource.h>
++
++#include "clk-kunit.h"
++
++static void kunit_clk_disable_unprepare(struct kunit_resource *res)
++{
++	struct clk *clk = res->data;
++
++	clk_disable_unprepare(clk);
++}
++
++/**
++ * kunit_clk_prepare_enable() - Test managed clk_prepare_enable()
++ * @test: The test context
++ * @clk: clk to prepare and enable
++ *
++ * Returns: 0 on success, or negative errno on failure.
++ */
++int kunit_clk_prepare_enable(struct kunit *test, struct clk *clk)
++{
++	if (!kunit_alloc_resource(test, NULL, kunit_clk_disable_unprepare,
++				  GFP_KERNEL, clk))
++		return -EINVAL;
++
++	return clk_prepare_enable(clk);
++}
++EXPORT_SYMBOL_GPL(kunit_clk_prepare_enable);
++
++static void kunit_clk_put(struct kunit_resource *res)
++{
++	struct clk *clk = res->data;
++
++	clk_put(clk);
++}
++
++/**
++ * kunit_clk_get() - Test managed clk_get()
++ * @test: The test context
++ * @dev: device for clock "consumer"
++ * @id: clock consumer ID
++ *
++ * Returns: new clk consumer or ERR_PTR on failure
++ */
++struct clk *
++kunit_clk_get(struct kunit *test, struct device *dev, const char *con_id)
++{
++	struct clk *clk;
++
++	clk = clk_get(dev, con_id);
++	if (IS_ERR(clk))
++		return clk;
++
++	if (!kunit_alloc_resource(test, NULL, kunit_clk_put, GFP_KERNEL, clk)) {
++		clk_put(clk);
++		return ERR_PTR(-EINVAL);
++	}
++
++	return clk;
++}
++EXPORT_SYMBOL_GPL(kunit_clk_get);
++
++/**
++ * kunit_of_clk_get() - Test managed of_clk_get()
++ * @test: The test context
++ * @np: device_node for clock "consumer"
++ * @index: index in 'clocks' property of @np
++ *
++ * Returns: new clk consumer or ERR_PTR on failure
++ */
++struct clk *
++kunit_of_clk_get(struct kunit *test, struct device_node *np, int index)
++{
++	struct clk *clk;
++
++	clk = of_clk_get(np, index);
++	if (IS_ERR(clk))
++		return clk;
++
++	if (!kunit_alloc_resource(test, NULL, kunit_clk_put, GFP_KERNEL, clk)) {
++		clk_put(clk);
++		return ERR_PTR(-EINVAL);
++	}
++
++	return clk;
++}
++EXPORT_SYMBOL_GPL(kunit_of_clk_get);
++
++/**
++ * kunit_clk_hw_get_clk() - Test managed clk_hw_get_clk()
++ * @test: The test context
++ * @hw: clk_hw associated with the clk being consumed
++ * @con_id: connection ID string on device
++ *
++ * Returns: new clk consumer or ERR_PTR on failure
++ */
++struct clk *
++kunit_clk_hw_get_clk(struct kunit *test, struct clk_hw *hw, const char *con_id)
++{
++	struct clk *clk;
++
++	clk = clk_hw_get_clk(hw, con_id);
++	if (IS_ERR(clk))
++		return clk;
++
++	if (!kunit_alloc_resource(test, NULL, kunit_clk_put, GFP_KERNEL, clk)) {
++		clk_put(clk);
++		return ERR_PTR(-EINVAL);
++	}
++
++	return clk;
++}
++EXPORT_SYMBOL_GPL(kunit_clk_hw_get_clk);
++
++/**
++ * kunit_clk_hw_get_clk_prepared_enabled() - Test managed clk_hw_get_clk() + clk_prepare_enable()
++ * @test: The test context
++ * @hw: clk_hw associated with the clk being consumed
++ * @con_id: connection ID string on device
++ *
++ * Returns: new clk consumer that is prepared and enabled or ERR_PTR on failure
++ */
++struct clk *
++kunit_clk_hw_get_clk_prepared_enabled(struct kunit *test, struct clk_hw *hw,
++				      const char *con_id)
++{
++	int ret;
++	struct clk *clk;
++
++	clk = kunit_clk_hw_get_clk(test, hw, con_id);
++	if (IS_ERR(clk))
++		return clk;
++
++	ret = kunit_clk_prepare_enable(test, clk);
++	if (ret)
++		return ERR_PTR(ret);
++
++	return clk;
++}
++EXPORT_SYMBOL_GPL(kunit_clk_hw_get_clk_prepared_enabled);
++
++static void kunit_clk_hw_unregister(struct kunit_resource *res)
++{
++	struct clk_hw *hw = res->data;
++
++	clk_hw_unregister(hw);
++}
++
++/**
++ * kunit_clk_hw_register() - Test managed clk_hw_register()
++ * @test: The test context
++ * @dev: device that is registering this clock
++ * @hw: link to hardware-specific clock data
++ *
++ * Returns: 0 on success or a negative errno value on failure
++ */
++int kunit_clk_hw_register(struct kunit *test, struct device *dev, struct clk_hw *hw)
++{
++	int ret;
++
++	ret = clk_hw_register(dev, hw);
++	if (ret)
++		return ret;
++
++	if (!kunit_alloc_resource(test, NULL, kunit_clk_hw_unregister, GFP_KERNEL, hw)) {
++		clk_hw_unregister(hw);
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++/**
++ * kunit_of_clk_hw_register() - Test managed of_clk_hw_register()
++ * @test: The test context
++ * @node: device_node of device that is registering this clock
++ * @hw: link to hardware-specific clock data
++ *
++ * Returns: 0 on success or a negative errno value on failure
++ */
++int kunit_of_clk_hw_register(struct kunit *test, struct device_node *node, struct clk_hw *hw)
++{
++	int ret;
++
++	ret = of_clk_hw_register(node, hw);
++	if (ret)
++		return ret;
++
++	if (!kunit_alloc_resource(test, NULL, kunit_clk_hw_unregister, GFP_KERNEL, hw)) {
++		clk_hw_unregister(hw);
++		return -EINVAL;
++	}
++
++	return 0;
++}
+diff --git a/drivers/clk/clk-kunit.h b/drivers/clk/clk-kunit.h
+new file mode 100644
+index 000000000000..153597d69269
+--- /dev/null
++++ b/drivers/clk/clk-kunit.h
+@@ -0,0 +1,28 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _CLK_KUNIT_H
++#define _CLK_KUNIT_H
++
++struct clk;
++struct clk_hw;
++struct device;
++struct device_node;
++struct kunit;
++
++struct clk *
++kunit_clk_get(struct kunit *test, struct device *dev, const char *con_id);
++struct clk *
++kunit_of_clk_get(struct kunit *test, struct device_node *np, int index);
++
++struct clk *
++kunit_clk_hw_get_clk(struct kunit *test, struct clk_hw *hw, const char *con_id);
++struct clk *
++kunit_clk_hw_get_clk_prepared_enabled(struct kunit *test, struct clk_hw *hw,
++				      const char *con_id);
++
++int kunit_clk_prepare_enable(struct kunit *test, struct clk *clk);
++
++int kunit_clk_hw_register(struct kunit *test, struct device *dev, struct clk_hw *hw);
++int kunit_of_clk_hw_register(struct kunit *test, struct device_node *node,
++			     struct clk_hw *hw);
++
++#endif
 -- 
 https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
 https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
