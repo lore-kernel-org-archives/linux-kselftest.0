@@ -2,140 +2,88 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9F89C7EE37
-	for <linux-kselftest@archiver.kernel.org>; Fri,  3 Mar 2023 15:01:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A513CC64EC4
+	for <linux-kselftest@archiver.kernel.org>; Fri,  3 Mar 2023 19:21:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231417AbjCCPBA (ORCPT
+        id S231230AbjCCTVE (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 3 Mar 2023 10:01:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44188 "EHLO
+        Fri, 3 Mar 2023 14:21:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231337AbjCCPAz (ORCPT
+        with ESMTP id S231190AbjCCTVE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 3 Mar 2023 10:00:55 -0500
-Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7EBC62DAD;
-        Fri,  3 Mar 2023 07:00:49 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 76ECD58206E;
-        Fri,  3 Mar 2023 09:35:32 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Fri, 03 Mar 2023 09:35:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1677854132; x=1677861332; bh=EhQ9pFjZXP4HTv7ya9gpFDV+YiUqRp+E8wi
-        r3tCHXho=; b=I1headauudJSswX9EvaMaMq8BcWzxWf1GaVo8Wlw4FdySSolnyJ
-        TA6uUxYnw+dJBczt/cQHmUGM0xE1M/w2OmW+SnSGEpJTCzVCCo1pUuq2F155BLp8
-        u27ubW7A0hzJmJsej7z8xMbyZVV89dMs9I10LaSzt5PYlFi8duBYsojDOBz/xBZy
-        MRrjwGMGgPdEE3riBCJM8SIfAYTpSK9nfM2qRwrc4YiK4xBq697RlT46sceAib5y
-        J8Mi7v6p/BMKMyQJ8PIXgdAp9BaNCb7/ZrCW2+vHgeRlkmTeJPysYO5kNI8x35wE
-        2g1myqJgxY6PPJtNNV+h8NnlBspDFm2i9qA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1677854132; x=1677861332; bh=EhQ9pFjZXP4HTv7ya9gpFDV+YiUqRp+E8wi
-        r3tCHXho=; b=Trcg1C7+2n3zXd+Vk5nrLVQ9hvyeM23w9il2QRgPkTdtwBHNmOY
-        RBkjbOHXWpfW2xJq902uqJFWcD5y6HST8uXHKuSVc6vh94yH3dkKID70ma+RbsCf
-        6py3z7vMm7lXNxi5wJwH742NhN0NP+XGurZkPMIkPD9BxYMBy1dRZlDqhJNbjCYh
-        5iM93OEFXWsBLHexd4tQ+PLnEyhzTG/XHWPEyveRApVtPct8oBY/T9f8OL04Q+xm
-        MNvjkwWl6oLh+hq7EE2lr/GBgboGQIs/ReWQmHph7OYTWwSI+HRsqIjH7+/wunXf
-        RwWL8QZADXkRoAoKITIBqoyqf7hn7P1Pzeg==
-X-ME-Sender: <xms:swUCZB1rnweLZk35aHZiBgQWFd-oQS0q4y7Ma-f2gJ1tk6biV4p_Hg>
-    <xme:swUCZIHFzqXPPzmmIzzZ8hbg8cu0hT6v9WDLAMa2qvNbZmz6_fgLUPXbYk3nsoO1S
-    yzmgkFIx8dmUN1DofE>
-X-ME-Received: <xmr:swUCZB5WyEYUImTMYsXup4NV2rGqlQ4CXRbFaXA3rvitzHJ1MtjSdfh1-yc7HfAJomfXhRJ-_TntgLzh0LWjcYD5iNeOtUs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudelledgiedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggugfgjsehtqhertddttddvnecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnhepiedtueffveeiueeftdduvdffffffgeffgfekiefhleelkedtlefhvefh
-    udduhffgnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgv
-    tghh
-X-ME-Proxy: <xmx:swUCZO0KN82qNQan-BTftrLDKnylngDMU3kB73-c4kbYIkWqmm5zEA>
-    <xmx:swUCZEFZAKmu-VEfiiDvSkw-voCWXL5yTI1_bUG7e_svIUf71SL0Ww>
-    <xmx:swUCZP8CKWwnn4NXwiUhJ2CvoZJcEA141NSgtQxxD3V1QOU_R9XBSw>
-    <xmx:tAUCZK7yubatAcs36FTKgZwEIF0ZKZ47INAM8_nfsLoYZtA1K_JHFw>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 3 Mar 2023 09:35:30 -0500 (EST)
-Date:   Fri, 3 Mar 2023 15:35:28 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     David Gow <davidgow@google.com>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        patches@lists.linux.dev,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Subject: Re: [PATCH 3/8] kunit: Add test managed platform_device/driver APIs
-Message-ID: <20230303143528.2dovipmqlms74vp2@houat>
-References: <20230302013822.1808711-1-sboyd@kernel.org>
- <20230302013822.1808711-4-sboyd@kernel.org>
- <CABVgOSmR0_u8Tw0E8C1mRFxSiGKwdKG5ka_+X_36Hj4VNLdg2g@mail.gmail.com>
+        Fri, 3 Mar 2023 14:21:04 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B5B7559E8
+        for <linux-kselftest@vger.kernel.org>; Fri,  3 Mar 2023 11:21:03 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id v16so3352492wrn.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 03 Mar 2023 11:21:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677871261;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=y9ZZuv5MtZprL8HR8bDjuGADsur3LZJXi9dnz/mZ8tk=;
+        b=bPygZgsgJ/zfuY2F35GQXTzCzXigU0Gz8EZtxrejcBORT1QYCwBpvi90lCwdUVaKH6
+         3ufMmvPDjQTtyvtiQWrJnakF0Kp1JsVPHw4hfm3/etg/hXQnbAjDYCCviJHOsvlT4G9T
+         Bh7vY4H5mi5p7UpVsCZ1vu+u8WvMTXIZ6MiOiv7xiXh0KAsY6wYR3sawtAqaacKznAM0
+         1J/SdB32JzLOV6KM9mV44s4Yz1XXt9Rw+qI//Bl7a+45lu0kJBYJzIH+0+X1HntQwl0D
+         dCSDno2vpi5n5bkyeV2+DJWyVoplH05p8wgy46aQv22a2Z6S+gk7H/6IJeyB/9Jdgxnx
+         6dCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677871261;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=y9ZZuv5MtZprL8HR8bDjuGADsur3LZJXi9dnz/mZ8tk=;
+        b=4uiYWGu2vyVbWy4NWue+CYLhiOXLdD1L0sWBsyoAF8GG4VqWDFHCkHKkR/vu24gtif
+         6Lww/g1YPhvwvzu0239I+XVQS+9ENCMl53g28QJg4QFQuO5l8gLbY4Bg+bbIGmORW+BE
+         hYDSgCNlmsizasfjqGxZPB15fEKHkWuYh0y4xgV/Ltq3q0JPytjSWVyF5yzUFPKJPpT/
+         mW+fG/EBXCDWVbL6jX6RgZqsbDRS8LcAIyBnz5BzvBbCaecuddINRWt8EwSfWFtPrltO
+         2/q79xN7bdjuYHwzunNkKyOelRwIqjtNlfEWwAeSDywBuJoDFWFUgKd4VmwLPuqSFoZl
+         SxtA==
+X-Gm-Message-State: AO0yUKUg4lHm2gzHPPlea+y7F44FAM5RvT8X0MjPrYbkj5zRw5+GbhCI
+        31zUtpk7dLiUGex6PE0CSayQ3mkhy78=
+X-Google-Smtp-Source: AK7set/HF+wL+GQOyCK5EKNdcgmXKmLhYpZ3mJcWcMkBilLrJlyDjQdbDi7Dr67sMHGIvoPq08651g==
+X-Received: by 2002:a05:6000:118a:b0:2c7:be8:4873 with SMTP id g10-20020a056000118a00b002c70be84873mr1984584wrx.58.1677871261465;
+        Fri, 03 Mar 2023 11:21:01 -0800 (PST)
+Received: from kos-moceratops.home ([2a01:cb1d:8ddc:f000:36ae:1bf1:281b:95d9])
+        by smtp.gmail.com with ESMTPSA id p1-20020a5d4581000000b002c55551e6e9sm2948341wrq.108.2023.03.03.11.21.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Mar 2023 11:21:01 -0800 (PST)
+From:   Patrice Duroux <patrice.duroux@gmail.com>
+To:     linux-kselftest@vger.kernel.org
+Cc:     Patrice Duroux <patrice.duroux@gmail.com>
+Subject: [PATCH 2/2] replace 2&>1 by 2>&1
+Date:   Fri,  3 Mar 2023 20:20:56 +0100
+Message-Id: <20230303192056.18732-1-patrice.duroux@gmail.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <CAGKjw9KHDnVgRz5bstJYkq4t0-bT5fvkuQZbEB48d-8jo4Q00g@mail.gmail.com>
+References: <CAGKjw9KHDnVgRz5bstJYkq4t0-bT5fvkuQZbEB48d-8jo4Q00g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CABVgOSmR0_u8Tw0E8C1mRFxSiGKwdKG5ka_+X_36Hj4VNLdg2g@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Mar 03, 2023 at 03:15:31PM +0800, David Gow wrote:
-> On Thu, 2 Mar 2023 at 09:38, Stephen Boyd <sboyd@kernel.org> wrote:
-> >
-> > Introduce KUnit resource wrappers around platform_driver_register(),
-> > platform_device_alloc(), and platform_device_add() so that test authors
-> > can register platform drivers/devices from their tests and have the
-> > drivers/devices automatically be unregistered when the test is done.
-> >
-> > This makes test setup code simpler when a platform driver or platform
-> > device is needed. Add a few test cases at the same time to make sure the
-> > APIs work as intended.
-> >
-> > Cc: Brendan Higgins <brendan.higgins@linux.dev>
-> > Cc: David Gow <davidgow@google.com>
-> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> > Signed-off-by: Stephen Boyd <sboyd@kernel.org>
-> > ---
-> >
-> > Should this be moved to drivers/base/ and called platform_kunit.c?
-> > The include/kunit/platform_driver.h could also be
-> > kunit/platform_device.h to match linux/platform_device.h if that is more
-> > familiar.
->=20
-> DRM has a similar thing already (albeit with a root_device, which is
-> more common with KUnit tests generally):
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/i=
-nclude/drm/drm_kunit_helpers.h
->=20
-> But that's reasonably drm-specific, so it makes sense that it lives
-> with DRM stuff. platform_device is a bit more generic.
+Signed-off-by: Patrice Duroux <patrice.duroux@gmail.com>
+---
+ .../testing/selftests/drivers/net/dsa/test_bridge_fdb_stress.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I'd be very happy to get something from the core to address the same
-thing.
+diff --git a/tools/testing/selftests/drivers/net/dsa/test_bridge_fdb_stress.sh b/tools/testing/selftests/drivers/net/dsa/test_bridge_fdb_stress.sh
+index a1f269ee84da..92acab83fbe2 100755
+--- a/tools/testing/selftests/drivers/net/dsa/test_bridge_fdb_stress.sh
++++ b/tools/testing/selftests/drivers/net/dsa/test_bridge_fdb_stress.sh
+@@ -31,7 +31,7 @@ trap 'cleanup' EXIT
+ 
+ eth=${NETIFS[p1]}
+ 
+-ip link del br0 2&>1 >/dev/null || :
++ip link del br0 2>&1 >/dev/null || :
+ ip link add br0 type bridge && ip link set $eth master br0
+ 
+ (while :; do
+-- 
+2.39.2
 
-I think the main thing we needed that isn't covered by this patch is we
-wanted the device to be bound to its driver, so with probe being called
-before calling the test (see 57a84a97bbda).
-
-Maxime
