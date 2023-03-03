@@ -2,214 +2,142 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93CD5C64EC4
-	for <linux-kselftest@archiver.kernel.org>; Fri,  3 Mar 2023 13:44:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC9EDC64EC4
+	for <linux-kselftest@archiver.kernel.org>; Fri,  3 Mar 2023 14:55:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231225AbjCCNoW (ORCPT
+        id S230499AbjCCOzw (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 3 Mar 2023 08:44:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57766 "EHLO
+        Fri, 3 Mar 2023 09:55:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230498AbjCCNoS (ORCPT
+        with ESMTP id S229854AbjCCOzv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 3 Mar 2023 08:44:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F0FE12865
-        for <linux-kselftest@vger.kernel.org>; Fri,  3 Mar 2023 05:43:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677850963;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VRBvAso0m6Mh4AYb8jIiudho0ePNxChhIVaVb3X9gn0=;
-        b=Oa7rcj5jMNYHRrCZm8+QMBxmO22QGfzl9FXSYBF4HSZznfBLEvYZedBssOwWVyeeTAnZxK
-        2ksAWOXyD0ZAzWrplnKR2Fdk8O0NfAlcuXnVLrLHBL80jiwsGgRoMUiqHrkO6gyOk0YELA
-        +WjQvSifJ03gpp8Xm6cyF5tGmjUJh6o=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-133-mQ3cnKj9OyaRCFw6YJT2uA-1; Fri, 03 Mar 2023 08:42:42 -0500
-X-MC-Unique: mQ3cnKj9OyaRCFw6YJT2uA-1
-Received: by mail-wm1-f69.google.com with SMTP id p22-20020a7bcc96000000b003e2036a1516so2851518wma.7
-        for <linux-kselftest@vger.kernel.org>; Fri, 03 Mar 2023 05:42:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677850961;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VRBvAso0m6Mh4AYb8jIiudho0ePNxChhIVaVb3X9gn0=;
-        b=1pkd1Z6gxB7HuxcpzXOYvP4NPiDm86r4TFuoGXSuwZfItpfFUDufjmiGpNnPO07edw
-         kK2eLzZrPTGukGvYXpaogBI8ezxynGFCVi1dWdjxMOpkuziRkEyU32T2rzBz5jQrcbok
-         PwaBtnXN7kXZ8zhZ34FRVx/376FYg6Mk6CPlMV55Yh3PK7goy0FmB37AioBGDwZRIGv2
-         i4DGV4g6zZhPJBgLg0gXcrTCQxla8Ij+a6aJObbH8937rO9BxyhjG2esZT5P0z4j65Vu
-         ayMMr9umq82H2uX4hJa2/zPso1Utea2FrJoEAAeBcYnCPyC6/HvVoE+PVD5+IhM27IZH
-         xrTA==
-X-Gm-Message-State: AO0yUKVYclsBiHH8f0aqgmxbdiF15ZO1lfB5IdJkPyB2rfWBK8uT6Y3c
-        OjkKqWYmZpAefAZFljPpKkxz2i/mdI9hMrG5VywEkmYAb+4bOD9H0xALax3c07Ye5qWzqlDcZ46
-        QkbobE9Jms/1h1WIwbiLlqaXRWQDERrkn8w==
-X-Received: by 2002:a05:6000:1289:b0:2c7:1524:eb07 with SMTP id f9-20020a056000128900b002c71524eb07mr1195448wrx.67.1677850961243;
-        Fri, 03 Mar 2023 05:42:41 -0800 (PST)
-X-Google-Smtp-Source: AK7set/LUwHmGIAdTsbIGVjpc4uuopNpN8Lb5bV+jaI23Vz/K5QtjmEqhYCXmnTN3x4dHcJnCwSFbA==
-X-Received: by 2002:a05:6000:1289:b0:2c7:1524:eb07 with SMTP id f9-20020a056000128900b002c71524eb07mr1195437wrx.67.1677850961025;
-        Fri, 03 Mar 2023 05:42:41 -0800 (PST)
-Received: from localhost.localdomain ([46.33.96.29])
-        by smtp.gmail.com with ESMTPSA id a7-20020a5d4d47000000b002c5706f7c6dsm2208708wru.94.2023.03.03.05.42.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Mar 2023 05:42:40 -0800 (PST)
-From:   Michal Sekletar <msekleta@redhat.com>
-To:     gregkh@linuxfoundation.org
-Cc:     jirislaby@kernel.org, arozansk@redhat.com, shuah@kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Michal Sekletar <msekleta@redhat.com>
-Subject: [PATCH 2/2] selftests: tty: add selftest for tty timestamp updates
-Date:   Fri,  3 Mar 2023 14:36:06 +0100
-Message-Id: <20230303133606.227934-2-msekleta@redhat.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230303133606.227934-1-msekleta@redhat.com>
-References: <20230303133606.227934-1-msekleta@redhat.com>
+        Fri, 3 Mar 2023 09:55:51 -0500
+X-Greylist: delayed 599 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 03 Mar 2023 06:55:49 PST
+Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB14126FD;
+        Fri,  3 Mar 2023 06:55:49 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id E05FF58209F;
+        Fri,  3 Mar 2023 09:38:37 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Fri, 03 Mar 2023 09:38:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1677854317; x=1677861517; bh=fE
+        NpqGS/+8eA5DI/UUI0vpXheU20dTSblaG27LRs1wM=; b=TMhMKykfeOcON4SmqH
+        CiYcR4MIZ49Z7wHVFPQNZj3iGkQl9Ekns63B0lEoL+meNxR+1YZlErUd72YNzWtc
+        Tc3ckFkvLMeh9z5LY4PAFBAmSGhVbQXp133+eiQ6TbSr8c0f+rN06dClkyxbipje
+        G99ggeGVGmhkM+vYhAS0iTVg1hZFSEFrqGP0d9QqHjS8ElbKXMyT/CaVXWnxeQKB
+        /7z5ZnS1fBdEZ8W9XD7NfqLT4E50Bhdgu3yHMLuWpcq1zHML7Xkl6vuvxxwWr/x4
+        kTDHrA9LQ5EfKoXkh3mlh09MDR4S8hkgaXi2RK52pdw166eV5NR15Pqw78vYO19m
+        5pnA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1677854317; x=1677861517; bh=fENpqGS/+8eA5
+        DI/UUI0vpXheU20dTSblaG27LRs1wM=; b=S5/UuJmbtsS/NWyXg3Ps3ypf5/t2J
+        P263Lmin6EpwJeGdsXY7ll3SIMZ13M5mt47W1zamhNF1Za+SwrlDllq7hyfWwIJF
+        E0BALtrYPdg8Wv2JEv+lAFvDlUAVZSUieuhgvoqF6K/ORnQdbKnsVLBgOQyVKQ/a
+        1bRA8NkMejJ9bonI4XKeyEv4VEZ41/TS2ho+dfe4t7NIkfh7iQQqDRSgiIxIFf3n
+        bEhBuSvaJ2jJnfAd1mf7eTwFir4izLMxvO6ovQo7kuJIcXJXDbPbT17X6F4IdV5F
+        eOuCDvuhjDUvFXQRMxhiGcGpV9+x4iWQj01t/RarVARG5rhzaclijqE5Q==
+X-ME-Sender: <xms:bQYCZBqQ_OWB-XfeAkakbJrvkOlAPPrdrOfjnoXZNzAAbN2ysnU5_g>
+    <xme:bQYCZDrT7oGvvXps_IIKr4EyvuOtztAVxEjjLij73_GjNwXm2pjPb8clAUw7L-et6
+    THtA9aJSxq4Fthg0Rc>
+X-ME-Received: <xmr:bQYCZONjTuFbLn6b407OWCuogFfuUAkjkP7v-oYKOzKLTSWSB0h0NQ7KAgDn2usbc1W11_Ho64ar_UqZQMVs_dWdJ1SZ2Tw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudelledgieduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeetfefffefgkedtfefgledugfdtjeefjedvtddtkeetieffjedvgfehheff
+    hfevudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:bQYCZM7lRZBpN1iCDRWpa8RRIEzCmsRX5qOpjq_60GBkK-GZLyuuIA>
+    <xmx:bQYCZA6xZfTwaBxJlNayuRLhTYG2SBHDQ-3PlQ-sVrUwaNBFfq_FGA>
+    <xmx:bQYCZEiTLUpDKCmsz6nBVCy-qKZZKeYrjzBlgrYQuNET0iH3p73yMg>
+    <xmx:bQYCZDPi_FBzF2yyIJcOR5G-ya25UwN715kOJpXal74DI6neV3tjeA>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 3 Mar 2023 09:38:36 -0500 (EST)
+Date:   Fri, 3 Mar 2023 15:38:35 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        patches@lists.linux.dev,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Subject: Re: [PATCH 0/8] clk: Add kunit tests for fixed rate and parent data
+Message-ID: <20230303143835.hxvkujrdxh7345ah@houat>
+References: <20230302013822.1808711-1-sboyd@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zxhsbaoummc7j6bf"
+Content-Disposition: inline
+In-Reply-To: <20230302013822.1808711-1-sboyd@kernel.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Signed-off-by: Michal Sekletar <msekleta@redhat.com>
----
- tools/testing/selftests/Makefile              |  1 +
- tools/testing/selftests/tty/.gitignore        |  2 +
- tools/testing/selftests/tty/Makefile          |  5 ++
- .../testing/selftests/tty/tty_tstamp_update.c | 88 +++++++++++++++++++
- 4 files changed, 96 insertions(+)
- create mode 100644 tools/testing/selftests/tty/.gitignore
- create mode 100644 tools/testing/selftests/tty/Makefile
- create mode 100644 tools/testing/selftests/tty/tty_tstamp_update.c
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 13a6837a0c6b..fc46926f505b 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -84,6 +84,7 @@ TARGETS += timers
- endif
- TARGETS += tmpfs
- TARGETS += tpm2
-+TARGETS += tty
- TARGETS += user
- TARGETS += vDSO
- TARGETS += mm
-diff --git a/tools/testing/selftests/tty/.gitignore b/tools/testing/selftests/tty/.gitignore
-new file mode 100644
-index 000000000000..fe70462a4aad
---- /dev/null
-+++ b/tools/testing/selftests/tty/.gitignore
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+tty_tstamp_update
-diff --git a/tools/testing/selftests/tty/Makefile b/tools/testing/selftests/tty/Makefile
-new file mode 100644
-index 000000000000..50d7027b2ae3
---- /dev/null
-+++ b/tools/testing/selftests/tty/Makefile
-@@ -0,0 +1,5 @@
-+# SPDX-License-Identifier: GPL-2.0
-+CFLAGS = -O2 -Wall
-+TEST_GEN_PROGS := tty_tstamp_update
-+
-+include ../lib.mk
-diff --git a/tools/testing/selftests/tty/tty_tstamp_update.c b/tools/testing/selftests/tty/tty_tstamp_update.c
-new file mode 100644
-index 000000000000..0ee97943dccc
---- /dev/null
-+++ b/tools/testing/selftests/tty/tty_tstamp_update.c
-@@ -0,0 +1,88 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <errno.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/stat.h>
-+#include <unistd.h>
-+#include <linux/limits.h>
-+
-+#include "../kselftest.h"
-+
-+#define MIN_TTY_PATH_LEN 8
-+
-+static bool tty_valid(char *tty)
-+{
-+	if (strlen(tty) < MIN_TTY_PATH_LEN)
-+		return false;
-+
-+	if (strncmp(tty, "/dev/tty", MIN_TTY_PATH_LEN) == 0 ||
-+	    strncmp(tty, "/dev/pts", MIN_TTY_PATH_LEN) == 0)
-+		return true;
-+
-+	return false;
-+}
-+
-+static int write_dev_tty(void)
-+{
-+	FILE *f;
-+	int r = 0;
-+
-+	f = fopen("/dev/tty", "r+");
-+	if (!f)
-+		return -errno;
-+
-+	r = fprintf(f, "hello, world!\n");
-+	if (r != strlen("hello, world!\n"))
-+		r = -EIO;
-+
-+	fclose(f);
-+	return r;
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	int r;
-+	char tty[PATH_MAX] = {};
-+	struct stat st1, st2;
-+
-+	ksft_print_header();
-+	ksft_set_plan(1);
-+
-+	r = readlink("/proc/self/fd/0", tty, PATH_MAX);
-+	if (r < 0)
-+		ksft_exit_fail_msg("readlink on /proc/self/fd/0 failed: %m\n");
-+
-+	if (!tty_valid(tty))
-+		ksft_exit_skip("invalid tty path '%s'\n", tty);
-+
-+	r = stat(tty, &st1);
-+	if (r < 0)
-+		ksft_exit_fail_msg("stat failed on tty path '%s': %m\n", tty);
-+
-+	/* We need to wait at least 8 seconds in order to observe timestamp change */
-+	/* https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fbf47635315ab308c9b58a1ea0906e711a9228de */
-+	sleep(10);
-+
-+	r = write_dev_tty();
-+	if (r < 0)
-+		ksft_exit_fail_msg("failed to write to /dev/tty: %s\n",
-+				   strerror(-r));
-+
-+	r = stat(tty, &st2);
-+	if (r < 0)
-+		ksft_exit_fail_msg("stat failed on tty path '%s': %m\n", tty);
-+
-+	/* We wrote to the terminal so timestamps should have been updated */
-+	if (st1.st_atim.tv_sec == st2.st_atim.tv_sec &&
-+	    st1.st_mtim.tv_sec == st2.st_mtim.tv_sec) {
-+		ksft_test_result_fail("tty timestamps not updated\n");
-+		ksft_exit_fail();
-+	}
-+
-+	ksft_test_result_pass(
-+		"timestamps of terminal '%s' updated after write to /dev/tty\n", tty);
-+	return EXIT_SUCCESS;
-+}
--- 
-2.39.2
+--zxhsbaoummc7j6bf
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+Hi,
+
+On Wed, Mar 01, 2023 at 05:38:13PM -0800, Stephen Boyd wrote:
+> This patch series adds unit tests for the clk fixed rate basic type and
+> the clk registration functions that use struct clk_parent_data. To get
+> there, we add support for loading a DTB into the UML kernel that's
+> running the unit tests along with probing platform drivers to bind to
+> device nodes specified in DT.
+>=20
+> With this series, we're able to exercise some of the code in the common
+> clk framework that uses devicetree lookups to find parents and the fixed
+> rate clk code that scans devicetree directly and creates clks. Please
+> review.
+>=20
+> I Cced everyone to all the patches so they get the full context. I'm
+> hoping I can take the whole pile through the clk tree as they almost all
+> depend on each other. In the future I imagine it will be easy to add
+> more test nodes to the clk.dtsi file and not need to go across various
+> maintainer trees like this series does.
+
+That's really great, thanks!
+
+I wanted to have a look at how we could possibly do this for DRM, I
+guess I have a starting point now :)
+
+Maxime
+
+--zxhsbaoummc7j6bf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZAIGawAKCRDj7w1vZxhR
+xS33AQD23xSdqBXlBOhJsMv6KYIZ12jQ2GO9rfSeTnQ8xbOokQD/bAnk3DyP7XE/
+fGO0wD2U0Tkw7bdC9RO2kuSjjCSIvgk=
+=gx7K
+-----END PGP SIGNATURE-----
+
+--zxhsbaoummc7j6bf--
