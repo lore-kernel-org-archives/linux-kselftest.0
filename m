@@ -2,175 +2,128 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A1BFC678D4
-	for <linux-kselftest@archiver.kernel.org>; Mon,  6 Mar 2023 16:12:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BBD4C64EC4
+	for <linux-kselftest@archiver.kernel.org>; Mon,  6 Mar 2023 16:19:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230474AbjCFQMQ (ORCPT
+        id S229834AbjCFQT3 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 6 Mar 2023 11:12:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56042 "EHLO
+        Mon, 6 Mar 2023 11:19:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232796AbjCFQL7 (ORCPT
+        with ESMTP id S229824AbjCFQTP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 Mar 2023 11:11:59 -0500
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E76B4FA88
-        for <linux-kselftest@vger.kernel.org>; Mon,  6 Mar 2023 08:08:38 -0800 (PST)
-Received: by mail-io1-xd29.google.com with SMTP id 76so4207636iou.9
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Mar 2023 08:08:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1678118803;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=e7dAgDboD1nwP5+XX6Gpi6cj6HuqQDphe3J0S8kZqwA=;
-        b=cmwkGk0sfDxLR0/c/zD8q+CxEYBkWnqe2zJi29SN0wR76WgMhwakXUaUDgl+/ibRRX
-         ybb2Glc9vdkT/k60sZoh/0wLZ3lRUumuJxyopfVdDHEJ+Qx0jnEkS92eZO3JvSRRAeCP
-         B+TDlfkL84dD5TD1LRW6wSEU+RnRARQbRa9OU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678118803;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=e7dAgDboD1nwP5+XX6Gpi6cj6HuqQDphe3J0S8kZqwA=;
-        b=OZtkheTwi6NCr3MNvefzfMXR11Vq/HiLSzDKHQUf9U3qo3tjM2ExK12mXt6yNaZk/r
-         CPcEfQlChyCCB9bmIPBmveL7Bs2FVU8+HLvGS5zKKkokuoAgWc5QFJ2Bg7by7QtkpEcZ
-         YCH6dD8T+mA23+cCS9kG2B+di2XA0tyPljrOoB6KdKRHKrahRffv87fxIz0dLtktCSAN
-         TvaVOv+lXveLnjyZYbWh+i+nZ6fBAR43KEE50Z7IBGtc3mlAgzrsh1t6JDBNRK0vJ87q
-         T3s+Ice5i2osn/tzC8HKLuYvWWIlu9zQxjo45+Gt2GKr9edY8LIkUQvzz6KXqUYJ83eE
-         7AWQ==
-X-Gm-Message-State: AO0yUKWe/jlZzJ7Ww1eLObPrVTS26Rh1GhsXCDNmO5lxckXfnlBsZkrh
-        B/+xMHkfOIsBrocLSuC/rDGY4Q==
-X-Google-Smtp-Source: AK7set/5wMHvgBGYNORNTLIQc8lg5UH9pESn3evMck0I8U2TUY+aFX1R4Mnp6ivgn4D8wf8+cM17Hw==
-X-Received: by 2002:a6b:5a0e:0:b0:72c:f57a:a37b with SMTP id o14-20020a6b5a0e000000b0072cf57aa37bmr6270225iob.2.1678118802712;
-        Mon, 06 Mar 2023 08:06:42 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id y6-20020a6bc406000000b00743fe29dd56sm3442423ioa.4.2023.03.06.08.06.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 08:06:42 -0800 (PST)
-Message-ID: <9a0e7062-2d16-3743-ffb6-a6b56bfbbd20@linuxfoundation.org>
-Date:   Mon, 6 Mar 2023 09:06:41 -0700
+        Mon, 6 Mar 2023 11:19:15 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 323824E5EC;
+        Mon,  6 Mar 2023 08:16:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 0FD25CE13A3;
+        Mon,  6 Mar 2023 16:15:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80115C433EF;
+        Mon,  6 Mar 2023 16:15:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678119316;
+        bh=9a3UZUAnwjQQhgCgDJ7MKuT6/Sf1dQsHXr9Zku6OsNY=;
+        h=From:Date:Subject:To:Cc:From;
+        b=k4iNlWOLOaOPbJBQZByspHrjv0TPajRL00imAcrw5uz7ZihtZ19wt8gepaS6SN7M5
+         VPzGJuSRg83f0B5QlDSkpQDDt6m1GGiTATtuvcxF8RCwew2M1pf5X6dPL4EN+0Okdp
+         KIRTqoFFKdBiDdeuJvyUE+Xh2MXOHmjSNe9ID7Q3XuSom/VQP5+46V9+3qYoDi109e
+         RfYkqp9NCN8IXHrCnYBQN40HZbdescJie7T5nwZHzg+biBZJAGrJmWPrZfz7xA8Gp3
+         tGM7ZvnwJnbW/GrgkMoxTTNrSYwxShi46sTl6SocSB/7ushtCEerj0rEr1HS4AjgjZ
+         ZwfL0j657IqNg==
+From:   Mark Brown <broonie@kernel.org>
+Date:   Mon, 06 Mar 2023 16:15:07 +0000
+Subject: [PATCH] KVM: selftests: Comment newly defined aarch64 ID registers
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 1/2] selftests/kmod: increase the kmod timeout from 45 to
- 165
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        gregkh@linuxfoundation.org, tiwai@suse.de, tianfei.zhang@intel.com,
-        russell.h.weight@intel.com, keescook@chromium.org,
-        tweek@google.com, a.manzanares@samsung.com, dave@stgolabs.net,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230206234344.2433950-1-mcgrof@kernel.org>
- <20230206234344.2433950-2-mcgrof@kernel.org>
- <b094dc23-a96d-93c4-a350-8fb92476f431@linuxfoundation.org>
- <Y/0xx0cedxlRMKpH@bombadil.infradead.org>
- <537d3d3d-9ecc-bdd9-f703-708f6826d1f2@linuxfoundation.org>
- <ZAJrFvIDj98C9SkD@bombadil.infradead.org>
-Content-Language: en-US
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <ZAJrFvIDj98C9SkD@bombadil.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20230210-kvm-arm64-getreg-comments-v1-1-a16c73be5ab4@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAIoRBmQC/x2NywqDMBBFf0Vm3YEY2/TxK6WLGMc4SJIyI7Yg/
+ ntjl+fCuWcDJWFSeDQbCK2sXHKF9tRAmHyOhDxUBmtsZ2xrcF4TeknujJEWoYihpER5UTTXm7l
+ 3zrlxuED1e6+EvfgcpuPhU2Q+5rfQyN9/8vna9x8Kf5ivggAAAA==
+To:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.13-dev-bd1bf
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2507; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=9a3UZUAnwjQQhgCgDJ7MKuT6/Sf1dQsHXr9Zku6OsNY=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkBhGQou3gS/eCqhQJI1oy3yDoWgiJU61dH1a0K++y
+ wR+MAHyJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZAYRkAAKCRAk1otyXVSH0DC3CA
+ CDAlrk7iMJb+P1P7II5kQl9iLm3JOqbxtT4U0hX2XoMPNi/rCRv8G+lF50in82+/4HmuJTc6kjNdrn
+ Kr0CNdsdXI6DT9Q+fXgjU+n9PWBjxopbldbl0XbK0uYD2a2HhmMgJwh5+N4NkMNqKiXrKW6J3WCNdY
+ +9vyBZLSSIMEbKMaV5SD4OMm+2fJEizZQZhcnmb0sqwVfqGi9ZIxo2C2paxi1T4y8wuukZmXsHItWy
+ Rm1qiT5g31+3SSpFo96WgFJ0iQmK0/1K2G/K8kXJnYLY1FXQsqEIvmO2NNvS5PyGbJ8PORTjiM8HCt
+ I94yCVBxTAqZ2k5G6P1Ier927x7PJa
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 3/3/23 14:48, Luis Chamberlain wrote:
-> On Fri, Mar 03, 2023 at 01:35:10PM -0700, Shuah Khan wrote:
->> On 2/27/23 15:42, Luis Chamberlain wrote:
->>> On Mon, Feb 27, 2023 at 03:32:50PM -0700, Shuah Khan wrote:
->>>> On 2/6/23 16:43, Luis Chamberlain wrote:
->>>>> The default sefltests timeout is 45 seconds. If you run the kmod
->>>>> selftests on your own with say:
->>>>>
->>>>> ./tools/testings/selftests/kmod.sh
->>>>>
->>>>> Then the default timeout won't be in effect.
->>>>>
->>>>> I've never ran kmod selftests using the generic make wrapper
->>>>> (./tools/testing/selftests/run_kselftest.sh -s) util now
->>>>> that I have support for it on kdevops [0]. And with that the
->>>>> test is limitted to the default timeout which we quickly run
->>>>> into. Bump this up to what I see is required on 8GiB / 8 vcpu
->>>>> libvirt q35 guest as can be easily created now with kdevops.
->>>>>
->>>>> To run selftests with kdevops:
->>>>>
->>>>> make menuconfig # enable dedicated selftests and kmod test
->>>>> make
->>>>> make bringup
->>>>> make linux
->>>>> make selftests-kmod
->>>>>
->>>>> This ends up taking about 280 seconds now, give or take add
->>>>> 50 seconds more more and we end up with 350. Document the
->>>>> rationale.
->>>>>
->>>>> [0] https://github.com/linux-kdevops/kdevops
->>>>> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
->>>>> ---
->>>>>     tools/testing/selftests/kmod/settings | 4 ++++
->>>>>     1 file changed, 4 insertions(+)
->>>>>     create mode 100644 tools/testing/selftests/kmod/settings
->>>>>
->>>>> diff --git a/tools/testing/selftests/kmod/settings b/tools/testing/selftests/kmod/settings
->>>>> new file mode 100644
->>>>> index 000000000000..6fca0f1a4594
->>>>> --- /dev/null
->>>>> +++ b/tools/testing/selftests/kmod/settings
->>>>> @@ -0,0 +1,4 @@
->>>>> +# measured from a manual run:
->>>>> +# time ./tools/testing/selftests/kmod/kmod.sh
->>>>> +# Then add ~50 seconds more gracetime.
->>>>> +timeout=350
->>>>
->>>> Adding timeouts like this for individual tests increases the overall kselftest
->>>> run-time. I am not in favor of adding timeouts.
->>>>
->>>> We have to find a better way to do this.
->>>
->>> Well if folks don't have this the test will fail, and so a false
->>> positive. If the goal is to have a low time timeout for "do not run
->>> tests past this time and do not fail if we stopped the test" then
->>> that seems to be likely one way to go and each test may need to be
->>> modified to not fail fatally in case of a special signal.
->>>
->>
->> We are finding more and more that timeout values are requiring
->> tweaks. I am in favor of coming up a way to exit the test with
->> a timeout condition.
-> 
-> OK so do we use the existing timeout as a "optional, I don't want my
-> test to take longer than this" or "if this test takes longer than
-> this amount this is a fatal issue"?
+All otherwise unspecified aarch64 ID registers should be read as zero so
+we cover the whole ID register space in the get-reg-list test but we've
+added comments for those that have been named. Add comments for
+ID_AA64PFR2_EL1, ID_AA64SMFR0_EL1, ID_AA64ISAR2_EL1, ID_AA64MMFR3_EL1
+and ID_AA64MMFR4_EL1 which have been defined since the comments were
+added so someone looking for them will see that they are covered.
 
-It isn't a fatal issue. So I wouldn't call it one. I would add a
-message saying test timed out.
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ tools/testing/selftests/kvm/aarch64/get-reg-list.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-One way to handle this is:
-- Add a test run-time option and have user tune it as needed.
+diff --git a/tools/testing/selftests/kvm/aarch64/get-reg-list.c b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
+index d287dd2cac0a..df8a8afca4fc 100644
+--- a/tools/testing/selftests/kvm/aarch64/get-reg-list.c
++++ b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
+@@ -807,10 +807,10 @@ static __u64 base_regs[] = {
+ 	ARM64_SYS_REG(3, 0, 0, 3, 7),
+ 	ARM64_SYS_REG(3, 0, 0, 4, 0),	/* ID_AA64PFR0_EL1 */
+ 	ARM64_SYS_REG(3, 0, 0, 4, 1),	/* ID_AA64PFR1_EL1 */
+-	ARM64_SYS_REG(3, 0, 0, 4, 2),
++	ARM64_SYS_REG(3, 0, 0, 4, 2),	/* ID_AA64PFR2_EL1 */
+ 	ARM64_SYS_REG(3, 0, 0, 4, 3),
+ 	ARM64_SYS_REG(3, 0, 0, 4, 4),	/* ID_AA64ZFR0_EL1 */
+-	ARM64_SYS_REG(3, 0, 0, 4, 5),
++	ARM64_SYS_REG(3, 0, 0, 4, 5),	/* ID_AA64SMFR0_EL1 */
+ 	ARM64_SYS_REG(3, 0, 0, 4, 6),
+ 	ARM64_SYS_REG(3, 0, 0, 4, 7),
+ 	ARM64_SYS_REG(3, 0, 0, 5, 0),	/* ID_AA64DFR0_EL1 */
+@@ -823,7 +823,7 @@ static __u64 base_regs[] = {
+ 	ARM64_SYS_REG(3, 0, 0, 5, 7),
+ 	ARM64_SYS_REG(3, 0, 0, 6, 0),	/* ID_AA64ISAR0_EL1 */
+ 	ARM64_SYS_REG(3, 0, 0, 6, 1),	/* ID_AA64ISAR1_EL1 */
+-	ARM64_SYS_REG(3, 0, 0, 6, 2),
++	ARM64_SYS_REG(3, 0, 0, 6, 2),	/* ID_AA64ISAR2_EL1 */
+ 	ARM64_SYS_REG(3, 0, 0, 6, 3),
+ 	ARM64_SYS_REG(3, 0, 0, 6, 4),
+ 	ARM64_SYS_REG(3, 0, 0, 6, 5),
+@@ -832,8 +832,8 @@ static __u64 base_regs[] = {
+ 	ARM64_SYS_REG(3, 0, 0, 7, 0),	/* ID_AA64MMFR0_EL1 */
+ 	ARM64_SYS_REG(3, 0, 0, 7, 1),	/* ID_AA64MMFR1_EL1 */
+ 	ARM64_SYS_REG(3, 0, 0, 7, 2),	/* ID_AA64MMFR2_EL1 */
+-	ARM64_SYS_REG(3, 0, 0, 7, 3),
+-	ARM64_SYS_REG(3, 0, 0, 7, 4),
++	ARM64_SYS_REG(3, 0, 0, 7, 3),	/* ID_AA64MMFR3_EL1 */
++	ARM64_SYS_REG(3, 0, 0, 7, 4),	/* ID_AA64MMFR4_EL1 */
+ 	ARM64_SYS_REG(3, 0, 0, 7, 5),
+ 	ARM64_SYS_REG(3, 0, 0, 7, 6),
+ 	ARM64_SYS_REG(3, 0, 0, 7, 7),
 
-Make the timeout an option so users can set it based on their
-environments.
+---
+base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+change-id: 20230210-kvm-arm64-getreg-comments-078093666fd5
 
-> 
-> I ask because right now we can't override it even with an environment
-> variable. If we had such support we can let test runners (like kdevops)
-> use selftests with its own set of qualified / verified timeouts for the
-> VMs it uses.
-> 
-> For instance, Iw ant to soon start asking 0day to enable my kdevops
-> 0-day tests for the subsystems I maintain, but I can't do that yet as
-> the timeout is not correct.
-
-This test isn't part of the default run, so day has to run this as a
-special case and it would make prefect sense to provide a tunable
-timeout option.
-
-thanks,
--- Shuah
-> 
->    Luis
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
 
