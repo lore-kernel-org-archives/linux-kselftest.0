@@ -2,34 +2,34 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C159DC678D4
-	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Mar 2023 17:57:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55F1EC678D5
+	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Mar 2023 17:57:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230185AbjCGR5T (ORCPT
+        id S229748AbjCGR5W (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 7 Mar 2023 12:57:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46158 "EHLO
+        Tue, 7 Mar 2023 12:57:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230214AbjCGR4l (ORCPT
+        with ESMTP id S229868AbjCGR4n (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Mar 2023 12:56:41 -0500
+        Tue, 7 Mar 2023 12:56:43 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3421A42DD;
-        Tue,  7 Mar 2023 09:51:20 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D5109DE31;
+        Tue,  7 Mar 2023 09:51:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 52A15B819B4;
-        Tue,  7 Mar 2023 17:51:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDA70C433EF;
-        Tue,  7 Mar 2023 17:51:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5B9D5B819BF;
+        Tue,  7 Mar 2023 17:51:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BB17C433EF;
+        Tue,  7 Mar 2023 17:51:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678211478;
-        bh=BjwGdaLYs0pdsmZf0YX6ZKPmNaoc52KbJ38cJ8yp6KQ=;
+        s=korg; t=1678211481;
+        bh=eP+73pVJN2JOL4/U1n4qAQhINBuvjQM1H1Ib7gZxDEo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1hl/04423kqga9rpb6ehaWSMp5hNaLGA06fGWkNGlrI3wEQozMKZ5++uDBU04sFxH
-         LELpPRL8QEeIx3nA/KmVNl5zCyIuP91AxZOHUAIMJEzyvfiJrT+36V4/1BL1swlmGG
-         9KFmLZeDefQjD928W99mDx4VZI7VljQ5GmsfFlIo=
+        b=J9L1TbYevx9zKN5PMrZ5ux4o4JE/1q4CCsCttI1JcYAaLGM+cfB+VgTGYHnEPovfE
+         1WxLDbLtSltuHx1xAWuiSPJI/94jPJ0ynjU+gAmIxU/E62Kskmqk6XAIff0VyVCEh3
+         MuE5+ltB0D4eov38dbPU8JikuUmvf4OY8T3QEJ1Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -37,10 +37,11 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
         Ingo Molnar <mingo@redhat.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Subject: [PATCH 6.2 0876/1001] selftests: drivers: Fix incorrect kernel headers search path
-Date:   Tue,  7 Mar 2023 18:00:48 +0100
-Message-Id: <20230307170059.913722189@linuxfoundation.org>
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>
+Subject: [PATCH 6.2 0859/1001] selftests: arm64: Fix incorrect kernel headers search path
+Date:   Tue,  7 Mar 2023 18:00:31 +0100
+Message-Id: <20230307170059.119318780@linuxfoundation.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230307170022.094103862@linuxfoundation.org>
 References: <20230307170022.094103862@linuxfoundation.org>
@@ -54,7 +55,7 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 
-commit 07f0148aafe8c95a3a76cd59e9e75b4d78d1d31d upstream.
+commit 7482c19173b7eb044d476b3444d7ee55bc669d03 upstream.
 
 Use $(KHDR_INCLUDES) as lookup path for kernel headers. This prevents
 building against kernel headers from the build environment in scenarios
@@ -66,35 +67,35 @@ Cc: Shuah Khan <shuah@kernel.org>
 Cc: linux-kselftest@vger.kernel.org
 Cc: Ingo Molnar <mingo@redhat.com>
 Cc: <stable@vger.kernel.org>  # 5.18+
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
 Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/drivers/dma-buf/Makefile        |    2 +-
- tools/testing/selftests/drivers/s390x/uvdevice/Makefile |    3 +--
- 2 files changed, 2 insertions(+), 3 deletions(-)
+ tools/testing/selftests/arm64/fp/Makefile   |    2 +-
+ tools/testing/selftests/arm64/tags/Makefile |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
---- a/tools/testing/selftests/drivers/dma-buf/Makefile
-+++ b/tools/testing/selftests/drivers/dma-buf/Makefile
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0-only
--CFLAGS += -I../../../../../usr/include/
+--- a/tools/testing/selftests/arm64/fp/Makefile
++++ b/tools/testing/selftests/arm64/fp/Makefile
+@@ -3,7 +3,7 @@
+ # A proper top_srcdir is needed by KSFT(lib.mk)
+ top_srcdir = $(realpath ../../../../../)
+ 
+-CFLAGS += -I$(top_srcdir)/usr/include/
 +CFLAGS += $(KHDR_INCLUDES)
  
- TEST_GEN_PROGS := udmabuf
+ TEST_GEN_PROGS := fp-stress \
+ 	sve-ptrace sve-probe-vls \
+--- a/tools/testing/selftests/arm64/tags/Makefile
++++ b/tools/testing/selftests/arm64/tags/Makefile
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
  
---- a/tools/testing/selftests/drivers/s390x/uvdevice/Makefile
-+++ b/tools/testing/selftests/drivers/s390x/uvdevice/Makefile
-@@ -11,10 +11,9 @@ else
- TEST_GEN_PROGS := test_uvdevice
- 
- top_srcdir ?= ../../../../../..
--khdr_dir = $(top_srcdir)/usr/include
- LINUX_TOOL_ARCH_INCLUDE = $(top_srcdir)/tools/arch/$(ARCH)/include
- 
--CFLAGS += -Wall -Werror -static -I$(khdr_dir) -I$(LINUX_TOOL_ARCH_INCLUDE)
-+CFLAGS += -Wall -Werror -static $(KHDR_INCLUDES) -I$(LINUX_TOOL_ARCH_INCLUDE)
- 
- include ../../../lib.mk
+-CFLAGS += -I../../../../../usr/include/
++CFLAGS += $(KHDR_INCLUDES)
+ TEST_GEN_PROGS := tags_test
+ TEST_PROGS := run_tags_test.sh
  
 
 
