@@ -2,166 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B5668C76186
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67F37C74A4B
 	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Mar 2023 22:24:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231448AbjCGWXh (ORCPT
+        id S231183AbjCGWXd (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 7 Mar 2023 17:23:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48778 "EHLO
+        Tue, 7 Mar 2023 17:23:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231575AbjCGWXD (ORCPT
+        with ESMTP id S231324AbjCGWW6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Mar 2023 17:23:03 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB2D18B0F;
-        Tue,  7 Mar 2023 14:22:58 -0800 (PST)
+        Tue, 7 Mar 2023 17:22:58 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC24A4B2D;
+        Tue,  7 Mar 2023 14:22:44 -0800 (PST)
 From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1678227764;
-        bh=wMlMqNF3HdsYBhiMwlY00yIFmFgEItJMu93P1cpiTpQ=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=NmpjSn5YwfoF1abfuFJijYMNNRIa0mx8eQEZFvBSGeYztxwiE/Me+n99EAMrGX6Fv
-         gI1qjXLVit3g103iTC5gfOKWsqCRtT/gKQV1Ml8vy3OQvmxwWySaLKhbaErh/KC1cF
-         ugjQwa6WJ922MDTuy/bSkVZbcNw3QEdg4L2f8dwI=
-Date:   Tue, 07 Mar 2023 22:22:34 +0000
-Subject: [PATCH RFC 5/5] tools/nolibc: tests: add test for
- -fstack-protector
+        s=mail; t=1678227762;
+        bh=kgcKp/6qGiFaqBrzwsbN0tNUCKiKFuSQnGedC4rFcio=;
+        h=From:Subject:Date:To:Cc:From;
+        b=naW7o5lCeB/nUleImnp+h+9gLyPBxPTao9FDtTbr/86omhIELCgYKidsfqduXQWLO
+         33V8jHAzuTvCfGz+sU2CPYnjN8CeERJkBukYdjfAYfIdDgbDeoQq4Dfe08l72qiY0F
+         kVjyLBf1isto0e1OdQIGZWt8zrE8O6pAGuMiHNvk=
+Subject: [PATCH RFC 0/5] tools/nolibc: add support for stack protector
+Date:   Tue, 07 Mar 2023 22:22:29 +0000
+Message-Id: <20230223-nolibc-stackprotector-v1-0-3e74d81b3f21@weissschuh.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20230223-nolibc-stackprotector-v1-5-3e74d81b3f21@weissschuh.net>
-References: <20230223-nolibc-stackprotector-v1-0-3e74d81b3f21@weissschuh.net>
-In-Reply-To: <20230223-nolibc-stackprotector-v1-0-3e74d81b3f21@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIACW5B2QC/x2NywrCMBAAf6Xs2UCbVipeBT/Aq3jIY2MXw6Zso
+ gil/+7icQaG2aCiEFY4dxsIfqhSYYXh0EFYHD/RUFQG29uxt3Y0XDL5YGpz4bVKaRhaEROneEz
+ TKaV5HkBb7yoaL47DojW/c1a5Cib6/md3uF0v8Nj3H9Cwt9GBAAAA
 To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1678227756; l=3131;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1678227756; l=1747;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=wMlMqNF3HdsYBhiMwlY00yIFmFgEItJMu93P1cpiTpQ=;
- b=LUG3ujBuABS0LQOJZ/EC+fRvBT+VCTd8tKxSAkaQ/VV8PiWPHofAfK/UB+9qTeTgG+SngI5BU
- Cn6xoSswl9+COeeKYUc6FbOjZ2q/+j/slBLKz6tcRU8R8JIdpFwXD5W
+ bh=kgcKp/6qGiFaqBrzwsbN0tNUCKiKFuSQnGedC4rFcio=;
+ b=HtG6zEnZMq7VZz5FJquxBBgSKoVo0gRsHMBytoj17uzdaG0886ia0VLA4zZnAEvxC+fz3l7Gf
+ Lm0Ir34BdYUAbVku8YsBaxrOn1Aj5WflVv3/6LKjy5i5swV5+GOw8kY
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Test the previously introduce stack protector functionality in nolibc.
+Stack protection is a feature to detect and handle stack buffer
+overflows at runtime.
+For this to work the compiler and libc have to collaborate.
+
+This patch adds the following parts to nolibc that are required by the
+compiler:
+
+* __stack_chk_guard: random sentinel value
+* __stack_chk_fail: handler for detected stack smashes
+
+In addition an initialization function is added that randomizes the
+sentinel value.
+
+Only support for global guards is implemented.
+Register guards are useful in multi-threaded context which nolibc does
+not provide support for.
+
+Link: https://lwn.net/Articles/584225/
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- tools/testing/selftests/nolibc/nolibc-test.c | 74 +++++++++++++++++++++++++++-
- 1 file changed, 72 insertions(+), 2 deletions(-)
+Thomas Weißschuh (5):
+      tools/nolibc: add definitions for standard fds
+      tools/nolibc: add helpers for wait() signal exits
+      tools/nolibc: tests: constify test_names
+      tools/nolibc: add support for stack protector
+      tools/nolibc: tests: add test for -fstack-protector
 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index fb2d4872fac9..4990b2750279 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -45,6 +45,7 @@ char **environ;
- struct test {
- 	const char *name;              // test name
- 	int (*func)(int min, int max); // handler
-+	char skip_by_default;         // don't run by default
- };
- 
- #ifndef _NOLIBC_STDLIB_H
-@@ -667,6 +668,70 @@ int run_stdlib(int min, int max)
- 	return ret;
- }
- 
-+#if defined(__clang__)
-+__attribute__((optnone))
-+#elif defined(__GNUC__)
-+__attribute__((optimize("O0")))
-+#endif
-+static int run_smash_stack(int min, int max)
-+{
-+	char buf[100];
-+
-+	for (size_t i = 0; i < 200; i++)
-+		buf[i] = 15;
-+
-+	return 1;
-+}
-+
-+int run_stackprotector(int min, int max)
-+{
-+	int llen = 0;
-+
-+	llen += printf("0 ");
-+
-+#if !defined(NOLIBC_STACKPROTECTOR)
-+	llen += printf("stack smashing detection not supported");
-+	pad_spc(llen, 64, "[SKIPPED]\n");
-+	return 0;
-+#endif
-+
-+	pid_t pid = fork();
-+
-+	switch (pid) {
-+	case -1:
-+		llen += printf("fork()");
-+		pad_spc(llen, 64, "[FAIL]\n");
-+		return 1;
-+
-+	case 0:
-+		close(STDOUT_FILENO);
-+		close(STDERR_FILENO);
-+
-+		char *const argv[] = {
-+			"/proc/self/exe",
-+			"_smash_stack",
-+			NULL,
-+		};
-+		execve("/proc/self/exe", argv, NULL);
-+		return 1;
-+
-+	default: {
-+		int status;
-+
-+		pid = waitpid(pid, &status, 0);
-+
-+		if (pid == -1 || !WIFSIGNALED(status) || WTERMSIG(status) != SIGABRT) {
-+			llen += printf("waitpid()");
-+			pad_spc(llen, 64, "[FAIL]\n");
-+			return 1;
-+		}
-+		llen += printf("stack smashing detected");
-+		pad_spc(llen, 64, " [OK]\n");
-+		return 0;
-+	}
-+	}
-+}
-+
- /* prepare what needs to be prepared for pid 1 (stdio, /dev, /proc, etc) */
- int prepare(void)
- {
-@@ -719,8 +784,11 @@ int prepare(void)
- /* This is the definition of known test names, with their functions */
- static const struct test test_names[] = {
- 	/* add new tests here */
--	{ .name = "syscall",   .func = run_syscall  },
--	{ .name = "stdlib",    .func = run_stdlib   },
-+	{ .name = "syscall",        .func = run_syscall         },
-+	{ .name = "stdlib",         .func = run_stdlib          },
-+	{ .name = "stackprotector", .func = run_stackprotector, },
-+	{ .name = "_smash_stack",   .func = run_smash_stack,
-+	  .skip_by_default = 1                                  },
- 	{ 0 }
- };
- 
-@@ -811,6 +879,8 @@ int main(int argc, char **argv, char **envp)
- 	} else {
- 		/* no test mentioned, run everything */
- 		for (idx = 0; test_names[idx].name; idx++) {
-+			if (test_names[idx].skip_by_default)
-+				continue;
- 			printf("Running test '%s'\n", test_names[idx].name);
- 			err = test_names[idx].func(min, max);
- 			ret += err;
+ tools/include/nolibc/Makefile                |  4 +-
+ tools/include/nolibc/arch-i386.h             |  8 ++-
+ tools/include/nolibc/arch-x86_64.h           |  5 ++
+ tools/include/nolibc/nolibc.h                |  1 +
+ tools/include/nolibc/stackprotector.h        | 48 ++++++++++++++++++
+ tools/include/nolibc/types.h                 |  2 +
+ tools/include/nolibc/unistd.h                |  5 ++
+ tools/testing/selftests/nolibc/Makefile      | 12 +++++
+ tools/testing/selftests/nolibc/nolibc-test.c | 76 ++++++++++++++++++++++++++--
+ 9 files changed, 155 insertions(+), 6 deletions(-)
+---
+base-commit: b7453ccfdbe0b9e95b488814c53e8cbf8966aae4
+change-id: 20230223-nolibc-stackprotector-d4d5f48ff771
 
+Best regards,
 -- 
-2.39.2
+Thomas Weißschuh <linux@weissschuh.net>
 
