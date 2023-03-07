@@ -2,34 +2,34 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB7F0C678D5
-	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Mar 2023 18:52:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A83DC678D4
+	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Mar 2023 18:54:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233311AbjCGSwz (ORCPT
+        id S233360AbjCGSyJ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 7 Mar 2023 13:52:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52226 "EHLO
+        Tue, 7 Mar 2023 13:54:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233398AbjCGSwX (ORCPT
+        with ESMTP id S232925AbjCGSxs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Mar 2023 13:52:23 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00FC5C8097;
-        Tue,  7 Mar 2023 10:40:54 -0800 (PST)
+        Tue, 7 Mar 2023 13:53:48 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0652FB3286;
+        Tue,  7 Mar 2023 10:41:45 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A8526B8184E;
-        Tue,  7 Mar 2023 18:39:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0208BC433EF;
-        Tue,  7 Mar 2023 18:39:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7F85EB819D0;
+        Tue,  7 Mar 2023 18:36:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7730C4339B;
+        Tue,  7 Mar 2023 18:36:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678214371;
-        bh=BjwGdaLYs0pdsmZf0YX6ZKPmNaoc52KbJ38cJ8yp6KQ=;
+        s=korg; t=1678214201;
+        bh=0/FxfKa+D6jU4s2roRUp6voKNROUjD0Ib4RCyc9aZm0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S2xJTObO3d2GE+vZ/ocmzidMz/vsXpKEMt4QfnZ61kSC7zW6k/sEf2iA4fBYDiIe9
-         PtFmXrzdgH4bsUwrC7dARHyTLZFJxUXxEDmhLsr55g5XanFbBQ88ARgU0FtPyJOUnx
-         SZsQGPE1BZLaql9lY4bssiMjXuzUgaDoMkmTVNik=
+        b=BhAd7SUpilOeoJN7nNLdgiHfzkVg2iZQKK2mJGa0EovSQ8hR6n0amIWpJ40j3ylWV
+         FF0pCnnsu81YSoZ7g58drxD3Kg2A45mt3Sls4mAJ2F6Llo38x3MVRPc1cElSmtn0Ye
+         0rLlcv91Sy+CWCnSoAJJSdyR7ZoH6g+R6YSmgE84=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -38,9 +38,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
         Ingo Molnar <mingo@redhat.com>,
         Shuah Khan <skhan@linuxfoundation.org>
-Subject: [PATCH 6.1 770/885] selftests: drivers: Fix incorrect kernel headers search path
-Date:   Tue,  7 Mar 2023 18:01:44 +0100
-Message-Id: <20230307170035.414295107@linuxfoundation.org>
+Subject: [PATCH 6.1 755/885] selftests: pidfd: Fix incorrect kernel headers search path
+Date:   Tue,  7 Mar 2023 18:01:29 +0100
+Message-Id: <20230307170034.736789030@linuxfoundation.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230307170001.594919529@linuxfoundation.org>
 References: <20230307170001.594919529@linuxfoundation.org>
@@ -54,7 +54,7 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 
-commit 07f0148aafe8c95a3a76cd59e9e75b4d78d1d31d upstream.
+commit 3f7d71768795c386019f2295c1986d00035c9f0f upstream.
 
 Use $(KHDR_INCLUDES) as lookup path for kernel headers. This prevents
 building against kernel headers from the build environment in scenarios
@@ -65,36 +65,21 @@ Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: Shuah Khan <shuah@kernel.org>
 Cc: linux-kselftest@vger.kernel.org
 Cc: Ingo Molnar <mingo@redhat.com>
-Cc: <stable@vger.kernel.org>  # 5.18+
+Cc: <stable@vger.kernel.org> # 5.18+
 Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/drivers/dma-buf/Makefile        |    2 +-
- tools/testing/selftests/drivers/s390x/uvdevice/Makefile |    3 +--
- 2 files changed, 2 insertions(+), 3 deletions(-)
+ tools/testing/selftests/pidfd/Makefile |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/tools/testing/selftests/drivers/dma-buf/Makefile
-+++ b/tools/testing/selftests/drivers/dma-buf/Makefile
+--- a/tools/testing/selftests/pidfd/Makefile
++++ b/tools/testing/selftests/pidfd/Makefile
 @@ -1,5 +1,5 @@
  # SPDX-License-Identifier: GPL-2.0-only
--CFLAGS += -I../../../../../usr/include/
-+CFLAGS += $(KHDR_INCLUDES)
+-CFLAGS += -g -I../../../../usr/include/ -pthread -Wall
++CFLAGS += -g $(KHDR_INCLUDES) -pthread -Wall
  
- TEST_GEN_PROGS := udmabuf
- 
---- a/tools/testing/selftests/drivers/s390x/uvdevice/Makefile
-+++ b/tools/testing/selftests/drivers/s390x/uvdevice/Makefile
-@@ -11,10 +11,9 @@ else
- TEST_GEN_PROGS := test_uvdevice
- 
- top_srcdir ?= ../../../../../..
--khdr_dir = $(top_srcdir)/usr/include
- LINUX_TOOL_ARCH_INCLUDE = $(top_srcdir)/tools/arch/$(ARCH)/include
- 
--CFLAGS += -Wall -Werror -static -I$(khdr_dir) -I$(LINUX_TOOL_ARCH_INCLUDE)
-+CFLAGS += -Wall -Werror -static $(KHDR_INCLUDES) -I$(LINUX_TOOL_ARCH_INCLUDE)
- 
- include ../../../lib.mk
- 
+ TEST_GEN_PROGS := pidfd_test pidfd_fdinfo_test pidfd_open_test \
+ 	pidfd_poll_test pidfd_wait pidfd_getfd_test pidfd_setns_test
 
 
