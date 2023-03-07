@@ -2,84 +2,132 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED0C9C678DB
-	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Mar 2023 17:58:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ED6EBC678DB
+	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Mar 2023 18:44:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230244AbjCGR6P (ORCPT
+        id S232969AbjCGSoT (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 7 Mar 2023 12:58:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51020 "EHLO
+        Tue, 7 Mar 2023 13:44:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230117AbjCGR56 (ORCPT
+        with ESMTP id S233182AbjCGSnu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Mar 2023 12:57:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 666BAA4B06;
-        Tue,  7 Mar 2023 09:52:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 460F4B818F6;
-        Tue,  7 Mar 2023 17:52:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A40BC433EF;
-        Tue,  7 Mar 2023 17:52:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678211546;
-        bh=/ooHOkNY9mnKWxMy7OT2dF9ymgmUJhRB6jQOXArb1YE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JC7ol2btuyy8ZqRTMo08DKuMntAn09OLuaXDO3mXdAV2bsWDqmalTJNIi8Mj8HsZp
-         3tWweT07subEj1/jfmSedJ0erh38ZOXVUevIR77unqapsOrxRZzmyodCrlnlWOWADN
-         90CGFoNeA04fhgyMXERI2SOEIGtpieO9dpXbX8vA=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        Ingo Molnar <mingo@redhat.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Subject: [PATCH 6.2 0857/1001] selftests: core: Fix incorrect kernel headers search path
-Date:   Tue,  7 Mar 2023 18:00:29 +0100
-Message-Id: <20230307170059.023368304@linuxfoundation.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230307170022.094103862@linuxfoundation.org>
-References: <20230307170022.094103862@linuxfoundation.org>
-User-Agent: quilt/0.67
+        Tue, 7 Mar 2023 13:43:50 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0EEAF6AC
+        for <linux-kselftest@vger.kernel.org>; Tue,  7 Mar 2023 10:33:57 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id ky4so15129974plb.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Mar 2023 10:33:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112; t=1678213965;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=7nSW2bIEn/YH0CU0N36uXcKpQuGPDeUNwGojRrSBHl0=;
+        b=pAy3yAcKHVEvrxLB2Dt87nUMh/9BRoRk+UwOXKdX8Q6sSHOTKGGrHoCgOzZ1H6DRTb
+         wSdQI9tLiMg4SuSP11eORtI8r7CYah/QGH6NIIKCwa/JaQFH2SOwRO80zXeT+vuFucVP
+         rGGVKSD6+boCsMwaoSv6OeWmQ7JD7TLqb3eBzrI3AbuQzjxNpNES0iuOZ601UK99YyQg
+         MGYwdi/DTkLbXpW+QPEwaeRliV+5O2w4YdB2uV743lyBMtOsF4cCa4wzLRybyRFOGVan
+         Wh53+f8TsPbwaeGo+g/D8nG8W8oCloPcOzv8Sa9hIFks5O5zWtXZpjsLqn3KWzh0BlZY
+         +4Nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678213965;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7nSW2bIEn/YH0CU0N36uXcKpQuGPDeUNwGojRrSBHl0=;
+        b=3jvX9qHKZ1jaujIQQuwKLEox4fg8vUSKK3Izii9xOV0uzkqJq0dgad4uaTr5+6xvdo
+         SfMugQsZLNDkBc2Y4VR6d0llUWTE6kEOQ0Y8gVRdunXHcG1NPxN9MsvwimDqaNTM3G1c
+         pfX/HesW2SrzVhfE3/EbHTuWqPMoVMELla7idb/ph9NJdGVwMkvS28t78qYjxkEoXXkK
+         Z3bRKl0eicY8Vhy2pf9uPwAJSqrY7srtltGQUhZPI618IEDVSJxLLaiBk+n6KN5fBN6q
+         OnVdHVysQXK/47/nqFDFAPtgNhXuqLT/3xZhRCnybZppYeC2F5IBG33gYkiEW/cTx+YI
+         9U/A==
+X-Gm-Message-State: AO0yUKUxdNJEgP+fqxNBSLhd9oQcrOLzmHspFFU+JG2LDqwbcxDlxIHp
+        Brlw7f2dXYJ6AByMcCxz0bm6ZmGpvOpom9VdSaUL8DxP
+X-Google-Smtp-Source: AK7set+Gfq4O7MAYS+dtiW124J3NonyyBQigve0G+3uyUO1C+mZjHap/yUT3nigup9JgHzGnBltjIQ==
+X-Received: by 2002:a05:6a21:6da5:b0:cc:46bd:39b0 with SMTP id wl37-20020a056a216da500b000cc46bd39b0mr16338000pzb.56.1678213965302;
+        Tue, 07 Mar 2023 10:32:45 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id g14-20020a62e30e000000b005aa80fe8be7sm8232655pfh.67.2023.03.07.10.32.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 10:32:45 -0800 (PST)
+Message-ID: <6407834d.620a0220.afc92.f666@mx.google.com>
+Date:   Tue, 07 Mar 2023 10:32:45 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: next
+X-Kernelci-Tree: kselftest
+X-Kernelci-Kernel: v6.3-rc1-1-ge1e17d7debf4
+X-Kernelci-Report-Type: test
+Subject: kselftest/next kselftest-cpufreq: 4 runs,
+ 1 regressions (v6.3-rc1-1-ge1e17d7debf4)
+To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+kselftest/next kselftest-cpufreq: 4 runs, 1 regressions (v6.3-rc1-1-ge1e17d=
+7debf4)
 
-commit 145df2fdc38f24b3e52e4c2a59b02d874a074fbd upstream.
+Regressions Summary
+-------------------
 
-Use $(KHDR_INCLUDES) as lookup path for kernel headers. This prevents
-building against kernel headers from the build environment in scenarios
-where kernel headers are installed into a specific output directory
-(O=...).
-
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: <stable@vger.kernel.org> # 5.18+
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- tools/testing/selftests/core/Makefile |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
---- a/tools/testing/selftests/core/Makefile
-+++ b/tools/testing/selftests/core/Makefile
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0-only
--CFLAGS += -g -I../../../../usr/include/
-+CFLAGS += -g $(KHDR_INCLUDES)
- 
- TEST_GEN_PROGS := close_range_test
- 
+platform        | arch  | lab           | compiler | defconfig             =
+       | regressions
+----------------+-------+---------------+----------+-----------------------=
+-------+------------
+mt8173-elm-hana | arm64 | lab-collabora | gcc-10   | defconfig+kse...4-chro=
+mebook | 1          =
 
 
+  Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/v6.3=
+-rc1-1-ge1e17d7debf4/plan/kselftest-cpufreq/
+
+  Test:     kselftest-cpufreq
+  Tree:     kselftest
+  Branch:   next
+  Describe: v6.3-rc1-1-ge1e17d7debf4
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
+lftest.git
+  SHA:      e1e17d7debf486fd3b757df9e009b8d109e4be43 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform        | arch  | lab           | compiler | defconfig             =
+       | regressions
+----------------+-------+---------------+----------+-----------------------=
+-------+------------
+mt8173-elm-hana | arm64 | lab-collabora | gcc-10   | defconfig+kse...4-chro=
+mebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/640779de3413ee27728c8648
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest+arm64-chromebook
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//kselftest/next/v6.3-rc1-1-ge1e=
+17d7debf4/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora/k=
+selftest-cpufreq-mt8173-elm-hana.txt
+  HTML log:    https://storage.kernelci.org//kselftest/next/v6.3-rc1-1-ge1e=
+17d7debf4/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora/k=
+selftest-cpufreq-mt8173-elm-hana.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
+elftest/20230303.0/arm64/initrd.cpio.gz =
+
+
+
+  * kselftest-cpufreq.login: https://kernelci.org/test/case/id/640779de3413=
+ee27728c8649
+        failing since 140 days (last pass: linux-kselftest-next-6.0-rc2-11-=
+g144eeb2fc761, first fail: v6.1-rc1) =
+
+ =20
