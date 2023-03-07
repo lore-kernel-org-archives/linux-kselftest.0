@@ -2,112 +2,76 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FB59C678D5
-	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Mar 2023 21:18:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E1BCC678D5
+	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Mar 2023 22:23:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231374AbjCGVSk (ORCPT
+        id S231674AbjCGWX1 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 7 Mar 2023 16:18:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54100 "EHLO
+        Tue, 7 Mar 2023 17:23:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231370AbjCGVSi (ORCPT
+        with ESMTP id S229667AbjCGWWz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Mar 2023 16:18:38 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F23099D65;
-        Tue,  7 Mar 2023 13:18:37 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id ec29so27021601edb.6;
-        Tue, 07 Mar 2023 13:18:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678223915;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bT9FiASK1DB4QbD0wXIRsqFb1t5m7/WMXyE4zipQBgs=;
-        b=XZRUHZNlOVWWar8OmQxc4l18Ns4Ay3zk1r5/iP0nGgvrTarrD1WtX4t7ZDUeAU+Kmn
-         y3gux0xqokeG1SF1sfRK8kH6Fs4eK/RB3DJDFJateRr3aPzJO/rdAB33D1DxBCmMvug1
-         2+t/rOZmMi9aCK9I8RXUjUslBeJtPNIejQlHCpUdxA/6eyfbUFM9w37VUA1uKho+LTWc
-         CC6uwViT8Xbi5YfZ5sxgklTr+38MZrlyneYHCqEEFrcAi/gzGISimm7UQJKVDiZYkpcn
-         8L4DjJ3sPxFDMWliMIZaLeEF/uitLcKCkMjVzBypmiqjyFBvfKhUi2jAGDUpLX9HbWYf
-         1h1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678223915;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bT9FiASK1DB4QbD0wXIRsqFb1t5m7/WMXyE4zipQBgs=;
-        b=F+lbrUxRtBxt4NZRLnH5iJsbhQQBfN120YX2ExOnMQXLymfoPa7sOm+LT2CmedHG+l
-         2PfaUHUrLPiGnuTB9ThcFu0I3miBbQGE1bNVF4rHCoLetN+l7XAU2ALTF/M97CGmaWJ5
-         ODN3XT9sD+5KIQEvdcAN2PB+iMeUxPsTshxQcQCFPADOIfjljIjRZ94AmXIwPAUcVWo3
-         yBgLJTpqxJk8m1/Zp7I23tDtWKjqxBYcbu7b4YQbngqY6JpZi019ORtphKV6dZM4BoZq
-         VeJSMpNfOWq785+ONJNGp/tk3sRyYJ2oVfDQoeOJr1cqaJA0qlFkZTfwnmFsajPdhTdJ
-         hFSg==
-X-Gm-Message-State: AO0yUKUj72GNPDC19RdZn+Cx8brRvDRrelUQpdn4jn/hZEBuAADeH/V8
-        FGYZ86zONEsMpSxhf30FhSm7zOgkVHudPLvKshqeQ1r2HzY=
-X-Google-Smtp-Source: AK7set+Se0iunflJpZCYnoGyjZ2gQplgrdTsGwS0vBTFJC6JhbRPQsBREQBt88sd9cj+dWd/Nc5Ban1xnd1TF7pS/ps=
-X-Received: by 2002:a17:906:948:b0:8b1:2898:2138 with SMTP id
- j8-20020a170906094800b008b128982138mr7898708ejd.3.1678223915375; Tue, 07 Mar
- 2023 13:18:35 -0800 (PST)
+        Tue, 7 Mar 2023 17:22:55 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BFBF15C81;
+        Tue,  7 Mar 2023 14:22:44 -0800 (PST)
+From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1678227761;
+        bh=Q1jPkyZPjmkNR+Jyt/fGKq7/BIdQKHocnxXtbPXnLSw=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+        b=lfM6gB7vpnbV7lLlqhIAQvjNfPPsozDIil7qCsXldnF7LPqqzcg+6k9gfyy8OVi5N
+         F03kVXkRO5yyxxK6hYFAm0FXxCwRiP2KYL49r3PBOSQ6y4PAVju0czdw/bkWcUIjIG
+         FFufZnn/jvclQ1YHa2ZChcz6uyZIkJS+s+qYARXk=
+Date:   Tue, 07 Mar 2023 22:22:30 +0000
+Subject: [PATCH RFC 1/5] tools/nolibc: add definitions for standard fds
 MIME-Version: 1.0
-References: <cover.1677526810.git.dxu@dxuuu.xyz> <20230227230338.awdzw57e4uzh4u7n@MacBook-Pro-6.local>
- <20230228015712.clq6kyrsd7rrklbz@kashmir.localdomain> <CAADnVQ+a633QyZgkbXfRiT_WRbPgr5n8RN0w=ntEkBHUeqRcbw@mail.gmail.com>
- <20230228231716.a5uwc4tdo3kjlkg7@aviatrix-fedora.tail1b9c7.ts.net>
- <CAADnVQKK+a_0effQW5qBSq1AXoQOJg5-79q3d1NWJ2Vv8SHvOw@mail.gmail.com>
- <20230307194801.mopwvidrkrybm7h5@kashmir.localdomain> <20230307201156.GF13059@breakpoint.cc>
-In-Reply-To: <20230307201156.GF13059@breakpoint.cc>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 7 Mar 2023 13:18:23 -0800
-Message-ID: <CAADnVQJXpkzic+v-TTn2o8hAu94S2ARq86DUamKiMEqmJ1zy+g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 0/8] Support defragmenting IPv(4|6) packets in BPF
-To:     Florian Westphal <fw@strlen.de>
-Cc:     Daniel Xu <dxu@dxuuu.xyz>, bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20230223-nolibc-stackprotector-v1-1-3e74d81b3f21@weissschuh.net>
+References: <20230223-nolibc-stackprotector-v1-0-3e74d81b3f21@weissschuh.net>
+In-Reply-To: <20230223-nolibc-stackprotector-v1-0-3e74d81b3f21@weissschuh.net>
+To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1678227756; l=623;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=Q1jPkyZPjmkNR+Jyt/fGKq7/BIdQKHocnxXtbPXnLSw=;
+ b=k9sQ2zQo0NYNDTEvziF2PQIfuN0V6xMfb7Q1Mjy1kpxg7OsUccF2ZAZUmoqJ0+KzrfoAY2NzZ
+ +mLkLpw/h3IAnWIF+tu2OHFTiVb2tr4DISmA/JJGeea/cY4teLpfhYk
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 12:11=E2=80=AFPM Florian Westphal <fw@strlen.de> wro=
-te:
->
-> Daniel Xu <dxu@dxuuu.xyz> wrote:
-> > From my reading (I'll run some tests later) it looks like netfilter
-> > will defrag all ipv4/ipv6 packets in any netns with conntrack enabled.
-> > It appears to do so in NF_INET_PRE_ROUTING.
->
-> Yes, and output.
->
-> > One thing we would need though are (probably kfunc) wrappers around
-> > nf_defrag_ipv4_enable() and nf_defrag_ipv6_enable() to ensure BPF progs
-> > are not transitively depending on defrag support from other netfilter
-> > modules.
-> >
-> > The exact mechanism would probably need some thinking, as the above
-> > functions kinda rely on module_init() and module_exit() semantics. We
-> > cannot make the prog bump the refcnt every time it runs -- it would
-> > overflow.  And it would be nice to automatically free the refcnt when
-> > prog is unloaded.
->
-> Probably add a flag attribute that is evaluated at BPF_LINK time, so
-> progs can say they need defrag enabled.  Same could be used to request
-> conntrack enablement.
->
-> Will need some glue on netfilter side to handle DEFRAG=3Dm, but we alread=
-y
-> have plenty of those.
+These are useful for users and will also be used in an upcoming
+testcase.
 
-All makes perfect sense to me.
-It's cleaner than a special netdevice.
-ipv4_conntrack_defrag() is pretty neat. I didn't know about it.
-If we can reuse it as-is that would be ideal.
-Conceptually it fits perfectly.
-If we cannot reuse it (for whatever unlikely reason) I would
-argue that TC hook should gain similar functionality.
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+ tools/include/nolibc/unistd.h | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/tools/include/nolibc/unistd.h b/tools/include/nolibc/unistd.h
+index 1cfcd52106a4..ac7d53d986cd 100644
+--- a/tools/include/nolibc/unistd.h
++++ b/tools/include/nolibc/unistd.h
+@@ -13,6 +13,11 @@
+ #include "sys.h"
+ 
+ 
++#define STDIN_FILENO  0
++#define STDOUT_FILENO 1
++#define STDERR_FILENO 2
++
++
+ static __attribute__((unused))
+ int msleep(unsigned int msecs)
+ {
+
+-- 
+2.39.2
+
