@@ -2,34 +2,34 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 56C18C678D4
-	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Mar 2023 18:48:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78A6FC678D5
+	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Mar 2023 18:48:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233295AbjCGSsR (ORCPT
+        id S232917AbjCGSs2 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 7 Mar 2023 13:48:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37590 "EHLO
+        Tue, 7 Mar 2023 13:48:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233278AbjCGSrt (ORCPT
+        with ESMTP id S233263AbjCGSsI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Mar 2023 13:47:49 -0500
+        Tue, 7 Mar 2023 13:48:08 -0500
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F3E9BC6D7;
-        Tue,  7 Mar 2023 10:36:59 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB418BC6E4;
+        Tue,  7 Mar 2023 10:37:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E4263CE1C9C;
-        Tue,  7 Mar 2023 18:36:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D96D5C433EF;
-        Tue,  7 Mar 2023 18:36:43 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5408ECE1CA0;
+        Tue,  7 Mar 2023 18:36:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DD72C43329;
+        Tue,  7 Mar 2023 18:36:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678214204;
-        bh=O3HI6ryrPz/9NtjXoIDP253cnk70kHJ4kKsXW93ORXs=;
+        s=korg; t=1678214213;
+        bh=5HPV5A2n+wX8FaESr1ESZ5sZPXmSk506fMceRtKFuNE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=POHqrvIBugCvEwYC2CAl40gOqCrdpwDu2XVm9zPEocZer6yvdCuZdUmo6Rz3lCESg
-         CVQ+Fk1cWb+DTInQSemF7nn4fuA9te39wq95cz6jqV+3aI8zH+U72g8Ai45zRj2STk
-         TxuMFzRl4mHk8fjVFiM1Lx72k1nZbOdhLTwBTxQc=
+        b=h4L8/HS/NUi8HpkqwJtp2kHRhZ/RIeGyEQOKZzyK30mmEsSR3QLzvKnY9631joonB
+         INAwTEGe9y/FOHm9+1d5Ur5qEC0Sve6BVM8BEGNLQJsnFtLh0FsSM0TueAx0RXIuHG
+         TT5BeqwK0jK30Up//iTiV2OfDFgWXc28yZrvrcdY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -38,9 +38,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
         Ingo Molnar <mingo@redhat.com>,
         Shuah Khan <skhan@linuxfoundation.org>
-Subject: [PATCH 6.1 756/885] selftests: membarrier: Fix incorrect kernel headers search path
-Date:   Tue,  7 Mar 2023 18:01:30 +0100
-Message-Id: <20230307170034.780947360@linuxfoundation.org>
+Subject: [PATCH 6.1 759/885] selftests: gpio: Fix incorrect kernel headers search path
+Date:   Tue,  7 Mar 2023 18:01:33 +0100
+Message-Id: <20230307170034.917655007@linuxfoundation.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230307170001.594919529@linuxfoundation.org>
 References: <20230307170001.594919529@linuxfoundation.org>
@@ -54,7 +54,7 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 
-commit 498bb027726371ba4a94686d251f9be1d437573e upstream.
+commit 8bb9c1808628babcc7b99ec2439bf102379bd4ac upstream.
 
 Use $(KHDR_INCLUDES) as lookup path for kernel headers. This prevents
 building against kernel headers from the build environment in scenarios
@@ -69,17 +69,18 @@ Cc: <stable@vger.kernel.org>  # 5.18+
 Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/membarrier/Makefile |    2 +-
+ tools/testing/selftests/gpio/Makefile |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/tools/testing/selftests/membarrier/Makefile
-+++ b/tools/testing/selftests/membarrier/Makefile
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0-only
--CFLAGS += -g -I../../../../usr/include/
-+CFLAGS += -g $(KHDR_INCLUDES)
- LDLIBS += -lpthread
+--- a/tools/testing/selftests/gpio/Makefile
++++ b/tools/testing/selftests/gpio/Makefile
+@@ -3,6 +3,6 @@
+ TEST_PROGS := gpio-mockup.sh gpio-sim.sh
+ TEST_FILES := gpio-mockup-sysfs.sh
+ TEST_GEN_PROGS_EXTENDED := gpio-mockup-cdev gpio-chip-info gpio-line-name
+-CFLAGS += -O2 -g -Wall -I../../../../usr/include/ $(KHDR_INCLUDES)
++CFLAGS += -O2 -g -Wall $(KHDR_INCLUDES)
  
- TEST_GEN_PROGS := membarrier_test_single_thread \
+ include ../lib.mk
 
 
