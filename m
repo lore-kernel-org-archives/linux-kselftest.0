@@ -2,251 +2,191 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7575C74A5B
-	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Mar 2023 22:24:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50BD1C6FA99
+	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Mar 2023 22:40:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231446AbjCGWXg (ORCPT
+        id S231527AbjCGWki (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 7 Mar 2023 17:23:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48658 "EHLO
+        Tue, 7 Mar 2023 17:40:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231453AbjCGWXB (ORCPT
+        with ESMTP id S231979AbjCGWkP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Mar 2023 17:23:01 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C851A4B32;
-        Tue,  7 Mar 2023 14:22:44 -0800 (PST)
-From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1678227762;
-        bh=7B9eU1poI//tORVnXKk/Isa53ZRzzHKFs17ILGS5uAY=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=O14LOF3jp44o43W/cVAfN9UTGrU7Je+MZjmS8/5gJ4yidCy575yHJhQLBk5PMdFBV
-         alOFaqyfDBKT6HrppTAb/4QzqYt6ypX8cNQd6df+N+pGhRorDA+VAvuIy4YeoqipFz
-         d01UbPM7K8OKyuMzMPTzzciEvgC7rsCKQCHlanIg=
-Date:   Tue, 07 Mar 2023 22:22:33 +0000
-Subject: [PATCH RFC 4/5] tools/nolibc: add support for stack protector
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20230223-nolibc-stackprotector-v1-4-3e74d81b3f21@weissschuh.net>
-References: <20230223-nolibc-stackprotector-v1-0-3e74d81b3f21@weissschuh.net>
-In-Reply-To: <20230223-nolibc-stackprotector-v1-0-3e74d81b3f21@weissschuh.net>
-To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1678227756; l=7186;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=7B9eU1poI//tORVnXKk/Isa53ZRzzHKFs17ILGS5uAY=;
- b=0uWbmRx4pY+W8ydurYQGxLqGKtMnVJBCi+t7ihfRpjbO56SVmFC+cnXWLko3NNRsh+oJEUd4n
- aMc2socQ8bFCC9xZ/UrHsR/nm6UWEQSgS8tFlk+Fwj7dTIE+whBYu5+
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+        Tue, 7 Mar 2023 17:40:15 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DBBAA2186
+        for <linux-kselftest@vger.kernel.org>; Tue,  7 Mar 2023 14:39:41 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id e195-20020a25e7cc000000b00a1e59ba7ed9so15567140ybh.11
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Mar 2023 14:39:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678228780;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=d5sV/9QBhMVgVGTAWq7/DnOA4YA0+xQYxnQrYod4TUo=;
+        b=hhrXN3bOat3CTLco/yNvAbB70x8BJlerST3ZLVjOJzB7utq6BOLTd7rIV7HndRvIFK
+         GIGvF1jH9qZWEqLuYbNVOERQUuL0SbhQOLbQA2TgYZnzzt5ttwCFjX9yZXyXAcJMb3ob
+         WM/E3UgrXVANjxIgyI19FkuQeGNLwU4c0ESoHihWk2Cbu6ylYm0PAPEEUfrYGdY4MhHc
+         cvdzR1Y2pucigncVY2XBxKvNVgwtcAruaoPTul2p7zy95FH44VOKVfffeK5Z4g/0f4Dj
+         tyW0dLqKDFb/KzndpXfbmAdfnfjWzd6MPGcG+rvPk87FQGOX2XDKhLUiLdwfd4dpQbbc
+         wO0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678228780;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=d5sV/9QBhMVgVGTAWq7/DnOA4YA0+xQYxnQrYod4TUo=;
+        b=ncDJ4f/RANb1p2xfYYXl++pklLGmTVOu3JmNU2LaWMw6PCZbE4OVAoBboE7hAavtI/
+         S5fF1m0sfGP5GkXBUDntNph5ZzQ3YyxkMWL2BmI8RvrkAMVT52X3xxoN+ULgWoyznMrz
+         7+DRmz3H8WUVJqzHxkADTpZTqB7M43YU+Z73RK6egmmB+21VsdUNuQWr5tUrbdL9n+CH
+         Fx4BFS8abVQUSL0T0lPi4SBy4Eumd4Xys3bXTq/SgCXbCdvsOy4kQcbqXYpPkbSqqgIL
+         8gSXGslSUXPHjnbE53l+KkHMmQagcV+aHf/Qa2GYQMcJbrLSWGDxFfuWudcge0cb/yVf
+         sQHg==
+X-Gm-Message-State: AO0yUKV+DRVp4IdpCXYmjzeH95HZH5e/CLpwgtOCRrVg5RW2k0JYJM8i
+        rBt1QZJdPBI8tWz28XSCahf/hA1/cA==
+X-Google-Smtp-Source: AK7set8pGkC2UiAO2v5rfMCf88X6exkHaZm9sKuSofYPS3FONpBilcB29gYsZHLSAgiF/8ooPtlfqeaXGA==
+X-Received: from rmoar-specialist.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:45d3])
+ (user=rmoar job=sendgmr) by 2002:a5b:bc6:0:b0:a0d:8150:be04 with SMTP id
+ c6-20020a5b0bc6000000b00a0d8150be04mr7829283ybr.13.1678228780098; Tue, 07 Mar
+ 2023 14:39:40 -0800 (PST)
+Date:   Tue,  7 Mar 2023 22:39:35 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.rc0.216.gc4246ad0f0-goog
+Message-ID: <20230307223937.2892762-1-rmoar@google.com>
+Subject: [PATCH v3 1/3] kunit: fix bug in debugfs logs of parameterized tests
+From:   Rae Moar <rmoar@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com, dlatypov@google.com
+Cc:     skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Rae Moar <rmoar@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Stack protection is a feature to detect and handle stack buffer
-overflows at runtime.
-For this to work the compiler and libc have to collaborate.
+Fix bug in debugfs logs that causes individual parameterized results to not
+appear because the log is reinitialized (cleared) when each parameter is
+run.
 
-This patch adds the following parts to nolibc that are required by the
-compiler:
+Ensure these results appear in the debugfs logs, increase log size to
+allow for the size of parameterized results. As a result, append lines to
+the log directly rather than using an intermediate variable that can cause
+stack size warnings due to the increased log size.
 
-* __stack_chk_guard: random sentinel value
-* __stack_chk_fail: handler for detected stack smashes
+Here is the debugfs log of ext4_inode_test which uses parameterized tests
+before the fix:
 
-In addition an initialization function is added that randomizes the
-sentinel value.
+     KTAP version 1
 
-Only support for global guards is implemented.
-Register guards are useful in multi-threaded context which nolibc does
-not provide support for.
+     # Subtest: ext4_inode_test
+     1..1
+ # Totals: pass:16 fail:0 skip:0 total:16
+ ok 1 ext4_inode_test
 
-Link: https://lwn.net/Articles/584225/
+As you can see, this log does not include any of the individual
+parametrized results.
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+After (in combination with the next two fixes to remove extra empty line
+and ensure KTAP valid format):
+
+ KTAP version 1
+ 1..1
+     KTAP version 1
+     # Subtest: ext4_inode_test
+     1..1
+        KTAP version 1
+         # Subtest: inode_test_xtimestamp_decoding
+         ok 1 1901-12-13 Lower bound of 32bit < 0 timestamp, no extra bits
+         ... (the rest of the individual parameterized tests)
+         ok 16 2446-05-10 Upper bound of 32bit >=0 timestamp. All extra
+     # inode_test_xtimestamp_decoding: pass:16 fail:0 skip:0 total:16
+     ok 1 inode_test_xtimestamp_decoding
+ # Totals: pass:16 fail:0 skip:0 total:16
+ ok 1 ext4_inode_test
+
+Signed-off-by: Rae Moar <rmoar@google.com>
+Reviewed-by: David Gow <davidgow@google.com>
 ---
- tools/include/nolibc/Makefile           |  4 +--
- tools/include/nolibc/arch-i386.h        |  8 +++++-
- tools/include/nolibc/arch-x86_64.h      |  5 ++++
- tools/include/nolibc/nolibc.h           |  1 +
- tools/include/nolibc/stackprotector.h   | 48 +++++++++++++++++++++++++++++++++
- tools/testing/selftests/nolibc/Makefile | 12 +++++++++
- 6 files changed, 75 insertions(+), 3 deletions(-)
 
-diff --git a/tools/include/nolibc/Makefile b/tools/include/nolibc/Makefile
-index ec57d3932506..9839feafd38a 100644
---- a/tools/include/nolibc/Makefile
-+++ b/tools/include/nolibc/Makefile
-@@ -25,8 +25,8 @@ endif
+Changes from v2 -> v3:
+- Fix a off-by-one bug in the kunit_log_append method.
+
+Changes from v1 -> v2:
+- Remove the use of the line variable in kunit_log_append that was causing
+  stack size warnings.
+- Add before and after to the commit message.
+
+ include/kunit/test.h |  2 +-
+ lib/kunit/test.c     | 18 ++++++++++++------
+ 2 files changed, 13 insertions(+), 7 deletions(-)
+
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index 08d3559dd703..0668d29f3453 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -34,7 +34,7 @@ DECLARE_STATIC_KEY_FALSE(kunit_running);
+ struct kunit;
  
- nolibc_arch := $(patsubst arm64,aarch64,$(ARCH))
- arch_file := arch-$(nolibc_arch).h
--all_files := ctype.h errno.h nolibc.h signal.h std.h stdint.h stdio.h stdlib.h \
--             string.h sys.h time.h types.h unistd.h
-+all_files := ctype.h errno.h nolibc.h signal.h stackprotector.h std.h stdint.h \
-+             stdio.h stdlib.h string.h sys.h time.h types.h unistd.h
+ /* Size of log associated with test. */
+-#define KUNIT_LOG_SIZE	512
++#define KUNIT_LOG_SIZE 1500
  
- # install all headers needed to support a bare-metal compiler
- all: headers
-diff --git a/tools/include/nolibc/arch-i386.h b/tools/include/nolibc/arch-i386.h
-index e8d0cf545bf1..a8deb123edca 100644
---- a/tools/include/nolibc/arch-i386.h
-+++ b/tools/include/nolibc/arch-i386.h
-@@ -180,6 +180,9 @@ struct sys_stat_struct {
- 
- char **environ __attribute__((weak));
- const unsigned long *_auxv __attribute__((weak));
-+void __stack_chk_init(void) __attribute__((weak));
-+
-+#define __ARCH_SUPPORTS_STACK_PROTECTOR
- 
- /* startup code */
- /*
-@@ -188,9 +191,12 @@ const unsigned long *_auxv __attribute__((weak));
-  * 2) The deepest stack frame should be set to zero
-  *
+ /* Maximum size of parameter description string. */
+ #define KUNIT_PARAM_DESC_SIZE 128
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index c9e15bb60058..c4d6304edd61 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -114,22 +114,27 @@ static void kunit_print_test_stats(struct kunit *test,
   */
--void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) _start(void)
-+void __attribute__((weak,noreturn,optimize("omit-frame-pointer"),no_stack_protector)) _start(void)
+ void kunit_log_append(char *log, const char *fmt, ...)
  {
- 	__asm__ volatile (
-+#ifdef NOLIBC_STACKPROTECTOR
-+		"call __stack_chk_init\n"   // initialize stack protector
-+#endif
- 		"pop %eax\n"                // argc   (first arg, %eax)
- 		"mov %esp, %ebx\n"          // argv[] (second arg, %ebx)
- 		"lea 4(%ebx,%eax,4),%ecx\n" // then a NULL then envp (third arg, %ecx)
-diff --git a/tools/include/nolibc/arch-x86_64.h b/tools/include/nolibc/arch-x86_64.h
-index 17f6751208e7..f7f2a11d4c3b 100644
---- a/tools/include/nolibc/arch-x86_64.h
-+++ b/tools/include/nolibc/arch-x86_64.h
-@@ -181,6 +181,8 @@ struct sys_stat_struct {
- char **environ __attribute__((weak));
- const unsigned long *_auxv __attribute__((weak));
+-	char line[KUNIT_LOG_SIZE];
+ 	va_list args;
+-	int len_left;
++	int len, log_len, len_left;
  
-+#define __ARCH_SUPPORTS_STACK_PROTECTOR
-+
- /* startup code */
- /*
-  * x86-64 System V ABI mandates:
-@@ -191,6 +193,9 @@ const unsigned long *_auxv __attribute__((weak));
- void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) _start(void)
- {
- 	__asm__ volatile (
-+#ifdef NOLIBC_STACKPROTECTOR
-+		"call __stack_chk_init\n"   // initialize stack protector
-+#endif
- 		"pop %rdi\n"                // argc   (first arg, %rdi)
- 		"mov %rsp, %rsi\n"          // argv[] (second arg, %rsi)
- 		"lea 8(%rsi,%rdi,8),%rdx\n" // then a NULL then envp (third arg, %rdx)
-diff --git a/tools/include/nolibc/nolibc.h b/tools/include/nolibc/nolibc.h
-index b2bc48d3cfe4..04739a6293c4 100644
---- a/tools/include/nolibc/nolibc.h
-+++ b/tools/include/nolibc/nolibc.h
-@@ -104,6 +104,7 @@
- #include "string.h"
- #include "time.h"
- #include "unistd.h"
-+#include "stackprotector.h"
+ 	if (!log)
+ 		return;
  
- /* Used by programs to avoid std includes */
- #define NOLIBC
-diff --git a/tools/include/nolibc/stackprotector.h b/tools/include/nolibc/stackprotector.h
-new file mode 100644
-index 000000000000..ca1360b7afd8
---- /dev/null
-+++ b/tools/include/nolibc/stackprotector.h
-@@ -0,0 +1,48 @@
-+/* SPDX-License-Identifier: LGPL-2.1 OR MIT */
-+/*
-+ * Stack protector support for NOLIBC
-+ * Copyright (C) 2023 Thomas Weißschuh <linux@weissschuh.net>
-+ */
-+
-+#ifndef _NOLIBC_STACKPROTECTOR_H
-+#define _NOLIBC_STACKPROTECTOR_H
-+
-+#include "arch.h"
-+
-+#if defined(NOLIBC_STACKPROTECTOR)
-+
-+#if !defined(__ARCH_SUPPORTS_STACK_PROTECTOR)
-+#error "nolibc does not support stack protectors on this arch"
-+#endif
-+
-+#include "sys.h"
-+#include "stdlib.h"
-+
-+__attribute__((weak,noreturn,section(".text.nolibc_stack_chk")))
-+void __stack_chk_fail(void)
-+{
-+	write(STDERR_FILENO, "!!Stack smashing detected!!\n", 28);
-+	abort();
-+}
-+
-+__attribute__((weak,noreturn,section(".text.nolibc_stack_chk")))
-+void __stack_chk_fail_local(void)
-+{
-+	__stack_chk_fail();
-+}
-+
-+__attribute__((weak,section(".data.nolibc_stack_chk")))
-+uintptr_t __stack_chk_guard;
-+
-+__attribute__((weak,no_stack_protector,section(".text.nolibc_stack_chk")))
-+void __stack_chk_init(void)
-+{
-+	// raw syscall assembly as calling a function would trigger the
-+	// stackprotector itself
-+	my_syscall3(__NR_getrandom, &__stack_chk_guard, sizeof(__stack_chk_guard), 0);
-+	// a bit more randomness in case getrandom() fails
-+	__stack_chk_guard |= (uintptr_t) &__stack_chk_guard;
-+}
-+#endif // defined(NOLIBC_STACKPROTECTOR)
-+
-+#endif // _NOLIBC_STACKPROTECTOR_H
-diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index ea2b82a3cd86..749a09c9a012 100644
---- a/tools/testing/selftests/nolibc/Makefile
-+++ b/tools/testing/selftests/nolibc/Makefile
-@@ -1,6 +1,8 @@
- # SPDX-License-Identifier: GPL-2.0
- # Makefile for nolibc tests
- include ../../../scripts/Makefile.include
-+# We need this for the "cc-option" macro.
-+include ../../../build/Build.include
+-	len_left = KUNIT_LOG_SIZE - strlen(log) - 1;
++	log_len = strlen(log);
++	len_left = KUNIT_LOG_SIZE - log_len - 1;
+ 	if (len_left <= 0)
+ 		return;
  
- # we're in ".../tools/testing/selftests/nolibc"
- ifeq ($(srctree),)
-@@ -74,7 +76,13 @@ else
- Q=@
- endif
- 
-+CFLAGS_STACKPROTECTOR = -DNOLIBC_STACKPROTECTOR \
-+			$(call cc-option,-mstack-protector-guard=global) \
-+			$(call cc-option,-fstack-protector-all)
- CFLAGS_s390 = -m64
-+CFLAGS_x86 = $(CFLAGS_STACKPROTECTOR)
-+CFLAGS_i386 = $(CFLAGS_STACKPROTECTOR)
-+CFLAGS_x86_64 = $(CFLAGS_STACKPROTECTOR)
- CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables $(CFLAGS_$(ARCH))
- LDFLAGS := -s
- 
-@@ -118,6 +126,10 @@ nolibc-test: nolibc-test.c sysroot/$(ARCH)/include
- 	$(QUIET_CC)$(CC) $(CFLAGS) $(LDFLAGS) -o $@ \
- 	  -nostdlib -static -Isysroot/$(ARCH)/include $< -lgcc
- 
-+foo: foo.c sysroot/$(ARCH)/include
-+	$(QUIET_CC)$(CC) $(CFLAGS) $(LDFLAGS) -o $@ \
-+	  -nostdlib -static -Isysroot/$(ARCH)/include $< -lgcc
++	/* Evaluate length of line to add to log */
+ 	va_start(args, fmt);
+-	vsnprintf(line, sizeof(line), fmt, args);
++	len = vsnprintf(NULL, 0, fmt, args) + 1;
++	va_end(args);
 +
- # qemu user-land test
- run-user: nolibc-test
- 	$(Q)qemu-$(QEMU_ARCH) ./nolibc-test > "$(CURDIR)/run.out" || :
++	/* Print formatted line to the log */
++	va_start(args, fmt);
++	vsnprintf(log + log_len, min(len, len_left), fmt, args);
+ 	va_end(args);
+ 
+-	strncat(log, line, len_left);
+ }
+ EXPORT_SYMBOL_GPL(kunit_log_append);
+ 
+@@ -437,7 +442,6 @@ static void kunit_run_case_catch_errors(struct kunit_suite *suite,
+ 	struct kunit_try_catch_context context;
+ 	struct kunit_try_catch *try_catch;
+ 
+-	kunit_init_test(test, test_case->name, test_case->log);
+ 	try_catch = &test->try_catch;
+ 
+ 	kunit_try_catch_init(try_catch,
+@@ -533,6 +537,8 @@ int kunit_run_tests(struct kunit_suite *suite)
+ 		struct kunit_result_stats param_stats = { 0 };
+ 		test_case->status = KUNIT_SKIPPED;
+ 
++		kunit_init_test(&test, test_case->name, test_case->log);
++
+ 		if (!test_case->generate_params) {
+ 			/* Non-parameterised test. */
+ 			kunit_run_case_catch_errors(suite, test_case, &test);
 
+base-commit: 60684c2bd35064043360e6f716d1b7c20e967b7d
 -- 
-2.39.2
+2.40.0.rc0.216.gc4246ad0f0-goog
 
