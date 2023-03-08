@@ -2,226 +2,457 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2568C64EC4
-	for <linux-kselftest@archiver.kernel.org>; Wed,  8 Mar 2023 20:40:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 863BEC678D5
+	for <linux-kselftest@archiver.kernel.org>; Wed,  8 Mar 2023 22:19:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230257AbjCHUkG (ORCPT
+        id S230143AbjCHWTy (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 8 Mar 2023 15:40:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38582 "EHLO
+        Wed, 8 Mar 2023 17:19:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230285AbjCHUkB (ORCPT
+        with ESMTP id S230280AbjCHWTq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Mar 2023 15:40:01 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A31B5BAD33
-        for <linux-kselftest@vger.kernel.org>; Wed,  8 Mar 2023 12:40:00 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-538116920c3so180590267b3.15
-        for <linux-kselftest@vger.kernel.org>; Wed, 08 Mar 2023 12:40:00 -0800 (PST)
+        Wed, 8 Mar 2023 17:19:46 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD0E968D9
+        for <linux-kselftest@vger.kernel.org>; Wed,  8 Mar 2023 14:19:43 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id l24-20020a25b318000000b007eba3f8e3baso158316ybj.4
+        for <linux-kselftest@vger.kernel.org>; Wed, 08 Mar 2023 14:19:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678308000;
+        d=google.com; s=20210112; t=1678313982;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lHMaaQziz2QfMgPi4gvnI0eOazLpKsiF3QitYkad+kQ=;
-        b=fixDoqmcQCD/PBowzjqprv0GU2CpNcYHV3jm73Qd/NNMchq0yphn41wD49+Y+4CdOP
-         eKuO+He/XD6rfjpQ64xHCzI7R7CCEX5wdCvLqrdQGs2sg1nWbpCLQ/8z3j7f5spKFim/
-         Yr7kpq2ToMcZmrgVtksg0DxAmm6HCfm49fZKfxSlD0D9X1PE7xEX53rEOzE+9s69l8gc
-         xW4tsKkBymbI/Lyt1ChuNx5GsnRXru8Ezd/h/m0CU2qWFQitujWcfUJ0jopJhOUjrlup
-         bs1zlP0lrshDI/GrRPmmdl/SHsj9R2uL8yfNsq8xTKg+JF8MRCICoxuZyO4pXWU/bfJ0
-         VTtQ==
+        bh=5txiN0T0pyYIZ4jIjYUYC6xswaf7imtQj/PyicFDO6w=;
+        b=lbzztN2/q5dDGMHVRVSf807ec5rCEfvkCwizvtWnZzZ/Z4PrrdIz6Gv86YKVDkihJ/
+         7npmw4xBdNwGsN/R9KaIXYutexUdxJbdKyAhPW2NpSmeTAWUA/eNYaslmBnlbKvUrraD
+         zLW5NpuDV3wvvZzwFEzA+X2E32pzb8hXRJN41gMuVmp/brZFJY/tS5B4zfeoPCnhkpVj
+         UBbietgCHSUx8yEip+LCESU6x06FcO74L69wHRicx0BCU0omCy6TEELrdMdc1JKTdR/3
+         0BwHDZBrcASUQTApgPtWm9Sgp4ny2lBTeEhu3RsjG822JWKRPbgb6bQolYovnkppq7Yw
+         Lshw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678308000;
+        d=1e100.net; s=20210112; t=1678313982;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lHMaaQziz2QfMgPi4gvnI0eOazLpKsiF3QitYkad+kQ=;
-        b=LUnHY5QwosCnz3INKEN3oXORcPPstgpwKHagyRuRDDPRpcvf/vpjH5ZtM3FsdEOFMr
-         RfBRnU7BuaU5g7MtmAUysMQ1F6bUrU2XrVfavC5dYYLUkLQ7MbV9Zr8gypV1KjSL8fP8
-         OgK6KkH4MjyPffyERaDBZiri3vzuLCnIvFlwRg+Qp90n+MDxfn1RsZ7nxqv1u680Pf+/
-         04+/ikiKll1pWcpVFPzriRMKqSmp1BsRFEvJUCODmOTF4Le+udBRgoOtca5Eaj7hStR3
-         N9bWDXBu7oUSrhK3h1EhP26CEznV8SJHBoWmB5UslR6gmvbl94Y96CfmjklSPKTlqMI4
-         lQMw==
-X-Gm-Message-State: AO0yUKUdnWmJ7Z2yGAv6/AMAyaSVfJFoIlGGYSwdcTOo58mHBbTSu1+q
-        NhTM/y67+8kqF7YYoxFaIMalIZIC6g==
-X-Google-Smtp-Source: AK7set94UvujMpNNzHqe5EjaUlutCYrYwKji4Z1jCaRhw5X0rqSIi3r+2DE7/duXcz1DaB1JNC1+P1H+9A==
-X-Received: from rmoar-specialist.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:45d3])
- (user=rmoar job=sendgmr) by 2002:a05:6902:145:b0:ac2:a7a7:23c3 with SMTP id
- p5-20020a056902014500b00ac2a7a723c3mr7613716ybh.12.1678307999988; Wed, 08 Mar
- 2023 12:39:59 -0800 (PST)
-Date:   Wed,  8 Mar 2023 20:39:52 +0000
-In-Reply-To: <20230308203952.3060546-1-rmoar@google.com>
+        bh=5txiN0T0pyYIZ4jIjYUYC6xswaf7imtQj/PyicFDO6w=;
+        b=Jr1LhjfxltmH38WRyxJNGMABbhM5VUYHwRqtR+a9YedggrMkaKyEc8QhbQai7k1aV6
+         COQQ4cz0sxTmGjBGFAE6nuke1aFL0/a/eCPwGA77lc10vO4L0edz7UN7IHaM2pOy/TKm
+         2iTMdOBneOKC+Tm5g5o4Bjkbn8Ad63wQhZvVzfY7rdcUuG0xLj5Q1wZw46DN6NYAhIzd
+         FqZDtA0629iddHW9/fBT9Z+24aut1jJp7yVi+ALpEmcqS1LLvrFGay/4UuN0qEiPIPNe
+         ONnZOyLrgrvATJKB/IKSn5SMfbs4cLXT24xmDVU9Hf5DZyzlH7/SHSl/Py1W0tLOtYkJ
+         rm8w==
+X-Gm-Message-State: AO0yUKUa+mTKZn5G/A7LkX5Fb8ys818YrCaiAHmJ7wIEHAK4GO55DP93
+        VKe3LvCAoeDGjQYtqnbREbKuLkNeHiUP3B0rzRVK
+X-Google-Smtp-Source: AK7set9U7RePYRpvr5M0NfAv/z+rVkS3Bu5OE4ujNbqr5wxWZuaDAbPmVcOQ61tYdUZusmoyznesUpm5/KvdmIkv4NtW
+X-Received: from axel.svl.corp.google.com ([2620:15c:2d4:203:96cb:1c04:7322:78a4])
+ (user=axelrasmussen job=sendgmr) by 2002:a81:4e8a:0:b0:52f:b69:1f7e with SMTP
+ id c132-20020a814e8a000000b0052f0b691f7emr7ywb.26.1678313982097; Wed, 08 Mar
+ 2023 14:19:42 -0800 (PST)
+Date:   Wed,  8 Mar 2023 14:19:29 -0800
+In-Reply-To: <20230308221932.1548827-1-axelrasmussen@google.com>
 Mime-Version: 1.0
-References: <20230308203952.3060546-1-rmoar@google.com>
-X-Mailer: git-send-email 2.40.0.rc0.216.gc4246ad0f0-goog
-Message-ID: <20230308203952.3060546-3-rmoar@google.com>
-Subject: [PATCH v4 3/3] kunit: fix bug of extra newline characters in debugfs logs
-From:   Rae Moar <rmoar@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com, dlatypov@google.com
-Cc:     skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Rae Moar <rmoar@google.com>
+References: <20230308221932.1548827-1-axelrasmussen@google.com>
+X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
+Message-ID: <20230308221932.1548827-2-axelrasmussen@google.com>
+Subject: [PATCH v4 1/4] mm: userfaultfd: rename functions for clarity + consistency
+From:   Axel Rasmussen <axelrasmussen@google.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+        "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Nadav Amit <namit@vmware.com>, Peter Xu <peterx@redhat.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     James Houghton <jthoughton@google.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Axel Rasmussen <axelrasmussen@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Fix bug of the extra newline characters in debugfs logs. When a
-line is added to debugfs with a newline character at the end,
-an extra line appears in the debugfs log.
+The basic problem is, over time we've added new userfaultfd ioctls, and
+we've refactored the code so functions which used to handle only one
+case are now re-used to deal with several cases. While this happened, we
+didn't bother to rename the functions.
 
-This is due to a discrepancy between how the lines are printed and how they
-are added to the logs. Remove this discrepancy by checking if a newline
-character is present before adding a newline character. This should closely
-match the printk behavior.
+Similarly, as we added new functions, we cargo-culted pieces of the
+now-inconsistent naming scheme, so those functions too ended up with
+names that don't make a lot of sense.
 
-Add kunit_log_newline_test to provide test coverage for this issue.  (Also,
-move kunit_log_test above suite definition to remove the unnecessary
-declaration prior to the suite definition)
+A key point here is, "copy" in most userfaultfd code refers specifically
+to UFFDIO_COPY, where we allocate a new page and copy its contents from
+userspace. There are many functions with "copy" in the name that don't
+actually do this (at least in some cases).
 
-As an example, say we add these two lines to the log:
+So, rename things into a consistent scheme. The high level idea is that
+the call stack for userfaultfd ioctls becomes:
 
-kunit_log(..., "KTAP version 1\n");
-kunit_log(..., "1..1");
+userfaultfd_ioctl
+  -> userfaultfd_(particular ioctl)
+    -> mfill_atomic_(particular kind of fill operation)
+      -> mfill_atomic    /* loops over pages in range */
+        -> mfill_atomic_pte    /* deals with single pages */
+          -> mfill_atomic_pte_(particular kind of fill operation)
+            -> mfill_atomic_install_pte
 
-The debugfs log before this fix:
+There are of course some special cases (shmem, hugetlb), but this is the
+general structure which all function names now adhere to.
 
- KTAP version 1
-
- 1..1
-
-The debugfs log after this fix:
-
- KTAP version 1
- 1..1
-
-Signed-off-by: Rae Moar <rmoar@google.com>
-Reviewed-by: David Gow <davidgow@google.com>
+Acked-by: Peter Xu <peterx@redhat.com>
+Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
 ---
+ fs/userfaultfd.c              | 18 +++----
+ include/linux/hugetlb.h       | 30 +++++------
+ include/linux/userfaultfd_k.h | 18 +++----
+ mm/hugetlb.c                  | 20 +++----
+ mm/userfaultfd.c              | 98 +++++++++++++++++------------------
+ 5 files changed, 92 insertions(+), 92 deletions(-)
 
-Changes from v3 -> v4:
-- Slight formatting change in test.h regarding "\" placement.
-
-Changes from v2 -> v3:
-- Changes to commit message.
-
-Changes from v1 -> v2:
-- Changed the way extra newlines are removed. Instead of removing extra
-  newline characters, add a newline if one is not present. This is a bit
-  cleaner.
-- Note: I looked into using KERN_CONT to match the printk behavior to
-  vsnprintf but this could cause issues with KTAP printing on the same line
-  as interrupting kernel messages. I also looked at just adding KERN_CONT
-  functionality to kunit_log and I did get this to work but it was a bit
-  messy because it required a few calls to kunit_log_newline in
-  kunit_run_tests. If this is very desired functionality, happy to add this
-  to version 3.
-
- include/kunit/test.h   |  2 +-
- lib/kunit/kunit-test.c | 35 +++++++++++++++++++++++------------
- lib/kunit/test.c       | 18 ++++++++++++++++++
- 3 files changed, 42 insertions(+), 13 deletions(-)
-
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index 0668d29f3453..9721584027d8 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -420,7 +420,7 @@ void __printf(2, 3) kunit_log_append(char *log, const char *fmt, ...);
- #define kunit_log(lvl, test_or_suite, fmt, ...)				\
- 	do {								\
- 		printk(lvl fmt, ##__VA_ARGS__);				\
--		kunit_log_append((test_or_suite)->log,	fmt "\n",	\
-+		kunit_log_append((test_or_suite)->log,	fmt,		\
- 				 ##__VA_ARGS__);			\
- 	} while (0)
+diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+index 44d1ee429eb0..365bf00dd8dd 100644
+--- a/fs/userfaultfd.c
++++ b/fs/userfaultfd.c
+@@ -1741,9 +1741,9 @@ static int userfaultfd_copy(struct userfaultfd_ctx *ctx,
+ 	if (uffdio_copy.mode & ~(UFFDIO_COPY_MODE_DONTWAKE|UFFDIO_COPY_MODE_WP))
+ 		goto out;
+ 	if (mmget_not_zero(ctx->mm)) {
+-		ret = mcopy_atomic(ctx->mm, uffdio_copy.dst, uffdio_copy.src,
+-				   uffdio_copy.len, &ctx->mmap_changing,
+-				   uffdio_copy.mode);
++		ret = mfill_atomic_copy(ctx->mm, uffdio_copy.dst, uffdio_copy.src,
++					uffdio_copy.len, &ctx->mmap_changing,
++					uffdio_copy.mode);
+ 		mmput(ctx->mm);
+ 	} else {
+ 		return -ESRCH;
+@@ -1793,9 +1793,9 @@ static int userfaultfd_zeropage(struct userfaultfd_ctx *ctx,
+ 		goto out;
  
-diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
-index 4df0335d0d06..b63595d3e241 100644
---- a/lib/kunit/kunit-test.c
-+++ b/lib/kunit/kunit-test.c
-@@ -443,18 +443,6 @@ static struct kunit_suite kunit_resource_test_suite = {
- 	.test_cases = kunit_resource_test_cases,
- };
+ 	if (mmget_not_zero(ctx->mm)) {
+-		ret = mfill_zeropage(ctx->mm, uffdio_zeropage.range.start,
+-				     uffdio_zeropage.range.len,
+-				     &ctx->mmap_changing);
++		ret = mfill_atomic_zeropage(ctx->mm, uffdio_zeropage.range.start,
++					   uffdio_zeropage.range.len,
++					   &ctx->mmap_changing);
+ 		mmput(ctx->mm);
+ 	} else {
+ 		return -ESRCH;
+@@ -1903,9 +1903,9 @@ static int userfaultfd_continue(struct userfaultfd_ctx *ctx, unsigned long arg)
+ 		goto out;
  
--static void kunit_log_test(struct kunit *test);
--
--static struct kunit_case kunit_log_test_cases[] = {
--	KUNIT_CASE(kunit_log_test),
--	{}
--};
--
--static struct kunit_suite kunit_log_test_suite = {
--	.name = "kunit-log-test",
--	.test_cases = kunit_log_test_cases,
--};
--
- static void kunit_log_test(struct kunit *test)
- {
- 	struct kunit_suite suite;
-@@ -481,6 +469,29 @@ static void kunit_log_test(struct kunit *test)
- #endif
+ 	if (mmget_not_zero(ctx->mm)) {
+-		ret = mcopy_continue(ctx->mm, uffdio_continue.range.start,
+-				     uffdio_continue.range.len,
+-				     &ctx->mmap_changing);
++		ret = mfill_atomic_continue(ctx->mm, uffdio_continue.range.start,
++					    uffdio_continue.range.len,
++					    &ctx->mmap_changing);
+ 		mmput(ctx->mm);
+ 	} else {
+ 		return -ESRCH;
+diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+index 7c977d234aba..8f0467bf1cbd 100644
+--- a/include/linux/hugetlb.h
++++ b/include/linux/hugetlb.h
+@@ -158,13 +158,13 @@ unsigned long hugetlb_total_pages(void);
+ vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
+ 			unsigned long address, unsigned int flags);
+ #ifdef CONFIG_USERFAULTFD
+-int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm, pte_t *dst_pte,
+-				struct vm_area_struct *dst_vma,
+-				unsigned long dst_addr,
+-				unsigned long src_addr,
+-				enum mcopy_atomic_mode mode,
+-				struct page **pagep,
+-				bool wp_copy);
++int hugetlb_mfill_atomic_pte(struct mm_struct *dst_mm, pte_t *dst_pte,
++			     struct vm_area_struct *dst_vma,
++			     unsigned long dst_addr,
++			     unsigned long src_addr,
++			     enum mcopy_atomic_mode mode,
++			     struct page **pagep,
++			     bool wp_copy);
+ #endif /* CONFIG_USERFAULTFD */
+ bool hugetlb_reserve_pages(struct inode *inode, long from, long to,
+ 						struct vm_area_struct *vma,
+@@ -393,14 +393,14 @@ static inline void hugetlb_free_pgd_range(struct mmu_gather *tlb,
  }
  
-+static void kunit_log_newline_test(struct kunit *test)
-+{
-+	kunit_info(test, "Add newline\n");
-+	if (test->log) {
-+		KUNIT_ASSERT_NOT_NULL_MSG(test, strstr(test->log, "Add newline\n"),
-+			"Missing log line, full log:\n%s", test->log);
-+		KUNIT_EXPECT_NULL(test, strstr(test->log, "Add newline\n\n"));
-+	} else {
-+		kunit_skip(test, "only useful when debugfs is enabled");
-+	}
-+}
-+
-+static struct kunit_case kunit_log_test_cases[] = {
-+	KUNIT_CASE(kunit_log_test),
-+	KUNIT_CASE(kunit_log_newline_test),
-+	{}
-+};
-+
-+static struct kunit_suite kunit_log_test_suite = {
-+	.name = "kunit-log-test",
-+	.test_cases = kunit_log_test_cases,
-+};
-+
- static void kunit_status_set_failure_test(struct kunit *test)
+ #ifdef CONFIG_USERFAULTFD
+-static inline int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
+-						pte_t *dst_pte,
+-						struct vm_area_struct *dst_vma,
+-						unsigned long dst_addr,
+-						unsigned long src_addr,
+-						enum mcopy_atomic_mode mode,
+-						struct page **pagep,
+-						bool wp_copy)
++static inline int hugetlb_mfill_atomic_pte(struct mm_struct *dst_mm,
++					   pte_t *dst_pte,
++					   struct vm_area_struct *dst_vma,
++					   unsigned long dst_addr,
++					   unsigned long src_addr,
++					   enum mcopy_atomic_mode mode,
++					   struct page **pagep,
++					   bool wp_copy)
  {
- 	struct kunit fake;
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 811fcc376d2f..e2910b261112 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -108,6 +108,22 @@ static void kunit_print_test_stats(struct kunit *test,
- 		  stats.total);
- }
+ 	BUG();
+ 	return 0;
+diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
+index 3767f18114ef..468080125612 100644
+--- a/include/linux/userfaultfd_k.h
++++ b/include/linux/userfaultfd_k.h
+@@ -61,15 +61,15 @@ extern int mfill_atomic_install_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
+ 				    unsigned long dst_addr, struct page *page,
+ 				    bool newly_allocated, bool wp_copy);
  
-+/**
-+ * kunit_log_newline() - Add newline to the end of log if one is not
-+ * already present.
-+ * @log: The log to add the newline to.
-+ */
-+static void kunit_log_newline(char *log)
-+{
-+	int log_len, len_left;
-+
-+	log_len = strlen(log);
-+	len_left = KUNIT_LOG_SIZE - log_len - 1;
-+
-+	if (log_len > 0 && log[log_len - 1] != '\n')
-+		strncat(log, "\n", len_left);
-+}
-+
+-extern ssize_t mcopy_atomic(struct mm_struct *dst_mm, unsigned long dst_start,
+-			    unsigned long src_start, unsigned long len,
+-			    atomic_t *mmap_changing, __u64 mode);
+-extern ssize_t mfill_zeropage(struct mm_struct *dst_mm,
+-			      unsigned long dst_start,
+-			      unsigned long len,
+-			      atomic_t *mmap_changing);
+-extern ssize_t mcopy_continue(struct mm_struct *dst_mm, unsigned long dst_start,
+-			      unsigned long len, atomic_t *mmap_changing);
++extern ssize_t mfill_atomic_copy(struct mm_struct *dst_mm, unsigned long dst_start,
++				 unsigned long src_start, unsigned long len,
++				 atomic_t *mmap_changing, __u64 mode);
++extern ssize_t mfill_atomic_zeropage(struct mm_struct *dst_mm,
++				     unsigned long dst_start,
++				     unsigned long len,
++				     atomic_t *mmap_changing);
++extern ssize_t mfill_atomic_continue(struct mm_struct *dst_mm, unsigned long dst_start,
++				     unsigned long len, atomic_t *mmap_changing);
+ extern int mwriteprotect_range(struct mm_struct *dst_mm,
+ 			       unsigned long start, unsigned long len,
+ 			       bool enable_wp, atomic_t *mmap_changing);
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 07abcb6eb203..4c9276549394 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -6154,17 +6154,17 @@ vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
+ 
+ #ifdef CONFIG_USERFAULTFD
  /*
-  * Append formatted message to log, size of which is limited to
-  * KUNIT_LOG_SIZE bytes (including null terminating byte).
-@@ -135,6 +151,8 @@ void kunit_log_append(char *log, const char *fmt, ...)
- 	vsnprintf(log + log_len, min(len, len_left), fmt, args);
- 	va_end(args);
- 
-+	/* Add newline to end of log if not already present. */
-+	kunit_log_newline(log);
+- * Used by userfaultfd UFFDIO_COPY.  Based on mcopy_atomic_pte with
+- * modifications for huge pages.
++ * Used by userfaultfd UFFDIO_* ioctls. Based on userfaultfd's mfill_atomic_pte
++ * with modifications for hugetlb pages.
+  */
+-int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
+-			    pte_t *dst_pte,
+-			    struct vm_area_struct *dst_vma,
+-			    unsigned long dst_addr,
+-			    unsigned long src_addr,
+-			    enum mcopy_atomic_mode mode,
+-			    struct page **pagep,
+-			    bool wp_copy)
++int hugetlb_mfill_atomic_pte(struct mm_struct *dst_mm,
++			     pte_t *dst_pte,
++			     struct vm_area_struct *dst_vma,
++			     unsigned long dst_addr,
++			     unsigned long src_addr,
++			     enum mcopy_atomic_mode mode,
++			     struct page **pagep,
++			     bool wp_copy)
+ {
+ 	bool is_continue = (mode == MCOPY_ATOMIC_CONTINUE);
+ 	struct hstate *h = hstate_vma(dst_vma);
+diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
+index 53c3d916ff66..84db5b2fad3a 100644
+--- a/mm/userfaultfd.c
++++ b/mm/userfaultfd.c
+@@ -127,13 +127,13 @@ int mfill_atomic_install_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
+ 	return ret;
  }
- EXPORT_SYMBOL_GPL(kunit_log_append);
  
+-static int mcopy_atomic_pte(struct mm_struct *dst_mm,
+-			    pmd_t *dst_pmd,
+-			    struct vm_area_struct *dst_vma,
+-			    unsigned long dst_addr,
+-			    unsigned long src_addr,
+-			    struct page **pagep,
+-			    bool wp_copy)
++static int mfill_atomic_pte_copy(struct mm_struct *dst_mm,
++				 pmd_t *dst_pmd,
++				 struct vm_area_struct *dst_vma,
++				 unsigned long dst_addr,
++				 unsigned long src_addr,
++				 struct page **pagep,
++				 bool wp_copy)
+ {
+ 	void *page_kaddr;
+ 	int ret;
+@@ -204,10 +204,10 @@ static int mcopy_atomic_pte(struct mm_struct *dst_mm,
+ 	goto out;
+ }
+ 
+-static int mfill_zeropage_pte(struct mm_struct *dst_mm,
+-			      pmd_t *dst_pmd,
+-			      struct vm_area_struct *dst_vma,
+-			      unsigned long dst_addr)
++static int mfill_atomic_pte_zeropage(struct mm_struct *dst_mm,
++				     pmd_t *dst_pmd,
++				     struct vm_area_struct *dst_vma,
++				     unsigned long dst_addr)
+ {
+ 	pte_t _dst_pte, *dst_pte;
+ 	spinlock_t *ptl;
+@@ -240,11 +240,11 @@ static int mfill_zeropage_pte(struct mm_struct *dst_mm,
+ }
+ 
+ /* Handles UFFDIO_CONTINUE for all shmem VMAs (shared or private). */
+-static int mcontinue_atomic_pte(struct mm_struct *dst_mm,
+-				pmd_t *dst_pmd,
+-				struct vm_area_struct *dst_vma,
+-				unsigned long dst_addr,
+-				bool wp_copy)
++static int mfill_atomic_pte_continue(struct mm_struct *dst_mm,
++				     pmd_t *dst_pmd,
++				     struct vm_area_struct *dst_vma,
++				     unsigned long dst_addr,
++				     bool wp_copy)
+ {
+ 	struct inode *inode = file_inode(dst_vma->vm_file);
+ 	pgoff_t pgoff = linear_page_index(dst_vma, dst_addr);
+@@ -307,10 +307,10 @@ static pmd_t *mm_alloc_pmd(struct mm_struct *mm, unsigned long address)
+ 
+ #ifdef CONFIG_HUGETLB_PAGE
+ /*
+- * __mcopy_atomic processing for HUGETLB vmas.  Note that this routine is
++ * mfill_atomic processing for HUGETLB vmas.  Note that this routine is
+  * called with mmap_lock held, it will release mmap_lock before returning.
+  */
+-static __always_inline ssize_t __mcopy_atomic_hugetlb(struct mm_struct *dst_mm,
++static __always_inline ssize_t mfill_atomic_hugetlb(struct mm_struct *dst_mm,
+ 					      struct vm_area_struct *dst_vma,
+ 					      unsigned long dst_start,
+ 					      unsigned long src_start,
+@@ -411,7 +411,7 @@ static __always_inline ssize_t __mcopy_atomic_hugetlb(struct mm_struct *dst_mm,
+ 			goto out_unlock;
+ 		}
+ 
+-		err = hugetlb_mcopy_atomic_pte(dst_mm, dst_pte, dst_vma,
++		err = hugetlb_mfill_atomic_pte(dst_mm, dst_pte, dst_vma,
+ 					       dst_addr, src_addr, mode, &page,
+ 					       wp_copy);
+ 
+@@ -463,7 +463,7 @@ static __always_inline ssize_t __mcopy_atomic_hugetlb(struct mm_struct *dst_mm,
+ }
+ #else /* !CONFIG_HUGETLB_PAGE */
+ /* fail at build time if gcc attempts to use this */
+-extern ssize_t __mcopy_atomic_hugetlb(struct mm_struct *dst_mm,
++extern ssize_t mfill_atomic_hugetlb(struct mm_struct *dst_mm,
+ 				      struct vm_area_struct *dst_vma,
+ 				      unsigned long dst_start,
+ 				      unsigned long src_start,
+@@ -484,8 +484,8 @@ static __always_inline ssize_t mfill_atomic_pte(struct mm_struct *dst_mm,
+ 	ssize_t err;
+ 
+ 	if (mode == MCOPY_ATOMIC_CONTINUE) {
+-		return mcontinue_atomic_pte(dst_mm, dst_pmd, dst_vma, dst_addr,
+-					    wp_copy);
++		return mfill_atomic_pte_continue(dst_mm, dst_pmd, dst_vma,
++						 dst_addr, wp_copy);
+ 	}
+ 
+ 	/*
+@@ -500,11 +500,11 @@ static __always_inline ssize_t mfill_atomic_pte(struct mm_struct *dst_mm,
+ 	 */
+ 	if (!(dst_vma->vm_flags & VM_SHARED)) {
+ 		if (mode == MCOPY_ATOMIC_NORMAL)
+-			err = mcopy_atomic_pte(dst_mm, dst_pmd, dst_vma,
+-					       dst_addr, src_addr, page,
+-					       wp_copy);
++			err = mfill_atomic_pte_copy(dst_mm, dst_pmd, dst_vma,
++						    dst_addr, src_addr, page,
++						    wp_copy);
+ 		else
+-			err = mfill_zeropage_pte(dst_mm, dst_pmd,
++			err = mfill_atomic_pte_zeropage(dst_mm, dst_pmd,
+ 						 dst_vma, dst_addr);
+ 	} else {
+ 		err = shmem_mfill_atomic_pte(dst_mm, dst_pmd, dst_vma,
+@@ -516,13 +516,13 @@ static __always_inline ssize_t mfill_atomic_pte(struct mm_struct *dst_mm,
+ 	return err;
+ }
+ 
+-static __always_inline ssize_t __mcopy_atomic(struct mm_struct *dst_mm,
+-					      unsigned long dst_start,
+-					      unsigned long src_start,
+-					      unsigned long len,
+-					      enum mcopy_atomic_mode mcopy_mode,
+-					      atomic_t *mmap_changing,
+-					      __u64 mode)
++static __always_inline ssize_t mfill_atomic(struct mm_struct *dst_mm,
++					    unsigned long dst_start,
++					    unsigned long src_start,
++					    unsigned long len,
++					    enum mcopy_atomic_mode mcopy_mode,
++					    atomic_t *mmap_changing,
++					    __u64 mode)
+ {
+ 	struct vm_area_struct *dst_vma;
+ 	ssize_t err;
+@@ -588,9 +588,9 @@ static __always_inline ssize_t __mcopy_atomic(struct mm_struct *dst_mm,
+ 	 * If this is a HUGETLB vma, pass off to appropriate routine
+ 	 */
+ 	if (is_vm_hugetlb_page(dst_vma))
+-		return  __mcopy_atomic_hugetlb(dst_mm, dst_vma, dst_start,
+-					       src_start, len, mcopy_mode,
+-					       wp_copy);
++		return  mfill_atomic_hugetlb(dst_mm, dst_vma, dst_start,
++					     src_start, len, mcopy_mode,
++					     wp_copy);
+ 
+ 	if (!vma_is_anonymous(dst_vma) && !vma_is_shmem(dst_vma))
+ 		goto out_unlock;
+@@ -688,26 +688,26 @@ static __always_inline ssize_t __mcopy_atomic(struct mm_struct *dst_mm,
+ 	return copied ? copied : err;
+ }
+ 
+-ssize_t mcopy_atomic(struct mm_struct *dst_mm, unsigned long dst_start,
+-		     unsigned long src_start, unsigned long len,
+-		     atomic_t *mmap_changing, __u64 mode)
++ssize_t mfill_atomic_copy(struct mm_struct *dst_mm, unsigned long dst_start,
++			  unsigned long src_start, unsigned long len,
++			  atomic_t *mmap_changing, __u64 mode)
+ {
+-	return __mcopy_atomic(dst_mm, dst_start, src_start, len,
+-			      MCOPY_ATOMIC_NORMAL, mmap_changing, mode);
++	return mfill_atomic(dst_mm, dst_start, src_start, len,
++			    MCOPY_ATOMIC_NORMAL, mmap_changing, mode);
+ }
+ 
+-ssize_t mfill_zeropage(struct mm_struct *dst_mm, unsigned long start,
+-		       unsigned long len, atomic_t *mmap_changing)
++ssize_t mfill_atomic_zeropage(struct mm_struct *dst_mm, unsigned long start,
++			      unsigned long len, atomic_t *mmap_changing)
+ {
+-	return __mcopy_atomic(dst_mm, start, 0, len, MCOPY_ATOMIC_ZEROPAGE,
+-			      mmap_changing, 0);
++	return mfill_atomic(dst_mm, start, 0, len, MCOPY_ATOMIC_ZEROPAGE,
++			    mmap_changing, 0);
+ }
+ 
+-ssize_t mcopy_continue(struct mm_struct *dst_mm, unsigned long start,
+-		       unsigned long len, atomic_t *mmap_changing)
++ssize_t mfill_atomic_continue(struct mm_struct *dst_mm, unsigned long start,
++			      unsigned long len, atomic_t *mmap_changing)
+ {
+-	return __mcopy_atomic(dst_mm, start, 0, len, MCOPY_ATOMIC_CONTINUE,
+-			      mmap_changing, 0);
++	return mfill_atomic(dst_mm, start, 0, len, MCOPY_ATOMIC_CONTINUE,
++			    mmap_changing, 0);
+ }
+ 
+ long uffd_wp_range(struct mm_struct *dst_mm, struct vm_area_struct *dst_vma,
 -- 
-2.40.0.rc0.216.gc4246ad0f0-goog
+2.40.0.rc1.284.g88254d51c5-goog
 
