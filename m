@@ -2,321 +2,122 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E2ACC6FD19
-	for <linux-kselftest@archiver.kernel.org>; Wed,  8 Mar 2023 22:23:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11D4DC678D5
+	for <linux-kselftest@archiver.kernel.org>; Wed,  8 Mar 2023 22:44:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbjCHWXz (ORCPT
+        id S229798AbjCHWoc (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 8 Mar 2023 17:23:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44374 "EHLO
+        Wed, 8 Mar 2023 17:44:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbjCHWXx (ORCPT
+        with ESMTP id S229800AbjCHWob (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Mar 2023 17:23:53 -0500
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38D28618B0;
-        Wed,  8 Mar 2023 14:23:45 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id D430F5C00E4;
-        Wed,  8 Mar 2023 17:23:41 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Wed, 08 Mar 2023 17:23:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=devkernel.io; h=
-        cc:cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1678314221; x=1678400621; bh=QO
-        wR0D9gPl7Iokbw5axOEkvXsNmPpiw+HASooBf+03M=; b=lEYGgCBk+s6p2F2hDg
-        KMCAS6GDNmPhmF8hzbgrDsWoKCfoCxTm4MCAXu3DzbuD887fuK5qf/vOtNdfenmy
-        6147lBzeLBmBzolXLHDclVdOjbSxOrw3nU2z2jmjv8Jh313mxtnmijp+60vcLjwI
-        f1p3ce55zBaKvAap2+SNySgwZ7DCjMoqaxBLesXfMlx+BGBlhAFrAb/4u2v4hPvl
-        5jQy6FXNDrhW7jDnU30wwuH/nFdPZI3rtOemLUCo/+KjNCERlBPZXxUnBbnUsNqA
-        gEJECf6tSyiAqwvAy/9IANtucsrYL3RgvMf+VSjxal/SA4g0EuwW8pVr74AJQWMH
-        JqJA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1678314221; x=1678400621; bh=QOwR0D9gPl7Io
-        kbw5axOEkvXsNmPpiw+HASooBf+03M=; b=pOp2qRfTXTkJ0KODm+Rfr1kfNl3ed
-        D5XPH96mBf358Jzs9KYB69sfGM6i33xmK3PLcTrjbb64zUzZD0R4JmbR9HPtHQ9R
-        7ozLcRgO5PgXYVCFSOmmHb7CsBYvBWTiDp94Isj4ZO1fvcWNFggAY/Vlgj/QuRBa
-        Zum0fNSu7RNqC6pi0JCKz04DjwsOh41htTqdHp+N5JA1z1sGVKjGtL3XjLzu1PV8
-        afQnZruYilXNQIZdgks65nMeqro3fRskkUkzqYvHrAxBFE02jKGmiEkF7IPicIcG
-        +LdoOlxs3OnUp/TPhSjCn3Wvzh1hd1RxEtmvFKP++dg+hKXekzULJSPrg==
-X-ME-Sender: <xms:7QoJZICotthS5iF31MchtXt9rbPKJZ06Sptp-SKqrE8TtNqfhUhFFg>
-    <xme:7QoJZKjaHv-uOmoL22Vi86Ur5TqzVhSckJ_2jhOyKXQ5Vsf31sxvl7SWmSUUA3HOu
-    8T1ehEEQqhrHkUNQD4>
-X-ME-Received: <xmr:7QoJZLlh1pIuzaXk1LLgh6Ef6Mmg7dvm2lUOYCbuZkYlh3J7ArkFjWw5R3L4_LFf0_9IYRsedCBM_mJtrbnO9Qp9NDil6szmrP2C0Qv6>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddufedgudduvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecunecujfgurhepfhgfhffvvefuffgjkfggtgesth
-    dtredttdertdenucfhrhhomhepufhtvghfrghnucftohgvshgthhcuoehshhhrseguvghv
-    khgvrhhnvghlrdhioheqnecuggftrfgrthhtvghrnhepveelgffghfehudeitdehjeevhe
-    dthfetvdfhledutedvgeeikeeggefgudeguedtnecuvehluhhsthgvrhfuihiivgeptden
-    ucfrrghrrghmpehmrghilhhfrhhomhepshhhrhesuggvvhhkvghrnhgvlhdrihho
-X-ME-Proxy: <xmx:7QoJZOw9g-ox6g4HhJ4TDGVLB7S9QjlJomlQ3OGxLyQeD9l3hd-cSA>
-    <xmx:7QoJZNQpV70N78TNvO8tasxk-Ay4IgwMgX0GsPelgPyVjcACxwi3Kg>
-    <xmx:7QoJZJbjB9bZfn4ag6TCDjZLpWIWWWq3fz2U6X7RihcAcetco-pLKg>
-    <xmx:7QoJZOReFAtqiDoskpqnglfshXpP18U6aK9EMQ_fxPEN6GeXBx-0Tw>
-Feedback-ID: i84614614:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 8 Mar 2023 17:23:40 -0500 (EST)
-References: <20230224044000.3084046-1-shr@devkernel.io>
- <20230224044000.3084046-2-shr@devkernel.io>
- <20230308164746.GA473363@cmpxchg.org>
-User-agent: mu4e 1.6.11; emacs 28.2.50
-From:   Stefan Roesch <shr@devkernel.io>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     kernel-team@fb.com, linux-mm@kvack.org, riel@surriel.com,
-        mhocko@suse.com, david@redhat.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, akpm@linux-foundation.org
-Subject: Re: [PATCH v3 1/3] mm: add new api to enable ksm per process
-Date:   Wed, 08 Mar 2023 14:16:36 -0800
-In-reply-to: <20230308164746.GA473363@cmpxchg.org>
-Message-ID: <qvqwbkl2zxui.fsf@dev0134.prn3.facebook.com>
+        Wed, 8 Mar 2023 17:44:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3806505B
+        for <linux-kselftest@vger.kernel.org>; Wed,  8 Mar 2023 14:43:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678315423;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jUpec8k3TuIoHkhdWuDgw2GYbAPkkhYheZa+lxQbkK0=;
+        b=cmaQEjZIrCRnjXrCHu0deOC73CBs7yt24Wy6ffxgB/4ZHscLP7E265dnZAuUpERw3V1Tie
+        SV/CMYT4ECovlXrcshPsp5Rv5Q2S+o4BTuENGZQNTZdS6d3UZRTm5gK7NApdhAQPi67wBC
+        JJRUiL9enMssq4uMVKSlTnfObBoHkrg=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-91-3R_gxJBDM-GzZnqSBM2lAQ-1; Wed, 08 Mar 2023 17:43:42 -0500
+X-MC-Unique: 3R_gxJBDM-GzZnqSBM2lAQ-1
+Received: by mail-qt1-f198.google.com with SMTP id w16-20020ac843d0000000b003bfe50a4105so42397qtn.10
+        for <linux-kselftest@vger.kernel.org>; Wed, 08 Mar 2023 14:43:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678315422;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jUpec8k3TuIoHkhdWuDgw2GYbAPkkhYheZa+lxQbkK0=;
+        b=g9ySXZRHdequdNfhFQZ/XxK58zvxUDhYejVCmbJOfYtPLd9Nyg4W9Hjz2jw6JoxyD+
+         UmEbqHVCPTn7XgFPOXqahNPfslLmoy96gzY1TdY0iLlhlL/2WkbPdEhi8ttgynOYhYdl
+         QTbIszN2Rg23ttooD9WYBF3Ox/dVXsbL6kSxCL7zXGMQu5LXU1Lqar0DuMlwNjiWsjiX
+         eKoh98X0xgDbjSoEmlDmx16NdrZPqruWg34WCNWUly3ltZ+XDrLdn61UPYhZb7egXeZQ
+         DASIr9MVA3RERXJCRoT2IKo8HiKpWifmpHcDAteT/9P4acbC0tJDxypYYPMIg80JVuBV
+         AVWg==
+X-Gm-Message-State: AO0yUKVBNY3s9uHJ+Zh99b3sDBscwWLvmoyFTbOs5eo9enJyUaN8eAxY
+        S6RkA50CHTCmWSbmaC3L7u1z4BuNvOi8PUjlprS4lC4bROA2xshFzb1WMO3uvOg1jzBE9UeCGxw
+        jVmw/q177lQ2IKjOnTIhK/J12nwk2
+X-Received: by 2002:a05:622a:4c7:b0:3bf:be4b:8094 with SMTP id q7-20020a05622a04c700b003bfbe4b8094mr39961479qtx.0.1678315422278;
+        Wed, 08 Mar 2023 14:43:42 -0800 (PST)
+X-Google-Smtp-Source: AK7set/svpcFN7oyLd26+MN7LVXbPhQYslhKV53Vi4XzGLt4t3d/JLaXvYRZ51X7BFbuHcnLETSjqQ==
+X-Received: by 2002:a05:622a:4c7:b0:3bf:be4b:8094 with SMTP id q7-20020a05622a04c700b003bfbe4b8094mr39961450qtx.0.1678315422037;
+        Wed, 08 Mar 2023 14:43:42 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id r25-20020ac87959000000b003bfc1f49ad1sm12255401qtt.87.2023.03.08.14.43.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 14:43:41 -0800 (PST)
+Date:   Wed, 8 Mar 2023 17:43:39 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     Axel Rasmussen <axelrasmussen@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Nadav Amit <namit@vmware.com>, Shuah Khan <shuah@kernel.org>,
+        James Houghton <jthoughton@google.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 3/4] mm: userfaultfd: combine 'mode' and 'wp_copy'
+ arguments
+Message-ID: <ZAkPmy0EqcW6Mfvn@x1n>
+References: <20230308221932.1548827-1-axelrasmussen@google.com>
+ <20230308221932.1548827-4-axelrasmussen@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230308221932.1548827-4-axelrasmussen@google.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+All nitpicks below.
 
-Johannes Weiner <hannes@cmpxchg.org> writes:
+On Wed, Mar 08, 2023 at 02:19:31PM -0800, Axel Rasmussen wrote:
+> +static inline bool uffd_flags_has_mode(uffd_flags_t flags, enum mfill_atomic_mode expected)
+> +{
+> +	return (flags & MFILL_ATOMIC_MODE_MASK) == ((__force uffd_flags_t) expected);
+> +}
 
-> On Thu, Feb 23, 2023 at 08:39:58PM -0800, Stefan Roesch wrote:
->> This adds a new prctl to API to enable and disable KSM on a per process
->> basis instead of only at the VMA basis (with madvise).
->>
->> 1) Introduce new MMF_VM_MERGE_ANY flag
->>
->> This introduces the new flag MMF_VM_MERGE_ANY flag. When this flag is
->> set, kernel samepage merging (ksm) gets enabled for all vma's of a
->> process.
->>
->> 2) add flag to __ksm_enter
->>
->> This change adds the flag parameter to __ksm_enter. This allows to
->> distinguish if ksm was called by prctl or madvise.
->>
->> 3) add flag to __ksm_exit call
->>
->> This adds the flag parameter to the __ksm_exit() call. This allows to
->> distinguish if this call is for an prctl or madvise invocation.
->>
->> 4) invoke madvise for all vmas in scan_get_next_rmap_item
->>
->> If the new flag MMF_VM_MERGE_ANY has been set for a process, iterate
->> over all the vmas and enable ksm if possible. For the vmas that can be
->> ksm enabled this is only done once.
->>
->> 5) support disabling of ksm for a process
->>
->> This adds the ability to disable ksm for a process if ksm has been
->> enabled for the process.
->>
->> 6) add new prctl option to get and set ksm for a process
->>
->> This adds two new options to the prctl system call
->> - enable ksm for all vmas of a process (if the vmas support it).
->> - query if ksm has been enabled for a process.
->>
->> Signed-off-by: Stefan Roesch <shr@devkernel.io>
->
-> Hey Stefan, thanks for merging the patches into one. I found it much
-> easier to review.
->
-> Overall this looks straight-forward to me. A few comments below:
->
->> @@ -2659,6 +2660,34 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
->>  	case PR_SET_VMA:
->>  		error = prctl_set_vma(arg2, arg3, arg4, arg5);
->>  		break;
->> +#ifdef CONFIG_KSM
->> +	case PR_SET_MEMORY_MERGE:
->> +		if (!capable(CAP_SYS_RESOURCE))
->> +			return -EPERM;
->> +
->> +		if (arg2) {
->> +			if (mmap_write_lock_killable(me->mm))
->> +				return -EINTR;
->> +
->> +			if (test_bit(MMF_VM_MERGEABLE, &me->mm->flags))
->> +				error = -EINVAL;
->
-> So if the workload has already madvised specific VMAs the
-> process-enablement will fail. Why is that? Shouldn't it be possible to
-> override a local decision from an outside context that has more
-> perspective on both sharing opportunities and security aspects?
->
-> If there is a good reason for it, the -EINVAL should be addressed in
-> the manpage. And maybe add a comment here as well.
->
+I would still call it uffd_flags_get_mode() or uffd_flags_mode(), "has"
+sounds a bit like there can be >1 modes set but it's not.
 
-This makes sense, I'll remove the check above.
+> +
+> +static inline uffd_flags_t uffd_flags_set_mode(uffd_flags_t flags, enum mfill_atomic_mode mode)
+> +{
+> +	return flags | ((__force uffd_flags_t) mode);
+> +}
 
->> +			else if (!test_bit(MMF_VM_MERGE_ANY, &me->mm->flags))
->> +				error = __ksm_enter(me->mm, MMF_VM_MERGE_ANY);
->> +			mmap_write_unlock(me->mm);
->> +		} else {
->> +			__ksm_exit(me->mm, MMF_VM_MERGE_ANY);
->> +		}
->> +		break;
->> +	case PR_GET_MEMORY_MERGE:
->> +		if (!capable(CAP_SYS_RESOURCE))
->> +			return -EPERM;
->> +
->> +		if (arg2 || arg3 || arg4 || arg5)
->> +			return -EINVAL;
->> +
->> +		error = !!test_bit(MMF_VM_MERGE_ANY, &me->mm->flags);
->> +		break;
->> +#endif
->>  	default:
->>  		error = -EINVAL;
->>  		break;
->> diff --git a/mm/ksm.c b/mm/ksm.c
->> index 56808e3bfd19..23d6944f78ad 100644
->> --- a/mm/ksm.c
->> +++ b/mm/ksm.c
->> @@ -1063,6 +1063,7 @@ static int unmerge_and_remove_all_rmap_items(void)
->>
->>  			mm_slot_free(mm_slot_cache, mm_slot);
->>  			clear_bit(MMF_VM_MERGEABLE, &mm->flags);
->> +			clear_bit(MMF_VM_MERGE_ANY, &mm->flags);
->>  			mmdrop(mm);
->>  		} else
->>  			spin_unlock(&ksm_mmlist_lock);
->> @@ -2329,6 +2330,17 @@ static struct ksm_rmap_item *get_next_rmap_item(struct ksm_mm_slot *mm_slot,
->>  	return rmap_item;
->>  }
->>
->> +static bool vma_ksm_mergeable(struct vm_area_struct *vma)
->> +{
->> +	if (vma->vm_flags & VM_MERGEABLE)
->> +		return true;
->> +
->> +	if (test_bit(MMF_VM_MERGE_ANY, &vma->vm_mm->flags))
->> +		return true;
->> +
->> +	return false;
->> +}
->> +
->>  static struct ksm_rmap_item *scan_get_next_rmap_item(struct page **page)
->>  {
->>  	struct mm_struct *mm;
->> @@ -2405,8 +2417,20 @@ static struct ksm_rmap_item *scan_get_next_rmap_item(struct page **page)
->>  		goto no_vmas;
->>
->>  	for_each_vma(vmi, vma) {
->> -		if (!(vma->vm_flags & VM_MERGEABLE))
->> +		if (!vma_ksm_mergeable(vma))
->>  			continue;
->> +		if (!(vma->vm_flags & VM_MERGEABLE)) {
->
-> IMO, the helper obscures the interaction between the vma flag and the
-> per-process flag here. How about:
->
-> 		if (!(vma->vm_flags & VM_MERGEABLE)) {
-> 			if (!test_bit(MMF_VM_MERGE_ANY, &vma->vm_mm->flags))
-> 				continue;
->
-> 			/*
-> 			 * With per-process merging enabled, have the MM scan
-> 			 * enroll any existing and new VMAs on the fly.
-> 			 *
-> 			ksm_madvise();
-> 		}
->
->> +			unsigned long flags = vma->vm_flags;
->> +
->> +			/* madvise failed, use next vma */
->> +			if (ksm_madvise(vma, vma->vm_start, vma->vm_end, MADV_MERGEABLE, &flags))
->> +				continue;
->> +			/* vma, not supported as being mergeable */
->> +			if (!(flags & VM_MERGEABLE))
->> +				continue;
->> +
->> +			vm_flags_set(vma, VM_MERGEABLE);
->
-> I don't understand the local flags. Can't it pass &vma->vm_flags to
-> ksm_madvise()? It'll set VM_MERGEABLE on success. And you know it
-> wasn't set before because the whole thing is inside the !set
-> branch. The return value doesn't seem super useful, it's only the flag
-> setting that matters:
->
-> 			ksm_madvise(vma, vma->vm_start, vma->vm_end, MADV_MERGEABLE, &vma->vm_flags);
-> 			/* madvise can fail, and will skip special vmas (pfnmaps and such) */
-> 			if (!(vma->vm_flags & VM_MERGEABLE))
-> 				continue;
->
+IIUC this __force mostly won't work in any way because it protects
+e.g. illegal math ops upon it (to only allow bitops, iiuc) but here it's an
+OR so it's always legal..
 
-vm_flags is defined as const. I cannot pass it directly inside the
-function, this is the reason, I'm using a local variable for it.
+So I'd just drop it and also clear the mode mask to be very clear it sets
+the mode right, rather than any chance of messing up when set twice:
 
->> +		}
->>  		if (ksm_scan.address < vma->vm_start)
->>  			ksm_scan.address = vma->vm_start;
->>  		if (!vma->anon_vma)
->> @@ -2491,6 +2515,7 @@ static struct ksm_rmap_item *scan_get_next_rmap_item(struct page **page)
->>
->>  		mm_slot_free(mm_slot_cache, mm_slot);
->>  		clear_bit(MMF_VM_MERGEABLE, &mm->flags);
->> +		clear_bit(MMF_VM_MERGE_ANY, &mm->flags);
->>  		mmap_read_unlock(mm);
->>  		mmdrop(mm);
->>  	} else {
->
->> @@ -2664,12 +2690,39 @@ int __ksm_enter(struct mm_struct *mm)
->>  	return 0;
->>  }
->>
->> -void __ksm_exit(struct mm_struct *mm)
->> +static void unmerge_vmas(struct mm_struct *mm)
->> +{
->> +	struct vm_area_struct *vma;
->> +	struct vma_iterator vmi;
->> +
->> +	vma_iter_init(&vmi, mm, 0);
->> +
->> +	mmap_read_lock(mm);
->> +	for_each_vma(vmi, vma) {
->> +		if (vma->vm_flags & VM_MERGEABLE) {
->> +			unsigned long flags = vma->vm_flags;
->> +
->> +			if (ksm_madvise(vma, vma->vm_start, vma->vm_end, MADV_UNMERGEABLE, &flags))
->> +				continue;
->> +
->> +			vm_flags_clear(vma, VM_MERGEABLE);
->
-> ksm_madvise() tests and clears VM_MERGEABLE, so AFAICS
->
-> 	for_each_vma(vmi, vma)
-> 		ksm_madvise();
->
-> should do it...
->
+    flags &= ~MFILL_ATOMIC_MODE_MASK;
+    return flags | mode;
 
-This is the same problem. vma->vm_flags is defined as const.
+But feel free to ignore this if there's no other reason to repost, I don't
+think it matters a huge deal.
 
-+		if (vma->vm_flags & VM_MERGEABLE) {
-This will be removed.
+Acked-by: Peter Xu <peterx@redhat.com>
 
->> +		}
->> +	}
->> +	mmap_read_unlock(mm);
->> +}
->> +
->> +void __ksm_exit(struct mm_struct *mm, int flag)
->>  {
->>  	struct ksm_mm_slot *mm_slot;
->>  	struct mm_slot *slot;
->>  	int easy_to_free = 0;
->>
->> +	if (!(current->flags & PF_EXITING) && flag == MMF_VM_MERGE_ANY &&
->> +		test_bit(MMF_VM_MERGE_ANY, &mm->flags)) {
->> +		clear_bit(MMF_VM_MERGE_ANY, &mm->flags);
->> +		unmerge_vmas(mm);
->
-> ...and then it's short enough to just open-code it here and drop the
-> unmerge_vmas() helper.
+Thanks,
+
+-- 
+Peter Xu
+
