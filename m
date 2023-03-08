@@ -2,210 +2,321 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E13FC678D5
-	for <linux-kselftest@archiver.kernel.org>; Wed,  8 Mar 2023 22:20:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E2ACC6FD19
+	for <linux-kselftest@archiver.kernel.org>; Wed,  8 Mar 2023 22:23:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230260AbjCHWT6 (ORCPT
+        id S229954AbjCHWXz (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 8 Mar 2023 17:19:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36496 "EHLO
+        Wed, 8 Mar 2023 17:23:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230271AbjCHWTy (ORCPT
+        with ESMTP id S229610AbjCHWXx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Mar 2023 17:19:54 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99F7497FE3
-        for <linux-kselftest@vger.kernel.org>; Wed,  8 Mar 2023 14:19:49 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-536a4eba107so184482117b3.19
-        for <linux-kselftest@vger.kernel.org>; Wed, 08 Mar 2023 14:19:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678313989;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YSBFx52RvXhjtM1Ms4suwV92HKajMqVhV7t5r8e9JsE=;
-        b=eDQwE03ssVefKuCHB5TW/9cRNCO3i1U9pzf4Ycjg91bvG1agIDtj0QTDE2eFmvjKVx
-         fxVClPeOZeCKq1qpEHM10j3+vzTxm44vqdZdGCiDVrHAvZXHmxYM4g8g7ee6/gIHO4RV
-         03sVypQgd6aKkvssDe9MhchkPxSpvN6scQQTzDvldztsTNuwXJ25oes+JdaaWvEgW/vh
-         Ks2aJ38BOoW1g1SD7qNi3QXAOQ0/ZHcfW8uPrpQnxFE88qQ6reh6KQ7yHElvT2u7uvjc
-         Kakf4FsYCP6sbS07URRagbKBCEzMwfQV1R7J01ZCBx0pl/NWDzpaG7SW0ucedJET5wuC
-         9P6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678313989;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YSBFx52RvXhjtM1Ms4suwV92HKajMqVhV7t5r8e9JsE=;
-        b=0RIliqOVeYMDpPVofiuTMY2RM0y8vMwcB749EEhbEcCis5EufNaK0CigY+Jq+KXN4V
-         xMiq/Wll8g4p25Xo1t/+kwbEnVJvQk3TKUXvO7jm4EfOo5zTPyE5BzO0p4XBdWxOGGcb
-         uiKFBWDnK3Ya2TpqtATcOARrXaEs6OeG0yW6o/nqShJqzC42i6cuQuValvEz0mP1g+rI
-         ArWUwl6XoSxt3AB+Bgf1yJiopS6ithWHyJSLoR1DxZuN37Ax7flctNBnXxMyXwE2IFYJ
-         7nK3n8+K5LloFNA+5w1QQuBAl9+Ak6qEZsdzULem+FRN0oR3BiZegAPfizYGoCRj2K6X
-         uklA==
-X-Gm-Message-State: AO0yUKXeEaf2Iwt6QO+Tv6yaFxHAL7spnq70AUH/lqltTObjZnRTwCcK
-        KJEOSIiKwXXrNCgTX3tO5obe9UDJWnJqDuX4BALY
-X-Google-Smtp-Source: AK7set/Y8V4CBFECi0ndhD/iIYsa8Ih564aUc0de91ZFzdsRCTCZqdn0UCRIo/zFP9QU38jh/ZHPKYk13T3u2uxCOIk3
-X-Received: from axel.svl.corp.google.com ([2620:15c:2d4:203:96cb:1c04:7322:78a4])
- (user=axelrasmussen job=sendgmr) by 2002:a81:ad5a:0:b0:536:4d58:54b2 with
- SMTP id l26-20020a81ad5a000000b005364d5854b2mr13032103ywk.4.1678313988783;
- Wed, 08 Mar 2023 14:19:48 -0800 (PST)
-Date:   Wed,  8 Mar 2023 14:19:32 -0800
-In-Reply-To: <20230308221932.1548827-1-axelrasmussen@google.com>
-Mime-Version: 1.0
-References: <20230308221932.1548827-1-axelrasmussen@google.com>
-X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
-Message-ID: <20230308221932.1548827-5-axelrasmussen@google.com>
-Subject: [PATCH v4 4/4] mm: userfaultfd: add UFFDIO_CONTINUE_MODE_WP to
- install WP PTEs
-From:   Axel Rasmussen <axelrasmussen@google.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Nadav Amit <namit@vmware.com>, Peter Xu <peterx@redhat.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     James Houghton <jthoughton@google.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Axel Rasmussen <axelrasmussen@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Wed, 8 Mar 2023 17:23:53 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38D28618B0;
+        Wed,  8 Mar 2023 14:23:45 -0800 (PST)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id D430F5C00E4;
+        Wed,  8 Mar 2023 17:23:41 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Wed, 08 Mar 2023 17:23:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=devkernel.io; h=
+        cc:cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1678314221; x=1678400621; bh=QO
+        wR0D9gPl7Iokbw5axOEkvXsNmPpiw+HASooBf+03M=; b=lEYGgCBk+s6p2F2hDg
+        KMCAS6GDNmPhmF8hzbgrDsWoKCfoCxTm4MCAXu3DzbuD887fuK5qf/vOtNdfenmy
+        6147lBzeLBmBzolXLHDclVdOjbSxOrw3nU2z2jmjv8Jh313mxtnmijp+60vcLjwI
+        f1p3ce55zBaKvAap2+SNySgwZ7DCjMoqaxBLesXfMlx+BGBlhAFrAb/4u2v4hPvl
+        5jQy6FXNDrhW7jDnU30wwuH/nFdPZI3rtOemLUCo/+KjNCERlBPZXxUnBbnUsNqA
+        gEJECf6tSyiAqwvAy/9IANtucsrYL3RgvMf+VSjxal/SA4g0EuwW8pVr74AJQWMH
+        JqJA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1678314221; x=1678400621; bh=QOwR0D9gPl7Io
+        kbw5axOEkvXsNmPpiw+HASooBf+03M=; b=pOp2qRfTXTkJ0KODm+Rfr1kfNl3ed
+        D5XPH96mBf358Jzs9KYB69sfGM6i33xmK3PLcTrjbb64zUzZD0R4JmbR9HPtHQ9R
+        7ozLcRgO5PgXYVCFSOmmHb7CsBYvBWTiDp94Isj4ZO1fvcWNFggAY/Vlgj/QuRBa
+        Zum0fNSu7RNqC6pi0JCKz04DjwsOh41htTqdHp+N5JA1z1sGVKjGtL3XjLzu1PV8
+        afQnZruYilXNQIZdgks65nMeqro3fRskkUkzqYvHrAxBFE02jKGmiEkF7IPicIcG
+        +LdoOlxs3OnUp/TPhSjCn3Wvzh1hd1RxEtmvFKP++dg+hKXekzULJSPrg==
+X-ME-Sender: <xms:7QoJZICotthS5iF31MchtXt9rbPKJZ06Sptp-SKqrE8TtNqfhUhFFg>
+    <xme:7QoJZKjaHv-uOmoL22Vi86Ur5TqzVhSckJ_2jhOyKXQ5Vsf31sxvl7SWmSUUA3HOu
+    8T1ehEEQqhrHkUNQD4>
+X-ME-Received: <xmr:7QoJZLlh1pIuzaXk1LLgh6Ef6Mmg7dvm2lUOYCbuZkYlh3J7ArkFjWw5R3L4_LFf0_9IYRsedCBM_mJtrbnO9Qp9NDil6szmrP2C0Qv6>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddufedgudduvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecunecujfgurhepfhgfhffvvefuffgjkfggtgesth
+    dtredttdertdenucfhrhhomhepufhtvghfrghnucftohgvshgthhcuoehshhhrseguvghv
+    khgvrhhnvghlrdhioheqnecuggftrfgrthhtvghrnhepveelgffghfehudeitdehjeevhe
+    dthfetvdfhledutedvgeeikeeggefgudeguedtnecuvehluhhsthgvrhfuihiivgeptden
+    ucfrrghrrghmpehmrghilhhfrhhomhepshhhrhesuggvvhhkvghrnhgvlhdrihho
+X-ME-Proxy: <xmx:7QoJZOw9g-ox6g4HhJ4TDGVLB7S9QjlJomlQ3OGxLyQeD9l3hd-cSA>
+    <xmx:7QoJZNQpV70N78TNvO8tasxk-Ay4IgwMgX0GsPelgPyVjcACxwi3Kg>
+    <xmx:7QoJZJbjB9bZfn4ag6TCDjZLpWIWWWq3fz2U6X7RihcAcetco-pLKg>
+    <xmx:7QoJZOReFAtqiDoskpqnglfshXpP18U6aK9EMQ_fxPEN6GeXBx-0Tw>
+Feedback-ID: i84614614:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 8 Mar 2023 17:23:40 -0500 (EST)
+References: <20230224044000.3084046-1-shr@devkernel.io>
+ <20230224044000.3084046-2-shr@devkernel.io>
+ <20230308164746.GA473363@cmpxchg.org>
+User-agent: mu4e 1.6.11; emacs 28.2.50
+From:   Stefan Roesch <shr@devkernel.io>
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     kernel-team@fb.com, linux-mm@kvack.org, riel@surriel.com,
+        mhocko@suse.com, david@redhat.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, akpm@linux-foundation.org
+Subject: Re: [PATCH v3 1/3] mm: add new api to enable ksm per process
+Date:   Wed, 08 Mar 2023 14:16:36 -0800
+In-reply-to: <20230308164746.GA473363@cmpxchg.org>
+Message-ID: <qvqwbkl2zxui.fsf@dev0134.prn3.facebook.com>
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-UFFDIO_COPY already has UFFDIO_COPY_MODE_WP, so when installing a new
-PTE to resolve a missing fault, one can install a write-protected one.
-This is useful when using UFFDIO_REGISTER_MODE_{MISSING,WP} in
-combination.
 
-This was motivated by testing HugeTLB HGM [1], and in particular its
-interaction with userfaultfd features. Existing userfaultfd code
-supports using WP and MINOR modes together (i.e. you can register an
-area with both enabled), but without this CONTINUE flag the combination
-is in practice unusable.
+Johannes Weiner <hannes@cmpxchg.org> writes:
 
-So, add an analogous UFFDIO_CONTINUE_MODE_WP, which does the same thing
-as UFFDIO_COPY_MODE_WP, but for *minor* faults.
+> On Thu, Feb 23, 2023 at 08:39:58PM -0800, Stefan Roesch wrote:
+>> This adds a new prctl to API to enable and disable KSM on a per process
+>> basis instead of only at the VMA basis (with madvise).
+>>
+>> 1) Introduce new MMF_VM_MERGE_ANY flag
+>>
+>> This introduces the new flag MMF_VM_MERGE_ANY flag. When this flag is
+>> set, kernel samepage merging (ksm) gets enabled for all vma's of a
+>> process.
+>>
+>> 2) add flag to __ksm_enter
+>>
+>> This change adds the flag parameter to __ksm_enter. This allows to
+>> distinguish if ksm was called by prctl or madvise.
+>>
+>> 3) add flag to __ksm_exit call
+>>
+>> This adds the flag parameter to the __ksm_exit() call. This allows to
+>> distinguish if this call is for an prctl or madvise invocation.
+>>
+>> 4) invoke madvise for all vmas in scan_get_next_rmap_item
+>>
+>> If the new flag MMF_VM_MERGE_ANY has been set for a process, iterate
+>> over all the vmas and enable ksm if possible. For the vmas that can be
+>> ksm enabled this is only done once.
+>>
+>> 5) support disabling of ksm for a process
+>>
+>> This adds the ability to disable ksm for a process if ksm has been
+>> enabled for the process.
+>>
+>> 6) add new prctl option to get and set ksm for a process
+>>
+>> This adds two new options to the prctl system call
+>> - enable ksm for all vmas of a process (if the vmas support it).
+>> - query if ksm has been enabled for a process.
+>>
+>> Signed-off-by: Stefan Roesch <shr@devkernel.io>
+>
+> Hey Stefan, thanks for merging the patches into one. I found it much
+> easier to review.
+>
+> Overall this looks straight-forward to me. A few comments below:
+>
+>> @@ -2659,6 +2660,34 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
+>>  	case PR_SET_VMA:
+>>  		error = prctl_set_vma(arg2, arg3, arg4, arg5);
+>>  		break;
+>> +#ifdef CONFIG_KSM
+>> +	case PR_SET_MEMORY_MERGE:
+>> +		if (!capable(CAP_SYS_RESOURCE))
+>> +			return -EPERM;
+>> +
+>> +		if (arg2) {
+>> +			if (mmap_write_lock_killable(me->mm))
+>> +				return -EINTR;
+>> +
+>> +			if (test_bit(MMF_VM_MERGEABLE, &me->mm->flags))
+>> +				error = -EINVAL;
+>
+> So if the workload has already madvised specific VMAs the
+> process-enablement will fail. Why is that? Shouldn't it be possible to
+> override a local decision from an outside context that has more
+> perspective on both sharing opportunities and security aspects?
+>
+> If there is a good reason for it, the -EINVAL should be addressed in
+> the manpage. And maybe add a comment here as well.
+>
 
-Update the selftest to do some very basic exercising of the new flag.
+This makes sense, I'll remove the check above.
 
-[1]: https://patchwork.kernel.org/project/linux-mm/cover/20230218002819.1486479-1-jthoughton@google.com/
+>> +			else if (!test_bit(MMF_VM_MERGE_ANY, &me->mm->flags))
+>> +				error = __ksm_enter(me->mm, MMF_VM_MERGE_ANY);
+>> +			mmap_write_unlock(me->mm);
+>> +		} else {
+>> +			__ksm_exit(me->mm, MMF_VM_MERGE_ANY);
+>> +		}
+>> +		break;
+>> +	case PR_GET_MEMORY_MERGE:
+>> +		if (!capable(CAP_SYS_RESOURCE))
+>> +			return -EPERM;
+>> +
+>> +		if (arg2 || arg3 || arg4 || arg5)
+>> +			return -EINVAL;
+>> +
+>> +		error = !!test_bit(MMF_VM_MERGE_ANY, &me->mm->flags);
+>> +		break;
+>> +#endif
+>>  	default:
+>>  		error = -EINVAL;
+>>  		break;
+>> diff --git a/mm/ksm.c b/mm/ksm.c
+>> index 56808e3bfd19..23d6944f78ad 100644
+>> --- a/mm/ksm.c
+>> +++ b/mm/ksm.c
+>> @@ -1063,6 +1063,7 @@ static int unmerge_and_remove_all_rmap_items(void)
+>>
+>>  			mm_slot_free(mm_slot_cache, mm_slot);
+>>  			clear_bit(MMF_VM_MERGEABLE, &mm->flags);
+>> +			clear_bit(MMF_VM_MERGE_ANY, &mm->flags);
+>>  			mmdrop(mm);
+>>  		} else
+>>  			spin_unlock(&ksm_mmlist_lock);
+>> @@ -2329,6 +2330,17 @@ static struct ksm_rmap_item *get_next_rmap_item(struct ksm_mm_slot *mm_slot,
+>>  	return rmap_item;
+>>  }
+>>
+>> +static bool vma_ksm_mergeable(struct vm_area_struct *vma)
+>> +{
+>> +	if (vma->vm_flags & VM_MERGEABLE)
+>> +		return true;
+>> +
+>> +	if (test_bit(MMF_VM_MERGE_ANY, &vma->vm_mm->flags))
+>> +		return true;
+>> +
+>> +	return false;
+>> +}
+>> +
+>>  static struct ksm_rmap_item *scan_get_next_rmap_item(struct page **page)
+>>  {
+>>  	struct mm_struct *mm;
+>> @@ -2405,8 +2417,20 @@ static struct ksm_rmap_item *scan_get_next_rmap_item(struct page **page)
+>>  		goto no_vmas;
+>>
+>>  	for_each_vma(vmi, vma) {
+>> -		if (!(vma->vm_flags & VM_MERGEABLE))
+>> +		if (!vma_ksm_mergeable(vma))
+>>  			continue;
+>> +		if (!(vma->vm_flags & VM_MERGEABLE)) {
+>
+> IMO, the helper obscures the interaction between the vma flag and the
+> per-process flag here. How about:
+>
+> 		if (!(vma->vm_flags & VM_MERGEABLE)) {
+> 			if (!test_bit(MMF_VM_MERGE_ANY, &vma->vm_mm->flags))
+> 				continue;
+>
+> 			/*
+> 			 * With per-process merging enabled, have the MM scan
+> 			 * enroll any existing and new VMAs on the fly.
+> 			 *
+> 			ksm_madvise();
+> 		}
+>
+>> +			unsigned long flags = vma->vm_flags;
+>> +
+>> +			/* madvise failed, use next vma */
+>> +			if (ksm_madvise(vma, vma->vm_start, vma->vm_end, MADV_MERGEABLE, &flags))
+>> +				continue;
+>> +			/* vma, not supported as being mergeable */
+>> +			if (!(flags & VM_MERGEABLE))
+>> +				continue;
+>> +
+>> +			vm_flags_set(vma, VM_MERGEABLE);
+>
+> I don't understand the local flags. Can't it pass &vma->vm_flags to
+> ksm_madvise()? It'll set VM_MERGEABLE on success. And you know it
+> wasn't set before because the whole thing is inside the !set
+> branch. The return value doesn't seem super useful, it's only the flag
+> setting that matters:
+>
+> 			ksm_madvise(vma, vma->vm_start, vma->vm_end, MADV_MERGEABLE, &vma->vm_flags);
+> 			/* madvise can fail, and will skip special vmas (pfnmaps and such) */
+> 			if (!(vma->vm_flags & VM_MERGEABLE))
+> 				continue;
+>
 
-Acked-by: Peter Xu <peterx@redhat.com>
-Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
----
- fs/userfaultfd.c                         | 8 ++++++--
- include/linux/userfaultfd_k.h            | 3 ++-
- include/uapi/linux/userfaultfd.h         | 7 +++++++
- mm/userfaultfd.c                         | 5 +++--
- tools/testing/selftests/mm/userfaultfd.c | 4 ++++
- 5 files changed, 22 insertions(+), 5 deletions(-)
+vm_flags is defined as const. I cannot pass it directly inside the
+function, this is the reason, I'm using a local variable for it.
 
-diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-index 56e54e50414e..664019381e04 100644
---- a/fs/userfaultfd.c
-+++ b/fs/userfaultfd.c
-@@ -1878,6 +1878,7 @@ static int userfaultfd_continue(struct userfaultfd_ctx *ctx, unsigned long arg)
- 	struct uffdio_continue uffdio_continue;
- 	struct uffdio_continue __user *user_uffdio_continue;
- 	struct userfaultfd_wake_range range;
-+	uffd_flags_t flags = 0;
- 
- 	user_uffdio_continue = (struct uffdio_continue __user *)arg;
- 
-@@ -1902,13 +1903,16 @@ static int userfaultfd_continue(struct userfaultfd_ctx *ctx, unsigned long arg)
- 	    uffdio_continue.range.start) {
- 		goto out;
- 	}
--	if (uffdio_continue.mode & ~UFFDIO_CONTINUE_MODE_DONTWAKE)
-+	if (uffdio_continue.mode & ~(UFFDIO_CONTINUE_MODE_DONTWAKE |
-+				     UFFDIO_CONTINUE_MODE_WP))
- 		goto out;
-+	if (uffdio_continue.mode & UFFDIO_CONTINUE_MODE_WP)
-+		flags |= MFILL_ATOMIC_WP;
- 
- 	if (mmget_not_zero(ctx->mm)) {
- 		ret = mfill_atomic_continue(ctx->mm, uffdio_continue.range.start,
- 					    uffdio_continue.range.len,
--					    &ctx->mmap_changing);
-+					    &ctx->mmap_changing, flags);
- 		mmput(ctx->mm);
- 	} else {
- 		return -ESRCH;
-diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
-index 4d7425684171..9499cfcf83fa 100644
---- a/include/linux/userfaultfd_k.h
-+++ b/include/linux/userfaultfd_k.h
-@@ -82,7 +82,8 @@ extern ssize_t mfill_atomic_zeropage(struct mm_struct *dst_mm,
- 				     unsigned long len,
- 				     atomic_t *mmap_changing);
- extern ssize_t mfill_atomic_continue(struct mm_struct *dst_mm, unsigned long dst_start,
--				     unsigned long len, atomic_t *mmap_changing);
-+				     unsigned long len, atomic_t *mmap_changing,
-+				     uffd_flags_t flags);
- extern int mwriteprotect_range(struct mm_struct *dst_mm,
- 			       unsigned long start, unsigned long len,
- 			       bool enable_wp, atomic_t *mmap_changing);
-diff --git a/include/uapi/linux/userfaultfd.h b/include/uapi/linux/userfaultfd.h
-index 005e5e306266..14059a0861bf 100644
---- a/include/uapi/linux/userfaultfd.h
-+++ b/include/uapi/linux/userfaultfd.h
-@@ -297,6 +297,13 @@ struct uffdio_writeprotect {
- struct uffdio_continue {
- 	struct uffdio_range range;
- #define UFFDIO_CONTINUE_MODE_DONTWAKE		((__u64)1<<0)
-+	/*
-+	 * UFFDIO_CONTINUE_MODE_WP will map the page write protected on
-+	 * the fly.  UFFDIO_CONTINUE_MODE_WP is available only if the
-+	 * write protected ioctl is implemented for the range
-+	 * according to the uffdio_register.ioctls.
-+	 */
-+#define UFFDIO_CONTINUE_MODE_WP			((__u64)1<<1)
- 	__u64 mode;
- 
- 	/*
-diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-index dd807924446f..2f64e0a9b234 100644
---- a/mm/userfaultfd.c
-+++ b/mm/userfaultfd.c
-@@ -693,10 +693,11 @@ ssize_t mfill_atomic_zeropage(struct mm_struct *dst_mm, unsigned long start,
- }
- 
- ssize_t mfill_atomic_continue(struct mm_struct *dst_mm, unsigned long start,
--			      unsigned long len, atomic_t *mmap_changing)
-+			      unsigned long len, atomic_t *mmap_changing,
-+			      uffd_flags_t flags)
- {
- 	return mfill_atomic(dst_mm, start, 0, len, mmap_changing,
--			    uffd_flags_set_mode(0, MFILL_ATOMIC_CONTINUE));
-+			    uffd_flags_set_mode(flags, MFILL_ATOMIC_CONTINUE));
- }
- 
- long uffd_wp_range(struct vm_area_struct *dst_vma,
-diff --git a/tools/testing/selftests/mm/userfaultfd.c b/tools/testing/selftests/mm/userfaultfd.c
-index 7f22844ed704..41c1f9abc481 100644
---- a/tools/testing/selftests/mm/userfaultfd.c
-+++ b/tools/testing/selftests/mm/userfaultfd.c
-@@ -585,6 +585,8 @@ static void continue_range(int ufd, __u64 start, __u64 len)
- 	req.range.start = start;
- 	req.range.len = len;
- 	req.mode = 0;
-+	if (test_uffdio_wp)
-+		req.mode |= UFFDIO_CONTINUE_MODE_WP;
- 
- 	if (ioctl(ufd, UFFDIO_CONTINUE, &req))
- 		err("UFFDIO_CONTINUE failed for address 0x%" PRIx64,
-@@ -1332,6 +1334,8 @@ static int userfaultfd_minor_test(void)
- 	uffdio_register.range.start = (unsigned long)area_dst_alias;
- 	uffdio_register.range.len = nr_pages * page_size;
- 	uffdio_register.mode = UFFDIO_REGISTER_MODE_MINOR;
-+	if (test_uffdio_wp)
-+		uffdio_register.mode |= UFFDIO_REGISTER_MODE_WP;
- 	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register))
- 		err("register failure");
- 
--- 
-2.40.0.rc1.284.g88254d51c5-goog
+>> +		}
+>>  		if (ksm_scan.address < vma->vm_start)
+>>  			ksm_scan.address = vma->vm_start;
+>>  		if (!vma->anon_vma)
+>> @@ -2491,6 +2515,7 @@ static struct ksm_rmap_item *scan_get_next_rmap_item(struct page **page)
+>>
+>>  		mm_slot_free(mm_slot_cache, mm_slot);
+>>  		clear_bit(MMF_VM_MERGEABLE, &mm->flags);
+>> +		clear_bit(MMF_VM_MERGE_ANY, &mm->flags);
+>>  		mmap_read_unlock(mm);
+>>  		mmdrop(mm);
+>>  	} else {
+>
+>> @@ -2664,12 +2690,39 @@ int __ksm_enter(struct mm_struct *mm)
+>>  	return 0;
+>>  }
+>>
+>> -void __ksm_exit(struct mm_struct *mm)
+>> +static void unmerge_vmas(struct mm_struct *mm)
+>> +{
+>> +	struct vm_area_struct *vma;
+>> +	struct vma_iterator vmi;
+>> +
+>> +	vma_iter_init(&vmi, mm, 0);
+>> +
+>> +	mmap_read_lock(mm);
+>> +	for_each_vma(vmi, vma) {
+>> +		if (vma->vm_flags & VM_MERGEABLE) {
+>> +			unsigned long flags = vma->vm_flags;
+>> +
+>> +			if (ksm_madvise(vma, vma->vm_start, vma->vm_end, MADV_UNMERGEABLE, &flags))
+>> +				continue;
+>> +
+>> +			vm_flags_clear(vma, VM_MERGEABLE);
+>
+> ksm_madvise() tests and clears VM_MERGEABLE, so AFAICS
+>
+> 	for_each_vma(vmi, vma)
+> 		ksm_madvise();
+>
+> should do it...
+>
 
+This is the same problem. vma->vm_flags is defined as const.
+
++		if (vma->vm_flags & VM_MERGEABLE) {
+This will be removed.
+
+>> +		}
+>> +	}
+>> +	mmap_read_unlock(mm);
+>> +}
+>> +
+>> +void __ksm_exit(struct mm_struct *mm, int flag)
+>>  {
+>>  	struct ksm_mm_slot *mm_slot;
+>>  	struct mm_slot *slot;
+>>  	int easy_to_free = 0;
+>>
+>> +	if (!(current->flags & PF_EXITING) && flag == MMF_VM_MERGE_ANY &&
+>> +		test_bit(MMF_VM_MERGE_ANY, &mm->flags)) {
+>> +		clear_bit(MMF_VM_MERGE_ANY, &mm->flags);
+>> +		unmerge_vmas(mm);
+>
+> ...and then it's short enough to just open-code it here and drop the
+> unmerge_vmas() helper.
