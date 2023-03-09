@@ -2,44 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F767C64EC4
-	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Mar 2023 08:10:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F8B7C6FD19
+	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Mar 2023 08:11:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230124AbjCIIJs (ORCPT
+        id S230200AbjCIILV (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 9 Mar 2023 03:09:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56994 "EHLO
+        Thu, 9 Mar 2023 03:11:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbjCIIJk (ORCPT
+        with ESMTP id S230269AbjCIIKa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Mar 2023 03:09:40 -0500
+        Thu, 9 Mar 2023 03:10:30 -0500
 Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0B28888AC;
-        Thu,  9 Mar 2023 00:09:39 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAF15DB4AD;
+        Thu,  9 Mar 2023 00:09:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678349379; x=1709885379;
+  t=1678349398; x=1709885398;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Z7V/YOwn030poZpCpEChyw8MC+7YqADB7tm3JIqLGIM=;
-  b=gB//xKSLLn5/juX7z0zPe9bJIFF8HtlM0FR/zPGydo8JxtnLppIdxJbI
-   dNOw8twirYUQg5m27vHPFgF1+HZiwWEW0wVUNq4oqGfWZsZ5mRyFlHbrg
-   KtSlk1srLc1KvotH/tIISpzB1WF9NMn4i8QgHhHLuLO6MZHuOTqngIyvC
-   ZaOPGsqFQBF83xVAs2FFPC3cKmx3mwTgf2IULEShAoAiDCG+3091olMul
-   qVTAvW6UGT85nQGnYEkxSM37JmITK2hj5x5pLbwxTphyRRJtoOpv+wmVG
-   Wjo42jF1RAh9zUlpjWCMXAefxaf2ud6LBp9OqVLVnwBBnEn8YpCDxlUdg
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="364023131"
+  bh=Hl6KGE/GWJvBWXJmrRoyZQJPdHXffgrjU6Y+0qnffPE=;
+  b=gooyune0CosFRbkbrpLZwAQ2YCxcUdlTVuqpLUJxKYvGw1r97cLc2Iwk
+   sh2IX4xgm/u5R+I3rVs8A8ckR33pLxwfBmv+kgteQ8ZG4f4DDQNug14D6
+   AuZH7X/1EZrROhDaqQyYTW5tN7XTC0eGnHmByUv0el4ggfGylxPwbY5mK
+   bZl6XnVfOPFUMC3KprLqCcd1lYqfUBfrtFpbmTCAYBTHpiDcUy6+4+dfv
+   NXhBUi/+5Y4/aCRkm1ihhvAd3YksnuJV/KLFEvm7it5DG7btCe/YFDp8x
+   Hvdf4lS5YCaxdQqN89MaBdxZwsQWKS/PuJZPd9Xek+mMvIl3JUHlXf0db
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="364023222"
 X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
-   d="scan'208";a="364023131"
+   d="scan'208";a="364023222"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 00:09:38 -0800
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 00:09:55 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="787471396"
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="787471444"
 X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
-   d="scan'208";a="787471396"
+   d="scan'208";a="787471444"
 Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by fmsmga002.fm.intel.com with ESMTP; 09 Mar 2023 00:09:31 -0800
+  by fmsmga002.fm.intel.com with ESMTP; 09 Mar 2023 00:09:44 -0800
 From:   Yi Liu <yi.l.liu@intel.com>
 To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
         kevin.tian@intel.com, robin.murphy@arm.com,
@@ -51,9 +51,9 @@ Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
         shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
         suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH 08/12] iommufd/device: Report supported hwpt_types
-Date:   Thu,  9 Mar 2023 00:09:06 -0800
-Message-Id: <20230309080910.607396-9-yi.l.liu@intel.com>
+Subject: [PATCH 10/12] iommufd/selftest: Add coverage for IOMMU_HWPT_ALLOC with user data
+Date:   Thu,  9 Mar 2023 00:09:08 -0800
+Message-Id: <20230309080910.607396-11-yi.l.liu@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230309080910.607396-1-yi.l.liu@intel.com>
 References: <20230309080910.607396-1-yi.l.liu@intel.com>
@@ -63,139 +63,231 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This provides a way for userspace to probe the supported hwpt data
-types by kernel. Currently, kernel only supports IOMMU_HWPT_TYPE_DEFAULT,
-new types would be added per vendor drivers' extension.
+From: Nicolin Chen <nicolinc@nvidia.com>
 
-Userspace that wants to allocate hw_pagetable with user data should check
-this. While for the allocation without user data, no need for it. It is
-supported by default.
+The IOMMU_HWPT_ALLOC ioctl now supports passing user_data to allocate a
+customized domain. Add its coverage for both a regular domain case and
+a nested domain case.
 
-Co-developed-by: Nicolin Chen <nicolinc@nvidia.com>
 Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
 Signed-off-by: Yi Liu <yi.l.liu@intel.com>
 ---
- drivers/iommu/iommufd/device.c          |  1 +
- drivers/iommu/iommufd/hw_pagetable.c    | 18 +++++++++++++++---
- drivers/iommu/iommufd/iommufd_private.h |  2 ++
- drivers/iommu/iommufd/main.c            |  2 +-
- include/uapi/linux/iommufd.h            |  8 ++++++++
- 5 files changed, 27 insertions(+), 4 deletions(-)
+ tools/testing/selftests/iommu/iommufd.c       | 114 +++++++++++++++++-
+ tools/testing/selftests/iommu/iommufd_utils.h |  36 ++++++
+ 2 files changed, 149 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/iommu/iommufd/device.c b/drivers/iommu/iommufd/device.c
-index 19cd6df46c6a..0328071dcac1 100644
---- a/drivers/iommu/iommufd/device.c
-+++ b/drivers/iommu/iommufd/device.c
-@@ -322,6 +322,7 @@ int iommufd_device_get_hw_info(struct iommufd_ucmd *ucmd)
+diff --git a/tools/testing/selftests/iommu/iommufd.c b/tools/testing/selftests/iommu/iommufd.c
+index d2ce2ddbdc40..783afd6ccd2e 100644
+--- a/tools/testing/selftests/iommu/iommufd.c
++++ b/tools/testing/selftests/iommu/iommufd.c
+@@ -125,6 +125,7 @@ TEST_F(iommufd, cmd_length)
+ 	TEST_LENGTH(iommu_option, IOMMU_OPTION);
+ 	TEST_LENGTH(iommu_vfio_ioas, IOMMU_VFIO_IOAS);
+ 	TEST_LENGTH(iommu_hw_info, IOMMU_DEVICE_GET_HW_INFO);
++	TEST_LENGTH(iommu_hwpt_alloc, IOMMU_HWPT_ALLOC);
+ #undef TEST_LENGTH
+ }
  
- 	cmd->out_data_type = ops->driver_type;
- 	cmd->data_len = length;
-+	cmd->out_hwpt_type_bitmap = iommufd_hwpt_type_bitmaps[ops->driver_type];
- 
- 	rc = iommufd_ucmd_respond(ucmd, sizeof(*cmd));
- 
-diff --git a/drivers/iommu/iommufd/hw_pagetable.c b/drivers/iommu/iommufd/hw_pagetable.c
-index 67facca98de1..160712256c64 100644
---- a/drivers/iommu/iommufd/hw_pagetable.c
-+++ b/drivers/iommu/iommufd/hw_pagetable.c
-@@ -173,6 +173,14 @@ static const size_t iommufd_hwpt_alloc_data_size[] = {
- 	[IOMMU_HWPT_TYPE_DEFAULT] = 0,
+@@ -197,6 +198,7 @@ FIXTURE_VARIANT(iommufd_ioas)
+ {
+ 	unsigned int mock_domains;
+ 	unsigned int memory_limit;
++	bool new_hwpt;
  };
  
-+/*
-+ * bitmaps of supported hwpt types of by underlying iommu, indexed
-+ * by ops->driver_type which is one of enum iommu_hw_info_type.
-+ */
-+const u64 iommufd_hwpt_type_bitmaps[] =  {
-+	[IOMMU_HW_INFO_TYPE_DEFAULT] = BIT_ULL(IOMMU_HWPT_TYPE_DEFAULT),
+ FIXTURE_SETUP(iommufd_ioas)
+@@ -236,6 +238,12 @@ FIXTURE_VARIANT_ADD(iommufd_ioas, mock_domain)
+ 	.mock_domains = 1,
+ };
+ 
++FIXTURE_VARIANT_ADD(iommufd_ioas, mock_domain_hwpt)
++{
++	.mock_domains = 1,
++	.new_hwpt = true,
 +};
 +
- int iommufd_hwpt_alloc(struct iommufd_ucmd *ucmd)
+ FIXTURE_VARIANT_ADD(iommufd_ioas, two_mock_domain)
  {
- 	struct iommu_hwpt_alloc *cmd = ucmd->cmd;
-@@ -182,7 +190,7 @@ int iommufd_hwpt_alloc(struct iommufd_ucmd *ucmd)
- 	struct iommufd_ioas *ioas;
- 	const struct iommu_ops *ops;
- 	void *data = NULL;
--	u32 klen;
-+	u32 driver_type, klen;
- 	int rc;
- 
- 	if (cmd->__reserved || cmd->flags)
-@@ -198,8 +206,12 @@ int iommufd_hwpt_alloc(struct iommufd_ucmd *ucmd)
- 		goto out_put_idev;
+ 	.mock_domains = 2,
+@@ -263,6 +271,93 @@ TEST_F(iommufd_ioas, ioas_destroy)
  	}
+ }
  
--	/* Only support IOMMU_HWPT_TYPE_DEFAULT for now */
--	if (cmd->data_type != IOMMU_HWPT_TYPE_DEFAULT) {
-+	driver_type = ops->driver_type;
++TEST_F(iommufd_ioas, hwpt_alloc)
++{
++	uint32_t new_hwpt_id = 0;
 +
-+	/* data_type should be a supported type by the driver */
-+	if (WARN_ON(driver_type >= ARRAY_SIZE(iommufd_hwpt_type_bitmaps)) ||
-+	    !((1 << cmd->data_type) &
-+			iommufd_hwpt_type_bitmaps[driver_type])) {
- 		rc = -EINVAL;
- 		goto out_put_idev;
- 	}
-diff --git a/drivers/iommu/iommufd/iommufd_private.h b/drivers/iommu/iommufd/iommufd_private.h
-index d879264d1acf..164ccfc2e6e0 100644
---- a/drivers/iommu/iommufd/iommufd_private.h
-+++ b/drivers/iommu/iommufd/iommufd_private.h
-@@ -321,6 +321,8 @@ iommufd_get_device(struct iommufd_ucmd *ucmd, u32 id)
- void iommufd_device_destroy(struct iommufd_object *obj);
- int iommufd_device_get_hw_info(struct iommufd_ucmd *ucmd);
- 
-+extern const u64 iommufd_hwpt_type_bitmaps[];
++	if (self->stdev_id && self->device_id) {
++		test_cmd_hwpt_alloc(self->device_id, self->ioas_id, &new_hwpt_id);
++		test_cmd_mock_domain_replace(self->stdev_id, new_hwpt_id);
++		/* hw_pagetable cannot be freed if a device is attached to it */
++		EXPECT_ERRNO(EBUSY, _test_ioctl_destroy(self->fd, new_hwpt_id));
 +
- struct iommufd_access {
- 	struct iommufd_object obj;
- 	struct iommufd_ctx *ictx;
-diff --git a/drivers/iommu/iommufd/main.c b/drivers/iommu/iommufd/main.c
-index 2cf45f65b637..7ec3ceac01b3 100644
---- a/drivers/iommu/iommufd/main.c
-+++ b/drivers/iommu/iommufd/main.c
-@@ -298,7 +298,7 @@ static const struct iommufd_ioctl_op iommufd_ioctl_ops[] = {
- 	IOCTL_OP(IOMMU_HWPT_ALLOC, iommufd_hwpt_alloc, struct iommu_hwpt_alloc,
- 		 data_uptr),
- 	IOCTL_OP(IOMMU_DEVICE_GET_HW_INFO, iommufd_device_get_hw_info,
--		 struct iommu_hw_info, __reserved),
-+		 struct iommu_hw_info, out_hwpt_type_bitmap),
- 	IOCTL_OP(IOMMU_HWPT_INVALIDATE, iommufd_hwpt_invalidate,
- 		 struct iommu_hwpt_invalidate, data_uptr),
- 	IOCTL_OP(IOMMU_IOAS_ALLOC, iommufd_ioas_alloc_ioctl,
-diff --git a/include/uapi/linux/iommufd.h b/include/uapi/linux/iommufd.h
-index d0962c41f8d6..e2eff9c56ab3 100644
---- a/include/uapi/linux/iommufd.h
-+++ b/include/uapi/linux/iommufd.h
-@@ -421,6 +421,8 @@ enum iommu_hw_info_type {
-  * @out_data_type: Output the iommu hardware info type, it is one of
-  *                 enum iommu_hw_info_type.
-  * @__reserved: Must be 0
-+ * @out_hwpt_type_bitmap: Output the supported page table type. Each
-+ *                        bit is defined in enum iommu_hwpt_type.
-  *
-  * Query the hardware iommu information for given device which has been
-  * bound to iommufd. @data_len is the size of the buffer which captures
-@@ -435,6 +437,11 @@ enum iommu_hw_info_type {
-  * The @out_data_type will be filled if the ioctl succeeds. It would
-  * be used to decode the data filled in the buffer pointed by @data_ptr.
-  *
-+ * @out_hwpt_type_bitmap reports the supported hwpt types. This differs
-+ * per the @out_data_type. Userspace should check it before allocating a
-+ * user-managed hw_pagetable with user data, unless it allocates a default
-+ * hw_pagetable that does not need user data.
-+ *
-  * This is only available for the physical devices bound to iommufd as
-  * only physical devices can have hardware IOMMU.
-  */
-@@ -446,6 +453,7 @@ struct iommu_hw_info {
- 	__aligned_u64 data_ptr;
- 	__u32 out_data_type;
- 	__u32 __reserved;
-+	__aligned_u64 out_hwpt_type_bitmap;
- };
- #define IOMMU_DEVICE_GET_HW_INFO _IO(IOMMUFD_TYPE, IOMMUFD_CMD_DEVICE_GET_HW_INFO)
++		/* Detach from the new hw_pagetable and try again */
++		test_cmd_mock_domain_replace(self->stdev_id, self->ioas_id);
++		test_ioctl_destroy(new_hwpt_id);
++	} else {
++		test_err_cmd_hwpt_alloc(ENOENT, self->device_id,
++					self->ioas_id, &new_hwpt_id);
++		test_err_mock_domain_replace(ENOENT,
++					     self->stdev_id, new_hwpt_id);
++	}
++}
++
++TEST_F(iommufd_ioas, nested_hwpt_alloc)
++{
++	uint32_t nested_hwpt_id[2] = {};
++	uint32_t parent_hwpt_id = 0;
++	uint32_t test_hwpt_id = 0;
++
++	if (self->device_id) {
++		/* Negative tests */
++		test_err_cmd_hwpt_alloc(ENOENT, self->ioas_id, self->device_id,
++					&test_hwpt_id);
++		test_err_cmd_hwpt_alloc(EINVAL, self->device_id,
++					self->device_id, &test_hwpt_id);
++
++		/* Allocate two nested hwpts sharing one common parent hwpt */
++		test_cmd_hwpt_alloc(self->device_id, self->ioas_id,
++				    &parent_hwpt_id);
++
++		test_cmd_hwpt_alloc_nested(self->device_id, parent_hwpt_id,
++					   &nested_hwpt_id[0]);
++		test_cmd_hwpt_alloc_nested(self->device_id, parent_hwpt_id,
++					   &nested_hwpt_id[1]);
++
++		/* Negative test: a nested hwpt on top of a nested hwpt */
++		test_err_cmd_hwpt_alloc_nested(EINVAL, self->device_id,
++					       nested_hwpt_id[0],
++					       &test_hwpt_id);
++		/* Negative test: parent hwpt now cannot be freed */
++		EXPECT_ERRNO(EBUSY,
++			     _test_ioctl_destroy(self->fd, parent_hwpt_id));
++
++		/* Attach device to nested_hwpt_id[0] that then will be busy */
++		test_cmd_mock_domain_replace(self->stdev_id,
++					     nested_hwpt_id[0]);
++		EXPECT_ERRNO(EBUSY,
++			     _test_ioctl_destroy(self->fd, nested_hwpt_id[0]));
++
++		/* Switch from nested_hwpt_id[0] to nested_hwpt_id[1] */
++		test_cmd_mock_domain_replace(self->stdev_id,
++					     nested_hwpt_id[1]);
++		EXPECT_ERRNO(EBUSY,
++			     _test_ioctl_destroy(self->fd, nested_hwpt_id[1]));
++		test_ioctl_destroy(nested_hwpt_id[0]);
++
++		/* Detach from nested_hwpt_id[1] and destroy it */
++		test_cmd_mock_domain_replace(self->stdev_id, parent_hwpt_id);
++		test_ioctl_destroy(nested_hwpt_id[1]);
++
++		/* Detach from the parent hw_pagetable and destroy it */
++		test_cmd_mock_domain_replace(self->stdev_id, self->ioas_id);
++		test_ioctl_destroy(parent_hwpt_id);
++	} else {
++		test_err_cmd_hwpt_alloc(ENOENT, self->device_id, self->ioas_id,
++					&parent_hwpt_id);
++		test_err_cmd_hwpt_alloc_nested(ENOENT, self->device_id,
++					       parent_hwpt_id,
++					       &nested_hwpt_id[0]);
++		test_err_cmd_hwpt_alloc_nested(ENOENT, self->device_id,
++					       parent_hwpt_id,
++					       &nested_hwpt_id[1]);
++		test_err_mock_domain_replace(ENOENT, self->stdev_id,
++					     nested_hwpt_id[0]);
++		test_err_mock_domain_replace(ENOENT, self->stdev_id,
++					     nested_hwpt_id[1]);
++	}
++}
++
+ TEST_F(iommufd_ioas, hwpt_attach)
+ {
+ 	/* Create a device attached directly to a hwpt */
+@@ -632,6 +727,8 @@ TEST_F(iommufd_ioas, access_pin)
+ 			       MOCK_FLAGS_ACCESS_CREATE_NEEDS_PIN_PAGES);
  
+ 	for (npages = 1; npages < BUFFER_SIZE / PAGE_SIZE; npages++) {
++		uint32_t new_hwpt_id = 0;
++		uint32_t mock_device_id;
+ 		uint32_t mock_stdev_id;
+ 		uint32_t mock_hwpt_id;
+ 
+@@ -665,12 +762,27 @@ TEST_F(iommufd_ioas, access_pin)
+ 				   _IOMMU_TEST_CMD(IOMMU_TEST_OP_ACCESS_PAGES),
+ 				   &access_cmd));
+ 		test_cmd_mock_domain(self->ioas_id, &mock_stdev_id,
+-				     &mock_hwpt_id, NULL);
++				     &mock_hwpt_id, &mock_device_id);
+ 		check_map_cmd.id = mock_hwpt_id;
++		if (variant->new_hwpt) {
++			test_cmd_hwpt_alloc(mock_device_id, self->ioas_id,
++					    &new_hwpt_id);
++			test_cmd_mock_domain_replace(mock_stdev_id,
++						     new_hwpt_id);
++			check_map_cmd.id = new_hwpt_id;
++		} else {
++			check_map_cmd.id = mock_hwpt_id;
++		}
+ 		ASSERT_EQ(0, ioctl(self->fd,
+ 				   _IOMMU_TEST_CMD(IOMMU_TEST_OP_MD_CHECK_MAP),
+ 				   &check_map_cmd));
+ 
++		if (variant->new_hwpt) {
++			/* Detach from the new hwpt for its destroy() */
++			test_cmd_mock_domain_replace(mock_stdev_id,
++						     mock_hwpt_id);
++			test_ioctl_destroy(new_hwpt_id);
++		}
+ 		test_ioctl_destroy(mock_stdev_id);
+ 		test_cmd_destroy_access_pages(
+ 			access_cmd.id,
+diff --git a/tools/testing/selftests/iommu/iommufd_utils.h b/tools/testing/selftests/iommu/iommufd_utils.h
+index b57e1e60f69d..e0e484e1c775 100644
+--- a/tools/testing/selftests/iommu/iommufd_utils.h
++++ b/tools/testing/selftests/iommu/iommufd_utils.h
+@@ -116,6 +116,42 @@ static int _test_cmd_hwpt_alloc(int fd, __u32 device_id, __u32 pt_id,
+ 
+ #define test_cmd_hwpt_alloc(device_id, pt_id, hwpt_id) \
+ 	ASSERT_EQ(0, _test_cmd_hwpt_alloc(self->fd, device_id, pt_id, hwpt_id))
++#define test_err_cmd_hwpt_alloc(_errno, device_id, pt_id, hwpt_id)     \
++	EXPECT_ERRNO(_errno, _test_cmd_hwpt_alloc(self->fd, device_id, \
++						  pt_id, hwpt_id))
++
++static int _test_cmd_hwpt_alloc_nested(int fd, __u32 device_id, __u32 parent_id,
++				       __u32 *hwpt_id)
++{
++	struct iommu_hwpt_selftest data = {
++		.flags = IOMMU_TEST_FLAG_NESTED,
++		.test_config = IOMMU_TEST_IOTLB_DEFAULT,
++	};
++	struct iommu_hwpt_alloc cmd = {
++		.size = sizeof(cmd),
++		.dev_id = device_id,
++		.pt_id = parent_id,
++		.data_type = IOMMU_HWPT_TYPE_SELFTTEST,
++		.data_len = sizeof(data),
++		.data_uptr = (uint64_t)&data,
++	};
++	int ret;
++
++	ret = ioctl(fd, IOMMU_HWPT_ALLOC, &cmd);
++	if (ret)
++		return ret;
++	if (hwpt_id)
++		*hwpt_id = cmd.out_hwpt_id;
++	return 0;
++}
++
++#define test_cmd_hwpt_alloc_nested(device_id, parent_id, hwpt_id)     \
++	ASSERT_EQ(0, _test_cmd_hwpt_alloc_nested(self->fd, device_id, \
++						 parent_id, hwpt_id))
++#define test_err_cmd_hwpt_alloc_nested(_errno, device_id, parent_id, hwpt_id) \
++	EXPECT_ERRNO(_errno,                                                  \
++		     _test_cmd_hwpt_alloc_nested(self->fd, device_id,         \
++						 parent_id, hwpt_id))
+ 
+ static int _test_cmd_access_set_ioas(int fd, __u32 access_id,
+ 				     unsigned int ioas_id)
 -- 
 2.34.1
 
