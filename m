@@ -2,44 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E04C3C61DA4
-	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Mar 2023 08:25:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4722CC61DA4
+	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Mar 2023 08:25:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbjCIIYi (ORCPT
+        id S229906AbjCIIZJ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 9 Mar 2023 03:24:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50236 "EHLO
+        Thu, 9 Mar 2023 03:25:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230419AbjCIIYA (ORCPT
+        with ESMTP id S229852AbjCIIYS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Mar 2023 03:24:00 -0500
+        Thu, 9 Mar 2023 03:24:18 -0500
 Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3C9B8F2B;
-        Thu,  9 Mar 2023 00:22:46 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36CD514EB0;
+        Thu,  9 Mar 2023 00:23:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678350166; x=1709886166;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=1BqCuzwrx1sAGErM7heQwG3PZAKj4z7gGmdrSQhTQJU=;
-  b=I9XuFC+/EnuxLXGm6ajJnqm43zcrlXdCM54lMJnDq28fuAjGANyQxqoQ
-   q5KmVL69AJn3MAHKpnISU29+sHEP3cPV2ryz7aK6qeRtNK19JCCGBG/sd
-   vfL58oXZLi7uYM06OLFTLvxX8bt5bAJ9xp5srhf/P0J2HGvums9V55kOy
-   HBAVjYaxQ0+2GOy4rHEbEcqUFwy31eAyynrtKuprnoQc+ABSbQxhBI1IP
-   hYXAjZebOhjlhME0etU7F3irU+ABXzwV77wnJLzkhwO/vf+Jy7XjFRFfi
-   1ADKEzyxRRmcTSl+DVNj42XlYIVwpsCyeeu/44LOhJAgT2wfKuiXosRNi
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="364026161"
+  t=1678350183; x=1709886183;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=8FKzjXidbvZaREDXMrJoGHp6nNM9UNsEUhh+2h9xdEU=;
+  b=XIXig3ooZb2MMzfG0jTf82bP75lFMg7lxkaYwr0o4/HCJClgpSHn0L8A
+   Rjzj/w23G1AaUbKlde2wgC0Aumi13wv4GCSqTw5wkWh0Tv/d8Zu2Je1uA
+   jV30KBXPDWm/zS26cgrsvzdCSCcgd++GkQioK/omttmFead8IRYV1encZ
+   3RgsnqQuWV08MznmydJRl+4QygwpTNtJUR3JZiW2cSD+Hth7MuNHbWs7T
+   xWX1DjhSG/ppnXf5MkLp3IXOa58852vEQHfT66mcfP5lqZRBxccP7bYwF
+   Z0yW7hGyo3VnQQTuaQnsIY/J+5qoxm23B7T2MvroCvUayTU7QCiLx1Se8
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="364026207"
 X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
-   d="scan'208";a="364026161"
+   d="scan'208";a="364026207"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 00:22:44 -0800
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 00:22:45 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="787474147"
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="787474152"
 X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
-   d="scan'208";a="787474147"
+   d="scan'208";a="787474152"
 Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by fmsmga002.fm.intel.com with ESMTP; 09 Mar 2023 00:22:10 -0800
+  by fmsmga002.fm.intel.com with ESMTP; 09 Mar 2023 00:22:12 -0800
 From:   Yi Liu <yi.l.liu@intel.com>
 To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
         kevin.tian@intel.com, robin.murphy@arm.com,
@@ -51,72 +51,82 @@ Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
         shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
         suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 0/5] Add Intel VT-d nested translation
-Date:   Thu,  9 Mar 2023 00:22:02 -0800
-Message-Id: <20230309082207.612346-1-yi.l.liu@intel.com>
+Subject: [PATCH v2 2/5] iommu/vt-d: Implement hw_info for iommu capability query
+Date:   Thu,  9 Mar 2023 00:22:04 -0800
+Message-Id: <20230309082207.612346-3-yi.l.liu@intel.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230309082207.612346-1-yi.l.liu@intel.com>
+References: <20230309082207.612346-1-yi.l.liu@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This is to add Intel VT-d nested translation based on IOMMUFD nesting
-infrastructure. As the iommufd nesting infrastructure series[1], iommu
-core supports new ops to report iommu hardware information, allocate
-domains with user data and sync stage-1 IOTLB. The data required in
-the three paths are vendor-specific, so
+From: Lu Baolu <baolu.lu@linux.intel.com>
 
-1) IOMMU_HW_INFO_TYPE_INTEL_VTD and struct iommu_device_info_vtd are
-   defined to report iommu hardware information for Intel VT-d .
-2) IOMMU_HWPT_DATA_VTD_S1 is defined for the Intel VT-d stage-1 page
-   table, it will be used in the stage-1 domain allocation and IOTLB
-   syncing path. struct iommu_hwpt_intel_vtd is defined to pass user_data
-   for the Intel VT-d stage-1 domain allocation.
-   struct iommu_hwpt_invalidate_intel_vtd is defined to pass the data for
-   the Intel VT-d stage-1 IOTLB invalidation.
+Add intel_iommu_hw_info() to report cap_reg and ecap_reg information.
 
-With above IOMMUFD extensions, the intel iommu driver implements the three
-callbacks to support nested translation.
+Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+Signed-off-by: Yi Liu <yi.l.liu@intel.com>
+Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+Signed-off-by: Yi Sun <yi.y.sun@linux.intel.com>
+---
+ drivers/iommu/intel/iommu.c | 19 +++++++++++++++++++
+ drivers/iommu/intel/iommu.h |  1 +
+ 2 files changed, 20 insertions(+)
 
-Complete code can be found in [2], QEMU could can be found in [3].
-
-base-commit: f01f1c95684dd18c15dd0e51b4fd6e796a0a2c0e
-
-[1] https://lore.kernel.org/linux-iommu/20230309080910.607396-1-yi.l.liu@intel.com/
-[2] https://github.com/yiliu1765/iommufd/tree/iommufd_nesting
-[3] https://github.com/yiliu1765/qemu/tree/wip/iommufd_rfcv3%2Bnesting
-
-Change log:
-v2:
- - The iommufd infrastructure is split to be separate series.
-
-v1: https://lore.kernel.org/linux-iommu/20230209043153.14964-1-yi.l.liu@intel.com/
-
-Regards,
-        Yi Liu
-
-Lu Baolu (4):
-  iommu/vt-d: Implement hw_info for iommu capability query
-  iommu/vt-d: Extend dmar_domain to support nested domain
-  iommu/vt-d: Add helper to setup pasid nested translation
-  iommu/vt-d: Add nested domain support
-
-Yi Liu (1):
-  iommufd: Add nesting related data structures for Intel VT-d
-
- drivers/iommu/intel/Makefile         |   2 +-
- drivers/iommu/intel/iommu.c          |  57 ++++++++---
- drivers/iommu/intel/iommu.h          |  51 ++++++++--
- drivers/iommu/intel/nested.c         | 143 +++++++++++++++++++++++++++
- drivers/iommu/intel/pasid.c          | 142 ++++++++++++++++++++++++++
- drivers/iommu/intel/pasid.h          |   2 +
- drivers/iommu/iommufd/hw_pagetable.c |   7 +-
- drivers/iommu/iommufd/main.c         |   5 +
- include/uapi/linux/iommufd.h         | 136 +++++++++++++++++++++++++
- 9 files changed, 522 insertions(+), 23 deletions(-)
- create mode 100644 drivers/iommu/intel/nested.c
-
+diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+index 7c2f4bd33582..004406209793 100644
+--- a/drivers/iommu/intel/iommu.c
++++ b/drivers/iommu/intel/iommu.c
+@@ -4780,8 +4780,26 @@ static void intel_iommu_remove_dev_pasid(struct device *dev, ioasid_t pasid)
+ 	intel_pasid_tear_down_entry(iommu, dev, pasid, false);
+ }
+ 
++static void *intel_iommu_hw_info(struct device *dev, u32 *length)
++{
++	struct device_domain_info *info = dev_iommu_priv_get(dev);
++	struct intel_iommu *iommu = info->iommu;
++	struct iommu_hw_info_vtd *vtd;
++
++	vtd = kzalloc(sizeof(*vtd), GFP_KERNEL);
++	if (!vtd)
++		return ERR_PTR(-ENOMEM);
++
++	vtd->cap_reg = iommu->cap;
++	vtd->ecap_reg = iommu->ecap;
++	*length = sizeof(*vtd);
++
++	return vtd;
++}
++
+ const struct iommu_ops intel_iommu_ops = {
+ 	.capable		= intel_iommu_capable,
++	.hw_info		= intel_iommu_hw_info,
+ 	.domain_alloc		= intel_iommu_domain_alloc,
+ 	.probe_device		= intel_iommu_probe_device,
+ 	.probe_finalize		= intel_iommu_probe_finalize,
+@@ -4794,6 +4812,7 @@ const struct iommu_ops intel_iommu_ops = {
+ 	.def_domain_type	= device_def_domain_type,
+ 	.remove_dev_pasid	= intel_iommu_remove_dev_pasid,
+ 	.pgsize_bitmap		= SZ_4K,
++	.driver_type		= IOMMU_HW_INFO_TYPE_INTEL_VTD,
+ #ifdef CONFIG_INTEL_IOMMU_SVM
+ 	.page_response		= intel_svm_page_response,
+ #endif
+diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
+index d6df3b865812..9871de2170eb 100644
+--- a/drivers/iommu/intel/iommu.h
++++ b/drivers/iommu/intel/iommu.h
+@@ -23,6 +23,7 @@
+ #include <linux/bitfield.h>
+ #include <linux/xarray.h>
+ #include <linux/perf_event.h>
++#include <uapi/linux/iommufd.h>
+ 
+ #include <asm/cacheflush.h>
+ #include <asm/iommu.h>
 -- 
 2.34.1
 
