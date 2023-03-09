@@ -2,521 +2,146 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 94C3CC76186
-	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Mar 2023 17:08:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CAD5C6FD19
+	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Mar 2023 17:21:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230253AbjCIRIS (ORCPT
+        id S229892AbjCIRVL (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 9 Mar 2023 12:08:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39746 "EHLO
+        Thu, 9 Mar 2023 12:21:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231146AbjCIRIB (ORCPT
+        with ESMTP id S230437AbjCIRVF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Mar 2023 12:08:01 -0500
-Received: from smtp-42ab.mail.infomaniak.ch (smtp-42ab.mail.infomaniak.ch [IPv6:2001:1600:3:17::42ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5754EBDB4
-        for <linux-kselftest@vger.kernel.org>; Thu,  9 Mar 2023 09:04:35 -0800 (PST)
-Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4PXb0W27KzzMqG0T;
-        Thu,  9 Mar 2023 17:55:39 +0100 (CET)
-Received: from unknown by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4PXb0V5ZHrzMslrt;
-        Thu,  9 Mar 2023 17:55:38 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1678380939;
-        bh=uPajZJs+jU8cEgwLqntijm09MCIH0iL/1aPPbTJuMU0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d/54t4r9ay41/bPQxJWrasqEdoxH2cpS8gE7pdldTDz7Vn7OxZ3/84QxyaERIVENr
-         T37pYGZWoZPNOBSWDYy+Dvx7HmJWCkTxPuFqgOsiwUvfpU83k5e+bzd4LYJHE8GXTS
-         NkcWCKorvdnzzcFsJa5iy4vkemkAckgjE3m0Yv5I=
-From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To:     Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Richard Weinberger <richard@nod.at>
-Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        Christopher Obbard <chris.obbard@collabora.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack3000@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        James Morris <jmorris@namei.org>, Jeff Xu <jeffxu@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Paul Moore <paul@paul-moore.com>,
-        Ritesh Raj Sarraf <ritesh@collabora.com>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sjoerd Simons <sjoerd@collabora.com>,
-        Willem de Bruijn <willemb@google.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, stable@vger.kernel.org
-Subject: [PATCH v1 1/5] hostfs: Fix ephemeral inodes
-Date:   Thu,  9 Mar 2023 17:54:51 +0100
-Message-Id: <20230309165455.175131-2-mic@digikod.net>
-In-Reply-To: <20230309165455.175131-1-mic@digikod.net>
-References: <20230309165455.175131-1-mic@digikod.net>
+        Thu, 9 Mar 2023 12:21:05 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2060.outbound.protection.outlook.com [40.107.223.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D83B661312;
+        Thu,  9 Mar 2023 09:21:03 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=deOa48gyN54cotpHu4RmrMDdC0YT1d+w8D2tkGJXqb++mFbRna7aqJFGMU38zjU0XowR/psrS5kS6hIQ7Rxj3uYowGxfM9KZY8eQ1yKMaBmnKsD2b/ejUvFDuBo7rbOOJnkEV+hZDaj4pf0LD+C9yN1p9U/Yf1zf8lhtla9PmUOtDmQDV4mJlcboQj9OPVt4lbYFcDAemG8pz8KXwQ1SanoggNjlHFdI6/XzQujkGb/NChAuDIvTkE6CNq6cEyAig/YJuKZg/+Rvi70YfGBXmr3LXVKqzc1HTOHBPtcY4c8YNZTHITzJ4fGorVp0Y9g+6k0nsCihKuDYoKuv6ReWRA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=I2ColwMjueZ+u0KnqnMFLSfhm2F+7iidraEBEVbTypw=;
+ b=L7/4jxxxzn863xeVnTtq48kgzKWGmMO63OmJ2DjW0vg9H0dtuOj9Ss8GjCEg8AApNo8OGIuh0Ji8gwtSvwm52a+QVAdNMOg2ja5gFm395xyEUO6hqUwaNT1e5oEBvQ101B3PmnYuXR/eVyDmvQON5mWPzZces1Jy4Rbth2fjbN/C++qe2wfrX0k1ZFt7+3NBrz2BxiiIjTDwAzPt57IFPzKxLCcwCbDscUDlkPN0x5BDAXcRjqdZOi2X1bBzEvHM8031IIkkz5LHuBTIWEyMmjYKfOcl9PmT1gkK11yen01mFwyxKYQiABJJOaNoUq6cR9jHpZSzX6+tPUwniShvNg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=I2ColwMjueZ+u0KnqnMFLSfhm2F+7iidraEBEVbTypw=;
+ b=cEVx0kUnpa6PHUxikye8ju8uO2xU+ekdi/eL3SPfotyy7Q6WxN2ZwoddlnZakmBkMpcFaiff1zyEHm3wEJVPsz3sEmaX4SCPtFyectO1OVOlVyE33hD4K4gjaKRN3dAhNoqY8aNkNHci+2WF8e5sCSukXigkBIT1A19mXbsCA3KITD7FVFDzdPegDDlMKXLghg9UfstxN6iGy926a0Jw68n7MaRTBO+qnPDl9Cnp4UTiVxqimhs9z/7pVKyHF5ON9ts5ERKXJN6Rq6g6jOpW8MftVkOqAdIo3cLqS/g6uAqMmwBbZGAGYvOS8CszuK/kRUIkBS3a+RmnASfo23+3ow==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by DS7PR12MB6166.namprd12.prod.outlook.com (2603:10b6:8:99::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.19; Thu, 9 Mar
+ 2023 17:21:01 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::ef6d:fdf6:352f:efd1]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::ef6d:fdf6:352f:efd1%3]) with mapi id 15.20.6178.017; Thu, 9 Mar 2023
+ 17:21:01 +0000
+Date:   Thu, 9 Mar 2023 13:20:58 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Baolu Lu <baolu.lu@linux.intel.com>
+Cc:     Yi Liu <yi.l.liu@intel.com>, joro@8bytes.org,
+        alex.williamson@redhat.com, kevin.tian@intel.com,
+        robin.murphy@arm.com, cohuck@redhat.com, eric.auger@redhat.com,
+        nicolinc@nvidia.com, kvm@vger.kernel.org, mjrosato@linux.ibm.com,
+        chao.p.peng@linux.intel.com, yi.y.sun@linux.intel.com,
+        peterx@redhat.com, jasowang@redhat.com,
+        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
+        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 3/4] iommufd: Add IOMMU_DEVICE_GET_HW_INFO
+Message-ID: <ZAoVemZoGpx16P9E@nvidia.com>
+References: <20230309075358.571567-1-yi.l.liu@intel.com>
+ <20230309075358.571567-4-yi.l.liu@intel.com>
+ <6c1b221e-df8d-4b82-10e5-aa3027819d45@linux.intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6c1b221e-df8d-4b82-10e5-aa3027819d45@linux.intel.com>
+X-ClientProxiedBy: SJ0PR05CA0141.namprd05.prod.outlook.com
+ (2603:10b6:a03:33d::26) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Infomaniak-Routing: alpha
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DS7PR12MB6166:EE_
+X-MS-Office365-Filtering-Correlation-Id: 13dbb63c-e221-44e6-94a1-08db20c2a7da
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: VT1nl0c+OvHMYgMlqI+4AS39leT1VGIN7iENUds09JmQIqfL6dwmhgqger0+pm1b/9z6/8p5Rery0UIbVb8rU+zvrjQX0S80aYg2yo9sZRobU7KIcdR4TZWHtHknD9EQXwAL8MzP0Ofqm2XhpHLLEGQrJFJ9nWa+Ar318V9CXQfUHEtPpaTN3on04hrAWlH0+eFw7Mts3iM7agyaGD3K33iq+VcogmCPkDIkAOkW+0g5T1G45Ih2Aj/ael8GP8c+TD0Sez4tZsmpJzeHVirIdeq4z/SYy4IUdNgh8egWckIMS0JgLYeLXOIEKhiwHZfOW9BDsLhrQQK43pKDmKm5xrpM0feDBVjN68aWs4sVRBBg1cgr7MNBWChwKV9p5iFHXQbkUEmI+MaDPkaslJtWLI3xM4CnsNEnWSdaN7t5jOeqVyGYBiZmnkAx6PGl0esWk56w+5h0XNa35OBMSOZyyUW4C2aHhSlw5vEJTDrQE3bMIRieue4FZXHgJQSrx44ctmIsKanqk/FmVebWijd21o1bz84VqIaM93vzIja3pKgklDzucyx+NjYGxP1WQyPeDR9EmZpKufti10ysNoN2KIQHU4Rh+spah+S2Mi6IiOs+ni4FuWsF7w7e/fAAH3re1txX0fY4uwlxO8mzxoh7aQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(396003)(39860400002)(366004)(376002)(136003)(451199018)(36756003)(6486002)(316002)(6916009)(5660300002)(7416002)(2906002)(8936002)(66476007)(66946007)(8676002)(66556008)(4744005)(41300700001)(4326008)(26005)(86362001)(186003)(6666004)(2616005)(478600001)(6512007)(6506007)(38100700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?giTJ0eotKAMxQIF7wp1ZUApxmz5yMAew0KcHZTLWr/sIGrAmyUq4Nt7Iep2q?=
+ =?us-ascii?Q?VIRb+hvU/kUJ/pyDh+BLX86wLAOo7kc0x+jzQQS/8kgjdOzbm4Uz0aqYYHy9?=
+ =?us-ascii?Q?UVAMSOlfQNb/Gqlcgs21oGJvwqDu8FBOim6a+8lA7R1oyQl+zUxNEtfq+wtW?=
+ =?us-ascii?Q?g4CucP0l2PmpMXMKBLfEHUmxFDvLtdk2KZwNrsREgb6CVHCctvCO4AnxeJZ5?=
+ =?us-ascii?Q?Qfb8892r6oK4gNQgaKpMu5/2Roprouh9Ay8l2nk6EXlYdqzfjNmreNBO2GtN?=
+ =?us-ascii?Q?y/R4hu4FnB0AXkQWx/p8GdAbZhcDybTEcYHEBFvD6w+pkddLB0YOGuXgVKlM?=
+ =?us-ascii?Q?MY5hQv1qHscNdQJf873X3/ISP9F6PGgu0mOpMGm4Jrgcsoce/P3T+Sauhbcw?=
+ =?us-ascii?Q?UIhAPPWefz8ah/LLIfX5IkZzzIyMq+wL+eMyKX3Tolk5QMK8KycyXMFUpkiw?=
+ =?us-ascii?Q?l6ogq+Q0VEdkCZ1mQh/KToy/k+ekSS+96v/+fC91eMbFIuY5wsgeXZT9fR3B?=
+ =?us-ascii?Q?f17iYH2XoxykM/pYzFg7n/UcCfSpQjAs9TtWEz6LBfpvIN85O7omJODCBzlx?=
+ =?us-ascii?Q?u7nCPFtCcHRJccOYRIJIARdftJZKx2sSBqsqYKm2CkfvMEM7qK6nTc+0FsWk?=
+ =?us-ascii?Q?mo+93kNk9YXz1XcllsbsMyMvvzef9dim/Dr+2OalNy1ZxeJH/kGw2DK3cWYr?=
+ =?us-ascii?Q?CLTzwRQqfX0fllTLwFvVYVL+u6qCW94lTWm44PXwyCyu1raSej1sS9rRaV4S?=
+ =?us-ascii?Q?vV94w2Ip2g0oS0rEol+T+phmLLUAqdS3EboLe38zhx7yWXMcuallun7choiE?=
+ =?us-ascii?Q?Q3blllUhOfjdyZr7p40oWi5+TJ8JLSeAmliDtAV7Imb38NRfhoj2fbaZW4GB?=
+ =?us-ascii?Q?5EMRgXD/JttfQUO2Kp/daLeEucp+/kSyQQXPRWTspz/2aZSgdjG+HQw2nzdG?=
+ =?us-ascii?Q?J8F4hh6+q+7+SN7U8L8rfJ9rESXCI1D6TeoL757pMmgnO44D2GAD0Npwgx72?=
+ =?us-ascii?Q?IUPJiGXY12uaG2ffoX+lGoVtm+4Vxht4hE0Sm9kkw4J9nUbgFnrIwwtfqhYO?=
+ =?us-ascii?Q?ylATfeRAfCyI+etZ89CJz3mwbq3SWt8P5RvON0WQrg3nEtPGMXDN0b131uiH?=
+ =?us-ascii?Q?0GGG7N8h5KVAxVvh6QJcgslrw7yobB20ZxcmDXsimNc/VQiSFoAt66RTQVgc?=
+ =?us-ascii?Q?BuzKOmyYROdlh3wmZcYqZfUB/y7dPoLrs3RXrfhteIy/Aym+HoU56hiSRy2t?=
+ =?us-ascii?Q?HyKcFjmEAJa1qRSo0yKiqb45MNouHE7hxD2KY13XI9Xd9gJM99FfKsPEkz1S?=
+ =?us-ascii?Q?NIMK4YiSl2QhxhfS7DAjjIe5gLnI4biwEtc9cJ57WBONC/g+koOrKsemf0Fs?=
+ =?us-ascii?Q?QqO40jC/K2r0y5pD5pHZ2udur/nag3wF84E6DKYvU8EeY7RBDoY2UvHQtMvJ?=
+ =?us-ascii?Q?OIh07oIpTD1ztND7gWmV9BUw1mZc7C8zLJpOE6gPndKNaFK6j5rnfub3uApi?=
+ =?us-ascii?Q?PJrc/cVFz9+dEputYfi7GlyBDsRkdD0Ht8c4PK3h2JWpGKWVGn0xXbnUP615?=
+ =?us-ascii?Q?9y0BN2dW35AD8jIlmMwLeLgq4jDlglVRm4Bhb1tG?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 13dbb63c-e221-44e6-94a1-08db20c2a7da
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2023 17:21:01.7577
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Gv61OLbGV0junHtjKKjf8Px7pNcISTq5M+T33gFlGN+xJHeH+WWst7skgqF3ugmW
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6166
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-hostfs creates a new inode for each opened or created file, which created
-useless inode allocations and forbade identifying a host file with a kernel
-inode.
+On Thu, Mar 09, 2023 at 09:50:18PM +0800, Baolu Lu wrote:
 
-Fix this uncommon filesystem behavior by tying kernel inodes to host
-file's inode and device IDs.  Even if the host filesystem inodes may be
-recycled, this cannot happen while a file referencing it is open, which
-is the case with hostfs.  It should be noted that hostfs inode IDs may
-not be unique for the same hostfs superblock because multiple host's
-(backed) superblocks may be used.
+> > +	if (cmd->flags || cmd->__reserved || !cmd->data_len)
+> > +		return -EOPNOTSUPP;
+> > +
+> > +	idev = iommufd_get_device(ucmd, cmd->dev_id);
+> > +	if (IS_ERR(idev))
+> > +		return PTR_ERR(idev);
+> > +
+> > +	ops = dev_iommu_ops(idev->dev);
+> > +	if (!ops || !ops->hw_info) {
+> 
+> dev_iommu_ops() will never return a NULL.
+> 
+> Need below check
+> 
+> 	dev->iommu && dev->iommu->iommu_dev
+> 
+> before dev_iommu_ops(). Perhaps something like below?
+> 
+> 	if (!dev->iommu || !dev->iommu->iommu_dev)
+> 		return -EINVAL;
 
-Delete inodes when dropping them to force backed host's file descriptors
-closing.
+At this point the device has become owned through the ownership API,
+it absolutely has to have an iommu and an ops. No need to check
+anything.
 
-This enables to entirely remove ARCH_EPHEMERAL_INODES, and then makes
-Landlock fully supported by UML.  This is very useful for testing
-(ongoing and backported) changes.
-
-These changes also factor out and simplify some helpers thanks to the
-new hostfs_inode_update() and the hostfs_iget() revamp: read_name(),
-hostfs_create(), hostfs_lookup(), hostfs_mknod(), and
-hostfs_fill_sb_common().
-
-A following commit with new Landlock tests check this new hostfs inode
-consistency.
-
-Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
-Cc: Johannes Berg <johannes@sipsolutions.net>
-Cc: Richard Weinberger <richard@nod.at>
-Cc: <stable@vger.kernel.org> # 5.15.x: ce72750f04d6: hostfs: Fix writeback of dirty pages
-Cc: <stable@vger.kernel.org> # 5.15+
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20230309165455.175131-2-mic@digikod.net
----
- arch/Kconfig              |   7 --
- arch/um/Kconfig           |   1 -
- fs/hostfs/hostfs.h        |   1 +
- fs/hostfs/hostfs_kern.c   | 213 +++++++++++++++++++-------------------
- fs/hostfs/hostfs_user.c   |   1 +
- security/landlock/Kconfig |   2 +-
- 6 files changed, 109 insertions(+), 116 deletions(-)
-
-diff --git a/arch/Kconfig b/arch/Kconfig
-index e3511afbb7f2..d5f0841ac3c1 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -1156,13 +1156,6 @@ config COMPAT_32BIT_TIME
- config ARCH_NO_PREEMPT
- 	bool
- 
--config ARCH_EPHEMERAL_INODES
--	def_bool n
--	help
--	  An arch should select this symbol if it doesn't keep track of inode
--	  instances on its own, but instead relies on something else (e.g. the
--	  host kernel for an UML kernel).
--
- config ARCH_SUPPORTS_RT
- 	bool
- 
-diff --git a/arch/um/Kconfig b/arch/um/Kconfig
-index 541a9b18e343..4057d5267c6a 100644
---- a/arch/um/Kconfig
-+++ b/arch/um/Kconfig
-@@ -5,7 +5,6 @@ menu "UML-specific options"
- config UML
- 	bool
- 	default y
--	select ARCH_EPHEMERAL_INODES
- 	select ARCH_HAS_FORTIFY_SOURCE
- 	select ARCH_HAS_GCOV_PROFILE_ALL
- 	select ARCH_HAS_KCOV
-diff --git a/fs/hostfs/hostfs.h b/fs/hostfs/hostfs.h
-index 69cb796f6270..0239e3af3945 100644
---- a/fs/hostfs/hostfs.h
-+++ b/fs/hostfs/hostfs.h
-@@ -65,6 +65,7 @@ struct hostfs_stat {
- 	unsigned long long blocks;
- 	unsigned int maj;
- 	unsigned int min;
-+	dev_t dev;
- };
- 
- extern int stat_file(const char *path, struct hostfs_stat *p, int fd);
-diff --git a/fs/hostfs/hostfs_kern.c b/fs/hostfs/hostfs_kern.c
-index 28b4f15c19eb..19496f732016 100644
---- a/fs/hostfs/hostfs_kern.c
-+++ b/fs/hostfs/hostfs_kern.c
-@@ -26,6 +26,7 @@ struct hostfs_inode_info {
- 	fmode_t mode;
- 	struct inode vfs_inode;
- 	struct mutex open_mutex;
-+	dev_t dev;
- };
- 
- static inline struct hostfs_inode_info *HOSTFS_I(struct inode *inode)
-@@ -182,14 +183,6 @@ static char *follow_link(char *link)
- 	return ERR_PTR(n);
- }
- 
--static struct inode *hostfs_iget(struct super_block *sb)
--{
--	struct inode *inode = new_inode(sb);
--	if (!inode)
--		return ERR_PTR(-ENOMEM);
--	return inode;
--}
--
- static int hostfs_statfs(struct dentry *dentry, struct kstatfs *sf)
- {
- 	/*
-@@ -228,6 +221,7 @@ static struct inode *hostfs_alloc_inode(struct super_block *sb)
- 		return NULL;
- 	hi->fd = -1;
- 	hi->mode = 0;
-+	hi->dev = 0;
- 	inode_init_once(&hi->vfs_inode);
- 	mutex_init(&hi->open_mutex);
- 	return &hi->vfs_inode;
-@@ -240,6 +234,7 @@ static void hostfs_evict_inode(struct inode *inode)
- 	if (HOSTFS_I(inode)->fd != -1) {
- 		close_file(&HOSTFS_I(inode)->fd);
- 		HOSTFS_I(inode)->fd = -1;
-+		HOSTFS_I(inode)->dev = 0;
- 	}
- }
- 
-@@ -265,6 +260,7 @@ static int hostfs_show_options(struct seq_file *seq, struct dentry *root)
- static const struct super_operations hostfs_sbops = {
- 	.alloc_inode	= hostfs_alloc_inode,
- 	.free_inode	= hostfs_free_inode,
-+	.drop_inode	= generic_delete_inode,
- 	.evict_inode	= hostfs_evict_inode,
- 	.statfs		= hostfs_statfs,
- 	.show_options	= hostfs_show_options,
-@@ -512,18 +508,31 @@ static const struct address_space_operations hostfs_aops = {
- 	.write_end	= hostfs_write_end,
- };
- 
--static int read_name(struct inode *ino, char *name)
-+static int hostfs_inode_update(struct inode *ino, const struct hostfs_stat *st)
-+{
-+	set_nlink(ino, st->nlink);
-+	i_uid_write(ino, st->uid);
-+	i_gid_write(ino, st->gid);
-+	ino->i_atime =
-+		(struct timespec64){ st->atime.tv_sec, st->atime.tv_nsec };
-+	ino->i_mtime =
-+		(struct timespec64){ st->mtime.tv_sec, st->mtime.tv_nsec };
-+	ino->i_ctime =
-+		(struct timespec64){ st->ctime.tv_sec, st->ctime.tv_nsec };
-+	ino->i_size = st->size;
-+	ino->i_blocks = st->blocks;
-+	return 0;
-+}
-+
-+static int hostfs_inode_set(struct inode *ino, void *data)
- {
-+	struct hostfs_stat *st = data;
- 	dev_t rdev;
--	struct hostfs_stat st;
--	int err = stat_file(name, &st, -1);
--	if (err)
--		return err;
- 
- 	/* Reencode maj and min with the kernel encoding.*/
--	rdev = MKDEV(st.maj, st.min);
-+	rdev = MKDEV(st->maj, st->min);
- 
--	switch (st.mode & S_IFMT) {
-+	switch (st->mode & S_IFMT) {
- 	case S_IFLNK:
- 		ino->i_op = &hostfs_link_iops;
- 		break;
-@@ -535,7 +544,7 @@ static int read_name(struct inode *ino, char *name)
- 	case S_IFBLK:
- 	case S_IFIFO:
- 	case S_IFSOCK:
--		init_special_inode(ino, st.mode & S_IFMT, rdev);
-+		init_special_inode(ino, st->mode & S_IFMT, rdev);
- 		ino->i_op = &hostfs_iops;
- 		break;
- 	case S_IFREG:
-@@ -547,17 +556,42 @@ static int read_name(struct inode *ino, char *name)
- 		return -EIO;
- 	}
- 
--	ino->i_ino = st.ino;
--	ino->i_mode = st.mode;
--	set_nlink(ino, st.nlink);
--	i_uid_write(ino, st.uid);
--	i_gid_write(ino, st.gid);
--	ino->i_atime = (struct timespec64){ st.atime.tv_sec, st.atime.tv_nsec };
--	ino->i_mtime = (struct timespec64){ st.mtime.tv_sec, st.mtime.tv_nsec };
--	ino->i_ctime = (struct timespec64){ st.ctime.tv_sec, st.ctime.tv_nsec };
--	ino->i_size = st.size;
--	ino->i_blocks = st.blocks;
--	return 0;
-+	HOSTFS_I(ino)->dev = st->dev;
-+	ino->i_ino = st->ino;
-+	ino->i_mode = st->mode;
-+	return hostfs_inode_update(ino, st);
-+}
-+
-+static int hostfs_inode_test(struct inode *inode, void *data)
-+{
-+	const struct hostfs_stat *st = data;
-+
-+	return inode->i_ino == st->ino && HOSTFS_I(inode)->dev == st->dev;
-+}
-+
-+static struct inode *hostfs_iget(struct super_block *sb, char *name)
-+{
-+	struct inode *inode;
-+	struct hostfs_stat st;
-+	int err = stat_file(name, &st, -1);
-+
-+	if (err)
-+		return ERR_PTR(err);
-+
-+	inode = iget5_locked(sb, st.ino, hostfs_inode_test, hostfs_inode_set,
-+			     &st);
-+	if (!inode)
-+		return ERR_PTR(-ENOMEM);
-+
-+	if (inode->i_state & I_NEW) {
-+		unlock_new_inode(inode);
-+	} else {
-+		spin_lock(&inode->i_lock);
-+		hostfs_inode_update(inode, &st);
-+		spin_unlock(&inode->i_lock);
-+	}
-+
-+	return inode;
- }
- 
- static int hostfs_create(struct mnt_idmap *idmap, struct inode *dir,
-@@ -565,62 +599,48 @@ static int hostfs_create(struct mnt_idmap *idmap, struct inode *dir,
- {
- 	struct inode *inode;
- 	char *name;
--	int error, fd;
--
--	inode = hostfs_iget(dir->i_sb);
--	if (IS_ERR(inode)) {
--		error = PTR_ERR(inode);
--		goto out;
--	}
-+	int fd;
- 
--	error = -ENOMEM;
- 	name = dentry_name(dentry);
- 	if (name == NULL)
--		goto out_put;
-+		return -ENOMEM;
- 
- 	fd = file_create(name, mode & 0777);
--	if (fd < 0)
--		error = fd;
--	else
--		error = read_name(inode, name);
-+	if (fd < 0) {
-+		__putname(name);
-+		return fd;
-+	}
- 
-+	inode = hostfs_iget(dir->i_sb, name);
- 	__putname(name);
--	if (error)
--		goto out_put;
-+	if (IS_ERR(inode))
-+		return PTR_ERR(inode);
- 
- 	HOSTFS_I(inode)->fd = fd;
- 	HOSTFS_I(inode)->mode = FMODE_READ | FMODE_WRITE;
- 	d_instantiate(dentry, inode);
- 	return 0;
--
-- out_put:
--	iput(inode);
-- out:
--	return error;
- }
- 
- static struct dentry *hostfs_lookup(struct inode *ino, struct dentry *dentry,
- 				    unsigned int flags)
- {
--	struct inode *inode;
-+	struct inode *inode = NULL;
- 	char *name;
--	int err;
--
--	inode = hostfs_iget(ino->i_sb);
--	if (IS_ERR(inode))
--		goto out;
- 
--	err = -ENOMEM;
- 	name = dentry_name(dentry);
--	if (name) {
--		err = read_name(inode, name);
--		__putname(name);
--	}
--	if (err) {
--		iput(inode);
--		inode = (err == -ENOENT) ? NULL : ERR_PTR(err);
-+	if (name == NULL)
-+		return ERR_PTR(-ENOMEM);
-+
-+	inode = hostfs_iget(ino->i_sb, name);
-+	__putname(name);
-+	if (IS_ERR(inode)) {
-+		if (PTR_ERR(inode) == -ENOENT)
-+			inode = NULL;
-+		else
-+			return ERR_CAST(inode);
- 	}
-- out:
-+
- 	return d_splice_alias(inode, dentry);
- }
- 
-@@ -704,35 +724,23 @@ static int hostfs_mknod(struct mnt_idmap *idmap, struct inode *dir,
- 	char *name;
- 	int err;
- 
--	inode = hostfs_iget(dir->i_sb);
--	if (IS_ERR(inode)) {
--		err = PTR_ERR(inode);
--		goto out;
--	}
--
--	err = -ENOMEM;
- 	name = dentry_name(dentry);
- 	if (name == NULL)
--		goto out_put;
-+		return -ENOMEM;
- 
- 	err = do_mknod(name, mode, MAJOR(dev), MINOR(dev));
--	if (err)
--		goto out_free;
-+	if (err) {
-+		__putname(name);
-+		return err;
-+	}
- 
--	err = read_name(inode, name);
-+	inode = hostfs_iget(dir->i_sb, name);
- 	__putname(name);
--	if (err)
--		goto out_put;
-+	if (IS_ERR(inode))
-+		return PTR_ERR(inode);
- 
- 	d_instantiate(dentry, inode);
- 	return 0;
--
-- out_free:
--	__putname(name);
-- out_put:
--	iput(inode);
-- out:
--	return err;
- }
- 
- static int hostfs_rename2(struct mnt_idmap *idmap,
-@@ -929,49 +937,40 @@ static int hostfs_fill_sb_common(struct super_block *sb, void *d, int silent)
- 	sb->s_maxbytes = MAX_LFS_FILESIZE;
- 	err = super_setup_bdi(sb);
- 	if (err)
--		goto out;
-+		return err;
- 
- 	/* NULL is printed as '(null)' by printf(): avoid that. */
- 	if (req_root == NULL)
- 		req_root = "";
- 
--	err = -ENOMEM;
- 	sb->s_fs_info = host_root_path =
- 		kasprintf(GFP_KERNEL, "%s/%s", root_ino, req_root);
- 	if (host_root_path == NULL)
--		goto out;
--
--	root_inode = new_inode(sb);
--	if (!root_inode)
--		goto out;
-+		return -ENOMEM;
- 
--	err = read_name(root_inode, host_root_path);
--	if (err)
--		goto out_put;
-+	root_inode = hostfs_iget(sb, host_root_path);
-+	if (IS_ERR(root_inode))
-+		return PTR_ERR(root_inode);
- 
- 	if (S_ISLNK(root_inode->i_mode)) {
--		char *name = follow_link(host_root_path);
--		if (IS_ERR(name)) {
--			err = PTR_ERR(name);
--			goto out_put;
--		}
--		err = read_name(root_inode, name);
-+		char *name;
-+
-+		iput(root_inode);
-+		name = follow_link(host_root_path);
-+		if (IS_ERR(name))
-+			return PTR_ERR(name);
-+
-+		root_inode = hostfs_iget(sb, name);
- 		kfree(name);
--		if (err)
--			goto out_put;
-+		if (IS_ERR(root_inode))
-+			return PTR_ERR(root_inode);
- 	}
- 
--	err = -ENOMEM;
- 	sb->s_root = d_make_root(root_inode);
- 	if (sb->s_root == NULL)
--		goto out;
-+		return -ENOMEM;
- 
- 	return 0;
--
--out_put:
--	iput(root_inode);
--out:
--	return err;
- }
- 
- static struct dentry *hostfs_read_sb(struct file_system_type *type,
-diff --git a/fs/hostfs/hostfs_user.c b/fs/hostfs/hostfs_user.c
-index 5ecc4706172b..840619e39a1a 100644
---- a/fs/hostfs/hostfs_user.c
-+++ b/fs/hostfs/hostfs_user.c
-@@ -36,6 +36,7 @@ static void stat64_to_hostfs(const struct stat64 *buf, struct hostfs_stat *p)
- 	p->blocks = buf->st_blocks;
- 	p->maj = os_major(buf->st_rdev);
- 	p->min = os_minor(buf->st_rdev);
-+	p->dev = buf->st_dev;
- }
- 
- int stat_file(const char *path, struct hostfs_stat *p, int fd)
-diff --git a/security/landlock/Kconfig b/security/landlock/Kconfig
-index 8e33c4e8ffb8..c1e862a38410 100644
---- a/security/landlock/Kconfig
-+++ b/security/landlock/Kconfig
-@@ -2,7 +2,7 @@
- 
- config SECURITY_LANDLOCK
- 	bool "Landlock support"
--	depends on SECURITY && !ARCH_EPHEMERAL_INODES
-+	depends on SECURITY
- 	select SECURITY_PATH
- 	help
- 	  Landlock is a sandboxing mechanism that enables processes to restrict
--- 
-2.39.2
-
+Jason
