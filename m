@@ -2,33 +2,33 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 287FBC6FD19
-	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Mar 2023 17:08:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 62F96C742A7
+	for <linux-kselftest@archiver.kernel.org>; Thu,  9 Mar 2023 17:08:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231196AbjCIRIM (ORCPT
+        id S230183AbjCIRIQ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 9 Mar 2023 12:08:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41436 "EHLO
+        Thu, 9 Mar 2023 12:08:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230161AbjCIRH7 (ORCPT
+        with ESMTP id S230186AbjCIRIA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Mar 2023 12:07:59 -0500
-X-Greylist: delayed 528 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 09 Mar 2023 09:04:35 PST
-Received: from smtp-8faf.mail.infomaniak.ch (smtp-8faf.mail.infomaniak.ch [83.166.143.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA953E7CA2
+        Thu, 9 Mar 2023 12:08:00 -0500
+X-Greylist: delayed 534 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 09 Mar 2023 09:04:37 PST
+Received: from smtp-42ab.mail.infomaniak.ch (smtp-42ab.mail.infomaniak.ch [84.16.66.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6BF4ED690
         for <linux-kselftest@vger.kernel.org>; Thu,  9 Mar 2023 09:04:35 -0800 (PST)
 Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4PXb0Y03cRzMr6NZ;
-        Thu,  9 Mar 2023 17:55:41 +0100 (CET)
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4PXb0X3cgfz27QL;
-        Thu,  9 Mar 2023 17:55:40 +0100 (CET)
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4PXb0V2x4kzMrBsq;
+        Thu,  9 Mar 2023 17:55:38 +0100 (CET)
+Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4PXb0S4yJxz28qt;
+        Thu,  9 Mar 2023 17:55:36 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1678380940;
-        bh=5XKkJXyUYTVLyNMTHu8kQsFPejWd1y7kK82u9RT7CZI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tWATp9wxn1djEaAGnnVb3uKNZOqxgQH7XetZl7OSi1kHZyae/02hzY+ev1aMi7Rgt
-         8dgqDa4uIFA70MTauRetw+kYCspgDirTXFhSa7zIIoeduxqM5i6cdWfJM5Ki6kET9z
-         LBgOjh4nNPooHulQo/6H5Pbbcb45P60jUG5GJJWQ=
+        s=20191114; t=1678380938;
+        bh=ogM5pzTOPJ57a+lItppwvkB6tXtQU91aX+WE5VtmmcE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=CVXMq/rQbiuM9zOgGARjrSOVIjtO1kgaAhwvBp8NUHE3mNkiQ/2xHLdfd0MUJvTIg
+         7v0YEpQaMbG6AGVYpDPVBHqvrjtay+Yzp78DwLMrN8ui7hppXKT7z4HkTYuYsTvjRp
+         ZXF3Ti6YH59tZhuUZi8ONTjjDxyd1oH5LNrvy6fA=
 From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To:     Anton Ivanov <anton.ivanov@cambridgegreys.com>,
         Johannes Berg <johannes@sipsolutions.net>,
@@ -48,12 +48,10 @@ Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
         Willem de Bruijn <willemb@google.com>,
         linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, stable@vger.kernel.org
-Subject: [PATCH v1 3/5] selftests/landlock: Add supports_filesystem() helper
-Date:   Thu,  9 Mar 2023 17:54:53 +0100
-Message-Id: <20230309165455.175131-4-mic@digikod.net>
-In-Reply-To: <20230309165455.175131-1-mic@digikod.net>
-References: <20230309165455.175131-1-mic@digikod.net>
+        linux-security-module@vger.kernel.org
+Subject: [PATCH v1 0/5] Landlock support for UML
+Date:   Thu,  9 Mar 2023 17:54:50 +0100
+Message-Id: <20230309165455.175131-1-mic@digikod.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -62,107 +60,47 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Replace supports_overlayfs() with supports_filesystem() to be able to
-check several filesystems.  This will be useful in a following commit.
+Hi,
 
-Only check for overlay filesystem once in the setup step, and then rely
-on self->skip_test.
+Commit cb2c7d1a1776 ("landlock: Support filesystem access-control")
+introduced a new ARCH_EPHEMERAL_INODES configuration, only enabled for
+User-Mode Linux.  The reason was that UML's hostfs managed inodes in an
+ephemeral way: from the kernel point of view, the same inode struct
+could be created several times while being used by user space because
+the kernel didn't hold references to inodes.  Because Landlock (and
+probably other subsystems) ties properties (i.e. access rights) to inode
+objects, it wasn't possible to create rules that match inodes and then
+allow specific accesses.
 
-Cc: Guenter Roeck <groeck@chromium.org>
-Cc: Jeff Xu <jeffxu@google.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20230309165455.175131-4-mic@digikod.net
----
- tools/testing/selftests/landlock/fs_test.c | 36 ++++++++++++++--------
- 1 file changed, 23 insertions(+), 13 deletions(-)
+This patch series fixes the way UML manages inodes according to the
+underlying filesystem.  They are now properly handles as for other
+filesystems, which enables to support Landlock (and probably other
+features).
 
-diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
-index 0438651f61d2..c1e655fc06bb 100644
---- a/tools/testing/selftests/landlock/fs_test.c
-+++ b/tools/testing/selftests/landlock/fs_test.c
-@@ -107,8 +107,10 @@ static bool fgrep(FILE *const inf, const char *const str)
- 	return false;
- }
- 
--static bool supports_overlayfs(void)
-+static bool supports_filesystem(const char *const filesystem)
- {
-+	char str[32];
-+	int len;
- 	bool res;
- 	FILE *const inf = fopen("/proc/filesystems", "r");
- 
-@@ -119,7 +121,12 @@ static bool supports_overlayfs(void)
- 	if (!inf)
- 		return true;
- 
--	res = fgrep(inf, "nodev\toverlay\n");
-+	len = snprintf(str, sizeof(str), "nodev\t%s\n", filesystem);
-+	if (len >= sizeof(str))
-+		/* Ignores too-long filesystem names. */
-+		return true;
-+
-+	res = fgrep(inf, str);
- 	fclose(inf);
- 	return res;
- }
-@@ -4044,14 +4051,17 @@ static const char (*merge_sub_files[])[] = {
-  *         └── work
-  */
- 
--/* clang-format off */
--FIXTURE(layout2_overlay) {};
--/* clang-format on */
-+FIXTURE(layout2_overlay)
-+{
-+	bool skip_test;
-+};
- 
- FIXTURE_SETUP(layout2_overlay)
- {
--	if (!supports_overlayfs())
--		SKIP(return, "overlayfs is not supported");
-+	if (!supports_filesystem("overlay")) {
-+		self->skip_test = true;
-+		SKIP(return, "overlayfs is not supported (setup)");
-+	}
- 
- 	prepare_layout(_metadata);
- 
-@@ -4089,8 +4099,8 @@ FIXTURE_SETUP(layout2_overlay)
- 
- FIXTURE_TEARDOWN(layout2_overlay)
- {
--	if (!supports_overlayfs())
--		SKIP(return, "overlayfs is not supported");
-+	if (self->skip_test)
-+		SKIP(return, "overlayfs is not supported (teardown)");
- 
- 	EXPECT_EQ(0, remove_path(lower_do1_fl3));
- 	EXPECT_EQ(0, remove_path(lower_dl1_fl2));
-@@ -4123,8 +4133,8 @@ FIXTURE_TEARDOWN(layout2_overlay)
- 
- TEST_F_FORK(layout2_overlay, no_restriction)
- {
--	if (!supports_overlayfs())
--		SKIP(return, "overlayfs is not supported");
-+	if (self->skip_test)
-+		SKIP(return, "overlayfs is not supported (test)");
- 
- 	ASSERT_EQ(0, test_open(lower_fl1, O_RDONLY));
- 	ASSERT_EQ(0, test_open(lower_dl1, O_RDONLY));
-@@ -4289,8 +4299,8 @@ TEST_F_FORK(layout2_overlay, same_content_different_file)
- 	size_t i;
- 	const char *path_entry;
- 
--	if (!supports_overlayfs())
--		SKIP(return, "overlayfs is not supported");
-+	if (self->skip_test)
-+		SKIP(return, "overlayfs is not supported (test)");
- 
- 	/* Sets rules on base directories (i.e. outside overlay scope). */
- 	ruleset_fd = create_ruleset(_metadata, ACCESS_RW, layer1_base);
+Backporting these patches requires some selftest harness patches
+backports too.
+
+Regards,
+
+Mickaël Salaün (5):
+  hostfs: Fix ephemeral inodes
+  selftests/landlock: Don't create useless file layouts
+  selftests/landlock: Add supports_filesystem() helper
+  selftests/landlock: Make mounts configurable
+  selftests/landlock: Add tests for pseudo filesystems
+
+ arch/Kconfig                               |   7 -
+ arch/um/Kconfig                            |   1 -
+ fs/hostfs/hostfs.h                         |   1 +
+ fs/hostfs/hostfs_kern.c                    | 213 ++++++------
+ fs/hostfs/hostfs_user.c                    |   1 +
+ security/landlock/Kconfig                  |   2 +-
+ tools/testing/selftests/landlock/config    |   8 +-
+ tools/testing/selftests/landlock/fs_test.c | 381 +++++++++++++++++++--
+ 8 files changed, 472 insertions(+), 142 deletions(-)
+
+
+base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
 -- 
 2.39.2
 
