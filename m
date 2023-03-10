@@ -2,345 +2,142 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A926C742A7
-	for <linux-kselftest@archiver.kernel.org>; Fri, 10 Mar 2023 17:52:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9983C64EC4
+	for <linux-kselftest@archiver.kernel.org>; Fri, 10 Mar 2023 17:53:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231567AbjCJRwZ (ORCPT
+        id S230039AbjCJRxL (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 10 Mar 2023 12:52:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52214 "EHLO
+        Fri, 10 Mar 2023 12:53:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230350AbjCJRwY (ORCPT
+        with ESMTP id S229845AbjCJRxK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Mar 2023 12:52:24 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17FB676161;
-        Fri, 10 Mar 2023 09:52:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CAB94B82089;
-        Fri, 10 Mar 2023 17:52:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C410EC433D2;
-        Fri, 10 Mar 2023 17:52:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678470738;
-        bh=O+Esizz49eDVD0nZLwhoBoCxIFUOp9NOk9OqSnjPQP8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=UkUlkxNlx5RfT2h9XJDJ+K6Ghs/ACyaUvyGJ4UfA8INn1gENYxXy8OgWanrAkr4xX
-         XKI9IxAW8Un40yLb64V50xs1JAChu+0cT55iUaSCK2ucCoMlS65wKwaZKZJdJJ0GA1
-         UmXCu1gx6dwF3LcDmuGjW5nlGgMmKHEvxuPMdmCqlfXEP8Td4033zQDkvCQ6EjFyNW
-         CrOjtQdEEKTvJurefcUiExoE6WR0xXAYe65LHR+NLo9sau+YRzFpzxyfJLOLF3zLYP
-         WbRLnY5G1A9Rh2w7jyMthUWa14xocBLUfuGYkBTPC+8QJ843LpPVSUZcKuBLpcT18L
-         Yy3Ctl+ne6zFA==
-From:   zwisler@kernel.org
-To:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Ross Zwisler <zwisler@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Hao Luo <haoluo@google.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Jiri Olsa <jolsa@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Leon Romanovsky <leon@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Song Liu <song@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Yonghong Song <yhs@fb.com>, linux-kselftest@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Michael S . Tsirkin" <mst@redhat.com>
-Subject: [PATCH bpf-next v3 1/2] bpf: use canonical ftrace path
-Date:   Fri, 10 Mar 2023 10:52:08 -0700
-Message-Id: <20230310175209.2130880-1-zwisler@kernel.org>
-X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
+        Fri, 10 Mar 2023 12:53:10 -0500
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2051.outbound.protection.outlook.com [40.107.92.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4042132BF2;
+        Fri, 10 Mar 2023 09:52:51 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SgaInzOU1H5sJd67J2vYFGlVs38H0h/84VmZnf0YK0Cf9RY4aXQkx0ZMgZDG7wSSwnKYQKy3QLhtyi5w7/aVMtWNRJKr7ioOL3oDzvv6T65yDZIZw8/Tll5sRzfn3CGHg8lmq65k2I0FYUE/0/ez4Ls3aw0RhjTJpr9YcUtSR0mLEkK/tD7G+0J1ztFN1rMW4/duCkwkkiUwW6YivFJIqNxgb5108jWbTTnQU9rEHOsewyPpdlEd8Ci5Z24huXWwTtAbysdTNMCcoO5U+FdwXe2P+9yYLNDozzG38MVdboiXyARVd3BWmUaglcEy4qatpS/9p01cvZAnRKI7NjlIhA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KBlbLBgqEZsbs+4lI1zac1466siCk/hPJuNt/jJnIko=;
+ b=b4CL7nClyiJqSh4ewxW2NUq5DaN2iIFfDRojaTkFNDLFGw4mVlH0ucJ8lGM3RslqOeq22HgWCzsfCe6QTxKgyMHYwWyd0R++W+UV6ZPZAiMvbnHutRLXyg/cD2hOoJR/2noG0kO0YVrzzFCSHLVkkzH7Qc6d/k46ctFU9NCPTEywlFdoMLn2tJ6GgH/KckrbH4RrSXOt5JlHbcXpk2qjZOYLcPGaevLiw7slYllT7SDCECAp/Baz2x5JAnjeyF2A/4AmkaBf06xWsPRB19gzI6yVaOvXzVRwBkAoLJ1+8aR+/jFWQWcQU23nP75nClEhu1Il9VsI1PnzpVvxZPcGqw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KBlbLBgqEZsbs+4lI1zac1466siCk/hPJuNt/jJnIko=;
+ b=O+GgCjKAzLvJ96BmlJ8aQFicvFHQxSDJJL9Av9EVwmK1J7bB31deFEAsM0aoydzFAWC6znoSkjqfIQHkO+DeyfLa9+MjLdepNc9V3IEfVa4dIXc+SHRcZ8zX+uULVoz/WT+ecdV1SNqu5afHqhw6DGJEggo23UmJCGDhhzdW1aqRRBIY5TtfXjRyOk785Ks8zvvodjxKaSgYAUu6q3SH4aUM8//oBLnSRK79oLAkCQQa9lt8TZuL9ubjSGm6YBHg+AxF5I6dUwLvXyjO+bgv4Me/1uZ+3jPUHRA6xfY9OXaStCstyySdtsNfzJiiZDDSzYVA05HPiWMVDIcG/SdFKg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by DS0PR12MB7728.namprd12.prod.outlook.com (2603:10b6:8:130::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.19; Fri, 10 Mar
+ 2023 17:52:49 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::ef6d:fdf6:352f:efd1]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::ef6d:fdf6:352f:efd1%3]) with mapi id 15.20.6178.017; Fri, 10 Mar 2023
+ 17:52:49 +0000
+Date:   Fri, 10 Mar 2023 13:52:46 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Nicolin Chen <nicolinc@nvidia.com>
+Cc:     "Liu, Yi L" <yi.l.liu@intel.com>,
+        Baolu Lu <baolu.lu@linux.intel.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
+        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "jasowang@redhat.com" <jasowang@redhat.com>,
+        "shameerali.kolothum.thodi@huawei.com" 
+        <shameerali.kolothum.thodi@huawei.com>,
+        "lulu@redhat.com" <lulu@redhat.com>,
+        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH 08/12] iommufd/device: Report supported hwpt_types
+Message-ID: <ZAtubgIHAOtrnIbL@nvidia.com>
+References: <20230309080910.607396-1-yi.l.liu@intel.com>
+ <20230309080910.607396-9-yi.l.liu@intel.com>
+ <f0076d6a-d764-b018-7442-08a6293f9553@linux.intel.com>
+ <ZArXyj3iiPa95aCu@Asurada-Nvidia>
+ <DS0PR11MB752928ECB7D395C601F14246C3BA9@DS0PR11MB7529.namprd11.prod.outlook.com>
+ <ZArgAXMUpNjDfFgZ@Asurada-Nvidia>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZArgAXMUpNjDfFgZ@Asurada-Nvidia>
+X-ClientProxiedBy: BY3PR10CA0021.namprd10.prod.outlook.com
+ (2603:10b6:a03:255::26) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DS0PR12MB7728:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6d85369e-0086-49be-a3cb-08db21904369
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: UqW1bNvi14gfyQmwBwxqZ8Tk/aYTrUZpub9wmvTeohPE7Vdz0Yji8vuGOUG9AiBUXU2vCGRwGiA3SBwnBucZ0ckUDupDqx8vLXOyXF2MPwr7LYcoK9BnXR+wFTJfaWdwCc5r33fUOpX604k0Bt1uDmNKgDmCekekVgbfcSSAfTLuyK7FUxCLkltArIxxPZgyKCkQGmNwTeBPRgcJeIlgElQLKOwXyaGB3oIn3ODqKffeQ3yktuOAFTMTnyQ9ANeT35Xf1XQ+yx/LRyPSOqQjsA+F4UQzYD8a/q4wpY4BzqS5s9lGWl1SFGqf+csXt2yXbIQLja6MYMObAxZRsvTo4Y64LNxXudBHScnVBXC/d+tLu6XW8h+uArfpJV8ctjInVJXtrbSfGp4gqcg38O7g0GWNRsCFDbPuWFGLXtR9g1NY/g1nnvoHkI13+tQeafbo9MEqTAerhHmJBFT1+sd0/gYW4D0oD0Z8qDmEPndfiJa1l3LY3lvvCVaqk1kjvUS+VzGYNUGbaCRqGpE3Ysy7vW5sPggxE5Xb9dtCE59GDRRjOAVyVhuCpreNpMEee9pXjiSkO/l0NsaUhWERELAngRInWC8tlhq/48kN5L+/lAp9krK+JePEwYPcpwO5/mbDQDFNRxSi9BvmpSJyovY70A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(396003)(136003)(346002)(366004)(376002)(451199018)(36756003)(6636002)(37006003)(54906003)(478600001)(41300700001)(6486002)(8936002)(5660300002)(316002)(4326008)(7416002)(2906002)(4744005)(66476007)(8676002)(66556008)(6862004)(66946007)(6506007)(26005)(86362001)(38100700002)(6666004)(186003)(2616005)(6512007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?rLjdF+s7wAXDzn6WBZ2eWeWKXd/cMxRjwRT0lqpbTZ8dsHm3qf7OblP7bT7q?=
+ =?us-ascii?Q?+f0ZnPMDsP41IZcUcnrwZlt3HfSmuKkOAoNbbgcp8k2uHIfduMnmCxOCRZ0D?=
+ =?us-ascii?Q?7FIk5xb0HN/WhNLuAokQqyEY7tuTbV/NrQimfcyUVsoqtXTh5qOHbcd+Uy8Z?=
+ =?us-ascii?Q?OTb4FMxidKn3BfHV9YcS31be8y5a7AmRcyzVDzRyr3PJaXAvy6Bvo+J6WnQG?=
+ =?us-ascii?Q?XaubkwcRoMUEohI+OrtZSlXIK+eeUJiV3MTPxzgw2dmkjK5+FrUBxwv20AfX?=
+ =?us-ascii?Q?erNG6DQyAqDKGdiuBIYtNt9VA2TfbDswz6GYhh+KFxgcjn+lWBVML9XfRmGe?=
+ =?us-ascii?Q?BnQBDqqlo0m08d3LPwUi5Uzt7KAckApbeZZvzcMOXR5RdNnKRKJ9XQXpmgDq?=
+ =?us-ascii?Q?g5WUQsHFjdGe0jIB0jCs1uw3bsu9I1LkmT+FpvAlYA/QHbYe1kx+8RYY9jMo?=
+ =?us-ascii?Q?uMNzig6Uoq72GucCllYgwp4ORZUDRWcq7CrpmBbrA946bBomjxwlHPUh+ebn?=
+ =?us-ascii?Q?5bSMggs+Yh7kHIbTArpHndrnT17LqzbvlJHtOspVkGLMPOoPDbFq3zX9Eknj?=
+ =?us-ascii?Q?xefN4/GOwvfoIn6GhQPSxY0rpWGQWM9+hI2Ol8c6hFqwadG4KknZVorjzFhK?=
+ =?us-ascii?Q?rnWA+TOE8EnuuzRnb2A4P0sE3ME6GmH2nuI0Mv0M4Jy7VVMKv4e7nLTX+ZaT?=
+ =?us-ascii?Q?cenMrNlEBRmdgT9/PITEsm1IMjD96K633Iwrxr2/8Savw07h7u+eZkUhnjXR?=
+ =?us-ascii?Q?ehuiY/gePZlqtoZdLFrKveRjJfdVcWAxRXXiZxWKfAu9rH5RbHX1MjuntcJW?=
+ =?us-ascii?Q?L4ENucYybefA1vU11nkqU6hk9Hvi8dOnTK4NvFcFwLAQ/OXB7Ci0ycC7ckYR?=
+ =?us-ascii?Q?yFXMvQcT21/OBqdoIcKhf/vrxpUxod5DPwqNR0HMevyFsy5grj48dBBLKY2O?=
+ =?us-ascii?Q?KvzryEEoeITg6dGgLfpX/NWd3Rqd1VzvnrQkK6Jo9TjlhqWDKiEB6DJv13lL?=
+ =?us-ascii?Q?DJQ5wT2Z0HSGZ41tu2GYQCGUgrUCSE4IYV6YGmM4v0Xf4a0QzmZxkrF9Yjrp?=
+ =?us-ascii?Q?Nen1cwx/fnEQJJdXg2K+C+ZholRMLlxD78RuF6hg0VDWYROcfAoHA/x4RzIQ?=
+ =?us-ascii?Q?rZAr+HVitY1zmQLiKMYnZesUZ5GVTic5mUWpGigZXHnmSSp4hy/vtljETcUx?=
+ =?us-ascii?Q?TdzowQP2f0hLmL9OzJ+aFQ5EoS1WFYgqfRHyPSpndNmTqs6jPtOeZgrLVD3a?=
+ =?us-ascii?Q?XrTxIy5TmAmmiJt69kiJgEX1npCGPghFzMBFSxv1qZ/3AhyOTJbAcJgTSO4p?=
+ =?us-ascii?Q?so3/p4x8gQcdykqjoQV30/9HnrCUQ1DFrYiZ6/YRFbm7M226+QG+Po/JYYHR?=
+ =?us-ascii?Q?LxmRhAds0/jCDadTu0tvuLMLyTuBH/Tr1WTx8rjVXWHE/ra2tj+Htc8UvtYy?=
+ =?us-ascii?Q?iYL3EJ2DULwvSs7JXqRgHDg6oNFzoWEYw7Q5yLuWDOLX1G385ldx0GAxnvP8?=
+ =?us-ascii?Q?zKAw2shBDnD9e5Q3rZYm3+5X+KBtKEkwVhATCmREBt7bAYTSSZ9ATgRoFUai?=
+ =?us-ascii?Q?NVbBYHo817mfAaMwctWaIDbT/ZC9iycISupOpfDp?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6d85369e-0086-49be-a3cb-08db21904369
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2023 17:52:49.5248
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /CFHBCLFUhC8pmtUda5MN2ZSVhhdTpQZQOiYBd64LH9Nqxi7ARMErF1F2QORDMk1
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7728
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Ross Zwisler <zwisler@google.com>
+On Thu, Mar 09, 2023 at 11:45:05PM -0800, Nicolin Chen wrote:
 
-The canonical location for the tracefs filesystem is at /sys/kernel/tracing.
+> Yea, that's what I thought too. Yet, I am wondering a bit if
+> it'd be better to have an ops->hwpt_type in the drivers, v.s.
+> maintaining a potentially big chunk of the array here.
 
-But, from Documentation/trace/ftrace.rst:
+It probably is, some ops->iommufd_data.XX is not a bad idea
 
-  Before 4.1, all ftrace tracing control files were within the debugfs
-  file system, which is typically located at /sys/kernel/debug/tracing.
-  For backward compatibility, when mounting the debugfs file system,
-  the tracefs file system will be automatically mounted at:
-
-  /sys/kernel/debug/tracing
-
-Many comments and samples in the bpf code still refer to this older
-debugfs path, so let's update them to avoid confusion.  There are a few
-spots where the bpf code explicitly checks both tracefs and debugfs
-(tools/bpf/bpftool/tracelog.c and tools/lib/api/fs/fs.c) and I've left
-those alone so that the tools can continue to work with both paths.
-
-Signed-off-by: Ross Zwisler <zwisler@google.com>
-Acked-by: Michael S. Tsirkin <mst@redhat.com>
----
-
-v2 was submitted to bpf-next via a pair of pull requests:
-	https://github.com/kernel-patches/bpf/pull/4672
-	https://github.com/kernel-patches/bpf/pull/4648
-
-The only change since v2 is that I rebased on the current bpf-next_base.
-
-I've run this through all the BPF selftests on a local machine:
-	sudo ./test_verifier
-	sudo make run_tests
-
-and didn't hit any regressions.  I've also tested to make sure each
-modified selftest runs successfully with each path of tracefs (with and
-without debugfs).
-
----
- include/uapi/linux/bpf.h           | 8 ++++----
- samples/bpf/cpustat_kern.c         | 4 ++--
- samples/bpf/hbm.c                  | 4 ++--
- samples/bpf/ibumad_kern.c          | 4 ++--
- samples/bpf/lwt_len_hist.sh        | 2 +-
- samples/bpf/offwaketime_kern.c     | 2 +-
- samples/bpf/task_fd_query_user.c   | 4 ++--
- samples/bpf/test_lwt_bpf.sh        | 2 +-
- samples/bpf/test_overhead_tp.bpf.c | 4 ++--
- tools/include/uapi/linux/bpf.h     | 8 ++++----
- 10 files changed, 21 insertions(+), 21 deletions(-)
-
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index d8c534e05b0a..13129df937cd 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -1647,17 +1647,17 @@ union bpf_attr {
-  * 	Description
-  * 		This helper is a "printk()-like" facility for debugging. It
-  * 		prints a message defined by format *fmt* (of size *fmt_size*)
-- * 		to file *\/sys/kernel/debug/tracing/trace* from DebugFS, if
-+ * 		to file *\/sys/kernel/tracing/trace* from TraceFS, if
-  * 		available. It can take up to three additional **u64**
-  * 		arguments (as an eBPF helpers, the total number of arguments is
-  * 		limited to five).
-  *
-  * 		Each time the helper is called, it appends a line to the trace.
-- * 		Lines are discarded while *\/sys/kernel/debug/tracing/trace* is
-- * 		open, use *\/sys/kernel/debug/tracing/trace_pipe* to avoid this.
-+ * 		Lines are discarded while *\/sys/kernel/tracing/trace* is
-+ * 		open, use *\/sys/kernel/tracing/trace_pipe* to avoid this.
-  * 		The format of the trace is customizable, and the exact output
-  * 		one will get depends on the options set in
-- * 		*\/sys/kernel/debug/tracing/trace_options* (see also the
-+ * 		*\/sys/kernel/tracing/trace_options* (see also the
-  * 		*README* file under the same directory). However, it usually
-  * 		defaults to something like:
-  *
-diff --git a/samples/bpf/cpustat_kern.c b/samples/bpf/cpustat_kern.c
-index 5aefd19cdfa1..944f13fe164a 100644
---- a/samples/bpf/cpustat_kern.c
-+++ b/samples/bpf/cpustat_kern.c
-@@ -76,8 +76,8 @@ struct {
- 
- /*
-  * The trace events for cpu_idle and cpu_frequency are taken from:
-- * /sys/kernel/debug/tracing/events/power/cpu_idle/format
-- * /sys/kernel/debug/tracing/events/power/cpu_frequency/format
-+ * /sys/kernel/tracing/events/power/cpu_idle/format
-+ * /sys/kernel/tracing/events/power/cpu_frequency/format
-  *
-  * These two events have same format, so define one common structure.
-  */
-diff --git a/samples/bpf/hbm.c b/samples/bpf/hbm.c
-index 516fbac28b71..ff58ec43f56a 100644
---- a/samples/bpf/hbm.c
-+++ b/samples/bpf/hbm.c
-@@ -65,7 +65,7 @@ static void Usage(void);
- static void read_trace_pipe2(void);
- static void do_error(char *msg, bool errno_flag);
- 
--#define DEBUGFS "/sys/kernel/debug/tracing/"
-+#define TRACEFS "/sys/kernel/tracing/"
- 
- static struct bpf_program *bpf_prog;
- static struct bpf_object *obj;
-@@ -77,7 +77,7 @@ static void read_trace_pipe2(void)
- 	FILE *outf;
- 	char *outFname = "hbm_out.log";
- 
--	trace_fd = open(DEBUGFS "trace_pipe", O_RDONLY, 0);
-+	trace_fd = open(TRACEFS "trace_pipe", O_RDONLY, 0);
- 	if (trace_fd < 0) {
- 		printf("Error opening trace_pipe\n");
- 		return;
-diff --git a/samples/bpf/ibumad_kern.c b/samples/bpf/ibumad_kern.c
-index 9b193231024a..f07474c72525 100644
---- a/samples/bpf/ibumad_kern.c
-+++ b/samples/bpf/ibumad_kern.c
-@@ -39,8 +39,8 @@ struct {
- /* Taken from the current format defined in
-  * include/trace/events/ib_umad.h
-  * and
-- * /sys/kernel/debug/tracing/events/ib_umad/ib_umad_read/format
-- * /sys/kernel/debug/tracing/events/ib_umad/ib_umad_write/format
-+ * /sys/kernel/tracing/events/ib_umad/ib_umad_read/format
-+ * /sys/kernel/tracing/events/ib_umad/ib_umad_write/format
-  */
- struct ib_umad_rw_args {
- 	u64 pad;
-diff --git a/samples/bpf/lwt_len_hist.sh b/samples/bpf/lwt_len_hist.sh
-index 7078bfcc4f4d..381b2c634784 100755
---- a/samples/bpf/lwt_len_hist.sh
-+++ b/samples/bpf/lwt_len_hist.sh
-@@ -5,7 +5,7 @@ NS1=lwt_ns1
- VETH0=tst_lwt1a
- VETH1=tst_lwt1b
- BPF_PROG=lwt_len_hist.bpf.o
--TRACE_ROOT=/sys/kernel/debug/tracing
-+TRACE_ROOT=/sys/kernel/tracing
- 
- function cleanup {
- 	# To reset saved histogram, remove pinned map
-diff --git a/samples/bpf/offwaketime_kern.c b/samples/bpf/offwaketime_kern.c
-index eb4d94742e6b..23f12b47e9e5 100644
---- a/samples/bpf/offwaketime_kern.c
-+++ b/samples/bpf/offwaketime_kern.c
-@@ -110,7 +110,7 @@ static inline int update_counts(void *ctx, u32 pid, u64 delta)
- }
- 
- #if 1
--/* taken from /sys/kernel/debug/tracing/events/sched/sched_switch/format */
-+/* taken from /sys/kernel/tracing/events/sched/sched_switch/format */
- struct sched_switch_args {
- 	unsigned long long pad;
- 	char prev_comm[TASK_COMM_LEN];
-diff --git a/samples/bpf/task_fd_query_user.c b/samples/bpf/task_fd_query_user.c
-index a33d74bd3a4b..1e61f2180470 100644
---- a/samples/bpf/task_fd_query_user.c
-+++ b/samples/bpf/task_fd_query_user.c
-@@ -235,7 +235,7 @@ static int test_debug_fs_uprobe(char *binary_path, long offset, bool is_return)
- 	struct bpf_link *link;
- 	ssize_t bytes;
- 
--	snprintf(buf, sizeof(buf), "/sys/kernel/debug/tracing/%s_events",
-+	snprintf(buf, sizeof(buf), "/sys/kernel/tracing/%s_events",
- 		 event_type);
- 	kfd = open(buf, O_WRONLY | O_TRUNC, 0);
- 	CHECK_PERROR_RET(kfd < 0);
-@@ -252,7 +252,7 @@ static int test_debug_fs_uprobe(char *binary_path, long offset, bool is_return)
- 	close(kfd);
- 	kfd = -1;
- 
--	snprintf(buf, sizeof(buf), "/sys/kernel/debug/tracing/events/%ss/%s/id",
-+	snprintf(buf, sizeof(buf), "/sys/kernel/tracing/events/%ss/%s/id",
- 		 event_type, event_alias);
- 	efd = open(buf, O_RDONLY, 0);
- 	CHECK_PERROR_RET(efd < 0);
-diff --git a/samples/bpf/test_lwt_bpf.sh b/samples/bpf/test_lwt_bpf.sh
-index 2e9f5126963b..0bf2d0f6bf4b 100755
---- a/samples/bpf/test_lwt_bpf.sh
-+++ b/samples/bpf/test_lwt_bpf.sh
-@@ -21,7 +21,7 @@ IP_LOCAL="192.168.99.1"
- 
- PROG_SRC="test_lwt_bpf.c"
- BPF_PROG="test_lwt_bpf.o"
--TRACE_ROOT=/sys/kernel/debug/tracing
-+TRACE_ROOT=/sys/kernel/tracing
- CONTEXT_INFO=$(cat ${TRACE_ROOT}/trace_options | grep context)
- 
- function lookup_mac()
-diff --git a/samples/bpf/test_overhead_tp.bpf.c b/samples/bpf/test_overhead_tp.bpf.c
-index 67cab3881969..8b498328e961 100644
---- a/samples/bpf/test_overhead_tp.bpf.c
-+++ b/samples/bpf/test_overhead_tp.bpf.c
-@@ -7,7 +7,7 @@
- #include "vmlinux.h"
- #include <bpf/bpf_helpers.h>
- 
--/* from /sys/kernel/debug/tracing/events/task/task_rename/format */
-+/* from /sys/kernel/tracing/events/task/task_rename/format */
- struct task_rename {
- 	__u64 pad;
- 	__u32 pid;
-@@ -21,7 +21,7 @@ int prog(struct task_rename *ctx)
- 	return 0;
- }
- 
--/* from /sys/kernel/debug/tracing/events/fib/fib_table_lookup/format */
-+/* from /sys/kernel/tracing/events/fib/fib_table_lookup/format */
- struct fib_table_lookup {
- 	__u64 pad;
- 	__u32 tb_id;
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index d8c534e05b0a..13129df937cd 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -1647,17 +1647,17 @@ union bpf_attr {
-  * 	Description
-  * 		This helper is a "printk()-like" facility for debugging. It
-  * 		prints a message defined by format *fmt* (of size *fmt_size*)
-- * 		to file *\/sys/kernel/debug/tracing/trace* from DebugFS, if
-+ * 		to file *\/sys/kernel/tracing/trace* from TraceFS, if
-  * 		available. It can take up to three additional **u64**
-  * 		arguments (as an eBPF helpers, the total number of arguments is
-  * 		limited to five).
-  *
-  * 		Each time the helper is called, it appends a line to the trace.
-- * 		Lines are discarded while *\/sys/kernel/debug/tracing/trace* is
-- * 		open, use *\/sys/kernel/debug/tracing/trace_pipe* to avoid this.
-+ * 		Lines are discarded while *\/sys/kernel/tracing/trace* is
-+ * 		open, use *\/sys/kernel/tracing/trace_pipe* to avoid this.
-  * 		The format of the trace is customizable, and the exact output
-  * 		one will get depends on the options set in
-- * 		*\/sys/kernel/debug/tracing/trace_options* (see also the
-+ * 		*\/sys/kernel/tracing/trace_options* (see also the
-  * 		*README* file under the same directory). However, it usually
-  * 		defaults to something like:
-  *
-
-base-commit: d1d51a62d060d02f99ee407959e24ad10a40e053
-prerequisite-patch-id: 9d1a70f239e7476600fe4018125df58a368dc725
-prerequisite-patch-id: 29fea9a24684ec09762b277403d7bffffb25cdf3
-prerequisite-patch-id: 9cb5a22a0f88413c393ddc29f264fbd96938c598
-prerequisite-patch-id: 87ce0f3257a51e8cc06dd21ae3fa4102406ba4b4
-prerequisite-patch-id: a46e67372e8493e5f7dab95f72281bd690cbeacf
-prerequisite-patch-id: bae92ed6da92da5587f8d54fed5976c7dd6a468a
-prerequisite-patch-id: c84726372fab0771a2c2ff0942f13a9556db8740
-prerequisite-patch-id: 8a1a8806ec58ca208ee81f83557af90472fcba7f
-prerequisite-patch-id: 0f7d6ec99549b042bc37603a2a9034853015a6d6
-prerequisite-patch-id: 88a110f7993c374c6df429a1f67706e5abd65a02
-prerequisite-patch-id: 3ada332d91275a471e9b65eb532571ef5caad4af
-prerequisite-patch-id: e7ade2dda63127886579bf88f3eddda82d6a103b
-prerequisite-patch-id: a49488cb1b167a9c85405c142cc3edb7bdb32c3d
-prerequisite-patch-id: 9656ecd9c036e140d819c3929f01ac7264452382
-prerequisite-patch-id: d1fa19bc1974a78632f48080b4eef3d4d6c07d3d
-prerequisite-patch-id: 245b71b3aecf33a9d2a9609fc45f72ac50d1e92a
-prerequisite-patch-id: 1253300de46fe258927fd3ddd5009a1468f6e69b
-prerequisite-patch-id: 638e5805bdaa8842589729a26707c47a593464c2
-prerequisite-patch-id: 1d08f9dfe4c360d566edbee925424b789e0f844b
-prerequisite-patch-id: b6c73e77b10fc771566de294973334646cad4d44
-prerequisite-patch-id: 57034da9a1b439c9fa3ecca69a099204a339502a
-prerequisite-patch-id: ef11bfbcdf2239002958554e2dc5fbe8ec4d6e9a
-prerequisite-patch-id: 68c01f7ca5b9c740b9259b73d97f168765c794d0
-prerequisite-patch-id: 846110172a75fdaf1017da1fec3709fa301a5a47
-prerequisite-patch-id: 8070c339fe5ce2e46b5de76b59d0a3f2c25d9abb
-prerequisite-patch-id: c48cc68777605390db454b6392569ccdcd88cdc1
-prerequisite-patch-id: 0d36d64d21de2d0df3ac31c5203a5cd868b4be47
-prerequisite-patch-id: 6538cefc509c89e2375dcb6dc85d11fb6993474d
-prerequisite-patch-id: dc57bbf1190a31aec332cab39f990ac568e6722d
-prerequisite-patch-id: 0d90b60b4ce60024f31f576bab79453f6d480a8e
-prerequisite-patch-id: 15c1914741be406aeee6c66332f079f3f8367751
-prerequisite-patch-id: 78a735554858860fa695dd9e20bf7c5a41fafe20
-prerequisite-patch-id: 238aaa7c1f55fdac815a6e14310d074c1ac70983
-prerequisite-patch-id: d514061d937de74e8cc3d8848488a60dad2e2a2e
-prerequisite-patch-id: 0f1a878f5768b886db78ea0fc6fe17d2297daa2e
-prerequisite-patch-id: fa48be79a1e1e1c611d7975501a8f9dfa6f1c4fe
-prerequisite-patch-id: 0a193e915faed8479f150c30ba0c335e288f634f
-prerequisite-patch-id: 2cab00be3bb34454f98dac426301468e7ef12ad1
-prerequisite-patch-id: daa2a81b90fda8ca09d11a35aff5a282e6f76ec2
-prerequisite-patch-id: 5001694a51d83ed8ca428855b92b3ead261a469d
--- 
-2.40.0.rc1.284.g88254d51c5-goog
-
+Jason
