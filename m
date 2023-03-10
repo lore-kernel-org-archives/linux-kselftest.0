@@ -2,137 +2,334 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D647FC6FA99
-	for <linux-kselftest@archiver.kernel.org>; Fri, 10 Mar 2023 17:50:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6550AC6FD1C
+	for <linux-kselftest@archiver.kernel.org>; Fri, 10 Mar 2023 17:52:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbjCJRu6 (ORCPT
+        id S231473AbjCJRwY (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 10 Mar 2023 12:50:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50134 "EHLO
+        Fri, 10 Mar 2023 12:52:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230350AbjCJRu4 (ORCPT
+        with ESMTP id S230274AbjCJRwX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Mar 2023 12:50:56 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2051.outbound.protection.outlook.com [40.107.243.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF05C2D140;
-        Fri, 10 Mar 2023 09:50:29 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TE4S3FYmPZuK94IljfD+DsOu/So31BJOXEQjbYw4JzuVEyevuRgBy9L0vf+8f1PWM3SHnIsYMSX1rNK54YyhNds+xXuLOgdHpQsl7CGF1KgyQApCYzOxTt2Q8++Mz/i2EO1Uj7LFu/QiVnUcGFaOQXRW9rOPkR/Ho4sb9ErPWa2NdJB/VeSR05NaqejyAIidyAQf4B8RDDXA1wQ2FrsCmWjdHPlTV2RHylejoaS0UldWMacNIwVjTqYHgyhwSZN501i4FnWjQmNkiWa/mo4hu9EEe0VRQdi6DqTp4r41nCYbK5giw+xLG4Ur5l3HllB4uOzp9fYE+IEZKobGGphSwg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KwVQghQY1RkoGK/a3xxiopTmhxGAPiTjcD7q4HtP8f4=;
- b=T9/aBoTz2PtD7dBBmeov5XQPPNuz0r9h+2RCUAxbR3uYXdn6l9SK/Qc9ifnCcYb2npoIH1zvfCSSgSIqgUtyZrLh5oW0b30ng/lei7Kk8eJ6rlTgQXSrZvkd2SdNE4DTigz4l8QMjoFk8FSEvyBScgAC+RZncSQVz/pKFBczzThyhPWdfCpQIrJAD6FGT4IyFxM9mpi4niKMu9mH7QatchMf2OkomGUJgzDSAA8BiCZB+tN6lo0+ZOHu1KL7r4qJXVQltVSvAX8LPBwt10ym3yhUVm6W+pe0MaKQ6Z0KeG+kzWk3E3XU6gOoUaVmcazcIzxIG/YRKiUhQ9z2L1nXcQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KwVQghQY1RkoGK/a3xxiopTmhxGAPiTjcD7q4HtP8f4=;
- b=OABvCs+ipqOEqb1w+AkowKpgMDh25m9EwqkOjK3ZeHTiK0WDmkAfVG0VaAof+R8WjRqHuSGU0NthcUKxJuhkKpf+/bBpxOvbW97HebVfOg5sKjFgnN7Beh7VTfDf0WQthM69mt+5yFTwrdhU/Xo+k6BWOpluxGNCmgAXl199vdgz6KHFbIGTMHyvYyqDwS0nSwg4KHL/hYB2qLODVCMzAw4IxJ9tV4BqsA/NyVVQanAsXERa96FXwVTw70C6QIsCA3i+FJHY2cakOcvhSStUnD3ht/G84E02wbS01ugz4EvAdh/C6E2Vix2u+E3lwwvt2749BKodF5FikXipQL5shQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by CH3PR12MB8235.namprd12.prod.outlook.com (2603:10b6:610:120::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.17; Fri, 10 Mar
- 2023 17:50:27 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::ef6d:fdf6:352f:efd1]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::ef6d:fdf6:352f:efd1%3]) with mapi id 15.20.6178.017; Fri, 10 Mar 2023
- 17:50:27 +0000
-Date:   Fri, 10 Mar 2023 13:50:24 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Yi Liu <yi.l.liu@intel.com>
-Cc:     joro@8bytes.org, alex.williamson@redhat.com, kevin.tian@intel.com,
-        robin.murphy@arm.com, baolu.lu@linux.intel.com, cohuck@redhat.com,
-        eric.auger@redhat.com, nicolinc@nvidia.com, kvm@vger.kernel.org,
-        mjrosato@linux.ibm.com, chao.p.peng@linux.intel.com,
-        yi.y.sun@linux.intel.com, peterx@redhat.com, jasowang@redhat.com,
-        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
-        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 07/12] iommufd: Add IOMMU_HWPT_INVALIDATE
-Message-ID: <ZAtt4F9zSZxptyZh@nvidia.com>
-References: <20230309080910.607396-1-yi.l.liu@intel.com>
- <20230309080910.607396-8-yi.l.liu@intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230309080910.607396-8-yi.l.liu@intel.com>
-X-ClientProxiedBy: SJ0PR03CA0110.namprd03.prod.outlook.com
- (2603:10b6:a03:333::25) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Fri, 10 Mar 2023 12:52:23 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34AC9132A9D;
+        Fri, 10 Mar 2023 09:52:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 996AC61C1D;
+        Fri, 10 Mar 2023 17:52:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E473C433EF;
+        Fri, 10 Mar 2023 17:52:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678470740;
+        bh=rvULcMQnOcEV1/N95RMElAxf9VjqPaHAYPiwDky8pPQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Nv5HMJ+L9rzqmRtJNmvGRwmH9rIelY67V2THPbNfPoeFwezGCJwBM37yfKe7Msgwq
+         tz9PyTOlKsOhqmuTZi395Q47CU6+ZuD5QYHjkSGzeWLc7mE39o86Tn7T8molP1eYCS
+         DV4LgXSZvyefhfRUlyIPJ1J3drYmwVIYAx+qek/fCvA3IO7JE9sQsKQfUdGLH7a9iF
+         JAYdr+2WoeMGIccYyPAgvXVqMZt+nrFB/ymatMmHFXH7ZYaDmnz0B0hFs/v9J17j29
+         gbbnejZpyP485jG4SWzJu4+r1Trfaur1lBsBfBNwRHeC3TnpaPJ0ojjqEkIjRfOdOD
+         RlVMh6lFhziKw==
+From:   zwisler@kernel.org
+To:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Ross Zwisler <zwisler@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Hao Luo <haoluo@google.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Jiri Olsa <jolsa@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Leon Romanovsky <leon@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Song Liu <song@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Yonghong Song <yhs@fb.com>, linux-kselftest@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Michael S . Tsirkin" <mst@redhat.com>
+Subject: [PATCH bpf-next v3 2/2] selftests/bpf: use canonical ftrace path
+Date:   Fri, 10 Mar 2023 10:52:09 -0700
+Message-Id: <20230310175209.2130880-2-zwisler@kernel.org>
+X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
+In-Reply-To: <20230310175209.2130880-1-zwisler@kernel.org>
+References: <20230310175209.2130880-1-zwisler@kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|CH3PR12MB8235:EE_
-X-MS-Office365-Filtering-Correlation-Id: 31a939c4-9588-48b1-1181-08db218feec6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ocCZPbksoe7kSmpFClGLpEXIk7UC/UYCrhrZZjv5tBg61QvvrZvgAG6/VXUzPgQjneDwaWQI4szd6L9A1iax3ophk/zzL3uHr9wP6uDvqlWlOsJn53AHzr8bIaA+B2jTKuJcN7epCV/HgH7cctueLXua05afyx5UqfDbC0MrqITnFtcsHgkqx+TTzcRw0d6St9a25uRcxRcr6LAuMAhYcoYMIxt9TUzQy+rOKm5X9dN25sqNEU5dPXqbPaaj3s4vHlUNq8beqedO0WbrxfZNMzd0bEhN5gKZ23PQHIifedO2m6oObBwn2Lh2Otty03aU8atWwSnqHMrKZ36o1YYVcz9aMOo5O4FFc8jy9OhTYXvArIhXR/hFWcj2hO4l981lKc1h54kIoFm+NP+3mb9jiiSoyvjWjDdzRFquVZjWKo2hh1egdyEoY/djm/viAmjT0N0bRsJNWWypBbXgfO37RysMgTnqEeNrGsMC/Nl/agU6aOrAGtpV5FiGaXm4HLON1+5K6HBFPhwr7dBjr56ynbjINniLQjjGyRxh5yaNFDT3wJETc+eCTwMYZd44gzRNAnkByKdxQJCsmFu3ShOYmc0C2K4uLluFcRIte/d5fryy8knulN6hCZhV3SrVw1K1TjecI6FATk4YNJVVND5NVA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(39860400002)(136003)(346002)(396003)(376002)(451199018)(83380400001)(478600001)(36756003)(186003)(38100700002)(66476007)(66556008)(8676002)(66946007)(4326008)(6916009)(26005)(6512007)(6506007)(2906002)(6666004)(4744005)(7416002)(2616005)(5660300002)(316002)(6486002)(41300700001)(86362001)(8936002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?8EP9y16+sNzPUOgngxBvsaNge4QCwRDPoP92Md20j50HgEryme5+IG8jHoc7?=
- =?us-ascii?Q?HZA4+AUaPhIarCN1HmSAjADMTDrtTqkZQHJNW7yF+41J2k00P08jBgVKzayS?=
- =?us-ascii?Q?YF5/4tpbRklU32bkmKM/JQMx+jzCPe7VAjFe7Q9VxcruronQ4bLzxaG9P8l8?=
- =?us-ascii?Q?dIf/Cydu0+uwk/XbjF9j2W8oLZVNmFfA/h543vn9AcnjZxf7sZVL0EEXDbiE?=
- =?us-ascii?Q?FXEopY3qhVS/fXs6Ub1AOdOBC1+vszZn4DbJHIMeOHUnz29SXobtP7tZcGjF?=
- =?us-ascii?Q?whQJRr0Z7DRbjq3eIg29ETC8YHu0eurBZP9cq3gOt55gkyFTY4Q9D4I8oYUb?=
- =?us-ascii?Q?OxuUMKZvzYgbqbhFAexQNBeDB/VQEIviwO5802GAAK9MWhN4xAjuleT4tLzA?=
- =?us-ascii?Q?bTiNTsxr3k/5fBkPNEWp0200Nc/d3HIb1avnC3Dibr/bKgTSpsk1brtXmEHr?=
- =?us-ascii?Q?HVgGXeORfVhOrOczAAwbj/J0jZT9dZbonhBB3HWSqs0lik/7CVGZ+LbNjwZS?=
- =?us-ascii?Q?dFqz+X8+bWb2ncCnc7xK6dhfvoK8zCzVkiaw8IqRIva4Bv7A625yydC4OZ1y?=
- =?us-ascii?Q?zrnDWYIPJRmzqRCp63OETnbNMLv3l+9d1dOJeYgfiNxjbkTUU/FQUo+N6PWb?=
- =?us-ascii?Q?ntMsveDOGXGPKf2MJ28JnuFyFla0XrmLuajJMzHgi+jg/eABPi7IKvnBR9jg?=
- =?us-ascii?Q?tEEIPCaZyoCmwOd3FfqPCur+IByOqefxJy+ggRiZFBBimTVSWgR63XGU4SDS?=
- =?us-ascii?Q?9LVobONQ+/wA56ixiVxe3xAoDEjVci/O3Et4ixQ5vcMD5bAmMTxR2nXI6nKy?=
- =?us-ascii?Q?YKu4WuW8tOkrEzC+YFHwzP3KRvxiN9bbzV4C4P5OYmBJVz3fiGTTzlfFMtzB?=
- =?us-ascii?Q?K1QWkH3nKwFCbelveuFqiYNAm3W+ogN72ilksF1SapsmF5b/CBZ56u9pzCM2?=
- =?us-ascii?Q?K9uo3+VWcwt5DNiQpROoXlXn/o0oogV7dnDXPcqSCUCrEKbSoA0nZbiDdVlV?=
- =?us-ascii?Q?/ri6m3bFiu/301c8IsxiFv2eR0h73VjRfMlPZ37AjH7Qv11rixngSas3ATxD?=
- =?us-ascii?Q?293AvyprZhmgFG9IFwcLu6rXgGiyxj4AgzIjIuMPAZZVPN9uKhL1lHjUfYBe?=
- =?us-ascii?Q?bzRWpGa2bF1cyzAsksYA4Q9MiFQSE/SHpujcR142aeQ0Xq1DQuwt+uc1JSNt?=
- =?us-ascii?Q?i9A5U5mulixFtuefQYz3knWyRsFi/eqgSd4W5HJNaLKSGAMtR/d1Tsp1mn8Z?=
- =?us-ascii?Q?BL9SL/E5FoHh51fK/LBAxJwRKbwD+qlgkEhaS3sArEbgp7KJoej9E1TuaZ7h?=
- =?us-ascii?Q?aYPsB4GrCBwVL+dRV7S7EgMOv6xSsLFUGmDcZif9iRqxODh8HcsTRoKTBZg5?=
- =?us-ascii?Q?UKay9E9NsMr9m1fR1z15NawjAzs/GZ65t55gdF2VvObm9q5h8wY8fD/d07Qf?=
- =?us-ascii?Q?sNUFZ+63sM4aTtraJzW/o1+4zittK4dX6k0/NQR178lvjk7UIqhpavfbWkw8?=
- =?us-ascii?Q?ERNF/+EyGlZsU5Oma0wIPFR1noHuX/cBpbNQNDNIT5tVmoC96x4Romql6x3c?=
- =?us-ascii?Q?adbIqQhl9il7kcKfz0jj3k54zvd1r7Vut2+B/6Bd?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 31a939c4-9588-48b1-1181-08db218feec6
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2023 17:50:27.5242
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HTiDbv4vX7MT1cusXDCfWbpaWIXEvhP89IS48CfSuD2xjisilGvRAxw44+YhfOwU
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8235
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 12:09:05AM -0800, Yi Liu wrote:
-> +int iommufd_hwpt_invalidate(struct iommufd_ucmd *ucmd)
-> +{
-> +	struct iommu_hwpt_invalidate *cmd = ucmd->cmd;
-> +	struct iommufd_hw_pagetable *hwpt;
-> +	u64 user_ptr;
-> +	u32 user_data_len, klen;
-> +	int rc = 0;
-> +
-> +	/*
-> +	 * For a user-managed HWPT, type should not be IOMMU_HWPT_TYPE_DEFAULT.
-> +	 * data_len should not exceed the size of iommufd_invalidate_buffer.
-> +	 */
-> +	if (cmd->data_type == IOMMU_HWPT_TYPE_DEFAULT || !cmd->data_len ||
-> +	    cmd->data_type >= ARRAY_SIZE(iommufd_hwpt_invalidate_info_size))
-> +		return -EOPNOTSUPP;
+From: Ross Zwisler <zwisler@google.com>
 
-This needs to do the standard check for zeros in unknown trailing data
-bit. Check that alloc does it too
+The canonical location for the tracefs filesystem is at /sys/kernel/tracing.
 
-Jason
+But, from Documentation/trace/ftrace.rst:
+
+  Before 4.1, all ftrace tracing control files were within the debugfs
+  file system, which is typically located at /sys/kernel/debug/tracing.
+  For backward compatibility, when mounting the debugfs file system,
+  the tracefs file system will be automatically mounted at:
+
+  /sys/kernel/debug/tracing
+
+Many tests in the bpf selftest code still refer to this older debugfs
+path, so let's update them to avoid confusion.
+
+Signed-off-by: Ross Zwisler <zwisler@google.com>
+Acked-by: Michael S. Tsirkin <mst@redhat.com>
+---
+ tools/testing/selftests/bpf/get_cgroup_id_user.c    |  8 ++++++--
+ .../selftests/bpf/prog_tests/kprobe_multi_test.c    |  7 ++++++-
+ .../selftests/bpf/prog_tests/task_fd_query_tp.c     |  8 ++++++--
+ .../selftests/bpf/prog_tests/tp_attach_query.c      |  8 ++++++--
+ .../testing/selftests/bpf/prog_tests/trace_printk.c | 10 +++++++---
+ .../selftests/bpf/prog_tests/trace_vprintk.c        | 10 +++++++---
+ .../selftests/bpf/progs/test_stacktrace_map.c       |  2 +-
+ tools/testing/selftests/bpf/progs/test_tracepoint.c |  2 +-
+ tools/testing/selftests/bpf/test_ftrace.sh          |  7 ++++++-
+ tools/testing/selftests/bpf/test_tunnel.sh          | 13 +++++++++----
+ tools/testing/selftests/bpf/trace_helpers.c         |  8 ++++++--
+ 11 files changed, 61 insertions(+), 22 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/get_cgroup_id_user.c b/tools/testing/selftests/bpf/get_cgroup_id_user.c
+index 156743cf5870..4fa61ac8a0ee 100644
+--- a/tools/testing/selftests/bpf/get_cgroup_id_user.c
++++ b/tools/testing/selftests/bpf/get_cgroup_id_user.c
+@@ -86,8 +86,12 @@ int main(int argc, char **argv)
+ 	pid = getpid();
+ 	bpf_map_update_elem(pidmap_fd, &key, &pid, 0);
+ 
+-	snprintf(buf, sizeof(buf),
+-		 "/sys/kernel/debug/tracing/events/%s/id", probe_name);
++	if (access("/sys/kernel/tracing/trace", F_OK) == 0)
++		snprintf(buf, sizeof(buf),
++			 "/sys/kernel/tracing/events/%s/id", probe_name);
++	else
++		snprintf(buf, sizeof(buf),
++			 "/sys/kernel/debug/tracing/events/%s/id", probe_name);
+ 	efd = open(buf, O_RDONLY, 0);
+ 	if (CHECK(efd < 0, "open", "err %d errno %d\n", efd, errno))
+ 		goto close_prog;
+diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+index 113dba349a57..22be0a9a5a0a 100644
+--- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
++++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+@@ -338,7 +338,12 @@ static int get_syms(char ***symsp, size_t *cntp, bool kernel)
+ 	 * Filtering out duplicates by using hashmap__add, which won't
+ 	 * add existing entry.
+ 	 */
+-	f = fopen("/sys/kernel/debug/tracing/available_filter_functions", "r");
++
++	if (access("/sys/kernel/tracing/trace", F_OK) == 0)
++		f = fopen("/sys/kernel/tracing/available_filter_functions", "r");
++	else
++		f = fopen("/sys/kernel/debug/tracing/available_filter_functions", "r");
++
+ 	if (!f)
+ 		return -EINVAL;
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/task_fd_query_tp.c b/tools/testing/selftests/bpf/prog_tests/task_fd_query_tp.c
+index c717741bf8b6..60f92fd3c37a 100644
+--- a/tools/testing/selftests/bpf/prog_tests/task_fd_query_tp.c
++++ b/tools/testing/selftests/bpf/prog_tests/task_fd_query_tp.c
+@@ -17,8 +17,12 @@ static void test_task_fd_query_tp_core(const char *probe_name,
+ 	if (CHECK(err, "bpf_prog_test_load", "err %d errno %d\n", err, errno))
+ 		goto close_prog;
+ 
+-	snprintf(buf, sizeof(buf),
+-		 "/sys/kernel/debug/tracing/events/%s/id", probe_name);
++	if (access("/sys/kernel/tracing/trace", F_OK) == 0)
++		snprintf(buf, sizeof(buf),
++			 "/sys/kernel/tracing/events/%s/id", probe_name);
++	else
++		snprintf(buf, sizeof(buf),
++			 "/sys/kernel/debug/tracing/events/%s/id", probe_name);
+ 	efd = open(buf, O_RDONLY, 0);
+ 	if (CHECK(efd < 0, "open", "err %d errno %d\n", efd, errno))
+ 		goto close_prog;
+diff --git a/tools/testing/selftests/bpf/prog_tests/tp_attach_query.c b/tools/testing/selftests/bpf/prog_tests/tp_attach_query.c
+index 770fcc3bb1ba..d3e377fa8e9b 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tp_attach_query.c
++++ b/tools/testing/selftests/bpf/prog_tests/tp_attach_query.c
+@@ -16,8 +16,12 @@ void serial_test_tp_attach_query(void)
+ 	for (i = 0; i < num_progs; i++)
+ 		obj[i] = NULL;
+ 
+-	snprintf(buf, sizeof(buf),
+-		 "/sys/kernel/debug/tracing/events/sched/sched_switch/id");
++	if (access("/sys/kernel/tracing/trace", F_OK) == 0)
++		snprintf(buf, sizeof(buf),
++			 "/sys/kernel/tracing/events/sched/sched_switch/id");
++	else
++		snprintf(buf, sizeof(buf),
++			 "/sys/kernel/debug/tracing/events/sched/sched_switch/id");
+ 	efd = open(buf, O_RDONLY, 0);
+ 	if (CHECK(efd < 0, "open", "err %d errno %d\n", efd, errno))
+ 		return;
+diff --git a/tools/testing/selftests/bpf/prog_tests/trace_printk.c b/tools/testing/selftests/bpf/prog_tests/trace_printk.c
+index cade7f12315f..7b9124d506a5 100644
+--- a/tools/testing/selftests/bpf/prog_tests/trace_printk.c
++++ b/tools/testing/selftests/bpf/prog_tests/trace_printk.c
+@@ -5,7 +5,8 @@
+ 
+ #include "trace_printk.lskel.h"
+ 
+-#define TRACEBUF	"/sys/kernel/debug/tracing/trace_pipe"
++#define TRACEFS_PIPE	"/sys/kernel/tracing/trace_pipe"
++#define DEBUGFS_PIPE	"/sys/kernel/debug/tracing/trace_pipe"
+ #define SEARCHMSG	"testing,testing"
+ 
+ void serial_test_trace_printk(void)
+@@ -34,8 +35,11 @@ void serial_test_trace_printk(void)
+ 	if (!ASSERT_OK(err, "trace_printk__attach"))
+ 		goto cleanup;
+ 
+-	fp = fopen(TRACEBUF, "r");
+-	if (!ASSERT_OK_PTR(fp, "fopen(TRACEBUF)"))
++	if (access(TRACEFS_PIPE, F_OK) == 0)
++		fp = fopen(TRACEFS_PIPE, "r");
++	else
++		fp = fopen(DEBUGFS_PIPE, "r");
++	if (!ASSERT_OK_PTR(fp, "fopen(TRACE_PIPE)"))
+ 		goto cleanup;
+ 
+ 	/* We do not want to wait forever if this test fails... */
+diff --git a/tools/testing/selftests/bpf/prog_tests/trace_vprintk.c b/tools/testing/selftests/bpf/prog_tests/trace_vprintk.c
+index 7a4e313e8558..44ea2fd88f4c 100644
+--- a/tools/testing/selftests/bpf/prog_tests/trace_vprintk.c
++++ b/tools/testing/selftests/bpf/prog_tests/trace_vprintk.c
+@@ -5,7 +5,8 @@
+ 
+ #include "trace_vprintk.lskel.h"
+ 
+-#define TRACEBUF	"/sys/kernel/debug/tracing/trace_pipe"
++#define TRACEFS_PIPE	"/sys/kernel/tracing/trace_pipe"
++#define DEBUGFS_PIPE	"/sys/kernel/debug/tracing/trace_pipe"
+ #define SEARCHMSG	"1,2,3,4,5,6,7,8,9,10"
+ 
+ void serial_test_trace_vprintk(void)
+@@ -27,8 +28,11 @@ void serial_test_trace_vprintk(void)
+ 	if (!ASSERT_OK(err, "trace_vprintk__attach"))
+ 		goto cleanup;
+ 
+-	fp = fopen(TRACEBUF, "r");
+-	if (!ASSERT_OK_PTR(fp, "fopen(TRACEBUF)"))
++	if (access(TRACEFS_PIPE, F_OK) == 0)
++		fp = fopen(TRACEFS_PIPE, "r");
++	else
++		fp = fopen(DEBUGFS_PIPE, "r");
++	if (!ASSERT_OK_PTR(fp, "fopen(TRACE_PIPE)"))
+ 		goto cleanup;
+ 
+ 	/* We do not want to wait forever if this test fails... */
+diff --git a/tools/testing/selftests/bpf/progs/test_stacktrace_map.c b/tools/testing/selftests/bpf/progs/test_stacktrace_map.c
+index 728dbd39eff0..47568007b668 100644
+--- a/tools/testing/selftests/bpf/progs/test_stacktrace_map.c
++++ b/tools/testing/selftests/bpf/progs/test_stacktrace_map.c
+@@ -38,7 +38,7 @@ struct {
+ 	__type(value, stack_trace_t);
+ } stack_amap SEC(".maps");
+ 
+-/* taken from /sys/kernel/debug/tracing/events/sched/sched_switch/format */
++/* taken from /sys/kernel/tracing/events/sched/sched_switch/format */
+ struct sched_switch_args {
+ 	unsigned long long pad;
+ 	char prev_comm[TASK_COMM_LEN];
+diff --git a/tools/testing/selftests/bpf/progs/test_tracepoint.c b/tools/testing/selftests/bpf/progs/test_tracepoint.c
+index 43bd7a20cc50..4cb8bbb6a320 100644
+--- a/tools/testing/selftests/bpf/progs/test_tracepoint.c
++++ b/tools/testing/selftests/bpf/progs/test_tracepoint.c
+@@ -4,7 +4,7 @@
+ #include <vmlinux.h>
+ #include <bpf/bpf_helpers.h>
+ 
+-/* taken from /sys/kernel/debug/tracing/events/sched/sched_switch/format */
++/* taken from /sys/kernel/tracing/events/sched/sched_switch/format */
+ struct sched_switch_args {
+ 	unsigned long long pad;
+ 	char prev_comm[TASK_COMM_LEN];
+diff --git a/tools/testing/selftests/bpf/test_ftrace.sh b/tools/testing/selftests/bpf/test_ftrace.sh
+index 20de7bb873bc..f5109eb0e951 100755
+--- a/tools/testing/selftests/bpf/test_ftrace.sh
++++ b/tools/testing/selftests/bpf/test_ftrace.sh
+@@ -1,6 +1,11 @@
+ #!/bin/bash
+ 
+-TR=/sys/kernel/debug/tracing/
++if [[ -e /sys/kernel/tracing/trace ]]; then
++    TR=/sys/kernel/tracing/
++else
++    TR=/sys/kernel/debug/tracing/
++fi
++
+ clear_trace() { # reset trace output
+     echo > $TR/trace
+ }
+diff --git a/tools/testing/selftests/bpf/test_tunnel.sh b/tools/testing/selftests/bpf/test_tunnel.sh
+index 06857b689c11..2dec7dbf29a2 100755
+--- a/tools/testing/selftests/bpf/test_tunnel.sh
++++ b/tools/testing/selftests/bpf/test_tunnel.sh
+@@ -571,8 +571,13 @@ setup_xfrm_tunnel()
+ 
+ test_xfrm_tunnel()
+ {
++	if [[ -e /sys/kernel/tracing/trace ]]; then
++		TRACE=/sys/kernel/tracing/trace
++	else
++		TRACE=/sys/kernel/debug/tracing/trace
++	fi
+ 	config_device
+-	> /sys/kernel/debug/tracing/trace
++	> ${TRACE}
+ 	setup_xfrm_tunnel
+ 	mkdir -p ${BPF_PIN_TUNNEL_DIR}
+ 	bpftool prog loadall ${BPF_FILE} ${BPF_PIN_TUNNEL_DIR}
+@@ -581,11 +586,11 @@ test_xfrm_tunnel()
+ 		${BPF_PIN_TUNNEL_DIR}/xfrm_get_state
+ 	ip netns exec at_ns0 ping $PING_ARG 10.1.1.200
+ 	sleep 1
+-	grep "reqid 1" /sys/kernel/debug/tracing/trace
++	grep "reqid 1" ${TRACE}
+ 	check_err $?
+-	grep "spi 0x1" /sys/kernel/debug/tracing/trace
++	grep "spi 0x1" ${TRACE}
+ 	check_err $?
+-	grep "remote ip 0xac100164" /sys/kernel/debug/tracing/trace
++	grep "remote ip 0xac100164" ${TRACE}
+ 	check_err $?
+ 	cleanup
+ 
+diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
+index 09a16a77bae4..934bf28fc888 100644
+--- a/tools/testing/selftests/bpf/trace_helpers.c
++++ b/tools/testing/selftests/bpf/trace_helpers.c
+@@ -12,7 +12,8 @@
+ #include <sys/mman.h>
+ #include "trace_helpers.h"
+ 
+-#define DEBUGFS "/sys/kernel/debug/tracing/"
++#define TRACEFS_PIPE	"/sys/kernel/tracing/trace_pipe"
++#define DEBUGFS_PIPE	"/sys/kernel/debug/tracing/trace_pipe"
+ 
+ #define MAX_SYMS 300000
+ static struct ksym syms[MAX_SYMS];
+@@ -136,7 +137,10 @@ void read_trace_pipe(void)
+ {
+ 	int trace_fd;
+ 
+-	trace_fd = open(DEBUGFS "trace_pipe", O_RDONLY, 0);
++	if (access(TRACEFS_PIPE, F_OK) == 0)
++		trace_fd = open(TRACEFS_PIPE, O_RDONLY, 0);
++	else
++		trace_fd = open(DEBUGFS_PIPE, O_RDONLY, 0);
+ 	if (trace_fd < 0)
+ 		return;
+ 
+-- 
+2.40.0.rc1.284.g88254d51c5-goog
+
