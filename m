@@ -2,439 +2,266 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72D3DC761A6
-	for <linux-kselftest@archiver.kernel.org>; Tue, 14 Mar 2023 22:20:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 47E34C6FD1F
+	for <linux-kselftest@archiver.kernel.org>; Tue, 14 Mar 2023 22:21:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231355AbjCNWUP (ORCPT
+        id S229682AbjCNWVk (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 14 Mar 2023 18:20:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57978 "EHLO
+        Tue, 14 Mar 2023 18:21:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231603AbjCNWTx (ORCPT
+        with ESMTP id S229866AbjCNWVh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Mar 2023 18:19:53 -0400
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B55E39CFE
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Mar 2023 15:18:58 -0700 (PDT)
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-536d63d17dbso181514187b3.22
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Mar 2023 15:18:58 -0700 (PDT)
+        Tue, 14 Mar 2023 18:21:37 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A0064D2B1
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Mar 2023 15:20:58 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id r1so4653698ybu.5
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Mar 2023 15:20:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678831989;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tLH8n4YXArkUQffQbzzj3eK/Q2WLoaxfMp0XyWUCAx0=;
-        b=MI0DIqw5o1kZ1LidUuNaCJMA1DxP0NtutTXWrUU8amV1STMNMqNO2OPPS9//RZuv3A
-         zzB0FueU6Jqwgkt3s73/teOAXyeLiYzeAhcfl72HJAz9vcXG4WiP4Cl6pwvUeooTLu8X
-         qLDXXeOJ5LFaOKHGQ4BrfEnF6FOPwA1/isprSDTO7hbDxWSQ8EueIhnqKeM5j7T/C9Ht
-         w3RMJcxALYuduZmuu/mzmTD0DbkgnvmNEvul75x9RGDTSACOgQ54D+7BARCdmMU8K6oe
-         7MiOfSGSiV9f+yhGhCKUbtBNj06VNFw1ccDp2m/3PInTQvkDFM7rN0LFb/AlNiFMhgvu
-         5b9Q==
+        d=google.com; s=20210112; t=1678832454;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=prmEhq3NQgLd3x/54m3N/hnamRPai5NrclABlw05kvc=;
+        b=W+qNZdRIotMleNE57r9jiKwraAWhd5MwTIvahen0WEkE5PzTRfmpRXWqkUhrPuXIJq
+         iOnlW0h/sR5EQYT1noYI5h5qxP67NxcyQAYUBvPIaBiOTQ6INBGE5VpUu4nLVv1ZgT02
+         UaGlJgByAVV73JGmEHYNz/tvTczs8bNZngZHMdpmlwhzd0aMyKtTskgYYO5Z069HIK2B
+         cVaMa5F5P19meeZJc60/mXF3AP4vN/fYubS4IlRxhs0oMqcLwh8BqCqcUp6kNhSOb7DB
+         40YDvH/qdQ3IsnL5+jzoJFLVvdy1p1rDNpZ2WNL95MejPc/m90zkXXi/+fyynxXl5xwJ
+         oY5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678831989;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tLH8n4YXArkUQffQbzzj3eK/Q2WLoaxfMp0XyWUCAx0=;
-        b=NxcI+IdE8N/MP/p+17dqCrdISNJs0TFUDZHdQUYqp4CkIFjXBu0uIRSI65mD/6LWCN
-         McJ45qvny0e41cWhEzqQXP6x23vSHi0taLIxruOO1j3p0uEOeFXH3qQbHx/2F8VHOCIM
-         4dGHzirq0ilw3ZfSn+1WJGUiu1d2XtaT0pDcwwATJnttRchszIXMzuQglznipYtg3F9A
-         6nlQ0cBESSPcVlAlKxx8gylK13aGLpO8Z8ZVyjHTlBdf5qYTbEUnzWDckkzL0gALztcq
-         YoxdTG+j94jKx8SGnJf1SiW6ZuG1DQbC+yhUwzO1AMVFgmwxCT5qe9JEX834kLo3+3Eu
-         aI0w==
-X-Gm-Message-State: AO0yUKU8hFUhUqVdumD6iZdlfhOg9ZGIPi36ggaIn7xYklqyHiAjZm7f
-        LhGKV376LmwnXXnbCW+Mn7K1mwXYAi8O65EpixKb
-X-Google-Smtp-Source: AK7set8X8Ot/dtqhk3gU8wbWHExODdLNpBgnH2rdmHFOGldWEBXjs/mUM1rQq6qsmvaLIXxgbT15ZCWXxNsrjbSSl02K
-X-Received: from axel.svl.corp.google.com ([2620:15c:2d4:203:21ce:bab3:17ec:2276])
- (user=axelrasmussen job=sendgmr) by 2002:a81:ad66:0:b0:52e:e8b1:d51e with
- SMTP id l38-20020a81ad66000000b0052ee8b1d51emr11451580ywk.1.1678831989108;
- Tue, 14 Mar 2023 15:13:09 -0700 (PDT)
-Date:   Tue, 14 Mar 2023 15:12:48 -0700
-In-Reply-To: <20230314221250.682452-1-axelrasmussen@google.com>
-Mime-Version: 1.0
-References: <20230314221250.682452-1-axelrasmussen@google.com>
-X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
-Message-ID: <20230314221250.682452-3-axelrasmussen@google.com>
-Subject: [PATCH v5 2/4] mm: userfaultfd: don't pass around both mm and vma
-From:   Axel Rasmussen <axelrasmussen@google.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Nadav Amit <namit@vmware.com>, Peter Xu <peterx@redhat.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     James Houghton <jthoughton@google.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Axel Rasmussen <axelrasmussen@google.com>
+        d=1e100.net; s=20210112; t=1678832454;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=prmEhq3NQgLd3x/54m3N/hnamRPai5NrclABlw05kvc=;
+        b=cl8zZ+lV7Q52MAAPEwq3zwEJHMqN5V7IKFrU5MZ9cvxEtWTJKA/B8wgwi/2HHrfdVV
+         lmgMc7AWg6HBhI0naUHF2DNKGIW318iYoPCMh41I77PctvxAkABAUj/gTLGcDKoy5u+e
+         N1YHWP9NM39rNy/Rl5WKSbdiAJ1l3AmOJGyotZFEjleVo2Gx2YT/3JtQxLE8cVCu5spG
+         WNcnRodGmI/2SBCc0VyW1S7Rs/DYBeCdYTgLr+6YGc4Qsi4ZRUCeixqDOFvEB+fJVilt
+         hZLPLt5HA/o1GSQ+okpI25f2Gn0Iy6x8dkeFMjNHGv0e1qBSk4QHZI7Nwvg45dYpPfZL
+         lB+A==
+X-Gm-Message-State: AO0yUKXRugxB0E5M3jyxkqeFHgOCpZDCz7lzRDtbK/04yPKungto0Gk5
+        1+7BjECkJZKTgP639pbvpR/N6JWMzUrq6h/VxUmg0A==
+X-Google-Smtp-Source: AK7set8SkYGNcFnfYPsMfzR9x36zzygYapNbW6uZiul45TDLPJiNPfU+4GRchnUtuOZ+roEgbEeaRI7iP32Bln9WT6o=
+X-Received: by 2002:a5b:38a:0:b0:ac9:cb97:bd0e with SMTP id
+ k10-20020a5b038a000000b00ac9cb97bd0emr19406415ybp.5.1678832453903; Tue, 14
+ Mar 2023 15:20:53 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230310222002.3633162-1-rmoar@google.com> <490271eb-1429-2217-6e38-837c6e5e328b@gmail.com>
+In-Reply-To: <490271eb-1429-2217-6e38-837c6e5e328b@gmail.com>
+From:   Rae Moar <rmoar@google.com>
+Date:   Tue, 14 Mar 2023 18:20:42 -0400
+Message-ID: <CA+GJov4hw7yDRo2_uYWWe0chmBEtUh+t8aYhxSDXp2zch9cYvg@mail.gmail.com>
+Subject: Re: [KTAP V2 PATCH] ktap_v2: add skip test result
+To:     Frank Rowand <frowand.list@gmail.com>
+Cc:     davidgow@google.com, skhan@linuxfoundation.org,
+        keescook@chromium.org, Tim.Bird@sony.com,
+        brendanhiggins@google.com, corbet@lwn.net,
+        guillaume.tucker@collabora.com, dlatypov@google.com,
+        kernelci@groups.io, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Quite a few userfaultfd functions took both mm and vma pointers as
-arguments. Since the mm is trivially accessible via vma->vm_mm, there's
-no reason to pass both; it just needlessly extends the already long
-argument list.
+On Sat, Mar 11, 2023 at 10:52=E2=80=AFPM Frank Rowand <frowand.list@gmail.c=
+om> wrote:
+>
+> On 3/10/23 16:20, Rae Moar wrote:
+> > Add the test result "skip" to KTAP version 2 as an alternative way to
+> > indicate a test was skipped.
+> >
+> > The current spec uses the "#SKIP" directive to indicate that a test was
+> > skipped. However, the "#SKIP" directive is not always evident when quic=
+kly
+> > skimming through KTAP results.
+> >
+> > The "skip" result would provide an alternative that could make it clear=
+er
+> > that a test has not successfully passed because it was skipped.
+> >
+> > Before:
+> >
+> >  KTAP version 1
+> >  1..1
+> >    KTAP version 1
+> >    1..2
+> >    ok 1 case_1
+> >    ok 2 case_2 #SKIP
+> >  ok 1 suite
+> >
+> > After:
+> >
+> >  KTAP version 2
+> >  1..1
+> >    KTAP version 2
+> >    1..2
+> >    ok 1 case_1
+> >    skip 2 case_2
+> >  ok 1 suite
+> >
+> > Here is a link to a version of the KUnit parser that is able to parse
+> > the skip test result for KTAP version 2. Note this parser is still able
+> > to parse the "#SKIP" directive.
+> >
+> > Link: https://kunit-review.googlesource.com/c/linux/+/5689
+> >
+> > Signed-off-by: Rae Moar <rmoar@google.com>
+> > --->
+> > Note: this patch is based on Frank's ktap_spec_version_2 branch.
+> >
+> >  Documentation/dev-tools/ktap.rst | 27 ++++++++++++++++++---------
+> >  1 file changed, 18 insertions(+), 9 deletions(-)
+> >
+> > diff --git a/Documentation/dev-tools/ktap.rst b/Documentation/dev-tools=
+/ktap.rst
+> > index ff77f4aaa6ef..f48aa00db8f0 100644
+> > --- a/Documentation/dev-tools/ktap.rst
+> > +++ b/Documentation/dev-tools/ktap.rst
+> > @@ -74,7 +74,8 @@ They are required and must have the format:
+> >       <result> <number> [<description>][ # [<directive>] [<diagnostic d=
+ata>]]
+> >
+> >  The result can be either "ok", which indicates the test case passed,
+> > -or "not ok", which indicates that the test case failed.
+> > +"not ok", which indicates that the test case failed, or "skip", which =
+indicates
+> > +the test case did not run.
+> >
+> >  <number> represents the number of the test being performed. The first =
+test must
+> >  have the number 1 and the number then must increase by 1 for each addi=
+tional
+> > @@ -91,12 +92,13 @@ A directive is a keyword that indicates a different=
+ outcome for a test other
+> >  than passed and failed. The directive is optional, and consists of a s=
+ingle
+> >  keyword preceding the diagnostic data. In the event that a parser enco=
+unters
+> >  a directive it doesn't support, it should fall back to the "ok" / "not=
+ ok"
+> > -result.
+> > +/ "skip" result.
+> >
+> >  Currently accepted directives are:
+> >
+> > -- "SKIP", which indicates a test was skipped (note the result of the t=
+est case
+> > -  result line can be either "ok" or "not ok" if the SKIP directive is =
+used)
+>
+> > +- "SKIP", which indicates a test was skipped (note this is an alternat=
+ive to
+> > +  the "skip" result type and if the SKIP directive is used, the
+> > +  result can be any type - "ok", "not ok", or "skip")
+>
+> For the "SKIP" directive, result type of either "ok", or "not ok" reflect=
+s the
+> current real world usage, which is mixed.  I agree is makes sense to also
+> allow the result type of "skip" with the "SKIP directive.
+>
+> I think it would be good to deprecate the "SKIP" directive, with a schedu=
+led
+> removal in the V3 specification - that would allow plenty of time for tes=
+t
+> parsers to process both V1 and V2 data, before removing processing of V1 =
+data.
+>
+> If so, the deprecation plan should be documented.
+>
 
-Get rid of the mm pointer, where possible, to shorten the argument list.
+Hi Frank!
 
-Acked-by: Peter Xu <peterx@redhat.com>
-Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
-Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
----
- fs/userfaultfd.c              |  2 +-
- include/linux/hugetlb.h       |  5 ++-
- include/linux/shmem_fs.h      |  4 +--
- include/linux/userfaultfd_k.h |  4 +--
- mm/hugetlb.c                  |  4 +--
- mm/shmem.c                    |  7 ++--
- mm/userfaultfd.c              | 61 +++++++++++++++++------------------
- 7 files changed, 41 insertions(+), 46 deletions(-)
+This is a great point. I think it is necessary to add specifications
+on how the SKIP directive will be deprecated. I will be taking all of
+these suggestions when I make a v2.
 
-diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-index 365bf00dd8dd..84d5d402214a 100644
---- a/fs/userfaultfd.c
-+++ b/fs/userfaultfd.c
-@@ -1629,7 +1629,7 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
- 
- 		/* Reset ptes for the whole vma range if wr-protected */
- 		if (userfaultfd_wp(vma))
--			uffd_wp_range(mm, vma, start, vma_end - start, false);
-+			uffd_wp_range(vma, start, vma_end - start, false);
- 
- 		new_flags = vma->vm_flags & ~__VM_UFFD_FLAGS;
- 		prev = vma_merge(&vmi, mm, prev, start, vma_end, new_flags,
-diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-index 8f0467bf1cbd..8b9325f77ac3 100644
---- a/include/linux/hugetlb.h
-+++ b/include/linux/hugetlb.h
-@@ -158,7 +158,7 @@ unsigned long hugetlb_total_pages(void);
- vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
- 			unsigned long address, unsigned int flags);
- #ifdef CONFIG_USERFAULTFD
--int hugetlb_mfill_atomic_pte(struct mm_struct *dst_mm, pte_t *dst_pte,
-+int hugetlb_mfill_atomic_pte(pte_t *dst_pte,
- 			     struct vm_area_struct *dst_vma,
- 			     unsigned long dst_addr,
- 			     unsigned long src_addr,
-@@ -393,8 +393,7 @@ static inline void hugetlb_free_pgd_range(struct mmu_gather *tlb,
- }
- 
- #ifdef CONFIG_USERFAULTFD
--static inline int hugetlb_mfill_atomic_pte(struct mm_struct *dst_mm,
--					   pte_t *dst_pte,
-+static inline int hugetlb_mfill_atomic_pte(pte_t *dst_pte,
- 					   struct vm_area_struct *dst_vma,
- 					   unsigned long dst_addr,
- 					   unsigned long src_addr,
-diff --git a/include/linux/shmem_fs.h b/include/linux/shmem_fs.h
-index 103d1000a5a2..b82916c25e61 100644
---- a/include/linux/shmem_fs.h
-+++ b/include/linux/shmem_fs.h
-@@ -151,14 +151,14 @@ extern void shmem_uncharge(struct inode *inode, long pages);
- 
- #ifdef CONFIG_USERFAULTFD
- #ifdef CONFIG_SHMEM
--extern int shmem_mfill_atomic_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
-+extern int shmem_mfill_atomic_pte(pmd_t *dst_pmd,
- 				  struct vm_area_struct *dst_vma,
- 				  unsigned long dst_addr,
- 				  unsigned long src_addr,
- 				  bool zeropage, bool wp_copy,
- 				  struct page **pagep);
- #else /* !CONFIG_SHMEM */
--#define shmem_mfill_atomic_pte(dst_mm, dst_pmd, dst_vma, dst_addr, \
-+#define shmem_mfill_atomic_pte(dst_pmd, dst_vma, dst_addr, \
- 			       src_addr, zeropage, wp_copy, pagep) ({ BUG(); 0; })
- #endif /* CONFIG_SHMEM */
- #endif /* CONFIG_USERFAULTFD */
-diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
-index 468080125612..ba79e296fcc7 100644
---- a/include/linux/userfaultfd_k.h
-+++ b/include/linux/userfaultfd_k.h
-@@ -56,7 +56,7 @@ enum mcopy_atomic_mode {
- 	MCOPY_ATOMIC_CONTINUE,
- };
- 
--extern int mfill_atomic_install_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
-+extern int mfill_atomic_install_pte(pmd_t *dst_pmd,
- 				    struct vm_area_struct *dst_vma,
- 				    unsigned long dst_addr, struct page *page,
- 				    bool newly_allocated, bool wp_copy);
-@@ -73,7 +73,7 @@ extern ssize_t mfill_atomic_continue(struct mm_struct *dst_mm, unsigned long dst
- extern int mwriteprotect_range(struct mm_struct *dst_mm,
- 			       unsigned long start, unsigned long len,
- 			       bool enable_wp, atomic_t *mmap_changing);
--extern long uffd_wp_range(struct mm_struct *dst_mm, struct vm_area_struct *vma,
-+extern long uffd_wp_range(struct vm_area_struct *vma,
- 			  unsigned long start, unsigned long len, bool enable_wp);
- 
- /* mm helpers */
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 4c9276549394..fe043034ab46 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -6157,8 +6157,7 @@ vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
-  * Used by userfaultfd UFFDIO_* ioctls. Based on userfaultfd's mfill_atomic_pte
-  * with modifications for hugetlb pages.
-  */
--int hugetlb_mfill_atomic_pte(struct mm_struct *dst_mm,
--			     pte_t *dst_pte,
-+int hugetlb_mfill_atomic_pte(pte_t *dst_pte,
- 			     struct vm_area_struct *dst_vma,
- 			     unsigned long dst_addr,
- 			     unsigned long src_addr,
-@@ -6166,6 +6165,7 @@ int hugetlb_mfill_atomic_pte(struct mm_struct *dst_mm,
- 			     struct page **pagep,
- 			     bool wp_copy)
- {
-+	struct mm_struct *dst_mm = dst_vma->vm_mm;
- 	bool is_continue = (mode == MCOPY_ATOMIC_CONTINUE);
- 	struct hstate *h = hstate_vma(dst_vma);
- 	struct address_space *mapping = dst_vma->vm_file->f_mapping;
-diff --git a/mm/shmem.c b/mm/shmem.c
-index 448f393d8ab2..1d751b6cf1ac 100644
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -2415,8 +2415,7 @@ static struct inode *shmem_get_inode(struct mnt_idmap *idmap, struct super_block
- }
- 
- #ifdef CONFIG_USERFAULTFD
--int shmem_mfill_atomic_pte(struct mm_struct *dst_mm,
--			   pmd_t *dst_pmd,
-+int shmem_mfill_atomic_pte(pmd_t *dst_pmd,
- 			   struct vm_area_struct *dst_vma,
- 			   unsigned long dst_addr,
- 			   unsigned long src_addr,
-@@ -2506,11 +2505,11 @@ int shmem_mfill_atomic_pte(struct mm_struct *dst_mm,
- 		goto out_release;
- 
- 	ret = shmem_add_to_page_cache(folio, mapping, pgoff, NULL,
--				      gfp & GFP_RECLAIM_MASK, dst_mm);
-+				      gfp & GFP_RECLAIM_MASK, dst_vma->vm_mm);
- 	if (ret)
- 		goto out_release;
- 
--	ret = mfill_atomic_install_pte(dst_mm, dst_pmd, dst_vma, dst_addr,
-+	ret = mfill_atomic_install_pte(dst_pmd, dst_vma, dst_addr,
- 				       &folio->page, true, wp_copy);
- 	if (ret)
- 		goto out_delete_from_cache;
-diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-index 84db5b2fad3a..4fc373476739 100644
---- a/mm/userfaultfd.c
-+++ b/mm/userfaultfd.c
-@@ -55,12 +55,13 @@ struct vm_area_struct *find_dst_vma(struct mm_struct *dst_mm,
-  * This function handles both MCOPY_ATOMIC_NORMAL and _CONTINUE for both shmem
-  * and anon, and for both shared and private VMAs.
-  */
--int mfill_atomic_install_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
-+int mfill_atomic_install_pte(pmd_t *dst_pmd,
- 			     struct vm_area_struct *dst_vma,
- 			     unsigned long dst_addr, struct page *page,
- 			     bool newly_allocated, bool wp_copy)
- {
- 	int ret;
-+	struct mm_struct *dst_mm = dst_vma->vm_mm;
- 	pte_t _dst_pte, *dst_pte;
- 	bool writable = dst_vma->vm_flags & VM_WRITE;
- 	bool vm_shared = dst_vma->vm_flags & VM_SHARED;
-@@ -127,8 +128,7 @@ int mfill_atomic_install_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
- 	return ret;
- }
- 
--static int mfill_atomic_pte_copy(struct mm_struct *dst_mm,
--				 pmd_t *dst_pmd,
-+static int mfill_atomic_pte_copy(pmd_t *dst_pmd,
- 				 struct vm_area_struct *dst_vma,
- 				 unsigned long dst_addr,
- 				 unsigned long src_addr,
-@@ -190,10 +190,10 @@ static int mfill_atomic_pte_copy(struct mm_struct *dst_mm,
- 	__SetPageUptodate(page);
- 
- 	ret = -ENOMEM;
--	if (mem_cgroup_charge(page_folio(page), dst_mm, GFP_KERNEL))
-+	if (mem_cgroup_charge(page_folio(page), dst_vma->vm_mm, GFP_KERNEL))
- 		goto out_release;
- 
--	ret = mfill_atomic_install_pte(dst_mm, dst_pmd, dst_vma, dst_addr,
-+	ret = mfill_atomic_install_pte(dst_pmd, dst_vma, dst_addr,
- 				       page, true, wp_copy);
- 	if (ret)
- 		goto out_release;
-@@ -204,8 +204,7 @@ static int mfill_atomic_pte_copy(struct mm_struct *dst_mm,
- 	goto out;
- }
- 
--static int mfill_atomic_pte_zeropage(struct mm_struct *dst_mm,
--				     pmd_t *dst_pmd,
-+static int mfill_atomic_pte_zeropage(pmd_t *dst_pmd,
- 				     struct vm_area_struct *dst_vma,
- 				     unsigned long dst_addr)
- {
-@@ -217,7 +216,7 @@ static int mfill_atomic_pte_zeropage(struct mm_struct *dst_mm,
- 
- 	_dst_pte = pte_mkspecial(pfn_pte(my_zero_pfn(dst_addr),
- 					 dst_vma->vm_page_prot));
--	dst_pte = pte_offset_map_lock(dst_mm, dst_pmd, dst_addr, &ptl);
-+	dst_pte = pte_offset_map_lock(dst_vma->vm_mm, dst_pmd, dst_addr, &ptl);
- 	if (dst_vma->vm_file) {
- 		/* the shmem MAP_PRIVATE case requires checking the i_size */
- 		inode = dst_vma->vm_file->f_inode;
-@@ -230,7 +229,7 @@ static int mfill_atomic_pte_zeropage(struct mm_struct *dst_mm,
- 	ret = -EEXIST;
- 	if (!pte_none(*dst_pte))
- 		goto out_unlock;
--	set_pte_at(dst_mm, dst_addr, dst_pte, _dst_pte);
-+	set_pte_at(dst_vma->vm_mm, dst_addr, dst_pte, _dst_pte);
- 	/* No need to invalidate - it was non-present before */
- 	update_mmu_cache(dst_vma, dst_addr, dst_pte);
- 	ret = 0;
-@@ -240,8 +239,7 @@ static int mfill_atomic_pte_zeropage(struct mm_struct *dst_mm,
- }
- 
- /* Handles UFFDIO_CONTINUE for all shmem VMAs (shared or private). */
--static int mfill_atomic_pte_continue(struct mm_struct *dst_mm,
--				     pmd_t *dst_pmd,
-+static int mfill_atomic_pte_continue(pmd_t *dst_pmd,
- 				     struct vm_area_struct *dst_vma,
- 				     unsigned long dst_addr,
- 				     bool wp_copy)
-@@ -269,7 +267,7 @@ static int mfill_atomic_pte_continue(struct mm_struct *dst_mm,
- 		goto out_release;
- 	}
- 
--	ret = mfill_atomic_install_pte(dst_mm, dst_pmd, dst_vma, dst_addr,
-+	ret = mfill_atomic_install_pte(dst_pmd, dst_vma, dst_addr,
- 				       page, false, wp_copy);
- 	if (ret)
- 		goto out_release;
-@@ -310,7 +308,7 @@ static pmd_t *mm_alloc_pmd(struct mm_struct *mm, unsigned long address)
-  * mfill_atomic processing for HUGETLB vmas.  Note that this routine is
-  * called with mmap_lock held, it will release mmap_lock before returning.
-  */
--static __always_inline ssize_t mfill_atomic_hugetlb(struct mm_struct *dst_mm,
-+static __always_inline ssize_t mfill_atomic_hugetlb(
- 					      struct vm_area_struct *dst_vma,
- 					      unsigned long dst_start,
- 					      unsigned long src_start,
-@@ -318,6 +316,7 @@ static __always_inline ssize_t mfill_atomic_hugetlb(struct mm_struct *dst_mm,
- 					      enum mcopy_atomic_mode mode,
- 					      bool wp_copy)
- {
-+	struct mm_struct *dst_mm = dst_vma->vm_mm;
- 	int vm_shared = dst_vma->vm_flags & VM_SHARED;
- 	ssize_t err;
- 	pte_t *dst_pte;
-@@ -411,7 +410,7 @@ static __always_inline ssize_t mfill_atomic_hugetlb(struct mm_struct *dst_mm,
- 			goto out_unlock;
- 		}
- 
--		err = hugetlb_mfill_atomic_pte(dst_mm, dst_pte, dst_vma,
-+		err = hugetlb_mfill_atomic_pte(dst_pte, dst_vma,
- 					       dst_addr, src_addr, mode, &page,
- 					       wp_copy);
- 
-@@ -463,17 +462,15 @@ static __always_inline ssize_t mfill_atomic_hugetlb(struct mm_struct *dst_mm,
- }
- #else /* !CONFIG_HUGETLB_PAGE */
- /* fail at build time if gcc attempts to use this */
--extern ssize_t mfill_atomic_hugetlb(struct mm_struct *dst_mm,
--				      struct vm_area_struct *dst_vma,
--				      unsigned long dst_start,
--				      unsigned long src_start,
--				      unsigned long len,
--				      enum mcopy_atomic_mode mode,
--				      bool wp_copy);
-+extern ssize_t mfill_atomic_hugetlb(struct vm_area_struct *dst_vma,
-+				    unsigned long dst_start,
-+				    unsigned long src_start,
-+				    unsigned long len,
-+				    enum mcopy_atomic_mode mode,
-+				    bool wp_copy);
- #endif /* CONFIG_HUGETLB_PAGE */
- 
--static __always_inline ssize_t mfill_atomic_pte(struct mm_struct *dst_mm,
--						pmd_t *dst_pmd,
-+static __always_inline ssize_t mfill_atomic_pte(pmd_t *dst_pmd,
- 						struct vm_area_struct *dst_vma,
- 						unsigned long dst_addr,
- 						unsigned long src_addr,
-@@ -484,7 +481,7 @@ static __always_inline ssize_t mfill_atomic_pte(struct mm_struct *dst_mm,
- 	ssize_t err;
- 
- 	if (mode == MCOPY_ATOMIC_CONTINUE) {
--		return mfill_atomic_pte_continue(dst_mm, dst_pmd, dst_vma,
-+		return mfill_atomic_pte_continue(dst_pmd, dst_vma,
- 						 dst_addr, wp_copy);
- 	}
- 
-@@ -500,14 +497,14 @@ static __always_inline ssize_t mfill_atomic_pte(struct mm_struct *dst_mm,
- 	 */
- 	if (!(dst_vma->vm_flags & VM_SHARED)) {
- 		if (mode == MCOPY_ATOMIC_NORMAL)
--			err = mfill_atomic_pte_copy(dst_mm, dst_pmd, dst_vma,
-+			err = mfill_atomic_pte_copy(dst_pmd, dst_vma,
- 						    dst_addr, src_addr, page,
- 						    wp_copy);
- 		else
--			err = mfill_atomic_pte_zeropage(dst_mm, dst_pmd,
-+			err = mfill_atomic_pte_zeropage(dst_pmd,
- 						 dst_vma, dst_addr);
- 	} else {
--		err = shmem_mfill_atomic_pte(dst_mm, dst_pmd, dst_vma,
-+		err = shmem_mfill_atomic_pte(dst_pmd, dst_vma,
- 					     dst_addr, src_addr,
- 					     mode != MCOPY_ATOMIC_NORMAL,
- 					     wp_copy, page);
-@@ -588,7 +585,7 @@ static __always_inline ssize_t mfill_atomic(struct mm_struct *dst_mm,
- 	 * If this is a HUGETLB vma, pass off to appropriate routine
- 	 */
- 	if (is_vm_hugetlb_page(dst_vma))
--		return  mfill_atomic_hugetlb(dst_mm, dst_vma, dst_start,
-+		return  mfill_atomic_hugetlb(dst_vma, dst_start,
- 					     src_start, len, mcopy_mode,
- 					     wp_copy);
- 
-@@ -641,7 +638,7 @@ static __always_inline ssize_t mfill_atomic(struct mm_struct *dst_mm,
- 		BUG_ON(pmd_none(*dst_pmd));
- 		BUG_ON(pmd_trans_huge(*dst_pmd));
- 
--		err = mfill_atomic_pte(dst_mm, dst_pmd, dst_vma, dst_addr,
-+		err = mfill_atomic_pte(dst_pmd, dst_vma, dst_addr,
- 				       src_addr, &page, mcopy_mode, wp_copy);
- 		cond_resched();
- 
-@@ -710,7 +707,7 @@ ssize_t mfill_atomic_continue(struct mm_struct *dst_mm, unsigned long start,
- 			    mmap_changing, 0);
- }
- 
--long uffd_wp_range(struct mm_struct *dst_mm, struct vm_area_struct *dst_vma,
-+long uffd_wp_range(struct vm_area_struct *dst_vma,
- 		   unsigned long start, unsigned long len, bool enable_wp)
- {
- 	unsigned int mm_cp_flags;
-@@ -730,7 +727,7 @@ long uffd_wp_range(struct mm_struct *dst_mm, struct vm_area_struct *dst_vma,
- 	 */
- 	if (!enable_wp && vma_wants_manual_pte_write_upgrade(dst_vma))
- 		mm_cp_flags |= MM_CP_TRY_CHANGE_WRITABLE;
--	tlb_gather_mmu(&tlb, dst_mm);
-+	tlb_gather_mmu(&tlb, dst_vma->vm_mm);
- 	ret = change_protection(&tlb, dst_vma, start, start + len, mm_cp_flags);
- 	tlb_finish_mmu(&tlb);
- 
-@@ -782,7 +779,7 @@ int mwriteprotect_range(struct mm_struct *dst_mm, unsigned long start,
- 			goto out_unlock;
- 	}
- 
--	err = uffd_wp_range(dst_mm, dst_vma, start, len, enable_wp);
-+	err = uffd_wp_range(dst_vma, start, len, enable_wp);
- 
- 	/* Return 0 on success, <0 on failures */
- 	if (err > 0)
--- 
-2.40.0.rc1.284.g88254d51c5-goog
+Also, just letting you know I am planning on sending out two more KTAP
+v2 proposals in the next few days.
 
+Thanks for your insight.
+-Rae
+
+> >  - "TODO", which indicates that a test is not expected to pass at the m=
+oment,
+> >    e.g. because the feature it is testing is known to be broken. While =
+this>    directive is inherited from TAP, its use in the kernel is discoura=
+ged.
+> > @@ -110,7 +112,7 @@ Currently accepted directives are:
+> >
+> >  The diagnostic data is a plain-text field which contains any additiona=
+l details
+> >  about why this result was produced. This is typically an error message=
+ for ERROR
+> > -or failed tests, or a description of missing dependencies for a SKIP r=
+esult.
+> > +or failed tests, or a description of missing dependencies for a skippe=
+d test.
+> >
+> >  The diagnostic data field is optional, and results which have neither =
+a
+> >  directive nor any diagnostic data do not need to include the "#" field
+> > @@ -130,11 +132,18 @@ The test "test_case_name" failed.
+> >
+> >  ::
+> >
+> > -     ok 1 test # SKIP necessary dependency unavailable
+> > +     skip 1 test # necessary dependency unavailable
+>
+> Maybe add a note that the "skip" result method is preferred over the belo=
+w
+> "ok ... # SKIP..." example below.
+>
+
+Will add this to v2.
+
+> >
+> > -The test "test" was SKIPPED with the diagnostic message "necessary dep=
+endency
+> > +The test "test" was skipped with the diagnostic message "necessary dep=
+endency
+> >  unavailable".
+> >
+> > +::
+> > +
+> > +     ok 1 test_2 # SKIP this test should not run
+> > +
+> > +The test "test_2" was skipped with the diagnostic message "this test
+> > +should not run".
+>
+> Maybe add a deprecation note here.
+>
+
+WIll add this to v2.
+
+> > +
+> >  ::
+> >
+> >       not ok 1 test # TIMEOUT 30 seconds
+> > @@ -225,7 +234,7 @@ An example format with multiple levels of nested te=
+sting:
+> >           not ok 1 test_1
+> >           ok 2 test_2
+> >         not ok 1 test_3
+> > -       ok 2 test_4 # SKIP
+> > +       skip 2 test_4
+> >       not ok 1 example_test_1
+> >       ok 2 example_test_2
+> >
+> > @@ -262,7 +271,7 @@ Example KTAP output
+> >         ok 1 example_test_1
+> >           KTAP version 2
+> >           1..2
+> > -         ok 1 test_1 # SKIP test_1 skipped
+> > +         skip 1 test_1 # test_1 skipped
+> >           ok 2 test_2
+> >         ok 2 example_test_2
+> >           KTAP version 2
+> >
+> > base-commit: 906f02e42adfbd5ae70d328ee71656ecb602aaf5
+>
