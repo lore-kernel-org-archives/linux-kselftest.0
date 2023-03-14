@@ -2,59 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BA05C76196
-	for <linux-kselftest@archiver.kernel.org>; Tue, 14 Mar 2023 22:15:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DA3D8C77B60
+	for <linux-kselftest@archiver.kernel.org>; Tue, 14 Mar 2023 22:15:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231220AbjCNWPT (ORCPT
+        id S231277AbjCNWPT (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Tue, 14 Mar 2023 18:15:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48620 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231557AbjCNWOv (ORCPT
+        with ESMTP id S231540AbjCNWOt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Mar 2023 18:14:51 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61711580F8
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Mar 2023 15:14:12 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-544570e6d82so48676027b3.23
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Mar 2023 15:14:12 -0700 (PDT)
+        Tue, 14 Mar 2023 18:14:49 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE3C570A9
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Mar 2023 15:14:08 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id i11-20020a256d0b000000b0086349255277so18483083ybc.8
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Mar 2023 15:14:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678831993;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4pTQknU0yyvhsrgkZGBBdxk3ve6H2jxjb5KB6cR7GsY=;
-        b=R5pck/04mfxPmIVBB9o4uaUAo15/ZfMIMU4zBBeiy60dN3PkzfG+pL2Jk8ShQx/wnT
-         tu1lgw8s51UeJbNP7Jq1JSaDKFmENaAF8z1goiVAAzBIHtPHaXkByRIiol+yJE5/YgnQ
-         hW5qdRTIt9H9xpPdA02kwFo7Rk+Ynt1+wYVf34T5VMzeBtBNZvPPA5O3aC3D91D0RNtm
-         mSJ+v1/gDC92H9jo4qw/x0rtVNP40bPesp90xC2s/8DWp1y16hh7VG0pXJdfZGwPx2Bb
-         3g6PFtXcDzEpd66sHf07DdrXtn5FXRMWyPg2Jsy3ULZKlqOp9KCEKjeIRXmZa8Bhn/E3
-         nxaA==
+        d=google.com; s=20210112; t=1678831985;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=v6jdDP8HhF+biD07TiydHxLy71rB2V7SdCiknod97SM=;
+        b=kMu0VK08lTX+5fGCRmCECylQ1aqYZ8mpt4UDxQRqVGr8ZicRslJK6RZfMREIZJzldf
+         b2WpiHLAep+eDhqTStwebxhwBuyEH+w8tmRzHHpxwWyep5Mh0PC88Wl2/3J4e+W7pAzP
+         IDab7doSIoA8eZfk1DgaqTEDzb8HFVVtMZh95QNo3Qmw83r20VOALCNOvfejuXwDyc90
+         CHLqs3kzNMn+KQjv8RdBvB11OBEEcP4lTTTzLF9fXIqz4pDf4RqUprJK1uTU3EK1dgHB
+         BV6/EsDqJO7IonNIQMoqEv6ZVIdGnLhvdlGeLlPDsj6gw1dR15e+Snij3i1HCkBvM6z6
+         bOZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678831993;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4pTQknU0yyvhsrgkZGBBdxk3ve6H2jxjb5KB6cR7GsY=;
-        b=5reooc6RfMUd/TMB+B5KqKnxbicdTf6wuf1x9+YsUg22vwg9ktMRpFBIecFY/QStvQ
-         aBPDeIbF/x0TKsFUmRfqDj8uDd9oz8fbrBHzL8x1wkGTh68h9cDkd1ZM9XKKl0g1pKEo
-         FJAZg9OhgEUgFSe43SexUBkr1GYyLieotJMNfqiFj73dGqMlZxbKn2iuauJwK5/KXR9a
-         eIvc6/BMmxqeNZwA2AtzCgwATemq5Yrf60hNd6zeyqPy4RZhCAz/pS+kbFDR6w7FjdIG
-         11y3HmCLRlCiB2xygjIZlrOHTjzZ2QpeLtcOAg4IwDF6ihIwkQj04gWAYHfhJWtgZkXg
-         N+Nw==
-X-Gm-Message-State: AO0yUKVPRGmghWl0vyWmIzh4n7G7MRaWvpvNBM7LKmxH/fpM8bLpSS8y
-        FDsm0gqdvNHiVCGN4d70r+KDCRxL7At8aY7kqyd9
-X-Google-Smtp-Source: AK7set+CfovE4o2SVuha7KE903+E9XdVfmvAi2JH8R4Sr+s1e8IgI0cxifkuT5NnCB1X9zPcFkujhBDANx40mexrV28r
+        d=1e100.net; s=20210112; t=1678831985;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=v6jdDP8HhF+biD07TiydHxLy71rB2V7SdCiknod97SM=;
+        b=KjKkTwk86iiFNZ8av8fJCA2Yd3HZvE7KXfT4x+t2A0HdBA5VVIp1a6WgzHgoqSPuRw
+         sqK58lSwtSdUyFWM4aqQ3iE9F9WmPaOFqrPyfF9LejS5SM3ipiLgTYwjYXA1cjjMq+1V
+         kdPq78rTtodsiE+mtMixfCtS194FLKXj463+Xpoe21RjRW4MzkVu6mlYfNNDxTuf1l7V
+         iF03d9HcyC9DqoHxtxArN05iXsAILa+9ooZNYF/G6ULVxn57vM5jpTEE5bDHN/Q9hjcN
+         Q57RBn4/B4TxQVSHpH2ZecBcAtEku7pGEwVoRCJ0A68AVQe3LYB8kkbavozW0KzG67VO
+         nkxg==
+X-Gm-Message-State: AO0yUKWQo4LXikTF4Y9/Ij+5PE0jas5VTp8zxswt1erjoxUiqbKJiwmX
+        c7QLyl4Q+kD9SU5GBQ47w/rXNlULAPZtyOn3gafQ
+X-Google-Smtp-Source: AK7set9RXicAeOPxAWz9Bj3vMYwmH12zqvh/H2CP6il+7wLaox5h+GED8g10IS8EvCU0qVZf8Sv5uMcqxHjOD8TzfHqN
 X-Received: from axel.svl.corp.google.com ([2620:15c:2d4:203:21ce:bab3:17ec:2276])
- (user=axelrasmussen job=sendgmr) by 2002:a81:ac52:0:b0:541:9b2b:8240 with
- SMTP id z18-20020a81ac52000000b005419b2b8240mr6114708ywj.6.1678831992903;
- Tue, 14 Mar 2023 15:13:12 -0700 (PDT)
-Date:   Tue, 14 Mar 2023 15:12:50 -0700
-In-Reply-To: <20230314221250.682452-1-axelrasmussen@google.com>
+ (user=axelrasmussen job=sendgmr) by 2002:a81:4512:0:b0:541:9f3a:ac46 with
+ SMTP id s18-20020a814512000000b005419f3aac46mr6045642ywa.8.1678831985320;
+ Tue, 14 Mar 2023 15:13:05 -0700 (PDT)
+Date:   Tue, 14 Mar 2023 15:12:46 -0700
 Mime-Version: 1.0
-References: <20230314221250.682452-1-axelrasmussen@google.com>
 X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
-Message-ID: <20230314221250.682452-5-axelrasmussen@google.com>
-Subject: [PATCH v5 4/4] mm: userfaultfd: add UFFDIO_CONTINUE_MODE_WP to
- install WP PTEs
+Message-ID: <20230314221250.682452-1-axelrasmussen@google.com>
+Subject: [PATCH v5 0/4] mm: userfaultfd: refactor and add UFFDIO_CONTINUE_MODE_WP
 From:   Axel Rasmussen <axelrasmussen@google.com>
 To:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -75,162 +72,55 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-UFFDIO_COPY already has UFFDIO_COPY_MODE_WP, so when installing a new
-PTE to resolve a missing fault, one can install a write-protected one.
-This is useful when using UFFDIO_REGISTER_MODE_{MISSING,WP} in
-combination.
+This series, currently based on 6.3-rc1, is divided into two parts:
 
-This was motivated by testing HugeTLB HGM [1], and in particular its
-interaction with userfaultfd features. Existing userfaultfd code
-supports using WP and MINOR modes together (i.e. you can register an
-area with both enabled), but without this CONTINUE flag the combination
-is in practice unusable.
+- Commits 1-3 refactor userfaultfd ioctl code without behavior changes, with the
+  main goal of improving consistency and reducing the number of function args.
+- Commit 4 adds UFFDIO_CONTINUE_MODE_WP.
 
-So, add an analogous UFFDIO_CONTINUE_MODE_WP, which does the same thing
-as UFFDIO_COPY_MODE_WP, but for *minor* faults.
+The refactors are sorted by increasing controversial-ness, the idea being we
+could drop some of the refactors if they are deemed not worth it.
 
-Update the selftest to do some very basic exercising of the new flag.
+Changelog:
 
-Update Documentation/ to describe how these flags are used (neither the
-COPY nor the new CONTINUE versions of this mode flag were described
-there before).
+v4->v5:
+ - rename "uffd_flags_has_mode" to "uffd_flags_mode_is"
+ - modify "uffd_flags_set_mode" to clear mode bits before setting new mode
+ - update userfaultfd documentation to describe new mode flag
 
-[1]: https://patchwork.kernel.org/project/linux-mm/cover/20230218002819.1486479-1-jthoughton@google.com/
+v3->v4:
+ - massage the uffd_flags_t implementation to eliminate all sparse warnings
+ - add a couple inline helpers to make uffd_flags_t usage easier
+ - drop the refactor passing `struct uffdio_range *` around (previously 4/5)
+ - define a temporary `struct mm_struct *` in function with >=3 `vma->vm_mm`
+ - consistent argument order between `flags` and `pagep`
+ - expand on the use case in patch 4/4 message
 
-Acked-by: Peter Xu <peterx@redhat.com>
-Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
-Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
----
- Documentation/admin-guide/mm/userfaultfd.rst | 8 ++++++++
- fs/userfaultfd.c                             | 8 ++++++--
- include/linux/userfaultfd_k.h                | 3 ++-
- include/uapi/linux/userfaultfd.h             | 7 +++++++
- mm/userfaultfd.c                             | 5 +++--
- tools/testing/selftests/mm/userfaultfd.c     | 4 ++++
- 6 files changed, 30 insertions(+), 5 deletions(-)
+v2->v3:
+ - rebase onto 6.3-rc1
+ - typedef a new type for mfill flags in patch 3/5 (suggested by Nadav)
 
-diff --git a/Documentation/admin-guide/mm/userfaultfd.rst b/Documentation/admin-guide/mm/userfaultfd.rst
-index 7dc823b56ca4..0ce400f8da93 100644
---- a/Documentation/admin-guide/mm/userfaultfd.rst
-+++ b/Documentation/admin-guide/mm/userfaultfd.rst
-@@ -219,6 +219,14 @@ former will have ``UFFD_PAGEFAULT_FLAG_WP`` set, the latter
- you still need to supply a page when ``UFFDIO_REGISTER_MODE_MISSING`` was
- used.
- 
-+When using ``UFFDIO_REGISTER_MODE_WP`` in combination with either
-+``UFFDIO_REGISTER_MODE_MISSING`` or ``UFFDIO_REGISTER_MODE_MINOR``, when
-+resolving missing / minor faults with ``UFFDIO_COPY`` or ``UFFDIO_CONTINUE``
-+respectively, it may be desirable for the new page / mapping to be
-+write-protected (so future writes will also result in a WP fault). These ioctls
-+support a mode flag (``UFFDIO_COPY_MODE_WP`` or ``UFFDIO_CONTINUE_MODE_WP``
-+respectively) to configure the mapping this way.
-+
- QEMU/KVM
- ========
- 
-diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-index 56e54e50414e..664019381e04 100644
---- a/fs/userfaultfd.c
-+++ b/fs/userfaultfd.c
-@@ -1878,6 +1878,7 @@ static int userfaultfd_continue(struct userfaultfd_ctx *ctx, unsigned long arg)
- 	struct uffdio_continue uffdio_continue;
- 	struct uffdio_continue __user *user_uffdio_continue;
- 	struct userfaultfd_wake_range range;
-+	uffd_flags_t flags = 0;
- 
- 	user_uffdio_continue = (struct uffdio_continue __user *)arg;
- 
-@@ -1902,13 +1903,16 @@ static int userfaultfd_continue(struct userfaultfd_ctx *ctx, unsigned long arg)
- 	    uffdio_continue.range.start) {
- 		goto out;
- 	}
--	if (uffdio_continue.mode & ~UFFDIO_CONTINUE_MODE_DONTWAKE)
-+	if (uffdio_continue.mode & ~(UFFDIO_CONTINUE_MODE_DONTWAKE |
-+				     UFFDIO_CONTINUE_MODE_WP))
- 		goto out;
-+	if (uffdio_continue.mode & UFFDIO_CONTINUE_MODE_WP)
-+		flags |= MFILL_ATOMIC_WP;
- 
- 	if (mmget_not_zero(ctx->mm)) {
- 		ret = mfill_atomic_continue(ctx->mm, uffdio_continue.range.start,
- 					    uffdio_continue.range.len,
--					    &ctx->mmap_changing);
-+					    &ctx->mmap_changing, flags);
- 		mmput(ctx->mm);
- 	} else {
- 		return -ESRCH;
-diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
-index a948d92154f5..fd6d7d80b6ea 100644
---- a/include/linux/userfaultfd_k.h
-+++ b/include/linux/userfaultfd_k.h
-@@ -83,7 +83,8 @@ extern ssize_t mfill_atomic_zeropage(struct mm_struct *dst_mm,
- 				     unsigned long len,
- 				     atomic_t *mmap_changing);
- extern ssize_t mfill_atomic_continue(struct mm_struct *dst_mm, unsigned long dst_start,
--				     unsigned long len, atomic_t *mmap_changing);
-+				     unsigned long len, atomic_t *mmap_changing,
-+				     uffd_flags_t flags);
- extern int mwriteprotect_range(struct mm_struct *dst_mm,
- 			       unsigned long start, unsigned long len,
- 			       bool enable_wp, atomic_t *mmap_changing);
-diff --git a/include/uapi/linux/userfaultfd.h b/include/uapi/linux/userfaultfd.h
-index 005e5e306266..14059a0861bf 100644
---- a/include/uapi/linux/userfaultfd.h
-+++ b/include/uapi/linux/userfaultfd.h
-@@ -297,6 +297,13 @@ struct uffdio_writeprotect {
- struct uffdio_continue {
- 	struct uffdio_range range;
- #define UFFDIO_CONTINUE_MODE_DONTWAKE		((__u64)1<<0)
-+	/*
-+	 * UFFDIO_CONTINUE_MODE_WP will map the page write protected on
-+	 * the fly.  UFFDIO_CONTINUE_MODE_WP is available only if the
-+	 * write protected ioctl is implemented for the range
-+	 * according to the uffdio_register.ioctls.
-+	 */
-+#define UFFDIO_CONTINUE_MODE_WP			((__u64)1<<1)
- 	__u64 mode;
- 
- 	/*
-diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-index 9202c1fc79ba..048beb5d0edd 100644
---- a/mm/userfaultfd.c
-+++ b/mm/userfaultfd.c
-@@ -693,10 +693,11 @@ ssize_t mfill_atomic_zeropage(struct mm_struct *dst_mm, unsigned long start,
- }
- 
- ssize_t mfill_atomic_continue(struct mm_struct *dst_mm, unsigned long start,
--			      unsigned long len, atomic_t *mmap_changing)
-+			      unsigned long len, atomic_t *mmap_changing,
-+			      uffd_flags_t flags)
- {
- 	return mfill_atomic(dst_mm, start, 0, len, mmap_changing,
--			    uffd_flags_set_mode(0, MFILL_ATOMIC_CONTINUE));
-+			    uffd_flags_set_mode(flags, MFILL_ATOMIC_CONTINUE));
- }
- 
- long uffd_wp_range(struct vm_area_struct *dst_vma,
-diff --git a/tools/testing/selftests/mm/userfaultfd.c b/tools/testing/selftests/mm/userfaultfd.c
-index 7f22844ed704..41c1f9abc481 100644
---- a/tools/testing/selftests/mm/userfaultfd.c
-+++ b/tools/testing/selftests/mm/userfaultfd.c
-@@ -585,6 +585,8 @@ static void continue_range(int ufd, __u64 start, __u64 len)
- 	req.range.start = start;
- 	req.range.len = len;
- 	req.mode = 0;
-+	if (test_uffdio_wp)
-+		req.mode |= UFFDIO_CONTINUE_MODE_WP;
- 
- 	if (ioctl(ufd, UFFDIO_CONTINUE, &req))
- 		err("UFFDIO_CONTINUE failed for address 0x%" PRIx64,
-@@ -1332,6 +1334,8 @@ static int userfaultfd_minor_test(void)
- 	uffdio_register.range.start = (unsigned long)area_dst_alias;
- 	uffdio_register.range.len = nr_pages * page_size;
- 	uffdio_register.mode = UFFDIO_REGISTER_MODE_MINOR;
-+	if (test_uffdio_wp)
-+		uffdio_register.mode |= UFFDIO_REGISTER_MODE_WP;
- 	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register))
- 		err("register failure");
- 
--- 
+v1->v2:
+ - refactor before adding the new flag, to avoid perpetuating messiness
+
+Axel Rasmussen (4):
+  mm: userfaultfd: rename functions for clarity + consistency
+  mm: userfaultfd: don't pass around both mm and vma
+  mm: userfaultfd: combine 'mode' and 'wp_copy' arguments
+  mm: userfaultfd: add UFFDIO_CONTINUE_MODE_WP to install WP PTEs
+
+ Documentation/admin-guide/mm/userfaultfd.rst |   8 +
+ fs/userfaultfd.c                             |  29 ++--
+ include/linux/hugetlb.h                      |  27 ++-
+ include/linux/shmem_fs.h                     |   9 +-
+ include/linux/userfaultfd_k.h                |  69 +++++---
+ include/uapi/linux/userfaultfd.h             |   7 +
+ mm/hugetlb.c                                 |  28 +--
+ mm/shmem.c                                   |  14 +-
+ mm/userfaultfd.c                             | 170 +++++++++----------
+ tools/testing/selftests/mm/userfaultfd.c     |   4 +
+ 10 files changed, 196 insertions(+), 169 deletions(-)
+
+--
 2.40.0.rc1.284.g88254d51c5-goog
 
