@@ -2,37 +2,37 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89BDAC76196
-	for <linux-kselftest@archiver.kernel.org>; Wed, 15 Mar 2023 18:38:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B34FC761AF
+	for <linux-kselftest@archiver.kernel.org>; Wed, 15 Mar 2023 18:38:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232504AbjCOSiO (ORCPT
+        id S232535AbjCOSiP (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 15 Mar 2023 14:38:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55892 "EHLO
+        Wed, 15 Mar 2023 14:38:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231773AbjCOSiJ (ORCPT
+        with ESMTP id S232332AbjCOSiM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Mar 2023 14:38:09 -0400
+        Wed, 15 Mar 2023 14:38:12 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B139BA58;
-        Wed, 15 Mar 2023 11:37:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFE9265103;
+        Wed, 15 Mar 2023 11:37:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C529D61E3C;
-        Wed, 15 Mar 2023 18:37:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC07BC433AA;
-        Wed, 15 Mar 2023 18:37:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 036B361E47;
+        Wed, 15 Mar 2023 18:37:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CED0C4339B;
+        Wed, 15 Mar 2023 18:37:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678905457;
-        bh=+IVvkQrzSA4hm1JV3KHEDzwagCuncHGxrIZJFvXhdgw=;
+        s=k20201202; t=1678905453;
+        bh=OhTnxlFMN+kdsVZGN8Un8ZAPR2Heza4JgO3N/EMGkoo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sMxDonUQqA6TI49xCL1QMkaCrG3vR/KwE7uNeC5xVmj009k50w8zzmXGT1N3WvosY
-         BWxFHsJ/6in114u5xYmtxdPzysDKTwhgQCokBaReGLo57r9cEbv2BIvly9M84EmU3c
-         gfTNYOr2t+IxfnjE3DnAsxKRNMLde5hzdyDVuOaMXYw68bqeuf3o+zgk/Qy9IfxQvr
-         43/bU1i6g3ROF7IVv/Ao20vGwLBM0jax0pbKfhnoFDxtBqFsLBmTgoGnq1Wl9fXpjr
-         cM75aVLWe90GbS2MZI7Fvf8O+oQ0eH1w8Bv1x5Z1wwl6hpzGfBZjC5nxlT83QTo8vb
-         NiMPiM85ZR2nw==
+        b=gxNfxVdXub33nw5zhTD7YYGcoA9rRsrmRAnDK7NvfCyWC9g3KRRZ/r1qPP46O+QWc
+         imcM2n4aOORt6CQvsgyrwem9q4/TwaCF7+ewT2qFyPYP/qKsattbIIC39mBhHbwGdO
+         q4KHMnW1PfG8T1Dr9NQ0EKWQTS8AgEv2byVvFnLtkdULZtoZoh2Y/sSmxtk5EjkrwJ
+         eGp5p8JXs5IeNpiqN54S+4Y+sVmgtdCsVXfXQAdMfc1/8zZ/2x1sR75kimhAsavg5t
+         uzXGKv1JJNmVCoilDSASo/qFvvgaeiV0m+qV+Y+ua+WK2ajw5GrZ0PiePwB0vx1R8w
+         i1HhlzGlgp+WA==
 From:   Stephen Boyd <sboyd@kernel.org>
 To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>
@@ -48,9 +48,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         devicetree@vger.kernel.org, linux-kselftest@vger.kernel.org,
         kunit-dev@googlegroups.com, Maxime Ripard <maxime@cerno.tech>
-Subject: [PATCH v2 10/11] dt-bindings: clk: Add KUnit clk_parent_data test
-Date:   Wed, 15 Mar 2023 11:37:27 -0700
-Message-Id: <20230315183729.2376178-11-sboyd@kernel.org>
+Subject: [PATCH v2 05/11] of: Add a KUnit test for overlays and test managed APIs
+Date:   Wed, 15 Mar 2023 11:37:22 -0700
+Message-Id: <20230315183729.2376178-6-sboyd@kernel.org>
 X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
 In-Reply-To: <20230315183729.2376178-1-sboyd@kernel.org>
 References: <20230315183729.2376178-1-sboyd@kernel.org>
@@ -60,73 +60,195 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Describe a binding for a device that provides and consumes clks in DT so
-that a KUnit test can register clks based on the device node and test
-clk_hw_register() with clk_parent_data.
+Test the KUnit test managed overlay APIs. Confirm that platform devices
+are created and destroyed properly. This provides us confidence that the
+test managed work correctly and can be relied upon to provide tests with
+fake platform devices and device nodes via overlays compiled into the
+kernel image.
 
 Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>
-Cc: David Gow <davidgow@google.com>
+Cc: Frank Rowand <frowand.list@gmail.com>
 Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 ---
- .../clock/test,clk-kunit-parent-data.yaml     | 47 +++++++++++++++++++
- 1 file changed, 47 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/clock/test,clk-kunit-parent-data.yaml
+ drivers/of/.kunitconfig            |   2 +
+ drivers/of/Kconfig                 |  10 +++
+ drivers/of/Makefile                |   1 +
+ drivers/of/kunit_overlay_test.dtso |   9 +++
+ drivers/of/overlay_test.c          | 107 +++++++++++++++++++++++++++++
+ 5 files changed, 129 insertions(+)
+ create mode 100644 drivers/of/kunit_overlay_test.dtso
+ create mode 100644 drivers/of/overlay_test.c
 
-diff --git a/Documentation/devicetree/bindings/clock/test,clk-kunit-parent-data.yaml b/Documentation/devicetree/bindings/clock/test,clk-kunit-parent-data.yaml
+diff --git a/drivers/of/.kunitconfig b/drivers/of/.kunitconfig
+index 5a8fee11978c..7d570cb922a1 100644
+--- a/drivers/of/.kunitconfig
++++ b/drivers/of/.kunitconfig
+@@ -1,3 +1,5 @@
+ CONFIG_KUNIT=y
+ CONFIG_OF=y
+ CONFIG_OF_KUNIT_TEST=y
++CONFIG_OF_OVERLAY=y
++CONFIG_OF_OVERLAY_KUNIT_TEST=y
+diff --git a/drivers/of/Kconfig b/drivers/of/Kconfig
+index f6739b9560c5..736029c120ae 100644
+--- a/drivers/of/Kconfig
++++ b/drivers/of/Kconfig
+@@ -112,6 +112,16 @@ config OF_OVERLAY
+ 	  While this option is selected automatically when needed, you can
+ 	  enable it manually to improve device tree unit test coverage.
+ 
++config OF_OVERLAY_KUNIT_TEST
++	tristate "Device Tree overlay KUnit tests" if !KUNIT_ALL_TESTS
++	depends on OF_OVERLAY
++	depends on KUNIT
++	default KUNIT_ALL_TESTS
++	help
++	  This option builds KUnit unit tests for the device tree overlay code.
++
++	  If unsure, say N here, but this option is safe to enable.
++
+ config OF_NUMA
+ 	bool
+ 
+diff --git a/drivers/of/Makefile b/drivers/of/Makefile
+index d1110358fd45..b49351c4d0d2 100644
+--- a/drivers/of/Makefile
++++ b/drivers/of/Makefile
+@@ -24,5 +24,6 @@ obj-$(CONFIG_KUNIT) += of_kunit.o
+ DTC_FLAGS_kunit += -@
+ obj-$(CONFIG_OF_KUNIT) += kunit.dtbo.o
+ obj-$(CONFIG_OF_KUNIT_TEST) += of_test.o
++obj-$(CONFIG_OF_OVERLAY_KUNIT_TEST) += overlay_test.o kunit_overlay_test.dtbo.o
+ 
+ obj-$(CONFIG_OF_UNITTEST) += unittest-data/
+diff --git a/drivers/of/kunit_overlay_test.dtso b/drivers/of/kunit_overlay_test.dtso
 new file mode 100644
-index 000000000000..ece47f05c498
+index 000000000000..6e70e2f8cd90
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/test,clk-kunit-parent-data.yaml
-@@ -0,0 +1,47 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/clock/test,clk-kunit-parent-data.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/drivers/of/kunit_overlay_test.dtso
+@@ -0,0 +1,9 @@
++// SPDX-License-Identifier: GPL-2.0
++/dts-v1/;
++/plugin/;
 +
-+title: KUnit clk provider for clk_parent_data unit tests
++&kunit_bus {
++	test-kunit {
++		compatible = "test,kunit-empty";
++	};
++};
+diff --git a/drivers/of/overlay_test.c b/drivers/of/overlay_test.c
+new file mode 100644
+index 000000000000..1b044ecc2f02
+--- /dev/null
++++ b/drivers/of/overlay_test.c
+@@ -0,0 +1,107 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * KUnit tests for device tree overlays
++ */
++#include <linux/device/bus.h>
++#include <linux/kconfig.h>
++#include <linux/of.h>
++#include <linux/platform_device.h>
 +
-+maintainers:
-+  - Stephen Boyd <sboyd@kernel.org>
++#include <kunit/of.h>
++#include <kunit/test.h>
 +
-+description: |
-+  A clk provider to test the struct clk_parent_data implementation in the Linux
-+  kernel.
++/* Test that of_overlay_apply_kunit() adds a node to the live tree */
++static void of_overlay_apply_kunit_apply(struct kunit *test)
++{
++	struct device_node *np;
 +
-+properties:
-+  compatible:
-+    const: test,clk-kunit-parent-data
++	KUNIT_ASSERT_EQ(test, 0,
++			of_overlay_apply_kunit(test, kunit_overlay_test));
 +
-+  clocks:
-+    items:
-+      - description: Fixed parent
-+      - description: 50 MHz fixed parent
++	np = of_find_node_by_name(NULL, "test-kunit");
++	KUNIT_EXPECT_NOT_ERR_OR_NULL(test, np);
++	of_node_put(np);
++}
 +
-+  clock-names:
-+    items:
-+      - const: parent_fwname
-+      - const: "50"
++static int bus_match_np(struct device *dev, const void *data)
++{
++	const struct device_node *np = data;
 +
-+  "#clock-cells":
-+    const: 1
++	return np == dev->of_node;
++}
 +
-+required:
-+  - compatible
-+  - "#clock-cells"
++/*
++ * Test that of_overlay_apply_kunit() creates platform devices with the
++ * expected device_node
++ */
++static void of_overlay_apply_kunit_platform_device(struct kunit *test)
++{
++	struct device *dev;
++	struct device_node *np;
 +
-+additionalProperties: false
++	KUNIT_ASSERT_EQ(test, 0,
++			of_overlay_apply_kunit(test, kunit_overlay_test));
 +
-+examples:
-+  - |
-+    clock-controller {
-+      compatible = "test,clk-kunit-parent-data";
-+      #clock-cells = <1>;
-+      clocks = <&fixed_parent>, <&fixed_50MHz>;
-+      clock-names = "parent_fwname", "50";
-+    };
-+...
++	np = of_find_node_by_name(NULL, "test-kunit");
++	of_node_put_kunit(test, np);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, np);
++
++	dev = bus_find_device(&platform_bus_type, NULL, np, bus_match_np);
++	KUNIT_EXPECT_NOT_ERR_OR_NULL(test, dev);
++	put_device(dev);
++}
++
++static int of_overlay_bus_match_compatible(struct device *dev, const void *data)
++{
++	return of_device_is_compatible(dev->of_node, data);
++}
++
++/* Test that of_overlay_apply_kunit() cleans up after the test is finished */
++static void of_overlay_apply_kunit_cleanup(struct kunit *test)
++{
++	struct device *dev;
++	struct device_node *np;
++
++	KUNIT_ASSERT_EQ(test, 0,
++			of_overlay_apply_kunit(test, kunit_overlay_test));
++
++	np = of_find_node_by_name(NULL, "test-kunit");
++	of_node_put(np); /* Not derefing 'np' after this */
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, np);
++
++	dev = bus_find_device(&platform_bus_type, NULL, np, bus_match_np);
++	put_device(dev); /* Not derefing 'device' after this */
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, dev);
++
++	/* Remove overlay */
++	kunit_cleanup(test);
++
++	np = of_find_node_by_name(NULL, "test-kunit");
++	KUNIT_EXPECT_PTR_EQ(test, NULL, np);
++	of_node_put(np);
++
++	dev = bus_find_device(&platform_bus_type, NULL, "test,kunit-empty",
++			      of_overlay_bus_match_compatible);
++	KUNIT_EXPECT_PTR_EQ(test, NULL, dev);
++	put_device(dev);
++}
++
++static struct kunit_case of_overlay_apply_kunit_test_cases[] = {
++	KUNIT_CASE(of_overlay_apply_kunit_apply),
++	KUNIT_CASE(of_overlay_apply_kunit_platform_device),
++	KUNIT_CASE(of_overlay_apply_kunit_cleanup),
++	{}
++};
++
++/*
++ * Test suite for test managed device tree overlays.
++ */
++static struct kunit_suite of_overlay_apply_kunit_suite = {
++	.name = "of_overlay_apply_kunit",
++	.test_cases = of_overlay_apply_kunit_test_cases,
++};
++
++kunit_test_suites(
++	&of_overlay_apply_kunit_suite,
++);
++MODULE_LICENSE("GPL");
 -- 
 https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
 https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
