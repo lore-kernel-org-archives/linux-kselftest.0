@@ -2,37 +2,37 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E03AFC74A5B
-	for <linux-kselftest@archiver.kernel.org>; Wed, 15 Mar 2023 18:38:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 89BDAC76196
+	for <linux-kselftest@archiver.kernel.org>; Wed, 15 Mar 2023 18:38:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232297AbjCOSiN (ORCPT
+        id S232504AbjCOSiO (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 15 Mar 2023 14:38:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55856 "EHLO
+        Wed, 15 Mar 2023 14:38:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232285AbjCOSiI (ORCPT
+        with ESMTP id S231773AbjCOSiJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Mar 2023 14:38:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A643C5BCAB;
-        Wed, 15 Mar 2023 11:37:39 -0700 (PDT)
+        Wed, 15 Mar 2023 14:38:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B139BA58;
+        Wed, 15 Mar 2023 11:37:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AEAE3B81ED8;
-        Wed, 15 Mar 2023 18:37:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0908C433AA;
-        Wed, 15 Mar 2023 18:37:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C529D61E3C;
+        Wed, 15 Mar 2023 18:37:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC07BC433AA;
+        Wed, 15 Mar 2023 18:37:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678905452;
-        bh=EFxqrYszB/6SHqjnakwbj0FJzNzPv1cwpyJhojl6Aek=;
+        s=k20201202; t=1678905457;
+        bh=+IVvkQrzSA4hm1JV3KHEDzwagCuncHGxrIZJFvXhdgw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Gjb4q8qL5pVxyZgdeADmQBLan83VvAvrl1wHXV+pdjlukbOvYIBq2tEQrNgTc9bQP
-         raoRfq+fIn8e5HxOhuzG1BDyLqXrn7yLP7HbdjBJYoYMPaKa51UwMzPMaSv0Jstpgr
-         YJ/CmKS9i2EeSsKnK85SlxeqXydiCMKD3jL+8bmtw1e5qfZUZqm0Bzym9OtlmRaUBy
-         /nLgEHykisM7I9FCLX2cbns2tEXANpmdzmXnFjwfelFrjBGg6ONwmS76rbljt/qdSs
-         RZ6GibJVviF19QWdw6MNyjzccYAZWIwXOMDsn0Kh+Fx8VGgMtHUXTAffYa3ydjAGh6
-         D+FCucH8XmKuA==
+        b=sMxDonUQqA6TI49xCL1QMkaCrG3vR/KwE7uNeC5xVmj009k50w8zzmXGT1N3WvosY
+         BWxFHsJ/6in114u5xYmtxdPzysDKTwhgQCokBaReGLo57r9cEbv2BIvly9M84EmU3c
+         gfTNYOr2t+IxfnjE3DnAsxKRNMLde5hzdyDVuOaMXYw68bqeuf3o+zgk/Qy9IfxQvr
+         43/bU1i6g3ROF7IVv/Ao20vGwLBM0jax0pbKfhnoFDxtBqFsLBmTgoGnq1Wl9fXpjr
+         cM75aVLWe90GbS2MZI7Fvf8O+oQ0eH1w8Bv1x5Z1wwl6hpzGfBZjC5nxlT83QTo8vb
+         NiMPiM85ZR2nw==
 From:   Stephen Boyd <sboyd@kernel.org>
 To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>
@@ -48,9 +48,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         devicetree@vger.kernel.org, linux-kselftest@vger.kernel.org,
         kunit-dev@googlegroups.com, Maxime Ripard <maxime@cerno.tech>
-Subject: [PATCH v2 03/11] dt-bindings: vendor-prefixes: Add "test" vendor for KUnit and friends
-Date:   Wed, 15 Mar 2023 11:37:20 -0700
-Message-Id: <20230315183729.2376178-4-sboyd@kernel.org>
+Subject: [PATCH v2 10/11] dt-bindings: clk: Add KUnit clk_parent_data test
+Date:   Wed, 15 Mar 2023 11:37:27 -0700
+Message-Id: <20230315183729.2376178-11-sboyd@kernel.org>
 X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
 In-Reply-To: <20230315183729.2376178-1-sboyd@kernel.org>
 References: <20230315183729.2376178-1-sboyd@kernel.org>
@@ -60,30 +60,73 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add the vendor prefix "test" to reserve a vendor prefix for bindings
-that are purely for testing device tree code. This allows test code to
-write bindings that can be checked by the schema validator.
+Describe a binding for a device that provides and consumes clks in DT so
+that a KUnit test can register clks based on the device node and test
+clk_hw_register() with clk_parent_data.
 
 Cc: Rob Herring <robh+dt@kernel.org>
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>
+Cc: David Gow <davidgow@google.com>
 Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 ---
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ .../clock/test,clk-kunit-parent-data.yaml     | 47 +++++++++++++++++++
+ 1 file changed, 47 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/test,clk-kunit-parent-data.yaml
 
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index ed64e06ecca4..e50a78ec7344 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -1331,6 +1331,8 @@ patternProperties:
-     description: Terasic Inc.
-   "^tesla,.*":
-     description: Tesla, Inc.
-+  "^test,.*":
-+    description: Reserved for use by tests. For example, KUnit.
-   "^tfc,.*":
-     description: Three Five Corp
-   "^thead,.*":
+diff --git a/Documentation/devicetree/bindings/clock/test,clk-kunit-parent-data.yaml b/Documentation/devicetree/bindings/clock/test,clk-kunit-parent-data.yaml
+new file mode 100644
+index 000000000000..ece47f05c498
+--- /dev/null
++++ b/Documentation/devicetree/bindings/clock/test,clk-kunit-parent-data.yaml
+@@ -0,0 +1,47 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/clock/test,clk-kunit-parent-data.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: KUnit clk provider for clk_parent_data unit tests
++
++maintainers:
++  - Stephen Boyd <sboyd@kernel.org>
++
++description: |
++  A clk provider to test the struct clk_parent_data implementation in the Linux
++  kernel.
++
++properties:
++  compatible:
++    const: test,clk-kunit-parent-data
++
++  clocks:
++    items:
++      - description: Fixed parent
++      - description: 50 MHz fixed parent
++
++  clock-names:
++    items:
++      - const: parent_fwname
++      - const: "50"
++
++  "#clock-cells":
++    const: 1
++
++required:
++  - compatible
++  - "#clock-cells"
++
++additionalProperties: false
++
++examples:
++  - |
++    clock-controller {
++      compatible = "test,clk-kunit-parent-data";
++      #clock-cells = <1>;
++      clocks = <&fixed_parent>, <&fixed_50MHz>;
++      clock-names = "parent_fwname", "50";
++    };
++...
 -- 
 https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
 https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
