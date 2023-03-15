@@ -2,142 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39364C61DA4
-	for <linux-kselftest@archiver.kernel.org>; Wed, 15 Mar 2023 10:07:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B038C61DA4
+	for <linux-kselftest@archiver.kernel.org>; Wed, 15 Mar 2023 12:53:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230451AbjCOKHa (ORCPT
+        id S233116AbjCOMxy (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 15 Mar 2023 06:07:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36742 "EHLO
+        Wed, 15 Mar 2023 08:53:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232017AbjCOKHO (ORCPT
+        with ESMTP id S233112AbjCOMxw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Mar 2023 06:07:14 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D552941F;
-        Wed, 15 Mar 2023 03:06:39 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Wed, 15 Mar 2023 08:53:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AEFB95441;
+        Wed, 15 Mar 2023 05:53:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 6E6512199E;
-        Wed, 15 Mar 2023 10:06:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1678874780; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=auNt55LvkWQ3/5jHUnJWSmBV3O1aurOSCvt2OfSASXw=;
-        b=EWusQoZrHm4R+Z8gOwf+VWiGLfTg/YPBBz4ukCor9snEInG4fAo11/bMdFC5EFIdKhzZ0Q
-        htin41SUiyeWwMG+mevKr1YFOTOb489CJxVl4D+YgVVzz03EGv+stcJD7fwwWXLjvNl6HV
-        VJ2dt74dBXEM23dSMQs4clS7lCkjrS4=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 39D4E13A2F;
-        Wed, 15 Mar 2023 10:06:20 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id b20pDZyYEWRdPgAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Wed, 15 Mar 2023 10:06:20 +0000
-Date:   Wed, 15 Mar 2023 11:06:18 +0100
-From:   Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH 2/5] cgroup/cpuset: Include offline CPUs when tasks'
- cpumasks in top_cpuset are updated
-Message-ID: <20230315100618.6cypp4l3vjpg2p7r@blackpad>
-References: <20230306200849.376804-1-longman@redhat.com>
- <20230306200849.376804-3-longman@redhat.com>
- <20230314173411.fqaxoa2tfifnj6i3@blackpad>
- <957bd5c2-1bae-de95-f119-483ef64dab60@redhat.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0B33AB81DF4;
+        Wed, 15 Mar 2023 12:53:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7799C433D2;
+        Wed, 15 Mar 2023 12:53:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678884815;
+        bh=73YQjdWBQ7W+f1WTCO1fpecJQkpb+JY7Fg21petFwTM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VtfzCLi+N05uMJ+YAB5G3kk5X3kxSCSkY4mPoYpyahE2ZFPIHIX2nMF4ECQZ/XVSw
+         CDCEmggVKj6b9a5Q4ZpikbxfrMgpuDOe2weeOqdkb7UwRHNC6JMmZwSRmsKt1tqnmq
+         cRAi8oetJn7F5TUwM5skyJUFSSZukvXeJdELQD42mkk17JZAhORKYWhIc5/fdPpLJf
+         uO0QU//JVCfvvf0Wb05vtlAU1KZZz9JL1bPRW7wN21uf1PlkDRFc+l+2nTuF9KQHST
+         YWfH4JPKFfgpRV+bAajeo3oMfETA8bdKeAm38lQa+poREA/eFWXxoHTpJBB/RnzOWR
+         hDP4i8LNXMAgQ==
+Date:   Wed, 15 Mar 2023 12:53:29 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     kernelci@groups.io, rmoar@google.com
+Cc:     "Bird, Tim" <Tim.Bird@sony.com>,
+        "frowand.list@gmail.com" <frowand.list@gmail.com>,
+        "davidgow@google.com" <davidgow@google.com>,
+        "skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "brendanhiggins@google.com" <brendanhiggins@google.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "guillaume.tucker@collabora.com" <guillaume.tucker@collabora.com>,
+        "dlatypov@google.com" <dlatypov@google.com>,
+        "kunit-dev@googlegroups.com" <kunit-dev@googlegroups.com>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [KTAP V2 PATCH] ktap_v2: add skip test result
+Message-ID: <4568b302-2a5a-4499-b2f7-12f89c031495@sirena.org.uk>
+References: <20230310222002.3633162-1-rmoar@google.com>
+ <BYAPR13MB2503C590A2AE6FEF6BCAC529FDBB9@BYAPR13MB2503.namprd13.prod.outlook.com>
+ <CA+GJov5O6hGdjYMXjRd34MEZuyBuukyJCOsS=HeO30h43eLQbQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="yqt7k42xoiztgvzs"
+        protocol="application/pgp-signature"; boundary="U7vq7nqwbMFIlUmg"
 Content-Disposition: inline
-In-Reply-To: <957bd5c2-1bae-de95-f119-483ef64dab60@redhat.com>
+In-Reply-To: <CA+GJov5O6hGdjYMXjRd34MEZuyBuukyJCOsS=HeO30h43eLQbQ@mail.gmail.com>
+X-Cookie: "Speed is subsittute fo accurancy."
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
---yqt7k42xoiztgvzs
-Content-Type: text/plain; charset=utf-8
+--U7vq7nqwbMFIlUmg
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 14, 2023 at 03:02:53PM -0400, Waiman Long <longman@redhat.com> =
-wrote:
-> > > +			cpumask_andnot(new_cpus, possible_mask, cs->subparts_cpus);
-> > > +		} else {
-> > > +			cpumask_and(new_cpus, cs->effective_cpus, possible_mask);
-> > > +		}
-> > I'm wrapping my head around this slightly.
-> > 1) I'd suggest swapping args in of cpumask_and() to have possible_mask
-> >     consistently first.
-> I don't quite understand what you meant by "swapping args". It is effecti=
-ve
-> new_cpus =3D cs->effective_cpus =E2=88=A9 possible_mask. What is the poin=
-t of swapping
-> cs->effective_cpus and possible_mask.
+On Tue, Mar 14, 2023 at 06:03:59PM -0400, Rae Moar via groups.io wrote:
 
-No effect except better readability (possible_mask comes first in the
-other branch above too, left hand arg as the "base" that's modified).
+> One thing to note on the created churn: I have noticed a proportion of
+> kselftests currently implement skipped tests in a way that does not
+> use the SKIP directive. They use a comment of the format "# [SKIP]"
+> prior to a test result line with no SKIP directive. Thus, in order to
+> reach KTAP compliance the way skip tests are handled would need to be
+> changed in these cases anyways.
 
+This is the documented way of reporting a skip in KTAP:
 
-> > 2) Then I'm wondering whether two branches are truly different when
-> >     effective_cpus :=3D cpus_allowed - subparts_cpus
-> >     top_cpuset.cpus_allowed =3D=3D possible_mask        (1)
-> effective_cpus may not be equal "cpus_allowed - subparts_cpus" if some of
-> the CPUs are offline as effective_cpus contains only online CPUs.
-> subparts_cpu can include offline cpus too. That is why I choose that
-> expression. I will add a comment to clarify that.
+   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/dev-tools/ktap.rst#n97
 
-I see now that it returns offlined cpus to top cpuset's tasks.
+TBH I'm finding it really hard to summon much enthusiasm for changing
+this except as part of some other incompatible update - the current
+format isn't ideal but deploying a change would be a bunch of hassle for
+the existing test automation systems.
 
-> >=20
-> > IOW, can you see a difference in what affinities are set to eligible
-> > top_cpuset tasks before and after this patch upon CPU hotplug?
-> > (Hm, (1) holds only in v2. So is this a fix for v1 only?)
->=20
-> This is due to the fact that cpu hotplug code currently doesn't update the
-> cpu affinity of tasks in the top cpuset. Tasks not in the top cpuset can
-> rely on the hotplug code to update the cpu affinity appropriately.
-
-Oh, I mistook this for hotplug changing behavior but it's actually for
-updating top_cpuset when its children becomes a partition root.
-
-	IIUC, top cpuset + hotplug has been treated specially because
-	hotplug must have taken care of affinity regardless of cpuset.
-	v1 allowed modification of top cpuset's mask (not sure if that
-	worked), v2 won't allow direct top cpuset's mask modificiation
-	but indirectly via partition root children.
-
-So this is a continuation for 3fb906e7fabb ("cgroup/cpuset: Don't filter
-offline CPUs in cpuset_cpus_allowed() for top cpuset tasks") to ensure
-hotplug offline/online cycle won't overwrite top_cpuset tasks'
-affinities (when partition change during offlined period).
-This looks correct in this regard then.
-(I wish it were simpler but that's for a different/broader top
-cpuset+hotplug approach.)
-
-Thanks,
-Michal
-
---yqt7k42xoiztgvzs
+--U7vq7nqwbMFIlUmg
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCZBGYmAAKCRAkDQmsBEOq
-uaWcAQDsTN8vvkQ0WHz1vK9CcBuE+hz0udNCFVljCdlcN7YaoQD/ReBCP2l0Ow8V
-Ka835fpnfysSJql4yq+mHpTDP+XMJAk=
-=JvSg
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQRv8gACgkQJNaLcl1U
+h9BmFQf/Q1nCvItoW2dwIKw8OMB17PPv988cXqqaciRnl2GNIvXW1BEgAZ02WipH
+iUO+5wSKsyyoZWEwRewPEdbrRjCuXyXRUDFkBJ7kmaqwMrJqLTV9Ittf7LsNbAt3
+eekzRFG1+ksmERKtJtVnKQ047Ed49o6/vYJmt3URAvLKZ3jRrPVMgFrANuQG6Zw2
+J3hjbS/EumCa0GwzP2/gFbwAWyZQUbwYlFXDeBH7ckZyr5PZULj76CiBtxmbj/dG
+VE2i4aQPhWDa8rPpjJFQnPtTCCddE6AIh4f8JUhxLmd86Kx2f710G7b7OYeqFcLD
+uHh7g8vAalv15HB5imHnxf8Gzu9C5w==
+=nDd6
 -----END PGP SIGNATURE-----
 
---yqt7k42xoiztgvzs--
+--U7vq7nqwbMFIlUmg--
