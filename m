@@ -2,150 +2,147 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97FB2C7618A
-	for <linux-kselftest@archiver.kernel.org>; Thu, 16 Mar 2023 20:28:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98BFFC6FD1F
+	for <linux-kselftest@archiver.kernel.org>; Thu, 16 Mar 2023 21:03:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbjCPU2z (ORCPT
+        id S229543AbjCPVD1 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 16 Mar 2023 16:28:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33790 "EHLO
+        Thu, 16 Mar 2023 17:03:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbjCPU2y (ORCPT
+        with ESMTP id S229542AbjCPVD0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Mar 2023 16:28:54 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B13F20555;
-        Thu, 16 Mar 2023 13:28:53 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id DE37B60501;
-        Thu, 16 Mar 2023 21:28:49 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1678998529; bh=ahEFVVhdg+LtRwVQf0dgtf/npUuwtlKdwtIwDCR5Vk4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=piIgxmLo2kvU5rj8gYAND6x2kY5XGbtyqGmDHTM5GtgNw+x8raHemruZDKJzDIOnW
-         UEBThEyq7YGgz2KDYVD54xzkga6jCsOW1+bfJkFIMzAyjQ0kxuJSeKppU3YP49/QfZ
-         S32juUZbrGfPcbsoz/94G9l4eayG+Nt5ckqPr0AqPDheytq/P/GlfT5AFQF1oiLCDN
-         PlsvIXML8gcLEK6bPxHJjs/tmumvD5yTKCAojzpNUYC4imZNCykbLLzJRyZxNse3hN
-         oC3cQeZLt+98jWxdyiKgn0TnOafGbaBrGvCRiru8z64jvXdNPTqa4b8Zwkkwgo7lsz
-         u/Pex60FJShWA==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id vZz56q_HW_Mx; Thu, 16 Mar 2023 21:28:47 +0100 (CET)
-Received: from [192.168.1.4] (unknown [77.237.109.125])
-        by domac.alu.hr (Postfix) with ESMTPSA id 1FAC1604FE;
-        Thu, 16 Mar 2023 21:28:47 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1678998527; bh=ahEFVVhdg+LtRwVQf0dgtf/npUuwtlKdwtIwDCR5Vk4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Vh2RaTiy/ONE5mWyhcOgcEwqN0X0ftYO4JO192uRSIufRzw+Fv0BQlezVh/Iv0r+7
-         noEbpJCdfiwPELB8dCoOY5Z/v6mdiZO42/pzKLYeEL8KgoqWoqXU/jgvyREkEp6gel
-         AYwfz2nVT2N8pncqG6LFpkNfU1N3l+09gj3VnsOYVVKcy44r5Ym04hsoqV18wFZIBf
-         Jq7Xi19lQiQBcixslRY5NevCyryC1jjJeW/w5WuR9o1u1GCpQ6QwLsk1t4I5+GT2e1
-         mRm2am6qT6e2VZH7cM7UvwgADUVUnPVsWKkQq83JZ9tx3vtGiTfPajBbzkQaV0XF4s
-         N1LA/ijV2SJuA==
-Message-ID: <5260feaa-1b0d-b398-b648-b10263145751@alu.unizg.hr>
-Date:   Thu, 16 Mar 2023 21:28:46 +0100
+        Thu, 16 Mar 2023 17:03:26 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B2FBC17F
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Mar 2023 14:03:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=n1kN+k7LI7KLIVcbZMyo20mGw3CkM+7K/Z2zv0lcJ3U=;
+        t=1679000604; x=1680210204; b=TYThEI1XxdKbMEVD3TjOlrwQdUe4QQq75N1Ol6EsuX6egWf
+        2G2vSj/R6qznW5pAkygHIZRb1uJe4v/G4wctzYn7h7jLDsYb8wWrxxsf8dKl3MQU6bWRA9Z/EFjY4
+        ijD04TPxEyf75791fyfB8r6jdOJgaz2xRFzmudu6zy4JcKrkZXS/KgIUK3IjPtTYO9fWl/eFnQuhY
+        xCXe+sVbAhAck7qkPMY3WOY2esCGozkoFL6D1ioH4mEiWhL9OMW5vM4Cgrgy/GxU61e9NJGaJq4OE
+        zBotbiyGgvqrM6blPoJ1UUQ0P5Si1aV1oQnXffANylqH3y3H0sl3dyu74Jo1pLJA==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.96)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1pcuks-005NAr-0e;
+        Thu, 16 Mar 2023 22:03:22 +0100
+Message-ID: <e4d5d03d37335e7e9ceb0333749a7fac1545f7e6.camel@sipsolutions.net>
+Subject: Re: [PATCH] kunit: tool: fix type annotation for IO
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Date:   Thu, 16 Mar 2023 22:03:21 +0100
+In-Reply-To: <CAGS_qxoEOW+FN33czFOhJ7xgPeKjGsj=BMc4iF-aP53TfyiyEQ@mail.gmail.com>
+References: <20230315105055.9b2be0153625.I7a2cb99b95dff216c0feed4604255275e0b156a7@changeid>
+         <CAGS_qxrJ53EyQaf5WqfSBYhOF0+LvWgvKL4gExu9vCPxRb7ipw@mail.gmail.com>
+         <e028d27b3e998eaba2d71b6e224eb707015f8edf.camel@sipsolutions.net>
+         <CAGS_qxpYEnzWM=nPXDAbebuQERN4ijb0FKFbtmX5hK9qwVn12A@mail.gmail.com>
+         <9a172b50457f4074af41fe1dc8e55dcaf4795d7e.camel@sipsolutions.net>
+         <CAGS_qxoEOW+FN33czFOhJ7xgPeKjGsj=BMc4iF-aP53TfyiyEQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: BUG: selftest/net/tun: Hang in unregister_netdevice
-To:     Eric Dumazet <edumazet@google.com>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, shuah@kernel.org
-References: <910f9616-fdcc-51bd-786d-8ecc9f4b5179@alu.unizg.hr>
- <20230315205639.38461-1-kuniyu@amazon.com>
- <CANn89iJDRG_CFWUz1GOSEi4YagCynZ-zhjq4POjbpyjkv9aawg@mail.gmail.com>
-Content-Language: en-US, hr
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <CANn89iJDRG_CFWUz1GOSEi4YagCynZ-zhjq4POjbpyjkv9aawg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-malware-bazaar: not-scanned
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 15. 03. 2023. 21:59, Eric Dumazet wrote:
-> On Wed, Mar 15, 2023 at 1:57 PM Kuniyuki Iwashima <kuniyu@amazon.com> wrote:
->>
->> However, we don't assume the delay and also the failure in
->> tun_set_real_num_queues().
->>
->> In this case, we have to re-initialise the queues without
->> touching kobjects.
->>
->> Eric,
->> Are you working on this?
->> If not, let me try fixing this :)
-> 
-> I am not working on this, please go ahead, thanks !
+On Thu, 2023-03-16 at 10:58 -0700, Daniel Latypov wrote:
+> Yikes.
+> I either forgot or never knew about --strict, thanks for pointing it out.
+>=20
+> Looking into it, I don't think it's worth using for kunit.py, details bel=
+ow.
 
-Hi,
+Oh, no argument, whatever works for you. I don't really even remember
+why I/we settled on mypy vs. pytypes, I don't remember really doing any
+comparison.
 
-It's me again. I just have new findings.
+I do find the whole type-checking, if occasionally a bit painful, to be
+of benefit though, at least for larger code bases (and by larger I think
+I probably would say "more than a single file that you can keep in your
+head entirely" :-)
 
-[root@pc-mtodorov linux_torvalds]# grep -E '(KOBJECT|TRACKER)' /boot/config-6.3.0-rc2-00006-gfc89d7fb499b 
-CONFIG_REF_TRACKER=y
-CONFIG_NET_DEV_REFCNT_TRACKER=y
-CONFIG_NET_NS_REFCNT_TRACKER=y
-CONFIG_DEBUG_KOBJECT=y
-# CONFIG_DEBUG_KOBJECT_RELEASE is not set
-# CONFIG_SAMPLE_KOBJECT is not set
-# CONFIG_TEST_REF_TRACKER is not set
-[root@pc-mtodorov linux_torvalds]# uname -rms
-Linux 6.3.0-rc2-00006-gfc89d7fb499b x86_64
-[root@pc-mtodorov linux_torvalds]# grep -E '(KOBJECT|TRACKER)' /boot/config-6.3.0-rc2-00006-gfc89d7fb499b 
-CONFIG_REF_TRACKER=y
-CONFIG_NET_DEV_REFCNT_TRACKER=y
-CONFIG_NET_NS_REFCNT_TRACKER=y
-CONFIG_DEBUG_KOBJECT=y
-# CONFIG_DEBUG_KOBJECT_RELEASE is not set
-# CONFIG_SAMPLE_KOBJECT is not set
-# CONFIG_TEST_REF_TRACKER is not set
-[root@pc-mtodorov linux_torvalds]# tools/testing/selftests/net/tun
-TAP version 13
-1..5
-# Starting 5 tests from 1 test cases.
-#  RUN           tun.delete_detach_close ...
-#            OK  tun.delete_detach_close
-ok 1 tun.delete_detach_close
-#  RUN           tun.detach_delete_close ...
-#            OK  tun.detach_delete_close
-ok 2 tun.detach_delete_close
-#  RUN           tun.detach_close_delete ...
-#            OK  tun.detach_close_delete
-ok 3 tun.detach_close_delete
-#  RUN           tun.reattach_delete_close ...
-#            OK  tun.reattach_delete_close
-ok 4 tun.reattach_delete_close
-#  RUN           tun.reattach_close_delete ...
-#            OK  tun.reattach_close_delete
-ok 5 tun.reattach_close_delete
-# PASSED: 5 / 5 tests passed.
-# Totals: pass:5 fail:0 xfail:0 xpass:0 skip:0 error:0
-[root@pc-mtodorov linux_torvalds]# 
+> Hmm, the untyped stuff is not too important since we also use pytype,
+> which is a lot smarter in that it infers types where not specified.
 
-My interpretation if you allow it is that the bug search can be narrowed to the code
-that depends on CONFIG_DEBUG_KOBJECT_RELEASE=y.
+Hmm, mypy normally does a bunch of inference too, but yeah might be less
+smart here, or maybe --strict just insists on more precision.
 
-Best regards,
-Mirsad
+> The other two though warrant some attention
+> * attr-defined: we don't care about this. We have a directive to
+> squash this "error" for pytype. Ugh, do we need another one for
+> pytype?
+
+You mean mypy? I guess yes, you'd need "# type: ignore". But funnily, I
+think both tools will insist that you place the comment on the same line
+as the error, and that doesn't really work since you can only have one
+comment on that line :-) However, it looks like pytype would also accept
+"# type: ignore" according to the docs.
 
 
-CONFIG_DEBUG_KOBJECT=y alone doesn't seem to be sufficient to trigger the reference leak.
+> * assignment: not actually a real error, it points to our type
+> annotations being a bit sloppy
 
-Hope this helps narrow down the search.
+Not sure what you meant by this, but maybe I just don't see it with my
+version of mypy.
 
--- 
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
- 
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
-The European Union
+>   tools/testing/kunit/kunit.py:459: error: Incompatible types in
+> assignment (expression has type "List[str]", variable has type
+> "TextIO")  [assignment]
+>=20
+> So it doesn't like that we assign a list[str] or a IO[str] to `kunit_outp=
+ut`.
+> But we're passing it in as Iterable[str], which both work as.
+>=20
+> Even explicitly annotating it as an Iterable[str] doesn't make it happy [=
+1].
+> I'll ignore this, then.
 
+I think you got that annotation wrong, at least as far as mypy is
+concerned?
+
+>                 sys.stdin.reconfigure(errors=3D'backslashreplace')  #pyty=
+pe: disable=3Dattribute-error
+> -               kunit_output =3D sys.stdin
+> +               kunit_output =3D sys.stdin  # type[Iterable[str]]
+
+Doing
+
+ kunit_output: Iterable[str] =3D sys.stdin
+
+actually fixes it for me, and you don't even need the second one:
+
+>         else:
+>                 with open(cli_args.file, 'r', errors=3D'backslashreplace'=
+) as f:
+> -                       kunit_output =3D f.read().splitlines()
+> +                       kunit_output =3D f.read().splitlines()  #type[Ite=
+rable[str]]
+>=20
+
+which I think is because it assigned the type as Iterable[str] after the
+first one, and then was happy since splitlines() is Iterable[str] after
+all. So maybe pytypes is smarter about finding the best common type.
+
+
+
+Anyway ... I don't really care so much. I just noticed this, and had it
+been any more complex I'd probably have gone and just ignored kunit from
+my project.
+
+Oh, another unrelated thing: it kind of bothered me that even with
+kunit_parser.py you automatically get some output on stdout, it felt
+like kunit_parser.py was or should be more of a library, but in the end
+I don't really care so much since I needed to write a JSON file for our
+internal system and could just suppress the stdout entirely :)
+
+johannes
