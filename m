@@ -2,313 +2,141 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3235C7619A
-	for <linux-kselftest@archiver.kernel.org>; Fri, 17 Mar 2023 03:15:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0174FC74A5B
+	for <linux-kselftest@archiver.kernel.org>; Fri, 17 Mar 2023 04:02:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229934AbjCQDP0 (ORCPT
+        id S229680AbjCQECY (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 16 Mar 2023 23:15:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38152 "EHLO
+        Fri, 17 Mar 2023 00:02:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjCQDOJ (ORCPT
+        with ESMTP id S229607AbjCQECW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Mar 2023 23:14:09 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA851CAEF;
-        Thu, 16 Mar 2023 20:13:56 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id i24so4358126qtm.6;
-        Thu, 16 Mar 2023 20:13:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679022835;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:feedback-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=0IIu5Yi5LuAls+pJ/ShpvT4cQhYjefLMDzlyAtUzY2M=;
-        b=m+zgzFjXwbdVq8oriwEEmqgtBN1LLiRL+9JjmhytNN0SF3YFVo2Vi8LlvYHglF50VM
-         e2yN/UshjMiKk0Or3cWkHnHYvpWJuHSzPSozs71pP+QjiRkIAX5kxnKEpVhx1aUTcAQg
-         OzOox798eW7VxQdIP313YmzIhXSWFfMrf639rrvvj2AINdeENb899UYdJAoZYtGWV0dg
-         3hKoIouUO6YjafexNiisB6pdUbhjas6qu7NOk59J9+AzhbuNbR03+U+Ylp368aMWBDk5
-         DtALnRnFDEdijM30ef1G3R5QF1O11V4QXQlwLn9JOb9TgJ5Liq20bqD9Gl9uea/j1A9P
-         AKpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679022835;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:feedback-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0IIu5Yi5LuAls+pJ/ShpvT4cQhYjefLMDzlyAtUzY2M=;
-        b=zdfB+IgA7eXAGsTJSTAcqIEnIBcm3jBGKMt8LaJVelyx7T5R4XxSRJjim6qQ0TxANP
-         70JtDMIPXqV09YGuEJCKLxuvU6CkUqZBp2z3kggA74YoItkLT63sv8TtW2yJtKMfdBjd
-         5ng0P372z6oD1JX9j5slf2yDBgNiZjd6Hde7Sfef64CMonnztXcb21Cu73A/E0TkCQEB
-         ACqLvVc3AzG2zMFHSnCVACxdrGIwQHyGLy78TXesfbLT5w+tdUkYDExCB+VitSqwk89/
-         dcxAgifgkHWToee3qXMbP1ZDdXqNIchI01+5kiEbsQIaPCLjS6o2GgTy3vzSTO5jjgRd
-         Lekg==
-X-Gm-Message-State: AO0yUKVV6CHARZQSLxxUDowN64NLd5bytAuMzcF7vIDlyyaTqnCJqoMJ
-        cbGueXFxbgEoK47LwxhoZ+U=
-X-Google-Smtp-Source: AK7set/bz+3OIzw1dnNbFrUKZvoDlrzcBSmpVgyEfWc4/E6RcfAUuT7Uvnwt9sz6dLhl52Q8mqt/HQ==
-X-Received: by 2002:ac8:594f:0:b0:3b9:bc8c:c1fa with SMTP id 15-20020ac8594f000000b003b9bc8cc1famr3055942qtz.5.1679022835153;
-        Thu, 16 Mar 2023 20:13:55 -0700 (PDT)
-Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id p11-20020a05620a22ab00b0074357fa9e15sm829282qkh.42.2023.03.16.20.13.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 20:13:54 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 345CE27C0054;
-        Thu, 16 Mar 2023 23:13:54 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Thu, 16 Mar 2023 23:13:54 -0400
-X-ME-Sender: <xms:8toTZB7jZCXZwj36DNFrvw6gePT6M4GoLUIejUCzWn6CrXdiEF7Uaw>
-    <xme:8toTZO7DnztCuv-a5FiT7cUhOQJTQJk7gmC6KyfX6M1vhqD5DeL6QOOXCougUwbO-
-    mIY4qXtM3hlODb_jQ>
-X-ME-Received: <xmr:8toTZIeY1uemKKbna27jzNQpFDK0cCpgk8mTC8G3rZy_IG_BgciwceOGEoM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdefuddgheejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepuehoqhhu
-    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
-    htthgvrhhnpeegleejiedthedvheeggfejveefjeejkefgveffieeujefhueeigfegueeh
-    geeggfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
-    gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
-    igmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:8toTZKKnv3aIxfp68Xdg-5h-wDt12DNYe4nPPd-5l_1ZVNWMwSyRLA>
-    <xmx:8toTZFKw0QGRaghQbYSZisz9OlaB7iYIfBUaowTs6sHlTktTE-d0YA>
-    <xmx:8toTZDxbMFMyHtnriPcdRy7VWXVHNRctcxkfu4vn8RRqVVE094Bx2g>
-    <xmx:8toTZNL76-OaaLhoDSgloZeKJ0vBbByYYODswkcPGqjdNWKnoXI0Sg>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 16 Mar 2023 23:13:53 -0400 (EDT)
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     rcu@vger.kernel.org
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Shuah Khan <shuah@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        seanjc@google.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH rcu 5/7] rcutorture: Add SRCU deadlock scenarios
-Date:   Thu, 16 Mar 2023 20:13:37 -0700
-Message-Id: <20230317031339.10277-6-boqun.feng@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230317031339.10277-1-boqun.feng@gmail.com>
-References: <20230317031339.10277-1-boqun.feng@gmail.com>
+        Fri, 17 Mar 2023 00:02:22 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2080.outbound.protection.outlook.com [40.107.93.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A6A837B64;
+        Thu, 16 Mar 2023 21:02:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oIvWfsh+H+v5RAO4Q+p0uzarkImwch8b85g1b5CKli6tQqh68kUoy0ICW7Cx6OlD18rFMWPM6tQSDChRmjvR4hnYqwvf+AZ0C4OULcxfX6kpdHcy3jHJm5rleJOMSko+0+yJ4wg2eUCFyYeg0CJiY+wo1D+jjumy0rR5gsYgzwliId2Sit7kQ959ZDxfAjGAg7Yq1gnkVBt/bobqjfIAmFR58KluU6zLanguEWZrEG+6g6XPkx6P/5Ko47lyf+7AtJulHP8/xomIwLfUN7W83ne+l7dTqWCMbsQ3H67iINleUFH1i5aGYMFaVoQBHMsGTLpW98LtDdHFO2tprGvlSQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PKvx0kGn1ZCmtDU7tLF24u0S88w74lvM7wQ+loXc66I=;
+ b=ZR88gsX85TdxXTVgqMxU+pGciQlo2n0FuBsOwSvajb2ToKAE6/DxzZYdDVppsZ5fop/QMwS9J8HAiajKMhX6drIaa4begaT8DdX53huumn2KEqPYqVWEYVg8xZhpH9efCqzy1n2f+VnaunpXm962SNv/DI1icqYc+sxlYenUGeArS4+NycAzMOASrSCI5wQUsKhcp6fVnEIFGvuPGeW58qG+rPshxk8lMYqNW5PbR4VmEEqu74ewDIFnkY9Fj1vSh7Vlju+Vn9KoOttYRImTL8w1ahuwHtNpb0wWD1bDblAV5UWBP+0ZQCsOD1MOGFcqqKZlv+Ar/FTSfsg+yb8atQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.233) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PKvx0kGn1ZCmtDU7tLF24u0S88w74lvM7wQ+loXc66I=;
+ b=Fh5LpEJqvqRk24qykiWKjOWf4MtacSIRgiQn/cNna9mu3mMEr5rcpC50rl0Dh/whzNAUNtoED1Jpz2HWOCQS1LAGpa0CCs8E/IdWBxNchLjjMAqDCf3Oa3iPJygz/bwNTefifeqHjrPkLTgHDQkkmlLPPxEVtO8WQfBRPpKaQPtXyblnHRCK1+zMgi8xe8KNuOR+ePlRCzauIDQED0xR3YLl4rTa3WXBr8EJ123Q680bpmwfoUOUZxbYMcpN8D87B3yIWDOMMrXcTO5PzQciq/q9sDe2Az9U3i2oKaMS9p9dxIK9s3dscJ2MmQCw4ybGgOp8T6QYelaUM0rYisrLCw==
+Received: from BN9PR03CA0570.namprd03.prod.outlook.com (2603:10b6:408:138::35)
+ by CY5PR12MB6155.namprd12.prod.outlook.com (2603:10b6:930:25::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.33; Fri, 17 Mar
+ 2023 04:02:18 +0000
+Received: from BN8NAM11FT088.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:138:cafe::4c) by BN9PR03CA0570.outlook.office365.com
+ (2603:10b6:408:138::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.33 via Frontend
+ Transport; Fri, 17 Mar 2023 04:02:18 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.233) by
+ BN8NAM11FT088.mail.protection.outlook.com (10.13.177.81) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6199.18 via Frontend Transport; Fri, 17 Mar 2023 04:02:17 +0000
+Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
+ (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Thu, 16 Mar 2023
+ 21:02:06 -0700
+Received: from drhqmail203.nvidia.com (10.126.190.182) by
+ drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.37; Thu, 16 Mar 2023 21:02:06 -0700
+Received: from Asurada-Nvidia (10.127.8.9) by mail.nvidia.com (10.126.190.182)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5 via Frontend
+ Transport; Thu, 16 Mar 2023 21:02:06 -0700
+Date:   Thu, 16 Mar 2023 21:02:04 -0700
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>
+CC:     "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Liu, Yi L" <yi.l.liu@intel.com>
+Subject: Re: [PATCH 12/14] iommufd: Add IOMMU_HWPT_ALLOC
+Message-ID: <ZBPmPODkv72aDQ4R@Asurada-Nvidia>
+References: <0-v1-7612f88c19f5+2f21-iommufd_alloc_jgg@nvidia.com>
+ <12-v1-7612f88c19f5+2f21-iommufd_alloc_jgg@nvidia.com>
+ <BN9PR11MB5276AD6D42FA8FEFE3B69C878CBD9@BN9PR11MB5276.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <BN9PR11MB5276AD6D42FA8FEFE3B69C878CBD9@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT088:EE_|CY5PR12MB6155:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8b3d45c9-7480-4d53-4011-08db269c6663
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: s+ewrtHVJC3vrHbdsVf/XNtrILaK2Jq37rZCaJereNP/eXSg3VslZez6wsXPda0jQfC5zfNx1+AdzL6xUqR1Kp2SPjlAoXFbE5pGAmhQDzgORWAZQ7luVH44VWKkKXY/L/wl5/4cHdXWpv0QAObtLeJuBF1igc5NXxd2cj5CEozJ+RvS5IYqPK19qx6fTZBxCLFP0YehfSs+M00dutKMF14RYBCr7gsXgkX4sj45xljvGlC8rTIf1qc5sNDfMdF9ENNap440llIJPnBtYtBw3p7ryDmtXd6pkQQmyyuNS+Tz6sa9t/6LENxDcdxK/vRjEK0CgVBZRM16XRNKCQFILinrj+JsrIGTY4PczUiFpr5PvmA98BNUwXUeuFacbeqygyZqu2spNPT7ymscC6kU0JI+P6Bfd24py3apIqN17yeVpW2mJ2LsQxTSlwIVphPUP0e/Qv+sr1N+AApZlNx1eXLgyfjb5wm+dPTwFO4braCQ4b0nRg7wU/eCGxhg2CeHInXPf0IwKlR8seZViP8yozUUNJU3IjpZt5kupndZ32YvIcN6+2LtJZY+NvHJHYMFkU1fh7gM3GU0u5GzEea0DSqnrn6veihWgRT2OVQC0mgxz5C3izSuinl4Liyugs1BL8I3V46J3Khqzsf/0TQL9G8vHnt89TLJihEjY+Gu4Y0tTf44KSfC3QWXolsbLt8tXBX3/QfjE0ne5OpIcez5hCLwXObqm0igNcl0tM9XUrK+eqm9lFCZnPWqVdnen0Q+
+X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(136003)(346002)(376002)(396003)(39860400002)(451199018)(36840700001)(40470700004)(46966006)(40460700003)(356005)(41300700001)(426003)(4326008)(8676002)(70206006)(47076005)(70586007)(8936002)(186003)(5660300002)(26005)(54906003)(110136005)(336012)(316002)(478600001)(40480700001)(55016003)(9686003)(33716001)(82740400003)(2906002)(36860700001)(7636003)(86362001)(82310400005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2023 04:02:17.5560
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8b3d45c9-7480-4d53-4011-08db269c6663
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT088.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6155
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: "Paul E. McKenney" <paulmck@kernel.org>
+On Fri, Mar 17, 2023 at 03:02:26AM +0000, Tian, Kevin wrote:
 
-In order to test the new SRCU-lockdep functionality, this commit adds
-an rcutorture.test_srcu_lockdep module parameter that, when non-zero,
-selects an SRCU deadlock scenario to execute.  This parameter is a
-five-digit number formatted as DNNL, where "D" is 1 to force a deadlock
-and 0 to avoid doing so; "NN" is the test number, 0 for SRCU-based, 1
-for SRCU/mutex-based, and 2 for SRCU/rwsem-based; and "L" is the number
-of steps in the deadlock cycle.
+> > +/**
+> > + * struct iommu_hwpt_alloc - ioctl(IOMMU_HWPT_ALLOC)
+> > + * @size: sizeof(struct iommu_hwpt_alloc)
+> > + * @flags: Must be 0
+> > + * @dev_id: The device to allocate this HWPT for
+> > + * @pt_id: The IOAS to connect this HWPT to
+> > + * @out_hwpt_id: The ID of the new HWPT
+> > + * @__reserved: Must be 0
+> > + *
+> > + * Explicitly allocate a hardware page table object. This is the same object
+> > + * type that is returned by iommufd_device_attach() and represents the
+> > + * underlying iommu driver's iommu_domain kernel object.
+> > + *
+> > + * A normal HWPT will be created with the mappings from the given IOAS.
+> > + */
+> 
+> 'normal' is a confusing word in this context.
 
-Note that rcutorture.test_srcu_lockdep=1 will also force a hard hang.
+Yea, Eric was asking about a related question in another thread,
+because he couldn't get this part. I think we could replace this
+"normal" with just "kernel-managed", so eventually it would look
+like the following narrative after adding user_data and nesting:
 
-If a non-zero value of rcutorture.test_srcu_lockdep does not select a
-deadlock scenario, a console message is printed and testing continues.
+ * A kernel-managed HWPT will be created with the mappings from the given IOAS.
+ * The @data_type for its allocation can be set to IOMMU_HWPT_TYPE_DEFAULT, or
+ * another type (being listed below) to customize the allocation.
+ *
+ * A user-managed HWPT will be created from a given parent HWPT via @pt_id, in
+ * which the parent HWPT must be allocated previously via the same ioctl from a
+ * given IOAS. The @data_type must not be set to IOMMU_HWPT_TYPE_DEFAULT but a
+ * pre-defined type corresponding to the underlying IOMMU hardware.
 
-[ paulmck: Apply kernel test robot feedback, add rwsem support. ]
-[ paulmck: Apply Dan Carpenter feedback. ]
-
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
----
- kernel/rcu/rcutorture.c | 151 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 151 insertions(+)
-
-diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
-index 8e6c023212cb..80ff9a743d31 100644
---- a/kernel/rcu/rcutorture.c
-+++ b/kernel/rcu/rcutorture.c
-@@ -120,6 +120,7 @@ torture_param(int, test_boost, 1, "Test RCU prio boost: 0=no, 1=maybe, 2=yes.");
- torture_param(int, test_boost_duration, 4, "Duration of each boost test, seconds.");
- torture_param(int, test_boost_interval, 7, "Interval between boost tests, seconds.");
- torture_param(bool, test_no_idle_hz, true, "Test support for tickless idle CPUs");
-+torture_param(int, test_srcu_lockdep, 0, "Test specified SRCU deadlock scenario.");
- torture_param(int, verbose, 1, "Enable verbose debugging printk()s");
- 
- static char *torture_type = "rcu";
-@@ -3463,6 +3464,154 @@ static void rcutorture_sync(void)
- 		cur_ops->sync();
- }
- 
-+static DEFINE_MUTEX(mut0);
-+static DEFINE_MUTEX(mut1);
-+static DEFINE_MUTEX(mut2);
-+static DEFINE_MUTEX(mut3);
-+static DEFINE_MUTEX(mut4);
-+static DEFINE_MUTEX(mut5);
-+static DEFINE_MUTEX(mut6);
-+static DEFINE_MUTEX(mut7);
-+static DEFINE_MUTEX(mut8);
-+static DEFINE_MUTEX(mut9);
-+
-+static DECLARE_RWSEM(rwsem0);
-+static DECLARE_RWSEM(rwsem1);
-+static DECLARE_RWSEM(rwsem2);
-+static DECLARE_RWSEM(rwsem3);
-+static DECLARE_RWSEM(rwsem4);
-+static DECLARE_RWSEM(rwsem5);
-+static DECLARE_RWSEM(rwsem6);
-+static DECLARE_RWSEM(rwsem7);
-+static DECLARE_RWSEM(rwsem8);
-+static DECLARE_RWSEM(rwsem9);
-+
-+DEFINE_STATIC_SRCU(srcu0);
-+DEFINE_STATIC_SRCU(srcu1);
-+DEFINE_STATIC_SRCU(srcu2);
-+DEFINE_STATIC_SRCU(srcu3);
-+DEFINE_STATIC_SRCU(srcu4);
-+DEFINE_STATIC_SRCU(srcu5);
-+DEFINE_STATIC_SRCU(srcu6);
-+DEFINE_STATIC_SRCU(srcu7);
-+DEFINE_STATIC_SRCU(srcu8);
-+DEFINE_STATIC_SRCU(srcu9);
-+
-+static int srcu_lockdep_next(const char *f, const char *fl, const char *fs, const char *fu, int i,
-+			     int cyclelen, int deadlock)
-+{
-+	int j = i + 1;
-+
-+	if (j >= cyclelen)
-+		j = deadlock ? 0 : -1;
-+	if (j >= 0)
-+		pr_info("%s: %s(%d), %s(%d), %s(%d)\n", f, fl, i, fs, j, fu, i);
-+	else
-+		pr_info("%s: %s(%d), %s(%d)\n", f, fl, i, fu, i);
-+	return j;
-+}
-+
-+// Test lockdep on SRCU-based deadlock scenarios.
-+static void rcu_torture_init_srcu_lockdep(void)
-+{
-+	int cyclelen;
-+	int deadlock;
-+	bool err = false;
-+	int i;
-+	int j;
-+	int idx;
-+	struct mutex *muts[] = { &mut0, &mut1, &mut2, &mut3, &mut4,
-+				 &mut5, &mut6, &mut7, &mut8, &mut9 };
-+	struct rw_semaphore *rwsems[] = { &rwsem0, &rwsem1, &rwsem2, &rwsem3, &rwsem4,
-+					  &rwsem5, &rwsem6, &rwsem7, &rwsem8, &rwsem9 };
-+	struct srcu_struct *srcus[] = { &srcu0, &srcu1, &srcu2, &srcu3, &srcu4,
-+					&srcu5, &srcu6, &srcu7, &srcu8, &srcu9 };
-+	int testtype;
-+
-+	if (!test_srcu_lockdep)
-+		return;
-+
-+	deadlock = test_srcu_lockdep / 1000;
-+	testtype = (test_srcu_lockdep / 10) % 100;
-+	cyclelen = test_srcu_lockdep % 10;
-+	WARN_ON_ONCE(ARRAY_SIZE(muts) != ARRAY_SIZE(srcus));
-+	if (WARN_ONCE(deadlock != !!deadlock,
-+		      "%s: test_srcu_lockdep=%d and deadlock digit %d must be zero or one.\n",
-+		      __func__, test_srcu_lockdep, deadlock))
-+		err = true;
-+	if (WARN_ONCE(cyclelen <= 0,
-+		      "%s: test_srcu_lockdep=%d and cycle-length digit %d must be greater than zero.\n",
-+		      __func__, test_srcu_lockdep, cyclelen))
-+		err = true;
-+	if (err)
-+		goto err_out;
-+
-+	if (testtype == 0) {
-+		pr_info("%s: test_srcu_lockdep = %05d: SRCU %d-way %sdeadlock.\n",
-+			__func__, test_srcu_lockdep, cyclelen, deadlock ? "" : "non-");
-+		if (deadlock && cyclelen == 1)
-+			pr_info("%s: Expect hang.\n", __func__);
-+		for (i = 0; i < cyclelen; i++) {
-+			j = srcu_lockdep_next(__func__, "srcu_read_lock", "synchronize_srcu",
-+					      "srcu_read_unlock", i, cyclelen, deadlock);
-+			idx = srcu_read_lock(srcus[i]);
-+			if (j >= 0)
-+				synchronize_srcu(srcus[j]);
-+			srcu_read_unlock(srcus[i], idx);
-+		}
-+		return;
-+	}
-+
-+	if (testtype == 1) {
-+		pr_info("%s: test_srcu_lockdep = %05d: SRCU/mutex %d-way %sdeadlock.\n",
-+			__func__, test_srcu_lockdep, cyclelen, deadlock ? "" : "non-");
-+		for (i = 0; i < cyclelen; i++) {
-+			pr_info("%s: srcu_read_lock(%d), mutex_lock(%d), mutex_unlock(%d), srcu_read_unlock(%d)\n",
-+				__func__, i, i, i, i);
-+			idx = srcu_read_lock(srcus[i]);
-+			mutex_lock(muts[i]);
-+			mutex_unlock(muts[i]);
-+			srcu_read_unlock(srcus[i], idx);
-+
-+			j = srcu_lockdep_next(__func__, "mutex_lock", "synchronize_srcu",
-+					      "mutex_unlock", i, cyclelen, deadlock);
-+			mutex_lock(muts[i]);
-+			if (j >= 0)
-+				synchronize_srcu(srcus[j]);
-+			mutex_unlock(muts[i]);
-+		}
-+		return;
-+	}
-+
-+	if (testtype == 2) {
-+		pr_info("%s: test_srcu_lockdep = %05d: SRCU/rwsem %d-way %sdeadlock.\n",
-+			__func__, test_srcu_lockdep, cyclelen, deadlock ? "" : "non-");
-+		for (i = 0; i < cyclelen; i++) {
-+			pr_info("%s: srcu_read_lock(%d), down_read(%d), up_read(%d), srcu_read_unlock(%d)\n",
-+				__func__, i, i, i, i);
-+			idx = srcu_read_lock(srcus[i]);
-+			down_read(rwsems[i]);
-+			up_read(rwsems[i]);
-+			srcu_read_unlock(srcus[i], idx);
-+
-+			j = srcu_lockdep_next(__func__, "down_write", "synchronize_srcu",
-+					      "up_write", i, cyclelen, deadlock);
-+			down_write(rwsems[i]);
-+			if (j >= 0)
-+				synchronize_srcu(srcus[j]);
-+			up_write(rwsems[i]);
-+		}
-+		return;
-+	}
-+
-+err_out:
-+	pr_info("%s: test_srcu_lockdep = %05d does nothing.\n", __func__, test_srcu_lockdep);
-+	pr_info("%s: test_srcu_lockdep = DNNL.\n", __func__);
-+	pr_info("%s: D: Deadlock if nonzero.\n", __func__);
-+	pr_info("%s: NN: Test number, 0=SRCU, 1=SRCU/mutex, 2=SRCU/rwsem.\n", __func__);
-+	pr_info("%s: L: Cycle length.\n", __func__);
-+}
-+
- static int __init
- rcu_torture_init(void)
- {
-@@ -3504,6 +3653,8 @@ rcu_torture_init(void)
- 	if (cur_ops->init)
- 		cur_ops->init();
- 
-+	rcu_torture_init_srcu_lockdep();
-+
- 	if (nreaders >= 0) {
- 		nrealreaders = nreaders;
- 	} else {
--- 
-2.39.2
-
+Thanks
+Nic
