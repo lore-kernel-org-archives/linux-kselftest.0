@@ -2,43 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EECDC6FD1D
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D797CC7618E
 	for <linux-kselftest@archiver.kernel.org>; Fri, 17 Mar 2023 15:16:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231789AbjCQPQv (ORCPT
+        id S231808AbjCQPQv (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Fri, 17 Mar 2023 11:16:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44152 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbjCQPQl (ORCPT
+        with ESMTP id S230273AbjCQPQm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Mar 2023 11:16:41 -0400
+        Fri, 17 Mar 2023 11:16:42 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3074831BD0
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Mar 2023 08:15:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AABBF4D626
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Mar 2023 08:15:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
         s=mimecast20190719; t=1679066135;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XQ/fbLiMTxYvcy4Xv+isuWXHLsrugKjziame8MLcKpQ=;
-        b=EE30zdnXa4imFeCY54+AIDEPKPIha2s7E5PtIY15p+72PIByifqRo3MABdXSU24TnYaUQn
-        TalxLnA3JDX/f0jtecWlpS4lyu2wDjuod1C/DsvuuDYH2wgTv1q2vH1ZQLhImxe6PFfHQa
-        COR871feI6Bp+G77WCymWdt20CfL2UQ=
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=q7V46Q52rkSh11P7uwpvJlomEOhaWhBzxdnEpXedVNs=;
+        b=Obe8WIAeMyZ+uyXIXL5lNqKdAyznM23sampzKQ8IBvKPKqUGbgjEnE+DQlUlM8slU95ZZx
+        Xi7ZpzGGVMMwWWe3jsDBpfSuWSVwfwIdnKZgkUDuY6CLWCU0LnH8uUnCv5UC1V71NVioP1
+        mWDfQUvzegRxiTwHFk7bxVtFUF/yqd0=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-345-60e1ciYHONuf3FhLRFxLKQ-1; Fri, 17 Mar 2023 11:15:32 -0400
-X-MC-Unique: 60e1ciYHONuf3FhLRFxLKQ-1
+ us-mta-657-W1yAmKFMMy2wcEDHNLbwnw-1; Fri, 17 Mar 2023 11:15:30 -0400
+X-MC-Unique: W1yAmKFMMy2wcEDHNLbwnw-1
 Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9816C29AA2DD;
-        Fri, 17 Mar 2023 15:15:31 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7683C29AA2E3;
+        Fri, 17 Mar 2023 15:15:29 +0000 (UTC)
 Received: from llong.com (unknown [10.22.10.238])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 20780492B00;
-        Fri, 17 Mar 2023 15:15:31 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id BBEE7492B00;
+        Fri, 17 Mar 2023 15:15:28 +0000 (UTC)
 From:   Waiman Long <longman@redhat.com>
 To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
         Johannes Weiner <hannes@cmpxchg.org>,
@@ -49,114 +48,54 @@ Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
         =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
         Juri Lelli <juri.lelli@redhat.com>,
         Waiman Long <longman@redhat.com>
-Subject: [PATCH v2 4/4] cgroup/cpuset: Minor updates to test_cpuset_prs.sh
-Date:   Fri, 17 Mar 2023 11:15:08 -0400
-Message-Id: <20230317151508.1225282-5-longman@redhat.com>
-In-Reply-To: <20230317151508.1225282-1-longman@redhat.com>
-References: <20230317151508.1225282-1-longman@redhat.com>
+Subject: [PATCH v2 0/4] cgroup/cpuset: Miscellaneous updates
+Date:   Fri, 17 Mar 2023 11:15:04 -0400
+Message-Id: <20230317151508.1225282-1-longman@redhat.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch makes the following minor updates to the cpuset partition
-testing script test_cpuset_prs.sh.
+ v2:
+  - Add a new patch 1 that fixes a bug introduced by recent v6.2 commit
+    7a2127e66a00 ("cpuset: Call set_cpus_allowed_ptr() with appropriate
+    mask for task").
+  - Make a small twist and additional comment to patch 2 ("cgroup/cpuset:
+    Skip task update if hotplug doesn't affect current cpuset") as
+    suggested by Michal.
+  - Remove v1 patches 3/4 for now for further discussion.
 
- - Remove online_cpus function call as it will be called anyway on exit
-   in cleanup.
- - Make the enabling of sched/verbose debugfs flag conditional on the
-   "-v" verbose option and set DELAY_FACTOR to 2 in this case as cpuset
-   partition operations are likely to be slowed down by enabling that.
+This patch series includes miscellaneous update to the cpuset and its
+testing code.
 
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- .../selftests/cgroup/test_cpuset_prs.sh       | 25 +++++++++++--------
- 1 file changed, 14 insertions(+), 11 deletions(-)
+Patch 1 fixes a bug caused by commit 7a2127e66a00 ("cpuset: Call
+set_cpus_allowed_ptr() with appropriate mask for task") in the partition
+handling code. This fix was verified by running the test_cpuset_prs.sh
+test.
 
-diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-index 75c100de90ff..2b5215cc599f 100755
---- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-+++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-@@ -15,13 +15,6 @@ skip_test() {
- 
- [[ $(id -u) -eq 0 ]] || skip_test "Test must be run as root!"
- 
--# Set sched verbose flag, if available
--if [[ -d /sys/kernel/debug/sched ]]
--then
--	# Used to restore the original setting during cleanup
--	SCHED_DEBUG=$(cat /sys/kernel/debug/sched/verbose)
--	echo Y > /sys/kernel/debug/sched/verbose
--fi
- 
- # Get wait_inotify location
- WAIT_INOTIFY=$(cd $(dirname $0); pwd)/wait_inotify
-@@ -37,10 +30,14 @@ CPUS=$(lscpu | grep "^CPU(s):" | sed -e "s/.*:[[:space:]]*//")
- PROG=$1
- VERBOSE=
- DELAY_FACTOR=1
-+SCHED_DEBUG=
- while [[ "$1" = -* ]]
- do
- 	case "$1" in
- 		-v) VERBOSE=1
-+		    # Enable sched/verbose can slow thing down
-+		    [[ $DELAY_FACTOR -eq 1 ]] &&
-+			DELAY_FACTOR=2
- 		    break
- 		    ;;
- 		-d) DELAY_FACTOR=$2
-@@ -54,6 +51,14 @@ do
- 	shift
- done
- 
-+# Set sched verbose flag if available when "-v" option is specified
-+if [[ -n "$VERBOSE" && -d /sys/kernel/debug/sched ]]
-+then
-+	# Used to restore the original setting during cleanup
-+	SCHED_DEBUG=$(cat /sys/kernel/debug/sched/verbose)
-+	echo Y > /sys/kernel/debug/sched/verbose
-+fi
-+
- cd $CGROUP2
- echo +cpuset > cgroup.subtree_control
- [[ -d test ]] || mkdir test
-@@ -65,7 +70,8 @@ cleanup()
- 	rmdir A1/A2/A3 A1/A2 A1 B1 > /dev/null 2>&1
- 	cd ..
- 	rmdir test > /dev/null 2>&1
--	echo "$SCHED_DEBUG" > /sys/kernel/debug/sched/verbose
-+	[[ -n "$SCHED_DEBUG" ]] &&
-+		echo "$SCHED_DEBUG" > /sys/kernel/debug/sched/verbose
- }
- 
- # Pause in ms
-@@ -571,7 +577,6 @@ run_state_test()
- 			echo "Test $TEST[$I] failed result check!"
- 			eval echo \"\${$TEST[$I]}\"
- 			dump_states
--			online_cpus
- 			exit 1
- 		}
- 
-@@ -582,7 +587,6 @@ run_state_test()
- 				eval echo \"\${$TEST[$I]}\"
- 				echo
- 				dump_states
--				online_cpus
- 				exit 1
- 			}
- 		}
-@@ -594,7 +598,6 @@ run_state_test()
- 				eval echo \"\${$TEST[$I]}\"
- 				echo
- 				dump_states
--				online_cpus
- 				exit 1
- 			}
- 		}
+Patch 2 is for a hotplug optimization.
+
+Patch 3 is actually a follow-up of commit 3fb906e7fabb ("cgroup/cpuset:
+Don't filter offline CPUs in cpuset_cpus_allowed() for top cpuset tasks").
+
+Patch 4 reduces verbosity when running test_cpuset_prs.sh test script
+unless explicitly enabled with the -v option.
+
+Waiman Long (4):
+  cgroup/cpuset: Fix partition root's cpuset.cpus update bug
+  cgroup/cpuset: Skip task update if hotplug doesn't affect current
+    cpuset
+  cgroup/cpuset: Include offline CPUs when tasks' cpumasks in top_cpuset
+    are updated
+  cgroup/cpuset: Minor updates to test_cpuset_prs.sh
+
+ kernel/cgroup/cpuset.c                        | 38 +++++++++++++------
+ .../selftests/cgroup/test_cpuset_prs.sh       | 25 ++++++------
+ 2 files changed, 41 insertions(+), 22 deletions(-)
+
 -- 
 2.31.1
 
