@@ -2,526 +2,174 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 19CF1C6FD1D
-	for <linux-kselftest@archiver.kernel.org>; Fri, 17 Mar 2023 15:33:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 71803C6FD1D
+	for <linux-kselftest@archiver.kernel.org>; Fri, 17 Mar 2023 17:50:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230317AbjCQPdf (ORCPT
+        id S229542AbjCQRuB (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 17 Mar 2023 11:33:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39958 "EHLO
+        Fri, 17 Mar 2023 13:50:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230212AbjCQPde (ORCPT
+        with ESMTP id S229489AbjCQRuA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Mar 2023 11:33:34 -0400
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594C0C3CEB;
-        Fri, 17 Mar 2023 08:33:04 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4PdRkC08qjz9xGYt;
-        Fri, 17 Mar 2023 22:45:07 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwBnOWDafhRkaQemAQ--.41316S6;
-        Fri, 17 Mar 2023 15:54:17 +0100 (CET)
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     corbet@lwn.net, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, dsahern@kernel.org, shuah@kernel.org,
-        brauner@kernel.org
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, ebiederm@xmission.com,
-        mcgrof@kernel.org, Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH 4/5] selftests/umd_mgmt: Add selftests for UMD management library
-Date:   Fri, 17 Mar 2023 15:52:39 +0100
-Message-Id: <20230317145240.363908-5-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230317145240.363908-1-roberto.sassu@huaweicloud.com>
-References: <20230317145240.363908-1-roberto.sassu@huaweicloud.com>
+        Fri, 17 Mar 2023 13:50:00 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0034EDCF5B;
+        Fri, 17 Mar 2023 10:49:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679075399; x=1710611399;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=e7Q2D+fCz0L/qZJRLYQvMztRNqy5DEJq0yUAatN53PM=;
+  b=iyRpuWZ29hxafQwhTUmeAnSLHoCFt2rhUMyBWaYZcvekSuVDhp19GAxs
+   vl1bYpXjKxY+VaF1QSoMieKVl1U7Bn5750d3PuYnJJlkqsUjX0/lQwWHj
+   eQMSoyvA+yUNgqo/DXZReSFoqnfLHvRsnVW/qjPAoNVZBYDQw8HdLudez
+   Qal8myo5xUucbREdFT7qg8BFPuAIbhrbp+oWupJLRJhdgJc0POLl99ZZ4
+   YRCtFhuXvz8WDj27W1O9xNriuuwsBWeCxHvxSzOZKQ8DTuJiC1IJsFxqp
+   G9ryIMtrdTVTGN2e95cA2G25y4aOF5YhrGp9slTT+zp1yKDcOEiLs2cKm
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="337027113"
+X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
+   d="scan'208";a="337027113"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 10:49:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="682762408"
+X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
+   d="scan'208";a="682762408"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmsmga007.fm.intel.com with ESMTP; 17 Mar 2023 10:49:58 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 17 Mar 2023 10:49:58 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Fri, 17 Mar 2023 10:49:58 -0700
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.169)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Fri, 17 Mar 2023 10:49:58 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AtlQY/nU7toQVn2Sn2oRclixhBVF0OzixIs9mJjs3fGUsftmDQnDeOYY5ebtftIvMvTs3mWUY0eX3Jimv74CLMd2Xvw2ubTI1hcqVRfuE+4zEQ4B7/Gowi1bL52S3WBDZEyqJ0vE/CevL9PRijDtgksz/xrfhuiZlffjUm/1a43RC7GNdtGpqXllt/tEk156Ndueo3t4Q8VrnhH6pfN5Rz8QDTn6dHdDPsWTMQTLpF0Bb+um65ChNP5+d8JW3ex8bqvvMvqhK8tUO5ZgitG0SaiTWDHZvOchBzIFwiIQSj3YABgjtdXB6DagB7dNMVjB2yeJaeVXUq/6mT7JuLhUuQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XG8U7+YykeY2I5YtEncJZe/tnQ9I+tT4xeHqhgU5XfY=;
+ b=my8vx3VqwLXdoph7ZiwWud+wdM+s9XBt5a++VZO3xpeHFRDWLS9LCDbzA/ncUOyix1p4qgYUJ87lgqaLbNAZ6ZYxC6AQVmTB13rSg9Wbm4CttZqxrBqhuErd/SDWDwY850HzazsPWh4EZxeir//16EckGCzYphI/Fz8bi1lennF/TROYXANV4rzfKedKLCcM0Wx798rS7Wdgp27VmF6IJGUkDunkHq3frkrSKr1xigVvaqSGJ/zME1mg3Xju36/d0JSMEL5ywVb0oyWHdszs6pr8GVupBgbXr/xIXNVVviJIMZ9mrmLgeSYeMVsnNsWihU7GewnCh7ij0bFD/0rNOA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CY4PR11MB1862.namprd11.prod.outlook.com (2603:10b6:903:124::18)
+ by PH0PR11MB7493.namprd11.prod.outlook.com (2603:10b6:510:284::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.35; Fri, 17 Mar
+ 2023 17:49:56 +0000
+Received: from CY4PR11MB1862.namprd11.prod.outlook.com
+ ([fe80::d651:ac39:526d:604f]) by CY4PR11MB1862.namprd11.prod.outlook.com
+ ([fe80::d651:ac39:526d:604f%12]) with mapi id 15.20.6178.035; Fri, 17 Mar
+ 2023 17:49:56 +0000
+Message-ID: <ef0ff486-afed-5b3b-34af-0b8a7c5ff5b3@intel.com>
+Date:   Fri, 17 Mar 2023 10:49:53 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.8.0
+Subject: Re: [PATCH] selftests/resctrl: Use correct exit code when tests fail
+Content-Language: en-US
+To:     Peter Newman <peternewman@google.com>,
+        Fenghua Yu <fenghua.yu@intel.com>
+CC:     Shuah Khan <shuah@kernel.org>,
+        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
+        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <eranian@google.com>
+References: <20230309145757.2280518-1-peternewman@google.com>
+From:   Reinette Chatre <reinette.chatre@intel.com>
+In-Reply-To: <20230309145757.2280518-1-peternewman@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MW2PR16CA0035.namprd16.prod.outlook.com (2603:10b6:907::48)
+ To CY4PR11MB1862.namprd11.prod.outlook.com (2603:10b6:903:124::18)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwBnOWDafhRkaQemAQ--.41316S6
-X-Coremail-Antispam: 1UD129KBjvAXoWfXr17tr4rXF4UGw1kAFyUAwb_yoW8JFyfuo
-        ZxGrs8Wr409347Aw13Wr4xJrWxW393KF17JF1rW3yrJF9rAayYkryUCw13Zr4Svr4rZa40
-        vF1qva1xJayrXr1kn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-        AaLaJ3UjIYCTnIWjp_UUUOo7kC6x804xWl14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK
-        8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF
-        0E3s1l82xGYIkIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vE
-        j48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxV
-        AFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x02
-        67AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F4
-        0Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC
-        6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxV
-        Aaw2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2Iq
-        xVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r
-        4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY
-        6xkF7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2js
-        IE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIF
-        yTuYvjxUI-eODUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgATBF1jj4asxgAFsN
-X-CFilter-Loop: Reflected
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PR11MB1862:EE_|PH0PR11MB7493:EE_
+X-MS-Office365-Filtering-Correlation-Id: ec97b7dc-abea-4a3b-8ed7-08db271004e7
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: D5vRUKndTCXMk+rLt/EVSJbg6Kt6BtUsgJg01zIRApVqrr0IrmiDQ0/25oeiVtt1IdsFCWBHo2hxcCZDgAn1RZvhWQQBqE+/RwV54kpE5P6mHEe6n1b2DRiv45qakgHCp5QbfgUspojrKb3KbvVOy1OY5gXc27VfSBoAGM8xMm/8H/4JsmsJbKCJVnciMW7svjY2A1To1tX0ZInHIBHDFcxrE6sEQ15rpBTHgDeE+hvrWDEkRsxkRsbEv2nLvsx37YVLjZIwxPCaLfgzAbmARQNPk6R5Isnu7p/6adSk+EzW9APB0aW2Ttp6LC8kvwf/l/xtX6oAFAuwzfPID1KhB1W+NIPcHHpBQ54PaipHdAmDKh9CAOAFaPgSfWwb8OnoMhnWVY27JyvvTFNFIvKGg7R8sut+GHoA/ilzLGMwBEPP4EFwM6ASDnTwjyHVi0iAL2fM38gBe3xZnm3iW1yZKXpkYf++Am1tOioD+ryC1hvuFSTVNCKM8wog7wOAsletBXnZvmRTq6FF62qrjctorqVwTujLPwRc9qx3w/PRq3BKpEPFD9mUUUR3b4aexrS7y1Y3WJKxmYVQ4DgcoQa+Yt9d1f235A+SIRosNDzdjkxWUtyep6M50/LVOWf04+uQ8Ot/ns2nJMOel+2wjLh0FG1SsdR8H4/8+pYiKt7cr2G/z4VNP9fLWW5zq+SMG98VuJZ8swfIX71qnrJLgPe2Bq2FrrvLziPPkEioU8IL7/8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB1862.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(376002)(346002)(136003)(366004)(396003)(451199018)(6512007)(2616005)(86362001)(41300700001)(31696002)(36756003)(6636002)(4744005)(44832011)(8936002)(5660300002)(54906003)(316002)(110136005)(66946007)(478600001)(8676002)(66476007)(66556008)(2906002)(83380400001)(38100700002)(82960400001)(53546011)(6666004)(26005)(6506007)(6486002)(4326008)(186003)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WlpuVmx0QTdwTm5GUllsalo0UGprZ0dsZk1VQkh6Y0ZGSXIvcXF2bUNPdHla?=
+ =?utf-8?B?bms1aFRJOGR0b0ZlYkw5ejkrR3NsWGQwaUpkWFdYSlNLbkpMRVJ2T0I4MTIw?=
+ =?utf-8?B?UE9VOElVekJNT2Y1WUtqNEQ4QjRXUzNKOXh0YVp3R1orV0s5Y2UxaDFOMnNt?=
+ =?utf-8?B?UnNaaEN4ZGxvT2Q2cENJQ2xSdk1xUHdzTUxCb3pVcmpRYisxUkNFVnFvV0hU?=
+ =?utf-8?B?bGxUVEhYNTkwVzBaSm11dU9qYXJRYzFNOTcrMWZ2NDV1TFdZVkhCcTlKK2Rh?=
+ =?utf-8?B?clc2UkpJZEdrZWFXNUpFMzk4MWhXMlZpMlZ2TUUrZFBjcUdrTVRWeUhqMVN5?=
+ =?utf-8?B?ekRtLzZ0L0ZUdFNoOUc3UFM2S3QrVkpyMCtINGk5bXNzVmcvWmtid2h3aFRK?=
+ =?utf-8?B?MitEUE4yaXJodjlrcEVUWG1LMlNkOXJ1RDdjQk5pMFV3Wm00WXI2emxkZ1Rl?=
+ =?utf-8?B?cFkzQUR3TjBVaVRSdVErVkZhRHFaTXo5OFNLSlhtSGJqcVlTVEpOZWxwMFJy?=
+ =?utf-8?B?SW5NREw2SCtwcFB6SHorQmNMSWJSV2J1Y3Qydi8vdUo3eTdaUms4cHBoY3Zo?=
+ =?utf-8?B?TlozVFFlRURYeVA3UzNSaHNsamMyVjBRYjE2bVBpS29pSDhuM0xPU1Z2N3Bz?=
+ =?utf-8?B?Wm9KOW51WlFjakJ5MEE0a2JGcTlIM1F6M3BNMW04eTU4UmxmYzRPakt3anUr?=
+ =?utf-8?B?OVdudUdZaDV0czVUZXYyam5BNGo2VWZzZkdHSWUyOVBnTzUyS1VxU3Z0TStm?=
+ =?utf-8?B?UVB6eUZpUDk3UDR1TjZwQzlYZXpLYjZRaHMvUW14K0hOUEd1L3hWUnk4OVN1?=
+ =?utf-8?B?Vjdoeit4Vm5wZmhhWXg1VnRaQVkzc2VFTTJiOGxjcVJSbDJvdU03SDFzQ2E2?=
+ =?utf-8?B?OTJkS2pVcWt5NVl1K3dCU2pkVDBzRXIwNkpnckZ0dW9tTWlGNmYyR01YdU9K?=
+ =?utf-8?B?MjlHMk5GTjBDNkc5eklycTNaVU4yV3ZnTXhPT3ZGVjdqYXA2Zk9JQjcvN3Nr?=
+ =?utf-8?B?bStXWitZdkhMcTlhaHB2QmVpWnZYS3F4ZTNlMUlaZzBFU3dNUUZITzJMaUht?=
+ =?utf-8?B?T2tHbVdlU0FNcEc0TXc4OTJsbnRGK0g4Ri9DdHZ1aUhPZjBWTUN2U1RxUDJD?=
+ =?utf-8?B?OGo4NmJleUVLcjg3YWxpUjJ1b3RPSGVjQlJQQVZuT3VjZGdITC9rTHJmaXBq?=
+ =?utf-8?B?U3QvY1drYll3ZE9CRHhHZ0lsdUFUT0d6TW1VVTdObFBxV2RPOU9SOUFGTWNl?=
+ =?utf-8?B?dmlRZ1huOUdiakhhdW02ZS9RSFNxMGhxaWF2UVkwZ0xJclBkVlRjU1phTXM5?=
+ =?utf-8?B?bWxOVjJwNjA2TTF1aWE1Ykp6RGRNRTlBR3F2bWJYVWV0RHFOSk5qSEJjUlZK?=
+ =?utf-8?B?VTYxdFNHS0xVZ3ZhUmo1elo5d3g2ZzIxUlNpRVhZbXJFVDRBVEhTUEZjdE45?=
+ =?utf-8?B?Z1BFMTl6ckpCaFZDMDdyOWNVTEE3RjBYV241Zy91RytjYk00cktseStGSVdY?=
+ =?utf-8?B?TFRoUkhhSGtVZUxIbk91L2JPT3F2TkxUelNWdGhtb1RQMXpTbHVJeEpJMUdU?=
+ =?utf-8?B?YVJpV29uWEhoVkovRElHNndabk9BODhhdlBkc0JnU05kL2gxaE1mTkttcUwz?=
+ =?utf-8?B?YjJmTVptYUM3RTVsZVRDRzBYQ0dwYU1MeFNuUlo4NlpBNEEvd1NWajZTcDRF?=
+ =?utf-8?B?MVcwUG1ZTGdqUVRna3V3Y0cxVkdTU0dBb3lUUzR6V3AwUzd6ZGpKSVdrSGV3?=
+ =?utf-8?B?V1hSd0t3TkpNWmYva1Vjc2JiZzRuRm5nODU0Y3hLUmM4OVNLQ0h6T2t6N3N6?=
+ =?utf-8?B?VU1SWi8rUG42dWtabVlSTnNiK1ZlNUFBdGdhZXdjQWRXMnc1cXZSYlhHZUEy?=
+ =?utf-8?B?Y3ZJNjBjUVp3am42S3F0eTIwMUVwZDloanZ1bTNieHdsdFpGTnFrK25uSnk0?=
+ =?utf-8?B?eU5WemN6b3B4S3p2bEsrd09IVlBsTmI1ZnR1NHNMWXl3SEFBOEg3SXJhWWFZ?=
+ =?utf-8?B?YTdLWWExeGxoWUpzSU80a2FUNUpyQksvOVdoaHBSK3kxbW5mU0VtT3Z5Y0F1?=
+ =?utf-8?B?aGYxUUh5WGdVZG16cnovYmJNRDhaLzArR0JJdnR6dS8vejNLYkJnKzlmQ3NZ?=
+ =?utf-8?B?KzJjWXo2K3V0ZXFUMVJQUjJEWEhrWDBnK3NQeGZ2NFByNXF1RHdaQmUwZG5P?=
+ =?utf-8?B?TXc9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: ec97b7dc-abea-4a3b-8ed7-08db271004e7
+X-MS-Exchange-CrossTenant-AuthSource: CY4PR11MB1862.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2023 17:49:56.0957
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: V+axNYpMUgIDuKzZg4QDeWfdMlKoI/3CLd6Ff04syh3dW0Q8lpvBhgKVirClWnTkNduHeV+kNu6BJ/xb2U+c2Nu+Xe4BuAkGyX6SLdqkXfY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB7493
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+Hi Peter,
 
-Introduce a simple UMD driver using the management library, for testing
-purposes.
+On 3/9/2023 6:57 AM, Peter Newman wrote:
+> Use ksft_finished() after running tests so that resctrl_tests doesn't
+> return exit code 0 when tests fail.
+> 
+> Consequently, report the MBA and MBM tests as skipped when running on
+> non-Intel hardware, otherwise resctrl_tests will exit with a failure
+> code.
+> 
+> Signed-off-by: Peter Newman <peternewman@google.com>
+> ---
 
-UMD Manager: sample_mgr.c
-UMD Loader: sample_loader.c
-UMD Handler: sample_handler.c
+Thank you very much.
 
-The UMD Manager exposes /sys/kernel/security/sample_umd and accepts an
-offset between 0-128K. It invokes the UMD Loader to start the UMD Handler
-and passes to the latter the offset at which it sets the byte of the
-response buffer to 1. The UMD Manager verifies that and returns the number
-of bytes written on success, a negative value on failure.
+Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- MAINTAINERS                                   |   1 +
- tools/testing/selftests/Makefile              |   1 +
- tools/testing/selftests/umd_mgmt/.gitignore   |   1 +
- tools/testing/selftests/umd_mgmt/Makefile     |  14 ++
- tools/testing/selftests/umd_mgmt/config       |   1 +
- .../selftests/umd_mgmt/sample_umd/Makefile    |  22 ++++
- .../selftests/umd_mgmt/sample_umd/msgfmt.h    |  13 ++
- .../umd_mgmt/sample_umd/sample_binary_blob.S  |   7 +
- .../umd_mgmt/sample_umd/sample_handler.c      |  81 ++++++++++++
- .../umd_mgmt/sample_umd/sample_loader.c       |  28 ++++
- .../umd_mgmt/sample_umd/sample_mgr.c          | 124 ++++++++++++++++++
- tools/testing/selftests/umd_mgmt/umd_mgmt.sh  |  40 ++++++
- 12 files changed, 333 insertions(+)
- create mode 100644 tools/testing/selftests/umd_mgmt/.gitignore
- create mode 100644 tools/testing/selftests/umd_mgmt/Makefile
- create mode 100644 tools/testing/selftests/umd_mgmt/config
- create mode 100644 tools/testing/selftests/umd_mgmt/sample_umd/Makefile
- create mode 100644 tools/testing/selftests/umd_mgmt/sample_umd/msgfmt.h
- create mode 100644 tools/testing/selftests/umd_mgmt/sample_umd/sample_binary_blob.S
- create mode 100644 tools/testing/selftests/umd_mgmt/sample_umd/sample_handler.c
- create mode 100644 tools/testing/selftests/umd_mgmt/sample_umd/sample_loader.c
- create mode 100644 tools/testing/selftests/umd_mgmt/sample_umd/sample_mgr.c
- create mode 100755 tools/testing/selftests/umd_mgmt/umd_mgmt.sh
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 7b27435fd20..a0cd161843e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11251,6 +11251,7 @@ L:	linux-kernel@vger.kernel.org
- S:	Maintained
- F:	include/linux/usermode_driver_mgmt.h
- F:	kernel/usermode_driver_mgmt.c
-+F:	tools/testing/selftests/umd_mgmt/*
- 
- KERNEL VIRTUAL MACHINE (KVM)
- M:	Paolo Bonzini <pbonzini@redhat.com>
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 13a6837a0c6..84202d5b4fb 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -84,6 +84,7 @@ TARGETS += timers
- endif
- TARGETS += tmpfs
- TARGETS += tpm2
-+TARGETS += umd_mgmt
- TARGETS += user
- TARGETS += vDSO
- TARGETS += mm
-diff --git a/tools/testing/selftests/umd_mgmt/.gitignore b/tools/testing/selftests/umd_mgmt/.gitignore
-new file mode 100644
-index 00000000000..215c17d13e9
---- /dev/null
-+++ b/tools/testing/selftests/umd_mgmt/.gitignore
-@@ -0,0 +1 @@
-+/sample_umd/sample_umh
-diff --git a/tools/testing/selftests/umd_mgmt/Makefile b/tools/testing/selftests/umd_mgmt/Makefile
-new file mode 100644
-index 00000000000..f1d47eec04e
---- /dev/null
-+++ b/tools/testing/selftests/umd_mgmt/Makefile
-@@ -0,0 +1,14 @@
-+# SPDX-License-Identifier: GPL-2.0
-+TEST_GEN_PROGS_EXTENDED = sample_umd.ko
-+
-+$(OUTPUT)/%.ko: $(wildcard sample_umd/Makefile sample_umd/*.[ch])
-+	$(call msg,MOD,,$@)
-+	$(Q)$(MAKE) -C sample_umd install
-+
-+OVERRIDE_TARGETS := 1
-+override define CLEAN
-+	$(call msg,CLEAN)
-+	$(Q)$(MAKE) -C sample_umd clean
-+endef
-+
-+include ../lib.mk
-diff --git a/tools/testing/selftests/umd_mgmt/config b/tools/testing/selftests/umd_mgmt/config
-new file mode 100644
-index 00000000000..71a078a3ac0
---- /dev/null
-+++ b/tools/testing/selftests/umd_mgmt/config
-@@ -0,0 +1 @@
-+CONFIG_BPFILTER=y
-diff --git a/tools/testing/selftests/umd_mgmt/sample_umd/Makefile b/tools/testing/selftests/umd_mgmt/sample_umd/Makefile
-new file mode 100644
-index 00000000000..6d950e05f3d
---- /dev/null
-+++ b/tools/testing/selftests/umd_mgmt/sample_umd/Makefile
-@@ -0,0 +1,22 @@
-+KDIR ?= ../../../../..
-+
-+userprogs := sample_umh
-+sample_umh-objs := sample_handler.o
-+userccflags += -I $(srctree)
-+
-+$(obj)/sample_binary_blob.o: $(obj)/sample_umh
-+
-+MODULES = sample_loader_kmod.ko sample_mgr.ko
-+
-+obj-m += sample_loader_kmod.o sample_mgr.o
-+
-+sample_loader_kmod-objs = sample_loader.o sample_binary_blob.o
-+
-+all:
-+	+$(Q)$(MAKE) -C $(KDIR) M=$$PWD modules
-+
-+clean:
-+	+$(Q)$(MAKE) -C $(KDIR) M=$$PWD clean
-+
-+install: all
-+	+$(Q)$(MAKE) -C $(KDIR) M=$$PWD modules_install
-diff --git a/tools/testing/selftests/umd_mgmt/sample_umd/msgfmt.h b/tools/testing/selftests/umd_mgmt/sample_umd/msgfmt.h
-new file mode 100644
-index 00000000000..34a62d72cde
---- /dev/null
-+++ b/tools/testing/selftests/umd_mgmt/sample_umd/msgfmt.h
-@@ -0,0 +1,13 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _SAMPLE_UMH_MSGFMT_H
-+#define _SAMPLE_UMH_MSGFMT_H
-+
-+struct sample_request {
-+	uint32_t offset;
-+};
-+
-+struct sample_reply {
-+	uint8_t data[128 * 1024];
-+};
-+
-+#endif
-diff --git a/tools/testing/selftests/umd_mgmt/sample_umd/sample_binary_blob.S b/tools/testing/selftests/umd_mgmt/sample_umd/sample_binary_blob.S
-new file mode 100644
-index 00000000000..3687dd13973
---- /dev/null
-+++ b/tools/testing/selftests/umd_mgmt/sample_umd/sample_binary_blob.S
-@@ -0,0 +1,7 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+	.section .init.rodata, "a"
-+	.global sample_umh_start
-+sample_umh_start:
-+	.incbin "tools/testing/selftests/umd_mgmt/sample_umd/sample_umh"
-+	.global sample_umh_end
-+sample_umh_end:
-diff --git a/tools/testing/selftests/umd_mgmt/sample_umd/sample_handler.c b/tools/testing/selftests/umd_mgmt/sample_umd/sample_handler.c
-new file mode 100644
-index 00000000000..94ea6d99bbc
---- /dev/null
-+++ b/tools/testing/selftests/umd_mgmt/sample_umd/sample_handler.c
-@@ -0,0 +1,81 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2023 Huawei Technologies Duesseldorf GmbH
-+ *
-+ * Author: Roberto Sassu <roberto.sassu@huawei.com>
-+ *
-+ * Implement the UMD Handler.
-+ */
-+#include <unistd.h>
-+#include <malloc.h>
-+#include <stdint.h>
-+
-+#include "msgfmt.h"
-+
-+FILE *debug_f;
-+
-+static void loop(void)
-+{
-+	struct sample_request *req = NULL;
-+	struct sample_reply *reply = NULL;
-+
-+	req = calloc(1, sizeof(*req));
-+	if (!req)
-+		return;
-+
-+	reply = calloc(1, sizeof(*reply));
-+	if (!reply)
-+		goto out;
-+
-+	while (1) {
-+		int n, len, offset;
-+
-+		offset = 0;
-+		len = sizeof(*req);
-+
-+		while (len) {
-+			n = read(0, ((void *)req) + offset, len);
-+			if (n <= 0) {
-+				fprintf(debug_f, "invalid request %d\n", n);
-+				goto out;
-+			}
-+
-+			len -= n;
-+			offset += n;
-+		}
-+
-+		if (req->offset < sizeof(reply->data))
-+			reply->data[req->offset] = 1;
-+
-+		offset = 0;
-+		len = sizeof(*reply);
-+
-+		while (len) {
-+			n = write(1, ((void *)reply) + offset, len);
-+			if (n <= 0) {
-+				fprintf(debug_f, "reply failed %d\n", n);
-+				goto out;
-+			}
-+
-+			len -= n;
-+			offset += n;
-+		}
-+
-+		if (req->offset < sizeof(reply->data))
-+			reply->data[req->offset] = 0;
-+	}
-+out:
-+	free(req);
-+	free(reply);
-+}
-+
-+int main(void)
-+{
-+	debug_f = fopen("/dev/kmsg", "w");
-+	setvbuf(debug_f, 0, _IOLBF, 0);
-+	fprintf(debug_f, "<5>Started sample_umh\n");
-+	loop();
-+	fclose(debug_f);
-+
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/umd_mgmt/sample_umd/sample_loader.c b/tools/testing/selftests/umd_mgmt/sample_umd/sample_loader.c
-new file mode 100644
-index 00000000000..36c0e69e3f7
---- /dev/null
-+++ b/tools/testing/selftests/umd_mgmt/sample_umd/sample_loader.c
-@@ -0,0 +1,28 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2023 Huawei Technologies Duesseldorf GmbH
-+ *
-+ * Author: Roberto Sassu <roberto.sassu@huawei.com>
-+ *
-+ * Implement the UMD Loader (credits: bpfilter).
-+ */
-+#include <linux/module.h>
-+#include <linux/usermode_driver_mgmt.h>
-+
-+extern char sample_umh_start;
-+extern char sample_umh_end;
-+extern struct umd_mgmt sample_mgmt_ops;
-+
-+static int __init load_umh(void)
-+{
-+	return umd_mgmt_load(&sample_mgmt_ops, &sample_umh_start,
-+			     &sample_umh_end);
-+}
-+
-+static void __exit fini_umh(void)
-+{
-+	umd_mgmt_unload(&sample_mgmt_ops);
-+}
-+module_init(load_umh);
-+module_exit(fini_umh);
-+MODULE_LICENSE("GPL");
-diff --git a/tools/testing/selftests/umd_mgmt/sample_umd/sample_mgr.c b/tools/testing/selftests/umd_mgmt/sample_umd/sample_mgr.c
-new file mode 100644
-index 00000000000..75c572f9849
---- /dev/null
-+++ b/tools/testing/selftests/umd_mgmt/sample_umd/sample_mgr.c
-@@ -0,0 +1,124 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2023 Huawei Technologies Duesseldorf GmbH
-+ *
-+ * Author: Roberto Sassu <roberto.sassu@huawei.com>
-+ *
-+ * Implement the UMD Manager.
-+ */
-+#include <linux/module.h>
-+#include <linux/security.h>
-+#include <linux/seq_file.h>
-+#include <linux/usermode_driver_mgmt.h>
-+
-+#include "msgfmt.h"
-+
-+struct umd_mgmt sample_mgmt_ops;
-+EXPORT_SYMBOL_GPL(sample_mgmt_ops);
-+
-+struct dentry *sample_umd_dentry;
-+
-+static int sample_write_common(u32 offset, bool test)
-+{
-+	struct sample_request *req;
-+	struct sample_reply *reply;
-+	int ret;
-+
-+	req = kzalloc(sizeof(*req), GFP_KERNEL);
-+	if (!req) {
-+		ret = -ENOMEM;
-+		goto out;
-+	}
-+
-+	reply = kzalloc(sizeof(*reply), GFP_KERNEL);
-+	if (!reply) {
-+		ret = -ENOMEM;
-+		goto out;
-+	}
-+
-+	req->offset = offset;
-+
-+	if (test)
-+		/* Lock is already taken. */
-+		ret = umd_send_recv(&sample_mgmt_ops.info, req, sizeof(*req),
-+				    reply, sizeof(*reply));
-+	else
-+		ret = umd_mgmt_send_recv(&sample_mgmt_ops, req, sizeof(*req),
-+					 reply, sizeof(*reply));
-+	if (ret < 0)
-+		goto out;
-+
-+	if (reply->data[req->offset] != 1) {
-+		ret = -EINVAL;
-+		goto out;
-+	}
-+out:
-+	kfree(req);
-+	kfree(reply);
-+
-+	return ret;
-+}
-+
-+static ssize_t sample_umd_write(struct file *file, const char __user *buf,
-+				size_t datalen, loff_t *ppos)
-+{
-+	char offset_str[8];
-+	u32 offset;
-+	int ret;
-+
-+	if (datalen >= sizeof(offset_str))
-+		return -EINVAL;
-+
-+	ret = copy_from_user(offset_str, buf, datalen);
-+	if (ret < 0)
-+		return ret;
-+
-+	offset_str[datalen] = '\0';
-+
-+	ret = kstrtou32(offset_str, 10, &offset);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (offset >= sizeof(((struct sample_reply *)0)->data))
-+		return -EINVAL;
-+
-+	ret = sample_write_common(offset, false);
-+	if (ret < 0)
-+		return ret;
-+
-+	return datalen;
-+}
-+
-+static const struct file_operations sample_umd_file_ops = {
-+	.write = sample_umd_write,
-+};
-+
-+static int sample_post_start_umh(struct umd_mgmt *mgmt)
-+{
-+	return sample_write_common(0, true);
-+}
-+
-+static int __init load_umh(void)
-+{
-+	mutex_init(&sample_mgmt_ops.lock);
-+	sample_mgmt_ops.info.tgid = NULL;
-+	sample_mgmt_ops.info.driver_name = "sample_umh";
-+	sample_mgmt_ops.post_start = sample_post_start_umh;
-+	sample_mgmt_ops.kmod = "sample_loader_kmod";
-+	sample_mgmt_ops.kmod_loaded = false;
-+
-+	sample_umd_dentry = securityfs_create_file("sample_umd", 0200, NULL,
-+						   NULL, &sample_umd_file_ops);
-+	if (IS_ERR(sample_umd_dentry))
-+		return PTR_ERR(sample_umd_dentry);
-+
-+	return 0;
-+}
-+
-+static void __exit fini_umh(void)
-+{
-+	securityfs_remove(sample_umd_dentry);
-+}
-+module_init(load_umh);
-+module_exit(fini_umh);
-+MODULE_LICENSE("GPL");
-diff --git a/tools/testing/selftests/umd_mgmt/umd_mgmt.sh b/tools/testing/selftests/umd_mgmt/umd_mgmt.sh
-new file mode 100755
-index 00000000000..9b90d737fec
---- /dev/null
-+++ b/tools/testing/selftests/umd_mgmt/umd_mgmt.sh
-@@ -0,0 +1,40 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# Copyright (C) 2023 Huawei Technologies Duesseldorf GmbH
-+#
-+# Author: Roberto Sassu <roberto.sassu@huawei.com>
-+#
-+# Script to test the UMD management library.
-+
-+# Kselftest framework defines: ksft_pass=0, ksft_fail=1, ksft_skip=4
-+ksft_pass=0
-+ksft_fail=1
-+ksft_skip=4
-+
-+if ! /sbin/modprobe -q sample_mgr; then
-+	echo "umd_mgmt: module sample_mgr is not found [SKIP]"
-+	exit $ksft_skip
-+fi
-+
-+if [ ! -f /sys/kernel/security/sample_umd ]; then
-+	echo "umd_mgmt: kernel interface is not found [SKIP]"
-+	exit $ksft_skip
-+fi
-+
-+i=0
-+
-+while [ $i -lt 500 ]; do
-+	if ! echo $(( RANDOM % 128 * 1024 )) > /sys/kernel/security/sample_umd; then
-+		echo "umd_mgmt: test failed"
-+		exit $ksft_fail
-+	fi
-+
-+	if [ $(( i % 50 )) -eq 0 ]; then
-+		rmmod sample_loader_kmod
-+	fi
-+
-+	(( i++ ))
-+done
-+
-+exit $ksft_pass
--- 
-2.25.1
-
+Reinette
