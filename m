@@ -2,81 +2,81 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 33E98C7618E
-	for <linux-kselftest@archiver.kernel.org>; Fri, 17 Mar 2023 03:15:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7048C7618B
+	for <linux-kselftest@archiver.kernel.org>; Fri, 17 Mar 2023 03:15:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbjCQDPV (ORCPT
+        id S229902AbjCQDPX (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 16 Mar 2023 23:15:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36482 "EHLO
+        Thu, 16 Mar 2023 23:15:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbjCQDOK (ORCPT
+        with ESMTP id S229971AbjCQDOI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Mar 2023 23:14:10 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99FC31F5C9;
-        Thu, 16 Mar 2023 20:13:58 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id r5so4364646qtp.4;
-        Thu, 16 Mar 2023 20:13:58 -0700 (PDT)
+        Thu, 16 Mar 2023 23:14:08 -0400
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E131C5A5;
+        Thu, 16 Mar 2023 20:13:53 -0700 (PDT)
+Received: by mail-qv1-xf34.google.com with SMTP id qh28so2694872qvb.7;
+        Thu, 16 Mar 2023 20:13:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679022837;
+        d=gmail.com; s=20210112; t=1679022832;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:feedback-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=jKjJq2iUpcRiss0xHIuELyHg6cgOJsVnKIWh6aQhr+o=;
-        b=njafY3YZ1bwUF3TeJHoNWVte22ueJDvEHAowKhGDAgj8LwGRayCDFY5PH7yaCbD6oj
-         O16shgk91L3XgnvllCZAOjXOg1Qh+KG8EGr+oVe79lyufQGc14y7XKQC2JRMf2QWLyJZ
-         4YrKrEhzc0mShfnIo+oQVMqMVS29OJERYPs6yxdr0eMRpbON4Sju6ORKorSonHgV8Zlk
-         samPgrFoM1mUqMIY6YKRp9x33r7ZE2znHBgf0UC+fKvmjzZUhrqVc30CYe54fSual9VR
-         6Mm0LGf6fHvO+Qvm3J5ey2eCLmRofDsJcTHBEwOli/5K5H0F497tfoKgD+XJiwYN/eeI
-         accA==
+        bh=l+cxk4GRXEy3PWXlv26d2F3VWdrTeh7XQDcb/gZHyn4=;
+        b=WV+SSosX+LSP9x5dty+3YbEqmAPAUQDCF83larBgi6og0Aw5VjpVorLzHq30Wq/RY6
+         ZZJOw7VnBBtpMlzBp8mNUlK/bn5X+i4O0nRjl8DkcLucOaApZ9TvMDNzHm+JFJQ8K/Nw
+         kHiJTtQ8QFuJ3w2elqBwXPp5rwdnCZ6buC3Wm3CHxXI9YM6K/GGjXffMZfk70udXzdLL
+         aBDJEN/CvRzhXzbSU6waNKe5NHsz4YWq7TcjCXxKd/fAH92Ki9d9xxEeuilhezTgiEic
+         Cf2+bNs2tpekPqsYP2zbBsQaPHsCLasyqk8+TN2jhtWJ4ZGsI24TfrjRaFC7cG9wYlX0
+         VaLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679022837;
+        d=1e100.net; s=20210112; t=1679022832;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:feedback-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=jKjJq2iUpcRiss0xHIuELyHg6cgOJsVnKIWh6aQhr+o=;
-        b=NMxaqKUp7WSRjUWajQ3YWOT3yMfVhJkTPXf0rZ2omm2s726PO+AeCTiB71cnctJqFU
-         HhswX0RHW/sy2VUW6bFZFGMiPe8WFU3qQfbx9dlhJ+bC/wvOczhOzD713DCbeHREagAG
-         R8o1X+6VFVoQIBk5B82ZDozmpz6Ob2VzYANuH3ITrdnPuMNnxPOYdrRlj0+QyW7IDBgg
-         MrZsB1xR8jJNRtb2SE+zY7v30N2aonS6ItxdTvx/fa3MldIXukjnmdYTDm3MYIB8nJPZ
-         REHG8EaZaXMq1wbh7eTHWw848ve+WknFX/jHIvf723z0SyF7jsRUKnUOxGyJAtHzXUz2
-         otrA==
-X-Gm-Message-State: AO0yUKWqqgPib9OMbh3/uzFL2BNNa+maUm6c8PEg01x3FHyVK3mDcBLU
-        KPPZzyVRVRrIyoECdbEa8eE=
-X-Google-Smtp-Source: AK7set/4OLOuuf9LGJVCwC5AGdthelLPVlzBzvqm+tbNbpmadOqoU9PKPGF0SRYTn/QuVCVvy4+Hyw==
-X-Received: by 2002:a05:622a:24a:b0:3bf:d87d:4945 with SMTP id c10-20020a05622a024a00b003bfd87d4945mr9981933qtx.18.1679022837771;
-        Thu, 16 Mar 2023 20:13:57 -0700 (PDT)
+        bh=l+cxk4GRXEy3PWXlv26d2F3VWdrTeh7XQDcb/gZHyn4=;
+        b=BigdZcoQ7sQC5jrOeJGDtqfueafE7inoDahc1mzVQqOGB0ZODRuqP2iNkzMwsAKN8C
+         d/14cqpTP2P0qFp0bSeY0H44MWxIsB3TcQOkpgcF/VxlnG7li5IFVYQJa2fAaVITmyfD
+         dTdGnlc4no1JG1mVbXQvMoycsS2JwuKlIoWyV8h54I5wsjnVBY1ERFi4BfUTzc0Su6Et
+         jAPf21MAJaj/gpbfVu3XXZjc5B/YFY0qhPUwBDoqFe8qyWw5rMmkLulCR0KfhluSnEpy
+         5uXkR03svxrDK/ONuoDGd+baNHG+IISWe9MVNC2BQKCoXSWcab7mbZWg/lP3zHcNLXbd
+         +SDQ==
+X-Gm-Message-State: AO0yUKUkoX72yxqL9URusBAQEn/hTpsYKQaXqqg6SwM4rptBmYoPEr4z
+        8MliEGyEoFnh73taGGC4oLg=
+X-Google-Smtp-Source: AK7set8RP3+6SAfsQgJ4ywKwsYSMSkHSN8UMChqof//OKVEdbhULyWO1xA3rWns2AUHAI7suuCxJRA==
+X-Received: by 2002:a05:6214:1d01:b0:577:5ffe:e0d8 with SMTP id e1-20020a0562141d0100b005775ffee0d8mr44428281qvd.24.1679022832634;
+        Thu, 16 Mar 2023 20:13:52 -0700 (PDT)
 Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id d20-20020ac85354000000b003b323387c1asm814466qto.18.2023.03.16.20.13.56
+        by smtp.gmail.com with ESMTPSA id g2-20020a37b602000000b0071aacb2c76asm781448qkf.132.2023.03.16.20.13.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 20:13:57 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailauth.nyi.internal (Postfix) with ESMTP id C2E4127C0054;
-        Thu, 16 Mar 2023 23:13:56 -0400 (EDT)
+        Thu, 16 Mar 2023 20:13:52 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 8819027C0054;
+        Thu, 16 Mar 2023 23:13:51 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Thu, 16 Mar 2023 23:13:56 -0400
-X-ME-Sender: <xms:9NoTZPtLeoqFZxx5bqcWLVTdycR1xboaPoKKf40BJGZSoPmnn0_KsA>
-    <xme:9NoTZAf4r9NjzyGnlzh8qLAVFY042ZGgF4FnTgi_cdN2WYeVefV1fvtEytBqmscyW
-    Tz-Syb75ShCEPbpZg>
-X-ME-Received: <xmr:9NoTZCw9l-rfYqLZ3fKBrsP8k7vimEE34Z-hAt_5hc9pfdVUHFipC-5xXeg>
+  by compute4.internal (MEProxy); Thu, 16 Mar 2023 23:13:51 -0400
+X-ME-Sender: <xms:79oTZCGaCtq3AZq4NKLvRr-3rLcQ3T0N9h0s3hP2cDAy2W_T10UaYA>
+    <xme:79oTZDViX1nd8LA_k7XN1uVmra6UHO1MBYmcx0ANKU3fX2n5aYRjijQPk75MWDjVP
+    FY1RZzvQNIS6O-Ffw>
+X-ME-Received: <xmr:79oTZMLGFDZRU6moEEkUEkqekDvOytytX3plUMpMTnH1hT5u9l7xIw7Q8N0>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdefuddgheekucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepuehoqhhu
     nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
-    htthgvrhhnpeegleejiedthedvheeggfejveefjeejkefgveffieeujefhueeigfegueeh
-    geeggfenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
-    gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
-    igmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:9NoTZOP_zZTty0uVojoeQfJuk_E4DCdVGww0N7N_wN3iw26PXPEdRg>
-    <xmx:9NoTZP-pI2v_Et0yEmziLpxjgCbnJDFCfd6y0gp5Udphv0jiGiRUqQ>
-    <xmx:9NoTZOUX5QJ9f-WB1No1281Da4aTX6IgGtWYreVH-qNHr7ck3dpFzw>
-    <xmx:9NoTZKeeuXYjFcNULRxNy98QCprNmp1hn_L5XBwqDGBEdmAR5TpQiw>
+    htthgvrhhnpefghfffvefhhfdvgfejgfekvdelgfekgeevueehlefhiedvgeffjefgteeu
+    gfehieenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhh
+    phgvrhhsohhnrghlihhthidqieelvdeghedtieegqddujeejkeehheehvddqsghoqhhunh
+    drfhgvnhhgpeepghhmrghilhdrtghomhesfhhigihmvgdrnhgrmhgv
+X-ME-Proxy: <xmx:79oTZMFYJm1mrOHEuTb5D002r9YhCIinrYN5M811w3BEANGt_JS_kQ>
+    <xmx:79oTZIX0QFnPvPkZl-dnh2JRjRoH-mYVvlKxDpaiasZoZ_eqpnC37w>
+    <xmx:79oTZPM22p0wfNDQyDSQfkDNqQXKzuxW_P4t2XCeFNjkAoEPqsvJHQ>
+    <xmx:79oTZJeoVMbKBXxhQVr2wtxhBk7gcHDmRmI2tuFdp-oskznImSx3OQ>
 Feedback-ID: iad51458e:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 16 Mar 2023 23:13:56 -0400 (EDT)
+ 16 Mar 2023 23:13:51 -0400 (EDT)
 From:   Boqun Feng <boqun.feng@gmail.com>
 To:     rcu@vger.kernel.org
 Cc:     Peter Zijlstra <peterz@infradead.org>,
@@ -96,10 +96,11 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         David Woodhouse <dwmw2@infradead.org>,
         Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
         seanjc@google.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH rcu 7/7] rcutorture: Add srcu_lockdep.sh
-Date:   Thu, 16 Mar 2023 20:13:39 -0700
-Message-Id: <20230317031339.10277-8-boqun.feng@gmail.com>
+        linux-kselftest@vger.kernel.org,
+        kernel test robot <oliver.sang@intel.com>
+Subject: [PATCH rcu 3/7] locking: Reduce the number of locks in ww_mutex stress tests
+Date:   Thu, 16 Mar 2023 20:13:35 -0700
+Message-Id: <20230317031339.10277-4-boqun.feng@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230317031339.10277-1-boqun.feng@gmail.com>
 References: <20230317031339.10277-1-boqun.feng@gmail.com>
@@ -109,99 +110,31 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: "Paul E. McKenney" <paulmck@kernel.org>
+The stress test in test_ww_mutex_init() uses 4095 locks since
+lockdep::reference has 12 bits, and since we are going to reduce it to
+11 bits to support lock_sync(), and 2047 is still a reasonable number of
+the max nesting level for locks, so adjust the test.
 
-This commit adds an srcu_lockdep.sh script that checks whether lockdep
-correctly classifies SRCU-based, SRCU/mutex-based, and SRCU/rwsem-based
-deadlocks.
-
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-[ boqun: Fix "RCUTORTURE" with "$RCUTORTURE" ]
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Link: https://lore.kernel.org/oe-lkp/202302011445.9d99dae2-oliver.sang@intel.com
 Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
 ---
- .../selftests/rcutorture/bin/srcu_lockdep.sh  | 73 +++++++++++++++++++
- 1 file changed, 73 insertions(+)
- create mode 100755 tools/testing/selftests/rcutorture/bin/srcu_lockdep.sh
+ kernel/locking/test-ww_mutex.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/rcutorture/bin/srcu_lockdep.sh b/tools/testing/selftests/rcutorture/bin/srcu_lockdep.sh
-new file mode 100755
-index 000000000000..961932754684
---- /dev/null
-+++ b/tools/testing/selftests/rcutorture/bin/srcu_lockdep.sh
-@@ -0,0 +1,73 @@
-+#!/bin/bash
-+#
-+# Run SRCU-lockdep tests and report any that fail to meet expectations.
-+
-+usage () {
-+	echo "Usage: $scriptname optional arguments:"
-+	echo "       --datestamp string"
-+	exit 1
-+}
-+
-+ds=`date +%Y.%m.%d-%H.%M.%S`-srcu_lockdep
-+scriptname="$0"
-+
-+T="`mktemp -d ${TMPDIR-/tmp}/srcu_lockdep.sh.XXXXXX`"
-+trap 'rm -rf $T' 0
-+
-+RCUTORTURE="`pwd`/tools/testing/selftests/rcutorture"; export RCUTORTURE
-+PATH=${RCUTORTURE}/bin:$PATH; export PATH
-+. functions.sh
-+
-+while test $# -gt 0
-+do
-+	case "$1" in
-+	--datestamp)
-+		checkarg --datestamp "(relative pathname)" "$#" "$2" '^[a-zA-Z0-9._/-]*$' '^--'
-+		ds=$2
-+		shift
-+		;;
-+	*)
-+		echo Unknown argument $1
-+		usage
-+		;;
-+	esac
-+	shift
-+done
-+
-+err=
-+nerrs=0
-+for d in 0 1
-+do
-+	for t in 0 1 2
-+	do
-+		for c in 1 2 3
-+		do
-+			err=
-+			val=$((d*1000+t*10+c))
-+			tools/testing/selftests/rcutorture/bin/kvm.sh --allcpus --duration 5s --configs "SRCU-P" --bootargs "rcutorture.test_srcu_lockdep=$val" --trust-make --datestamp "$ds/$val" > "$T/kvm.sh.out" 2>&1
-+			ret=$?
-+			mv "$T/kvm.sh.out" "$RCUTORTURE/res/$ds/$val"
-+			if test "$d" -ne 0 && test "$ret" -eq 0
-+			then
-+				err=1
-+				echo -n Unexpected success for > "$RCUTORTURE/res/$ds/$val/kvm.sh.err"
-+			fi
-+			if test "$d" -eq 0 && test "$ret" -ne 0
-+			then
-+				err=1
-+				echo -n Unexpected failure for > "$RCUTORTURE/res/$ds/$val/kvm.sh.err"
-+			fi
-+			if test -n "$err"
-+			then
-+				grep "rcu_torture_init_srcu_lockdep: test_srcu_lockdep = " "$RCUTORTURE/res/$ds/$val/SRCU-P/console.log" | sed -e 's/^.*rcu_torture_init_srcu_lockdep://' >> "$RCUTORTURE/res/$ds/$val/kvm.sh.err"
-+				cat "$RCUTORTURE/res/$ds/$val/kvm.sh.err"
-+				nerrs=$((nerrs+1))
-+			fi
-+		done
-+	done
-+done
-+if test "$nerrs" -ne 0
-+then
-+	exit 1
-+fi
-+exit 0
+diff --git a/kernel/locking/test-ww_mutex.c b/kernel/locking/test-ww_mutex.c
+index 29dc253d03af..93cca6e69860 100644
+--- a/kernel/locking/test-ww_mutex.c
++++ b/kernel/locking/test-ww_mutex.c
+@@ -659,7 +659,7 @@ static int __init test_ww_mutex_init(void)
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = stress(4095, hweight32(STRESS_ALL)*ncpus, STRESS_ALL);
++	ret = stress(2047, hweight32(STRESS_ALL)*ncpus, STRESS_ALL);
+ 	if (ret)
+ 		return ret;
+ 
 -- 
 2.39.2
 
