@@ -2,32 +2,32 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DECE6C76195
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF048C7619A
 	for <linux-kselftest@archiver.kernel.org>; Sat, 18 Mar 2023 14:24:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbjCROYg (ORCPT
+        id S229888AbjCROYf (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 18 Mar 2023 10:24:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56024 "EHLO
+        Sat, 18 Mar 2023 10:24:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229809AbjCROYe (ORCPT
+        with ESMTP id S229478AbjCROYd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 18 Mar 2023 10:24:34 -0400
+        Sat, 18 Mar 2023 10:24:33 -0400
 Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD2235246;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C608F34F74;
         Sat, 18 Mar 2023 07:24:29 -0700 (PDT)
 Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id B7F2918838A8;
-        Sat, 18 Mar 2023 14:12:42 +0000 (UTC)
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id E41D018839C7;
+        Sat, 18 Mar 2023 14:12:46 +0000 (UTC)
 Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 9E47E25002BC;
-        Sat, 18 Mar 2023 14:12:42 +0000 (UTC)
+        by mailout.gigahost.dk (Postfix) with ESMTP id DB0C325002BC;
+        Sat, 18 Mar 2023 14:12:46 +0000 (UTC)
 Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 929E49B403E4; Sat, 18 Mar 2023 14:12:42 +0000 (UTC)
+        id D13B49B403E2; Sat, 18 Mar 2023 14:12:46 +0000 (UTC)
 X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 Received: from fujitsu.vestervang (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
-        by smtp.gigahost.dk (Postfix) with ESMTPSA id D42DE91201E3;
-        Sat, 18 Mar 2023 14:12:41 +0000 (UTC)
+        by smtp.gigahost.dk (Postfix) with ESMTPSA id 1B3E49B403E1;
+        Sat, 18 Mar 2023 14:12:46 +0000 (UTC)
 From:   "Hans J. Schultz" <netdev@kapio-technology.com>
 To:     davem@davemloft.net, kuba@kernel.org
 Cc:     netdev@vger.kernel.org,
@@ -66,10 +66,12 @@ Cc:     netdev@vger.kernel.org,
         DRIVER),
         bridge@lists.linux-foundation.org (moderated list:ETHERNET BRIDGE),
         linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Subject: [PATCH v2 net-next 0/6] ATU and FDB synchronization on locked ports
-Date:   Sat, 18 Mar 2023 15:10:04 +0100
-Message-Id: <20230318141010.513424-1-netdev@kapio-technology.com>
+Subject: [PATCH v2 net-next 6/6] selftests: forwarding: add dynamic FDB test
+Date:   Sat, 18 Mar 2023 15:10:10 +0100
+Message-Id: <20230318141010.513424-7-netdev@kapio-technology.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230318141010.513424-1-netdev@kapio-technology.com>
+References: <20230318141010.513424-1-netdev@kapio-technology.com>
 MIME-Version: 1.0
 Organization: Westermo Network Technologies AB
 Content-Transfer-Encoding: 8bit
@@ -77,91 +79,73 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch set makes it possible to have synchronized dynamic ATU and FDB
-entries on locked ports. As locked ports are not able to automatically
-learn, they depend on userspace added entries, where userspace can add
-static or dynamic entries. The lifetime of static entries are completely
-dependent on userspace intervention, and thus not of interest here. We
-are only concerned with dynamic entries, which can be added with a
-command like:
+Test FDB ageing of user entry created by
 
 bridge fdb replace ADDR dev <DEV> master dynamic
 
-We choose only to support this feature on locked ports, as it involves
-utilizing the CPU to handle ATU related switchcore events (typically
-interrupts) and thus can result in significant performance loss if
-exposed to heavy traffic.
+Use LOW_AGEING_TIME variable in forwarding.config to set a low ageing time.
+Beware, DSA might not accept the ageing time you want. Check the
+age_time_coeff value for your driver.
 
-On locked ports it is important for userspace to know when an authorized
-station has become silent, hence not breaking the communication of a
-station that has been authorized based on the MAC-Authentication Bypass
-(MAB) scheme. Thus if the station keeps being active after authorization,
-it will continue to have an open port as long as it is active. Only after
-a silent period will it have to be reauthorized. As the ageing process in
-the ATU is dependent on incoming traffic to the switchcore port, it is
-necessary for the ATU to signal that an entry has aged out, so that the
-FDB can be updated at the correct time.
+Signed-off-by: Hans J. Schultz <netdev@kapio-technology.com>
+---
+ .../net/forwarding/bridge_locked_port.sh      | 36 +++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-This patch set includes a solution for the Marvell mv88e6xxx driver, where
-for this driver we use the Hold-At-One feature so that an age-out
-violation interrupt occurs when a station has been silent for the
-system-set age time. The age out violation interrupt allows the switchcore
-driver to remove both the ATU and the FDB entry at the same time.
-
-It is up to the maintainers of other switchcore drivers to implement the
-feature for their specific driver.
-
-LOG:
-	V2:	Ensure the port is locked when using the feature as we
-		must ensure that learning is enabled at all times for
-		the interrupts to occur. This was missed in the previous
-		version.
-
-		Instead of ignoring unsupported flags, ensure that
-		drivers are only called when supporting the feature.
-		As 'dynamic' flag is legacy, all drivers support it at
-		least by their previous handling.
-
-Hans J. Schultz (6):
-  net: bridge: add dynamic flag to switchdev notifier
-  net: dsa: propagate flags down towards drivers
-  drivers: net: dsa: add fdb entry flags incoming to switchcore drivers
-  net: bridge: ensure FDB offloaded flag is handled as needed
-  net: dsa: mv88e6xxx: implementation of dynamic ATU entries
-  selftests: forwarding: add dynamic FDB test
-
- drivers/net/dsa/b53/b53_common.c              |  4 +-
- drivers/net/dsa/b53/b53_priv.h                |  4 +-
- drivers/net/dsa/hirschmann/hellcreek.c        |  4 +-
- drivers/net/dsa/lan9303-core.c                |  4 +-
- drivers/net/dsa/lantiq_gswip.c                |  4 +-
- drivers/net/dsa/microchip/ksz_common.c        |  6 +-
- drivers/net/dsa/mt7530.c                      |  4 +-
- drivers/net/dsa/mv88e6xxx/chip.c              | 20 ++++--
- drivers/net/dsa/mv88e6xxx/chip.h              |  9 ++-
- drivers/net/dsa/mv88e6xxx/global1_atu.c       | 21 +++++++
- drivers/net/dsa/mv88e6xxx/port.c              |  6 +-
- drivers/net/dsa/mv88e6xxx/switchdev.c         | 61 +++++++++++++++++++
- drivers/net/dsa/mv88e6xxx/switchdev.h         |  5 ++
- drivers/net/dsa/mv88e6xxx/trace.h             |  5 ++
- drivers/net/dsa/ocelot/felix.c                |  4 +-
- drivers/net/dsa/qca/qca8k-common.c            |  4 +-
- drivers/net/dsa/qca/qca8k.h                   |  4 +-
- drivers/net/dsa/rzn1_a5psw.c                  |  4 +-
- drivers/net/dsa/sja1105/sja1105_main.c        | 11 ++--
- include/net/dsa.h                             |  9 ++-
- include/net/switchdev.h                       |  1 +
- net/bridge/br_fdb.c                           |  5 +-
- net/bridge/br_switchdev.c                     |  1 +
- net/dsa/dsa.c                                 |  6 ++
- net/dsa/port.c                                | 28 +++++----
- net/dsa/port.h                                |  8 +--
- net/dsa/slave.c                               | 20 ++++--
- net/dsa/switch.c                              | 26 +++++---
- net/dsa/switch.h                              |  1 +
- .../net/forwarding/bridge_locked_port.sh      | 36 +++++++++++
- 30 files changed, 258 insertions(+), 67 deletions(-)
-
+diff --git a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
+index dc92d32464f6..dbc7017fd45d 100755
+--- a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
++++ b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
+@@ -14,6 +14,7 @@ ALL_TESTS="
+ NUM_NETIFS=4
+ CHECK_TC="no"
+ source lib.sh
++source tc_common.sh
+ 
+ h1_create()
+ {
+@@ -319,6 +320,41 @@ locked_port_mab_flush()
+ 	log_test "Locked port MAB FDB flush"
+ }
+ 
++# Test of dynamic FDB entries.
++locked_port_dyn_fdb()
++{
++	local mac=00:01:02:03:04:05
++	local ageing_time
++
++	RET=0
++	ageing_time=$(bridge_ageing_time_get br0)
++	tc qdisc add dev $swp2 clsact
++	ip link set dev br0 type bridge ageing_time $LOW_AGEING_TIME
++	bridge link set dev $swp1 learning on locked on
++
++	bridge fdb replace $mac dev $swp1 master dynamic
++	tc filter add dev $swp2 egress protocol ip pref 1 handle 1 flower \
++		dst_ip 192.0.2.2 ip_proto udp dst_port 12345 action pass
++
++	$MZ $swp1 -c 1 -p 128 -t udp "sp=54321,dp=12345" \
++		-a $mac -b `mac_get $h2` -A 192.0.2.1 -B 192.0.2.2 -q
++	tc_check_packets "dev $swp2 egress" 1 1
++	check_err $? "Packet not seen on egress after adding dynamic FDB"
++
++	sleep $((LOW_AGEING_TIME / 100 + 10))
++
++	$MZ $swp1 -c 1 -p 128 -t udp "sp=54321,dp=12345" \
++		-a $mac -b `mac_get $h2` -A 192.0.2.1 -B 192.0.2.2 -q
++	tc_check_packets "dev $swp2 egress" 1 1
++	check_fail $? "Dynamic FDB entry did not age out"
++
++	ip link set dev br0 type bridge ageing_time $ageing_time
++	bridge link set dev $swp1 learning off locked off
++	tc qdisc del dev $swp2 clsact
++
++	log_test "Locked port dyn FDB"
++}
++
+ trap cleanup EXIT
+ 
+ setup_prepare
 -- 
 2.34.1
 
