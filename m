@@ -2,32 +2,33 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF048C7619A
-	for <linux-kselftest@archiver.kernel.org>; Sat, 18 Mar 2023 14:24:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05DD8C77B62
+	for <linux-kselftest@archiver.kernel.org>; Sat, 18 Mar 2023 14:24:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229888AbjCROYf (ORCPT
+        id S229799AbjCROYh (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 18 Mar 2023 10:24:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56016 "EHLO
+        Sat, 18 Mar 2023 10:24:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjCROYd (ORCPT
+        with ESMTP id S229822AbjCROYe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 18 Mar 2023 10:24:33 -0400
+        Sat, 18 Mar 2023 10:24:34 -0400
+X-Greylist: delayed 705 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 18 Mar 2023 07:24:29 PDT
 Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C608F34F74;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5D2A34F65;
         Sat, 18 Mar 2023 07:24:29 -0700 (PDT)
 Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id E41D018839C7;
-        Sat, 18 Mar 2023 14:12:46 +0000 (UTC)
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 63259188398F;
+        Sat, 18 Mar 2023 14:12:43 +0000 (UTC)
 Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id DB0C325002BC;
-        Sat, 18 Mar 2023 14:12:46 +0000 (UTC)
+        by mailout.gigahost.dk (Postfix) with ESMTP id 5299225002BC;
+        Sat, 18 Mar 2023 14:12:43 +0000 (UTC)
 Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id D13B49B403E2; Sat, 18 Mar 2023 14:12:46 +0000 (UTC)
+        id 4764D9B403E4; Sat, 18 Mar 2023 14:12:43 +0000 (UTC)
 X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 Received: from fujitsu.vestervang (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
-        by smtp.gigahost.dk (Postfix) with ESMTPSA id 1B3E49B403E1;
-        Sat, 18 Mar 2023 14:12:46 +0000 (UTC)
+        by smtp.gigahost.dk (Postfix) with ESMTPSA id 91AFB9B403E2;
+        Sat, 18 Mar 2023 14:12:42 +0000 (UTC)
 From:   "Hans J. Schultz" <netdev@kapio-technology.com>
 To:     davem@davemloft.net, kuba@kernel.org
 Cc:     netdev@vger.kernel.org,
@@ -66,9 +67,9 @@ Cc:     netdev@vger.kernel.org,
         DRIVER),
         bridge@lists.linux-foundation.org (moderated list:ETHERNET BRIDGE),
         linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Subject: [PATCH v2 net-next 6/6] selftests: forwarding: add dynamic FDB test
-Date:   Sat, 18 Mar 2023 15:10:10 +0100
-Message-Id: <20230318141010.513424-7-netdev@kapio-technology.com>
+Subject: [PATCH v2 net-next 1/6] net: bridge: add dynamic flag to switchdev notifier
+Date:   Sat, 18 Mar 2023 15:10:05 +0100
+Message-Id: <20230318141010.513424-2-netdev@kapio-technology.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230318141010.513424-1-netdev@kapio-technology.com>
 References: <20230318141010.513424-1-netdev@kapio-technology.com>
@@ -79,73 +80,39 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Test FDB ageing of user entry created by
-
-bridge fdb replace ADDR dev <DEV> master dynamic
-
-Use LOW_AGEING_TIME variable in forwarding.config to set a low ageing time.
-Beware, DSA might not accept the ageing time you want. Check the
-age_time_coeff value for your driver.
+To be able to add dynamic FDB entries to drivers from userspace, the
+dynamic flag must be added when sending RTM_NEWNEIGH events down.
 
 Signed-off-by: Hans J. Schultz <netdev@kapio-technology.com>
 ---
- .../net/forwarding/bridge_locked_port.sh      | 36 +++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ include/net/switchdev.h   | 1 +
+ net/bridge/br_switchdev.c | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
-index dc92d32464f6..dbc7017fd45d 100755
---- a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
-+++ b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
-@@ -14,6 +14,7 @@ ALL_TESTS="
- NUM_NETIFS=4
- CHECK_TC="no"
- source lib.sh
-+source tc_common.sh
+diff --git a/include/net/switchdev.h b/include/net/switchdev.h
+index ca0312b78294..aaf918d4ba67 100644
+--- a/include/net/switchdev.h
++++ b/include/net/switchdev.h
+@@ -249,6 +249,7 @@ struct switchdev_notifier_fdb_info {
+ 	u8 added_by_user:1,
+ 	   is_local:1,
+ 	   locked:1,
++	   is_dyn:1,
+ 	   offloaded:1;
+ };
  
- h1_create()
- {
-@@ -319,6 +320,41 @@ locked_port_mab_flush()
- 	log_test "Locked port MAB FDB flush"
- }
- 
-+# Test of dynamic FDB entries.
-+locked_port_dyn_fdb()
-+{
-+	local mac=00:01:02:03:04:05
-+	local ageing_time
-+
-+	RET=0
-+	ageing_time=$(bridge_ageing_time_get br0)
-+	tc qdisc add dev $swp2 clsact
-+	ip link set dev br0 type bridge ageing_time $LOW_AGEING_TIME
-+	bridge link set dev $swp1 learning on locked on
-+
-+	bridge fdb replace $mac dev $swp1 master dynamic
-+	tc filter add dev $swp2 egress protocol ip pref 1 handle 1 flower \
-+		dst_ip 192.0.2.2 ip_proto udp dst_port 12345 action pass
-+
-+	$MZ $swp1 -c 1 -p 128 -t udp "sp=54321,dp=12345" \
-+		-a $mac -b `mac_get $h2` -A 192.0.2.1 -B 192.0.2.2 -q
-+	tc_check_packets "dev $swp2 egress" 1 1
-+	check_err $? "Packet not seen on egress after adding dynamic FDB"
-+
-+	sleep $((LOW_AGEING_TIME / 100 + 10))
-+
-+	$MZ $swp1 -c 1 -p 128 -t udp "sp=54321,dp=12345" \
-+		-a $mac -b `mac_get $h2` -A 192.0.2.1 -B 192.0.2.2 -q
-+	tc_check_packets "dev $swp2 egress" 1 1
-+	check_fail $? "Dynamic FDB entry did not age out"
-+
-+	ip link set dev br0 type bridge ageing_time $ageing_time
-+	bridge link set dev $swp1 learning off locked off
-+	tc qdisc del dev $swp2 clsact
-+
-+	log_test "Locked port dyn FDB"
-+}
-+
- trap cleanup EXIT
- 
- setup_prepare
+diff --git a/net/bridge/br_switchdev.c b/net/bridge/br_switchdev.c
+index de18e9c1d7a7..9707d3fdb396 100644
+--- a/net/bridge/br_switchdev.c
++++ b/net/bridge/br_switchdev.c
+@@ -134,6 +134,7 @@ static void br_switchdev_fdb_populate(struct net_bridge *br,
+ 	item->added_by_user = test_bit(BR_FDB_ADDED_BY_USER, &fdb->flags);
+ 	item->offloaded = test_bit(BR_FDB_OFFLOADED, &fdb->flags);
+ 	item->is_local = test_bit(BR_FDB_LOCAL, &fdb->flags);
++	item->is_dyn = !test_bit(BR_FDB_STATIC, &fdb->flags);
+ 	item->locked = false;
+ 	item->info.dev = (!p || item->is_local) ? br->dev : p->dev;
+ 	item->info.ctx = ctx;
 -- 
 2.34.1
 
