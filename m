@@ -2,79 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E3DAC7618A
-	for <linux-kselftest@archiver.kernel.org>; Mon, 20 Mar 2023 15:50:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75C88C7618D
+	for <linux-kselftest@archiver.kernel.org>; Mon, 20 Mar 2023 15:50:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231601AbjCTPu2 (ORCPT
+        id S231953AbjCTPuc (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 20 Mar 2023 11:50:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58996 "EHLO
+        Mon, 20 Mar 2023 11:50:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233330AbjCTPtr (ORCPT
+        with ESMTP id S233317AbjCTPtq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 20 Mar 2023 11:49:47 -0400
+        Mon, 20 Mar 2023 11:49:46 -0400
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE4078A77;
-        Mon, 20 Mar 2023 08:41:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FDC21715A;
+        Mon, 20 Mar 2023 08:41:22 -0700 (PDT)
 From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1679326881;
-        bh=8+nQaJm+ZpSS5pDVDYI8Ih7aP+obiBBNskXrcuawcY4=;
+        s=mail; t=1679326880;
+        bh=yB2bNNpPwty3egJ8yVVXOGLcmpOFHoeuVC5kDwG8ohI=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=VdYuP7uYCUpZyRNirukTM8/cDEaFkpqBlXmt2CKnGfoSb+HKuGYOax1JiCSV2ZDdt
-         LbJkixmmNM134m39O+raBfqHfuG3c9Hj2n8LdjunxEFlpwBFEN48z5HfW4SjPpLL7X
-         oHx1Qg7jnXszNuARoiFN+CyCpfAa384ZtFERU0y0=
-Date:   Mon, 20 Mar 2023 15:41:05 +0000
-Subject: [PATCH v2 5/8] tools/nolibc: tests: fold in no-stack-protector
- cflags
+        b=eFkBuK/S4F2SEkh7vacz64gEtABXZiqYJQTWItjyffou0X6moh2Edq/OQSwtgh4Ri
+         d7v6N98AKifzaxjV9Fr10n8y8O3SkKDbLazTDZXNVdCwrj3KIqQPJOIXBxaECQYdTd
+         IlfnIdqnMdNAXCk/czAfGHc9X2Up6qhFDIac8HSk=
+Date:   Mon, 20 Mar 2023 15:41:03 +0000
+Subject: [PATCH v2 3/8] tools/nolibc: tests: constify test_names
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20230223-nolibc-stackprotector-v2-5-4c938e098d67@weissschuh.net>
+Message-Id: <20230223-nolibc-stackprotector-v2-3-4c938e098d67@weissschuh.net>
 References: <20230223-nolibc-stackprotector-v2-0-4c938e098d67@weissschuh.net>
 In-Reply-To: <20230223-nolibc-stackprotector-v2-0-4c938e098d67@weissschuh.net>
 To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1679326878; l=987;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1679326878; l=802;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=8+nQaJm+ZpSS5pDVDYI8Ih7aP+obiBBNskXrcuawcY4=;
- b=TaXGkzUL3xHCtunu6pxuTjT6Der+r4LEofS5YgQayMdk3NgAUO2r6DsVBZrRzelmREo9bB9L1
- nrNsis9gLYgDvKhmE0MsrOgYVZe3KOKZ1ROVCIsjF6flvn6rD3033hm
+ bh=yB2bNNpPwty3egJ8yVVXOGLcmpOFHoeuVC5kDwG8ohI=;
+ b=1xaQrroQTlcIJhL2JEaH2lGu9cjtjGYX88x03R//qu/u9/ZsqxCO6nP6wkI1lnlELbadj7STf
+ ePm1XzGV+r9BZjLWRL9p+8/ttwuNEIy/bRrWfg6VxlV1GxLFo4mHd6B
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-For the cflags to enable stack protectors to work properly they need to
-be specified after -fno-stack-protector.
-
-To do this fold all cflags into a single variable and move
--fno-stack-protector before the arch-specific cflags.
+Nothing ever modifies this structure.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- tools/testing/selftests/nolibc/Makefile | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ tools/testing/selftests/nolibc/nolibc-test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index c99bbcda7495..236c0364f5fb 100644
---- a/tools/testing/selftests/nolibc/Makefile
-+++ b/tools/testing/selftests/nolibc/Makefile
-@@ -77,8 +77,9 @@ Q=@
- endif
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index 6a7c13f0cd61..fb2d4872fac9 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -717,7 +717,7 @@ int prepare(void)
+ }
  
- CFLAGS_s390 = -m64
--CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables $(CFLAGS_$(ARCH))
--CFLAGS  += $(call cc-option,-fno-stack-protector)
-+CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables \
-+		$(call cc-option,-fno-stack-protector) \
-+		$(CFLAGS_$(ARCH))
- LDFLAGS := -s
- 
- help:
+ /* This is the definition of known test names, with their functions */
+-static struct test test_names[] = {
++static const struct test test_names[] = {
+ 	/* add new tests here */
+ 	{ .name = "syscall",   .func = run_syscall  },
+ 	{ .name = "stdlib",    .func = run_stdlib   },
 
 -- 
 2.40.0
