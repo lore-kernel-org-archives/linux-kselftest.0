@@ -2,167 +2,75 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BE3AC7618A
-	for <linux-kselftest@archiver.kernel.org>; Mon, 20 Mar 2023 15:50:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C8CF1C7618D
+	for <linux-kselftest@archiver.kernel.org>; Mon, 20 Mar 2023 15:50:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232036AbjCTPud (ORCPT
+        id S232075AbjCTPud (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Mon, 20 Mar 2023 11:50:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54060 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233312AbjCTPtq (ORCPT
+        with ESMTP id S233321AbjCTPtq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Mon, 20 Mar 2023 11:49:46 -0400
 Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76C032A98E;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A7018B2E;
         Mon, 20 Mar 2023 08:41:22 -0700 (PDT)
 From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
         s=mail; t=1679326880;
-        bh=SKQQeeAAWGRSm8SFG5OU6QwacV+yOMhgHKMMQrEuzXo=;
+        bh=xDSjSascpesmgYZoOnKeZCwVvAZAUVs1JwzaeHlI+NA=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=tBQq0JK3zlvRWZeoYiPAQ9wwGEa9T89SQKWD5RKqTC9lZOcrJAsmPoPuft4t8Fr51
-         A3lCGFeYxC6qnK6ejjhzSBU5KPz93y6aWL6NiU20i/nDCMV/wpOnp2Yy7L/juYGykJ
-         LX/UCPXW00tem9ide6DIiHZEfvkOUMXvNO9Pdo3I=
-Date:   Mon, 20 Mar 2023 15:41:04 +0000
-Subject: [PATCH v2 4/8] tools/nolibc: add support for stack protector
+        b=Jf0ZSaLKTLUuhpDms909S2dyE0kwa5jMwuPDEE8OAtZ3FWHz8Yzzjs3kqtK/6KJk9
+         8FwfTH/Hp53ATcS0Sx/1VL8QKhauW2TjTiLUHr+wO8t6mIxY2F6HBjy6BfQFAp3R8s
+         R3RszYh9AwSFcBN0COT55mM1O3erj2O1KXq2CoFM=
+Date:   Mon, 20 Mar 2023 15:41:01 +0000
+Subject: [PATCH v2 1/8] tools/nolibc: add definitions for standard fds
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20230223-nolibc-stackprotector-v2-4-4c938e098d67@weissschuh.net>
+Message-Id: <20230223-nolibc-stackprotector-v2-1-4c938e098d67@weissschuh.net>
 References: <20230223-nolibc-stackprotector-v2-0-4c938e098d67@weissschuh.net>
 In-Reply-To: <20230223-nolibc-stackprotector-v2-0-4c938e098d67@weissschuh.net>
 To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1679326878; l=3910;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1679326877; l=623;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=SKQQeeAAWGRSm8SFG5OU6QwacV+yOMhgHKMMQrEuzXo=;
- b=pCpEl3ma7Rbkt+V7cxvV1fBSkxozeEcJnk8bVg0tqUNbIZG9dHPkeOWUPTAenPN8ljKX8rHrW
- r0bwZrQjKJaBU8EraYn5aWu0o7UNg3C60Q4DAKQyh7g/ncEFw40ZiEo
+ bh=xDSjSascpesmgYZoOnKeZCwVvAZAUVs1JwzaeHlI+NA=;
+ b=I6y1pduG9zTlWy+fGjussRCl8YSaD3MtbMYd9dIJFX/jUULKfAjFdYAwjL213kqIP1OJ/a+5T
+ /jlT5ioSOXtAAGannMTNat/uBhM5w1+WgYLl1nXMAttBvnUh/1+48bj
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This is useful when using nolibc for security-critical tools.
-Using nolibc has the advantage that the code is easily auditable and
-sandboxable with seccomp as no unexpected syscalls are used.
-Using compiler-assistent stack protection provides another security
-mechanism.
-
-For this to work the compiler and libc have to collaborate.
-
-This patch adds the following parts to nolibc that are required by the
-compiler:
-
-* __stack_chk_guard: random sentinel value
-* __stack_chk_fail: handler for detected stack smashes
-
-In addition an initialization function is added that randomizes the
-sentinel value.
-
-Only support for global guards is implemented.
-Register guards are useful in multi-threaded context which nolibc does
-not provide support for.
-
-Link: https://lwn.net/Articles/584225/
+These are useful for users and will also be used in an upcoming
+testcase.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- tools/include/nolibc/Makefile         |  4 +--
- tools/include/nolibc/nolibc.h         |  1 +
- tools/include/nolibc/stackprotector.h | 53 +++++++++++++++++++++++++++++++++++
- 3 files changed, 56 insertions(+), 2 deletions(-)
+ tools/include/nolibc/unistd.h | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/tools/include/nolibc/Makefile b/tools/include/nolibc/Makefile
-index ec57d3932506..9839feafd38a 100644
---- a/tools/include/nolibc/Makefile
-+++ b/tools/include/nolibc/Makefile
-@@ -25,8 +25,8 @@ endif
+diff --git a/tools/include/nolibc/unistd.h b/tools/include/nolibc/unistd.h
+index 1cfcd52106a4..ac7d53d986cd 100644
+--- a/tools/include/nolibc/unistd.h
++++ b/tools/include/nolibc/unistd.h
+@@ -13,6 +13,11 @@
+ #include "sys.h"
  
- nolibc_arch := $(patsubst arm64,aarch64,$(ARCH))
- arch_file := arch-$(nolibc_arch).h
--all_files := ctype.h errno.h nolibc.h signal.h std.h stdint.h stdio.h stdlib.h \
--             string.h sys.h time.h types.h unistd.h
-+all_files := ctype.h errno.h nolibc.h signal.h stackprotector.h std.h stdint.h \
-+             stdio.h stdlib.h string.h sys.h time.h types.h unistd.h
  
- # install all headers needed to support a bare-metal compiler
- all: headers
-diff --git a/tools/include/nolibc/nolibc.h b/tools/include/nolibc/nolibc.h
-index b2bc48d3cfe4..04739a6293c4 100644
---- a/tools/include/nolibc/nolibc.h
-+++ b/tools/include/nolibc/nolibc.h
-@@ -104,6 +104,7 @@
- #include "string.h"
- #include "time.h"
- #include "unistd.h"
-+#include "stackprotector.h"
- 
- /* Used by programs to avoid std includes */
- #define NOLIBC
-diff --git a/tools/include/nolibc/stackprotector.h b/tools/include/nolibc/stackprotector.h
-new file mode 100644
-index 000000000000..d119cbbbc256
---- /dev/null
-+++ b/tools/include/nolibc/stackprotector.h
-@@ -0,0 +1,53 @@
-+/* SPDX-License-Identifier: LGPL-2.1 OR MIT */
-+/*
-+ * Stack protector support for NOLIBC
-+ * Copyright (C) 2023 Thomas Weißschuh <linux@weissschuh.net>
-+ */
++#define STDIN_FILENO  0
++#define STDOUT_FILENO 1
++#define STDERR_FILENO 2
 +
-+#ifndef _NOLIBC_STACKPROTECTOR_H
-+#define _NOLIBC_STACKPROTECTOR_H
 +
-+#include "arch.h"
-+
-+#if defined(NOLIBC_STACKPROTECTOR)
-+
-+#if !defined(__ARCH_SUPPORTS_STACK_PROTECTOR)
-+#error "nolibc does not support stack protectors on this arch"
-+#endif
-+
-+#include "sys.h"
-+#include "stdlib.h"
-+
-+/* The functions in this header are using raw syscall macros to avoid
-+ * triggering stack protector errors themselves
-+ */
-+
-+__attribute__((weak,noreturn,section(".text.nolibc_stack_chk")))
-+void __stack_chk_fail(void)
-+{
-+	pid_t pid;
-+	my_syscall3(__NR_write, STDERR_FILENO, "!!Stack smashing detected!!\n", 28);
-+	pid = my_syscall0(__NR_getpid);
-+	my_syscall2(__NR_kill, pid, SIGABRT);
-+	for (;;);
-+}
-+
-+__attribute__((weak,noreturn,section(".text.nolibc_stack_chk")))
-+void __stack_chk_fail_local(void)
-+{
-+	__stack_chk_fail();
-+}
-+
-+__attribute__((weak,section(".data.nolibc_stack_chk")))
-+uintptr_t __stack_chk_guard;
-+
-+__attribute__((weak,no_stack_protector,section(".text.nolibc_stack_chk")))
-+void __stack_chk_init(void)
-+{
-+	my_syscall3(__NR_getrandom, &__stack_chk_guard, sizeof(__stack_chk_guard), 0);
-+	/* a bit more randomness in case getrandom() fails */
-+	__stack_chk_guard ^= (uintptr_t) &__stack_chk_guard;
-+}
-+#endif // defined(NOLIBC_STACKPROTECTOR)
-+
-+#endif // _NOLIBC_STACKPROTECTOR_H
+ static __attribute__((unused))
+ int msleep(unsigned int msecs)
+ {
 
 -- 
 2.40.0
