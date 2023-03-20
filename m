@@ -2,94 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D8F3C7618A
-	for <linux-kselftest@archiver.kernel.org>; Mon, 20 Mar 2023 15:40:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E2E5BC7618A
+	for <linux-kselftest@archiver.kernel.org>; Mon, 20 Mar 2023 15:50:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233245AbjCTPkp (ORCPT
+        id S231829AbjCTPuZ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 20 Mar 2023 11:40:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40044 "EHLO
+        Mon, 20 Mar 2023 11:50:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233262AbjCTPkT (ORCPT
+        with ESMTP id S233344AbjCTPtt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 20 Mar 2023 11:40:19 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 864C6A5E3
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Mar 2023 08:32:01 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id t5so11515309edd.7
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Mar 2023 08:32:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1679326314;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ONCoqAuPFAdxcHJlJkmwpKMX/MPlR6FkYHZLYnTGWGA=;
-        b=ZAG07fjd1pGdKzK6v1r6GnVVdTiwCGVdbZgvimV0oMBbMrtpEp7Vf5VtfChYznrOc6
-         H0M5oKF/oqkK+eiujHnj4RkGkHe1EGUWGTj5spGvroIRSc0RunHN0DZeywnFEy+ELW3g
-         I1IsObzaSbYO7aYSdtbhiiuZyLfr04luFU8Ju/hnMT9QRQjo3bnL3xU12gKF8bXKVocG
-         wPSKeMuXRncMIA08YpSBxkh35gUR42GYCP/ZSehhvMNiZVSOhSd24vgR4AsLaeCwcD26
-         mQChHP13oK+HLvVovVvuVvI/Re5PiAqBU2KoYz0eW9Tb3NAQLfevbE9pwLetC1J9bp4O
-         FRPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679326314;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ONCoqAuPFAdxcHJlJkmwpKMX/MPlR6FkYHZLYnTGWGA=;
-        b=Br/ukjqBPzciJeOHTPLbUrxgZnnfCQYiRsSsJzAL5WOIsXQJwzeJJ1BBtHQ7L3ON+F
-         /X9/vbrDLPtbt5wnECfwemwnlqFA5eSm+RCxKk/Hh4C6H/HbVKZVktV0hzX2f+RKkvGt
-         YpVCvdSVeBY0TEzIC/6Pvycm1duAyV1uZnYx5ckUVjFkUYD5LfCmeMdTvpDIASRPPKcx
-         3x/TNRmgCxkTFRzraI6zSdDoB4nkiq6heDDdOa/IjM6Q5e4LzikGjI9lQDBs5PkOxB9e
-         Ty6T54WBXcAh6Y8jrPh74DlqsqraUyXXEmf4uhquQzVULCCjXgTQYX+XelXCx8oEaSXF
-         xnKQ==
-X-Gm-Message-State: AO0yUKXkCwnTeRhKy1nkUO3p3Bw/7FJXe78Q4c9mSzD8M8P6/63UiH+Z
-        WczZUUBNfudIYvJ9AxKXowVHK2d1MNS/TVeuwF+kOQ==
-X-Google-Smtp-Source: AK7set9zRda+HOBbyE1RH7U3Q5LdXAIFkGANo3ucDxxjiF5CtJ+awwn6fl76qqAqukfOF4oE95J6aFnk+XfPYhz4GPU=
-X-Received: by 2002:a17:906:cf8d:b0:930:310:abef with SMTP id
- um13-20020a170906cf8d00b009300310abefmr4344539ejb.3.1679326313919; Mon, 20
- Mar 2023 08:31:53 -0700 (PDT)
+        Mon, 20 Mar 2023 11:49:49 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF0012B9F7;
+        Mon, 20 Mar 2023 08:41:25 -0700 (PDT)
+From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1679326882;
+        bh=i20Oh7UPtMkF7KR9AMHb1kh7uhEQ1eEVn8pe6hGS0IY=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+        b=IEEumZMhOJj7/5fO9M78jnYjwF6vw43+TOAY/TOfIzzevHlcJgYEvXOpVK4hK6WzL
+         DYbYEfL2viDF9VD4rWWIpw6yBSn5zYJYUlTIWXC0fgSIrv1eEYwV0CA922VvWoljCG
+         eIoaLVFeQNfCsVOAedKa5p8UBoO3TjLpsAssyeTc=
+Date:   Mon, 20 Mar 2023 15:41:08 +0000
+Subject: [PATCH v2 8/8] tools/nolibc: x86_64: add stackprotector support
 MIME-Version: 1.0
-References: <20230320005258.1428043-1-sashal@kernel.org> <20230320005258.1428043-8-sashal@kernel.org>
-In-Reply-To: <20230320005258.1428043-8-sashal@kernel.org>
-From:   Lorenz Bauer <lmb@isovalent.com>
-Date:   Mon, 20 Mar 2023 15:31:42 +0000
-Message-ID: <CAN+4W8g6AcQQWe7rrBVOFYoqeQA-1VbUP_W7DPS3q0k-czOLfg@mail.gmail.com>
-Subject: Re: [PATCH AUTOSEL 6.2 08/30] selftests/bpf: check that modifier
- resolves after pointer
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Martin KaFai Lau <martin.lau@kernel.org>, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, shuah@kernel.org,
-        yhs@fb.com, eddyz87@gmail.com, sdf@google.com, error27@gmail.com,
-        iii@linux.ibm.com, memxor@gmail.com, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20230223-nolibc-stackprotector-v2-8-4c938e098d67@weissschuh.net>
+References: <20230223-nolibc-stackprotector-v2-0-4c938e098d67@weissschuh.net>
+In-Reply-To: <20230223-nolibc-stackprotector-v2-0-4c938e098d67@weissschuh.net>
+To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1679326878; l=1856;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=i20Oh7UPtMkF7KR9AMHb1kh7uhEQ1eEVn8pe6hGS0IY=;
+ b=yBKpZLIhD2oLBnMhKGSP33SljC5XJO6L5jLzsIMP1QRDWF8qpnRzP3lO5IRVQgThoA/S0AcOs
+ KcMpHjuFCsHCZygA9AsMyhp/qPX/l1LhHvKCsQg759Tph36y0IVFjve
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 12:53=E2=80=AFAM Sasha Levin <sashal@kernel.org> wr=
-ote:
->
-> From: Lorenz Bauer <lorenz.bauer@isovalent.com>
->
-> [ Upstream commit dfdd608c3b365f0fd49d7e13911ebcde06b9865b ]
->
-> Add a regression test that ensures that a VAR pointing at a
-> modifier which follows a PTR (or STRUCT or ARRAY) is resolved
-> correctly by the datasec validator.
->
-> Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
-> Link: https://lore.kernel.org/r/20230306112138.155352-3-lmb@isovalent.com
-> Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+Enable the new stackprotector support for x86_64.
 
-Hi Sasha,
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+ tools/include/nolibc/arch-x86_64.h      | 5 +++++
+ tools/testing/selftests/nolibc/Makefile | 2 ++
+ 2 files changed, 7 insertions(+)
 
-Can you explain why this patch was selected? I'd prefer to not
-backport the test, since it frequently leads to breakage when trying
-to build selftests/bpf on stable kernels.
+diff --git a/tools/include/nolibc/arch-x86_64.h b/tools/include/nolibc/arch-x86_64.h
+index 17f6751208e7..f7f2a11d4c3b 100644
+--- a/tools/include/nolibc/arch-x86_64.h
++++ b/tools/include/nolibc/arch-x86_64.h
+@@ -181,6 +181,8 @@ struct sys_stat_struct {
+ char **environ __attribute__((weak));
+ const unsigned long *_auxv __attribute__((weak));
+ 
++#define __ARCH_SUPPORTS_STACK_PROTECTOR
++
+ /* startup code */
+ /*
+  * x86-64 System V ABI mandates:
+@@ -191,6 +193,9 @@ const unsigned long *_auxv __attribute__((weak));
+ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) _start(void)
+ {
+ 	__asm__ volatile (
++#ifdef NOLIBC_STACKPROTECTOR
++		"call __stack_chk_init\n"   // initialize stack protector
++#endif
+ 		"pop %rdi\n"                // argc   (first arg, %rdi)
+ 		"mov %rsp, %rsi\n"          // argv[] (second arg, %rsi)
+ 		"lea 8(%rsi,%rdi,8),%rdx\n" // then a NULL then envp (third arg, %rdx)
+diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+index 8f069ebdd124..543555f4cbdc 100644
+--- a/tools/testing/selftests/nolibc/Makefile
++++ b/tools/testing/selftests/nolibc/Makefile
+@@ -80,6 +80,8 @@ CFLAGS_STACKPROTECTOR = -DNOLIBC_STACKPROTECTOR \
+ 			$(call cc-option,-mstack-protector-guard=global) \
+ 			$(call cc-option,-fstack-protector-all)
+ CFLAGS_i386 = $(CFLAGS_STACKPROTECTOR)
++CFLAGS_x86_64 = $(CFLAGS_STACKPROTECTOR)
++CFLAGS_x86 = $(CFLAGS_STACKPROTECTOR)
+ CFLAGS_s390 = -m64
+ CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables \
+ 		$(call cc-option,-fno-stack-protector) \
 
-Thanks
-Lorenz
+-- 
+2.40.0
+
