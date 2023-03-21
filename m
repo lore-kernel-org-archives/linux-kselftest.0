@@ -2,68 +2,68 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD649C6FD1D
-	for <linux-kselftest@archiver.kernel.org>; Tue, 21 Mar 2023 00:48:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AEFAFC761AF
+	for <linux-kselftest@archiver.kernel.org>; Tue, 21 Mar 2023 00:48:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbjCUAs4 (ORCPT
+        id S229809AbjCUAs5 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 20 Mar 2023 20:48:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56568 "EHLO
+        Mon, 20 Mar 2023 20:48:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbjCUAsy (ORCPT
+        with ESMTP id S229750AbjCUAsy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Mon, 20 Mar 2023 20:48:54 -0400
 Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E3211653;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF772113FB;
         Mon, 20 Mar 2023 17:48:51 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 1801D5C019D;
-        Mon, 20 Mar 2023 20:48:51 -0400 (EDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id DAE775C019B;
+        Mon, 20 Mar 2023 20:48:49 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Mon, 20 Mar 2023 20:48:51 -0400
+  by compute6.internal (MEProxy); Mon, 20 Mar 2023 20:48:49 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=cc
         :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1679359731; x=1679446131; bh=vAnKio6G1pyRKqUfraKaMDB3b315AuN4QEd
-        NLYxwdsw=; b=y0X51D+LQ86Kr2xYgtguu+CJsOoj3uGl1Biz+j6wtuucwB8Ul7G
-        1WU7SRSXYafwqUPT96W18O3eN0WP6EQ6gZJBfE7X7FtfP2DjlchcHq/YTkuOYxX0
-        NzareEUASz6hZ/r+xDoITDNVfwTl1xVKrVc5i9Ssgcr3UH65mCtpXHwuEg36qoNo
-        8p5VAs4u3KNLaBS7ErqjpQTq4F/u/FWtG+3b/sSH8E+JHm0AON8fDrdhSX7zSOOb
-        pGdaU3jrncLEPT4epAOqz8dVLoWgrIyeU+Cbs2RGABx8EmNtYBCNSC+g+u/r5J46
-        wioYomd8A8HnLYPzzvXocT345MYdbUScO6Q==
+        :in-reply-to:message-id:mime-version:reply-to:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1679359729; x=1679446129; bh=oG
+        kjK2TbqrODiZ27bwpufFy80dPhzmLH1tKePfQCcsg=; b=v2FnbI7Rk9K6GPSwoV
+        xTFz47m9B3DRkVgQxdK6L5tpwV54Pkk7nXPDW8hO9SqjDMl1ZpssfT6uEk2Yrbnj
+        95keebwa6R3FM4Pf/+d9dgLdWAhDmVitG2jRZLxpi4Fj9X2ICuP9iusyKQv0yjdV
+        vy6xo2bGVmW2P9VxdwPsscbPDhoLYU4CrDQS9TRgNrj1bs+YmyjAYIfVFNyHwbdN
+        PTjHUe5eyOqJdy5/nDUl2mESU2Nj5bSt8b7fGgACtHwaf+DfXEeltmX7FpBE23oS
+        GF6nRFzvAOu0tobGk2qS0ijszzwi7x63ONxjyyVMfRQUr1ZGxwmrJfkEaoum/gBk
+        EJgg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1679359731; x=1679446131; bh=vAnKio6G1pyRKqUfraKaMDB3b315AuN4QEd
-        NLYxwdsw=; b=f2iFj0LnxbayE/fbdq57CRZmIzsyJ82mp2azTzaS663PefKwqL+
-        E94QFUztNR9qdKpPQi4ujDylfOkDKesls2LeDiVSRazIzMyIqviHl1iwWZafTozc
-        0gvkT43UqlIKu9sAcuCWJPBuyQBgyzIuwA0rZhNdXZgYMmqQqWMKYZ/eJLVrIgWB
-        UT1OekG3FNdH+NmxwVpnNgX4JYJrbhU8fNNr7lAHSCCYonAArOJalBP8mQQaXJWo
-        kj7pNe1mn6Mu8vwuvKgPMhUyNS9iJCAZQDcCyd35kd4WNKm4lWLdHenocZOSV2vG
-        +01s43WmMNNACWLTWXTyMemqRH/Jwc/5Cxg==
-X-ME-Sender: <xms:8v4YZB6sY8yXiNB48-VeuqxhgUWClhNkoguHMcKu4g5LXkPZjKDH7A>
-    <xme:8v4YZO5YsYrhHaV-ydqXvo52m-HCKJU_T0ybhdSSZRmuKVWAOFU2XvOWixjwlWWSb
-    GrHr4wu45KtoiGWIw>
-X-ME-Received: <xmr:8v4YZIcJMbonm04Ed5Ore97fzE72_Qokfgwmmi9hhrkLWs7PmxwHwcmqb7rtZi7eWHaY62mhSZJz6w_p3ifNWku1hQIr95MO4l2BSjvBLzOF5aYZj-uCq8sEbOilQC8>
+        :in-reply-to:message-id:mime-version:reply-to:reply-to:sender
+        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm2; t=1679359729; x=1679446129; bh=o
+        GkjK2TbqrODiZ27bwpufFy80dPhzmLH1tKePfQCcsg=; b=DzX6tcpSYSk9j7QHV
+        +EMwBA/10OxE8TVWLr6K+huXm9MJ53Bi6IxUgPIubvFX74ivmSImfisv3iXPZAIs
+        uVJo45bg4cO2YTOSRzkZXiBSFQkiuPYjDsuJORjml0Bs/fO+u16RAic6UHbGuIK8
+        BkW333wARlfN/fCdjK1KeJS4UPSDYszqbsUqyVNcOBm47PQqJt5HQ5R5oQ0k9DYJ
+        PQi1X64ymp6bOKP4HS60cIr/T/k1jeklixqZaPsRpz3ERurcT93fmsn/uPNkRrp6
+        g1aKzOcYnI9aUdBrHnAqfYGDjCz8DWeeaAA3vEqEzL0U1fyFK9/gNbyplQlRoCOl
+        HIjEA==
+X-ME-Sender: <xms:8f4YZHEziw9O6xYv0zVNgw6T5KNDv0jZBP24KUVax6_f9c5kAOVfeg>
+    <xme:8f4YZEWJnmADW3GVHsM-lq3Vo3ymhF2A5ylT2oDxdljkzUTMifyYFQgJSHIvbEiyu
+    80JzBBlGIQ-yF2kTA>
+X-ME-Received: <xmr:8f4YZJLI0Osvud0r1x7HmlmDU62gVviQcZlTvhZYd3HoWJtkmTk9c3XWmof7ouDsB8OVe8VMGG6kInjngkkp5PnWUPnpyYQ3mjJjFNNc7tryYJpBTpcDMbztK2E8_Gw>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdefledgvdegucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgjfhhrggfgsedtqhertdertddtnecuhfhrohhmpegkihcu
-    jggrnhcuoeiiihdrhigrnhesshgvnhhtrdgtohhmqeenucggtffrrghtthgvrhhnpeegge
-    ehudfgudduvdelheehteegledtteeiveeuhfffveekhfevueefieeijeegvdenucevlhhu
-    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpeiiihdrhigrnhessh
-    gvnhhtrdgtohhm
-X-ME-Proxy: <xmx:8v4YZKLEx3Ti_-t9-4NOu6PX-BW1tmWOqqjvkYRLAtHoEje663ydPw>
-    <xmx:8v4YZFIJVDGrribfrliMwyGCU8MdMrpLCdTqZ0-o_Zmn4RCYfNP3GQ>
-    <xmx:8v4YZDxAprX49fQlD6LUB1OvkMhFxS5mK-UdABgDEIh-DjJGnyd9tQ>
-    <xmx:8_4YZM9hYdGoUXn3l65PhKzNFjgzTV9TZgSoe2F8C_Vx3wcmuejVRg>
+    cujfgurhephffvvefufffkofhrggfgsedtqhertdertddtnecuhfhrohhmpegkihcujggr
+    nhcuoeiiihdrhigrnhesshgvnhhtrdgtohhmqeenucggtffrrghtthgvrhhnpedvieeutd
+    ehtddthfegveekueevfedvueehjeeltdevgfejteekudfgvdelveekffenucffohhmrghi
+    nhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomhepiihirdihrghnsehsvghnthdrtghomh
+X-ME-Proxy: <xmx:8f4YZFH-k8MiCb1AZT43rTC3Iusm4DYChWfdn1O7rbkLHccCwp98ew>
+    <xmx:8f4YZNXSbymnOShVpJgEw9q3xgk_qPF3ltqHwPv9n39b64mXlJys6A>
+    <xmx:8f4YZAO_Sq9MbNIpY2wSkutSGsqo8wyNv-YovTm2jWWDtazPhbQ6rQ>
+    <xmx:8f4YZJr5alsmT1CNYtBtsUXuZPnPu-aGkmIpZ0HUUWBoQeT4MVhU6g>
 Feedback-ID: iccd040f4:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 20 Mar 2023 20:48:50 -0400 (EDT)
+ 20 Mar 2023 20:48:49 -0400 (EDT)
 From:   Zi Yan <zi.yan@sent.com>
 To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
         Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>,
@@ -71,12 +71,10 @@ To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
 Cc:     Zi Yan <ziy@nvidia.com>, Andrew Morton <akpm@linux-foundation.org>,
         linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
         linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH 2/5] mm: page_owner: add support for splitting to any order in split page_owner.
-Date:   Mon, 20 Mar 2023 20:48:26 -0400
-Message-Id: <20230321004829.2012847-3-zi.yan@sent.com>
+Subject: [PATCH 0/5] Split a folio to any lower order folios
+Date:   Mon, 20 Mar 2023 20:48:24 -0400
+Message-Id: <20230321004829.2012847-1-zi.yan@sent.com>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230321004829.2012847-1-zi.yan@sent.com>
-References: <20230321004829.2012847-1-zi.yan@sent.com>
 Reply-To: Zi Yan <ziy@nvidia.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
@@ -86,144 +84,53 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Zi Yan <ziy@nvidia.com>
 
-It adds a new_order parameter to set new page order in page owner and
-uses old_order instead of nr to make the parameters look consistent.
-It prepares for upcoming changes to support split huge page to any
-lower order.
+Hi all,
 
-Signed-off-by: Zi Yan <ziy@nvidia.com>
----
- include/linux/page_owner.h | 12 +++++++-----
- mm/huge_memory.c           |  3 ++-
- mm/page_alloc.c            |  6 +++---
- mm/page_owner.c            | 11 ++++++-----
- 4 files changed, 18 insertions(+), 14 deletions(-)
+File folio supports any order and people would like to support flexible ord=
+ers
+for anonymous folio[1] too. Currently, split_huge_page() only splits a huge
+page to order-0 pages, but splitting to orders higher than 0 is also useful.
+This patchset adds support for splitting a huge page to any lower order pag=
+es
+and uses it during folio truncate operations.
 
-diff --git a/include/linux/page_owner.h b/include/linux/page_owner.h
-index 119a0c9d2a8b..67d98de3d5a8 100644
---- a/include/linux/page_owner.h
-+++ b/include/linux/page_owner.h
-@@ -11,7 +11,8 @@ extern struct page_ext_operations page_owner_ops;
- extern void __reset_page_owner(struct page *page, unsigned short order);
- extern void __set_page_owner(struct page *page,
- 			unsigned short order, gfp_t gfp_mask);
--extern void __split_page_owner(struct page *page, unsigned int nr);
-+extern void __split_page_owner(struct page *page, unsigned short old_order,
-+			unsigned short new_order);
- extern void __folio_copy_owner(struct folio *newfolio, struct folio *old);
- extern void __set_page_owner_migrate_reason(struct page *page, int reason);
- extern void __dump_page_owner(const struct page *page);
-@@ -31,10 +32,11 @@ static inline void set_page_owner(struct page *page,
- 		__set_page_owner(page, order, gfp_mask);
- }
-=20
--static inline void split_page_owner(struct page *page, unsigned int nr)
-+static inline void split_page_owner(struct page *page, unsigned short old_=
-order,
-+			unsigned short new_order)
- {
- 	if (static_branch_unlikely(&page_owner_inited))
--		__split_page_owner(page, nr);
-+		__split_page_owner(page, old_order, new_order);
- }
- static inline void folio_copy_owner(struct folio *newfolio, struct folio *=
-old)
- {
-@@ -56,11 +58,11 @@ static inline void reset_page_owner(struct page *page, =
-unsigned short order)
- {
- }
- static inline void set_page_owner(struct page *page,
--			unsigned int order, gfp_t gfp_mask)
-+			unsigned short order, gfp_t gfp_mask)
- {
- }
- static inline void split_page_owner(struct page *page,
--			unsigned short order)
-+			unsigned short old_order, unsigned short new_order)
- {
- }
- static inline void folio_copy_owner(struct folio *newfolio, struct folio *=
-folio)
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 30e3e300c42e..710189885402 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -2511,6 +2511,7 @@ static void __split_huge_page(struct page *page, stru=
-ct list_head *list,
- 	struct lruvec *lruvec;
- 	struct address_space *swap_cache =3D NULL;
- 	unsigned long offset =3D 0;
-+	unsigned int order =3D thp_order(head);
- 	unsigned int nr =3D thp_nr_pages(head);
- 	int i;
-=20
-@@ -2556,7 +2557,7 @@ static void __split_huge_page(struct page *page, stru=
-ct list_head *list,
- 	unlock_page_lruvec(lruvec);
- 	/* Caller disabled irqs, so they are still disabled here */
-=20
--	split_page_owner(head, nr);
-+	split_page_owner(head, order, 0);
-=20
- 	/* See comment in __split_huge_page_tail() */
- 	if (PageAnon(head)) {
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 59c2b6696698..ec85562865fb 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -3530,7 +3530,7 @@ void split_page(struct page *page, unsigned int order)
-=20
- 	for (i =3D 1; i < (1 << order); i++)
- 		set_page_refcounted(page + i);
--	split_page_owner(page, 1 << order);
-+	split_page_owner(page, order, 0);
- 	split_page_memcg(page, 1 << order, 1);
- }
- EXPORT_SYMBOL_GPL(split_page);
-@@ -5746,8 +5746,8 @@ static void *make_alloc_exact(unsigned long addr, uns=
-igned int order,
- 		struct page *page =3D virt_to_page((void *)addr);
- 		struct page *last =3D page + nr;
-=20
--		split_page_owner(page, 1 << order);
--		split_page_memcg(page, 1 << order);
-+		split_page_owner(page, 1 << order, 1);
-+		split_page_memcg(page, 1 << order, 1);
- 		while (page < --last)
- 			set_page_refcounted(last);
-=20
-diff --git a/mm/page_owner.c b/mm/page_owner.c
-index 31169b3e7f06..33d1b6efe6a6 100644
---- a/mm/page_owner.c
-+++ b/mm/page_owner.c
-@@ -211,19 +211,20 @@ void __set_page_owner_migrate_reason(struct page *pag=
-e, int reason)
- 	page_ext_put(page_ext);
- }
-=20
--void __split_page_owner(struct page *page, unsigned int nr)
-+void __split_page_owner(struct page *page, unsigned short old_order,
-+			unsigned short new_order)
- {
--	int i;
-+	int i, old_nr =3D 1 << old_order, new_nr =3D 1 << new_order;
- 	struct page_ext *page_ext =3D page_ext_get(page);
- 	struct page_owner *page_owner;
-=20
- 	if (unlikely(!page_ext))
- 		return;
-=20
--	for (i =3D 0; i < nr; i++) {
-+	for (i =3D 0; i < old_nr; i +=3D new_nr) {
-+		page_ext =3D lookup_page_ext(page + i);
- 		page_owner =3D get_page_owner(page_ext);
--		page_owner->order =3D 0;
--		page_ext =3D page_ext_next(page_ext);
-+		page_owner->order =3D new_order;
- 	}
- 	page_ext_put(page_ext);
- }
+The patchset is on top of mm-everything-2023-03-19-21-50.
+
+* Patch 1 and 2 add new_order parameter split_page_memcg() and
+  split_page_owner() and prepare for upcoming changes.
+* Patch 3 adds split_huge_page_to_list_to_order() to split a huge page
+  to any lower order. The original split_huge_page_to_list() calls
+  split_huge_page_to_list_to_order() with new_order =3D 0.
+* Patch 4 uses split_huge_page_to_list_to_order() in large pagecache folio
+  truncation instead of split the large folio all the way down to order-0.
+* Patch 5 adds a test API to debugfs and test cases in
+  split_huge_page_test selftests.
+
+Comments and/or suggestions are welcome.
+
+[1] https://lore.kernel.org/linux-mm/Y%2FblF0GIunm+pRIC@casper.infradead.or=
+g/
+
+Zi Yan (5):
+  mm: memcg: make memcg huge page split support any order split.
+  mm: page_owner: add support for splitting to any order in split
+    page_owner.
+  mm: thp: split huge page to any lower order pages.
+  mm: truncate: split huge page cache page to a non-zero order if
+    possible.
+  mm: huge_memory: enable debugfs to split huge pages to any order.
+
+ include/linux/huge_mm.h                       |  10 +-
+ include/linux/memcontrol.h                    |   5 +-
+ include/linux/page_owner.h                    |  12 +-
+ mm/huge_memory.c                              | 138 ++++++++---
+ mm/memcontrol.c                               |   8 +-
+ mm/page_alloc.c                               |   8 +-
+ mm/page_owner.c                               |  11 +-
+ mm/truncate.c                                 |  21 +-
+ .../selftests/mm/split_huge_page_test.c       | 225 +++++++++++++++++-
+ 9 files changed, 368 insertions(+), 70 deletions(-)
+
 --=20
 2.39.2
 
