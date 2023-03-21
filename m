@@ -2,429 +2,194 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD0FEC6FD1D
-	for <linux-kselftest@archiver.kernel.org>; Tue, 21 Mar 2023 00:49:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6348BC6FD1D
+	for <linux-kselftest@archiver.kernel.org>; Tue, 21 Mar 2023 01:26:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbjCUAtA (ORCPT
+        id S229449AbjCUB0t (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 20 Mar 2023 20:49:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56618 "EHLO
+        Mon, 20 Mar 2023 21:26:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbjCUAs4 (ORCPT
+        with ESMTP id S229610AbjCUB0s (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 20 Mar 2023 20:48:56 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E3615CBE;
-        Mon, 20 Mar 2023 17:48:52 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id AD2385C019E;
-        Mon, 20 Mar 2023 20:48:51 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Mon, 20 Mar 2023 20:48:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1679359731; x=1679446131; bh=FDz7l3LvqZq3Jky3lnWwH8yTFnKX+aXCW8S
-        XEMr4gJE=; b=5niVmPz2aeZ0HtCKbiQvOyB0pMpJh8W6P4WiO3IJI0e7KXhbDWv
-        f1jLRmSoY+37hjllFrfS5QGKQPlPk9Y6xWYj9Zuc889dppITzZZVZGGdN7jaKM83
-        nyKcrvS2uG+BB9+IjKGwaEBAzHXapjFg+Tr5sO4yfJTp5+QwXAgT/t6/3RN2I1zh
-        cAHJ0pecw3okshNGhxFe8k2sl5xA5iXZ8tUkXUagvEBmke+KYlkuL6Qsgi5UglAY
-        sULcpxzyyQ5xtAR8tviFv0T06NL7mCBb6B1bkF7iAeo5xCPPu1Wkc8z/fJ5xBQA6
-        oiqdCT6+nIYM8UUH29HW1rcn31IYO7pOsTA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1679359731; x=1679446131; bh=FDz7l3LvqZq3Jky3lnWwH8yTFnKX+aXCW8S
-        XEMr4gJE=; b=VgRaX4zOQO6ozdqdwOOQI8XAyWweKsJaRQgDpZk857Tlat5uQXz
-        Y5jWN5MThbJgZw78hkbT9B0fmobRSFP4TDPOsQE2fvCcQJOi4csAfFI6j9DFHl1Y
-        WxdnJUWShxOZK29RcmlOBI9wm6oQ91tMrHVlWz7vtcSHhONFSwP7bqBK3Hzn1tNJ
-        9XiMtjsADoGBAkRkcChzkNq7rxSUsKXQ6tMF5tP//svI1RpyfygxjB+3BLEmb4n6
-        tl/L4c3W7jH86BAhT66nwJyn05GlmsL3ZKc6L/Xnm1cluhFVg1S/274La4dhs5w6
-        48f2FbVvor7EJHRnmcLDxIU95KvQvopVmCA==
-X-ME-Sender: <xms:8_4YZKmc72i3dAcWDirRuXPntKOeoyH4_mVjUdPnnEZbQiETxYQvww>
-    <xme:8_4YZB2mhzYH0X78EtvM1YHa8CuHB30MeRUFBjdrVVv5yh4NGstB6is03cHdAX4W1
-    7JKKbCQFMLgtVE0Ow>
-X-ME-Received: <xmr:8_4YZIogHFdheBO5Os4P7c-m38-fVtiEHhXt746eIJmCQge848iSG5iHbc5lv4rgpVrff-ZAEDvjXUlXShf9s0mIsvSmljcj4Z75O7WQ1xrkUsv3kABNVxKGlf4T1Uo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdefledgvdegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgjfhhrggfgsedtqhertdertddtnecuhfhrohhmpegkihcu
-    jggrnhcuoeiiihdrhigrnhesshgvnhhtrdgtohhmqeenucggtffrrghtthgvrhhnpeegge
-    ehudfgudduvdelheehteegledtteeiveeuhfffveekhfevueefieeijeegvdenucevlhhu
-    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpeiiihdrhigrnhessh
-    gvnhhtrdgtohhm
-X-ME-Proxy: <xmx:8_4YZOlCUUwsLDp-4rCWupLtRT-eFxGfNQYhi8hQUD4GtmibLwrijA>
-    <xmx:8_4YZI2Xxnn6EawBL3GbjmBBK6bsdOAOSODK999-uflxmPVkFQwTYQ>
-    <xmx:8_4YZFvRmcK_usytmHVr2E093fPwoJPRRyvlD-1bPkDuGJl8_IpntQ>
-    <xmx:8_4YZJI_nAwKXmXn5SfX0NgjgvAhJ-YeZlj6UN7tsxxzk1hwVHbDpw>
-Feedback-ID: iccd040f4:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 20 Mar 2023 20:48:51 -0400 (EDT)
-From:   Zi Yan <zi.yan@sent.com>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>,
-        linux-mm@kvack.org
-Cc:     Zi Yan <ziy@nvidia.com>, Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH 3/5] mm: thp: split huge page to any lower order pages.
-Date:   Mon, 20 Mar 2023 20:48:27 -0400
-Message-Id: <20230321004829.2012847-4-zi.yan@sent.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230321004829.2012847-1-zi.yan@sent.com>
-References: <20230321004829.2012847-1-zi.yan@sent.com>
-Reply-To: Zi Yan <ziy@nvidia.com>
-MIME-Version: 1.0
+        Mon, 20 Mar 2023 21:26:48 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AECB1BA;
+        Mon, 20 Mar 2023 18:26:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679362007; x=1710898007;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=LtUJ07a/truYX+NEfV4ZLkuSkiJJV/MaVr/UNe2ZYw4=;
+  b=JTdaaE3tAo/ujtZwBajUTvkHFImwGyXqjLMZHS+khu0ssOzztvmJjEdZ
+   0uhP8CqccVJCcyk8b/J+lhw509tGKgevh87seTi+hTk+jy1mR1El/WjpT
+   mOYhybRXWZL3JnbGHe4Nvnk1/+UNSJ4GsbdccIhzae72wDTSXkgB/dYVr
+   +mDQi/856cjVuw9y6ahmZqmiFRZ7S6mAMKgDzXfwUJ+C8JbcGQUTgeLpj
+   YamUyGaSjJbzbfdNWRQ4V9DZ3VRF1e+h8ekktF8NJmtqwwC8Jooz5t84Y
+   POrOr6ZTk2pxvsqJcGEvFdl22skvXHRZUgNz3IbAWhZMPxAeRMLTjeoLW
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="401393816"
+X-IronPort-AV: E=Sophos;i="5.98,277,1673942400"; 
+   d="scan'208";a="401393816"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 18:26:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="711601182"
+X-IronPort-AV: E=Sophos;i="5.98,277,1673942400"; 
+   d="scan'208";a="711601182"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga008.jf.intel.com with ESMTP; 20 Mar 2023 18:26:41 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 20 Mar 2023 18:25:59 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 20 Mar 2023 18:25:58 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Mon, 20 Mar 2023 18:25:58 -0700
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.177)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Mon, 20 Mar 2023 18:25:58 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NlU/sCq+cEupyM4Vz70cOkFqBERwno8A1UJOu+z0HxGSrIj9p0eD9MpLKrhZE+g/B+DdutlXAFSRN5mec5+bEz84Wl1rbLcvZAP8NmPLFdc1SRIV3Zbm5UKA+b6TSkwTcKXGmfI/Wod6UvsjCI6U94mJYIW+r+uWcKpAHtOhO930BanloZD1+puV8WXCUV/ifhs+I4snS/mOsXgpXfCT/SN2HflqTliFZmWqHKn+PokTrSOelBk3fYLgu96Bosj7d0cCGJX38rOTyv9s0sRSxJYkgCsbun5i/Ltcyl+GdPNyhmKwjQzN9C9xl0MJ+w0ry6S6nIhvgFo7IN0/0UGkdQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xbBbhHSYFvcA8YICf1URyY+7PHcgnbHkzzbiHrSqW+g=;
+ b=is5EYRIM1Uj3AdOCigbxwYlBVLTJWum1rkW/zRvwZzLjmUoBI504cEaEyDw4xiK22gXTcvscvoIajBVxHwcBvhs2NxtR1XfcosYAEt9wIsQvyPQZNqxe7FiTsbmIm1AyZaejcqzreJyuYytzyGThFxvORbIDlkP5+0EKNQJ0mAkdLOxZymSvJKtHaFMKvwFReHSWLOoaNiQeSKyMZHolCl/52uOb2I2Vsl0f+xpm6D9yTF3LTEyCaB+W2pXP+q3Jn3cSdzIMk52bdyCxEs5iWd5IWiKQrGl43CUx7xCNU7LF3BHLXGdZSSSsrlN/s6yiWLahXq3dyPWAlQ3yKloPyA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by PH0PR11MB4807.namprd11.prod.outlook.com (2603:10b6:510:3a::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Tue, 21 Mar
+ 2023 01:25:56 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::1aac:b695:f7c5:bcac]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::1aac:b695:f7c5:bcac%9]) with mapi id 15.20.6178.037; Tue, 21 Mar 2023
+ 01:25:56 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+CC:     "Liu, Yi L" <yi.l.liu@intel.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
+        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "jasowang@redhat.com" <jasowang@redhat.com>,
+        "shameerali.kolothum.thodi@huawei.com" 
+        <shameerali.kolothum.thodi@huawei.com>,
+        "lulu@redhat.com" <lulu@redhat.com>,
+        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Subject: RE: [PATCH 04/12] iommufd: Pass parent hwpt and user_data to
+ iommufd_hw_pagetable_alloc()
+Thread-Topic: [PATCH 04/12] iommufd: Pass parent hwpt and user_data to
+ iommufd_hw_pagetable_alloc()
+Thread-Index: AQHZUl5+74r99ujM3k2mVNy7XlBGXK7+0CWQgATfRQCAANJZEA==
+Date:   Tue, 21 Mar 2023 01:25:56 +0000
+Message-ID: <BN9PR11MB527689FBADB059536F0265F48C819@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20230309080910.607396-1-yi.l.liu@intel.com>
+ <20230309080910.607396-5-yi.l.liu@intel.com>
+ <BN9PR11MB5276815B943E2232F158C0128CBD9@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <ZBhVyqEeAbnJJqNW@nvidia.com>
+In-Reply-To: <ZBhVyqEeAbnJJqNW@nvidia.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|PH0PR11MB4807:EE_
+x-ms-office365-filtering-correlation-id: dbd5bf53-7f39-4bca-6565-08db29ab387a
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: VbQpHQIDABg8j9VCO+qOOsy4JO3vp4qbsGSxrMdx2sYY2A1kTsxftKsAJplcqB3c4M7eQ4+a+/NLY+DBZeyHiJwPM/OnEub5Dic1mtkOVLReUyoYOl8CY2LZwUUjehrQ912rk7TDFvp0sWiA/+RKyOWo1Tmsxq2KiZ0XwCxiMXc6MNrVqnUpCmlRoQZpdI1/31TTy1i7NlNWpQ41uHYjEcD1EPUplCSu61C73HmvI9ttPhLhr/UCmZ13r6X9pvRDUQw48pDbrUJsN/DT1f6GshrxAwCSdDReTW860CbIqUoJYOGvnhU7bvVUo1o5jC4F27B+ath6NAJ2uSqfjRmUjzUnl8MLtw7S+GjUZzZanuWkGa5+KOSoFwEe1ofny8WzVCd3ikzt5mSXMxQaJXt7jyXlweJdKV6FwkJ9S1mxOY6RT7dpb2EWDOPLYaG8FveDddfGvg1cdzaRKWX+686YhBvTE+8crxRZIKtA4N4jbQlOzSRow/jpJhPQJlgEDFEMmy6uPeFk5is9iqKw48im2Hhk+Oxm/rB2E+/qnAbsQPfhjxuQgUee8XGBU958lTHzA6ziwx/EE664kHRPunqZB7rBdfVGxyTQdDT80WKOritswhIusYPWht6JSFmUoVrelYdHBaCJqQpZwNQ2UbzaybzgtExI3yOI6PHh/bGdc/70gHdMHIkSe1KHPaC/iUNqHOzP0n8xH1GAM792Y+nUWg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(376002)(396003)(136003)(39860400002)(346002)(366004)(451199018)(38100700002)(71200400001)(7696005)(316002)(4744005)(55016003)(54906003)(33656002)(76116006)(6916009)(8676002)(66446008)(66946007)(66476007)(5660300002)(66556008)(8936002)(52536014)(4326008)(64756008)(41300700001)(7416002)(478600001)(2906002)(122000001)(82960400001)(86362001)(38070700005)(186003)(9686003)(26005)(6506007);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?pKFkFzi3a1gKRP7bObNBttYGWELowe0K/dlzt8ArFtpqHAvZ+qi3rj370uY+?=
+ =?us-ascii?Q?3+Tv2LCkwQyiU/0R1BYMmpFJQxOF/JFzL6A64UKH9Isr2wuwFo2FAWxpj+Yk?=
+ =?us-ascii?Q?LYGg4KrB8+joT02SXzd/7n6QbuHJ4lrqIiScCdrAuqww+4OgCkONrhgwQaGU?=
+ =?us-ascii?Q?IO/lwSDXOOoUIcuP0II7a+aSQwvr8/1KQ1a9QwLF+Qr0ATChzTCj9Ag9/kSR?=
+ =?us-ascii?Q?FioY//JooEpOPFlVpMu8pOHw93JYCYF5OZwIMmLyTotSJWVSpk/Lcc0IHUoM?=
+ =?us-ascii?Q?eytfmbgY8iV3NtXjpJUcOgRu3wgCBKWogqAJUusaL/I01LKfGrbR47I4ZtSm?=
+ =?us-ascii?Q?/CNaIm+Od4QEqItJWhUPdwivrtsTf7sAaRH1ZQR4c0oW1npOSQw7jMykL0Wg?=
+ =?us-ascii?Q?EsuaGZjZbBud23QutWT3HfVko9wUzc7i7ZpSEshWHVJU/pSUDi2wICeTF1yt?=
+ =?us-ascii?Q?wOsvK+EMDHE8NIR/La0KI1d3eWYOeF1DMA88LbnE+JusCBCBipLqRDI6v83Q?=
+ =?us-ascii?Q?oBLIgZIkSTlMdh9PunxO82GYR23DPE4UydRD4Pre0fN7rUI4xbqXOxD4qBIN?=
+ =?us-ascii?Q?Dg3iux7vAHGiW135EnWhYj/UPeoIkcXSYoaQLTFj8ueNP7CaVYiGpHnnbRp+?=
+ =?us-ascii?Q?FaDM3A99Q/PQwGOZ0KxMEJCLELWbCFF7rIwTexUgBRiw17/Sz1bo4kqbr30t?=
+ =?us-ascii?Q?i4VMJDBarGcflMXTFCTYbm0Ia5WxffHu21shAnXBk2Vqc0HpCJtCH+UsAL9a?=
+ =?us-ascii?Q?lixS94idgDlt8bgPEdhWHKBznior9WQcYb2YAPzPwgx3i1VTVUgAo031HO0X?=
+ =?us-ascii?Q?keEx7Q+UMHl3wWEFn3CG2AQ2np7xyrahSiAsk/0MKz5Foc6E5KT1s+HLnf8q?=
+ =?us-ascii?Q?tAdC4F22Owprl3uVF/gMsiTIm46ZzeWm4n3Rb6sjWtogJLP+QUKLfIozRPFT?=
+ =?us-ascii?Q?fcZiHR8LjeuBQd05zNp4RiToQZ6KKvWvKd4D7zmnYLOoZVKupnkx4NuTfAwL?=
+ =?us-ascii?Q?bIoop2e3y7P2h7knlqY4oJx30vt5a8Gaqkq66mM6p+LGjREmirjdmc0AFj6J?=
+ =?us-ascii?Q?+XEksf7WBYw7drJSqy2YM7PifKHX+WTREgQwvooan2HZvsXRZaSVk4vgLNJz?=
+ =?us-ascii?Q?EtJ+TzW/ZlYSRrypBV7wimOWU3spaY2ZD3wc3xu8XjkCp/SzfzXZiVPZQ3p3?=
+ =?us-ascii?Q?VNaDvECN03iZWfSCVOqdH408BZexXTnPtZoeR7eplmvlPBVS9iQ+C1LY3v9u?=
+ =?us-ascii?Q?gUnuiHh5RKpxo7Vu6Q5LSg7su0T1FPINY765PZGddKZem+HwXzFbfQzt6MMA?=
+ =?us-ascii?Q?ApBSYi0O+uhnHw/Aln24eZkNrHzeOtJQaoj1+CVmAvw5/0EBtptXtaMjd07p?=
+ =?us-ascii?Q?+h9xzMcv1rVijn6YEx72GoTG062faLVBfvnEDzii80xsOA08QN0gaIuMyvzT?=
+ =?us-ascii?Q?oed7XMhQE2EEGWyAedOd5vsfQMaNAN1xF6VLQNse1Dh6LEWiz3I+i5G4ov3Z?=
+ =?us-ascii?Q?p6xqIlApwV5cKG3MMrjImQafbguY+X2hcGzTmlsrrq5X8lHMXLDJmJOt2uIR?=
+ =?us-ascii?Q?SNCfVso/xp+eja4h9zj/lIJgrj6A4heReU1hDgvR?=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dbd5bf53-7f39-4bca-6565-08db29ab387a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Mar 2023 01:25:56.6267
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: XkdwgufhKVUstJw2xJeqhajnnrRiXZTbTUzWsbKgchaw6WmQZCLYgF5E/ScjKRyRYafd4+iHE2/biLk5/hz2aA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB4807
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Zi Yan <ziy@nvidia.com>
+> From: Jason Gunthorpe <jgg@nvidia.com>
+> Sent: Monday, March 20, 2023 8:47 PM
+>=20
+> On Fri, Mar 17, 2023 at 10:23:54AM +0000, Tian, Kevin wrote:
+> > > From: Liu, Yi L <yi.l.liu@intel.com>
+> > > Sent: Thursday, March 9, 2023 4:09 PM
+> > >
+> > > +	/* It must be either NESTED or UNMANAGED, depending on
+> > > parent_domain */
+> > > +	if ((parent_domain && hwpt->domain->type !=3D
+> > > IOMMU_DOMAIN_NESTED) ||
+> > > +	    (!parent_domain && hwpt->domain->type !=3D
+> > > IOMMU_DOMAIN_UNMANAGED))
+> > > +		goto out_abort;
+> > > +
+> >
+> > WARN_ON()
+>=20
+> Wouldn't that be userspace triggerable? It gets to pick the hwpt used.
+>=20
 
-To split a THP to any lower order pages, we need to reform THPs on
-subpages at given order and add page refcount based on the new page
-order. Also we need to reinitialize page_deferred_list after removing
-the page from the split_queue, otherwise a subsequent split will see
-list corruption when checking the page_deferred_list again.
-
-It has many uses, like minimizing the number of pages after
-truncating a huge pagecache page. For anonymous THPs, we can only split
-them to order-0 like before until we add support for any size anonymous
-THPs.
-
-Signed-off-by: Zi Yan <ziy@nvidia.com>
----
- include/linux/huge_mm.h |  10 ++--
- mm/huge_memory.c        | 103 +++++++++++++++++++++++++++++-----------
- 2 files changed, 82 insertions(+), 31 deletions(-)
-
-diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
-index 20284387b841..32c91e1b59cd 100644
---- a/include/linux/huge_mm.h
-+++ b/include/linux/huge_mm.h
-@@ -147,10 +147,11 @@ void prep_transhuge_page(struct page *page);
- void free_transhuge_page(struct page *page);
-=20
- bool can_split_folio(struct folio *folio, int *pextra_pins);
--int split_huge_page_to_list(struct page *page, struct list_head *list);
-+int split_huge_page_to_list_to_order(struct page *page, struct list_head *=
-list,
-+		unsigned int new_order);
- static inline int split_huge_page(struct page *page)
- {
--	return split_huge_page_to_list(page, NULL);
-+	return split_huge_page_to_list_to_order(page, NULL, 0);
- }
- void deferred_split_folio(struct folio *folio);
-=20
-@@ -297,7 +298,8 @@ can_split_folio(struct folio *folio, int *pextra_pins)
- 	return false;
- }
- static inline int
--split_huge_page_to_list(struct page *page, struct list_head *list)
-+split_huge_page_to_list_to_order(struct page *page, struct list_head *list,
-+		unsigned int new_order)
- {
- 	return 0;
- }
-@@ -397,7 +399,7 @@ static inline bool thp_migration_supported(void)
- static inline int split_folio_to_list(struct folio *folio,
- 		struct list_head *list)
- {
--	return split_huge_page_to_list(&folio->page, list);
-+	return split_huge_page_to_list_to_order(&folio->page, list, 0);
- }
-=20
- static inline int split_folio(struct folio *folio)
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 710189885402..f119b9be33f2 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -2359,11 +2359,13 @@ void vma_adjust_trans_huge(struct vm_area_struct *v=
-ma,
-=20
- static void unmap_folio(struct folio *folio)
- {
--	enum ttu_flags ttu_flags =3D TTU_RMAP_LOCKED | TTU_SPLIT_HUGE_PMD |
--		TTU_SYNC;
-+	enum ttu_flags ttu_flags =3D TTU_RMAP_LOCKED | TTU_SYNC;
-=20
- 	VM_BUG_ON_FOLIO(!folio_test_large(folio), folio);
-=20
-+	if (folio_order(folio) >=3D HPAGE_PMD_ORDER)
-+		ttu_flags |=3D TTU_SPLIT_HUGE_PMD;
-+
- 	/*
- 	 * Anon pages need migration entries to preserve them, but file
- 	 * pages can simply be left unmapped, then faulted back on demand.
-@@ -2395,7 +2397,6 @@ static void lru_add_page_tail(struct page *head, stru=
-ct page *tail,
- 		struct lruvec *lruvec, struct list_head *list)
- {
- 	VM_BUG_ON_PAGE(!PageHead(head), head);
--	VM_BUG_ON_PAGE(PageCompound(tail), head);
- 	VM_BUG_ON_PAGE(PageLRU(tail), head);
- 	lockdep_assert_held(&lruvec->lru_lock);
-=20
-@@ -2416,9 +2417,10 @@ static void lru_add_page_tail(struct page *head, str=
-uct page *tail,
- }
-=20
- static void __split_huge_page_tail(struct page *head, int tail,
--		struct lruvec *lruvec, struct list_head *list)
-+		struct lruvec *lruvec, struct list_head *list, unsigned int new_order)
- {
- 	struct page *page_tail =3D head + tail;
-+	unsigned long compound_head_flag =3D new_order ? (1L << PG_head) : 0;
-=20
- 	VM_BUG_ON_PAGE(atomic_read(&page_tail->_mapcount) !=3D -1, page_tail);
-=20
-@@ -2451,6 +2453,7 @@ static void __split_huge_page_tail(struct page *head,=
- int tail,
- 			 (1L << PG_arch_3) |
- #endif
- 			 (1L << PG_dirty) |
-+			 compound_head_flag |
- 			 LRU_GEN_MASK | LRU_REFS_MASK));
-=20
- 	/* ->mapping in first and second tail page is replaced by other uses */
-@@ -2483,10 +2486,15 @@ static void __split_huge_page_tail(struct page *hea=
-d, int tail,
- 	 * which needs correct compound_head().
- 	 */
- 	clear_compound_head(page_tail);
-+	if (new_order) {
-+		prep_compound_page(page_tail, new_order);
-+		prep_transhuge_page(page_tail);
-+	}
-=20
- 	/* Finally unfreeze refcount. Additional reference from page cache. */
--	page_ref_unfreeze(page_tail, 1 + (!PageAnon(head) ||
--					  PageSwapCache(head)));
-+	page_ref_unfreeze(page_tail, 1 + ((!PageAnon(head) ||
-+					   PageSwapCache(head)) ?
-+						thp_nr_pages(page_tail) : 0));
-=20
- 	if (page_is_young(head))
- 		set_page_young(page_tail);
-@@ -2504,7 +2512,7 @@ static void __split_huge_page_tail(struct page *head,=
- int tail,
- }
-=20
- static void __split_huge_page(struct page *page, struct list_head *list,
--		pgoff_t end)
-+		pgoff_t end, unsigned int new_order)
- {
- 	struct folio *folio =3D page_folio(page);
- 	struct page *head =3D &folio->page;
-@@ -2513,10 +2521,11 @@ static void __split_huge_page(struct page *page, st=
-ruct list_head *list,
- 	unsigned long offset =3D 0;
- 	unsigned int order =3D thp_order(head);
- 	unsigned int nr =3D thp_nr_pages(head);
-+	unsigned int new_nr =3D 1 << new_order;
- 	int i;
-=20
- 	/* complete memcg works before add pages to LRU */
--	split_page_memcg(head, nr, 1);
-+	split_page_memcg(head, nr, new_nr);
-=20
- 	if (PageAnon(head) && PageSwapCache(head)) {
- 		swp_entry_t entry =3D { .val =3D page_private(head) };
-@@ -2531,14 +2540,14 @@ static void __split_huge_page(struct page *page, st=
-ruct list_head *list,
-=20
- 	ClearPageHasHWPoisoned(head);
-=20
--	for (i =3D nr - 1; i >=3D 1; i--) {
--		__split_huge_page_tail(head, i, lruvec, list);
-+	for (i =3D nr - new_nr; i >=3D new_nr; i -=3D new_nr) {
-+		__split_huge_page_tail(head, i, lruvec, list, new_order);
- 		/* Some pages can be beyond EOF: drop them from page cache */
- 		if (head[i].index >=3D end) {
- 			struct folio *tail =3D page_folio(head + i);
-=20
- 			if (shmem_mapping(head->mapping))
--				shmem_uncharge(head->mapping->host, 1);
-+				shmem_uncharge(head->mapping->host, new_nr);
- 			else if (folio_test_clear_dirty(tail))
- 				folio_account_cleaned(tail,
- 					inode_to_wb(folio->mapping->host));
-@@ -2548,29 +2557,38 @@ static void __split_huge_page(struct page *page, st=
-ruct list_head *list,
- 			__xa_store(&head->mapping->i_pages, head[i].index,
- 					head + i, 0);
- 		} else if (swap_cache) {
-+			/*
-+			 * split anonymous THPs (including swapped out ones) to
-+			 * non-zero order not supported
-+			 */
-+			VM_WARN_ONCE(new_order,
-+				"Split swap-cached anon folio to non-0 order not supported");
- 			__xa_store(&swap_cache->i_pages, offset + i,
- 					head + i, 0);
- 		}
- 	}
-=20
--	ClearPageCompound(head);
-+	if (!new_order)
-+		ClearPageCompound(head);
-+	else
-+		set_compound_order(head, new_order);
- 	unlock_page_lruvec(lruvec);
- 	/* Caller disabled irqs, so they are still disabled here */
-=20
--	split_page_owner(head, order, 0);
-+	split_page_owner(head, order, new_order);
-=20
- 	/* See comment in __split_huge_page_tail() */
- 	if (PageAnon(head)) {
- 		/* Additional pin to swap cache */
- 		if (PageSwapCache(head)) {
--			page_ref_add(head, 2);
-+			page_ref_add(head, 1 + new_nr);
- 			xa_unlock(&swap_cache->i_pages);
- 		} else {
- 			page_ref_inc(head);
- 		}
- 	} else {
- 		/* Additional pin to page cache */
--		page_ref_add(head, 2);
-+		page_ref_add(head, 1 + new_nr);
- 		xa_unlock(&head->mapping->i_pages);
- 	}
- 	local_irq_enable();
-@@ -2583,7 +2601,14 @@ static void __split_huge_page(struct page *page, str=
-uct list_head *list,
- 		split_swap_cluster(entry);
- 	}
-=20
--	for (i =3D 0; i < nr; i++) {
-+	/*
-+	 * set page to its compound_head when split to THPs, so that GUP pin and
-+	 * PG_locked are transferred to the right after-split page
-+	 */
-+	if (new_order)
-+		page =3D compound_head(page);
-+
-+	for (i =3D 0; i < nr; i +=3D new_nr) {
- 		struct page *subpage =3D head + i;
- 		if (subpage =3D=3D page)
- 			continue;
-@@ -2617,29 +2642,31 @@ bool can_split_folio(struct folio *folio, int *pext=
-ra_pins)
- }
-=20
- /*
-- * This function splits huge page into normal pages. @page can point to any
-- * subpage of huge page to split. Split doesn't change the position of @pa=
-ge.
-+ * This function splits huge page into pages in @new_order. @page can poin=
-t to
-+ * any subpage of huge page to split. Split doesn't change the position of
-+ * @page.
-  *
-  * Only caller must hold pin on the @page, otherwise split fails with -EBU=
-SY.
-  * The huge page must be locked.
-  *
-  * If @list is null, tail pages will be added to LRU list, otherwise, to @=
-list.
-  *
-- * Both head page and tail pages will inherit mapping, flags, and so on fr=
-om
-- * the hugepage.
-+ * Pages in new_order will inherit mapping, flags, and so on from the huge=
-page.
-  *
-- * GUP pin and PG_locked transferred to @page. Rest subpages can be freed =
-if
-- * they are not mapped.
-+ * GUP pin and PG_locked transferred to @page or the compound page @page b=
-elongs
-+ * to. Rest subpages can be freed if they are not mapped.
-  *
-  * Returns 0 if the hugepage is split successfully.
-  * Returns -EBUSY if the page is pinned or if anon_vma disappeared from un=
-der
-  * us.
-  */
--int split_huge_page_to_list(struct page *page, struct list_head *list)
-+int split_huge_page_to_list_to_order(struct page *page, struct list_head *=
-list,
-+				     unsigned int new_order)
- {
- 	struct folio *folio =3D page_folio(page);
- 	struct deferred_split *ds_queue =3D get_deferred_split_queue(folio);
--	XA_STATE(xas, &folio->mapping->i_pages, folio->index);
-+	/* reset xarray order to new order after split */
-+	XA_STATE_ORDER(xas, &folio->mapping->i_pages, folio->index, new_order);
- 	struct anon_vma *anon_vma =3D NULL;
- 	struct address_space *mapping =3D NULL;
- 	int extra_pins, ret;
-@@ -2649,6 +2676,18 @@ int split_huge_page_to_list(struct page *page, struc=
-t list_head *list)
- 	VM_BUG_ON_FOLIO(!folio_test_locked(folio), folio);
- 	VM_BUG_ON_FOLIO(!folio_test_large(folio), folio);
-=20
-+	/* Cannot split THP to order-1 (no order-1 THPs) */
-+	if (new_order =3D=3D 1) {
-+		VM_WARN_ONCE(1, "Cannot split to order-1 folio");
-+		return -EINVAL;
-+	}
-+
-+	/* Split anonymous folio to non-zero order not support */
-+	if (folio_test_anon(folio) && new_order) {
-+		VM_WARN_ONCE(1, "Split anon folio to non-0 order not support");
-+		return -EINVAL;
-+	}
-+
- 	is_hzp =3D is_huge_zero_page(&folio->page);
- 	VM_WARN_ON_ONCE_FOLIO(is_hzp, folio);
- 	if (is_hzp)
-@@ -2744,7 +2783,13 @@ int split_huge_page_to_list(struct page *page, struc=
-t list_head *list)
- 	if (folio_ref_freeze(folio, 1 + extra_pins)) {
- 		if (!list_empty(&folio->_deferred_list)) {
- 			ds_queue->split_queue_len--;
--			list_del(&folio->_deferred_list);
-+			/*
-+			 * Reinitialize page_deferred_list after removing the
-+			 * page from the split_queue, otherwise a subsequent
-+			 * split will see list corruption when checking the
-+			 * page_deferred_list.
-+			 */
-+			list_del_init(&folio->_deferred_list);
- 		}
- 		spin_unlock(&ds_queue->split_queue_lock);
- 		if (mapping) {
-@@ -2754,14 +2799,18 @@ int split_huge_page_to_list(struct page *page, stru=
-ct list_head *list)
- 			if (folio_test_swapbacked(folio)) {
- 				__lruvec_stat_mod_folio(folio, NR_SHMEM_THPS,
- 							-nr);
--			} else {
-+			} else if (!new_order) {
-+				/*
-+				 * Decrease THP stats only if split to normal
-+				 * pages
-+				 */
- 				__lruvec_stat_mod_folio(folio, NR_FILE_THPS,
- 							-nr);
- 				filemap_nr_thps_dec(mapping);
- 			}
- 		}
-=20
--		__split_huge_page(page, list, end);
-+		__split_huge_page(page, list, end, new_order);
- 		ret =3D 0;
- 	} else {
- 		spin_unlock(&ds_queue->split_queue_lock);
---=20
-2.39.2
-
+The domain type is set by iommu driver instead of userspace. A sane
+driver should pass above check, if it claims to support nested.=20
