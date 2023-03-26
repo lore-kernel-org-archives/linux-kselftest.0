@@ -2,583 +2,336 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5D92C77B6C
-	for <linux-kselftest@archiver.kernel.org>; Sun, 26 Mar 2023 06:20:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 30E1FC74A5B
+	for <linux-kselftest@archiver.kernel.org>; Sun, 26 Mar 2023 06:34:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231706AbjCZGU5 (ORCPT
+        id S229988AbjCZGeA (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 26 Mar 2023 02:20:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36404 "EHLO
+        Sun, 26 Mar 2023 02:34:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230334AbjCZGUy (ORCPT
+        with ESMTP id S229795AbjCZGd7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 26 Mar 2023 02:20:54 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A287AD06;
-        Sat, 25 Mar 2023 23:20:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679811652; x=1711347652;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=j4/SleTfftB6KrA223qocI+KyHxUrA23jqrHhH2W6Kg=;
-  b=h8YrbN+sqiaSsG0Uo/kpSfvRonjxhhWC1IQN86rskJtNXcZXL/f6EeYy
-   wiPpZXirIcek15uayZog2d+KpyCX49qARkb55cUpbV1dTK96r2paNsz5T
-   lhxZXiMqZuAhMyrQtUDcHINi/0DmK+6zcESRAHXfSLWmFy3UGjt1w7P9E
-   NZumUV/FDFIf9hJ/CmT3pI3Lo0pqGCcaUKiSAalXv7ryMTVNQSWgV/5a9
-   CvlE2mtO0oenBXUVI78a/dJhYIT36LsvPy4pSmqwjN0Gn0AczoDRcx/Wo
-   95BeMY40cY/6cRImj90jwkrlZI8frB0xdO0GKaOfynnhPmUn34139VHlv
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10660"; a="341628548"
-X-IronPort-AV: E=Sophos;i="5.98,292,1673942400"; 
-   d="scan'208";a="341628548"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2023 23:20:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10660"; a="660510710"
-X-IronPort-AV: E=Sophos;i="5.98,292,1673942400"; 
-   d="scan'208";a="660510710"
-Received: from srivats1-mobl.amr.corp.intel.com (HELO skuppusw-desk1.amr.corp.intel.com) ([10.209.108.178])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2023 23:20:50 -0700
-From:   Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Guorui Yu <GuoRui.Yu@linux.alibaba.com>,
-        Du Fan <fan.du@intel.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: [PATCH v1 2/3] virt: tdx-guest: Add Quote generation support
-Date:   Sat, 25 Mar 2023 23:20:38 -0700
-Message-Id: <20230326062039.341479-3-sathyanarayanan.kuppuswamy@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230326062039.341479-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-References: <20230326062039.341479-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+        Sun, 26 Mar 2023 02:33:59 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FEC244BD;
+        Sat, 25 Mar 2023 23:33:57 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id h11so396404lfu.8;
+        Sat, 25 Mar 2023 23:33:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679812436;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CGJJOvtcK4rfy8EdLpv7G1dLKnVvC2mUQhS3ItGwVPo=;
+        b=Iaocolml4PQftUgPU0I7aFHb5cyFWjkR9QZa7V2703kYA1eTqC8Xg2cEI8Bn3uElO5
+         LZL3DAjinapxcrRk78lh0i18RhesrZivJaxOO+RCyQR/gPbK+vMzvqoZgwkE7mJTvop6
+         tXLCOmmYW+4FQhbg7AOvKVJtUhQ2LBLlP3z6p0H9pw+ZE2dd0E9qv7a0bvSxkeGp44AJ
+         bTLtp8ia+um0niBr9fIG8jGyCaNUXnqLGbU1nuhpxXvaYbaCqJTST4QLnx16PuK89j6M
+         4hpYVbzB3vCIdkvEFkjKcvsl7nZAb5j7OYXYV9R/HRvGimEc5vXEATMHW5/iKCprhg2A
+         WuEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679812436;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CGJJOvtcK4rfy8EdLpv7G1dLKnVvC2mUQhS3ItGwVPo=;
+        b=8EvHFvJFSXt2Iw9PG3PkvPYeAqko6emE6k45R+Ved4lXxj6aMJaclO+Dztfw8CTgJM
+         P3+oy6lsGLTyeFWQQjEo0r6hfTvX6iLJ5Jt+8DTG3VYIkl3bvFRV5RkqN8L6RzQEDpZf
+         ugFTx0x+jNbaE0QxIsJRCezPJ0NUQSd1ii9kstdoV0JPyrCIS/YzoYqX8Y+HNpVC3zEk
+         18iMnWdLjIhKT7MUovo9Ou7tv9ahfHcePzq/USlvC7kyy2jlQgXEF7pCx47JCLL7JYgh
+         2qx8CvZ2DIWR9MZh8kCGV4tLnXdHMPSUSHsz3AfmGYox99RySUZ/rdBvaOCBO/E1Px1w
+         Gk3Q==
+X-Gm-Message-State: AAQBX9ca/ntwAiysMjDyp/WgnY8GN7tcR3ooFt5rMqXlcJ09LYPsfa4B
+        GrsLgSd0ggkXTUBfcdO5sViqi38xLjw=
+X-Google-Smtp-Source: AKy350ZXYYKi6F5QRiljLOTKU3HumFIG+dhc1C+mZe/xE6McpCdJ0miMd6ZVSHa1R3saSh4W+MXyGg==
+X-Received: by 2002:ac2:50d7:0:b0:4e9:6097:add3 with SMTP id h23-20020ac250d7000000b004e96097add3mr2289095lfm.61.1679812435594;
+        Sat, 25 Mar 2023 23:33:55 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
+        by smtp.gmail.com with ESMTPSA id v2-20020ac25922000000b004eb09081d77sm654244lfi.91.2023.03.25.23.33.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 25 Mar 2023 23:33:55 -0700 (PDT)
+Message-ID: <33f8fd51-1cc9-a280-77ec-302b822f3e7a@gmail.com>
+Date:   Sun, 26 Mar 2023 09:33:54 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-US, en-GB
+To:     David Gow <davidgow@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com
+References: <20230325043104.3761770-1-davidgow@google.com>
+ <20230325043104.3761770-2-davidgow@google.com>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: [RFC PATCH 1/2] kunit: resource: Add kunit_defer() functionality
+In-Reply-To: <20230325043104.3761770-2-davidgow@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-In TDX guest, the second stage in attestation process is to send the
-TDREPORT to QE/QGS to generate the TD Quote. For platforms that does
-not support communication channels like vsock or TCP/IP, implement
-support to get TD Quote using hypercall. GetQuote hypercall can be used
-by the TD guest to request VMM facilitate the Quote generation via
-QE/QGS. More details about GetQuote hypercall can be found in TDX
-Guest-Host Communication Interface (GHCI) for Intel TDX 1.0, section
-titled "TDG.VP.VMCALL<GetQuote>".
+On 3/25/23 06:31, David Gow wrote:
+> Many uses of the KUnit resource system are intended to simply defer
+> calling a function until the test exits (be it due to success or
+> failure). The existing kunit_alloc_resource() function is often used for
+> this, but was awkward to use (requiring passing NULL init functions, etc),
+> and returned a resource without incrementing its reference count, which
+> -- while okay for this use-case -- could cause problems in others.
+> 
+> Instead, introduce a simple kunit_defer() API: a simple function
+> (returning nothing, accepting a single void* argument) can be scheduled
+> to be called when the test exits. Deferred functions are called in the
+> opposite order to that which they were registered.
+> 
+> This is implemented as a resource under the hood, so the ordering
+> between resource cleanup and deferred functions is maintained.
+> 
+> Signed-off-by: David Gow <davidgow@google.com>
+> ---
+>   include/kunit/resource.h |  87 +++++++++++++++++++++++++++++++
+>   lib/kunit/resource.c     | 110 +++++++++++++++++++++++++++++++++++++++
+>   2 files changed, 197 insertions(+)
+> 
+> diff --git a/include/kunit/resource.h b/include/kunit/resource.h
+> index cf6fb8f2ac1b..6c4728ca9237 100644
+> --- a/include/kunit/resource.h
+> +++ b/include/kunit/resource.h
+> @@ -387,4 +387,91 @@ static inline int kunit_destroy_named_resource(struct kunit *test,
+>    */
+>   void kunit_remove_resource(struct kunit *test, struct kunit_resource *res);
+>   
+> +typedef void (*kunit_defer_function_t)(void *ctx);
+> +
+> +/**
+> + * kunit_defer() - Defer a function call until the test ends.
+> + * @test: Test case to associate the deferred function with.
+> + * @func: The function to run on test exit
+> + * @ctx: Data passed into @func
+> + * @internal_gfp: gfp to use for internal allocations, if unsure, use GFP_KERNEL
+> + *
+> + * Defer the execution of a function until the test exits, either normally or
+> + * due to a failure.  @ctx is passed as additional context. All functions
+> + * registered with kunit_defer() will execute in the opposite order to that
+> + * they were registered in.
+> + *
+> + * This is useful for cleaning up allocated memory and resources.
+> + *
+> + * RETURNS:
 
-Add support for TDX_CMD_GET_QUOTE IOCTL to allow attestation agent
-submit GetQuote requests from the user space using GetQuote hypercall.
+Is this intentional? Unless I'm mistaken the kernel-doc return value 
+specifier is 'Return:'.
 
-Since GetQuote is an asynchronous request hypercall, VMM will use
-callback interrupt vector configured by SetupEventNotifyInterrupt
-hypercall to notify the guest about Quote generation completion or
-failure. So register an IRQ handler for it.
+> + *   An opaque "cancellation token", or NULL on error. Pass this token to
+> + *   kunit_defer_cancel() in order to cancel the deferred execution of func().
+> + */
+> +void *kunit_defer(struct kunit *test, kunit_defer_function_t func,
+> +		  void *ctx, gfp_t internal_gfp);
+> +
+> +/**
+> + * kunit_defer_cancel_token() - Cancel a deferred function call.
+> + * @test: Test case the deferred function is associated with.
+> + * @cancel_token: The cancellation token returned by kunit_defer()
+> + *
+> + * Prevent a function deferred using kunit_defer() from executing when the
+> + * test ends.
+> + *
+> + * Prefer using this to kunit_defer_cancel() where possible.
+> + */
+> +void kunit_defer_cancel_token(struct kunit *test, void *cancel_token);
+> +
+> +/**
+> + * kunit_defer_trigger_token() - Run a deferred function call immediately.
+> + * @test: Test case the deferred function is associated with.
+> + * @cancel_token: The cancellation token returned by kunit_defer()
+> + *
+> + * Execute a deferred function call immediately, instead of waiting for the
+> + * test to end.
+> + *
+> + * Prefer using this to kunit_defer_trigger() where possible.
+> + */
+> +void kunit_defer_trigger_token(struct kunit *test, void *cancel_token);
+> +
+> +/**
+> + * kunit_defer_cancel() - Cancel a matching deferred function call.
+> + * @test: Test case the deferred function is associated with.
+> + * @func: The deferred function to cancel.
+> + * @ctx: The context passed to the deferred function to trigger.
+> + *
+> + * Prevent a function deferred via kunit_defer() from executing at shutdown.
+> + * Unlike kunit_defer_cancel_token(), this takes the (func, ctx) pair instead of
+> + * the cancellation token. If that function/context pair was deferred multiple
+> + * times, only the most recent one will be cancelled.
+> + *
+> + * Prefer using kunit_defer_cancel_token() to this where possible.
+> + */
+> +void kunit_defer_cancel(struct kunit *test,
+> +			kunit_defer_function_t func,
+> +			void *ctx);
+> +
+> +/**
+> + * kunit_defer_trigger() - Run a matching deferred function call immediately.
+> + * @test: Test case the deferred function is associated with.
+> + * @func: The deferred function to trigger.
+> + * @ctx: The context passed to the deferred function to trigger.
+> + *
+> + * Execute a function deferred via kunit_defer() immediately, rather than when
+> + * the test ends.
+> + * Unlike kunit_defer_trigger_token(), this takes the (func, ctx) pair instead of
+> + * the cancellation token. If that function/context pair was deferred multiple
+> + * times, it will only be executed once here. The most recent deferral will
+> + * no longer execute when the test ends.
+> + *
+> + * kunit_defer_trigger(test, func, ctx);
+> + * is equivalent to
+> + * func(ctx);
+> + * kunit_defer_cancel(test, func, ctx);
+> + *
+> + * Prefer using kunit_defer_trigger_token() to this where possible.
+> + */
+> +void kunit_defer_trigger(struct kunit *test,
+> +			 kunit_defer_function_t func,
+> +			 void *ctx);
+>   #endif /* _KUNIT_RESOURCE_H */
+> diff --git a/lib/kunit/resource.c b/lib/kunit/resource.c
+> index c414df922f34..0d0c48054d45 100644
+> --- a/lib/kunit/resource.c
+> +++ b/lib/kunit/resource.c
+> @@ -77,3 +77,113 @@ int kunit_destroy_resource(struct kunit *test, kunit_resource_match_t match,
+>   	return 0;
+>   }
+>   EXPORT_SYMBOL_GPL(kunit_destroy_resource);
+> +
+> +struct kunit_defer_ctx {
+> +	kunit_defer_function_t func;
+> +	void *ctx;
+> +};
+> +
+> +static void __kunit_defer_free(struct kunit_resource *res)
+> +{
+> +	struct kunit_defer_ctx *defer_ctx = (struct kunit_defer_ctx *)res->data;
+> +
+> +	defer_ctx->func(defer_ctx->ctx);
+> +
+> +	kfree(res->data);
+> +}
+> +
+> +void *kunit_defer(struct kunit *test, kunit_defer_function_t func,
+> +				void *ctx, gfp_t internal_gfp)
+> +{
+> +	struct kunit_resource *res;
+> +	struct kunit_defer_ctx *defer_ctx;
+> +
+> +	KUNIT_ASSERT_NOT_NULL_MSG(test, func, "Tried to defer a NULL function!");
+> +
+> +	res = kzalloc(sizeof(*res), internal_gfp);
+> +	if (!res)
+> +		return NULL;
+> +
+> +	defer_ctx = kzalloc(sizeof(*defer_ctx), internal_gfp);
+> +	if (!defer_ctx)
+> +		goto free_res;
+> +
+> +	defer_ctx->func = func;
+> +	defer_ctx->ctx = ctx;
+> +
+> +	res->should_kfree = true;
+> +	__kunit_add_resource(test, NULL, __kunit_defer_free, res, defer_ctx);
+> +
+> +	return (void *)res;
+> +
+> +free_res:
+> +	kfree(res);
+> +	return NULL;
+> +}
+> +
+> +void kunit_defer_cancel_token(struct kunit *test, void *cancel_token)
+> +{
+> +	struct kunit_resource *res = (struct kunit_resource *)cancel_token;
+> +
+> +	/* Remove the free function so we don't run the deferred function. */
+> +	res->free = NULL;
+> +
+> +	kunit_remove_resource(test, res);
+> +}
+> +
+> +void kunit_defer_trigger_token(struct kunit *test, void *cancel_token)
+> +{
+> +	struct kunit_resource *res = (struct kunit_resource *)cancel_token;
+> +
+> +	/* Removing the resource should trigger the res->free function. */
+> +	kunit_remove_resource(test, res);
+> +}
+> +
+> +static bool __kunit_defer_match(struct kunit *test,
+> +				struct kunit_resource *res, void *match_data)
+> +{
+> +	struct kunit_defer_ctx *match_ctx = (struct kunit_defer_ctx *)match_data;
+> +	struct kunit_defer_ctx *res_ctx = (struct kunit_defer_ctx *)res->data;
+> +
+> +	/* Make sure this is a free function. */
+> +	if (res->free != __kunit_defer_free)
+> +		return false;
+> +
+> +	/* Both the function and context data should match. */
+> +	return (match_ctx->func == res_ctx->func) && (match_ctx->ctx == res_ctx->ctx);
+> +}
+> +
+> +void kunit_defer_cancel(struct kunit *test,
+> +			kunit_defer_function_t func,
+> +			void *ctx)
+> +{
+> +	struct kunit_defer_ctx defer_ctx;
+> +	struct kunit_resource *res;
+> +
+> +	defer_ctx.func = func;
+> +	defer_ctx.ctx = ctx;
+> +
+> +	res = kunit_find_resource(test, __kunit_defer_match, &defer_ctx);
+> +	if (res) {
+> +		kunit_defer_cancel_token(test, res);
+> +		kunit_put_resource(res);
+> +	}
+> +}
+> +
+> +void kunit_defer_trigger(struct kunit *test,
+> +			 kunit_defer_function_t func,
+> +			 void *ctx)
+> +{
+> +	struct kunit_defer_ctx defer_ctx;
+> +	struct kunit_resource *res;
+> +
+> +	defer_ctx.func = func;
+> +	defer_ctx.ctx = ctx;
+> +
+> +	res = kunit_find_resource(test, __kunit_defer_match, &defer_ctx);
+> +	if (res) {
+> +		kunit_defer_trigger_token(test, res);
+> +		/* We have to put() this here, else free won't be called. */
+> +		kunit_put_resource(res);
+> +	}
+> +}
 
-GetQuote TDVMCALL requires TD guest pass a 4K aligned shared buffer
-with TDREPORT data as input, which is further used by the VMM to copy
-the TD Quote result after successful Quote generation. To create the
-shared buffer without breaking the direct map, use DMA alloc APIs.
+I am not really sure if you must provide the 'tokenless' cancel or 
+trigger APIs. They just feel a bit much to me. Well, if you have a 
+reason to do so then this looks good to me.
 
-Also note that, shared buffer allocation is currently handled in IOCTL
-handler, although it will increase the TDX_CMD_GET_QUOTE IOCTL response
-time, it is negligible compared to the time required for the quote
-generation completion. So IOCTL performance optimization is not
-considered at this time.
+Yours,
+	-- Matti
 
-To support parallel GetQuote requests, use linked list to track the
-active GetQuote requests and upon receiving the callback IRQ, loop
-through the active requests and mark the processed requests complete.
-Users can open multiple instances of the attestation device and send
-GetQuote requests in parallel.
-
-Since GetQuote support requires usage of DMA APIs, convert TDX guest
-driver to a platform driver.
-
-Reviewed-by: Tony Luck <tony.luck@intel.com>
-Reviewed-by: Andi Kleen <ak@linux.intel.com>
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
----
- Documentation/virt/coco/tdx-guest.rst   |  11 ++
- arch/x86/coco/tdx/tdx.c                 |  40 ++++
- arch/x86/include/asm/tdx.h              |   2 +
- drivers/virt/coco/tdx-guest/tdx-guest.c | 249 +++++++++++++++++++++++-
- include/uapi/linux/tdx-guest.h          |  44 +++++
- 5 files changed, 344 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/virt/coco/tdx-guest.rst b/Documentation/virt/coco/tdx-guest.rst
-index 46e316db6bb4..69954ed85c68 100644
---- a/Documentation/virt/coco/tdx-guest.rst
-+++ b/Documentation/virt/coco/tdx-guest.rst
-@@ -42,6 +42,17 @@ ABI. However, in the future, if the TDX Module supports more than one subtype,
- a new IOCTL CMD will be created to handle it. To keep the IOCTL naming
- consistent, a subtype index is added as part of the IOCTL CMD.
- 
-+2.2 TDX_CMD_GET_QUOTE
-+----------------------
-+
-+:Input parameters: struct tdx_quote_req
-+:Output: Return 0 on success, -EINTR for interrupted request, -EIO on TDCALL
-+         failure or standard error number on common failures. Upon successful
-+         execution, QUOTE data is copied to tdx_quote_req.buf.
-+
-+The TDX_CMD_GET_QUOTE IOCTL can be used by attestation software to generate
-+QUOTE for the given TDREPORT using TDG.VP.VMCALL<GetQuote> hypercall.
-+
- Reference
- ---------
- 
-diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-index d03985952d45..b823c4f493d4 100644
---- a/arch/x86/coco/tdx/tdx.c
-+++ b/arch/x86/coco/tdx/tdx.c
-@@ -34,6 +34,7 @@
- #define TDVMCALL_MAP_GPA		0x10001
- #define TDVMCALL_REPORT_FATAL_ERROR	0x10003
- #define TDVMCALL_SETUP_NOTIFY_INTR	0x10004
-+#define TDVMCALL_GET_QUOTE		0x10002
- 
- /* MMIO direction */
- #define EPT_READ	0
-@@ -199,6 +200,45 @@ static void __noreturn tdx_panic(const char *msg)
- 		__tdx_hypercall(&args, 0);
- }
- 
-+/**
-+ * tdx_hcall_get_quote() - Wrapper to request TD Quote using GetQuote
-+ *                         hypercall.
-+ * @tdquote: Address of the direct mapped kernel buffer which contains
-+ *	     TDREPORT data. The same buffer will be used by VMM to store
-+ *	     the generated TD Quote output.
-+ * @size: size of the tdquote buffer.
-+ *
-+ * Refer to section titled "TDG.VP.VMCALL<GetQuote>" in the TDX GHCI
-+ * v1.0 specification for more information on GetQuote hypercall.
-+ * It is used in the TDX guest driver module to get the TD Quote.
-+ *
-+ * Return 0 on success or error code on failure.
-+ */
-+int tdx_hcall_get_quote(u8 *tdquote, size_t size)
-+{
-+	struct tdx_hypercall_args args = {0};
-+
-+	/*
-+	 * TDX guest driver is the only user of this function and it uses
-+	 * the kernel mapped memory. So use virt_to_phys() to get the
-+	 * physical address of the TDQuote buffer without any additional
-+	 * checks for memory type.
-+	 */
-+	args.r10 = TDX_HYPERCALL_STANDARD;
-+	args.r11 = TDVMCALL_GET_QUOTE;
-+	args.r12 = cc_mkdec(virt_to_phys(tdquote));
-+	args.r13 = size;
-+
-+	/*
-+	 * Pass the physical address of TDREPORT to the VMM and
-+	 * trigger the Quote generation. It is not a blocking
-+	 * call, hence completion of this request will be notified to
-+	 * the TD guest via a callback interrupt.
-+	 */
-+	return __tdx_hypercall(&args, 0);
-+}
-+EXPORT_SYMBOL_GPL(tdx_hcall_get_quote);
-+
- static void tdx_parse_tdinfo(u64 *cc_mask)
- {
- 	struct tdx_module_output out;
-diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
-index 8807fe1b1f3f..a72bd7b96564 100644
---- a/arch/x86/include/asm/tdx.h
-+++ b/arch/x86/include/asm/tdx.h
-@@ -75,6 +75,8 @@ int tdx_register_event_irq_cb(tdx_event_irq_cb_t handler, void *data);
- 
- int tdx_unregister_event_irq_cb(tdx_event_irq_cb_t handler, void *data);
- 
-+int tdx_hcall_get_quote(u8 *tdquote, size_t size);
-+
- #else
- 
- static inline void tdx_early_init(void) { };
-diff --git a/drivers/virt/coco/tdx-guest/tdx-guest.c b/drivers/virt/coco/tdx-guest/tdx-guest.c
-index 5e44a0fa69bd..2424a0d02bc8 100644
---- a/drivers/virt/coco/tdx-guest/tdx-guest.c
-+++ b/drivers/virt/coco/tdx-guest/tdx-guest.c
-@@ -12,12 +12,151 @@
- #include <linux/mod_devicetable.h>
- #include <linux/string.h>
- #include <linux/uaccess.h>
-+#include <linux/platform_device.h>
-+#include <linux/interrupt.h>
-+#include <linux/irq.h>
-+#include <linux/dma-mapping.h>
- 
- #include <uapi/linux/tdx-guest.h>
- 
- #include <asm/cpu_device_id.h>
- #include <asm/tdx.h>
- 
-+/**
-+ * struct quote_entry - Quote request struct
-+ * @valid: Flag to check validity of the GetQuote request.
-+ * @buf: Kernel buffer to share data with VMM (size is page aligned).
-+ * @buf_len: Size of the buf in bytes.
-+ * @dma_address: DMA address of the buffer.
-+ * @dev: Reference to device used in DMA allocation.
-+ * @compl: Completion object to track completion of GetQuote request.
-+ * @list: List object for reference in quote_list.
-+ */
-+struct quote_entry {
-+	bool valid;
-+	void *buf;
-+	size_t buf_len;
-+	dma_addr_t dma_address;
-+	struct device *dev;
-+	struct completion compl;
-+	struct list_head list;
-+};
-+
-+/*
-+ * To support parallel GetQuote requests, use the list
-+ * to track active GetQuote requests.
-+ */
-+static LIST_HEAD(quote_list);
-+
-+/* Lock to protect quote_list */
-+static DEFINE_MUTEX(quote_lock);
-+
-+/* Quote generation work */
-+static void quote_callback_handler(struct work_struct *work);
-+
-+static DECLARE_WORK(quote_work, quote_callback_handler);
-+
-+static struct platform_device *tdx_dev;
-+
-+static struct quote_entry *alloc_quote_entry(struct device *dev, size_t buf_len)
-+{
-+	struct quote_entry *entry = NULL;
-+	size_t new_len = PAGE_ALIGN(buf_len);
-+
-+	entry = kmalloc(sizeof(*entry), GFP_KERNEL);
-+	if (!entry)
-+		return NULL;
-+
-+	entry->buf = dma_alloc_coherent(dev, new_len, &entry->dma_address,
-+					GFP_KERNEL);
-+	if (!entry->buf) {
-+		kfree(entry);
-+		return NULL;
-+	}
-+
-+	entry->buf_len = new_len;
-+	init_completion(&entry->compl);
-+	entry->valid = true;
-+	entry->dev = dev;
-+
-+	return entry;
-+}
-+
-+static void free_quote_entry(struct quote_entry *entry)
-+{
-+	dma_free_coherent(entry->dev, entry->buf_len, entry->buf,
-+			  entry->dma_address);
-+	kfree(entry);
-+}
-+
-+/* Must be called with quote_lock held */
-+static void _del_quote_entry(struct quote_entry *entry)
-+{
-+	list_del(&entry->list);
-+	free_quote_entry(entry);
-+}
-+
-+static void del_quote_entry(struct quote_entry *entry)
-+{
-+	mutex_lock(&quote_lock);
-+	_del_quote_entry(entry);
-+	mutex_unlock(&quote_lock);
-+}
-+
-+/* Handles early termination of GetQuote requests */
-+static void terminate_quote_request(struct quote_entry *entry)
-+{
-+	struct tdx_quote_hdr *quote_hdr;
-+
-+	/*
-+	 * For early termination, if the request is not yet
-+	 * processed by VMM (GET_QUOTE_IN_FLIGHT), the VMM
-+	 * still owns the shared buffer, so mark the request
-+	 * invalid to let quote_callback_handler() handle the
-+	 * memory cleanup function. If the request is already
-+	 * processed, then do the cleanup and return.
-+	 */
-+	mutex_lock(&quote_lock);
-+	quote_hdr = entry->buf;
-+	if (quote_hdr->status == GET_QUOTE_IN_FLIGHT) {
-+		entry->valid = false;
-+		mutex_unlock(&quote_lock);
-+		return;
-+	}
-+	_del_quote_entry(entry);
-+	mutex_unlock(&quote_lock);
-+}
-+
-+static int attestation_callback_handler(void *dev_id)
-+{
-+	schedule_work(&quote_work);
-+	return 0;
-+}
-+
-+static void quote_callback_handler(struct work_struct *work)
-+{
-+	struct tdx_quote_hdr *quote_hdr;
-+	struct quote_entry *entry, *next;
-+
-+	/* Find processed quote request and mark it complete */
-+	mutex_lock(&quote_lock);
-+	list_for_each_entry_safe(entry, next, &quote_list, list) {
-+		quote_hdr = entry->buf;
-+		if (quote_hdr->status == GET_QUOTE_IN_FLIGHT)
-+			continue;
-+		/*
-+		 * If user invalidated the current request, remove the
-+		 * entry from the quote list and free it. If the request
-+		 * is still valid, mark it complete.
-+		 */
-+		if (entry->valid)
-+			complete(&entry->compl);
-+		else
-+			_del_quote_entry(entry);
-+	}
-+	mutex_unlock(&quote_lock);
-+}
-+
- static long tdx_get_report0(struct tdx_report_req __user *req)
- {
- 	u8 *reportdata, *tdreport;
-@@ -53,12 +192,78 @@ static long tdx_get_report0(struct tdx_report_req __user *req)
- 	return ret;
- }
- 
-+static long tdx_get_quote(struct tdx_quote_req __user *ureq)
-+{
-+	struct device *dev = &tdx_dev->dev;
-+	struct quote_entry *entry;
-+	struct tdx_quote_req req;
-+	long ret;
-+
-+	if (copy_from_user(&req, ureq, sizeof(req)))
-+		return -EFAULT;
-+
-+	/*
-+	 * TDX GHCI specification does not specify any upper limit
-+	 * on Quote buffer size. So no upper limit check is added.
-+	 * If a user passes a large value, it is expected that it
-+	 * will fail during memory allocation in alloc_quote_entry().
-+	 */
-+	if (!req.len)
-+		return -EINVAL;
-+
-+	entry = alloc_quote_entry(dev, req.len);
-+	if (!entry)
-+		return -ENOMEM;
-+
-+	if (copy_from_user(entry->buf, (void __user *)req.buf, req.len)) {
-+		free_quote_entry(entry);
-+		return -EFAULT;
-+	}
-+
-+	mutex_lock(&quote_lock);
-+
-+	/* Submit GetQuote Request using GetQuote hypercall */
-+	ret = tdx_hcall_get_quote(entry->buf, entry->buf_len);
-+	if (ret) {
-+		mutex_unlock(&quote_lock);
-+		dev_err(dev, "GetQuote hypercall failed, status:%lx\n", ret);
-+		free_quote_entry(entry);
-+		return -EIO;
-+	}
-+
-+	/* Add current quote entry to quote_list to track active requests */
-+	list_add_tail(&entry->list, &quote_list);
-+
-+	mutex_unlock(&quote_lock);
-+
-+	/*
-+	 * Wait till GetQuote completion or request is cancelled by the
-+	 * user signal. If the request is cancelled by the user, don't
-+	 * cleanup the quote buffer as it is still owned by the VMM.
-+	 */
-+	ret = wait_for_completion_interruptible(&entry->compl);
-+	if (ret < 0) {
-+		dev_err(dev, "GetQuote request terminated\n");
-+		terminate_quote_request(entry);
-+		return -EINTR;
-+	}
-+
-+	if (copy_to_user((void __user *)req.buf, entry->buf, req.len))
-+		ret = -EFAULT;
-+
-+	del_quote_entry(entry);
-+
-+	return ret;
-+}
-+
- static long tdx_guest_ioctl(struct file *file, unsigned int cmd,
- 			    unsigned long arg)
- {
- 	switch (cmd) {
- 	case TDX_CMD_GET_REPORT0:
- 		return tdx_get_report0((struct tdx_report_req __user *)arg);
-+	case TDX_CMD_GET_QUOTE:
-+		return tdx_get_quote((struct tdx_quote_req *)arg);
- 	default:
- 		return -ENOTTY;
- 	}
-@@ -76,6 +281,27 @@ static struct miscdevice tdx_misc_dev = {
- 	.fops = &tdx_guest_fops,
- };
- 
-+static int tdx_guest_probe(struct platform_device *pdev)
-+{
-+	if (tdx_register_event_irq_cb(attestation_callback_handler, pdev))
-+		return -EIO;
-+
-+	return misc_register(&tdx_misc_dev);
-+}
-+
-+static int tdx_guest_remove(struct platform_device *pdev)
-+{
-+	tdx_unregister_event_irq_cb(attestation_callback_handler, pdev);
-+	misc_deregister(&tdx_misc_dev);
-+	return 0;
-+}
-+
-+static struct platform_driver tdx_guest_driver = {
-+	.probe = tdx_guest_probe,
-+	.remove = tdx_guest_remove,
-+	.driver.name = KBUILD_MODNAME,
-+};
-+
- static const struct x86_cpu_id tdx_guest_ids[] = {
- 	X86_MATCH_FEATURE(X86_FEATURE_TDX_GUEST, NULL),
- 	{}
-@@ -84,16 +310,35 @@ MODULE_DEVICE_TABLE(x86cpu, tdx_guest_ids);
- 
- static int __init tdx_guest_init(void)
- {
-+	int ret;
-+
- 	if (!x86_match_cpu(tdx_guest_ids))
- 		return -ENODEV;
- 
--	return misc_register(&tdx_misc_dev);
-+	ret = platform_driver_register(&tdx_guest_driver);
-+	if (ret) {
-+		pr_err("failed to register driver, err=%d\n", ret);
-+		return ret;
-+	}
-+
-+	tdx_dev = platform_device_register_simple(KBUILD_MODNAME,
-+						  PLATFORM_DEVID_NONE,
-+						  NULL, 0);
-+	if (IS_ERR(tdx_dev)) {
-+		ret = PTR_ERR(tdx_dev);
-+		pr_err("failed to allocate device, err=%d\n", ret);
-+		platform_driver_unregister(&tdx_guest_driver);
-+		return ret;
-+	}
-+
-+	return 0;
- }
- module_init(tdx_guest_init);
- 
- static void __exit tdx_guest_exit(void)
- {
--	misc_deregister(&tdx_misc_dev);
-+	platform_device_unregister(tdx_dev);
-+	platform_driver_unregister(&tdx_guest_driver);
- }
- module_exit(tdx_guest_exit);
- 
-diff --git a/include/uapi/linux/tdx-guest.h b/include/uapi/linux/tdx-guest.h
-index a6a2098c08ff..94c78d08f2aa 100644
---- a/include/uapi/linux/tdx-guest.h
-+++ b/include/uapi/linux/tdx-guest.h
-@@ -17,6 +17,12 @@
- /* Length of TDREPORT used in TDG.MR.REPORT TDCALL */
- #define TDX_REPORT_LEN                  1024
- 
-+/* TD Quote status codes */
-+#define GET_QUOTE_SUCCESS               0
-+#define GET_QUOTE_IN_FLIGHT             0xffffffffffffffff
-+#define GET_QUOTE_ERROR                 0x8000000000000000
-+#define GET_QUOTE_SERVICE_UNAVAILABLE   0x8000000000000001
-+
- /**
-  * struct tdx_report_req - Request struct for TDX_CMD_GET_REPORT0 IOCTL.
-  *
-@@ -30,6 +36,35 @@ struct tdx_report_req {
- 	__u8 tdreport[TDX_REPORT_LEN];
- };
- 
-+/* struct tdx_quote_hdr: Format of Quote request buffer header.
-+ * @version: Quote format version, filled by TD.
-+ * @status: Status code of Quote request, filled by VMM.
-+ * @in_len: Length of TDREPORT, filled by TD.
-+ * @out_len: Length of Quote data, filled by VMM.
-+ * @data: Quote data on output or TDREPORT on input.
-+ *
-+ * More details of Quote data header can be found in TDX
-+ * Guest-Host Communication Interface (GHCI) for Intel TDX 1.0,
-+ * section titled "TDG.VP.VMCALL<GetQuote>"
-+ */
-+struct tdx_quote_hdr {
-+	__u64 version;
-+	__u64 status;
-+	__u32 in_len;
-+	__u32 out_len;
-+	__u64 data[];
-+};
-+
-+/* struct tdx_quote_req: Request struct for TDX_CMD_GET_QUOTE IOCTL.
-+ * @buf: Address of user buffer that includes TDREPORT. Upon successful
-+ *	 completion of IOCTL, output is copied back to the same buffer.
-+ * @len: Length of the Quote buffer.
-+ */
-+struct tdx_quote_req {
-+	__u64 buf;
-+	__u64 len;
-+};
-+
- /*
-  * TDX_CMD_GET_REPORT0 - Get TDREPORT0 (a.k.a. TDREPORT subtype 0) using
-  *                       TDCALL[TDG.MR.REPORT]
-@@ -39,4 +74,13 @@ struct tdx_report_req {
-  */
- #define TDX_CMD_GET_REPORT0              _IOWR('T', 1, struct tdx_report_req)
- 
-+/*
-+ * TDX_CMD_GET_QUOTE - Get TD Guest Quote from QE/QGS using GetQuote
-+ *		       TDVMCALL.
-+ *
-+ * Returns 0 on success, -EINTR for interrupted request, and
-+ * standard errno on other failures.
-+ */
-+#define TDX_CMD_GET_QUOTE		_IOR('T', 2, struct tdx_quote_req)
-+
- #endif /* _UAPI_LINUX_TDX_GUEST_H_ */
 -- 
-2.34.1
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
 
