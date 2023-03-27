@@ -2,303 +2,137 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52864C74A5B
-	for <linux-kselftest@archiver.kernel.org>; Mon, 27 Mar 2023 02:12:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D589C74A5B
+	for <linux-kselftest@archiver.kernel.org>; Mon, 27 Mar 2023 02:37:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229475AbjC0CMr (ORCPT
+        id S229565AbjC0ChI (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 26 Mar 2023 22:12:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40502 "EHLO
+        Sun, 26 Mar 2023 22:37:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjC0CMq (ORCPT
+        with ESMTP id S229475AbjC0ChH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 26 Mar 2023 22:12:46 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0742D4EFD;
-        Sun, 26 Mar 2023 19:12:45 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id bm2so5271343oib.4;
-        Sun, 26 Mar 2023 19:12:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679883164;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vEMCMLPR+Xjpl1WIVDjjcljkaYbB096H73XtZut4AIE=;
-        b=h8ttn/WZlHCnNrNjpePRY0xXuYnGRBM9uD3zdQ3BDLBFJUOcCKD+7XLAXzqkYpddkg
-         jCMTh+4qH0vxZglSyK/XHJKfePoNIxTCchfDLLoODWUOfEMPzO0uA3Ou2y08Jg1+CquQ
-         rSBHgXtQObUdZ/dhuUJjcFARridNUoGHemYivHXVDqUWijfxCGCVr8Lwm9MBlMe+5IUb
-         1T+8She3tCf2l9HAjXShKIJwkNUJCNkQGZtdcgaQNBkz8jKkZBFEzo/tGQ6lm4PVx4z1
-         KjO0Y4r6/Xf3TJMPS6CtoUmAyvIzNVk5E2jV17UGRKJe9o6vNre2YnqlfHTFb7JwvxKr
-         G8wQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679883164;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vEMCMLPR+Xjpl1WIVDjjcljkaYbB096H73XtZut4AIE=;
-        b=LEkYr0oVa+MMLemqPopNQ57dQNgm5xjTFoAhgmJUD2wdobnuaaaZZne784IuaqreAm
-         XRb1WYvGgoSpGwiwPjGJi4X6Nsp96fLANO3+TPRh80luf9LsNP8oObEkUo4qg1F+WFE2
-         ljVL8WOsKGQ62uOtbCxGWhP+b7v9xGBhaa07U+sTovmF5DC0Az8re9SzA8hsH46zaIW9
-         YuoVDGINqXFqOuaOu6twGQDmFDBizkRW0GX76P5l/zo1UFxVYWgPcvaXXIHd9R3thPWr
-         bfk0h0usgxD3jF+O3jrX6/2tv3SOEAVN7c5c40jAZ3h3kntuikbgp68U7jl8TYh5ggQU
-         OLkA==
-X-Gm-Message-State: AO0yUKUO1O+QVdxzF3b10/dpHsssibTl4RklpI4vIS/Va2FuZ3WSDHnX
-        BxociPlMY7lz4zR2XDi7Iec=
-X-Google-Smtp-Source: AK7set+ZcGTcslKPlXsUuWQ2kqytCSF3wbKvkLhVBhilVcUsLVY9961WTiDRsPSA+mPzUZxoRQNBOQ==
-X-Received: by 2002:a05:6808:2804:b0:383:f5f8:651f with SMTP id et4-20020a056808280400b00383f5f8651fmr4015166oib.55.1679883164234;
-        Sun, 26 Mar 2023 19:12:44 -0700 (PDT)
-Received: from ?IPV6:2600:1700:2442:6db0:988b:7dda:764e:c744? ([2600:1700:2442:6db0:988b:7dda:764e:c744])
-        by smtp.gmail.com with ESMTPSA id m206-20020acabcd7000000b0037d7f4eb7e8sm10737093oif.31.2023.03.26.19.12.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Mar 2023 19:12:43 -0700 (PDT)
-Message-ID: <5626cd99-f44a-97db-334e-99f1d62112a1@gmail.com>
-Date:   Sun, 26 Mar 2023 21:12:42 -0500
+        Sun, 26 Mar 2023 22:37:07 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9311140C0;
+        Sun, 26 Mar 2023 19:37:02 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PlH5P09Hcz4f3nKC;
+        Mon, 27 Mar 2023 10:36:57 +0800 (CST)
+Received: from k01.huawei.com (unknown [10.67.174.197])
+        by APP4 (Coremail) with SMTP id gCh0CgB3J6tKASFkB_OSGA--.18301S2;
+        Mon, 27 Mar 2023 10:36:58 +0800 (CST)
+From:   Xu Kuohai <xukuohai@huaweicloud.com>
+To:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Subject: [PATCH bpf-next] selftests/bpf: Remove two infinite loop bound check cases
+Date:   Mon, 27 Mar 2023 11:35:38 -0400
+Message-Id: <20230327153538.850440-1-xukuohai@huaweicloud.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [KTAP V2 PATCH] ktap_v2: allow prefix to KTAP lines
-Content-Language: en-US
-To:     Rae Moar <rmoar@google.com>, davidgow@google.com,
-        skhan@linuxfoundation.org, keescook@chromium.org,
-        Tim.Bird@sony.com, brendanhiggins@google.com
-Cc:     corbet@lwn.net, guillaume.tucker@collabora.com,
-        dlatypov@google.com, kernelci@lists.linux.dev,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230316225926.494921-1-rmoar@google.com>
-From:   Frank Rowand <frowand.list@gmail.com>
-In-Reply-To: <20230316225926.494921-1-rmoar@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgB3J6tKASFkB_OSGA--.18301S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxZw48AFWkKrW7XrWxKFyDJrb_yoW5WFyrpa
+        4fX3ZrJrWxJw4UAa4kKay2vrySgrWkZa17Aas7Kr1xAry7t3W3Wa4Uta15CwnxtryfGrsa
+        vr1UAwn7tayUWw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M280x2IEY4vEnII2IxkI6r4Y6ry7M2
+        8lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_
+        tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r
+        xl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv
+        0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z2
+        80aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28I
+        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
+        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI
+        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42
+        IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2
+        z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUcZXoUUUUU
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 3/16/23 17:59, Rae Moar wrote:
-> Change the KTAP v2 spec to allow variable prefixes to KTAP lines,
-> instead of fixed indentation of two spaces. However, the prefix must be
-> constant on the same level of testing (besides unknown lines).
-> 
-> This was proposed by Tim Bird in 2021 and then supported by Frank Rowand
-> in 2022 (see link below).
-> 
-> Link: https://lore.kernel.org/all/bc6e9ed7-d98b-c4da-2a59-ee0915c18f10@gmail.com/
+From: Xu Kuohai <xukuohai@huawei.com>
 
-Another link to the same thread, but expanded to show all replies in one page is:
+The two infinite loop bound check cases added by commit
+1a3148fc171f ("selftests/bpf: Check when bounds are not in the 32-bit range")
+take a long time to execute but don't add much value.
 
-  https://lore.kernel.org/all/bc6e9ed7-d98b-c4da-2a59-ee0915c18f10@gmail.com/T/#u
+Remove them to reduce run time of test_verifier.
 
-Near the top of that thread I proposed alternative 1 (essentially what Tim
-originally suggested, and what Rae proposes here) and alternative 2 (with
-slight variant 2b).  The overall preference seemed to be alternative 1, but
-if we wanted to provide a method to provide test or system metadata then
-alternative 2 might provide both a test prefix and metadata.
+Fixes: 1a3148fc171f ("selftests/bpf: Check when bounds are not in the 32-bit range")
+Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+---
+ tools/testing/selftests/bpf/verifier/bounds.c | 50 -------------------
+ 1 file changed, 50 deletions(-)
 
-Alternate 1 provides the vast majority of what I need the prefix for, but
-I think there has been a recent comment that it would be useful to be able
-to report system metadata (sorry, I haven't found a reference for that yet).
-In my case, it would be informative to use metadata to report which config
-options that impact the DT unittests are enabled.
-
-> 
-> As cited in the original proposal, it is useful in some Fuego tests to
-> include an identifier in the prefix. This is an example:
-> 
->  KTAP version 1
->  1..2
->  [batch_id 4] KTAP version 1
->  [batch_id 4] 1..2
->  [batch_id 4] ok 1 cyclictest with 1000 cycles
->  [batch_id 4] # problem setting CLOCK_REALTIME
->  [batch_id 4] not ok 2 cyclictest with CLOCK_REALTIME
->  not ok 1 check realtime
->  [batch_id 4] KTAP version 1
->  [batch_id 4] 1..1
->  [batch_id 4] ok 1 IOZone read/write 4k blocks
->  ok 2 check I/O performance
-> 
-> Here is a link to a version of the KUnit parser that is able to parse
-> variable length prefixes for KTAP version 2. Note that the prefix must
-> be constant at the same level of testing.
-> 
-> Link: https://kunit-review.googlesource.com/c/linux/+/5710
-> 
-> Signed-off-by: Rae Moar <rmoar@google.com>
-> ---
-> 
-> This idea has already been proposed but I wanted to potentially
-> restart the discussion by demonstrating this change can by
-> implemented in the KUnit parser. Let me know what you think.
-> 
-> Note: this patch is based on Frank's ktap_spec_version_2 branch.
-> 
->  Documentation/dev-tools/ktap.rst | 21 ++++++++++++++++++---
->  1 file changed, 18 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/dev-tools/ktap.rst b/Documentation/dev-tools/ktap.rst
-> index ff77f4aaa6ef..ac61fdd97096 100644
-> --- a/Documentation/dev-tools/ktap.rst
-> +++ b/Documentation/dev-tools/ktap.rst
-
-Some additional lines of the Spec to be updated (from my alternate 1 email,
-I haven't checked the current Spec to see if these are the exact changes
-needed, but at least capture the intent:
-
-The "Version lines" format is changed from:
-
-   KTAP version 1
-
-to:
-
-   [<prefix string>] KTAP version 1
-
-The "Plan lines" format is changed from:
-
-   "1..N"
-
-to:
-
-   [<prefix string>] "1..N"
-
-The "Test case result lines" format is changed from:
-
-   <result> <number> [<description>][ # [<directive>] [<diagnostic data>]]
-
-to:
-
-   [<prefix string>] <result> <number> [<description>][ # [<directive>] [<diagnostic data>]]
-
-
-   <prefix content is a constant string>
-
-
-I wrote (with a bit of imprecision):
-
-  Indentation for "Nested tests" follows <prefix string>.  The indentation
-  does NOT precede <prefix string>.
-
-which was meant to imply that the two space indentation would follow the
-<prefix string>.
-
-The patch I am replying to instead replaces the two space indentation
-entirely with the <prefix string>.  I think this patches' version of
-indentation is superior to what I suggested.
-
-> @@ -192,9 +192,11 @@ starting with another KTAP version line and test plan, and end with the overall
->  result. If one of the subtests fail, for example, the parent test should also
->  fail.
->  
-> -Additionally, all lines in a subtest should be indented. One level of
-> -indentation is two spaces: "  ". The indentation should begin at the version
-> -line and should end before the parent test's result line.
-> +Additionally, all lines in a subtest should be indented. The standard for one
-> +level of indentation is two spaces: "  ". However, any prefix for indentation
-> +is allowed as long as the prefix is consistent throughout that level of
-> +testing. The indentation should begin at the version line and should end
-> +before the parent test's result line.
->  
->  "Unknown lines" are not considered to be lines in a subtest and thus are
->  allowed to be either indented or not indented.
-
-I was a little more verbose about "Unknown lines":
-
-   "Unknown lines" may optionally be prefixed with the <prefix string>, but
-   are not required to be prefixed with the <prefix string>.  It is allowed
-   for some "Unknown lines" to not be prefixed with the <prefix string>, even
-   if one or more other "Unknown lines" are prefixed with the <prefix string>.
-
-I think combining the intent ("not considered to be lines in a subtest") with
-the extra verbosity would be useful.
-
-> @@ -229,6 +231,19 @@ An example format with multiple levels of nested testing:
->  	not ok 1 example_test_1
->  	ok 2 example_test_2
->  
-> +An example of a test with two nested subtests using prefixes:
-> +
-> +::
-> +
-> +	KTAP version 2
-> +	1..1
-> +	[prefix_1] KTAP version 2
-> +	[prefix_1] 1..2
-> +	[prefix_1] ok 1 test_1
-> +	[prefix_1] ok 2 test_2
-> +	# example passed
-> +	ok 1 example
-> +
-
-The "[" and "]" are meant to indicate an optional field, so the
-example would be:
-
-+	KTAP version 2
-+	1..1
-+	prefix_1 KTAP version 2
-+	prefix_1 1..2
-+	prefix_1 ok 1 test_1
-+	prefix_1 ok 2 test_2
-+	# example passed
-+	ok 1 example
-+
-
-Of course, "[" and "]" are valid characters within the prefix string, so
-that an example of "[prefix_1]" could be mentioned as a valid example.
-
-I would suggest some additional more complex examples:
-
-+	prefix_0 KTAP version 2
-+	prefix_0 1..1
-+	prefix_0 prefix_1 KTAP version 2
-+	prefix_0 prefix_1 1..2
-+	prefix_0 prefix_1 ok 1 test_1
-+	prefix_0 prefix_1 ok 2 test_2
-+	# example passed
-+	prefix_0 ok 1 example
-+
-
-+	KTAP version 2
-+	1..2
-+	prefix_1 KTAP version 2
-+	prefix_1 1..2
-+	prefix_1 ok 1 test_a_1
-+	prefix_1 ok 2 test_a_2
-+	# example passed
-+	ok 1 example
-+	prefix_2 KTAP version 2
-+	prefix_2 1..2
-+	prefix_2 ok 1 test_b_1
-+	prefix_2 ok 2 test_b_2
-+	# example passed
-+	ok 2 example
-+
-
-+	KTAP version 2
-+	1..3
-+	prefix_1 KTAP version 2
-+	prefix_1 1..2
-+	prefix_1 ok 1 test_a_1
-+	prefix_1 ok 2 test_a_2
-+	# example passed
-+	ok 1 example
-+	  KTAP version 2
-+	  1..2
-+	  ok 1 test_b_1
-+	  ok 2 test_b_2
-+	# example passed
-+	ok 2 example
-+	prefix_2 KTAP version 2
-+	prefix_2 1..2
-+	prefix_2 ok 1 test_c_1
-+	prefix_2 ok 2 test_c_2
-+	# example passed
-+	ok 3 example
-+
-
-
-
->  
->  Major differences between TAP and KTAP
->  --------------------------------------
-> 
-> base-commit: 906f02e42adfbd5ae70d328ee71656ecb602aaf5
+diff --git a/tools/testing/selftests/bpf/verifier/bounds.c b/tools/testing/selftests/bpf/verifier/bounds.c
+index 74b1917d4208..515a8222f08f 100644
+--- a/tools/testing/selftests/bpf/verifier/bounds.c
++++ b/tools/testing/selftests/bpf/verifier/bounds.c
+@@ -777,31 +777,6 @@
+ 	.result = ACCEPT,
+ 	.prog_type = BPF_PROG_TYPE_XDP,
+ },
+-{
+-	"bound check with JMP_JSLT for crossing 64-bit signed boundary",
+-	.insns = {
+-	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
+-	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1, offsetof(struct xdp_md, data_end)),
+-	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
+-	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 1),
+-	BPF_JMP_REG(BPF_JGT, BPF_REG_1, BPF_REG_3, 8),
+-
+-	BPF_LDX_MEM(BPF_B, BPF_REG_1, BPF_REG_2, 0),
+-	BPF_LD_IMM64(BPF_REG_0, 0x7fffffffffffff10),
+-	BPF_ALU64_REG(BPF_ADD, BPF_REG_1, BPF_REG_0),
+-
+-	BPF_LD_IMM64(BPF_REG_0, 0x8000000000000000),
+-	BPF_ALU64_IMM(BPF_ADD, BPF_REG_0, 1),
+-	/* r1 signed range is [S64_MIN, S64_MAX] */
+-	BPF_JMP_REG(BPF_JSLT, BPF_REG_0, BPF_REG_1, -2),
+-
+-	BPF_MOV64_IMM(BPF_REG_0, 0),
+-	BPF_EXIT_INSN(),
+-	},
+-	.errstr = "BPF program is too large",
+-	.result = REJECT,
+-	.prog_type = BPF_PROG_TYPE_XDP,
+-},
+ {
+ 	"bound check for loop upper bound greater than U32_MAX",
+ 	.insns = {
+@@ -849,28 +824,3 @@
+ 	.result = ACCEPT,
+ 	.prog_type = BPF_PROG_TYPE_XDP,
+ },
+-{
+-	"bound check with JMP32_JSLT for crossing 32-bit signed boundary",
+-	.insns = {
+-	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, offsetof(struct xdp_md, data)),
+-	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1, offsetof(struct xdp_md, data_end)),
+-	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
+-	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 1),
+-	BPF_JMP_REG(BPF_JGT, BPF_REG_1, BPF_REG_3, 6),
+-
+-	BPF_LDX_MEM(BPF_B, BPF_REG_1, BPF_REG_2, 0),
+-	BPF_MOV32_IMM(BPF_REG_0, 0x7fffff10),
+-	BPF_ALU32_REG(BPF_ADD, BPF_REG_1, BPF_REG_0),
+-
+-	BPF_MOV32_IMM(BPF_REG_0, 0x80000000),
+-	BPF_ALU32_IMM(BPF_ADD, BPF_REG_0, 1),
+-	/* r1 signed range is [S32_MIN, S32_MAX] */
+-	BPF_JMP32_REG(BPF_JSLT, BPF_REG_0, BPF_REG_1, -2),
+-
+-	BPF_MOV64_IMM(BPF_REG_0, 0),
+-	BPF_EXIT_INSN(),
+-	},
+-	.errstr = "BPF program is too large",
+-	.result = REJECT,
+-	.prog_type = BPF_PROG_TYPE_XDP,
+-},
+-- 
+2.30.2
 
