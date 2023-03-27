@@ -2,64 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DBCF8C6FD1D
-	for <linux-kselftest@archiver.kernel.org>; Mon, 27 Mar 2023 19:12:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B298CC6FD1D
+	for <linux-kselftest@archiver.kernel.org>; Mon, 27 Mar 2023 19:12:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232568AbjC0TM2 (ORCPT
+        id S232802AbjC0TMn (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 27 Mar 2023 15:12:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33574 "EHLO
+        Mon, 27 Mar 2023 15:12:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232530AbjC0TMZ (ORCPT
+        with ESMTP id S232721AbjC0TM3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 27 Mar 2023 15:12:25 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 533651710
-        for <linux-kselftest@vger.kernel.org>; Mon, 27 Mar 2023 12:11:54 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id r5so9643885qtp.4
-        for <linux-kselftest@vger.kernel.org>; Mon, 27 Mar 2023 12:11:54 -0700 (PDT)
+        Mon, 27 Mar 2023 15:12:29 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EBA12705
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Mar 2023 12:11:56 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id t19so9619910qta.12
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Mar 2023 12:11:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1679944313;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=v7QgF4SPMByI95xKzR5JGt1MbjLLP8ljYyAalP24SZ0=;
-        b=fj9ssUNvI0n6VKKx7zevE6u4UkHwEvocg0Hwc+ADRIU82d6JgjBqmN8nQCar5UMtmK
-         c3wYyRc/0lYfxRMiHLOGqojq7mSU+v0qyN7P5q793z4033nycPbedcUKGr4pQcb3/dr9
-         2AABL2LLCF3J6o49Ugq/FZHqbBDaq24f3OQfsvWOmQIgQT9L2kfL12Bcy4hiN+O+lzAt
-         dVMpMikros3nEcW9kg31ahO8Am7qSRuh3LEjDhcGT/XCCSj6+NyX3/ohlvdd0U3ylYHD
-         1ESXpfdvTsQ5mczGInyzTOkj43Ug0vegCxekafyazAeF9TlncJbddRnDRwvLnPXkKkjm
-         3VHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679944313;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=bytedance.com; s=google; t=1679944315;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=v7QgF4SPMByI95xKzR5JGt1MbjLLP8ljYyAalP24SZ0=;
-        b=vZo8I3AbgYkrSo3uZXT1A/ZKK8Arz4NzjD9iIi8XH69u2pOVXKhBnhNKN76i78oOQG
-         80YovOEXgli1O0m5Kzq1kRfBQ7yJhR+DB6G9KHiWxSaFq2XDpidOLFKQoHyk73N2PsJ0
-         RxmwZJ0TEqxF047VEn+c5TK6l+F+jIzN6wVpchKJtHIfcFG1h3NrvcVywK8RF99UqyHN
-         KbhVRkYhRdFcLMk0Tu2kbvlgqD0zvhT6qzq/QqNjQzwl0XAOpULcn+1klhtDhcotKoyi
-         bj20pOl4Sd5AboJD6zDcIxUZQAzpslq/9hvYT/wHGLea8XxxjLQYrluuFemQYBsmLUm0
-         +tww==
-X-Gm-Message-State: AAQBX9cEPNi0CWJHFrN0cyYCSmRZJEqq8trJdVKJmp8H2utH7XNScF03
-        c3RrCekcwgeWHi/TNvYSzgIM7w==
-X-Google-Smtp-Source: AKy350bgbPKaehPavn4jrWcChc00F0kRsdrrQ9tfFTF5o7GVzpAXwL0VK3B2pUdIMuH1t8ze8fyp6w==
-X-Received: by 2002:ac8:5f53:0:b0:3e4:e58c:d321 with SMTP id y19-20020ac85f53000000b003e4e58cd321mr9356681qta.33.1679944313444;
-        Mon, 27 Mar 2023 12:11:53 -0700 (PDT)
+        bh=Y+fcBmNwaYYPHaFQTMyMlmEgRAw7iowZyfvTwdusqIc=;
+        b=gADa5RHsTd0tWC9q7vi8VAcRiUWkdYHk5GgP5oAsTxquPj3jVz+x7m2wOss37oS73z
+         pTh5QQCpLYgyc3SqeUeNTmt7khVJASffcx0hXYDDiJGqZfCZvnWRvw/Hf9TsmgqFMPVP
+         Qdb515RMDb/MioZPwwKrAG9Z1jDsv6sJeydT6qMe7g6M7TnR1nbaDqP2d9pz8IhYkO61
+         L1pii3ci8qpHfdSpRUI44PNb1iGeK+pt0v5VYPvQ7870ANQ9OlDzkApm5pcPbNF80osh
+         FCxWyOqjsMp3lWEECMFl7pAXhkdyfC8bOamQTZeL3rzOPfXk4KBoJ8UYfrRvTdeXo7GV
+         3/OQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679944315;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Y+fcBmNwaYYPHaFQTMyMlmEgRAw7iowZyfvTwdusqIc=;
+        b=XotpUoIfyslEnwbEYPgOk8NLLPDUz7/KiNL2fJ7MhMYrU4mRo70XGvG9u3KDOWA91D
+         VjSrmEa66IPpiUJhd4n7lRU0WjfsKKaPv+8gsP9FP6PCxfTzGXoWJAeUu/03LGFJtryg
+         tdpcxrjwjtrKcNqgVTdwwbpI13Lx26WuBAtCvRFqfuD6yTZraW0rfgZvmtR8/G+6mc5l
+         ZZfC1+HfrYzaKR8MAc0XnWc0lQAXSbob9bl011wn6zqh99Hz0fReivu0kkBfLM5EYIDx
+         8keda5kpxqg10gB+WGPoN0jQ95E1dhFQINr+rbeTzzvodKvINtWccNV2kc7FwIlThIjJ
+         jMaw==
+X-Gm-Message-State: AO0yUKULKDzeIbtBhTFdPJVCPGb4cmJPLIgDJBZZ+ZgJQUvdah5t6etp
+        e7XmYDy5C4tskjfW8Lf18FXzZQ==
+X-Google-Smtp-Source: AK7set+YB+1J9uVDVyg1O0Agv93wcxLr3a7Apewktxjq43LIUgBzdILMJKsuL86AQov6ipS8fdfdLw==
+X-Received: by 2002:ac8:5f4a:0:b0:3e3:90bb:ad9b with SMTP id y10-20020ac85f4a000000b003e390bbad9bmr21749182qta.34.1679944315144;
+        Mon, 27 Mar 2023 12:11:55 -0700 (PDT)
 Received: from [172.17.0.3] ([130.44.215.126])
-        by smtp.gmail.com with ESMTPSA id d185-20020a37b4c2000000b007425ef4cbc2sm16989236qkf.100.2023.03.27.12.11.52
+        by smtp.gmail.com with ESMTPSA id d185-20020a37b4c2000000b007425ef4cbc2sm16989236qkf.100.2023.03.27.12.11.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 12:11:52 -0700 (PDT)
+        Mon, 27 Mar 2023 12:11:54 -0700 (PDT)
 From:   Bobby Eshleman <bobby.eshleman@bytedance.com>
-Subject: [PATCH net-next v4 0/3] Add support for sockmap to vsock.
-Date:   Mon, 27 Mar 2023 19:11:50 +0000
-Message-Id: <20230327-vsock-sockmap-v4-0-c62b7cd92a85@bytedance.com>
+Date:   Mon, 27 Mar 2023 19:11:52 +0000
+Subject: [PATCH net-next v4 2/3] selftests/bpf: add vsock to vmtest.sh
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAHbqIWQC/1WNQQrCMBBFr1Jm7eCYBIpeRVxkpqMNYloypRRK7
- 27izs2HB//xdjAtSQ1u3Q5F12RpyhXCqQMZY34ppqEyOHKevOtxtUne2OYTZ/TEdCXpSYYLVIe
- jKXKJWcZmcThz+Ffaay76TNuveoesC2bdFngcxxfYw958jwAAAA==
+Message-Id: <20230327-vsock-sockmap-v4-2-c62b7cd92a85@bytedance.com>
+References: <20230327-vsock-sockmap-v4-0-c62b7cd92a85@bytedance.com>
+In-Reply-To: <20230327-vsock-sockmap-v4-0-c62b7cd92a85@bytedance.com>
 To:     Stefan Hajnoczi <stefanha@redhat.com>,
         Stefano Garzarella <sgarzare@redhat.com>,
         "Michael S. Tsirkin" <mst@redhat.com>,
@@ -88,93 +88,60 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-We're testing usage of vsock as a way to redirect guest-local UDS
-requests to the host and this patch series greatly improves the
-performance of such a setup.
+Add vsock loopback to the test kernel.
 
-Compared to copying packets via userspace, this improves throughput by
-121% in basic testing.
-
-Tested as follows.
-
-Setup: guest unix dgram sender -> guest vsock redirector -> host vsock
-       server
-Threads: 1
-Payload: 64k
-No sockmap:
-- 76.3 MB/s
-- The guest vsock redirector was
-  "socat VSOCK-CONNECT:2:1234 UNIX-RECV:/path/to/sock"
-Using sockmap (this patch):
-- 168.8 MB/s (+121%)
-- The guest redirector was a simple sockmap echo server,
-  redirecting unix ingress to vsock 2:1234 egress.
-- Same sender and server programs
-
-*Note: these numbers are from RFC v1
-
-Only the virtio transport has been tested. The loopback transport was
-used in writing bpf/selftests, but not thoroughly tested otherwise.
-
-This series requires the skb patch.
-
-Changes in v4:
-- af_vsock: fix parameter alignment in vsock_dgram_recvmsg()
-- af_vsock: add TCP_ESTABLISHED comment in vsock_dgram_connect()
-- vsock/bpf: change ret type to bool
-
-Changes in v3:
-- vsock/bpf: Refactor wait logic in vsock_bpf_recvmsg() to avoid
-  backwards goto
-- vsock/bpf: Check psock before acquiring slock
-- vsock/bpf: Return bool instead of int of 0 or 1
-- vsock/bpf: Wrap macro args __sk/__psock in parens
-- vsock/bpf: Place comment trailer */ on separate line
-
-Changes in v2:
-- vsock/bpf: rename vsock_dgram_* -> vsock_*
-- vsock/bpf: change sk_psock_{get,put} and {lock,release}_sock() order
-  to minimize slock hold time
-- vsock/bpf: use "new style" wait
-- vsock/bpf: fix bug in wait log
-- vsock/bpf: add check that recvmsg sk_type is one dgram, seqpacket, or
-  stream.  Return error if not one of the three.
-- virtio/vsock: comment __skb_recv_datagram() usage
-- virtio/vsock: do not init copied in read_skb()
-- vsock/bpf: add ifdef guard around struct proto in dgram_recvmsg()
-- selftests/bpf: add vsock loopback config for aarch64
-- selftests/bpf: add vsock loopback config for s390x
-- selftests/bpf: remove vsock device from vmtest.sh qemu machine
-- selftests/bpf: remove CONFIG_VIRTIO_VSOCKETS=y from config.x86_64
-- vsock/bpf: move transport-related (e.g., if (!vsk->transport)) checks
-  out of fast path
+This allows sockmap for vsock to be tested.
 
 Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
+Acked-by: Stefano Garzarella <sgarzare@redhat.com>
 ---
-Bobby Eshleman (3):
-      vsock: support sockmap
-      selftests/bpf: add vsock to vmtest.sh
-      selftests/bpf: add a test case for vsock sockmap
+ tools/testing/selftests/bpf/config.aarch64 | 2 ++
+ tools/testing/selftests/bpf/config.s390x   | 3 +++
+ tools/testing/selftests/bpf/config.x86_64  | 3 +++
+ 3 files changed, 8 insertions(+)
 
- drivers/vhost/vsock.c                              |   1 +
- include/linux/virtio_vsock.h                       |   1 +
- include/net/af_vsock.h                             |  17 ++
- net/vmw_vsock/Makefile                             |   1 +
- net/vmw_vsock/af_vsock.c                           |  64 +++++++-
- net/vmw_vsock/virtio_transport.c                   |   2 +
- net/vmw_vsock/virtio_transport_common.c            |  25 +++
- net/vmw_vsock/vsock_bpf.c                          | 174 +++++++++++++++++++++
- net/vmw_vsock/vsock_loopback.c                     |   2 +
- tools/testing/selftests/bpf/config.aarch64         |   2 +
- tools/testing/selftests/bpf/config.s390x           |   3 +
- tools/testing/selftests/bpf/config.x86_64          |   3 +
- .../selftests/bpf/prog_tests/sockmap_listen.c      | 163 +++++++++++++++++++
- 13 files changed, 452 insertions(+), 6 deletions(-)
----
-base-commit: e5b42483ccce50d5b957f474fd332afd4ef0c27b
-change-id: 20230327-vsock-sockmap-30b090c70cd1
+diff --git a/tools/testing/selftests/bpf/config.aarch64 b/tools/testing/selftests/bpf/config.aarch64
+index 1f0437644186..253821494884 100644
+--- a/tools/testing/selftests/bpf/config.aarch64
++++ b/tools/testing/selftests/bpf/config.aarch64
+@@ -176,6 +176,8 @@ CONFIG_VIRTIO_MMIO_CMDLINE_DEVICES=y
+ CONFIG_VIRTIO_MMIO=y
+ CONFIG_VIRTIO_NET=y
+ CONFIG_VIRTIO_PCI=y
++CONFIG_VIRTIO_VSOCKETS_COMMON=y
+ CONFIG_VLAN_8021Q=y
+ CONFIG_VSOCKETS=y
++CONFIG_VSOCKETS_LOOPBACK=y
+ CONFIG_XFRM_USER=y
+diff --git a/tools/testing/selftests/bpf/config.s390x b/tools/testing/selftests/bpf/config.s390x
+index d49f6170e7bd..2ba92167be35 100644
+--- a/tools/testing/selftests/bpf/config.s390x
++++ b/tools/testing/selftests/bpf/config.s390x
+@@ -140,5 +140,8 @@ CONFIG_VIRTIO_BALLOON=y
+ CONFIG_VIRTIO_BLK=y
+ CONFIG_VIRTIO_NET=y
+ CONFIG_VIRTIO_PCI=y
++CONFIG_VIRTIO_VSOCKETS_COMMON=y
+ CONFIG_VLAN_8021Q=y
++CONFIG_VSOCKETS=y
++CONFIG_VSOCKETS_LOOPBACK=y
+ CONFIG_XFRM_USER=y
+diff --git a/tools/testing/selftests/bpf/config.x86_64 b/tools/testing/selftests/bpf/config.x86_64
+index dd97d61d325c..b650b2e617b8 100644
+--- a/tools/testing/selftests/bpf/config.x86_64
++++ b/tools/testing/selftests/bpf/config.x86_64
+@@ -234,7 +234,10 @@ CONFIG_VIRTIO_BLK=y
+ CONFIG_VIRTIO_CONSOLE=y
+ CONFIG_VIRTIO_NET=y
+ CONFIG_VIRTIO_PCI=y
++CONFIG_VIRTIO_VSOCKETS_COMMON=y
+ CONFIG_VLAN_8021Q=y
++CONFIG_VSOCKETS=y
++CONFIG_VSOCKETS_LOOPBACK=y
+ CONFIG_X86_ACPI_CPUFREQ=y
+ CONFIG_X86_CPUID=y
+ CONFIG_X86_MSR=y
 
-Best regards,
 -- 
-Bobby Eshleman <bobby.eshleman@bytedance.com>
+2.30.2
 
