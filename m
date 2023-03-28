@@ -2,76 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FD5DC761AF
-	for <linux-kselftest@archiver.kernel.org>; Tue, 28 Mar 2023 13:40:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 31009C77B61
+	for <linux-kselftest@archiver.kernel.org>; Tue, 28 Mar 2023 14:51:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232840AbjC1NkR (ORCPT
+        id S233508AbjC1Ovg (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 28 Mar 2023 09:40:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41008 "EHLO
+        Tue, 28 Mar 2023 10:51:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230263AbjC1NkR (ORCPT
+        with ESMTP id S233277AbjC1OvX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 Mar 2023 09:40:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B295122;
-        Tue, 28 Mar 2023 06:40:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A0CA8B81CFA;
-        Tue, 28 Mar 2023 13:40:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40F30C433EF;
-        Tue, 28 Mar 2023 13:40:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680010807;
-        bh=icUy13Xzx8zHFQYe+wcW2EESbKwQa3rKnpkk5O1qqOo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dnpLXIuxAYnWll/36a77A70//tWgi7UQv5dZoVH7VSv2/a9EAsI0GZIPnCgkhA060
-         VslmWbFGcWf79brWo36ELhrhE4YyMh5zn7QADHaduPRccfPGtc2gnmExolXu23WsLX
-         BGzcIr3YSBMUrjvDqgeyz7MYhzYeT/fh9xgr7KOr2hiZ2/rZAY3b148Sw+k6mDWbt+
-         19GUyK6xFRoVD0yvXTL2QRBWihNcViUPyY5kRqGUeNBin+6uiuKHKcmb7w40DPVFhS
-         hwBCh79JIrz2NcJEj/7c3A9x97h6lXiSofq63UTTdgyGiV5iUm9rA1aihu3tuGL1m3
-         0rCqqFWrsCoKA==
-Date:   Tue, 28 Mar 2023 14:40:01 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Juri Lelli <juri.lelli@redhat.com>
-Subject: Re: [PATCH v2 0/4] cgroup/cpuset: Miscellaneous updates
-Message-ID: <20230328134000.GA1333@willie-the-truck>
-References: <20230317151508.1225282-1-longman@redhat.com>
+        Tue, 28 Mar 2023 10:51:23 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D9FD307;
+        Tue, 28 Mar 2023 07:51:01 -0700 (PDT)
+From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1680015059;
+        bh=OC20lNQ2kW08aHm+ntfqMtfDoB6968+zaZ8h6wCeC0I=;
+        h=From:Date:Subject:To:Cc:From;
+        b=Ok2+HEIic10pECRlUIIVtxnPuTAa0eI732lvD25KYFwTpa3fN1bYQWfTcxbZGuQeN
+         QgytGstYMtSgu/Sv0dUu28MzGJsh4qrLLT3WzFqgqMn0KOirFlwHF/Vh+7/CRv9BVl
+         xShadoIGUho+cxix6dlxYmXayVseA401bFZfGvqs=
+Date:   Tue, 28 Mar 2023 14:50:35 +0000
+Subject: [PATCH] tools/nolibc: tests: use volatile to force stack smashing
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230317151508.1225282-1-longman@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20230328-nolibc-smash-stack-volatile-v1-1-2b4aa7563a77@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIALr+ImQC/x2NMQ7CMAwAv1J5xlJIhha+ghic4BKL4KC4rZCq/
+ p2I8W6428G4CRtchx0ab2JStcP5NEDKpE9GeXQG73xwwU+otUhMaG+yjLZQeuFWCy1SGB1PI1/
+ 8GGYm6IVIxhgbacq9oWspXX4az/L9L2/34/gBVdYBkIIAAAA=
+To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1680015056; l=1274;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=OC20lNQ2kW08aHm+ntfqMtfDoB6968+zaZ8h6wCeC0I=;
+ b=foXYvQN71ivsHirrXL4/rtYWQt3bVjFIRd7+bVLXr3yfBSrVRpsXh4/ottXX9+xvJjweLVKdJ
+ vb/glnJG7LMDyPiGskvss1mIdS6AKkwJ25++TRBYX7F/HJ+xdn04CcT
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Waiman,
+Use a volatile pointer to write outside the buffer so the compiler can't
+optimize it away.
 
-On Fri, Mar 17, 2023 at 11:15:04AM -0400, Waiman Long wrote:
->  v2:
->   - Add a new patch 1 that fixes a bug introduced by recent v6.2 commit
->     7a2127e66a00 ("cpuset: Call set_cpus_allowed_ptr() with appropriate
->     mask for task").
->   - Make a small twist and additional comment to patch 2 ("cgroup/cpuset:
->     Skip task update if hotplug doesn't affect current cpuset") as
->     suggested by Michal.
->   - Remove v1 patches 3/4 for now for further discussion.
-> 
-> This patch series includes miscellaneous update to the cpuset and its
-> testing code.
+Reported-by: Alexey Dobriyan <adobriyan@gmail.com>
+Link: https://lore.kernel.org/lkml/c0584807-511c-4496-b062-1263ea38f349@p183/
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
 
-FWIW, this series also passes my asymmetric 32-bit tests.
+This is based on the "dev" branch of the rcu tree.
+---
+ tools/testing/selftests/nolibc/nolibc-test.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-Cheers,
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index 21bacc928bf7..47013b78972e 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -667,17 +667,13 @@ int run_stdlib(int min, int max)
+ 	return ret;
+ }
+ 
+-#if defined(__clang__)
+-__attribute__((optnone))
+-#elif defined(__GNUC__)
+-__attribute__((optimize("O0")))
+-#endif
+ static int smash_stack(void)
+ {
+ 	char buf[100];
++	volatile char *ptr = buf;
+ 
+ 	for (size_t i = 0; i < 200; i++)
+-		buf[i] = 'P';
++		ptr[i] = 'P';
+ 
+ 	return 1;
+ }
 
-Will
+---
+base-commit: 6e7cac3d5b8c77ddedfaa7efad23aa542cde53b2
+change-id: 20230328-nolibc-smash-stack-volatile-0e87e9273fea
+
+Best regards,
+-- 
+Thomas Weißschuh <linux@weissschuh.net>
+
