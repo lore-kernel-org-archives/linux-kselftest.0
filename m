@@ -2,146 +2,103 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16E32C761AF
-	for <linux-kselftest@archiver.kernel.org>; Wed, 29 Mar 2023 17:23:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8DEAC74A5B
+	for <linux-kselftest@archiver.kernel.org>; Wed, 29 Mar 2023 18:08:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230051AbjC2RXa (ORCPT
+        id S229997AbjC2SIH (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 29 Mar 2023 13:23:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49670 "EHLO
+        Wed, 29 Mar 2023 14:08:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230103AbjC2RX3 (ORCPT
+        with ESMTP id S230021AbjC2SIG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 29 Mar 2023 13:23:29 -0400
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD8D53C05
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Mar 2023 10:23:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Content-Type:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=8SRscMN5b9HTgCA/7xjbHkj7Ve/A0/I00v8SnxaFrfs=;
-        t=1680110607; x=1681320207; b=vdR4QNrXfElKgCRhyi92tiGObndNpZfg0QhFyoytyF/IonH
-        K+L0fFs/rYNFaCvl1TmPOCc1pShAHPYWWgP1oU2ezQCHJ+QRWAgfkVe24eyNVBMPY8+nGojhD1Vli
-        0VOPGB+n5Hz1eeZj5FY3FdTKDbUfpx7dvRWBUbMY0w/WzhBnccgGjWT6SKnV/enKQMzEgfXT+z7Vj
-        G21+XPE8wNZ0sqSLNsEfnPTOj0lUxNIIQmAmNcMGY5r+FKXOH3PDKimF6dh2i1TJzbtfedyOYA6xE
-        h8E5HDeTewJ0VvNOxuZ1TTTeezP4l1S2AM+BDzSyjACqVeI9dq8IfAKSwixBzDhQ==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.96)
-        (envelope-from <benjamin@sipsolutions.net>)
-        id 1phZW8-000AZQ-1g;
-        Wed, 29 Mar 2023 19:23:24 +0200
-From:   benjamin@sipsolutions.net
-To:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Cc:     Johannes Berg <johannes@sipsolutions.net>,
-        Benjamin Berg <benjamin.berg@intel.com>
-Subject: [PATCH 2/3] kunit: add ability to register a simple cleanup function
-Date:   Wed, 29 Mar 2023 19:23:10 +0200
-Message-Id: <20230329172311.71861-2-benjamin@sipsolutions.net>
+        Wed, 29 Mar 2023 14:08:06 -0400
+Received: from mail-ed1-x564.google.com (mail-ed1-x564.google.com [IPv6:2a00:1450:4864:20::564])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41AD4229
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Mar 2023 11:08:04 -0700 (PDT)
+Received: by mail-ed1-x564.google.com with SMTP id t10so66640702edd.12
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Mar 2023 11:08:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dectris.com; s=google; t=1680113283;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uP7fzXbhXSN7Ty9wbiAQl7kbA4rMdsvSYTII18zPk8s=;
+        b=ATX9XU+HBGGxsEECzUbAvUJoaUp7fq2m3zz/b//YJQdB8nYjBPfmBGsBIZy1VWA69C
+         HOtLiGMDFXtrp251BUC8uuI+jqfbkWpuxkWx5tJXdgaKHq+0vY+RTekviWenFhZzOEmT
+         Ue0TkmuDkXwGCwu3JHikcDTFc0InRXv47WCKw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680113283;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uP7fzXbhXSN7Ty9wbiAQl7kbA4rMdsvSYTII18zPk8s=;
+        b=YDZEU1D91ThfR7UsZMIjah1gwRVxZkGnmNyrwz5QaaXI4fIYCAXR4yhMK8d9+wkn2G
+         +qFNk2lMXC/RzCV6NgZ2QWg4ryM0Cz2VveYTVZHZ5OVLYGs28+oC9gRK/df8XMOw0hDp
+         vjzt/bVgBnDOy8KZIQIgv65y1HmytpflOJOBMpWWf2yT3e/T9wH9lyV9E6Yjn7u8OgAa
+         F6UW3NNj4GHBclU1aLnpsI2Y/re6Ava2lsBqFRrBxOw2yjnUR3n90rXrVRKsBDegoFmP
+         mcgGUL/8c/ycnjAy397T4GxmigMidXYBAdtSOItndE1F6vH7497Gb/0EJ5iN43DsZ9zU
+         cG+Q==
+X-Gm-Message-State: AAQBX9dnYS+NpeT7yLo69hSBjjRBxwIcksCVgl8SmS3EuVQZqSdZaAlp
+        8O34P7lpwahZ9t8kT0B7FudJAiEpTfQZBFnc1flIh+tX570l
+X-Google-Smtp-Source: AKy350YvWlz1e2WjuGCn/zBJU22CORmNL2L0daOgmAIK1LGoOSmFs9rLKhk0fTclz8aZ+4FYU54u7vUoR8BQ
+X-Received: by 2002:a17:907:d386:b0:87b:dac0:b23b with SMTP id vh6-20020a170907d38600b0087bdac0b23bmr22156821ejc.55.1680113283167;
+        Wed, 29 Mar 2023 11:08:03 -0700 (PDT)
+Received: from fedora.dectris.local (dect-ch-bad-pfw.cyberlink.ch. [62.12.151.50])
+        by smtp-relay.gmail.com with ESMTPS id m10-20020a1709066d0a00b00920438f59b3sm12072998ejr.154.2023.03.29.11.08.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 11:08:03 -0700 (PDT)
+X-Relaying-Domain: dectris.com
+From:   Kal Conley <kal.conley@dectris.com>
+To:     Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>
+Cc:     Kal Conley <kal.conley@dectris.com>, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH bpf-next v2 01/10] selftests: xsk: Add xskxceiver.h dependency to Makefile
+Date:   Wed, 29 Mar 2023 20:04:53 +0200
+Message-Id: <20230329180502.1884307-2-kal.conley@dectris.com>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230329172311.71861-1-benjamin@sipsolutions.net>
-References: <20230329172311.71861-1-benjamin@sipsolutions.net>
+In-Reply-To: <20230329180502.1884307-1-kal.conley@dectris.com>
+References: <20230329180502.1884307-1-kal.conley@dectris.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Benjamin Berg <benjamin.berg@intel.com>
+xskxceiver depends on xskxceiver.h so tell make about it.
 
-This is useful to e.g. automatically free resources at the end of the
-test, without having to deal with kunit resource objects directly.
-
-The whole point of doing this is that the callback is guaranteed to
-happen in case the test aborts (due to an assertion). As such, use
-assertions internally rather than requiring further error checking by
-the API user.
-
-Signed-off-by: Benjamin Berg <benjamin.berg@intel.com>
+Signed-off-by: Kal Conley <kal.conley@dectris.com>
 ---
- include/kunit/test.h | 20 ++++++++++++++++++++
- lib/kunit/test.c     | 37 +++++++++++++++++++++++++++++++++++++
- 2 files changed, 57 insertions(+)
+ tools/testing/selftests/bpf/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index 519b90261c72..ab1dacf1c9f4 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -373,6 +373,26 @@ static inline void *kunit_kcalloc(struct kunit *test, size_t n, size_t size, gfp
- 	return kunit_kmalloc_array(test, n, size, gfp | __GFP_ZERO);
- }
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 4a8ef118fd9d..223be997f15d 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -612,7 +612,7 @@ $(OUTPUT)/test_verifier: test_verifier.c verifier/tests.h $(BPFOBJ) | $(OUTPUT)
+ 	$(call msg,BINARY,,$@)
+ 	$(Q)$(CC) $(CFLAGS) $(filter %.a %.o %.c,$^) $(LDLIBS) -o $@
  
-+typedef void (*kunit_cleanup_t)(const void *);
-+
-+/**
-+ * kunit_add_cleanup() - Add post-test cleanup action.
-+ * @test: The test case to which the resource belongs.
-+ * @cleanup_func: function to call at end of test.
-+ * @data: data to pass to @free_func.
-+ * @internal_gfp: gfp to use for internal allocations, if unsure, use GFP_KERNEL
-+ *
-+ * This adds a cleanup action to be executed after the test completes.
-+ * Internally this is handled using a *test managed resource*.
-+ *
-+ * This function will abort the test on failure.
-+ *
-+ * Note: KUnit needs to allocate memory for a kunit_resource object. You must
-+ * specify an @internal_gfp that is compatible with the current context.
-+ */
-+void kunit_add_cleanup(struct kunit *test, kunit_cleanup_t cleanup_func,
-+		       const void *data, gfp_t internal_gfp);
-+
- void kunit_cleanup(struct kunit *test);
+-$(OUTPUT)/xskxceiver: xskxceiver.c $(OUTPUT)/xsk.o $(OUTPUT)/xsk_xdp_progs.skel.h $(BPFOBJ) | $(OUTPUT)
++$(OUTPUT)/xskxceiver: xskxceiver.c xskxceiver.h $(OUTPUT)/xsk.o $(OUTPUT)/xsk_xdp_progs.skel.h $(BPFOBJ) | $(OUTPUT)
+ 	$(call msg,BINARY,,$@)
+ 	$(Q)$(CC) $(CFLAGS) $(filter %.a %.o %.c,$^) $(LDLIBS) -o $@
  
- void __printf(2, 3) kunit_log_append(char *log, const char *fmt, ...);
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index c9e15bb60058..72d956dfc324 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -719,6 +719,43 @@ void *kunit_kmalloc_array(struct kunit *test, size_t n, size_t size, gfp_t gfp)
- }
- EXPORT_SYMBOL_GPL(kunit_kmalloc_array);
- 
-+struct kunit_auto_cleanup {
-+	struct kunit_resource resource;
-+	kunit_cleanup_t cleanup_func;
-+};
-+
-+static void kunit_auto_cleanup_free(struct kunit_resource *res)
-+{
-+	struct kunit_auto_cleanup *cleanup;
-+
-+	cleanup = container_of(res, struct kunit_auto_cleanup, resource);
-+
-+	cleanup->cleanup_func(cleanup->resource.data);
-+}
-+
-+void kunit_add_cleanup(struct kunit *test, kunit_cleanup_t cleanup_func,
-+		       const void *data, gfp_t internal_gfp)
-+{
-+	struct kunit_auto_cleanup *res;
-+
-+	KUNIT_ASSERT_NOT_NULL_MSG(test, cleanup_func,
-+				  "Cleanup function must not be NULL");
-+
-+	res = kzalloc(sizeof(*res), internal_gfp);
-+	if (!res) {
-+		cleanup_func(data);
-+		KUNIT_ASSERT_FAILURE(test, "Could not allocate resource for cleanup");
-+	}
-+
-+	res->cleanup_func = cleanup_func;
-+	res->resource.should_kfree = true;
-+
-+	/* Cannot fail as init is NULL */
-+	__kunit_add_resource(test, NULL, kunit_auto_cleanup_free,
-+			     &res->resource, (void *)data);
-+}
-+EXPORT_SYMBOL_GPL(kunit_add_cleanup);
-+
- static inline bool kunit_kfree_match(struct kunit *test,
- 				     struct kunit_resource *res, void *match_data)
- {
 -- 
 2.39.2
 
