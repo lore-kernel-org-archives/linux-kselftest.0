@@ -2,44 +2,45 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27F7BC6FD18
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 976BFC74A5B
 	for <linux-kselftest@archiver.kernel.org>; Wed, 29 Mar 2023 17:23:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230179AbjC2RX3 (ORCPT
+        id S229456AbjC2RXa (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 29 Mar 2023 13:23:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49662 "EHLO
+        Wed, 29 Mar 2023 13:23:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjC2RX2 (ORCPT
+        with ESMTP id S230051AbjC2RX2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Wed, 29 Mar 2023 13:23:28 -0400
 Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF88422C
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B78AB10D3
         for <linux-kselftest@vger.kernel.org>; Wed, 29 Mar 2023 10:23:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Content-Type:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-To:Resent-Cc:
-        Resent-Message-ID:In-Reply-To:References;
-        bh=qCUo0G46cYQXreTtfAzXKfSeX+oSqchDN4KPUhh50yI=; t=1680110607; x=1681320207; 
-        b=seRoA4omQ/rpHaxdDJzhcVjYFPWhYkjBbFxdCpAcCQ7YJaL3hcTzOpa1iHhgZnxB+/sZkTOo0Bc
-        wvJClGTb4Ayu35Id8wV7CcKmqLIgDW/tbtU1ldQO9fdPuUTKRAd4V0ZZzp4amztG2ALVpsWOPzGUB
-        riir3k1RhdShYp8eEc6NyiCs7vkhSznAt12WpH7l3z6SRZeOZwUMF5SZVKzpo4OMZK71qw/wjJzFA
-        9HAp9aPHCuUEQ56cSfBokiwVzFezug4ercZsmMrw0YY+nJ+MQuqb9Ke5B/fqljYq6HbKdYwbzFv8X
-        1H0IJMWVuReiXn+uXxh4Q6Obc94S9KgELqBQ==;
+        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Content-Type:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=fWWMWsWDiMkkqHyM1AnILBzBWIyFWrb7Hh7aBaAQW40=;
+        t=1680110607; x=1681320207; b=auuBdJjWuTJ06rGBBX7bWLF7ZnS1ZCi6sRd8RYiMTMd7j2Z
+        I+6mviCluz1OKdwcKhTsa0dt6JiGJbAuZgkNQOQ72YsQAqbQ8fbKf8rNTX5KoABb03HJLoNVmAhAW
+        APc3EN9I+ReIskAuBn4YMRqhl64nrd4sKrSYDgiDWFQS6L1NkCEwgg81KUU9EvKPxL7CcOYrCN2uo
+        GIuqnyWrdojn02gMQ51VF2DCvugsCFFxqa0fRinRCPjQKWo9mUKoolD55v55UEt0CrO1prcKnUH6P
+        5eNsIFiUJHBcybqUMwnGENX5P6LxVRB3z+uumEhnzs4/Bj+6qQ794q73m3K61ZOg==;
 Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
         (Exim 4.96)
         (envelope-from <benjamin@sipsolutions.net>)
-        id 1phZW8-000AZQ-10;
+        id 1phZW8-000AZQ-2S;
         Wed, 29 Mar 2023 19:23:24 +0200
 From:   benjamin@sipsolutions.net
 To:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
 Cc:     Johannes Berg <johannes@sipsolutions.net>,
         Benjamin Berg <benjamin.berg@intel.com>
-Subject: [PATCH 1/3] kunit: add parameter generation macro using description from array
-Date:   Wed, 29 Mar 2023 19:23:09 +0200
-Message-Id: <20230329172311.71861-1-benjamin@sipsolutions.net>
+Subject: [PATCH 3/3] kunit: add a convenience allocation wrapper for SKBs
+Date:   Wed, 29 Mar 2023 19:23:11 +0200
+Message-Id: <20230329172311.71861-3-benjamin@sipsolutions.net>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230329172311.71861-1-benjamin@sipsolutions.net>
+References: <20230329172311.71861-1-benjamin@sipsolutions.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -48,46 +49,59 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Benjamin Berg <benjamin.berg@intel.com>
 
-The existing KUNIT_ARRAY_PARAM macro requires a separate function to
-get the description. However, in a lot of cases the description can
-just be copied directly from the array. Add a second macro that
-avoids having to write a static function just for a single strscpy.
+This simplifies the use of SKBs in tests by avoiding the need for
+error checking.
 
 Signed-off-by: Benjamin Berg <benjamin.berg@intel.com>
 ---
- include/kunit/test.h | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ include/kunit/skbuff.h | 38 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 include/kunit/skbuff.h
 
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index 08d3559dd703..519b90261c72 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -1414,6 +1414,25 @@ do {									       \
- 		return NULL;									\
- 	}
- 
-+/**
-+ * KUNIT_ARRAY_PARAM_DESC() - Define test parameter generator from an array.
-+ * @name:  prefix for the test parameter generator function.
-+ * @array: array of test parameters.
-+ * @desc_member: structure member from array element to use as description
+diff --git a/include/kunit/skbuff.h b/include/kunit/skbuff.h
+new file mode 100644
+index 000000000000..46dcb00af655
+--- /dev/null
++++ b/include/kunit/skbuff.h
+@@ -0,0 +1,38 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * KUnit struct sk_buff helpers.
 + *
-+ * Define function @name_gen_params which uses @array to generate parameters.
++ * Copyright (C) 2023 Intel Corporation
 + */
-+#define KUNIT_ARRAY_PARAM_DESC(name, array, desc_member)					\
-+	static const void *name##_gen_params(const void *prev, char *desc)			\
-+	{											\
-+		typeof((array)[0]) *__next = prev ? ((typeof(__next)) prev) + 1 : (array);	\
-+		if (__next - (array) < ARRAY_SIZE((array))) {					\
-+			strscpy(desc, __next->desc_member, KUNIT_PARAM_DESC_SIZE);		\
-+			return __next;								\
-+		}										\
-+		return NULL;									\
-+	}
 +
- // TODO(dlatypov@google.com): consider eventually migrating users to explicitly
- // include resource.h themselves if they need it.
- #include <kunit/resource.h>
++#ifndef _KUNIT_SKBUFF_H
++#define _KUNIT_SKBUFF_H
++
++#include <kunit/test.h>
++#include <linux/skbuff.h>
++
++/**
++ * kunit_zalloc_skb() - Allocate and initialize a resource managed skb.
++ * @test: The test case to which the skb belongs
++ * @len: size to allocate
++ * @gfp: allocation mask
++ *
++ * Allocate a new struct sk_buff, zero fill the give length and add it as a
++ * resource to the kunit test for automatic cleanup.
++ *
++ * The function will not return in case of an allocation error.
++ */
++static inline struct sk_buff *kunit_zalloc_skb(struct kunit *test, int len,
++					       gfp_t gfp)
++{
++	struct sk_buff *res = alloc_skb(len, gfp);
++
++	KUNIT_ASSERT_NOT_NULL(test, res);
++	KUNIT_ASSERT_EQ(test, skb_pad(res, len), 0);
++
++	kunit_add_cleanup(test, (kunit_cleanup_t) kfree_skb, res, gfp);
++
++	return res;
++}
++
++#endif /* _KUNIT_SKBUFF_H */
 -- 
 2.39.2
 
