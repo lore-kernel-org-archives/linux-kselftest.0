@@ -2,74 +2,75 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F657C6FD18
-	for <linux-kselftest@archiver.kernel.org>; Wed, 29 Mar 2023 18:08:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DE4CC6FD18
+	for <linux-kselftest@archiver.kernel.org>; Wed, 29 Mar 2023 18:08:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230113AbjC2SIK (ORCPT
+        id S230177AbjC2SIV (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 29 Mar 2023 14:08:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36472 "EHLO
+        Wed, 29 Mar 2023 14:08:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230061AbjC2SII (ORCPT
+        with ESMTP id S230096AbjC2SIJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 29 Mar 2023 14:08:08 -0400
-Received: from mail-ed1-x561.google.com (mail-ed1-x561.google.com [IPv6:2a00:1450:4864:20::561])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E3F31995
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Mar 2023 11:08:06 -0700 (PDT)
-Received: by mail-ed1-x561.google.com with SMTP id eh3so66712913edb.11
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Mar 2023 11:08:06 -0700 (PDT)
+        Wed, 29 Mar 2023 14:08:09 -0400
+Received: from mail-ed1-x563.google.com (mail-ed1-x563.google.com [IPv6:2a00:1450:4864:20::563])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 326874C0D
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Mar 2023 11:08:08 -0700 (PDT)
+Received: by mail-ed1-x563.google.com with SMTP id eh3so66713256edb.11
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Mar 2023 11:08:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dectris.com; s=google; t=1680113285;
+        d=dectris.com; s=google; t=1680113286;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=w4tucP9Q9FV6sU4BIjvtlK70WE+DVbPqhpqoYAULqHo=;
-        b=X++xilXrfsolAEeAEWD8InjkTe+RrpkihRhi6UrAZ6Zwm/aL2viz+zwojEU9LnkYqq
-         ryjfDqEM8u0cczzchazAh6dGcIe+AWz76Vpig6TK44rTT0IW7R0qMIHg7f/ZX+4Wj78i
-         h6+P96MSSqcfY550wsQZ3fzJYgb2BwXJj86W4=
+        bh=7l3JqaZ/F1Xw0Z8kRSNKL5fbAB/UmHB3O5Uun2MQO78=;
+        b=MAEEH3HGa7M9V3alShG0dh2Xaw5ztphBzVuDATfWiwHZz9OiqSWIhmfByHZRYFH1Gv
+         B6m8yXnt/TzXSc5GPdCovGkuC2K4kXPOFLB/uUWaVJhTHZAjPVrvLRkSK66nbW5KH2PI
+         81PmW3uYvOvbKdc64Wi6FTaA8LqvXQleGboes=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680113285;
+        d=1e100.net; s=20210112; t=1680113286;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=w4tucP9Q9FV6sU4BIjvtlK70WE+DVbPqhpqoYAULqHo=;
-        b=TGjQb4OFMggUvOiyltxBDnxHdaVQGXr9/VEfdAk3eSpfG/2yO4mdcSxEWp+45FQl8v
-         C2j25+a18Wux/AxHo/wXSG4m2bWHIIhWpyXJg6CbBSodZfxvkLvhrngrpmaeLc4I+rk5
-         txcV54ns90F8+Hbjy5D3dbtLt7IOeZsOb3pPFoXFFNqLfPBFFh5zWaiAzpHdcpHvi7UD
-         qcxs9Y80i/D9i71Fg/jRVc+qatLC+QIYvGwzJ/p6CTXwZAIifYF8cUl/l8hNoa8UfW2j
-         NQuhIvkvIOrSAc+6qF/Tb0lr0+M5CaJJ7I0WbOJ1YvsA+m9vOVvrGspZpfOY4/bE80AG
-         OiJA==
-X-Gm-Message-State: AAQBX9de6R18OqFcv7YewD3Q/oYnwidTiZvMFjNjBV0X1lmtndMx/pRw
-        0wAEffKc/TcWhll0JHcD5/PhswbxnRQD0KubgVRornmNC42Q
-X-Google-Smtp-Source: AKy350YdMPM2CK+luf9WqRlx44zCAom7BCSezfWowFXLrio8cNSqf7Xmc5ri2icJ3h+cMwrUzMTnJ+EAMZp/
-X-Received: by 2002:a17:907:2175:b0:920:7a99:dcd4 with SMTP id rl21-20020a170907217500b009207a99dcd4mr21005414ejb.62.1680113284926;
-        Wed, 29 Mar 2023 11:08:04 -0700 (PDT)
+        bh=7l3JqaZ/F1Xw0Z8kRSNKL5fbAB/UmHB3O5Uun2MQO78=;
+        b=LmYesoJvuicCmiYXbeksApB4TTUrKh2IOVntc64EESjMlpjqeU6BrufQDaDcFMOVSB
+         bR8RhFRSLdE/HcT31m7ibyOqJ43b/+8bXNaw3wq8VnIgsdpcbtVYgTAMaWSlNEMDRLme
+         EiHfGrMsu+aaJbMlknlDGBh9lup6sPiTr6evB+kGkZGYRC5u3ch09byMeqAOE/du2i2R
+         S0dG/hfmI4e2/beQC/ByiIPlurVCBjYDqXWJ5078F17CBsjixHdviKbRLPwZ3vbXlVgZ
+         GIGbgfUY8zDrNXVnmy+N4AFZUs2PxzZXAeinj9p4nm21x3jwEcRmOTZmsTtUrvlJDNMW
+         yABg==
+X-Gm-Message-State: AAQBX9eKR18kkPl2SMQelRYMArFrI3lnAqFrhF6f1U5otGV+94UJSlHT
+        9cS67j1PjeyDyKeiW6GXjRGkNKgpHD3CTuU5v/+gYg+6BJEk
+X-Google-Smtp-Source: AKy350aQv50ZGqox8uPY+2MEmJO7lJ/IIxyNCBGekrZLoOoqIDUhuBJK1lUho1/76aZAxM3hdDjQ1Y2kqQOp
+X-Received: by 2002:a17:907:c609:b0:93f:9b1b:f303 with SMTP id ud9-20020a170907c60900b0093f9b1bf303mr17483715ejc.75.1680113286692;
+        Wed, 29 Mar 2023 11:08:06 -0700 (PDT)
 Received: from fedora.dectris.local (dect-ch-bad-pfw.cyberlink.ch. [62.12.151.50])
-        by smtp-relay.gmail.com with ESMTPS id m10-20020a1709066d0a00b00920438f59b3sm12072998ejr.154.2023.03.29.11.08.04
+        by smtp-relay.gmail.com with ESMTPS id m10-20020a1709066d0a00b00920438f59b3sm12072998ejr.154.2023.03.29.11.08.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 11:08:04 -0700 (PDT)
+        Wed, 29 Mar 2023 11:08:06 -0700 (PDT)
 X-Relaying-Domain: dectris.com
 From:   Kal Conley <kal.conley@dectris.com>
 To:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
         Magnus Karlsson <magnus.karlsson@intel.com>,
         Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
         Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <martin.lau@linux.dev>,
         Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>,
         Stanislav Fomichev <sdf@google.com>,
         Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
+        Shuah Khan <shuah@kernel.org>
 Cc:     Kal Conley <kal.conley@dectris.com>, netdev@vger.kernel.org,
         bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2 03/10] selftests: xsk: Add test case for packets at end of UMEM
-Date:   Wed, 29 Mar 2023 20:04:55 +0200
-Message-Id: <20230329180502.1884307-4-kal.conley@dectris.com>
+Subject: [PATCH bpf-next v2 05/10] selftests: xsk: Disable IPv6 on VETH1
+Date:   Wed, 29 Mar 2023 20:04:57 +0200
+Message-Id: <20230329180502.1884307-6-kal.conley@dectris.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230329180502.1884307-1-kal.conley@dectris.com>
 References: <20230329180502.1884307-1-kal.conley@dectris.com>
@@ -79,47 +80,35 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add test case to testapp_invalid_desc for valid packets at the end of
-the UMEM.
+This change fixes flakiness in the BIDIRECTIONAL test:
+
+    # [is_pkt_valid] expected length [60], got length [90]
+    not ok 1 FAIL: SKB BUSY-POLL BIDIRECTIONAL
+
+When IPv6 is enabled, the interface will periodically send MLDv1 and
+MLDv2 packets. These packets can cause the BIDIRECTIONAL test to fail
+since it uses VETH0 for RX.
+
+For other tests, this was not a problem since they only receive on VETH1
+and IPv6 was already disabled on VETH0.
 
 Signed-off-by: Kal Conley <kal.conley@dectris.com>
 ---
- tools/testing/selftests/bpf/xskxceiver.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/test_xsk.sh | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
-index 3956f5db84f3..34a1f32fe752 100644
---- a/tools/testing/selftests/bpf/xskxceiver.c
-+++ b/tools/testing/selftests/bpf/xskxceiver.c
-@@ -1662,6 +1662,8 @@ static void testapp_invalid_desc(struct test_spec *test)
- 		{-2, PKT_SIZE, 0, false},
- 		/* Packet too large */
- 		{0x2000, XSK_UMEM__INVALID_FRAME_SIZE, 0, false},
-+		/* Up to end of umem allowed */
-+		{umem_size - PKT_SIZE, PKT_SIZE, 0, true},
- 		/* After umem ends */
- 		{umem_size, PKT_SIZE, 0, false},
- 		/* Straddle the end of umem */
-@@ -1675,16 +1677,17 @@ static void testapp_invalid_desc(struct test_spec *test)
- 
- 	if (test->ifobj_tx->umem->unaligned_mode) {
- 		/* Crossing a page boundrary allowed */
--		pkts[6].valid = true;
-+		pkts[7].valid = true;
- 	}
- 	if (test->ifobj_tx->umem->frame_size == XSK_UMEM__DEFAULT_FRAME_SIZE / 2) {
- 		/* Crossing a 2K frame size boundrary not allowed */
--		pkts[7].valid = false;
-+		pkts[8].valid = false;
- 	}
- 
- 	if (test->ifobj_tx->shared_umem) {
- 		pkts[4].addr += umem_size;
- 		pkts[5].addr += umem_size;
-+		pkts[6].addr += umem_size;
- 	}
- 
- 	pkt_stream_generate_custom(test, pkts, ARRAY_SIZE(pkts));
+diff --git a/tools/testing/selftests/bpf/test_xsk.sh b/tools/testing/selftests/bpf/test_xsk.sh
+index b077cf58f825..377fb157a57c 100755
+--- a/tools/testing/selftests/bpf/test_xsk.sh
++++ b/tools/testing/selftests/bpf/test_xsk.sh
+@@ -116,6 +116,7 @@ setup_vethPairs() {
+ 	ip link add ${VETH0} numtxqueues 4 numrxqueues 4 type veth peer name ${VETH1} numtxqueues 4 numrxqueues 4
+ 	if [ -f /proc/net/if_inet6 ]; then
+ 		echo 1 > /proc/sys/net/ipv6/conf/${VETH0}/disable_ipv6
++		echo 1 > /proc/sys/net/ipv6/conf/${VETH1}/disable_ipv6
+ 	fi
+ 	if [[ $verbose -eq 1 ]]; then
+ 	        echo "setting up ${VETH1}"
 -- 
 2.39.2
 
