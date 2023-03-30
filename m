@@ -2,136 +2,125 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02F10C77B60
-	for <linux-kselftest@archiver.kernel.org>; Thu, 30 Mar 2023 15:45:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96162C761A6
+	for <linux-kselftest@archiver.kernel.org>; Thu, 30 Mar 2023 16:01:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233308AbjC3PpY (ORCPT
+        id S230294AbjC3QBB (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 30 Mar 2023 11:45:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57032 "EHLO
+        Thu, 30 Mar 2023 12:01:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233344AbjC3PpS (ORCPT
+        with ESMTP id S231624AbjC3QBA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 30 Mar 2023 11:45:18 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96037E19F;
-        Thu, 30 Mar 2023 08:44:53 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id f6-20020a17090ac28600b0023b9bf9eb63so20059141pjt.5;
-        Thu, 30 Mar 2023 08:44:53 -0700 (PDT)
+        Thu, 30 Mar 2023 12:01:00 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB28CD31F
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Mar 2023 09:00:51 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id qe8-20020a17090b4f8800b0023f07253a2cso20105101pjb.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Mar 2023 09:00:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680191092;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lU9JCkTye6Fj+qGS5BcJ6TDCunaP0ev1Z3VOnL6O7u8=;
-        b=ARXUEmqMaQiFvA623fC9h/1bTtbZu+9APT25M51Fyzal5QyyBhpNOKenjrxHC9tNvl
-         S5qRlO9XoSCMeMsGUxdNgy5JziINi0lqiObnEMVskhrUlgY/Nx4DIG0QNEQsDohNNwVI
-         ZjpV6n4C/vseZe/Yaal+huKNBxLZRFnxa87dsmJ+XNyIozRshatOv7uSBF+5zoQgGC9u
-         APpkQ7cgiCA7P+a0ITBi0t+ePzbvRC6ZSQ8PNQFlEV5Nkz3BPNiKrW3feDlfatNMu8VV
-         ylQbTLsNnGSA8P3WnQGfjLEZ3+xacpPhY8gzVJGbk7L8KERA9bNGO7XypeGYZuS4b7+c
-         MaZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680191092;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20210112; t=1680192051;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lU9JCkTye6Fj+qGS5BcJ6TDCunaP0ev1Z3VOnL6O7u8=;
-        b=Gwhpp1CH3ATa+s2l6hpaB3nP5joifaqa6K3nft1d7wcbwEMWA4r+AZi7qphPWyHCs2
-         Nog49W4S7XEBlsjWJ7ivtghFM549D/hExVrN9l77iUxRgb62zZiGmjU3RGe+sfHx5BWH
-         MjeXQBRrRxHDGxGONxkNBYLPSkgGoQoLWliNxu6h+Ow/zg2seXaYhD2MYg+rCyuNsPz1
-         khOqw8dykb2G0SdzWsXcMDO68s9Fj7jQ5ofzEDynphVZYldHcv5Spr3jUIksMhfJwZHs
-         ppWqlUeFfro/WON8v7egFR+rE+vaEHNGw3dmtqBvW4RduHZYgtbGXqdeFV3iK2K+vTce
-         hdyA==
-X-Gm-Message-State: AAQBX9cXZQznOvKBR8LKDUkXTdw0N1D0vB5soaf4NfchGEZcU0Eq7idB
-        TXbsRkRTUsVjDnpsQ1ZMMnk=
-X-Google-Smtp-Source: AKy350an4aqBBaa4AoyKQMK/eGaMNqvVN6MWoVbuOKTA1coVugM8BSX93rzwnm0ye04pw2RvKavoAQ==
-X-Received: by 2002:a17:903:244e:b0:1a1:bbcd:917e with SMTP id l14-20020a170903244e00b001a1bbcd917emr26930417pls.10.1680191091900;
-        Thu, 30 Mar 2023 08:44:51 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id u1-20020a170902bf4100b001a1faeac240sm352484pls.186.2023.03.30.08.44.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 08:44:51 -0700 (PDT)
-Date:   Thu, 30 Mar 2023 18:44:31 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Hans Schultz <netdev@kapio-technology.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
-        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v2 net-next 2/6] net: dsa: propagate flags down towards
- drivers
-Message-ID: <20230330154431.vii5llyqgiymievp@skbuf>
-References: <20230327225933.plm5raegywbe7g2a@skbuf>
- <87ileljfwo.fsf@kapio-technology.com>
- <20230328114943.4mibmn2icutcio4m@skbuf>
- <87cz4slkx5.fsf@kapio-technology.com>
- <20230330124326.v5mqg7do25tz6izk@skbuf>
- <87wn2yxunb.fsf@kapio-technology.com>
- <20230330130936.hxme34qrqwolvpsh@skbuf>
- <875yaimgro.fsf@kapio-technology.com>
- <20230330150752.gdquw5kudtrqgzyz@skbuf>
- <877cuy6ynf.fsf@kapio-technology.com>
+        bh=ndN3+GWy8wiNegcKyQXjM8GtRL7wqyotsSg3louAi+Y=;
+        b=B+4E6zCM3cVbvx/Ya9MhixdwjJ2M5pFXN+uWzVzW8ahSxKL6Nlk4YMR8gQb2LQb4na
+         ONESj/nRf3zYZhdUgHt71q3LSmG5FnInlOTKB43AqnRaiVDgzH6IOfdbgJLDvA1SxSjO
+         ZcMY9FXTG/5whKP9/GGRf3w3eckoelDPbXIp0rHtVVh1O0SQu+qxMYaZRy+NOZ8AwtcO
+         h6zq9qSO+NcVl2fxgvOcW4P3S3bMVK7vacW20vV6sqp/ijKbzXcPnSqSU8E70nCaZk/n
+         WF6bkWSjsgRdtwZNLLTfzWzu1cfHV/RmBaeXFmYs6iKZ3Y6IVOx5PlcgUfSNN2ygnDE9
+         LouQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680192051;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ndN3+GWy8wiNegcKyQXjM8GtRL7wqyotsSg3louAi+Y=;
+        b=LoUAy+ZOktgmoaU5rxYn5PXTnLax2zm5Vd42BL85Ut7b24aGSnXyJOvYyhnL5iX7NP
+         BPLEQitXM+FstGEqbzBg6na3Duc9v2iUZzw4KCSk3bU4kFJic2ZEhY4S9tUh3kPb2TY9
+         +J2Db226qqLFFipiJC9276qSeAx8tThiH3Y0p482N5+4+HsVzV0k7RBQscMAAcw31Dft
+         bm8RyiwRjRMpuQESWIOkOuQVbAeUP5JYB0oFVA9spFabWbWvktYdLc5YQBIZusR8sK2T
+         qbjQymSzi0qWSLxG5kY367ookXzQPB+GB6EfrCvgmgJxDMIMn+kVdHPhT9AMxJkYOfHi
+         wEnQ==
+X-Gm-Message-State: AAQBX9eInB5bBy/I0/cVskJz3AoZ9A8yWCKvSfqY4/L42zfFc2DJudci
+        iDNTwQoq2LSpruiBE/OCerfCu61AtI9B4hfZdiyBSg==
+X-Google-Smtp-Source: AKy350ZRFCaxo1XdHRaStzy2w+WauhrDw1erUDUR6mVqVnGireSA8/POZOMnlvpUoGDqOHndQJiPJs+v19qW2Gwzq3A=
+X-Received: by 2002:a17:902:74c9:b0:1a0:48ff:539c with SMTP id
+ f9-20020a17090274c900b001a048ff539cmr7929154plt.11.1680192050876; Thu, 30 Mar
+ 2023 09:00:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <877cuy6ynf.fsf@kapio-technology.com>
+References: <20230330081831.2291351-1-javierm@redhat.com> <202303301815.kRKFM3NH-lkp@intel.com>
+ <87a5zufq7n.fsf@minerva.mail-host-address-is-not-set>
+In-Reply-To: <87a5zufq7n.fsf@minerva.mail-host-address-is-not-set>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Thu, 30 Mar 2023 09:00:39 -0700
+Message-ID: <CAGS_qxot1_+J3YCykkk0H1fZM6Cn6Pv4SFT6iCf9J7td1aH9HQ@mail.gmail.com>
+Subject: Re: [PATCH v2] Input: Add KUnit tests for some of the input core
+ helper functions
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     kernel test robot <lkp@intel.com>, linux-kernel@vger.kernel.org,
+        oe-kbuild-all@lists.linux.dev,
+        Enric Balletbo i Serra <eballetbo@redhat.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        linux-kselftest@vger.kernel.org,
+        =?UTF-8?B?TWHDrXJhIENhbmFs?= <mcanal@igalia.com>,
+        David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
+        Maxime Ripard <maxime@cerno.tech>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-input@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 05:34:44PM +0200, Hans Schultz wrote:
-> On Thu, Mar 30, 2023 at 18:07, Vladimir Oltean <olteanv@gmail.com> wrote:
+On Thu, Mar 30, 2023 at 4:12=E2=80=AFAM Javier Martinez Canillas
+<javierm@redhat.com> wrote:
+>
+> kernel test robot <lkp@intel.com> writes:
+>
+> Hello,
+>
+> [...]
+>
 > >
-> > Then, make DSA decide whether to handle the "added_by_user && !is_static"
-> > combination or not, based on the presence of the DSA_FDB_FLAG_DYNAMIC
-> > flag, which will be set in ds->supported_fdb_flags only for the mv88e6xxx
-> > driver.
-> 
-> Okay, so this will require a new function in the DSA layer that sets
-> which flags are supported and that the driver will call on
-> initialization.
-> 
-> Where (in the DSA layer) should such a function be placed and what
-> should it be called?
+> > All warnings (new ones prefixed by >>):
+> >
+> >    drivers/clk/.kunitconfig: warning: ignored by one of the .gitignore =
+files
+> >    drivers/gpu/drm/tests/.kunitconfig: warning: ignored by one of the .=
+gitignore files
+> >    drivers/gpu/drm/vc4/tests/.kunitconfig: warning: ignored by one of t=
+he .gitignore files
+> >    drivers/hid/.kunitconfig: warning: ignored by one of the .gitignore =
+files
+> >>> drivers/input/tests/.kunitconfig: warning: ignored by one of the .git=
+ignore files
+>
+> KUnit folks, what should we do about this? I believe the correct thing
+> here would be for these dot-files to not be ignored by git.
+>
+> Not only to prevent these reports, but also to avoid the need to add
+> them using `git add -f`, since is quite error prone and easy to miss.
+>
+> I was thinking about posting the following patch:
+>
+> From f1dc1733001682886458c23b676123635bc29da0 Mon Sep 17 00:00:00 2001
+> From: Javier Martinez Canillas <javierm@redhat.com>
+> Date: Thu, 30 Mar 2023 13:04:42 +0200
+> Subject: [PATCH] .gitignore: Exclude KUnit config dot-files
 
-Don't overthink it, no new function. It's okay to just set
-ds->supported_fdb_flags = DSA_FDB_FLAG_DYNAMIC in
-mv88e6xxx_register_switch(), near the place where it currently sets
-ds->num_lag_ids. Either before dsa_register_switch(), or within the
-ds->ops->setup(). Both are fine, since the user network interfaces
-haven't been allocated just yet by dsa_slave_create() and so, the
-switchdev code path is inaccessible.
+Ah, I forgot/didn't realize lkp bot was complaining about .kunitconfig's.
+Agreed, we should go with something like that.
 
-Existing drivers will have ds->supported_fdb_flags = 0 by default, since
-they allocate the struct dsa_switch with kzalloc(), and DSA will have to
-do something sane with that.
+As I noted in my reply on the patch, there was a previous patch to do
+just the same thing here,
+https://lore.kernel.org/linux-kselftest/20230127145708.12915-1-andriy.shevc=
+henko@linux.intel.com/
+
+I'm not sure who is intended to pick up the patch, but maybe bringing
+up the fact this causes spurious warnings will help argue for the
+change.
+
+Thanks,
+Daniel
