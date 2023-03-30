@@ -2,51 +2,51 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3804EC77B6C
-	for <linux-kselftest@archiver.kernel.org>; Thu, 30 Mar 2023 23:48:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 94544C6FD1D
+	for <linux-kselftest@archiver.kernel.org>; Thu, 30 Mar 2023 23:48:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231830AbjC3XsY (ORCPT
+        id S231822AbjC3XsX (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 30 Mar 2023 19:48:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43904 "EHLO
+        Thu, 30 Mar 2023 19:48:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231770AbjC3Xrx (ORCPT
+        with ESMTP id S231768AbjC3Xrx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Thu, 30 Mar 2023 19:47:53 -0400
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE5710AAB;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 720AA12BF4;
         Thu, 30 Mar 2023 16:47:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1680220042; x=1711756042;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=BDOVJxkv4ZCtP+exumrul4a9lyDZPaoK8i+VzmJqHJE=;
-  b=MfEAjojD+Gk3mEDX8uSsu1pjgKRg28dU9ELllbN6P4FqIyaPRiWBDXrB
-   BAgU0/RffY6Ils1UiexOs7Zbu+GOeeGf48Mj/kMCbFlJSynjTIkxV/wcL
-   YqswD5g399LT//D6OJp9JrNA0FnTeuOSrO4ba3Lr9sZT/7sXgQt/Pe9Tt
-   H0dc7RLwVRi1BZ5QdkhZn17xZoT6iYIOapfiKiMujBSCAaBdNFb+9pYuo
-   2KoB6t51LFcciVU+5loAskbXoUcjQ0IKhN6flt4s/WD3x0Q4xdA6TM4Ah
-   Snnb++932y6W/ahT6x9W+bTlb7xMEK5mjHE/W5q9YTJUbSMgXh+vWGjn+
+  bh=PXl1dGOSTl3mjfBv99XnPT3QfP3sbVC8+kNUvV4iUz4=;
+  b=YWeOrMdjuvUsAeQlKBK4PxqDsMoposkoi4rhIYI6AGr8Y/nlLEC6ftou
+   jOXfKdaeAx06cC+G6jgtYttjtL0TAMahGdlOlEjUwUv+QyuvvDZngA72a
+   icL1B7i9TNlxRtvMzAGDzLMBeHCZBrF7IePxV90TvyKwZiDn520Q/qCjs
+   HItQuVtUkZsuksOYshCWmheS8DpVI0Mu8gZaDxjs28KekkpmVZnFzF+wK
+   AoLTdkr5XbdWnlOhR8CMR3JA1o8R/Ri2eRMFhxnScLLHBckhTBU9T5QDv
+   o4yFcgbjTESKccKJLUKYvcGgFYS7c3RTK8yLztR1cldQ+KdPyfKsgDFG6
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="427587834"
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="427587825"
 X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
-   d="scan'208";a="427587834"
+   d="scan'208";a="427587825"
 Received: from fmsmga006.fm.intel.com ([10.253.24.20])
   by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 16:47:16 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="930926055"
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="930926049"
 X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
-   d="scan'208";a="930926055"
+   d="scan'208";a="930926049"
 Received: from chang-linux-3.sc.intel.com ([172.25.66.173])
   by fmsmga006.fm.intel.com with ESMTP; 30 Mar 2023 16:47:16 -0700
 From:   "Chang S. Bae" <chang.seok.bae@intel.com>
 To:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     shuah@kernel.org, tglx@linutronix.de, dave.hansen@linux.intel.com,
         bp@alien8.de, chang.seok.bae@intel.com
-Subject: [PATCH v3 3/3] selftests/x86/amx: Remove unneeded code
-Date:   Thu, 30 Mar 2023 16:35:20 -0700
-Message-Id: <20230330233520.21937-4-chang.seok.bae@intel.com>
+Subject: [PATCH v3 1/3] selftests/x86/sigaltstack: Adjust the test to the kernel's altstack check
+Date:   Thu, 30 Mar 2023 16:35:18 -0700
+Message-Id: <20230330233520.21937-2-chang.seok.bae@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230330233520.21937-1-chang.seok.bae@intel.com>
 References: <20220711170330.27138-1-chang.seok.bae@intel.com>
@@ -55,74 +55,58 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Remove some unused helper code. Also, get rid of the redundant permission
-request.
+The test assumes an insufficient altstack is allowed. Then it raises a
+signal to test the delivery failure due to an altstack overflow.
+
+The kernel now provides the STRICT_SIGALTSTACK_SIZE option to tweak
+sigaltstack()'s sanity check to prevent an insufficient altstack.
+ENOMEM is returned on the check failure.
+
+Adjust the code to skip the test when this option is on.
 
 Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 Cc: Shuah Khan <shuah@kernel.org>
 Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Borislav Petkov <bp@alien8.de>
 Cc: Dave Hansen <dave.hansen@linux.intel.com>
 Cc: linux-kselftest@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 ---
 Changes from v2:
-* Add as a new patch
----
- tools/testing/selftests/x86/amx.c | 20 --------------------
- 1 file changed, 20 deletions(-)
+* Fix the subsystem name in the subject.
 
-diff --git a/tools/testing/selftests/x86/amx.c b/tools/testing/selftests/x86/amx.c
-index f0b1efe89ef7..854f7d61be89 100644
---- a/tools/testing/selftests/x86/amx.c
-+++ b/tools/testing/selftests/x86/amx.c
-@@ -39,16 +39,6 @@ struct xsave_buffer {
- 	};
- };
+Changes from v1:
+* Call out the config name (Shuah Khan).
+* Massage the print message (Shuah Khan).
+---
+ tools/testing/selftests/x86/sigaltstack.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/x86/sigaltstack.c b/tools/testing/selftests/x86/sigaltstack.c
+index f689af75e979..22a88b764a8e 100644
+--- a/tools/testing/selftests/x86/sigaltstack.c
++++ b/tools/testing/selftests/x86/sigaltstack.c
+@@ -88,8 +88,18 @@ static void sigalrm(int sig, siginfo_t *info, void *ctx_void)
  
--static inline uint64_t xgetbv(uint32_t index)
--{
--	uint32_t eax, edx;
--
--	asm volatile("xgetbv;"
--		     : "=a" (eax), "=d" (edx)
--		     : "c" (index));
--	return eax + ((uint64_t)edx << 32);
--}
--
- static inline void xsave(struct xsave_buffer *xbuf, uint64_t rfbm)
+ static void test_sigaltstack(void *altstack, unsigned long size)
  {
- 	uint32_t rfbm_lo = rfbm;
-@@ -110,8 +100,6 @@ static struct {
+-	if (setup_altstack(altstack, size))
++	if (setup_altstack(altstack, size)) {
++		/*
++		 * The kernel may return ENOMEM when the altstack size
++		 * is insufficient. Skip the test in this case.
++		 */
++		if (errno == ENOMEM && size < at_minstack_size) {
++			printf("[SKIP]\tThe running kernel disallows an insufficient size.\n");
++			return;
++		}
++
+ 		err(1, "sigaltstack()");
++	}
  
- #define CPUID_LEAF_XSTATE		0xd
- #define CPUID_SUBLEAF_XSTATE_USER	0x0
--#define TILE_CPUID			0x1d
--#define TILE_PALETTE_ID			0x1
+ 	sigalrm_expected = (size > at_minstack_size) ? true : false;
  
- static void check_cpuid_xtiledata(void)
- {
-@@ -161,12 +149,6 @@ static inline void clear_xstate_header(struct xsave_buffer *buffer)
- 	memset(&buffer->header, 0, sizeof(buffer->header));
- }
- 
--static inline uint64_t get_xstatebv(struct xsave_buffer *buffer)
--{
--	/* XSTATE_BV is at the beginning of the header: */
--	return *(uint64_t *)&buffer->header;
--}
--
- static inline void set_xstatebv(struct xsave_buffer *buffer, uint64_t bv)
- {
- 	/* XSTATE_BV is at the beginning of the header: */
-@@ -769,8 +751,6 @@ static void test_context_switch(void)
- 	/* Affinitize to one CPU to force context switches */
- 	affinitize_cpu0();
- 
--	req_xtiledata_perm();
--
- 	printf("[RUN]\tCheck tiledata context switches, %d iterations, %d threads.\n",
- 	       ctxtswtest_config.iterations,
- 	       ctxtswtest_config.num_threads);
 -- 
 2.17.1
 
