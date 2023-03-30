@@ -2,103 +2,139 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 31CDFC7619A
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9040BC761AF
 	for <linux-kselftest@archiver.kernel.org>; Thu, 30 Mar 2023 23:48:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231806AbjC3XsW (ORCPT
+        id S231814AbjC3XsW (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Thu, 30 Mar 2023 19:48:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43412 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231767AbjC3Xrw (ORCPT
+        with ESMTP id S231705AbjC3Xrx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 30 Mar 2023 19:47:52 -0400
+        Thu, 30 Mar 2023 19:47:53 -0400
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 451D212858;
-        Thu, 30 Mar 2023 16:47:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066091287F;
+        Thu, 30 Mar 2023 16:47:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680220038; x=1711756038;
+  t=1680220039; x=1711756039;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=q+JNlSC1uCqvuWCBy2qAYpAlDZtiUcm4wmk9OxwbY/4=;
-  b=IwJYyML8iXPKBMVylEEDOGgx8KayXV1Z0lJZZWbDmwQL+xRCrYrokdve
-   VySUiHg4o/Nqsh7pRd6W0Xhqy7lFOBgXX6quHjkWJ7Cg1RezQe4Bnphc2
-   A61Gfu4TCACSXKEe7E6zGVgHbRB9ejuSvQtfKdcOQSDZOOLAaIj6mJjek
-   zeT/RlLbpNi7TmDrD03/OLoo6FetZ9/gqxODXtvXjXFrUStpH4Y8wE981
-   xAPUkkzmJAS1JTu/gQzMWYNB/0QC2Z8Hp9Gg1tbbCJysGPdLyPPIdeNth
-   uom3FreHj5xkFogXDWGx2jNZRxejJRZ2NBHI8XC8/1//3atiwvn+QaT8Z
+  bh=ICpoF7mu9Aw52F1J5i0VBfsK43335W9h7I5PoX16fbU=;
+  b=NvNnoRt3EtZAjx/7i0Gc0+r3jiYoDXI7TvrS4gg2Mof8PewT28pQirJt
+   f3meeVSLfz6DUxYJSComdkcSk243uwu1/wWhF+pA2EJhI2i1Wqp92Snk0
+   RXi5r4PFZTmu4NweNN37HO+JWPT0GhfnpxheSnmRaTEhm0IMTg8se6XQx
+   30lLtvWKtVnkNdUva6huzZtgAVb57QpexMRbebH4LVozsJDrzQM1pPISe
+   ge2TpY62fnAFnDhxb7BhbF6SVCQEZkweBoyH9moD8C5DY46zXZIguMyAB
+   Kd/42wUcW7akw0OM9oj3NZOGLt/zgGWcdrjjCFMuipb1KMtTF1Y1Kmcd8
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="427587819"
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="427587829"
 X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
-   d="scan'208";a="427587819"
+   d="scan'208";a="427587829"
 Received: from fmsmga006.fm.intel.com ([10.253.24.20])
   by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 16:47:16 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="930926046"
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="930926052"
 X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
-   d="scan'208";a="930926046"
+   d="scan'208";a="930926052"
 Received: from chang-linux-3.sc.intel.com ([172.25.66.173])
   by fmsmga006.fm.intel.com with ESMTP; 30 Mar 2023 16:47:16 -0700
 From:   "Chang S. Bae" <chang.seok.bae@intel.com>
 To:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     shuah@kernel.org, tglx@linutronix.de, dave.hansen@linux.intel.com,
         bp@alien8.de, chang.seok.bae@intel.com
-Subject: [PATCH v3 0/3] selftests/x86: AMX-related test improvements
-Date:   Thu, 30 Mar 2023 16:35:17 -0700
-Message-Id: <20230330233520.21937-1-chang.seok.bae@intel.com>
+Subject: [PATCH v3 2/3] selftests/x86/amx: Fix the test to avoid failure when AMX is unavailable
+Date:   Thu, 30 Mar 2023 16:35:19 -0700
+Message-Id: <20230330233520.21937-3-chang.seok.bae@intel.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220711170330.27138-1-chang.seok.bae@intel.com>
+In-Reply-To: <20230330233520.21937-1-chang.seok.bae@intel.com>
 References: <20220711170330.27138-1-chang.seok.bae@intel.com>
+ <20230330233520.21937-1-chang.seok.bae@intel.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Dear maintainers,
+When a CPU does not have AMX, the test fails. But this is wrong as it
+should be runnable regardless. Skip the test instead.
 
-Let me follow up on the last posting [5] with these two small changes:
-* Clean up unused code in the AMX test.
-* Fix the subsystem name in the patch1 subject.
+Also, simplify the feature check using arch_prctl() instead of CPUID. The
+syscall is more trustworthy as the kernel controls the feature permission.
 
-Here is a summary of the included test code changes:
+Reported-by: Thomas Gleixner <tglx@linutronix.de>
+Fixes: 6a3e0651b4a ("selftests/x86/amx: Add test cases for AMX state management")
+Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: linux-kselftest@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+Changes from v2: None
 
-* With the STRICT_SIGALTSTACK_SIZE option [1,2], the kernel's altstack
-  check becomes stringent. The x86 sigaltstack test is ignorant about
-  this. Adjust the test. This check was established [3] to ensure
-  every AMX task's altstack is sufficient (regardless of that option)
-  [4].
+Changes from v1:
+* Simplify the feature check code (Shuah Khan).
+---
+ tools/testing/selftests/x86/amx.c | 31 ++++++++++---------------------
+ 1 file changed, 10 insertions(+), 21 deletions(-)
 
-* The AMX test wrongly fails on non-AMX machines. Fix the code to skip
-  the test instead.
-
-* It also has some unused code. Remove them where at this.
-
-The series is available in this repository:
-  git://github.com/intel/amx-linux.git selftest
-
-Thanks,
-Chang
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/x86/Kconfig#n2467
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/admin-guide/kernel-parameters.txt#n6038
-[3] 3aac3ebea08f ("x86/signal: Implement sigaltstack size validation")
-[4] 4b7ca609a33d ("x86/signal: Use fpu::__state_user_size for sigalt stack validation")
-[5] https://lore.kernel.org/lkml/20220711170330.27138-1-chang.seok.bae@intel.com/
-
-
-Chang S. Bae (3):
-  selftests/x86/sigaltstack: Adjust the test to the kernel's altstack
-    check
-  selftests/x86/amx: Fix the test to avoid failure when AMX is
-    unavailable
-  selftests/x86/amx: Remove unneeded code
-
- tools/testing/selftests/x86/amx.c         | 51 +++++------------------
- tools/testing/selftests/x86/sigaltstack.c | 12 +++++-
- 2 files changed, 21 insertions(+), 42 deletions(-)
-
-
-base-commit: 197b6b60ae7bc51dd0814953c562833143b292aa
+diff --git a/tools/testing/selftests/x86/amx.c b/tools/testing/selftests/x86/amx.c
+index d884fd69dd51..f0b1efe89ef7 100644
+--- a/tools/testing/selftests/x86/amx.c
++++ b/tools/testing/selftests/x86/amx.c
+@@ -101,24 +101,6 @@ static void clearhandler(int sig)
+ #define XFEATURE_MASK_XTILEDATA	(1 << XFEATURE_XTILEDATA)
+ #define XFEATURE_MASK_XTILE	(XFEATURE_MASK_XTILECFG | XFEATURE_MASK_XTILEDATA)
+ 
+-#define CPUID_LEAF1_ECX_XSAVE_MASK	(1 << 26)
+-#define CPUID_LEAF1_ECX_OSXSAVE_MASK	(1 << 27)
+-static inline void check_cpuid_xsave(void)
+-{
+-	uint32_t eax, ebx, ecx, edx;
+-
+-	/*
+-	 * CPUID.1:ECX.XSAVE[bit 26] enumerates general
+-	 * support for the XSAVE feature set, including
+-	 * XGETBV.
+-	 */
+-	__cpuid_count(1, 0, eax, ebx, ecx, edx);
+-	if (!(ecx & CPUID_LEAF1_ECX_XSAVE_MASK))
+-		fatal_error("cpuid: no CPU xsave support");
+-	if (!(ecx & CPUID_LEAF1_ECX_OSXSAVE_MASK))
+-		fatal_error("cpuid: no OS xsave support");
+-}
+-
+ static uint32_t xbuf_size;
+ 
+ static struct {
+@@ -350,6 +332,7 @@ enum expected_result { FAIL_EXPECTED, SUCCESS_EXPECTED };
+ 
+ /* arch_prctl() and sigaltstack() test */
+ 
++#define ARCH_GET_XCOMP_SUPP	0x1021
+ #define ARCH_GET_XCOMP_PERM	0x1022
+ #define ARCH_REQ_XCOMP_PERM	0x1023
+ 
+@@ -928,10 +911,16 @@ static void test_ptrace(void)
+ 
+ int main(void)
+ {
+-	/* Check hardware availability at first */
+-	check_cpuid_xsave();
+-	check_cpuid_xtiledata();
++	unsigned long features;
++	long rc;
+ 
++	rc = syscall(SYS_arch_prctl, ARCH_GET_XCOMP_SUPP, &features);
++	if (rc || (features & XFEATURE_MASK_XTILE) != XFEATURE_MASK_XTILE) {
++		printf("[SKIP]\tno AMX support.\n");
++		exit(KSFT_FAIL);
++	}
++
++	check_cpuid_xtiledata();
+ 	init_stashed_xsave();
+ 	sethandler(SIGILL, handle_noperm, 0);
+ 
 -- 
 2.17.1
 
