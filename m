@@ -2,56 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 830D7C76196
-	for <linux-kselftest@archiver.kernel.org>; Fri, 31 Mar 2023 17:20:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 599B4C77B6C
+	for <linux-kselftest@archiver.kernel.org>; Fri, 31 Mar 2023 17:20:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232034AbjCaRU2 (ORCPT
+        id S232138AbjCaRU3 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 31 Mar 2023 13:20:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49562 "EHLO
+        Fri, 31 Mar 2023 13:20:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232204AbjCaRU0 (ORCPT
+        with ESMTP id S231232AbjCaRU0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Fri, 31 Mar 2023 13:20:26 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 040BCB474
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F8371CB87
         for <linux-kselftest@vger.kernel.org>; Fri, 31 Mar 2023 10:20:25 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id om3-20020a17090b3a8300b0023efab0e3bfso26110037pjb.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 31 Mar 2023 10:20:24 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id r7-20020a17090b050700b002404be7920aso22098295pjz.5
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 Mar 2023 10:20:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112; t=1680283224;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112; t=1680283225;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=iPT3W31x2j+JJJTffuGI48n0z7fVw4JxvH77ju/Af3A=;
-        b=oavfO98pHy6LPyDmJpfKYtk5/hTAdr6AAlz7q0x3/5v25ClnIWLPq4d6niRs8dgYEx
-         CiK6pZkojmGBqCYM9fBMV/C8c5E2vrGbmblDSAsQiROmV6xPMimPQVT/GGIOlXZvOXuT
-         KYSRfh/te/KGhVL7scQWgWO8K5bQZvxS+IYwUEUO0gG8y1CyIE8Mzhx83Mhgbllk7daz
-         xh8V9iinxt2/GsHxXByHV2b7jDJ1rcMRXhq35Y/fNVmImNrrReagtwyH5e/VIzwFI67e
-         ua7b4EIba5RbA5sdwjbnBVw/4Pi8MGHBVuM23D8QprwDINPg5ov6B2ddXdorC/C06Pup
-         Dk3A==
+        bh=RdJH+fKHNxaa/t3gBEsC5D5G+73x7CCC1y3jp7fB+Ag=;
+        b=k/q9gQaY3lv6FB41Jm63O/sIvuIgYZRUJPfW1mnjuI1GR08yJgD5m5I8QcC9VmcvRC
+         WKHSO8IeSwYQXkN9y3g86coq+w32eWgHJs1Gm4vnWKRGUGLsHfHjlZVOFqHfqwnmPGpk
+         3hPXBVXgr4sIagfjrnpxD4m9UXjYDNIHlM6LY2dsOMNXzpndA2kfKou06thgzOhVxRWX
+         OBKddz9u9Fe6NUdysh0Bq0P2dtcrgD7GiTIxJ1jkWxwELBSkEXWagC7Bz7YGTODyRqa7
+         7ZYBVOHc6YhxDZw0wa2LH7HsDsN9p0S0IeC5hOKvNPtVAwP1CIUcYP4CQvJkx2M2Nffp
+         N2/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680283224;
+        d=1e100.net; s=20210112; t=1680283225;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=iPT3W31x2j+JJJTffuGI48n0z7fVw4JxvH77ju/Af3A=;
-        b=1EULImAqCeTdVlNt10PoCjYSANleeHqiiPePcHcvCaQ2HBHoIupP4ccvsOei4VSbs9
-         3bMbAf3CYPvT8aJ7wi3o98S5KBaNom5zBvAz/t2PU34wjIjxECP0We7pJNgHjJfors6x
-         V/ZXH0MKhuculIjupMWBeEtVjq1bQgCVSyXbsAZN/iaSFEaPZ0xuvuwZxsa02OeW/gnG
-         1ZnsYi9J+ohgeUZS8Bv+Mvy0SzKuCNarSqrUZXwKOZ5Wo2oIYwLk/+g9nmgNh+KKK/4d
-         4nGzQzW6dJ3OTpcmDsSkpDl7quABBd5/w+3Z4nB1fPWPoFu0cpPvScW5z1kqXdXnpeBE
-         cy4g==
-X-Gm-Message-State: AAQBX9ftgAwn+9UrvMyfqJmGHQt4EYN9786f42WuJ75+aNM5YLKSYMb5
-        MNuPsEHg2HacaqCje/i8xNCsng==
-X-Google-Smtp-Source: AKy350b6nUtUPO6lRLIq/8IyTZ7MENgY1H3PCRoN0bpnTbZjkN+lBRREkuDB09Biv1o9uqK8IXN7KQ==
-X-Received: by 2002:a17:902:f68b:b0:1a2:9334:f79a with SMTP id l11-20020a170902f68b00b001a29334f79amr7390325plg.38.1680283224480;
+        bh=RdJH+fKHNxaa/t3gBEsC5D5G+73x7CCC1y3jp7fB+Ag=;
+        b=FbPPHOjS0fl2Tkm0jl7tbBRBisWqMs3BTMi334CTAyqWmGUM4qJdS+V06DqD+q+h64
+         pkWsqKXX5ZAfPY9Ecv3n5q7dl99pomZcK60Lu86ou3kw8wU61ynyW+mbICRpinqOMb5y
+         C0iHxXTKAZFvr+/ghIXoX0Da+FKmbwUIzi8w+I8n+RrMN1+YercS2WNVsR5NZZX3/G4J
+         iCUBWyIMcAFA9D9pNWWHGPDBcZRNu1BjZ/B9I7DZJmRWNFbBXHyTXgqhgOOpibQXher8
+         AKU7su9BqluKUfI4op+qtL37t0G8QDdhwOBUad7I9NDzhNz8FwX8KeQccrQ7piXEH6Jq
+         RGuQ==
+X-Gm-Message-State: AAQBX9fe4YuGp1rAe6Vv3pRjkJmYL/xf7t96rtk/U0ck/D+TZQ4qr6fv
+        TRv+J95UbBIiTg+j6IN9YgS5YyeaL00P/MSLdvCZWw==
+X-Google-Smtp-Source: AKy350ayRg5cNo8+fuC++/Y+wx3es+MC3mKMlt2wrYkqYqLnCpLBAffZEgWad/OHyVw/p+lj/UazMQ==
+X-Received: by 2002:a05:6a20:dca5:b0:e3:8710:6846 with SMTP id ky37-20020a056a20dca500b000e387106846mr6592406pzb.10.1680283224860;
         Fri, 31 Mar 2023 10:20:24 -0700 (PDT)
 Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id d6-20020a170902c18600b001a04d37a4acsm1846495pld.9.2023.03.31.10.20.23
+        by smtp.gmail.com with ESMTPSA id p19-20020a63fe13000000b004fadb547d0csm1813628pgh.61.2023.03.31.10.20.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 10:20:23 -0700 (PDT)
-Message-ID: <64271657.170a0220.1f62e.3eb4@mx.google.com>
-Date:   Fri, 31 Mar 2023 10:20:23 -0700 (PDT)
+        Fri, 31 Mar 2023 10:20:24 -0700 (PDT)
+Message-ID: <64271658.630a0220.cc136.4356@mx.google.com>
+Date:   Fri, 31 Mar 2023 10:20:24 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
@@ -59,7 +59,7 @@ X-Kernelci-Tree: kselftest
 X-Kernelci-Branch: fixes
 X-Kernelci-Report-Type: test
 X-Kernelci-Kernel: linux-kselftest-fixes-6.3-rc5-1-gf1594bc67657
-Subject: kselftest/fixes kselftest-lkdtm: 4 runs,
+Subject: kselftest/fixes kselftest-seccomp: 4 runs,
  3 regressions (linux-kselftest-fixes-6.3-rc5-1-gf1594bc67657)
 To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
         shuah@kernel.org
@@ -68,8 +68,8 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kselftest/fixes kselftest-lkdtm: 4 runs, 3 regressions (linux-kselftest-fix=
-es-6.3-rc5-1-gf1594bc67657)
+kselftest/fixes kselftest-seccomp: 4 runs, 3 regressions (linux-kselftest-f=
+ixes-6.3-rc5-1-gf1594bc67657)
 
 Regressions Summary
 -------------------
@@ -89,9 +89,9 @@ mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | gcc-10   | defconfig=
 
 
   Details:  https://kernelci.org/test/job/kselftest/branch/fixes/kernel/lin=
-ux-kselftest-fixes-6.3-rc5-1-gf1594bc67657/plan/kselftest-lkdtm/
+ux-kselftest-fixes-6.3-rc5-1-gf1594bc67657/plan/kselftest-seccomp/
 
-  Test:     kselftest-lkdtm
+  Test:     kselftest-seccomp
   Tree:     kselftest
   Branch:   fixes
   Describe: linux-kselftest-fixes-6.3-rc5-1-gf1594bc67657
@@ -114,7 +114,7 @@ imx6q-sabrelite              | arm   | lab-collabora | gcc-10   | multi_v7_=
 defconfig+kselftest | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/6427051c668029d06062f771
+  Details:     https://kernelci.org/test/plan/id/642704d1005b5f6e0562f776
 
   Results:     0 PASS, 1 FAIL, 0 SKIP
   Full config: multi_v7_defconfig+kselftest
@@ -122,18 +122,19 @@ defconfig+kselftest | 1          =
 10110)
   Plain log:   https://storage.kernelci.org//kselftest/fixes/linux-kselftes=
 t-fixes-6.3-rc5-1-gf1594bc67657/arm/multi_v7_defconfig+kselftest/gcc-10/lab=
--collabora/kselftest-lkdtm-imx6q-sabrelite.txt
+-collabora/kselftest-seccomp-imx6q-sabrelite.txt
   HTML log:    https://storage.kernelci.org//kselftest/fixes/linux-kselftes=
 t-fixes-6.3-rc5-1-gf1594bc67657/arm/multi_v7_defconfig+kselftest/gcc-10/lab=
--collabora/kselftest-lkdtm-imx6q-sabrelite.html
+-collabora/kselftest-seccomp-imx6q-sabrelite.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
 elftest/20230324.0/armhf/initrd.cpio.gz =
 
 
 
-  * kselftest-lkdtm.login: https://kernelci.org/test/case/id/6427051c668029=
-d06062f772
-        failing since 164 days (last pass: v6.0-rc1, first fail: v6.1-rc1) =
+  * kselftest-seccomp.login: https://kernelci.org/test/case/id/642704d1005b=
+5f6e0562f777
+        failing since 94 days (last pass: linux-kselftest-fixes-6.1-rc3-3-g=
+89c1017aac67, first fail: v6.2-rc1) =
 
  =
 
@@ -147,7 +148,7 @@ mt8173-elm-hana              | arm64 | lab-collabora | gcc-10   | defconfig=
 +kse...4-chromebook | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/642706b8af6517d97b62f77f
+  Details:     https://kernelci.org/test/plan/id/64270559727e91640c62f789
 
   Results:     0 PASS, 1 FAIL, 0 SKIP
   Full config: defconfig+kselftest+arm64-chromebook
@@ -155,17 +156,17 @@ mt8173-elm-hana              | arm64 | lab-collabora | gcc-10   | defconfig=
 110)
   Plain log:   https://storage.kernelci.org//kselftest/fixes/linux-kselftes=
 t-fixes-6.3-rc5-1-gf1594bc67657/arm64/defconfig+kselftest+arm64-chromebook/=
-gcc-10/lab-collabora/kselftest-lkdtm-mt8173-elm-hana.txt
+gcc-10/lab-collabora/kselftest-seccomp-mt8173-elm-hana.txt
   HTML log:    https://storage.kernelci.org//kselftest/fixes/linux-kselftes=
 t-fixes-6.3-rc5-1-gf1594bc67657/arm64/defconfig+kselftest+arm64-chromebook/=
-gcc-10/lab-collabora/kselftest-lkdtm-mt8173-elm-hana.html
+gcc-10/lab-collabora/kselftest-seccomp-mt8173-elm-hana.html
   Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
 elftest/20230324.0/arm64/initrd.cpio.gz =
 
 
 
-  * kselftest-lkdtm.login: https://kernelci.org/test/case/id/642706b8af6517=
-d97b62f780
+  * kselftest-seccomp.login: https://kernelci.org/test/case/id/64270559727e=
+91640c62f78a
         failing since 163 days (last pass: linux-kselftest-fixes-6.0-rc3, f=
 irst fail: v6.1-rc1-5-gcb05c81ada76) =
 
@@ -181,7 +182,7 @@ mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | gcc-10   | defconfig=
 +kse...4-chromebook | 1          =
 
 
-  Details:     https://kernelci.org/test/plan/id/64270556e41d0a343e62f786
+  Details:     https://kernelci.org/test/plan/id/64270553e41d0a343e62f780
 
   Results:     0 PASS, 1 FAIL, 0 SKIP
   Full config: defconfig+kselftest+arm64-chromebook
@@ -189,17 +190,19 @@ mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | gcc-10   | defconfig=
 110)
   Plain log:   https://storage.kernelci.org//kselftest/fixes/linux-kselftes=
 t-fixes-6.3-rc5-1-gf1594bc67657/arm64/defconfig+kselftest+arm64-chromebook/=
-gcc-10/lab-collabora/kselftest-lkdtm-mt8183-kukui-jacuzzi-juniper-sku16.txt
+gcc-10/lab-collabora/kselftest-seccomp-mt8183-kukui-jacuzzi-juniper-sku16.t=
+xt
   HTML log:    https://storage.kernelci.org//kselftest/fixes/linux-kselftes=
 t-fixes-6.3-rc5-1-gf1594bc67657/arm64/defconfig+kselftest+arm64-chromebook/=
-gcc-10/lab-collabora/kselftest-lkdtm-mt8183-kukui-jacuzzi-juniper-sku16.html
+gcc-10/lab-collabora/kselftest-seccomp-mt8183-kukui-jacuzzi-juniper-sku16.h=
+tml
   Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
 elftest/20230324.0/arm64/initrd.cpio.gz =
 
 
 
-  * kselftest-lkdtm.login: https://kernelci.org/test/case/id/64270556e41d0a=
-343e62f787
+  * kselftest-seccomp.login: https://kernelci.org/test/case/id/64270553e41d=
+0a343e62f781
         failing since 163 days (last pass: linux-kselftest-fixes-6.0-rc3, f=
 irst fail: v6.1-rc1-5-gcb05c81ada76) =
 
