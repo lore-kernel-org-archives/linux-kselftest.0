@@ -2,128 +2,169 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91201C761A6
-	for <linux-kselftest@archiver.kernel.org>; Fri, 31 Mar 2023 15:33:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1E5AC76196
+	for <linux-kselftest@archiver.kernel.org>; Fri, 31 Mar 2023 16:27:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232523AbjCaPdO (ORCPT
+        id S233349AbjCaQ1l (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 31 Mar 2023 11:33:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55668 "EHLO
+        Fri, 31 Mar 2023 12:27:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230495AbjCaPdN (ORCPT
+        with ESMTP id S232604AbjCaQ10 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 31 Mar 2023 11:33:13 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2062.outbound.protection.outlook.com [40.107.237.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E73F1DFA1
-        for <linux-kselftest@vger.kernel.org>; Fri, 31 Mar 2023 08:33:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SEYvWJz+tdp5myoJyTkWyW5xwnl/BrJDlKUrc3OArewBQLoP5v2ovBZGh3NmoJxP5Qqq4DgUrRNATaPJ2/wKvRTJBFk4Qt0cYGHxGvmnjpdcs1ObAGfGK1S5o/zoBSrRoJXyuG1EIsEl5vV932ZhRjXtWbH38xd9A0iqS7HjAPN17HSCcYynmRvdLphtLvTvKW7J0DyKx3xzVTy0qMTLXIQQDrzzO0GJVh25vxk4jYjk7ViFCTrEEYbIF2ywCs/DalryXV/sXOjqLCrwicbu1yt3qu7vEZswQ3HZYejYJGS5kzDADiAzqMM4ilAI3soL/K1YEZ8lo6hDlN/hTzi86Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xCETgn10UD9azxn1n4NEWbXkKG7vD/mdwBqtnG3PTsg=;
- b=f+qtmRqCm5d0Qz+7sELBg2qrpl4uEPBEXch0uzEbgmlN6b6TXJPwxfiwtco8LV+D3Cjdi4CUjS6+W87ZWltjrgzpyNalhluwx2u21PNv7LuZLa/SX1U8q8ksjTlO7VsC+pEffqWEDHxhrMEOJnudflEk/EhYf9BolNGXQaHxuj9IU6zuT/4WdI8ZDuKeMMeyrxg+NwgTqvaKFXJ0MLqGCqXpj4izQTfi4GJE3G9d0yvwoZzG9DM1A8t90xB+zDwmhwLyk0HoNcL6SlNBVj0oW7LYBZfVzoqZ2Z9128xIbJO7fU7b5Z/OOshxk9LtXDEva+WC48098P9wBm6BhOb2nw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xCETgn10UD9azxn1n4NEWbXkKG7vD/mdwBqtnG3PTsg=;
- b=D5mwm306HmpC2VJp/kOMWGZQDAPngljrFJJfaBhNNHLaitMsZi8IazCf5bacgXpLJfrRr+QXh5RaQiy4xPkwTzIxoa4DrJB0Svv3nJRRBu9GMc4V85sty9x+XE2SwKrYCEL4hgLp9Wgb4ieZNcVr84AXVUCTkYr8co7NC4V1nP/E9g+3PL7LljXzGi6zm6JszHVfTz19PXY78Eox7FJgovWo8aEJdD75Spju8jCOe+ZNL6vsZGE1oarlPEQ5NZ55bVBs4nmrhug5H5/dnKGhdjEwkIWcix5ti0by7Mf7bpNwTtLxgrCpMWPFAa4rXRjRtWEbLzpmKOJ6XRY4qV31CQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by BL1PR12MB5093.namprd12.prod.outlook.com (2603:10b6:208:309::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.24; Fri, 31 Mar
- 2023 15:32:30 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::ef6d:fdf6:352f:efd1]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::ef6d:fdf6:352f:efd1%3]) with mapi id 15.20.6178.037; Fri, 31 Mar 2023
- 15:32:30 +0000
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     iommu@lists.linux.dev, Kevin Tian <kevin.tian@intel.com>,
-        linux-kselftest@vger.kernel.org
-Cc:     Lixiao Yang <lixiao.yang@intel.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Nicolin Chen <nicolinc@nvidia.com>,
-        Pengfei Xu <pengfei.xu@intel.com>, Yi Liu <yi.l.liu@intel.com>
-Subject: [PATCH 0/4] Fix three syzkaller splats in iommufd
-Date:   Fri, 31 Mar 2023 12:32:23 -0300
-Message-Id: <0-v1-ceab6a4d7d7a+94-iommufd_syz_jgg@nvidia.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BL1P223CA0028.NAMP223.PROD.OUTLOOK.COM
- (2603:10b6:208:2c4::33) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Fri, 31 Mar 2023 12:27:26 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC38D27007
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 Mar 2023 09:22:49 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id fy10-20020a17090b020a00b0023b4bcf0727so23912703pjb.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 Mar 2023 09:22:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112; t=1680279697;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=37qqI/bwK1/tmljha8vDWtoRRd+oIltmRl9kyhy7WtA=;
+        b=ytmF1CfUEwG24Q4vQ/LHpas722PGcd0/SBJ6dLaXwnuSevD0Tvalx7F3wyEA8C19pG
+         H7BSZeT73uwspKQ3RaQIZa9TsB4zdlYsamsjcuoPhU4W/rSpFcXpMoDlhIQbWRcvDxRW
+         qd4to43HUIbIH7dwLNTZ1seyGGLpSoCoYwQprFtTDrQZ8SjkP6rjOgRkybmT0idCbv+R
+         aQgEgWARBhyk1Q37wanCGP3xtaYzn0ciFa5E/Av2lVhswfLMVE83xBu4WezWKEkCBDIJ
+         EWwPSuQoR9uX0FW6dKQ0HVlplzMPJsoEZCzoPocy3odtnEwa4Y8om+WPEvwq0HHu8yJh
+         enJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680279697;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=37qqI/bwK1/tmljha8vDWtoRRd+oIltmRl9kyhy7WtA=;
+        b=b+bTJw2Z4G55vTYDraauumCgGqPD6h5F6MLbNsizS1FABJ8COJO4+FGr/grRwNVB6h
+         Zb/dpp/+24DtP8g0RUze0p3iMIXf+Y80xuV7aRWodqWh77y5+75wam/DjcQF4gj5TVV4
+         7veEScIMnGJMG7PtCpLr/ncrQE6kuhkJMt8lA0yh5AiOpKYblKEGOlDtkDCagu/eEXSS
+         p9afCenXE9hGyC4vM1onSWn/uP71xK4GneCX/1CumCTlh3weU3Tw/Op6vuGN1ayVFFI8
+         QGZhGGTV4nJvVnFuhBdBzk025eUgV804n3oMlvmeTWwF2t09eWMeE7W7j3r5EWcqDFil
+         /W7w==
+X-Gm-Message-State: AAQBX9eUK8Djd6dQvtu9pXARxPJM+q/wnTLJemD4j3FvYgv21IRpo0tx
+        URx+pUQTwTh/S8uYEg5+QZi0UA==
+X-Google-Smtp-Source: AKy350YAdIgExMESLTGRAywVD7gQLSVvVNBmjmQId6PN1MKJqCm0k3Fan7WS7Z/xOXdDaUAblxjQ7g==
+X-Received: by 2002:a17:903:22c4:b0:1a2:8924:224a with SMTP id y4-20020a17090322c400b001a28924224amr9780069plg.25.1680279697036;
+        Fri, 31 Mar 2023 09:21:37 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id k2-20020a170902e90200b001a19cf1b37esm1803410pld.40.2023.03.31.09.21.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Mar 2023 09:21:36 -0700 (PDT)
+Message-ID: <64270890.170a0220.31a27.3d95@mx.google.com>
+Date:   Fri, 31 Mar 2023 09:21:36 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|BL1PR12MB5093:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8f2e5dee-1ef4-499c-cb84-08db31fd23a9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: a0To093sPrD2LEV4H0bayaN3R9ThYItenGxuh5IHmYbn9gHbO8xkEF/+qAo9pIPxc+F9DVL3YvFrwmXT5FAMy7WRgk6AudhuJs8vL7IEBw+BbxkYfr6SH3jRw2kAw22WE3Jhlau1/XjvyRNeph0EvrRLMqyRRWqEwgnINd+vJa49FXr6e8xVRKJXwSXl4JrCo2q5wpwnsMPkTtj3AgFjzTN0nXxXu241pdMOjJFGRonvVDAM9RIppVxTW+SlRfnoW1sO1FhsSK//dSYe4YfK6hCNZkZfaaArIz9ohXYBwFcJKkA6qXmhVhXl3basxMtWxICmhw9SFfHwRAS3nV2x9uKzSXEWfkArjEcp8Z8UTLH7xf3wMuQip7bb8iajl9hFB9VHj9UHsOYcpnYZAeHHni4WQsysHDqwumPw3ydHRk0Ez3W4Car+zwWzxArIUoEaHTcbQeRVe72q4S2cYeZTRlZAMXOyFRb71POI+VyP5gkUqwt+W7yh3G8AtXeYJmCzGaxkN2gY8gy6tO8Y77CXKe6VPR04ZJGTAVxzL3iQknSRPM4Hqp730TTnnBdeMnASub5+vYrCh6tCoYrQxmYK9qfcYu5Mb7bdHxCOIw8Dd4o=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(39860400002)(366004)(396003)(346002)(451199021)(8676002)(54906003)(316002)(6486002)(66556008)(66946007)(66476007)(4326008)(36756003)(6512007)(6506007)(6666004)(26005)(38100700002)(2616005)(186003)(83380400001)(5660300002)(41300700001)(8936002)(478600001)(86362001)(4744005)(2906002)(4216001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PgGD3wgyLU3zVCe0D6WqYIuKgYeaO4Cs8EV2msNLkOcM+d15O8I/7+ilQ/fX?=
- =?us-ascii?Q?MvGTeEK8o9m2S9znoEOP1wIYtLp0enwxNiyaVKWbsB4kyya8W3905eDWtZaT?=
- =?us-ascii?Q?4Db7E0Q+Rz8l5Lujk1LNlek8/n7Eyw3hnlvX1IkaeELdtk7CMAIByEJTs/iR?=
- =?us-ascii?Q?XKuujNtsIq+ZKHWYIpmOuvL6ZKw5riREbxBri1Vw6Kf+zygMeqiJCjZdTvoD?=
- =?us-ascii?Q?7nnV/47Mh3CIl3L+utMOrcE6+k1aypGYCJT5CC/ueb9I9wM7pjUrE6yCL1l0?=
- =?us-ascii?Q?iZitJeo5D1+RrlYzazHPeoop1NoCl1fqznMMcPxmV3jDLoBckMUVQO84mTsv?=
- =?us-ascii?Q?L/iMvF2HUizmKRpwJTVDqumh0HgA5leHl5FKXiWbYllkZUu0t6vwpgCgP16F?=
- =?us-ascii?Q?s5aXHAkbIEXYU1oReamCgCeieCdlidVlH5XkZ9vKNwKnRux9gfR4Xuaqe5uQ?=
- =?us-ascii?Q?CqZM3TIiKSER9b7bavqkAVIJFZ8T1TXR+Ak0l4pRZG0sdUX/9O9zLbbrpNkZ?=
- =?us-ascii?Q?XG7ly4VxcUERdZlNdJA/YW9fgZJptzrf0Wuml37Nn2imTT+y1kEsUuR83AED?=
- =?us-ascii?Q?ihC9WqAK+S+y+Hs0tD1t1Tx5fjlb3t7i0QgqrMzjahP9qb2OuIAMXJE6Ga63?=
- =?us-ascii?Q?AMyJZEXLmgRqIOlHYZNitBNijkjjYgsHhz4vFXq15Y6cptjobCjLC9HGT1ML?=
- =?us-ascii?Q?P3phdhrUrlHM9bSoYKzvjrR2FLKiK4JyIPQNKCxmA+BeclPdr+IO9qTynx3B?=
- =?us-ascii?Q?nEPGPU5VUQqEOfY9/rGe3mwcRSFiSGYjrVX0xDLpDRIN254PQgTu60r8NeGq?=
- =?us-ascii?Q?pJdZKmvhTCuS9iYtY0WealTzlzy760wQI7iejh9gkZzAS+t9O5b8Ox/qsx8d?=
- =?us-ascii?Q?WtFC0gdKegBMNFn7xunBpLKpW5L0Efq0lKXlfoNujlA77ql5HBa8DNMH+Jw6?=
- =?us-ascii?Q?nfMZ7dtW6hP/7mo/3RamLrc5iqOR5HdltEdKuy4NjToDGGSPERhQcvtgwYTW?=
- =?us-ascii?Q?EptB/Ml1oqBROoP6XwT2xWDLxRjBGHDW7EPkkcQjPuUstG7BNtaf1xOdb+98?=
- =?us-ascii?Q?8PLCipOhAbdv/InAbLbaTQw5ptaUth7BdolfzMplPtG2SV3k6hKiS6bG8g4h?=
- =?us-ascii?Q?b6gcRUUseLIgW3S+THdU4Ww/mnl5NUwUMopazM2s0aYKcy4f2FSBiaiml8a5?=
- =?us-ascii?Q?j5d1Jjk6CWX082V3LdlekIzmPLPzoeKfBS6GaISYiSGQUpQCwlkmrNZwYfDW?=
- =?us-ascii?Q?BPiZ9qS8jJzOoFxdFxrw3N/nVAjMnobwslYV/vFisOh0lhSaqVZkz80p07Gm?=
- =?us-ascii?Q?6w7744ZdeQrNgglEek+DvyN2GHEPcm4uISZus033g+DBT9oPd4PLhM4AWzIy?=
- =?us-ascii?Q?7XwbTBykH/e0IQeIdEvAIlbLP7DNIxA/8VqV3b9qflEQyZKJ9MAyJhctFzYd?=
- =?us-ascii?Q?tXoaBxinQ/jsxzt6Ja3i8e8eyDgbrFFVmgsynxi2L3/QLbxZkxpa8iqYM8sI?=
- =?us-ascii?Q?YWgloGLXs1R3iUw6X2ddRnT/m2bUzoqrBaesUkZoeR0M7hCGPl53AIY4uU7U?=
- =?us-ascii?Q?Wg+VGtbP5ctmAmHj2h4ImzPv2IDUuyScE1v/M8yu?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8f2e5dee-1ef4-499c-cb84-08db31fd23a9
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2023 15:32:29.9280
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: v533FgWJPK8i+hE8fW9XLRsgK2c4d+/EiOvyIyJ82AM9mPL30blA9026BgC8l/kS
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5093
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Tree: kselftest
+X-Kernelci-Branch: fixes
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: linux-kselftest-fixes-6.3-rc5-1-gf1594bc67657
+Subject: kselftest/fixes build: 7 builds: 0 failed, 7 passed,
+ 6 warnings (linux-kselftest-fixes-6.3-rc5-1-gf1594bc67657)
+To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-All related to the pages code, and the latter are reproducible with a
-simple test.
+kselftest/fixes build: 7 builds: 0 failed, 7 passed, 6 warnings (linux-ksel=
+ftest-fixes-6.3-rc5-1-gf1594bc67657)
 
-Jason Gunthorpe (4):
-  iommufd: Check for uptr overflow
-  iommufd: Fix unpinning of pages when an access is present
-  iommufd: Do not corrupt the pfn list when doing batch carry
-  iommufd/selftest: Cover domain unmap with huge pages and access
+Full Build Summary: https://kernelci.org/build/kselftest/branch/fixes/kerne=
+l/linux-kselftest-fixes-6.3-rc5-1-gf1594bc67657/
 
- drivers/iommu/iommufd/pages.c           | 16 ++++++++++--
- tools/testing/selftests/iommu/iommufd.c | 34 +++++++++++++++++++++++++
- 2 files changed, 48 insertions(+), 2 deletions(-)
+Tree: kselftest
+Branch: fixes
+Git Describe: linux-kselftest-fixes-6.3-rc5-1-gf1594bc67657
+Git Commit: f1594bc676579133a3cd906d7d27733289edfb86
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
+est.git
+Built: 4 unique architectures
+
+Warnings Detected:
+
+arm64:
+    defconfig+kselftest (clang-16): 3 warnings
+
+arm:
+
+i386:
+
+x86_64:
+    x86_64_defconfig+kselftest (clang-16): 3 warnings
 
 
-base-commit: 9c7d518b9b71f4d5ca3d12952cda3417ac6126c4
--- 
-2.40.0
+Warnings summary:
 
+    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x3e: relocation to=
+ !ENDBR: .text+0x1463d6
+    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x28: relocation to=
+ !ENDBR: .text+0x14654b
+    1    vmlinux.o: warning: objtool: lkdtm_UNSET_SMEP+0xca: relocation to =
+!ENDBR: native_write_cr4+0x4
+    1    drivers/gpu/host1x/dev.c:520:6: warning: variable 'syncpt_irq' is =
+uninitialized when used here [-Wuninitialized]
+    1    drivers/gpu/host1x/dev.c:490:16: note: initialize the variable 'sy=
+ncpt_irq' to silence this warning
+    1    1 warning generated.
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, clang-16) =E2=80=94 PASS, 0 errors, 3 warnings,=
+ 0 section mismatches
+
+Warnings:
+    drivers/gpu/host1x/dev.c:520:6: warning: variable 'syncpt_irq' is unini=
+tialized when used here [-Wuninitialized]
+    drivers/gpu/host1x/dev.c:490:16: note: initialize the variable 'syncpt_=
+irq' to silence this warning
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 3 w=
+arnings, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x28: relocation to !END=
+BR: .text+0x14654b
+    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x3e: relocation to !END=
+BR: .text+0x1463d6
+    vmlinux.o: warning: objtool: lkdtm_UNSET_SMEP+0xca: relocation to !ENDB=
+R: native_write_cr4+0x4
+
+---
+For more info write to <info@kernelci.org>
