@@ -2,47 +2,45 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6301AC77B60
-	for <linux-kselftest@archiver.kernel.org>; Sun,  2 Apr 2023 18:04:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 640B7C77B62
+	for <linux-kselftest@archiver.kernel.org>; Sun,  2 Apr 2023 18:04:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231327AbjDBSEr (ORCPT
+        id S231339AbjDBSEs (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 2 Apr 2023 14:04:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35086 "EHLO
+        Sun, 2 Apr 2023 14:04:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230498AbjDBSEq (ORCPT
+        with ESMTP id S231136AbjDBSEr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 2 Apr 2023 14:04:46 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC7D1526C;
+        Sun, 2 Apr 2023 14:04:47 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F5DA5255;
         Sun,  2 Apr 2023 11:04:45 -0700 (PDT)
 From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
         s=mail; t=1680458683;
-        bh=pHLKhMFkF7gynF7dKsz0mx/ghrke0CAkg+O7mwjoO8c=;
-        h=From:Subject:Date:To:Cc:From;
-        b=oMOT6TZyAHkzrZo1VxtS/bIthJsYW8wUkJUp9ULS2iPukfQicfnOtZU9Zs9jxO4Zv
-         lhELqsolT8rtnDbD4rOOXgfSmB3t35Irb50XRwczV8sZ+nH5AaPA2mtBxaqLd9/uv5
-         VwXQX+gtvLDvW3qOjGXqjKcQxwvYWXmlWvAZUnaI=
-Subject: [PATCH v3 0/4] tools/nolibc: add testcases for vfprintf
-Date:   Sun, 02 Apr 2023 18:04:33 +0000
-Message-Id: <20230328-nolibc-printf-test-v3-0-ddc79f92efd5@weissschuh.net>
+        bh=lRlYUuDp5glflddJvEoeapRiiCbk9usZQ1sjBHNJHWA=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+        b=hAqtsk1tMBTOcLmQdfShfuClxGMOfQ87C1yjw1nXaohBeAmIZ/e/XxuFfsdy7yO+p
+         OXqzOIh903ka6x+00ab+Iz2eJSzlOzTipUjoo/vQ0DSbbJ3BJgIGarqD0mQTag+73p
+         CKaeLPdhaEvB9qxGbfTqKeI8hzmdfQSmNYAYoOU0=
+Date:   Sun, 02 Apr 2023 18:04:37 +0000
+Subject: [PATCH v3 4/4] tools/nolibc: add testcases for vfprintf
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIALLDKWQC/32NQQ6CMBAAv0J6dk1ZQkRP/sNwaMvWbkIK6RbUE
- P5u5QEeZ5LJbEooMYm6VZtKtLLwFAs0p0q5YOKTgIfCCjU2usEO4jSydTAnjtlDJsmgWxxaYx3
- WdadKaI0Q2GSiCyWNyzgWOSfy/D5Oj75wYMlT+hzjFX/272NF0OAvaAePta6v+v4iFhEXlnCOl
- FW/7/sXkAyHQc4AAAA=
+Message-Id: <20230328-nolibc-printf-test-v3-4-ddc79f92efd5@weissschuh.net>
+References: <20230328-nolibc-printf-test-v3-0-ddc79f92efd5@weissschuh.net>
+In-Reply-To: <20230328-nolibc-printf-test-v3-0-ddc79f92efd5@weissschuh.net>
 To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1680458682; l=1453;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1680458682; l=3462;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=pHLKhMFkF7gynF7dKsz0mx/ghrke0CAkg+O7mwjoO8c=;
- b=1EETe+2UjrvlGI1LlrXqhh1QmdJIW+3tsIwwwVP4B6VHuvNJfWnsUm+mVYUwrOs04R/Z6qfzX
- hYUI61l9STWAfQT6ifNUKMhJZC4HVGmZn9ONgRY6QIAUKR2Q4EkOV2Y
+ bh=lRlYUuDp5glflddJvEoeapRiiCbk9usZQ1sjBHNJHWA=;
+ b=r1gaqwcr5bI+JYJYF6F/e7zU/ZbkMtq+8Nx9jeWHBtiCSsdad9o8hV1RBLVCxN8lFZ0Rv2ta+
+ gv3a94JEvWNBu2sE9onoc7uR2GvxejWHKmk4N4eDNT6RtNdjesRUa4P
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 Precedence: bulk
@@ -51,40 +49,123 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 vfprintf() is complex and so far did not have proper tests.
 
-This series is based on the "dev" branch of the RCU tree.
-
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
-Changes in v3:
-- also provide and use fflush/fclose.
-- reject fileno(NULL).
-- provide compatability with buffered streams from glibc.
-- Link to v2: https://lore.kernel.org/r/20230328-nolibc-printf-test-v2-0-f72bdf210190@weissschuh.net
+ tools/testing/selftests/nolibc/nolibc-test.c | 86 ++++++++++++++++++++++++++++
+ 1 file changed, 86 insertions(+)
 
-Changes in v2:
-- Include <sys/mman.h> for tests.
-- Implement FILE* in terms of integer pointers.
-- Provide fdopen() and fileno().
-- Link to v1: https://lore.kernel.org/lkml/20230328-nolibc-printf-test-v1-0-d7290ec893dd@weissschuh.net/
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index 47013b78972e..de943e028933 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -20,6 +20,7 @@
+ #include <linux/reboot.h>
+ #include <sys/io.h>
+ #include <sys/ioctl.h>
++#include <sys/mman.h>
+ #include <sys/mount.h>
+ #include <sys/reboot.h>
+ #include <sys/stat.h>
+@@ -667,6 +668,90 @@ int run_stdlib(int min, int max)
+ 	return ret;
+ }
+ 
++#define EXPECT_VFPRINTF(c, expected, fmt, ...)				\
++	ret += expect_vfprintf(llen, c, expected, fmt, ##__VA_ARGS__)
++
++static int expect_vfprintf(int llen, size_t c, const char *expected, const char *fmt, ...)
++{
++	int ret, fd, w, r;
++	char buf[100];
++	FILE *memfile;
++	va_list args;
++
++	fd = memfd_create("vfprintf", 0);
++	if (fd == -1) {
++		pad_spc(llen, 64, "[FAIL]\n");
++		return 1;
++	}
++
++	memfile = fdopen(fd, "w+");
++	if (!memfile) {
++		pad_spc(llen, 64, "[FAIL]\n");
++		return 1;
++	}
++
++	va_start(args, fmt);
++	w = vfprintf(memfile, fmt, args);
++	va_end(args);
++
++	if (w != c) {
++		llen += printf(" written(%d) != %d", w, (int) c);
++		pad_spc(llen, 64, "[FAIL]\n");
++		return 1;
++	}
++
++	fflush(memfile);
++	lseek(fd, 0, SEEK_SET);
++
++	r = read(fd, buf, sizeof(buf) - 1);
++	buf[r] = '\0';
++
++	fclose(memfile);
++
++	if (r != w) {
++		llen += printf(" written(%d) != read(%d)", w, r);
++		pad_spc(llen, 64, "[FAIL]\n");
++		return 1;
++	}
++
++	llen += printf(" \"%s\" = \"%s\"", expected, buf);
++	ret = strncmp(expected, buf, c);
++
++	pad_spc(llen, 64, ret ? "[FAIL]\n" : " [OK]\n");
++	return ret;
++}
++
++static int run_vfprintf(int min, int max)
++{
++	int test;
++	int tmp;
++	int ret = 0;
++	void *p1, *p2;
++
++	for (test = min; test >= 0 && test <= max; test++) {
++		int llen = 0; // line length
++
++		/* avoid leaving empty lines below, this will insert holes into
++		 * test numbers.
++		 */
++		switch (test + __LINE__ + 1) {
++		CASE_TEST(empty);        EXPECT_VFPRINTF(0, "", ""); break;
++		CASE_TEST(simple);       EXPECT_VFPRINTF(3, "foo", "foo"); break;
++		CASE_TEST(string);       EXPECT_VFPRINTF(3, "foo", "%s", "foo"); break;
++		CASE_TEST(number);       EXPECT_VFPRINTF(4, "1234", "%d", 1234); break;
++		CASE_TEST(negnumber);    EXPECT_VFPRINTF(5, "-1234", "%d", -1234); break;
++		CASE_TEST(unsigned);     EXPECT_VFPRINTF(5, "12345", "%u", 12345); break;
++		CASE_TEST(char);         EXPECT_VFPRINTF(1, "c", "%c", 'c'); break;
++		CASE_TEST(hex);          EXPECT_VFPRINTF(1, "f", "%x", 0xf); break;
++		CASE_TEST(pointer);      EXPECT_VFPRINTF(3, "0x1", "%p", (void *) 0x1); break;
++		case __LINE__:
++			return ret; /* must be last */
++		/* note: do not set any defaults so as to permit holes above */
++		}
++	}
++	return ret;
++}
++
+ static int smash_stack(void)
+ {
+ 	char buf[100];
+@@ -774,6 +859,7 @@ static const struct test test_names[] = {
+ 	/* add new tests here */
+ 	{ .name = "syscall",    .func = run_syscall    },
+ 	{ .name = "stdlib",     .func = run_stdlib     },
++	{ .name = "vfprintf",   .func = run_vfprintf   },
+ 	{ .name = "protection", .func = run_protection },
+ 	{ 0 }
+ };
 
----
-Thomas Weißschuh (4):
-      tools/nolibc: add libc-test binary
-      tools/nolibc: add wrapper for memfd_create
-      tools/nolibc: implement fd-based FILE streams
-      tools/nolibc: add testcases for vfprintf
-
- tools/include/nolibc/stdio.h                 | 95 ++++++++++++++++++++--------
- tools/include/nolibc/sys.h                   | 23 +++++++
- tools/testing/selftests/nolibc/.gitignore    |  1 +
- tools/testing/selftests/nolibc/Makefile      |  5 ++
- tools/testing/selftests/nolibc/nolibc-test.c | 86 +++++++++++++++++++++++++
- 5 files changed, 183 insertions(+), 27 deletions(-)
----
-base-commit: a63baab5f60110f3631c98b55d59066f1c68c4f7
-change-id: 20230328-nolibc-printf-test-052d5abc2118
-
-Best regards,
 -- 
-Thomas Weißschuh <linux@weissschuh.net>
+2.40.0
 
