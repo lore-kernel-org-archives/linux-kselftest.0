@@ -2,271 +2,141 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2965DC761A6
-	for <linux-kselftest@archiver.kernel.org>; Mon,  3 Apr 2023 11:04:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EC2FC761A6
+	for <linux-kselftest@archiver.kernel.org>; Mon,  3 Apr 2023 11:11:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231644AbjDCLEL (ORCPT
+        id S232116AbjDCLLL (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 3 Apr 2023 07:04:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53494 "EHLO
+        Mon, 3 Apr 2023 07:11:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230269AbjDCLEK (ORCPT
+        with ESMTP id S230090AbjDCLLK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 3 Apr 2023 07:04:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28EAD6188
-        for <linux-kselftest@vger.kernel.org>; Mon,  3 Apr 2023 04:03:07 -0700 (PDT)
+        Mon, 3 Apr 2023 07:11:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CDE51BEA
+        for <linux-kselftest@vger.kernel.org>; Mon,  3 Apr 2023 04:10:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680519786;
+        s=mimecast20190719; t=1680520223;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=IQkFi8pN49v364EdSnnTRUfRnb+lg1bb/1afwxowe7o=;
-        b=C1pSAFBzJ7mx8Vx6K05hfnuuBNKp94SSWxOB9YgTSgdm+D8Vbxs2DLbVygMUhgk99kR2vj
-        MNqrM4hj9js1pA4mp4ZcxmdEI4THlzmuGqVW1R+Wf7TlXVNKxJOk8a9jOCfRmC4G4eE1yA
-        V0gvb9xLWwLo16KymVXKy497GorHVE4=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=2LyTXIwTIB/nVxYXSDDIz7jSdM+ZVkfbUtijN6RN/W0=;
+        b=eQOzxIBmubDrJygysoibgT0Ehz51RvK/34tapLj2paIGkGtcgT8gWjchdCXaUA6TNkOO+5
+        INNgYdmAgzNLaVTGFgtxintov3Cxx176WTWNeBWDZJ0Kbpq9+mE4ueDJoGaKvzORhyzSRg
+        MkU4A3PFDGA/qrwH5i1DWKXTQs0uJSc=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-563-z3ohpELANo-WJaYx8Ewe9Q-1; Mon, 03 Apr 2023 07:03:04 -0400
-X-MC-Unique: z3ohpELANo-WJaYx8Ewe9Q-1
-Received: by mail-wr1-f69.google.com with SMTP id t9-20020adfba49000000b002dd3986083bso3151817wrg.12
-        for <linux-kselftest@vger.kernel.org>; Mon, 03 Apr 2023 04:03:04 -0700 (PDT)
+ us-mta-446-0bbnQrxwPfmiLFhAWDqfag-1; Mon, 03 Apr 2023 07:10:22 -0400
+X-MC-Unique: 0bbnQrxwPfmiLFhAWDqfag-1
+Received: by mail-qv1-f72.google.com with SMTP id pe26-20020a056214495a00b005df3eac4c0bso9764222qvb.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 03 Apr 2023 04:10:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680519783;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :from:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IQkFi8pN49v364EdSnnTRUfRnb+lg1bb/1afwxowe7o=;
-        b=ujKIZDRar3V6S55FYmJGAu8ydknBFdql5iEq5/TWRnf3kM5ZWIwEvJQHDZKLuTjtPH
-         bKHeKopSq//dQC2IeEWJ+JsZEE+z5e1vXjjeWDPNJX6NS6wQbGhr4+22aFe1/i0QkDI/
-         lw0mlCiWORm5aiXyC3HOLz4Y/wZ5WFhLgzzJo/niduPYYXkyEZSsSHhZvVMXYJ/r8nHI
-         9NTPaIfqO/u+rB+Uv+Q1X3Fc4CEAOhUyGtBD1Rou/L5wBLjXdkGSZuu56tdaLhPfvrJ5
-         pFGObTKULt2ceuDITOeqQ/+HIZSUpr5ODvZFmeIszadY7mcYRRdUssgUZBLQ3bG+eZNN
-         e/6A==
-X-Gm-Message-State: AAQBX9eIWoLoFVxTMVI0mDncD4nmq/C9qKhdFWFewY5kTniCCknsvxb4
-        SnjgihlAe/pfnc7xc1ST7lxSfyjSMoq6TtzR1GyH7lS4t00yZWKWvbxG8Xho0o/pRZplrtE3y33
-        6cnBPetleSviLpCDs2VPQm32k8PF2mtXuGc2q
-X-Received: by 2002:adf:ce8e:0:b0:2dd:3856:4dec with SMTP id r14-20020adfce8e000000b002dd38564decmr27424152wrn.61.1680519783551;
-        Mon, 03 Apr 2023 04:03:03 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Y2oST8H5mGI1Iswt2xjz8GyMo1HkvGSAsOIq6xqlbT4sEKAEwC6DgPef4K+whDRfjGMWlQuQ==
-X-Received: by 2002:adf:ce8e:0:b0:2dd:3856:4dec with SMTP id r14-20020adfce8e000000b002dd38564decmr27424136wrn.61.1680519783128;
-        Mon, 03 Apr 2023 04:03:03 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c702:5e00:8e78:71f3:6243:77f0? (p200300cbc7025e008e7871f3624377f0.dip0.t-ipconnect.de. [2003:cb:c702:5e00:8e78:71f3:6243:77f0])
-        by smtp.gmail.com with ESMTPSA id 7-20020a05600c024700b003ee63fe5203sm11736573wmj.36.2023.04.03.04.03.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Apr 2023 04:03:02 -0700 (PDT)
-Message-ID: <e888871b-9f48-c01d-ce7f-f32ec3d79ef8@redhat.com>
-Date:   Mon, 3 Apr 2023 13:03:01 +0200
+        d=1e100.net; s=20210112; t=1680520222;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2LyTXIwTIB/nVxYXSDDIz7jSdM+ZVkfbUtijN6RN/W0=;
+        b=AbfTiguWp0RhFzFUriXs4v7ujDcPirvfTIn1RMvi59esjE4JM7SotTptgRpLeJYjrl
+         3Xg32rflJJL/IuBM/exqnECkkacdXtH+nw8RmUPhRDODuXy3ctNTAp75ZJMwW0/VYKZ8
+         7EsMg9hT7X+NhylGe4u8K+C0DG0AtADzMOJAmYgvrpAQQiZB1tuVSg5B02ZGVO97Hd0V
+         6q/6e3Xs3jff7Awl7UP4B1uLB7Ib0/GewTCFfz7SDbUzQL19R44hdVT82DflDBmXq7qf
+         CYTUP+xTG1JM9AdT5iWYAwCH8cWfbnNH7pkXZnZp1wGJ6vEoqa3iuaNuRWOJDTFvjf+y
+         PB5g==
+X-Gm-Message-State: AAQBX9eFb407JCAPB2KOWrUpZ7Ad2/rYP9y/exE+Twi3MOl4uIFla5a9
+        Ko9MqkhUvWgFfJm0EedJsDivuVZFKlm4IRETOPyTCOcndelv+nZHzosseO5ttqKYx56tafjEh4G
+        Pcqo8Oa333LiYgeFY+xYxGhDEl/Rt
+X-Received: by 2002:a05:6214:20af:b0:5b7:fc3f:627c with SMTP id 15-20020a05621420af00b005b7fc3f627cmr56199451qvd.41.1680520222094;
+        Mon, 03 Apr 2023 04:10:22 -0700 (PDT)
+X-Google-Smtp-Source: AKy350anlnRjskidVzUxw4lC24jdLIo1HJimHkPD2ABe7fU37aXmhofK7QF06gaCIs48vZzsoFlAZQ==
+X-Received: by 2002:a05:6214:20af:b0:5b7:fc3f:627c with SMTP id 15-20020a05621420af00b005b7fc3f627cmr56199409qvd.41.1680520221837;
+        Mon, 03 Apr 2023 04:10:21 -0700 (PDT)
+Received: from sgarzare-redhat (host-82-57-51-130.retail.telecomitalia.it. [82.57.51.130])
+        by smtp.gmail.com with ESMTPSA id di15-20020ad458ef000000b005e13c17dcb8sm2536442qvb.79.2023.04.03.04.10.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Apr 2023 04:10:21 -0700 (PDT)
+Date:   Mon, 3 Apr 2023 13:10:14 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     John Fastabend <john.fastabend@gmail.com>
+Cc:     Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v4 0/3] Add support for sockmap to vsock.
+Message-ID: <u3azhe3tsae6c3h2hbhzypvcxbjsostqple3wkqtplvdhtadkf@5posaldst7ec>
+References: <20230327-vsock-sockmap-v4-0-c62b7cd92a85@bytedance.com>
+ <6427838247d16_c503a2087e@john.notmuch>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v4 1/3] mm: add new api to enable ksm per process
-Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-To:     Stefan Roesch <shr@devkernel.io>, kernel-team@fb.com
-Cc:     linux-mm@kvack.org, riel@surriel.com, mhocko@suse.com,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        akpm@linux-foundation.org, hannes@cmpxchg.org,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>
-References: <20230310182851.2579138-1-shr@devkernel.io>
- <20230310182851.2579138-2-shr@devkernel.io>
- <7ed4308d-b400-d2bb-b539-3fe418862ab8@redhat.com>
-Organization: Red Hat
-In-Reply-To: <7ed4308d-b400-d2bb-b539-3fe418862ab8@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <6427838247d16_c503a2087e@john.notmuch>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 03.04.23 12:37, David Hildenbrand wrote:
-> On 10.03.23 19:28, Stefan Roesch wrote:
->> Patch series "mm: process/cgroup ksm support", v3.
+On Fri, Mar 31, 2023 at 06:06:10PM -0700, John Fastabend wrote:
+>Bobby Eshleman wrote:
+>> We're testing usage of vsock as a way to redirect guest-local UDS
+>> requests to the host and this patch series greatly improves the
+>> performance of such a setup.
 >>
->> So far KSM can only be enabled by calling madvise for memory regions.  To
->> be able to use KSM for more workloads, KSM needs to have the ability to be
->> enabled / disabled at the process / cgroup level.
+>> Compared to copying packets via userspace, this improves throughput by
+>> 121% in basic testing.
 >>
->> Use case 1:
+>> Tested as follows.
 >>
->>     The madvise call is not available in the programming language.  An
->>     example for this are programs with forked workloads using a garbage
->>     collected language without pointers.  In such a language madvise cannot
->>     be made available.
+>> Setup: guest unix dgram sender -> guest vsock redirector -> host vsock
+>>        server
+>> Threads: 1
+>> Payload: 64k
+>> No sockmap:
+>> - 76.3 MB/s
+>> - The guest vsock redirector was
+>>   "socat VSOCK-CONNECT:2:1234 UNIX-RECV:/path/to/sock"
+>> Using sockmap (this patch):
+>> - 168.8 MB/s (+121%)
+>> - The guest redirector was a simple sockmap echo server,
+>>   redirecting unix ingress to vsock 2:1234 egress.
+>> - Same sender and server programs
 >>
->>     In addition the addresses of objects get moved around as they are
->>     garbage collected.  KSM sharing needs to be enabled "from the outside"
->>     for these type of workloads.
-> 
-> I guess the interpreter could enable it (like a memory allocator could
-> enable it for the whole heap). But I get that it's much easier to enable
-> this per-process, and eventually only when a lot of the same processes
-> are running in that particular environment.
-> 
+>> *Note: these numbers are from RFC v1
 >>
->> Use case 2:
+>> Only the virtio transport has been tested. The loopback transport was
+>> used in writing bpf/selftests, but not thoroughly tested otherwise.
 >>
->>     The same interpreter can also be used for workloads where KSM brings
->>     no benefit or even has overhead.  We'd like to be able to enable KSM on
->>     a workload by workload basis.
-> 
-> Agreed. A per-process control is also helpful to identidy workloads
-> where KSM might be beneficial (and to which degree).
-> 
->>
->> Use case 3:
->>
->>     With the madvise call sharing opportunities are only enabled for the
->>     current process: it is a workload-local decision.  A considerable number
->>     of sharing opportuniites may exist across multiple workloads or jobs.
->>     Only a higler level entity like a job scheduler or container can know
->>     for certain if its running one or more instances of a job.  That job
->>     scheduler however doesn't have the necessary internal worklaod knowledge
->>     to make targeted madvise calls.
->>
->> Security concerns:
->>
->>     In previous discussions security concerns have been brought up.  The
->>     problem is that an individual workload does not have the knowledge about
->>     what else is running on a machine.  Therefore it has to be very
->>     conservative in what memory areas can be shared or not.  However, if the
->>     system is dedicated to running multiple jobs within the same security
->>     domain, its the job scheduler that has the knowledge that sharing can be
->>     safely enabled and is even desirable.
->>
->> Performance:
->>
->>     Experiments with using UKSM have shown a capacity increase of around
->>     20%.
->>
-> 
-> As raised, it would be great to include more details about the workload
-> where this particulalry helps (e.g., a lot of Django processes operating
-> in the same domain).
-> 
->>
->> 1. New options for prctl system command
->>
->>      This patch series adds two new options to the prctl system call.
->>      The first one allows to enable KSM at the process level and the second
->>      one to query the setting.
->>
->>      The setting will be inherited by child processes.
->>
->>      With the above setting, KSM can be enabled for the seed process of a
->>      cgroup and all processes in the cgroup will inherit the setting.
->>
->> 2. Changes to KSM processing
->>
->>      When KSM is enabled at the process level, the KSM code will iterate
->>      over all the VMA's and enable KSM for the eligible VMA's.
->>
->>      When forking a process that has KSM enabled, the setting will be
->>      inherited by the new child process.
->>
->>      In addition when KSM is disabled for a process, KSM will be disabled
->>      for the VMA's where KSM has been enabled.
-> 
-> Do we want to make MADV_MERGEABLE/MADV_UNMERGEABLE fail while the new
-> prctl is enabled for a process?
-> 
->>
->> 3. Add general_profit metric
->>
->>      The general_profit metric of KSM is specified in the documentation,
->>      but not calculated.  This adds the general profit metric to
->>      /sys/kernel/debug/mm/ksm.
->>
->> 4. Add more metrics to ksm_stat
->>
->>      This adds the process profit and ksm type metric to
->>      /proc/<pid>/ksm_stat.
->>
->> 5. Add more tests to ksm_tests
->>
->>      This adds an option to specify the merge type to the ksm_tests.
->>      This allows to test madvise and prctl KSM.  It also adds a new option
->>      to query if prctl KSM has been enabled.  It adds a fork test to verify
->>      that the KSM process setting is inherited by client processes.
->>
->> An update to the prctl(2) manpage has been proposed at [1].
->>
->> This patch (of 3):
->>
->> This adds a new prctl to API to enable and disable KSM on a per process
->> basis instead of only at the VMA basis (with madvise).
->>
->> 1) Introduce new MMF_VM_MERGE_ANY flag
->>
->>      This introduces the new flag MMF_VM_MERGE_ANY flag.  When this flag
->>      is set, kernel samepage merging (ksm) gets enabled for all vma's of a
->>      process.
->>
->> 2) add flag to __ksm_enter
->>
->>      This change adds the flag parameter to __ksm_enter.  This allows to
->>      distinguish if ksm was called by prctl or madvise.
->>
->> 3) add flag to __ksm_exit call
->>
->>      This adds the flag parameter to the __ksm_exit() call.  This allows
->>      to distinguish if this call is for an prctl or madvise invocation.
->>
->> 4) invoke madvise for all vmas in scan_get_next_rmap_item
->>
->>      If the new flag MMF_VM_MERGE_ANY has been set for a process, iterate
->>      over all the vmas and enable ksm if possible.  For the vmas that can be
->>      ksm enabled this is only done once.
->>
->> 5) support disabling of ksm for a process
->>
->>      This adds the ability to disable ksm for a process if ksm has been
->>      enabled for the process.
->>
->> 6) add new prctl option to get and set ksm for a process
->>
->>      This adds two new options to the prctl system call
->>      - enable ksm for all vmas of a process (if the vmas support it).
->>      - query if ksm has been enabled for a process.
-> 
-> 
-> Did you consider, instead of handling MMF_VM_MERGE_ANY in a special way,
-> to instead make it reuse the existing MMF_VM_MERGEABLE/VM_MERGEABLE
-> infrastructure. Especially:
-> 
-> 1) During prctl(MMF_VM_MERGE_ANY), set VM_MERGABLE on all applicable
->      compatible. Further, set MMF_VM_MERGEABLE and enter KSM if not
->      already set.
-> 
-> 2) When creating a new, compatible VMA and MMF_VM_MERGE_ANY is set, set
->      VM_MERGABLE?
-> 
-> The you can avoid all runtime checks for compatible VMAs and only look
-> at the VM_MERGEABLE flag. In fact, the VM_MERGEABLE will be completely
-> expressive then for all VMAs. You don't need vma_ksm_mergeable() then.
-> 
-> 
-> Another thing to consider is interaction with arch/s390/mm/gmap.c:
-> s390x/kvm does not support KSM and it has to disable it for all VMAs. We
-> have to find a way to fence the prctl (for example, fail setting the
-> prctl after gmap_mark_unmergeable() ran, and make
-> gmap_mark_unmergeable() fail if the prctl ran -- or handle it gracefully
-> in some other way).
+>> This series requires the skb patch.
+>
+>Appears reasonable to me although I didn't review internals of all
+>the af_vsock stuff. I see it got merged great.
 
+Thanks for checking!
 
-Staring at that code, I wonder if the "mm->def_flags &= ~VM_MERGEABLE" 
-is doing what it's supposed to do. I don't think this effectively 
-prevents right now madvise() from getting re-enabled on that VMA.
+>
+>One nit, I have a series coming shortly to pull the tests out of
+>the sockmap_listen and into a sockmap_vsock because I don't think they
+>belong in _listen but that is just a refactor.
+>
 
-@Christian, Janosch, am I missing something?
+LGTM!
 
--- 
 Thanks,
-
-David / dhildenb
+Stefano
 
