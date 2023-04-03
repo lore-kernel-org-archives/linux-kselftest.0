@@ -2,108 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 07D43C76188
-	for <linux-kselftest@archiver.kernel.org>; Mon,  3 Apr 2023 20:04:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A7BA5C76188
+	for <linux-kselftest@archiver.kernel.org>; Mon,  3 Apr 2023 20:19:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229509AbjDCUEX (ORCPT
+        id S231513AbjDCUTG (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 3 Apr 2023 16:04:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45062 "EHLO
+        Mon, 3 Apr 2023 16:19:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbjDCUEW (ORCPT
+        with ESMTP id S229446AbjDCUTF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 3 Apr 2023 16:04:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 086733AA9
-        for <linux-kselftest@vger.kernel.org>; Mon,  3 Apr 2023 13:04:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F2A361F8D
-        for <linux-kselftest@vger.kernel.org>; Mon,  3 Apr 2023 20:04:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E15AAC433EF;
-        Mon,  3 Apr 2023 20:04:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680552259;
-        bh=SkQKXg7e6jWC+JmwEDnAzIME7oRvA/Mg8OWanQG97Wg=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=MFq0ap/w4iRH9Rkn9zhxp930+VkKfsIcUD3W48zz+gHKAqeE7q/Rkp4fViZWPw+xC
-         VYAKlawhHf+wlkyjEDyeX8u8tHpnM4OFiOI0ctmFAxsJXPu8mqAC+Zcqygu99/NARH
-         nP/ygGIZjrEEozoLR2tz1baovYvOC3k6hCcM+jHqGp1QH8bZAgWpuAq2y4R/D1txv+
-         GgSmC7A70Vi8wdCvG9l2bcsdHWrN9qVEFM9lFyz1V64P/5+JXOB/GkjuODpno0etqA
-         NXkZu9F6t+OSsFZqP+ajN0vxG6npPuPly9XqXFsjNfuCWudqvxGZUuTck1v2fDwjY0
-         sqH8oWEVC0thw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C751AC41670;
-        Mon,  3 Apr 2023 20:04:19 +0000 (UTC)
+        Mon, 3 Apr 2023 16:19:05 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7810A30F2
+        for <linux-kselftest@vger.kernel.org>; Mon,  3 Apr 2023 13:19:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Cc:Content-ID:Content-Description;
+        bh=38BGroVZAuyq0X0g37qzFVZE9dX3qdPdmWQGZxGzDNg=; b=bir6njtt37jgRupoVl9T8Gfhbc
+        Q6/PEY9Q8dW+1ajvPzzEh/TMrZ+y6GdRC0/x2wFgJYTzo/N84CSNXCvJwpqBYtUXOrnxovwjrusmF
+        1Ee+bOxWQnpWJKv04S3flYrvALSfPE1FjtWug9eh2QkiZ2x+4XwlyDljDBa5TalmnNFTeiLaPOByv
+        h1FVOHC1eashtO/eA47bjiyfwATFaOsXkpvm9JyJ1SbjybjtmCR77kg9R7p15IbzLDTCBp4/Rwpzc
+        owHzF5bkAVQX1yIgtXe6Mlh5Zlp0Mwal5Y33NmeItoWsvT2Shue6FCLN+e8hf8fn27Dwf8ljYrtQ5
+        /7ON7m7w==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pjQdr-00GZlq-0q;
+        Mon, 03 Apr 2023 20:19:03 +0000
+Message-ID: <1d7e238b-7e8f-9ce0-1ecb-68e2b80b6d92@infradead.org>
+Date:   Mon, 3 Apr 2023 13:19:02 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-From:   "Kernel.org Bugbot" <bugbot@kernel.org>
-To:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        bugs@lists.linux.dev, rdunlap@infradead.org,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: Kernel panic, CONFIG_FIPS_SIGNATURE_SELFTEST, missing dependency
+Content-Language: en-US
+To:     "Kernel.org Bugbot" <bugbot@kernel.org>, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org, bugs@lists.linux.dev,
         skhan@linuxfoundation.org
-Message-ID: <20230403-b217293c2-4b94a5e6478a@bugzilla.kernel.org>
-In-Reply-To: <20230403-b217293c0-1e5391e4b7f5@bugzilla.kernel.org>
 References: <20230403-b217293c0-1e5391e4b7f5@bugzilla.kernel.org>
-Subject: Re: Kernel panic, CONFIG_FIPS_SIGNATURE_SELFTEST, missing
- dependency
-X-Bugzilla-Product: Linux
-X-Bugzilla-Component: Kernel
-X-Mailer: peebz 0.1
-Date:   Mon,  3 Apr 2023 20:04:19 +0000 (UTC)
+ <20230403-b217293c2-4b94a5e6478a@bugzilla.kernel.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230403-b217293c2-4b94a5e6478a@bugzilla.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-o6irnndpcv7 writes via Kernel.org Bugzilla:
 
-Hi Randy!
 
-(In reply to Bugbot from comment #1)
-> Randy Dunlap <rdunlap@infradead.org> writes:
->
-> Please tell us what the kernel panic message is.
+On 4/3/23 13:04, Kernel.org Bugbot wrote:
+> o6irnndpcv7 writes via Kernel.org Bugzilla:
 > 
-
-There is no message. I'm sorry.
-I just get a black screen.
-
-I'm using EFI to boot my machine. And I can get some output if I enable 'earlycon=efifb' via CMDLINE. 
-
-The output stops at:
-Console: colour dummy device 80x25
-printk: console [tty0] enabled
-printk: bootconsole [efifb0] disabled
-
-At this point the machine freezes. No error message.
-
-And when I set:
-CONFIG_PANIC_ON_OOPS=y
-CONFIG_PANIC_ON_OOPS_VALUE=1
-CONFIG_PANIC_TIMEOUT=-1
-
-That gives me a reboot loop.
-
+> Hi Randy!
 > 
-> Have you tested this on a mainline kernel, without gentoo patches?
+> (In reply to Bugbot from comment #1)
+>> Randy Dunlap <rdunlap@infradead.org> writes:
+>>
+>> Please tell us what the kernel panic message is.
+>>
 > 
-> Does gentoo add any patches in this area?
->
-
-Unfortunately I don't know if Gentoo is adding any patches that may affect this.
-
-But I can confirm that the problem persists while using vanilla-sources for kernel 6.2.9.
-
-Thanks,
-   sephora
-
+> There is no message. I'm sorry.
+> I just get a black screen.
 > 
-> Thanks.
+> I'm using EFI to boot my machine. And I can get some output if I enable 'earlycon=efifb' via CMDLINE. 
+> 
+> The output stops at:
+> Console: colour dummy device 80x25
+> printk: console [tty0] enabled
+> printk: bootconsole [efifb0] disabled
+> 
+> At this point the machine freezes. No error message.
+> 
+> And when I set:
+> CONFIG_PANIC_ON_OOPS=y
+> CONFIG_PANIC_ON_OOPS_VALUE=1
+> CONFIG_PANIC_TIMEOUT=-1
+> 
+> That gives me a reboot loop.
+> 
+>>
+>> Have you tested this on a mainline kernel, without gentoo patches?
+>>
+>> Does gentoo add any patches in this area?
+>>
+> 
+> Unfortunately I don't know if Gentoo is adding any patches that may affect this.
+> 
+> But I can confirm that the problem persists while using vanilla-sources for kernel 6.2.9.
 
-View: https://bugzilla.kernel.org/show_bug.cgi?id=217293#c2
-You can reply to this message to join the discussion.
+Please put your kernel .config file on the bugzilla entry.
+
+What makes you think that this is related to FIPS_SIGNATURE_SELFTEST?
+
+thanks.
 -- 
-Deet-doot-dot, I am a bot.
-Kernel.org Bugzilla (peebz 0.1)
-
+~Randy
