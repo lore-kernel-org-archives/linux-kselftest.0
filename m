@@ -2,111 +2,162 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 972D5C76196
-	for <linux-kselftest@archiver.kernel.org>; Mon,  3 Apr 2023 12:05:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6D6AC76196
+	for <linux-kselftest@archiver.kernel.org>; Mon,  3 Apr 2023 12:25:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231826AbjDCMFQ (ORCPT
+        id S232285AbjDCMZm (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 3 Apr 2023 08:05:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33024 "EHLO
+        Mon, 3 Apr 2023 08:25:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231967AbjDCMFO (ORCPT
+        with ESMTP id S232066AbjDCMZf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 3 Apr 2023 08:05:14 -0400
-Received: from mail-lj1-x261.google.com (mail-lj1-x261.google.com [IPv6:2a00:1450:4864:20::261])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07D5BB44E
-        for <linux-kselftest@vger.kernel.org>; Mon,  3 Apr 2023 05:05:00 -0700 (PDT)
-Received: by mail-lj1-x261.google.com with SMTP id e9so14817477ljq.4
-        for <linux-kselftest@vger.kernel.org>; Mon, 03 Apr 2023 05:04:59 -0700 (PDT)
+        Mon, 3 Apr 2023 08:25:35 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F80F11669;
+        Mon,  3 Apr 2023 05:25:30 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-5463fa0c2bfso217654617b3.1;
+        Mon, 03 Apr 2023 05:25:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dectris.com; s=google; t=1680523498;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dubmJZzj9ewK7VdPsSH0OrrerYhQltiRGNAZ5sYhsdE=;
-        b=owWYS1VVibUABjXX7VSbtvRh0XtK1zmGJqqs+aa0pqCH5H4x0JQhsXiwVyNu+HHeyY
-         37mKtGwGmRcsh6ob2/NSrbFsxSqlE2ZztPtJJ869q7Zq07tIFXnzdIv7YbJ2ZKoCHlmw
-         e88iSnpzMFdgVnavEgGXPliO2xm0td647Oo5Q=
+        d=gmail.com; s=20210112; t=1680524729;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=wrxNT3T7Ko3Ffo0om2m2atTAcgZ2iipxGV6gZ7LmlEM=;
+        b=TRPqrm31yGQxx6HqvbPpJ/mjZckDgoUJnRqoZ9+eXYRshO+N/uP7/N1+sHDDMqyEpr
+         9ppAdiHfDdNgNj8UmiFr27EbhQ9DSNYyT4QjzlT20wNCEwWTzjgGy7vpRSP2Czuh+B96
+         NFm2QJbZVNHLrcwV1mNW5OC8NrfpM5dr1HftMvnR4DiZA4fmbwi3Sh424Pa6jIktqMCv
+         CAxqJcoVyE0chK3VFSjFeYfKhp+jF9Rvn37+kKfYXaci9FI6gXgPYQO/dWUsKURdLIaT
+         FL0tmTbpdCDQIL+CWZXcFGNNQE2ihfiHb+mJoxrmSGcavoIMcU57ra08VypRxsIGyXHP
+         MxTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680523498;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1680524729;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=dubmJZzj9ewK7VdPsSH0OrrerYhQltiRGNAZ5sYhsdE=;
-        b=ykKHvidBwktigSadZzJUjZKCTgqTMelx8VXBAIVqh6y9lFscOwyaJ9CUR/BOx1yVii
-         Ls59JLxXDtTaVGHrF/ufrWEX38rQx2LddNdfXVZdoqjgcfTSQFjl3XfA6B0QcPBkM5xb
-         XDgZdJJ5JGJHtq/btUI6EcPQWCAEVjJ1YuWi7p5xXuHdn+iYJPzLrEprpNttVKU6wmop
-         PFFW1svhtewSWpelSVUzSzN6+SyomqqYrpSRMSsw8YtaM8a0P2YTI+sO2eRDpJMpkRRa
-         92/j1MTtFDHJQXl3M9W7oLab62Tf9FRCWwqPuu5A129cs6CEOPdEadtf7tDQc4qIrsDJ
-         i6zg==
-X-Gm-Message-State: AAQBX9eJ9TYaAsvdQ6ryZLorMOOauv98jXNu2jwzE/dTaB+LrfLf+udz
-        p0LX8OmAEhcqCapWBbRl3UZpZVXjQRlNaRz8Qlqh5XcqgOBS
-X-Google-Smtp-Source: AKy350YerD1mBS1N0DhMKmHhnV36wHp/bArUw8WNCwFwDem7NnjRkJ70Xq8ME/XUvVF7/+TWaOidByobHMw/
-X-Received: by 2002:a2e:8786:0:b0:2a6:389f:d0d0 with SMTP id n6-20020a2e8786000000b002a6389fd0d0mr653005lji.37.1680523498077;
-        Mon, 03 Apr 2023 05:04:58 -0700 (PDT)
-Received: from fedora.dectris.local (dect-ch-bad-pfw.cyberlink.ch. [62.12.151.50])
-        by smtp-relay.gmail.com with ESMTPS id bg27-20020a05651c0b9b00b002905c01ea6dsm2299495ljb.31.2023.04.03.05.04.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 05:04:58 -0700 (PDT)
-X-Relaying-Domain: dectris.com
-From:   Kal Conley <kal.conley@dectris.com>
-To:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+        bh=wrxNT3T7Ko3Ffo0om2m2atTAcgZ2iipxGV6gZ7LmlEM=;
+        b=HBlRz9TYW6EgHiWLvyXMAZsJ+abBfaAR7f6rnn6ESayoMFP7ryyl/cv5GC4hD1t/dN
+         8l/kx/Voo1xf0YJoN6AgGpQ2KaZFmip1BoiArxkRPDuHMzX82CaYTQ9AWiHHayFLz9pI
+         /wtIRFgpJmOeDtaTuKuN+H6Umy9Csb3mqc2r18TVuy/rIFyAeRIh27W4aIAbbuYgCriI
+         ZiNTlSoErd5ehEEIWFVI8e8EV6a0LSYsXVcbw2RtN18rXzm1f2+aQz3ILQWfG6lue6d3
+         qDpEqtSEKjKw8kpVS0Ofn5O8faEsP4/A7mOQI9t1IuRw0Xfkp5eue/nP3gcW/gG68DM7
+         raYg==
+X-Gm-Message-State: AAQBX9fUNsFZQ0BbzjaSpiji9xScvfLoy7NpjId6ZwktEK3LDkzXYw88
+        0kxL0AfOVpVGlm2IAi1W06K9k+oi95kr7/C7+khmsQJzNh8KmxEq
+X-Google-Smtp-Source: AKy350bgo3DeUzBwHQucu8jAnInJaNAqvFim+1vy82DIp2k3HaY0dRNVy3D+izvuXktB0K9yMx3dGYUwBk6g2sgx4N4=
+X-Received: by 2002:a81:ae60:0:b0:546:5f4d:c002 with SMTP id
+ g32-20020a81ae60000000b005465f4dc002mr4303907ywk.10.1680524729206; Mon, 03
+ Apr 2023 05:25:29 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230329180502.1884307-1-kal.conley@dectris.com> <20230329180502.1884307-8-kal.conley@dectris.com>
+In-Reply-To: <20230329180502.1884307-8-kal.conley@dectris.com>
+From:   Magnus Karlsson <magnus.karlsson@gmail.com>
+Date:   Mon, 3 Apr 2023 14:25:18 +0200
+Message-ID: <CAJ8uoz2crsRkuCNPxrpBc0oZwgeprboVQW8Zxh-9CWHb_Ze4Hw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 07/10] selftests: xsk: Add test UNALIGNED_INV_DESC_4K1_FRAME_SIZE
+To:     Kal Conley <kal.conley@dectris.com>
+Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
         Magnus Karlsson <magnus.karlsson@intel.com>,
         Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
         Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <martin.lau@linux.dev>,
         Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>,
         Stanislav Fomichev <sdf@google.com>,
         Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Weqaar Janjua <weqaar.janjua@gmail.com>
-Cc:     Kal Conley <kal.conley@dectris.com>, netdev@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH bpf] selftests: xsk: Disable IPv6 on VETH1
-Date:   Mon,  3 Apr 2023 14:04:51 +0200
-Message-Id: <20230403120451.31041-1-kal.conley@dectris.com>
-X-Mailer: git-send-email 2.39.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This change fixes flakiness in the BIDIRECTIONAL test:
+On Wed, 29 Mar 2023 at 20:12, Kal Conley <kal.conley@dectris.com> wrote:
+>
+> Add unaligned descriptor test for frame size of 4001. Using an odd frame
+> size ensures that the end of the UMEM is not near a page boundary. This
+> allows testing descriptors that staddle the end of the UMEM but not a
 
-    # [is_pkt_valid] expected length [60], got length [90]
-    not ok 1 FAIL: SKB BUSY-POLL BIDIRECTIONAL
+nit: straddle
 
-When IPv6 is enabled, the interface will periodically send MLDv1 and
-MLDv2 packets. These packets can cause the BIDIRECTIONAL test to fail
-since it uses VETH0 for RX.
+> page.
+>
+> This test used to fail without the previous commit ("xsk: Add check for
+> unaligned descriptors that overrun UMEM").
+>
+> Signed-off-by: Kal Conley <kal.conley@dectris.com>
+> ---
+>  tools/testing/selftests/bpf/xskxceiver.c | 25 ++++++++++++++++++++++++
+>  tools/testing/selftests/bpf/xskxceiver.h |  1 +
+>  2 files changed, 26 insertions(+)
+>
+> diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
+> index 1a4bdd5aa78c..9b9efd0e0a4c 100644
+> --- a/tools/testing/selftests/bpf/xskxceiver.c
+> +++ b/tools/testing/selftests/bpf/xskxceiver.c
+> @@ -69,6 +69,7 @@
+>   */
+>
+>  #define _GNU_SOURCE
+> +#include <assert.h>
+>  #include <fcntl.h>
+>  #include <errno.h>
+>  #include <getopt.h>
+> @@ -1876,6 +1877,30 @@ static void run_pkt_test(struct test_spec *test, enum test_mode mode, enum test_
+>                 test->ifobj_rx->umem->unaligned_mode = true;
+>                 testapp_invalid_desc(test);
+>                 break;
+> +       case TEST_TYPE_UNALIGNED_INV_DESC_4K1_FRAME:
+> +               if (!hugepages_present(test->ifobj_tx)) {
+> +                       ksft_test_result_skip("No 2M huge pages present.\n");
+> +                       return;
+> +               }
+> +               test_spec_set_name(test, "UNALIGNED_INV_DESC_4K1_FRAME_SIZE");
+> +               /* Odd frame size so the UMEM doesn't end near a page boundary. */
+> +               test->ifobj_tx->umem->frame_size = 4001;
+> +               test->ifobj_rx->umem->frame_size = 4001;
+> +               test->ifobj_tx->umem->unaligned_mode = true;
+> +               test->ifobj_rx->umem->unaligned_mode = true;
+> +               /* This test exists to test descriptors that staddle the end of
 
-For other tests, this was not a problem since they only receive on VETH1
-and IPv6 was already disabled on VETH0.
+nit: straddle
 
-Fixes: a89052572ebb ("selftests/bpf: Xsk selftests framework")
-Signed-off-by: Kal Conley <kal.conley@dectris.com>
----
- tools/testing/selftests/bpf/test_xsk.sh | 1 +
- 1 file changed, 1 insertion(+)
+> +                * the UMEM but not a page.
+> +                */
+> +               {
+> +                       u64 umem_size = test->ifobj_tx->umem->num_frames *
+> +                                       test->ifobj_tx->umem->frame_size;
+> +                       u64 page_size = sysconf(_SC_PAGESIZE);
+> +
+> +                       assert(umem_size % page_size > PKT_SIZE);
+> +                       assert(umem_size % page_size < page_size - PKT_SIZE);
+> +               }
+> +               testapp_invalid_desc(test);
 
-diff --git a/tools/testing/selftests/bpf/test_xsk.sh b/tools/testing/selftests/bpf/test_xsk.sh
-index b077cf58f825..377fb157a57c 100755
---- a/tools/testing/selftests/bpf/test_xsk.sh
-+++ b/tools/testing/selftests/bpf/test_xsk.sh
-@@ -116,6 +116,7 @@ setup_vethPairs() {
- 	ip link add ${VETH0} numtxqueues 4 numrxqueues 4 type veth peer name ${VETH1} numtxqueues 4 numrxqueues 4
- 	if [ -f /proc/net/if_inet6 ]; then
- 		echo 1 > /proc/sys/net/ipv6/conf/${VETH0}/disable_ipv6
-+		echo 1 > /proc/sys/net/ipv6/conf/${VETH1}/disable_ipv6
- 	fi
- 	if [[ $verbose -eq 1 ]]; then
- 	        echo "setting up ${VETH1}"
--- 
-2.39.2
+Please put this code in a function that you call. Declare your local
+variables in the beginning of that function.
 
+> +               break;
+>         case TEST_TYPE_UNALIGNED:
+>                 if (!testapp_unaligned(test))
+>                         return;
+> diff --git a/tools/testing/selftests/bpf/xskxceiver.h b/tools/testing/selftests/bpf/xskxceiver.h
+> index cc24ab72f3ff..919327807a4e 100644
+> --- a/tools/testing/selftests/bpf/xskxceiver.h
+> +++ b/tools/testing/selftests/bpf/xskxceiver.h
+> @@ -78,6 +78,7 @@ enum test_type {
+>         TEST_TYPE_ALIGNED_INV_DESC,
+>         TEST_TYPE_ALIGNED_INV_DESC_2K_FRAME,
+>         TEST_TYPE_UNALIGNED_INV_DESC,
+> +       TEST_TYPE_UNALIGNED_INV_DESC_4K1_FRAME,
+>         TEST_TYPE_HEADROOM,
+>         TEST_TYPE_TEARDOWN,
+>         TEST_TYPE_BIDI,
+> --
+> 2.39.2
+>
