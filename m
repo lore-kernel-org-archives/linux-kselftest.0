@@ -2,62 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3BDDC761A6
-	for <linux-kselftest@archiver.kernel.org>; Mon,  3 Apr 2023 11:38:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77556C761A6
+	for <linux-kselftest@archiver.kernel.org>; Mon,  3 Apr 2023 11:42:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231248AbjDCLi5 (ORCPT
+        id S231958AbjDCLmv (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 3 Apr 2023 07:38:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43662 "EHLO
+        Mon, 3 Apr 2023 07:42:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbjDCLi4 (ORCPT
+        with ESMTP id S231248AbjDCLmu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 3 Apr 2023 07:38:56 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F43910C1;
-        Mon,  3 Apr 2023 04:38:54 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id p204so34332952ybc.12;
-        Mon, 03 Apr 2023 04:38:54 -0700 (PDT)
+        Mon, 3 Apr 2023 07:42:50 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F48646BD
+        for <linux-kselftest@vger.kernel.org>; Mon,  3 Apr 2023 04:42:49 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id eg48so116023323edb.13
+        for <linux-kselftest@vger.kernel.org>; Mon, 03 Apr 2023 04:42:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680521933;
+        d=dectris.com; s=google; t=1680522168;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=7f0JvRPA8wF7JzRYt6f8kMcRYqhWRK+NhWeg+hJVnW4=;
-        b=Ka0lWqI1eu/HBbFcHQGar8so4yqKR67TH67iGvKwgJB8uUwinZA9ilpZvi2kNAf5Sa
-         r/tb0/Rj/RymkZTVOO2TkbIKzXk1Aqc9TRqSC1VhwD9ud013Xzp2E5DTctiC6y7pxsJW
-         2ltlrT3K0OSAff7hSc84fdb2flKQ+Em76VL0iKroH4+KCNEG0vg2nkooE7Q8WAOxzIYv
-         +h+/vZlUMXa3cZyQSXO6qze7bIJ+z69SCFSb3esun3JBPiyWj+SnC1389bU/VBRpkqWu
-         Un+0MOZj/sP4A4n77L2sXwZbsgH1bGyFuJg10+fTx/NfpgJHDIVdh6oxXV+dOLQlxJ1X
-         OKzQ==
+        bh=kJQgC8vpBuUWGJhcmSIUYP2ioIg7/McJ6PvsYtiX0TE=;
+        b=iDYAFPmDRwMU+VamA8pIZ58oU63tZjtvtsecrSIUt+oBtbA8KN8HVQcvNAAsiFefSf
+         LX5kinSZHaHt3C7yD5JwIdxnrq6ta3wG7lrzniX35KmYnPelrcWZVdIYANXRZdnR9WLr
+         6yiGkovJf0+3739Jh0AcDgGDdvEl+cr9KKyyI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680521933;
+        d=1e100.net; s=20210112; t=1680522168;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=7f0JvRPA8wF7JzRYt6f8kMcRYqhWRK+NhWeg+hJVnW4=;
-        b=gIl5YhfV9CG0ovtEh+hFKbYwU2EmWui17wEfVcqECVOXiDNVlJe8+TPAFN/ld3RHwC
-         mC8URoHfKP9V4M4YC/gxKy+Qkm5I8DmcXH+yDGIvmkFcX5wCJRapkBIuYgEPkLe8PatI
-         OV+7See+4IQlM+fuHe7uK5H8Gfo0AZZk+jBQ95SXkdGtldsjjJM8lPnII6LI/SxXQEPr
-         PLr4hA4XfMq77OVZ9Gl9kjmzDJNH9t0aC8D2/6bFegOGkJo4GJv0cdLh1YgAE0tQTZw6
-         VjgmgNnCbmIwxnJgdkWUzgTie9bF+dT58l0sIQm0o/QZYq+6hcYZhTrKNzyhHKypRDDE
-         t3ZA==
-X-Gm-Message-State: AAQBX9duGIUiJNwE2t+Q7z/mAocEm79plTZn8nBTyi3K/eZTnzaGVHQ3
-        f7VvYHVUeMr+X/MpBQD8RsOEuV3DjJG7qCXW+0Q=
-X-Google-Smtp-Source: AKy350ZZshnb2hcPSa2L56dn8KrsJ1ojlCmyoSN4WB8v1sen1WfH2fMzlVaeRaI5cLIr6NXEskGzd55CIOvQwuETEf8=
-X-Received: by 2002:a25:cf8e:0:b0:b6a:2590:6c63 with SMTP id
- f136-20020a25cf8e000000b00b6a25906c63mr10856403ybg.2.1680521933188; Mon, 03
- Apr 2023 04:38:53 -0700 (PDT)
+        bh=kJQgC8vpBuUWGJhcmSIUYP2ioIg7/McJ6PvsYtiX0TE=;
+        b=j87sefG5k26L06XD+uKuEiHRCFzlobhp9966pCZCrK+ke8feix/uL5TG4seCPyJ367
+         JLvEm7g5LJj3IZkKi+QwkPUU7ZBa0mwqNbI7m9RvBtCeSOwb+a/IequnVZZHSqyZ2nZY
+         dktHOqRNhm6pfTmfFPVwpskW2rqIvTRy5z3mWO5aSkPnIR7ko4ncxSBOpTLtMqx3q/SQ
+         tk4Fw4sP3iHtoI9hnkYe63oW34eFfbewJweaNcllDdLq1zbi6B7xCxrTySxul1YQIG6X
+         MoFWqzzVaLKGbLLhcAdm1BR4ygs7oV+fXFJcaqopzgq+fK/iFQfyhsAQQHZUntpbkMax
+         FkZA==
+X-Gm-Message-State: AAQBX9eMCU07zSGG44Qt0WrVUfow7ofXSZue+RiPRETrF2Yn9PSRDeZR
+        vZvIsGGYEzu6Q2nDKWZ62kWSqS8p9Brpoyg30PhK9g==
+X-Google-Smtp-Source: AKy350YiUmrIhgS3KRvmZNctbR+6CUC0vQUYvXEn75Ib+anyPhlAs65KH9rxI+jaGGrCT7L9bwrs9se7qF1/+y3voyw=
+X-Received: by 2002:a50:9e8e:0:b0:4fa:4bc4:ad5b with SMTP id
+ a14-20020a509e8e000000b004fa4bc4ad5bmr18336974edf.6.1680522167955; Mon, 03
+ Apr 2023 04:42:47 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230329180502.1884307-1-kal.conley@dectris.com>
  <20230329180502.1884307-5-kal.conley@dectris.com> <CAJ8uoz1cGV1_3HQQddbkExVnm=wngP3ECJZNS5gOtQtfi=mPnA@mail.gmail.com>
- <CAHApi-kV_c-z1zf9M_XyR_Wa=4xi-Cpk1FZT7BFTYQHgU1Bdqg@mail.gmail.com> <CAHApi-mp7ymJ2MP_MFK=Rcv--YCz4aqtKArMwF1roRZHh0to1A@mail.gmail.com>
-In-Reply-To: <CAHApi-mp7ymJ2MP_MFK=Rcv--YCz4aqtKArMwF1roRZHh0to1A@mail.gmail.com>
-From:   Magnus Karlsson <magnus.karlsson@gmail.com>
-Date:   Mon, 3 Apr 2023 13:38:42 +0200
-Message-ID: <CAJ8uoz25jnBtaKZQ7SbJ_fdihiQTfN_AAtOuB4v-g85SS7QM5g@mail.gmail.com>
+ <CAHApi-kV_c-z1zf9M_XyR_Wa=4xi-Cpk1FZT7BFTYQHgU1Bdqg@mail.gmail.com>
+ <CAHApi-mp7ymJ2MP_MFK=Rcv--YCz4aqtKArMwF1roRZHh0to1A@mail.gmail.com> <CAJ8uoz25jnBtaKZQ7SbJ_fdihiQTfN_AAtOuB4v-g85SS7QM5g@mail.gmail.com>
+In-Reply-To: <CAJ8uoz25jnBtaKZQ7SbJ_fdihiQTfN_AAtOuB4v-g85SS7QM5g@mail.gmail.com>
+From:   Kal Cutter Conley <kal.conley@dectris.com>
+Date:   Mon, 3 Apr 2023 13:47:28 +0200
+Message-ID: <CAHApi-kNzh1v7O9thi+2epqitE8pjFOn0tTLD1q8GyRuS9JH8w@mail.gmail.com>
 Subject: Re: [PATCH bpf-next v2 04/10] selftests: xsk: Deflakify
  STATS_RX_DROPPED test
-To:     Kal Cutter Conley <kal.conley@dectris.com>
+To:     Magnus Karlsson <magnus.karlsson@gmail.com>
 Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
         Magnus Karlsson <magnus.karlsson@intel.com>,
         Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
@@ -80,15 +78,9 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 3 Apr 2023 at 13:35, Kal Cutter Conley <kal.conley@dectris.com> wrote:
+> #2 is also a bug fix in my mind, but not #3 as it just adds a test.
 >
-> >
-> > Can I send patches 01-05 all together as one patchset?
-> >
-> On second thought, I will just send out 01, 04, and 05 already
-> separately since those are all completely independent.
 
-#2 is also a bug fix in my mind, but not #3 as it just adds a test.
-
-For some reason I did not receive patch #1 and #8. Might be something
-flaky on my side, do not know.
+#2 is a bugfix, but if we put this on the "bpf" tree already, then it
+will make a problem for later commits that depend on it which would go
+on bpf-next.
