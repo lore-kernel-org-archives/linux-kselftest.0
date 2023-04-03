@@ -2,100 +2,73 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52CE9C76196
-	for <linux-kselftest@archiver.kernel.org>; Mon,  3 Apr 2023 13:02:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ED67DC761A6
+	for <linux-kselftest@archiver.kernel.org>; Mon,  3 Apr 2023 14:29:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231576AbjDCNCQ (ORCPT
+        id S233406AbjDCO3L (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 3 Apr 2023 09:02:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54622 "EHLO
+        Mon, 3 Apr 2023 10:29:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232242AbjDCNCN (ORCPT
+        with ESMTP id S233404AbjDCO3K (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 3 Apr 2023 09:02:13 -0400
-Received: from mail-lf1-x163.google.com (mail-lf1-x163.google.com [IPv6:2a00:1450:4864:20::163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0336B1D91A
-        for <linux-kselftest@vger.kernel.org>; Mon,  3 Apr 2023 06:02:08 -0700 (PDT)
-Received: by mail-lf1-x163.google.com with SMTP id c29so37993394lfv.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 03 Apr 2023 06:02:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dectris.com; s=google; t=1680526927;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=vEhFH3i/UwokEBWEnFizsJMKXzUUnazCcIuMHjSUIWg=;
-        b=hCS9Wy2klHb60FM9HLsFhdDnFuvaJ0L559f3t8KLSH+WOQVwm7Gfy1vcir0LaqB20z
-         G609n6eZu90oMP0/D43sf+JUA+EFKw8Npk+8GU1+wF1ntisjYLjJlpY4bSItWrbYssLB
-         0RrR//bU44J5eXUBpyIxgGKqO3GSZJ3jzYVO4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680526927;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vEhFH3i/UwokEBWEnFizsJMKXzUUnazCcIuMHjSUIWg=;
-        b=q2BU0WI321XgL6Dm7iO+a6p9RlsEpzIfSP/fMWnff3awTUwwf0wJcrlP7/t1hlJIMc
-         lzsWto/wU4jQu5naKHNJthTsr5GNakv5Lq4bKAUvhAie9ZjcSOcnVXJff6FnGpHNRdy9
-         hkFY8mFVSXzEXKtKlW72qaX7hk1zXSVViPeRgmflOWVJq7nLkVnzi6JQ1glDCspY4Clq
-         II5mnkHu0PB7UbJcmftfChknlM0R3jO/OkWoTbzDq7/DtwjbYnO7S7xGQ2tqRhUN2PXT
-         YFJuYSoVkg5yAO35BWLjv0FiJrudTl2IivOcKNL6P/f7a1tRuco/nNe6yITKltc6QNP6
-         rmZg==
-X-Gm-Message-State: AAQBX9fySxtAdeyDDBV8Xlcj+TEN6+9hae4llYYxrNvMP8CoP3YALAag
-        19iJqrhBaxGfKQQQZ3yaLYz7jd8TBpJHm7acLa/8jrRdY60N
-X-Google-Smtp-Source: AKy350aHfgDDioVgKMy3hSPfGcQzCSSIU939JUAmQ90NcFGWD+Ct6os165xxQS0qaStfntHDP4gOAcD4gwA6
-X-Received: by 2002:ac2:508d:0:b0:4ea:f69a:de37 with SMTP id f13-20020ac2508d000000b004eaf69ade37mr10184339lfm.42.1680526926900;
-        Mon, 03 Apr 2023 06:02:06 -0700 (PDT)
-Received: from fedora.dectris.local (dect-ch-bad-pfw.cyberlink.ch. [62.12.151.50])
-        by smtp-relay.gmail.com with ESMTPS id w7-20020ac25987000000b004e81ff9f545sm2099845lfn.79.2023.04.03.06.02.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 06:02:06 -0700 (PDT)
-X-Relaying-Domain: dectris.com
-From:   Kal Conley <kal.conley@dectris.com>
-To:     Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>
-Cc:     Kal Conley <kal.conley@dectris.com>, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH bpf-next] selftests: xsk: Add xskxceiver.h dependency to Makefile
-Date:   Mon,  3 Apr 2023 15:01:51 +0200
-Message-Id: <20230403130151.31195-1-kal.conley@dectris.com>
-X-Mailer: git-send-email 2.39.2
+        Mon, 3 Apr 2023 10:29:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E8031983
+        for <linux-kselftest@vger.kernel.org>; Mon,  3 Apr 2023 07:29:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5CBB861DCC
+        for <linux-kselftest@vger.kernel.org>; Mon,  3 Apr 2023 14:29:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C60D1C4339B;
+        Mon,  3 Apr 2023 14:29:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680532140;
+        bh=1GAeGiLzhhg9kO9BbA811P7zGVpfnCMRVRii0AxeKqQ=;
+        h=From:To:Subject:Date:From;
+        b=MH3nQOGVHHF/LLX793XZR2UbS8RvP6CbYTCYlyXRjuYh0PBfeLB0ig6XqkGJOpOou
+         g4yAvZJqtD8BSbrkMS/we0saSak093BC55b7MwrvC4Otj9eafvzIAQgDeYhXa7WZQ/
+         fKGkVjYDwmxc06njPSMhy8QuNFSH+xlVyNh8oZ6LaSu3i5Xhyl3EXk6hKGvYJakP5Y
+         lmCqVhGPb/cfvgoophV+sfbNxezZ3v2QLlkwyQK2b+hfooFictLo0fCvYR0ANg2Gro
+         rGFmW7VDu+t7nABnsoTlZTyE3xa8xLtiPQugjlj8Elg1teIieaR/IBiLFRnwPQiCIW
+         cw0VUuupk9YOA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A30ACC41670;
+        Mon,  3 Apr 2023 14:29:00 +0000 (UTC)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+From:   "Kernel.org Bugbot" <bugbot@kernel.org>
+To:     linux-kselftest@vger.kernel.org, shuah@kernel.org,
+        bugs@lists.linux.dev, skhan@linuxfoundation.org
+Message-ID: <20230403-b217293c0-1e5391e4b7f5@bugzilla.kernel.org>
+Subject: Kernel panic, CONFIG_FIPS_SIGNATURE_SELFTEST, missing dependency
+X-Bugzilla-Product: Linux
+X-Bugzilla-Component: Kernel
+X-Mailer: peebz 0.1
+Date:   Mon,  3 Apr 2023 14:29:00 +0000 (UTC)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-xskxceiver depends on xskxceiver.h so tell make about it.
+o6irnndpcv7 writes via Kernel.org Bugzilla:
 
-Signed-off-by: Kal Conley <kal.conley@dectris.com>
----
- tools/testing/selftests/bpf/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hello and good day!
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index b677dcd0b77a..b55d828911d5 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -607,7 +607,7 @@ $(OUTPUT)/test_verifier: test_verifier.c verifier/tests.h $(BPFOBJ) | $(OUTPUT)
- 	$(call msg,BINARY,,$@)
- 	$(Q)$(CC) $(CFLAGS) $(filter %.a %.o %.c,$^) $(LDLIBS) -o $@
- 
--$(OUTPUT)/xskxceiver: xskxceiver.c $(OUTPUT)/xsk.o $(OUTPUT)/xsk_xdp_progs.skel.h $(BPFOBJ) | $(OUTPUT)
-+$(OUTPUT)/xskxceiver: xskxceiver.c xskxceiver.h $(OUTPUT)/xsk.o $(OUTPUT)/xsk_xdp_progs.skel.h $(BPFOBJ) | $(OUTPUT)
- 	$(call msg,BINARY,,$@)
- 	$(Q)$(CC) $(CFLAGS) $(filter %.a %.o %.c,$^) $(LDLIBS) -o $@
- 
+I think I found a missing dependency.
+In case of setting CONFIG_FIPS_SIGNATURE_SELFTEST, CONFIG_CRYPTO_SHA256 also needs to be set. But not as module.
+Failing to do so results in an early kernel panic during boot. 
+
+Tested on linux-6.1.12-gentoo and linux-6.1.19-gentoo.
+
+
+Thanks,
+  sephora
+
+View: https://bugzilla.kernel.org/show_bug.cgi?id=217293#c0
+You can reply to this message to join the discussion.
 -- 
-2.39.2
+Deet-doot-dot, I am a bot.
+Kernel.org Bugzilla (peebz 0.1)
 
