@@ -2,64 +2,203 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2980DC761A6
-	for <linux-kselftest@archiver.kernel.org>; Tue,  4 Apr 2023 17:19:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 45FB0C761A6
+	for <linux-kselftest@archiver.kernel.org>; Tue,  4 Apr 2023 17:56:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235949AbjDDRTG (ORCPT
+        id S235672AbjDDR4C (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 4 Apr 2023 13:19:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44592 "EHLO
+        Tue, 4 Apr 2023 13:56:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235925AbjDDRTB (ORCPT
+        with ESMTP id S235899AbjDDRz7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 4 Apr 2023 13:19:01 -0400
-X-Greylist: delayed 4196 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 04 Apr 2023 10:18:41 PDT
-Received: from mail.feshiecree.pl (mail.feshiecree.pl [89.40.114.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0CD24C23
-        for <linux-kselftest@vger.kernel.org>; Tue,  4 Apr 2023 10:18:41 -0700 (PDT)
-Received: by mail.feshiecree.pl (Postfix, from userid 1001)
-        id 2DB438881F; Tue,  4 Apr 2023 08:50:33 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=feshiecree.pl;
-        s=mail; t=1680594647;
-        bh=hFxZwVw4rIL+JwfEOGI47p+fdoVOAeqVswP6NWoHSHQ=;
-        h=Date:From:To:Subject:From;
-        b=Wn8uov4QXQpknss+sZQ37R13S5Dut9awdLck/yQeBuLHyGNAFoeCOdR6/NGhIA51m
-         feFehylZdsnGTC3T/IXpk1Ec6TQ7oe0680y/EMnSmd5JtEv4xUx4Tf3aa5g8yWNd/y
-         ww2VO0CN6p5gFcpraIFqKM5rkqk1McMtabLE/uHru/sVB+s7wBsd2JHGes/g/UWcxj
-         bo1uV72r84iqi+GZZVAuNz6Erxyil2x1XO9OGuhn4JuRB5drfmtutBciR/0hshbjcO
-         iylQI+2iLjQjxx9AkIt4kGmcxmTzLgEmFFWr4Xsla18P6r4M3M/duQE6bih+0hvHLr
-         BYuLZwHT/F/dQ==
-Received: by feshiecree.pl for <linux-kselftest@vger.kernel.org>; Tue,  4 Apr 2023 07:50:27 GMT
-Message-ID: <20230404074504-0.1.1t.5n24.0.nn6fr405gn@feshiecree.pl>
-Date:   Tue,  4 Apr 2023 07:50:27 GMT
-From:   "Krystian Wieczorek" <krystian.wieczorek@feshiecree.pl>
-To:     <linux-kselftest@vger.kernel.org>
-Subject: W sprawie samochodu
-X-Mailer: mail.feshiecree.pl
-MIME-Version: 1.0
+        Tue, 4 Apr 2023 13:55:59 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C995E49E2;
+        Tue,  4 Apr 2023 10:55:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=ONN1widH5Qtf7uAuoBh252hI4mEZ9k+7s+ZgWeKSXzM=;
+        t=1680630953; x=1681840553; b=tPIWdRQr4eY1sv2hMQTIF7vRfMNImyWcyCrBXSf1bKv1xdj
+        S1h9gfQinaT7X1aIBDZZHdvxTwviuKmwrkk81ErUafgsSXmmnIOT2M/kDphyKSXfPFtEpbjzWJUJb
+        FownlQURVp5uEcmAF9BC8EkqGZWXVnQP7LlI56wv6hiBYar416qc0Eek5l/RegcbzFRHi3PKkPvqg
+        dXgR9tsEITS186LlQDjGVfAa6/NSuNNIJEdAL+bctOLOtDdIGyqoEuR+rkoTkyH3SAV6x2QhT++K3
+        HyIMutoVN9f5/zAJDeYMuOix775pYZm+4X1BH2fR8+AMJ5gcrjETB5WN/R08U6FQ==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.96)
+        (envelope-from <benjamin@sipsolutions.net>)
+        id 1pjksW-006Bx4-12;
+        Tue, 04 Apr 2023 19:55:32 +0200
+Message-ID: <4d9b16aa28d4eb6c9d5a158e112abfedbfa2cd4b.camel@sipsolutions.net>
+Subject: Re: [RFC PATCH v2 1/3] kunit: Add kunit_add_action() to defer a
+ call until test exit
+From:   Benjamin Berg <benjamin@sipsolutions.net>
+To:     Maxime Ripard <maxime@cerno.tech>, David Gow <davidgow@google.com>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Daniel Latypov <dlatypov@google.com>,
+        Rae Moar <rmoar@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com
+Date:   Tue, 04 Apr 2023 19:55:30 +0200
+In-Reply-To: <20230404133231.ingzo7xy7lejpqqb@houat>
+References: <20230331080411.981038-1-davidgow@google.com>
+         <20230331080411.981038-2-davidgow@google.com>
+         <20230404133231.ingzo7xy7lejpqqb@houat>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+MIME-Version: 1.0
+X-malware-bazaar: not-scanned
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Dzie=C5=84 dobry,
+Hi,
 
-chcieliby=C5=9Bmy zapewni=C4=87 Pa=C5=84stwu kompleksowe rozwi=C4=85zania=
-, je=C5=9Bli chodzi o system monitoringu GPS.
+On Tue, 2023-04-04 at 15:32 +0200, Maxime Ripard wrote:
+> [SNIP]
+> > +/**
+> > + * kunit_add_action() - Defer an 'action' (function call) until the te=
+st ends.
+> > + * @test: Test case to associate the action with.
+> > + * @func: The function to run on test exit
+> > + * @ctx: Data passed into @func
+> > + * @internal_gfp: gfp to use for internal allocations, if unsure, use =
+GFP_KERNEL
+> > + *
+> > + * Defer the execution of a function until the test exits, either norm=
+ally or
+> > + * due to a failure.=C2=A0 @ctx is passed as additional context. All f=
+unctions
+> > + * registered with kunit_add_action() will execute in the opposite ord=
+er to that
+> > + * they were registered in.
+> > + *
+> > + * This is useful for cleaning up allocated memory and resources.
+> > + *
+> > + * Returns:
+> > + *=C2=A0=C2=A0 An opaque "cancellation token", or NULL on error. Pass =
+this token to
+> > + *=C2=A0=C2=A0 kunit_remove_action_token() in order to cancel the defe=
+rred execution of
+> > + *=C2=A0=C2=A0 func().
+> > + */
+> > +struct kunit_action_ctx *kunit_add_action(struct kunit *test, kunit_de=
+fer_function_t func,
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 void *ctx, gfp_t intern=
+al_gfp);
+>=20
+> Do we expect any other context than GFP_KERNEL?
+>=20
+> If so, then maybe we can have kunit_add_action() assume GFP_KERNEL and
+> add a variant for the odd case where we would actually need a different
+> GFP flag.
 
-Precyzyjne monitorowanie pojazd=C3=B3w na mapach cyfrowych, =C5=9Bledzeni=
-e ich parametr=C3=B3w eksploatacyjnych w czasie rzeczywistym oraz kontrol=
-a paliwa to kluczowe funkcjonalno=C5=9Bci naszego systemu.=20
+Does anything other than GFP_KERNEL make sense? I would assume these
+functions should only ever be called from a kunit context, i.e. the
+passed test is guaranteed to be identical to the value returned by
+kunit_get_current_test().
 
-Organizowanie pracy pracownik=C3=B3w jest dzi=C4=99ki temu prostsze i bar=
-dziej efektywne, a oszcz=C4=99dno=C5=9Bci i optymalizacja w zakresie pono=
-szonych koszt=C3=B3w, maj=C4=85 dla ka=C5=BCdego przedsi=C4=99biorcy ogro=
-mne znaczenie.
+That said, I am happy with merging this in this form. I feel the right
+thing here is a patch (with corresponding spatch) that changes all of
+the related APIs to remove the gfp argument.
 
-Dopasujemy nasz=C4=85 ofert=C4=99 do Pa=C5=84stwa oczekiwa=C5=84 i potrze=
-b organizacji. Czy mogliby=C5=9Bmy porozmawia=C4=87 o naszej propozycji?
+> > +/**
+> > + * kunit_remove_action_token() - Cancel a deferred action.
+> > + * @test: Test case the action is associated with.
+> > + * @cancel_token: The cancellation token returned by kunit_add_action(=
+)
+> > + *
+> > + * Prevent an action deferred using kunit_add_action() from executing =
+when the
+> > + * test ends.
+> > + *
+> > + * You can also use the (test, function, context) triplet to remove an=
+ action
+> > + * with kunit_remove_action().
+> > + */
+> > +void kunit_remove_action_token(struct kunit *test, struct kunit_action=
+_ctx *cancel_token);
+>=20
+> It's not clear to me why we still need the token. If
+> kunit_remove_action() works fine, why would we need to store the token?
+>=20
+> Can't we just make kunit_add_action() return an int to indicate whether
+> it failed or not, and that's it?
+>=20
+> > [SNIP]
+>=20
+> One thing worth pointing is that if kunit_add_action() fails, the
+> cleanup function passed as an argument won't run.
+>=20
+> So, if the kzalloc call ever fails, patch 2 will leak its res->data()
+> resource for example.
+>=20
+> devm (and drmm) handles this using a variant called
+> devm_add_action_or_reset, we should either provide the same variant or
+> just go for that behavior by default.
+
+Both version of the function would need a return value. An alternative
+might be to make assertions part of the API. But as with dropping the
+gfp argument, that seems like a more intrusive change that needs to
+happen independently.
+
+Anyway, I am fine with action_or_reset as the default and possibly the
+only behaviour. I expect that every API user will want an assertion
+that checks for failure here anyway.
+
+Benjamin
 
 
-Pozdrawiam
-Krystian Wieczorek
+If kunit_* functions can assert in error conditions, then the example
+
+void test_func(struct kunit *test)
+{
+  char u8 *buf =3D kunit_kzalloc(test, 1024, GFP_KERNEL);
+  struct sk_buff *skb_a;
+  struct sk_buff *skb_b;
+  /* Further variables */
+
+  KUNIT_ASSERT_NOT_NULL(test, buf);
+
+  skb_a =3D skb_alloc(1024, GFP_KERNEL);
+  KUNIT_ASSERT_NOT_NULL(test, skb_a);
+  if (kunit_add_cleanup(test, (kunit_defer_function_t) kfree_skb, skb_a))
+    KUNIT_ASSERT_FAILURE("Failed to add cleanup");
+
+  /* Or, maybe: */
+  skb_b =3D skb_alloc(1024, GFP_KERNEL);
+  KUNIT_ASSERT_NOT_NULL(test, skb_b);
+  KUNIT_ASSERT_EQ(test, 0,
+                  kunit_add_cleanup(test,
+                                    (kunit_defer_function_t) kfree_skb,
+                                    skb_b));
+
+  /* run code that may assert */
+}
+
+
+could be shortened to (with a trivial kunit_skb_alloc helper)
+
+void test_func(struct kunit *test)
+{
+  char u8 *buf =3D kunit_kzalloc(test, 1024, GFP_KERNEL);
+  struct sk_buff *skb_a =3D kunit_skb_alloc(1024, GFP_KERNEL);
+  struct sk_buff *skb_b =3D kunit_skb_alloc(1024, GFP_KERNEL);
+  /* Further variables */
+
+  /* run code that may assert */
+}
+
+I should just post a patch for the existing API and see what people say
+then ...
