@@ -2,111 +2,148 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C9A6C77B6C
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C878C76196
 	for <linux-kselftest@archiver.kernel.org>; Thu,  6 Apr 2023 21:54:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233648AbjDFVy5 (ORCPT
+        id S229934AbjDFVy5 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Thu, 6 Apr 2023 17:54:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42212 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjDFVy4 (ORCPT
+        with ESMTP id S229586AbjDFVy4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Thu, 6 Apr 2023 17:54:56 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1330DA5FF;
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 087379EF3;
         Thu,  6 Apr 2023 14:54:54 -0700 (PDT)
 From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
         s=mail; t=1680818092;
-        bh=vTkw79wXmjqLnNQjs+gxqaE5Rm4KsNN2M5mSIaE9oJQ=;
-        h=From:Subject:Date:To:Cc:From;
-        b=Mm0s0hRgTzcaYnyrDom104CHBUL+Fjqf1lvCK9FOVsjcwpenNmlo/+HpFDmDRnxah
-         82mKImdlWW7q9TNn15zik+TGvhLcTy8Y7stViTUx4aZ+m5dscpTsOhM8lLMAKBAZxQ
-         6tDXoOFESU81HAtoirFavLl/u6s+zdBBjf3q3uTQ=
-Subject: [PATCH v2 00/11] tools/nolibc: -std=c89 compatibility
-Date:   Thu, 06 Apr 2023 21:54:46 +0000
-Message-Id: <20230328-nolibc-c99-v2-0-c989f2289222@weissschuh.net>
+        bh=gdtMqD9cVgCQr6akdRRL11+XYs6brwtyfOnOQ2LQk4A=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+        b=GJSX6AXBprEX2dSMIQSilbFhVVjV2o274TjhG8igjp7UpPVZySChxRUu5c621F0aQ
+         47xUd4MdnZ6mkh+CZEc0ODDC2t2aBG06HyO4KJkj33j+mt/A18r+cMcwy/AtsCVqxk
+         mtCN7ZRgbeBJCAaIRgduLc0KmRj2oRuSAYnjmkm0=
+Date:   Thu, 06 Apr 2023 21:54:48 +0000
+Subject: [PATCH v2 02/11] tools/nolibc: use __inline__ syntax
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAKY/L2QC/22NQQ6CMBBFr0JmbQ1tgVBX3sOwaOvUTkKK6QBqC
- He3snb5XvL/24AxEzJcqg0yrsQ0pQLqVIGPNj1Q0L0wqFrpWqtepGkk54U3RrQmNA3apu10B2X
- gLKNw2SYfyyQt41jkM2Og91G4DYUj8TzlzxFc5c/+/V6lkML2ulbBSROkub6QmNnHJZ4TzjDs+
- /4FrdzMCL4AAAA=
+Message-Id: <20230328-nolibc-c99-v2-2-c989f2289222@weissschuh.net>
+References: <20230328-nolibc-c99-v2-0-c989f2289222@weissschuh.net>
+In-Reply-To: <20230328-nolibc-c99-v2-0-c989f2289222@weissschuh.net>
 To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1680818091; l=2524;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1680818091; l=3469;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=vTkw79wXmjqLnNQjs+gxqaE5Rm4KsNN2M5mSIaE9oJQ=;
- b=u8ffBBBHpKO4SHr4y2hSWddmtXo0ReO8KKTrSymF304NsOzmHrbKVqYAYkSMTc6v29MXR7vsg
- YhPYYU897SxBe+QxpBaPoOxMAwc9F7wDlTVpKWqCrNbmrAd3tgdrmBH
+ bh=gdtMqD9cVgCQr6akdRRL11+XYs6brwtyfOnOQ2LQk4A=;
+ b=EdYL72397iLYKjJXbVFusjZuMDs5WazWBO+FX53GIWWTa2/u6/0k/DKwgr0QK48GizOuIFjSc
+ 2QO/U8hWSajAbRI0jryiCQjEJwIQxzWepWr3uS8jK2VPvKfmGHiIEse
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This series replaces the C99 compatibility patch. (See v1 link below).
-After the discussion about support C99 and/or GNU89 I came to the
-conclusion supporting straight C89 is not very hard.
+When building in strict C89 mode the "inline" keyword is unknown.
+While "__inline__" is non-standard it is used by the kernel headers
+themselves.
+So the used compilers would have to support it or the users shim it with
+a #define.
 
-Instead of validating both C99 and GNU89 in some awkward way only for
-somebody requesting true C89 support let's just do it this way.
-
-Feel free to squash all the comment syntax patches together if you
-prefer.
-
-All changes in this series are cosmetic only.
-
-To: Willy Tarreau <w@1wt.eu>
-To: Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-
-This series is based on the "dev" branch of the RCU tree.
-
 ---
-Changes in v2:
-- Target C89 instead of C99
-- Link to v1: https://lore.kernel.org/r/20230328-nolibc-c99-v1-1-a8302fb19f19@weissschuh.net
+ tools/include/nolibc/stdlib.h | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
----
-Thomas Weißschuh (11):
-      tools/nolibc: use standard __asm__ statements
-      tools/nolibc: use __inline__ syntax
-      tools/nolibc: i386: use C89 comment syntax
-      tools/nolibc: x86_64: use C89 comment syntax
-      tools/nolibc: riscv: use C89 comment syntax
-      tools/nolibc: aarch64: use C89 comment syntax
-      tools/nolibc: arm: use C89 comment syntax
-      tools/nolibc: mips: use C89 comment syntax
-      tools/nolibc: loongarch: use C89 comment syntax
-      tools/nolibc: use C89 comment syntax
-      tools/nolibc: validate C89 compatibility
+diff --git a/tools/include/nolibc/stdlib.h b/tools/include/nolibc/stdlib.h
+index 894c955d027e..902162f80337 100644
+--- a/tools/include/nolibc/stdlib.h
++++ b/tools/include/nolibc/stdlib.h
+@@ -102,7 +102,7 @@ char *_getenv(const char *name, char **environ)
+ 	return NULL;
+ }
+ 
+-static inline __attribute__((unused,always_inline))
++static __inline__ __attribute__((unused,always_inline))
+ char *getenv(const char *name)
+ {
+ 	extern char **environ;
+@@ -231,7 +231,7 @@ int utoh_r(unsigned long in, char *buffer)
+ /* converts unsigned long <in> to an hex string using the static itoa_buffer
+  * and returns the pointer to that string.
+  */
+-static inline __attribute__((unused))
++static __inline__ __attribute__((unused))
+ char *utoh(unsigned long in)
+ {
+ 	utoh_r(in, itoa_buffer);
+@@ -293,7 +293,7 @@ int itoa_r(long in, char *buffer)
+ /* for historical compatibility, same as above but returns the pointer to the
+  * buffer.
+  */
+-static inline __attribute__((unused))
++static __inline__ __attribute__((unused))
+ char *ltoa_r(long in, char *buffer)
+ {
+ 	itoa_r(in, buffer);
+@@ -303,7 +303,7 @@ char *ltoa_r(long in, char *buffer)
+ /* converts long integer <in> to a string using the static itoa_buffer and
+  * returns the pointer to that string.
+  */
+-static inline __attribute__((unused))
++static __inline__ __attribute__((unused))
+ char *itoa(long in)
+ {
+ 	itoa_r(in, itoa_buffer);
+@@ -313,7 +313,7 @@ char *itoa(long in)
+ /* converts long integer <in> to a string using the static itoa_buffer and
+  * returns the pointer to that string. Same as above, for compatibility.
+  */
+-static inline __attribute__((unused))
++static __inline__ __attribute__((unused))
+ char *ltoa(long in)
+ {
+ 	itoa_r(in, itoa_buffer);
+@@ -323,7 +323,7 @@ char *ltoa(long in)
+ /* converts unsigned long integer <in> to a string using the static itoa_buffer
+  * and returns the pointer to that string.
+  */
+-static inline __attribute__((unused))
++static __inline__ __attribute__((unused))
+ char *utoa(unsigned long in)
+ {
+ 	utoa_r(in, itoa_buffer);
+@@ -367,7 +367,7 @@ int u64toh_r(uint64_t in, char *buffer)
+ /* converts uint64_t <in> to an hex string using the static itoa_buffer and
+  * returns the pointer to that string.
+  */
+-static inline __attribute__((unused))
++static __inline__ __attribute__((unused))
+ char *u64toh(uint64_t in)
+ {
+ 	u64toh_r(in, itoa_buffer);
+@@ -429,7 +429,7 @@ int i64toa_r(int64_t in, char *buffer)
+ /* converts int64_t <in> to a string using the static itoa_buffer and returns
+  * the pointer to that string.
+  */
+-static inline __attribute__((unused))
++static __inline__ __attribute__((unused))
+ char *i64toa(int64_t in)
+ {
+ 	i64toa_r(in, itoa_buffer);
+@@ -439,7 +439,7 @@ char *i64toa(int64_t in)
+ /* converts uint64_t <in> to a string using the static itoa_buffer and returns
+  * the pointer to that string.
+  */
+-static inline __attribute__((unused))
++static __inline__ __attribute__((unused))
+ char *u64toa(uint64_t in)
+ {
+ 	u64toa_r(in, itoa_buffer);
 
- tools/include/nolibc/arch-aarch64.h          | 32 ++++++++--------
- tools/include/nolibc/arch-arm.h              | 42 ++++++++++-----------
- tools/include/nolibc/arch-i386.h             | 40 ++++++++++----------
- tools/include/nolibc/arch-loongarch.h        | 38 +++++++++----------
- tools/include/nolibc/arch-mips.h             | 56 ++++++++++++++--------------
- tools/include/nolibc/arch-riscv.h            | 40 ++++++++++----------
- tools/include/nolibc/arch-x86_64.h           | 34 ++++++++---------
- tools/include/nolibc/stackprotector.h        |  4 +-
- tools/include/nolibc/stdlib.h                | 18 ++++-----
- tools/include/nolibc/string.h                |  4 +-
- tools/include/nolibc/sys.h                   |  8 ++--
- tools/testing/selftests/nolibc/Makefile      |  2 +-
- tools/testing/selftests/nolibc/nolibc-test.c | 14 +++----
- 13 files changed, 166 insertions(+), 166 deletions(-)
----
-base-commit: bd5b341f0f69eb4c958ffd48699213c5b9af8145
-change-id: 20230328-nolibc-c99-59f44ea45636
-
-Best regards,
 -- 
-Thomas Weißschuh <linux@weissschuh.net>
+2.40.0
 
