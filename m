@@ -2,150 +2,278 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 205A2C761A6
-	for <linux-kselftest@archiver.kernel.org>; Thu,  6 Apr 2023 14:42:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DAC64C7618D
+	for <linux-kselftest@archiver.kernel.org>; Thu,  6 Apr 2023 15:00:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239322AbjDFOmC (ORCPT
+        id S239292AbjDFPAD (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 6 Apr 2023 10:42:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42588 "EHLO
+        Thu, 6 Apr 2023 11:00:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239269AbjDFOlt (ORCPT
+        with ESMTP id S239360AbjDFO7t (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 Apr 2023 10:41:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10AAECA0A
-        for <linux-kselftest@vger.kernel.org>; Thu,  6 Apr 2023 07:39:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680791940;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=j895ymwzo5cFUK4EnI2MaN8LhhF7WBFR4yyDeDEaR/E=;
-        b=WUY0OWrAQpngkqCKEL6vymLQmsWR9dRK8GCrBFyLPgrzcZ8yHosQz1D58ce/LjZrbezkQ/
-        +iIgWe1ZbR29526lqP76FWNIkVN6Yf3jvaeUuT3vgwCUEgB5NeRx9P6Wq2BLyKmUozRXwc
-        74j5YvISvi2NIIKB8KQhVroHSfoRtS4=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-427-2zNvxyssPOSoqDTGGj0R7Q-1; Thu, 06 Apr 2023 10:32:41 -0400
-X-MC-Unique: 2zNvxyssPOSoqDTGGj0R7Q-1
-Received: by mail-wr1-f70.google.com with SMTP id h5-20020adfaa85000000b002dc1cdac53fso55145wrc.5
-        for <linux-kselftest@vger.kernel.org>; Thu, 06 Apr 2023 07:32:41 -0700 (PDT)
+        Thu, 6 Apr 2023 10:59:49 -0400
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB5F79EE1;
+        Thu,  6 Apr 2023 07:59:24 -0700 (PDT)
+Received: by mail-oi1-f169.google.com with SMTP id l18so29235947oic.13;
+        Thu, 06 Apr 2023 07:59:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680791560; x=1683383560;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=j895ymwzo5cFUK4EnI2MaN8LhhF7WBFR4yyDeDEaR/E=;
-        b=IsS+kk3eVpYdsg+EKG8GajYhAA0Wqc7zOzR2wDCNaNpFxZKasNad7rL0Aksgfk0ft1
-         n25A74tT4i+OEVPYkQF+iX9KDCjdv8qciNPOLnI+hM41x8nUK2Xbj8hO5+2/RfH8sc9j
-         Kv6ZY25DuZos2wpKGGnU/hi+sUTWpbf3wz6t7DAvjQ+vwkPCQiqN6y/d2SFDXDwykTwg
-         CS9s6MZAZPdM3lS6hkNNXrgEg4dasgHd+zCmnocKRO0rn0QK36FZEGel1A8tGxjzTFCp
-         obHNrO0VQtb/0hfZdeyX9iapNuGUsqiEmf2aA+rn+yqxbEtneTmU4PVs8foy6IF8Vdw4
-         hFIg==
-X-Gm-Message-State: AAQBX9fiHclWZybYhYG9g6me7ZceGqhsnj7LKDrnGEuAt8tvRYwtnCTd
-        3l2xnuV0E7csO8zGml0sDoLzmt/Ikf+7hvCNMzEBMDPM/jMg+iyjWJUMRLsuwVXhcRmjrTvcHDQ
-        dxfkr4GOH+JoH4lVYZIbfzFC9vIrl+kr5NZI+
-X-Received: by 2002:adf:e807:0:b0:2db:9ccf:f9f5 with SMTP id o7-20020adfe807000000b002db9ccff9f5mr7281888wrm.0.1680791560106;
-        Thu, 06 Apr 2023 07:32:40 -0700 (PDT)
-X-Google-Smtp-Source: AKy350ZQFqd68J323693RzSjFbAIGhMIx+Sk7+HCdTARcTO1jXA82EQy191Q5dTyk14QuMR9BHz7KQ==
-X-Received: by 2002:adf:e807:0:b0:2db:9ccf:f9f5 with SMTP id o7-20020adfe807000000b002db9ccff9f5mr7281865wrm.0.1680791559754;
-        Thu, 06 Apr 2023 07:32:39 -0700 (PDT)
-Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
-        by smtp.gmail.com with ESMTPSA id a15-20020a5d4d4f000000b002cfe685bfd6sm1881580wru.108.2023.04.06.07.32.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 07:32:38 -0700 (PDT)
-Message-ID: <a4994de5-973e-8df9-bb23-d74659641070@redhat.com>
-Date:   Thu, 6 Apr 2023 16:32:37 +0200
+        d=1e100.net; s=20210112; t=1680793158;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wcyQ9PVr/q3d+Z2b5CyPmPNAX1Bn6Htbl2OP4BAR1uE=;
+        b=xtIPrB9mnPkv01wG6BfT/mBnevWeJrS1Gci3xHrEVKnYznV5VRRFa3iIbpDKvg/7pY
+         MqlmcEAShgk/ozYFQ4C1L5r+lKQC1QE+tzfVsHVR3TvPG6mClO6CTOtErvvEiKA6pqcv
+         pBoYMeY6e/7k4JxxtfaEtJjdXgty2TuSFty5xb/P2Kcpe4hPpRAme2cHkd/nhsfhgRM/
+         wl/JLBW4BVyoEF69U2xQbLJuzgM3P5l+NrPjznREDxL9tJ3wx5OE9+L6DBxyrfnTwjZX
+         3YMXtZ5oucR3RqlWEgIH8eMLBG/s+L6rNKrtyKU24+9dzasMZb+DCopaQG5iiFI/fxKs
+         Q5kA==
+X-Gm-Message-State: AAQBX9fiNTETMRNi1mAhNtEnyZygrewjztiiOci7sr+G3VcI64oHaQGT
+        keAhXgZtLHtwFBx7+5W1Vg==
+X-Google-Smtp-Source: AKy350bjhoej/GkPRCQguDVc7FGMvBb8pRji3Y3UcdAY1y3ZiLemp4BMpemZ7xkxLgitjCt5O7uYJQ==
+X-Received: by 2002:a05:6808:f12:b0:389:122c:ad2c with SMTP id m18-20020a0568080f1200b00389122cad2cmr5138452oiw.27.1680793157817;
+        Thu, 06 Apr 2023 07:59:17 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id 17-20020aca1211000000b0038b862bc35bsm401800ois.8.2023.04.06.07.59.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Apr 2023 07:59:17 -0700 (PDT)
+Received: (nullmailer pid 3082000 invoked by uid 1000);
+        Thu, 06 Apr 2023 14:59:16 -0000
+Date:   Thu, 6 Apr 2023 09:59:16 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        patches@lists.linux.dev,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, Maxime Ripard <maxime@cerno.tech>
+Subject: Re: [PATCH v3 05/11] of: Add a KUnit test for overlays and test
+ managed APIs
+Message-ID: <20230406145916.GB3036886-robh@kernel.org>
+References: <20230327222159.3509818-1-sboyd@kernel.org>
+ <20230327222159.3509818-6-sboyd@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Content-Language: en-US
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Stefan Roesch <shr@devkernel.io>, kernel-team@fb.com,
-        linux-mm@kvack.org, riel@surriel.com, mhocko@suse.com,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        akpm@linux-foundation.org, Bagas Sanjaya <bagasdotme@gmail.com>
-References: <20230310182851.2579138-1-shr@devkernel.io>
- <20230310182851.2579138-3-shr@devkernel.io>
- <ce494e5a-3540-d6ad-4e9c-0bb49c7e1e1b@redhat.com>
- <qvqw8rf6uicf.fsf@dev0134.prn3.facebook.com>
- <e7a930f6-feba-29a4-7c48-ae7d8108c7dc@redhat.com>
- <20230406141619.GB35884@cmpxchg.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v4 2/3] mm: add new KSM process and sysfs knobs
-In-Reply-To: <20230406141619.GB35884@cmpxchg.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230327222159.3509818-6-sboyd@kernel.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 06.04.23 16:16, Johannes Weiner wrote:
-> On Thu, Apr 06, 2023 at 03:23:11PM +0200, David Hildenbrand wrote:
->>>>
->>>> Often, when you have to start making a list of things that a patch does, it
->>>> might make sense to split some of the items into separate patches such that you
->>>> can avoid lists and just explain in list-free text how the pieces in the patch
->>>> fit together.
->>>>
->>>> I'd suggest splitting this patch into logical pieces. For example, separating
->>>> the general profit calculation/exposure from the per-mm profit and the per-mm
->>>> ksm type indication.
->>>>
->>>
->>> Originally these were individual patches. If I recall correctly Johannes
->>> Weiner wanted them as one patch. I can certainly split them again.
->>
->> That's why I remember that v1 contained more patches :)
->>
->> Again, just my opinion on patches that require a description in form of a
->> list ...
+On Mon, Mar 27, 2023 at 03:21:53PM -0700, Stephen Boyd wrote:
+> Test the KUnit test managed overlay APIs. Confirm that platform devices
+> are created and destroyed properly. This provides us confidence that the
+> test managed work correctly and can be relied upon to provide tests with
+> fake platform devices and device nodes via overlays compiled into the
+> kernel image.
 > 
-> My concern was the initial splitting of patch 1. I found it easier to
-> review with the new prctl() being one logical change, and fully
-> implemented in one go. The changelog is still in the form of a list,
-> but it essentially enumerates diff hunks that make up the interface.
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Frank Rowand <frowand.list@gmail.com>
+> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+> ---
+>  drivers/of/.kunitconfig            |   2 +
+>  drivers/of/Kconfig                 |  10 +++
+>  drivers/of/Makefile                |   1 +
+>  drivers/of/kunit_overlay_test.dtso |   9 +++
+>  drivers/of/overlay_test.c          | 110 +++++++++++++++++++++++++++++
+>  5 files changed, 132 insertions(+)
+>  create mode 100644 drivers/of/kunit_overlay_test.dtso
+>  create mode 100644 drivers/of/overlay_test.c
 > 
-> No objection to splitting out the multiple sysfs knobs, though!
-> 
-> The strategy I usually follow is this:
-> 
-> 1. Split out changes based on user-visible behavior (new prctl(), new
->     sysfs knob)
-> 
-> 2. Extract changes made along the way that have stand-alone value in
->     existing code (bug fixes, simplifying/documenting tricky sections,
->     cleanups).
-> 
-> 3. Split out noisy prep work such as renames and refactors that make
->     the user-visible functional changes more difficult to understand.
-> 
-> and then order the series into sections 2, 3, and 1.
-> 
+> diff --git a/drivers/of/.kunitconfig b/drivers/of/.kunitconfig
+> index 5a8fee11978c..7d570cb922a1 100644
+> --- a/drivers/of/.kunitconfig
+> +++ b/drivers/of/.kunitconfig
+> @@ -1,3 +1,5 @@
+>  CONFIG_KUNIT=y
+>  CONFIG_OF=y
+>  CONFIG_OF_KUNIT_TEST=y
+> +CONFIG_OF_OVERLAY=y
+> +CONFIG_OF_OVERLAY_KUNIT_TEST=y
+> diff --git a/drivers/of/Kconfig b/drivers/of/Kconfig
+> index 1b995cecf5be..5bdeba11268d 100644
+> --- a/drivers/of/Kconfig
+> +++ b/drivers/of/Kconfig
+> @@ -113,6 +113,16 @@ config OF_OVERLAY
+>  	  While this option is selected automatically when needed, you can
+>  	  enable it manually to improve device tree unit test coverage.
+>  
+> +config OF_OVERLAY_KUNIT_TEST
+> +	tristate "Device Tree overlay KUnit tests" if !KUNIT_ALL_TESTS
+> +	depends on OF_OVERLAY
+> +	depends on KUNIT
+> +	default KUNIT_ALL_TESTS
+> +	help
+> +	  This option builds KUnit unit tests for the device tree overlay code.
+> +
+> +	  If unsure, say N here, but this option is safe to enable.
+> +
+>  config OF_NUMA
+>  	bool
+>  
+> diff --git a/drivers/of/Makefile b/drivers/of/Makefile
+> index c694f998b9f5..2ad60d5b87ac 100644
+> --- a/drivers/of/Makefile
+> +++ b/drivers/of/Makefile
+> @@ -21,5 +21,6 @@ endif
+>  
+>  obj-$(CONFIG_KUNIT) += of_kunit.o
+>  obj-$(CONFIG_OF_KUNIT_TEST) += of_test.o
+> +obj-$(CONFIG_OF_OVERLAY_KUNIT_TEST) += overlay_test.o kunit_overlay_test.dtbo.o
+>  
+>  obj-$(CONFIG_OF_UNITTEST) += unittest-data/
+> diff --git a/drivers/of/kunit_overlay_test.dtso b/drivers/of/kunit_overlay_test.dtso
+> new file mode 100644
+> index 000000000000..85f20b4b4c16
+> --- /dev/null
+> +++ b/drivers/of/kunit_overlay_test.dtso
+> @@ -0,0 +1,9 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/dts-v1/;
+> +/plugin/;
+> +
+> +&{/} {
+> +	kunit-test {
+> +		compatible = "test,empty";
+> +	};
+> +};
+> diff --git a/drivers/of/overlay_test.c b/drivers/of/overlay_test.c
+> new file mode 100644
+> index 000000000000..66b1dceea568
+> --- /dev/null
+> +++ b/drivers/of/overlay_test.c
+> @@ -0,0 +1,110 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * KUnit tests for device tree overlays
+> + */
+> +#include <linux/device/bus.h>
+> +#include <linux/kconfig.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +
+> +#include <kunit/of.h>
+> +#include <kunit/test.h>
+> +
+> +static const char * const kunit_node_name = "kunit-test";
+> +static const char * const kunit_compatible = "test,empty";
+> +
+> +/* Test that of_overlay_apply_kunit() adds a node to the live tree */
+> +static void of_overlay_apply_kunit_apply(struct kunit *test)
+> +{
+> +	struct device_node *np;
+> +
+> +	KUNIT_ASSERT_EQ(test, 0,
+> +			of_overlay_apply_kunit(test, kunit_overlay_test));
+> +
+> +	np = of_find_node_by_name(NULL, kunit_node_name);
+> +	KUNIT_EXPECT_NOT_ERR_OR_NULL(test, np);
+> +	of_node_put(np);
+> +}
+> +
+> +static int bus_match_np(struct device *dev, const void *data)
+> +{
+> +	const struct device_node *np = data;
+> +
+> +	return np == dev->of_node;
+> +}
+> +
+> +/*
+> + * Test that of_overlay_apply_kunit() creates platform devices with the
+> + * expected device_node
+> + */
+> +static void of_overlay_apply_kunit_platform_device(struct kunit *test)
+> +{
+> +	struct device *dev;
+> +	struct device_node *np;
+> +
+> +	KUNIT_ASSERT_EQ(test, 0,
+> +			of_overlay_apply_kunit(test, kunit_overlay_test));
+> +
+> +	np = of_find_node_by_name(NULL, kunit_node_name);
+> +	of_node_put_kunit(test, np);
+> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, np);
+> +
+> +	dev = bus_find_device(&platform_bus_type, NULL, np, bus_match_np);
 
-I agree. The most important part is the "logical change" part. Once it's 
-down to a list of 3 items or so for a single commit we can usually 
-express it like (just an example that does no longer apply due to 
-pages_volatile() not being required) the following when combining items 
-1+2+3 from the list:
+of_find_device_by_node()
 
-"
-Let's expose the general KSM profit via sysfs and document that new 
-toggle. [add details about that and especially why we are doing that]
+> +	KUNIT_EXPECT_NOT_ERR_OR_NULL(test, dev);
+> +	put_device(dev);
+> +}
+> +
+> +static int of_overlay_bus_match_compatible(struct device *dev, const void *data)
+> +{
+> +	return of_device_is_compatible(dev->of_node, data);
+> +}
+> +
+> +/* Test that of_overlay_apply_kunit() cleans up after the test is finished */
+> +static void of_overlay_apply_kunit_cleanup(struct kunit *test)
+> +{
+> +	struct device *dev;
+> +	struct device_node *np;
+> +
+> +	KUNIT_ASSERT_EQ(test, 0,
+> +			of_overlay_apply_kunit(test, kunit_overlay_test));
+> +
+> +	np = of_find_node_by_name(NULL, kunit_node_name);
+> +	of_node_put(np); /* Not derefing 'np' after this */
+> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, np);
+> +
+> +	dev = bus_find_device(&platform_bus_type, NULL, np, bus_match_np);
 
-As we need the number of volatile pages to calculate the general KSM 
-profit, factor out existing functionality into a helper.
-"
+And here.
 
-Much easier to read.
+> +	put_device(dev); /* Not derefing 'device' after this */
+> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, dev);
+> +
+> +	/* Remove overlay */
+> +	kunit_cleanup(test);
 
--- 
-Thanks,
+I guess this is testing the cleanup. It's not that obvious given the 
+overlay is removed by kunit_cleanup(). Not sure if anything can be done 
+though...
 
-David / dhildenb
-
+> +
+> +	np = of_find_node_by_name(NULL, kunit_node_name);
+> +	KUNIT_EXPECT_PTR_EQ(test, NULL, np);
+> +	of_node_put(np);
+> +
+> +	dev = bus_find_device(&platform_bus_type, NULL, kunit_compatible,
+> +			      of_overlay_bus_match_compatible);
+> +	KUNIT_EXPECT_PTR_EQ(test, NULL, dev);
+> +	put_device(dev);
+> +}
+> +
+> +static struct kunit_case of_overlay_apply_kunit_test_cases[] = {
+> +	KUNIT_CASE(of_overlay_apply_kunit_apply),
+> +	KUNIT_CASE(of_overlay_apply_kunit_platform_device),
+> +	KUNIT_CASE(of_overlay_apply_kunit_cleanup),
+> +	{}
+> +};
+> +
+> +/*
+> + * Test suite for test managed device tree overlays.
+> + */
+> +static struct kunit_suite of_overlay_apply_kunit_suite = {
+> +	.name = "of_overlay_apply_kunit",
+> +	.test_cases = of_overlay_apply_kunit_test_cases,
+> +};
+> +
+> +kunit_test_suites(
+> +	&of_overlay_apply_kunit_suite,
+> +);
+> +MODULE_LICENSE("GPL");
+> -- 
+> https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
+> https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
+> 
