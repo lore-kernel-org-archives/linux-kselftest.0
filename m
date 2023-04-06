@@ -2,45 +2,45 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 123BDC77B6E
-	for <linux-kselftest@archiver.kernel.org>; Thu,  6 Apr 2023 21:55:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5CCBC77B6F
+	for <linux-kselftest@archiver.kernel.org>; Thu,  6 Apr 2023 21:55:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238668AbjDFVzD (ORCPT
+        id S238653AbjDFVzB (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 6 Apr 2023 17:55:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42300 "EHLO
+        Thu, 6 Apr 2023 17:55:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236370AbjDFVy7 (ORCPT
+        with ESMTP id S237377AbjDFVy7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Thu, 6 Apr 2023 17:54:59 -0400
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F95A5FF;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39E18A5FC;
         Thu,  6 Apr 2023 14:54:58 -0700 (PDT)
 From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
         s=mail; t=1680818094;
-        bh=Rf7Jc56HjkpWDXljnPpY5bO94Kjcb/DhOAnDyw2YeEs=;
+        bh=ivxkrkfr/Vz1LAtJgf52WLXoMkNfU0tK0Pz7f9le2Yc=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=knWR5xTcOlKFmcstTjTjzwApExaXWn9NSBrkqKAWsEJSeW5cnYUTZ04QJslMoL/MB
-         l0L6bscC6c9V/rD502l7smuFCU5v5R8guvoESxeSkfYj3Xl/tzhpkX9PyYTUwp7Hg0
-         w2RhXnhqDkTYmpuYZ0T9JQfGlRv5y7PPedhUif3g=
-Date:   Thu, 06 Apr 2023 21:54:53 +0000
-Subject: [PATCH v2 07/11] tools/nolibc: arm: use C89 comment syntax
+        b=Bm4BZb8GowdJfVz+QTa0kDUjQVG4JNtoLAHtV7dyIDAGx806KXE3j61OLRAptMCY4
+         ++NW2oopLQcoYo1MbVL0sBpgsyTEvSEJKPYkQoHTJqZyvuYnwGgBR4JfC+rcbhXtKf
+         OThcesSem4AdHBsztxsrlibsHNS32UTHLxXNq/kE=
+Date:   Thu, 06 Apr 2023 21:54:51 +0000
+Subject: [PATCH v2 05/11] tools/nolibc: riscv: use C89 comment syntax
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20230328-nolibc-c99-v2-7-c989f2289222@weissschuh.net>
+Message-Id: <20230328-nolibc-c99-v2-5-c989f2289222@weissschuh.net>
 References: <20230328-nolibc-c99-v2-0-c989f2289222@weissschuh.net>
 In-Reply-To: <20230328-nolibc-c99-v2-0-c989f2289222@weissschuh.net>
 To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1680818091; l=3900;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1680818091; l=3358;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=Rf7Jc56HjkpWDXljnPpY5bO94Kjcb/DhOAnDyw2YeEs=;
- b=YwG20llV8yOPYg5+PPSwm+Ukx9mn6MnyiPWyK7kOfNaoTB57yX1mRwtVZw7dwhGZG4Tp6pv8w
- SLMFUB9v5FvCaHdplAPl4PWYUNXfYo7ONwRjPNPAxSdO6C6ENl7+lfo
+ bh=ivxkrkfr/Vz1LAtJgf52WLXoMkNfU0tK0Pz7f9le2Yc=;
+ b=b1N/Dkx1yViUzSy6LzMrmFZOLq0MQqxbkgmMFxlBOMJP3HJEwJ1jYJ2y70l044ZCNrcOy2vSI
+ 68nXdzBuMSNDo95qMOER4oS3/JwfMLSEXf6EKjicJ/eCNqtfB/w6z/A
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 Precedence: bulk
@@ -51,69 +51,62 @@ Most of nolibc is already using C89 comments.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- tools/include/nolibc/arch-arm.h | 42 ++++++++++++++++++++---------------------
- 1 file changed, 21 insertions(+), 21 deletions(-)
+ tools/include/nolibc/arch-riscv.h | 40 +++++++++++++++++++--------------------
+ 1 file changed, 20 insertions(+), 20 deletions(-)
 
-diff --git a/tools/include/nolibc/arch-arm.h b/tools/include/nolibc/arch-arm.h
-index 42499f23e73c..9fc926f5fbae 100644
---- a/tools/include/nolibc/arch-arm.h
-+++ b/tools/include/nolibc/arch-arm.h
-@@ -203,34 +203,34 @@ const unsigned long *_auxv __attribute__((weak));
- void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) _start(void)
- {
- 	__asm__ volatile (
--		"pop {%r0}\n"                 // argc was in the stack
--		"mov %r1, %sp\n"              // argv = sp
-+		"pop {%r0}\n"                 /* argc was in the stack                               */
-+		"mov %r1, %sp\n"              /* argv = sp                                           */
+diff --git a/tools/include/nolibc/arch-riscv.h b/tools/include/nolibc/arch-riscv.h
+index e197fcb10ac0..0d5f15fdedc4 100644
+--- a/tools/include/nolibc/arch-riscv.h
++++ b/tools/include/nolibc/arch-riscv.h
+@@ -181,28 +181,28 @@ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) _start(void)
+ 		".option norelax\n"
+ 		"lla   gp, __global_pointer$\n"
+ 		".option pop\n"
+-		"lw    a0, 0(sp)\n"          // argc (a0) was in the stack
+-		"add   a1, sp, "SZREG"\n"    // argv (a1) = sp
+-		"slli  a2, a0, "PTRLOG"\n"   // envp (a2) = SZREG*argc ...
+-		"add   a2, a2, "SZREG"\n"    //             + SZREG (skip null)
+-		"add   a2,a2,a1\n"           //             + argv
+-
+-		"add   a3, a2, zero\n"       // iterate a3 over envp to find auxv (after NULL)
+-		"0:\n"                       // do {
+-		"ld    a4, 0(a3)\n"          //   a4 = *a3;
+-		"add   a3, a3, "SZREG"\n"    //   a3 += sizeof(void*);
+-		"bne   a4, zero, 0b\n"       // } while (a4);
+-		"lui   a4, %hi(_auxv)\n"     // a4 = &_auxv (high bits)
+-		"sd    a3, %lo(_auxv)(a4)\n" // store a3 into _auxv
+-
+-		"lui a3, %hi(environ)\n"     // a3 = &environ (high bits)
+-		"sd a2,%lo(environ)(a3)\n"   // store envp(a2) into environ
+-		"andi  sp,a1,-16\n"          // sp must be 16-byte aligned
+-		"call  main\n"               // main() returns the status code, we'll exit with it.
+-		"li a7, 93\n"                // NR_exit == 93
++		"lw    a0, 0(sp)\n"          /* argc (a0) was in the stack                          */
++		"add   a1, sp, "SZREG"\n"    /* argv (a1) = sp                                      */
++		"slli  a2, a0, "PTRLOG"\n"   /* envp (a2) = SZREG*argc ...                          */
++		"add   a2, a2, "SZREG"\n"    /*             + SZREG (skip null)                     */
++		"add   a2,a2,a1\n"           /*             + argv                                  */
++
++		"add   a3, a2, zero\n"       /* iterate a3 over envp to find auxv (after NULL)      */
++		"0:\n"                       /* do {                                                */
++		"ld    a4, 0(a3)\n"          /*   a4 = *a3;                                         */
++		"add   a3, a3, "SZREG"\n"    /*   a3 += sizeof(void*);                              */
++		"bne   a4, zero, 0b\n"       /* } while (a4);                                       */
++		"lui   a4, %hi(_auxv)\n"     /* a4 = &_auxv (high bits)                             */
++		"sd    a3, %lo(_auxv)(a4)\n" /* store a3 into _auxv                                 */
++
++		"lui a3, %hi(environ)\n"     /* a3 = &environ (high bits)                           */
++		"sd a2,%lo(environ)(a3)\n"   /* store envp(a2) into environ                         */
++		"andi  sp,a1,-16\n"          /* sp must be 16-byte aligned                          */
++		"call  main\n"               /* main() returns the status code, we'll exit with it. */
++		"li a7, 93\n"                /* NR_exit == 93                                       */
+ 		"ecall\n"
+ 	);
+ 	__builtin_unreachable();
+ }
  
--		"add %r2, %r0, $1\n"          // envp = (argc + 1) ...
--		"lsl %r2, %r2, $2\n"          //        * 4        ...
--		"add %r2, %r2, %r1\n"         //        + argv
--		"ldr %r3, 1f\n"               // r3 = &environ (see below)
--		"str %r2, [r3]\n"             // store envp into environ
-+		"add %r2, %r0, $1\n"          /* envp = (argc + 1) ...                               */
-+		"lsl %r2, %r2, $2\n"          /*        * 4        ...                               */
-+		"add %r2, %r2, %r1\n"         /*        + argv                                       */
-+		"ldr %r3, 1f\n"               /* r3 = &environ (see below)                           */
-+		"str %r2, [r3]\n"             /* store envp into environ                             */
- 
--		"mov r4, r2\n"                // search for auxv (follows NULL after last env)
-+		"mov r4, r2\n"                /* search for auxv (follows NULL after last env)       */
- 		"0:\n"
--		"mov r5, r4\n"                // r5 = r4
--		"add r4, r4, #4\n"            // r4 += 4
--		"ldr r5,[r5]\n"               // r5 = *r5 = *(r4-4)
--		"cmp r5, #0\n"                // and stop at NULL after last env
-+		"mov r5, r4\n"                /* r5 = r4                                             */
-+		"add r4, r4, #4\n"            /* r4 += 4                                             */
-+		"ldr r5,[r5]\n"               /* r5 = *r5 = *(r4-4)                                  */
-+		"cmp r5, #0\n"                /* and stop at NULL after last env                     */
- 		"bne 0b\n"
--		"ldr %r3, 2f\n"               // r3 = &_auxv (low bits)
--		"str r4, [r3]\n"              // store r4 into _auxv
-+		"ldr %r3, 2f\n"               /* r3 = &_auxv (low bits)                              */
-+		"str r4, [r3]\n"              /* store r4 into _auxv                                 */
- 
--		"mov %r3, $8\n"               // AAPCS : sp must be 8-byte aligned in the
--		"neg %r3, %r3\n"              //         callee, and bl doesn't push (lr=pc)
--		"and %r3, %r3, %r1\n"         // so we do sp = r1(=sp) & r3(=-8);
--		"mov %sp, %r3\n"              //
-+		"mov %r3, $8\n"               /* AAPCS : sp must be 8-byte aligned in the            */
-+		"neg %r3, %r3\n"              /*         callee, and bl doesn't push (lr=pc)         */
-+		"and %r3, %r3, %r1\n"         /* so we do sp = r1(=sp) & r3(=-8);                    */
-+		"mov %sp, %r3\n"
- 
--		"bl main\n"                   // main() returns the status code, we'll exit with it.
--		"movs r7, $1\n"               // NR_exit == 1
-+		"bl main\n"                   /* main() returns the status code, we'll exit with it. */
-+		"movs r7, $1\n"               /* NR_exit == 1                                        */
- 		"svc $0x00\n"
--		".align 2\n"                  // below are the pointers to a few variables
-+		".align 2\n"                  /* below are the pointers to a few variables           */
- 		"1:\n"
- 		".word environ\n"
- 		"2:\n"
+-#endif // _NOLIBC_ARCH_RISCV_H
++#endif /* _NOLIBC_ARCH_RISCV_H */
 
 -- 
 2.40.0
