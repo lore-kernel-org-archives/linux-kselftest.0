@@ -2,47 +2,46 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BDC0C76196
-	for <linux-kselftest@archiver.kernel.org>; Thu,  6 Apr 2023 13:57:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A82A7C77B70
+	for <linux-kselftest@archiver.kernel.org>; Thu,  6 Apr 2023 13:57:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238872AbjDFN5q (ORCPT
+        id S238860AbjDFN5u (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 6 Apr 2023 09:57:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37552 "EHLO
+        Thu, 6 Apr 2023 09:57:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238889AbjDFN5n (ORCPT
+        with ESMTP id S238843AbjDFN5s (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 Apr 2023 09:57:43 -0400
+        Thu, 6 Apr 2023 09:57:48 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 885F7A5F7;
-        Thu,  6 Apr 2023 06:57:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A61A9775;
+        Thu,  6 Apr 2023 06:57:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ED6C76456E;
-        Thu,  6 Apr 2023 13:57:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE9A7C4339B;
-        Thu,  6 Apr 2023 13:57:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 50E6264827;
+        Thu,  6 Apr 2023 13:57:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F19AC433A4;
+        Thu,  6 Apr 2023 13:57:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680789439;
-        bh=UK5JJfdjiAdN9kwU5At61bUGQenEJhFJVNvEndfAWkg=;
-        h=From:Subject:Date:To:Cc:From;
-        b=IE52y9OSvrDsq/qGBBJkmB2j05+j9lw2T2ob9/QkVqO/PyUngTEWVbSRCieWPi6R8
-         ZtzVpD21IS9CZ9fW/B08b6k4rc5q/5xtHRzUziAB9spTCFC6Wxo1dvmDBLpVJoSx7J
-         6Yic4XcYtoX669XTvda+qWSbBqgQW3fQTkr2B/I4xLrNq4upp/lLaDd0nWKy+fgcE2
-         jkuVjrjGpDG+l2Akpf8NnNJw6sKP9XZcKelGlqBSLaa8NfT/u8Fuep5eQFVJk7ikqv
-         2Go3ooxSSF8dhDzT48HEdoDEk9eBtRalrJfCD42AD3koaxq8WPN2X6fmZjh3/zILuk
-         zXjg4uCaW9r0g==
+        s=k20201202; t=1680789443;
+        bh=ytJn4w5Dy5SWLa0FnByQtdiXEcdwmqHMOCYVqkoHY8M=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+        b=IJcZ4F1xjaQ4Y8Cse4s6lD4Fs/8+l9oFFrg4IWSplJzD5fDpXHw38gkJNZcoYgy2m
+         KxnbKunAaNfykgVwfk7oenBAJ3tVS4CvhZB2G3YJWnSIhD25BjU0AwRpKrDt2cfqzl
+         IpO5EbtT2d2k3k9ndhhPzHVsfHix9nIeXQ3IinQiSmgBqIKftv6JD2FVsVcQU+hXsS
+         NyQs+Nij+CD1V2BNwoE3OUW/QoN5ziH/3SWf+nSo7xEuOFAtw2KvkTPc11WdY/4bMJ
+         S2x49NlI7KdN3KnjBFdzJPGa0nIKpUIByBb+hqeV6J5t6/y82NCV6Bkj7UH4wZhmQ3
+         CdFuQzQ6FGmsg==
 From:   Mark Brown <broonie@kernel.org>
-Subject: [PATCH 0/2] kselftest: Support nolibc
-Date:   Thu, 06 Apr 2023 14:56:28 +0100
-Message-Id: <20230405-kselftest-nolibc-v1-0-63fbcd70b202@kernel.org>
+Date:   Thu, 06 Apr 2023 14:56:30 +0100
+Subject: [PATCH 2/2] kselftest/arm64: Convert za-fork to use kselftest.h
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAIzPLmQC/x2N0QrCMAwAf2Xk2UCsVdBfER/aLHPB2UlShjD27
- 3Y+HsdxK7iYisOtW8FkUde5NDgeOuAxlaeg9o0hUDhRpDO+XKahilcs86SZkXNgoRgvPV2hZTm
- 5YLZUeNzDd/IqtouPyaDf/+v+2LYfjLvkRXsAAAA=
+Message-Id: <20230405-kselftest-nolibc-v1-2-63fbcd70b202@kernel.org>
+References: <20230405-kselftest-nolibc-v1-0-63fbcd70b202@kernel.org>
+In-Reply-To: <20230405-kselftest-nolibc-v1-0-63fbcd70b202@kernel.org>
 To:     Shuah Khan <shuah@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
@@ -51,54 +50,216 @@ Cc:     linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.13-dev-00303
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1586; i=broonie@kernel.org;
- h=from:subject:message-id; bh=UK5JJfdjiAdN9kwU5At61bUGQenEJhFJVNvEndfAWkg=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkLs+7k+k7gQDbtDEjL2cEjcLJgulQT9C2jU5yInP9
- TZZJ4OmJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZC7PuwAKCRAk1otyXVSH0I4CB/
- 9p1/dGEQmbpFozJZoptPdTRtXccp9r7HSg3K8nmCuP/kLeje5ebuMpUPL1EjH6C5FgEL6xd0k2Xm/C
- BxGBHaHGAcfydZV99U0m6C82xD3XhmXXYj0tpunoJcVfT6s09lywO6AcHzbUcxtt3No6cG4/TfNP4C
- YKhP0qeRkGZ2ScrmRMPxtUx3BA3eonc9qaHjkPg8OXvt422Q8hXUBK/cF0VTuAw/S5CpPgKH2lmaQO
- Td/y89LL/cmxWBWjunb7U+g/jF52IO0COXW7gTY1G6LbHd95h/PVAh70cZVlxqTf0mskVQD/3oo/Md
- iPbuJ2WbdSLRa4KxAipuF75cPI6Z8w
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5178; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=ytJn4w5Dy5SWLa0FnByQtdiXEcdwmqHMOCYVqkoHY8M=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkLs+80yzLeyGUhQXPJmaYoxHF1c5gwAnwwLgvREBL
+ QLj2zJCJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZC7PvAAKCRAk1otyXVSH0MaiB/
+ 9GqQ45Q2obhNcd6abvqwjxt292Y9OnTQjQAbChlA/DhCQuwldDpml2LncJHCUVlYC7vkLkP8gYktcy
+ 3aLR1l8sZjDhZez0DEMq6coFfwjkyBx04gTI6oT4wmcDdxgsY3lpJH/bm3dPrBw+R0CutOhRM1PMMb
+ Jazidq5KMzV84HbR7bfohl6FBOpAzpt6zLlIBFdL1nsgZqKwB7WbaxsN9NIfnf8BbJnbAHCKfMh80a
+ s7F3cRhKbgL8p9dihTUApdIsGfvfuXMiZUEG4w6gMN0Gb+LLFDuaP0kb2CLZyHbQtBwm+8CPnU/z9N
+ zuCKHjGpoB1nLU5BZwesCzluYSsYfW
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-At present the kselftest header can't be used with nolibc since it makes
-use of vprintf() which is not available in nolibc and seems like it would
-be inappropriate to implement given the minimal system requirements and
-environment intended for nolibc. This has resulted in some open coded
-kselftests which use nolibc to test features that are supposed to be
-controlled via libc and therefore better exercised in an environment with
-no libc.
+Now that kselftest.h can be used with nolibc convert the za-fork test to
+use it. We do still have to open code ksft_print_msg() but that's not the
+end of the world. Some of the advantage comes from using printf() which we
+could have been using already.
 
-Rather than continue this let's factor out the I/O routines in kselftest.h
-into a separate header file and provide a nolibc implementation which only
-allows simple strings to be provided rather than full printf() support.
-This is limiting but a great improvement on sharing no code at all.
+This does change the output when tests are skipped, bringing it in line
+with the standard kselftest output by removing the test name - we move
+from
 
-As an example of using this I've updated the arm64 za-fork test to use
-the standard kselftest.h.
+    ok 0 skipped
+
+to
+
+    ok 1 # SKIP fork_test
+
+The old output was not following KTAP format for skips, and the
+numbering was not standard or consistent with the reported plan.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
-Mark Brown (2):
-      kselftest: Support nolibc
-      kselftest/arm64: Convert za-fork to use kselftest.h
+ tools/testing/selftests/arm64/fp/Makefile  |  2 +-
+ tools/testing/selftests/arm64/fp/za-fork.c | 88 ++++++------------------------
+ 2 files changed, 17 insertions(+), 73 deletions(-)
 
- tools/testing/selftests/arm64/fp/Makefile  |   2 +-
- tools/testing/selftests/arm64/fp/za-fork.c |  88 +++--------------
- tools/testing/selftests/kselftest-nolibc.h |  93 ++++++++++++++++++
- tools/testing/selftests/kselftest-std.h    | 151 +++++++++++++++++++++++++++++
- tools/testing/selftests/kselftest.h        | 149 +++-------------------------
- 5 files changed, 272 insertions(+), 211 deletions(-)
----
-base-commit: e8d018dd0257f744ca50a729e3d042cf2ec9da65
-change-id: 20230405-kselftest-nolibc-cb2ce0446d09
+diff --git a/tools/testing/selftests/arm64/fp/Makefile b/tools/testing/selftests/arm64/fp/Makefile
+index 48f56c86ad45..b413b0af07f9 100644
+--- a/tools/testing/selftests/arm64/fp/Makefile
++++ b/tools/testing/selftests/arm64/fp/Makefile
+@@ -38,7 +38,7 @@ $(OUTPUT)/vec-syscfg: vec-syscfg.c $(OUTPUT)/rdvl.o
+ $(OUTPUT)/vlset: vlset.c
+ $(OUTPUT)/za-fork: za-fork.c $(OUTPUT)/za-fork-asm.o
+ 	$(CC) -fno-asynchronous-unwind-tables -fno-ident -s -Os -nostdlib \
+-		-include ../../../../include/nolibc/nolibc.h \
++		-include ../../../../include/nolibc/nolibc.h -I../..\
+ 		-static -ffreestanding -Wall $^ -o $@
+ $(OUTPUT)/za-ptrace: za-ptrace.c
+ $(OUTPUT)/za-test: za-test.S $(OUTPUT)/asm-utils.o
+diff --git a/tools/testing/selftests/arm64/fp/za-fork.c b/tools/testing/selftests/arm64/fp/za-fork.c
+index ff475c649e96..3acd5621e468 100644
+--- a/tools/testing/selftests/arm64/fp/za-fork.c
++++ b/tools/testing/selftests/arm64/fp/za-fork.c
+@@ -9,42 +9,9 @@
+ #include <linux/sched.h>
+ #include <linux/wait.h>
+ 
+-#define EXPECTED_TESTS 1
+-
+-static void putstr(const char *str)
+-{
+-	write(1, str, strlen(str));
+-}
+-
+-static void putnum(unsigned int num)
+-{
+-	char c;
+-
+-	if (num / 10)
+-		putnum(num / 10);
+-
+-	c = '0' + (num % 10);
+-	write(1, &c, 1);
+-}
++#include "kselftest.h"
+ 
+-static int tests_run;
+-static int tests_passed;
+-static int tests_failed;
+-static int tests_skipped;
+-
+-static void print_summary(void)
+-{
+-	if (tests_passed + tests_failed + tests_skipped != EXPECTED_TESTS)
+-		putstr("# UNEXPECTED TEST COUNT: ");
+-
+-	putstr("# Totals: pass:");
+-	putnum(tests_passed);
+-	putstr(" fail:");
+-	putnum(tests_failed);
+-	putstr(" xfail:0 xpass:0 skip:");
+-	putnum(tests_skipped);
+-	putstr(" error:0\n");
+-}
++#define EXPECTED_TESTS 1
+ 
+ int fork_test(void);
+ int verify_fork(void);
+@@ -63,22 +30,21 @@ int fork_test_c(void)
+ 	if (newpid == 0) {
+ 		/* In child */
+ 		if (!verify_fork()) {
+-			putstr("# ZA state invalid in child\n");
++			ksft_print_msg("ZA state invalid in child\n");
+ 			exit(0);
+ 		} else {
+ 			exit(1);
+ 		}
+ 	}
+ 	if (newpid < 0) {
+-		putstr("# fork() failed: -");
+-		putnum(-newpid);
+-		putstr("\n");
++		printf("# fork() failed: %d\n", newpid);
++
+ 		return 0;
+ 	}
+ 
+ 	parent_result = verify_fork();
+ 	if (!parent_result)
+-		putstr("# ZA state invalid in parent\n");
++		ksft_print_msg("ZA state invalid in parent\n");
+ 
+ 	for (;;) {
+ 		waiting = waitpid(newpid, &child_status, 0);
+@@ -86,18 +52,16 @@ int fork_test_c(void)
+ 		if (waiting < 0) {
+ 			if (errno == EINTR)
+ 				continue;
+-			putstr("# waitpid() failed: ");
+-			putnum(errno);
+-			putstr("\n");
++			printf("# waitpid() failed: %d\n", errno);
+ 			return 0;
+ 		}
+ 		if (waiting != newpid) {
+-			putstr("# waitpid() returned wrong PID\n");
++			printf("# waitpid() returned wrong PID\n");
+ 			return 0;
+ 		}
+ 
+ 		if (!WIFEXITED(child_status)) {
+-			putstr("# child did not exit\n");
++			printf("# child did not exit\n");
+ 			return 0;
+ 		}
+ 
+@@ -105,29 +69,14 @@ int fork_test_c(void)
+ 	}
+ }
+ 
+-#define run_test(name)			     \
+-	if (name()) {			     \
+-		tests_passed++;		     \
+-	} else {			     \
+-		tests_failed++;		     \
+-		putstr("not ");		     \
+-	}				     \
+-	putstr("ok ");			     \
+-	putnum(++tests_run);		     \
+-	putstr(" " #name "\n");
+-
+ int main(int argc, char **argv)
+ {
+ 	int ret, i;
+ 
+-	putstr("TAP version 13\n");
+-	putstr("1..");
+-	putnum(EXPECTED_TESTS);
+-	putstr("\n");
++	ksft_print_header();
++	ksft_set_plan(EXPECTED_TESTS);
+ 
+-	putstr("# PID: ");
+-	putnum(getpid());
+-	putstr("\n");
++	printf("# PID: %d\n", getpid());
+ 
+ 	/*
+ 	 * This test is run with nolibc which doesn't support hwcap and
+@@ -136,21 +85,16 @@ int main(int argc, char **argv)
+ 	 */
+ 	ret = open("/proc/sys/abi/sme_default_vector_length", O_RDONLY, 0);
+ 	if (ret >= 0) {
+-		run_test(fork_test);
++		ksft_test_result(fork_test(), "fork_test");
+ 
+ 	} else {
+-		putstr("# SME support not present\n");
+-
++		ksft_print_msg("SME not supported\n");
+ 		for (i = 0; i < EXPECTED_TESTS; i++) {
+-			putstr("ok ");
+-			putnum(i);
+-			putstr(" skipped\n");
++			ksft_test_result_skip("fork_test\n");
+ 		}
+-
+-		tests_skipped += EXPECTED_TESTS;
+ 	}
+ 
+-	print_summary();
++	ksft_finished();
+ 
+ 	return 0;
+ }
 
-Best regards,
 -- 
-Mark Brown <broonie@kernel.org>
+2.30.2
 
