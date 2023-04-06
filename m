@@ -2,537 +2,200 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B0A1C7618D
-	for <linux-kselftest@archiver.kernel.org>; Thu,  6 Apr 2023 13:58:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15D7BC761A6
+	for <linux-kselftest@archiver.kernel.org>; Thu,  6 Apr 2023 14:13:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238896AbjDFN6K (ORCPT
+        id S230064AbjDFONC (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 6 Apr 2023 09:58:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38292 "EHLO
+        Thu, 6 Apr 2023 10:13:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238894AbjDFN55 (ORCPT
+        with ESMTP id S239089AbjDFOMu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 Apr 2023 09:57:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C31A5C6;
-        Thu,  6 Apr 2023 06:57:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B44B60DBF;
-        Thu,  6 Apr 2023 13:57:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D20FAC433D2;
-        Thu,  6 Apr 2023 13:57:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680789441;
-        bh=a79oajkhQYVRaB6DwXBTM0ag0IUaHV1EBWHADnz2lHk=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=ELrykX2bdSssJi10V3rL9ckMK0huAvl1wMVY8P31xTyyYCK/jwq9s2vMazoCjluFK
-         IMWh/f1AVCNvPC1g0buxk4hdVTGKWE6ASgMh4XxEFfIKetCM47fFDgZnM8U6AHKlWd
-         zls10d3p0kADlG4uRfshgYilSQkUsK9EeC6LYQ7y0dF2ulTUpCBKhegizv0wCNDRrf
-         FMi4PCKjyMShrswQy7K/mi8s3+Y1y+3fsGSeV2HffKRidErv6+TXILq3GY2iN9ZOig
-         SrxuprHt1n+NkJ68+0uxPmpw+b3hHO8Z6vEkV100rqD1f6V386xjjxFoMhW08FbslF
-         Jm2tfBSrz4ZUQ==
-From:   Mark Brown <broonie@kernel.org>
-Date:   Thu, 06 Apr 2023 14:56:29 +0100
-Subject: [PATCH 1/2] kselftest: Support nolibc
+        Thu, 6 Apr 2023 10:12:50 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D52547EEF
+        for <linux-kselftest@vger.kernel.org>; Thu,  6 Apr 2023 07:12:41 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id x3so9906931iov.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 06 Apr 2023 07:12:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680790361;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=EK2TuG+WkLupwO9C8GXLQol+GTLoseAFOILf7LMA4Ag=;
+        b=tYw73/FyTv5WaJ2rhzmMHPoBwLZmIl1kP79Cm+DPhR8Bio9CXcigKm2MZdEI9PbSK2
+         yyI4fRp937L9lL1uad95bKspK2fe6c0FhAjKTqCFFAJFUUoVd79F9OGw1SynOtQ/fxKk
+         jRtwJSrIOoskNiC1HuaSBoXRW5VHpPW48JP7mPyh2nqCvP5oCtk40np8S4dVXG9pSamP
+         xREEqvZib8vgIIICvvVBDkBHzaAptHbVxNKdNh9VUuP4G48X7Hjt4vdrjNmtnlQKBY0k
+         GuLKtn0cvgC59502Tp1PUYcnzkJcOHCD38s4NQF5DXC7+mspTwE0JWlhBTpLqQZxdXUm
+         XwoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680790361;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EK2TuG+WkLupwO9C8GXLQol+GTLoseAFOILf7LMA4Ag=;
+        b=aWxwuUcPNd7/GbIBJwQKiP8fDM7ivGb8gTpArqC/VLWPgeoHArjzUgLJ8mSl4qgkAt
+         r6uX6EeowWF3iopUs6TNcFIKE7erOBu5R6rlqSsG6kxFlgtQfGHmDvFCH58df9l6u+jN
+         VU+bKZAcUYz+G/T0TtBy6omX5d9MG7JTgkmtFKeLET40OPQlFKT617EUU6Wpr+tFJDz1
+         G9QiCyX2TkOMVbcpUs6xEaRHmxY43fuOnj6C5brLAfoN/7YkwpeiD53562BwY9hsYgN9
+         VBWj7nC94pJzljxT6kGXTL8BXab9Kc418B+SdhlEUf7wvXGjxeDt/cPchbL2yNCmmWn0
+         TDmw==
+X-Gm-Message-State: AAQBX9dulhnqcVxrotzTOKrLnA+5LHGCdxgYlxE/sse2RfeGAho//SYc
+        vFVNvf3MmCG4SJLg81KV8psqCFUeXiXv6Cl8L9z+fQ==
+X-Google-Smtp-Source: AKy350ZfMeq75xGiCP03gTiGqNqmMx1cPRWF+FsoE17HCPQ7PHCvr67VYtxzWA3ws1glln92pVHB5xOFHTA8Ouz5LAs=
+X-Received: by 2002:a6b:d10a:0:b0:744:b4c2:30fa with SMTP id
+ l10-20020a6bd10a000000b00744b4c230famr6986944iob.18.1680790360988; Thu, 06
+ Apr 2023 07:12:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230405-kselftest-nolibc-v1-1-63fbcd70b202@kernel.org>
-References: <20230405-kselftest-nolibc-v1-0-63fbcd70b202@kernel.org>
-In-Reply-To: <20230405-kselftest-nolibc-v1-0-63fbcd70b202@kernel.org>
-To:     Shuah Khan <shuah@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.13-dev-00303
-X-Developer-Signature: v=1; a=openpgp-sha256; l=11785; i=broonie@kernel.org;
- h=from:subject:message-id; bh=a79oajkhQYVRaB6DwXBTM0ag0IUaHV1EBWHADnz2lHk=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkLs+7erwrk7RnEeNVoFpLU3iXhOt2tuhANaHD45/y
- QLSxDb6JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZC7PuwAKCRAk1otyXVSH0Lq+B/
- 43w6CkOjngdTrY09nlmgjf6DFUrZkA6qawnyCIqH8OG5gy2LUg0VofMP28j+hXCZzp68Ha4nOzVmwj
- zq4MbAEIDgG5iTLjXKJKp3LB+P1QUAns4pZz8EYVf+UADOdxzwSbleMOCkkXHClVVTPqc7KxdrzAQF
- 0eTWs7S3J+yXDXqP+Qqg9av1J0w1Gg4RX+1vvMoUWqEbyOQCzyyObsxLFqVdgt8/jNbuT53LhwNU1f
- 1AF6o7+wDvJfcwFk5tHD8s/GFZPkIhsEyQoNqT1r6t6ROGcm/9krEFc4nVUybhyAZppWkt9nEOaLQm
- UNzEfyRrMFOXpQ9Qa88Wwiw+g7ORjB
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+References: <20230316123028.2890338-1-elver@google.com>
+In-Reply-To: <20230316123028.2890338-1-elver@google.com>
+From:   Marco Elver <elver@google.com>
+Date:   Thu, 6 Apr 2023 16:12:04 +0200
+Message-ID: <CANpmjNOwo=4_VpUs1PYajtxb8gvt3hyhgwc-Bk9RN4VgupZCyQ@mail.gmail.com>
+Subject: Re: [PATCH v6 1/2] posix-timers: Prefer delivery of signals to the
+ current thread
+To:     elver@google.com, Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>
+Cc:     Oleg Nesterov <oleg@redhat.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com,
+        Frederic Weisbecker <frederic@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-At present the kselftest header can't be used with nolibc since it makes
-use of vprintf() which is not available in nolibc and seems like it would
-be inappropriate to implement given the minimal system requirements and
-environment intended for nolibc. This has resulted in some open coded
-kselftests which use nolibc to test features that are supposed to be
-controlled via libc and therefore better exercised in an environment with
-no libc.
+On Thu, 16 Mar 2023 at 13:31, Marco Elver <elver@google.com> wrote:
+>
+> From: Dmitry Vyukov <dvyukov@google.com>
+>
+> POSIX timers using the CLOCK_PROCESS_CPUTIME_ID clock prefer the main
+> thread of a thread group for signal delivery.     However, this has a
+> significant downside: it requires waking up a potentially idle thread.
+>
+> Instead, prefer to deliver signals to the current thread (in the same
+> thread group) if SIGEV_THREAD_ID is not set by the user. This does not
+> change guaranteed semantics, since POSIX process CPU time timers have
+> never guaranteed that signal delivery is to a specific thread (without
+> SIGEV_THREAD_ID set).
+>
+> The effect is that we no longer wake up potentially idle threads, and
+> the kernel is no longer biased towards delivering the timer signal to
+> any particular thread (which better distributes the timer signals esp.
+> when multiple timers fire concurrently).
+>
+> Signed-off-by: Dmitry Vyukov <dvyukov@google.com>
+> Suggested-by: Oleg Nesterov <oleg@redhat.com>
+> Reviewed-by: Oleg Nesterov <oleg@redhat.com>
+> Signed-off-by: Marco Elver <elver@google.com>
+> ---
+> v6:
+> - Split test from this patch.
+> - Update wording on what this patch aims to improve.
+>
+> v5:
+> - Rebased onto v6.2.
+>
+> v4:
+> - Restructured checks in send_sigqueue() as suggested.
+>
+> v3:
+> - Switched to the completely different implementation (much simpler)
+>   based on the Oleg's idea.
+>
+> RFC v2:
+> - Added additional Cc as Thomas asked.
+> ---
+>  kernel/signal.c | 25 ++++++++++++++++++++++---
+>  1 file changed, 22 insertions(+), 3 deletions(-)
+>
+> diff --git a/kernel/signal.c b/kernel/signal.c
+> index 8cb28f1df294..605445fa27d4 100644
+> --- a/kernel/signal.c
+> +++ b/kernel/signal.c
+> @@ -1003,8 +1003,7 @@ static void complete_signal(int sig, struct task_struct *p, enum pid_type type)
+>         /*
+>          * Now find a thread we can wake up to take the signal off the queue.
+>          *
+> -        * If the main thread wants the signal, it gets first crack.
+> -        * Probably the least surprising to the average bear.
+> +        * Try the suggested task first (may or may not be the main thread).
+>          */
+>         if (wants_signal(sig, p))
+>                 t = p;
+> @@ -1970,8 +1969,23 @@ int send_sigqueue(struct sigqueue *q, struct pid *pid, enum pid_type type)
+>
+>         ret = -1;
+>         rcu_read_lock();
+> +       /*
+> +        * This function is used by POSIX timers to deliver a timer signal.
+> +        * Where type is PIDTYPE_PID (such as for timers with SIGEV_THREAD_ID
+> +        * set), the signal must be delivered to the specific thread (queues
+> +        * into t->pending).
+> +        *
+> +        * Where type is not PIDTYPE_PID, signals must just be delivered to the
+> +        * current process. In this case, prefer to deliver to current if it is
+> +        * in the same thread group as the target, as it avoids unnecessarily
+> +        * waking up a potentially idle task.
+> +        */
+>         t = pid_task(pid, type);
+> -       if (!t || !likely(lock_task_sighand(t, &flags)))
+> +       if (!t)
+> +               goto ret;
+> +       if (type != PIDTYPE_PID && same_thread_group(t, current))
+> +               t = current;
+> +       if (!likely(lock_task_sighand(t, &flags)))
+>                 goto ret;
+>
+>         ret = 1; /* the signal is ignored */
+> @@ -1993,6 +2007,11 @@ int send_sigqueue(struct sigqueue *q, struct pid *pid, enum pid_type type)
+>         q->info.si_overrun = 0;
+>
+>         signalfd_notify(t, sig);
+> +       /*
+> +        * If the type is not PIDTYPE_PID, we just use shared_pending, which
+> +        * won't guarantee that the specified task will receive the signal, but
+> +        * is sufficient if t==current in the common case.
+> +        */
+>         pending = (type != PIDTYPE_PID) ? &t->signal->shared_pending : &t->pending;
+>         list_add_tail(&q->list, &pending->list);
+>         sigaddset(&pending->signal, sig);
+> --
 
-Rather than continue this let's factor out the I/O routines in kselftest.h
-into a separate header file and provide a nolibc implementation which only
-allows simple strings to be provided rather than full printf() support.
-This is limiting but a great improvement on sharing no code at all.
+One last semi-gentle ping. ;-)
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/kselftest-nolibc.h |  93 ++++++++++++++++++
- tools/testing/selftests/kselftest-std.h    | 151 +++++++++++++++++++++++++++++
- tools/testing/selftests/kselftest.h        | 149 +++-------------------------
- 3 files changed, 255 insertions(+), 138 deletions(-)
+1. We're seeing that in some applications that use POSIX timers
+heavily, but where the main thread is mostly idle, the main thread
+receives a disproportional amount of the signals along with being
+woken up constantly. This is bad, because the main thread usually
+waits with the help of a futex or really long sleeps. Now the main
+thread will steal time (to go back to sleep) from another thread that
+could have instead just proceeded with whatever it was doing.
 
-diff --git a/tools/testing/selftests/kselftest-nolibc.h b/tools/testing/selftests/kselftest-nolibc.h
-new file mode 100644
-index 000000000000..3dea10cc5490
---- /dev/null
-+++ b/tools/testing/selftests/kselftest-nolibc.h
-@@ -0,0 +1,93 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * kselftest-nolibc	Cut down nolibc based kselftest output functions
-+ *
-+ * Copyright (c) 2014 Shuah Khan <shuahkh@osg.samsung.com>
-+ * Copyright (c) 2014 Samsung Electronics Co., Ltd.
-+ *
-+ */
-+
-+#ifndef __KSELFTEST_H
-+#error This file should never be included directly, always include kselftest.h
-+#endif
-+
-+static inline void ksft_print_msg(const char *msg)
-+{
-+	printf("# %s", msg);
-+}
-+
-+static inline void ksft_test_result_pass(const char *msg)
-+{
-+	ksft_cnt.ksft_pass++;
-+
-+	printf("ok %d %s", ksft_test_num(), msg);
-+}
-+
-+static inline void ksft_test_result_fail(const char *msg)
-+{
-+	ksft_cnt.ksft_fail++;
-+
-+	printf("not ok %d %s", ksft_test_num(), msg);
-+}
-+
-+/**
-+ * ksft_test_result() - Report test success based on truth of condition
-+ *
-+ * @condition: if true, report test success, otherwise failure.
-+ */
-+#define ksft_test_result(condition, fmt) do {	\
-+	if (!!(condition))				\
-+		ksft_test_result_pass(fmt);\
-+	else						\
-+		ksft_test_result_fail(fmt);\
-+	} while (0)
-+
-+static inline void ksft_test_result_xfail(const char *msg)
-+{
-+	ksft_cnt.ksft_xfail++;
-+
-+	printf("ok %d # XFAIL %s", ksft_test_num(), msg);
-+}
-+
-+static inline void ksft_test_result_skip(const char *msg)
-+{
-+	ksft_cnt.ksft_xskip++;
-+
-+	printf("ok %d # SKIP %s", ksft_test_num(), msg);
-+}
-+
-+static inline void ksft_test_result_error(const char *msg)
-+{
-+	ksft_cnt.ksft_error++;
-+
-+	printf("not ok %d # error %s", ksft_test_num(), msg);
-+}
-+
-+static inline int ksft_exit_fail_msg(const char *msg)
-+{
-+	printf("Bail out! %s", msg);
-+
-+	ksft_print_cnts();
-+	exit(KSFT_FAIL);
-+}
-+
-+static inline int ksft_exit_skip(const char *msg)
-+{
-+	/*
-+	 * FIXME: several tests misuse ksft_exit_skip so produce
-+	 * something sensible if some tests have already been run
-+	 * or a plan has been printed.  Those tests should use
-+	 * ksft_test_result_skip or ksft_exit_fail_msg instead.
-+	 */
-+	if (ksft_plan || ksft_test_num()) {
-+		ksft_cnt.ksft_xskip++;
-+		printf("ok %d # SKIP ", 1 + ksft_test_num());
-+	} else {
-+		printf("1..0 # SKIP ");
-+	}
-+	if (msg)
-+		printf("%s", msg);
-+	if (ksft_test_num())
-+		ksft_print_cnts();
-+	exit(KSFT_SKIP);
-+}
-diff --git a/tools/testing/selftests/kselftest-std.h b/tools/testing/selftests/kselftest-std.h
-new file mode 100644
-index 000000000000..b57c515f6dda
---- /dev/null
-+++ b/tools/testing/selftests/kselftest-std.h
-@@ -0,0 +1,151 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * kselftest-std.h:	Full stdio based kselftest output functions
-+ *
-+ * Copyright (c) 2014 Shuah Khan <shuahkh@osg.samsung.com>
-+ * Copyright (c) 2014 Samsung Electronics Co., Ltd.
-+ *
-+ */
-+
-+#ifndef __KSELFTEST_H
-+#error This file should never be included directly, always include kselftest.h
-+#endif
-+
-+static inline void ksft_print_msg(const char *msg, ...)
-+{
-+	int saved_errno = errno;
-+	va_list args;
-+
-+	va_start(args, msg);
-+	printf("# ");
-+	errno = saved_errno;
-+	vprintf(msg, args);
-+	va_end(args);
-+}
-+
-+static inline void ksft_test_result_pass(const char *msg, ...)
-+{
-+	int saved_errno = errno;
-+	va_list args;
-+
-+	ksft_cnt.ksft_pass++;
-+
-+	va_start(args, msg);
-+	printf("ok %d ", ksft_test_num());
-+	errno = saved_errno;
-+	vprintf(msg, args);
-+	va_end(args);
-+}
-+
-+static inline void ksft_test_result_fail(const char *msg, ...)
-+{
-+	int saved_errno = errno;
-+	va_list args;
-+
-+	ksft_cnt.ksft_fail++;
-+
-+	va_start(args, msg);
-+	printf("not ok %d ", ksft_test_num());
-+	errno = saved_errno;
-+	vprintf(msg, args);
-+	va_end(args);
-+}
-+
-+/**
-+ * ksft_test_result() - Report test success based on truth of condition
-+ *
-+ * @condition: if true, report test success, otherwise failure.
-+ */
-+#define ksft_test_result(condition, fmt, ...) do {	\
-+	if (!!(condition))				\
-+		ksft_test_result_pass(fmt, ##__VA_ARGS__);\
-+	else						\
-+		ksft_test_result_fail(fmt, ##__VA_ARGS__);\
-+	} while (0)
-+
-+static inline void ksft_test_result_xfail(const char *msg, ...)
-+{
-+	int saved_errno = errno;
-+	va_list args;
-+
-+	ksft_cnt.ksft_xfail++;
-+
-+	va_start(args, msg);
-+	printf("ok %d # XFAIL ", ksft_test_num());
-+	errno = saved_errno;
-+	vprintf(msg, args);
-+	va_end(args);
-+}
-+
-+static inline void ksft_test_result_skip(const char *msg, ...)
-+{
-+	int saved_errno = errno;
-+	va_list args;
-+
-+	ksft_cnt.ksft_xskip++;
-+
-+	va_start(args, msg);
-+	printf("ok %d # SKIP ", ksft_test_num());
-+	errno = saved_errno;
-+	vprintf(msg, args);
-+	va_end(args);
-+}
-+
-+/* TODO: how does "error" differ from "fail" or "skip"? */
-+static inline void ksft_test_result_error(const char *msg, ...)
-+{
-+	int saved_errno = errno;
-+	va_list args;
-+
-+	ksft_cnt.ksft_error++;
-+
-+	va_start(args, msg);
-+	printf("not ok %d # error ", ksft_test_num());
-+	errno = saved_errno;
-+	vprintf(msg, args);
-+	va_end(args);
-+}
-+
-+static inline int ksft_exit_fail_msg(const char *msg, ...)
-+{
-+	int saved_errno = errno;
-+	va_list args;
-+
-+	va_start(args, msg);
-+	printf("Bail out! ");
-+	errno = saved_errno;
-+	vprintf(msg, args);
-+	va_end(args);
-+
-+	ksft_print_cnts();
-+	exit(KSFT_FAIL);
-+}
-+
-+static inline int ksft_exit_skip(const char *msg, ...)
-+{
-+	int saved_errno = errno;
-+	va_list args;
-+
-+	va_start(args, msg);
-+
-+	/*
-+	 * FIXME: several tests misuse ksft_exit_skip so produce
-+	 * something sensible if some tests have already been run
-+	 * or a plan has been printed.  Those tests should use
-+	 * ksft_test_result_skip or ksft_exit_fail_msg instead.
-+	 */
-+	if (ksft_plan || ksft_test_num()) {
-+		ksft_cnt.ksft_xskip++;
-+		printf("ok %d # SKIP ", 1 + ksft_test_num());
-+	} else {
-+		printf("1..0 # SKIP ");
-+	}
-+	if (msg) {
-+		errno = saved_errno;
-+		vprintf(msg, args);
-+		va_end(args);
-+	}
-+	if (ksft_test_num())
-+		ksft_print_cnts();
-+	exit(KSFT_SKIP);
-+}
-diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
-index 33a0dbd26bd3..10fb6f7c4ae2 100644
---- a/tools/testing/selftests/kselftest.h
-+++ b/tools/testing/selftests/kselftest.h
-@@ -26,6 +26,10 @@
-  *     ksft_test_result_xfail(fmt, ...);
-  *     ksft_test_result_error(fmt, ...);
-  *
-+ * If building with nolibc then only a string may be provided, va_args
-+ * arre not supported and format characters within the string will not be
-+ * interpreted.
-+ *
-  * When all tests are finished, clean up and exit the program with one of:
-  *
-  *    ksft_finished();
-@@ -43,11 +47,13 @@
- #ifndef __KSELFTEST_H
- #define __KSELFTEST_H
- 
-+#ifndef NOLIBC
- #include <errno.h>
- #include <stdlib.h>
- #include <unistd.h>
- #include <stdarg.h>
- #include <stdio.h>
-+#endif
- 
- #ifndef ARRAY_SIZE
- #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
-@@ -132,100 +138,11 @@ static inline void ksft_print_cnts(void)
- 		ksft_cnt.ksft_xskip, ksft_cnt.ksft_error);
- }
- 
--static inline void ksft_print_msg(const char *msg, ...)
--{
--	int saved_errno = errno;
--	va_list args;
--
--	va_start(args, msg);
--	printf("# ");
--	errno = saved_errno;
--	vprintf(msg, args);
--	va_end(args);
--}
--
--static inline void ksft_test_result_pass(const char *msg, ...)
--{
--	int saved_errno = errno;
--	va_list args;
--
--	ksft_cnt.ksft_pass++;
--
--	va_start(args, msg);
--	printf("ok %d ", ksft_test_num());
--	errno = saved_errno;
--	vprintf(msg, args);
--	va_end(args);
--}
--
--static inline void ksft_test_result_fail(const char *msg, ...)
--{
--	int saved_errno = errno;
--	va_list args;
--
--	ksft_cnt.ksft_fail++;
--
--	va_start(args, msg);
--	printf("not ok %d ", ksft_test_num());
--	errno = saved_errno;
--	vprintf(msg, args);
--	va_end(args);
--}
--
--/**
-- * ksft_test_result() - Report test success based on truth of condition
-- *
-- * @condition: if true, report test success, otherwise failure.
-- */
--#define ksft_test_result(condition, fmt, ...) do {	\
--	if (!!(condition))				\
--		ksft_test_result_pass(fmt, ##__VA_ARGS__);\
--	else						\
--		ksft_test_result_fail(fmt, ##__VA_ARGS__);\
--	} while (0)
--
--static inline void ksft_test_result_xfail(const char *msg, ...)
--{
--	int saved_errno = errno;
--	va_list args;
--
--	ksft_cnt.ksft_xfail++;
--
--	va_start(args, msg);
--	printf("ok %d # XFAIL ", ksft_test_num());
--	errno = saved_errno;
--	vprintf(msg, args);
--	va_end(args);
--}
--
--static inline void ksft_test_result_skip(const char *msg, ...)
--{
--	int saved_errno = errno;
--	va_list args;
--
--	ksft_cnt.ksft_xskip++;
--
--	va_start(args, msg);
--	printf("ok %d # SKIP ", ksft_test_num());
--	errno = saved_errno;
--	vprintf(msg, args);
--	va_end(args);
--}
--
--/* TODO: how does "error" differ from "fail" or "skip"? */
--static inline void ksft_test_result_error(const char *msg, ...)
--{
--	int saved_errno = errno;
--	va_list args;
--
--	ksft_cnt.ksft_error++;
--
--	va_start(args, msg);
--	printf("not ok %d # error ", ksft_test_num());
--	errno = saved_errno;
--	vprintf(msg, args);
--	va_end(args);
--}
-+#ifdef NOLIBC
-+#include "kselftest-nolibc.h"
-+#else
-+#include "kselftest-std.h"
-+#endif
- 
- static inline int ksft_exit_pass(void)
- {
-@@ -260,21 +177,6 @@ static inline int ksft_exit_fail(void)
- 		  ksft_cnt.ksft_xfail +	\
- 		  ksft_cnt.ksft_xskip)
- 
--static inline int ksft_exit_fail_msg(const char *msg, ...)
--{
--	int saved_errno = errno;
--	va_list args;
--
--	va_start(args, msg);
--	printf("Bail out! ");
--	errno = saved_errno;
--	vprintf(msg, args);
--	va_end(args);
--
--	ksft_print_cnts();
--	exit(KSFT_FAIL);
--}
--
- static inline int ksft_exit_xfail(void)
- {
- 	ksft_print_cnts();
-@@ -287,33 +189,4 @@ static inline int ksft_exit_xpass(void)
- 	exit(KSFT_XPASS);
- }
- 
--static inline int ksft_exit_skip(const char *msg, ...)
--{
--	int saved_errno = errno;
--	va_list args;
--
--	va_start(args, msg);
--
--	/*
--	 * FIXME: several tests misuse ksft_exit_skip so produce
--	 * something sensible if some tests have already been run
--	 * or a plan has been printed.  Those tests should use
--	 * ksft_test_result_skip or ksft_exit_fail_msg instead.
--	 */
--	if (ksft_plan || ksft_test_num()) {
--		ksft_cnt.ksft_xskip++;
--		printf("ok %d # SKIP ", 1 + ksft_test_num());
--	} else {
--		printf("1..0 # SKIP ");
--	}
--	if (msg) {
--		errno = saved_errno;
--		vprintf(msg, args);
--		va_end(args);
--	}
--	if (ksft_test_num())
--		ksft_print_cnts();
--	exit(KSFT_SKIP);
--}
--
- #endif /* __KSELFTEST_H */
+2. Delivering signals to random threads is currently way too
+expensive. We need to resort to this crazy algorithm: 1) receive timer
+signal, 2) check if main thread, 3) if main thread (which is likely),
+pick a random thread and do tgkill. To find a random thread, iterate
+/proc/self/task, but that's just abysmal for various reasons. Other
+alternatives, like inherited task clock perf events are too expensive
+as soon as we need to enable/disable the timers (does IPIs), and
+maintaining O(#threads) timers is just as horrible.
 
--- 
-2.30.2
+This patch solves both the above issues.
 
+We acknowledge the unfortunate situation of attributing this patch to
+one clear subsystem and owner: it straddles into signal delivery and
+POSIX timers territory, and perhaps some scheduling. The patch itself
+only touches kernel/signal.c.
+
+If anyone has serious objections, please shout (soon'ish). Given the
+patch has been reviewed by Oleg, and scrutinized by Dmitry and myself,
+presumably we need to find a tree that currently takes kernel/signal.c
+patches?
+
+Thanks!
+
+-- Marco
