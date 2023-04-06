@@ -2,57 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28878C7618D
-	for <linux-kselftest@archiver.kernel.org>; Wed,  5 Apr 2023 23:59:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A9B7C7618D
+	for <linux-kselftest@archiver.kernel.org>; Thu,  6 Apr 2023 00:12:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234244AbjDEX7s (ORCPT
+        id S232642AbjDFAMi (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 5 Apr 2023 19:59:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44582 "EHLO
+        Wed, 5 Apr 2023 20:12:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233953AbjDEX7p (ORCPT
+        with ESMTP id S229631AbjDFAMh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 5 Apr 2023 19:59:45 -0400
-Received: from mail-ed1-x564.google.com (mail-ed1-x564.google.com [IPv6:2a00:1450:4864:20::564])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E4C5B9A
-        for <linux-kselftest@vger.kernel.org>; Wed,  5 Apr 2023 16:59:40 -0700 (PDT)
-Received: by mail-ed1-x564.google.com with SMTP id r11so145277824edd.5
-        for <linux-kselftest@vger.kernel.org>; Wed, 05 Apr 2023 16:59:40 -0700 (PDT)
+        Wed, 5 Apr 2023 20:12:37 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E7A661AE
+        for <linux-kselftest@vger.kernel.org>; Wed,  5 Apr 2023 17:12:35 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-4fa3ca41383so791530a12.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 05 Apr 2023 17:12:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dectris.com; s=google; t=1680739179;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aiktHjl/mMcq2QHaTiXh/kaZ7IlrVAnqoR/RxQRC2zg=;
-        b=M4qbOdZXV1C/wDoAtkeyblRD3pP/gVWJ2ejk/HkiM7w0jCcQ+v29RtLw8uUviwLJl1
-         auBRb4iOIKy8itmdG/qdpbrAKRxz64u2qESoitiubJYsYHgTftPuHS1ASwXk3vl7M4az
-         3IStF2usOaKTZJlThJ/IelRoZTkMFI4q2YFm8=
+        d=dectris.com; s=google; t=1680739953;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=QWqojSp8qeBF+mnrDb0v8Y1VEeoiQlSQ1yGGpxufYDs=;
+        b=mmtf2AayBWm/z9sUCranjsDtUq8AxYpmX4yPfK4znmF2gMIODJ7tf13ZcvRf7XB84K
+         AgOJLhfcSJpYEPHYwm5X0Fu3pt6ZBax5QjRsO69RzY2rTbyqiLNyDuId8qaErMGe3LMS
+         iWF5PYWGarqFRVHJNktro71deVYVccaeWoaJw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680739179;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aiktHjl/mMcq2QHaTiXh/kaZ7IlrVAnqoR/RxQRC2zg=;
-        b=27uYKiGJKQqKldEpKlZHk8BmuptL9gqavyWM3U2VDU+YwBpyMQj4r4Yn2Zz5FCeZXF
-         JhQBDhCKqy8EagbaefBhntcB6XeTb7uVaZT8kQzOtjOmNooculD1UCH5GGWW83xfh8v0
-         3FpYmvvbJiAEaQJDYzzdjXH7eyemUdehlvvdpHdUcNXPrlWCcdgszG5j45kSE0pX3oy3
-         RNmBpRFns3aTQMTmaqS3xOLRls1QmGjOcVmWciDH97eAhWcVTjR+2oMDAWPL2Wt/tdRZ
-         /DlxNWQ51wp1ICkUcMaRDlRlBbmMg7dJ8k4MQAAkjjT3+C0PW5j+e9wZ7MyzgYgh8PcN
-         0N0g==
-X-Gm-Message-State: AAQBX9dvkBsxy3Tr531VaWgIetPBdp5zJmuHaDy7l49CnDcuXPDKKQ+v
-        TPZMmGQ9dR2uDoVsrdSr85KOQ8ZjkZqRbSeZUmRwUtgxck72
-X-Google-Smtp-Source: AKy350ZO1gDgW7Ny5Ov0vBQrRbAUQYqALMitKDhaeYZHL3oGuCKea7cv8SV217niml8vcg3/D1sq64+4Br0U
-X-Received: by 2002:a17:906:edcb:b0:930:f953:9614 with SMTP id sb11-20020a170906edcb00b00930f9539614mr5666535ejb.1.1680739178981;
-        Wed, 05 Apr 2023 16:59:38 -0700 (PDT)
-Received: from fedora.dectris.local (dect-ch-bad-pfw.cyberlink.ch. [62.12.151.50])
-        by smtp-relay.gmail.com with ESMTPS id hd33-20020a17090796a100b00949174b747bsm8548ejc.96.2023.04.05.16.59.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 16:59:38 -0700 (PDT)
-X-Relaying-Domain: dectris.com
-From:   Kal Conley <kal.conley@dectris.com>
+        d=1e100.net; s=20210112; t=1680739953;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QWqojSp8qeBF+mnrDb0v8Y1VEeoiQlSQ1yGGpxufYDs=;
+        b=Ldnnys9XhYDxVk5D+naReJYd8Euxy4xG+j6SYj0jLyqvenVPqbCWlIDR+K0k5AhTwU
+         OU7/4n7MQt9N0ykyD30xJyb/+pn8uN4xHCAuISBXo03RShnu4TxH1Ff3DPyjkTFIapr+
+         Dxf7odbKZbWhgvSc5+W7pEhBJmr0xSas1jPmHI2P1we1V+PJjtqrSwUBIsjv/r6x916u
+         LJrB+mT/hFnkuzCgfYh0wfHnnoqA+0ZsAnQDaA+Kx9UnAeq+maPOTlrHMuccSb0qk/S7
+         6JVIe9srhS8uyzDNNYfYsdIDM4UF6tTvMoJwBVLwGcxdxYYk5td/kQOr7LEsMRNKZOT6
+         RXQA==
+X-Gm-Message-State: AAQBX9eeQ/lDTYjQ3oZmqO0+b1lizLK9VwFpasGt6Se9//GClsD+XKW5
+        5Ep6s2pf5I7gfIrBJtY6QWSbhWER/u9ycQ+vrUvb7A==
+X-Google-Smtp-Source: AKy350bSg5cQf76vayF8cuTHt7hGbMj/aBgU/6HTmDSPmn/KXvw21Y1A4RFFgZK1jB9dW9Ud6Cu2kqEjEDgC+YjCXjw=
+X-Received: by 2002:a50:8adc:0:b0:502:3c99:417f with SMTP id
+ k28-20020a508adc000000b005023c99417fmr2041304edk.6.1680739953661; Wed, 05 Apr
+ 2023 17:12:33 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230405235920.7305-1-kal.conley@dectris.com> <20230405235920.7305-3-kal.conley@dectris.com>
+In-Reply-To: <20230405235920.7305-3-kal.conley@dectris.com>
+From:   Kal Cutter Conley <kal.conley@dectris.com>
+Date:   Thu, 6 Apr 2023 02:17:13 +0200
+Message-ID: <CAHApi-kRav_7jpkyTf+Ko7LJwx6_UO+1QydoAr-fMqeyBE=OYw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 2/2] selftests: xsk: Add test UNALIGNED_INV_DESC_4K1_FRAME_SIZE
 To:     Magnus Karlsson <magnus.karlsson@intel.com>,
         Martin KaFai Lau <martin.lau@linux.dev>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
         Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
         Jonathan Lemon <jonathan.lemon@gmail.com>,
         Alexei Starovoitov <ast@kernel.org>,
@@ -64,89 +65,23 @@ To:     Magnus Karlsson <magnus.karlsson@intel.com>,
         Stanislav Fomichev <sdf@google.com>,
         Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
         Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
-Cc:     Kal Conley <kal.conley@dectris.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2 2/2] selftests: xsk: Add test UNALIGNED_INV_DESC_4K1_FRAME_SIZE
-Date:   Thu,  6 Apr 2023 01:59:19 +0200
-Message-Id: <20230405235920.7305-3-kal.conley@dectris.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230405235920.7305-1-kal.conley@dectris.com>
-References: <20230405235920.7305-1-kal.conley@dectris.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add unaligned descriptor test for frame size of 4001. Using an odd frame
-size ensures that the end of the UMEM is not near a page boundary. This
-allows testing descriptors that staddle the end of the UMEM but not a
-page.
+> Add unaligned descriptor test for frame size of 4001. Using an odd frame
+> size ensures that the end of the UMEM is not near a page boundary. This
+> allows testing descriptors that staddle the end of the UMEM but not a
+> page.
+>
+> This test used to fail without the previous commit ("xsk: Add check for
+> unaligned descriptors that overrun UMEM").
 
-This test used to fail without the previous commit ("xsk: Add check for
-unaligned descriptors that overrun UMEM").
+Sorry I forgot to update the commit message with the new commit label.
+If accepted, please change the second paragraph to :
 
-Signed-off-by: Kal Conley <kal.conley@dectris.com>
----
- tools/testing/selftests/bpf/xskxceiver.c | 24 ++++++++++++++++++++++++
- tools/testing/selftests/bpf/xskxceiver.h |  1 +
- 2 files changed, 25 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
-index 1a4bdd5aa78c..5a9691e942de 100644
---- a/tools/testing/selftests/bpf/xskxceiver.c
-+++ b/tools/testing/selftests/bpf/xskxceiver.c
-@@ -69,6 +69,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#include <assert.h>
- #include <fcntl.h>
- #include <errno.h>
- #include <getopt.h>
-@@ -1876,6 +1877,29 @@ static void run_pkt_test(struct test_spec *test, enum test_mode mode, enum test_
- 		test->ifobj_rx->umem->unaligned_mode = true;
- 		testapp_invalid_desc(test);
- 		break;
-+	case TEST_TYPE_UNALIGNED_INV_DESC_4K1_FRAME: {
-+		u64 page_size, umem_size;
-+
-+		if (!hugepages_present(test->ifobj_tx)) {
-+			ksft_test_result_skip("No 2M huge pages present.\n");
-+			return;
-+		}
-+		test_spec_set_name(test, "UNALIGNED_INV_DESC_4K1_FRAME_SIZE");
-+		/* Odd frame size so the UMEM doesn't end near a page boundary. */
-+		test->ifobj_tx->umem->frame_size = 4001;
-+		test->ifobj_rx->umem->frame_size = 4001;
-+		test->ifobj_tx->umem->unaligned_mode = true;
-+		test->ifobj_rx->umem->unaligned_mode = true;
-+		/* This test exists to test descriptors that staddle the end of
-+		 * the UMEM but not a page.
-+		 */
-+		page_size = sysconf(_SC_PAGESIZE);
-+		umem_size = test->ifobj_tx->umem->num_frames * test->ifobj_tx->umem->frame_size;
-+		assert(umem_size % page_size > PKT_SIZE);
-+		assert(umem_size % page_size < page_size - PKT_SIZE);
-+		testapp_invalid_desc(test);
-+		break;
-+	}
- 	case TEST_TYPE_UNALIGNED:
- 		if (!testapp_unaligned(test))
- 			return;
-diff --git a/tools/testing/selftests/bpf/xskxceiver.h b/tools/testing/selftests/bpf/xskxceiver.h
-index cc24ab72f3ff..919327807a4e 100644
---- a/tools/testing/selftests/bpf/xskxceiver.h
-+++ b/tools/testing/selftests/bpf/xskxceiver.h
-@@ -78,6 +78,7 @@ enum test_type {
- 	TEST_TYPE_ALIGNED_INV_DESC,
- 	TEST_TYPE_ALIGNED_INV_DESC_2K_FRAME,
- 	TEST_TYPE_UNALIGNED_INV_DESC,
-+	TEST_TYPE_UNALIGNED_INV_DESC_4K1_FRAME,
- 	TEST_TYPE_HEADROOM,
- 	TEST_TYPE_TEARDOWN,
- 	TEST_TYPE_BIDI,
--- 
-2.39.2
-
+This test used to fail without the previous commit ("xsk: Fix unaligned
+descriptor validation").
