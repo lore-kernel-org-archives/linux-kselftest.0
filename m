@@ -2,45 +2,45 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6B74C77B71
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D39A7C77B73
 	for <linux-kselftest@archiver.kernel.org>; Thu,  6 Apr 2023 21:56:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233619AbjDFVzb (ORCPT
+        id S231411AbjDFVza (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 6 Apr 2023 17:55:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42340 "EHLO
+        Thu, 6 Apr 2023 17:55:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237775AbjDFVzA (ORCPT
+        with ESMTP id S237784AbjDFVzA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Thu, 6 Apr 2023 17:55:00 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DDCFAD1F;
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE98AD20;
         Thu,  6 Apr 2023 14:54:59 -0700 (PDT)
 From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1680818094;
-        bh=Qe8nJyPjBlgmIx599eDy96a3x+QpMDsnrKcc0Qv66Ts=;
+        s=mail; t=1680818095;
+        bh=X60ak0sedknadOIvWDQ9aZzSRdad/1Q+QXzu97VjaVg=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=ATnC3jHsaUStckaLysEVMZrrbG0rnq87drAcNeh9DF9hkWl+2+XhjIk81Tgkc0H0O
-         jpuImOwKvA22HpAMPFLYvAPoQiYNLKdVV3ReUc1DSNTIHGVW6L1rmkuHjvHO4bapBu
-         8c4G35FzuM9YqekvgqcN71MVcj9d0AYzzvidyZOs=
-Date:   Thu, 06 Apr 2023 21:54:54 +0000
-Subject: [PATCH v2 08/11] tools/nolibc: mips: use C89 comment syntax
+        b=A6jHzu4hl7h2IqK2hYbiB9n8cM4IKteAULIPE6nlG64aIFGTzLxiuRNmm58AKi/wI
+         e3gH8Jiiw+K/fgoGHaP/5QWYFSo7z9WujywvvNjwNwD33hAsNHAVczBTxrR4nYAau4
+         sTzxOcLcEpPiwE5h3fHD3EzYs5dxKFieeRCyCfy4=
+Date:   Thu, 06 Apr 2023 21:54:56 +0000
+Subject: [PATCH v2 10/11] tools/nolibc: use C89 comment syntax
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20230328-nolibc-c99-v2-8-c989f2289222@weissschuh.net>
+Message-Id: <20230328-nolibc-c99-v2-10-c989f2289222@weissschuh.net>
 References: <20230328-nolibc-c99-v2-0-c989f2289222@weissschuh.net>
 In-Reply-To: <20230328-nolibc-c99-v2-0-c989f2289222@weissschuh.net>
 To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1680818091; l=4214;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1680818091; l=3509;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=Qe8nJyPjBlgmIx599eDy96a3x+QpMDsnrKcc0Qv66Ts=;
- b=idk4i0dx9aQMIIIuqV3T2Pxpyz4qWL8BNHt3AQEwQ6WUS0osDqTsirey4HbMn872g968Y+d9Z
- XUYG17J9e1JD8u+XPccmRLVAM9vp9dj3SWfkh5uBk0g2Kzgq/uOQaUI
+ bh=X60ak0sedknadOIvWDQ9aZzSRdad/1Q+QXzu97VjaVg=;
+ b=PMX15SgYaKLuh5We5vXFX7qq/vVTiYc/ps7vPXcz4VTIyom6AennGirjFTmtxyRzGmXO4A2zN
+ Bc47UZD5RNzAmKgsnNVfINKRiw5puxDBrjGWqTc4NgasTco8G3aTs+5
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 Precedence: bulk
@@ -51,84 +51,104 @@ Most of nolibc is already using C89 comments.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- tools/include/nolibc/arch-mips.h | 56 ++++++++++++++++++++--------------------
- 1 file changed, 28 insertions(+), 28 deletions(-)
+ tools/include/nolibc/stackprotector.h        |  4 ++--
+ tools/include/nolibc/sys.h                   |  8 ++++----
+ tools/testing/selftests/nolibc/nolibc-test.c | 12 ++++++------
+ 3 files changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/tools/include/nolibc/arch-mips.h b/tools/include/nolibc/arch-mips.h
-index bf83432d23ed..8822f150e72f 100644
---- a/tools/include/nolibc/arch-mips.h
-+++ b/tools/include/nolibc/arch-mips.h
-@@ -183,42 +183,42 @@ const unsigned long *_auxv __attribute__((weak));
- void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __start(void)
- {
- 	__asm__ volatile (
--		//".set nomips16\n"
-+		/*".set nomips16\n"*/
- 		".set push\n"
- 		".set    noreorder\n"
- 		".option pic0\n"
--		//".ent __start\n"
--		//"__start:\n"
--		"lw $a0,($sp)\n"        // argc was in the stack
--		"addiu  $a1, $sp, 4\n"  // argv = sp + 4
--		"sll $a2, $a0, 2\n"     // a2 = argc * 4
--		"add   $a2, $a2, $a1\n" // envp = argv + 4*argc ...
--		"addiu $a2, $a2, 4\n"   //        ... + 4
--		"lui $a3, %hi(environ)\n"     // load environ into a3 (hi)
--		"addiu $a3, %lo(environ)\n"   // load environ into a3 (lo)
--		"sw $a2,($a3)\n"              // store envp(a2) into environ
--
--		"move $t0, $a2\n"             // iterate t0 over envp, look for NULL
--		"0:"                          // do {
--		"lw $a3, ($t0)\n"             //   a3=*(t0);
--		"bne $a3, $0, 0b\n"           // } while (a3);
--		"addiu $t0, $t0, 4\n"         // delayed slot: t0+=4;
--		"lui $a3, %hi(_auxv)\n"       // load _auxv into a3 (hi)
--		"addiu $a3, %lo(_auxv)\n"     // load _auxv into a3 (lo)
--		"sw $t0, ($a3)\n"             // store t0 into _auxv
-+		/*".ent __start\n"*/
-+		/*"__start:\n"*/
-+		"lw $a0,($sp)\n"        /* argc was in the stack                               */
-+		"addiu  $a1, $sp, 4\n"  /* argv = sp + 4                                       */
-+		"sll $a2, $a0, 2\n"     /* a2 = argc * 4                                       */
-+		"add   $a2, $a2, $a1\n" /* envp = argv + 4*argc ...                            */
-+		"addiu $a2, $a2, 4\n"   /*        ... + 4                                      */
-+		"lui $a3, %hi(environ)\n"     /* load environ into a3 (hi)                     */
-+		"addiu $a3, %lo(environ)\n"   /* load environ into a3 (lo)                     */
-+		"sw $a2,($a3)\n"              /* store envp(a2) into environ                   */
-+
-+		"move $t0, $a2\n"             /* iterate t0 over envp, look for NULL           */
-+		"0:"                          /* do {                                          */
-+		"lw $a3, ($t0)\n"             /*   a3=*(t0);                                   */
-+		"bne $a3, $0, 0b\n"           /* } while (a3);                                 */
-+		"addiu $t0, $t0, 4\n"         /* delayed slot: t0+=4;                          */
-+		"lui $a3, %hi(_auxv)\n"       /* load _auxv into a3 (hi)                       */
-+		"addiu $a3, %lo(_auxv)\n"     /* load _auxv into a3 (lo)                       */
-+		"sw $t0, ($a3)\n"             /* store t0 into _auxv                           */
+diff --git a/tools/include/nolibc/stackprotector.h b/tools/include/nolibc/stackprotector.h
+index d119cbbbc256..77e5251c4490 100644
+--- a/tools/include/nolibc/stackprotector.h
++++ b/tools/include/nolibc/stackprotector.h
+@@ -48,6 +48,6 @@ void __stack_chk_init(void)
+ 	/* a bit more randomness in case getrandom() fails */
+ 	__stack_chk_guard ^= (uintptr_t) &__stack_chk_guard;
+ }
+-#endif // defined(NOLIBC_STACKPROTECTOR)
++#endif /* defined(NOLIBC_STACKPROTECTOR) */
  
- 		"li $t0, -8\n"
--		"and $sp, $sp, $t0\n"   // sp must be 8-byte aligned
--		"addiu $sp,$sp,-16\n"   // the callee expects to save a0..a3 there!
--		"jal main\n"            // main() returns the status code, we'll exit with it.
--		"nop\n"                 // delayed slot
--		"move $a0, $v0\n"       // retrieve 32-bit exit code from v0
--		"li $v0, 4001\n"        // NR_exit == 4001
-+		"and $sp, $sp, $t0\n"   /* sp must be 8-byte aligned                           */
-+		"addiu $sp,$sp,-16\n"   /* the callee expects to save a0..a3 there!            */
-+		"jal main\n"            /* main() returns the status code, we'll exit with it. */
-+		"nop\n"                 /* delayed slot                                        */
-+		"move $a0, $v0\n"       /* retrieve 32-bit exit code from v0                   */
-+		"li $v0, 4001\n"        /* NR_exit == 4001                                     */
- 		"syscall\n"
--		//".end __start\n"
-+		/*".end __start\n"*/
- 		".set pop\n"
- 	);
- 	__builtin_unreachable();
+-#endif // _NOLIBC_STACKPROTECTOR_H
++#endif /* _NOLIBC_STACKPROTECTOR_H */
+diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+index bea9760dbd16..1b9b91cd8b57 100644
+--- a/tools/include/nolibc/sys.h
++++ b/tools/include/nolibc/sys.h
+@@ -12,15 +12,15 @@
+ 
+ /* system includes */
+ #include <asm/unistd.h>
+-#include <asm/signal.h>  // for SIGCHLD
++#include <asm/signal.h>  /* for SIGCHLD */
+ #include <asm/ioctls.h>
+ #include <asm/mman.h>
+ #include <linux/fs.h>
+ #include <linux/loop.h>
+ #include <linux/time.h>
+ #include <linux/auxvec.h>
+-#include <linux/fcntl.h> // for O_* and AT_*
+-#include <linux/stat.h>  // for statx()
++#include <linux/fcntl.h> /* for O_* and AT_* */
++#include <linux/stat.h>  /* for statx() */
+ 
+ #include "arch.h"
+ #include "errno.h"
+@@ -322,7 +322,7 @@ static __attribute__((noreturn,unused))
+ void sys_exit(int status)
+ {
+ 	my_syscall1(__NR_exit, status & 255);
+-	while(1); // shut the "noreturn" warnings.
++	while(1); /* shut the "noreturn" warnings. */
  }
  
--#endif // _NOLIBC_ARCH_MIPS_H
-+#endif /* _NOLIBC_ARCH_MIPS_H */
+ static __attribute__((noreturn,unused))
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index e692be98973a..f06b38cfe38a 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: GPL-2.0
++/* SPDX-License-Identifier: GPL-2.0 */
+ 
+ #define _GNU_SOURCE
+ 
+@@ -46,8 +46,8 @@ char **environ;
+ 
+ /* definition of a series of tests */
+ struct test {
+-	const char *name;              // test name
+-	int (*func)(int min, int max); // handler
++	const char *name;              /* test name */
++	int (*func)(int min, int max); /* handler */
+ };
+ 
+ #ifndef _NOLIBC_STDLIB_H
+@@ -494,7 +494,7 @@ int run_syscall(int min, int max)
+ 	euid0 = geteuid() == 0;
+ 
+ 	for (test = min; test >= 0 && test <= max; test++) {
+-		int llen = 0; // line length
++		int llen = 0; /* line length */
+ 
+ 		/* avoid leaving empty lines below, this will insert holes into
+ 		 * test numbers.
+@@ -584,7 +584,7 @@ int run_stdlib(int min, int max)
+ 	void *p1, *p2;
+ 
+ 	for (test = min; test >= 0 && test <= max; test++) {
+-		int llen = 0; // line length
++		int llen = 0; /* line length */
+ 
+ 		/* avoid leaving empty lines below, this will insert holes into
+ 		 * test numbers.
+@@ -731,7 +731,7 @@ static int run_vfprintf(int min, int max)
+ 	void *p1, *p2;
+ 
+ 	for (test = min; test >= 0 && test <= max; test++) {
+-		int llen = 0; // line length
++		int llen = 0; /* line length */
+ 
+ 		/* avoid leaving empty lines below, this will insert holes into
+ 		 * test numbers.
 
 -- 
 2.40.0
