@@ -2,119 +2,81 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D9BCC7619A
-	for <linux-kselftest@archiver.kernel.org>; Thu,  6 Apr 2023 00:13:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49963C7618D
+	for <linux-kselftest@archiver.kernel.org>; Thu,  6 Apr 2023 00:19:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234275AbjDFANL (ORCPT
+        id S233903AbjDFATC (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 5 Apr 2023 20:13:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60746 "EHLO
+        Wed, 5 Apr 2023 20:19:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233501AbjDFANK (ORCPT
+        with ESMTP id S230108AbjDFATB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 5 Apr 2023 20:13:10 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54CA56A64
-        for <linux-kselftest@vger.kernel.org>; Wed,  5 Apr 2023 17:13:05 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id v67-20020a254846000000b00b8189f73e94so16847928yba.12
-        for <linux-kselftest@vger.kernel.org>; Wed, 05 Apr 2023 17:13:05 -0700 (PDT)
+        Wed, 5 Apr 2023 20:19:01 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF0276598
+        for <linux-kselftest@vger.kernel.org>; Wed,  5 Apr 2023 17:18:59 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5425c04765dso371234447b3.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 05 Apr 2023 17:18:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680739984;
+        d=google.com; s=20210112; t=1680740339;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=oIVv17QpIfjpv7NHijjNGS+xbKdk8/meE9TVNffXN1Y=;
-        b=PRY0RJTTBJ67UCBYkIEfsKRFyOT1gcdKU7mv/OeUzw1r1nHClV6TBceqcc2vjff2tA
-         aPBnlafF5cZNOFZk7kkdgzedBzJszoOmZ6449L11iLZyzQBJwlpKdC0qaOZBJyWu8z4M
-         P0QAQTHfWIZF22LNU5dHMgudihMSjpdbQg3y2CTSzwBJJolDcfkY5TLf8sy8EzVb1R/l
-         mC3myJMNfjzT0D9U3rl0dzlL4Yb+k5D0GFie433PGG9ovD4mM2lE01EC7KeVSPHh3N39
-         58OrvOuOSTMsNWJGHY1yw7ar6BNckD+7YknVNuukTyYjrkODZjRDw55OF4eEDiSVle11
-         WAZA==
+        bh=cWlTF2KX/SLscX0Kn9NLj6T2D2vSbjVY278n3hbFYjY=;
+        b=Su2D1+qUf7Ph7eETWK8SAUW7jHWbOHfiOGnPWly+EXs6AMreGK9jAxeB1sMb/OMOPY
+         kb81oTWVp7qPJ2XaqWMTwg/It/LOWezEc3rfAp0sKBaL+3W33vnN2uAad8mK04NnX8v1
+         wgAS00fxMs0Eaz+vby2VZhRvD404NTgE/9a45xFXzFfTi/U2c5pggtcuLB/TcYR1JJDC
+         xNKoRnTU0wNG29j38mxAbaJJb0Ufgh/SdVrwZsC3vIzS1COrjLhtGDoK464jKbYW9zC+
+         TYvQ2qipOJbnx1veLjZWyA5PJ0blbodGz5ZfUzySMc7nrWDz1f4UI9YX21mBsZcMeCPm
+         Hr3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680739984;
+        d=1e100.net; s=20210112; t=1680740339;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oIVv17QpIfjpv7NHijjNGS+xbKdk8/meE9TVNffXN1Y=;
-        b=bfKIhNFsTXqVL3FAYtx/7C4cLDB8lZX5fVt5VFsUh5KprCOsp6TA3d2tVKgQQroA05
-         O+VffD8SJf9RFdjsndr1zAISE6T9+RhWglNnK69p4d15oQU2LuaRTVFE65s7wUyBpVrT
-         +9KFe3rFQla0A+iUcEnw2o6RT9MgH4e44QFnssCyRSc/NjISzvY62jD3ZBNjK41jLHZf
-         FV0mJPCIFiQJDx+xb/QXv+wkpmG76vmK6lu05ghYGqa2T5hiO860lchfSwKzLqCwFndy
-         kdsHUrIw462nkBKeLT/sqT4HtigpS3WFkLH3DeFShuAV1+Rw5I2wORGGnndPgkmsdqao
-         UW6Q==
-X-Gm-Message-State: AAQBX9dzDXIIwHIZcGWscUp5b+jLr/0bE7x1f2qKT8vNz6cvveMM/v38
-        KgcpN5kEFhD5OLnZ7spygU3ES8+pRJw=
-X-Google-Smtp-Source: AKy350bU395ykLooX4kh7nExUdXZhZMKGyWg+oKLdJndjcqqAmwjNJzfNYUADWizH4EUPPTWLDpdaY+aKrM=
+        bh=cWlTF2KX/SLscX0Kn9NLj6T2D2vSbjVY278n3hbFYjY=;
+        b=iROCzzdZX/1gPsXuTEnDChtauZagaGW4XiGV7L/a5b2e2Culyk9FFwtVymq9Ekv7ZH
+         JFP5O0WLvLMgjnwnKkfOCcWElazzFw8mjyBdGEFBHXY0+WarS2qQHKAJuaPD5ZL11Aop
+         nOLOZNcsBRGTrbq5EqpwIJDQInEC+kJM+vKtDOjTj/H3nuxwDXnQK8l7Aa+6TajpM6zX
+         WEcUIlYAXgG08b4DocurJXU0S0iBqMkFP+TD1lXFmmQ56ERgRZPZg5bkZjxgfSgjYQOO
+         Cul2dyDAluWUftLxHFjwh7YEEN6FITTuwxbiXttkTRoizmKhRIFP/kzRRoZx52RP96fK
+         gnjA==
+X-Gm-Message-State: AAQBX9dDiV1mjSxbzXfhJ1nvzcqFDHjdwmBgS5UOvlQvSslZ9ZrNRkp9
+        w2oGUxnrxwtG4ypC0lJZsNb5kVEjwsI=
+X-Google-Smtp-Source: AKy350bQ3fIfLy6btCgwToPkUIzYS2FCVZiNU6H5A1yDmDhqpOXUJ575ykKtCBiZenPiKTLxHQxC0TT3qII=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:df57:0:b0:b68:7b14:186b with SMTP id
- w84-20020a25df57000000b00b687b14186bmr751713ybg.1.1680739984384; Wed, 05 Apr
- 2023 17:13:04 -0700 (PDT)
-Date:   Wed, 5 Apr 2023 17:13:02 -0700
+ (user=seanjc job=sendgmr) by 2002:a05:6902:12c7:b0:b26:884:c35e with SMTP id
+ j7-20020a05690212c700b00b260884c35emr835123ybu.4.1680740339147; Wed, 05 Apr
+ 2023 17:18:59 -0700 (PDT)
+Date:   Wed,  5 Apr 2023 17:18:20 -0700
 In-Reply-To: <20230405101350.259000-1-gehao@kylinos.cn>
 Mime-Version: 1.0
 References: <20230405101350.259000-1-gehao@kylinos.cn>
-Message-ID: <ZC4OjuhPDlehRksi@google.com>
+X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
+Message-ID: <168074029572.706923.3161914837229872289.b4-ty@google.com>
 Subject: Re: [RESEND PATCH] kvm/selftests: Close opened file descriptor in stable_tsc_check_supported()
 From:   Sean Christopherson <seanjc@google.com>
-To:     Hao Ge <gehao@kylinos.cn>
-Cc:     pbonzini@redhat.com, shuah@kernel.org, dmatlack@google.com,
-        coltonlewis@google.com, vipinsh@google.com, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gehao618@163.com
-Content-Type: text/plain; charset="us-ascii"
+To:     Sean Christopherson <seanjc@google.com>, pbonzini@redhat.com,
+        shuah@kernel.org, dmatlack@google.com, coltonlewis@google.com,
+        vipinsh@google.com, Hao Ge <gehao@kylinos.cn>
+Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, gehao618@163.com
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Apr 05, 2023, Hao Ge wrote:
+On Wed, 05 Apr 2023 18:13:50 +0800, Hao Ge wrote:
 > Close the "current_clocksource" file descriptor before
 > returning or exiting from stable_tsc_check_supported()
 > in vmx_nested_tsc_scaling_test
 > 
-> Signed-off-by: Hao Ge <gehao@kylinos.cn>
-> ---
->  .../selftests/kvm/x86_64/vmx_nested_tsc_scaling_test.c    | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/kvm/x86_64/vmx_nested_tsc_scaling_test.c b/tools/testing/selftests/kvm/x86_64/vmx_nested_tsc_scaling_test.c
-> index d427eb146bc5..fa03c8d1ce4e 100644
-> --- a/tools/testing/selftests/kvm/x86_64/vmx_nested_tsc_scaling_test.c
-> +++ b/tools/testing/selftests/kvm/x86_64/vmx_nested_tsc_scaling_test.c
-> @@ -126,12 +126,16 @@ static void stable_tsc_check_supported(void)
->  		goto skip_test;
->  
->  	if (fgets(buf, sizeof(buf), fp) == NULL)
-> -		goto skip_test;
-> +		goto close_fp;
->  
->  	if (strncmp(buf, "tsc", sizeof(buf)))
-> -		goto skip_test;
-> +		goto close_fp;
->  
-> +	fclose(fp);
->  	return;
-> +
-> +close_fp:
-> +	fclose(fp);
->  skip_test:
->  	print_skip("Kernel does not use TSC clocksource - assuming that host TSC is not stable");
->  	exit(KSFT_SKIP);
 
-Actually, this can be streamlined by having the helper return a bool and punting
-the skip logic to TEST_REQUIRE.  I'll still apply this patch first, but I'll post
-a patch on top to yield:
+Applied to kvm-x86 selftests, thanks!
 
-static bool system_has_stable_tsc(void)
-{
-	bool tsc_is_stable;
-	FILE *fp;
-	char buf[4];
+[1/1] kvm/selftests: Close opened file descriptor in stable_tsc_check_supported()
+      https://github.com/kvm-x86/linux/commit/771214507387
 
-	fp = fopen("/sys/devices/system/clocksource/clocksource0/current_clocksource", "r");
-	if (fp == NULL)
-		return false;
-
-	tsc_is_stable = fgets(buf, sizeof(buf), fp) &&
-			!strncmp(buf, "tsc", sizeof(buf));
-
-	fclose(fp);
-	return tsc_is_stable;
-}
+--
+https://github.com/kvm-x86/linux/tree/next
+https://github.com/kvm-x86/linux/tree/fixes
