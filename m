@@ -2,107 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5A86C77B6E
-	for <linux-kselftest@archiver.kernel.org>; Thu,  6 Apr 2023 21:54:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A0078C77B6F
+	for <linux-kselftest@archiver.kernel.org>; Thu,  6 Apr 2023 21:55:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237326AbjDFVy6 (ORCPT
+        id S229586AbjDFVy7 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 6 Apr 2023 17:54:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42236 "EHLO
+        Thu, 6 Apr 2023 17:54:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230179AbjDFVy5 (ORCPT
+        with ESMTP id S231411AbjDFVy5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Thu, 6 Apr 2023 17:54:57 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12FC2A5FC;
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 863C0AD02;
         Thu,  6 Apr 2023 14:54:55 -0700 (PDT)
 From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
         s=mail; t=1680818092;
-        bh=3MGSvpy8BgTYO3uiUf6A95riQqbsUtkLORdyUz+rY5k=;
+        bh=OcgnK0Ms7iKUc3TQe2cs92M6mnXoTMxMYhUD6BUEzjE=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=YhGVNWFGblJqJWs5/gQoihyXPPCDuEPXbZVJP3XV1KRglAlmIcWaBwLqf/H8CJ61E
-         h516d2nFvm/zpOQzOkzlUm9KDG/erlCOyqOb1eUYQ8TrgbiDK0AktAMBIxMJpHXeyb
-         htTcz/aZN9FBqV+Ilblc8tuBMwE0h+70rHE1fvp0=
-Date:   Thu, 06 Apr 2023 21:54:50 +0000
-Subject: [PATCH v2 04/11] tools/nolibc: x86_64: use C89 comment syntax
+        b=Al7o5EBhk9fVdcBzYPZEdaPJHwKO2ORtiubgQZ+/zeKtZH6A0vekJi37Qe1qWNhcX
+         BWroDIsn/txxYpbjETqAP/Ac7n8RyicjGXxEpnC9/6ey/4FNmPKbKEsvX/Mt1bHOkK
+         0p8qAjfC4Opqv6OzMwTji3UZvGD7bwYMUnH2b1uw=
+Date:   Thu, 06 Apr 2023 21:54:47 +0000
+Subject: [PATCH v2 01/11] tools/nolibc: use standard __asm__ statements
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20230328-nolibc-c99-v2-4-c989f2289222@weissschuh.net>
+Message-Id: <20230328-nolibc-c99-v2-1-c989f2289222@weissschuh.net>
 References: <20230328-nolibc-c99-v2-0-c989f2289222@weissschuh.net>
 In-Reply-To: <20230328-nolibc-c99-v2-0-c989f2289222@weissschuh.net>
 To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1680818091; l=3259;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1680818091; l=1491;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=3MGSvpy8BgTYO3uiUf6A95riQqbsUtkLORdyUz+rY5k=;
- b=D61vWCH2rhmbgKzdGMopqMSfr6vlwxQF6lgD+EmocanAw8HUPZ5lsikNV4rCjvpy4Ap9DnS3n
- UqAEckRLu2hC/F8gM0MCVDKvCw3U1fBZeVqtWY94dhtzAONYuK4jsiW
+ bh=OcgnK0Ms7iKUc3TQe2cs92M6mnXoTMxMYhUD6BUEzjE=;
+ b=/tLhsCm0o1ql7hDEB3NMPFg2Mw9aY+TDPxcepfXwZ3cfGVm7hLaY7Gftn6wrO02BFbkXeIaOh
+ 4A+bOEa+Bq1BrgsxG2EClk9aWzQio0erKF1n/E6RFFmCOx/zDQXvZu/
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Most of nolibc is already using C89 comments.
+Most of the code was migrated to C99-conformant __asm__ statements
+before. It seems string.h was missed.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- tools/include/nolibc/arch-x86_64.h | 34 +++++++++++++++++-----------------
- 1 file changed, 17 insertions(+), 17 deletions(-)
+ tools/include/nolibc/string.h                | 4 ++--
+ tools/testing/selftests/nolibc/nolibc-test.c | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/tools/include/nolibc/arch-x86_64.h b/tools/include/nolibc/arch-x86_64.h
-index f7f2a11d4c3b..d98f6c89d143 100644
---- a/tools/include/nolibc/arch-x86_64.h
-+++ b/tools/include/nolibc/arch-x86_64.h
-@@ -194,27 +194,27 @@ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) _start(void)
- {
- 	__asm__ volatile (
- #ifdef NOLIBC_STACKPROTECTOR
--		"call __stack_chk_init\n"   // initialize stack protector
-+		"call __stack_chk_init\n"   /* initialize stack protector                          */
- #endif
--		"pop %rdi\n"                // argc   (first arg, %rdi)
--		"mov %rsp, %rsi\n"          // argv[] (second arg, %rsi)
--		"lea 8(%rsi,%rdi,8),%rdx\n" // then a NULL then envp (third arg, %rdx)
--		"mov %rdx, environ\n"       // save environ
--		"xor %ebp, %ebp\n"          // zero the stack frame
--		"mov %rdx, %rax\n"          // search for auxv (follows NULL after last env)
-+		"pop %rdi\n"                /* argc   (first arg, %rdi)                            */
-+		"mov %rsp, %rsi\n"          /* argv[] (second arg, %rsi)                           */
-+		"lea 8(%rsi,%rdi,8),%rdx\n" /* then a NULL then envp (third arg, %rdx)             */
-+		"mov %rdx, environ\n"       /* save environ                                        */
-+		"xor %ebp, %ebp\n"          /* zero the stack frame                                */
-+		"mov %rdx, %rax\n"          /* search for auxv (follows NULL after last env)       */
- 		"0:\n"
--		"add $8, %rax\n"            // search for auxv using rax, it follows the
--		"cmp -8(%rax), %rbp\n"      // ... NULL after last env (rbp is zero here)
-+		"add $8, %rax\n"            /* search for auxv using rax, it follows the           */
-+		"cmp -8(%rax), %rbp\n"      /* ... NULL after last env (rbp is zero here)          */
- 		"jnz 0b\n"
--		"mov %rax, _auxv\n"         // save it into _auxv
--		"and $-16, %rsp\n"          // x86 ABI : esp must be 16-byte aligned before call
--		"call main\n"               // main() returns the status code, we'll exit with it.
--		"mov %eax, %edi\n"          // retrieve exit code (32 bit)
--		"mov $60, %eax\n"           // NR_exit == 60
--		"syscall\n"                 // really exit
--		"hlt\n"                     // ensure it does not return
-+		"mov %rax, _auxv\n"         /* save it into _auxv                                  */
-+		"and $-16, %rsp\n"          /* x86 ABI : esp must be 16-byte aligned before call   */
-+		"call main\n"               /* main() returns the status code, we'll exit with it. */
-+		"mov %eax, %edi\n"          /* retrieve exit code (32 bit)                         */
-+		"mov $60, %eax\n"           /* NR_exit == 60                                       */
-+		"syscall\n"                 /* really exit                                         */
-+		"hlt\n"                     /* ensure it does not return                           */
- 	);
- 	__builtin_unreachable();
+diff --git a/tools/include/nolibc/string.h b/tools/include/nolibc/string.h
+index fffdaf6ff467..0c2e06c7c477 100644
+--- a/tools/include/nolibc/string.h
++++ b/tools/include/nolibc/string.h
+@@ -90,7 +90,7 @@ void *memset(void *dst, int b, size_t len)
+ 
+ 	while (len--) {
+ 		/* prevent gcc from recognizing memset() here */
+-		asm volatile("");
++		__asm__ volatile("");
+ 		*(p++) = b;
+ 	}
+ 	return dst;
+@@ -139,7 +139,7 @@ size_t strlen(const char *str)
+ 	size_t len;
+ 
+ 	for (len = 0; str[len]; len++)
+-		asm("");
++		__asm__("");
+ 	return len;
  }
  
--#endif // _NOLIBC_ARCH_X86_64_H
-+#endif /* _NOLIBC_ARCH_X86_64_H */
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index 888da60eb5ba..e692be98973a 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -984,7 +984,7 @@ int main(int argc, char **argv, char **envp)
+ #else
+ 		else if (ioperm(0x501, 1, 1) == 0)
+ #endif
+-			asm volatile ("outb %%al, %%dx" :: "d"(0x501), "a"(0));
++			__asm__ volatile ("outb %%al, %%dx" :: "d"(0x501), "a"(0));
+ 		/* if it does nothing, fall back to the regular panic */
+ #endif
+ 	}
 
 -- 
 2.40.0
