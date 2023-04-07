@@ -2,237 +2,111 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 175A5C76196
-	for <linux-kselftest@archiver.kernel.org>; Fri,  7 Apr 2023 07:35:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E869CC6FD1D
+	for <linux-kselftest@archiver.kernel.org>; Fri,  7 Apr 2023 08:46:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238783AbjDGHfC (ORCPT
+        id S232108AbjDGIq7 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 7 Apr 2023 03:35:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33744 "EHLO
+        Fri, 7 Apr 2023 04:46:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232563AbjDGHez (ORCPT
+        with ESMTP id S239799AbjDGIq6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 7 Apr 2023 03:34:55 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 959D2A26A
-        for <linux-kselftest@vger.kernel.org>; Fri,  7 Apr 2023 00:34:53 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-93434918b67so135664066b.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 07 Apr 2023 00:34:53 -0700 (PDT)
+        Fri, 7 Apr 2023 04:46:58 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E0D8A79
+        for <linux-kselftest@vger.kernel.org>; Fri,  7 Apr 2023 01:46:53 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id d22-20020a17090a111600b0023d1b009f52so864466pja.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 07 Apr 2023 01:46:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680852892;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=bytedance.com; s=google; t=1680857213;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xufJewXyhNV91ceoQQRbqkfFuhj5XUSD9386rC0IB28=;
-        b=gDMbr9D7tJfW5EhGD1TauIK78v+jZ7HUY7e7xfnLQhu1bEnuRBb0SqZjJ51+UqnBdc
-         QrABNaCBE42IvweCIbz+OmT7FfcD6fDU31Aj8En6ELtBabJM0gTH+lLXGmKH/DZRtp+P
-         FfNP2yFQVIMY0xfUglALIrdcxAM40WZgLRaKlFjvmvF8nzE0LpLZqVSTArizOpK6o86n
-         F59MbAyWPqLUz1onQKYeDGol9W6HmV3j24HnaNBKgFUPpu5qPJSUTORcD+uWZSzrhoJH
-         Gft2x4kLBBdmGR32hJdvvPnUqtQCfIryMpFtmCWIgxEzTKwurrEKiBUVgyu4XHizGsur
-         iMhQ==
+        bh=FVi0AWiu1zAkxzg8zSlzsBAWbtMyPsv5tFRVM1WnV2A=;
+        b=YjtReY6YH5PgBWUNe8+Zz4g/S7AxXP6Ok/jQUc4jyUj8R+tDpnsYdLbh8/iMw2v+Jv
+         P23WAr2SOl8H6ECcKcyL7BfAoR+jwoW5qbOL9VtenUVOu/XpVntsOtakSPjqNpj9SBfI
+         2btr4MW/LNfAmx4og6Fbif4/zshs0ZWo3bs8VJT4aeAh9+Z/rTf6LQ/Ewh8uNxiIyqh8
+         /NvMpNeaBAFmvi635Gy7rT3iNd7KLX9AbDcfGQkw/CyU8p55KmHTE/GF27WcJebT51A3
+         xWjGoGrkccsgK0wUmabcpFmK6SbB7An3As2nt521xR37SML4gDfm6L2iCFCySbEIU8HK
+         KQTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680852892;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1680857213;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xufJewXyhNV91ceoQQRbqkfFuhj5XUSD9386rC0IB28=;
-        b=QaXgBfCgg8eLEdDOKIwT2uOz2c2niL+cPwtueUSrzve3Zr+dajSoCDebSz+Lnw5NwU
-         5HW0ZtG5XSogH49iz3RTyNb/DxgI4Fo0OXzar+gjZuljdVbI4nAnO2DzZAQKYZrNCIvo
-         Z5XIygVOpEh6Y5NoIjRlT865vELJpZ0mcWWoYb7mrS3X02L6OfkPH+ufGx3PbNzm7gto
-         L0q4uBhzZt0ikXV8F714uitAYW+65A2OdrlAM6Ru9BPPVdUl4/awNtBkqmVW0iGKxun3
-         KbWwlt4bSHXzb0QIOGTSZr6wpWJ7Sw56+N0fGOOZgmUFKRQffVFY7QkRruk9awJ8uxiJ
-         e+yg==
-X-Gm-Message-State: AAQBX9c8mptU+3KPglYxYxbinEwCXpienjW9NlNLop1f0a9+rX89p2k1
-        YdmAm8/xXuDMIPr7l+HnSrO5cpNdDtxHTBo84Zi2Mw==
-X-Google-Smtp-Source: AKy350bF8961SbdQkzvhhN/J2V2TxAtpP2NJYlX5JDDN+lnoULk6K/VoRyybz83rRM6Adk8ORW5BfMtw4ISKJ9e8OKk=
-X-Received: by 2002:a50:d716:0:b0:502:6d4b:40f5 with SMTP id
- t22-20020a50d716000000b005026d4b40f5mr997137edi.7.1680852891875; Fri, 07 Apr
- 2023 00:34:51 -0700 (PDT)
+        bh=FVi0AWiu1zAkxzg8zSlzsBAWbtMyPsv5tFRVM1WnV2A=;
+        b=Awz/4mOi6LSOgmpbKP6yMphyfjgmk1uXyx/CefYzaExAnwdEm+xtPUbyq9SrzRrwXy
+         aQsDqWoiboTZ/VjggYzQ6fZgnJs5HzkjSFnPqKij6btGsYuy0nUVjjDTAe9kbI269NBJ
+         9+uk9qm24UVXxpjnOq+RmPwBdKpHOxxO2Opb/TLwwqcaUg/Y/D2PZsE11LU1aaMKAopA
+         y3g7TibgSlw2BuTGVedd5nDQtMgD1xiX7NRI9OX7yuHN6LvcwoIxsveDmtYhyQSm7lSC
+         ICxKdLJn1JSe+LSp3tCbm9AzBm2vbHhUitsDgCQ+njIzF58hutgetBg/+s/uzL3UYRCH
+         IgdQ==
+X-Gm-Message-State: AAQBX9e3Bwlk9WoVjyFn8aAX1Xp+o+pL9kIrFbVMX1haZ1R/aadbcdrF
+        PQ6q6slD/bZaa9Tj6FIzIS5PQQ==
+X-Google-Smtp-Source: AKy350bzeTj5bfaWlrevCPwRsEkQ42Pd5eqaKyCwfP9XiQJ2/nx1laJP+4SSVAhR8jdFnKHsZw+QhA==
+X-Received: by 2002:a17:90b:4a0a:b0:23b:3d6e:1ed with SMTP id kk10-20020a17090b4a0a00b0023b3d6e01edmr1732441pjb.13.1680857213186;
+        Fri, 07 Apr 2023 01:46:53 -0700 (PDT)
+Received: from C02F52LSML85.bytedance.net ([139.177.225.238])
+        by smtp.gmail.com with ESMTPSA id s13-20020a17090a5d0d00b0023b3d80c76csm2333676pji.4.2023.04.07.01.46.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Apr 2023 01:46:52 -0700 (PDT)
+From:   Feng zhou <zhoufeng.zf@bytedance.com>
+To:     martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        mykolal@fb.com, shuah@kernel.org
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        yangzhenze@bytedance.com, wangdongdong.6@bytedance.com,
+        zhouchengming@bytedance.com, zhoufeng.zf@bytedance.com
+Subject: [PATCH v2 1/2] bpf/btf: Fix is_int_ptr()
+Date:   Fri,  7 Apr 2023 16:46:07 +0800
+Message-Id: <20230407084608.62296-2-zhoufeng.zf@bytedance.com>
+X-Mailer: git-send-email 2.39.2 (Apple Git-143)
+In-Reply-To: <20230407084608.62296-1-zhoufeng.zf@bytedance.com>
+References: <20230407084608.62296-1-zhoufeng.zf@bytedance.com>
 MIME-Version: 1.0
-References: <20230406074005.1784728-1-usama.anjum@collabora.com>
- <20230406074005.1784728-3-usama.anjum@collabora.com> <CABb0KFHZpYVML2e+Xg9+kwjyhqQkikPBhymO=EXoQnO2xjfG4g@mail.gmail.com>
- <0351b563-5193-6431-aa9c-c5bf5741b791@collabora.com> <CABb0KFE4ruptVXDpCk5MB6nkh9WeKTcKfROnx0ecoy-k1eCKCw@mail.gmail.com>
- <8a837998-604f-a871-729e-aa274a621481@collabora.com>
-In-Reply-To: <8a837998-604f-a871-729e-aa274a621481@collabora.com>
-From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-Date:   Fri, 7 Apr 2023 09:34:40 +0200
-Message-ID: <CABb0KFEBqAMWWpAeBfqzA4JrHo3yLyaT0rqKTUn28O0hE+szBA@mail.gmail.com>
-Subject: Re: [PATCH v12 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Mike Rapoport <rppt@kernel.org>, Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 6 Apr 2023 at 23:04, Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
-> On 4/7/23 1:00=E2=80=AFAM, Micha=C5=82 Miros=C5=82aw wrote:
-> > On Thu, 6 Apr 2023 at 19:58, Muhammad Usama Anjum
-> > <usama.anjum@collabora.com> wrote:
-[...]
-> >>>> +               cur->len +=3D n_pages;
-> >>>> +               p->found_pages +=3D n_pages;
-> >>>> +
-> >>>> +               if (p->max_pages && (p->found_pages =3D=3D p->max_pa=
-ges))
-> >>>> +                       return PM_SCAN_FOUND_MAX_PAGES;
-> >>>> +
-> >>>> +               return 0;
-> >>>> +       }
-> >>>> +
-> >>>> +       if (!p->vec_index || ((p->vec_index + 1) < p->vec_len)) {
-> >>>
-> >>> It looks that `if (p->vec_index < p->vec_len)` is enough here - if we
-> >>> have vec_len =3D=3D 0 here, then we'd not fit the entry in the usersp=
-ace
-> >>> buffer anyway. Am I missing something?
-> >> No. I'd explained it with diagram last time:
-> >> https://lore.kernel.org/all/3c8d9ea0-1382-be0c-8dd2-d490eedd3b55@colla=
-bora.com
-> >>
-> >> I'll add a concise comment here.
-> >
-> > So it seems, but I think the code changed a bit and maybe could be
-> > simplified now? Since p->vec_len =3D=3D 0 is currently not valid, the
-> > field could count only the entries available in p->vec[] -- IOW: not
-> > include p->cur in the count.
-> I see. But this'll not work as we need to count p->cur to don't go above
-> the maximum count, p->vec_size.
+From: Feng Zhou <zhoufeng.zf@bytedance.com>
 
-You can subtract 1 from p->vec_size before the page walk to account
-for the buffer in `cur`.
+When tracing a kernel function with arg type is u32*, btf_ctx_access()
+would report error: arg2 type INT is not a struct.
 
-[...]
-> >>>> +static inline int pagemap_scan_deposit(struct pagemap_scan_private =
-*p,
-> >>>> +                                      struct page_region __user *ve=
-c,
-> >>>> +                                      unsigned long *vec_index)
-> >>>
-> >>> ..._deposit() is used only in single place - please inline.
-> >> It is already inline.
-> >
-> > Sorry. I mean: please paste the code in place of the single call.
-> I've made it a separate function to make the code look better in the call=
-er
-> function and logically easier to understand. This function is ugly.
-> do_pagemap_scan() is also already very long function with lots of things
-> happening. If you still insist, I'll remove this function.
+The commit bb6728d75611 ("bpf: Allow access to int pointer arguments
+in tracing programs") added support for int pointer, but don't skip
+modifiers before checking it's type. This patch fixes it.
 
-Please do remove - it will make the copy to userspace code all neatly toget=
-her.
+Fixes: bb6728d75611 ("bpf: Allow access to int pointer arguments in tracing programs")
+Co-developed-by: Chengming Zhou <zhouchengming@bytedance.com>
+Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
+---
+ kernel/bpf/btf.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-[...]
-> >>>> +                */
-> >>>> +               if (is_written && PM_SCAN_OP_IS_WP(p) &&
-> >>>> +                   ((end - start < HPAGE_SIZE) ||
-> >>>> +                    (p->max_pages &&
-> >>>> +                     (p->max_pages - p->found_pages) < n_pages))) {
-> >>>> +
-> >>>> +                       split_huge_pmd(vma, pmd, start);
-> >>>> +                       goto process_smaller_pages;
-> >>>> +               }
-> >>>> +
-> >>>> +               if (p->max_pages &&
-> >>>> +                   p->found_pages + n_pages > p->max_pages)
-> >>>> +                       n_pages =3D p->max_pages - p->found_pages;
-> >>>> +
-> >>>> +               ret =3D pagemap_scan_output(is_written, is_file, is_=
-present,
-> >>>> +                                         is_swap, p, start, n_pages=
-);
-> >>>> +               if (ret < 0)
-> >>>> +                       return ret;
-> >
-> > So let's simplify this:
-> >
-> > if (p->max_pages && n_pages > max_pages - found_pages)
-> >   n_pages =3D max_pages - found_pages;
-> >
-> > if (is_written && DO_WP && n_pages !=3D HPAGE_SIZE / PAGE_SIZE) {
-> >   split_thp();
-> >   goto process_smaller_pages;
-> > }
-> Clever!! This looks very sleek.
->
-> >
-> > BTW, THP handling could be extracted to a function that would return
-> > -EAGAIN if it has split the page or it wasn't a THP -- and that would
-> > mean `goto process_smaller_pages`.
-> Other functions in this file handle the THP in this same way. So it feels
-> like more intuitive that we follow to same pattern in this file.
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 593c45a294d0..17c65de1e48b 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -5913,9 +5913,8 @@ static bool is_int_ptr(struct btf *btf, const struct btf_type *t)
+ 	/* t comes in already as a pointer */
+ 	t = btf_type_by_id(btf, t->type);
+ 
+-	/* allow const */
+-	if (BTF_INFO_KIND(t->info) == BTF_KIND_CONST)
+-		t = btf_type_by_id(btf, t->type);
++	/* skip modifiers */
++	t = btf_type_skip_modifiers(btf, t->type, NULL);
+ 
+ 	return btf_type_is_int(t);
+ }
+-- 
+2.20.1
 
-I'll leave it to you. Extracting THP support would avoid a goto and
-#ifdef inside a function, though (and make the function smaller).
-
-> >>>> +       /*
-> >>>> +        * Allocate smaller buffer to get output from inside the pag=
-e walk
-> >>>> +        * functions and walk page range in PAGEMAP_WALK_SIZE size c=
-hunks. As
-> >>>> +        * we want to return output to user in compact form where no=
- two
-> >>>> +        * consecutive regions should be continuous and have the sam=
-e flags.
-> >>>> +        * So store the latest element in p.cur between different wa=
-lks and
-> >>>> +        * store the p.cur at the end of the walk to the user buffer=
-.
-> >>>> +        */
-> >>>> +       p.vec =3D kmalloc_array(p.vec_len, sizeof(struct page_region=
-),
-> >>>> +                             GFP_KERNEL);
-> >>>> +       if (!p.vec)
-> >>>> +               return -ENOMEM;
-> >>>> +
-> >>>> +       walk_start =3D walk_end =3D start;
-> >>>> +       while (walk_end < end && !ret) {
-> >>>
-> >>> The loop will stop if a previous iteration returned ENOSPC (and the
-> >>> error will be lost) - is it intended?
-> >> It is intentional. -ENOSPC means that the user buffer is full even tho=
-ugh
-> >> there was more memory to walk over. We don't treat this error. So when
-> >> buffer gets full, we stop walking over further as user buffer has gott=
-en
-> >> full and return as success.
-> >
-> > Thanks. What's the difference between -ENOSPC and
-> > PM_SCAN_FOUND_MAX_PAGES? They seem to result in the same effect (code
-> > flow).
-> -ENOSPC --> user buffer has been filled completely
-> PM_SCAN_FOUND_MAX_PAGES --> max_pages have been found, user buffer may
->                             still have more space
-
-What is the difference in code behaviour when those two cases are
-compared? (I'd expect none.)
-
-Best Regards
-Micha=C5=82 Miros=C5=82aw
