@@ -2,51 +2,51 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D1EEC77B70
-	for <linux-kselftest@archiver.kernel.org>; Tue, 11 Apr 2023 16:01:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C2DCC77B76
+	for <linux-kselftest@archiver.kernel.org>; Tue, 11 Apr 2023 16:01:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbjDKQBy (ORCPT
+        id S229914AbjDKQBz (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 11 Apr 2023 12:01:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53798 "EHLO
+        Tue, 11 Apr 2023 12:01:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229914AbjDKQBY (ORCPT
+        with ESMTP id S229925AbjDKQBY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Tue, 11 Apr 2023 12:01:24 -0400
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E8D049FA
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 021FC3594
         for <linux-kselftest@vger.kernel.org>; Tue, 11 Apr 2023 09:01:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1681228882; x=1712764882;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=i2C6HVcldbHRC+EVsJimv+eCkqn6k5GMHuuTW5O2y7c=;
-  b=XtkDT+bTivN1Et0W0A9obcHTL1JZ2rYCbwIyVOHyt9+HcbddydJgRdcN
-   kcoZzZ1Oxsktu2oTxbaXLTQj5nWSkUlAd59JOGn3Z4D5yul3B5oc+tFGy
-   MP5QDTm2cjScNUalyE9EVDsYt320al7hb6UQDHO8DhanVnDuGPblbR/1V
-   tAFySuNXgQhL3VDUmMPqwsKxkYjpBmUqonQ0hlQn56UnWficFh1IQ2hQ6
-   wA9I44wV3QE1i8BNn23/MbD9AeloxxpBKvLBW3BKqT6V6A3HcEIFqGuGx
-   V4NlXZEFqF0XRLcSrEx3N12NxPwacLp/j5XWb9mFNfTwUWRO/wr2VJ7cC
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="341149064"
+  bh=8h9zsN6Q/5dlNLUFk19BumoHl+8mwQn+6CuUCd7CzaI=;
+  b=CdaowFB8id1DSm3+Hssvd+r9H4H3GnQLiE8jt9gDr6r8J+gNKMF22PNy
+   dCRVAQ1Z9WVpvJ+d3gZOs+Z3i0MW2yKz5j0L5yYUi7Nj6ejAEjYtfQLRf
+   e16DUWYKN4ZUgH9Z+85wF//5rAzlOGPw67FVxZeLhjgaiCe+m/ANPc1d4
+   2EpEpnYogdJxoLAeGkYiZd1aSk9H70G2hi+EOwhgxsHBwq1EdJCUukVGl
+   3qhYcEYqhMlJUZXVSiv9megwqLtDs863X86PHHIDKS2zGTusq3JFdaPC1
+   YPJYFNqHm8AaCoRYMCJcOQYtX5gTPcY45cnz17mnzavvcgrn7NTdk0N+/
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="341149085"
 X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="341149064"
+   d="scan'208";a="341149085"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 09:01:17 -0700
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 09:01:20 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="777972291"
+X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="777972316"
 X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="777972291"
+   d="scan'208";a="777972316"
 Received: from mwajdecz-mobl.ger.corp.intel.com ([10.249.133.24])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 09:01:15 -0700
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 09:01:18 -0700
 From:   Michal Wajdeczko <michal.wajdeczko@intel.com>
 To:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
 Cc:     Michal Wajdeczko <michal.wajdeczko@intel.com>,
         David Gow <davidgow@google.com>
-Subject: [PATCH 1/3] kunit/test: Add example test showing parameterized testing
-Date:   Tue, 11 Apr 2023 18:00:54 +0200
-Message-Id: <20230411160056.1586-2-michal.wajdeczko@intel.com>
+Subject: [PATCH 3/3] kunit: Update reporting function to support results from subtests
+Date:   Tue, 11 Apr 2023 18:00:56 +0200
+Message-Id: <20230411160056.1586-4-michal.wajdeczko@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20230411160056.1586-1-michal.wajdeczko@intel.com>
 References: <20230411160056.1586-1-michal.wajdeczko@intel.com>
@@ -56,69 +56,85 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Use of parameterized testing is documented [1] but such use case
-is not present in demo kunit test. Add small subtest for that.
-
-[1] https://kernel.org/doc/html/latest/dev-tools/kunit/usage.html#parameterized-testing
+There is function to report status of either suite or test, but it
+doesn't support parameterized subtests that have to log report on
+its own. Extend it to also accept subtest level results to avoid
+code duplication.
 
 Signed-off-by: Michal Wajdeczko <michal.wajdeczko@intel.com>
 Cc: David Gow <davidgow@google.com>
 ---
- lib/kunit/kunit-example-test.c | 34 ++++++++++++++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ lib/kunit/test.c | 28 +++++++++++++++++-----------
+ 1 file changed, 17 insertions(+), 11 deletions(-)
 
-diff --git a/lib/kunit/kunit-example-test.c b/lib/kunit/kunit-example-test.c
-index cd8b7e51d02b..775443f77763 100644
---- a/lib/kunit/kunit-example-test.c
-+++ b/lib/kunit/kunit-example-test.c
-@@ -167,6 +167,39 @@ static void example_static_stub_test(struct kunit *test)
- 	KUNIT_EXPECT_EQ(test, add_one(1), 2);
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index 5679197b5f8a..692fce258c5b 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -154,8 +154,14 @@ static void kunit_print_suite_start(struct kunit_suite *suite)
+ 		  kunit_suite_num_test_cases(suite));
  }
  
-+static const struct example_param {
-+	int value;
-+} example_params_array[] = {
-+	{ .value = 2, },
-+	{ .value = 1, },
-+	{ .value = 0, },
++enum kunit_test_or_suite {
++	KUNIT_SUITE = 0,
++	KUNIT_TEST,
++	KUNIT_SUBTEST,
 +};
 +
-+static void example_param_get_desc(const struct example_param *p, char *desc)
-+{
-+	snprintf(desc, KUNIT_PARAM_DESC_SIZE, "example value %d", p->value);
-+}
-+
-+KUNIT_ARRAY_PARAM(example, example_params_array, example_param_get_desc);
-+
-+/*
-+ * This test shows the use of params.
-+ */
-+static void example_params_test(struct kunit *test)
-+{
-+	const struct example_param *param = test->param_value;
-+
-+	/* By design, param pointer will not be NULL */
-+	KUNIT_ASSERT_NOT_NULL(test, param);
-+
-+	/* Test can be skipped on unsupported param values */
-+	if (!param->value)
-+		kunit_skip(test, "unsupported param value");
-+
-+	/* You can use param values for parameterized testing */
-+	KUNIT_EXPECT_EQ(test, param->value % param->value, 0);
-+}
-+
- /*
-  * Here we make a list of all the test cases we want to add to the test suite
-  * below.
-@@ -183,6 +216,7 @@ static struct kunit_case example_test_cases[] = {
- 	KUNIT_CASE(example_mark_skipped_test),
- 	KUNIT_CASE(example_all_expect_macros_test),
- 	KUNIT_CASE(example_static_stub_test),
-+	KUNIT_CASE_PARAM(example_params_test, example_gen_params),
- 	{}
- };
+ static void kunit_print_ok_not_ok(void *test_or_suite,
+-				  bool is_test,
++				  enum kunit_test_or_suite is_test,
+ 				  enum kunit_status status,
+ 				  size_t test_number,
+ 				  const char *description,
+@@ -180,7 +186,9 @@ static void kunit_print_ok_not_ok(void *test_or_suite,
+ 			(status == KUNIT_SKIPPED) ? directive : "");
+ 	else
+ 		kunit_log(KERN_INFO, test,
+-			  KUNIT_SUBTEST_INDENT "%s %zd %s%s%s",
++			  "%.*s%s %zd %s%s%s",
++			  (int) strlen(KUNIT_SUBTEST_INDENT) * is_test,
++			  KUNIT_SUBTEST_INDENT KUNIT_SUBTEST_INDENT,
+ 			  kunit_status_to_ok_not_ok(status),
+ 			  test_number, description, directive_header,
+ 			  (status == KUNIT_SKIPPED) ? directive : "");
+@@ -209,7 +217,7 @@ static size_t kunit_suite_counter = 1;
  
+ static void kunit_print_suite_end(struct kunit_suite *suite)
+ {
+-	kunit_print_ok_not_ok((void *)suite, false,
++	kunit_print_ok_not_ok((void *)suite, KUNIT_SUITE,
+ 			      kunit_suite_has_succeeded(suite),
+ 			      kunit_suite_counter++,
+ 			      suite->name,
+@@ -554,13 +562,11 @@ int kunit_run_tests(struct kunit_suite *suite)
+ 						 "param-%d", test.param_index);
+ 				}
+ 
+-				kunit_log(KERN_INFO, &test,
+-					  KUNIT_SUBTEST_INDENT KUNIT_SUBTEST_INDENT
+-					  "%s %d %s%s%s",
+-					  kunit_status_to_ok_not_ok(test.status),
+-					  test.param_index + 1, param_desc,
+-					  test.status == KUNIT_SKIPPED ? " # SKIP " : "",
+-					  test.status == KUNIT_SKIPPED ? test.status_comment : "");
++				kunit_print_ok_not_ok(&test, KUNIT_SUBTEST,
++						      test.status,
++						      test.param_index + 1,
++						      param_desc,
++						      test.status_comment);
+ 
+ 				/* Get next param. */
+ 				param_desc[0] = '\0';
+@@ -574,7 +580,7 @@ int kunit_run_tests(struct kunit_suite *suite)
+ 
+ 		kunit_print_test_stats(&test, param_stats);
+ 
+-		kunit_print_ok_not_ok(&test, true, test_case->status,
++		kunit_print_ok_not_ok(&test, KUNIT_TEST, test_case->status,
+ 				      kunit_test_case_num(suite, test_case),
+ 				      test_case->name,
+ 				      test.status_comment);
 -- 
 2.25.1
 
