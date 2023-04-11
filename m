@@ -2,108 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA277C76196
-	for <linux-kselftest@archiver.kernel.org>; Tue, 11 Apr 2023 14:27:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C38AC77B6F
+	for <linux-kselftest@archiver.kernel.org>; Tue, 11 Apr 2023 14:31:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229721AbjDKO1L (ORCPT
+        id S229964AbjDKObe (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 11 Apr 2023 10:27:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34448 "EHLO
+        Tue, 11 Apr 2023 10:31:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230384AbjDKO1A (ORCPT
+        with ESMTP id S229797AbjDKObT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 11 Apr 2023 10:27:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C13149FA
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Apr 2023 07:25:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681223133;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kMuXjs2koZ/Flt7PJQx7eiW1x5ktANLpUol8YMKeKVs=;
-        b=jH4I4lgufgNcKog7oMzVI1YUzAU0IZoEHExeSqY4Oka0Eo7hOhcv6hrf4xGt8/DfUd3xXP
-        1feipEV39BuTS6mMsEOi6hzBFoL1XBBjVfXcbhj6Ru5ELbC3AN9+i5em3hHiRuXztLShnt
-        uL5tu3TMnCtOgXBPETEnpkerdRo3axc=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-497-HXPMVzgwN7ms9In_1b7_gA-1; Tue, 11 Apr 2023 10:25:29 -0400
-X-MC-Unique: HXPMVzgwN7ms9In_1b7_gA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 11 Apr 2023 10:31:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3DB246A4;
+        Tue, 11 Apr 2023 07:31:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EF19628237D4;
-        Tue, 11 Apr 2023 14:25:28 +0000 (UTC)
-Received: from t480s.redhat.com (unknown [10.39.194.95])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CA53914171D7;
-        Tue, 11 Apr 2023 14:25:26 +0000 (UTC)
-From:   David Hildenbrand <david@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        sparclinux@vger.kernel.org, David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Peter Xu <peterx@redhat.com>, Hugh Dickins <hughd@google.com>,
-        Shuah Khan <shuah@kernel.org>, Sam Ravnborg <sam@ravnborg.org>,
-        Yu Zhao <yuzhao@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>
-Subject: [PATCH v1 RESEND 5/6] mm/huge_memory: revert "Partly revert "mm/thp: carry over dirty bit when thp splits on pmd""
-Date:   Tue, 11 Apr 2023 16:25:11 +0200
-Message-Id: <20230411142512.438404-6-david@redhat.com>
-In-Reply-To: <20230411142512.438404-1-david@redhat.com>
-References: <20230411142512.438404-1-david@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 65FAA61DB6;
+        Tue, 11 Apr 2023 14:31:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D21C5C433EF;
+        Tue, 11 Apr 2023 14:31:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681223475;
+        bh=FxshusFhkLSqD8VVFjKAZ0lTKteKhqRO31rZyJhDFaw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DPi6ss7Cj9TPuKQ+4yhmLMQqjuvGY3aLMiq6Z4PI3hXcK4Uh2EdVZ+C+SMar2lmuk
+         O9Yc+71Z0yCO9y39kgnZUz5iSRqjl+tnvvL6/mmjsYm1S4nolpwQyVSfmInlO7+XIZ
+         JC2u+EbHSoxYw10i+5OxSMT85dZ5fjx3TeMIuBQL7RuOksnggGIrt3hYgHcSzfDxK1
+         hEup2sAqXgZReh5GMSlkNu0tOk5YY62/DL73El/UbwxF7t7D+v6GefFYHIHpZR4aLO
+         lMc+fC80ZOxwEvXUsxEFBpwX9YpOkVbocsC3zi2fHAtdJLEkk/cwJyi5uGhGMvcXVd
+         ZLX0ceZaLq5ag==
+Date:   Tue, 11 Apr 2023 15:31:10 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     paulmck@kernel.org, Willy Tarreau <w@1wt.eu>,
+        Shuah Khan <shuah@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] tools/nolibc/stdio: Implement vprintf()
+Message-ID: <9dfb88e8-2a61-47a8-876e-581e4c717217@sirena.org.uk>
+References: <20230405-kselftest-nolibc-v2-0-2ac2495814b5@kernel.org>
+ <20230405-kselftest-nolibc-v2-1-2ac2495814b5@kernel.org>
+ <ZC8OwUPAC4s413jP@1wt.eu>
+ <cbece9a0-b8d0-4f3e-9a55-9fe87e111392@paulmck-laptop>
+ <fc52d5c1-61db-b8e3-e608-12434b0ee740@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ikaMBnalE2kSmUMA"
+Content-Disposition: inline
+In-Reply-To: <fc52d5c1-61db-b8e3-e608-12434b0ee740@linuxfoundation.org>
+X-Cookie: In the war of wits, he's unarmed.
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This reverts commit 624a2c94f5b7 ("Partly revert "mm/thp: carry over dirty
-bit when thp splits on pmd"") and the fixup in commit e833bc503405
-("mm/thp: re-apply mkdirty for small pages after split").
 
-Now that sparc64 mkdirty handling is fixed and no longer sets a PTE/PMD
-writable that shouldn't be writable, let's revert the temporary fix and
-remove the stale comment.
+--ikaMBnalE2kSmUMA
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-The mkdirty mm selftest still passes with this change on sparc64.
+On Mon, Apr 10, 2023 at 12:30:04PM -0600, Shuah Khan wrote:
+> On 4/6/23 12:43, Paul E. McKenney wrote:
 
-Note that loongarch handling was fixed in commit bf2f34a506e6 ("LoongArch:
-Set _PAGE_DIRTY only if _PAGE_WRITE is set in {pmd,pte}_mkdirty()")
+> > Alternatively, if it would be more convenient for Mark to send this
+> > up via kselftest:
 
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
- mm/huge_memory.c | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+> > Acked-by: Paul E. McKenney <paulmck@kernel.org>
 
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index ec86bf1d4e81..6f3af65435c8 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -2238,18 +2238,13 @@ static void __split_huge_pmd_locked(struct vm_area_struct *vma, pmd_t *pmd,
- 			entry = maybe_mkwrite(entry, vma);
- 			if (anon_exclusive)
- 				SetPageAnonExclusive(page + i);
-+			if (!write)
-+				entry = pte_wrprotect(entry);
- 			if (!young)
- 				entry = pte_mkold(entry);
- 			/* NOTE: this may set soft-dirty too on some archs */
- 			if (dirty)
- 				entry = pte_mkdirty(entry);
--			/*
--			 * NOTE: this needs to happen after pte_mkdirty,
--			 * because some archs (sparc64, loongarch) could
--			 * set hw write bit when mkdirty.
--			 */
--			if (!write)
--				entry = pte_wrprotect(entry);
- 			if (soft_dirty)
- 				entry = pte_mksoft_dirty(entry);
- 			if (uffd_wp)
--- 
-2.39.2
+> > It currently merges cleanly with the -rcu tree's dev branch, so this
+> > should not be a problem.
 
+> > Either way, please let me know, Mark!
+
+> I can take these through kselftest or can go through arm64
+
+> Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+
+It seems like more of a kselftest change than anything else so probably
+makes sense for it to go that way?  The example user isn't really even
+needed.
+
+--ikaMBnalE2kSmUMA
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQ1by0ACgkQJNaLcl1U
+h9AdOwf/ef2K4FS5NC2X5JFtmHxasft3ExxGAIzwI2FFzmPKRLOJwLctThZFfYIb
+2x6bej5BCZ6nQjDUrckEglZ5rRlb/s9VzGELvn3w0RsR0dnPQtYQXfYt4zR2pSVt
+OWLN2AznoWmaMCx2FZc5nWgiaTxW32BrBIfaOHfF3nV2mrXO1qbCNzgdbQIkydJf
+HN9gZRdKJAfKFHIKIyiQ0Pkng7k2u+9NnyEkSmOSMlUVWCpEHTiYIGO2xh6D4bME
+0Nbm+MhRjs0h5okPFnFioyCNey4noUN1zASYmTk+TBMeKIc0GcgRsmzMmOTKESMR
+KGetRNC2Sm57xIzbjD5lJNCv3OGIvA==
+=YHmn
+-----END PGP SIGNATURE-----
+
+--ikaMBnalE2kSmUMA--
