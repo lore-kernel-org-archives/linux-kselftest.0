@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CCE37C77B6E
-	for <linux-kselftest@archiver.kernel.org>; Wed, 12 Apr 2023 15:39:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4996C77B6E
+	for <linux-kselftest@archiver.kernel.org>; Wed, 12 Apr 2023 15:39:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231577AbjDLPja (ORCPT
+        id S231705AbjDLPjj (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 12 Apr 2023 11:39:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43800 "EHLO
+        Wed, 12 Apr 2023 11:39:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231556AbjDLPj2 (ORCPT
+        with ESMTP id S231610AbjDLPjc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 Apr 2023 11:39:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B95ED6584
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Apr 2023 08:38:33 -0700 (PDT)
+        Wed, 12 Apr 2023 11:39:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A84E7B2
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Apr 2023 08:38:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681313913;
+        s=mimecast20190719; t=1681313915;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding;
-        bh=lVXR3D7hXYBtVLp/ThxuWMiiNyD2dWfyFQSjCn5jxS8=;
-        b=WodvM877ZgIaTjlDBCf/ruxd4HyyYrryj0qU1UV8/N7cQlwda6e5KONpCBgLODNC99oQqx
-        PLEbRXaNIvRPbTpIDqKIdZqooL0AJRlLmFj6or6AeYBU1rQPaslkOTq63kSGHHa1fsy054
-        lW5NuC/WJV1v110PtiiLnm9f+wToExA=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=k6rrgRvWYYfVtAToY1FAF0Jliiym6oOFi31ZayQ1IeY=;
+        b=imvtpzDz/sxaqpj0xYKc8G/gpPBzp3+Qey96TaIUNUHIGJvkDXFyZz99EQpcQIdXl+UKlM
+        CgG9xDzn61luKE7pfGjL9u9tCn3pYdhDR2C9r/VzkrUEaoUGxjgnzLCf4MlcL2HgA5u00H
+        r1GE9SG7oXVvOvRtlbLiQnM5/cfr588=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-665-lNKMYUmXMAimN2RXA32hlQ-1; Wed, 12 Apr 2023 11:38:29 -0400
-X-MC-Unique: lNKMYUmXMAimN2RXA32hlQ-1
+ us-mta-584-FOtmkdM9OOCYuEpr2kcA0Q-1; Wed, 12 Apr 2023 11:38:30 -0400
+X-MC-Unique: FOtmkdM9OOCYuEpr2kcA0Q-1
 Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 73F181C09516;
-        Wed, 12 Apr 2023 15:38:28 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 348E0100DED1;
+        Wed, 12 Apr 2023 15:38:30 +0000 (UTC)
 Received: from llong.com (unknown [10.22.32.168])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E0B4C40C6E20;
-        Wed, 12 Apr 2023 15:38:27 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id AF5A740C6E20;
+        Wed, 12 Apr 2023 15:38:29 +0000 (UTC)
 From:   Waiman Long <longman@redhat.com>
 To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
         Johannes Weiner <hannes@cmpxchg.org>,
@@ -48,9 +48,9 @@ Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
         Valentin Schneider <vschneid@redhat.com>,
         Frederic Weisbecker <frederic@kernel.org>,
         Waiman Long <longman@redhat.com>
-Subject: [RFC PATCH 1/5] cgroup/cpuset: Extract out CS_CPU_EXCLUSIVE & CS_SCHED_LOAD_BALANCE handling
-Date:   Wed, 12 Apr 2023 11:37:54 -0400
-Message-Id: <20230412153758.3088111-2-longman@redhat.com>
+Subject: [RFC PATCH 4/5] cgroup/cpuset: Documentation update for the new "isolcpus" partition
+Date:   Wed, 12 Apr 2023 11:37:57 -0400
+Message-Id: <20230412153758.3088111-5-longman@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
@@ -58,247 +58,145 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Extract out the setting of CS_CPU_EXCLUSIVE and CS_SCHED_LOAD_BALANCE
-flags as well as the rebuilding of scheduling domains into the new
-update_partition_exclusive() and update_partition_sd_lb() helper
-functions to simplify the logic. The update_partition_exclusive()
-helper is called mainly at the beginning of the caller, but it may be
-called at the end too. The update_partition_sd_lb() helper is called
-at the end of the caller.
-
-This patch should reduce the chance that cpuset partition will end up
-in an incorrect state.
+This patch updates the cgroup-v2.rst file to include information about
+the new "isolcpus" partition type.
 
 Signed-off-by: Waiman Long <longman@redhat.com>
 ---
- kernel/cgroup/cpuset.c | 124 ++++++++++++++++++++++++-----------------
- 1 file changed, 72 insertions(+), 52 deletions(-)
+ Documentation/admin-guide/cgroup-v2.rst | 89 +++++++++++++++++++------
+ 1 file changed, 70 insertions(+), 19 deletions(-)
 
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index 937ef4d60cd4..83a7193e0f2c 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -1252,7 +1252,7 @@ static void update_tasks_cpumask(struct cpuset *cs, struct cpumask *new_cpus)
- static void compute_effective_cpumask(struct cpumask *new_cpus,
- 				      struct cpuset *cs, struct cpuset *parent)
- {
--	if (parent->nr_subparts_cpus) {
-+	if (parent->nr_subparts_cpus && is_partition_valid(cs)) {
- 		cpumask_or(new_cpus, parent->effective_cpus,
- 			   parent->subparts_cpus);
- 		cpumask_and(new_cpus, new_cpus, cs->cpus_allowed);
-@@ -1274,6 +1274,43 @@ enum subparts_cmd {
+diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+index f67c0829350b..352a02849fa7 100644
+--- a/Documentation/admin-guide/cgroup-v2.rst
++++ b/Documentation/admin-guide/cgroup-v2.rst
+@@ -2225,7 +2225,8 @@ Cpuset Interface Files
+ 	  ==========	=====================================
+ 	  "member"	Non-root member of a partition
+ 	  "root"	Partition root
+-	  "isolated"	Partition root without load balancing
++	  "isolcpus"	Partition root for isolated CPUs pool
++	  "isolated"	Partition root for isolated CPUs
+ 	  ==========	=====================================
  
- static int update_flag(cpuset_flagbits_t bit, struct cpuset *cs,
- 		       int turning_on);
-+
-+/*
-+ * Update partition exclusive flag
-+ *
-+ * Return: 0 if successful, an error code otherwise
-+ */
-+static int update_partition_exclusive(struct cpuset *cs, int new_prs)
-+{
-+	bool exclusive = (new_prs > 0);
-+
-+	if (exclusive && !is_cpu_exclusive(cs)) {
-+		if (update_flag(CS_CPU_EXCLUSIVE, cs, 1))
-+			return PERR_NOTEXCL;
-+	} else if (!exclusive && is_cpu_exclusive(cs)) {
-+		/* Turning off CS_CPU_EXCLUSIVE will not return error */
-+		update_flag(CS_CPU_EXCLUSIVE, cs, 0);
-+	}
-+	return 0;
-+}
-+
-+/*
-+ * Update partition load balance flag and/or rebuild sched domain
-+ *
-+ * Changing load balance flag will automatically call
-+ * rebuild_sched_domains_locked().
-+ */
-+static void update_partition_sd_lb(struct cpuset *cs, int old_prs)
-+{
-+	int new_prs = cs->partition_root_state;
-+	bool new_lb = (new_prs != PRS_ISOLATED);
-+
-+	if (new_lb != !!is_sched_load_balance(cs))
-+		update_flag(CS_SCHED_LOAD_BALANCE, cs, new_lb);
-+	else if ((new_prs > 0) || (old_prs > 0))
-+		rebuild_sched_domains_locked();
-+}
-+
- /**
-  * update_parent_subparts_cpumask - update subparts_cpus mask of parent cpuset
-  * @cs:      The cpuset that requests change in partition root state
-@@ -1477,14 +1514,13 @@ static int update_parent_subparts_cpumask(struct cpuset *cs, int cmd,
+ 	The root cgroup is always a partition root and its state
+@@ -2237,24 +2238,41 @@ Cpuset Interface Files
+ 	its descendants except those that are separate partition roots
+ 	themselves and their descendants.
  
- 	/*
- 	 * Transitioning between invalid to valid or vice versa may require
--	 * changing CS_CPU_EXCLUSIVE and CS_SCHED_LOAD_BALANCE.
-+	 * changing CS_CPU_EXCLUSIVE.
- 	 */
- 	if (old_prs != new_prs) {
--		if (is_prs_invalid(old_prs) && !is_cpu_exclusive(cs) &&
--		    (update_flag(CS_CPU_EXCLUSIVE, cs, 1) < 0))
--			return PERR_NOTEXCL;
--		if (is_prs_invalid(new_prs) && is_cpu_exclusive(cs))
--			update_flag(CS_CPU_EXCLUSIVE, cs, 0);
-+		int err = update_partition_exclusive(cs, new_prs);
++	When set to "isolcpus", the CPUs in that partition root will
++	be in an isolated state without any load balancing from the
++	scheduler.  This partition root is special as there can be at
++	most one instance of it in a system and no task or child cpuset
++	is allowed in this cgroup.  It acts as a pool of isolated CPUs to
++	be pulled into other "isolated" partitions.  The "cpuset.cpus"
++	of an "isolcpus" partition root contains the list of isolated
++	CPUs it holds, where "cpuset.cpus.effective" contains the list
++	of freely available isolated CPUs that are ready to be pull
++	into other "isolated" partition.
 +
-+		if (err)
-+			return err;
- 	}
- 
- 	/*
-@@ -1521,15 +1557,16 @@ static int update_parent_subparts_cpumask(struct cpuset *cs, int cmd,
- 		update_tasks_cpumask(parent, tmp->addmask);
- 
- 	/*
--	 * Set or clear CS_SCHED_LOAD_BALANCE when partcmd_update, if necessary.
--	 * rebuild_sched_domains_locked() may be called.
-+	 * For partcmd_update without newmask, it is being called from
-+	 * cpuset_hotplug_workfn() where cpus_read_lock() wasn't taken.
-+	 * Update the load balance flag and scheduling domain if
-+	 * cpus_read_trylock() is successful.
- 	 */
--	if (old_prs != new_prs) {
--		if (old_prs == PRS_ISOLATED)
--			update_flag(CS_SCHED_LOAD_BALANCE, cs, 1);
--		else if (new_prs == PRS_ISOLATED)
--			update_flag(CS_SCHED_LOAD_BALANCE, cs, 0);
-+	if ((cmd == partcmd_update) && !newmask && cpus_read_trylock()) {
-+		update_partition_sd_lb(cs, old_prs);
-+		cpus_read_unlock();
- 	}
-+
- 	notify_partition_change(cs, old_prs);
- 	return 0;
- }
-@@ -1744,6 +1781,7 @@ static int update_cpumask(struct cpuset *cs, struct cpuset *trialcs,
- 	int retval;
- 	struct tmpmasks tmp;
- 	bool invalidate = false;
-+	int old_prs = cs->partition_root_state;
- 
- 	/* top_cpuset.cpus_allowed tracks cpu_online_mask; it's read-only */
- 	if (cs == &top_cpuset)
-@@ -1863,6 +1901,9 @@ static int update_cpumask(struct cpuset *cs, struct cpuset *trialcs,
- 		 */
- 		if (parent->child_ecpus_count)
- 			update_sibling_cpumasks(parent, cs, &tmp);
-+
-+		/* Update CS_SCHED_LOAD_BALANCE and/or sched_domains */
-+		update_partition_sd_lb(cs, old_prs);
- 	}
- 	return 0;
- }
-@@ -2239,7 +2280,6 @@ static int update_flag(cpuset_flagbits_t bit, struct cpuset *cs,
- static int update_prstate(struct cpuset *cs, int new_prs)
- {
- 	int err = PERR_NONE, old_prs = cs->partition_root_state;
--	bool sched_domain_rebuilt = false;
- 	struct cpuset *parent = parent_cs(cs);
- 	struct tmpmasks tmpmask;
- 
-@@ -2258,45 +2298,28 @@ static int update_prstate(struct cpuset *cs, int new_prs)
- 	if (alloc_cpumasks(NULL, &tmpmask))
- 		return -ENOMEM;
- 
-+	err = update_partition_exclusive(cs, new_prs);
-+	if (err)
-+		goto out;
-+
- 	if (!old_prs) {
- 		/*
--		 * Turning on partition root requires setting the
--		 * CS_CPU_EXCLUSIVE bit implicitly as well and cpus_allowed
--		 * cannot be empty.
-+		 * cpus_allowed cannot be empty.
- 		 */
- 		if (cpumask_empty(cs->cpus_allowed)) {
- 			err = PERR_CPUSEMPTY;
- 			goto out;
- 		}
- 
--		err = update_flag(CS_CPU_EXCLUSIVE, cs, 1);
--		if (err) {
--			err = PERR_NOTEXCL;
--			goto out;
--		}
+ 	When set to "isolated", the CPUs in that partition root will
+ 	be in an isolated state without any load balancing from the
+ 	scheduler.  Tasks placed in such a partition with multiple
+ 	CPUs should be carefully distributed and bound to each of the
+-	individual CPUs for optimal performance.
 -
- 		err = update_parent_subparts_cpumask(cs, partcmd_enable,
- 						     NULL, &tmpmask);
--		if (err) {
--			update_flag(CS_CPU_EXCLUSIVE, cs, 0);
-+		if (err)
- 			goto out;
--		}
+-	The value shown in "cpuset.cpus.effective" of a partition root
+-	is the CPUs that the partition root can dedicate to a potential
+-	new child partition root. The new child subtracts available
+-	CPUs from its parent "cpuset.cpus.effective".
 -
--		if (new_prs == PRS_ISOLATED) {
--			/*
--			 * Disable the load balance flag should not return an
--			 * error unless the system is running out of memory.
--			 */
--			update_flag(CS_SCHED_LOAD_BALANCE, cs, 0);
--			sched_domain_rebuilt = true;
--		}
- 	} else if (old_prs && new_prs) {
- 		/*
- 		 * A change in load balance state only, no change in cpumasks.
- 		 */
--		update_flag(CS_SCHED_LOAD_BALANCE, cs, (new_prs != PRS_ISOLATED));
--		sched_domain_rebuilt = true;
--		goto out;	/* Sched domain is rebuilt in update_flag() */
-+		goto out;
- 	} else {
- 		/*
- 		 * Switching back to member is always allowed even if it
-@@ -2315,15 +2338,6 @@ static int update_prstate(struct cpuset *cs, int new_prs)
- 			compute_effective_cpumask(cs->effective_cpus, cs, parent);
- 			spin_unlock_irq(&callback_lock);
- 		}
+-	A partition root ("root" or "isolated") can be in one of the
+-	two possible states - valid or invalid.  An invalid partition
+-	root is in a degraded state where some state information may
+-	be retained, but behaves more like a "member".
 -
--		/* Turning off CS_CPU_EXCLUSIVE will not return error */
--		update_flag(CS_CPU_EXCLUSIVE, cs, 0);
--
--		if (!is_sched_load_balance(cs)) {
--			/* Make sure load balance is on */
--			update_flag(CS_SCHED_LOAD_BALANCE, cs, 1);
--			sched_domain_rebuilt = true;
--		}
- 	}
+-	All possible state transitions among "member", "root" and
+-	"isolated" are allowed.
++	individual CPUs for optimal performance.  The isolated CPUs can
++	come from either the parent partition root or from an "isolcpus"
++	partition if the parent cannot satisfy its request.
++
++	The value shown in "cpuset.cpus.effective" of a partition root is
++	the CPUs that the partition root can dedicate to a potential new
++	child partition root. The new child partition subtracts available
++	CPUs from its parent "cpuset.cpus.effective". An exception is
++	an "isolated" partition that pulls its isolated CPUs from the
++	"isolcpus" partition root that is not its direct parent.
++
++	A partition root can be in one of the two possible states -
++	valid or invalid.  An invalid partition root is in a degraded
++	state where some state information may be retained, but behaves
++	more like a "member".
++
++	All possible state transitions among "member", "root", "isolcpus"
++	and "isolated" are allowed.  However, the partition root may
++	not be valid if the corresponding prerequisite conditions are
++	not met.
  
- 	update_tasks_cpumask(parent, tmpmask.new_cpus);
-@@ -2331,18 +2345,24 @@ static int update_prstate(struct cpuset *cs, int new_prs)
- 	if (parent->child_ecpus_count)
- 		update_sibling_cpumasks(parent, cs, &tmpmask);
+ 	On read, the "cpuset.cpus.partition" file can show the following
+ 	values.
+@@ -2262,16 +2280,18 @@ Cpuset Interface Files
+ 	  =============================	=====================================
+ 	  "member"			Non-root member of a partition
+ 	  "root"			Partition root
+-	  "isolated"			Partition root without load balancing
++	  "isolcpus"			Partition root for isolated CPUs pool
++	  "isolated"			Partition root for isolated CPUs
+ 	  "root invalid (<reason>)"	Invalid partition root
++	  "isolcpus invalid (<reason>)"	Invalid isolcpus partition root
+ 	  "isolated invalid (<reason>)"	Invalid isolated partition root
+ 	  =============================	=====================================
  
--	if (!sched_domain_rebuilt)
--		rebuild_sched_domains_locked();
- out:
- 	/*
--	 * Make partition invalid if an error happen
-+	 * Make partition invalid & disable CS_CPU_EXCLUSIVE if an error
-+	 * happens.
- 	 */
--	if (err)
-+	if (err) {
- 		new_prs = -new_prs;
-+		update_partition_exclusive(cs, new_prs);
-+	}
+ 	In the case of an invalid partition root, a descriptive string on
+-	why the partition is invalid is included within parentheses.
++	why the partition is invalid may be included within parentheses.
+ 
+-	For a partition root to become valid, the following conditions
+-	must be met.
++	For a "root" partition root to become valid, the following
++	conditions must be met.
+ 
+ 	1) The "cpuset.cpus" is exclusive with its siblings , i.e. they
+ 	   are not shared by any of its siblings (exclusivity rule).
+@@ -2281,6 +2301,37 @@ Cpuset Interface Files
+ 	4) The "cpuset.cpus.effective" cannot be empty unless there is
+ 	   no task associated with this partition.
+ 
++        A valid "isolcpus" partition root requires the following
++        conditions.
 +
- 	spin_lock_irq(&callback_lock);
- 	cs->partition_root_state = new_prs;
- 	WRITE_ONCE(cs->prs_err, err);
- 	spin_unlock_irq(&callback_lock);
++        1) The parent cgroup is a valid partition root.
++        2) The "cpuset.cpus" must be a subset of parent's "cpuset.cpus"
++           including an empty cpu list.
++        3) There can be no more than one valid "isolcpus" partition.
++        4) No task or child cpuset is allowed.
 +
-+	/* Update sched domains and load balance flag */
-+	update_partition_sd_lb(cs, old_prs);
++        Note that an "isolcpus" partition is not exclusive and its
++        isolated CPUs can be distributed down sibling cgroups even
++        though they may not appear in their "cpuset.cpus.effective".
 +
- 	/*
- 	 * Update child cpusets, if present.
- 	 * Force update if switching back to member.
++        A valid "isolated" partition root can pull isolated CPUs from
++        either its parent partition or from the "isolcpus" partition.
++        It also requires the following conditions to be met.
++
++	1) The "cpuset.cpus" is exclusive with its siblings , i.e. they
++	   are not shared by any of its siblings (exclusivity rule).
++	2) The "cpuset.cpus" is not empty and must be a subset of
++	   parent's "cpuset.cpus".
++	3) The "cpuset.cpus.effective" cannot be empty unless there is
++	   no task associated with this partition.
++
++        If pulling isolated CPUS from "isolcpus" partition,
++        the "cpuset.cpus" must also be a subset of "isolcpus"
++        partition's "cpuset.cpus" and all the requested CPUs must
++        be available for pulling, i.e. in "isolcpus" partition's
++        "cpuset.cpus.effective". In this case, its hierarchical parent
++        does not need to be a valid partition root.
++
+ 	External events like hotplug or changes to "cpuset.cpus" can
+ 	cause a valid partition root to become invalid and vice versa.
+ 	Note that a task cannot be moved to a cgroup with empty
 -- 
 2.31.1
 
