@@ -2,138 +2,88 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A0EB2C77B61
-	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Apr 2023 16:33:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B769C77B61
+	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Apr 2023 17:10:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbjDMQda (ORCPT
+        id S230281AbjDMRKY (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 13 Apr 2023 12:33:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40292 "EHLO
+        Thu, 13 Apr 2023 13:10:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjDMQd3 (ORCPT
+        with ESMTP id S230085AbjDMRKV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Apr 2023 12:33:29 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C973AAD;
-        Thu, 13 Apr 2023 09:33:28 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 261CA5C00D1;
-        Thu, 13 Apr 2023 12:33:27 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Thu, 13 Apr 2023 12:33:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=devkernel.io; h=
-        cc:cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1681403607; x=1681490007; bh=E7
-        v8GvR/BA8ZybVtwk1BgUR7UNaro8OfYXIZQ2El7BY=; b=ViQZJZIU22yTNfIXLP
-        xff30J2t4m8/W4Cxx+Uv32Zj6vz41yqCPEbVWpXv1gvmj1lPhh5ikKTe0F5NBrPX
-        07Kw9by1MdmhjEixCyCg3c4a7j38kyNG5wJoWTdEDoVOZHleD2CNnE+kh5b9E6ze
-        vuSTwIBiV2diADtLTlPRyWmIGYie5u/WuM8/vDpMBWxZAm0X463lzuklBNMOsZc2
-        p6L/39L43RxMkGdkVZsI8dO2ADwLBOpf69aUjIBdiiT/ecOGEok5hSoGetFQmH9G
-        vABt4czEa++k/9PZ0P0G8ywTStOJqWaLgq2ZRVARy9GgZwmjap01zXFth/kwj2Z4
-        Fi/w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1681403607; x=1681490007; bh=E7v8GvR/BA8Zy
-        bVtwk1BgUR7UNaro8OfYXIZQ2El7BY=; b=GO3ith22DKwoVSWx9DMWTK5XCro1D
-        EZlVCZ5TANUiZreKwDmm8WsGdVvrv98eXVLItMdzSK8R/4+bn+1krYW8uY5lg66U
-        Qb/tMzIh/0T/z+cO/rQMHBQ7HSjXV47XpFWtSN2YfSBeYiQtIk+qoCtGWuHiDGJQ
-        va9xYVjR8OaYOtYiE0eRxe+CgoWkG26AOdWemJ88sHoxztzkhw+u0NQgx4P7P+yR
-        0eDV2YWP+P0+b83JKsdcbEfdGX7UZZ+xQ8XGXstsoMOoezsFeClj/QNOPO8H/9kg
-        7Rrh5DSSRYHDa0OFGr6SVf0/YjOZjQJTPUxrgmjifORYZmds16ZfWrdYQ==
-X-ME-Sender: <xms:1i44ZLLwPpC7pfQnl9snOxcBI0uWqRURu5vbloAl0qFwOb3u7P1fmA>
-    <xme:1i44ZPKDGn8ScwgZauMFTHFojElFJuaE7sYyNU9d0f-KkuJJcX4R6eKCitzjg5px2
-    vn5YypNOuK05AwnP5w>
-X-ME-Received: <xmr:1i44ZDvyTWf2CtQnEdUC7WC7R8LVKTAos5WRYQHGIIMZTi5uc5FrAcmKLfvD1xO37UsURJQvBGAUzId6SGIJSac44U_BN-w-J50QwNaNIKI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdekkedguddtfecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpehffgfhvfevufffjgfkgggtsehttdertddtredtnecuhfhrohhmpefuthgv
-    fhgrnhcutfhovghstghhuceoshhhrhesuggvvhhkvghrnhgvlhdrihhoqeenucggtffrrg
-    htthgvrhhnpedttdevfffgudeujefffeeutdekvddtffefleellefgfefgleejteeffedu
-    geduteenucffohhmrghinhepthgvshhtshdrthhoohhlshenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehshhhrseguvghvkhgvrhhnvghlrdhi
-    oh
-X-ME-Proxy: <xmx:1i44ZEaRGMFDbi6mcrtyICuUrVCweEurHu0RxZT82UL4G3Zt4fdx5A>
-    <xmx:1i44ZCaDxibspyokOSr1sxgvMDarZAq6ul_x4kiz7_zUtULY6lPbqQ>
-    <xmx:1i44ZICXSDiex0DDslZ88ERmPrXokxI5RdNs9dIlAPOzqut9xWVoMg>
-    <xmx:1y44ZImPLGl_eRuWkJVVDZB1pG6E7LNBuH4f1aUoo_CG5ZHj4ET3jg>
-Feedback-ID: i84614614:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 13 Apr 2023 12:33:25 -0400 (EDT)
-References: <20230412031648.2206875-1-shr@devkernel.io>
- <20230412031648.2206875-4-shr@devkernel.io>
- <7c5606cc-ca58-c505-b0d3-2eec29fe606a@redhat.com>
- <190bed16-7b7b-a880-9793-cdeb1baef29d@redhat.com>
-User-agent: mu4e 1.10.1; emacs 28.2.50
-From:   Stefan Roesch <shr@devkernel.io>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     kernel-team@fb.com, linux-mm@kvack.org, riel@surriel.com,
-        mhocko@suse.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, akpm@linux-foundation.org,
-        hannes@cmpxchg.org, willy@infradead.org,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: Re: [PATCH v6 3/3] selftests/mm: add new selftests for KSM
-Date:   Thu, 13 Apr 2023 09:32:21 -0700
-In-reply-to: <190bed16-7b7b-a880-9793-cdeb1baef29d@redhat.com>
-Message-ID: <qvqwfs93yc6m.fsf@devbig1114.prn1.facebook.com>
+        Thu, 13 Apr 2023 13:10:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7195F7D85;
+        Thu, 13 Apr 2023 10:10:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B9BC64031;
+        Thu, 13 Apr 2023 17:10:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DF8C8C433D2;
+        Thu, 13 Apr 2023 17:10:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681405818;
+        bh=TTMPY+VYyqCQUJ6Kf3OMi0XvWsEMpitS3xIlaYntt/o=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=rNALsve5zDHrmp3o0aYNfmHMpYblt/hhzFFUmRj+5rvF9o6cdFXAq2IVoqHfBTqDd
+         AvXiIvPSABYQr1o47YBnhfI062hxDaVpltx+azxLFd2CMwLPggXGX3P4PN8UCtbW5c
+         vgSn0luMIByakBX8BAvgCB+Uqgw47gKiwMUynVVFny0RDJPFasFEnDJzQr89cZvOh4
+         gsJbT5JtR13DiX3Gt+FdyXHEpTtHXXqPZvjIQcaTJU/mlTya6SdfpPukNItplp2Cfs
+         oQu+mrd3iGpizzS+OOfAMsEUhds4wRDe6UDCoBW/gm9YHZdppH8cpbHPHavki6RUH+
+         agQD6/C5gfniA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BF7B1E21ED9;
+        Thu, 13 Apr 2023 17:10:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net 0/4] mptcp: more fixes for 6.3
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168140581877.3344.4926518348735216178.git-patchwork-notify@kernel.org>
+Date:   Thu, 13 Apr 2023 17:10:18 +0000
+References: <20230411-upstream-net-20230411-mptcp-fixes-v1-0-ca540f3ef986@tessares.net>
+In-Reply-To: <20230411-upstream-net-20230411-mptcp-fixes-v1-0-ca540f3ef986@tessares.net>
+To:     Matthieu Baerts <matthieu.baerts@tessares.net>
+Cc:     mptcp@lists.linux.dev, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, dcaratti@redhat.com,
+        dmytro@shytyi.net, shuah@kernel.org, martineau@kernel.org,
+        geliang.tang@suse.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        stable@vger.kernel.org, cpaasch@apple.com
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Hello:
 
-David Hildenbrand <david@redhat.com> writes:
+This series was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-> On 13.04.23 15:07, David Hildenbrand wrote:
->> On 12.04.23 05:16, Stefan Roesch wrote:
->>> This adds three new tests to the selftests for KSM.  These tests use the
->>> new prctl API's to enable and disable KSM.
->>>
->>> 1) add new prctl flags to prctl header file in tools dir
->>>
->>>      This adds the new prctl flags to the include file prct.h in the
->>>      tools directory.  This makes sure they are available for testing.
->>>
->>> 2) add KSM prctl merge test
->>>
->>>      This adds the -t option to the ksm_tests program.  The -t flag
->>>      allows to specify if it should use madvise or prctl ksm merging.
->>>
->>> 3) add KSM get merge type test
->>>
->>>      This adds the -G flag to the ksm_tests program to query the KSM
->>>      status with prctl after KSM has been enabled with prctl.
->>>
->>> 4) add KSM fork test
->>>
->>>      Add fork test to verify that the MMF_VM_MERGE_ANY flag is inherited
->>>      by the child process.
->>>
->>> 5) add two functions for debugging merge outcome
->>>
->>>      This adds two functions to report the metrics in /proc/self/ksm_stat
->>>      and /sys/kernel/debug/mm/ksm.
->>>
->>> The debugging can be enabled with the following command line:
->>> make -C tools/testing/selftests TARGETS="mm" --keep-going \
->>>           EXTRA_CFLAGS=-DDEBUG=1
->> Would it make sense to instead have a "-D" (if still unused) runtime
->> options to print this data? Dead code that's not compiled is a bit
->> unfortunate as it can easily bit-rot.
->> This patch essentially does two things
->> 1) Add the option to run all tests/benchmarks with the PRCTL instead of
->> MADVISE
->> 2) Add some functional KSM tests for the new PRCTL (fork, enabling
->> works, disabling works).
->> The latter should rather go into ksm_functional_tests().
->
->
-> "tools/testing/selftests/mm/ksm_functional_tests.c" is what I wanted to say.
+On Tue, 11 Apr 2023 22:42:08 +0200 you wrote:
+> Patch 1 avoids scheduling the MPTCP worker on a closed socket on some
+> edge cases. It fixes issues that can be visible from v5.11.
+> 
+> Patch 2 makes sure the MPTCP worker doesn't try to manipulate
+> disconnected sockets. This is also a fix for an issue that can be
+> visible from v5.11.
+> 
+> [...]
 
-I understood. I'll look into moving the fork check and the disabling
-into the functional tests for the next version.
+Here is the summary with links:
+  - [net,1/4] mptcp: use mptcp_schedule_work instead of open-coding it
+    https://git.kernel.org/netdev/net/c/a5cb752b1257
+  - [net,2/4] mptcp: stricter state check in mptcp_worker
+    https://git.kernel.org/netdev/net/c/d6a044373343
+  - [net,3/4] mptcp: fix NULL pointer dereference on fastopen early fallback
+    https://git.kernel.org/netdev/net/c/c0ff6f6da66a
+  - [net,4/4] selftests: mptcp: userspace pm: uniform verify events
+    https://git.kernel.org/netdev/net/c/711ae788cbbb
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
