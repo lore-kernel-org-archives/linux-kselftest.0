@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD7A3C77B71
-	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Apr 2023 07:23:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB2F1C77B61
+	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Apr 2023 07:23:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbjDMHXG (ORCPT
+        id S229853AbjDMHXK (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 13 Apr 2023 03:23:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38346 "EHLO
+        Thu, 13 Apr 2023 03:23:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbjDMHXF (ORCPT
+        with ESMTP id S229847AbjDMHXH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Apr 2023 03:23:05 -0400
-Received: from esa6.hc1455-7.c3s2.iphmx.com (esa6.hc1455-7.c3s2.iphmx.com [68.232.139.139])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0668B1BE6;
-        Thu, 13 Apr 2023 00:23:03 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="114304608"
+        Thu, 13 Apr 2023 03:23:07 -0400
+Received: from esa7.hc1455-7.c3s2.iphmx.com (esa7.hc1455-7.c3s2.iphmx.com [139.138.61.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8262A4C3C;
+        Thu, 13 Apr 2023 00:23:06 -0700 (PDT)
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="91996438"
 X-IronPort-AV: E=Sophos;i="5.98,339,1673881200"; 
-   d="scan'208";a="114304608"
-Received: from unknown (HELO yto-r2.gw.nic.fujitsu.com) ([218.44.52.218])
-  by esa6.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2023 16:23:02 +0900
+   d="scan'208";a="91996438"
+Received: from unknown (HELO yto-r1.gw.nic.fujitsu.com) ([218.44.52.217])
+  by esa7.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2023 16:23:03 +0900
 Received: from yto-m2.gw.nic.fujitsu.com (yto-nat-yto-m2.gw.nic.fujitsu.com [192.168.83.65])
-        by yto-r2.gw.nic.fujitsu.com (Postfix) with ESMTP id 09185DE50D;
-        Thu, 13 Apr 2023 16:22:59 +0900 (JST)
+        by yto-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id 7DCBCD66A1;
+        Thu, 13 Apr 2023 16:23:01 +0900 (JST)
 Received: from yto-om3.fujitsu.com (yto-om3.o.css.fujitsu.com [10.128.89.164])
-        by yto-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id 533FFD35F5;
-        Thu, 13 Apr 2023 16:22:58 +0900 (JST)
+        by yto-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id C6F9FD35F7;
+        Thu, 13 Apr 2023 16:23:00 +0900 (JST)
 Received: from cn-r05-10.example.com (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
-        by yto-om3.fujitsu.com (Postfix) with ESMTP id 1E4FC40007204;
-        Thu, 13 Apr 2023 16:22:58 +0900 (JST)
+        by yto-om3.fujitsu.com (Postfix) with ESMTP id 8BBF840007204;
+        Thu, 13 Apr 2023 16:23:00 +0900 (JST)
 From:   Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
 To:     Fenghua Yu <fenghua.yu@intel.com>,
         Reinette Chatre <reinette.chatre@intel.com>,
         Shuah Khan <shuah@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        tan.shaopeng@jp.fujitsu.com
-Subject: [PATCH v9 1/6] selftests/resctrl: Fix set up schemata with 100% allocation on first run in MBM test
-Date:   Thu, 13 Apr 2023 16:22:54 +0900
-Message-Id: <20230413072259.2089348-2-tan.shaopeng@jp.fujitsu.com>
+        tan.shaopeng@jp.fujitsu.com, Shuah Khan <skhan@linuxfoundation.org>
+Subject: [PATCH v9 3/6] selftests/resctrl: Flush stdout file buffer before executing fork()
+Date:   Thu, 13 Apr 2023 16:22:56 +0900
+Message-Id: <20230413072259.2089348-4-tan.shaopeng@jp.fujitsu.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20230413072259.2089348-1-tan.shaopeng@jp.fujitsu.com>
 References: <20230413072259.2089348-1-tan.shaopeng@jp.fujitsu.com>
@@ -49,86 +49,57 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-There is a comment "Set up shemata with 100% allocation on the first run"
-in function mbm_setup(), but there is an increment bug and the condition
-"num_of_runs == 0" will never be met and write_schemata() will never be
-called to set schemata to 100%. Even if write_schemata() is called in MBM
-test, since it is not supported for MBM test it does not set the schemata.
-This is currently fine because resctrl_val_parm->mum_resctrlfs is always 1
-and umount/mount will be run in each test to set the schemata to 100%.
+When a process has buffered output, a child process created by fork()
+will also copy buffered output. When using kselftest framework,
+the output (resctrl test result message) will be printed multiple times.
 
-To support the usage when MBM test does not unmount/remount resctrl
-filesystem before the test starts, fix to call write_schemata() and
-set schemata properly when the function is called for the first time.
+Add fflush() to flush out the buffered output before executing fork().
 
-Also, remove static local variable 'num_of_runs' because this is not
-needed as there is resctrl_val_param->num_of_runs which should be used
-instead like in cat_setup().
-
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
 Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
 ---
- tools/testing/selftests/resctrl/mbm_test.c  | 13 +++++++------
- tools/testing/selftests/resctrl/resctrlfs.c |  4 +++-
- 2 files changed, 10 insertions(+), 7 deletions(-)
+ tools/testing/selftests/resctrl/cat_test.c    | 1 +
+ tools/testing/selftests/resctrl/resctrl_val.c | 1 +
+ tools/testing/selftests/resctrl/resctrlfs.c   | 1 +
+ 3 files changed, 3 insertions(+)
 
-diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
-index c9dfa54af42f..9b591c35310f 100644
---- a/tools/testing/selftests/resctrl/mbm_test.c
-+++ b/tools/testing/selftests/resctrl/mbm_test.c
-@@ -89,23 +89,24 @@ static int check_results(int span)
- static int mbm_setup(int num, ...)
- {
- 	struct resctrl_val_param *p;
--	static int num_of_runs;
- 	va_list param;
- 	int ret = 0;
+diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
+index 08070d4fa735..38c10a8c1814 100644
+--- a/tools/testing/selftests/resctrl/cat_test.c
++++ b/tools/testing/selftests/resctrl/cat_test.c
+@@ -167,6 +167,7 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
+ 		return errno;
+ 	}
  
--	/* Run NUM_OF_RUNS times */
--	if (num_of_runs++ >= NUM_OF_RUNS)
--		return END_OF_TESTS;
--
- 	va_start(param, num);
- 	p = va_arg(param, struct resctrl_val_param *);
- 	va_end(param);
++	fflush(stdout);
+ 	bm_pid = fork();
  
-+	/* Run NUM_OF_RUNS times */
-+	if (p->num_of_runs >= NUM_OF_RUNS)
-+		return -1;
-+
- 	/* Set up shemata with 100% allocation on the first run. */
--	if (num_of_runs == 0)
-+	if (p->num_of_runs == 0)
- 		ret = write_schemata(p->ctrlgrp, "100", p->cpu_no,
- 				     p->resctrl_val);
- 
-+	p->num_of_runs++;
-+
- 	return ret;
- }
- 
+ 	/* Set param values for child thread which will be allocated bitmask
+diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
+index 00864242d76c..e632657995c7 100644
+--- a/tools/testing/selftests/resctrl/resctrl_val.c
++++ b/tools/testing/selftests/resctrl/resctrl_val.c
+@@ -629,6 +629,7 @@ int resctrl_val(char **benchmark_cmd, struct resctrl_val_param *param)
+ 	 * Fork to start benchmark, save child's pid so that it can be killed
+ 	 * when needed
+ 	 */
++	fflush(stdout);
+ 	bm_pid = fork();
+ 	if (bm_pid == -1) {
+ 		perror("# Unable to fork");
 diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
-index cc6cf49e3129..b31b1d9e41d1 100644
+index b31b1d9e41d1..fb00245dee92 100644
 --- a/tools/testing/selftests/resctrl/resctrlfs.c
 +++ b/tools/testing/selftests/resctrl/resctrlfs.c
-@@ -498,6 +498,7 @@ int write_schemata(char *ctrlgrp, char *schemata, int cpu_no, char *resctrl_val)
- 	FILE *fp;
- 
- 	if (strncmp(resctrl_val, MBA_STR, sizeof(MBA_STR)) &&
-+	    strncmp(resctrl_val, MBM_STR, sizeof(MBM_STR)) &&
- 	    strncmp(resctrl_val, CAT_STR, sizeof(CAT_STR)) &&
- 	    strncmp(resctrl_val, CMT_STR, sizeof(CMT_STR)))
- 		return -ENOENT;
-@@ -523,7 +524,8 @@ int write_schemata(char *ctrlgrp, char *schemata, int cpu_no, char *resctrl_val)
- 	if (!strncmp(resctrl_val, CAT_STR, sizeof(CAT_STR)) ||
- 	    !strncmp(resctrl_val, CMT_STR, sizeof(CMT_STR)))
- 		sprintf(schema, "%s%d%c%s", "L3:", resource_id, '=', schemata);
--	if (!strncmp(resctrl_val, MBA_STR, sizeof(MBA_STR)))
-+	if (!strncmp(resctrl_val, MBA_STR, sizeof(MBA_STR)) ||
-+	    !strncmp(resctrl_val, MBM_STR, sizeof(MBM_STR)))
- 		sprintf(schema, "%s%d%c%s", "MB:", resource_id, '=', schemata);
- 
- 	fp = fopen(controlgroup, "w");
+@@ -678,6 +678,7 @@ int filter_dmesg(void)
+ 		perror("pipe");
+ 		return ret;
+ 	}
++	fflush(stdout);
+ 	pid = fork();
+ 	if (pid == 0) {
+ 		close(pipefds[0]);
 -- 
 2.27.0
 
