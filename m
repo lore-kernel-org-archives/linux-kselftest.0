@@ -2,37 +2,37 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A761C77B71
-	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Apr 2023 02:37:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A64FC77B71
+	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Apr 2023 02:39:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230155AbjDMCh6 (ORCPT
+        id S230459AbjDMCj3 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 12 Apr 2023 22:37:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36216 "EHLO
+        Wed, 12 Apr 2023 22:39:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbjDMChS (ORCPT
+        with ESMTP id S229920AbjDMCiy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 Apr 2023 22:37:18 -0400
+        Wed, 12 Apr 2023 22:38:54 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B94D8A6F;
-        Wed, 12 Apr 2023 19:36:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64E08698;
+        Wed, 12 Apr 2023 19:37:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D0AD163A9D;
-        Thu, 13 Apr 2023 02:36:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BD80C433A4;
-        Thu, 13 Apr 2023 02:36:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DA9463A9B;
+        Thu, 13 Apr 2023 02:37:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9FEFC433D2;
+        Thu, 13 Apr 2023 02:37:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681353392;
+        s=k20201202; t=1681353461;
         bh=3mEJP8tmz/XW5HcFioTquKyOJJLG48D3oWkCAML/yZA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Cu/bK0aPlKahfZ6qcCZU3MjQoTLvd9+pVpnbbeE4C8qqAivutoubpeNTL8XQ0myPz
-         1679faqGPiWEFdomFeb03gr1J3MfdcySni42H1IrX9wcrw3wI99eUGw62NuzFp46iT
-         J3wNieGe7a0RvBOT4MXBL6jUkUR1J7Zy9AibhoTogzkX/NW267wpLioa0Bs1RZ9/TH
-         5gBtF+/s3Pv4fvIvraPWgfbNo3aFWm0yR9COvEz/BCOiwLIpxqFoAf+ukTnX3GAXeQ
-         cIt6ACryFhbilXPYqRughCguR3LiwHV4J8mMSdCnlnq71wtPUXorYvqPkG9neWtGtz
-         Tlj/oFHpl4KTw==
+        b=VFrpm/FyfMkwZa8FLObMAtXBOWJhCOW8xxarl4pIGx1OlZ1mmVdxgn4xDUW7U5VQX
+         weA/9t/m+obpOLuy64MR4leWxUBkarf48a4fRP8KLo0XingoJAwmZaZaRSbCCEg4uc
+         1KabZRH5UlVhsBH79/uS+lHiWYYO8E7Tc8gG+fsXUNHB4JyontPqqXilO58ttwfMe+
+         oo4OmOnYh1r6lHM1HhXZlYz/mWzGAIZ9W+MieyTZJoiVhde2UONZ306dguQ6ejCBNJ
+         9/7jWBQhFwVHtQvbz+fJ3tDQo9gBlubx69u5yssAiDMt6UX3zboL4Toidv3Jjh4bHJ
+         VMkQVbQCvggTg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Anh Tuan Phan <tuananhlfc@gmail.com>,
@@ -41,12 +41,12 @@ Cc:     Anh Tuan Phan <tuananhlfc@gmail.com>,
         Sasha Levin <sashal@kernel.org>, sforshee@kernel.org,
         shuah@kernel.org, linux-fsdevel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.2 12/20] selftests mount: Fix mount_setattr_test builds failed
-Date:   Wed, 12 Apr 2023 22:35:50 -0400
-Message-Id: <20230413023601.74410-12-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 6/8] selftests mount: Fix mount_setattr_test builds failed
+Date:   Wed, 12 Apr 2023 22:37:23 -0400
+Message-Id: <20230413023727.74875-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230413023601.74410-1-sashal@kernel.org>
-References: <20230413023601.74410-1-sashal@kernel.org>
+In-Reply-To: <20230413023727.74875-1-sashal@kernel.org>
+References: <20230413023727.74875-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
