@@ -2,83 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 531BBC77B70
-	for <linux-kselftest@archiver.kernel.org>; Sat, 15 Apr 2023 17:12:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E9E69C77B77
+	for <linux-kselftest@archiver.kernel.org>; Sat, 15 Apr 2023 21:28:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbjDORMQ (ORCPT
+        id S230009AbjDOV2x (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 15 Apr 2023 13:12:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40482 "EHLO
+        Sat, 15 Apr 2023 17:28:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbjDORMP (ORCPT
+        with ESMTP id S229667AbjDOV2w (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 15 Apr 2023 13:12:15 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 61F7C186;
-        Sat, 15 Apr 2023 10:12:14 -0700 (PDT)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 33FHC7wj020436;
-        Sat, 15 Apr 2023 19:12:07 +0200
-Date:   Sat, 15 Apr 2023 19:12:07 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 00/11] tools/nolibc: -std=c89 compatibility
-Message-ID: <ZDra55UlsZdQYf70@1wt.eu>
-References: <20230328-nolibc-c99-v2-0-c989f2289222@weissschuh.net>
- <ZDKFTvhzgVGBjr0M@1wt.eu>
- <ZDq455RD5yJ8Nwk0@1wt.eu>
- <e93c1260-ae29-4fa4-9097-a81784ac7ef8@t-8ch.de>
+        Sat, 15 Apr 2023 17:28:52 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 615AA30C3;
+        Sat, 15 Apr 2023 14:28:50 -0700 (PDT)
+From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1681594128;
+        bh=Serav5NsrGD7AG0O6Mn+YtgEHgPcj/qioSXyB4VmbSc=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+        b=Snq8rnmGEhznB84w1h1GMX2CCLnPQiQYZsr7CzHsiLIF0csWLWmOE5ELA15vljlvC
+         s46bmjPStN3vU9wE2zoXbsvn8jXtSdqRvPv8bz/7Wzn1It6pIsB8hDZSumyA7CR067
+         HSfD1ctfwSw8qR5Krd7KchDszRkk2CAawuIgB+7g=
+Date:   Sat, 15 Apr 2023 23:28:48 +0200
+Subject: [PATCH 2/2] tools/nolibc: add testcase for fork()/waitpid()
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <e93c1260-ae29-4fa4-9097-a81784ac7ef8@t-8ch.de>
+Message-Id: <20230415-nolibc-fork-v1-2-9747c73651c5@weissschuh.net>
+References: <20230415-nolibc-fork-v1-0-9747c73651c5@weissschuh.net>
+In-Reply-To: <20230415-nolibc-fork-v1-0-9747c73651c5@weissschuh.net>
+To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1681594127; l=1787;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=Serav5NsrGD7AG0O6Mn+YtgEHgPcj/qioSXyB4VmbSc=;
+ b=CpgzObVEN4lDAf4txDLUIMfLrZ7bQE/nT95ucHYkuVj5n26guKfZ+O3iP0qg8Ub9+Ilj6WS7g
+ cpuzD12N0V7C5TkrMonxcca/bN3j+hm4BHn81dgd4x4FEoZOr1noMTW
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Apr 15, 2023 at 05:15:27PM +0200, Thomas Weiﬂschuh wrote:
-> On 2023-04-15 16:47:03+0200, Willy Tarreau wrote:
-> > On Sun, Apr 09, 2023 at 11:28:46AM +0200, Willy Tarreau wrote:
-> > > On Thu, Apr 06, 2023 at 09:54:46PM +0000, Thomas Weiﬂschuh wrote:
-> > > > This series replaces the C99 compatibility patch. (See v1 link below).
-> > > > After the discussion about support C99 and/or GNU89 I came to the
-> > > > conclusion supporting straight C89 is not very hard.
-> > > > 
-> > > > Instead of validating both C99 and GNU89 in some awkward way only for
-> > > > somebody requesting true C89 support let's just do it this way.
-> > > > 
-> > > > Feel free to squash all the comment syntax patches together if you
-> > > > prefer.
-> > > 
-> > > I gave it some thought, at first considering that going lower than GNU89
-> > > was possibly not very useful, but given that the changes are very small
-> > > in the end (mostly comments formating), I think that you're right. The
-> > > cost of reaching this level of portability is basically zero once the
-> > > patch is applied so I think it's worth doing it now. However I think I
-> > > will indeed squash all the comments patch together as you suggest.
-> > 
-> > I've now squashed the ones about comments together, fixed the declaration
-> > inside the for statement in nolibc-test and tested with gcc 4.7 & 4.8 and
-> > confirmed it works as expected. I've queued it there for now:
-> > 
-> >    https://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git/log/?h=20230415-nolibc-updates-4a
-> 
-> Thanks!
-> 
-> I noticed today that I did not adapt the comments in arch-s390.h;
-> because the start() comments were already correct.
-> 
-> But the last line of arch-s390.h still contains a C99 comment.
+On s390 the arguments to clone() which is used by fork() are different
+than other archs.
+Make sure everything works correctly.
 
-ah, I must have missed it because I checked using git grep //.
+Signed-off-by: Thomas Wei√üschuh <linux@weissschuh.net>
+---
+ tools/testing/selftests/nolibc/nolibc-test.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-> Do you want me to send a patch or could you just push one?
-> (Or fold it into my patch)
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index 888da60eb5ba..d294338cf141 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -474,6 +474,25 @@ static int test_getpagesize(void)
+ 	return !c;
+ }
+ 
++static int test_fork(void)
++{
++	int status;
++	pid_t pid = fork();
++
++	switch (pid) {
++	case -1:
++		return 1;
++
++	case 0:
++		exit(123);
++
++	default:
++		pid = waitpid(pid, &status, 0);
++
++		return pid == -1 || !WIFEXITED(status) || WEXITSTATUS(status) != 123;
++	}
++}
++
+ /* Run syscall tests between IDs <min> and <max>.
+  * Return 0 on success, non-zero on failure.
+  */
+@@ -530,6 +549,7 @@ int run_syscall(int min, int max)
+ 		CASE_TEST(dup3_0);            tmp = dup3(0, 100, 0);  EXPECT_SYSNE(1, tmp, -1); close(tmp); break;
+ 		CASE_TEST(dup3_m1);           tmp = dup3(-1, 100, 0); EXPECT_SYSER(1, tmp, -1, EBADF); if (tmp != -1) close(tmp); break;
+ 		CASE_TEST(execve_root);       EXPECT_SYSER(1, execve("/", (char*[]){ [0] = "/", [1] = NULL }, NULL), -1, EACCES); break;
++		CASE_TEST(fork);              EXPECT_SYSZR(1, test_fork()); break;
+ 		CASE_TEST(getdents64_root);   EXPECT_SYSNE(1, test_getdents64("/"), -1); break;
+ 		CASE_TEST(getdents64_null);   EXPECT_SYSER(1, test_getdents64("/dev/null"), -1, ENOTDIR); break;
+ 		CASE_TEST(gettimeofday_null); EXPECT_SYSZR(1, gettimeofday(NULL, NULL)); break;
 
-I'll do it and force-push. Thanks for checking and notifying me!
+-- 
+2.40.0
 
-Cheers,
-Willy
