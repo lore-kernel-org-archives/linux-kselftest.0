@@ -2,75 +2,125 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81093C77B73
-	for <linux-kselftest@archiver.kernel.org>; Sat, 15 Apr 2023 21:28:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A0D92C77B71
+	for <linux-kselftest@archiver.kernel.org>; Sun, 16 Apr 2023 00:25:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbjDOV2x (ORCPT
+        id S230143AbjDPAZy (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 15 Apr 2023 17:28:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33906 "EHLO
+        Sat, 15 Apr 2023 20:25:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229803AbjDOV2w (ORCPT
+        with ESMTP id S230099AbjDPAZx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 15 Apr 2023 17:28:52 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7762430D8;
-        Sat, 15 Apr 2023 14:28:50 -0700 (PDT)
-From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1681594128;
-        bh=ffuzWbsBT4I0Dzm1ac4bREAFCsDITc0shbz2IoN6G7s=;
-        h=From:Subject:Date:To:Cc:From;
-        b=JQ91D5LOfZi7AADvHsorsBSrap9gQCs8WEn0nMe8bBwPKEMCzeBDCX6OKzrKIRpwt
-         xUynC+oE2TFmFmP9/5/2YCcvi7szYJv52lxYwCqzHrYvd+pP8OeOD/lpBii3kO/uaj
-         agOxYkduxAOiU+wS4nrfXQDiMUcwL8KNBxewqJq0=
-Subject: [PATCH 0/2] tools/nolibc: fork: fix on s390 and add test
-Date:   Sat, 15 Apr 2023 23:28:46 +0200
-Message-Id: <20230415-nolibc-fork-v1-0-9747c73651c5@weissschuh.net>
+        Sat, 15 Apr 2023 20:25:53 -0400
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE8EF35A9;
+        Sat, 15 Apr 2023 17:25:52 -0700 (PDT)
+Received: by mail-ej1-x644.google.com with SMTP id dx24so11056814ejb.11;
+        Sat, 15 Apr 2023 17:25:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681604751; x=1684196751;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AikccuILl/rWwVlUOcy4wtolB2YL8IX34+EVMpD42sg=;
+        b=dPCVE1VQ9k0Cuu8quWGycURV9SGO5kqGK2tGTmoickhgMNDpDqcBvl5IcL+XDpuhl3
+         cOWkJWembdBu9WvJy52kUQA2ZSXBiRBiKCBqFVzjviJFVC9Brxy3iw/ErGO6jsBpHYk3
+         S8G4PAKdZopqWjA7S4NdtvXkORXKKQqN1OI20eQ3ILhOJAwlk2Bal7PjzFxSuXSc1CQ8
+         Ttlog++cOP2dT+V1t2hhXvarZyGaZvsQqW6cK2Gjry3vMUL53+d15wQ4UOagzze5+Fat
+         x9ohAczNH1lDYPkB1IjdaaQ88fmk6W9MLBV72LT8BTvwgcYPdUH861TPzTUgvKIek4QS
+         cYHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681604751; x=1684196751;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AikccuILl/rWwVlUOcy4wtolB2YL8IX34+EVMpD42sg=;
+        b=TDRuc3NbJGuq0JPeJ1jmJ65fkcyIA3PxSKVXzdQML8MZ9aTf8CpGkPGe1na93cWLHk
+         /ZOMUIwDNDAbbF1h8e6/cS2Je8vQsDEeNqd9NobF0PlmrkxzRMoiNlkakQY571UCUHHR
+         UQgtHRXlGEkAlqD0q2zZihADBbEVlGX6PsrCkTjUXLiAEXSykuA/MlvIPOkHx6Hzn6mD
+         re/fUTr2evy/qRqoV3gHKB0AwOD+ZdcBAKrBsubYsfqUT4gb8HJAE38dFwFkvuLkeBtf
+         iYA4mkb576PbGQBT3j6N1GvUTBEFPyAsEVjeiAEflWf5CRTX4hB5wIqOhlXhEwkWu1xz
+         8S1g==
+X-Gm-Message-State: AAQBX9dG8ZnyrBDQ+inO9hYaHLtfFoxKPZrpLeyHdvaeUVHpRQNkbpzN
+        BgHYFnVQV7LzboFZ5fbXpH+pnwX9NSl75ObNV7E=
+X-Google-Smtp-Source: AKy350bwAxk4mfYw5rLmjnhLo0oyAebJps3Rkaf2Za1xbwAMpcl5KBQjhfMpWZzvodcmJLLEgxG23DeILztqemeHW6Q=
+X-Received: by 2002:a17:906:fcd8:b0:94e:2d:e94f with SMTP id
+ qx24-20020a170906fcd800b0094e002de94fmr1597507ejb.8.1681604751315; Sat, 15
+ Apr 2023 17:25:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAA4XO2QC/x2NSQrDMAwAvxJ0rsDOTr5SerBdpRExcpBpKYT8v
- aLHGRjmhErKVGFpTlD6cOUiBv7WQNqCvAj5aQytazvX+wGlZI4J16I7xsnNU+j6wY8jWBFDJYw
- aJG3WyDtnk4fSyt//4v64rh8WSOKecgAAAA==
-To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1681594127; l=927;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=ffuzWbsBT4I0Dzm1ac4bREAFCsDITc0shbz2IoN6G7s=;
- b=NT6hmRBQG7jQ+hw3g97sTAG6HwkeHoAj7Vr246YpEyxNiOXxpnKGk8rbLG7vK6UPH9v6ByOiZ
- R9vZTgycSdFAY3WiAD5lubtvCE2s1Z96Pu93wFWFKPmTPxnBg1I37Ok
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+References: <20230414110056.19665-1-cloudliang@tencent.com>
+ <20230414110056.19665-5-cloudliang@tencent.com> <ZDoY1hOJfMwJk1SQ@debian.me>
+In-Reply-To: <ZDoY1hOJfMwJk1SQ@debian.me>
+From:   Jinrong Liang <ljr.kernel@gmail.com>
+Date:   Sun, 16 Apr 2023 08:25:40 +0800
+Message-ID: <CAFg_LQVLzXUhgOkzO780D1HmtLJ6topwPNQJTYXFbR9L7+X17Q@mail.gmail.com>
+Subject: Re: [PATCH 4/7] KVM: x86/pmu: Add documentation for fixed ctr on PMU filter
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Like Xu <like.xu.linux@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>,
+        Aaron Lewis <aaronlewis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jinrong Liang <cloudliang@tencent.com>,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The generic fork() implementation in nolibc falls back to the clone()
-syscall. On s390 the first two arguments to clone() are swapped compared
-to other architectures, breaking the implementation in nolibc.
+Bagas Sanjaya <bagasdotme@gmail.com> =E4=BA=8E2023=E5=B9=B44=E6=9C=8815=E6=
+=97=A5=E5=91=A8=E5=85=AD 11:24=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Fri, Apr 14, 2023 at 07:00:53PM +0800, Jinrong Liang wrote:
+> > +Specifically, KVM follows the following pseudo-code when determining w=
+hether to
+> > +allow the guest FixCtr[i] to count its pre-defined fixed event:
+> > +
+> > +  FixCtr[i]_is_allowed =3D (action =3D=3D ALLOW) && (bitmap & BIT(i)) =
+||
+> > +    (action =3D=3D DENY) && !(bitmap & BIT(i));
+> > +  FixCtr[i]_is_denied =3D !FixCtr[i]_is_allowed;
+> > +
+>
+> As kernel test robot has reported [1], you need to wrap the code above
+> in a code block:
 
-Add a custom implementation of fork() to s390 that works.
+I will make the changes as you suggested, i.e. wrap the code above in
+a code block.
 
-While at it also add a testcase for fork().
+Thanks.
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
-Thomas Weißschuh (2):
-      tools/nolibc: s390: provide custom implementation for sys_fork
-      tools/nolibc: add testcase for fork()/waitpid()
-
- tools/include/nolibc/arch-s390.h             |  8 ++++++++
- tools/include/nolibc/sys.h                   |  2 ++
- tools/testing/selftests/nolibc/nolibc-test.c | 20 ++++++++++++++++++++
- 3 files changed, 30 insertions(+)
----
-base-commit: c1c4f33b6be9b3412d9e0ba01b367f4ffe47c379
-change-id: 20230415-nolibc-fork-b7087a345166
-
-Best regards,
--- 
-Thomas Weißschuh <linux@weissschuh.net>
-
+>
+> ---- >8 ----
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.=
+rst
+> index 036f5b1a39aff8..b5836767e0e76d 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -5126,7 +5126,7 @@ Via this API, KVM userspace can also control the be=
+havior of the VM's fixed
+>  counters (if any) by configuring the "action" and "fixed_counter_bitmap"=
+ fields.
+>
+>  Specifically, KVM follows the following pseudo-code when determining whe=
+ther to
+> -allow the guest FixCtr[i] to count its pre-defined fixed event:
+> +allow the guest FixCtr[i] to count its pre-defined fixed event::
+>
+>    FixCtr[i]_is_allowed =3D (action =3D=3D ALLOW) && (bitmap & BIT(i)) ||
+>      (action =3D=3D DENY) && !(bitmap & BIT(i));
+>
+> Thanks.
+>
+> [1]: https://lore.kernel.org/linux-doc/202304150850.rx4UDDsB-lkp@intel.co=
+m/
+>
+> --
+> An old man doll... just what I always wanted! - Clara
