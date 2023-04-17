@@ -2,34 +2,34 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C73EC77B7D
-	for <linux-kselftest@archiver.kernel.org>; Mon, 17 Apr 2023 16:02:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4FCFC77B7C
+	for <linux-kselftest@archiver.kernel.org>; Mon, 17 Apr 2023 16:01:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbjDQQCA (ORCPT
+        id S229717AbjDQQB6 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 17 Apr 2023 12:02:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56300 "EHLO
+        Mon, 17 Apr 2023 12:01:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230304AbjDQQBy (ORCPT
+        with ESMTP id S230137AbjDQQBx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 Apr 2023 12:01:54 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272C0BBA5;
-        Mon, 17 Apr 2023 09:01:44 -0700 (PDT)
+        Mon, 17 Apr 2023 12:01:53 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC76C17B;
+        Mon, 17 Apr 2023 09:01:43 -0700 (PDT)
 From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1681747302;
-        bh=/tBIqb3YiZRud1yDXqeDbEhl0GcdVbv2DqKYt4+iwGU=;
+        s=mail; t=1681747301;
+        bh=9096Axbwkb5RULpEWmhmqDxDTfhtR94gJcnvpcVYljc=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=nl94KQlg1GxjCKOnf3UNM2jbbKw3sUtF6qW5kFgadFHgqlsy9AH06gsgaZ0sixF+I
-         6A+a9ZSnWL7U5mecK+r2wOoL137aNZ6sPxhhFrRaj1nRsNTnKlwhOdGG2lL8W6CIlY
-         Qf63zPue1aDtonPgAADlS5vgM7meZRkNFoCwZVRE=
-Date:   Mon, 17 Apr 2023 18:01:35 +0200
-Subject: [PATCH 5/6] tools/nolibc: loongarch: add stackprotector support
+        b=hzQwJo69/eMSqc5dq85JLzKI3yUdHw/NvcRfp8mtuU+HYH1DFKD6Xdxi6JDWeqi8M
+         AUGR54oBJ7UV7UKIiwWHjFfYlHq0d7lmJgl8YZYVyuQP3CBBu0UU5tWsY8KbX+m9pj
+         QlwCFb9z0YOB/U7zSNrt6kTyXZKtCVG4sL9bQI0c=
+Date:   Mon, 17 Apr 2023 18:01:32 +0200
+Subject: [PATCH 2/6] tools/nolibc: riscv: add stackprotector support
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20230408-nolibc-stackprotector-archs-v1-5-271f5c859c71@weissschuh.net>
+Message-Id: <20230408-nolibc-stackprotector-archs-v1-2-271f5c859c71@weissschuh.net>
 References: <20230408-nolibc-stackprotector-archs-v1-0-271f5c859c71@weissschuh.net>
 In-Reply-To: <20230408-nolibc-stackprotector-archs-v1-0-271f5c859c71@weissschuh.net>
 To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>,
@@ -40,11 +40,11 @@ Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org,
         =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1681747300; l=2073;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1681747300; l=1984;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=/tBIqb3YiZRud1yDXqeDbEhl0GcdVbv2DqKYt4+iwGU=;
- b=vUkGNETLBzKth36N1KX6EIz8V04NLKaAwiZOLdqvzTD05bUymN/ILZN3wB9aRQjizoh52oWpG
- Vtj14M8jfS4CD9pYv6bBtf3wqMtw00w0vxjbDA5lpeOdzykdGs/JFx9
+ bh=9096Axbwkb5RULpEWmhmqDxDTfhtR94gJcnvpcVYljc=;
+ b=G2kyIfSoKVPBz/GbvVu4K6RodfnUF9UYUpy4/vKKzawGKD6LgcM4U5ANPLBC+L0xsG5FO0iA0
+ a4UzdbTWSHsBeIc6cRypowKluMPEQ5m7M6apMZsDwFnowwAP53abYcF
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 Precedence: bulk
@@ -53,46 +53,44 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- tools/include/nolibc/arch-loongarch.h   | 7 ++++++-
+ tools/include/nolibc/arch-riscv.h       | 7 ++++++-
  tools/testing/selftests/nolibc/Makefile | 1 +
  2 files changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/tools/include/nolibc/arch-loongarch.h b/tools/include/nolibc/arch-loongarch.h
-index ec3b46a991a9..07e3b1fd7262 100644
---- a/tools/include/nolibc/arch-loongarch.h
-+++ b/tools/include/nolibc/arch-loongarch.h
-@@ -149,6 +149,8 @@
+diff --git a/tools/include/nolibc/arch-riscv.h b/tools/include/nolibc/arch-riscv.h
+index 0d5f15fdedc4..b2ccffcc079f 100644
+--- a/tools/include/nolibc/arch-riscv.h
++++ b/tools/include/nolibc/arch-riscv.h
+@@ -173,14 +173,19 @@ struct sys_stat_struct {
  char **environ __attribute__((weak));
  const unsigned long *_auxv __attribute__((weak));
  
 +#define __ARCH_SUPPORTS_STACK_PROTECTOR
 +
- #if __loongarch_grlen == 32
- #define LONGLOG      "2"
- #define SZREG        "4"
-@@ -170,9 +172,12 @@ const unsigned long *_auxv __attribute__((weak));
- #endif
- 
  /* startup code */
 -void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) _start(void)
 +void __attribute__((weak,noreturn,optimize("omit-frame-pointer"),no_stack_protector)) _start(void)
  {
  	__asm__ volatile (
+ 		".option push\n"
+ 		".option norelax\n"
+ 		"lla   gp, __global_pointer$\n"
+ 		".option pop\n"
 +#ifdef NOLIBC_STACKPROTECTOR
-+		"bl __stack_chk_init\n"               /* initialize stack protector                          */
++		"call __stack_chk_init\n"    /* initialize stack protector                          */
 +#endif
- 		REG_L        " $a0, $sp, 0\n"         /* argc (a0) was in the stack                          */
- 		LONG_ADDI    " $a1, $sp, "SZREG"\n"   /* argv (a1) = sp + SZREG                              */
- 		LONG_SLL     " $a2, $a0, "LONGLOG"\n" /* envp (a2) = SZREG*argc ...                          */
+ 		"lw    a0, 0(sp)\n"          /* argc (a0) was in the stack                          */
+ 		"add   a1, sp, "SZREG"\n"    /* argv (a1) = sp                                      */
+ 		"slli  a2, a0, "PTRLOG"\n"   /* envp (a2) = SZREG*argc ...                          */
 diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index 8feffc790a31..efa7a51e0fcd 100644
+index 3c8e3a6f8985..0a83ad388a16 100644
 --- a/tools/testing/selftests/nolibc/Makefile
 +++ b/tools/testing/selftests/nolibc/Makefile
-@@ -85,6 +85,7 @@ CFLAGS_STKP_x86 = $(CFLAGS_STACKPROTECTOR)
- CFLAGS_STKP_arm64 = $(CFLAGS_STACKPROTECTOR)
- CFLAGS_STKP_arm = $(CFLAGS_STACKPROTECTOR)
- CFLAGS_STKP_riscv = $(CFLAGS_STACKPROTECTOR)
-+CFLAGS_STKP_loongarch = $(CFLAGS_STACKPROTECTOR)
+@@ -82,6 +82,7 @@ CFLAGS_STACKPROTECTOR = -DNOLIBC_STACKPROTECTOR \
+ CFLAGS_STKP_i386 = $(CFLAGS_STACKPROTECTOR)
+ CFLAGS_STKP_x86_64 = $(CFLAGS_STACKPROTECTOR)
+ CFLAGS_STKP_x86 = $(CFLAGS_STACKPROTECTOR)
++CFLAGS_STKP_riscv = $(CFLAGS_STACKPROTECTOR)
  CFLAGS_s390 = -m64
  CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 \
  		$(call cc-option,-fno-stack-protector) \
