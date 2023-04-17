@@ -2,117 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CC51CC77B70
-	for <linux-kselftest@archiver.kernel.org>; Mon, 17 Apr 2023 15:04:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99A9DC77B76
+	for <linux-kselftest@archiver.kernel.org>; Mon, 17 Apr 2023 15:16:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231236AbjDQPEC (ORCPT
+        id S230152AbjDQPQG (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 17 Apr 2023 11:04:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57338 "EHLO
+        Mon, 17 Apr 2023 11:16:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230453AbjDQPD4 (ORCPT
+        with ESMTP id S230052AbjDQPQF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 Apr 2023 11:03:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67FA110E
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Apr 2023 08:03:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681743784;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9AEy9mK6O3Mbv/ulbvFXi8BBb8TRpaehy7L8tKOiCn8=;
-        b=Al5vq02qUq/C6bYhnzShJgBCw2/jGZJM/Onzux3OEz0FOXOteVwDWWaskypqE1tRTCRlYl
-        D4h8tZ9SBVWkU9r+8/qtHVdo9JWhghXa/4Y9nbkvZV77Api6I+3poF86EKYlaeJcimFHIe
-        yTo26kzjd28Rl12obMUP+sIUEYkgUVA=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-345-_KH9HYJNMG2Pd5R_uWZ8nw-1; Mon, 17 Apr 2023 10:56:36 -0400
-X-MC-Unique: _KH9HYJNMG2Pd5R_uWZ8nw-1
-Received: by mail-wm1-f72.google.com with SMTP id w16-20020a05600c475000b003f082eecdcaso10678037wmo.6
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Apr 2023 07:56:36 -0700 (PDT)
+        Mon, 17 Apr 2023 11:16:05 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CDD191;
+        Mon, 17 Apr 2023 08:16:04 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id ff18so3166382qtb.13;
+        Mon, 17 Apr 2023 08:16:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681744563; x=1684336563;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Njb3nDqiylR1xpil80P1e9sGs4DNK9W/rwC6kpXNNPk=;
+        b=cogNwe4nSD8gJhJXPp6ZEL5Md6p5BXdC73TYAFa86y6GESPSH7OOkJv5FvzleIzixZ
+         YvPQyj6QI+oLAeXQFVpfdYK+vSo+z44XUiOiP5tCSrqHbjY9rkW5bH+oRCoxXQBxxhA4
+         gV4R3u+DqMi0ajJDdFwDvap0S1tMHFur4vivV3YN5bw3GzDp+ZHy7mlZstTVMspEK+dY
+         JRtCDLr8zhRZQ0T6z9GrklieSg5uekw8Ajn9q1g4YFR74X9kSNhnfglWwix6XHXl7z2K
+         tXfYjTb3vEfjDX4f+ibLB2YvIabfF6OTRkOxOjPt2OdmSNqcBefHLxeS6nO1eTk40Ux9
+         vMxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681743395; x=1684335395;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :from:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9AEy9mK6O3Mbv/ulbvFXi8BBb8TRpaehy7L8tKOiCn8=;
-        b=Xaw4BfgCYWLWhDTKWRZ3m9v/bhSUvjkKbC1m39bloObXBXsR+XkqJn5sY5oBzZtctl
-         Fl5vosxYOZNPTHheAu++2P/AggpmrcwuklArYTdWFyu/UT5oAQ2ykK2mZN1V3J4UKhc/
-         HchfadDywxG0fi7BSofKDZraUQH/0u04+DRNZJwN8ys9o8Gl68ogBrYvNX+fuiarsUDS
-         blammUzAZ6kqzT27O29NbmVDASXUz+2ldOng7Og2pCZr/Yp+V0d45nj7yK8kucsx+mOH
-         xfjYinZicrQHr6VHErB6k6KAuG04F7EcsmymI3f7c9/DnwyXZRZ51Sl++i/cyRiUDDyH
-         DMQg==
-X-Gm-Message-State: AAQBX9ef0DNRXmGJCXGdOR44vcUQnQIHFrJfVUltOFz1wIlI12BQxWGp
-        e3+H9fLdvlacfTjaSNP44kROfFqmagF24+2OB4NkxABAqFFk/Xdt3xJmqXT6gupMQkg/hsvaREJ
-        e0S601hsCMOmbp9eXYM194P6zuWDi
-X-Received: by 2002:a1c:6a10:0:b0:3f1:7324:c81d with SMTP id f16-20020a1c6a10000000b003f17324c81dmr2928931wmc.14.1681743395474;
-        Mon, 17 Apr 2023 07:56:35 -0700 (PDT)
-X-Google-Smtp-Source: AKy350a6ddKymR8nlcmLUE/5sBw6TnJoW0qmSC81AMGo1SYFyxMxj5tFc0W5AcAdnFpqPUjwD1aYVg==
-X-Received: by 2002:a1c:6a10:0:b0:3f1:7324:c81d with SMTP id f16-20020a1c6a10000000b003f17324c81dmr2928915wmc.14.1681743395171;
-        Mon, 17 Apr 2023 07:56:35 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c700:fc00:db07:68a9:6af5:ecdf? (p200300cbc700fc00db0768a96af5ecdf.dip0.t-ipconnect.de. [2003:cb:c700:fc00:db07:68a9:6af5:ecdf])
-        by smtp.gmail.com with ESMTPSA id v22-20020a7bcb56000000b003f049a42689sm12161191wmj.25.2023.04.17.07.56.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Apr 2023 07:56:34 -0700 (PDT)
-Message-ID: <954d6b1f-5b4d-48e5-02fe-646b3e79f6e5@redhat.com>
-Date:   Mon, 17 Apr 2023 16:56:33 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v8 3/3] selftests/mm: add new selftests for KSM
-Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-To:     Stefan Roesch <shr@devkernel.io>, kernel-team@fb.com
-Cc:     linux-mm@kvack.org, riel@surriel.com, mhocko@suse.com,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        akpm@linux-foundation.org, hannes@cmpxchg.org, willy@infradead.org,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-References: <20230415225913.3206647-1-shr@devkernel.io>
- <20230415225913.3206647-4-shr@devkernel.io>
- <355f42d1-4354-376d-ab27-7e55d06e64a6@redhat.com>
-Organization: Red Hat
-In-Reply-To: <355f42d1-4354-376d-ab27-7e55d06e64a6@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        d=1e100.net; s=20221208; t=1681744563; x=1684336563;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Njb3nDqiylR1xpil80P1e9sGs4DNK9W/rwC6kpXNNPk=;
+        b=bH4JBBxQ+ctxC1zTNy7nebWif0Q500vVRssUQqLjjITso7OzIpYUcgv/yHYW+l8Am1
+         wF26vFLsUiBh1K7up0UUCWpCdO9DO624sYTisgeZ3UQQfygzR/fSY5AG7ugP4aTpE/nG
+         Uu4WcRja0lcOt/GrlXtq2HhiXxERBYTobB1PSm8g2xFDiTK3v1TniHc2k0QuqfTBtKoe
+         ISXf49jWFqFlo2YMeS53rg4pDlXqkxgZYB61mTdoI6fo7UuBK5KeEWz4NKBGZ6GhIsSC
+         y3OYY7/z56PKNH8LxIkraB674tteNBdkHFNWzM28yrfDL/If4qtoPeT7LNoc70cL+Wtg
+         XJAg==
+X-Gm-Message-State: AAQBX9e9HaY2BZ4mbRhkv5FVLnA0462QvCt6YoenmpD4iApe3YPmHXv3
+        QhA5Io8ZyGblC2ftNpGXHcE=
+X-Google-Smtp-Source: AKy350YmOO+ODOpIwgxzxH8zOmhBZngaKtmCkSvJuNR6otd2m3bfKHixNNMLv5XF0PbqdyvSgkbSXg==
+X-Received: by 2002:ac8:7c56:0:b0:3ec:4856:9708 with SMTP id o22-20020ac87c56000000b003ec48569708mr12340263qtv.68.1681744563392;
+        Mon, 17 Apr 2023 08:16:03 -0700 (PDT)
+Received: from localhost (240.157.150.34.bc.googleusercontent.com. [34.150.157.240])
+        by smtp.gmail.com with ESMTPSA id 125-20020a370c83000000b0074de7b1fe1csm1227218qkm.17.2023.04.17.08.16.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Apr 2023 08:16:02 -0700 (PDT)
+Date:   Mon, 17 Apr 2023 11:16:02 -0400
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To:     Yang Yang <yang.yang29@zte.com.cn>, davem@davemloft.net,
+        edumazet@google.com, willemdebruijn.kernel@gmail.com
+Cc:     yang.yang29@zte.com.cn, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com, shuah@kernel.org,
+        zhang.yunkai@zte.com.cn, xu.xin16@zte.com.cn,
+        Xuexin Jiang <jiang.xuexin@zte.com.cn>
+Message-ID: <643d62b28e413_29adc929416@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20230417122423.193237-1-yang.yang29@zte.com.cn>
+References: <202304172017351308785@zte.com.cn>
+ <20230417122423.193237-1-yang.yang29@zte.com.cn>
+Subject: RE: [PATCH linux-next 1/3] selftests: net: udpgso_bench_rx: Fix
+ verifty exceptions
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 17.04.23 16:35, David Hildenbrand wrote:
->> +/* Verify that KSM can be enabled / queried with prctl. */
->> +static void test_prctl(void)
->> +{
->> +	int ret;
->> +
->> +	ksft_print_msg("[RUN] %s\n", __func__);
->> +
->> +	ret = prctl(PR_SET_MEMORY_MERGE, 1, 0, 0, 0);
->> +	if (ret < 0 && errno == EINVAL) {
->> +		ksft_test_result_skip("PR_SET_MEMORY_MERGE not supported\n");
->> +		return;
->> +	} else if (ret) {
->> +		ksft_test_result_fail("PR_SET_MEMORY_MERGE=1 failed\n");
->> +	}
+Yang Yang wrote:
+> From: Zhang Yunkai (CGEL ZTE) <zhang.yunkai@zte.com.cn>
 > 
-> Just realized we're missing a "return;" in case of the failure here.
+> The verification function of this test case is likely to encounter the
+> following error, which may confuse users.
 > 
+> Executing the following command fails:
+> bash# udpgso_bench_tx -l 4 -4 -D "$DST"
+> bash# udpgso_bench_tx -l 4 -4 -D "$DST" -S 0
+> bash# udpgso_bench_rx -4 -G -S 1472 -v
 
+Why are you running two senders concurrently? The test is not intended
+to handle that case.
 
-And we should probably fix that as well:
-
-ERROR: do not initialise globals to 0
-#235: FILE: tools/testing/selftests/mm/ksm_tests.c:57:
-+int debug = 0;
-
-total: 1 errors, 0 warnings, 512 lines checked
-
-
--- 
-Thanks,
-
-David / dhildenb
-
+> udpgso_bench_rx: data[1472]: len 2944, a(97) != q(113)
+> 
+> This is because the sending buffers are not aligned by 26 bytes, and the
+> GRO is not merged sequentially, and the receiver does not judge this
+> situation. We do the validation after the data is split at the receiving
+> end, just as the application actually uses this feature.
+> 
+> Signed-off-by: Zhang Yunkai (CGEL ZTE) <zhang.yunkai@zte.com.cn>
+> Reviewed-by: xu xin (CGEL ZTE) <xu.xin16@zte.com.cn>
+> Reviewed-by: Yang Yang (CGEL ZTE) <yang.yang29@zte.com.cn>
+> Cc: Xuexin Jiang (CGEL ZTE) <jiang.xuexin@zte.com.cn>
