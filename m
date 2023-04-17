@@ -2,34 +2,34 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B4FCFC77B7C
-	for <linux-kselftest@archiver.kernel.org>; Mon, 17 Apr 2023 16:01:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 43028C77B76
+	for <linux-kselftest@archiver.kernel.org>; Mon, 17 Apr 2023 16:02:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbjDQQB6 (ORCPT
+        id S230230AbjDQQCI (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 17 Apr 2023 12:01:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56292 "EHLO
+        Mon, 17 Apr 2023 12:02:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbjDQQBx (ORCPT
+        with ESMTP id S230231AbjDQQBz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 Apr 2023 12:01:53 -0400
+        Mon, 17 Apr 2023 12:01:55 -0400
 Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC76C17B;
-        Mon, 17 Apr 2023 09:01:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB244CC14;
+        Mon, 17 Apr 2023 09:01:47 -0700 (PDT)
 From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
         s=mail; t=1681747301;
-        bh=9096Axbwkb5RULpEWmhmqDxDTfhtR94gJcnvpcVYljc=;
+        bh=iwWW56Gx2lHStfQUQLk6EkDugqDvy/8mdADPIa3bZBc=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=hzQwJo69/eMSqc5dq85JLzKI3yUdHw/NvcRfp8mtuU+HYH1DFKD6Xdxi6JDWeqi8M
-         AUGR54oBJ7UV7UKIiwWHjFfYlHq0d7lmJgl8YZYVyuQP3CBBu0UU5tWsY8KbX+m9pj
-         QlwCFb9z0YOB/U7zSNrt6kTyXZKtCVG4sL9bQI0c=
-Date:   Mon, 17 Apr 2023 18:01:32 +0200
-Subject: [PATCH 2/6] tools/nolibc: riscv: add stackprotector support
+        b=LAZFEc5+buhv5vFiEgQ4tVfLKtvgMm7K7xdNzjQoLSnVM8ybd6eb/wrr+lb0RMHXG
+         QsJEMZB++ItERXWp2Jv43McibCD0PoMHYbumhEzpJD/vCsWmkRJzDe0Z26dbLBq4yn
+         MUunnPYWPp9wjDuds29Nb9Vh+ozyU1AJbvjmVFv8=
+Date:   Mon, 17 Apr 2023 18:01:31 +0200
+Subject: [PATCH 1/6] selftests/nolibc: reduce syscalls during space padding
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20230408-nolibc-stackprotector-archs-v1-2-271f5c859c71@weissschuh.net>
+Message-Id: <20230408-nolibc-stackprotector-archs-v1-1-271f5c859c71@weissschuh.net>
 References: <20230408-nolibc-stackprotector-archs-v1-0-271f5c859c71@weissschuh.net>
 In-Reply-To: <20230408-nolibc-stackprotector-archs-v1-0-271f5c859c71@weissschuh.net>
 To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>,
@@ -40,60 +40,62 @@ Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org,
         =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1681747300; l=1984;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1681747300; l=1322;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=9096Axbwkb5RULpEWmhmqDxDTfhtR94gJcnvpcVYljc=;
- b=G2kyIfSoKVPBz/GbvVu4K6RodfnUF9UYUpy4/vKKzawGKD6LgcM4U5ANPLBC+L0xsG5FO0iA0
- a4UzdbTWSHsBeIc6cRypowKluMPEQ5m7M6apMZsDwFnowwAP53abYcF
+ bh=iwWW56Gx2lHStfQUQLk6EkDugqDvy/8mdADPIa3bZBc=;
+ b=selfxBdXZN6SyUn9/aMPtG19qHA4hVIr96ooaQSSksgZp/PXoWSXp/QlxzyjnYfomFB9l7tEj
+ htoVVvo6yB2DT7K+m+H1w3NCUEcJJj4a20quDM+7bESYELvKgwgdcyo
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Previously each space character used for alignment during test execution
+was written in a single write() call.
+This would make the output from strace fairly unreadable.
+Coalesce all spaces into a single call to write().
+
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- tools/include/nolibc/arch-riscv.h       | 7 ++++++-
- tools/testing/selftests/nolibc/Makefile | 1 +
- 2 files changed, 7 insertions(+), 1 deletion(-)
+ tools/testing/selftests/nolibc/nolibc-test.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/tools/include/nolibc/arch-riscv.h b/tools/include/nolibc/arch-riscv.h
-index 0d5f15fdedc4..b2ccffcc079f 100644
---- a/tools/include/nolibc/arch-riscv.h
-+++ b/tools/include/nolibc/arch-riscv.h
-@@ -173,14 +173,19 @@ struct sys_stat_struct {
- char **environ __attribute__((weak));
- const unsigned long *_auxv __attribute__((weak));
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index 68e22617651c..35f203556a0c 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -108,19 +108,26 @@ const char *errorname(int err)
+ 	}
+ }
  
-+#define __ARCH_SUPPORTS_STACK_PROTECTOR
++static void putcharn(char c, size_t n)
++{
++	char buf[64];
 +
- /* startup code */
--void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) _start(void)
-+void __attribute__((weak,noreturn,optimize("omit-frame-pointer"),no_stack_protector)) _start(void)
++	memset(buf, c, n);
++	buf[n] = '\0';
++	fputs(buf, stdout);
++}
++
+ static int pad_spc(int llen, int cnt, const char *fmt, ...)
  {
- 	__asm__ volatile (
- 		".option push\n"
- 		".option norelax\n"
- 		"lla   gp, __global_pointer$\n"
- 		".option pop\n"
-+#ifdef NOLIBC_STACKPROTECTOR
-+		"call __stack_chk_init\n"    /* initialize stack protector                          */
-+#endif
- 		"lw    a0, 0(sp)\n"          /* argc (a0) was in the stack                          */
- 		"add   a1, sp, "SZREG"\n"    /* argv (a1) = sp                                      */
- 		"slli  a2, a0, "PTRLOG"\n"   /* envp (a2) = SZREG*argc ...                          */
-diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index 3c8e3a6f8985..0a83ad388a16 100644
---- a/tools/testing/selftests/nolibc/Makefile
-+++ b/tools/testing/selftests/nolibc/Makefile
-@@ -82,6 +82,7 @@ CFLAGS_STACKPROTECTOR = -DNOLIBC_STACKPROTECTOR \
- CFLAGS_STKP_i386 = $(CFLAGS_STACKPROTECTOR)
- CFLAGS_STKP_x86_64 = $(CFLAGS_STACKPROTECTOR)
- CFLAGS_STKP_x86 = $(CFLAGS_STACKPROTECTOR)
-+CFLAGS_STKP_riscv = $(CFLAGS_STACKPROTECTOR)
- CFLAGS_s390 = -m64
- CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 \
- 		$(call cc-option,-fno-stack-protector) \
+ 	va_list args;
+-	int len;
+ 	int ret;
+ 
+-	for (len = 0; len < cnt - llen; len++)
+-		putchar(' ');
++	putcharn(' ', cnt - llen);
+ 
+ 	va_start(args, fmt);
+ 	ret = vfprintf(stdout, fmt, args);
+ 	va_end(args);
+-	return ret < 0 ? ret : ret + len;
++	return ret < 0 ? ret : ret + cnt - llen;
+ }
+ 
+ /* The tests below are intended to be used by the macroes, which evaluate
 
 -- 
 2.40.0
