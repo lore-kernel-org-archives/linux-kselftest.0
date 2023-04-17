@@ -2,34 +2,34 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43028C77B76
-	for <linux-kselftest@archiver.kernel.org>; Mon, 17 Apr 2023 16:02:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23476C77B76
+	for <linux-kselftest@archiver.kernel.org>; Mon, 17 Apr 2023 16:02:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230230AbjDQQCI (ORCPT
+        id S231153AbjDQQCK (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 17 Apr 2023 12:02:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56370 "EHLO
+        Mon, 17 Apr 2023 12:02:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230231AbjDQQBz (ORCPT
+        with ESMTP id S230336AbjDQQBz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Mon, 17 Apr 2023 12:01:55 -0400
 Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB244CC14;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB059CC13;
         Mon, 17 Apr 2023 09:01:47 -0700 (PDT)
 From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1681747301;
-        bh=iwWW56Gx2lHStfQUQLk6EkDugqDvy/8mdADPIa3bZBc=;
+        s=mail; t=1681747302;
+        bh=7JAtwI3C3P/xbRS3GHZabYuHj1wyiMQ9ppPE8nh6168=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=LAZFEc5+buhv5vFiEgQ4tVfLKtvgMm7K7xdNzjQoLSnVM8ybd6eb/wrr+lb0RMHXG
-         QsJEMZB++ItERXWp2Jv43McibCD0PoMHYbumhEzpJD/vCsWmkRJzDe0Z26dbLBq4yn
-         MUunnPYWPp9wjDuds29Nb9Vh+ozyU1AJbvjmVFv8=
-Date:   Mon, 17 Apr 2023 18:01:31 +0200
-Subject: [PATCH 1/6] selftests/nolibc: reduce syscalls during space padding
+        b=WpoZErt0EHw1mQ1j5YnoJf8dhOeV5qO12+XK00Uapv+8i9fhb5pawhHWE+TWthp6O
+         k0CkzLh0HaGJOLMPBHbEFeRb7UE5x1MK32yPEUP/P5q4P1lW/5Mmqa1lGNc27sSwkj
+         Lg+HfGjj8OQxX+f1hvW0HXBCunDIQl5/Gih+7kYQ=
+Date:   Mon, 17 Apr 2023 18:01:36 +0200
+Subject: [PATCH 6/6] tools/nolibc: mips: add stackprotector support
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20230408-nolibc-stackprotector-archs-v1-1-271f5c859c71@weissschuh.net>
+Message-Id: <20230408-nolibc-stackprotector-archs-v1-6-271f5c859c71@weissschuh.net>
 References: <20230408-nolibc-stackprotector-archs-v1-0-271f5c859c71@weissschuh.net>
 In-Reply-To: <20230408-nolibc-stackprotector-archs-v1-0-271f5c859c71@weissschuh.net>
 To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>,
@@ -40,62 +40,61 @@ Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org,
         =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1681747300; l=1322;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1681747300; l=1927;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=iwWW56Gx2lHStfQUQLk6EkDugqDvy/8mdADPIa3bZBc=;
- b=selfxBdXZN6SyUn9/aMPtG19qHA4hVIr96ooaQSSksgZp/PXoWSXp/QlxzyjnYfomFB9l7tEj
- htoVVvo6yB2DT7K+m+H1w3NCUEcJJj4a20quDM+7bESYELvKgwgdcyo
+ bh=7JAtwI3C3P/xbRS3GHZabYuHj1wyiMQ9ppPE8nh6168=;
+ b=iozURWBM7REeKZo0rYtfFd1FC9qFdufDUvWCJFMpYA9cdyZYwkyNhkDY4aycsW5EaJEgHllPA
+ ZiuL3/UUboiAOCtF1+SCsTQsmkj3cUg4PycI16wiDTxXNluKC8ZobuC
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Previously each space character used for alignment during test execution
-was written in a single write() call.
-This would make the output from strace fairly unreadable.
-Coalesce all spaces into a single call to write().
-
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- tools/testing/selftests/nolibc/nolibc-test.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+ tools/include/nolibc/arch-mips.h        | 8 +++++++-
+ tools/testing/selftests/nolibc/Makefile | 1 +
+ 2 files changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 68e22617651c..35f203556a0c 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -108,19 +108,26 @@ const char *errorname(int err)
- 	}
- }
+diff --git a/tools/include/nolibc/arch-mips.h b/tools/include/nolibc/arch-mips.h
+index 8822f150e72f..65c19ccc7f9d 100644
+--- a/tools/include/nolibc/arch-mips.h
++++ b/tools/include/nolibc/arch-mips.h
+@@ -179,14 +179,20 @@ struct sys_stat_struct {
+ char **environ __attribute__((weak));
+ const unsigned long *_auxv __attribute__((weak));
  
-+static void putcharn(char c, size_t n)
-+{
-+	char buf[64];
++#define __ARCH_SUPPORTS_STACK_PROTECTOR
 +
-+	memset(buf, c, n);
-+	buf[n] = '\0';
-+	fputs(buf, stdout);
-+}
-+
- static int pad_spc(int llen, int cnt, const char *fmt, ...)
+ /* startup code, note that it's called __start on MIPS */
+-void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __start(void)
++void __attribute__((weak,noreturn,optimize("omit-frame-pointer"),no_stack_protector)) __start(void)
  {
- 	va_list args;
--	int len;
- 	int ret;
- 
--	for (len = 0; len < cnt - llen; len++)
--		putchar(' ');
-+	putcharn(' ', cnt - llen);
- 
- 	va_start(args, fmt);
- 	ret = vfprintf(stdout, fmt, args);
- 	va_end(args);
--	return ret < 0 ? ret : ret + len;
-+	return ret < 0 ? ret : ret + cnt - llen;
- }
- 
- /* The tests below are intended to be used by the macroes, which evaluate
+ 	__asm__ volatile (
+ 		/*".set nomips16\n"*/
+ 		".set push\n"
+ 		".set    noreorder\n"
+ 		".option pic0\n"
++#ifdef NOLIBC_STACKPROTECTOR
++		"jal __stack_chk_init\n" /* initialize stack protector                         */
++		"nop\n"                  /* delayed slot                                       */
++#endif
+ 		/*".ent __start\n"*/
+ 		/*"__start:\n"*/
+ 		"lw $a0,($sp)\n"        /* argc was in the stack                               */
+diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+index efa7a51e0fcd..a7524445f33c 100644
+--- a/tools/testing/selftests/nolibc/Makefile
++++ b/tools/testing/selftests/nolibc/Makefile
+@@ -84,6 +84,7 @@ CFLAGS_STKP_x86_64 = $(CFLAGS_STACKPROTECTOR)
+ CFLAGS_STKP_x86 = $(CFLAGS_STACKPROTECTOR)
+ CFLAGS_STKP_arm64 = $(CFLAGS_STACKPROTECTOR)
+ CFLAGS_STKP_arm = $(CFLAGS_STACKPROTECTOR)
++CFLAGS_STKP_mips = $(CFLAGS_STACKPROTECTOR)
+ CFLAGS_STKP_riscv = $(CFLAGS_STACKPROTECTOR)
+ CFLAGS_STKP_loongarch = $(CFLAGS_STACKPROTECTOR)
+ CFLAGS_s390 = -m64
 
 -- 
 2.40.0
