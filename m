@@ -2,141 +2,312 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64E95C77B70
-	for <linux-kselftest@archiver.kernel.org>; Mon, 17 Apr 2023 12:40:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23829C77B72
+	for <linux-kselftest@archiver.kernel.org>; Mon, 17 Apr 2023 12:57:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231197AbjDQMkm (ORCPT
+        id S231287AbjDQM5B (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 17 Apr 2023 08:40:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33116 "EHLO
+        Mon, 17 Apr 2023 08:57:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231203AbjDQMkb (ORCPT
+        with ESMTP id S231282AbjDQM47 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 Apr 2023 08:40:31 -0400
-X-Greylist: delayed 607 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 17 Apr 2023 05:40:30 PDT
-Received: from ubuntu20 (unknown [193.203.214.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC48E59EB;
-        Mon, 17 Apr 2023 05:40:29 -0700 (PDT)
-Received: by ubuntu20 (Postfix, from userid 1003)
-        id BBF41E0C2F; Mon, 17 Apr 2023 12:24:25 +0000 (UTC)
-From:   Yang Yang <yang.yang29@zte.com.cn>
-To:     davem@davemloft.net, edumazet@google.com,
-        willemdebruijn.kernel@gmail.com
-Cc:     yang.yang29@zte.com.cn, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com, shuah@kernel.org,
-        zhang.yunkai@zte.com.cn, xu.xin16@zte.com.cn,
-        Xuexin Jiang <jiang.xuexin@zte.com.cn>
-Subject: [PATCH linux-next 1/3] selftests: net: udpgso_bench_rx: Fix verifty exceptions
-Date:   Mon, 17 Apr 2023 20:24:23 +0800
-Message-Id: <20230417122423.193237-1-yang.yang29@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <202304172017351308785@zte.com.cn>
-References: <202304172017351308785@zte.com.cn>
+        Mon, 17 Apr 2023 08:56:59 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E44D40D1;
+        Mon, 17 Apr 2023 05:56:54 -0700 (PDT)
+Received: from localhost.localdomain (unknown [39.37.187.173])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6191766031ED;
+        Mon, 17 Apr 2023 13:56:44 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1681736212;
+        bh=UJ9inWKfSD8Ebr7KDSzef4kllVFvYPxKsnaKTitb5Mc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=b+SRe8DNUXoC/SD36lds0Cs5oXowY2kJ1eJPM3kl9xuLxR499mV3uoxMr8d1JRyE3
+         zsg26R5XDJtJRarAcO8NoX7YKE601gm9Q8ofwwJpxzDMqrSKec7sb8wjIN/9kJK3gv
+         qTpJDXGf1X1BQnHAvgVEnQbX8U2xuq+J5xr32uOg6g/mdhkWPXLVOhslcUwqBH5+Xh
+         LXXRxosxYfjrc2OURDIeKGrvl4t8MgeRGbGUx9fOaZGlGlP3blfPlIAhNoCNsvO76R
+         NapPNdBWAz45ii6UVF1KP5IdBxeXCGajiQLDaFQ0NKnVRxxGb8vqY4qlE7/iE1sXCe
+         EsCA8XVs8XkGA==
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+To:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@Oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: [PATCH v13 0/5] Implement IOCTL to get and optionally clear info about PTEs
+Date:   Mon, 17 Apr 2023 17:56:25 +0500
+Message-Id: <20230417125630.1146906-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Zhang Yunkai (CGEL ZTE) <zhang.yunkai@zte.com.cn>
+*Changes in v13*
+- Rebase on top of next-20230414
+- Give-up on using uffd_wp_range() and write new helpers, flush tlb only
+  once
 
-The verification function of this test case is likely to encounter the
-following error, which may confuse users.
+*Changes in v12*
+- Update and other memory types to UFFD_FEATURE_WP_ASYNC
+- Rebaase on top of next-20230406
+- Review updates
 
-Executing the following command fails:
-bash# udpgso_bench_tx -l 4 -4 -D "$DST"
-bash# udpgso_bench_tx -l 4 -4 -D "$DST" -S 0
-bash# udpgso_bench_rx -4 -G -S 1472 -v
-udpgso_bench_rx: data[1472]: len 2944, a(97) != q(113)
+*Changes in v11*
+- Rebase on top of next-20230307
+- Base patches on UFFD_FEATURE_WP_UNPOPULATED
+- Do a lot of cosmetic changes and review updates
+- Remove ENGAGE_WP + !GET operation as it can be performed with
+  UFFDIO_WRITEPROTECT
 
-This is because the sending buffers are not aligned by 26 bytes, and the
-GRO is not merged sequentially, and the receiver does not judge this
-situation. We do the validation after the data is split at the receiving
-end, just as the application actually uses this feature.
+*Changes in v10*
+- Add specific condition to return error if hugetlb is used with wp
+  async
+- Move changes in tools/include/uapi/linux/fs.h to separate patch
+- Add documentation
 
-Signed-off-by: Zhang Yunkai (CGEL ZTE) <zhang.yunkai@zte.com.cn>
-Reviewed-by: xu xin (CGEL ZTE) <xu.xin16@zte.com.cn>
-Reviewed-by: Yang Yang (CGEL ZTE) <yang.yang29@zte.com.cn>
-Cc: Xuexin Jiang (CGEL ZTE) <jiang.xuexin@zte.com.cn>
----
- tools/testing/selftests/net/udpgso_bench_rx.c | 38 +++++++++++++++++++++------
- 1 file changed, 30 insertions(+), 8 deletions(-)
+*Changes in v9:*
+- Correct fault resolution for userfaultfd wp async
+- Fix build warnings and errors which were happening on some configs
+- Simplify pagemap ioctl's code
 
-diff --git a/tools/testing/selftests/net/udpgso_bench_rx.c b/tools/testing/selftests/net/udpgso_bench_rx.c
-index f35a924d4a30..a5b7f30659a5 100644
---- a/tools/testing/selftests/net/udpgso_bench_rx.c
-+++ b/tools/testing/selftests/net/udpgso_bench_rx.c
-@@ -189,16 +189,16 @@ static char sanitized_char(char val)
- 	return (val >= 'a' && val <= 'z') ? val : '.';
- }
- 
--static void do_verify_udp(const char *data, int len)
-+static void do_verify_udp(const char *data, int start, int len)
- {
--	char cur = data[0];
-+	char cur = data[start];
- 	int i;
- 
- 	/* verify contents */
- 	if (cur < 'a' || cur > 'z')
- 		error(1, 0, "data initial byte out of range");
- 
--	for (i = 1; i < len; i++) {
-+	for (i = start + 1; i < start + len; i++) {
- 		if (cur == 'z')
- 			cur = 'a';
- 		else
-@@ -212,6 +212,24 @@ static void do_verify_udp(const char *data, int len)
- 	}
- }
- 
-+static void do_verify_udp_gro(const char *data, int len, int gso_size)
-+{
-+	int remaining = len;
-+	int start = 0;
-+
-+	while (remaining) {
-+		if (remaining < 0)
-+			break;
-+
-+		if (remaining > gso_size)
-+			do_verify_udp(data, start, gso_size);
-+		else
-+			do_verify_udp(data, start, remaining);
-+		start += gso_size;
-+		remaining -= gso_size;
-+	}
-+}
-+
- static int recv_msg(int fd, char *buf, int len, int *gso_size)
- {
- 	char control[CMSG_SPACE(sizeof(int))] = {0};
-@@ -264,16 +282,20 @@ static void do_flush_udp(int fd)
- 		if (cfg_expected_pkt_len && ret != cfg_expected_pkt_len)
- 			error(1, 0, "recv: bad packet len, got %d,"
- 			      " expected %d\n", ret, cfg_expected_pkt_len);
-+		if (cfg_expected_gso_size && cfg_expected_gso_size != gso_size)
-+			error(1, 0, "recv: bad gso size, got %d, expected %d %s",
-+				gso_size, cfg_expected_gso_size, "(-1 == no gso cmsg))\n");
- 		if (len && cfg_verify) {
- 			if (ret == 0)
- 				error(1, errno, "recv: 0 byte datagram\n");
- 
--			do_verify_udp(rbuf, ret);
-+			if (!cfg_gro_segment)
-+				do_verify_udp(rbuf, 0, ret);
-+			else if (gso_size > 0)
-+				do_verify_udp_gro(rbuf, ret, gso_size);
-+			else
-+				do_verify_udp_gro(rbuf, ret, ret);
- 		}
--		if (cfg_expected_gso_size && cfg_expected_gso_size != gso_size)
--			error(1, 0, "recv: bad gso size, got %d, expected %d "
--			      "(-1 == no gso cmsg))\n", gso_size,
--			      cfg_expected_gso_size);
- 
- 		packets++;
- 		bytes += ret;
+*Changes in v8:*
+- Update uffd async wp implementation
+- Improve PAGEMAP_IOCTL implementation
+
+*Changes in v7:*
+- Add uffd wp async
+- Update the IOCTL to use uffd under the hood instead of soft-dirty
+  flags
+
+*Motivation*
+The real motivation for adding PAGEMAP_SCAN IOCTL is to emulate Windows
+GetWriteWatch() syscall [1]. The GetWriteWatch{} retrieves the addresses of
+the pages that are written to in a region of virtual memory.
+
+This syscall is used in Windows applications and games etc. This syscall is
+being emulated in pretty slow manner in userspace. Our purpose is to
+enhance the kernel such that we translate it efficiently in a better way.
+Currently some out of tree hack patches are being used to efficiently
+emulate it in some kernels. We intend to replace those with these patches.
+So the whole gaming on Linux can effectively get benefit from this. It
+means there would be tons of users of this code.
+
+CRIU use case [2] was mentioned by Andrei and Danylo:
+> Use cases for migrating sparse VMAs are binaries sanitized with ASAN,
+> MSAN or TSAN [3]. All of these sanitizers produce sparse mappings of
+> shadow memory [4]. Being able to migrate such binaries allows to highly
+> reduce the amount of work needed to identify and fix post-migration
+> crashes, which happen constantly.
+
+Andrei's defines the following uses of this code:
+* it is more granular and allows us to track changed pages more
+  effectively. The current interface can clear dirty bits for the entire
+  process only. In addition, reading info about pages is a separate
+  operation. It means we must freeze the process to read information
+  about all its pages, reset dirty bits, only then we can start dumping
+  pages. The information about pages becomes more and more outdated,
+  while we are processing pages. The new interface solves both these
+  downsides. First, it allows us to read pte bits and clear the
+  soft-dirty bit atomically. It means that CRIU will not need to freeze
+  processes to pre-dump their memory. Second, it clears soft-dirty bits
+  for a specified region of memory. It means CRIU will have actual info
+  about pages to the moment of dumping them.
+* The new interface has to be much faster because basic page filtering
+  is happening in the kernel. With the old interface, we have to read
+  pagemap for each page.
+
+*Implementation Evolution (Short Summary)*
+From the definition of GetWriteWatch(), we feel like kernel's soft-dirty
+feature can be used under the hood with some additions like:
+* reset soft-dirty flag for only a specific region of memory instead of
+clearing the flag for the entire process
+* get and clear soft-dirty flag for a specific region atomically
+
+So we decided to use ioctl on pagemap file to read or/and reset soft-dirty
+flag. But using soft-dirty flag, sometimes we get extra pages which weren't
+even written. They had become soft-dirty because of VMA merging and
+VM_SOFTDIRTY flag. This breaks the definition of GetWriteWatch(). We were
+able to by-pass this short coming by ignoring VM_SOFTDIRTY until David
+reported that mprotect etc messes up the soft-dirty flag while ignoring
+VM_SOFTDIRTY [5]. This wasn't happening until [6] got introduced. We
+discussed if we can revert these patches. But we could not reach to any
+conclusion. So at this point, I made couple of tries to solve this whole
+VM_SOFTDIRTY issue by correcting the soft-dirty implementation:
+* [7] Correct the bug fixed wrongly back in 2014. It had potential to cause
+regression. We left it behind.
+* [8] Keep a list of soft-dirty part of a VMA across splits and merges. I
+got the reply don't increase the size of the VMA by 8 bytes.
+
+At this point, we left soft-dirty considering it is too much delicate and
+userfaultfd [9] seemed like the only way forward. From there onward, we
+have been basing soft-dirty emulation on userfaultfd wp feature where
+kernel resolves the faults itself when WP_ASYNC feature is used. It was
+straight forward to add WP_ASYNC feature in userfautlfd. Now we get only
+those pages dirty or written-to which are really written in reality. (PS
+There is another WP_UNPOPULATED userfautfd feature is required which is
+needed to avoid pre-faulting memory before write-protecting [9].)
+
+All the different masks were added on the request of CRIU devs to create
+interface more generic and better.
+
+[1] https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-getwritewatch
+[2] https://lore.kernel.org/all/20221014134802.1361436-1-mdanylo@google.com
+[3] https://github.com/google/sanitizers
+[4] https://github.com/google/sanitizers/wiki/AddressSanitizerAlgorithm#64-bit
+[5] https://lore.kernel.org/all/bfcae708-db21-04b4-0bbe-712badd03071@redhat.com
+[6] https://lore.kernel.org/all/20220725142048.30450-1-peterx@redhat.com/
+[7] https://lore.kernel.org/all/20221122115007.2787017-1-usama.anjum@collabora.com
+[8] https://lore.kernel.org/all/20221220162606.1595355-1-usama.anjum@collabora.com
+[9] https://lore.kernel.org/all/20230306213925.617814-1-peterx@redhat.com
+[10] https://lore.kernel.org/all/20230125144529.1630917-1-mdanylo@google.com
+
+* Original Cover letter from v8*
+Hello,
+
+Note:
+Soft-dirty pages and pages which have been written-to are synonyms. As
+kernel already has soft-dirty feature inside which we have given up to
+use, we are using written-to terminology while using UFFD async WP under
+the hood.
+
+This IOCTL, PAGEMAP_SCAN on pagemap file can be used to get and/or clear
+the info about page table entries. The following operations are
+supported in this ioctl:
+- Get the information if the pages have been written-to (PAGE_IS_WRITTEN),
+  file mapped (PAGE_IS_FILE), present (PAGE_IS_PRESENT) or swapped
+  (PAGE_IS_SWAPPED).
+- Write-protect the pages (PAGEMAP_WP_ENGAGE) to start finding which
+  pages have been written-to.
+- Find pages which have been written-to and write protect the pages
+  (atomic PAGE_IS_WRITTEN + PAGEMAP_WP_ENGAGE)
+
+It is possible to find and clear soft-dirty pages entirely in userspace.
+But it isn't efficient:
+- The mprotect and SIGSEGV handler for bookkeeping
+- The userfaultfd wp (synchronous) with the handler for bookkeeping
+
+Some benchmarks can be seen here[1]. This series adds features that weren't
+present earlier:
+- There is no atomic get soft-dirty/Written-to status and clear present in
+  the kernel.
+- The pages which have been written-to can not be found in accurate way.
+  (Kernel's soft-dirty PTE bit + sof_dirty VMA bit shows more soft-dirty
+  pages than there actually are.)
+
+Historically, soft-dirty PTE bit tracking has been used in the CRIU
+project. The procfs interface is enough for finding the soft-dirty bit
+status and clearing the soft-dirty bit of all the pages of a process.
+We have the use case where we need to track the soft-dirty PTE bit for
+only specific pages on-demand. We need this tracking and clear mechanism
+of a region of memory while the process is running to emulate the
+getWriteWatch() syscall of Windows.
+
+*(Moved to using UFFD instead of soft-dirtyi feature to find pages which
+have been written-to from v7 patch series)*:
+Stop using the soft-dirty flags for finding which pages have been
+written to. It is too delicate and wrong as it shows more soft-dirty
+pages than the actual soft-dirty pages. There is no interest in
+correcting it [2][3] as this is how the feature was written years ago.
+It shouldn't be updated to changed behaviour. Peter Xu has suggested
+using the async version of the UFFD WP [4] as it is based inherently
+on the PTEs.
+
+So in this patch series, I've added a new mode to the UFFD which is
+asynchronous version of the write protect. When this variant of the
+UFFD WP is used, the page faults are resolved automatically by the
+kernel. The pages which have been written-to can be found by reading
+pagemap file (!PM_UFFD_WP). This feature can be used successfully to
+find which pages have been written to from the time the pages were
+write protected. This works just like the soft-dirty flag without
+showing any extra pages which aren't soft-dirty in reality.
+
+The information related to pages if the page is file mapped, present and
+swapped is required for the CRIU project [5][6]. The addition of the
+required mask, any mask, excluded mask and return masks are also required
+for the CRIU project [5].
+
+The IOCTL returns the addresses of the pages which match the specific
+masks. The page addresses are returned in struct page_region in a compact
+form. The max_pages is needed to support a use case where user only wants
+to get a specific number of pages. So there is no need to find all the
+pages of interest in the range when max_pages is specified. The IOCTL
+returns when the maximum number of the pages are found. The max_pages is
+optional. If max_pages is specified, it must be equal or greater than the
+vec_size. This restriction is needed to handle worse case when one
+page_region only contains info of one page and it cannot be compacted.
+This is needed to emulate the Windows getWriteWatch() syscall.
+
+The patch series include the detailed selftest which can be used as an
+example for the uffd async wp test and PAGEMAP_IOCTL. It shows the
+interface usages as well.
+
+[1] https://lore.kernel.org/lkml/54d4c322-cd6e-eefd-b161-2af2b56aae24@collabora.com/
+[2] https://lore.kernel.org/all/20221220162606.1595355-1-usama.anjum@collabora.com
+[3] https://lore.kernel.org/all/20221122115007.2787017-1-usama.anjum@collabora.com
+[4] https://lore.kernel.org/all/Y6Hc2d+7eTKs7AiH@x1n
+[5] https://lore.kernel.org/all/YyiDg79flhWoMDZB@gmail.com/
+[6] https://lore.kernel.org/all/20221014134802.1361436-1-mdanylo@google.com/
+
+Regards,
+Muhammad Usama Anjum
+
+Muhammad Usama Anjum (4):
+  fs/proc/task_mmu: Implement IOCTL to get and optionally clear info
+    about PTEs
+  tools headers UAPI: Update linux/fs.h with the kernel sources
+  mm/pagemap: add documentation of PAGEMAP_SCAN IOCTL
+  selftests: mm: add pagemap ioctl tests
+
+Peter Xu (1):
+  userfaultfd: UFFD_FEATURE_WP_ASYNC
+
+ Documentation/admin-guide/mm/pagemap.rst     |   56 +
+ Documentation/admin-guide/mm/userfaultfd.rst |   35 +
+ fs/proc/task_mmu.c                           |  478 +++++++
+ fs/userfaultfd.c                             |   26 +-
+ include/linux/userfaultfd_k.h                |   21 +-
+ include/uapi/linux/fs.h                      |   53 +
+ include/uapi/linux/userfaultfd.h             |    9 +-
+ mm/hugetlb.c                                 |   32 +-
+ mm/memory.c                                  |   27 +-
+ tools/include/uapi/linux/fs.h                |   53 +
+ tools/testing/selftests/mm/.gitignore        |    1 +
+ tools/testing/selftests/mm/Makefile          |    3 +-
+ tools/testing/selftests/mm/config            |    1 +
+ tools/testing/selftests/mm/pagemap_ioctl.c   | 1326 ++++++++++++++++++
+ tools/testing/selftests/mm/run_vmtests.sh    |    4 +
+ 15 files changed, 2102 insertions(+), 23 deletions(-)
+ create mode 100644 tools/testing/selftests/mm/pagemap_ioctl.c
+ mode change 100644 => 100755 tools/testing/selftests/mm/run_vmtests.sh
+
 -- 
-2.15.2
+2.39.2
+
