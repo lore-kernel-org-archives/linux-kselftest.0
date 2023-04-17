@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B1D4C77B76
-	for <linux-kselftest@archiver.kernel.org>; Mon, 17 Apr 2023 16:40:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 292EDC77B76
+	for <linux-kselftest@archiver.kernel.org>; Mon, 17 Apr 2023 16:43:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229559AbjDQQkk (ORCPT
+        id S229568AbjDQQnI (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 17 Apr 2023 12:40:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54682 "EHLO
+        Mon, 17 Apr 2023 12:43:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjDQQkj (ORCPT
+        with ESMTP id S229542AbjDQQnH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 Apr 2023 12:40:39 -0400
+        Mon, 17 Apr 2023 12:43:07 -0400
 Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 857FE6A7C;
-        Mon, 17 Apr 2023 09:40:38 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id F00CF5C01D3;
-        Mon, 17 Apr 2023 12:40:37 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9D117D84;
+        Mon, 17 Apr 2023 09:43:06 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 49C1D5C007C;
+        Mon, 17 Apr 2023 12:43:06 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Mon, 17 Apr 2023 12:40:37 -0400
+  by compute3.internal (MEProxy); Mon, 17 Apr 2023 12:43:06 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=devkernel.io; h=
         cc:cc:content-type:content-type:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1681749637; x=1681836037; bh=BX
-        hqaNdZoSfWVMrAt/T4aVq7tNwxkU+VJy/AREti7rM=; b=MzPxUJ3UmwYBJognTb
-        XPWvNxa7bzSLI4adjiLIm5xQkLSmahFWwMrI0+oh9osJ+NXS+vlJEwA8b+DKAAGY
-        7dLD3t1xFTg5TB0D0z+nR3R3aUAiAxtwPqUGWkaM7UsLgc+LC7SqIDANDRkJjgVv
-        EsSbnrUu7W7WMP3PCJ13+9IKcS2zoAlmr2zYCdnor/3DLsD7VQSBc9abuBTKQ0m1
-        arhrlxeymtX9GZYv+0Sk1OEMoiH2S1IpvsJY7v2KC8sT9KSQ7dafPMUfmRl/TNne
-        guyIN/ul4mN2itFMh6vjm1kCQGqBdg9chAENPyGFReuyGsjoSdTVdL2FVCMTsJum
-        kNkw==
+        :subject:subject:to:to; s=fm1; t=1681749786; x=1681836186; bh=YD
+        e3y1T8NWWsjl/y28nmrnwl6G1y0u8s1lFy/i0ih80=; b=b+MrrqmkqnhWnXyJzS
+        +Hug34CJDBjbLk5mJEQi4cnFU/leVEaDstO0jkZZv3DZGS+QaNMEacn1E5hS985x
+        Rq2B/cmHgqjyF4t7EUcQ4IYgKTn9Km0262ErSAjFO2o/xjf/VhWNKnJjRenYuXBN
+        0US8Hr6b1oGQTDDh2PHEGXr9MntmpuCfdqOVQHadrOP3U48KHXHIS3eQ9rQe4HFb
+        wPN9xBMC7Ow5GuwKFEfSyOjTRoE7QXT61XkipHiu7kQe0ku/JH3GTs6Z9ppHkqn2
+        xGqVINFBYcGV9EicZAhEHzSjx3ny7545Okc25v4sGXa/YBP40GxWpMYV1+CBf/Sq
+        hyRw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-type:content-type:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1681749637; x=1681836037; bh=BXhqaNdZoSfWV
-        MrAt/T4aVq7tNwxkU+VJy/AREti7rM=; b=ZguVOLyfeRNG+jVKyJZD4ON/zyxtV
-        NivALjETnZEMOMN+LkELs+wytylULWKs8N2F09xpSIQM8G04U2WTX+67SVTzccqH
-        D4IoLrShT264KJqQWFepvv40Ma6tY6JIKV/a7X08q3CmPHiq1jt7sypD1yVbZeXn
-        XIQ5uUR9BbmV5HvfPMAg+mI+8jRnEc/BRVSzikFtaymM/gUG0Jqlg+OhZ4IPnT2p
-        Mucnw7ILKzq5K6hOlNYQazQJq9DRaPkbbgWEYXXVldn4FiDxbd48lZE7L6J5oAcK
-        29jPVt0tJfPnWmHcghHDI1iIRld65jmjU2pym7tDrPU7EpcBVmw3ID7bg==
-X-ME-Sender: <xms:hXY9ZLc3Oeh2sfvqyGDDxcc-asZP2Qj_an0YUhcalQWu4g_kc8Hbeg>
-    <xme:hXY9ZBM_FZ83uaHeHgPTY2Inijq_zUwqOvBDqkSb5kvSzE6fMlEjdjvUDmAFZ_Oa_
-    sVQvBeMhelWWvr1VTQ>
-X-ME-Received: <xmr:hXY9ZEhFm2nMCc7iGtQyIxzIkRdf1fChpuBzK7hIS_MtOLdYfulTXZAymWfMimGdPblBJmC7kU-L6BVVRx2fvvs50eXOBRIAQYE1x1kB6uU>
+        :x-sasl-enc; s=fm3; t=1681749786; x=1681836186; bh=YDe3y1T8NWWsj
+        l/y28nmrnwl6G1y0u8s1lFy/i0ih80=; b=OmXJCtZ0e8x+NUyE3P6D2U2F1NBIO
+        dzCNJxBz85VvpX8WrqJOEZ1yp1D65nsJkLziTq8BrS4FmYvZgbxQ2G7R27EAWv21
+        0bx/yjSHqzRK8w8ZWaVp0WXL7frKJrHxZ2/wutn09xDw25NAvtTjmGeNpAG4pukv
+        ipewXi0x7D6siNWcJXqVqOCdICB0mjdMktmqEp4mXCKz2gY5quwFRpxnW+SP6oFp
+        eGxJ/kwLoB7YWA2CedgOceSWdbTP/bJwfDKYhnhXKGEptW/AxGPjYCG00JDU8l85
+        7UwsDoKqsDbsCopDPLy3xXsB6RxhyAJLqVBFaLEjZvkmzTedafLd6ojPw==
+X-ME-Sender: <xms:GXc9ZDd7ys3en2ywRjBvRYO3KyL-7CVOwfu2fx7HfTJTnrfsyOYTdA>
+    <xme:GXc9ZJP8kxrLKNvJOfaiEGJETZ0ugIRgwb0mjCQxutJPIHCV4F88HFrEuA0fpcW9q
+    zTp9iyGl6pr4OCcqus>
+X-ME-Received: <xmr:GXc9ZMj00o7AxdE8HsTepTFIaVI9nrbjelpIIea6TOL--SJQ5GSxcWfP3Z8tQHc2xE4e8nj62G1lsELIhj3OkvPHsrU_gmwTFHWXEk3igMPI>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeliedguddtfecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
     necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
@@ -56,16 +56,17 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeliedguddtfecutefuodetgg
     htthgvrhhnpeevlefggffhheduiedtheejveehtdfhtedvhfeludetvdegieekgeeggfdu
     geeutdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
     hshhhrseguvghvkhgvrhhnvghlrdhioh
-X-ME-Proxy: <xmx:hXY9ZM-bngqK9LuT34gisg5gjf-d5znk0v-YeYaUrbp4nYPKcaDdCw>
-    <xmx:hXY9ZHsVnGbmWFFrwCEzTp4xC7TrqPmQemfvwgByRL-UN-wp1oq0Yg>
-    <xmx:hXY9ZLFDDORVRB4dU2DtGkhCzxL67WnxU4uD1XU_ZWv2EniPSp0eXQ>
-    <xmx:hXY9ZFJOXkYv0yrXE6hxN7oocMV_VlM3v9QgsnIAWvZ0mOg9E2c66Q>
+X-ME-Proxy: <xmx:GXc9ZE9VAbXr0Oyq6ogSh_COHTHLrwA2XJfbDaUjP2Q5W3w_QLWhDg>
+    <xmx:GXc9ZPsQTqeXsUcrOo92rHCOuYyRSjhVxd1hIh5ulpnGPhA_ZB7dcQ>
+    <xmx:GXc9ZDFZyTH4Y-FB8pFdwyRY7CiS-9ov_tYC61NK96yGyoqf9FLQnw>
+    <xmx:Gnc9ZNJn4lxCpTZL4eruSA2Zoy52vH0BY-M6SIR2CU2C9VMwL4BZKA>
 Feedback-ID: i84614614:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 17 Apr 2023 12:40:36 -0400 (EDT)
+ 17 Apr 2023 12:43:04 -0400 (EDT)
 References: <20230415225913.3206647-1-shr@devkernel.io>
  <20230415225913.3206647-4-shr@devkernel.io>
  <355f42d1-4354-376d-ab27-7e55d06e64a6@redhat.com>
+ <954d6b1f-5b4d-48e5-02fe-646b3e79f6e5@redhat.com>
 User-agent: mu4e 1.10.1; emacs 28.2.50
 From:   Stefan Roesch <shr@devkernel.io>
 To:     David Hildenbrand <david@redhat.com>
@@ -75,9 +76,9 @@ Cc:     kernel-team@fb.com, linux-mm@kvack.org, riel@surriel.com,
         hannes@cmpxchg.org, willy@infradead.org,
         Bagas Sanjaya <bagasdotme@gmail.com>
 Subject: Re: [PATCH v8 3/3] selftests/mm: add new selftests for KSM
-Date:   Mon, 17 Apr 2023 09:40:19 -0700
-In-reply-to: <355f42d1-4354-376d-ab27-7e55d06e64a6@redhat.com>
-Message-ID: <qvqw5y9ubgxo.fsf@devbig1114.prn1.facebook.com>
+Date:   Mon, 17 Apr 2023 09:42:39 -0700
+In-reply-to: <954d6b1f-5b4d-48e5-02fe-646b3e79f6e5@redhat.com>
+Message-ID: <qvqw1qkibgtk.fsf@devbig1114.prn1.facebook.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 Precedence: bulk
@@ -87,21 +88,31 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 David Hildenbrand <david@redhat.com> writes:
 
->> +/* Verify that KSM can be enabled / queried with prctl. */
->> +static void test_prctl(void)
->> +{
->> +	int ret;
->> +
->> +	ksft_print_msg("[RUN] %s\n", __func__);
->> +
->> +	ret = prctl(PR_SET_MEMORY_MERGE, 1, 0, 0, 0);
->> +	if (ret < 0 && errno == EINVAL) {
->> +		ksft_test_result_skip("PR_SET_MEMORY_MERGE not supported\n");
->> +		return;
->> +	} else if (ret) {
->> +		ksft_test_result_fail("PR_SET_MEMORY_MERGE=1 failed\n");
->> +	}
+> On 17.04.23 16:35, David Hildenbrand wrote:
+>>> +/* Verify that KSM can be enabled / queried with prctl. */
+>>> +static void test_prctl(void)
+>>> +{
+>>> +	int ret;
+>>> +
+>>> +	ksft_print_msg("[RUN] %s\n", __func__);
+>>> +
+>>> +	ret = prctl(PR_SET_MEMORY_MERGE, 1, 0, 0, 0);
+>>> +	if (ret < 0 && errno == EINVAL) {
+>>> +		ksft_test_result_skip("PR_SET_MEMORY_MERGE not supported\n");
+>>> +		return;
+>>> +	} else if (ret) {
+>>> +		ksft_test_result_fail("PR_SET_MEMORY_MERGE=1 failed\n");
+>>> +	}
+>> Just realized we're missing a "return;" in case of the failure here.
+>>
 >
-> Just realized we're missing a "return;" in case of the failure here.
 >
-I'll fix it in the next version.
+> And we should probably fix that as well:
+>
+> ERROR: do not initialise globals to 0
+> #235: FILE: tools/testing/selftests/mm/ksm_tests.c:57:
+> +int debug = 0;
+>
+> total: 1 errors, 0 warnings, 512 lines checked
+
+I'll fix it in the next version.'
