@@ -2,107 +2,89 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF1E6C77B71
-	for <linux-kselftest@archiver.kernel.org>; Tue, 18 Apr 2023 09:57:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AC8BC77B76
+	for <linux-kselftest@archiver.kernel.org>; Tue, 18 Apr 2023 10:11:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230252AbjDRJ56 (ORCPT
+        id S231153AbjDRKLN (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 18 Apr 2023 05:57:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57050 "EHLO
+        Tue, 18 Apr 2023 06:11:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjDRJ5t (ORCPT
+        with ESMTP id S230521AbjDRKLL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Apr 2023 05:57:49 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9FDC6A4E;
-        Tue, 18 Apr 2023 02:57:15 -0700 (PDT)
-Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33I9IdI4013108;
-        Tue, 18 Apr 2023 09:56:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : content-transfer-encoding : mime-version; s=pp1;
- bh=J+p+gfyJJ6nBJWE8WFIjO7GLXingCOBL/XNRh1TDLiM=;
- b=YfLEphrlrYnCsndIAGwBGrjg0NSns+Lt20CtPiH6xnolP6LHsQYEffq9kUH9oiw6DASG
- RTF6kBKJBkFmeJds8zKSk903fEG9eMieTq34TbiBFE0fKFXNlrOrjHd9a3qZkYHdY8yE
- QKp73s/po/9gfWP2PRfZ39RYZrcAY2K5cO5QqI9PITe1d88nI/qOyeZL3mJO7M3xLxNv
- FlapPeOcGnJSX6uaxBi2zNYuCXDm+TqaTUmuI0t1oiZZLpmlYdLjh7IMlPNmYowPmOd/
- Eot62+4NzEtJUEiafK7BDqkvEADQvDTLrHXZ2gRi5Nzn7xs28Oqcr0X8mDhCkduyRAoJ qQ== 
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q1pkw4mfh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Apr 2023 09:56:11 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33GJaDJp018133;
-        Tue, 18 Apr 2023 09:56:08 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3pykj6hk51-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Apr 2023 09:56:08 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33I9u4x28651434
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 18 Apr 2023 09:56:04 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B8D2320040;
-        Tue, 18 Apr 2023 09:56:04 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 35B0B20043;
-        Tue, 18 Apr 2023 09:56:03 +0000 (GMT)
-Received: from li-ed75614c-32e0-11b2-a85c-ba2953069b43.in.ibm.com (unknown [9.109.209.37])
-        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 18 Apr 2023 09:56:03 +0000 (GMT)
-From:   Akanksha J N <akanksha@linux.ibm.com>
-To:     linux-kselftest@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     rostedt@goodmis.org, mhiramat@kernel.org, shuah@kernel.org,
-        naveen.n.rao@linux.ibm.com, akanksha@linux.ibm.com
-Subject: [PATCH v2 0/2] selftests/ftrace: Add tests for kprobes and optimized probes 
-Date:   Tue, 18 Apr 2023 15:25:55 +0530
-Message-Id: <20230418095557.19061-1-akanksha@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 2pHQchKEUpiOx0TtXCxwwv9iAlaOSlrB
-X-Proofpoint-ORIG-GUID: 2pHQchKEUpiOx0TtXCxwwv9iAlaOSlrB
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Tue, 18 Apr 2023 06:11:11 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9D9593AA0;
+        Tue, 18 Apr 2023 03:10:48 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 25119168F;
+        Tue, 18 Apr 2023 03:11:32 -0700 (PDT)
+Received: from [192.168.4.21] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 43FFF3F587;
+        Tue, 18 Apr 2023 03:10:47 -0700 (PDT)
+Message-ID: <20487c94-7f81-cbf5-7136-c7f266eaf60d@arm.com>
+Date:   Tue, 18 Apr 2023 11:10:48 +0100
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-18_05,2023-04-17_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- priorityscore=1501 mlxlogscore=563 bulkscore=0 mlxscore=0 spamscore=0
- impostorscore=0 malwarescore=0 clxscore=1011 adultscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304180082
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] kselftest: vDSO: Fix accumulation of uninitialized ret
+ when CLOCK_REALTIME is undefined
+To:     Colin Ian King <colin.i.king@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kselftest@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230417104743.30018-1-colin.i.king@gmail.com>
+Content-Language: en-US
+From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
+In-Reply-To: <20230417104743.30018-1-colin.i.king@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patchset adds a stress test for kprobes and a test for checking
-optimized probes.
-The two tests are being added based on the below discussion:
-https://lore.kernel.org/all/20230128101622.ce6f8e64d929e29d36b08b73@kernel.org/
+Hi Colin,
 
-Changelog:
+On 4/17/23 11:47, Colin Ian King wrote:
+> In the unlikely case that CLOCK_REALTIME is not defined, variable ret is
+> not initialized and further accumulation of return values to ret can leave
+> ret in an undefined state. Fix this by initialized ret to zero and changing
+> the assignment of ret to an accumulation for the CLOCK_REALTIME case.
+> 
 
+I was wondering how did you find this.
 
-* Add an explicit fork after enabling the events ( echo "forked" )
-* Remove the extended test from multiple_kprobe_types.tc which adds 
-  multiple consecutive probes in a function and add it as a 
-  separate test case. 
-* Add new test case which checks for optimized probes.
+Apart that:
 
-Akanksha J N (2):
-  selftests/ftrace: Add new test case which adds multiple consecutive
-    probes in a function
-  selftests/ftrace: Add new test case which checks for optimized probes
+Reviewed-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
 
- .../test.d/kprobe/kprobe_insn_boundary.tc     | 19 +++++++++++
- .../ftrace/test.d/kprobe/kprobe_opt_types.tc  | 34 +++++++++++++++++++
- 2 files changed, 53 insertions(+)
- create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_insn_boundary.tc
- create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_opt_types.tc
+> Fixes: 03f55c7952c9 ("kselftest: Extend vDSO selftest to clock_getres")
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+>  tools/testing/selftests/vDSO/vdso_test_clock_getres.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/vDSO/vdso_test_clock_getres.c b/tools/testing/selftests/vDSO/vdso_test_clock_getres.c
+> index 15dcee16ff72..38d46a8bf7cb 100644
+> --- a/tools/testing/selftests/vDSO/vdso_test_clock_getres.c
+> +++ b/tools/testing/selftests/vDSO/vdso_test_clock_getres.c
+> @@ -84,12 +84,12 @@ static inline int vdso_test_clock(unsigned int clock_id)
+>  
+>  int main(int argc, char **argv)
+>  {
+> -	int ret;
+> +	int ret = 0;
+>  
+>  #if _POSIX_TIMERS > 0
+>  
+>  #ifdef CLOCK_REALTIME
+> -	ret = vdso_test_clock(CLOCK_REALTIME);
+> +	ret += vdso_test_clock(CLOCK_REALTIME);
+>  #endif
+>  
+>  #ifdef CLOCK_BOOTTIME
 
 -- 
-2.31.1
-
+Regards,
+Vincenzo
