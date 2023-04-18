@@ -2,117 +2,186 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C731C77B78
-	for <linux-kselftest@archiver.kernel.org>; Tue, 18 Apr 2023 14:21:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84868C77B75
+	for <linux-kselftest@archiver.kernel.org>; Tue, 18 Apr 2023 15:29:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232318AbjDROVH (ORCPT
+        id S231273AbjDRP3s (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 18 Apr 2023 10:21:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57246 "EHLO
+        Tue, 18 Apr 2023 11:29:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232052AbjDROVF (ORCPT
+        with ESMTP id S230423AbjDRP3r (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Apr 2023 10:21:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF754234
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Apr 2023 07:20:19 -0700 (PDT)
+        Tue, 18 Apr 2023 11:29:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC3BF9
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Apr 2023 08:29:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681827619;
+        s=mimecast20190719; t=1681831741;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=wTEgz5FFB3FlmpBtdJxi9kvXmr1g0kCkiAoUmPe0HM4=;
-        b=SZrZcsttPIe9+OHScVXS3ICPqhNLY1okPYEvqHEnuPT3/SDVyev2KuhX4um3Lj+N0u6VV0
-        R9bLA9TNXED32b0DBDDrcTZt9QyqZ38buj2DpUCmNrTlL/H+QqxrXjg6WIQVS/2OJmLtGk
-        YwfgXMRFRGWyFKkkIqoDo3d3IdYcVFc=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-500-GxYwqqPgP82qC6L9-Y8M-w-1; Tue, 18 Apr 2023 10:20:17 -0400
-X-MC-Unique: GxYwqqPgP82qC6L9-Y8M-w-1
-Received: by mail-qt1-f197.google.com with SMTP id l20-20020a05622a051400b003e6d92a606bso15727093qtx.14
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Apr 2023 07:20:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681827617; x=1684419617;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wTEgz5FFB3FlmpBtdJxi9kvXmr1g0kCkiAoUmPe0HM4=;
-        b=doAGOpxWYxlQSswYkckxgl0trhc2IS32lpe1MIrs4oVPv3KtYgjjPYIPC9uxR1nAD0
-         eeuzsoZKaoS6RscgRz6SAg+6jz33HLyg9JL8xSOkEKx+OtDvdBJHd3rKIQfC51FsQsUl
-         /e7hkh1FV8xZUNpHIz7IoAGpadsiOjQX9FYX7lubkzsEfeMk3CoquZYGeQFH8FrV0f5X
-         N0AM60LRr/1eq6KKq648soyvBHo4gC5Uii58IYB8ETuzPRjvpqtExHgJNXz1U7dfYRnd
-         vN3E1hqLXEsVbyF0mfN8OrMwZOPufh4SkjmrWZ3m9fA/P6cxAh8lHkJ9w90l4VzMOe8d
-         eVDQ==
-X-Gm-Message-State: AAQBX9cB/Wk3vRyex26H4ylRwmXn3WdS1UN/ErtzSOSYILyJPNj94/eH
-        T5Qx2eEwDWFWwDrU+Sf9QPr7YG5RBo/xK5LRqjontLf0Qn6NMQykYPa5+/qpVhfpffxrb+kTtpd
-        HlKjXxKVQee7HOUggwJOFkLBvM88O
-X-Received: by 2002:a05:622a:295:b0:3eb:1082:ec93 with SMTP id z21-20020a05622a029500b003eb1082ec93mr21708229qtw.41.1681827617181;
-        Tue, 18 Apr 2023 07:20:17 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bNyfIphFgQOXdbQ7b0I8+fgR55aExZiLfyClg34Zc0Jl2xZiTSAbBlkl2Gs52kSSuYH+mTfQ==
-X-Received: by 2002:a05:622a:295:b0:3eb:1082:ec93 with SMTP id z21-20020a05622a029500b003eb1082ec93mr21708196qtw.41.1681827616954;
-        Tue, 18 Apr 2023 07:20:16 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-229-200.dyn.eolo.it. [146.241.229.200])
-        by smtp.gmail.com with ESMTPSA id w5-20020ac84d05000000b003ef28a76a11sm1704159qtv.68.2023.04.18.07.20.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 07:20:16 -0700 (PDT)
-Message-ID: <ef0371ebc094e2c0778badca69ea0043b98589aa.camel@redhat.com>
-Subject: Re: [PATCH linux-next 1/3] selftests: net: udpgso_bench_rx: Fix
- verifty exceptions
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Yang Yang <yang.yang29@zte.com.cn>, davem@davemloft.net,
-        edumazet@google.com, willemdebruijn.kernel@gmail.com
-Cc:     kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        shuah@kernel.org, zhang.yunkai@zte.com.cn, xu.xin16@zte.com.cn,
-        Xuexin Jiang <jiang.xuexin@zte.com.cn>
-Date:   Tue, 18 Apr 2023 16:20:12 +0200
-In-Reply-To: <20230417122423.193237-1-yang.yang29@zte.com.cn>
-References: <202304172017351308785@zte.com.cn>
-         <20230417122423.193237-1-yang.yang29@zte.com.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        bh=lecfMikStSmpt+Q0WpS+JI6gz8j1FT0LsSw/UhC5P0k=;
+        b=OkkSEgXsTuDlz5DR+jTr9WAMUi26Q6+Wsxg7WDxo20kYqf/GUuvFDkG/hvS84gQ1XS9vD9
+        OL6yMQqASWv4YnQ8ivGjqIZVdBQknYszlVY6qx/kqe0E12yNWXIYKUpYLmZQWNWXWhU1T6
+        mk1rF6E9/SCfFe9eQEeO7sT5esUDXAE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-637-58a_-S71MqC04QAAf1VC5A-1; Tue, 18 Apr 2023 11:28:58 -0400
+X-MC-Unique: 58a_-S71MqC04QAAf1VC5A-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 78A5588905A;
+        Tue, 18 Apr 2023 15:28:57 +0000 (UTC)
+Received: from t480s.redhat.com (unknown [10.39.194.149])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5EE7914171B8;
+        Tue, 18 Apr 2023 15:28:54 +0000 (UTC)
+From:   David Hildenbrand <david@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, linux-s390@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Stefan Roesch <shr@devkernel.io>,
+        Rik van Riel <riel@surriel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Shuah Khan <shuah@kernel.org>
+Subject: [PATCH v1 1/3] mm/ksm: unmerge and clear VM_MERGEABLE when setting PR_SET_MEMORY_MERGE=0
+Date:   Tue, 18 Apr 2023 17:28:47 +0200
+Message-Id: <20230418152849.505124-2-david@redhat.com>
+In-Reply-To: <20230418152849.505124-1-david@redhat.com>
+References: <20230418051342.1919757-1-shr@devkernel.io>
+ <20230418152849.505124-1-david@redhat.com>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 2023-04-17 at 20:24 +0800, Yang Yang wrote:
-> From: Zhang Yunkai (CGEL ZTE) <zhang.yunkai@zte.com.cn>
->=20
-> The verification function of this test case is likely to encounter the
-> following error, which may confuse users.
->=20
-> Executing the following command fails:
-> bash# udpgso_bench_tx -l 4 -4 -D "$DST"
-> bash# udpgso_bench_tx -l 4 -4 -D "$DST" -S 0
-> bash# udpgso_bench_rx -4 -G -S 1472 -v
-> udpgso_bench_rx: data[1472]: len 2944, a(97) !=3D q(113)
+Let's unmerge any KSM pages when setting PR_SET_MEMORY_MERGE=0, and clear
+the VM_MERGEABLE flag from all VMAs -- just like KSM would. Of course,
+only do that if we previously set PR_SET_MEMORY_MERGE=1.
 
+Signed-off-by: David Hildenbrand <david@redhat.com>
+---
+ include/linux/ksm.h |  1 +
+ kernel/sys.c        |  7 +------
+ mm/ksm.c            | 47 +++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 49 insertions(+), 6 deletions(-)
 
-As noted by Willem, both the commit message and the above command
-sequence is quite confusing. Please reorder the commands in the exact
-sequence you run them, presumably:
-
-udpgso_bench_rx -4 -G -S 1472 -v &
-udpgso_bench_tx -l 4 -4 -D "$DST" -S 0
-
-
-> This is because the sending buffers are not aligned by 26 bytes, and the
-> GRO is not merged sequentially, and the receiver does not judge this
-> situation. We do the validation after the data is split at the receiving
-> end, just as the application actually uses this feature.
-
-The wording from Willem response is much more clear. If applicable,
-please use such text.
-
-BTW I could not reproduce the issue with any permutation of the
-suggested commands I could think of, so possibly that section need some
-extra clarification.
-
-Thanks,
-
-Paolo
+diff --git a/include/linux/ksm.h b/include/linux/ksm.h
+index 590934bdddcf..7108bc65dc2a 100644
+--- a/include/linux/ksm.h
++++ b/include/linux/ksm.h
+@@ -21,6 +21,7 @@ int ksm_madvise(struct vm_area_struct *vma, unsigned long start,
+ 
+ void ksm_add_vma(struct vm_area_struct *vma);
+ int ksm_enable_merge_any(struct mm_struct *mm);
++int ksm_disable_merge_any(struct mm_struct *mm);
+ 
+ int __ksm_enter(struct mm_struct *mm);
+ void __ksm_exit(struct mm_struct *mm);
+diff --git a/kernel/sys.c b/kernel/sys.c
+index 72cdb16e2636..3436376667d7 100644
+--- a/kernel/sys.c
++++ b/kernel/sys.c
+@@ -2698,12 +2698,7 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
+ 		if (arg2) {
+ 			error = ksm_enable_merge_any(me->mm);
+ 		} else {
+-			/*
+-			 * TODO: we might want disable KSM on all VMAs and
+-			 * trigger unsharing to completely disable KSM.
+-			 */
+-			clear_bit(MMF_VM_MERGE_ANY, &me->mm->flags);
+-			error = 0;
++			error = ksm_disable_merge_any(me->mm);
+ 		}
+ 		mmap_write_unlock(me->mm);
+ 		break;
+diff --git a/mm/ksm.c b/mm/ksm.c
+index a959e8925413..813f7fbc1832 100644
+--- a/mm/ksm.c
++++ b/mm/ksm.c
+@@ -2520,6 +2520,22 @@ static void __ksm_add_vma(struct vm_area_struct *vma)
+ 		vm_flags_set(vma, VM_MERGEABLE);
+ }
+ 
++static int __ksm_del_vma(struct vm_area_struct *vma)
++{
++	int err;
++
++	if (!(vma->vm_flags & VM_MERGEABLE))
++		return 0;
++
++	if (vma->anon_vma) {
++		err = unmerge_ksm_pages(vma, vma->vm_start, vma->vm_end);
++		if (err)
++			return err;
++	}
++
++	vm_flags_clear(vma, VM_MERGEABLE);
++	return 0;
++}
+ /**
+  * ksm_add_vma - Mark vma as mergeable if compatible
+  *
+@@ -2542,6 +2558,20 @@ static void ksm_add_vmas(struct mm_struct *mm)
+ 		__ksm_add_vma(vma);
+ }
+ 
++static int ksm_del_vmas(struct mm_struct *mm)
++{
++	struct vm_area_struct *vma;
++	int err;
++
++	VMA_ITERATOR(vmi, mm, 0);
++	for_each_vma(vmi, vma) {
++		err = __ksm_del_vma(vma);
++		if (err)
++			return err;
++	}
++	return 0;
++}
++
+ /**
+  * ksm_enable_merge_any - Add mm to mm ksm list and enable merging on all
+  *                        compatible VMA's
+@@ -2569,6 +2599,23 @@ int ksm_enable_merge_any(struct mm_struct *mm)
+ 	return 0;
+ }
+ 
++int ksm_disable_merge_any(struct mm_struct *mm)
++{
++	int err;
++
++	if (!test_bit(MMF_VM_MERGE_ANY, &mm->flags))
++		return 0;
++
++	err = ksm_del_vmas(mm);
++	if (err) {
++		ksm_add_vmas(mm);
++		return err;
++	}
++
++	clear_bit(MMF_VM_MERGE_ANY, &mm->flags);
++	return 0;
++}
++
+ int ksm_madvise(struct vm_area_struct *vma, unsigned long start,
+ 		unsigned long end, int advice, unsigned long *vm_flags)
+ {
+-- 
+2.39.2
 
