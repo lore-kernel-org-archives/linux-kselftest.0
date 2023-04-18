@@ -2,45 +2,45 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FC2AC6FD18
-	for <linux-kselftest@archiver.kernel.org>; Tue, 18 Apr 2023 11:16:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E374C7EE20
+	for <linux-kselftest@archiver.kernel.org>; Tue, 18 Apr 2023 11:16:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231381AbjDRLP6 (ORCPT
+        id S231492AbjDRLQA (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 18 Apr 2023 07:15:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57344 "EHLO
+        Tue, 18 Apr 2023 07:16:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231423AbjDRLP4 (ORCPT
+        with ESMTP id S231454AbjDRLP4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Tue, 18 Apr 2023 07:15:56 -0400
 Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2045.outbound.protection.outlook.com [40.107.104.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DE8126AD;
-        Tue, 18 Apr 2023 04:15:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD0E87ED1;
+        Tue, 18 Apr 2023 04:15:30 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Gv5B7AoPqtImOlehtkpdN0UUysRp0RXYAmY8UpBMmsu19KPsEyAyASsWphLmRCIWWp4FROs8AvZsnQSN/wLqHFkr1wlJ0gowvNWxnAmPSxILgbS8uVjqBox42BLPaHH22xqXeGlGEZYrxfkuzs9IFFuVoPRq78tnlvTMRoaV+AHJMAvbgGIBFVG98kTOy29ayo44DVzcznzK9JAGYU8n5g0t5OrCijFDGtiEh4BjUW9VLaGBqL4AzLQQ/u8Sa9upGbXzOxB0x4ID3V14f8SnT0cqeInYeNGSIyU8qC1/7HyVsVzGL+JdHxgjxWEklSJIfX/jpYx+BF49IkQhDhkrJA==
+ b=PKiWqHDcznDvL2KWlDuoCc9W/dcsRQLykNPrYN4whE1A5RYKjP8A+QCiOJPX4RF/YwFdbGIojLVwF93LeOuI0LxouuIjmY53PYt3v6PPheiOdzR5SObELbEKnjhHoLSrxZyqTsbTbJUlOq4wb+KEtIfQTXX0d5Smgkrp8SAfFQyBz+OTXpadWIobjktFBDKxsi2BVhQtWQHKpGb843ELI9eOmM5Cc1RLc+yC/ASTOuiErM5lyw/Sk38bqcQFetQpJ8y1GSA1mqJqnaMKkek5Oqk8QuSKc6JYcxeP7VWnhCWa4BI9EreuVq+1WtAa/ky8F8o0VVwEzsAuByHTRtG7QQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=u/WbGqpZdzz7a1IaX8ZTpWons9aKUG8SCU8qFLaYAZk=;
- b=ig/yTjcb3EghKiX8SwcNs3ktMsuH9M8hjmgSnz+evxvQk/KJOoWal+z2zgoHWyFh/Rf1UfHqZB3MjNOLXbjdn/8NfSK3yggOb7vEW6cR8JRtrNeQOWGlERIAuyi5h7hjtiyWPhWIxR7sokf4Cp7rBIdNbJ8xxMUTvHy0uHU5SiWTpxE3Naq20qwGKZVIq187Y96d1cWAMuuA+4j8maZDTHfVOX3Pb7KYJcq2JYozL2apr1Zk7qCvmJHan4MPHuybS03r2hJwNZNBLZ7NScIyy/dVGLsnaw+8y0tE+VOWrAaHvWfiymw4bd5JcdUVYtkx7Ta4hUzS+hagkq4Zj59wkA==
+ bh=FNJoeWLjyVB2LWaj/CAkCgVQequpiOHssTo2XTeNbkU=;
+ b=mlY2IXqFazMO+1KbN5ldQ/NSH7iZZ+ME7tigEUtO99rTzGh7YDumOhYQyHc41n1/johevuquX857F/ybkm5jeK7vWbeLHy6ccM0/SghLsrfmD76IbD8aVuiSSMGUNy62iJO7ZtDsJ3UlpmvzczqY7K1/Hu0wwhXJJZaoKh3z7CgxYnDaZ2evcqFKEs2x6CUp25Z5bU1oShgYYb2ok3zfLNZ2YJnV3DeXd03cgzvfodKnaTGjEb/Rpa1niZCHF+wta5Qgx64OUYT4JYQ0sruTL1PMzRvrR3b4Z+bQuczlU43UvTq5eZrT47VP4jfBNuCJgCy/pQfMOIgbaANLGcadPA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=u/WbGqpZdzz7a1IaX8ZTpWons9aKUG8SCU8qFLaYAZk=;
- b=Q7/LfCeI9cb9eOuBc9mTXcJGuFa5cpDmKJ4eikwsdAcFplE3KKM9JPLotdVHzeVEI0I5MAp7RGZHMOSAuZ9WPnkWUEzQgB/W5GSFcYNHgpjFyHSCFTcul4g0B6tIAaC//SO0SvK9u0ulfV32DaRGDYlzg3SBqJube97aKJw0QHY=
+ bh=FNJoeWLjyVB2LWaj/CAkCgVQequpiOHssTo2XTeNbkU=;
+ b=IxtuU/kkUhDeLHSzuCEzkfO3aJVxazESK5FjSTkQ/KvcxkTxLhUPSv8ggBROSnYmicFKRxt0hIs2ynSgW3a9kZfKn5c3q6PFNJTfzIhJUlaY4g16Dbj9Er2UKLj7Lizdrfw3+UbVdVCxrwbJpk+Vzfb4IsODqYFZOehURWK5OTg=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from AM0PR04MB6452.eurprd04.prod.outlook.com (2603:10a6:208:16d::21)
  by AS8PR04MB8659.eurprd04.prod.outlook.com (2603:10a6:20b:42a::22) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.45; Tue, 18 Apr
- 2023 11:15:23 +0000
+ 2023 11:15:26 +0000
 Received: from AM0PR04MB6452.eurprd04.prod.outlook.com
  ([fe80::55b1:d2dd:4327:912b]) by AM0PR04MB6452.eurprd04.prod.outlook.com
  ([fe80::55b1:d2dd:4327:912b%5]) with mapi id 15.20.6298.028; Tue, 18 Apr 2023
- 11:15:23 +0000
+ 11:15:26 +0000
 From:   Vladimir Oltean <vladimir.oltean@nxp.com>
 To:     netdev@vger.kernel.org
 Cc:     "David S. Miller" <davem@davemloft.net>,
@@ -60,9 +60,9 @@ Cc:     "David S. Miller" <davem@davemloft.net>,
         Ferenc Fejes <ferenc.fejes@ericsson.com>,
         Aaron Conole <aconole@redhat.com>,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 net-next 6/9] selftests: forwarding: sch_tbf_*: Add a pre-run hook
-Date:   Tue, 18 Apr 2023 14:14:56 +0300
-Message-Id: <20230418111459.811553-7-vladimir.oltean@nxp.com>
+Subject: [PATCH v2 net-next 8/9] selftests: forwarding: introduce helper for standard ethtool counters
+Date:   Tue, 18 Apr 2023 14:14:58 +0300
+Message-Id: <20230418111459.811553-9-vladimir.oltean@nxp.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230418111459.811553-1-vladimir.oltean@nxp.com>
 References: <20230418111459.811553-1-vladimir.oltean@nxp.com>
@@ -74,166 +74,93 @@ X-ClientProxiedBy: FR2P281CA0152.DEUP281.PROD.OUTLOOK.COM
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: AM0PR04MB6452:EE_|AS8PR04MB8659:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8f37e036-6e70-4036-7611-08db3ffe3456
+X-MS-Office365-Filtering-Correlation-Id: 8155f5dc-4a08-4e57-3759-08db3ffe35e2
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: IPFwC3lhJDHCmig+8RI9Bm4q5c69JL3UpFF5mPt5A5gbc2Tsi4f9DKMn/Rl4zvEBo8odhlRLNXQy6dEa/P8hOD2YPXPwdjvCIHWdYRMcVsRWjqsRq1XCCBp4g51EpAau6MVb//Kmz9ISuuXhnBy87VQD4KSrFfi8Ode4mCjI+pvIJ7fG5Kq+ftaamNFpi3h9cNHD976llIhca3gBuuUyHQ/bOiQUoYNdC2dWBOjnxA293+6dolnBXpGEDYTWiIMQd+GCMH4iQcqvIM2nmgTA0wLpzrE+dTrVOHDiVMdZLQ8N8nVTs2dFxAYnhGOx7pHEkE4T1e8v4PyfP5WBQ8m76fqgHIul/2DYAlTpaxSHJpeYBWGg/apVTicqk2Ja10dAPBPUDwsil5COi/wq0gX4GqlQR6mbgF6EG4g7boaq4WzFk3oYIWDZsNW8GvTJTjzuXDBW6FEdV05zGOA/15I8o7sWmy5ypTzrVqOXR9UEqRe9Zy0sqJEeYtnQ5etmxAKHCR1UTkxqjgVJ7eW+Xdo3BjS2aVdUZX4gUFZIAFL2YR6baH+RDXguwrE/PpiK3wpaswN96yjFONQTaTPa72mAlxcUkFdioBlWQKRQoHArS3SuG/VwxpxwjR/gMZSBJ8dH
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6452.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(346002)(396003)(39860400002)(366004)(451199021)(6666004)(6486002)(478600001)(86362001)(2616005)(36756003)(26005)(83380400001)(6512007)(1076003)(6506007)(186003)(38100700002)(38350700002)(52116002)(66556008)(66946007)(66476007)(316002)(2906002)(4326008)(6916009)(8936002)(5660300002)(8676002)(7416002)(44832011)(41300700001)(54906003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: zv1+RJTdlaMt84O1ADRtfLJSXFVeMyXJa7sH8+KxETEDMdgcTomCRQV2ZlbGvWJWGDmmygKUu3RH8oldU2HBahZMG2JmCp/uKyGlOaOHsB8ycKJTfMEkK6fBNZl30lgsoIaYkMU8KB8lkf8BMDERSr/FEo/BrATcbD/h8Z1nitMgb2Ii1uajdf4aBNT9cBWEF98KX44mlY+SRTBniGJ2/KnAulHplEdxxV+C+gZocGrJVigU0AbEOgiQUj0Z9/IC/iDLArg3aftlWXYNZ/bYHjuuSxCElsaXAoGtKodFfFarbi/jceb9XSS5TUS24eZ3WUEibSdV6QvQNSbEA/EliKS8eLDzhZkeKbfTnUeDHVHoJPCVinugg/75PbrHR5lzvu6VCk6OFW3u+LF6dCoMgAFrzGyEg7TpHFQABl7hY5nxIl9rCs0gIhn6hWYV3pjl51YWga0h46p9hNZuV7EXlIKvFnumrR6+ZhwTXxFd1R0xwrhL1XRZWrp0rMUSVrV3NBz7xSuhtvrLeugs5aSE8zuastCN3mk8C2aUZWD7oy2aCzhic68A/z8B8Y5jqBP5GBYrJZRlFF3cclZXmkiWG6lzybDJ+H5HUhPWAPFZFRn37Rqyiwgcjm+iqARtE8Ye
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6452.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(346002)(396003)(39860400002)(366004)(451199021)(6666004)(6486002)(478600001)(86362001)(2616005)(36756003)(26005)(6512007)(1076003)(6506007)(186003)(38100700002)(38350700002)(52116002)(66556008)(66946007)(66476007)(316002)(2906002)(4326008)(6916009)(8936002)(5660300002)(8676002)(7416002)(44832011)(41300700001)(54906003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?w/Yp7vLnaB5LbTqSC/aaNj0NbMQd4mX0cvR1lSzsGqwwTLb6yHHMLbMI+qRo?=
- =?us-ascii?Q?Hm0y2tRQePw9f7VlGf3jeiiRd31p76tivovL5JwCf0Gb/qTaAL0WRFsDXPjE?=
- =?us-ascii?Q?1D42yB50Xf9G3jARNS9HMonM2jyRlHUaFCUDfBLw/mFJA8ku6WLVpfy5sjJn?=
- =?us-ascii?Q?9t/7Vb3L/nxttEtfSbOpKHfa4hwB8qviXfcRKB4wOtKstTsve3ki4lUiXdbV?=
- =?us-ascii?Q?ft+6q+DUSz1PJx4kwcqZqA6zjrs8Vi4BL+3RcxfF8MTWDom/G6zIX0qMn9a5?=
- =?us-ascii?Q?Unpv3+AcxCYXd73nI0Xe5AMjKEUOG/Xc1Sp96UV6+RbLHr4V4SkXi+cXVQQY?=
- =?us-ascii?Q?c0DD9EK/fcno53y2C2JwAH+VkoxVPH+3RjiIRmmtiL8VPEeV/eLTrhiC+k6h?=
- =?us-ascii?Q?u6RAoqxVqHf0vEuL7qgViCKhRupXZAQt9wDosAM7NqhtklDkTTnN3bKiwxu3?=
- =?us-ascii?Q?4PdGXgg5KbF//OYwEyMRh9wNGPw3UrsDLDogQIE/QMkiIJly582kSBWMOHob?=
- =?us-ascii?Q?MlOd+dcnsBqBI3/NmUqwJvQVbnfm+Ip6OOfCSnRE9PXkSvYiOo8Ohh1cIqyq?=
- =?us-ascii?Q?svh0xJG+IRo3znyx+GtmRsGwR5bdyVo4WaYi/QNyzycX3kH1PzQ2ZMgvLqO7?=
- =?us-ascii?Q?nomj4Q6uO1ZtcRuj+6hDfBr0x48LpCUKxhBHU9zOHNrSdZeNpGrfn36pqzKk?=
- =?us-ascii?Q?j3kGxBa1vK9sntusmD1YKTlaRPm2kNcY/yAeTwJsvPTAgbT6AFWsh2nR2idF?=
- =?us-ascii?Q?/W5PuzAQLXxJyvbF6rA3r08l2ZlaPhPWugGfI1v6x1Fe2jb2xfpYxwkyFjBW?=
- =?us-ascii?Q?R6BzEBlVIk1A/vQBGq98TxqsMAPZKJjhPzAjsmiT2ZU3KgaQpkT3vOxTcE9s?=
- =?us-ascii?Q?pLhfTLoQosJfbav+TNpohlVGQKn7JrDCRCM6CvCr4jik4xkuNWfIYx1gu9Dg?=
- =?us-ascii?Q?kY5P/zBXLn4mTXjVNO4J8ycpjLRsr1ZIpGqxfHuNzwpM68aukYhsz9zsjZ/1?=
- =?us-ascii?Q?RbDZI3yZ4+4WooV3/frkQuJU9JK37HybaM/Jx0GEak8wJMs506YOhE2bDdFa?=
- =?us-ascii?Q?GPLIZcOPJCBnvcKiRgoD64qVMvGfMj7t+7EpUGDd/5JW7iQLGaGg6cIgF/ci?=
- =?us-ascii?Q?odysQDnwx7/YxvzNMR5uUH31iKhE8yddtfqFJpU4QygmDcchLrkOfXaQH+y6?=
- =?us-ascii?Q?e0wouu1QNOu555pPWTrvR3h5IfAwc4XmcrNW9FUHm+QN6mxKmzVIZI2cOBVg?=
- =?us-ascii?Q?11biHdLKLCjx7c5FzZJXyjdPDHt9A3i8fuXGsivMklq6w3L4Zzkf4+V6PfMa?=
- =?us-ascii?Q?sVd6dmDvjdP4CdH5Jom3xY1ip+1ubvPgPA8VylT4E9qneUFUDBIppXxkv6km?=
- =?us-ascii?Q?Uk32hmDB6NtQix1gdXsrCu8vfC6YwY7f2b7EL1qMKiUAdZIrhjYQBH7rf4fk?=
- =?us-ascii?Q?XtyAneZmZ/sN0ZqOw6LZ2v9C9hAP+qskA4VhSqT3bh9mTuOwp3t6mBsLNCo1?=
- =?us-ascii?Q?PMACeNkRP0sktttgYY4wTo1JTvbM9FuxpBpaZCr3RTeL4Ym5u+o1n+6g/RL5?=
- =?us-ascii?Q?Y254utTWYwxxwyLRv33B2YBGZaMLqh3cyX/DnO6phbWmOQB6OuC1Pnv5shgD?=
- =?us-ascii?Q?ow=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Dc7sx8EWNVzq27W11WWtliuWmWgHwS04w8zcQSMewuzlq1xShZWu2dFkdAFQ?=
+ =?us-ascii?Q?nLZe2DdoXpnzGbwL4v3tJlMu9uFATL/Vza4LnYAzCDsMvmYrH/CEey8sTB9D?=
+ =?us-ascii?Q?4nUTx09k2qlACPP22X/a/KgtkgKeGKnilVRAqovEVyHehqWe0tC+hFPYfZQP?=
+ =?us-ascii?Q?dQV+q+JRrY+nEkP3gXgo6Eqqd0jlrOZSj7Gjy4jhh8j04uJzsKobTrsN5M5Q?=
+ =?us-ascii?Q?XBjq55hUd2mEbGkZ6pTZRAMHNUUqcO/PCi71HyGxylJLZuxXKh5BcZqNxf2F?=
+ =?us-ascii?Q?BbTJXakm3Fy7qVw0t5HTKM4u3vC3XgQez1hRsgY0te6qxWzTt5IozqpJaH24?=
+ =?us-ascii?Q?hd7jolwN6bowlXUsqjC6Fp+kXRo32bRMZx6XX7M8PvO+dSBtUogOupQ10/ez?=
+ =?us-ascii?Q?KxYCxY+MAHWK6H/pUkEgPw+fdTUD+UzkXuYfhz/4udwGsrDdofu0ukcvTPHa?=
+ =?us-ascii?Q?T/qLiBJRhUutBbh6B++R6emEbArxmMTI/zSqT2NDHWPtehcgRIAvZz0BRDpr?=
+ =?us-ascii?Q?+cB1YM0Z/N41560rb8DdFcaJMF2fo2+LSHTeq39cri7TV32TRoR5SSpsWhSv?=
+ =?us-ascii?Q?yFXMIddXwTCFd9z76QsuVw929BbndLbHQCkherkpmf4Ge8HwEE1wzeqdy35W?=
+ =?us-ascii?Q?pg42viz6TlEAgubwuE5fbGSuIVTs8YeLWisgVjjDTU1wVk0U2w6iFeZcG1FP?=
+ =?us-ascii?Q?W+7o6gdJYQaRpsESndO/Qn7zAZADh583gj2G+Z2DoF8vtdhi9aFjmrg5BuaQ?=
+ =?us-ascii?Q?cEBFMfPKSzI3qxNw3/HNd2hN3bEf6azXRiWb83VxQtLkn4LqMYZxR+Exylen?=
+ =?us-ascii?Q?oQ8rPcdriTWXvZ4hyS8n4NQL+1MM8x+EjHy16K4hZ9SyJcgacRwgHNwdDsao?=
+ =?us-ascii?Q?rwQp8lFGONfnhYe23iIFgGhv7NPi47rkiThzWrYY3pfczlfMGifVKSkjFlXS?=
+ =?us-ascii?Q?1JTG38C9QBncssaK12ZzicQFOjFojr4kwqco0U0B02gTEUrhDOHrjW+cGioc?=
+ =?us-ascii?Q?il8GBvdZstTQoUWgLHgo0DEoqB8zaRdT/fHhRWW9B2groykKH0v/ctnoVGFR?=
+ =?us-ascii?Q?BSrflkxiYMbMKGqRahehRX6k4Jdy4v9pmPz43mzVYDNR8Ee/nT7Y19v/r0T3?=
+ =?us-ascii?Q?rMKIXyvGfVVIXHsBuQ0JH2H9/m7CInupxXkaYWWL9j51/XK6Ikzn9J7ppbWf?=
+ =?us-ascii?Q?G7w+vegWrmcI7ffygsfAV928WHDTxNR9jgt3r7tMlyT5YTb1RLfjQA5UZT2K?=
+ =?us-ascii?Q?vcUb8cU1gv9XMiyIjk5fT0xwLK8vHzSA7A41xdAfPyW17nyAECbT2sl1ruyy?=
+ =?us-ascii?Q?klc3u5Zf9FLj9d4ksuPgHfX7KcKMnjcTn5XLtJ7ygRFDo4QfG3rqVYeWPHWa?=
+ =?us-ascii?Q?RNKxTP1whBU+AqmpV67AT6qE2F5PmNd0gDqDnqrNVilfauXB/+VWDH50f4nI?=
+ =?us-ascii?Q?Mm3w863YslyteeaOJpLqkrd+4xnYU4UAgxJtqGkWEnhrtpSLHOVmNftkjmdf?=
+ =?us-ascii?Q?+oLYHfC3eQibKutRM2kJxgZ3ZolKn+1qwH3X3u9e9mHEd5xVnYfrMN6BZ5W+?=
+ =?us-ascii?Q?V5qOafUllIz90pWDaqdFSW9CMkTbdBLFJcgy7q42DxuSGcz/1bfl2d3EbWgx?=
+ =?us-ascii?Q?Bw=3D=3D?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8f37e036-6e70-4036-7611-08db3ffe3456
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8155f5dc-4a08-4e57-3759-08db3ffe35e2
 X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6452.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Apr 2023 11:15:23.7301
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Apr 2023 11:15:26.2991
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 47JhNNU+7/t34hqu8VNdws7CCkEoGo4FZphESo3iv5M3t42EkI3oNfxkoXLC14ppMwp9Ew9bWv2ih9ayTdqHzw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: hIGkp3fhnqsnS4TwdmxDV+4fmJY+QKAzkI64e8W2tXKqVOFSYHD2dgNgjOYLouvEL+jTUp2KAYIRZ/g/jhEgSQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8659
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Petr Machata <petrm@nvidia.com>
+Counters for the MAC Merge layer and preemptible MAC have standardized
+so far on using structured ethtool stats as opposed to the driver
+specific names and meanings.
 
-The driver-specific wrappers of these selftests invoke bail_on_lldpad to
-make sure that LLDPAD doesn't trample the configuration. The function
-bail_on_lldpad is going to move to lib.sh in the next patch. With that, it
-won't be visible for the wrappers before sourcing the framework script. And
-after sourcing it, it is too late: the selftest will have run by then.
+Benefit from that rare opportunity and introduce a helper to lib.sh for
+querying standardized counters, in the hope that these will take off for
+other uses as well.
 
-One option might be to source NUM_NETIFS=0 lib.sh from the wrapper, but
-even if that worked (it might, it might not), that seems cumbersome. lib.sh
-is doing fair amount of stuff, and even if it works today, it does not look
-particularly solid as a solution.
-
-Instead, introduce a hook, sch_tbf_pre_hook(), that when available, gets
-invoked. Move the bail to the hook.
-
-Signed-off-by: Petr Machata <petrm@nvidia.com>
-Reviewed-by: Danielle Ratson <danieller@nvidia.com>
 Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 ---
-v1->v2: new patch from Petr
+v1->v2: patch is new
 
- tools/testing/selftests/drivers/net/mlxsw/sch_tbf_ets.sh  | 6 +++++-
- tools/testing/selftests/drivers/net/mlxsw/sch_tbf_prio.sh | 6 +++++-
- tools/testing/selftests/drivers/net/mlxsw/sch_tbf_root.sh | 6 +++++-
- tools/testing/selftests/net/forwarding/sch_tbf_etsprio.sh | 4 ++++
- tools/testing/selftests/net/forwarding/sch_tbf_root.sh    | 4 ++++
- 5 files changed, 23 insertions(+), 3 deletions(-)
+ tools/testing/selftests/net/forwarding/lib.sh | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/tools/testing/selftests/drivers/net/mlxsw/sch_tbf_ets.sh b/tools/testing/selftests/drivers/net/mlxsw/sch_tbf_ets.sh
-index c6ce0b448bf3..b9b4cdf14ceb 100755
---- a/tools/testing/selftests/drivers/net/mlxsw/sch_tbf_ets.sh
-+++ b/tools/testing/selftests/drivers/net/mlxsw/sch_tbf_ets.sh
-@@ -2,7 +2,11 @@
- # SPDX-License-Identifier: GPL-2.0
- 
- source qos_lib.sh
--bail_on_lldpad
-+
-+sch_tbf_pre_hook()
-+{
-+	bail_on_lldpad
-+}
- 
- lib_dir=$(dirname $0)/../../../net/forwarding
- TCFLAGS=skip_sw
-diff --git a/tools/testing/selftests/drivers/net/mlxsw/sch_tbf_prio.sh b/tools/testing/selftests/drivers/net/mlxsw/sch_tbf_prio.sh
-index 8d245f331619..dff9810ee04f 100755
---- a/tools/testing/selftests/drivers/net/mlxsw/sch_tbf_prio.sh
-+++ b/tools/testing/selftests/drivers/net/mlxsw/sch_tbf_prio.sh
-@@ -2,7 +2,11 @@
- # SPDX-License-Identifier: GPL-2.0
- 
- source qos_lib.sh
--bail_on_lldpad
-+
-+sch_tbf_pre_hook()
-+{
-+	bail_on_lldpad
-+}
- 
- lib_dir=$(dirname $0)/../../../net/forwarding
- TCFLAGS=skip_sw
-diff --git a/tools/testing/selftests/drivers/net/mlxsw/sch_tbf_root.sh b/tools/testing/selftests/drivers/net/mlxsw/sch_tbf_root.sh
-index 013886061f15..75406bd7036e 100755
---- a/tools/testing/selftests/drivers/net/mlxsw/sch_tbf_root.sh
-+++ b/tools/testing/selftests/drivers/net/mlxsw/sch_tbf_root.sh
-@@ -2,7 +2,11 @@
- # SPDX-License-Identifier: GPL-2.0
- 
- source qos_lib.sh
--bail_on_lldpad
-+
-+sch_tbf_pre_hook()
-+{
-+	bail_on_lldpad
-+}
- 
- lib_dir=$(dirname $0)/../../../net/forwarding
- TCFLAGS=skip_sw
-diff --git a/tools/testing/selftests/net/forwarding/sch_tbf_etsprio.sh b/tools/testing/selftests/net/forwarding/sch_tbf_etsprio.sh
-index 75a37c189ef3..df9bcd6a811a 100644
---- a/tools/testing/selftests/net/forwarding/sch_tbf_etsprio.sh
-+++ b/tools/testing/selftests/net/forwarding/sch_tbf_etsprio.sh
-@@ -57,6 +57,10 @@ tbf_root_test()
- 	tc qdisc del dev $swp2 root
+diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
+index efd48e1cadd2..36e47c9d7cca 100755
+--- a/tools/testing/selftests/net/forwarding/lib.sh
++++ b/tools/testing/selftests/net/forwarding/lib.sh
+@@ -787,6 +787,17 @@ ethtool_stats_get()
+ 	ethtool -S $dev | grep "^ *$stat:" | head -n 1 | cut -d: -f2
  }
  
-+if type -t sch_tbf_pre_hook >/dev/null; then
-+	sch_tbf_pre_hook
-+fi
++ethtool_std_stats_get()
++{
++	local dev=$1; shift
++	local grp=$1; shift
++	local name=$1; shift
++	local src=$1; shift
 +
- trap cleanup EXIT
- 
- setup_prepare
-diff --git a/tools/testing/selftests/net/forwarding/sch_tbf_root.sh b/tools/testing/selftests/net/forwarding/sch_tbf_root.sh
-index 72aa21ba88c7..96c997be0d03 100755
---- a/tools/testing/selftests/net/forwarding/sch_tbf_root.sh
-+++ b/tools/testing/selftests/net/forwarding/sch_tbf_root.sh
-@@ -23,6 +23,10 @@ tbf_test()
- 	tc qdisc del dev $swp2 root
- }
- 
-+if type -t sch_tbf_pre_hook >/dev/null; then
-+	sch_tbf_pre_hook
-+fi
++	ethtool --json -S $dev --groups $grp -- --src $src | \
++		jq '.[]."'"$grp"'"."'$name'"'
++}
 +
- trap cleanup EXIT
- 
- setup_prepare
+ qdisc_stats_get()
+ {
+ 	local dev=$1; shift
 -- 
 2.34.1
 
