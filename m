@@ -2,175 +2,299 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53894C77B75
-	for <linux-kselftest@archiver.kernel.org>; Tue, 18 Apr 2023 20:05:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DDEBC77B7F
+	for <linux-kselftest@archiver.kernel.org>; Wed, 19 Apr 2023 08:30:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbjDRUFQ (ORCPT
+        id S231612AbjDSIaw (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 18 Apr 2023 16:05:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58172 "EHLO
+        Wed, 19 Apr 2023 04:30:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbjDRUFP (ORCPT
+        with ESMTP id S231577AbjDSIau (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Apr 2023 16:05:15 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F16E51FD7;
-        Tue, 18 Apr 2023 13:05:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681848314; x=1713384314;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MESHOGE+6HB9L0+Pxz2Yf8K9mFxsBzR+eoMqR4IqWFE=;
-  b=DOEvAulM6XMvBVa2yWRE0tnzDL72XwND8mFCqIubQ4OPsiOfvuMf+DZ6
-   8dWTIrAF8dZYIkfLTOWFxQZVdT3yoP68oei4UZZrUVIxaocgF7v2IaeXU
-   QB11emoP2s/VjhD52cIOR+UqufWFwPPRK2ZjM0dVDzMZJryq3CqcWWfoQ
-   IVNSEcrBTDFD3yqXHoGi8DwsNAURKm3QMac0fOnVYhvXpgic/uDwSG2qO
-   YcG2uUcz4ABuDMkpUJebAXgZVuoZtRBvgL+0isfgDEDTJE8oYVDAGRDuf
-   cE6gItV1knfLXnMmRXmowxm48oiHBnPLY5wiP6fGhvva0jhPYdydfsEa2
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="344024377"
-X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
-   d="scan'208";a="344024377"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 13:05:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="780609861"
-X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
-   d="scan'208";a="780609861"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 18 Apr 2023 13:05:06 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1porZZ-000dzb-10;
-        Tue, 18 Apr 2023 20:05:05 +0000
-Date:   Wed, 19 Apr 2023 04:04:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
+        Wed, 19 Apr 2023 04:30:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22FF012582;
+        Wed, 19 Apr 2023 01:30:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 23DFD63C81;
+        Wed, 19 Apr 2023 08:30:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91AF2C433EF;
+        Wed, 19 Apr 2023 08:30:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681893013;
+        bh=jcrD/MAqpsfteSxcrKJQtY6pksCSFUz4k6hypV9cW7I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GUlfmzAac1xNbniOW+9sTcn+D51raTUKPS47ZwRVE0bQSvC6ZMhwZyI4seWoAszOs
+         dI8qjMwileJSg0S3nHgT7At7aZ2exrs23CjAt26gaSKvr6lK+7UyJ4DYH+cTStdCdv
+         l+LJ2u8v//8RTDDiirAHC7MRuX7HNTijYtoxdRQ1UGU1utqpVcDw5PIHxqsDdqHIlC
+         zFoDv1hARCjt0NHV+1a8aPm1ch7VvJq+rJfqvWmW5BYgK3OGJpuE++V+o3oeQemMcx
+         dTkykrgRGHk1v8rIbaO0egj/zk3jR9uCB8kTaYySO+xQzHlO+iyVziqx7juWEimRjL
+         9Jrf+qrir6/Ag==
+Date:   Wed, 19 Apr 2023 10:29:59 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Ackerley Tng <ackerleytng@google.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Hugh Dickins <hughd@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
         Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Greg KH <greg@kroah.com>
-Subject: Re: [PATCH v14 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-Message-ID: <202304190331.VR44lj9J-lkp@intel.com>
-References: <20230418062008.1434826-3-usama.anjum@collabora.com>
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>,
+        Pankaj Gupta <pankaj.gupta@amd.com>,
+        linux-arch@vger.kernel.org, arnd@arndb.de, linmiaohe@huawei.com,
+        naoya.horiguchi@nec.com, tabba@google.com, wei.w.wang@intel.com
+Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
+ guest private memory
+Message-ID: <20230418-anfallen-irdisch-6993a61be10b@brauner>
+References: <20220818132421.6xmjqduempmxnnu2@box>
+ <diqzlej60z57.fsf@ackerleytng-cloudtop.c.googlers.com>
+ <20221202061347.1070246-2-chao.p.peng@linux.intel.com>
+ <20230413-anlegen-ergibt-cbefffe0b3de@brauner>
+ <ZDiCG/7OgDI0SwMR@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230418062008.1434826-3-usama.anjum@collabora.com>
+In-Reply-To: <ZDiCG/7OgDI0SwMR@google.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Muhammad,
+On Thu, Apr 13, 2023 at 03:28:43PM -0700, Sean Christopherson wrote:
+> On Thu, Apr 13, 2023, Christian Brauner wrote:
+> > On Thu, Aug 18, 2022 at 04:24:21PM +0300, Kirill A . Shutemov wrote:
+> > > On Wed, Aug 17, 2022 at 10:40:12PM -0700, Hugh Dickins wrote:
+> > > > Here's what I would prefer, and imagine much easier for you to maintain;
+> > > > but I'm no system designer, and may be misunderstanding throughout.
+> > > > 
+> > > > QEMU gets fd from opening /dev/kvm_something, uses ioctls (or perhaps
+> > > > the fallocate syscall interface itself) to allocate and free the memory,
+> > > > ioctl for initializing some of it too.  KVM in control of whether that
+> > > > fd can be read or written or mmap'ed or whatever, no need to prevent it
+> > > > in shmem.c, no need for flags, seals, notifications to and fro because
+> > > > KVM is already in control and knows the history.  If shmem actually has
+> > > > value, call into it underneath - somewhat like SysV SHM, and /dev/zero
+> > > > mmap, and i915/gem make use of it underneath.  If shmem has nothing to
+> > > > add, just allocate and free kernel memory directly, recorded in your
+> > > > own xarray.
+> > > 
+> > > I guess shim layer on top of shmem *can* work. I don't see immediately why
+> > > it would not. But I'm not sure it is right direction. We risk creating yet
+> > > another parallel VM with own rules/locking/accounting that opaque to
+> > > core-mm.
+> > 
+> > Sorry for necrobumping this thread but I've been reviewing the
+> 
+> No worries, I'm just stoked someone who actually knows what they're doing is
+> chiming in :-)
 
-kernel test robot noticed the following build warnings:
+It's a dangerous business, going out of your subsystem. You step into
+code, and if you don't watch your hands, there is no knowing where you
+might be swept off to.
 
-[auto build test WARNING on akpm-mm/mm-everything]
-[also build test WARNING on next-20230417]
-[cannot apply to linus/master v6.3-rc7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+That saying goes for me here specifically...
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Muhammad-Usama-Anjum/userfaultfd-UFFD_FEATURE_WP_ASYNC/20230418-142225
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230418062008.1434826-3-usama.anjum%40collabora.com
-patch subject: [PATCH v14 2/5] fs/proc/task_mmu: Implement IOCTL to get and optionally clear info about PTEs
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20230419/202304190331.VR44lj9J-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/4fe2396ba406868e01de910812e7e3c719ba11be
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Muhammad-Usama-Anjum/userfaultfd-UFFD_FEATURE_WP_ASYNC/20230418-142225
-        git checkout 4fe2396ba406868e01de910812e7e3c719ba11be
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash fs/proc/
+> 
+> > memfd_restricted() extension that Ackerley is currently working on. I
+> > was pointed to this thread as this is what the extension is building
+> > on but I'll reply to both threads here.
+> > 
+> > From a glance at v10, memfd_restricted() is currently implemented as an
+> > in-kernel stacking filesystem. A call to memfd_restricted() creates a
+> > new restricted memfd file and a new unlinked tmpfs file and stashes the
+> > tmpfs file into the memfd file's private data member. It then uses the
+> > tmpfs file's f_ops and i_ops to perform the relevant file and inode
+> > operations. So it has the same callstack as a general stacking
+> > filesystem like overlayfs in some cases:
+> > 
+> >         memfd_restricted->getattr()
+> >         -> tmpfs->getattr()
+> 
+> ...
+> 
+> > Since you're effectively acting like a stacking filesystem you should
+> > really use the device number of your memfd restricted filesystem. IOW,
+> > sm like:
+> > 
+> >         stat->dev = memfd_restricted_dentry->d_sb->s_dev;
+> > 
+> > But then you run into trouble if you want to go forward with Ackerley's
+> > extension that allows to explicitly pass in tmpfs fds to
+> > memfd_restricted(). Afaict, two tmpfs instances might allocate the same
+> > inode number. So now the inode and device number pair isn't unique
+> > anymore.
+> > 
+> > So you might best be served by allocating and reporting your own inode
+> > numbers as well.
+> > 
+> > But if you want to preserve the inode number and device number of the
+> > relevant tmpfs instance but still report memfd restricted as your
+> > filesystem type
+> 
+> Unless I missed something along the way, reporting memfd_restricted as a distinct
+> filesystem is very much a non-goal.  AFAIK it's purely a side effect of the
+> proposed implementation.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304190331.VR44lj9J-lkp@intel.com/
+In the current implementation you would have to put in effort to fake
+this. For example, you would need to also implement ->statfs
+super_operation where you'd need to fill in the details of the tmpfs
+instance. At that point all that memfd_restricted fs code that you've
+written is nothing but deadweight, I would reckon.
 
-All warnings (new ones prefixed by >>):
+> 
+> > then I think it's reasonable to ask whether a stacking implementation really
+> > makes sense here.
+> > 
+> > If you extend memfd_restricted() or even consider extending it in the
+> > future to take tmpfs file descriptors as arguments to identify the tmpfs
+> > instance in which to allocate the underlying tmpfs file for the new
+> > restricted memfd file you should really consider a tmpfs based
+> > implementation.
+> > 
+> > Because at that point it just feels like a pointless wrapper to get
+> > custom f_ops and i_ops. Plus it's wasteful because you allocate dentries
+> > and inodes that you don't really care about at all.
+> > 
+> > Just off the top of my hat you might be better served:
+> > * by a new ioctl() on tmpfs instances that
+> >   yield regular tmpfs file descriptors with restricted f_ops and i_ops.
+> >   That's not that different from btrfs subvolumes which effectively are
+> >   directories but are created through an ioctl().
+> 
+> I think this is more or less what we want to do, except via a dedicated syscall
+> instead of an ioctl() so that the primary interface isn't strictly tied to tmpfs,
+> e.g. so that it can be extended to other backing types in the future.
 
-   fs/proc/task_mmu.c: In function 'do_pagemap_scan':
-   fs/proc/task_mmu.c:2205:17: error: implicit declaration of function 'flush_tlb_mm_range'; did you mean 'flush_tlb_range'? [-Werror=implicit-function-declaration]
-    2205 |                 flush_tlb_mm_range(mm, start, end, PAGE_SHIFT, false);
-         |                 ^~~~~~~~~~~~~~~~~~
-         |                 flush_tlb_range
-   In file included from include/linux/highmem.h:14,
-                    from include/linux/bvec.h:10,
-                    from include/linux/blk_types.h:10,
-                    from include/linux/writeback.h:13,
-                    from include/linux/memcontrol.h:22,
-                    from include/linux/swap.h:9,
-                    from include/linux/mm_inline.h:7,
-                    from fs/proc/task_mmu.c:3:
-   include/linux/highmem-internal.h: In function 'pagemap_scan_pmd_entry':
->> include/linux/highmem-internal.h:271:9: warning: 'orig_pte' is used uninitialized [-Wuninitialized]
-     271 |         __kunmap_atomic(__addr);                                \
-         |         ^~~~~~~~~~~~~~~
-   fs/proc/task_mmu.c:1934:22: note: 'orig_pte' was declared here
-    1934 |         pte_t *pte, *orig_pte;
-         |                      ^~~~~~~~
-   cc1: some warnings being treated as errors
+Ok. But just to point this out, this would make memfd_restricted()
+a multiplexer on types of memory. And my wild guess is that not all
+memory types you might reasonably want to use will have a filesystem
+like interface such. So in the future you might end up with multiple
+ways of specifying the type of memory:
 
+// use tmpfs backing
+memfd_restricted(fd_tmpfs, 0);
 
-vim +/orig_pte +271 include/linux/highmem-internal.h
+// use hugetlbfs backing
+memfd_restricted(fd_hugetlbfs, 0);
 
-13f876ba77ebd5 Thomas Gleixner       2020-11-03  251  
-e7392b4eca84e8 Fabio M. De Francesco 2022-05-13  252  /**
-e7392b4eca84e8 Fabio M. De Francesco 2022-05-13  253   * kunmap_atomic - Unmap the virtual address mapped by kmap_atomic() - deprecated!
-e7392b4eca84e8 Fabio M. De Francesco 2022-05-13  254   * @__addr:       Virtual address to be unmapped
-e7392b4eca84e8 Fabio M. De Francesco 2022-05-13  255   *
-e7392b4eca84e8 Fabio M. De Francesco 2022-05-13  256   * Unmaps an address previously mapped by kmap_atomic() and re-enables
-e7392b4eca84e8 Fabio M. De Francesco 2022-05-13  257   * pagefaults. Depending on PREEMP_RT configuration, re-enables also
-e7392b4eca84e8 Fabio M. De Francesco 2022-05-13  258   * migration and preemption. Users should not count on these side effects.
-e7392b4eca84e8 Fabio M. De Francesco 2022-05-13  259   *
-e7392b4eca84e8 Fabio M. De Francesco 2022-05-13  260   * Mappings should be unmapped in the reverse order that they were mapped.
-e7392b4eca84e8 Fabio M. De Francesco 2022-05-13  261   * See kmap_local_page() for details on nesting.
-e7392b4eca84e8 Fabio M. De Francesco 2022-05-13  262   *
-e7392b4eca84e8 Fabio M. De Francesco 2022-05-13  263   * @__addr can be any address within the mapped page, so there is no need
-e7392b4eca84e8 Fabio M. De Francesco 2022-05-13  264   * to subtract any offset that has been added. In contrast to kunmap(),
-e7392b4eca84e8 Fabio M. De Francesco 2022-05-13  265   * this function takes the address returned from kmap_atomic(), not the
-e7392b4eca84e8 Fabio M. De Francesco 2022-05-13  266   * page passed to it. The compiler will warn you if you pass the page.
-13f876ba77ebd5 Thomas Gleixner       2020-11-03  267   */
-13f876ba77ebd5 Thomas Gleixner       2020-11-03  268  #define kunmap_atomic(__addr)					\
-13f876ba77ebd5 Thomas Gleixner       2020-11-03  269  do {								\
-13f876ba77ebd5 Thomas Gleixner       2020-11-03  270  	BUILD_BUG_ON(__same_type((__addr), struct page *));	\
-13f876ba77ebd5 Thomas Gleixner       2020-11-03 @271  	__kunmap_atomic(__addr);				\
-13f876ba77ebd5 Thomas Gleixner       2020-11-03  272  } while (0)
-13f876ba77ebd5 Thomas Gleixner       2020-11-03  273  
+// use non-fs type memory backing
+memfd_restricted(-EBADF, MEMFD_SUPER_FANCY_MEMORY_TYPE);
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+interface wise I find an unpleasant design. But that multi-memory-open
+goal also makes it a bit hard to come up with a clean design (On
+possibility would be to use an extensible struct - versioned by size -
+similar to openat2() and clone3() such that you can specify all types of
+options on the memory in the future.).
+
+> 
+> > * by a mount option to tmpfs that makes it act
+> >   in this restricted manner then you don't need an ioctl() and can get
+> >   away with regular open calls. Such a tmpfs instance would only create
+> >   regular, restricted memfds.
+> 
+> I'd prefer to not go this route, becuase IIUC, it would require relatively invasive
+> changes to shmem code, and IIUC would require similar changes to other support
+> backings in the future, e.g. hugetlbfs?  And as above, I don't think any of the
+> potential use cases need restrictedmem to be a uniquely identifiable mount.
+
+Ok, see my comment above then.
+
+> 
+> One of the goals (hopefully not a pipe dream) is to design restrictmem in such a
+> way that extending it to support other backing types isn't terribly difficult.
+
+Not necessarily difficult, just difficult to do tastefully imho. But
+it's not that has traditionally held people back. ;)
+
+> In case it's not obvious, most of us working on this stuff aren't filesystems
+> experts, and many of us aren't mm experts either.  The more we (KVM folks for the
+> most part) can leverage existing code to do the heavy lifting, the better.
+
+Well, hopefully we can complement each other's knowledge here.
+
+> 
+> After giving myself a bit of a crash course in file systems, would something like
+> the below have any chance of (a) working, (b) getting merged, and (c) being
+> maintainable?
+> 
+> The idea is similar to a stacking filesystem, but instead of stacking, restrictedmem
+> hijacks a f_ops and a_ops to create a lightweight shim around tmpfs.  There are
+> undoubtedly issues and edge cases, I'm just looking for a quick "yes, this might
+> be doable" or a "no, that's absolutely bonkers, don't try it".
+
+Maybe, but I think it's weird. _Replacing_ f_ops isn't something that's
+unprecedented. It happens everytime a character device is opened (see
+fs/char_dev.c:chrdev_open()). And debugfs does a similar (much more
+involved) thing where it replaces it's proxy f_ops with the relevant
+subsystem's f_ops. The difference is that in both cases the replace
+happens at ->open() time; and the replace is done once. Afterwards only
+the newly added f_ops are relevant.
+
+In your case you'd be keeping two sets of {f,a}_ops; one usable by
+userspace and another only usable by in-kernel consumers. And there are
+some concerns (non-exhaustive list), I think:
+
+* {f,a}_ops weren't designed for this. IOW, one set of {f,a}_ops is
+  authoritative per @file and it is left to the individual subsystems to
+  maintain driver specific ops (see the sunrpc stuff or sockets).
+* lifetime management for the two sets of {f,a}_ops: If the ops belong
+  to a module then you need to make sure that the module can't get
+  unloaded while you're using the fops. Might not be a concern in this
+  case.
+* brittleness: Not all f_ops for example deal with userspace
+  functionality some deal with cleanup when the file is closed like
+  ->release(). So it's delicate to override that functionality with
+  custom f_ops. Restricted memfds could easily forget to cleanup
+  resources.
+* Potential for confusion why there's two sets of {f,a}_ops.
+* f_ops specifically are generic across a vast amount of consumers and
+  are subject to change. If memfd_restricted() has specific requirements
+  because of this weird double-use they won't be taken into account.
+
+I find this hard to navigate tbh and it feels like taking a shortcut to
+avoid building a proper api. If you only care about a specific set of
+operations specific to memfd restricte that needs to be available to
+in-kernel consumers, I wonder if you shouldn't just go one step further
+then your proposal below and build a dedicated minimal ops api. Idk,
+sketching like a madman on a drawning board here with no claim to
+feasibility from a mm perspective whatsoever:
+
+struct restrictedmem_ops {
+	// only contains very limited stuff you need or special stuff
+	// you nee, similar to struct proto_ops (sockets) and so on
+};
+
+struct restrictedmem {
+	const struct restrictedmem_ops ops;
+};
+
+This would avoid fuzzing with two different set of {f,a}_ops in this
+brittle way. It would force you to clarify the semantics that you need
+and the operations that you need or don't need implemented. And it would
+get rid of the ambiguity inherent to using two sets of {f,a}_ops.
