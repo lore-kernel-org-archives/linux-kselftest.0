@@ -2,147 +2,79 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18E2BC6FD18
-	for <linux-kselftest@archiver.kernel.org>; Wed, 19 Apr 2023 11:42:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ED3D0C6FD18
+	for <linux-kselftest@archiver.kernel.org>; Wed, 19 Apr 2023 14:05:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232623AbjDSLmP (ORCPT
+        id S231349AbjDSOFr (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 19 Apr 2023 07:42:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37976 "EHLO
+        Wed, 19 Apr 2023 10:05:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232622AbjDSLmO (ORCPT
+        with ESMTP id S231532AbjDSOFq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 Apr 2023 07:42:14 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0058115466;
-        Wed, 19 Apr 2023 04:41:45 -0700 (PDT)
-Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33JB0dfo004586;
-        Wed, 19 Apr 2023 11:39:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : to : cc : references : from : subject : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=jvitvu8tNatkgoZLUb/7EoCBqdtrYk/17qPZfc3bgOs=;
- b=MpyF3S6oqeISAqJTKFHWOZSHNSFkagp15cThaXAR/6EDJIFO8nVhFdUkVQYAcV0mi9i2
- SFohJ8tWX8lFUDubvQJDYoEfFUTDOgHePuwokQoKz14heJ/e75QPbDc6VwgXM097MU1w
- nlBx8GpVfKDmidp/tb6a04dzRkqlE5hEKgHM4zgxReb5stBFGN/Xl1CQZQyuLI3PdHll
- lsVufL+QTZsjDakCy73FQyJZqNFN+hz5oj17IEwYpEPo0V3jXal+bzOKK0BUwDJcM7r4
- +9SlxeicI+xv4byXMAxQWCSRGcUU8RTwQzE2j4ZINuYhgjtkeen3ojfymyCfx9uw8U3+ lg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q20x17775-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Apr 2023 11:39:19 +0000
-Received: from m0353724.ppops.net (m0353724.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33JBDnC9023064;
-        Wed, 19 Apr 2023 11:39:19 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q20x1776s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Apr 2023 11:39:19 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33J6Q5Jx003283;
-        Wed, 19 Apr 2023 11:39:17 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3pykj6j7sm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 19 Apr 2023 11:39:17 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33JBdD9I20709964
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 19 Apr 2023 11:39:13 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C46A920043;
-        Wed, 19 Apr 2023 11:39:13 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DDE5520040;
-        Wed, 19 Apr 2023 11:39:12 +0000 (GMT)
-Received: from [9.171.27.132] (unknown [9.171.27.132])
-        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 19 Apr 2023 11:39:12 +0000 (GMT)
-Message-ID: <42df1c58-f0bf-5dd8-03db-ee2fa28d7c1b@linux.ibm.com>
-Date:   Wed, 19 Apr 2023 13:39:12 +0200
+        Wed, 19 Apr 2023 10:05:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C50FF40C7;
+        Wed, 19 Apr 2023 07:05:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A5F863F9F;
+        Wed, 19 Apr 2023 14:05:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B59AC433D2;
+        Wed, 19 Apr 2023 14:05:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681913143;
+        bh=nOoKTOCJ3uH9k61FiEasxH0rLarWnxmZFFtaJY5x3/g=;
+        h=Subject:From:To:Cc:Date:From;
+        b=NNATWlOJ+m5LfLsJ/jPP8wbO/+W6MKvPubxzWJBfn/iZOd5K/cFyY8BNFjmY3JGsU
+         0m7HUs5KzEPb8qg54kGhm1YC2WrcSbMKb9vHANkN031fOztKzkIhlm50R0PCIvyM7z
+         Call2nUEX+bKK6D73TvqgMBzMAN1lGTRum2P6sArZ0B+8vWXT1rnYxqvHmj2dDz6uv
+         vKmo8ELoHeX6fZsNudd8a3lF6ND9UpDh2m0VA78yXEhwwM5ignx+td1KbaGvnqeyIz
+         sM7g3g9es2tf9TTgi8IZlpLzHEuI6n/ekoiez/9PGc3F/NojLO4tLx89WQAHUnyreP
+         9DijXi/9bvzJw==
+Subject: [PATCH RESEND] .gitignore: Do not ignore .kunitconfig files
+From:   Chuck Lever <cel@kernel.org>
+To:     masahiroy@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        cel@kernel.org
+Date:   Wed, 19 Apr 2023 10:05:42 -0400
+Message-ID: <168191307928.6696.11689169705819224951.stgit@91.116.238.104.host.secureserver.net>
+User-Agent: StGit/1.5
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, linux-s390@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Stefan Roesch <shr@devkernel.io>,
-        Rik van Riel <riel@surriel.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Shuah Khan <shuah@kernel.org>
-References: <20230418051342.1919757-1-shr@devkernel.io>
- <20230418152849.505124-1-david@redhat.com>
- <20230418152849.505124-4-david@redhat.com>
-Content-Language: en-US
-From:   Janosch Frank <frankja@linux.ibm.com>
-Subject: Re: [PATCH v1 3/3] mm/ksm: move disabling KSM from s390/gmap code to
- KSM code
-In-Reply-To: <20230418152849.505124-4-david@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 6IxnLG2-LMktCbzW90tov6FIPqZB3dRQ
-X-Proofpoint-GUID: jvs1HAeEVjkq_CnN1R30R2G2A3flzTM1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-19_06,2023-04-18_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- bulkscore=0 adultscore=0 impostorscore=0 mlxlogscore=580
- priorityscore=1501 spamscore=0 phishscore=0 clxscore=1011 mlxscore=0
- suspectscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2303200000 definitions=main-2304190103
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 4/18/23 17:28, David Hildenbrand wrote:
-> Let's factor out actual disabling of KSM. The existing
-> "mm->def_flags &= ~VM_MERGEABLE;" was essentially a NOP and can be dropped,
-> because def_flags should never include VM_MERGEABLE. Note that we don't
-> currently prevent re-enabling KSM.
-> 
-> This should now be faster in case KSM was never enabled, because we only
-> conditionally iterate all VMAs. Further, it certainly looks cleaner.
-> 
-> Signed-off-by: David Hildenbrand <david@redhat.com>
-> ---
->   arch/s390/mm/gmap.c | 20 +-------------------
->   include/linux/ksm.h |  6 ++++++
->   mm/ksm.c            | 11 +++++++++++
->   3 files changed, 18 insertions(+), 19 deletions(-)
-> 
-> diff --git a/arch/s390/mm/gmap.c b/arch/s390/mm/gmap.c
-> index 0949811761e6..dfe905c7bd8e 100644
-> --- a/arch/s390/mm/gmap.c
-> +++ b/arch/s390/mm/gmap.c
-> @@ -2585,30 +2585,12 @@ EXPORT_SYMBOL_GPL(s390_enable_sie);
->   
->   int gmap_mark_unmergeable(void)
->   {
-> -	struct mm_struct *mm = current->mm;
-> -	struct vm_area_struct *vma;
-> -	unsigned long vm_flags;
-> -	int ret;
-> -	VMA_ITERATOR(vmi, mm, 0);
-> -
->   	/*
->   	 * Make sure to disable KSM (if enabled for the whole process or
->   	 * individual VMAs). Note that nothing currently hinders user space
->   	 * from re-enabling it.
->   	 */
+From: Chuck Lever <chuck.lever@oracle.com>
 
-Is that still true?
+Circumvent the .gitignore wildcard to avoid warnings about ignored
+.kunitconfig files. As far as I can tell, the warnings are harmless
+and these files are not actually ignored.
 
-My KSM knowledge is nearly zero but from what I can see the patch looks 
-ok to me:
-Acked-by: Janosch Frank <frankja@linux.ibm.net>
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/oe-kbuild-all/202304142337.jc4oUrov-lkp@intel.com/
+Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
+---
+ .gitignore |    1 +
+ 1 file changed, 1 insertion(+)
+
+Resending...  It was not clear to me if this file has a specific
+maintainer. I chose to send it to the most recent committer.
+
+diff --git a/.gitignore b/.gitignore
+index 70ec6037fa7a..51117ba29c88 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -105,6 +105,7 @@ modules.order
+ !.gitignore
+ !.mailmap
+ !.rustfmt.toml
++!.kunitconfig
+ 
+ #
+ # Generated include files
 
 
