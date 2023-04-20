@@ -2,184 +2,266 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ABAFCC77B73
-	for <linux-kselftest@archiver.kernel.org>; Thu, 20 Apr 2023 18:53:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD786C77B73
+	for <linux-kselftest@archiver.kernel.org>; Thu, 20 Apr 2023 20:57:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231491AbjDTSw5 (ORCPT
+        id S232473AbjDTU5u (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 20 Apr 2023 14:52:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57556 "EHLO
+        Thu, 20 Apr 2023 16:57:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232036AbjDTSwm (ORCPT
+        with ESMTP id S231394AbjDTU5s (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Apr 2023 14:52:42 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74D3244BA;
-        Thu, 20 Apr 2023 11:52:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DQa9c+OY1jJHMf3qRpoUkegQAJuUhkHNqrBI0pFyudkcQUcli12DyW9Yr717riwsKnmK46fAhJQuwokZfRUW28qxWah3DlbePPkaBZ7bwDBXe9w+clF5aZT/Fo+AbcVuemWfStyE4iLbQZf+d8Noacy4MPCJlMDcMvY5mRKRR9Pht49IN8CfMkuduaY6cUe/gR3Y1kZOmo6X5JbVtS+/cVcFIafnv6JickDvH3rAE+4kGdTcvdYYxtqrNar/eFMvdCHMKDLiGwlYx9v9iJ3wUgFTaLuWuU5cphGTIkKy6KzKxtuNUfjNk2F+qjDhlkKIyQmR5iJPo9DpyYmgh5HngQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3blGAHefJ4aP70tNrJtt6rGHVG5EmtnNNBaQcgWD0rI=;
- b=HftrH7S+VAVOKLIlNQUSU3CyFP8OTnydiJHBxPGzP3SqMYNcupC7yeabLQWa8P4nJNox+2xPjOrCktItRwuqrdMZY6nTiAR4KxPaf/R3n1rSeQWmdzjGZ18K8IMJ81w0XYg56vTeGhM0BDIfKgzp7ijPIhtLYZtr6jbHmKppAeOIgMAwLOoKPkGtuBM+gtaxcfV9gtMWeq/Zw6+claJIEuPqw5zBNHt7hrC3t1R5DRci1TUEjo1ysGowdO7poA32uqRXVnYONJ2J7X9wxvyMSoQMDiO4XhmfSrJMwRehSjfPmzDNMRtCtvTKwokxW7nH+OLGn+YR2sozVXM4yoZNbw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3blGAHefJ4aP70tNrJtt6rGHVG5EmtnNNBaQcgWD0rI=;
- b=BAY3YUFVT33oOZ47Bn49fiHEdhUWf5BNG/P1k0+ihKtPBEk5FxfF41LF6iBgyRsNtW/oos/Ex7daXxUfJmmqdggEa3jEEMbFjZZBQ1F1PS0F+cSzWK1F68by0Wt+alZJBmbi4FsSIxB5aGo7VRM1q8cLdCR0lvX3+BznJkNnvMyzzmQBc4b9rW1ENsbae/NNzPap96bhh13CxNX+KduV6dFLz1OXO9fpadY75BA7yCyEPb9KuFOYhWWiTrjM50/+iv065Aa3K5TIQUj2DplrynbsUO/mJardhXkYRNwD2RHXbFljVPvlyg9oIfaW6c1hDqChzZXuGBsNfN8ELwdkXQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by MW3PR12MB4553.namprd12.prod.outlook.com (2603:10b6:303:2c::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.22; Thu, 20 Apr
- 2023 18:51:50 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab%6]) with mapi id 15.20.6319.020; Thu, 20 Apr 2023
- 18:51:50 +0000
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     iommu@lists.linux.dev, linux-kselftest@vger.kernel.org
-Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
-        Kevin Tian <kevin.tian@intel.com>, kvm@vger.kernel.org,
-        Lixiao Yang <lixiao.yang@intel.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Nicolin Chen <nicolinc@nvidia.com>, Yi Liu <yi.l.liu@intel.com>
-Subject: [PATCH v6 01/19] iommufd: Move isolated msi enforcement to iommufd_device_bind()
-Date:   Thu, 20 Apr 2023 15:51:16 -0300
-Message-Id: <1-v6-fdb604df649a+369-iommufd_alloc_jgg@nvidia.com>
-In-Reply-To: <0-v6-fdb604df649a+369-iommufd_alloc_jgg@nvidia.com>
-References: 
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BL0PR03CA0013.namprd03.prod.outlook.com
- (2603:10b6:208:2d::26) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|MW3PR12MB4553:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3be85793-1341-4cdb-90f0-08db41d04738
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8znuAU2rc5bnucutZqWqoEvHStBSWRmEb5KDLypr0rsjVwHSJoekGUqtv3SVbqEK1S/kv/Eoq2E3RLypdJ8cs3egi3fcJtfeofHN28OuLZ8dv8yqlG51HEqXWYWL33udbTCHrp1Tk683qYAjlDKWu/ktWo+nkt3rZ6OmboQ7sXEsX2b/iGNuJ74mWwTowqvulUJ/zQv8IXhfkrgRpOXMZjvCytcJET3vH968JVUvhqnjlHSSOBcs0859LAetEBuUzh9NhsLtXkstNw/6rdmFyOP21Wx7AkUhd+FlsOZ1FvfsgQKXcSM5rKjfzrHsLcki0i4RKiQtzikrEISKJkMwte+m5px8pl5sdDCQKmvXPJjayESpUW1a1+F2lTCvBeyLVAuogpNfMhg9OKDLQLwwCy9hPtk2a/FhYwC1RTp+RZDpVCgbUdQYNFnMejPWwLZY597yZ5tFcjJOpA9fYL1y8mEN7zZpHjm2m3s7KtXjvQAHywU/+XE7aRix1qvuHXInaNAVJv2pCoWWzQ9wuHgo+RO0DHRoVu/JPWn+keSKN527VvxI9l1BC5WYhIvnOh2xR2dYf4bmkkL2ULbE5qw3UH8FsiyJtKB4bYeRezFntVI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(39860400002)(346002)(376002)(136003)(451199021)(54906003)(4326008)(316002)(66946007)(66556008)(66476007)(478600001)(6666004)(6486002)(5660300002)(8936002)(41300700001)(8676002)(2906002)(86362001)(36756003)(38100700002)(2616005)(6512007)(186003)(6506007)(26005)(83380400001)(4216001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?f6SyglhUzw/YpbAEJKQgALHl+Xls1XI3RuPCgAw1bXFqUQ5lnx6PkTidQXo9?=
- =?us-ascii?Q?U4YYsbzBfFaL6vayNm4UIz0TLjRhsdeH8NnJOcf/ikLbfb/aU/apa/oNve+M?=
- =?us-ascii?Q?2k2uy9S0SGIxtR9Gh0xF44p77j04Wp4JB7bZE4nYSuQS17qMXbqT/+IOUVls?=
- =?us-ascii?Q?dXQf23+IkIZ4ljJQEXuHsQ5wWzDR5+3794W+rbUx5AZeh0O1918n1TDiUjuh?=
- =?us-ascii?Q?2+SDOPAQy3fTvPIhRzyC20muQ0S+6fLaygIHbdMXp6PCJ/yOBTXW76uXsSfL?=
- =?us-ascii?Q?wVjlzd+vd1Uq2B42O3nwLD3Gu+t1WMuAOpjEEq3w89YBJcgiiOvGyRdDqv/q?=
- =?us-ascii?Q?LCSxfoYITsVTMzEPcFPHTn+EEA5gEoy3NrptO8BY/RGbohYN04iHs2RH97Cj?=
- =?us-ascii?Q?lk/y23ouygt54lBQDEfesCc4Y+HQTwtTR0hQGEauPGg/7aN4IfywMKANk4lv?=
- =?us-ascii?Q?5aIK5j3r+z8woanNHHJzd57D2lGmCaZhN12ZgxavOyhu13nnqchitdLH+qtk?=
- =?us-ascii?Q?vpeSYipBz3ZnAtMBHDSyLeDJwZlucEDtj2bmiiCKsgXVRI1BI1TJzk2KyCzy?=
- =?us-ascii?Q?bYmr/OUesCZubs0ET//nIBFVjkSzxcFQHIasYEpGmB/coudRDKcZpuI2z9uG?=
- =?us-ascii?Q?j11FQh7YJSu7rNwiCVdiHfRYWht1RVwsfe+BlDVh0o75R6h4gY1vQeMeHJUE?=
- =?us-ascii?Q?YFDkiBFLVBYxKqIRnWhMuPFQHFSgH/R0TeEe8H9EsYc/wtmqJMuIe/5x/XcE?=
- =?us-ascii?Q?OGzfFliecHEs43J9T4O4ldlzkhAckBTb5fCLU0SRTK7keaNlhkA7kLcOPWg4?=
- =?us-ascii?Q?9oX7vHbgxqkv1E5q8RfRULqv/mPdNHnq5LMF2k0LSdIsjL1VwzqC4jK6OZSI?=
- =?us-ascii?Q?bPuk9pEd8U5AeCQV6tWwAG6541gIGnVUILJomQFZdIYCYF3B+nxPoqB1n/tE?=
- =?us-ascii?Q?waHhcGVRmgNP+14KGYVlNB5fHxBpZ/3wJU9r76N4EF44WC+WYzo/ffPAlGjQ?=
- =?us-ascii?Q?BdSKSFNrYAZjhUvGO02AmRfa75C5hBQMPLVW6tGuq9MSac8ODtfpUhufqsZe?=
- =?us-ascii?Q?ry4iqwrGPLRpHcxpTLMrJW3NCoyxqccOWYSis1iRdNLrQuAeAH/CIwMxdRhW?=
- =?us-ascii?Q?/vRZNjpW6AvQoy2jsFVTg9mrEEsL0i8fLo4jVICE+4vevKhOPpNRCRVv37TP?=
- =?us-ascii?Q?2xpfhEVL+76CBRdlofR+FXWiDd+5nUMk21qpDIwPafVcjUKztWqolX22cXHn?=
- =?us-ascii?Q?U4urnnEqyObVAoBKDvvB81go1n/7Jrh2B0tzid+CPplPbw6Sc3bBQLiULYJW?=
- =?us-ascii?Q?aZjmUVOH9Z6lVBLz3zJJFMhoQtl/2CEmgLYU3Mu3WLEkbgGMSDYITkUSU8xs?=
- =?us-ascii?Q?q2pdfKkOj34tJC8WnHZsw/1ZrqaYG32GqsyE6Q27ZMkAwhvaF9404FVqLh1k?=
- =?us-ascii?Q?DE8UOdi51ZTdQ59fgptzk9cV1yrvXWRnNGR14IVR+d4SBMzGMxaBBHFFLokj?=
- =?us-ascii?Q?/vCRUOtM4iJwwu1Tho1ygAGzhTGX2diUnxzm6Pe7Xz4NXnTp4oN42yCGHckF?=
- =?us-ascii?Q?t3CUITcz79/ZA6zJRSrlg0BRJ+UOyzoQso8/X35g?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3be85793-1341-4cdb-90f0-08db41d04738
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2023 18:51:41.4215
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: vivszOU8MAxWsM/17eN2qB+HOGDMujFh111hLLakT/gngLE+EcUmnISdHEyMH9Tq
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4553
+        Thu, 20 Apr 2023 16:57:48 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6347423C
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Apr 2023 13:57:46 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-b8bf9f09340so1371384276.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Apr 2023 13:57:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682024265; x=1684616265;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=5yzTg1HjZXhyiiyjfkjQABzGLu2Q1ap1FIlFZzPamAM=;
+        b=CBi4oyy3PbOkEIks6OuRCzZBUXoTmT1Azzv/BL5OSDeard16zpdwuFwJlGAzZec/8h
+         urN1PYynIvVibXD5+uQTxPJZ0cHysiFJa4tRbnEz0v8IfgMv5+0XJV+boTC4GkmIwGcC
+         Ni/qexVXdD3RGT3PUthBE2VL1J4jTWfz+gg0nHT5u6hKz/W4PBqDIVhbcDqQHSMI4YsC
+         RbczTQAMKtIdf5OBPXhrTP1oKGPq8t84NaI1mHdTi3Wz5Sxo9nCiFFi0vnfPkXHaBbMv
+         c0gZvLkSkOMzvqSdvbNFL93bnyzHiQNR0SP1hunSJYMKsYebdnbKlOnh7GHLvHm7fOhY
+         f4WQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682024265; x=1684616265;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5yzTg1HjZXhyiiyjfkjQABzGLu2Q1ap1FIlFZzPamAM=;
+        b=jzk1Z/5KontRtFyfEDoq8ZzFdujUTu/F8NaeHluu9Dxy9PWteeONgPtwWkCufyqMvL
+         ZriVe7l4ZaMD1YHhhrhVWALnaCPkz6Hy5NJhWY00FtzhV06qIYiprU2YpexrU5h3QAv9
+         Aw5UgMFbyrGkxn9hP6FSAgW2L7zmMKrOIts/XzlDuHGXt2AZfRujyhBerLQDhigk7G7e
+         Iw/nT7uDMiE85Y6227U3BWnT8k0weLjmTLP3RLU+jKieiMzzZvgEWYn4pJrHTSG5Olzg
+         Bbdfd7U/q/uKjK9576L8fRE2QjX+S3nnYEMmiRUK/v4lSyleQD2Fyc03m0wuff0NI5wf
+         i8JQ==
+X-Gm-Message-State: AAQBX9dPhtTUrxwHI+gleZPo7c9oTiQBsfhzoYsxPgapvvVsFudGdBES
+        zdvex4fPYL9tZAz7TdR8hD9kfpAMmg==
+X-Google-Smtp-Source: AKy350biCQsQsBH/ynN5GE4QuylXbnxvdaHRCye7LUQ+dAisidmDp5bnNQq+MYru8DJv003y3BvdLq6ovg==
+X-Received: from rmoar-specialist.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:45d3])
+ (user=rmoar job=sendgmr) by 2002:a25:cc0c:0:b0:b8b:f584:6b73 with SMTP id
+ l12-20020a25cc0c000000b00b8bf5846b73mr162050ybf.10.1682024265828; Thu, 20 Apr
+ 2023 13:57:45 -0700 (PDT)
+Date:   Thu, 20 Apr 2023 20:57:34 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
+Message-ID: <20230420205734.1288498-1-rmoar@google.com>
+Subject: [KTAP V2 PATCH] ktap_v2: add test metadata
+From:   Rae Moar <rmoar@google.com>
+To:     frowand.list@gmail.com, davidgow@google.com,
+        skhan@linuxfoundation.org, keescook@chromium.org,
+        Tim.Bird@sony.com, brendanhiggins@google.com
+Cc:     corbet@lwn.net, guillaume.tucker@collabora.com,
+        dlatypov@google.com, kernelci@lists.linux.dev,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rae Moar <rmoar@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-With the recent rework this no longer needs to be done at domain
-attachment time, we know if the device is usable by iommufd when we bind
-it.
+Add specification for declaring test metadata to the KTAP v2 spec.
 
-The value of msi_device_has_isolated_msi() is not allowed to change while
-a driver is bound.
+The purpose of test metadata is to allow for the declaration of essential
+testing information in KTAP output. This information includes test
+names, test configuration info, test attributes, and test files.
 
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+There have been similar ideas around the idea of test metadata such as test
+prefixes and test name lines. However, I propose this specification as an
+overall fix for these issues.
+
+These test metadata lines are a form of diagnostic lines with the
+format: "# <metadata_type>: <data>". As a type of diagnostic line, test
+metadata lines are compliant with KTAP v1, which will help to not
+interfere too much with current parsers.
+
+Specifically the "# Subtest:" line is derived from the TAP 14 spec:
+https://testanything.org/tap-version-14-specification.html.
+
+The proposed location for test metadata is in the test header, between the
+version line and the test plan line. Note including diagnostic lines in
+the test header is a depature from KTAP v1.
+
+This location provides two main benefits:
+
+First, metadata will be printed prior to when subtests are run. Then if a
+test fails, test metadata can help discern which test is causing the issue
+and potentially why.
+
+Second, this location ensures that the lines will not be accidentally
+parsed as a subtest's diagnostic lines because the lines are bordered by
+the version line and plan line.
+
+Here is an example of test metadata:
+
+ KTAP version 2
+ # Config: CONFIG_TEST=y
+ 1..1
+     KTAP version 2
+     # Subtest: test_suite
+     # File: /sys/kernel/...
+     # Attributes: slow
+     # Other: example_test
+     1..2
+     ok 1 test_1
+     ok 2 test_2
+ ok 1 test_suite
+
+Here is a link to a version of the KUnit parser that is able to parse test
+metadata lines for KTAP version 2. Note this includes test metadata
+lines for the main level of KTAP.
+
+Link: https://kunit-review.googlesource.com/c/linux/+/5809
+
+Signed-off-by: Rae Moar <rmoar@google.com>
 ---
- drivers/iommu/iommufd/device.c | 38 ++++++++++++++++++----------------
- 1 file changed, 20 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/iommu/iommufd/device.c b/drivers/iommu/iommufd/device.c
-index c6f4852a8a0c08..e66303c17c894c 100644
---- a/drivers/iommu/iommufd/device.c
-+++ b/drivers/iommu/iommufd/device.c
-@@ -60,6 +60,26 @@ struct iommufd_device *iommufd_device_bind(struct iommufd_ctx *ictx,
- 	if (!group)
- 		return ERR_PTR(-ENODEV);
+Hi everyone,
+
+I would like to use this proposal similar to an RFC to gather ideas on the
+topic of test metadata. Let me know what you think.
+
+I am also interested in brainstorming a list of recognized metadata types.
+Providing recognized metadata types would be helpful in parsing and
+displaying test metadata in a useful way.
+
+Current ideas:
+- "# Subtest: <test_name>" to indicate test name (name must match
+  corresponding result line)
+- "# Attributes: <attributes list>" to indicate test attributes (list
+  separated by commas)
+- "# File: <file_path>" to indicate file used in testing
+
+Any other ideas?
+
+Note this proposal replaces two of my previous proposals: "ktap_v2: add
+recognized test name line" and "ktap_v2: allow prefix to KTAP lines."
+
+Thanks!
+-Rae
+
+Note: this patch is based on Frank's ktap_spec_version_2 branch.
+
+ Documentation/dev-tools/ktap.rst | 51 ++++++++++++++++++++++++++++++--
+ 1 file changed, 48 insertions(+), 3 deletions(-)
+
+diff --git a/Documentation/dev-tools/ktap.rst b/Documentation/dev-tools/ktap.rst
+index ff77f4aaa6ef..a2d0a196c115 100644
+--- a/Documentation/dev-tools/ktap.rst
++++ b/Documentation/dev-tools/ktap.rst
+@@ -17,7 +17,9 @@ KTAP test results describe a series of tests (which may be nested: i.e., test
+ can have subtests), each of which can contain both diagnostic data -- e.g., log
+ lines -- and a final result. The test structure and results are
+ machine-readable, whereas the diagnostic data is unstructured and is there to
+-aid human debugging.
++aid human debugging. One exception to this is test metadata lines - a type
++of diagnostic lines. Test metadata is located between the version line and
++plan line of a test and can be machine-readable.
  
-+	/*
-+	 * For historical compat with VFIO the insecure interrupt path is
-+	 * allowed if the module parameter is set. Secure/Isolated means that a
-+	 * MemWr operation from the device (eg a simple DMA) cannot trigger an
-+	 * interrupt outside this iommufd context.
-+	 */
-+	if (!iommufd_selftest_is_mock_dev(dev) &&
-+	    !iommu_group_has_isolated_msi(group)) {
-+		if (!allow_unsafe_interrupts) {
-+			rc = -EPERM;
-+			goto out_group_put;
-+		}
-+
-+		dev_warn(
-+			dev,
-+			"MSI interrupts are not secure, they cannot be isolated by the platform. "
-+			"Check that platform features like interrupt remapping are enabled. "
-+			"Use the \"allow_unsafe_interrupts\" module parameter to override\n");
-+	}
-+
- 	rc = iommu_device_claim_dma_owner(dev, ictx);
- 	if (rc)
- 		goto out_group_put;
-@@ -146,24 +166,6 @@ static int iommufd_device_setup_msi(struct iommufd_device *idev,
- 		 */
- 		hwpt->msi_cookie = true;
- 	}
--
--	/*
--	 * For historical compat with VFIO the insecure interrupt path is
--	 * allowed if the module parameter is set. Insecure means that a MemWr
--	 * operation from the device (eg a simple DMA) cannot trigger an
--	 * interrupt outside this iommufd context.
--	 */
--	if (!iommufd_selftest_is_mock_dev(idev->dev) &&
--	    !iommu_group_has_isolated_msi(idev->group)) {
--		if (!allow_unsafe_interrupts)
--			return -EPERM;
--
--		dev_warn(
--			idev->dev,
--			"MSI interrupts are not secure, they cannot be isolated by the platform. "
--			"Check that platform features like interrupt remapping are enabled. "
--			"Use the \"allow_unsafe_interrupts\" module parameter to override\n");
--	}
- 	return 0;
- }
+ KTAP output is built from four different types of lines:
+ - Version lines
+@@ -28,8 +30,7 @@ KTAP output is built from four different types of lines:
+ In general, valid KTAP output should also form valid TAP output, but some
+ information, in particular nested test results, may be lost. Also note that
+ there is a stagnant draft specification for TAP14, KTAP diverges from this in
+-a couple of places (notably the "Subtest" header), which are described where
+-relevant later in this document.
++a couple of places, which are described where relevant later in this document.
  
+ Version lines
+ -------------
+@@ -166,6 +167,45 @@ even if they do not start with a "#": this is to capture any other useful
+ kernel output which may help debug the test. It is nevertheless recommended
+ that tests always prefix any diagnostic output they have with a "#" character.
+ 
++Test metadata lines
++-------------------
++
++Test metadata lines are a type of diagnostic lines used to the declare the
++name of a test and other helpful testing information in the test header.
++These lines are often helpful for parsing and for providing context during
++crashes.
++
++Test metadata lines must follow the format: "# <metadata_type>: <data>".
++These lines must be located between the version line and the plan line
++within a test header.
++
++There are a few currently recognized metadata types:
++- "# Subtest: <test_name>" to indicate test name (name must match
++  corresponding result line)
++- "# Attributes: <attributes list>" to indicate test attributes (list
++  separated by commas)
++- "# File: <file_path>" to indicate file used in testing
++
++As a rule, the "# Subtest:" line is generally first to declare the test
++name. Note that metadata lines do not necessarily need to use a
++recognized metadata type.
++
++An example of using metadata lines:
++
++::
++
++        KTAP version 2
++        1..1
++        # File: /sys/kernel/...
++          KTAP version 2
++          # Subtest: example
++          # Attributes: slow, example_test
++          1..1
++          ok 1 test_1
++        # example passed
++        ok 1 example
++
++
+ Unknown lines
+ -------------
+ 
+@@ -206,6 +246,7 @@ An example of a test with two nested subtests:
+ 	KTAP version 2
+ 	1..1
+ 	  KTAP version 2
++	  # Subtest: example
+ 	  1..2
+ 	  ok 1 test_1
+ 	  not ok 2 test_2
+@@ -219,6 +260,7 @@ An example format with multiple levels of nested testing:
+ 	KTAP version 2
+ 	1..2
+ 	  KTAP version 2
++	  # Subtest: example_test_1
+ 	  1..2
+ 	    KTAP version 2
+ 	    1..2
+@@ -254,6 +296,7 @@ Example KTAP output
+ 	KTAP version 2
+ 	1..1
+ 	  KTAP version 2
++	  # Subtest: main_test
+ 	  1..3
+ 	    KTAP version 2
+ 	    1..1
+@@ -261,11 +304,13 @@ Example KTAP output
+ 	    ok 1 test_1
+ 	  ok 1 example_test_1
+ 	    KTAP version 2
++            # Attributes: slow
+ 	    1..2
+ 	    ok 1 test_1 # SKIP test_1 skipped
+ 	    ok 2 test_2
+ 	  ok 2 example_test_2
+ 	    KTAP version 2
++	    # Subtest: example_test_3
+ 	    1..3
+ 	    ok 1 test_1
+ 	    # test_2: FAIL
+
+base-commit: 906f02e42adfbd5ae70d328ee71656ecb602aaf5
 -- 
-2.40.0
+2.40.0.396.gfff15efe05-goog
 
