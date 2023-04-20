@@ -2,46 +2,46 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1340C7EE21
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F00A8C7EE23
 	for <linux-kselftest@archiver.kernel.org>; Thu, 20 Apr 2023 18:52:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231819AbjDTSw1 (ORCPT
+        id S231897AbjDTSw2 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 20 Apr 2023 14:52:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56670 "EHLO
+        Thu, 20 Apr 2023 14:52:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231975AbjDTSv7 (ORCPT
+        with ESMTP id S232034AbjDTSwJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Apr 2023 14:51:59 -0400
+        Thu, 20 Apr 2023 14:52:09 -0400
 Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 321AA3C2D;
-        Thu, 20 Apr 2023 11:51:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F58D4221;
+        Thu, 20 Apr 2023 11:51:59 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KuJWuzcvHe8/E9DtBthWWptQWuCqy6v5aQ6IBchQZ+buOPH4czVyvUIzyT4BOhGGJhReXrgxq+27oi4AlJlIn1ouT7dB+D4A1tzAgSOYppHQW33kgzvKCnJdB9E0PTn3/7/qzxJMvoW3ymc2/BMDjmxjnHLgCB0YUJngGi6zFfLYPuAoOtDpmW7FcleSXMfD8t+BB14vmYGVnPtw7eSvlXnvA7eksDS+V1X8rBnFsszeu6OfY4YQQoiY6Du/1bRk19NkX2N247/vF119uYEfPMZndrmovtgE154M3X2dyfFxI3TDBvQsB77pbU7rhWtFwLBu8UhuS+UD2C5+TRHKBg==
+ b=IiTMS8X7p/8jNlFAmSJAaOK68lgN67gTwxU0zL59m81MDcDeHSDE92+WGXe3kl3frtPl21qBSiFwzQnNeVwJuudwGGqHTIO8+FUXVa0MFy0YNvpCaUe+wTg5qh2SSZRsqk4k7Dm9piIzlHnmVr84UtAH1/pIgh5erI9jA4eXduQQRLrzxE9hRni2aOpKV13XkTdP0UWx4M+5pZo4whDJKVMBciV5AUx+RoTp7otAQkHua19x8Cpi11PvBvi5txd9OyWU0kR//YLLgw46xes5ls/5OS/Al3mxtTsG9h7BnXgDwLxPHD8Mkcd5ZhwRiAQgeiicdgnmnwyNVpOwxulH0A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1ghKHbRE07T4XrpixzlOMsV4FCPz3qkBGoHREdGoGiI=;
- b=G5korABzuLiIshOplo2j/8M40/qDR6uNE/nsgd3ZnSucITNE3vAW4oVlcaCGTTg47DAnu6m11B80wwaLyLIU9kRFznbOLBZxM8SXCi2wkgjeSNLlcxt7dKd8s5gar7DaetR1ozh4Sp0ixAqM1NsEaBHs/cIZBRYF9eAu5ef8sFvI4sKor4kh4Uj2z07N3QR5gOF7/i2BcPyBIKgQcqDj8A/grdxcOyxTzz4bCtyrfJUszGqRFQV6/c9jUsD+ZchemzJTCsmtVCkDcFqzQzCgNhqiu5KYYBhiXrja4j1cyM8KhmY3lrlqaMq4LHdMA9a8Acd/UoYlhJWOp8PjH466Lg==
+ bh=RFhH+VMaXLDWwRmCU+TbUC9YfLiad4RolEiHONxioxs=;
+ b=XQb6toU69FOnpUFa6bnTYeI0sQcP5aMrt3XlnKL5dY6A3w5J9OhQbX7wO0a7syqtJUuAgZZJ9XChaYHdwnvQ0Bve/zyIAmAtLd68kCfVtkbGTpOzCWvhoZFe425y/mZt1hcqMhgteiS2IgQyasRd4bcerERQLf1Vg8GGMVhuKvoaJtMkXgY/a4Y7BvqD7amAXuNrpR3g1ttl7MkR5KfdHjoHiURdj5g0O52VW+B/ubZs6pd67yvWsabddkD8lTbPjtvYQj5qzTa28fquUI+JoMC1jJc6wPzC+sWp8ss5yK+kfkikUfH2EusmuMk8vAcMGWyDjtrq94pHApaQLq/g4g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1ghKHbRE07T4XrpixzlOMsV4FCPz3qkBGoHREdGoGiI=;
- b=k6VJeqH2f1g5YNCfZOiQGdlnCI9BvZZkgWRrvEYHD+iaAwFvzBzegvWoVz7Nprsp5jtjDUCbmSaxGvKtXljRl/47ywvwdKuTWFd3KCdUHLS30fb9grySPG8Oc0U+Vh+yk1WSljKb5LUnp+tG9HlViPlLCTGW+lcfn1mpcrLvMAC+diCRBZb7AOjQrrccyJwLZOSHJj2Jovy88EYTgley38TuMC3/fbnO7PAfB5aZ8MCXqP4OfC/uLAJ76bwd8KF2axx1obIY1SLgEkvNf3unS4BMYIKEpBMrVy73Qt31tJN/JD9sqQRUQ4Qk+3EksV41pT5doNGkyMjaMCngucgAMA==
+ bh=RFhH+VMaXLDWwRmCU+TbUC9YfLiad4RolEiHONxioxs=;
+ b=ggzITyXO+BLupjCFHB9ZUbpdzqS9+ahdyvHbCh4njNNF6Zp+s9tzrPjIMBOZRvq8OBK1h65c6BsjjTSfJp7ZRy3gxSeoJ6JGeQrN1GgpkjUbn3zl0CQ74//r0y/gtyAyMlyFSDICcxb2lxF0/gp2FqaLsEzBqR+SwXk7rdiwLp1kcZW7C3LeVUm6E/sMwRGRI2UxEBm5hDkD6FjcDBEx5/hjT068hVemn9wf1cYYu7lcwN8mfT0f9TOlyZ0gA/iHo1BWe73kqC2sVP4Ni2eq4AIDtsmjhIHNcDu6tM49UjvIMztlFb8ysqcbvZsQwxC73HhMiYJsa5oEPpyxVi1rEA==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
  by MW3PR12MB4553.namprd12.prod.outlook.com (2603:10b6:303:2c::19) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.22; Thu, 20 Apr
- 2023 18:51:48 +0000
+ 2023 18:51:44 +0000
 Received: from LV2PR12MB5869.namprd12.prod.outlook.com
  ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
  ([fe80::f7a7:a561:87e9:5fab%6]) with mapi id 15.20.6319.020; Thu, 20 Apr 2023
- 18:51:47 +0000
+ 18:51:44 +0000
 From:   Jason Gunthorpe <jgg@nvidia.com>
 To:     iommu@lists.linux.dev, linux-kselftest@vger.kernel.org
 Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
@@ -49,63 +49,63 @@ Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
         Lixiao Yang <lixiao.yang@intel.com>,
         Matthew Rosato <mjrosato@linux.ibm.com>,
         Nicolin Chen <nicolinc@nvidia.com>, Yi Liu <yi.l.liu@intel.com>
-Subject: [PATCH v6 16/19] iommufd/selftest: Test iommufd_device_replace()
-Date:   Thu, 20 Apr 2023 15:51:31 -0300
-Message-Id: <16-v6-fdb604df649a+369-iommufd_alloc_jgg@nvidia.com>
+Subject: [PATCH v6 13/19] iommu: Introduce a new iommu_group_replace_domain() API
+Date:   Thu, 20 Apr 2023 15:51:28 -0300
+Message-Id: <13-v6-fdb604df649a+369-iommufd_alloc_jgg@nvidia.com>
 In-Reply-To: <0-v6-fdb604df649a+369-iommufd_alloc_jgg@nvidia.com>
 References: 
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: BL0PR03CA0006.namprd03.prod.outlook.com
- (2603:10b6:208:2d::19) To LV2PR12MB5869.namprd12.prod.outlook.com
+X-ClientProxiedBy: BLAPR03CA0106.namprd03.prod.outlook.com
+ (2603:10b6:208:32a::21) To LV2PR12MB5869.namprd12.prod.outlook.com
  (2603:10b6:408:176::16)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|MW3PR12MB4553:EE_
-X-MS-Office365-Filtering-Correlation-Id: eaf3cbda-16d7-4f90-3447-08db41d0462b
+X-MS-Office365-Filtering-Correlation-Id: bc40397b-192a-4f61-5ac1-08db41d04565
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yFFijJLxIPetan91cBl7au8tj8dyfFjirjuL+/XkhOyrZqKlmVyWHKdBXauw0rgEinPE8/gmtrQQEKdvXSSLzusmVca6FYugGmgFA/Eg5cp38hUeRLAOOL54j70HcuYssPeO7nUw5e3i1UNaci2wqEL816potbvdDlMGA8H9whV0GXNDvnbx3LGLcOCUWOkkO+bKOFI0zkk0c2t5plz0tdrQ+xF5s9Ydt96qWnQRVyo0ViU4ukrjtpCfbRFTcjrX7U5Dz6dmo+1wZP/1UBjVxlZ/oKEZdxfNmFPMgkN2lPF37WnZIA3GIB/m2qo55BtIuLx9F65xIpupwg5NdY7Ej+1IbqRSOa/hVXEUJneZV4a45NC8t5V7mBl7SqmDYxbpedVC06DcIlRMHlB7FY9khznWLdRN+VehUl+0nbfdknq1zMeKEto3wi7zfj77yVcrUQFx7947CxKwnbxBG9DI38GPu1WA3c2SzdVqbXgCF84Mv2IDcWnJ6faWS+Z5vSk6MUh6bjMeWxAEx6WYR53OHIuT1PKBBLDvhfrMT0t2QE7Fa1FykVp6wvS/MuaERVaM
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(39860400002)(346002)(376002)(136003)(451199021)(54906003)(4326008)(316002)(66946007)(66556008)(66476007)(478600001)(6666004)(6486002)(5660300002)(8936002)(41300700001)(8676002)(2906002)(86362001)(36756003)(38100700002)(2616005)(6512007)(186003)(6506007)(26005)(83380400001)(66899021);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: iNsXK6SrHYqgeugEoX9dvxXM3cOacwcv62RO4X9P3TBq4WL/2tIp37bFiGQVpDalJlaU/pH45v6CKi5jmRa+M9LutsDtYcuFCZ3ekphOfhZpQ2DwscZ49DrawEgTPVpENHdxod/MutPn6zUP/oYa9MkWwbYT6Nwi0jpi2CP2ikWTY2ImESOVeE1wIP6fviCJPmD6bXngYVc4sgCEpSfLtRKkJNSoj6I91l+0DqsV1JyPRVQY5CRS91YnySmYBe99MuOv0A7pmKbHe4bZc7fraIyVvLIqJ2iTUeJ90dzh2mTu38i+YYYzVB+WbevxHDVZA9Geh6s32L2N8EHjhXh+jAgwm21cp+XQW9qXuC89pXAxUfhnZ6eQKbeH0ULUTRGVxbXRFSkzATDdifl0aXhKvxedxXbAiP7nmZ5CdKv8c24Hz/fLKYnCvFNJXfjoqL12GW9npbzJXsTwF2yAYdUyelH6w1HAsnBT3DWnkBNNDAhW5lh6oyLZnQSSnMyi/c9T1I8Nkk7rwFEyB6dDRE6rfI//gI9mhjs6gh/DJ86Jue1HQMY6oVTkHjDoTWIdd1Xp
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(39860400002)(346002)(376002)(136003)(451199021)(54906003)(4326008)(316002)(66946007)(66556008)(66476007)(478600001)(6666004)(6486002)(5660300002)(8936002)(41300700001)(8676002)(2906002)(86362001)(36756003)(38100700002)(2616005)(6512007)(186003)(6506007)(26005)(83380400001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?MuCJhKK8EhNjsQvBGXlwHsNZi/chZaeipFQ7XiqeII4K4NjTX+c0HOcfDjTv?=
- =?us-ascii?Q?jN3tZh0zB+eEINyv9GB975Zc/UDzrtY6kkHemaPAIQLO33jBqC1/Z/fTAfJw?=
- =?us-ascii?Q?ummZjhnPT5dwqaeijQQto5kU9734AlCjAdC2He8PthacdtAFUyysJVV+0KWW?=
- =?us-ascii?Q?tylD7DOHU47nbSfOsCJiM4dK8TvS9IBqeo2w3Zl5JIeRDctWxfPSJGAUr7sY?=
- =?us-ascii?Q?NnGhpjOYh9FtYmCotz5GgTmnGn7qJxA5NBZYovEwIxeM4cXl6Eilv5Tg+sw/?=
- =?us-ascii?Q?f2p+P/SHG7TeMGXyWgVNsOV467qOnFSbjlb+FxLmcR+7BB5JK+s8ftlJu6m1?=
- =?us-ascii?Q?9q2Q/VkP18pnh72hsTJJ4wSY1nuhTkLEkgLZMyh9l8sLwpyM0e9k5bpw9uVn?=
- =?us-ascii?Q?yjvvldzmpSselAXVlATIZ8UzcbK3sPz/U7K3WYOKP+6eetyKH7V0rq8buPW2?=
- =?us-ascii?Q?TnSr4VbTsfoFUVQWAxjjnCQHceVfe7P9E3qCEkioMf0RdfT+4jYfM1pyNDgW?=
- =?us-ascii?Q?N+e8Z4ptOut2WKErM80O1Nkj/1iE2Vm0DMMfmNke/T3f4QlLLLOp4SnUN5Gk?=
- =?us-ascii?Q?vaS/F7B3pK7V6jxi1kr2J6XMsqTtpyQAtmkD7m5UrFTqvHjjURjEQ4PEwnd4?=
- =?us-ascii?Q?jKfjq+bQ7M1TELEnbXPvR5HRBG/lJN/hncGslY2PFjEBMd2CJlC2+lAXIapF?=
- =?us-ascii?Q?UIGZfKVR99Iv/GYYX4+clVioHyDe612qlUvhi4bPMuc2+DhlbSu88YlW6FDr?=
- =?us-ascii?Q?aD5P4N/Bor6MKTs8V+OxjKKr3vXuK7Mz8MFXLtWbDsEr2kgI3qSxF7g1c0YH?=
- =?us-ascii?Q?BsSzhUPksQyImE20jNlem1RFpjzyBbTRk1F9qCsca0Y1XlDcl9vOawFF1K77?=
- =?us-ascii?Q?ur4mQAcjXDOxOyG1yXjG5b30LBMDzMsDUvmcaWW1BJh33+fHNMU7s15v6YdG?=
- =?us-ascii?Q?w9HtUgyoqrfY1JuVE60nAwkUP5aFGZq2VMwSKSQ8BoxAMCd1jA1LgOZSWo06?=
- =?us-ascii?Q?G9vOg9+HgQqyXym3wSWNkC7n4fEHt/Po6bLbJhtNXzayOvKd9qNPDIxAQ3tY?=
- =?us-ascii?Q?EZhyzWgHIz20XHGk5VrC55s2IzHAebOKGcZrNtab6jd81SJArfZzoqtbTiU5?=
- =?us-ascii?Q?iiivRtGe+Q+rbjQRS9Sz4zW+hTq3pmuITumMPIO41T6rQWbAsZaLayBbVmtF?=
- =?us-ascii?Q?PylvhCn2wGqOgxh8XqArwuRZJYdGrJpO2h0Qy5t98NI2Doj0cl9pLPOcId5n?=
- =?us-ascii?Q?XZjRpGSM0gcRvT3bSVoUCmqGfaNo1+lKToK3c66AMoSGAASYHeCZoXzcIdmr?=
- =?us-ascii?Q?mbHeiHalgNg7EnC5I1y2RB+EUfqKeQ71/RitiUcRF1HQssTNhJJV3/TJRhww?=
- =?us-ascii?Q?ZqTZyWQO6uI7qoYw3cJnmACSldEfnrhzdvnyXwt7Wnr6JNcjOTkSdCpRjCDt?=
- =?us-ascii?Q?v3UAciUPbBgM/wNdpY9+EAarPjba+y6Wq9um8O+jJClFso18gxroNs5teQa6?=
- =?us-ascii?Q?PTaI2s1uSkBw92m4DKoev/ig+mWE4W/Q+4Fhz6dno+pT5vDocAvgXNXk5Iw9?=
- =?us-ascii?Q?MCBHjaTA35tsB86HkjFa+2ljUhtR2f9KLVQqWxj9?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?lSbjo3k7QrPwgWTyzWWxBEIXhtf5zvXajdyYMwSc5hs1JpaqnS2+Jdy1tJgY?=
+ =?us-ascii?Q?UdF6h5riKy+e+pQf141LGkff7xCgI252suOIBjc7HNNqQW4rsMHCF7Hn0tP/?=
+ =?us-ascii?Q?cmgpzyCI3KJmgQMYyI06BaKwzWkzdlBIv39w02VWXB2kzd6BdhXCpzamCsij?=
+ =?us-ascii?Q?ljXUOhJqWFBZpAaJzvqVFLSULV22lN1X/BC9kqbU2dLszYNpWljHwzonij6m?=
+ =?us-ascii?Q?QomTKEjOKzavHH6UDB46Ne1sY8Qtk3SFfT5mADpA7Itji7m9ZIdaiq6t+46x?=
+ =?us-ascii?Q?DkbMsXdMvL7m7TKJM2az4tKUtXPW+Ur/XD3l8zLavJ4kQb37RuHQelRsOqc1?=
+ =?us-ascii?Q?wZJuV1y8bbkhJ6tnf1FstMJhT/AxSiaakYUZCOT9vOqD3r61NbgJclQI1Dl8?=
+ =?us-ascii?Q?1a8BIx8KNYQxbsh7eXkusz7TE53Hnzo3+ZCaYOYuFleDOrNbLt1dZUooFXpu?=
+ =?us-ascii?Q?ElYzE5twGCKOMKP/Jh/gdEEzGiH7j5zikayBqFITGTOOpIGgbcA27mHx3lF6?=
+ =?us-ascii?Q?7YfaxoKZS/ZbkQXM04HMVIga+VzfiCW47wxLnxLKTg8EbTezOHAZkpMTikUp?=
+ =?us-ascii?Q?C2RpEVr/8ahkvjkhiSQse01stopfIhVom+sdSx22YsQ6wBuTOgh1v7XOc8UE?=
+ =?us-ascii?Q?uw3javasC78Hc3CMxZVErlGX+reKFVRdv1JAvPT3BZoWkQN98ckQtNbwdjDq?=
+ =?us-ascii?Q?7rSLA4atTT4RxtENdrQyHb5YMMaG10zTFlIGssSqLylBr1PNMAksk6bR/Sfs?=
+ =?us-ascii?Q?nh1FvcqoH6/ZQzCSnsZl+CMe0LdkrzppVEZlSpBw3+XE5y1NLl0pXX2YYcsH?=
+ =?us-ascii?Q?fSSD7qAJve67TW7gz5UP1EjelRGDQUlLCYVVvNbq7/CLMlnwsDCxPWVg5uEr?=
+ =?us-ascii?Q?RCtbByrYTYngls3Ey16cLdN32e4rp+ypoXDt4veHBTDcLaiTcodLZJ14uZcH?=
+ =?us-ascii?Q?V9pVVsMlN0K6Ye3UzUkZl3KNJb2zuN5kYc4nAZm+t5VVyIVh5wg9rxaiwA/i?=
+ =?us-ascii?Q?kVgjOlf/WhZtKrEOTxqxohE31kLA6/tWwJKSaQ6zoFRc6k3zly+uzgXxm8tC?=
+ =?us-ascii?Q?7BRwyOzldbx82gtKdtcmX+2OxTRZ6u06o4nDPdIJRaWso8rNuqPPqoIeMfem?=
+ =?us-ascii?Q?nNL+IVe2IcnNl/I3lhupwkZLucuuYhZsISckpyYLvCe/il822R1zmS2Sv+4x?=
+ =?us-ascii?Q?Oegv+Iv7mc7hL44ALHl/JM9eHh0XPmdBDd08hMZZh6uDmIxLnIGOaD8zQMR6?=
+ =?us-ascii?Q?NzI5wJwNZvYQkMfF91jNO41wCBkwM8M4YCR4acUEx6v15GoG7YhdWqs6FKDX?=
+ =?us-ascii?Q?8WfSbS/c0SnhG/KiKMQ+ovYXPc46bNnrnUPqGAVtwNnsA4eqloSIgZ/y+dN+?=
+ =?us-ascii?Q?HOmPVrByisRPM0jfLj11CbdDBhae+QitNScheKsiJle5YQtQU1vV2Ih8U7y0?=
+ =?us-ascii?Q?v9xtFQT6tNyRcZvW2ESrYsCn+FkzkKCCbtQnsm8u0KmQCWOipkZga1WOBkhT?=
+ =?us-ascii?Q?KUO8P400aXN2dXvJFU3z2Z7V/j7zK+Gcc/UPULebx5GwjFwie5JEPXco51n0?=
+ =?us-ascii?Q?eee1iRXAM0mPRvMR93dPh/VEmf0HGtELiieSQlMo?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: eaf3cbda-16d7-4f90-3447-08db41d0462b
+X-MS-Exchange-CrossTenant-Network-Message-Id: bc40397b-192a-4f61-5ac1-08db41d04565
 X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2023 18:51:39.1223
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2023 18:51:37.8398
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: G78Q0wxEg6Ya72+Zd+Qisx9DOuJjQo03JVR/C7B4RYQ/HZBxCHjqYulRoccMkfQf
+X-MS-Exchange-CrossTenant-UserPrincipalName: jntZfU23zc8DbbLi5Fry0yO7hvgjW29EQHNFwAwecqKBTKMVpsX4vIsxXILfMsqn
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4553
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
@@ -113,288 +113,109 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Nicolin Chen <nicolinc@nvidia.com>
 
-Allow the selftest to call the function on the mock idev, add some tests
-to exercise it.
+qemu has a need to replace the translations associated with a domain
+when the guest does large-scale operations like switching between an
+IDENTITY domain and, say, dma-iommu.c.
 
+Currently, it does this by replacing all the mappings in a single
+domain, but this is very inefficient and means that domains have to be
+per-device rather than per-translation.
+
+Provide a high-level API to allow replacements of one domain with
+another. This is similar to a detach/attach cycle except it doesn't
+force the group to go to the blocking domain in-between.
+
+By removing this forced blocking domain the iommu driver has the
+opportunity to implement a non-disruptive replacement of the domain to the
+greatest extent its hardware allows. This allows the qemu emulation of the
+vIOMMU to be more complete, as real hardware often has a non-distruptive
+replacement capability.
+
+It could be possible to address this by simply removing the protection
+from the iommu_attach_group(), but it is not so clear if that is safe for
+the few users. Thus, add a new API to serve this new purpose.
+
+All drivers are already required to support changing between active
+UNMANAGED domains when using their attach_dev ops.
+
+This API is expected to be used only by IOMMUFD, so add to the iommu-priv
+header and mark it as IOMMUFD_INTERNAL.
+
+Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
 Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
 Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-Signed-off-by: Yi Liu <yi.l.liu@intel.com>
 Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 ---
- drivers/iommu/iommufd/iommufd_test.h          |  4 ++
- drivers/iommu/iommufd/selftest.c              | 39 +++++++++++++++++
- include/linux/iommufd.h                       |  1 +
- tools/testing/selftests/iommu/iommufd.c       | 37 ++++++++++++++--
- .../selftests/iommu/iommufd_fail_nth.c        | 42 +++++++++++++++++++
- tools/testing/selftests/iommu/iommufd_utils.h | 30 +++++++++++++
- 6 files changed, 149 insertions(+), 4 deletions(-)
+ drivers/iommu/iommu-priv.h | 10 ++++++++++
+ drivers/iommu/iommu.c      | 30 ++++++++++++++++++++++++++++++
+ 2 files changed, 40 insertions(+)
+ create mode 100644 drivers/iommu/iommu-priv.h
 
-diff --git a/drivers/iommu/iommufd/iommufd_test.h b/drivers/iommu/iommufd/iommufd_test.h
-index b3d69cca77295c..e3f1035cbd6464 100644
---- a/drivers/iommu/iommufd/iommufd_test.h
-+++ b/drivers/iommu/iommufd/iommufd_test.h
-@@ -17,6 +17,7 @@ enum {
- 	IOMMU_TEST_OP_ACCESS_PAGES,
- 	IOMMU_TEST_OP_ACCESS_RW,
- 	IOMMU_TEST_OP_SET_TEMP_MEMORY_LIMIT,
-+	IOMMU_TEST_OP_MOCK_DOMAIN_REPLACE,
- };
+diff --git a/drivers/iommu/iommu-priv.h b/drivers/iommu/iommu-priv.h
+new file mode 100644
+index 00000000000000..7c8011bfd15374
+--- /dev/null
++++ b/drivers/iommu/iommu-priv.h
+@@ -0,0 +1,10 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++#ifndef __LINUX_IOMMU_PRIV_H
++#define __LINUX_IOMMU_PRIV_H
++
++#include <linux/iommu.h>
++
++int iommu_group_replace_domain(struct iommu_group *group,
++			       struct iommu_domain *new_domain);
++
++#endif /* __LINUX_IOMMU_PRIV_H */
+diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+index 76969904b93af4..91a948a76db5ee 100644
+--- a/drivers/iommu/iommu.c
++++ b/drivers/iommu/iommu.c
+@@ -33,6 +33,7 @@
+ #include <linux/msi.h>
  
- enum {
-@@ -52,6 +53,9 @@ struct iommu_test_cmd {
- 			__u32 out_stdev_id;
- 			__u32 out_hwpt_id;
- 		} mock_domain;
-+		struct {
-+			__u32 pt_id;
-+		} mock_domain_replace;
- 		struct {
- 			__aligned_u64 iova;
- 			__aligned_u64 length;
-diff --git a/drivers/iommu/iommufd/selftest.c b/drivers/iommu/iommufd/selftest.c
-index 58471f9452be55..dd792294298ffd 100644
---- a/drivers/iommu/iommufd/selftest.c
-+++ b/drivers/iommu/iommufd/selftest.c
-@@ -455,6 +455,42 @@ static int iommufd_test_mock_domain(struct iommufd_ucmd *ucmd,
- 	return rc;
+ #include "dma-iommu.h"
++#include "iommu-priv.h"
+ 
+ #include "iommu-sva.h"
+ 
+@@ -2191,6 +2192,35 @@ int iommu_attach_group(struct iommu_domain *domain, struct iommu_group *group)
  }
+ EXPORT_SYMBOL_GPL(iommu_attach_group);
  
-+/* Replace the mock domain with a manually allocated hw_pagetable */
-+static int iommufd_test_mock_domain_replace(struct iommufd_ucmd *ucmd,
-+					    unsigned int device_id, u32 pt_id,
-+					    struct iommu_test_cmd *cmd)
++/**
++ * iommu_group_replace_domain - replace the domain that a group is attached to
++ * @new_domain: new IOMMU domain to replace with
++ * @group: IOMMU group that will be attached to the new domain
++ *
++ * This API allows the group to switch domains without being forced to go to
++ * the blocking domain in-between.
++ *
++ * If the currently attached domain is a core domain (e.g. a default_domain),
++ * it will act just like the iommu_attach_group().
++ */
++int iommu_group_replace_domain(struct iommu_group *group,
++			       struct iommu_domain *new_domain)
 +{
-+	struct iommufd_object *dev_obj;
-+	struct selftest_obj *sobj;
-+	int rc;
-+
-+	/*
-+	 * Prefer to use the OBJ_SELFTEST because the destroy_rwsem will ensure
-+	 * it doesn't race with detach, which is not allowed.
-+	 */
-+	dev_obj =
-+		iommufd_get_object(ucmd->ictx, device_id, IOMMUFD_OBJ_SELFTEST);
-+	if (IS_ERR(dev_obj))
-+		return PTR_ERR(dev_obj);
-+
-+	sobj = container_of(dev_obj, struct selftest_obj, obj);
-+	if (sobj->type != TYPE_IDEV) {
-+		rc = -EINVAL;
-+		goto out_dev_obj;
-+	}
-+
-+	rc = iommufd_device_replace(sobj->idev.idev, &pt_id);
-+	if (rc)
-+		goto out_dev_obj;
-+
-+	cmd->mock_domain_replace.pt_id = pt_id;
-+	rc = iommufd_ucmd_respond(ucmd, sizeof(*cmd));
-+
-+out_dev_obj:
-+	iommufd_put_object(dev_obj);
-+	return rc;
-+}
-+
- /* Add an additional reserved IOVA to the IOAS */
- static int iommufd_test_add_reserved(struct iommufd_ucmd *ucmd,
- 				     unsigned int mockpt_id,
-@@ -944,6 +980,9 @@ int iommufd_test(struct iommufd_ucmd *ucmd)
- 						 cmd->add_reserved.length);
- 	case IOMMU_TEST_OP_MOCK_DOMAIN:
- 		return iommufd_test_mock_domain(ucmd, cmd);
-+	case IOMMU_TEST_OP_MOCK_DOMAIN_REPLACE:
-+		return iommufd_test_mock_domain_replace(
-+			ucmd, cmd->id, cmd->mock_domain_replace.pt_id, cmd);
- 	case IOMMU_TEST_OP_MD_CHECK_MAP:
- 		return iommufd_test_md_check_pa(
- 			ucmd, cmd->id, cmd->check_map.iova,
-diff --git a/include/linux/iommufd.h b/include/linux/iommufd.h
-index c0b5b3ac34f1e0..3044a432a83e22 100644
---- a/include/linux/iommufd.h
-+++ b/include/linux/iommufd.h
-@@ -22,6 +22,7 @@ struct iommufd_device *iommufd_device_bind(struct iommufd_ctx *ictx,
- void iommufd_device_unbind(struct iommufd_device *idev);
- 
- int iommufd_device_attach(struct iommufd_device *idev, u32 *pt_id);
-+int iommufd_device_replace(struct iommufd_device *idev, u32 *pt_id);
- void iommufd_device_detach(struct iommufd_device *idev);
- 
- struct iommufd_access_ops {
-diff --git a/tools/testing/selftests/iommu/iommufd.c b/tools/testing/selftests/iommu/iommufd.c
-index da0443ba16830f..57559f60ca6486 100644
---- a/tools/testing/selftests/iommu/iommufd.c
-+++ b/tools/testing/selftests/iommu/iommufd.c
-@@ -9,9 +9,6 @@
- 
- #include "iommufd_utils.h"
- 
--static void *buffer;
--
--static unsigned long PAGE_SIZE;
- static unsigned long HUGEPAGE_SIZE;
- 
- #define MOCK_PAGE_SIZE (PAGE_SIZE / 2)
-@@ -1001,6 +998,7 @@ FIXTURE(iommufd_mock_domain)
- 	uint32_t ioas_id;
- 	uint32_t hwpt_id;
- 	uint32_t hwpt_ids[2];
-+	uint32_t stdev_ids[2];
- 	int mmap_flags;
- 	size_t mmap_buf_size;
- };
-@@ -1022,7 +1020,8 @@ FIXTURE_SETUP(iommufd_mock_domain)
- 	ASSERT_GE(ARRAY_SIZE(self->hwpt_ids), variant->mock_domains);
- 
- 	for (i = 0; i != variant->mock_domains; i++)
--		test_cmd_mock_domain(self->ioas_id, NULL, &self->hwpt_ids[i]);
-+		test_cmd_mock_domain(self->ioas_id, &self->stdev_ids[i],
-+				     &self->hwpt_ids[i]);
- 	self->hwpt_id = self->hwpt_ids[0];
- 
- 	self->mmap_flags = MAP_SHARED | MAP_ANONYMOUS;
-@@ -1274,6 +1273,36 @@ TEST_F(iommufd_mock_domain, user_copy)
- 	test_ioctl_destroy(ioas_id);
- }
- 
-+TEST_F(iommufd_mock_domain, replace)
-+{
-+	uint32_t ioas_id;
-+
-+	test_ioctl_ioas_alloc(&ioas_id);
-+
-+	test_cmd_mock_domain_replace(self->stdev_ids[0], ioas_id);
-+
-+	/*
-+	 * Replacing the IOAS causes the prior HWPT to be deallocated, thus we
-+	 * should get enoent when we try to use it.
-+	 */
-+	if (variant->mock_domains == 1)
-+		test_err_mock_domain_replace(ENOENT, self->stdev_ids[0],
-+					     self->hwpt_ids[0]);
-+
-+	test_cmd_mock_domain_replace(self->stdev_ids[0], ioas_id);
-+	if (variant->mock_domains >= 2) {
-+		test_cmd_mock_domain_replace(self->stdev_ids[0],
-+					     self->hwpt_ids[1]);
-+		test_cmd_mock_domain_replace(self->stdev_ids[0],
-+					     self->hwpt_ids[1]);
-+		test_cmd_mock_domain_replace(self->stdev_ids[0],
-+					     self->hwpt_ids[0]);
-+	}
-+
-+	test_cmd_mock_domain_replace(self->stdev_ids[0], self->ioas_id);
-+	test_ioctl_destroy(ioas_id);
-+}
-+
- /* VFIO compatibility IOCTLs */
- 
- TEST_F(iommufd, simple_ioctls)
-diff --git a/tools/testing/selftests/iommu/iommufd_fail_nth.c b/tools/testing/selftests/iommu/iommufd_fail_nth.c
-index d9afcb23810e1a..96fb2f04623f23 100644
---- a/tools/testing/selftests/iommu/iommufd_fail_nth.c
-+++ b/tools/testing/selftests/iommu/iommufd_fail_nth.c
-@@ -41,6 +41,8 @@ static int writeat(int dfd, const char *fn, const char *val)
- 
- static __attribute__((constructor)) void setup_buffer(void)
- {
-+	PAGE_SIZE = sysconf(_SC_PAGE_SIZE);
-+
- 	BUFFER_SIZE = 2*1024*1024;
- 
- 	buffer = mmap(0, BUFFER_SIZE, PROT_READ | PROT_WRITE,
-@@ -569,4 +571,44 @@ TEST_FAIL_NTH(basic_fail_nth, access_pin_domain)
- 	return 0;
- }
- 
-+/* device.c */
-+TEST_FAIL_NTH(basic_fail_nth, device)
-+{
-+	uint32_t ioas_id;
-+	uint32_t ioas_id2;
-+	uint32_t stdev_id;
-+	__u64 iova;
-+
-+	self->fd = open("/dev/iommu", O_RDWR);
-+	if (self->fd == -1)
-+		return -1;
-+
-+	if (_test_ioctl_ioas_alloc(self->fd, &ioas_id))
-+		return -1;
-+
-+	if (_test_ioctl_ioas_alloc(self->fd, &ioas_id2))
-+		return -1;
-+
-+	iova = MOCK_APERTURE_START;
-+	if (_test_ioctl_ioas_map(self->fd, ioas_id, buffer, PAGE_SIZE, &iova,
-+				 IOMMU_IOAS_MAP_FIXED_IOVA |
-+					 IOMMU_IOAS_MAP_WRITEABLE |
-+					 IOMMU_IOAS_MAP_READABLE))
-+		return -1;
-+	if (_test_ioctl_ioas_map(self->fd, ioas_id2, buffer, PAGE_SIZE, &iova,
-+				 IOMMU_IOAS_MAP_FIXED_IOVA |
-+					 IOMMU_IOAS_MAP_WRITEABLE |
-+					 IOMMU_IOAS_MAP_READABLE))
-+		return -1;
-+
-+	fail_nth_enable();
-+
-+	if (_test_cmd_mock_domain(self->fd, ioas_id, &stdev_id, NULL))
-+		return -1;
-+
-+	if (_test_cmd_mock_domain_replace(self->fd, stdev_id, ioas_id2, NULL))
-+		return -1;
-+	return 0;
-+}
-+
- TEST_HARNESS_MAIN
-diff --git a/tools/testing/selftests/iommu/iommufd_utils.h b/tools/testing/selftests/iommu/iommufd_utils.h
-index 85d6662ef8e867..8b11bb70095269 100644
---- a/tools/testing/selftests/iommu/iommufd_utils.h
-+++ b/tools/testing/selftests/iommu/iommufd_utils.h
-@@ -19,6 +19,8 @@
- static void *buffer;
- static unsigned long BUFFER_SIZE;
- 
-+static unsigned long PAGE_SIZE;
-+
- /*
-  * Have the kernel check the refcount on pages. I don't know why a freshly
-  * mmap'd anon non-compound page starts out with a ref of 3
-@@ -66,6 +68,34 @@ static int _test_cmd_mock_domain(int fd, unsigned int ioas_id, __u32 *stdev_id,
- 	EXPECT_ERRNO(_errno, _test_cmd_mock_domain(self->fd, ioas_id, \
- 						   stdev_id, hwpt_id))
- 
-+static int _test_cmd_mock_domain_replace(int fd, __u32 stdev_id, __u32 pt_id,
-+					 __u32 *hwpt_id)
-+{
-+	struct iommu_test_cmd cmd = {
-+		.size = sizeof(cmd),
-+		.op = IOMMU_TEST_OP_MOCK_DOMAIN_REPLACE,
-+		.id = stdev_id,
-+		.mock_domain_replace = {
-+			.pt_id = pt_id,
-+		},
-+	};
 +	int ret;
 +
-+	ret = ioctl(fd, IOMMU_TEST_CMD, &cmd);
++	if (!new_domain)
++		return -EINVAL;
++
++	mutex_lock(&group->mutex);
++	ret = __iommu_group_set_domain(group, new_domain);
 +	if (ret)
-+		return ret;
-+	if (hwpt_id)
-+		*hwpt_id = cmd.mock_domain_replace.pt_id;
-+	return 0;
++		__iommu_group_for_each_dev(group, group->domain,
++					   iommu_group_do_attach_device);
++	mutex_unlock(&group->mutex);
++	return ret;
 +}
++EXPORT_SYMBOL_NS_GPL(iommu_group_replace_domain, IOMMUFD_INTERNAL);
 +
-+#define test_cmd_mock_domain_replace(stdev_id, pt_id)                         \
-+	ASSERT_EQ(0, _test_cmd_mock_domain_replace(self->fd, stdev_id, pt_id, \
-+						   NULL))
-+#define test_err_mock_domain_replace(_errno, stdev_id, pt_id)                  \
-+	EXPECT_ERRNO(_errno, _test_cmd_mock_domain_replace(self->fd, stdev_id, \
-+							   pt_id, NULL))
-+
- static int _test_cmd_create_access(int fd, unsigned int ioas_id,
- 				   __u32 *access_id, unsigned int flags)
+ static int iommu_group_do_set_platform_dma(struct device *dev, void *data)
  {
+ 	const struct iommu_ops *ops = dev_iommu_ops(dev);
 -- 
 2.40.0
 
