@@ -2,56 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75C27C77B61
-	for <linux-kselftest@archiver.kernel.org>; Fri, 21 Apr 2023 16:59:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DC8BCC77B76
+	for <linux-kselftest@archiver.kernel.org>; Fri, 21 Apr 2023 16:59:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233452AbjDUQ71 (ORCPT
+        id S233005AbjDUQ7b (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 21 Apr 2023 12:59:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40580 "EHLO
+        Fri, 21 Apr 2023 12:59:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233397AbjDUQ7W (ORCPT
+        with ESMTP id S233425AbjDUQ7Z (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 21 Apr 2023 12:59:22 -0400
-Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E8CC15A35
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Apr 2023 09:58:53 -0700 (PDT)
-Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-63d3b5c334eso1742303b3a.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Apr 2023 09:58:53 -0700 (PDT)
+        Fri, 21 Apr 2023 12:59:25 -0400
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A552215607
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 Apr 2023 09:58:59 -0700 (PDT)
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-24708bfb463so2215533a91.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 Apr 2023 09:58:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682095989; x=1684687989;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Bpz9GCI4OFqr9DlnIkg8fh50O4zOZAPmw/GqyWI1sUY=;
-        b=DGn7gCykqxE1wl2tXEHxtzFbscSQI+JYs1BOyBXnwpOUa0v37O5EWPBn/ZgODYtQlN
-         ucm2bl+oRpYs66hkDH2OsTMMwYnJjHqmfL1Gfoz55eaPsC+KkP0XkEqAwZ6rs8pd6Rpz
-         FUqoTwNDb4fdpZO/bATUsOleiUawwODIJsv2oBaDLHov514nHeOp01TeHl5biXsvmD+B
-         drB6ioShN8gZ615eSTgzwj90uRL3MtckEF9+PdrDWulnCx0CuSxldhcUkAHan3z7jBnk
-         tHJsR2+7JQcAF/jPDdgXfTyng+EIcBFq/MixhtIbZMOElAUZCqnEM9rZEPv1BqgcbQ1G
-         Ek/g==
+        d=google.com; s=20221208; t=1682095992; x=1684687992;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=dM0sknYnz5Tr9YshwaHjySCVB3V9EWCXlRX5uFgEya8=;
+        b=cKoOxJh4k5Df809KvDrC16SHpyyANbnD88ODpXNOuka0EEfmMXb9/GGZHQjZmiaSGC
+         PHXwzp6oJJCuBjtwH55J3xqdIM10HnXCfOmj/GRFwtdNPqo3g+mBSidFvw86YFvbU0sY
+         QFH5aE4DJ8NgYwN0BX1m2H/84CVYfPBQlivAZjfI0w0gbJssCQFPLo6dhrf9i30gQDYK
+         RVT9NmA3RwkhJ9wGFaj9EOO7LpEIdOpFNM2q37g3x6fVQdiBTnwi7UMa2h5IS92inTkJ
+         5XzKSeq94NI91RbwFfXmAf2d+oezqCbzgzE8MFn7zbTcJm/Y08tOtjCRc2EpRU8GmuIw
+         Joug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682095989; x=1684687989;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Bpz9GCI4OFqr9DlnIkg8fh50O4zOZAPmw/GqyWI1sUY=;
-        b=QIaSS+euEh1u6vrPPZArCL+ZpNqhipE1h8rRRdePxkaIge5+ooP9kFe4Fr4RDJuwPr
-         Lr9n+G3dDEyLMe867ymkAx5eeuhBlYa40Z3sOl2bbgEWMMHvW5/fjpZsSzSH8Ai18gqJ
-         jiNNJQa1j7R1KpRnUEmTS40nbIS/ziJM5LCI3Y+b/EiRmK9aaQlw536MD7JNn8T+jos9
-         cYg92T0l/jEydLImEuwYZfk09yo+qV+TNSYMHygHOvETkyRWDY9nf/0gTCA4Zit+bDby
-         GOxILXkcRC3XOOxpcfESyL+DU2rM8NpKVXmayIIYPuF8nrm0MNJnzeOG5LnuG8BuS8a2
-         Fntg==
-X-Gm-Message-State: AAQBX9cSAcPMcw3oyMzv+F1OWJgHDVVQts5lP9+datw4vSIlh149bajd
-        IPd6sHYGFvt0BdPSo4UiFvYcSPj4epTZ
-X-Google-Smtp-Source: AKy350ZhH26lR6IB3CnQ8CLF2JwssN6KagmxAVm6T/W0c2gS8Zvsk3hHnJOD9Yv5ucUQ9FKvawPIRN1PXzlu
+        d=1e100.net; s=20221208; t=1682095992; x=1684687992;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dM0sknYnz5Tr9YshwaHjySCVB3V9EWCXlRX5uFgEya8=;
+        b=RxDPkTrfqvn2qIPMNyZyrVIAQhZ5HmH1YgkyMvOM8AY0OcZDVLhqgunAl9CfwhlTHK
+         DTXABXYzysvXebbJ79rRbxlodiu/FGMdt/43sJJNwm9azitEb5v7DKo9LlBRK2mMyAv4
+         oCvpQuWxEYoT6jPzPAFwlIjpk784VI6W67mO6sjpr4N5BHPbMszOa5bZib2pMxNMAzuJ
+         84qB8L/Dl35jZ6PRUoJz7KfE+YltEr9ORhXgrcmjjR12EbOQsenNg8XGCc+S6/iMUwjy
+         rf2LAWXfKZ8hIHs5MVGgoz58ibknX3VutKfOSZc0i6uaqtMKWbjR1MX3LSxq1fIDqNx3
+         38Aw==
+X-Gm-Message-State: AAQBX9fq3b+g2LvoHYfdFlKSod1UmQ101dE+qGejPpzwoHw5JY/r8xiu
+        +J8LNv7eu0LLFVQ3f6FoEdVcO0xjD2eT
+X-Google-Smtp-Source: AKy350YMrLXAhkSUtVuYqUb/z6RwX7RpSjICLEgXjDkxf6HBxqanxF3VIJFd0FfCazAdAkwHsavol8ftYq4a
 X-Received: from vipin.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:479f])
- (user=vipinsh job=sendgmr) by 2002:a05:6a00:b94:b0:63d:397a:8fdd with SMTP id
- g20-20020a056a000b9400b0063d397a8fddmr2339440pfj.0.1682095989138; Fri, 21 Apr
- 2023 09:53:09 -0700 (PDT)
-Date:   Fri, 21 Apr 2023 09:52:56 -0700
+ (user=vipinsh job=sendgmr) by 2002:a17:90a:740d:b0:244:8f24:783d with SMTP id
+ a13-20020a17090a740d00b002448f24783dmr1553862pjg.4.1682095992639; Fri, 21 Apr
+ 2023 09:53:12 -0700 (PDT)
+Date:   Fri, 21 Apr 2023 09:52:58 -0700
+In-Reply-To: <20230421165305.804301-1-vipinsh@google.com>
 Mime-Version: 1.0
+References: <20230421165305.804301-1-vipinsh@google.com>
 X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
-Message-ID: <20230421165305.804301-1-vipinsh@google.com>
-Subject: [PATCH 0/9] KVM: arm64: Use MMU read lock for clearing dirty logs
+Message-ID: <20230421165305.804301-3-vipinsh@google.com>
+Subject: [PATCH 2/9] KVM: selftests: Add optional delay between consecutive
+ Clear-Dirty-Log calls
 From:   Vipin Sharma <vipinsh@google.com>
 To:     maz@kernel.org, oliver.upton@linux.dev, james.morse@arm.com,
         suzuki.poulose@arm.com, yuzenghui@huawei.com,
@@ -71,71 +74,134 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch series improves guest vCPUs performances on Arm during clearing
-dirty log operations by taking MMU read lock instead of MMU write lock.
+In dirty_log_perf_test, add option "-l" to wait between consecutive
+Clear-Dirty-Log calls. Accept delay in milliseconds.
 
-vCPUs write protection faults are fixed in Arm using MMU read locks.
-However, when userspace is clearing dirty logs via KVM_CLEAR_DIRTY_LOG
-ioctl, then kernel code takes MMU write lock. This will block vCPUs
-write protection faults and degrade guest performance.  This
-degradation gets worse as guest VM size increases in terms of memory and
-vCPU count.
+This allows dirty_log_perf_test to mimic real world use where after
+clearing dirty memory, some time is spent in transferring memory before
+making a subsequeunt Clear-Dirty-Log call.
 
-In this series, MMU read lock adoption is made possible by using
-KVM_PGTABLE_WALK_SHARED flag in page walker.
+Signed-off-by: Vipin Sharma <vipinsh@google.com>
+---
+ .../testing/selftests/kvm/dirty_log_perf_test.c | 17 +++++++++++++++--
+ tools/testing/selftests/kvm/include/memstress.h |  5 +++--
+ tools/testing/selftests/kvm/lib/memstress.c     | 10 +++++++++-
+ 3 files changed, 27 insertions(+), 5 deletions(-)
 
-Patches 1 to 5:
-These patches are modifying dirty_log_perf_test. Intent is to mimic
-production scenarios where guest keeps on executing while userspace
-threads collect and clear dirty logs independently.
-
-Three new command line options are added:
-1. j: Allows to run guest vCPUs and main thread collecting dirty logs
-      independently of each other after initialization is complete.
-2. k: Allows to clear dirty logs in smaller chunks compared to existing
-      whole memslot clear in one call.
-3. l: Allows to add customizable wait time between consecutive clear
-      dirty log calls to mimic sending dirty memory to destination.
-
-Patch 7-8:
-These patches refactor code to move MMU lock operations to arch specific
-code, refactor Arm's page table walker APIs, and change MMU write lock
-for clearing dirty logs to read lock. Patch 8 has results showing
-improvements based on dirty_log_perf_test.
-
-Vipin Sharma (9):
-  KVM: selftests: Allow dirty_log_perf_test to clear dirty memory in
-    chunks
-  KVM: selftests: Add optional delay between consecutive Clear-Dirty-Log
-    calls
-  KVM: selftests: Pass count of read and write accesses from guest to
-    host
-  KVM: selftests: Print read and write accesses of pages by vCPUs in
-    dirty_log_perf_test
-  KVM: selftests: Allow independent execution of vCPUs in
-    dirty_log_perf_test
-  KVM: arm64: Correct the kvm_pgtable_stage2_flush() documentation
-  KVM: mmu: Move mmu lock/unlock to arch code for clear dirty log
-  KMV: arm64: Allow stage2_apply_range_sched() to pass page table walker
-    flags
-  KVM: arm64: Run clear-dirty-log under MMU read lock
-
- arch/arm64/include/asm/kvm_pgtable.h          |  17 ++-
- arch/arm64/kvm/hyp/nvhe/mem_protect.c         |   4 +-
- arch/arm64/kvm/hyp/pgtable.c                  |  16 ++-
- arch/arm64/kvm/mmu.c                          |  36 ++++--
- arch/mips/kvm/mmu.c                           |   2 +
- arch/riscv/kvm/mmu.c                          |   2 +
- arch/x86/kvm/mmu/mmu.c                        |   3 +
- .../selftests/kvm/dirty_log_perf_test.c       | 108 ++++++++++++++----
- .../testing/selftests/kvm/include/memstress.h |  13 ++-
- tools/testing/selftests/kvm/lib/memstress.c   |  43 +++++--
- virt/kvm/dirty_ring.c                         |   2 -
- virt/kvm/kvm_main.c                           |   4 -
- 12 files changed, 185 insertions(+), 65 deletions(-)
-
-
-base-commit: 95b9779c1758f03cf494e8550d6249a40089ed1c
+diff --git a/tools/testing/selftests/kvm/dirty_log_perf_test.c b/tools/testing/selftests/kvm/dirty_log_perf_test.c
+index 0852a7ba42e1..338f03a4a550 100644
+--- a/tools/testing/selftests/kvm/dirty_log_perf_test.c
++++ b/tools/testing/selftests/kvm/dirty_log_perf_test.c
+@@ -135,6 +135,7 @@ struct test_params {
+ 	uint32_t random_seed;
+ 	bool random_access;
+ 	uint64_t clear_chunk_size;
++	int clear_chunk_wait_time_ms
+ };
+ 
+ static void run_test(enum vm_guest_mode mode, void *arg)
+@@ -249,7 +250,8 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 			clock_gettime(CLOCK_MONOTONIC, &start);
+ 			memstress_clear_dirty_log_in_chunks(vm, bitmaps, p->slots,
+ 							    pages_per_slot,
+-							    pages_per_clear);
++							    pages_per_clear,
++							    p->clear_chunk_wait_time_ms);
+ 			ts_diff = timespec_elapsed(start);
+ 			clear_dirty_log_total = timespec_add(clear_dirty_log_total,
+ 							     ts_diff);
+@@ -352,6 +354,11 @@ static void help(char *name)
+ 	       "     the memslot size then whole memslot is cleared in one call.\n"
+ 	       "     Size must be aligned to the host page size. e.g. 10M or 3G\n"
+ 	       "     (default: UINT64_MAX, clears whole memslot in one call)\n");
++	printf(" -l: Specify time in milliseconds to wait after Clear-Dirty-Log\n"
++	       "     call. This allows to mimic use cases where flow is to get\n"
++	       "     dirty log followed by multiple clear dirty log calls and\n"
++	       "     sending corresponding memory to destination (in this test\n"
++	       "     sending will be just idle waiting)\n");
+ 	puts("");
+ 	exit(0);
+ }
+@@ -368,6 +375,7 @@ int main(int argc, char *argv[])
+ 		.random_seed = 1,
+ 		.write_percent = 100,
+ 		.clear_chunk_size = UINT64_MAX,
++		.clear_chunk_wait_time_ms = 0,
+ 	};
+ 	int opt;
+ 
+@@ -378,7 +386,7 @@ int main(int argc, char *argv[])
+ 
+ 	guest_modes_append_default();
+ 
+-	while ((opt = getopt(argc, argv, "ab:c:eghi:k:m:nop:r:s:v:x:w:")) != -1) {
++	while ((opt = getopt(argc, argv, "ab:c:eghi:k:l:m:nop:r:s:v:x:w:")) != -1) {
+ 		switch (opt) {
+ 		case 'a':
+ 			p.random_access = true;
+@@ -405,6 +413,11 @@ int main(int argc, char *argv[])
+ 		case 'k':
+ 			p.clear_chunk_size = parse_size(optarg);
+ 			break;
++		case 'l':
++			p.clear_chunk_wait_time_ms =
++					atoi_non_negative("Clear dirty log chunks wait time",
++							  optarg);
++			break;
+ 		case 'm':
+ 			guest_modes_cmdline(optarg);
+ 			break;
+diff --git a/tools/testing/selftests/kvm/include/memstress.h b/tools/testing/selftests/kvm/include/memstress.h
+index 2acc93f76fc3..01fdcea80360 100644
+--- a/tools/testing/selftests/kvm/include/memstress.h
++++ b/tools/testing/selftests/kvm/include/memstress.h
+@@ -78,12 +78,13 @@ void memstress_get_dirty_log(struct kvm_vm *vm, unsigned long *bitmaps[], int sl
+ void memstress_clear_dirty_log_in_chunks(struct kvm_vm *vm,
+ 					 unsigned long *bitmaps[], int slots,
+ 					 uint64_t pages_per_slot,
+-					 uint64_t pages_per_clear);
++					 uint64_t pages_per_clear,
++					 int wait_ms);
+ static inline void memstress_clear_dirty_log(struct kvm_vm *vm,
+ 					     unsigned long *bitmaps[], int slots,
+ 					     uint64_t pages_per_slot) {
+ 	memstress_clear_dirty_log_in_chunks(vm, bitmaps, slots, pages_per_slot,
+-					    pages_per_slot);
++					    pages_per_slot, 0);
+ }
+ unsigned long **memstress_alloc_bitmaps(int slots, uint64_t pages_per_slot);
+ void memstress_free_bitmaps(unsigned long *bitmaps[], int slots);
+diff --git a/tools/testing/selftests/kvm/lib/memstress.c b/tools/testing/selftests/kvm/lib/memstress.c
+index e0c701ab4e9a..483ecbc53a5b 100644
+--- a/tools/testing/selftests/kvm/lib/memstress.c
++++ b/tools/testing/selftests/kvm/lib/memstress.c
+@@ -358,10 +358,15 @@ void memstress_get_dirty_log(struct kvm_vm *vm, unsigned long *bitmaps[], int sl
+ void memstress_clear_dirty_log_in_chunks(struct kvm_vm *vm,
+ 					 unsigned long *bitmaps[], int slots,
+ 					 uint64_t pages_per_slot,
+-					 uint64_t pages_per_clear)
++					 uint64_t pages_per_clear,
++					 int wait_ms)
+ {
+ 	int i, slot;
+ 	uint64_t from, clear_pages_count;
++	struct timespec wait = {
++		.tv_sec = wait_ms / 1000,
++		.tv_nsec = (wait_ms % 1000) * 1000000ull,
++	};
+ 
+ 	for (i = 0; i < slots; i++) {
+ 		slot = MEMSTRESS_MEM_SLOT_INDEX + i;
+@@ -374,6 +379,9 @@ void memstress_clear_dirty_log_in_chunks(struct kvm_vm *vm,
+ 			kvm_vm_clear_dirty_log(vm, slot, bitmaps[i], from,
+ 					       clear_pages_count);
+ 			from += clear_pages_count;
++			if (wait_ms)
++				nanosleep(&wait, NULL);
++
+ 		}
+ 	}
+ 
 -- 
 2.40.0.634.g4ca3ef3211-goog
 
