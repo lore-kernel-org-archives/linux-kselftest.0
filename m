@@ -2,56 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AF36C77B76
-	for <linux-kselftest@archiver.kernel.org>; Fri, 21 Apr 2023 14:18:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B54CC77B7F
+	for <linux-kselftest@archiver.kernel.org>; Fri, 21 Apr 2023 14:18:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232208AbjDUOSB (ORCPT
+        id S232315AbjDUOSC (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 21 Apr 2023 10:18:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53722 "EHLO
+        Fri, 21 Apr 2023 10:18:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232360AbjDUORq (ORCPT
+        with ESMTP id S231838AbjDUOR6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 21 Apr 2023 10:17:46 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139BE1258F
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Apr 2023 07:17:44 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-b8f566ea5e6so6392595276.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Apr 2023 07:17:44 -0700 (PDT)
+        Fri, 21 Apr 2023 10:17:58 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B12FA19B2
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 Apr 2023 07:17:56 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54f855ecb9cso23421547b3.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 Apr 2023 07:17:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682086663; x=1684678663;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ObvMQpDO4VdOnjufZAdgVMFaduqKSCa+HnPbId1089s=;
-        b=ns5H+QuUh8mZPsqMyCzdWVAI4JV7KSMOsX/PkKfi+KNM578zeMJZglKgjpr9UxuRnA
-         wi25x9VT/iovSYgHd+ve7v7cd+FGEBPpntXYK5n0ggGm32KLQWoAmoG1zm5YzGbgtbrq
-         RgTiawh3lkrVdmd0R3kDNubrRwYA0ZgP70oIVMckT5bHQVK56Xdft2ji0Wnav1ky6YhF
-         nniaUNEowlFAQLCk2RUV86VHg09+JUS0zqM05SVxhgO6+lK/se36eKCwGMRdVYXqX4nx
-         8uLc5IBLZvH0koSjHV6sUtsZWbHv1v1y0x+sKRLknFsVO04HECC7IZBwaOVCeLtP7eYM
-         qOAw==
+        d=google.com; s=20221208; t=1682086676; x=1684678676;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+n+j8heP4pCjXZYyBacJTBZB3NL6fBggzFdjHd9oRv0=;
+        b=1J+xPZGWBNzha1s2A0zh1bYQja2oWHpvpOCxFHuTZtFUWKMmSQnBfxHBH0Zcm44kZA
+         mPOZ/Fht1Aftwl9AJ1rKtC59A4jvXdb1ZYW8T2qD/3ZYsP8HOjEF5aK/sPWCyvfddAGs
+         YZVHhrnd9w2mxWucAZPFAtJnP9MSj3lmKy/TSOAxNQS4f3hIn2T2k8w1STVe4BtZELVX
+         pJkgxjkF5hE3w133duRa8aLyLmZJq1iOL967XYQ/GUbKLPXFkKw4b9ahEO8C0ZO6zECt
+         izmMTaC7MHs6J71osGTiOvAsndQZ1oFYtSarJD7aSOdBEp0EuGUc3FUDwpkI1pL1x4Bm
+         A4Iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682086663; x=1684678663;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ObvMQpDO4VdOnjufZAdgVMFaduqKSCa+HnPbId1089s=;
-        b=aClKZN0KGWfj1WnhId1QyKx7liqNAMT/HrvSpnUsoVqW0P28ShG0OzzCDcNEMHuwB3
-         5xlIZwMe0/wusmwP885FSyp9m3xn7aAx9kdDRpYEc7bNqO03rtNxDi/YygOCeBUsiOlQ
-         8eA/eGSvVaB0BtqQY5plL7pswsCULIYcP+Fs9QsGCW4v24mTreHtcY5hgbHEB97XdCN1
-         AnigiTeDOmPxFIS3RZQFOc93fAQ4yF0C8tZDbOe3Qwjsw9kr4cX4tl3dWmPqMtKtvgrd
-         Bjo2v3+8QhlRt0n8HOW6gQh6Nu2cGm9nK2wa9CppGbLY9IpiiyteNNNdnVFkz6DgKiNx
-         AOXA==
-X-Gm-Message-State: AAQBX9egtb2r5vmDcpy8d/d4oboHCNmrcPNkac4pfQztLXg7T2mluiCl
-        OA5GDne3EZLJTYBp+QcZoMYS8vtl2sJ1YlCnHg==
-X-Google-Smtp-Source: AKy350ZG7u2gePkwhYPhvuDsxGloMw0UJdMM4BeAyPegJQdDxY8uNtCzr8KodyMKn0yqhT8McYTYsD6j34k8q2wqkQ==
+        d=1e100.net; s=20221208; t=1682086676; x=1684678676;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+n+j8heP4pCjXZYyBacJTBZB3NL6fBggzFdjHd9oRv0=;
+        b=PHI9Bm0l4pLTxg02Kzp8GUA3oTwGCAJ2e8A4LmzJxu4V7xSVc4uo4ixnrTudeIt0It
+         1OeuV+VkCVzTso3va6Z286EElKaZ4ntMxOrJoXQFKtNZLvFwSj2K3s2jO0iieZ/sX50c
+         cqad20ghmevJoseCR6lPIynz7lhMkTt+pIIrR2awZnbt+PNSuDbRuS8xstJV/hb/S826
+         CkHcS9vgBpBqHYWoYieEFhmPz2gmNZFbw6vkjNr7+7MkfqUmzCyrDPr0J6Wll+JPyl6i
+         rezulOZCSVtFVgauc68CbjnAO/RbzJjJGw/VMRitXQY/5BoMldXf06j11aDnxgRgm5i/
+         7i1Q==
+X-Gm-Message-State: AAQBX9cmMmVJDtoVTQmz14YorCcXxSF7510cfkE2kOmDi3D0eoqyiiZh
+        Ui+G7CzV20D0kaqiMr+wD6f4PLDRBGQwFwXd0w==
+X-Google-Smtp-Source: AKy350arYGzYEIPhtnp3xySUlV+rNDfVObOqcPYOAss6sIzU6gdyo3tnVcUWjCj9A0vbWC7usI/Jxf0ocUwJeeSCCw==
 X-Received: from peternewman0.zrh.corp.google.com ([2a00:79e0:9d:6:c801:daa2:428c:d3fc])
- (user=peternewman job=sendgmr) by 2002:a05:690c:2b88:b0:54c:15ad:11e4 with
- SMTP id en8-20020a05690c2b8800b0054c15ad11e4mr1865952ywb.0.1682086663349;
- Fri, 21 Apr 2023 07:17:43 -0700 (PDT)
-Date:   Fri, 21 Apr 2023 16:17:14 +0200
+ (user=peternewman job=sendgmr) by 2002:a0d:ec48:0:b0:54f:ae82:3f92 with SMTP
+ id r8-20020a0dec48000000b0054fae823f92mr1328767ywn.2.1682086675839; Fri, 21
+ Apr 2023 07:17:55 -0700 (PDT)
+Date:   Fri, 21 Apr 2023 16:17:18 +0200
+In-Reply-To: <20230421141723.2405942-1-peternewman@google.com>
 Mime-Version: 1.0
+References: <20230421141723.2405942-1-peternewman@google.com>
 X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
-Message-ID: <20230421141723.2405942-1-peternewman@google.com>
-Subject: [PATCH v1 0/9] x86/resctrl: Use soft RMIDs for reliable MBM on AMD
+Message-ID: <20230421141723.2405942-5-peternewman@google.com>
+Subject: [PATCH v1 4/9] x86/resctrl: Flush MBM event counts on soft RMID change
 From:   Peter Newman <peternewman@google.com>
 To:     Fenghua Yu <fenghua.yu@intel.com>,
         Reinette Chatre <reinette.chatre@intel.com>
@@ -69,130 +71,80 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Reinette, Fenghua,
+To implement soft RMIDs, context switch must detect when the current
+soft RMID is changing and if so, flush the CPU's MBM event counts to the
+outgoing soft RMID.
 
-This series introduces a new mount option enabling an alternate mode for
-MBM to work around an issue on present AMD implementations and any other
-resctrl implementation where there are more RMIDs (or equivalent) than
-hardware counters.
+To avoid impacting context switch performance in the non-soft RMID case,
+protect the new logic with a static branch.
 
-The L3 External Bandwidth Monitoring feature of the AMD PQoS
-extension[1] only guarantees that RMIDs currently assigned to a
-processor will be tracked by hardware. The counters of any other RMIDs
-which are no longer being tracked will be reset to zero. The MBM event
-counters return "Unavailable" to indicate when this has happened.
+Co-developed-by: Stephane Eranian <eranian@google.com>
+Signed-off-by: Stephane Eranian <eranian@google.com>
+Signed-off-by: Peter Newman <peternewman@google.com>
+---
+ arch/x86/include/asm/resctrl.h         | 27 +++++++++++++++++++++++++-
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c |  1 +
+ 2 files changed, 27 insertions(+), 1 deletion(-)
 
-An interval for effectively measuring memory bandwidth typically needs
-to be multiple seconds long. In Google's workloads, it is not feasible
-to bound the number of jobs with different RMIDs which will run in a
-cache domain over any period of time.  Consequently, on a
-fully-committed system where all RMIDs are allocated, few groups'
-counters return non-zero values.
-
-To demonstrate the underlying issue, the first patch provides a test
-case in tools/testing/selftests/resctrl/test_rmids.sh.
-
-On an AMD EPYC 7B12 64-Core Processor with the default behavior:
-
- # ./test_rmids.sh
- Created 255 monitoring groups.
- g1: mbm_total_bytes: Unavailable -> Unavailable (FAIL)
- g2: mbm_total_bytes: Unavailable -> Unavailable (FAIL)
- g3: mbm_total_bytes: Unavailable -> Unavailable (FAIL)
-[..]
- g238: mbm_total_bytes: Unavailable -> Unavailable (FAIL)
- g239: mbm_total_bytes: Unavailable -> Unavailable (FAIL)
- g240: mbm_total_bytes: Unavailable -> Unavailable (FAIL)
- g241: mbm_total_bytes: Unavailable -> 660497472
- g242: mbm_total_bytes: Unavailable -> 660793344
- g243: mbm_total_bytes: Unavailable -> 660477312
- g244: mbm_total_bytes: Unavailable -> 660495360
- g245: mbm_total_bytes: Unavailable -> 660775360
- g246: mbm_total_bytes: Unavailable -> 660645504
- g247: mbm_total_bytes: Unavailable -> 660696128
- g248: mbm_total_bytes: Unavailable -> 660605248
- g249: mbm_total_bytes: Unavailable -> 660681280
- g250: mbm_total_bytes: Unavailable -> 660834240
- g251: mbm_total_bytes: Unavailable -> 660440064
- g252: mbm_total_bytes: Unavailable -> 660501504
- g253: mbm_total_bytes: Unavailable -> 660590720
- g254: mbm_total_bytes: Unavailable -> 660548352
- g255: mbm_total_bytes: Unavailable -> 660607296
- 255 groups, 0 returned counts in first pass, 15 in second
- successfully measured bandwidth from 15/255 groups
-
-To compare, here is the output from an Intel(R) Xeon(R) Platinum 8173M
-CPU:
-
- # ./test_rmids.sh
- Created 223 monitoring groups.
- g1: mbm_total_bytes: 0 -> 606126080
- g2: mbm_total_bytes: 0 -> 613236736
- g3: mbm_total_bytes: 0 -> 610254848
-[..]
- g221: mbm_total_bytes: 0 -> 584679424
- g222: mbm_total_bytes: 0 -> 588808192
- g223: mbm_total_bytes: 0 -> 587317248
- 223 groups, 223 returned counts in first pass, 223 in second
- successfully measured bandwidth from 223/223 groups
-
-To make better use of the hardware in such a use case, this patchset
-introduces a "soft" RMID implementation, where each CPU is permanently
-assigned a "hard" RMID. On context switches which change the current
-soft RMID, the difference between each CPU's current event counts and
-most recent counts is added to the totals for the current or outgoing
-soft RMID.
-
-This technique does not work for cache occupancy counters, so this patch
-series disables cache occupancy events when soft RMIDs are enabled.
-
-This series adds the "mbm_soft_rmid" mount option to allow users to
-opt-in to the functionaltiy when they deem it helpful.
-
-When the same system from the earlier AMD example enables the
-mbm_soft_rmid mount option:
-
- # ./test_rmids.sh
- Created 255 monitoring groups.
- g1: mbm_total_bytes: 0 -> 686560576
- g2: mbm_total_bytes: 0 -> 668204416
-[..]
- g252: mbm_total_bytes: 0 -> 672651200
- g253: mbm_total_bytes: 0 -> 666956800
- g254: mbm_total_bytes: 0 -> 665917056
- g255: mbm_total_bytes: 0 -> 671049600
- 255 groups, 255 returned counts in first pass, 255 in second
- successfully measured bandwidth from 255/255 groups
-
-(patches are based on tip/master)
-
-[1] https://www.amd.com/system/files/TechDocs/56375_1.03_PUB.pdf
-
-Peter Newman (8):
-  selftests/resctrl: Verify all RMIDs count together
-  x86/resctrl: Add resctrl_mbm_flush_cpu() to collect CPUs' MBM events
-  x86/resctrl: Flush MBM event counts on soft RMID change
-  x86/resctrl: Call mon_event_count() directly for soft RMIDs
-  x86/resctrl: Create soft RMID version of __mon_event_count()
-  x86/resctrl: Assign HW RMIDs to CPUs for soft RMID
-  x86/resctrl: Use mbm_update() to push soft RMID counts
-  x86/resctrl: Add mount option to enable soft RMID
-
-Stephane Eranian (1):
-  x86/resctrl: Hold a spinlock in __rmid_read() on AMD
-
- arch/x86/include/asm/resctrl.h                |  29 +++-
- arch/x86/kernel/cpu/resctrl/core.c            |  80 ++++++++-
- arch/x86/kernel/cpu/resctrl/ctrlmondata.c     |   9 +-
- arch/x86/kernel/cpu/resctrl/internal.h        |  19 ++-
- arch/x86/kernel/cpu/resctrl/monitor.c         | 158 +++++++++++++++++-
- arch/x86/kernel/cpu/resctrl/rdtgroup.c        |  52 ++++++
- tools/testing/selftests/resctrl/test_rmids.sh |  93 +++++++++++
- 7 files changed, 425 insertions(+), 15 deletions(-)
- create mode 100755 tools/testing/selftests/resctrl/test_rmids.sh
-
-
-base-commit: dd806e2f030e57dd5bac973372aa252b6c175b73
+diff --git a/arch/x86/include/asm/resctrl.h b/arch/x86/include/asm/resctrl.h
+index e7acf118d770..50d05e883dbb 100644
+--- a/arch/x86/include/asm/resctrl.h
++++ b/arch/x86/include/asm/resctrl.h
+@@ -36,6 +36,9 @@ DECLARE_PER_CPU(struct resctrl_pqr_state, pqr_state);
+ DECLARE_STATIC_KEY_FALSE(rdt_enable_key);
+ DECLARE_STATIC_KEY_FALSE(rdt_alloc_enable_key);
+ DECLARE_STATIC_KEY_FALSE(rdt_mon_enable_key);
++DECLARE_STATIC_KEY_FALSE(rdt_soft_rmid_enable_key);
++
++void resctrl_mbm_flush_cpu(void);
+ 
+ /*
+  * __resctrl_sched_in() - Writes the task's CLOSid/RMID to IA32_PQR_MSR
+@@ -75,9 +78,31 @@ static inline void __resctrl_sched_in(struct task_struct *tsk)
+ 	}
+ 
+ 	if (closid != state->cur_closid || rmid != state->cur_rmid) {
++		if (static_branch_likely(&rdt_soft_rmid_enable_key)) {
++			/*
++			 * Flush current event counts to outgoing soft rmid
++			 * when it changes.
++			 */
++			if (rmid != state->cur_rmid)
++				resctrl_mbm_flush_cpu();
++
++			/*
++			 * rmid never changes in this mode, so skip wrmsr if the
++			 * closid is not changing.
++			 */
++			if (closid != state->cur_closid)
++				wrmsr(MSR_IA32_PQR_ASSOC, state->hw_rmid,
++				      closid);
++		} else {
++			wrmsr(MSR_IA32_PQR_ASSOC, rmid, closid);
++		}
++
++		/*
++		 * Record new closid/rmid last so soft rmid case can detect
++		 * changes.
++		 */
+ 		state->cur_closid = closid;
+ 		state->cur_rmid = rmid;
+-		wrmsr(MSR_IA32_PQR_ASSOC, rmid, closid);
+ 	}
+ }
+ 
+diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+index 6ad33f355861..c10f4798156a 100644
+--- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
++++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+@@ -35,6 +35,7 @@
+ DEFINE_STATIC_KEY_FALSE(rdt_enable_key);
+ DEFINE_STATIC_KEY_FALSE(rdt_mon_enable_key);
+ DEFINE_STATIC_KEY_FALSE(rdt_alloc_enable_key);
++DEFINE_STATIC_KEY_FALSE(rdt_soft_rmid_enable_key);
+ static struct kernfs_root *rdt_root;
+ struct rdtgroup rdtgroup_default;
+ LIST_HEAD(rdt_all_groups);
 -- 
 2.40.0.634.g4ca3ef3211-goog
 
