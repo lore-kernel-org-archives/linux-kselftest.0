@@ -2,210 +2,184 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24AE2C77B75
-	for <linux-kselftest@archiver.kernel.org>; Fri, 21 Apr 2023 09:06:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9281C7618E
+	for <linux-kselftest@archiver.kernel.org>; Fri, 21 Apr 2023 14:17:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231684AbjDUJGW (ORCPT
+        id S229575AbjDUOR6 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 21 Apr 2023 05:06:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52178 "EHLO
+        Fri, 21 Apr 2023 10:17:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231717AbjDUJGO (ORCPT
+        with ESMTP id S232383AbjDUORs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 21 Apr 2023 05:06:14 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73FFD6EB6
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Apr 2023 02:05:47 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id 98e67ed59e1d1-246fa478d45so1713790a91.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Apr 2023 02:05:47 -0700 (PDT)
+        Fri, 21 Apr 2023 10:17:48 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8363CE50
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 Apr 2023 07:17:47 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54c2999fdc7so27601737b3.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 Apr 2023 07:17:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1682067947; x=1684659947;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=t0gJQV+jBsuJN+dqapwDGx8wuqSDbN1mALWddpdSsEk=;
-        b=S5Ivxp968YSA3NDLM8BeS1NCb2DfvXA3IuISPyCNzeNTePZMImiqO1QFMplQ3aXvDz
-         /JvtVHFnfcDqRSLbbaCRYizZ6eVphwrfwkjJf7dk2xAGd6ln9qyu2KFaV5fIQGQLEGbh
-         UFTjg240tmdYVaKwG8OZ6gX0sCfvi3mqh0IFgjtv3fmK0Ctvild8XBJs1iZoKvJFwu54
-         qQqD2rnDRafbasd6xUreABRj/ccs0fL2FTpiONAYRciJzBzv3/2xzI1k/ZZ/gFwxgUY5
-         HePnsiegALfcpVVlCX9aIdraq+Dy+PNzgb9CdkwgZPAqjAbqksx1axNBgTMMnjnnUNXn
-         zPMg==
+        d=google.com; s=20221208; t=1682086666; x=1684678666;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=K9ehmzwOW4Qc9gQvpwM/ZZofEU4OqXe1UUgzo44mFis=;
+        b=jQ/EfbElWOoD7Q5RcZ9PEMa2xeB33n91soMxfAboXtG9IdbuenydvfqGJRJs173o0i
+         vupY0UegJS39vUDZPWg//Oym1AxFL0seSvyqJuJ2iCaBeWL8/gw7JMqp4PQ7JqaqcVXN
+         iNIK16Y8y4rXoL54RmLqFH1ccS7vUP4c6UAmjsYbFOzVDuRQ9s7pTGXMPN+J00WMZlh/
+         dkBxnZoW2ygD8DRNK6Rn+6P0ltnrb6sIgfoNbyE0Ov4dTaBIn6WtKU0bQDqeRL8gbvhA
+         /vwQxur+PunJsSaBWZDh+8oiYEaDyLaOgE7fzoSNYbg7eGhEH2OnC/ShEbI1U1+eZhx8
+         QppA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682067947; x=1684659947;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=t0gJQV+jBsuJN+dqapwDGx8wuqSDbN1mALWddpdSsEk=;
-        b=OELWq9AmZRvN7CvX9H31OH0KH619alDfMckyB3m1Iyv9fvyXECywIzwrdgIS78jSO8
-         hcwkSW99op9A1lKwFfVW3Ifizx0oz7/Pgg4/pajecvA5HlayQv+U54H6iHKzNC9vysGO
-         aBIMgX5RKw5q/clfJNiauv6fUVKqnjB5zso4Zm5c5yQHt1sfSnpb7jwgvkk0Pf6oRfZa
-         yaqrwPDtELwP+Kw2ooXPm+PLvpujtr8SVllpAZ6IS7n6kv2WLoCWntpTLWAuNPg2KjEY
-         ruExG+xRUiNanslGUI9eBT+RVkYWTmkmtwLDne9ZcVEiN6uDLKkFcfAKwmf4aHYuTr67
-         bR/g==
-X-Gm-Message-State: AAQBX9cMH1aF27x9awh+upmJh4U/3Xssjoa2mUCRTB66ArZvty5LTg/c
-        15UazuD6178LI2MLIO2fRDYAMzz+5EoI1MzZdi3ZDg==
-X-Google-Smtp-Source: AKy350Yq/tolYlOhf1pDRg+pi8crdvgzu8tht/po/DMcygONgBqFFU6dDpp2J5xJKwIpk+nmGlNlMw==
-X-Received: by 2002:a17:90a:3004:b0:246:681c:71fd with SMTP id g4-20020a17090a300400b00246681c71fdmr4294867pjb.6.1682067946936;
-        Fri, 21 Apr 2023 02:05:46 -0700 (PDT)
-Received: from C02F52LSML85.bytedance.net ([139.177.225.254])
-        by smtp.gmail.com with ESMTPSA id t3-20020a17090a950300b0024796ddd19bsm4192309pjo.7.2023.04.21.02.05.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Apr 2023 02:05:46 -0700 (PDT)
-From:   Feng zhou <zhoufeng.zf@bytedance.com>
-To:     martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        mykolal@fb.com, shuah@kernel.org
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        yangzhenze@bytedance.com, wangdongdong.6@bytedance.com,
-        zhoufeng.zf@bytedance.com
-Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Add testcase for bpf_task_under_cgroup
-Date:   Fri, 21 Apr 2023 17:04:03 +0800
-Message-Id: <20230421090403.15515-3-zhoufeng.zf@bytedance.com>
-X-Mailer: git-send-email 2.39.2 (Apple Git-143)
-In-Reply-To: <20230421090403.15515-1-zhoufeng.zf@bytedance.com>
-References: <20230421090403.15515-1-zhoufeng.zf@bytedance.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        d=1e100.net; s=20221208; t=1682086666; x=1684678666;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=K9ehmzwOW4Qc9gQvpwM/ZZofEU4OqXe1UUgzo44mFis=;
+        b=IOd+xSdat9DTyWW5c1gHDhTen9rJoqqAjC81gDzxLFAsnYQO+OI8Bk4CqwmV5dfYj5
+         3vEp7yHTvp7dTauZYZ2Qwp4hYjIVyEvcC+Li+U2VzgcHW4Va+s0CAGKDibGcHaF3YOD0
+         KmmmVgIjobEGXLGoeMdPuSeeSyyrv2etB0vLhY2r9t2EcAw/OF1V1ezJpI8U6EuJvpHN
+         QGpHwIhXu+82DEl252uQV98iXvYSIV6Ty+OvSWSQQ1xAu/l6vbL2aUXAbvdwUX5o4fkj
+         GdRNTq5JHEw4g5Djef4X5pASIIImMkVdblt5uKg49w4pox/dt6/IEGC4MyK7kqcEU87/
+         XOyA==
+X-Gm-Message-State: AAQBX9fa85tHpSqBRcavvdkcB4xJWcLTRvh1bVwJ5b56l/D9nDwT0NPR
+        41F4j2FWtSNMGsUzsZT1XGBroEDHWERuOyJoZw==
+X-Google-Smtp-Source: AKy350bGSojqd0RF8hFVJ3f1aMQaH6BbLkjOI4vRi/ZfKEmx8aOtAggSlmMc650/M/hrY1VHYKP2C4yWp1Cj3Omwyg==
+X-Received: from peternewman0.zrh.corp.google.com ([2a00:79e0:9d:6:c801:daa2:428c:d3fc])
+ (user=peternewman job=sendgmr) by 2002:a81:b725:0:b0:555:f33e:e346 with SMTP
+ id v37-20020a81b725000000b00555f33ee346mr1484199ywh.6.1682086666823; Fri, 21
+ Apr 2023 07:17:46 -0700 (PDT)
+Date:   Fri, 21 Apr 2023 16:17:15 +0200
+In-Reply-To: <20230421141723.2405942-1-peternewman@google.com>
+Mime-Version: 1.0
+References: <20230421141723.2405942-1-peternewman@google.com>
+X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
+Message-ID: <20230421141723.2405942-2-peternewman@google.com>
+Subject: [PATCH v1 1/9] selftests/resctrl: Verify all RMIDs count together
+From:   Peter Newman <peternewman@google.com>
+To:     Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>
+Cc:     Babu Moger <babu.moger@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Stephane Eranian <eranian@google.com>,
+        James Morse <james.morse@arm.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Peter Newman <peternewman@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Feng Zhou <zhoufeng.zf@bytedance.com>
+AMD CPUs in particular implement fewer monitors than RMIDs, so add a
+test case to see if a large number of monitoring groups can be measured
+together.
 
-test_progs:
-Tests new kfunc bpf_task_under_cgroup().
-
-The bpf program saves the pid which call the getuid syscall within a
-given cgroup to the remote_pid, which is convenient for the user-mode
-program to verify the test correctness.
-
-The user-mode program creates its own mount namespace, and mounts the
-cgroupsv2 hierarchy in there, call the getuid syscall, then check if
-remote_pid and local_pid are equal.
-
-Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
+Signed-off-by: Peter Newman <peternewman@google.com>
 ---
- .../bpf/prog_tests/task_under_cgroup.c        | 46 +++++++++++++++++++
- .../selftests/bpf/progs/cgrp_kfunc_common.h   |  1 +
- .../bpf/progs/test_task_under_cgroup.c        | 40 ++++++++++++++++
- 3 files changed, 87 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_task_under_cgroup.c
+ tools/testing/selftests/resctrl/test_rmids.sh | 93 +++++++++++++++++++
+ 1 file changed, 93 insertions(+)
+ create mode 100755 tools/testing/selftests/resctrl/test_rmids.sh
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c b/tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c
-new file mode 100644
-index 000000000000..bd3deb469938
+diff --git a/tools/testing/selftests/resctrl/test_rmids.sh b/tools/testing/selftests/resctrl/test_rmids.sh
+new file mode 100755
+index 000000000000..475e69c0217e
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c
-@@ -0,0 +1,46 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2023 Bytedance */
++++ b/tools/testing/selftests/resctrl/test_rmids.sh
+@@ -0,0 +1,93 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
 +
-+#include <test_progs.h>
-+#include <cgroup_helpers.h>
-+#include "test_task_under_cgroup.skel.h"
++cd /sys/fs/resctrl
 +
-+#define FOO	"/foo"
-+
-+void test_task_under_cgroup(void)
-+{
-+	struct test_task_under_cgroup *skel;
-+	int ret, foo = -1;
-+
-+	foo = test__join_cgroup(FOO);
-+	if (!ASSERT_OK(foo < 0, "cgroup_join_foo"))
-+		return;
-+
-+	skel = test_task_under_cgroup__open();
-+	if (!ASSERT_OK_PTR(skel, "test_task_under_cgroup__open"))
-+		goto cleanup;
-+
-+	skel->rodata->local_pid = getpid();
-+	skel->rodata->cgid = get_cgroup_id(FOO);
-+
-+	ret = test_task_under_cgroup__load(skel);
-+	if (!ASSERT_OK(ret, "test_task_under_cgroup__load"))
-+		goto cleanup;
-+
-+	ret = test_task_under_cgroup__attach(skel);
-+	if (!ASSERT_OK(ret, "test_task_under_cgroup__attach"))
-+		goto cleanup;
-+
-+	syscall(__NR_getuid);
-+
-+	test_task_under_cgroup__detach(skel);
-+
-+	ASSERT_EQ(skel->bss->remote_pid, skel->rodata->local_pid,
-+		  "test task_under_cgroup");
-+
-+cleanup:
-+	if (foo)
-+		close(foo);
-+
-+	test_task_under_cgroup__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/cgrp_kfunc_common.h b/tools/testing/selftests/bpf/progs/cgrp_kfunc_common.h
-index 22914a70db54..41b3ea231698 100644
---- a/tools/testing/selftests/bpf/progs/cgrp_kfunc_common.h
-+++ b/tools/testing/selftests/bpf/progs/cgrp_kfunc_common.h
-@@ -26,6 +26,7 @@ struct cgroup *bpf_cgroup_ancestor(struct cgroup *cgrp, int level) __ksym;
- struct cgroup *bpf_cgroup_from_id(u64 cgid) __ksym;
- void bpf_rcu_read_lock(void) __ksym;
- void bpf_rcu_read_unlock(void) __ksym;
-+int bpf_task_under_cgroup(struct cgroup *cgrp, struct task_struct *task) __ksym;
- 
- static inline struct __cgrps_kfunc_map_value *cgrps_kfunc_map_value_lookup(struct cgroup *cgrp)
- {
-diff --git a/tools/testing/selftests/bpf/progs/test_task_under_cgroup.c b/tools/testing/selftests/bpf/progs/test_task_under_cgroup.c
-new file mode 100644
-index 000000000000..e2740f9b029d
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_task_under_cgroup.c
-@@ -0,0 +1,40 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2023 Bytedance */
-+
-+#include <vmlinux.h>
-+#include <asm/unistd.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_helpers.h>
-+
-+#include "cgrp_kfunc_common.h"
-+
-+const volatile int local_pid;
-+const volatile long cgid;
-+int remote_pid;
-+
-+SEC("tp_btf/sys_enter")
-+int BPF_PROG(sysenter, struct pt_regs *regs, long id)
-+{
-+	struct cgroup *cgrp;
-+
-+	if (id != __NR_getuid)
-+		return 0;
-+
-+	if (local_pid != (bpf_get_current_pid_tgid() >> 32))
-+		return 0;
-+
-+	cgrp = bpf_cgroup_from_id(cgid);
-+	if (!cgrp)
-+		return 0;
-+
-+	if (!bpf_task_under_cgroup(cgrp, bpf_get_current_task_btf()))
-+		goto out;
-+
-+	remote_pid = local_pid;
-+
-+out:
-+	bpf_cgroup_release(cgrp);
-+	return 0;
++grep -q mbm_total_bytes info/L3_MON/mon_features || {
++	echo "MBM required"
++	exit 4
 +}
 +
-+char _license[] SEC("license") = "GPL";
++which perf > /dev/null || {
++	echo "perf tool required"
++	exit 4
++}
++
++num_rmids=$(cat info/L3_MON/num_rmids)
++
++count=0
++
++result=0
++
++# use as many RMIDs as possible, up to the number of RMIDs
++for i in `seq $num_rmids`; do
++	mkdir mon_groups/_test_m$((count+1)) 2> /dev/null || break
++	if [[ -d mon_groups/_test_m$((count+1))/mon_data ]]; then
++		count=$((count+1))
++	else
++		break;
++	fi
++done
++
++echo "Created $count monitoring groups."
++
++if [[ $count -eq 0 ]]; then
++	echo "need monitoring groups to continue."
++	exit 4
++fi
++
++declare -a bytes_array
++
++unavailable=0
++unavailable0=0
++
++for i in `seq $count`; do
++	bytes_array[$i]=$(cat mon_groups/_test_m${i}/mon_data/mon_L3_00/mbm_total_bytes)
++
++	if [[ "${bytes_array[$i]}" = "Unavailable" ]]; then
++		unavailable0=$((unavailable0 + 1))
++	fi
++done
++
++for i in `seq $count`; do
++	echo $$ > mon_groups/_test_m${i}/tasks
++	taskset 0x1 perf bench mem memcpy -s 100MB -f default > /dev/null
++done
++echo $$ > tasks
++
++# zero non-integer values
++declare -i bytes bytes0
++
++success_count=0
++
++for i in `seq $count`; do
++	raw_bytes=$(cat mon_groups/_test_m${i}/mon_data/mon_L3_00/mbm_total_bytes)
++	raw_bytes0=${bytes_array[$i]}
++
++	# coerce the value to an integer for math
++	bytes=$raw_bytes
++	bytes0=$raw_bytes0
++
++	echo -n "g${i}: mbm_total_bytes: $raw_bytes0 -> $raw_bytes"
++
++	if [[ "$raw_bytes" = "Unavailable" ]]; then
++		unavailable=$((unavailable + 1))
++	fi
++
++	if [[ $bytes -gt $bytes0 ]]; then
++		success_count=$((success_count+1))
++		echo ""
++	else
++		echo " (FAIL)"
++		result=1
++	fi
++done
++
++first=$((count-unavailable0))
++second=$((count-unavailable))
++echo "$count groups, $first returned counts in first pass, $second in second"
++echo "successfully measured bandwidth from ${success_count}/${count} groups"
++
++rmdir mon_groups/_test_m*
++
++exit $result
 -- 
-2.20.1
+2.40.0.634.g4ca3ef3211-goog
 
