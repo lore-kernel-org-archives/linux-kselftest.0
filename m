@@ -2,59 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA92DC7618E
-	for <linux-kselftest@archiver.kernel.org>; Fri, 21 Apr 2023 14:18:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AF36C77B76
+	for <linux-kselftest@archiver.kernel.org>; Fri, 21 Apr 2023 14:18:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231628AbjDUOSA (ORCPT
+        id S232208AbjDUOSB (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 21 Apr 2023 10:18:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53786 "EHLO
+        Fri, 21 Apr 2023 10:18:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232455AbjDUORz (ORCPT
+        with ESMTP id S232360AbjDUORq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 21 Apr 2023 10:17:55 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 989FFE50
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Apr 2023 07:17:53 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54fc35ab48fso9379957b3.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Apr 2023 07:17:53 -0700 (PDT)
+        Fri, 21 Apr 2023 10:17:46 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139BE1258F
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 Apr 2023 07:17:44 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-b8f566ea5e6so6392595276.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 Apr 2023 07:17:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682086673; x=1684678673;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BuRpJ8asAkuXVj/aByE26xnYMHbcW3VWyH6v7oH/F3A=;
-        b=YF6mH/8C6d2LEICnoqqT4IlypJNJI7h7vMGL3vmU8nm89xmj7nFwuuIi0Wugm9WY7S
-         LZT7Lgv38D5hvS66vh1juZA/85ZJAPR2JWb6rtiB3SRpL/EO75XCQVejewfggFNY6tFf
-         RzHFp1/kP+25z9AnutEzY4IoniQvEzo16VK7X+sycwpCy3UwwvKbnqksNfF1U7vt2PHV
-         bSJAcLXepaAKacebZQY18LDeX7Zs7xw1hB+gldk/e7vBIaWUaSVtYUz6W4roqTjhSZJG
-         HMyd3SE7sDxYTWk7s5ZqTodFH5yuHwd0x1uf+1epjoOsNQcwdzTFPBgd9pwdMOellgcs
-         H4CQ==
+        d=google.com; s=20221208; t=1682086663; x=1684678663;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ObvMQpDO4VdOnjufZAdgVMFaduqKSCa+HnPbId1089s=;
+        b=ns5H+QuUh8mZPsqMyCzdWVAI4JV7KSMOsX/PkKfi+KNM578zeMJZglKgjpr9UxuRnA
+         wi25x9VT/iovSYgHd+ve7v7cd+FGEBPpntXYK5n0ggGm32KLQWoAmoG1zm5YzGbgtbrq
+         RgTiawh3lkrVdmd0R3kDNubrRwYA0ZgP70oIVMckT5bHQVK56Xdft2ji0Wnav1ky6YhF
+         nniaUNEowlFAQLCk2RUV86VHg09+JUS0zqM05SVxhgO6+lK/se36eKCwGMRdVYXqX4nx
+         8uLc5IBLZvH0koSjHV6sUtsZWbHv1v1y0x+sKRLknFsVO04HECC7IZBwaOVCeLtP7eYM
+         qOAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682086673; x=1684678673;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BuRpJ8asAkuXVj/aByE26xnYMHbcW3VWyH6v7oH/F3A=;
-        b=KLtvrBCz40Z3gYkAQ8yHTjtSWPLK2FLQ27mEeEjfaMaA2rrcW3O0FpQhIj0YjKLco/
-         TRjMTtgaij8dELB+BuYzVOg8MEPwxVPJwdpQNEg67iArDBp3XmGZsCx8PtZRcs9VduJ9
-         upaHsuSzjp9x7+xMqjSlEaoLR3gg2kFfZlxQKNev3cyCvhwvmImwRlQGnZabz6XbM+Zv
-         eTPUtEQPJMRNLphV+YhPSnLUw+ppxWUXrW0BiymZpj8QIYlVy0rtzaAYjuRE3fgpYAAO
-         ZzSXq7vOeEH9dmXDNnOozVImweau6B5AgRcmfYmZvaG7F3V+G+zdzxQaZFH1EZXGYcRu
-         VwjQ==
-X-Gm-Message-State: AAQBX9e+3RdKJ2ZKrbt/9aHdVrrSJY/uc4KdWQIg2yEWWCa7AIo9bFl4
-        QhgbC+40yoJwTOy5rcpw++8PQsQAHUxtE822IQ==
-X-Google-Smtp-Source: AKy350bSfP1gP4DD2HHVEqwXmh0xWlWT1hVdE3FbvnbuPnVQDeyMt9ZPm07M+aCRtKM49nBWk/ZKtfMv2uVqwFggNA==
+        d=1e100.net; s=20221208; t=1682086663; x=1684678663;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ObvMQpDO4VdOnjufZAdgVMFaduqKSCa+HnPbId1089s=;
+        b=aClKZN0KGWfj1WnhId1QyKx7liqNAMT/HrvSpnUsoVqW0P28ShG0OzzCDcNEMHuwB3
+         5xlIZwMe0/wusmwP885FSyp9m3xn7aAx9kdDRpYEc7bNqO03rtNxDi/YygOCeBUsiOlQ
+         8eA/eGSvVaB0BtqQY5plL7pswsCULIYcP+Fs9QsGCW4v24mTreHtcY5hgbHEB97XdCN1
+         AnigiTeDOmPxFIS3RZQFOc93fAQ4yF0C8tZDbOe3Qwjsw9kr4cX4tl3dWmPqMtKtvgrd
+         Bjo2v3+8QhlRt0n8HOW6gQh6Nu2cGm9nK2wa9CppGbLY9IpiiyteNNNdnVFkz6DgKiNx
+         AOXA==
+X-Gm-Message-State: AAQBX9egtb2r5vmDcpy8d/d4oboHCNmrcPNkac4pfQztLXg7T2mluiCl
+        OA5GDne3EZLJTYBp+QcZoMYS8vtl2sJ1YlCnHg==
+X-Google-Smtp-Source: AKy350ZG7u2gePkwhYPhvuDsxGloMw0UJdMM4BeAyPegJQdDxY8uNtCzr8KodyMKn0yqhT8McYTYsD6j34k8q2wqkQ==
 X-Received: from peternewman0.zrh.corp.google.com ([2a00:79e0:9d:6:c801:daa2:428c:d3fc])
- (user=peternewman job=sendgmr) by 2002:a0d:ec49:0:b0:552:b607:634b with SMTP
- id r9-20020a0dec49000000b00552b607634bmr1395087ywn.4.1682086672863; Fri, 21
- Apr 2023 07:17:52 -0700 (PDT)
-Date:   Fri, 21 Apr 2023 16:17:17 +0200
-In-Reply-To: <20230421141723.2405942-1-peternewman@google.com>
+ (user=peternewman job=sendgmr) by 2002:a05:690c:2b88:b0:54c:15ad:11e4 with
+ SMTP id en8-20020a05690c2b8800b0054c15ad11e4mr1865952ywb.0.1682086663349;
+ Fri, 21 Apr 2023 07:17:43 -0700 (PDT)
+Date:   Fri, 21 Apr 2023 16:17:14 +0200
 Mime-Version: 1.0
-References: <20230421141723.2405942-1-peternewman@google.com>
 X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
-Message-ID: <20230421141723.2405942-4-peternewman@google.com>
-Subject: [PATCH v1 3/9] x86/resctrl: Add resctrl_mbm_flush_cpu() to collect
- CPUs' MBM events
+Message-ID: <20230421141723.2405942-1-peternewman@google.com>
+Subject: [PATCH v1 0/9] x86/resctrl: Use soft RMIDs for reliable MBM on AMD
 From:   Peter Newman <peternewman@google.com>
 To:     Fenghua Yu <fenghua.yu@intel.com>,
         Reinette Chatre <reinette.chatre@intel.com>
@@ -72,174 +69,130 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-AMD implementations so far are only guaranteed to provide MBM event
-counts for RMIDs which are currently assigned in CPUs' PQR_ASSOC MSRs.
-Hardware can reallocate the counter resources for all other RMIDs' which
-are not currently assigned to those which are, zeroing the event counts
-of the unassigned RMIDs.
+Hi Reinette, Fenghua,
 
-In practice, this makes it impossible to simultaneously calculate the
-memory bandwidth speed of all RMIDs on a busy system where all RMIDs are
-in use. Over a multiple-second measurement window, the RMID would need
-to remain assigned in all of the L3 cache domains where it has been
-assigned for the duration of the measurement, otherwise portions of the
-final count will be zero. In general, it is not possible to bound the
-number of RMIDs which will be assigned in an L3 domain over any interval
-of time.
+This series introduces a new mount option enabling an alternate mode for
+MBM to work around an issue on present AMD implementations and any other
+resctrl implementation where there are more RMIDs (or equivalent) than
+hardware counters.
 
-To provide reliable MBM counts on such systems, introduce "soft" RMIDs:
-when enabled, each CPU is permanently assigned a hardware RMID whose
-event counts are flushed to the current soft RMID during context
-switches which result in a change in soft RMID as well as whenever
-userspace requests the current event count for a domain.
+The L3 External Bandwidth Monitoring feature of the AMD PQoS
+extension[1] only guarantees that RMIDs currently assigned to a
+processor will be tracked by hardware. The counters of any other RMIDs
+which are no longer being tracked will be reset to zero. The MBM event
+counters return "Unavailable" to indicate when this has happened.
 
-Implement resctrl_mbm_flush_cpu(), which collects a domain's current MBM
-event counts into its current software RMID. The delta for each CPU is
-determined by tracking the previous event counts in per-CPU data.  The
-software byte counts reside in the arch-independent mbm_state
-structures.
+An interval for effectively measuring memory bandwidth typically needs
+to be multiple seconds long. In Google's workloads, it is not feasible
+to bound the number of jobs with different RMIDs which will run in a
+cache domain over any period of time.  Consequently, on a
+fully-committed system where all RMIDs are allocated, few groups'
+counters return non-zero values.
 
-Co-developed-by: Stephane Eranian <eranian@google.com>
-Signed-off-by: Stephane Eranian <eranian@google.com>
-Signed-off-by: Peter Newman <peternewman@google.com>
----
- arch/x86/include/asm/resctrl.h         |  2 +
- arch/x86/kernel/cpu/resctrl/internal.h | 10 ++--
- arch/x86/kernel/cpu/resctrl/monitor.c  | 78 ++++++++++++++++++++++++++
- 3 files changed, 86 insertions(+), 4 deletions(-)
+To demonstrate the underlying issue, the first patch provides a test
+case in tools/testing/selftests/resctrl/test_rmids.sh.
 
-diff --git a/arch/x86/include/asm/resctrl.h b/arch/x86/include/asm/resctrl.h
-index 255a78d9d906..e7acf118d770 100644
---- a/arch/x86/include/asm/resctrl.h
-+++ b/arch/x86/include/asm/resctrl.h
-@@ -13,6 +13,7 @@
-  * @cur_closid:	The cached Class Of Service ID
-  * @default_rmid:	The user assigned Resource Monitoring ID
-  * @default_closid:	The user assigned cached Class Of Service ID
-+ * @hw_rmid:	The permanently-assigned RMID when soft RMIDs are in use
-  *
-  * The upper 32 bits of MSR_IA32_PQR_ASSOC contain closid and the
-  * lower 10 bits rmid. The update to MSR_IA32_PQR_ASSOC always
-@@ -27,6 +28,7 @@ struct resctrl_pqr_state {
- 	u32			cur_closid;
- 	u32			default_rmid;
- 	u32			default_closid;
-+	u32			hw_rmid;
- };
- 
- DECLARE_PER_CPU(struct resctrl_pqr_state, pqr_state);
-diff --git a/arch/x86/kernel/cpu/resctrl/internal.h b/arch/x86/kernel/cpu/resctrl/internal.h
-index 02a062558c67..256eee05d447 100644
---- a/arch/x86/kernel/cpu/resctrl/internal.h
-+++ b/arch/x86/kernel/cpu/resctrl/internal.h
-@@ -298,12 +298,14 @@ struct rftype {
-  * @prev_bw:	The most recent bandwidth in MBps
-  * @delta_bw:	Difference between the current and previous bandwidth
-  * @delta_comp:	Indicates whether to compute the delta_bw
-+ * @soft_rmid_bytes: Recent bandwidth count in bytes when using soft RMIDs
-  */
- struct mbm_state {
--	u64	prev_bw_bytes;
--	u32	prev_bw;
--	u32	delta_bw;
--	bool	delta_comp;
-+	u64		prev_bw_bytes;
-+	u32		prev_bw;
-+	u32		delta_bw;
-+	bool		delta_comp;
-+	atomic64_t	soft_rmid_bytes;
- };
- 
- /**
-diff --git a/arch/x86/kernel/cpu/resctrl/monitor.c b/arch/x86/kernel/cpu/resctrl/monitor.c
-index 2de8397f91cd..3671100d3cc7 100644
---- a/arch/x86/kernel/cpu/resctrl/monitor.c
-+++ b/arch/x86/kernel/cpu/resctrl/monitor.c
-@@ -404,6 +404,84 @@ static struct mbm_state *get_mbm_state(struct rdt_domain *d, u32 rmid,
- 	}
- }
- 
-+struct mbm_soft_counter {
-+	u64	prev_bytes;
-+	bool	initialized;
-+};
-+
-+struct mbm_flush_state {
-+	struct mbm_soft_counter local;
-+	struct mbm_soft_counter total;
-+};
-+
-+DEFINE_PER_CPU(struct mbm_flush_state, flush_state);
-+
-+/*
-+ * flushes the value of the cpu_rmid to the current soft rmid
-+ */
-+static void __mbm_flush(int evtid, struct rdt_resource *r, struct rdt_domain *d)
-+{
-+	struct mbm_flush_state *state = this_cpu_ptr(&flush_state);
-+	u32 soft_rmid = this_cpu_ptr(&pqr_state)->cur_rmid;
-+	u32 hw_rmid = this_cpu_ptr(&pqr_state)->hw_rmid;
-+	struct mbm_soft_counter *counter;
-+	struct mbm_state *m;
-+	u64 val;
-+
-+	/* cache occupancy events are disabled in this mode */
-+	WARN_ON(!is_mbm_event(evtid));
-+
-+	if (evtid == QOS_L3_MBM_LOCAL_EVENT_ID) {
-+		counter = &state->local;
-+	} else {
-+		WARN_ON(evtid != QOS_L3_MBM_TOTAL_EVENT_ID);
-+		counter = &state->total;
-+	}
-+
-+	/*
-+	 * Propagate the value read from the hw_rmid assigned to the current CPU
-+	 * into the "soft" rmid associated with the current task or CPU.
-+	 */
-+	m = get_mbm_state(d, soft_rmid, evtid);
-+	if (!m)
-+		return;
-+
-+	if (resctrl_arch_rmid_read(r, d, hw_rmid, evtid, &val))
-+		return;
-+
-+	/* Count bandwidth after the first successful counter read. */
-+	if (counter->initialized) {
-+		/* Assume that mbm_update() will prevent double-overflows. */
-+		if (val != counter->prev_bytes)
-+			atomic64_add(val - counter->prev_bytes,
-+				     &m->soft_rmid_bytes);
-+	} else {
-+		counter->initialized = true;
-+	}
-+
-+	counter->prev_bytes = val;
-+}
-+
-+/*
-+ * Called from context switch code __resctrl_sched_in() when the current soft
-+ * RMID is changing or before reporting event counts to user space.
-+ */
-+void resctrl_mbm_flush_cpu(void)
-+{
-+	struct rdt_resource *r = &rdt_resources_all[RDT_RESOURCE_L3].r_resctrl;
-+	int cpu = smp_processor_id();
-+	struct rdt_domain *d;
-+
-+	d = get_domain_from_cpu(cpu, r);
-+	if (!d)
-+		return;
-+
-+	if (is_mbm_local_enabled())
-+		__mbm_flush(QOS_L3_MBM_LOCAL_EVENT_ID, r, d);
-+	if (is_mbm_total_enabled())
-+		__mbm_flush(QOS_L3_MBM_TOTAL_EVENT_ID, r, d);
-+}
-+
- static int __mon_event_count(u32 rmid, struct rmid_read *rr)
- {
- 	struct mbm_state *m;
+On an AMD EPYC 7B12 64-Core Processor with the default behavior:
+
+ # ./test_rmids.sh
+ Created 255 monitoring groups.
+ g1: mbm_total_bytes: Unavailable -> Unavailable (FAIL)
+ g2: mbm_total_bytes: Unavailable -> Unavailable (FAIL)
+ g3: mbm_total_bytes: Unavailable -> Unavailable (FAIL)
+[..]
+ g238: mbm_total_bytes: Unavailable -> Unavailable (FAIL)
+ g239: mbm_total_bytes: Unavailable -> Unavailable (FAIL)
+ g240: mbm_total_bytes: Unavailable -> Unavailable (FAIL)
+ g241: mbm_total_bytes: Unavailable -> 660497472
+ g242: mbm_total_bytes: Unavailable -> 660793344
+ g243: mbm_total_bytes: Unavailable -> 660477312
+ g244: mbm_total_bytes: Unavailable -> 660495360
+ g245: mbm_total_bytes: Unavailable -> 660775360
+ g246: mbm_total_bytes: Unavailable -> 660645504
+ g247: mbm_total_bytes: Unavailable -> 660696128
+ g248: mbm_total_bytes: Unavailable -> 660605248
+ g249: mbm_total_bytes: Unavailable -> 660681280
+ g250: mbm_total_bytes: Unavailable -> 660834240
+ g251: mbm_total_bytes: Unavailable -> 660440064
+ g252: mbm_total_bytes: Unavailable -> 660501504
+ g253: mbm_total_bytes: Unavailable -> 660590720
+ g254: mbm_total_bytes: Unavailable -> 660548352
+ g255: mbm_total_bytes: Unavailable -> 660607296
+ 255 groups, 0 returned counts in first pass, 15 in second
+ successfully measured bandwidth from 15/255 groups
+
+To compare, here is the output from an Intel(R) Xeon(R) Platinum 8173M
+CPU:
+
+ # ./test_rmids.sh
+ Created 223 monitoring groups.
+ g1: mbm_total_bytes: 0 -> 606126080
+ g2: mbm_total_bytes: 0 -> 613236736
+ g3: mbm_total_bytes: 0 -> 610254848
+[..]
+ g221: mbm_total_bytes: 0 -> 584679424
+ g222: mbm_total_bytes: 0 -> 588808192
+ g223: mbm_total_bytes: 0 -> 587317248
+ 223 groups, 223 returned counts in first pass, 223 in second
+ successfully measured bandwidth from 223/223 groups
+
+To make better use of the hardware in such a use case, this patchset
+introduces a "soft" RMID implementation, where each CPU is permanently
+assigned a "hard" RMID. On context switches which change the current
+soft RMID, the difference between each CPU's current event counts and
+most recent counts is added to the totals for the current or outgoing
+soft RMID.
+
+This technique does not work for cache occupancy counters, so this patch
+series disables cache occupancy events when soft RMIDs are enabled.
+
+This series adds the "mbm_soft_rmid" mount option to allow users to
+opt-in to the functionaltiy when they deem it helpful.
+
+When the same system from the earlier AMD example enables the
+mbm_soft_rmid mount option:
+
+ # ./test_rmids.sh
+ Created 255 monitoring groups.
+ g1: mbm_total_bytes: 0 -> 686560576
+ g2: mbm_total_bytes: 0 -> 668204416
+[..]
+ g252: mbm_total_bytes: 0 -> 672651200
+ g253: mbm_total_bytes: 0 -> 666956800
+ g254: mbm_total_bytes: 0 -> 665917056
+ g255: mbm_total_bytes: 0 -> 671049600
+ 255 groups, 255 returned counts in first pass, 255 in second
+ successfully measured bandwidth from 255/255 groups
+
+(patches are based on tip/master)
+
+[1] https://www.amd.com/system/files/TechDocs/56375_1.03_PUB.pdf
+
+Peter Newman (8):
+  selftests/resctrl: Verify all RMIDs count together
+  x86/resctrl: Add resctrl_mbm_flush_cpu() to collect CPUs' MBM events
+  x86/resctrl: Flush MBM event counts on soft RMID change
+  x86/resctrl: Call mon_event_count() directly for soft RMIDs
+  x86/resctrl: Create soft RMID version of __mon_event_count()
+  x86/resctrl: Assign HW RMIDs to CPUs for soft RMID
+  x86/resctrl: Use mbm_update() to push soft RMID counts
+  x86/resctrl: Add mount option to enable soft RMID
+
+Stephane Eranian (1):
+  x86/resctrl: Hold a spinlock in __rmid_read() on AMD
+
+ arch/x86/include/asm/resctrl.h                |  29 +++-
+ arch/x86/kernel/cpu/resctrl/core.c            |  80 ++++++++-
+ arch/x86/kernel/cpu/resctrl/ctrlmondata.c     |   9 +-
+ arch/x86/kernel/cpu/resctrl/internal.h        |  19 ++-
+ arch/x86/kernel/cpu/resctrl/monitor.c         | 158 +++++++++++++++++-
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c        |  52 ++++++
+ tools/testing/selftests/resctrl/test_rmids.sh |  93 +++++++++++
+ 7 files changed, 425 insertions(+), 15 deletions(-)
+ create mode 100755 tools/testing/selftests/resctrl/test_rmids.sh
+
+
+base-commit: dd806e2f030e57dd5bac973372aa252b6c175b73
 -- 
 2.40.0.634.g4ca3ef3211-goog
 
