@@ -2,59 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B2EFC7618E
-	for <linux-kselftest@archiver.kernel.org>; Fri, 21 Apr 2023 16:55:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 64541C77B76
+	for <linux-kselftest@archiver.kernel.org>; Fri, 21 Apr 2023 16:55:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233449AbjDUQzN (ORCPT
+        id S233443AbjDUQzP (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 21 Apr 2023 12:55:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58506 "EHLO
+        Fri, 21 Apr 2023 12:55:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233445AbjDUQyo (ORCPT
+        with ESMTP id S233437AbjDUQyo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Fri, 21 Apr 2023 12:54:44 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 400FE167DE
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Apr 2023 09:54:27 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id d9443c01a7336-1a697b64beaso15782225ad.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Apr 2023 09:54:27 -0700 (PDT)
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E7AD167CC
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 Apr 2023 09:54:26 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id 98e67ed59e1d1-247a8ef12d2so1362552a91.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 Apr 2023 09:54:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682095994; x=1684687994;
+        d=google.com; s=20221208; t=1682096005; x=1684688005;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2PAF8eecHjdHkncCHVDxnuwZD238/O/D5uX087DV6gk=;
-        b=PTkyUTn2160dQG/w0LBEubHoXT6/kolM07eAXpOkI5VQKBjVge2/G3D9DJWv4EmluF
-         jwrYT87c/pr1Xst3R4sPDfwUW1QW6N7gw0yt507TfR8+t+X9AZokv5qPyHgjsmekGrNG
-         N5lb8NDbmayYdr4sbEsTRxgCzT7JDO2aRCdXd3ULGGsFS/IzMoTjppouMIJbEHzjtzJn
-         0UQdx9F3D1PLMFaK3GeO580/u61tzYb2QXdQjUSDj2cShYPf8ASAPVv3u7/P4wOk+ciC
-         66tN/SEGEQMjy6UGRqCfjY+yHppjjUO6tyxdYKf7p4Z/hg9iu3GtO1l0LIPj0nE4z4c0
-         zDPg==
+        bh=EZkpp0Q8jjYvxCvjV0ny/+Rc/wVVpL1bL7ck4xeVhlc=;
+        b=0h1fkH+Qg9TAAOhRy5ByqB0jrA5qVCSK4v4VOevyiT2ApjSQTkdNJB5NveNHYdDJyn
+         UJHQdihO3xA3kzsZEepsUYjUUldoQQHE3IwikHmH626x/P3dqcuE74kUFvi/fYfmL8id
+         EDHpOrTTDrdls8Ay6MgcRCV+nPsBif06WnlTwtqTPlBkRDbsQd0Ihsksz1E+BPVTlwL+
+         Wr1jDKNxfs+qyRuwYH973UQwgCLkK4mXV3n/qkGEbaFtetzvIDazfRsZNp9s0jwVrFs5
+         k56stUv4Ja+Quv0wmKFN8uJmrJL9UvFWW6XEpyc/9yhzn8gHY1vEcRlztKntO6uIDVGX
+         jZXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682095994; x=1684687994;
+        d=1e100.net; s=20221208; t=1682096005; x=1684688005;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2PAF8eecHjdHkncCHVDxnuwZD238/O/D5uX087DV6gk=;
-        b=H30aPYq30V/pboG0lA4ZllqZZrSNdt0Hk0I9aq/8unRbl3Q+fM6IJDNOru7V9zz5au
-         nqcn5kXXX74k+Nzq+76V1tEG/c0MJD2xplq01wQ5ykvswHDxW5rJiuvQZSDi7Ce1d8Ur
-         OW5bILLxQm0FlIqREAoAIimDFMkBMO/7eYeiekAYRiX6syzI1sZcZGA2AcpG8T+ubrDS
-         KZFEb2vlZ1ccarYo8uEiJ7ni8gH8+D3cUojoTf1YbVjQdNKt3w/SMhPkrLbrJWqER4DV
-         On6cyrJVGE9+SMZldKX4/a0dI4WPjbpMOgFfcUl2rBPdQvAQhBxTVAK2wxMgA9ZuaExW
-         kmiA==
-X-Gm-Message-State: AAQBX9cA+zHs9RIBFe2QfX6apoeYSt+z1rxWWPqO9KVUIGdqKFifaLZN
-        3mUkBztra2t3XgTAgzoWO6YWsqXZJngB
-X-Google-Smtp-Source: AKy350ZhDTjaiDsWlopRxc48Dw1pNwwJqPHfzna6+NHQQh4Cp6jlmLNI1MOs2L3SqIF7smNjuMPM7IP//W/I
+        bh=EZkpp0Q8jjYvxCvjV0ny/+Rc/wVVpL1bL7ck4xeVhlc=;
+        b=abYJv7e2HEuo6AIC4PUXsaZjIWfupQV17AXy0fvry1hIg5iSaJRg8ts13OeP4as1DX
+         dMlErr/XFpvPL2E43AhmdQe+hKuZwKCGC+tGDBFbNHPlp9CCMhEv/NInWvO/Tvk6//e3
+         VmnEnf9zIVJwPc3LYnkGhxD+44qJYofnE+N2FefEF5V4BJyXrp77HDhjlROo00S3fbBx
+         oUMXtpY76cVOPW+S1z232oT7PqjNXN5tpYiJ49UJikyrSM64PiXMsbr+zo9d51SrRtoB
+         WOFk6+yi0cEHkGSrSGeHPOLRbhQioSx9LTBzD8c86vupDp3R0LoLWGp4qbsqULMQXeMZ
+         EiOw==
+X-Gm-Message-State: AAQBX9cQdkG3fgQKQpJMd9tyAd2TARADEPHKRcJXt3AR8139gju5cpn8
+        UU2nhF3INC8LnpxbMxQRiqcTcZpr9H0b
+X-Google-Smtp-Source: AKy350bDKAEiJjC/uv+A89c39cSNVyu8ADQH7b61iTn5O1CeNgQ8Eu2os+9yNYOIL6Af0Fk180jnNb9Y53o2
 X-Received: from vipin.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:479f])
- (user=vipinsh job=sendgmr) by 2002:a17:902:7b85:b0:1a0:4321:920e with SMTP id
- w5-20020a1709027b8500b001a04321920emr1816879pll.12.1682095994335; Fri, 21 Apr
- 2023 09:53:14 -0700 (PDT)
-Date:   Fri, 21 Apr 2023 09:52:59 -0700
+ (user=vipinsh job=sendgmr) by 2002:a17:90a:690d:b0:23f:a851:4f04 with SMTP id
+ r13-20020a17090a690d00b0023fa8514f04mr1467442pjj.3.1682096004881; Fri, 21 Apr
+ 2023 09:53:24 -0700 (PDT)
+Date:   Fri, 21 Apr 2023 09:53:05 -0700
 In-Reply-To: <20230421165305.804301-1-vipinsh@google.com>
 Mime-Version: 1.0
 References: <20230421165305.804301-1-vipinsh@google.com>
 X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
-Message-ID: <20230421165305.804301-4-vipinsh@google.com>
-Subject: [PATCH 3/9] KVM: selftests: Pass count of read and write accesses
- from guest to host
+Message-ID: <20230421165305.804301-10-vipinsh@google.com>
+Subject: [PATCH 9/9] KVM: arm64: Run clear-dirty-log under MMU read lock
 From:   Vipin Sharma <vipinsh@google.com>
 To:     maz@kernel.org, oliver.upton@linux.dev, james.morse@arm.com,
         suzuki.poulose@arm.com, yuzenghui@huawei.com,
@@ -74,75 +73,76 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Pass number of read and write accesses done in the memstress' guest code
-to userspace.
+Take MMU read lock for write protecting PTEs and use shared page table
+walker for clearing dirty logs.
 
-These counts will be one way to measure vCPU performances during
-memstress and dirty logging related tests. For example, in
-dirty_log_perf_test this can be used to measure impact of dirty and
-clear log APIs on vCPUs performances.
+Clearing dirty logs are currently performed under MMU write locks. This
+means vCPUs write protection fault, which also take MMU read lock,  will
+be blocked during this operation. This causes guest degradation and
+especially noticeable on VMs with lot of vCPUs.
 
-In current dirty_log_perf_test, each vCPU executes in lockstep to the
-current iteration in userspace, therefore, these access counts will not
-provide much useful information except for observing individual vCPUs
-read vs write accesses.
+Taking MMU read lock will allow vCPUs to execute parallelly and reduces
+the impact on vCPUs performance.
 
-However, in future commits, dirty_log_perf_test behavior will be changed
-to allow vCPUs to execute independent of userspace iterations. This will
-mimic real world workload where guest keeps on executing while VMM is
-collecting and clearing dirty logs separately. With read and write
-accesses known for each vCPU, impact of get and clear dirty log APIs can
-be quantified. Note that these access counts will not be 100% reliable
-in knowing vCPUs performances since vCPUs scheduling can impact
-the progress.
+Tested improvement on a ARM Ampere Altra host (64 CPUs, 256 GB
+memory and single NUMA node) via dirty_log_perf_test for 48 vCPU, 96
+GB memory, 8GB clear chunk size, 1 second wait between Clear-Dirty-Log
+calls and configuration:
+
+Test command:
+./dirty_log_perf_test -s anonymous_hugetlb_2mb -b 2G -v 48 -l 1 -k 8G -j -m 2
+
+Before:
+Total pages touched: 50331648 (Reads: 0, Writes: 50331648)
+
+After:
+Total pages touched: 125304832 (Reads: 0, Writes: 125304832)
 
 Signed-off-by: Vipin Sharma <vipinsh@google.com>
 ---
- tools/testing/selftests/kvm/lib/memstress.c | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+ arch/arm64/kvm/mmu.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/lib/memstress.c b/tools/testing/selftests/kvm/lib/memstress.c
-index 483ecbc53a5b..9c2e360e610f 100644
---- a/tools/testing/selftests/kvm/lib/memstress.c
-+++ b/tools/testing/selftests/kvm/lib/memstress.c
-@@ -50,6 +50,8 @@ void memstress_guest_code(uint32_t vcpu_idx)
- 	struct memstress_args *args = &memstress_args;
- 	struct memstress_vcpu_args *vcpu_args = &args->vcpu_args[vcpu_idx];
- 	struct guest_random_state rand_state;
-+	uint64_t write_access;
-+	uint64_t read_access;
- 	uint64_t gva;
- 	uint64_t pages;
- 	uint64_t addr;
-@@ -65,6 +67,8 @@ void memstress_guest_code(uint32_t vcpu_idx)
- 	GUEST_ASSERT(vcpu_args->vcpu_idx == vcpu_idx);
+diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+index e0189cdda43d..3f2117d93998 100644
+--- a/arch/arm64/kvm/mmu.c
++++ b/arch/arm64/kvm/mmu.c
+@@ -67,8 +67,12 @@ static int stage2_apply_range(struct kvm_s2_mmu *mmu, phys_addr_t addr,
+ 		if (ret)
+ 			break;
  
- 	while (true) {
-+		write_access = 0;
-+		read_access = 0;
- 		for (i = 0; i < pages; i++) {
- 			if (args->random_access)
- 				page = guest_random_u32(&rand_state) % pages;
-@@ -73,13 +77,16 @@ void memstress_guest_code(uint32_t vcpu_idx)
+-		if (resched && next != end)
+-			cond_resched_rwlock_write(&kvm->mmu_lock);
++		if (resched && next != end) {
++			if (flags & KVM_PGTABLE_WALK_SHARED)
++				cond_resched_rwlock_read(&kvm->mmu_lock);
++			else
++				cond_resched_rwlock_write(&kvm->mmu_lock);
++		}
+ 	} while (addr = next, addr != end);
  
- 			addr = gva + (page * args->guest_page_size);
+ 	return ret;
+@@ -994,7 +998,7 @@ static void kvm_mmu_write_protect_pt_masked(struct kvm *kvm,
+ 	phys_addr_t start = (base_gfn +  __ffs(mask)) << PAGE_SHIFT;
+ 	phys_addr_t end = (base_gfn + __fls(mask) + 1) << PAGE_SHIFT;
  
--			if (guest_random_u32(&rand_state) % 100 < args->write_percent)
-+			if (guest_random_u32(&rand_state) % 100 < args->write_percent) {
- 				*(uint64_t *)addr = 0x0123456789ABCDEF;
--			else
-+				write_access++;
-+			} else {
- 				READ_ONCE(*(uint64_t *)addr);
-+				read_access++;
-+			}
- 		}
- 
--		GUEST_SYNC(1);
-+		GUEST_SYNC_ARGS(1, read_access, write_access, 0, 0);
- 	}
+-	stage2_wp_range(&kvm->arch.mmu, start, end, 0);
++	stage2_wp_range(&kvm->arch.mmu, start, end, KVM_PGTABLE_WALK_SHARED);
  }
  
+ /*
+@@ -1008,9 +1012,9 @@ void kvm_arch_mmu_enable_log_dirty_pt_masked(struct kvm *kvm,
+ 		struct kvm_memory_slot *slot,
+ 		gfn_t gfn_offset, unsigned long mask)
+ {
+-	write_lock(&kvm->mmu_lock);
++	read_lock(&kvm->mmu_lock);
+ 	kvm_mmu_write_protect_pt_masked(kvm, slot, gfn_offset, mask);
+-	write_unlock(&kvm->mmu_lock);
++	read_unlock(&kvm->mmu_lock);
+ }
+ 
+ static void kvm_send_hwpoison_signal(unsigned long address, short lsb)
 -- 
 2.40.0.634.g4ca3ef3211-goog
 
