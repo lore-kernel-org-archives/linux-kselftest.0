@@ -2,99 +2,105 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C012C77B61
-	for <linux-kselftest@archiver.kernel.org>; Thu, 27 Apr 2023 19:57:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50B17C77B61
+	for <linux-kselftest@archiver.kernel.org>; Thu, 27 Apr 2023 20:05:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245540AbjD0T5B (ORCPT
+        id S231563AbjD0UF1 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 27 Apr 2023 15:57:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41730 "EHLO
+        Thu, 27 Apr 2023 16:05:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbjD0T5A (ORCPT
+        with ESMTP id S1344077AbjD0UF0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Apr 2023 15:57:00 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 391DF1FD0;
-        Thu, 27 Apr 2023 12:57:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682625420; x=1714161420;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=haUZlRZVpKJjs4ThNpRF4P6XcJnbRFVkaRfj4rKvGQM=;
-  b=Tt8qcUcYkXFpLJ4j3rDUq1mJ++3CQ4IHBrXyhcIqKzLLFcmYePmf4fOu
-   FXKqk5dDER9tk4WZjRi2x6ffIY7m/K2APq60GhSC/DFAOX6Wy7YNjW7Dl
-   YaqF2fcP4YJJWE7PX3pUqfkxEv1sR3KvIj02g1ssg9svgekTbIGPAbuOV
-   6Q0PbiwJLSZ4B9YHs0WRmNCI4HyAGB3NB3QKrgeCOR7QLJU4fb6+mdwPS
-   8x5Xp/+Q/dtSPdK3SHUlaZ5364TqFfLQOWbcNGoYlyazEOiWe31woRvZh
-   owrS23sNdh2qe949qrjLuwS42QNbJ+yKjdX5AJmq4DQj5MJsOI6txZVj4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="336556487"
-X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
-   d="scan'208";a="336556487"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 12:56:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="868857114"
-X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
-   d="scan'208";a="868857114"
-Received: from jonnaman-mobl2.amr.corp.intel.com (HELO [10.212.24.30]) ([10.212.24.30])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 12:56:58 -0700
-Message-ID: <7d3f1877-8762-34f4-f1bb-c5c2924c2b77@intel.com>
-Date:   Thu, 27 Apr 2023 12:56:52 -0700
+        Thu, 27 Apr 2023 16:05:26 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF0D2359D;
+        Thu, 27 Apr 2023 13:05:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=gUdQqSB70eOPUq7yX+9RzGvH6V4bI9S8SRAVMdNM5n8=; b=iCQsTqXFNo3L5y+k1Rf4a2wpoB
+        3NlGxhZ4Tycl26wePNMqqDSDFJVwveF2FOpR4TFHUFz7k2RrHwk3FKc7TzZ8WO7dftacwgdJ54rKG
+        zacclXGTCllJO2j7pMHcGECyli2mL5Am3SITJbVVVBhm45wgOBXWEttRWq6d8dTc/USxyPEGgf9Fa
+        xrKvjWX0qFrLXyXWLmcQu7pAoFpk4IiQaMi6J7n8VZRMbFtKCJm6GjkoPfGYnLcwJ0SMEzvvl0Myp
+        40nLk1BeQnX983JSrAnV6naizObaSmEG9ZJQN0Cly/pMYtK7TH1EVTtBK0HRq3YSc4FHzh5Vme4bE
+        4nqa357w==;
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1ps7rB-000I5U-4Q; Thu, 27 Apr 2023 22:04:45 +0200
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1ps7rA-000DyF-HV; Thu, 27 Apr 2023 22:04:44 +0200
+Subject: Re: [PATCH bpf] selftests/bpf: fix pkg-config call building sign-file
+To:     Jeremy Sowden <jeremy@azazel.net>,
+        Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+References: <20230426215032.415792-1-jeremy@azazel.net>
+ <e1bd99a4ea209277d657f7fb7ccdc26451113fc9.camel@huaweicloud.com>
+ <20230427195814.GE415348@azazel.net>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <e0ce3c40-bc47-02a3-5e89-e74916a58630@iogearbox.net>
+Date:   Thu, 27 Apr 2023 22:04:43 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 3/3] selftests/tdx: Test GetQuote TDX attestation
- feature
+In-Reply-To: <20230427195814.GE415348@azazel.net>
+Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Language: en-US
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Dionna Amalie Glaze <dionnaglaze@google.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Chong Cai <chongc@google.com>, Qinkun Bao <qinkun@apache.org>,
-        Guorui Yu <GuoRui.Yu@linux.alibaba.com>,
-        Du Fan <fan.du@intel.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
-References: <20230413034108.1902712-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20230413034108.1902712-4-sathyanarayanan.kuppuswamy@linux.intel.com>
- <CAAH4kHb_PAhR5jLFi2KsGku9ALNtjtxb-JO-k1ULK-Mj5mi=pw@mail.gmail.com>
- <a418c2d3-e333-fe3d-63a5-c6e555f81fc7@linux.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <a418c2d3-e333-fe3d-63a5-c6e555f81fc7@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.8/26889/Thu Apr 27 09:25:48 2023)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 4/27/23 12:10, Sathyanarayanan Kuppuswamy wrote:
->> Shouldn't req be zeroed before populating reportdata? We wouldn't want
->> uninitialized memory to leave the guest. I know this is just a test,
-> There are only two members in struct tdx_report_req (reportdata and tdreport).
-> The reportdata has already been updated here, and the tdreport will be updated
-> by the kernel on output. Since TDX_CMD_GET_REPORT0 IOCTL handler uses an
-> intermediate kernel buffer to the TDREPORT and copies the generated report back
-> to this user buffer, this uninitialized tdreport data never leaves the guest.
+On 4/27/23 9:58 PM, Jeremy Sowden wrote:
+> On 2023-04-27, at 08:52:27 +0200, Roberto Sassu wrote:
+>> On Wed, 2023-04-26 at 22:50 +0100, Jeremy Sowden wrote:
+>>> When building sign-file, the call to get the CFLAGS for libcrypto is
+>>> missing white-space between `pkg-config` and `--cflags`:
+>>>
+>>>    $(shell $(HOSTPKG_CONFIG)--cflags libcrypto 2> /dev/null)
+>>>
+>>> Removing the redirection of stderr, we see:
+>>>
+>>>    $ make -C tools/testing/selftests/bpf sign-file
+>>>    make: Entering directory '[...]/tools/testing/selftests/bpf'
+>>>    make: pkg-config--cflags: No such file or directory
+>>>      SIGN-FILE sign-file
+>>>    make: Leaving directory '[...]/tools/testing/selftests/bpf'
+>>>
+>>> Add the missing space.
+>>>
+>>> Fixes: fc97590668ae ("selftests/bpf: Add test for bpf_verify_pkcs7_signature() kfunc")
+>>> Signed-off-by: Jeremy Sowden <jeremy@azazel.net>
+>>
+>> Thanks.
+>>
+>> Reviewed-by: Roberto Sassu <roberto.sassu@huawei.com>
+>>
+>> Roberto
+> 
+> Thanks.  I was having e-mail problems yesterday when I sent the original
+> message with the patch in it, and it didn't reach some of the
+> recipients.  I'll send it again with your `Reviewed-by:` attached.
 
-Is that really even relevant?
+No need, already took it, thanks. Looks like patchbot did not reply. :/
 
-I mean, we could implement the whole thing with get_user_pages() and
-then just pass the physical address of the reportdata and tdreport down
-to the TDX module.
-
-It doesn't matter either way.  The data is going from guest userspace to
-the guest kernel to the TDX module, all of which are trusted.
-
-It's a selftest.  I'd just leave it alone.
-
-
+https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git/commit/?id=415d7a49cd796a11cfbeaa360b13721bba5117bb
