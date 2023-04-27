@@ -2,146 +2,111 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E88BC77B73
-	for <linux-kselftest@archiver.kernel.org>; Thu, 27 Apr 2023 20:18:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 361BBC77B73
+	for <linux-kselftest@archiver.kernel.org>; Thu, 27 Apr 2023 20:38:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344171AbjD0USL (ORCPT
+        id S1344148AbjD0Ui4 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 27 Apr 2023 16:18:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52652 "EHLO
+        Thu, 27 Apr 2023 16:38:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344045AbjD0USK (ORCPT
+        with ESMTP id S245168AbjD0Uiz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Apr 2023 16:18:10 -0400
-X-Greylist: delayed 1121 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 27 Apr 2023 13:18:09 PDT
-Received: from ulthar.dreamlands.azazel.net (wan.azazel.net [81.187.77.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E13B3ABC;
-        Thu, 27 Apr 2023 13:18:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=azazel.net;
-        s=20220717; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=vVMK0DmoTVin8v+RKwMB1x+zt92VjiVf5R1eGxA+9Ks=; b=nH4/jvP+w5LbS4HpcOH1UgI3is
-        /iytLTAfnnvZ/T5RRDqRq4usCneIywBasHitLIVdl6kRp4o3KEhIWUUX2rGkPrBkFLNhYpKvKuTlr
-        56d7zW7RRQl4CKxLOY9fptKbCbgZuFr9hKJbNChLIzhummoEBhFS0b/4yO+ZCE9aBggtzghKEUFpt
-        cESJEjjsUroeFS1XjPgydfgFoOuHF7Td485RW2bt6P1Hsa6+GGlQNht1bB0GAaLEEgRzKU1jLI5JM
-        PE605vx6Z7S8aB6koS6eDY2OcahwIPdkW4gMmb+6+yX9A0emWv264cVcv0OSQ30lmADM0Af9jfKKk
-        ObL+NzsA==;
-Received: from azazel by ulthar.dreamlands.azazel.net with local (Exim 4.96)
-        (envelope-from <azazel@azazel.net>)
-        id 1ps7ks-0021kV-29;
-        Thu, 27 Apr 2023 20:58:14 +0100
-Date:   Thu, 27 Apr 2023 20:58:14 +0100
-From:   Jeremy Sowden <jeremy@azazel.net>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf] selftests/bpf: fix pkg-config call building sign-file
-Message-ID: <20230427195814.GE415348@azazel.net>
-References: <20230426215032.415792-1-jeremy@azazel.net>
- <e1bd99a4ea209277d657f7fb7ccdc26451113fc9.camel@huaweicloud.com>
+        Thu, 27 Apr 2023 16:38:55 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08EA33C15;
+        Thu, 27 Apr 2023 13:38:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=mb+mw9RoqPzSHwk13zdaZsc81X0xQJcY8tYM6v4FHUI=; b=IJYieqMbLLhnFwjYIv3DzoJbc6
+        w/TidPHt60tuVQEEqr2cd6v1r0PgUuRcEGqsd5mmjkhtUxKBI+bRystWAwkyNBgHUWnF/eScr9Y1D
+        NUFJjXWNu0P+iFi3KSriG6s92Hs7HbV+W6GKOKq89rnxvBCa1RK18Wp/YKF6orgZz+N7SRi5Bztl3
+        JdTCK7zs1vA00180MS5iE3vhv4mAFhqt5zHIgBaCaKf96yuXanhbB6jkHLhpqZtboKduPUu8sHk8R
+        P1OlEVE9sL9+XsUtmh4QkdM4ghZlhzBJAbQ/3POrDxAABHgDZ9AHYPISto+BDensactLlt7QlGYcF
+        acSlnwJQ==;
+Received: from sslproxy05.your-server.de ([78.46.172.2])
+        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1ps8OB-00019O-KX; Thu, 27 Apr 2023 22:38:51 +0200
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1ps8OB-000VKx-9i; Thu, 27 Apr 2023 22:38:51 +0200
+Subject: Re: [PATCH v1] selftests/bpf: Do not use sign-file as testcase
+To:     Stanislav Fomichev <sdf@google.com>,
+        Alexey Gladkov <legion@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>
+References: <88e3ab23029d726a2703adcf6af8356f7a2d3483.1682607419.git.legion@kernel.org>
+ <ZEq+u0CWs8eO2ED/@google.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <66b8d805-06db-a0ca-9a69-b715d03d4f5e@iogearbox.net>
+Date:   Thu, 27 Apr 2023 22:38:50 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mRi/Sh4c9dkl2g8K"
-Content-Disposition: inline
-In-Reply-To: <e1bd99a4ea209277d657f7fb7ccdc26451113fc9.camel@huaweicloud.com>
-X-SA-Exim-Connect-IP: <locally generated>
-X-SA-Exim-Mail-From: azazel@azazel.net
-X-SA-Exim-Scanned: No (on ulthar.dreamlands.azazel.net); SAEximRunCond expanded to false
+In-Reply-To: <ZEq+u0CWs8eO2ED/@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.8/26889/Thu Apr 27 09:25:48 2023)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On 4/27/23 8:28 PM, Stanislav Fomichev wrote:
+> On 04/27, Alexey Gladkov wrote:
+>> The sign-file utility (from scripts/) is used in prog_tests/verify_pkcs7_sig.c,
+>> but the utility should not be called as a test. Executing this utility
+>> produces the following error:
+>>
+>> selftests: /linux/tools/testing/selftests/bpf: urandom_read
+>> ok 16 selftests: /linux/tools/testing/selftests/bpf: urandom_read
+>>
+>> selftests: /linux/tools/testing/selftests/bpf: sign-file
+>> not ok 17 selftests: /linux/tools/testing/selftests/bpf: sign-file # exit=2
+>>
+>> Fixes: fc97590668ae ("selftests/bpf: Add test for bpf_verify_pkcs7_signature() kfunc")
+>> Signed-off-by: Alexey Gladkov <legion@kernel.org>
+> 
+> Acked-by: Stanislav Fomichev <sdf@google.com>
+> 
+>>   tools/testing/selftests/bpf/Makefile | 3 +--
+>>   1 file changed, 1 insertion(+), 2 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+>> index b677dcd0b77a..fd214d1526d4 100644
+>> --- a/tools/testing/selftests/bpf/Makefile
+>> +++ b/tools/testing/selftests/bpf/Makefile
+>> @@ -88,8 +88,7 @@ TEST_GEN_PROGS_EXTENDED = test_sock_addr test_skb_cgroup_id_user \
+>>   	xskxceiver xdp_redirect_multi xdp_synproxy veristat xdp_hw_metadata \
+>>   	xdp_features
+>>   
+>> -TEST_CUSTOM_PROGS = $(OUTPUT)/urandom_read $(OUTPUT)/sign-file
+>> -TEST_GEN_FILES += liburandom_read.so
+>> +TEST_GEN_FILES += liburandom_read.so urandom_read sign-file
 
---mRi/Sh4c9dkl2g8K
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Given you move over both of them, the commit msg should be adapted accordingly
+since it mainly talks about sign-file, less so about urandom_read.
 
-On 2023-04-27, at 08:52:27 +0200, Roberto Sassu wrote:
-> On Wed, 2023-04-26 at 22:50 +0100, Jeremy Sowden wrote:
-> > When building sign-file, the call to get the CFLAGS for libcrypto is
-> > missing white-space between `pkg-config` and `--cflags`:
-> >=20
-> >   $(shell $(HOSTPKG_CONFIG)--cflags libcrypto 2> /dev/null)
-> >=20
-> > Removing the redirection of stderr, we see:
-> >=20
-> >   $ make -C tools/testing/selftests/bpf sign-file
-> >   make: Entering directory '[...]/tools/testing/selftests/bpf'
-> >   make: pkg-config--cflags: No such file or directory
-> >     SIGN-FILE sign-file
-> >   make: Leaving directory '[...]/tools/testing/selftests/bpf'
-> >=20
-> > Add the missing space.
-> >=20
-> > Fixes: fc97590668ae ("selftests/bpf: Add test for bpf_verify_pkcs7_sign=
-ature() kfunc")
-> > Signed-off-by: Jeremy Sowden <jeremy@azazel.net>
->=20
-> Thanks.
->=20
-> Reviewed-by: Roberto Sassu <roberto.sassu@huawei.com>
->
-> Roberto
+Also now that you remove the TEST_CUSTOM_PROGS, we should probably also remove
+the other two instances:
 
-Thanks.  I was having e-mail problems yesterday when I sent the original
-message with the patch in it, and it didn't reach some of the
-recipients.  I'll send it again with your `Reviewed-by:` attached.
+tools/testing/selftests/bpf/Makefile:91:TEST_CUSTOM_PROGS = $(OUTPUT)/urandom_read $(OUTPUT)/sign-file
+tools/testing/selftests/bpf/Makefile:156:        $(TEST_CUSTOM_PROGS)): %: $(OUTPUT)/% ;
+tools/testing/selftests/bpf/Makefile:674:EXTRA_CLEAN := $(TEST_CUSTOM_PROGS) $(SCRATCH_DIR) $(HOST_SCRATCH_DIR) \
 
-J.
+>>   # Emit succinct information message describing current building step
+>>   # $1 - generic step name (e.g., CC, LINK, etc);
+>> -- 
+>> 2.33.7
+>>
 
-> > ---
-> >  tools/testing/selftests/bpf/Makefile | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >=20
-> > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selft=
-ests/bpf/Makefile
-> > index b677dcd0b77a..ad01c9e1ff12 100644
-> > --- a/tools/testing/selftests/bpf/Makefile
-> > +++ b/tools/testing/selftests/bpf/Makefile
-> > @@ -197,7 +197,7 @@ $(OUTPUT)/urandom_read: urandom_read.c urandom_read=
-_aux.c $(OUTPUT)/liburandom_r
-> > =20
-> >  $(OUTPUT)/sign-file: ../../../../scripts/sign-file.c
-> >  	$(call msg,SIGN-FILE,,$@)
-> > -	$(Q)$(CC) $(shell $(HOSTPKG_CONFIG)--cflags libcrypto 2> /dev/null) \
-> > +	$(Q)$(CC) $(shell $(HOSTPKG_CONFIG) --cflags libcrypto 2> /dev/null) \
-> >  		  $< -o $@ \
-> >  		  $(shell $(HOSTPKG_CONFIG) --libs libcrypto 2> /dev/null || echo -l=
-crypto)
-> > =20
-
---mRi/Sh4c9dkl2g8K
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEbB20U2PvQDe9VtUXKYasCr3xBA0FAmRK084ACgkQKYasCr3x
-BA3WMw//dtfaKXgeSzYYSiB5uUJ91AnWV5EhEUZhFmgrxl9zATqbS+UimZ2X3JiV
-uuHbQQixkxwB8FNUYmEVGQpIjuJonWnTFhorfWvVTzr4hDNTsycE/FyB9ROYUWBJ
-0+T3aMcm8tBS8hqasPncs33TgEolPlO902kyUaB5NCfZOKNWW88wUOA6EiAILN5L
-nEmOK8BwIt68gO55fAWm/zOObyG17YdYdmI6EBCdxW8UaVUCbO9K4DJDoPsy2e8u
-QauB6vpiGLJAFQEnGaKeecEnBRYJFEGMop/bLEnuThRR9Cc6W8cW2iTo2ltF4ljy
-CwwF6yO11Ua6cGF+0s/gvFnTfHwtOfuIRmQcSQEoaZyTWrE8M1bmK55WCxiaQb4B
-Cpeylu3XnCCRZzHUoxQutc9+4lt87EdgQLRHVv1SbGVMYgJiDdhNMu/ZxXZp4eDN
-VRFklTPVumtH1IUYGwjIfpIl8JCZAE+yOeLmMjE7PgrD3Ay+UB3FYE6irW8+Q/rp
-GG1AdIMlqkq9Tuj6hv+9ymtfBgZBaaS6aCoFqJaEHKVmJwHBRxOA7DpeVh+zkLBd
-Oh+fxnmvxm54Np/EjvyY/D2BvuIu2ZkhHACwozvIwydc51+9f86ksR3zKUWyHSlZ
-UKoV4IlblMs98QvNiw3I91fBPwLCUsMzjI7UyDUMgsVpzCrQTZE=
-=sPuM
------END PGP SIGNATURE-----
-
---mRi/Sh4c9dkl2g8K--
