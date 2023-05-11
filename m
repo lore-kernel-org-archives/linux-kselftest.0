@@ -2,122 +2,152 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8198C7EE22
-	for <linux-kselftest@archiver.kernel.org>; Thu, 11 May 2023 16:40:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7089C7EE24
+	for <linux-kselftest@archiver.kernel.org>; Thu, 11 May 2023 18:24:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238747AbjEKQkM (ORCPT
+        id S238741AbjEKSYi (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 11 May 2023 12:40:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54010 "EHLO
+        Thu, 11 May 2023 14:24:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237896AbjEKQkK (ORCPT
+        with ESMTP id S238738AbjEKSYh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 11 May 2023 12:40:10 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D3015256
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 May 2023 09:40:08 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f475366522so15960535e9.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 May 2023 09:40:08 -0700 (PDT)
+        Thu, 11 May 2023 14:24:37 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 396EF4C38
+        for <linux-kselftest@vger.kernel.org>; Thu, 11 May 2023 11:24:36 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-ba22ced2f40so12588172276.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 11 May 2023 11:24:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1683823207; x=1686415207;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rWPj+0MEcU+bJjFDLtiKhJORofVGXZE+QDk7KaJWG9E=;
-        b=UuPFreN/sIyZvma3z9Xm6KxNZFcbh1TpDfsITGLUWBCWA6T4xHCFr5HuwlelWhANsc
-         GODLbDYWSkjxpw1FlGH7zBZhqQl+PBnoza0HREbOpZD4TA496u22UD6bDXXczi7KYVpl
-         vUHL3f5x4AXj97duCDa1dgEYjprlWsVyV+SBIS6xrVMPSwQcsV6kK8n5uf0FR6XnIuc4
-         bHtcnz/0qP1iI3PLzgpdryNpdPYlDZbySxQcLGTnHTgtAXoWs5v1mwmzllg9a6m64GLt
-         EJC3fIG+NQH/j+vTbDoa5wKLgeATWhDm4OwK78ppk49kTcq7mfR/nc2WNPwoATtQv89M
-         LAmQ==
+        d=google.com; s=20221208; t=1683829475; x=1686421475;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=LjUrEJJ1UhaYRGAtGgSCY4PNxG4jgAwHbuTYYPklZWY=;
+        b=55rn+NwTS9qkN6o3EHQH9tg5nvgfFAoVfIi3Ps/Vx2UwN/K9+YFrkS/lHydkVA1cxR
+         iowaGUww07beE3ntNfoSK93Fb1ceSg9jZe+0OTW9gkOExIsspD5MajhZSLmPMFNhTmMt
+         gYuZl1WAugwIYddYiwJQaO7nq+GtN5jEQblGC1v623/h5p5sdc5Fgzt9DS2LFIrWogJ1
+         uW449MkphLCiIDXFZtwUGTOaENHChuPdfQqfcJ0QFEkS+4bIncJToGHvvADNkuPgQdkG
+         R3TQXk6+FSc/Ziwfvc5dNOcdLIdSb14/ToPdMXENIjkpjZO8fNcFVpbUtLbpkbE1w/zq
+         6kkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683823207; x=1686415207;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rWPj+0MEcU+bJjFDLtiKhJORofVGXZE+QDk7KaJWG9E=;
-        b=UIf6OtL6AUX7JrjFP5V++8vDJmGKCio6aGHRC8vXS6s6pCSO3LrVjCNfzmcBnbhZsg
-         DkRNDq3HGQk8G1igV/R38V7MT4hBuxx/3SW8m/cQHFVKLDuFh01DujyBsQ4N6APVcS3r
-         t8FnzHYRUumwL4ZfSxb3/7g/IgOhpetUOse5NEbJIvA2AWB+tzIrgE7SeY4boInOhASf
-         ahBZrvoDZmE0ABRFssvv6IWTJedjreVYvj0PQQz06VLhEZE+r1g7LJMpVebgsrTe+vKt
-         BNRkltNzbw/K7pSCT1J5Tcv7V54a4O/W0ibu34G6kZCkNHiEKveajxeCoUZt1x6vCJrt
-         WoZQ==
-X-Gm-Message-State: AC+VfDx1jpAkPXDKsYRiliI2WlJQCdm3UrG09yJF3br4/0E/tfnGsFty
-        tK2lCGD4UdwHekurETrqO0dzEQ==
-X-Google-Smtp-Source: ACHHUZ5lIBereKcBnZpJKQGjLGzbXt7Ys+TI95CPzIw7E6x8cqi52/zghFhzklOdZznlq63vKEcQWg==
-X-Received: by 2002:a1c:f20a:0:b0:3f1:819d:d050 with SMTP id s10-20020a1cf20a000000b003f1819dd050mr15055961wmc.37.1683823206802;
-        Thu, 11 May 2023 09:40:06 -0700 (PDT)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id 12-20020a05600c020c00b003f4b6bcbd8bsm4941659wmi.31.2023.05.11.09.40.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 09:40:06 -0700 (PDT)
-Date:   Thu, 11 May 2023 18:40:05 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Haibo Xu <haibo1.xu@intel.com>
-Cc:     xiaobo55x@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 1/2] riscv: kvm: Add KVM_GET_REG_LIST API support
-Message-ID: <20230511-d0a207eebb30fc88de875e4f@orel>
-References: <cover.1683791148.git.haibo1.xu@intel.com>
- <921fc2e1a91887170e277acb1b52df57480a5736.1683791148.git.haibo1.xu@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <921fc2e1a91887170e277acb1b52df57480a5736.1683791148.git.haibo1.xu@intel.com>
+        d=1e100.net; s=20221208; t=1683829475; x=1686421475;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LjUrEJJ1UhaYRGAtGgSCY4PNxG4jgAwHbuTYYPklZWY=;
+        b=iHX8Bz9ubrUDb4L3i1zGKrPwPU/mEdSVfkAzdq3xI7G+OuedhzaDbg35ioQtLNR+a7
+         DRzSjdtm9LP7o2pCZfBLRHmWhHlNG5705/H4swRZH/Ybpoe8n/R9x7x4PFWwuxkOWfN7
+         S/F4n89EFK/iSDH+PX3XQdojFU0HHvQzwO1aO34XMDqkjZoQKoXofNEb0sCkF+pwFyBL
+         hgMfdiaFfJG+k9d2S5eY6WNEtb8P9wqmpyDUdYotSgYQms29ZOE9S/7s/MC1jQyQ3MQA
+         l3ZcjF3weIDAp5Yq/VhyJiUpGfo48ydeDZoe07Qb88tYZURgp+nSTGQZ9Ili7WbFrRCo
+         urug==
+X-Gm-Message-State: AC+VfDyf+//Zvduac30BE8GF0+pfQ4HBohXtgdRwWXFkx8/VPg8Im8Qg
+        lnoSVcRLA1RsdQITMzQ4PIRkT7DY99jp17UZHAfM
+X-Google-Smtp-Source: ACHHUZ5tH1DV1GALQ1Ob1t3RTbPs1BmNd7Keg/peKTDa9epscPLL3nUgdVKOqLkDNSlWMLhG0C8f2l/D/e6LqknAyPsd
+X-Received: from axel.svl.corp.google.com ([2620:15c:2d4:203:1119:8675:ddb3:1e7a])
+ (user=axelrasmussen job=sendgmr) by 2002:a05:6902:154f:b0:b78:8bd8:6e77 with
+ SMTP id r15-20020a056902154f00b00b788bd86e77mr14316791ybu.8.1683829475459;
+ Thu, 11 May 2023 11:24:35 -0700 (PDT)
+Date:   Thu, 11 May 2023 11:24:25 -0700
+In-Reply-To: <20230511182426.1898675-1-axelrasmussen@google.com>
+Mime-Version: 1.0
+References: <20230511182426.1898675-1-axelrasmussen@google.com>
+X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
+Message-ID: <20230511182426.1898675-2-axelrasmussen@google.com>
+Subject: [PATCH 2/3] selftests/mm: refactor uffd_poll_thread to allow custom
+ fault handlers
+From:   Axel Rasmussen <axelrasmussen@google.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Hongchen Zhang <zhanghongchen@loongson.cn>,
+        Huang Ying <ying.huang@intel.com>,
+        James Houghton <jthoughton@google.com>,
+        "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        "Mike Rapoport (IBM)" <rppt@kernel.org>,
+        Nadav Amit <namit@vmware.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        ZhangPeng <zhangpeng362@huawei.com>
+Cc:     Axel Rasmussen <axelrasmussen@google.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, May 11, 2023 at 05:22:48PM +0800, Haibo Xu wrote:
-> KVM_GET_REG_LIST API will return all registers that are available to
-> KVM_GET/SET_ONE_REG APIs. It's very useful to identify some platform
-> regression issue during VM migration.
-> 
-> Since this API was already supported on arm64, it'd be straightforward
-> to enable it on riscv with similar code structure.
-> 
-> Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
-> ---
->  Documentation/virt/kvm/api.rst |   2 +-
->  arch/riscv/kvm/vcpu.c          | 346 +++++++++++++++++++++++++++++++++
->  2 files changed, 347 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> index add067793b90..280e89abd004 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -3499,7 +3499,7 @@ VCPU matching underlying host.
->  ---------------------
->  
->  :Capability: basic
-> -:Architectures: arm64, mips
-> +:Architectures: arm64, mips, riscv
->  :Type: vcpu ioctl
->  :Parameters: struct kvm_reg_list (in/out)
->  :Returns: 0 on success; -1 on error
-> diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
-> index 8bd9f2a8a0b9..fb8834e4fa15 100644
-> --- a/arch/riscv/kvm/vcpu.c
-> +++ b/arch/riscv/kvm/vcpu.c
-> @@ -657,6 +657,334 @@ static int kvm_riscv_vcpu_set_reg_isa_ext(struct kvm_vcpu *vcpu,
->  	return 0;
->  }
->  
-> +static inline unsigned long num_config_regs(void)
-> +{
-> +	return sizeof(struct kvm_riscv_config) / sizeof(unsigned long);
+Previously, we had "one fault handler to rule them all", which used
+several branches to deal with all of the scenarios required by all of
+the various tests.
 
-We can't assume all config registers are present. For example,
-zicbom and zicboz block size registers are only present when their
-respective extensions are available.
+In upcoming patches, I plan to add a new test, which has its own
+slightly different fault handling logic. Instead of continuing to add
+cruft to the existing fault handler, let's allow tests to define custom
+ones, separate from other tests.
 
-Thanks,
-drew
+Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+---
+ tools/testing/selftests/mm/uffd-common.c | 5 ++++-
+ tools/testing/selftests/mm/uffd-common.h | 3 +++
+ tools/testing/selftests/mm/uffd-stress.c | 6 ++----
+ 3 files changed, 9 insertions(+), 5 deletions(-)
+
+diff --git a/tools/testing/selftests/mm/uffd-common.c b/tools/testing/selftests/mm/uffd-common.c
+index 61c6250adf93..c9756dbffe7d 100644
+--- a/tools/testing/selftests/mm/uffd-common.c
++++ b/tools/testing/selftests/mm/uffd-common.c
+@@ -499,6 +499,9 @@ void *uffd_poll_thread(void *arg)
+ 	int ret;
+ 	char tmp_chr;
+ 
++	if (!args->handle_fault)
++		args->handle_fault = uffd_handle_page_fault;
++
+ 	pollfd[0].fd = uffd;
+ 	pollfd[0].events = POLLIN;
+ 	pollfd[1].fd = pipefd[cpu*2];
+@@ -527,7 +530,7 @@ void *uffd_poll_thread(void *arg)
+ 			err("unexpected msg event %u\n", msg.event);
+ 			break;
+ 		case UFFD_EVENT_PAGEFAULT:
+-			uffd_handle_page_fault(&msg, args);
++			args->handle_fault(&msg, args);
+ 			break;
+ 		case UFFD_EVENT_FORK:
+ 			close(uffd);
+diff --git a/tools/testing/selftests/mm/uffd-common.h b/tools/testing/selftests/mm/uffd-common.h
+index 6068f2346b86..b28d88b9937e 100644
+--- a/tools/testing/selftests/mm/uffd-common.h
++++ b/tools/testing/selftests/mm/uffd-common.h
+@@ -77,6 +77,9 @@ struct uffd_args {
+ 	unsigned long missing_faults;
+ 	unsigned long wp_faults;
+ 	unsigned long minor_faults;
++
++	/* A custom fault handler; defaults to uffd_handle_page_fault. */
++	void (*handle_fault)(struct uffd_msg *msg, struct uffd_args *args);
+ };
+ 
+ struct uffd_test_ops {
+diff --git a/tools/testing/selftests/mm/uffd-stress.c b/tools/testing/selftests/mm/uffd-stress.c
+index f1ad9eef1c3a..47e1464935a8 100644
+--- a/tools/testing/selftests/mm/uffd-stress.c
++++ b/tools/testing/selftests/mm/uffd-stress.c
+@@ -199,10 +199,8 @@ static int stress(struct uffd_args *args)
+ 				   locking_thread, (void *)cpu))
+ 			return 1;
+ 		if (bounces & BOUNCE_POLL) {
+-			if (pthread_create(&uffd_threads[cpu], &attr,
+-					   uffd_poll_thread,
+-					   (void *)&args[cpu]))
+-				return 1;
++			if (pthread_create(&uffd_threads[cpu], &attr, uffd_poll_thread, &args[cpu]))
++				err("uffd_poll_thread create");
+ 		} else {
+ 			if (pthread_create(&uffd_threads[cpu], &attr,
+ 					   uffd_read_thread,
+-- 
+2.40.1.606.ga4b1b128d6-goog
+
