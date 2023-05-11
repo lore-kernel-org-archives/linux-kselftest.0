@@ -2,56 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A250C7EE2A
-	for <linux-kselftest@archiver.kernel.org>; Thu, 11 May 2023 18:24:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C091AC7EE22
+	for <linux-kselftest@archiver.kernel.org>; Thu, 11 May 2023 18:24:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238875AbjEKSYj (ORCPT
+        id S238949AbjEKSY6 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 11 May 2023 14:24:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47598 "EHLO
+        Thu, 11 May 2023 14:24:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238811AbjEKSYh (ORCPT
+        with ESMTP id S238914AbjEKSYj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 11 May 2023 14:24:37 -0400
+        Thu, 11 May 2023 14:24:39 -0400
 Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62BDB40ED
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 May 2023 11:24:34 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-ba6f530c9c7so186515276.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 May 2023 11:24:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC81D1FD7
+        for <linux-kselftest@vger.kernel.org>; Thu, 11 May 2023 11:24:37 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-b9a7e65b34aso16106012276.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 11 May 2023 11:24:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683829473; x=1686421473;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=pi6QoZ5SCLGgP2sxC+MkaEgbY1VXhaAz9TEP3dwrDPs=;
-        b=zpyNZKJdhGrBM4FCCCFdLJNUeHu7VB5x1zBza86yuRYT//8gc05k3M+A1XAjXeHYQU
-         XsEPOjhIWX936abY0RAnUz756Co2yEtSnUBul6v6sCxjIPkPJgNCvPmNFhIN62HuVOE1
-         irkrkZ4ocjIKKQeR0IfXiH2yEHFBjv0I6mZrVd3b7aEQFXXsYHEuLzZoJ1h6qn/7NkBG
-         Kjw+bEIhpmgecGP8AQgNQNhH64/X0SBEYMkbt0iVzYsNyZ87+y4B+sEecTBCV4ftXZHx
-         CwAYGbE8i4Tg39vPlkbL8N9Ogy15Z6Fr4rHTurnmFTOuV0J1qAkQm721UxKaMxjwzdwc
-         hf5Q==
+        d=google.com; s=20221208; t=1683829477; x=1686421477;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=pXR2gVK9OA+wwjaEDZ+OSGVT3sLd4z3OrzMBakd4aKc=;
+        b=uljCWBeUfmKO+5Of2CDGdnripKh0c8Rzx0Uw+3mUJQMB0vkRyYLVzF+n17pnlhk/Gx
+         5bJy3V1jOgdbwhD+IzTsmSPyo+npOvf5g9Bg01qvgjSMD6eTNJAt18pXpgDdOP/1R0pG
+         f7W9dTJmQptgBrJNb6rZO42eQOqXUPeL3PmdMoDvsc0jIKFazxlaZQy6iFcTAKrcyb2g
+         Vd4Xof1tpuhpdbe6fUAhZyOPuYJwlVtphMWQs8q/tSYp7h7umSFg6RazMw4joPD08IQq
+         U+PE0b8W/rQAZMz7pnNUhXYfuSp6KyH2zv92pJQFwOvAqZixv97KJ+4OltRNsi03yCWr
+         atQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683829473; x=1686421473;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pi6QoZ5SCLGgP2sxC+MkaEgbY1VXhaAz9TEP3dwrDPs=;
-        b=aXKobyB0375sfIO5M2dL8DydNhd0vdYvs0tbeh2j1Sg4fRnhY7yhbKYbI1xON8Vn8h
-         wkoqK82fvVj1NjzahzI8grp3ljb6e6s+FhnpRakuTy1QUOQF8W21hVm6xU+jcUfQGdCL
-         52t/EJioqImLAj21e5XBCHwGs9jE+L5PgWwNaa4WpwXHqHL/BFpZFL9WUcwQt5QJp0zp
-         bx3/xL1DH8yEP4uYxUmAnK/RX4Z9718n9/XblYqG76AMJyjIAaoOVjD/UfK9LgA/myx/
-         REe7TtX0rIvOzbBYVejSQHQ1da2l9Eu/TkU/hVGuAmhJjNNf/okANGDSP1eK+mCf8DnW
-         ItWA==
-X-Gm-Message-State: AC+VfDyzIX4Y0rNOYMylNpJ5cBfVYwF7Js1haWFM6veHr+chDhhOqvlj
-        bzMBs6qxYUaaHgDnjJYdIfgY+LOF9G4197oV4rKy
-X-Google-Smtp-Source: ACHHUZ7u4hIr1abfAjSfObToFMnjaZ5a7i67wz1z8K+AHbBfqmL+8z0DeI0fgjzjTRoAf5zNOgmTizL/c3RRg3dEL+oU
+        d=1e100.net; s=20221208; t=1683829477; x=1686421477;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pXR2gVK9OA+wwjaEDZ+OSGVT3sLd4z3OrzMBakd4aKc=;
+        b=bN98M/o0FIlFMsbIK1mc5SqRiUVjfbxx93pLiPATc/pZStvayaXwWH7wl81eVAId43
+         URCf8op7zuJ/OKPkHd1b80yHM1f21JleIzwGND6+L+F5YIjKt4qkVuCY43QtcxvHjw7H
+         ndYunaRnjeJAflKEEuokZbVbLVNq2jO1N73rk5brOqdZsa8RgeL4yh4muU65jQhPaGPS
+         dksZQ332R+VlSRL5z6TR729ocnhmegqmPet4QLt3QwpHdCx4+u5TESz0Jh25dIfzzSEf
+         FyUTYzIyHnnrnxdWC9GVdcUL93T8tIoKtfDJgxHTqSWlkzI8+pAIeOmhrw3VrCyMN8Mw
+         ANbA==
+X-Gm-Message-State: AC+VfDxbgFD7RT/z7tMUkkywSN3jjJTbPx4PzNbSzICYQI6j0TLBwouZ
+        /oTf7+CaZODI4JCqp2ul/dmg82J2t+/l4REb38qo
+X-Google-Smtp-Source: ACHHUZ6/k8WRFVr95FNBEjmhvpwsN42OkGFLi7clqHCCS0gOIKkyVoZZe1vIA3bGUQMYYdRD+oFyrl83UA1YRSgN8vJE
 X-Received: from axel.svl.corp.google.com ([2620:15c:2d4:203:1119:8675:ddb3:1e7a])
  (user=axelrasmussen job=sendgmr) by 2002:a05:6902:114e:b0:b4a:3896:bc17 with
- SMTP id p14-20020a056902114e00b00b4a3896bc17mr9915594ybu.0.1683829473641;
- Thu, 11 May 2023 11:24:33 -0700 (PDT)
-Date:   Thu, 11 May 2023 11:24:24 -0700
+ SMTP id p14-20020a056902114e00b00b4a3896bc17mr9915667ybu.0.1683829477159;
+ Thu, 11 May 2023 11:24:37 -0700 (PDT)
+Date:   Thu, 11 May 2023 11:24:26 -0700
+In-Reply-To: <20230511182426.1898675-1-axelrasmussen@google.com>
 Mime-Version: 1.0
+References: <20230511182426.1898675-1-axelrasmussen@google.com>
 X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
-Message-ID: <20230511182426.1898675-1-axelrasmussen@google.com>
-Subject: [PATCH 1/3] mm: userfaultfd: add new UFFDIO_SIGBUS ioctl
+Message-ID: <20230511182426.1898675-3-axelrasmussen@google.com>
+Subject: [PATCH 3/3] selftests/mm: add uffd unit test for UFFDIO_SIGBUS
 From:   Axel Rasmussen <axelrasmussen@google.com>
 To:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -75,345 +77,176 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The basic idea here is to "simulate" memory poisoning for VMs. A VM
-running on some host might encounter a memory error, after which some
-page(s) are poisoned (i.e., future accesses SIGBUS). They expect that
-once poisoned, pages can never become "un-poisoned". So, when we live
-migrate the VM, we need to preserve the poisoned status of these pages.
-
-When live migrating, we try to get the guest running on its new host as
-quickly as possible. So, we start it running before all memory has been
-copied, and before we're certain which pages should be poisoned or not.
-
-So the basic way to use this new feature is:
-
-- On the new host, the guest's memory is registered with userfaultfd, in
-  either MISSING or MINOR mode (doesn't really matter for this purpose).
-- On any first access, we get a userfaultfd event. At this point we can
-  communicate with the old host to find out if the page was poisoned.
-- If so, we can respond with a UFFDIO_SIGBUS - this places a swap marker
-  so any future accesses will SIGBUS. Because the pte is now "present",
-  future accesses won't generate more userfaultfd events, they'll just
-  SIGBUS directly.
-
-UFFDIO_SIGBUS does not handle unmapping previously-present PTEs. This
-isn't needed, because during live migration we want to intercept
-all accesses with userfaultfd (not just writes, so WP mode isn't useful
-for this). So whether minor or missing mode is being used (or both), the
-PTE won't be present in any case, so handling that case isn't needed.
+The test is pretty basic, and exercises UFFDIO_SIGBUS straightforwardly.
+We register a region with userfaultfd, in missing fault mode. For each
+fault, we either issue UFFDIO_ZEROPAGE (odd pages) or UFFDIO_SIGBUS
+(even pages). We read each page in the region, and assert that the odd
+pages are zeroed as expected, and the even pages yield a SIGBUS as
+expected.
 
 Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
 ---
- fs/userfaultfd.c                 | 63 ++++++++++++++++++++++++++++++++
- include/linux/swapops.h          |  3 +-
- include/linux/userfaultfd_k.h    |  4 ++
- include/uapi/linux/userfaultfd.h | 25 +++++++++++--
- mm/memory.c                      |  4 ++
- mm/userfaultfd.c                 | 62 ++++++++++++++++++++++++++++++-
- 6 files changed, 156 insertions(+), 5 deletions(-)
+ tools/testing/selftests/mm/uffd-unit-tests.c | 114 ++++++++++++++++++-
+ 1 file changed, 110 insertions(+), 4 deletions(-)
 
-diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-index 0fd96d6e39ce..edc2928dae2b 100644
---- a/fs/userfaultfd.c
-+++ b/fs/userfaultfd.c
-@@ -1966,6 +1966,66 @@ static int userfaultfd_continue(struct userfaultfd_ctx *ctx, unsigned long arg)
- 	return ret;
- }
- 
-+static inline int userfaultfd_sigbus(struct userfaultfd_ctx *ctx, unsigned long arg)
-+{
-+	__s64 ret;
-+	struct uffdio_sigbus uffdio_sigbus;
-+	struct uffdio_sigbus __user *user_uffdio_sigbus;
-+	struct userfaultfd_wake_range range;
-+
-+	user_uffdio_sigbus = (struct uffdio_sigbus __user *)arg;
-+
-+	ret = -EAGAIN;
-+	if (atomic_read(&ctx->mmap_changing))
-+		goto out;
-+
-+	ret = -EFAULT;
-+	if (copy_from_user(&uffdio_sigbus, user_uffdio_sigbus,
-+			   /* don't copy the output fields */
-+			   sizeof(uffdio_sigbus) - (sizeof(__s64))))
-+		goto out;
-+
-+	ret = validate_range(ctx->mm, uffdio_sigbus.range.start,
-+			     uffdio_sigbus.range.len);
-+	if (ret)
-+		goto out;
-+
-+	ret = -EINVAL;
-+	/* double check for wraparound just in case. */
-+	if (uffdio_sigbus.range.start + uffdio_sigbus.range.len <=
-+	    uffdio_sigbus.range.start) {
-+		goto out;
-+	}
-+	if (uffdio_sigbus.mode & ~UFFDIO_SIGBUS_MODE_DONTWAKE)
-+		goto out;
-+
-+	if (mmget_not_zero(ctx->mm)) {
-+		ret = mfill_atomic_sigbus(ctx->mm, uffdio_sigbus.range.start,
-+					  uffdio_sigbus.range.len,
-+					  &ctx->mmap_changing, 0);
-+		mmput(ctx->mm);
-+	} else {
-+		return -ESRCH;
-+	}
-+
-+	if (unlikely(put_user(ret, &user_uffdio_sigbus->updated)))
-+		return -EFAULT;
-+	if (ret < 0)
-+		goto out;
-+
-+	/* len == 0 would wake all */
-+	BUG_ON(!ret);
-+	range.len = ret;
-+	if (!(uffdio_sigbus.mode & UFFDIO_SIGBUS_MODE_DONTWAKE)) {
-+		range.start = uffdio_sigbus.range.start;
-+		wake_userfault(ctx, &range);
-+	}
-+	ret = range.len == uffdio_sigbus.range.len ? 0 : -EAGAIN;
-+
-+out:
-+	return ret;
-+}
-+
- static inline unsigned int uffd_ctx_features(__u64 user_features)
- {
- 	/*
-@@ -2067,6 +2127,9 @@ static long userfaultfd_ioctl(struct file *file, unsigned cmd,
- 	case UFFDIO_CONTINUE:
- 		ret = userfaultfd_continue(ctx, arg);
- 		break;
-+	case UFFDIO_SIGBUS:
-+		ret = userfaultfd_sigbus(ctx, arg);
-+		break;
+diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
+index 269c86768a02..3eb5a6f9b51f 100644
+--- a/tools/testing/selftests/mm/uffd-unit-tests.c
++++ b/tools/testing/selftests/mm/uffd-unit-tests.c
+@@ -881,13 +881,13 @@ static void retry_uffdio_zeropage(int ufd,
  	}
- 	return ret;
  }
-diff --git a/include/linux/swapops.h b/include/linux/swapops.h
-index 3a451b7afcb3..fa778a0ae730 100644
---- a/include/linux/swapops.h
-+++ b/include/linux/swapops.h
-@@ -405,7 +405,8 @@ typedef unsigned long pte_marker;
  
- #define  PTE_MARKER_UFFD_WP			BIT(0)
- #define  PTE_MARKER_SWAPIN_ERROR		BIT(1)
--#define  PTE_MARKER_MASK			(BIT(2) - 1)
-+#define  PTE_MARKER_UFFD_SIGBUS			BIT(2)
-+#define  PTE_MARKER_MASK			(BIT(3) - 1)
- 
- static inline swp_entry_t make_pte_marker_entry(pte_marker marker)
+-static bool do_uffdio_zeropage(int ufd, bool has_zeropage)
++static bool do_uffdio_zeropage(int ufd, bool has_zeropage, bool test_retry, unsigned long offset)
  {
-diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
-index d78b01524349..6de1084939c5 100644
---- a/include/linux/userfaultfd_k.h
-+++ b/include/linux/userfaultfd_k.h
-@@ -46,6 +46,7 @@ enum mfill_atomic_mode {
- 	MFILL_ATOMIC_COPY,
- 	MFILL_ATOMIC_ZEROPAGE,
- 	MFILL_ATOMIC_CONTINUE,
-+	MFILL_ATOMIC_SIGBUS,
- 	NR_MFILL_ATOMIC_MODES,
- };
+ 	struct uffdio_zeropage uffdio_zeropage = { 0 };
+ 	int ret;
+ 	__s64 res;
  
-@@ -83,6 +84,9 @@ extern ssize_t mfill_atomic_zeropage(struct mm_struct *dst_mm,
- extern ssize_t mfill_atomic_continue(struct mm_struct *dst_mm, unsigned long dst_start,
- 				     unsigned long len, atomic_t *mmap_changing,
- 				     uffd_flags_t flags);
-+extern ssize_t mfill_atomic_sigbus(struct mm_struct *dst_mm, unsigned long start,
-+				   unsigned long len, atomic_t *mmap_changing,
-+				   uffd_flags_t flags);
- extern int mwriteprotect_range(struct mm_struct *dst_mm,
- 			       unsigned long start, unsigned long len,
- 			       bool enable_wp, atomic_t *mmap_changing);
-diff --git a/include/uapi/linux/userfaultfd.h b/include/uapi/linux/userfaultfd.h
-index 66dd4cd277bd..616e33d3db97 100644
---- a/include/uapi/linux/userfaultfd.h
-+++ b/include/uapi/linux/userfaultfd.h
-@@ -39,7 +39,8 @@
- 			   UFFD_FEATURE_MINOR_SHMEM |		\
- 			   UFFD_FEATURE_EXACT_ADDRESS |		\
- 			   UFFD_FEATURE_WP_HUGETLBFS_SHMEM |	\
--			   UFFD_FEATURE_WP_UNPOPULATED)
-+			   UFFD_FEATURE_WP_UNPOPULATED |	\
-+			   UFFD_FEATURE_SIGBUS_IOCTL)
- #define UFFD_API_IOCTLS				\
- 	((__u64)1 << _UFFDIO_REGISTER |		\
- 	 (__u64)1 << _UFFDIO_UNREGISTER |	\
-@@ -49,12 +50,14 @@
- 	 (__u64)1 << _UFFDIO_COPY |		\
- 	 (__u64)1 << _UFFDIO_ZEROPAGE |		\
- 	 (__u64)1 << _UFFDIO_WRITEPROTECT |	\
--	 (__u64)1 << _UFFDIO_CONTINUE)
-+	 (__u64)1 << _UFFDIO_CONTINUE |		\
-+	 (__u64)1 << _UFFDIO_SIGBUS)
- #define UFFD_API_RANGE_IOCTLS_BASIC		\
- 	((__u64)1 << _UFFDIO_WAKE |		\
- 	 (__u64)1 << _UFFDIO_COPY |		\
-+	 (__u64)1 << _UFFDIO_WRITEPROTECT |	\
- 	 (__u64)1 << _UFFDIO_CONTINUE |		\
--	 (__u64)1 << _UFFDIO_WRITEPROTECT)
-+	 (__u64)1 << _UFFDIO_SIGBUS)
+-	uffdio_zeropage.range.start = (unsigned long) area_dst;
++	uffdio_zeropage.range.start = (unsigned long) area_dst + offset;
+ 	uffdio_zeropage.range.len = page_size;
+ 	uffdio_zeropage.mode = 0;
+ 	ret = ioctl(ufd, UFFDIO_ZEROPAGE, &uffdio_zeropage);
+@@ -901,7 +901,7 @@ static bool do_uffdio_zeropage(int ufd, bool has_zeropage)
+ 	} else if (has_zeropage) {
+ 		if (res != page_size)
+ 			err("UFFDIO_ZEROPAGE unexpected size");
+-		else
++		else if (test_retry)
+ 			retry_uffdio_zeropage(ufd, &uffdio_zeropage);
+ 		return true;
+ 	} else
+@@ -938,7 +938,7 @@ static void uffd_zeropage_test(uffd_test_args_t *args)
+ 		/* Ignore the retval; we already have it */
+ 		uffd_register_detect_zeropage(uffd, area_dst_alias, page_size);
  
- /*
-  * Valid ioctl command number range with this API is from 0x00 to
-@@ -71,6 +74,7 @@
- #define _UFFDIO_ZEROPAGE		(0x04)
- #define _UFFDIO_WRITEPROTECT		(0x06)
- #define _UFFDIO_CONTINUE		(0x07)
-+#define _UFFDIO_SIGBUS			(0x08)
- #define _UFFDIO_API			(0x3F)
- 
- /* userfaultfd ioctl ids */
-@@ -91,6 +95,8 @@
- 				      struct uffdio_writeprotect)
- #define UFFDIO_CONTINUE		_IOWR(UFFDIO, _UFFDIO_CONTINUE,	\
- 				      struct uffdio_continue)
-+#define UFFDIO_SIGBUS		_IOWR(UFFDIO, _UFFDIO_SIGBUS, \
-+				      struct uffdio_sigbus)
- 
- /* read() structure */
- struct uffd_msg {
-@@ -225,6 +231,7 @@ struct uffdio_api {
- #define UFFD_FEATURE_EXACT_ADDRESS		(1<<11)
- #define UFFD_FEATURE_WP_HUGETLBFS_SHMEM		(1<<12)
- #define UFFD_FEATURE_WP_UNPOPULATED		(1<<13)
-+#define UFFD_FEATURE_SIGBUS_IOCTL		(1<<14)
- 	__u64 features;
- 
- 	__u64 ioctls;
-@@ -321,6 +328,18 @@ struct uffdio_continue {
- 	__s64 mapped;
- };
- 
-+struct uffdio_sigbus {
-+	struct uffdio_range range;
-+#define UFFDIO_SIGBUS_MODE_DONTWAKE		((__u64)1<<0)
-+	__u64 mode;
-+
-+	/*
-+	 * Fields below here are written by the ioctl and must be at the end:
-+	 * the copy_from_user will not read past here.
-+	 */
-+	__s64 updated;
-+};
-+
- /*
-  * Flags for the userfaultfd(2) system call itself.
-  */
-diff --git a/mm/memory.c b/mm/memory.c
-index f69fbc251198..e4b4207c2590 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -3675,6 +3675,10 @@ static vm_fault_t handle_pte_marker(struct vm_fault *vmf)
- 	if (WARN_ON_ONCE(!marker))
- 		return VM_FAULT_SIGBUS;
- 
-+	/* SIGBUS explicitly requested for this PTE. */
-+	if (marker & PTE_MARKER_UFFD_SIGBUS)
-+		return VM_FAULT_SIGBUS;
-+
- 	/* Higher priority than uffd-wp when data corrupted */
- 	if (marker & PTE_MARKER_SWAPIN_ERROR)
- 		return VM_FAULT_SIGBUS;
-diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-index e97a0b4889fc..933587eebd5d 100644
---- a/mm/userfaultfd.c
-+++ b/mm/userfaultfd.c
-@@ -278,6 +278,51 @@ static int mfill_atomic_pte_continue(pmd_t *dst_pmd,
- 	goto out;
+-	if (do_uffdio_zeropage(uffd, has_zeropage))
++	if (do_uffdio_zeropage(uffd, has_zeropage, true, 0))
+ 		for (i = 0; i < page_size; i++)
+ 			if (area_dst[i] != 0)
+ 				err("data non-zero at offset %d\n", i);
+@@ -952,6 +952,106 @@ static void uffd_zeropage_test(uffd_test_args_t *args)
+ 	uffd_test_pass();
  }
  
-+/* Handles UFFDIO_SIGBUS for all non-hugetlb VMAs. */
-+static int mfill_atomic_pte_sigbus(pmd_t *dst_pmd,
-+				   struct vm_area_struct *dst_vma,
-+				   unsigned long dst_addr,
-+				   uffd_flags_t flags)
++static void do_uffdio_sigbus(int uffd, unsigned long offset)
 +{
++	struct uffdio_sigbus uffdio_sigbus = { 0 };
 +	int ret;
-+	struct mm_struct *dst_mm = dst_vma->vm_mm;
-+	pte_t _dst_pte, *dst_pte;
-+	spinlock_t *ptl;
++	__s64 res;
 +
-+	_dst_pte = make_pte_marker(PTE_MARKER_UFFD_SIGBUS);
-+	dst_pte = pte_offset_map_lock(dst_mm, dst_pmd, dst_addr, &ptl);
++	uffdio_sigbus.range.start = (unsigned long) area_dst + offset;
++	uffdio_sigbus.range.len = page_size;
++	uffdio_sigbus.mode = 0;
++	ret = ioctl(uffd, UFFDIO_SIGBUS, &uffdio_sigbus);
++	res = uffdio_sigbus.updated;
 +
-+	if (vma_is_shmem(dst_vma)) {
-+		struct inode *inode;
-+		pgoff_t offset, max_off;
++	if (ret)
++		err("UFFDIO_SIGBUS error: %"PRId64, (int64_t)res);
++	else if (res != page_size)
++		err("UFFDIO_SIGBUS unexpected size: %"PRId64, (int64_t)res);
++}
 +
-+		/* serialize against truncate with the page table lock */
-+		inode = dst_vma->vm_file->f_inode;
-+		offset = linear_page_index(dst_vma, dst_addr);
-+		max_off = DIV_ROUND_UP(i_size_read(inode), PAGE_SIZE);
-+		ret = -EFAULT;
-+		if (unlikely(offset >= max_off))
-+			goto out_unlock;
++static void uffd_sigbus_ioctl_handle_fault(
++	struct uffd_msg *msg, struct uffd_args *args)
++{
++	unsigned long offset;
++
++	if (msg->event != UFFD_EVENT_PAGEFAULT)
++		err("unexpected msg event %u", msg->event);
++
++	if (msg->arg.pagefault.flags &
++	    (UFFD_PAGEFAULT_FLAG_WP | UFFD_PAGEFAULT_FLAG_MINOR))
++		err("unexpected fault type %llu", msg->arg.pagefault.flags);
++
++	offset = (char *)(unsigned long)msg->arg.pagefault.address - area_dst;
++	offset &= ~(page_size-1);
++
++	/* Odd pages -> zeropage; even pages -> sigbus. */
++	if (offset & page_size) {
++		if (!do_uffdio_zeropage(uffd, true, false, offset))
++			err("UFFDIO_ZEROPAGE failed");
++	} else {
++		do_uffdio_sigbus(uffd, offset);
++	}
++}
++
++static void uffd_sigbus_ioctl_test(uffd_test_args_t *targs)
++{
++	pthread_t uffd_mon;
++	char c;
++	struct uffd_args args = { 0 };
++	struct sigaction act = { 0 };
++	unsigned long nr_sigbus = 0;
++	unsigned long nr;
++
++	fcntl(uffd, F_SETFL, uffd_flags | O_NONBLOCK);
++
++	if (!uffd_register_detect_zeropage(uffd, area_dst, nr_pages * page_size))
++		err("register failed: no zeropage support");
++
++	args.handle_fault = uffd_sigbus_ioctl_handle_fault;
++	if (pthread_create(&uffd_mon, NULL, uffd_poll_thread, &args))
++		err("uffd_poll_thread create");
++
++	sigbuf = &jbuf;
++	act.sa_sigaction = sighndl;
++	act.sa_flags = SA_SIGINFO;
++	if (sigaction(SIGBUS, &act, 0))
++		err("sigaction");
++
++	for (nr = 0; nr < nr_pages; ++nr) {
++		unsigned long offset = nr * page_size;
++		const char *bytes = (const char *) area_dst + offset;
++		const char *i;
++
++		if (sigsetjmp(*sigbuf, 1)) {
++			/*
++			 * Access below triggered a SIGBUS, which was caught by
++			 * sighndl, which then jumped here. Count this SIGBUS,
++			 * and move on to next page.
++			 */
++			++nr_sigbus;
++			continue;
++		}
++
++		for (i = bytes; i < bytes + page_size; ++i) {
++			if (*i)
++				err("nonzero byte in area_dst (%p) at %p: %u",
++				    area_dst, i, *i);
++		}
 +	}
 +
-+	ret = -EEXIST;
-+	/*
-+	 * For now, we don't handle unmapping pages, so only support filling in
-+	 * none PTEs, or replacing PTE markers.
-+	 */
-+	if (!pte_none_mostly(*dst_pte))
-+		goto out_unlock;
++	if (write(pipefd[1], &c, sizeof(c)) != sizeof(c))
++		err("pipe write");
++	if (pthread_join(uffd_mon, NULL))
++		err("pthread_join()");
 +
-+	set_pte_at(dst_mm, dst_addr, dst_pte, _dst_pte);
++	if (nr_sigbus != nr_pages / 2)
++		err("expected to receive %lu SIGBUS, actually received %lu",
++		    nr_pages / 2, nr_sigbus);
 +
-+	/* No need to invalidate - it was non-present before */
-+	update_mmu_cache(dst_vma, dst_addr, dst_pte);
-+	ret = 0;
-+out_unlock:
-+	pte_unmap_unlock(dst_pte, ptl);
-+	return ret;
++	uffd_test_pass();
 +}
 +
- static pmd_t *mm_alloc_pmd(struct mm_struct *mm, unsigned long address)
- {
- 	pgd_t *pgd;
-@@ -328,8 +373,12 @@ static __always_inline ssize_t mfill_atomic_hugetlb(
- 	 * supported by hugetlb.  A PMD_SIZE huge pages may exist as used
- 	 * by THP.  Since we can not reliably insert a zero page, this
- 	 * feature is not supported.
-+	 *
-+	 * PTE marker handling for hugetlb is a bit special, so for now
-+	 * UFFDIO_SIGBUS is not supported.
- 	 */
--	if (uffd_flags_mode_is(flags, MFILL_ATOMIC_ZEROPAGE)) {
-+	if (uffd_flags_mode_is(flags, MFILL_ATOMIC_ZEROPAGE) ||
-+	    uffd_flags_mode_is(flags, MFILL_ATOMIC_SIGBUS)) {
- 		mmap_read_unlock(dst_mm);
- 		return -EINVAL;
- 	}
-@@ -473,6 +522,9 @@ static __always_inline ssize_t mfill_atomic_pte(pmd_t *dst_pmd,
- 	if (uffd_flags_mode_is(flags, MFILL_ATOMIC_CONTINUE)) {
- 		return mfill_atomic_pte_continue(dst_pmd, dst_vma,
- 						 dst_addr, flags);
-+	} else if (uffd_flags_mode_is(flags, MFILL_ATOMIC_SIGBUS)) {
-+		return mfill_atomic_pte_sigbus(dst_pmd, dst_vma,
-+					       dst_addr, flags);
- 	}
+ /*
+  * Test the returned uffdio_register.ioctls with different register modes.
+  * Note that _UFFDIO_ZEROPAGE is tested separately in the zeropage test.
+@@ -1127,6 +1227,12 @@ uffd_test_case_t uffd_tests[] = {
+ 		UFFD_FEATURE_PAGEFAULT_FLAG_WP |
+ 		UFFD_FEATURE_WP_HUGETLBFS_SHMEM,
+ 	},
++	{
++		.name = "sigbus-ioctl",
++		.uffd_fn = uffd_sigbus_ioctl_test,
++		.mem_targets = MEM_ALL & ~(MEM_HUGETLB | MEM_HUGETLB_PRIVATE),
++		.uffd_feature_required = UFFD_FEATURE_SIGBUS_IOCTL,
++	},
+ };
  
- 	/*
-@@ -694,6 +746,14 @@ ssize_t mfill_atomic_continue(struct mm_struct *dst_mm, unsigned long start,
- 			    uffd_flags_set_mode(flags, MFILL_ATOMIC_CONTINUE));
- }
- 
-+ssize_t mfill_atomic_sigbus(struct mm_struct *dst_mm, unsigned long start,
-+			    unsigned long len, atomic_t *mmap_changing,
-+			    uffd_flags_t flags)
-+{
-+	return mfill_atomic(dst_mm, start, 0, len, mmap_changing,
-+			    uffd_flags_set_mode(flags, MFILL_ATOMIC_SIGBUS));
-+}
-+
- long uffd_wp_range(struct vm_area_struct *dst_vma,
- 		   unsigned long start, unsigned long len, bool enable_wp)
- {
+ static void usage(const char *prog)
 -- 
 2.40.1.606.ga4b1b128d6-goog
 
