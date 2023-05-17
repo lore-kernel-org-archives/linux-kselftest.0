@@ -2,153 +2,87 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BA8FC7EE23
-	for <linux-kselftest@archiver.kernel.org>; Wed, 17 May 2023 11:20:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F928C77B7A
+	for <linux-kselftest@archiver.kernel.org>; Wed, 17 May 2023 11:20:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229545AbjEQLUg (ORCPT
+        id S230258AbjEQLUg (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Wed, 17 May 2023 07:20:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42128 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230258AbjEQLUf (ORCPT
+        with ESMTP id S230093AbjEQLUe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 17 May 2023 07:20:35 -0400
+        Wed, 17 May 2023 07:20:34 -0400
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 016831BF
-        for <linux-kselftest@vger.kernel.org>; Wed, 17 May 2023 04:20:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FD8C103
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 May 2023 04:20:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1684322434; x=1715858434;
-  h=from:to:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=9dzr8tvDYI2+0eZZWUhDHHpN/Iz2mOx345NMl71pfHE=;
-  b=Dc8p5tqAxS/aNaER2dlbXO2vSlVTol9k66V4RQVr5QCt6TSYYBkKrrLY
-   iGiB30vVp9n72MoJyFpRGmM08VQZhJPBzLlyVrGKnectTsDHt/nMc8XST
-   1EK32wzC6PP3yNX9aZOKohzo4zX7YrH7g51FMWHudY9NTKolIukoEFsWn
-   ngr91KvRThoDxTOSsPvfw2OoZ/8k2TLnI7CuUPLRwWQLmWQRSRhNNPahC
-   +y9zL4jwche8iU5N7jmIWMHzqq3Ox8BQURApkruj29zE3OIxY9IeS8oDW
-   kKz98fca6PJTaecJA0Nqhz19Hfd2mbpVgebEV+VCaVBDcVNU3s2qu055e
+  h=from:to:subject:date:message-id:in-reply-to:references:
+   mime-version:content-transfer-encoding;
+  bh=8SpyRf+yeQrxbHtQ75fj/0ADY3ykc7S3MEaXhzRIDVw=;
+  b=JvxVhVktXJbclCFUolhyymiK55D2E7BR2+QEMkEGrZINThwl1LcOO34d
+   39Sy72Wl7koFkhHJIXpGArCiK6l4mGdhENDOWnDeFnhAXLSvyT3SGIq1H
+   UfIlQ+OP8fWfqFgGmQrooXZpFkO1Rk58nm+kMPHPu5hEazAAdkUKjeRXk
+   XFQXZJftM7zF5TmESCKjEAQt4vhzpTQu7a8v02BO3XW7wA5IyW+GAvP5X
+   64Dlb6x4lKSsdoOOza2vDHOuJgTcAjqzgYFQXuDWobeqFBLGnKYsDaFrG
+   6g2F6sya2qd95nuBazRydLLpCzMRjrbFrNcZ72gdrV9tsKd8vyicSYd6P
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="341115899"
+X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="341115909"
 X-IronPort-AV: E=Sophos;i="5.99,281,1677571200"; 
-   d="scan'208";a="341115899"
+   d="scan'208";a="341115909"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 04:20:30 -0700
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 04:20:32 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="766738727"
+X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="766738744"
 X-IronPort-AV: E=Sophos;i="5.99,281,1677571200"; 
-   d="scan'208";a="766738727"
+   d="scan'208";a="766738744"
 Received: from mwajdecz-mobl.ger.corp.intel.com ([10.249.142.110])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 04:20:28 -0700
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 04:20:31 -0700
 From:   Michal Wajdeczko <michal.wajdeczko@intel.com>
 To:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Subject: [PATCH v3 0/3] kunit: Fix reporting of the skipped parameterized tests
-Date:   Wed, 17 May 2023 13:18:13 +0200
-Message-Id: <20230517111816.984-1-michal.wajdeczko@intel.com>
+Subject: [PATCH v3 2/3] kunit: Fix reporting of the skipped parameterized tests
+Date:   Wed, 17 May 2023 13:18:15 +0200
+Message-Id: <20230517111816.984-3-michal.wajdeczko@intel.com>
 X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20230517111816.984-1-michal.wajdeczko@intel.com>
+References: <20230517111816.984-1-michal.wajdeczko@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Due to the lack of the SKIP directive in the output, if any of the
-parameterized test was skipped, the parser could not recognize that
-correctly and was marking the test as PASSED.
+Logs from the parameterized tests that were skipped don't include
+SKIP directive thus they are displayed as PASSED. Fix that.
 
-This can easily be seen by running the new subtest from patch 1:
-
-$ ./tools/testing/kunit/kunit.py run \
-	--kunitconfig ./lib/kunit/.kunitconfig *.example_params*
-
-  [ ] Starting KUnit Kernel (1/1)...
-  [ ] ============================================================
-  [ ] =================== example (1 subtest) ====================
-  [ ] =================== example_params_test  ===================
-  [ ] [PASSED] example value 2
-  [ ] [PASSED] example value 1
-  [ ] [PASSED] example value 0
-  [ ] =============== [PASSED] example_params_test ===============
-  [ ] ===================== [PASSED] example =====================
-  [ ] ============================================================
-  [ ] Testing complete. Ran 3 tests: passed: 3
-
-$ ./tools/testing/kunit/kunit.py run \
-	--kunitconfig ./lib/kunit/.kunitconfig *.example_params* \
-	--raw_output
-
-  [ ] Starting KUnit Kernel (1/1)...
-  KTAP version 1
-  1..1
-      # example: initializing suite
-      KTAP version 1
-      # Subtest: example
-      1..1
-          KTAP version 1
-          # Subtest: example_params_test
-      # example_params_test: initializing
-          ok 1 example value 2
-      # example_params_test: initializing
-          ok 2 example value 1
-      # example_params_test: initializing
-          ok 3 example value 0
-      # example_params_test: pass:2 fail:0 skip:1 total:3
-      ok 1 example_params_test
-  # Totals: pass:2 fail:0 skip:1 total:3
-  ok 1 example
-
-After adding the SKIP directive, the report looks as expected:
-
-  [ ] Starting KUnit Kernel (1/1)...
-  [ ] ============================================================
-  [ ] =================== example (1 subtest) ====================
-  [ ] =================== example_params_test  ===================
-  [ ] [PASSED] example value 2
-  [ ] [PASSED] example value 1
-  [ ] [SKIPPED] example value 0
-  [ ] =============== [PASSED] example_params_test ===============
-  [ ] ===================== [PASSED] example =====================
-  [ ] ============================================================
-  [ ] Testing complete. Ran 3 tests: passed: 2, skipped: 1
-
-  [ ] Starting KUnit Kernel (1/1)...
-  KTAP version 1
-  1..1
-      # example: initializing suite
-      KTAP version 1
-      # Subtest: example
-      1..1
-          KTAP version 1
-          # Subtest: example_params_test
-      # example_params_test: initializing
-          ok 1 example value 2
-      # example_params_test: initializing
-          ok 2 example value 1
-      # example_params_test: initializing
-          ok 3 example value 0 # SKIP unsupported param value
-      # example_params_test: pass:2 fail:0 skip:1 total:3
-      ok 1 example_params_test
-  # Totals: pass:2 fail:0 skip:1 total:3
-  ok 1 example
-
-v2: better align with future support for arbitrary levels of testing
-v3: rebased on kunit tree [1]
-
-[1]: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/log/?h=kunit
-
+Signed-off-by: Michal Wajdeczko <michal.wajdeczko@intel.com>
 Cc: David Gow <davidgow@google.com>
-Cc: Rae Moar <rmoar@google.com>
+Reviewed-by: Rae Moar <rmoar@google.com>
+Reviewed-by: David Gow <davidgow@google.com>
+---
+ lib/kunit/test.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Michal Wajdeczko (3):
-  kunit/test: Add example test showing parameterized testing
-  kunit: Fix reporting of the skipped parameterized tests
-  kunit: Update kunit_print_ok_not_ok function
-
- include/kunit/test.h           |  1 +
- lib/kunit/kunit-example-test.c | 34 +++++++++++++++++++++++++++
- lib/kunit/test.c               | 43 ++++++++++++++++++++++------------
- 3 files changed, 63 insertions(+), 15 deletions(-)
-
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index f5e4ceffd282..af48d0761d26 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -627,9 +627,11 @@ int kunit_run_tests(struct kunit_suite *suite)
+ 
+ 				kunit_log(KERN_INFO, &test,
+ 					  KUNIT_SUBTEST_INDENT KUNIT_SUBTEST_INDENT
+-					  "%s %d %s",
++					  "%s %d %s%s%s",
+ 					  kunit_status_to_ok_not_ok(test.status),
+-					  test.param_index + 1, param_desc);
++					  test.param_index + 1, param_desc,
++					  test.status == KUNIT_SKIPPED ? " # SKIP " : "",
++					  test.status == KUNIT_SKIPPED ? test.status_comment : "");
+ 
+ 				/* Get next param. */
+ 				param_desc[0] = '\0';
 -- 
 2.25.1
 
