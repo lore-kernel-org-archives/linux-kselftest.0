@@ -2,97 +2,110 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73E93C77B75
-	for <linux-kselftest@archiver.kernel.org>; Thu, 18 May 2023 02:19:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 19C65C77B75
+	for <linux-kselftest@archiver.kernel.org>; Thu, 18 May 2023 03:22:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbjERCTB (ORCPT
+        id S229604AbjERDWx (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 17 May 2023 22:19:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56050 "EHLO
+        Wed, 17 May 2023 23:22:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbjERCSr (ORCPT
+        with ESMTP id S229512AbjERDWv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 17 May 2023 22:18:47 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE1492137
-        for <linux-kselftest@vger.kernel.org>; Wed, 17 May 2023 19:18:46 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-3f3882a5f8aso3757771cf.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 17 May 2023 19:18:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1684376326; x=1686968326;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RjDDJEmMByrSrRAzAnrYD81CTFNgsqIfOqapJ9IGu5M=;
-        b=mQQrGh4h/KNWIK2PoMB6Pztwf3cVCXmBMz0qqgOhBsvYUoYmvpqwqduJIzlAMMC7YK
-         ZrUS/hiBuG72PkbcadbIrnygdqpWVUoSGwOt1fIX6LFaYv2ZtLweuzoryGI5e/lbAEvj
-         QAZwZXY/iYOPxIXmup+iJ05KpzCFPd+H+MV7k=
+        Wed, 17 May 2023 23:22:51 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE1331724
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 May 2023 20:22:49 -0700 (PDT)
+Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com [209.85.210.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 051133F436
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 May 2023 03:22:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1684380168;
+        bh=Gi4VEKOMa2h3a92P3bc7WeGm4ywxJ/65UScMzNMWt9g=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=bX8IqC40EOAP8pTuipBl//j+yIo6kiDL6AgW34yo8g0O9Y/V1DsBiXLKzDhPnkwYr
+         KNlTcDX8mwhBK7C0ZrzeOOJdr8Fn0uEyQ0dYe8HVxCmx7A5xoiaDD6Q06t7G8mOhBf
+         se+kadhnm0T8QQ1eSMexTokSavHp3usRjy0F6u7b/Bc7uF/GIu/iBJzYMtcTLKSL+R
+         IilEAP/6l/KRHTGBm7ECqNyqkquMB7+i6J625gyXeVyZ/YmSMRSfwRsxvWn8G3bQ0t
+         ycTDhGX4qjK1noEGWoVJ39bB0s0ttEK/QywNKcnYnfcTM1vc82lnTcqiLUmzkiaePU
+         2zIDtz6U0WF1A==
+Received: by mail-ot1-f70.google.com with SMTP id 46e09a7af769-6ab1f10384fso486644a34.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 May 2023 20:22:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684376326; x=1686968326;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1684380167; x=1686972167;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=RjDDJEmMByrSrRAzAnrYD81CTFNgsqIfOqapJ9IGu5M=;
-        b=cy4c4a51tBfGhGLUYm0N8FSIF3To+ro4pxNkrqywy+I4elIY3H9z2fDQSfjsDL5WDV
-         9Z+zRWzOfbJWVTUNfZOW2Rz3f/dcj4qBF3l1x0MwwyUMJk938yaFheFEZ/xBd5yxLWoY
-         5vjfkTnum/0FwNnuKJoDktq6MZ1LvEYh5FTsACrHhtVxDG8BjKj5ulV9ixUC5uwaadgP
-         FJiDPGxrUUhmNo9W5YXjKhmIgjzGez0ws90h7wUvPWmbQIKgcE8TvPv/lWkmLPPLvrN8
-         BMT+rnxvPYJ/HH84+cqFEmeUO94GO6UsUxPAQF+b5I9QIrFQwXnuSFSaV2U75OfRvN2W
-         Grog==
-X-Gm-Message-State: AC+VfDyCb0AdC688ATaB1BaRx90+dP14Oxh8fevHe5ZFLm1uMv2v+Oqf
-        KX7SkqsEwAFV3kubvwppO96U5g==
-X-Google-Smtp-Source: ACHHUZ7onnyA0YRXFWFSrDrQsTcQvuLRzQPOgD7sBT31Y/nwpybDDjLCC9uzwGCwdRjZeUxjOoHbXw==
-X-Received: by 2002:ac8:588f:0:b0:3f5:2fa4:43bd with SMTP id t15-20020ac8588f000000b003f52fa443bdmr3399132qta.3.1684376325860;
-        Wed, 17 May 2023 19:18:45 -0700 (PDT)
-Received: from joelboxx.c.googlers.com.com (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
-        by smtp.gmail.com with ESMTPSA id j13-20020a05620a000d00b007577ccf566asm85082qki.93.2023.05.17.19.18.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 19:18:45 -0700 (PDT)
-From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Kirill A Shutemov <kirill@shutemov.name>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Subject: [PATCH RFC 2/4] selftests: mm: Fix failure case when new remap region was not found
-Date:   Thu, 18 May 2023 02:18:23 +0000
-Message-ID: <20230518021825.712742-3-joel@joelfernandes.org>
-X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
-In-Reply-To: <20230518021825.712742-1-joel@joelfernandes.org>
-References: <20230518021825.712742-1-joel@joelfernandes.org>
+        bh=Gi4VEKOMa2h3a92P3bc7WeGm4ywxJ/65UScMzNMWt9g=;
+        b=dulOILEqCwfrT73CrkQdSRzTz3thEuVcPENrCBGyWKpGfRR/FZeApr/TX0ch6UCauH
+         G3FUmcYbhHZN+/6xnOqCtAF5d/KkkgwCzrdx6bA4Zr2D8Mp55btEVm1ebFEUPbTThkOB
+         Me/7f8ZpXrflYwwlGWN+/ll+SrrYxGQuJgj43dQ7oFv/FsrLPRkAemaC+PXSlvsK1LIY
+         C9UVJ+v92+hzAVYBIzsqTYfdxVVQVwlRkyH5Q6ESrE6pYwy3sQDwVyjNTkLupS/v60/N
+         HotNUe5YBjaTTIxHp8JVybPHtZLsCrp9KbwrWeCEY6pcbBVxUdNloAhUOIkcd0YGQGJE
+         BB9g==
+X-Gm-Message-State: AC+VfDw61n6Ss/HJwqcMgstkEUvirtmy6PIZ1KByZAdUw8YUVjZh7bXU
+        +hZ+L6AvBiIiZxgPcdrXjgJ6NUu0/gya7+JeV/AjZvuFG7TjRME8JSu2OYh8M5e8DRBzAYP2vdY
+        E4SeaEXkIQPDJTkkNgcrqQscSjAG8kbQ7GKHK8FK73vNHigzNisNefZZeEwfn
+X-Received: by 2002:a05:6870:a343:b0:17e:5166:e5ad with SMTP id y3-20020a056870a34300b0017e5166e5admr99277oak.44.1684380166735;
+        Wed, 17 May 2023 20:22:46 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5Di+BGi2T2Y8o48hf73VHtmqnUhbnSLeez5vG0gzZcxFpeZcJDMLOxz1YGfRxkX+0YNvwFmiA9PRUEr7Fdn9Q=
+X-Received: by 2002:a05:6870:a343:b0:17e:5166:e5ad with SMTP id
+ y3-20020a056870a34300b0017e5166e5admr99266oak.44.1684380166509; Wed, 17 May
+ 2023 20:22:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230517041119.202072-1-po-hsu.lin@canonical.com> <ZGRthdt5u88zs6xy@shredder>
+In-Reply-To: <ZGRthdt5u88zs6xy@shredder>
+From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
+Date:   Thu, 18 May 2023 11:22:35 +0800
+Message-ID: <CAMy_GT9SYNzhDx6Eod8VXkDM+eKnn+5NjxvBvd5bORF9kBBu_g@mail.gmail.com>
+Subject: Re: [PATCH] selftests: fib_tests: mute cleanup error message
+To:     Ido Schimmel <idosch@idosch.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, dsahern@gmail.com, shuah@kernel.org,
+        pabeni@redhat.com, kuba@kernel.org, edumazet@google.com,
+        davem@davemloft.net
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When a valid remap region could not be found, the source mapping is not
-cleaned up. Fix the goto statement such that the clean up happens.
+On Wed, May 17, 2023 at 2:00=E2=80=AFPM Ido Schimmel <idosch@idosch.org> wr=
+ote:
+>
+> On Wed, May 17, 2023 at 12:11:19PM +0800, Po-Hsu Lin wrote:
+> > In the end of the test, there will be an error message induced by the
+> > `ip netns del ns1` command in cleanup()
+> >
+> >   Tests passed: 201
+> >   Tests failed:   0
+> >   Cannot remove namespace file "/run/netns/ns1": No such file or direct=
+ory
+> >
+> > Redirect the error message to /dev/null to mute it.
+> >
+> > Fixes: a0e11da78f48 ("fib_tests: Add tests for metrics on routes")
+>
+> I don't think this tag is correct. More likely that this is caused by
+> commit b60417a9f2b8 ("selftest: fib_tests: Always cleanup before exit").
+>
+> You can even reproduce it with '-h':
+>
+> # ./fib_tests.sh -h
+> usage: fib_tests.sh OPTS
+> [...]
+> Cannot remove namespace file "/var/run/netns/ns1": No such file or direct=
+ory
+>
+> Reverting the commit I mentioned makes it go away.
+>
+> Also, please use "PATCH net" prefix:
+> https://www.kernel.org/doc/html/latest/process/maintainer-netdev.html#tl-=
+dr
 
-Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
----
- tools/testing/selftests/mm/mremap_test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/mm/mremap_test.c b/tools/testing/selftests/mm/mremap_test.c
-index 5c3773de9f0f..6822d657f589 100644
---- a/tools/testing/selftests/mm/mremap_test.c
-+++ b/tools/testing/selftests/mm/mremap_test.c
-@@ -316,7 +316,7 @@ static long long remap_region(struct config c, unsigned int threshold_mb,
- 		if (addr + c.dest_alignment < addr) {
- 			ksft_print_msg("Couldn't find a valid region to remap to\n");
- 			ret = -1;
--			goto out;
-+			goto clean_up_src;
- 		}
- 		addr += c.dest_alignment;
- 	}
--- 
-2.40.1.606.ga4b1b128d6-goog
-
+Thank you!
+I will submit V2 for this.
