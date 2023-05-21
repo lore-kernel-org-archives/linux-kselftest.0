@@ -2,38 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 279FAC77B7C
-	for <linux-kselftest@archiver.kernel.org>; Sun, 21 May 2023 09:37:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93CB2C7EE29
+	for <linux-kselftest@archiver.kernel.org>; Sun, 21 May 2023 09:37:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbjEUJhS (ORCPT
+        id S229570AbjEUJhV (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 21 May 2023 05:37:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58278 "EHLO
+        Sun, 21 May 2023 05:37:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230164AbjEUJhH (ORCPT
+        with ESMTP id S230177AbjEUJhH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Sun, 21 May 2023 05:37:07 -0400
 Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B76D0119;
-        Sun, 21 May 2023 02:36:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD5F7E6;
+        Sun, 21 May 2023 02:36:49 -0700 (PDT)
 From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1684661803;
-        bh=IRUupTWokl6bSvN/Qk4Ov6+kUGTwoo0KFMWwChixIDM=;
-        h=From:Subject:Date:To:Cc:From;
-        b=cqxlSIQDXcaATq4ZkEomg3mY2IIrtqss61smptg9yb0lL1E7hdITHmKOiQkYwWMPr
-         dSUmlXT3YXWXIAj6wIKV373n/HOdFYkU8neAUuRNG4U2Y55s6Mf3AQV4YgSKua8BCn
-         gEy2ZeaIjLoDyfdEpiNxt0KJb6Awa7KExEknuKus=
-Subject: [PATCH 0/7] tools/nolibc: autodetect stackprotector availability
- from compiler
-Date:   Sun, 21 May 2023 11:36:28 +0200
-Message-Id: <20230521-nolibc-automatic-stack-protector-v1-0-dad6c80c51c1@weissschuh.net>
+        s=mail; t=1684661804;
+        bh=OtZaR9VeuPmOojjtUgQSBdMGO5O2wKJgryXGtmTqRzI=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+        b=qhrhQOOMS89DvZWNK5Af0kDzvUeY+vJnHje0Yv/lqShv8qVQxvPu7lLqOxLdaHDbb
+         yg7wwTACqQ699CQiFqiHYVuIpHZfQMKuNwT2AyogjeH4mqTU1vmIvrxFgkdbLkNxF/
+         nsk2legjwR2ozCkPxi3xQjS0XL+LYgRhmOHn0l14=
+Date:   Sun, 21 May 2023 11:36:35 +0200
+Subject: [PATCH 7/7] tools/nolibc: simplify stackprotector compiler flags
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIABzmaWQC/x2NQQrCMBAAv1L27EIbraJfkR4268YuxqRsUhFK/
- 27wOHOY2aCIqRS4dRuYfLRoTg2GQwc8U3oK6qMxuN4d+9ENmHJUz0hrzW+qylgq8QsXy1W4ZkN
- /CpdA/ipnN0LLeCqC3ijx3EJpjbHJxSTo9/+9T/v+A6RUit+HAAAA
+Message-Id: <20230521-nolibc-automatic-stack-protector-v1-7-dad6c80c51c1@weissschuh.net>
+References: <20230521-nolibc-automatic-stack-protector-v1-0-dad6c80c51c1@weissschuh.net>
+In-Reply-To: <20230521-nolibc-automatic-stack-protector-v1-0-dad6c80c51c1@weissschuh.net>
 To:     Willy Tarreau <w@1wt.eu>, "Paul E. McKenney" <paulmck@kernel.org>,
         Shuah Khan <shuah@kernel.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
@@ -46,51 +44,58 @@ Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
         =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1684661802; l=1743;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1684661802; l=1698;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=IRUupTWokl6bSvN/Qk4Ov6+kUGTwoo0KFMWwChixIDM=;
- b=+KCHXIX7ZFxeWvKYgiPiXSHck8c9OJAqiZ1m8d98eL9+rckJEWvb6uDCavW+0/kuvJ7Fdte+g
- m1VE13Y0y6WDZ5dPNcWR/VP/9J98CEzoH+Wt4RH1E7OYcJxR3RLRXIu
+ bh=OtZaR9VeuPmOojjtUgQSBdMGO5O2wKJgryXGtmTqRzI=;
+ b=DomoIsmXsRZwQWk0ScmwjLFDuu1dnN26YCXUzo34GqOdYuAtwSgkUrabKkFdr4rSI27UuPoCc
+ 06iKjlgljDsC3ma9RvH/A7hClYqSQSwPisv/goaAeqLfKemkx+wOWfn
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-As suggested by Willy it is possible to detect the availability of
-stackprotector via preprocessor defines.
-Make use of that to simplify the code and interface of nolibc.
+Now that nolibc enable stackprotector support automatically when the
+compiler enables it we only have to get the -fstack-protector flags
+correct.
+
+The cc-options are structured so that -fstack-protector-all is only
+enabled if -mstack-protector=guard works, as that is the only mode
+supported by nolibc.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
-Thomas Weißschuh (7):
-      tools/nolibc: fix typo pint -> point
-      tools/nolibc: x86_64: disable stack protector for _start
-      tools/nolibc: ensure stack protector guard is never zero
-      tools/nolibc: add test for __stack_chk_guard initialization
-      tools/nolibc: reformat list of headers to be installed
-      tools/nolibc: add autodetection for stackprotector support
-      tools/nolibc: simplify stackprotector compiler flags
+ tools/testing/selftests/nolibc/Makefile | 13 ++-----------
+ 1 file changed, 2 insertions(+), 11 deletions(-)
 
- tools/include/nolibc/Makefile                | 19 +++++++++++++++++--
- tools/include/nolibc/arch-aarch64.h          |  6 +++---
- tools/include/nolibc/arch-arm.h              |  6 +++---
- tools/include/nolibc/arch-i386.h             |  6 +++---
- tools/include/nolibc/arch-loongarch.h        |  6 +++---
- tools/include/nolibc/arch-mips.h             |  6 +++---
- tools/include/nolibc/arch-riscv.h            |  6 +++---
- tools/include/nolibc/arch-x86_64.h           |  8 ++++----
- tools/include/nolibc/arch.h                  |  2 +-
- tools/include/nolibc/compiler.h              | 15 +++++++++++++++
- tools/include/nolibc/stackprotector.h        | 15 ++++++---------
- tools/testing/selftests/nolibc/Makefile      | 13 ++-----------
- tools/testing/selftests/nolibc/nolibc-test.c | 10 +++++++++-
- 13 files changed, 72 insertions(+), 46 deletions(-)
----
-base-commit: 606343b7478c319cb30291a39ecbceddb42229d6
-change-id: 20230521-nolibc-automatic-stack-protector-b4f7fab9e625
+diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+index bd41102ea299..445c352b1b33 100644
+--- a/tools/testing/selftests/nolibc/Makefile
++++ b/tools/testing/selftests/nolibc/Makefile
+@@ -76,20 +76,11 @@ else
+ Q=@
+ endif
+ 
+-CFLAGS_STACKPROTECTOR = -DNOLIBC_STACKPROTECTOR \
+-			$(call cc-option,-mstack-protector-guard=global) \
+-			$(call cc-option,-fstack-protector-all)
+-CFLAGS_STKP_i386 = $(CFLAGS_STACKPROTECTOR)
+-CFLAGS_STKP_x86_64 = $(CFLAGS_STACKPROTECTOR)
+-CFLAGS_STKP_x86 = $(CFLAGS_STACKPROTECTOR)
+-CFLAGS_STKP_arm64 = $(CFLAGS_STACKPROTECTOR)
+-CFLAGS_STKP_arm = $(CFLAGS_STACKPROTECTOR)
+-CFLAGS_STKP_mips = $(CFLAGS_STACKPROTECTOR)
+-CFLAGS_STKP_riscv = $(CFLAGS_STACKPROTECTOR)
+-CFLAGS_STKP_loongarch = $(CFLAGS_STACKPROTECTOR)
++CFLAGS_STACKPROTECTOR = $(call cc-option,-mstack-protector-guard=global -fstack-protector-all)
+ CFLAGS_s390 = -m64
+ CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 \
+ 		$(call cc-option,-fno-stack-protector) \
++		$(call cc-option,-mstack-protector-guard=global $(call cc-option,-fstack-protector-all)) \
+ 		$(CFLAGS_STKP_$(ARCH)) $(CFLAGS_$(ARCH))
+ LDFLAGS := -s
+ 
 
-Best regards,
 -- 
-Thomas Weißschuh <linux@weissschuh.net>
+2.40.1
 
