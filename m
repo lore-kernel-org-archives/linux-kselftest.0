@@ -2,81 +2,196 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 981A4C7EE32
-	for <linux-kselftest@archiver.kernel.org>; Wed, 24 May 2023 06:46:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D095C77B7A
+	for <linux-kselftest@archiver.kernel.org>; Wed, 24 May 2023 06:46:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239393AbjEXGqs (ORCPT
+        id S239074AbjEXGqs (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Wed, 24 May 2023 02:46:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34848 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235788AbjEXGpw (ORCPT
+        with ESMTP id S234559AbjEXGpw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Wed, 24 May 2023 02:45:52 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F0C18D;
-        Tue, 23 May 2023 23:44:50 -0700 (PDT)
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3167E5D;
+        Tue, 23 May 2023 23:44:51 -0700 (PDT)
 From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1684910688;
-        bh=O1oDBEfZrMirjlbecuPJrH574m6Ohdf1ItbhTKlrEjI=;
-        h=From:Subject:Date:To:Cc:From;
-        b=ht2yqTZeKv6LzUZha6EPeYtNgnQRnSMKkCA3G2s4yGzdGgvtCc3O+Wan3e1ulQ83c
-         5hCznMkRAXJtg0maOrsfdhdZx0HByzK8GLS/YPQs1U7yI3vZkvH5po12GhNTTF+0ze
-         hGWJUTVA8Iz2jNwZPB5fYSbOaIZl8uc9hZNbqPrQ=
-Subject: [PATCH 0/3] tools/nolibc: stack protector compatibility fixes
-Date:   Wed, 24 May 2023 08:44:41 +0200
-Message-Id: <20230523-nolibc-stackprotector-gcc9-v1-0-3e4804235d50@weissschuh.net>
+        s=mail; t=1684910689;
+        bh=reqmiExzGTQxklSzXm/noKKOAtLNvVE59PGDoFayN1w=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+        b=T5SmGOkI29IEM9XLSnj/i28kCVnJ1iPZXPvU8IsemBikgoO7uMwTYcYpUYVPF3d/V
+         oR29290VK+P963iAIaUBPnyiysG3V/TjFDNENC4DJD4RzCCj42362qbBnOLzA7pQwL
+         FWbUt3btYEL2eEYtlYxmBTxdg/HpRJhc/5STdbTU=
+Date:   Wed, 24 May 2023 08:44:44 +0200
+Subject: [PATCH 3/3] tools/nolibc: fix segfaults on compilers without
+ attribute no_stack_protector
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAFmybWQC/x2NQQrCMBAAv1L27EKaorZ+RTwk27VdDEnZjSKU/
- t3gceYws4OxChvcuh2UP2JScoP+1AGtIS+MMjcG7/zgzn7AXJJEQquBXpuWylSL4kI04cgc596
- F63QZoQViMMaoIdPaEvmdUpOb8lO+/+P9cRw/ZUPgcoEAAAA=
+Message-Id: <20230523-nolibc-stackprotector-gcc9-v1-3-3e4804235d50@weissschuh.net>
+References: <20230523-nolibc-stackprotector-gcc9-v1-0-3e4804235d50@weissschuh.net>
+In-Reply-To: <20230523-nolibc-stackprotector-gcc9-v1-0-3e4804235d50@weissschuh.net>
 To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
 Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         Zhangjin Wu <falcon@tinylab.org>,
         =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1684910688; l=1233;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1684910688; l=6337;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=O1oDBEfZrMirjlbecuPJrH574m6Ohdf1ItbhTKlrEjI=;
- b=/4nb//vyfjDcXpmlXxL6cXxCgsjdFwq/fOL3SDCndBD3Ho39yWGtHbc5aYy8INfLQ+9gqYixE
- Xdusi0/HrzoBOe0uylH/Trhw7P0CNYYax0D1nidOclWIShxD6GWZrMp
+ bh=reqmiExzGTQxklSzXm/noKKOAtLNvVE59PGDoFayN1w=;
+ b=37z0/+Hv+PAPuNXfne/yE/xDem/kRyC8T7qzhC9LLT1n00nsJ7pvhUOMzZ8UIuX5RNyAfO/UW
+ 3I0zQDK4E1GBPAb9uGHQraM8gl/1B96DWTzSLOn25HI2PoDEM0vqOz0
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Two fixes for nolibc to
-* allow users to explicitly disable (or theoretically enable) when
-  building the tests
-* fix stackprotectors on GCC < 10.
+Not all compilers, notably GCC < 10, have support for
+__attribute__((no_stack_protector)).
+Fall back to a mechanism that also works there.
+
+Tested with GCC 9.5.0 from kernel.org crosstools.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
-Thomas Weißschuh (3):
-      Revert "EXP: tools/nolibc: partially revert stackprotector compiler flags"
-      selftests/nolibc: allow disabling of stackprotector support
-      tools/nolibc: fix segfaults on compilers without attribute no_stack_protector
+ tools/include/nolibc/arch-aarch64.h   |  2 +-
+ tools/include/nolibc/arch-arm.h       |  2 +-
+ tools/include/nolibc/arch-i386.h      |  2 +-
+ tools/include/nolibc/arch-loongarch.h |  2 +-
+ tools/include/nolibc/arch-mips.h      |  2 +-
+ tools/include/nolibc/arch-riscv.h     |  2 +-
+ tools/include/nolibc/arch-x86_64.h    |  2 +-
+ tools/include/nolibc/compiler.h       | 10 ++++++++++
+ tools/include/nolibc/stackprotector.h |  2 +-
+ 9 files changed, 18 insertions(+), 8 deletions(-)
 
- tools/include/nolibc/arch-aarch64.h     |  2 +-
- tools/include/nolibc/arch-arm.h         |  2 +-
- tools/include/nolibc/arch-i386.h        |  2 +-
- tools/include/nolibc/arch-loongarch.h   |  2 +-
- tools/include/nolibc/arch-mips.h        |  2 +-
- tools/include/nolibc/arch-riscv.h       |  2 +-
- tools/include/nolibc/arch-x86_64.h      |  2 +-
- tools/include/nolibc/compiler.h         | 10 ++++++++++
- tools/include/nolibc/stackprotector.h   |  2 +-
- tools/testing/selftests/nolibc/Makefile | 13 ++-----------
- 10 files changed, 20 insertions(+), 19 deletions(-)
----
-base-commit: 8213b0cdb51d1f66af713e00fd0dff3c2eb47636
-change-id: 20230523-nolibc-stackprotector-gcc9-8eebd10a7968
+diff --git a/tools/include/nolibc/arch-aarch64.h b/tools/include/nolibc/arch-aarch64.h
+index 64ec65b4ee38..11f294a406b7 100644
+--- a/tools/include/nolibc/arch-aarch64.h
++++ b/tools/include/nolibc/arch-aarch64.h
+@@ -175,7 +175,7 @@ char **environ __attribute__((weak));
+ const unsigned long *_auxv __attribute__((weak));
+ 
+ /* startup code */
+-void __attribute__((weak,noreturn,optimize("omit-frame-pointer"),no_stack_protector)) _start(void)
++void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
+ {
+ 	__asm__ volatile (
+ #ifdef _NOLIBC_STACKPROTECTOR
+diff --git a/tools/include/nolibc/arch-arm.h b/tools/include/nolibc/arch-arm.h
+index 924169522cf7..45b89ffe8247 100644
+--- a/tools/include/nolibc/arch-arm.h
++++ b/tools/include/nolibc/arch-arm.h
+@@ -202,7 +202,7 @@ char **environ __attribute__((weak));
+ const unsigned long *_auxv __attribute__((weak));
+ 
+ /* startup code */
+-void __attribute__((weak,noreturn,optimize("omit-frame-pointer"),no_stack_protector)) _start(void)
++void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
+ {
+ 	__asm__ volatile (
+ #ifdef _NOLIBC_STACKPROTECTOR
+diff --git a/tools/include/nolibc/arch-i386.h b/tools/include/nolibc/arch-i386.h
+index 37f813912957..3d672d925e9e 100644
+--- a/tools/include/nolibc/arch-i386.h
++++ b/tools/include/nolibc/arch-i386.h
+@@ -190,7 +190,7 @@ const unsigned long *_auxv __attribute__((weak));
+  * 2) The deepest stack frame should be set to zero
+  *
+  */
+-void __attribute__((weak,noreturn,optimize("omit-frame-pointer"),no_stack_protector)) _start(void)
++void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
+ {
+ 	__asm__ volatile (
+ #ifdef _NOLIBC_STACKPROTECTOR
+diff --git a/tools/include/nolibc/arch-loongarch.h b/tools/include/nolibc/arch-loongarch.h
+index d8ea7e787df4..ad3f266e7093 100644
+--- a/tools/include/nolibc/arch-loongarch.h
++++ b/tools/include/nolibc/arch-loongarch.h
+@@ -172,7 +172,7 @@ const unsigned long *_auxv __attribute__((weak));
+ #endif
+ 
+ /* startup code */
+-void __attribute__((weak,noreturn,optimize("omit-frame-pointer"),no_stack_protector)) _start(void)
++void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
+ {
+ 	__asm__ volatile (
+ #ifdef _NOLIBC_STACKPROTECTOR
+diff --git a/tools/include/nolibc/arch-mips.h b/tools/include/nolibc/arch-mips.h
+index 9860236e5340..db24e0837a39 100644
+--- a/tools/include/nolibc/arch-mips.h
++++ b/tools/include/nolibc/arch-mips.h
+@@ -182,7 +182,7 @@ char **environ __attribute__((weak));
+ const unsigned long *_auxv __attribute__((weak));
+ 
+ /* startup code, note that it's called __start on MIPS */
+-void __attribute__((weak,noreturn,optimize("omit-frame-pointer"),no_stack_protector)) __start(void)
++void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector __start(void)
+ {
+ 	__asm__ volatile (
+ 		/*".set nomips16\n"*/
+diff --git a/tools/include/nolibc/arch-riscv.h b/tools/include/nolibc/arch-riscv.h
+index 86616aeb77a0..a2e8564e66d6 100644
+--- a/tools/include/nolibc/arch-riscv.h
++++ b/tools/include/nolibc/arch-riscv.h
+@@ -180,7 +180,7 @@ char **environ __attribute__((weak));
+ const unsigned long *_auxv __attribute__((weak));
+ 
+ /* startup code */
+-void __attribute__((weak,noreturn,optimize("omit-frame-pointer"),no_stack_protector)) _start(void)
++void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
+ {
+ 	__asm__ volatile (
+ 		".option push\n"
+diff --git a/tools/include/nolibc/arch-x86_64.h b/tools/include/nolibc/arch-x86_64.h
+index 485a7ff72a87..6fc4d8392742 100644
+--- a/tools/include/nolibc/arch-x86_64.h
++++ b/tools/include/nolibc/arch-x86_64.h
+@@ -190,7 +190,7 @@ const unsigned long *_auxv __attribute__((weak));
+  * 2) The deepest stack frame should be zero (the %rbp).
+  *
+  */
+-void __attribute__((weak,noreturn,optimize("omit-frame-pointer"),no_stack_protector)) _start(void)
++void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
+ {
+ 	__asm__ volatile (
+ #ifdef _NOLIBC_STACKPROTECTOR
+diff --git a/tools/include/nolibc/compiler.h b/tools/include/nolibc/compiler.h
+index 57da75cea799..beddc3665d69 100644
+--- a/tools/include/nolibc/compiler.h
++++ b/tools/include/nolibc/compiler.h
+@@ -12,4 +12,14 @@
+ 
+ #endif /* defined(__SSP__) ... */
+ 
++#if defined(__has_attribute)
++#  if __has_attribute(no_stack_protector)
++#    define __no_stack_protector __attribute__((no_stack_protector))
++#  else
++#    define __no_stack_protector __attribute__((__optimize__("-fno-stack-protector")))
++#  endif
++#else
++#  define __no_stack_protector __attribute__((__optimize__("-fno-stack-protector")))
++#endif /* defined(__has_attribute) */
++
+ #endif /* _NOLIBC_COMPILER_H */
+diff --git a/tools/include/nolibc/stackprotector.h b/tools/include/nolibc/stackprotector.h
+index 0a89e2b89ca6..88f7b2d098ff 100644
+--- a/tools/include/nolibc/stackprotector.h
++++ b/tools/include/nolibc/stackprotector.h
+@@ -37,7 +37,7 @@ void __stack_chk_fail_local(void)
+ __attribute__((weak,section(".data.nolibc_stack_chk")))
+ uintptr_t __stack_chk_guard;
+ 
+-__attribute__((weak,no_stack_protector,section(".text.nolibc_stack_chk")))
++__attribute__((weak,section(".text.nolibc_stack_chk"))) __no_stack_protector
+ void __stack_chk_init(void)
+ {
+ 	my_syscall3(__NR_getrandom, &__stack_chk_guard, sizeof(__stack_chk_guard), 0);
 
-Best regards,
 -- 
-Thomas Weißschuh <linux@weissschuh.net>
+2.40.1
 
