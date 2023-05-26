@@ -2,126 +2,54 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DF78AC7EE2F
-	for <linux-kselftest@archiver.kernel.org>; Fri, 26 May 2023 06:30:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C667C77B7C
+	for <linux-kselftest@archiver.kernel.org>; Fri, 26 May 2023 06:57:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242147AbjEZGap (ORCPT
+        id S231495AbjEZG5L (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 26 May 2023 02:30:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34070 "EHLO
+        Fri, 26 May 2023 02:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236693AbjEZGam (ORCPT
+        with ESMTP id S229805AbjEZG5K (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 26 May 2023 02:30:42 -0400
+        Fri, 26 May 2023 02:57:10 -0400
 Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0681F125;
-        Thu, 25 May 2023 23:30:40 -0700 (PDT)
-From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1685082638;
-        bh=feE5GF7sSHQYQ5FSqkLvKWbBOiMTo93SuVWHmjxyeJw=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=ExDchs/ZRrFRV4v4wSML7GCpmB6CbFZGI2pFOKySq4/R0XYKv7NO8qhMUdcp59qLM
-         yO8jj0Hy//LPUkI5AY35Pkm2YrSP9OhcTGdAlRfU5HjjiuaU1Dqf5SgbthmSyQHeeq
-         hxEa+6eGi0g96TcsnBAmXJRdKGIwG+8+w3ks5iyI=
-Date:   Fri, 26 May 2023 08:30:35 +0200
-Subject: [PATCH 1/2] tools/nolibc: add support for prctl()
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE46E95;
+        Thu, 25 May 2023 23:57:09 -0700 (PDT)
+Date:   Fri, 26 May 2023 08:57:07 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+        t=1685084228; bh=svHIYYsnUTreXuvX8V5j3gYUDNQ2Qs7ua4MdAIMR+mQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kUxyoogygvgs87cTjQvR6A7rvVBHtM0GxBqXbkuy2fa+dKd8zPRrhAGUbyeMzZGe/
+         So2e2OkGQJexcrinFdfjO4ngF0eba/peYRfnksaujydQhYl3ON+JYjfKe0wiLOwxqG
+         iUneCQgPT/JO7dRY+dhnAuPl2uZtI7JKgr6j1E7E=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Zhangjin Wu <falcon@tinylab.org>
+Cc:     w@1wt.eu, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        palmer@dabbelt.com, paul.walmsley@sifive.com
+Subject: Re: [PATCH 05/13] selftests/nolibc: riscv: customize makefile for
+ rv32
+Message-ID: <4a3b1cdf-91d5-4668-925e-21f8f5c64a92@t-8ch.de>
+References: <cover.1684949267.git.falcon@tinylab.org>
+ <7adb27a7c56dd06d782710a5f684ea6263900f98.1684949268.git.falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20230526-nolibc-test-no-dump-v1-1-62e724a96db2@weissschuh.net>
-References: <20230526-nolibc-test-no-dump-v1-0-62e724a96db2@weissschuh.net>
-In-Reply-To: <20230526-nolibc-test-no-dump-v1-0-62e724a96db2@weissschuh.net>
-To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1685082637; l=2782;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=feE5GF7sSHQYQ5FSqkLvKWbBOiMTo93SuVWHmjxyeJw=;
- b=rKi2UVvspxLdWtiD9wtKUzt6GsxOe7oxvaliatgqOG70KqJoHRv8LLJbfWoAcJjMUfpGU/10R
- d43FqGOGdnOAE2UR81CMJvQezwmf0cO5fuBibGQmBn7BMVjw9uZgnRs
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7adb27a7c56dd06d782710a5f684ea6263900f98.1684949268.git.falcon@tinylab.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-It will be used to disable core dumps from the child spawned to validate
-the stack protector functionality.
+On 2023-05-25 01:50:57+0800, Zhangjin Wu wrote:
+> both riscv64 and riscv32 have the same ARCH value, it is riscv, the
+> default defconfig enables 64bit, to support riscv32, let's allow pass
+> "ARCH=riscv32" or "ARCH=riscv CONFIG_32BIT=1" to customize riscv32
+> setting.
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- tools/include/nolibc/sys.h                   | 27 +++++++++++++++++++++++++++
- tools/testing/selftests/nolibc/nolibc-test.c |  2 ++
- 2 files changed, 29 insertions(+)
+What's the advantage of doing CONFIG_32BIT? For i386/x86_64, arm/arm64
+it's not necessary either.
+(Let's ignore the "x86" case)
 
-diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-index 7874062bea95..3d521feffad6 100644
---- a/tools/include/nolibc/sys.h
-+++ b/tools/include/nolibc/sys.h
-@@ -22,6 +22,7 @@
- #include <linux/fcntl.h> /* for O_* and AT_* */
- #include <linux/stat.h>  /* for statx() */
- #include <linux/reboot.h> /* for LINUX_REBOOT_* */
-+#include <linux/prctl.h>
- 
- #include "arch.h"
- #include "errno.h"
-@@ -894,6 +895,32 @@ int open(const char *path, int flags, ...)
- }
- 
- 
-+/*
-+ * int prctl(int option, unsigned long arg2, unsigned long arg3,
-+ *                       unsigned long arg4, unsigned long arg5);
-+ */
-+
-+static __attribute__((unused))
-+int sys_prctl(int option, unsigned long arg2, unsigned long arg3,
-+		          unsigned long arg4, unsigned long arg5)
-+{
-+	return my_syscall5(__NR_prctl, option, arg2, arg3, arg4, arg5);
-+}
-+
-+static __attribute__((unused))
-+int prctl(int option, unsigned long arg2, unsigned long arg3,
-+		      unsigned long arg4, unsigned long arg5)
-+{
-+	int ret = sys_prctl(option, arg2, arg3, arg4, arg5);
-+
-+	if (ret < 0) {
-+		SET_ERRNO(-ret);
-+		ret = -1;
-+	}
-+	return ret;
-+}
-+
-+
- /*
-  * int pivot_root(const char *new, const char *old);
-  */
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 6e0a4dbe321e..76a9a0f362b1 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -22,6 +22,7 @@
- #include <sys/ioctl.h>
- #include <sys/mman.h>
- #include <sys/mount.h>
-+#include <sys/prctl.h>
- #include <sys/reboot.h>
- #include <sys/stat.h>
- #include <sys/syscall.h>
-@@ -580,6 +581,7 @@ int run_syscall(int min, int max)
- 		CASE_TEST(poll_null);         EXPECT_SYSZR(1, poll(NULL, 0, 0)); break;
- 		CASE_TEST(poll_stdout);       EXPECT_SYSNE(1, ({ struct pollfd fds = { 1, POLLOUT, 0}; poll(&fds, 1, 0); }), -1); break;
- 		CASE_TEST(poll_fault);        EXPECT_SYSER(1, poll((void *)1, 1, 0), -1, EFAULT); break;
-+		CASE_TEST(prctl);             EXPECT_SYSER(1, prctl(PR_SET_NAME, NULL, 0, 0, 0), -1, EFAULT); break;
- 		CASE_TEST(read_badf);         EXPECT_SYSER(1, read(-1, &tmp, 1), -1, EBADF); break;
- 		CASE_TEST(sched_yield);       EXPECT_SYSZR(1, sched_yield()); break;
- 		CASE_TEST(select_null);       EXPECT_SYSZR(1, ({ struct timeval tv = { 0 }; select(0, NULL, NULL, NULL, &tv); })); break;
-
--- 
-2.40.1
-
+If for riscv the "normal" version is riscv64 then adding a new "riscv32" that
+works the same as the other architectures seems nicer and easier.
