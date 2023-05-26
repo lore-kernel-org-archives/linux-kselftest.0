@@ -2,126 +2,134 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 227BBC7EE2D
-	for <linux-kselftest@archiver.kernel.org>; Fri, 26 May 2023 07:51:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63697C77B7A
+	for <linux-kselftest@archiver.kernel.org>; Fri, 26 May 2023 07:54:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242533AbjEZHv0 (ORCPT
+        id S242179AbjEZHyE (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 26 May 2023 03:51:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44822 "EHLO
+        Fri, 26 May 2023 03:54:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242512AbjEZHvY (ORCPT
+        with ESMTP id S236939AbjEZHyD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 26 May 2023 03:51:24 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F79E135;
-        Fri, 26 May 2023 00:51:23 -0700 (PDT)
-From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1685087481;
-        bh=DkJgAJcAvtdVnot+t7IOseLE6pLBA89qfDYOzqzRxr4=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=lLn5Ra4UT5W+7hPi/W7hyftOnWvQtbYt+RnnVvKlguWzQzyC0CwMO2hGXzu6ur9yH
-         qfmUquarnq6NgvYS+xMiQ8MFmMW45qi4cvdFJu3NugZ30I2j+u6vl7Wz5c3sc1gHEz
-         6DY8wQXm+P5v9F77hDDwcSJsc8sUYdW2ttJUKJJQ=
-Date:   Fri, 26 May 2023 09:51:19 +0200
-Subject: [PATCH v2 1/2] tools/nolibc: add support for prctl()
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20230526-nolibc-test-no-dump-v2-1-a66500bf73fc@weissschuh.net>
-References: <20230526-nolibc-test-no-dump-v2-0-a66500bf73fc@weissschuh.net>
-In-Reply-To: <20230526-nolibc-test-no-dump-v2-0-a66500bf73fc@weissschuh.net>
-To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1685087479; l=2797;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=DkJgAJcAvtdVnot+t7IOseLE6pLBA89qfDYOzqzRxr4=;
- b=1qmpuRz+hs8ZGEviZzteWWt0ML8v4Ia8/JBkYrADdw2L0sSJWamEoTw3a3mzpd35T6OfV0d2/
- uvz8xMz4/LmC5SqdGi/Jv4+cymN2dC0aC+H8ojsYN0kyrYw8n7SMt0n
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+        Fri, 26 May 2023 03:54:03 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC73125
+        for <linux-kselftest@vger.kernel.org>; Fri, 26 May 2023 00:54:02 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-ba8338f20bdso735405276.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 26 May 2023 00:54:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685087641; x=1687679641;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=9bgtUJTrUPIWbcjE2YrRDnp+lMcC0D7ZWyXbYBrXuSE=;
+        b=h1pP42iyvlOB7PXc1d4O9+YDxu94Br5uZo6P1cNH3ds5S4dVjkvqv666GHsU2XnWNc
+         BKU6U3EKC39ri14gHTtxayPzPH7zeDs1FSRNTXw0qG8Y95K0jYVhODrw16EXjaMnOXN2
+         8VDkWg0ZCzGJI4BA5kx8VBZimihQKyKEEwBvBMoODoHlICnpGzPL2WYtYEN5qvpjuCMo
+         39IXxvMNHQYov2AEv+Yor1fr68hO1jhtMWIrtKAsJHOKCm7QWjw5LHMEAEjZs2V915om
+         cE77hXJmthrXbCEmNzrxHXvH1W9XGqNrrM9fCm25iGWls/sYKEuS2X2OQlGpJo5C0ct6
+         VfWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685087641; x=1687679641;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9bgtUJTrUPIWbcjE2YrRDnp+lMcC0D7ZWyXbYBrXuSE=;
+        b=BA5YFiM3MFxrhh7uDCcJ3mzuRTDAgHJHNJ8ceb+AsEo19N2J3XgkORwp8D/khCU4M5
+         Dn4dY+BFuxRI3IMkdWJ3mCXiu77WFgQhM+jdEC8y5KFsZvfwHcMJX/xfO1uXp8/liGIa
+         rPD9V+Oq/cOZnYetFIrEZxesJxdclfsjWHNwrR3hHJPR7E7szHmJ8nMuDB2m+ufTtH4I
+         nwrIsXY/jv9AClDH5b3v15yopPcFEYZu2oV7w6DEQX5ws23hMeKCeClM4HcWKKy1GNUC
+         xI2egUsANK8rJxjC7Rcv4dhY8/NEHGk1qo+OVT//zAXk742ZyXEd/naS9oNOdaYYcp+9
+         dKDw==
+X-Gm-Message-State: AC+VfDyHV+4P8w6nWBVu8r6YCrXU8ZsgIsCngxkIMTYm5IBkYixoSu8Y
+        hiya9gmdgyAL+X2QByHrhcqOso1SC8n4MQ==
+X-Google-Smtp-Source: ACHHUZ5J/dcsqYhlQaPA0ex1GxAxZze4W6DSSDGH0LeBuat3DIA1OjJPZ9PuzQX+zpk79CLo6+n3+iFEP7bVPg==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a25:3d2:0:b0:bac:a1d4:dbf6 with SMTP id
+ 201-20020a2503d2000000b00baca1d4dbf6mr492750ybd.6.1685087641289; Fri, 26 May
+ 2023 00:54:01 -0700 (PDT)
+Date:   Fri, 26 May 2023 15:53:54 +0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
+Message-ID: <20230526075355.586335-1-davidgow@google.com>
+Subject: [RFC PATCH] kunit: Move kunit_abort() call out of kunit_do_failed_assertion()
+From:   David Gow <davidgow@google.com>
+To:     Dan Carpenter <dan.carpenter@linaro.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Rae Moar <rmoar@google.com>,
+        Daniel Latypov <dlatypov@google.com>
+Cc:     David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-It will be used to disable core dumps from the child spawned to validate
-the stack protector functionality.
+KUnit aborts the current thread when an assertion fails. Currently, this
+is done conditionally as part of the kunit_do_failed_assertion()
+function, but this hides the kunit_abort() call from the compiler
+(particularly if it's in another module). This, in turn, can lead to
+both suboptimal code generation (the compiler can't know if
+kunit_do_failed_assertion() will return), and to static analysis tools
+like smatch giving false positives.
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+Moving the kunit_abort() call into the macro should give the compiler
+and tools a better chance at understanding what's going on. Doing so
+requires exporting kunit_abort(), though it's recommended to continue to
+use assertions in lieu of aborting directly.
+
+Suggested-by: Dan Carpenter <dan.carpenter@linaro.org>
+Signed-off-by: David Gow <davidgow@google.com>
 ---
- tools/include/nolibc/sys.h                   | 27 +++++++++++++++++++++++++++
- tools/testing/selftests/nolibc/nolibc-test.c |  2 ++
- 2 files changed, 29 insertions(+)
+ include/kunit/test.h | 4 ++++
+ lib/kunit/test.c     | 5 +----
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-index 7874062bea95..3d521feffad6 100644
---- a/tools/include/nolibc/sys.h
-+++ b/tools/include/nolibc/sys.h
-@@ -22,6 +22,7 @@
- #include <linux/fcntl.h> /* for O_* and AT_* */
- #include <linux/stat.h>  /* for statx() */
- #include <linux/reboot.h> /* for LINUX_REBOOT_* */
-+#include <linux/prctl.h>
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index 2f23d6efa505..6a35e3e2a1e5 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -481,6 +481,8 @@ void __printf(2, 3) kunit_log_append(char *log, const char *fmt, ...);
+  */
+ #define KUNIT_SUCCEED(test) do {} while (0)
  
- #include "arch.h"
- #include "errno.h"
-@@ -894,6 +895,32 @@ int open(const char *path, int flags, ...)
++void __noreturn kunit_abort(struct kunit *test);
++
+ void kunit_do_failed_assertion(struct kunit *test,
+ 			       const struct kunit_loc *loc,
+ 			       enum kunit_assert_type type,
+@@ -498,6 +500,8 @@ void kunit_do_failed_assertion(struct kunit *test,
+ 				  assert_format,			       \
+ 				  fmt,					       \
+ 				  ##__VA_ARGS__);			       \
++	if (assert_type == KUNIT_ASSERTION)				       \
++		kunit_abort(test);					       \
+ } while (0)
+ 
+ 
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index d3fb93a23ccc..3b350e50cab9 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -310,7 +310,7 @@ static void kunit_fail(struct kunit *test, const struct kunit_loc *loc,
+ 	string_stream_destroy(stream);
  }
  
+-static void __noreturn kunit_abort(struct kunit *test)
++void __noreturn kunit_abort(struct kunit *test)
+ {
+ 	kunit_try_catch_throw(&test->try_catch); /* Does not return. */
  
-+/*
-+ * int prctl(int option, unsigned long arg2, unsigned long arg3,
-+ *                       unsigned long arg4, unsigned long arg5);
-+ */
-+
-+static __attribute__((unused))
-+int sys_prctl(int option, unsigned long arg2, unsigned long arg3,
-+		          unsigned long arg4, unsigned long arg5)
-+{
-+	return my_syscall5(__NR_prctl, option, arg2, arg3, arg4, arg5);
-+}
-+
-+static __attribute__((unused))
-+int prctl(int option, unsigned long arg2, unsigned long arg3,
-+		      unsigned long arg4, unsigned long arg5)
-+{
-+	int ret = sys_prctl(option, arg2, arg3, arg4, arg5);
-+
-+	if (ret < 0) {
-+		SET_ERRNO(-ret);
-+		ret = -1;
-+	}
-+	return ret;
-+}
-+
-+
- /*
-  * int pivot_root(const char *new, const char *old);
-  */
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 6e0a4dbe321e..95ff2867a91d 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -22,6 +22,7 @@
- #include <sys/ioctl.h>
- #include <sys/mman.h>
- #include <sys/mount.h>
-+#include <sys/prctl.h>
- #include <sys/reboot.h>
- #include <sys/stat.h>
- #include <sys/syscall.h>
-@@ -580,6 +581,7 @@ int run_syscall(int min, int max)
- 		CASE_TEST(poll_null);         EXPECT_SYSZR(1, poll(NULL, 0, 0)); break;
- 		CASE_TEST(poll_stdout);       EXPECT_SYSNE(1, ({ struct pollfd fds = { 1, POLLOUT, 0}; poll(&fds, 1, 0); }), -1); break;
- 		CASE_TEST(poll_fault);        EXPECT_SYSER(1, poll((void *)1, 1, 0), -1, EFAULT); break;
-+		CASE_TEST(prctl);             EXPECT_SYSER(1, prctl(PR_SET_NAME, (unsigned long)NULL, 0, 0, 0), -1, EFAULT); break;
- 		CASE_TEST(read_badf);         EXPECT_SYSER(1, read(-1, &tmp, 1), -1, EBADF); break;
- 		CASE_TEST(sched_yield);       EXPECT_SYSZR(1, sched_yield()); break;
- 		CASE_TEST(select_null);       EXPECT_SYSZR(1, ({ struct timeval tv = { 0 }; select(0, NULL, NULL, NULL, &tv); })); break;
-
+@@ -340,9 +340,6 @@ void kunit_do_failed_assertion(struct kunit *test,
+ 	kunit_fail(test, loc, type, assert, assert_format, &message);
+ 
+ 	va_end(args);
+-
+-	if (type == KUNIT_ASSERTION)
+-		kunit_abort(test);
+ }
+ EXPORT_SYMBOL_GPL(kunit_do_failed_assertion);
+ 
 -- 
-2.40.1
+2.41.0.rc0.172.g3f132b7071-goog
 
