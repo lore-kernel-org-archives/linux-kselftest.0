@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB59DC77B7A
-	for <linux-kselftest@archiver.kernel.org>; Wed, 31 May 2023 16:36:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3AA39C7EE2D
+	for <linux-kselftest@archiver.kernel.org>; Wed, 31 May 2023 16:36:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbjEaQg1 (ORCPT
+        id S229911AbjEaQgd (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 31 May 2023 12:36:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58166 "EHLO
+        Wed, 31 May 2023 12:36:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229896AbjEaQgR (ORCPT
+        with ESMTP id S229934AbjEaQgW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 31 May 2023 12:36:17 -0400
+        Wed, 31 May 2023 12:36:22 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B6918F
-        for <linux-kselftest@vger.kernel.org>; Wed, 31 May 2023 09:34:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906D3E58
+        for <linux-kselftest@vger.kernel.org>; Wed, 31 May 2023 09:34:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685550857;
+        s=mimecast20190719; t=1685550858;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding;
-        bh=vEOF8HrDImAV/WYXa7xNLQNUFj3sGLIQNJ3rM8mtWVY=;
-        b=PzWELqpJJR+7ubLVgsq+PAzBIdgNVWruHg9vFscz/q30ciuhNcWOPItO4Qe72l6q+gEScw
-        Mbw9Os1ornZuo4Pu2hjnavfSZhae2P8kgmazuSknomGtU1wapo0D+gbZokGjXnpozDlkK9
-        LsHHbzbhmvrS68HVSARMUCuv6kJBBRU=
+        bh=dnclgW5iNRTHpshzwEto29UyjPb2x7GdQxiRrKMztLM=;
+        b=Ea4bZ7Hyb27KnAhLJZmi7QEi3dRIk3MQpMWMtn1bFHF4HryQIzm6Q/gOHnEl3TcLXax26q
+        28KAb+kftBFc84PgSjybcGbps9lIdlNQI+2f8DqBsnxT+47EWPFVktY77MOM0h3CkaGz+D
+        kbHoowZaGv94yuIkbYvHrjW/LERmM8E=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-422-MwNguLseOg23MkkEXw2tFA-1; Wed, 31 May 2023 12:34:15 -0400
-X-MC-Unique: MwNguLseOg23MkkEXw2tFA-1
+ us-mta-304-Fsumc8WaOPO8O5kahn-oUA-1; Wed, 31 May 2023 12:34:13 -0400
+X-MC-Unique: Fsumc8WaOPO8O5kahn-oUA-1
 Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 489CD101A53B;
-        Wed, 31 May 2023 16:34:14 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A53C285A5B5;
+        Wed, 31 May 2023 16:34:12 +0000 (UTC)
 Received: from llong.com (dhcp-17-153.bos.redhat.com [10.18.17.153])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C4BD22166B2B;
-        Wed, 31 May 2023 16:34:13 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2C3B12166B28;
+        Wed, 31 May 2023 16:34:12 +0000 (UTC)
 From:   Waiman Long <longman@redhat.com>
 To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
         Johannes Weiner <hannes@cmpxchg.org>,
@@ -52,9 +52,9 @@ Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
         Brent Rowsell <browsell@redhat.com>,
         Peter Hunt <pehunt@redhat.com>, Phil Auld <pauld@redhat.com>,
         Waiman Long <longman@redhat.com>
-Subject: [PATCH v2 5/6] cgroup/cpuset: Documentation update for partition
-Date:   Wed, 31 May 2023 12:34:04 -0400
-Message-Id: <20230531163405.2200292-6-longman@redhat.com>
+Subject: [PATCH v2 2/6] cgroup/cpuset: Improve temporary cpumasks handling
+Date:   Wed, 31 May 2023 12:34:01 -0400
+Message-Id: <20230531163405.2200292-3-longman@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
@@ -62,147 +62,191 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch updates the cgroup-v2.rst file to include information about
-the new "cpuset.cpus.reserve" control file as well as the new remote
-partition.
+The limitation that update_parent_subparts_cpumask() can only use
+addmask & delmask in the given tmp cpumasks is fragile and may lead to
+unexpected error. Add a new statically allocated cs_tmp_cpus cpumask
+(protected by cpuset_mutex) for internal use so that all the three
+temporary cpumasks can be freely used.
+
+With this change, we can move the update_tasks_cpumask() for the
+parent and update_sibling_cpumasks() for the sibling to inside
+update_parent_subparts_cpumask().
+
+Also add a init_tmpmasks() helper to handle initialization of the tmpmasks
+structure when cpumasks are too big to be statically allocated on stack.
 
 Signed-off-by: Waiman Long <longman@redhat.com>
 ---
- Documentation/admin-guide/cgroup-v2.rst | 92 +++++++++++++++++++++----
- 1 file changed, 79 insertions(+), 13 deletions(-)
+ kernel/cgroup/cpuset.c | 66 ++++++++++++++++++++++++------------------
+ 1 file changed, 38 insertions(+), 28 deletions(-)
 
-diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-index f67c0829350b..3e9351c2cd27 100644
---- a/Documentation/admin-guide/cgroup-v2.rst
-+++ b/Documentation/admin-guide/cgroup-v2.rst
-@@ -2215,6 +2215,38 @@ Cpuset Interface Files
+diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+index 12a0b583aca4..8604c919e1e4 100644
+--- a/kernel/cgroup/cpuset.c
++++ b/kernel/cgroup/cpuset.c
+@@ -208,6 +208,8 @@ struct cpuset {
+ 	struct cgroup_file partition_file;
+ };
  
- 	Its value will be affected by memory nodes hotplug events.
++static cpumask_var_t	cs_tmp_cpus;	/* Temp cpumask for partition */
++
+ /*
+  * Partition root states:
+  *
+@@ -668,6 +670,24 @@ static inline void free_cpumasks(struct cpuset *cs, struct tmpmasks *tmp)
+ 	}
+ }
  
-+  cpuset.cpus.reserve
-+	A read-write multiple values file which exists only on root
-+	cgroup.
++/*
++ * init_tmpmasks - Initialize the cpumasks in tmpmasks with the given ones
++ */
++#ifdef CONFIG_CPUMASK_OFFSTACK
++static inline void
++init_tmpmasks(struct tmpmasks *tmp, struct cpumask *new_cpus,
++	      struct cpumask *addmask, struct cpumask *delmask)
++{
++	tmp->new_cpus = new_cpus;
++	tmp->addmask  = addmask;
++	tmp->delmask  = delmask;
++}
++#else
++static inline void
++init_tmpmasks(struct tmpmasks *tmp, struct cpumask *new_cpus,
++	      struct cpumask *addmask, struct cpumask *delmask) { }
++#endif
 +
-+	It lists all the CPUs that are reserved for adjacent and remote
-+	partitions created in the system.  See the next section for
-+	more information on what an adjacent or remote partitions is.
-+
-+	Creation of adjacent partition does not require touching this
-+	control file as CPU reservation will be done automatically.
-+	In order to create a remote partition, the CPUs needed by the
-+	remote partition has to be written to this file first.
-+
-+	Due to the fact that "cpuset.cpus.reserve" holds reserve CPUs
-+	that can be used by multiple partitions and automatic reservation
-+	may also race with manual reservation, an extension prefixes of
-+	"+" and "-" are allowed for this file to reduce race.
-+
-+	A "+" prefix can be used to indicate a list of additional
-+	CPUs that are to be added without disturbing the CPUs that are
-+	originally there.  For example, if its current value is "3-4",
-+	echoing ""+5" to it will change it to "3-5".
-+
-+	Once a remote partition is destroyed, its CPUs have to be
-+	removed from this file or no other process can use them.  A "-"
-+	prefix can be used to remove a list of CPUs from it.  However,
-+	removing CPUs that are currently used in existing partitions
-+	may cause those partitions to become invalid.  A single "-"
-+	character without any number can be used to indicate removal
-+	of all the free CPUs not yet allocated to any partitions to
-+	avoid accidental partition invalidation.
-+
-   cpuset.cpus.partition
- 	A read-write single value file which exists on non-root
- 	cpuset-enabled cgroups.  This flag is owned by the parent cgroup
-@@ -2228,25 +2260,49 @@ Cpuset Interface Files
- 	  "isolated"	Partition root without load balancing
- 	  ==========	=====================================
+ /**
+  * alloc_trial_cpuset - allocate a trial cpuset
+  * @cs: the cpuset that the trial cpuset duplicates
+@@ -1300,6 +1320,8 @@ enum subparts_cmd {
  
--	The root cgroup is always a partition root and its state
--	cannot be changed.  All other non-root cgroups start out as
--	"member".
-+	A cpuset partition is a collection of cgroups with a partition
-+	root at the top of the hierarchy and its descendants except
-+	those that are separate partition roots themselves and their
-+	descendants.  A partition has exclusive access to the set of
-+	CPUs allocated to it.  Other cgroups outside of that partition
-+	cannot use any CPUs in that set.
-+
-+	There are two types of partitions - adjacent and remote.  The
-+	parent of an adjacent partition must be a valid partition root.
-+	Partition roots of adjacent partitions are all clustered around
-+	the root cgroup.  Creation of adjacent partition is done by
-+	writing the desired partition type into "cpuset.cpus.partition".
-+
-+	A remote partition does not require a partition root parent.
-+	So a remote partition can be formed far from the root cgroup.
-+	However, its creation is a 2-step process.  The CPUs needed
-+	by a remote partition ("cpuset.cpus" of the partition root)
-+	has to be written into "cpuset.cpus.reserve" of the root
-+	cgroup first.  After that, "isolated" can be written into
-+	"cpuset.cpus.partition" of the partition root to form a remote
-+	isolated partition which is the only supported remote partition
-+	type for now.
-+
-+	All remote partitions are terminal as adjacent partition cannot
-+	be created underneath it.  With the way remote partition is
-+	formed, it is not possible to create another valid remote
-+	partition underneath it.
-+
-+	The root cgroup is always a partition root and its state cannot
-+	be changed.  All other non-root cgroups start out as "member".
+ static int update_flag(cpuset_flagbits_t bit, struct cpuset *cs,
+ 		       int turning_on);
++static void update_sibling_cpumasks(struct cpuset *parent, struct cpuset *cs,
++				    struct tmpmasks *tmp);
  
- 	When set to "root", the current cgroup is the root of a new
--	partition or scheduling domain that comprises itself and all
--	its descendants except those that are separate partition roots
--	themselves and their descendants.
-+	partition or scheduling domain.
+ /*
+  * Update partition exclusive flag
+@@ -1463,7 +1485,7 @@ static int update_parent_subparts_cpumask(struct cpuset *cs, int cmd,
+ 		adding = cpumask_andnot(tmp->addmask, tmp->addmask,
+ 					parent->subparts_cpus);
+ 		/*
+-		 * Empty cpumask is not allewed
++		 * Empty cpumask is not allowed
+ 		 */
+ 		if (cpumask_empty(newmask)) {
+ 			part_error = PERR_CPUSEMPTY;
+@@ -1583,8 +1605,11 @@ static int update_parent_subparts_cpumask(struct cpuset *cs, int cmd,
  
--	When set to "isolated", the CPUs in that partition root will
-+	When set to "isolated", the CPUs in that partition will
- 	be in an isolated state without any load balancing from the
- 	scheduler.  Tasks placed in such a partition with multiple
- 	CPUs should be carefully distributed and bound to each of the
- 	individual CPUs for optimal performance.
+ 	spin_unlock_irq(&callback_lock);
  
--	The value shown in "cpuset.cpus.effective" of a partition root
--	is the CPUs that the partition root can dedicate to a potential
--	new child partition root. The new child subtracts available
--	CPUs from its parent "cpuset.cpus.effective".
-+	The value shown in "cpuset.cpus.effective" of a partition root is
-+	the CPUs that are dedicated to that partition and not available
-+	to cgroups outside of that partittion.
+-	if (adding || deleting)
++	if (adding || deleting) {
+ 		update_tasks_cpumask(parent, tmp->addmask);
++		if (parent->child_ecpus_count)
++			update_sibling_cpumasks(parent, cs, tmp);
++	}
  
- 	A partition root ("root" or "isolated") can be in one of the
- 	two possible states - valid or invalid.  An invalid partition
-@@ -2270,8 +2326,8 @@ Cpuset Interface Files
- 	In the case of an invalid partition root, a descriptive string on
- 	why the partition is invalid is included within parentheses.
+ 	/*
+ 	 * For partcmd_update without newmask, it is being called from
+@@ -1839,18 +1864,13 @@ static int update_cpumask(struct cpuset *cs, struct cpuset *trialcs,
+ 	if (cpumask_equal(cs->cpus_allowed, trialcs->cpus_allowed))
+ 		return 0;
  
--	For a partition root to become valid, the following conditions
--	must be met.
-+	For an adjacent partition root to be valid, the following
-+	conditions must be met.
+-#ifdef CONFIG_CPUMASK_OFFSTACK
+ 	/*
+ 	 * Use the cpumasks in trialcs for tmpmasks when they are pointers
+-	 * to allocated cpumasks.
+-	 *
+-	 * Note that update_parent_subparts_cpumask() uses only addmask &
+-	 * delmask, but not new_cpus.
++	 * to allocated cpumasks & save the newmask into cs_tmp_cpus.
+ 	 */
+-	tmp.addmask  = trialcs->subparts_cpus;
+-	tmp.delmask  = trialcs->effective_cpus;
+-	tmp.new_cpus = NULL;
+-#endif
++	cpumask_copy(cs_tmp_cpus, trialcs->cpus_allowed);
++	init_tmpmasks(&tmp, trialcs->cpus_allowed, trialcs->subparts_cpus,
++		      trialcs->effective_cpus);
  
- 	1) The "cpuset.cpus" is exclusive with its siblings , i.e. they
- 	   are not shared by any of its siblings (exclusivity rule).
-@@ -2281,6 +2337,16 @@ Cpuset Interface Files
- 	4) The "cpuset.cpus.effective" cannot be empty unless there is
- 	   no task associated with this partition.
+ 	retval = validate_change(cs, trialcs);
  
-+	For a remote partition root to be valid, the following conditions
-+	must be met.
-+
-+	1) The same exclusivity rule as adjacent partition root.
-+	2) The "cpuset.cpus" is not empty and all the CPUs must be
-+	   present in "cpuset.cpus.reserve" of the root cgroup and none
-+	   of them are allocated to another partition.
-+	3) The "cpuset.cpus" value must be present in all its ancestors
-+	   to ensure proper hierarchical cpu distribution.
-+
- 	External events like hotplug or changes to "cpuset.cpus" can
- 	cause a valid partition root to become invalid and vice versa.
- 	Note that a task cannot be moved to a cgroup with empty
+@@ -1870,7 +1890,7 @@ static int update_cpumask(struct cpuset *cs, struct cpuset *trialcs,
+ 		parent = parent_cs(cs);
+ 		cpuset_for_each_child(cp, css, parent)
+ 			if (is_partition_valid(cp) &&
+-			    cpumask_intersects(trialcs->cpus_allowed, cp->cpus_allowed)) {
++			    cpumask_intersects(cs_tmp_cpus, cp->cpus_allowed)) {
+ 				rcu_read_unlock();
+ 				update_parent_subparts_cpumask(cp, partcmd_invalidate, NULL, &tmp);
+ 				rcu_read_lock();
+@@ -1887,13 +1907,15 @@ static int update_cpumask(struct cpuset *cs, struct cpuset *trialcs,
+ 						       NULL, &tmp);
+ 		else
+ 			update_parent_subparts_cpumask(cs, partcmd_update,
+-						trialcs->cpus_allowed, &tmp);
++						cs_tmp_cpus, &tmp);
+ 	}
+ 
++	/* Restore trialcs->cpus_allowed */
++	cpumask_copy(trialcs->cpus_allowed, cs_tmp_cpus);
+ 	compute_effective_cpumask(trialcs->effective_cpus, trialcs,
+ 				  parent_cs(cs));
+ 	spin_lock_irq(&callback_lock);
+-	cpumask_copy(cs->cpus_allowed, trialcs->cpus_allowed);
++	cpumask_copy(cs->cpus_allowed, cs_tmp_cpus);
+ 
+ 	/*
+ 	 * Make sure that subparts_cpus, if not empty, is a subset of
+@@ -1914,11 +1936,6 @@ static int update_cpumask(struct cpuset *cs, struct cpuset *trialcs,
+ 	}
+ 	spin_unlock_irq(&callback_lock);
+ 
+-#ifdef CONFIG_CPUMASK_OFFSTACK
+-	/* Now trialcs->cpus_allowed is available */
+-	tmp.new_cpus = trialcs->cpus_allowed;
+-#endif
+-
+ 	/* effective_cpus will be updated here */
+ 	update_cpumasks_hier(cs, &tmp, false);
+ 
+@@ -2343,13 +2360,11 @@ static int update_prstate(struct cpuset *cs, int new_prs)
+ 
+ 		err = update_parent_subparts_cpumask(cs, partcmd_enable,
+ 						     NULL, &tmpmask);
+-		if (err)
+-			goto out;
+ 	} else if (old_prs && new_prs) {
+ 		/*
+ 		 * A change in load balance state only, no change in cpumasks.
+ 		 */
+-		goto out;
++		;
+ 	} else {
+ 		/*
+ 		 * Switching back to member is always allowed even if it
+@@ -2369,12 +2384,6 @@ static int update_prstate(struct cpuset *cs, int new_prs)
+ 			spin_unlock_irq(&callback_lock);
+ 		}
+ 	}
+-
+-	update_tasks_cpumask(parent, tmpmask.new_cpus);
+-
+-	if (parent->child_ecpus_count)
+-		update_sibling_cpumasks(parent, cs, &tmpmask);
+-
+ out:
+ 	/*
+ 	 * Make partition invalid & disable CS_CPU_EXCLUSIVE if an error
+@@ -3500,6 +3509,7 @@ int __init cpuset_init(void)
+ 	BUG_ON(!alloc_cpumask_var(&top_cpuset.cpus_allowed, GFP_KERNEL));
+ 	BUG_ON(!alloc_cpumask_var(&top_cpuset.effective_cpus, GFP_KERNEL));
+ 	BUG_ON(!zalloc_cpumask_var(&top_cpuset.subparts_cpus, GFP_KERNEL));
++	BUG_ON(!zalloc_cpumask_var(&cs_tmp_cpus, GFP_KERNEL));
+ 
+ 	cpumask_setall(top_cpuset.cpus_allowed);
+ 	nodes_setall(top_cpuset.mems_allowed);
 -- 
 2.31.1
 
