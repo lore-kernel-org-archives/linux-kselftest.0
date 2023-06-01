@@ -2,116 +2,334 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 29985C7EE23
-	for <linux-kselftest@archiver.kernel.org>; Thu,  1 Jun 2023 07:59:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53DDBC77B7E
+	for <linux-kselftest@archiver.kernel.org>; Thu,  1 Jun 2023 08:16:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231774AbjFAH7r (ORCPT
+        id S231669AbjFAIQw (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 1 Jun 2023 03:59:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54036 "EHLO
+        Thu, 1 Jun 2023 04:16:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231420AbjFAH7Y (ORCPT
+        with ESMTP id S231151AbjFAIQw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 1 Jun 2023 03:59:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15771982
-        for <linux-kselftest@vger.kernel.org>; Thu,  1 Jun 2023 00:52:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685605925;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UGN0oJNZes7Qo6ZcpteciDRTsS0uKCd+DRQnkDayhbo=;
-        b=WGwTAN+PYuyvGfZWv9W0neWjZHQtsMbUd8s+IKfJSHbZekPRGRTRUT5PnDuhB6WWLqhK3O
-        +u9l8p4CameARnwHpZoJAhmjY3LZSBcqGpRgveRFuTbcBjW3YQsXMckrR1jBoypJ3f2/5b
-        C/SX03HtT8qx505hC0KCmUIEEnojWLg=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-478-uLGOweFGPA63p_1IQYmmYQ-1; Thu, 01 Jun 2023 03:52:03 -0400
-X-MC-Unique: uLGOweFGPA63p_1IQYmmYQ-1
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f41a04a297so3708455e9.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 01 Jun 2023 00:52:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685605922; x=1688197922;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :content-language:references:cc:to:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UGN0oJNZes7Qo6ZcpteciDRTsS0uKCd+DRQnkDayhbo=;
-        b=C9Z6X6nDyR/Q1DcPqWRc7FuRydtnoCQZYfrXdA3VEIrf9qIAnYYiXR3uHIiNgZjpud
-         KILUj1Rpw60A3CQOVnBNJ5ATNePsV/GdJr3Qv+6EODXTMYNTQCNXx+rivXdTslAf5t2u
-         M9lKjE8eB+rmFzo3UT/OcdEPBqRexGbLYfJjK5BZdaF6NFqcL9Lm0a1WhLdU2KTAYz+h
-         +Bbt2JtJqYfl1uWl5aO0pCnt4r8mZTPKp5G2+hrR/s/M+v3ymPj/FAwi+fjDAcEGaSdl
-         g+4+h92hNREqbWOBiB/QvTiDWI4tB52MP3V78P9qA8+HM/6ViQBM4Y+avVT7DOKCc3nI
-         SjrA==
-X-Gm-Message-State: AC+VfDwArVs4Z6tFbM4xN8dvUWEJqAImeLNURjKrpJJIGXOjxcDffwBu
-        eNQDE6zEp5fYRG6AGx6Rfi6uf7tnvRhI7GB+XpClxS7t0zj/Q6VpXvJLrO6Ls2h5h3Ze/Z7cvhz
-        q6ByUhqKi+JI8diaZ1nivPSGwGC4/3jd6Ukqz
-X-Received: by 2002:a05:600c:2252:b0:3f6:f29:7b41 with SMTP id a18-20020a05600c225200b003f60f297b41mr1285388wmm.7.1685605922820;
-        Thu, 01 Jun 2023 00:52:02 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6pqppsA7O9z8geVps55kh02RQkezTsYAVSQPRyQwzdBB9ynfyxZUJOB68G0Jnr3KhTLwFlsg==
-X-Received: by 2002:a05:600c:2252:b0:3f6:f29:7b41 with SMTP id a18-20020a05600c225200b003f60f297b41mr1285375wmm.7.1685605922505;
-        Thu, 01 Jun 2023 00:52:02 -0700 (PDT)
-Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
-        by smtp.gmail.com with ESMTPSA id w8-20020a1cf608000000b003f603b8eb5asm1338590wmc.7.2023.06.01.00.52.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Jun 2023 00:52:02 -0700 (PDT)
-Message-ID: <4dfd0f47-e1f7-1e9f-65e0-ee4881495be3@redhat.com>
-Date:   Thu, 1 Jun 2023 09:52:01 +0200
+        Thu, 1 Jun 2023 04:16:52 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5D119F;
+        Thu,  1 Jun 2023 01:16:50 -0700 (PDT)
+Received: from [192.168.127.158] (unknown [118.107.131.147])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 995F86606E8C;
+        Thu,  1 Jun 2023 09:16:37 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1685607409;
+        bh=BA3QmEKFqxqHdhhS4O9rOqqxg4EqkWr8qScJTtUpscw=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=BW8rTdw4F+NWs34EXLaSqYAKE0lj+Cv98P4+2+RNl+iH0+ECZUTXf4/7QhoYlrZJ1
+         tHsJU8Mv9S2CiDymCEnw6J1uQVLylqwpKTuU8OZx7ObMcJ6tDqmYGsaOaV9XWTrlKu
+         0TDMFNgWAZ2pXvXEwxr7mtw9LLAIOXXiW/Hz3wy1p6ZQk2aJiqZzKluI8obkWl5yyf
+         Dfe93RFyS8Q7qzJ7hH6RxATRLtXGd8q7qpubaBB6coat4mHcZcaSgYe5F0ubVvzUws
+         APPbBmq5x4AxTM/ddC2/4NMC2YoQisDIS3nI3YOhZAFLyM5eMAOzLpFTvwEfjbukgV
+         poxEWcIJUaduA==
+Message-ID: <aeaaa33e-4d23-fd3a-1357-4751007aa3bd@collabora.com>
+Date:   Thu, 1 Jun 2023 13:16:14 +0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org,
+ Thunderbird/102.9.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        David Hildenbrand <david@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        Peter Xu <peterx@redhat.com>, Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>
-References: <20230519102723.185721-1-david@redhat.com>
- <20230519102723.185721-2-david@redhat.com>
- <e49b5642-014b-4a95-9ba8-738bfd02b2ea@lucifer.local>
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
+        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v16 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+To:     Peter Xu <peterx@redhat.com>
+References: <20230525085517.281529-1-usama.anjum@collabora.com>
+ <20230525085517.281529-3-usama.anjum@collabora.com> <ZHfAOAKj1ZQJ+zSy@x1n>
 Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v1 1/3] selftests/mm: factor out detection of hugetlb page
- sizes into vm_util
-In-Reply-To: <e49b5642-014b-4a95-9ba8-738bfd02b2ea@lucifer.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <ZHfAOAKj1ZQJ+zSy@x1n>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 28.05.23 16:49, Lorenzo Stoakes wrote:
-> On Fri, May 19, 2023 at 12:27:21PM +0200, David Hildenbrand wrote:
->> Let's factor detection out into vm_util, to be reused by a new test.
->>
+On 6/1/23 2:46 AM, Peter Xu wrote:
+> Muhammad,
 > 
-> Bit of a nit as it's hardly vitally important, but perhaps worth mentioning
-> that you also refactor the function to accept any array (this is a
-> requirement rather than simply refactoring a thing but still :)
-
-Well, the function used to, and still does accept an array. It's just a 
-more human-friendly way of expressing that.
-
-If I have to resend the whole patchset, I can add a note "While at it, 
-make the function accept an array instead of a raw pointer.".
-
-[...]
+> Sorry, I probably can only review the non-interface part, and leave the
+> interface/buffer handling, etc. review for others and real potential users
+> of it..
+Thank you so much for the review. I think mostly we should be okay with
+interface as everybody has been making suggestions over the past revisions.
 
 > 
-> Looks good to me,
+> On Thu, May 25, 2023 at 01:55:14PM +0500, Muhammad Usama Anjum wrote:
+>> +static inline void make_uffd_wp_huge_pte(struct vm_area_struct *vma,
+>> +					 unsigned long addr, pte_t *ptep,
+>> +					 pte_t ptent)
+>> +{
+>> +	pte_t old_pte;
+>> +
+>> +	if (!huge_pte_none(ptent)) {
+>> +		old_pte = huge_ptep_modify_prot_start(vma, addr, ptep);
+>> +		ptent = huge_pte_mkuffd_wp(old_pte);
+>> +		ptep_modify_prot_commit(vma, addr, ptep, old_pte, ptent);
 > 
-> Reviewed-by: Lorenzo Stoakes <lstoakes@gmail.com>
-> 
+> huge_ptep_modify_prot_start()?
+Sorry, I didn't realized that huge_ptep_modify_prot_start() is different
+from its pte version.
 
-Thanks!
+> 
+> The other thing is what if it's a pte marker already?  What if a hugetlb
+> migration entry?  Please check hugetlb_change_protection().
+I've updated it in more better way. Please let me know what do you think
+about the following:
+
+static inline void make_uffd_wp_huge_pte(struct vm_area_struct *vma,
+					 unsigned long addr, pte_t *ptep,
+					 pte_t ptent)
+{
+	if (is_hugetlb_entry_hwpoisoned(ptent) || is_pte_marker(ptent))
+		return;
+
+	if (is_hugetlb_entry_migration(ptent))
+		set_huge_pte_at(vma->vm_mm, addr, ptep,
+				pte_swp_mkuffd_wp(ptent));
+	else if (!huge_pte_none(ptent))
+		ptep_modify_prot_commit(vma, addr, ptep, ptent,
+					huge_pte_mkuffd_wp(ptent));
+	else
+		set_huge_pte_at(vma->vm_mm, addr, ptep,
+				make_pte_marker(PTE_MARKER_UFFD_WP));
+}
+
+As we always set UNPOPULATED, so markers are always set on none ptes
+initially. Is it possible that a none pte becomes present, then swapped and
+finally none again? So I'll do the following addition for make_uffd_wp_pte():
+
+--- a/fs/proc/task_mmu.c
++++ b/fs/proc/task_mmu.c
+@@ -1800,6 +1800,9 @@ static inline void make_uffd_wp_pte(struct
+vm_area_struct *vma,
+ 	} else if (is_swap_pte(ptent)) {
+ 		ptent = pte_swp_mkuffd_wp(ptent);
+ 		set_pte_at(vma->vm_mm, addr, pte, ptent);
++	} else {
++		set_pte_at(vma->vm_mm, addr, pte,
++			   make_pte_marker(PTE_MARKER_UFFD_WP));
+ 	}
+ }
+
+
+
+
+> 
+>> +	} else {
+>> +		set_huge_pte_at(vma->vm_mm, addr, ptep,
+>> +				make_pte_marker(PTE_MARKER_UFFD_WP));
+>> +	}
+>> +}
+>> +#endif
+> 
+> [...]
+> 
+>> +static int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
+>> +				  unsigned long end, struct mm_walk *walk)
+>> +{
+>> +	struct pagemap_scan_private *p = walk->private;
+>> +	struct vm_area_struct *vma = walk->vma;
+>> +	unsigned long addr = end;
+>> +	pte_t *pte, *orig_pte;
+>> +	spinlock_t *ptl;
+>> +	bool is_written;
+>> +	int ret = 0;
+>> +
+>> +	arch_enter_lazy_mmu_mode();
+>> +
+>> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+>> +	ptl = pmd_trans_huge_lock(pmd, vma);
+>> +	if (ptl) {
+>> +		unsigned long n_pages = (end - start)/PAGE_SIZE;
+>> +
+>> +		if (p->max_pages && n_pages > p->max_pages - p->found_pages)
+>> +			n_pages = p->max_pages - p->found_pages;
+>> +
+>> +		is_written = !is_pmd_uffd_wp(*pmd);
+>> +
+>> +		/*
+>> +		 * Break huge page into small pages if the WP operation need to
+>> +		 * be performed is on a portion of the huge page.
+>> +		 */
+>> +		if (is_written && IS_PM_SCAN_WP(p->flags) &&
+>> +		    n_pages < HPAGE_SIZE/PAGE_SIZE) {
+>> +			spin_unlock(ptl);
+>> +
+>> +			split_huge_pmd(vma, pmd, start);
+>> +			goto process_smaller_pages;
+>> +		}
+>> +
+>> +		if (IS_PM_SCAN_GET(p->flags))
+>> +			ret = pagemap_scan_output(is_written, vma->vm_file,
+>> +						  pmd_present(*pmd),
+>> +						  is_swap_pmd(*pmd),
+>> +						  p, start, n_pages);
+>> +
+>> +		if (ret >= 0 && is_written && IS_PM_SCAN_WP(p->flags))
+>> +			make_uffd_wp_pmd(vma, addr, pmd);
+>> +
+>> +		if (IS_PM_SCAN_WP(p->flags))
+>> +			flush_tlb_range(vma, start, end);
+>> +
+>> +		spin_unlock(ptl);
+>> +
+>> +		arch_leave_lazy_mmu_mode();
+>> +		return ret;
+>> +	}
+>> +
+>> +process_smaller_pages:
+>> +	if (pmd_trans_unstable(pmd)) {
+>> +		arch_leave_lazy_mmu_mode();
+>> +		return 0;
+> 
+> I'm not sure whether this is right..  Shouldn't you return with -EAGAIN and
+> let the user retry?  Returning 0 means you'll move on with the next pmd
+> afaict and ignoring this one.
+This has come up before. We are just replicating pagemap_pmd_range() here
+as we are doing almost the same thing through IOCTL. It doesn't return any
+error in this case and just skips it. So we are doing the same.
+
+> 
+>> +	}
+>> +#endif
+>> +
+>> +	orig_pte = pte = pte_offset_map_lock(vma->vm_mm, pmd, start, &ptl);
+> 
+> Just a heads-up that this may start to fail at some point if Hugh's work
+> will land earlier:
+> 
+> https://lore.kernel.org/linux-mm/68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com/
+Thank you so much for the heads up.
+
+> 
+>> +	for (addr = start; addr < end && !ret; pte++, addr += PAGE_SIZE) {
+>> +		is_written = !is_pte_uffd_wp(*pte);
+>> +
+>> +		if (IS_PM_SCAN_GET(p->flags))
+>> +			ret = pagemap_scan_output(is_written, vma->vm_file,
+>> +						  pte_present(*pte),
+>> +						  is_swap_pte(*pte),
+>> +						  p, addr, 1);
+>> +
+>> +		if (ret >= 0 && is_written && IS_PM_SCAN_WP(p->flags))
+>> +			make_uffd_wp_pte(vma, addr, pte);
+>> +	}
+>> +
+>> +	if (IS_PM_SCAN_WP(p->flags))
+>> +		flush_tlb_range(vma, start, addr);
+>> +
+>> +	pte_unmap_unlock(orig_pte, ptl);
+>> +	arch_leave_lazy_mmu_mode();
+>> +
+>> +	cond_resched();
+>> +	return ret;
+>> +}
+>> +
+>> +#ifdef CONFIG_HUGETLB_PAGE
+>> +static int pagemap_scan_hugetlb_entry(pte_t *ptep, unsigned long hmask,
+>> +				      unsigned long start, unsigned long end,
+>> +				      struct mm_walk *walk)
+>> +{
+>> +	unsigned long n_pages = (end - start)/PAGE_SIZE;
+>> +	struct pagemap_scan_private *p = walk->private;
+>> +	struct vm_area_struct *vma = walk->vma;
+>> +	struct hstate *h = hstate_vma(vma);
+>> +	spinlock_t *ptl;
+>> +	bool is_written;
+>> +	int ret = 0;
+>> +	pte_t pte;
+>> +
+>> +	arch_enter_lazy_mmu_mode();
+> 
+> This _seems_ to be not needed for hugetlb entries.
+I'll remove it.
+
+> 
+>> +
+>> +	if (p->max_pages && n_pages > p->max_pages - p->found_pages)
+>> +		n_pages = p->max_pages - p->found_pages;
+>> +
+>> +	if (IS_PM_SCAN_WP(p->flags)) {
+>> +		i_mmap_lock_write(vma->vm_file->f_mapping);
+>> +		ptl = huge_pte_lock(h, vma->vm_mm, ptep);
+>> +	}
+>> +
+>> +	pte = huge_ptep_get(ptep);
+>> +	is_written = !is_huge_pte_uffd_wp(pte);
+>> +
+>> +	/*
+>> +	 * Partial hugetlb page clear isn't supported
+>> +	 */
+>> +	if (is_written && IS_PM_SCAN_WP(p->flags) &&
+>> +	    n_pages < HPAGE_SIZE/PAGE_SIZE) {
+>> +		ret = -EPERM;
+>> +		goto unlock_and_return;
+>> +	}
+>> +
+>> +	if (IS_PM_SCAN_GET(p->flags)) {
+>> +		ret = pagemap_scan_output(is_written, vma->vm_file,
+>> +					  pte_present(pte), is_swap_pte(pte),
+>> +					  p, start, n_pages);
+>> +		if (ret < 0)
+>> +			goto unlock_and_return;
+>> +	}
+>> +
+>> +	if (is_written && IS_PM_SCAN_WP(p->flags)) {
+>> +		make_uffd_wp_huge_pte(vma, start, ptep, pte);
+>> +		flush_hugetlb_tlb_range(vma, start, end);
+>> +	}
+>> +
+>> +unlock_and_return:
+>> +	if (IS_PM_SCAN_WP(p->flags)) {
+>> +		spin_unlock(ptl);
+>> +		i_mmap_unlock_write(vma->vm_file->f_mapping);
+>> +	}
+>> +
+>> +	arch_leave_lazy_mmu_mode();
+> 
+> Same here.
+> 
+>> +
+>> +	return ret;
+>> +}
+> 
+> [...]
+> 
 
 -- 
-Thanks,
-
-David / dhildenb
-
+BR,
+Muhammad Usama Anjum
