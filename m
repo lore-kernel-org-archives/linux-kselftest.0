@@ -2,110 +2,94 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EAA57C7EE29
-	for <linux-kselftest@archiver.kernel.org>; Fri,  2 Jun 2023 10:20:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1E40C7EE2F
+	for <linux-kselftest@archiver.kernel.org>; Fri,  2 Jun 2023 10:25:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234914AbjFBKUn (ORCPT
+        id S235456AbjFBKZV (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 2 Jun 2023 06:20:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44450 "EHLO
+        Fri, 2 Jun 2023 06:25:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233986AbjFBKUj (ORCPT
+        with ESMTP id S235364AbjFBKYH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Jun 2023 06:20:39 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B66194;
-        Fri,  2 Jun 2023 03:20:38 -0700 (PDT)
-Date:   Fri, 2 Jun 2023 12:20:34 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1685701235; bh=p8zy09hQZDIIVHzkSV9VXJxDfAUWj/mvEvyOT3k7A/Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HXAY/JzAJzZGzRxkerz7y+d+s64mDEh57DaAujLAWHIUZJkFJSVPGYOa+IvRPH32t
-         MTKDzLcBUTuikb6NM8VUOjmr9e63fAiEmOGZKG7pTGvVmorEemK6nGONfxAY38evcp
-         WWvGkvyaAQTYpX3dXfxbB5L60xEVkWEpTRDqH9l8=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     w@1wt.eu, linux-kernel@vger.kernel.org,
+        Fri, 2 Jun 2023 06:24:07 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49B6170B;
+        Fri,  2 Jun 2023 03:23:33 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f603ff9c02so18047845e9.2;
+        Fri, 02 Jun 2023 03:23:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685701412; x=1688293412;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7zsWsO0SYQc2zuAFXTltDM4jvFhQ6oDnJCWqcpd786g=;
+        b=LU4R41oGxlkBy98OrlbBVW7Wp8pbWnN6DV/EvdZHvc0d8DC+O4FAonI4plWiMFQX2q
+         A8HwU2Ls79uqvm1sfiKvAhBjIpi1uwEKKwH3EUZjlxTN1j4hC0+agvXp3q5gbBSsdvqw
+         znYnMg1FtuRK/AeZP+IJTHPwqh1mrubdM+6yTfZVgkzzIAJeO652mvrCSK6VzJjBfOpN
+         X1dlI7Ah9o5e9uWO5ihIJwN7OkVgX5ZU8t+Q1m29BBnmXFQIb/2v3bTUcmn7J3t8w5nK
+         legiO/tChDYMMStOX01s3fJ//cgXFv2yaPrYhVesAyZPqThUIhpbqwEYxOAbKTLfJPhb
+         XKwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685701412; x=1688293412;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7zsWsO0SYQc2zuAFXTltDM4jvFhQ6oDnJCWqcpd786g=;
+        b=dvHT3lpxCBUwsDsRwja6yk8OkU/gZDK7chnfzUYcWrGU+lz/V5SizKPpFZ/jDXZSvz
+         AwRW4hNI8CsWmsJGauMAvm5OKKC2EWU9UPttXM0isBWrMHag8fwVDFFbOZ9s/5YZFWn7
+         0zhZ0fllKToRY8OisKy/V9T/w+sLEFHeO5XMbCJb8mGxfp5PKrm6Y3/Ay4bLAfz0Nfd6
+         uT7t/XT7veJnLiKcE94d3KzhopsUkz8OJQaC+xfA806BuQ+/sSLsQnLGdiUQYk+CgLqp
+         3Ts1jwZUTzgudVQxlFHr84F9GwnlmYU3fqGi/5nQMENl0m7lniXoFyEvOXZENoFL/b24
+         H4Gw==
+X-Gm-Message-State: AC+VfDwZ4sVbUvo/H6uBNk73euXY8s/3CewQ1l133VFa+wXr41mTxW54
+        DWfF53Vkc5aaFYo+nlXnruC5f13j2IC6yQ==
+X-Google-Smtp-Source: ACHHUZ4Fl3gljkQdCDOjzrgPzwI2Pjo+30dGKXdJ0cCSR8AkNPESiVXzE3/y3lx+UGWXjhGjLZC/Kg==
+X-Received: by 2002:a5d:4a52:0:b0:309:3b8d:16a8 with SMTP id v18-20020a5d4a52000000b003093b8d16a8mr3808046wrs.50.1685701411933;
+        Fri, 02 Jun 2023 03:23:31 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id g9-20020adfe409000000b0030ae53550f5sm1245989wrm.51.2023.06.02.03.23.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Jun 2023 03:23:31 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftests/nolibc: test_fork: fix up duplicated print
-Message-ID: <a72cac9d-609f-4c4f-a7f8-7c6b89837e0a@t-8ch.de>
-References: <61bdfe7bacebdef8aa9195f6f2550a5b0d33aab3.1685426545.git.falcon@tinylab.org>
- <20230602024157.11151-1-falcon@tinylab.org>
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] KVM: s390: selftests: Fix spelling mistake "initally" -> "initially"
+Date:   Fri,  2 Jun 2023 11:23:30 +0100
+Message-Id: <20230602102330.1230734-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230602024157.11151-1-falcon@tinylab.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2023-06-02 10:41:57+0800, Zhangjin Wu wrote:
-> Hi, Willy
-> 
-> What about this one for 2023xxxx-nolibc-rv32+stkp6?
-> 
-> @Thomas, welcome your Reviewed-by If it is ok for you ;-)
+There is a spelling mistake in literal string. Fix it.
 
-Indeed, good catch!
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ tools/testing/selftests/kvm/s390x/cmma_test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
+diff --git a/tools/testing/selftests/kvm/s390x/cmma_test.c b/tools/testing/selftests/kvm/s390x/cmma_test.c
+index 6d0751ea224b..576fe8ee0aec 100644
+--- a/tools/testing/selftests/kvm/s390x/cmma_test.c
++++ b/tools/testing/selftests/kvm/s390x/cmma_test.c
+@@ -656,7 +656,7 @@ struct testdef {
+ } testlist[] = {
+ 	{ "migration mode and dirty tracking", test_migration_mode },
+ 	{ "GET_CMMA_BITS: basic calls", test_get_cmma_basic },
+-	{ "GET_CMMA_BITS: all pages are dirty initally", test_get_inital_dirty },
++	{ "GET_CMMA_BITS: all pages are dirty initially", test_get_inital_dirty },
+ 	{ "GET_CMMA_BITS: holes are skipped", test_get_skip_holes },
+ };
+ 
+-- 
+2.30.2
 
-> Best regards,
-> Zhangjin
-> 
-> > running nolibc-test with glibc on x86_64 got such print issue:
-> > 
-> >     29 execve_root = -1 EACCES                                       [OK]
-> >     30 fork30 fork = 0                                                      [OK]
-> >     31 getdents64_root = 712                                         [OK]
-> > 
-> > The fork test case has three printf calls:
-> > 
-> >     (1) llen += printf("%d %s", test, #name);
-> >     (2) llen += printf(" = %d %s ", expr, errorname(errno));
-> >     (3) llen += pad_spc(llen, 64, "[FAIL]\n"); --> vfprintf()
-> > 
-> > In the following scene, the above issue happens:
-> > 
-> >     (a) The parent calls (1)
-> >     (b) The parent calls fork()
-> >     (c) The child runs and shares the print buffer of (1)
-> >     (d) The child exits, flushs the print buffer and closes its own stdout/stderr
-> >         * "30 fork" is printed at the first time.
-> >     (e) The parent calls (2) and (3), with "\n" in (3), it flushs the whole buffer
-> >         * "30 fork = 0 ..." is printed
-> > 
-> > Therefore, there are two "30 fork" in the stdout.
-> > 
-> > Between (a) and (b), if flush the stdout (and the sterr), the child in
-> > stage (c) will not be able to 'see' the print buffer.
-> > 
-> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> > ---
-> >  tools/testing/selftests/nolibc/nolibc-test.c | 8 +++++++-
-> >  1 file changed, 7 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-> > index 7de46305f419..88323a60aa4a 100644
-> > --- a/tools/testing/selftests/nolibc/nolibc-test.c
-> > +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-> > @@ -486,7 +486,13 @@ static int test_getpagesize(void)
-> >  static int test_fork(void)
-> >  {
-> >  	int status;
-> > -	pid_t pid = fork();
-> > +	pid_t pid;
-> > +
-> > +	/* flush the printf buffer to avoid child flush it */
-> > +	fflush(stdout);
-> > +	fflush(stderr);
-> > +
-> > +	pid = fork();
-> >  
-> >  	switch (pid) {
-> >  	case -1:
-> > -- 
-> > 2.25.1
-> > 
-> > 
