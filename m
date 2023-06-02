@@ -2,219 +2,137 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 49B38C7EE23
-	for <linux-kselftest@archiver.kernel.org>; Thu,  1 Jun 2023 21:41:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 42A74C77B7E
+	for <linux-kselftest@archiver.kernel.org>; Fri,  2 Jun 2023 01:34:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232853AbjFAVla (ORCPT
+        id S230166AbjFBBee (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 1 Jun 2023 17:41:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57648 "EHLO
+        Thu, 1 Jun 2023 21:34:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233269AbjFAVl0 (ORCPT
+        with ESMTP id S231241AbjFBBed (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 1 Jun 2023 17:41:26 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B43D61AB;
-        Thu,  1 Jun 2023 14:41:20 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-30adc51b65cso1284117f8f.0;
-        Thu, 01 Jun 2023 14:41:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685655679; x=1688247679;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=axm7gWfA5Bz2zISfLReqOuWM4uugQUqN8yYC/Fksz6E=;
-        b=YZSlWv4ZRTQrtBhg3PQzZua0HI+2SFQ6DVd2Bx8xgGekGmRuK9f8yJ5kXzevfEebGJ
-         bucJgtW1H96KQ9FvVilYQGKt3XZoTwjQEwF2O0W1xpw1L8r/MC8vgMaeBIF52HNhL50P
-         /NSkVOvlvcL0qcW8QPRHK71tAbxiyBwhld75ewICg7hsBYfqExnDnK7hzYW7vWyaMVIK
-         9fwPDib6jPpa7owSGwZfa/cyHecswJxl8TExBrc1+4kpqHQoOJkAeESleA6xKBT3YB2W
-         msg6fEThLJQo/ha+hc6/maQT3ptl156aGXgRK3enrAhrHR2yzAcpY3ONhaXCn0H2vIxo
-         e0bQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685655679; x=1688247679;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=axm7gWfA5Bz2zISfLReqOuWM4uugQUqN8yYC/Fksz6E=;
-        b=jhnfS260KmITXM/KTGxhPDiCHyKQgW9bJzCuec8UEIiv7Gl0vMYjLU+LV+vakqhthl
-         3LHhRUNECVOifuwzDOJhtxuoXYStG1xgEQretJugWUZFyujrLt4MaCeWzbAr56FDtBxW
-         wN575bbxD0iBXJfUVY2Pd255v2XHCWeFrWekNchoDqIYyeud9Qx2ViVkjVeOqTANZ3zS
-         MPWdcY8IH4Ez4HRoCKJ1aaD3/dAev0doScogj1SJyc8f49KEsfhrnctRn/HVLY+Xihc/
-         Y6WrzZlUTR3/2nbher86zvTvukVychZf7EX0JLvAnenj7p/3W5db/ql6fWXnw9fz1wn7
-         c32A==
-X-Gm-Message-State: AC+VfDzDNjALw/jaF9qMFScPgZYMA3Ci1yZP+j1cCXfT70Uou0bhoIAV
-        9Ty5xFFcjYokj66Dp77z0VF2W8ML9v8=
-X-Google-Smtp-Source: ACHHUZ7LYqeF93KRE7QDwkmLW/473nUeONnAulQMEPgBiMAGpBIIpvYu2qiK+F5rppMScPdQKgWYKg==
-X-Received: by 2002:adf:ce81:0:b0:306:30ea:a060 with SMTP id r1-20020adfce81000000b0030630eaa060mr2860269wrn.51.1685655678619;
-        Thu, 01 Jun 2023 14:41:18 -0700 (PDT)
-Received: from localhost ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
-        by smtp.gmail.com with ESMTPSA id l9-20020adfe589000000b00307c8d6b4a0sm11440534wrm.26.2023.06.01.14.41.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jun 2023 14:41:17 -0700 (PDT)
-Date:   Thu, 1 Jun 2023 22:41:16 +0100
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        Peter Xu <peterx@redhat.com>, Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>
-Subject: Re: [PATCH v1 2/3] selftests/mm: gup_longterm: new functional test
- for FOLL_LONGTERM
-Message-ID: <85dc50c7-459a-4cbb-abd3-16f35a8e10b0@lucifer.local>
-References: <20230519102723.185721-1-david@redhat.com>
- <20230519102723.185721-3-david@redhat.com>
- <be2346e4-e8c0-4470-9bf4-59eb864063a8@lucifer.local>
- <fa6009d4-643e-97ec-5317-a57a535e0495@redhat.com>
+        Thu, 1 Jun 2023 21:34:33 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2081.outbound.protection.outlook.com [40.107.100.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60154128;
+        Thu,  1 Jun 2023 18:34:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PCBHbt5YIOodjPfUOjDIYxkC8de4r+fTDA3RuBhqCkmRs9hoYwZg1on1+TNLwUMWXMEUcrZn8TZo6G4Lx7cUK7YmsoxxJ6YcYV4fZOmLuxKZUFM4DD8amoudRlgb5C4FIWTUmRfu9JsStIj6rTGjeJKn/zDY5hfaqBa9f9ZGwM4agNFMGF9ZTyVgch4UajmQoVlYVdmSkmDvbNw2pv0Fgxlt/oMb8oMRqPzKPI2zhIGGm+XTEuJfF2UXrwFT4YdXTzvTjmoBC+Ijj4h98E1+DtKnlN/6IB2bGe4ihQFWau7ZM/OwSVhO62gmoJz1kyf5VY6xyZd4zF2+cWc7yN3Cpw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tMgl0DkiCy0u8hqwUZJYdqw2AWjIMAntZIkehI+DBoE=;
+ b=M4UtwI3DBX5+naKT5viVFBZlHI8z8O6Sn1MTVdtwKGR1iyF84qvX9ZIkQ5JYPWooOjOX1DSAllJcGW0ntLJ6BZkrroXRIf6SLfyKNHLk6ejGKlzi+s3sdJi7rn3y1hiDM3Tc9xfL99UjL7gBbf5rDwOt5DcFkn2a6enybh9yti986hn/7dbIwoKG//NfWmouejz+Cn84Ul3YLtyLOrMWE7v0N+fOmaiH/WVVwu6E8y7km1zKZylv+MYZhIrXlLNKMgo7BMlDK5M/Zg/mZjWlN804H8W013+Dxs6ath0cjHZubCS63rXE3KK2M/gdHkdq7auAPD+QeHwUT7Y4Y0tzpg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=linux-foundation.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tMgl0DkiCy0u8hqwUZJYdqw2AWjIMAntZIkehI+DBoE=;
+ b=iu+WKdfPHy6xQA45EDYiAm8KyWSoOven0if53qufV2C0cQ0JhyVoq+qjoZAnxsywHwdcSEjsYtcKUKonXqAtkChkPEwMwJacrmdu6Ed2XPXfZiBbHvupcQOIr+f2kxa7nb7Bxyi8bV0jcPabaGLtaI7bHoIy3jl3DGjWgejvpEnjE1njDypBLdHTjLiZ69MydWx+yzOzfbjEl8tEsEMJtunCEEIPXfzzlGfMxGHqzQ5EINjJVIU3O3KK2wsLjHJ5b+9YX2r57qfwBTFt9ECnV9zSE+uyDCJvKJCIOWJ20iRVi6gEP3lMhlX6WYExhgRy0YjAiPfBeLB94AazXjyZGg==
+Received: from DS7PR03CA0066.namprd03.prod.outlook.com (2603:10b6:5:3bb::11)
+ by BL1PR12MB5825.namprd12.prod.outlook.com (2603:10b6:208:394::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.21; Fri, 2 Jun
+ 2023 01:34:30 +0000
+Received: from CY4PEPF0000EDD4.namprd03.prod.outlook.com
+ (2603:10b6:5:3bb:cafe::91) by DS7PR03CA0066.outlook.office365.com
+ (2603:10b6:5:3bb::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.23 via Frontend
+ Transport; Fri, 2 Jun 2023 01:34:30 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ CY4PEPF0000EDD4.mail.protection.outlook.com (10.167.241.208) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6455.18 via Frontend Transport; Fri, 2 Jun 2023 01:34:29 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Thu, 1 Jun 2023
+ 18:34:20 -0700
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail202.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Thu, 1 Jun 2023
+ 18:34:19 -0700
+Received: from blueforge.nvidia.com (10.127.8.13) by mail.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server id 15.2.986.37 via Frontend
+ Transport; Thu, 1 Jun 2023 18:34:19 -0700
+From:   John Hubbard <jhubbard@nvidia.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     David Hildenbrand <david@redhat.com>, Peter Xu <peterx@redhat.com>,
+        "Shuah Khan" <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>, <linux-mm@kvack.org>,
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: [PATCH 01/12] selftests/mm: fix uffd-stress unused function warning
+Date:   Thu, 1 Jun 2023 18:33:47 -0700
+Message-ID: <20230602013358.900637-2-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230602013358.900637-1-jhubbard@nvidia.com>
+References: <20230602013358.900637-1-jhubbard@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fa6009d4-643e-97ec-5317-a57a535e0495@redhat.com>
+X-NVConfidentiality: public
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000EDD4:EE_|BL1PR12MB5825:EE_
+X-MS-Office365-Filtering-Correlation-Id: ac14170e-9fdd-4c10-e96d-08db63098292
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: afidxTc0skUtYIJV8NCzn01xbip1EvVEiMeVpotyRY/6TOrHS3KnVeSJQHducfggHUTsmCI6v/d0w9eeI8JmWoV+gkUnn0xP+h2cLhdwcGkc1QVoaR1wyzaZ92mPyEfVoVZ9solQsCvvYxSH0VfHkSxw1d4hS+OvVH4wE3yCkSNEgkYO7UolEcO4eTHA7TJbtau3W4K7ELVBghOtr2NAI0Mxog0NB5l7xpCsmFL1NvJPMfTw8LjJOg0ngefIRr+hjVYcECJzAYleIRo4BHHmEMNNQU5NIRIKaNlJpxsYHtk78UfKtC6aahhNwo+ExJUPazl7OQCFLD1S670HDfUVIzjbsrSNbcCnrqX3tUQgsovLxekWXELq/VJxFhlDxM/MIM9nRmuII883Uo4MVd8gEAI42Cji6VdEYNLPcUfzFTRc9XlsTqQ7WiTKXOM6m8RJdhzEY1HPcdxSuSKca6qaKM2sVWTnjb2/nuoM+/8ID27yjC1cRmeXQpdU3VDADIch6fXjSQMAfVFVVfsb/OBqNhsuJpAa1x5Du7sw0PRTwrMPyrcBlAsL0I0qsBjuZsWrJkz0J+rIANAbJ5fpYxq0ORuRijmxw04WF9xPP3zrDt9T3Fqo+BJr7bhZPFEf26Pkkalxfb0GxxlN8zfEdyNzANczZv5+7gshnOpBHn9HQeN/c1Gcdk3ZD1elY4y4y9mesJ/r1L1qWKnYiQM8CsceCmKcOJmIM0oMjxXHDO/wnfmN9k6h8DPgmFk5haFV6lqa
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(136003)(39860400002)(396003)(376002)(346002)(451199021)(46966006)(40470700004)(36840700001)(316002)(40460700003)(82740400003)(7636003)(40480700001)(7696005)(41300700001)(356005)(478600001)(36756003)(107886003)(36860700001)(336012)(86362001)(82310400005)(186003)(83380400001)(47076005)(426003)(54906003)(2906002)(5660300002)(1076003)(26005)(4744005)(4326008)(2616005)(6916009)(6666004)(70206006)(8936002)(70586007)(8676002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2023 01:34:29.8484
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ac14170e-9fdd-4c10-e96d-08db63098292
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000EDD4.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5825
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jun 01, 2023 at 10:16:41AM +0200, David Hildenbrand wrote:
-> On 28.05.23 17:03, Lorenzo Stoakes wrote:
-> > On Fri, May 19, 2023 at 12:27:22PM +0200, David Hildenbrand wrote:
-> > > Let's add a new test for checking whether GUP long-term page pinning
-> > > works as expected (R/O vs. R/W, MAP_PRIVATE vs. MAP_SHARED, GUP vs.
-> > > GUP-fast). Note that COW handling with long-term R/O pinning in private
-> > > mappings, and pinning of anonymous memory in general, is tested by the
-> > > COW selftest. This test, therefore, focuses on page pinning in
-> > > file mappings.
-> > >
-> > > The most interesting case is probably the "local tmpfile" case, as that
-> > > will likely end up on a "real" filesystem such as ext4 or xfs, not on a
-> > > virtual one like tmpfs or hugetlb where any long-term page pinning is
-> > > always expected to succeed.
-> > >
-> > > For now, only add tests that use the "/sys/kernel/debug/gup_test"
-> > > interface. We'll add tests based on liburing separately next.
-> > >
-> > > Signed-off-by: David Hildenbrand <david@redhat.com>
-> > > ---
->
-> [...]
->
-> > > +static void do_test(int fd, size_t size, enum test_type type, bool shared)
-> > > +{
-> > > +	__fsword_t fs_type = get_fs_type(fd);
-> > > +	bool should_work;
-> > > +	char *mem;
-> > > +	int ret;
-> > > +
-> > > +	if (ftruncate(fd, size)) {
-> > > +		ksft_test_result_fail("ftruncate() failed\n");
-> > > +		return;
-> > > +	}
-> > > +
-> > > +	if (fallocate(fd, 0, 0, size)) {
-> > > +		if (size == pagesize)
-> > > +			ksft_test_result_fail("fallocate() failed\n");
-> > > +		else
-> > > +			ksft_test_result_skip("need more free huge pages\n");
-> > > +		return;
-> > > +	}
-> > > +
-> > > +	mem = mmap(NULL, size, PROT_READ | PROT_WRITE,
-> > > +		   shared ? MAP_SHARED : MAP_PRIVATE, fd, 0);
-> > > +	if (mem == MAP_FAILED) {
-> > > +		if (size == pagesize || shared)
-> > > +			ksft_test_result_fail("mmap() failed\n");
-> > > +		else
-> > > +			ksft_test_result_skip("need more free huge pages\n");
-> > > +		return;
-> > > +	}
-> > > +
-> > > +	/*
-> > > +	 * Fault in the page writable such that GUP-fast can eventually pin
-> > > +	 * it immediately.
-> > > +	 */
-> > > +	memset(mem, 0, size);
-> >
->
-> For shared mappings, MAP_POPULATE will not fault-in the pages writable. See
-> mm/gup.c:populate_vma_page_range().
+uffd_minor_feature() was unused. Remove it in order to fix the
+associated clang build warning.
 
-Ughhh yeah, I was aware but hadn't considered the shared case, here. Fair
-enough.
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+---
+ tools/testing/selftests/mm/uffd-stress.c | 10 ----------
+ 1 file changed, 10 deletions(-)
 
->
-> [There is also the case that mmap() doesn't fail if populate fails, but
-> that's only a side note regarding weird semantics of MAP_POPULATE]
+diff --git a/tools/testing/selftests/mm/uffd-stress.c b/tools/testing/selftests/mm/uffd-stress.c
+index f1ad9eef1c3a..995ff13e74c7 100644
+--- a/tools/testing/selftests/mm/uffd-stress.c
++++ b/tools/testing/selftests/mm/uffd-stress.c
+@@ -88,16 +88,6 @@ static void uffd_stats_reset(struct uffd_args *args, unsigned long n_cpus)
+ 	}
+ }
+ 
+-static inline uint64_t uffd_minor_feature(void)
+-{
+-	if (test_type == TEST_HUGETLB && map_shared)
+-		return UFFD_FEATURE_MINOR_HUGETLBFS;
+-	else if (test_type == TEST_SHMEM)
+-		return UFFD_FEATURE_MINOR_SHMEM;
+-	else
+-		return 0;
+-}
+-
+ static void *locking_thread(void *arg)
+ {
+ 	unsigned long cpu = (unsigned long) arg;
+-- 
+2.40.1
 
-Yes this is... a thing. And mm_populate() explicitly (void)-casting
-__mm_populate() is the cherry on that particular cake :)
-
->
-> [...]
->
-> > > +	int flags = MFD_HUGETLB;
-> > > +	int fd;
-> > > +
-> > > +	ksft_print_msg("[RUN] %s ... with memfd hugetlb (%zu kB)\n", desc,
-> > > +		       hugetlbsize / 1024);
-> > > +
-> > > +	flags |= __builtin_ctzll(hugetlbsize) << MFD_HUGE_SHIFT;
-> >
-> > Hm this feels a little cute :)
->
-> It's a weird interfacing, having to specify the desired size via flags ...
-> see the man page of memfd_create, which links to the man page of mmap: "the
-> desired huge page size can be configured by encoding the base-2 logarithm of
-> the desired page size in the six bits at the offset MAP_HUGE_SHIFT".
->
-> FWIW, we're using the same approach in cow.c already [and other memfd users
-> like QEMU do it just like that, using ctz].
-
-Ack, yeah I had assumed so, just felt slightly odd. Thanks for the
-explanation!
-
->
-> [...]
->
-> > > diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-> > > index 4893eb60d96d..b6b1eb6a8a6b 100644
-> > > --- a/tools/testing/selftests/mm/run_vmtests.sh
-> > > +++ b/tools/testing/selftests/mm/run_vmtests.sh
-> > > @@ -24,7 +24,7 @@ separated by spaces:
-> > >   - mmap
-> > >   	tests for mmap(2)
-> > >   - gup_test
-> > > -	tests for gup using gup_test interface
-> > > +	tests for gup
-> >
-> > Super nitty again, but I'm guessing this means the CONFIG_GUP_TEST
-> > interface, perhaps worth keeping?
->
-> With this patch, agreed. But not longer with the next patch -- guess I
-> simplified when splitting it up. If there are no strong feelings I'll leave
-> it in this patch.
->
-> [...]
->
-> > >
-> >
-> > OK this patch is really nice + well implemented, I can only point out a
-> > couple EXTREMELY nitty comments :) Thanks very much for adding a test for
-> > this, it's super useful!
-> >
-> > Therefore,
-> >
-> > Reviewed-by: Lorenzo Stoakes <lstoakes@gmail.com>
-> >
->
-> Thanks for the review! My selftest patches rarely get that much attention,
-> so highly appreciated :)
-
-No worries, this is very much in my wheelhouse (relating directly to my
-recent GUP series) so this is actually very useful and relevant to me. Also
-I am very much in favour of improved test coverage, is a bug bear of mine.
-
->
-> --
-> Thanks,
->
-> David / dhildenb
->
