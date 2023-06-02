@@ -2,145 +2,105 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 01F68C77B7A
-	for <linux-kselftest@archiver.kernel.org>; Fri,  2 Jun 2023 08:49:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 87096C7EE29
+	for <linux-kselftest@archiver.kernel.org>; Fri,  2 Jun 2023 09:33:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234713AbjFBItL (ORCPT
+        id S233994AbjFBJdx (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 2 Jun 2023 04:49:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48272 "EHLO
+        Fri, 2 Jun 2023 05:33:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233820AbjFBIs0 (ORCPT
+        with ESMTP id S233875AbjFBJdt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Jun 2023 04:48:26 -0400
-Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C29E46;
-        Fri,  2 Jun 2023 01:48:06 -0700 (PDT)
-Received: by mail-yb1-xb44.google.com with SMTP id 3f1490d57ef6-bacf685150cso1947533276.3;
-        Fri, 02 Jun 2023 01:48:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685695686; x=1688287686;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eheHZP8cKp+sdwSIjhX5j/WsObGvLb/DF1UbUOwIt7I=;
-        b=jOmsxqUo2frjiadNp+Wq4gGj+0bwTjeG5B38UXc9OlNsCz+2Nhy31EABVLzGc0TbZ8
-         tkezj9qxu1Uy7z5NjqByZX4upmIJIwM5SVGyK/+MMa2bWUQCDUy9/FRFSxpt5tXS2wah
-         DtDSMoVidwF1Pja7vO5yAtCvoaPj908lByJhyMd/op4/OJ2YqwkF+P2qkJhGGZu/s+5x
-         ie2PT2qndP7C/l2XSmT/Y1T2tWVZQ5qS0iVW//Qj45Y08blaK9tzVuU6WI/KGgY0rTSI
-         OCzsJ6eJfd0MePPs8HTHFY9wTVYyNZmQzZNPw766JB86tshr1Dz1wYkL27Q8aMonPptA
-         UNmg==
+        Fri, 2 Jun 2023 05:33:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09EF4C0
+        for <linux-kselftest@vger.kernel.org>; Fri,  2 Jun 2023 02:32:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685698364;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zGO5HytmLACgK9GKNF+3cgvVOya1l1UlgEMwgI/rmuY=;
+        b=E6Xv5+wUcQbk+xtHAsSPyIUd2cX0xxhCrW6NDVMGFUcBgE15zvSyjSWCTiJkENMuVHQIih
+        Ruem2Kbw5QAWznUNuxm5X2RLHJTZ2OJ1wb6Ww2cw7FnvMmsQ318KYd9gWUwUlhIU71Ywgo
+        bODJLq3uVu3JaMVwGdGX1rBr6TrszyE=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-516-2q2ZKQySPviUOUxBiEw9Dw-1; Fri, 02 Jun 2023 05:32:42 -0400
+X-MC-Unique: 2q2ZKQySPviUOUxBiEw9Dw-1
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-30aeef6f601so1010115f8f.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 02 Jun 2023 02:32:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685695686; x=1688287686;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eheHZP8cKp+sdwSIjhX5j/WsObGvLb/DF1UbUOwIt7I=;
-        b=XzK3uYRgixAlcKDiPs3ch+HCKnC+v2xz8jHdFVltkN6UaS9b83ZWqmMf9pP8b5VA9l
-         G6A8T5IwUMaAZYeZhL1R1TXQw6pkhznmkFEp3oKrAZVTH7FERoSAAcskh6tW5s0DgA3X
-         jVG/wmwen2q8SfEGlalAqBxybcEUTIZMXcwG2v9BF+0i9bSLlKECxG1Ts4Q5o3xJnKPK
-         COHY5BhTB0X63B5WMCFSxFBTN1KaLUXJOYnull6KTqeO2x+HiB2xZFP9kfYukdjTZyXq
-         4nqQCZ/dgzlp4xwIvBnuaDqBp0FSShsekB766F/3yWZygrhewwKc9Qr9AyNyAI+DJg1S
-         +Njw==
-X-Gm-Message-State: AC+VfDw1JPRLoC+1P0tUj4Daz862Rp4Qo5/1BuGKz23H4/i/UUQhEASN
-        OwalWTCWTPWDqFZnb4JIOzuxpbpRtdOmYmWcM4XzPr0nnM6m+A==
-X-Google-Smtp-Source: ACHHUZ5ZRiZ3evxYl3PDPH5kOW8kA9DTwBFIDbz1j/ffQgg/vdI3dYl9C0mP0XRvVy3PWFK8xxHYGbDTbc/CHDn9TSI=
-X-Received: by 2002:a0d:ea05:0:b0:568:f2c:ee43 with SMTP id
- t5-20020a0dea05000000b005680f2cee43mr13449240ywe.2.1685695685750; Fri, 02 Jun
- 2023 01:48:05 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685698361; x=1688290361;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zGO5HytmLACgK9GKNF+3cgvVOya1l1UlgEMwgI/rmuY=;
+        b=C5hx1mCbW0SyTITWHfWhOhFDctLfmQYxjVxDcVujGmHgWX7uqvCGgIzgSi42dokyaL
+         Il/xAfVJAM3T9EHsCeVSQAip27qvk1f3V2sfbLcwOkk5vuY0xIPIesLnKaLArQSqKRGj
+         sD+a+mL5YymvO94kcEZ0ihy6l60Yz25QfuuXYhlirf88ETntncKDjbzJkA85OVD0QEbi
+         p8VcxWwWMA6pRHNVRf5n4/Lnb6ru7+GxBRAGkqbYidj1Juw9ko4EzGiLbSaRLU2Eljv2
+         YUnA12q0c18t8oR4W+GJuNZIaHr42Iv2UWoy0om2xFYMgAjnehSSURXawJJyPyhJr/AD
+         Ertg==
+X-Gm-Message-State: AC+VfDzo5EDsXYlixAf8wMzxqQYSEEsBN+RHVrzAQbiCH9nxQAkfVKc2
+        UywQICe1fiw6d5FAZuouwaImZtza3cKN6F/oyG8EW7K9eoHkeK6ZRhLSG/fqPaJvw7CcG7A2BWi
+        n6/Qe71F6POS5sk0VS2xokx0aL2wx
+X-Received: by 2002:a7b:ce0a:0:b0:3f4:fc5e:fbf2 with SMTP id m10-20020a7bce0a000000b003f4fc5efbf2mr1343873wmc.8.1685698361249;
+        Fri, 02 Jun 2023 02:32:41 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5qXLoMOUyOwyxB8QJi5/lh8XWNUX/jSwFh9mmS99bJj5kctxTuQ4RoxvaIPaaRHATi9LX5Ug==
+X-Received: by 2002:a7b:ce0a:0:b0:3f4:fc5e:fbf2 with SMTP id m10-20020a7bce0a000000b003f4fc5efbf2mr1343855wmc.8.1685698360862;
+        Fri, 02 Jun 2023 02:32:40 -0700 (PDT)
+Received: from ?IPV6:2003:d8:2f2e:ae00:f2e3:50e0:73f7:451? (p200300d82f2eae00f2e350e073f70451.dip0.t-ipconnect.de. [2003:d8:2f2e:ae00:f2e3:50e0:73f7:451])
+        by smtp.gmail.com with ESMTPSA id m16-20020a7bcb90000000b003f6028a4c85sm4897350wmi.16.2023.06.02.02.32.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Jun 2023 02:32:40 -0700 (PDT)
+Message-ID: <78c0b444-8a95-396e-5f5e-8175f94a49cc@redhat.com>
+Date:   Fri, 2 Jun 2023 11:32:39 +0200
 MIME-Version: 1.0
-References: <20230602065958.2869555-1-imagedong@tencent.com>
- <20230602065958.2869555-6-imagedong@tencent.com> <69103b6f490309c381432cae5fdabf02d80a4397.camel@linux.ibm.com>
-In-Reply-To: <69103b6f490309c381432cae5fdabf02d80a4397.camel@linux.ibm.com>
-From:   Menglong Dong <menglong8.dong@gmail.com>
-Date:   Fri, 2 Jun 2023 16:47:54 +0800
-Message-ID: <CADxym3bc-jY=My6iHivuani1PH838yHjdVejAcXwWk0N5Qomkg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 5/5] selftests/bpf: add testcase for
- FENTRY/FEXIT with 6+ arguments
-To:     Ilya Leoshkevich <iii@linux.ibm.com>
-Cc:     olsajiri@gmail.com, davem@davemloft.net, dsahern@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, mykolal@fb.com,
-        shuah@kernel.org, benbjiang@tencent.com, imagedong@tencent.com,
-        xukuohai@huawei.com, chantr4@gmail.com, zwisler@google.com,
-        eddyz87@gmail.com, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 00/12] A minor flurry of selftest/mm fixes
+Content-Language: en-US
+To:     John Hubbard <jhubbard@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20230602013358.900637-1-jhubbard@nvidia.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230602013358.900637-1-jhubbard@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jun 2, 2023 at 4:24=E2=80=AFPM Ilya Leoshkevich <iii@linux.ibm.com>=
- wrote:
->
-> On Fri, 2023-06-02 at 14:59 +0800, menglong8.dong@gmail.com wrote:
-> > From: Menglong Dong <imagedong@tencent.com>
-> >
-> > Add test7/test12/test14 in fexit_test.c and fentry_test.c to test the
-> > fentry and fexit whose target function have 7/12/14 arguments.
-> >
-> > And the testcases passed:
-> >
-> > ./test_progs -t fexit
-> > $71      fentry_fexit:OK
-> > $73/1    fexit_bpf2bpf/target_no_callees:OK
-> > $73/2    fexit_bpf2bpf/target_yes_callees:OK
-> > $73/3    fexit_bpf2bpf/func_replace:OK
-> > $73/4    fexit_bpf2bpf/func_replace_verify:OK
-> > $73/5    fexit_bpf2bpf/func_sockmap_update:OK
-> > $73/6    fexit_bpf2bpf/func_replace_return_code:OK
-> > $73/7    fexit_bpf2bpf/func_map_prog_compatibility:OK
-> > $73/8    fexit_bpf2bpf/func_replace_multi:OK
-> > $73/9    fexit_bpf2bpf/fmod_ret_freplace:OK
-> > $73/10   fexit_bpf2bpf/func_replace_global_func:OK
-> > $73/11   fexit_bpf2bpf/fentry_to_cgroup_bpf:OK
-> > $73/12   fexit_bpf2bpf/func_replace_progmap:OK
-> > $73      fexit_bpf2bpf:OK
-> > $74      fexit_sleep:OK
-> > $75      fexit_stress:OK
-> > $76      fexit_test:OK
-> > Summary: 5/12 PASSED, 0 SKIPPED, 0 FAILED
-> >
-> > ./test_progs -t fentry
-> > $71      fentry_fexit:OK
-> > $72      fentry_test:OK
-> > $140     module_fentry_shadow:OK
-> > Summary: 3/0 PASSED, 0 SKIPPED, 0 FAILED
-> >
-> > Reviewed-by: Jiang Biao <benbjiang@tencent.com>
-> > Signed-off-by: Menglong Dong <imagedong@tencent.com>
-> > ---
-> >  net/bpf/test_run.c                            | 30 +++++++++++++++-
-> >  .../testing/selftests/bpf/progs/fentry_test.c | 34
-> > ++++++++++++++++++
-> >  .../testing/selftests/bpf/progs/fexit_test.c  | 35
-> > +++++++++++++++++++
-> >  3 files changed, 98 insertions(+), 1 deletion(-)
->
-> Don't you also need
->
-> --- a/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
-> @@ -34,7 +34,7 @@ void test_fentry_fexit(void)
->         fentry_res =3D (__u64 *)fentry_skel->bss;
->         fexit_res =3D (__u64 *)fexit_skel->bss;
->         printf("%lld\n", fentry_skel->bss->test1_result);
-> -       for (i =3D 0; i < 8; i++) {
-> +       for (i =3D 0; i < 11; i++) {
->                 ASSERT_EQ(fentry_res[i], 1, "fentry result");
->                 ASSERT_EQ(fexit_res[i], 1, "fexit result");
->         }
->
-> to verify the results of the new tests?
+On 02.06.23 03:33, John Hubbard wrote:
+> It turned out that an even dozen patches were required in order to get the
+> selftests building cleanly, and all running, once again. I made it worse on
+> myself by insisting on using clang, which seems to uncover a few more warnings
+> than gcc these days.
+> 
+> So I still haven't gotten to my original goal of running a new HMM test that
+> Alistair handed me (it's not here yet), but at least this fixes everything I ran
+> into just now.
 
-Oops, I missed this part......Thank you for reminding,
-and I'll fix it in V3.
+Thanks, now I can stop commenting out some (IIRC primarily uffd-related) 
+tests when just wanting to run some specific tests on some of odd 
+installations :D
 
-Thanks!
-Menglong Dong
+I assume this round you only consideres 64bit builds, right? My last 
+attempts with 32bit revealed a lot of issues, and I only fixed what I 
+really wanted to test (COW).
+
+-- 
+Thanks,
+
+David / dhildenb
+
