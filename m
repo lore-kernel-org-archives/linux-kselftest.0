@@ -2,65 +2,65 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C3FFC7EE24
-	for <linux-kselftest@archiver.kernel.org>; Fri,  2 Jun 2023 11:07:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96A2EC7EE32
+	for <linux-kselftest@archiver.kernel.org>; Fri,  2 Jun 2023 11:07:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235301AbjFBLHk (ORCPT
+        id S235832AbjFBLHl (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 2 Jun 2023 07:07:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48242 "EHLO
+        Fri, 2 Jun 2023 07:07:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235852AbjFBLH1 (ORCPT
+        with ESMTP id S235863AbjFBLH2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Jun 2023 07:07:27 -0400
+        Fri, 2 Jun 2023 07:07:28 -0400
 Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA231E47
-        for <linux-kselftest@vger.kernel.org>; Fri,  2 Jun 2023 04:07:02 -0700 (PDT)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20230602110649euoutp017c3495b697e8c7e1e8b3727d8488292c~k0t2gd8380063500635euoutp01H
-        for <linux-kselftest@vger.kernel.org>; Fri,  2 Jun 2023 11:06:49 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20230602110649euoutp017c3495b697e8c7e1e8b3727d8488292c~k0t2gd8380063500635euoutp01H
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D175E55
+        for <linux-kselftest@vger.kernel.org>; Fri,  2 Jun 2023 04:07:08 -0700 (PDT)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20230602110658euoutp0153ae530e2b5d8667a7d6bbc33cc4f35f~k0t_smsn70190301903euoutp01z
+        for <linux-kselftest@vger.kernel.org>; Fri,  2 Jun 2023 11:06:58 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20230602110658euoutp0153ae530e2b5d8667a7d6bbc33cc4f35f~k0t_smsn70190301903euoutp01z
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1685704009;
-        bh=f1HjrLD6njVVPjduaddJfi5+Ds9joRkOIy3esLq1bnY=;
+        s=mail20170921; t=1685704018;
+        bh=BhjlbE3l65EDbxXPKpYH+/IItCuSaglkyGpoc2fZJys=;
         h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=k0PEgADhvo9GS/8EziJJ8+YBDRBajjsrbEBycS2y3yquOZqIH/7/yezUD5rIA2oBj
-         SkfPi0x0Slsy9VUBzRSI7D0JAaM3EKB6GRXf/qJa81xdmukBg1zs2WNTytDVoaMDsz
-         WAyje9wOMKFrKEG2tyyx/rDdC6jghlVqjfzaaEms=
+        b=X0LTpbuqcSvbiXMG8CGVd2hMCiFANmN0MeNr9nHqf5XoJm0XPowTlO9Q39fGZsCww
+         VYNpi/yndgc1369Xeb/TxQjIua+Zz5/gD72Hwb0UpzYmcH3UCVX7WF/P+iAQwScyo5
+         4hY8AAhHhkMuo17hdYwUhg74s6lqbCIm7csNdLy0=
 Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
         eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20230602110649eucas1p28840581b7ed263d9183eb206ae73eb8b~k0t2PEHvj3164631646eucas1p2s;
-        Fri,  2 Jun 2023 11:06:49 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id F0.77.11320.94DC9746; Fri,  2
-        Jun 2023 12:06:49 +0100 (BST)
+        20230602110658eucas1p27ccf28cedfee77b724984314dfce3c77~k0t_jdLpI2052120521eucas1p2d;
+        Fri,  2 Jun 2023 11:06:58 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 97.77.11320.25DC9746; Fri,  2
+        Jun 2023 12:06:58 +0100 (BST)
 Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20230602110649eucas1p1fc4db9a31735ed13e14c3142e1edb23b~k0t2AAFU52550025500eucas1p1s;
-        Fri,  2 Jun 2023 11:06:49 +0000 (GMT)
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20230602110658eucas1p27d31eeac2417f9e19f8d4b6de012209b~k0t_KGxtF2052220522eucas1p2z;
+        Fri,  2 Jun 2023 11:06:58 +0000 (GMT)
 Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
         eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230602110649eusmtrp117f0da1caa43f6460c75da86d68d59c4~k0t1-iGSw2194821948eusmtrp1l;
-        Fri,  2 Jun 2023 11:06:49 +0000 (GMT)
-X-AuditID: cbfec7f4-993ff70000022c38-85-6479cd49faef
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id BA.A9.10549.94DC9746; Fri,  2
-        Jun 2023 12:06:49 +0100 (BST)
+        20230602110658eusmtrp19add2e18ca5bb2a26ee0cbd401c5a237~k0t_JjZpq2194821948eusmtrp12;
+        Fri,  2 Jun 2023 11:06:58 +0000 (GMT)
+X-AuditID: cbfec7f4-97dff70000022c38-9a-6479cd527b71
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 51.B9.10549.15DC9746; Fri,  2
+        Jun 2023 12:06:57 +0100 (BST)
 Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20230602110649eusmtip129b8cc86ce1cff9465c3b2643e67ef54~k0t1yIPZj0530205302eusmtip1U;
-        Fri,  2 Jun 2023 11:06:49 +0000 (GMT)
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20230602110657eusmtip2922d74715e738263fbe99c2d1cb968c1~k0t9_p76L0244502445eusmtip27;
+        Fri,  2 Jun 2023 11:06:57 +0000 (GMT)
 Received: from localhost (106.210.248.205) by CAMSVWEXC02.scsc.local
         (2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-        Fri, 2 Jun 2023 12:06:48 +0100
+        Fri, 2 Jun 2023 12:06:57 +0100
 From:   Joel Granados <j.granados@samsung.com>
 To:     <mcgrof@kernel.org>
 CC:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
         <linux-kselftest@vger.kernel.org>,
         Joel Granados <j.granados@samsung.com>
-Subject: [PATCH 4/8] test_sysctl: Add an unregister sysctl test
-Date:   Fri, 2 Jun 2023 13:06:34 +0200
-Message-ID: <20230602110638.789426-5-j.granados@samsung.com>
+Subject: [PATCH 8/8] sysctl: replace child with a flags var
+Date:   Fri, 2 Jun 2023 13:06:38 +0200
+Message-ID: <20230602110638.789426-9-j.granados@samsung.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230602110638.789426-1-j.granados@samsung.com>
 MIME-Version: 1.0
@@ -69,146 +69,263 @@ Content-Type: text/plain
 X-Originating-IP: [106.210.248.205]
 X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
         CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrJIsWRmVeSWpSXmKPExsWy7djP87qeZytTDO5uU7DYs/cki8XlXXPY
-        LKbfec9mcWPCU0YHFo9NqzrZPD5vkgtgiuKySUnNySxLLdK3S+DKONSyhLHgtEjFqv67LA2M
-        bwS6GDk5JARMJPq2v2bqYuTiEBJYwSjxr2cNI4TzhVHi56OtUM5nRom3H1qYYFrWdJ1kgUgs
-        Z5R4f+koC1zVx/+rWSGcLYwStyavYQdpYRPQkTj/5g4ziC0iIC5x4vRmsLnMAhMYJfrW/WIB
-        SQgL2EvMO3YNbAeLgIrEqRuzWEFsXgEbidnH1rBC7JaXaLs+nRHE5hSwlTh0+gwbRI2gxMmZ
-        T8DmMAPVNG+dzQxhS0gcfPGCGaJXWWLCut9Qc2olTm25Bfa2hMARDombT3dAFblIND7+yghh
-        C0u8Or6FHcKWkTg9uYcFomEyo8T+fx/YIZzVjBLLGr9Cg8ZaouXKE6gOR4l/57uAbA4gm0/i
-        xltBiIv4JCZtm84MEeaV6GgTmsCoMgvJD7OQ/DALyQ8LGJlXMYqnlhbnpqcWG+WllusVJ+YW
-        l+al6yXn525iBKaO0/+Of9nBuPzVR71DjEwcjIcYJTiYlUR4hcLKU4R4UxIrq1KL8uOLSnNS
-        iw8xSnOwKInzatueTBYSSE8sSc1OTS1ILYLJMnFwSjUwWVUy3fw9uf5l+cLXlvFfFJaq7VzE
-        YcQufCTiueHBgOeiXgFpXd+WfNkptOXe5NPvhH8828Bvc/rxEmUu/6+1Mzy37bpVsvJky8d5
-        GUuOGIjd28P4Z233SvOv6zP0Gw4GrGub867ft3zD/L/3o5j4NjLk/1Q8KSv5mSmRM29CwrzP
-        cwJ/7JrDbfBcdf31HfITrhoeql91/WVWnNj0CzY/j2Z9LoteejHL57LK4Qi315oup9e/WFcu
-        4nhho4jnmaJT6TqvuJ1bptx2jfA+o+5umS3/ycxijbven/jKT5+03+t2PbvMslSaoSuvd474
-        RrU7yZ/svS/Z597Oeuw+YV/e1AtGgdoCC5f8f/X91oIE3ywlluKMREMt5qLiRAAIYHaBjAMA
-        AA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprPIsWRmVeSWpSXmKPExsVy+t/xu7qeZytTDP6e4LbYs/cki8XlXXPY
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrBIsWRmVeSWpSXmKPExsWy7djPc7pBZytTDCbdELfYs/cki8XlXXPY
+        LKbfec9mcWPCU0YHFo9NqzrZPD5vkgtgiuKySUnNySxLLdK3S+DKeP5oEnPBUrOKJzevMzcw
+        PtXpYuTkkBAwkbi2+AdzFyMXh5DACkaJ/QvWMEE4XxglDk7pZ4dwPjNKdE6ZwgzTcrxpHQtE
+        YjmjxInFG5ngqn6v64FytjBKvGrbyQLSwiagI3H+zR2wdhEBcYkTpzczghQxC0xglOhb9wus
+        SFjAWqL77xJGEJtFQEXi8rz5bCA2r4CNxI2Dx6F2y0u0XZ8OVsMpYCtx6PQZqBpBiZMzn4DN
+        YQaqad46mxnClpA4+OIFVK+yxIR1v1kh7FqJU1tuMUHYBzgktk8Ph7BdJNb92QxVIyzx6vgW
+        dghbRuL05B6wnyUEJgOD6d8HdghnNaPEssavUJOsJVquPIHqcJTo790FtJkDyOaTuPFWEOIg
+        PolJ26ZDhXklOtqEJjCqzELywiwkL8xC8sICRuZVjOKppcW56anFRnmp5XrFibnFpXnpesn5
+        uZsYgYnj9L/jX3YwLn/1Ue8QIxMH4yFGCQ5mJRFeobDyFCHelMTKqtSi/Pii0pzU4kOM0hws
+        SuK82rYnk4UE0hNLUrNTUwtSi2CyTBycUg1MOy7cush8WI87YYdC45XLBsV85Z77eOuZlCNF
+        uLJml7nqmdfr/fk8e02/e/LZVKMrV2w4NsXeFl+w3mzb+49S+zlDogUZ68rcFxyZJ5TxxCn7
+        6ow9VrLFZjK71pz7KKXbuuZ54cWPeRtOa1757bj1b5n/ltlSvvUBxl2u4e9rT0bNa05T6VvB
+        pn0xfKqPimlrQrKYebzaW7vDbSVpESelRLaJ7/Lb9J5bYIX4wn8VqT77zX+8c1JWdt4Qu6eI
+        xWXpPYNFifp7jv7/VN2fNHF+27O/zf9ndX8VNeNJ3P6n6CtDocc0lvRd4bwzlkycslssfsrs
+        lZL7QpcbG11cJzBDyZ97k6kir7jEQYfqN15KLMUZiYZazEXFiQCl5pPziwMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrAIsWRmVeSWpSXmKPExsVy+t/xe7qBZytTDK4ftLHYs/cki8XlXXPY
         LKbfec9mcWPCU0YHFo9NqzrZPD5vkgtgitKzKcovLUlVyMgvLrFVija0MNIztLTQMzKx1DM0
-        No+1MjJV0rezSUnNySxLLdK3S9DLONSyhLHgtEjFqv67LA2MbwS6GDk5JARMJNZ0nWQBsYUE
-        ljJKTF/jDBGXkdj45SorhC0s8edaF1sXIxdQzUdGiXN3n0I5WxglWs5OZAOpYhPQkTj/5g4z
-        iC0iIC5x4vRmRpAiZoEJjBJ9636BrRAWsJeYd+waE4jNIqAicerGLLAVvAI2ErOPrYFaJy/R
-        dn06I4jNKWArcej0GTaI82wk1p+5wA5RLyhxcuYTsJnMQPXNW2czQ9gSEgdfvGCGmKMsMWHd
-        b6iZtRKf/z5jnMAoMgtJ+ywk7bOQtC9gZF7FKJJaWpybnltsqFecmFtcmpeul5yfu4kRGFPb
-        jv3cvINx3quPeocYmTgYDzFKcDArifAKhZWnCPGmJFZWpRblxxeV5qQWH2I0BfpzIrOUaHI+
-        MKrzSuINzQxMDU3MLA1MLc2MlcR5PQs6EoUE0hNLUrNTUwtSi2D6mDg4pRqYVI/r7353sMEn
-        d5PRV/ZF0x0WfNm58vqKvtVyrMus9qbErH7V15Zzj/uVEOfaR8cWZ54wMHor0Rn0SurBs3PZ
-        pRt6FTg+McUcvT7T8f/6lTGyrzYxiqixT1sfaPsuenXG8oSFC900ptzdp/m22cP47e8/a648
-        1pogs1Fq7uUNs8xWn67YmbpKszS3cuLynGcM1ycuX78r70jAw8jLmZfDOh47pof3r9A9yOw5
-        cwmzBv+xKzvrEx6xu8xS8+eTnbm0Xujig5O60bYB388s/lB/vmvDPOabu+VmxytYsufzTX5m
-        cvXpbJn+qK9la4r1T3ZrXDvW3yr4KOfeUj7zf66uco+l7874p84h9uCtzdwdopuUWIozEg21
-        mIuKEwEfEtWDMgMAAA==
-X-CMS-MailID: 20230602110649eucas1p1fc4db9a31735ed13e14c3142e1edb23b
+        No+1MjJV0rezSUnNySxLLdK3S9DLeP5oEnPBUrOKJzevMzcwPtXpYuTkkBAwkTjetI6li5GL
+        Q0hgKaNEx5EfLBAJGYmNX66yQtjCEn+udbFBFH1klLgxeSYThLOFUeLk0tXMIFVsAjoS59/c
+        AbNFBMQlTpzezAhSxCwwgVGib90vsLHCAtYS3X+XMILYLAIqEpfnzWcDsXkFbCRuHDzODLFO
+        XqLt+nSwGk4BW4lDp8+A1QgB1aw/c4Edol5Q4uTMJ2AzmYHqm7fOZoawJSQOvngBNUdZYsK6
+        31Av1Ep8/vuMcQKjyCwk7bOQtM9C0r6AkXkVo0hqaXFuem6xoV5xYm5xaV66XnJ+7iZGYFRt
+        O/Zz8w7Gea8+6h1iZOJgPMQowcGsJMIrFFaeIsSbklhZlVqUH19UmpNafIjRFOjPicxSosn5
+        wLjOK4k3NDMwNTQxszQwtTQzVhLn9SzoSBQSSE8sSc1OTS1ILYLpY+LglGpginw5ye355S9L
+        uGIrg1zeNGxcsvXd9HMnnssv3H/lvMb0+25NC+qWTnlm/ibnk4tR4YokyTc8HH0Z0dryZX97
+        eUxWPtWdx8T8nOOL3qevLZ+8zmdutvZf+fBszJLWn01PHkY/ePQ86quTZ9Zzbd4TZ1mlTmxb
+        IvB88ksTN+WfH9e2VDGszSjfFZ7ZwL8p6u7e7N7dM2vefrvdVm3fE/9+Web7+cddz4nFB/6x
+        n728oJ/Drzdqe98sHb5vOxLcLHmfbLr8tcaH/YzSRo+rNondu5p0ZbYLunrd57/pOq9+6qNk
+        fl2VTon8Dc84WWapB86qKZB8uNGwvFzebY7TLY/g4/MqE4qmHPup91QltD4gQomlOCPRUIu5
+        qDgRABcI0OAzAwAA
+X-CMS-MailID: 20230602110658eucas1p27d31eeac2417f9e19f8d4b6de012209b
 X-Msg-Generator: CA
-X-RootMTR: 20230602110649eucas1p1fc4db9a31735ed13e14c3142e1edb23b
+X-RootMTR: 20230602110658eucas1p27d31eeac2417f9e19f8d4b6de012209b
 X-EPHeader: CA
 CMS-TYPE: 201P
-X-CMS-RootMailID: 20230602110649eucas1p1fc4db9a31735ed13e14c3142e1edb23b
+X-CMS-RootMailID: 20230602110658eucas1p27d31eeac2417f9e19f8d4b6de012209b
 References: <20230602110638.789426-1-j.granados@samsung.com>
-        <CGME20230602110649eucas1p1fc4db9a31735ed13e14c3142e1edb23b@eucas1p1.samsung.com>
+        <CGME20230602110658eucas1p27d31eeac2417f9e19f8d4b6de012209b@eucas1p2.samsung.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a test that checks that the unregistered directory is removed from
-/proc/sys/debug
+This is part of the effort to remove the empty element at the end of
+ctl_table structs. "child" was a deprecated elem in this struct and was
+being used to differentiate between two types of ctl_tables: "normal"
+and "permanently emtpy".
+
+What changed?:
+* Replace "child" with a u8 "flag" variable and use it to differentiate
+  between types by refactoring the permanently empty helper functions.
+* Remove the "empty child" check from sysctl_check_table
+* Remove count_subheaders function as there is no longer a need to
+  calculate how many headers there are for every child
+* Remove the recursive call to unregister_sysctl_table as there is no
+  need to traverse down the child tree any longer
+* Add a new SYSCTL_PERM_EMPTY_DIR binary flag
+* Remove the last remanence of child from partport/procfs.c
 
 Signed-off-by: Joel Granados <j.granados@samsung.com>
 ---
- lib/test_sysctl.c                        | 30 ++++++++++++++++++++++++
- tools/testing/selftests/sysctl/sysctl.sh | 16 +++++++++++++
- 2 files changed, 46 insertions(+)
+ drivers/parport/procfs.c |  1 -
+ fs/proc/proc_sysctl.c    | 81 +++++++++-------------------------------
+ include/linux/sysctl.h   |  4 +-
+ 3 files changed, 20 insertions(+), 66 deletions(-)
 
-diff --git a/lib/test_sysctl.c b/lib/test_sysctl.c
-index 0cf7c547d61a..555244687443 100644
---- a/lib/test_sysctl.c
-+++ b/lib/test_sysctl.c
-@@ -170,12 +170,42 @@ static int test_sysctl_setup_node_tests(void)
- 	return 0;
- }
+diff --git a/drivers/parport/procfs.c b/drivers/parport/procfs.c
+index 0f2d2e1ee28e..4e5b972c3e26 100644
+--- a/drivers/parport/procfs.c
++++ b/drivers/parport/procfs.c
+@@ -387,7 +387,6 @@ parport_device_sysctl_template = {
+ 			.data		= NULL,
+ 			.maxlen		= 0,
+ 			.mode		= 0555,
+-			.child		= NULL
+ 		},
+ 		{}
+ 	}
+diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
+index 07804097f997..a180bc952397 100644
+--- a/fs/proc/proc_sysctl.c
++++ b/fs/proc/proc_sysctl.c
+@@ -29,9 +29,8 @@ static const struct file_operations proc_sys_dir_file_operations;
+ static const struct inode_operations proc_sys_dir_operations;
  
-+/* Used to test that unregister actually removes the directory */
-+static struct ctl_table test_table_unregister[] = {
-+	{
-+		.procname	= "unregister_error",
-+		.data		= &test_data.int_0001,
-+		.maxlen		= sizeof(int),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec_minmax,
-+	},
-+	{}
-+};
-+
-+static int test_sysctl_run_unregister_nested(void)
-+{
-+	struct ctl_table_header *unregister;
-+
-+	unregister = register_sysctl("debug/test_sysctl/unregister_error",
-+				   test_table_unregister);
-+	if (!unregister)
-+		return -ENOMEM;
-+
-+	unregister_sysctl_table(unregister);
-+	return 0;
-+}
-+
- static int __init test_sysctl_init(void)
+ /* Support for permanently empty directories */
+-
+ struct ctl_table sysctl_mount_point[] = {
+-	{ }
++	{.flags = SYSCTL_PERM_EMPTY_DIR }
+ };
+ 
+ /**
+@@ -48,21 +47,14 @@ struct ctl_table_header *register_sysctl_mount_point(const char *path)
+ }
+ EXPORT_SYMBOL(register_sysctl_mount_point);
+ 
+-static bool is_empty_dir(struct ctl_table_header *head)
+-{
+-	return head->ctl_table[0].child == sysctl_mount_point;
+-}
+-
+-static void set_empty_dir(struct ctl_dir *dir)
+-{
+-	dir->header.ctl_table[0].child = sysctl_mount_point;
+-}
+-
+-static void clear_empty_dir(struct ctl_dir *dir)
+-
+-{
+-	dir->header.ctl_table[0].child = NULL;
+-}
++#define sysctl_is_perm_empty_ctl_table(tptr)		\
++	(tptr[0].flags & SYSCTL_PERM_EMPTY_DIR)
++#define sysctl_is_perm_empty_ctl_header(hptr)		\
++	(sysctl_is_perm_empty_ctl_table(hptr->ctl_table))
++#define sysctl_set_perm_empty_ctl_header(hptr)		\
++	(hptr->ctl_table[0].flags |= SYSCTL_PERM_EMPTY_DIR)
++#define sysctl_clear_perm_empty_ctl_header(hptr)	\
++	(hptr->ctl_table[0].flags &= ~SYSCTL_PERM_EMPTY_DIR)
+ 
+ void proc_sys_poll_notify(struct ctl_table_poll *poll)
  {
+@@ -230,20 +222,22 @@ static void erase_header(struct ctl_table_header *head)
+ static int insert_header(struct ctl_dir *dir, struct ctl_table_header *header)
+ {
+ 	struct ctl_table *entry;
++	struct ctl_table_header *dir_h = &dir->header;
  	int err;
  
- 	err = test_sysctl_setup_node_tests();
-+	if (err)
-+		goto out;
- 
-+	err = test_sysctl_run_unregister_nested();
 +
-+out:
+ 	/* Is this a permanently empty directory? */
+-	if (is_empty_dir(&dir->header))
++	if (sysctl_is_perm_empty_ctl_header(dir_h))
+ 		return -EROFS;
+ 
+ 	/* Am I creating a permanently empty directory? */
+-	if (header->ctl_table == sysctl_mount_point) {
++	if (sysctl_is_perm_empty_ctl_table(header->ctl_table)) {
+ 		if (!RB_EMPTY_ROOT(&dir->root))
+ 			return -EINVAL;
+-		set_empty_dir(dir);
++		sysctl_set_perm_empty_ctl_header(dir_h);
+ 	}
+ 
+-	dir->header.nreg++;
++	dir_h->nreg++;
+ 	header->parent = dir;
+ 	err = insert_links(header);
+ 	if (err)
+@@ -259,9 +253,9 @@ static int insert_header(struct ctl_dir *dir, struct ctl_table_header *header)
+ 	put_links(header);
+ fail_links:
+ 	if (header->ctl_table == sysctl_mount_point)
+-		clear_empty_dir(dir);
++		sysctl_clear_perm_empty_ctl_header(dir_h);
+ 	header->parent = NULL;
+-	drop_sysctl_table(&dir->header);
++	drop_sysctl_table(dir_h);
  	return err;
  }
- module_init(test_sysctl_init);
-diff --git a/tools/testing/selftests/sysctl/sysctl.sh b/tools/testing/selftests/sysctl/sysctl.sh
-index cb8f83dfe16b..a6d79d7a36e4 100755
---- a/tools/testing/selftests/sysctl/sysctl.sh
-+++ b/tools/testing/selftests/sysctl/sysctl.sh
-@@ -31,6 +31,7 @@ ALL_TESTS="$ALL_TESTS 0005:3:1:int_0003"
- ALL_TESTS="$ALL_TESTS 0006:50:1:bitmap_0001"
- ALL_TESTS="$ALL_TESTS 0007:1:1:boot_int"
- ALL_TESTS="$ALL_TESTS 0008:1:1:match_int"
-+ALL_TESTS="$ALL_TESTS 0009:1:1:unregister_error"
  
- function allow_user_defaults()
- {
-@@ -797,6 +798,20 @@ sysctl_test_0008()
- 	return 0
+@@ -479,7 +473,7 @@ static struct inode *proc_sys_make_inode(struct super_block *sb,
+ 		inode->i_mode |= S_IFDIR;
+ 		inode->i_op = &proc_sys_dir_operations;
+ 		inode->i_fop = &proc_sys_dir_file_operations;
+-		if (is_empty_dir(head))
++		if (sysctl_is_perm_empty_ctl_header(head))
+ 			make_empty_dir_inode(inode);
+ 	}
+ 
+@@ -1136,9 +1130,6 @@ static int sysctl_check_table(const char *path, struct ctl_table *table)
+ 	struct ctl_table *entry;
+ 	int err = 0;
+ 	list_for_each_table_entry(entry, table) {
+-		if (entry->child)
+-			err |= sysctl_err(path, entry, "Not a file");
+-
+ 		if ((entry->proc_handler == proc_dostring) ||
+ 		    (entry->proc_handler == proc_dobool) ||
+ 		    (entry->proc_handler == proc_dointvec) ||
+@@ -1465,25 +1456,6 @@ void __init __register_sysctl_init(const char *path, struct ctl_table *table,
+ 	kmemleak_not_leak(hdr);
  }
  
-+sysctl_test_0009()
-+{
-+	TARGET="${SYSCTL}/$(get_test_target 0009)"
-+	echo -n "Testing if $TARGET unregistered correctly ..."
-+	if [ -d $TARGET ]; then
-+		echo "TEST FAILED"
-+		rc=1
-+		test_rc
-+	fi
-+
-+	echo "ok"
-+	return 0
-+}
-+
- list_tests()
+-static int count_subheaders(struct ctl_table *table)
+-{
+-	int has_files = 0;
+-	int nr_subheaders = 0;
+-	struct ctl_table *entry;
+-
+-	/* special case: no directory and empty directory */
+-	if (!table || !table->procname)
+-		return 1;
+-
+-	list_for_each_table_entry(entry, table) {
+-		if (entry->child)
+-			nr_subheaders += count_subheaders(entry->child);
+-		else
+-			has_files = 1;
+-	}
+-	return nr_subheaders + has_files;
+-}
+-
+ static void put_links(struct ctl_table_header *header)
  {
- 	echo "Test ID list:"
-@@ -813,6 +828,7 @@ list_tests()
- 	echo "0006 x $(get_test_count 0006) - tests proc_do_large_bitmap()"
- 	echo "0007 x $(get_test_count 0007) - tests setting sysctl from kernel boot param"
- 	echo "0008 x $(get_test_count 0008) - tests sysctl macro values match"
-+	echo "0009 x $(get_test_count 0009) - tests sysct unregister"
- }
+ 	struct ctl_table_set *root_set = &sysctl_table_root.default_set;
+@@ -1546,28 +1518,11 @@ static void drop_sysctl_table(struct ctl_table_header *header)
+  */
+ void unregister_sysctl_table(struct ctl_table_header * header)
+ {
+-	int nr_subheaders;
+ 	might_sleep();
  
- usage()
+ 	if (header == NULL)
+ 		return;
+ 
+-	nr_subheaders = count_subheaders(header->ctl_table_arg);
+-	if (unlikely(nr_subheaders > 1)) {
+-		struct ctl_table_header **subheaders;
+-		int i;
+-
+-		subheaders = (struct ctl_table_header **)(header + 1);
+-		for (i = nr_subheaders -1; i >= 0; i--) {
+-			struct ctl_table_header *subh = subheaders[i];
+-			struct ctl_table *table = subh->ctl_table_arg;
+-			unregister_sysctl_table(subh);
+-			kfree(table);
+-		}
+-		kfree(header);
+-		return;
+-	}
+-
+ 	spin_lock(&sysctl_lock);
+ 	drop_sysctl_table(header);
+ 	spin_unlock(&sysctl_lock);
+diff --git a/include/linux/sysctl.h b/include/linux/sysctl.h
+index 653b66c762b1..0cd79a7f1d3e 100644
+--- a/include/linux/sysctl.h
++++ b/include/linux/sysctl.h
+@@ -137,7 +137,7 @@ struct ctl_table {
+ 	void *data;
+ 	int maxlen;
+ 	umode_t mode;
+-	struct ctl_table *child;	/* Deprecated */
++	u8 flags;
+ 	proc_handler *proc_handler;	/* Callback for text formatting */
+ 	struct ctl_table_poll *poll;
+ 	void *extra1;
+@@ -229,7 +229,7 @@ extern int unaligned_enabled;
+ extern int unaligned_dump_stack;
+ extern int no_unaligned_warning;
+ 
+-extern struct ctl_table sysctl_mount_point[];
++#define SYSCTL_PERM_EMPTY_DIR	(1 << 0)
+ 
+ #else /* CONFIG_SYSCTL */
+ 
 -- 
 2.30.2
 
