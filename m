@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B7B0C77B7A
-	for <linux-kselftest@archiver.kernel.org>; Sat,  3 Jun 2023 02:16:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3ADAC7EE2A
+	for <linux-kselftest@archiver.kernel.org>; Sat,  3 Jun 2023 02:16:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237223AbjFCCQw (ORCPT
+        id S237074AbjFCCQy (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 2 Jun 2023 22:16:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33132 "EHLO
+        Fri, 2 Jun 2023 22:16:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237161AbjFCCQc (ORCPT
+        with ESMTP id S237196AbjFCCQs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Jun 2023 22:16:32 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2088.outbound.protection.outlook.com [40.107.244.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E22FE51;
-        Fri,  2 Jun 2023 19:16:24 -0700 (PDT)
+        Fri, 2 Jun 2023 22:16:48 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2088.outbound.protection.outlook.com [40.107.93.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF9ADE74;
+        Fri,  2 Jun 2023 19:16:25 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GctmxXwc1KzrMcPKtC4bFBdF18Tq8Fvx3XIXqfWL7bszbUxHTDMHtOYGQkXWx2K89H2l5xVjWP91GkwZev40myuNktu3q4Ey9KnKWIyoUbR27PU/ChBm8VU3jJAxrvqlyG0vVRRKE1dSiiUO+jTX0xeXqumfuYKsGDKqXDKT8noMlGO225cjMqgB3LWEv2KXf6YHcNv85Kp+xv/q//l61nz2V/tt2uZSQsBJesODBRZ+m99EuYxt7YC8C/6HqpK39QfShlpSdBch1M1G0ztaAAAJryRN2f9yVFFUqAUMqaeGdMHR1D3k6GHsseTfDMw5aran/uwdCljGRcUQMNH5Hw==
+ b=E0wvmzMX2+2lgTlGV7+gto7RjltVDuDcJ4EUgBPfOqWKHBi349MiK3mAuRAQA0LkcgjMzzMXnhvy8liOr50rBTlrUSYtZgiMz7w8EYS72+fLiZzr48HjXI5A8c64x98QZZm6JewQrriNl1kc3hgYrJvdMqNARjWbHKEyeiCzbYNdbTb24zAW2qgtHEDi0w4+f2zR7CGLCguLO8GBEdpgNu+nUItTOZcEXxe1NVU4o/9BKpZumEpcqBBSYtIWE+KGPUep9S2uaf2oTh+tHwJGFPWx/angdN+YN3zYaFhxJaWnkKsLoZoOMD0LeEKD83wCkvb328zz01fQ77dJPoHOgA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NAgHsicGbXE7/y+61Ec/TG4fp5QK6NCUPay76C4Qy/s=;
- b=EG3WIBkfd9R/MpUDztYzE00rJQqPz1NxWMYlsKDptFOzpHaF5tZQhz2nrVJqacsdC0K8jVUhAJ63fWng/tpOi2zruhkuA1LxkgAUghclpkgB3DJbR1eQE8x2yY6Hi2dPa/RjCt+w9p9IwNHDijKOraJUbytX4m0eFTTK3iat6nVJBecMXWd/hI/b/sS2XOZfzOEnphwdEzWyzqX5KurRs25hNcSgYhG+KdNsZwCHH5TTIBLDCSBseghHfugjq97FUTYfplb2qXlDRaCGZFbirg3/M2fTI4Ska89N6EGMYkhGhwnpGWk1H0Jxyr5lZvW+u1wsCJuFZKS16tUlZK3o2A==
+ bh=1DWMqFfWmcM0S74ipR90Z5t8Em5oNzomwf7Su2Dj4R4=;
+ b=kNzp/bAEy19hfRkRKK6QPpeiYkzY+cUNeFDmfUWE+62TBp3ZMvsqqlxtJViVReODiuf7JU1NoaBO0aqboxHr2Ui1Duoj97gSMM/19GNuqQX94Vbj3rpSNckd9XpWlJn23ioFQf+xgetrC5L24HRVCqQ5BQnwUt9YAGlsNCQBAYxXsUcZTIQeTuWajrv0Xlc98btnnTTcRr7aM4c82sbeNNCDeZrT65zEybX8iM53k0fWI6BzaQwNWjlOscJoyy+GRAOlP73N9BYo565YLn54NaiDD5/yDs2bNrEC9n6zrUhwGCr3Vcnnsafj1tX/kADqY0QM/qsm2yGeBervdO7Ilw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  216.228.117.160) smtp.rcpttodomain=linux-foundation.org
  smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
@@ -30,18 +30,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NAgHsicGbXE7/y+61Ec/TG4fp5QK6NCUPay76C4Qy/s=;
- b=oUKZRpkGyLvMoK3wAqp2OJFWuSZTx5/59zOGYWSRblw9ZQpAo4pc7Pw7KY2zEZUKC9kR/L/Jd0p+TbGt/6U+TnpFCxjaXDbLtGEK4e09EDmDvgmLoxzy2C5cgyBksjUzW69k6eeR+ymKHhqXAIdaKJKindYfGeBOhZj/TilYPL3dUu3vXHlgsegapg4rdcCIRkBRFdM0Auhu3QbQ33j43ULE1iUcjaxVSICzUZGNKZUMv6YVo5hDqQnMS6A+5nfivdNMu68lyzpmx4alwASkIqWyXyDZ+HV+zfKV7AQlTjaeD7PtDAO3BQEZZTDJ54vI6ZUnbmNQ246RFb6BFqaKhg==
-Received: from BN9PR03CA0604.namprd03.prod.outlook.com (2603:10b6:408:106::9)
- by SA1PR12MB5669.namprd12.prod.outlook.com (2603:10b6:806:237::6) with
+ bh=1DWMqFfWmcM0S74ipR90Z5t8Em5oNzomwf7Su2Dj4R4=;
+ b=UyepBzWfehO7MgNo3y09cOBnplR2kwSIug7lDAlrS0810ErTRvFZJc2690uqVH0t5dYlGuMeO4QfsqhzPs7ji69zfqXG8qOZFs76PqfJTg2FjlKsMNgnErtvfuMqO0VjPRxcd3cfbA/VQTckhazivCPTOxYJ3qXxbyi3SbX/y9WIbtAl3aimDV5iwjRE/eJ57y26pKC1h8R411jUmVDL07m75XwfEDSJQCXQvD3to8/p22vHrxc4oWoi9Y+bP68a3bAHgBmLdkh3RZ7dcBhBJFBWfBVnnchDHOnlcIgcN4kMOcgneSN2aV7peakqhrtTwHE5X3n623pLreRvMBlErg==
+Received: from BN9PR03CA0603.namprd03.prod.outlook.com (2603:10b6:408:106::8)
+ by PH7PR12MB6764.namprd12.prod.outlook.com (2603:10b6:510:1ae::8) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.26; Sat, 3 Jun
- 2023 02:16:22 +0000
+ 2023 02:16:23 +0000
 Received: from BN8NAM11FT051.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:106:cafe::5c) by BN9PR03CA0604.outlook.office365.com
- (2603:10b6:408:106::9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.28 via Frontend
- Transport; Sat, 3 Jun 2023 02:16:22 +0000
+ (2603:10b6:408:106:cafe::8f) by BN9PR03CA0603.outlook.office365.com
+ (2603:10b6:408:106::8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.31 via Frontend
+ Transport; Sat, 3 Jun 2023 02:16:23 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
@@ -51,11 +51,11 @@ Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
 Received: from mail.nvidia.com (216.228.117.160) by
  BN8NAM11FT051.mail.protection.outlook.com (10.13.177.66) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6455.28 via Frontend Transport; Sat, 3 Jun 2023 02:16:21 +0000
+ 15.20.6455.28 via Frontend Transport; Sat, 3 Jun 2023 02:16:22 +0000
 Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
  (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 2 Jun 2023
- 19:16:08 -0700
+ 19:16:09 -0700
 Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail205.nvidia.com
  (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Fri, 2 Jun 2023
@@ -71,9 +71,9 @@ CC:     David Hildenbrand <david@redhat.com>, Peter Xu <peterx@redhat.com>,
         <linux-kselftest@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
         John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH v2 07/11] selftests/mm: fix a "possibly uninitialized" warning in pkey-x86.h
-Date:   Fri, 2 Jun 2023 19:15:54 -0700
-Message-ID: <20230603021558.95299-8-jhubbard@nvidia.com>
+Subject: [PATCH v2 09/11] selftests/mm: move psize(), pshift() into vm_utils.c
+Date:   Fri, 2 Jun 2023 19:15:56 -0700
+Message-ID: <20230603021558.95299-10-jhubbard@nvidia.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230603021558.95299-1-jhubbard@nvidia.com>
 References: <20230603021558.95299-1-jhubbard@nvidia.com>
@@ -83,51 +83,101 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT051:EE_|SA1PR12MB5669:EE_
-X-MS-Office365-Filtering-Correlation-Id: 44ca2b62-876b-40f5-5b85-08db63d8862e
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT051:EE_|PH7PR12MB6764:EE_
+X-MS-Office365-Filtering-Correlation-Id: 407d3725-fac4-4239-cc21-08db63d886ea
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: S90U94XXVLZ/TLsq4/SAX5i0GfONXKsvYdY1089LwZLkJVp4Is12igWRP36EaUskKwJIM7qVTGE7r+2jsHCWuSv/g3yYIANX+I2HjoJfp2b5mJKH0hWwo5miRz+97/ksJhTInwnEEsiBf/egsS1YF26LUNaHdUt8FSPnJkr+Qb226tfxaxTNFj62OICQ1n7E9u1P8LP65x7xw3jGunm4PkUHls5Ic2bL//VEas59vMhznRsF5cVaiG+xtuwwo1qPX9rpU+K52ABF9ia9jC5aHqQxwlukagWDT/9JAZtlauqBDneebow5Pr6B/xCZ8SiyUuGzKdh1qEPlc1TueIH1Hxg3pzHHeqGWE02vVKEuY9LcWCUq1Ol+++RLlg2v8V7hqF555Q8D9bu91/Uprdrjidf+yEyrzmCOUci1+xxcNTQ9I/e37CVIHLfBGsoqrme4mZ6vqoFVdNhDKbg6rtgNL0TNxremBNq0eNn2OV6qeE0tt/z507soxXjEkNUUPFhRKLBg4PLChvDVg/je3xQFRjPdQ0Exw4k3+lmmkLQ01eT70Go8EY3Ox0l2dCFXGNvDZRkvLPAH2cMUwkVbokK6ewJOOe4Z3cZ3T/Rz7C0EcUGoIp4WwPbjesVZ4Y5iCztFvfa0PtCPgqz8hWl9fTW/IpnC3rU3RW5VdYXKOrvFdMGL7bujsd4y2Vy/JtsCJido4BgZC44k6bmps0802qCPWVTLvp2nLoLbKRLZ+JH3FYdQNQYmTAjdIDLCf/4e1At+
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(346002)(376002)(396003)(451199021)(36840700001)(40470700004)(46966006)(186003)(478600001)(82310400005)(86362001)(316002)(7696005)(6916009)(70206006)(70586007)(4326008)(41300700001)(36756003)(54906003)(6666004)(40460700003)(107886003)(40480700001)(36860700001)(5660300002)(47076005)(82740400003)(2906002)(26005)(83380400001)(2616005)(4744005)(356005)(7636003)(8936002)(426003)(336012)(8676002)(1076003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: gMGmq3uSy47cK0QCBP8nvRopexopyt98f8rAjhRSt6kcCMjIJln+Jd124MEdJKEnM7wzPgKenr2OH859KMAqAuRAJ6/HJ2d/D/zc2dL4RwWOqOZTVo9m9DWhJQ89CMcifgjNb21Ei/B1hUffraT2q+6wpbMePAjGQiWDtKoKiwS/mtGW8+mTS4/lZAJm6nCoRaZ/Z7puKdQQdQTULDFu6LZiUdbr8Xa2uWb4gtD65aHOsWj9HA6oVhqIamfQIQpDB81KZbGaFc7RoOrQZqlCl3kiQVTWjNarfvqo8fyEzRgkB/1cz2LL7M2l6nI0ZbzQqTmZ6oHVwrlUT7f9s7RE1h5uEBVAcqceyPcho+J5R/mEywh6sLmhTIAmyTtZlXY8io8pdBWnW4kuYpI+edf7NmC17E7PDFSKfkzluWOzHomLK8CxtPRhLi07525ZwLc7KQdDLNR00jNPZHeLT/YEjwcM/WAUEsXGWSwWXef5D3zJuCO1yUl1IgBAOQMEbbKIU9ruGNsL50q9xsrw9Ks1BsvDutIecehzMtXqR8yZ7rsLzBsc/Hj2ngG2lRRFgLUqIpYf5Lh7+rkSIG/zbbrHyM53A/FnGwfwk+amTvKmCr0vdULof0namXujL6DBkF30x2C3YYPkd62pbgK/G48EVFiqLiUNnML2ywdbB+UbRig7unqumOasib+NqHombP6bwttuZmJa+1ic19pGSzA0+oEc/GfPrUCXFL43RiOE5boQ+QwnZfqNVe4f3tKs7Mvc
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(39860400002)(346002)(136003)(451199021)(40470700004)(46966006)(36840700001)(82310400005)(36860700001)(83380400001)(40480700001)(426003)(336012)(47076005)(7636003)(82740400003)(4326008)(356005)(36756003)(41300700001)(316002)(6666004)(1076003)(7696005)(26005)(6916009)(107886003)(70586007)(70206006)(8936002)(2906002)(40460700003)(5660300002)(8676002)(2616005)(54906003)(478600001)(86362001)(186003);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jun 2023 02:16:21.6296
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jun 2023 02:16:22.8646
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 44ca2b62-876b-40f5-5b85-08db63d8862e
+X-MS-Exchange-CrossTenant-Network-Message-Id: 407d3725-fac4-4239-cc21-08db63d886ea
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT051.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB5669
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6764
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This fixes a real bug, too, because xstate_size()  was assuming that
-the stack variable xstate_size was initialized to zero. That's not
-guaranteed nor even especially likely.
+This is in preparation for linking test programs with both vm_utils.c
+and uffd-common.c. The static inline routines, while normally not a
+problem, in this case complicate an already fragile header file
+situation: the header files including other header files leads to
+compilation failures in a subsequent patch that moves code around.
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+Anyway, there is no particular need for inlining here, so turn these
+into normal functions, as a workaround to avoid refactoring the header
+file includes for now.
+
+Cc: David Hildenbrand <david@redhat.com>
 Cc: Peter Xu <peterx@redhat.com>
 Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 ---
- tools/testing/selftests/mm/pkey-x86.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/mm/vm_util.c | 14 ++++++++++++++
+ tools/testing/selftests/mm/vm_util.h | 16 ++--------------
+ 2 files changed, 16 insertions(+), 14 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/pkey-x86.h b/tools/testing/selftests/mm/pkey-x86.h
-index 72c14cd3ddc7..e32ae8a1cd99 100644
---- a/tools/testing/selftests/mm/pkey-x86.h
-+++ b/tools/testing/selftests/mm/pkey-x86.h
-@@ -132,7 +132,7 @@ int pkey_reg_xstate_offset(void)
- 	unsigned int ecx;
- 	unsigned int edx;
- 	int xstate_offset;
--	int xstate_size;
-+	int xstate_size = 0;
- 	unsigned long XSTATE_CPUID = 0xd;
- 	int leaf;
+diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
+index 9b06a5034808..01296c17df02 100644
+--- a/tools/testing/selftests/mm/vm_util.c
++++ b/tools/testing/selftests/mm/vm_util.c
+@@ -301,3 +301,17 @@ int uffd_get_features(uint64_t *features)
  
+ 	return 0;
+ }
++
++unsigned int psize(void)
++{
++	if (!__page_size)
++		__page_size = sysconf(_SC_PAGESIZE);
++	return __page_size;
++}
++
++unsigned int pshift(void)
++{
++	if (!__page_shift)
++		__page_shift = (ffsl(psize()) - 1);
++	return __page_shift;
++}
+diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
+index 07f39ed2efba..8aa543a3678b 100644
+--- a/tools/testing/selftests/mm/vm_util.h
++++ b/tools/testing/selftests/mm/vm_util.h
+@@ -3,7 +3,6 @@
+ #include <stdbool.h>
+ #include <sys/mman.h>
+ #include <err.h>
+-#include <string.h> /* ffsl() */
+ #include <unistd.h> /* _SC_PAGESIZE */
+ 
+ #define BIT_ULL(nr)                   (1ULL << (nr))
+@@ -17,19 +16,8 @@
+ extern unsigned int __page_size;
+ extern unsigned int __page_shift;
+ 
+-static inline unsigned int psize(void)
+-{
+-	if (!__page_size)
+-		__page_size = sysconf(_SC_PAGESIZE);
+-	return __page_size;
+-}
+-
+-static inline unsigned int pshift(void)
+-{
+-	if (!__page_shift)
+-		__page_shift = (ffsl(psize()) - 1);
+-	return __page_shift;
+-}
++unsigned int psize(void);
++unsigned int pshift(void);
+ 
+ uint64_t pagemap_get_entry(int fd, char *start);
+ bool pagemap_is_softdirty(int fd, char *start);
 -- 
 2.40.1
 
