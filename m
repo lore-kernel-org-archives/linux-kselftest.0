@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E2E8C7EE2A
-	for <linux-kselftest@archiver.kernel.org>; Sat,  3 Jun 2023 02:16:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97169C7EE2C
+	for <linux-kselftest@archiver.kernel.org>; Sat,  3 Jun 2023 02:16:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229802AbjFCCQX (ORCPT
+        id S236800AbjFCCQY (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 2 Jun 2023 22:16:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33072 "EHLO
+        Fri, 2 Jun 2023 22:16:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236970AbjFCCQU (ORCPT
+        with ESMTP id S236979AbjFCCQV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Jun 2023 22:16:20 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2044.outbound.protection.outlook.com [40.107.96.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA495E4D;
-        Fri,  2 Jun 2023 19:16:18 -0700 (PDT)
+        Fri, 2 Jun 2023 22:16:21 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2077.outbound.protection.outlook.com [40.107.243.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 641B7E50;
+        Fri,  2 Jun 2023 19:16:20 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jgvSi9dSbKVMcY+CgQwG2SKhOukNJgmgwMICDh82nbVonRjZja3P1mg1izMhzxCO2AFxBwNX2zSBtkcXR2lvpUTgxY3NvNWbm8CZMNXNPCeROGwQcpWEO3dIIFd4E9eXoPUjUjQ/vM1fN1voWw1mweRcT6e5DUgOSHW7L1dumc851GZjaXPYlBnHCiEIg7VCZC01s2VdRAA0jf3P5cw2L1E7qGR/+BNYSc4v55Nr/tlXdiNvek+OrA8JVQ8oUeo+h4klMioPW2CmYCyHxBC6E/nUfplnpbyMuCKHtO0bCqF2AXWFuhwdy7nTL0e0aKtqQ46DStqXFuGmgyKw4a22RA==
+ b=KUWL+FWzusZCsXa3496iA4IrJcIx1sCKGbwQxMvWawi7ygVrFpM2byfOY9J4rr1FsBMWLCcUM4lQP+a6L/K49804WRjcLgiJuLlMo0jxl4WWLgP99BFuXD85jvwAGgoOzxDLm0h7apFV+phVNSZL5zgYSITnr3SylhxUqEJiNeRLcq9HFBU2K3nrYeYIFIEsgnjqHeON3lE77IKtwrJXEoOJZ1AJWGRd874E6GGxXThHL0pg6pi3Yz96xzyskUkTt3B/MnE8CHRpAY70zxxr/X7XDSzWcYF87UagIJTdEVkweKWkPFHqQUARZLZ++ow5okkVGruHzpjvabfgPPaicw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=r7qWJ0iKcBH5AScsmOvvAEPpASsgJNPE7K/FjHHYXLU=;
- b=YKhQUjW1ovBgO+ZNgp+ye7ws9uBtrORudLnIQHelZQphhRgGauN5HNrVyscPhGF4Z7BGZ+dG1DCD6yA+ZwXS3RywKY0PnkCDRkT8R3syvqdr9MhX3UXd9scGarEs6E9q/Sw4AOQznF+qt2bJnT5O8TZV5AKkdAvNpsEm8HZD6tP5nsCIayohsDzu7/PD6UZvCKk8AJqzt7D9EL7VpSnHUhigTZIss/eRqKnxbcfQ+k7PsueF802HaekFEOnDuefCRAI7yNmontEke4RCWW9jqRwzSyFo1FBpxKTsUapf189kG7XTYq7Fsdm/Wzw4cZbLWnixFsNL6/NuuVXvcEzJww==
+ bh=kCV4OGw85JdREHNb90EA9+G/fEjEeMMfpbm2v13o33o=;
+ b=S39PLRU/pLCimfpFWhiFIS+Pq8WWQt+9UKC+JDoa0uB5EDODX8qOPAIrG6ObvHlhXTqrLBQXodXAIe7AIcbHzQNpdXCtNtrKbJ9sYvTneEbyf15BEubrMb7PfKhNznPGse+nq7R20myPdfMAqcJdxWsmlVloLNqtg7Mz1GWbCwMW90/1u4WkmsnfB9+sv60IdnlMwC30J52TuM5Fi+2sqxMBlBvyj7E2qqWCIr5AT9qJil74rlIHFVFB7OAyD1vX9xY4ZsU9l4SHEnOWntwB39QZb8U94mUBYWg4waIlfJVI4TP3b3JGLPz5yy1wyHIB44JfGAtEg1IDryvMy3kpqg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  216.228.117.161) smtp.rcpttodomain=linux-foundation.org
  smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
@@ -30,17 +30,17 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=r7qWJ0iKcBH5AScsmOvvAEPpASsgJNPE7K/FjHHYXLU=;
- b=T+kwaTEri7b1E2Fiz+lE/Cx+qu4HUGHgz5z8Ry34UH0YNjx/cg+ayUy846jpQ8iUc0FzqCUwiftnWztDVsSIwK+1UXDD5++4V7m0+aNbTjhLSp7U1dhhkvXAfG8m/IMm3T+nwgKVld9cW3g21hILxefGnkfnIntw1inXTL1HOYbOThiG8wVuaNaxkdjusy14BcYVGOhEEa9dNDm3S1J+VS/+gff6W3l9sZtN4ZMpsFQrMbcLAGnuCNVQNGsOlg7YeSv/i0kRSOc2w+ZysICLQsSBr49kSYg3Xs3acT4OCHhu74xljguL6GNnpjHh1/U3ViBq6yG7u0aXbNbru8eFdg==
+ bh=kCV4OGw85JdREHNb90EA9+G/fEjEeMMfpbm2v13o33o=;
+ b=IFD2JA6b4dzfMo//LIseiwBGNQlJhDeGsWjn1hl4QeB0COmEZiOipLpp3Lzu+hwd8Y4oSefwxNNLr309j/mf002gE2UfAt4HI0ojpJkfzYB2osZz2bcBerQZEwnM1JNJi/dvO9aNrPPVexcmlpdfk7P/+vs9LvvX6OqwiQ9488ZIpgJ+kqWoDnbOhHEIwUXlf5jUN8MkJDa7C+DUGMjpo585Obflex+j8FObwO6vQMZ6OR7BpS7M85xwmyEZccVjgPkkjguevMzzjZijKn3iW41gg/DZO4hzR5blIMRYAfMZlV9L8tIXrlJV18Fb2CkZ/ddDAakaPO0xUcSSlYZTwA==
 Received: from DM6PR13CA0008.namprd13.prod.outlook.com (2603:10b6:5:bc::21) by
- MW4PR12MB7191.namprd12.prod.outlook.com (2603:10b6:303:22d::8) with Microsoft
+ DM4PR12MB5722.namprd12.prod.outlook.com (2603:10b6:8:5d::11) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6455.28; Sat, 3 Jun 2023 02:16:15 +0000
+ 15.20.6455.27; Sat, 3 Jun 2023 02:16:18 +0000
 Received: from DM6NAM11FT048.eop-nam11.prod.protection.outlook.com
  (2603:10b6:5:bc:cafe::54) by DM6PR13CA0008.outlook.office365.com
  (2603:10b6:5:bc::21) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.15 via Frontend
- Transport; Sat, 3 Jun 2023 02:16:15 +0000
+ Transport; Sat, 3 Jun 2023 02:16:18 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
@@ -50,18 +50,18 @@ Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
 Received: from mail.nvidia.com (216.228.117.161) by
  DM6NAM11FT048.mail.protection.outlook.com (10.13.173.114) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6455.24 via Frontend Transport; Sat, 3 Jun 2023 02:16:15 +0000
+ 15.20.6455.24 via Frontend Transport; Sat, 3 Jun 2023 02:16:18 +0000
 Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
  (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 2 Jun 2023
- 19:16:08 -0700
+ 19:16:10 -0700
 Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail205.nvidia.com
  (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Fri, 2 Jun 2023
- 19:16:08 -0700
+ 19:16:09 -0700
 Received: from blueforge.nvidia.com (10.127.8.13) by mail.nvidia.com
  (10.129.68.9) with Microsoft SMTP Server id 15.2.986.37 via Frontend
- Transport; Fri, 2 Jun 2023 19:16:08 -0700
+ Transport; Fri, 2 Jun 2023 19:16:09 -0700
 From:   John Hubbard <jhubbard@nvidia.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 CC:     David Hildenbrand <david@redhat.com>, Peter Xu <peterx@redhat.com>,
@@ -70,10 +70,11 @@ CC:     David Hildenbrand <david@redhat.com>, Peter Xu <peterx@redhat.com>,
         <linux-kselftest@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
         John Hubbard <jhubbard@nvidia.com>,
-        "Muhammad Usama Anjum" <usama.anjum@collabora.com>
-Subject: [PATCH v2 08/11] selftests/mm: fix uffd-unit-tests.c build failure due to missing MADV_COLLAPSE
-Date:   Fri, 2 Jun 2023 19:15:55 -0700
-Message-ID: <20230603021558.95299-9-jhubbard@nvidia.com>
+        "Muhammad Usama Anjum" <usama.anjum@collabora.com>,
+        Jonathan Corbet <corbet@lwn.net>, <linux-doc@vger.kernel.org>
+Subject: [PATCH v2 11/11] Documentation: kselftest: "make headers" is a prerequisite
+Date:   Fri, 2 Jun 2023 19:15:58 -0700
+Message-ID: <20230603021558.95299-12-jhubbard@nvidia.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230603021558.95299-1-jhubbard@nvidia.com>
 References: <20230603021558.95299-1-jhubbard@nvidia.com>
@@ -83,108 +84,59 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT048:EE_|MW4PR12MB7191:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7413a83a-9fe6-4415-5259-08db63d8823d
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT048:EE_|DM4PR12MB5722:EE_
+X-MS-Office365-Filtering-Correlation-Id: 23ca7e7f-de61-4145-f36a-08db63d8840b
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Nr0aRGhqo8cpXsOta8vimurzvq1Cu8pWwPJNbdshFg390LbktTr7mjClIX1+L88vdPvs2x/EQYxnZ/DmMiXOOPZGqwBmSH+dnmhnIw6qKD8DE8lbyZ1Xvg1W5dyDzwDD3h6XN4Sr8MmwHAZA+qQZFUepUCVoQY6TSZCoyyWtXO90jB06BGM7Znb1CzayQZ2hMiuqKUfl/jOVP1fhKELa6154GvqpIku3zOuly//Io/0pgnwn4m8RktJWsJsOguZIkcsYP9AFOFkT0bYhIcy/vp4WUuyVfQvz30CfHwghT5YN2OjbX1jfOcA+PNMJLhKJ3jQgy513ZcEA798hrQNZSnp1+P/BNqxHM0yZirP59bZmW3vLjiGxzI+iIKRe9fqZQ8qiqSssjSAIQpo2WxxBm9sVlWp91DbR39Xem2Ujvzf+XB1yQOOPMQlW7xIXJ9aGh9Hi8ZK+0E+a1oSzik4HQWPVsmCmEy+cR5SW2RWDaqALJ0DmlLLPvdh6z7PH2RnZvbwIVoyEUle7ocH0zCq1sKDdzqbiEBkp0CkX2hkU1lnkpRP0FFbkSO1G2SYdPqBIxfLEBn9xqSpOJpbO7AHJqZfMOcw9utgpcm6bMXPluvI4BFOJcIFGrW3Mac0Ctzrh+k8E/dPXv5IW63lpdNJFi2EWVk/aB8Yc8xggB8aHdFXUCtRDpraLOEcls2bxTlUA7HcwOZtClCxlfA8lx/cFDdbOxYHvM7cWCqYZMl1gvRr2dSLxKop2Ce+/C2MkDn5E
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(136003)(346002)(376002)(451199021)(36840700001)(40470700004)(46966006)(36860700001)(47076005)(83380400001)(40480700001)(86362001)(40460700003)(82310400005)(82740400003)(356005)(7636003)(478600001)(6666004)(7696005)(54906003)(8676002)(8936002)(5660300002)(70586007)(4326008)(70206006)(6916009)(41300700001)(2906002)(316002)(2616005)(426003)(336012)(26005)(1076003)(36756003)(186003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: MLfwVrGrq1zwE18u6qZn7XDLHadZq2ULwUAhGN3WlJQUP7TCIVVfWwBf+2DH8FazyPKw2IUXCXnXxytQqrONT/tyhRmfyleI3JxF/ObrPaKnnZBU6VUuqakCe2cp8BHGA2mBM4QEfI01aL7EVTacE5HCKOlRemTSuuW226K7PPrpvAw65+Zbx/n8lr9q7ly7wid5aMVMCJ5ZpYQmn6/GDsguSbUY56ekhVTnTE0ZSvbz1qQBLJCv/jZexgsXo+vcuOSz9hWHcaIkkFOj6XljYIijWbpg57oSYxAWBpOm4+IOwX89cXPxPFoDclsx1rUPVlW6gKtSoBHlCM6ijFygXlNbJ2QlsFWiiOs0TtMCp7aBkByWOEfFKVPIDUMannBpYMp1qkf9tD+XfeRMd5/NbTXaDOBPpD4S+bzPkdRuSsAnKTwps8mBSAlCnVTocEq/pem5fPohL08PyvVGNm1N5bjch6QhYeRNWfSE6Xg1FHie8k4cfRfgSuziN6GLXM4I5563zJG6SQWdtSN3vWXArWiH4c4ocvMmuveJ8WnqzfKDxEHqaW5+w4KsWbY+/JV4S0/yCoFmkn/rwFKLjCcwD/wuONATu/XkQPwku/NyeRw7BHVuRtZkWJkR1Pd3WeGInHTSithhn4dw+afQ9zoN+sXjWJvsk4Cx2TwCD4dC8bI2w82FVKoQrV1wXWYjSMLqm+pEjmSLegt5NKgzDnA+DKyglS4b0BYi0jU185jTBshrqAXK8+sFeqHpIBS+RlaFlN+5eKRnKVGjBjQAn+y20BLaUnR6VKN39jFvpuClWng=
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(136003)(396003)(376002)(451199021)(40470700004)(36840700001)(46966006)(40460700003)(6666004)(186003)(1076003)(82310400005)(7696005)(82740400003)(83380400001)(2616005)(7636003)(356005)(426003)(26005)(336012)(966005)(36860700001)(47076005)(54906003)(86362001)(478600001)(316002)(36756003)(8676002)(40480700001)(41300700001)(70586007)(4326008)(70206006)(8936002)(6916009)(7416002)(5660300002)(2906002);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jun 2023 02:16:15.0793
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jun 2023 02:16:18.0956
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7413a83a-9fe6-4415-5259-08db63d8823d
+X-MS-Exchange-CrossTenant-Network-Message-Id: 23ca7e7f-de61-4145-f36a-08db63d8840b
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT048.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7191
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5722
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-MADV_PAGEOUT, MADV_POPULATE_READ, MADV_COLLAPSE are conditionally
-defined as necessary. However, that was being done in .c files, and a
-new build failure came up that would have been automatically avoided had
-these been in a common header file.
+As per a discussion with Muhammad Usama Anjum [1], the following is how
+one is supposed to build selftests:
 
-So consolidate and move them all to vm_util.h, which fixes the build
-failure.
+    make headers && make -C tools/testing/selftests/mm
 
-An alternative approach from Muhammad Usama Anjum was: rely on "make
-headers" being required, and include asm-generic/mman-common.h. This
-works in the sense that it builds, but it still generates warnings about
-duplicate MADV_* symbols, and the goal here is to get a fully clean (no
-warnings) build here.
+However, that's not yet documented anywhere. So add it to
+Documentation/dev-tools/kselftest.rst .
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+[1] https://lore.kernel.org/all/bf910fa5-0c96-3707-cce4-5bcc656b6274@collabora.com/
+
+Cc: David Hildenbrand <david@redhat.com>
 Cc: Peter Xu <peterx@redhat.com>
 Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: linux-doc@vger.kernel.org
 Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 ---
- tools/testing/selftests/mm/cow.c        |  7 -------
- tools/testing/selftests/mm/khugepaged.c | 10 ----------
- tools/testing/selftests/mm/vm_util.h    | 10 ++++++++++
- 3 files changed, 10 insertions(+), 17 deletions(-)
+ Documentation/dev-tools/kselftest.rst | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/mm/cow.c b/tools/testing/selftests/mm/cow.c
-index dc9d6fe86028..8882b05ec9c8 100644
---- a/tools/testing/selftests/mm/cow.c
-+++ b/tools/testing/selftests/mm/cow.c
-@@ -30,13 +30,6 @@
- #include "../kselftest.h"
- #include "vm_util.h"
+diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
+index 12b575b76b20..6e35d042199c 100644
+--- a/Documentation/dev-tools/kselftest.rst
++++ b/Documentation/dev-tools/kselftest.rst
+@@ -36,6 +36,7 @@ Running the selftests (hotplug tests are run in limited mode)
  
--#ifndef MADV_PAGEOUT
--#define MADV_PAGEOUT 21
--#endif
--#ifndef MADV_COLLAPSE
--#define MADV_COLLAPSE 25
--#endif
--
- static size_t pagesize;
- static int pagemap_fd;
- static size_t thpsize;
-diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
-index 97adc0f34f9c..e88ee039d0eb 100644
---- a/tools/testing/selftests/mm/khugepaged.c
-+++ b/tools/testing/selftests/mm/khugepaged.c
-@@ -22,16 +22,6 @@
+ To build the tests::
  
- #include "vm_util.h"
++  $ make headers
+   $ make -C tools/testing/selftests
  
--#ifndef MADV_PAGEOUT
--#define MADV_PAGEOUT 21
--#endif
--#ifndef MADV_POPULATE_READ
--#define MADV_POPULATE_READ 22
--#endif
--#ifndef MADV_COLLAPSE
--#define MADV_COLLAPSE 25
--#endif
--
- #define BASE_ADDR ((void *)(1UL << 30))
- static unsigned long hpage_pmd_size;
- static unsigned long page_size;
-diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
-index b950bd16083a..07f39ed2efba 100644
---- a/tools/testing/selftests/mm/vm_util.h
-+++ b/tools/testing/selftests/mm/vm_util.h
-@@ -63,3 +63,13 @@ int uffd_register_with_ioctls(int uffd, void *addr, uint64_t len,
- 
- #define PAGEMAP_PRESENT(ent)	(((ent) & (1ull << 63)) != 0)
- #define PAGEMAP_PFN(ent)	((ent) & ((1ull << 55) - 1))
-+
-+#ifndef MADV_PAGEOUT
-+#define MADV_PAGEOUT 21
-+#endif
-+#ifndef MADV_POPULATE_READ
-+#define MADV_POPULATE_READ 22
-+#endif
-+#ifndef MADV_COLLAPSE
-+#define MADV_COLLAPSE 25
-+#endif
+ To run the tests::
 -- 
 2.40.1
 
