@@ -2,67 +2,67 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F19F5C7EE2A
-	for <linux-kselftest@archiver.kernel.org>; Sat,  3 Jun 2023 02:16:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60F55C77B7A
+	for <linux-kselftest@archiver.kernel.org>; Sat,  3 Jun 2023 02:16:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235954AbjFCCQ0 (ORCPT
+        id S237163AbjFCCQe (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 2 Jun 2023 22:16:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33108 "EHLO
+        Fri, 2 Jun 2023 22:16:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236891AbjFCCQW (ORCPT
+        with ESMTP id S237015AbjFCCQX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Jun 2023 22:16:22 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF412E51;
-        Fri,  2 Jun 2023 19:16:20 -0700 (PDT)
+        Fri, 2 Jun 2023 22:16:23 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2073.outbound.protection.outlook.com [40.107.223.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFCA0E58;
+        Fri,  2 Jun 2023 19:16:21 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=m9Ear+/SCRaCx+W+EfXa3zK3+7ueA6SEbXdMi8Wi8IxJ633NMeM5x8/VG++bj8XV9RHOud8LTrF0osXqbe7WJlqjOBK/btp1Yv21gV6blMYpR9W+h+JO8KxrcFycHbQRyHJjiBXqBwtYnSS//NYEHRB1aiu5re5KRupcpnEEYKv4AV9matG1CtbNAMOes062XaWfUZBADfBjfJAx6jOzoPFT+RzGN6yfNSFzhxan73HNC/HcVWnq3f0nE36Tzw/mUdwcsPFW8tQofXaJo/AXrIrtpTKivLqbQUBf4Z/UDRks61n1JgTGjYuZA2n6gI1QfY/Jg68S0WmWJdOWZBLy/g==
+ b=T1SzSZX5sfdi8n+rRRJLOjrhDH0c5LsshUSc3SYgZ3bHJeg/G1GeQwAnfgWEaZPfazwMDadrQUROeCFNgxVWklqYZIqng2Qq11JwKe595/YYibxUt6A+h0sho2whBg5Hrjo9eGe72oXglB+lP3J6/F4Ek0EQyQdTPzimF8ngCzm2hqRk0pl9yP2JWOe3vcpaSz0NIucN6Yf1B++ZUUObhhmCUhMNJk8nvRYP2G6UKPx77KuQQqYtNy/OJgZFj7XCty+RCP0QSS2uFZJum9P7TswPtgMZuwTCYiONMmaBwlnCSfh678taCBX1Px/pYorvGj3tJrjZVua45RLJ+A6T5g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lcAlKHerk5VQh9Nf0GPXXyu2H5vBR4yo7s+VUgObnFs=;
- b=hYcYjI7iDVb46vrq1eDMlu91xrFM2ZYsG07XVurPydy0gMBa/wXDs5T3oBRxBJhmyJ57aVWPbLPkA6FWqLEtRcmMO3lX3bTMEOvXibH0MyMxigBl3tFEDb06uRGktFcTfV+UIxT8svyGb5tdKLAk8Zuv8a/M+LZlzTjj1vtWBsiDJ/NmJ0ankNcnAG74W6UaGtq9VxofBpA76KfXgJlG9OurvE0AlSM1rMeNYaFGY8JXlri0mw1GXq/hmPv8PswbhgxJ8kMbVkqgz2wHNr4fnIEwS51bSlbCGwjn5tLuMDeLczuE8OlVNS0AjZteqhHgz4Cu5QrUa3XftiHBN+ywrA==
+ bh=UU6vV/sOpPEMMFpfhHsw3NPBeeRzKVMoxxxvmeZx6Tw=;
+ b=D4N/T26p3jh6MKzX1D9cSs10+ycsjZJPrezsT0Z7smgfVQg4Tujl6IxfpKzYqCxe2gUA9ozwS421YMLovLjWooFg4qo4YfOQaHWtVRk7gNx0+WuXJ3K1qIf3SmgZ5WmO9k8HdG1MXve2TVSkmvOvvnGv8vaI5t6tk9cKoxSPayVzyh+5s0MxeJqxQVniO1i/02I5qMQ15VxVE+qSkqDWPR6RmwT8kpW8GPMjC9uPXq/HGYrWmkappS2z2gPpSeHbkMfU1Cry9TFjSCU22YWQJ3lNEnt7DoEEINm7qY9o0AaJsvPmq8xwyersHwbzE0lj/MBseBPXY5hkQi0JxNeWlQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=linux-foundation.org
+ 216.228.117.160) smtp.rcpttodomain=linux-foundation.org
  smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
  header.from=nvidia.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lcAlKHerk5VQh9Nf0GPXXyu2H5vBR4yo7s+VUgObnFs=;
- b=YDp7oB/QOhbid8330Q6LrtGivQpWHJdS7P56IEXHRRjlZKG5b4cUTHyYTKElgN5/34JwKEEHhu0eKSmchjm+9Yo6TF2iBzHE/InheRe8UXVA7U9SgGqjIhZefvtPw/MiIUEF79tH4iT+9lCQ0JL9X3x8tvmjO2lNhuQplb39c+qPnbIS/Expq6brT8QA//Wq/nH92zDd3Kr6JgZO86OpKfFcfUOfUg0Icj3lvoCk/EVgu4Ehdi+SX0HpP4xFeUrcRzPDpnbqLoqZYwCtPmBjYvnl5GsjvRHZbJUVeM2F454Sugox7O/2Lp7UKysd3+viEiYsDHPGWpTbA6rIOHEUxQ==
-Received: from DM6PR07CA0101.namprd07.prod.outlook.com (2603:10b6:5:337::34)
- by MN2PR12MB4111.namprd12.prod.outlook.com (2603:10b6:208:1de::22) with
+ bh=UU6vV/sOpPEMMFpfhHsw3NPBeeRzKVMoxxxvmeZx6Tw=;
+ b=Y7yTiF/RPSSgZTzfD43O0Qg+zOeElK4MuXtBkqywR0tfiscDG6EDB2rVuN249LEbj/xri4KbBBWWB2w0Xl04UUoPYFdpIGMD9hWbr/hjY1mlHkOIPjuS9cvQMGn+n4M65VSwBEg2crNwosxe+hVmVVKjYkOAqX4lz4Wx7GaGEh4yagD6FPhLRPdTvvlzHeUGEIl/kj31sVXs7CxqVO47cjbVHyozAZS61C9NzX4Af7jU7pDTB0A1oMApKl0WAt0Yh7iO+CJyjnCV6hCNgGJIYPTj5qmfNpqxi16PFq6QmiipxAQIWWyT6TjVtoGZK5xBkRihaXl92lOl32Hsjce1yQ==
+Received: from BN0PR07CA0009.namprd07.prod.outlook.com (2603:10b6:408:141::8)
+ by CY8PR12MB7241.namprd12.prod.outlook.com (2603:10b6:930:5a::12) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.28; Sat, 3 Jun
- 2023 02:16:17 +0000
-Received: from DM6NAM11FT053.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:337:cafe::71) by DM6PR07CA0101.outlook.office365.com
- (2603:10b6:5:337::34) with Microsoft SMTP Server (version=TLS1_2,
+ 2023 02:16:19 +0000
+Received: from BN8NAM11FT044.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:141:cafe::fb) by BN0PR07CA0009.outlook.office365.com
+ (2603:10b6:408:141::8) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.26 via Frontend
- Transport; Sat, 3 Jun 2023 02:16:17 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ Transport; Sat, 3 Jun 2023 02:16:19 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- DM6NAM11FT053.mail.protection.outlook.com (10.13.173.74) with Microsoft SMTP
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ BN8NAM11FT044.mail.protection.outlook.com (10.13.177.219) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6455.28 via Frontend Transport; Sat, 3 Jun 2023 02:16:17 +0000
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ 15.20.6455.28 via Frontend Transport; Sat, 3 Jun 2023 02:16:18 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 2 Jun 2023
- 19:16:09 -0700
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail205.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
+ 19:16:06 -0700
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail202.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Fri, 2 Jun 2023
- 19:16:09 -0700
+ 19:16:05 -0700
 Received: from blueforge.nvidia.com (10.127.8.13) by mail.nvidia.com
  (10.129.68.9) with Microsoft SMTP Server id 15.2.986.37 via Frontend
- Transport; Fri, 2 Jun 2023 19:16:09 -0700
+ Transport; Fri, 2 Jun 2023 19:16:05 -0700
 From:   John Hubbard <jhubbard@nvidia.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 CC:     David Hildenbrand <david@redhat.com>, Peter Xu <peterx@redhat.com>,
@@ -71,386 +71,101 @@ CC:     David Hildenbrand <david@redhat.com>, Peter Xu <peterx@redhat.com>,
         <linux-kselftest@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
         John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH v2 10/11] selftests/mm: move uffd* routines from vm_util.c to uffd-common.c
-Date:   Fri, 2 Jun 2023 19:15:57 -0700
-Message-ID: <20230603021558.95299-11-jhubbard@nvidia.com>
+Subject: [PATCH v2 00/11] A minor flurry of selftest/mm fixes
+Date:   Fri, 2 Jun 2023 19:15:47 -0700
+Message-ID: <20230603021558.95299-1-jhubbard@nvidia.com>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230603021558.95299-1-jhubbard@nvidia.com>
-References: <20230603021558.95299-1-jhubbard@nvidia.com>
 MIME-Version: 1.0
 X-NVConfidentiality: public
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT053:EE_|MN2PR12MB4111:EE_
-X-MS-Office365-Filtering-Correlation-Id: f3e5c188-8562-4b8c-27fc-08db63d8839e
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT044:EE_|CY8PR12MB7241:EE_
+X-MS-Office365-Filtering-Correlation-Id: e394d163-831c-41b8-c725-08db63d88470
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zRH4Lziu2uTMYsjOoQoDaOxP3aJd7SS784tyb/lUqgHSXf/rpQEiTUeSiAPMNx3oUnrMvPlYR2x0LYwVgqKQh/bLD+mfW6aesDUpyasMF6YbBXJyLEN7gcVFYkXT+4D8MgP8GVc2hjdKwvE+GW3HylY+h+agrObp7diDLIEVj6iQm2WPItKo7ySygFc2e74NUDv+LJ19zhvT92on+srvDXk6IyLTmn0pgHWVnjuqCSUkt0wVF2Luo2RrDNul0S7LPhX5HfRcKwZumKqaIWRfifCreNkGB7FLb5fmG6TT1z39e72WUadmGLmASU63zvleoKU90UeJZfoOezktgNZjqwt4zW/Mazsqr4XOFSu49oAsJzhDgnKDuaoaO9UbCbMRYb+AVA9pdJNGeyHpqjAPrEV6r/p29jz1u5PT1mbJMYPfSMpFAdthsgfNtYbFr5sFQwYPRiT1U2h2uQMCobrIRqqoKps356hEj57amXaRN/b00oeRdardsrgNUsSd3TZ02117Q/oFgsZkchokOG/5ROgJIr3UKt5OfA29Lcds1J4GY5DhStoLOaSBLEgD6sBJsh1KdJto1cVjop12NUF4hNaIgecyhoadwkt5FR2xsb6UFY/QzFuSYuTfGGJQzuld9YOlrbxnN7efKu1B8lycK/2JKEF2fJIoAabGaicNrsBXi3NteodDyfxsVWxj67I+oGEn5pwHv4qXh1x/uvyHSGmp/9LXq74DWoa0Td2s45E=
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(136003)(39860400002)(396003)(451199021)(46966006)(36840700001)(40470700004)(8676002)(8936002)(5660300002)(316002)(41300700001)(2906002)(4326008)(70206006)(70586007)(6916009)(54906003)(6666004)(7696005)(426003)(26005)(1076003)(336012)(186003)(36756003)(107886003)(2616005)(47076005)(83380400001)(36860700001)(7636003)(356005)(478600001)(82310400005)(40460700003)(82740400003)(40480700001)(86362001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: nh9AwJYEV6c2+4flDpr4l0g4dRs7cMXrYfVpvV1Cpx8v+2Do4AbyubIMmt8iceem2YDFWz0y0OXuDPhxeElrwPRpCs+7gIZcmHFqa7zHQGgbwRBAMUWrJgK0nLfpJ+kx9/83QPjo1MaqCoN8fB2Ertyd9l3K3tdoBtrhFOqMLJrqZOpMDe1JZLu07gaPhQR2gxXdDGIBgLph78YNNQYhbL/ju+s0jKDX0tsQTmDvEfTnI/4Wfvah3HgyN9MRxZ/Ty8a4auzJxd7SLf4AQWiM6pl+zv2f/ALQkCXuCRatRuKz+7NMBKYWpOmpdvcqgASaudSABogsd1qpPQBj1crUVU6HWqKmRQY6jefGGn0VB11nPPrVzgbrykk0GQPN3ZE3LL9qIwLR7emMgvBcloTRdF4B59RC07FHNtCjKIckBzeog67P9T28d1joYkTF9yIJKLt51nmk7MPR+fFqB4/LYK4a5FWVB5LSnIkUdpwelkwOvQqvGmR/1KtJCFvOSbMJNlI94krbDqL/lcOT8vWNbhF2lkbD/1k5xN36tnquR4MpqICtCzjUfbac5Zx25u9+NZ56N4ctWQ8n7mUGOOTzKIFuiiXyKtUYTXFBZr2uphCRLwLNBuQ9ZepNUVA0KyVNnbxZffY03lH8yYKH0zggCuvivVBU0uqHjQJs6FzOBOgI13b9pGmt0todkAB+vVoZrd1I9wLEK2s1pIhqgug69vpueN3I4BY+VZ2UGj/hVqJBdwrXWwjgmGdo6SJTIQ/sIB6/xisTaOFk3XzHDr1Tuvo0tZi0pFhRKmHS/PUic4Q=
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(136003)(39860400002)(396003)(451199021)(46966006)(36840700001)(40470700004)(8676002)(8936002)(5660300002)(316002)(41300700001)(2906002)(4326008)(70206006)(70586007)(6916009)(966005)(54906003)(6666004)(7696005)(426003)(26005)(1076003)(336012)(186003)(36756003)(107886003)(2616005)(47076005)(83380400001)(36860700001)(7636003)(356005)(478600001)(82310400005)(40460700003)(82740400003)(40480700001)(86362001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jun 2023 02:16:17.3760
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jun 2023 02:16:18.7095
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f3e5c188-8562-4b8c-27fc-08db63d8839e
+X-MS-Exchange-CrossTenant-Network-Message-Id: e394d163-831c-41b8-c725-08db63d88470
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT053.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT044.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4111
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7241
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Move the uffd*() routines to their natural home. Note that
-ksm_functional_tests.c also depend, intentionally (due to a recent
-commit [1]), upon uffd-common.[ch].
+Hi,
 
-Cc: David Hildenbrand <david@redhat.com>
-Cc: Peter Xu <peterx@redhat.com>
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
----
+This is v2 of a series that fixes up build errors and warnings for at
+least the 64-bit builds on x86 with clang.
+
+There are lots of changes since v1 [1], thanks to reviews from Peter Xu, David
+Hildenbrand, and Muhammad Usama Anjum. These include:
+
+* Using "make headers", and documenting that prerequisite as well.
+* Better ways to avoid clang's Wformat-security warnings
+* Added Cc's, ack-by's, reviewed-by's.
+* Updated commit log messages.
+
+The series also includes an optional "improvement" of moving some uffd
+code into uffd-common.[ch], which is proving to be somewhat
+controversial, and so if that doesn't get resolved, then patches 9 and
+10 may just get dropped. They are not required in order to get a clean
+build, now that "make headers" is happening.
+
+[1]: https://lore.kernel.org/all/20230602013358.900637-1-jhubbard@nvidia.com/
+
+thanks,
+
+John Hubbard
+NVIDIA
+
+John Hubbard (11):
+  selftests/mm: fix uffd-stress unused function warning
+  selftests/mm: fix unused variable warnings in hugetlb-madvise.c,
+    migration.c
+  selftests/mm: fix "warning: expression which evaluates to zero..." in
+    mlock2-tests.c
+  selftests/mm: fix invocation of tests that are run via shell scripts
+  selftests/mm: .gitignore: add mkdirty, va_high_addr_switch
+  selftests/mm: fix two -Wformat-security warnings in uffd builds
+  selftests/mm: fix a "possibly uninitialized" warning in pkey-x86.h
+  selftests/mm: fix uffd-unit-tests.c build failure due to missing
+    MADV_COLLAPSE
+  selftests/mm: move psize(), pshift() into vm_utils.c
+  selftests/mm: move uffd* routines from vm_util.c to uffd-common.c
+  Documentation: kselftest: "make headers" is a prerequisite
+
+ Documentation/dev-tools/kselftest.rst         |   1 +
+ tools/testing/selftests/mm/.gitignore         |   2 +
  tools/testing/selftests/mm/Makefile           |   7 +-
+ tools/testing/selftests/mm/cow.c              |   7 --
  tools/testing/selftests/mm/hugepage-mremap.c  |   2 +-
+ tools/testing/selftests/mm/hugetlb-madvise.c  |   8 +-
+ tools/testing/selftests/mm/khugepaged.c       |  10 --
  .../selftests/mm/ksm_functional_tests.c       |   2 +-
- tools/testing/selftests/mm/uffd-common.c      | 105 ++++++++++++++++++
+ tools/testing/selftests/mm/migration.c        |   5 +-
+ tools/testing/selftests/mm/mlock2-tests.c     |   1 -
+ tools/testing/selftests/mm/pkey-x86.h         |   2 +-
+ tools/testing/selftests/mm/run_vmtests.sh     |   6 +-
+ tools/testing/selftests/mm/uffd-common.c      | 105 +++++++++++++++++
  tools/testing/selftests/mm/uffd-common.h      |  12 +-
- tools/testing/selftests/mm/vm_util.c          | 104 -----------------
- tools/testing/selftests/mm/vm_util.h          |  10 --
- 7 files changed, 122 insertions(+), 120 deletions(-)
+ tools/testing/selftests/mm/uffd-stress.c      |  10 --
+ tools/testing/selftests/mm/uffd-unit-tests.c  |  16 +--
+ tools/testing/selftests/mm/vm_util.c          | 106 ++----------------
+ tools/testing/selftests/mm/vm_util.h          |  36 ++----
+ 18 files changed, 165 insertions(+), 173 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index 23af4633f0f4..a15572758954 100644
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -109,8 +109,11 @@ include ../lib.mk
- 
- $(TEST_GEN_PROGS): vm_util.c
- 
--$(OUTPUT)/uffd-stress: uffd-common.c
--$(OUTPUT)/uffd-unit-tests: uffd-common.c
-+$(OUTPUT)/uffd-stress:          uffd-common.c
-+$(OUTPUT)/uffd-unit-tests:      uffd-common.c
-+$(OUTPUT)/hugepage-mremap:      uffd-common.c
-+$(OUTPUT)/write_to_hugetlbfs:   uffd-common.c
-+$(OUTPUT)/ksm_functional_tests: uffd-common.c
- 
- ifeq ($(MACHINE),x86_64)
- BINARIES_32 := $(patsubst %,$(OUTPUT)/%,$(BINARIES_32))
-diff --git a/tools/testing/selftests/mm/hugepage-mremap.c b/tools/testing/selftests/mm/hugepage-mremap.c
-index cabd0084f57b..8158fe909f5e 100644
---- a/tools/testing/selftests/mm/hugepage-mremap.c
-+++ b/tools/testing/selftests/mm/hugepage-mremap.c
-@@ -24,7 +24,7 @@
- #include <sys/ioctl.h>
- #include <string.h>
- #include <stdbool.h>
--#include "vm_util.h"
-+#include "uffd-common.h"
- 
- #define DEFAULT_LENGTH_MB 10UL
- #define MB_TO_BYTES(x) (x * 1024 * 1024)
-diff --git a/tools/testing/selftests/mm/ksm_functional_tests.c b/tools/testing/selftests/mm/ksm_functional_tests.c
-index 26853badae70..648188ad73fa 100644
---- a/tools/testing/selftests/mm/ksm_functional_tests.c
-+++ b/tools/testing/selftests/mm/ksm_functional_tests.c
-@@ -22,7 +22,7 @@
- #include <linux/userfaultfd.h>
- 
- #include "../kselftest.h"
--#include "vm_util.h"
-+#include "uffd-common.h"
- 
- #define KiB 1024u
- #define MiB (1024 * KiB)
-diff --git a/tools/testing/selftests/mm/uffd-common.c b/tools/testing/selftests/mm/uffd-common.c
-index 61c6250adf93..e1ad63668a05 100644
---- a/tools/testing/selftests/mm/uffd-common.c
-+++ b/tools/testing/selftests/mm/uffd-common.c
-@@ -6,6 +6,7 @@
-  */
- 
- #include "uffd-common.h"
-+#include "vm_util.h"
- 
- #define BASE_PMD_ADDR ((void *)(1UL << 30))
- 
-@@ -616,3 +617,107 @@ int copy_page(int ufd, unsigned long offset, bool wp)
- {
- 	return __copy_page(ufd, offset, false, wp);
- }
-+
-+/* If `ioctls' non-NULL, the allowed ioctls will be returned into the var */
-+int uffd_register_with_ioctls(int uffd, void *addr, uint64_t len,
-+			      bool miss, bool wp, bool minor, uint64_t *ioctls)
-+{
-+	struct uffdio_register uffdio_register = { 0 };
-+	uint64_t mode = 0;
-+	int ret = 0;
-+
-+	if (miss)
-+		mode |= UFFDIO_REGISTER_MODE_MISSING;
-+	if (wp)
-+		mode |= UFFDIO_REGISTER_MODE_WP;
-+	if (minor)
-+		mode |= UFFDIO_REGISTER_MODE_MINOR;
-+
-+	uffdio_register.range.start = (unsigned long)addr;
-+	uffdio_register.range.len = len;
-+	uffdio_register.mode = mode;
-+
-+	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register) == -1)
-+		ret = -errno;
-+	else if (ioctls)
-+		*ioctls = uffdio_register.ioctls;
-+
-+	return ret;
-+}
-+
-+int uffd_register(int uffd, void *addr, uint64_t len,
-+		  bool miss, bool wp, bool minor)
-+{
-+	return uffd_register_with_ioctls(uffd, addr, len,
-+					 miss, wp, minor, NULL);
-+}
-+
-+int uffd_unregister(int uffd, void *addr, uint64_t len)
-+{
-+	struct uffdio_range range = { .start = (uintptr_t)addr, .len = len };
-+	int ret = 0;
-+
-+	if (ioctl(uffd, UFFDIO_UNREGISTER, &range) == -1)
-+		ret = -errno;
-+
-+	return ret;
-+}
-+
-+int uffd_open_dev(unsigned int flags)
-+{
-+	int fd, uffd;
-+
-+	fd = open("/dev/userfaultfd", O_RDWR | O_CLOEXEC);
-+	if (fd < 0)
-+		return fd;
-+	uffd = ioctl(fd, USERFAULTFD_IOC_NEW, flags);
-+	close(fd);
-+
-+	return uffd;
-+}
-+
-+int uffd_open_sys(unsigned int flags)
-+{
-+#ifdef __NR_userfaultfd
-+	return syscall(__NR_userfaultfd, flags);
-+#else
-+	return -1;
-+#endif
-+}
-+
-+int uffd_open(unsigned int flags)
-+{
-+	int uffd = uffd_open_sys(flags);
-+
-+	if (uffd < 0)
-+		uffd = uffd_open_dev(flags);
-+
-+	return uffd;
-+}
-+
-+int uffd_get_features(uint64_t *features)
-+{
-+	struct uffdio_api uffdio_api = { .api = UFFD_API, .features = 0 };
-+	/*
-+	 * This should by default work in most kernels; the feature list
-+	 * will be the same no matter what we pass in here.
-+	 */
-+	int fd = uffd_open(UFFD_USER_MODE_ONLY);
-+
-+	if (fd < 0)
-+		/* Maybe the kernel is older than user-only mode? */
-+		fd = uffd_open(0);
-+
-+	if (fd < 0)
-+		return fd;
-+
-+	if (ioctl(fd, UFFDIO_API, &uffdio_api)) {
-+		close(fd);
-+		return -errno;
-+	}
-+
-+	*features = uffdio_api.features;
-+	close(fd);
-+
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/mm/uffd-common.h b/tools/testing/selftests/mm/uffd-common.h
-index 6068f2346b86..a1cdb78c0762 100644
---- a/tools/testing/selftests/mm/uffd-common.h
-+++ b/tools/testing/selftests/mm/uffd-common.h
-@@ -19,8 +19,6 @@
- #include <signal.h>
- #include <poll.h>
- #include <string.h>
--#include <linux/mman.h>
--#include <sys/mman.h>
- #include <sys/syscall.h>
- #include <sys/ioctl.h>
- #include <sys/wait.h>
-@@ -110,6 +108,16 @@ int __copy_page(int ufd, unsigned long offset, bool retry, bool wp);
- int copy_page(int ufd, unsigned long offset, bool wp);
- void *uffd_poll_thread(void *arg);
- 
-+int uffd_register(int uffd, void *addr, uint64_t len,
-+		  bool miss, bool wp, bool minor);
-+int uffd_unregister(int uffd, void *addr, uint64_t len);
-+int uffd_open_dev(unsigned int flags);
-+int uffd_open_sys(unsigned int flags);
-+int uffd_open(unsigned int flags);
-+int uffd_get_features(uint64_t *features);
-+int uffd_register_with_ioctls(int uffd, void *addr, uint64_t len,
-+			      bool miss, bool wp, bool minor, uint64_t *ioctls);
-+
- #define TEST_ANON	1
- #define TEST_HUGETLB	2
- #define TEST_SHMEM	3
-diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-index 01296c17df02..c64a0134f83c 100644
---- a/tools/testing/selftests/mm/vm_util.c
-+++ b/tools/testing/selftests/mm/vm_util.c
-@@ -198,110 +198,6 @@ unsigned long default_huge_page_size(void)
- 	return hps;
- }
- 
--/* If `ioctls' non-NULL, the allowed ioctls will be returned into the var */
--int uffd_register_with_ioctls(int uffd, void *addr, uint64_t len,
--			      bool miss, bool wp, bool minor, uint64_t *ioctls)
--{
--	struct uffdio_register uffdio_register = { 0 };
--	uint64_t mode = 0;
--	int ret = 0;
--
--	if (miss)
--		mode |= UFFDIO_REGISTER_MODE_MISSING;
--	if (wp)
--		mode |= UFFDIO_REGISTER_MODE_WP;
--	if (minor)
--		mode |= UFFDIO_REGISTER_MODE_MINOR;
--
--	uffdio_register.range.start = (unsigned long)addr;
--	uffdio_register.range.len = len;
--	uffdio_register.mode = mode;
--
--	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register) == -1)
--		ret = -errno;
--	else if (ioctls)
--		*ioctls = uffdio_register.ioctls;
--
--	return ret;
--}
--
--int uffd_register(int uffd, void *addr, uint64_t len,
--		  bool miss, bool wp, bool minor)
--{
--	return uffd_register_with_ioctls(uffd, addr, len,
--					 miss, wp, minor, NULL);
--}
--
--int uffd_unregister(int uffd, void *addr, uint64_t len)
--{
--	struct uffdio_range range = { .start = (uintptr_t)addr, .len = len };
--	int ret = 0;
--
--	if (ioctl(uffd, UFFDIO_UNREGISTER, &range) == -1)
--		ret = -errno;
--
--	return ret;
--}
--
--int uffd_open_dev(unsigned int flags)
--{
--	int fd, uffd;
--
--	fd = open("/dev/userfaultfd", O_RDWR | O_CLOEXEC);
--	if (fd < 0)
--		return fd;
--	uffd = ioctl(fd, USERFAULTFD_IOC_NEW, flags);
--	close(fd);
--
--	return uffd;
--}
--
--int uffd_open_sys(unsigned int flags)
--{
--#ifdef __NR_userfaultfd
--	return syscall(__NR_userfaultfd, flags);
--#else
--	return -1;
--#endif
--}
--
--int uffd_open(unsigned int flags)
--{
--	int uffd = uffd_open_sys(flags);
--
--	if (uffd < 0)
--		uffd = uffd_open_dev(flags);
--
--	return uffd;
--}
--
--int uffd_get_features(uint64_t *features)
--{
--	struct uffdio_api uffdio_api = { .api = UFFD_API, .features = 0 };
--	/*
--	 * This should by default work in most kernels; the feature list
--	 * will be the same no matter what we pass in here.
--	 */
--	int fd = uffd_open(UFFD_USER_MODE_ONLY);
--
--	if (fd < 0)
--		/* Maybe the kernel is older than user-only mode? */
--		fd = uffd_open(0);
--
--	if (fd < 0)
--		return fd;
--
--	if (ioctl(fd, UFFDIO_API, &uffdio_api)) {
--		close(fd);
--		return -errno;
--	}
--
--	*features = uffdio_api.features;
--	close(fd);
--
--	return 0;
--}
--
- unsigned int psize(void)
- {
- 	if (!__page_size)
-diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
-index 8aa543a3678b..f04f82771cd0 100644
---- a/tools/testing/selftests/mm/vm_util.h
-+++ b/tools/testing/selftests/mm/vm_util.h
-@@ -33,16 +33,6 @@ bool check_huge_shmem(void *addr, int nr_hpages, uint64_t hpage_size);
- int64_t allocate_transhuge(void *ptr, int pagemap_fd);
- unsigned long default_huge_page_size(void);
- 
--int uffd_register(int uffd, void *addr, uint64_t len,
--		  bool miss, bool wp, bool minor);
--int uffd_unregister(int uffd, void *addr, uint64_t len);
--int uffd_open_dev(unsigned int flags);
--int uffd_open_sys(unsigned int flags);
--int uffd_open(unsigned int flags);
--int uffd_get_features(uint64_t *features);
--int uffd_register_with_ioctls(int uffd, void *addr, uint64_t len,
--			      bool miss, bool wp, bool minor, uint64_t *ioctls);
--
- /*
-  * On ppc64 this will only work with radix 2M hugepage size
-  */
+
+base-commit: 929ed21dfdb6ee94391db51c9eedb63314ef6847
 -- 
 2.40.1
 
