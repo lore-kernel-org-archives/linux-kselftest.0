@@ -2,182 +2,127 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3ADAC7EE2A
-	for <linux-kselftest@archiver.kernel.org>; Sat,  3 Jun 2023 02:16:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 46A0BC7EE24
+	for <linux-kselftest@archiver.kernel.org>; Sat,  3 Jun 2023 07:59:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237074AbjFCCQy (ORCPT
+        id S229673AbjFCH7z (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 2 Jun 2023 22:16:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33128 "EHLO
+        Sat, 3 Jun 2023 03:59:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237196AbjFCCQs (ORCPT
+        with ESMTP id S229572AbjFCH7y (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Jun 2023 22:16:48 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2088.outbound.protection.outlook.com [40.107.93.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF9ADE74;
-        Fri,  2 Jun 2023 19:16:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=E0wvmzMX2+2lgTlGV7+gto7RjltVDuDcJ4EUgBPfOqWKHBi349MiK3mAuRAQA0LkcgjMzzMXnhvy8liOr50rBTlrUSYtZgiMz7w8EYS72+fLiZzr48HjXI5A8c64x98QZZm6JewQrriNl1kc3hgYrJvdMqNARjWbHKEyeiCzbYNdbTb24zAW2qgtHEDi0w4+f2zR7CGLCguLO8GBEdpgNu+nUItTOZcEXxe1NVU4o/9BKpZumEpcqBBSYtIWE+KGPUep9S2uaf2oTh+tHwJGFPWx/angdN+YN3zYaFhxJaWnkKsLoZoOMD0LeEKD83wCkvb328zz01fQ77dJPoHOgA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1DWMqFfWmcM0S74ipR90Z5t8Em5oNzomwf7Su2Dj4R4=;
- b=kNzp/bAEy19hfRkRKK6QPpeiYkzY+cUNeFDmfUWE+62TBp3ZMvsqqlxtJViVReODiuf7JU1NoaBO0aqboxHr2Ui1Duoj97gSMM/19GNuqQX94Vbj3rpSNckd9XpWlJn23ioFQf+xgetrC5L24HRVCqQ5BQnwUt9YAGlsNCQBAYxXsUcZTIQeTuWajrv0Xlc98btnnTTcRr7aM4c82sbeNNCDeZrT65zEybX8iM53k0fWI6BzaQwNWjlOscJoyy+GRAOlP73N9BYo565YLn54NaiDD5/yDs2bNrEC9n6zrUhwGCr3Vcnnsafj1tX/kADqY0QM/qsm2yGeBervdO7Ilw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=linux-foundation.org
- smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1DWMqFfWmcM0S74ipR90Z5t8Em5oNzomwf7Su2Dj4R4=;
- b=UyepBzWfehO7MgNo3y09cOBnplR2kwSIug7lDAlrS0810ErTRvFZJc2690uqVH0t5dYlGuMeO4QfsqhzPs7ji69zfqXG8qOZFs76PqfJTg2FjlKsMNgnErtvfuMqO0VjPRxcd3cfbA/VQTckhazivCPTOxYJ3qXxbyi3SbX/y9WIbtAl3aimDV5iwjRE/eJ57y26pKC1h8R411jUmVDL07m75XwfEDSJQCXQvD3to8/p22vHrxc4oWoi9Y+bP68a3bAHgBmLdkh3RZ7dcBhBJFBWfBVnnchDHOnlcIgcN4kMOcgneSN2aV7peakqhrtTwHE5X3n623pLreRvMBlErg==
-Received: from BN9PR03CA0603.namprd03.prod.outlook.com (2603:10b6:408:106::8)
- by PH7PR12MB6764.namprd12.prod.outlook.com (2603:10b6:510:1ae::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.26; Sat, 3 Jun
- 2023 02:16:23 +0000
-Received: from BN8NAM11FT051.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:106:cafe::8f) by BN9PR03CA0603.outlook.office365.com
- (2603:10b6:408:106::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.31 via Frontend
- Transport; Sat, 3 Jun 2023 02:16:23 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BN8NAM11FT051.mail.protection.outlook.com (10.13.177.66) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6455.28 via Frontend Transport; Sat, 3 Jun 2023 02:16:22 +0000
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 2 Jun 2023
- 19:16:09 -0700
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail205.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Fri, 2 Jun 2023
- 19:16:08 -0700
-Received: from blueforge.nvidia.com (10.127.8.13) by mail.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server id 15.2.986.37 via Frontend
- Transport; Fri, 2 Jun 2023 19:16:08 -0700
-From:   John Hubbard <jhubbard@nvidia.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     David Hildenbrand <david@redhat.com>, Peter Xu <peterx@redhat.com>,
-        "Shuah Khan" <shuah@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>, <linux-mm@kvack.org>,
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH v2 09/11] selftests/mm: move psize(), pshift() into vm_utils.c
-Date:   Fri, 2 Jun 2023 19:15:56 -0700
-Message-ID: <20230603021558.95299-10-jhubbard@nvidia.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230603021558.95299-1-jhubbard@nvidia.com>
-References: <20230603021558.95299-1-jhubbard@nvidia.com>
+        Sat, 3 Jun 2023 03:59:54 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E5FE41;
+        Sat,  3 Jun 2023 00:59:49 -0700 (PDT)
+X-QQ-mid: bizesmtp74t1685779178tv1c2476
+Received: from linux-lab-host.localdomain ( [119.123.130.226])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sat, 03 Jun 2023 15:59:37 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: iDzLjIm7mlbPeIpKhf0L/FoYc5sBCuLlmD1uXZ6PLTeLTNqoaWw5vVBt4RZJB
+        5nE1u/X8VOHe4a2rR+f7qxdPnaataTsBE75Oo4mGR2USddqN+9RQQPyA/5wd+P1RNg+61hT
+        T4ihHHsbzzkJRV4iR5QslKSjQPbWr51ZPYBKeCRHy+oGzp323hJBYRC8MJJxxsCRic62xGL
+        ITChxxvvC1tCoY2knphq+S5rHgRqy+N1sUTxEzMkPMc4Wc6gKtQFPqVfzGFhF0AMi3yem4B
+        IKCZuEyBe2QNxxuKAHqKATlXoBfkF0tk216ifnrEK8YL3kzCnQLRs5Cbn2P/6+hCCQjQ90i
+        YcItibezI442FD77p6lUKtGFX33/1dqqP10oZvk
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 8921411248983777273
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        thomas@t-8ch.de
+Subject: [PATCH v3 00/12] nolibc: add generic part1 of prepare for rv32
+Date:   Sat,  3 Jun 2023 15:59:29 +0800
+Message-Id: <cover.1685777982.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-NVConfidentiality: public
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT051:EE_|PH7PR12MB6764:EE_
-X-MS-Office365-Filtering-Correlation-Id: 407d3725-fac4-4239-cc21-08db63d886ea
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gMGmq3uSy47cK0QCBP8nvRopexopyt98f8rAjhRSt6kcCMjIJln+Jd124MEdJKEnM7wzPgKenr2OH859KMAqAuRAJ6/HJ2d/D/zc2dL4RwWOqOZTVo9m9DWhJQ89CMcifgjNb21Ei/B1hUffraT2q+6wpbMePAjGQiWDtKoKiwS/mtGW8+mTS4/lZAJm6nCoRaZ/Z7puKdQQdQTULDFu6LZiUdbr8Xa2uWb4gtD65aHOsWj9HA6oVhqIamfQIQpDB81KZbGaFc7RoOrQZqlCl3kiQVTWjNarfvqo8fyEzRgkB/1cz2LL7M2l6nI0ZbzQqTmZ6oHVwrlUT7f9s7RE1h5uEBVAcqceyPcho+J5R/mEywh6sLmhTIAmyTtZlXY8io8pdBWnW4kuYpI+edf7NmC17E7PDFSKfkzluWOzHomLK8CxtPRhLi07525ZwLc7KQdDLNR00jNPZHeLT/YEjwcM/WAUEsXGWSwWXef5D3zJuCO1yUl1IgBAOQMEbbKIU9ruGNsL50q9xsrw9Ks1BsvDutIecehzMtXqR8yZ7rsLzBsc/Hj2ngG2lRRFgLUqIpYf5Lh7+rkSIG/zbbrHyM53A/FnGwfwk+amTvKmCr0vdULof0namXujL6DBkF30x2C3YYPkd62pbgK/G48EVFiqLiUNnML2ywdbB+UbRig7unqumOasib+NqHombP6bwttuZmJa+1ic19pGSzA0+oEc/GfPrUCXFL43RiOE5boQ+QwnZfqNVe4f3tKs7Mvc
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(39860400002)(346002)(136003)(451199021)(40470700004)(46966006)(36840700001)(82310400005)(36860700001)(83380400001)(40480700001)(426003)(336012)(47076005)(7636003)(82740400003)(4326008)(356005)(36756003)(41300700001)(316002)(6666004)(1076003)(7696005)(26005)(6916009)(107886003)(70586007)(70206006)(8936002)(2906002)(40460700003)(5660300002)(8676002)(2616005)(54906003)(478600001)(86362001)(186003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jun 2023 02:16:22.8646
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 407d3725-fac4-4239-cc21-08db63d886ea
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT051.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6764
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This is in preparation for linking test programs with both vm_utils.c
-and uffd-common.c. The static inline routines, while normally not a
-problem, in this case complicate an already fragile header file
-situation: the header files including other header files leads to
-compilation failures in a subsequent patch that moves code around.
+Hi, Willy
 
-Anyway, there is no particular need for inlining here, so turn these
-into normal functions, as a workaround to avoid refactoring the header
-file includes for now.
+This is the v3 generic part1 for rv32, all of the found issues of v2
+part1 [1] have been fixed up, several generic patches have been fixed up
+and merged from v2 part2 [2] to this series, the standalone test_fork
+patch [4] is merged with a Reviewed-by line into this series too.
 
-Cc: David Hildenbrand <david@redhat.com>
-Cc: Peter Xu <peterx@redhat.com>
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+This series is based on 20230528-nolibc-rv32+stkp5 branch of [5].
+
+Changes from v2 -> v3:
+
+* selftests/nolibc: fix up compile warning with glibc on x86_64
+
+  Use simpler 'long long' conversion instead of old #ifdef ...
+  (Suggestion from Willy)
+
+* tools/nolibc: add missing nanoseconds support for __NR_statx
+
+  Split the compound assignment into two single assignments
+  (Suggestion from Thomas)
+
+* selftests/nolibc: add new gettimeofday test cases
+
+  Removed the gettimeofday(NULL, &tz)
+  (Suggestion from Thomas)
+
+All of the commit messages have been re-checked, some missing
+Suggested-by lines are added.
+
+The whole patchset have been tested on arm, aarch64, rv32 and rv64, no
+regressions (the next compile patchset is required to do rv32 test).
+
+The nolibc-test has been tested with glibc on x86_64 too.
+
+Btw, we have found such poll failures on arm (not introduced by this
+patchset), this will be fixed in our coming ppoll_time64 patchset:
+
+48 poll_null = -1 ENOSYS                                        [FAIL]
+49 poll_stdout = -1 ENOSYS                                      [FAIL]
+50 poll_fault = -1 ENOSYS  != (-1 EFAULT)                       [FAIL]
+
+And the gettimeofday_null removal patch from Thomas [3] may conflicts
+with the gettimeofday removal and addition patches, but it is not hard
+to fix.
+
+Best regards,
+Zhangjin
 ---
- tools/testing/selftests/mm/vm_util.c | 14 ++++++++++++++
- tools/testing/selftests/mm/vm_util.h | 16 ++--------------
- 2 files changed, 16 insertions(+), 14 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-index 9b06a5034808..01296c17df02 100644
---- a/tools/testing/selftests/mm/vm_util.c
-+++ b/tools/testing/selftests/mm/vm_util.c
-@@ -301,3 +301,17 @@ int uffd_get_features(uint64_t *features)
- 
- 	return 0;
- }
-+
-+unsigned int psize(void)
-+{
-+	if (!__page_size)
-+		__page_size = sysconf(_SC_PAGESIZE);
-+	return __page_size;
-+}
-+
-+unsigned int pshift(void)
-+{
-+	if (!__page_shift)
-+		__page_shift = (ffsl(psize()) - 1);
-+	return __page_shift;
-+}
-diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
-index 07f39ed2efba..8aa543a3678b 100644
---- a/tools/testing/selftests/mm/vm_util.h
-+++ b/tools/testing/selftests/mm/vm_util.h
-@@ -3,7 +3,6 @@
- #include <stdbool.h>
- #include <sys/mman.h>
- #include <err.h>
--#include <string.h> /* ffsl() */
- #include <unistd.h> /* _SC_PAGESIZE */
- 
- #define BIT_ULL(nr)                   (1ULL << (nr))
-@@ -17,19 +16,8 @@
- extern unsigned int __page_size;
- extern unsigned int __page_shift;
- 
--static inline unsigned int psize(void)
--{
--	if (!__page_size)
--		__page_size = sysconf(_SC_PAGESIZE);
--	return __page_size;
--}
--
--static inline unsigned int pshift(void)
--{
--	if (!__page_shift)
--		__page_shift = (ffsl(psize()) - 1);
--	return __page_shift;
--}
-+unsigned int psize(void);
-+unsigned int pshift(void);
- 
- uint64_t pagemap_get_entry(int fd, char *start);
- bool pagemap_is_softdirty(int fd, char *start);
+[1]: https://lore.kernel.org/linux-riscv/cover.1685362482.git.falcon@tinylab.org/T/#t
+[2]: https://lore.kernel.org/linux-riscv/cover.1685387484.git.falcon@tinylab.org/T/#t
+[3]: https://lore.kernel.org/lkml/20230530-nolibc-gettimeofday-v1-1-7307441a002b@weissschuh.net/
+[4]: https://lore.kernel.org/lkml/61bdfe7bacebdef8aa9195f6f2550a5b0d33aab3.1685426545.git.falcon@tinylab.org/
+[5]: https://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git
+
+Zhangjin Wu (12):
+  selftests/nolibc: syscall_args: use generic __NR_statx
+  tools/nolibc: add missing nanoseconds support for __NR_statx
+  selftests/nolibc: allow specify extra arguments for qemu
+  selftests/nolibc: fix up compile warning with glibc on x86_64
+  selftests/nolibc: not include limits.h for nolibc
+  selftests/nolibc: use INT_MAX instead of __INT_MAX__
+  tools/nolibc: arm: add missing my_syscall6
+  tools/nolibc: open: fix up compile warning for arm
+  selftests/nolibc: support two errnos with EXPECT_SYSER2()
+  selftests/nolibc: remove gettimeofday_bad1/2 completely
+  selftests/nolibc: add new gettimeofday test cases
+  selftests/nolibc: test_fork: fix up duplicated print
+
+ tools/include/nolibc/arch-arm.h              | 23 +++++++++++
+ tools/include/nolibc/stdint.h                | 14 +++++++
+ tools/include/nolibc/sys.h                   | 39 +++++++++---------
+ tools/testing/selftests/nolibc/Makefile      |  2 +-
+ tools/testing/selftests/nolibc/nolibc-test.c | 42 ++++++++++++--------
+ 5 files changed, 85 insertions(+), 35 deletions(-)
+
 -- 
-2.40.1
+2.25.1
 
