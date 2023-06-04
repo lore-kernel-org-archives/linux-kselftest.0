@@ -2,163 +2,186 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37251C7EE24
-	for <linux-kselftest@archiver.kernel.org>; Sat,  3 Jun 2023 23:48:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EE99C77B7A
+	for <linux-kselftest@archiver.kernel.org>; Sun,  4 Jun 2023 01:37:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229501AbjFCXsS (ORCPT
+        id S229629AbjFDBhI (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 3 Jun 2023 19:48:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57696 "EHLO
+        Sat, 3 Jun 2023 21:37:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjFCXsQ (ORCPT
+        with ESMTP id S229490AbjFDBhG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 3 Jun 2023 19:48:16 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2081.outbound.protection.outlook.com [40.107.237.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FF82180;
-        Sat,  3 Jun 2023 16:48:15 -0700 (PDT)
+        Sat, 3 Jun 2023 21:37:06 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2063.outbound.protection.outlook.com [40.107.243.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75811B1;
+        Sat,  3 Jun 2023 18:37:00 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CrbVE2zT/30BzcG6KBA4NDR8Aj9fTb0JTl7FTYH7jGq70bqZVYRtvRMvFPiR26daFtUNAFPpGYFBaH6RZeqZBpjcpfNb5rMnuWJ4evBlhaJ1QhqmaypDXbejvHZygQ5vL8QM+FMPMVZXHsDWzYrbZryLC59I+Lv1eTlVsU4Y/54z1P0dmo/HErCqbPBzNua3uLU7xy6fZBs2ieusEyajlkML7O7VweUXlVdylv0MeNS91RGDausnNrVh+yasIJ/eQW6YjmsrX5c3FLYYzvXcfjdOwVGrtVQejfTKupifJNEX4NSPlBNY/Bu2tW8owj1WRpBxaso4Uljfvp8tYrL0IA==
+ b=MPACAR2yQJ4F6oa7rXn3+iBpMmN5QR+Z0uoVrN8xUjVkP8WM46l2zhitZGahNYq9fJk75koUw51CRgCZSom8oi9GxH2GS5uSNskFk7FGpl8BJ9v7aTIX25RIRzvHDtfUMWHQYADeptWKrXINNnFCDe4oEbDxR3XmzBzexGHnR4h/bY5YeDBkVwDQXZqu+NwkH+ZZsck6M5b4GXjiZNC4Z9DZUcIzYa8vyFmBavBMdXvKx+0bns9eZ1qzoOigvHtjOXeLQZ7DDwIHhpn18bMUaF/5W5LRJGSQDwhqJ5cINfSu+w+ijTaJZuSBGOVpy6tMW5XUkmd/f60I+/QMee/JlQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3NuBTcNyla7IsWEMFzrrnO8ZavMIOU96D6BXSpSIsR8=;
- b=i8Tbkn8Nu/viyM+fpQwAWkf8SHlBrl7EJHWTRxKhgptCx4zu+2Tb8mW9uiAn94Feg0Ofo3M4TG2bmStdAhboKXYUu3wBoZB02JnF+nZsQB2MA+OCCdprzs5O8jtCXUsmtD06B1hbDgN43rQlIbn+d+c/7NSPsFIAN1cH8K/OJzZ7LqxY480WEHkSceu6vGjkKBDMTbAGRdwiy8yPa+Y7VJndSVzZY+ClP5GcVQYD5m7VlsradOLKLfb4AmH9TaUyavkgl0jBVr/g3YLtfwvmPhItlY2Bbwsx/nBVqk3unsxeu+s7Jd70ubffW5pgnHZUdPe6g+SnJ/6NXIIqJ3WHjg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
+ bh=4Fine+ULcirLmEqNWkiHf+fbRUQNrgpAQqF8Q8I9Jv8=;
+ b=MdzxRR3TZKcLeiUaWCfxSwlYFXYJcpfoRDZ9p6YAuJpetYlXOUkwkJ+/R3ykmKe/lZf9mhmZpsKmXxjThBy9ZY4FLSL7/4mYmD4/AXkLaGDcHM2ZBntHSR7z9/6KfYdqaVDXyqIUV83zV2mhKMKQo/YOpUhpn2q/Q9XlBiWHPRs35DO7lotfJMtlaOGHVFypTT83AJTMH5f1mmO/4CpjI9DuEkzQGKoj5IknP9HpaNuKFoAd0kQJ6H6wdoMO5xjXkw3mpoQjST7Qdc6KUf0y0qnwAiQjfryn66Ij7y0zwBGgS8D3/2NE+9DvR0F+McfLcakHLunmlWz8mw4HzeBK4g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.232) smtp.rcpttodomain=linux-foundation.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3NuBTcNyla7IsWEMFzrrnO8ZavMIOU96D6BXSpSIsR8=;
- b=L9Uq4aW3AK1IbDj0vUihg9235RruMFXmOHiO5gZww2T7AlxQW8tutwiduSK29NtBRpO1+jJnswMIgVUwrMn2MhXmJw18gF3nZbBzaH8w7pqDlVxlGCniBpin/1O8RVuXUEovT1tTAAEB2atCuPsbQKrlWeeUFnx88WkpBxAtFWeOLTMW60AYTYjZ1v9tvOjEdj9Il+7A3Bjxbi48nDFL8JhD8dI0Bvk3aYZ3VyIA7MMug90zHSHWpxeCpkJgX5zAdD+zv80SW83JkP1P550gYAvXerk4HMNRpv8Si1vyaTPpLwPjt+ip3WnvtkkHP9yyLDSt9Ztn15YOLmv9T99j+Q==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
- by CH3PR12MB8460.namprd12.prod.outlook.com (2603:10b6:610:156::15) with
+ bh=4Fine+ULcirLmEqNWkiHf+fbRUQNrgpAQqF8Q8I9Jv8=;
+ b=OrI2m++9//JoC4ACk196ao5xHrEWWVeaOx2P0WZH4LjPEJyfWQl/MvogU5jaU4aBO6fenHTHyogoE8YHokrKy7MwpwLZ0McFrrYkYgLXDMVVxNmnIP2MenBKlXbZ1nZuOJXiSjHU+0XPcRu5hPtYri6sBV25obA+Gsz3x0Buo5uDrPqj/0hj9R8qeqzcFnadhHVxX18duclW+q1A1xUgM2viYmjCaMBhLOZOkB98x5YYEAevHE4yRzyhs58t1Fk6ikBbvwy7tJp91vYxWr2DXuEWAZByE6LOrajvG6am9+OMks1A8utYw8r/UAG98514F31kn9CtKIpceFhfadyw6g==
+Received: from SA9P221CA0017.NAMP221.PROD.OUTLOOK.COM (2603:10b6:806:25::22)
+ by CH3PR12MB7594.namprd12.prod.outlook.com (2603:10b6:610:140::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.27; Sat, 3 Jun
- 2023 23:48:13 +0000
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::e01a:d41e:80b4:7cef]) by BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::e01a:d41e:80b4:7cef%7]) with mapi id 15.20.6455.030; Sat, 3 Jun 2023
- 23:48:13 +0000
-Message-ID: <3842dfc1-70ce-4568-a29d-31450d4c9861@nvidia.com>
-Date:   Sat, 3 Jun 2023 16:48:10 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 11/12] selftests/mm: fix missing UFFDIO_CONTINUE_MODE_WP
- and similar build failures
-Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20230602013358.900637-1-jhubbard@nvidia.com>
- <20230602013358.900637-12-jhubbard@nvidia.com>
- <7a999b80-e266-2b7e-f198-869b1ac7cde7@redhat.com>
- <993773ab-7f5b-241f-b532-ee79a03b371f@nvidia.com>
- <a4fbc191-9acb-5db8-a375-96c0c1ba3fcd@redhat.com>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.28; Sun, 4 Jun
+ 2023 01:36:58 +0000
+Received: from SN1PEPF000252A3.namprd05.prod.outlook.com
+ (2603:10b6:806:25:cafe::a8) by SA9P221CA0017.outlook.office365.com
+ (2603:10b6:806:25::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.30 via Frontend
+ Transport; Sun, 4 Jun 2023 01:36:58 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.232) by
+ SN1PEPF000252A3.mail.protection.outlook.com (10.167.242.10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6477.13 via Frontend Transport; Sun, 4 Jun 2023 01:36:57 +0000
+Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
+ (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Sat, 3 Jun 2023
+ 18:36:44 -0700
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.37; Sat, 3 Jun 2023 18:36:43 -0700
+Received: from sandstorm.nvidia.com (10.127.8.14) by mail.nvidia.com
+ (10.126.190.180) with Microsoft SMTP Server id 15.2.986.37 via Frontend
+ Transport; Sat, 3 Jun 2023 18:36:43 -0700
 From:   John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <a4fbc191-9acb-5db8-a375-96c0c1ba3fcd@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BYAPR05CA0094.namprd05.prod.outlook.com
- (2603:10b6:a03:e0::35) To BY5PR12MB4130.namprd12.prod.outlook.com
- (2603:10b6:a03:20b::16)
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     David Hildenbrand <david@redhat.com>, Peter Xu <peterx@redhat.com>,
+        "Shuah Khan" <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>, <linux-mm@kvack.org>,
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        "Muhammad Usama Anjum" <usama.anjum@collabora.com>,
+        Jonathan Corbet <corbet@lwn.net>, <linux-doc@vger.kernel.org>
+Subject: [PATCH 1/1] selftests: error out if kernel header files are not yet built
+Date:   Sat, 3 Jun 2023 18:36:37 -0700
+Message-ID: <20230604013637.203330-2-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230604013637.203330-1-jhubbard@nvidia.com>
+References: <20230604013637.203330-1-jhubbard@nvidia.com>
 MIME-Version: 1.0
+X-NVConfidentiality: public
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR12MB4130:EE_|CH3PR12MB8460:EE_
-X-MS-Office365-Filtering-Correlation-Id: efea11cd-c1d9-4f58-a025-08db648cfe47
+X-MS-TrafficTypeDiagnostic: SN1PEPF000252A3:EE_|CH3PR12MB7594:EE_
+X-MS-Office365-Filtering-Correlation-Id: e1f3a09b-c919-4a52-1891-08db649c2fa5
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: seprN+BX7YlpawL6aTDttSVcI6BbKgz8aKih1mvIaHrM3yoxFna5w9/+4XlFh66PCTVRoZB0eSPlep9G5B37oJWVARG/fSydztlkWh4+8UyQmhDXs0IKxGoZTWcl0uI7iyCs5/vr+dZvMXb3p1lqDAQ1IzHyyRZiX+shjvFxUUROWcrDrCG1rfSc4an674A1bsAKRgVFSCb304dIMlkORBZLD0lWOyhrKFRw6V1RkWUzPeC0qbmiae/rd+Rlb7ppxcmRSlvJGSxgVE8ahFdsaQ1FwHkrpNumODvnAE8be/NeqaztoVRDHqJP/nRc0H7hudaZ16xw34ipOtI4aU2JSTiinJ/7aV87lyT6kXxcu645XtW5IcPbyKoJAHGBKmT6k5gVF6+wq825JTikJCEvR86pgyDR6RUbf167Pd5AI3Os2ETLfMU2C+6TWSKiqLhB2MuvIYK+64QZrE5sUGHP8P5K3O3ib4/cgx1lYeyBgmTXjV9aukeEDGDd9pKKRQAwxAefckO4n8GnykWghIeG2AQl4ka7iTOz2itt0L9GjAfkznZr/2obtyquposYaUByJDJRw08AJgaB1QH9bwVbFO58Xbzj7YEqqW9oULibeyPc7gKneSCWKfascXIMHPiwFbyxB9C1UMgnowCS9bYVkw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(376002)(366004)(39860400002)(136003)(451199021)(478600001)(31696002)(2616005)(86362001)(36756003)(186003)(26005)(6512007)(53546011)(6506007)(6486002)(2906002)(38100700002)(41300700001)(83380400001)(66946007)(66556008)(31686004)(66476007)(8936002)(8676002)(4326008)(316002)(5660300002)(110136005)(54906003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZnVlMjlqbXpWeTJWSlpsR0hKQlMyaWZCMFE4d01IOERybnZNNExWVS9VRTNM?=
- =?utf-8?B?Sjl4VktXTURBK3gyZytzZlB2R2VSZ0FjQ0haTUw0bEdFNXVQdHhoNzhIR3kz?=
- =?utf-8?B?bzRGRW03aGFXQ1IzMGtiQVd3VUJoVTd0NTRXcEZlaXpZVEIvTkllS2pyOFF2?=
- =?utf-8?B?WHBjU0VFa3o0N2tUeEE1eTFRNlFCSGdBWkFnV3JCOU0xZXR1WGd1cWl6WXBm?=
- =?utf-8?B?MHJHaDJ4N3ZCanFRZ05meTVxZURGYlIxb2VYa2Y3RytZUnlObkNZbDQ3K1Rq?=
- =?utf-8?B?aHQ1a2pPTjQrb3lrZ3hTWkMrL29naEZOVlBhMWp6Ym9hUjBZREU5ZFo3VGht?=
- =?utf-8?B?eVpEaUpxUTlqWDBhaXBEeVhIL1BYTmptVXNlVk9ETkFGTWV0cWlSY2srMGFy?=
- =?utf-8?B?WVFTdTRtbXVjZ2ZyWElBUXhoT1RMalR5YnlRUjNoZE5vY2R2dlVPeE1hY0tP?=
- =?utf-8?B?ODMyVXBOR1VNeGpGamlQNStPdEZQMFlwSzREeTA5NXhzMFkvRis1ZHZRb1Zy?=
- =?utf-8?B?VGdpblNVbGc5cXFjL1VrMU85S2dLb3VUaUF4bUhxOVdjanZsSFVDOW1xOFRE?=
- =?utf-8?B?enI4a3pCb1VScG1SczhOelZKd2hYMURKY2xDQ29ScnBzRlNVQys3WVcxUHA0?=
- =?utf-8?B?eEhmaFVDdEkrTmRyMWh2RWsrVUdzZElFNE1IVWJXbGxNQ0pqU2tRQzFDbmdR?=
- =?utf-8?B?R2RJclZXbzg3N25jMWtPdkVTTXpBWGRjN0QxQVU2VjNNWkM0bDBMV2JTdHZJ?=
- =?utf-8?B?d3dqcnJoRGlEYjNTWllLUmd6WmNpVjJvWlRPZGppS0tyOVEvN2d4VjBZWVdr?=
- =?utf-8?B?NldsQUUzN1RCYlp5dUF0blJrRXhvWStCUmRPZUFsUitkRWQrbzdjWTJwNnBE?=
- =?utf-8?B?MGxYaURRMGU3cmk0aWhtZXM4MldjWktNaHZlUVl3ZTBFNVFQOVdjTURiVWxW?=
- =?utf-8?B?eEVGN1MrVzNpbDNFRnEwNkc4SDJXMEcwbDhjYndQWHI5azQ1dzMwMWNMNm12?=
- =?utf-8?B?NVNpUFhCUHZUZ0kvN2dybHhvaGd1a05qUjlBcDIyUEtOTDBDcjZxTFRLVCtY?=
- =?utf-8?B?SW5Gaks1RU9WYVZGNXphVkhHNjlRbjRtN242RHBwY243YzYrR3pjd20xVTR3?=
- =?utf-8?B?dFo2YWlyYk5xOTNBNkdWWjJIbElDUnBUd1h2N1JTQ01ncUdCL2Q3cXVJcFp0?=
- =?utf-8?B?eVFhZzRWd3NpWHdJdll6ekp0bUNqTjg2VWZlbkhkRnc1UWtqNU5JT211ZTlK?=
- =?utf-8?B?TzkzdlVCdUVQSHU0clROWnRRakNYeFVzc0EyNUZZVDJDcnd4RE5pTE5LL09x?=
- =?utf-8?B?R1pYNzg4ZzQ1VzJ3ZWx4b1BtaFg0MmEvek5Rdy8wWmtOS1pWdmsrVUxmVjJv?=
- =?utf-8?B?cUNwVjJqNHJBVUxXbmJraU1MaUVnL0xQdlJKNmxhWHkvL1hMd2NEdnk0dWgz?=
- =?utf-8?B?M3FHSmtob05WSXRxZWtZeVR5ZWVQb2Z1MlFKSks2eVhEcFFhc2M5N085Z2dD?=
- =?utf-8?B?TUxRWjdHWStVNDlSeHFuZkNhT3hjK3h5dWkyZ0ZTVkFsd2RPazVBeDJjdGxS?=
- =?utf-8?B?WThUT1cxN0VQUmhMdnlKU2tMS092N2dUSFdIelowVjRSZ2prMGhjN3hGdW5j?=
- =?utf-8?B?TEUzbmNVdEp0a3NsWWlDMmw2b3IvL0w1N2VhU1RlVzdGWmpkaUIzRTBwZWxl?=
- =?utf-8?B?RzFPVG92SDBTbnUzVkZidGxrMkNlRFNLWnBFMlM0YVQrcEplOE54Y285YVBy?=
- =?utf-8?B?KzJEQW5HekQ2RzlvcWRZVm94Vkg0amRWWHVlVTllRFdFcnZtdmtYekFtNytk?=
- =?utf-8?B?Z2ExMXhoWnFQVHp0a0E2VnduK24xVks3ZmxhUjI1bGQzdWxDd0UvT2RhalRX?=
- =?utf-8?B?dG9hblBZRzAvYWo4c3RDbG0wR2tmRzZnUEh6OTRlNUlZK1NQcFJMZ2t4Rk4v?=
- =?utf-8?B?bGpKK0lEWElMd0NraHB4Y1lYQm9CZEk0a0s5cmZvUTVEZkFsTDFXRUxjMW85?=
- =?utf-8?B?dmNINlE2MjFwVG1aVC9vNndpVjZKeHUzYlNISlJnZU85ZkFKeDZQR2NxdzI4?=
- =?utf-8?B?RG52OXZUaE5hT0dSUk5yaFNKUEN6V1hBV3EwSzlmK21tY2dGZHFZZk00N2ZG?=
- =?utf-8?Q?cI+I8sctzucTPuDiI6KR+4aQU?=
+X-Microsoft-Antispam-Message-Info: BfSfAzMPoASKlerMip8fOPLFriCPAAIezR2vgk+T31bRmXTJHlmw/VbtrNDT3NFWSBfKP91+9tJG+pR9f80IOf/KC9EnLHJblGc9uQnwrSKt081eTg8YD1W0IP1+7wnv/8ia4OeWgnA0KcfQdvsAY2I1tlTrWQdpkYUr0mSmRL8AMC/7BEdybJ951do7xKbMyK0yAc3SirFZ1RPUOpi0unxJL4fvK52/qL8ihEgtLOlAmFx0fq3otxyY1Z/W0DGHs2NO3WZ/nzJkS4x6CWFPtbmIRvrs7p+q8hq2anWWEH4xq2eMZLCOz3zZ34W28wGxRbujIyC/wuj1o3vwaRf6lEEZk0Xn22OyBvmcVHMNzndKkTOAgLXyex7FpwDu1a0f0q1eyhB+f7sMT32La+doh3qivG1ap2UElcsdss6V2O4ciRDQ+s+axnd+aacQrkB5arQPjOXZFlwXX4XnYbgJWAVmRBsyWqtix4xqeZPMxENcAHtulGiVMDOX1B8Nd3FfqzF+FfFNVezkUShq9VYKYy8KXfqv6LlVKmTo7/+oZnmxgm3HY/H/f/Bg1rJCV0E+KfURPac5s7MNhid1PMt4NL5dcu8JmNKVhtzFnVPkM4dzQmq9ie/gAFqGNaE2QoAIBcyvY1sBMWIFBbfSjCUG/nWdb3AAsYOo0XMUAe61q/ex+txr2nPWMnDGkVSrCHHS8/3O0+2xyco8dWXgPq7iE9TkTXoTj1H6d5xzHFO2vph4epJxZWzi0rgERSg9jRecSt6mdC+x7sdDcLdC1iyjOQ==
+X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(396003)(346002)(136003)(451199021)(36840700001)(46966006)(40470700004)(7416002)(5660300002)(8676002)(8936002)(316002)(4326008)(41300700001)(2906002)(70206006)(70586007)(6916009)(966005)(54906003)(7696005)(6666004)(426003)(1076003)(26005)(336012)(186003)(36756003)(2616005)(83380400001)(47076005)(36860700001)(40460700003)(7636003)(356005)(478600001)(82310400005)(82740400003)(40480700001)(86362001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: efea11cd-c1d9-4f58-a025-08db648cfe47
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jun 2023 23:48:12.9695
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jun 2023 01:36:57.8831
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Network-Message-Id: e1f3a09b-c919-4a52-1891-08db649c2fa5
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qQb76J9xQdkx59WQaKefNuRKqSnfdqq1+Z5AutLabZO92e0aFWGPfLm7kp0eN8MrrpP+OPWigTHeoi0NzEIEeQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8460
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: SN1PEPF000252A3.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB7594
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/3/23 01:27, David Hildenbrand wrote:
-> On 03.06.23 00:20, John Hubbard wrote:
->> On 6/2/23 03:23, David Hildenbrand wrote:
->> ...
->>> Unfortunately, that seems to be the ugly way to handle this because
->>> including the in-tree headers seems to not work and I yet haven't
->>> figured out why (there were some changes back and forth so I lost track).
->>
->> Yes, ugly, and based on Muhammad's response, I plan on dropping this patch
->> entirely, in fact.
-> 
-> Ah, finally I know why it sometimes worked and sometimes didn't ... yes, 
-> let's document that somehow.
-> 
-> Maybe we can even warn from the Makefile when the in-tree headers are 
-> not installed yet?
-> 
+As per a discussion with Muhammad Usama Anjum [1], the following is how
+one is supposed to build selftests:
 
-Yes. And in fact, after some fooling around getting reacquainted with
-selftest Makefiles, it turns out that fussy part was setting up to
-detect the missing header files. And that seems to be working reliably
-now.
+    make headers && make -C tools/testing/selftests/mm
 
-So from there, it's just as easy to automatically build any missing
-header files and continue as it is to warn about it.
+Change the selftest build system's lib.mk to fail out with a helpful
+message if that prerequisite "make headers" has not been done yet.
 
-I'll post a patch.
+[1] https://lore.kernel.org/all/bf910fa5-0c96-3707-cce4-5bcc656b6274@collabora.com/
 
+Cc: David Hildenbrand <david@redhat.com>
+Cc: Peter Xu <peterx@redhat.com>
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: linux-doc@vger.kernel.org
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+---
+ tools/testing/selftests/lib.mk | 36 +++++++++++++++++++++++++++++++---
+ 1 file changed, 33 insertions(+), 3 deletions(-)
 
-thanks,
+diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+index 05400462c779..b8ea03b9a015 100644
+--- a/tools/testing/selftests/lib.mk
++++ b/tools/testing/selftests/lib.mk
+@@ -44,10 +44,22 @@ endif
+ selfdir = $(realpath $(dir $(filter %/lib.mk,$(MAKEFILE_LIST))))
+ top_srcdir = $(selfdir)/../../..
+ 
+-ifeq ($(KHDR_INCLUDES),)
+-KHDR_INCLUDES := -isystem $(top_srcdir)/usr/include
++ifneq ($(KBUILD_OUTPUT),)
++  # Make's built-in functions such as $(abspath ...), $(realpath ...) cannot
++  # expand a shell special character '~'. We use a somewhat tedious way here.
++  abs_objtree := $(shell cd $(top_srcdir) && mkdir -p $(KBUILD_OUTPUT) && cd $(KBUILD_OUTPUT) && pwd)
++  $(if $(abs_objtree),, \
++    $(error failed to create output directory "$(KBUILD_OUTPUT)"))
++  # $(realpath ...) resolves symlinks
++  abs_objtree := $(realpath $(abs_objtree))
++  KHDR_DIR := ${abs_objtree}/usr/include
++else
++  abs_srctree := $(shell cd $(top_srcdir) && pwd)
++  KHDR_DIR := ${abs_srctree}/usr/include
+ endif
+ 
++KHDR_INCLUDES := -isystem $(KHDR_DIR)
++
+ # The following are built by lib.mk common compile rules.
+ # TEST_CUSTOM_PROGS should be used by tests that require
+ # custom build rule and prevent common build rule use.
+@@ -58,7 +70,25 @@ TEST_GEN_PROGS := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS))
+ TEST_GEN_PROGS_EXTENDED := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS_EXTENDED))
+ TEST_GEN_FILES := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_FILES))
+ 
+-all: $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES)
++all: kernel_header_files $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) \
++     $(TEST_GEN_FILES)
++
++kernel_header_files:
++	@ls $(KHDR_DIR)/linux/*.h >/dev/null 2>/dev/null;                      \
++	if [ $$? -ne 0 ]; then                                                 \
++            RED='\033[1;31m';                                                  \
++            NOCOLOR='\033[0m';                                                 \
++            echo;                                                              \
++            echo -e "$${RED}error$${NOCOLOR}: missing kernel header files.";   \
++            echo "Please run this and try again:";                             \
++            echo;                                                              \
++            echo "    cd $(top_srcdir)";                                       \
++            echo "    make headers";                                           \
++            echo;                                                              \
++	    exit 1; \
++	fi
++
++.PHONY: kernel_header_files
+ 
+ define RUN_TESTS
+ 	BASE_DIR="$(selfdir)";			\
 -- 
-John Hubbard
-NVIDIA
+2.40.1
 
