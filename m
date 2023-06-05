@@ -2,172 +2,221 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 30A5AC77B73
-	for <linux-kselftest@archiver.kernel.org>; Mon,  5 Jun 2023 18:04:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0839CC77B73
+	for <linux-kselftest@archiver.kernel.org>; Mon,  5 Jun 2023 18:04:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235664AbjFESEZ (ORCPT
+        id S235673AbjFESEl (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 5 Jun 2023 14:04:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35990 "EHLO
+        Mon, 5 Jun 2023 14:04:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235529AbjFESEF (ORCPT
+        with ESMTP id S235561AbjFESEI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 5 Jun 2023 14:04:05 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7DE0E49;
-        Mon,  5 Jun 2023 11:03:44 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-65299178ac5so4624490b3a.1;
-        Mon, 05 Jun 2023 11:03:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685988224; x=1688580224;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=y7uQ8QjbEIiqKEh+gAYz/364Mw8hqnIeWQ0ws9py8v4=;
-        b=ZZUUkU1id25XUT7xzdMGrfSeQBz12c6CsXPYvy99BkUDyNpTI8Nk3dtBpa6o0bB3Ye
-         T1BzhXQbKlgXLWz0ONNcVvg9J2srMSm979nKkowd2Tdai2MxNYcR4Xv/Fd+gNnGWEcBj
-         +tdGktnKGB7IHV4jcDkT+7h+8GuTAnS8BZ/YTER7GeCghLjr31+D8KWBUIX77NMsFRXr
-         vmNig4VJKob0X9z1WU80jFxOmYtnYoopLn04QN6/gnTovH9KHRNJkTn++D1D+7SFcD3w
-         qwL1PMsm3g0eokamoTOQwHPmREB1nQ9b/UD+TnHhjVjUblG4u0o9R3NUrwLkSZcNYgTD
-         VHpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685988224; x=1688580224;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=y7uQ8QjbEIiqKEh+gAYz/364Mw8hqnIeWQ0ws9py8v4=;
-        b=edGu9C9Gaa/DO3/C3sRFyYTReTpdGOd5vixEwt35quKW3mAA80YdnpoLM3V2kW79KP
-         579YHBTcj5l/2WYV1oN8sCkBwVhmFze4B01qL6Od/H4ArQUe2tnT1xUc8YtGTG2pN+OE
-         F6ryygVmPjbcqlKjgk0fwOpzTRd+atorUJozsG/keEcpY1djrbtmztGQETIHGo+4P66Y
-         ehMYdgXjC7v+dNalJUadY8kq4s1zPZYfdHb62l5IXO6JO2SI9TPAMA25FuNKT+P89vRC
-         8krvaZKX7uRo/aiDl73SRYlqmSDTDwXWtWH0F4v2ddyFwDdEOzMdo4O+OMxSzdYRT9v7
-         O9zg==
-X-Gm-Message-State: AC+VfDzldN8eINa72ENGsGphOj18sgR7WBEwkAF4ftTmwpKc8KHLfQDV
-        BpbVquob0hiyZXog6eFIN7g=
-X-Google-Smtp-Source: ACHHUZ4Eb3dRTX7BPtTzDnDRnFPVDzzGWQOhROXaY3q99Qhi0JUFr7PXGrwliw8sAT5rh0+4Y0EevA==
-X-Received: by 2002:a05:6a20:5495:b0:111:4a86:f70 with SMTP id i21-20020a056a20549500b001114a860f70mr9430752pzk.6.1685988223898;
-        Mon, 05 Jun 2023 11:03:43 -0700 (PDT)
-Received: from localhost (dhcp-72-235-13-41.hawaiiantel.net. [72.235.13.41])
-        by smtp.gmail.com with ESMTPSA id x5-20020a636305000000b0053051d50a48sm6090200pgb.79.2023.06.05.11.03.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jun 2023 11:03:43 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 5 Jun 2023 08:03:42 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Mrunal Patel <mpatel@redhat.com>,
-        Ryan Phillips <rphillips@redhat.com>,
-        Brent Rowsell <browsell@redhat.com>,
-        Peter Hunt <pehunt@redhat.com>, Phil Auld <pauld@redhat.com>
-Subject: Re: [RFC PATCH 0/5] cgroup/cpuset: A new "isolcpus" paritition
-Message-ID: <ZH4jfmypOXGJPu0D@slm.duckdns.org>
-References: <46d26abf-a725-b924-47fa-4419b20bbc02@redhat.com>
- <jqkf7jkuyxqiupmxmdbmpnbpojub2pjsz3oogwncmwqdghlsgk@phsqzirmmlyl>
- <f2bd7b1e-190e-1d08-f085-b4cae36fb5be@redhat.com>
- <ZFGOTHQj3k5rzmyR@blackbook>
- <deb7b684-3d7c-b3ae-7b36-5b7ba2dd8001@redhat.com>
- <ZFUo5IYAIwTEKR4_@slm.duckdns.org>
- <759603dd-7538-54ad-e63d-bb827b618ae3@redhat.com>
- <405b2805-538c-790b-5bf8-e90d3660f116@redhat.com>
- <ZGvHUjOCjwat91Gq@slm.duckdns.org>
- <18793f4a-fd39-2e71-0b77-856afb01547b@redhat.com>
+        Mon, 5 Jun 2023 14:04:08 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC41010F2;
+        Mon,  5 Jun 2023 11:03:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685988227; x=1717524227;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=adWz9KGhV5KjAo3m22fwN6bZ55XBth7V+DQufUxY6uk=;
+  b=gZ0jy6VOzfLNlKUKbs4r31Eqg9TiHH4sx184OVSpFQxcJBsOv/nCDAwJ
+   d3RIVvwKUKPbkaTl4OYcv4Bk8pauoiFyfwOjE+rJ7ks5fWyn0w5K906VN
+   XchraR8ZbwKGdsmYIyLya8fFfQJV3yyKc73YxIQXJUii8KHXz2PnSCZWp
+   1kxRUsx6dy2u0/OnC2WPScvN1LM093Y6xj1zRrVRsNWYg7aVySut15Mlz
+   PI3VFNBHvf1R/ofk0o/ACpQ7HOndkrfIeU2Q8BVmwtQyLKQBXwEaVVjqt
+   T+v7d3zuoH3ZTjPgNRR3VPfPC+UHgEZYWwXgIimmFZsy5ZoR1B+C5hQzM
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="442815431"
+X-IronPort-AV: E=Sophos;i="6.00,218,1681196400"; 
+   d="scan'208";a="442815431"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 11:03:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="821274299"
+X-IronPort-AV: E=Sophos;i="6.00,218,1681196400"; 
+   d="scan'208";a="821274299"
+Received: from gfittedx-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.47.115])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 11:03:29 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-kselftest@vger.kernel.org,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
+        Fenghua Yu <fenghua.yu@intel.com>, linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v3 16/19] selftests/resctrl: Don't use variable argument list for ->setup()
+Date:   Mon,  5 Jun 2023 21:01:42 +0300
+Message-Id: <20230605180145.112924-17-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230605180145.112924-1-ilpo.jarvinen@linux.intel.com>
+References: <20230605180145.112924-1-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <18793f4a-fd39-2e71-0b77-856afb01547b@redhat.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello, Waiman.
+struct resctrl_val_param has ->setup() function that accepts variable
+argument list. All test cases use only 1 argument as input and it's
+the struct resctrl_val_param pointer.
 
-On Sun, May 28, 2023 at 05:18:50PM -0400, Waiman Long wrote:
-> On 5/22/23 15:49, Tejun Heo wrote:
-> Sorry for the late reply as I had been off for almost 2 weeks due to PTO.
+Instead of variable argument list, directly pass struct
+resctrl_val_param pointer as the only parameter to ->setup().
 
-And me too. Just moved.
+Co-developed-by: Fenghua Yu <fenghua.yu@intel.com>
+Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
+Signed-off-by: Ilpo JÃ¤rvinen <ilpo.jarvinen@linux.intel.com>
+---
+ tools/testing/selftests/resctrl/cache.c       | 2 +-
+ tools/testing/selftests/resctrl/cat_test.c    | 8 +-------
+ tools/testing/selftests/resctrl/cmt_test.c    | 9 +--------
+ tools/testing/selftests/resctrl/mba_test.c    | 8 +-------
+ tools/testing/selftests/resctrl/mbm_test.c    | 8 +-------
+ tools/testing/selftests/resctrl/resctrl.h     | 3 +--
+ tools/testing/selftests/resctrl/resctrl_val.c | 2 +-
+ 7 files changed, 7 insertions(+), 33 deletions(-)
 
-> > Why is the syntax different from .cpus? Wouldn't it be better to keep them
-> > the same?
-> 
-> Unlike cpuset.cpus, cpuset.cpus.reserve is supposed to contains CPUs that
-> are used in multiple partitions. Also automatic reservation of adjacent
-> partitions can happen in parallel. That is why I think it will be safer if
-
-Ah, I see, this is because cpu.reserve is only in the root cgroup, so you
-can't say that the knob is owned by the parent cgroup and thus access is
-controlled that way.
-
-...
-> > >      There are two types of partitions - adjacent and remote.  The
-> > >      parent of an adjacent partition must be a valid partition root.
-> > >      Partition roots of adjacent partitions are all clustered around
-> > >      the root cgroup.  Creation of adjacent partition is done by
-> > >      writing the desired partition type into "cpuset.cpus.partition".
-> > > 
-> > >      A remote partition does not require a partition root parent.
-> > >      So a remote partition can be formed far from the root cgroup.
-> > >      However, its creation is a 2-step process.  The CPUs needed
-> > >      by a remote partition ("cpuset.cpus" of the partition root)
-> > >      has to be written into "cpuset.cpus.reserve" of the root
-> > >      cgroup first.  After that, "isolated" can be written into
-> > >      "cpuset.cpus.partition" of the partition root to form a remote
-> > >      isolated partition which is the only supported remote partition
-> > >      type for now.
-> > > 
-> > >      All remote partitions are terminal as adjacent partition cannot
-> > >      be created underneath it.
-> >
-> > Can you elaborate this extra restriction a bit further?
-> 
-> Are you referring to the fact that only remote isolated partitions are
-> supported? I do not preclude the support of load balancing remote
-> partitions. I keep it to isolated partitions for now for ease of
-> implementation and I am not currently aware of a use case where such a
-> remote partition type is needed.
->
-> If you are talking about remote partition being terminal. It is mainly
-> because it can be more tricky to support hierarchical adjacent partitions
-> underneath it especially if it is not isolated. We can certainly support it
-> if a use case arises. I just don't want to implement code that nobody is
-> really going to use.
-> 
-> BTW, with the current way the remote partition is created, it is not
-> possible to have another remote partition underneath it.
-
-The fact that the control is spread across a root-only file and per-cgroup
-file seems hacky to me. e.g. How would it interact with namespacing? Are
-there reasons why this can't be properly hierarchical other than the amount
-of work needed? For example:
-
-  cpuset.cpus.exclusive is a per-cgroup file and represents the mask of CPUs
-  that the cgroup holds exclusively. The mask is always a subset of
-  cpuset.cpus. The parent loses access to a CPU when the CPU is given to a
-  child by setting the CPU in the child's cpus.exclusive and the CPU can't
-  be given to more than one child. IOW, exclusive CPUs are available only to
-  the leaf cgroups that have them set in their .exclusive file.
-
-  When a cgroup is turned into a partition, its cpuset.cpus and
-  cpuset.cpus.exclusive should be the same. For backward compatibility, if
-  the cgroup's parent is already a partition, cpuset will automatically
-  attempt to add all cpus in cpuset.cpus into cpuset.cpus.exclusive.
-
-I could well be missing something important but I'd really like to see
-something like the above where the reservation feature blends in with the
-rest of cpuset.
-
-Thanks.
-
+diff --git a/tools/testing/selftests/resctrl/cache.c b/tools/testing/selftests/resctrl/cache.c
+index bf758f2e5578..385c01dd3ec6 100644
+--- a/tools/testing/selftests/resctrl/cache.c
++++ b/tools/testing/selftests/resctrl/cache.c
+@@ -237,7 +237,7 @@ int cat_val(struct resctrl_val_param *param)
+ 	/* Test runs until the callback setup() tells the test to stop. */
+ 	while (1) {
+ 		if (!strncmp(resctrl_val, CAT_STR, sizeof(CAT_STR))) {
+-			ret = param->setup(1, param);
++			ret = param->setup(param);
+ 			if (ret == END_OF_TESTS) {
+ 				ret = 0;
+ 				break;
+diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
+index 480db0dc4e0e..42e35269d8b6 100644
+--- a/tools/testing/selftests/resctrl/cat_test.c
++++ b/tools/testing/selftests/resctrl/cat_test.c
+@@ -27,17 +27,11 @@ static unsigned long cache_size;
+  * con_mon grp, mon_grp in resctrl FS.
+  * Run 5 times in order to get average values.
+  */
+-static int cat_setup(int num, ...)
++static int cat_setup(struct resctrl_val_param *p)
+ {
+-	struct resctrl_val_param *p;
+ 	char schemata[64];
+-	va_list param;
+ 	int ret = 0;
+ 
+-	va_start(param, num);
+-	p = va_arg(param, struct resctrl_val_param *);
+-	va_end(param);
+-
+ 	/* Run NUM_OF_RUNS times */
+ 	if (p->num_of_runs >= NUM_OF_RUNS)
+ 		return END_OF_TESTS;
+diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
+index beb0f0687c6d..7214aefb55ed 100644
+--- a/tools/testing/selftests/resctrl/cmt_test.c
++++ b/tools/testing/selftests/resctrl/cmt_test.c
+@@ -21,15 +21,8 @@ static char cbm_mask[256];
+ static unsigned long long_mask;
+ static unsigned long cache_size;
+ 
+-static int cmt_setup(int num, ...)
++static int cmt_setup(struct resctrl_val_param *p)
+ {
+-	struct resctrl_val_param *p;
+-	va_list param;
+-
+-	va_start(param, num);
+-	p = va_arg(param, struct resctrl_val_param *);
+-	va_end(param);
+-
+ 	/* Run NUM_OF_RUNS times */
+ 	if (p->num_of_runs >= NUM_OF_RUNS)
+ 		return END_OF_TESTS;
+diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
+index 3d53c6c9b9ce..4d2f145804b8 100644
+--- a/tools/testing/selftests/resctrl/mba_test.c
++++ b/tools/testing/selftests/resctrl/mba_test.c
+@@ -22,18 +22,12 @@
+  * con_mon grp, mon_grp in resctrl FS.
+  * For each allocation, run 5 times in order to get average values.
+  */
+-static int mba_setup(int num, ...)
++static int mba_setup(struct resctrl_val_param *p)
+ {
+ 	static int runs_per_allocation, allocation = 100;
+-	struct resctrl_val_param *p;
+ 	char allocation_str[64];
+-	va_list param;
+ 	int ret;
+ 
+-	va_start(param, num);
+-	p = va_arg(param, struct resctrl_val_param *);
+-	va_end(param);
+-
+ 	if (runs_per_allocation >= NUM_OF_RUNS)
+ 		runs_per_allocation = 0;
+ 
+diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
+index 2d58d4b8a918..c7de6f5977f6 100644
+--- a/tools/testing/selftests/resctrl/mbm_test.c
++++ b/tools/testing/selftests/resctrl/mbm_test.c
+@@ -86,16 +86,10 @@ static int check_results(size_t span)
+ 	return ret;
+ }
+ 
+-static int mbm_setup(int num, ...)
++static int mbm_setup(struct resctrl_val_param *p)
+ {
+-	struct resctrl_val_param *p;
+-	va_list param;
+ 	int ret = 0;
+ 
+-	va_start(param, num);
+-	p = va_arg(param, struct resctrl_val_param *);
+-	va_end(param);
+-
+ 	/* Run NUM_OF_RUNS times */
+ 	if (p->num_of_runs >= NUM_OF_RUNS)
+ 		return END_OF_TESTS;
+diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
+index 645ad407bd8d..838d1a438f33 100644
+--- a/tools/testing/selftests/resctrl/resctrl.h
++++ b/tools/testing/selftests/resctrl/resctrl.h
+@@ -3,7 +3,6 @@
+ #ifndef RESCTRL_H
+ #define RESCTRL_H
+ #include <stdio.h>
+-#include <stdarg.h>
+ #include <math.h>
+ #include <errno.h>
+ #include <sched.h>
+@@ -68,7 +67,7 @@ struct resctrl_val_param {
+ 	char		*bw_report;
+ 	unsigned long	mask;
+ 	int		num_of_runs;
+-	int		(*setup)(int num, ...);
++	int		(*setup)(struct resctrl_val_param *param);
+ };
+ 
+ #define MBM_STR			"mbm"
+diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
+index e8f1e6a59f4a..f0f6c5f6e98b 100644
+--- a/tools/testing/selftests/resctrl/resctrl_val.c
++++ b/tools/testing/selftests/resctrl/resctrl_val.c
+@@ -759,7 +759,7 @@ int resctrl_val(char **benchmark_cmd, struct resctrl_val_param *param)
+ 
+ 	/* Test runs until the callback setup() tells the test to stop. */
+ 	while (1) {
+-		ret = param->setup(1, param);
++		ret = param->setup(param);
+ 		if (ret == END_OF_TESTS) {
+ 			ret = 0;
+ 			break;
 -- 
-tejun
+2.30.2
+
