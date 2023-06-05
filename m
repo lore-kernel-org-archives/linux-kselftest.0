@@ -2,120 +2,164 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74E0FC7EE2E
-	for <linux-kselftest@archiver.kernel.org>; Mon,  5 Jun 2023 18:05:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FF3FC7EE23
+	for <linux-kselftest@archiver.kernel.org>; Mon,  5 Jun 2023 18:46:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234995AbjFESFK (ORCPT
+        id S230039AbjFESp7 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 5 Jun 2023 14:05:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36300 "EHLO
+        Mon, 5 Jun 2023 14:45:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235503AbjFESEW (ORCPT
+        with ESMTP id S229529AbjFESp6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 5 Jun 2023 14:04:22 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB60B10F6;
-        Mon,  5 Jun 2023 11:03:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685988239; x=1717524239;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=tlqcBuGsxOSKA74bKjbrp+jQUh7f0hcz1UsL+nprPCM=;
-  b=Wqpt7jOaUP7T6Zma2jkS7N41+GFkGsSzywN/hkT9eH8F1symbnGa7ja+
-   nP1jxfM/KVuLqgkvxTzVCkcf9KkqQgHoKvuAxi/Tx0N8GQTW4r4RSYj7d
-   1pM+Tizzia2uo2vcdyYGnkf+uIe1Lw2yk1kDao0qYpprGKjYrNP9MpmBx
-   fYPlRqB6rERAuscFKRJzzLEJ6+GwcAl/vj8VdgdyzX1NyfUInbKw53iTA
-   IMx16CTE+ztTfC+wXLxlyiGv5sWUCy5N9YQ7+bzvRP2opNs5ahMlbL4XK
-   aqV0TRuJEULRu1owJCqEet/VUn+p73PS9nEyxPJ7X5uPeWnfPuLMOs6Jk
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="442815458"
-X-IronPort-AV: E=Sophos;i="6.00,218,1681196400"; 
-   d="scan'208";a="442815458"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 11:03:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="821274326"
-X-IronPort-AV: E=Sophos;i="6.00,218,1681196400"; 
-   d="scan'208";a="821274326"
-Received: from gfittedx-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.47.115])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 11:03:36 -0700
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     linux-kselftest@vger.kernel.org,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
-        Fenghua Yu <fenghua.yu@intel.com>, linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v3 18/19] selftests/resctrl: Pass the real number of tests to show_cache_info()
-Date:   Mon,  5 Jun 2023 21:01:44 +0300
-Message-Id: <20230605180145.112924-19-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230605180145.112924-1-ilpo.jarvinen@linux.intel.com>
-References: <20230605180145.112924-1-ilpo.jarvinen@linux.intel.com>
+        Mon, 5 Jun 2023 14:45:58 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2063.outbound.protection.outlook.com [40.107.212.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85DBCD;
+        Mon,  5 Jun 2023 11:45:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QM/+Qa/JZgVQ9hQD7L007metcDkf5MIGgZSYH815d5TZC25PRh1ChCf1rpLeiemIGE49jywAy1lmNwb8yybiaatJiZg1M9sIA4Y93FI3n4cm7aiCAwCxV9DucSMDzVDavMAEC1Tl71Gjk+SKSsTjvYXy2woKerpau4l2lUvpLiUxWgk1vq3IID2QsLFe4C9tM4lYixsvbJKe0C23K+aGeaYaSnM9T8X8CWOgO4No9/9W8/AnlxeNeelspwwPr9tj7UAYz0bFr8UauVaZ8COmh+SDr3U6sa3aP/6A7q8xvZ429LybxqNZmJgcqgAeKTn4LkQwOlrFT+pOQxD4j40hgg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ScM44XN/sTIIV8+HD+uJL/SUy+T4f338lVor4+vf5aU=;
+ b=ldc/7gMfdMX9+grA0EpyP2+P62D0w0F/5uSOdkvmTEWT20kfSF0iJaQjkUyvDa4seIkbKbtUYONkC40ND6bMKEZEC7h2Md64fK9dQBwII5Gm3i/8iAkKZj7JPaxeRSUdVUN4fWkAVEHEfv+Ql9ihg9jeVv8ywSih2lU8wE6TKw6477ZuOvO+g8x7id8AeN381ZgKlnbl9wPyDfRi6gHqOSTZiRyLp4ZfkZMokdPPlTak/jLNrtwBTPtLbDovD+UdgbTXETgdTB4pKxVydmZzWZSOLNdyyeAxzttAqkS2b3SGRb4YC+QUoRq85XymIZE6AGdKuCddYbdIKcwK2QPdew==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ScM44XN/sTIIV8+HD+uJL/SUy+T4f338lVor4+vf5aU=;
+ b=j+PWzaB4ZL/Dw2+dXe+moiklob1q2pG5Gpq4iBgiojOfy+mFDsOJW/O/7KloVhMLxSsgYnA71HYiPhO9oCzZw1uLQRx301a/E3RtUXxCPS79slF0MuDZbYVH0yd7iOs6KOdJAuLhpjtUbsvJ/zqXJIUw2l9lEISslqUWP5NcPw74HVXwQs0oLesLHS7F2z+YwviWrW25ndsdfJbWToyIHx/6lwVCvNpIjZps2VxfjBlwlmu1Y6vCzlGrrOv9G1HJqsfwz85fNXE/Hf7m68KwWsNvTkDKhF2qLsoIIwDR5LhcIYrjsM9KOUVhClLhYcI5x910EfkA1fV+/a4rPsFagw==
+Received: from SN1PR12CA0044.namprd12.prod.outlook.com (2603:10b6:802:20::15)
+ by PH8PR12MB6745.namprd12.prod.outlook.com (2603:10b6:510:1c0::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Mon, 5 Jun
+ 2023 18:45:55 +0000
+Received: from SN1PEPF000252A3.namprd05.prod.outlook.com
+ (2603:10b6:802:20:cafe::7a) by SN1PR12CA0044.outlook.office365.com
+ (2603:10b6:802:20::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33 via Frontend
+ Transport; Mon, 5 Jun 2023 18:45:55 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ SN1PEPF000252A3.mail.protection.outlook.com (10.167.242.10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6477.13 via Frontend Transport; Mon, 5 Jun 2023 18:45:55 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 5 Jun 2023
+ 11:45:36 -0700
+Received: from [10.110.48.28] (10.126.231.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Mon, 5 Jun 2023
+ 11:45:35 -0700
+Message-ID: <58ff372c-a917-e580-80ff-f1118f82320a@nvidia.com>
+Date:   Mon, 5 Jun 2023 11:45:35 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 04/12] selftests/mm: fix a char* assignment in
+ mlock2-tests.c
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>
+CC:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>, <linux-mm@kvack.org>,
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20230602013358.900637-1-jhubbard@nvidia.com>
+ <20230602013358.900637-5-jhubbard@nvidia.com>
+ <18e69073-1007-07d8-bf0d-5f400ecab8ea@redhat.com> <ZHoJxAWtwBo33l6B@x1n>
+ <f61fb7c1-64ab-c3c3-bd95-92a962f07226@nvidia.com> <ZH4BkqDh0MXqx8ae@x1n>
+From:   John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <ZH4BkqDh0MXqx8ae@x1n>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.231.35]
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN1PEPF000252A3:EE_|PH8PR12MB6745:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8e7776cf-433e-4508-e042-08db65f5186d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: FBanSuRMnoKzYlEwYvgBq573IXfYiW28QvRv534LzG6GwJ0z3xNDP4Fvp1n1i79u94zfGD21IZcvrO48Ks6UOPvAUiV95U9PP3zw7RehgwJXl8bGxYYY/j2B6RWsgxvPTXm92LqHcLSE3XNYW72rlV+u1pyRPOaBGCy4wr2+lUGERnaBX7c9nU+uetsnfGls3Xl/3zrvjssMdSLCBTQWQ8p9+cVQv1+DqDZLJibtgTwTNGE4vTI9hCyby73r59dtU4iT4rybm61ElSZgfgXPccxssrDC0MhiDLwc8R0Kjn0aLXKxMNYMLfOfRUBbZlAN7niotMDzRjhKe62P5MijsjGyOhVuLGJmsgYXnvQGmvS/hklYsYN7dRtg4AyB80xUDuy2tbZh7gL+Sw01hycTwECAbl4WY35yVYoYQ/FPf9ba4eThzKx09Z+10Pvknv5v2lErRXq6qM4C17ulA7RsGiWfDCaT/YSHOyEro2ojoJjkp9CZqCsqDg8AaLFWEY+yg9vVb6GHPGGOk2kBqzY8k01BTJC2cXcMVD3CXiDshW2JVOf+cjVAaWJflD+sgdpxkBb/UgGZliEgcAwAzMk36vMk/Gsc4Bj97+g+iPoMBorBOHNnl5PiEXbgI8/SwY+ZQDes419FsskweKZLvAQBSCex0vWlwSrPKqS5uGbv+fwUI90ZVkdDLU2Mn6/PI5A0YDx25ZCeSTaONe4ghEAj6jNYv1ndJoW4LOoAvph+riak9SfYC+27wfrASGABRLW5YJwTSoDFWzFWaC///ZWDog==
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(396003)(39860400002)(346002)(451199021)(46966006)(36840700001)(40470700004)(36756003)(2906002)(86362001)(31696002)(82310400005)(5660300002)(31686004)(40480700001)(47076005)(83380400001)(16526019)(426003)(336012)(186003)(36860700001)(26005)(53546011)(356005)(7636003)(478600001)(82740400003)(16576012)(40460700003)(54906003)(70586007)(70206006)(6916009)(316002)(4326008)(2616005)(41300700001)(8936002)(8676002)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2023 18:45:55.3054
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8e7776cf-433e-4508-e042-08db65f5186d
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: SN1PEPF000252A3.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6745
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Results include warm-up test which is discarded before passing the sum
-to show_cache_info(). show_cache_info() handles this by subtracting one
-from the number of tests in divisor. It is a trappy construct to have
-sum and number of tests parameters to disagree like this.
+On 6/5/23 08:38, Peter Xu wrote:
+...
+>>>> I'm probably missing something, but what is the stop variable supposed to do
+>>>> here? It's completely unused, no?
+>>>>
+>>>> if (!strchr(end_addr, ' ')) {
+>>>> 	printf("cannot parse /proc/self/maps\n");
+>>>> 	goto out;
+>>>> }
+>>
+>> Yes it is! I certainly had tunnel vision on that one. I've changed the
+>> patch to simply delete that line, for v2, thanks.
+>>
+>>>
+>>> I guess it wanted to do "*stop = '\0'" but it just didn't matter a lot
+>>> since the sscanf() just worked..
+>>>
+>>
+>> Maybe, yes. Hard to tell the original intent at this point...it might
+>> have been used in an early draft version of the loop that didn't get
+>> posted, perhaps.
+> 
+> I'm pretty sure of it.. see the pattern:
+> 
+> 		end_addr = strchr(line, '-');
+> 		if (!end_addr) {
+> 			printf("cannot parse /proc/self/maps\n");
+> 			goto out;
+> 		}
+> 		*end_addr = '\0';
+> 
+> And...
+> 
+> 		stop = strchr(end_addr, ' ');
+> 		if (!stop) {
+> 			printf("cannot parse /proc/self/maps\n");
+> 			goto out;
+> 		}
+> 		stop = '\0';    <------------------- only diff here
+> 
 
-A more logical place for subtracting the skipped tests is where the sum
-is calculated so move it there. Pass the correct number of tests to
-show_cache_info() so it can be used directly as the divisor for
-calculating the average.
+Yes, and that pattern shows why it wants to be "*stop = '\0';", but
+it doesn't show why the author wasted a line of code in the first
+place, setting a variable that is not used afterwards.
 
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
- tools/testing/selftests/resctrl/cache.c    | 2 +-
- tools/testing/selftests/resctrl/cat_test.c | 2 +-
- tools/testing/selftests/resctrl/cmt_test.c | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+In other words, changing this to "*stop = '\0';" would make it
+look pretty, but it's a non-functional line of code to add. Which
+is why I think it should just be deleted at this point.
 
-diff --git a/tools/testing/selftests/resctrl/cache.c b/tools/testing/selftests/resctrl/cache.c
-index 385c01dd3ec6..5aa112e5fdd3 100644
---- a/tools/testing/selftests/resctrl/cache.c
-+++ b/tools/testing/selftests/resctrl/cache.c
-@@ -290,7 +290,7 @@ int show_cache_info(unsigned long sum_llc_val, int no_of_bits,
- 	long avg_diff = 0;
- 	int ret;
- 
--	avg_llc_val = sum_llc_val / (num_of_runs - 1);
-+	avg_llc_val = sum_llc_val / num_of_runs;
- 	avg_diff = (long)abs(cache_span - avg_llc_val);
- 	diff_percent = ((float)cache_span - avg_llc_val) / cache_span * 100;
- 
-diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-index ed6c8e64ad11..3848dfb46aba 100644
---- a/tools/testing/selftests/resctrl/cat_test.c
-+++ b/tools/testing/selftests/resctrl/cat_test.c
-@@ -77,7 +77,7 @@ static int check_results(struct resctrl_val_param *param)
- 	no_of_bits = count_bits(param->mask);
- 
- 	return show_cache_info(sum_llc_perf_miss, no_of_bits, param->span / 64,
--			       MAX_DIFF, MAX_DIFF_PERCENT, NUM_OF_RUNS,
-+			       MAX_DIFF, MAX_DIFF_PERCENT, runs - 1,
- 			       get_vendor() == ARCH_INTEL, false);
- }
- 
-diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
-index 0ac9d6bbd13d..cb2197647c6c 100644
---- a/tools/testing/selftests/resctrl/cmt_test.c
-+++ b/tools/testing/selftests/resctrl/cmt_test.c
-@@ -59,7 +59,7 @@ static int check_results(struct resctrl_val_param *param, int no_of_bits)
- 	fclose(fp);
- 
- 	return show_cache_info(sum_llc_occu_resc, no_of_bits, param->span,
--			       MAX_DIFF, MAX_DIFF_PERCENT, NUM_OF_RUNS,
-+			       MAX_DIFF, MAX_DIFF_PERCENT, runs - 1,
- 			       true, true);
- }
- 
+thanks,
 -- 
-2.30.2
+John Hubbard
+NVIDIA
 
