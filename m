@@ -2,132 +2,115 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 55B9CC77B7A
-	for <linux-kselftest@archiver.kernel.org>; Tue,  6 Jun 2023 07:17:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D8C2C77B73
+	for <linux-kselftest@archiver.kernel.org>; Tue,  6 Jun 2023 07:35:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236033AbjFFHRi (ORCPT
+        id S231911AbjFFHfy (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 6 Jun 2023 03:17:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37414 "EHLO
+        Tue, 6 Jun 2023 03:35:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235189AbjFFHRa (ORCPT
+        with ESMTP id S235090AbjFFHfx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Jun 2023 03:17:30 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2054.outbound.protection.outlook.com [40.107.93.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3002A1AD;
-        Tue,  6 Jun 2023 00:17:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EtD5DMcRtax3IhhQMIiE+vjeICL1EGPrTF6//Ttjq+NjVcqCvGP5DvjDXlk1pgUlgmpzhEYGqTTcjdlco2fQaE++QPgSuHAMlM91cKauLkEbvc1hhnXyzGk7wGUap6MxfAZduCopL2OGc4hY2Yj867oXaLFuRRGkk2lXJtZ03VtiXorUAVzwfkMWHTOcGCqmVwWrw/tHHXb16w0x8GPnGVTwjYBR5Xqqn3VWcE6B8049AVf8DqtaI8POBvk5H7JV5Wx7WTRAOk5TMU70PCm+OP4NUZ8R2RX6ApUXpWlhcC065c5hjbBJLhcmu3IjvvlxsBgib6jQgoWpp4IvWZpVug==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NAgHsicGbXE7/y+61Ec/TG4fp5QK6NCUPay76C4Qy/s=;
- b=OoAqg5tguFZ1vwtXW8FuZaE2JlIvRPT1vpl0EzfNtqkyx3yyxoEvBZZB/RYYtLzaUuA914TSGVc1k/A191Xa5qPVX0Zn3Q/PfG6oRCcvgX2cG+hKaGxARt3w5oCQWaYFqVbNCZ38yVTk35/u5umynqTbFFXUzYl63ej2kxEPcz1YaYUps5isAVI4Uqa1f1l8y83mN0/0/6uUu3w9a82CwfALELyiK5CmbHMQqID0Xo82/YmOYwZI8ITyl1VX8iR34W/txL2qoDwVzr5paYqWsokvYvHjslKXvhi3IfFFaBoB6tDTSx7TnUX7nH6YWX7eXt9anoEmIdU5wFmBzrMi/A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=linux-foundation.org
- smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NAgHsicGbXE7/y+61Ec/TG4fp5QK6NCUPay76C4Qy/s=;
- b=EeVZOxCmS8sCB9O2Pdq8KGt2pnC9CWFWrapoL4tF3K44KB4t1FvaCS+9H/id1MA9hkbYUX3sajszSdoRRqYmnQmJN24V9zI3PZKrS3oUuPZ9oO+mlsvyEeO9ExSKajaNHMaAtjKihFQbOJ7gl55HrfPLzRe+Fu+0zWSl2iCXHN10pX0oQt+bsYHsRmStF/mkCgdmVjxrzANQuh+9aKcbLJte1wfzxHCbgNy8UqVFoBwNzXxLztEigeCKAw5hlVkegso2z8EfmY4CPg2aoVnT6lzfxijMZuzb81/dhqa7YT5oCvL5ogBXZwvyQrWMJKFy/YysSzLd++0HQVjggtc0pA==
-Received: from DM6PR06CA0022.namprd06.prod.outlook.com (2603:10b6:5:120::35)
- by SJ2PR12MB8884.namprd12.prod.outlook.com (2603:10b6:a03:547::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.32; Tue, 6 Jun
- 2023 07:17:24 +0000
-Received: from DM6NAM11FT047.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:120:cafe::11) by DM6PR06CA0022.outlook.office365.com
- (2603:10b6:5:120::35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33 via Frontend
- Transport; Tue, 6 Jun 2023 07:17:23 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- DM6NAM11FT047.mail.protection.outlook.com (10.13.172.139) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6455.33 via Frontend Transport; Tue, 6 Jun 2023 07:17:23 +0000
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Tue, 6 Jun 2023
- 00:17:11 -0700
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail204.nvidia.com
- (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Tue, 6 Jun 2023
- 00:17:10 -0700
-Received: from sandstorm.nvidia.com (10.127.8.14) by mail.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server id 15.2.986.37 via Frontend
- Transport; Tue, 6 Jun 2023 00:17:10 -0700
-From:   John Hubbard <jhubbard@nvidia.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     David Hildenbrand <david@redhat.com>, Peter Xu <peterx@redhat.com>,
-        "Shuah Khan" <shuah@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>, <linux-mm@kvack.org>,
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH v3 07/11] selftests/mm: fix a "possibly uninitialized" warning in pkey-x86.h
-Date:   Tue, 6 Jun 2023 00:16:33 -0700
-Message-ID: <20230606071637.267103-8-jhubbard@nvidia.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230606071637.267103-1-jhubbard@nvidia.com>
-References: <20230606071637.267103-1-jhubbard@nvidia.com>
-MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: 8bit
+        Tue, 6 Jun 2023 03:35:53 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3DB711D;
+        Tue,  6 Jun 2023 00:35:51 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 129EA5C00CC;
+        Tue,  6 Jun 2023 03:35:49 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 06 Jun 2023 03:35:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1686036949; x=1686123349; bh=JP
+        6R94uQbzQBfUBBvYz80fUZWf0TL/O0HNFiOYoH0g8=; b=VzA/5wvw+R/Q0vEigx
+        C6bAunIc1d6yzEraxrGySxrM2Id2FfJbsuAgHJIWW7cxm+dvWvB+5urBCTuP/aCt
+        oBtRxJh+nBd0aERvmDnApWrYKp9f+vx1onw2ekLHupDXSbY1FoeS1M0XW1vntoYb
+        QILd8QYJa+0e2BlpOuwrHwouhgh8HewOcxOwEZjxWf43hJtvhpcbUDhizkUiqr4W
+        6XPiIvx3fOWe63trfROGA4YOvcPc4PFY6vjuSb6FTWqBJaD4F5DlISMf4dvrOHKp
+        CN3YJvGMiM1ktsW/dO7PZ+kK5QPvg8i7+CdDMH53oVygrDLDsIx+HdbQ9crCMRnD
+        RdxQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1686036949; x=1686123349; bh=JP6R94uQbzQBf
+        UBBvYz80fUZWf0TL/O0HNFiOYoH0g8=; b=NJZ/bUauyn6r9C2HniX6H8c+cfhTz
+        zWalf2888DaLopnoz27/2Bhayjh1J7fAqLRxel8pdEoGtvN74uqeJskTSRP+PjKx
+        1ACNlag3qsQY4TwYXeJOX+b6caxIE6GXgCvw4UocZ0dAj8RKictsabo9jR4oKDSb
+        1kPRfEvSld4q463ZukNMi2EZc6nMf5UK3T0Fo1KnhqbzjaBEyZKdIbUbcpwUoKGw
+        O2+xz/3sKW1RDpfi5te+Ln8XeCEquZEZYHke4XoS6cJg+aDrbTXLBxYVcKZsKBGE
+        d4uBpzsPSLmAiOa9419nOpkYnrH3vHZog8Nh8bztyXiKFPz58qOvk7IWQ==
+X-ME-Sender: <xms:1OF-ZKt9FM-Vh1KjIFQye05jUJr2DB9M0kJ3xkz2GOCM6xJIrEKTNA>
+    <xme:1OF-ZPc_OwDlWmBUK1wtW1BsCPhNvqwQxqXM5bja4oepM_sVkE4bblHJ4TNFnAUFe
+    l8u3RWEGfH9F8vJeIQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedttddguddvtdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeu
+    feehudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:1OF-ZFx-xnV4OSZPeRQwP67_ZNCCCObOLZBge6a0A-hiiSGnA4RcPA>
+    <xmx:1OF-ZFPhvQTI52yGaUY8KdiJAuK1kW_ejI79kv0KPVwIzhhHHWtTaA>
+    <xmx:1OF-ZK9GEYwyjb3dy3bwc6Lir3zhwym7NWTiTM4_J37LyQs2LkUklw>
+    <xmx:1eF-ZBZ6vCszYkLrJswcZcm_k0XMuUbT_z6z-oydrUerYNiK6XLS_w>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 5175CB60086; Tue,  6 Jun 2023 03:35:48 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-447-ge2460e13b3-fm-20230525.001-ge2460e13
+Mime-Version: 1.0
+Message-Id: <4fcdd08c-e6fb-40b7-9f2b-77f96e798b37@app.fastmail.com>
+In-Reply-To: <f2776eb566b8cf2409d2c21f83ebf85ab92d2f09.1685780412.git.falcon@tinylab.org>
+References: <cover.1685780412.git.falcon@tinylab.org>
+ <f2776eb566b8cf2409d2c21f83ebf85ab92d2f09.1685780412.git.falcon@tinylab.org>
+Date:   Tue, 06 Jun 2023 09:35:27 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Zhangjin Wu" <falcon@tinylab.org>, "Willy Tarreau" <w@1wt.eu>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+Subject: Re: [PATCH v3 1/3] tools/nolibc: fix up #error compile failures with -ENOSYS
 Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT047:EE_|SJ2PR12MB8884:EE_
-X-MS-Office365-Filtering-Correlation-Id: 87ba35a6-be00-4893-8c59-08db665e133e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qct1Q3zBkNF5cbSrqByrHcstcilf9UxsoJTgPw+u31leZzzB3/6kvsfFfRK9Rx5KOh63TvqNOcKvdQGCptalV8oDsUaURjr17phQcW4DzAP+k0oG6vKlVC+ekVobFgeik0YLDY0v/LUIDdjbumEgVLEK/PF40ss/sKmSo6QnrRWiEakQ0L5PF8iFiljulJnxWPa19jS9wB2PPUljWDT7wIpoGCu3g1vi8EMJg3N9EAD0WmnEb0hbuhV6MjPAG08GAmPKRLK/D4uNsqMuuSCEWJ1pcaDS3nVvi4VJ3n1L3Xre+iyOcdUkyweryQSSvG9+eJwcoudhbFolb7G6ACOoTvzQ1d9FDeZXGF/5hwXtt0OttvStUrUr9BdsubWNVdWRF+NlLZFqHaBy/4ExSLAeCfT7FLw98IVdRnOzbIJxaVPAbZJT8qRC2ZiHLSCUpC48/ENcxNBKyu+gI0mK1BLlXBomfSmy/K+6+QDS/Mj/bpOmhOYxg9LbLPIq2CepMRdbISBPn35yhQUkxOQvZpNJ4gHRDdgrAOVEnJZQ4/Ppn31gdXoa7+4YujMQiUIjqHLzqHNvbDNS4V6cG03udjjvQV/feMV6kEbuNjfOKRylBn84tOF/Jk2OAoATjNwYcoYU392ovx31jkpi22k+qp/5cGH5iuyqUtfAGXjm4DFBzqMJvKFcz2/gWv2pCNMFNQJGcwjGS3yvN3zUFxqk02w70XwjsYUHXDe+lVGHdkRYfnJpX+VsZLNKI7pAdlVt7Om7
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(396003)(136003)(346002)(451199021)(40470700004)(46966006)(36840700001)(82310400005)(47076005)(83380400001)(336012)(426003)(54906003)(478600001)(40480700001)(82740400003)(8676002)(8936002)(316002)(70206006)(70586007)(4326008)(356005)(7636003)(5660300002)(6916009)(40460700003)(41300700001)(86362001)(36756003)(6666004)(4744005)(2906002)(7696005)(36860700001)(107886003)(186003)(1076003)(26005)(2616005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2023 07:17:23.7319
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 87ba35a6-be00-4893-8c59-08db665e133e
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT047.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8884
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This fixes a real bug, too, because xstate_size()  was assuming that
-the stack variable xstate_size was initialized to zero. That's not
-guaranteed nor even especially likely.
+On Sat, Jun 3, 2023, at 11:01, Zhangjin Wu wrote:
+>
+> Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> Link: 
+> https://lore.kernel.org/linux-riscv/5e7d2adf-e96f-41ca-a4c6-5c87a25d4c9c@app.fastmail.com/
+> Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+> ---
+>  tools/include/nolibc/sys.h | 26 +++++++++++++-------------
+>  1 file changed, 13 insertions(+), 13 deletions(-)
+>
+> diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+> index 856249a11890..78c86f124335 100644
+> --- a/tools/include/nolibc/sys.h
+> +++ b/tools/include/nolibc/sys.h
+> @@ -124,7 +124,7 @@ int sys_chmod(const char *path, mode_t mode)
+>  #elif defined(__NR_chmod)
+>  	return my_syscall2(__NR_chmod, path, mode);
+>  #else
+> -#error Neither __NR_fchmodat nor __NR_chmod defined, cannot implement 
+> sys_chmod()
+> +	return -ENOSYS;
+>  #endif
+>  }
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
-Cc: Peter Xu <peterx@redhat.com>
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
----
- tools/testing/selftests/mm/pkey-x86.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I think the most logical would be to have each syscall (chmod,
+fchmodat, ...) have its own function that returns -ENOSYS if
+that is not defined, and have the logic that decides which one
+to use as a separate function.
 
-diff --git a/tools/testing/selftests/mm/pkey-x86.h b/tools/testing/selftests/mm/pkey-x86.h
-index 72c14cd3ddc7..e32ae8a1cd99 100644
---- a/tools/testing/selftests/mm/pkey-x86.h
-+++ b/tools/testing/selftests/mm/pkey-x86.h
-@@ -132,7 +132,7 @@ int pkey_reg_xstate_offset(void)
- 	unsigned int ecx;
- 	unsigned int edx;
- 	int xstate_offset;
--	int xstate_size;
-+	int xstate_size = 0;
- 	unsigned long XSTATE_CPUID = 0xd;
- 	int leaf;
- 
--- 
-2.40.1
+This patch is a step in that direction though, so I think that's
+totally fine.
 
+     Arnd
