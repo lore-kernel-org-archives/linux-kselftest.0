@@ -2,114 +2,149 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DFDAAC77B7A
-	for <linux-kselftest@archiver.kernel.org>; Tue,  6 Jun 2023 07:11:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1D35C77B73
+	for <linux-kselftest@archiver.kernel.org>; Tue,  6 Jun 2023 07:17:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235936AbjFFHLh (ORCPT
+        id S233867AbjFFHR1 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 6 Jun 2023 03:11:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60640 "EHLO
+        Tue, 6 Jun 2023 03:17:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234960AbjFFHL1 (ORCPT
+        with ESMTP id S232402AbjFFHRZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Jun 2023 03:11:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C053EC
-        for <linux-kselftest@vger.kernel.org>; Tue,  6 Jun 2023 00:10:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686035436;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=znzcZh/FoBR70IAi4uiesl3ajaljXIGrrB/hgdSvA54=;
-        b=RlYCfh/Hjz+wp4GcMXZwHLRf7jaHQnhFR0ptFN6qaV7d+Ljbgy+QiwvWbfg9XOt7EgKgjk
-        wxlDrtqi04pYud3pFspVbITfFrPUcR/BemeDiehIKXZ7a87CwGBU9iEOYp8H4/oTME+MuQ
-        TSwbzhVkVrKabHcERQdThe5/q8TdL50=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-664-w5rUU1lvPDGj2fC1QokvZw-1; Tue, 06 Jun 2023 03:10:33 -0400
-X-MC-Unique: w5rUU1lvPDGj2fC1QokvZw-1
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f72720c592so24717185e9.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 06 Jun 2023 00:10:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686035431; x=1688627431;
-        h=content-transfer-encoding:in-reply-to:organization:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=znzcZh/FoBR70IAi4uiesl3ajaljXIGrrB/hgdSvA54=;
-        b=b97zWtseeq3FhxEU0qOqpQ1rnf5bzUMUKnG/u9H1yYNgnr1j+MWn16dMJCwzbhhZd7
-         J2jNFZNCbb5WcylnWQUCRuqWm/PMsV9LOtTTtJLV0HqSMihlfe3tS8/UEMgDWsZgllsv
-         mr3adicLp4fXBybJuW2TecbaKIjBjeFipkv0zwHqalaRvHMI2Fx3YB8NqiX3TqbjK5RP
-         Pkfg7S7/RjpZah9qBXf3eKcfIHsZipVFZznsgJPVpljjuqQJ62ugniAw2J8JJv17kTc3
-         jRL3MWC7fkZRYm35Ma79oXr30mN8JvERC9kaO5IK9XnQwpaLu6r2b8vgFlUpEgS320U0
-         HQEg==
-X-Gm-Message-State: AC+VfDyWoGWXyy/YBBRyWJ8+jgn1Kr7S9/Nulx5k8abU51b0PlMMw1Oj
-        XHKcq4llPcm9rtTILuGwp5TajMnmJ6X5O5ueb+Ar/rIbv7j4CRDFypNG9fUeX01EK5PyDOC3SF8
-        zdPqxT0EhfTcya3lTTSuJDxdaEeYy
-X-Received: by 2002:a7b:c302:0:b0:3f7:2d79:9edf with SMTP id k2-20020a7bc302000000b003f72d799edfmr1228113wmj.7.1686035431312;
-        Tue, 06 Jun 2023 00:10:31 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6Ei1Gu9cG306mrOCZa5KgbLIesll7Akod2t7m1Y5/w4jJYTazc5TJRd+GgF71Pteor29xSSQ==
-X-Received: by 2002:a7b:c302:0:b0:3f7:2d79:9edf with SMTP id k2-20020a7bc302000000b003f72d799edfmr1228091wmj.7.1686035430963;
-        Tue, 06 Jun 2023 00:10:30 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c709:d100:ce7e:d566:43f8:2b24? (p200300cbc709d100ce7ed56643f82b24.dip0.t-ipconnect.de. [2003:cb:c709:d100:ce7e:d566:43f8:2b24])
-        by smtp.gmail.com with ESMTPSA id r1-20020a5d52c1000000b0030ae69920c9sm11651633wrv.53.2023.06.06.00.10.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jun 2023 00:10:26 -0700 (PDT)
-Message-ID: <e099e2c1-322c-0a64-0f5b-5da621fedca1@redhat.com>
-Date:   Tue, 6 Jun 2023 09:10:22 +0200
+        Tue, 6 Jun 2023 03:17:25 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2076.outbound.protection.outlook.com [40.107.92.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C59B109;
+        Tue,  6 Jun 2023 00:17:23 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SKCZpwPZn23qi/s//HrklUidi1cZTg+OFkOTTb6LLuNjErtxW09Q8rwbsLq6opHL7SDr266v+BpzJeTRp5iX4/lo6441Nc38GPSRS0FKYWIR0B6JXSnxhcL6FtfSepErTzWbOkf3RfawIllKqXRTNJULh23HJqR6pAMkrkHVONJrkJ8Ome9RHu1VG6NOggFgUTVHuGQpwOWhNSAvgnVw5fHQaRgDJRZgEDuJhIjlGip+NuERnINk+siIDs7VT/Pt0v3sjBKAMDGj/NRzmBr1T6gPhu5QI9M1DU15RUCyIcgRshZM9n18lubdZvL1HJdIIZv5xK6DzcdwPqfv6pp/Pg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cvdHBj5yApv+3mwcH6LWSMXJlHljQnJdtS4CV2ZOt8I=;
+ b=cZjPNHv3lFsL80EkUAoVmgtV9Y1ajms0ffTe/M7tRc3CqusyPIAWgfMR/YN9nYu5eFqXZzuPk5zEyHpT5gX5AuxgZpI05Wp/Qf/RDa2GVXm5TUmKMdpplKVynpWKgp4zEx6Thub6Yc6EqFwXUCG1t/o0HARpupRpTIpBjDJUoQB3B/73F+v0qlhHxl/S4mVhlfsvAiMObufKlIYh6NSbGTJ/n1EYZFkhk4lFwbZEOx+lN5HrVtYmCogoSPU4TfYst0+FPOQXtpzHsJV/84jF7zli/DTS3IKZE9ofmm1A+EpPcm1NocLc0GxxD6a5yMRFhNYqmlsIAvL7LR7UwY8bTw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=linux-foundation.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cvdHBj5yApv+3mwcH6LWSMXJlHljQnJdtS4CV2ZOt8I=;
+ b=hnOtLnQIeaBIonQjlIzuBxnpVe/Mj5harWLyrSeykRmLLQcA+b8fyuvpBU30IW7k7b4huCaOFjndaDY0+HUEpt3rHVBNSN4ikjAIz14AfQEXZCKL4xVzuHb5BtyGTHLZTRTDKs3ymrMEWApL8LrpJ0UKsyIyAxdoPE5DlgNcAsHDiGOoQe1yC/AYcvBAA6ayZBU+15Wdt/Zu0l8TeGfCvmxNx5C8eufdeNdXpZe5sgWy1gGhly6I8PrMDuNE0yOEtNdxTnTx+7fykL/hr0+hBGO6weSX0VipNfOSqlv2ng2HcvpdNmaSw1+Y2MSJMS1bfQLXUGEn6B8s+fSzms2MaA==
+Received: from BL1PR13CA0400.namprd13.prod.outlook.com (2603:10b6:208:2c2::15)
+ by DM6PR12MB4340.namprd12.prod.outlook.com (2603:10b6:5:2a8::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Tue, 6 Jun
+ 2023 07:17:21 +0000
+Received: from BL02EPF000145BB.namprd05.prod.outlook.com
+ (2603:10b6:208:2c2:cafe::fd) by BL1PR13CA0400.outlook.office365.com
+ (2603:10b6:208:2c2::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.19 via Frontend
+ Transport; Tue, 6 Jun 2023 07:17:21 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ BL02EPF000145BB.mail.protection.outlook.com (10.167.241.211) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6477.13 via Frontend Transport; Tue, 6 Jun 2023 07:17:21 +0000
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Tue, 6 Jun 2023
+ 00:17:10 -0700
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail205.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Tue, 6 Jun 2023
+ 00:17:09 -0700
+Received: from sandstorm.nvidia.com (10.127.8.14) by mail.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server id 15.2.986.37 via Frontend
+ Transport; Tue, 6 Jun 2023 00:17:09 -0700
+From:   John Hubbard <jhubbard@nvidia.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     David Hildenbrand <david@redhat.com>, Peter Xu <peterx@redhat.com>,
+        "Shuah Khan" <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>, <linux-mm@kvack.org>,
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: [PATCH v3 04/11] selftests/mm: fix invocation of tests that are run via shell scripts
+Date:   Tue, 6 Jun 2023 00:16:30 -0700
+Message-ID: <20230606071637.267103-5-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230606071637.267103-1-jhubbard@nvidia.com>
+References: <20230606071637.267103-1-jhubbard@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v1 2/3] selftests/mm: gup_longterm: new functional test
- for FOLL_LONGTERM
-To:     John Hubbard <jhubbard@nvidia.com>, linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>, Peter Xu <peterx@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>, Jan Kara <jack@suse.cz>
-References: <20230519102723.185721-1-david@redhat.com>
- <20230519102723.185721-3-david@redhat.com>
- <ea3548ae-de27-fb67-5b2a-34aca006005c@nvidia.com>
-Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <ea3548ae-de27-fb67-5b2a-34aca006005c@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-NVConfidentiality: public
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF000145BB:EE_|DM6PR12MB4340:EE_
+X-MS-Office365-Filtering-Correlation-Id: 555001b6-8227-4b16-534e-08db665e11d3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: tOxXSSCYbKiZAW8KhYwA//tOeeLektX4TyG4wkJRRv63fRRRNez/Kr0IWnUKT7BNwCP+PZ+bRfJyJ5wdEmQLS4YnhG6zJuhLLlK0rLdGZx5IAuI2jxuuO7g78qmPc5ZwaX4b3xxVHzeiarI77YScpsfP5ytdg8h7GfK01k9IbYS1d2SnRk3bAPhaowpHCa/Mj7tpC7YSN2g8eIFVb4E8srzEMd0wTSGXqLMpylHuoPVjXa/9Hcra8P90Pz9yziWdmkF5AQ/vUHmUNUtYsWP/qTpfoQRhP/CpsHOcYFog8X8APG7Lo9tBhkx2ER475JvcAywq7PTY399PIHMiEBRHrMV1ORij7KKYKfdi7CKF+Oc5n6PAGN37Vc7PSsmhtEcd+kfMwO67XrpTS2l00SR/H8T9wWx8dhpSRIcA/3z6B3pQc6X6QxPpoXoOXDyFLJvaW/5dh6inaK6ploMWuG6DAY7uQglcT+3XmoLGfBj4a2n1RBD726FfyJRguRYNlCUk0BVm5q8gvu5VHBbLc5z1sJYUJNa87mxkMF8YtEETATIKgbqsb/iEaRF39unYwe8RWiSN6BNDZsIPcb4zdeT8j27tIODkT3ahWoA3Z6KcUbIfcmBRfZv47T7eBpLdxECg7wcaKi03nhDi8NlzBUcbjh/QM+/AYMDxSIFAYLtQ9AMo/v9OwHpiw7bftd/wA8zC382vn5bIyYtTYnVXMQ8QVMM1JGMeub/ogvtC2213ICFIOdtQAmaiLVrw5y63gaNl
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(346002)(136003)(39860400002)(451199021)(46966006)(40470700004)(36840700001)(26005)(82740400003)(70206006)(70586007)(356005)(7636003)(6916009)(4326008)(7696005)(336012)(47076005)(36860700001)(83380400001)(82310400005)(478600001)(426003)(2616005)(6666004)(36756003)(2906002)(40460700003)(1076003)(41300700001)(40480700001)(8676002)(316002)(54906003)(8936002)(86362001)(5660300002)(186003)(107886003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2023 07:17:21.3046
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 555001b6-8227-4b16-534e-08db665e11d3
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL02EPF000145BB.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4340
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 06.06.23 08:23, John Hubbard wrote:
-> On 5/19/23 03:27, David Hildenbrand wrote:
-> ...
->> diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
->> index 23af4633f0f4..95acb099315e 100644
->> --- a/tools/testing/selftests/mm/Makefile
->> +++ b/tools/testing/selftests/mm/Makefile
->> @@ -34,6 +34,7 @@ LDLIBS = -lrt -lpthread
->>   
->>   TEST_GEN_PROGS = cow
->>   TEST_GEN_PROGS += compaction_test
->> +TEST_GEN_PROGS += gup_longterm
-> 
-> Hi David,
-> 
-> Peter Xu just pointed out that we need a .gitignore entry for
-> gup_longterm [1]. That logically belongs in this patch, I think.
+We cannot depend upon git to reliably retain the executable bit on shell
+scripts, or so I was told several years ago while working on this same
+run_vmtests.sh script. And sure enough, things such as test_hmm.sh are
+lately failing to run, due to lacking execute permissions.
 
-Yes, although I don't care if it's in a follow-up patch (we're talking 
-testcases after all).
+Fix this by explicitly adding "bash" to each of the shell script
+invocations. Leave fixing the overall approach to another day.
 
-@Andrew can you include that hunk in that patch or do you want a resend?
+Acked-by: David Hildenbrand <david@redhat.com>
+Cc: Peter Xu <peterx@redhat.com>
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+---
+ tools/testing/selftests/mm/run_vmtests.sh | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
+diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+index 4893eb60d96d..8f81432e4bac 100644
+--- a/tools/testing/selftests/mm/run_vmtests.sh
++++ b/tools/testing/selftests/mm/run_vmtests.sh
+@@ -242,18 +242,18 @@ if [ $VADDR64 -ne 0 ]; then
+ 	if [ "$ARCH" == "$ARCH_ARM64" ]; then
+ 		echo 6 > /proc/sys/vm/nr_hugepages
+ 	fi
+-	CATEGORY="hugevm" run_test ./va_high_addr_switch.sh
++	CATEGORY="hugevm" run_test bash ./va_high_addr_switch.sh
+ 	if [ "$ARCH" == "$ARCH_ARM64" ]; then
+ 		echo $prev_nr_hugepages > /proc/sys/vm/nr_hugepages
+ 	fi
+ fi # VADDR64
+ 
+ # vmalloc stability smoke test
+-CATEGORY="vmalloc" run_test ./test_vmalloc.sh smoke
++CATEGORY="vmalloc" run_test bash ./test_vmalloc.sh smoke
+ 
+ CATEGORY="mremap" run_test ./mremap_dontunmap
+ 
+-CATEGORY="hmm" run_test ./test_hmm.sh smoke
++CATEGORY="hmm" run_test bash ./test_hmm.sh smoke
+ 
+ # MADV_POPULATE_READ and MADV_POPULATE_WRITE tests
+ CATEGORY="madv_populate" run_test ./madv_populate
 -- 
-Cheers,
-
-David / dhildenb
+2.40.1
 
