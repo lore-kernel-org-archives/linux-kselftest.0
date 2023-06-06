@@ -2,58 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28400C77B7A
-	for <linux-kselftest@archiver.kernel.org>; Tue,  6 Jun 2023 19:04:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BDB8C7EE32
+	for <linux-kselftest@archiver.kernel.org>; Tue,  6 Jun 2023 19:04:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239270AbjFFTEc (ORCPT
+        id S239324AbjFFTEm (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 6 Jun 2023 15:04:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38736 "EHLO
+        Tue, 6 Jun 2023 15:04:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239214AbjFFTEU (ORCPT
+        with ESMTP id S239251AbjFFTEb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Jun 2023 15:04:20 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A70810FF
-        for <linux-kselftest@vger.kernel.org>; Tue,  6 Jun 2023 12:04:19 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-bacfa4ef059so10375324276.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 06 Jun 2023 12:04:19 -0700 (PDT)
+        Tue, 6 Jun 2023 15:04:31 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 993201730
+        for <linux-kselftest@vger.kernel.org>; Tue,  6 Jun 2023 12:04:24 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id 98e67ed59e1d1-2569094c4cdso2143110a91.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 06 Jun 2023 12:04:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686078258; x=1688670258;
+        d=google.com; s=20221208; t=1686078264; x=1688670264;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4awdlrIAeNpwHVWeIID1BUVh8RCTYusTWiK5XfdHg+o=;
-        b=EM6Va8BzGwCED0zIh64Bnjix1yyjlAzWk5b48JtiXuhP31W1mbMccgQlZPFYy2Rc8v
-         tMovnZrmg6i3waIkF808VpF/dEtWacRQ+yv83fbRyzUMvkWnAQduvEvPNXK1sSt1N2Cy
-         PtYuLHfMT8qcUe5nsKygK7f4ppJDBYrYq77vKTy6tbx4tH0TKa3ANgH0owgHfn5b1Tx1
-         OI+RAo/8et/7ti+hO4SSDEjjeJCABpVM+ohklHFBBqTgC2zed5wK6sgfxTCj5lcV8B7r
-         QzmY/WCfEZ0p/5xV7lrrRx2FQaR4Eg7AC1b0TCHXbKQd5gKgaSLxDQ+6klKWy+rQ6YtV
-         ePmQ==
+        bh=MZNbtWHLPp5u2GywkOyP6D11aGDQiwpmebr72+3tZZw=;
+        b=3nPwPewVscUDqVZMn7Uj3o98nrz5j8VLctE94SycAE0CkTh6eROV6trMOeNgO1y4jS
+         yLqfAq9F5z3V/0un8MfG4HdspEU1lRRMGNzpIw+TRUDHmsZbFPuX/+Cikl64LmUYIx66
+         8bq6oGIyVKNOZEdXnRQamgBHRpoKdYwSVBMUDqfzl7aIO0QNJg3Dh7nLDTiLBxl5+u8s
+         7Pxbmh7gLIa94u88QAeI5yehSo2cVl1/aF9z6LyF0284EPn+EeLrVrvCYse/GQqVLuDH
+         J/bFMQvA4aC2mtn4McrJir6hXAodHcAaWQLRaE/P7TGgIMKpZ2UbMXusJndkMLSh2bgC
+         CYgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686078258; x=1688670258;
+        d=1e100.net; s=20221208; t=1686078264; x=1688670264;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4awdlrIAeNpwHVWeIID1BUVh8RCTYusTWiK5XfdHg+o=;
-        b=Krr5yezwSI4NGN16R1C7M48Bg9On5DwdrXOJ6yUTlV+7Ojx1xpzYdBwhKhiRoRtAyO
-         yLbbszXvjKiWyYS0oOMQ0meJOvekV0zmi9lyXx0snm1wFWEpcUMURbJQUYZXoqLM8g4p
-         RFmUIRlcnPcExm0HG9b9h0dApjGWkXdFUJ/S3yXpDNsjASl3KBw45eRBv7OcNiZei2lq
-         TjjHpksy975y8ZVl35KxfZv2POE+GTh8TKn6ImXHNtvz3i0YWlbnlGSIB6T4CVfrWByW
-         Fbd8e7VrGJOQaaZOp8MGx6Z1hmIB7xHsjYkwjkZmCb5gk7x/bgF++f8qaAyYFqrnJGCF
-         /ouQ==
-X-Gm-Message-State: AC+VfDz5Y40d/RggEaDzVOf1WUMi+455W9bHo8Xyvbo2+mOBxXUGYT0B
-        392SLFZgoVNNqxctl0gxklBQfeCm89yrc+PfpQ==
-X-Google-Smtp-Source: ACHHUZ7qnoxO8i1wmNBAi7fatM+eI5rwKFB4S/AWZNBrdb9BhmqSWgFoaD3eNX27zoBKSk99WIOAutKPR4Hz0jbmxQ==
+        bh=MZNbtWHLPp5u2GywkOyP6D11aGDQiwpmebr72+3tZZw=;
+        b=eEEv55bNKFd0/Z4ta6fing3PwgRNezka24dV+lWGwi6DPJ7E3DNV8hyrTDhKYR0bM1
+         trz5l8a3gPeMqKPOsTTPqO0GN1+qMa3uYX72bc6rnD6qksrXZxb1Ul8aLVZr6umZw/tl
+         68aXXBZOUyWhJwctYGW5AePbOvZHwO57lYw+s6+nG2lxkGRDXWHjAeonnOoRBumlk+AN
+         X+UWDT/Duk2DeC5L+lDjxxNKxTb8Km1Pme5Eiwk7ycm7viKkaF3Le2dB4wgAt5l8pndQ
+         68fwGdRQ0+J7ET/lBIGFatV9ATu6lYKK5k/KirXNX6pMDzHz/GkxLKzilFdNC4hZ0cSu
+         zbpA==
+X-Gm-Message-State: AC+VfDzd/xitJSVnYMnRymrK+4GNPVvwV4eoSRQ4k8ZjE0PtpAzUvFHe
+        OX8kFhM5dvTj9DosUS08tzi1JsubtvKa/mKL6w==
+X-Google-Smtp-Source: ACHHUZ7IGNkoxDfbAlb5rNYiUxqKSeo6I3oYpfv0H1ogSeNyAElarCOglNHY4mpG93xhDZmjnsgqFXX+BQakQxRlBw==
 X-Received: from ackerleytng-ctop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:13f8])
- (user=ackerleytng job=sendgmr) by 2002:a05:6902:10c8:b0:ba8:797c:9bc7 with
- SMTP id w8-20020a05690210c800b00ba8797c9bc7mr1725260ybu.11.1686078258501;
- Tue, 06 Jun 2023 12:04:18 -0700 (PDT)
-Date:   Tue,  6 Jun 2023 19:03:48 +0000
+ (user=ackerleytng job=sendgmr) by 2002:a17:90a:c092:b0:256:b3d0:f2f0 with
+ SMTP id o18-20020a17090ac09200b00256b3d0f2f0mr806359pjs.2.1686078263970; Tue,
+ 06 Jun 2023 12:04:23 -0700 (PDT)
+Date:   Tue,  6 Jun 2023 19:03:51 +0000
 In-Reply-To: <cover.1686077275.git.ackerleytng@google.com>
 Mime-Version: 1.0
 References: <cover.1686077275.git.ackerleytng@google.com>
 X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Message-ID: <0ae157ec9e196f353ecf9036dbffdc295c994817.1686077275.git.ackerleytng@google.com>
-Subject: [RFC PATCH 03/19] mm: hugetlb: Expose remove_inode_hugepages
+Message-ID: <69ae008ec4076456078b880575ac310171136ac0.1686077275.git.ackerleytng@google.com>
+Subject: [RFC PATCH 06/19] mm: hugetlb: Provide hugetlb_filemap_add_folio()
 From:   Ackerley Tng <ackerleytng@google.com>
 To:     akpm@linux-foundation.org, mike.kravetz@oracle.com,
         muchun.song@linux.dev, pbonzini@redhat.com, seanjc@google.com,
@@ -79,50 +79,64 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-TODO may want to move this to hugetlb
+hstate_inode() is hugetlbfs-specific, limiting
+hugetlb_add_to_page_cache() to hugetlbfs.
+
+hugetlb_filemap_add_folio() allows hstate to be specified and further
+separates hugetlb from hugetlbfs.
 
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 ---
- fs/hugetlbfs/inode.c    | 3 +--
- include/linux/hugetlb.h | 4 ++++
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ include/linux/hugetlb.h |  2 ++
+ mm/hugetlb.c            | 13 ++++++++++---
+ 2 files changed, 12 insertions(+), 3 deletions(-)
 
-diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
-index 3dab50d3ed88..4f25df31ae80 100644
---- a/fs/hugetlbfs/inode.c
-+++ b/fs/hugetlbfs/inode.c
-@@ -611,8 +611,7 @@ static bool remove_inode_single_folio(struct hstate *h, struct inode *inode,
-  * Note: If the passed end of range value is beyond the end of file, but
-  * not LLONG_MAX this routine still performs a hole punch operation.
-  */
--static void remove_inode_hugepages(struct inode *inode, loff_t lstart,
--				   loff_t lend)
-+void remove_inode_hugepages(struct inode *inode, loff_t lstart, loff_t lend)
- {
- 	struct hstate *h = hstate_inode(inode);
- 	struct address_space *mapping = &inode->i_data;
 diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-index 023293ceec25..1483020b412b 100644
+index 14df89d1642c..7d49048c5a2a 100644
 --- a/include/linux/hugetlb.h
 +++ b/include/linux/hugetlb.h
-@@ -259,6 +259,8 @@ void hugetlb_unshare_all_pmds(struct vm_area_struct *vma);
- void hugetlb_zero_partial_page(struct hstate *h, struct address_space *mapping,
- 			       loff_t start, loff_t end);
+@@ -756,6 +756,8 @@ struct folio *alloc_hugetlb_folio_nodemask(struct hstate *h, int preferred_nid,
+ 				nodemask_t *nmask, gfp_t gfp_mask);
+ struct folio *alloc_hugetlb_folio_vma(struct hstate *h, struct vm_area_struct *vma,
+ 				unsigned long address);
++int hugetlb_filemap_add_folio(struct address_space *mapping, struct hstate *h,
++			      struct folio *folio, pgoff_t idx);
+ int hugetlb_add_to_page_cache(struct folio *folio, struct address_space *mapping,
+ 			pgoff_t idx);
+ void restore_reserve_on_error(struct hstate *h, struct vm_area_struct *vma,
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 99ab4bbdb2ce..d16c6417b90f 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -5665,11 +5665,10 @@ static bool hugetlbfs_pagecache_present(struct hstate *h,
+ 	return present;
+ }
  
-+void remove_inode_hugepages(struct inode *inode, loff_t lstart, loff_t lend);
+-int hugetlb_add_to_page_cache(struct folio *folio, struct address_space *mapping,
+-			   pgoff_t idx)
++int hugetlb_filemap_add_folio(struct address_space *mapping, struct hstate *h,
++			      struct folio *folio, pgoff_t idx)
+ {
+ 	struct inode *inode = mapping->host;
+-	struct hstate *h = hstate_inode(inode);
+ 	int err;
+ 
+ 	__folio_set_locked(folio);
+@@ -5693,6 +5692,14 @@ int hugetlb_add_to_page_cache(struct folio *folio, struct address_space *mapping
+ 	return 0;
+ }
+ 
++int hugetlb_add_to_page_cache(struct folio *folio, struct address_space *mapping,
++			      pgoff_t idx)
++{
++	struct hstate *h = hstate_inode(mapping->host);
 +
- #else /* !CONFIG_HUGETLB_PAGE */
- 
- static inline void hugetlb_dup_vma_private(struct vm_area_struct *vma)
-@@ -470,6 +472,8 @@ static inline void hugetlb_unshare_all_pmds(struct vm_area_struct *vma) { }
- static inline void hugetlb_zero_partial_page(
- 	struct hstate *h, struct address_space *mapping, loff_t start, loff_t end) {}
- 
-+static inline void remove_inode_hugepages(struct inode *inode, loff_t lstart, loff_t lend) {}
++	return hugetlb_filemap_add_folio(mapping, h, folio, idx);
++}
 +
- #endif /* !CONFIG_HUGETLB_PAGE */
- /*
-  * hugepages at page global directory. If arch support
+ static inline vm_fault_t hugetlb_handle_userfault(struct vm_area_struct *vma,
+ 						  struct address_space *mapping,
+ 						  pgoff_t idx,
 -- 
 2.41.0.rc0.172.g3f132b7071-goog
 
