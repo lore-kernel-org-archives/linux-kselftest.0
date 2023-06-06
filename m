@@ -2,104 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD591C7EE24
-	for <linux-kselftest@archiver.kernel.org>; Tue,  6 Jun 2023 18:37:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 29CC3C7EE2A
+	for <linux-kselftest@archiver.kernel.org>; Tue,  6 Jun 2023 18:48:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232116AbjFFShC (ORCPT
+        id S239082AbjFFSsG (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 6 Jun 2023 14:37:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51002 "EHLO
+        Tue, 6 Jun 2023 14:48:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238346AbjFFShC (ORCPT
+        with ESMTP id S238904AbjFFSsF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Jun 2023 14:37:02 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE88D11B;
-        Tue,  6 Jun 2023 11:36:57 -0700 (PDT)
-Date:   Tue, 6 Jun 2023 20:36:53 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1686076615; bh=OjRLqwrxR3FBsWW4XS2Cc09XFAFldwpVvvt9U+Wh0WI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jUN+GWhoyrtMbFAKRDwmRGykG90E96Ekg0Tfu8T7zUUwutFn9MeQJuZ2SLG3d6UDe
-         +LU5lzDLMfsmeBrCSWiGWbK7znlbqv0VHMFVPcppLKCCZ7dUOSXSU4kyKVpwZro48S
-         5oCiYmxg1TZDtAe01th4fdo17Nc0/TM9939V4HoQ=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Zhangjin Wu <falcon@tinylab.org>, w@1wt.eu
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 4/4] tools/nolibc: sys.h: apply __syscall() helper
-Message-ID: <7e76f099-4198-421c-8157-430201970c4c@t-8ch.de>
-References: <cover.1686036862.git.falcon@tinylab.org>
- <ee86e33d9f0031da5932b0de798f188535308dd7.1686036862.git.falcon@tinylab.org>
+        Tue, 6 Jun 2023 14:48:05 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E6BEA;
+        Tue,  6 Jun 2023 11:47:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=CLlX0vggMROMtuqvN2c1dj9w/eUmy+R/m6XCbHJiuHU=; b=q19aI4oE+OYFJEiFSUfnZCHRem
+        Rg77BMJz0qwU8mdJdu5sE7SuM3oNKzVducd2u0+mrDXqcJyvZg4Km/bek/Tgdsw7nVet/kOaHjMcO
+        LkVKFZpGLNqmWcm4jMCOlYQcw+Z4dEdgMQXl1bf1J7vKQ3elP7q1VVxxsuZ2UNUU/Lf3H3VkcoglP
+        5g6eYrmxBScK5LD1z/9qfj+h8u+V+qbrc2qNul11Poy+qe3YkkHqPZiGOVnEyM0RzcyMZwfZXn1uL
+        h9bdySazRx6xvkGc9Mz0PE54OY0bFd8EfrDt09xbrWAaANd7JaWpgg6PdFqsOdObFjG/wp8g7CM8g
+        YCOTMQ8Q==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1q6bil-002oDx-1W;
+        Tue, 06 Jun 2023 18:47:55 +0000
+Date:   Tue, 6 Jun 2023 11:47:55 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Joel Granados <j.granados@samsung.com>
+Cc:     kernel test robot <oliver.sang@intel.com>, oe-lkp@lists.linux.dev,
+        lkp@intel.com, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 6/8] test_sysclt: Test for registering a mount point
+Message-ID: <ZH9/WxPIPj2y2PkO@bombadil.infradead.org>
+References: <CGME20230604144143eucas1p1ba7a3773905187be28571e973ef6e118@eucas1p1.samsung.com>
+ <202306042234.f2d7beff-oliver.sang@intel.com>
+ <20230606092717.uesyzrptbsbzefbq@localhost>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ee86e33d9f0031da5932b0de798f188535308dd7.1686036862.git.falcon@tinylab.org>
+In-Reply-To: <20230606092717.uesyzrptbsbzefbq@localhost>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Zhangjin,
+On Tue, Jun 06, 2023 at 11:27:17AM +0200, Joel Granados wrote:
+> On Sun, Jun 04, 2023 at 10:41:05PM +0800, kernel test robot wrote:
+> @mcgrof: Can we just ignore this 0-day report as a false positive?
 
-On 2023-06-06 16:17:38+0800, Zhangjin Wu wrote:
-> Use __syscall() helper to shrink 252 lines of code.
-> 
->     $ git show HEAD^:tools/include/nolibc/sys.h | wc -l
->     1425
->     $ git show HEAD:tools/include/nolibc/sys.h | wc -l
->     1173
->     $ echo "1425-1173" | bc -l
->     252
-> 
-> Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> ---
->  tools/include/nolibc/sys.h | 336 +++++--------------------------------
->  1 file changed, 42 insertions(+), 294 deletions(-)
-> 
-> diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-> index f6e3168b3e50..0cfc5157845a 100644
-> --- a/tools/include/nolibc/sys.h
-> +++ b/tools/include/nolibc/sys.h
-> @@ -108,13 +108,7 @@ int sys_chdir(const char *path)
->  static __attribute__((unused))
->  int chdir(const char *path)
->  {
-> -	int ret = sys_chdir(path);
-> -
-> -	if (ret < 0) {
-> -		SET_ERRNO(-ret);
-> -		ret = -1;
-> -	}
-> -	return ret;
-> +	return __syscall(chdir, path);
+Yes, thanks for highlighting it.
 
-To be honest I'm still not a big fan of the __syscall macro.
-It's a bit too magic for too little gain.
-
-The commit message argues that the patches make the code shorter.
-
-However doing 
-
-__sysret(sys_chdir(path));
-
-instead of
-
-__syscall(chdir, path);
-
-is only three characters longer and the same amout of lines.
-
-Otherwise we would have syscall() _syscall() and __syscall() each doing
-different things.
-
-And __syscall does not behave like a regular function.
-
-The rest of the patchset looks great.
-
-Maybe Willy can break the tie?
-
-
-Thomas
-
-
-Note: If we figure out a way to build syscall() without macros I would
-like that also :-)
+ Luis
