@@ -2,58 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E1FEC7EE2C
-	for <linux-kselftest@archiver.kernel.org>; Tue,  6 Jun 2023 19:05:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D83DEC77B7A
+	for <linux-kselftest@archiver.kernel.org>; Tue,  6 Jun 2023 19:05:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238749AbjFFTEo (ORCPT
+        id S239232AbjFFTFD (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 6 Jun 2023 15:04:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38982 "EHLO
+        Tue, 6 Jun 2023 15:05:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239260AbjFFTEb (ORCPT
+        with ESMTP id S239233AbjFFTEa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Jun 2023 15:04:31 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DC4A173B
-        for <linux-kselftest@vger.kernel.org>; Tue,  6 Jun 2023 12:04:26 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id 41be03b00d2f7-5343c1d114cso5935810a12.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 06 Jun 2023 12:04:26 -0700 (PDT)
+        Tue, 6 Jun 2023 15:04:30 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F1B51717
+        for <linux-kselftest@vger.kernel.org>; Tue,  6 Jun 2023 12:04:21 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-bb05f0e6ef9so9640188276.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 06 Jun 2023 12:04:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686078266; x=1688670266;
+        d=google.com; s=20221208; t=1686078260; x=1688670260;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RTPC0AoXX+NIzZnufKQytW8TkFDwziCOrc5ZhwaQeP0=;
-        b=owBmv/2mMPcrWAYYeOz6IufYws8uNBVmJpdSLiIa/Oxif5X7cqv+vateNaoAbLjKN+
-         9g8OIvY2fitd8/bF4vWCTRGtTW4cbQGYeFnSk7O/6JmITSXQUE0V5caWCidr9eoCizfR
-         mnHihiIAiXJOu1//OF3fyNTkiIvpgOeBZOYv+VfEA9HuxcdSL1KjLzz1ww4jo+xPlynH
-         cZu+282ONjHqqdAeelyqOrgfiIuIaT7NMZ4iSDTpZ4yPFrLEm9YlMCTiZ2Jg+4dOz9SD
-         Af25fA3ecy4VQVCca8EotY/PKiVwegJai+On/aGLqcq8u80JQ1wIUoTEAC7FSVslSvP6
-         ocKA==
+        bh=EVsoBqdtoJX8/StMCoaJ2TBhLAuQb0ZIsYKuvX8foFc=;
+        b=3bRhDOn2F1YoY78ybE5Buf9pXWlEWLIrZLl3zmMqCMxMWePwOymNgzPlL05No/cBty
+         JhXR5aZftY97cDZvNkSb70a55Fkj8oothgT0n+qKkVwOjj7CYzQnLwO2wmEIMdOIIq24
+         jiWbdBDp6sWsJWroyTU36/XenlT2tddUva4/zzFiwtqHgjy72QN5YVUYSt+vJDoI3IyN
+         VcmHCICw1jUnn1dcw1Z79WvsPN60OZDQjPZspnctaG3vX9a9apYfWKKt97pGmH1ZZWZ+
+         n8NTZLQKSqtuCbrmmo44T26y4ZuXSivXoMS2qmsA9OyppL+7KUrgyC0TXXVY+vLySr9n
+         vPOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686078266; x=1688670266;
+        d=1e100.net; s=20221208; t=1686078260; x=1688670260;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RTPC0AoXX+NIzZnufKQytW8TkFDwziCOrc5ZhwaQeP0=;
-        b=S8Sq9+uptJpKB3gEVf/yGmr2ThU6lTxreKx0t9uSPwdcNknIVRzlZw+X89cQn1lz9X
-         nTxMNXmXP0Qg2jYgeSwaksj7LErLQ1NFMvJmxxoDmPbOKmEU79xuW/ZMJoJLLW3jookR
-         UuHfdIqPIxR7wHHo/MR3/aLJUroHSP3rejwkdH53IbiNyQbk4bfZ/UdmdRuyiwzUzL7T
-         BeoeVNxfD3OqeIMUgn/2pe57fXZSEuKSdJUUyVIHBdOHdVEAHs/IT10+485fYMFuTY4A
-         /Hl5Xc52DuS1NlVnSAeuS1FyCIGUKRx6r6fnV12S5vIiJo7kchtZIXUFRXFfERScHQ44
-         8QUg==
-X-Gm-Message-State: AC+VfDyWdRt/1IKc2pwvHP6iCOSvrWmfxSMxq1fu5ssk+9ryB//xmNRg
-        0cRwCj+na8HzjbsycECn2Czp8oFk1dUFKM0UYw==
-X-Google-Smtp-Source: ACHHUZ7U7Xr5zqg3KoBTJpAqI34Pla/gmFzawbxWzmrT+4L/HPyaurNY1sqxQPPqj80dK4ECUufRqT2mO/+XHSgL7w==
+        bh=EVsoBqdtoJX8/StMCoaJ2TBhLAuQb0ZIsYKuvX8foFc=;
+        b=jvByZh4jmCi7MxAFuRX+WiUtpI7iGsOAOfGvTPdIDn9IuB6uzXQXBJQN+r1uavT54Z
+         C3JO0J3F8+235vRuRKxVCo/LNWtxHkcwaUmytJWiMQorDBV2ic1+8htufUGrORmjDpje
+         MnGiTMHr/kCWU8T5sWMmX8TQbN5PXPDMGb2UHg4mAecqrU+vIkNvGDiuVTctnlACaK+f
+         OGwLOeW/rO3815ELNrOCDcC39grFaOPIAZemyeI9Hd6ex/bVMikOsyBkAGVtr+zcZMTL
+         ZQkA796jEIVP0MaEPDq1VDNXWTgoX/ys2DAhdMSA1oSwrnmzb2zD3NjA5Fd0/Q2nf9Ot
+         0DEw==
+X-Gm-Message-State: AC+VfDzeOJZXVIZBiHFXfkQIAEwhVVLC948FkkDUEysb4lT+vGKlHr+e
+        HQXcUil8ZZy36VV1f4kfwNzRfwG1Woe36J9IoA==
+X-Google-Smtp-Source: ACHHUZ7pHc1WWdEMTu1ZaLAHhToRSasMGs58ikGHS3ezVoQuVBFPIMzugkY1x4qddS4xfRUOsuXb06aDGCKa9mnCdw==
 X-Received: from ackerleytng-ctop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:13f8])
- (user=ackerleytng job=sendgmr) by 2002:a65:618a:0:b0:542:9fad:de1 with SMTP
- id c10-20020a65618a000000b005429fad0de1mr614686pgv.12.1686078265785; Tue, 06
- Jun 2023 12:04:25 -0700 (PDT)
-Date:   Tue,  6 Jun 2023 19:03:52 +0000
+ (user=ackerleytng job=sendgmr) by 2002:a05:6902:124f:b0:ba8:2e68:7715 with
+ SMTP id t15-20020a056902124f00b00ba82e687715mr1639977ybu.2.1686078260457;
+ Tue, 06 Jun 2023 12:04:20 -0700 (PDT)
+Date:   Tue,  6 Jun 2023 19:03:49 +0000
 In-Reply-To: <cover.1686077275.git.ackerleytng@google.com>
 Mime-Version: 1.0
 References: <cover.1686077275.git.ackerleytng@google.com>
 X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Message-ID: <508025e09425a98d52b17cfbdc07340ae05e3e32.1686077275.git.ackerleytng@google.com>
-Subject: [RFC PATCH 07/19] mm: hugetlb: Refactor vma_*_reservation functions
+Message-ID: <d1c8d97fbeab33b147b104ed18299b510c50ab40.1686077275.git.ackerleytng@google.com>
+Subject: [RFC PATCH 04/19] mm: hugetlb: Decouple hstate, subpool from inode
 From:   Ackerley Tng <ackerleytng@google.com>
 To:     akpm@linux-foundation.org, mike.kravetz@oracle.com,
         muchun.song@linux.dev, pbonzini@redhat.com, seanjc@google.com,
@@ -79,365 +79,325 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-vma_*_reservation functions rely on vma_resv_map(), which assumes on a
-hugetlbfs concept of the resv_map being stored in a specific field of
-the inode.
+hstate and subpool being retrievable from inode via hstate_inode() and
+subpool_inode() respectively is a hugetlbfs concept.
 
-This refactor enables vma_*_reservation functions, now renamed
-resv_map_*_reservation, to be used with non-hugetlbfs filesystems,
-further decoupling hugetlb from hugetlbfs.
+hugetlb should be agnostic of hugetlbfs and hugetlb accounting
+functions should accept hstate (required) and subpool (can be NULL)
+independently of inode.
+
+inode is still a parameter for these accounting functions since the
+inode's block counts need to be updated during accounting.
+
+The inode's resv_map will also still need to be updated if not NULL.
 
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 ---
- mm/hugetlb.c | 184 +++++++++++++++++++++++++++------------------------
- 1 file changed, 99 insertions(+), 85 deletions(-)
+ fs/hugetlbfs/inode.c    | 59 ++++++++++++++++++++++++++++-------------
+ include/linux/hugetlb.h | 32 +++++++++++++++++-----
+ mm/hugetlb.c            | 49 ++++++++++++++++++++--------------
+ 3 files changed, 95 insertions(+), 45 deletions(-)
 
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index d16c6417b90f..d943f83d15a9 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -2643,89 +2643,81 @@ static void return_unused_surplus_pages(struct hstate *h,
+diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
+index 4f25df31ae80..0fc49b6252e4 100644
+--- a/fs/hugetlbfs/inode.c
++++ b/fs/hugetlbfs/inode.c
+@@ -164,7 +164,7 @@ static int hugetlbfs_file_mmap(struct file *file, struct vm_area_struct *vma)
+ 	file_accessed(file);
  
+ 	ret = -ENOMEM;
+-	if (!hugetlb_reserve_pages(inode,
++	if (!hugetlb_reserve_pages(h, subpool_inode(inode), inode,
+ 				vma->vm_pgoff >> huge_page_order(h),
+ 				len >> huge_page_shift(h), vma,
+ 				vma->vm_flags))
+@@ -550,14 +550,18 @@ hugetlb_vmdelete_list(struct rb_root_cached *root, pgoff_t start, pgoff_t end,
+ 	}
+ }
  
- /*
-- * vma_needs_reservation, vma_commit_reservation and vma_end_reservation
-- * are used by the huge page allocation routines to manage reservations.
-+ * resv_map_needs_reservation, resv_map_commit_reservation and
-+ * resv_map_end_reservation are used by the huge page allocation routines to
-+ * manage reservations.
-  *
-- * vma_needs_reservation is called to determine if the huge page at addr
-- * within the vma has an associated reservation.  If a reservation is
-- * needed, the value 1 is returned.  The caller is then responsible for
-- * managing the global reservation and subpool usage counts.  After
-- * the huge page has been allocated, vma_commit_reservation is called
-- * to add the page to the reservation map.  If the page allocation fails,
-- * the reservation must be ended instead of committed.  vma_end_reservation
-- * is called in such cases.
-+ * resv_map_needs_reservation is called to determine if the huge page at addr
-+ * within the vma has an associated reservation.  If a reservation is needed,
-+ * the value 1 is returned.  The caller is then responsible for managing the
-+ * global reservation and subpool usage counts.  After the huge page has been
-+ * allocated, resv_map_commit_reservation is called to add the page to the
-+ * reservation map.  If the page allocation fails, the reservation must be ended
-+ * instead of committed.  resv_map_end_reservation is called in such cases.
-  *
-- * In the normal case, vma_commit_reservation returns the same value
-- * as the preceding vma_needs_reservation call.  The only time this
-- * is not the case is if a reserve map was changed between calls.  It
-- * is the responsibility of the caller to notice the difference and
-- * take appropriate action.
-+ * In the normal case, resv_map_commit_reservation returns the same value as the
-+ * preceding resv_map_needs_reservation call.  The only time this is not the
-+ * case is if a reserve map was changed between calls.  It is the responsibility
-+ * of the caller to notice the difference and take appropriate action.
-  *
-- * vma_add_reservation is used in error paths where a reservation must
-- * be restored when a newly allocated huge page must be freed.  It is
-- * to be called after calling vma_needs_reservation to determine if a
-- * reservation exists.
-+ * resv_map_add_reservation is used in error paths where a reservation must be
-+ * restored when a newly allocated huge page must be freed.  It is to be called
-+ * after calling resv_map_needs_reservation to determine if a reservation
-+ * exists.
-  *
-- * vma_del_reservation is used in error paths where an entry in the reserve
-- * map was created during huge page allocation and must be removed.  It is to
-- * be called after calling vma_needs_reservation to determine if a reservation
-+ * resv_map_del_reservation is used in error paths where an entry in the reserve
-+ * map was created during huge page allocation and must be removed.  It is to be
-+ * called after calling resv_map_needs_reservation to determine if a reservation
-  * exists.
+-/*
++/**
++ * Remove folio from page_cache and userspace mappings. Also unreserves pages,
++ * updating hstate @h, subpool @spool (if not NULL), @inode block info and
++ * @inode's resv_map (if not NULL).
++ *
+  * Called with hugetlb fault mutex held.
+  * Returns true if page was actually removed, false otherwise.
   */
--enum vma_resv_mode {
--	VMA_NEEDS_RESV,
--	VMA_COMMIT_RESV,
--	VMA_END_RESV,
--	VMA_ADD_RESV,
--	VMA_DEL_RESV,
-+enum resv_map_resv_mode {
-+	RESV_MAP_NEEDS_RESV,
-+	RESV_MAP_COMMIT_RESV,
-+	RESV_MAP_END_RESV,
-+	RESV_MAP_ADD_RESV,
-+	RESV_MAP_DEL_RESV,
- };
--static long __vma_reservation_common(struct hstate *h,
--				struct vm_area_struct *vma, unsigned long addr,
--				enum vma_resv_mode mode)
-+static long __resv_map_reservation_common(struct resv_map *resv, pgoff_t resv_index,
-+					  bool may_be_shared_mapping,
-+					  enum resv_map_resv_mode mode)
+-static bool remove_inode_single_folio(struct hstate *h, struct inode *inode,
+-					struct address_space *mapping,
+-					struct folio *folio, pgoff_t index,
+-					bool truncate_op)
++static bool remove_mapping_single_folio(
++	struct address_space *mapping, struct folio *folio, pgoff_t index,
++	struct hstate *h, struct hugepage_subpool *spool, struct inode *inode,
++	bool truncate_op)
  {
--	struct resv_map *resv;
--	pgoff_t idx;
- 	long ret;
- 	long dummy_out_regions_needed;
+ 	bool ret = false;
  
--	resv = vma_resv_map(vma);
--	if (!resv)
--		return 1;
--
--	idx = vma_hugecache_offset(h, vma, addr);
- 	switch (mode) {
--	case VMA_NEEDS_RESV:
--		ret = region_chg(resv, idx, idx + 1, &dummy_out_regions_needed);
-+	case RESV_MAP_NEEDS_RESV:
-+		ret = region_chg(resv, resv_index, resv_index + 1, &dummy_out_regions_needed);
- 		/* We assume that vma_reservation_* routines always operate on
- 		 * 1 page, and that adding to resv map a 1 page entry can only
- 		 * ever require 1 region.
- 		 */
- 		VM_BUG_ON(dummy_out_regions_needed != 1);
- 		break;
--	case VMA_COMMIT_RESV:
--		ret = region_add(resv, idx, idx + 1, 1, NULL, NULL);
-+	case RESV_MAP_COMMIT_RESV:
-+		ret = region_add(resv, resv_index, resv_index + 1, 1, NULL, NULL);
- 		/* region_add calls of range 1 should never fail. */
- 		VM_BUG_ON(ret < 0);
- 		break;
--	case VMA_END_RESV:
--		region_abort(resv, idx, idx + 1, 1);
-+	case RESV_MAP_END_RESV:
-+		region_abort(resv, resv_index, resv_index + 1, 1);
- 		ret = 0;
- 		break;
--	case VMA_ADD_RESV:
--		if (vma->vm_flags & VM_MAYSHARE) {
--			ret = region_add(resv, idx, idx + 1, 1, NULL, NULL);
-+	case RESV_MAP_ADD_RESV:
-+		if (may_be_shared_mapping) {
-+			ret = region_add(resv, resv_index, resv_index + 1, 1, NULL, NULL);
- 			/* region_add calls of range 1 should never fail. */
- 			VM_BUG_ON(ret < 0);
- 		} else {
--			region_abort(resv, idx, idx + 1, 1);
--			ret = region_del(resv, idx, idx + 1);
-+			region_abort(resv, resv_index, resv_index + 1, 1);
-+			ret = region_del(resv, resv_index, resv_index + 1);
- 		}
- 		break;
--	case VMA_DEL_RESV:
--		if (vma->vm_flags & VM_MAYSHARE) {
--			region_abort(resv, idx, idx + 1, 1);
--			ret = region_del(resv, idx, idx + 1);
-+	case RESV_MAP_DEL_RESV:
-+		if (may_be_shared_mapping) {
-+			region_abort(resv, resv_index, resv_index + 1, 1);
-+			ret = region_del(resv, resv_index, resv_index + 1);
- 		} else {
--			ret = region_add(resv, idx, idx + 1, 1, NULL, NULL);
-+			ret = region_add(resv, resv_index, resv_index + 1, 1, NULL, NULL);
- 			/* region_add calls of range 1 should never fail. */
- 			VM_BUG_ON(ret < 0);
- 		}
-@@ -2734,7 +2726,7 @@ static long __vma_reservation_common(struct hstate *h,
- 		BUG();
+@@ -582,9 +586,8 @@ static bool remove_inode_single_folio(struct hstate *h, struct inode *inode,
+ 	hugetlb_delete_from_page_cache(folio);
+ 	ret = true;
+ 	if (!truncate_op) {
+-		if (unlikely(hugetlb_unreserve_pages(inode, index,
+-							index + 1, 1)))
+-			hugetlb_fix_reserve_counts(inode);
++		if (unlikely(hugetlb_unreserve_pages(h, spool, inode, index, index + 1, 1)))
++			hugetlb_fix_reserve_counts(h, spool);
  	}
  
--	if (vma->vm_flags & VM_MAYSHARE || mode == VMA_DEL_RESV)
-+	if (may_be_shared_mapping || mode == RESV_MAP_DEL_RESV)
- 		return ret;
- 	/*
- 	 * We know private mapping must have HPAGE_RESV_OWNER set.
-@@ -2758,34 +2750,39 @@ static long __vma_reservation_common(struct hstate *h,
+ 	folio_unlock(folio);
+@@ -592,7 +595,14 @@ static bool remove_inode_single_folio(struct hstate *h, struct inode *inode,
+ }
+ 
+ /*
+- * remove_inode_hugepages handles two distinct cases: truncation and hole
++ * Remove hugetlb page mappings from @mapping between offsets [@lstart, @lend).
++ * Also updates reservations in:
++ * + hstate @h (required)
++ * + subpool @spool (can be NULL)
++ * + resv_map in @inode (can be NULL)
++ * and updates blocks in @inode (required)
++ *
++ * remove_mapping_hugepages handles two distinct cases: truncation and hole
+  * punch.  There are subtle differences in operation for each case.
+  *
+  * truncation is indicated by end of range being LLONG_MAX
+@@ -611,10 +621,10 @@ static bool remove_inode_single_folio(struct hstate *h, struct inode *inode,
+  * Note: If the passed end of range value is beyond the end of file, but
+  * not LLONG_MAX this routine still performs a hole punch operation.
+  */
+-void remove_inode_hugepages(struct inode *inode, loff_t lstart, loff_t lend)
++void remove_mapping_hugepages(struct address_space *mapping,
++			      struct hstate *h, struct hugepage_subpool *spool,
++			      struct inode *inode, loff_t lstart, loff_t lend)
+ {
+-	struct hstate *h = hstate_inode(inode);
+-	struct address_space *mapping = &inode->i_data;
+ 	const pgoff_t start = lstart >> huge_page_shift(h);
+ 	const pgoff_t end = lend >> huge_page_shift(h);
+ 	struct folio_batch fbatch;
+@@ -636,8 +646,8 @@ void remove_inode_hugepages(struct inode *inode, loff_t lstart, loff_t lend)
+ 			/*
+ 			 * Remove folio that was part of folio_batch.
+ 			 */
+-			if (remove_inode_single_folio(h, inode, mapping, folio,
+-							index, truncate_op))
++			if (remove_mapping_single_folio(mapping, folio, index,
++							h, spool, inode, truncate_op))
+ 				freed++;
+ 
+ 			mutex_unlock(&hugetlb_fault_mutex_table[hash]);
+@@ -647,7 +657,16 @@ void remove_inode_hugepages(struct inode *inode, loff_t lstart, loff_t lend)
+ 	}
+ 
+ 	if (truncate_op)
+-		(void)hugetlb_unreserve_pages(inode, start, LONG_MAX, freed);
++		(void)hugetlb_unreserve_pages(h, spool, inode, start, LONG_MAX, freed);
++}
++
++void remove_inode_hugepages(struct inode *inode, loff_t lstart, loff_t lend)
++{
++	struct address_space *mapping = &inode->i_data;
++	struct hstate *h = hstate_inode(inode);
++	struct hugepage_subpool *spool = subpool_inode(inode);
++
++	return remove_mapping_hugepages(mapping, h, spool, inode, lstart, lend);
+ }
+ 
+ static void hugetlbfs_evict_inode(struct inode *inode)
+@@ -1548,6 +1567,7 @@ struct file *hugetlb_file_setup(const char *name, size_t size,
+ 	struct vfsmount *mnt;
+ 	int hstate_idx;
+ 	struct file *file;
++	struct hstate *h;
+ 
+ 	hstate_idx = get_hstate_idx(page_size_log);
+ 	if (hstate_idx < 0)
+@@ -1578,9 +1598,10 @@ struct file *hugetlb_file_setup(const char *name, size_t size,
+ 	inode->i_size = size;
+ 	clear_nlink(inode);
+ 
+-	if (!hugetlb_reserve_pages(inode, 0,
+-			size >> huge_page_shift(hstate_inode(inode)), NULL,
+-			acctflag))
++	h = hstate_inode(inode);
++	if (!hugetlb_reserve_pages(h, subpool_inode(inode), inode, 0,
++				   size >> huge_page_shift(h), NULL,
++				   acctflag))
+ 		file = ERR_PTR(-ENOMEM);
+ 	else
+ 		file = alloc_file_pseudo(inode, mnt, name, O_RDWR,
+diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+index 1483020b412b..2457d7a21974 100644
+--- a/include/linux/hugetlb.h
++++ b/include/linux/hugetlb.h
+@@ -166,11 +166,13 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm, pte_t *dst_pte,
+ 				struct page **pagep,
+ 				bool wp_copy);
+ #endif /* CONFIG_USERFAULTFD */
+-bool hugetlb_reserve_pages(struct inode *inode, long from, long to,
+-						struct vm_area_struct *vma,
+-						vm_flags_t vm_flags);
+-long hugetlb_unreserve_pages(struct inode *inode, long start, long end,
+-						long freed);
++bool hugetlb_reserve_pages(struct hstate *h, struct hugepage_subpool *spool,
++			   struct inode *inode,
++			   long from, long to,
++			   struct vm_area_struct *vma,
++			   vm_flags_t vm_flags);
++long hugetlb_unreserve_pages(struct hstate *h, struct hugepage_subpool *spool,
++			     struct inode *inode, long start, long end, long freed);
+ bool isolate_hugetlb(struct folio *folio, struct list_head *list);
+ int get_hwpoison_hugetlb_folio(struct folio *folio, bool *hugetlb, bool unpoison);
+ int get_huge_page_for_hwpoison(unsigned long pfn, int flags,
+@@ -178,7 +180,7 @@ int get_huge_page_for_hwpoison(unsigned long pfn, int flags,
+ void folio_putback_active_hugetlb(struct folio *folio);
+ void move_hugetlb_state(struct folio *old_folio, struct folio *new_folio, int reason);
+ void free_huge_page(struct page *page);
+-void hugetlb_fix_reserve_counts(struct inode *inode);
++void hugetlb_fix_reserve_counts(struct hstate *h, struct hugepage_subpool *spool);
+ extern struct mutex *hugetlb_fault_mutex_table;
+ u32 hugetlb_fault_mutex_hash(struct address_space *mapping, pgoff_t idx);
+ 
+@@ -259,6 +261,9 @@ void hugetlb_unshare_all_pmds(struct vm_area_struct *vma);
+ void hugetlb_zero_partial_page(struct hstate *h, struct address_space *mapping,
+ 			       loff_t start, loff_t end);
+ 
++void remove_mapping_hugepages(struct address_space *mapping,
++			      struct hstate *h, struct hugepage_subpool *spool,
++			      struct inode *inode, loff_t lstart, loff_t lend);
+ void remove_inode_hugepages(struct inode *inode, loff_t lstart, loff_t lend);
+ 
+ #else /* !CONFIG_HUGETLB_PAGE */
+@@ -472,6 +477,9 @@ static inline void hugetlb_unshare_all_pmds(struct vm_area_struct *vma) { }
+ static inline void hugetlb_zero_partial_page(
+ 	struct hstate *h, struct address_space *mapping, loff_t start, loff_t end) {}
+ 
++static inline void remove_mapping_hugepages(
++	struct address_space *mapping, struct hstate *h, struct hugepage_subpool *spool,
++	struct inode *inode, loff_t lstart, loff_t lend) {}
+ static inline void remove_inode_hugepages(struct inode *inode, loff_t lstart, loff_t lend) {}
+ 
+ #endif /* !CONFIG_HUGETLB_PAGE */
+@@ -554,6 +562,12 @@ static inline struct hstate *hstate_inode(struct inode *i)
+ {
+ 	return HUGETLBFS_SB(i->i_sb)->hstate;
+ }
++
++static inline struct hugepage_subpool *subpool_inode(struct inode *inode)
++{
++	return HUGETLBFS_SB(inode->i_sb)->spool;
++}
++
+ #else /* !CONFIG_HUGETLBFS */
+ 
+ #define is_file_hugepages(file)			false
+@@ -568,6 +582,12 @@ static inline struct hstate *hstate_inode(struct inode *i)
+ {
+ 	return NULL;
+ }
++
++static inline struct hugepage_subpool *subpool_inode(struct inode *inode)
++{
++	return NULL;
++}
++
+ #endif /* !CONFIG_HUGETLBFS */
+ 
+ #ifdef HAVE_ARCH_HUGETLB_UNMAPPED_AREA
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 9c9262833b4f..9da419b930df 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -247,11 +247,6 @@ static long hugepage_subpool_put_pages(struct hugepage_subpool *spool,
  	return ret;
  }
  
--static long vma_needs_reservation(struct hstate *h,
--			struct vm_area_struct *vma, unsigned long addr)
-+static long resv_map_needs_reservation(struct resv_map *resv, pgoff_t resv_index,
-+				       bool may_be_shared_mapping)
+-static inline struct hugepage_subpool *subpool_inode(struct inode *inode)
+-{
+-	return HUGETLBFS_SB(inode->i_sb)->spool;
+-}
+-
+ static inline struct hugepage_subpool *subpool_vma(struct vm_area_struct *vma)
  {
--	return __vma_reservation_common(h, vma, addr, VMA_NEEDS_RESV);
-+	return __resv_map_reservation_common(
-+		resv, resv_index, may_be_shared_mapping, RESV_MAP_NEEDS_RESV);
+ 	return subpool_inode(file_inode(vma->vm_file));
+@@ -898,16 +893,13 @@ static long region_del(struct resv_map *resv, long f, long t)
+  * appear as a "reserved" entry instead of simply dangling with incorrect
+  * counts.
+  */
+-void hugetlb_fix_reserve_counts(struct inode *inode)
++void hugetlb_fix_reserve_counts(struct hstate *h, struct hugepage_subpool *spool)
+ {
+-	struct hugepage_subpool *spool = subpool_inode(inode);
+ 	long rsv_adjust;
+ 	bool reserved = false;
+ 
+ 	rsv_adjust = hugepage_subpool_get_pages(spool, 1);
+ 	if (rsv_adjust > 0) {
+-		struct hstate *h = hstate_inode(inode);
+-
+ 		if (!hugetlb_acct_memory(h, 1))
+ 			reserved = true;
+ 	} else if (!rsv_adjust) {
+@@ -6762,15 +6754,22 @@ long hugetlb_change_protection(struct vm_area_struct *vma,
+ 	return pages > 0 ? (pages << h->order) : pages;
  }
  
--static long vma_commit_reservation(struct hstate *h,
--			struct vm_area_struct *vma, unsigned long addr)
-+static long resv_map_commit_reservation(struct resv_map *resv, pgoff_t resv_index,
-+					bool may_be_shared_mapping)
+-/* Return true if reservation was successful, false otherwise.  */
+-bool hugetlb_reserve_pages(struct inode *inode,
+-					long from, long to,
+-					struct vm_area_struct *vma,
+-					vm_flags_t vm_flags)
++/**
++ * Reserves pages between vma indices @from and @to by handling accounting in:
++ * + hstate @h (required)
++ * + subpool @spool (can be NULL)
++ * + @inode (required if @vma is NULL)
++ *
++ * Will setup resv_map in @vma if necessary.
++ * Return true if reservation was successful, false otherwise.
++ */
++bool hugetlb_reserve_pages(struct hstate *h, struct hugepage_subpool *spool,
++			   struct inode *inode,
++			   long from, long to,
++			   struct vm_area_struct *vma,
++			   vm_flags_t vm_flags)
  {
--	return __vma_reservation_common(h, vma, addr, VMA_COMMIT_RESV);
-+	return __resv_map_reservation_common(
-+		resv, resv_index, may_be_shared_mapping, RESV_MAP_COMMIT_RESV);
- }
- 
--static void vma_end_reservation(struct hstate *h,
--			struct vm_area_struct *vma, unsigned long addr)
-+static void resv_map_end_reservation(struct resv_map *resv, pgoff_t resv_index,
-+				     bool may_be_shared_mapping)
- {
--	(void)__vma_reservation_common(h, vma, addr, VMA_END_RESV);
-+	(void)__resv_map_reservation_common(
-+		resv, resv_index, may_be_shared_mapping, RESV_MAP_END_RESV);
- }
- 
--static long vma_add_reservation(struct hstate *h,
--			struct vm_area_struct *vma, unsigned long addr)
-+static long resv_map_add_reservation(struct resv_map *resv, pgoff_t resv_index,
-+				     bool may_be_shared_mapping)
- {
--	return __vma_reservation_common(h, vma, addr, VMA_ADD_RESV);
-+	return __resv_map_reservation_common(
-+		resv, resv_index, may_be_shared_mapping, RESV_MAP_ADD_RESV);
- }
- 
--static long vma_del_reservation(struct hstate *h,
--			struct vm_area_struct *vma, unsigned long addr)
-+static long resv_map_del_reservation(struct resv_map *resv, pgoff_t resv_index,
-+				     bool may_be_shared_mapping)
- {
--	return __vma_reservation_common(h, vma, addr, VMA_DEL_RESV);
-+	return __resv_map_reservation_common(
-+		resv, resv_index, may_be_shared_mapping, RESV_MAP_DEL_RESV);
- }
- 
- /*
-@@ -2811,7 +2808,12 @@ static long vma_del_reservation(struct hstate *h,
- void restore_reserve_on_error(struct hstate *h, struct vm_area_struct *vma,
- 			unsigned long address, struct folio *folio)
- {
--	long rc = vma_needs_reservation(h, vma, address);
-+	long rc;
-+	struct resv_map *resv = vma_resv_map(vma);
-+	pgoff_t resv_index = vma_hugecache_offset(h, vma, address);
-+	bool may_share = vma->vm_flags & VM_MAYSHARE;
-+
-+	rc = resv_map_needs_reservation(resv, resv_index, may_share);
- 
- 	if (folio_test_hugetlb_restore_reserve(folio)) {
- 		if (unlikely(rc < 0))
-@@ -2828,9 +2830,9 @@ void restore_reserve_on_error(struct hstate *h, struct vm_area_struct *vma,
- 			 */
- 			folio_clear_hugetlb_restore_reserve(folio);
- 		else if (rc)
--			(void)vma_add_reservation(h, vma, address);
-+			(void)resv_map_add_reservation(resv, resv_index, may_share);
- 		else
--			vma_end_reservation(h, vma, address);
-+			resv_map_end_reservation(resv, resv_index, may_share);
- 	} else {
- 		if (!rc) {
- 			/*
-@@ -2841,7 +2843,7 @@ void restore_reserve_on_error(struct hstate *h, struct vm_area_struct *vma,
- 			 * Remove the entry so that a subsequent allocation
- 			 * does not consume a reservation.
- 			 */
--			rc = vma_del_reservation(h, vma, address);
-+			rc = resv_map_del_reservation(resv, resv_index, may_share);
- 			if (rc < 0)
- 				/*
- 				 * VERY rare out of memory condition.  Since
-@@ -2855,7 +2857,7 @@ void restore_reserve_on_error(struct hstate *h, struct vm_area_struct *vma,
- 		} else if (rc < 0) {
- 			/*
- 			 * Rare out of memory condition from
--			 * vma_needs_reservation call.  Memory allocation is
-+			 * resv_map_needs_reservation call.  Memory allocation is
- 			 * only attempted if a new entry is needed.  Therefore,
- 			 * this implies there is not an entry in the
- 			 * reserve map.
-@@ -2877,7 +2879,7 @@ void restore_reserve_on_error(struct hstate *h, struct vm_area_struct *vma,
- 			/*
- 			 * No reservation present, do nothing
- 			 */
--			 vma_end_reservation(h, vma, address);
-+			 resv_map_end_reservation(resv, resv_index, may_share);
- 	}
- }
- 
-@@ -3019,13 +3021,17 @@ struct folio *alloc_hugetlb_folio_from_subpool(
+ 	long chg = -1, add = -1;
+-	struct hstate *h = hstate_inode(inode);
+-	struct hugepage_subpool *spool = subpool_inode(inode);
+ 	struct resv_map *resv_map;
  	struct hugetlb_cgroup *h_cg = NULL;
- 	bool deferred_reserve;
- 
-+	struct resv_map *resv = vma_resv_map(vma);
-+	pgoff_t resv_index = vma_hugecache_offset(h, vma, addr);
-+	bool may_share = vma->vm_flags & VM_MAYSHARE;
-+
- 	idx = hstate_index(h);
- 	/*
- 	 * Examine the region/reserve map to determine if the process
- 	 * has a reservation for the page to be allocated.  A return
- 	 * code of zero indicates a reservation exists (no change).
- 	 */
--	map_chg = gbl_chg = vma_needs_reservation(h, vma, addr);
-+	map_chg = gbl_chg = resv_map_needs_reservation(resv, resv_index, may_share);
- 	if (map_chg < 0)
- 		return ERR_PTR(-ENOMEM);
- 
-@@ -3039,7 +3045,7 @@ struct folio *alloc_hugetlb_folio_from_subpool(
- 	if (map_chg || avoid_reserve) {
- 		gbl_chg = hugepage_subpool_get_pages(spool, 1);
- 		if (gbl_chg < 0) {
--			vma_end_reservation(h, vma, addr);
-+			resv_map_end_reservation(resv, resv_index, may_share);
- 			return ERR_PTR(-ENOSPC);
- 		}
- 
-@@ -3104,11 +3110,11 @@ struct folio *alloc_hugetlb_folio_from_subpool(
- 
- 	hugetlb_set_folio_subpool(folio, spool);
- 
--	map_commit = vma_commit_reservation(h, vma, addr);
-+	map_commit = resv_map_commit_reservation(resv, resv_index, may_share);
- 	if (unlikely(map_chg > map_commit)) {
- 		/*
- 		 * The page was added to the reservation map between
--		 * vma_needs_reservation and vma_commit_reservation.
-+		 * resv_map_needs_reservation and resv_map_commit_reservation.
- 		 * This indicates a race with hugetlb_reserve_pages.
- 		 * Adjust for the subpool count incremented above AND
- 		 * in hugetlb_reserve_pages for the same page.  Also,
-@@ -3134,7 +3140,7 @@ struct folio *alloc_hugetlb_folio_from_subpool(
- out_subpool_put:
- 	if (map_chg || avoid_reserve)
- 		hugepage_subpool_put_pages(spool, 1);
--	vma_end_reservation(h, vma, addr);
-+	resv_map_end_reservation(resv, resv_index, may_share);
- 	return ERR_PTR(-ENOSPC);
+ 	long gbl_reserve, regions_needed = 0;
+@@ -6921,13 +6920,23 @@ bool hugetlb_reserve_pages(struct inode *inode,
+ 	return false;
  }
  
-@@ -5901,12 +5907,16 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
- 	 * the spinlock.
- 	 */
- 	if ((flags & FAULT_FLAG_WRITE) && !(vma->vm_flags & VM_SHARED)) {
--		if (vma_needs_reservation(h, vma, haddr) < 0) {
-+		struct resv_map *resv = vma_resv_map(vma);
-+		pgoff_t resv_index = vma_hugecache_offset(h, vma, address);
-+		bool may_share = vma->vm_flags & VM_MAYSHARE;
-+
-+		if (resv_map_needs_reservation(resv, resv_index, may_share) < 0) {
- 			ret = VM_FAULT_OOM;
- 			goto backout_unlocked;
- 		}
- 		/* Just decrements count, does not deallocate */
--		vma_end_reservation(h, vma, haddr);
-+		resv_map_end_reservation(resv, resv_index, may_share);
- 	}
+-long hugetlb_unreserve_pages(struct inode *inode, long start, long end,
+-								long freed)
++/**
++ * Unreserves pages between vma indices @start and @end by handling accounting
++ * in:
++ * + hstate @h (required)
++ * + subpool @spool (can be NULL)
++ * + @inode (required)
++ * + resv_map in @inode (can be NULL)
++ *
++ * @freed is the number of pages freed, for updating inode->i_blocks.
++ *
++ * Returns 0 on success.
++ */
++long hugetlb_unreserve_pages(struct hstate *h, struct hugepage_subpool *spool,
++			     struct inode *inode, long start, long end, long freed)
+ {
+-	struct hstate *h = hstate_inode(inode);
+ 	struct resv_map *resv_map = inode_resv_map(inode);
+ 	long chg = 0;
+-	struct hugepage_subpool *spool = subpool_inode(inode);
+ 	long gbl_reserve;
  
- 	ptl = huge_pte_lock(h, mm, ptep);
-@@ -6070,12 +6080,16 @@ vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
- 	 */
- 	if ((flags & (FAULT_FLAG_WRITE|FAULT_FLAG_UNSHARE)) &&
- 	    !(vma->vm_flags & VM_MAYSHARE) && !huge_pte_write(entry)) {
--		if (vma_needs_reservation(h, vma, haddr) < 0) {
-+		struct resv_map *resv = vma_resv_map(vma);
-+		pgoff_t resv_index = vma_hugecache_offset(h, vma, address);
-+		bool may_share = vma->vm_flags & VM_MAYSHARE;
-+
-+		if (resv_map_needs_reservation(resv, resv_index, may_share) < 0) {
- 			ret = VM_FAULT_OOM;
- 			goto out_mutex;
- 		}
- 		/* Just decrements count, does not deallocate */
--		vma_end_reservation(h, vma, haddr);
-+		resv_map_end_reservation(resv, resv_index, may_share);
- 
- 		pagecache_folio = filemap_lock_folio(mapping, idx);
- 	}
+ 	/*
 -- 
 2.41.0.rc0.172.g3f132b7071-goog
 
