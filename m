@@ -2,58 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C07E8C7EE2A
-	for <linux-kselftest@archiver.kernel.org>; Tue,  6 Jun 2023 19:07:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22A1BC7EE2A
+	for <linux-kselftest@archiver.kernel.org>; Tue,  6 Jun 2023 19:07:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239380AbjFFTHH (ORCPT
+        id S239425AbjFFTHk (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 6 Jun 2023 15:07:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39610 "EHLO
+        Tue, 6 Jun 2023 15:07:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239376AbjFFTFu (ORCPT
+        with ESMTP id S239241AbjFFTGv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Jun 2023 15:05:50 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED3C819B3
-        for <linux-kselftest@vger.kernel.org>; Tue,  6 Jun 2023 12:04:55 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id d9443c01a7336-1b0406e6c75so25928255ad.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 06 Jun 2023 12:04:55 -0700 (PDT)
+        Tue, 6 Jun 2023 15:06:51 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B3719B5
+        for <linux-kselftest@vger.kernel.org>; Tue,  6 Jun 2023 12:05:03 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-ba81b24b878so10281309276.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 06 Jun 2023 12:05:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686078280; x=1688670280;
+        d=google.com; s=20221208; t=1686078284; x=1688670284;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qPbJS0NeJm0ebjWuWAGTg4zHB+jUkimTjx0FXzxIc84=;
-        b=08oQhpNB5bPsCTiYZb6zzITcl3NrY7Nrj0gHP7CL4wEm89iCZHqEqZvXMnagv03rkn
-         GPexWIBMA+li5aiwDX4ihlFm6cVZOeax1+AHpQmOU2YD/QwBli/TC1j7FXVthdfotrbj
-         ohAd8tgwk7CZ9llZkCvOzoa+H0uBPFBXEcWSK2TcUhtWGacdRDhynTXSQrFRtxSj03ll
-         +4JVjB3yWPlWCPldFPbqjqq8D3jeR9j4nRL0TBHcuQBOxSh7kt2ZiDSE77C+EmED3XTt
-         Cx6sMOv8frrdr7pYnwu4yVAynavbLFmrX0Dakhf26NBqNaaItWBILzjwUpL7K2OiHx+L
-         mttg==
+        bh=xVPr1dIpnxklN0GMh0WV40gxjr+XB/duCXqFm/4Eedk=;
+        b=OpWI8RPhFgIw5MoV+RS2cmQpFpGPXsQqq6sU1K61/owOmBB1Ql0+w7FJ3nZldnf8p9
+         +qYBb0NtRqwQu8dWDMwOUTG0ATZVJvom27ARS7xgWW5TfboiScGSMfZ8N45qzVKLAY2H
+         4CU726nNQYrYfpWC/qzLp0r9J8us1SCC2lEqZrYJr9OdHyFq/TUwds9iZNdlTcobAHRr
+         ZZALUwW7mEujbc7yxykj2/g4xPWE/5QaSH6KTAlpAQ02/2PJYX27kEua6tRoLiCjwPDV
+         pyCH4FFtF/i8mbhld01B2RuTsSf6teTynYWziBlTcigs4W2oRa0ZqtYf/T+WFi+IMehY
+         DIyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686078280; x=1688670280;
+        d=1e100.net; s=20221208; t=1686078284; x=1688670284;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qPbJS0NeJm0ebjWuWAGTg4zHB+jUkimTjx0FXzxIc84=;
-        b=dO7eSfKIN4YUXxpiih4v/+jscTMhJQofl5AVSQGbWTT//nTFsdciwE6RxHc9rfP871
-         SurWrG0CcEqaDQMOvf966NHij0geKvuwKrFJWO/Fv8WE8EZxXwsnlYRJw2Chl3nrcPeK
-         2Z0nI60NyWpK2uKsRYiUrtv/619s7KJur/k0h7vmaCBf8su0h7wFvs10hsna+znkQwKn
-         IoTq2Ev1bXlOgz3kWPSgrrh6K7qCsTWGwslLEp4Cby8yICPgNPVb53W6D0NFBCoTvsSQ
-         M9PqnHmKkGV432PQhAJ8z5ZbVfnHQsdhc06aw7RAkPtVnpzXtqmYysazCqeJ7ODeMCRa
-         Vcrw==
-X-Gm-Message-State: AC+VfDyDM87BwEz0ttuxnJ/JPtN4O1zlErwGqc2BJ0gH04pzgSK2PSBy
-        G+UHFaRnEXA46q+GpG2MOuLKBgW2L3Sd2q7mbA==
-X-Google-Smtp-Source: ACHHUZ7+W5XWqHy7WGLlye5fNuolaabE941Ydb/Msxa478YJYlgHnPlrM8+Gzs9sRjg5WLNJlGVtgTPDm/CmJ9Gc2A==
+        bh=xVPr1dIpnxklN0GMh0WV40gxjr+XB/duCXqFm/4Eedk=;
+        b=Zbq4iahxP3TMRcg9LgsxF9hV0xXm32x7BkC8FKI4kW0rqx2mvpQeb+La1NKekLW1vD
+         nYrNfiTKX+mL/hwbwAzlM8TbsZMXYdTh4OWDLyNapVwCrPg8yC0vo30LwWDkSYhXuaAa
+         EoQTWI+n0pwBkTrZS4Q4FkDB2euqGK/uRuPxNwDOkPhtZ6L3WihopNbmW2oXC0qqfLUM
+         hAwpkXGtLfMV3ohgyLckB6hueyb5+ZgVi3ZKWFofw3AfYJAZriuZJyMA4STPUdAM785y
+         dgCv0q77ZsiglLy2+cavU2vUuexsX6xzNSBAbZPVNNPtjaMwLoXPAzkaU/dAbw+qtz+1
+         ubrQ==
+X-Gm-Message-State: AC+VfDyyWDMp7tgr9Tjvybzp5Qpl0v7Welk/oE7hEXfLKlqY3xTUWAGy
+        5gvMtzZfStiWIrOZZsiBbv3L8FJ2IU71YB/sJQ==
+X-Google-Smtp-Source: ACHHUZ6iw5MaJvx6Biay/guXDPe54wqyOEjmtoFNQ8eDgpYM8NsdWofxvbuGdqaNO+FVNrUBL1ysZvJNR4qrxfEOBQ==
 X-Received: from ackerleytng-ctop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:13f8])
- (user=ackerleytng job=sendgmr) by 2002:a17:902:da8c:b0:1b0:4b1d:26e1 with
- SMTP id j12-20020a170902da8c00b001b04b1d26e1mr956600plx.8.1686078280564; Tue,
- 06 Jun 2023 12:04:40 -0700 (PDT)
-Date:   Tue,  6 Jun 2023 19:04:00 +0000
+ (user=ackerleytng job=sendgmr) by 2002:a05:6902:72d:b0:ba1:d0:7f7c with SMTP
+ id l13-20020a056902072d00b00ba100d07f7cmr1128681ybt.2.1686078284464; Tue, 06
+ Jun 2023 12:04:44 -0700 (PDT)
+Date:   Tue,  6 Jun 2023 19:04:02 +0000
 In-Reply-To: <cover.1686077275.git.ackerleytng@google.com>
 Mime-Version: 1.0
 References: <cover.1686077275.git.ackerleytng@google.com>
 X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Message-ID: <f8354b118e7f630c1340a9d651258606bf8d9400.1686077275.git.ackerleytng@google.com>
-Subject: [RFC PATCH 15/19] KVM: guest_mem: hugetlb: initialization and cleanup
+Message-ID: <2b26bcc8b10f8a11e6405d4cea5f1235e82e83c9.1686077275.git.ackerleytng@google.com>
+Subject: [RFC PATCH 17/19] KVM: selftests: Add basic selftests for
+ hugetlbfs-backed guest_mem
 From:   Ackerley Tng <ackerleytng@google.com>
 To:     akpm@linux-foundation.org, mike.kravetz@oracle.com,
         muchun.song@linux.dev, pbonzini@redhat.com, seanjc@google.com,
@@ -79,215 +80,66 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-First stage of hugetlb support: add initialization and cleanup
-routines
+Add tests for 2MB and 1GB page sizes.
 
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 ---
- include/uapi/linux/kvm.h | 25 ++++++++++++
- virt/kvm/guest_mem.c     | 88 +++++++++++++++++++++++++++++++++++++---
- 2 files changed, 108 insertions(+), 5 deletions(-)
+ .../testing/selftests/kvm/guest_memfd_test.c  | 33 ++++++++++++++-----
+ 1 file changed, 24 insertions(+), 9 deletions(-)
 
-diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-index 0fa665e8862a..1df0c802c29f 100644
---- a/include/uapi/linux/kvm.h
-+++ b/include/uapi/linux/kvm.h
-@@ -13,6 +13,7 @@
- #include <linux/compiler.h>
- #include <linux/ioctl.h>
- #include <asm/kvm.h>
-+#include <asm-generic/hugetlb_encode.h>
- 
- #define KVM_API_VERSION 12
- 
-@@ -2280,6 +2281,30 @@ struct kvm_memory_attributes {
- #define KVM_CREATE_GUEST_MEMFD	_IOWR(KVMIO,  0xd4, struct kvm_create_guest_memfd)
- 
- #define KVM_GUEST_MEMFD_HUGE_PMD		(1ULL << 0)
-+#define KVM_GUEST_MEMFD_HUGETLB			(1ULL << 1)
-+
-+/*
-+ * Huge page size encoding when KVM_GUEST_MEMFD_HUGETLB is specified, and a huge
-+ * page size other than the default is desired.  See hugetlb_encode.h.  All
-+ * known huge page size encodings are provided here.  It is the responsibility
-+ * of the application to know which sizes are supported on the running system.
-+ * See mmap(2) man page for details.
-+ */
-+#define KVM_GUEST_MEMFD_HUGE_SHIFT	HUGETLB_FLAG_ENCODE_SHIFT
-+#define KVM_GUEST_MEMFD_HUGE_MASK	HUGETLB_FLAG_ENCODE_MASK
-+
-+#define KVM_GUEST_MEMFD_HUGE_64KB	HUGETLB_FLAG_ENCODE_64KB
-+#define KVM_GUEST_MEMFD_HUGE_512KB	HUGETLB_FLAG_ENCODE_512KB
-+#define KVM_GUEST_MEMFD_HUGE_1MB	HUGETLB_FLAG_ENCODE_1MB
-+#define KVM_GUEST_MEMFD_HUGE_2MB	HUGETLB_FLAG_ENCODE_2MB
-+#define KVM_GUEST_MEMFD_HUGE_8MB	HUGETLB_FLAG_ENCODE_8MB
-+#define KVM_GUEST_MEMFD_HUGE_16MB	HUGETLB_FLAG_ENCODE_16MB
-+#define KVM_GUEST_MEMFD_HUGE_32MB	HUGETLB_FLAG_ENCODE_32MB
-+#define KVM_GUEST_MEMFD_HUGE_256MB	HUGETLB_FLAG_ENCODE_256MB
-+#define KVM_GUEST_MEMFD_HUGE_512MB	HUGETLB_FLAG_ENCODE_512MB
-+#define KVM_GUEST_MEMFD_HUGE_1GB	HUGETLB_FLAG_ENCODE_1GB
-+#define KVM_GUEST_MEMFD_HUGE_2GB	HUGETLB_FLAG_ENCODE_2GB
-+#define KVM_GUEST_MEMFD_HUGE_16GB	HUGETLB_FLAG_ENCODE_16GB
- 
- struct kvm_create_guest_memfd {
- 	__u64 size;
-diff --git a/virt/kvm/guest_mem.c b/virt/kvm/guest_mem.c
-index 13253af40be6..b533143e2878 100644
---- a/virt/kvm/guest_mem.c
-+++ b/virt/kvm/guest_mem.c
-@@ -19,6 +19,7 @@
- #include <linux/secretmem.h>
- #include <linux/set_memory.h>
- #include <linux/sched/signal.h>
-+#include <linux/hugetlb.h>
- 
- #include <uapi/linux/magic.h>
- 
-@@ -30,6 +31,11 @@ struct kvm_gmem {
- 	struct kvm *kvm;
- 	u64 flags;
- 	struct xarray bindings;
-+	struct {
-+		struct hstate *h;
-+		struct hugepage_subpool *spool;
-+		struct resv_map *resv_map;
-+	} hugetlb;
- };
- 
- static loff_t kvm_gmem_get_size(struct file *file)
-@@ -346,6 +352,46 @@ static const struct inode_operations kvm_gmem_iops = {
- 	.setattr	= kvm_gmem_setattr,
- };
- 
-+static int kvm_gmem_hugetlb_setup(struct inode *inode, struct kvm_gmem *gmem,
-+				  loff_t size, u64 flags)
-+{
-+	int page_size_log;
-+	int hstate_idx;
-+	long hpages;
-+	struct resv_map *resv_map;
-+	struct hugepage_subpool *spool;
-+	struct hstate *h;
-+
-+	page_size_log = (flags >> KVM_GUEST_MEMFD_HUGE_SHIFT) & KVM_GUEST_MEMFD_HUGE_MASK;
-+	hstate_idx = get_hstate_idx(page_size_log);
-+	if (hstate_idx < 0)
-+		return -ENOENT;
-+
-+	h = &hstates[hstate_idx];
-+	/* Round up to accommodate size requests that don't align with huge pages */
-+	hpages = round_up(size, huge_page_size(h)) >> huge_page_shift(h);
-+	spool = hugepage_new_subpool(h, hpages, hpages);
-+	if (!spool)
-+		goto out;
-+
-+	resv_map = resv_map_alloc();
-+	if (!resv_map)
-+		goto out_subpool;
-+
-+	inode->i_blkbits = huge_page_shift(h);
-+
-+	gmem->hugetlb.h = h;
-+	gmem->hugetlb.spool = spool;
-+	gmem->hugetlb.resv_map = resv_map;
-+
-+	return 0;
-+
-+out_subpool:
-+	kfree(spool);
-+out:
-+	return -ENOMEM;
-+}
-+
- static struct inode *kvm_gmem_create_inode(struct kvm *kvm, loff_t size, u64 flags,
- 					   struct vfsmount *mnt)
- {
-@@ -368,6 +414,12 @@ static struct inode *kvm_gmem_create_inode(struct kvm *kvm, loff_t size, u64 fla
- 	if (!gmem)
- 		goto err_inode;
- 
-+	if (flags & KVM_GUEST_MEMFD_HUGETLB) {
-+		err = kvm_gmem_hugetlb_setup(inode, gmem, size, flags);
-+		if (err)
-+			goto err_gmem;
-+	}
-+
- 	xa_init(&gmem->bindings);
- 
- 	kvm_get_kvm(kvm);
-@@ -385,6 +437,8 @@ static struct inode *kvm_gmem_create_inode(struct kvm *kvm, loff_t size, u64 fla
- 
- 	return inode;
- 
-+err_gmem:
-+	kfree(gmem);
- err_inode:
- 	iput(inode);
- 	return ERR_PTR(err);
-@@ -414,6 +468,8 @@ static struct file *kvm_gmem_create_file(struct kvm *kvm, loff_t size, u64 flags
- 	return file;
+diff --git a/tools/testing/selftests/kvm/guest_memfd_test.c b/tools/testing/selftests/kvm/guest_memfd_test.c
+index 059b33cdecec..6e24631119c6 100644
+--- a/tools/testing/selftests/kvm/guest_memfd_test.c
++++ b/tools/testing/selftests/kvm/guest_memfd_test.c
+@@ -90,20 +90,14 @@ static void test_fallocate(int fd, size_t page_size, size_t total_size)
+ 	TEST_ASSERT(!ret, "fallocate to restore punched hole should succeed");
  }
  
-+#define KVM_GUEST_MEMFD_ALL_FLAGS (KVM_GUEST_MEMFD_HUGE_PMD | KVM_GUEST_MEMFD_HUGETLB)
-+
- int kvm_gmem_create(struct kvm *kvm, struct kvm_create_guest_memfd *gmem)
+-
+-int main(int argc, char *argv[])
++void test_guest_mem(struct kvm_vm *vm, uint32_t flags, size_t page_size)
  {
+-	size_t page_size;
+-	size_t total_size;
  	int fd;
-@@ -424,8 +480,15 @@ int kvm_gmem_create(struct kvm *kvm, struct kvm_create_guest_memfd *gmem)
- 	if (size < 0 || !PAGE_ALIGNED(size))
- 		return -EINVAL;
+-	struct kvm_vm *vm;
++	size_t total_size;
  
--	if (flags & ~KVM_GUEST_MEMFD_HUGE_PMD)
--		return -EINVAL;
-+	if (!(flags & KVM_GUEST_MEMFD_HUGETLB)) {
-+		if (flags & ~(unsigned int)KVM_GUEST_MEMFD_ALL_FLAGS)
-+			return -EINVAL;
-+	} else {
-+		/* Allow huge page size encoding in flags. */
-+		if (flags & ~(unsigned int)(KVM_GUEST_MEMFD_ALL_FLAGS |
-+				(KVM_GUEST_MEMFD_HUGE_MASK << KVM_GUEST_MEMFD_HUGE_SHIFT)))
-+			return -EINVAL;
-+	}
+-	page_size = getpagesize();
+ 	total_size = page_size * 4;
  
- 	if (flags & KVM_GUEST_MEMFD_HUGE_PMD) {
- #ifdef CONFIG_TRANSPARENT_HUGEPAGE
-@@ -610,7 +673,17 @@ static void kvm_gmem_evict_inode(struct inode *inode)
- 	 * pointed at this file.
- 	 */
- 	kvm_gmem_invalidate_begin(kvm, gmem, 0, -1ul);
--	truncate_inode_pages_final(inode->i_mapping);
-+	if (gmem->flags & KVM_GUEST_MEMFD_HUGETLB) {
-+		truncate_inode_pages_final_prepare(inode->i_mapping);
-+		remove_mapping_hugepages(
-+			inode->i_mapping, gmem->hugetlb.h, gmem->hugetlb.spool,
-+			gmem->hugetlb.resv_map, inode, 0, LLONG_MAX);
+-	vm = vm_create_barebones();
+-
+-	fd = vm_create_guest_memfd(vm, total_size, 0);
++	fd = vm_create_guest_memfd(vm, total_size, flags);
+ 
+ 	test_file_read_write(fd);
+ 	test_mmap(fd, page_size);
+@@ -112,3 +106,24 @@ int main(int argc, char *argv[])
+ 
+ 	close(fd);
+ }
 +
-+		resv_map_release(&gmem->hugetlb.resv_map->refs);
-+		hugepage_put_subpool(gmem->hugetlb.spool);
-+	} else {
-+		truncate_inode_pages_final(inode->i_mapping);
-+	}
- 	kvm_gmem_invalidate_end(kvm, gmem, 0, -1ul);
- 
- 	mutex_unlock(&kvm->slots_lock);
-@@ -688,10 +761,15 @@ bool kvm_gmem_check_alignment(const struct kvm_userspace_memory_region2 *mem)
- {
- 	size_t page_size;
- 
--	if (mem->flags & KVM_GUEST_MEMFD_HUGE_PMD)
-+	if (mem->flags & KVM_GUEST_MEMFD_HUGETLB) {
-+		size_t page_size_log = ((mem->flags >> KVM_GUEST_MEMFD_HUGE_SHIFT)
-+					& KVM_GUEST_MEMFD_HUGE_MASK);
-+		page_size = 1UL << page_size_log;
-+	} else if (mem->flags & KVM_GUEST_MEMFD_HUGE_PMD) {
- 		page_size = HPAGE_PMD_SIZE;
--	else
-+	} else {
- 		page_size = PAGE_SIZE;
-+	}
- 
- 	return (IS_ALIGNED(mem->gmem_offset, page_size) &&
- 		IS_ALIGNED(mem->memory_size, page_size));
++int main(int argc, char *argv[])
++{
++	struct kvm_vm *vm = vm_create_barebones();
++
++	printf("Test guest mem 4K\n");
++	test_guest_mem(vm, 0, getpagesize());
++	printf("        PASSED\n");
++
++	printf("Test guest mem hugetlb 2M\n");
++	test_guest_mem(
++		vm, KVM_GUEST_MEMFD_HUGETLB | KVM_GUEST_MEMFD_HUGE_2MB, 2UL << 20);
++	printf("        PASSED\n");
++
++	printf("Test guest mem hugetlb 1G\n");
++	test_guest_mem(
++		vm, KVM_GUEST_MEMFD_HUGETLB | KVM_GUEST_MEMFD_HUGE_1GB, 1UL << 30);
++	printf("        PASSED\n");
++
++	return 0;
++}
 -- 
 2.41.0.rc0.172.g3f132b7071-goog
 
