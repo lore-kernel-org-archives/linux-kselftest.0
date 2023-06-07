@@ -2,132 +2,127 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3048AC7EE2E
-	for <linux-kselftest@archiver.kernel.org>; Wed,  7 Jun 2023 21:05:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9A2AC7EE23
+	for <linux-kselftest@archiver.kernel.org>; Wed,  7 Jun 2023 21:20:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235904AbjFGVFi (ORCPT
+        id S231599AbjFGVUW (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 7 Jun 2023 17:05:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34848 "EHLO
+        Wed, 7 Jun 2023 17:20:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236072AbjFGVEh (ORCPT
+        with ESMTP id S231500AbjFGVUV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 7 Jun 2023 17:04:37 -0400
-Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E64192D55
-        for <linux-kselftest@vger.kernel.org>; Wed,  7 Jun 2023 14:04:18 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id B3F55761600
-        for <linux-kselftest@vger.kernel.org>; Wed,  7 Jun 2023 21:04:17 +0000 (UTC)
-Received: from pdx1-sub0-mail-a233.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 49F6D761779
-        for <linux-kselftest@vger.kernel.org>; Wed,  7 Jun 2023 21:04:17 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1686171857; a=rsa-sha256;
-        cv=none;
-        b=YD2+PfLSxyOkB4g9vRC40hvsDQQoc/ywYg+RP81VMcmKSCh/nubuPpnRpG3cSoa8OM1m5R
-        UynTapesOv9fRZ2EM7I7pxCoa3buj1RmSQp3diLqvHa5xbaszcPAfgBKzdufknfOx29nsp
-        JlTGKmJjZtfxNmsls8RTiAlFEGeBkc1IrBpw3XZ+AiZR29AZ+hVXbD4uCIJSnZaTD4AWj7
-        9Mv1WvaiybEMG7aiPDeO4SITLB3/6WQHiY2POq+2ScS+EesQQezIewpIOAcI67XtMiaXnk
-        VEcf8G91TNkcF+cbTlGVjMdw+ZiiezyLdYpsuHgr56+APijbc3RY6cDWnCqv/A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1686171857;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         dkim-signature; bh=5/ao13F8CNYp1ZMCVek/NrMErWLjCVRsd7llF9n1i+4=;
-        b=Vpy+cBFWQm6PZwMY4YAdy2Kj0SE2wCpwUyUgb/YCxFGo24JnIAxghn3PNUHluvMCu0WOPX
-        81p3u4Oizp9zA8ET6ata/E00xcEix735c0NNQHDtuyJDU3lRBfbqRBYO55Jq0sjjFLiEyn
-        8OPco3Q/XhKF05N8+xME3SRdKHraGDYzCZ3Q9ebC2xlmml0usIpkbSWxS3jNHQjGpnuvWR
-        82cN4OR2e9zLOtqKGjr0vxUJ800n9uPAH+FqWqAMrtBpxiKQWUhtvyJgk45854mdYgNGA2
-        o5QuwA8KDvXyidv1kif2Yr+s7dp1Aqq3ZfcQbzj/V8iqMSKXFhr73hFHWxW5Og==
-ARC-Authentication-Results: i=1;
-        rspamd-6f5cfd578c-jwvbw;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=kjlx@templeofstupid.com
-X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|kjlx@templeofstupid.com
-X-MailChannels-Auth-Id: dreamhost
-X-Illustrious-Language: 433a2d402fe847a3_1686171857536_2981396014
-X-MC-Loop-Signature: 1686171857536:314360050
-X-MC-Ingress-Time: 1686171857535
-Received: from pdx1-sub0-mail-a233.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.103.24.122 (trex/6.8.1);
-        Wed, 07 Jun 2023 21:04:17 +0000
-Received: from kmjvbox (c-73-93-64-36.hsd1.ca.comcast.net [73.93.64.36])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kjlx@templeofstupid.com)
-        by pdx1-sub0-mail-a233.dreamhost.com (Postfix) with ESMTPSA id 4Qc0Fs0FxgzTh
-        for <linux-kselftest@vger.kernel.org>; Wed,  7 Jun 2023 14:04:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=templeofstupid.com;
-        s=dreamhost; t=1686171857;
-        bh=5/ao13F8CNYp1ZMCVek/NrMErWLjCVRsd7llF9n1i+4=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=Ks06xLF7GgKn/OTiw8dmTQO8nej2Brz6p1ADLhr2dsBmEKI2DmGH2E2TYoyVG362f
-         6xxKjIH2WwcZo10JQ1hxEzYhUGIXIcK3Dp6Nl+m4Alm0omgGG4c49q22t1Obk0kDx6
-         B6Mik2b4H+v8QyYk1XKNohlCXlCbPSxsXri5V0PY=
-Received: from johansen (uid 1000)
-        (envelope-from kjlx@templeofstupid.com)
-        id e005f
-        by kmjvbox (DragonFly Mail Agent v0.12);
-        Wed, 07 Jun 2023 14:04:16 -0700
-Date:   Wed, 7 Jun 2023 14:04:16 -0700
-From:   Krister Johansen <kjlx@templeofstupid.com>
-To:     bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: [PATCH bpf v2 0/2] bpf: fix NULL dereference during extable search
-Message-ID: <cover.1686166633.git.kjlx@templeofstupid.com>
+        Wed, 7 Jun 2023 17:20:21 -0400
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6A5691FFE;
+        Wed,  7 Jun 2023 14:20:15 -0700 (PDT)
+Received: (from willy@localhost)
+        by mail.home.local (8.17.1/8.17.1/Submit) id 357LJhPp013364;
+        Wed, 7 Jun 2023 23:19:43 +0200
+Date:   Wed, 7 Jun 2023 23:19:43 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Zhangjin Wu <falcon@tinylab.org>, thomas@t-8ch.de,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: nolibc patches, still possible for 6.5 ?
+Message-ID: <ZID0b+nIcypMjV0y@1wt.eu>
+References: <ZHyPi29q3MKiNAQZ@1wt.eu>
+ <5494ac68-b4b9-434f-92c1-7e197c92a4ab@paulmck-laptop>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <5494ac68-b4b9-434f-92c1-7e197c92a4ab@paulmck-laptop>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
-Enclosed are a pair of patches for an oops that can occur if an exception is
-generated while a bpf subprogram is running.  One of the bpf_prog_aux entries
-for the subprograms are missing an extable.  This can lead to an exception that
-would otherwise be handled turning into a NULL pointer bug.
+Hello Paul,
 
-The bulk of the change here is simply adding a pair of programs for the
-selftest.  The proposed fix in this iteration is a 1-line change.
+On Sun, Jun 04, 2023 at 03:57:54PM -0700, Paul E. McKenney wrote:
+> On Sun, Jun 04, 2023 at 03:20:11PM +0200, Willy Tarreau wrote:
+> > Hello Paul,
+> > 
+> > Thomas and Zhangjin have provided significant nolibc cleanups, and
+> > fixes, as well as preparation work to later support riscv32.
+> > 
+> > These consist in the following main series:
+> >   - generalization of stackprotector to other archs that were not
+> >     previously supported (riscv, mips, loongarch, arm, arm64)
+> > 
+> >   - general cleanups of the makefile, test report output, deduplication
+> >     of certain tests
+> > 
+> >   - slightly better compliance of some tests performed on certain syscalls
+> >     (e.g. no longer pass (void*)1 to gettimeofday() since glibc hates it).
+> > 
+> >   - add support for nanoseconds in stat() and statx()
+> > 
+> >   - fixes for some syscalls (e.g. ppoll() has 5 arguments not 4)
+> > 
+> >   - fixes around limits.h and  INT_MAX / INT_FAST64_MAX
+> > 
+> > I rebased the whole series on top of your latest dev branch (d19a9ca3d5)
+> > and it works fine for all archs.
+> > 
+> > I don't know if you're still planning on merging new stuff in this area
+> > for 6.5 or not (since I know that it involves new series of tests on your
+> > side as well), but given that Zhangjin will engage into deeper changes
+> > later for riscv32 that will likely imply to update more syscalls to use
+> > the time64 ones, I would prefer to split the cleanups from the hard stuff,
+> > but I'll let you judge based on the current state of what's pending for
+> > 6.5.
+> > 
+> > In any case I'm putting all this here for now (not for merge yet):
+> > 
+> >    git://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git 20230604-nolibc-rv32+stkp6
+> > 
+> > I'd like Thomas and Zhangjin to perform a last check to confirm they're
+> > OK with this final integration.
+> 
+> Given that the testing converges by the end of this week, I can't see
+> any reason why these cannot make v6.5.  (There were some kernel test
+> robot complaints as well, valid or not I am not sure.)
 
-These changes were tested via the verifier and progs selftests and no
-regressions were observed.
+After Thomas' and Zhangjin's reviews and checks, I could run a mostly
+complete check:
+  - arm64, i386, x86_64 show 100% success
+  - arm, mips: 100% success, stackprotector skipped
+  - s390x, riscv64: run-user OK, kernel build fails (see below)
+  - loongarch: build OK, just not executed (need to upgrade my qemu
+    and I hate doing it late when some tests results are needed)
 
-Changes from v1:
+Regarding the build failure affecting s390x and riscv64, it's a regular
+kernel resulting from "make defconfig". For both archs, I'm getting this
+failure:
 
-- Add a selftest (Feedback From Alexei Starovoitov)
-- Move to a 1-line verifier change instead of searching multiple extables
+  In file included from kernel/rcu/update.c:649:
+  kernel/rcu/tasks.h: In function 'get_rcu_tasks_gp_kthread':
+    CC      fs/kernfs/dir.o
+    CC      security/bpf/hooks.o
+  kernel/rcu/tasks.h:1939:16: error: 'rcu_tasks' undeclared (first use in this function)
+   1939 |         return rcu_tasks.kthread_ptr;
+        |                ^~~~~~~~~
+  kernel/rcu/tasks.h:1939:16: note: each undeclared identifier is reported only once for each function it appears in
+  kernel/rcu/tasks.h:1940:1: error: control reaches end of non-void function [-Werror=return-type]
+   1940 | }
+        | ^
+  cc1: some warnings being treated as errors
 
-Krister Johansen (2):
-  Add a selftest for subprogram extables
-  bpf: ensure main program has an extable
+I rebased the branch on top of 6.4-rc5 and got the same. I'm building
+with gcc-11.3.0 from kernel.org. I'm not sure whether this comes from
+my build environment or recent changes to the kernel, but I'm sure I
+haven't seen that error during 6.3-rc cycle. However, given that
+Zhangjin seems to have successfully built it for riscv, there might
+be something odd on my side.
 
- kernel/bpf/verifier.c                         |  1 +
- .../bpf/prog_tests/subprogs_extable.c         | 35 +++++++++
- .../bpf/progs/test_subprogs_extable.c         | 71 +++++++++++++++++++
- 3 files changed, 107 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/subprogs_extable.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_subprogs_extable.c
+Given that this build issue is not dependent on the selftest, I'm fine
+with the branch getting merged as-is, and can provide feedback on this
+build error if needed:
 
--- 
-2.25.1
+  git://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git 20230606-nolibc-rv32+stkp7a
 
+Just let me know if you prefer that I resend the whole series or need
+more info etc, as usual.
+
+Thank you!
+Willy
