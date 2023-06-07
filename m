@@ -2,342 +2,475 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E34BBC7EE2F
-	for <linux-kselftest@archiver.kernel.org>; Wed,  7 Jun 2023 16:40:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55AF0C7EE25
+	for <linux-kselftest@archiver.kernel.org>; Wed,  7 Jun 2023 16:52:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbjFGQkl (ORCPT
+        id S229791AbjFGQw6 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 7 Jun 2023 12:40:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59716 "EHLO
+        Wed, 7 Jun 2023 12:52:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbjFGQkj (ORCPT
+        with ESMTP id S229655AbjFGQw5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 7 Jun 2023 12:40:39 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF1AD1FC2;
-        Wed,  7 Jun 2023 09:40:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686156038; x=1717692038;
-  h=date:from:to:cc:subject:message-id;
-  bh=GqKYxnubSgI/pE7wcj7bL/DYozmNTzniYDllwQ8VGnI=;
-  b=IlcXsEYU5osmmKzgoWUE+cze9oF8zu6jVhPVnt1qJL49r0n+W9LX/+rB
-   24QZySQgRYyK4eKVXED2zP92dJT7hvDzN7dTo0fzwMOuKN5ov+vSBwFs0
-   K3jkz/zTVVOjMXYDTth1L5dMhAnSesQMKudlQQ+TQFUW4V7w59vd2AmaH
-   /lwuedLT1o/apV2S1XqH9Gk7Y8VjCQfPSAud1mPuk0EgR5pwY1gtt2eX/
-   P+TKjvWPiVMx3dDNN3TcUTqtmSwG2RfhPOIOI9Z0WRkOMUIKN5DlME6MJ
-   aNYYRpkZs1XsvTRAVbLanCG5/jd0HGm8zdH1jtS1kXQsPISJTXXeh4zbc
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="341695969"
-X-IronPort-AV: E=Sophos;i="6.00,224,1681196400"; 
-   d="scan'208";a="341695969"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 09:40:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="712726946"
-X-IronPort-AV: E=Sophos;i="6.00,224,1681196400"; 
-   d="scan'208";a="712726946"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 07 Jun 2023 09:40:24 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q6wCu-0006kl-0a;
-        Wed, 07 Jun 2023 16:40:24 +0000
-Date:   Thu, 08 Jun 2023 00:39:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Linux Memory Management List <linux-mm@kvack.org>,
-        bpf@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        kasan-dev@googlegroups.com, kunit-dev@googlegroups.com,
-        kvmarm@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-pci@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org
-Subject: [linux-next:master] BUILD REGRESSION
- abbd8bb42915d9ed06df11b430bf4ecb3d8ac5ad
-Message-ID: <20230607163937.ZTc-D%lkp@intel.com>
-User-Agent: s-nail v14.9.24
+        Wed, 7 Jun 2023 12:52:57 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B3E7188
+        for <linux-kselftest@vger.kernel.org>; Wed,  7 Jun 2023 09:52:55 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-516500163b2so134a12.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 07 Jun 2023 09:52:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686156773; x=1688748773;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kDPu/l1jQkL1v/hJOBAOUnasvA9zu2nCkrjHp2QAgLM=;
+        b=iwJUggxmjMfoM27ioWLRFV88/qcJLp1Oygu73i7qkmVtRPdM1GTkdOV0mLDei7dJou
+         Tszz7TvhbzC6Jz9+7gHV5V7QAiGdiFnO9+fnSBTwFhURNAJJuLDSDAAZ+adkLbgyuI5V
+         JUZLetMRYQNt4iOSw+EUjZvDw3+c3kYqbMM74nOemu+u1R+OUzEKQ7fkMCNzfaLN4z0k
+         5KzopE35KJ+BqV0b3RincLl3QesUZZCGe9+dpyv3edUGB+UtXniS/bwJNFFmjVyh3IW9
+         pgxm2oNOf16IWersIYGfY62yQfxgwwLwLHKTkOk5bdBm4oDUibP6dV0/sPt7XlsFEBXV
+         XyZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686156773; x=1688748773;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kDPu/l1jQkL1v/hJOBAOUnasvA9zu2nCkrjHp2QAgLM=;
+        b=RWUUdFMNShRIXcEr42MlRhDXekSfrk5BuNw09byvEriJnW4vTQKXiPsv0jM10qOFnr
+         RRiTII3BCZniJ52HLMm3aZnVomVVcHbHs5W60TRSuvdqzvdTBmojQBFZ4xxszGTwI7M8
+         DebWOhgOo/TZD1dRFCo0HZtMkiirINay5nPhNSns+wds/i+u1Jb99YPcfR47ppu0rV99
+         cPiOLnDSAja+19fnB28864Fsy1+xMv79aXDnua3/vtEByu2WN2MXp0wg/+fafHeuDPlP
+         vstJ2hAXjoZe+YoOHol+BF+giI49u6IcDXGgz3AipKs39dkynfXwDWXrkCrLb133G/aQ
+         K0cg==
+X-Gm-Message-State: AC+VfDywN/zh3JvNkKX0HQc685owg5MpjlV+wwT1wfZg+KMjgQz4UcTP
+        GcfCJitsAs4J+MdW7YerqcyySLFcw0RHwVIaBljSCA==
+X-Google-Smtp-Source: ACHHUZ6yw6A9LT5KQ0IM2TL4O+4LveUckjZMTIyQKCOBlFMXKIWAT/Vq7U6GCPlCLWZN9p98qgeOkVVJjCH+qSayDa4=
+X-Received: by 2002:a50:bb2a:0:b0:502:7e99:a1a7 with SMTP id
+ y39-20020a50bb2a000000b005027e99a1a7mr130646ede.1.1686156773093; Wed, 07 Jun
+ 2023 09:52:53 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230606060822.1065182-1-usama.anjum@collabora.com>
+ <20230606060822.1065182-3-usama.anjum@collabora.com> <CABb0KFGUSDwbMHQymCbPDwPiDit1+1JHbgTzzxXL04vQMUxo5w@mail.gmail.com>
+ <0b8b19e7-fffa-aa1f-8479-e5a338780f7a@collabora.com>
+In-Reply-To: <0b8b19e7-fffa-aa1f-8479-e5a338780f7a@collabora.com>
+From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+Date:   Wed, 7 Jun 2023 18:52:41 +0200
+Message-ID: <CABb0KFHoYeOz7A6vAUqYDx8PkxjeujPrQRi+Y0YxkqQ_i4tTpA@mail.gmail.com>
+Subject: Re: [PATCH v17 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-branch HEAD: abbd8bb42915d9ed06df11b430bf4ecb3d8ac5ad  Add linux-next specific files for 20230607
+On Wed, 7 Jun 2023 at 18:13, Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+>
+> Hi Micha=C5=82,
+>
+> Thank you for taking time to review!
+>
+> On 6/7/23 7:52=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
+> > On Tue, 6 Jun 2023 at 08:08, Muhammad Usama Anjum
+> > <usama.anjum@collabora.com> wrote:
+> >> This IOCTL, PAGEMAP_SCAN on pagemap file can be used to get and/or cle=
+ar
+> >> the info about page table entries. The following operations are suppor=
+ted
+> >> in this ioctl:
+> >> - Get the information if the pages have been written-to (PAGE_IS_WRITT=
+EN),
+> >>   file mapped (PAGE_IS_FILE), present (PAGE_IS_PRESENT) or swapped
+> >>   (PAGE_IS_SWAPPED).
+> >> - Find pages which have been written-to and/or write protect the pages
+> >>   (atomic PM_SCAN_OP_GET + PM_SCAN_OP_WP)
+> >>
+> >> This IOCTL can be extended to get information about more PTE bits.
+> > [...]
+> >> --- a/fs/proc/task_mmu.c
+> >> +++ b/fs/proc/task_mmu.c
+[...]
+> >> +static inline bool pagemap_scan_check_page_written(struct pagemap_sca=
+n_private *p)
+> >> +{
+> >> +       return (p->required_mask | p->anyof_mask | p->excluded_mask) &
+> >> +              PAGE_IS_WRITTEN;
+> >> +}
+> >
+> > This could be precalculated and put as a flag into
+> > pagemap_scan_private - it is kernel-private structure and there are a
+> > few spare bits in `flags` if you'd prefer not to add an explicit
+> > boolean.
+> This inline function is only being used at one spot. I can remove the
+> function altogether. I don't like putting it in flags. It'll bring some
+> complexity.
 
-Error/Warning reports:
+The difference at the call site will be function call vs field access.
+Do you mean that moving the function to where the struct is
+initialized would add complexity? Why is that?
 
-https://lore.kernel.org/oe-kbuild-all/202305132244.DwzBUcUd-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202306021936.OktTcMAT-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202306051812.1YdWyZca-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202306071513.vCmugxAi-lkp@intel.com
+> > [...]
+> >> +static int pagemap_scan_output(bool wt, bool file, bool pres, bool sw=
+ap,
+> >> +                              struct pagemap_scan_private *p,
+> >> +                              unsigned long addr, unsigned int n_page=
+s)
+> >> +{
+> >> +       unsigned long bitmap =3D PM_SCAN_BITMAP(wt, file, pres, swap);
+> >> +       struct page_region *cur =3D &p->cur;
+> >> +
+> >> +       if (!n_pages)
+> >> +               return -EINVAL;
+> >> +
+> >> +       if ((p->required_mask & bitmap) !=3D p->required_mask)
+> >> +               return 0;
+> >> +       if (p->anyof_mask && !(p->anyof_mask & bitmap))
+> >> +               return 0;
+> >> +       if (p->excluded_mask & bitmap)
+> >> +               return 0;
+> >> +
+> >> +       bitmap &=3D p->return_mask;
+> >> +       if (!bitmap)
+> >> +               return 0;
+> >> +
+> >> +       if (cur->bitmap =3D=3D bitmap &&
+> >> +           cur->start + cur->len * PAGE_SIZE =3D=3D addr) {
+> >> +               cur->len +=3D n_pages;
+> >> +               p->found_pages +=3D n_pages;
+> >> +       } else {
+> >> +               /*
+> >> +                * All data is copied to cur first. When more data is =
+found, we
+> >> +                * push cur to vec and copy new data to cur. The vec_i=
+ndex
+> >> +                * represents the current index of vec array. We add 1=
+ to the
+> >> +                * vec_index while performing checks to account for da=
+ta in cur.
+> >> +                */
+> >> +               if (cur->len && (p->vec_index + 1) >=3D p->vec_len)
+> >> +                       return -ENOSPC;
+> >> +
+> >> +               if (cur->len) {
+> >> +                       memcpy(&p->vec[p->vec_index], cur, sizeof(*p->=
+vec));
+> >> +                       p->vec_index++;
+> >> +               }
+> >> +
+> >> +               cur->start =3D addr;
+> >> +               cur->len =3D n_pages;
+> >> +               cur->bitmap =3D bitmap;
+> >> +               p->found_pages +=3D n_pages;
+> >> +       }
+> >> +
+> >> +       if (p->max_pages && (p->found_pages =3D=3D p->max_pages))
+> >> +               return PM_SCAN_FOUND_MAX_PAGES;
+> >> +
+> >> +       return 0;
+> >> +}
+> >> +
+> >> +static int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
+> >> +                                 unsigned long end, struct mm_walk *w=
+alk)
+> >> +{
+> >> +       struct pagemap_scan_private *p =3D walk->private;
+> >> +       struct vm_area_struct *vma =3D walk->vma;
+> >> +       unsigned long addr =3D end;
+> >> +       pte_t *pte, *orig_pte;
+> >> +       spinlock_t *ptl;
+> >> +       bool is_written;
+> >> +       int ret =3D 0;
+> >> +
+> >> +       arch_enter_lazy_mmu_mode();
+> >> +
+> >> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+> >> +       ptl =3D pmd_trans_huge_lock(pmd, vma);
+> >> +       if (ptl) {
+> >> +               unsigned long n_pages =3D (end - start)/PAGE_SIZE;
+> >> +
+> >> +               if (p->max_pages && n_pages > p->max_pages - p->found_=
+pages)
+> >> +                       n_pages =3D p->max_pages - p->found_pages;
+> >
+> > Since p->found_pages is only ever increased in `pagemap_scan_output()`
+> > and that function is only called for GET or GET+WP operations, maybe
+> > the logic could be folded to pagemap_scan_output() to avoid
+> > duplication?
+> > In this function the calculation is used only when WP op is done to
+> > split the HP if n_pages limit would be hit, but if using plain WP
+> > (without GET) it doesn't make sense to use the limit.
+> The n_pages is needed to decide if THP need to be broken down and it is
+> used in pagemap_scan_output(). I've brought this condition out of
+> pagemap_scan_output() to cater this former condition. If I move it to
+> pagemap_scan_output(), I'll have to write same condition to find out if I
+> need to breakt he THP. This seems like repetition, but we have same use
+> case for tlbhuge page.
 
-Error/Warning: (recently discovered and may have been fixed)
+My point is that you need to split the THP only if doing a GET+WP
+operation. If you only do GET, then the worst case would be for the
+process to report a spurious WRITTEN bit if an earlier-visited part of
+THP was modified and the scan restarted in the middle of a THP.
 
-ERROR: modpost: "lynx_pcs_destroy" [drivers/net/ethernet/stmicro/stmmac/stmmac.ko] undefined!
-drivers/bus/fsl-mc/fsl-mc-allocator.c:108:12: warning: variable 'mc_bus_dev' is uninitialized when used here [-Wuninitialized]
-drivers/cpufreq/cpufreq-dt-platdev.c:105:34: warning: 'blocklist' defined but not used [-Wunused-const-variable=]
-drivers/cpufreq/cpufreq-dt-platdev.c:18:34: warning: 'allowlist' defined but not used [-Wunused-const-variable=]
-drivers/net/ethernet/altera/altera_tse_main.c:1419: undefined reference to `lynx_pcs_create_mdiodev'
-drivers/net/ethernet/altera/altera_tse_main.c:1473: undefined reference to `lynx_pcs_destroy'
-include/drm/drm_print.h:456:39: error: format '%ld' expects argument of type 'long int', but argument 4 has type 'size_t' {aka 'unsigned int'} [-Werror=format=]
-lib/kunit/executor_test.c:138:4: error: cast from 'void (*)(const void *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Werror,-Wcast-function-type-strict]
-microblaze-linux-ld: (.text+0x14a4): undefined reference to `lynx_pcs_destroy'
-nios2-linux-ld: drivers/net/ethernet/altera/altera_tse_main.c:1451: undefined reference to `lynx_pcs_destroy'
-tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:330:18: warning: no previous prototype for 'bpf_kfunc_call_test_offset' [-Wmissing-prototypes]
-tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:336:1: warning: no previous prototype for 'bpf_kfunc_call_memb_acquire' [-Wmissing-prototypes]
-tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:342:18: warning: no previous prototype for 'bpf_kfunc_call_memb1_release' [-Wmissing-prototypes]
-tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:394:18: warning: no previous prototype for 'bpf_kfunc_call_test_fail1' [-Wmissing-prototypes]
-tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:398:18: warning: no previous prototype for 'bpf_kfunc_call_test_fail2' [-Wmissing-prototypes]
-tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:402:18: warning: no previous prototype for 'bpf_kfunc_call_test_fail3' [-Wmissing-prototypes]
-tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:410:18: warning: no previous prototype for 'bpf_kfunc_call_test_mem_len_fail1' [-Wmissing-prototypes]
+>> > (pagemap_scan_output() is trivial enough so I think it could be pulled
+> > inside the spinlocked region.)
+> It is already in spinlocked region. Spin lock is being released after tlb
+> flush.
 
-Unverified Error/Warning (likely false positive, please contact us if interested):
+Ah, I was thinking about calling pagemap_scan_output() before checking
+split_huge_pmd() case - and at that use the pagemap_scan_output()'s
+return value to do the check.
 
-arch/arm64/kvm/mmu.c:147:3-9: preceding lock on line 140
-drivers/clk/qcom/gpucc-sm8550.c:37:22: sparse: sparse: decimal constant 2300000000 is between LONG_MAX and ULONG_MAX. For C99 that means long long, C90 compilers are very likely to produce unsigned long (and a warning) here
-drivers/clk/qcom/videocc-sm8550.c:34:22: sparse: sparse: decimal constant 2300000000 is between LONG_MAX and ULONG_MAX. For C99 that means long long, C90 compilers are very likely to produce unsigned long (and a warning) here
-drivers/nvme/host/pr.c:268:23-26: ERROR: reference preceded by free on line 278
-drivers/pci/endpoint/functions/pci-epf-mhi.c:362:2-9: line 362 is redundant because platform_get_irq() already prints an error
-drivers/usb/cdns3/cdns3-starfive.c:23: warning: expecting prototype for cdns3(). Prototype was for USB_STRAP_HOST() instead
-drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c:217:30: sparse: sparse: incorrect type in argument 1 (different base types)
-kernel/events/uprobes.c:478 uprobe_write_opcode() warn: passing zero to 'PTR_ERR'
-lib/kunit/test.c:336 __kunit_abort() warn: ignoring unreachable code.
+> >> +               is_written =3D !is_pmd_uffd_wp(*pmd);
+> >> +
+> >> +               /*
+> >> +                * Break huge page into small pages if the WP operatio=
+n need to
+> >> +                * be performed is on a portion of the huge page.
+> >> +                */
+> >> +               if (is_written && IS_PM_SCAN_WP(p->flags) &&
+> >> +                   n_pages < HPAGE_SIZE/PAGE_SIZE) {
+> >> +                       spin_unlock(ptl);
+> >> +
+> >> +                       split_huge_pmd(vma, pmd, start);
+> >> +                       goto process_smaller_pages;
+> >> +               }
+> >> +
+> >> +               if (IS_PM_SCAN_GET(p->flags))
+> >> +                       ret =3D pagemap_scan_output(is_written, vma->v=
+m_file,
+> >> +                                                 pmd_present(*pmd),
+> >> +                                                 is_swap_pmd(*pmd),
+> >> +                                                 p, start, n_pages);
+> >> +
+> >> +               if (ret >=3D 0 && is_written && IS_PM_SCAN_WP(p->flags=
+))
+> >> +                       make_uffd_wp_pmd(vma, addr, pmd);
+> >> +
+> >> +               if (IS_PM_SCAN_WP(p->flags))
+> >
+> > Why `is_written` is not checked? If is_written is false, then the WP
+> > op should be a no-op and so won't need TLB flushing, will it? [Same
+> > for the PTE case below.]
+> It can be done for THP. But for ptes we cannot trust is_written as
+> is_written only represent last pte state.
 
-Error/Warning ids grouped by kconfigs:
+Ok, so the PTE case could use a flag recording whether any PTE had WP
+applied instead of `is_written`.
 
-gcc_recent_errors
-|-- arc-allyesconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- arm-allmodconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- arm-allyesconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- arm64-allyesconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- arm64-randconfig-c004-20230607
-|   `-- arch-arm64-kvm-mmu.c:preceding-lock-on-line
-|-- csky-randconfig-s053-20230607
-|   |-- drivers-clk-qcom-gpucc-sm8550.c:sparse:sparse:decimal-constant-is-between-LONG_MAX-and-ULONG_MAX.-For-C99-that-means-long-long-C90-compilers-are-very-likely-to-produce-unsigned-long-(and-a-warning)-he
-|   `-- drivers-clk-qcom-videocc-sm8550.c:sparse:sparse:decimal-constant-is-between-LONG_MAX-and-ULONG_MAX.-For-C99-that-means-long-long-C90-compilers-are-very-likely-to-produce-unsigned-long-(and-a-warning)-
-|-- i386-allyesconfig
-|   |-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|   `-- include-drm-drm_print.h:error:format-ld-expects-argument-of-type-long-int-but-argument-has-type-size_t-aka-unsigned-int
-|-- i386-randconfig-m021-20230607
-|   `-- kernel-events-uprobes.c-uprobe_write_opcode()-warn:passing-zero-to-PTR_ERR
-|-- m68k-allmodconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- microblaze-randconfig-c041-20230607
-|   `-- drivers-nvme-host-pr.c:ERROR:reference-preceded-by-free-on-line
-|-- microblaze-randconfig-c044-20230607
-|   `-- microblaze-linux-ld:(.text):undefined-reference-to-lynx_pcs_destroy
-|-- mips-allmodconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- nios2-defconfig
-|   |-- drivers-net-ethernet-altera-altera_tse_main.c:undefined-reference-to-lynx_pcs_create_mdiodev
-|   |-- drivers-net-ethernet-altera-altera_tse_main.c:undefined-reference-to-lynx_pcs_destroy
-|   `-- nios2-linux-ld:drivers-net-ethernet-altera-altera_tse_main.c:undefined-reference-to-lynx_pcs_destroy
-|-- openrisc-randconfig-s052-20230607
-|   |-- drivers-clk-qcom-gpucc-sm8550.c:sparse:sparse:decimal-constant-is-between-LONG_MAX-and-ULONG_MAX.-For-C99-that-means-long-long-C90-compilers-are-very-likely-to-produce-unsigned-long-(and-a-warning)-he
-|   |-- drivers-clk-qcom-videocc-sm8550.c:sparse:sparse:decimal-constant-is-between-LONG_MAX-and-ULONG_MAX.-For-C99-that-means-long-long-C90-compilers-are-very-likely-to-produce-unsigned-long-(and-a-warning)-
-|   |-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|   `-- drivers-usb-typec-tcpm-qcom-qcom_pmic_typec_pdphy.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-short-usertype-header-got-restricted-__le16-const-usertype-header
-|-- parisc-randconfig-s042-20230607
-|   |-- drivers-clk-qcom-videocc-sm8550.c:sparse:sparse:decimal-constant-is-between-LONG_MAX-and-ULONG_MAX.-For-C99-that-means-long-long-C90-compilers-are-very-likely-to-produce-unsigned-long-(and-a-warning)-
-|   `-- mm-kfence-core.c:sparse:sparse:cast-to-restricted-__le64
-|-- powerpc-allmodconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- powerpc-randconfig-c031-20230607
-|   `-- drivers-pci-endpoint-functions-pci-epf-mhi.c:line-is-redundant-because-platform_get_irq()-already-prints-an-error
-|-- riscv-allmodconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- riscv-defconfig
-|   `-- ERROR:lynx_pcs_destroy-drivers-net-ethernet-stmicro-stmmac-stmmac.ko-undefined
-|-- riscv-rv32_defconfig
-|   `-- ERROR:lynx_pcs_destroy-drivers-net-ethernet-stmicro-stmmac-stmmac.ko-undefined
-|-- s390-allmodconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- s390-allyesconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- sh-randconfig-m041-20230607
-|   `-- lib-kunit-test.c-__kunit_abort()-warn:ignoring-unreachable-code.
-|-- x86_64-allyesconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- x86_64-randconfig-c044-20230607
-|   |-- drivers-cpufreq-cpufreq-dt-platdev.c:warning:allowlist-defined-but-not-used
-|   `-- drivers-cpufreq-cpufreq-dt-platdev.c:warning:blocklist-defined-but-not-used
-|-- x86_64-randconfig-k001-20230607
-|   |-- tools-testing-selftests-bpf-bpf_testmod-bpf_testmod.c:warning:no-previous-prototype-for-bpf_kfunc_call_memb1_release
-|   |-- tools-testing-selftests-bpf-bpf_testmod-bpf_testmod.c:warning:no-previous-prototype-for-bpf_kfunc_call_memb_acquire
-|   |-- tools-testing-selftests-bpf-bpf_testmod-bpf_testmod.c:warning:no-previous-prototype-for-bpf_kfunc_call_test_fail1
-|   |-- tools-testing-selftests-bpf-bpf_testmod-bpf_testmod.c:warning:no-previous-prototype-for-bpf_kfunc_call_test_fail2
-|   |-- tools-testing-selftests-bpf-bpf_testmod-bpf_testmod.c:warning:no-previous-prototype-for-bpf_kfunc_call_test_fail3
-|   |-- tools-testing-selftests-bpf-bpf_testmod-bpf_testmod.c:warning:no-previous-prototype-for-bpf_kfunc_call_test_mem_len_fail1
-|   `-- tools-testing-selftests-bpf-bpf_testmod-bpf_testmod.c:warning:no-previous-prototype-for-bpf_kfunc_call_test_offset
-|-- x86_64-randconfig-x062-20230607
-|   `-- drivers-net-ethernet-altera-altera_tse_main.c:undefined-reference-to-lynx_pcs_destroy
-`-- x86_64-randconfig-x066-20230607
-    `-- ERROR:lynx_pcs_destroy-drivers-net-ethernet-stmicro-stmmac-stmmac.ko-undefined
-clang_recent_errors
-|-- arm64-randconfig-r036-20230607
-|   `-- drivers-bus-fsl-mc-fsl-mc-allocator.c:warning:variable-mc_bus_dev-is-uninitialized-when-used-here
-|-- i386-randconfig-i002-20230607
-|   `-- drivers-bus-fsl-mc-fsl-mc-allocator.c:warning:variable-mc_bus_dev-is-uninitialized-when-used-here
-|-- i386-randconfig-i061-20230607
-|   `-- drivers-bus-fsl-mc-fsl-mc-allocator.c:warning:variable-mc_bus_dev-is-uninitialized-when-used-here
-`-- riscv-randconfig-r032-20230607
-    `-- lib-kunit-executor_test.c:error:cast-from-void-(-)(const-void-)-to-kunit_action_t-(aka-void-(-)(void-)-)-converts-to-incompatible-function-type-Werror-Wcast-function-type-strict
+> >> +                       flush_tlb_range(vma, start, end);
+> >> +
+> > [...]
+> >> +       if (IS_PM_SCAN_WP(p->flags))
+> >> +               flush_tlb_range(vma, start, addr);
+> >> +
+> >> +       pte_unmap_unlock(orig_pte, ptl);
+> >> +       arch_leave_lazy_mmu_mode();
+> >> +
+> >> +       cond_resched();
+> >> +       return ret;
+> >> +}
+> >> +
+> >> +#ifdef CONFIG_HUGETLB_PAGE
+> >> +static int pagemap_scan_hugetlb_entry(pte_t *ptep, unsigned long hmas=
+k,
+> >> +                                     unsigned long start, unsigned lo=
+ng end,
+> >> +                                     struct mm_walk *walk)
+> >> +{
+> >> +       unsigned long n_pages =3D (end - start)/PAGE_SIZE;
+> >> +       struct pagemap_scan_private *p =3D walk->private;
+> >> +       struct vm_area_struct *vma =3D walk->vma;
+> >> +       struct hstate *h =3D hstate_vma(vma);
+> >> +       spinlock_t *ptl;
+> >> +       bool is_written;
+> >> +       int ret =3D 0;
+> >> +       pte_t pte;
+> >> +
+> >> +       if (p->max_pages && n_pages > p->max_pages - p->found_pages)
+> >> +               n_pages =3D p->max_pages - p->found_pages;
+> >> +
+> >> +       if (IS_PM_SCAN_WP(p->flags)) {
+> >> +               i_mmap_lock_write(vma->vm_file->f_mapping);
+> >> +               ptl =3D huge_pte_lock(h, vma->vm_mm, ptep);
+> >> +       }
+> >> +
+> >> +       pte =3D huge_ptep_get(ptep);
+> >> +       is_written =3D !is_huge_pte_uffd_wp(pte);
+> >> +
+> >> +       /*
+> >> +        * Partial hugetlb page clear isn't supported
+> >> +        */
+> >> +       if (is_written && IS_PM_SCAN_WP(p->flags) &&
+> >> +           n_pages < HPAGE_SIZE/PAGE_SIZE) {
+> >> +               ret =3D -EPERM;
+> >
+> > Shouldn't this be ENOSPC, conveying that the operation would overflow
+> > the n_pages limit?
+> We are testing here is user has asked us to engage WP on a part of the
+> hugetlb or we can only perform WP on a part of the engage as user buffer =
+is
+> full. We cannot judge this has happened because of the former or later
+> condition. So I'm assuming that user's parameters aren't solid enough and
+> returning -EPERM. It seemed more suitable to me. But I can return -ENOSPC
+> as well, if you say?
 
-elapsed time: 721m
+Those two cases can be differentiated when checked before truncating
+n_pages. If a user requests partial WP for a hugetlb page wouldn't
+EINVAL (or other error - as this can't ever work) be more appropriate
+(this check could happen only at the start of scan)? If the request is
+due to max_pages limit (with found_pages > 0), then I'd return ENOSPC
+and expect the user to restart the scan with a new buffer.
 
-configs tested: 143
-configs skipped: 6
+Our discussion here makes me wonder: what is the expected return value
+for the ioctl WP (without GET) operation? If it would return e.g. the
+number of 4K-pages successfully scanned, then the caller would be able
+to detect the partial tail hugepage case and act accordingly.
 
-tested configs:
-alpha                            alldefconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha        buildonly-randconfig-r002-20230607   gcc  
-alpha                               defconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                     haps_hs_smp_defconfig   gcc  
-arc                  randconfig-r002-20230607   gcc  
-arc                  randconfig-r016-20230607   gcc  
-arc                  randconfig-r033-20230607   gcc  
-arc                  randconfig-r043-20230607   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                         assabet_defconfig   gcc  
-arm                                 defconfig   gcc  
-arm                           h3600_defconfig   gcc  
-arm                            hisi_defconfig   gcc  
-arm                           imxrt_defconfig   gcc  
-arm                  randconfig-r046-20230607   clang
-arm                          sp7021_defconfig   clang
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r003-20230607   clang
-arm64                randconfig-r036-20230607   clang
-csky         buildonly-randconfig-r003-20230607   gcc  
-csky                                defconfig   gcc  
-hexagon              randconfig-r014-20230607   clang
-hexagon              randconfig-r041-20230607   clang
-hexagon              randconfig-r045-20230607   clang
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-r005-20230607   clang
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230607   clang
-i386                 randconfig-i002-20230607   clang
-i386                 randconfig-i003-20230607   clang
-i386                 randconfig-i004-20230607   clang
-i386                 randconfig-i005-20230607   clang
-i386                 randconfig-i006-20230607   clang
-i386                 randconfig-i011-20230607   gcc  
-i386                 randconfig-i012-20230607   gcc  
-i386                 randconfig-i051-20230607   clang
-i386                 randconfig-i052-20230607   clang
-i386                 randconfig-i053-20230607   clang
-i386                 randconfig-i054-20230607   clang
-i386                 randconfig-i055-20230607   clang
-i386                 randconfig-i056-20230607   clang
-i386                 randconfig-i061-20230607   clang
-i386                 randconfig-i062-20230607   clang
-i386                 randconfig-i063-20230607   clang
-i386                 randconfig-i064-20230607   clang
-i386                 randconfig-i065-20230607   clang
-i386                 randconfig-i066-20230607   clang
-i386                 randconfig-r022-20230607   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch    buildonly-randconfig-r004-20230607   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r021-20230607   gcc  
-loongarch            randconfig-r024-20230607   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                       m5275evb_defconfig   gcc  
-m68k                            mac_defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                         bigsur_defconfig   gcc  
-mips                 randconfig-r004-20230607   gcc  
-mips                 randconfig-r031-20230607   gcc  
-mips                        vocore2_defconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r026-20230607   gcc  
-openrisc             randconfig-r023-20230607   gcc  
-openrisc             randconfig-r032-20230607   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                     ksi8560_defconfig   clang
-powerpc                      makalu_defconfig   gcc  
-powerpc                       maple_defconfig   gcc  
-powerpc                      ppc6xx_defconfig   gcc  
-powerpc              randconfig-r005-20230607   clang
-powerpc              randconfig-r023-20230607   gcc  
-powerpc                 xes_mpc85xx_defconfig   clang
-riscv                            alldefconfig   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r022-20230607   gcc  
-riscv                randconfig-r042-20230607   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r006-20230607   clang
-s390                 randconfig-r024-20230607   gcc  
-s390                 randconfig-r044-20230607   gcc  
-sh                               allmodconfig   gcc  
-sh                         ap325rxa_defconfig   gcc  
-sh                          sdk7780_defconfig   gcc  
-sparc        buildonly-randconfig-r006-20230607   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r015-20230607   gcc  
-sparc                randconfig-r026-20230607   gcc  
-sparc                       sparc64_defconfig   gcc  
-sparc64              randconfig-r021-20230607   gcc  
-sparc64              randconfig-r034-20230607   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230607   clang
-x86_64               randconfig-a002-20230607   clang
-x86_64               randconfig-a003-20230607   clang
-x86_64               randconfig-a004-20230607   clang
-x86_64               randconfig-a005-20230607   clang
-x86_64               randconfig-a006-20230607   clang
-x86_64               randconfig-a011-20230607   gcc  
-x86_64               randconfig-a012-20230607   gcc  
-x86_64               randconfig-a013-20230607   gcc  
-x86_64               randconfig-a014-20230607   gcc  
-x86_64               randconfig-a015-20230607   gcc  
-x86_64               randconfig-a016-20230607   gcc  
-x86_64               randconfig-k001-20230607   gcc  
-x86_64               randconfig-x051-20230607   gcc  
-x86_64               randconfig-x052-20230607   gcc  
-x86_64               randconfig-x053-20230607   gcc  
-x86_64               randconfig-x054-20230607   gcc  
-x86_64               randconfig-x055-20230607   gcc  
-x86_64               randconfig-x056-20230607   gcc  
-x86_64               randconfig-x061-20230607   gcc  
-x86_64               randconfig-x062-20230607   gcc  
-x86_64               randconfig-x063-20230607   gcc  
-x86_64               randconfig-x064-20230607   gcc  
-x86_64               randconfig-x065-20230607   gcc  
-x86_64               randconfig-x066-20230607   gcc  
-x86_64                               rhel-8.3   gcc  
-xtensa                  nommu_kc705_defconfig   gcc  
-xtensa               randconfig-r011-20230607   gcc  
-xtensa               randconfig-r012-20230607   gcc  
-xtensa               randconfig-r035-20230607   gcc  
+> >> +static int pagemap_scan_pte_hole(unsigned long addr, unsigned long en=
+d,
+> >> +                                int depth, struct mm_walk *walk)
+> >> +{
+> >> +       unsigned long n_pages =3D (end - addr)/PAGE_SIZE;
+> >> +       struct pagemap_scan_private *p =3D walk->private;
+> >> +       struct vm_area_struct *vma =3D walk->vma;
+> >> +       int ret =3D 0;
+> >> +
+> >> +       if (!vma || !IS_PM_SCAN_GET(p->flags))
+> >> +               return 0;
+> >> +
+> >> +       if (p->max_pages && n_pages > p->max_pages - p->found_pages)
+> >> +               n_pages =3D p->max_pages - p->found_pages;
+> >
+> > Nit: If the page flags don't match (wouldn't be output), the limit
+> > would not be hit and the calculation is unnecessary. But if it was
+> > done in pagemap_scan_output() instead after all the flags checks...
+> Correct for this use case. But moving to pagemap_scan_output() would make
+> me do duplicate calculation for other 2 cases as explained above.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+(responded below the cases above)
+
+> >> +       ret =3D pagemap_scan_output(false, vma->vm_file, false, false,=
+ p, addr,
+> >> +                                 n_pages);
+> >> +
+> >> +       return ret;
+> >> +}
+> > [...]
+> >> +static long do_pagemap_scan(struct mm_struct *mm,
+> >> +                           struct pm_scan_arg __user *uarg)
+> >> +{
+> >> +       unsigned long start, end, walk_start, walk_end;
+> >> +       unsigned long empty_slots, vec_index =3D 0;
+> >> +       struct mmu_notifier_range range;
+> >> +       struct page_region __user *vec;
+> >> +       struct pagemap_scan_private p;
+> >> +       struct pm_scan_arg arg;
+> >> +       int ret =3D 0;
+> >> +
+> >> +       if (copy_from_user(&arg, uarg, sizeof(arg)))
+> >> +               return -EFAULT;
+> >> +
+> >> +       start =3D untagged_addr((unsigned long)arg.start);
+> >> +       vec =3D (struct page_region *)untagged_addr((unsigned long)arg=
+.vec);
+> >> +
+> >> +       ret =3D pagemap_scan_args_valid(&arg, start, vec);
+> >> +       if (ret)
+> >> +               return ret;
+> >> +
+> >> +       end =3D start + arg.len;
+> >> +       p.max_pages =3D arg.max_pages;
+> >> +       p.found_pages =3D 0;
+> >> +       p.flags =3D arg.flags;
+> >> +       p.required_mask =3D arg.required_mask;
+> >> +       p.anyof_mask =3D arg.anyof_mask;
+> >> +       p.excluded_mask =3D arg.excluded_mask;
+> >> +       p.return_mask =3D arg.return_mask;
+> >> +       p.cur.start =3D p.cur.len =3D p.cur.bitmap =3D 0;
+> >> +       p.vec =3D NULL;
+> >> +       p.vec_len =3D PAGEMAP_WALK_SIZE >> PAGE_SHIFT;
+> >
+> > If p.vec_len would not count the entry held in `cur` (IOW: vec_len =3D
+> > WALK_SIZE - 1), then pagemap_scan_output() wouldn't need the big
+> > comment about adding or subtracting 1 when checking for overflow. The
+> > output vector needs to have space for at least one entrry to make GET
+> > useful. Maybe `cur` could be renamed or annotated to express that it
+> > always holds the last entry?
+> Ohhh.. This can be done by doing subtracting 1 from empty_slots. But I've
+> explored the idea. I don't see any benefit. If we do this, then I'll have
+> to put a comment why subtracting 1 is needed. Seems like same problem:
+>
+> --- a/fs/proc/task_mmu.c
+> +++ b/fs/proc/task_mmu.c
+> @@ -1909,7 +1909,7 @@ static int pagemap_scan_output(bool wt, bool file,
+> bool pres, bool swap,
+>                  * represents the current index of vec array. We add 1 to=
+ the
+>                  * vec_index while performing checks to account for data =
+in
+> cur.
+>                  */
+> -               if (cur->len && (p->vec_index + 1) >=3D p->vec_len)
+> +               if (cur->len && p->vec_index >=3D p->vec_len)
+>                         return -ENOSPC;
+>
+>                 if (cur->len) {
+> @@ -2202,7 +2202,7 @@ static long do_pagemap_scan(struct mm_struct *mm,
+>                 if (IS_PM_SCAN_GET(p.flags)) {
+>                         p.vec_index =3D 0;
+>
+> -                       empty_slots =3D arg.vec_len - vec_index;
+> +                       empty_slots =3D arg.vec_len - 1 - vec_index;
+>                         p.vec_len =3D min(p.vec_len, empty_slots);
+>                 }
+>
+> Lets leave it as it is. I can change `cur` to `last` or any other name.
+> Please suggest.
+
+The difference is that you have the subtraction only once per the
+outer page_walk loop iteration, but in the current version the
+addition has to happen every pagemap_scan_output() call after a hole.
+
+From the readability perspective, "if (next_index >=3D vec_len)" is
+short and self-documenting. Also I'd use "p.vec_len =3D min(p.vec_len,
+empty_slots - 1)" as it also conveys the intent better (in that `vec`
+is holding all but the last entry, but arg.vec_len holds the final
+output buffer length).
+
+If we're picking colors, then maybe make `arg.vec_len` have a
+different name than `p.vec_len` (same for `vec_index`) so that there
+is less confusion possible as to what they refer to. Maybe keep
+`arg.vec_len`, but have `p.vec_buf`, `p.vec_buf_len`, and
+`p.next_buf_index`?
+
+(Note: you'd also need to decrement p.vec_len where it is first assigned.)
+
+[...]
+Best Regards
+Micha=C5=82 Miros=C5=82aw
