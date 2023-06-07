@@ -2,34 +2,34 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B31EC7EE2E
-	for <linux-kselftest@archiver.kernel.org>; Wed,  7 Jun 2023 20:46:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CC8CC83003
+	for <linux-kselftest@archiver.kernel.org>; Wed,  7 Jun 2023 20:51:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234886AbjFGUq3 (ORCPT
+        id S235200AbjFGUvs (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 7 Jun 2023 16:46:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46726 "EHLO
+        Wed, 7 Jun 2023 16:51:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234893AbjFGUqO (ORCPT
+        with ESMTP id S235207AbjFGUvj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 7 Jun 2023 16:46:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81AF826A5;
-        Wed,  7 Jun 2023 13:45:56 -0700 (PDT)
+        Wed, 7 Jun 2023 16:51:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 375DA2688;
+        Wed,  7 Jun 2023 13:51:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0429764640;
-        Wed,  7 Jun 2023 20:45:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E387BC4339B;
-        Wed,  7 Jun 2023 20:45:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 179B363188;
+        Wed,  7 Jun 2023 20:51:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3B0AC433D2;
+        Wed,  7 Jun 2023 20:51:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1686170755;
-        bh=b4oGrHUU4PlZn58yeBa1vTwhXg4J0f1XcSHjsV6FHiY=;
+        s=korg; t=1686171084;
+        bh=Dl4DDEJCwWXOnm/5mNrAnRjprwk0cp43lsOU4uP0rqE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OanPyMD4jNvQqWbXRJsI/VPVTsUKqz/Db4UmpAZjNWIy7grP8EuiN1Btoz77lwYQ5
-         Q0NRcHP2vNYoiREuNIY38Pp+v8kzXnZyF/C3u3sEzLXxPuZ1KRjKzERgIhmSQB1zSh
-         Wq/eXElGlNhGXTHfMYpcnafvAgRUezitrXHu+OKo=
+        b=uE3QizK/cbS/nz4yXUaWvFJOCIBFgtZuzf1F6DqwYaJ7vJePXi+lVxXo0NCSCmWUx
+         t/CZbw8MbigZzaVhSnz9LEcULx2Stg+qs9yPztmers7eY2CX5SERl3YTApV3/7ivga
+         EPMAte8MzG9I6zAxiILeKePFQK3yTQEZersNb8bM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -46,12 +46,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
         Scott Branden <sbranden@broadcom.com>,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH 6.1 205/225] test_firmware: fix the memory leak of the allocated firmware buffer
-Date:   Wed,  7 Jun 2023 22:16:38 +0200
-Message-ID: <20230607200921.070241596@linuxfoundation.org>
+Subject: [PATCH 5.10 105/120] test_firmware: fix the memory leak of the allocated firmware buffer
+Date:   Wed,  7 Jun 2023 22:17:01 +0200
+Message-ID: <20230607200904.227581241@linuxfoundation.org>
 X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230607200913.334991024@linuxfoundation.org>
-References: <20230607200913.334991024@linuxfoundation.org>
+In-Reply-To: <20230607200900.915613242@linuxfoundation.org>
+References: <20230607200900.915613242@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -160,7 +160,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/lib/test_firmware.c
 +++ b/lib/test_firmware.c
-@@ -44,6 +44,7 @@ struct test_batched_req {
+@@ -41,6 +41,7 @@ struct test_batched_req {
  	bool sent;
  	const struct firmware *fw;
  	const char *name;
@@ -168,7 +168,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	struct completion completion;
  	struct task_struct *task;
  	struct device *dev;
-@@ -174,8 +175,14 @@ static void __test_release_all_firmware(
+@@ -143,8 +144,14 @@ static void __test_release_all_firmware(
  
  	for (i = 0; i < test_fw_config->num_requests; i++) {
  		req = &test_fw_config->reqs[i];
@@ -184,7 +184,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	}
  
  	vfree(test_fw_config->reqs);
-@@ -651,6 +658,8 @@ static ssize_t trigger_request_store(str
+@@ -589,6 +596,8 @@ static ssize_t trigger_request_store(str
  
  	mutex_lock(&test_fw_mutex);
  	release_firmware(test_firmware);
@@ -193,7 +193,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	test_firmware = NULL;
  	rc = request_firmware(&test_firmware, name, dev);
  	if (rc) {
-@@ -751,6 +760,8 @@ static ssize_t trigger_async_request_sto
+@@ -689,6 +698,8 @@ static ssize_t trigger_async_request_sto
  	mutex_lock(&test_fw_mutex);
  	release_firmware(test_firmware);
  	test_firmware = NULL;
@@ -202,16 +202,16 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	rc = request_firmware_nowait(THIS_MODULE, 1, name, dev, GFP_KERNEL,
  				     NULL, trigger_async_request_cb);
  	if (rc) {
-@@ -793,6 +804,8 @@ static ssize_t trigger_custom_fallback_s
+@@ -731,6 +742,8 @@ static ssize_t trigger_custom_fallback_s
  
  	mutex_lock(&test_fw_mutex);
  	release_firmware(test_firmware);
 +	if (test_fw_config->reqs)
 +		__test_release_all_firmware();
  	test_firmware = NULL;
- 	rc = request_firmware_nowait(THIS_MODULE, FW_ACTION_NOUEVENT, name,
+ 	rc = request_firmware_nowait(THIS_MODULE, FW_ACTION_NOHOTPLUG, name,
  				     dev, GFP_KERNEL, NULL,
-@@ -855,6 +868,8 @@ static int test_fw_run_batch_request(voi
+@@ -793,6 +806,8 @@ static int test_fw_run_batch_request(voi
  						 test_fw_config->buf_size);
  		if (!req->fw)
  			kfree(test_buf);
@@ -220,7 +220,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	} else {
  		req->rc = test_fw_config->req_firmware(&req->fw,
  						       req->name,
-@@ -915,6 +930,7 @@ static ssize_t trigger_batched_requests_
+@@ -848,6 +863,7 @@ static ssize_t trigger_batched_requests_
  		req->fw = NULL;
  		req->idx = i;
  		req->name = test_fw_config->name;
@@ -228,7 +228,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  		req->dev = dev;
  		init_completion(&req->completion);
  		req->task = kthread_run(test_fw_run_batch_request, req,
-@@ -1019,6 +1035,7 @@ ssize_t trigger_batched_requests_async_s
+@@ -947,6 +963,7 @@ ssize_t trigger_batched_requests_async_s
  	for (i = 0; i < test_fw_config->num_requests; i++) {
  		req = &test_fw_config->reqs[i];
  		req->name = test_fw_config->name;
