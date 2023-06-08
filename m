@@ -2,63 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A4AB9C83003
-	for <linux-kselftest@archiver.kernel.org>; Thu,  8 Jun 2023 16:40:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D0547C7EE2E
+	for <linux-kselftest@archiver.kernel.org>; Thu,  8 Jun 2023 16:40:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236782AbjFHQkf (ORCPT
+        id S236819AbjFHQkg (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 8 Jun 2023 12:40:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48068 "EHLO
+        Thu, 8 Jun 2023 12:40:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236806AbjFHQjz (ORCPT
+        with ESMTP id S236672AbjFHQjq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 8 Jun 2023 12:39:55 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49A4135A1
-        for <linux-kselftest@vger.kernel.org>; Thu,  8 Jun 2023 09:39:22 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-30af86a966eso624248f8f.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 08 Jun 2023 09:39:22 -0700 (PDT)
+        Thu, 8 Jun 2023 12:39:46 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD60230C2
+        for <linux-kselftest@vger.kernel.org>; Thu,  8 Jun 2023 09:39:19 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-30ae61354fbso653307f8f.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 Jun 2023 09:39:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1686242348; x=1688834348;
+        d=tessares.net; s=google; t=1686242346; x=1688834346;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=JRNPtrh4/qtNxd83RxLqXaD6crOweapuAV2/D/pcw+U=;
-        b=Un3Fkyk4WZcSeyKvPkb+USXGmQAKE4cyiEAXc1XkV8Oz+isJ+310fknpM39YJXcpT7
-         xMb8dv8TEzPZlrJTxh8KqRRrXv7TBrDN0gvG0A7xPDXnQYNh1Rw0SNtiSmCjjkULgeYA
-         bV824eAUyex6CxGsOM0Nzrm3rHe4AnTdoJfmTBdEfoWH8jVI+qq57StwYNBMYzq3IYp/
-         d6D7GgfcYtVdRYo3t2/1hH/Bggf7z3dZbQq+anWEvc0lFKlCFX8+WZScz6KhjY+cYqkD
-         peKuH37IgC+QJBF7nd29MYH9JtAILlx7F3R8hUYQb86zsA+c34eYVtDn6JIPa6HJB1hL
-         m4AA==
+        bh=25ZaF3JsFYErEFoIbwPYOVDqmdE5+qzB+30gx62T0y8=;
+        b=bLE4kzr1bCQ0rzhbxY0Bt2OGLWYWKUZUwOYk/Uv3yrqZC4kbVx5rg5DiQzYVWyZa+R
+         FaZQ+3Ucbvs9Q0kYkMlU6FkvzDbO9YKspfiklSDL8M/PjPOtuK4VmxEMue8L5L4sNjwK
+         Elfr4IyYglh1HPIsBF/Jo76xv6l0n6yddU7X1jLX83bevK1ZGiERRZK1v9Tb27hbH0RJ
+         Jei0rFxsjerhn+sFbdi6juWAKH9iQTNQ/FTCBq3RDDe9A/2lRyL3hp+ILbQAQ5yyUQ1a
+         YJjCWU888tmCtXnPr6UdXbQGkhdeKubc4ZTxnKqeLDqE33HltjLTZpa1jfJlTrtm7OVR
+         TVTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686242348; x=1688834348;
+        d=1e100.net; s=20221208; t=1686242346; x=1688834346;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JRNPtrh4/qtNxd83RxLqXaD6crOweapuAV2/D/pcw+U=;
-        b=YEegyyNaIIp7AQNcAaIOvnSkEQdvQ28Ub2c9aiSBDqjOPbTvUKHC9nU83RatSE/ntx
-         gGkq3rnwnlkexRwWvILy9mt2IAprUT2kmdsyas/Ka7IA596GMQ8P184Zk4urGZY7KwR4
-         1POLRzxKT6ETLCsbYRlUWH4KjXUPzg4KxAmnkd0QvQb/rUzYI69L0cZWKPenr3nVCe7Q
-         OGhOmdUyjNqmAJoBsveeWf/KgUk1d0riR/gFZxgsaiqC+Ooh9xFTCFG3nVM0r8qM4ErF
-         YZHeaBjOGuDKtV2aZ5uoUcF7XC8avZfs0DmjQ9ARjoFRrNGEe3/h3eUgblxLWL/51BoZ
-         tEVg==
-X-Gm-Message-State: AC+VfDyZsKZTPhOGC/rkvctO4nhJ4PbDHsz9Q07JxUoWUHYtwNl4NSlL
-        Q4SqZz7Y66YeqoJttL9K0y3A4g==
-X-Google-Smtp-Source: ACHHUZ5iZJdIddG/7W2VPfdO3Ht89qbeIG8+GZVpkumfcegq4+3YDO4cSKUdXj66iQ4hYfXS1+lG+w==
-X-Received: by 2002:a5d:4d49:0:b0:2f9:c2ab:e1de with SMTP id a9-20020a5d4d49000000b002f9c2abe1demr6785099wru.14.1686242348666;
-        Thu, 08 Jun 2023 09:39:08 -0700 (PDT)
+        bh=25ZaF3JsFYErEFoIbwPYOVDqmdE5+qzB+30gx62T0y8=;
+        b=B/jqZ8btco4//orKQUC93UuO3zjPeBiB26yHrH5/TMtDJArO/sxYpC+aqV9EjiavGW
+         G8SC2jP+ilxqsMvqq1TYZDzVnuVxGNJ6H2Q8STG3lTBusaG+gIXP9KZyX2B0zA8V/Ve0
+         Krk8Xvhc60c9CmnjPgV+yI1mQ4gQPtFwcLgGzenxerWvdcuUvjfRGsg9z1lCbHYrBo5F
+         vcd4zNXQNDl7TzBaomWgAOZwtoSK6+h2uCKCRsp1vXnPAET9kf5Vp2y6+05vFymiI6cu
+         8t2Au4gs5BGFDXVc0h/Z3BOX1Cn5Uo2M2Tw16USivk7yMAAb0Kr6Zu/NgNZMLx1qfAh7
+         JZkQ==
+X-Gm-Message-State: AC+VfDz4vmQutqFD9bj+wmUtDYQnDONx8xyIrClCO1iel6nlF5hTFzDv
+        tK4pEOlbw3VXltVymbDa0iMqjQ==
+X-Google-Smtp-Source: ACHHUZ65wUtjJyqPFNvZuE1f6WBvIeZZIadiu1Pgy4n7Ffa7OL1OMBN55r1OPGcfegL0pNfZ2vA9Ww==
+X-Received: by 2002:a5d:5915:0:b0:30e:438f:8ceb with SMTP id v21-20020a5d5915000000b0030e438f8cebmr7199002wrd.59.1686242346219;
+        Thu, 08 Jun 2023 09:39:06 -0700 (PDT)
 Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id e13-20020adfef0d000000b0030aeb3731d0sm2038215wro.98.2023.06.08.09.39.07
+        by smtp.gmail.com with ESMTPSA id e13-20020adfef0d000000b0030aeb3731d0sm2038215wro.98.2023.06.08.09.39.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 09:39:08 -0700 (PDT)
+        Thu, 08 Jun 2023 09:39:05 -0700 (PDT)
 From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-Date:   Thu, 08 Jun 2023 18:38:55 +0200
-Subject: [PATCH net 13/14] selftests: mptcp: userspace pm: skip if not
- supported
+Date:   Thu, 08 Jun 2023 18:38:53 +0200
+Subject: [PATCH net 11/14] selftests: mptcp: sockopt: skip TCP_INQ checks
+ if not supported
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230608-upstream-net-20230608-mptcp-selftests-support-old-kernels-part-2-v1-13-20997a6fd841@tessares.net>
+Message-Id: <20230608-upstream-net-20230608-mptcp-selftests-support-old-kernels-part-2-v1-11-20997a6fd841@tessares.net>
 References: <20230608-upstream-net-20230608-mptcp-selftests-support-old-kernels-part-2-v1-0-20997a6fd841@tessares.net>
 In-Reply-To: <20230608-upstream-net-20230608-mptcp-selftests-support-old-kernels-part-2-v1-0-20997a6fd841@tessares.net>
 To:     mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
@@ -76,21 +76,21 @@ Cc:     Florian Westphal <fw@strlen.de>, netdev@vger.kernel.org,
         Matthieu Baerts <matthieu.baerts@tessares.net>,
         stable@vger.kernel.org
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1305;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2133;
  i=matthieu.baerts@tessares.net; h=from:subject:message-id;
- bh=lCLnyi7to0GdP9Uc/eccM6C9A2GjbynXexM/0ZjcvOU=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkggQa1p5uGknzfdbqipsdBEVna7eEYJQ1LesHn
- 5K9Wwv69+mJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZIIEGgAKCRD2t4JPQmmg
- c8D8D/wMnUOKRUij+6jmSfvUzmfQsZc+4SMaMFn+wgdn8svqr2AHPK7kCbmnqA6KX5zY1FH269z
- aWkyEdCkvRR6utKPf1YW/D0SBKTqPqEJCFU4TPE2bIhsvo3J7guHMcF3Xm3OO1bCyc+DLohR41S
- qbch7QxblDWd/vsQSfGkL0JdMObSonfZDc5LDX316RHptcu28eVEF7fIbYVlGw0c3F2DHr9ULDm
- z3JsxfqM2qLlpGw5Z5Sle9LEnxbskRy8+sihXK/P//IHSsV7UwsrDrna4p/ZTEGjT4499P5Z2Jq
- gXRxBGrzaI11tIiE0JkROQw7mPJbowZ1DHAdJ9ThntOVks+AgO1MKAom+yHf23vzJMYjbRrZXIW
- HjkBUUfoE+9AfIVUnRdVD6x5I012PLjb+UquMvymYnOZ6wEdslrkJROrK1LD7vNOEa79zHz8ci+
- 0hlduCLvV2W3CiyILiQ6PfWzlpxYnI0FhJKBhNoi9XD8UC0Akh81nVo0hOYJMAwpGH8t3dHy77I
- NY09X5fxFc3cEF2mzeQzC2NSTM0QN4zb43J/uFfzGJbYROEuiveDhmo9m6SyrA0Hp/zmORxLlgs
- r3teRyxJMpvkN5YfYn4srB6c4XTKjsqJJOrVGf1UI03CUwKJUYOdTaxITNFNFXKWVEt67qu5WTp
- Sz9RyljYaDzfb/A==
+ bh=1OsCicu/3vbKAvtKytrt0z0ywt61KRKpMc3STXoQXA8=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkggQawz6TxWhaJHOCzsoj7Dunv2uUMLzRPPKj2
+ W1VAUZNjaiJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZIIEGgAKCRD2t4JPQmmg
+ c+JJD/4nMV96ft2RW4sWQl2h5V60vSuGvtu8Fj57RT4rjI8alspOTImfQDSHV2VT0jvyK73a2NN
+ JcBwh0n2KlCAcqU3yRL5Yxe36fHk2ZMJMUi4WUnc1KhOauu9GbtXDgKqgLjk50w69a2msxXrB1/
+ BzP0Ih1mfkVrKPnsUwbORN+wUjE5jqy+9rP78316DlCkrihfSV9o5yXiwOJJ6qfSbqSKCSt2vMR
+ vdwYxKtLLh137dUTEzaIymzu8z6ZeFw8FXUmGwXXuHHqy7tmr04vFFtP5+Pe0dwZr/1eCP4sOKy
+ +bBIkjQAaz0hzN09loIChJYeJIziWtfxC8KDkpIWl/Voqdfnye2MfE7q4PLN16+Xro81sf8WhQJ
+ rzq0VzRkLDWcXAeiUAgLUw0DfCZsJy33gLTuAMfLqDLW9waL/rbJLF46zo2GBmRTBDPHexcgwHj
+ ht4DgOE/Mgl5XUWbcH36p2TPiR8jK8JIt7Q8+OVNlU9HUTnB1KwzF59WViYddFICF4NxK3+5s99
+ I3psrh50vH4op27pQiGJkm0wibIQAqED5A8ezAJJ8XAyG3Kplv8RTlQKz4bURFrv0QEWEBKVprp
+ y4qGrl3N5S/nGIe9cptNKHf0m+gS8irTTywG5VbZkeronyhJu2GKkAKYH9Ty8YAwO66aIYObQkN
+ /bhqNwA09G2k+EA==
 X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 Precedence: bulk
@@ -100,36 +100,62 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 Selftests are supposed to run on any kernels, including the old ones not
 supporting all MPTCP features.
 
-One of them is the MPTCP Userspace PM introduced by commit 4638de5aefe5
-("mptcp: handle local addrs announced by userspace PMs").
+One of them is TCP_INQ cmsg support introduced in commit 2c9e77659a0c
+("mptcp: add TCP_INQ cmsg support").
 
-We can skip all these tests if the feature is not supported simply by
-looking for the MPTCP pm_type's sysctl knob.
+It is possible to look for "mptcp_ioctl" in kallsyms because it was
+needed to introduce the mentioned feature. We can skip these tests and
+not set TCPINQ option if the feature is not supported.
 
 Link: https://github.com/multipath-tcp/mptcp_net-next/issues/368
-Fixes: 259a834fadda ("selftests: mptcp: functional tests for the userspace PM type")
+Fixes: 5cbd886ce2a9 ("selftests: mptcp: add TCP_INQ support")
 Cc: stable@vger.kernel.org
 Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
 ---
- tools/testing/selftests/net/mptcp/userspace_pm.sh | 5 +++++
- 1 file changed, 5 insertions(+)
+ tools/testing/selftests/net/mptcp/mptcp_sockopt.sh | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/net/mptcp/userspace_pm.sh b/tools/testing/selftests/net/mptcp/userspace_pm.sh
-index 192ab818f292..38a1d34f7b4d 100755
---- a/tools/testing/selftests/net/mptcp/userspace_pm.sh
-+++ b/tools/testing/selftests/net/mptcp/userspace_pm.sh
-@@ -5,6 +5,11 @@
+diff --git a/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh b/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh
+index 1d4ae8792227..f295a371ff14 100755
+--- a/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh
++++ b/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh
+@@ -187,9 +187,14 @@ do_transfer()
+ 		local_addr="0.0.0.0"
+ 	fi
  
- mptcp_lib_check_mptcp
- 
-+if ! mptcp_lib_has_file '/proc/sys/net/mptcp/pm_type'; then
-+	echo "userspace pm tests are not supported by the kernel: SKIP"
-+	exit ${KSFT_SKIP}
-+fi
++	cmsg="TIMESTAMPNS"
++	if mptcp_lib_kallsyms_has "mptcp_ioctl$"; then
++		cmsg+=",TCPINQ"
++	fi
 +
- ip -Version > /dev/null 2>&1
- if [ $? -ne 0 ];then
- 	echo "SKIP: Cannot not run test without ip tool"
+ 	timeout ${timeout_test} \
+ 		ip netns exec ${listener_ns} \
+-			$mptcp_connect -t ${timeout_poll} -l -M 1 -p $port -s ${srv_proto} -c TIMESTAMPNS,TCPINQ \
++			$mptcp_connect -t ${timeout_poll} -l -M 1 -p $port -s ${srv_proto} -c "${cmsg}" \
+ 				${local_addr} < "$sin" > "$sout" &
+ 	local spid=$!
+ 
+@@ -197,7 +202,7 @@ do_transfer()
+ 
+ 	timeout ${timeout_test} \
+ 		ip netns exec ${connector_ns} \
+-			$mptcp_connect -t ${timeout_poll} -M 2 -p $port -s ${cl_proto} -c TIMESTAMPNS,TCPINQ \
++			$mptcp_connect -t ${timeout_poll} -M 2 -p $port -s ${cl_proto} -c "${cmsg}" \
+ 				$connect_addr < "$cin" > "$cout" &
+ 
+ 	local cpid=$!
+@@ -313,6 +318,11 @@ do_tcpinq_tests()
+ {
+ 	local lret=0
+ 
++	if ! mptcp_lib_kallsyms_has "mptcp_ioctl$"; then
++		echo "INFO: TCP_INQ not supported: SKIP"
++		return
++	fi
++
+ 	local args
+ 	for args in "-t tcp" "-r tcp"; do
+ 		do_tcpinq_test $args
 
 -- 
 2.40.1
