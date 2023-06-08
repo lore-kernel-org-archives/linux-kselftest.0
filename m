@@ -2,161 +2,116 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D0547C7EE2E
-	for <linux-kselftest@archiver.kernel.org>; Thu,  8 Jun 2023 16:40:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A8DFC7EE23
+	for <linux-kselftest@archiver.kernel.org>; Thu,  8 Jun 2023 16:41:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236819AbjFHQkg (ORCPT
+        id S236705AbjFHQl1 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 8 Jun 2023 12:40:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48468 "EHLO
+        Thu, 8 Jun 2023 12:41:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236672AbjFHQjq (ORCPT
+        with ESMTP id S236863AbjFHQko (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 8 Jun 2023 12:39:46 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD60230C2
-        for <linux-kselftest@vger.kernel.org>; Thu,  8 Jun 2023 09:39:19 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-30ae61354fbso653307f8f.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 08 Jun 2023 09:39:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1686242346; x=1688834346;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=25ZaF3JsFYErEFoIbwPYOVDqmdE5+qzB+30gx62T0y8=;
-        b=bLE4kzr1bCQ0rzhbxY0Bt2OGLWYWKUZUwOYk/Uv3yrqZC4kbVx5rg5DiQzYVWyZa+R
-         FaZQ+3Ucbvs9Q0kYkMlU6FkvzDbO9YKspfiklSDL8M/PjPOtuK4VmxEMue8L5L4sNjwK
-         Elfr4IyYglh1HPIsBF/Jo76xv6l0n6yddU7X1jLX83bevK1ZGiERRZK1v9Tb27hbH0RJ
-         Jei0rFxsjerhn+sFbdi6juWAKH9iQTNQ/FTCBq3RDDe9A/2lRyL3hp+ILbQAQ5yyUQ1a
-         YJjCWU888tmCtXnPr6UdXbQGkhdeKubc4ZTxnKqeLDqE33HltjLTZpa1jfJlTrtm7OVR
-         TVTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686242346; x=1688834346;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=25ZaF3JsFYErEFoIbwPYOVDqmdE5+qzB+30gx62T0y8=;
-        b=B/jqZ8btco4//orKQUC93UuO3zjPeBiB26yHrH5/TMtDJArO/sxYpC+aqV9EjiavGW
-         G8SC2jP+ilxqsMvqq1TYZDzVnuVxGNJ6H2Q8STG3lTBusaG+gIXP9KZyX2B0zA8V/Ve0
-         Krk8Xvhc60c9CmnjPgV+yI1mQ4gQPtFwcLgGzenxerWvdcuUvjfRGsg9z1lCbHYrBo5F
-         vcd4zNXQNDl7TzBaomWgAOZwtoSK6+h2uCKCRsp1vXnPAET9kf5Vp2y6+05vFymiI6cu
-         8t2Au4gs5BGFDXVc0h/Z3BOX1Cn5Uo2M2Tw16USivk7yMAAb0Kr6Zu/NgNZMLx1qfAh7
-         JZkQ==
-X-Gm-Message-State: AC+VfDz4vmQutqFD9bj+wmUtDYQnDONx8xyIrClCO1iel6nlF5hTFzDv
-        tK4pEOlbw3VXltVymbDa0iMqjQ==
-X-Google-Smtp-Source: ACHHUZ65wUtjJyqPFNvZuE1f6WBvIeZZIadiu1Pgy4n7Ffa7OL1OMBN55r1OPGcfegL0pNfZ2vA9Ww==
-X-Received: by 2002:a5d:5915:0:b0:30e:438f:8ceb with SMTP id v21-20020a5d5915000000b0030e438f8cebmr7199002wrd.59.1686242346219;
-        Thu, 08 Jun 2023 09:39:06 -0700 (PDT)
-Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id e13-20020adfef0d000000b0030aeb3731d0sm2038215wro.98.2023.06.08.09.39.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 09:39:05 -0700 (PDT)
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-Date:   Thu, 08 Jun 2023 18:38:53 +0200
-Subject: [PATCH net 11/14] selftests: mptcp: sockopt: skip TCP_INQ checks
- if not supported
+        Thu, 8 Jun 2023 12:40:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1630930E8;
+        Thu,  8 Jun 2023 09:40:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 25B5264F38;
+        Thu,  8 Jun 2023 16:39:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B420C4339B;
+        Thu,  8 Jun 2023 16:39:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686242370;
+        bh=Cf3z+nnUaW3W8zmLq/SrMFZhb/6KU25y6zFdgoiD08c=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=cegBkSvL0OG4VmYS2DkPbih7pnNhDyzJ/f3xab3ysTxVpdgndRfBNpG4cG5wvS7FK
+         erZMiCxFySVANo+w1HHTA7AqRn+alVmIPf1mWS15ypnF9sm61N9NvweI/9HyTdnJTE
+         4Y5x4b7RoUCv3j35z9vqzINmLqsj4IK6yQzHq3U7cdV9KmCRyLuo7YG+/5oq0fz7qz
+         OqQ+YonasyOFalTRRUz+UbF8ePCQWEwmhHiEBW1aPtCVteZMcN3M3KOGB4lQz0pzOR
+         vrCqvxjJEAuLftJha/5XSE82kPz6ZfupAa3KtewwRnuDamkvvoy8XbT2LmPzAwYjaQ
+         wsAGb/waic7pQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 297E9CE14DD; Thu,  8 Jun 2023 09:39:30 -0700 (PDT)
+Date:   Thu, 8 Jun 2023 09:39:30 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Zhangjin Wu <falcon@tinylab.org>, thomas@t-8ch.de,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: nolibc patches, still possible for 6.5 ?
+Message-ID: <9dab59c7-a562-446d-94cf-39e4d40423c7@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <ZHyPi29q3MKiNAQZ@1wt.eu>
+ <5494ac68-b4b9-434f-92c1-7e197c92a4ab@paulmck-laptop>
+ <ZID0b+nIcypMjV0y@1wt.eu>
+ <66c0e446-846c-47a6-ab60-948dc0118cec@paulmck-laptop>
+ <ZIFa0Y7GIN0S/T6q@1wt.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230608-upstream-net-20230608-mptcp-selftests-support-old-kernels-part-2-v1-11-20997a6fd841@tessares.net>
-References: <20230608-upstream-net-20230608-mptcp-selftests-support-old-kernels-part-2-v1-0-20997a6fd841@tessares.net>
-In-Reply-To: <20230608-upstream-net-20230608-mptcp-selftests-support-old-kernels-part-2-v1-0-20997a6fd841@tessares.net>
-To:     mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Davide Caratti <dcaratti@redhat.com>,
-        Dmytro Shytyi <dmytro@shytyi.net>,
-        Menglong Dong <imagedong@tencent.com>,
-        Geliang Tang <geliang.tang@suse.com>,
-        Kishen Maloor <kishen.maloor@intel.com>
-Cc:     Florian Westphal <fw@strlen.de>, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        stable@vger.kernel.org
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2133;
- i=matthieu.baerts@tessares.net; h=from:subject:message-id;
- bh=1OsCicu/3vbKAvtKytrt0z0ywt61KRKpMc3STXoQXA8=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkggQawz6TxWhaJHOCzsoj7Dunv2uUMLzRPPKj2
- W1VAUZNjaiJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZIIEGgAKCRD2t4JPQmmg
- c+JJD/4nMV96ft2RW4sWQl2h5V60vSuGvtu8Fj57RT4rjI8alspOTImfQDSHV2VT0jvyK73a2NN
- JcBwh0n2KlCAcqU3yRL5Yxe36fHk2ZMJMUi4WUnc1KhOauu9GbtXDgKqgLjk50w69a2msxXrB1/
- BzP0Ih1mfkVrKPnsUwbORN+wUjE5jqy+9rP78316DlCkrihfSV9o5yXiwOJJ6qfSbqSKCSt2vMR
- vdwYxKtLLh137dUTEzaIymzu8z6ZeFw8FXUmGwXXuHHqy7tmr04vFFtP5+Pe0dwZr/1eCP4sOKy
- +bBIkjQAaz0hzN09loIChJYeJIziWtfxC8KDkpIWl/Voqdfnye2MfE7q4PLN16+Xro81sf8WhQJ
- rzq0VzRkLDWcXAeiUAgLUw0DfCZsJy33gLTuAMfLqDLW9waL/rbJLF46zo2GBmRTBDPHexcgwHj
- ht4DgOE/Mgl5XUWbcH36p2TPiR8jK8JIt7Q8+OVNlU9HUTnB1KwzF59WViYddFICF4NxK3+5s99
- I3psrh50vH4op27pQiGJkm0wibIQAqED5A8ezAJJ8XAyG3Kplv8RTlQKz4bURFrv0QEWEBKVprp
- y4qGrl3N5S/nGIe9cptNKHf0m+gS8irTTywG5VbZkeronyhJu2GKkAKYH9Ty8YAwO66aIYObQkN
- /bhqNwA09G2k+EA==
-X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZIFa0Y7GIN0S/T6q@1wt.eu>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Selftests are supposed to run on any kernels, including the old ones not
-supporting all MPTCP features.
+On Thu, Jun 08, 2023 at 06:36:33AM +0200, Willy Tarreau wrote:
+> On Wed, Jun 07, 2023 at 03:58:01PM -0700, Paul E. McKenney wrote:
+> > > Regarding the build failure affecting s390x and riscv64, it's a regular
+> > > kernel resulting from "make defconfig". For both archs, I'm getting this
+> > > failure:
+> > > 
+> > >   In file included from kernel/rcu/update.c:649:
+> > >   kernel/rcu/tasks.h: In function 'get_rcu_tasks_gp_kthread':
+> > >     CC      fs/kernfs/dir.o
+> > >     CC      security/bpf/hooks.o
+> > >   kernel/rcu/tasks.h:1939:16: error: 'rcu_tasks' undeclared (first use in this function)
+> > >    1939 |         return rcu_tasks.kthread_ptr;
+> > >         |                ^~~~~~~~~
+> > >   kernel/rcu/tasks.h:1939:16: note: each undeclared identifier is reported only once for each function it appears in
+> > >   kernel/rcu/tasks.h:1940:1: error: control reaches end of non-void function [-Werror=return-type]
+> > >    1940 | }
+> > >         | ^
+> > >   cc1: some warnings being treated as errors
+> > > 
+> > > I rebased the branch on top of 6.4-rc5 and got the same. I'm building
+> > > with gcc-11.3.0 from kernel.org. I'm not sure whether this comes from
+> > > my build environment or recent changes to the kernel, but I'm sure I
+> > > haven't seen that error during 6.3-rc cycle. However, given that
+> > > Zhangjin seems to have successfully built it for riscv, there might
+> > > be something odd on my side.
+> > 
+> > That line of code is in rcu/dev but not in mainline yet.  In fact, it
+> > is not yet in -next.
+> > 
+> > But it is a bug.  One that my Kconfig laziness hid from me.  Easy fix,
+> > but it is clearly time for me to stop being lazy about that part of the
+> > Kconfig setup.  :-/
+> > 
+> > So thank you for reporting it!
+> 
+> Great, I'm happy that it cuold be used to spot a real bug ;-)
+> 
+> > Longer term, both to avoid you having to deal with RCU bugs and to make
+> > it easier to have multiple administrative nolibc maintainers, it might
+> > work better for you to base your stack on vX.y-rc1.  That way, I could
+> > just pull directly from your tree.
+> (...)
+> > This is something to think about for some upcoming cycle, given that
+> > we are already pretty much set up for the upcoming merge window.
+> 
+> Yes I think it makes sense now. Initially tiny changes had implications
+> on rcutorture and needed to be properly sequenced but that's no longer
+> the case and we can indeed simplify this. And it will force us to gather
+> all patches in one single series, which is also easier to review/discuss.
+> 
+> So that works for me.
 
-One of them is TCP_INQ cmsg support introduced in commit 2c9e77659a0c
-("mptcp: add TCP_INQ cmsg support").
+Very good!
 
-It is possible to look for "mptcp_ioctl" in kallsyms because it was
-needed to introduce the mentioned feature. We can skip these tests and
-not set TCPINQ option if the feature is not supported.
+Actually, in theory, I could replace my current stack with a direct
+pull of your stack and get a head start on this process.  Let me see
+how I feel about making this switch on Monday.  ;-)
 
-Link: https://github.com/multipath-tcp/mptcp_net-next/issues/368
-Fixes: 5cbd886ce2a9 ("selftests: mptcp: add TCP_INQ support")
-Cc: stable@vger.kernel.org
-Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
----
- tools/testing/selftests/net/mptcp/mptcp_sockopt.sh | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh b/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh
-index 1d4ae8792227..f295a371ff14 100755
---- a/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh
-+++ b/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh
-@@ -187,9 +187,14 @@ do_transfer()
- 		local_addr="0.0.0.0"
- 	fi
- 
-+	cmsg="TIMESTAMPNS"
-+	if mptcp_lib_kallsyms_has "mptcp_ioctl$"; then
-+		cmsg+=",TCPINQ"
-+	fi
-+
- 	timeout ${timeout_test} \
- 		ip netns exec ${listener_ns} \
--			$mptcp_connect -t ${timeout_poll} -l -M 1 -p $port -s ${srv_proto} -c TIMESTAMPNS,TCPINQ \
-+			$mptcp_connect -t ${timeout_poll} -l -M 1 -p $port -s ${srv_proto} -c "${cmsg}" \
- 				${local_addr} < "$sin" > "$sout" &
- 	local spid=$!
- 
-@@ -197,7 +202,7 @@ do_transfer()
- 
- 	timeout ${timeout_test} \
- 		ip netns exec ${connector_ns} \
--			$mptcp_connect -t ${timeout_poll} -M 2 -p $port -s ${cl_proto} -c TIMESTAMPNS,TCPINQ \
-+			$mptcp_connect -t ${timeout_poll} -M 2 -p $port -s ${cl_proto} -c "${cmsg}" \
- 				$connect_addr < "$cin" > "$cout" &
- 
- 	local cpid=$!
-@@ -313,6 +318,11 @@ do_tcpinq_tests()
- {
- 	local lret=0
- 
-+	if ! mptcp_lib_kallsyms_has "mptcp_ioctl$"; then
-+		echo "INFO: TCP_INQ not supported: SKIP"
-+		return
-+	fi
-+
- 	local args
- 	for args in "-t tcp" "-r tcp"; do
- 		do_tcpinq_test $args
-
--- 
-2.40.1
-
+							Thanx, Paul
