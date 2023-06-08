@@ -2,63 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B085AC7EE23
-	for <linux-kselftest@archiver.kernel.org>; Thu,  8 Jun 2023 16:40:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05AB4C83003
+	for <linux-kselftest@archiver.kernel.org>; Thu,  8 Jun 2023 16:40:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236465AbjFHQka (ORCPT
+        id S236583AbjFHQkb (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 8 Jun 2023 12:40:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48428 "EHLO
+        Thu, 8 Jun 2023 12:40:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236594AbjFHQjp (ORCPT
+        with ESMTP id S235530AbjFHQj3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 8 Jun 2023 12:39:45 -0400
+        Thu, 8 Jun 2023 12:39:29 -0400
 Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E118435AA
-        for <linux-kselftest@vger.kernel.org>; Thu,  8 Jun 2023 09:39:16 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-3090d3e9c92so857807f8f.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 08 Jun 2023 09:39:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 461F530F0
+        for <linux-kselftest@vger.kernel.org>; Thu,  8 Jun 2023 09:39:03 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-30e53cacc10so624615f8f.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 Jun 2023 09:39:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1686242343; x=1688834343;
+        d=tessares.net; s=google; t=1686242340; x=1688834340;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=0SeIVqfDIJ5M+hwTQOEMBeQrB+d7nlSQcKhwVwTtbA0=;
-        b=PKE5oK5KGY4ma9jGzewDadwzaiA2O8Ub9z2aWRW2Zw0Ab6RQDseA2a9nVCtiA1wgTy
-         pt9Z+swTeoNTXsnQ0hxjkmu3n7rfs9QIL8/9kQ9w0XnWXGljXuJgUcJ4lpugzv45hbw7
-         SmfBpvPfYm2GHr2bswOyyeIL/8ju134caaLCZOXAyvyJIKSBtL7dLg7MYGf956EsuJgu
-         G61TrWm12iUPzxCXs4mWdbYov0BApBshQmldY5zlQojhAzNXy6izScgbF8LQZWlZB90g
-         kscAL4Rwr1tW2hr63vMn+cKd0fqk126qFLwkw4spcRQ9yvxRY1PE1Yov0CZYYXgJAsV4
-         uO/Q==
+        bh=czHHBif6b3JNPCEfCU3p0DvzKEkPWI28pRVwFLD3TEk=;
+        b=75gqNSzuYINuHY5SCr+DHhdj+MkqUn5K3pmF8985c8b8Qmgt1IHJAZJbh3f+fzNMY+
+         JUtij/ifnHZ1Px7qoQ1wFDKBOqJToPqBdYBS2zGOInSX45sAZYmn2sOZQ7zd17InT0O2
+         AIAlryytQH9DnHpTSrMJF3xqZe9oT0H0DDff/9wWNrftjM751OclCeRqvFH2bTLCcEbF
+         mWkV7W28ySKLRml85f2ryhONR1gaaW1AniH5+dVoNnB8yUMbjwJ+VRh+2xa/K0HfBncg
+         dQN8umCqv6aPBowj7IRydRJYCEj1ITGy9KeepeK0zmgrV1BdIYcCye4Mav0dmWcqYw8Q
+         axYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686242343; x=1688834343;
+        d=1e100.net; s=20221208; t=1686242340; x=1688834340;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0SeIVqfDIJ5M+hwTQOEMBeQrB+d7nlSQcKhwVwTtbA0=;
-        b=ijf2ljR+bVJBv+T7UiUy9VBMCdx4gkqO9W9/IJ/FTMjlvNGLT6QWPQwuPqHbzrIY9i
-         Klvw4Gw6oKqlekZ95mea2rEmXNRjfEVTpQ1WdOB9P+4MebvocYK7Bgif7ohcNZ4yyC6V
-         KBYyTqdJXcztCxtavJuOvUSrkWz5T6Yx4tlBiSiAlEa9hpDQfWWOzl2wZz9eZCtVXtDO
-         Gv/LSfioBiC3JD/XDuVCXcDwVrjclHd4a+R61vITNlz5hfAxya2MFOhUZ3D3EGdRTXB6
-         l+bLvIflbBcgIl5u9x3xEv+vS8iLFs6xnhMwYFmOt4m9FNL8VXc4LZ2zlyIWd4VgmNAs
-         KeWQ==
-X-Gm-Message-State: AC+VfDwSKKK27zk54T8t9OJ2XAVx33uHXSE5h+kDA94i7LQ6CqzfMvUH
-        E20w+cxszDlb3/vrpuHqS2Ef+A==
-X-Google-Smtp-Source: ACHHUZ6yurkoDraX+JVU46TTVJ2MRrt+TCpcI/s2PSIbLlBZf42OvA/DRkeZVRZAV3vbPyQNmtxxtQ==
-X-Received: by 2002:adf:d083:0:b0:2dc:cad4:87b9 with SMTP id y3-20020adfd083000000b002dccad487b9mr8050050wrh.68.1686242343680;
-        Thu, 08 Jun 2023 09:39:03 -0700 (PDT)
+        bh=czHHBif6b3JNPCEfCU3p0DvzKEkPWI28pRVwFLD3TEk=;
+        b=Gd4e3nChJeXR0ifNiCKLkyDpK8McScysFRGssrJTvEn+Y19kbHDEKg08ImIGqOjzWI
+         qKfUIlpPlOSPMg5gjAATYpDFEBsBW3CkvkuSCWGc5kvzBnyfx7Gmd4EtNlYR5sPMzh1U
+         bji8ME/1xj6hNLhDQo0ZWtBQuuFYUOJeAS5nWbt167xFXy3UAaIAhHHyjtjj1UHD8SHO
+         68zKCEEVwBNylcW3gEi9ZH9RM8TfIs+mdi9DCCKDOXmRwpkA438zQUo3XnxGcNP4HMpP
+         eU9U4acmU42yEy3pCqhniRJQ6oVDS7fu4xvYwJLKD5T/YPj8X8ERwfPHkLIvnGsAMyIe
+         gP/A==
+X-Gm-Message-State: AC+VfDwCUYAKN0upBzKJyBUQapPls60JfVAN2Ciu0+Y/fxUh188ij/3k
+        axSeLO8zrqfm7TgcARwgTT5Npw==
+X-Google-Smtp-Source: ACHHUZ5ejWfNPCf5kv9xyszkDUXkBmsLNfy8THTCbjUhm65isOwsiOMKIa209E2ordVxlqcTIstceg==
+X-Received: by 2002:adf:f1d1:0:b0:30a:e70d:9e73 with SMTP id z17-20020adff1d1000000b0030ae70d9e73mr7766087wro.33.1686242339908;
+        Thu, 08 Jun 2023 09:38:59 -0700 (PDT)
 Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id e13-20020adfef0d000000b0030aeb3731d0sm2038215wro.98.2023.06.08.09.39.02
+        by smtp.gmail.com with ESMTPSA id e13-20020adfef0d000000b0030aeb3731d0sm2038215wro.98.2023.06.08.09.38.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 09:39:03 -0700 (PDT)
+        Thu, 08 Jun 2023 09:38:59 -0700 (PDT)
 From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-Date:   Thu, 08 Jun 2023 18:38:51 +0200
-Subject: [PATCH net 09/14] selftests: mptcp: sockopt: relax expected
- returned size
+Date:   Thu, 08 Jun 2023 18:38:48 +0200
+Subject: [PATCH net 06/14] selftests: mptcp: diag: skip inuse tests if not
+ supported
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230608-upstream-net-20230608-mptcp-selftests-support-old-kernels-part-2-v1-9-20997a6fd841@tessares.net>
+Message-Id: <20230608-upstream-net-20230608-mptcp-selftests-support-old-kernels-part-2-v1-6-20997a6fd841@tessares.net>
 References: <20230608-upstream-net-20230608-mptcp-selftests-support-old-kernels-part-2-v1-0-20997a6fd841@tessares.net>
 In-Reply-To: <20230608-upstream-net-20230608-mptcp-selftests-support-old-kernels-part-2-v1-0-20997a6fd841@tessares.net>
 To:     mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
@@ -76,21 +76,21 @@ Cc:     Florian Westphal <fw@strlen.de>, netdev@vger.kernel.org,
         Matthieu Baerts <matthieu.baerts@tessares.net>,
         stable@vger.kernel.org
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3171;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1252;
  i=matthieu.baerts@tessares.net; h=from:subject:message-id;
- bh=GQeNP3ltipPT1KJXTiCPa8omelDx4jZnpR+BwG9Is00=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkggQa5Qov3Fm/bDBsD6CR3oljXLClang/MHNLi
- wAtvYGLcoyJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZIIEGgAKCRD2t4JPQmmg
- c+syEADSQGmhuKC+jL1Bbph2uy7m/3SgiQ/Rjsewr3kgOOoWSkI0PiBA9l3d33m5A3stWa+m5cW
- 4h3QM4CZV2Q0OMhe+9D3NxlwodEyXVAdoR0HbHYTb2587u4XQe0yQuqC1J1VRLZZWWTDw5HSYLd
- LAM+aTCwDUVEhscCJBavOWcyhzife41OhauVMOvwuICpuADLAGoGRIyoT8ulyodHphBNY1wgTjl
- BUu2xZxX+/xnjpIf3vfPqna4w7rcOFpjjSW4unyNTPbyfvdi4MGSeGb9quzTgeVxRoM39qfXd2M
- /Vk7jy5bS7R+raVsSijiU2L0bQvK1MrHdOegnkX8yjZjdQ1sD0PzHPZ82s3g0zbDw4ybrxgQ0wq
- jQc2L8ZE/oVmIEEDPF0/Cb7DofA3XYBRdss8FZFxIONIUDDzuucHgOw6ceu0ehHtklC9AsddAIK
- /2m0h6ZPAiUbU7m+oV/xODXdOPJl1xsTMZ+gT9Ty8ws7S+Jqg2cpFDkn/ArszNepyylYfqnWkeb
- aBng4kd+RggojDawfTjbCN1nv3Cdvi7DD5xNVyIPzQviT+pOsI/IrTLn3g7BRsuIuTIPLVHfkcb
- ujwm75fK61gPmojrfB0EHbQOcGG7rMpLESGijU/MZjfbn91o+e0An9tPVwVr+DUHkei7JyqVTZ5
- LrK04fBk+bt8vfQ==
+ bh=GFhSqu6crxevOWFlUMLP/NWLyXtLoglclQ/BPatDiGs=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkggQZ1TJ6RZ82IXZNGMBvvYLfKUyHoJAZyLbq5
+ B+55fJO15WJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZIIEGQAKCRD2t4JPQmmg
+ c0ogEAC5De1Wak4W2bPErgQJAQgZ7UQe8hoKJnfOsYDzE3i3Q+MZg/KnWX27LHbm+JZ/40ustCj
+ P8Dxhkwbsoi/Y7tLwvwo7IJJ6r8qyHalenDoNywL1J3txjNY7Alj2gXfdaDWB7UoLAsZeqVMlRt
+ 7iMOXgrPaSmP7a5XcfkbZnHoY4LMK11R0pM/VCdorceRiIXRjR7YoQmeX9uS+Kb5439K8HYMkIw
+ wwmNkxywerdfOWOxfhbP/DM+8gp+We9hiEsD5/H4LtjARq3ECjQKniSTYOuSjZ4VlXLxbFNBtZI
+ xyfoP2+Apk14eu85zmXtjIIr3OSkdqtRpatmXGX75Wn9iuR/UI1We3FnK8tTS51boHjruxs94OM
+ YimNcl6q8o+xw5Y/vbUqLv5HZRRl8rG0FXPpE1vujcuW/eL2sHPNxXMvxhqGGcv+08arFHDl9Fi
+ enKjaOXsuArKdRkUK9wB59EFxKRKhkaC6G2c9B3yz0pppGsJAcxSHmx5kpatXekr8xcfSPQv/Rp
+ nOE1oA29xr27XV68cb7o+Whh/4XmNufUM3n8Wp6uympepL4bfuq9l0Nk7woP7MLlgtegmC9HlPc
+ CVL/eGOdPukWMIzEInRCSn7lqYTZ4op2YZUtxsFBE1w8lC9ByYufMkvni19TPmhMiQFtDIUeDFU
+ cLNweqj49lEMGHw==
 X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 Precedence: bulk
@@ -100,81 +100,35 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 Selftests are supposed to run on any kernels, including the old ones not
 supporting all MPTCP features.
 
-One of them is the getsockopt(SOL_MPTCP) to get info about the MPTCP
-connections introduced by commit 55c42fa7fa33 ("mptcp: add MPTCP_INFO
-getsockopt") and the following ones.
+One of them is the reporting of the MPTCP sockets being used, introduced
+by commit c558246ee73e ("mptcp: add statistics for mptcp socket in use").
 
-We cannot guess in advance which sizes the kernel will returned: older
-kernel can returned smaller sizes, e.g. recently the tcp_info structure
-has been modified in commit 71fc704768f6 ("tcp: add rcv_wnd and
-plb_rehash to TCP_INFO") where a new field has been added.
-
-The userspace can also expect a smaller size if it is compiled with old
-uAPI kernel headers.
-
-So for these sizes, we can only check if they are above a certain
-threshold, 0 for the moment. We can also only compared sizes with the
-ones set by the kernel.
+Similar to the parent commit, it looks like there is no good pre-check
+to do here, i.e. dedicated function available in kallsyms. Instead, we
+try to get info and if nothing is returned, the test is marked as
+skipped.
 
 Link: https://github.com/multipath-tcp/mptcp_net-next/issues/368
-Fixes: ce9979129a0b ("selftests: mptcp: add mptcp getsockopt test cases")
+Fixes: e04a30f78809 ("selftest: mptcp: add test for mptcp socket in use")
 Cc: stable@vger.kernel.org
 Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
 ---
- tools/testing/selftests/net/mptcp/mptcp_sockopt.c | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+ tools/testing/selftests/net/mptcp/diag.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_sockopt.c b/tools/testing/selftests/net/mptcp/mptcp_sockopt.c
-index ae61f39556ca..b35148edbf02 100644
---- a/tools/testing/selftests/net/mptcp/mptcp_sockopt.c
-+++ b/tools/testing/selftests/net/mptcp/mptcp_sockopt.c
-@@ -87,6 +87,10 @@ struct so_state {
- 	uint64_t tcpi_rcv_delta;
- };
+diff --git a/tools/testing/selftests/net/mptcp/diag.sh b/tools/testing/selftests/net/mptcp/diag.sh
+index 4a6165389b74..fa9e09ad97d9 100755
+--- a/tools/testing/selftests/net/mptcp/diag.sh
++++ b/tools/testing/selftests/net/mptcp/diag.sh
+@@ -173,7 +173,7 @@ chk_msk_inuse()
+ 		sleep 0.1
+ 	done
  
-+#ifndef MIN
-+#define MIN(a, b) ((a) < (b) ? (a) : (b))
-+#endif
-+
- static void die_perror(const char *msg)
- {
- 	perror(msg);
-@@ -349,13 +353,14 @@ static void do_getsockopt_tcp_info(struct so_state *s, int fd, size_t r, size_t
- 			xerror("getsockopt MPTCP_TCPINFO (tries %d, %m)");
+-	__chk_nr get_msk_inuse $expected "$msg"
++	__chk_nr get_msk_inuse $expected "$msg" 0
+ }
  
- 		assert(olen <= sizeof(ti));
--		assert(ti.d.size_user == ti.d.size_kernel);
--		assert(ti.d.size_user == sizeof(struct tcp_info));
-+		assert(ti.d.size_kernel > 0);
-+		assert(ti.d.size_user ==
-+		       MIN(ti.d.size_kernel, sizeof(struct tcp_info)));
- 		assert(ti.d.num_subflows == 1);
- 
- 		assert(olen > (socklen_t)sizeof(struct mptcp_subflow_data));
- 		olen -= sizeof(struct mptcp_subflow_data);
--		assert(olen == sizeof(struct tcp_info));
-+		assert(olen == ti.d.size_user);
- 
- 		if (ti.ti[0].tcpi_bytes_sent == w &&
- 		    ti.ti[0].tcpi_bytes_received == r)
-@@ -401,13 +406,14 @@ static void do_getsockopt_subflow_addrs(int fd)
- 		die_perror("getsockopt MPTCP_SUBFLOW_ADDRS");
- 
- 	assert(olen <= sizeof(addrs));
--	assert(addrs.d.size_user == addrs.d.size_kernel);
--	assert(addrs.d.size_user == sizeof(struct mptcp_subflow_addrs));
-+	assert(addrs.d.size_kernel > 0);
-+	assert(addrs.d.size_user ==
-+	       MIN(addrs.d.size_kernel, sizeof(struct mptcp_subflow_addrs)));
- 	assert(addrs.d.num_subflows == 1);
- 
- 	assert(olen > (socklen_t)sizeof(struct mptcp_subflow_data));
- 	olen -= sizeof(struct mptcp_subflow_data);
--	assert(olen == sizeof(struct mptcp_subflow_addrs));
-+	assert(olen == addrs.d.size_user);
- 
- 	llen = sizeof(local);
- 	ret = getsockname(fd, (struct sockaddr *)&local, &llen);
+ # $1: ns, $2: port
 
 -- 
 2.40.1
