@@ -2,61 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0239BC7EE29
-	for <linux-kselftest@archiver.kernel.org>; Thu,  8 Jun 2023 09:45:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 56276C7EE2E
+	for <linux-kselftest@archiver.kernel.org>; Thu,  8 Jun 2023 09:58:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233379AbjFHJpu (ORCPT
+        id S235211AbjFHJ6w (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 8 Jun 2023 05:45:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47622 "EHLO
+        Thu, 8 Jun 2023 05:58:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235383AbjFHJps (ORCPT
+        with ESMTP id S234793AbjFHJ6v (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 8 Jun 2023 05:45:48 -0400
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A94213C;
-        Thu,  8 Jun 2023 02:45:33 -0700 (PDT)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-19f268b1d83so334794fac.1;
-        Thu, 08 Jun 2023 02:45:33 -0700 (PDT)
+        Thu, 8 Jun 2023 05:58:51 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F6FB2706
+        for <linux-kselftest@vger.kernel.org>; Thu,  8 Jun 2023 02:58:50 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-30af20f5f67so421480f8f.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 Jun 2023 02:58:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686217533; x=1688809533;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KWfXcI9qpNRXyZ49c1qVkzQX/sqIlGyUNHOIKGAzDQA=;
-        b=OoOYd2Yl2fvO4CeoY9SXHmrdO/GnjLe13sWCrJ7lGe1yhDuyXVDlqo0aUAKF0FKt9F
-         uEbaKxjDxSqxqK3VGqMeVp/mo6E9VAG1KNWCB0Y1+PWB/moUVnUjS1NHX3MLj8gLWZ6z
-         SsE9OQSfsUMJoyg9sQB2EtUigZho4LxaKSjdF4sCvz6wVdlD4AGj9a0TH/W8c5cYCVQP
-         4kTNx9yq3tD7FM3+jK+lGWxjLs98WKyMsVCvksXQYHXH/ArNdQ0oQUlPlOSpbl04LXv5
-         8Urqn++vTFktCKLCVxhFq0WA7NQuJmzpA31w40ViBGkfOQ8lMcSiN/BxLM8WpSOTLZL5
-         6DiA==
+        d=ventanamicro.com; s=google; t=1686218329; x=1688810329;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=bro8SCdRCjEHWuDcBtldZHsndfar0M9rwEdZ8SQ0W0s=;
+        b=DWLlXBMjR+In9QMk6WByU+4r6ZJwRxIdZLTZafSYiCKOJbbbT6swcxcbDLzxBWXjSp
+         1fbhQV7xgyvNNKARmYmQiulH1nZx4WLvUTDj3K4StImn2hgIxDj2+ikZyPIKdWisMOTf
+         POkUvZLouPzWG0TFB+pG8Fqpf4v308cP9MheL82rSXAkIQHV8FTqswIFUo3ofKEZH1T5
+         gBAYnPnURVTOhHfQfMReB4ybwIfvFPWb9VgzTP9BzQ4nEZKp69qw8Fh1mVAeJnQ4O6Qb
+         hvdyiWTomMIhVCmxq/xcYY3sZSRGDpAgFxYDyLLQmROw3quJagxDYH4kZcjPI1PfZRLY
+         vJdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686217533; x=1688809533;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KWfXcI9qpNRXyZ49c1qVkzQX/sqIlGyUNHOIKGAzDQA=;
-        b=VnAMV3JHdzpAQMJU6260SpIBIlG2aajNoebrUXeiqLhYiYOucXyggdTiFxTg2vR7zc
-         77fVkRxt9YzSl4ceYPbWGG08WEqi4uVndWkXrDJWz9tLoOZ1Rxu9KhXHqZbj8VLy/HzK
-         nLlY6ZhLwO1nGRQNS8WTmPgMl5OVwVKabERFa8MMB3ktIg8goJMsQVaOi7Wex+wGwOV4
-         1EgAk5RLHwgNHXiUNNy1CGm3LE2edQhjOE7sdiVBh4PIyf8qx9X1sonWGjfD7B1j6lu6
-         1l2vuFNuph/lyabQMdjy/YrE1CUPfj6uXUR0CEzvT1q0OURy6SEyuLN3JNLUK9XDKo4Q
-         CneA==
-X-Gm-Message-State: AC+VfDzeBamlQKYWvt63YKUW/+DcGcjTj65x8yDAM703QRi2vsuIjseX
-        f6mfjApxLDEdd2XHFYG6AEjF5JzIXVBbNsbb+Mo=
-X-Google-Smtp-Source: ACHHUZ5IWgmj+LEHtiTJyB5L+4nONSN43H9fR9QcrJW/5jde8UjA7NnpuuS9XpaB5O5YV3svfxnb3boBreWg1R1DcOk=
-X-Received: by 2002:a05:6808:315:b0:39a:62f7:9463 with SMTP id
- i21-20020a056808031500b0039a62f79463mr4776127oie.41.1686217532902; Thu, 08
- Jun 2023 02:45:32 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1684999824.git.haibo1.xu@intel.com> <da390e6200e838fce320a2a43b2f87951b4e0bbb.1684999824.git.haibo1.xu@intel.com>
- <20230525-2bab5376987792eab73507ac@orel>
-In-Reply-To: <20230525-2bab5376987792eab73507ac@orel>
-From:   Haibo Xu <xiaobo55x@gmail.com>
-Date:   Thu, 8 Jun 2023 17:45:21 +0800
-Message-ID: <CAJve8okR_iH4vF9DV9zTkDaeYe25kP7KUcKQphmjG5q-iVb-KA@mail.gmail.com>
-Subject: Re: [PATCH v2 11/11] KVM: riscv: selftests: Add get-reg-list test
-To:     Andrew Jones <ajones@ventanamicro.com>
+        d=1e100.net; s=20221208; t=1686218329; x=1688810329;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bro8SCdRCjEHWuDcBtldZHsndfar0M9rwEdZ8SQ0W0s=;
+        b=YOutyNU8JTpl3/Z+fFPHD4W3ThPKb763FIoUcpqYmnRBStK48uqQ5pRVb4y4xZGWm4
+         X7AwfPnTLtBWLxtEjzxAFCpKqwdvnOXwgwLAijB4s8+C51LOg9kFHqg2F3wNPukpsB59
+         lKbDKq7CnCGhUrUd79ZjPl+QonLeKkSK6eEc0zAij7cL/rZOuQL0FqsGCrtD/Hjej0gd
+         wl8F621gNqQol4itRIdgjzqH0nsRGaitNzeThl9lv5WC/Mb0ihWZexqsTHCc1AHE09vs
+         ZelELJ4pxeuZwDiwmPZ0lYyXdn4YgId/Z2Kn7CdST4AJARZxTvtj/Ej8okcGcxzE0KSd
+         lYUQ==
+X-Gm-Message-State: AC+VfDyZISeOdaoAnPQUCPRP4VDqMsSFGWfe17pXTAIHMEC046g5SZJS
+        ZCR15nNCJdo17hzqopoBktlHWw==
+X-Google-Smtp-Source: ACHHUZ6f6RLGsz44l11hXuy9AWjs8GZ3O0KJYqBLOUqFSQ6jSeZDCKr+qhXxSeHoE89ty7CpeH4xmQ==
+X-Received: by 2002:a5d:6550:0:b0:30a:9014:838d with SMTP id z16-20020a5d6550000000b0030a9014838dmr6419901wrv.11.1686218329062;
+        Thu, 08 Jun 2023 02:58:49 -0700 (PDT)
+Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
+        by smtp.gmail.com with ESMTPSA id q12-20020a05600000cc00b002ff2c39d072sm1065586wrx.104.2023.06.08.02.58.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 02:58:48 -0700 (PDT)
+Date:   Thu, 8 Jun 2023 11:58:47 +0200
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Haibo Xu <xiaobo55x@gmail.com>
 Cc:     Haibo Xu <haibo1.xu@intel.com>, maz@kernel.org,
         oliver.upton@linux.dev, seanjc@google.com,
         Paolo Bonzini <pbonzini@redhat.com>,
@@ -78,93 +75,68 @@ Cc:     Haibo Xu <haibo1.xu@intel.com>, maz@kernel.org,
         kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
         linux-kselftest@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v2 11/11] KVM: riscv: selftests: Add get-reg-list test
+Message-ID: <20230608-344953a953eeb63ef6c26fb8@orel>
+References: <cover.1684999824.git.haibo1.xu@intel.com>
+ <da390e6200e838fce320a2a43b2f87951b4e0bbb.1684999824.git.haibo1.xu@intel.com>
+ <20230525-2bab5376987792eab73507ac@orel>
+ <CAJve8okR_iH4vF9DV9zTkDaeYe25kP7KUcKQphmjG5q-iVb-KA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJve8okR_iH4vF9DV9zTkDaeYe25kP7KUcKQphmjG5q-iVb-KA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, May 26, 2023 at 1:18=E2=80=AFAM Andrew Jones <ajones@ventanamicro.c=
-om> wrote:
->
+On Thu, Jun 08, 2023 at 05:45:21PM +0800, Haibo Xu wrote:
+> On Fri, May 26, 2023 at 1:18 AM Andrew Jones <ajones@ventanamicro.com> wrote:
+> >
+> 
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CORE | KVM_REG_RISCV_CORE_REG(mode),
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_REG(sstatus),
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_REG(sie),
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_REG(stvec),
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_REG(sscratch),
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_REG(sepc),
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_REG(scause),
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_REG(stval),
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_REG(sip),
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_REG(satp),
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_REG(scounteren),
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_TIMER | KVM_REG_RISCV_TIMER_REG(frequency),
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_TIMER | KVM_REG_RISCV_TIMER_REG(time),
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_TIMER | KVM_REG_RISCV_TIMER_REG(compare),
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_TIMER | KVM_REG_RISCV_TIMER_REG(state),
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_A,
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_C,
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_D,
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_F,
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_H,
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_I,
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_M,
+> >
+> > I think all the above should have the size KVM_REG_SIZE_ULONG. Please also
+> > test with a 32-bit host.
+> >
+> 
+> Hi Andrew,
+> 
+> Just noticed the RISC-V 32-bit kvm selftests was not supported currently.
 
-> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CORE | KVM_REG_R=
-ISCV_CORE_REG(mode),
-> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RI=
-SCV_CSR_REG(sstatus),
-> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RI=
-SCV_CSR_REG(sie),
-> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RI=
-SCV_CSR_REG(stvec),
-> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RI=
-SCV_CSR_REG(sscratch),
-> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RI=
-SCV_CSR_REG(sepc),
-> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RI=
-SCV_CSR_REG(scause),
-> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RI=
-SCV_CSR_REG(stval),
-> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RI=
-SCV_CSR_REG(sip),
-> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RI=
-SCV_CSR_REG(satp),
-> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RI=
-SCV_CSR_REG(scounteren),
-> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_TIMER | KVM_REG_=
-RISCV_TIMER_REG(frequency),
-> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_TIMER | KVM_REG_=
-RISCV_TIMER_REG(time),
-> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_TIMER | KVM_REG_=
-RISCV_TIMER_REG(compare),
-> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_TIMER | KVM_REG_=
-RISCV_TIMER_REG(state),
-> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_ISA_EXT | KVM_RI=
-SCV_ISA_EXT_A,
-> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_ISA_EXT | KVM_RI=
-SCV_ISA_EXT_C,
-> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_ISA_EXT | KVM_RI=
-SCV_ISA_EXT_D,
-> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_ISA_EXT | KVM_RI=
-SCV_ISA_EXT_F,
-> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_ISA_EXT | KVM_RI=
-SCV_ISA_EXT_H,
-> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_ISA_EXT | KVM_RI=
-SCV_ISA_EXT_I,
-> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_ISA_EXT | KVM_RI=
-SCV_ISA_EXT_M,
->
-> I think all the above should have the size KVM_REG_SIZE_ULONG. Please als=
-o
-> test with a 32-bit host.
->
+Oh, right.
 
-Hi Andrew,
+> Even though I tried to remove the below check for 32-bit, there were
+> still many warning and error messages during compiling.
+> It seems 32-bit KVM selftests was not supported either for ARM/x86. Do
+> we have a plan to support it on risc-v?
 
-Just noticed the RISC-V 32-bit kvm selftests was not supported currently.
-Even though I tried to remove the below check for 32-bit, there were
-still many warning and error messages during compiling.
-It seems 32-bit KVM selftests was not supported either for ARM/x86. Do
-we have a plan to support it on risc-v?
+No plan and, if there was, it would be super low priority. So for stuff
+like using KVM_REG_SIZE_ULONG, we'll just have to try and get it right
+without testing. If somebody adds 32-bit support to these tests someday,
+then, hopefully, it'll just work (I'm allowed one overly optimistic
+comment per day).
 
-Regards,
-Haibo
-
-diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h
-b/tools/testing/selftests/kvm/include/kvm_util_base.h
-index ac4aaa21deee..a32ccc06435b 100644
---- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-@@ -205,9 +205,9 @@ extern enum vm_guest_mode vm_mode_default;
-
- #elif defined(__riscv)
-
--#if __riscv_xlen =3D=3D 32
--#error "RISC-V 32-bit kvm selftests not supported"
--#endif
-+//#if __riscv_xlen =3D=3D 32
-+//#error "RISC-V 32-bit kvm selftests not supported"
-+//#endif
-
->
-> Thanks,
-> drew
+Thanks,
+drew
