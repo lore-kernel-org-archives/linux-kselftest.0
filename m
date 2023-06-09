@@ -2,157 +2,87 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA8F7C7EE25
-	for <linux-kselftest@archiver.kernel.org>; Fri,  9 Jun 2023 21:40:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9FD5C7EE2E
+	for <linux-kselftest@archiver.kernel.org>; Fri,  9 Jun 2023 21:43:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230435AbjFIVkN (ORCPT
+        id S232098AbjFIVnn (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 9 Jun 2023 17:40:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32844 "EHLO
+        Fri, 9 Jun 2023 17:43:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230047AbjFIVkM (ORCPT
+        with ESMTP id S229599AbjFIVnm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 9 Jun 2023 17:40:12 -0400
-Received: from cheetah.elm.relay.mailchannels.net (cheetah.elm.relay.mailchannels.net [23.83.212.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A9C035BE
-        for <linux-kselftest@vger.kernel.org>; Fri,  9 Jun 2023 14:40:10 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 60CEE7E1D5E
-        for <linux-kselftest@vger.kernel.org>; Fri,  9 Jun 2023 21:40:10 +0000 (UTC)
-Received: from pdx1-sub0-mail-a291.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id B0CBF7E2BDD
-        for <linux-kselftest@vger.kernel.org>; Fri,  9 Jun 2023 21:40:09 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1686346809; a=rsa-sha256;
-        cv=none;
-        b=hc6j65DivfrCCV6bXLmM2iSPZY6eyIVsX2RW40fTs2OO3IW26U1LOtsCK8Jl5/8BcJgq2w
-        Yzz/9UUSVzRtCnK8oJrl5UMSW19Z4ImISd/qJHP9RrlTOMDe8AQOxtIgRJgooKO78hZUKZ
-        +U5152EqkqKCaL9nXlTAG+/swTK4FSDKOb1nY58sF8/GNUFkx7tgmkq7e08h237UFvYWLy
-        3QtbCidsJTgxU19Qtcw4lgImtdmoX9k/trqdH26YhjX92Lc8OyaPllhNQDknmZTAdwB7RM
-        7u8oEiFqftR7EmqeZU7+WdtpjhXsnwK2ED7ItrObJNqcw8NDa8+WpAXhUKoJFA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1686346809;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=u6VFkU8CeRSXxG9CpKygUWaCfdMHq1wUPGyeNaB+TlE=;
-        b=GhBl7CUL3AqzvrfuKDAoCNg/FmGZFr6+yLlKuMORXWUoWOYFBE2m+dMl3SDfc6SKCuBd+a
-        fFnfHp1tNVtF+M5P1GuCwlNpiG3v37pjhONxmV2zwylqrSBtTSYo4RV8cNVQ/Ox6HnfJde
-        dQIkylEdh53Bjrc5jSC1jy2VSrUdHt9xhJtXJmKX1D7ZtpbXsmD9+VXv2JwL7Nzfbt60q8
-        mJy34bVHmxDeNOJn6zaBHgbZjJcnJiDSDD0JJZ7MBJtEUpWWzh1jLAhkebKrasHsle73hD
-        IHbXwqq+Ht4kqBJ74rFkDwCtcrPYZjnjlNmoFAHW7vySsr5Y8sM1UCCHsGllxg==
-ARC-Authentication-Results: i=1;
-        rspamd-7c78575475-xtsqr;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=kjlx@templeofstupid.com
-X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
-X-MC-Relay: Good
-X-MailChannels-SenderId: dreamhost|x-authsender|kjlx@templeofstupid.com
-X-MailChannels-Auth-Id: dreamhost
-X-Towering-Relation: 37cf606d19bc44ec_1686346810218_3115947551
-X-MC-Loop-Signature: 1686346810218:252784323
-X-MC-Ingress-Time: 1686346810218
-Received: from pdx1-sub0-mail-a291.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.97.48.103 (trex/6.8.1);
-        Fri, 09 Jun 2023 21:40:10 +0000
-Received: from kmjvbox (c-73-93-64-36.hsd1.ca.comcast.net [73.93.64.36])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kjlx@templeofstupid.com)
-        by pdx1-sub0-mail-a291.dreamhost.com (Postfix) with ESMTPSA id 4QdDyJ6ddwzYN
-        for <linux-kselftest@vger.kernel.org>; Fri,  9 Jun 2023 14:40:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=templeofstupid.com;
-        s=dreamhost; t=1686346809;
-        bh=u6VFkU8CeRSXxG9CpKygUWaCfdMHq1wUPGyeNaB+TlE=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=Iyv1QSXdQRbIWJQoNqScr1eFgnvlDibXQ2N/j+Rghgo11nkvnTKr+NuMf+YgJ8tYb
-         AwT8Hv6fI5B9CmxFLyrB2X2or1ckwfM+ikaRFmxQNjmgV1/b0ah/DBZCvZ8356O+9l
-         UegCkqq/hwdeSAjg+Rp6Sfdrrs7p8Eu6AJdRAdp0=
-Received: from johansen (uid 1000)
-        (envelope-from kjlx@templeofstupid.com)
-        id e00d9
-        by kmjvbox (DragonFly Mail Agent v0.12);
-        Fri, 09 Jun 2023 14:40:07 -0700
-Date:   Fri, 9 Jun 2023 14:40:07 -0700
-From:   Krister Johansen <kjlx@templeofstupid.com>
-To:     bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf v4 1/2] bpf: ensure main program has an extable
-Message-ID: <9253ce691956f19adc93be7dc4c3a7aabe3db3de.1686345886.git.kjlx@templeofstupid.com>
-References: <cover.1686345886.git.kjlx@templeofstupid.com>
+        Fri, 9 Jun 2023 17:43:42 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17704210E
+        for <linux-kselftest@vger.kernel.org>; Fri,  9 Jun 2023 14:43:41 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id ca18e2360f4ac-760dff4b701so22767139f.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 09 Jun 2023 14:43:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1686347020; x=1688939020;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zTniS9s9n8Hii/rpOvujGvQzp0uGfuz+V/CHX4S8b1A=;
+        b=L2gBH5LR9/NnnjQxk/9gp+5oaRF+iMSmZ8+jYTBr3+KP952QM3dXG5wEaAUduKXVsH
+         l7OcQDRePoAvwNf8ZfNEALQISR3WuS7uWaX9XWEkLqVZamD/itWI6Y6g7iH+QxXUUS9G
+         JBDZ10Jp7umy2R3SPW4yuWAmPnfW8pOQL3mHY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686347020; x=1688939020;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zTniS9s9n8Hii/rpOvujGvQzp0uGfuz+V/CHX4S8b1A=;
+        b=TjLgr4ZPr9i+2TDGv9LNUHAhygUSmtRHBXg6RMOzRUhf/IP+zISVj35ea5i7+c3Mxi
+         hjbOIuVy2dLaukkhXpRfCUi4kgp+Chz6vzmO5YbyxEbJ0BroCQM/kI0xhv4zDcF+eB75
+         02PrZeYKLa6j0wZjqhr6xYeyjCNXpsCG3rl04QdvVUKZ+j03Sn7LPiTAAA1lyOjvNfyF
+         lBJi88wKXb0KmLcDmadHMsPK6ENxIGMelN7E0HqKjEHumL8uOU6zHOM9zgmkCou3BhYk
+         0YoGn9cYOzx6j++kHNOT6U+JzibtIExjgHUpREb+BgGusTnXF09iFcGU9xsPZMSz2LW6
+         FSeA==
+X-Gm-Message-State: AC+VfDyhRQSBwkOdtSvF3lt4MCPydkY2eJmYXpWwITzVZbCr/ziAT8B6
+        T0pVsP75PlnC96IyJ3I+1nligg==
+X-Google-Smtp-Source: ACHHUZ4tEr2HoQujt6xk4qRtonXoDYtO5E49SJ/tX/dVSI4RCzhLiJ/sEoDoqAsbkzKxlTRARpklfQ==
+X-Received: by 2002:a05:6e02:1a2d:b0:33d:c72:4ee with SMTP id g13-20020a056e021a2d00b0033d0c7204eemr1867942ile.1.1686347020374;
+        Fri, 09 Jun 2023 14:43:40 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id ei2-20020a05663829a200b0041f4ce6e9cdsm1214208jab.65.2023.06.09.14.43.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Jun 2023 14:43:40 -0700 (PDT)
+Message-ID: <b7a3219e-4e0a-7a08-439a-a8a6e35271ca@linuxfoundation.org>
+Date:   Fri, 9 Jun 2023 15:43:39 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1686345886.git.kjlx@templeofstupid.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2] selftests: prctl: Add new prctl test for PR_SET_NAME
+Content-Language: en-US
+To:     Osama Muhammad <osmtendev@gmail.com>, shuah@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230607153600.15816-1-osmtendev@gmail.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20230607153600.15816-1-osmtendev@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When subprograms are in use, the main program is not jit'd after the
-subprograms because jit_subprogs sets a value for prog->bpf_func upon
-success.  Subsequent calls to the JIT are bypassed when this value is
-non-NULL.  This leads to a situation where the main program and its
-func[0] counterpart are both in the bpf kallsyms tree, but only func[0]
-has an extable.  Extables are only created during JIT.  Now there are
-two nearly identical program ksym entries in the tree, but only one has
-an extable.  Depending upon how the entries are placed, there's a chance
-that a fault will call search_extable on the aux with the NULL entry.
+On 6/7/23 09:36, Osama Muhammad wrote:
+> This patch will add the new test, which covers the prctl call
+> PR_SET_NAME command. The test tries to give a name using the PR_SET_NAME
+> call and then confirm it that it changed correctly by using  PR_GET_NAME.
+> It also tries to rename it with empty name.In the test PR_GET_NAME is
+> tested by passing null pointer to it and check its behaviour.
+> 
+> Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
+> 
+> ---
+> changes since v1:
+> 	-Used TASK_COMM_LEN instead of using numerical value 16.
 
-Since jit_subprogs already copies state from func[0] to the main
-program, include the extable pointer in this state duplication.
-Additionally, ensure that the copy of the main program in func[0] is not
-added to the bpf_prog_kallsyms table. Instead, let the main program get
-added later in bpf_prog_load().  This ensures there is only a single
-copy of the main program in the kallsyms table, and that its tag matches
-the tag observed by tooling like bpftool.
+Please add linux/sched.h here as an include to pull this.
+It is good to add an explicit include as opposed taking
+a chance on it being included from another include.
 
-Cc: stable@vger.kernel.org
-Fixes: 1c2a088a6626 ("bpf: x64: add JIT support for multi-function programs")
-Signed-off-by: Krister Johansen <kjlx@templeofstupid.com>
-Acked-by: Yonghong Song <yhs@fb.com>
----
- kernel/bpf/verifier.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 5871aa78d01a..b62d1fc0f92b 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -17214,9 +17214,10 @@ static int jit_subprogs(struct bpf_verifier_env *env)
- 	}
- 
- 	/* finally lock prog and jit images for all functions and
--	 * populate kallsysm
-+	 * populate kallsysm. Begin at the first subprogram, since
-+	 * bpf_prog_load will add the kallsyms for the main program.
- 	 */
--	for (i = 0; i < env->subprog_cnt; i++) {
-+	for (i = 1; i < env->subprog_cnt; i++) {
- 		bpf_prog_lock_ro(func[i]);
- 		bpf_prog_kallsyms_add(func[i]);
- 	}
-@@ -17242,6 +17243,7 @@ static int jit_subprogs(struct bpf_verifier_env *env)
- 	prog->jited = 1;
- 	prog->bpf_func = func[0]->bpf_func;
- 	prog->jited_len = func[0]->jited_len;
-+	prog->aux->extable = func[0]->aux->extable;
- 	prog->aux->func = func;
- 	prog->aux->func_cnt = env->subprog_cnt;
- 	bpf_prog_jit_attempt_done(prog);
--- 
-2.25.1
-
+thanks,
+-- Shuah
