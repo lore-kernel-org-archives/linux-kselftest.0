@@ -2,305 +2,210 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CD91C87FDD
-	for <linux-kselftest@archiver.kernel.org>; Mon, 12 Jun 2023 11:13:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4429EC7EE23
+	for <linux-kselftest@archiver.kernel.org>; Mon, 12 Jun 2023 12:49:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238486AbjFLLNh (ORCPT
+        id S235149AbjFLMtZ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 12 Jun 2023 07:13:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47182 "EHLO
+        Mon, 12 Jun 2023 08:49:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238291AbjFLLNP (ORCPT
+        with ESMTP id S234787AbjFLMtY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 12 Jun 2023 07:13:15 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5EA4B769B;
-        Mon, 12 Jun 2023 04:02:10 -0700 (PDT)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8DxzOoV+4ZkB7YDAA--.8107S3;
-        Mon, 12 Jun 2023 19:01:41 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxfcoQ+4Zk19QVAA--.54161S3;
-        Mon, 12 Jun 2023 19:01:40 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, loongarch@lists.linux.dev,
-        linux-arch@vger.kernel.org, bpf@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
-Subject: [PATCH v1 1/2] asm-generic: Unify uapi bitsperlong.h for arm64, riscv and loongarch
-Date:   Mon, 12 Jun 2023 19:01:33 +0800
-Message-Id: <1686567694-20099-2-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1686567694-20099-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1686567694-20099-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf8AxfcoQ+4Zk19QVAA--.54161S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW3tF4DXFy8ZrW8Xr17WFyDArc_yoWDCrWUpF
-        95Crn7GF40krWak3yrJF1Igry5A393GF4UtFW2gry0vrWxJF18Gr4v9FsxCa4xJayqqryr
-        uF9agry5Gan8t3cCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUB2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVWxJr0_GcWln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
-        xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q
-        6rW5McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
-        vIr41lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
-        Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
-        xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0
-        cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8V
-        AvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E
-        14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUxhiSDUUUU
+        Mon, 12 Jun 2023 08:49:24 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1CF4E69;
+        Mon, 12 Jun 2023 05:49:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686574162; x=1718110162;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=WyaMZ95mKStGhDk3V4snEG/Bvw6l1dOxldXvkGV5r0w=;
+  b=JkoUujsYFX0CLuUl32PaGBxjiqjUVn4w5C3vjZb6cwHSnB0wnyXWduCo
+   K13k0jt1OJ6ZKJOnBDBbjhUF8+2nfb1tTTOXTbb3+iyE22hWPq2EWfyfi
+   /TYB/YXxAOinEeXkR3k/R1Jcs4cg28moozMvFMpT8cC6DFsr1dLfFOL+e
+   +z0ytBHQazfBhwef99p89Y9dZXfGbz15WoXHKe6W0uCgwA3rPwMhcWvd4
+   8wzOAP9wfsm4jzWSsldOlmqB26S6P7J/8Vt8EuJ1ixfignG9mWO2bSZIb
+   Zd8CgJusJx+xMZx6uRztX1fwqmpqNySiUM3aB74xIVwQdoYEe4wU20ejK
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="358022002"
+X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
+   d="scan'208";a="358022002"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 05:49:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="711187240"
+X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
+   d="scan'208";a="711187240"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga002.jf.intel.com with ESMTP; 12 Jun 2023 05:49:21 -0700
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 12 Jun 2023 05:49:21 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Mon, 12 Jun 2023 05:49:21 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.104)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Mon, 12 Jun 2023 05:49:21 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gzlG7ZWvnpi5LJQaiwEGrHSKfzagsX8HfcVudsk/yiPRSNb7QBFjCxRxTIjNNgYEz5r7vPt3FRgMYJXV+m0SSko/ii0ejAGrZd7HFi7RyR0iuYjl4YGPMq96MR2zuWM5Pp4RDjjYBSahHgYwG2ClsNaw/adzF4Niai902/JqBoie9i00DUVaAaEqhVYLz/xb8AuuMRq4bg48HI9V/tTgPohXS0ujbOzCMK7X6FPUGdbXTIPYClJqOR1D38VucrHxownQDsvdcPdNiDyGXi91DPBhMRBBnHZ2iLmmoJF1A+qM36h2bAJkeUhrqj2US+PSBUeKk9B8ngRs6zhkWy6wJg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WyaMZ95mKStGhDk3V4snEG/Bvw6l1dOxldXvkGV5r0w=;
+ b=j29PjdW6j2Gq92CChcFDaecJCbsuFpByJWOQBzOHQVl9fzLPtxkvi5nq0jIooPDjotib6KVWsYTgg1Jb6tJMTiy9ehJ15e0ds1rffhg35Mxu6F60OjRZrdghPIKy2eAIG1dHQauQiXWglZNwCKkac4qrvlw23fVcbjJhr7Tm53/Qwj2bUEWi1tBr6uMeNW/P5NdH6sXeqGMBsb8XDuWHmn9UxgsPF++XCVyu5h/XI9iTEhZj2yHqQHeJvFOQZ0AWZt4cE9C6h5VBEth2bgnFAKua8kUiuReI3U1aG9WLlLHh/lYI+t3jHbugsnhZJNembkpIthUsuIXmXAHnNYVETg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
+ by PH0PR11MB4951.namprd11.prod.outlook.com (2603:10b6:510:43::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.29; Mon, 12 Jun
+ 2023 12:49:19 +0000
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::19b7:466f:32ac:b764]) by BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::19b7:466f:32ac:b764%3]) with mapi id 15.20.6455.043; Mon, 12 Jun 2023
+ 12:49:19 +0000
+From:   "Huang, Kai" <kai.huang@intel.com>
+To:     "corbet@lwn.net" <corbet@lwn.net>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>
+CC:     "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "Yu, Guorui" <guorui.yu@linux.alibaba.com>,
+        "qinkun@apache.org" <qinkun@apache.org>,
+        "wander@redhat.com" <wander@redhat.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "chongc@google.com" <chongc@google.com>,
+        "Aktas, Erdem" <erdemaktas@google.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "dionnaglaze@google.com" <dionnaglaze@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "Du, Fan" <fan.du@intel.com>
+Subject: Re: [PATCH v3 1/3] x86/tdx: Add TDX Guest event notify interrupt
+ support
+Thread-Topic: [PATCH v3 1/3] x86/tdx: Add TDX Guest event notify interrupt
+ support
+Thread-Index: AQHZhjUeN1r3OXi4mUiNWNBRLpdS2a+HTC0A
+Date:   Mon, 12 Jun 2023 12:49:19 +0000
+Message-ID: <60bf8ff53a226ad386cde930e6d117be7b565002.camel@intel.com>
+References: <cover.1684048511.git.sathyanarayanan.kuppuswamy@linux.intel.com>
+         <83a832b156f6e3bf906fee657b0147f042481a36.1684048511.git.sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <83a832b156f6e3bf906fee657b0147f042481a36.1684048511.git.sathyanarayanan.kuppuswamy@linux.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.48.2 (3.48.2-1.fc38) 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|PH0PR11MB4951:EE_
+x-ms-office365-filtering-correlation-id: caec5af4-b471-42dc-3b46-08db6b437040
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ZF00NbCW1GkNKP0azIVbc1RKKzFFFCKymWdJex4fyijv19vBeWcCuYgoA8FZLkB+xdPnUmVp/KG/UBjK9/KCXjcMYDVKDKTrGZ0TzzaNqeOvuFA5EXJ+385t3Nh5oZjIpmWExFd9Xjm39esW//W0Yp4id0j57fbNkUnEMLzLO0B6/XK64xVjkmuxSWR1H61211P1KqAWDvMzauWbgXw3/uKF4YWD7W70AL/nL6xpmsP7A+dzgvVL5rECkx33UESveL0fmu+KNAflSAUkCEIClnsFeWn3iZh58rVbNf7JOdivlk85RclbfBroQ4pPeoAaha2dRWJngptMoygs61zquzedek3GXCNLDjcKeANGMPkCIchKAVrVrbbsqc/oMDwT1MWpERU+iWTqHa9njTBe+JpCfQu/VjMzuJpLofYzwGXNr0lVZosvKnMu1CR75l/KyZ0qZvEJpKhrXdH2h59WFjYtp5eK4BHRI2d2zUgPRPMy9OlpSIfrZApYDKiKuRR7kaSOgHH/rdTuRlt74sh6J6bH0FtQ7bWq8AcGDjzr5kxUAtdccuGJ29Q1rJoJr/TSjNUl7hEVOGQ9fE+c34mH2jIzV919Zui2If+Cl8MZe35S315oIN0Q+5RpoGkyVgjH
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(376002)(39860400002)(136003)(366004)(396003)(451199021)(4326008)(91956017)(64756008)(66476007)(66556008)(316002)(7416002)(66446008)(41300700001)(76116006)(186003)(110136005)(2906002)(54906003)(478600001)(66946007)(8676002)(8936002)(5660300002)(71200400001)(6486002)(6512007)(6506007)(122000001)(26005)(83380400001)(36756003)(38070700005)(86362001)(82960400001)(2616005)(38100700002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cTRKK291UXZySnpiUmpkUmJzOU92SlRVNzVwSVR2Zmt0NUY2bXUyakVlMWpl?=
+ =?utf-8?B?YjU3MnMzMkFzRWZBQ2pzNDFkWm5BY1FPSWprUWRqMExoY2hTc2kvZFNzREY2?=
+ =?utf-8?B?cUhuNUZnamw0ek9VQWZLVTlQR0ZMVGJZZG92c1ZuQmhpS2F2NUxlSE5TVGlv?=
+ =?utf-8?B?Tys1Q3B3UHJxUCtzMVlsV3BEMnRlS3Q2UUhQT3dvenhTdnNpSVhZNG45MEpC?=
+ =?utf-8?B?UGdaTXZqSEdwU2dWbmhMWS96RDM2QzRUaGtKZlVIM1pndDcweWR1MUxiTW5y?=
+ =?utf-8?B?eFk5Uitrc0Zwek5RSUZQS1dDdWZDZjdSWjlXUTRSTllrLzVEY0JIbGhaaGll?=
+ =?utf-8?B?Qk0xamczSWJvOE1mQ1JwNzRsYzF5Wnl4bW0wdFhWS3NOdnVCVElLbTNJdG1a?=
+ =?utf-8?B?RUtBYWVoLzdaVmxBK3piVlJRZWdOY2pQVzVPemJ0SHJuQ3hYNTUxWmo4WjJ6?=
+ =?utf-8?B?UUlMWnd0Q2xoYlZKR1hSK3lSU3IzSVBoZm0zVDhDa0FxMjl4UUJkUVh6eVdL?=
+ =?utf-8?B?UUpFaWVicExFRndMSHBEOWZwaVA3enNZS1hPeTBYYXdkYnNueUJTTHcxbkN3?=
+ =?utf-8?B?dmpDbFZLMXdoblFlczJyZHFGWVBUZ2hRTmU3b2dVZkFrR3NXSkI5a2t5cmhu?=
+ =?utf-8?B?TkxmR1dVbjlUbDBKVTA1NmZ3TjhDWkR0MEhLc0JVZUxoUENTY00xYzdKUFMx?=
+ =?utf-8?B?YVRDdERqYmIvclVwb1I5UUdJRktQY25NcmJxTnpIaU9lbnc4bkh3czJaNDlt?=
+ =?utf-8?B?clUyVDhEVm9zcEtuS2JsUGdHZ2lEa1ZSbTNaaFpXNFNMOEJUQjdEM3Q0N2tP?=
+ =?utf-8?B?c1FMSXhYT1gxMThSUHNSaDVjUzJiS3pGdmZJMlpZVFgrUkRRanVTczBDN0tx?=
+ =?utf-8?B?VDVVUm9BN29iOU5xK1hIL0JrTTVJTGFWQU1EMUg5QUNuRmd5UDlPSVlNR1dY?=
+ =?utf-8?B?cHpPZ3FaRFE1Qk45ZlI2RzJzaTNHOWFIeVVIeVhVL0NQRzNTWkw0c2JKY1M3?=
+ =?utf-8?B?TFVnZFBqa0lyejExUTg3WnptTldlSnJQWFJ3dkZWcjNtOXg2ZUtQaEl2Z0hI?=
+ =?utf-8?B?MVFoNHBqS2dwZVNUck1NOHFiRHI0Z21CUWJrVngwNFhkenZ0YnRsUmlEK2Y2?=
+ =?utf-8?B?ZDdwVVlCU0E0OEZQaXlRUHpmamV2Nnh3bmV2K0FUWERabUM1UUNqWGhsdHhQ?=
+ =?utf-8?B?RkN2SUNPdjBHTGZrd2RLS21kNnp2U2theXpLSEY2OCtlOVRlalpLZUM5dGJJ?=
+ =?utf-8?B?SUhUR1BsTUxsbjAyS0x2eGJVcEVvOWI0ZUpIRXdza2g0TlJCRXhmeCttUlds?=
+ =?utf-8?B?dzEvTFd0c3grekRRUUlOK0tDRS9sdjVraHJFM1FXZk0yVWVCYkg1YVFrYlha?=
+ =?utf-8?B?cUl2K1gyNGNUWHB2L1JKMU9YN1pKSTlTNU5lUzJlYStzd08zdmdWMEVtSE9P?=
+ =?utf-8?B?VGUwa2daUisyRTVTT21vcWc0cU9sR0x3RXQ3Y1hpeHZSRnlBSjZpTG83T2JL?=
+ =?utf-8?B?NjZrQURkam0rdkFzWTNHWHpFanM1Uzg2KzlYRm94K0dpakpTSFNscFBzZUx0?=
+ =?utf-8?B?M1U2UGdwOVFJZTRhL2dGTlkwdGUrNXVNNElKODFvb0ZPMDB1K2J0YjhLM1pI?=
+ =?utf-8?B?MmJEaWZiUkZtUnNSdHZVdGZRVWF2U1ZQcHBkWXltVFZsb0E4MFQrZzBMS000?=
+ =?utf-8?B?dmgreENFQlpzbXAwOXpkV1RWYStabkc4ZW1tSnJIU1MxWlJsNWRXaWpVdURB?=
+ =?utf-8?B?VGszWmc5MTRaZWJld3pkUWZVcUpleWN3SnhJQno4TXphTGVxOGI0aWIrMm1r?=
+ =?utf-8?B?VkdoLzNPa1RRVXB1SE5MaEJoTStMUitvRU54RmlpM3dsN2E2SFpJRE80RkNB?=
+ =?utf-8?B?RU5CbjFPYU4zZG81NWFWS1dHTExMdEdYZGVRdHFMZkRUR3J3bGRCYVc3MGNk?=
+ =?utf-8?B?clVVeFVxUEFwLzJxTVBxekloZEN1NTNMUGowOFVBQUI4YmlvK1hXY1QwM1Ey?=
+ =?utf-8?B?RVJUWmF6SURUckpNQ2hjS3N1Z1JNUXEwNkxLa2FaUUQvWThrYUgxcXdsY1Fl?=
+ =?utf-8?B?MmgvcGNLcERKV1h1cHlqMGZVVjB0L2VZMVQxQlpNVlkrNGYyVDU4SW96R1I3?=
+ =?utf-8?B?a0trRDlFTko1aWd2eTJkMDJzN3p1ak56MEg3NGlQeFM5WGtGcVR2VTBLckdD?=
+ =?utf-8?B?Znc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <34C0AA444952564798BA94C3CB18ED95@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: caec5af4-b471-42dc-3b46-08db6b437040
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jun 2023 12:49:19.3023
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ENu0D22Wa7Hl2xF0wQsLwqyjtNrgw/1Cuho7eXdNNjmKaRnbjvQmeFnMrtoGiGVDs3ASxzSqyzg5UOi6ZoUv2A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB4951
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Now we specify the minimal version of GCC as 5.1 and Clang/LLVM as 11.0.0
-in Documentation/process/changes.rst, __CHAR_BIT__ and __SIZEOF_LONG__ are
-usable, it is probably fine to unify the definition of __BITS_PER_LONG as
-(__CHAR_BIT__ * __SIZEOF_LONG__) in asm-generic uapi bitsperlong.h.
-
-In order to keep safe and avoid regression, only unify uapi bitsperlong.h
-for arm64, riscv and loongarch which are added since the linux-3.x days.
-
-Suggested-by: Xi Ruoyao <xry111@xry111.site>
-Link: https://lore.kernel.org/all/d3e255e4746de44c9903c4433616d44ffcf18d1b.camel@xry111.site/
-Suggested-by: Arnd Bergmann <arnd@arndb.de>
-Link: https://lore.kernel.org/linux-arch/a3a4f48a-07d4-4ed9-bc53-5d383428bdd2@app.fastmail.com/
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- arch/arm64/include/uapi/asm/bitsperlong.h          | 24 ----------------------
- arch/loongarch/include/uapi/asm/bitsperlong.h      |  9 --------
- arch/riscv/include/uapi/asm/bitsperlong.h          | 14 -------------
- include/uapi/asm-generic/bitsperlong.h             | 10 +++++++++
- tools/arch/arm64/include/uapi/asm/bitsperlong.h    | 24 ----------------------
- .../arch/loongarch/include/uapi/asm/bitsperlong.h  |  9 --------
- tools/arch/riscv/include/uapi/asm/bitsperlong.h    | 14 -------------
- tools/include/uapi/asm-generic/bitsperlong.h       | 11 ++++++++++
- tools/include/uapi/asm/bitsperlong.h               |  6 ------
- 9 files changed, 21 insertions(+), 100 deletions(-)
- delete mode 100644 arch/arm64/include/uapi/asm/bitsperlong.h
- delete mode 100644 arch/loongarch/include/uapi/asm/bitsperlong.h
- delete mode 100644 arch/riscv/include/uapi/asm/bitsperlong.h
- delete mode 100644 tools/arch/arm64/include/uapi/asm/bitsperlong.h
- delete mode 100644 tools/arch/loongarch/include/uapi/asm/bitsperlong.h
- delete mode 100644 tools/arch/riscv/include/uapi/asm/bitsperlong.h
-
-diff --git a/arch/arm64/include/uapi/asm/bitsperlong.h b/arch/arm64/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 485d60be..0000000
---- a/arch/arm64/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,24 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--/*
-- * Copyright (C) 2012 ARM Ltd.
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License version 2 as
-- * published by the Free Software Foundation.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-- *
-- * You should have received a copy of the GNU General Public License
-- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-- */
--#ifndef __ASM_BITSPERLONG_H
--#define __ASM_BITSPERLONG_H
--
--#define __BITS_PER_LONG 64
--
--#include <asm-generic/bitsperlong.h>
--
--#endif	/* __ASM_BITSPERLONG_H */
-diff --git a/arch/loongarch/include/uapi/asm/bitsperlong.h b/arch/loongarch/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 00b4ba1..0000000
---- a/arch/loongarch/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,9 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef __ASM_LOONGARCH_BITSPERLONG_H
--#define __ASM_LOONGARCH_BITSPERLONG_H
--
--#define __BITS_PER_LONG (__SIZEOF_LONG__ * 8)
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* __ASM_LOONGARCH_BITSPERLONG_H */
-diff --git a/arch/riscv/include/uapi/asm/bitsperlong.h b/arch/riscv/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 7d0b32e..0000000
---- a/arch/riscv/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,14 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-only WITH Linux-syscall-note */
--/*
-- * Copyright (C) 2012 ARM Ltd.
-- * Copyright (C) 2015 Regents of the University of California
-- */
--
--#ifndef _UAPI_ASM_RISCV_BITSPERLONG_H
--#define _UAPI_ASM_RISCV_BITSPERLONG_H
--
--#define __BITS_PER_LONG (__SIZEOF_POINTER__ * 8)
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* _UAPI_ASM_RISCV_BITSPERLONG_H */
-diff --git a/include/uapi/asm-generic/bitsperlong.h b/include/uapi/asm-generic/bitsperlong.h
-index 693d9a4..fb104f9 100644
---- a/include/uapi/asm-generic/bitsperlong.h
-+++ b/include/uapi/asm-generic/bitsperlong.h
-@@ -3,6 +3,15 @@
- #define _UAPI__ASM_GENERIC_BITS_PER_LONG
- 
- /*
-+ * In order to keep safe and avoid regression, only unify uapi
-+ * bitsperlong.h for arm64, riscv and loongarch which are added
-+ * since the linux-3.x days. See the following link for more info:
-+ * https://lore.kernel.org/linux-arch/b9624545-2c80-49a1-ac3c-39264a591f7b@app.fastmail.com/
-+ */
-+#if defined(__aarch64__) || defined(__riscv) || defined(__loongarch__)
-+#define __BITS_PER_LONG (__CHAR_BIT__ * __SIZEOF_LONG__)
-+#else
-+/*
-  * There seems to be no way of detecting this automatically from user
-  * space, so 64 bit architectures should override this in their
-  * bitsperlong.h. In particular, an architecture that supports
-@@ -12,5 +21,6 @@
- #ifndef __BITS_PER_LONG
- #define __BITS_PER_LONG 32
- #endif
-+#endif
- 
- #endif /* _UAPI__ASM_GENERIC_BITS_PER_LONG */
-diff --git a/tools/arch/arm64/include/uapi/asm/bitsperlong.h b/tools/arch/arm64/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 485d60be..0000000
---- a/tools/arch/arm64/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,24 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--/*
-- * Copyright (C) 2012 ARM Ltd.
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License version 2 as
-- * published by the Free Software Foundation.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-- *
-- * You should have received a copy of the GNU General Public License
-- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-- */
--#ifndef __ASM_BITSPERLONG_H
--#define __ASM_BITSPERLONG_H
--
--#define __BITS_PER_LONG 64
--
--#include <asm-generic/bitsperlong.h>
--
--#endif	/* __ASM_BITSPERLONG_H */
-diff --git a/tools/arch/loongarch/include/uapi/asm/bitsperlong.h b/tools/arch/loongarch/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 00b4ba1..0000000
---- a/tools/arch/loongarch/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,9 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef __ASM_LOONGARCH_BITSPERLONG_H
--#define __ASM_LOONGARCH_BITSPERLONG_H
--
--#define __BITS_PER_LONG (__SIZEOF_LONG__ * 8)
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* __ASM_LOONGARCH_BITSPERLONG_H */
-diff --git a/tools/arch/riscv/include/uapi/asm/bitsperlong.h b/tools/arch/riscv/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 0b9b58b..0000000
---- a/tools/arch/riscv/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,14 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-only */
--/*
-- * Copyright (C) 2012 ARM Ltd.
-- * Copyright (C) 2015 Regents of the University of California
-- */
--
--#ifndef _UAPI_ASM_RISCV_BITSPERLONG_H
--#define _UAPI_ASM_RISCV_BITSPERLONG_H
--
--#define __BITS_PER_LONG (__SIZEOF_POINTER__ * 8)
--
--#include <asm-generic/bitsperlong.h>
--
--#endif /* _UAPI_ASM_RISCV_BITSPERLONG_H */
-diff --git a/tools/include/uapi/asm-generic/bitsperlong.h b/tools/include/uapi/asm-generic/bitsperlong.h
-index 23e6c41..fb104f9 100644
---- a/tools/include/uapi/asm-generic/bitsperlong.h
-+++ b/tools/include/uapi/asm-generic/bitsperlong.h
-@@ -1,7 +1,17 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
- #ifndef _UAPI__ASM_GENERIC_BITS_PER_LONG
- #define _UAPI__ASM_GENERIC_BITS_PER_LONG
- 
- /*
-+ * In order to keep safe and avoid regression, only unify uapi
-+ * bitsperlong.h for arm64, riscv and loongarch which are added
-+ * since the linux-3.x days. See the following link for more info:
-+ * https://lore.kernel.org/linux-arch/b9624545-2c80-49a1-ac3c-39264a591f7b@app.fastmail.com/
-+ */
-+#if defined(__aarch64__) || defined(__riscv) || defined(__loongarch__)
-+#define __BITS_PER_LONG (__CHAR_BIT__ * __SIZEOF_LONG__)
-+#else
-+/*
-  * There seems to be no way of detecting this automatically from user
-  * space, so 64 bit architectures should override this in their
-  * bitsperlong.h. In particular, an architecture that supports
-@@ -11,5 +21,6 @@
- #ifndef __BITS_PER_LONG
- #define __BITS_PER_LONG 32
- #endif
-+#endif
- 
- #endif /* _UAPI__ASM_GENERIC_BITS_PER_LONG */
-diff --git a/tools/include/uapi/asm/bitsperlong.h b/tools/include/uapi/asm/bitsperlong.h
-index da52065..c65267a 100644
---- a/tools/include/uapi/asm/bitsperlong.h
-+++ b/tools/include/uapi/asm/bitsperlong.h
-@@ -1,8 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0 */
- #if defined(__i386__) || defined(__x86_64__)
- #include "../../../arch/x86/include/uapi/asm/bitsperlong.h"
--#elif defined(__aarch64__)
--#include "../../../arch/arm64/include/uapi/asm/bitsperlong.h"
- #elif defined(__powerpc__)
- #include "../../../arch/powerpc/include/uapi/asm/bitsperlong.h"
- #elif defined(__s390__)
-@@ -13,12 +11,8 @@
- #include "../../../arch/mips/include/uapi/asm/bitsperlong.h"
- #elif defined(__ia64__)
- #include "../../../arch/ia64/include/uapi/asm/bitsperlong.h"
--#elif defined(__riscv)
--#include "../../../arch/riscv/include/uapi/asm/bitsperlong.h"
- #elif defined(__alpha__)
- #include "../../../arch/alpha/include/uapi/asm/bitsperlong.h"
--#elif defined(__loongarch__)
--#include "../../../arch/loongarch/include/uapi/asm/bitsperlong.h"
- #else
- #include <asm-generic/bitsperlong.h>
- #endif
--- 
-2.1.0
-
+T24gU3VuLCAyMDIzLTA1LTE0IGF0IDAwOjIzIC0wNzAwLCBLdXBwdXN3YW15IFNhdGh5YW5hcmF5
+YW5hbiB3cm90ZToNCj4gSG9zdC1ndWVzdCBldmVudCBub3RpZmljYXRpb24gdmlhIGNvbmZpZ3Vy
+ZWQgaW50ZXJydXB0IHZlY3RvciBpcyB1c2VmdWwNCj4gaW4gY2FzZXMgd2hlcmUgYSBndWVzdCBt
+YWtlcyBhbiBhc3luY2hyb25vdXMgcmVxdWVzdCBhbmQgbmVlZHMgYQ0KPiBjYWxsYmFjayBmcm9t
+IHRoZSBob3N0IHRvIGluZGljYXRlIHRoZSBjb21wbGV0aW9uIG9yIHRvIGxldCB0aGUgaG9zdA0K
+PiBub3RpZnkgdGhlIGd1ZXN0IGFib3V0IGV2ZW50cyBsaWtlIGRldmljZSByZW1vdmFsLiBPbmUg
+dXNhZ2UgZXhhbXBsZSBpcywNCj4gY2FsbGJhY2sgcmVxdWlyZW1lbnQgb2YgR2V0UXVvdGUgYXN5
+bmNocm9ub3VzIGh5cGVyY2FsbC4NCj4gDQo+IEluIFREWCBndWVzdCwgU2V0dXBFdmVudE5vdGlm
+eUludGVycnVwdCBoeXBlcmNhbGwgY2FuIGJlIHVzZWQgYnkgdGhlDQo+IGd1ZXN0IHRvIHNwZWNp
+Znkgd2hpY2ggaW50ZXJydXB0IHZlY3RvciB0byB1c2UgYXMgYW4gZXZlbnQtbm90aWZ5DQo+IHZl
+Y3RvciBmcm9tIHRoZSBWTU0uIERldGFpbHMgYWJvdXQgdGhlIFNldHVwRXZlbnROb3RpZnlJbnRl
+cnJ1cHQNCj4gaHlwZXJjYWxsIGNhbiBiZSBmb3VuZCBpbiBURFggR3Vlc3QtSG9zdCBDb21tdW5p
+Y2F0aW9uIEludGVyZmFjZQ0KPiAoR0hDSSkgU3BlY2lmaWNhdGlvbiwgc2VjdGlvbiAiVlAuVk1D
+QUxMPFNldHVwRXZlbnROb3RpZnlJbnRlcnJ1cHQ+Ii4NCj4gDQo+IEFzIHBlciBkZXNpZ24sIFZN
+TSB3aWxsIHBvc3QgdGhlIGV2ZW50IGNvbXBsZXRpb24gSVJRIHVzaW5nIHRoZSBzYW1lDQo+IENQ
+VSBvbiB3aGljaCBTZXR1cEV2ZW50Tm90aWZ5SW50ZXJydXB0IGh5cGVyY2FsbCByZXF1ZXN0IGlz
+IHJlY2VpdmVkLg0KPiBTbyBhbGxvY2F0ZSBhbiBJUlEgdmVjdG9yIGZyb20gIng4Nl92ZWN0b3Jf
+ZG9tYWluIiwgYW5kIHNldCB0aGUgQ1BVDQo+IGFmZmluaXR5IG9mIHRoZSBJUlEgdmVjdG9yIHRv
+IHRoZSBDUFUgb24gd2hpY2gNCj4gU2V0dXBFdmVudE5vdGlmeUludGVycnVwdCBoeXBlcmNhbGwg
+aXMgbWFkZS4NCj4gDQo+IEFkZCB0ZHhfcmVnaXN0ZXJfZXZlbnRfaXJxX2NiKCkvdGR4X3VucmVn
+aXN0ZXJfZXZlbnRfaXJxX2NiKCkNCj4gaW50ZXJmYWNlcyB0byBhbGxvdyBkcml2ZXJzIHRvIHJl
+Z2lzdGVyL3VucmVnaXN0ZXIgZXZlbnQgbm90aWZpY2F0aW9uDQo+IGhhbmRsZXJzLg0KPiANCj4g
+UmV2aWV3ZWQtYnk6IFRvbnkgTHVjayA8dG9ueS5sdWNrQGludGVsLmNvbT4NCj4gUmV2aWV3ZWQt
+Ynk6IEFuZGkgS2xlZW4gPGFrQGxpbnV4LmludGVsLmNvbT4NCj4gUmV2aWV3ZWQtYnk6IE1pa2Eg
+V2VzdGVyYmVyZyA8bWlrYS53ZXN0ZXJiZXJnQGxpbnV4LmludGVsLmNvbT4NCj4gUmV2aWV3ZWQt
+Ynk6IEVyZGVtIEFrdGFzIDxlcmRlbWFrdGFzQGdvb2dsZS5jb20+DQo+IEFja2VkLWJ5OiBLaXJp
+bGwgQS4gU2h1dGVtb3YgPGtpcmlsbC5zaHV0ZW1vdkBsaW51eC5pbnRlbC5jb20+DQo+IEFja2Vk
+LWJ5OiBXYW5kZXIgTGFpcnNvbiBDb3N0YSA8d2FuZGVyQHJlZGhhdC5jb20+DQo+IFNpZ25lZC1v
+ZmYtYnk6IEt1cHB1c3dhbXkgU2F0aHlhbmFyYXlhbmFuIDxzYXRoeWFuYXJheWFuYW4ua3VwcHVz
+d2FteUBsaW51eC5pbnRlbC5jb20+DQo+IA0KDQpBY2tlZC1ieTogS2FpIEh1YW5nIDxrYWkuaHVh
+bmdAaW50ZWwuY29tPg0K
