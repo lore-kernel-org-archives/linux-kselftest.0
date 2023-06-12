@@ -2,32 +2,32 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53269C88CBB
-	for <linux-kselftest@archiver.kernel.org>; Mon, 12 Jun 2023 19:15:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00EA3C88CB2
+	for <linux-kselftest@archiver.kernel.org>; Mon, 12 Jun 2023 19:15:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238066AbjFLTPG (ORCPT
+        id S238145AbjFLTPH (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 12 Jun 2023 15:15:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46436 "EHLO
+        Mon, 12 Jun 2023 15:15:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238092AbjFLTOw (ORCPT
+        with ESMTP id S238010AbjFLTOp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 12 Jun 2023 15:14:52 -0400
-Received: from smtp-42a8.mail.infomaniak.ch (smtp-42a8.mail.infomaniak.ch [IPv6:2001:1600:4:17::42a8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BDD3E56
-        for <linux-kselftest@vger.kernel.org>; Mon, 12 Jun 2023 12:14:45 -0700 (PDT)
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Qg1b633ZZzMq8NJ;
-        Mon, 12 Jun 2023 19:14:42 +0000 (UTC)
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4Qg1b56dRlz1WQ8;
-        Mon, 12 Jun 2023 21:14:41 +0200 (CEST)
+        Mon, 12 Jun 2023 15:14:45 -0400
+Received: from smtp-8faa.mail.infomaniak.ch (smtp-8faa.mail.infomaniak.ch [IPv6:2001:1600:4:17::8faa])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7081BE54
+        for <linux-kselftest@vger.kernel.org>; Mon, 12 Jun 2023 12:14:43 -0700 (PDT)
+Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Qg1b23pH8zMq94q;
+        Mon, 12 Jun 2023 19:14:38 +0000 (UTC)
+Received: from unknown by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4Qg1b12W4MzMqmsh;
+        Mon, 12 Jun 2023 21:14:37 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1686597282;
-        bh=dQkYX36jTDSeJo8SzhoPDVUOJ2TyKr9pVuNY0nvc1PQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RTnB7itTTwDWOuQSJ8JqgXlVzQqlfA+Cnym9zSqg/4DUI3Fc3chJptmCAoDO8ssvI
-         uaiHEMbDhM8624pNOnd3/qlAVyzy25h5VJEEawEFK5czOakPvJzUwF96Z4m/lWApGg
-         zry/wnS3zqSPRpFArJLlt7BDUCfFS/tQG5KHrXkM=
+        s=20191114; t=1686597278;
+        bh=IyGVL/IDfihrZ3aEmE9iwusUGzsJURKRriLT2zxWZro=;
+        h=From:To:Cc:Subject:Date:From;
+        b=e3g9IqhKw1rGaPe68hX+Rw5YNj1RnNxL/Vjdw6KjhQnt6JRteAcyfr8t0+nm5Qy7l
+         EWO1ML1nD0yHNjfeENmIWHjkBweHDdMqouRltkE5PwslyW1nacJ8yD+8oKW/DGeKeM
+         0f9bXfRiKckLQOkzzsojx8g85/jhF1LobJ5QoTvU=
 From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To:     Anton Ivanov <anton.ivanov@cambridgegreys.com>,
         Johannes Berg <johannes@sipsolutions.net>,
@@ -49,11 +49,9 @@ Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
         linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
         linux-security-module@vger.kernel.org
-Subject: [PATCH v2 4/6] selftests/landlock: Make mounts configurable
-Date:   Mon, 12 Jun 2023 21:14:28 +0200
-Message-ID: <20230612191430.339153-5-mic@digikod.net>
-In-Reply-To: <20230612191430.339153-1-mic@digikod.net>
-References: <20230612191430.339153-1-mic@digikod.net>
+Subject: [PATCH v2 0/6] Landlock support for UML
+Date:   Mon, 12 Jun 2023 21:14:24 +0200
+Message-ID: <20230612191430.339153-1-mic@digikod.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -62,102 +60,63 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a new struct mnt_opt to define a mount point with the mount_opt()
-helper.  This doesn't change tests but prepare for the next commit.
+Hi,
 
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
----
- tools/testing/selftests/landlock/fs_test.c | 45 +++++++++++++++++++---
- 1 file changed, 40 insertions(+), 5 deletions(-)
+Commit cb2c7d1a1776 ("landlock: Support filesystem access-control")
+introduced a new ARCH_EPHEMERAL_INODES configuration, only enabled for
+User-Mode Linux.  The reason was that UML's hostfs managed inodes in an
+ephemeral way: from the kernel point of view, the same inode struct
+could be created several times while being used by user space because
+the kernel didn't hold references to inodes.  Because Landlock (and
+probably other subsystems) ties properties (i.e. access rights) to inode
+objects, it wasn't possible to create rules that match inodes and then
+allow specific accesses.
 
-diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
-index c1e655fc06bb..737047a81547 100644
---- a/tools/testing/selftests/landlock/fs_test.c
-+++ b/tools/testing/selftests/landlock/fs_test.c
-@@ -213,7 +213,26 @@ static int remove_path(const char *const path)
- 	return err;
- }
- 
--static void prepare_layout(struct __test_metadata *const _metadata)
-+struct mnt_opt {
-+	const char *const source;
-+	const char *const type;
-+	const unsigned long flags;
-+	const char *const data;
-+};
-+
-+const struct mnt_opt mnt_tmp = {
-+	.type = "tmpfs",
-+	.data = "size=4m,mode=700",
-+};
-+
-+static int mount_opt(const struct mnt_opt *const mnt, const char *const target)
-+{
-+	return mount(mnt->source ?: mnt->type, target, mnt->type, mnt->flags,
-+		     mnt->data);
-+}
-+
-+static void prepare_layout_opt(struct __test_metadata *const _metadata,
-+			       const struct mnt_opt *const mnt)
- {
- 	disable_caps(_metadata);
- 	umask(0077);
-@@ -225,11 +244,27 @@ static void prepare_layout(struct __test_metadata *const _metadata)
- 	 */
- 	set_cap(_metadata, CAP_SYS_ADMIN);
- 	ASSERT_EQ(0, unshare(CLONE_NEWNS));
--	ASSERT_EQ(0, mount("tmp", TMP_DIR, "tmpfs", 0, "size=4m,mode=700"));
-+	ASSERT_EQ(0, mount_opt(mnt, TMP_DIR))
-+	{
-+		TH_LOG("Failed to mount the %s filesystem: %s", mnt->type,
-+		       strerror(errno));
-+		/*
-+		 * FIXTURE_TEARDOWN() is not called when FIXTURE_SETUP()
-+		 * failed, so we need to explicitly do a minimal cleanup to
-+		 * avoid cascading errors with other tests that don't depend on
-+		 * the same filesystem.
-+		 */
-+		remove_path(TMP_DIR);
-+	}
- 	ASSERT_EQ(0, mount(NULL, TMP_DIR, NULL, MS_PRIVATE | MS_REC, NULL));
- 	clear_cap(_metadata, CAP_SYS_ADMIN);
- }
- 
-+static void prepare_layout(struct __test_metadata *const _metadata)
-+{
-+	prepare_layout_opt(_metadata, &mnt_tmp);
-+}
-+
- static void cleanup_layout(struct __test_metadata *const _metadata)
- {
- 	set_cap(_metadata, CAP_SYS_ADMIN);
-@@ -269,7 +304,7 @@ static void create_layout1(struct __test_metadata *const _metadata)
- 	create_file(_metadata, file1_s3d1);
- 	create_directory(_metadata, dir_s3d2);
- 	set_cap(_metadata, CAP_SYS_ADMIN);
--	ASSERT_EQ(0, mount("tmp", dir_s3d2, "tmpfs", 0, "size=4m,mode=700"));
-+	ASSERT_EQ(0, mount_opt(&mnt_tmp, dir_s3d2));
- 	clear_cap(_metadata, CAP_SYS_ADMIN);
- 
- 	ASSERT_EQ(0, mkdir(dir_s3d3, 0700));
-@@ -4068,7 +4103,7 @@ FIXTURE_SETUP(layout2_overlay)
- 	create_directory(_metadata, LOWER_BASE);
- 	set_cap(_metadata, CAP_SYS_ADMIN);
- 	/* Creates tmpfs mount points to get deterministic overlayfs. */
--	ASSERT_EQ(0, mount("tmp", LOWER_BASE, "tmpfs", 0, "size=4m,mode=700"));
-+	ASSERT_EQ(0, mount_opt(&mnt_tmp, LOWER_BASE));
- 	clear_cap(_metadata, CAP_SYS_ADMIN);
- 	create_file(_metadata, lower_fl1);
- 	create_file(_metadata, lower_dl1_fl2);
-@@ -4078,7 +4113,7 @@ FIXTURE_SETUP(layout2_overlay)
- 
- 	create_directory(_metadata, UPPER_BASE);
- 	set_cap(_metadata, CAP_SYS_ADMIN);
--	ASSERT_EQ(0, mount("tmp", UPPER_BASE, "tmpfs", 0, "size=4m,mode=700"));
-+	ASSERT_EQ(0, mount_opt(&mnt_tmp, UPPER_BASE));
- 	clear_cap(_metadata, CAP_SYS_ADMIN);
- 	create_file(_metadata, upper_fu1);
- 	create_file(_metadata, upper_du1_fu2);
+This patch series fixes the way UML manages inodes according to the
+underlying filesystem.  They are now properly handles as for other
+filesystems, which enables to support Landlock (and probably other
+features).
+
+Changes since v1:
+https://lore.kernel.org/r/20230309165455.175131-1-mic@digikod.net
+- Remove Cc stable@ (suggested by Richard).
+- Add Acked-by: Richard Weinberger to the first patch.
+- Split the test patch into two patches: one for the common
+  pseudo-filesystems, and another patch dedicated to hostfs.
+- Remove CONFIG_SECURITY_PATH because it is useless for merge_config.sh
+- Move CONFIG_HOSTFS to a new config.um file.
+- Fix commit message spelling and test warnings.
+- Improve prepare_layout_opt() with remove_path() call to avoid
+  cascading errors when some tested filesystems are not supported.
+- Remove cgroup-v1 tests because this filesystem cannot really be
+  mounted several times.
+- Add test coverage with and without kernel debug code, according to
+  GCC 12 and GCC 13.
+
+Regards,
+
+Mickaël Salaün (6):
+  hostfs: Fix ephemeral inodes
+  selftests/landlock: Don't create useless file layouts
+  selftests/landlock: Add supports_filesystem() helper
+  selftests/landlock: Make mounts configurable
+  selftests/landlock: Add tests for pseudo filesystems
+  selftests/landlock: Add hostfs tests
+
+ arch/Kconfig                               |   7 -
+ arch/um/Kconfig                            |   1 -
+ fs/hostfs/hostfs.h                         |   1 +
+ fs/hostfs/hostfs_kern.c                    | 213 ++++++------
+ fs/hostfs/hostfs_user.c                    |   1 +
+ security/landlock/Kconfig                  |   2 +-
+ tools/testing/selftests/landlock/config    |   9 +-
+ tools/testing/selftests/landlock/config.um |   1 +
+ tools/testing/selftests/landlock/fs_test.c | 387 +++++++++++++++++++--
+ 9 files changed, 478 insertions(+), 144 deletions(-)
+ create mode 100644 tools/testing/selftests/landlock/config.um
+
+
+base-commit: 858fd168a95c5b9669aac8db6c14a9aeab446375
 -- 
 2.41.0
 
