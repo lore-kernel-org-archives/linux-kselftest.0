@@ -2,148 +2,169 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 67107C7EE25
-	for <linux-kselftest@archiver.kernel.org>; Mon, 12 Jun 2023 07:53:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7743C7EE43
+	for <linux-kselftest@archiver.kernel.org>; Mon, 12 Jun 2023 07:59:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235851AbjFLHxR (ORCPT
+        id S231986AbjFLH7T (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 12 Jun 2023 03:53:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56876 "EHLO
+        Mon, 12 Jun 2023 03:59:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236037AbjFLHxC (ORCPT
+        with ESMTP id S232354AbjFLH65 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 12 Jun 2023 03:53:02 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B775A2717;
-        Mon, 12 Jun 2023 00:51:57 -0700 (PDT)
-Received: from [192.168.10.55] (unknown [119.152.150.198])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8C41066056AA;
-        Mon, 12 Jun 2023 08:42:25 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686555747;
-        bh=jaXgQtw+3VAkdUzI7Dmasonlno9daKl/YokJZ/nQOdQ=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=HmFlYt84rHySyKYTzkAvoEwDVJBcltGzygCAaH8aQEDBATyrzU8pKiWTrNTkmrM6i
-         v4n4y/kp58PSf+LFZYxjlS+3RXrrNQk8i5uk8Ez+Bu6Z+IeT0N3eMKmwPyN62Z7G8w
-         TT/4VK4c4bN0mMA1XyCMJ+LAmIzC0fnjy7uJh/KXJEyj5mVX8aGl2gi4NK/DTrjgka
-         EeXPV1Vxdai9pAhvFnHTJNOD2Hw2BQ0zIiM7rBxj6vgAyT6PbPmod/w3O7RWH7bD9e
-         5Fs1kRQPcMATzpCHT4LZqIHdAh2yRf6VwrdtlcYOqgjbEoNXGccK2Tb1fmqnc7TUe0
-         X1P18g1Tsz/2w==
-Message-ID: <e6ca3de5-fbd2-1d93-6011-5ae0765b826d@collabora.com>
-Date:   Mon, 12 Jun 2023 12:42:21 +0500
+        Mon, 12 Jun 2023 03:58:57 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on20616.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eab::616])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A12D1708;
+        Mon, 12 Jun 2023 00:58:08 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JOToqRxKhZ9VA6yevfrIz8Asujos22rWSpsyGIFVyXGzDJG3wIKDnLK+pzGBZqSFf+LJBvR4YQ4wyAbDbg3LFU4smcUgeIR1AFdFRfnklWos2Orkjd7T0eOGVPtQQIl5FOfJJzeQje9U6nw8bFeOz+WjVcSARpCNCLeH7n9QZm/4U/Ov/owZkMM5zTvhMrjH6VkZUrezBp1NT1AC/0H2ympmr4Oh445cWxkNrAC73EKn7zf03Ti8jFZPLvsXoUR0D9I5FpUS7NYYPtxhgjqXdb91FquYKCPRh7aJkXMrPnF5q3WUSLjBcelE1f/z4eyjxEWvvrYMWahb5c4dAxP3/g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qkFF8XacPy+XwzRG8rWFGWys4y0Z/lnLqYZzx1+FS4k=;
+ b=H7EpM3jJd6Vt3/ZD1xeVg3aLqJpXAQK7BHlk0XDlQQ7S4YV/r/lj/85+0M/LXvkML40uAJvoj8p13UlIVkVg50YOM7+pCm+7wbrToTIQ3LUAsLxPwa+VQMx9cUF9kchWWUO+lyz8TfPhRbEhRuXasC7CPoGW2ua0Mf1BkloHRq6I2d0LfYCIaS13M0nM1KAxBJR+dmhekDaCX76DnuUtP2FI+OGH0J9W2P//XVsZLPaoYeJ7A5FoowNIxbu5aDtR8+RWWYfC4ltmUvgruXVV0GUNZN3vmnzBMkXfi2wPVKGvzxElyvjptMch6fdhuCsRRgFBCwDBVsm4KUw+ikhTyg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qkFF8XacPy+XwzRG8rWFGWys4y0Z/lnLqYZzx1+FS4k=;
+ b=eYdGmFIlK8kNXbZlWUpMY7wFuIZ5ztAyb2NG9HQSs9jzI/jDPSOPr4X5mlDv5kX7Ohzu+GYcoSrmp/QdubfMhLwsIReYRFsPD1NeBIQf6c5dH8jUUca0OTrabO8fYviFmfNkoVSpVHTIlnYku+p6B7iT/Wy2xSsSpGoJl4rZ5CqIUPuBwcVGBpRW55bX1lyVpZ5QAe7REnNrBv1mLstHob7lVGjKIVCotysY6SAubpaiohH3b8x2SCMUhsgSsy1OqVeFYbHndM7KbMG7Hag8thhj9or5Xh3TUQY5YzFb36PvlHkbC+PFYpntK4ZhObMGWH2/+EQZELXuSD+oZSIofQ==
+Received: from DS7PR03CA0080.namprd03.prod.outlook.com (2603:10b6:5:3bb::25)
+ by IA1PR12MB7734.namprd12.prod.outlook.com (2603:10b6:208:422::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Mon, 12 Jun
+ 2023 07:57:43 +0000
+Received: from CY4PEPF0000EE3C.namprd03.prod.outlook.com
+ (2603:10b6:5:3bb:cafe::bf) by DS7PR03CA0080.outlook.office365.com
+ (2603:10b6:5:3bb::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.33 via Frontend
+ Transport; Mon, 12 Jun 2023 07:57:43 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ CY4PEPF0000EE3C.mail.protection.outlook.com (10.167.242.16) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6500.22 via Frontend Transport; Mon, 12 Jun 2023 07:57:43 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 12 Jun 2023
+ 00:57:34 -0700
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Mon, 12 Jun
+ 2023 00:57:33 -0700
+Received: from vdi.nvidia.com (10.127.8.14) by mail.nvidia.com (10.129.68.7)
+ with Microsoft SMTP Server id 15.2.986.37 via Frontend Transport; Mon, 12 Jun
+ 2023 00:57:30 -0700
+From:   Vlad Buslov <vladbu@nvidia.com>
+To:     <pabeni@redhat.com>, <davem@davemloft.net>, <kuba@kernel.org>,
+        <shuah@kernel.org>, <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>,
+        <jiri@resnulli.us>
+CC:     <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <marcelo.leitner@gmail.com>, <shaozhengchao@huawei.com>,
+        <victor@mojatatu.com>, Vlad Buslov <vladbu@nvidia.com>
+Subject: [PATCH net 1/4] selftests/tc-testing: Fix Error: Specified qdisc kind is unknown.
+Date:   Mon, 12 Jun 2023 09:57:09 +0200
+Message-ID: <20230612075712.2861848-2-vladbu@nvidia.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230612075712.2861848-1-vladbu@nvidia.com>
+References: <20230612075712.2861848-1-vladbu@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        Peter Xu <peterx@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] selftests: mm: uufd-unit-tests: remove a format
- warning in printf
-Content-Language: en-US
-To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-References: <20230610235016.438460-1-mirsad.todorovac@alu.unizg.hr>
- <109d9c47-9c0e-e8ca-2bc1-cb741bc45a1b@collabora.com>
- <138905be-3963-cd67-c217-7aa561372293@alu.unizg.hr>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <138905be-3963-cd67-c217-7aa561372293@alu.unizg.hr>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000EE3C:EE_|IA1PR12MB7734:EE_
+X-MS-Office365-Filtering-Correlation-Id: 80aca579-ba3a-43d8-aef5-08db6b1ab3ba
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: o0n7xq7sfCE2Hj2zd3JSeF5shl7xt8Z+cXPKfJV9TofRGM3r6UmDZd/8g0bF4muCCtApNpRsgh0mL3WdR68z3FH47bQ3DxOL+bVAxzr7dsokITKHtxyTJLU1x9NnUF2A8IpQFbllEC7uXNdwGVSG84IK/uIdFEN5MgzUGWtxxt5HanDZae8lCGO7tyI3x3eGw9AICEHtFRwhQMmT0e/vYSIzQmbHFWEJFK1gydzxMCd6xdwwkWrjqi4u4cPeR8rmv7ygbO7DWPOuKFkUZlz+4Rb5KVE0bQ6Zl3JczjUJytZpDjK8f72prmrxrR1bXCYEj4YWZBZl6UpuGHSrfe0Ns0QmqQmk/P20p7R6Dqttkgcyf4ltyvZOKC0wjJPL7mQw0tMD/jEEv8rZ4gEOpr2vJ4Zzh7dU5vZfriAMi6UiurbfiDwnOdCQt/ST41gtZXmj7sP3l8AawzbKFhEFm7yynWPOAZXXQSxoDkt6pnq6ktp6jmex4wztajHBQP4sS0zo4Mifggl+EhT/Ot3sYJ8XNUh2ayDLDBNYOFoe0VNuTywpFpZIPZPANdR5VuAsGDA71IbJEqAuO4fkS0A5WrUQintfr9yL8BqwEm1Bjw8cve2+Okrl3dmU4/21+QEjyNTSnLDgD42hoz76BY1XnTkq6zHHKox8777+uMpSX+BOharJM9G37VV530s0/TeKm0CYlUPjeq6XfL/HPLlg2+Yroc7jr/bCq1goWvNo16Ieq+MTZpOyAeBaMhcrH/zTwPgC
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(136003)(396003)(39860400002)(451199021)(36840700001)(40470700004)(46966006)(40460700003)(82310400005)(107886003)(1076003)(40480700001)(26005)(5660300002)(426003)(41300700001)(186003)(36756003)(36860700001)(7416002)(47076005)(336012)(316002)(70206006)(70586007)(8936002)(6666004)(478600001)(83380400001)(2616005)(54906003)(82740400003)(8676002)(110136005)(86362001)(2906002)(7636003)(7696005)(4326008)(356005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2023 07:57:43.0328
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 80aca579-ba3a-43d8-aef5-08db6b1ab3ba
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000EE3C.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7734
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/12/23 5:11 AM, Mirsad Goran Todorovac wrote:
-> Apologies Muhammad then, didn't follow that branch.
-No problem.
+All TEQL tests assume that sch_teql module is loaded. Load module in tdc.sh
+before running qdisc tests.
 
-> 
-> Regards,
-> Mirsad
-> 
-> On 6/11/23 14:30, Muhammad Usama Anjum wrote:
->> The fix has already been picked up by Andew in mm unstable:
->>
->> https://lore.kernel.org/all/20230607023727.0E011C433D2@smtp.kernel.org
->>
->> On 6/11/23 4:50 AM, Mirsad Todorovac wrote:
->>> GCC 11.3.0 issued warnings about macros and types of arguments [edited]:
->>>
->>> gcc -Wall -I ../tools/testing/selftests/../../.. \
->>>     -I ../tools/testing/selftests/../../../tools/include/uapi \
->>>     -isystem ../usr/include -no-pie uffd-unit-tests.c vm_util.c \
->>>     uffd-common.c -lrt -lpthread -o \
->>>     ../tools/testing/selftests/mm/uffd-unit-tests
->>> uffd-unit-tests.c: In function ‘main’:
->>> uffd-unit-tests.c:1198:41: warning: format not a string literal and no \
->>>     format arguments [-Wformat-security]
->>>   1198 |                         uffd_test_start(test_name);
->>>        |                                         ^~~~~~~~~
->>> uffd-unit-tests.c:100:24: note: in definition of macro ‘uffd_test_start’
->>>    100 |                 printf(__VA_ARGS__);            \
->>>        |                        ^~~~~~~~~~~
->>> uffd-unit-tests.c:1205:33: warning: format not a string literal and no \
->>>     format arguments [-Wformat-security]
->>>   1205 |                                 uffd_test_skip(errmsg);
->>>        |                                 ^~~~~~~~~~~~~~
->>>
->>> The macros are defined as:
->>>
->>>   #define  uffd_test_start(...)  do {             \
->>>                  printf("Testing ");             \
->>>                  printf(__VA_ARGS__);            \
->>>                  printf("... ");                 \
->>>                  fflush(stdout);                 \
->>>          } while (0)
->>>
->>>   #define  uffd_test_skip(...)  do {              \
->>>                  printf("skipped [reason: ");    \
->>>                  printf(__VA_ARGS__);            \
->>>                  printf("]\n");                  \
->>>                  ksft_inc_xskip_cnt();           \
->>>          } while (0)
->>>
->>> Minor workaround, adding "%s" first argument to macro expansion calls seems
->>> to be the easiest way to eliminate the warnings.
->>>
->>> Cc: Peter Xu <peterx@redhat.com>
->>> Cc: linux-mm@kvack.org
->>> Cc: linux-kselftest@vger.kernel.org
->>> Fixes: 43759d44dc34 ("selftests/mm: add uffdio register ioctls test")
->>> Fixes: 16a45b57cbf2 ("selftests/mm: add framework for uffd-unit-test")
->>> Signed-off-by: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
->>> ---
->>>   tools/testing/selftests/mm/uffd-unit-tests.c | 4 ++--
->>>   1 file changed, 2 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c
->>> b/tools/testing/selftests/mm/uffd-unit-tests.c
->>> index 269c86768a02..d356dd271c84 100644
->>> --- a/tools/testing/selftests/mm/uffd-unit-tests.c
->>> +++ b/tools/testing/selftests/mm/uffd-unit-tests.c
->>> @@ -1195,14 +1195,14 @@ int main(int argc, char *argv[])
->>>               snprintf(test_name, sizeof(test_name),
->>>                    "%s on %s", test->name, mem_type->name);
->>>   -            uffd_test_start(test_name);
->>> +            uffd_test_start("%s", test_name);
->>>               if (!uffd_feature_supported(test)) {
->>>                   uffd_test_skip("feature missing");
->>>                   continue;
->>>               }
->>>               if (uffd_setup_environment(&args, test, mem_type,
->>>                              &errmsg)) {
->>> -                uffd_test_skip(errmsg);
->>> +                uffd_test_skip("%s", errmsg);
->>>                   continue;
->>>               }
->>>               test->uffd_fn(&args);
->>
+Fixes following example error when running tests via tdc.sh for all TEQL
+tests:
 
+ # $ sudo ./tdc.py -d eth2 -e 84a0
+ #  -- ns/SubPlugin.__init__
+ # Test 84a0: Create TEQL with default setting
+ # exit: 2
+ # exit: 0
+ # Error: Specified qdisc kind is unknown.
+ #
+ # -----> teardown stage *** Could not execute: "$TC qdisc del dev $DUMMY handle 1: root"
+ #
+ # -----> teardown stage *** Error message: "Error: Invalid handle.
+ # "
+ # returncode 2; expected [0]
+ #
+ # -----> teardown stage *** Aborting test run.
+ #
+ # <_io.BufferedReader name=3> *** stdout ***
+ #
+ # <_io.BufferedReader name=5> *** stderr ***
+ # "-----> teardown stage" did not complete successfully
+ # Exception <class '__main__.PluginMgrTestFail'> ('teardown', 'Error: Specified qdisc kind is unknown.\n', '"-----> teardown stage" did not complete successfully') (caught in test_runner, running test 2 84a0 Create TEQL with default setting stage teardown)
+ # ---------------
+ # traceback
+ #   File "/images/src/linux/tools/testing/selftests/tc-testing/./tdc.py", line 495, in test_runner
+ #     res = run_one_test(pm, args, index, tidx)
+ #   File "/images/src/linux/tools/testing/selftests/tc-testing/./tdc.py", line 434, in run_one_test
+ #     prepare_env(args, pm, 'teardown', '-----> teardown stage', tidx['teardown'], procout)
+ #   File "/images/src/linux/tools/testing/selftests/tc-testing/./tdc.py", line 245, in prepare_env
+ #     raise PluginMgrTestFail(
+ # ---------------
+ # accumulated output for this test:
+ # Error: Specified qdisc kind is unknown.
+ #
+ # ---------------
+ #
+ # All test results:
+ #
+ # 1..1
+ # ok 1 84a0 - Create TEQL with default setting # skipped - "-----> teardown stage" did not complete successfully
+
+Fixes: cc62fbe114c9 ("selftests/tc-testing: add selftests for teql qdisc")
+Signed-off-by: Vlad Buslov <vladbu@nvidia.com>
+---
+ tools/testing/selftests/tc-testing/tdc.sh | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tools/testing/selftests/tc-testing/tdc.sh b/tools/testing/selftests/tc-testing/tdc.sh
+index afb0cd86fa3d..eb357bd7923c 100755
+--- a/tools/testing/selftests/tc-testing/tdc.sh
++++ b/tools/testing/selftests/tc-testing/tdc.sh
+@@ -2,5 +2,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
+ modprobe netdevsim
++modprobe sch_teql
+ ./tdc.py -c actions --nobuildebpf
+ ./tdc.py -c qdisc
 -- 
-BR,
-Muhammad Usama Anjum
+2.39.2
+
