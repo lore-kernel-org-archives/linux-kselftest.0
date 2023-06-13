@@ -2,37 +2,37 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09090C77B7A
-	for <linux-kselftest@archiver.kernel.org>; Tue, 13 Jun 2023 10:29:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AB8CC77B7A
+	for <linux-kselftest@archiver.kernel.org>; Tue, 13 Jun 2023 10:30:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241092AbjFMK3n (ORCPT
+        id S234951AbjFMKa2 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 13 Jun 2023 06:29:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57310 "EHLO
+        Tue, 13 Jun 2023 06:30:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234891AbjFMK3f (ORCPT
+        with ESMTP id S242031AbjFMKaH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 13 Jun 2023 06:29:35 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43CDD189;
-        Tue, 13 Jun 2023 03:29:33 -0700 (PDT)
+        Tue, 13 Jun 2023 06:30:07 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F6481997;
+        Tue, 13 Jun 2023 03:29:54 -0700 (PDT)
 Received: from localhost.localdomain (unknown [119.155.33.163])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9DFAB6606F02;
-        Tue, 13 Jun 2023 11:29:25 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 891C66606F02;
+        Tue, 13 Jun 2023 11:29:46 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686652172;
-        bh=Nvj+aUGG5O62PP1/ZbsmZrjxXeUIlqkVFzPkFkQ2rL8=;
+        s=mail; t=1686652192;
+        bh=pxNP2M0MAq9fxYUTXNYNkDDZyl8VonsUf4izFOdExko=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iv/JXJrEuCIqUuSSkjNcsIEqoxjOzMXhHtMeHX5O8HglbKBiedviiWSyS4124rtlw
-         WjxXOvVudC7nN61NERBL4Pr7ENNvjkOhGL8dSnKW/dQzyr73i0CZfzUqia0MWMGIQs
-         0N52XnGZDXvapp/G6cat9+YpRD7PLC8kTCJeM7j9eXbgrHd8hr5CiSRvimbO8KQkRV
-         06j00VAOg+dE4jYl2jbM3+EQwrNlb6+TSoPNC3hikzz/ibdcMbymi8VyqvPbUWipVy
-         QjdkQS6Ue9aCvBoYlfKTA5wjzNHaw2u6i/MuRReLBJmwVXObm9d3vJGQ+y5+AnEfgO
-         z/WxKzIov3UmQ==
+        b=bmqDUh6lq7nhS/sYEeT/7TbdxwdEo/bWCqp52RyYD5MPmGRBbCrUtpt6KcdCOsPgu
+         CB56J6NjGtlezBbO74kvUi2KEu+nTve6tuVumbd7VpjezXdENqmhRMp+mZQgo67YXQ
+         bDBZ665MCItpglMMxYycZdPvQMbhKoN3cErSfT69MPfLp1c4Q8H6azLl/XdOklHIce
+         uMVKR0WoSePOcHTHcyaHbu2skFtIldM5yEdfCedPLvgB0qbCWtvjuGMx8GMQqFIWT4
+         /mgyw+XPFzSaCC5M4VAePAif/sVNakNIlK+2ZxTs5IhVPRCVfGpW0U0kfCUJkjAe5R
+         WSMMm/E4QCsiA==
 From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
 To:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -60,9 +60,9 @@ Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
         Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: [PATCH v18 1/5] userfaultfd: UFFD_FEATURE_WP_ASYNC
-Date:   Tue, 13 Jun 2023 15:29:01 +0500
-Message-Id: <20230613102905.2808371-2-usama.anjum@collabora.com>
+Subject: [PATCH v18 4/5] mm/pagemap: add documentation of PAGEMAP_SCAN IOCTL
+Date:   Tue, 13 Jun 2023 15:29:04 +0500
+Message-Id: <20230613102905.2808371-5-usama.anjum@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230613102905.2808371-1-usama.anjum@collabora.com>
 References: <20230613102905.2808371-1-usama.anjum@collabora.com>
@@ -72,459 +72,86 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Peter Xu <peterx@redhat.com>
+Add some explanation and method to use write-protection and written-to
+on memory range.
 
-This patch adds a new userfaultfd-wp feature UFFD_FEATURE_WP_ASYNC, that
-allows userfaultfd wr-protect faults to be resolved by the kernel directly.
-
-It can be used like a high accuracy version of soft-dirty, without vma
-modifications during tracking, and also with ranged support by default
-rather than for a whole mm when reset the protections due to existence of
-ioctl(UFFDIO_WRITEPROTECT).
-
-Several goals of such a dirty tracking interface:
-
-1. All types of memory should be supported and tracable. This is nature
-   for soft-dirty but should mention when the context is userfaultfd,
-   because it used to only support anon/shmem/hugetlb. The problem is for
-   a dirty tracking purpose these three types may not be enough, and it's
-   legal to track anything e.g. any page cache writes from mmap.
-
-2. Protections can be applied to partial of a memory range, without vma
-   split/merge fuss.  The hope is that the tracking itself should not
-   affect any vma layout change.  It also helps when reset happens because
-   the reset will not need mmap write lock which can block the tracee.
-
-3. Accuracy needs to be maintained.  This means we need pte markers to work
-   on any type of VMA.
-
-One could question that, the whole concept of async dirty tracking is not
-really close to fundamentally what userfaultfd used to be: it's not "a
-fault to be serviced by userspace" anymore. However, using userfaultfd-wp
-here as a framework is convenient for us in at least:
-
-1. VM_UFFD_WP vma flag, which has a very good name to suite something like
-   this, so we don't need VM_YET_ANOTHER_SOFT_DIRTY. Just use a new
-   feature bit to identify from a sync version of uffd-wp registration.
-
-2. PTE markers logic can be leveraged across the whole kernel to maintain
-   the uffd-wp bit as long as an arch supports, this also applies to this
-   case where uffd-wp bit will be a hint to dirty information and it will
-   not go lost easily (e.g. when some page cache ptes got zapped).
-
-3. Reuse ioctl(UFFDIO_WRITEPROTECT) interface for either starting or
-   resetting a range of memory, while there's no counterpart in the old
-   soft-dirty world, hence if this is wanted in a new design we'll need a
-   new interface otherwise.
-
-We can somehow understand that commonality because uffd-wp was
-fundamentally a similar idea of write-protecting pages just like
-soft-dirty.
-
-This implementation allows WP_ASYNC to imply WP_UNPOPULATED, because so far
-WP_ASYNC seems to not usable if without WP_UNPOPULATE.  This also gives us
-chance to modify impl of WP_ASYNC just in case it could be not depending on
-WP_UNPOPULATED anymore in the future kernels. It's also fine to imply that
-because both features will rely on PTE_MARKER_UFFD_WP config option, so
-they'll show up together (or both missing) in an UFFDIO_API probe.
-
-vma_can_userfault() now allows any VMA if the userfaultfd registration is
-only about async uffd-wp. So we can track dirty for all kinds of memory
-including generic file systems (like XFS, EXT4 or BTRFS).
-
-One trick worth mention in do_wp_page() is that we need to manually update
-vmf->orig_pte here because it can be used later with a pte_same() check -
-this path always has FAULT_FLAG_ORIG_PTE_VALID set in the flags.
-
-The major defect of this approach of dirty tracking is we need to populate
-the pgtables when tracking starts. Soft-dirty doesn't do it like that.
-It's unwanted in the case where the range of memory to track is huge and
-unpopulated (e.g., tracking updates on a 10G file with mmap() on top,
-without having any page cache installed yet). One way to improve this is
-to allow pte markers exist for larger than PTE level for PMD+. That will
-not change the interface if to implemented, so we can leave that for later.
-
-Co-developed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Signed-off-by: Peter Xu <peterx@redhat.com>
 ---
-Changes in v18:
-- Rebase on top of next-20230613 (use ptep_get)
-
-Changes in v17:
-- Rebase on top of next-20230525
-
-Changes in v12:
-- Peter added the hugetlb support and revamped some other implementation
-- Transferred the authorship to Peter
-- Merge documentation to this patch
+Changes in v16:
+- Update the documentation
 
 Changes in v11:
-- Fix return code in userfaultfd_register() and minor changes here and
-  there
-- Rebase on top of next-20230307
-- Base patches on UFFD_FEATURE_WP_UNPOPULATED https://lore.kernel.org/all/20230306213925.617814-1-peterx@redhat.com
-- UFFD_FEATURE_WP_ASYNC depends on UFFD_FEATURE_WP_UNPOPULATED to work
-  (correctly)
-
-Changes in v10:
-- Build fix
-- Update comments and add error condition to return error from uffd
-  register if hugetlb pages are present when wp async flag is set
-
-Changes in v9:
-- Correct the fault resolution with code contributed by Peter
-
-Changes in v7:
-- Remove UFFDIO_WRITEPROTECT_MODE_ASYNC_WP and add UFFD_FEATURE_WP_ASYNC
-- Handle automatic page fault resolution in better way (thanks to Peter)
+- Add more documentation
 ---
- Documentation/admin-guide/mm/userfaultfd.rst | 35 ++++++++++++++++++++
- fs/userfaultfd.c                             | 26 ++++++++++++---
- include/linux/userfaultfd_k.h                | 21 +++++++++++-
- include/uapi/linux/userfaultfd.h             |  9 ++++-
- mm/hugetlb.c                                 | 32 ++++++++++--------
- mm/memory.c                                  | 27 +++++++++++++--
- 6 files changed, 128 insertions(+), 22 deletions(-)
+ Documentation/admin-guide/mm/pagemap.rst | 58 ++++++++++++++++++++++++
+ 1 file changed, 58 insertions(+)
 
-diff --git a/Documentation/admin-guide/mm/userfaultfd.rst b/Documentation/admin-guide/mm/userfaultfd.rst
-index 7c304e432205..4b7f43fbbe18 100644
---- a/Documentation/admin-guide/mm/userfaultfd.rst
-+++ b/Documentation/admin-guide/mm/userfaultfd.rst
-@@ -244,6 +244,41 @@ write-protected (so future writes will also result in a WP fault). These ioctls
- support a mode flag (``UFFDIO_COPY_MODE_WP`` or ``UFFDIO_CONTINUE_MODE_WP``
- respectively) to configure the mapping this way.
- 
-+If the userfaultfd context has ``UFFD_FEATURE_WP_ASYNC`` feature bit set,
-+any vma registered with write-protection will work in async mode rather
-+than the default sync mode.
+diff --git a/Documentation/admin-guide/mm/pagemap.rst b/Documentation/admin-guide/mm/pagemap.rst
+index c8f380271cad..3b977526d4b3 100644
+--- a/Documentation/admin-guide/mm/pagemap.rst
++++ b/Documentation/admin-guide/mm/pagemap.rst
+@@ -227,3 +227,61 @@ Before Linux 3.11 pagemap bits 55-60 were used for "page-shift" (which is
+ always 12 at most architectures). Since Linux 3.11 their meaning changes
+ after first clear of soft-dirty bits. Since Linux 4.2 they are used for
+ flags unconditionally.
 +
-+In async mode, there will be no message generated when a write operation
-+happens, meanwhile the write-protection will be resolved automatically by
-+the kernel.  It can be seen as a more accurate version of soft-dirty
-+tracking and it can be different in a few ways:
++Pagemap Scan IOCTL
++==================
 +
-+  - The dirty result will not be affected by vma changes (e.g. vma
-+    merging) because the dirty is only tracked by the pte.
++The ``PAGEMAP_SCAN`` IOCTL on the pagemap file can be used to get or optionally
++clear the info about page table entries. The following operations are supported
++in this IOCTL:
++- Get the information if the pages have been written-to (``PAGE_IS_WRITTEN``),
++  file mapped (``PAGE_IS_FILE``), present (``PAGE_IS_PRESENT``) or swapped
++  (``PAGE_IS_SWAPPED``).
++- Find pages which have been written-to and/or write protect the pages atomically
++  (atomic ``PM_SCAN_OP_GET + PM_SCAN_OP_WP``)
 +
-+  - It supports range operations by default, so one can enable tracking on
-+    any range of memory as long as page aligned.
++The ``struct pm_scan_arg`` is used as the argument of the IOCTL.
++ 1. The size of the ``struct pm_scan_arg`` must be specified in the ``size``
++    field. This field will be helpful in recognizing the structure if extensions
++    are done later.
++ 2. The flags can be specified in the ``flags`` field. The ``PM_SCAN_OP_GET``
++    and ``PM_SCAN_OP_WP`` are the only added flags at this time.
++ 3. The range is specified through ``start`` and ``len``.
++ 4. The output buffer of ``struct page_region`` array and size is specified in
++    ``vec`` and ``vec_len``.
++ 5. The optional maximum requested pages are specified in the ``max_pages``.
++ 6. The masks are specified in ``required_mask``, ``anyof_mask``,
++    ``excluded_ mask`` and ``return_mask``.
++    1.  To find if ``PAGE_IS_WRITTEN`` flag is set for pages which have
++        ``PAGE_IS_FILE`` set and ``PAGE_IS_SWAPPED`` un-set, ``required_mask``
++        is set to ``PAGE_IS_FILE``, ``exclude_mask`` is set to
++        ``PAGE_IS_SWAPPED`` and ``return_mask`` is set to ``PAGE_IS_WRITTEN``.
++        The output buffer in ``vec`` and length must be specified in ``vec_len``.
++    2. To find pages which have either ``PAGE_IS_FILE`` or ``PAGE_IS_SWAPPED``
++       set, ``anyof_masks`` is set to  ``PAGE_IS_FILE | PAGE_IS_SWAPPED``.
++    3. To find written pages and engage write protect, ``PAGE_IS_WRITTEN`` is
++       specified in ``required_mask`` and ``return_mask``. In addition to
++       specifying the output buffer in ``vec`` and length in ``vec_len``, the
++       ``PM_SCAN_OP_WP`` is specified in ``flags`` to perform write protect
++       on the range as well.
 +
-+  - Dirty information will not get lost if the pte was zapped due to
-+    various reasons (e.g. during split of a shmem transparent huge page).
++The ``PAGE_IS_WRITTEN`` flag can be considered as the better and correct
++alternative of soft-dirty flag. It doesn't get affected by household chores (VMA
++merging) of the kernel and hence the user can find the true soft-dirty pages
++only. This IOCTL adds the atomic way to find which pages have been written and
++write protect those pages again. This kind of operation is needed to efficiently
++find out which pages have changed in the memory.
 +
-+  - Due to a reverted meaning of soft-dirty (page clean when uffd-wp bit
-+    set; dirty when uffd-wp bit cleared), it has different semantics on
-+    some of the memory operations.  For example: ``MADV_DONTNEED`` on
-+    anonymous (or ``MADV_REMOVE`` on a file mapping) will be treated as
-+    dirtying of memory by dropping uffd-wp bit during the procedure.
-+
-+The user app can collect the "written/dirty" status by looking up the
-+uffd-wp bit for the pages being interested in /proc/pagemap.
-+
-+The page will not be under track of uffd-wp async mode until the page is
-+explicitly write-protected by ``ioctl(UFFDIO_WRITEPROTECT)`` with the mode
-+flag ``UFFDIO_WRITEPROTECT_MODE_WP`` set.  Trying to resolve a page fault
-+that was tracked by async mode userfaultfd-wp is invalid.
-+
-+When userfaultfd-wp async mode is used alone, it can be applied to all
-+kinds of memory.
-+
- QEMU/KVM
- ========
- 
-diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-index 7cecd49e078b..81b98e4a9f55 100644
---- a/fs/userfaultfd.c
-+++ b/fs/userfaultfd.c
-@@ -123,6 +123,11 @@ static bool userfaultfd_is_initialized(struct userfaultfd_ctx *ctx)
- 	return ctx->features & UFFD_FEATURE_INITIALIZED;
- }
- 
-+static bool userfaultfd_wp_async_ctx(struct userfaultfd_ctx *ctx)
-+{
-+	return ctx && (ctx->features & UFFD_FEATURE_WP_ASYNC);
-+}
-+
- /*
-  * Whether WP_UNPOPULATED is enabled on the uffd context.  It is only
-  * meaningful when userfaultfd_wp()==true on the vma and when it's
-@@ -1322,6 +1327,7 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
- 	bool basic_ioctls;
- 	unsigned long start, end, vma_end;
- 	struct vma_iterator vmi;
-+	bool wp_async = userfaultfd_wp_async_ctx(ctx);
- 	pgoff_t pgoff;
- 
- 	user_uffdio_register = (struct uffdio_register __user *) arg;
-@@ -1396,7 +1402,7 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
- 
- 		/* check not compatible vmas */
- 		ret = -EINVAL;
--		if (!vma_can_userfault(cur, vm_flags))
-+		if (!vma_can_userfault(cur, vm_flags, wp_async))
- 			goto out_unlock;
- 
- 		/*
-@@ -1457,7 +1463,7 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
- 	for_each_vma_range(vmi, vma, end) {
- 		cond_resched();
- 
--		BUG_ON(!vma_can_userfault(vma, vm_flags));
-+		BUG_ON(!vma_can_userfault(vma, vm_flags, wp_async));
- 		BUG_ON(vma->vm_userfaultfd_ctx.ctx &&
- 		       vma->vm_userfaultfd_ctx.ctx != ctx);
- 		WARN_ON(!(vma->vm_flags & VM_MAYWRITE));
-@@ -1557,6 +1563,7 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
- 	unsigned long start, end, vma_end;
- 	const void __user *buf = (void __user *)arg;
- 	struct vma_iterator vmi;
-+	bool wp_async = userfaultfd_wp_async_ctx(ctx);
- 	pgoff_t pgoff;
- 
- 	ret = -EFAULT;
-@@ -1611,7 +1618,7 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
- 		 * provides for more strict behavior to notice
- 		 * unregistration errors.
- 		 */
--		if (!vma_can_userfault(cur, cur->vm_flags))
-+		if (!vma_can_userfault(cur, cur->vm_flags, wp_async))
- 			goto out_unlock;
- 
- 		found = true;
-@@ -1627,7 +1634,7 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
- 	for_each_vma_range(vmi, vma, end) {
- 		cond_resched();
- 
--		BUG_ON(!vma_can_userfault(vma, vma->vm_flags));
-+		BUG_ON(!vma_can_userfault(vma, vma->vm_flags, wp_async));
- 
- 		/*
- 		 * Nothing to do: this vma is already registered into this
-@@ -1965,6 +1972,11 @@ static int userfaultfd_continue(struct userfaultfd_ctx *ctx, unsigned long arg)
- 	return ret;
- }
- 
-+bool userfaultfd_wp_async(struct vm_area_struct *vma)
-+{
-+	return userfaultfd_wp_async_ctx(vma->vm_userfaultfd_ctx.ctx);
-+}
-+
- static inline unsigned int uffd_ctx_features(__u64 user_features)
- {
- 	/*
-@@ -1998,6 +2010,11 @@ static int userfaultfd_api(struct userfaultfd_ctx *ctx,
- 	ret = -EPERM;
- 	if ((features & UFFD_FEATURE_EVENT_FORK) && !capable(CAP_SYS_PTRACE))
- 		goto err_out;
-+
-+	/* WP_ASYNC relies on WP_UNPOPULATED, choose it unconditionally */
-+	if (features & UFFD_FEATURE_WP_ASYNC)
-+		features |= UFFD_FEATURE_WP_UNPOPULATED;
-+
- 	/* report all available features and ioctls to userland */
- 	uffdio_api.features = UFFD_API_FEATURES;
- #ifndef CONFIG_HAVE_ARCH_USERFAULTFD_MINOR
-@@ -2010,6 +2027,7 @@ static int userfaultfd_api(struct userfaultfd_ctx *ctx,
- #ifndef CONFIG_PTE_MARKER_UFFD_WP
- 	uffdio_api.features &= ~UFFD_FEATURE_WP_HUGETLBFS_SHMEM;
- 	uffdio_api.features &= ~UFFD_FEATURE_WP_UNPOPULATED;
-+	uffdio_api.features &= ~UFFD_FEATURE_WP_ASYNC;
- #endif
- 	uffdio_api.ioctls = UFFD_API_IOCTLS;
- 	ret = -EFAULT;
-diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
-index ac7b0c96d351..3b684770c3f8 100644
---- a/include/linux/userfaultfd_k.h
-+++ b/include/linux/userfaultfd_k.h
-@@ -157,11 +157,22 @@ static inline bool userfaultfd_armed(struct vm_area_struct *vma)
- }
- 
- static inline bool vma_can_userfault(struct vm_area_struct *vma,
--				     unsigned long vm_flags)
-+				     unsigned long vm_flags,
-+				     bool wp_async)
- {
-+	vm_flags &= __VM_UFFD_FLAGS;
-+
- 	if ((vm_flags & VM_UFFD_MINOR) &&
- 	    (!is_vm_hugetlb_page(vma) && !vma_is_shmem(vma)))
- 		return false;
-+
-+	/*
-+	 * If wp async enabled, and WP is the only mode enabled, allow any
-+	 * memory type.
-+	 */
-+	if (wp_async && (vm_flags == VM_UFFD_WP))
-+		return true;
-+
- #ifndef CONFIG_PTE_MARKER_UFFD_WP
- 	/*
- 	 * If user requested uffd-wp but not enabled pte markers for
-@@ -171,6 +182,8 @@ static inline bool vma_can_userfault(struct vm_area_struct *vma,
- 	if ((vm_flags & VM_UFFD_WP) && !vma_is_anonymous(vma))
- 		return false;
- #endif
-+
-+	/* By default, allow any of anon|shmem|hugetlb */
- 	return vma_is_anonymous(vma) || is_vm_hugetlb_page(vma) ||
- 	    vma_is_shmem(vma);
- }
-@@ -193,6 +206,7 @@ extern int userfaultfd_unmap_prep(struct vm_area_struct *vma,
- extern void userfaultfd_unmap_complete(struct mm_struct *mm,
- 				       struct list_head *uf);
- extern bool userfaultfd_wp_unpopulated(struct vm_area_struct *vma);
-+extern bool userfaultfd_wp_async(struct vm_area_struct *vma);
- 
- #else /* CONFIG_USERFAULTFD */
- 
-@@ -293,6 +307,11 @@ static inline bool userfaultfd_wp_unpopulated(struct vm_area_struct *vma)
- 	return false;
- }
- 
-+static inline bool userfaultfd_wp_async(struct vm_area_struct *vma)
-+{
-+	return false;
-+}
-+
- #endif /* CONFIG_USERFAULTFD */
- 
- static inline bool userfaultfd_wp_use_markers(struct vm_area_struct *vma)
-diff --git a/include/uapi/linux/userfaultfd.h b/include/uapi/linux/userfaultfd.h
-index 66dd4cd277bd..cfb87a112a9f 100644
---- a/include/uapi/linux/userfaultfd.h
-+++ b/include/uapi/linux/userfaultfd.h
-@@ -39,7 +39,8 @@
- 			   UFFD_FEATURE_MINOR_SHMEM |		\
- 			   UFFD_FEATURE_EXACT_ADDRESS |		\
- 			   UFFD_FEATURE_WP_HUGETLBFS_SHMEM |	\
--			   UFFD_FEATURE_WP_UNPOPULATED)
-+			   UFFD_FEATURE_WP_UNPOPULATED |	\
-+			   UFFD_FEATURE_WP_ASYNC)
- #define UFFD_API_IOCTLS				\
- 	((__u64)1 << _UFFDIO_REGISTER |		\
- 	 (__u64)1 << _UFFDIO_UNREGISTER |	\
-@@ -210,6 +211,11 @@ struct uffdio_api {
- 	 * (i.e. empty ptes).  This will be the default behavior for shmem
- 	 * & hugetlbfs, so this flag only affects anonymous memory behavior
- 	 * when userfault write-protection mode is registered.
-+	 *
-+	 * UFFD_FEATURE_WP_ASYNC indicates that userfaultfd write-protection
-+	 * asynchronous mode is supported in which the write fault is
-+	 * automatically resolved and write-protection is un-set.
-+	 * It implies UFFD_FEATURE_WP_UNPOPULATED.
- 	 */
- #define UFFD_FEATURE_PAGEFAULT_FLAG_WP		(1<<0)
- #define UFFD_FEATURE_EVENT_FORK			(1<<1)
-@@ -225,6 +231,7 @@ struct uffdio_api {
- #define UFFD_FEATURE_EXACT_ADDRESS		(1<<11)
- #define UFFD_FEATURE_WP_HUGETLBFS_SHMEM		(1<<12)
- #define UFFD_FEATURE_WP_UNPOPULATED		(1<<13)
-+#define UFFD_FEATURE_WP_ASYNC			(1<<14)
- 	__u64 features;
- 
- 	__u64 ioctls;
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index d76574425da3..0db13167b1ee 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -6156,21 +6156,27 @@ vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
- 	/* Handle userfault-wp first, before trying to lock more pages */
- 	if (userfaultfd_wp(vma) && huge_pte_uffd_wp(huge_ptep_get(ptep)) &&
- 	    (flags & FAULT_FLAG_WRITE) && !huge_pte_write(entry)) {
--		struct vm_fault vmf = {
--			.vma = vma,
--			.address = haddr,
--			.real_address = address,
--			.flags = flags,
--		};
-+		if (!userfaultfd_wp_async(vma)) {
-+			struct vm_fault vmf = {
-+				.vma = vma,
-+				.address = haddr,
-+				.real_address = address,
-+				.flags = flags,
-+			};
- 
--		spin_unlock(ptl);
--		if (pagecache_folio) {
--			folio_unlock(pagecache_folio);
--			folio_put(pagecache_folio);
-+			spin_unlock(ptl);
-+			if (pagecache_folio) {
-+				folio_unlock(pagecache_folio);
-+				folio_put(pagecache_folio);
-+			}
-+			hugetlb_vma_unlock_read(vma);
-+			mutex_unlock(&hugetlb_fault_mutex_table[hash]);
-+			return handle_userfault(&vmf, VM_UFFD_WP);
- 		}
--		hugetlb_vma_unlock_read(vma);
--		mutex_unlock(&hugetlb_fault_mutex_table[hash]);
--		return handle_userfault(&vmf, VM_UFFD_WP);
-+
-+		entry = huge_pte_clear_uffd_wp(entry);
-+		set_huge_pte_at(mm, haddr, ptep, entry);
-+		/* Fallthrough to CoW */
- 	}
- 
- 	/*
-diff --git a/mm/memory.c b/mm/memory.c
-index e7046cc88596..cf75d2943538 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -3340,11 +3340,28 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
- 	const bool unshare = vmf->flags & FAULT_FLAG_UNSHARE;
- 	struct vm_area_struct *vma = vmf->vma;
- 	struct folio *folio = NULL;
-+	pte_t pte;
- 
- 	if (likely(!unshare)) {
- 		if (userfaultfd_pte_wp(vma, ptep_get(vmf->pte))) {
--			pte_unmap_unlock(vmf->pte, vmf->ptl);
--			return handle_userfault(vmf, VM_UFFD_WP);
-+			if (!userfaultfd_wp_async(vma)) {
-+				pte_unmap_unlock(vmf->pte, vmf->ptl);
-+				return handle_userfault(vmf, VM_UFFD_WP);
-+			}
-+
-+			/*
-+			 * Nothing needed (cache flush, TLB invalidations,
-+			 * etc.) because we're only removing the uffd-wp bit,
-+			 * which is completely invisible to the user.
-+			 */
-+			pte = pte_clear_uffd_wp(ptep_get(vmf->pte));
-+
-+			set_pte_at(vma->vm_mm, vmf->address, vmf->pte, pte);
-+			/*
-+			 * Update this to be prepared for following up CoW
-+			 * handling
-+			 */
-+			vmf->orig_pte = pte;
- 		}
- 
- 		/*
-@@ -4824,8 +4841,11 @@ static inline vm_fault_t wp_huge_pmd(struct vm_fault *vmf)
- 
- 	if (vma_is_anonymous(vmf->vma)) {
- 		if (likely(!unshare) &&
--		    userfaultfd_huge_pmd_wp(vmf->vma, vmf->orig_pmd))
-+		    userfaultfd_huge_pmd_wp(vmf->vma, vmf->orig_pmd)) {
-+			if (userfaultfd_wp_async(vmf->vma))
-+				goto split;
- 			return handle_userfault(vmf, VM_UFFD_WP);
-+		}
- 		return do_huge_pmd_wp_page(vmf);
- 	}
- 
-@@ -4837,6 +4857,7 @@ static inline vm_fault_t wp_huge_pmd(struct vm_fault *vmf)
- 		}
- 	}
- 
-+split:
- 	/* COW or write-notify handled on pte level: split pmd. */
- 	__split_huge_pmd(vmf->vma, vmf->pmd, vmf->address, false, NULL);
- 
++To get information about which pages have been written-to or optionally write
++protect the pages, following must be performed first in order:
++ 1. The userfaultfd file descriptor is created with ``userfaultfd`` syscall.
++ 2. The ``UFFD_FEATURE_WP_UNPOPULATED`` and ``UFFD_FEATURE_WP_ASYNC`` features
++    are set by ``UFFDIO_API`` IOCTL.
++ 3. The memory range is registered with ``UFFDIO_REGISTER_MODE_WP`` mode
++    through ``UFFDIO_REGISTER`` IOCTL.
++ 4. Then the any part of the registered memory or the whole memory region must
++    be write protected using ``PAGEMAP_SCAN`` IOCTL with flag ``PM_SCAN_OP_WP``
++    or the ``UFFDIO_WRITEPROTECT`` IOCTL can be used. Both of these perform the
++    same operation. The former is better in terms of performance.
++ 5. Now the ``PAGEMAP_SCAN`` IOCTL can be used to either just find pages which
++    have been written-to and/or optionally write protect the pages as well.
 -- 
 2.39.2
 
