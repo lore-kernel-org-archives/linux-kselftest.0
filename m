@@ -2,38 +2,38 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D9C5EB64D8
-	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Jun 2023 18:11:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EAB2EB64DC
+	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Jun 2023 18:11:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242005AbjFNSLP (ORCPT
+        id S241923AbjFNSLp (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 14 Jun 2023 14:11:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39610 "EHLO
+        Wed, 14 Jun 2023 14:11:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241008AbjFNSKx (ORCPT
+        with ESMTP id S242120AbjFNSLT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 14 Jun 2023 14:10:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 330AA2686;
-        Wed, 14 Jun 2023 11:10:23 -0700 (PDT)
+        Wed, 14 Jun 2023 14:11:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2BDA295F;
+        Wed, 14 Jun 2023 11:10:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DC2A964593;
-        Wed, 14 Jun 2023 18:09:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A76AC433CB;
-        Wed, 14 Jun 2023 18:09:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C7384645A6;
+        Wed, 14 Jun 2023 18:09:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F014C433C0;
+        Wed, 14 Jun 2023 18:09:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686766170;
-        bh=5RT+1Ed3wlNsUFIiAUAkZSAQ11PIAvj/hYAZC9K3F20=;
+        s=k20201202; t=1686766187;
+        bh=0ayyCNVLvQE2fk7z+0Ei1x6tEumXh4v5ec9O/CPruY8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jp5+Lria9yAWeZ9iJIHusdDPiBgUStgV1fZbEIkuGm0YYbXiN2gdl5764EREsXEzj
-         18FTtiUIgcYWl4Oi1wu1loAaLje/vubVlOBYjTgqvPA3eUTBctLd3cHS8OcRulyh5E
-         K1Z/6A9kX9pacfQa2UCAeVQDnHZm9dJvDviqjtdrWCpex4IzYPToohgXvYwOeCb1hB
-         gD+iCd85RSQKnwREDCJAzRh0OgASYUzVi3Rvk0t+gCje/dyeL5aM27i2ves126vdVu
-         k196MykQcl6X4iLIc06xPHrGbJYp9VIE87x+8Hq6GMXEiQGaRteuzw9INUgXPAMV+e
-         wfis52c4BHgKA==
+        b=QNZyTTxJc9utGF/3mf0rAOtZQR+boC8DqmZxwZyydUlpvmlVQXjANtWERlTthIZZY
+         EqDtj5dgu7lZSg3LliI8UAvQT6mPbUbQV+FeTrvi4xGAX+X1tbgRTdeAJVksh54PTW
+         YekVTKn5gPS9uftsbBK83DGujHWAksD7EiHhBvhn1kvXFeNely0QZO8QQFjzJX0s9H
+         uAOPIVhleWc3HBvZXt6/aDd+QbZ4alocbt929MZZEQ8YKA79lgpwTFq72kKaa0Ab4S
+         AfcPHrZfahrJ13TogluIsMD1gld6H6vjja2dhr1m4FrTMxbaLzHOTPrw19lezqcMNX
+         Iu6KyR6h0QDDg==
 From:   Miguel Ojeda <ojeda@kernel.org>
 To:     David Gow <davidgow@google.com>,
         Brendan Higgins <brendan.higgins@linux.dev>,
@@ -48,57 +48,42 @@ Cc:     Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
         Philip Li <philip.li@intel.com>, kunit-dev@googlegroups.com,
         linux-kselftest@vger.kernel.org, rust-for-linux@vger.kernel.org,
         linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Subject: [PATCH 2/6] rust: str: make doctests compilable/testable
-Date:   Wed, 14 Jun 2023 20:08:26 +0200
-Message-ID: <20230614180837.630180-3-ojeda@kernel.org>
+Subject: [PATCH 6/6] MAINTAINERS: add Rust KUnit files to the KUnit entry
+Date:   Wed, 14 Jun 2023 20:08:30 +0200
+Message-ID: <20230614180837.630180-7-ojeda@kernel.org>
 In-Reply-To: <20230614180837.630180-1-ojeda@kernel.org>
 References: <20230614180837.630180-1-ojeda@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Rust documentation tests are going to be build/run-tested
-with the KUnit integration added in a future patch, thus
-update them to make them compilable/testable so that we
-may start enforcing it.
+The KUnit maintainers would like to maintain these files on their
+side too (thanks!), so add them to their entry.
+
+With this in place, `scripts/get_maintainer.pl` prints both sets
+of maintainers/reviewers (i.e. KUnit and Rust) for those files,
+which is the behavior we are looking for.
 
 Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 ---
- rust/kernel/str.rs | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ MAINTAINERS | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/rust/kernel/str.rs b/rust/kernel/str.rs
-index c9dd3bf59e34..c41607b2e4fe 100644
---- a/rust/kernel/str.rs
-+++ b/rust/kernel/str.rs
-@@ -213,6 +213,7 @@ impl fmt::Display for CStr {
-     ///
-     /// ```
-     /// # use kernel::c_str;
-+    /// # use kernel::fmt;
-     /// # use kernel::str::CStr;
-     /// # use kernel::str::CString;
-     /// let penguin = c_str!("🐧");
-@@ -241,6 +242,7 @@ impl fmt::Debug for CStr {
-     ///
-     /// ```
-     /// # use kernel::c_str;
-+    /// # use kernel::fmt;
-     /// # use kernel::str::CStr;
-     /// # use kernel::str::CString;
-     /// let penguin = c_str!("🐧");
-@@ -529,7 +531,7 @@ fn write_str(&mut self, s: &str) -> fmt::Result {
- /// # Examples
- ///
- /// ```
--/// use kernel::str::CString;
-+/// use kernel::{str::CString, fmt};
- ///
- /// let s = CString::try_from_fmt(fmt!("{}{}{}", "abc", 10, 20)).unwrap();
- /// assert_eq!(s.as_bytes_with_nul(), "abc1020\0".as_bytes());
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 250518fc70ff..f4c9ce1b685f 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11323,6 +11323,8 @@ W:	https://google.github.io/kunit-docs/third_party/kernel/docs/
+ F:	Documentation/dev-tools/kunit/
+ F:	include/kunit/
+ F:	lib/kunit/
++F:	rust/kernel/kunit.rs
++F:	scripts/rustdoc_test_*
+ F:	tools/testing/kunit/
+ 
+ KERNEL USERMODE HELPER
 -- 
 2.41.0
 
