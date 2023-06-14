@@ -2,38 +2,38 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A926DEB64D9
-	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Jun 2023 18:10:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AFAA1EB64D8
+	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Jun 2023 18:11:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233196AbjFNSKy (ORCPT
+        id S241201AbjFNSLM (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 14 Jun 2023 14:10:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39610 "EHLO
+        Wed, 14 Jun 2023 14:11:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232670AbjFNSKk (ORCPT
+        with ESMTP id S240402AbjFNSKu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 14 Jun 2023 14:10:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 345FC2D4F;
-        Wed, 14 Jun 2023 11:09:58 -0700 (PDT)
+        Wed, 14 Jun 2023 14:10:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18FCD30C4;
+        Wed, 14 Jun 2023 11:10:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3491564592;
-        Wed, 14 Jun 2023 18:09:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6764C433D9;
-        Wed, 14 Jun 2023 18:09:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 427A16455E;
+        Wed, 14 Jun 2023 18:09:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAA94C433C0;
+        Wed, 14 Jun 2023 18:09:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686766174;
-        bh=yuicnU1+K5kamMw4AKK6QIF4bp4V9ExVM3jTIfRBEOw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=G38HL9+74I16rMOjwjJnhHjOLlUbn3uZEChcDwRfH6N6PITDqjR2o+2U4crPNMyqj
-         igjbV068IX0zfVweh8fbiZTDv+XKVNNOkyEc/kH5jnA39c4vQ+5sTrKYQxUHHBGF8b
-         fZ9HRRI0vE9qhbla4pFDDIBzLRJo4nlrjbPGGYwgObKFNSCbC4Rfzy5SsGO9PiIYF7
-         sW/h3vbDpkWLaLzts7tZIS6ouR8ovcnvyFYuh22R2lRyERDvDtEqiHvWtC1KdDNvSa
-         eEXUKCp9wOusXG4/9uyAmks3iBdFx1FB1lc1TYaDFSEAGNXH+L8a1PloQIZcyvhon9
-         yISoA5LF5C4og==
+        s=k20201202; t=1686766161;
+        bh=fXHMpfERvexjC1cBZRBzlkhrqEdvS6t8XukfGExQ9rE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=T0w5Clw6D4NpCHTogWpArssUXW2986IdhYro40TmZhV+LtKFz6dSaRaikAvt5XheN
+         gns0l1bPss9Nt4D/PIWJTOti/EYwrF5vvVwflkW8e5n1OccZ39RQNJ9l4K29zn/qQ0
+         Yhc31ewVSDSm5RRWPdKyHSSFaFETQYbBMr2xeZh+9eYsg5ov906SSTX52WUs38mQtF
+         AAaZlNB2T49Ix361pzTvDWu0aqP/ZDnjPAlSTdJzy3QgCUYIZaua0jK/tzd4TuS17p
+         0DRXPAM1lXrOe1bf0wqzLqcfJXNaIrXp85SBe8sLyJIgec60v35blJICTjgZAAh/Wq
+         veL2T6ul3pjPw==
 From:   Miguel Ojeda <ojeda@kernel.org>
 To:     David Gow <davidgow@google.com>,
         Brendan Higgins <brendan.higgins@linux.dev>,
@@ -48,113 +48,60 @@ Cc:     Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
         Philip Li <philip.li@intel.com>, kunit-dev@googlegroups.com,
         linux-kselftest@vger.kernel.org, rust-for-linux@vger.kernel.org,
         linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Subject: [PATCH 3/6] rust: sync: make doctests compilable/testable
-Date:   Wed, 14 Jun 2023 20:08:27 +0200
-Message-ID: <20230614180837.630180-4-ojeda@kernel.org>
-In-Reply-To: <20230614180837.630180-1-ojeda@kernel.org>
-References: <20230614180837.630180-1-ojeda@kernel.org>
+Subject: [PATCH 0/6] KUnit integration for Rust doctests
+Date:   Wed, 14 Jun 2023 20:08:24 +0200
+Message-ID: <20230614180837.630180-1-ojeda@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Rust documentation tests are going to be build/run-tested
-with the KUnit integration added in a future patch, thus
-update them to make them compilable/testable so that we
-may start enforcing it.
+This is the initial KUnit integration for running Rust documentation
+tests within the kernel.
 
-Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
----
- rust/kernel/sync/arc.rs           | 9 +++++++--
- rust/kernel/sync/lock/mutex.rs    | 1 +
- rust/kernel/sync/lock/spinlock.rs | 1 +
- 3 files changed, 9 insertions(+), 2 deletions(-)
+Thank you to the KUnit team for all the input and feedback on this
+over the months, as well as the Intel LKP 0-Day team!
 
-diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
-index a89843cacaad..1ecb2efab51e 100644
---- a/rust/kernel/sync/arc.rs
-+++ b/rust/kernel/sync/arc.rs
-@@ -73,6 +73,7 @@
- /// assert_eq!(cloned.b, 20);
- ///
- /// // The refcount drops to zero when `cloned` goes out of scope, and the memory is freed.
-+/// # Ok::<(), Error>(())
- /// ```
- ///
- /// Using `Arc<T>` as the type of `self`:
-@@ -98,6 +99,7 @@
- /// let obj = Arc::try_new(Example { a: 10, b: 20 })?;
- /// obj.use_reference();
- /// obj.take_over();
-+/// # Ok::<(), Error>(())
- /// ```
- ///
- /// Coercion from `Arc<Example>` to `Arc<dyn MyTrait>`:
-@@ -121,6 +123,7 @@
- ///
- /// // `coerced` has type `Arc<dyn MyTrait>`.
- /// let coerced: Arc<dyn MyTrait> = obj;
-+/// # Ok::<(), Error>(())
- /// ```
- pub struct Arc<T: ?Sized> {
-     ptr: NonNull<ArcInner<T>>,
-@@ -337,7 +340,7 @@ fn from(item: Pin<UniqueArc<T>>) -> Self {
- /// # Example
- ///
- /// ```
--/// use crate::sync::{Arc, ArcBorrow};
-+/// use kernel::sync::{Arc, ArcBorrow};
- ///
- /// struct Example;
- ///
-@@ -350,12 +353,13 @@ fn from(item: Pin<UniqueArc<T>>) -> Self {
- ///
- /// // Assert that both `obj` and `cloned` point to the same underlying object.
- /// assert!(core::ptr::eq(&*obj, &*cloned));
-+/// # Ok::<(), Error>(())
- /// ```
- ///
- /// Using `ArcBorrow<T>` as the type of `self`:
- ///
- /// ```
--/// use crate::sync::{Arc, ArcBorrow};
-+/// use kernel::sync::{Arc, ArcBorrow};
- ///
- /// struct Example {
- ///     a: u32,
-@@ -370,6 +374,7 @@ fn from(item: Pin<UniqueArc<T>>) -> Self {
- ///
- /// let obj = Arc::try_new(Example { a: 10, b: 20 })?;
- /// obj.as_arc_borrow().use_reference();
-+/// # Ok::<(), Error>(())
- /// ```
- pub struct ArcBorrow<'a, T: ?Sized + 'a> {
-     inner: NonNull<ArcInner<T>>,
-diff --git a/rust/kernel/sync/lock/mutex.rs b/rust/kernel/sync/lock/mutex.rs
-index 923472f04af4..09276fedc091 100644
---- a/rust/kernel/sync/lock/mutex.rs
-+++ b/rust/kernel/sync/lock/mutex.rs
-@@ -63,6 +63,7 @@ macro_rules! new_mutex {
- /// assert_eq!(e.c, 10);
- /// assert_eq!(e.d.lock().a, 20);
- /// assert_eq!(e.d.lock().b, 30);
-+/// # Ok::<(), Error>(())
- /// ```
- ///
- /// The following example shows how to use interior mutability to modify the contents of a struct
-diff --git a/rust/kernel/sync/lock/spinlock.rs b/rust/kernel/sync/lock/spinlock.rs
-index 979b56464a4e..91eb2c9e9123 100644
---- a/rust/kernel/sync/lock/spinlock.rs
-+++ b/rust/kernel/sync/lock/spinlock.rs
-@@ -61,6 +61,7 @@ macro_rules! new_spinlock {
- /// assert_eq!(e.c, 10);
- /// assert_eq!(e.d.lock().a, 20);
- /// assert_eq!(e.d.lock().b, 30);
-+/// # Ok::<(), Error>(())
- /// ```
- ///
- /// The following example shows how to use interior mutability to modify the contents of a struct
+This may be merged through either the KUnit or the Rust trees. If
+the KUnit team wants to merge it, then that would be great.
+
+Please see the message in the main commit for the details.
+
+
+Miguel Ojeda (6):
+  rust: init: make doctests compilable/testable
+  rust: str: make doctests compilable/testable
+  rust: sync: make doctests compilable/testable
+  rust: types: make doctests compilable/testable
+  rust: support running Rust documentation tests as KUnit ones
+  MAINTAINERS: add Rust KUnit files to the KUnit entry
+
+ MAINTAINERS                       |   2 +
+ lib/Kconfig.debug                 |  13 +++
+ rust/.gitignore                   |   2 +
+ rust/Makefile                     |  29 ++++++
+ rust/bindings/bindings_helper.h   |   1 +
+ rust/helpers.c                    |   7 ++
+ rust/kernel/init.rs               |  25 +++--
+ rust/kernel/kunit.rs              | 156 ++++++++++++++++++++++++++++
+ rust/kernel/lib.rs                |   2 +
+ rust/kernel/str.rs                |   4 +-
+ rust/kernel/sync/arc.rs           |   9 +-
+ rust/kernel/sync/lock/mutex.rs    |   1 +
+ rust/kernel/sync/lock/spinlock.rs |   1 +
+ rust/kernel/types.rs              |   6 +-
+ scripts/.gitignore                |   2 +
+ scripts/Makefile                  |   4 +
+ scripts/rustdoc_test_builder.rs   |  73 ++++++++++++++
+ scripts/rustdoc_test_gen.rs       | 162 ++++++++++++++++++++++++++++++
+ 18 files changed, 484 insertions(+), 15 deletions(-)
+ create mode 100644 rust/kernel/kunit.rs
+ create mode 100644 scripts/rustdoc_test_builder.rs
+ create mode 100644 scripts/rustdoc_test_gen.rs
+
+
+base-commit: d2e3115d717197cb2bc020dd1f06b06538474ac3
 -- 
 2.41.0
 
