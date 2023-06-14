@@ -2,54 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BF357EB64DA
-	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Jun 2023 07:42:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7894EB64DB
+	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Jun 2023 08:10:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235014AbjFNHml (ORCPT
+        id S230195AbjFNIKy (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 14 Jun 2023 03:42:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55056 "EHLO
+        Wed, 14 Jun 2023 04:10:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234847AbjFNHml (ORCPT
+        with ESMTP id S235293AbjFNIJj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 14 Jun 2023 03:42:41 -0400
+        Wed, 14 Jun 2023 04:09:39 -0400
 Received: from mail.208.org (unknown [183.242.55.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930A81BC5
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Jun 2023 00:42:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 076A5170E
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Jun 2023 01:09:38 -0700 (PDT)
 Received: from mail.208.org (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTP id 4Qgy7Z69zgzBQJYw
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Jun 2023 15:42:34 +0800 (CST)
+        by mail.208.org (Postfix) with ESMTP id 4Qgykl6VWWzBQgnx
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Jun 2023 16:09:35 +0800 (CST)
 Authentication-Results: mail.208.org (amavisd-new); dkim=pass
         reason="pass (just generated, assumed good)" header.d=208.org
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
         content-transfer-encoding:content-type:message-id:user-agent
         :references:in-reply-to:subject:to:from:date:mime-version; s=
-        dkim; t=1686728554; x=1689320555; bh=snMogAIL9y2byMbsZXqj+hiozP/
-        +XS6VEZBwL8D7BD8=; b=QCwMuqdVsxZLhCViwgbZUgy8hRFEaVoU5f6prngM7lj
-        xh2B+HTGC5E3icZpe9pcHYrn82WrJ1tZCRJGtZSoCn11TzJ/ipPmkRhM7SiTpdVM
-        Qv+Zu7eV8KP/vOOwyulFckqmtzXtLw7j5exUW/EKRv3CxWfBpVLWEMmd9v0Lr72E
-        t5KiUlLOcM9QjZ86AO1w/3jf1pN79SKgVmkMEJU/VFf5nNA1Iwhot9YOZLLNJNVj
-        01KjzIjRF3jYDx8i99yzBXy/rEYG/bB05ZA5PS0KQ+LWeDRl+jIQwU+Sy7mu9uV4
-        1rZP7f1F/+zWHkWUqdD5cCGhscrvrtoOM4M3njOn4Lg==
+        dkim; t=1686730175; x=1689322176; bh=JijrW1fwSsmefAAG9n8gwRM/0xn
+        Z2LBWhX2qj/HdfiQ=; b=J/5YZBrJTrfOf71Urz8ML/6OoHkvClOA2hkelQGJI1T
+        ok5T222ZYns389Nld9oOUY3Fn1jucn1n89bLqygeiCcgTUVawf95I9OT0eov3jLg
+        nGKOk8/BNtRf1O72GaAk9Eh8XeYEm6e2oVAQpDFkoIiwJT9+B/Vz9U+ZIBvjAcQn
+        9xtWqAhrIdvJpqDRhP6CHpzGWy+llnG8pIoIy4FF35igi8fBdo4L/sMezgbnl8N6
+        nxT2wvT+6US25KMXTSkNPVgdSR8O3oFXOQNctIpmp4YNbxWeKzPBfVwKuA4BZIKg
+        ftOrzBxc46kbn5AvsKXAkFqETOfmooeUt/GjoTRGCnA==
 X-Virus-Scanned: amavisd-new at mail.208.org
 Received: from mail.208.org ([127.0.0.1])
         by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 5I_SSF-f8Rkz for <linux-kselftest@vger.kernel.org>;
-        Wed, 14 Jun 2023 15:42:34 +0800 (CST)
+        with ESMTP id 4Jg4CIYPplLV for <linux-kselftest@vger.kernel.org>;
+        Wed, 14 Jun 2023 16:09:35 +0800 (CST)
 Received: from localhost (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTPSA id 4Qgy7Z3WNczBQJYk;
-        Wed, 14 Jun 2023 15:42:34 +0800 (CST)
+        by mail.208.org (Postfix) with ESMTPSA id 4Qgykl4NnyzBQJZ9;
+        Wed, 14 Jun 2023 16:09:35 +0800 (CST)
 MIME-Version: 1.0
-Date:   Wed, 14 Jun 2023 15:42:34 +0800
+Date:   Wed, 14 Jun 2023 16:09:35 +0800
 From:   wuyonggang001@208suo.com
-To:     andrii@kernel.org, shuah@kernel.org
-Cc:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/bpf: Fix the address is NULL
-In-Reply-To: <20230614073443.4894-1-zhanglibing@cdjrlc.com>
-References: <20230614073443.4894-1-zhanglibing@cdjrlc.com>
+To:     w@1wt.eu, shuah@kernel.org
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/nolibc: Remove unneeded variable
+In-Reply-To: <20230614080240.48197-1-zhanglibing@cdjrlc.com>
+References: <20230614080240.48197-1-zhanglibing@cdjrlc.com>
 User-Agent: Roundcube Webmail
-Message-ID: <7f34bd3ce377d9d89626c2df8fa584e0@208suo.com>
+Message-ID: <f964d3dbc6362c2cae56bdbdc05befea@208suo.com>
 X-Sender: wuyonggang001@208suo.com
 Content-Type: text/plain; charset=US-ASCII;
  format=flowed
@@ -58,28 +57,87 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Fix the following coccicheck error:
+Fix the following coccicheck warning:
 
-tools/testing/selftests/bpf/progs/test_ksyms_weak.c:53:6-20: ERROR: test 
-of a variable/field address
+tools/testing/selftests/nolibc/nolibc-test.c:646:5-8: Unneeded variable: 
+"ret". Return "0"
 
 Signed-off-by: Yonggang Wu <wuyonggang001@208suo.com>
 ---
-  tools/testing/selftests/bpf/progs/test_ksyms_weak.c | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
+  tools/testing/selftests/nolibc/nolibc-test.c | 15 ++++++---------
+  1 file changed, 6 insertions(+), 9 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/test_ksyms_weak.c 
-b/tools/testing/selftests/bpf/progs/test_ksyms_weak.c
-index d00268c91e19..768a4d6ee6f5 100644
---- a/tools/testing/selftests/bpf/progs/test_ksyms_weak.c
-+++ b/tools/testing/selftests/bpf/progs/test_ksyms_weak.c
-@@ -50,7 +50,7 @@ int pass_handler(const void *ctx)
-      /* tests non-existent symbols. */
-      out__non_existent_typed = (__u64)&bpf_link_fops2;
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c 
+b/tools/testing/selftests/nolibc/nolibc-test.c
+index 486334981e60..2b723354e085 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -546,7 +546,6 @@ int run_syscall(int min, int max)
+      int proc;
+      int test;
+      int tmp;
+-    int ret = 0;
+      void *p1, *p2;
 
--    if (&bpf_link_fops2) /* can't happen */
-+    if (&bpf_link_fops2 != NULL) /* can't happen */
-          out__non_existent_typed = 
-(__u64)bpf_per_cpu_ptr(&bpf_link_fops2, 0);
+      /* <proc> indicates whether or not /proc is mounted */
+@@ -632,18 +631,17 @@ int run_syscall(int min, int max)
+          CASE_TEST(syscall_noargs);    EXPECT_SYSEQ(1, 
+syscall(__NR_getpid), getpid()); break;
+          CASE_TEST(syscall_args);      EXPECT_SYSER(1, 
+syscall(__NR_statx, 0, NULL, 0, 0, NULL), -1, EFAULT); break;
+          case __LINE__:
+-            return ret; /* must be last */
++            return 0; /* must be last */
+          /* note: do not set any defaults so as to permit holes above */
+          }
+      }
+-    return ret;
++    return 0;
+  }
 
-      if (!bpf_ksym_exists(bpf_task_acquire))
+  int run_stdlib(int min, int max)
+  {
+      int test;
+      int tmp;
+-    int ret = 0;
+      void *p1, *p2;
+
+      for (test = min; test >= 0 && test <= max; test++) {
+@@ -726,11 +724,11 @@ int run_stdlib(int min, int max)
+  # warning "__SIZEOF_LONG__ is undefined"
+  #endif /* __SIZEOF_LONG__ */
+          case __LINE__:
+-            return ret; /* must be last */
++            return 0; /* must be last */
+          /* note: do not set any defaults so as to permit holes above */
+          }
+      }
+-    return ret;
++    return 0;
+  }
+
+  #define EXPECT_VFPRINTF(c, expected, fmt, ...)                \
+@@ -790,7 +788,6 @@ static int run_vfprintf(int min, int max)
+  {
+      int test;
+      int tmp;
+-    int ret = 0;
+      void *p1, *p2;
+
+      for (test = min; test >= 0 && test <= max; test++) {
+@@ -810,11 +807,11 @@ static int run_vfprintf(int min, int max)
+          CASE_TEST(hex);          EXPECT_VFPRINTF(1, "f", "%x", 0xf); 
+break;
+          CASE_TEST(pointer);      EXPECT_VFPRINTF(3, "0x1", "%p", (void 
+*) 0x1); break;
+          case __LINE__:
+-            return ret; /* must be last */
++            return 0; /* must be last */
+          /* note: do not set any defaults so as to permit holes above */
+          }
+      }
+-    return ret;
++    return 0;
+  }
+
+  static int smash_stack(void)
