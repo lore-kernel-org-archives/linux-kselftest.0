@@ -2,38 +2,38 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5751BEB64D8
-	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Jun 2023 18:10:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A926DEB64D9
+	for <linux-kselftest@archiver.kernel.org>; Wed, 14 Jun 2023 18:10:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240887AbjFNSKv (ORCPT
+        id S233196AbjFNSKy (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 14 Jun 2023 14:10:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38734 "EHLO
+        Wed, 14 Jun 2023 14:10:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241941AbjFNSKi (ORCPT
+        with ESMTP id S232670AbjFNSKk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 14 Jun 2023 14:10:38 -0400
+        Wed, 14 Jun 2023 14:10:40 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E9B26BE;
-        Wed, 14 Jun 2023 11:09:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 345FC2D4F;
+        Wed, 14 Jun 2023 11:09:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 93BE8643F8;
-        Wed, 14 Jun 2023 18:09:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C196C433C9;
-        Wed, 14 Jun 2023 18:09:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3491564592;
+        Wed, 14 Jun 2023 18:09:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6764C433D9;
+        Wed, 14 Jun 2023 18:09:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686766166;
-        bh=TfRlhBGxo3h+MgvwWv9kx22B1kJhHcF/Z0Gy3SwIz98=;
+        s=k20201202; t=1686766174;
+        bh=yuicnU1+K5kamMw4AKK6QIF4bp4V9ExVM3jTIfRBEOw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ORwQCmDp2rnw3G5HOz9fnVuS/GOwHPQcQFvCBFSNw9eDVvAkVQ1hMuIkmXUpt3pE2
-         8GGoIzE4tF32NriWHlgX5x3oVqabZRWwKlgT2OuXJqXqI1Zk1SKVNJEato34GLlHSa
-         r0JdF6XUfxHT0NiwzgBXbCz4uxHtkSTnTRqcYMqhukSp9PzDdYR/lmqJgeU6vfuBqo
-         JNVLwVhIL3JsXMGPqCQJilg/2BMF3Zy9Qc93/16RIgMSplZhwth4YnU4Kls+Tr/xg0
-         6KqyfPvEWmRxUh2dSypiNIeQLNRV7gJ5XtPO/dJ5BuE9oVPQjTcfDe6mJeqDdNDhAB
-         DcOEFtKNUrBPQ==
+        b=G38HL9+74I16rMOjwjJnhHjOLlUbn3uZEChcDwRfH6N6PITDqjR2o+2U4crPNMyqj
+         igjbV068IX0zfVweh8fbiZTDv+XKVNNOkyEc/kH5jnA39c4vQ+5sTrKYQxUHHBGF8b
+         fZ9HRRI0vE9qhbla4pFDDIBzLRJo4nlrjbPGGYwgObKFNSCbC4Rfzy5SsGO9PiIYF7
+         sW/h3vbDpkWLaLzts7tZIS6ouR8ovcnvyFYuh22R2lRyERDvDtEqiHvWtC1KdDNvSa
+         eEXUKCp9wOusXG4/9uyAmks3iBdFx1FB1lc1TYaDFSEAGNXH+L8a1PloQIZcyvhon9
+         yISoA5LF5C4og==
 From:   Miguel Ojeda <ojeda@kernel.org>
 To:     David Gow <davidgow@google.com>,
         Brendan Higgins <brendan.higgins@linux.dev>,
@@ -48,9 +48,9 @@ Cc:     Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
         Philip Li <philip.li@intel.com>, kunit-dev@googlegroups.com,
         linux-kselftest@vger.kernel.org, rust-for-linux@vger.kernel.org,
         linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Subject: [PATCH 1/6] rust: init: make doctests compilable/testable
-Date:   Wed, 14 Jun 2023 20:08:25 +0200
-Message-ID: <20230614180837.630180-2-ojeda@kernel.org>
+Subject: [PATCH 3/6] rust: sync: make doctests compilable/testable
+Date:   Wed, 14 Jun 2023 20:08:27 +0200
+Message-ID: <20230614180837.630180-4-ojeda@kernel.org>
 In-Reply-To: <20230614180837.630180-1-ojeda@kernel.org>
 References: <20230614180837.630180-1-ojeda@kernel.org>
 MIME-Version: 1.0
@@ -66,94 +66,95 @@ may start enforcing it.
 
 Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 ---
- rust/kernel/init.rs | 25 ++++++++++++++++---------
- 1 file changed, 16 insertions(+), 9 deletions(-)
+ rust/kernel/sync/arc.rs           | 9 +++++++--
+ rust/kernel/sync/lock/mutex.rs    | 1 +
+ rust/kernel/sync/lock/spinlock.rs | 1 +
+ 3 files changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/rust/kernel/init.rs b/rust/kernel/init.rs
-index b4332a4ec1f4..1073515ed40e 100644
---- a/rust/kernel/init.rs
-+++ b/rust/kernel/init.rs
-@@ -120,14 +120,23 @@
- //!   `slot` gets called.
- //!
- //! ```rust
--//! use kernel::{prelude::*, init};
-+//! # #![allow(unreachable_pub, clippy::disallowed_names)]
-+//! use kernel::{prelude::*, init, types::Opaque};
- //! use core::{ptr::addr_of_mut, marker::PhantomPinned, pin::Pin};
- //! # mod bindings {
-+//! #     #![allow(non_camel_case_types)]
- //! #     pub struct foo;
- //! #     pub unsafe fn init_foo(_ptr: *mut foo) {}
- //! #     pub unsafe fn destroy_foo(_ptr: *mut foo) {}
- //! #     pub unsafe fn enable_foo(_ptr: *mut foo, _flags: u32) -> i32 { 0 }
- //! # }
-+//! # trait FromErrno {
-+//! #     fn from_errno(errno: core::ffi::c_int) -> Error {
-+//! #         // Dummy error that can be constructed outside the `kernel` crate.
-+//! #         Error::from(core::fmt::Error)
-+//! #     }
-+//! # }
-+//! # impl FromErrno for Error {}
- //! /// # Invariants
- //! ///
- //! /// `foo` is always initialized
-@@ -158,7 +167,7 @@
- //!                 if err != 0 {
- //!                     // Enabling has failed, first clean up the foo and then return the error.
- //!                     bindings::destroy_foo(Opaque::raw_get(foo));
--//!                     return Err(Error::from_kernel_errno(err));
-+//!                     return Err(Error::from_errno(err));
- //!                 }
- //!
- //!                 // All fields of `RawFoo` have been initialized, since `_p` is a ZST.
-@@ -226,8 +235,7 @@
+diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
+index a89843cacaad..1ecb2efab51e 100644
+--- a/rust/kernel/sync/arc.rs
++++ b/rust/kernel/sync/arc.rs
+@@ -73,6 +73,7 @@
+ /// assert_eq!(cloned.b, 20);
  ///
- /// ```rust
- /// # #![allow(clippy::disallowed_names, clippy::new_ret_no_self)]
--/// # use kernel::{init, pin_init, stack_pin_init, init::*, sync::Mutex, new_mutex};
--/// # use macros::pin_data;
-+/// # use kernel::{init, macros::pin_data, pin_init, stack_pin_init, init::*, sync::Mutex, new_mutex};
- /// # use core::pin::Pin;
- /// #[pin_data]
- /// struct Foo {
-@@ -277,7 +285,7 @@ macro_rules! stack_pin_init {
- ///
- /// # Examples
- ///
--/// ```rust
-+/// ```rust,ignore
- /// # #![allow(clippy::disallowed_names, clippy::new_ret_no_self)]
- /// # use kernel::{init, pin_init, stack_try_pin_init, init::*, sync::Mutex, new_mutex};
- /// # use macros::pin_data;
-@@ -303,7 +311,7 @@ macro_rules! stack_pin_init {
- /// pr_info!("a: {}", &*foo.a.lock());
+ /// // The refcount drops to zero when `cloned` goes out of scope, and the memory is freed.
++/// # Ok::<(), Error>(())
  /// ```
  ///
--/// ```rust
-+/// ```rust,ignore
- /// # #![allow(clippy::disallowed_names, clippy::new_ret_no_self)]
- /// # use kernel::{init, pin_init, stack_try_pin_init, init::*, sync::Mutex, new_mutex};
- /// # use macros::pin_data;
-@@ -513,8 +521,7 @@ macro_rules! stack_try_pin_init {
- /// For instance:
+ /// Using `Arc<T>` as the type of `self`:
+@@ -98,6 +99,7 @@
+ /// let obj = Arc::try_new(Example { a: 10, b: 20 })?;
+ /// obj.use_reference();
+ /// obj.take_over();
++/// # Ok::<(), Error>(())
+ /// ```
  ///
- /// ```rust
--/// # use kernel::pin_init;
--/// # use macros::pin_data;
-+/// # use kernel::{macros::pin_data, pin_init};
- /// # use core::{ptr::addr_of_mut, marker::PhantomPinned};
- /// #[pin_data]
- /// struct Buf {
-@@ -841,7 +848,7 @@ macro_rules! init {
- /// # Examples
+ /// Coercion from `Arc<Example>` to `Arc<dyn MyTrait>`:
+@@ -121,6 +123,7 @@
  ///
- /// ```rust
--/// use kernel::{init::PinInit, error::Error, InPlaceInit};
-+/// use kernel::{init::{PinInit, zeroed}, error::Error};
- /// struct BigBuf {
- ///     big: Box<[u8; 1024 * 1024 * 1024]>,
- ///     small: [u8; 1024 * 1024],
+ /// // `coerced` has type `Arc<dyn MyTrait>`.
+ /// let coerced: Arc<dyn MyTrait> = obj;
++/// # Ok::<(), Error>(())
+ /// ```
+ pub struct Arc<T: ?Sized> {
+     ptr: NonNull<ArcInner<T>>,
+@@ -337,7 +340,7 @@ fn from(item: Pin<UniqueArc<T>>) -> Self {
+ /// # Example
+ ///
+ /// ```
+-/// use crate::sync::{Arc, ArcBorrow};
++/// use kernel::sync::{Arc, ArcBorrow};
+ ///
+ /// struct Example;
+ ///
+@@ -350,12 +353,13 @@ fn from(item: Pin<UniqueArc<T>>) -> Self {
+ ///
+ /// // Assert that both `obj` and `cloned` point to the same underlying object.
+ /// assert!(core::ptr::eq(&*obj, &*cloned));
++/// # Ok::<(), Error>(())
+ /// ```
+ ///
+ /// Using `ArcBorrow<T>` as the type of `self`:
+ ///
+ /// ```
+-/// use crate::sync::{Arc, ArcBorrow};
++/// use kernel::sync::{Arc, ArcBorrow};
+ ///
+ /// struct Example {
+ ///     a: u32,
+@@ -370,6 +374,7 @@ fn from(item: Pin<UniqueArc<T>>) -> Self {
+ ///
+ /// let obj = Arc::try_new(Example { a: 10, b: 20 })?;
+ /// obj.as_arc_borrow().use_reference();
++/// # Ok::<(), Error>(())
+ /// ```
+ pub struct ArcBorrow<'a, T: ?Sized + 'a> {
+     inner: NonNull<ArcInner<T>>,
+diff --git a/rust/kernel/sync/lock/mutex.rs b/rust/kernel/sync/lock/mutex.rs
+index 923472f04af4..09276fedc091 100644
+--- a/rust/kernel/sync/lock/mutex.rs
++++ b/rust/kernel/sync/lock/mutex.rs
+@@ -63,6 +63,7 @@ macro_rules! new_mutex {
+ /// assert_eq!(e.c, 10);
+ /// assert_eq!(e.d.lock().a, 20);
+ /// assert_eq!(e.d.lock().b, 30);
++/// # Ok::<(), Error>(())
+ /// ```
+ ///
+ /// The following example shows how to use interior mutability to modify the contents of a struct
+diff --git a/rust/kernel/sync/lock/spinlock.rs b/rust/kernel/sync/lock/spinlock.rs
+index 979b56464a4e..91eb2c9e9123 100644
+--- a/rust/kernel/sync/lock/spinlock.rs
++++ b/rust/kernel/sync/lock/spinlock.rs
+@@ -61,6 +61,7 @@ macro_rules! new_spinlock {
+ /// assert_eq!(e.c, 10);
+ /// assert_eq!(e.d.lock().a, 20);
+ /// assert_eq!(e.d.lock().b, 30);
++/// # Ok::<(), Error>(())
+ /// ```
+ ///
+ /// The following example shows how to use interior mutability to modify the contents of a struct
 -- 
 2.41.0
 
