@@ -2,73 +2,106 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CBE0AEB64D9
-	for <linux-kselftest@archiver.kernel.org>; Thu, 15 Jun 2023 03:51:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EB4EEB64D9
+	for <linux-kselftest@archiver.kernel.org>; Thu, 15 Jun 2023 03:52:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237218AbjFODvv (ORCPT
+        id S238152AbjFODwU (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 14 Jun 2023 23:51:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52446 "EHLO
+        Wed, 14 Jun 2023 23:52:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjFODvv (ORCPT
+        with ESMTP id S238184AbjFODwK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 14 Jun 2023 23:51:51 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4FBC211D;
-        Wed, 14 Jun 2023 20:51:49 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QhSyr4qs2z4wg8;
-        Thu, 15 Jun 2023 13:51:48 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1686801108;
-        bh=qGB4VmQpo0NG0SfVSZwSKZzT6dQGTcK0z6GE9CVlpHA=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=HUlBhzLnwGOuqz/Gh6n755jLbrwG/vJLsKNom07Ay3VJKFafsiXQmdJP4QkcVegHr
-         TPv9WrgY+KwvsvgUvtxwnhgO/VZi7zvhdy58EOjeaGYvpTNcMTYYgV0MmUAN7AANof
-         1hctcrLuo+FGcbqOhit+YywrNyXaTmrcXdbJlvNSgq39wX6+NpQe7vCIde0/9bqX/G
-         /UydAteXIqvdHKE6b06jzhM3tCknRcuFOhJZTfaOnWIO9DmW/rm5l8ZAvrVxBMOlYD
-         1YDO13QIF2j40mcPE3N+W2GlB8OxiovoCsRFsOztf1kT5H3Jxw6enTW1xKaoF7XNab
-         70yM750BR17SQ==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     wuyonggang001@208suo.com, shuah@kernel.org
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/powerpc: Remove unneeded variable
-In-Reply-To: <553bb6053c7b7bee60eda3ca90470ac3@208suo.com>
-References: <20230614070926.36395-1-zhanglibing@cdjrlc.com>
- <553bb6053c7b7bee60eda3ca90470ac3@208suo.com>
-Date:   Thu, 15 Jun 2023 13:51:48 +1000
-Message-ID: <87a5x1fkmj.fsf@mail.lhotse>
+        Wed, 14 Jun 2023 23:52:10 -0400
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F0B26B6;
+        Wed, 14 Jun 2023 20:52:06 -0700 (PDT)
+Received: by mail-ot1-x32a.google.com with SMTP id 46e09a7af769-6b2afc1ec49so277226a34.0;
+        Wed, 14 Jun 2023 20:52:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686801125; x=1689393125;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XvOg6IfbDqELoJ+xhmzfRwP+bYiifV5+pLJQKyD2w2k=;
+        b=mc/lDSJlyiOvuCU0/kkMoWp3+Qa3gQ1ViKUT8uc95AOn+AXSA5VSlE9WJ1HQsI7IRr
+         KsmRtH32ZHgQ4Hlv1g/oF8L2iDIIx7orxQ5HMr3hX7c/wVvv3Zb3KLCqtLi/xaYUs1Jc
+         h5iBQaoFu/IzLJ8Xyuu7R16T4cTqd4AapakxQRGDTODajej2QnBCVWmUigc+nMjqpqL5
+         nwj/W2K5CfTbZd+1mQUX42cy4tjkMzMnBj6Cc1eUPQM1hxf6QaKXCHH3b7yEUPBFf1gl
+         3kLL4Si6UgrroKc/LniXIXnP9lNLVwR4AMPQf+W2WQ9GcKfzDJzxy60Z8VNK9EctvHwd
+         6RtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686801125; x=1689393125;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XvOg6IfbDqELoJ+xhmzfRwP+bYiifV5+pLJQKyD2w2k=;
+        b=f7zqEWt64ExCeHTzMrjG2ikhkRDLCnZPp1I0h3K1UktbbhUBQ/A2NPhnFUlQFbf+01
+         zJkerYjngltq01yK3vz+wClzhi78CKsTOGxIZkLCyuw2jb5XEPptXxozjb/hBfIjuJ8J
+         aT9Dd+tZi/2J6Ry5znaBOhiwG1/Hzr7qOKqIpwpRAyO0BGjT0M50e1VeLNpffVTu0uYI
+         NOdEin3z5pHKOokHAzYZ6tCfwSBHjLcK0ziI+EccVkhwawPPHl/DjhEw/pNi2rBnAmGr
+         PAA/xedwhDwe1y4a0kpWYyjjUzclB+36iKirZShQ/C4S9CUAPrdPKRnmAgWuvqVQKArB
+         +3ZA==
+X-Gm-Message-State: AC+VfDxe6APS9kCVkdyJNBmysoohtwthIG5saTDpEvu63/8YFBD8qbpG
+        y2A7d//6AmNjEIcbi3+J9SY=
+X-Google-Smtp-Source: ACHHUZ65QNp1nT4Po7nJM3CDNMKAiSKyD8qHADr54qw8cYq2P0sGXMiG2Eur0+P3JLDKa0U6gGnshw==
+X-Received: by 2002:a05:6830:6112:b0:6b4:293e:b99a with SMTP id ca18-20020a056830611200b006b4293eb99amr2953804otb.9.1686801125584;
+        Wed, 14 Jun 2023 20:52:05 -0700 (PDT)
+Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
+        by smtp.gmail.com with ESMTPSA id c8-20020a9d4808000000b006b296562566sm6338554otf.79.2023.06.14.20.52.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Jun 2023 20:52:05 -0700 (PDT)
+Message-ID: <2b4b23ce-316e-b998-7faf-e529b121a8b4@gmail.com>
+Date:   Wed, 14 Jun 2023 22:03:33 -0300
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 1/6] rust: init: make doctests compilable/testable
+Content-Language: en-US
+To:     Miguel Ojeda <ojeda@kernel.org>, David Gow <davidgow@google.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>
+Cc:     Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        Alice Ryhl <aliceryhl@google.com>,
+        Andreas Hindborg <nmi@metaspace.dk>,
+        Philip Li <philip.li@intel.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, rust-for-linux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev
+References: <20230614180837.630180-1-ojeda@kernel.org>
+ <20230614180837.630180-2-ojeda@kernel.org>
+From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+In-Reply-To: <20230614180837.630180-2-ojeda@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-wuyonggang001@208suo.com writes:
-> Fix the following coccicheck warning:
->
-> tools/testing/selftests/powerpc/alignment/alignment_handler.c:558:5-7: 
-> Unneeded variable: "rc". Return "0"
+On 6/14/23 15:08, Miguel Ojeda wrote:
+> Rust documentation tests are going to be build/run-tested
+> with the KUnit integration added in a future patch, thus
+> update them to make them compilable/testable so that we
+> may start enforcing it.
+> 
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> ---
+> [...]
+>   //! #     pub unsafe fn destroy_foo(_ptr: *mut foo) {}
+>   //! #     pub unsafe fn enable_foo(_ptr: *mut foo, _flags: u32) -> i32 { 0 }
+>   //! # }
+> +//! # trait FromErrno {
+> +//! #     fn from_errno(errno: core::ffi::c_int) -> Error {
+> +//! #         // Dummy error that can be constructed outside the `kernel` crate.
+> +//! #         Error::from(core::fmt::Error)
+> +//! #     }
+> +//! # }
+> +//! # impl FromErrno for Error {}
+>   //! /// # Invariants
+>   //! ///
+>   //! /// `foo` is always initialized
+> [...]
 
-The check is wrong.
-
-> diff --git 
-> a/tools/testing/selftests/powerpc/alignment/alignment_handler.c 
-> b/tools/testing/selftests/powerpc/alignment/alignment_handler.c
-> index 33ee34fc0828..4980656c3f70 100644
-> --- a/tools/testing/selftests/powerpc/alignment/alignment_handler.c
-> +++ b/tools/testing/selftests/powerpc/alignment/alignment_handler.c
-> @@ -332,7 +332,7 @@ int test_alignment_handler_vsx_206(void)
->       STORE_VSX_XFORM_TEST(stxvd2x);
->       STORE_VSX_XFORM_TEST(stxvw4x);
->       STORE_VSX_XFORM_TEST(stxsdx);
-> -    return rc;
-> +    return 0;
-
-rc is used in the macros.
-
-cheers
+Little question, what's the purpose of `FromErrno` here?
