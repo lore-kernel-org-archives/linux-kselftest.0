@@ -2,65 +2,65 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C3A9EB64DD
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6C28C001DE
 	for <linux-kselftest@archiver.kernel.org>; Fri, 16 Jun 2023 09:01:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343889AbjFPJAm (ORCPT
+        id S1343926AbjFPJAo (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 16 Jun 2023 05:00:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52102 "EHLO
+        Fri, 16 Jun 2023 05:00:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343614AbjFPI7i (ORCPT
+        with ESMTP id S1343983AbjFPI7v (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 16 Jun 2023 04:59:38 -0400
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E08D1BC3
-        for <linux-kselftest@vger.kernel.org>; Fri, 16 Jun 2023 01:59:37 -0700 (PDT)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20230616085935euoutp021ed06f15341cf5101272647166a51f63~pGAwpQJY42873228732euoutp02W
-        for <linux-kselftest@vger.kernel.org>; Fri, 16 Jun 2023 08:59:35 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20230616085935euoutp021ed06f15341cf5101272647166a51f63~pGAwpQJY42873228732euoutp02W
+        Fri, 16 Jun 2023 04:59:51 -0400
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4784330FC
+        for <linux-kselftest@vger.kernel.org>; Fri, 16 Jun 2023 01:59:43 -0700 (PDT)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20230616085942euoutp0196c03f90486852a7653cfe45473a1778~pGA2Xk5eZ0287502875euoutp016
+        for <linux-kselftest@vger.kernel.org>; Fri, 16 Jun 2023 08:59:42 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20230616085942euoutp0196c03f90486852a7653cfe45473a1778~pGA2Xk5eZ0287502875euoutp016
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1686905975;
-        bh=f1HjrLD6njVVPjduaddJfi5+Ds9joRkOIy3esLq1bnY=;
+        s=mail20170921; t=1686905982;
+        bh=k6w26tA5MuuVW167a8RaVYBvH9le+QbGGVR79rArU/4=;
         h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=KoXZXarVSr/tD/cq7Yr116Qpv0UTVbKgzPKO47hFfs5Ou7v5oY2VR2r1o77XmxHl+
-         l996+etLl/hWWokJ0qKPX5rdIbEX+hVlBb1QRWaSSoX44e6vyYrFrj1ck2pNDbNbFZ
-         Beje4hzUUapjgY0PMNBPSVe7UTXhO14VGhqp6p/c=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20230616085935eucas1p1171b73897e1cd825a5d5ab373ed4c9c9~pGAwaB_uZ1146911469eucas1p1m;
-        Fri, 16 Jun 2023 08:59:35 +0000 (GMT)
+        b=FctFWHJPsD3dDo/3kFxh3zjFrLgqE8tEobwKRK/rDJNSz3MUbE0MGaJ5DTVgL0xA+
+         Q7B3ynnHVixyIUSMEdvNTk9kkZu49WWQE8DiZoftcFjCsWkdw5zKLPSEjzhSyEPRu6
+         lrIdn+HJoLIAw4NnESjVEzLcUCmzDFMOt9zI/i2c=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20230616085941eucas1p21635b3c7e00f84049d5b66ea5fcd22a3~pGA2OB0bz0552005520eucas1p2y;
+        Fri, 16 Jun 2023 08:59:41 +0000 (GMT)
 Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id 6C.45.42423.7742C846; Fri, 16
-        Jun 2023 09:59:35 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20230616085935eucas1p2439375978f0ee33afd6310a9f8c5d07a~pGAwHTLq61755217552eucas1p2_;
-        Fri, 16 Jun 2023 08:59:35 +0000 (GMT)
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 51.D4.11320.D742C846; Fri, 16
+        Jun 2023 09:59:41 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20230616085941eucas1p152b54db1511bfdd1afab32621aec847e~pGA1_NAv72668626686eucas1p1U;
+        Fri, 16 Jun 2023 08:59:41 +0000 (GMT)
 Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230616085935eusmtrp1c68c5c817c528c9d8849b36ad7e6f2d5~pGAwGsbAm0890108901eusmtrp1a;
-        Fri, 16 Jun 2023 08:59:35 +0000 (GMT)
-X-AuditID: cbfec7f2-a51ff7000002a5b7-4d-648c24771e35
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230616085941eusmtrp2ea835b8ccfdbc7908ca8719bd6ab21c5~pGA19aaMh1371213712eusmtrp2y;
+        Fri, 16 Jun 2023 08:59:41 +0000 (GMT)
+X-AuditID: cbfec7f4-97dff70000022c38-5e-648c247d4969
 Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id DC.9E.14344.7742C846; Fri, 16
-        Jun 2023 09:59:35 +0100 (BST)
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id F0.AE.14344.D742C846; Fri, 16
+        Jun 2023 09:59:41 +0100 (BST)
 Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
         eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20230616085935eusmtip252b10b84713a96d7276b9661b401440f~pGAv_AsVC1986719867eusmtip25;
-        Fri, 16 Jun 2023 08:59:35 +0000 (GMT)
+        20230616085941eusmtip20ee9de30262fab02e77e310597033a2d~pGA1xagG11986719867eusmtip28;
+        Fri, 16 Jun 2023 08:59:41 +0000 (GMT)
 Received: from localhost (106.210.248.231) by CAMSVWEXC02.scsc.local
         (2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-        Fri, 16 Jun 2023 09:59:34 +0100
+        Fri, 16 Jun 2023 09:59:40 +0100
 From:   Joel Granados <j.granados@samsung.com>
 To:     <mcgrof@kernel.org>
 CC:     <linux-kselftest@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>,
         Joel Granados <j.granados@samsung.com>
-Subject: [PATCH v2 4/8] test_sysctl: Add an unregister sysctl test
-Date:   Fri, 16 Jun 2023 10:59:18 +0200
-Message-ID: <20230616085922.3066990-5-j.granados@samsung.com>
+Subject: [PATCH v2 7/8] sysctl: Remove debugging dump_stack
+Date:   Fri, 16 Jun 2023 10:59:21 +0200
+Message-ID: <20230616085922.3066990-8-j.granados@samsung.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230616085922.3066990-1-j.granados@samsung.com>
 MIME-Version: 1.0
@@ -69,145 +69,67 @@ Content-Type: text/plain
 X-Originating-IP: [106.210.248.231]
 X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
         CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrKIsWRmVeSWpSXmKPExsWy7djPc7rlKj0pBpuuqFjs2XuSxeLyrjls
-        FtPvvGezuDHhKaMDi8emVZ1sHp83yQUwRXHZpKTmZJalFunbJXBlHGpZwlhwWqRiVf9dlgbG
-        NwJdjJwcEgImEj2v7zKC2EICKxglph/N7mLkArK/MEosa7zEAuF8ZpTYvGMqO0zHz+6z7BAd
-        yxklFvdawRXd+nSCCcLZyijRvOEAE0gVm4COxPk3d5hBbBEBcYkTpzeD7WMWmMAoMesQB4gt
-        LOAkcejsMhYQm0VAVWL+ri9g9bwCthKP73ZDbZaXaLs+HayXU8BO4vGkBnaIGkGJkzOfsEDM
-        lJdo3jqbGcKWkDj44gWQzQHUqyzx6XkCxJhaiVNbboHdKSFwgEPiR9dNNoiEi8SPKXtYIWxh
-        iVfHt0DtlZE4PbmHBaJhMqPE/n8f2CGc1aBA+soEUWUt0XLlCVSHo8TNd6dZIDbzSdx4Kwhx
-        EJ/EpG3ToQ7ilehoE5rAqDILyQuzkLwwC8kLCxiZVzGKp5YW56anFhvmpZbrFSfmFpfmpesl
-        5+duYgSmjNP/jn/awTj31Ue9Q4xMHIyHGCU4mJVEeJed6EoR4k1JrKxKLcqPLyrNSS0+xCjN
-        waIkzqttezJZSCA9sSQ1OzW1ILUIJsvEwSnVwKTokj6h6puZyRH3aW/eZW452WR1+ov/1bDF
-        030OHp9QP2+l7q39P2bcPdZRvLjrzpkd/zz7+ics+KOsu3unZO6SsOzUWXtTf/2YOdX7XrmT
-        oGPcf9GmprLAXd3fZxYIFjZ+FmcT36t+eNXeFTq3vlznjzX2D4zJ739quWHz499nwmw1exdO
-        uPhMLEjwGeO9o7PdQiT0nwhfi9pz7Jx0o6hxbAq7xmnOSee2BCnPfW279uyMT/YKs6Rq+fOF
-        5S+rPRffG+2/7B5X2HL9TcqzLGdXJBnsvHXpzwGmwzXRrtmLGtqC+9c8l5d9smWhwha/H4um
-        TMo54K4oUDS5vpDraeKl4JkTPtYHhUvW8C1y3bVHiaU4I9FQi7moOBEAYYU3+ogDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprHIsWRmVeSWpSXmKPExsVy+t/xe7rlKj0pBve+CFns2XuSxeLyrjls
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrGIsWRmVeSWpSXmKPExsWy7djPc7q1Kj0pBrcWm1rs2XuSxeLyrjls
+        FtPvvGezuDHhKaMDi8emVZ1sHp83yQUwRXHZpKTmZJalFunbJXBlnJ/4kbmgh6XiwJQn7A2M
+        25m7GDk5JARMJNZN+MPYxcjFISSwglFi6vI1rBDOF0aJjysuMUM4nxkl3p24CtfSc7gPqmo5
+        o8TrOzNY4aqONS1nh3C2Mkos2byVBaSFTUBH4vybO2DtIgLiEidOb2YEsZkFJjBKzDrEAWIL
+        C1hLrL7VAxZnEVCVONJ1E8zmFbCVWLV9FhPEanmJtuvTweKcAnYSjyc1sEPUCEqcnPmEBWKm
+        vETz1tnMELaExMEXL4BsDqBeZYlPzxMgxtRKnNpyiwnkTgmBPRwSqw7MgnrNRWJ172sWCFtY
+        4tXxLewQtozE/53zoRomM0rs//eBHcJZzSixrPEr1HXWEi1XnrBDbHOUePk2GsLkk7jxVhDi
+        Hj6JSdumQ93DK9HRJjSBUWUWkg9mIflgFpIPFjAyr2IUTy0tzk1PLTbKSy3XK07MLS7NS9dL
+        zs/dxAhMGqf/Hf+yg3H5q496hxiZOBgPMUpwMCuJ8C470ZUixJuSWFmVWpQfX1Sak1p8iFGa
+        g0VJnFfb9mSykEB6YklqdmpqQWoRTJaJg1OqgcnpSdIGR98XxroR/0OXXpyrvf1pa5eMmqoq
+        59H3py93Pf8lP+V0dn14x7cHizd67WARLFuefzLjJM+CosyHP0KPNpuxHj5tpDdn5qyZ4T/2
+        L+Y9fWG/fYrvt0/11gVnGda4Fvu/eXN14W7mEuVru2U36e17ynTvRHHShNvdny86lW6u1toT
+        duZCxFfRa28Sr09dsKF6Xo7M+kalyA1R2QLyKjNfhKfcr1TKn7hLsSDKPLWV8W7WmWg3kyp1
+        W8NHod9WPdtXO/PAx0CtJMUv3wzepc+PjWVp+L/mguPbP85p9/betS/732Xb9chzw1Hz4oLa
+        +fFMtr2Nfw4rXFJxTYko3LOsqfrKii3L8pNWWdxWYinOSDTUYi4qTgQAArDPqIkDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprHIsWRmVeSWpSXmKPExsVy+t/xe7q1Kj0pBkeeKFjs2XuSxeLyrjls
         FtPvvGezuDHhKaMDi8emVZ1sHp83yQUwRenZFOWXlqQqZOQXl9gqRRtaGOkZWlroGZlY6hka
-        m8daGZkq6dvZpKTmZJalFunbJehlHGpZwlhwWqRiVf9dlgbGNwJdjJwcEgImEj+7z7J3MXJx
-        CAksZZS48LCTCSIhI7Hxy1VWCFtY4s+1LjaIoo+MEu2ft7JCOFsZJf48mQhWxSagI3H+zR1m
-        EFtEQFzixOnNjCA2s8AERolZhzhAbGEBJ4lDZ5exgNgsAqoS83d9AavnFbCVeHy3mx1im7xE
-        2/XpYL2cAnYSjyc1gMWFgGoab/ezQ9QLSpyc+YQFYr68RPPW2cwQtoTEwRcvgGwOoDnKEp+e
-        J0CMrJX4/PcZ4wRGkVlIumch6Z6FpHsBI/MqRpHU0uLc9NxiI73ixNzi0rx0veT83E2MwIja
-        duznlh2MK1991DvEyMTBeIhRgoNZSYR32YmuFCHelMTKqtSi/Pii0pzU4kOMpkBvTmSWEk3O
-        B8Z0Xkm8oZmBqaGJmaWBqaWZsZI4r2dBR6KQQHpiSWp2ampBahFMHxMHp1QDk+Nt5qjca9Z8
-        Z+dZpWZ9ucwto9dkp+6jwGTmXdBh4M4ZOXWuxhy9mLPsCwPSDziuj5sh8SmXP/Vj8oRtDyT+
-        v7V7p29y51SZ17ZNB5dVTMi/pqzxVN4wt3bVu4mbztktNZ5/f/uOYhf5vjNlSbbLJSINq1Td
-        j8TOOvC08muqcJvewrNsrlaa6gfXH3y39uT6bG6DpTt6s6XCLVd2/qj4E18tqXdlzsa9TT/3
-        Hrw78fhBBxN7yUvbeW7GVct2HFXe4L7qWqb0osfbKu9NfDiPP87t8R/BXy2ZHZkyKu4/VZed
-        sHZSkvR7Jf1s1nbR9CWurVs1I/Vu7vlblhEbeiOBia2zYtfrLNtal00rJJ8mKLEUZyQaajEX
-        FScCAI0Gvi0xAwAA
-X-CMS-MailID: 20230616085935eucas1p2439375978f0ee33afd6310a9f8c5d07a
+        m8daGZkq6dvZpKTmZJalFunbJehlnJ/4kbmgh6XiwJQn7A2M25m7GDk5JARMJHoO97F2MXJx
+        CAksZZSY+uM0O0RCRmLjl6usELawxJ9rXWwQRR8ZJfoePGaBcLYySvT8f8wGUsUmoCNx/s0d
+        sLEiAuISJ05vZgSxmQUmMErMOsQBYgsLWEusvtUDFmcRUJU40nUTzOYVsJVYtX0WE8Q2eYm2
+        69PB4pwCdhKPJzWAXSQEVNN4u58dol5Q4uTMJywQ8+UlmrfOZoawJSQOvngBZHMAzVGW+PQ8
+        AWJkrcTnv88YJzCKzELSPQtJ9ywk3QsYmVcxiqSWFuem5xYb6RUn5haX5qXrJefnbmIERtS2
+        Yz+37GBc+eqj3iFGJg7GQ4wSHMxKIrzLTnSlCPGmJFZWpRblxxeV5qQWH2I0BXpzIrOUaHI+
+        MKbzSuINzQxMDU3MLA1MLc2MlcR5PQs6EoUE0hNLUrNTUwtSi2D6mDg4pRqYxB8n7eBvSlyy
+        7Lxeb57Et5ZU5v6c6fEOy8LfPPDPlZkjeFc0Qux7HOfmr6bO1UWeU2qcOu1Pd9vwZmZGPXv0
+        91OcGYv8aZ/99/y2VVx9vvOMRNd+2Qw+macMOVIVX53kPn/hT5u7YdakVcya+t3q5+UsKzjS
+        OzYesQt+H9Lkt4JH1vXW+10XtISVPq684rV/74wWV3aTCyZ9y7NiWv8fNs0MdY6cqxMomF9g
+        PYv3fEtiMNulsKabZpkF5WvcOH3veSz9aDRP+vYTfvkVSloxNgb6l5dozNCrZ39Xd23xmuRv
+        ezxLsp6VZ2U2mu4+fDDeIOveHqYpt5ddPye0RT2ZScuqvf+Z+e279SYem5VYijMSDbWYi4oT
+        AZlX6PsxAwAA
+X-CMS-MailID: 20230616085941eucas1p152b54db1511bfdd1afab32621aec847e
 X-Msg-Generator: CA
-X-RootMTR: 20230616085935eucas1p2439375978f0ee33afd6310a9f8c5d07a
+X-RootMTR: 20230616085941eucas1p152b54db1511bfdd1afab32621aec847e
 X-EPHeader: CA
 CMS-TYPE: 201P
-X-CMS-RootMailID: 20230616085935eucas1p2439375978f0ee33afd6310a9f8c5d07a
+X-CMS-RootMailID: 20230616085941eucas1p152b54db1511bfdd1afab32621aec847e
 References: <20230616085922.3066990-1-j.granados@samsung.com>
-        <CGME20230616085935eucas1p2439375978f0ee33afd6310a9f8c5d07a@eucas1p2.samsung.com>
+        <CGME20230616085941eucas1p152b54db1511bfdd1afab32621aec847e@eucas1p1.samsung.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a test that checks that the unregistered directory is removed from
-/proc/sys/debug
+Remove unneeded dump_stack in __register_sysctl_table
 
 Signed-off-by: Joel Granados <j.granados@samsung.com>
 ---
- lib/test_sysctl.c                        | 30 ++++++++++++++++++++++++
- tools/testing/selftests/sysctl/sysctl.sh | 16 +++++++++++++
- 2 files changed, 46 insertions(+)
+ fs/proc/proc_sysctl.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/lib/test_sysctl.c b/lib/test_sysctl.c
-index 0cf7c547d61a..555244687443 100644
---- a/lib/test_sysctl.c
-+++ b/lib/test_sysctl.c
-@@ -170,12 +170,42 @@ static int test_sysctl_setup_node_tests(void)
- 	return 0;
+diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
+index 8873812d22f3..07804097f997 100644
+--- a/fs/proc/proc_sysctl.c
++++ b/fs/proc/proc_sysctl.c
+@@ -1406,7 +1406,6 @@ struct ctl_table_header *__register_sysctl_table(
+ 	spin_unlock(&sysctl_lock);
+ fail:
+ 	kfree(header);
+-	dump_stack();
+ 	return NULL;
  }
  
-+/* Used to test that unregister actually removes the directory */
-+static struct ctl_table test_table_unregister[] = {
-+	{
-+		.procname	= "unregister_error",
-+		.data		= &test_data.int_0001,
-+		.maxlen		= sizeof(int),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec_minmax,
-+	},
-+	{}
-+};
-+
-+static int test_sysctl_run_unregister_nested(void)
-+{
-+	struct ctl_table_header *unregister;
-+
-+	unregister = register_sysctl("debug/test_sysctl/unregister_error",
-+				   test_table_unregister);
-+	if (!unregister)
-+		return -ENOMEM;
-+
-+	unregister_sysctl_table(unregister);
-+	return 0;
-+}
-+
- static int __init test_sysctl_init(void)
- {
- 	int err;
- 
- 	err = test_sysctl_setup_node_tests();
-+	if (err)
-+		goto out;
- 
-+	err = test_sysctl_run_unregister_nested();
-+
-+out:
- 	return err;
- }
- module_init(test_sysctl_init);
-diff --git a/tools/testing/selftests/sysctl/sysctl.sh b/tools/testing/selftests/sysctl/sysctl.sh
-index cb8f83dfe16b..a6d79d7a36e4 100755
---- a/tools/testing/selftests/sysctl/sysctl.sh
-+++ b/tools/testing/selftests/sysctl/sysctl.sh
-@@ -31,6 +31,7 @@ ALL_TESTS="$ALL_TESTS 0005:3:1:int_0003"
- ALL_TESTS="$ALL_TESTS 0006:50:1:bitmap_0001"
- ALL_TESTS="$ALL_TESTS 0007:1:1:boot_int"
- ALL_TESTS="$ALL_TESTS 0008:1:1:match_int"
-+ALL_TESTS="$ALL_TESTS 0009:1:1:unregister_error"
- 
- function allow_user_defaults()
- {
-@@ -797,6 +798,20 @@ sysctl_test_0008()
- 	return 0
- }
- 
-+sysctl_test_0009()
-+{
-+	TARGET="${SYSCTL}/$(get_test_target 0009)"
-+	echo -n "Testing if $TARGET unregistered correctly ..."
-+	if [ -d $TARGET ]; then
-+		echo "TEST FAILED"
-+		rc=1
-+		test_rc
-+	fi
-+
-+	echo "ok"
-+	return 0
-+}
-+
- list_tests()
- {
- 	echo "Test ID list:"
-@@ -813,6 +828,7 @@ list_tests()
- 	echo "0006 x $(get_test_count 0006) - tests proc_do_large_bitmap()"
- 	echo "0007 x $(get_test_count 0007) - tests setting sysctl from kernel boot param"
- 	echo "0008 x $(get_test_count 0008) - tests sysctl macro values match"
-+	echo "0009 x $(get_test_count 0009) - tests sysct unregister"
- }
- 
- usage()
 -- 
 2.30.2
 
