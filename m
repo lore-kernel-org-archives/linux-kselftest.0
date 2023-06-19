@@ -2,201 +2,187 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 90C53EB64D9
-	for <linux-kselftest@archiver.kernel.org>; Mon, 19 Jun 2023 12:30:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B1F03EB64D9
+	for <linux-kselftest@archiver.kernel.org>; Mon, 19 Jun 2023 12:37:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230293AbjFSMaY (ORCPT
+        id S229735AbjFSMhN (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 19 Jun 2023 08:30:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51392 "EHLO
+        Mon, 19 Jun 2023 08:37:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbjFSMaY (ORCPT
+        with ESMTP id S229453AbjFSMhM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 19 Jun 2023 08:30:24 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB0D5E62;
-        Mon, 19 Jun 2023 05:30:19 -0700 (PDT)
-X-QQ-mid: bizesmtp73t1687177462tlqf4j6u
-Received: from linux-lab-host.localdomain ( [116.30.126.60])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 19 Jun 2023 20:24:21 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: VbOeDQvtdXORok8YaoXRnAMACRibjaa4Zvbrj15+WMLSwufmkG9LMAdyY8Ein
-        2OwxfOiDDC0BifHbTdxZbJH1mljpItWBnPOr5JhNTv1Ya59YgaKMc6CXWsTmjhXxKIT8Qqp
-        JjGYsjnMR5XlwjUElOlkjPwSSa135JuYzIIoYGtsDYvqSTWKooG3Fn4Bn6OZi2rO2Xse8nZ
-        P2wJLMQDrGvO+iDQiiea/Gqh2kxuXeioFKdrwfUqWdkV59oboGAlAnMVF1icF8qLtBhCyrl
-        TkNwi8bPvI+9G6E6l1biDAbQqd8j1p3c/djFR1455mi9OGMsg5xSJhywwDPUrbed0dCa6jk
-        XvdNHbwwb+m9QbRjJJXJFZqoOEc87yWDomOKuz5AD3JdDPe4pm4kEek7QVXCA==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 1937257225110562742
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        thomas@t-8ch.de
-Subject: [PATCH v5 1/5] tools/nolibc: fix up #error compile failures with -ENOSYS
-Date:   Mon, 19 Jun 2023 20:24:15 +0800
-Message-Id: <1a823ba7b250ba5190f802dfc4428d4e248f71b3.1687176996.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1687176996.git.falcon@tinylab.org>
-References: <cover.1687176996.git.falcon@tinylab.org>
+        Mon, 19 Jun 2023 08:37:12 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2089.outbound.protection.outlook.com [40.107.92.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB2C91;
+        Mon, 19 Jun 2023 05:37:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FbxfVlFhu3vvsBVR5gKDxHZ32aGBzamQ/j0EYiqb8ez6dz273KU3wI4Cwm2jDL7eLnlDztQgVTRlICS5SGaxH2dZe9lRX618E8U2M5DZg/R1VHD4J5gYuG+Q6R61MR6/WYgWLAZojJBco70SDfv3ohI9OeLYPWx/pQTr3mr9iQUHHIGhbmvAcgiG7e6NyivBg+8PFk6fWBPzzF70/pGKIOW2YTLF+AEKTdOKRt8fmGSknTB/YK7eX7RFNRuWZOqwWzd9KBFF9ykpOESBYYLB1zt4nkPUQU+6VWR5g8doF7n1IQSFiLur+vhwwBEiJXG7EKjBqPDX4N7uaflDL+wcIw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gAuyof0ipmqTj+sPabNAsJHWIfBDzCc0XRhKPt1RgOM=;
+ b=c1psmZx2VijCrxjXdyJcc9mKB2uoqCCcBTABVoDgbi1Tea7RQDUwrPAsx3Ek+pl3cZISQsB1mfgCh5bIIRll5alkzPzyIpKyKbhSM8yoygN63YCeNiwuWUV30DHAt80eiCdkm4/R41mBhj5zSreXO1kYJoy33u1ATHGJAsKIV0424e5eO5f0qPv8HlDFqCuoLjVIQxJyhZ+FaRn9KFF9nlaZ82P4RsC/+oGJgr0xOqhI7/5LY17jyog3BJZ3SHtSinWTaOmFLHmdy0Z3kD/j2czhyv2LxoVE+NBtWfcJ64iC2R63e2TAHL+AuvpZD04Jg+i/RUHbvpkSy7w9ObxTBA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gAuyof0ipmqTj+sPabNAsJHWIfBDzCc0XRhKPt1RgOM=;
+ b=Nfw74zDuE50dvYyz9CIedhBgoKNNxZwOHeyWP5DwUidxPrDFrCT0BxLAhO9H9U5zbWz0RK6ViKgM9sbK/+1t7c+CLJUuK/w8NrwdNrcD3Bmzkx8g4x/5WOCONjVnaUdAOykg3Ab5lgA5gelGORpNBgnkKi2UeMjCySykMoEzRF08hvToFTc/WtnntWJafbl0h+YlJQW+e3Pym6rPk9va1S5FqSGExCMWHf/g5b8YctStx+h8KSHuGcg66hoERu4nRyYuP6YTtTqhjiQcZJwErGjpNGY226gLykJDUHquR2/zG3YTMZCuZrq+R6+tz7Cri75of+KIuxZdWjAgpBZ7JA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by MW6PR12MB8833.namprd12.prod.outlook.com (2603:10b6:303:23f::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.32; Mon, 19 Jun
+ 2023 12:37:06 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f7a7:a561:87e9:5fab%7]) with mapi id 15.20.6500.031; Mon, 19 Jun 2023
+ 12:37:07 +0000
+Date:   Mon, 19 Jun 2023 09:37:05 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     "Liu, Yi L" <yi.l.liu@intel.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
+        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "jasowang@redhat.com" <jasowang@redhat.com>,
+        "shameerali.kolothum.thodi@huawei.com" 
+        <shameerali.kolothum.thodi@huawei.com>,
+        "lulu@redhat.com" <lulu@redhat.com>,
+        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
+Subject: Re: [PATCH v2 00/11] iommufd: Add nesting infrastructure
+Message-ID: <ZJBL8QLLBiwRsUSI@nvidia.com>
+References: <20230511143844.22693-1-yi.l.liu@intel.com>
+ <BN9PR11MB5276DAF0A11809CF8433EE338C7C9@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <ZGdiS2m8jcd5OOt5@nvidia.com>
+ <BN9PR11MB5276A74B2DA86C79908A420B8C419@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <ZH9AGWf1yRDu/86q@nvidia.com>
+ <BN9PR11MB52763C7B838B04D3200322FD8C58A@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BN9PR11MB52763C7B838B04D3200322FD8C58A@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-ClientProxiedBy: CH2PR14CA0021.namprd14.prod.outlook.com
+ (2603:10b6:610:60::31) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|MW6PR12MB8833:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7d43756f-656e-471f-d57a-08db70c1e4b6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: HGdPEQDWGcpcksziHoncG722igoPnehJI4+c13Um+EqvUrPislTwV0ymlTZnIbMLhw5WNx2DpbXZdHij8H8A42Fxwquz/unAvg4WEXClMP0jiCbtSV4i667L3axlBqK3/UmplqI/XVQoFXDBv5GIwmpKSGT2il/dmxXrfN8HNFsBrOxD1o/f3EMSbU+SIsgPz+RC9EIaxnqKEhJO82t1NhiYkLd0GqBSSHXYVTNQS/IVxqHF+COLeSYhpRJ9naZYrkX7NR7w+YOXjCYetFIyCA3atpXUVHgqv5MHMhXa0blhjKKbji6JD9gnB9A5oDU1QfNGJJoDgaV6w10hkjxZc3TYPA487v2mgCS6a9PizpQtD7UYU13VHIEp879ELvIwz8tD1fTfjPB0G+KMSCXnIZ1O+/BGoQ0CDMWuy1cPf7osD7HzORwjtW8nRaSAtvGsLLmNMFrqqplsXcS8jZBoE6TagcUu4E6OZYPG76ZQJAM1hdyXZeHMS3xoqxdiqbCso1iJNOXvksICDf5+SkUonBwRYucjbZNAWI9FINMOnC4hbz9u2ls7/ZamEYvxLkwq
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(396003)(376002)(136003)(39860400002)(451199021)(66946007)(66556008)(66476007)(6916009)(316002)(4326008)(186003)(2616005)(38100700002)(86362001)(26005)(6506007)(83380400001)(6512007)(478600001)(6486002)(36756003)(54906003)(2906002)(5660300002)(8936002)(8676002)(7416002)(41300700001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?JQVVaojLw80TopkgGkBHyAH7XPaIaTTED+A6OgjTz/TYgtQxIFDiTdfirfVv?=
+ =?us-ascii?Q?N/gF/LjM2CSxi1F7BNe/cKwpehVwU6ZgxZ9VX5iVzSGLl0NN0YbzFPKyyI8u?=
+ =?us-ascii?Q?d/6M1sGy6UJtMvZnYE3VykYqgSFd/dZWiB+rym1uLuHJU+rGrYLQIXZPXAyj?=
+ =?us-ascii?Q?Ypp5Jn7yqLUhJijepPU98CUCuyWVvkthh9fzmEE7Xsh838Uj9u8TqT3L67D8?=
+ =?us-ascii?Q?rVJkydq2ucUSovanf8OAoog1JlS+9EWtYTiCPiWeR8X66gCp3WqDad0cxPgD?=
+ =?us-ascii?Q?7H6P/lMNSK5Rgui9s0tc2jTQexPrLy0H3AMNPoN2hlWP89bnEEt6crKZvFtW?=
+ =?us-ascii?Q?vuugwdfPLg1iONth7bei0UeICIXTgszuz7exEka1KuhQb4TIMgd8o+JhYf7r?=
+ =?us-ascii?Q?HqIxYmJJyrKGJnmySdk0SsmhnilwH0jjOAs3f2kLBYpSBTrCf58/ec7Sq7Tl?=
+ =?us-ascii?Q?6iIv9N5ruzz+dN8evUD9jkRu5kqTZVhVNIAt4c3adEZEASuMthBDv2bD6FPd?=
+ =?us-ascii?Q?wiFQjEJIJiT9fYT0Us4qGmsFTTq4kmUOE/MVgw2WgpVLO/6DIgqdK9qoxNNu?=
+ =?us-ascii?Q?s37tOSz8s6126ngjnizEcNTGNP3dERr1rhOdOUrIEkFRCjU+u7EDlo3fkpGF?=
+ =?us-ascii?Q?oh1eE4+HAMbHHKFDh5y7xLBVvIkjisu4DaRPJcEiLBcp1lDDfow5Klm9k5Ru?=
+ =?us-ascii?Q?aHIQQc84degoEVcxUVoDmh/5u338S4C7EuHI9V05boiys+bsBoxHtpblx/FU?=
+ =?us-ascii?Q?03Xd8bwGxjxpL5ptSn2SbyNJ+lSIoRdOMO98St5F9ThJeiDpBjgOkaYhChGa?=
+ =?us-ascii?Q?avd/SZhPgtbibWBcBb055UewR3vT5UTCXted6Ob37TqZpMJ2SqcJuRhFTpWg?=
+ =?us-ascii?Q?T4hAs6Y3Us01CoGCQaK5ezMq1I2y5VGmCJwwVGRJXsfA+Hyg6ZEmC8F5nM5f?=
+ =?us-ascii?Q?1+NuWcP3CPMZgGn5EIRWol1UhFUIrzBy4bff0GBHGHjUX5nhee4YVAce2Jly?=
+ =?us-ascii?Q?FxWdFN6EtJPlSYv8+2l+aKYtfT0cYxSTB4UpGea8dWEmaM7jehUQ78yZxWGV?=
+ =?us-ascii?Q?BtZOVwvQLVZLRl9eJu1zjDFMHEKHebW3FSJjW0XoM8kaMATAT75qfUqeX7KN?=
+ =?us-ascii?Q?5UqPNeSED/CUFwOOPunEumNXqlktEGNbupkBg3FAoZJd7Q+y0ae73W8xJjdt?=
+ =?us-ascii?Q?WwYydYWbR5ebge8fHL3MJeE5WAdO6iRY1hTxkpJ3Mz7IOdJX9v+xDwwf6JlM?=
+ =?us-ascii?Q?E+lgGQL9tRhjEky4pFvDTwWVCSZqIalrDcnrGQBvnmiPzq2qbov2vf0iL+5U?=
+ =?us-ascii?Q?aCHzAB3I/UMC6vIO2g5++JCp7jX/C4Lm2d8eyG17rhaVVPnUUn8/p45EF+0l?=
+ =?us-ascii?Q?6prHze0rhZLJsy0di22m7CGlG8v0DlJWDJ9bD+aUwuXSjYs4Edb7Mrzg18LQ?=
+ =?us-ascii?Q?sgxglF9tXavNYMQZg/wNLzupt+lQvA8OOe4HQune5fLjuZyTxbQHCPySgb/2?=
+ =?us-ascii?Q?rd7m1XTn5psghhrDI9JmDPPH7Jkxn+paautJ0gK5qMB+v3jih9KuOc7rp3FA?=
+ =?us-ascii?Q?AmXgf7afxT9F/adCOrk=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7d43756f-656e-471f-d57a-08db70c1e4b6
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jun 2023 12:37:07.2616
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LoB2dtMKg8jljQYMvE7ro/qmlPatHE7ybzT1rhJ01XQiCJ+ZLtNr97VjoDSEz4cS
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR12MB8833
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Compiling nolibc for rv32 got such errors:
+On Fri, Jun 16, 2023 at 02:43:13AM +0000, Tian, Kevin wrote:
+> > From: Jason Gunthorpe <jgg@nvidia.com>
+> > Sent: Tuesday, June 6, 2023 10:18 PM
+> > 
+> > > > > It's not necessarily to add reserved regions to the IOAS of the parent
+> > > > > hwpt since the device doesn't access that address space after it's
+> > > > > attached to stage-1. The parent is used only for address translation
+> > > > > in the iommu side.
+> > > >
+> > > > But if we don't put them in the IOAS of the parent there is no way for
+> > > > userspace to learn what they are to forward to the VM ?
+> > >
+> > > emmm I wonder whether that is the right interface to report
+> > > per-device reserved regions.
+> > 
+> > The iommu driver needs to report different reserved regions for the S1
+> > and S2 iommu_domains, 
+> 
+> I can see the difference between RID and RID+PASID, but not sure whether
+> it's a actual requirement regarding to attached domain.
 
-    In file included from nolibc/sysroot/riscv/include/nolibc.h:99,
-                     from nolibc/sysroot/riscv/include/errno.h:26,
-                     from nolibc/sysroot/riscv/include/stdio.h:14,
-                     from tools/testing/selftests/nolibc/nolibc-test.c:12:
-    nolibc/sysroot/riscv/include/sys.h:946:2: error: #error Neither __NR_ppoll nor __NR_poll defined, cannot implement sys_poll()
-      946 | #error Neither __NR_ppoll nor __NR_poll defined, cannot implement sys_poll()
-          |  ^~~~~
-    nolibc/sysroot/riscv/include/sys.h:1062:2: error: #error None of __NR_select, __NR_pselect6, nor __NR__newselect defined, cannot implement sys_select()
-     1062 | #error None of __NR_select, __NR_pselect6, nor __NR__newselect defined, cannot implement sys_select()
+No, it isn't RID or RID+PASID here
 
-If a syscall is not supported by a target platform, 'return -ENOSYS' is
-better than '#error', which lets the other syscalls work as-is and
-allows developers to fix up the test failures reported by nolibc-test
-one by one later.
+The S2 has a different set of reserved regsions than the S1 because
+the S2's IOVA does not appear on the bus.
 
-This converts all of the '#error' to 'return -ENOSYS', so, all of the
-'#error' failures are fixed.
+So the S2's reserved regions are entirely an artifact of how the IOMMU
+HW itself works when nesting.
 
-Suggested-by: Arnd Bergmann <arnd@arndb.de>
-Link: https://lore.kernel.org/linux-riscv/5e7d2adf-e96f-41ca-a4c6-5c87a25d4c9c@app.fastmail.com/
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/include/nolibc/sys.h | 26 +++++++++++++-------------
- 1 file changed, 13 insertions(+), 13 deletions(-)
+We can probably get by with some documented slightly messy rules that
+the reserved_regions only applies to directly RID attached domains. S2
+and PASID attachments always have no reserved spaces.
 
-diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-index 856249a11890..78c86f124335 100644
---- a/tools/include/nolibc/sys.h
-+++ b/tools/include/nolibc/sys.h
-@@ -124,7 +124,7 @@ int sys_chmod(const char *path, mode_t mode)
- #elif defined(__NR_chmod)
- 	return my_syscall2(__NR_chmod, path, mode);
- #else
--#error Neither __NR_fchmodat nor __NR_chmod defined, cannot implement sys_chmod()
-+	return -ENOSYS;
- #endif
- }
- 
-@@ -153,7 +153,7 @@ int sys_chown(const char *path, uid_t owner, gid_t group)
- #elif defined(__NR_chown)
- 	return my_syscall3(__NR_chown, path, owner, group);
- #else
--#error Neither __NR_fchownat nor __NR_chown defined, cannot implement sys_chown()
-+	return -ENOSYS;
- #endif
- }
- 
-@@ -251,7 +251,7 @@ int sys_dup2(int old, int new)
- #elif defined(__NR_dup2)
- 	return my_syscall2(__NR_dup2, old, new);
- #else
--#error Neither __NR_dup3 nor __NR_dup2 defined, cannot implement sys_dup2()
-+	return -ENOSYS;
- #endif
- }
- 
-@@ -351,7 +351,7 @@ pid_t sys_fork(void)
- #elif defined(__NR_fork)
- 	return my_syscall0(__NR_fork);
- #else
--#error Neither __NR_clone nor __NR_fork defined, cannot implement sys_fork()
-+	return -ENOSYS;
- #endif
- }
- #endif
-@@ -648,7 +648,7 @@ int sys_link(const char *old, const char *new)
- #elif defined(__NR_link)
- 	return my_syscall2(__NR_link, old, new);
- #else
--#error Neither __NR_linkat nor __NR_link defined, cannot implement sys_link()
-+	return -ENOSYS;
- #endif
- }
- 
-@@ -700,7 +700,7 @@ int sys_mkdir(const char *path, mode_t mode)
- #elif defined(__NR_mkdir)
- 	return my_syscall2(__NR_mkdir, path, mode);
- #else
--#error Neither __NR_mkdirat nor __NR_mkdir defined, cannot implement sys_mkdir()
-+	return -ENOSYS;
- #endif
- }
- 
-@@ -729,7 +729,7 @@ long sys_mknod(const char *path, mode_t mode, dev_t dev)
- #elif defined(__NR_mknod)
- 	return my_syscall3(__NR_mknod, path, mode, dev);
- #else
--#error Neither __NR_mknodat nor __NR_mknod defined, cannot implement sys_mknod()
-+	return -ENOSYS;
- #endif
- }
- 
-@@ -848,7 +848,7 @@ int sys_open(const char *path, int flags, mode_t mode)
- #elif defined(__NR_open)
- 	return my_syscall3(__NR_open, path, flags, mode);
- #else
--#error Neither __NR_openat nor __NR_open defined, cannot implement sys_open()
-+	return -ENOSYS;
- #endif
- }
- 
-@@ -943,7 +943,7 @@ int sys_poll(struct pollfd *fds, int nfds, int timeout)
- #elif defined(__NR_poll)
- 	return my_syscall3(__NR_poll, fds, nfds, timeout);
- #else
--#error Neither __NR_ppoll nor __NR_poll defined, cannot implement sys_poll()
-+	return -ENOSYS;
- #endif
- }
- 
-@@ -1059,7 +1059,7 @@ int sys_select(int nfds, fd_set *rfds, fd_set *wfds, fd_set *efds, struct timeva
- #endif
- 	return my_syscall5(__NR__newselect, nfds, rfds, wfds, efds, timeout);
- #else
--#error None of __NR_select, __NR_pselect6, nor __NR__newselect defined, cannot implement sys_select()
-+	return -ENOSYS;
- #endif
- }
- 
-@@ -1196,7 +1196,7 @@ int sys_stat(const char *path, struct stat *buf)
- #elif defined(__NR_stat)
- 	ret = my_syscall2(__NR_stat, path, &stat);
- #else
--#error Neither __NR_newfstatat nor __NR_stat defined, cannot implement sys_stat()
-+	return -ENOSYS;
- #endif
- 	buf->st_dev          = stat.st_dev;
- 	buf->st_ino          = stat.st_ino;
-@@ -1243,7 +1243,7 @@ int sys_symlink(const char *old, const char *new)
- #elif defined(__NR_symlink)
- 	return my_syscall2(__NR_symlink, old, new);
- #else
--#error Neither __NR_symlinkat nor __NR_symlink defined, cannot implement sys_symlink()
-+	return -ENOSYS;
- #endif
- }
- 
-@@ -1312,7 +1312,7 @@ int sys_unlink(const char *path)
- #elif defined(__NR_unlink)
- 	return my_syscall1(__NR_unlink, path);
- #else
--#error Neither __NR_unlinkat nor __NR_unlink defined, cannot implement sys_unlink()
-+	return -ENOSYS;
- #endif
- }
- 
--- 
-2.25.1
+> When talking about RID-based nesting alone, ARM needs to add reserved
+> regions to the parent IOAS as identity is a valid S1 mode in nesting.
 
+No, definately not. The S2 has no reserved regions because it is an
+internal IOVA, and we should not abuse that.
+
+Reflecting the requirements for an identity map is something all iommu
+HW needs to handle, we should figure out how to do that properly.
+
+> But for Intel RID nesting excludes identity (which becomes a direct
+> attach to S2) so the reserved regions apply to S1 instead of the parent IOAS.
+
+IIRC all the HW models will assign their S2's as a RID attached "S1"
+during boot time to emulate "no translation"?
+
+They all need to learn what the allowed identiy mapping is so that the
+VMM can construct a compatible guest address space, independently of
+any IOAS restrictions.
+
+Jason
