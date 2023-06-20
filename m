@@ -2,191 +2,233 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26CFAEB64D8
-	for <linux-kselftest@archiver.kernel.org>; Tue, 20 Jun 2023 09:07:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55198EB64D7
+	for <linux-kselftest@archiver.kernel.org>; Tue, 20 Jun 2023 10:04:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231282AbjFTJHs (ORCPT
+        id S230399AbjFTKE0 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 20 Jun 2023 05:07:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33032 "EHLO
+        Tue, 20 Jun 2023 06:04:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231179AbjFTJHr (ORCPT
+        with ESMTP id S231727AbjFTKEN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 20 Jun 2023 05:07:47 -0400
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68588B9;
-        Tue, 20 Jun 2023 02:07:44 -0700 (PDT)
-Received: by mail-lf1-x144.google.com with SMTP id 2adb3069b0e04-4f955def3a5so59551e87.0;
-        Tue, 20 Jun 2023 02:07:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687252062; x=1689844062;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kGS7NeM6a0TRa9MgngivWkVQd9RoCsbI/u1bjUhzsAY=;
-        b=Z3A5SgoMsZZI/IOZKA0EJeuqa+VEjhwotQ6RMv+8YdadbUAbhwEbX+cslIcrrfurEe
-         84NkEhfl3GT7GYhMBK4iAMwWuOvJWB6vAr8F/7kKzcFLKIxY0gFdYs8I/JTthK2UlMik
-         VTxrLLOPTBwfa4VNSCsLeTDHN0qRaetCLgB/hN+kjb6rYJSNK9ill+xSeqhhCxYWGiax
-         zK8iU553FUZ0bsTMFmFwzf/Xx+YppsR7Ft8Qls+O5e/r7TLlMcWGgkNPC/xVVRqWoVi6
-         EEU21cIwjJi2reiJ/9xM0iuJV04NxmInvnNGxORDoMCz8X7/57sK6dCww1+IV59eCwVg
-         uiYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687252062; x=1689844062;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kGS7NeM6a0TRa9MgngivWkVQd9RoCsbI/u1bjUhzsAY=;
-        b=Wuyh656WFr3ZxERwG56Plxp7D2B0B9bGlatRiLR3SmIcF66gJFMyYsk3LIUG2LLTsu
-         SiSVu/FOpK814OXaSjjfBxVdBYz4vWTawzuBXAxiWlpvevHP0FrQTvki6ZWJQhQoOCrQ
-         QrIZBvo2DGCXsLpBQltT3asOmm21KFz3WGjyjUYVk3Uory0Suqg4LhfkLYQu8pqzxwjt
-         OUn2ujTCrHP57KbV4e+/Abm4c6GFfPlv47jAWngvroJZU7mo74NPvYiRcz0o41bakRrY
-         vHZBfZQzV1MHnT6QAxllslL0691sQvsv3LFGwZ4Zd1mOYOo90tS8hPEvAUtOVA8+d4Tv
-         stAQ==
-X-Gm-Message-State: AC+VfDz6Bj4FOXqjYWCn2IxMVaWXsEuFliyeSKmwxUklAXmK0lBo7iHK
-        A6+8UaHKrcyIx/lADVx/zR23EO7Ut8bemZw3LA==
-X-Google-Smtp-Source: ACHHUZ5vfpktClWHjrxt+djdq7PbNWMenSFwb/G6DRupMMWPlnOXD6+NIv1/HNuBKBIZzb9xYHQfHVYTcKailZ9Bbb8=
-X-Received: by 2002:a19:7719:0:b0:4f3:ac64:84f5 with SMTP id
- s25-20020a197719000000b004f3ac6484f5mr5962706lfc.36.1687252061967; Tue, 20
- Jun 2023 02:07:41 -0700 (PDT)
+        Tue, 20 Jun 2023 06:04:13 -0400
+X-Greylist: delayed 94 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 20 Jun 2023 03:03:58 PDT
+Received: from forward205a.mail.yandex.net (forward205a.mail.yandex.net [178.154.239.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D1FE6E;
+        Tue, 20 Jun 2023 03:03:57 -0700 (PDT)
+Received: from forward100a.mail.yandex.net (forward100a.mail.yandex.net [IPv6:2a02:6b8:c0e:500:1:45:d181:d100])
+        by forward205a.mail.yandex.net (Yandex) with ESMTP id 05FC24827D;
+        Tue, 20 Jun 2023 12:56:10 +0300 (MSK)
+Received: from mail-nwsmtp-smtp-production-main-51.vla.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-51.vla.yp-c.yandex.net [IPv6:2a02:6b8:c1f:5e51:0:640:23ee:0])
+        by forward100a.mail.yandex.net (Yandex) with ESMTP id 3E21D46CF8;
+        Tue, 20 Jun 2023 12:56:04 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-51.vla.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id Utd7jIuDca60-C477uvSM;
+        Tue, 20 Jun 2023 12:56:03 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1687254963;
+        bh=rkYmDxtuWXPP1hMHDuX5+P8sJGSUmlxPNxtIqEwkg3w=;
+        h=Message-Id:Date:In-Reply-To:Cc:Subject:References:To:From;
+        b=D/AGAc49Aj7GVb2SA46LvULaSvzlzykalpkesue6nUPQqWCRkQN6tnUrX3lsRuDy3
+         9HK0v9FvtHGZgqQ6sFh8WAVDBSC+1DCD6txEzvKlunEn2TussWRBtHZyLYHoR/1+Tl
+         ed8JMVYBBW8Q2lGCZM5oeZMtzS2ZewHNpI3jhhRY=
+Authentication-Results: mail-nwsmtp-smtp-production-main-51.vla.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
+From:   Stas Sergeev <stsp2@yandex.ru>
+To:     linux-kernel@vger.kernel.org
+Cc:     Stas Sergeev <stsp2@yandex.ru>, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org, Jeff Layton <jlayton@kernel.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org
+Subject: [PATCH 3/3] selftests: add OFD lock tests
+Date:   Tue, 20 Jun 2023 14:55:07 +0500
+Message-Id: <20230620095507.2677463-4-stsp2@yandex.ru>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230620095507.2677463-1-stsp2@yandex.ru>
+References: <20230620095507.2677463-1-stsp2@yandex.ru>
 MIME-Version: 1.0
-References: <20230609030302.1278716-1-sunliming@kylinos.cn>
- <20230609030302.1278716-2-sunliming@kylinos.cn> <20230616160845.GA88@W11-BEAU-MD.localdomain>
- <CAJncD7Sfasoe4-hKZP4c3bPZ892S2Kk5JaMo-aca6eBDwLjLNQ@mail.gmail.com> <20230619184044.GA88@W11-BEAU-MD.localdomain>
-In-Reply-To: <20230619184044.GA88@W11-BEAU-MD.localdomain>
-From:   sunliming <kelulanainsley@gmail.com>
-Date:   Tue, 20 Jun 2023 17:07:30 +0800
-Message-ID: <CAJncD7SSAcHpSA5tVHCahg=m6dFb0EzERardWk6diUa52npq7g@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] tracing/user_events: Fix incorrect return value
- for writing operation when events are disabled
-To:     Beau Belgrave <beaub@linux.microsoft.com>
-Cc:     mhiramat@kernel.org, rostedt@goodmis.org, shuah@kernel.org,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Beau Belgrave <beaub@linux.microsoft.com> =E4=BA=8E2023=E5=B9=B46=E6=9C=882=
-0=E6=97=A5=E5=91=A8=E4=BA=8C 02:40=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Mon, Jun 19, 2023 at 04:51:56PM +0800, sunliming wrote:
-> > Beau Belgrave <beaub@linux.microsoft.com> =E4=BA=8E2023=E5=B9=B46=E6=9C=
-=8817=E6=97=A5=E5=91=A8=E5=85=AD 00:08=E5=86=99=E9=81=93=EF=BC=9A
-> > >
-> > > On Fri, Jun 09, 2023 at 11:03:00AM +0800, sunliming wrote:
-> > > > The writing operation return the count of writes whether events are
-> > > > enabled or disabled. This is incorrect when events are disabled. Fi=
-x
-> > > > this by just return -ENOENT when events are disabled.
-> > > >
-> > >
-> > > When testing this patch locally I found that we would occasionally ge=
-t
-> > > -ENOENT when events were enabled, but then become disabled, since wri=
-tes
-> > > do not have any locking around the tracepoint checks for performance
-> > > reasons.
-> > >
-> > > I've asked a few peers of mine their thoughts on this, whether an err=
-or
-> > > should result when there are no enabled events. The consensus I've he=
-ard
-> > > back is that they would not consider this case an actual error, just =
-as
-> > > writing to /dev/null does not actually return an error.
-> > >
-> > > However, if you feel strongly we need this and have a good use case, =
-it
-> > > seems better to enable this logic behind a flag instead of having it
-> > > default based on my conversations with others.
-> > >
-> > > Thanks,
-> > > -Beau
-> >
-> >
-> >
-> > There is indeed a problem. Once enabled, perform the write operation
-> > immediately.
-> >
->
-> The immediate write does work, and gets put into a buffer. The ftrace
-> and perf self tests do the above case. So, no worries at this point.
->
-> > Now=EF=BC=8Cwhen the event is disabled, the trace record appears to be =
-lost.
->
-> I'm taking this to mean, if in between the time of the bit check and the
-> actual write() /writev() syscall the event becomes disabled, the event
-> won't write to the buffer. Yes, that is expected.
->
-Yes , got it, thank you for your explanation.
+Test the basic locking stuff on 2 fds: multiple read locks,
+conflicts between read and write locks, use of len==0 for queries.
+Also test for pid and F_UNLCK F_OFD_GETLK extensions.
 
-> > In some situations
-> > where data timing is sensitive, it may cause confusion. In this case,
-> > not returning an
-> > error (as mentioned in your reply, it is not considered this case an
-> > actual error) and
-> > returning 0 ( meaning that the number of data to be written is 0) may
-> > be a good way
-> > to handle it?
->
-> This is where I get a little lost. What would a user process do with a
-> return of 0 bytes? It shouldn't retry, since it just hit that small
-> timing window. In reality, it just incurred a temporary excessive
-> syscall cost, but no real data loss (the operator/admin turned the event
-> off).
->
-> I'm missing why you feel it's important the user process know such a
-> window was hit?
->
-> Can you help me understand that?
->
-I haven't encountered a specific scenario that it's important the user proc=
-ess
-know such a window was hit. This may be a mistake in my understanding.
-When someone uses user events checking the output of an event to confirm
-the execution status of a program, it may cause confusion if someone else
-prohibits the event. This shouldn't be a serious issue, this patch just mak=
-es
-things look better.
+Signed-off-by: Stas Sergeev <stsp2@yandex.ru>
 
-Thanks,
--Sunliming
+CC: Shuah Khan <shuah@kernel.org>
+CC: linux-kernel@vger.kernel.org
+CC: linux-kselftest@vger.kernel.org
+CC: Jeff Layton <jlayton@kernel.org>
+CC: Chuck Lever <chuck.lever@oracle.com>
+CC: Alexander Viro <viro@zeniv.linux.org.uk>
+CC: Christian Brauner <brauner@kernel.org>
+CC: linux-fsdevel@vger.kernel.org
 
-> I do think returning 0 bytes is better than an error here, but I'd
-> really like to know why the user process wants to know at all. Maybe
-> they have user-space only logging and want to be able to mark there if
-> it's in both spots (kernel and user buffers)?
->
-> Thanks,
-> -Beau
->
-> > Thanks,
-> > -Sunliming
-> >
-> > >
-> > > > Signed-off-by: sunliming <sunliming@kylinos.cn>
-> > > > ---
-> > > >  kernel/trace/trace_events_user.c | 3 ++-
-> > > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_=
-events_user.c
-> > > > index 1ac5ba5685ed..92204bbe79da 100644
-> > > > --- a/kernel/trace/trace_events_user.c
-> > > > +++ b/kernel/trace/trace_events_user.c
-> > > > @@ -1957,7 +1957,8 @@ static ssize_t user_events_write_core(struct =
-file *file, struct iov_iter *i)
-> > > >
-> > > >               if (unlikely(faulted))
-> > > >                       return -EFAULT;
-> > > > -     }
-> > > > +     } else
-> > > > +             return -ENOENT;
-> > > >
-> > > >       return ret;
-> > > >  }
-> > > > --
-> > > > 2.25.1
+---
+ tools/testing/selftests/locking/Makefile   |   2 +
+ tools/testing/selftests/locking/ofdlocks.c | 138 +++++++++++++++++++++
+ 2 files changed, 140 insertions(+)
+ create mode 100644 tools/testing/selftests/locking/ofdlocks.c
+
+diff --git a/tools/testing/selftests/locking/Makefile b/tools/testing/selftests/locking/Makefile
+index 6e7761ab3536..a83ced1626de 100644
+--- a/tools/testing/selftests/locking/Makefile
++++ b/tools/testing/selftests/locking/Makefile
+@@ -7,4 +7,6 @@ all:
+ 
+ TEST_PROGS := ww_mutex.sh
+ 
++TEST_GEN_PROGS := ofdlocks
++
+ include ../lib.mk
+diff --git a/tools/testing/selftests/locking/ofdlocks.c b/tools/testing/selftests/locking/ofdlocks.c
+new file mode 100644
+index 000000000000..1cff350e2c81
+--- /dev/null
++++ b/tools/testing/selftests/locking/ofdlocks.c
+@@ -0,0 +1,138 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#define _GNU_SOURCE
++#include <fcntl.h>
++#include <assert.h>
++#include <stdio.h>
++#include <unistd.h>
++#include <string.h>
++#include "../kselftest.h"
++
++static int lock_set(int fd, struct flock *fl)
++{
++	int ret;
++
++	fl->l_pid = 0;		// needed for OFD locks
++	fl->l_whence = SEEK_SET;
++	ret = fcntl(fd, F_OFD_SETLK, fl);
++	if (ret)
++		perror("fcntl()");
++	return ret;
++}
++
++static int lock_get(int fd, struct flock *fl)
++{
++	int ret;
++
++	fl->l_pid = 0;		// needed for OFD locks
++	fl->l_whence = SEEK_SET;
++	ret = fcntl(fd, F_OFD_GETLK, fl);
++	if (ret)
++		perror("fcntl()");
++	return ret;
++}
++
++int main(void)
++{
++	int rc;
++	struct flock fl, fl2;
++	int fd = open("/tmp/aa", O_RDWR | O_CREAT | O_EXCL, 0600);
++	int fd2 = open("/tmp/aa", O_RDONLY);
++
++	unlink("aa");
++	assert(fd != -1);
++	assert(fd2 != -1);
++	ksft_print_msg("[INFO] opened fds %i %i\n", fd, fd2);
++
++	/* Set some read lock */
++	fl.l_type = F_RDLCK;
++	fl.l_start = 5;
++	fl.l_len = 3;
++	rc = lock_set(fd, &fl);
++	if (rc == 0) {
++		ksft_print_msg
++		    ("[SUCCESS] set OFD read lock on first fd\n");
++	} else {
++		ksft_print_msg("[FAIL] to set OFD read lock on first fd\n");
++		return -1;
++	}
++	/* Make sure read locks do not conflict on different fds. */
++	fl.l_type = F_RDLCK;
++	fl.l_start = 5;
++	fl.l_len = 1;
++	rc = lock_get(fd2, &fl);
++	if (rc != 0)
++		return -1;
++	if (fl.l_type != F_UNLCK) {
++		ksft_print_msg("[FAIL] read locks conflicted\n");
++		return -1;
++	}
++	/* Make sure read/write locks do conflict on different fds. */
++	fl.l_type = F_WRLCK;
++	fl.l_start = 5;
++	fl.l_len = 1;
++	rc = lock_get(fd2, &fl);
++	if (rc != 0)
++		return -1;
++	if (fl.l_type != F_UNLCK) {
++		ksft_print_msg
++		    ("[SUCCESS] read and write locks conflicted\n");
++	} else {
++		ksft_print_msg
++		    ("[SUCCESS] read and write locks not conflicted\n");
++		return -1;
++	}
++	/* Get info about the lock on first fd. */
++	fl.l_type = F_UNLCK;
++	fl.l_start = 5;
++	fl.l_len = 1;
++	rc = lock_get(fd, &fl);
++	if (rc != 0) {
++		ksft_print_msg
++		    ("[FAIL] F_OFD_GETLK with F_UNLCK not supported\n");
++		return -1;
++	}
++	if (fl.l_type != F_UNLCK) {
++		if (fl.l_pid != getpid()) {
++			ksft_print_msg
++			    ("[FAIL] F_OFD_GETLK does not return pid, %i\n",
++			    fl.l_pid);
++			return -1;
++		}
++		ksft_print_msg
++		    ("[SUCCESS] F_UNLCK test returns: locked, type %i pid %i len %zi\n",
++		     fl.l_type, fl.l_pid, fl.l_len);
++	} else {
++		ksft_print_msg
++		    ("[FAIL] F_OFD_GETLK with F_UNLCK did not return lock info\n");
++		return -1;
++	}
++	/* Try the same but by locking everything by len==0. */
++	fl2.l_type = F_UNLCK;
++	fl2.l_start = 0;
++	fl2.l_len = 0;
++	rc = lock_get(fd, &fl2);
++	if (rc != 0) {
++		ksft_print_msg
++		    ("[FAIL] F_OFD_GETLK with F_UNLCK not supported\n");
++		return -1;
++	}
++	if (memcmp(&fl, &fl2, sizeof(fl))) {
++		ksft_print_msg
++		    ("[FAIL] F_UNLCK test returns: locked, type %i pid %i len %zi\n",
++		     fl.l_type, fl.l_pid, fl.l_len);
++		return -1;
++	}
++	ksft_print_msg("[SUCCESS] F_UNLCK with len==0 returned the same\n");
++	/* Get info about the lock on second fd - no locks on it. */
++	fl.l_type = F_UNLCK;
++	fl.l_start = 0;
++	fl.l_len = 0;
++	lock_get(fd2, &fl);
++	if (fl.l_type != F_UNLCK) {
++		ksft_print_msg
++		    ("[FAIL] F_OFD_GETLK with F_UNLCK return lock info from another fd\n");
++		return -1;
++	}
++	return 0;
++}
+-- 
+2.39.2
+
