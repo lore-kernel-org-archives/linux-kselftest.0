@@ -2,172 +2,191 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8DA6EB64D7
-	for <linux-kselftest@archiver.kernel.org>; Tue, 20 Jun 2023 12:47:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A69DEB64D8
+	for <linux-kselftest@archiver.kernel.org>; Tue, 20 Jun 2023 13:56:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232480AbjFTMri (ORCPT
+        id S231486AbjFTN4j (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 20 Jun 2023 08:47:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33870 "EHLO
+        Tue, 20 Jun 2023 09:56:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjFTMrg (ORCPT
+        with ESMTP id S230490AbjFTN4i (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 20 Jun 2023 08:47:36 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2085.outbound.protection.outlook.com [40.107.94.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0B7010F8;
-        Tue, 20 Jun 2023 05:47:35 -0700 (PDT)
+        Tue, 20 Jun 2023 09:56:38 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2066.outbound.protection.outlook.com [40.107.212.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBAFE10DC;
+        Tue, 20 Jun 2023 06:56:34 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=l5hKIAw3xv0dIpm5uzBI4KBh+HjjW/Hcj6jbgxFuPv+xvOkIK+giLSL5fCQcKUZtH94W+Lc3HKE9ZStK0+PkfQU+ggNET4kf98sF3phbbLl2G+VklYnLukfHuNHq0F7JDS4J16T5ARPn2JjDRhoK1U/OsBnqsmwz5Y2lRylC5nyHK/BydNvib0/VF0QU0lQxNB5t8DEHqlhl2kaGxPg9ZmMHsXAzd6WuvkkODqH8rhTSW39Eyn5FAe8o5Oeur7u195N3ZVtsrDfF6B9Cvgfm9vTsk0R5qoVOlZxwEc7feWfoK1RImD2Yr8/cX7wBi4K0ON1bpSqyNXFF5EzFZxlUtQ==
+ b=kTNWQqssTDgBI6kdgVMPWfyGRQObSzRbFuwHVkJJwZHaBR2L9i4vjwBrSKWlnZRp74n/WbAWUN+3h9IUT6nfpNDCHXcvQtxQxbFu9MOQlLWJARxUdoLNxkxeg0k7DiA4m+1wmxC6tF5gkio3hts8NYvBBfgfgCCeTpuRBnJMZmi4nfXXyaBGKHf8m+vRk+8PA5e0wTiFLwvVf9YPWG6NA/S3sGp7r0l4kdq5XavSFNGA5fJb3enhrOqCQoIHMGpMyDsoU0yY46ieiuIkTLuhjjzswNEiQYFpdIuj6Ye39tAcLs3O+G84OCom5l9a/w9t68LCFAQGgYsr6r/OCTYCNQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ecB0MEaScDKpI6VFS9sI1CZgZI+wr2BPROOaXHBrcmc=;
- b=WMaw9zHfs91t1VrB6VGyxCTgbLu2m9tOuBz4pgfprdT0MfFpUbfcw75aW+2JZ2Ki7bzt8kQKX2usiwmD4CIKOxj7DOMPoCVuqU+obAffPQ5Zan6/lITRWg6mGWpLbr3EElB4ITInC7a5HQ7oNSwVi3vTy5FVgqqNovrc8ktJhI10MdggQ+V7ZMkVVk7ZGjBuwZ+snO24VNdpqGkgic9WK83VQ4X5R5vJmaOjEdZhljjDfhVhQyJu9bxIslu5NXRLKWlbissOR0q7QG7lEWfsM+FNMh2+86Zk4VqgSe/F6dSmzFFdgrnuHYuGbyWjF3bPaIVXS0HjJoerVNgMk2HaOg==
+ bh=yCGG7lGAwprHsBHgarZ7ZS6N9LaL6ev675HRDSZXNGs=;
+ b=JUYOmQluHIUovZdbd64gaPv1c4+IzxYKjvGlXtjfUwee63AS2kqUwmY4idIwJkaSlSo9v3SrxzAgWkZHcozes4+IWBVExHjmAPYUUBJACHfJA4agQgj+NuB7L4R6uUuekk1vnRESn2HQGhUhLJR3PrUOWfEtuRCZSKHBZmczt4VSVIXI63nDEH7uKBI51PBQY9DxqHwIZCZ/EuVRvJdaZxXynbmZRaRST+kjrEFycKkgwl5kHIctD325yBnEMgrjkl31gaB9qeiqFZ+LM3K8HRfvQaBJ+e+kxuf953p6VkbkM336XwN9cSyjdrsKMggHllInC7thGqvIbgvP95YHOQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
+ 216.228.117.160) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ecB0MEaScDKpI6VFS9sI1CZgZI+wr2BPROOaXHBrcmc=;
- b=fK/nqqG0q/dxTHsR44DOfZvoOQ78Z13CriEWYOZIy+zJarJaaO2hpFpBuUqcKrpJZfD3qVZDIm8gjjJ+uuVFPZZ8fOHtfPonW6Ay89bOWTyzv1LsB2dsFr8qvWTZMXEWrUJJ+G+H0KAl8UA4RGyfd7Q53hDLT7H70YVL/OFj/7zqech4WPokdQ1lf4/vxvlGgytExJxsIjY1/qVjiXGhJQW9DwXoSY/cjqVvAprpZ9CbsCswMFcnn16dkljsfZLr3/zvNa3iQFUk4Tf5OvshN/iZUeaT5NjVSWvSook6jMFgI2NPur8g8IduFvO0WrN/+vte0pR9mfP0TRPx8yaGBw==
-Received: from DM6PR11CA0057.namprd11.prod.outlook.com (2603:10b6:5:14c::34)
- by DM6PR12MB4090.namprd12.prod.outlook.com (2603:10b6:5:217::11) with
+ bh=yCGG7lGAwprHsBHgarZ7ZS6N9LaL6ev675HRDSZXNGs=;
+ b=qUQ886+jv/ag1ytEgTlsrAH8Kxp6QnhUdJbfLpy9ovHkXG8WLAuakmTa7faXroOHT/d2QaJdj7cqINPYaEaA9SzkYHK4AF/1tWqrEnIPTg1dpD604FDX+ZKQ7AuVsu1XXA9cdDpDnNbxp57zBnXeit3ljJ+64CVHQWpERYMnigDCtaz1JXihmATJr7cLOfb5KVTWicQXCIaTnGON6uNZbDXpXQjavuJRuV/5Te/5fiI5znqEUMcEauW7ubuxddHH10mufiE+zWy3HFNlHXo0wcPlTqvB/Vr7w3q/v7+R0mTWQhUE/AVmto51AlK1DZP//sk2jk12YfNMijzKwjs6XA==
+Received: from DM6PR07CA0110.namprd07.prod.outlook.com (2603:10b6:5:330::26)
+ by MN2PR12MB4581.namprd12.prod.outlook.com (2603:10b6:208:260::11) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.37; Tue, 20 Jun
- 2023 12:47:33 +0000
-Received: from CY4PEPF0000EE3B.namprd03.prod.outlook.com
- (2603:10b6:5:14c:cafe::58) by DM6PR11CA0057.outlook.office365.com
- (2603:10b6:5:14c::34) with Microsoft SMTP Server (version=TLS1_2,
+ 2023 13:56:32 +0000
+Received: from DM6NAM11FT057.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:330:cafe::79) by DM6PR07CA0110.outlook.office365.com
+ (2603:10b6:5:330::26) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.37 via Frontend
- Transport; Tue, 20 Jun 2023 12:47:33 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ Transport; Tue, 20 Jun 2023 13:56:32 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- CY4PEPF0000EE3B.mail.protection.outlook.com (10.167.242.15) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6521.17 via Frontend Transport; Tue, 20 Jun 2023 12:47:32 +0000
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ DM6NAM11FT057.mail.protection.outlook.com (10.13.172.252) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6500.37 via Frontend Transport; Tue, 20 Jun 2023 13:56:31 +0000
 Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Tue, 20 Jun 2023
- 05:47:22 -0700
-Received: from yaviefel.vdiclient.nvidia.com (10.126.231.35) by
+ 06:56:20 -0700
+Received: from yaviefel.vdiclient.nvidia.com (10.126.230.35) by
  rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.37; Tue, 20 Jun 2023 05:47:18 -0700
+ 15.2.986.37; Tue, 20 Jun 2023 06:56:15 -0700
 From:   Petr Machata <petrm@nvidia.com>
 To:     "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>, <netdev@vger.kernel.org>
-CC:     Petr Machata <petrm@nvidia.com>,
+CC:     Petr Machata <petrm@nvidia.com>, Ido Schimmel <idosch@nvidia.com>,
         Danielle Ratson <danieller@nvidia.com>,
-        Shuah Khan <shuah@kernel.org>,
+        Amit Cohen <amcohen@nvidia.com>, Shuah Khan <shuah@kernel.org>,
         <linux-kselftest@vger.kernel.org>, <mlxsw@nvidia.com>
-Subject: [PATCH net] selftests: forwarding: Fix race condition in mirror installation
-Date:   Tue, 20 Jun 2023 14:45:15 +0200
-Message-ID: <268816ac729cb6028c7a34d4dda6f4ec7af55333.1687264607.git.petrm@nvidia.com>
+Subject: [PATCH net-next 00/16] selftests: Preparations for out-of-order-operations patches in mlxsw
+Date:   Tue, 20 Jun 2023 15:55:46 +0200
+Message-ID: <cover.1687265905.git.petrm@nvidia.com>
 X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Originating-IP: [10.126.231.35]
-X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
+X-Originating-IP: [10.126.230.35]
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
  rnnvmail201.nvidia.com (10.129.68.8)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000EE3B:EE_|DM6PR12MB4090:EE_
-X-MS-Office365-Filtering-Correlation-Id: ca93189e-9e94-4f47-b452-08db718c8435
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT057:EE_|MN2PR12MB4581:EE_
+X-MS-Office365-Filtering-Correlation-Id: ca74a200-4726-4e88-0895-08db71962718
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BO/8vPiKYfHcOyRvnN/GQaHoTvAyQuHh4TT5DNlILx0QdfxtGOGYvVKDubUm3KjwZMMEI+xGuBkUXEM5EANb+7Tp4o6tE0/i/pTuDrc6HdD9TiUW2s3oYO7AY+AUF64tIhs0MqKSp2Dy2Kfh9+w/WnCB1aU047Y87Z0drStlFV1L5dmsBMQgNW/qVKZcuEBs8r9eMci2LjmuHMKnZ58ie2azQ1SH31KjvdYr5cv5u7H16mUUFmvpaZhg9dBt9i+vSR79/Y+VtOk5+WJphxKkd1Wn3nmo5/WrahSuA+1eqzNwKke+bwI4nNb0xnN/g6Nw7ig36psX0CisOFofZF1cqWrGNZLpjZ6RS75jEUXEZqWwCS840c0iD5QXaK0Sl5nwtpnAxDMCdSLRobO0zpOUF9bGZZQ6TuRsal1uNF++1xAExOwPwaahYzHaQxha7Fz7lEVItKc3WQLqPt5yV65lYAW7NAiyelFizSlulDux/Ok53mo9fYiw1adWtAesCmtE2mDIpEKKgBiBeZpsCJapwOzewUKvNdTk6xFSpECh0PQ6J2o8ZeNDRluPQRTA6haDShVAuvHE73c6N2fFkyyksm4xCvLwXQOHwkN/PIDwosFmQQ40zLjvL6uL7On1EFv06fq+k/GBbG4mM2PsfGlVxSLVeA9OCsiLI0dr5CPBT9MkxxlkYgLWhgPKTk0kuViSVOr0Fk6OYNckIK9eNXEkbiGchFuKAr1OtV0vJ71da9UDnMUmysX7mZ7g4+uf8NkY
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(136003)(396003)(39860400002)(451199021)(36840700001)(46966006)(40470700004)(8936002)(41300700001)(40460700003)(8676002)(82310400005)(478600001)(82740400003)(16526019)(356005)(7636003)(426003)(336012)(2616005)(6666004)(186003)(26005)(107886003)(36860700001)(7696005)(54906003)(47076005)(40480700001)(110136005)(86362001)(36756003)(316002)(4326008)(70206006)(70586007)(2906002)(5660300002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: qEp0V7BUvyDyHPrLVMpxWD1R98vjKrEnt6aTo2lyA43SLn/zCmntA0jgNCE9cnnCiODyuExU/QhBJu1cVF5VpfIOwzlbqZt2c+St+O4YCQjuKTQqRzFyOdogutkNzrbIezq1T99xSLw99KOEksMzryJHh7te4QVDbS8jbww2HUXs9eCHN2ZhJgmN147ocSb/FXzMpVz5do3wluQ6WAJyvtDvakrcO+8TrfHVZ4/FiG2xVz0nwyIDWMP4LTepIJJoKpZG6wq5Gu45A1GXajFPaR5mNq+9duDkiOBFsYcXqbocpRQ28MXKDhqWUCIgk419LUn2Et6c175N9Q3Xntp7SNri9FLHScfqj0gHVb1knMFlMOsh/VkxouO2HzLKj0AEE41quMscEIEoogwidOos0aldF8AWy7CcRW6J6a1HMOMX+JH76iD/EKcW2Oj6VxIH2RqSIRGavd64uSLLxmvuAdqXIZ7hwb0InZDlpfsChWRNfwm5pu97lUfZZbMA7LJ1zZhTYojECaIFILGph61Mkufcz1LOEA44gixf5qpbt+AOUMOl0ezvsNHV6xvWIK7GI+49qfvjzgUC3f3vHznZv0drTVIWtRakrXPLQngs7EKYAmdEOQrWyoIv/Eh5jQoBrKKyyDBuyMsJpIdOmbkIs5Ulhpx6qgySEmv44ULo238iXCctF4W+NaMPeJ2RrKTVEm2XFtY3dymBD8Unrik+0poUm1qrSE/UM5nKIE8INrrQBLc7Gl0Mh0pctCqTixE34ZoG8LofDFT+XQjxNKo7QA==
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(376002)(396003)(346002)(451199021)(46966006)(40470700004)(36840700001)(70586007)(40460700003)(70206006)(4326008)(16526019)(2616005)(356005)(7636003)(82310400005)(86362001)(107886003)(26005)(186003)(36860700001)(83380400001)(66574015)(47076005)(426003)(336012)(82740400003)(478600001)(36756003)(7696005)(110136005)(6666004)(54906003)(40480700001)(2906002)(41300700001)(5660300002)(8936002)(8676002)(66899021)(316002)(17423001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2023 12:47:32.9123
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2023 13:56:31.6570
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: ca93189e-9e94-4f47-b452-08db718c8435
+X-MS-Exchange-CrossTenant-Network-Message-Id: ca74a200-4726-4e88-0895-08db71962718
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000EE3B.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT057.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4090
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4581
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Danielle Ratson <danieller@nvidia.com>
+The mlxsw driver currently makes the assumption that the user applies
+configuration in a bottom-up manner. Thus netdevices need to be added to
+the bridge before IP addresses are configured on that bridge or SVI added
+on top of it. Enslaving a netdevice to another netdevice that already has
+uppers is in fact forbidden by mlxsw for this reason. Despite this safety,
+it is rather easy to get into situations where the offloaded configuration
+is just plain wrong.
 
-When mirroring to a gretap in hardware the device expects to be
-programmed with the egress port and all the encapsulating headers. This
-requires the driver to resolve the path the packet will take in the
-software data path and program the device accordingly.
+Over the course of the following several patchsets, mlxsw code is going to
+be adjusted to diminish the space of wrongly offloaded configurations.
+Ideally the offload state will reflect the actual state, regardless of the
+sequence of operation used to construct that state.
 
-If the path cannot be resolved (in this case because of an unresolved
-neighbor), then mirror installation fails until the path is resolved.
-This results in a race that causes the test to sometimes fail.
+Several selftests build configurations that will not be offloadable in the
+future on some systems. The reason is that what will get offloaded is the
+actual configuration, not the configuration steps.
 
-Fix this by setting the neighbor's state to permanent in a couple of
-tests, so that it is always valid.
+For example, when a port is added to a bridge that has an IP address, that
+bridge will get a RIF, which it would not have with the current code. But
+on Nvidia Spectrum-1 machines, MAC addresses of all RIFs need to have the
+same prefix, which the bridge will violate. The RIF thus couldn't be
+created, and the enslavement is therefore canceled, because it would lead
+to an unoffloadable configuration. This breaks some selftests.
 
-Fixes: 35c31d5c323f ("selftests: forwarding: Test mirror-to-gretap w/ UL 802.1d")
-Fixes: 239e754af854 ("selftests: forwarding: Test mirror-to-gretap w/ UL 802.1q")
-Signed-off-by: Danielle Ratson <danieller@nvidia.com>
-Reviewed-by: Petr Machata <petrm@nvidia.com>
-Signed-off-by: Petr Machata <petrm@nvidia.com>
----
- .../testing/selftests/net/forwarding/mirror_gre_bridge_1d.sh  | 4 ++++
- .../testing/selftests/net/forwarding/mirror_gre_bridge_1q.sh  | 4 ++++
- 2 files changed, 8 insertions(+)
+In this patchset, adjust selftests to avoid the configurations that mlxsw
+would be incapable of offloading, while maintaining relevance with regards
+to the feature that is being tested. There are generally two cases of
+fixes:
 
-diff --git a/tools/testing/selftests/net/forwarding/mirror_gre_bridge_1d.sh b/tools/testing/selftests/net/forwarding/mirror_gre_bridge_1d.sh
-index c5095da7f6bf..aec752a22e9e 100755
---- a/tools/testing/selftests/net/forwarding/mirror_gre_bridge_1d.sh
-+++ b/tools/testing/selftests/net/forwarding/mirror_gre_bridge_1d.sh
-@@ -93,12 +93,16 @@ cleanup()
- 
- test_gretap()
- {
-+	ip neigh replace 192.0.2.130 lladdr $(mac_get $h3) \
-+		 nud permanent dev br2
- 	full_test_span_gre_dir gt4 ingress 8 0 "mirror to gretap"
- 	full_test_span_gre_dir gt4 egress 0 8 "mirror to gretap"
- }
- 
- test_ip6gretap()
- {
-+	ip neigh replace 2001:db8:2::2 lladdr $(mac_get $h3) \
-+		nud permanent dev br2
- 	full_test_span_gre_dir gt6 ingress 8 0 "mirror to ip6gretap"
- 	full_test_span_gre_dir gt6 egress 0 8 "mirror to ip6gretap"
- }
-diff --git a/tools/testing/selftests/net/forwarding/mirror_gre_bridge_1q.sh b/tools/testing/selftests/net/forwarding/mirror_gre_bridge_1q.sh
-index 9ff22f28032d..0cf4c47a46f9 100755
---- a/tools/testing/selftests/net/forwarding/mirror_gre_bridge_1q.sh
-+++ b/tools/testing/selftests/net/forwarding/mirror_gre_bridge_1q.sh
-@@ -90,12 +90,16 @@ cleanup()
- 
- test_gretap()
- {
-+	ip neigh replace 192.0.2.130 lladdr $(mac_get $h3) \
-+		 nud permanent dev br1
- 	full_test_span_gre_dir gt4 ingress 8 0 "mirror to gretap"
- 	full_test_span_gre_dir gt4 egress 0 8 "mirror to gretap"
- }
- 
- test_ip6gretap()
- {
-+	ip neigh replace 2001:db8:2::2 lladdr $(mac_get $h3) \
-+		nud permanent dev br1
- 	full_test_span_gre_dir gt6 ingress 8 0 "mirror to ip6gretap"
- 	full_test_span_gre_dir gt6 egress 0 8 "mirror to ip6gretap"
- }
+- Disabling IPv6 autogen on bridges that do not participate in routing,
+  either because of the abovementioned requirement to keep the same MAC
+  prefix on all in-HW router interfaces, or, on 802.1ad bridges, because
+  in-HW router interfaces are not supported at all.
+
+- Setting the bridge MAC address to what it will become after the first
+  member port is attached, so that the in-HW router interface is created
+  with a supported MAC address.
+
+The patchset is then split thus:
+
+- Patches #1-#7 adjust generic selftests
+- Patches #8-#16 adjust mlxsw-specific selftests
+
+Petr Machata (16):
+  selftests: forwarding: q_in_vni: Disable IPv6 autogen on bridges
+  selftests: forwarding: dual_vxlan_bridge: Disable IPv6 autogen on
+    bridges
+  selftests: forwarding: skbedit_priority: Disable IPv6 autogen on a
+    bridge
+  selftests: forwarding: pedit_dsfield: Disable IPv6 autogen on a bridge
+  selftests: forwarding: mirror_gre_*: Disable IPv6 autogen on bridges
+  selftests: forwarding: mirror_gre_*: Use port MAC for bridge address
+  selftests: forwarding: router_bridge: Use port MAC for bridge address
+  selftests: mlxsw: q_in_q_veto: Disable IPv6 autogen on bridges
+  selftests: mlxsw: extack: Disable IPv6 autogen on bridges
+  selftests: mlxsw: mirror_gre_scale: Disable IPv6 autogen on a bridge
+  selftests: mlxsw: qos_dscp_bridge: Disable IPv6 autogen on a bridge
+  selftests: mlxsw: qos_ets_strict: Disable IPv6 autogen on bridges
+  selftests: mlxsw: qos_mc_aware: Disable IPv6 autogen on bridges
+  selftests: mlxsw: spectrum: q_in_vni_veto: Disable IPv6 autogen on a
+    bridge
+  selftests: mlxsw: vxlan: Disable IPv6 autogen on bridges
+  selftests: mlxsw: one_armed_router: Use port MAC for bridge address
+
+ .../selftests/drivers/net/mlxsw/extack.sh     | 24 ++++++++---
+ .../drivers/net/mlxsw/mirror_gre_scale.sh     |  1 +
+ .../drivers/net/mlxsw/one_armed_router.sh     |  3 +-
+ .../drivers/net/mlxsw/q_in_q_veto.sh          |  8 ++++
+ .../drivers/net/mlxsw/qos_dscp_bridge.sh      |  1 +
+ .../drivers/net/mlxsw/qos_ets_strict.sh       |  8 +++-
+ .../drivers/net/mlxsw/qos_mc_aware.sh         |  2 +
+ .../net/mlxsw/spectrum/q_in_vni_veto.sh       |  1 +
+ .../selftests/drivers/net/mlxsw/vxlan.sh      | 41 ++++++++++++++-----
+ .../net/forwarding/dual_vxlan_bridge.sh       |  1 +
+ .../net/forwarding/mirror_gre_bound.sh        |  1 +
+ .../net/forwarding/mirror_gre_bridge_1d.sh    |  3 +-
+ .../forwarding/mirror_gre_bridge_1d_vlan.sh   |  3 +-
+ .../forwarding/mirror_gre_bridge_1q_lag.sh    |  3 +-
+ .../net/forwarding/mirror_topo_lib.sh         |  1 +
+ .../selftests/net/forwarding/pedit_dsfield.sh |  4 +-
+ .../selftests/net/forwarding/q_in_vni.sh      |  1 +
+ .../selftests/net/forwarding/router_bridge.sh |  3 +-
+ .../net/forwarding/skbedit_priority.sh        |  4 +-
+ 19 files changed, 88 insertions(+), 25 deletions(-)
+
 -- 
 2.40.1
 
