@@ -2,64 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A0B9EB64D8
-	for <linux-kselftest@archiver.kernel.org>; Tue, 20 Jun 2023 13:56:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE30CEB64D8
+	for <linux-kselftest@archiver.kernel.org>; Tue, 20 Jun 2023 13:56:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231315AbjFTN4x (ORCPT
+        id S232191AbjFTN44 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 20 Jun 2023 09:56:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53810 "EHLO
+        Tue, 20 Jun 2023 09:56:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230490AbjFTN4w (ORCPT
+        with ESMTP id S230490AbjFTN4z (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 20 Jun 2023 09:56:52 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8732DA2;
-        Tue, 20 Jun 2023 06:56:51 -0700 (PDT)
+        Tue, 20 Jun 2023 09:56:55 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2081.outbound.protection.outlook.com [40.107.101.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 875A1CF;
+        Tue, 20 Jun 2023 06:56:54 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XF42j/VjsTkd5jiORnGggVhkv8045kKJckvJLIVex2tjiI6u7I6o0ZKDc92ctGGvNqnkEz0tuXanzHlyyzh6LdaLppKZ+yUzuVdITYU9ETxQsdmTaDDZqg1/TX1aLr8zs5bKYi/C9tmQwN0g5UZg6LGIhdB97b3NAaqjPVH9LZ2XLvkc7fa9w9T6PyWBbr9Xl8B7u2pTTp/hjAc2q1xuxzQLPnNrAbUqcHzEMxpRTq53AeJmrQedeEpItCGuYAoW3Ci+xVj9SV9XzyRIpsLiJgagecaECWDX3f9uDxN+9xgZlhypJmy/lbc3wmVa0l7WGjBPfWT7aRvzS1WBWwW2kg==
+ b=FQe4iEHqfFIJZYYKykows3EwcRySV5qo27vxTchP/mdf0HtYOwM2qLTb/KbyHGZsk3MYwAR3dTE41JZtTeMWU2Gw3CSyCs0sAooCf9CdlOZ5IVPNnogN5FgeODyyg8JmZ4sm6AqgisMUoq/rljny7e9eWBmtqYMs/R+Z1pme1mQ7Cwyh+DBMVH75ekytIHgS3h0KVcjM3EGklwwVDk+i795RW4cvNA8L62MUsp5RFP7+dlcLmKuCebfquIj71RUrY7Xw8+ofLA3t4FFtJ4F7T5ZQDnELz9z8vJIwXUEjeGdw2k5viyfEBV3Vi2UIRD1LfmUIib4TE43hfdZId20DTA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QbIkZBZ1ilkaoKN/V8acfhsJ7LM1HVj4j4+snS+ul1o=;
- b=KqLPyKM7t/sYN1Q7fbAj7ZUY1urcVze5XPl45Db6Dd0ShyBpDj3r4XxYjW6Jh1wfmKXOSxyOlBq5l3pBcGAPFVUruipPVEJyLmVDOiMbOEPr0Qy1RZy9yj3l7WJSb0dcQ4Xlbty2iOxHKO1Aq7vQc1nOX0Akr+ZvRMYrnv1l3v6yAlA9C2xxBHpB50anl7RW0mObgh3sZEDlVg4cHMHfpnGXpyoE/3qDCJ3QrCghFy0LgQwzWu3DqMaKe5pS9xO+sAXNvW5N7R7oKZIAL+ouDs3ULSI8TKz3DaOwmgiBflMNaNU84zzekAEDRSUBB3N8ttqpugkZ9ioEkAL/+iIPIw==
+ bh=qV5UJXrBf2eZAVglW/rxhIEfxoZDb/BHlLBWQjREYXU=;
+ b=iSfvA0LDZWsLbTo1Fd52nfnVIj3J/AJ8X7fBGICQBmslg7PlIM3FdllDJe5FQBAKtyZ04+qwTWU25DefhoLCyzu7rTu/0nl0AtuRsPb3DY0VtDK2XrJ7iu1lP/BtqZgmlGZI+GIunkPHGpin3EOAq+3sdmGPCaWvM4iRG5EwknGZ9CmoDKkqHGOSAqv3fVZ33S/LRtWeifHDIrDa14LSWQGNiUlWlUpyr656n+L4tIsKYR/HL0pKVjkCmenmeiDnAgGQM5JPeiHJdyBPaoqeIZM9Puzg0x594cKVkUgm0LCaGQatx4dVApToRFfOttG5KOKbYK02AZIsoryuMV0mmw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
+ 216.228.117.161) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QbIkZBZ1ilkaoKN/V8acfhsJ7LM1HVj4j4+snS+ul1o=;
- b=ivq4umzxajZVslQHJ72PRFYAiJ6ybYqU7Ks+PjBKose0vuIfynaYQIn7MMj3RaUR8KAUGVXoP+iIPLT1zybBUPw85GMw8HSXPzPEyRa0jsgpTIGrMAUqRSkrGq7AE8BuMPT7RzuVyIOICbm4GupcqnVc4ZJsFcp5GoYgV4V6nQrzf7A8QBBa9utdKeGOH0bIJRGI55VTq9VFPM04d/GC65tWglVevBS67sdxs4P5K/cKsCojj/l7t1/vwbHlDuWTAhJLSRm66eXRlSX3HZqCmDmYhNRyY75wQLL7vFa8Kqx8EbwgvQ9/baMxvPRg/9h37ZpPFV1vyqau/RlySanAHQ==
-Received: from BN9P221CA0010.NAMP221.PROD.OUTLOOK.COM (2603:10b6:408:10a::13)
- by MN2PR12MB4390.namprd12.prod.outlook.com (2603:10b6:208:26e::21) with
+ bh=qV5UJXrBf2eZAVglW/rxhIEfxoZDb/BHlLBWQjREYXU=;
+ b=MVXYOEOa5nLFMPQnUYd91opaou0+aTN1h6FwVmgkpccXbtIYznzbyBg/DzVVFr2/baO6mIg1d1n/A5YrNP+muMHY+b9jBuhfZcWYjkIpkYsd/kwGb2IVjbN1mzPn5wEwjUvgd177iPqrM7j+rjW+or/CAD2kvsvWWwxX64rUIPgWQucmpD/8pVMRuNJVI9558IFOT5KH9QYMuv+dMBKBJUu3zyLlpUUjsz+octOaGW760exQQEPdtPQkpyO5nfSYuxxJQh5/5wOvfKayAQbg8Yg53OLb2Em8LINdI9sedPT2dP4gRXOflSsgb5XsV2kwwh9VzPwjcOWxi6OPEAQmSQ==
+Received: from BN8PR16CA0014.namprd16.prod.outlook.com (2603:10b6:408:4c::27)
+ by MN0PR12MB5955.namprd12.prod.outlook.com (2603:10b6:208:37e::14) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.37; Tue, 20 Jun
- 2023 13:56:48 +0000
-Received: from BN8NAM11FT077.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:10a:cafe::dd) by BN9P221CA0010.outlook.office365.com
- (2603:10b6:408:10a::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.21; Tue, 20 Jun
+ 2023 13:56:51 +0000
+Received: from BN8NAM11FT048.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:4c:cafe::33) by BN8PR16CA0014.outlook.office365.com
+ (2603:10b6:408:4c::27) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.37 via Frontend
- Transport; Tue, 20 Jun 2023 13:56:48 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ Transport; Tue, 20 Jun 2023 13:56:51 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BN8NAM11FT077.mail.protection.outlook.com (10.13.177.232) with Microsoft SMTP
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ BN8NAM11FT048.mail.protection.outlook.com (10.13.177.117) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6477.29 via Frontend Transport; Tue, 20 Jun 2023 13:56:48 +0000
+ 15.20.6500.37 via Frontend Transport; Tue, 20 Jun 2023 13:56:50 +0000
 Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Tue, 20 Jun 2023
- 06:56:32 -0700
+ 06:56:40 -0700
 Received: from yaviefel.vdiclient.nvidia.com (10.126.230.35) by
  rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.37; Tue, 20 Jun 2023 06:56:26 -0700
+ 15.2.986.37; Tue, 20 Jun 2023 06:56:36 -0700
 From:   Petr Machata <petrm@nvidia.com>
 To:     "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
@@ -69,9 +69,9 @@ CC:     Petr Machata <petrm@nvidia.com>, Ido Schimmel <idosch@nvidia.com>,
         Danielle Ratson <danieller@nvidia.com>,
         Amit Cohen <amcohen@nvidia.com>, Shuah Khan <shuah@kernel.org>,
         <linux-kselftest@vger.kernel.org>, <mlxsw@nvidia.com>
-Subject: [PATCH net-next 02/16] selftests: forwarding: dual_vxlan_bridge: Disable IPv6 autogen on bridges
-Date:   Tue, 20 Jun 2023 15:55:48 +0200
-Message-ID: <d79a51602a4ebde0cefc104c3f799229c7d6f0bd.1687265905.git.petrm@nvidia.com>
+Subject: [PATCH net-next 04/16] selftests: forwarding: pedit_dsfield: Disable IPv6 autogen on a bridge
+Date:   Tue, 20 Jun 2023 15:55:50 +0200
+Message-ID: <23dcd3264f6f93356e3ee1aa12287ba8ece9f2a3.1687265905.git.petrm@nvidia.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <cover.1687265905.git.petrm@nvidia.com>
 References: <cover.1687265905.git.petrm@nvidia.com>
@@ -83,23 +83,23 @@ X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
  rnnvmail201.nvidia.com (10.129.68.8)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT077:EE_|MN2PR12MB4390:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3eac0015-12da-4b4f-b392-08db7196311b
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT048:EE_|MN0PR12MB5955:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6c9f7e67-b52f-4bcf-87a5-08db71963285
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WRfmb2IyXkpnVth1s6ZlHVio35VXIR/HiIm9iN3GRSlZUKwiZIOokJtnq62fi2xYCkRRUty2ojE+1HpEo2KduLMD4ABrC1gDDtL3H93J32WGOy1xNM76GisKYkv/3TW+n8vWU+b3lzTXCq22FyzAN4sJdI35pGyqH143y6u+5zW5TLG9xH7Cp9gAiTdJtL8u+AzG/z8NKlXlby1inovVJNW1VeOyPGTxDo4vx34TvBue0cWdnRtIP5uaY+mGdK/L+yd3Ei8JzKRi3n9SKWKjf6GNVsUBdaXcqlnXgKMIDi9trxkkd+gCxn76Hr/RGu0hqrObYd37mYQhNcSfw6XkYwUfpkdvMAS5LX/LdrD4gEnVLAv8xx7PgsXInw0Ss04xSnmER7ghlIRWNiPlZGj0qHmR7E5udKO15mzGe9yxxOXHTDHNj8CTjWM6lMlP7jIrnHRyIS+/DfqVtt9+OEWeE8Hgw+PD+MjV0PHr3SBqepTy+z8hjchqV30DIECYCeDKT+5HNNIWBlaLGSPchGLRHQ3Zez/Pteej5tE6VdFo7kIfOcHCEa8m/N+ApehrV+8+yxFFNXA0zRX2YABf2Aggu23vj4oB5rba3Q37MjkEORuVipLBJIUD88F+Fm/gSSoTUnqWRqP3El0NIUXQdlDcJ5nSNPH/Dq5FHcJ/iacdyGYCyFA86x4WlDE2VNnhQdJ3jEDQHp/I8kbz0vaZcEgyw8/HbiIQ4vigtnv5/gHP89WXiI7xKrmvDS9xJk+RGSnq
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(39860400002)(136003)(396003)(451199021)(40470700004)(36840700001)(46966006)(40460700003)(7696005)(6666004)(478600001)(66574015)(47076005)(26005)(16526019)(186003)(107886003)(336012)(426003)(2616005)(36756003)(82310400005)(86362001)(82740400003)(356005)(7636003)(40480700001)(36860700001)(8936002)(41300700001)(8676002)(5660300002)(316002)(4326008)(2906002)(70586007)(70206006)(54906003)(110136005);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: Y4Zn3aIWlfeqR9K1ftCGRs1jvHBYAV3LLuW5HlH7Zx3oUKDJgzVVN5oVFkBBcwm7qCQquT9UTJb/tXxGYLEOC3lGXt91hALVCxWezWmWRKEgyQnqmsjBS6buEYmFmu+/6g84crbHEwFguq4/FOlb48kW/MLuFKn0lU0ncbJPRV9KklJua3HdIbTTP55i0EZhckrW1aVTb+rUt3A89HeABp5gVaPkL2YT3PkDSUdu7+6y+WfrQtFRIiEt5/MDFwcNSgUtdw5pIX2/nXhhGTWR8Zwx1DqJVg/QZJHXe/j04912DhSU9hwlqCzluSWyOqZi1j8bJUVTn5rfUndGqlr8aGUcP64nvif8ALDAFF+xdelsPZ+q4wDaeh1KAawcP1vbwQRFq5FfX61sF+p8Du+lk9bSNy1s6hyFL0ROgI3S9DROeo9L9sjj78flQRqHrhdITn8eBI37Cg8T6M9vScrBxPWo41OzVEnmLdijUWSBN0yQvQq3m7NXo+YLrtw9cMJPLHc/zzkyg55nFGJKmP2YOKkIgxwZpTeZ58tzvmE69qEzJ48klnCTu2ooN5/GBb/cyq645kMZH9n8UAl61S4psrXkSVUIO0BMb+2xJEYX38yoLL99hUmaphueEL2KbS9V5rq9rJETHbFoNjfKUOfaJvhad/TkTRfXj/pYS0S2dug8SvBjU/j6YZUNNS5ST88H83FeGWWqPbIFNtCE/DRduJxFsJntTngTU0YV8q7wZZSwJNsCBUmFOy+AlYb5L/kP
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(396003)(136003)(39860400002)(451199021)(40470700004)(46966006)(36840700001)(5660300002)(8936002)(8676002)(4326008)(70586007)(70206006)(316002)(110136005)(41300700001)(2906002)(54906003)(36860700001)(6666004)(7696005)(40460700003)(478600001)(82740400003)(107886003)(40480700001)(26005)(186003)(16526019)(83380400001)(36756003)(426003)(336012)(66574015)(47076005)(7636003)(356005)(82310400005)(2616005)(86362001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2023 13:56:48.4114
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2023 13:56:50.7827
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3eac0015-12da-4b4f-b392-08db7196311b
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6c9f7e67-b52f-4bcf-87a5-08db71963285
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT077.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT048.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4390
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5955
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -107,32 +107,44 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 In a future patch, mlxsw will start adding RIFs to uppers of front panel
 port netdevices, if they have an IP address.
 
-This will cause this selftest to fail spuriously. The swp enslavement to
-the 802.1ad bridge is not allowed, because RIFs are not allowed to be
-created for 802.1ad bridges, but the address indicates one needs to be
-created.
+At the time that the front panel port is enslaved to the bridge, the bridge
+MAC address does not have the same prefix as other interfaces in the
+system. On Nvidia Spectrum-1 machines all the RIFs have to have the same
+38-bit MAC address prefix. Since the bridge does not obey this limitation,
+the RIF cannot be created, and the enslavement attempt is vetoed on the
+grounds of the configuration not being offloadable.
+
+The selftest itself however checks whether skbedit changes packet priority
+as appropriate. The bridge thus does not need to participate in routing
+traffic and the IP address or the RIF are irrelevant.
 
 Fix by disabling automatic IPv6 address generation for the HW-offloaded
 bridge in this selftest, thus exempting it from mlxsw router attention.
+Since the bridge is only used for L2 forwarding, this change should not
+hinder usefulness of this selftest for testing SW datapath or HW datapaths
+in other devices.
 
 Signed-off-by: Petr Machata <petrm@nvidia.com>
-Reviewed-by: Amit Cohen <amcohen@nvidia.com>
+Reviewed-by: Danielle Ratson <danieller@nvidia.com>
 ---
- tools/testing/selftests/net/forwarding/dual_vxlan_bridge.sh | 1 +
- 1 file changed, 1 insertion(+)
+ tools/testing/selftests/net/forwarding/skbedit_priority.sh | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/net/forwarding/dual_vxlan_bridge.sh b/tools/testing/selftests/net/forwarding/dual_vxlan_bridge.sh
-index 5148d97a5df8..68ee92df3e07 100755
---- a/tools/testing/selftests/net/forwarding/dual_vxlan_bridge.sh
-+++ b/tools/testing/selftests/net/forwarding/dual_vxlan_bridge.sh
-@@ -132,6 +132,7 @@ switch_create()
- 	#### BR1 ####
- 	ip link add name br1 type bridge vlan_filtering 1 \
- 		vlan_protocol 802.1ad vlan_default_pvid 0 mcast_snooping 0
+diff --git a/tools/testing/selftests/net/forwarding/skbedit_priority.sh b/tools/testing/selftests/net/forwarding/skbedit_priority.sh
+index bde11dc27873..3dd5fcbd3eaa 100755
+--- a/tools/testing/selftests/net/forwarding/skbedit_priority.sh
++++ b/tools/testing/selftests/net/forwarding/skbedit_priority.sh
+@@ -54,7 +54,9 @@ h2_destroy()
+ 
+ switch_create()
+ {
+-	ip link add name br1 up type bridge vlan_filtering 1
++	ip link add name br1 type bridge vlan_filtering 1
 +	ip link set dev br1 addrgenmode none
- 	# Make sure the bridge uses the MAC address of the local port and not
- 	# that of the VxLAN's device.
- 	ip link set dev br1 address $(mac_get $swp1)
++	ip link set dev br1 up
+ 	ip link set dev $swp1 master br1
+ 	ip link set dev $swp1 up
+ 	ip link set dev $swp2 master br1
 -- 
 2.40.1
 
