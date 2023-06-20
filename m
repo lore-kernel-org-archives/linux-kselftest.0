@@ -2,163 +2,130 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38B49EB64D8
-	for <linux-kselftest@archiver.kernel.org>; Tue, 20 Jun 2023 10:06:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C25BEB64D7
+	for <linux-kselftest@archiver.kernel.org>; Tue, 20 Jun 2023 10:11:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232050AbjFTKGo (ORCPT
+        id S230295AbjFTKLW (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 20 Jun 2023 06:06:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39812 "EHLO
+        Tue, 20 Jun 2023 06:11:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231575AbjFTKGS (ORCPT
+        with ESMTP id S231231AbjFTKLU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 20 Jun 2023 06:06:18 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA257DB;
-        Tue, 20 Jun 2023 03:06:15 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2b4725e9917so35299241fa.2;
-        Tue, 20 Jun 2023 03:06:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687255571; x=1689847571;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wtXc4PCbTDlAHZAVqhvtwaRICGJ6lazGNb1ljaV+Ftw=;
-        b=ldW/ylsuWZH3AXZueyYlRT0nh9Gl/MhIKISAju1Ir5dsyEDOYv8I/dKPmBee/odzkK
-         SDbVl0f1M1Z+H7UtPcorlVsRZ1YEUg+5forY69CwXp/YyhIvg9aUPWStKrGV2gmYsZNf
-         NowMzGu9Th8C8x1f9CVWdoHwEa07JlDa8276RyVLTkeEuOuDgoqnuPXbaJN0RQp9CxTN
-         scEmXUBZ0g6uTFZ/EWqPVXJUnHpeqXlZJ82NBJRiFQfJgWE85T8UqdlMfqHEootOMNc4
-         iiLGC6mmOBawCmItBjo8MjcoUJOAgAXU+CIrdSEtjUQzRSJ6ljr4Z5qpcnpXOjSwCxRp
-         vlGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687255571; x=1689847571;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wtXc4PCbTDlAHZAVqhvtwaRICGJ6lazGNb1ljaV+Ftw=;
-        b=l8megoFlgHrfD+dmkWmrP0X4XgeljU/oDZAACQUnD1hWQFVAwLhcMjSmKxWwYW0tat
-         RfWzpopmsThIXT7rPGviDkVcFqUxyJbKkcC19beWPrJa4A3czVanWXMFMopdMTJlRy2c
-         JcyZ5fOKU1rUCd7l110iXKcKLWsskjlBYwEYauzN4cY9Jo0ifuQDUkb2o6Qx2iTMnRQy
-         YVtsjr6Z00Skky5HJOSboVKSamTwimkQmtpiDxxxsvaa55685c7uYYySuYQmq5ji14tR
-         NpxrE5Zc4iRUxbOeL46R/gFcEIML9JCKUkpYlN7jWmcqy6+QOEcXFHLnCQ7S8njNxTML
-         8/ng==
-X-Gm-Message-State: AC+VfDzx3bD56ERWNFI6k3dnH1ORgUu/guA4qfk0a8PZimBSqE75E6L/
-        MIS14a3Itq7QjkwL7f3ze3NmCNsZWVTx2vSuAbc=
-X-Google-Smtp-Source: ACHHUZ7b29WcQEpJBxPgynKh2dxcEjQKO63R0QvBncBcn4CVZjBKqj6DvExU9PFON2qlRV1iXePc6q0qi5nDf7A9U3Q=
-X-Received: by 2002:a2e:9b06:0:b0:2b1:dc7a:ebf2 with SMTP id
- u6-20020a2e9b06000000b002b1dc7aebf2mr7647520lji.17.1687255570896; Tue, 20 Jun
- 2023 03:06:10 -0700 (PDT)
+        Tue, 20 Jun 2023 06:11:20 -0400
+X-Greylist: delayed 538 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 20 Jun 2023 03:11:19 PDT
+Received: from forward200a.mail.yandex.net (forward200a.mail.yandex.net [IPv6:2a02:6b8:c0e:500:1:45:d181:d200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC12A2;
+        Tue, 20 Jun 2023 03:11:19 -0700 (PDT)
+Received: from forward103a.mail.yandex.net (forward103a.mail.yandex.net [IPv6:2a02:6b8:c0e:500:1:45:d181:d103])
+        by forward200a.mail.yandex.net (Yandex) with ESMTP id 2DCC64A0D8;
+        Tue, 20 Jun 2023 12:55:42 +0300 (MSK)
+Received: from mail-nwsmtp-smtp-production-main-51.vla.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-51.vla.yp-c.yandex.net [IPv6:2a02:6b8:c1f:5e51:0:640:23ee:0])
+        by forward103a.mail.yandex.net (Yandex) with ESMTP id EE78C46C91;
+        Tue, 20 Jun 2023 12:55:32 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-51.vla.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id Utd7jIuDca60-FHm4Ipak;
+        Tue, 20 Jun 2023 12:55:32 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1687254932;
+        bh=hY46ZClPP9+NLwarO4tWKAup6MP0se1suvHpVvDPsAU=;
+        h=Message-Id:Date:Cc:Subject:To:From;
+        b=qoqaIRpV3bFWmt1BFyIn7vZbg/hftQx1uYO+qvw/KxsKHbW5ZWMtnm5QW+g/+jeEq
+         4GY5kmtRUAZD7fo+3M/qrIiPzJ17r7P+ge4ysmKdPswEUHKTYwtYqvsY17Gnigo4PL
+         Mk97FVN2y6v+meBriWpBDi5fgO9/0QGEPdCA3owk=
+Authentication-Results: mail-nwsmtp-smtp-production-main-51.vla.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
+From:   Stas Sergeev <stsp2@yandex.ru>
+To:     linux-kernel@vger.kernel.org
+Cc:     Stas Sergeev <stsp2@yandex.ru>, Jeff Layton <jlayton@kernel.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH 0/3] RFC: F_OFD_GETLK should provide more info
+Date:   Tue, 20 Jun 2023 14:55:04 +0500
+Message-Id: <20230620095507.2677463-1-stsp2@yandex.ru>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <cover.1686275310.git.haibo1.xu@intel.com> <8cd4ce50f5f4a639f4508085959aae222d4d4386.1686275310.git.haibo1.xu@intel.com>
- <20230609-fba04b424a4d46574e04e587@orel>
-In-Reply-To: <20230609-fba04b424a4d46574e04e587@orel>
-From:   Haibo Xu <xiaobo55x@gmail.com>
-Date:   Tue, 20 Jun 2023 18:05:59 +0800
-Message-ID: <CAJve8okjRZEt6_6SB9EWm+6c7utpExzenfWo2T1N-J6G9w9czQ@mail.gmail.com>
-Subject: Re: [PATCH v3 10/10] KVM: riscv: selftests: Add get-reg-list test
-To:     Andrew Jones <ajones@ventanamicro.com>
-Cc:     Haibo Xu <haibo1.xu@intel.com>, maz@kernel.org,
-        oliver.upton@linux.dev, seanjc@google.com,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Shuah Khan <shuah@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Ben Gardon <bgardon@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jun 9, 2023 at 9:35=E2=80=AFPM Andrew Jones <ajones@ventanamicro.co=
-m> wrote:
->
-> On Fri, Jun 09, 2023 at 10:12:18AM +0800, Haibo Xu wrote:
-> > +static struct vcpu_reg_list aia_config =3D {
-> > +     .sublists =3D {
-> > +     BASE_SUBLIST,
-> > +     AIA_REGS_SUBLIST,
-> > +     {0},
-> > +     },
-> > +};
-> > +
-> > +static struct vcpu_reg_list fp_f_d_config =3D {
-> > +     .sublists =3D {
-> > +     BASE_SUBLIST,
-> > +     FP_F_REGS_SUBLIST,
-> > +     FP_D_REGS_SUBLIST,
-> > +     {0},
-> > +     },
-> > +};
-> > +
-> > +struct vcpu_reg_list *vcpu_configs[] =3D {
-> > +     &zicbo_config,
-> > +     &aia_config,
-> > +     &fp_f_d_config,
-> > +};
-> > +int vcpu_configs_n =3D ARRAY_SIZE(vcpu_configs);
-> > --
-> > 2.34.1
-> >
->
-> I see we have a bit of a problem with the configs for riscv. Since we
-> don't disable anything we're not testing, then for any test that is
-> missing, for example, the f and d registers, we'll get output like
-> "There are 66 new registers. Consider adding them to the blessed reg
-> list with the following lines:" and then a dump of all the f and d
-> registers. The test doesn't fail, but it's messy and confusing. Ideally
-> we'd disable all registers of all sublists not in the config, probably
-> by starting by disabling everything and then only reenabling the ones
-> in the config.
->
-> Anything that can't be disabled is either a KVM bug, i.e. we should
-> be able to disable it, because we can't expect every host to have it,
-> or it needs to be in the base register sublist (meaning every host
-> will always have it).
->
+This patch-set implements 2 small extensions to the current F_OFD_GETLK,
+allowing it to gather more information than it currently returns.
 
-HI Andrew,
+First extension allows to use F_UNLCK on query, which currently returns
+EINVAL. Instead it can be used to query the locks on a particular fd -
+something that is not currently possible. The basic idea is that on
+F_OFD_GETLK, F_UNLCK would "conflict" with (or query) any types of the
+lock on the same fd, and ignore any locks on other fds.
 
-I found several multi-letters ISA EXT(AIA/SSTC etc) were not allowed
-to be disabled.
-Is it a bug? shall we fix it=EF=BC=9F
+Use-cases:
 
-Thanks,
-Haibo
+1. CRIU-alike scenario when you want to read the locking info from an
+fd for the later reconstruction. This can now be done by setting
+l_start and l_len to 0 to cover entire file range, and do F_OFD_GETLK.
+In the loop you need to advance l_start past the returned lock ranges,
+to eventually collect all locked ranges.
 
-static bool kvm_riscv_vcpu_isa_disable_allowed(unsigned long ext)
- {
-     switch (ext) {
-     case KVM_RISCV_ISA_EXT_A:
-     case KVM_RISCV_ISA_EXT_C:
-     case KVM_RISCV_ISA_EXT_I:
-     case KVM_RISCV_ISA_EXT_M:
-     case KVM_RISCV_ISA_EXT_SSAIA:
-     case KVM_RISCV_ISA_EXT_SSTC:
-     case KVM_RISCV_ISA_EXT_SVINVAL:
-     case KVM_RISCV_ISA_EXT_ZIHINTPAUSE:
-     case KVM_RISCV_ISA_EXT_ZBB:
-         return false;
-     default:
-         break;
-     }
+2. Implementing the lock checking/enforcing policy.
+Say you want to implement an "auditor" module in your program,
+that checks that the I/O is done only after the proper locking is
+applied on a file region. In this case you need to know if the
+particular region is locked on that fd, and if so - with what type
+of the lock. If you would do that currently (without this extension)
+then you can only check for the write locks, and for that you need to
+probe the lock on your fd and then open the same file via nother fd and
+probe there. That way you can identify the write lock on a particular
+fd, but such trick is non-atomic and complex. As for finding out the
+read lock on a particular fd - impossible.
+This extension allows to do such queries without any extra efforts.
 
-     return true;
- }
+3. Implementing the mandatory locking policy.
+Suppose you want to make a policy where the write lock inhibits any
+unlocked readers and writers. Currently you need to check if the
+write lock is present on some other fd, and if it is not there - allow
+the I/O operation. But because the write lock can appear at any moment,
+you need to do that under some global lock, which can be released only
+when the I/O operation is finished.
+With the proposed extension you can instead just check the write lock
+on your own fd first, and if it is there - allow the I/O operation on
+that fd without using any global lock. Only if there is no write lock
+on this fd, then you need to take global lock and check for a write
+lock on other fds.
 
-> Thanks,
-> drew
+
+The second patch implements another extension.
+Currently F_OFD_GETLK returns -1 in the l_pid member.
+This patch removes the code that writes -1 there, so that the proper
+pid is returned. I am not sure why it was decided to deliberately hide
+the owner's pid. It may be needed in case you want to send some
+message to the offending locker, like eg SIGKILL.
+
+
+The third patch adds a test-case for OFD locks.
+It tests both the generic things and the proposed extensions.
+
+Stas Sergeev (3):
+  fs/locks: F_UNLCK extension for F_OFD_GETLK
+  fd/locks: allow get the lock owner by F_OFD_GETLK
+  selftests: add OFD lock tests
+
+ fs/locks.c                                 |  25 +++-
+ tools/testing/selftests/locking/Makefile   |   2 +
+ tools/testing/selftests/locking/ofdlocks.c | 135 +++++++++++++++++++++
+ 3 files changed, 157 insertions(+), 5 deletions(-)
+ create mode 100644 tools/testing/selftests/locking/ofdlocks.c
+
+CC: Jeff Layton <jlayton@kernel.org>
+CC: Chuck Lever <chuck.lever@oracle.com>
+CC: Alexander Viro <viro@zeniv.linux.org.uk>
+CC: Christian Brauner <brauner@kernel.org>
+CC: linux-fsdevel@vger.kernel.org
+CC: linux-kernel@vger.kernel.org
+CC: Shuah Khan <shuah@kernel.org>
+CC: linux-kselftest@vger.kernel.org
+
+-- 
+2.39.2
+
