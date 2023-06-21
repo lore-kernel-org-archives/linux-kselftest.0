@@ -2,131 +2,91 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16107EB64D7
-	for <linux-kselftest@archiver.kernel.org>; Wed, 21 Jun 2023 15:31:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2E59EB64DC
+	for <linux-kselftest@archiver.kernel.org>; Wed, 21 Jun 2023 15:36:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233416AbjFUPbn (ORCPT
+        id S233475AbjFUPge (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 21 Jun 2023 11:31:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38308 "EHLO
+        Wed, 21 Jun 2023 11:36:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233462AbjFUPba (ORCPT
+        with ESMTP id S233510AbjFUPgX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 21 Jun 2023 11:31:30 -0400
-Received: from forward206a.mail.yandex.net (forward206a.mail.yandex.net [178.154.239.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBADDCC;
-        Wed, 21 Jun 2023 08:30:57 -0700 (PDT)
-Received: from forward103a.mail.yandex.net (forward103a.mail.yandex.net [IPv6:2a02:6b8:c0e:500:1:45:d181:d103])
-        by forward206a.mail.yandex.net (Yandex) with ESMTP id E496247332;
-        Wed, 21 Jun 2023 18:22:46 +0300 (MSK)
-Received: from mail-nwsmtp-smtp-production-main-31.vla.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-31.vla.yp-c.yandex.net [IPv6:2a02:6b8:c18:58f:0:640:3768:0])
-        by forward103a.mail.yandex.net (Yandex) with ESMTP id 7231846C65;
-        Wed, 21 Jun 2023 18:22:42 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-31.vla.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id UMkSjYADYGk0-AkLoIPpV;
-        Wed, 21 Jun 2023 18:22:41 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1687360962;
-        bh=lDc4QgnEZC8KLbodk8+haNOeCOpk4ZEgKr8+epbYZ8s=;
-        h=Message-Id:Date:In-Reply-To:Cc:Subject:References:To:From;
-        b=eIQxgQ/KENbUZ2x3qrqriO4S0ZYhAkXI/90UF2KUSj/TTbA+veewMIsiEPhYnRdqt
-         0V0P/wgTHNei1+XAV7yCi7yD4HZ3Ll1e4DBnlsO+NONxMTp0e/uNDn6HZVSqkGE1/J
-         BP3N5YBMk6d5ek3PfEddmifedtt1aTG0h2dxqna4=
-Authentication-Results: mail-nwsmtp-smtp-production-main-31.vla.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
-From:   Stas Sergeev <stsp2@yandex.ru>
-To:     linux-kernel@vger.kernel.org
-Cc:     Stas Sergeev <stsp2@yandex.ru>, Jeff Layton <jlayton@kernel.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org
-Subject: [PATCH 1/2] fs/locks: F_UNLCK extension for F_OFD_GETLK
-Date:   Wed, 21 Jun 2023 20:22:12 +0500
-Message-Id: <20230621152214.2720319-2-stsp2@yandex.ru>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230621152214.2720319-1-stsp2@yandex.ru>
-References: <20230621152214.2720319-1-stsp2@yandex.ru>
+        Wed, 21 Jun 2023 11:36:23 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33B541706;
+        Wed, 21 Jun 2023 08:35:59 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-988a5383fd4so662539466b.0;
+        Wed, 21 Jun 2023 08:35:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687361753; x=1689953753;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=yLC3Qvm8n/w4CH5ToSb5DN8Odh2TdBdFkjR985bJsFU=;
+        b=XNNg4geRz6v9Rne19hZvE7dAvG7m5JVqo482JTQxpuo2aiaamcJHYjpGzn/hDYhn4R
+         34MbwzgM88Y7NgENR6uA17UWiK/FzRBMbt1DFnUdf/mnGNQNinfxbqTCgaBInMhCjq/6
+         iDIClLNEKaInpZedkWU6pP+zF1LqhgBnl4dg2ZXMBVZ/R6gsIStjaGRbimg/YBE0791l
+         65L7T1AnG/c1WBy3tN6kQkfY+SaHhzvlga+WLowV4xjOg8hXtcaUv89A8tFbU3d0h1Ny
+         BdRGtaLRnrf+kWj5Lxx6BX30XOo9xbnOVazlq7DRD/evPGoK0K+t6rOCUa7/slGjr6Z2
+         w+Vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687361753; x=1689953753;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yLC3Qvm8n/w4CH5ToSb5DN8Odh2TdBdFkjR985bJsFU=;
+        b=C5cVaBSDOiMMYM4YrCJtPubyt8eJaZ4qnYTP2HRSdi8tCRCrEWq67uzvxF3ySsr4i0
+         jN5bJbZm+RmR3FCQw483ATfoT2CV5FtMUA3wywnZXsM6NN2PvPGTqMAqemkje38beQ0z
+         mJjMVswBxExYCZ0Axxc5OUGZ5dbgxLJ4ComNA1mm+6AfatFGmUxsbHTrqfFHWFLYTTzS
+         yCu6NJWhbiJoCT4cqGmMl82MUJun2BpIsHwQndF0e5AYhoyloL6Yru17dUWP/rvvK7ja
+         CWyymBp67dHqgume0pEtMls2c6/VRpnNTD5p4WbvwrWHsofejqtI7KEiV5QJ1g9pSHmc
+         Y/Ng==
+X-Gm-Message-State: AC+VfDyNhTBAHctK7grMBuE7RXUUR9vojoPSxCl8z3S3Ipag1dq6bN0z
+        ZohV/zsnbu/kccB5cyeLeII=
+X-Google-Smtp-Source: ACHHUZ7xMfjgNRfxub1WKJ+EPmb+d8kHugGo/ZZVh5n6Kd95fkq5o9VnmXX478QuZDnsXNW4XE425g==
+X-Received: by 2002:a17:906:58cd:b0:989:d9d:d90a with SMTP id e13-20020a17090658cd00b009890d9dd90amr6598582ejs.34.1687361753358;
+        Wed, 21 Jun 2023 08:35:53 -0700 (PDT)
+Received: from lelloman-5950.homenet.telecomitalia.it (host-87-21-158-222.retail.telecomitalia.it. [87.21.158.222])
+        by smtp.gmail.com with ESMTPSA id r3-20020a170906c28300b00988acf24f9csm3266123ejz.97.2023.06.21.08.35.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 08:35:52 -0700 (PDT)
+From:   Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+To:     tj@kernel.org, lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        shuah@kernel.org, mhocko@kernel.org, roman.gushchin@linux.dev,
+        shakeelb@google.com, muchun.song@linux.dev, sjenning@redhat.com,
+        ddstreet@ieee.org, vitaly.wool@konsulko.com, riel@surriel.com,
+        nphamcs@gmail.com
+Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+Subject: [PATCH 0/3] selftests: cgroup: add zswap test program
+Date:   Wed, 21 Jun 2023 17:35:45 +0200
+Message-Id: <20230621153548.428093-1-cerasuolodomenico@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently F_UNLCK with F_OFD_GETLK returns -EINVAL.
-The proposed extension allows to use it for getting the lock
-information from the particular fd.
+This series adds 2 zswap related selftests that verify known and fixed
+issues. A new dedicated test program (test_zswap) is proposed since
+the test cases are specific to zswap and hosts specific helpers.
 
-Signed-off-by: Stas Sergeev <stsp2@yandex.ru>
+The first patch adds the (empty) test program, while the other 2 add an
+actual test function each.
 
-CC: Jeff Layton <jlayton@kernel.org>
-CC: Chuck Lever <chuck.lever@oracle.com>
-CC: Alexander Viro <viro@zeniv.linux.org.uk>
-CC: Christian Brauner <brauner@kernel.org>
-CC: linux-fsdevel@vger.kernel.org
-CC: linux-kernel@vger.kernel.org
-CC: Shuah Khan <shuah@kernel.org>
-CC: linux-kselftest@vger.kernel.org
-CC: linux-api@vger.kernel.org
+Domenico Cerasuolo (3):
+  selftests: cgroup: add test_zswap program
+  selftests: cgroup: add test_zswap with no kmem bypass test
+  selftests: cgroup: add zswap-memcg unwanted writeback test
 
----
- fs/locks.c | 23 ++++++++++++++++++++---
- 1 file changed, 20 insertions(+), 3 deletions(-)
+ tools/testing/selftests/cgroup/.gitignore   |   1 +
+ tools/testing/selftests/cgroup/Makefile     |   2 +
+ tools/testing/selftests/cgroup/test_zswap.c | 286 ++++++++++++++++++++
+ 3 files changed, 289 insertions(+)
+ create mode 100644 tools/testing/selftests/cgroup/test_zswap.c
 
-diff --git a/fs/locks.c b/fs/locks.c
-index df8b26a42524..210766007e63 100644
---- a/fs/locks.c
-+++ b/fs/locks.c
-@@ -868,6 +868,21 @@ static bool posix_locks_conflict(struct file_lock *caller_fl,
- 	return locks_conflict(caller_fl, sys_fl);
- }
- 
-+/* Determine if lock sys_fl blocks lock caller_fl. Used on xx_GETLK
-+ * path so checks for additional GETLK-specific things like F_UNLCK.
-+ */
-+static bool posix_test_locks_conflict(struct file_lock *caller_fl,
-+				      struct file_lock *sys_fl)
-+{
-+	/* F_UNLCK checks any locks on the same fd. */
-+	if (caller_fl->fl_type == F_UNLCK) {
-+		if (!posix_same_owner(caller_fl, sys_fl))
-+			return false;
-+		return locks_overlap(caller_fl, sys_fl);
-+	}
-+	return posix_locks_conflict(caller_fl, sys_fl);
-+}
-+
- /* Determine if lock sys_fl blocks lock caller_fl. FLOCK specific
-  * checking before calling the locks_conflict().
-  */
-@@ -901,7 +916,7 @@ posix_test_lock(struct file *filp, struct file_lock *fl)
- retry:
- 	spin_lock(&ctx->flc_lock);
- 	list_for_each_entry(cfl, &ctx->flc_posix, fl_list) {
--		if (!posix_locks_conflict(fl, cfl))
-+		if (!posix_test_locks_conflict(fl, cfl))
- 			continue;
- 		if (cfl->fl_lmops && cfl->fl_lmops->lm_lock_expirable
- 			&& (*cfl->fl_lmops->lm_lock_expirable)(cfl)) {
-@@ -2207,7 +2222,8 @@ int fcntl_getlk(struct file *filp, unsigned int cmd, struct flock *flock)
- 	if (fl == NULL)
- 		return -ENOMEM;
- 	error = -EINVAL;
--	if (flock->l_type != F_RDLCK && flock->l_type != F_WRLCK)
-+	if (cmd != F_OFD_GETLK && flock->l_type != F_RDLCK
-+			&& flock->l_type != F_WRLCK)
- 		goto out;
- 
- 	error = flock_to_posix_lock(filp, fl, flock);
-@@ -2414,7 +2430,8 @@ int fcntl_getlk64(struct file *filp, unsigned int cmd, struct flock64 *flock)
- 		return -ENOMEM;
- 
- 	error = -EINVAL;
--	if (flock->l_type != F_RDLCK && flock->l_type != F_WRLCK)
-+	if (cmd != F_OFD_GETLK && flock->l_type != F_RDLCK
-+			&& flock->l_type != F_WRLCK)
- 		goto out;
- 
- 	error = flock64_to_posix_lock(filp, fl, flock);
 -- 
-2.39.2
+2.34.1
 
