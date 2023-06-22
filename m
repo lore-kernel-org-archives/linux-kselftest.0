@@ -2,160 +2,113 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 498C1EB64D7
-	for <linux-kselftest@archiver.kernel.org>; Fri, 23 Jun 2023 09:44:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BAC8EB64D7
+	for <linux-kselftest@archiver.kernel.org>; Fri, 23 Jun 2023 09:59:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231138AbjFWJod (ORCPT
+        id S231421AbjFWJ7e (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 23 Jun 2023 05:44:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33000 "EHLO
+        Fri, 23 Jun 2023 05:59:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbjFWJoc (ORCPT
+        with ESMTP id S229686AbjFWJ7d (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 23 Jun 2023 05:44:32 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD241FF9
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 Jun 2023 02:44:27 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-513ea2990b8so8952a12.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 Jun 2023 02:44:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687513466; x=1690105466;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uECgceGWceBpnEwgVEt1AFSmdXNTa/+8ZyNWq8IpWMk=;
-        b=Kbr+ZwwHYHvA0TCLJ0MdIwK/ccEwxx5KSPma0dmAvQIY6kj9M5JLiT59I+c/izkmv2
-         n9pmwQxDJQNjmwworyPbaKeC3Ld8nQ4YzJQUl81n0uzJKWW+y1YBMTq+bAxjaNy+2Uk1
-         2+c6VxKT2l9oN0UJs9rmXFiz2wziDEW+FMecIVeRpyPC+3p6h7YtB2bWAnfvkjFG019s
-         SvcL3SBhcYvAVeuiLFX4CwomKL1yZfd3JUWKnS/0/hgwcAMoHAZfCNAKfXwtIiCjg6jh
-         Ae993CrxqBpmSq0aTmVtiKkCd/JgjSefymLwf4R5lFK8ec0c85cp6c0CFc3gblvcnhWa
-         1m6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687513466; x=1690105466;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uECgceGWceBpnEwgVEt1AFSmdXNTa/+8ZyNWq8IpWMk=;
-        b=TsQ0siqJeZ4/HJTgZ7x9z9F60zQOZc3O9ntCjEwI4gK9a28TJy7Qmq7afwQUG5CsrE
-         HtY07WiSi5vKKE1mevPJnBSS6Apw2URdRe2ks0/NV3QMvx8NTXOkGunOTgQNs2wYe007
-         vo87e6OKJ51yYCpS0oa1me5sINc34oZJvD4e3DSyPQk7LtArRTU7R68NfmZoPp5EZXWj
-         cF93ZUiHgInR4UxN8wk3ytGd2iiIvPihC3p5ZEljnmT9S2jn883ven9etheI5TPW9S2C
-         7kfEnmkOMdGW4yGeXbzJn9gnC5iG6PybLUIdU6bAWRgX9+n1gYQ4Tnh/JShxr4Eo9J0h
-         gpVA==
-X-Gm-Message-State: AC+VfDx5pZ21e36bsF/ef1+NooiqBzFkGgl/k80zOroZGzHjScSTbKyK
-        HvH/oajrxeCtgP2TSIlOrzTxWhnO80pXZYsvPwSX/Q==
-X-Google-Smtp-Source: ACHHUZ6rqOZ455iJdXd6CS4M6p+mA/ZNKARrMmKzGjtlcQiR2QyldrbL8+MKATVwRLr7V20zWPJywlF1j6AsPkZ9OkM=
-X-Received: by 2002:a50:d08c:0:b0:516:6453:1b76 with SMTP id
- v12-20020a50d08c000000b0051664531b76mr51906edd.5.1687513465752; Fri, 23 Jun
- 2023 02:44:25 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230615141144.665148-1-usama.anjum@collabora.com>
- <20230615141144.665148-3-usama.anjum@collabora.com> <ZJHp6hSeS6lMo7qx@gmail.com>
- <1c1beeda-ceed-fdab-bbf5-1881e0a8b102@collabora.com> <ZJNTWV+JZ+tTMdcp@gmail.com>
- <c8c3f983-8189-e602-157a-84ca1d8984dd@collabora.com>
-In-Reply-To: <c8c3f983-8189-e602-157a-84ca1d8984dd@collabora.com>
-From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-Date:   Fri, 23 Jun 2023 11:44:14 +0200
-Message-ID: <CABb0KFFEiTr4TfYnAOOd8tODEaY_KBE2EjNBEJqX6RjxZpCjZA@mail.gmail.com>
-Subject: Re: [PATCH v19 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Andrei Vagin <avagin@gmail.com>, Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Fri, 23 Jun 2023 05:59:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D287E75;
+        Fri, 23 Jun 2023 02:59:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C4A82619E6;
+        Fri, 23 Jun 2023 09:59:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59253C433C0;
+        Fri, 23 Jun 2023 09:59:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687514371;
+        bh=4Sre3Xe85q5AdiCISxJI7jZ0ap6BzfWgIsXsmS9GAeg=;
+        h=Subject:From:To:Cc:In-Reply-To:References:Date:From;
+        b=qF0FqNbgti2kUjCNRZktFY/T7IkOS0lKFWJ9d35XUkpV//Dbgvb/A+EveLG/fgnVo
+         UBdskociHfOd35HYD5d9Ejx+hHn5FlaaMy1ZxRFsCZxAIRQMdjXNjn/LhxbPPpS4be
+         BwZ1+tg5L/ix1eyqDu0EpvEBHyMUsxCZMm5YLzXAE4Rg/2NbYGcaow+8cYsmm97kTk
+         AAWHCTCDYVo4rlXoCnoAy2LoQo9yGxuh3RbXT04+6Yc6HrBRpFZVUJ5Tq0X8HQNY8L
+         CVrz3xO+Qv32lcWcKkaFiQ3SLSVKXTK1PTXOcgc1jqkceav+NXiglVIbSD3TFJl6zl
+         chQQUgcz8Krmw==
+Message-ID: <3719669bc40890e3a8221593ff8a178411ad749b.camel@kernel.org>
+Subject: Re: [PATCH] fcntl.2: document F_UNLCK F_OFD_GETLK extension
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Stas Sergeev <stsp2@yandex.ru>, linux-kernel@vger.kernel.org
+Cc:     Chuck Lever <chuck.lever@oracle.com>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
         Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
+        linux-fsdevel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org
+In-Reply-To: <20230621152214.2720319-4-stsp2@yandex.ru>
+References: <20230621152214.2720319-1-stsp2@yandex.ru>
+         <20230621152214.2720319-4-stsp2@yandex.ru>
+Content-Type: text/plain; charset="ISO-8859-15"
 Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Date:   Thu, 22 Jun 2023 08:03:53 -0400
+User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 22 Jun 2023 at 12:21, Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
-> On 6/22/23 12:45=E2=80=AFAM, Andrei Vagin wrote:
-> > On Wed, Jun 21, 2023 at 11:34:54AM +0500, Muhammad Usama Anjum wrote:
-> >> On 6/20/23 11:03=E2=80=AFPM, Andrei Vagin wrote:
-[...]
-> >>> should it be PM_SCAN_FOUND_MAX_PAGES? Otherwise, it fails the ioctl e=
-ven
-> >>> if it has handled some pages already.
-> >> It is a double edge sword. If we don't return error, user will never k=
-now
-> >> that he needs to specify more max_pages or his output buffer is small =
-and
-> >> not coverig the entire range. The real purpose here that user gets awa=
-re
-> >> that he needs to specify full hugetlb range and found pages should cov=
-er
-> >> the entire range as well.
-> >
-> > but if PM_SCAN_OP_WP is set, this error will be fatal, because some
-> > pages can be marked write-protected, but they are not be reported to
-> > user-space.
-> >
-> > I think the ioctl has to report back the end address of the handled
-> > region. It is like read and write syscalls that can return less data
-> > than requested.
-> This is good point. I'll abort the walk here instead of retuning the erro=
-r
-> to user.
+On Wed, 2023-06-21 at 20:22 +0500, Stas Sergeev wrote:
+> F_UNLCK has the special meaning when used as a lock type on input.
+> It returns the information about any lock found in the specified
+> region on that particular file descriptor. Locks on other file
+> descriptors are ignored by F_UNLCK.
+>=20
+> Signed-off-by: Stas Sergeev <stsp2@yandex.ru>
+>=20
+> CC: Jeff Layton <jlayton@kernel.org>
+> CC: Chuck Lever <chuck.lever@oracle.com>
+> CC: Alexander Viro <viro@zeniv.linux.org.uk>
+> CC: Christian Brauner <brauner@kernel.org>
+> CC: linux-fsdevel@vger.kernel.org
+> CC: linux-kernel@vger.kernel.org
+> CC: Shuah Khan <shuah@kernel.org>
+> CC: linux-kselftest@vger.kernel.org
+> CC: linux-api@vger.kernel.org
+>=20
+> ---
+>  man2/fcntl.2 | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>=20
+> diff --git a/man2/fcntl.2 b/man2/fcntl.2
+> index 7b5604e3a..e3e3e7b8c 100644
+> --- a/man2/fcntl.2
+> +++ b/man2/fcntl.2
+> @@ -604,6 +604,13 @@ then details about one of these locks are returned v=
+ia
+>  .IR lock ,
+>  as described above for
+>  .BR F_GETLK .
+> +.B F_UNLCK
+> +has the special meaning when put into
+> +.I l_type
+> +as an input. It returns the information about any lock in the specified
+> +range on that particular file descriptor. The locks on other file
+> +descriptors are ignored by
+> +.BR F_UNLCK .
+>  .PP
+>  In the current implementation,
+>  .\" commit 57b65325fe34ec4c917bc4e555144b4a94d9e1f7
 
-It would be great if the ioctl returned the address the walk finished
-at. This would remove the special case for "buffer full after full
-page was added" and if it happens that despite `max_pages` limit was
-reached but no more pages would need to be added the caller would not
-have to call the ioctl again on the remaining range.
 
-[...]
-> >>> How long can it take to run this loop? Should we interrupt it if a
-> >>> signal has been queued?
-> >> I'm following mincore and pagemap_read here. There is no such thing th=
-ere.
-> >> IOCTL is performing what user has requested.
-> >
-> > In case of pagemap, its buffer is limited by MAX_RW_COUNT (0x7ffff000),
-> > so it can handle maximum 0xffffe00 pages in one iteration.  Do you have=
- any
-> > limits for input parameters?
-> >
-> >> If the execution time is a
-> >> concern, user should have called the IOCTL on shorter address range.
-> >
-> > It doesn't work this way. There can be many users and signals has to be
-> > delivered in a reasonable time. One of the obvious examples when a sign=
-al
-> > has to be delivered asap is OOM.
-> This IOCTL is just like mincore, but with other flags and functionalities=
-.
-> Mincore doesn't put any limit like this. I don't think we should put any
-> limit here as well.
+We need to be pedantic for manpages. A "file description" is the
+representation of the open file in the kernel (basically, the "struct
+file" in the kernel). A file _descriptor_ is the numeric identifier
+returned by open() and similar functions.
 
-I don't think we should treat mincore() as a good API example. Its
-interface has similar performance problems to what select() or poll()
-does. In this ioctl's case, we can limit the output at this end (large
-anyway) as it won't affect the performance if for x TiB of memory the
-call is made twice instead of once. (Returning the end of the walk
-reached would be much help here.)
+The locks are owned by the file description, so that would be the better
+term to use here. I think you want something like:
 
-Best Regards
-Micha=C5=82 Miros=C5=82aw
+"When the l_type is set to F_UNLCK, returned locks are limited to ones
+set on the given file description. Locks set on other file descriptions
+are ignored on F_GETLK requests with the l_type set to F_UNLCK."
+
+--=20
+Jeff Layton <jlayton@kernel.org>
