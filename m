@@ -2,40 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B240AEB64DD
-	for <linux-kselftest@archiver.kernel.org>; Sun, 25 Jun 2023 16:32:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DDF3EB64DD
+	for <linux-kselftest@archiver.kernel.org>; Sun, 25 Jun 2023 16:33:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231808AbjFYQcT (ORCPT
+        id S231627AbjFYQdi (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 25 Jun 2023 12:32:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58330 "EHLO
+        Sun, 25 Jun 2023 12:33:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231806AbjFYQcG (ORCPT
+        with ESMTP id S231288AbjFYQd2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 25 Jun 2023 12:32:06 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D412728;
-        Sun, 25 Jun 2023 09:31:30 -0700 (PDT)
-X-QQ-mid: bizesmtp85t1687710626t7jbsr0w
+        Sun, 25 Jun 2023 12:33:28 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AEDA1BE4;
+        Sun, 25 Jun 2023 09:33:05 -0700 (PDT)
+X-QQ-mid: bizesmtp66t1687710716t7j8m98e
 Received: from linux-lab-host.localdomain ( [116.30.129.193])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 26 Jun 2023 00:30:25 +0800 (CST)
+        id ; Mon, 26 Jun 2023 00:31:55 +0800 (CST)
 X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: CR3LFp2JE4mpAf5y1pCIlD9ZuX5yZ9/MFjh9Rx/IYCq+dZVYGNuGoTwWI2/cU
-        7y7AqL44Pdv4fR6BRFE2lKIGGIqoK7WSllgvTCbiF7Pt8YiUDmgoWHuaE8vvDnY+kob8aD4
-        rcRFHrAWameWRiSQXD4QKc6YlPDfxIzaySY1pj4n91YVobq79egaQIPRAOBoL2w6xj1KX90
-        rbJYg/39ozxNvpn0O7+NW9mQyyWrrN6yhBjt3CXXQboXTRbjlGk8sl0/6rjRnvp1w9Lbgiu
-        Qwvd0ki0gNaYVTUHb1oNuJoIv0UZODB0/WFuM31AGbiFatgymF9gTMwqsJboJt+o6sISVp8
-        R0T37t5eMjeoZHVqoaRHxNNYneZp41r5cY9m6ZV691Y9P+tG1s=
+X-QQ-FEAT: LE7C6P2vL8RGulXWTTLak4tKHmM9RyxNo4MpbhA1cetkjXVlxD7BfmIkGgBxZ
+        Ucd2qvMGnBiNEi1gt8gFRG/QB4iuakqK4bLQWTHiXz1IFwr0pOKNSipi+OQqDhF0Xlr1Erx
+        YjmmGzMcDzYy5AeV9+gNwwrympcxJjWnFXHhFjuQCcKDNm76J/5XjOVV+mce7JRpYWu5t7h
+        6oynNPEO+ZTpgOFIBwTo5o0vPxK3IFg2rh6vYk3RQG9dDPAv7S67oy4ZdlgYzahE/ppOHyz
+        vjDr8orwmf4JL47UyysQnYEeHvjyV+jojY+XvtHZCdTb1609MzK+3yXbnVp9QMHWeszl11t
+        KU0+RkddaxiUciiOajhmc54aRNxd1T5qnX7/jvvTmjghBGlEOY=
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 16565260553308252172
+X-BIZMAIL-ID: 7069103967638041911
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     thomas@t-8ch.de, w@1wt.eu
 Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH v1 12/22] selftests/nolibc: add extra configs for arm64
-Date:   Mon, 26 Jun 2023 00:30:17 +0800
-Message-Id: <ca6cad47facf3096fad6a5e755ba9d6723edcf8f.1687706332.git.falcon@tinylab.org>
+Subject: [PATCH v1 13/22] selftests/nolibc: add extra configs for arm
+Date:   Mon, 26 Jun 2023 00:31:30 +0800
+Message-Id: <c246545360acd511e06b4fb47d42c2d9bf724189.1687706332.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1687706332.git.falcon@tinylab.org>
 References: <cover.1687706332.git.falcon@tinylab.org>
@@ -47,6 +47,10 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Enable minimal configs for the arm virt board of qemu.
+
+Enable CONFIG_COMPAT_32BIT_TIME for the poll test cases.
+
 Add AMBA PL011 console for test result print.
 
 Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
@@ -55,14 +59,14 @@ Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
  1 file changed, 1 insertion(+)
 
 diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index d45454f86ae1..6e59a694096d 100644
+index 6e59a694096d..79983ddc1584 100644
 --- a/tools/testing/selftests/nolibc/Makefile
 +++ b/tools/testing/selftests/nolibc/Makefile
-@@ -61,6 +61,7 @@ EXTCONFIG_COMMON    += -e SHMEM -e TMPFS
- EXTCONFIG_i386       = -e COMPAT_32BIT_TIME -e SERIAL_8250 -e SERIAL_8250_CONSOLE
+@@ -62,6 +62,7 @@ EXTCONFIG_i386       = -e COMPAT_32BIT_TIME -e SERIAL_8250 -e SERIAL_8250_CONSOL
  EXTCONFIG_x86_64     = -e 64BIT -e SERIAL_8250 -e SERIAL_8250_CONSOLE
  EXTCONFIG_x86        = -e 64BIT -e SERIAL_8250 -e SERIAL_8250_CONSOLE
-+EXTCONFIG_arm64      = -e SERIAL_AMBA_PL011 -e SERIAL_AMBA_PL011_CONSOLE
+ EXTCONFIG_arm64      = -e SERIAL_AMBA_PL011 -e SERIAL_AMBA_PL011_CONSOLE
++EXTCONFIG_arm        = $(addprefix -e ,COMPAT_32BIT_TIME MMU ARCH_MULTIPLATFORM ARCH_MULTI_V7 ARM_PATCH_PHYS_VIRT ARCH_VIRT SERIAL_AMBA_PL011 SERIAL_AMBA_PL011_CONSOLE)
  EXTCONFIG_ARCH       = $(EXTCONFIG_$(ARCH))
  
  # extra kernel configs, include common + architecture specific
