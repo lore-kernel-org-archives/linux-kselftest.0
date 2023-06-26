@@ -2,170 +2,82 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2ECE1EB64DD
-	for <linux-kselftest@archiver.kernel.org>; Sun, 25 Jun 2023 10:14:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B53CAC0015E
+	for <linux-kselftest@archiver.kernel.org>; Sun, 25 Jun 2023 12:11:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231836AbjFYKOE (ORCPT
+        id S231836AbjFYML3 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 25 Jun 2023 06:14:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54098 "EHLO
+        Sun, 25 Jun 2023 08:11:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231219AbjFYKOD (ORCPT
+        with ESMTP id S231152AbjFYML3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 25 Jun 2023 06:14:03 -0400
-Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3231B9
-        for <linux-kselftest@vger.kernel.org>; Sun, 25 Jun 2023 03:13:58 -0700 (PDT)
-Date:   Sun, 25 Jun 2023 10:13:48 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-        s=protonmail; t=1687688036; x=1687947236;
-        bh=k39oL5YOXLn4GMRTwjuG9qX93XSq1AYvlF1Zp8zdaRY=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=D5FjEe4xr7pKYA7BZBeOjWYeIlznYW4dAI8fpszRrITkSkiPQMQhb86TEFSaAUw/w
-         r1YWkTRg6DvGDikuWlcBUx36fTL3plzCPuYlmLJKYrn1eptMiAmyB0MbkNRJQS2XDb
-         AIz1UyOWHUarQ2vMLuSPvRlgQqcXRKtVVWbXfHAvytZ0z13K/zfTD+FSwKlIjvt2NO
-         hznwHDGto7i6u6oU3Mm+vkS2QmsKm7OJtxKjQtQS7Ag3FO0796Z2lcg2lb5C0XPWtQ
-         Q3PoBK9sveUIIO6HxwSd0mOVxGPEwoXEKPSbs9Y7xGo+Hui62BnGxbqvYQsQQpEWog
-         BYDOlK0Ug/krQ==
-To:     Miguel Ojeda <ojeda@kernel.org>, David Gow <davidgow@google.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>
-From:   Benno Lossin <benno.lossin@proton.me>
-Cc:     Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Alice Ryhl <aliceryhl@google.com>,
-        Andreas Hindborg <nmi@metaspace.dk>,
-        Philip Li <philip.li@intel.com>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, rust-for-linux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Subject: Re: [PATCH 1/6] rust: init: make doctests compilable/testable
-Message-ID: <4bf1311c-6a13-736c-7de5-d5027e950977@proton.me>
-In-Reply-To: <20230614180837.630180-2-ojeda@kernel.org>
-References: <20230614180837.630180-1-ojeda@kernel.org> <20230614180837.630180-2-ojeda@kernel.org>
-Feedback-ID: 71780778:user:proton
+        Sun, 25 Jun 2023 08:11:29 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50FA8115;
+        Sun, 25 Jun 2023 05:11:27 -0700 (PDT)
+Received: from dggpeml500012.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QpqXL5vT4zLn4C;
+        Sun, 25 Jun 2023 20:09:22 +0800 (CST)
+Received: from localhost.localdomain (10.67.175.61) by
+ dggpeml500012.china.huawei.com (7.185.36.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Sun, 25 Jun 2023 20:11:24 +0800
+From:   Zheng Yejian <zhengyejian1@huawei.com>
+To:     <rostedt@goodmis.org>, <mhiramat@kernel.org>, <shuah@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        <linux-trace-kernel@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <zhengyejian1@huawei.com>
+Subject: [PATCH] selftests/ftrace: Correctly enable event in instance-event.tc
+Date:   Mon, 26 Jun 2023 08:11:44 +0800
+Message-ID: <20230626001144.2635956-1-zhengyejian1@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.175.61]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500012.china.huawei.com (7.185.36.15)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/14/23 20:08, Miguel Ojeda wrote:
-> Rust documentation tests are going to be build/run-tested
-> with the KUnit integration added in a future patch, thus
-> update them to make them compilable/testable so that we
-> may start enforcing it.
->=20
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+Function instance_set() expects to enable event 'sched_switch', so we
+should set 1 to its 'enable' file.
 
-Reviewed-by: Benno Lossin <benno.lossin@proton.me>
+Testcase passed after this patch:
+  # ./ftracetest test.d/instances/instance-event.tc
+  === Ftrace unit tests ===
+  [1] Test creation and deletion of trace instances while setting an event
+  [PASS]
 
---=20
-Cheers,
-Benno
+  # of passed:  1
+  # of failed:  0
+  # of unresolved:  0
+  # of untested:  0
+  # of unsupported:  0
+  # of xfailed:  0
+  # of undefined(test bug):  0
 
-> ---
->   rust/kernel/init.rs | 25 ++++++++++++++++---------
->   1 file changed, 16 insertions(+), 9 deletions(-)
->=20
-> diff --git a/rust/kernel/init.rs b/rust/kernel/init.rs
-> index b4332a4ec1f4..1073515ed40e 100644
-> --- a/rust/kernel/init.rs
-> +++ b/rust/kernel/init.rs
-> @@ -120,14 +120,23 @@
->   //!   `slot` gets called.
->   //!
->   //! ```rust
-> -//! use kernel::{prelude::*, init};
-> +//! # #![allow(unreachable_pub, clippy::disallowed_names)]
-> +//! use kernel::{prelude::*, init, types::Opaque};
->   //! use core::{ptr::addr_of_mut, marker::PhantomPinned, pin::Pin};
->   //! # mod bindings {
-> +//! #     #![allow(non_camel_case_types)]
->   //! #     pub struct foo;
->   //! #     pub unsafe fn init_foo(_ptr: *mut foo) {}
->   //! #     pub unsafe fn destroy_foo(_ptr: *mut foo) {}
->   //! #     pub unsafe fn enable_foo(_ptr: *mut foo, _flags: u32) -> i32 =
-{ 0 }
->   //! # }
-> +//! # trait FromErrno {
-> +//! #     fn from_errno(errno: core::ffi::c_int) -> Error {
-> +//! #         // Dummy error that can be constructed outside the `kernel=
-` crate.
-> +//! #         Error::from(core::fmt::Error)
-> +//! #     }
-> +//! # }
-> +//! # impl FromErrno for Error {}
->   //! /// # Invariants
->   //! ///
->   //! /// `foo` is always initialized
-> @@ -158,7 +167,7 @@
->   //!                 if err !=3D 0 {
->   //!                     // Enabling has failed, first clean up the foo =
-and then return the error.
->   //!                     bindings::destroy_foo(Opaque::raw_get(foo));
-> -//!                     return Err(Error::from_kernel_errno(err));
-> +//!                     return Err(Error::from_errno(err));
->   //!                 }
->   //!
->   //!                 // All fields of `RawFoo` have been initialized, si=
-nce `_p` is a ZST.
-> @@ -226,8 +235,7 @@
->   ///
->   /// ```rust
->   /// # #![allow(clippy::disallowed_names, clippy::new_ret_no_self)]
-> -/// # use kernel::{init, pin_init, stack_pin_init, init::*, sync::Mutex,=
- new_mutex};
-> -/// # use macros::pin_data;
-> +/// # use kernel::{init, macros::pin_data, pin_init, stack_pin_init, ini=
-t::*, sync::Mutex, new_mutex};
->   /// # use core::pin::Pin;
->   /// #[pin_data]
->   /// struct Foo {
-> @@ -277,7 +285,7 @@ macro_rules! stack_pin_init {
->   ///
->   /// # Examples
->   ///
-> -/// ```rust
-> +/// ```rust,ignore
->   /// # #![allow(clippy::disallowed_names, clippy::new_ret_no_self)]
->   /// # use kernel::{init, pin_init, stack_try_pin_init, init::*, sync::M=
-utex, new_mutex};
->   /// # use macros::pin_data;
-> @@ -303,7 +311,7 @@ macro_rules! stack_pin_init {
->   /// pr_info!("a: {}", &*foo.a.lock());
->   /// ```
->   ///
-> -/// ```rust
-> +/// ```rust,ignore
->   /// # #![allow(clippy::disallowed_names, clippy::new_ret_no_self)]
->   /// # use kernel::{init, pin_init, stack_try_pin_init, init::*, sync::M=
-utex, new_mutex};
->   /// # use macros::pin_data;
-> @@ -513,8 +521,7 @@ macro_rules! stack_try_pin_init {
->   /// For instance:
->   ///
->   /// ```rust
-> -/// # use kernel::pin_init;
-> -/// # use macros::pin_data;
-> +/// # use kernel::{macros::pin_data, pin_init};
->   /// # use core::{ptr::addr_of_mut, marker::PhantomPinned};
->   /// #[pin_data]
->   /// struct Buf {
-> @@ -841,7 +848,7 @@ macro_rules! init {
->   /// # Examples
->   ///
->   /// ```rust
-> -/// use kernel::{init::PinInit, error::Error, InPlaceInit};
-> +/// use kernel::{init::{PinInit, zeroed}, error::Error};
->   /// struct BigBuf {
->   ///     big: Box<[u8; 1024 * 1024 * 1024]>,
->   ///     small: [u8; 1024 * 1024],
-> --
-> 2.41.0
->=20
+Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
+---
+ .../testing/selftests/ftrace/test.d/instances/instance-event.tc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/tools/testing/selftests/ftrace/test.d/instances/instance-event.tc b/tools/testing/selftests/ftrace/test.d/instances/instance-event.tc
+index 0eb47fbb3f44..42422e425107 100644
+--- a/tools/testing/selftests/ftrace/test.d/instances/instance-event.tc
++++ b/tools/testing/selftests/ftrace/test.d/instances/instance-event.tc
+@@ -39,7 +39,7 @@ instance_read() {
+ 
+ instance_set() {
+         while :; do
+-                echo 1 > foo/events/sched/sched_switch
++                echo 1 > foo/events/sched/sched_switch/enable
+         done 2> /dev/null
+ }
+ 
+-- 
+2.25.1
 
