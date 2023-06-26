@@ -2,143 +2,132 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A760EB64DC
-	for <linux-kselftest@archiver.kernel.org>; Mon, 26 Jun 2023 18:36:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03B77EB64DC
+	for <linux-kselftest@archiver.kernel.org>; Mon, 26 Jun 2023 18:41:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230503AbjFZSgo (ORCPT
+        id S232524AbjFZSlz (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 26 Jun 2023 14:36:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50316 "EHLO
+        Mon, 26 Jun 2023 14:41:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231285AbjFZSgn (ORCPT
+        with ESMTP id S232514AbjFZSly (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 26 Jun 2023 14:36:43 -0400
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93181DC;
-        Mon, 26 Jun 2023 11:36:40 -0700 (PDT)
-Received: by mail-qv1-xf30.google.com with SMTP id 6a1803df08f44-635eb3a1d93so2932506d6.1;
-        Mon, 26 Jun 2023 11:36:40 -0700 (PDT)
+        Mon, 26 Jun 2023 14:41:54 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 849ABDA
+        for <linux-kselftest@vger.kernel.org>; Mon, 26 Jun 2023 11:41:52 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1b7fdc66e30so7604575ad.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 26 Jun 2023 11:41:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687804599; x=1690396599;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Saqf++aQwl6xF1LIXzZ525kejntUO5u9ymt5w3hstmY=;
-        b=fpgUN78PxoSf3SHWfU+rQIstNMm8SoAgc/D4eyzw7ccrhk/N+hCHQoH1RDvO9QZvX5
-         wsS3sC81RRWdQ2Yir7FvCT0yR+2KeSvGOxAGtkjCrNT5gR8sjEruP4T5qJ9jNvzCI0TN
-         tM7dvvUEgkx014kNb8HU6A+dP+xUDQ5aqd20Nq7/vuOt+ODRchFr28bPnHMmfXym83L1
-         yPRBoO13oanyALmq2EQdLeoFV7C6h0U+6ezAeY4pQ64mwCPs9ZKaiYFtAm07FVVhuPJF
-         NrsYP8B5C/IFr/SXcItD93LOown9efVlMcxv0019N8JR+yBcFrArfTR8858XKGjeMAkB
-         wkSQ==
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1687804912; x=1690396912;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Mc8gTI3W4RW6dHKji0wpJv9Z8xook1q3V9GncqmxBNs=;
+        b=iOnzyINlILniQP2HRPivDFLMjVUVk2QQghS1NdKbwT8rRo+aVuMr+sfhItnycltrNm
+         +n6dJOvm68rZFp2EiiEnVADw/GZuH7oKvqN5Sq39xJfzgSMC4/5mT/TAx3BStqepAQXQ
+         Sg4Dn+fhfxgYQwc18AdfeP92dYRiA++NH4Fi85nAY0RVNSlIGXaoGVPilka2ylzoQiOL
+         QFv51RKurWg4uRW70Xv1lzgmSMw2Ip/+GK4UUgD+U9SZlbfDzwzEPmEvWFZ81IT+N/0w
+         PNWNpwtVOFrYPj4+2nZkY4bDzIDrdYhdHQSuBH1u4hj92twmPTY8PNZWxTnXDJ34Xi9t
+         MkkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687804599; x=1690396599;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1687804912; x=1690396912;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Saqf++aQwl6xF1LIXzZ525kejntUO5u9ymt5w3hstmY=;
-        b=EKIdl37acyP5gE5GRilRN6mnqZCdl9ZQMp7HqYJ1i4zp8MXSM2HCZQQuEBM7npIrl3
-         Zpl94glG1aumckbbunecGW6VnDuF/s5BTDT4rwvzPe42uvDgT5G5PUcaPVpn58wwYzwR
-         Cr9+Y0ah8aSABbe6kPhI5fO2OSQ8drKoRUYwFW43tHomS73sm5cetvnTMYU1Cfo5NhRS
-         6Qoxl6EbUXEtPsChalH6mlmA9lIc4/arrD4lUV1vJHNKXGFGvJFaJzCe+/erWVFvU0eU
-         FIhxHm1S0Wj5V3DU+JbaGuL7v3eC2t+ofGrTmvS/LvQkxIO7XKW2jG1EJ2cQCla+v1j7
-         J/2A==
-X-Gm-Message-State: AC+VfDxDPpdp+o2fWYAKZt/oI3Bt5/XZvGLbEAyyGUYj9/zzqZSuI3hL
-        C7eFRuKQqxDfCJVf2i5sdDs9gRJadUNMKqUI+lceCZ8p
-X-Google-Smtp-Source: ACHHUZ6i/NdcLdpqQu19Scj3mAVZNhAacTX/czYtDFNCf1fchd/sIG4Wsw/6Uwzu5g7qwlGE4ZGaMks0gGYPpfcRcuQ=
-X-Received: by 2002:a05:6214:493:b0:62f:ffcc:337a with SMTP id
- pt19-20020a056214049300b0062fffcc337amr42466272qvb.25.1687804599337; Mon, 26
- Jun 2023 11:36:39 -0700 (PDT)
+        bh=Mc8gTI3W4RW6dHKji0wpJv9Z8xook1q3V9GncqmxBNs=;
+        b=fmnynypPUM5W8XjDOOVwklLU6oAgZhSEXYPjzpLVc9hdX8Jjhs4rYpC9ZM7Z4QZRVT
+         KqhIgC4ehja1wKjg38UJbebvej6N5+xIn3cZcw9le/FzrmxxA33Xs4Xb4hCwJeC/Zd6W
+         TwuC1S3JG9oFmuPQUelt27PwCjL+CcsBOivRLNvKXyiMhOeCm5jev9c1PJ75CIQoZDuj
+         mFK0CnnVvAVE5mBlSnWY0qrv00NxUWRd1HIDyGK9onwe9vcj625XJb6bmRjKr+0aQTt9
+         Nko9LB37nQXg312nLNRFMFbaSIx2rcPNAgmZNWnnk7ZHeiOFaLQbdpkfS2a/QJApFouH
+         QKhw==
+X-Gm-Message-State: AC+VfDyLxbVo2pcRPl1gswzmyUdhkP4FvX9Rh4EB1jjr0OtkLtjj0sun
+        ecFfYNMXWGYvwjBD1KAv6xhk8g==
+X-Google-Smtp-Source: ACHHUZ6kF7UCHGB/S7z47aVb3jHXMmBM7Gkc9O6kvyrBL6waC3X7eaZQjrosczNmx+jqkRnxb00mxg==
+X-Received: by 2002:a17:902:be09:b0:1b3:d6c8:7008 with SMTP id r9-20020a170902be0900b001b3d6c87008mr3314468pls.57.1687804912000;
+        Mon, 26 Jun 2023 11:41:52 -0700 (PDT)
+Received: from ghost.hq.rivosinc.com ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id y6-20020a1709029b8600b001b682336f66sm4499842plp.55.2023.06.26.11.41.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jun 2023 11:41:51 -0700 (PDT)
+From:   Charlie Jenkins <charlie@rivosinc.com>
+To:     charlie@rivosinc.com
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Zong Li <zong.li@sifive.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guo Ren <guoren@kernel.org>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Sergey Matyukevich <sergey.matyukevich@syntacore.com>,
+        David Hildenbrand <david@redhat.com>,
+        Mayuresh Chitale <mchitale@ventanamicro.com>,
+        Qinglin Pan <panqinglin2020@iscas.ac.cn>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Brian Cain <bcain@quicinc.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Anup Patel <anup@brainfault.org>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        Evan Green <evan@rivosinc.com>,
+        Guillaume Tucker <guillaume.tucker@collabora.com>,
+        Mark Brown <broonie@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-doc@vger.kernel.org (open list:DOCUMENTATION),
+        linux-riscv@lists.infradead.org (open list:RISC-V ARCHITECTURE),
+        linux-kernel@vger.kernel.org (open list),
+        linux-mm@kvack.org (open list:EXEC & BINFMT API),
+        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
+Subject: [PATCH 0/2] Restrict address space for sv39,sv48,sv57
+Date:   Mon, 26 Jun 2023 11:36:02 -0700
+Message-Id: <20230626183611.40479-1-charlie@rivosinc.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230607153600.15816-1-osmtendev@gmail.com> <b7a3219e-4e0a-7a08-439a-a8a6e35271ca@linuxfoundation.org>
- <CAK6rUAMODPLQeUawXMW_RNiJFdukOqdhS5GA5XRAq4U9bnQdNg@mail.gmail.com>
- <3c03e28b-8006-a4ac-30bc-6aaf83ccb5d5@linuxfoundation.org> <CAK6rUAObT-kQVGddhvxxtaKPcuaDddM6ipEDXuECCFtpR-GV6w@mail.gmail.com>
-In-Reply-To: <CAK6rUAObT-kQVGddhvxxtaKPcuaDddM6ipEDXuECCFtpR-GV6w@mail.gmail.com>
-From:   Osama Muhammad <osmtendev@gmail.com>
-Date:   Mon, 26 Jun 2023 23:36:28 +0500
-Message-ID: <CAK6rUAMuYTUhqcGmDrmeEWnigy3X4OxNb4zmHc0TmcVJ79MyHg@mail.gmail.com>
-Subject: Re: [PATCH v2] selftests: prctl: Add new prctl test for PR_SET_NAME
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     shuah@kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Shuah,
+Make sv39 the default address space for mmap as some applications
+currently depend on this assumption. The RISC-V specification enforces
+that bits outside of the virtual address range are not used, so
+restricting the size of the default address space as such should be
+temporary. A hint address passed to mmap will cause the largest address
+space that fits entirely into the hint to be used. If the hint is less
+than or equal to 1<<38, a 39-bit address will be used. After an address
+space is completely full, the next smallest address space will be used.
 
-Any feedback on this patch?.
+Documentation is also added to the RISC-V virtual memory section to explain
+these changes.
 
-Thanks,
-Osama
+Charlie Jenkins (2):
+  RISC-V: mm: Restrict address space for sv39,sv48,sv57
+  RISC-V: mm: Update documentation and include test
+
+ Documentation/riscv/vm-layout.rst             | 20 ++++++++
+ arch/riscv/include/asm/elf.h                  |  2 +-
+ arch/riscv/include/asm/pgtable.h              | 21 ++++++--
+ arch/riscv/include/asm/processor.h            | 41 +++++++++++++---
+ tools/testing/selftests/riscv/Makefile        |  2 +-
+ tools/testing/selftests/riscv/mm/Makefile     | 22 +++++++++
+ .../selftests/riscv/mm/testcases/mmap.c       | 49 +++++++++++++++++++
+ 7 files changed, 144 insertions(+), 13 deletions(-)
+ create mode 100644 tools/testing/selftests/riscv/mm/Makefile
+ create mode 100644 tools/testing/selftests/riscv/mm/testcases/mmap.c
 
 
-On Sat, 17 Jun 2023 at 18:01, Osama Muhammad <osmtendev@gmail.com> wrote:
->
-> Hi,
->
-> Yes, I did install the latest kernel headers and TASK_COMM_LEN is not
-> accessible in userspace.
->
-> I looked into the test which uses TASK_COMM_LEN but the test defines
-> it in its own header file.
->
-> Example:  https://elixir.bootlin.com/linux/latest/source/tools/testing/selftests/bpf/progs/pyperf.h#L13
->
-> TASK_COMM_LEN is defined in include/linux/sched.h, but this header
-> file is not exposed to userspace.
->
-> TASK_COMM_LEN is not defined in /include/uapi/linux/sched.h which is
-> exposed to userspace kernel headers.
-> Please find the link to the header file exposed to user space :-
-> -https://elixir.bootlin.com/linux/v5.15.116/source/include/uapi/linux/sched.h
->
-> As for arm64/abi/tpidr2.c It includes linux/sched.h which will be
-> /include/uapi/linux/sched.h because the user space program is
-> including it.
-> So it also cannot use TASK_COMM_LEN directly.
->
-> Regards,
-> Osama
->
-> On Tue, 13 Jun 2023 at 02:56, Shuah Khan <skhan@linuxfoundation.org> wrote:
-> >
-> > On 6/10/23 07:01, Osama Muhammad wrote:
-> > > Hi all,
-> > >
-> > > I looked into it and tried to use TASK_COMM_LEN in the test. Even
-> > > though I included "linux/sched.h '', I was not able to compile the
-> > > test because it couldn't find it in the header file.
-> > > I dived deep into the issue and turns out header file mapped in
-> > > /usr/include/linux/sched.h is actually mapped to
-> > > /include/uapi/linux/sched.h[1] in linux source,
-> > > where TASK_COMM_LEN is not even defined. Instead TASK_COMM_LEN is
-> > > defined in /include/linux/sched.h which is not mapped to any header
-> > > files in
-> > > userspace(/(/usr/include/linux).
-> > > I also tried to find the TASK_COM_LEN in /usr/include/linux/ but I
-> > > couldn't find it. Following are the search results.
-> > > grep -rnw '/usr/include/linux/' -e 'TASK_COMM_LEN"
-> > > RESULTS OF COMMAND :- /usr/include/linux/taskstats.h:38:#define
-> > > TS_COMM_LEN 32 /* should be >= TASK_COMM_LEN
-> > > Based on this information, I have two questions:
-> > > 1. Would this require a fix to move 'TASK_COMM_LEN' macro from
-> > > /include/linux/sched.h to UAPI headers /include/uapi/linux/sched.h.
-> > > 2. Is there any other way to access TASK_COMM_LEN in the selftest that
-> > > I'm not aware of?
-> > >
-> > > [1]:-https://elixir.bootlin.com/linux/v5.15.116/source/include/uapi/linux/sched.h
-> > >
-> >
-> > The best source is Linux mainline.
-> >
-> > Take a look at test files that include linux/sched.h
-> >
-> > arm64/abi/tpidr2.c is one of them.
-> >
-> > Did you install headers before compiling the test?
-> >   make headers_install
-> >
-> > thanks,
-> > -- Shuah
-> >
-> >
+base-commit: eef509789cecdce895020682192d32e8bac790e8
+-- 
+2.34.1
+
