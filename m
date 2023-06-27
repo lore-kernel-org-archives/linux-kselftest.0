@@ -2,143 +2,122 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DDBCEEB64D9
-	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Jun 2023 14:43:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ADBBEEB64D9
+	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Jun 2023 14:54:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231918AbjF0Ond (ORCPT
+        id S232160AbjF0OyE (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 27 Jun 2023 10:43:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43538 "EHLO
+        Tue, 27 Jun 2023 10:54:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231848AbjF0OnS (ORCPT
+        with ESMTP id S231854AbjF0Oxs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Jun 2023 10:43:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A1723AAC
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Jun 2023 07:42:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687876855;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HxXXRG19n9JIA9MH1iFO6LWghYV5obKh5ig/aXiH0Xo=;
-        b=M0sIQLfwrWbtHzV0qUWLeOGwSx+mbBeICu5GFz2/4/npZwq528Lkll2hcUoMHEb44WYutK
-        5z7yg6neUsAUyr9gzP6xUvLNvG34vHf2UY3nhtsLuu+NCKFBO2tT00DzsDUFXRhrxfgZZq
-        siBDrAZOE/FMDZ+YOrPRTUp5yFYjjQw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-433-LmQfQh6XPPu43T56nk_XGA-1; Tue, 27 Jun 2023 10:40:51 -0400
-X-MC-Unique: LmQfQh6XPPu43T56nk_XGA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B1A458C810A;
-        Tue, 27 Jun 2023 14:35:32 +0000 (UTC)
-Received: from llong.com (unknown [10.22.10.32])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DDBCE40C2063;
-        Tue, 27 Jun 2023 14:35:31 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Mrunal Patel <mpatel@redhat.com>,
-        Ryan Phillips <rphillips@redhat.com>,
-        Brent Rowsell <browsell@redhat.com>,
-        Peter Hunt <pehunt@redhat.com>, Phil Auld <pauld@redhat.com>,
-        Waiman Long <longman@redhat.com>
-Subject: [PATCH v4 1/9] cgroup/cpuset: Inherit parent's load balance state in v2
-Date:   Tue, 27 Jun 2023 10:35:00 -0400
-Message-Id: <20230627143508.1576882-2-longman@redhat.com>
-In-Reply-To: <20230627143508.1576882-1-longman@redhat.com>
-References: <20230627143508.1576882-1-longman@redhat.com>
+        Tue, 27 Jun 2023 10:53:48 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 267A4FA;
+        Tue, 27 Jun 2023 07:51:51 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 076803200902;
+        Tue, 27 Jun 2023 10:51:49 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Tue, 27 Jun 2023 10:51:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1687877509; x=1687963909; bh=J3c7xEg1YYI1wbRJy4qEuZ+boAxMySi5/Do
+        IOAO5gmQ=; b=hz+vJUg6/cZg8YDhve5zDRJlNDDz7L3F3NrNUBFBV7BRIVCY/cO
+        yudg+iwgFub4Y2o/zqIA/jswngiWu1DT8Jtxii5L/zV/tI7xKQMHIDfjpziFGnf6
+        GP9WqzvTGneYGh0KxDj5Mgj0oVPZgiEUIhiZ0iwlOXwgt9X1SSdmBUm3rQvNli8Q
+        W8Mgh17/B455eXKqfEsS4kjEw1tVnvqlUnBxElvl6AW61PvnKkA2+28lc0RiJbLo
+        CcFMZ0Ec+tvHXrIrB8Hz7uZ/IVQsDk38cuBOokKNrPWdsbAGQvYpSVk88JcQcoiV
+        jDvm4fvt/sJq9F9J0lvtjbvb2gMlopxHI6Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1687877509; x=1687963909; bh=J3c7xEg1YYI1wbRJy4qEuZ+boAxMySi5/Do
+        IOAO5gmQ=; b=A29GD4T+i5IqDhXAoTc3X1F9q08SZiK4F/dqN2gK6eClwF+xUsc
+        Rb0kKaF8UXdrQWfWsfMX81NxWhJ4C37Yzn0VGKYaUF6ug2i8EYo7Musc3OhnuKSX
+        lsMwf5JynptvrqXgKjpDtbKF0V3Bb3iwxDy+q9Eu+/1nHbsSoEeL5h7SeS/19n3g
+        OHxElU34m3xpbnt5F0o1UE6pUc9uucx3wzW5PgnjUtetc2HZRcmxZLBJFlHFcGMN
+        xrIOcU2UGUdIoRihQVhfe/MwciVfteHECfgqJzrjGzz3qYXsnI9l8dn+yRLLktf7
+        6IMfDTEJRTQam69e+SHFs9Rz2N718k/vZVQ==
+X-ME-Sender: <xms:hfeaZOUsX6-KqQxbmdgBnMZ6wNH0rhCxn1TOVs_SDDeMdBKYWuM00A>
+    <xme:hfeaZKn37W5L4sGVVjJChvYyulvnep473lsDql4-0UvzhhD6PHZhmWb3yXSqIQJlx
+    4ZxETT6TQTyUySDAA>
+X-ME-Received: <xmr:hfeaZCahAN26rfSxkkVFGPyXi3CD6Qb9wQDzyqvVXo7SvVpGNOML-JGHFq0lorqspFmU4Rvw4wQG7TvMV8IH_p-T5G0svIZBpKax>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrtddtgdeflecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenfg
+    hrlhcuvffnffculdejtddmnecujfgurhepfffhvfevuffkfhggtggugfgjsehtkefstddt
+    tddunecuhfhrohhmpeffrghnihgvlhcuighuuceougiguhesugiguhhuuhdrgiihiieqne
+    cuggftrfgrthhtvghrnhepudefiedtieehffeuffelffegheegjeekteekgfdtkeefjeeh
+    ffejtdfgkeeiteelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepugiguhesugiguhhuuhdrgiihii
+X-ME-Proxy: <xmx:hfeaZFUt-HHxVlILylDOTB_guDV_gvTgjgjh468_aQIlDVu3G1dY9g>
+    <xmx:hfeaZIlvBTx6nBB6Nj_IvLEBd3yma-IqEq_zlI5mgoKcGK6pxQm7IQ>
+    <xmx:hfeaZKcvuJFGIxzHbokFp40x4LcuS9dbxC7U8xOHom64hGUfV0fckg>
+    <xmx:hfeaZC4fUpuPIKeRG5l1RH2I8d9cULCwJgiGhNg6D1ehy4U2aU3GkQ>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 27 Jun 2023 10:51:48 -0400 (EDT)
+Date:   Tue, 27 Jun 2023 08:51:47 -0600
+From:   Daniel Xu <dxu@dxuuu.xyz>
+To:     Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        coreteam@netfilter.org, netfilter-devel@vger.kernel.org,
+        fw@strlen.de, daniel@iogearbox.net, dsahern@kernel.org
+Subject: Re: [PATCH bpf-next 0/7] Support defragmenting IPv(4|6) packets in
+ BPF
+Message-ID: <hwsdt5pjygunx7lxrvnwjerugchzpu5mpb442hlwf2h5szqq2h@cuqbteb6bqyh>
+References: <cover.1687819413.git.dxu@dxuuu.xyz>
+ <874jmthtiu.fsf@toke.dk>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+In-Reply-To: <874jmthtiu.fsf@toke.dk>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Since commit f28e22441f35 ("cgroup/cpuset: Add a new isolated
-cpus.partition type"), the CS_SCHED_LOAD_BALANCE bit of a v2 cpuset
-can be on or off. The child cpusets of a partition root must have the
-same setting as its parent or it may screw up the rebuilding of sched
-domains. Fix this problem by making sure the a child v2 cpuset will
-follows its parent cpuset load balance state unless the child cpuset
-is a new partition root itself.
+Hi Toke,
 
-Fixes: f28e22441f35 ("cgroup/cpuset: Add a new isolated cpus.partition type")
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- kernel/cgroup/cpuset.c | 33 ++++++++++++++++++++++++++++++---
- 1 file changed, 30 insertions(+), 3 deletions(-)
+Thanks for taking a look at the patchset.
 
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index 58e6f18f01c1..170e342b07e3 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -1588,11 +1588,16 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp,
- 		}
- 
- 		/*
--		 * Skip the whole subtree if the cpumask remains the same
--		 * and has no partition root state and force flag not set.
-+		 * Skip the whole subtree if
-+		 * 1) the cpumask remains the same,
-+		 * 2) has no partition root state,
-+		 * 3) force flag not set, and
-+		 * 4) for v2 load balance state same as its parent.
- 		 */
- 		if (!cp->partition_root_state && !force &&
--		    cpumask_equal(tmp->new_cpus, cp->effective_cpus)) {
-+		    cpumask_equal(tmp->new_cpus, cp->effective_cpus) &&
-+		    (!cgroup_subsys_on_dfl(cpuset_cgrp_subsys) ||
-+		    (is_sched_load_balance(parent) == is_sched_load_balance(cp)))) {
- 			pos_css = css_rightmost_descendant(pos_css);
- 			continue;
- 		}
-@@ -1675,6 +1680,20 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp,
- 
- 		update_tasks_cpumask(cp, tmp->new_cpus);
- 
-+		/*
-+		 * On default hierarchy, inherit the CS_SCHED_LOAD_BALANCE
-+		 * from parent if current cpuset isn't a valid partition root
-+		 * and their load balance states differ.
-+		 */
-+		if (cgroup_subsys_on_dfl(cpuset_cgrp_subsys) &&
-+		    !is_partition_valid(cp) &&
-+		    (is_sched_load_balance(parent) != is_sched_load_balance(cp))) {
-+			if (is_sched_load_balance(parent))
-+				set_bit(CS_SCHED_LOAD_BALANCE, &cp->flags);
-+			else
-+				clear_bit(CS_SCHED_LOAD_BALANCE, &cp->flags);
-+		}
-+
- 		/*
- 		 * On legacy hierarchy, if the effective cpumask of any non-
- 		 * empty cpuset is changed, we need to rebuild sched domains.
-@@ -3222,6 +3241,14 @@ static int cpuset_css_online(struct cgroup_subsys_state *css)
- 		cs->use_parent_ecpus = true;
- 		parent->child_ecpus_count++;
- 	}
-+
-+	/*
-+	 * For v2, clear CS_SCHED_LOAD_BALANCE if parent is isolated
-+	 */
-+	if (cgroup_subsys_on_dfl(cpuset_cgrp_subsys) &&
-+	    !is_sched_load_balance(parent))
-+		clear_bit(CS_SCHED_LOAD_BALANCE, &cs->flags);
-+
- 	spin_unlock_irq(&callback_lock);
- 
- 	if (!test_bit(CGRP_CPUSET_CLONE_CHILDREN, &css->cgroup->flags))
--- 
-2.31.1
+On Tue, Jun 27, 2023 at 04:25:13PM +0200, Toke Høiland-Jørgensen wrote:
+> > The basic idea is we bump a refcnt on the netfilter defrag module and
+> > then run the bpf prog after the defrag module runs. This allows bpf
+> > progs to transparently see full, reassembled packets. The nice thing
+> > about this is that progs don't have to carry around logic to detect
+> > fragments.
+> 
+> One high-level comment after glancing through the series: Instead of
+> allocating a flag specifically for the defrag module, why not support
+> loading (and holding) arbitrary netfilter modules in the UAPI? If we
+> need to allocate a new flag every time someone wants to use a netfilter
+> module along with BPF we'll run out of flags pretty quickly :)
 
+I don't have enough context on netfilter in general to say if it'd be
+generically useful -- perhaps Florian can comment on that.
+
+However, I'm not sure such a mechanism removes the need for a flag. The
+netfilter defrag modules still need to be called into to bump the refcnt.
+
+The module could export some kfuncs to inc/dec the refcnt, but it'd be
+rather odd for prog code to think about the lifetime of the attachment
+(as inc/dec for _each_ prog execution seems wasteful and slow).  AFAIK
+all the other resource acquire/release APIs are for a single prog
+execution.
+
+So a flag for link attach feels the most natural to me. We could always
+add a flag2 field or something right?
+
+[...]
+
+Thanks,
+Daniel
