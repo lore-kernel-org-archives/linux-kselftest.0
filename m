@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81B01EB64DD
-	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Jun 2023 14:36:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77A53EB64D9
+	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Jun 2023 14:36:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231345AbjF0Og4 (ORCPT
+        id S231421AbjF0Og5 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 27 Jun 2023 10:36:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38008 "EHLO
+        Tue, 27 Jun 2023 10:36:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230489AbjF0Ogz (ORCPT
+        with ESMTP id S231271AbjF0Og4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Jun 2023 10:36:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CEA530EE
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Jun 2023 07:36:06 -0700 (PDT)
+        Tue, 27 Jun 2023 10:36:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 001CC30D7
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Jun 2023 07:36:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687876565;
+        s=mimecast20190719; t=1687876563;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=T1/GI0DN/l36YNRdQUEP56Qh0Q1HrifFn5e4yBEgTec=;
-        b=g7NoqCvev+lxIChha9NYqvCm1GaY624/0YNi4nsNO1My3NoVbhzNQJFgF8KjpgIhY2RYI9
-        C7hzRa4APMgrDgHuTyRIQyI4Ssz2j7+a5BR7KFDmBYVR2/jsF1tmYrN73NsQKGKG4rOL9B
-        hIjhnNFYuPOWIHpEPJIZ+XITjSEVnxA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=vmQ47yrk6oi4cwmpXV9NlSGFJ5Yq05aPKaX6AWXHzFg=;
+        b=UN21Mqra9VuzAjK4Oq9vSEUtX9R4K61p2qSfpiw0AXVxYXPojVTcyA/6e7y5+f19X82IkB
+        xIZWogAsiSO34MeXc32glZvZGEhcpOoEDY8Ia2ksSR6j7/YVVFz7EAmR4jZ/968pHqTyKq
+        /rJt9NElVZOF+IdF5W0I2Vu2zd0IPk4=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-492-Wp4Ew9xSP4CUljkjzPLvUg-1; Tue, 27 Jun 2023 10:36:00 -0400
-X-MC-Unique: Wp4Ew9xSP4CUljkjzPLvUg-1
+ us-mta-185-Ay3jFgDAP7uyNdF6Hx5YQw-1; Tue, 27 Jun 2023 10:35:56 -0400
+X-MC-Unique: Ay3jFgDAP7uyNdF6Hx5YQw-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3B52D8E2D58;
-        Tue, 27 Jun 2023 14:35:35 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D62893819AE2;
+        Tue, 27 Jun 2023 14:35:37 +0000 (UTC)
 Received: from llong.com (unknown [10.22.10.32])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6B80540C2063;
-        Tue, 27 Jun 2023 14:35:34 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 12F0E40C2063;
+        Tue, 27 Jun 2023 14:35:37 +0000 (UTC)
 From:   Waiman Long <longman@redhat.com>
 To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
         Johannes Weiner <hannes@cmpxchg.org>,
@@ -53,9 +53,9 @@ Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
         Brent Rowsell <browsell@redhat.com>,
         Peter Hunt <pehunt@redhat.com>, Phil Auld <pauld@redhat.com>,
         Waiman Long <longman@redhat.com>
-Subject: [PATCH v4 4/9] cgroup/cpuset: Allow suppression of sched domain rebuild in update_cpumasks_hier()
-Date:   Tue, 27 Jun 2023 10:35:03 -0400
-Message-Id: <20230627143508.1576882-5-longman@redhat.com>
+Subject: [PATCH v4 7/9] cgroup/cpuset: Check partition conflict with housekeeping setup
+Date:   Tue, 27 Jun 2023 10:35:06 -0400
+Message-Id: <20230627143508.1576882-8-longman@redhat.com>
 In-Reply-To: <20230627143508.1576882-1-longman@redhat.com>
 References: <20230627143508.1576882-1-longman@redhat.com>
 MIME-Version: 1.0
@@ -65,108 +65,98 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-A single partition setup and tear-down operation can lead to
-multiple rebuild_sched_domains_locked() calls which is a waste of
-effort. This can partly be mitigated by adding a flag to suppress the
-rebuild_sched_domains_locked() call in update_cpumasks_hier(). Since
-a Boolean flag has already been passed as the 3rd argument to
-update_cpumasks_hier(), we can extend that to a full flag word.
+A user can pre-configure certain CPUs in an isolated state at boot time
+with the "isolcpus" kernel boot command line option. Those CPUs will
+not be in the housekeeping_cpumask(HK_TYPE_DOMAIN) and so will not
+be in any sched domains. This may conflict with the partition setup
+at runtime. Those boot time isolated CPUs should only be used in an
+isolated partition.
 
-The sched domain rebuild suppression is now enabled in
-update_sibling_cpumasks() as all it callers will do the sched domain
-rebuild after its return later on anyway.
+This patch adds the necessary check and disallows partition setup if the
+check fails.
 
 Signed-off-by: Waiman Long <longman@redhat.com>
 ---
- kernel/cgroup/cpuset.c | 24 ++++++++++++++++--------
- 1 file changed, 16 insertions(+), 8 deletions(-)
+ kernel/cgroup/cpuset.c | 31 +++++++++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
 diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index b8ccc1be7bde..64f9e305b3ab 100644
+index 56aa7b4f213c..3b0805eacb6b 100644
 --- a/kernel/cgroup/cpuset.c
 +++ b/kernel/cgroup/cpuset.c
-@@ -1590,6 +1590,12 @@ static int update_parent_subparts_cpumask(struct cpuset *cs, int cmd,
+@@ -75,6 +75,7 @@ enum prs_errcode {
+ 	PERR_NOCPUS,
+ 	PERR_HOTPLUG,
+ 	PERR_CPUSEMPTY,
++	PERR_HKEEPING,
+ };
+ 
+ static const char * const perr_strings[] = {
+@@ -85,6 +86,7 @@ static const char * const perr_strings[] = {
+ 	[PERR_NOCPUS]    = "Parent unable to distribute cpu downstream",
+ 	[PERR_HOTPLUG]   = "No cpu available due to hotplug",
+ 	[PERR_CPUSEMPTY] = "cpuset.cpus is empty",
++	[PERR_HKEEPING]  = "partition config conflicts with housekeeping setup",
+ };
+ 
+ struct cpuset {
+@@ -1574,6 +1576,26 @@ static int remote_cpus_update(struct cpuset *cs, struct cpumask *newmask,
  	return 0;
  }
  
 +/*
-+ * update_cpumasks_hier() flags
++ * prstate_housekeeping_conflict - check for partition & housekeeping conflicts
++ * @prstate: partition root state to be checked
++ * @new_cpus: cpu mask
++ * Return: true if there is conflict, false otherwise
++ *
++ * CPUs outside of housekeeping_cpumask(HK_TYPE_DOMAIN) can only be used in
++ * an isolated partition.
 + */
-+#define HIER_CHECKALL		0x01	/* Check all cpusets with no skipping */
-+#define HIER_NO_SD_REBUILD	0x02	/* Don't rebuild sched domains */
++static bool prstate_housekeeping_conflict(int prstate, struct cpumask *new_cpus)
++{
++	const struct cpumask *hk_domain = housekeeping_cpumask(HK_TYPE_DOMAIN);
++	bool all_in_hk = cpumask_subset(new_cpus, hk_domain);
 +
- /*
-  * update_cpumasks_hier - Update effective cpumasks and tasks in the subtree
-  * @cs:  the cpuset to consider
-@@ -1604,7 +1610,7 @@ static int update_parent_subparts_cpumask(struct cpuset *cs, int cmd,
-  * Called with cpuset_mutex held
-  */
- static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp,
--				 bool force)
-+				 int flags)
- {
- 	struct cpuset *cp;
- 	struct cgroup_subsys_state *pos_css;
-@@ -1644,10 +1650,10 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp,
- 		 * Skip the whole subtree if
- 		 * 1) the cpumask remains the same,
- 		 * 2) has no partition root state,
--		 * 3) force flag not set, and
-+		 * 3) HIER_CHECKALL flag not set, and
- 		 * 4) for v2 load balance state same as its parent.
- 		 */
--		if (!cp->partition_root_state && !force &&
-+		if (!cp->partition_root_state && !(flags & HIER_CHECKALL) &&
- 		    cpumask_equal(tmp->new_cpus, cp->effective_cpus) &&
- 		    (!cgroup_subsys_on_dfl(cpuset_cgrp_subsys) ||
- 		    (is_sched_load_balance(parent) == is_sched_load_balance(cp)))) {
-@@ -1764,7 +1770,7 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp,
- 	}
- 	rcu_read_unlock();
++	if (!all_in_hk && (prstate != PRS_ISOLATED))
++		return true;
++
++	return false;
++}
++
+ /**
+  * update_parent_effective_cpumask - update effective_cpus mask of parent cpuset
+  * @cs:      The cpuset that requests change in partition root state
+@@ -1674,6 +1696,9 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
+ 		if (!cpumask_intersects(xcpus, parent->exclusive_cpus))
+ 			return PERR_INVCPUS;
  
--	if (need_rebuild_sched_domains)
-+	if (need_rebuild_sched_domains && !(flags & HIER_NO_SD_REBUILD))
- 		rebuild_sched_domains_locked();
- }
- 
-@@ -1788,7 +1794,9 @@ static void update_sibling_cpumasks(struct cpuset *parent, struct cpuset *cs,
- 	 * to use the right effective_cpus value.
- 	 *
- 	 * The update_cpumasks_hier() function may sleep. So we have to
--	 * release the RCU read lock before calling it.
-+	 * release the RCU read lock before calling it. HIER_NO_SD_REBUILD
-+	 * flag is used to suppress rebuild of sched domains as the callers
-+	 * will take care of that.
- 	 */
- 	rcu_read_lock();
- 	cpuset_for_each_child(sibling, pos_css, parent) {
-@@ -1800,7 +1808,7 @@ static void update_sibling_cpumasks(struct cpuset *parent, struct cpuset *cs,
- 			continue;
- 
- 		rcu_read_unlock();
--		update_cpumasks_hier(sibling, tmp, false);
-+		update_cpumasks_hier(sibling, tmp, HIER_NO_SD_REBUILD);
- 		rcu_read_lock();
- 		css_put(&sibling->css);
- 	}
-@@ -1913,7 +1921,7 @@ static int update_cpumask(struct cpuset *cs, struct cpuset *trialcs,
- 	spin_unlock_irq(&callback_lock);
- 
- 	/* effective_cpus will be updated here */
--	update_cpumasks_hier(cs, &tmp, false);
-+	update_cpumasks_hier(cs, &tmp, 0);
- 
- 	if (cs->partition_root_state) {
- 		struct cpuset *parent = parent_cs(cs);
-@@ -2382,7 +2390,7 @@ static int update_prstate(struct cpuset *cs, int new_prs)
- 	 * Force update if switching back to member.
- 	 */
- 	if (!list_empty(&cs->css.children))
--		update_cpumasks_hier(cs, &tmpmask, !new_prs);
-+		update_cpumasks_hier(cs, &tmpmask, !new_prs ? HIER_CHECKALL : 0);
- 
- 	/* Update sched domains and load balance flag */
- 	update_partition_sd_lb(cs, old_prs);
++		if (prstate_housekeeping_conflict(new_prs, xcpus))
++			return PERR_HKEEPING;
++
+ 		/*
+ 		 * A parent can be left with no CPU as long as there is no
+ 		 * task directly associated with the parent partition.
+@@ -2249,6 +2274,9 @@ static int update_cpumask(struct cpuset *cs, struct cpuset *trialcs,
+ 		if (cpumask_empty(trialcs->exclusive_cpus)) {
+ 			invalidate = true;
+ 			cs->prs_err = PERR_INVCPUS;
++		} else if (prstate_housekeeping_conflict(old_prs, trialcs->exclusive_cpus)) {
++			invalidate = true;
++			cs->prs_err = PERR_HKEEPING;
+ 		} else if (tasks_nocpu_error(parent, cs, trialcs->exclusive_cpus)) {
+ 			invalidate = true;
+ 			cs->prs_err = PERR_NOCPUS;
+@@ -2381,6 +2409,9 @@ static int update_exclusive_cpumask(struct cpuset *cs, struct cpuset *trialcs,
+ 		if (cpumask_empty(trialcs->exclusive_cpus)) {
+ 			invalidate = true;
+ 			cs->prs_err = PERR_INVCPUS;
++		} else if (prstate_housekeeping_conflict(old_prs, trialcs->exclusive_cpus)) {
++			invalidate = true;
++			cs->prs_err = PERR_HKEEPING;
+ 		} else if (tasks_nocpu_error(parent, cs, trialcs->exclusive_cpus)) {
+ 			invalidate = true;
+ 			cs->prs_err = PERR_NOCPUS;
 -- 
 2.31.1
 
