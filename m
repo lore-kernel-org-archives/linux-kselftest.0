@@ -2,343 +2,352 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BF61EB64DC
-	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Jun 2023 14:37:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 111A4C001DB
+	for <linux-kselftest@archiver.kernel.org>; Tue, 27 Jun 2023 14:37:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231514AbjF0OhX (ORCPT
+        id S231578AbjF0OhY (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 27 Jun 2023 10:37:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38996 "EHLO
+        Tue, 27 Jun 2023 10:37:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231621AbjF0OhP (ORCPT
+        with ESMTP id S231641AbjF0OhQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Jun 2023 10:37:15 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 743602D6D;
-        Tue, 27 Jun 2023 07:37:02 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1b7fb1a82c4so15341895ad.1;
-        Tue, 27 Jun 2023 07:37:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687876622; x=1690468622;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=g3qBBoPBinM9uTXU87TH/vR1WOzaJAFG3FM+rFMLF54=;
-        b=IPz+v5nf/T0u4wRLY/4MeaZaX+az7xLRtL+fVxrR7eQHSlL/AoasbcdyD7duyR4DAy
-         ELMramw4ZuqUad5pWWnAJRtcKsmKZSvUrA2FKNsMTWwkhEu7K/q23a3FEth9kroV3HsO
-         JbtaGw2KVh1tvB+KIFpngujrKG6/gqXnL4F+4BHJsZCSHgUApJl68+a9rTr5NqO5MDER
-         vqQMfRslhY7j8vXulhrNMpvxHaxN5xi6EbNVEHZ/DM1hcBxrSbr02iCR6GNsY7Fq2INW
-         wcnre2+r49YClpEFBl0lP3fKSnWkIFxgy2lU3hOdGMYr+kqWRAqWVOHl0fSXH2jMiSXd
-         5VSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687876622; x=1690468622;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=g3qBBoPBinM9uTXU87TH/vR1WOzaJAFG3FM+rFMLF54=;
-        b=aj6JDTJkcT0OhJ5/f5IT2crsj7cfk/sn5yVMbWuqolnT58r+LUMmYlxmOrgclKvw71
-         IxUlTjktNl4exi/6kj6x/2JlIKFXnJZBN9givse0bDDim72qC6Imuq+cPQKLJrezGvlY
-         iWNLS8oF+3yib73+0Ga4+Nd8yLOgIWlF7Z+sse7pAEvApMgW9CIXB6hliUugx8m6xux5
-         Ndp5V9NjUrjo3MCS9gXkafsHFhCvYi/2i1FrKx0i0F9qPxbkNGbWHicsYhVrkx8xtX6I
-         oxz531SQij9FG7A37YfW4U0AcPLm0zS1DBm+AAw5I8V1+Ek01q8kM/SzamV98+XpcYuL
-         t3hg==
-X-Gm-Message-State: AC+VfDy7LRinm0ihd7m/gZFJtAVl0MTtf9mL9XHyQDo01ZZcWLwgjeBl
-        XzlsjSQTdZH3qXndIM9FAAdQoHUakuSL5Q==
-X-Google-Smtp-Source: ACHHUZ6I1MW+JxOBt1ZDqPrCHSMiiDYCa5Ns+cE/SUfVDqyGdhPXGCk9PfsOR1PrbQ4bQAnb1XyA1A==
-X-Received: by 2002:a17:902:e74c:b0:1b7:d051:89c1 with SMTP id p12-20020a170902e74c00b001b7d05189c1mr8603529plf.53.1687876608872;
-        Tue, 27 Jun 2023 07:36:48 -0700 (PDT)
-Received: from gmail.com ([2601:600:8500:5f14:d627:c51e:516e:a105])
-        by smtp.gmail.com with ESMTPSA id s7-20020a170902988700b001ac2be26340sm6115627plp.222.2023.06.27.07.36.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jun 2023 07:36:48 -0700 (PDT)
-Date:   Tue, 27 Jun 2023 07:36:45 -0700
-From:   Andrei Vagin <avagin@gmail.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v21 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-Message-ID: <ZJrz/cu/UtfBKQ01@gmail.com>
-References: <20230626113156.1274521-1-usama.anjum@collabora.com>
- <20230626113156.1274521-3-usama.anjum@collabora.com>
- <ZJo/gOnTmwEQPLF8@gmail.com>
- <13ea54c0-25a3-285c-f47e-d6da11c91795@collabora.com>
+        Tue, 27 Jun 2023 10:37:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3344F3598
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Jun 2023 07:36:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687876573;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uQnA8KxcgOFozupPVsTAvj62Jsq+O+jMrE7LgQghL4U=;
+        b=NRjCKK2pwti6iMsXPnezwsJuZwASiyCU0u9XmLPYNI/6DvmMoIKjqAywPtqrOg19e61McI
+        JM5asmP6uv7Q9mZUrhezMDEHBRV2sKPmtOw9xxy4WRxlValEwDwhmIOHkoWpoDQym7Upiw
+        jknDKYeja0t50qTpnF/l9kLjleXmkOU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-665-z_GAHB-2PXOu6TeGcIJ5RA-1; Tue, 27 Jun 2023 10:36:11 -0400
+X-MC-Unique: z_GAHB-2PXOu6TeGcIJ5RA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8763F854C20;
+        Tue, 27 Jun 2023 14:35:33 +0000 (UTC)
+Received: from llong.com (unknown [10.22.10.32])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id BFA7B40C2063;
+        Tue, 27 Jun 2023 14:35:32 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Mrunal Patel <mpatel@redhat.com>,
+        Ryan Phillips <rphillips@redhat.com>,
+        Brent Rowsell <browsell@redhat.com>,
+        Peter Hunt <pehunt@redhat.com>, Phil Auld <pauld@redhat.com>,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH v4 2/9] cgroup/cpuset: Extract out CS_CPU_EXCLUSIVE & CS_SCHED_LOAD_BALANCE handling
+Date:   Tue, 27 Jun 2023 10:35:01 -0400
+Message-Id: <20230627143508.1576882-3-longman@redhat.com>
+In-Reply-To: <20230627143508.1576882-1-longman@redhat.com>
+References: <20230627143508.1576882-1-longman@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <13ea54c0-25a3-285c-f47e-d6da11c91795@collabora.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 02:00:31PM +0500, Muhammad Usama Anjum wrote:
-> Hi Andrei and Michal,
-> 
-> Lets resolve last two points. Please reply below.
-> 
-> On 6/27/23 6:46 AM, Andrei Vagin wrote:
-> ...
-> >> +#ifdef CONFIG_HUGETLB_PAGE
-> >> +static int pagemap_scan_hugetlb_entry(pte_t *ptep, unsigned long hmask,
-> >> +				      unsigned long start, unsigned long end,
-> >> +				      struct mm_walk *walk)
-> >> +{
-> >> +	unsigned long n_pages = (end - start)/PAGE_SIZE;
-> >> +	struct pagemap_scan_private *p = walk->private;
-> >> +	struct vm_area_struct *vma = walk->vma;
-> >> +	bool is_written, is_interesting = true;
-> >> +	struct hstate *h = hstate_vma(vma);
-> >> +	unsigned long bitmap;
-> >> +	spinlock_t *ptl;
-> >> +	int ret = 0;
-> >> +	pte_t ptent;
-> >> +
-> >> +	if (IS_PM_SCAN_WP(p->flags) && n_pages < HPAGE_SIZE/PAGE_SIZE)
-> >> +		return -EINVAL;
-> >> +
-> >> +	if (n_pages > p->max_pages - p->found_pages)
-> >> +		n_pages = p->max_pages - p->found_pages;
-> >> +
-> >> +	if (IS_PM_SCAN_WP(p->flags)) {
-> >> +		i_mmap_lock_write(vma->vm_file->f_mapping);
-> >> +		ptl = huge_pte_lock(h, vma->vm_mm, ptep);
-> >> +	}
-> >> +
-> >> +	ptent = huge_ptep_get(ptep);
-> >> +	is_written = !is_huge_pte_uffd_wp(ptent);
-> >> +
-> >> +	/*
-> >> +	 * Partial hugetlb page clear isn't supported
-> >> +	 */
-> >> +	if (is_written && IS_PM_SCAN_WP(p->flags) &&
-> >> +	    n_pages < HPAGE_SIZE/PAGE_SIZE) {
-> > 
-> > should it be done only if is_interesting is set?
-> This can be good optimization. We shouldn't return error before finding if
-> page is interesting. I'll update.
-> 
-> > 
-> >> +		ret = PM_SCAN_END_WALK;
-> >> +		goto unlock_and_return;
-> >> +	}
-> >> +
-> >> +	bitmap = PM_SCAN_FLAGS(is_written, pagemap_scan_is_huge_file(ptent),
-> >> +			       pte_present(ptent), is_swap_pte(ptent),
-> >> +			       pte_present(ptent) && is_zero_pfn(pte_pfn(ptent)));
-> >> +
-> >> +	if (IS_PM_SCAN_GET(p->flags)) {
-> >> +		is_interesting = pagemap_scan_is_interesting_page(bitmap, p);
-> >> +		if (is_interesting)
-> >> +			ret = pagemap_scan_output(bitmap, p, start, n_pages);
-> >> +	}
-> >> +
-> >> +	if (IS_PM_SCAN_WP(p->flags) && is_written && is_interesting &&
-> >> +	    ret >= 0) {
-> >> +		make_uffd_wp_huge_pte(vma, start, ptep, ptent);
-> >> +		flush_hugetlb_tlb_range(vma, start, end);
-> >> +	}
-> >> +
-> >> +unlock_and_return:
-> >> +	if (IS_PM_SCAN_WP(p->flags)) {
-> >> +		spin_unlock(ptl);
-> >> +		i_mmap_unlock_write(vma->vm_file->f_mapping);
-> >> +	}
-> >> +
-> >> +	return ret;
-> >> +}
-> ...
-> >> +
-> >> +static long do_pagemap_scan(struct mm_struct *mm, unsigned long __arg)
-> >> +{
-> >> +	struct pm_scan_arg __user *uarg = (struct pm_scan_arg __user *)__arg;
-> >> +	unsigned long long start, end, walk_start, walk_end;
-> >> +	unsigned long empty_slots, vec_index = 0;
-> >> +	struct mmu_notifier_range range;
-> >> +	struct page_region __user *vec;
-> >> +	struct pagemap_scan_private p;
-> >> +	struct pm_scan_arg arg;
-> >> +	int ret = 0;
-> >> +
-> >> +	if (copy_from_user(&arg, uarg, sizeof(arg)))
-> >> +		return -EFAULT;
-> >> +
-> >> +	start = untagged_addr((unsigned long)arg.start);
-> >> +	vec = (struct page_region *)untagged_addr((unsigned long)arg.vec);
-> >> +
-> >> +	ret = pagemap_scan_args_valid(&arg, start, vec);
-> >> +	if (ret)
-> >> +		return ret;
-> >> +
-> >> +	end = start + arg.len;
-> >> +	p.max_pages = (arg.max_pages) ? arg.max_pages : ULONG_MAX;
-> >> +	p.found_pages = 0;
-> >> +	p.required_mask = arg.required_mask;
-> >> +	p.anyof_mask = arg.anyof_mask;
-> >> +	p.excluded_mask = arg.excluded_mask;
-> >> +	p.return_mask = arg.return_mask;
-> >> +	p.flags = arg.flags;
-> >> +	p.flags |= ((p.required_mask | p.anyof_mask | p.excluded_mask) &
-> >> +		    PAGE_IS_WRITTEN) ? PM_SCAN_REQUIRE_UFFD : 0;
-> >> +	p.cur_buf.start = p.cur_buf.len = p.cur_buf.flags = 0;
-> >> +	p.vec_buf = NULL;
-> >> +	p.vec_buf_len = PAGEMAP_WALK_SIZE >> PAGE_SHIFT;
-> >> +
-> >> +	/*
-> >> +	 * Allocate smaller buffer to get output from inside the page walk
-> >> +	 * functions and walk page range in PAGEMAP_WALK_SIZE size chunks. As
-> >> +	 * we want to return output to user in compact form where no two
-> >> +	 * consecutive regions should be continuous and have the same flags.
-> >> +	 * So store the latest element in p.cur_buf between different walks and
-> >> +	 * store the p.cur_buf at the end of the walk to the user buffer.
-> >> +	 */
-> >> +	if (IS_PM_SCAN_GET(p.flags)) {
-> >> +		p.vec_buf = kmalloc_array(p.vec_buf_len, sizeof(*p.vec_buf),
-> >> +					  GFP_KERNEL);
-> >> +		if (!p.vec_buf)
-> >> +			return -ENOMEM;
-> >> +	}
-> >> +
-> >> +	if (IS_PM_SCAN_WP(p.flags)) {
-> >> +		mmu_notifier_range_init(&range, MMU_NOTIFY_PROTECTION_VMA, 0,
-> >> +					mm, start, end);
-> >> +		mmu_notifier_invalidate_range_start(&range);
-> >> +	}
-> >> +
-> >> +	walk_start = walk_end = start;
-> >> +	while (walk_end < end && !ret) {
-> >> +		if (IS_PM_SCAN_GET(p.flags)) {
-> >> +			p.vec_buf_index = 0;
-> >> +
-> >> +			/*
-> >> +			 * All data is copied to cur_buf first. When more data
-> >> +			 * is found, we push cur_buf to vec_buf and copy new
-> >> +			 * data to cur_buf. Subtract 1 from length as the
-> >> +			 * index of cur_buf isn't counted in length.
-> >> +			 */
-> >> +			empty_slots = arg.vec_len - vec_index;
-> >> +			p.vec_buf_len = min(p.vec_buf_len, empty_slots - 1);
-> >> +		}
-> >> +
-> >> +		walk_end = (walk_start + PAGEMAP_WALK_SIZE) & PAGEMAP_WALK_MASK;
-> >> +		if (walk_end > end)
-> >> +			walk_end = end;
-> >> +
-> > 
-> > If this loop can run for a long time, we need to interrupt it in case of
-> > pending signals.
-> > 
-> > If you think we don't need to do that, pls explain in the commit
-> > message, so that maintainers don't miss this part and double check that
-> > everything is alright here.
-> This can be done. I'll add to the commit message that we are walking over
-> entire range passed.
-> 
-> > 
-> >> +		ret = mmap_read_lock_killable(mm);
-> >> +		if (ret)
-> > 
-> > If any pages have been handled, we need to report them to user-space. It
-> > isn't acceptable to return a error in such cases.
-> This will return error only when task has gotten some serios signal and it
-> is giong to be killed. In this scenerio, we shouldn't care about returning
-> gracefully. Why do you think we should return gracefully in this case?
+Extract out the setting of CS_CPU_EXCLUSIVE and CS_SCHED_LOAD_BALANCE
+flags as well as the rebuilding of scheduling domains into the new
+update_partition_exclusive() and update_partition_sd_lb() helper
+functions to simplify the logic. The update_partition_exclusive()
+helper is called mainly at the beginning of the caller, but it may be
+called at the end too. The update_partition_sd_lb() helper is called
+at the end of the caller.
 
-You are right, it can be interrupted only by a fatal signal. You can
-ignore this comment.
+This patch should reduce the chance that cpuset partition will end up
+in an incorrect state.
 
-> 
-> > 
-> > And we need to report an address where it stopped scanning.
-> > We can do that by adding zero length vector.
-> I don't want to do multiplexing the ending address in vec. Can we add
-> end_addr variable in struct pm_scan_arg to always return the ending address?
-> 
-> struct pm_scan_arg {
-> 	...
-> 	_u64 end_addr;
-> };
-> 
-> 
-> > 
-> > 
-> >> +			goto free_data;
-> >> +		ret = walk_page_range(mm, walk_start, walk_end,
-> >> +				      &pagemap_scan_ops, &p);
-> >> +		mmap_read_unlock(mm);
-> >> +
-> >> +		if (ret && ret != PM_SCAN_FOUND_MAX_PAGES &&
-> >> +		    ret != PM_SCAN_END_WALK)
-> >> +			goto free_data;
-> >> +
-> >> +		walk_start = walk_end;
-> >> +		if (IS_PM_SCAN_GET(p.flags) && p.vec_buf_index) {
-> >> +			if (copy_to_user(&vec[vec_index], p.vec_buf,
-> >> +					 p.vec_buf_index * sizeof(*p.vec_buf))) {
-> >> +				/*
-> >> +				 * Return error even though the OP succeeded
-> >> +				 */
-> >> +				ret = -EFAULT;
-> >> +				goto free_data;
-> >> +			}
-> >> +			vec_index += p.vec_buf_index;
-> > 
-> > Should we set ret to zero here if it is equal PM_SCAN_END_WALK.
-> No, PM_SCAN_END_WALK is just internal code to stop the page walk and return
-> immedtitely. When we get this return value, we stop this loop and return to
-> user with whatever data we have in user buffer.
+Signed-off-by: Waiman Long <longman@redhat.com>
+---
+ kernel/cgroup/cpuset.c | 141 +++++++++++++++++++++++++----------------
+ 1 file changed, 86 insertions(+), 55 deletions(-)
 
-but PM_SCAN_END_WALK is returned when p.vec_buf is full, so we can
-restart the loop after coping vec_buf to the user buffer, can't we?
+diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+index 170e342b07e3..ade33e50ffe2 100644
+--- a/kernel/cgroup/cpuset.c
++++ b/kernel/cgroup/cpuset.c
+@@ -1255,7 +1255,7 @@ static void update_tasks_cpumask(struct cpuset *cs, struct cpumask *new_cpus)
+ static void compute_effective_cpumask(struct cpumask *new_cpus,
+ 				      struct cpuset *cs, struct cpuset *parent)
+ {
+-	if (parent->nr_subparts_cpus) {
++	if (parent->nr_subparts_cpus && is_partition_valid(cs)) {
+ 		cpumask_or(new_cpus, parent->effective_cpus,
+ 			   parent->subparts_cpus);
+ 		cpumask_and(new_cpus, new_cpus, cs->cpus_allowed);
+@@ -1277,6 +1277,50 @@ enum subparts_cmd {
+ 
+ static int update_flag(cpuset_flagbits_t bit, struct cpuset *cs,
+ 		       int turning_on);
++
++/*
++ * Update partition exclusive flag
++ *
++ * Return: 0 if successful, an error code otherwise
++ */
++static int update_partition_exclusive(struct cpuset *cs, int new_prs)
++{
++	bool exclusive = (new_prs > 0);
++
++	if (exclusive && !is_cpu_exclusive(cs)) {
++		if (update_flag(CS_CPU_EXCLUSIVE, cs, 1))
++			return PERR_NOTEXCL;
++	} else if (!exclusive && is_cpu_exclusive(cs)) {
++		/* Turning off CS_CPU_EXCLUSIVE will not return error */
++		update_flag(CS_CPU_EXCLUSIVE, cs, 0);
++	}
++	return 0;
++}
++
++/*
++ * Update partition load balance flag and/or rebuild sched domain
++ *
++ * Changing load balance flag will automatically call
++ * rebuild_sched_domains_locked().
++ */
++static void update_partition_sd_lb(struct cpuset *cs, int old_prs)
++{
++	int new_prs = cs->partition_root_state;
++	bool new_lb = (new_prs != PRS_ISOLATED);
++	bool rebuild_domains = (new_prs > 0) || (old_prs > 0);
++
++	if (new_lb != !!is_sched_load_balance(cs)) {
++		rebuild_domains = true;
++		if (new_lb)
++			set_bit(CS_SCHED_LOAD_BALANCE, &cs->flags);
++		else
++			clear_bit(CS_SCHED_LOAD_BALANCE, &cs->flags);
++	}
++
++	if (rebuild_domains)
++		rebuild_sched_domains_locked();
++}
++
+ /**
+  * update_parent_subparts_cpumask - update subparts_cpus mask of parent cpuset
+  * @cs:      The cpuset that requests change in partition root state
+@@ -1336,8 +1380,7 @@ static int update_parent_subparts_cpumask(struct cpuset *cs, int cmd,
+ 		return is_partition_invalid(parent)
+ 		       ? PERR_INVPARENT : PERR_NOTPART;
+ 	}
+-	if ((newmask && cpumask_empty(newmask)) ||
+-	   (!newmask && cpumask_empty(cs->cpus_allowed)))
++	if (!newmask && cpumask_empty(cs->cpus_allowed))
+ 		return PERR_CPUSEMPTY;
+ 
+ 	/*
+@@ -1403,11 +1446,16 @@ static int update_parent_subparts_cpumask(struct cpuset *cs, int cmd,
+ 		cpumask_and(tmp->addmask, newmask, parent->cpus_allowed);
+ 		adding = cpumask_andnot(tmp->addmask, tmp->addmask,
+ 					parent->subparts_cpus);
++		/*
++		 * Empty cpumask is not allewed
++		 */
++		if (cpumask_empty(newmask)) {
++			part_error = PERR_CPUSEMPTY;
+ 		/*
+ 		 * Make partition invalid if parent's effective_cpus could
+ 		 * become empty and there are tasks in the parent.
+ 		 */
+-		if (adding &&
++		} else if (adding &&
+ 		    cpumask_subset(parent->effective_cpus, tmp->addmask) &&
+ 		    !cpumask_intersects(tmp->delmask, cpu_active_mask) &&
+ 		    partition_is_populated(parent, cs)) {
+@@ -1480,14 +1528,13 @@ static int update_parent_subparts_cpumask(struct cpuset *cs, int cmd,
+ 
+ 	/*
+ 	 * Transitioning between invalid to valid or vice versa may require
+-	 * changing CS_CPU_EXCLUSIVE and CS_SCHED_LOAD_BALANCE.
++	 * changing CS_CPU_EXCLUSIVE.
+ 	 */
+ 	if (old_prs != new_prs) {
+-		if (is_prs_invalid(old_prs) && !is_cpu_exclusive(cs) &&
+-		    (update_flag(CS_CPU_EXCLUSIVE, cs, 1) < 0))
+-			return PERR_NOTEXCL;
+-		if (is_prs_invalid(new_prs) && is_cpu_exclusive(cs))
+-			update_flag(CS_CPU_EXCLUSIVE, cs, 0);
++		int err = update_partition_exclusive(cs, new_prs);
++
++		if (err)
++			return err;
+ 	}
+ 
+ 	/*
+@@ -1524,15 +1571,16 @@ static int update_parent_subparts_cpumask(struct cpuset *cs, int cmd,
+ 		update_tasks_cpumask(parent, tmp->addmask);
+ 
+ 	/*
+-	 * Set or clear CS_SCHED_LOAD_BALANCE when partcmd_update, if necessary.
+-	 * rebuild_sched_domains_locked() may be called.
++	 * For partcmd_update without newmask, it is being called from
++	 * cpuset_hotplug_workfn() where cpus_read_lock() wasn't taken.
++	 * Update the load balance flag and scheduling domain if
++	 * cpus_read_trylock() is successful.
+ 	 */
+-	if (old_prs != new_prs) {
+-		if (old_prs == PRS_ISOLATED)
+-			update_flag(CS_SCHED_LOAD_BALANCE, cs, 1);
+-		else if (new_prs == PRS_ISOLATED)
+-			update_flag(CS_SCHED_LOAD_BALANCE, cs, 0);
++	if ((cmd == partcmd_update) && !newmask && cpus_read_trylock()) {
++		update_partition_sd_lb(cs, old_prs);
++		cpus_read_unlock();
+ 	}
++
+ 	notify_partition_change(cs, old_prs);
+ 	return 0;
+ }
+@@ -1766,6 +1814,7 @@ static int update_cpumask(struct cpuset *cs, struct cpuset *trialcs,
+ 	int retval;
+ 	struct tmpmasks tmp;
+ 	bool invalidate = false;
++	int old_prs = cs->partition_root_state;
+ 
+ 	/* top_cpuset.cpus_allowed tracks cpu_online_mask; it's read-only */
+ 	if (cs == &top_cpuset)
+@@ -1885,6 +1934,9 @@ static int update_cpumask(struct cpuset *cs, struct cpuset *trialcs,
+ 		 */
+ 		if (parent->child_ecpus_count)
+ 			update_sibling_cpumasks(parent, cs, &tmp);
++
++		/* Update CS_SCHED_LOAD_BALANCE and/or sched_domains */
++		update_partition_sd_lb(cs, old_prs);
+ 	}
+ 	return 0;
+ }
+@@ -2261,7 +2313,6 @@ static int update_flag(cpuset_flagbits_t bit, struct cpuset *cs,
+ static int update_prstate(struct cpuset *cs, int new_prs)
+ {
+ 	int err = PERR_NONE, old_prs = cs->partition_root_state;
+-	bool sched_domain_rebuilt = false;
+ 	struct cpuset *parent = parent_cs(cs);
+ 	struct tmpmasks tmpmask;
+ 
+@@ -2280,45 +2331,28 @@ static int update_prstate(struct cpuset *cs, int new_prs)
+ 	if (alloc_cpumasks(NULL, &tmpmask))
+ 		return -ENOMEM;
+ 
++	err = update_partition_exclusive(cs, new_prs);
++	if (err)
++		goto out;
++
+ 	if (!old_prs) {
+ 		/*
+-		 * Turning on partition root requires setting the
+-		 * CS_CPU_EXCLUSIVE bit implicitly as well and cpus_allowed
+-		 * cannot be empty.
++		 * cpus_allowed cannot be empty.
+ 		 */
+ 		if (cpumask_empty(cs->cpus_allowed)) {
+ 			err = PERR_CPUSEMPTY;
+ 			goto out;
+ 		}
+ 
+-		err = update_flag(CS_CPU_EXCLUSIVE, cs, 1);
+-		if (err) {
+-			err = PERR_NOTEXCL;
+-			goto out;
+-		}
+-
+ 		err = update_parent_subparts_cpumask(cs, partcmd_enable,
+ 						     NULL, &tmpmask);
+-		if (err) {
+-			update_flag(CS_CPU_EXCLUSIVE, cs, 0);
++		if (err)
+ 			goto out;
+-		}
+-
+-		if (new_prs == PRS_ISOLATED) {
+-			/*
+-			 * Disable the load balance flag should not return an
+-			 * error unless the system is running out of memory.
+-			 */
+-			update_flag(CS_SCHED_LOAD_BALANCE, cs, 0);
+-			sched_domain_rebuilt = true;
+-		}
+ 	} else if (old_prs && new_prs) {
+ 		/*
+ 		 * A change in load balance state only, no change in cpumasks.
+ 		 */
+-		update_flag(CS_SCHED_LOAD_BALANCE, cs, (new_prs != PRS_ISOLATED));
+-		sched_domain_rebuilt = true;
+-		goto out;	/* Sched domain is rebuilt in update_flag() */
++		goto out;
+ 	} else {
+ 		/*
+ 		 * Switching back to member is always allowed even if it
+@@ -2337,15 +2371,6 @@ static int update_prstate(struct cpuset *cs, int new_prs)
+ 			compute_effective_cpumask(cs->effective_cpus, cs, parent);
+ 			spin_unlock_irq(&callback_lock);
+ 		}
+-
+-		/* Turning off CS_CPU_EXCLUSIVE will not return error */
+-		update_flag(CS_CPU_EXCLUSIVE, cs, 0);
+-
+-		if (!is_sched_load_balance(cs)) {
+-			/* Make sure load balance is on */
+-			update_flag(CS_SCHED_LOAD_BALANCE, cs, 1);
+-			sched_domain_rebuilt = true;
+-		}
+ 	}
+ 
+ 	update_tasks_cpumask(parent, tmpmask.new_cpus);
+@@ -2353,18 +2378,21 @@ static int update_prstate(struct cpuset *cs, int new_prs)
+ 	if (parent->child_ecpus_count)
+ 		update_sibling_cpumasks(parent, cs, &tmpmask);
+ 
+-	if (!sched_domain_rebuilt)
+-		rebuild_sched_domains_locked();
+ out:
+ 	/*
+-	 * Make partition invalid if an error happen
++	 * Make partition invalid & disable CS_CPU_EXCLUSIVE if an error
++	 * happens.
+ 	 */
+-	if (err)
++	if (err) {
+ 		new_prs = -new_prs;
++		update_partition_exclusive(cs, new_prs);
++	}
++
+ 	spin_lock_irq(&callback_lock);
+ 	cs->partition_root_state = new_prs;
+ 	WRITE_ONCE(cs->prs_err, err);
+ 	spin_unlock_irq(&callback_lock);
++
+ 	/*
+ 	 * Update child cpusets, if present.
+ 	 * Force update if switching back to member.
+@@ -2372,6 +2400,9 @@ static int update_prstate(struct cpuset *cs, int new_prs)
+ 	if (!list_empty(&cs->css.children))
+ 		update_cpumasks_hier(cs, &tmpmask, !new_prs);
+ 
++	/* Update sched domains and load balance flag */
++	update_partition_sd_lb(cs, old_prs);
++
+ 	notify_partition_change(cs, old_prs);
+ 	free_cpumasks(NULL, &tmpmask);
+ 	return 0;
+-- 
+2.31.1
 
-> 
-> > 
-> >> +		}
-> >> +	}
-> >> +
-> >> +	if (p.cur_buf.len) {
-> >> +		if (copy_to_user(&vec[vec_index], &p.cur_buf, sizeof(p.cur_buf))) {
-> >> +			ret = -EFAULT;
-> >> +			goto free_data;
-> >> +		}
-> >> +		vec_index++;
-> >> +	}
-> >> +
-> >> +	ret = vec_index;
-> >> +
-> >> +free_data:
-> >> +	if (IS_PM_SCAN_WP(p.flags))
-> >> +		mmu_notifier_invalidate_range_end(&range);
-> >> +
-> >> +	kfree(p.vec_buf);
-> >> +	return ret;
-> >> +}
-> >> +
-> ...
-> 
-> -- 
-> BR,
-> Muhammad Usama Anjum
