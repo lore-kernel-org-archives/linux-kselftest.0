@@ -2,144 +2,157 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03B7BEB64DA
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24DB9C001B3
 	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Jun 2023 09:53:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232849AbjF1Jwx (ORCPT
+        id S232889AbjF1Jw5 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 28 Jun 2023 05:52:53 -0400
-Received: from dfw.source.kernel.org ([139.178.84.217]:36890 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232236AbjF1JuB (ORCPT
+        Wed, 28 Jun 2023 05:52:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52488 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232358AbjF1JuZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Jun 2023 05:50:01 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CF0EE6126D;
-        Wed, 28 Jun 2023 09:50:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CF13C433C0;
-        Wed, 28 Jun 2023 09:49:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687945800;
-        bh=wHy/4Bdn8bLqInIOtsbVUy9HeffaJhdQru3m0BWjVgw=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=BWkUgE7gZGIMcrVg4STv/B5lPWx6Q8LyAoYbws0CSfCsql+bBDYdawWGK2XhmpBeC
-         3NvH9Qv74cYPjC+asPQ3krfts5qn3C7LZYVRGVdHGFaGO7GdSQmH+hfhKB56A3qgD4
-         rRd/g93Rxsf5ti8lgPiq9rjcuAtigVVAqhyrlKKEcf0T7e2F743EjQwGeo+bPkXkPY
-         n2tEOow3lYJ/Tr3Tgu68XW+2U48h6bpvpjGQUwRX+yOVSS3c8yAM8jlgvUV2Czauhv
-         C6o8lclOBYraXDRZR45mVnE2yiHbIPq7H1HzStHYeG5v/6wDIwbVa1imO/tNyHZj0v
-         6GKfP/FzqBL8w==
-From:   Maxime Ripard <mripard@kernel.org>
-Date:   Wed, 28 Jun 2023 11:49:23 +0200
-Subject: [PATCH v2 3/3] drivers: base: Free devm resources when
- unregistering a device
+        Wed, 28 Jun 2023 05:50:25 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE2912119
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Jun 2023 02:48:37 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3fa9850bfebso31213465e9.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Jun 2023 02:48:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent.com; s=google; t=1687945716; x=1690537716;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FP6EIORZPJxzFsIqvOxDq19SJKXWVqMsImue+SKUFg8=;
+        b=XsjxTyPkJ3bOYJQSpzHK71Ql/BG/qCVbF4SB/59ookNrppeeken42JlBoGr5NHXNIh
+         z5IbxM+mlAVvX+9Zundma7f7rcvVCCcbEuFkhhOuF371COKodPCbgnyvza8yDvStMuIs
+         cY2wVRlR0PGT0lTJF+lBmQbSBJDngLEdidJa888k6igCPGkx3KhX+byDoZneoELdMQTS
+         EF8B74wwJTrdqRVRX+v5KmlY0xBEfeYc72B1CHnJLEES+EmAIPTcnpm9I0R9hg94sBWZ
+         2i/kux9PGuhd/MDx93JduKCKm+pQIutwlEXMrmSwoALEysgTm/Zma6x57ASw6zwUbx6B
+         6Y9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687945716; x=1690537716;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FP6EIORZPJxzFsIqvOxDq19SJKXWVqMsImue+SKUFg8=;
+        b=ThK4YDqUVWVhqxt2fQe+9SF2RY+V19wESf5xjrzcSQushC1J/Zce+HDMGAqypqu7Lb
+         wtlGc3D5npbsXjvsMUCEh6swZ9djQQTazchXtJkuusD2gD5cmSGnWy+saF47+r4kKC8r
+         DEEni+XAzeRIWpfVoYgkrN7caOR3ZnvtCh4xrJUvVnu6+n2LVk46ijoeKbeOMVsXJf6E
+         LQYy+sxYnYhZlxv/l2tIHCII0eFuqv5EID5NOp27fqzLYiSQk7aPt1HfJoaiXZMOPrjO
+         D0rGLHuwAIPMRPTipuTFlNLk+RIWMNG710Sf2u7zPKZRo4akF+qGdvbT1U80e8vxqobh
+         T7fw==
+X-Gm-Message-State: AC+VfDyhUZweCq7ZFoasST1BNZYXWIbOGXZNTdWCIWM4ZHKgGWAg3o2G
+        BPFCXM9xPhDsAqvefgfWBzKj+g==
+X-Google-Smtp-Source: ACHHUZ7wPIusenCR7v9NN3XspUt/PsXwcRvhGF4plXfCXn9cqoUqOXtN00e6OOtxQAfdg+FxvGhXgQ==
+X-Received: by 2002:a7b:c017:0:b0:3f5:ffe3:46a7 with SMTP id c23-20020a7bc017000000b003f5ffe346a7mr24250845wmb.9.1687945716240;
+        Wed, 28 Jun 2023 02:48:36 -0700 (PDT)
+Received: from [192.168.1.193] (f.c.7.0.0.0.0.0.0.0.0.0.0.0.0.0.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff::7cf])
+        by smtp.gmail.com with ESMTPSA id k26-20020a7bc41a000000b003fbb1a9586esm1187613wmi.15.2023.06.28.02.48.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jun 2023 02:48:36 -0700 (PDT)
+From:   Lorenz Bauer <lmb@isovalent.com>
+Subject: [PATCH bpf-next v4 0/7] Add SO_REUSEPORT support for TC
+ bpf_sk_assign
+Date:   Wed, 28 Jun 2023 10:48:15 +0100
+Message-Id: <20230613-so-reuseport-v4-0-4ece76708bba@isovalent.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230329-kunit-devm-inconsistencies-test-v2-3-19feb71e864b@kernel.org>
-References: <20230329-kunit-devm-inconsistencies-test-v2-0-19feb71e864b@kernel.org>
-In-Reply-To: <20230329-kunit-devm-inconsistencies-test-v2-0-19feb71e864b@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, Maxime Ripard <mripard@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAN8BnGQC/32OQQ7CIBBFr9KwFkOhluDKexgXDE4tiUIDSGqa3
+ l3Kyhjj8ufNf38WEjFYjOTYLCRgttF6V0K3a4gZtbshtdeSCWdcsL4VNHoa8Blx8iFRVNwceN9
+ KgUhKBXRECkE7M26lz9sNTwEHO9e1M4FpoA7nRC6FjDYmH171jcwr/72YOWUUpOmVFl1ZFicbf
+ dZ3dGlv/KPKsvgnEEWgmITOAEhQ6luwrusbyAOISBYBAAA=
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        David Ahern <dsahern@kernel.org>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Joe Stringer <joe@wand.net.nz>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc:     Hemanth Malla <hemanthmalla@gmail.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Lorenz Bauer <lmb@isovalent.com>,
+        Joe Stringer <joe@cilium.io>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3285; i=mripard@kernel.org;
- h=from:subject:message-id; bh=kkD1/1T/bjGcKyT9fGwaBiGFMGIVAdeHxZ21NAuyjKQ=;
- b=owGbwMvMwCX2+D1vfrpE4FHG02pJDClzmDQeKW9juC9gfatjn+zP1Tc23Pvrmamu8vlh4Z0Fz
- 0MeOSxL6ShlYRDjYpAVU2SJETZfEndq1utONr55MHNYmUCGMHBxCsBEHjUzMnQyzcqpElvTKrI5
- b+bcuqw+yyvfLRbvNI6x/MYZ685Xu4aR4b5PXZ3fitalx1w82WN83qfUTXv818QscdauFV7nTaf
- N5gQA
-X-Developer-Key: i=mripard@kernel.org; a=openpgp;
- fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: David Gow <davidgow@google.com>
+We want to replace iptables TPROXY with a BPF program at TC ingress.
+To make this work in all cases we need to assign a SO_REUSEPORT socket
+to an skb, which is currently prohibited. This series adds support for
+such sockets to bpf_sk_assing.
 
-In the current code, devres_release_all() only gets called if the device
-has a bus and has been probed.
+I did some refactoring to cut down on the amount of duplicate code. The
+key to this is to use INDIRECT_CALL in the reuseport helpers. To show
+that this approach is not just beneficial to TC sk_assign I removed
+duplicate code for bpf_sk_lookup as well.
 
-This leads to issues when using bus-less or driver-less devices where
-the device might never get freed if a managed resource holds a reference
-to the device. This is happening in the DRM framework for example.
+Joint work with Daniel Borkmann.
 
-We should thus call devres_release_all() in the device_del() function to
-make sure that the device-managed actions are properly executed when the
-device is unregistered, even if it has neither a bus nor a driver.
-
-This is effectively the same change than commit 2f8d16a996da ("devres:
-release resources on device_del()") that got reverted by commit
-a525a3ddeaca ("driver core: free devres in device_release") over
-use-after-free concerns.
-
-It's not clear whether those concerns are legitimate though, but I would
-expect drivers not to register new resources in their device-managed
-actions.
-
-Fixes: a525a3ddeaca ("driver core: free devres in device_release")
-Signed-off-by: Maxime Ripard <mripard@kernel.org>
+Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
 ---
- drivers/base/core.c                      | 11 +++++++++++
- drivers/base/test/platform-device-test.c |  2 --
- drivers/base/test/root-device-test.c     |  2 --
- 3 files changed, 11 insertions(+), 4 deletions(-)
+Changes in v4:
+- WARN_ON_ONCE if reuseport socket is refcounted (Kuniyuki)
+- Use inet[6]_ehashfn_t to shorten function declarations (Kuniyuki)
+- Shuffle documentation patch around (Kuniyuki)
+- Update commit message to explain why IPv6 needs EXPORT_SYMBOL
+- Link to v3: https://lore.kernel.org/r/20230613-so-reuseport-v3-0-907b4cbb7b99@isovalent.com
 
-diff --git a/drivers/base/core.c b/drivers/base/core.c
-index 3dff5037943e..6ceaf50f5a67 100644
---- a/drivers/base/core.c
-+++ b/drivers/base/core.c
-@@ -3817,6 +3817,17 @@ void device_del(struct device *dev)
- 	device_platform_notify_remove(dev);
- 	device_links_purge(dev);
- 
-+	/*
-+	 * If a device does not have a driver attached, we need to clean
-+	 * up any managed resources. We do this in device_release(), but
-+	 * it's never called (and we leak the device) if a managed
-+	 * resource holds a reference to the device. So release all
-+	 * managed resources here, like we do in driver_detach(). We
-+	 * still need to do so again in device_release() in case someone
-+	 * adds a new resource after this point, though.
-+	 */
-+	devres_release_all(dev);
-+
- 	bus_notify(dev, BUS_NOTIFY_REMOVED_DEVICE);
- 	kobject_uevent(&dev->kobj, KOBJ_REMOVE);
- 	glue_dir = get_glue_dir(dev);
-diff --git a/drivers/base/test/platform-device-test.c b/drivers/base/test/platform-device-test.c
-index b6ebf1dcdffb..1ae5ce8bd366 100644
---- a/drivers/base/test/platform-device-test.c
-+++ b/drivers/base/test/platform-device-test.c
-@@ -87,8 +87,6 @@ static void platform_device_devm_register_get_unregister_with_devm_test(struct k
- 	struct test_priv *priv = test->priv;
- 	int ret;
- 
--	kunit_skip(test, "This needs to be fixed in the core.");
--
- 	pdev = platform_device_alloc(DEVICE_NAME, PLATFORM_DEVID_NONE);
- 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
- 
-diff --git a/drivers/base/test/root-device-test.c b/drivers/base/test/root-device-test.c
-index 9a3e6cccae13..780d07455f57 100644
---- a/drivers/base/test/root-device-test.c
-+++ b/drivers/base/test/root-device-test.c
-@@ -78,8 +78,6 @@ static void root_device_devm_register_get_unregister_with_devm_test(struct kunit
- 	struct test_priv *priv = test->priv;
- 	int ret;
- 
--	kunit_skip(test, "This needs to be fixed in the core.");
--
- 	priv->dev = root_device_register(DEVICE_NAME);
- 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv->dev);
- 
+Changes in v3:
+- Fix warning re udp_ehashfn and udp6_ehashfn (Simon)
+- Return higher scoring connected UDP reuseport sockets (Kuniyuki)
+- Fix ipv6 module builds
+- Link to v2: https://lore.kernel.org/r/20230613-so-reuseport-v2-0-b7c69a342613@isovalent.com
 
+Changes in v2:
+- Correct commit abbrev length (Kuniyuki)
+- Reduce duplication (Kuniyuki)
+- Add checks on sk_state (Martin)
+- Split exporting inet[6]_lookup_reuseport into separate patch (Eric)
+
+---
+Daniel Borkmann (1):
+      selftests/bpf: Test that SO_REUSEPORT can be used with sk_assign helper
+
+Lorenz Bauer (6):
+      udp: re-score reuseport groups when connected sockets are present
+      net: export inet_lookup_reuseport and inet6_lookup_reuseport
+      net: remove duplicate reuseport_lookup functions
+      net: document inet[6]_lookup_reuseport sk_state requirements
+      net: remove duplicate sk_lookup helpers
+      bpf, net: Support SO_REUSEPORT sockets with bpf_sk_assign
+
+ include/net/inet6_hashtables.h                     |  81 ++++++++-
+ include/net/inet_hashtables.h                      |  74 +++++++-
+ include/net/sock.h                                 |   7 +-
+ include/uapi/linux/bpf.h                           |   3 -
+ net/core/filter.c                                  |   2 -
+ net/ipv4/inet_hashtables.c                         |  67 ++++---
+ net/ipv4/udp.c                                     |  88 ++++-----
+ net/ipv6/inet6_hashtables.c                        |  70 +++++---
+ net/ipv6/udp.c                                     |  98 ++++------
+ tools/include/uapi/linux/bpf.h                     |   3 -
+ tools/testing/selftests/bpf/network_helpers.c      |   3 +
+ .../selftests/bpf/prog_tests/assign_reuse.c        | 197 +++++++++++++++++++++
+ .../selftests/bpf/progs/test_assign_reuse.c        | 142 +++++++++++++++
+ 13 files changed, 656 insertions(+), 179 deletions(-)
+---
+base-commit: 970308a7b544fa1c7ee98a2721faba3765be8dd8
+change-id: 20230613-so-reuseport-e92c526173ee
+
+Best regards,
 -- 
-2.40.0
+Lorenz Bauer <lmb@isovalent.com>
 
