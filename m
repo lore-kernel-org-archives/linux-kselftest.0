@@ -2,238 +2,144 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E118AEB64DD
-	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Jun 2023 09:53:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03B7BEB64DA
+	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Jun 2023 09:53:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232824AbjF1Jwv (ORCPT
+        id S232849AbjF1Jwx (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 28 Jun 2023 05:52:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52496 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232376AbjF1Ju1 (ORCPT
+        Wed, 28 Jun 2023 05:52:53 -0400
+Received: from dfw.source.kernel.org ([139.178.84.217]:36890 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232236AbjF1JuB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Jun 2023 05:50:27 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F34FD2948
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Jun 2023 02:48:39 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3fa8cd4a113so34847125e9.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Jun 2023 02:48:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1687945718; x=1690537718;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=96/f/RvXpGow2TyWU+GM8deXUy7W/19EXjrkjTO+eEA=;
-        b=fPBPFp/rKQx/d+HhD6y+c0OYsGdTxbVGlAyAA1ZBY+/Z3NzYK1MW6JNDIlq14ru8NF
-         dznczzbIQXdc8Q+I6Z3coMOxMKdO6CfQ7pgrnKvUiSyseVMgQApGX+uCvs7dmzQLFK+K
-         19MsacVQvrRIguC8IEpOdSSbfN6aavYkb2lINwXlQi9wGS5iH7vM+F6svCnGfSzpASKI
-         O708ILKTOs6OIw2rwi0J+fgjggPPhrkME/v8/Ad98R7Zc1pO8xX9H0vU/e6jioInqeo5
-         ScRm1PKf4/jVTcQhSl4+42b/mz35Bu4VJKWFr0BFHwYoR0tzL00cArsDFzUbA+ArW+6W
-         gRLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687945718; x=1690537718;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=96/f/RvXpGow2TyWU+GM8deXUy7W/19EXjrkjTO+eEA=;
-        b=UO7JyB6XCz2P2OFzPTexL0JCVCvJ4sqMFHcC4M3FAPRgnuFnUqTqcfMms2TOncWkw7
-         5FWLCZw30ZA4XPblpd19VWy5w8CoOW9ZvgyqdGE0rWjGEdL6T6UtrdApL10F0Y/wO/wO
-         28XB9iNZ40eSys75e9hBxScgjTZPGCeYsCr3ws9xzSjLABo/PdhgNC/eBL9LwvRMuoyd
-         Ndg16ZwvGYyCETDq6oHJzqGAXV38iLndRytZTNAn+VKX2hSQHDYNnHeBBLZxRApVbO99
-         4Grx1OtRBmZuLipbd6lWrRRUWs9/ZiHcbl7X0cSW1Xq7J25G+R+60rJZfMng6bt7nqL4
-         xi4w==
-X-Gm-Message-State: AC+VfDzwCklrDeGWGC+CeM3qmNL4YPz5XMAu4VYwBGGw3yHAJ62Sf3F0
-        wbN/FYsavQOjK4hmOJQoKW0T8g==
-X-Google-Smtp-Source: ACHHUZ7Hy2PQCfttWP5fxXbGdwJlBeaT0jUQ7qvk/Xug6qDjmUR8qVtwmPWQt57TWr7Mhu1AOdnKmA==
-X-Received: by 2002:a05:600c:2204:b0:3fa:8db4:91ec with SMTP id z4-20020a05600c220400b003fa8db491ecmr6771751wml.10.1687945718336;
-        Wed, 28 Jun 2023 02:48:38 -0700 (PDT)
-Received: from [192.168.1.193] (f.c.7.0.0.0.0.0.0.0.0.0.0.0.0.0.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff::7cf])
-        by smtp.gmail.com with ESMTPSA id k26-20020a7bc41a000000b003fbb1a9586esm1187613wmi.15.2023.06.28.02.48.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jun 2023 02:48:38 -0700 (PDT)
-From:   Lorenz Bauer <lmb@isovalent.com>
-Date:   Wed, 28 Jun 2023 10:48:17 +0100
-Subject: [PATCH bpf-next v4 2/7] net: export inet_lookup_reuseport and
- inet6_lookup_reuseport
+        Wed, 28 Jun 2023 05:50:01 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CF0EE6126D;
+        Wed, 28 Jun 2023 09:50:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CF13C433C0;
+        Wed, 28 Jun 2023 09:49:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687945800;
+        bh=wHy/4Bdn8bLqInIOtsbVUy9HeffaJhdQru3m0BWjVgw=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+        b=BWkUgE7gZGIMcrVg4STv/B5lPWx6Q8LyAoYbws0CSfCsql+bBDYdawWGK2XhmpBeC
+         3NvH9Qv74cYPjC+asPQ3krfts5qn3C7LZYVRGVdHGFaGO7GdSQmH+hfhKB56A3qgD4
+         rRd/g93Rxsf5ti8lgPiq9rjcuAtigVVAqhyrlKKEcf0T7e2F743EjQwGeo+bPkXkPY
+         n2tEOow3lYJ/Tr3Tgu68XW+2U48h6bpvpjGQUwRX+yOVSS3c8yAM8jlgvUV2Czauhv
+         C6o8lclOBYraXDRZR45mVnE2yiHbIPq7H1HzStHYeG5v/6wDIwbVa1imO/tNyHZj0v
+         6GKfP/FzqBL8w==
+From:   Maxime Ripard <mripard@kernel.org>
+Date:   Wed, 28 Jun 2023 11:49:23 +0200
+Subject: [PATCH v2 3/3] drivers: base: Free devm resources when
+ unregistering a device
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230613-so-reuseport-v4-2-4ece76708bba@isovalent.com>
-References: <20230613-so-reuseport-v4-0-4ece76708bba@isovalent.com>
-In-Reply-To: <20230613-so-reuseport-v4-0-4ece76708bba@isovalent.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        David Ahern <dsahern@kernel.org>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Joe Stringer <joe@wand.net.nz>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>
-Cc:     Hemanth Malla <hemanthmalla@gmail.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Lorenz Bauer <lmb@isovalent.com>
+Message-Id: <20230329-kunit-devm-inconsistencies-test-v2-3-19feb71e864b@kernel.org>
+References: <20230329-kunit-devm-inconsistencies-test-v2-0-19feb71e864b@kernel.org>
+In-Reply-To: <20230329-kunit-devm-inconsistencies-test-v2-0-19feb71e864b@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, Maxime Ripard <mripard@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>
 X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3285; i=mripard@kernel.org;
+ h=from:subject:message-id; bh=kkD1/1T/bjGcKyT9fGwaBiGFMGIVAdeHxZ21NAuyjKQ=;
+ b=owGbwMvMwCX2+D1vfrpE4FHG02pJDClzmDQeKW9juC9gfatjn+zP1Tc23Pvrmamu8vlh4Z0Fz
+ 0MeOSxL6ShlYRDjYpAVU2SJETZfEndq1utONr55MHNYmUCGMHBxCsBEHjUzMnQyzcqpElvTKrI5
+ b+bcuqw+yyvfLRbvNI6x/MYZ685Xu4aR4b5PXZ3fitalx1w82WN83qfUTXv818QscdauFV7nTaf
+ N5gQA
+X-Developer-Key: i=mripard@kernel.org; a=openpgp;
+ fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Rename the existing reuseport helpers for IPv4 and IPv6 so that they
-can be invoked in the follow up commit. Export them so that building
-DCCP and IPv6 as a module works.
+From: David Gow <davidgow@google.com>
 
-No change in functionality.
+In the current code, devres_release_all() only gets called if the device
+has a bus and has been probed.
 
-Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
+This leads to issues when using bus-less or driver-less devices where
+the device might never get freed if a managed resource holds a reference
+to the device. This is happening in the DRM framework for example.
+
+We should thus call devres_release_all() in the device_del() function to
+make sure that the device-managed actions are properly executed when the
+device is unregistered, even if it has neither a bus nor a driver.
+
+This is effectively the same change than commit 2f8d16a996da ("devres:
+release resources on device_del()") that got reverted by commit
+a525a3ddeaca ("driver core: free devres in device_release") over
+use-after-free concerns.
+
+It's not clear whether those concerns are legitimate though, but I would
+expect drivers not to register new resources in their device-managed
+actions.
+
+Fixes: a525a3ddeaca ("driver core: free devres in device_release")
+Signed-off-by: Maxime Ripard <mripard@kernel.org>
 ---
- include/net/inet6_hashtables.h |  7 +++++++
- include/net/inet_hashtables.h  |  5 +++++
- net/ipv4/inet_hashtables.c     | 15 ++++++++-------
- net/ipv6/inet6_hashtables.c    | 19 ++++++++++---------
- 4 files changed, 30 insertions(+), 16 deletions(-)
+ drivers/base/core.c                      | 11 +++++++++++
+ drivers/base/test/platform-device-test.c |  2 --
+ drivers/base/test/root-device-test.c     |  2 --
+ 3 files changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/include/net/inet6_hashtables.h b/include/net/inet6_hashtables.h
-index 56f1286583d3..032ddab48f8f 100644
---- a/include/net/inet6_hashtables.h
-+++ b/include/net/inet6_hashtables.h
-@@ -48,6 +48,13 @@ struct sock *__inet6_lookup_established(struct net *net,
- 					const u16 hnum, const int dif,
- 					const int sdif);
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index 3dff5037943e..6ceaf50f5a67 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -3817,6 +3817,17 @@ void device_del(struct device *dev)
+ 	device_platform_notify_remove(dev);
+ 	device_links_purge(dev);
  
-+struct sock *inet6_lookup_reuseport(struct net *net, struct sock *sk,
-+				    struct sk_buff *skb, int doff,
-+				    const struct in6_addr *saddr,
-+				    __be16 sport,
-+				    const struct in6_addr *daddr,
-+				    unsigned short hnum);
++	/*
++	 * If a device does not have a driver attached, we need to clean
++	 * up any managed resources. We do this in device_release(), but
++	 * it's never called (and we leak the device) if a managed
++	 * resource holds a reference to the device. So release all
++	 * managed resources here, like we do in driver_detach(). We
++	 * still need to do so again in device_release() in case someone
++	 * adds a new resource after this point, though.
++	 */
++	devres_release_all(dev);
 +
- struct sock *inet6_lookup_listener(struct net *net,
- 				   struct inet_hashinfo *hashinfo,
- 				   struct sk_buff *skb, int doff,
-diff --git a/include/net/inet_hashtables.h b/include/net/inet_hashtables.h
-index 99bd823e97f6..8734f3488f5d 100644
---- a/include/net/inet_hashtables.h
-+++ b/include/net/inet_hashtables.h
-@@ -379,6 +379,11 @@ struct sock *__inet_lookup_established(struct net *net,
- 				       const __be32 daddr, const u16 hnum,
- 				       const int dif, const int sdif);
+ 	bus_notify(dev, BUS_NOTIFY_REMOVED_DEVICE);
+ 	kobject_uevent(&dev->kobj, KOBJ_REMOVE);
+ 	glue_dir = get_glue_dir(dev);
+diff --git a/drivers/base/test/platform-device-test.c b/drivers/base/test/platform-device-test.c
+index b6ebf1dcdffb..1ae5ce8bd366 100644
+--- a/drivers/base/test/platform-device-test.c
++++ b/drivers/base/test/platform-device-test.c
+@@ -87,8 +87,6 @@ static void platform_device_devm_register_get_unregister_with_devm_test(struct k
+ 	struct test_priv *priv = test->priv;
+ 	int ret;
  
-+struct sock *inet_lookup_reuseport(struct net *net, struct sock *sk,
-+				   struct sk_buff *skb, int doff,
-+				   __be32 saddr, __be16 sport,
-+				   __be32 daddr, unsigned short hnum);
-+
- static inline struct sock *
- 	inet_lookup_established(struct net *net, struct inet_hashinfo *hashinfo,
- 				const __be32 saddr, const __be16 sport,
-diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
-index e7391bf310a7..920131e4a65d 100644
---- a/net/ipv4/inet_hashtables.c
-+++ b/net/ipv4/inet_hashtables.c
-@@ -332,10 +332,10 @@ static inline int compute_score(struct sock *sk, struct net *net,
- 	return score;
- }
+-	kunit_skip(test, "This needs to be fixed in the core.");
+-
+ 	pdev = platform_device_alloc(DEVICE_NAME, PLATFORM_DEVID_NONE);
+ 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
  
--static inline struct sock *lookup_reuseport(struct net *net, struct sock *sk,
--					    struct sk_buff *skb, int doff,
--					    __be32 saddr, __be16 sport,
--					    __be32 daddr, unsigned short hnum)
-+struct sock *inet_lookup_reuseport(struct net *net, struct sock *sk,
-+				   struct sk_buff *skb, int doff,
-+				   __be32 saddr, __be16 sport,
-+				   __be32 daddr, unsigned short hnum)
- {
- 	struct sock *reuse_sk = NULL;
- 	u32 phash;
-@@ -346,6 +346,7 @@ static inline struct sock *lookup_reuseport(struct net *net, struct sock *sk,
- 	}
- 	return reuse_sk;
- }
-+EXPORT_SYMBOL_GPL(inet_lookup_reuseport);
+diff --git a/drivers/base/test/root-device-test.c b/drivers/base/test/root-device-test.c
+index 9a3e6cccae13..780d07455f57 100644
+--- a/drivers/base/test/root-device-test.c
++++ b/drivers/base/test/root-device-test.c
+@@ -78,8 +78,6 @@ static void root_device_devm_register_get_unregister_with_devm_test(struct kunit
+ 	struct test_priv *priv = test->priv;
+ 	int ret;
  
- /*
-  * Here are some nice properties to exploit here. The BSD API
-@@ -369,8 +370,8 @@ static struct sock *inet_lhash2_lookup(struct net *net,
- 	sk_nulls_for_each_rcu(sk, node, &ilb2->nulls_head) {
- 		score = compute_score(sk, net, hnum, daddr, dif, sdif);
- 		if (score > hiscore) {
--			result = lookup_reuseport(net, sk, skb, doff,
--						  saddr, sport, daddr, hnum);
-+			result = inet_lookup_reuseport(net, sk, skb, doff,
-+						       saddr, sport, daddr, hnum);
- 			if (result)
- 				return result;
+-	kunit_skip(test, "This needs to be fixed in the core.");
+-
+ 	priv->dev = root_device_register(DEVICE_NAME);
+ 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv->dev);
  
-@@ -399,7 +400,7 @@ static inline struct sock *inet_lookup_run_bpf(struct net *net,
- 	if (no_reuseport || IS_ERR_OR_NULL(sk))
- 		return sk;
- 
--	reuse_sk = lookup_reuseport(net, sk, skb, doff, saddr, sport, daddr, hnum);
-+	reuse_sk = inet_lookup_reuseport(net, sk, skb, doff, saddr, sport, daddr, hnum);
- 	if (reuse_sk)
- 		sk = reuse_sk;
- 	return sk;
-diff --git a/net/ipv6/inet6_hashtables.c b/net/ipv6/inet6_hashtables.c
-index b64b49012655..b7c56867314e 100644
---- a/net/ipv6/inet6_hashtables.c
-+++ b/net/ipv6/inet6_hashtables.c
-@@ -111,12 +111,12 @@ static inline int compute_score(struct sock *sk, struct net *net,
- 	return score;
- }
- 
--static inline struct sock *lookup_reuseport(struct net *net, struct sock *sk,
--					    struct sk_buff *skb, int doff,
--					    const struct in6_addr *saddr,
--					    __be16 sport,
--					    const struct in6_addr *daddr,
--					    unsigned short hnum)
-+struct sock *inet6_lookup_reuseport(struct net *net, struct sock *sk,
-+				    struct sk_buff *skb, int doff,
-+				    const struct in6_addr *saddr,
-+				    __be16 sport,
-+				    const struct in6_addr *daddr,
-+				    unsigned short hnum)
- {
- 	struct sock *reuse_sk = NULL;
- 	u32 phash;
-@@ -127,6 +127,7 @@ static inline struct sock *lookup_reuseport(struct net *net, struct sock *sk,
- 	}
- 	return reuse_sk;
- }
-+EXPORT_SYMBOL_GPL(inet6_lookup_reuseport);
- 
- /* called with rcu_read_lock() */
- static struct sock *inet6_lhash2_lookup(struct net *net,
-@@ -143,8 +144,8 @@ static struct sock *inet6_lhash2_lookup(struct net *net,
- 	sk_nulls_for_each_rcu(sk, node, &ilb2->nulls_head) {
- 		score = compute_score(sk, net, hnum, daddr, dif, sdif);
- 		if (score > hiscore) {
--			result = lookup_reuseport(net, sk, skb, doff,
--						  saddr, sport, daddr, hnum);
-+			result = inet6_lookup_reuseport(net, sk, skb, doff,
-+							saddr, sport, daddr, hnum);
- 			if (result)
- 				return result;
- 
-@@ -175,7 +176,7 @@ static inline struct sock *inet6_lookup_run_bpf(struct net *net,
- 	if (no_reuseport || IS_ERR_OR_NULL(sk))
- 		return sk;
- 
--	reuse_sk = lookup_reuseport(net, sk, skb, doff, saddr, sport, daddr, hnum);
-+	reuse_sk = inet6_lookup_reuseport(net, sk, skb, doff, saddr, sport, daddr, hnum);
- 	if (reuse_sk)
- 		sk = reuse_sk;
- 	return sk;
 
 -- 
-2.40.1
+2.40.0
 
