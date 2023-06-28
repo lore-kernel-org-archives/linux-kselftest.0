@@ -2,164 +2,157 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79186EB64DA
-	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Jun 2023 10:05:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8730FEB64D7
+	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Jun 2023 10:06:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230412AbjF1KF5 (ORCPT
+        id S230418AbjF1KF6 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 28 Jun 2023 06:05:57 -0400
-Received: from madras.collabora.co.uk ([46.235.227.172]:46864 "EHLO
-        madras.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235110AbjF1KA3 (ORCPT
+        Wed, 28 Jun 2023 06:05:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52992 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231643AbjF1JwY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Jun 2023 06:00:29 -0400
-Received: from localhost.localdomain (unknown [182.179.162.32])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id DC2306607173;
-        Wed, 28 Jun 2023 11:00:21 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1687946428;
-        bh=e3RwcWLS0DN4jGAQ1nXg3KEjRQ1a6mnaZglmii6vuAs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Au7dywa+LE2W/wzm1TZcFBU+0kVFgSRzNrCRHPyEN1RkjnVULKXhniptPZLhcXUGr
-         fSyahjqicrlbD/KI7XQwVreKPLo3XDb41yxXNuHrB2+YA39EYGBqHVC0hQWG13sqVt
-         +M87CEvDDDgGHS0pWrp8Bvsw6ZpnK9qnrHstqqEulP60PFV4uCx92Hcka5asggs54o
-         1PmzIdB+caWqskcSlIfmrLCWP23Hcyc1HYM2wAY4xIWS+pwcOVkpc9fedjwAfn5XeL
-         a8wJugNVzjrEdARZswXT6SzFU7Ih65MTILYlAn/BdXsw/xi6zw8HQiiZgaIfj6RfI4
-         PHx9RLfaakhCQ==
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-To:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <emmir@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@Oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: [PATCH v22 4/5] mm/pagemap: add documentation of PAGEMAP_SCAN IOCTL
-Date:   Wed, 28 Jun 2023 14:54:25 +0500
-Message-Id: <20230628095426.1886064-5-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230628095426.1886064-1-usama.anjum@collabora.com>
-References: <20230628095426.1886064-1-usama.anjum@collabora.com>
+        Wed, 28 Jun 2023 05:52:24 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBB93213F
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Jun 2023 02:48:41 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3fa96fd7a01so38551705e9.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Jun 2023 02:48:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent.com; s=google; t=1687945720; x=1690537720;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EB6riD1WXxwAhPHQKptx8Hj/oVT2Y4njsIUAGTnV+oQ=;
+        b=YHqeou5c6IyzYc35Am3dvA003R8/c/sUdngsOS4SuRzyMtyvrIFs3vUWsrjNA7ruj/
+         T82MvEwOoPDT9loqH9qK15lvk/TmrXnQWgqlvbb3fDEClVw7pjmRGlyiYje/T2Lnu1Kz
+         S1wfk/F64MQYlBGhEuGr2DWde0/f7xvLB4Eqmk6BpwYDEwTJD1oLrOh9ocyP43Awg3Wz
+         +0kMkOw6ydaLwfvGoLnhX+OetnVcNdROVXxCOt5nSY0VNUrLrp1va0AB6L4VAAXoZ1MB
+         IOLZ/QbqPA2trW23k3HtyNLYCc6IF6EhH8ZHBLcFQAUEWmwu9adHEd7deaPRM7dcRd6p
+         m6Qw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687945720; x=1690537720;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EB6riD1WXxwAhPHQKptx8Hj/oVT2Y4njsIUAGTnV+oQ=;
+        b=TKJ23SmD6X/KJFMqAdMK3CFE27lRkSyqLev89D1AsB9gtaY0G63cd1noZ6+RrEGPsi
+         IieRJyianaL4R9amLMgMA7lOCgFkSVFar/jc5VGAOc/zdbA/3YkbuszaBbgGLkU6uOn1
+         xUn4Dkk7umqz1eik9kHR/yjkMJvKMhbdPRKrtT6fvHfpoWo0FKgLLOujmqDnCajvQX9P
+         OhzYsLgbHOv/g93ftG5VTb8i8/v3HLh/7M/ngbfltOPY4urkdig7pzVIm+TuUBYOUvv/
+         sgENdDb7u5mW+Pu+0dNnEkra70g8wxMCIJsfZA+fW99JRFP/vExKoyObzGPHJQHWZP3J
+         Fmnw==
+X-Gm-Message-State: AC+VfDyvjiTGxCkIV2U2YNKN7Cu5bEtOSpA+7F9o0e0SnEmi0QpafsQ/
+        KlVMpktvAhKQ2YiFv1F84Pq7bQ==
+X-Google-Smtp-Source: ACHHUZ4P5NKU1ykLHA5DLQTtECISZ00C+OSVji0anJvKktZD8iKpsd8voDo+TT3dppPu0iM51moOxA==
+X-Received: by 2002:a7b:cd16:0:b0:3fa:98f8:225f with SMTP id f22-20020a7bcd16000000b003fa98f8225fmr5768761wmj.26.1687945720442;
+        Wed, 28 Jun 2023 02:48:40 -0700 (PDT)
+Received: from [192.168.1.193] (f.c.7.0.0.0.0.0.0.0.0.0.0.0.0.0.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff::7cf])
+        by smtp.gmail.com with ESMTPSA id k26-20020a7bc41a000000b003fbb1a9586esm1187613wmi.15.2023.06.28.02.48.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jun 2023 02:48:40 -0700 (PDT)
+From:   Lorenz Bauer <lmb@isovalent.com>
+Date:   Wed, 28 Jun 2023 10:48:19 +0100
+Subject: [PATCH bpf-next v4 4/7] net: document inet[6]_lookup_reuseport
+ sk_state requirements
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230613-so-reuseport-v4-4-4ece76708bba@isovalent.com>
+References: <20230613-so-reuseport-v4-0-4ece76708bba@isovalent.com>
+In-Reply-To: <20230613-so-reuseport-v4-0-4ece76708bba@isovalent.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        David Ahern <dsahern@kernel.org>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Joe Stringer <joe@wand.net.nz>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc:     Hemanth Malla <hemanthmalla@gmail.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Lorenz Bauer <lmb@isovalent.com>
+X-Mailer: b4 0.12.2
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add some explanation and method to use write-protection and written-to
-on memory range.
+The current implementation was extracted from inet[6]_lhash2_lookup
+in commit 80b373f74f9e ("inet: Extract helper for selecting socket
+from reuseport group") and commit 5df6531292b5 ("inet6: Extract helper
+for selecting socket from reuseport group"). In the original context,
+sk is always in TCP_LISTEN state and so did not have a separate check.
 
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Add documentation that specifies which sk_state are valid to pass to
+the function.
+
+Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
 ---
-Changes in v21:
-- Update according to changed interface
+ net/ipv4/inet_hashtables.c  | 14 ++++++++++++++
+ net/ipv6/inet6_hashtables.c | 14 ++++++++++++++
+ 2 files changed, 28 insertions(+)
 
-Changes in v20:
-- Add new flag in documentation
+diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
+index 352eb371c93b..ac927a635a6f 100644
+--- a/net/ipv4/inet_hashtables.c
++++ b/net/ipv4/inet_hashtables.c
+@@ -335,6 +335,20 @@ static inline int compute_score(struct sock *sk, struct net *net,
+ 
+ INDIRECT_CALLABLE_DECLARE(inet_ehashfn_t udp_ehashfn);
+ 
++/**
++ * inet_lookup_reuseport() - execute reuseport logic on AF_INET socket if necessary.
++ * @net: network namespace.
++ * @sk: AF_INET socket, must be in TCP_LISTEN state for TCP or TCP_CLOSE for UDP.
++ * @skb: context for a potential SK_REUSEPORT program.
++ * @doff: header offset.
++ * @saddr: source address.
++ * @sport: source port.
++ * @daddr: destination address.
++ * @hnum: destination port in host byte order.
++ *
++ * Return: NULL if sk doesn't have SO_REUSEPORT set, otherwise a pointer to
++ *         the selected sock or an error.
++ */
+ struct sock *inet_lookup_reuseport(struct net *net, struct sock *sk,
+ 				   struct sk_buff *skb, int doff,
+ 				   __be32 saddr, __be16 sport,
+diff --git a/net/ipv6/inet6_hashtables.c b/net/ipv6/inet6_hashtables.c
+index 3616225c89ef..d37602fabc00 100644
+--- a/net/ipv6/inet6_hashtables.c
++++ b/net/ipv6/inet6_hashtables.c
+@@ -114,6 +114,20 @@ static inline int compute_score(struct sock *sk, struct net *net,
+ 
+ INDIRECT_CALLABLE_DECLARE(inet6_ehashfn_t udp6_ehashfn);
+ 
++/**
++ * inet6_lookup_reuseport() - execute reuseport logic on AF_INET6 socket if necessary.
++ * @net: network namespace.
++ * @sk: AF_INET6 socket, must be in TCP_LISTEN state for TCP or TCP_CLOSE for UDP.
++ * @skb: context for a potential SK_REUSEPORT program.
++ * @doff: header offset.
++ * @saddr: source address.
++ * @sport: source port.
++ * @daddr: destination address.
++ * @hnum: destination port in host byte order.
++ *
++ * Return: NULL if sk doesn't have SO_REUSEPORT set, otherwise a pointer to
++ *         the selected sock or an error.
++ */
+ struct sock *inet6_lookup_reuseport(struct net *net, struct sock *sk,
+ 				    struct sk_buff *skb, int doff,
+ 				    const struct in6_addr *saddr,
 
-Changes in v19:
-- Improved documentatiom with punctuation marks
-
-Changes in v16:
-- Update the documentation
-
-Changes in v11:
-- Add more documentation
-
-rst
----
- Documentation/admin-guide/mm/pagemap.rst | 58 ++++++++++++++++++++++++
- 1 file changed, 58 insertions(+)
-
-diff --git a/Documentation/admin-guide/mm/pagemap.rst b/Documentation/admin-guide/mm/pagemap.rst
-index c8f380271cad..4bdad8eff009 100644
---- a/Documentation/admin-guide/mm/pagemap.rst
-+++ b/Documentation/admin-guide/mm/pagemap.rst
-@@ -227,3 +227,61 @@ Before Linux 3.11 pagemap bits 55-60 were used for "page-shift" (which is
- always 12 at most architectures). Since Linux 3.11 their meaning changes
- after first clear of soft-dirty bits. Since Linux 4.2 they are used for
- flags unconditionally.
-+
-+Pagemap Scan IOCTL
-+==================
-+
-+The ``PAGEMAP_SCAN`` IOCTL on the pagemap file can be used to get or optionally
-+clear the info about page table entries. The following operations are supported
-+in this IOCTL:
-+- Get the information if the pages have been written to (``PAGE_IS_WRITTEN``),
-+  file mapped (``PAGE_IS_FILE``), present (``PAGE_IS_PRESENT``), swapped
-+  (``PAGE_IS_SWAPPED``) or page has pfn zero (``PAGE_IS_PFNZERO``).
-+- Find pages which have been written to and/or write protect the pages atomically
-+  (atomic ``PM_SCAN_OP_GET + PM_SCAN_OP_WP``)
-+
-+The ``struct pm_scan_arg`` is used as the argument of the IOCTL.
-+ 1. The size of the ``struct pm_scan_arg`` must be specified in the ``size``
-+    field. This field will be helpful in recognizing the structure if extensions
-+    are done later.
-+ 2. The flags can be specified in the ``flags`` field. The ``PM_SCAN_OP_GET``
-+    and ``PM_SCAN_OP_WP`` are the only added flags at this time.
-+ 3. The range is specified through ``start`` and ``end``.
-+ 4. The output buffer of ``struct page_region`` array and size is specified in
-+    ``vec`` and ``vec_len``.
-+ 5. The optional maximum requested pages are specified in the ``max_pages``.
-+ 6. The masks are specified in ``required_mask``, ``anyof_mask``,
-+    ``excluded_ mask`` and ``return_mask``.
-+    1.  To find if ``PAGE_IS_WRITTEN`` flag is set for pages which have
-+        ``PAGE_IS_FILE`` set and ``PAGE_IS_SWAPPED`` unset, ``required_mask``
-+        is set to ``PAGE_IS_FILE``, ``exclude_mask`` is set to
-+        ``PAGE_IS_SWAPPED`` and ``return_mask`` is set to ``PAGE_IS_WRITTEN``.
-+        The output buffer in ``vec`` and length must be specified in ``vec_len``.
-+    2. To find pages which have either ``PAGE_IS_FILE`` or ``PAGE_IS_SWAPPED``
-+       set, ``anyof_masks`` is set to  ``PAGE_IS_FILE | PAGE_IS_SWAPPED``.
-+    3. To find written pages and engage write protect, ``PAGE_IS_WRITTEN`` is
-+       specified in ``required_mask`` and ``return_mask``. In addition to
-+       specifying the output buffer in ``vec`` and length in ``vec_len``, the
-+       ``PM_SCAN_OP_WP`` is specified in ``flags`` to perform write protect
-+       on the range as well.
-+
-+The ``PAGE_IS_WRITTEN`` flag can be considered as the better and correct
-+alternative of soft-dirty flag. It doesn't get affected by housekeeping chores
-+(VMA merging) of the kernel and hence the user can find the true soft-dirty pages
-+only. This IOCTL adds the atomic way to find which pages have been written and
-+write protect those pages again. This kind of operation is needed to efficiently
-+find out which pages have changed in the memory.
-+
-+To get information about which pages have been written to or optionally write
-+protect the pages, following must be performed first in order:
-+ 1. The userfaultfd file descriptor is created with ``userfaultfd`` syscall.
-+ 2. The ``UFFD_FEATURE_WP_UNPOPULATED`` and ``UFFD_FEATURE_WP_ASYNC`` features
-+    are set by ``UFFDIO_API`` IOCTL.
-+ 3. The memory range is registered with ``UFFDIO_REGISTER_MODE_WP`` mode
-+    through ``UFFDIO_REGISTER`` IOCTL.
-+ 4. Then any part of the registered memory or the whole memory region must
-+    be write protected using ``PAGEMAP_SCAN`` IOCTL with flag ``PM_SCAN_OP_WP``
-+    or the ``UFFDIO_WRITEPROTECT`` IOCTL can be used. Both of these perform the
-+    same operation. The former is better in terms of performance.
-+ 5. Now the ``PAGEMAP_SCAN`` IOCTL can be used to either just find pages which
-+    have been written to and/or optionally write protect the pages as well.
 -- 
-2.39.2
+2.40.1
 
