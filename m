@@ -2,193 +2,103 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 986ABEB64D7
-	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Jun 2023 08:14:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AD65EB64DC
+	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Jun 2023 08:22:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233756AbjF1IOY (ORCPT
+        id S232181AbjF1IWr (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 28 Jun 2023 04:14:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36840 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234088AbjF1IMR (ORCPT
+        Wed, 28 Jun 2023 04:22:47 -0400
+Received: from mailgate.ics.forth.gr ([139.91.1.2]:13488 "EHLO
+        mailgate.ics.forth.gr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232537AbjF1IS7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Jun 2023 04:12:17 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8633A420F;
-        Wed, 28 Jun 2023 01:08:45 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2b69923a715so55281451fa.0;
-        Wed, 28 Jun 2023 01:08:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687939724; x=1690531724;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=n3aJVivKTsxGgC5bZY9lBEYilnIfeNYiUvGs+4klsT4=;
-        b=YjeZO/jUnGdaNQpdnrUu1EmzUGRBz4pUJt0o59PNarnmbwrY+T5WRf4t0XEwJ6JNsu
-         CVZ8FrikEZv/mYXDcFMZ9laKMWPQR3yWYKFQIEkZoUZxkI9xPELX2njf6HauShx/hQoV
-         0c2ib/db7WxfNHNRFeYhjhAt4PutvQssRvidvcAsorZWtf3UyT/qc5inZf62EnnA+gO3
-         jrpoagOc/rO6uLLl/aSd1u/QTDArNU94qRibaASr2aj3Ejth1bwY684JWL2M2Jp02I4E
-         jBF5HbLndr972D+mUdP8DYEBPARi8JLKy87Qq/WXmd1fVMhc8xScXvT9YG7b/cPEggGD
-         QjYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687939724; x=1690531724;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=n3aJVivKTsxGgC5bZY9lBEYilnIfeNYiUvGs+4klsT4=;
-        b=juObJZAoX9NkwCX3XAYtQe+kHLewRGoVdVsntRfgYMA88j9AuYHNE8Y6e1h0zNZuUo
-         D5zkUErxlmLC0opV44DyJlfMaZFpoiYZ1dZ2VuQEbDWMvsRwZzZqU0v07MdA1fag3ISx
-         3HFdoDnQxOwzOdHnUxDuBNML/7QxaeXFwvBYlvx68b0WQygXVCczoMKaey2zEFLJarKz
-         7aCnvoxJCPfKPX42avswg3pWxI/eikJBmgFTC4KiQu5H2sn1Lx+VIo9K3ZJbeC46MLz/
-         3PzLFvRungztyAxJE+laUWgZP27qmXQrIRXq2IcqL8K+08fWmF9DqxtyhWLLbcIpaalD
-         J/4g==
-X-Gm-Message-State: AC+VfDzGJoOoBDLJbx8Vk/NZ8yEEIy7dsiwxuilD6GOhzZzcQSHNUQjj
-        x1J5HKdyDCGkosV7Ihgp0eExy+yLmISRKablWqQOVK2s3bA=
-X-Google-Smtp-Source: ACHHUZ6G3GAT9ajCN9HnEnSa14/P//f+PSHHiBNlYEdgWCk+bz3CMGjmyPuJIjqhIuitZ1/YwJeJIdz2FvIiBiB2/A0=
-X-Received: by 2002:a05:6512:3d21:b0:4fb:4368:14a1 with SMTP id
- d33-20020a0565123d2100b004fb436814a1mr7873262lfv.18.1687931912362; Tue, 27
- Jun 2023 22:58:32 -0700 (PDT)
+        Wed, 28 Jun 2023 04:18:59 -0400
+Received: from av3.ics.forth.gr (av3in.ics.forth.gr [139.91.1.77])
+        by mailgate.ics.forth.gr (8.15.2/ICS-FORTH/V10-1.8-GATE) with ESMTP id 35S7iT5D060361
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Jun 2023 10:44:29 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; d=ics.forth.gr; s=av; c=relaxed/simple;
+        q=dns/txt; i=@ics.forth.gr; t=1687938268; x=1690530268;
+        h=From:Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=p8V5keLqZmvghqwdTNhha7x0Up0dRy6dy2mG52JFhz0=;
+        b=UwHN5CAQyRm3KAhAmLCvT14b0hj9J0mgCI4yzHrD4xUrQX7s3YzW3+UOyMtHtO4l
+        +kkat1O6fQcT7gTx5MaItShLs4i5za8q6SnZxTpko7AAxkDV3mWfRt21iGLKiEMg
+        141u7K4iBBVldJpeVFJFkYP85TsewxyDejBLBH+r9sPWEQT7eX3ioA2h+uFnv6u3
+        Cin73X6F4fuOYWgMJgMNmU0VhoGAwX9rpqD7zpXVlA71ogRSRha/MIdnBLRMxvcM
+        /AdTIEdszr/Lh1ig7xHdZ6cAmjUUjPcSubVBbmT7VKHPuyTW8sr2kU/Cy5uAFlK/
+        bXpQDGoxqXU1sae2RAi0dQ==;
+X-AuditID: 8b5b014d-a23ec70000002178-01-649be4dc9c9e
+Received: from enigma.ics.forth.gr (enigma.ics.forth.gr [139.91.151.35])
+        by av3.ics.forth.gr (Symantec Messaging Gateway) with SMTP id A3.E5.08568.CD4EB946; Wed, 28 Jun 2023 10:44:28 +0300 (EEST)
+X-ICS-AUTH-INFO: Authenticated user: mick at ics.forth.gr
+Message-ID: <6dc3a208-e180-18b4-c87e-50735edd595b@ics.forth.gr>
+Date:   Wed, 28 Jun 2023 10:44:26 +0300
 MIME-Version: 1.0
-References: <cover.1687515463.git.haibo1.xu@intel.com> <341feff384c9f8a20ed4aac6e2dda0440d6b84f2.1687515463.git.haibo1.xu@intel.com>
- <20230627-4d207186c4ef81be43c9d874@orel>
-In-Reply-To: <20230627-4d207186c4ef81be43c9d874@orel>
-From:   Haibo Xu <xiaobo55x@gmail.com>
-Date:   Wed, 28 Jun 2023 13:58:21 +0800
-Message-ID: <CAJve8ony9nj9LyCAJjtvthR+ABLvSPHvpeE5e5=wr_z44i20qw@mail.gmail.com>
-Subject: Re: [PATCH v4 08/12] KVM: arm64: selftests: Move reject_set check
- logic to a function
-To:     Andrew Jones <ajones@ventanamicro.com>
-Cc:     Haibo Xu <haibo1.xu@intel.com>, maz@kernel.org,
-        oliver.upton@linux.dev, seanjc@google.com,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 1/2] RISC-V: mm: Restrict address space for sv39,sv48,sv57
+Content-Language: el-GR, en-US
+To:     Palmer Dabbelt <palmer@rivosinc.com>, jrtc27@jrtc27.com
+Cc:     charlie@rivosinc.com, alexghiti@rivosinc.com,
+        Atish Patra <atishp@rivosinc.com>,
+        Conor Dooley <conor@kernel.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Shuah Khan <shuah@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        aou@eecs.berkeley.edu, Bjorn Topel <bjorn@rivosinc.com>,
+        anup@brainfault.org, Evan Green <evan@rivosinc.com>,
+        linux-riscv@lists.infradead.org, konstantin@linuxfoundation.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org
+References: <mhng-7914c1d2-d671-4cc4-ba90-f85acb7c8b50@palmer-ri-x1c9>
+From:   Nick Kossifidis <mick@ics.forth.gr>
+In-Reply-To: <mhng-7914c1d2-d671-4cc4-ba90-f85acb7c8b50@palmer-ri-x1c9>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprOIsWRmVeSWpSXmKPExsXSHT1dWffOk9kpBpN2qFs8bjzOaNHy4R2r
+        xdbfs9gtNv//wmzx9sYrRot7E7+zWKycuorN4sgUO4s9CycyW+z8/IXRYmHbEhaL6Xfes1nc
+        W/Of1WLb5xY2iwVH0y3aZvE7CHhM/X2GxeNwxxd2j5Xv37F4bFrVyeax6dMkdo/9c9ewe2xe
+        Uu9xY1aEx6Xm6+wenzfJBXBFcdmkpOZklqUW6dslcGXcX76fueAzV8Wa040sDYx3OboYOTkk
+        BEwkPmyezdbFyMUhJHCUUWLa50ZmiISlxOZPL1lAbF4Be4lXr56BxVkEVCVaNjYzQcQFJU7O
+        fAJWIyoQLbH68wVWEFtYwE9i+vKfjCA2s4CcxPtn28HiIgLWEgcOHGUFWcYscJlZYtGMlWCD
+        hATcJDb9eg42iE1AU2L+pYNgNqeAu8SCCfeZIQaZSXRt7YIaKi/RvHU28wRGgVlI7piFZN8s
+        JC2zkLQsYGRZxSiQWGasl5lcrJeWX1SSoZdetIkRHHeMvjsYb29+q3eIkYmD8RCjBAezkgiv
+        2I/pKUK8KYmVValF+fFFpTmpxYcYpTlYlMR5T9guSBYSSE8sSc1OTS1ILYLJMnFwSjUwHfl9
+        5aVUUBHHJcF7/Y8j50tdMu1U/DLliox05Y0v3PKr8jqaPq9xnfd648PUy731PfMs3CsenGt9
+        US6wet33SjWFuheP0l6nLz3gIjVPPYL723a+uweiVy9wCV/UqFfnflqgt5VHs3XxYsPNBSKS
+        IsJ/8/taHD6caRdM4zp23s2qsrrnT1zj0q4lfOuVnlQbHDXJ5/i89+eOy0/WRd3SVFzaL/l1
+        0ZvQkqPml11ELK8vcGkSUzc0d0tS2lv2KSKurkUy10Xm6yuTfT61TC63fzslnD/Xv1jOUJVx
+        1l5OEe0lvR/OTMn9fq106u1ZTOdOz5tc8/WH0h5+W4332z5eaF4XXZ07aXbWk08bvRetUGIp
+        zkg01GIuKk4EAMjdIykqAwAA
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 5:09=E2=80=AFPM Andrew Jones <ajones@ventanamicro.c=
-om> wrote:
->
-> On Fri, Jun 23, 2023 at 06:40:10PM +0800, Haibo Xu wrote:
-> > No functional changes. Just move the reject_set check logic to a
-> > function so we can check for specific errno for specific register.
-> > This is a preparation for support reject_set in riscv.
-> >
-> > Suggested-by: Andrew Jones <ajones@ventanamicro.com>
-> > Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
-> > ---
-> >  tools/testing/selftests/kvm/aarch64/get-reg-list.c | 8 ++++++++
-> >  tools/testing/selftests/kvm/get-reg-list.c         | 7 ++++++-
-> >  2 files changed, 14 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/tools/testing/selftests/kvm/aarch64/get-reg-list.c b/tools=
-/testing/selftests/kvm/aarch64/get-reg-list.c
-> > index aaf035c969ec..4e2e1fe833eb 100644
-> > --- a/tools/testing/selftests/kvm/aarch64/get-reg-list.c
-> > +++ b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
-> > @@ -27,6 +27,14 @@ bool filter_reg(__u64 reg)
-> >       return false;
-> >  }
-> >
-> > +bool reject_set_fail(__u64 reg)
-> > +{
-> > +     if (reg =3D=3D KVM_REG_ARM64_SVE_VLS)
-> > +             return (errno !=3D EPERM);
-> > +
-> > +     return false;
-> > +}
->
-> I think we should pass errno in as a parameter and I prefer positive
-> predicate functions, so I'd name this check_reject_set() and reverse
-> the logic. Also, we don't want to check for KVM_REG_ARM64_SVE_VLS,
-> because that duplicates the rejects set. I see in a later patch
-> that riscv needs to check reg because different errors are used
-> for different registers, but that's because KVM_REG_RISCV_TIMER_REG(state=
-)
-> was erroneously added to the rejects set. KVM_REG_RISCV_TIMER_REG(state)
-> doesn't belong there. That register can be set, but it only supports
-> certain input, otherwise, it correctly, results in EINVAL. We'll need
-> the concept of a "skip set" to avoid tripping over that one.
->
-> So, I think arm's function should be
->
->  bool check_reject_set(int errno)
->  {
->      return errno =3D=3D EPERM;
->  }
->
-> and riscv's should be
->
->  bool check_reject_set(int errno)
->  {
->      return errno =3D=3D EOPNOTSUPP;
->  }
->
+On 6/28/23 02:36, Palmer Dabbelt wrote:
+> On Tue, 27 Jun 2023 15:32:36 PDT (-0700), jrtc27@jrtc27.com wrote:
+>> On 27 Jun 2023, at 23:21, Charlie Jenkins <charlie@rivosinc.com> wrote:
+>>>
+>>> Make sv39 the default address space for mmap as some applications
+>>> currently depend on this assumption.
+>>
+>> They are just plain wrong too. Sv48 was in even Priv v1.10 (the first
+>> spec where satp was named as such and contained the mode, rather than
+>> requiring M-mode’s help in configuring virtual memory), predating the
+>> ratified v1.11 spec. A 39-bit address space is pathetic and has
+>> implications for ASLR.
+>>
+>> I strongly suggest applications be forced to support at least Sv48,
+>> which is totally reasonable given the address space sizes used by other
+>> architectures. Sv57 is more disruptive to some runtimes, though ideally
+>> even that would be free for the kernel to use rather than committing to
+>> not using it for the default uABI.
+> 
+> Go and OpenJDK both broke when we expanded the VA width.  I don't like 
+> it either, but if the change breaks userspace then it's a regression and 
+> we have to live with the bug.
+> 
 
-Sure, will add a new 'skips_set' member to 'struct vcpu_reg_sublist' and
-move KVM_REG_RISCV_TIMER_REG(state) reg to it.
-
-> > +
-> >  #define REG_MASK (KVM_REG_ARCH_MASK | KVM_REG_SIZE_MASK | KVM_REG_ARM_=
-COPROC_MASK)
-> >
-> >  #define CORE_REGS_XX_NR_WORDS        2
-> > diff --git a/tools/testing/selftests/kvm/get-reg-list.c b/tools/testing=
-/selftests/kvm/get-reg-list.c
-> > index f6ad7991a812..b956ee410996 100644
-> > --- a/tools/testing/selftests/kvm/get-reg-list.c
-> > +++ b/tools/testing/selftests/kvm/get-reg-list.c
-> > @@ -98,6 +98,11 @@ void __weak print_reg(const char *prefix, __u64 id)
-> >       printf("\t0x%llx,\n", id);
-> >  }
-> >
-> > +bool __weak reject_set_fail(__u64 reg)
-> > +{
-> > +     return false;
-> > +}
-> > +
-> >  #ifdef __aarch64__
-> >  static void prepare_vcpu_init(struct vcpu_reg_list *c, struct kvm_vcpu=
-_init *init)
-> >  {
-> > @@ -216,7 +221,7 @@ static void run_test(struct vcpu_reg_list *c)
-> >                       if (s->rejects_set && find_reg(s->rejects_set, s-=
->rejects_set_n, reg.id)) {
-> >                               reject_reg =3D true;
-> >                               ret =3D __vcpu_ioctl(vcpu, KVM_SET_ONE_RE=
-G, &reg);
-> > -                             if (ret !=3D -1 || errno !=3D EPERM) {
-> > +                             if (ret !=3D -1 || reject_set_fail(reg.id=
-)) {
-> >                                       printf("%s: Failed to reject (ret=
-=3D%d, errno=3D%d) ", config_name(c), ret, errno);
-> >                                       print_reg(config_name(c), reg.id)=
-;
-> >                                       putchar('\n');
-> > --
-> > 2.34.1
-> >
->
-> Thanks,
-> drew
+Have we debugged this ? do we at least know why they break ? Just 
+disabling Sv48/57 by default for everyone because some userspace apps 
+break doesn't seem the correct approach, it seems more like a bug in 
+userspace IMHO.
