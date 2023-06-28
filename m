@@ -2,178 +2,238 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AB2FEB64D7
-	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Jun 2023 09:09:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E118AEB64DD
+	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Jun 2023 09:53:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234888AbjF1JI5 (ORCPT
+        id S232824AbjF1Jwv (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 28 Jun 2023 05:08:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44388 "EHLO
+        Wed, 28 Jun 2023 05:52:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233582AbjF1Itw (ORCPT
+        with ESMTP id S232376AbjF1Ju1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Jun 2023 04:49:52 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F8BD3A9B;
-        Wed, 28 Jun 2023 01:42:34 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4fb863edcb6so2505011e87.0;
-        Wed, 28 Jun 2023 01:42:34 -0700 (PDT)
+        Wed, 28 Jun 2023 05:50:27 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F34FD2948
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Jun 2023 02:48:39 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3fa8cd4a113so34847125e9.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Jun 2023 02:48:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687941753; x=1690533753;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=g54qKoeGjWz5wLaqSLQFYfEyGEtCRjTvx7zRiV5BneY=;
-        b=E5/fD6H+BE8e9eM4PW7j8lCTlWH1PJ6wKXBMhLgltNdLZtqhif+dAU6ErCt6xjnO2n
-         blrxZo+o+h9is0Kh3DBqUvRvELDuNGekKV5hEsI3Tm/WeNqOKlEs20l7VWWqw+0nAAnL
-         grS2UbVE9shuMYKdnuHK/3brcfz1oL9AeIqadZ5dFzddSUGtW2zKVrtvqJPyxJtokQVk
-         Hye0cd/ZwA+C20D7/S90adg5AzJhKMqaea+Ra7TKT48x1UhuQVFyTCzUcrS681LR40Aw
-         KG9+s5ZS+kRGfIZsdryvSB1COUaadyrYFTciLbGp3kZYPwYR+cxE6knYrMqPlheuRkYv
-         WQRw==
+        d=isovalent.com; s=google; t=1687945718; x=1690537718;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=96/f/RvXpGow2TyWU+GM8deXUy7W/19EXjrkjTO+eEA=;
+        b=fPBPFp/rKQx/d+HhD6y+c0OYsGdTxbVGlAyAA1ZBY+/Z3NzYK1MW6JNDIlq14ru8NF
+         dznczzbIQXdc8Q+I6Z3coMOxMKdO6CfQ7pgrnKvUiSyseVMgQApGX+uCvs7dmzQLFK+K
+         19MsacVQvrRIguC8IEpOdSSbfN6aavYkb2lINwXlQi9wGS5iH7vM+F6svCnGfSzpASKI
+         O708ILKTOs6OIw2rwi0J+fgjggPPhrkME/v8/Ad98R7Zc1pO8xX9H0vU/e6jioInqeo5
+         ScRm1PKf4/jVTcQhSl4+42b/mz35Bu4VJKWFr0BFHwYoR0tzL00cArsDFzUbA+ArW+6W
+         gRLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687941753; x=1690533753;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1687945718; x=1690537718;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=g54qKoeGjWz5wLaqSLQFYfEyGEtCRjTvx7zRiV5BneY=;
-        b=LDH6PIcZARUi+vznjMPioFXwrkBuJLmb5e9sQry8G3BCWJhqheaDa51CcQOpfZwMq+
-         onSfvUSJt5DO+2JpzdQpa6ORrqy2jm5vsA7FUGkOtYqiQ9AA0ecj9J20w7Qfav2qLg67
-         4Xo1HGN3e0buKr6+KRzCURColgqiUe+Mxs15Hbdli0L0VQ2rcHXbJDgo+u8mKj9t9+NB
-         7OBgflMGhKJV2w7awuHDYKI8aL4DuzFgUQ2IRSjtVYzDGMbH01tEDBC1X4jNtBjasY0w
-         fpCey9IHFYHVuQgzalLoFr3/hV1Wa+l0eoxkLiAKyO/IjUeLFuAhS3TiAzNdhHyAI7K0
-         TXlQ==
-X-Gm-Message-State: AC+VfDzuemng+0yn6bTQXoowj4hkZrXPjX0WVzfWXLLADe4kVJq0zaBD
-        uGLH/oYT9EwONjoWZ69K15iAafr1wXb7hZrQhb2C+g+V
-X-Google-Smtp-Source: ACHHUZ7VQCn+YpLvmFmYlf+FOQl2niELacwE4Dcgqiq8I8RkRNKRsyCtVuMehnHMGr1vYCdhl+c2sAGOLh6Bb/4fwYA=
-X-Received: by 2002:a05:651c:8f:b0:2b6:a17b:a120 with SMTP id
- 15-20020a05651c008f00b002b6a17ba120mr5672641ljq.22.1687932068929; Tue, 27 Jun
- 2023 23:01:08 -0700 (PDT)
+        bh=96/f/RvXpGow2TyWU+GM8deXUy7W/19EXjrkjTO+eEA=;
+        b=UO7JyB6XCz2P2OFzPTexL0JCVCvJ4sqMFHcC4M3FAPRgnuFnUqTqcfMms2TOncWkw7
+         5FWLCZw30ZA4XPblpd19VWy5w8CoOW9ZvgyqdGE0rWjGEdL6T6UtrdApL10F0Y/wO/wO
+         28XB9iNZ40eSys75e9hBxScgjTZPGCeYsCr3ws9xzSjLABo/PdhgNC/eBL9LwvRMuoyd
+         Ndg16ZwvGYyCETDq6oHJzqGAXV38iLndRytZTNAn+VKX2hSQHDYNnHeBBLZxRApVbO99
+         4Grx1OtRBmZuLipbd6lWrRRUWs9/ZiHcbl7X0cSW1Xq7J25G+R+60rJZfMng6bt7nqL4
+         xi4w==
+X-Gm-Message-State: AC+VfDzwCklrDeGWGC+CeM3qmNL4YPz5XMAu4VYwBGGw3yHAJ62Sf3F0
+        wbN/FYsavQOjK4hmOJQoKW0T8g==
+X-Google-Smtp-Source: ACHHUZ7Hy2PQCfttWP5fxXbGdwJlBeaT0jUQ7qvk/Xug6qDjmUR8qVtwmPWQt57TWr7Mhu1AOdnKmA==
+X-Received: by 2002:a05:600c:2204:b0:3fa:8db4:91ec with SMTP id z4-20020a05600c220400b003fa8db491ecmr6771751wml.10.1687945718336;
+        Wed, 28 Jun 2023 02:48:38 -0700 (PDT)
+Received: from [192.168.1.193] (f.c.7.0.0.0.0.0.0.0.0.0.0.0.0.0.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff::7cf])
+        by smtp.gmail.com with ESMTPSA id k26-20020a7bc41a000000b003fbb1a9586esm1187613wmi.15.2023.06.28.02.48.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jun 2023 02:48:38 -0700 (PDT)
+From:   Lorenz Bauer <lmb@isovalent.com>
+Date:   Wed, 28 Jun 2023 10:48:17 +0100
+Subject: [PATCH bpf-next v4 2/7] net: export inet_lookup_reuseport and
+ inet6_lookup_reuseport
 MIME-Version: 1.0
-References: <cover.1687515463.git.haibo1.xu@intel.com> <47f0502d076c071260a87953cbabadfc85d278cf.1687515463.git.haibo1.xu@intel.com>
- <20230627-adcb173b3ee813e2e16353bd@orel>
-In-Reply-To: <20230627-adcb173b3ee813e2e16353bd@orel>
-From:   Haibo Xu <xiaobo55x@gmail.com>
-Date:   Wed, 28 Jun 2023 14:00:57 +0800
-Message-ID: <CAJve8onuBoOOOL4yp3wTTsBMqxf4MZL6uUjgMBjUmWsTO61A2g@mail.gmail.com>
-Subject: Re: [PATCH v4 09/12] KVM: selftests: Only do get/set tests on present
- blessed list
-To:     Andrew Jones <ajones@ventanamicro.com>
-Cc:     Haibo Xu <haibo1.xu@intel.com>, maz@kernel.org,
-        oliver.upton@linux.dev, seanjc@google.com,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Shuah Khan <shuah@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Ben Gardon <bgardon@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230613-so-reuseport-v4-2-4ece76708bba@isovalent.com>
+References: <20230613-so-reuseport-v4-0-4ece76708bba@isovalent.com>
+In-Reply-To: <20230613-so-reuseport-v4-0-4ece76708bba@isovalent.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        David Ahern <dsahern@kernel.org>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Joe Stringer <joe@wand.net.nz>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc:     Hemanth Malla <hemanthmalla@gmail.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Lorenz Bauer <lmb@isovalent.com>
+X-Mailer: b4 0.12.2
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 5:11=E2=80=AFPM Andrew Jones <ajones@ventanamicro.c=
-om> wrote:
->
-> On Fri, Jun 23, 2023 at 06:40:11PM +0800, Haibo Xu wrote:
-> > Only do the get/set tests on present and blessed registers
-> > since we don't know the capabilities of any new ones.
-> >
-> > Suggested-by: Andrew Jones <ajones@ventanamicro.com>
-> > Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
-> > ---
-> >  tools/testing/selftests/kvm/get-reg-list.c | 29 ++++++++++++++--------
-> >  1 file changed, 18 insertions(+), 11 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/kvm/get-reg-list.c b/tools/testing=
-/selftests/kvm/get-reg-list.c
-> > index b956ee410996..3beb6b62de0a 100644
-> > --- a/tools/testing/selftests/kvm/get-reg-list.c
-> > +++ b/tools/testing/selftests/kvm/get-reg-list.c
-> > @@ -52,6 +52,10 @@ extern int vcpu_configs_n;
-> >       for_each_reg_filtered(i)                                         =
-       \
-> >               if (!find_reg(blessed_reg, blessed_n, reg_list->reg[i]))
-> >
-> > +#define for_each_present_blessed_reg(i)                      \
-> > +     for ((i) =3D 0; (i) < blessed_n; ++(i))           \
-> > +             if (find_reg(reg_list->reg, reg_list->n, blessed_reg[i]))
-> > +
-> >  static const char *config_name(struct vcpu_reg_list *c)
-> >  {
-> >       struct vcpu_reg_sublist *s;
-> > @@ -189,6 +193,16 @@ static void run_test(struct vcpu_reg_list *c)
-> >               return;
-> >       }
-> >
-> > +     for_each_sublist(c, s)
-> > +             blessed_n +=3D s->regs_n;
-> > +     blessed_reg =3D calloc(blessed_n, sizeof(__u64));
-> > +
-> > +     n =3D 0;
-> > +     for_each_sublist(c, s) {
-> > +             for (i =3D 0; i < s->regs_n; ++i)
-> > +                     blessed_reg[n++] =3D s->regs[i];
-> > +     }
-> > +
-> >       /*
-> >        * We only test that we can get the register and then write back =
-the
-> >        * same value. Some registers may allow other values to be writte=
-n
-> > @@ -198,8 +212,11 @@ static void run_test(struct vcpu_reg_list *c)
-> >        * be written need to have the other values tested, then we shoul=
-d
-> >        * create a new set of tests for those in a new independent test
-> >        * executable.
-> > +      *
-> > +      * Only do the get/set tests on present, blessed list registers,
-> > +      * since we don't know the capabilities of any new registers.
-> >        */
-> > -     for_each_reg(i) {
-> > +     for_each_present_blessed_reg(i) {
-> >               uint8_t addr[2048 / 8];
-> >               struct kvm_one_reg reg =3D {
-> >                       .id =3D reg_list->reg[i],
-> > @@ -242,16 +259,6 @@ static void run_test(struct vcpu_reg_list *c)
-> >               }
-> >       }
-> >
-> > -     for_each_sublist(c, s)
-> > -             blessed_n +=3D s->regs_n;
-> > -     blessed_reg =3D calloc(blessed_n, sizeof(__u64));
-> > -
-> > -     n =3D 0;
-> > -     for_each_sublist(c, s) {
-> > -             for (i =3D 0; i < s->regs_n; ++i)
-> > -                     blessed_reg[n++] =3D s->regs[i];
-> > -     }
-> > -
-> >       for_each_new_reg(i)
-> >               ++new_regs;
-> >
-> > --
-> > 2.34.1
-> >
->
-> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
->
-> Thanks,
-> drew
+Rename the existing reuseport helpers for IPv4 and IPv6 so that they
+can be invoked in the follow up commit. Export them so that building
+DCCP and IPv6 as a module works.
 
-Thanks for the review!
+No change in functionality.
+
+Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
+---
+ include/net/inet6_hashtables.h |  7 +++++++
+ include/net/inet_hashtables.h  |  5 +++++
+ net/ipv4/inet_hashtables.c     | 15 ++++++++-------
+ net/ipv6/inet6_hashtables.c    | 19 ++++++++++---------
+ 4 files changed, 30 insertions(+), 16 deletions(-)
+
+diff --git a/include/net/inet6_hashtables.h b/include/net/inet6_hashtables.h
+index 56f1286583d3..032ddab48f8f 100644
+--- a/include/net/inet6_hashtables.h
++++ b/include/net/inet6_hashtables.h
+@@ -48,6 +48,13 @@ struct sock *__inet6_lookup_established(struct net *net,
+ 					const u16 hnum, const int dif,
+ 					const int sdif);
+ 
++struct sock *inet6_lookup_reuseport(struct net *net, struct sock *sk,
++				    struct sk_buff *skb, int doff,
++				    const struct in6_addr *saddr,
++				    __be16 sport,
++				    const struct in6_addr *daddr,
++				    unsigned short hnum);
++
+ struct sock *inet6_lookup_listener(struct net *net,
+ 				   struct inet_hashinfo *hashinfo,
+ 				   struct sk_buff *skb, int doff,
+diff --git a/include/net/inet_hashtables.h b/include/net/inet_hashtables.h
+index 99bd823e97f6..8734f3488f5d 100644
+--- a/include/net/inet_hashtables.h
++++ b/include/net/inet_hashtables.h
+@@ -379,6 +379,11 @@ struct sock *__inet_lookup_established(struct net *net,
+ 				       const __be32 daddr, const u16 hnum,
+ 				       const int dif, const int sdif);
+ 
++struct sock *inet_lookup_reuseport(struct net *net, struct sock *sk,
++				   struct sk_buff *skb, int doff,
++				   __be32 saddr, __be16 sport,
++				   __be32 daddr, unsigned short hnum);
++
+ static inline struct sock *
+ 	inet_lookup_established(struct net *net, struct inet_hashinfo *hashinfo,
+ 				const __be32 saddr, const __be16 sport,
+diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
+index e7391bf310a7..920131e4a65d 100644
+--- a/net/ipv4/inet_hashtables.c
++++ b/net/ipv4/inet_hashtables.c
+@@ -332,10 +332,10 @@ static inline int compute_score(struct sock *sk, struct net *net,
+ 	return score;
+ }
+ 
+-static inline struct sock *lookup_reuseport(struct net *net, struct sock *sk,
+-					    struct sk_buff *skb, int doff,
+-					    __be32 saddr, __be16 sport,
+-					    __be32 daddr, unsigned short hnum)
++struct sock *inet_lookup_reuseport(struct net *net, struct sock *sk,
++				   struct sk_buff *skb, int doff,
++				   __be32 saddr, __be16 sport,
++				   __be32 daddr, unsigned short hnum)
+ {
+ 	struct sock *reuse_sk = NULL;
+ 	u32 phash;
+@@ -346,6 +346,7 @@ static inline struct sock *lookup_reuseport(struct net *net, struct sock *sk,
+ 	}
+ 	return reuse_sk;
+ }
++EXPORT_SYMBOL_GPL(inet_lookup_reuseport);
+ 
+ /*
+  * Here are some nice properties to exploit here. The BSD API
+@@ -369,8 +370,8 @@ static struct sock *inet_lhash2_lookup(struct net *net,
+ 	sk_nulls_for_each_rcu(sk, node, &ilb2->nulls_head) {
+ 		score = compute_score(sk, net, hnum, daddr, dif, sdif);
+ 		if (score > hiscore) {
+-			result = lookup_reuseport(net, sk, skb, doff,
+-						  saddr, sport, daddr, hnum);
++			result = inet_lookup_reuseport(net, sk, skb, doff,
++						       saddr, sport, daddr, hnum);
+ 			if (result)
+ 				return result;
+ 
+@@ -399,7 +400,7 @@ static inline struct sock *inet_lookup_run_bpf(struct net *net,
+ 	if (no_reuseport || IS_ERR_OR_NULL(sk))
+ 		return sk;
+ 
+-	reuse_sk = lookup_reuseport(net, sk, skb, doff, saddr, sport, daddr, hnum);
++	reuse_sk = inet_lookup_reuseport(net, sk, skb, doff, saddr, sport, daddr, hnum);
+ 	if (reuse_sk)
+ 		sk = reuse_sk;
+ 	return sk;
+diff --git a/net/ipv6/inet6_hashtables.c b/net/ipv6/inet6_hashtables.c
+index b64b49012655..b7c56867314e 100644
+--- a/net/ipv6/inet6_hashtables.c
++++ b/net/ipv6/inet6_hashtables.c
+@@ -111,12 +111,12 @@ static inline int compute_score(struct sock *sk, struct net *net,
+ 	return score;
+ }
+ 
+-static inline struct sock *lookup_reuseport(struct net *net, struct sock *sk,
+-					    struct sk_buff *skb, int doff,
+-					    const struct in6_addr *saddr,
+-					    __be16 sport,
+-					    const struct in6_addr *daddr,
+-					    unsigned short hnum)
++struct sock *inet6_lookup_reuseport(struct net *net, struct sock *sk,
++				    struct sk_buff *skb, int doff,
++				    const struct in6_addr *saddr,
++				    __be16 sport,
++				    const struct in6_addr *daddr,
++				    unsigned short hnum)
+ {
+ 	struct sock *reuse_sk = NULL;
+ 	u32 phash;
+@@ -127,6 +127,7 @@ static inline struct sock *lookup_reuseport(struct net *net, struct sock *sk,
+ 	}
+ 	return reuse_sk;
+ }
++EXPORT_SYMBOL_GPL(inet6_lookup_reuseport);
+ 
+ /* called with rcu_read_lock() */
+ static struct sock *inet6_lhash2_lookup(struct net *net,
+@@ -143,8 +144,8 @@ static struct sock *inet6_lhash2_lookup(struct net *net,
+ 	sk_nulls_for_each_rcu(sk, node, &ilb2->nulls_head) {
+ 		score = compute_score(sk, net, hnum, daddr, dif, sdif);
+ 		if (score > hiscore) {
+-			result = lookup_reuseport(net, sk, skb, doff,
+-						  saddr, sport, daddr, hnum);
++			result = inet6_lookup_reuseport(net, sk, skb, doff,
++							saddr, sport, daddr, hnum);
+ 			if (result)
+ 				return result;
+ 
+@@ -175,7 +176,7 @@ static inline struct sock *inet6_lookup_run_bpf(struct net *net,
+ 	if (no_reuseport || IS_ERR_OR_NULL(sk))
+ 		return sk;
+ 
+-	reuse_sk = lookup_reuseport(net, sk, skb, doff, saddr, sport, daddr, hnum);
++	reuse_sk = inet6_lookup_reuseport(net, sk, skb, doff, saddr, sport, daddr, hnum);
+ 	if (reuse_sk)
+ 		sk = reuse_sk;
+ 	return sk;
+
+-- 
+2.40.1
+
