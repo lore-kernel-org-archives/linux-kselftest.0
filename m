@@ -2,526 +2,486 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AEF75EB64DA
-	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Jun 2023 10:06:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48A8BEB64D7
+	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Jun 2023 10:06:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231139AbjF1KGF (ORCPT
+        id S231168AbjF1KGI (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 28 Jun 2023 06:06:05 -0400
-Received: from madras.collabora.co.uk ([46.235.227.172]:46674 "EHLO
-        madras.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234994AbjF1KAG (ORCPT
+        Wed, 28 Jun 2023 06:06:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52490 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231759AbjF1JwZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Jun 2023 06:00:06 -0400
-Received: from localhost.localdomain (unknown [182.179.162.32])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C3EAD660716E;
-        Wed, 28 Jun 2023 10:59:57 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1687946404;
-        bh=Nvj+aUGG5O62PP1/ZbsmZrjxXeUIlqkVFzPkFkQ2rL8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TwaksHgguHY5ibh0tLXyMNY9fkCm8CUm4Uo0kTBkPnC3IMdUnL8zBNjt1zrWQUESl
-         lQYB1ab6P3taD6PeopOgoTZc39XGxocEmWyUgsxZCp/u5g1DDd8wuHMKvrQqT5mpUv
-         GNfvk2tczN8KHG9sRv4OoDFNDxiVfMGG33Vj+O8qDzEF7e8zEPwLYBNDKAnlL5A6rp
-         1Na4uXmy2zgrLAYMiS6omwN1btKYDKqGT8MaCoZtaXrKZW+umj5ivWoT1ysUW0xtj2
-         5EnmztMxZy4XHYd59F2t9XjIL2ih5tYm3JoMBP6Qn2987/C1TWcGEtYm1l1bxcsLYR
-         unzZW+S6+uOtA==
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-To:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <emmir@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@Oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: [PATCH v22 1/5] userfaultfd: UFFD_FEATURE_WP_ASYNC
-Date:   Wed, 28 Jun 2023 14:54:22 +0500
-Message-Id: <20230628095426.1886064-2-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230628095426.1886064-1-usama.anjum@collabora.com>
-References: <20230628095426.1886064-1-usama.anjum@collabora.com>
+        Wed, 28 Jun 2023 05:52:25 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C7A22D4B
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Jun 2023 02:48:45 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3fa96fd7a04so36669855e9.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Jun 2023 02:48:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent.com; s=google; t=1687945723; x=1690537723;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Rrd+oVQwBiLqnLnpd+kxgQqY6NXFWO5dlCZVFiDqXJs=;
+        b=iEES/poOKrLptVoHsJpDsv8Cs372Sd8KK4kv1/mhPfihmm3c6SnuvKjrfXX3Qs6HUW
+         nJe8o7gXaiMNsNpm2cOu6si7noXu4ZL7G+31M8WB0NJvnI1+DPgsaFgDx46JlmRIv5RS
+         yvCMiQbE8vj50UBnjrBNGOcpEVnPKiH23DfYUDqsM7tOaHLmyJ+QqGxN3V/qwo6cbW9N
+         Z+DvmI4T/aUu5kE8Z6GDkIMXnvbnA+y+n1/KZ+sFjSiDMcB6lTMdrxbNjQC5mHgaFfan
+         c6BfxxNXvn09W/+4U2HqtQAhKjhREqbF/WtyrX+6l8/3KwoeqVWShw0z+IHLfEEGqF0M
+         RHZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687945723; x=1690537723;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Rrd+oVQwBiLqnLnpd+kxgQqY6NXFWO5dlCZVFiDqXJs=;
+        b=K3YR2Hl7IuZx36QwHs7Kyxbm6O0efyVgIvjVvw+YvkrTfMpV53j6pESslu+2dyFA/9
+         Ex5TjhvjSUvjXd7OcvLhzQQ+HlmIVb+kgG5gPwsUWoOUlwxVg5fIv6GbD/Zw7l+erXBM
+         LhvH4j+5dyY4mzyC2XRNSW9zurnz+A2evXF11IyP/Hq8SnPpBFP6ByCTmRLp21DJZ6Br
+         ycHD/5KZQdhxCb9DgVPut5JFShR8NnNlcNUqmmaomE7/8U/ntQ5hvvAj1a92Hv0yk5Nf
+         XPEPekOIwns/tM9TYh6Lth0VnwGOL0vXZJGvHII4lXKnz5DRzj0shYelqrrxqyj93xaB
+         844Q==
+X-Gm-Message-State: AC+VfDzpH/hvBND9fjKCkL6JyDqB9SEHFEkl+oUx9dlgLpqpP8ip9HOu
+        l19JVhCSjbaC5czIPcTAKjhzTg==
+X-Google-Smtp-Source: ACHHUZ6F6DU+I1zZoqKy0uQQiThIvfyFKpnnNjVjpk/AceBeqT24Hi/rUNCb6SlZOrpPOyEB+U1VKg==
+X-Received: by 2002:a7b:ca4c:0:b0:3f9:b30f:a013 with SMTP id m12-20020a7bca4c000000b003f9b30fa013mr20668470wml.6.1687945723591;
+        Wed, 28 Jun 2023 02:48:43 -0700 (PDT)
+Received: from [192.168.1.193] (f.c.7.0.0.0.0.0.0.0.0.0.0.0.0.0.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff::7cf])
+        by smtp.gmail.com with ESMTPSA id k26-20020a7bc41a000000b003fbb1a9586esm1187613wmi.15.2023.06.28.02.48.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jun 2023 02:48:43 -0700 (PDT)
+From:   Lorenz Bauer <lmb@isovalent.com>
+Date:   Wed, 28 Jun 2023 10:48:22 +0100
+Subject: [PATCH bpf-next v4 7/7] selftests/bpf: Test that SO_REUSEPORT can
+ be used with sk_assign helper
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230613-so-reuseport-v4-7-4ece76708bba@isovalent.com>
+References: <20230613-so-reuseport-v4-0-4ece76708bba@isovalent.com>
+In-Reply-To: <20230613-so-reuseport-v4-0-4ece76708bba@isovalent.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        David Ahern <dsahern@kernel.org>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Joe Stringer <joe@wand.net.nz>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc:     Hemanth Malla <hemanthmalla@gmail.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Lorenz Bauer <lmb@isovalent.com>,
+        Joe Stringer <joe@cilium.io>
+X-Mailer: b4 0.12.2
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Peter Xu <peterx@redhat.com>
+From: Daniel Borkmann <daniel@iogearbox.net>
 
-This patch adds a new userfaultfd-wp feature UFFD_FEATURE_WP_ASYNC, that
-allows userfaultfd wr-protect faults to be resolved by the kernel directly.
+We use two programs to check that the new reuseport logic is executed
+appropriately.
 
-It can be used like a high accuracy version of soft-dirty, without vma
-modifications during tracking, and also with ranged support by default
-rather than for a whole mm when reset the protections due to existence of
-ioctl(UFFDIO_WRITEPROTECT).
+The first is a TC clsact program which bpf_sk_assigns
+the skb to a UDP or TCP socket created by user space. Since the test
+communicates via lo we see both directions of packets in the eBPF.
+Traffic ingressing to the reuseport socket is identified by looking
+at the destination port. For TCP, we additionally need to make sure
+that we only assign the initial SYN packets towards our listening
+socket. The network stack then creates a request socket which
+transitions to ESTABLISHED after the 3WHS.
 
-Several goals of such a dirty tracking interface:
+The second is a reuseport program which shares the fact that
+it has been executed with user space. This tells us that the delayed
+lookup mechanism is working.
 
-1. All types of memory should be supported and tracable. This is nature
-   for soft-dirty but should mention when the context is userfaultfd,
-   because it used to only support anon/shmem/hugetlb. The problem is for
-   a dirty tracking purpose these three types may not be enough, and it's
-   legal to track anything e.g. any page cache writes from mmap.
-
-2. Protections can be applied to partial of a memory range, without vma
-   split/merge fuss.  The hope is that the tracking itself should not
-   affect any vma layout change.  It also helps when reset happens because
-   the reset will not need mmap write lock which can block the tracee.
-
-3. Accuracy needs to be maintained.  This means we need pte markers to work
-   on any type of VMA.
-
-One could question that, the whole concept of async dirty tracking is not
-really close to fundamentally what userfaultfd used to be: it's not "a
-fault to be serviced by userspace" anymore. However, using userfaultfd-wp
-here as a framework is convenient for us in at least:
-
-1. VM_UFFD_WP vma flag, which has a very good name to suite something like
-   this, so we don't need VM_YET_ANOTHER_SOFT_DIRTY. Just use a new
-   feature bit to identify from a sync version of uffd-wp registration.
-
-2. PTE markers logic can be leveraged across the whole kernel to maintain
-   the uffd-wp bit as long as an arch supports, this also applies to this
-   case where uffd-wp bit will be a hint to dirty information and it will
-   not go lost easily (e.g. when some page cache ptes got zapped).
-
-3. Reuse ioctl(UFFDIO_WRITEPROTECT) interface for either starting or
-   resetting a range of memory, while there's no counterpart in the old
-   soft-dirty world, hence if this is wanted in a new design we'll need a
-   new interface otherwise.
-
-We can somehow understand that commonality because uffd-wp was
-fundamentally a similar idea of write-protecting pages just like
-soft-dirty.
-
-This implementation allows WP_ASYNC to imply WP_UNPOPULATED, because so far
-WP_ASYNC seems to not usable if without WP_UNPOPULATE.  This also gives us
-chance to modify impl of WP_ASYNC just in case it could be not depending on
-WP_UNPOPULATED anymore in the future kernels. It's also fine to imply that
-because both features will rely on PTE_MARKER_UFFD_WP config option, so
-they'll show up together (or both missing) in an UFFDIO_API probe.
-
-vma_can_userfault() now allows any VMA if the userfaultfd registration is
-only about async uffd-wp. So we can track dirty for all kinds of memory
-including generic file systems (like XFS, EXT4 or BTRFS).
-
-One trick worth mention in do_wp_page() is that we need to manually update
-vmf->orig_pte here because it can be used later with a pte_same() check -
-this path always has FAULT_FLAG_ORIG_PTE_VALID set in the flags.
-
-The major defect of this approach of dirty tracking is we need to populate
-the pgtables when tracking starts. Soft-dirty doesn't do it like that.
-It's unwanted in the case where the range of memory to track is huge and
-unpopulated (e.g., tracking updates on a 10G file with mmap() on top,
-without having any page cache installed yet). One way to improve this is
-to allow pte markers exist for larger than PTE level for PMD+. That will
-not change the interface if to implemented, so we can leave that for later.
-
-Co-developed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Signed-off-by: Peter Xu <peterx@redhat.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Co-developed-by: Lorenz Bauer <lmb@isovalent.com>
+Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
+Cc: Joe Stringer <joe@cilium.io>
 ---
-Changes in v18:
-- Rebase on top of next-20230613 (use ptep_get)
+ tools/testing/selftests/bpf/network_helpers.c      |   3 +
+ .../selftests/bpf/prog_tests/assign_reuse.c        | 197 +++++++++++++++++++++
+ .../selftests/bpf/progs/test_assign_reuse.c        | 142 +++++++++++++++
+ 3 files changed, 342 insertions(+)
 
-Changes in v17:
-- Rebase on top of next-20230525
-
-Changes in v12:
-- Peter added the hugetlb support and revamped some other implementation
-- Transferred the authorship to Peter
-- Merge documentation to this patch
-
-Changes in v11:
-- Fix return code in userfaultfd_register() and minor changes here and
-  there
-- Rebase on top of next-20230307
-- Base patches on UFFD_FEATURE_WP_UNPOPULATED https://lore.kernel.org/all/20230306213925.617814-1-peterx@redhat.com
-- UFFD_FEATURE_WP_ASYNC depends on UFFD_FEATURE_WP_UNPOPULATED to work
-  (correctly)
-
-Changes in v10:
-- Build fix
-- Update comments and add error condition to return error from uffd
-  register if hugetlb pages are present when wp async flag is set
-
-Changes in v9:
-- Correct the fault resolution with code contributed by Peter
-
-Changes in v7:
-- Remove UFFDIO_WRITEPROTECT_MODE_ASYNC_WP and add UFFD_FEATURE_WP_ASYNC
-- Handle automatic page fault resolution in better way (thanks to Peter)
----
- Documentation/admin-guide/mm/userfaultfd.rst | 35 ++++++++++++++++++++
- fs/userfaultfd.c                             | 26 ++++++++++++---
- include/linux/userfaultfd_k.h                | 21 +++++++++++-
- include/uapi/linux/userfaultfd.h             |  9 ++++-
- mm/hugetlb.c                                 | 32 ++++++++++--------
- mm/memory.c                                  | 27 +++++++++++++--
- 6 files changed, 128 insertions(+), 22 deletions(-)
-
-diff --git a/Documentation/admin-guide/mm/userfaultfd.rst b/Documentation/admin-guide/mm/userfaultfd.rst
-index 7c304e432205..4b7f43fbbe18 100644
---- a/Documentation/admin-guide/mm/userfaultfd.rst
-+++ b/Documentation/admin-guide/mm/userfaultfd.rst
-@@ -244,6 +244,41 @@ write-protected (so future writes will also result in a WP fault). These ioctls
- support a mode flag (``UFFDIO_COPY_MODE_WP`` or ``UFFDIO_CONTINUE_MODE_WP``
- respectively) to configure the mapping this way.
+diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
+index a105c0cd008a..8a33bcea97de 100644
+--- a/tools/testing/selftests/bpf/network_helpers.c
++++ b/tools/testing/selftests/bpf/network_helpers.c
+@@ -423,6 +423,9 @@ struct nstoken *open_netns(const char *name)
  
-+If the userfaultfd context has ``UFFD_FEATURE_WP_ASYNC`` feature bit set,
-+any vma registered with write-protection will work in async mode rather
-+than the default sync mode.
-+
-+In async mode, there will be no message generated when a write operation
-+happens, meanwhile the write-protection will be resolved automatically by
-+the kernel.  It can be seen as a more accurate version of soft-dirty
-+tracking and it can be different in a few ways:
-+
-+  - The dirty result will not be affected by vma changes (e.g. vma
-+    merging) because the dirty is only tracked by the pte.
-+
-+  - It supports range operations by default, so one can enable tracking on
-+    any range of memory as long as page aligned.
-+
-+  - Dirty information will not get lost if the pte was zapped due to
-+    various reasons (e.g. during split of a shmem transparent huge page).
-+
-+  - Due to a reverted meaning of soft-dirty (page clean when uffd-wp bit
-+    set; dirty when uffd-wp bit cleared), it has different semantics on
-+    some of the memory operations.  For example: ``MADV_DONTNEED`` on
-+    anonymous (or ``MADV_REMOVE`` on a file mapping) will be treated as
-+    dirtying of memory by dropping uffd-wp bit during the procedure.
-+
-+The user app can collect the "written/dirty" status by looking up the
-+uffd-wp bit for the pages being interested in /proc/pagemap.
-+
-+The page will not be under track of uffd-wp async mode until the page is
-+explicitly write-protected by ``ioctl(UFFDIO_WRITEPROTECT)`` with the mode
-+flag ``UFFDIO_WRITEPROTECT_MODE_WP`` set.  Trying to resolve a page fault
-+that was tracked by async mode userfaultfd-wp is invalid.
-+
-+When userfaultfd-wp async mode is used alone, it can be applied to all
-+kinds of memory.
-+
- QEMU/KVM
- ========
- 
-diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-index 7cecd49e078b..81b98e4a9f55 100644
---- a/fs/userfaultfd.c
-+++ b/fs/userfaultfd.c
-@@ -123,6 +123,11 @@ static bool userfaultfd_is_initialized(struct userfaultfd_ctx *ctx)
- 	return ctx->features & UFFD_FEATURE_INITIALIZED;
- }
- 
-+static bool userfaultfd_wp_async_ctx(struct userfaultfd_ctx *ctx)
-+{
-+	return ctx && (ctx->features & UFFD_FEATURE_WP_ASYNC);
-+}
-+
- /*
-  * Whether WP_UNPOPULATED is enabled on the uffd context.  It is only
-  * meaningful when userfaultfd_wp()==true on the vma and when it's
-@@ -1322,6 +1327,7 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
- 	bool basic_ioctls;
- 	unsigned long start, end, vma_end;
- 	struct vma_iterator vmi;
-+	bool wp_async = userfaultfd_wp_async_ctx(ctx);
- 	pgoff_t pgoff;
- 
- 	user_uffdio_register = (struct uffdio_register __user *) arg;
-@@ -1396,7 +1402,7 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
- 
- 		/* check not compatible vmas */
- 		ret = -EINVAL;
--		if (!vma_can_userfault(cur, vm_flags))
-+		if (!vma_can_userfault(cur, vm_flags, wp_async))
- 			goto out_unlock;
- 
- 		/*
-@@ -1457,7 +1463,7 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
- 	for_each_vma_range(vmi, vma, end) {
- 		cond_resched();
- 
--		BUG_ON(!vma_can_userfault(vma, vm_flags));
-+		BUG_ON(!vma_can_userfault(vma, vm_flags, wp_async));
- 		BUG_ON(vma->vm_userfaultfd_ctx.ctx &&
- 		       vma->vm_userfaultfd_ctx.ctx != ctx);
- 		WARN_ON(!(vma->vm_flags & VM_MAYWRITE));
-@@ -1557,6 +1563,7 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
- 	unsigned long start, end, vma_end;
- 	const void __user *buf = (void __user *)arg;
- 	struct vma_iterator vmi;
-+	bool wp_async = userfaultfd_wp_async_ctx(ctx);
- 	pgoff_t pgoff;
- 
- 	ret = -EFAULT;
-@@ -1611,7 +1618,7 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
- 		 * provides for more strict behavior to notice
- 		 * unregistration errors.
- 		 */
--		if (!vma_can_userfault(cur, cur->vm_flags))
-+		if (!vma_can_userfault(cur, cur->vm_flags, wp_async))
- 			goto out_unlock;
- 
- 		found = true;
-@@ -1627,7 +1634,7 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
- 	for_each_vma_range(vmi, vma, end) {
- 		cond_resched();
- 
--		BUG_ON(!vma_can_userfault(vma, vma->vm_flags));
-+		BUG_ON(!vma_can_userfault(vma, vma->vm_flags, wp_async));
- 
- 		/*
- 		 * Nothing to do: this vma is already registered into this
-@@ -1965,6 +1972,11 @@ static int userfaultfd_continue(struct userfaultfd_ctx *ctx, unsigned long arg)
- 	return ret;
- }
- 
-+bool userfaultfd_wp_async(struct vm_area_struct *vma)
-+{
-+	return userfaultfd_wp_async_ctx(vma->vm_userfaultfd_ctx.ctx);
-+}
-+
- static inline unsigned int uffd_ctx_features(__u64 user_features)
+ void close_netns(struct nstoken *token)
  {
- 	/*
-@@ -1998,6 +2010,11 @@ static int userfaultfd_api(struct userfaultfd_ctx *ctx,
- 	ret = -EPERM;
- 	if ((features & UFFD_FEATURE_EVENT_FORK) && !capable(CAP_SYS_PTRACE))
- 		goto err_out;
++	if (!token)
++		return;
 +
-+	/* WP_ASYNC relies on WP_UNPOPULATED, choose it unconditionally */
-+	if (features & UFFD_FEATURE_WP_ASYNC)
-+		features |= UFFD_FEATURE_WP_UNPOPULATED;
+ 	ASSERT_OK(setns(token->orig_netns_fd, CLONE_NEWNET), "setns");
+ 	close(token->orig_netns_fd);
+ 	free(token);
+diff --git a/tools/testing/selftests/bpf/prog_tests/assign_reuse.c b/tools/testing/selftests/bpf/prog_tests/assign_reuse.c
+new file mode 100644
+index 000000000000..622f123410f4
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/assign_reuse.c
+@@ -0,0 +1,197 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2023 Isovalent */
++#include <uapi/linux/if_link.h>
++#include <test_progs.h>
 +
- 	/* report all available features and ioctls to userland */
- 	uffdio_api.features = UFFD_API_FEATURES;
- #ifndef CONFIG_HAVE_ARCH_USERFAULTFD_MINOR
-@@ -2010,6 +2027,7 @@ static int userfaultfd_api(struct userfaultfd_ctx *ctx,
- #ifndef CONFIG_PTE_MARKER_UFFD_WP
- 	uffdio_api.features &= ~UFFD_FEATURE_WP_HUGETLBFS_SHMEM;
- 	uffdio_api.features &= ~UFFD_FEATURE_WP_UNPOPULATED;
-+	uffdio_api.features &= ~UFFD_FEATURE_WP_ASYNC;
- #endif
- 	uffdio_api.ioctls = UFFD_API_IOCTLS;
- 	ret = -EFAULT;
-diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
-index ac7b0c96d351..3b684770c3f8 100644
---- a/include/linux/userfaultfd_k.h
-+++ b/include/linux/userfaultfd_k.h
-@@ -157,11 +157,22 @@ static inline bool userfaultfd_armed(struct vm_area_struct *vma)
- }
- 
- static inline bool vma_can_userfault(struct vm_area_struct *vma,
--				     unsigned long vm_flags)
-+				     unsigned long vm_flags,
-+				     bool wp_async)
- {
-+	vm_flags &= __VM_UFFD_FLAGS;
++#include <netinet/tcp.h>
++#include <netinet/udp.h>
 +
- 	if ((vm_flags & VM_UFFD_MINOR) &&
- 	    (!is_vm_hugetlb_page(vma) && !vma_is_shmem(vma)))
- 		return false;
++#include "network_helpers.h"
++#include "test_assign_reuse.skel.h"
 +
-+	/*
-+	 * If wp async enabled, and WP is the only mode enabled, allow any
-+	 * memory type.
-+	 */
-+	if (wp_async && (vm_flags == VM_UFFD_WP))
-+		return true;
++#define NS_TEST "assign_reuse"
++#define LOOPBACK 1
++#define PORT 4443
 +
- #ifndef CONFIG_PTE_MARKER_UFFD_WP
- 	/*
- 	 * If user requested uffd-wp but not enabled pte markers for
-@@ -171,6 +182,8 @@ static inline bool vma_can_userfault(struct vm_area_struct *vma,
- 	if ((vm_flags & VM_UFFD_WP) && !vma_is_anonymous(vma))
- 		return false;
- #endif
-+
-+	/* By default, allow any of anon|shmem|hugetlb */
- 	return vma_is_anonymous(vma) || is_vm_hugetlb_page(vma) ||
- 	    vma_is_shmem(vma);
- }
-@@ -193,6 +206,7 @@ extern int userfaultfd_unmap_prep(struct vm_area_struct *vma,
- extern void userfaultfd_unmap_complete(struct mm_struct *mm,
- 				       struct list_head *uf);
- extern bool userfaultfd_wp_unpopulated(struct vm_area_struct *vma);
-+extern bool userfaultfd_wp_async(struct vm_area_struct *vma);
- 
- #else /* CONFIG_USERFAULTFD */
- 
-@@ -293,6 +307,11 @@ static inline bool userfaultfd_wp_unpopulated(struct vm_area_struct *vma)
- 	return false;
- }
- 
-+static inline bool userfaultfd_wp_async(struct vm_area_struct *vma)
++static int attach_reuseport(int sock_fd, int prog_fd)
 +{
-+	return false;
++	return setsockopt(sock_fd, SOL_SOCKET, SO_ATTACH_REUSEPORT_EBPF,
++			  &prog_fd, sizeof(prog_fd));
 +}
 +
- #endif /* CONFIG_USERFAULTFD */
- 
- static inline bool userfaultfd_wp_use_markers(struct vm_area_struct *vma)
-diff --git a/include/uapi/linux/userfaultfd.h b/include/uapi/linux/userfaultfd.h
-index 66dd4cd277bd..cfb87a112a9f 100644
---- a/include/uapi/linux/userfaultfd.h
-+++ b/include/uapi/linux/userfaultfd.h
-@@ -39,7 +39,8 @@
- 			   UFFD_FEATURE_MINOR_SHMEM |		\
- 			   UFFD_FEATURE_EXACT_ADDRESS |		\
- 			   UFFD_FEATURE_WP_HUGETLBFS_SHMEM |	\
--			   UFFD_FEATURE_WP_UNPOPULATED)
-+			   UFFD_FEATURE_WP_UNPOPULATED |	\
-+			   UFFD_FEATURE_WP_ASYNC)
- #define UFFD_API_IOCTLS				\
- 	((__u64)1 << _UFFDIO_REGISTER |		\
- 	 (__u64)1 << _UFFDIO_UNREGISTER |	\
-@@ -210,6 +211,11 @@ struct uffdio_api {
- 	 * (i.e. empty ptes).  This will be the default behavior for shmem
- 	 * & hugetlbfs, so this flag only affects anonymous memory behavior
- 	 * when userfault write-protection mode is registered.
-+	 *
-+	 * UFFD_FEATURE_WP_ASYNC indicates that userfaultfd write-protection
-+	 * asynchronous mode is supported in which the write fault is
-+	 * automatically resolved and write-protection is un-set.
-+	 * It implies UFFD_FEATURE_WP_UNPOPULATED.
- 	 */
- #define UFFD_FEATURE_PAGEFAULT_FLAG_WP		(1<<0)
- #define UFFD_FEATURE_EVENT_FORK			(1<<1)
-@@ -225,6 +231,7 @@ struct uffdio_api {
- #define UFFD_FEATURE_EXACT_ADDRESS		(1<<11)
- #define UFFD_FEATURE_WP_HUGETLBFS_SHMEM		(1<<12)
- #define UFFD_FEATURE_WP_UNPOPULATED		(1<<13)
-+#define UFFD_FEATURE_WP_ASYNC			(1<<14)
- 	__u64 features;
- 
- 	__u64 ioctls;
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index d76574425da3..0db13167b1ee 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -6156,21 +6156,27 @@ vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
- 	/* Handle userfault-wp first, before trying to lock more pages */
- 	if (userfaultfd_wp(vma) && huge_pte_uffd_wp(huge_ptep_get(ptep)) &&
- 	    (flags & FAULT_FLAG_WRITE) && !huge_pte_write(entry)) {
--		struct vm_fault vmf = {
--			.vma = vma,
--			.address = haddr,
--			.real_address = address,
--			.flags = flags,
--		};
-+		if (!userfaultfd_wp_async(vma)) {
-+			struct vm_fault vmf = {
-+				.vma = vma,
-+				.address = haddr,
-+				.real_address = address,
-+				.flags = flags,
-+			};
- 
--		spin_unlock(ptl);
--		if (pagecache_folio) {
--			folio_unlock(pagecache_folio);
--			folio_put(pagecache_folio);
-+			spin_unlock(ptl);
-+			if (pagecache_folio) {
-+				folio_unlock(pagecache_folio);
-+				folio_put(pagecache_folio);
-+			}
-+			hugetlb_vma_unlock_read(vma);
-+			mutex_unlock(&hugetlb_fault_mutex_table[hash]);
-+			return handle_userfault(&vmf, VM_UFFD_WP);
- 		}
--		hugetlb_vma_unlock_read(vma);
--		mutex_unlock(&hugetlb_fault_mutex_table[hash]);
--		return handle_userfault(&vmf, VM_UFFD_WP);
++static __u64 cookie(int fd)
++{
++	__u64 cookie = 0;
++	socklen_t cookie_len = sizeof(cookie);
++	int ret;
 +
-+		entry = huge_pte_clear_uffd_wp(entry);
-+		set_huge_pte_at(mm, haddr, ptep, entry);
-+		/* Fallthrough to CoW */
- 	}
- 
- 	/*
-diff --git a/mm/memory.c b/mm/memory.c
-index e7046cc88596..cf75d2943538 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -3340,11 +3340,28 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
- 	const bool unshare = vmf->flags & FAULT_FLAG_UNSHARE;
- 	struct vm_area_struct *vma = vmf->vma;
- 	struct folio *folio = NULL;
-+	pte_t pte;
- 
- 	if (likely(!unshare)) {
- 		if (userfaultfd_pte_wp(vma, ptep_get(vmf->pte))) {
--			pte_unmap_unlock(vmf->pte, vmf->ptl);
--			return handle_userfault(vmf, VM_UFFD_WP);
-+			if (!userfaultfd_wp_async(vma)) {
-+				pte_unmap_unlock(vmf->pte, vmf->ptl);
-+				return handle_userfault(vmf, VM_UFFD_WP);
-+			}
++	ret = getsockopt(fd, SOL_SOCKET, SO_COOKIE, &cookie, &cookie_len);
++	ASSERT_OK(ret, "cookie");
++	ASSERT_GT(cookie, 0, "cookie_invalid");
 +
-+			/*
-+			 * Nothing needed (cache flush, TLB invalidations,
-+			 * etc.) because we're only removing the uffd-wp bit,
-+			 * which is completely invisible to the user.
-+			 */
-+			pte = pte_clear_uffd_wp(ptep_get(vmf->pte));
++	return cookie;
++}
 +
-+			set_pte_at(vma->vm_mm, vmf->address, vmf->pte, pte);
-+			/*
-+			 * Update this to be prepared for following up CoW
-+			 * handling
-+			 */
-+			vmf->orig_pte = pte;
- 		}
- 
- 		/*
-@@ -4824,8 +4841,11 @@ static inline vm_fault_t wp_huge_pmd(struct vm_fault *vmf)
- 
- 	if (vma_is_anonymous(vmf->vma)) {
- 		if (likely(!unshare) &&
--		    userfaultfd_huge_pmd_wp(vmf->vma, vmf->orig_pmd))
-+		    userfaultfd_huge_pmd_wp(vmf->vma, vmf->orig_pmd)) {
-+			if (userfaultfd_wp_async(vmf->vma))
-+				goto split;
- 			return handle_userfault(vmf, VM_UFFD_WP);
-+		}
- 		return do_huge_pmd_wp_page(vmf);
- 	}
- 
-@@ -4837,6 +4857,7 @@ static inline vm_fault_t wp_huge_pmd(struct vm_fault *vmf)
- 		}
- 	}
- 
-+split:
- 	/* COW or write-notify handled on pte level: split pmd. */
- 	__split_huge_pmd(vmf->vma, vmf->pmd, vmf->address, false, NULL);
- 
++static int echo_test_udp(int fd_sv)
++{
++	struct sockaddr_storage addr = {};
++	socklen_t len = sizeof(addr);
++	char buff[1] = {};
++	int fd_cl = -1, ret;
++
++	fd_cl = connect_to_fd(fd_sv, 100);
++	ASSERT_GT(fd_cl, 0, "create_client");
++	ASSERT_EQ(getsockname(fd_cl, (void *)&addr, &len), 0, "getsockname");
++
++	ASSERT_EQ(send(fd_cl, buff, sizeof(buff), 0), 1, "send_client");
++
++	ret = recv(fd_sv, buff, sizeof(buff), 0);
++	if (ret < 0)
++		return errno;
++
++	ASSERT_EQ(ret, 1, "recv_server");
++	ASSERT_EQ(sendto(fd_sv, buff, sizeof(buff), 0, (void *)&addr, len), 1, "send_server");
++	ASSERT_EQ(recv(fd_cl, buff, sizeof(buff), 0), 1, "recv_client");
++	close(fd_cl);
++	return 0;
++}
++
++static int echo_test_tcp(int fd_sv)
++{
++	char buff[1] = {};
++	int fd_cl = -1, fd_sv_cl = -1;
++
++	fd_cl = connect_to_fd(fd_sv, 100);
++	if (fd_cl < 0)
++		return errno;
++
++	fd_sv_cl = accept(fd_sv, NULL, NULL);
++	ASSERT_GE(fd_sv_cl, 0, "accept_fd");
++
++	ASSERT_EQ(send(fd_cl, buff, sizeof(buff), 0), 1, "send_client");
++	ASSERT_EQ(recv(fd_sv_cl, buff, sizeof(buff), 0), 1, "recv_server");
++	ASSERT_EQ(send(fd_sv_cl, buff, sizeof(buff), 0), 1, "send_server");
++	ASSERT_EQ(recv(fd_cl, buff, sizeof(buff), 0), 1, "recv_client");
++	close(fd_sv_cl);
++	close(fd_cl);
++	return 0;
++}
++
++void run_assign_reuse(int family, int sotype, const char *ip, __u16 port)
++{
++	DECLARE_LIBBPF_OPTS(bpf_tc_hook, tc_hook,
++		.ifindex = LOOPBACK,
++		.attach_point = BPF_TC_INGRESS,
++	);
++	DECLARE_LIBBPF_OPTS(bpf_tc_opts, tc_opts,
++		.handle = 1,
++		.priority = 1,
++	);
++	bool hook_created = false, tc_attached = false;
++	int ret, fd_tc, fd_accept, fd_drop, fd_map;
++	int *fd_sv = NULL;
++	__u64 fd_val;
++	struct test_assign_reuse *skel;
++	const int zero = 0;
++
++	skel = test_assign_reuse__open();
++	if (!ASSERT_OK_PTR(skel, "skel_open"))
++		goto cleanup;
++
++	skel->rodata->dest_port = port;
++
++	ret = test_assign_reuse__load(skel);
++	if (!ASSERT_OK(ret, "skel_load"))
++		goto cleanup;
++
++	ASSERT_EQ(skel->bss->sk_cookie_seen, 0, "cookie_init");
++
++	fd_tc = bpf_program__fd(skel->progs.tc_main);
++	fd_accept = bpf_program__fd(skel->progs.reuse_accept);
++	fd_drop = bpf_program__fd(skel->progs.reuse_drop);
++	fd_map = bpf_map__fd(skel->maps.sk_map);
++
++	fd_sv = start_reuseport_server(family, sotype, ip, port, 100, 1);
++	if (!ASSERT_NEQ(fd_sv, NULL, "start_reuseport_server"))
++		goto cleanup;
++
++	ret = attach_reuseport(*fd_sv, fd_drop);
++	if (!ASSERT_OK(ret, "attach_reuseport"))
++		goto cleanup;
++
++	fd_val = *fd_sv;
++	ret = bpf_map_update_elem(fd_map, &zero, &fd_val, BPF_NOEXIST);
++	if (!ASSERT_OK(ret, "bpf_sk_map"))
++		goto cleanup;
++
++	ret = bpf_tc_hook_create(&tc_hook);
++	if (ret == 0)
++		hook_created = true;
++	ret = ret == -EEXIST ? 0 : ret;
++	if (!ASSERT_OK(ret, "bpf_tc_hook_create"))
++		goto cleanup;
++
++	tc_opts.prog_fd = fd_tc;
++	ret = bpf_tc_attach(&tc_hook, &tc_opts);
++	if (!ASSERT_OK(ret, "bpf_tc_attach"))
++		goto cleanup;
++	tc_attached = true;
++
++	if (sotype == SOCK_STREAM)
++		ASSERT_EQ(echo_test_tcp(*fd_sv), ECONNREFUSED, "drop_tcp");
++	else
++		ASSERT_EQ(echo_test_udp(*fd_sv), EAGAIN, "drop_udp");
++	ASSERT_EQ(skel->bss->reuseport_executed, 1, "program executed once");
++
++	skel->bss->sk_cookie_seen = 0;
++	skel->bss->reuseport_executed = 0;
++	ASSERT_OK(attach_reuseport(*fd_sv, fd_accept), "attach_reuseport(accept)");
++
++	if (sotype == SOCK_STREAM)
++		ASSERT_EQ(echo_test_tcp(*fd_sv), 0, "echo_tcp");
++	else
++		ASSERT_EQ(echo_test_udp(*fd_sv), 0, "echo_udp");
++
++	ASSERT_EQ(skel->bss->sk_cookie_seen, cookie(*fd_sv),
++		  "cookie_mismatch");
++	ASSERT_EQ(skel->bss->reuseport_executed, 1, "program executed once");
++cleanup:
++	if (tc_attached) {
++		tc_opts.flags = tc_opts.prog_fd = tc_opts.prog_id = 0;
++		ret = bpf_tc_detach(&tc_hook, &tc_opts);
++		ASSERT_OK(ret, "bpf_tc_detach");
++	}
++	if (hook_created) {
++		tc_hook.attach_point = BPF_TC_INGRESS | BPF_TC_EGRESS;
++		bpf_tc_hook_destroy(&tc_hook);
++	}
++	test_assign_reuse__destroy(skel);
++	free_fds(fd_sv, 1);
++}
++
++void test_assign_reuse(void)
++{
++	struct nstoken *tok = NULL;
++
++	SYS(out, "ip netns add %s", NS_TEST);
++	SYS(cleanup, "ip -net %s link set dev lo up", NS_TEST);
++
++	tok = open_netns(NS_TEST);
++	if (!ASSERT_OK_PTR(tok, "netns token"))
++		return;
++
++	if (test__start_subtest("tcpv4"))
++		run_assign_reuse(AF_INET, SOCK_STREAM, "127.0.0.1", PORT);
++	if (test__start_subtest("tcpv6"))
++		run_assign_reuse(AF_INET6, SOCK_STREAM, "::1", PORT);
++	if (test__start_subtest("udpv4"))
++		run_assign_reuse(AF_INET, SOCK_DGRAM, "127.0.0.1", PORT);
++	if (test__start_subtest("udpv6"))
++		run_assign_reuse(AF_INET6, SOCK_DGRAM, "::1", PORT);
++
++cleanup:
++	close_netns(tok);
++	SYS_NOFAIL("ip netns delete %s", NS_TEST);
++out:
++	return;
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_assign_reuse.c b/tools/testing/selftests/bpf/progs/test_assign_reuse.c
+new file mode 100644
+index 000000000000..4f2e2321ea06
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_assign_reuse.c
+@@ -0,0 +1,142 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2023 Isovalent */
++#include <stdbool.h>
++#include <linux/bpf.h>
++#include <linux/if_ether.h>
++#include <linux/in.h>
++#include <linux/ip.h>
++#include <linux/ipv6.h>
++#include <linux/tcp.h>
++#include <linux/udp.h>
++#include <bpf/bpf_endian.h>
++#include <bpf/bpf_helpers.h>
++#include <linux/pkt_cls.h>
++
++char LICENSE[] SEC("license") = "GPL";
++
++__u64 sk_cookie_seen;
++__u64 reuseport_executed;
++union {
++	struct tcphdr tcp;
++	struct udphdr udp;
++} headers;
++
++const volatile __u16 dest_port;
++
++struct {
++	__uint(type, BPF_MAP_TYPE_SOCKMAP);
++	__uint(max_entries, 1);
++	__type(key, __u32);
++	__type(value, __u64);
++} sk_map SEC(".maps");
++
++SEC("sk_reuseport")
++int reuse_accept(struct sk_reuseport_md *ctx)
++{
++	reuseport_executed++;
++
++	if (ctx->ip_protocol == IPPROTO_TCP) {
++		if (ctx->data + sizeof(headers.tcp) > ctx->data_end)
++			return SK_DROP;
++
++		if (__builtin_memcmp(&headers.tcp, ctx->data, sizeof(headers.tcp)) != 0)
++			return SK_DROP;
++	} else if (ctx->ip_protocol == IPPROTO_UDP) {
++		if (ctx->data + sizeof(headers.udp) > ctx->data_end)
++			return SK_DROP;
++
++		if (__builtin_memcmp(&headers.udp, ctx->data, sizeof(headers.udp)) != 0)
++			return SK_DROP;
++	} else {
++		return SK_DROP;
++	}
++
++	sk_cookie_seen = bpf_get_socket_cookie(ctx->sk);
++	return SK_PASS;
++}
++
++SEC("sk_reuseport")
++int reuse_drop(struct sk_reuseport_md *ctx)
++{
++	reuseport_executed++;
++	sk_cookie_seen = 0;
++	return SK_DROP;
++}
++
++static int
++assign_sk(struct __sk_buff *skb)
++{
++	int zero = 0, ret = 0;
++	struct bpf_sock *sk;
++
++	sk = bpf_map_lookup_elem(&sk_map, &zero);
++	if (!sk)
++		return TC_ACT_SHOT;
++	ret = bpf_sk_assign(skb, sk, 0);
++	bpf_sk_release(sk);
++	return ret ? TC_ACT_SHOT : TC_ACT_OK;
++}
++
++static bool
++maybe_assign_tcp(struct __sk_buff *skb, struct tcphdr *th)
++{
++	if (th + 1 > (void *)(long)(skb->data_end))
++		return TC_ACT_SHOT;
++
++	if (!th->syn || th->ack || th->dest != bpf_htons(dest_port))
++		return TC_ACT_OK;
++
++	__builtin_memcpy(&headers.tcp, th, sizeof(headers.tcp));
++	return assign_sk(skb);
++}
++
++static bool
++maybe_assign_udp(struct __sk_buff *skb, struct udphdr *uh)
++{
++	if (uh + 1 > (void *)(long)(skb->data_end))
++		return TC_ACT_SHOT;
++
++	if (uh->dest != bpf_htons(dest_port))
++		return TC_ACT_OK;
++
++	__builtin_memcpy(&headers.udp, uh, sizeof(headers.udp));
++	return assign_sk(skb);
++}
++
++SEC("tc")
++int tc_main(struct __sk_buff *skb)
++{
++	void *data_end = (void *)(long)skb->data_end;
++	void *data = (void *)(long)skb->data;
++	struct ethhdr *eth;
++
++	eth = (struct ethhdr *)(data);
++	if (eth + 1 > data_end)
++		return TC_ACT_SHOT;
++
++	if (eth->h_proto == bpf_htons(ETH_P_IP)) {
++		struct iphdr *iph = (struct iphdr *)(data + sizeof(*eth));
++
++		if (iph + 1 > data_end)
++			return TC_ACT_SHOT;
++
++		if (iph->protocol == IPPROTO_TCP)
++			return maybe_assign_tcp(skb, (struct tcphdr *)(iph + 1));
++		else if (iph->protocol == IPPROTO_UDP)
++			return maybe_assign_udp(skb, (struct udphdr *)(iph + 1));
++		else
++			return TC_ACT_SHOT;
++	} else {
++		struct ipv6hdr *ip6h = (struct ipv6hdr *)(data + sizeof(*eth));
++
++		if (ip6h + 1 > data_end)
++			return TC_ACT_SHOT;
++
++		if (ip6h->nexthdr == IPPROTO_TCP)
++			return maybe_assign_tcp(skb, (struct tcphdr *)(ip6h + 1));
++		else if (ip6h->nexthdr == IPPROTO_UDP)
++			return maybe_assign_udp(skb, (struct udphdr *)(ip6h + 1));
++		else
++			return TC_ACT_SHOT;
++	}
++}
+
 -- 
-2.39.2
+2.40.1
 
