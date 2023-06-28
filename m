@@ -2,93 +2,127 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02FCCEB64D7
-	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Jun 2023 15:56:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9A17EB64DC
+	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Jun 2023 16:28:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231231AbjF1P4l (ORCPT
+        id S231807AbjF1Q2S (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 28 Jun 2023 11:56:41 -0400
-Received: from dfw.source.kernel.org ([139.178.84.217]:36384 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbjF1P4k (ORCPT
+        Wed, 28 Jun 2023 12:28:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:28860 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231787AbjF1Q2R (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Jun 2023 11:56:40 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        Wed, 28 Jun 2023 12:28:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687969650;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rWVq+eL4aDWA5meL5f9Eal8ANp/OHe6J2oj4uPsoS3g=;
+        b=AMR/VaYth3Za032ei4/4g7T5cQ5Ivs8oAd0cfohdYH43I8URB6jgjuafDWRDRgpBqa4Om2
+        +X1MX0YICmGNgEhvSkfgh6sNTFiTop1slIdqZWGEEFpT3ibkfGGytaoIn2V6iRxinnIbm+
+        w+lvSuB2dwWQGW2KP20ixs+6qloTnPo=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-163-Tolsu0WwPn-e71IcD6NDRg-1; Wed, 28 Jun 2023 12:27:27 -0400
+X-MC-Unique: Tolsu0WwPn-e71IcD6NDRg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E8FD96129B
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Jun 2023 15:56:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 492A7C433C8;
-        Wed, 28 Jun 2023 15:56:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687967799;
-        bh=G//ijS5G5PZHTk01cf4pUdRuLZqF8Qw9qSwmJRa3N0I=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ONqcLawx86QMgSRremu7C4N5VPBWKb+JVqd8SDMcqB+5I2dX3u5F5dF8OMXb3GGFY
-         ad73V24/5CSg+38eXicci5A//5sVorqsY35G55jAcROQ8+LaQE9uek7pORl+l8Lwp2
-         QF5wBbszaIfX1EHsI0Kb+6Q5tV4oElB/XTPmTl8dn9nEzVkgeUJMAHPk4/5cqWNUId
-         VCXLEBGaXXUexKXGuJ0S8pKFHJP84z+nVvoEZOuXRRzwNWt7MtBpBGwRmtpoDVPJ0i
-         lnP4eRxM1VkWWS7EGsiivH+HUePKfI4g0ilnVVjl7Nq3lRGCjLdXmA/4fYvGKR53BA
-         RyTI3/NJ43alA==
-Date:   Wed, 28 Jun 2023 16:56:35 +0100
-From:   Will Deacon <will@kernel.org>
-To:     broonie@kernel.org
-Cc:     catalin.marinas@arm.com, shuah@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 095E93C13F40;
+        Wed, 28 Jun 2023 16:27:17 +0000 (UTC)
+Received: from RHTPC1VM0NT.lan (unknown [10.22.32.232])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 84ED340BB4D;
+        Wed, 28 Jun 2023 16:27:16 +0000 (UTC)
+From:   Aaron Conole <aconole@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     dev@openvswitch.org, Pravin Shelar <pshelar@ovn.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eelco Chaudron <echaudro@redhat.com>,
+        Ilya Maximets <i.maximets@ovn.org>, shuah@kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: SSVE selftests failing unexpectedly
-Message-ID: <20230628155633.GA22275@willie-the-truck>
+Subject: [PATCH net-next 2/4] selftests: openvswitch: add a test for ipv4 forwarding
+Date:   Wed, 28 Jun 2023 12:27:12 -0400
+Message-Id: <20230628162714.392047-3-aconole@redhat.com>
+In-Reply-To: <20230628162714.392047-1-aconole@redhat.com>
+References: <20230628162714.392047-1-aconole@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Mark,
+This is a simple ipv4 bidirectional connectivity test.
 
-While debugging the SME issue reported in CI, I noticed that the
-streaming SVE tests are failing on the fastmodel because of an
-unexpected SIGILL. For example:
+Signed-off-by: Aaron Conole <aconole@redhat.com>
+---
+ .../selftests/net/openvswitch/openvswitch.sh  | 40 +++++++++++++++++++
+ 1 file changed, 40 insertions(+)
 
-will:arm64/signal$ ./ssve_za_regs
-# Streaming SVE registers :: Check that we get the right Streaming SVE registers reported
-Registered handlers for all signals.
-Detected MINSTKSIGSZ:4720
-Required Features: [ SME ] supported
-Incompatible Features: [] absent
-Testcase initialized.
-Testing VL 64
--- RX UNEXPECTED SIGNAL: 4
-==>> completed. FAIL(0)
+diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
+index 5cdacb3c8c925..5d60a9466dab3 100755
+--- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
++++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
+@@ -12,6 +12,7 @@ TRACING=0
+ 
+ tests="
+ 	arp_ping				eth-arp: Basic arp ping between two NS
++	connect_v4				ip4-xon: Basic ipv4 ping between two NS
+ 	netlink_checks				ovsnl: validate netlink attrs and settings
+ 	upcall_interfaces			ovs: test the upcall interfaces"
+ 
+@@ -192,6 +193,45 @@ test_arp_ping () {
+ 	return 0
+ }
+ 
++# connect_v4 test
++#  - client has 1500 byte MTU
++#  - server has 1500 byte MTU
++#  - use ICMP to ping in each direction
++test_connect_v4 () {
++
++	sbx_add "test_connect_v4" || return $?
++
++	ovs_add_dp "test_connect_v4" cv4 || return 1
++
++	info "create namespaces"
++	for ns in client server; do
++		ovs_add_netns_and_veths "test_connect_v4" "cv4" "$ns" \
++		    "${ns:0:1}0" "${ns:0:1}1" || return 1
++	done
++
++
++	ip netns exec client ip addr add 172.31.110.10/24 dev c1
++	ip netns exec client ip link set c1 up
++	ip netns exec server ip addr add 172.31.110.20/24 dev s1
++	ip netns exec server ip link set s1 up
++
++	# Add forwarding for ARP and ip packets - completely wildcarded
++	ovs_add_flow "test_connect_v4" cv4 \
++		'in_port(1),eth(),eth_type(0x0806),arp()' '2' || return 1
++	ovs_add_flow "test_connect_v4" cv4 \
++		'in_port(2),eth(),eth_type(0x0806),arp()' '1' || return 1
++	ovs_add_flow "test_connect_v4" cv4 \
++		'in_port(1),eth(),eth_type(0x0800),ipv4(src=172.31.110.10)' '2' || return 1
++	ovs_add_flow "test_connect_v4" cv4 \
++		'in_port(2),eth(),eth_type(0x0800),ipv4(src=172.31.110.20)' '1' || return 1
++
++	# do a ping
++	ovs_sbx "test_connect_v4" ip netns exec client ping 172.31.110.20 -c 3 || return 1
++
++	info "done..."
++	return 0
++}
++
+ # netlink_validation
+ # - Create a dp
+ # - check no warning with "old version" simulation
+-- 
+2.40.1
 
-The signal is injected because we get an SME trap due to an fpsimd, sve
-or sve2 instruction being used in streaming mode (ESR is 0x76000001).
-
-I did a bit of digging and it looks like this is my libc using a vector
-DUP instruction in memset:
-
-#0  __memset_generic () at ../sysdeps/aarch64/memset.S:37
-#1  0x0000aaaaaaaa1170 in get_current_context (dest_sz=131072,
-    dest_uc=0xaaaaaeab6ba0 <context>, td=0xaaaaaaab50f0 <tde>)
-    at ./test_signals_utils.h:69
-#2  do_one_sme_vl (si=<optimized out>, uc=<optimized out>, vl=64,
-    td=0xaaaaaaab50f0 <tde>) at testcases/ssve_za_regs.c:90
-#3  sme_regs (td=0xaaaaaaab50f0 <tde>, si=<optimized out>, uc=<optimized out>)
-    at testcases/ssve_za_regs.c:145
-#4  0x0000aaaaaaaa0ed0 in main (argc=<optimized out>, argv=<optimized out>)
-    at test_signals.c:21
-
-Dump of assembler code for function __memset_generic:
-=> 0x0000fffff7edfb00 <+0>:	dup	v0.16b, w1
-
-The easy option would be to require FA64 for these tests, but I guess it
-would be better to exit streaming mode.
-
-Please can you have a look?
-
-Thanks,
-
-Will
