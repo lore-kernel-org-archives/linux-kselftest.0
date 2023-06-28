@@ -2,142 +2,140 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BBE80EB64DC
-	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Jun 2023 08:34:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DA4CEB64D7
+	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Jun 2023 09:08:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234875AbjF1IeG (ORCPT
+        id S237197AbjF1JIw (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 28 Jun 2023 04:34:06 -0400
-Received: from madras.collabora.co.uk ([46.235.227.172]:32772 "EHLO
-        madras.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235465AbjF1Ibj (ORCPT
+        Wed, 28 Jun 2023 05:08:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47056 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233916AbjF1JEY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Jun 2023 04:31:39 -0400
-Received: from [192.168.10.54] (unknown [182.179.162.32])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Wed, 28 Jun 2023 05:04:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18AEF3595;
+        Wed, 28 Jun 2023 02:02:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 52947660716D;
-        Wed, 28 Jun 2023 07:03:51 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1687932238;
-        bh=Mnlsggp9LUoS8ve7lv1HuoaS0bmkESWlf5OUJi5Yvkg=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=mtwgShxLJXCcwEam7M0PfR4SvBpDh8abUYPjYTamu74SIzmR2joyzzavKdoArvNuB
-         nRSob2PXk934h4fvu2vLMtqfmEH257l2n5sSuLNTcht9AjHnEBIEA4X9b2iD7s6Kdp
-         oyLtdDgOsFk1pwIGepOZCkT0WiuzwivKJVDQ1pZ9WzWzytIRWyhufS6hgn6UVTSys+
-         iwH9DPNXEw6t5FZ1bKlSPXEBxg3jTg4miZptd7d63NVeFHuLTYhcpLhpS84vbUnX0w
-         IlsCZCstDQQ+LinINZe5gE5lY2Il64nYqc4HtIPtZludnhDTh9+qzMIbtaBDMR836V
-         y2vShbeIgCJvQ==
-Message-ID: <bbba2568-2b40-d2ef-0622-47cd21c95fec@collabora.com>
-Date:   Wed, 28 Jun 2023 11:03:46 +0500
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 89FE561276;
+        Wed, 28 Jun 2023 09:02:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DDCAC433C0;
+        Wed, 28 Jun 2023 09:02:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1687942953;
+        bh=dZ8ewtgN7+nQ8HFCPwMwFbD5X/40NMNmnlkYkea6Iqo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=e4Ni7XDNzGqsmBfx9rCiTuMO4Rbz5g8lx7ujGD3cwkr3aUIVy8zh8n5HiwhgYrUEO
+         8Fn09MGTbBZWGIAO0UJiAwEfgWLT9oJoP1qajsNFxwm9mz/fdQ8E21qW3FOvXQ+v+w
+         upAwUY0M0SsU7obLCi96V8Utj+Xqp0CqbpNxW3Mw=
+Date:   Wed, 28 Jun 2023 11:02:30 +0200
+From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "Yu, Guorui" <guorui.yu@linux.alibaba.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "joey.gouly@arm.com" <joey.gouly@arm.com>,
+        "dionnaglaze@google.com" <dionnaglaze@google.com>,
+        "qinkun@apache.org" <qinkun@apache.org>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Du, Fan" <fan.du@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "wander@redhat.com" <wander@redhat.com>,
+        "atishp@rivosinc.com" <atishp@rivosinc.com>,
+        "Aktas, Erdem" <erdemaktas@google.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "chongc@google.com" <chongc@google.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "dhowells@redhat.com" <dhowells@redhat.com>
+Subject: Re: [PATCH v3 3/3] selftests/tdx: Test GetQuote TDX attestation
+ feature
+Message-ID: <2023062825-rebel-happily-09fd@gregkh>
+References: <972e1d5c5ec53e2757fb17a586558c5385e987dd.1684048511.git.sathyanarayanan.kuppuswamy@linux.intel.com>
+ <64876bf6c30e2_1433ac29415@dwillia2-xfh.jf.intel.com.notmuch>
+ <64961c3baf8ce_142af829436@dwillia2-xfh.jf.intel.com.notmuch>
+ <9437b176-e15a-3cec-e5cb-68ff57dbc25c@linux.intel.com>
+ <CAAH4kHa85hCz0GhQM3f1OQ3wM+=-SfF77ShFAse0-eYGBHvO_A@mail.gmail.com>
+ <649b7a9b69cb6_11e68529473@dwillia2-xfh.jf.intel.com.notmuch>
+ <CAAH4kHY1-N+HOxPON6SuXE3QPowAGnwTjc5H=ZnNZwh7a+msnQ@mail.gmail.com>
+ <c85324480053af20e6f0409e28fbc5e156c54143.camel@intel.com>
+ <2023062805-drove-privatize-ae2c@gregkh>
+ <e30fb40d736ccc60672316c5d20aaf1ab7c94dcf.camel@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v21 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-Content-Language: en-US
-To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Andrei Vagin <avagin@gmail.com>
-References: <20230626113156.1274521-1-usama.anjum@collabora.com>
- <20230626113156.1274521-3-usama.anjum@collabora.com>
- <ZJo/gOnTmwEQPLF8@gmail.com>
- <13ea54c0-25a3-285c-f47e-d6da11c91795@collabora.com>
- <CABb0KFGn=3oAYa+wsf=iWr1Ss=en9+m11JOijEibXJLFDAkvjQ@mail.gmail.com>
- <6ac9c60e-0a6b-110a-cace-97afbd9708a0@collabora.com>
- <CABb0KFH60U5RE9dLfCOEGp5=wLwwxpKaMdzQL8drYEmL3T_itw@mail.gmail.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <CABb0KFH60U5RE9dLfCOEGp5=wLwwxpKaMdzQL8drYEmL3T_itw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e30fb40d736ccc60672316c5d20aaf1ab7c94dcf.camel@intel.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/28/23 12:54 AM, Michał Mirosław wrote:
-> On Tue, 27 Jun 2023 at 21:20, Muhammad Usama Anjum
-> <usama.anjum@collabora.com> wrote:
->> Thanks Michał for replying.
->>
->> On 6/27/23 11:52 PM, Michał Mirosław wrote:
->>> On Tue, 27 Jun 2023 at 11:00, Muhammad Usama Anjum
->>> <usama.anjum@collabora.com> wrote:
->>>>
->>>> Hi Andrei and Michal,
->>>>
->>>> Lets resolve last two points. Please reply below.
->>>>
->>>> On 6/27/23 6:46 AM, Andrei Vagin wrote:
->>> [...]
->>>>> And we need to report an address where it stopped scanning.
->>>>> We can do that by adding zero length vector.
->>>> I don't want to do multiplexing the ending address in vec. Can we add
->>>> end_addr variable in struct pm_scan_arg to always return the ending address?
->>>>
->>>> struct pm_scan_arg {
->>>>         ...
->>>>         _u64 end_addr;
->>>> };
->>>
->>> The idea to emit a zero-length entry for the end looks nice. This has
->>> the disadvantage that we'd need to either reserve one entry for the
->>> ending marker or stop the walk after the last entry is no longer
->>> matching.
->> This is ambiguous.
+On Wed, Jun 28, 2023 at 08:56:30AM +0000, Huang, Kai wrote:
+> On Wed, 2023-06-28 at 08:46 +0200, gregkh@linuxfoundation.org wrote:
+> > On Wed, Jun 28, 2023 at 02:16:45AM +0000, Huang, Kai wrote:
+> > > > You really shouldn't be putting attestation validation logic in the
+> > > > kernel.
+> > > 
+> > > Agreed.  The data blob for remote verification should be just some data blob to
+> > > the kernel.  I think the kernel shouldn't even try to understand the data blob
+> > > is for which architecture.  From the kernel's perspective, it should be just
+> > > some data blob that the kernel gets from hardware/firmware or whatever embedded
+> > > in the root-of-trust in the hardware after taking some input from usrspace for
+> > > the unique identity of the blob that can be used to, e.g., mitigate replay-
+> > > attack, etc.
+> > 
+> > Great, then use the common "data blob" api that we have in the kernel
+> > for a very long time now, the "firwmare download" api, or the sysfs
+> > binary file api.  Both of them just use the kernel as a pass-through and
+> > do not touch the data at all.  No need for crazy custom ioctls and all
+> > that mess :)
+> > 
 > 
-> Can you explain? Both solutions would allow to return the restart
-> point back to the caller (the second one would need to stop the walk
-> as soon as the matching page range finishes -- that creates
-> discontinuity).
+> I guess I was talking about from "kernel shouldn't try to parse attestation data
+> blob" perspective.  Looking at AMD's attestation flow (I have no deep
+> understanding of AMD's attestation flow), the assumption of "one remote
+> verifiable data blob" isn't even true -- AMD can return "attestation report"
+> (remote verifiable) and the "certificate" to verify it separately:
 > 
->>> Another solution would be to rewrite 'start' and 'len'. The caller
->>> would be forced to use non-const `pm_scan_arg`, but I expect the `vec`
->>> pointer would normally be written anyway (unless using only a
->>> statically-allocated buffer).
->>> Also, if the 'len' is replaced with 'end' that would make the ioctl
->>> easily restartable (just call again if start != end).
->> Nice idea. But returning ending address in len seems a bit strange.
+> https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/snp-attestation.html
 > 
-> I mean that it would update `start` = start value for next call' and
-> `len` = `len` - (new `start` - original `start`).
+> On the other hand, AFAICT Intel SGX-based attestation doesn't have a mechanism
+> "for the kernel" to return certificate(s), but choose to embed the
+> certificate(s) to the Quote itself.  I believe we can add such mechanism (e.g.,
+> another TDVMCALL) for the kernel to get certificate(s) separately, but AFAICT it
+> doesn't exist yet.
 > 
-> By replacing `len` I meant to remove the field and add `end` instead
-> to make the requested range use begin .. end (iterator range) style
-> instead of start + len (buffer and length). In this version you only
-> need to update `start` (or `begin` if you prefer).
-The `start` and `end` with updating the `start` with ending address seems
-most appropriate. I'll make updates.
+> Btw, getting "remote verifiable blob" is only one step of the attestation flow.
+> For instance, before the blob can be generated, there must be a step to
+> establish the attestation key between the machine and the attestation service. 
+> And the flow to do this could be very different between vendors too.
+> 
+> That being said, while I believe all those differences can be unified in some
+> way, I think the question is whether it is worth to put such effort to try to
+> unify attestation flow for all vendors.  As Erdem Aktas mentioned earlier, "the
+> number of CPU vendors for confidential computing seems manageable".
 
-> 
-> Best Regards
-> Michał Mirosław
+So you think that there should be a custom user/kernel api for every
+single different CPU vendor?  That's not how kernel development works,
+sorry.  Let's try to unify them to make both the kernel, and userspace,
+sane.
 
--- 
-BR,
-Muhammad Usama Anjum
+And Dan is right, if this is handling keys, then the key subsystem needs
+to be used here instead of custom ioctls.
+
+thanks,
+
+greg k-h
