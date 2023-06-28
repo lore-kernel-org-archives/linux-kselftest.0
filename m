@@ -2,34 +2,34 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C6D0EB64DC
-	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Jun 2023 10:05:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79186EB64DA
+	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Jun 2023 10:05:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbjF1KF4 (ORCPT
+        id S230412AbjF1KF5 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 28 Jun 2023 06:05:56 -0400
-Received: from madras.collabora.co.uk ([46.235.227.172]:46752 "EHLO
+        Wed, 28 Jun 2023 06:05:57 -0400
+Received: from madras.collabora.co.uk ([46.235.227.172]:46864 "EHLO
         madras.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235012AbjF1KAO (ORCPT
+        with ESMTP id S235110AbjF1KA3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Jun 2023 06:00:14 -0400
+        Wed, 28 Jun 2023 06:00:29 -0400
 Received: from localhost.localdomain (unknown [182.179.162.32])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 41C136607171;
-        Wed, 28 Jun 2023 11:00:05 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id DC2306607173;
+        Wed, 28 Jun 2023 11:00:21 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1687946412;
-        bh=R4/EHCgyXtTy2lr0+IeHZJqDQGup+VLSqhFGfVTkcQw=;
+        s=mail; t=1687946428;
+        bh=e3RwcWLS0DN4jGAQ1nXg3KEjRQ1a6mnaZglmii6vuAs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bccuG1+20PP9KQAUWpwv//Do0oqakQ0Qy5bnui26dAwckzwC/cQCrjbL+aDz/nx4r
-         oPkjeOh9s9oSPdpE3UzgDcnZsysy0AcL0GIjaklOMJj5Qpkyixu5e8SGdwn90z5Xym
-         Kywb6oW/b1yNb+4T6ffcAEDS7WQaXC5HCtqs5DulnbwkTR1c0FFx+x7bKEIfeNdqSQ
-         UbIPLiCCiAzC4UGU7+9iW3u5ENb9eY7qXaOTaUL3jCMLpq/O8/sPFzcYqKQYE32yme
-         Yun9i6As7ZatvsyGqPhcRFUFaxlT1ysEk+WLicrPkR4y06OjUHxEMcVvZ+IWDetqyz
-         HAs7/miuVBfbA==
+        b=Au7dywa+LE2W/wzm1TZcFBU+0kVFgSRzNrCRHPyEN1RkjnVULKXhniptPZLhcXUGr
+         fSyahjqicrlbD/KI7XQwVreKPLo3XDb41yxXNuHrB2+YA39EYGBqHVC0hQWG13sqVt
+         +M87CEvDDDgGHS0pWrp8Bvsw6ZpnK9qnrHstqqEulP60PFV4uCx92Hcka5asggs54o
+         1PmzIdB+caWqskcSlIfmrLCWP23Hcyc1HYM2wAY4xIWS+pwcOVkpc9fedjwAfn5XeL
+         a8wJugNVzjrEdARZswXT6SzFU7Ih65MTILYlAn/BdXsw/xi6zw8HQiiZgaIfj6RfI4
+         PHx9RLfaakhCQ==
 From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
 To:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -57,9 +57,9 @@ Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
         Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: [PATCH v22 2/5] fs/proc/task_mmu: Implement IOCTL to get and optionally clear info about PTEs
-Date:   Wed, 28 Jun 2023 14:54:23 +0500
-Message-Id: <20230628095426.1886064-3-usama.anjum@collabora.com>
+Subject: [PATCH v22 4/5] mm/pagemap: add documentation of PAGEMAP_SCAN IOCTL
+Date:   Wed, 28 Jun 2023 14:54:25 +0500
+Message-Id: <20230628095426.1886064-5-usama.anjum@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230628095426.1886064-1-usama.anjum@collabora.com>
 References: <20230628095426.1886064-1-usama.anjum@collabora.com>
@@ -69,786 +69,97 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This IOCTL, PAGEMAP_SCAN on pagemap file can be used to get and/or clear
-the info about page table entries. The following operations are supported
-in this ioctl:
-- Get the information if the pages have been written-to (PAGE_IS_WRITTEN),
-  file mapped (PAGE_IS_FILE), present (PAGE_IS_PRESENT), swapped
-  (PAGE_IS_SWAPPED) or page has pfn zero (PAGE_IS_PFNZERO).
-- Find pages which have been written-to and/or write protect the pages
-  (atomic PM_SCAN_OP_GET + PM_SCAN_OP_WP)
-
-This IOCTL can be extended to get information about more PTE bits. The
-entire address range passed by user [start, end) is scanned until either
-the user provided buffer is full or max_pages have been found.
+Add some explanation and method to use write-protection and written-to
+on memory range.
 
 Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 ---
-Changes in v22:
-- Interface change to return walk ending address to user:
-  - Replace [start start + len) with [start, end)
-  - Return the ending address of the address walk in start
-
 Changes in v21:
-- Abort walk instead of returning error if WP is to be performed on
-  partial hugetlb
-- Changed the data types of some variables in pagemap_scan_private to
-  long
+- Update according to changed interface
 
 Changes in v20:
-- Correct PAGE_IS_FILE and add PAGE_IS_PFNZERO
+- Add new flag in documentation
 
 Changes in v19:
-- Interface changes such as renaming, return mask and WP can be used
-  with any flags specified in masks
-- Internal code changes
-
-Changes in v18:
-- Rebased on top of next-20230613
-  - ptep_get() updates
-  - remove pmd_trans_unstable() and add ACTION_AGAIN
-- Review updates (Micheal)
-
-Changes in v17:
-- Rebased on next-20230606
-- Made make_uffd_wp_*_pte() better and minor changes
+- Improved documentatiom with punctuation marks
 
 Changes in v16:
-- Fixed a corner case where kernel writes beyond user buffer by one
-  element
-- Bring back exclusive PM_SCAN_OP_WP
-- Cosmetic changes
-
-Changes in v15:
-- Build fix:
-  - Use generic tlb flush function in pagemap_scan_pmd_entry() instead of
-    using x86 specific flush function in do_pagemap_scan()
-  - Remove #ifdef from pagemap_scan_hugetlb_entry()
-  - Use mm instead of undefined vma->vm_mm
-
-Changes in v14:
-- Fix build error caused by #ifdef added at last minute in some configs
-
-Changes in v13:
-- Review updates
-- mmap_read_lock_killable() instead of mmap_read_lock()
-- Replace uffd_wp_range() with helpers which increases performance
-  drastically for OP_WP operations by reducing the number of tlb
-  flushing etc
-- Add MMU_NOTIFY_PROTECTION_VMA notification for the memory range
-
-Changes in v12:
-- Add hugetlb support to cover all memory types
-- Merge "userfaultfd: Define dummy uffd_wp_range()" with this patch
-- Review updates to the code
+- Update the documentation
 
 Changes in v11:
-- Find written pages in a better way
-- Fix a corner case (thanks Paul)
-- Improve the code/comments
-- remove ENGAGE_WP + ! GET operation
-- shorten the commit message in favour of moving documentation to
-  pagemap.rst
+- Add more documentation
 
-Changes in v10:
-- move changes in tools/include/uapi/linux/fs.h to separate patch
-- update commit message
-
-Change in v8:
-- Correct is_pte_uffd_wp()
-- Improve readability and error checks
-- Remove some un-needed code
-
-Changes in v7:
-- Rebase on top of latest next
-- Fix some corner cases
-- Base soft-dirty on the uffd wp async
-- Update the terminologies
-- Optimize the memory usage inside the ioctl
+rst
 ---
- fs/proc/task_mmu.c      | 565 ++++++++++++++++++++++++++++++++++++++++
- include/linux/hugetlb.h |   1 +
- include/uapi/linux/fs.h |  55 ++++
- mm/hugetlb.c            |   2 +-
- 4 files changed, 622 insertions(+), 1 deletion(-)
+ Documentation/admin-guide/mm/pagemap.rst | 58 ++++++++++++++++++++++++
+ 1 file changed, 58 insertions(+)
 
-diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-index 507cd4e59d07..be747fb89827 100644
---- a/fs/proc/task_mmu.c
-+++ b/fs/proc/task_mmu.c
-@@ -19,6 +19,7 @@
- #include <linux/shmem_fs.h>
- #include <linux/uaccess.h>
- #include <linux/pkeys.h>
-+#include <linux/minmax.h>
- 
- #include <asm/elf.h>
- #include <asm/tlb.h>
-@@ -1765,11 +1766,575 @@ static int pagemap_release(struct inode *inode, struct file *file)
- 	return 0;
- }
- 
-+#define PM_SCAN_REQUIRE_UFFD	(1ULL << 63)
-+
-+#define PM_SCAN_FOUND_MAX_PAGES	(1)
-+#define PM_SCAN_END_WALK	(-256)
-+
-+#define PM_SCAN_BITS_ALL	(PAGE_IS_WRITTEN | PAGE_IS_FILE |	\
-+				 PAGE_IS_PRESENT | PAGE_IS_SWAPPED |	\
-+				 PAGE_IS_PFNZERO)
-+#define PM_SCAN_OPS		(PM_SCAN_OP_GET | PM_SCAN_OP_WP)
-+#define IS_PM_SCAN_GET(flags)	(flags & PM_SCAN_OP_GET)
-+#define IS_PM_SCAN_WP(flags)	(flags & PM_SCAN_OP_WP)
-+
-+#define PM_SCAN_FLAGS(wt, file, present, swap, pfnzero)	\
-+	((wt) | ((file) << 1) | ((present) << 2) |	\
-+	 ((swap) << 3) | ((pfnzero) << 4))
-+
-+struct pagemap_scan_private {
-+	struct page_region *vec_buf, cur_buf;
-+	unsigned long vec_buf_len, vec_buf_index, max_pages, found_pages;
-+	unsigned long long flags, required_mask, anyof_mask, excluded_mask, return_mask;
-+};
-+
-+static inline bool is_pte_uffd_wp(pte_t pte)
-+{
-+	return (pte_present(pte) && pte_uffd_wp(pte)) ||
-+	       pte_swp_uffd_wp_any(pte);
-+}
-+
-+static inline void make_uffd_wp_pte(struct vm_area_struct *vma,
-+				    unsigned long addr, pte_t *pte)
-+{
-+	pte_t ptent = ptep_get(pte);
-+
-+	if (pte_present(ptent)) {
-+		pte_t old_pte;
-+
-+		old_pte = ptep_modify_prot_start(vma, addr, pte);
-+		ptent = pte_mkuffd_wp(ptent);
-+		ptep_modify_prot_commit(vma, addr, pte, old_pte, ptent);
-+	} else if (is_swap_pte(ptent)) {
-+		ptent = pte_swp_mkuffd_wp(ptent);
-+		set_pte_at(vma->vm_mm, addr, pte, ptent);
-+	} else {
-+		set_pte_at(vma->vm_mm, addr, pte,
-+			   make_pte_marker(PTE_MARKER_UFFD_WP));
-+	}
-+}
-+
-+static inline bool pagemap_scan_is_file(struct vm_area_struct *vma, pte_t ptent,
-+					unsigned long addr)
-+{
-+	struct page *page = NULL;
-+	swp_entry_t entry;
-+
-+	if (pte_present(ptent)) {
-+		page = vm_normal_page(vma, addr, ptent);
-+	} else {
-+		entry = pte_to_swp_entry(ptent);
-+		if (is_pfn_swap_entry(entry))
-+			page = pfn_swap_entry_to_page(entry);
-+	}
-+
-+	if (page && !PageAnon(page))
-+		return true;
-+
-+	return false;
-+}
-+
-+#ifdef CONFIG_TRANSPARENT_HUGEPAGE
-+static inline bool is_pmd_uffd_wp(pmd_t pmd)
-+{
-+	return (pmd_present(pmd) && pmd_uffd_wp(pmd)) ||
-+	       (is_swap_pmd(pmd) && pmd_swp_uffd_wp(pmd));
-+}
-+
-+static inline void make_uffd_wp_pmd(struct vm_area_struct *vma,
-+				    unsigned long addr, pmd_t *pmdp)
-+{
-+	pmd_t old, pmd = *pmdp;
-+
-+	if (pmd_present(pmd)) {
-+		old = pmdp_invalidate_ad(vma, addr, pmdp);
-+		pmd = pmd_mkuffd_wp(old);
-+		set_pmd_at(vma->vm_mm, addr, pmdp, pmd);
-+	} else if (is_migration_entry(pmd_to_swp_entry(pmd))) {
-+		pmd = pmd_swp_mkuffd_wp(pmd);
-+		set_pmd_at(vma->vm_mm, addr, pmdp, pmd);
-+	}
-+}
-+#endif
-+
-+#ifdef CONFIG_HUGETLB_PAGE
-+static inline bool is_huge_pte_uffd_wp(pte_t pte)
-+{
-+	return (pte_present(pte) && huge_pte_uffd_wp(pte)) ||
-+	       pte_swp_uffd_wp_any(pte);
-+}
-+
-+static inline void make_uffd_wp_huge_pte(struct vm_area_struct *vma,
-+					 unsigned long addr, pte_t *ptep,
-+					 pte_t ptent)
-+{
-+	if (is_hugetlb_entry_hwpoisoned(ptent) || is_pte_marker(ptent))
-+		return;
-+
-+	if (is_hugetlb_entry_migration(ptent))
-+		set_huge_pte_at(vma->vm_mm, addr, ptep,
-+				pte_swp_mkuffd_wp(ptent));
-+	else if (!huge_pte_none(ptent))
-+		huge_ptep_modify_prot_commit(vma, addr, ptep, ptent,
-+					     huge_pte_mkuffd_wp(ptent));
-+	else
-+		set_huge_pte_at(vma->vm_mm, addr, ptep,
-+				make_pte_marker(PTE_MARKER_UFFD_WP));
-+}
-+
-+static inline bool pagemap_scan_is_huge_file(pte_t pte)
-+{
-+	if (pte_present(pte) && (!PageAnon(pte_page(pte))))
-+		return true;
-+
-+	return false;
-+}
-+#endif
-+
-+static int pagemap_scan_test_walk(unsigned long start, unsigned long end,
-+				  struct mm_walk *walk)
-+{
-+	struct pagemap_scan_private *p = walk->private;
-+	struct vm_area_struct *vma = walk->vma;
-+
-+	if ((p->flags & PM_SCAN_REQUIRE_UFFD) && (!userfaultfd_wp_async(vma) ||
-+	    !userfaultfd_wp_use_markers(vma)))
-+		return -EPERM;
-+
-+	if (vma->vm_flags & VM_PFNMAP)
-+		return 1;
-+
-+	return 0;
-+}
-+
-+static int pagemap_scan_output(unsigned long bitmap,
-+			       struct pagemap_scan_private *p,
-+			       unsigned long addr, unsigned int n_pages)
-+{
-+	struct page_region *cur_buf = &p->cur_buf;
-+
-+	if (!n_pages)
-+		return -EINVAL;
-+
-+	bitmap &= p->return_mask;
-+
-+	if (cur_buf->flags == bitmap &&
-+	    cur_buf->start + cur_buf->len * PAGE_SIZE == addr) {
-+		cur_buf->len += n_pages;
-+		p->found_pages += n_pages;
-+	} else {
-+		if (cur_buf->len) {
-+			if (p->vec_buf_index >= p->vec_buf_len)
-+				return PM_SCAN_END_WALK;
-+
-+			memcpy(&p->vec_buf[p->vec_buf_index], cur_buf,
-+			       sizeof(*p->vec_buf));
-+			p->vec_buf_index++;
-+		}
-+
-+		cur_buf->start = addr;
-+		cur_buf->len = n_pages;
-+		cur_buf->flags = bitmap;
-+		p->found_pages += n_pages;
-+	}
-+
-+	if (p->found_pages == p->max_pages)
-+		return PM_SCAN_FOUND_MAX_PAGES;
-+
-+	return 0;
-+}
-+
-+static bool pagemap_scan_is_interesting_page(unsigned long bitmap,
-+					     struct pagemap_scan_private *p)
-+{
-+	if ((p->required_mask & bitmap) != p->required_mask)
-+		return false;
-+	if (p->anyof_mask && !(p->anyof_mask & bitmap))
-+		return false;
-+	if (p->excluded_mask & bitmap)
-+		return false;
-+
-+	return true;
-+}
-+
-+static int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
-+				  unsigned long end, struct mm_walk *walk)
-+{
-+	bool is_written, flush = false, interesting = true;
-+	struct pagemap_scan_private *p = walk->private;
-+	struct vm_area_struct *vma = walk->vma;
-+	unsigned long bitmap, addr = end;
-+	pte_t *pte, *orig_pte, ptent;
-+	spinlock_t *ptl;
-+	int ret = 0;
-+
-+	arch_enter_lazy_mmu_mode();
-+
-+#ifdef CONFIG_TRANSPARENT_HUGEPAGE
-+	ptl = pmd_trans_huge_lock(pmd, vma);
-+	if (ptl) {
-+		unsigned long n_pages = (end - start)/PAGE_SIZE;
-+
-+		if (n_pages > p->max_pages - p->found_pages)
-+			n_pages = p->max_pages - p->found_pages;
-+
-+		is_written = !is_pmd_uffd_wp(*pmd);
-+
-+		bitmap = PM_SCAN_FLAGS(is_written, false,
-+				       pmd_present(*pmd), is_swap_pmd(*pmd),
-+				       pmd_present(*pmd) && is_zero_pfn(pmd_pfn(*pmd)));
-+
-+		if (IS_PM_SCAN_GET(p->flags))
-+			interesting = pagemap_scan_is_interesting_page(bitmap, p);
-+
-+		if (interesting) {
-+			/*
-+			 * Break huge page into small pages if the WP operation
-+			 * need to be performed is on a portion of the huge page.
-+			 */
-+			if (is_written && IS_PM_SCAN_WP(p->flags) &&
-+			    n_pages < HPAGE_SIZE/PAGE_SIZE) {
-+				spin_unlock(ptl);
-+
-+				split_huge_pmd(vma, pmd, start);
-+				goto process_smaller_pages;
-+			}
-+
-+			if (IS_PM_SCAN_GET(p->flags))
-+				ret = pagemap_scan_output(bitmap, p, start, n_pages);
-+
-+			if (IS_PM_SCAN_WP(p->flags) && is_written && ret >= 0) {
-+				make_uffd_wp_pmd(vma, start, pmd);
-+				flush_tlb_range(vma, start, end);
-+			}
-+		}
-+
-+		spin_unlock(ptl);
-+		arch_leave_lazy_mmu_mode();
-+
-+		return ret;
-+	}
-+
-+process_smaller_pages:
-+#endif
-+
-+	orig_pte = pte = pte_offset_map_lock(vma->vm_mm, pmd, start, &ptl);
-+	if (!pte) {
-+		walk->action = ACTION_AGAIN;
-+		return 0;
-+	}
-+
-+	for (addr = start; addr < end && !ret; pte++, addr += PAGE_SIZE) {
-+		ptent = ptep_get(pte);
-+		is_written = !is_pte_uffd_wp(ptent);
-+
-+		bitmap = PM_SCAN_FLAGS(is_written, pagemap_scan_is_file(vma, ptent, addr),
-+				       pte_present(ptent), is_swap_pte(ptent),
-+				       pte_present(ptent) && is_zero_pfn(pte_pfn(ptent)));
-+
-+		if (IS_PM_SCAN_GET(p->flags)) {
-+			interesting = pagemap_scan_is_interesting_page(bitmap, p);
-+			if (interesting)
-+				ret = pagemap_scan_output(bitmap, p, addr, 1);
-+		}
-+
-+		if (IS_PM_SCAN_WP(p->flags) && is_written && interesting &&
-+		    ret >= 0) {
-+			make_uffd_wp_pte(vma, addr, pte);
-+			flush = true;
-+		}
-+	}
-+
-+	if (flush)
-+		flush_tlb_range(vma, start, addr);
-+
-+	pte_unmap_unlock(orig_pte, ptl);
-+	arch_leave_lazy_mmu_mode();
-+
-+	cond_resched();
-+	return ret;
-+}
-+
-+#ifdef CONFIG_HUGETLB_PAGE
-+static int pagemap_scan_hugetlb_entry(pte_t *ptep, unsigned long hmask,
-+				      unsigned long start, unsigned long end,
-+				      struct mm_walk *walk)
-+{
-+	unsigned long n_pages = (end - start)/PAGE_SIZE;
-+	struct pagemap_scan_private *p = walk->private;
-+	struct vm_area_struct *vma = walk->vma;
-+	bool is_written, interesting = true;
-+	struct hstate *h = hstate_vma(vma);
-+	unsigned long bitmap;
-+	spinlock_t *ptl;
-+	int ret = 0;
-+	pte_t ptent;
-+
-+	if (IS_PM_SCAN_WP(p->flags) && n_pages < HPAGE_SIZE/PAGE_SIZE)
-+		return -EINVAL;
-+
-+	if (n_pages > p->max_pages - p->found_pages)
-+		n_pages = p->max_pages - p->found_pages;
-+
-+	if (IS_PM_SCAN_WP(p->flags)) {
-+		i_mmap_lock_write(vma->vm_file->f_mapping);
-+		ptl = huge_pte_lock(h, vma->vm_mm, ptep);
-+	}
-+
-+	ptent = huge_ptep_get(ptep);
-+	is_written = !is_huge_pte_uffd_wp(ptent);
-+
-+	bitmap = PM_SCAN_FLAGS(is_written, pagemap_scan_is_huge_file(ptent),
-+			       pte_present(ptent), is_swap_pte(ptent),
-+			       pte_present(ptent) && is_zero_pfn(pte_pfn(ptent)));
-+
-+	if (IS_PM_SCAN_GET(p->flags))
-+		interesting = pagemap_scan_is_interesting_page(bitmap, p);
-+
-+	if (interesting) {
-+		/*
-+		 * Partial hugetlb page clear isn't supported
-+		 */
-+		if (is_written && IS_PM_SCAN_WP(p->flags) &&
-+		    n_pages < HPAGE_SIZE/PAGE_SIZE) {
-+			ret = PM_SCAN_END_WALK;
-+			goto unlock_and_return;
-+		}
-+
-+		if (IS_PM_SCAN_GET(p->flags))
-+			ret = pagemap_scan_output(bitmap, p, start, n_pages);
-+
-+		if (IS_PM_SCAN_WP(p->flags) && is_written && ret >= 0) {
-+			make_uffd_wp_huge_pte(vma, start, ptep, ptent);
-+			flush_hugetlb_tlb_range(vma, start, end);
-+		}
-+	}
-+
-+unlock_and_return:
-+	if (IS_PM_SCAN_WP(p->flags)) {
-+		spin_unlock(ptl);
-+		i_mmap_unlock_write(vma->vm_file->f_mapping);
-+	}
-+
-+	return ret;
-+}
-+#else
-+#define pagemap_scan_hugetlb_entry NULL
-+#endif
-+
-+static int pagemap_scan_pte_hole(unsigned long addr, unsigned long end,
-+				 int depth, struct mm_walk *walk)
-+{
-+	unsigned long n_pages = (end - addr)/PAGE_SIZE;
-+	struct pagemap_scan_private *p = walk->private;
-+	struct vm_area_struct *vma = walk->vma;
-+	int ret = 0;
-+
-+	if (!vma || !IS_PM_SCAN_GET(p->flags))
-+		return 0;
-+
-+	if (n_pages > p->max_pages - p->found_pages)
-+		n_pages = p->max_pages - p->found_pages;
-+
-+	ret = pagemap_scan_output(PM_SCAN_FLAGS(false, false, false, false, false),
-+				  p, addr, n_pages);
-+
-+	return ret;
-+}
-+
-+static const struct mm_walk_ops pagemap_scan_ops = {
-+	.test_walk = pagemap_scan_test_walk,
-+	.pmd_entry = pagemap_scan_pmd_entry,
-+	.pte_hole = pagemap_scan_pte_hole,
-+	.hugetlb_entry = pagemap_scan_hugetlb_entry,
-+};
-+
-+static int pagemap_scan_args_valid(struct pm_scan_arg *arg, unsigned long start,
-+				   unsigned long end, struct page_region __user *vec)
-+{
-+	/* Detect illegal size, flags, len and masks */
-+	if (arg->size != sizeof(struct pm_scan_arg))
-+		return -EINVAL;
-+	if (!arg->flags)
-+		return -EINVAL;
-+	if (arg->flags & ~PM_SCAN_OPS)
-+		return -EINVAL;
-+	if (!(end - start))
-+		return -EINVAL;
-+	if ((arg->required_mask | arg->anyof_mask | arg->excluded_mask |
-+	     arg->return_mask) & ~PM_SCAN_BITS_ALL)
-+		return -EINVAL;
-+	if (!arg->required_mask && !arg->anyof_mask &&
-+	    !arg->excluded_mask)
-+		return -EINVAL;
-+	if (!arg->return_mask)
-+		return -EINVAL;
-+
-+	/* Validate memory range */
-+	if (!IS_ALIGNED(start, PAGE_SIZE))
-+		return -EINVAL;
-+	if (!access_ok((void __user *)start, end - start))
-+		return -EFAULT;
-+
-+	if (IS_PM_SCAN_GET(arg->flags)) {
-+		if (arg->vec_len == 0)
-+			return -EINVAL;
-+		if (!vec)
-+			return -EINVAL;
-+		if (!access_ok((void __user *)vec,
-+			       arg->vec_len * sizeof(struct page_region)))
-+			return -EFAULT;
-+	}
-+
-+	if (IS_PM_SCAN_WP(arg->flags) && !IS_PM_SCAN_GET(arg->flags) &&
-+	    arg->max_pages)
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
-+static long do_pagemap_scan(struct mm_struct *mm, unsigned long __arg)
-+{
-+	struct pm_scan_arg __user *uarg = (struct pm_scan_arg __user *)__arg;
-+	unsigned long long start, end, walk_start, walk_end;
-+	unsigned long empty_slots, vec_index = 0;
-+	struct mmu_notifier_range range;
-+	struct page_region __user *vec;
-+	struct pagemap_scan_private p;
-+	struct pm_scan_arg arg;
-+	int ret = 0;
-+
-+	if (copy_from_user(&arg, uarg, sizeof(arg)))
-+		return -EFAULT;
-+
-+	start = untagged_addr((unsigned long)arg.start);
-+	end = untagged_addr((unsigned long)arg.end);
-+	vec = (struct page_region __user *)untagged_addr((unsigned long)arg.vec);
-+
-+	ret = pagemap_scan_args_valid(&arg, start, end, vec);
-+	if (ret)
-+		return ret;
-+
-+	p.max_pages = (arg.max_pages) ? arg.max_pages : ULONG_MAX;
-+	p.found_pages = 0;
-+	p.required_mask = arg.required_mask;
-+	p.anyof_mask = arg.anyof_mask;
-+	p.excluded_mask = arg.excluded_mask;
-+	p.return_mask = arg.return_mask;
-+	p.flags = arg.flags;
-+	p.flags |= ((p.required_mask | p.anyof_mask | p.excluded_mask) &
-+		    PAGE_IS_WRITTEN) ? PM_SCAN_REQUIRE_UFFD : 0;
-+	p.cur_buf.start = p.cur_buf.len = p.cur_buf.flags = 0;
-+	p.vec_buf = NULL;
-+	p.vec_buf_len = PAGEMAP_WALK_SIZE >> PAGE_SHIFT;
-+
-+	/*
-+	 * Allocate smaller buffer to get output from inside the page walk
-+	 * functions and walk page range in PAGEMAP_WALK_SIZE size chunks. As
-+	 * we want to return output to user in compact form where no two
-+	 * consecutive regions should be continuous and have the same flags.
-+	 * So store the latest element in p.cur_buf between different walks and
-+	 * store the p.cur_buf at the end of the walk to the user buffer.
-+	 */
-+	if (IS_PM_SCAN_GET(p.flags)) {
-+		p.vec_buf = kmalloc_array(p.vec_buf_len, sizeof(*p.vec_buf),
-+					  GFP_KERNEL);
-+		if (!p.vec_buf)
-+			return -ENOMEM;
-+	}
-+
-+	if (IS_PM_SCAN_WP(p.flags)) {
-+		mmu_notifier_range_init(&range, MMU_NOTIFY_PROTECTION_VMA, 0,
-+					mm, start, end);
-+		mmu_notifier_invalidate_range_start(&range);
-+	}
-+
-+	walk_start = walk_end = start;
-+	while (walk_end < end && !ret) {
-+		if (IS_PM_SCAN_GET(p.flags)) {
-+			p.vec_buf_index = 0;
-+
-+			/*
-+			 * All data is copied to cur_buf first. When more data
-+			 * is found, we push cur_buf to vec_buf and copy new
-+			 * data to cur_buf. Subtract 1 from length as the
-+			 * index of cur_buf isn't counted in length.
-+			 */
-+			empty_slots = arg.vec_len - vec_index;
-+			p.vec_buf_len = min(p.vec_buf_len, empty_slots - 1);
-+		}
-+
-+		ret = mmap_read_lock_killable(mm);
-+		if (ret)
-+			goto return_status;
-+
-+		walk_end = min((walk_start + PAGEMAP_WALK_SIZE) & PAGEMAP_WALK_MASK, end);
-+
-+		ret = walk_page_range(mm, walk_start, walk_end,
-+				      &pagemap_scan_ops, &p);
-+		mmap_read_unlock(mm);
-+
-+		if (ret && ret != PM_SCAN_FOUND_MAX_PAGES &&
-+		    ret != PM_SCAN_END_WALK)
-+			goto return_status;
-+
-+		walk_start = walk_end;
-+		if (IS_PM_SCAN_GET(p.flags) && p.vec_buf_index) {
-+			if (copy_to_user(&vec[vec_index], p.vec_buf,
-+					 p.vec_buf_index * sizeof(*p.vec_buf))) {
-+				/*
-+				 * Return error even though the OP succeeded
-+				 */
-+				ret = -EFAULT;
-+				goto return_status;
-+			}
-+			vec_index += p.vec_buf_index;
-+		}
-+	}
-+
-+	if (p.cur_buf.len) {
-+		if (copy_to_user(&vec[vec_index], &p.cur_buf, sizeof(p.cur_buf))) {
-+			ret = -EFAULT;
-+			goto return_status;
-+		}
-+		vec_index++;
-+	}
-+
-+	ret = vec_index;
-+
-+return_status:
-+	arg.start = (unsigned long)walk_end;
-+	if (copy_to_user(&uarg->start, &arg.start, sizeof(arg.start)))
-+		ret = -EFAULT;
-+
-+	if (IS_PM_SCAN_WP(p.flags))
-+		mmu_notifier_invalidate_range_end(&range);
-+
-+	kfree(p.vec_buf);
-+	return ret;
-+}
-+
-+static long do_pagemap_cmd(struct file *file, unsigned int cmd,
-+			   unsigned long arg)
-+{
-+	struct mm_struct *mm = file->private_data;
-+
-+	switch (cmd) {
-+	case PAGEMAP_SCAN:
-+		return do_pagemap_scan(mm, arg);
-+
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
- const struct file_operations proc_pagemap_operations = {
- 	.llseek		= mem_lseek, /* borrow this */
- 	.read		= pagemap_read,
- 	.open		= pagemap_open,
- 	.release	= pagemap_release,
-+	.unlocked_ioctl = do_pagemap_cmd,
-+	.compat_ioctl	= do_pagemap_cmd,
- };
- #endif /* CONFIG_PROC_PAGE_MONITOR */
- 
-diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-index beb7c63d2871..a6e773c3e2b4 100644
---- a/include/linux/hugetlb.h
-+++ b/include/linux/hugetlb.h
-@@ -261,6 +261,7 @@ long hugetlb_change_protection(struct vm_area_struct *vma,
- 		unsigned long cp_flags);
- 
- bool is_hugetlb_entry_migration(pte_t pte);
-+bool is_hugetlb_entry_hwpoisoned(pte_t pte);
- void hugetlb_unshare_all_pmds(struct vm_area_struct *vma);
- 
- #else /* !CONFIG_HUGETLB_PAGE */
-diff --git a/include/uapi/linux/fs.h b/include/uapi/linux/fs.h
-index b7b56871029c..ac684d99e68f 100644
---- a/include/uapi/linux/fs.h
-+++ b/include/uapi/linux/fs.h
-@@ -305,4 +305,59 @@ typedef int __bitwise __kernel_rwf_t;
- #define RWF_SUPPORTED	(RWF_HIPRI | RWF_DSYNC | RWF_SYNC | RWF_NOWAIT |\
- 			 RWF_APPEND)
- 
-+/* Pagemap ioctl */
-+#define PAGEMAP_SCAN	_IOWR('f', 16, struct pm_scan_arg)
-+
-+/* Bits are set in flags of the page_region and masks in pm_scan_args */
-+#define PAGE_IS_WRITTEN		(1 << 0)
-+#define PAGE_IS_FILE		(1 << 1)
-+#define PAGE_IS_PRESENT		(1 << 2)
-+#define PAGE_IS_SWAPPED		(1 << 3)
-+#define PAGE_IS_PFNZERO		(1 << 4)
-+
-+/*
-+ * struct page_region - Page region with flags
-+ * @start:	Start of the region
-+ * @len:	Length of the region in pages
-+ * @bitmap:	Bits sets for the region
-+ */
-+struct page_region {
-+	__u64 start;
-+	__u64 len;
-+	__u64 flags;
-+};
-+
-+/*
-+ * struct pm_scan_arg - Pagemap ioctl argument
-+ * @size:		Size of the structure
-+ * @flags:		Flags for the IOCTL
-+ * @start:		Starting address of the region
-+ *			(Ending address of the walk is also returned in it)
-+ * @end:		Ending address of the region
-+ * @vec:		Address of page_region struct array for output
-+ * @vec_len:		Length of the page_region struct array
-+ * @max_pages:		Optional max return pages
-+ * @required_mask:	Required mask - All of these bits have to be set in the PTE
-+ * @anyof_mask:		Any mask - Any of these bits are set in the PTE
-+ * @excluded_mask:	Exclude mask - None of these bits are set in the PTE
-+ * @return_mask:	Bits that are to be reported in page_region
-+ */
-+struct pm_scan_arg {
-+	__u64 size;
-+	__u64 flags;
-+	__u64 start;
-+	__u64 end;
-+	__u64 vec;
-+	__u64 vec_len;
-+	__u64 max_pages;
-+	__u64 required_mask;
-+	__u64 anyof_mask;
-+	__u64 excluded_mask;
-+	__u64 return_mask;
-+};
-+
-+/* Supported flags */
-+#define PM_SCAN_OP_GET	(1 << 0)
-+#define PM_SCAN_OP_WP	(1 << 1)
-+
- #endif /* _UAPI_LINUX_FS_H */
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 0db13167b1ee..7e60f0f3fd03 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -4980,7 +4980,7 @@ bool is_hugetlb_entry_migration(pte_t pte)
- 		return false;
- }
- 
--static bool is_hugetlb_entry_hwpoisoned(pte_t pte)
-+bool is_hugetlb_entry_hwpoisoned(pte_t pte)
- {
- 	swp_entry_t swp;
- 
+diff --git a/Documentation/admin-guide/mm/pagemap.rst b/Documentation/admin-guide/mm/pagemap.rst
+index c8f380271cad..4bdad8eff009 100644
+--- a/Documentation/admin-guide/mm/pagemap.rst
++++ b/Documentation/admin-guide/mm/pagemap.rst
+@@ -227,3 +227,61 @@ Before Linux 3.11 pagemap bits 55-60 were used for "page-shift" (which is
+ always 12 at most architectures). Since Linux 3.11 their meaning changes
+ after first clear of soft-dirty bits. Since Linux 4.2 they are used for
+ flags unconditionally.
++
++Pagemap Scan IOCTL
++==================
++
++The ``PAGEMAP_SCAN`` IOCTL on the pagemap file can be used to get or optionally
++clear the info about page table entries. The following operations are supported
++in this IOCTL:
++- Get the information if the pages have been written to (``PAGE_IS_WRITTEN``),
++  file mapped (``PAGE_IS_FILE``), present (``PAGE_IS_PRESENT``), swapped
++  (``PAGE_IS_SWAPPED``) or page has pfn zero (``PAGE_IS_PFNZERO``).
++- Find pages which have been written to and/or write protect the pages atomically
++  (atomic ``PM_SCAN_OP_GET + PM_SCAN_OP_WP``)
++
++The ``struct pm_scan_arg`` is used as the argument of the IOCTL.
++ 1. The size of the ``struct pm_scan_arg`` must be specified in the ``size``
++    field. This field will be helpful in recognizing the structure if extensions
++    are done later.
++ 2. The flags can be specified in the ``flags`` field. The ``PM_SCAN_OP_GET``
++    and ``PM_SCAN_OP_WP`` are the only added flags at this time.
++ 3. The range is specified through ``start`` and ``end``.
++ 4. The output buffer of ``struct page_region`` array and size is specified in
++    ``vec`` and ``vec_len``.
++ 5. The optional maximum requested pages are specified in the ``max_pages``.
++ 6. The masks are specified in ``required_mask``, ``anyof_mask``,
++    ``excluded_ mask`` and ``return_mask``.
++    1.  To find if ``PAGE_IS_WRITTEN`` flag is set for pages which have
++        ``PAGE_IS_FILE`` set and ``PAGE_IS_SWAPPED`` unset, ``required_mask``
++        is set to ``PAGE_IS_FILE``, ``exclude_mask`` is set to
++        ``PAGE_IS_SWAPPED`` and ``return_mask`` is set to ``PAGE_IS_WRITTEN``.
++        The output buffer in ``vec`` and length must be specified in ``vec_len``.
++    2. To find pages which have either ``PAGE_IS_FILE`` or ``PAGE_IS_SWAPPED``
++       set, ``anyof_masks`` is set to  ``PAGE_IS_FILE | PAGE_IS_SWAPPED``.
++    3. To find written pages and engage write protect, ``PAGE_IS_WRITTEN`` is
++       specified in ``required_mask`` and ``return_mask``. In addition to
++       specifying the output buffer in ``vec`` and length in ``vec_len``, the
++       ``PM_SCAN_OP_WP`` is specified in ``flags`` to perform write protect
++       on the range as well.
++
++The ``PAGE_IS_WRITTEN`` flag can be considered as the better and correct
++alternative of soft-dirty flag. It doesn't get affected by housekeeping chores
++(VMA merging) of the kernel and hence the user can find the true soft-dirty pages
++only. This IOCTL adds the atomic way to find which pages have been written and
++write protect those pages again. This kind of operation is needed to efficiently
++find out which pages have changed in the memory.
++
++To get information about which pages have been written to or optionally write
++protect the pages, following must be performed first in order:
++ 1. The userfaultfd file descriptor is created with ``userfaultfd`` syscall.
++ 2. The ``UFFD_FEATURE_WP_UNPOPULATED`` and ``UFFD_FEATURE_WP_ASYNC`` features
++    are set by ``UFFDIO_API`` IOCTL.
++ 3. The memory range is registered with ``UFFDIO_REGISTER_MODE_WP`` mode
++    through ``UFFDIO_REGISTER`` IOCTL.
++ 4. Then any part of the registered memory or the whole memory region must
++    be write protected using ``PAGEMAP_SCAN`` IOCTL with flag ``PM_SCAN_OP_WP``
++    or the ``UFFDIO_WRITEPROTECT`` IOCTL can be used. Both of these perform the
++    same operation. The former is better in terms of performance.
++ 5. Now the ``PAGEMAP_SCAN`` IOCTL can be used to either just find pages which
++    have been written to and/or optionally write protect the pages as well.
 -- 
 2.39.2
 
