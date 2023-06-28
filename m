@@ -2,126 +2,142 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B3BCEB64DC
-	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Jun 2023 08:32:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BBE80EB64DC
+	for <linux-kselftest@archiver.kernel.org>; Wed, 28 Jun 2023 08:34:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232331AbjF1IcU (ORCPT
+        id S234875AbjF1IeG (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 28 Jun 2023 04:32:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41596 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234842AbjF1I1z (ORCPT
+        Wed, 28 Jun 2023 04:34:06 -0400
+Received: from madras.collabora.co.uk ([46.235.227.172]:32772 "EHLO
+        madras.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235465AbjF1Ibj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Jun 2023 04:27:55 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B201FE8;
-        Wed, 28 Jun 2023 01:21:46 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-51d80c5c834so1258115a12.1;
-        Wed, 28 Jun 2023 01:21:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687940504; x=1690532504;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Db2b1drcKZ8bYZGtiVSlYoLfHEvPC00Fe2KRsKbkAow=;
-        b=oyHT/PBTrBJOWW9uSHX8JHLMxyniJfcZ20guKjWbvOGKzO07bjOzXZFrOhoYRgOruS
-         C/w2IkHsAr1nqtgTbjtHhkWyaej1J1xS8vZxkZX0wDgwMXgSDevYNLuZfH2lHFMgwAUr
-         5Nzc4lHSRVNkKoS+pA1NqKw7PXagsxvmbmEG63Ctbwga4zmEbIbfDYc0nh9czC1NkU06
-         4EhUluL6BuFXB6HQlfcf7eq1k7WOsr+AOMp5s5W1J9Lvu7tloO4dwpj+IZjZDzS1ehEa
-         H3g2f5DdpcsbS1m33wP1amtox5rbdWKvImLDo83w9bsxmTvUrYTn7aonknHD7f31dhot
-         iPYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687940504; x=1690532504;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Db2b1drcKZ8bYZGtiVSlYoLfHEvPC00Fe2KRsKbkAow=;
-        b=PxBey6orXJjXs+3eKKr1c1UzkJwwAXxCuh3kR0ZAotG9Yqt0sOJoKfGNJuFU7osS3G
-         3eqe1REeGqzNm3kLGA+DmiD/W2xHYmJZRyECvZha7dm6w5eet11by7Df3p8Me9qa9mpP
-         NkrmAibBD1GIcWVFymOuMktttrFMUqKSXrgDZhtrVZUyphZRzyOqzx+uFFBAnBp5hsoR
-         I/fljUpFV55vgi8QFJnBEB9/ad5vRHDMwD5ovdVYb1/mAxWzRBZW6k5LRt97ZZRpmNZ7
-         EUcde3cHqnNGsY4QbgvR2XAVj0HGmlCycGB5/BoLaNCTfkKKnZhpUWLZ2V8LbWK13b0j
-         xc0w==
-X-Gm-Message-State: AC+VfDwyoVnXBgeJMD56tXDq6SmS7YMH4fi/lN2LLTghNnFGJJVYxMTc
-        10JQl9EpfCQOUfn+5vVUuzuQiMZBgGx8nYRQMJY=
-X-Google-Smtp-Source: ACHHUZ4C2pT8MhQeLYD8j0yGFHFNONA2MaLYo8SvketYluYkViF3Vk0d0NH5E8q2lu+r1kqhvS1yoxQ5EXc0dwBSw+w=
-X-Received: by 2002:aa7:c388:0:b0:514:a21b:f137 with SMTP id
- k8-20020aa7c388000000b00514a21bf137mr643963edq.6.1687940504022; Wed, 28 Jun
- 2023 01:21:44 -0700 (PDT)
+        Wed, 28 Jun 2023 04:31:39 -0400
+Received: from [192.168.10.54] (unknown [182.179.162.32])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 52947660716D;
+        Wed, 28 Jun 2023 07:03:51 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1687932238;
+        bh=Mnlsggp9LUoS8ve7lv1HuoaS0bmkESWlf5OUJi5Yvkg=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=mtwgShxLJXCcwEam7M0PfR4SvBpDh8abUYPjYTamu74SIzmR2joyzzavKdoArvNuB
+         nRSob2PXk934h4fvu2vLMtqfmEH257l2n5sSuLNTcht9AjHnEBIEA4X9b2iD7s6Kdp
+         oyLtdDgOsFk1pwIGepOZCkT0WiuzwivKJVDQ1pZ9WzWzytIRWyhufS6hgn6UVTSys+
+         iwH9DPNXEw6t5FZ1bKlSPXEBxg3jTg4miZptd7d63NVeFHuLTYhcpLhpS84vbUnX0w
+         IlsCZCstDQQ+LinINZe5gE5lY2Il64nYqc4HtIPtZludnhDTh9+qzMIbtaBDMR836V
+         y2vShbeIgCJvQ==
+Message-ID: <bbba2568-2b40-d2ef-0622-47cd21c95fec@collabora.com>
+Date:   Wed, 28 Jun 2023 11:03:46 +0500
 MIME-Version: 1.0
-References: <20230625123037.8384-1-dangel101@gmail.com>
-In-Reply-To: <20230625123037.8384-1-dangel101@gmail.com>
-From:   Enric Balletbo Serra <eballetbo@gmail.com>
-Date:   Wed, 28 Jun 2023 10:21:31 +0200
-Message-ID: <CAFqH_50RqvARZxVTnHz8fPm_CPQq0cwpr1kxGRxFzCjB_+RBCA@mail.gmail.com>
-Subject: Re: [PATCH v2] selftests/input: add tests for the EVIOCSABS ioctl
-To:     Dana Elfassy <delfassy@redhat.com>
-Cc:     shuah@kernel.org, eballetbo@kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dana Elfassy <dangel101@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v21 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+Content-Language: en-US
+To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>
+References: <20230626113156.1274521-1-usama.anjum@collabora.com>
+ <20230626113156.1274521-3-usama.anjum@collabora.com>
+ <ZJo/gOnTmwEQPLF8@gmail.com>
+ <13ea54c0-25a3-285c-f47e-d6da11c91795@collabora.com>
+ <CABb0KFGn=3oAYa+wsf=iWr1Ss=en9+m11JOijEibXJLFDAkvjQ@mail.gmail.com>
+ <6ac9c60e-0a6b-110a-cace-97afbd9708a0@collabora.com>
+ <CABb0KFH60U5RE9dLfCOEGp5=wLwwxpKaMdzQL8drYEmL3T_itw@mail.gmail.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <CABb0KFH60U5RE9dLfCOEGp5=wLwwxpKaMdzQL8drYEmL3T_itw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Dana,
+On 6/28/23 12:54 AM, Michał Mirosław wrote:
+> On Tue, 27 Jun 2023 at 21:20, Muhammad Usama Anjum
+> <usama.anjum@collabora.com> wrote:
+>> Thanks Michał for replying.
+>>
+>> On 6/27/23 11:52 PM, Michał Mirosław wrote:
+>>> On Tue, 27 Jun 2023 at 11:00, Muhammad Usama Anjum
+>>> <usama.anjum@collabora.com> wrote:
+>>>>
+>>>> Hi Andrei and Michal,
+>>>>
+>>>> Lets resolve last two points. Please reply below.
+>>>>
+>>>> On 6/27/23 6:46 AM, Andrei Vagin wrote:
+>>> [...]
+>>>>> And we need to report an address where it stopped scanning.
+>>>>> We can do that by adding zero length vector.
+>>>> I don't want to do multiplexing the ending address in vec. Can we add
+>>>> end_addr variable in struct pm_scan_arg to always return the ending address?
+>>>>
+>>>> struct pm_scan_arg {
+>>>>         ...
+>>>>         _u64 end_addr;
+>>>> };
+>>>
+>>> The idea to emit a zero-length entry for the end looks nice. This has
+>>> the disadvantage that we'd need to either reserve one entry for the
+>>> ending marker or stop the walk after the last entry is no longer
+>>> matching.
+>> This is ambiguous.
+> 
+> Can you explain? Both solutions would allow to return the restart
+> point back to the caller (the second one would need to stop the walk
+> as soon as the matching page range finishes -- that creates
+> discontinuity).
+> 
+>>> Another solution would be to rewrite 'start' and 'len'. The caller
+>>> would be forced to use non-const `pm_scan_arg`, but I expect the `vec`
+>>> pointer would normally be written anyway (unless using only a
+>>> statically-allocated buffer).
+>>> Also, if the 'len' is replaced with 'end' that would make the ioctl
+>>> easily restartable (just call again if start != end).
+>> Nice idea. But returning ending address in len seems a bit strange.
+> 
+> I mean that it would update `start` = start value for next call' and
+> `len` = `len` - (new `start` - original `start`).
+> 
+> By replacing `len` I meant to remove the field and add `end` instead
+> to make the requested range use begin .. end (iterator range) style
+> instead of start + len (buffer and length). In this version you only
+> need to update `start` (or `begin` if you prefer).
+The `start` and `end` with updating the `start` with ending address seems
+most appropriate. I'll make updates.
 
-Thank you for the patch.
+> 
+> Best Regards
+> Michał Mirosław
 
-Missatge de Dana Elfassy <delfassy@redhat.com> del dia dg., 25 de juny
-2023 a les 14:31:
->
-> This patch introduces two tests for the EVIOCSABS ioctl. The first one
-> checks that the ioctl fails when the EV_ABS bit was not set, and the
-> second one just checks that the normal workflow for this ioctl
-> succeeds.
->
-> Signed-off-by: Dana Elfassy <dangel101@gmail.com>
-
-Using gcov i see that this covers the code path when an EVIOCSABS
-ioctl is called, so
-
-Reviewed-by: Enric Balletbo i Serra <eballetbo@kernel.org>
-
-
-> ---
-> This patch depends on '[v3] selftests/input: Introduce basic tests for evdev ioctls' [1] sent to the ML.
-> [1] https://patchwork.kernel.org/project/linux-input/patch/20230607153214.15933-1-eballetbo@kernel.org/
->
->  tools/testing/selftests/input/evioc-test.c | 23 ++++++++++++++++++++++
->  1 file changed, 23 insertions(+)
->
-> diff --git a/tools/testing/selftests/input/evioc-test.c b/tools/testing/selftests/input/evioc-test.c
-> index 4c0c8ebed378..7afd537f0b24 100644
-> --- a/tools/testing/selftests/input/evioc-test.c
-> +++ b/tools/testing/selftests/input/evioc-test.c
-> @@ -279,4 +279,27 @@ TEST(eviocgrep_get_repeat_settings)
->         selftest_uinput_destroy(uidev);
->  }
->
-> +TEST(eviocsabs_set_abs_value_limits)
-> +{
-> +       struct selftest_uinput *uidev;
-> +       struct input_absinfo absinfo;
-> +       int rc;
-> +
-> +       // fail test on dev->absinfo
-> +       rc = selftest_uinput_create_device(&uidev), -1;
-> +       ASSERT_EQ(0, rc);
-> +       ASSERT_NE(NULL, uidev);
-> +       rc = ioctl(uidev->evdev_fd, EVIOCSABS(0), &absinfo);
-> +       ASSERT_EQ(-1, rc);
-> +       selftest_uinput_destroy(uidev);
-> +
-> +       // ioctl normal flow
-> +       rc = selftest_uinput_create_device(&uidev, EV_ABS, -1);
-> +       ASSERT_EQ(0, rc);
-> +       ASSERT_NE(NULL, uidev);
-> +       rc = ioctl(uidev->evdev_fd, EVIOCSABS(0), &absinfo);
-> +       ASSERT_EQ(0, rc);
-> +       selftest_uinput_destroy(uidev);
-> +}
-> +
->  TEST_HARNESS_MAIN
-> --
-> 2.41.0
->
+-- 
+BR,
+Muhammad Usama Anjum
