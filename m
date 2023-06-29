@@ -2,44 +2,45 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 485F0EB64D9
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7A82EB64DC
 	for <linux-kselftest@archiver.kernel.org>; Thu, 29 Jun 2023 09:11:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232100AbjF2JL4 (ORCPT
+        id S232223AbjF2JL5 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 29 Jun 2023 05:11:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33906 "EHLO
+        Thu, 29 Jun 2023 05:11:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232023AbjF2JLz (ORCPT
+        with ESMTP id S232047AbjF2JL4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Jun 2023 05:11:55 -0400
+        Thu, 29 Jun 2023 05:11:56 -0400
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46DEB1FD8;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0169210B;
         Thu, 29 Jun 2023 02:11:54 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 000B31F8C3;
-        Thu, 29 Jun 2023 09:11:52 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 41E501F8D6;
+        Thu, 29 Jun 2023 09:11:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
         t=1688029913; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=eakZ9Lwqp66DOPYDD7y7VLeLOLV3zqoUBYGx3Z4WOnY=;
-        b=eLEATQF/QD87CNPxQL0qRd1yPM+gwm4aUtlPjCwxI47+fW7Z9tuLJHE7ks451dK4laL3pI
-        8zEvCnCS3XrXPZVxZw5oQgqEbXxyuLUXAi4fXxLJX5nTejhVbG5jLbIqoquhY5LWEHNgTk
-        id7Hkm0ccym9GKAtLhyiRko4959cZdY=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MWY4rlizTsbE4lk/fbjSF0vRSuBEIrtI8kkmTHcKZeU=;
+        b=V433YG/ZQoa/QQPs4M307VdqVQ2YhmL/Ph5DUDb08P8wd0oOJm91kqkrUxXAIUor5M5ka1
+        seag/s7rQD0NbBqcbc/zv0ua307vDPz8pJEmHiiSzH8Ip9tpdbVlDA/n5dZff6G2Er2Zwp
+        TeZiFMiguSVTEKiYONtEG/vwLpcXqbA=
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BAC26139FF;
-        Thu, 29 Jun 2023 09:11:52 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1C12D139FF;
+        Thu, 29 Jun 2023 09:11:53 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id RVCrK9hKnWSMdQAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Thu, 29 Jun 2023 09:11:52 +0000
+        id 6MUPBtlKnWSMdQAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Thu, 29 Jun 2023 09:11:53 +0000
 From:   =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
 To:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
         linux-kselftest@vger.kernel.org
@@ -47,10 +48,12 @@ Cc:     Waiman Long <longman@redhat.com>,
         Zefan Li <lizefan.x@bytedance.com>, Tejun Heo <tj@kernel.org>,
         Johannes Weiner <hannes@cmpxchg.org>,
         Shuah Khan <shuah@kernel.org>
-Subject: [PATCH 0/3] cpuset: Allow setscheduler regardless of manipulated task
-Date:   Thu, 29 Jun 2023 11:11:43 +0200
-Message-ID: <20230629091146.28801-1-mkoutny@suse.com>
+Subject: [PATCH 2/3] selftests: cgroup: Minor code reorganizations
+Date:   Thu, 29 Jun 2023 11:11:45 +0200
+Message-ID: <20230629091146.28801-3-mkoutny@suse.com>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230629091146.28801-1-mkoutny@suse.com>
+References: <20230629091146.28801-1-mkoutny@suse.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -58,31 +61,82 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Changes in v1:
-- added selftests
-- comments rewording
+No functional change intended, these small changes are merged into one
+commit and they serve as a preparation for an upcoming new testcase.
 
-RFC in https://lore.kernel.org/r/20220623124944.2753-1-mkoutny@suse.com
+Signed-off-by: Michal Koutný <mkoutny@suse.com>
+---
+ MAINTAINERS                                       | 1 +
+ tools/testing/selftests/cgroup/cgroup_util.c      | 2 ++
+ tools/testing/selftests/cgroup/cgroup_util.h      | 2 ++
+ tools/testing/selftests/cgroup/test_core.c        | 2 +-
+ tools/testing/selftests/cgroup/test_cpuset_prs.sh | 2 +-
+ 5 files changed, 7 insertions(+), 2 deletions(-)
 
-Michal Koutný (3):
-  cpuset: Allow setscheduler regardless of manipulated task
-  selftests: cgroup: Minor code reorganizations
-  selftests: cgroup: Add cpuset migrations testcase
-
- MAINTAINERS                                   |   2 +
- kernel/cgroup/cpuset.c                        |   7 +
- tools/testing/selftests/cgroup/.gitignore     |   1 +
- tools/testing/selftests/cgroup/Makefile       |   2 +
- tools/testing/selftests/cgroup/cgroup_util.c  |   2 +
- tools/testing/selftests/cgroup/cgroup_util.h  |   2 +
- tools/testing/selftests/cgroup/test_core.c    |   2 +-
- tools/testing/selftests/cgroup/test_cpuset.c  | 272 ++++++++++++++++++
- .../selftests/cgroup/test_cpuset_prs.sh       |   2 +-
- 9 files changed, 290 insertions(+), 2 deletions(-)
- create mode 100644 tools/testing/selftests/cgroup/test_cpuset.c
-
-
-base-commit: 6995e2de6891c724bfeb2db33d7b87775f913ad1
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 35e19594640d..50e7056b4383 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -5259,6 +5259,7 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git
+ F:	Documentation/admin-guide/cgroup-v1/cpusets.rst
+ F:	include/linux/cpuset.h
+ F:	kernel/cgroup/cpuset.c
++F:	tools/testing/selftests/cgroup/test_cpuset_prs.sh
+ 
+ CONTROL GROUP - MEMORY RESOURCE CONTROLLER (MEMCG)
+ M:	Johannes Weiner <hannes@cmpxchg.org>
+diff --git a/tools/testing/selftests/cgroup/cgroup_util.c b/tools/testing/selftests/cgroup/cgroup_util.c
+index e8bbbdb77e0d..0340d4ca8f51 100644
+--- a/tools/testing/selftests/cgroup/cgroup_util.c
++++ b/tools/testing/selftests/cgroup/cgroup_util.c
+@@ -286,6 +286,8 @@ int cg_destroy(const char *cgroup)
+ {
+ 	int ret;
+ 
++	if (!cgroup)
++		return 0;
+ retry:
+ 	ret = rmdir(cgroup);
+ 	if (ret && errno == EBUSY) {
+diff --git a/tools/testing/selftests/cgroup/cgroup_util.h b/tools/testing/selftests/cgroup/cgroup_util.h
+index c92df4e5d395..1df7f202214a 100644
+--- a/tools/testing/selftests/cgroup/cgroup_util.h
++++ b/tools/testing/selftests/cgroup/cgroup_util.h
+@@ -11,6 +11,8 @@
+ #define USEC_PER_SEC	1000000L
+ #define NSEC_PER_SEC	1000000000L
+ 
++#define TEST_UID	65534 /* usually nobody, any !root is fine */
++
+ /*
+  * Checks if two given values differ by less than err% of their sum.
+  */
+diff --git a/tools/testing/selftests/cgroup/test_core.c b/tools/testing/selftests/cgroup/test_core.c
+index 600123503063..80aa6b2373b9 100644
+--- a/tools/testing/selftests/cgroup/test_core.c
++++ b/tools/testing/selftests/cgroup/test_core.c
+@@ -683,7 +683,7 @@ static int test_cgcore_thread_migration(const char *root)
+  */
+ static int test_cgcore_lesser_euid_open(const char *root)
+ {
+-	const uid_t test_euid = 65534;	/* usually nobody, any !root is fine */
++	const uid_t test_euid = TEST_UID;
+ 	int ret = KSFT_FAIL;
+ 	char *cg_test_a = NULL, *cg_test_b = NULL;
+ 	char *cg_test_a_procs = NULL, *cg_test_b_procs = NULL;
+diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+index 2b5215cc599f..4afb132e4e4f 100755
+--- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
++++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+@@ -10,7 +10,7 @@
+ skip_test() {
+ 	echo "$1"
+ 	echo "Test SKIPPED"
+-	exit 0
++	exit 4 # ksft_skip
+ }
+ 
+ [[ $(id -u) -eq 0 ]] || skip_test "Test must be run as root!"
 -- 
 2.41.0
 
