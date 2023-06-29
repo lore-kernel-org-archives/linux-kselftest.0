@@ -2,98 +2,192 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B048EB64D9
-	for <linux-kselftest@archiver.kernel.org>; Thu, 29 Jun 2023 19:42:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D544DC001DF
+	for <linux-kselftest@archiver.kernel.org>; Thu, 29 Jun 2023 20:50:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231989AbjF2TmR (ORCPT
+        id S232000AbjF2Uu4 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 29 Jun 2023 15:42:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57474 "EHLO
+        Thu, 29 Jun 2023 16:50:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbjF2TmQ (ORCPT
+        with ESMTP id S232016AbjF2Uuy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Jun 2023 15:42:16 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01A08210E;
-        Thu, 29 Jun 2023 12:42:14 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-51d7f4c1cfeso1212110a12.0;
-        Thu, 29 Jun 2023 12:42:14 -0700 (PDT)
+        Thu, 29 Jun 2023 16:50:54 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB55130F7
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Jun 2023 13:50:50 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-bfee66a6398so919143276.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Jun 2023 13:50:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688067733; x=1690659733;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=J8xfd3Bi3FUEg2mdjjnrWh1F35O1rgPB2ctPxtJWJao=;
-        b=LgBKMetrxewlKIGdFCcpoEPRF6NFs6XJRRca6Pvs1nL7hpytucBzWMjjhB6DivoOkT
-         nqkSHsiswr4OJ5TPcl1HDBDEX3X01uWyUl34o8Qk7wqTqJ6XUGB/JlF/lWy6IYXXzd2j
-         TNwn5f9XlqfqW9URN60MRZgDedy4THbCjfC0tIlbmkuATPbAb5fw5Ye67MY7fY5w4JHI
-         8fS5xnHf0h3e7UjdnX9E1FMiA6HgrheVR5Zwu1j+EDg37QlmB9xQlC57u7JpoGBx1OVz
-         BO+fSSJs9wIr4JHfKqIneRTn/Fl5uapvTuJIe6LWEdaiXxurU1C2KdKply9lMOsMhrTO
-         i5jg==
+        d=google.com; s=20221208; t=1688071850; x=1690663850;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=R8jkAmCGbYNygAZgSop/zKP0BAnGYhZIuFEhOa1in5M=;
+        b=a8O0wagyUtUHav4dJ+0FTU4BfULv1hqXducKGWGQFuo+G+tIPjHy7DS1ADLv5ngmlB
+         RSngMc0CnR4cfT4Dl1/3ekbmm7f4jkeC6RGHf37xUtQNDImjBtBI9DhIP8Z9AdXeugxu
+         EEIqVXFJE09pcCYmkIu4KbepOYvezPBB0mUQ8g4biI54D+MfCLg+3QhsHFv6yxYBACnS
+         hW5iDv/qv08V0YHMgwph0e9b+5pGUlXVr84spJ6yslQMHWase0Q3RfrmBefxTbxnzdJF
+         i1oPLS3gMTFjIwMQZ2twKVJdYWAw+m3Lbi649+iUQ0hPFKbJ4IuR/hqznd3O1UEd0bUk
+         66bA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688067733; x=1690659733;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=J8xfd3Bi3FUEg2mdjjnrWh1F35O1rgPB2ctPxtJWJao=;
-        b=fXnc5eJ8YTebi5Tx9oVvOeDMS68goxg6hkM0WirD0s8pYAdBVhiT3DjkWqys6Vhan5
-         vzZv9tilo3hBKvmHjXcv9feOrHnYV15DOqCUi7WuEj6wbdgp3rUedHS3HX9nhg2vvS8n
-         jMn1VoDDKp814z+fC3VMSdJvehz7dUlEKnTq0iso2ru9t80j9GauIJ4ygHtYg+ocWkaf
-         CvyAvEhrfoNfIj+uDvl86BFZsLUqGMBsnzpPj8pP22yAeF2JbPtwfL3lXgYP6UEAll4D
-         zI3G50r9+bNppHzvPIPFbWrqCBtH3h7v5bAwVJmkxaHQ70xZ30Bu13Z7xjGTGtQWM8ol
-         XN2w==
-X-Gm-Message-State: ABy/qLb0u/AK4P2YVQQtugm72o/NBSJcbTaGbnMO1uLmfEnPcciy48Cf
-        ysBplfX0JTc9Q1vue8apuw==
-X-Google-Smtp-Source: APBJJlEeUZAGifvNNwYzIvE081khgiSAJja1TtD3q2wF1Yzd9TXgi1C48M+JMyOUgYcqh1bFDGtfKw==
-X-Received: by 2002:a05:6402:205c:b0:51d:91cc:32e8 with SMTP id bc28-20020a056402205c00b0051d91cc32e8mr122204edb.29.1688067733196;
-        Thu, 29 Jun 2023 12:42:13 -0700 (PDT)
-Received: from p183 ([46.53.248.48])
-        by smtp.gmail.com with ESMTPSA id b5-20020aa7cd05000000b0051da8fd7570sm773742edw.41.2023.06.29.12.42.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jun 2023 12:42:12 -0700 (PDT)
-Date:   Thu, 29 Jun 2023 22:42:10 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: Re: [PATCH 2/2] selftests/proc: Do not build x86-64 tests on
- non-x86-64 builds
-Message-ID: <fd61fd96-f06f-4a2d-8707-0e1e395c9e51@p183>
-References: <20230629162301.1234157-1-bjorn@kernel.org>
- <20230629162301.1234157-3-bjorn@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230629162301.1234157-3-bjorn@kernel.org>
+        d=1e100.net; s=20221208; t=1688071850; x=1690663850;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=R8jkAmCGbYNygAZgSop/zKP0BAnGYhZIuFEhOa1in5M=;
+        b=fzi1hMwFT7t87k0d9Y/RsGiJT0TK2N2tbSSXyUdifGvoWiyVmhHwu+u7mfXMDZMKRf
+         E57lWi4KhdFZ6MItJ0+NHqGPYLHm5kpDf5DKLVUn1HUO7YRFlP7mWvMtffpa3GH4//Ib
+         XnS8oZLwbB/CmE3jUZmbgEfCsFPfkcY34ZtnOkkVGDrq3yawF4RRwM5LWfTfR3Dgub72
+         SL3+0cJXiTOqjLOlNJAoW6rDdSTLshFsnLkiubB6QK3SO5daRXqidftrEP8s+HsbQ0SW
+         3WenJx0WR2pD07IjT1N2DKKZPNSe3YVpE0Imhx3j2Auq3/sndyUPm3lMPQJYDtzNXdn3
+         DGgg==
+X-Gm-Message-State: ABy/qLboEsyTp1gQuPtcql5wZU6buPaWWdo/Rv0G50GaJ+7OI2uGgYBY
+        bI3vnd/6jL9S1er1KHU4p+g/J40rku17nCe6OpFg
+X-Google-Smtp-Source: APBJJlEqqtwXeQ2F+CB5P4eAYTWY2GLrYOnygDGt3hdnYMvy8/GPfEVbxlgghXg+IFwNtZpThqff4X0A++LKH4Bo56yy
+X-Received: from axel.svl.corp.google.com ([2620:15c:2a3:200:e20f:5917:3efa:d4bb])
+ (user=axelrasmussen job=sendgmr) by 2002:a25:738e:0:b0:bcc:285c:66ea with
+ SMTP id o136-20020a25738e000000b00bcc285c66eamr5716ybc.3.1688071850044; Thu,
+ 29 Jun 2023 13:50:50 -0700 (PDT)
+Date:   Thu, 29 Jun 2023 13:50:36 -0700
+In-Reply-To: <20230629205040.665834-1-axelrasmussen@google.com>
+Mime-Version: 1.0
+References: <20230629205040.665834-1-axelrasmussen@google.com>
+X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
+Message-ID: <20230629205040.665834-2-axelrasmussen@google.com>
+Subject: [PATCH v2 2/6] mm: userfaultfd: refactor hugetlb folio allocation /
+ lookup code
+From:   Axel Rasmussen <axelrasmussen@google.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Hugh Dickins <hughd@google.com>,
+        James Houghton <jthoughton@google.com>,
+        Jiaqi Yan <jiaqiyan@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        "Mike Rapoport (IBM)" <rppt@kernel.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Nadav Amit <namit@vmware.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        ZhangPeng <zhangpeng362@huawei.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        Axel Rasmussen <axelrasmussen@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jun 29, 2023 at 06:23:00PM +0200, Björn Töpel wrote:
-> From: Björn Töpel <bjorn@rivosinc.com>
-> 
-> The proc-empty-vm test is x86-64 only. Remove that test from
-> non-x86-64 builds.
-> 
-> Signed-off-by: Björn Töpel <bjorn@rivosinc.com>
+At the top of `hugetlb_mfill_atomic_pte`, we need to get the folio we're
+going to be mapping. There are three basic cases we're dealing with
+here:
 
-What's the address space size on risc-v?
+1. We're doing a UFFDIO_CONTINUE, in which case we lookup an existing
+   folio in the pagecache, instead of allocating a new one.
+2. We need to allocate a new folio.
+3. We previously failed while populating our new folio, so we "returned"
+   a temporary folio using `foliop` and had our caller retry.
 
-> --- a/tools/testing/selftests/proc/Makefile
-> +++ b/tools/testing/selftests/proc/Makefile
-> @@ -8,7 +8,11 @@ TEST_GEN_PROGS += fd-001-lookup
->  TEST_GEN_PROGS += fd-002-posix-eq
->  TEST_GEN_PROGS += fd-003-kthread
->  TEST_GEN_PROGS += proc-loadavg-001
-> +
-> +ifneq (,$(filter $(ARCH),x86_64))
->  TEST_GEN_PROGS += proc-empty-vm
-> +endif
-> +
->  TEST_GEN_PROGS += proc-pid-vm
->  TEST_GEN_PROGS += proc-self-map-files-001
->  TEST_GEN_PROGS += proc-self-map-files-002
+In a future commit I'm going to add a fourth case for UFFDIO_POISON,
+where we aren't going to map a folio at all (newly allocated or
+otherwise). This end state will be simpler, and we can re-use a bit more
+code, if we stop using `if (...)` to distinguish the cases.
+
+So, refactor the cases so they share most of the same code, and instead
+switch to `goto` to skip some parts depending on the case at hand.
+
+Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+---
+ mm/hugetlb.c | 53 +++++++++++++++++++++++++---------------------------
+ 1 file changed, 25 insertions(+), 28 deletions(-)
+
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index bce28cca73a1..38711d49e4db 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -6259,22 +6259,32 @@ int hugetlb_mfill_atomic_pte(pte_t *dst_pte,
+ 		if (IS_ERR(folio))
+ 			goto out;
+ 		folio_in_pagecache = true;
+-	} else if (!*foliop) {
+-		/* If a folio already exists, then it's UFFDIO_COPY for
+-		 * a non-missing case. Return -EEXIST.
+-		 */
+-		if (vm_shared &&
+-		    hugetlbfs_pagecache_present(h, dst_vma, dst_addr)) {
+-			ret = -EEXIST;
+-			goto out;
++		goto ready;
++	}
++
++	/* If a folio already exists, then it's UFFDIO_COPY for
++	 * a non-missing case. Return -EEXIST.
++	 */
++	if (vm_shared && hugetlbfs_pagecache_present(h, dst_vma, dst_addr)) {
++		ret = -EEXIST;
++		if (*foliop) {
++			folio_put(*foliop);
++			*foliop = NULL;
+ 		}
++		goto out;
++	}
+ 
+-		folio = alloc_hugetlb_folio(dst_vma, dst_addr, 0);
+-		if (IS_ERR(folio)) {
+-			ret = -ENOMEM;
+-			goto out;
++	folio = alloc_hugetlb_folio(dst_vma, dst_addr, 0);
++	if (IS_ERR(folio)) {
++		ret = -ENOMEM;
++		if (*foliop) {
++			folio_put(*foliop);
++			*foliop = NULL;
+ 		}
++		goto out;
++	}
+ 
++	if (!*foliop) {
+ 		ret = copy_folio_from_user(folio, (const void __user *) src_addr,
+ 					   false);
+ 
+@@ -6302,22 +6312,7 @@ int hugetlb_mfill_atomic_pte(pte_t *dst_pte,
+ 			 */
+ 			goto out;
+ 		}
+-	} else {
+-		if (vm_shared &&
+-		    hugetlbfs_pagecache_present(h, dst_vma, dst_addr)) {
+-			folio_put(*foliop);
+-			ret = -EEXIST;
+-			*foliop = NULL;
+-			goto out;
+-		}
+-
+-		folio = alloc_hugetlb_folio(dst_vma, dst_addr, 0);
+-		if (IS_ERR(folio)) {
+-			folio_put(*foliop);
+-			ret = -ENOMEM;
+-			*foliop = NULL;
+-			goto out;
+-		}
++	} else { /* Caller retried because we set *foliop previously */
+ 		ret = copy_user_large_folio(folio, *foliop, dst_addr, dst_vma);
+ 		folio_put(*foliop);
+ 		*foliop = NULL;
+@@ -6327,6 +6322,8 @@ int hugetlb_mfill_atomic_pte(pte_t *dst_pte,
+ 		}
+ 	}
+ 
++ready: /* `folio` ready to map (non-NULL, populated) */
++
+ 	/*
+ 	 * The memory barrier inside __folio_mark_uptodate makes sure that
+ 	 * preceding stores to the page contents become visible before
+-- 
+2.41.0.255.g8b1d071c50-goog
+
