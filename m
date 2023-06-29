@@ -2,101 +2,120 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D38AEB64D9
-	for <linux-kselftest@archiver.kernel.org>; Thu, 29 Jun 2023 12:28:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DECBFEB64D9
+	for <linux-kselftest@archiver.kernel.org>; Thu, 29 Jun 2023 13:21:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231987AbjF2M21 (ORCPT
+        id S230190AbjF2NVu (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 29 Jun 2023 08:28:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55846 "EHLO
+        Thu, 29 Jun 2023 09:21:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231778AbjF2M1o (ORCPT
+        with ESMTP id S229494AbjF2NVt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Jun 2023 08:27:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A132B3ABB
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 Jun 2023 05:25:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688041542;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vo3tdImAdzQt1bSg9dpIf8+/mvpWr7Q4kdLME5s0JGA=;
-        b=VjI9arHinLr6ZGgfpWJxiq3b2nHXf5EI8zeClPcyKC6kwGaJ7fxP8U3F7X9iaUGesvjyHR
-        B5PmemK/ZuQiIw0JGZl3LiA/ojj4WkrRPQ+AwaOFGuGPqS/Okq7Ys3A4NpsIJxbgt/BZuD
-        4uVjR7JDAWxlmSpQFRhOr5R6Wkf3acw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-66-djrDPkmHOHKgzNx0mhoZcw-1; Thu, 29 Jun 2023 08:25:37 -0400
-X-MC-Unique: djrDPkmHOHKgzNx0mhoZcw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7533680123E;
-        Thu, 29 Jun 2023 12:25:36 +0000 (UTC)
-Received: from RHTPC1VM0NT (unknown [10.22.32.232])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 0C496C09A07;
-        Thu, 29 Jun 2023 12:25:35 +0000 (UTC)
-From:   Aaron Conole <aconole@redhat.com>
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     netdev@vger.kernel.org, dev@openvswitch.org,
-        Ilya Maximets <i.maximets@ovn.org>,
-        Eric Dumazet <edumazet@google.com>,
-        linux-kselftest@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, shuah@kernel.org,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [ovs-dev] [PATCH net-next 0/4] selftests: openvswitch: add flow
- programming cases
-References: <20230628162714.392047-1-aconole@redhat.com>
-        <ZJyUoSaklfDodKim@corigine.com>
-Date:   Thu, 29 Jun 2023 08:25:35 -0400
-In-Reply-To: <ZJyUoSaklfDodKim@corigine.com> (Simon Horman's message of "Wed,
-        28 Jun 2023 22:14:25 +0200")
-Message-ID: <f7tjzvmmp4w.fsf@redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+        Thu, 29 Jun 2023 09:21:49 -0400
+Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:237:300::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4258F2707;
+        Thu, 29 Jun 2023 06:21:47 -0700 (PDT)
+Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
+        (envelope-from <fw@strlen.de>)
+        id 1qEraf-0006iS-KY; Thu, 29 Jun 2023 15:21:41 +0200
+Date:   Thu, 29 Jun 2023 15:21:41 +0200
+From:   Florian Westphal <fw@strlen.de>
+To:     Toke =?iso-8859-15?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
+Cc:     Florian Westphal <fw@strlen.de>, Daniel Xu <dxu@dxuuu.xyz>,
+        bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        coreteam@netfilter.org, netfilter-devel@vger.kernel.org,
+        daniel@iogearbox.net, dsahern@kernel.org
+Subject: Re: [PATCH bpf-next 0/7] Support defragmenting IPv(4|6) packets in
+ BPF
+Message-ID: <20230629132141.GA10165@breakpoint.cc>
+References: <cover.1687819413.git.dxu@dxuuu.xyz>
+ <874jmthtiu.fsf@toke.dk>
+ <20230627154439.GA18285@breakpoint.cc>
+ <87o7kyfoqf.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87o7kyfoqf.fsf@toke.dk>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Simon Horman <simon.horman@corigine.com> writes:
+Toke Høiland-Jørgensen <toke@redhat.com> wrote:
+> Florian Westphal <fw@strlen.de> writes:
+> > For bpf a flag during link attachment seemed like the best way
+> > to go.
+> 
+> Right, I wasn't disputing that having a flag to load a module was a good
+> idea. On the contrary, I was thinking we'd need many more of these
+> if/when BPF wants to take advantage of more netfilter code. Say, if a
+> BPF module wants to call into TPROXY, that module would also need go be
+> loaded and kept around, no?
 
-> On Wed, Jun 28, 2023 at 12:27:10PM -0400, Aaron Conole wrote:
->> The openvswitch selftests currently contain a few cases for managing the
->> datapath, which includes creating datapath instances, adding interfaces,
->> and doing some basic feature / upcall tests.  This is useful to validate
->> the control path.
->> 
->> Add the ability to program some of the more common flows with actions. This
->> can be improved overtime to include regression testing, etc.
->
-> Hi Aaron,
->
-> sorry but:
->
-> [text from Jakub]
->
-> ## Form letter - net-next-closed
->
-> The merge window for v6.5 has begun and therefore net-next is closed
-> for new drivers, features, code refactoring and optimizations.
-> We are currently accepting bug fixes only.
->
-> Please repost when net-next reopens after July 10th.
->
-> RFC patches sent for review only are obviously welcome at any time.
->
-> See: https://www.kernel.org/doc/html/next/process/maintainer-netdev.html#development-cycle
-> --
-> pw-bot: defer
+That seems to be a different topic that has nothing to do with
+either bpf_link or netfilter?
 
-Thanks Simon.  I skipped looking at the ML this time and used the site
-setup for random German tourists:
-http://vger.kernel.org/~davem/net-next.html
+If the program calls into say, TPROXY, then I'd expect that this needs
+to be handled via kfuncs, no? Or if I misunderstand, what do you mean
+by "call into TPROXY"?
 
-I guess I'll stop using it and just check the ML as normal :)  Sorry for
-the noise.
+And if so, thats already handled at bpf_prog load time, not
+at link creation time, or do I miss something here?
 
+AFAIU, if prog uses such kfuncs, verifier will grab needed module ref
+and if module isn't loaded the kfuncs won't be found and program load
+fails.
+
+> I was thinking something along the lines of just having a field
+> 'netfilter_modules[]' where userspace could put an arbitrary number of
+> module names into, and we'd load all of them and put a ref into the
+> bpf_link.
+
+Why?  I fail to understand the connection between bpf_link, netfilter
+and modules.  What makes netfilter so special that we need such a
+module array, and what does that have to do with bpf_link interface?
+
+> In principle, we could just have that be a string array f
+> module names, but that's probably a bit cumbersome (and, well, building
+> a generic module loader interface into the bpf_like API is not
+> desirable either). But maybe with an explicit ENUM?
+
+What functionality does that provide? I can't think of a single module
+where this functionality is needed.
+
+Either we're talking about future kfuncs, then, as far as i understand
+how kfuncs work, this is handled at bpf_prog load time, not when the
+bpf_link is created.
+
+Or we are talking about implicit dependencies, where program doesn't
+call function X but needs functionality handled earlier in the pipeline?
+
+The only two instances I know where this is the case for netfilter
+is defrag + conntrack.
+
+> > For conntrack, we MIGHT be able to not need a flag but
+> > maybe verifier could "guess" based on kfuncs used.
+> 
+> If the verifier can just identify the modules from the kfuncs and do the
+> whole thing automatically, that would of course be even better from an
+> ease-of-use PoV. Not sure what that would take, though? I seem to recall
+> having discussions around these lines before that fell down on various
+> points.
+
+AFAICS the conntrack kfuncs are wired to nf_conntrack already, so I
+would expect that the module has to be loaded already for the verifier
+to accept the program.
+
+Those kfuncs are not yet exposed to NETFILTER program types.
+Once they are, all that would be needed is for the netfilter bpf_link
+to be able tp detect that the prog is calling into those kfuncs, and
+then make the needed register/unregister calls to enable the conntrack
+hooks.
+
+Wheter thats better than using an explicit "please turn on conntrack for
+me", I don't know.  Perhaps future bpf programs could access skb->_nfct
+directly without kfuncs so I'd say the flag is a better approach
+from an uapi point of view.
