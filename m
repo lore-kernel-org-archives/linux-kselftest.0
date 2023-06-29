@@ -2,141 +2,107 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0512EB64D9
-	for <linux-kselftest@archiver.kernel.org>; Thu, 29 Jun 2023 12:17:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3703BEB64DD
+	for <linux-kselftest@archiver.kernel.org>; Thu, 29 Jun 2023 12:27:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231737AbjF2MRG (ORCPT
+        id S231561AbjF2M1V (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 29 Jun 2023 08:17:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51476 "EHLO
+        Thu, 29 Jun 2023 08:27:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbjF2MRE (ORCPT
+        with ESMTP id S232315AbjF2M06 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Jun 2023 08:17:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E811430D1
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 Jun 2023 05:16:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688040972;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Thu, 29 Jun 2023 08:26:58 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21BAE3C07;
+        Thu, 29 Jun 2023 05:26:34 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id CDDA121854;
+        Thu, 29 Jun 2023 12:26:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1688041592; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=xRtfZg4SPW/dfExfHKxyTm+z8to08LGorkhnQOIa1Ew=;
-        b=DcXCcey3hZQkbG7IOdhT4/gA367sqKMgOz7kmRT3lXwccO6FcRg1ZyjjL8FOcFsa1XDwhp
-        YUZNvWnJR+bpfUn4EH07EkBEGs4fgJCt53mjC0WgBUETTb/F2m8Q5J8NYi6l30NKssgIE5
-        fxQ5AjZNxUCJizzbVQfxdcFofdrsetk=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-646-aqz3mhXbNSuAWIPFWbQuIg-1; Thu, 29 Jun 2023 08:16:11 -0400
-X-MC-Unique: aqz3mhXbNSuAWIPFWbQuIg-1
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-98864f473c7so43278366b.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 Jun 2023 05:16:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688040970; x=1690632970;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xRtfZg4SPW/dfExfHKxyTm+z8to08LGorkhnQOIa1Ew=;
-        b=Ntzk/VBQ40xhN7vE2SJuZbcwR1QSxSmFhxDIwUm6kVfx8UHL5IQfPthiaWCgeggry+
-         vZfs59XAOJFYPjeD9RV1ltN46Y5tgbMRsOd2l5mLNOt1QbDCcuhUvPhhkRS57swLVP3X
-         RU5OQoR9fAzXWFKxLifAS72a1mFqSG2HyzD2x6i6/lVDWJ0+Y8NC74mrPVYsTncRu34A
-         BifuMouV3Daaj2op/vqDnN34o6OfocprITmTvC419NoYiaaRsMLeKeVbfV01eEOfXAW+
-         LDabLvBDPFYIIv6e3MoBBW0jcjM+8T3ktUwDCG82yLYZluxar4gGzTA+cIsZSZSK43UP
-         8Niw==
-X-Gm-Message-State: AC+VfDzfvxQxF7GR+hgNKuMh4YxmeA9ppvmgHqHPfXYXuhCuTFYHnxlE
-        xcKrrL8YFIZ4f7Rw3SrusUWHZAHmqdKhtO0ly17q7E0PLb/bX1y2d2zMODP1aK7qPW90LmMk4fC
-        hnhuF00MXSJ+W2EJ3Og2bIbD5reHeoygboom0
-X-Received: by 2002:a17:907:7ba5:b0:982:9b01:a57c with SMTP id ne37-20020a1709077ba500b009829b01a57cmr35983865ejc.12.1688040970185;
-        Thu, 29 Jun 2023 05:16:10 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ440Dob8tg/t5hFb4HMywtZ2vhJhTJbVaJ/t/Vr2iJNg951ErahzdstJyCHl3lyIqlaAIFN+A==
-X-Received: by 2002:a17:907:7ba5:b0:982:9b01:a57c with SMTP id ne37-20020a1709077ba500b009829b01a57cmr35983845ejc.12.1688040969798;
-        Thu, 29 Jun 2023 05:16:09 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id qq2-20020a17090720c200b00992aea2c55dsm589147ejb.153.2023.06.29.05.16.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jun 2023 05:16:09 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 940D2BC0450; Thu, 29 Jun 2023 14:16:08 +0200 (CEST)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Florian Westphal <fw@strlen.de>
-Cc:     Daniel Xu <dxu@dxuuu.xyz>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, coreteam@netfilter.org,
-        netfilter-devel@vger.kernel.org, fw@strlen.de,
-        daniel@iogearbox.net, dsahern@kernel.org
-Subject: Re: [PATCH bpf-next 0/7] Support defragmenting IPv(4|6) packets in BPF
-In-Reply-To: <20230627154439.GA18285@breakpoint.cc>
-References: <cover.1687819413.git.dxu@dxuuu.xyz> <874jmthtiu.fsf@toke.dk>
- <20230627154439.GA18285@breakpoint.cc>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Thu, 29 Jun 2023 14:16:08 +0200
-Message-ID: <87o7kyfoqf.fsf@toke.dk>
+        bh=wC2m3Yx3psKkEPLlun+ONLgR44D7q3seUbrUL2S3T30=;
+        b=ZyZqr+cHIpkjvoD03dDSgbCDBElpsaWtwxFW05ulVIk2gwfLFWUUD/kMkVJ+Z2klCfYTol
+        awCaBz7pOLURmVdQCBleNV4SQ2MLu1YT635FsDtY54RcGs8Z6WWBpSSqAeC5qiHL+Bt+PT
+        m2fXD2pRIfLjACuOVSVmECXejka9U5A=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AA76713905;
+        Thu, 29 Jun 2023 12:26:32 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ZE/9KHh4nWTXVwAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Thu, 29 Jun 2023 12:26:32 +0000
+Date:   Thu, 29 Jun 2023 14:26:31 +0200
+From:   Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Zefan Li <lizefan.x@bytedance.com>, Tejun Heo <tj@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH 1/3] cpuset: Allow setscheduler regardless of manipulated
+ task
+Message-ID: <4fowzgkh7yo5ku2fsrptyi7jzikynjtq4zpfcx7k26vk4k6zj3@ubnupp5jqgle>
+References: <20230629091146.28801-1-mkoutny@suse.com>
+ <20230629091146.28801-2-mkoutny@suse.com>
+ <15c607d9-c1fa-ca11-d675-8f2b3a6fd15b@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rblx2idammiw6ntz"
+Content-Disposition: inline
+In-Reply-To: <15c607d9-c1fa-ca11-d675-8f2b3a6fd15b@redhat.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Florian Westphal <fw@strlen.de> writes:
 
-> Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com> wrote:
->> > The basic idea is we bump a refcnt on the netfilter defrag module and
->> > then run the bpf prog after the defrag module runs. This allows bpf
->> > progs to transparently see full, reassembled packets. The nice thing
->> > about this is that progs don't have to carry around logic to detect
->> > fragments.
->>=20
->> One high-level comment after glancing through the series: Instead of
->> allocating a flag specifically for the defrag module, why not support
->> loading (and holding) arbitrary netfilter modules in the UAPI?
->
-> How would that work/look like?
->
-> defrag (and conntrack) need special handling because loading these
-> modules has no effect on the datapath.
->
-> Traditionally, yes, loading was enough, but now with netns being
-> ubiquitous we don't want these to get enabled unless needed.
->
-> Ignoring bpf, this happens when user adds nftables/iptables rules
-> that check for conntrack state, use some form of NAT or use e.g. tproxy.
->
-> For bpf a flag during link attachment seemed like the best way
-> to go.
+--rblx2idammiw6ntz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Right, I wasn't disputing that having a flag to load a module was a good
-idea. On the contrary, I was thinking we'd need many more of these
-if/when BPF wants to take advantage of more netfilter code. Say, if a
-BPF module wants to call into TPROXY, that module would also need go be
-loaded and kept around, no?
+On Thu, Jun 29, 2023 at 08:11:33AM -0400, Waiman Long <longman@redhat.com> =
+wrote:
+> So I think you should just use
+> cgroup_subsys_on_dfl(cpuset_cgrp_subsys) as the v2 check if your focus
+> is just to prevent problem when enabling cpuset controller.
 
-I was thinking something along the lines of just having a field
-'netfilter_modules[]' where userspace could put an arbitrary number of
-module names into, and we'd load all of them and put a ref into the
-bpf_link. In principle, we could just have that be a string array of
-module names, but that's probably a bit cumbersome (and, well, building
-a generic module loader interface into the bpf_like API is not
-desirable either). But maybe with an explicit ENUM?
+I thought the bare cgroup_subsys_on_dfl(cpuset_cgrp_subsys) is not used
+in cpuset.c but I was wrong -- yes, I'll change this.
 
-> At the moment I only see two flags for this, namely
-> "need defrag" and "need conntrack".
->
-> For conntrack, we MIGHT be able to not need a flag but
-> maybe verifier could "guess" based on kfuncs used.
+> This change will likely conflict with the latest cpuset change on trackin=
+g #
+> of dl tasks in a cpuset. You will have to, at least, move the dl task che=
+ck
+> before the security_task_setscheduler() check.
+>=20
+> Another fact about cpuset controller enabling is that both cpus_allowed a=
+nd
+> mems_allowed are empty at that point. You may also add these checks as a
+> preconditions for disabling the security_task_setscheduler check.
 
-If the verifier can just identify the modules from the kfuncs and do the
-whole thing automatically, that would of course be even better from an
-ease-of-use PoV. Not sure what that would take, though? I seem to recall
-having discussions around these lines before that fell down on various
-points.
+Ah, I will rebase on fresh mainline (or do you mean another reference?).
 
-> But for defrag, I don't think its good to add a dummy do-nothing
-> kfunc just for expressing the dependency on bpf prog side.
+Thanks for the hints,
+Michal
 
-Agreed.
+--rblx2idammiw6ntz
+Content-Type: application/pgp-signature; name="signature.asc"
 
--Toke
+-----BEGIN PGP SIGNATURE-----
 
+iHUEABYKAB0WIQQpEWyjXuwGT2dDBqAGvrMr/1gcjgUCZJ14dQAKCRAGvrMr/1gc
+jgWhAQCg5qoiDOfhNkRuhbqMER6ksJi/9R3UMnsTyDByQxNHcgD9Hxgyt1VPPcbL
+NtdTozyc/W59t7siU73cfznURZII+Qk=
+=E0Xs
+-----END PGP SIGNATURE-----
+
+--rblx2idammiw6ntz--
