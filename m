@@ -2,40 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14F76EB64DD
-	for <linux-kselftest@archiver.kernel.org>; Thu, 29 Jun 2023 23:36:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D59AAEB64D9
+	for <linux-kselftest@archiver.kernel.org>; Thu, 29 Jun 2023 23:45:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229873AbjF2XgL (ORCPT
+        id S232190AbjF2XpP (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 29 Jun 2023 19:36:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35268 "EHLO
+        Thu, 29 Jun 2023 19:45:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjF2XgK (ORCPT
+        with ESMTP id S232358AbjF2Xo6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Jun 2023 19:36:10 -0400
+        Thu, 29 Jun 2023 19:44:58 -0400
 Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D3A51713;
-        Thu, 29 Jun 2023 16:36:08 -0700 (PDT)
-X-QQ-mid: bizesmtp64t1688081757tnqk2bme
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 068843A9E;
+        Thu, 29 Jun 2023 16:44:31 -0700 (PDT)
+X-QQ-mid: bizesmtp71t1688082237td2r7nrs
 Received: from linux-lab-host.localdomain ( [119.123.131.49])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 30 Jun 2023 07:35:56 +0800 (CST)
+        id ; Fri, 30 Jun 2023 07:43:57 +0800 (CST)
 X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: 3M0okmaRx3jzXUNZYCjF22Yt5q5NFwMgmhuWKlNMBfQ9f40ThEIsT/5lI1O4U
-        WTU+lHNIjWl6hrnW7p4jSjiM7agpdRFqQPOYCLhDNV+lu8Gw8Ix+6NWlvPgvzPOA03J22Hs
-        xnOaKbUZegQkWE2vf+3+hpyASl6yde1FbI7BjKOd3RWr64jv3jC7X/FKkiY+gbl0I2iV2vp
-        abwjKmGuqvzJszYtKQcASRVuIKUcNRXdwsuK3jMwUIECfGliZDnizInZnNeglxZ0Hh15PpQ
-        9Zdle0TebbOIE/kaNpct8qijh366/xn6vycmfsA8M9NqWBuOsRh5KNxHkAp2Lfpk/7q+4HP
-        20AiePlmwg77191+LbqegPp1akzdiPRWn4wvBFR5rBZWkLxit/0Xzf4+I2sfQ==
+X-QQ-FEAT: 9fp+MOMfZT3B2+27Lz2FTtpHEdP5j3lylTTpTlkY+1W9tYtMODtQHajOyUa+u
+        KjzLT8Qc3eQVG5pPIeHgQ5dEURdQ2cV62nDeE9XHkM2MvowgrDTcEq1J+MR+p2lBpjqDlHc
+        tmi8mq8yEz4+BD0xkYc1YeDmRD++G0w1cUIY9KI046I1CS8lX0PcziIAYWisMdC9QHlVUwM
+        hR+oTfgO3MsLZfc3/7PNuAUYridqhYq4hM/1uuCK1ba9SyEP7nnM6tmkOtQ0vVt/NgPqU3U
+        3FHxEbPs/Dv4lcsYnMSZJ+xCqVW1y3+NJe4pF1nK122Bh9r3H7TYDjwy/7O9s3fM9xmypyg
+        I3b3Aw9jgd9IHLy+5b7dY2iJnlWWr+OA/fedR4Ss3GD+2BOQy3BrmSl9H/qoA==
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 10916663048857480056
+X-BIZMAIL-ID: 15543981623249164707
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     thomas@t-8ch.de, w@1wt.eu
 Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 06/15] selftests/nolibc: stat_timestamps: remove procfs dependency
-Date:   Fri, 30 Jun 2023 07:31:33 +0800
-Message-Id: <6fae777966cf710321a8d8369a9194e00b72ecf6.1688078605.git.falcon@tinylab.org>
+Subject: [PATCH v2 07/15] selftests/nolibc: link_cross: use /proc/self/cmdline
+Date:   Fri, 30 Jun 2023 07:37:00 +0800
+Message-Id: <c792f3a55323a9eb118fd23efbd0e686f8d45185.1688078605.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1688078604.git.falcon@tinylab.org>
 References: <cover.1688078604.git.falcon@tinylab.org>
@@ -47,11 +47,8 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-'/proc/self/' is a good path which doesn't have stale time info but it
-is only available for CONFIG_PROC_FS=y.
-
-For CONFIG_PROC_FS=n, Let's try '/init' for initramfs and '/' for the
-others.
+For CONFIG_NET=n, there would be no /proc/self/net, so, use
+/proc/self/cmdline instead.
 
 Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
@@ -59,18 +56,18 @@ Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 223c00e83abf..1d2be52d44a5 100644
+index 1d2be52d44a5..0bb222eaafca 100644
 --- a/tools/testing/selftests/nolibc/nolibc-test.c
 +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -582,7 +582,7 @@ static int test_stat_timestamps(void)
- 	if (sizeof(st.st_atim.tv_sec) != sizeof(st.st_atime))
- 		return 1;
- 
--	if (stat("/proc/self/", &st))
-+	if (stat("/proc/self/", &st) && stat("/init", &st) && stat("/", &st))
- 		return 1;
- 
- 	if (st.st_atim.tv_sec != st.st_atime || st.st_atim.tv_nsec > 1000000000)
+@@ -724,7 +724,7 @@ int run_syscall(int min, int max)
+ 		CASE_TEST(link_root1);        EXPECT_SYSER(1, link("/", "/"), -1, EEXIST); break;
+ 		CASE_TEST(link_blah);         EXPECT_SYSER(1, link("/proc/self/blah", "/blah"), -1, ENOENT); break;
+ 		CASE_TEST(link_dir);          EXPECT_SYSER(euid0, link("/", "/blah"), -1, EPERM); break;
+-		CASE_TEST(link_cross);        EXPECT_SYSER(proc, link("/proc/self/net", "/blah"), -1, EXDEV); break;
++		CASE_TEST(link_cross);        EXPECT_SYSER(proc, link("/proc/self/cmdline", "/blah"), -1, EXDEV); break;
+ 		CASE_TEST(lseek_m1);          EXPECT_SYSER(1, lseek(-1, 0, SEEK_SET), -1, EBADF); break;
+ 		CASE_TEST(lseek_0);           EXPECT_SYSER(1, lseek(0, 0, SEEK_SET), -1, ESPIPE); break;
+ 		CASE_TEST(mkdir_root);        EXPECT_SYSER(1, mkdir("/", 0755), -1, EEXIST); break;
 -- 
 2.25.1
 
