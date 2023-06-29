@@ -2,138 +2,122 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FF79EB64D9
-	for <linux-kselftest@archiver.kernel.org>; Thu, 29 Jun 2023 23:30:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 87B09C0015E
+	for <linux-kselftest@archiver.kernel.org>; Thu, 29 Jun 2023 23:35:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231446AbjF2Xan (ORCPT
+        id S231792AbjF2XfJ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 29 Jun 2023 19:30:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33968 "EHLO
+        Thu, 29 Jun 2023 19:35:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbjF2Xam (ORCPT
+        with ESMTP id S231823AbjF2XfB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Jun 2023 19:30:42 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 694EC1FE7;
-        Thu, 29 Jun 2023 16:30:40 -0700 (PDT)
-X-QQ-mid: bizesmtp77t1688081430tg4lkoyb
-Received: from linux-lab-host.localdomain ( [119.123.131.49])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 30 Jun 2023 07:30:29 +0800 (CST)
-X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: CR3LFp2JE4k2yCeR62ZuAGYUgkT1yq1gp7tSCx6PjhF/mNkyHruYzL79SeB7z
-        CxTzPB7K2xFoUA/Ttaf/5FeV6L2uZdCkhc6XFd+y19TuqfuZXiEi8MxdsIwOmgQRqo4pRJU
-        K9nE+AfOZFt1gnTXokRNuOjIyGH60R8MmM8qcVuceDH066+FiI3ebXS5ucV6i39M2LmgDgX
-        jrMaXXzbKZXF1L/CX6tToO/a7QqbP3ZC94AEgLSNMjGkx1IUrGdvDHYo0t+4/y0ZadUrf9Q
-        vKbj105VV3iJAVITKR8OC3793oJJQd58PXOK0m5ZJPs8AqexcipJTcZV9r6PDKW2fFm5tY3
-        UAyjZgTMxfiyqXCHysiWctOPNpjl1iIdiX5pdzoth3fQjGgjLzGMXhonNol+Q==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 8005163360113825460
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de, w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 05/15] selftests/nolibc: fix up kernel parameters support
-Date:   Fri, 30 Jun 2023 07:29:38 +0800
-Message-Id: <582776208a75df19d09b8eaafcb6fdad7219abc8.1688078605.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1688078604.git.falcon@tinylab.org>
-References: <cover.1688078604.git.falcon@tinylab.org>
+        Thu, 29 Jun 2023 19:35:01 -0400
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F8C12693
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Jun 2023 16:34:59 -0700 (PDT)
+Received: by mail-ot1-x331.google.com with SMTP id 46e09a7af769-6b75637076eso1105721a34.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Jun 2023 16:34:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1688081699; x=1690673699;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gG0p2NxJxfYPPHk57XaDb7PRgK5Ncrcc/zrK6bcWJBo=;
+        b=V55WG+KNmomp8p6ckLhRrH+LXm07woxdK5aExRC5Ap8XBsUXarBgSTLvYxJcJOWLaH
+         SZ94W8McRnwkd8EJtqtJiuP1Mqbaua+C+BgrqDU+dRC3HJ6HjxS4ALWXnq5izdYa0aWa
+         TIiVjfq4PS1K8Y+0KXOb27kFxC49e6PrVjVQU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688081699; x=1690673699;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gG0p2NxJxfYPPHk57XaDb7PRgK5Ncrcc/zrK6bcWJBo=;
+        b=Tc7RVcywttFTcTbGGiiCFhK/1uILboNVzYpn37TWlord9rgnctpZZoGm8Rnilke2Ln
+         9/bR+zw12LaGkmA/Z+iF3EtLMOvb5wF7VchNgt1Ve5M8L7OL43bK1YIp1PudZ679NGW1
+         ZnqheEDq8aRfs4JQR1Itmdv4FtTxK5KrcvaHiO62T2jEQa7QHiKBp0Vj9qjoOVKYP5rh
+         i2VYgj0S1gvWWM824RbO1LpE28kyUGV1cbpQtVLKklCaAxrJjQWsxrkmsDKmrYLsC9/D
+         kaKmdLv1BOM/21eJyqruhGYtX488z+hp5Puin8riHwqWAGqzIJT8RGvXpqo23QXVvxaT
+         MZPQ==
+X-Gm-Message-State: AC+VfDwa6cNXTpYAC7Ms0/eqhey/AVTlKIDLQl6A7KYeTHO/3HHM5EIE
+        fXjKBEZSweuKxPqyyhG9thYsaw==
+X-Google-Smtp-Source: ACHHUZ4zm9+O4p+Sybi08lceONGhN6p+USDHiBG49m/rR5eMzi1I2db76dpbjYtp40INdTnI3DxXkQ==
+X-Received: by 2002:a05:6870:7c13:b0:1b0:432d:acb7 with SMTP id je19-20020a0568707c1300b001b0432dacb7mr1706353oab.35.1688081698833;
+        Thu, 29 Jun 2023 16:34:58 -0700 (PDT)
+Received: from localhost (183.43.230.35.bc.googleusercontent.com. [35.230.43.183])
+        by smtp.gmail.com with UTF8SMTPSA id n59-20020a17090a2cc100b0025bdc3454c6sm12441785pjd.8.2023.06.29.16.34.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Jun 2023 16:34:58 -0700 (PDT)
+From:   jeffxu@chromium.org
+To:     skhan@linuxfoundation.org, keescook@chromium.org
+Cc:     akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
+        dverkamp@chromium.org, hughd@google.com, jeffxu@google.com,
+        jorgelo@chromium.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        jannh@google.com, linux-hardening@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Dominique Martinet <asmadeus@codewreck.org>
+Subject: [PATCH v2] Documentation: mm/memfd: vm.memfd_noexec
+Date:   Thu, 29 Jun 2023 23:34:54 +0000
+Message-ID: <20230629233454.4166842-1-jeffxu@google.com>
+X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kernel parameters allow pass two types of strings, one type is like
-'noapic', another type is like 'panic=5', the first type is passed as
-arguments of the init program, the second type is passed as environment
-variables of the init program.
+From: Jeff Xu <jeffxu@google.com>
 
-when users pass kernel parameters like this:
+Add documentation for sysctl vm.memfd_noexec
 
-    noapic NOLIBC_TEST=syscall
-
-our nolibc-test program will use the test setting from argv[1] and
-ignore the one from NOLIBC_TEST environment variable, and at last, it
-will print the following line and ignore the whole test setting.
-
-    Ignoring unknown test name 'noapic'
-
-reversing the parsing order does solve the above issue:
-
-    test = getenv("NOLIBC_TEST");
-    if (test)
-        test = argv[1];
-
-but it still doesn't work with such kernel parameters (without
-NOLIBC_TEST environment variable):
-
-    noapic FOO=bar
-
-To support all of the potential kernel parameters, let's verify the test
-setting from both of argv[1] and NOLIBC_TEST environment variable.
-
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+Link:https://lore.kernel.org/linux-mm/CABi2SkXUX_QqTQ10Yx9bBUGpN1wByOi_=gZU6WEy5a8MaQY3Jw@mail.gmail.com/T/
+Reported-by: Dominique Martinet <asmadeus@codewreck.org>
+Signed-off-by: Jeff Xu <jeffxu@google.com>
 ---
- tools/testing/selftests/nolibc/nolibc-test.c | 33 ++++++++++++++++++--
- 1 file changed, 31 insertions(+), 2 deletions(-)
+ Documentation/admin-guide/sysctl/vm.rst | 30 +++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 96d170cc9b47..223c00e83abf 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -1063,6 +1063,35 @@ static const struct test test_names[] = {
- 	{ 0 }
- };
+diff --git a/Documentation/admin-guide/sysctl/vm.rst b/Documentation/admin-guide/sysctl/vm.rst
+index 45ba1f4dc004..621588041a9e 100644
+--- a/Documentation/admin-guide/sysctl/vm.rst
++++ b/Documentation/admin-guide/sysctl/vm.rst
+@@ -424,6 +424,36 @@ e.g., up to one or two maps per allocation.
  
-+int is_setting_valid(char *test)
-+{
-+	int idx, len, test_len, valid = 0;
-+	char delimiter;
-+
-+	if (!test)
-+		return valid;
-+
-+	test_len = strlen(test);
-+
-+	for (idx = 0; test_names[idx].name; idx++) {
-+		len = strlen(test_names[idx].name);
-+		if (test_len < len)
-+			continue;
-+
-+		if (strncmp(test, test_names[idx].name, len) != 0)
-+			continue;
-+
-+		delimiter = test[len];
-+		if (delimiter != ':' && delimiter != ',' && delimiter != '\0')
-+			continue;
-+
-+		valid = 1;
-+		break;
-+	}
-+
-+	return valid;
-+}
-+
- int main(int argc, char **argv, char **envp)
- {
- 	int min = 0;
-@@ -1088,10 +1117,10 @@ int main(int argc, char **argv, char **envp)
- 	 *    syscall:5-15[:.*],stdlib:8-10
- 	 */
- 	test = argv[1];
--	if (!test)
-+	if (!is_setting_valid(test))
- 		test = getenv("NOLIBC_TEST");
+ The default value is 65530.
  
--	if (test) {
-+	if (is_setting_valid(test)) {
- 		char *comma, *colon, *dash, *value;
++memfd_noexec:
++=============
++This pid namespaced sysctl controls memfd_create().
++
++The new MFD_NOEXEC_SEAL and MFD_EXEC flags of memfd_create() allows
++application to set executable bit at creation time.
++
++When MFD_NOEXEC_SEAL is set, memfd is created without executable bit
++(mode:0666), and sealed with F_SEAL_EXEC, so it can't be chmod to
++be executable (mode: 0777) after creation.
++
++when MFD_EXEC flag is set, memfd is created with executable bit
++(mode:0777), this is the same as the old behavior of memfd_create.
++
++The new pid namespaced sysctl vm.memfd_noexec has 3 values:
++0: memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL acts like
++        MFD_EXEC was set.
++1: memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL acts like
++        MFD_NOEXEC_SEAL was set.
++2: memfd_create() without MFD_NOEXEC_SEAL will be rejected.
++
++The default value is 0.
++
++Once set, it can't be downgraded at runtime, i.e. 2=>1, 1=>0
++are denied.
++
++This is pid namespaced sysctl, child processes inherit the parent
++process's memfd_noexec at the time of fork. Changes to the parent
++process after fork are not automatically propagated to the child
++process.
  
- 		do {
+ memory_failure_early_kill:
+ ==========================
 -- 
-2.25.1
+2.41.0.255.g8b1d071c50-goog
 
