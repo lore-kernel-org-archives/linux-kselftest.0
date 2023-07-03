@@ -2,127 +2,90 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 075C0EB64DC
-	for <linux-kselftest@archiver.kernel.org>; Mon,  3 Jul 2023 08:19:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9794EB64DC
+	for <linux-kselftest@archiver.kernel.org>; Mon,  3 Jul 2023 08:20:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231364AbjGCITK (ORCPT
+        id S231381AbjGCIU2 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 3 Jul 2023 04:19:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57654 "EHLO
+        Mon, 3 Jul 2023 04:20:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231370AbjGCITJ (ORCPT
+        with ESMTP id S230232AbjGCIUY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 3 Jul 2023 04:19:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28438B2
-        for <linux-kselftest@vger.kernel.org>; Mon,  3 Jul 2023 01:18:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688372302;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=/pmTH7QHH1n+Sr1Aseof4xJ1nlp+d2SsSN19KkPk+1k=;
-        b=KXZUkkrgNENM1pnEAKgHQtWEUwxtZ+pBvlQuEO2DUyrJsCz0qgYMrivDssLkvrLKsRXNns
-        +zz/C1rDXELrkGhEbl90wTTYMxWh6a66tCfmYlCi/EH17EdGjgcJtbRe+06k2WO96ZMnrY
-        EEUN4PuXU4GeZZLiZNASW7b2ERAjlxA=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-459-KYG_4Y6MMlmFqFy5Rd3hEg-1; Mon, 03 Jul 2023 04:18:21 -0400
-X-MC-Unique: KYG_4Y6MMlmFqFy5Rd3hEg-1
-Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-4033e4d51ecso31907891cf.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 03 Jul 2023 01:18:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688372300; x=1690964300;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/pmTH7QHH1n+Sr1Aseof4xJ1nlp+d2SsSN19KkPk+1k=;
-        b=GH1AlodsmqjaJPRZ1l0DT6e2/BCe1/wweXPmh+rlJZKqq+V38zC9rkH10ULJJbRFF8
-         ttcjqNOa5qXSNk7QgBuREzQ98LCae1H5QHSY8LJUljm5awGNXr/XliD63Uhl4oJT0cUk
-         u+O9c4t5LlnMF1yOBLmksCyLyAPHbnbCjLR8KIM1rBTmPZF+4IGBXysUHXUe9YHHrSaQ
-         cpoRNZtW4HajtQuVCKvagwg6wnm4HM+PQ8HvfakF22gWx7e1M0Vcwl7Mhj+Q2KQrup5d
-         ME1iwDqH1mrGpafJvPwRgBAJrhBaWRl3jnGTRUmuhxpvAP/p4oxhhTSCqC1ZJ3yJjzsP
-         CGSw==
-X-Gm-Message-State: AC+VfDw9qVXMy5++g6WK0LtulAHlBSflSTl/ZTDctqf2bLb4ZUyireL6
-        pUkgx5dylopTPkOZyUYuIHlDnG4u5lzJ4jZJ9A1ocy+cXgFVyoF0y4SJAOJO+yBy9Snxhs1CKEb
-        q5Po67l/xDwyrVdZzKs3ZTEfjrj69
-X-Received: by 2002:ac8:5b0f:0:b0:3ff:2fa1:e725 with SMTP id m15-20020ac85b0f000000b003ff2fa1e725mr11276822qtw.0.1688372300547;
-        Mon, 03 Jul 2023 01:18:20 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7RTSEK4+Ecg/Cn1QgPkNUHsMhLiMif8GJbqZHZHROrpi4mF85x3CsfC5hkvyJdPFBYNSfKqA==
-X-Received: by 2002:ac8:5b0f:0:b0:3ff:2fa1:e725 with SMTP id m15-20020ac85b0f000000b003ff2fa1e725mr11276812qtw.0.1688372300262;
-        Mon, 03 Jul 2023 01:18:20 -0700 (PDT)
-Received: from fedora.redhat.com ([2a06:c701:4b84:700:e5a3:9a79:b307:264a])
-        by smtp.gmail.com with ESMTPSA id v9-20020ac83d89000000b004035cf1cc1asm1024966qtf.41.2023.07.03.01.18.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jul 2023 01:18:19 -0700 (PDT)
-From:   Dana Elfassy <delfassy@redhat.com>
-X-Google-Original-From: Dana Elfassy <dangel101@gmail.com>
-To:     shuah@kernel.org, usama.anjum@collabora.com, eballetbo@kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Dana Elfassy <dangel101@gmail.com>
-Subject: [PATCH] selftests/input: add tests for the EVIOCSCLOCKID ioctl
-Date:   Mon,  3 Jul 2023 11:18:01 +0300
-Message-ID: <20230703081801.900093-1-dangel101@gmail.com>
-X-Mailer: git-send-email 2.41.0
+        Mon, 3 Jul 2023 04:20:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4233E43;
+        Mon,  3 Jul 2023 01:20:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4663360E8C;
+        Mon,  3 Jul 2023 08:20:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A0F15C433BD;
+        Mon,  3 Jul 2023 08:20:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688372422;
+        bh=srJPRWMRNrhN7YZBUsB92axNpYSklojC0gn01qIJrmo=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=QxJUcip0A87b7bz6WFNxon3cN1V4hDMzgrbfR+ZCSGdokK1vsrBXaOpGhxgdfwbYH
+         CjS2tmUY6Ib21C/bLkeP3Ium9eQXHscn35XMnKBaopaqGAQImR7gjbrfCJikEXNOoq
+         aVVAYKsDhET8qVN9SQT+lfQp2N+HG88C6VKNcNJOUHUPyEynHcsRKt7xSMwG6FTkNL
+         kva3+GJCRCYuXm1txi0Vh0pzLKEM5b4dwbLZY1irwRUbUpb3/Z2bYaKZTilaq7Wryl
+         XoO2238lt1ZTYpGrb40391jPvEusoPn3b8rpBMM3voFaO2WCc3DucHaquAg7JsGN+W
+         KbWy75qhWpWDQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7D853C691EF;
+        Mon,  3 Jul 2023 08:20:22 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] selftests/net: Add xt_policy config for xfrm_policy test
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168837242251.9798.901827370226067728.git-patchwork-notify@kernel.org>
+Date:   Mon, 03 Jul 2023 08:20:22 +0000
+References: <20230701044103.1096039-1-daniel.diaz@linaro.org>
+In-Reply-To: <20230701044103.1096039-1-daniel.diaz@linaro.org>
+To:     =?utf-8?q?Daniel_D=C3=ADaz_=3Cdaniel=2Ediaz=40linaro=2Eorg=3E?=@ci.codeaurora.org
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, shuah@kernel.org, netdev@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch introduces tests for the EVIOCSCLOCKID ioctl, for full
-coverage of the different clkids
+Hello:
 
-Signed-off-by: Dana Elfassy <dangel101@gmail.com>
----
-This patch depends on '[v3] selftests/input: Introduce basic tests for evdev ioctls' [1] sent to the ML.
-[1] https://patchwork.kernel.org/project/linux-input/patch/20230607153214.15933-1-eballetbo@kernel.org/
+This patch was applied to netdev/net.git (main)
+by David S. Miller <davem@davemloft.net>:
 
- tools/testing/selftests/input/evioc-test.c | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+On Fri, 30 Jun 2023 22:41:03 -0600 you wrote:
+> When running Kselftests with the current selftests/net/config
+> the following problem can be seen with the net:xfrm_policy.sh
+> selftest:
+> 
+>   # selftests: net: xfrm_policy.sh
+>   [   41.076721] IPv6: ADDRCONF(NETDEV_CHANGE): veth0: link becomes ready
+>   [   41.094787] IPv6: ADDRCONF(NETDEV_CHANGE): veth0: link becomes ready
+>   [   41.107635] IPv6: ADDRCONF(NETDEV_CHANGE): veth0: link becomes ready
+>   # modprobe: FATAL: Module ip_tables not found in directory /lib/modules/6.1.36
+>   # iptables v1.8.7 (legacy): can't initialize iptables table `filter': Table does not exist (do you need to insmod?)
+>   # Perhaps iptables or your kernel needs to be upgraded.
+>   # modprobe: FATAL: Module ip_tables not found in directory /lib/modules/6.1.36
+>   # iptables v1.8.7 (legacy): can't initialize iptables table `filter': Table does not exist (do you need to insmod?)
+>   # Perhaps iptables or your kernel needs to be upgraded.
+>   # SKIP: Could not insert iptables rule
+>   ok 1 selftests: net: xfrm_policy.sh # SKIP
+> 
+> [...]
 
-diff --git a/tools/testing/selftests/input/evioc-test.c b/tools/testing/selftests/input/evioc-test.c
-index ad7b93fe39cf..81d5336d93ac 100644
---- a/tools/testing/selftests/input/evioc-test.c
-+++ b/tools/testing/selftests/input/evioc-test.c
-@@ -234,4 +234,36 @@ TEST(eviocsrep_set_repeat_settings)
- 	selftest_uinput_destroy(uidev);
- }
- 
-+TEST(eviocsclockid_set_clockid)
-+{
-+	struct selftest_uinput *uidev;
-+	int clkid = 0;
-+	int rc;
-+
-+	rc = selftest_uinput_create_device(&uidev, -1);
-+	ASSERT_EQ(0, rc);
-+	ASSERT_NE(NULL, uidev);
-+
-+	// case CLOCK_REALTIME
-+	rc = ioctl(uidev->evdev_fd, EVIOCSCLOCKID, &clkid);
-+	ASSERT_EQ(0, rc);
-+
-+	// case CLOCK_MONOTONIC
-+	clkid = 1;
-+	rc = ioctl(uidev->evdev_fd, EVIOCSCLOCKID, &clkid);
-+	ASSERT_EQ(0, rc);
-+
-+	// case CLOCK_BOOTTIME
-+	clkid = 7;
-+	rc = ioctl(uidev->evdev_fd, EVIOCSCLOCKID, &clkid);
-+	ASSERT_EQ(0, rc);
-+
-+	// case default
-+	clkid = -1;
-+	rc = ioctl(uidev->evdev_fd, EVIOCSCLOCKID, &clkid);
-+	ASSERT_EQ(-1, rc);
-+
-+	selftest_uinput_destroy(uidev);
-+}
-+
- TEST_HARNESS_MAIN
+Here is the summary with links:
+  - selftests/net: Add xt_policy config for xfrm_policy test
+    https://git.kernel.org/netdev/net/c/f56d1eeaeabf
+
+You are awesome, thank you!
 -- 
-2.41.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
