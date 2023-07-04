@@ -2,63 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FFB1C001B0
-	for <linux-kselftest@archiver.kernel.org>; Tue,  4 Jul 2023 13:46:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CC86EB64DD
+	for <linux-kselftest@archiver.kernel.org>; Tue,  4 Jul 2023 13:46:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231189AbjGDNqs (ORCPT
+        id S231450AbjGDNq5 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 4 Jul 2023 09:46:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55566 "EHLO
+        Tue, 4 Jul 2023 09:46:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231364AbjGDNqr (ORCPT
+        with ESMTP id S231513AbjGDNqt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 4 Jul 2023 09:46:47 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 214A3E7E
-        for <linux-kselftest@vger.kernel.org>; Tue,  4 Jul 2023 06:46:44 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3fbc244d384so54521135e9.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 04 Jul 2023 06:46:44 -0700 (PDT)
+        Tue, 4 Jul 2023 09:46:49 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F52110D5
+        for <linux-kselftest@vger.kernel.org>; Tue,  4 Jul 2023 06:46:47 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-3143b70d6easo1767024f8f.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 04 Jul 2023 06:46:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1688478403; x=1691070403;
+        d=isovalent.com; s=google; t=1688478405; x=1691070405;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=U+vl3t8RodtYbx2eQenih8tBnL7SBRBNpLzdp8LByFg=;
-        b=ZdTIfeIEGLzfxSzuPxM3gievbQxmAD7AOJh+4V0KmaEVlKTsTINx4tA9s/WiHt75oH
-         Ysk2Jxn4aS6F1qNcsceP6OlPbIWqWq1cYGfeTYT3FVi+PzU+urOyT34r+mFSoDIsFSwq
-         CaMEnop/92p4QIhVmSKmvPPTkNNPQD+15TkgV2sd4v4xDbd4wNCt43cxsIplloS4dRt+
-         J19nbZ/ogUBLILqL5qxJ3mTIMKwsCqrQywMB/ereToHiFigCTmgdgSrEAGkw8Rb51RMD
-         VzHUJOtIyDC8Bt4i4+HiF93ZDS/GWleXSin0tjVwLXB+L8zVmnc4i3Lo1gFXFaNLLNpd
-         sh+g==
+        bh=C2IDitR9Vhq5+nUn/yyJmBovpxVJNF/QnicIs9lsJ+Y=;
+        b=D7RibmC1rQJ8R8+HX4kjTFvvR2CgDwvOaepJYfaswNn8rG4oWqKjvZq6KGzCKg0m8d
+         wWt9AWDbXmssH1MsgmQyGc+31k7Sgz950TZ8oaLIXhX62SWcxe9pyci+bUX+eXJkliUh
+         YfoZvF4fvmHg8OZovJvCRR660XemmUpraqHDXdqEWPOhAZ/Ash/CMvRgJb/bTRl45oO6
+         B3JH4fjAfXtJaNVTqEViPvA0DOQ2A9cdcO7aQQEc/9lqtOWD59Y0ZvNim5uYL8vdyCkO
+         M+F2YnEKzfOW3s5BRgLhq9CYLP4W9hOl+GyN2hqreLt+Ut2WJ66ui5PgkAEHWuVUoQ3x
+         5l+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688478403; x=1691070403;
+        d=1e100.net; s=20221208; t=1688478405; x=1691070405;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=U+vl3t8RodtYbx2eQenih8tBnL7SBRBNpLzdp8LByFg=;
-        b=TauOfkr/i75tNMH6nGjdprElg6hNbU310oKTIwLeIT1XXIMxmHLstG1EBz23lojDPU
-         Zg67IpJNlFLPGcJTzB+e9Ce9hU4VkLbwHqlJJuGgzbqdA6qtUGgIjRAtrB45nd1Q926c
-         nqXyd8DBSEhzEJ/BBe8EBFMa42thrUCPkXUk/BmtV0f4qFqw4orujbPMGgtR1JgTzyT+
-         aDAt9au0XhshtkjepWUHMaraAndDxTqtCx2vFCeU2D6Q7gH5X/hrzpDesDzLhwYwBuA9
-         9yQAi7ANmbdRdUeaGHT5uLxgep8wGPEQE3jkjC4gtIurAABXLOTy/ElcH0cMjeFIfr5K
-         M/YQ==
-X-Gm-Message-State: AC+VfDzcSuh60SAJDgN6pajCvS8t5FpoDlJ0enOUyUn2noDs1EjLcGNY
-        3VKhK3d1nDXp6Po79ms9TlWw6TvJoab9JoxZlNisUg==
-X-Google-Smtp-Source: ACHHUZ7PgGMmvr4itGjLn3YE1UNMhepT0HQpN31fTTcglq7hAEcViziaB9Q0tBrjfhtSbZLbeSbirQ==
-X-Received: by 2002:a7b:c7d9:0:b0:3fb:c1df:a4fe with SMTP id z25-20020a7bc7d9000000b003fbc1dfa4femr10599757wmk.12.1688478403076;
-        Tue, 04 Jul 2023 06:46:43 -0700 (PDT)
+        bh=C2IDitR9Vhq5+nUn/yyJmBovpxVJNF/QnicIs9lsJ+Y=;
+        b=Hmd3bWq3fUSGfkmkaSfZ5YpEEC3YOaCcMKm3Isaxa4sF46y2oPq40WlhTqq4Jgujhi
+         N/JxUH5HMunOiO7sbOHA/1BztZ9OD0T6Te4e9N6ujAeXenSTLDl10Bw5dPjXTYc6qrQv
+         QgpkCTPkcqWMVIw0oxU0uUSb6AnnFgt6PhqcFJA5+SlJ/WA4kRvGFF+rQgHmEEmb/hit
+         VUwn/ly6AM40nJkYy0HAg7q5/d9oQpdt70ImPX44TeOO3G2Q+VbYzH7CBcnEHE+NqT+x
+         G/2Cpw272F9qt+0zA/n8fFxCbQP2LBNbt4dBmV0DGshByj6Lq6jSUC2N4lsfUhnPBh8J
+         ZsEA==
+X-Gm-Message-State: ABy/qLYyrvs1bieIXVE2daCk+pjr/AX8W4cpympeXdTI5Nzk9/8p0iEY
+        Z7ozjQrtR8EmCYYapJJuZ+qHs5chOCH4W6EaxuElHw==
+X-Google-Smtp-Source: APBJJlEGduOzEzHe7GYus5y9PRmRsc4u41aKbi0k3fjDnY/GuxPQAeB6TcnO2Kx0jc0qi6X9I1n7bw==
+X-Received: by 2002:a5d:518c:0:b0:314:fe8:94d8 with SMTP id k12-20020a5d518c000000b003140fe894d8mr9602461wrv.31.1688478405542;
+        Tue, 04 Jul 2023 06:46:45 -0700 (PDT)
 Received: from [192.168.133.175] ([5.148.46.226])
-        by smtp.gmail.com with ESMTPSA id x8-20020a5d60c8000000b003142b0d98b4sm9274680wrt.37.2023.07.04.06.46.42
+        by smtp.gmail.com with ESMTPSA id x8-20020a5d60c8000000b003142b0d98b4sm9274680wrt.37.2023.07.04.06.46.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jul 2023 06:46:42 -0700 (PDT)
+        Tue, 04 Jul 2023 06:46:45 -0700 (PDT)
 From:   Lorenz Bauer <lmb@isovalent.com>
-Date:   Tue, 04 Jul 2023 14:46:23 +0100
-Subject: [PATCH bpf-next v5 1/7] udp: re-score reuseport groups when
- connected sockets are present
+Date:   Tue, 04 Jul 2023 14:46:26 +0100
+Subject: [PATCH bpf-next v5 4/7] net: document inet[6]_lookup_reuseport
+ sk_state requirements
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230613-so-reuseport-v5-1-f6686a0dbce0@isovalent.com>
+Message-Id: <20230613-so-reuseport-v5-4-f6686a0dbce0@isovalent.com>
 References: <20230613-so-reuseport-v5-0-f6686a0dbce0@isovalent.com>
 In-Reply-To: <20230613-so-reuseport-v5-0-f6686a0dbce0@isovalent.com>
 To:     "David S. Miller" <davem@davemloft.net>,
@@ -87,105 +87,74 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Contrary to TCP, UDP reuseport groups can contain TCP_ESTABLISHED
-sockets. To support these properly we remember whether a group has
-a connected socket and skip the fast reuseport early-return. In
-effect we continue scoring all reuseport sockets and then choose the
-one with the highest score.
+The current implementation was extracted from inet[6]_lhash2_lookup
+in commit 80b373f74f9e ("inet: Extract helper for selecting socket
+from reuseport group") and commit 5df6531292b5 ("inet6: Extract helper
+for selecting socket from reuseport group"). In the original context,
+sk is always in TCP_LISTEN state and so did not have a separate check.
 
-The current code fails to re-calculate the score for the result of
-lookup_reuseport. According to Kuniyuki Iwashima:
+Add documentation that specifies which sk_state are valid to pass to
+the function.
 
-    1) SO_INCOMING_CPU is set
-       -> selected sk might have +1 score
-
-    2) BPF prog returns ESTABLISHED and/or SO_INCOMING_CPU sk
-       -> selected sk will have more than 8
-
-  Using the old score could trigger more lookups depending on the
-  order that sockets are created.
-
-    sk -> sk (SO_INCOMING_CPU) -> sk (ESTABLISHED)
-    |     |
-    `-> select the next SO_INCOMING_CPU sk
-          |
-          `-> select itself (We should save this lookup)
-
-Fixes: efc6b6f6c311 ("udp: Improve load balancing for SO_REUSEPORT.")
 Reviewed-by: Kuniyuki Iwashima <kuniyu@amazon.com>
 Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
 ---
- net/ipv4/udp.c | 20 +++++++++++++++-----
- net/ipv6/udp.c | 19 ++++++++++++++-----
- 2 files changed, 29 insertions(+), 10 deletions(-)
+ net/ipv4/inet_hashtables.c  | 15 +++++++++++++++
+ net/ipv6/inet6_hashtables.c | 15 +++++++++++++++
+ 2 files changed, 30 insertions(+)
 
-diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-index 42a96b3547c9..c62d5e1c6675 100644
---- a/net/ipv4/udp.c
-+++ b/net/ipv4/udp.c
-@@ -451,14 +451,24 @@ static struct sock *udp4_lib_lookup2(struct net *net,
- 		score = compute_score(sk, net, saddr, sport,
- 				      daddr, hnum, dif, sdif);
- 		if (score > badness) {
--			result = lookup_reuseport(net, sk, skb,
--						  saddr, sport, daddr, hnum);
-+			badness = score;
-+			result = lookup_reuseport(net, sk, skb, saddr, sport, daddr, hnum);
-+			if (!result) {
-+				result = sk;
-+				continue;
-+			}
-+
- 			/* Fall back to scoring if group has connections */
--			if (result && !reuseport_has_conns(sk))
-+			if (!reuseport_has_conns(sk))
- 				return result;
+diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
+index 352eb371c93b..64fc1bd3fb63 100644
+--- a/net/ipv4/inet_hashtables.c
++++ b/net/ipv4/inet_hashtables.c
+@@ -335,6 +335,21 @@ static inline int compute_score(struct sock *sk, struct net *net,
  
--			result = result ? : sk;
--			badness = score;
-+			/* Reuseport logic returned an error, keep original score. */
-+			if (IS_ERR(result))
-+				continue;
-+
-+			badness = compute_score(result, net, saddr, sport,
-+						daddr, hnum, dif, sdif);
-+
- 		}
- 	}
- 	return result;
-diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
-index 317b01c9bc39..dca8bec2eeb1 100644
---- a/net/ipv6/udp.c
-+++ b/net/ipv6/udp.c
-@@ -193,14 +193,23 @@ static struct sock *udp6_lib_lookup2(struct net *net,
- 		score = compute_score(sk, net, saddr, sport,
- 				      daddr, hnum, dif, sdif);
- 		if (score > badness) {
--			result = lookup_reuseport(net, sk, skb,
--						  saddr, sport, daddr, hnum);
-+			badness = score;
-+			result = lookup_reuseport(net, sk, skb, saddr, sport, daddr, hnum);
-+			if (!result) {
-+				result = sk;
-+				continue;
-+			}
-+
- 			/* Fall back to scoring if group has connections */
--			if (result && !reuseport_has_conns(sk))
-+			if (!reuseport_has_conns(sk))
- 				return result;
+ INDIRECT_CALLABLE_DECLARE(inet_ehashfn_t udp_ehashfn);
  
--			result = result ? : sk;
--			badness = score;
-+			/* Reuseport logic returned an error, keep original score. */
-+			if (IS_ERR(result))
-+				continue;
-+
-+			badness = compute_score(sk, net, saddr, sport,
-+						daddr, hnum, dif, sdif);
- 		}
- 	}
- 	return result;
++/**
++ * inet_lookup_reuseport() - execute reuseport logic on AF_INET socket if necessary.
++ * @net: network namespace.
++ * @sk: AF_INET socket, must be in TCP_LISTEN state for TCP or TCP_CLOSE for UDP.
++ * @skb: context for a potential SK_REUSEPORT program.
++ * @doff: header offset.
++ * @saddr: source address.
++ * @sport: source port.
++ * @daddr: destination address.
++ * @hnum: destination port in host byte order.
++ * @ehashfn: hash function used to generate the fallback hash.
++ *
++ * Return: NULL if sk doesn't have SO_REUSEPORT set, otherwise a pointer to
++ *         the selected sock or an error.
++ */
+ struct sock *inet_lookup_reuseport(struct net *net, struct sock *sk,
+ 				   struct sk_buff *skb, int doff,
+ 				   __be32 saddr, __be16 sport,
+diff --git a/net/ipv6/inet6_hashtables.c b/net/ipv6/inet6_hashtables.c
+index 3616225c89ef..f76dbbb29332 100644
+--- a/net/ipv6/inet6_hashtables.c
++++ b/net/ipv6/inet6_hashtables.c
+@@ -114,6 +114,21 @@ static inline int compute_score(struct sock *sk, struct net *net,
+ 
+ INDIRECT_CALLABLE_DECLARE(inet6_ehashfn_t udp6_ehashfn);
+ 
++/**
++ * inet6_lookup_reuseport() - execute reuseport logic on AF_INET6 socket if necessary.
++ * @net: network namespace.
++ * @sk: AF_INET6 socket, must be in TCP_LISTEN state for TCP or TCP_CLOSE for UDP.
++ * @skb: context for a potential SK_REUSEPORT program.
++ * @doff: header offset.
++ * @saddr: source address.
++ * @sport: source port.
++ * @daddr: destination address.
++ * @hnum: destination port in host byte order.
++ * @ehashfn: hash function used to generate the fallback hash.
++ *
++ * Return: NULL if sk doesn't have SO_REUSEPORT set, otherwise a pointer to
++ *         the selected sock or an error.
++ */
+ struct sock *inet6_lookup_reuseport(struct net *net, struct sock *sk,
+ 				    struct sk_buff *skb, int doff,
+ 				    const struct in6_addr *saddr,
 
 -- 
 2.40.1
