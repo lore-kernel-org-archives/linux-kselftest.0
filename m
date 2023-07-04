@@ -2,359 +2,144 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C6C1EB64DA
-	for <linux-kselftest@archiver.kernel.org>; Tue,  4 Jul 2023 08:30:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DC7EAEB64DA
+	for <linux-kselftest@archiver.kernel.org>; Tue,  4 Jul 2023 08:34:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231674AbjGDIao (ORCPT
+        id S231572AbjGDIeA (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 4 Jul 2023 04:30:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49608 "EHLO
+        Tue, 4 Jul 2023 04:34:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231618AbjGDIaf (ORCPT
+        with ESMTP id S230238AbjGDIdX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 4 Jul 2023 04:30:35 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25AFF1
-        for <linux-kselftest@vger.kernel.org>; Tue,  4 Jul 2023 01:30:33 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-565a33c35b1so58416607b3.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 04 Jul 2023 01:30:33 -0700 (PDT)
+        Tue, 4 Jul 2023 04:33:23 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B043F3;
+        Tue,  4 Jul 2023 01:33:18 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-51d885b0256so6843964a12.2;
+        Tue, 04 Jul 2023 01:33:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688459433; x=1691051433;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VPFPYpJqlVkifeWySsxdrO28y5Ny6mwft6nx5ZGUVhA=;
-        b=14EDmER7U5p0mx0dZlvSGrr81vx0YvPVwEF8Gh+/1kQO1+UZJp5K/F+lL9Myx/x9zY
-         vQqky1ClisRbs8YYZsldp7K48F4AHDpcvRFkmrCanxn0nYHAdiH69obE/poRWlCqj0S3
-         gIjiDU5P5lqw5j1C/hkVynNVKz++87eMq+sLy4J/R1GRKEajNXnBOdVz2049lPGshSxu
-         Plc3wwLAX4TBifDwSNOyvfApUkjT85k7e8qgWXHEBAhUpTscsh2hGUe/b7XWHXce6HvG
-         34Ur6wKY0ZPaNMh/joOMz71adFz/TgMQVmn6Q0ULqheiTyUL2qEcfppQBE3EID0pNjjr
-         bHrw==
+        d=gmail.com; s=20221208; t=1688459597; x=1691051597;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=/c3Osc+qzYUVB7Nmy8eYbeJkEHcCe9Nkfgf5cJF1fR0=;
+        b=Hu8GF4ume+33zVPcRcAzfhyWrGhX9CP3blkMI2wl00h4SA0+//2723sp9wvZ1XVLul
+         dvwppSniPQAEJZ99Im1GCkvZtCspnWB1N6tZDUHxVMY4QJDGp0nyVDUh7jT6pJXCngax
+         0s8hcExmv7HNFAleDneKdaYKCaLNmFATz6aABrUCQb7tj9l/92lxfTuaPQkrNFq7cVgW
+         YO4nP46zRw2NYf/vHr0DSzYYm+jnzAF+RJyRrexI0Z8SMrB1FQGqOoumqfhpvY0glDgJ
+         Y8Sj3IOX6QnW7DcnJxHW6kD4/4eIV+UcPiHgWevAGeG81pqsL4aOb/jJwJBwWCW7LYR9
+         6H0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688459433; x=1691051433;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VPFPYpJqlVkifeWySsxdrO28y5Ny6mwft6nx5ZGUVhA=;
-        b=JbnOqNwIsRyNF9s7yzrWlDNmZg0DZYLDQrSFwZbNmO5iJfN7eM5HqjWCSJvCvpK1u5
-         NSEZPXsVps8UWhgX23ogWNE60ARMZJsNgX5F1evudRK2JkMdtAGZlDPlwynZCrAWjmRp
-         Hu1GsSzeAdwkZ0ZwPK1TXz+9QOgSk6tRS3+WdlaXX5yrx/78qvOU2x0wR/KCCWaPkmQD
-         XS8LVxfi6wiEn/UmGqezYXrHVPXYcIOhiherToiqSCnVQL691P4CpTwqgoF2c/RwiT/Z
-         OsU/dXkQtVq5/fzL5Da6RETSJsfhQIc4x0VAeyIVf8uZh4C1lFhWl7pkq3Fi4E1bwBjO
-         xufQ==
-X-Gm-Message-State: ABy/qLbxwGqg9d42lcZbtvTToW8fL7ArDKooailjgS+AXo/gUzjadAAH
-        jNxe9qbBnGrbxTrDY9cRGnTauAaeSB4Xtg==
-X-Google-Smtp-Source: APBJJlG/mQtleWpmYTFrXjz5VDtAR3m8iutNTnV65fa5jShxEezd7l/XSMldeUFw12dUkSYPNgkYX2mxR5smOw==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a0d:d5c2:0:b0:577:d5b:7ce3 with SMTP id
- x185-20020a0dd5c2000000b005770d5b7ce3mr84586ywd.9.1688459433076; Tue, 04 Jul
- 2023 01:30:33 -0700 (PDT)
-Date:   Tue,  4 Jul 2023 16:30:22 +0800
-In-Reply-To: <20230704083022.692368-1-davidgow@google.com>
-Mime-Version: 1.0
-References: <20230704083022.692368-1-davidgow@google.com>
-X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
-Message-ID: <20230704083022.692368-2-davidgow@google.com>
-Subject: [PATCH 2/2] arch: um: Use the x86 checksum implementation on 32-bit
-From:   David Gow <davidgow@google.com>
-To:     Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-        Noah Goldstein <goldstein.w.n@gmail.com>
-Cc:     linux-um@lists.infradead.org, x86@kernel.org,
-        linux-arch@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
+        d=1e100.net; s=20221208; t=1688459597; x=1691051597;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/c3Osc+qzYUVB7Nmy8eYbeJkEHcCe9Nkfgf5cJF1fR0=;
+        b=P+CEn2kiO+LKrL1FAw2iO/qlBb69WyOM88GdU5NwmR7C5PUAGvACx/Hr39eeVfaX+n
+         qalgsx9Ia0JuuikxOcutJxMpJegOa9r3MI/DXz9haV4QnvfboraX3CIyNbruB2BwCJc+
+         rn/dy/dTIVy5VmOQ8SdEc8Hnabh4oEQocOQC8MEkCBaTt2tVuj3P8v5SxYiEkeSBm3Qb
+         umFUzQX1P4H9fXYJObpETz4ACM/+i6LcyzlaBvxQFQuqTV1wff2NsZY/BL/V/nIYYiEt
+         1w+jjT6OqQPlbmx1rTgbe5ncr9UWzLAeFRr8O3RSqwEdZaUCeptU5lWRicoAtsf72O52
+         uCCQ==
+X-Gm-Message-State: ABy/qLbSRFBNK0ZUXY9jSB2bbcES22U8xoHWVBeb5rufDYNd+DKSpP8H
+        ePZZgylz64GmiyoQKomYPPUTG5rSj/iDMWjiKaE=
+X-Google-Smtp-Source: APBJJlFP83Bj8mVZCOjb2sMOmBMemTEMEsFPAcrYr0NHdm6dy2d4qLyRt8n5yBV7ftnqEchbXDw6Fb9o53lTQQgdBeY=
+X-Received: by 2002:aa7:cf18:0:b0:51e:cb4:2b40 with SMTP id
+ a24-20020aa7cf18000000b0051e0cb42b40mr4771371edy.6.1688459596752; Tue, 04 Jul
+ 2023 01:33:16 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230703094722.909348-1-dangel101@gmail.com>
+In-Reply-To: <20230703094722.909348-1-dangel101@gmail.com>
+From:   Enric Balletbo Serra <eballetbo@gmail.com>
+Date:   Tue, 4 Jul 2023 10:33:04 +0200
+Message-ID: <CAFqH_52-DWon3u6c4=HBnrYKmg7OigT1Cri0xthxgPm5mvPyRQ@mail.gmail.com>
+Subject: Re: [PATCHv2] selftests/input: add tests for the EVIOCSCLOCKID ioctl
+To:     Dana Elfassy <delfassy@redhat.com>
+Cc:     shuah@kernel.org, eballetbo@kernel.org, usama.anjum@collabora.com,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Gow <davidgow@google.com>
+        Dana Elfassy <dangel101@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When UML is compiled under 32-bit x86, it uses its own copy of
-checksum_32.S, which is terribly out-of-date and doesn't support
-checksumming unaligned data.
+Hi Dana,
 
-This causes the new "checksum" KUnit test to fail:
-./tools/testing/kunit/kunit.py run --kconfig_add CONFIG_64BIT=n --cross_compile i686-linux-gnu- checksum
-    KTAP version 1
-    # Subtest: checksum
-    1..3
-    # test_csum_fixed_random_inputs: ASSERTION FAILED at lib/checksum_kunit.c:243
-    Expected result == expec, but
-        result == 33316 (0x8224)
-        expec == 33488 (0x82d0)
-    not ok 1 test_csum_fixed_random_inputs
-    # test_csum_all_carry_inputs: ASSERTION FAILED at lib/checksum_kunit.c:267
-    Expected result == expec, but
-        result == 65280 (0xff00)
-        expec == 0 (0x0)
-    not ok 2 test_csum_all_carry_inputs
-    # test_csum_no_carry_inputs: ASSERTION FAILED at lib/checksum_kunit.c:306
-    Expected result == expec, but
-        result == 65531 (0xfffb)
-        expec == 0 (0x0)
-    not ok 3 test_csum_no_carry_inputs
+Thank you for the patch.
 
-Sharing the normal implementation in arch/x86/lib both fixes all of
-these issues and means any further fixes only need to be done once.
+Missatge de Dana Elfassy <delfassy@redhat.com> del dia dl., 3 de jul.
+2023 a les 11:47:
+>
+> This patch introduces tests for the EVIOCSCLOCKID ioctl, for full
+> coverage of the different clkids
+>
+> Signed-off-by: Dana Elfassy <dangel101@gmail.com>
 
-x86_64 already seems to share the same implementation between UML and
-"normal" x86.
+I ran the tests and look at code coverage of them and they cover what
+is expected so
 
-Signed-off-by: David Gow <davidgow@google.com>
----
+Reviewed-by: Enric Balletbo i Serra <eballetbo@kernel.org>
 
-Note that there is a further issue with the pre-pentium-pro codepath in
-the shared x86 code, which I'll send a separate fix out for. i686+ works
-fine with just this series.
+Cheers,
+  Enric
 
----
- arch/x86/um/Makefile      |   3 +-
- arch/x86/um/checksum_32.S | 214 --------------------------------------
- 2 files changed, 2 insertions(+), 215 deletions(-)
- delete mode 100644 arch/x86/um/checksum_32.S
 
-diff --git a/arch/x86/um/Makefile b/arch/x86/um/Makefile
-index ee89f6bb9242..cb738967a9f5 100644
---- a/arch/x86/um/Makefile
-+++ b/arch/x86/um/Makefile
-@@ -17,11 +17,12 @@ obj-y = bugs_$(BITS).o delay.o fault.o ldt.o \
- 
- ifeq ($(CONFIG_X86_32),y)
- 
--obj-y += checksum_32.o syscalls_32.o
-+obj-y += syscalls_32.o
- obj-$(CONFIG_ELF_CORE) += elfcore.o
- 
- subarch-y = ../lib/string_32.o ../lib/atomic64_32.o ../lib/atomic64_cx8_32.o
- subarch-y += ../lib/cmpxchg8b_emu.o ../lib/atomic64_386_32.o
-+subarch-y += ../lib/checksum_32.o
- subarch-y += ../kernel/sys_ia32.o
- 
- else
-diff --git a/arch/x86/um/checksum_32.S b/arch/x86/um/checksum_32.S
-deleted file mode 100644
-index aed782ab7721..000000000000
---- a/arch/x86/um/checksum_32.S
-+++ /dev/null
-@@ -1,214 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-or-later */
--/*
-- * INET		An implementation of the TCP/IP protocol suite for the LINUX
-- *		operating system.  INET is implemented using the  BSD Socket
-- *		interface as the means of communication with the user level.
-- *
-- *		IP/TCP/UDP checksumming routines
-- *
-- * Authors:	Jorge Cwik, <jorge@laser.satlink.net>
-- *		Arnt Gulbrandsen, <agulbra@nvg.unit.no>
-- *		Tom May, <ftom@netcom.com>
-- *              Pentium Pro/II routines:
-- *              Alexander Kjeldaas <astor@guardian.no>
-- *              Finn Arne Gangstad <finnag@guardian.no>
-- *		Lots of code moved from tcp.c and ip.c; see those files
-- *		for more names.
-- *
-- * Changes:     Ingo Molnar, converted csum_partial_copy() to 2.1 exception
-- *			     handling.
-- *		Andi Kleen,  add zeroing on error
-- *                   converted to pure assembler
-- */
--
--#include <asm/errno.h>
--#include <asm/asm.h>
--#include <asm/export.h>
--				
--/*
-- * computes a partial checksum, e.g. for TCP/UDP fragments
-- */
--
--/*	
--unsigned int csum_partial(const unsigned char * buff, int len, unsigned int sum)
-- */
--		
--.text
--.align 4
--.globl csum_partial
--		
--#ifndef CONFIG_X86_USE_PPRO_CHECKSUM
--
--	  /*		
--	   * Experiments with Ethernet and SLIP connections show that buff
--	   * is aligned on either a 2-byte or 4-byte boundary.  We get at
--	   * least a twofold speedup on 486 and Pentium if it is 4-byte aligned.
--	   * Fortunately, it is easy to convert 2-byte alignment to 4-byte
--	   * alignment for the unrolled loop.
--	   */		
--csum_partial:
--	pushl %esi
--	pushl %ebx
--	movl 20(%esp),%eax	# Function arg: unsigned int sum
--	movl 16(%esp),%ecx	# Function arg: int len
--	movl 12(%esp),%esi	# Function arg: unsigned char *buff
--	testl $2, %esi		# Check alignment.
--	jz 2f			# Jump if alignment is ok.
--	subl $2, %ecx		# Alignment uses up two bytes.
--	jae 1f			# Jump if we had at least two bytes.
--	addl $2, %ecx		# ecx was < 2.  Deal with it.
--	jmp 4f
--1:	movw (%esi), %bx
--	addl $2, %esi
--	addw %bx, %ax
--	adcl $0, %eax
--2:
--	movl %ecx, %edx
--	shrl $5, %ecx
--	jz 2f
--	testl %esi, %esi
--1:	movl (%esi), %ebx
--	adcl %ebx, %eax
--	movl 4(%esi), %ebx
--	adcl %ebx, %eax
--	movl 8(%esi), %ebx
--	adcl %ebx, %eax
--	movl 12(%esi), %ebx
--	adcl %ebx, %eax
--	movl 16(%esi), %ebx
--	adcl %ebx, %eax
--	movl 20(%esi), %ebx
--	adcl %ebx, %eax
--	movl 24(%esi), %ebx
--	adcl %ebx, %eax
--	movl 28(%esi), %ebx
--	adcl %ebx, %eax
--	lea 32(%esi), %esi
--	dec %ecx
--	jne 1b
--	adcl $0, %eax
--2:	movl %edx, %ecx
--	andl $0x1c, %edx
--	je 4f
--	shrl $2, %edx		# This clears CF
--3:	adcl (%esi), %eax
--	lea 4(%esi), %esi
--	dec %edx
--	jne 3b
--	adcl $0, %eax
--4:	andl $3, %ecx
--	jz 7f
--	cmpl $2, %ecx
--	jb 5f
--	movw (%esi),%cx
--	leal 2(%esi),%esi
--	je 6f
--	shll $16,%ecx
--5:	movb (%esi),%cl
--6:	addl %ecx,%eax
--	adcl $0, %eax 
--7:	
--	popl %ebx
--	popl %esi
--	RET
--
--#else
--
--/* Version for PentiumII/PPro */
--
--csum_partial:
--	pushl %esi
--	pushl %ebx
--	movl 20(%esp),%eax	# Function arg: unsigned int sum
--	movl 16(%esp),%ecx	# Function arg: int len
--	movl 12(%esp),%esi	# Function arg:	const unsigned char *buf
--
--	testl $2, %esi         
--	jnz 30f                 
--10:
--	movl %ecx, %edx
--	movl %ecx, %ebx
--	andl $0x7c, %ebx
--	shrl $7, %ecx
--	addl %ebx,%esi
--	shrl $2, %ebx  
--	negl %ebx
--	lea 45f(%ebx,%ebx,2), %ebx
--	testl %esi, %esi
--	jmp *%ebx
--
--	# Handle 2-byte-aligned regions
--20:	addw (%esi), %ax
--	lea 2(%esi), %esi
--	adcl $0, %eax
--	jmp 10b
--
--30:	subl $2, %ecx          
--	ja 20b                 
--	je 32f
--	movzbl (%esi),%ebx	# csumming 1 byte, 2-aligned
--	addl %ebx, %eax
--	adcl $0, %eax
--	jmp 80f
--32:
--	addw (%esi), %ax	# csumming 2 bytes, 2-aligned
--	adcl $0, %eax
--	jmp 80f
--
--40: 
--	addl -128(%esi), %eax
--	adcl -124(%esi), %eax
--	adcl -120(%esi), %eax
--	adcl -116(%esi), %eax   
--	adcl -112(%esi), %eax   
--	adcl -108(%esi), %eax
--	adcl -104(%esi), %eax
--	adcl -100(%esi), %eax
--	adcl -96(%esi), %eax
--	adcl -92(%esi), %eax
--	adcl -88(%esi), %eax
--	adcl -84(%esi), %eax
--	adcl -80(%esi), %eax
--	adcl -76(%esi), %eax
--	adcl -72(%esi), %eax
--	adcl -68(%esi), %eax
--	adcl -64(%esi), %eax     
--	adcl -60(%esi), %eax     
--	adcl -56(%esi), %eax     
--	adcl -52(%esi), %eax   
--	adcl -48(%esi), %eax   
--	adcl -44(%esi), %eax
--	adcl -40(%esi), %eax
--	adcl -36(%esi), %eax
--	adcl -32(%esi), %eax
--	adcl -28(%esi), %eax
--	adcl -24(%esi), %eax
--	adcl -20(%esi), %eax
--	adcl -16(%esi), %eax
--	adcl -12(%esi), %eax
--	adcl -8(%esi), %eax
--	adcl -4(%esi), %eax
--45:
--	lea 128(%esi), %esi
--	adcl $0, %eax
--	dec %ecx
--	jge 40b
--	movl %edx, %ecx
--50:	andl $3, %ecx
--	jz 80f
--
--	# Handle the last 1-3 bytes without jumping
--	notl %ecx		# 1->2, 2->1, 3->0, higher bits are masked
--	movl $0xffffff,%ebx	# by the shll and shrl instructions
--	shll $3,%ecx
--	shrl %cl,%ebx
--	andl -128(%esi),%ebx	# esi is 4-aligned so should be ok
--	addl %ebx,%eax
--	adcl $0,%eax
--80: 
--	popl %ebx
--	popl %esi
--	RET
--				
--#endif
--	EXPORT_SYMBOL(csum_partial)
--- 
-2.41.0.255.g8b1d071c50-goog
-
+> ---
+> Changes in v2:
+> - Replaced clkids numerical values with their equivalent definition
+>
+> This patch depends on '[v3] selftests/input: Introduce basic tests for evdev ioctls' [1] sent to the ML.
+> [1] https://patchwork.kernel.org/project/linux-input/patch/20230607153214.15933-1-eballetbo@kernel.org/
+>
+>  tools/testing/selftests/input/evioc-test.c | 30 ++++++++++++++++++++++
+>  1 file changed, 30 insertions(+)
+>
+> diff --git a/tools/testing/selftests/input/evioc-test.c b/tools/testing/selftests/input/evioc-test.c
+> index ad7b93fe39cf..83ce1a3c9b84 100644
+> --- a/tools/testing/selftests/input/evioc-test.c
+> +++ b/tools/testing/selftests/input/evioc-test.c
+> @@ -17,6 +17,7 @@
+>  #include <sys/stat.h>
+>  #include <time.h>
+>  #include <unistd.h>
+> +#include <linux/time.h>
+>
+>  #include "../kselftest_harness.h"
+>
+> @@ -234,4 +235,33 @@ TEST(eviocsrep_set_repeat_settings)
+>         selftest_uinput_destroy(uidev);
+>  }
+>
+> +TEST(eviocsclockid_set_clockid)
+> +{
+> +       struct selftest_uinput *uidev;
+> +       int clkid = CLOCK_REALTIME;
+> +       int rc;
+> +
+> +       rc = selftest_uinput_create_device(&uidev, -1);
+> +       ASSERT_EQ(0, rc);
+> +       ASSERT_NE(NULL, uidev);
+> +
+> +       rc = ioctl(uidev->evdev_fd, EVIOCSCLOCKID, &clkid);
+> +       ASSERT_EQ(0, rc);
+> +
+> +       clkid = CLOCK_MONOTONIC;
+> +       rc = ioctl(uidev->evdev_fd, EVIOCSCLOCKID, &clkid);
+> +       ASSERT_EQ(0, rc);
+> +
+> +       clkid = CLOCK_BOOTTIME;
+> +       rc = ioctl(uidev->evdev_fd, EVIOCSCLOCKID, &clkid);
+> +       ASSERT_EQ(0, rc);
+> +
+> +       // case default
+> +       clkid = -1;
+> +       rc = ioctl(uidev->evdev_fd, EVIOCSCLOCKID, &clkid);
+> +       ASSERT_EQ(-1, rc);
+> +
+> +       selftest_uinput_destroy(uidev);
+> +}
+> +
+>  TEST_HARNESS_MAIN
+> --
+> 2.41.0
+>
