@@ -2,63 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D5F28EB64DA
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C00C8C001DD
 	for <linux-kselftest@archiver.kernel.org>; Tue,  4 Jul 2023 20:45:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231479AbjGDUpH (ORCPT
+        id S231407AbjGDUo7 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 4 Jul 2023 16:45:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51162 "EHLO
+        Tue, 4 Jul 2023 16:44:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231469AbjGDUpB (ORCPT
+        with ESMTP id S231433AbjGDUo6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 4 Jul 2023 16:45:01 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F129710C8
-        for <linux-kselftest@vger.kernel.org>; Tue,  4 Jul 2023 13:44:59 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3fbab0d0b88so437735e9.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 04 Jul 2023 13:44:59 -0700 (PDT)
+        Tue, 4 Jul 2023 16:44:58 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1596610DD
+        for <linux-kselftest@vger.kernel.org>; Tue,  4 Jul 2023 13:44:57 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3fbd33a573cso33112955e9.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 04 Jul 2023 13:44:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1688503498; x=1691095498;
+        d=tessares.net; s=google; t=1688503495; x=1691095495;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=irQcTZRmsJv9yLw+oo0R2smAEctmL3X55DWeBMb3Xgg=;
-        b=AbdcFx/rQ2BupkcS7tHqQ7Ov507+5/oUa82g3ajawYumtqR/ZB5JE/tvxh8BnQuetX
-         +2ErlL6WYuMv/FCCpm5LuR86PEh4ZRliv1TzZxU1Bq5rW8rfcmrp1+3/fYSoLxR18GWR
-         IgZ8mFwXKhJLqtoWDd40PXCvaUo4kB0IjBy+i88V+nR7p1goMR6w0vTs87KJwSM3go1y
-         42Ex7dtxXGgktJXtBH000UPPe0IwvgvFP7PETTDoKR4m3xYeBhg7Yh4H/Hd6YhVYoAnW
-         OBOdsGQSExWPviJbxA6Mfv0j8EDep9I9EDckuedjES1/UFrJxSreaI8ELtgA2ctlrTmy
-         HhpQ==
+        bh=hDHxKzuw+FQN3yqmvZTInWTuCOW02pUJl6ttc2wpkgY=;
+        b=nDhOY1uFJRI7sTrPHZ2ISJa0InUVg0tW7CH5q75pO7s3duzK+LXUOe+NUypd0QJE7b
+         jY/DONqMdinpTuwZy43GxqxidM4MwIHpGWHNedMf+8XGQkjSAyUDDVYCqzI643dncPUs
+         nxXiB4MkdlqBZ2c1MCLtMVdc4t4Bt7Kxag6OfYkAufQMknRT0ymGXVTRSNflXz69UylA
+         m8ETwddi2XkrCP5IilBIuNpMXVGhvyGtCa2zKBRJw9ZqxRZImhWCp7B8G+V8eUw+WqIT
+         bcIRT+1R18xEWEEbXEMOANvdKf/zHJAHHUPstjhuinqaS3LGvGYblF8i3ePzCdubnN8j
+         7T5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688503498; x=1691095498;
+        d=1e100.net; s=20221208; t=1688503495; x=1691095495;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=irQcTZRmsJv9yLw+oo0R2smAEctmL3X55DWeBMb3Xgg=;
-        b=TfSpsPDVMSSLWZRGDUwAMCIP868ZUtlv/RnVzaYYzyaTvIYSOZirMCFVD9pobYU73s
-         DMwidbuAknIMfCvxCOMn50WOo8a1qX/q+MDd22aqaACwQBnlHejH0qFTQ+UF/ZC/NU0m
-         Yy1P8G5WHFIfe4Y3rTq7aS9lIop2QcLqutV9CWJWtbPmOIUcc1Lby5Wb7I3dHyKxzqcB
-         C3mvnhVw7igcjzry1gtNPrkzS5oW7Jn42PzLrF8M6zWAiFt9vsm9FOU3Z34V1KrDhTos
-         vtY/ejQyqNXg+1+6U5m2mhoAw22cfRLeskkHblMMl6vGtIPrALjpeNjnWi59HaN73aY0
-         Nvog==
-X-Gm-Message-State: ABy/qLbwYqMjOIBW7XRn+MQ72DMEuSINTVJyUDwg54GDYk9gaSCXTO8j
-        SgKb60dwy352ESVQkvyQNkiPag==
-X-Google-Smtp-Source: APBJJlHVCDv2kYSOQsWKbxCTvcUMIPr4hZjuOTdzmgEd2cJycCTGIblQN7NvX5IjUohWlVIc7EfkDg==
-X-Received: by 2002:a05:600c:4446:b0:3fa:ef97:1fa5 with SMTP id v6-20020a05600c444600b003faef971fa5mr313961wmn.6.1688503498304;
-        Tue, 04 Jul 2023 13:44:58 -0700 (PDT)
+        bh=hDHxKzuw+FQN3yqmvZTInWTuCOW02pUJl6ttc2wpkgY=;
+        b=el9hqktHFw+tPmgfoWnONkSfHvd9bhI7Gf7w0+tS1TLP2Z2fZIPP4AEsgHT9lt1GOF
+         BW8gi3OW3b72IoldJOkzGImz+3KHEH5X2LfozuXu0LuOUmQEOmt8n4MeoEoRuccucf5+
+         hsUZCaoRHmRyv3Ykgp0dw5eMRBF21exagHa7JsG0dh/Y29YpBTw0EUqVVJQ2sY7Sqqxv
+         Nl8oAM35Dny6Tjayl4a6EmHGYUNYiKYmxop4DDC1WEEbC6ftTFGEvSu1WtgxgLPvv6hN
+         U9v1npj43ZMmnx1SliwpiZ0g29R5+UN8+3PYQitn/PyYUNRQFQu8UHBfHiByNF5ANNPV
+         eDgQ==
+X-Gm-Message-State: ABy/qLa9ZXnJB7Fpu+sXoJNxc2qUzEqBkhmMF+mYQUPvx+zuH3Bjuilw
+        gU3YP5KAp5GpKagktuF6WdkBCw==
+X-Google-Smtp-Source: APBJJlEDq7kPaqBJhj2tw4QTQfhouDPD/kuwj8ANuALjc+JfzPIfriVuSKT2j98z1RnqW9eGxTcvQg==
+X-Received: by 2002:a7b:c849:0:b0:3fb:e4ce:cc74 with SMTP id c9-20020a7bc849000000b003fbe4cecc74mr922840wml.8.1688503495554;
+        Tue, 04 Jul 2023 13:44:55 -0700 (PDT)
 Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id y4-20020a05600c364400b003fa74bff02asm115332wmq.26.2023.07.04.13.44.57
+        by smtp.gmail.com with ESMTPSA id y4-20020a05600c364400b003fa74bff02asm115332wmq.26.2023.07.04.13.44.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jul 2023 13:44:58 -0700 (PDT)
+        Tue, 04 Jul 2023 13:44:55 -0700 (PDT)
 From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-Date:   Tue, 04 Jul 2023 22:44:38 +0200
-Subject: [PATCH net 6/9] selftests: mptcp: userspace_pm: use correct server
- port
+Date:   Tue, 04 Jul 2023 22:44:35 +0200
+Subject: [PATCH net 3/9] selftests: mptcp: connect: fail if nft supposed to
+ work
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230704-upstream-net-20230704-misc-fixes-6-5-rc1-v1-6-d7e67c274ca5@tessares.net>
+Message-Id: <20230704-upstream-net-20230704-misc-fixes-6-5-rc1-v1-3-d7e67c274ca5@tessares.net>
 References: <20230704-upstream-net-20230704-misc-fixes-6-5-rc1-v1-0-d7e67c274ca5@tessares.net>
 In-Reply-To: <20230704-upstream-net-20230704-misc-fixes-6-5-rc1-v1-0-d7e67c274ca5@tessares.net>
 To:     mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
@@ -73,54 +73,72 @@ Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         Matthieu Baerts <matthieu.baerts@tessares.net>,
         stable@vger.kernel.org
 X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1273;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1735;
  i=matthieu.baerts@tessares.net; h=from:subject:message-id;
- bh=W8jKw1hMxiLOeZZvDuf1XZG5l8hWMmDQywIII/N7bcg=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkpITDVUs10maSaUizFfzW/5uHbdpafk0qxzjwH
- ltHTHnsCzeJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZKSEwwAKCRD2t4JPQmmg
- czn/D/wPsNjzMUnZu6WAL2gtkZCLSrk2FqCTpvoiCaj+toarKac6awqKM0X2OQqAcS5XBgt3nLj
- qrrZxiHCPMZQFpHZX3tQVo/der59hrjtswqjbMrPabPWMZXNSA+RZZatIxjri3198Qk01HEfxsJ
- Iz6DAImHfy3IHQHmSrtVH88cpkFzfGEzLeoZaiDWeiX1Snpz8C+KbWuiHROmLb6YlpXqjHva867
- ubmVDe8dhJleDBoSm+A+iRR03+8EowX7Jxwi6m0Huz+jAwXnJ/DLFa8L04pmY5O3fWUVsk10N+3
- IVO3l1OGvH2NP8AYNUjW0r0wAfU2x3Qh3BDqL3kRa0+TDzSAH+97/9Ep2o/W5QJL9cIz9YoPFeg
- JK9lRycRKMlEYeEODlIHg5Iu5ExxU11jo9n+Eh1OSKwnZx71ciZ3nmJm/yzdkbI7J0D1OewS3+P
- If80l9isMxznoyNNC4CcRszZ3jXl1Vq6P4G+zDOWmPYiuNEXjxAfitUqYX0tgGZZ5H7SgLZ3GT4
- U1kLzOr4hILxJWr4Sx8cQDT4L9gMZc0PkXGbCsPS5NmYakmVTJiSMBhkXq4r3It8Kdae7biYxCt
- UqNtEHOk6jaqgTB1x8bWjx/kH1DzJygKg8//96n6eE2erpDQt6YU49VfqwS9WZgogEb6xYrdQj4
- lDemp4eD5NsFKMQ==
+ bh=0Rssl8kPQuTQe6YW3ClerkSvvyET5dErT/6Ju+EMAIU=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkpITDsXCQh2/8B+/EEQwajr3UOcNe0KC1T1VSR
+ i0nw+qmmjaJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZKSEwwAKCRD2t4JPQmmg
+ cxI4D/443M6kpFU9MXcEibFvfOqfGe5agpWmRjTJYh6sp24Jx/FKUz8oIdKF/NAAYU+93dPU23k
+ ebgFzK1lBnh63Sr9L6l4zCPEjiGz2HGDn/qGRkc9KTsXvdXyKnQWlv7etoWbRtnDMdD4R/imLvN
+ +4RitnVQtMHdTor3MM7U7RH5ZxhRnbXJwv9DzWwI3HoK0gAB6Rryu/uqOdaivvuviZHpWiZpv7y
+ GfvU5zB7PIugU3ob8XCldTysNqz8w15gho6rmnStFGT8OCBxdBmw6vJ/Gf/djsqV8peKlIQk90r
+ QAUaYwvf1ufJBeTZtf6nakm5RI+F58e4SQ4/D1RW4TJijMZUVhkMwdbysGPbFiA9zIVUh3rXZ7d
+ 9rDx+3+ie7rJNV7eo1moNdFQW71D1df78NrjWue7+otlGnpFeDXgKq4m8hP/gHdnjCHwvzP/we5
+ +kWDY2i38TNbQSdecl2hTBEqCfTH/wAzlGA5jAnW6zjcDFBlrOcFh0yxvX16Uz5FJ3vv0AsT8O6
+ gaIMoB67IlQELv5IMHDbrjH+jXNU2WHWVQATqIug0W6oI+9WwgfKPju890uywfPiqdzsL+jCL3/
+ fesPuICLiiwDZBqnjcosKs2E+MSkIBigJLYrake8h/F9EZQNml/Ie4o8D8qwiGzUCI11klKMS27
+ Y2a1MOZQrAqodHg==
 X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-"server4_port" variable is not set but "app4_port" is the server port in
-v4 and the correct variable name to use.
+In case of "external" errors when preparing the environment for the
+TProxy tests, the subtests were marked as skipped.
 
-The port is optional so there was no visible impact.
+This is fine but it means these errors are ignored. On MPTCP Public CI,
+we do want to catch such issues and mark the selftest as failed if there
+are such issues. We can then use mptcp_lib_fail_if_expected_feature()
+helper that has been recently added to fail if needed.
 
 Link: https://github.com/multipath-tcp/mptcp_net-next/issues/368
-Fixes: ca188a25d43f ("selftests: mptcp: userspace PM support for MP_PRIO signals")
+Fixes: 5fb62e9cd3ad ("selftests: mptcp: add tproxy test case")
 Cc: stable@vger.kernel.org
 Acked-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
 ---
- tools/testing/selftests/net/mptcp/userspace_pm.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/net/mptcp/mptcp_connect.sh | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/tools/testing/selftests/net/mptcp/userspace_pm.sh b/tools/testing/selftests/net/mptcp/userspace_pm.sh
-index 98d9e4d2d3fc..841a67a7d524 100755
---- a/tools/testing/selftests/net/mptcp/userspace_pm.sh
-+++ b/tools/testing/selftests/net/mptcp/userspace_pm.sh
-@@ -848,7 +848,7 @@ test_prio()
- 	local count
+diff --git a/tools/testing/selftests/net/mptcp/mptcp_connect.sh b/tools/testing/selftests/net/mptcp/mptcp_connect.sh
+index 13561e5bc0cd..bbae40882bfa 100755
+--- a/tools/testing/selftests/net/mptcp/mptcp_connect.sh
++++ b/tools/testing/selftests/net/mptcp/mptcp_connect.sh
+@@ -718,6 +718,7 @@ table inet mangle {
+ EOF
+ 	if [ $? -ne 0 ]; then
+ 		echo "SKIP: $msg, could not load nft ruleset"
++		mptcp_lib_fail_if_expected_feature "nft rules"
+ 		return
+ 	fi
  
- 	# Send MP_PRIO signal from client to server machine
--	ip netns exec "$ns2" ./pm_nl_ctl set 10.0.1.2 port "$client4_port" flags backup token "$client4_token" rip 10.0.1.1 rport "$server4_port"
-+	ip netns exec "$ns2" ./pm_nl_ctl set 10.0.1.2 port "$client4_port" flags backup token "$client4_token" rip 10.0.1.1 rport "$app4_port"
- 	sleep 0.5
+@@ -733,6 +734,7 @@ EOF
+ 	if [ $? -ne 0 ]; then
+ 		ip netns exec "$listener_ns" nft flush ruleset
+ 		echo "SKIP: $msg, ip $r6flag rule failed"
++		mptcp_lib_fail_if_expected_feature "ip rule"
+ 		return
+ 	fi
  
- 	# Check TX
+@@ -741,6 +743,7 @@ EOF
+ 		ip netns exec "$listener_ns" nft flush ruleset
+ 		ip -net "$listener_ns" $r6flag rule del fwmark 1 lookup 100
+ 		echo "SKIP: $msg, ip route add local $local_addr failed"
++		mptcp_lib_fail_if_expected_feature "ip route"
+ 		return
+ 	fi
+ 
 
 -- 
 2.40.1
