@@ -2,119 +2,112 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A2CCEB64DA
-	for <linux-kselftest@archiver.kernel.org>; Wed,  5 Jul 2023 21:59:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 842D4EB64DA
+	for <linux-kselftest@archiver.kernel.org>; Thu,  6 Jul 2023 00:41:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230305AbjGEV7V (ORCPT
+        id S231281AbjGFAlG (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 5 Jul 2023 17:59:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48790 "EHLO
+        Wed, 5 Jul 2023 20:41:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbjGEV7V (ORCPT
+        with ESMTP id S231218AbjGFAlF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 5 Jul 2023 17:59:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30DBA198E;
-        Wed,  5 Jul 2023 14:59:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AB5186176B;
-        Wed,  5 Jul 2023 21:59:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6580C433C7;
-        Wed,  5 Jul 2023 21:59:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688594359;
-        bh=qEIycahdSuFpaMds3e9WtkAzIWBozcEdpxs2byPOYUw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=D+DNIqSYtkd+LV4jJsj6ZgUaSptlci0ak2Sm+xOLLEHOlo+njzgJQKUA3c5zMQAw3
-         SdRF1xDtKZyuEEqFNvHICX/ZDxH7CCdnCo9u+JK8kQM4tcTX6kXOcNKCnv7pZeMwmt
-         A2KJAsMIqFXs5CX1sUqixtJMe4OM7PLJMKPKM94QtSbZvkmcyWaqolxSz7nUvBMxRg
-         FUpqaJ+TZKkNWb9V1JqN4rre1F8z7a7Kfs5f8s98Gh2D/vwV1prYQ/I892GX2mja2v
-         w1Apw7iY9SQlq+gcZOifbs0GQiYm/DvNk+j7lmzuQgXVx5FyugMrACNOovVqTNczBF
-         5zEzNZe8EWBkQ==
-Date:   Wed, 5 Jul 2023 22:59:12 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Charlie Jenkins <charlie@rivosinc.com>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        paul.walmsley@sifive.com, palmer@rivosinc.com,
-        aou@eecs.berkeley.edu, anup@brainfault.org,
-        konstantin@linuxfoundation.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        mick@ics.forth.gr, jrtc27@jrtc27.com
-Subject: Re: [RESEND PATCH v3 0/2] RISC-V: mm: Make SV48 the default address
- space
-Message-ID: <20230705-antler-nature-4492ebe90c63@spud>
-References: <20230705190002.384799-1-charlie@rivosinc.com>
- <20230705-gloater-relation-29a6080ec87d@spud>
- <ZKXXquCXkSdFD837@ghost>
+        Wed, 5 Jul 2023 20:41:05 -0400
+Received: from smtp-fw-52005.amazon.com (smtp-fw-52005.amazon.com [52.119.213.156])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE92219A9;
+        Wed,  5 Jul 2023 17:41:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1688604065; x=1720140065;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=v+tsYcKm5P9WlsDhSBE+NcvZuf+VkDCTV0XouTKcUlk=;
+  b=S2l9TwrnnFEUAbIaUDOkTvSDkcp+K2B7GoftUG3YRHsUqQxVrggjjWLg
+   ZzAGz1iz7W6JmlcezonMbT77Jcx/nsqyusjGQn0zDulM7MqaOJVwi7kS0
+   ekx5K20hGZcWijspOt+qBEx8FEO8X6FWCXegDj9yIBXRKCFC3952XqpN3
+   Y=;
+X-IronPort-AV: E=Sophos;i="6.01,184,1684800000"; 
+   d="scan'208";a="591314401"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-7fa2de02.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-52005.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 00:41:01 +0000
+Received: from EX19MTAUWB002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2b-m6i4x-7fa2de02.us-west-2.amazon.com (Postfix) with ESMTPS id 0977F40D9F;
+        Thu,  6 Jul 2023 00:40:58 +0000 (UTC)
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Thu, 6 Jul 2023 00:40:58 +0000
+Received: from 88665a182662.ant.amazon.com.com (10.187.170.47) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Thu, 6 Jul 2023 00:40:53 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.com>
+To:     <lmb@isovalent.com>
+CC:     <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
+        <daniel@iogearbox.net>, <davem@davemloft.net>,
+        <dsahern@kernel.org>, <edumazet@google.com>, <haoluo@google.com>,
+        <hemanthmalla@gmail.com>, <joe@cilium.io>, <joe@wand.net.nz>,
+        <john.fastabend@gmail.com>, <jolsa@kernel.org>,
+        <kpsingh@kernel.org>, <kuba@kernel.org>, <kuniyu@amazon.com>,
+        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <martin.lau@linux.dev>, <mykolal@fb.com>, <netdev@vger.kernel.org>,
+        <pabeni@redhat.com>, <sdf@google.com>, <shuah@kernel.org>,
+        <song@kernel.org>, <willemdebruijn.kernel@gmail.com>, <yhs@fb.com>
+Subject: Re: [PATCH bpf-next v4 6/7] bpf, net: Support SO_REUSEPORT sockets with bpf_sk_assign
+Date:   Wed, 5 Jul 2023 17:40:44 -0700
+Message-ID: <20230706004044.79850-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <CAN+4W8hLXYZuNFG+=J-FWLXWhbwT5TrHjMg5VzjQhv2NBo5VaA@mail.gmail.com>
+References: <CAN+4W8hLXYZuNFG+=J-FWLXWhbwT5TrHjMg5VzjQhv2NBo5VaA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="LfSAcveqTz6Siyh4"
-Content-Disposition: inline
-In-Reply-To: <ZKXXquCXkSdFD837@ghost>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.187.170.47]
+X-ClientProxiedBy: EX19D038UWC004.ant.amazon.com (10.13.139.229) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+From: Lorenz Bauer <lmb@isovalent.com>
+Date: Mon, 3 Jul 2023 10:57:23 +0100
+> On Wed, Jun 28, 2023 at 7:54 PM Kuniyuki Iwashima <kuniyu@amazon.com> wrote:
+> 
+> > > +     reuse_sk = inet6_lookup_reuseport(net, sk, skb, doff,
+> > > +                                       saddr, sport, daddr, ntohs(dport),
+> > > +                                       ehashfn);
+> > > +     if (!reuse_sk || reuse_sk == sk)
+> > > +             return sk;
+> > > +
+> > > +     /* We've chosen a new reuseport sock which is never refcounted. This
+> > > +      * implies that sk also isn't refcounted.
+> > > +      */
+> > > +     WARN_ON_ONCE(*refcounted);
+> >
+> > One more nit.
+> >
+> > WARN_ON_ONCE() should be tested before inet6?_lookup_reuseport() not to
+> > miss the !reuse_sk case.
+> 
+> I was just pondering that as well, but I came to the opposite
+> conclusion. In the !reuse_sk case we don't really know anything about
+> sk, except that it isn't part of a reuseport group. How can we be sure
+> that it's not refcounted?
 
---LfSAcveqTz6Siyh4
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Sorry for late reply.
 
-On Wed, Jul 05, 2023 at 01:50:50PM -0700, Charlie Jenkins wrote:
-> On Wed, Jul 05, 2023 at 09:00:18PM +0100, Conor Dooley wrote:
-> > Hey Charlie,
-> >=20
-> > On Wed, Jul 05, 2023 at 11:59:40AM -0700, Charlie Jenkins wrote:
-> > > Make sv48 the default address space for mmap as some applications
-> > > currently depend on this assumption. Also enable users to select
-> > > desired address space using a non-zero hint address to mmap. Previous
-> > > kernel changes caused Java and other applications to be broken on sv57
-> > > which this patch fixes.
-> > >=20
-> > > Documentation is also added to the RISC-V virtual memory section to e=
-xplain
-> > > these changes.
-> >=20
-> > I can't find a changelog in any of these patches, nor an explanation for
-> > why this is v3 (or a RESEND). All I can find on the list is a v1. Could
-> > you explain and provide a changelog please?
-> >=20
-> > Cheers,
-> > Conor.
->=20
-> I made a series of mistakes due to an incorrect email configuration. I
-> knew something was wrong but I didn't know what after I sent out v2. v2
-> bumped the default address space from sv39 to sv48. The purpose of v3
-> was to remove an erroneous .gitignore I had included in v2 and also
-> modify a testcase that was supposed to check the default was sv48 but it
-> was still checking for sv39. After sending out v3 I realized what was
-> wrong with my configuration, so I decided to mark it as a resend because
-> I believe some people did recieve the previous emails.
+What we know about sk before inet6?_lookup_reuseport() are
 
-Ah yes, I remember massive CC list you used first time around that seemed
-to trip up infradead's list service. I guess I've finally gotten to the
-incoming mail volume that I am starting to not remember things, even
-when they were unusual...
+  (1) sk was full socket in bpf_sk_assign()
+  (2) sk had SOCK_RCU_FREE in bpf_sk_assign()
+  (3) sk was TCP_LISTEN here if TCP
 
-Next time you're sending patches, please add the changelog to your
-cover, makes life easier for reviewers etc.
+After bpf_sk_assign(), reqsk is never converted to fullsock, and UDP
+never clears SOCK_RCU_FREE.  If sk is TCP, now we are in the RCU grace
+period and confirmed sk->sk_state was TCP_LISTEN.  Then, TCP_LISTEN sk
+cannot be reused and SOCK_RCU_FREE is never cleared.
 
-Thanks Charlie,
-Conor.
+So, before/after inet6?_lookup_reuseport(), the fact that sk is not
+refcounted here should not change in spite of that reuse_sk is NULL.
 
---LfSAcveqTz6Siyh4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZKXnsAAKCRB4tDGHoIJi
-0k+oAQDvJTKzU6XjlcyqJplBSCfBAjHSVCZ/3LKrXVhbsOJ9yAEA4CJHvvobjGub
-lihp+LJxJxUlkuRipXEzHEkTRK6fIQM=
-=Msdq
------END PGP SIGNATURE-----
-
---LfSAcveqTz6Siyh4--
+What do you think ?
