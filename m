@@ -2,58 +2,66 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4E61EB64DC
-	for <linux-kselftest@archiver.kernel.org>; Sun,  9 Jul 2023 17:11:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DC1DBEB64DC
+	for <linux-kselftest@archiver.kernel.org>; Sun,  9 Jul 2023 17:28:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230377AbjGIRLD (ORCPT
+        id S229535AbjGIR2X (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 9 Jul 2023 13:11:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33788 "EHLO
+        Sun, 9 Jul 2023 13:28:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230059AbjGIRLD (ORCPT
+        with ESMTP id S229534AbjGIR2W (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 9 Jul 2023 13:11:03 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0D00E7;
-        Sun,  9 Jul 2023 10:11:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1688922659; bh=85baKQVhUJwMNHoo9j6MY2P0J1fOuNxV8TCqZobjB9I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CKPMWBpCTl/nxOv/Dn/MOf64AU50QS2zbBYprRqxOqoEuhaRzfbbrjuHonX/55Rne
-         HkXiS6uIbDajMYR6ZHyUcD92aXCyBWcbmx+EAMWSADIOGRRrI0pTqSqKXFnsbuTBBo
-         bWVZEEVF34nt8CjRN21mfw0xKwk8Zp9+wXSOpUmI=
-Date:   Sun, 9 Jul 2023 19:10:58 +0200
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Willy Tarreau <w@1wt.eu>
+        Sun, 9 Jul 2023 13:28:22 -0400
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 134EC8E;
+        Sun,  9 Jul 2023 10:28:19 -0700 (PDT)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 369HRrq1022299;
+        Sun, 9 Jul 2023 19:27:53 +0200
+Date:   Sun, 9 Jul 2023 19:27:53 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas@t-8ch.de>
 Cc:     Zhangjin Wu <falcon@tinylab.org>, arnd@arndb.de,
         linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, shuah@kernel.org
 Subject: Re: [PATCH 0/2] proc: proc_setattr for /proc/$PID/net
-Message-ID: <3261fa5b-b239-48a2-b1a8-34f80567cde1@t-8ch.de>
+Message-ID: <20230709172753.GA22287@1wt.eu>
 References: <20230624-proc-net-setattr-v1-0-73176812adee@weissschuh.net>
  <20230630140609.263790-1-falcon@tinylab.org>
  <20230709092947.GF9321@1wt.eu>
+ <3261fa5b-b239-48a2-b1a8-34f80567cde1@t-8ch.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230709092947.GF9321@1wt.eu>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <3261fa5b-b239-48a2-b1a8-34f80567cde1@t-8ch.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Willy,
+Hi Thomas,
 
-On 2023-07-09 11:29:47+0200, Willy Tarreau wrote:
-> On Fri, Jun 30, 2023 at 10:06:09PM +0800, Zhangjin Wu wrote:
->> [..]
+On Sun, Jul 09, 2023 at 07:10:58PM +0200, Thomas Weißschuh wrote:
+> Hi Willy,
 > 
-> Now queued, thanks!
-> Willy
+> On 2023-07-09 11:29:47+0200, Willy Tarreau wrote:
+> > On Fri, Jun 30, 2023 at 10:06:09PM +0800, Zhangjin Wu wrote:
+> >> [..]
+> > 
+> > Now queued, thanks!
+> > Willy
+> 
+> Don't we need an Ack from the fs maintainers for the patch to
+> fs/proc/proc_net.c ?
+> 
+> Personally I expected this series to go in via the fs tree because of
+> that patch.
 
-Don't we need an Ack from the fs maintainers for the patch to
-fs/proc/proc_net.c ?
+Gasp! You're totally right, I confused it with a test only changing
+the nolibc-test file, as the chmod_net test appeared as a dependency!
+Let me drop it from the series and push again.
 
-Personally I expected this series to go in via the fs tree because of
-that patch.
-
-Thomas
+Thanks a lot for notifying me!
+Willy
