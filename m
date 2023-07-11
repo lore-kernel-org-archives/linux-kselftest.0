@@ -2,407 +2,70 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BC40EB64DD
-	for <linux-kselftest@archiver.kernel.org>; Tue, 11 Jul 2023 09:49:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 21042EB64DC
+	for <linux-kselftest@archiver.kernel.org>; Tue, 11 Jul 2023 09:49:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231825AbjGKJtt (ORCPT
+        id S231977AbjGKJtu (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 11 Jul 2023 05:49:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38260 "EHLO
+        Tue, 11 Jul 2023 05:49:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231553AbjGKJti (ORCPT
+        with ESMTP id S231739AbjGKJtj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 11 Jul 2023 05:49:38 -0400
+        Tue, 11 Jul 2023 05:49:39 -0400
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72294A8;
-        Tue, 11 Jul 2023 02:49:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33F06DD;
+        Tue, 11 Jul 2023 02:49:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
         s=mail; t=1689068974;
-        bh=03IWGhZ8QhtZRHbntN3H9nx1jWn0im7jMDrqpZcDC9E=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=enZLzOOfdJZURIRYExyX4nKPwq7ZrcP6Uu30k8Z8FBnN5DX90an+CEoQpTtgBZ59C
-         Iep6Ze5HZeB6caPqlPsg3BMNkMgxLiIqkF9u0h5BKomFfMvd91AUwIv0EjoSrvJWme
-         SwemeWFdHQs/HFFbzwJHtGxZIypoDgJlcYSexLZo=
+        bh=FsS50Rrim8MuDCPlM48T3gytZjzvk+u7y3PzL9nBrJM=;
+        h=From:Subject:Date:To:Cc:From;
+        b=o1CDIbxHbAnDkfux/Bps6rjYqxnpceGCeKKCqBL7g7ITU/e6NUiK1WNECmdLCuSCW
+         2kUziYlADjOWSM0Q5bf/QVun0DJlyQNTeYqZdgZ2n2vWjrlyvuQINQS2GNkli1i+Cs
+         H1DSLfy4Nc4B3JT/ieH5jLrRef6GrTF9FfDro1bE=
 From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date:   Tue, 11 Jul 2023 11:48:41 +0200
-Subject: [PATCH 3/4] selftests/nolibc: simplify status argument
+Subject: [PATCH 0/4] selftests/nolibc: simplify conditions and testcases
+Date:   Tue, 11 Jul 2023 11:48:38 +0200
+Message-Id: <20230711-nolibc-sizeof-long-gaps-v1-0-dc78c3b85fc3@weissschuh.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230711-nolibc-sizeof-long-gaps-v1-3-dc78c3b85fc3@weissschuh.net>
-References: <20230711-nolibc-sizeof-long-gaps-v1-0-dc78c3b85fc3@weissschuh.net>
-In-Reply-To: <20230711-nolibc-sizeof-long-gaps-v1-0-dc78c3b85fc3@weissschuh.net>
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAHclrWQC/x3MQQqAIBBA0avErBtQC4quEi3URhsIDQciiu6et
+ HyL/x8QKkwCU/NAoZOFc6rQbQN+sykS8loNRplODVpjyjs7j8I35YB7ThGjPQRVMKN3diDqV6j
+ 1USjw9Z/n5X0/ZlEEr2kAAAA=
 To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
 Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         Zhangjin Wu <falcon@tinylab.org>,
         =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1689068953; l=8351;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1689068953; l=662;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=03IWGhZ8QhtZRHbntN3H9nx1jWn0im7jMDrqpZcDC9E=;
- b=GDj2A6NCENuF5duP+jAGRG273sGNnZpRTvbg/ryTcxFqm04Xf1W6x1W3XHtf6GRUuicM5bhWG
- a9hhDUb2lShA0D4j1P1LaZGu6iLgm3Gp4f/B6EF7zDxSoDNUi0UX71I
+ bh=FsS50Rrim8MuDCPlM48T3gytZjzvk+u7y3PzL9nBrJM=;
+ b=UMDf0t7s2OekdNEY8knIYZXgZ7qVv8iCAlVMsOBWLekg7wkvIt2puz5JGDANeJLttwWVvSzyM
+ 1LEwIFQEI+CD1HFDyjfhMlmxwe+ZUOB06LUwwg8xa4K00K5dZBhYJp1
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-I'm not sure if this is an improvement over the previous patch.
-If so it should be squashed into it.
+A few cleanups to the existing test logic.
 
-Not-Signed-off-by
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- tools/testing/selftests/nolibc/nolibc-test.c | 115 ++++++++++-----------------
- 1 file changed, 40 insertions(+), 75 deletions(-)
+Thomas Weißschuh (4):
+      selftests/nolibc: make evaluation of test conditions
+      selftests/nolibc: simplify status printing
+      selftests/nolibc: simplify status argument
+      selftests/nolibc: avoid gaps in test numbers
 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index b7ed10512d67..754815c142f6 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -127,17 +127,13 @@ static void putcharn(char c, size_t n)
- 	fputs(buf, stdout);
- }
- 
--enum RESULT {
--	OK,
--	FAIL,
--	SKIPPED,
--};
-+#define SKIPPED INT_MIN
- 
--static void result(int llen, enum RESULT r)
-+static void result(int llen, int r)
- {
- 	const char *msg;
- 
--	if (r == OK)
-+	if (r == 0)
- 		msg = " [OK]";
- 	else if (r == SKIPPED)
- 		msg = "[SKIPPED]";
-@@ -162,7 +158,7 @@ static int expect_zr(int expr, int llen)
- 	int ret = !(expr == 0);
- 
- 	llen += printf(" = %d ", expr);
--	result(llen, ret ? FAIL : OK);
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -175,7 +171,7 @@ static int expect_nz(int expr, int llen)
- 	int ret = !(expr != 0);
- 
- 	llen += printf(" = %d ", expr);
--	result(llen, ret ? FAIL : OK);
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -188,7 +184,7 @@ static int expect_eq(uint64_t expr, int llen, uint64_t val)
- 	int ret = !(expr == val);
- 
- 	llen += printf(" = %lld ", (long long)expr);
--	result(llen, ret ? FAIL : OK);
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -201,7 +197,7 @@ static int expect_ne(int expr, int llen, int val)
- 	int ret = !(expr != val);
- 
- 	llen += printf(" = %d ", expr);
--	result(llen, ret ? FAIL : OK);
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -214,7 +210,7 @@ static int expect_ge(int expr, int llen, int val)
- 	int ret = !(expr >= val);
- 
- 	llen += printf(" = %d ", expr);
--	result(llen, ret ? FAIL : OK);
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -227,7 +223,7 @@ static int expect_gt(int expr, int llen, int val)
- 	int ret = !(expr > val);
- 
- 	llen += printf(" = %d ", expr);
--	result(llen, ret ? FAIL : OK);
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -240,7 +236,7 @@ static int expect_le(int expr, int llen, int val)
- 	int ret = !(expr <= val);
- 
- 	llen += printf(" = %d ", expr);
--	result(llen, ret ? FAIL : OK);
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -253,7 +249,7 @@ static int expect_lt(int expr, int llen, int val)
- 	int ret = !(expr < val);
- 
- 	llen += printf(" = %d ", expr);
--	result(llen, ret ? FAIL : OK);
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -268,11 +264,10 @@ static int expect_syszr(int expr, int llen)
- 	if (expr) {
- 		ret = 1;
- 		llen += printf(" = %d %s ", expr, errorname(errno));
--		result(llen, FAIL);
- 	} else {
- 		llen += printf(" = %d ", expr);
--		result(llen, OK);
- 	}
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -287,11 +282,10 @@ static int expect_syseq(int expr, int llen, int val)
- 	if (expr != val) {
- 		ret = 1;
- 		llen += printf(" = %d %s ", expr, errorname(errno));
--		result(llen, FAIL);
- 	} else {
- 		llen += printf(" = %d ", expr);
--		result(llen, OK);
- 	}
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -306,11 +300,10 @@ static int expect_sysne(int expr, int llen, int val)
- 	if (expr == val) {
- 		ret = 1;
- 		llen += printf(" = %d %s ", expr, errorname(errno));
--		result(llen, FAIL);
- 	} else {
- 		llen += printf(" = %d ", expr);
--		result(llen, OK);
- 	}
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -333,10 +326,8 @@ static int expect_syserr2(int expr, int expret, int experr1, int experr2, int ll
- 			llen += printf(" != (%d %s) ", expret, errorname(experr1));
- 		else
- 			llen += printf(" != (%d %s %s) ", expret, errorname(experr1), errorname(experr2));
--		result(llen, FAIL);
--	} else {
--		result(llen, OK);
- 	}
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -349,12 +340,9 @@ static int expect_ptrzr(const void *expr, int llen)
- 	int ret = 0;
- 
- 	llen += printf(" = <%p> ", expr);
--	if (expr) {
-+	if (expr)
- 		ret = 1;
--		result(llen, FAIL);
--	} else {
--		result(llen, OK);
--	}
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -367,12 +355,9 @@ static int expect_ptrnz(const void *expr, int llen)
- 	int ret = 0;
- 
- 	llen += printf(" = <%p> ", expr);
--	if (!expr) {
-+	if (!expr)
- 		ret = 1;
--		result(llen, FAIL);
--	} else {
--		result(llen, OK);
--	}
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -384,12 +369,9 @@ static int expect_ptreq(const void *expr, int llen, const void *cmp)
- 	int ret = 0;
- 
- 	llen += printf(" = <%p> ", expr);
--	if (expr != cmp) {
-+	if (expr != cmp)
- 		ret = 1;
--		result(llen, FAIL);
--	} else {
--		result(llen, OK);
--	}
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -401,12 +383,9 @@ static int expect_ptrne(const void *expr, int llen, const void *cmp)
- 	int ret = 0;
- 
- 	llen += printf(" = <%p> ", expr);
--	if (expr == cmp) {
-+	if (expr == cmp)
- 		ret = 1;
--		result(llen, FAIL);
--	} else {
--		result(llen, OK);
--	}
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -428,10 +407,8 @@ static int expect_ptrerr2(const void *expr, const void *expret, int experr1, int
- 			llen += printf(" != (<%p> %s) ", expret, errorname(experr1));
- 		else
- 			llen += printf(" != (<%p> %s %s) ", expret, errorname(experr1), errorname(experr2));
--		result(llen, FAIL);
--	} else {
--		result(llen, OK);
- 	}
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -443,12 +420,9 @@ static int expect_strzr(const char *expr, int llen)
- 	int ret = 0;
- 
- 	llen += printf(" = <%s> ", expr);
--	if (expr) {
-+	if (expr)
- 		ret = 1;
--		result(llen, FAIL);
--	} else {
--		result(llen, OK);
--	}
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -461,12 +435,9 @@ static int expect_strnz(const char *expr, int llen)
- 	int ret = 0;
- 
- 	llen += printf(" = <%s> ", expr);
--	if (!expr) {
-+	if (!expr)
- 		ret = 1;
--		result(llen, FAIL);
--	} else {
--		result(llen, OK);
--	}
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -479,12 +450,9 @@ static int expect_streq(const char *expr, int llen, const char *cmp)
- 	int ret = 0;
- 
- 	llen += printf(" = <%s> ", expr);
--	if (strcmp(expr, cmp) != 0) {
-+	if (strcmp(expr, cmp) != 0)
- 		ret = 1;
--		result(llen, FAIL);
--	} else {
--		result(llen, OK);
--	}
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -497,12 +465,9 @@ static int expect_strne(const char *expr, int llen, const char *cmp)
- 	int ret = 0;
- 
- 	llen += printf(" = <%s> ", expr);
--	if (strcmp(expr, cmp) == 0) {
-+	if (strcmp(expr, cmp) == 0)
- 		ret = 1;
--		result(llen, FAIL);
--	} else {
--		result(llen, OK);
--	}
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -893,7 +858,7 @@ static int expect_vfprintf(int llen, size_t c, const char *expected, const char
- 
- 	memfile = fdopen(fd, "w+");
- 	if (!memfile) {
--		result(llen, FAIL);
-+		result(llen, 1);
- 		return 1;
- 	}
- 
-@@ -903,7 +868,7 @@ static int expect_vfprintf(int llen, size_t c, const char *expected, const char
- 
- 	if (w != c) {
- 		llen += printf(" written(%d) != %d", w, (int) c);
--		result(llen, FAIL);
-+		result(llen, 1);
- 		return 1;
- 	}
- 
-@@ -917,14 +882,14 @@ static int expect_vfprintf(int llen, size_t c, const char *expected, const char
- 
- 	if (r != w) {
- 		llen += printf(" written(%d) != read(%d)", w, r);
--		result(llen, FAIL);
-+		result(llen, 1);
- 		return 1;
- 	}
- 
- 	llen += printf(" \"%s\" = \"%s\"", expected, buf);
- 	ret = strncmp(expected, buf, c);
- 
--	result(llen, ret ? FAIL : OK);
-+	result(llen, ret);
- 	return ret;
- }
- 
-@@ -987,7 +952,7 @@ static int run_protection(int min, int max)
- #if defined(_NOLIBC_STACKPROTECTOR)
- 	if (!__stack_chk_guard) {
- 		llen += printf("__stack_chk_guard not initialized");
--		result(llen, FAIL);
-+		result(llen, 1);
- 		return 1;
- 	}
- #endif
-@@ -998,7 +963,7 @@ static int run_protection(int min, int max)
- 	switch (pid) {
- 	case -1:
- 		llen += printf("fork()");
--		result(llen, FAIL);
-+		result(llen, 1);
- 		return 1;
- 
- 	case 0:
-@@ -1014,10 +979,10 @@ static int run_protection(int min, int max)
- 
- 		if (pid == -1 || !WIFSIGNALED(status) || WTERMSIG(status) != SIGABRT) {
- 			llen += printf("waitpid()");
--			result(llen, FAIL);
-+			result(llen, 1);
- 			return 1;
- 		}
--		result(llen, OK);
-+		result(llen, 0);
- 		return 0;
- 	}
- }
+ tools/testing/selftests/nolibc/nolibc-test.c | 201 +++++++++++----------------
+ 1 file changed, 85 insertions(+), 116 deletions(-)
+---
+base-commit: 078cda365b3f47f61047a08230925a1478e9a1c8
+change-id: 20230711-nolibc-sizeof-long-gaps-0f28cba7ee4d
 
+Best regards,
 -- 
-2.41.0
+Thomas Weißschuh <linux@weissschuh.net>
 
