@@ -2,40 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74FB9EB64D9
-	for <linux-kselftest@archiver.kernel.org>; Wed, 12 Jul 2023 09:22:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A967DEB64D9
+	for <linux-kselftest@archiver.kernel.org>; Wed, 12 Jul 2023 09:24:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231407AbjGLJWm (ORCPT
+        id S232603AbjGLJYM (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 12 Jul 2023 05:22:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38316 "EHLO
+        Wed, 12 Jul 2023 05:24:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232190AbjGLJW2 (ORCPT
+        with ESMTP id S231970AbjGLJX6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 Jul 2023 05:22:28 -0400
+        Wed, 12 Jul 2023 05:23:58 -0400
 Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21D43E5F;
-        Wed, 12 Jul 2023 02:21:44 -0700 (PDT)
-X-QQ-mid: bizesmtp66t1689153656te3bxl5e
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C5519A7;
+        Wed, 12 Jul 2023 02:23:36 -0700 (PDT)
+X-QQ-mid: bizesmtp81t1689153787ta408fla
 Received: from linux-lab-host.localdomain ( [116.30.126.249])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 12 Jul 2023 17:20:55 +0800 (CST)
+        id ; Wed, 12 Jul 2023 17:23:05 +0800 (CST)
 X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: f0e3nd0UjDMWyqMb2OvZ3nICQJEiN23es6rzV5wC4cahNSci93zk5avdkN9io
-        q6BYdGJoZRmuMT5rlrQMLsTfYs1JDiRGxLhXm10fh6zUHduZJaJzzdEtPFbZO2sRNnVY/Uf
-        8Skorwq/S+JEevTOwGrg/t8gy1kUoX5xgEbi/iZ+uiG1SnDVRlw5OroSC880NrikfhbX63H
-        w4zF2E/cFDLmhtmGtHgNB6jMVLFmBbcIZL/11fBfv0u3A3oWwXw+n6Xv6ZP87Z0k4MjQdUV
-        qHnx5Qzfeg5RQdshjphvVgMsmNaMXJ6oh04J6bswf9QBTwjTrkRx8j2hcVC8HUQt2ZNFPHr
-        UkhFXblDdj8PllkZNal2brCfOMD9kbgKoDfE18K77we3a08FPPu8rZmNG75hdxty3rf8GWg
+X-QQ-FEAT: 239gR2IZrlvYgW4Z4Y00+uFld0r6zVlb6HKvXNeighaOY+7tVJQt96XqmH/mk
+        sYLWUoLD6gE+zFqzo7zSHQh6qE6Pg6q/MZliaTZ3tN0ZBAQv+Sd25QUu9CkLQqjlzjO4iBL
+        AwWjEf4FgSGRtVRSarzqA9PqIsKjX5M2H7TX7DKbz5gVxJ4fqq45DqQWiV/WEOPxODqf2hP
+        B+ssXhUMVmgfP64JPBLhYN0L33/lQoM7WRuCpdxOAWUjKue+gDeoNB2XytT/4KPt/JNHbxY
+        x9ultFO9qk848rTdoYdz2Ykhx1IywSNwk7mH/Q1vWUQgHtFmoQaZy6v+S7Bd5TdrLiWQVT8
+        g9DtCugDJoXSAYyYX+6wTLa3c1zreP5gOxVsqi8Uits20diOA61dS6O2ESgsA==
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 2211699565622657830
+X-BIZMAIL-ID: 9583563646986004817
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     w@1wt.eu
 Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, thomas@t-8ch.de
-Subject: [PATCH v3 05/11] tools/nolibc: i386: shrink _start with _start_c
-Date:   Wed, 12 Jul 2023 17:20:55 +0800
-Message-Id: <29e5222e81983e46c0dd8c043db66820ed80638b.1689150149.git.falcon@tinylab.org>
+Subject: [PATCH v3 07/11] tools/nolibc: mips: shrink _start with _start_c
+Date:   Wed, 12 Jul 2023 17:23:05 +0800
+Message-Id: <d769c0a075b9e13b283ee682213f9a7dd8462f41.1689150149.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1689150149.git.falcon@tinylab.org>
 References: <cover.1689150149.git.falcon@tinylab.org>
@@ -49,70 +49,85 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 move most of the _start operations to _start_c().
 
+Also clean up the instructions in delayed slots.
+
 Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
- tools/include/nolibc/arch-i386.h | 33 ++++++++------------------------
- 1 file changed, 8 insertions(+), 25 deletions(-)
+ tools/include/nolibc/arch-mips.h | 46 +++++++-------------------------
+ 1 file changed, 10 insertions(+), 36 deletions(-)
 
-diff --git a/tools/include/nolibc/arch-i386.h b/tools/include/nolibc/arch-i386.h
-index 1d4b683bc2cd..f0d0f5c364b8 100644
---- a/tools/include/nolibc/arch-i386.h
-+++ b/tools/include/nolibc/arch-i386.h
+diff --git a/tools/include/nolibc/arch-mips.h b/tools/include/nolibc/arch-mips.h
+index ae40d5268793..b1c070c5b24a 100644
+--- a/tools/include/nolibc/arch-mips.h
++++ b/tools/include/nolibc/arch-mips.h
 @@ -8,6 +8,7 @@
- #define _NOLIBC_ARCH_I386_H
+ #define _NOLIBC_ARCH_MIPS_H
  
  #include "compiler.h"
 +#include "crt.h"
  
- /* Syscalls for i386 :
-  *   - mostly similar to x86_64
-@@ -154,9 +155,6 @@
- 	_eax;							\
+ /* Syscalls for MIPS ABI O32 :
+  *   - WARNING! there's always a delayed slot!
+@@ -173,50 +174,23 @@
+ 	_arg4 ? -_num : _num;                                                 \
  })
  
 -char **environ __attribute__((weak));
 -const unsigned long *_auxv __attribute__((weak));
 -
- /* startup code */
- /*
-  * i386 System V ABI mandates:
-@@ -168,29 +166,14 @@ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_pr
+ /* startup code, note that it's called __start on MIPS */
+ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector __start(void)
  {
  	__asm__ volatile (
+-		/*".set nomips16\n"*/
+ 		".set push\n"
+-		".set    noreorder\n"
++		".set noreorder\n"
+ 		".option pic0\n"
  #ifdef _NOLIBC_STACKPROTECTOR
--		"call __stack_chk_init\n"   /* initialize stack protector                    */
-+		"call __stack_chk_init\n" /* initialize stack protector                          */
+-		"jal __stack_chk_init\n" /* initialize stack protector                         */
+-		"nop\n"                  /* delayed slot                                       */
++		"jal __stack_chk_init\n" /* initialize stack protector                     */
++		" nop\n"                 /* delayed slot                                   */
  #endif
--		"pop %eax\n"                /* argc   (first arg, %eax)                      */
--		"mov %esp, %ebx\n"          /* argv[] (second arg, %ebx)                     */
--		"lea 4(%ebx,%eax,4),%ecx\n" /* then a NULL then envp (third arg, %ecx)       */
--		"mov %ecx, environ\n"       /* save environ                                  */
--		"xor %ebp, %ebp\n"          /* zero the stack frame                          */
--		"mov %ecx, %edx\n"          /* search for auxv (follows NULL after last env) */
--		"0:\n"
--		"add $4, %edx\n"            /* search for auxv using edx, it follows the     */
--		"cmp -4(%edx), %ebp\n"      /* ... NULL after last env (ebp is zero here)    */
--		"jnz 0b\n"
--		"mov %edx, _auxv\n"         /* save it into _auxv                            */
--		"and $-16, %esp\n"          /* x86 ABI : esp must be 16-byte aligned before  */
--		"sub $4, %esp\n"            /* the call instruction (args are aligned)       */
--		"push %ecx\n"               /* push all registers on the stack so that we    */
--		"push %ebx\n"               /* support both regparm and plain stack modes    */
--		"push %eax\n"
--		"call main\n"               /* main() returns the status code in %eax        */
--		"mov %eax, %ebx\n"          /* retrieve exit code (32-bit int)               */
--		"movl $1, %eax\n"           /* NR_exit == 1                                  */
--		"int $0x80\n"               /* exit now                                      */
--		"hlt\n"                     /* ensure it does not                            */
-+		"xor  %ebp, %ebp\n"       /* zero the stack frame                                */
-+		"mov  %esp, %eax\n"       /* save stack pointer to %eax, as arg1 of _start_c     */
-+		"and  $-16, %esp\n"       /* last pushed argument must be 16-byte aligned        */
-+		"push %eax\n"             /* push arg1 on stack to support plain stack modes too */
-+		"call _start_c\n"         /* transfer to c runtime                               */
-+		"hlt\n"                   /* ensure it does not return                           */
+-		/*".ent __start\n"*/
+-		/*"__start:\n"*/
+-		"lw $a0,($sp)\n"        /* argc was in the stack                               */
+-		"addiu  $a1, $sp, 4\n"  /* argv = sp + 4                                       */
+-		"sll $a2, $a0, 2\n"     /* a2 = argc * 4                                       */
+-		"add   $a2, $a2, $a1\n" /* envp = argv + 4*argc ...                            */
+-		"addiu $a2, $a2, 4\n"   /*        ... + 4                                      */
+-		"lui $a3, %hi(environ)\n"     /* load environ into a3 (hi)                     */
+-		"addiu $a3, %lo(environ)\n"   /* load environ into a3 (lo)                     */
+-		"sw $a2,($a3)\n"              /* store envp(a2) into environ                   */
+-
+-		"move $t0, $a2\n"             /* iterate t0 over envp, look for NULL           */
+-		"0:"                          /* do {                                          */
+-		"lw $a3, ($t0)\n"             /*   a3=*(t0);                                   */
+-		"bne $a3, $0, 0b\n"           /* } while (a3);                                 */
+-		"addiu $t0, $t0, 4\n"         /* delayed slot: t0+=4;                          */
+-		"lui $a3, %hi(_auxv)\n"       /* load _auxv into a3 (hi)                       */
+-		"addiu $a3, %lo(_auxv)\n"     /* load _auxv into a3 (lo)                       */
+-		"sw $t0, ($a3)\n"             /* store t0 into _auxv                           */
+-
+-		"li $t0, -8\n"
+-		"and $sp, $sp, $t0\n"   /* sp must be 8-byte aligned                           */
+-		"addiu $sp,$sp,-16\n"   /* the callee expects to save a0..a3 there!            */
+-		"jal main\n"            /* main() returns the status code, we'll exit with it. */
+-		"nop\n"                 /* delayed slot                                        */
+-		"move $a0, $v0\n"       /* retrieve 32-bit exit code from v0                   */
+-		"li $v0, 4001\n"        /* NR_exit == 4001                                     */
+-		"syscall\n"
+-		/*".end __start\n"*/
++		"move  $a0, $sp\n"       /* save stack pointer to $a0, as arg1 of _start_c */
++		"li    $t0, -8\n"
++		"and   $sp, $sp, $t0\n"  /* $sp must be 8-byte aligned                     */
++		"addiu $sp, $sp, -16\n"  /* the callee expects to save a0..a3 there        */
++		"jal   _start_c\n"       /* transfer to c runtime                          */
++		" nop\n"                 /* delayed slot                                   */
+ 		".set pop\n"
  	);
  	__builtin_unreachable();
- }
 -- 
 2.25.1
 
