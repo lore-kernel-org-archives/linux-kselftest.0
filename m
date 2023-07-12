@@ -2,40 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 21479EB64DA
-	for <linux-kselftest@archiver.kernel.org>; Wed, 12 Jul 2023 09:27:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BACD7EB64DA
+	for <linux-kselftest@archiver.kernel.org>; Wed, 12 Jul 2023 09:28:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232550AbjGLJ1n (ORCPT
+        id S229529AbjGLJ2w (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 12 Jul 2023 05:27:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43718 "EHLO
+        Wed, 12 Jul 2023 05:28:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232772AbjGLJ1m (ORCPT
+        with ESMTP id S232142AbjGLJ2u (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 Jul 2023 05:27:42 -0400
+        Wed, 12 Jul 2023 05:28:50 -0400
 Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF6CBFB;
-        Wed, 12 Jul 2023 02:27:40 -0700 (PDT)
-X-QQ-mid: bizesmtp76t1689154051tknq755c
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1546139;
+        Wed, 12 Jul 2023 02:28:48 -0700 (PDT)
+X-QQ-mid: bizesmtp64t1689153721th57ji5d
 Received: from linux-lab-host.localdomain ( [116.30.126.249])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 12 Jul 2023 17:27:30 +0800 (CST)
+        id ; Wed, 12 Jul 2023 17:22:00 +0800 (CST)
 X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: 0nVv8wOro77vy4UoA7x+7BKA4KP17B5ePOoos9KdPSu4lX3g/jQWX5p5bQe81
-        uk1rep7yGkn3ZK0WeEiENotC+WSBpA+y8mcpeQu3yRB++8mz9Q3eEoyOGCpryRpqclGX02t
-        HIcCXYxqyTQNggTEnh3RXxIsofcYfY6euv7vve37dHQqnzwtngwneexKq0EHaruHVpN9otS
-        jgBXB4djg1LSLZaTH27xE+gT4zzs58Cn31MvRCJCAuNWMIOqQj9A1471dpCZ2ZXrcykWVuT
-        yUng3g53nFtiz8gty0yP5fvvsCGj1Sqm1R2eATEWObbRnWtOtdpTD563Vh2B2KJqbV9Nm1H
-        p+K7+VK+6CIsHrlobIXJKohHySC/XHgdUIUZCKFvo//cV0jMrTZb75KpH2y+Id00uE7CPPJ
+X-QQ-FEAT: ILHsT53NKPjtB6FRZNFER3rcR7JDnPatbvx5VZiH7Ka3nO5WQOLWEFZpPEe8B
+        Yg20t6QwyoFCV7b02MyegxMbyGupz2otIOof0G6QMVqebibWpCYSMNtwV2M05N2VPvYciuL
+        jF5v/Go5WOVHowGe5VRc1vEC41oiM+YrlHt+5weearunvpqX1+GxfH0v7Syit0E+URdtohu
+        9hwfCZcaKT3NdX/a/Ps8iFWFV2qcRE0U7fuz5iTPfe/tlJk3Xw30z1Y2BGkAYdt8EwEnHr+
+        1D/z5iJXvKaMQlS54kqs6mjGkWD1h3QFRBbwa6cUKarbLnaykhdxAmgGnkbFZy0WopMoW+8
+        apB15xrFXXrVeJf4imx2XhfhUHdkT8KcK0gALHVxGN9UEKsEoDXvi4foD2v5W+1himpDZ7d
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 8164517920057648241
+X-BIZMAIL-ID: 13879264576707349728
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     w@1wt.eu
 Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, thomas@t-8ch.de
-Subject: [PATCH v3 11/11] tools/nolibc: arch-*.h: add missing space after ','
-Date:   Wed, 12 Jul 2023 17:27:26 +0800
-Message-Id: <fe980d56a21c254c0355c1e5f2a3355a4cc5fe50.1689150149.git.falcon@tinylab.org>
+Subject: [PATCH v3 06/11] tools/nolibc: x86_64: shrink _start with _start_c
+Date:   Wed, 12 Jul 2023 17:22:00 +0800
+Message-Id: <8bdc96799300a5c5a40320d4f66ad54e97b4b9de.1689150149.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1689150149.git.falcon@tinylab.org>
 References: <cover.1689150149.git.falcon@tinylab.org>
@@ -47,134 +47,67 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Fix up such errors reported by scripts/checkpatch.pl:
-
-    ERROR: space required after that ',' (ctx:VxV)
-    #148: FILE: tools/include/nolibc/arch-aarch64.h:148:
-    +void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
-                             ^
-
-    ERROR: space required after that ',' (ctx:VxV)
-    #148: FILE: tools/include/nolibc/arch-aarch64.h:148:
-    +void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
-                                      ^
+move most of the _start operations to _start_c().
 
 Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
- tools/include/nolibc/arch-aarch64.h   | 2 +-
- tools/include/nolibc/arch-arm.h       | 2 +-
- tools/include/nolibc/arch-i386.h      | 2 +-
- tools/include/nolibc/arch-loongarch.h | 2 +-
- tools/include/nolibc/arch-mips.h      | 2 +-
- tools/include/nolibc/arch-riscv.h     | 2 +-
- tools/include/nolibc/arch-s390.h      | 2 +-
- tools/include/nolibc/arch-x86_64.h    | 2 +-
- 8 files changed, 8 insertions(+), 8 deletions(-)
+ tools/include/nolibc/arch-x86_64.h | 28 +++++++---------------------
+ 1 file changed, 7 insertions(+), 21 deletions(-)
 
-diff --git a/tools/include/nolibc/arch-aarch64.h b/tools/include/nolibc/arch-aarch64.h
-index e52fa5a20d71..c94fdca9ace6 100644
---- a/tools/include/nolibc/arch-aarch64.h
-+++ b/tools/include/nolibc/arch-aarch64.h
-@@ -145,7 +145,7 @@
- })
- 
- /* startup code */
--void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
-+void __attribute__((weak, noreturn, optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
- {
- 	__asm__ volatile (
- #ifdef _NOLIBC_STACKPROTECTOR
-diff --git a/tools/include/nolibc/arch-arm.h b/tools/include/nolibc/arch-arm.h
-index 74773ddcf4ca..5f8bfc24e9c7 100644
---- a/tools/include/nolibc/arch-arm.h
-+++ b/tools/include/nolibc/arch-arm.h
-@@ -185,7 +185,7 @@
- })
- 
- /* startup code */
--void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
-+void __attribute__((weak, noreturn, optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
- {
- 	__asm__ volatile (
- #ifdef _NOLIBC_STACKPROTECTOR
-diff --git a/tools/include/nolibc/arch-i386.h b/tools/include/nolibc/arch-i386.h
-index f0d0f5c364b8..915f0e77629e 100644
---- a/tools/include/nolibc/arch-i386.h
-+++ b/tools/include/nolibc/arch-i386.h
-@@ -162,7 +162,7 @@
-  * 2) The deepest stack frame should be set to zero
-  *
-  */
--void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
-+void __attribute__((weak, noreturn, optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
- {
- 	__asm__ volatile (
- #ifdef _NOLIBC_STACKPROTECTOR
-diff --git a/tools/include/nolibc/arch-loongarch.h b/tools/include/nolibc/arch-loongarch.h
-index 9db70d6f2c31..6edec94538e0 100644
---- a/tools/include/nolibc/arch-loongarch.h
-+++ b/tools/include/nolibc/arch-loongarch.h
-@@ -151,7 +151,7 @@
- #endif
- 
- /* startup code */
--void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
-+void __attribute__((weak, noreturn, optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
- {
- 	__asm__ volatile (
- #ifdef _NOLIBC_STACKPROTECTOR
-diff --git a/tools/include/nolibc/arch-mips.h b/tools/include/nolibc/arch-mips.h
-index b1c070c5b24a..36d4bf0c6aaa 100644
---- a/tools/include/nolibc/arch-mips.h
-+++ b/tools/include/nolibc/arch-mips.h
-@@ -175,7 +175,7 @@
- })
- 
- /* startup code, note that it's called __start on MIPS */
--void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector __start(void)
-+void __attribute__((weak, noreturn, optimize("omit-frame-pointer"))) __no_stack_protector __start(void)
- {
- 	__asm__ volatile (
- 		".set push\n"
-diff --git a/tools/include/nolibc/arch-riscv.h b/tools/include/nolibc/arch-riscv.h
-index 2e3fcf925ae9..043e2fd85ab0 100644
---- a/tools/include/nolibc/arch-riscv.h
-+++ b/tools/include/nolibc/arch-riscv.h
-@@ -143,7 +143,7 @@
- })
- 
- /* startup code */
--void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
-+void __attribute__((weak, noreturn, optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
- {
- 	__asm__ volatile (
- 		".option push\n"
-diff --git a/tools/include/nolibc/arch-s390.h b/tools/include/nolibc/arch-s390.h
-index 051f3f4ed19b..705576d8fd15 100644
---- a/tools/include/nolibc/arch-s390.h
-+++ b/tools/include/nolibc/arch-s390.h
-@@ -139,7 +139,7 @@
- })
- 
- /* startup code */
--void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
-+void __attribute__((weak, noreturn, optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
- {
- 	__asm__ volatile (
- 		"lgr	%r2, %r15\n"          /* save stack pointer to %r2, as arg1 of _start_c */
 diff --git a/tools/include/nolibc/arch-x86_64.h b/tools/include/nolibc/arch-x86_64.h
-index 0048adf6b11f..f5614a67f05a 100644
+index e980ca5417d0..0048adf6b11f 100644
 --- a/tools/include/nolibc/arch-x86_64.h
 +++ b/tools/include/nolibc/arch-x86_64.h
-@@ -161,7 +161,7 @@
-  * 2) The deepest stack frame should be zero (the %rbp).
-  *
-  */
--void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
-+void __attribute__((weak, noreturn, optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
+@@ -8,6 +8,7 @@
+ #define _NOLIBC_ARCH_X86_64_H
+ 
+ #include "compiler.h"
++#include "crt.h"
+ 
+ /* Syscalls for x86_64 :
+  *   - registers are 64-bit
+@@ -153,9 +154,6 @@
+ 	_ret;                                                                 \
+ })
+ 
+-char **environ __attribute__((weak));
+-const unsigned long *_auxv __attribute__((weak));
+-
+ /* startup code */
+ /*
+  * x86-64 System V ABI mandates:
+@@ -167,25 +165,13 @@ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_pr
  {
  	__asm__ volatile (
  #ifdef _NOLIBC_STACKPROTECTOR
+-		"call __stack_chk_init\n"   /* initialize stack protector                          */
++		"call __stack_chk_init\n" /* initialize stack protector                      */
+ #endif
+-		"pop %rdi\n"                /* argc   (first arg, %rdi)                            */
+-		"mov %rsp, %rsi\n"          /* argv[] (second arg, %rsi)                           */
+-		"lea 8(%rsi,%rdi,8),%rdx\n" /* then a NULL then envp (third arg, %rdx)             */
+-		"mov %rdx, environ\n"       /* save environ                                        */
+-		"xor %ebp, %ebp\n"          /* zero the stack frame                                */
+-		"mov %rdx, %rax\n"          /* search for auxv (follows NULL after last env)       */
+-		"0:\n"
+-		"add $8, %rax\n"            /* search for auxv using rax, it follows the           */
+-		"cmp -8(%rax), %rbp\n"      /* ... NULL after last env (rbp is zero here)          */
+-		"jnz 0b\n"
+-		"mov %rax, _auxv\n"         /* save it into _auxv                                  */
+-		"and $-16, %rsp\n"          /* x86 ABI : esp must be 16-byte aligned before call   */
+-		"call main\n"               /* main() returns the status code, we'll exit with it. */
+-		"mov %eax, %edi\n"          /* retrieve exit code (32 bit)                         */
+-		"mov $60, %eax\n"           /* NR_exit == 60                                       */
+-		"syscall\n"                 /* really exit                                         */
+-		"hlt\n"                     /* ensure it does not return                           */
++		"xor  %ebp, %ebp\n"       /* zero the stack frame                            */
++		"mov  %rsp, %rdi\n"       /* save stack pointer to %rdi, as arg1 of _start_c */
++		"and  $-16, %rsp\n"       /* %rsp must be 16-byte aligned before call        */
++		"call _start_c\n"         /* transfer to c runtime                           */
++		"hlt\n"                   /* ensure it does not return                       */
+ 	);
+ 	__builtin_unreachable();
+ }
 -- 
 2.25.1
 
