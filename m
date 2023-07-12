@@ -2,51 +2,54 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3AE1BEB64D9
-	for <linux-kselftest@archiver.kernel.org>; Wed, 12 Jul 2023 08:00:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D602DEB64D9
+	for <linux-kselftest@archiver.kernel.org>; Wed, 12 Jul 2023 08:00:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232012AbjGLIAJ (ORCPT
+        id S232179AbjGLIAd (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 12 Jul 2023 04:00:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39412 "EHLO
+        Wed, 12 Jul 2023 04:00:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230472AbjGLIAI (ORCPT
+        with ESMTP id S232101AbjGLIAO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 Jul 2023 04:00:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C38B10FA
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Jul 2023 00:59:18 -0700 (PDT)
+        Wed, 12 Jul 2023 04:00:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D579E199E
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Jul 2023 00:59:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689148757;
+        s=mimecast20190719; t=1689148761;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=NFh1fy7H4rVXbuwjJ23VCR8o/98dOivY4sK9jDopnVk=;
-        b=Ckana5Z16nOhjF7I8MuCDit4GN1McL3zAc6mX7a2FAOLrvQ1D+Nd6dESK5an78LZSYFdt2
-        lnfbbkPl8HD3fmZusAcze5ji6yGN9p+z2qX7BFipBMUBa7MVU3b2GNbde4FpUhmTZT8i3L
-        AbwwsvHZNW/CSWv2UOkXy3k8jVy1tG0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-13-qQFCFb3RP5OIbUN2ltDXLg-1; Wed, 12 Jul 2023 03:59:14 -0400
-X-MC-Unique: qQFCFb3RP5OIbUN2ltDXLg-1
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mKok55NQXTBLtHIZMbzGllTUQixFBx5xs4F6rwMNPAg=;
+        b=Y5O0keqdVXFUUy63RPkIrDWs96PYfUFXs2gN/K5QTUjJl5ieOyM4NYw22/lUswH/KIKTJI
+        h8I/ypTy5Nzrd0ZEu9jNwUrnplIHQpNwKG9kUv6uiYxqwxTBz8a3M/TyIU0oIGFVJqpgnf
+        /dFST+3N5saGKvfFrRyca7Fze9tdMm0=
+Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-644-nlLPEfVMMKuYfMHIWyplrw-1; Wed, 12 Jul 2023 03:59:17 -0400
+X-MC-Unique: nlLPEfVMMKuYfMHIWyplrw-1
 Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 29A548EBBA1;
-        Wed, 12 Jul 2023 07:59:14 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6D2601C07259;
+        Wed, 12 Jul 2023 07:59:17 +0000 (UTC)
 Received: from thuth.com (unknown [10.39.193.120])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 97B90492C13;
-        Wed, 12 Jul 2023 07:59:12 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 31E74492C13;
+        Wed, 12 Jul 2023 07:59:15 +0000 (UTC)
 From:   Thomas Huth <thuth@redhat.com>
 To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
         Paolo Bonzini <pbonzini@redhat.com>,
         Sean Christopherson <seanjc@google.com>
 Cc:     linux-kselftest@vger.kernel.org,
         David Matlack <dmatlack@google.com>
-Subject: [PATCH 0/4] Use TAP in some more x86 KVM selftests
-Date:   Wed, 12 Jul 2023 09:59:06 +0200
-Message-Id: <20230712075910.22480-1-thuth@redhat.com>
+Subject: [PATCH 2/4] KVM: selftests: x86: Use TAP interface in the sync_regs test
+Date:   Wed, 12 Jul 2023 09:59:08 +0200
+Message-Id: <20230712075910.22480-3-thuth@redhat.com>
+In-Reply-To: <20230712075910.22480-1-thuth@redhat.com>
+References: <20230712075910.22480-1-thuth@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
@@ -54,44 +57,242 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Here's a follow-up from my RFC series last year:
+The sync_regs test currently does not have any output (unless one
+of the TEST_ASSERT statement fails), so it's hard to say for a user
+whether a certain new sub-test has been included in the binary or
+not. Let's make this a little bit more user-friendly and include
+some TAP output via the kselftest_harness.h interface.
+To be able to use the interface, we have to break up the huge main()
+function here in more fine grained parts - then we can use the
+TEST_F() macro to define the individual tests. Since these are run
+with a separate VM now, we have also to make sure to create the
+expected state at the beginning of each test, so some parts grow
+a little bit - which should be OK considering that the individual
+tests are more self-contained now.
 
- https://lore.kernel.org/lkml/20221004093131.40392-1-thuth@redhat.com/T/
-
-Basic idea of this series is now to use the kselftest_harness.h
-framework to get TAP output in the tests, so that it is easier
-for the user to see what is going on, and e.g. to be able to
-detect whether a certain test is part of the test binary or not
-(which is useful when tests get extended in the course of time).
-
-Thomas Huth (4):
-  KVM: selftests: Rename the ASSERT_EQ macro
-  KVM: selftests: x86: Use TAP interface in the sync_regs test
-  KVM: selftests: x86: Use TAP interface in the fix_hypercall test
-  KVM: selftests: x86: Use TAP interface in the userspace_msr_exit test
-
- .../selftests/kvm/aarch64/aarch32_id_regs.c   |   8 +-
- .../selftests/kvm/aarch64/page_fault_test.c   |  10 +-
- .../testing/selftests/kvm/include/test_util.h |   4 +-
- tools/testing/selftests/kvm/lib/kvm_util.c    |   2 +-
- .../selftests/kvm/max_guest_memory_test.c     |   2 +-
- tools/testing/selftests/kvm/s390x/cmma_test.c |  62 +++++-----
- tools/testing/selftests/kvm/s390x/memop.c     |   6 +-
- tools/testing/selftests/kvm/s390x/tprot.c     |   4 +-
- .../x86_64/dirty_log_page_splitting_test.c    |  18 +--
- .../x86_64/exit_on_emulation_failure_test.c   |   2 +-
- .../selftests/kvm/x86_64/fix_hypercall_test.c |  16 ++-
- .../kvm/x86_64/nested_exceptions_test.c       |  12 +-
- .../kvm/x86_64/recalc_apic_map_test.c         |   6 +-
+Suggested-by: David Matlack <dmatlack@google.com>
+Signed-off-by: Thomas Huth <thuth@redhat.com>
+---
  .../selftests/kvm/x86_64/sync_regs_test.c     | 113 +++++++++++++++---
- .../selftests/kvm/x86_64/tsc_msrs_test.c      |  32 ++---
- .../kvm/x86_64/userspace_msr_exit_test.c      |  19 +--
- .../vmx_exception_with_invalid_guest_state.c  |   2 +-
- .../selftests/kvm/x86_64/vmx_pmu_caps_test.c  |   3 +-
- .../selftests/kvm/x86_64/xapic_state_test.c   |   8 +-
- .../selftests/kvm/x86_64/xen_vmcall_test.c    |  20 ++--
- 20 files changed, 218 insertions(+), 131 deletions(-)
+ 1 file changed, 98 insertions(+), 15 deletions(-)
 
+diff --git a/tools/testing/selftests/kvm/x86_64/sync_regs_test.c b/tools/testing/selftests/kvm/x86_64/sync_regs_test.c
+index 2da89fdc2471a..e1359a4a07fea 100644
+--- a/tools/testing/selftests/kvm/x86_64/sync_regs_test.c
++++ b/tools/testing/selftests/kvm/x86_64/sync_regs_test.c
+@@ -16,6 +16,7 @@
+ #include <string.h>
+ #include <sys/ioctl.h>
+ 
++#include "kselftest_harness.h"
+ #include "test_util.h"
+ #include "kvm_util.h"
+ #include "processor.h"
+@@ -80,23 +81,24 @@ static void compare_vcpu_events(struct kvm_vcpu_events *left,
+ #define TEST_SYNC_FIELDS   (KVM_SYNC_X86_REGS|KVM_SYNC_X86_SREGS|KVM_SYNC_X86_EVENTS)
+ #define INVALID_SYNC_FIELD 0x80000000
+ 
+-int main(int argc, char *argv[])
+-{
+-	struct kvm_vcpu *vcpu;
++FIXTURE(sync_regs_test) {
+ 	struct kvm_vm *vm;
+-	struct kvm_run *run;
+-	struct kvm_regs regs;
+-	struct kvm_sregs sregs;
+-	struct kvm_vcpu_events events;
+-	int rv, cap;
++	struct kvm_vcpu *vcpu;
++};
+ 
+-	cap = kvm_check_cap(KVM_CAP_SYNC_REGS);
+-	TEST_REQUIRE((cap & TEST_SYNC_FIELDS) == TEST_SYNC_FIELDS);
+-	TEST_REQUIRE(!(cap & INVALID_SYNC_FIELD));
++FIXTURE_SETUP(sync_regs_test) {
++	self->vm = vm_create_with_one_vcpu(&self->vcpu, guest_code);
++}
+ 
+-	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
++FIXTURE_TEARDOWN(sync_regs_test) {
++	kvm_vm_free(self->vm);
++}
+ 
+-	run = vcpu->run;
++TEST_F(sync_regs_test, read_invalid)
++{
++	struct kvm_vcpu *vcpu = self->vcpu;
++	struct kvm_run *run = vcpu->run;
++	int rv;
+ 
+ 	/* Request reading invalid register set from VCPU. */
+ 	run->kvm_valid_regs = INVALID_SYNC_FIELD;
+@@ -112,6 +114,13 @@ int main(int argc, char *argv[])
+ 		    "Invalid kvm_valid_regs did not cause expected KVM_RUN error: %d\n",
+ 		    rv);
+ 	run->kvm_valid_regs = 0;
++}
++
++TEST_F(sync_regs_test, set_invalid)
++{
++	struct kvm_vcpu *vcpu = self->vcpu;
++	struct kvm_run *run = vcpu->run;
++	int rv;
+ 
+ 	/* Request setting invalid register set into VCPU. */
+ 	run->kvm_dirty_regs = INVALID_SYNC_FIELD;
+@@ -127,11 +136,22 @@ int main(int argc, char *argv[])
+ 		    "Invalid kvm_dirty_regs did not cause expected KVM_RUN error: %d\n",
+ 		    rv);
+ 	run->kvm_dirty_regs = 0;
++}
++
++TEST_F(sync_regs_test, req_and_verify_all_valid)
++{
++	struct kvm_vcpu *vcpu = self->vcpu;
++	struct kvm_run *run = vcpu->run;
++	struct kvm_vcpu_events events;
++	struct kvm_sregs sregs;
++	struct kvm_regs regs;
++	int rv;
+ 
+ 	/* Request and verify all valid register sets. */
+ 	/* TODO: BUILD TIME CHECK: TEST_ASSERT(KVM_SYNC_X86_NUM_FIELDS != 3); */
+ 	run->kvm_valid_regs = TEST_SYNC_FIELDS;
+ 	rv = _vcpu_run(vcpu);
++	TEST_ASSERT(rv == 0, "vcpu_run failed: %d\n", rv);
+ 	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_IO);
+ 
+ 	vcpu_regs_get(vcpu, &regs);
+@@ -142,6 +162,22 @@ int main(int argc, char *argv[])
+ 
+ 	vcpu_events_get(vcpu, &events);
+ 	compare_vcpu_events(&events, &run->s.regs.events);
++}
++
++TEST_F(sync_regs_test, set_and_verify_various)
++{
++	struct kvm_vcpu *vcpu = self->vcpu;
++	struct kvm_run *run = vcpu->run;
++	struct kvm_vcpu_events events;
++	struct kvm_sregs sregs;
++	struct kvm_regs regs;
++	int rv;
++
++	/* Run once to get register set */
++	run->kvm_valid_regs = TEST_SYNC_FIELDS;
++	rv = _vcpu_run(vcpu);
++	TEST_ASSERT(rv == 0, "vcpu_run failed: %d\n", rv);
++	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_IO);
+ 
+ 	/* Set and verify various register values. */
+ 	run->s.regs.regs.rbx = 0xBAD1DEA;
+@@ -151,6 +187,7 @@ int main(int argc, char *argv[])
+ 	run->kvm_valid_regs = TEST_SYNC_FIELDS;
+ 	run->kvm_dirty_regs = KVM_SYNC_X86_REGS | KVM_SYNC_X86_SREGS;
+ 	rv = _vcpu_run(vcpu);
++	TEST_ASSERT(rv == 0, "vcpu_run failed: %d\n", rv);
+ 	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_IO);
+ 	TEST_ASSERT(run->s.regs.regs.rbx == 0xBAD1DEA + 1,
+ 		    "rbx sync regs value incorrect 0x%llx.",
+@@ -167,6 +204,13 @@ int main(int argc, char *argv[])
+ 
+ 	vcpu_events_get(vcpu, &events);
+ 	compare_vcpu_events(&events, &run->s.regs.events);
++}
++
++TEST_F(sync_regs_test, clear_kvm_dirty_regs_bits)
++{
++	struct kvm_vcpu *vcpu = self->vcpu;
++	struct kvm_run *run = vcpu->run;
++	int rv;
+ 
+ 	/* Clear kvm_dirty_regs bits, verify new s.regs values are
+ 	 * overwritten with existing guest values.
+@@ -175,10 +219,25 @@ int main(int argc, char *argv[])
+ 	run->kvm_dirty_regs = 0;
+ 	run->s.regs.regs.rbx = 0xDEADBEEF;
+ 	rv = _vcpu_run(vcpu);
++	TEST_ASSERT(rv == 0, "vcpu_run failed: %d\n", rv);
+ 	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_IO);
+ 	TEST_ASSERT(run->s.regs.regs.rbx != 0xDEADBEEF,
+ 		    "rbx sync regs value incorrect 0x%llx.",
+ 		    run->s.regs.regs.rbx);
++}
++
++TEST_F(sync_regs_test, clear_kvm_valid_and_dirty_regs)
++{
++	struct kvm_vcpu *vcpu = self->vcpu;
++	struct kvm_run *run = vcpu->run;
++	struct kvm_regs regs;
++	int rv;
++
++	/* Run once to get register set */
++	run->kvm_valid_regs = TEST_SYNC_FIELDS;
++	rv = _vcpu_run(vcpu);
++	TEST_ASSERT(rv == 0, "vcpu_run failed: %d\n", rv);
++	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_IO);
+ 
+ 	/* Clear kvm_valid_regs bits and kvm_dirty_bits.
+ 	 * Verify s.regs values are not overwritten with existing guest values
+@@ -187,9 +246,11 @@ int main(int argc, char *argv[])
+ 	run->kvm_valid_regs = 0;
+ 	run->kvm_dirty_regs = 0;
+ 	run->s.regs.regs.rbx = 0xAAAA;
++	vcpu_regs_get(vcpu, &regs);
+ 	regs.rbx = 0xBAC0;
+ 	vcpu_regs_set(vcpu, &regs);
+ 	rv = _vcpu_run(vcpu);
++	TEST_ASSERT(rv == 0, "vcpu_run failed: %d\n", rv);
+ 	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_IO);
+ 	TEST_ASSERT(run->s.regs.regs.rbx == 0xAAAA,
+ 		    "rbx sync regs value incorrect 0x%llx.",
+@@ -198,6 +259,20 @@ int main(int argc, char *argv[])
+ 	TEST_ASSERT(regs.rbx == 0xBAC0 + 1,
+ 		    "rbx guest value incorrect 0x%llx.",
+ 		    regs.rbx);
++}
++
++TEST_F(sync_regs_test, clear_kvm_valid_regs_bits)
++{
++	struct kvm_vcpu *vcpu = self->vcpu;
++	struct kvm_run *run = vcpu->run;
++	struct kvm_regs regs;
++	int rv;
++
++	/* Run once to get register set */
++	run->kvm_valid_regs = TEST_SYNC_FIELDS;
++	rv = _vcpu_run(vcpu);
++	TEST_ASSERT(rv == 0, "vcpu_run failed: %d\n", rv);
++	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_IO);
+ 
+ 	/* Clear kvm_valid_regs bits. Verify s.regs values are not overwritten
+ 	 * with existing guest values but that guest values are overwritten
+@@ -207,6 +282,7 @@ int main(int argc, char *argv[])
+ 	run->kvm_dirty_regs = TEST_SYNC_FIELDS;
+ 	run->s.regs.regs.rbx = 0xBBBB;
+ 	rv = _vcpu_run(vcpu);
++	TEST_ASSERT(rv == 0, "vcpu_run failed: %d\n", rv);
+ 	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_IO);
+ 	TEST_ASSERT(run->s.regs.regs.rbx == 0xBBBB,
+ 		    "rbx sync regs value incorrect 0x%llx.",
+@@ -215,8 +291,15 @@ int main(int argc, char *argv[])
+ 	TEST_ASSERT(regs.rbx == 0xBBBB + 1,
+ 		    "rbx guest value incorrect 0x%llx.",
+ 		    regs.rbx);
++}
++
++int main(int argc, char *argv[])
++{
++	int cap;
+ 
+-	kvm_vm_free(vm);
++	cap = kvm_check_cap(KVM_CAP_SYNC_REGS);
++	TEST_REQUIRE((cap & TEST_SYNC_FIELDS) == TEST_SYNC_FIELDS);
++	TEST_REQUIRE(!(cap & INVALID_SYNC_FIELD));
+ 
+-	return 0;
++	return test_harness_run(argc, argv);
+ }
 -- 
 2.39.3
 
