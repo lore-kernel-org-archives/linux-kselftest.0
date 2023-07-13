@@ -2,79 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46AF1EB64DD
-	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Jul 2023 13:24:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1721EB64DD
+	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Jul 2023 13:36:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234991AbjGMNYe (ORCPT
+        id S233674AbjGMNgr (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 13 Jul 2023 09:24:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56744 "EHLO
+        Thu, 13 Jul 2023 09:36:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235242AbjGMNYR (ORCPT
+        with ESMTP id S235076AbjGMNgo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Jul 2023 09:24:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 478E03C01;
-        Thu, 13 Jul 2023 06:23:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Thu, 13 Jul 2023 09:36:44 -0400
+X-Greylist: delayed 2401 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 13 Jul 2023 06:36:37 PDT
+Received: from mout-p-103.mailbox.org (mout-p-103.mailbox.org [IPv6:2001:67c:2050:0:465::103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F81C2D40;
+        Thu, 13 Jul 2023 06:36:36 -0700 (PDT)
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8557C612FC;
-        Thu, 13 Jul 2023 13:22:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73C62C433C7;
-        Thu, 13 Jul 2023 13:22:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689254550;
-        bh=bOUAPzYMXtdmmDSu2PZbdjTsWvkvo0nimQiCAPr8Yhw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=JhOxNiBdFSDCF2V9/Owve15T7sqX4XOaeLrOvcgSNwS3EOX8VGPBTRWhuKoRbgBd6
-         UZFYLGBzQhDg3neOr3DuwW0ysPNNI3j+3TqncYXQx5UByAPqlrSR9FNQA9+GAO5LFF
-         y0krZvqDmQ5nsqpEiy0GeMLmk+sjw1pb6NYckaT6eXLvP7V99Bmw8ctkemXlii6Yzb
-         LjhV08DNKdnVDxVeYlcOFk53tsOZU4+Jo52jzg8OzM36DdGHFjIQHeCqY+8H+mRPpa
-         fGonogsNanTUNMQAXXtHV+wsT033vaVk2i34k/TuiaojjLu7D980TKd4GHtOwPNXA1
-         kcr1qYNL3l4Gg==
-Date:   Thu, 13 Jul 2023 15:22:24 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-Cc:     Aleksa Sarai <cyphar@cyphar.com>, Willy Tarreau <w@1wt.eu>,
-        Shuah Khan <shuah@kernel.org>,
+        by mout-p-103.mailbox.org (Postfix) with ESMTPS id 4R1tvC4NGRz9sn9;
+        Thu, 13 Jul 2023 14:19:03 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cyphar.com; s=MBO0001;
+        t=1689250743;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=xpxD6jJvH2NdvxBxxbA/xwwWPK026oBkIsxvhSiVppQ=;
+        b=J67hj0asCAtelzLhPQXRrS+E99al7I+BMNtQLJqGszQMeBH8Oi6tEK67X9nMQw4qlX7wnP
+        +LA3S4+9ltR61EsvICm2rmjjJXhQ3MkQ89Ht0WK+0Y2DpXvYW0cThade6zZUIV/YXFgiJD
+        3X888cF2MvyASCky3OlN1BCR1QiJprtt/kc5/V+OD2qO2Dsbhq6GtGsv5sozeysXT4uFdv
+        RexNELuNQXxbzZjT3OAHIVJrVyE0Z2GrrCDmMnlJ+EPOH+ntjEukAwcxeynzUATx00+/ec
+        O1KjlREZGDtSYA82dFoqVAaaphuq3Hv/WOjIPJKcrjfKmzjiwIYCZKXlsDEZ+A==
+From:   Aleksa Sarai <cyphar@cyphar.com>
+To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Dave Chinner <dchinner@redhat.com>,
-        xu xin <cgel.zte@gmail.com>, Al Viro <viro@zeniv.linux.org.uk>,
-        Stefan Roesch <shr@devkernel.io>,
+        Al Viro <viro@zeniv.linux.org.uk>, xu xin <cgel.zte@gmail.com>,
         Zhihao Cheng <chengzhihao1@huawei.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Chao Yu <chao@kernel.org>,
+        "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
         Janis Danisevskis <jdanis@google.com>,
-        Kees Cook <keescook@chromium.org>, stable@vger.kernel.org,
+        Kees Cook <keescook@chromium.org>
+Cc:     Aleksa Sarai <cyphar@cyphar.com>, stable@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] procfs: block chmod on /proc/thread-self/comm
-Message-ID: <20230713-unerschrocken-kutschieren-9be3c8958b5d@brauner>
+Subject: [PATCH] procfs: block chmod on /proc/thread-self/comm
+Date:   Thu, 13 Jul 2023 22:17:50 +1000
+Message-ID: <20230713121752.8039-1-cyphar@cyphar.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> > diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-> > index 486334981e60..08f0969208eb 100644
-> > --- a/tools/testing/selftests/nolibc/nolibc-test.c
-> > +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-> > @@ -580,6 +580,10 @@ int run_syscall(int min, int max)
-> >  		CASE_TEST(chmod_net);         EXPECT_SYSZR(proc, chmod("/proc/self/net", 0555)); break;
-> >  		CASE_TEST(chmod_self);        EXPECT_SYSER(proc, chmod("/proc/self", 0555), -1, EPERM); break;
-> >  		CASE_TEST(chown_self);        EXPECT_SYSER(proc, chown("/proc/self", 0, 0), -1, EPERM); break;
-> > +		CASE_TEST(chmod_self_comm);   EXPECT_SYSER(proc, chmod("/proc/self/comm", 0777), -1, EPERM); break;
-> > +		CASE_TEST(chmod_tid_comm);    EXPECT_SYSER(proc, chmod("/proc/thread-self/comm", 0777), -1, EPERM); break;
-> > +		CASE_TEST(chmod_self_environ);EXPECT_SYSER(proc, chmod("/proc/self/environ", 0777), -1, EPERM); break;
-> > +		CASE_TEST(chmod_tid_environ); EXPECT_SYSER(proc, chmod("/proc/thread-self/environ", 0777), -1, EPERM); break;
+Due to an oversight in commit 1b3044e39a89 ("procfs: fix pthread
+cross-thread naming if !PR_DUMPABLE") in switching from REG to NOD,
+chmod operations on /proc/thread-self/comm were no longer blocked as
+they are on almost all other procfs files.
 
-> 
-> I'm not a big fan of this, it abuses the nolibc testsuite to test core
-> kernel functionality.
+A very similar situation with /proc/self/environ was used to as a root
+exploit a long time ago, but procfs has SB_I_NOEXEC so this is simply a
+correctness issue.
 
-Yes, this should be dropped.
-We need a minimal patch to fix this. This just makes backporting harder
-and any test doesn't need to be backported.
+Ref: https://lwn.net/Articles/191954/
+Ref: 6d76fa58b050 ("Don't allow chmod() on the /proc/<pid>/ files")
+Fixes: 1b3044e39a89 ("procfs: fix pthread cross-thread naming if !PR_DUMPABLE")
+Cc: stable@vger.kernel.org # v4.7+
+Signed-off-by: Aleksa Sarai <cyphar@cyphar.com>
+---
+ fs/proc/base.c                               | 3 ++-
+ tools/testing/selftests/nolibc/nolibc-test.c | 4 ++++
+ 2 files changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/fs/proc/base.c b/fs/proc/base.c
+index 05452c3b9872..7394229816f3 100644
+--- a/fs/proc/base.c
++++ b/fs/proc/base.c
+@@ -3583,7 +3583,8 @@ static int proc_tid_comm_permission(struct mnt_idmap *idmap,
+ }
+ 
+ static const struct inode_operations proc_tid_comm_inode_operations = {
+-		.permission = proc_tid_comm_permission,
++		.setattr	= proc_setattr,
++		.permission	= proc_tid_comm_permission,
+ };
+ 
+ /*
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index 486334981e60..08f0969208eb 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -580,6 +580,10 @@ int run_syscall(int min, int max)
+ 		CASE_TEST(chmod_net);         EXPECT_SYSZR(proc, chmod("/proc/self/net", 0555)); break;
+ 		CASE_TEST(chmod_self);        EXPECT_SYSER(proc, chmod("/proc/self", 0555), -1, EPERM); break;
+ 		CASE_TEST(chown_self);        EXPECT_SYSER(proc, chown("/proc/self", 0, 0), -1, EPERM); break;
++		CASE_TEST(chmod_self_comm);   EXPECT_SYSER(proc, chmod("/proc/self/comm", 0777), -1, EPERM); break;
++		CASE_TEST(chmod_tid_comm);    EXPECT_SYSER(proc, chmod("/proc/thread-self/comm", 0777), -1, EPERM); break;
++		CASE_TEST(chmod_self_environ);EXPECT_SYSER(proc, chmod("/proc/self/environ", 0777), -1, EPERM); break;
++		CASE_TEST(chmod_tid_environ); EXPECT_SYSER(proc, chmod("/proc/thread-self/environ", 0777), -1, EPERM); break;
+ 		CASE_TEST(chroot_root);       EXPECT_SYSZR(euid0, chroot("/")); break;
+ 		CASE_TEST(chroot_blah);       EXPECT_SYSER(1, chroot("/proc/self/blah"), -1, ENOENT); break;
+ 		CASE_TEST(chroot_exe);        EXPECT_SYSER(proc, chroot("/proc/self/exe"), -1, ENOTDIR); break;
+-- 
+2.41.0
+
