@@ -2,124 +2,112 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DDBE5C001DD
-	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Jul 2023 13:21:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4BC0C001DD
+	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Jul 2023 13:21:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234655AbjGMNVG (ORCPT
+        id S231537AbjGMNVJ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 13 Jul 2023 09:21:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51780 "EHLO
+        Thu, 13 Jul 2023 09:21:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234481AbjGMNUl (ORCPT
+        with ESMTP id S234495AbjGMNUo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Jul 2023 09:20:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61830270A;
-        Thu, 13 Jul 2023 06:20:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F2C7461077;
-        Thu, 13 Jul 2023 13:20:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA113C433C8;
-        Thu, 13 Jul 2023 13:20:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689254431;
-        bh=/HyMH976r1TkXdXXLMFe5egKFttnbGRT4cnSU1IDGSE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IyX8o5M49S3zdzIxtruMjTRp3CoLKS1Rhzh8MHa3gYd3oaysfgiI9455gtBEoX6/h
-         VbqM0gkLxd4eQvSWW7TISIVbalZNozQIlll8xozP/Mpus0rGu4PKXHlVyyOaDlD8Nm
-         MLz+0GsLu/xdnFlvqHh5WF5qicq294o0Dn9/hQp3R3SN5d/FjQLuMIOEbYVwPvBGkV
-         3pZL3qgJ3VM0f7sHcfQmUY8ueP8p88W4jCtOqXictAbtRiKpiIxS6sBpv5C7XYkSe3
-         I03sippl4hiN2aJerdZ/8LQgvMnUA8TpzL9Fg6A61oDg35Njc6Ts11QAdJ1MBAVhhm
-         G+bK9ll/f7X2A==
-Date:   Thu, 13 Jul 2023 15:20:20 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-Cc:     Aleksa Sarai <cyphar@cyphar.com>, Willy Tarreau <w@1wt.eu>,
+        Thu, 13 Jul 2023 09:20:44 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CA72721;
+        Thu, 13 Jul 2023 06:20:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689254434; x=1720790434;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Hn0fYehjq6FV6t/LfA0e2GwEyK8XmldiekSokujXnRI=;
+  b=TkKRkp6OFw7a7CyfCqDPaxrYgI6Z8DKzZLRzZa2oHJhSJLnkO5oUMCAE
+   wN0u6UPB27Dky6CgkIcv01CiDU8GmjzQmrwd5ndnafgAlVDklbSIDfCDE
+   /eTUiUn9CG34ncpTH7eky8luDvsZTK2XQNH+jWNc2jfOQTmZCuiazOXro
+   bVSJvUCdpktJVtGVw8e+pYMZR1Ly2kHi/UxmJ3JX+RppqaypPnlyDcqSS
+   NUa4v3iDFAGaWq7C1hQV5m8KM8UNTg94THaOHzpCk1SK3LCC17OISt0Ja
+   /2nzopszEQh9l869vaQAIQpl0YUi9kouUxGnMqxEyAaXTflZ+Gkw/ccn7
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="345496617"
+X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
+   d="scan'208";a="345496617"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2023 06:20:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="968615793"
+X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
+   d="scan'208";a="968615793"
+Received: from ijarvine-mobl2.ger.corp.intel.com ([10.251.222.39])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2023 06:20:32 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-kselftest@vger.kernel.org,
+        Reinette Chatre <reinette.chatre@intel.com>,
         Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Chinner <dchinner@redhat.com>,
-        xu xin <cgel.zte@gmail.com>, Al Viro <viro@zeniv.linux.org.uk>,
-        Stefan Roesch <shr@devkernel.io>,
-        Zhihao Cheng <chengzhihao1@huawei.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Janis Danisevskis <jdanis@google.com>,
-        Kees Cook <keescook@chromium.org>, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] procfs: block chmod on /proc/thread-self/comm
-Message-ID: <20230713-shrimps-sachkenntnis-0343cc776cc2@brauner>
-References: <20230713121907.9693-1-cyphar@cyphar.com>
- <e26a9bab-6443-4a0a-809a-ca1c1b4d28c3@t-8ch.de>
+        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
+        Fenghua Yu <fenghua.yu@intel.com>, linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v4 05/19] selftests/resctrl: Unmount resctrl FS before starting the first test
+Date:   Thu, 13 Jul 2023 16:19:18 +0300
+Message-Id: <20230713131932.133258-6-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230713131932.133258-1-ilpo.jarvinen@linux.intel.com>
+References: <20230713131932.133258-1-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <e26a9bab-6443-4a0a-809a-ca1c1b4d28c3@t-8ch.de>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jul 13, 2023 at 03:01:24PM +0200, Thomas Weißschuh wrote:
-> On 2023-07-13 22:19:04+1000, Aleksa Sarai wrote:
-> > Due to an oversight in commit 1b3044e39a89 ("procfs: fix pthread
-> > cross-thread naming if !PR_DUMPABLE") in switching from REG to NOD,
-> > chmod operations on /proc/thread-self/comm were no longer blocked as
-> > they are on almost all other procfs files.
-> > 
-> > A very similar situation with /proc/self/environ was used to as a root
-> > exploit a long time ago, but procfs has SB_I_NOEXEC so this is simply a
-> > correctness issue.
-> > 
-> > Ref: https://lwn.net/Articles/191954/
-> > Ref: 6d76fa58b050 ("Don't allow chmod() on the /proc/<pid>/ files")
-> > Fixes: 1b3044e39a89 ("procfs: fix pthread cross-thread naming if !PR_DUMPABLE")
-> > Cc: stable@vger.kernel.org # v4.7+
-> > Signed-off-by: Aleksa Sarai <cyphar@cyphar.com>
-> > ---
-> >  fs/proc/base.c                               | 3 ++-
-> >  tools/testing/selftests/nolibc/nolibc-test.c | 4 ++++
-> >  2 files changed, 6 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/fs/proc/base.c b/fs/proc/base.c
-> > index 05452c3b9872..7394229816f3 100644
-> > --- a/fs/proc/base.c
-> > +++ b/fs/proc/base.c
-> > @@ -3583,7 +3583,8 @@ static int proc_tid_comm_permission(struct mnt_idmap *idmap,
-> >  }
-> >  
-> >  static const struct inode_operations proc_tid_comm_inode_operations = {
-> > -		.permission = proc_tid_comm_permission,
-> > +		.setattr	= proc_setattr,
-> > +		.permission	= proc_tid_comm_permission,
-> >  };
-> 
-> Given that this seems to be a recurring theme a more systematic
-> aproach would help.
-> 
-> Something like the following (untested) patch:
-> 
-> diff --git a/fs/proc/base.c b/fs/proc/base.c
-> index 05452c3b9872..b90f2e9cda66 100644
-> --- a/fs/proc/base.c
-> +++ b/fs/proc/base.c
-> @@ -2649,6 +2649,7 @@ static struct dentry *proc_pident_instantiate(struct dentry *dentry,
->  		set_nlink(inode, 2);	/* Use getattr to fix if necessary */
->  	if (p->iop)
->  		inode->i_op = p->iop;
-> +	WARN_ON(!inode->i_op->setattr);
+Resctrl FS mount/remount/umount code is hard to track. Better approach
+is to use mount/umount pair for each test but that assumes resctrl FS
+is not mounted beforehand.
 
-Hm, no. This is hacky.
+Change umount_resctrlfs() so that it can unmount resctrl FS from any
+path, and enable further simplifications into mount/remount/umount
+logic by unmounting resctrl FS at the start if a pre-existing
+mountpoint is found.
 
-To fix this properly we will need to wean off notify_change() from
-falling back to simple_setattr() when no i_op->setattr() method is
-defined. To do that we will have to go through every filesystem and port
-all that rely on this fallback to set simple_setattr() explicitly as
-their i_op->setattr() method.
+Suggested-by: Reinette Chatre <reinette.chatre@intel.com>
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+---
+ tools/testing/selftests/resctrl/resctrl_tests.c | 2 ++
+ tools/testing/selftests/resctrl/resctrlfs.c     | 6 ++++--
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-Christoph and I just discussed this in relation to another patch.
+diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
+index 9b9751206e1c..b1b2d28b52f7 100644
+--- a/tools/testing/selftests/resctrl/resctrl_tests.c
++++ b/tools/testing/selftests/resctrl/resctrl_tests.c
+@@ -250,6 +250,8 @@ int main(int argc, char **argv)
+ 	if (!check_resctrlfs_support())
+ 		return ksft_exit_skip("resctrl FS does not exist. Enable X86_CPU_RESCTRL config option.\n");
+ 
++	umount_resctrlfs();
++
+ 	filter_dmesg();
+ 
+ 	ksft_set_plan(tests ? : 4);
+diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
+index fb00245dee92..23f75aeaa198 100644
+--- a/tools/testing/selftests/resctrl/resctrlfs.c
++++ b/tools/testing/selftests/resctrl/resctrlfs.c
+@@ -82,10 +82,12 @@ int remount_resctrlfs(bool mum_resctrlfs)
+ 
+ int umount_resctrlfs(void)
+ {
+-	if (find_resctrl_mount(NULL))
++	char mountpoint[256];
++
++	if (find_resctrl_mount(mountpoint))
+ 		return 0;
+ 
+-	if (umount(RESCTRL_PATH)) {
++	if (umount(mountpoint)) {
+ 		perror("# Unable to umount resctrl");
+ 
+ 		return errno;
+-- 
+2.30.2
 
-This is a bugfix so it should be as minimal as possible for easy
-backport.
