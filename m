@@ -2,26 +2,26 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 826FFC00528
-	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Jul 2023 13:55:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DBA6C001DF
+	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Jul 2023 13:55:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232227AbjGMNzJ (ORCPT
+        id S231804AbjGMNzI (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 13 Jul 2023 09:55:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49316 "EHLO
+        Thu, 13 Jul 2023 09:55:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231920AbjGMNzF (ORCPT
+        with ESMTP id S231667AbjGMNzA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Jul 2023 09:55:05 -0400
+        Thu, 13 Jul 2023 09:55:00 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3C3541FF7;
-        Thu, 13 Jul 2023 06:55:01 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7AA1C1576;
-        Thu, 13 Jul 2023 06:55:43 -0700 (PDT)
-Received: from e125769.cambridge.arm.com (e125769.cambridge.arm.com [10.1.196.26])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 70A523F73F;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6DEF71995;
         Thu, 13 Jul 2023 06:54:59 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B6F501595;
+        Thu, 13 Jul 2023 06:55:41 -0700 (PDT)
+Received: from e125769.cambridge.arm.com (e125769.cambridge.arm.com [10.1.196.26])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ACC483F73F;
+        Thu, 13 Jul 2023 06:54:57 -0700 (PDT)
 From:   Ryan Roberts <ryan.roberts@arm.com>
 To:     Andrew Morton <akpm@linux-foundation.org>,
         Shuah Khan <shuah@kernel.org>,
@@ -33,9 +33,9 @@ To:     Andrew Morton <akpm@linux-foundation.org>,
         "Liam R. Howlett" <Liam.Howlett@oracle.com>
 Cc:     Ryan Roberts <ryan.roberts@arm.com>, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v1 6/9] selftests/mm: va_high_addr_switch should skip unsupported arm64 configs
-Date:   Thu, 13 Jul 2023 14:54:37 +0100
-Message-Id: <20230713135440.3651409-7-ryan.roberts@arm.com>
+Subject: [PATCH v1 5/9] selftests/mm: Fix thuge-gen test bugs
+Date:   Thu, 13 Jul 2023 14:54:36 +0100
+Message-Id: <20230713135440.3651409-6-ryan.roberts@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230713135440.3651409-1-ryan.roberts@arm.com>
 References: <20230713135440.3651409-1-ryan.roberts@arm.com>
@@ -45,35 +45,45 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-va_high_addr_switch has a mechanism to determine if the tests should be
-run or skipped (supported_arch()). This currently returns
-unconditionally true for arm64. However, va_high_addr_switch also
-requires a large virtual address space for the tests to run, otherwise
-they spuriously fail.
+thuge-gen was previously only munmapping part of the mmapped buffer,
+which caused us to run out of 1G huge pages for a later part of the
+test. Fix this by munmapping the whole buffer. Based on the code, it
+looks like a typo rather than an intention to keep some of the buffer
+mapped.
 
-Since arm64 can only support VA > 48 bits when the page size is 64K,
-let's decide whether we should skip the test suite based on the page
-size. This reduces noise when running on 4K and 16K kernels.
+thuge-gen was also calling mmap with SHM_HUGETLB flag (bit 11 set),
+which is actually MAP_DENYWRITE in mmap context. The man page says this
+flag is ignored in modern kernels. I'm pretty sure from the context that
+the author intended to pass the MAP_HUGETLB flag so I've fixed that up
+too.
 
 Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
 ---
- tools/testing/selftests/mm/va_high_addr_switch.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/testing/selftests/mm/thuge-gen.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/va_high_addr_switch.c b/tools/testing/selftests/mm/va_high_addr_switch.c
-index 7cfaf4a74c57..4b6f62c69a9d 100644
---- a/tools/testing/selftests/mm/va_high_addr_switch.c
-+++ b/tools/testing/selftests/mm/va_high_addr_switch.c
-@@ -292,7 +292,8 @@ static int supported_arch(void)
- #elif defined(__x86_64__)
- 	return 1;
- #elif defined(__aarch64__)
--	return 1;
-+	size_t page_size = getpagesize();
-+	return page_size == PAGE_SIZE;
- #else
- 	return 0;
- #endif
+diff --git a/tools/testing/selftests/mm/thuge-gen.c b/tools/testing/selftests/mm/thuge-gen.c
+index 380ab5f0a534..16ed4dfa7359 100644
+--- a/tools/testing/selftests/mm/thuge-gen.c
++++ b/tools/testing/selftests/mm/thuge-gen.c
+@@ -139,7 +139,7 @@ void test_mmap(unsigned long size, unsigned flags)
+ 		before, after, before - after, size);
+ 	assert(size == getpagesize() || (before - after) == NUM_PAGES);
+ 	show(size);
+-	err = munmap(map, size);
++	err = munmap(map, size * NUM_PAGES);
+ 	assert(!err);
+ }
+ 
+@@ -222,7 +222,7 @@ int main(void)
+ 		test_mmap(ps, MAP_HUGETLB | arg);
+ 	}
+ 	printf("Testing default huge mmap\n");
+-	test_mmap(default_hps, SHM_HUGETLB);
++	test_mmap(default_hps, MAP_HUGETLB);
+ 
+ 	puts("Testing non-huge shmget");
+ 	test_shmget(getpagesize(), 0);
 -- 
 2.25.1
 
