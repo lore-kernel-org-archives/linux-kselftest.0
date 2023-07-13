@@ -2,286 +2,545 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23EDAC001DF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EEA3BEB64DD
 	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Jul 2023 13:21:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234147AbjGMNV1 (ORCPT
+        id S235212AbjGMNV2 convert rfc822-to-8bit (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 13 Jul 2023 09:21:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52042 "EHLO
+        Thu, 13 Jul 2023 09:21:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234827AbjGMNVB (ORCPT
+        with ESMTP id S232011AbjGMNVD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Jul 2023 09:21:01 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26BF72D78;
-        Thu, 13 Jul 2023 06:20:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689254449; x=1720790449;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=BcZjX/SIsP1+j3QddjGF0vdJ105WHXlg8OCe+/JJGQ4=;
-  b=WDh7NYCJu6l1utBp1ITiw0ITIWyWbgTDhf0y4FqR4vqjgOCMQmuWJb0l
-   m734ufadY/bW8jHmJUJ2FG1AUcqRxiWyvhJQ6DKWD6h/Z0z7RAXeEp5va
-   2zwd8+SnboXQiWelhdj4eHWeD53HDgG5P0aadQ/8X3pTgRPird6qLgfqx
-   P/oMyvtWVqNlvGb6ud3YhcmXx5kxWMZSnw/84gNOh5R/dNjevG5Nlxiqp
-   DT/FVDfiX4ooFTwlrtmCdvXm9vwWh0ptuGsTbxQMOmbkJYFp3eoZKeipg
-   4R007S9b6Aqhruc1be7MsPUt+4pKDHIrPkpxgMXbRaYP6uHUh+ciQqu2s
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="345496729"
-X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
-   d="scan'208";a="345496729"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2023 06:20:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="968615849"
-X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
-   d="scan'208";a="968615849"
-Received: from ijarvine-mobl2.ger.corp.intel.com ([10.251.222.39])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2023 06:20:46 -0700
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     linux-kselftest@vger.kernel.org,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
-        Fenghua Yu <fenghua.yu@intel.com>, linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v4 09/19] selftests/resctrl: Convert span to size_t
-Date:   Thu, 13 Jul 2023 16:19:22 +0300
-Message-Id: <20230713131932.133258-10-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230713131932.133258-1-ilpo.jarvinen@linux.intel.com>
-References: <20230713131932.133258-1-ilpo.jarvinen@linux.intel.com>
+        Thu, 13 Jul 2023 09:21:03 -0400
+Received: from us-smtp-delivery-44.mimecast.com (unknown [207.211.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB10E2D7B
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jul 2023 06:20:49 -0700 (PDT)
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-81-eeR6lKTCPZqZiOPmUMcdSw-1; Thu, 13 Jul 2023 09:20:31 -0400
+X-MC-Unique: eeR6lKTCPZqZiOPmUMcdSw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8AD6F80123E;
+        Thu, 13 Jul 2023 13:20:30 +0000 (UTC)
+Received: from hog.localdomain (unknown [10.45.224.2])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 738A02166B26;
+        Thu, 13 Jul 2023 13:20:29 +0000 (UTC)
+From:   Sabrina Dubroca <sd@queasysnail.net>
+To:     netdev@vger.kernel.org
+Cc:     Sabrina Dubroca <sd@queasysnail.net>, kuba@kernel.org,
+        simon.horman@corigine.com, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next v3 1/2] netdevsim: add dummy macsec offload
+Date:   Thu, 13 Jul 2023 15:20:23 +0200
+Message-Id: <80d31a79b3bab0b8ce7c55f5eab9a25b9896a795.1689173906.git.sd@queasysnail.net>
+In-Reply-To: <cover.1689173906.git.sd@queasysnail.net>
+References: <cover.1689173906.git.sd@queasysnail.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: queasysnail.net
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=WINDOWS-1252; x-default=true
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Span is defined either as unsigned long or int.
+When the kernel is compiled with MACsec support, add the
+NETIF_F_HW_MACSEC feature to netdevsim devices and implement
+macsec_ops.
 
-Consistently use size_t everywhere for span as it refers to size of the
-memory block.
+To allow easy testing of failure from the device, support is limited
+to 3 SecY's per netdevsim device, and 1 RXSC per SecY.
 
-Co-developed-by: Fenghua Yu <fenghua.yu@intel.com>
-Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+v2:
+ - nsim_macsec_add_secy, return -ENOSPC if secy_count isn't full but
+   we can't find an empty slot (Simon Horman)
+ - add sci_to_cpu to make sparse happy (Simon Horman)
+ - remove set but not used secy variable (kernel test robot and
+   Simon Horman)
+
+Signed-off-by: Sabrina Dubroca <sd@queasysnail.net>
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 ---
- tools/testing/selftests/resctrl/cache.c         |  4 ++--
- tools/testing/selftests/resctrl/cmt_test.c      |  2 +-
- tools/testing/selftests/resctrl/fill_buf.c      |  8 ++++----
- tools/testing/selftests/resctrl/mbm_test.c      |  8 ++++----
- tools/testing/selftests/resctrl/resctrl.h       | 10 +++++-----
- tools/testing/selftests/resctrl/resctrl_tests.c | 11 ++++++-----
- tools/testing/selftests/resctrl/resctrlfs.c     |  2 +-
- 7 files changed, 23 insertions(+), 22 deletions(-)
+ drivers/net/netdevsim/Makefile    |   4 +
+ drivers/net/netdevsim/macsec.c    | 356 ++++++++++++++++++++++++++++++
+ drivers/net/netdevsim/netdev.c    |   3 +
+ drivers/net/netdevsim/netdevsim.h |  34 +++
+ 4 files changed, 397 insertions(+)
+ create mode 100644 drivers/net/netdevsim/macsec.c
 
-diff --git a/tools/testing/selftests/resctrl/cache.c b/tools/testing/selftests/resctrl/cache.c
-index ced47b445d1e..f2c7d322bd76 100644
---- a/tools/testing/selftests/resctrl/cache.c
-+++ b/tools/testing/selftests/resctrl/cache.c
-@@ -282,7 +282,7 @@ int cat_val(struct resctrl_val_param *param)
-  * Return:		0 on success. non-zero on failure.
-  */
- int show_cache_info(unsigned long sum_llc_val, int no_of_bits,
--		    unsigned long cache_span, unsigned long max_diff,
-+		    size_t cache_span, unsigned long max_diff,
- 		    unsigned long max_diff_percent, unsigned long num_of_runs,
- 		    bool platform, bool cmt)
- {
-@@ -304,7 +304,7 @@ int show_cache_info(unsigned long sum_llc_val, int no_of_bits,
- 	ksft_print_msg("Percent diff=%d\n", abs((int)diff_percent));
- 	ksft_print_msg("Number of bits: %d\n", no_of_bits);
- 	ksft_print_msg("Average LLC val: %lu\n", avg_llc_val);
--	ksft_print_msg("Cache span (%s): %lu\n", cmt ? "bytes" : "lines",
-+	ksft_print_msg("Cache span (%s): %zu\n", cmt ? "bytes" : "lines",
- 		       cache_span);
+diff --git a/drivers/net/netdevsim/Makefile b/drivers/net/netdevsim/Makefile
+index 5735e5b1a2cb..f8de93bc5f5b 100644
+--- a/drivers/net/netdevsim/Makefile
++++ b/drivers/net/netdevsim/Makefile
+@@ -17,3 +17,7 @@ endif
+ ifneq ($(CONFIG_PSAMPLE),)
+ netdevsim-objs += psample.o
+ endif
++
++ifneq ($(CONFIG_MACSEC),)
++netdevsim-objs += macsec.o
++endif
+diff --git a/drivers/net/netdevsim/macsec.c b/drivers/net/netdevsim/macsec.c
+new file mode 100644
+index 000000000000..0d5f50430dd3
+--- /dev/null
++++ b/drivers/net/netdevsim/macsec.c
+@@ -0,0 +1,356 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <net/macsec.h>
++#include "netdevsim.h"
++
++static inline u64 sci_to_cpu(sci_t sci)
++{
++	return be64_to_cpu((__force __be64)sci);
++}
++
++static int nsim_macsec_find_secy(struct netdevsim *ns, sci_t sci)
++{
++	int i;
++
++	for (i = 0; i < NSIM_MACSEC_MAX_SECY_COUNT; i++) {
++		if (ns->macsec.nsim_secy[i].sci == sci)
++			return i;
++	}
++
++	return -1;
++}
++
++static int nsim_macsec_find_rxsc(struct nsim_secy *ns_secy, sci_t sci)
++{
++	int i;
++
++	for (i = 0; i < NSIM_MACSEC_MAX_RXSC_COUNT; i++) {
++		if (ns_secy->nsim_rxsc[i].sci == sci)
++			return i;
++	}
++
++	return -1;
++}
++
++static int nsim_macsec_add_secy(struct macsec_context *ctx)
++{
++	struct netdevsim *ns = netdev_priv(ctx->netdev);
++	int idx;
++
++	if (ns->macsec.nsim_secy_count == NSIM_MACSEC_MAX_SECY_COUNT)
++		return -ENOSPC;
++
++	for (idx = 0; idx < NSIM_MACSEC_MAX_SECY_COUNT; idx++) {
++		if (!ns->macsec.nsim_secy[idx].used)
++			break;
++	}
++
++	if (idx == NSIM_MACSEC_MAX_SECY_COUNT) {
++		netdev_err(ctx->netdev, "%s: nsim_secy_count not full but all SecYs used\n",
++			   __func__);
++		return -ENOSPC;
++	}
++
++	netdev_dbg(ctx->netdev, "%s: adding new secy with sci %08llx at index %d\n",
++		   __func__, sci_to_cpu(ctx->secy->sci), idx);
++	ns->macsec.nsim_secy[idx].used = true;
++	ns->macsec.nsim_secy[idx].nsim_rxsc_count = 0;
++	ns->macsec.nsim_secy[idx].sci = ctx->secy->sci;
++	ns->macsec.nsim_secy_count++;
++
++	return 0;
++}
++
++static int nsim_macsec_upd_secy(struct macsec_context *ctx)
++{
++	struct netdevsim *ns = netdev_priv(ctx->netdev);
++	int idx;
++
++	idx = nsim_macsec_find_secy(ns, ctx->secy->sci);
++	if (idx < 0) {
++		netdev_err(ctx->netdev, "%s: sci %08llx not found in secy table\n",
++			   __func__, sci_to_cpu(ctx->secy->sci));
++		return -ENOENT;
++	}
++
++	netdev_dbg(ctx->netdev, "%s: updating secy with sci %08llx at index %d\n",
++		   __func__, sci_to_cpu(ctx->secy->sci), idx);
++
++	return 0;
++}
++
++static int nsim_macsec_del_secy(struct macsec_context *ctx)
++{
++	struct netdevsim *ns = netdev_priv(ctx->netdev);
++	int idx;
++
++	idx = nsim_macsec_find_secy(ns, ctx->secy->sci);
++	if (idx < 0) {
++		netdev_err(ctx->netdev, "%s: sci %08llx not found in secy table\n",
++			   __func__, sci_to_cpu(ctx->secy->sci));
++		return -ENOENT;
++	}
++
++	netdev_dbg(ctx->netdev, "%s: removing SecY with SCI %08llx at index %d\n",
++		   __func__, sci_to_cpu(ctx->secy->sci), idx);
++
++	ns->macsec.nsim_secy[idx].used = false;
++	memset(&ns->macsec.nsim_secy[idx], 0, sizeof(ns->macsec.nsim_secy[idx]));
++	ns->macsec.nsim_secy_count--;
++
++	return 0;
++}
++
++static int nsim_macsec_add_rxsc(struct macsec_context *ctx)
++{
++	struct netdevsim *ns = netdev_priv(ctx->netdev);
++	struct nsim_secy *secy;
++	int idx;
++
++	idx = nsim_macsec_find_secy(ns, ctx->secy->sci);
++	if (idx < 0) {
++		netdev_err(ctx->netdev, "%s: sci %08llx not found in secy table\n",
++			   __func__, sci_to_cpu(ctx->secy->sci));
++		return -ENOENT;
++	}
++	secy = &ns->macsec.nsim_secy[idx];
++
++	if (secy->nsim_rxsc_count == NSIM_MACSEC_MAX_RXSC_COUNT)
++		return -ENOSPC;
++
++	for (idx = 0; idx < NSIM_MACSEC_MAX_RXSC_COUNT; idx++) {
++		if (!secy->nsim_rxsc[idx].used)
++			break;
++	}
++
++	if (idx == NSIM_MACSEC_MAX_RXSC_COUNT)
++		netdev_err(ctx->netdev, "%s: nsim_rxsc_count not full but all RXSCs used\n",
++			   __func__);
++
++	netdev_dbg(ctx->netdev, "%s: adding new rxsc with sci %08llx at index %d\n",
++		   __func__, sci_to_cpu(ctx->rx_sc->sci), idx);
++	secy->nsim_rxsc[idx].used = true;
++	secy->nsim_rxsc[idx].sci = ctx->rx_sc->sci;
++	secy->nsim_rxsc_count++;
++
++	return 0;
++}
++
++static int nsim_macsec_upd_rxsc(struct macsec_context *ctx)
++{
++	struct netdevsim *ns = netdev_priv(ctx->netdev);
++	struct nsim_secy *secy;
++	int idx;
++
++	idx = nsim_macsec_find_secy(ns, ctx->secy->sci);
++	if (idx < 0) {
++		netdev_err(ctx->netdev, "%s: sci %08llx not found in secy table\n",
++			   __func__, sci_to_cpu(ctx->secy->sci));
++		return -ENOENT;
++	}
++	secy = &ns->macsec.nsim_secy[idx];
++
++	idx = nsim_macsec_find_rxsc(secy, ctx->rx_sc->sci);
++	if (idx < 0) {
++		netdev_err(ctx->netdev, "%s: sci %08llx not found in RXSC table\n",
++			   __func__, sci_to_cpu(ctx->rx_sc->sci));
++		return -ENOENT;
++	}
++
++	netdev_dbg(ctx->netdev, "%s: updating RXSC with sci %08llx at index %d\n",
++		   __func__, sci_to_cpu(ctx->rx_sc->sci), idx);
++
++	return 0;
++}
++
++static int nsim_macsec_del_rxsc(struct macsec_context *ctx)
++{
++	struct netdevsim *ns = netdev_priv(ctx->netdev);
++	struct nsim_secy *secy;
++	int idx;
++
++	idx = nsim_macsec_find_secy(ns, ctx->secy->sci);
++	if (idx < 0) {
++		netdev_err(ctx->netdev, "%s: sci %08llx not found in secy table\n",
++			   __func__, sci_to_cpu(ctx->secy->sci));
++		return -ENOENT;
++	}
++	secy = &ns->macsec.nsim_secy[idx];
++
++	idx = nsim_macsec_find_rxsc(secy, ctx->rx_sc->sci);
++	if (idx < 0) {
++		netdev_err(ctx->netdev, "%s: sci %08llx not found in RXSC table\n",
++			   __func__, sci_to_cpu(ctx->rx_sc->sci));
++		return -ENOENT;
++	}
++
++	netdev_dbg(ctx->netdev, "%s: removing RXSC with sci %08llx at index %d\n",
++		   __func__, sci_to_cpu(ctx->rx_sc->sci), idx);
++
++	secy->nsim_rxsc[idx].used = false;
++	memset(&secy->nsim_rxsc[idx], 0, sizeof(secy->nsim_rxsc[idx]));
++	secy->nsim_rxsc_count--;
++
++	return 0;
++}
++
++static int nsim_macsec_add_rxsa(struct macsec_context *ctx)
++{
++	struct netdevsim *ns = netdev_priv(ctx->netdev);
++	struct nsim_secy *secy;
++	int idx;
++
++	idx = nsim_macsec_find_secy(ns, ctx->secy->sci);
++	if (idx < 0) {
++		netdev_err(ctx->netdev, "%s: sci %08llx not found in secy table\n",
++			   __func__, sci_to_cpu(ctx->secy->sci));
++		return -ENOENT;
++	}
++	secy = &ns->macsec.nsim_secy[idx];
++
++	idx = nsim_macsec_find_rxsc(secy, ctx->sa.rx_sa->sc->sci);
++	if (idx < 0) {
++		netdev_err(ctx->netdev, "%s: sci %08llx not found in RXSC table\n",
++			   __func__, sci_to_cpu(ctx->sa.rx_sa->sc->sci));
++		return -ENOENT;
++	}
++
++	netdev_dbg(ctx->netdev, "%s: RXSC with sci %08llx, AN %u\n",
++		   __func__, sci_to_cpu(ctx->sa.rx_sa->sc->sci), ctx->sa.assoc_num);
++
++	return 0;
++}
++
++static int nsim_macsec_upd_rxsa(struct macsec_context *ctx)
++{
++	struct netdevsim *ns = netdev_priv(ctx->netdev);
++	struct nsim_secy *secy;
++	int idx;
++
++	idx = nsim_macsec_find_secy(ns, ctx->secy->sci);
++	if (idx < 0) {
++		netdev_err(ctx->netdev, "%s: sci %08llx not found in secy table\n",
++			   __func__, sci_to_cpu(ctx->secy->sci));
++		return -ENOENT;
++	}
++	secy = &ns->macsec.nsim_secy[idx];
++
++	idx = nsim_macsec_find_rxsc(secy, ctx->sa.rx_sa->sc->sci);
++	if (idx < 0) {
++		netdev_err(ctx->netdev, "%s: sci %08llx not found in RXSC table\n",
++			   __func__, sci_to_cpu(ctx->sa.rx_sa->sc->sci));
++		return -ENOENT;
++	}
++
++	netdev_dbg(ctx->netdev, "%s: RXSC with sci %08llx, AN %u\n",
++		   __func__, sci_to_cpu(ctx->sa.rx_sa->sc->sci), ctx->sa.assoc_num);
++
++	return 0;
++}
++
++static int nsim_macsec_del_rxsa(struct macsec_context *ctx)
++{
++	struct netdevsim *ns = netdev_priv(ctx->netdev);
++	struct nsim_secy *secy;
++	int idx;
++
++	idx = nsim_macsec_find_secy(ns, ctx->secy->sci);
++	if (idx < 0) {
++		netdev_err(ctx->netdev, "%s: sci %08llx not found in secy table\n",
++			   __func__, sci_to_cpu(ctx->secy->sci));
++		return -ENOENT;
++	}
++	secy = &ns->macsec.nsim_secy[idx];
++
++	idx = nsim_macsec_find_rxsc(secy, ctx->sa.rx_sa->sc->sci);
++	if (idx < 0) {
++		netdev_err(ctx->netdev, "%s: sci %08llx not found in RXSC table\n",
++			   __func__, sci_to_cpu(ctx->sa.rx_sa->sc->sci));
++		return -ENOENT;
++	}
++
++	netdev_dbg(ctx->netdev, "%s: RXSC with sci %08llx, AN %u\n",
++		   __func__, sci_to_cpu(ctx->sa.rx_sa->sc->sci), ctx->sa.assoc_num);
++
++	return 0;
++}
++
++static int nsim_macsec_add_txsa(struct macsec_context *ctx)
++{
++	struct netdevsim *ns = netdev_priv(ctx->netdev);
++	int idx;
++
++	idx = nsim_macsec_find_secy(ns, ctx->secy->sci);
++	if (idx < 0) {
++		netdev_err(ctx->netdev, "%s: sci %08llx not found in secy table\n",
++			   __func__, sci_to_cpu(ctx->secy->sci));
++		return -ENOENT;
++	}
++
++	netdev_dbg(ctx->netdev, "%s: SECY with sci %08llx, AN %u\n",
++		   __func__, sci_to_cpu(ctx->secy->sci), ctx->sa.assoc_num);
++
++	return 0;
++}
++
++static int nsim_macsec_upd_txsa(struct macsec_context *ctx)
++{
++	struct netdevsim *ns = netdev_priv(ctx->netdev);
++	int idx;
++
++	idx = nsim_macsec_find_secy(ns, ctx->secy->sci);
++	if (idx < 0) {
++		netdev_err(ctx->netdev, "%s: sci %08llx not found in secy table\n",
++			   __func__, sci_to_cpu(ctx->secy->sci));
++		return -ENOENT;
++	}
++
++	netdev_dbg(ctx->netdev, "%s: SECY with sci %08llx, AN %u\n",
++		   __func__, sci_to_cpu(ctx->secy->sci), ctx->sa.assoc_num);
++
++	return 0;
++}
++
++static int nsim_macsec_del_txsa(struct macsec_context *ctx)
++{
++	struct netdevsim *ns = netdev_priv(ctx->netdev);
++	int idx;
++
++	idx = nsim_macsec_find_secy(ns, ctx->secy->sci);
++	if (idx < 0) {
++		netdev_err(ctx->netdev, "%s: sci %08llx not found in secy table\n",
++			   __func__, sci_to_cpu(ctx->secy->sci));
++		return -ENOENT;
++	}
++
++	netdev_dbg(ctx->netdev, "%s: SECY with sci %08llx, AN %u\n",
++		   __func__, sci_to_cpu(ctx->secy->sci), ctx->sa.assoc_num);
++
++	return 0;
++}
++
++static const struct macsec_ops nsim_macsec_ops = {
++	.mdo_add_secy = nsim_macsec_add_secy,
++	.mdo_upd_secy = nsim_macsec_upd_secy,
++	.mdo_del_secy = nsim_macsec_del_secy,
++	.mdo_add_rxsc = nsim_macsec_add_rxsc,
++	.mdo_upd_rxsc = nsim_macsec_upd_rxsc,
++	.mdo_del_rxsc = nsim_macsec_del_rxsc,
++	.mdo_add_rxsa = nsim_macsec_add_rxsa,
++	.mdo_upd_rxsa = nsim_macsec_upd_rxsa,
++	.mdo_del_rxsa = nsim_macsec_del_rxsa,
++	.mdo_add_txsa = nsim_macsec_add_txsa,
++	.mdo_upd_txsa = nsim_macsec_upd_txsa,
++	.mdo_del_txsa = nsim_macsec_del_txsa,
++};
++
++void nsim_macsec_init(struct netdevsim *ns)
++{
++	ns->netdev->macsec_ops = &nsim_macsec_ops;
++	ns->netdev->features |= NETIF_F_HW_MACSEC;
++	memset(&ns->macsec, 0, sizeof(ns->macsec));
++}
++
++void nsim_macsec_teardown(struct netdevsim *ns)
++{
++}
+diff --git a/drivers/net/netdevsim/netdev.c b/drivers/net/netdevsim/netdev.c
+index 35fa1ca98671..0c8daeb0d62b 100644
+--- a/drivers/net/netdevsim/netdev.c
++++ b/drivers/net/netdevsim/netdev.c
+@@ -304,6 +304,7 @@ static int nsim_init_netdevsim(struct netdevsim *ns)
+ 	if (err)
+ 		goto err_utn_destroy;
  
- 	return ret;
-diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
-index d31e28416bb7..beb0f0687c6d 100644
---- a/tools/testing/selftests/resctrl/cmt_test.c
-+++ b/tools/testing/selftests/resctrl/cmt_test.c
-@@ -121,7 +121,7 @@ int cmt_resctrl_val(int cpu_no, int n, char **benchmark_cmd)
- 	};
++	nsim_macsec_init(ns);
+ 	nsim_ipsec_init(ns);
  
- 	if (strcmp(benchmark_cmd[0], "fill_buf") == 0)
--		sprintf(benchmark_cmd[1], "%lu", param.span);
-+		sprintf(benchmark_cmd[1], "%zu", param.span);
+ 	err = register_netdevice(ns->netdev);
+@@ -314,6 +315,7 @@ static int nsim_init_netdevsim(struct netdevsim *ns)
  
- 	remove(RESULT_FILE_NAME);
- 
-diff --git a/tools/testing/selftests/resctrl/fill_buf.c b/tools/testing/selftests/resctrl/fill_buf.c
-index 3b328c844896..785cbd8d0148 100644
---- a/tools/testing/selftests/resctrl/fill_buf.c
-+++ b/tools/testing/selftests/resctrl/fill_buf.c
-@@ -139,7 +139,7 @@ static int fill_cache_write(unsigned char *start_ptr, unsigned char *end_ptr,
- }
- 
- static int
--fill_cache(unsigned long long buf_size, int malloc_and_init, int memflush,
-+fill_cache(size_t buf_size, int malloc_and_init, int memflush,
- 	   int op, char *resctrl_val)
- {
- 	unsigned char *start_ptr, *end_ptr;
-@@ -188,10 +188,10 @@ fill_cache(unsigned long long buf_size, int malloc_and_init, int memflush,
- 	return 0;
- }
- 
--int run_fill_buf(unsigned long span, int malloc_and_init_memory,
--		 int memflush, int op, char *resctrl_val)
-+int run_fill_buf(size_t span, int malloc_and_init_memory, int memflush, int op,
-+		 char *resctrl_val)
- {
--	unsigned long long cache_size = span;
-+	size_t cache_size = span;
- 	int ret;
- 
- 	ret = fill_cache(cache_size, malloc_and_init_memory, memflush, op,
-diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
-index 24326cb7bc21..fd116158d008 100644
---- a/tools/testing/selftests/resctrl/mbm_test.c
-+++ b/tools/testing/selftests/resctrl/mbm_test.c
-@@ -15,7 +15,7 @@
- #define NUM_OF_RUNS		5
- 
- static int
--show_bw_info(unsigned long *bw_imc, unsigned long *bw_resc, int span)
-+show_bw_info(unsigned long *bw_imc, unsigned long *bw_resc, size_t span)
- {
- 	unsigned long avg_bw_imc = 0, avg_bw_resc = 0;
- 	unsigned long sum_bw_imc = 0, sum_bw_resc = 0;
-@@ -40,14 +40,14 @@ show_bw_info(unsigned long *bw_imc, unsigned long *bw_resc, int span)
- 	ksft_print_msg("%s Check MBM diff within %d%%\n",
- 		       ret ? "Fail:" : "Pass:", MAX_DIFF_PERCENT);
- 	ksft_print_msg("avg_diff_per: %d%%\n", avg_diff_per);
--	ksft_print_msg("Span (MB): %d\n", span);
-+	ksft_print_msg("Span (MB): %zu\n", span);
- 	ksft_print_msg("avg_bw_imc: %lu\n", avg_bw_imc);
- 	ksft_print_msg("avg_bw_resc: %lu\n", avg_bw_resc);
- 
- 	return ret;
- }
- 
--static int check_results(int span)
-+static int check_results(size_t span)
- {
- 	unsigned long bw_imc[NUM_OF_RUNS], bw_resc[NUM_OF_RUNS];
- 	char temp[1024], *token_array[8];
-@@ -115,7 +115,7 @@ void mbm_test_cleanup(void)
- 	remove(RESULT_FILE_NAME);
- }
- 
--int mbm_bw_change(int span, int cpu_no, char *bw_report, char **benchmark_cmd)
-+int mbm_bw_change(size_t span, int cpu_no, char *bw_report, char **benchmark_cmd)
- {
- 	struct resctrl_val_param param = {
- 		.resctrl_val	= MBM_STR,
-diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index 99678d688a80..52068ceea956 100644
---- a/tools/testing/selftests/resctrl/resctrl.h
-+++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -63,7 +63,7 @@ struct resctrl_val_param {
- 	char		ctrlgrp[64];
- 	char		mongrp[64];
- 	int		cpu_no;
--	unsigned long	span;
-+	size_t		span;
- 	char		filename[64];
- 	char		*bw_report;
- 	unsigned long	mask;
-@@ -97,10 +97,10 @@ int write_bm_pid_to_resctrl(pid_t bm_pid, char *ctrlgrp, char *mongrp,
- 			    char *resctrl_val);
- int perf_event_open(struct perf_event_attr *hw_event, pid_t pid, int cpu,
- 		    int group_fd, unsigned long flags);
--int run_fill_buf(unsigned long span, int malloc_and_init_memory, int memflush,
--		 int op, char *resctrl_va);
-+int run_fill_buf(size_t span, int malloc_and_init_memory, int memflush, int op,
-+		 char *resctrl_va);
- int resctrl_val(char **benchmark_cmd, struct resctrl_val_param *param);
--int mbm_bw_change(int span, int cpu_no, char *bw_report, char **benchmark_cmd);
-+int mbm_bw_change(size_t span, int cpu_no, char *bw_report, char **benchmark_cmd);
- void tests_cleanup(void);
- void mbm_test_cleanup(void);
- int mba_schemata_change(int cpu_no, char *bw_report, char **benchmark_cmd);
-@@ -119,7 +119,7 @@ void cmt_test_cleanup(void);
- int get_core_sibling(int cpu_no);
- int measure_cache_vals(struct resctrl_val_param *param, int bm_pid);
- int show_cache_info(unsigned long sum_llc_val, int no_of_bits,
--		    unsigned long cache_span, unsigned long max_diff,
-+		    size_t cache_span, unsigned long max_diff,
- 		    unsigned long max_diff_percent, unsigned long num_of_runs,
- 		    bool platform, bool cmt);
- 
-diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
-index 3f26d2279f75..6b2ca1b4744f 100644
---- a/tools/testing/selftests/resctrl/resctrl_tests.c
-+++ b/tools/testing/selftests/resctrl/resctrl_tests.c
-@@ -70,7 +70,7 @@ void tests_cleanup(void)
- 	cat_test_cleanup();
- }
- 
--static void run_mbm_test(bool has_ben, char **benchmark_cmd, int span,
-+static void run_mbm_test(bool has_ben, char **benchmark_cmd, size_t span,
- 			 int cpu_no, char *bw_report)
- {
- 	int res;
-@@ -99,7 +99,7 @@ static void run_mbm_test(bool has_ben, char **benchmark_cmd, int span,
- 	umount_resctrlfs();
- }
- 
--static void run_mba_test(bool has_ben, char **benchmark_cmd, int span,
-+static void run_mba_test(bool has_ben, char **benchmark_cmd, size_t span,
- 			 int cpu_no, char *bw_report)
- {
- 	int res;
-@@ -118,7 +118,7 @@ static void run_mba_test(bool has_ben, char **benchmark_cmd, int span,
+ err_ipsec_teardown:
+ 	nsim_ipsec_teardown(ns);
++	nsim_macsec_teardown(ns);
+ 	nsim_bpf_uninit(ns);
+ err_utn_destroy:
+ 	rtnl_unlock();
+@@ -374,6 +376,7 @@ void nsim_destroy(struct netdevsim *ns)
+ 	rtnl_lock();
+ 	unregister_netdevice(dev);
+ 	if (nsim_dev_port_is_pf(ns->nsim_dev_port)) {
++		nsim_macsec_teardown(ns);
+ 		nsim_ipsec_teardown(ns);
+ 		nsim_bpf_uninit(ns);
  	}
+diff --git a/drivers/net/netdevsim/netdevsim.h b/drivers/net/netdevsim/netdevsim.h
+index 7d8ed8d8df5c..7be98b7dcca9 100644
+--- a/drivers/net/netdevsim/netdevsim.h
++++ b/drivers/net/netdevsim/netdevsim.h
+@@ -23,6 +23,7 @@
+ #include <net/devlink.h>
+ #include <net/udp_tunnel.h>
+ #include <net/xdp.h>
++#include <net/macsec.h>
  
- 	if (!has_ben)
--		sprintf(benchmark_cmd[1], "%d", span);
-+		sprintf(benchmark_cmd[1], "%zu", span);
- 	res = mba_schemata_change(cpu_no, bw_report, benchmark_cmd);
- 	ksft_test_result(!res, "MBA: schemata change\n");
+ #define DRV_NAME	"netdevsim"
  
-@@ -181,11 +181,12 @@ static void run_cat_test(int cpu_no, int no_of_bits)
- int main(int argc, char **argv)
- {
- 	bool has_ben = false, mbm_test = true, mba_test = true, cmt_test = true;
--	int c, cpu_no = 1, span = 250, argc_new = argc, i, no_of_bits = 0;
- 	char *benchmark_cmd[BENCHMARK_ARGS], bw_report[64], bm_type[64];
- 	char benchmark_cmd_area[BENCHMARK_ARGS][BENCHMARK_ARG_SIZE];
-+	int c, cpu_no = 1, argc_new = argc, i, no_of_bits = 0;
- 	int ben_ind, ben_count, tests = 0;
- 	bool cat_test = true;
-+	size_t span = 250;
+@@ -52,6 +53,25 @@ struct nsim_ipsec {
+ 	u32 ok;
+ };
  
- 	for (i = 0; i < argc; i++) {
- 		if (strcmp(argv[i], "-b") == 0) {
-@@ -273,7 +274,7 @@ int main(int argc, char **argv)
- 			benchmark_cmd[i] = benchmark_cmd_area[i];
++#define NSIM_MACSEC_MAX_SECY_COUNT 3
++#define NSIM_MACSEC_MAX_RXSC_COUNT 1
++struct nsim_rxsc {
++	sci_t sci;
++	bool used;
++};
++
++struct nsim_secy {
++	sci_t sci;
++	struct nsim_rxsc nsim_rxsc[NSIM_MACSEC_MAX_RXSC_COUNT];
++	u8 nsim_rxsc_count;
++	bool used;
++};
++
++struct nsim_macsec {
++	struct nsim_secy nsim_secy[NSIM_MACSEC_MAX_SECY_COUNT];
++	u8 nsim_secy_count;
++};
++
+ struct nsim_ethtool_pauseparam {
+ 	bool rx;
+ 	bool tx;
+@@ -93,6 +113,7 @@ struct netdevsim {
  
- 		strcpy(benchmark_cmd[0], "fill_buf");
--		sprintf(benchmark_cmd[1], "%d", span);
-+		sprintf(benchmark_cmd[1], "%zu", span);
- 		strcpy(benchmark_cmd[2], "1");
- 		strcpy(benchmark_cmd[3], "1");
- 		strcpy(benchmark_cmd[4], "0");
-diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
-index f622245adafe..8be5b745226d 100644
---- a/tools/testing/selftests/resctrl/resctrlfs.c
-+++ b/tools/testing/selftests/resctrl/resctrlfs.c
-@@ -298,7 +298,7 @@ int taskset_benchmark(pid_t bm_pid, int cpu_no)
- void run_benchmark(int signum, siginfo_t *info, void *ucontext)
- {
- 	int operation, ret, malloc_and_init_memory, memflush;
--	unsigned long span, buffer_span;
-+	size_t span, buffer_span;
- 	char **benchmark_cmd;
- 	char resctrl_val[64];
- 	FILE *fp;
+ 	bool bpf_map_accept;
+ 	struct nsim_ipsec ipsec;
++	struct nsim_macsec macsec;
+ 	struct {
+ 		u32 inject_error;
+ 		u32 sleep;
+@@ -366,6 +387,19 @@ static inline bool nsim_ipsec_tx(struct netdevsim *ns, struct sk_buff *skb)
+ }
+ #endif
+ 
++#if IS_ENABLED(CONFIG_MACSEC)
++void nsim_macsec_init(struct netdevsim *ns);
++void nsim_macsec_teardown(struct netdevsim *ns);
++#else
++static inline void nsim_macsec_init(struct netdevsim *ns)
++{
++}
++
++static inline void nsim_macsec_teardown(struct netdevsim *ns)
++{
++}
++#endif
++
+ struct nsim_bus_dev {
+ 	struct device dev;
+ 	struct list_head list;
 -- 
-2.30.2
+2.40.1
 
