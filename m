@@ -2,26 +2,26 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DBA6C001DF
-	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Jul 2023 13:55:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60368C001E0
+	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Jul 2023 13:55:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231804AbjGMNzI (ORCPT
+        id S231951AbjGMNzL (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 13 Jul 2023 09:55:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49250 "EHLO
+        Thu, 13 Jul 2023 09:55:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231667AbjGMNzA (ORCPT
+        with ESMTP id S231730AbjGMNzG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Jul 2023 09:55:00 -0400
+        Thu, 13 Jul 2023 09:55:06 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6DEF71995;
-        Thu, 13 Jul 2023 06:54:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 00205211E;
+        Thu, 13 Jul 2023 06:55:02 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B6F501595;
-        Thu, 13 Jul 2023 06:55:41 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3E61C1595;
+        Thu, 13 Jul 2023 06:55:45 -0700 (PDT)
 Received: from e125769.cambridge.arm.com (e125769.cambridge.arm.com [10.1.196.26])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ACC483F73F;
-        Thu, 13 Jul 2023 06:54:57 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 341AA3F73F;
+        Thu, 13 Jul 2023 06:55:01 -0700 (PDT)
 From:   Ryan Roberts <ryan.roberts@arm.com>
 To:     Andrew Morton <akpm@linux-foundation.org>,
         Shuah Khan <shuah@kernel.org>,
@@ -33,9 +33,9 @@ To:     Andrew Morton <akpm@linux-foundation.org>,
         "Liam R. Howlett" <Liam.Howlett@oracle.com>
 Cc:     Ryan Roberts <ryan.roberts@arm.com>, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v1 5/9] selftests/mm: Fix thuge-gen test bugs
-Date:   Thu, 13 Jul 2023 14:54:36 +0100
-Message-Id: <20230713135440.3651409-6-ryan.roberts@arm.com>
+Subject: [PATCH v1 7/9] selftests/mm: Make migration test robust to failure
+Date:   Thu, 13 Jul 2023 14:54:38 +0100
+Message-Id: <20230713135440.3651409-8-ryan.roberts@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230713135440.3651409-1-ryan.roberts@arm.com>
 References: <20230713135440.3651409-1-ryan.roberts@arm.com>
@@ -45,45 +45,113 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-thuge-gen was previously only munmapping part of the mmapped buffer,
-which caused us to run out of 1G huge pages for a later part of the
-test. Fix this by munmapping the whole buffer. Based on the code, it
-looks like a typo rather than an intention to keep some of the buffer
-mapped.
+The `migration` test currently has a number of robustness problems that
+cause it to hang and leak resources.
 
-thuge-gen was also calling mmap with SHM_HUGETLB flag (bit 11 set),
-which is actually MAP_DENYWRITE in mmap context. The man page says this
-flag is ignored in modern kernels. I'm pretty sure from the context that
-the author intended to pass the MAP_HUGETLB flag so I've fixed that up
-too.
+Timeout: There are 3 tests, which each previously ran for 60 seconds.
+However, the timeout in mm/settings for a single test binary was set to
+45 seconds. So when run using run_kselftest.sh, the top level timeout
+would trigger before the test binary was finished. Solve this by meeting
+in the middle; each of the 3 tests now runs for 20 seconds (for a total
+of 60), and the top level timeout is set to 90 seconds.
+
+Leaking child processes: the `shared_anon` test fork()s some children
+but then an ASSERT() fires before the test kills those children. The
+assert causes immediate exit of the parent and leaking of the children.
+Furthermore, if run using the run_kselftest.sh wrapper, the wrapper
+would get stuck waiting for those children to exit, which never happens.
+Solve this by deferring any asserts until after the children are killed.
+The same pattern is used for the threaded tests for uniformity.
+
+With these changes, the test binary now runs to completion on arm64,
+with 2 tests passing and the `shared_anon` test failing.
 
 Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
 ---
- tools/testing/selftests/mm/thuge-gen.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/mm/migration.c | 14 ++++++++++----
+ tools/testing/selftests/mm/settings    |  2 +-
+ 2 files changed, 11 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/thuge-gen.c b/tools/testing/selftests/mm/thuge-gen.c
-index 380ab5f0a534..16ed4dfa7359 100644
---- a/tools/testing/selftests/mm/thuge-gen.c
-+++ b/tools/testing/selftests/mm/thuge-gen.c
-@@ -139,7 +139,7 @@ void test_mmap(unsigned long size, unsigned flags)
- 		before, after, before - after, size);
- 	assert(size == getpagesize() || (before - after) == NUM_PAGES);
- 	show(size);
--	err = munmap(map, size);
-+	err = munmap(map, size * NUM_PAGES);
- 	assert(!err);
+diff --git a/tools/testing/selftests/mm/migration.c b/tools/testing/selftests/mm/migration.c
+index 379581567f27..189d7d9070e8 100644
+--- a/tools/testing/selftests/mm/migration.c
++++ b/tools/testing/selftests/mm/migration.c
+@@ -15,7 +15,7 @@
+ #include <time.h>
+ 
+ #define TWOMEG (2<<20)
+-#define RUNTIME (60)
++#define RUNTIME (20)
+ 
+ #define ALIGN(x, a) (((x) + (a - 1)) & (~((a) - 1)))
+ 
+@@ -118,6 +118,7 @@ TEST_F_TIMEOUT(migration, private_anon, 2*RUNTIME)
+ {
+ 	uint64_t *ptr;
+ 	int i;
++	int ret;
+ 
+ 	if (self->nthreads < 2 || self->n1 < 0 || self->n2 < 0)
+ 		SKIP(return, "Not enough threads or NUMA nodes available");
+@@ -131,9 +132,10 @@ TEST_F_TIMEOUT(migration, private_anon, 2*RUNTIME)
+ 		if (pthread_create(&self->threads[i], NULL, access_mem, ptr))
+ 			perror("Couldn't create thread");
+ 
+-	ASSERT_EQ(migrate(ptr, self->n1, self->n2), 0);
++	ret = migrate(ptr, self->n1, self->n2);
+ 	for (i = 0; i < self->nthreads - 1; i++)
+ 		ASSERT_EQ(pthread_cancel(self->threads[i]), 0);
++	ASSERT_EQ(ret, 0);
  }
  
-@@ -222,7 +222,7 @@ int main(void)
- 		test_mmap(ps, MAP_HUGETLB | arg);
- 	}
- 	printf("Testing default huge mmap\n");
--	test_mmap(default_hps, SHM_HUGETLB);
-+	test_mmap(default_hps, MAP_HUGETLB);
+ /*
+@@ -144,6 +146,7 @@ TEST_F_TIMEOUT(migration, shared_anon, 2*RUNTIME)
+ 	pid_t pid;
+ 	uint64_t *ptr;
+ 	int i;
++	int ret;
  
- 	puts("Testing non-huge shmget");
- 	test_shmget(getpagesize(), 0);
+ 	if (self->nthreads < 2 || self->n1 < 0 || self->n2 < 0)
+ 		SKIP(return, "Not enough threads or NUMA nodes available");
+@@ -161,9 +164,10 @@ TEST_F_TIMEOUT(migration, shared_anon, 2*RUNTIME)
+ 			self->pids[i] = pid;
+ 	}
+ 
+-	ASSERT_EQ(migrate(ptr, self->n1, self->n2), 0);
++	ret = migrate(ptr, self->n1, self->n2);
+ 	for (i = 0; i < self->nthreads - 1; i++)
+ 		ASSERT_EQ(kill(self->pids[i], SIGTERM), 0);
++	ASSERT_EQ(ret, 0);
+ }
+ 
+ /*
+@@ -173,6 +177,7 @@ TEST_F_TIMEOUT(migration, private_anon_thp, 2*RUNTIME)
+ {
+ 	uint64_t *ptr;
+ 	int i;
++	int ret;
+ 
+ 	if (self->nthreads < 2 || self->n1 < 0 || self->n2 < 0)
+ 		SKIP(return, "Not enough threads or NUMA nodes available");
+@@ -188,9 +193,10 @@ TEST_F_TIMEOUT(migration, private_anon_thp, 2*RUNTIME)
+ 		if (pthread_create(&self->threads[i], NULL, access_mem, ptr))
+ 			perror("Couldn't create thread");
+ 
+-	ASSERT_EQ(migrate(ptr, self->n1, self->n2), 0);
++	ret = migrate(ptr, self->n1, self->n2);
+ 	for (i = 0; i < self->nthreads - 1; i++)
+ 		ASSERT_EQ(pthread_cancel(self->threads[i]), 0);
++	ASSERT_EQ(ret, 0);
+ }
+ 
+ TEST_HARNESS_MAIN
+diff --git a/tools/testing/selftests/mm/settings b/tools/testing/selftests/mm/settings
+index 9abfc60e9e6f..ba4d85f74cd6 100644
+--- a/tools/testing/selftests/mm/settings
++++ b/tools/testing/selftests/mm/settings
+@@ -1 +1 @@
+-timeout=45
++timeout=90
 -- 
 2.25.1
 
