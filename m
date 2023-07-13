@@ -2,120 +2,79 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 625B7C0015E
-	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Jul 2023 13:23:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 46AF1EB64DD
+	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Jul 2023 13:24:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234861AbjGMNXg (ORCPT
+        id S234991AbjGMNYe (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 13 Jul 2023 09:23:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54490 "EHLO
+        Thu, 13 Jul 2023 09:24:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235269AbjGMNWr (ORCPT
+        with ESMTP id S235242AbjGMNYR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Jul 2023 09:22:47 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAF1C3ABF;
-        Thu, 13 Jul 2023 06:21:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689254500; x=1720790500;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=tlqcBuGsxOSKA74bKjbrp+jQUh7f0hcz1UsL+nprPCM=;
-  b=AgXVSRmU6wLzAsdt0IuhWfXR0zwIKmyYZUVnrRVrIcC9a9YrF1RoBYWU
-   buP4ki8u0M3zBgEEt9Za3U4h7z3EJejkHTt97jXyy76X/a6uk35d3R+qa
-   ar5qyzX87cMiugj0H/aEVezjgNLOsYRSCOBMh/qU1Ugvs5gtrX5QuZsAF
-   1bdODwE5QswBscO+ox+g3zXJlcjbFs8XXmey/bsfafXB7m/YnK79nEsdV
-   K54XCLw/KiVCUbZLExqNEqhiU9u2v9EWbaAKhO6LrZPAHCWkSRKMzrzAE
-   7DAVnGzzWoK+ugpJKWjhIv8SWUpL9xR/zpJdDnxgPnoWp4fTavCfSjzMG
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="345497119"
-X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
-   d="scan'208";a="345497119"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2023 06:21:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="968616058"
-X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
-   d="scan'208";a="968616058"
-Received: from ijarvine-mobl2.ger.corp.intel.com ([10.251.222.39])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2023 06:21:15 -0700
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     linux-kselftest@vger.kernel.org,
-        Reinette Chatre <reinette.chatre@intel.com>,
+        Thu, 13 Jul 2023 09:24:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 478E03C01;
+        Thu, 13 Jul 2023 06:23:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8557C612FC;
+        Thu, 13 Jul 2023 13:22:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73C62C433C7;
+        Thu, 13 Jul 2023 13:22:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689254550;
+        bh=bOUAPzYMXtdmmDSu2PZbdjTsWvkvo0nimQiCAPr8Yhw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=JhOxNiBdFSDCF2V9/Owve15T7sqX4XOaeLrOvcgSNwS3EOX8VGPBTRWhuKoRbgBd6
+         UZFYLGBzQhDg3neOr3DuwW0ysPNNI3j+3TqncYXQx5UByAPqlrSR9FNQA9+GAO5LFF
+         y0krZvqDmQ5nsqpEiy0GeMLmk+sjw1pb6NYckaT6eXLvP7V99Bmw8ctkemXlii6Yzb
+         LjhV08DNKdnVDxVeYlcOFk53tsOZU4+Jo52jzg8OzM36DdGHFjIQHeCqY+8H+mRPpa
+         fGonogsNanTUNMQAXXtHV+wsT033vaVk2i34k/TuiaojjLu7D980TKd4GHtOwPNXA1
+         kcr1qYNL3l4Gg==
+Date:   Thu, 13 Jul 2023 15:22:24 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+Cc:     Aleksa Sarai <cyphar@cyphar.com>, Willy Tarreau <w@1wt.eu>,
         Shuah Khan <shuah@kernel.org>,
-        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
-        Fenghua Yu <fenghua.yu@intel.com>, linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v4 18/19] selftests/resctrl: Pass the real number of tests to show_cache_info()
-Date:   Thu, 13 Jul 2023 16:19:31 +0300
-Message-Id: <20230713131932.133258-19-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230713131932.133258-1-ilpo.jarvinen@linux.intel.com>
-References: <20230713131932.133258-1-ilpo.jarvinen@linux.intel.com>
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Chinner <dchinner@redhat.com>,
+        xu xin <cgel.zte@gmail.com>, Al Viro <viro@zeniv.linux.org.uk>,
+        Stefan Roesch <shr@devkernel.io>,
+        Zhihao Cheng <chengzhihao1@huawei.com>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Janis Danisevskis <jdanis@google.com>,
+        Kees Cook <keescook@chromium.org>, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] procfs: block chmod on /proc/thread-self/comm
+Message-ID: <20230713-unerschrocken-kutschieren-9be3c8958b5d@brauner>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Results include warm-up test which is discarded before passing the sum
-to show_cache_info(). show_cache_info() handles this by subtracting one
-from the number of tests in divisor. It is a trappy construct to have
-sum and number of tests parameters to disagree like this.
+> > diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+> > index 486334981e60..08f0969208eb 100644
+> > --- a/tools/testing/selftests/nolibc/nolibc-test.c
+> > +++ b/tools/testing/selftests/nolibc/nolibc-test.c
+> > @@ -580,6 +580,10 @@ int run_syscall(int min, int max)
+> >  		CASE_TEST(chmod_net);         EXPECT_SYSZR(proc, chmod("/proc/self/net", 0555)); break;
+> >  		CASE_TEST(chmod_self);        EXPECT_SYSER(proc, chmod("/proc/self", 0555), -1, EPERM); break;
+> >  		CASE_TEST(chown_self);        EXPECT_SYSER(proc, chown("/proc/self", 0, 0), -1, EPERM); break;
+> > +		CASE_TEST(chmod_self_comm);   EXPECT_SYSER(proc, chmod("/proc/self/comm", 0777), -1, EPERM); break;
+> > +		CASE_TEST(chmod_tid_comm);    EXPECT_SYSER(proc, chmod("/proc/thread-self/comm", 0777), -1, EPERM); break;
+> > +		CASE_TEST(chmod_self_environ);EXPECT_SYSER(proc, chmod("/proc/self/environ", 0777), -1, EPERM); break;
+> > +		CASE_TEST(chmod_tid_environ); EXPECT_SYSER(proc, chmod("/proc/thread-self/environ", 0777), -1, EPERM); break;
 
-A more logical place for subtracting the skipped tests is where the sum
-is calculated so move it there. Pass the correct number of tests to
-show_cache_info() so it can be used directly as the divisor for
-calculating the average.
+> 
+> I'm not a big fan of this, it abuses the nolibc testsuite to test core
+> kernel functionality.
 
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
- tools/testing/selftests/resctrl/cache.c    | 2 +-
- tools/testing/selftests/resctrl/cat_test.c | 2 +-
- tools/testing/selftests/resctrl/cmt_test.c | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/resctrl/cache.c b/tools/testing/selftests/resctrl/cache.c
-index 385c01dd3ec6..5aa112e5fdd3 100644
---- a/tools/testing/selftests/resctrl/cache.c
-+++ b/tools/testing/selftests/resctrl/cache.c
-@@ -290,7 +290,7 @@ int show_cache_info(unsigned long sum_llc_val, int no_of_bits,
- 	long avg_diff = 0;
- 	int ret;
- 
--	avg_llc_val = sum_llc_val / (num_of_runs - 1);
-+	avg_llc_val = sum_llc_val / num_of_runs;
- 	avg_diff = (long)abs(cache_span - avg_llc_val);
- 	diff_percent = ((float)cache_span - avg_llc_val) / cache_span * 100;
- 
-diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-index ed6c8e64ad11..3848dfb46aba 100644
---- a/tools/testing/selftests/resctrl/cat_test.c
-+++ b/tools/testing/selftests/resctrl/cat_test.c
-@@ -77,7 +77,7 @@ static int check_results(struct resctrl_val_param *param)
- 	no_of_bits = count_bits(param->mask);
- 
- 	return show_cache_info(sum_llc_perf_miss, no_of_bits, param->span / 64,
--			       MAX_DIFF, MAX_DIFF_PERCENT, NUM_OF_RUNS,
-+			       MAX_DIFF, MAX_DIFF_PERCENT, runs - 1,
- 			       get_vendor() == ARCH_INTEL, false);
- }
- 
-diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
-index 0ac9d6bbd13d..cb2197647c6c 100644
---- a/tools/testing/selftests/resctrl/cmt_test.c
-+++ b/tools/testing/selftests/resctrl/cmt_test.c
-@@ -59,7 +59,7 @@ static int check_results(struct resctrl_val_param *param, int no_of_bits)
- 	fclose(fp);
- 
- 	return show_cache_info(sum_llc_occu_resc, no_of_bits, param->span,
--			       MAX_DIFF, MAX_DIFF_PERCENT, NUM_OF_RUNS,
-+			       MAX_DIFF, MAX_DIFF_PERCENT, runs - 1,
- 			       true, true);
- }
- 
--- 
-2.30.2
-
+Yes, this should be dropped.
+We need a minimal patch to fix this. This just makes backporting harder
+and any test doesn't need to be backported.
