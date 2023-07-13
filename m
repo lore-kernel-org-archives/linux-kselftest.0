@@ -2,112 +2,67 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4BC0C001DD
-	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Jul 2023 13:21:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CE730C0015E
+	for <linux-kselftest@archiver.kernel.org>; Thu, 13 Jul 2023 13:21:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231537AbjGMNVJ (ORCPT
+        id S234671AbjGMNVM convert rfc822-to-8bit (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 13 Jul 2023 09:21:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51938 "EHLO
+        Thu, 13 Jul 2023 09:21:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234495AbjGMNUo (ORCPT
+        with ESMTP id S234866AbjGMNUp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Jul 2023 09:20:44 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CA72721;
-        Thu, 13 Jul 2023 06:20:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689254434; x=1720790434;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Hn0fYehjq6FV6t/LfA0e2GwEyK8XmldiekSokujXnRI=;
-  b=TkKRkp6OFw7a7CyfCqDPaxrYgI6Z8DKzZLRzZa2oHJhSJLnkO5oUMCAE
-   wN0u6UPB27Dky6CgkIcv01CiDU8GmjzQmrwd5ndnafgAlVDklbSIDfCDE
-   /eTUiUn9CG34ncpTH7eky8luDvsZTK2XQNH+jWNc2jfOQTmZCuiazOXro
-   bVSJvUCdpktJVtGVw8e+pYMZR1Ly2kHi/UxmJ3JX+RppqaypPnlyDcqSS
-   NUa4v3iDFAGaWq7C1hQV5m8KM8UNTg94THaOHzpCk1SK3LCC17OISt0Ja
-   /2nzopszEQh9l869vaQAIQpl0YUi9kouUxGnMqxEyAaXTflZ+Gkw/ccn7
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="345496617"
-X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
-   d="scan'208";a="345496617"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2023 06:20:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10770"; a="968615793"
-X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
-   d="scan'208";a="968615793"
-Received: from ijarvine-mobl2.ger.corp.intel.com ([10.251.222.39])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2023 06:20:32 -0700
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     linux-kselftest@vger.kernel.org,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
-        Fenghua Yu <fenghua.yu@intel.com>, linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v4 05/19] selftests/resctrl: Unmount resctrl FS before starting the first test
-Date:   Thu, 13 Jul 2023 16:19:18 +0300
-Message-Id: <20230713131932.133258-6-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230713131932.133258-1-ilpo.jarvinen@linux.intel.com>
-References: <20230713131932.133258-1-ilpo.jarvinen@linux.intel.com>
+        Thu, 13 Jul 2023 09:20:45 -0400
+Received: from us-smtp-delivery-44.mimecast.com (us-smtp-delivery-44.mimecast.com [205.139.111.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E445F272A
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jul 2023 06:20:35 -0700 (PDT)
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-562-d28lCVOnM46F5xmYMZv0lA-1; Thu, 13 Jul 2023 09:20:29 -0400
+X-MC-Unique: d28lCVOnM46F5xmYMZv0lA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 391B0185A792;
+        Thu, 13 Jul 2023 13:20:29 +0000 (UTC)
+Received: from hog.localdomain (unknown [10.45.224.2])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 402D02166B27;
+        Thu, 13 Jul 2023 13:20:28 +0000 (UTC)
+From:   Sabrina Dubroca <sd@queasysnail.net>
+To:     netdev@vger.kernel.org
+Cc:     Sabrina Dubroca <sd@queasysnail.net>, kuba@kernel.org,
+        simon.horman@corigine.com, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next v3 0/2] add MACsec offload selftests
+Date:   Thu, 13 Jul 2023 15:20:22 +0200
+Message-Id: <cover.1689173906.git.sd@queasysnail.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: queasysnail.net
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=WINDOWS-1252; x-default=true
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Resctrl FS mount/remount/umount code is hard to track. Better approach
-is to use mount/umount pair for each test but that assumes resctrl FS
-is not mounted beforehand.
+Patch 1 adds MACsec offload to netdevsim (unchanged from v2).
 
-Change umount_resctrlfs() so that it can unmount resctrl FS from any
-path, and enable further simplifications into mount/remount/umount
-logic by unmounting resctrl FS at the start if a pre-existing
-mountpoint is found.
+Patch 2 adds a corresponding selftest to the rtnetlink testsuite.
 
-Suggested-by: Reinette Chatre <reinette.chatre@intel.com>
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
- tools/testing/selftests/resctrl/resctrl_tests.c | 2 ++
- tools/testing/selftests/resctrl/resctrlfs.c     | 6 ++++--
- 2 files changed, 6 insertions(+), 2 deletions(-)
+Sabrina Dubroca (2):
+  netdevsim: add dummy macsec offload
+  selftests: rtnetlink: add MACsec offload tests
 
-diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
-index 9b9751206e1c..b1b2d28b52f7 100644
---- a/tools/testing/selftests/resctrl/resctrl_tests.c
-+++ b/tools/testing/selftests/resctrl/resctrl_tests.c
-@@ -250,6 +250,8 @@ int main(int argc, char **argv)
- 	if (!check_resctrlfs_support())
- 		return ksft_exit_skip("resctrl FS does not exist. Enable X86_CPU_RESCTRL config option.\n");
- 
-+	umount_resctrlfs();
-+
- 	filter_dmesg();
- 
- 	ksft_set_plan(tests ? : 4);
-diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
-index fb00245dee92..23f75aeaa198 100644
---- a/tools/testing/selftests/resctrl/resctrlfs.c
-+++ b/tools/testing/selftests/resctrl/resctrlfs.c
-@@ -82,10 +82,12 @@ int remount_resctrlfs(bool mum_resctrlfs)
- 
- int umount_resctrlfs(void)
- {
--	if (find_resctrl_mount(NULL))
-+	char mountpoint[256];
-+
-+	if (find_resctrl_mount(mountpoint))
- 		return 0;
- 
--	if (umount(RESCTRL_PATH)) {
-+	if (umount(mountpoint)) {
- 		perror("# Unable to umount resctrl");
- 
- 		return errno;
+ drivers/net/netdevsim/Makefile           |   4 +
+ drivers/net/netdevsim/macsec.c           | 356 +++++++++++++++++++++++
+ drivers/net/netdevsim/netdev.c           |   3 +
+ drivers/net/netdevsim/netdevsim.h        |  34 +++
+ tools/testing/selftests/net/rtnetlink.sh |  83 ++++++
+ 5 files changed, 480 insertions(+)
+ create mode 100644 drivers/net/netdevsim/macsec.c
+
 -- 
-2.30.2
+2.40.1
 
