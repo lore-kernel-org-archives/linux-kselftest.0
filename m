@@ -2,121 +2,178 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CC12C00528
-	for <linux-kselftest@archiver.kernel.org>; Mon, 17 Jul 2023 12:55:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2C8BC0015E
+	for <linux-kselftest@archiver.kernel.org>; Mon, 17 Jul 2023 13:07:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230501AbjGQMzb (ORCPT
+        id S231366AbjGQNHR (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 17 Jul 2023 08:55:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36122 "EHLO
+        Mon, 17 Jul 2023 09:07:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbjGQMz1 (ORCPT
+        with ESMTP id S229948AbjGQNHR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 Jul 2023 08:55:27 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE5501B0;
-        Mon, 17 Jul 2023 05:55:26 -0700 (PDT)
+        Mon, 17 Jul 2023 09:07:17 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B8C3C7;
+        Mon, 17 Jul 2023 06:07:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689598526; x=1721134526;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=VqCLuF6+Bx4Auyc0wAAAKOAjCrnRB30KAZm7eJddByA=;
-  b=A/8xH1mduUSXiRwXaJutZJN9Nrdf/MDIfnUkkpC5UbjYNzOkPu9vdlrn
-   +4MZt4zoICdX8XLTiAuHOOn4ei1eJsXs7/Ly2WsJoeznJQuEn/nH9dnyC
-   uUtewIaQB1SDfJmkMH++j30ffJI9oEi6mHBkvILr3CqqeAuLIi1yruhYO
-   3dLDTCWrbXDadGk6vmCMBFlWRW0eP4q0TawuFhw0xXMtdMuUR4g63YjPT
-   oqWjQwGsONNuq/RV8RIXmUFMzBBOAE03w2Wr5UHQQN6almP5v0oVEYApQ
-   vreW83qepjMu6SDDgZVtGu3BVtMKw9tS4WgX6lfNtAnv7gxCq/FHhGrnJ
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="429680675"
+  t=1689599236; x=1721135236;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=gG4+L6/n9BpXjqaZ8By7jM8Mfd9yDo/AWXxOxB0yb9o=;
+  b=LOeO3c23gDuc76HVmLC1X49R+JklEE8ml9yoYbqrXLsnM9UZwI5T6O3I
+   qSqrO9p1OyvwXv2YNwvNuQ4YMv7IfswzxtO/tiAvuR19Mq/+sKVtM4Kr6
+   Lp2UanefEbXQIXLoyfdW92M9QXO9WiiTq7IZXfjGXt+u7+BjcCm1pTNPt
+   Oh30P0CWHFPBoCVVSj7BAq+vpfNHdrnVqUSmh7ZYAQd08xKQcL5j9YL2j
+   15D0NPDkcIOj4OeUNCc2iw/ehyTgr0a0abmE9txcmKD6+ZbXdqmLttK8l
+   VtMg3AkZGgurUln+I+hIoRLJ6S8Nll2484nFQnd7s349qMw6xcqEfDZW0
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="396751639"
 X-IronPort-AV: E=Sophos;i="6.01,211,1684825200"; 
-   d="scan'208";a="429680675"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2023 05:55:24 -0700
+   d="scan'208";a="396751639"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2023 06:05:52 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="793234537"
+X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="847280436"
 X-IronPort-AV: E=Sophos;i="6.01,211,1684825200"; 
-   d="scan'208";a="793234537"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga004.fm.intel.com with ESMTP; 17 Jul 2023 05:55:17 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id DC6B0370; Mon, 17 Jul 2023 15:55:23 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        David Gow <davidgow@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-arm-kernel@lists.infradead.org,
-        linux-pci@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH v3 2/4] x86/asm: Replace custom COUNT_ARGS() & CONCATENATE() implementations
-Date:   Mon, 17 Jul 2023 15:55:19 +0300
-Message-Id: <20230717125521.43176-3-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
-In-Reply-To: <20230717125521.43176-1-andriy.shevchenko@linux.intel.com>
-References: <20230717125521.43176-1-andriy.shevchenko@linux.intel.com>
+   d="scan'208";a="847280436"
+Received: from dkravtso-mobl1.ccr.corp.intel.com ([10.252.45.233])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2023 06:05:50 -0700
+Date:   Mon, 17 Jul 2023 16:05:43 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+cc:     linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Babu Moger <babu.moger@amd.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 04/19] selftests/resctrl: Close perf value read fd on
+ errors
+In-Reply-To: <4531fca1-2f3b-0c08-351b-f8e06c5f9f5c@intel.com>
+Message-ID: <8b904781-c5d-8164-b8dc-903d412330fd@linux.intel.com>
+References: <20230713131932.133258-1-ilpo.jarvinen@linux.intel.com> <20230713131932.133258-5-ilpo.jarvinen@linux.intel.com> <a4fa6303-4637-815a-e0fa-57f33babfb10@intel.com> <c14286ec-807c-8613-a4cc-d8ac733a87a1@linux.intel.com>
+ <4531fca1-2f3b-0c08-351b-f8e06c5f9f5c@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/mixed; boundary="8323329-1678409849-1689599152=:20605"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Replace custom implementation of the macros from args.h.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- arch/x86/include/asm/rmwcc.h | 11 +++--------
- 1 file changed, 3 insertions(+), 8 deletions(-)
+--8323329-1678409849-1689599152=:20605
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
-diff --git a/arch/x86/include/asm/rmwcc.h b/arch/x86/include/asm/rmwcc.h
-index 7fa611216417..4b081e0d3306 100644
---- a/arch/x86/include/asm/rmwcc.h
-+++ b/arch/x86/include/asm/rmwcc.h
-@@ -2,12 +2,7 @@
- #ifndef _ASM_X86_RMWcc
- #define _ASM_X86_RMWcc
- 
--/* This counts to 12. Any more, it will return 13th argument. */
--#define __RMWcc_ARGS(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _n, X...) _n
--#define RMWcc_ARGS(X...) __RMWcc_ARGS(, ##X, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
--
--#define __RMWcc_CONCAT(a, b) a ## b
--#define RMWcc_CONCAT(a, b) __RMWcc_CONCAT(a, b)
-+#include <linux/args.h>
- 
- #define __CLOBBERS_MEM(clb...)	"memory", ## clb
- 
-@@ -48,7 +43,7 @@ cc_label:	c = true;						\
- #define GEN_UNARY_RMWcc_3(op, var, cc)					\
- 	GEN_UNARY_RMWcc_4(op, var, cc, "%[var]")
- 
--#define GEN_UNARY_RMWcc(X...) RMWcc_CONCAT(GEN_UNARY_RMWcc_, RMWcc_ARGS(X))(X)
-+#define GEN_UNARY_RMWcc(X...)	CONCATENATE(GEN_UNARY_RMWcc_, COUNT_ARGS(X))(X)
- 
- #define GEN_BINARY_RMWcc_6(op, var, cc, vcon, _val, arg0)		\
- 	__GEN_RMWcc(op " %[val], " arg0, var, cc,			\
-@@ -57,7 +52,7 @@ cc_label:	c = true;						\
- #define GEN_BINARY_RMWcc_5(op, var, cc, vcon, val)			\
- 	GEN_BINARY_RMWcc_6(op, var, cc, vcon, val, "%[var]")
- 
--#define GEN_BINARY_RMWcc(X...) RMWcc_CONCAT(GEN_BINARY_RMWcc_, RMWcc_ARGS(X))(X)
-+#define GEN_BINARY_RMWcc(X...)	CONCATENATE(GEN_BINARY_RMWcc_, COUNT_ARGS(X))(X)
- 
- #define GEN_UNARY_SUFFIXED_RMWcc(op, suffix, var, cc, clobbers...)	\
- 	__GEN_RMWcc(op " %[var]\n\t" suffix, var, cc,			\
+On Fri, 14 Jul 2023, Reinette Chatre wrote:
+> On 7/14/2023 3:35 AM, Ilpo Järvinen wrote:
+> > On Thu, 13 Jul 2023, Reinette Chatre wrote:
+> >> On 7/13/2023 6:19 AM, Ilpo Järvinen wrote:
+> >>> Perf event fd (fd_lm) is not closed on some error paths.
+> >>>
+> >>> Always close fd_lm in get_llc_perf() and add close into an error
+> >>> handling block in cat_val().
+> >>>
+> >>> Fixes: 790bf585b0ee ("selftests/resctrl: Add Cache Allocation Technology (CAT) selftest")
+> >>> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> >>> ---
+> >>>  tools/testing/selftests/resctrl/cache.c | 10 +++++-----
+> >>>  1 file changed, 5 insertions(+), 5 deletions(-)
+> >>>
+> >>> diff --git a/tools/testing/selftests/resctrl/cache.c b/tools/testing/selftests/resctrl/cache.c
+> >>> index 8a4fe8693be6..ced47b445d1e 100644
+> >>> --- a/tools/testing/selftests/resctrl/cache.c
+> >>> +++ b/tools/testing/selftests/resctrl/cache.c
+> >>> @@ -87,21 +87,20 @@ static int reset_enable_llc_perf(pid_t pid, int cpu_no)
+> >>>  static int get_llc_perf(unsigned long *llc_perf_miss)
+> >>>  {
+> >>>  	__u64 total_misses;
+> >>> +	int ret;
+> >>>  
+> >>>  	/* Stop counters after one span to get miss rate */
+> >>>  
+> >>>  	ioctl(fd_lm, PERF_EVENT_IOC_DISABLE, 0);
+> >>>  
+> >>> -	if (read(fd_lm, &rf_cqm, sizeof(struct read_format)) == -1) {
+> >>> +	ret = read(fd_lm, &rf_cqm, sizeof(struct read_format));
+> >>> +	close(fd_lm);
+> >>> +	if (ret == -1) {
+> >>>  		perror("Could not get llc misses through perf");
+> >>> -
+> >>>  		return -1;
+> >>>  	}
+> >>>  
+> >>>  	total_misses = rf_cqm.values[0].value;
+> >>> -
+> >>> -	close(fd_lm);
+> >>> -
+> >>>  	*llc_perf_miss = total_misses;
+> >>>  
+> >>>  	return 0;
+> >>> @@ -253,6 +252,7 @@ int cat_val(struct resctrl_val_param *param)
+> >>>  					 memflush, operation, resctrl_val)) {
+> >>>  				fprintf(stderr, "Error-running fill buffer\n");
+> >>>  				ret = -1;
+> >>> +				close(fd_lm);
+> >>>  				break;
+> >>>  			}
+> >>>  
+> >>
+> >> Instead of fixing these existing patterns I think it would make the code
+> >> easier to understand and maintain if it is made symmetrical.
+> >> Having the perf event fd opened in one place but its close()
+> >> scattered elsewhere has the potential for confusion and making later
+> >> mistakes easy to miss.
+> >>
+> >> What if perf event fd is closed in a new "disable_llc_perf()" that
+> >> is matched with "reset_enable_llc_perf()" and called
+> >> from cat_val()?
+> >>
+> >> I think this raises another issue with the test trickery where
+> >> measure_cache_vals() has some assumptions about state based on the
+> >> test name.
+> > 
+> > I very much agree on the principle here, and thus I already have created 
+> > patches which will do a major cleanup on this area. The cleaned-up code 
+> > has pe_fd local var to cat_val() and handles closing it in cat_val() with 
+> > the usual patterns.
+> > 
+> > However, the patch is currently resides post L3 CAT test rewrite. 
+> > Backporting the cleanups/refactors into this series would require 
+> > considerable effort due to how convoluted all those n-step cleanup patches 
+> > and L3 CAT test rewrite are in this area. There's just very much to 
+> > cleanup here and L3 rewrite will touch the same areas so its a net 
+> > full of conflicts.
+> > 
+> > Do you want me to spend the effort to backport them into this series 
+> > (I expect will take some time)?
+> 
+> Considering the "Fixes" tag, having a smaller fix that can easily
+> be backported would be ideal so I am ok with deferring a bigger
+> rework.
+> 
+> I do think this fix can be made more robust with a couple of small
+> changes that should not introduce significant conflicts:
+> * initialize fd_lm to -1 
+
+> * do not close() fd_lm in get_llc_perf() but instead move its
+>   close() to at exit of cat_val().
+
+I changed the test to only close the fd in cat_val() which is the 
+direction the later refactor/cleanup changes (not in this series) was 
+moving anyway.
+
+> * add check in get_llc_perf() that it does not attempt ioctl()
+>   on "fd_lm == -1" (later addition would be error checking of
+>   the ioctl())
+
+The other two things suggested seem unnecessary and I've not implemented 
+them, I don't thinkg fd_lm can be -1 at ioctl(). Given this code is going 
+to be replaced soonish, putting any extra "safety" effort into it now 
+seems waste of time.
+
 -- 
-2.40.0.1.gaa8946217a0b
-
+ i.
+--8323329-1678409849-1689599152=:20605--
