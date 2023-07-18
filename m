@@ -2,129 +2,170 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E394EEB64DC
-	for <linux-kselftest@archiver.kernel.org>; Tue, 18 Jul 2023 21:18:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F41ACEB64DD
+	for <linux-kselftest@archiver.kernel.org>; Tue, 18 Jul 2023 22:05:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229510AbjGRVS5 (ORCPT
+        id S229749AbjGRWFa (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 18 Jul 2023 17:18:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41004 "EHLO
+        Tue, 18 Jul 2023 18:05:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231340AbjGRVSt (ORCPT
+        with ESMTP id S229681AbjGRWFa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Jul 2023 17:18:49 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91D4A1992;
-        Tue, 18 Jul 2023 14:18:43 -0700 (PDT)
-X-QQ-mid: bizesmtp62t1689715113t4aqmkoo
-Received: from linux-lab-host.localdomain ( [119.123.130.39])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 19 Jul 2023 05:18:32 +0800 (CST)
-X-QQ-SSF: 00200000000000D0X000B00A0000000
-X-QQ-FEAT: eTp2eCgHrZnVchQBQHtIq1r0Chl0Y2QbztCX0TuLdQWRfW6TBfD0oOxr2ZGUl
-        yeDiNZSVENj5aynfdi2NOfwTm0jEDkw5naUuGrqduIBj7DrVxkjq7hzmqe466uOcMmQ4Pwu
-        UheYGug3IvwmwqNhO0f54gtD5CS3BqKxSYZsenHMTFf/s4z03vCgj7ZUqzXY8eRywSO+OWS
-        I2bbHl1rsY8vhO5wagJxT4zU80r57W2C8xG3Prz2vxWKEQyWYDNwLPmwlY/0oa7JPlIi6Ct
-        NLQlRXtazcamKO4G51OA+NdQE9LFeIj3+wi2vuM0ZaQc3OwR6Tzwjo44z5oybS/0jggoEeX
-        c84ZB+ZfpFDm5HG45ZE7Np6rreJ6+cp9ChpV7qRly3xGJeCnGVwbYqt6fpZ1zrfZJofeqbY
-        eLYGk1HeKtk=
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 11777367648574905451
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     thomas@t-8ch.de, arnd@arndb.de, falcon@tinylab.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v1 8/8] selftests/nolibc: add test support for powerpc64
-Date:   Wed, 19 Jul 2023 05:18:32 +0800
-Message-Id: <dc634a44cf1a132d607e2c83874cda6cd6d6283f.1689713175.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1689713175.git.falcon@tinylab.org>
-References: <cover.1689713175.git.falcon@tinylab.org>
+        Tue, 18 Jul 2023 18:05:30 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7230D1FDF;
+        Tue, 18 Jul 2023 15:05:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1689717869;
+        bh=m5aG2jsE/sgyJ2tqwTkKOysF3r7AOBHTMjAwg4kbc1g=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+        b=eRcA8RmHcS61tw1UzwYA05Tv5Kkw2ND09r6+RbnVucax+MJIVCssxlKCIB1lYmhT9
+         aVi7nAJ8fNzPR42fUhN+bPFGWTJ/h+TmCVjiHxEOzPcWQWaIrUMvGJrmmNkB7aGQsr
+         u0odUd3EuICoRsC6nRZQq1z21HdHuI3kdD3OfcIw=
+From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Date:   Wed, 19 Jul 2023 00:00:42 +0200
+Subject: [PATCH RFC 4/7] selftests/nolibc: count subtests
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+Message-Id: <20230719-nolibc-ktap-tmp-v1-4-930bd0c52ff1@weissschuh.net>
+References: <20230719-nolibc-ktap-tmp-v1-0-930bd0c52ff1@weissschuh.net>
+In-Reply-To: <20230719-nolibc-ktap-tmp-v1-0-930bd0c52ff1@weissschuh.net>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Zhangjin Wu <falcon@tinylab.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1689717869; l=4038;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=m5aG2jsE/sgyJ2tqwTkKOysF3r7AOBHTMjAwg4kbc1g=;
+ b=fJ2NOu2wG+DLyHL32lAYwKlvELVRJsD01KjN7sfi/PiA2+k3UNDobW0TTr/7jSZPdiTHPQu2t
+ HAWcOWx0qwMA48xC01ns+/GgrZXn+10kbj4H4KWTwCRaomgoElyjVYo
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Here adds test support for big endian 64-bit PowerPC.
+This will be needed for KTAP output.
 
-The powernv machine of qemu-system-ppc64 is used with
-powernv_be_defconfig.
-
-As the document [1] shows:
-
-  PowerNV (as Non-Virtualized) is the “bare metal” platform using the
-  OPAL firmware. It runs Linux on IBM and OpenPOWER systems and it can be
-  used as an hypervisor OS, running KVM guests, or simply as a host OS.
-
-Note, differs from little endian 64-bit PowerPC, vmlinux is used instead
-of zImage, because big endian zImage [2] only boot on qemu with x-vof=on
-(added from qemu v7.0) and a fixup patch [3] for qemu v7.0.51:
-
-[1]: https://qemu.readthedocs.io/en/latest/system/ppc/powernv.html
-[2]: https://github.com/linuxppc/issues/issues/402
-[3]: https://lore.kernel.org/qemu-devel/20220504065536.3534488-1-aik@ozlabs.ru/
-
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- tools/testing/selftests/nolibc/Makefile | 6 ++++++
- 1 file changed, 6 insertions(+)
+ tools/testing/selftests/nolibc/nolibc-test.c | 30 +++++++++++++++++++++-------
+ 1 file changed, 23 insertions(+), 7 deletions(-)
 
-diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index fbdf7fd9bf96..cced1d60ecf9 100644
---- a/tools/testing/selftests/nolibc/Makefile
-+++ b/tools/testing/selftests/nolibc/Makefile
-@@ -19,6 +19,7 @@ endif
- XARCH           ?= $(or $(XARCH_$(ARCH)),$(ARCH))
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index 76bd6a0a8132..03f64ce1dda6 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -65,6 +65,13 @@ struct test {
+ 	int (*func)(unsigned int min, unsigned int max); /* handler */
+ };
  
- # ARCH is supported by kernel
-+ARCH_powerpc64   = powerpc
- ARCH_powerpc64le = powerpc
- ARCH            := $(or $(ARCH_$(XARCH)),$(XARCH))
++#define COUNT_SUBTESTS (-1)
++
++static unsigned int count_subtests(const struct test *test)
++{
++	return test->func(COUNT_SUBTESTS, COUNT_SUBTESTS);
++}
++
+ #ifndef _NOLIBC_STDLIB_H
+ char *itoa(int i)
+ {
+@@ -571,10 +578,10 @@ static int expect_strne(const char *expr, int llen, const char *cmp)
+ 	case __LINE__: llen += printf("%d %s", test, #name);
  
-@@ -30,6 +31,7 @@ IMAGE_arm64      = arch/arm64/boot/Image
- IMAGE_arm        = arch/arm/boot/zImage
- IMAGE_mips       = vmlinuz
- IMAGE_powerpc    = vmlinux
-+IMAGE_powerpc64  = vmlinux
- IMAGE_powerpc64le= arch/powerpc/boot/zImage
- IMAGE_riscv      = arch/riscv/boot/Image
- IMAGE_s390       = arch/s390/boot/bzImage
-@@ -45,6 +47,7 @@ DEFCONFIG_arm64      = defconfig
- DEFCONFIG_arm        = multi_v7_defconfig
- DEFCONFIG_mips       = malta_defconfig
- DEFCONFIG_powerpc    = pmac32_defconfig
-+DEFCONFIG_powerpc64  = powernv_be_defconfig
- DEFCONFIG_powerpc64le= powernv_defconfig
- DEFCONFIG_riscv      = defconfig
- DEFCONFIG_s390       = defconfig
-@@ -65,6 +68,7 @@ QEMU_ARCH_arm64      = aarch64
- QEMU_ARCH_arm        = arm
- QEMU_ARCH_mips       = mipsel  # works with malta_defconfig
- QEMU_ARCH_powerpc    = ppc
-+QEMU_ARCH_powerpc64  = ppc64
- QEMU_ARCH_powerpc64le= ppc64le
- QEMU_ARCH_riscv      = riscv64
- QEMU_ARCH_s390       = s390x
-@@ -79,6 +83,7 @@ QEMU_ARGS_arm64      = -M virt -cpu cortex-a53 -append "panic=-1 $(TEST:%=NOLIBC
- QEMU_ARGS_arm        = -M virt -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS_mips       = -M malta -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS_powerpc    = -M g3beige -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
-+QEMU_ARGS_powerpc64  = -M powernv -append "console=hvc0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS_powerpc64le= -M powernv -append "console=hvc0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS_riscv      = -M virt -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS_s390       = -M s390-ccw-virtio -m 1G -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
-@@ -95,6 +100,7 @@ else
- Q=@
- endif
+ #define SWITCH_TEST \
+-	switch (test + __LINE__ + 1) {
++	int _tests_start = __LINE__; switch (test + __LINE__ + 1) {
  
-+CFLAGS_powerpc64 = -m64 -mbig-endian -mmultiple -Wl,-EB,-melf64ppc
- CFLAGS_powerpc64le = -m64 -mlittle-endian -Wl,-EL,-melf64ppc
- CFLAGS_s390 = -m64
- CFLAGS_mips = -EL
+ #define SWITCH_TEST_END \
+-	case __LINE__: return ret; }
++	case __LINE__: return ret; default: return __LINE__ - _tests_start - 1; }
+ 
+ 
+ int run_startup(unsigned int min, unsigned int max)
+@@ -592,7 +599,7 @@ int run_startup(unsigned int min, unsigned int max)
+ 	test_auxv = _auxv;
+ #endif
+ 
+-	for (test = min; test >= 0 && test <= max; test++) {
++	for (test = min; test == COUNT_SUBTESTS || (test >= 0 && test <= max); test++) {
+ 		int llen = 0; /* line length */
+ 
+ 		/* avoid leaving empty lines below, this will insert holes into
+@@ -801,7 +808,7 @@ int run_syscall(unsigned int min, unsigned int max)
+ 	has_gettid = __GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 30);
+ #endif
+ 
+-	for (test = min; test >= 0 && test <= max; test++) {
++	for (test = min; test == COUNT_SUBTESTS || (test >= 0 && test <= max); test++) {
+ 		int llen = 0; /* line length */
+ 
+ 		/* avoid leaving empty lines below, this will insert holes into
+@@ -892,7 +899,7 @@ int run_stdlib(unsigned int min, unsigned int max)
+ 	int ret = 0;
+ 	void *p1, *p2;
+ 
+-	for (test = min; test >= 0 && test <= max; test++) {
++	for (test = min; test == COUNT_SUBTESTS || (test >= 0 && test <= max); test++) {
+ 		int llen = 0; /* line length */
+ 
+ 		/* avoid leaving empty lines below, this will insert holes into
+@@ -1032,7 +1039,7 @@ static int run_vfprintf(unsigned int min, unsigned int max)
+ 	int ret = 0;
+ 	void *p1, *p2;
+ 
+-	for (test = min; test >= 0 && test <= max; test++) {
++	for (test = min; test == COUNT_SUBTESTS || (test >= 0 && test <= max); test++) {
+ 		int llen = 0; /* line length */
+ 
+ 		/* avoid leaving empty lines below, this will insert holes into
+@@ -1070,6 +1077,9 @@ static int run_protection(unsigned int min, unsigned int max)
+ 	pid_t pid;
+ 	int llen = 0, status;
+ 
++	if (min == COUNT_SUBTESTS)
++		return 1;
++
+ 	llen += printf("0 -fstackprotector ");
+ 
+ #if !defined(_NOLIBC_STACKPROTECTOR)
+@@ -1219,6 +1229,7 @@ int main(int argc, char **argv, char **envp)
+ 	int ret = 0;
+ 	int err;
+ 	int idx;
++	unsigned int subtests;
+ 	char *test;
+ 
+ 	argv0 = argv[0];
+@@ -1265,6 +1276,8 @@ int main(int argc, char **argv, char **envp)
+ 				 * once. We may have an optional range at <colon>
+ 				 * here, which defaults to the full range.
+ 				 */
++
++				subtests = count_subtests(&test_names[idx]);
+ 				do {
+ 					min = 0; max = INT_MAX;
+ 					value = colon;
+@@ -1285,11 +1298,14 @@ int main(int argc, char **argv, char **envp)
+ 						else if (*dash)
+ 							max = atoi(dash);
+ 
++						if (max > subtests)
++							max = subtests;
++
+ 						value = colon;
+ 					}
+ 
+ 					/* now's time to call the test */
+-					printf("Running test '%s'\n", test_names[idx].name);
++					printf("Running test '%s' (%d-%d of %d)\n", test_names[idx].name, min, max, subtests);
+ 					err = test_names[idx].func(min, max);
+ 					ret += err;
+ 					printf("Errors during this test: %d\n\n", err);
+
 -- 
-2.25.1
+2.41.0
 
