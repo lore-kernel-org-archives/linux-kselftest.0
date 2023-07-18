@@ -2,38 +2,38 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 94A42EB64DA
-	for <linux-kselftest@archiver.kernel.org>; Tue, 18 Jul 2023 05:29:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3909CEB64DA
+	for <linux-kselftest@archiver.kernel.org>; Tue, 18 Jul 2023 05:29:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230360AbjGRF3P (ORCPT
+        id S230035AbjGRF33 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 18 Jul 2023 01:29:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36128 "EHLO
+        Tue, 18 Jul 2023 01:29:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230477AbjGRF3H (ORCPT
+        with ESMTP id S230284AbjGRF3T (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Jul 2023 01:29:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 160CE10C0;
-        Mon, 17 Jul 2023 22:28:41 -0700 (PDT)
+        Tue, 18 Jul 2023 01:29:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D7AD19B3;
+        Mon, 17 Jul 2023 22:28:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C4F261381;
-        Tue, 18 Jul 2023 05:28:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD072C433C8;
-        Tue, 18 Jul 2023 05:28:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C27FB61453;
+        Tue, 18 Jul 2023 05:28:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BC44C433B9;
+        Tue, 18 Jul 2023 05:28:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689658119;
-        bh=pDq8zAwwItzO8pDih79tVM9FL2q7j+cY2RORNTyXvJo=;
+        s=k20201202; t=1689658128;
+        bh=5/I2Oo1+eHlrU9kha5F8okWuBWfq/jmwWetfxpBFOJE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mg7gawPhf5h44Q4Lw0VZmHcJu2Psn4WiMq6k3UMWA4Ilx/OzR/RGky3KmujN/7FNC
-         b33Qsf9zyf83HOZ6EkiFugr99E16qCDkgwaeZfKr1GYFgHrfFWYvExq411QL5fCNAG
-         WohVVmv+EsMuyCaTkAnG7fqPjF8zck7E6NxCZEGUXD9Gx5UelQfYBW8oADw19m6mPu
-         zXdvohtqknr88s3QWR17HvhJkX8pwezvICB1X+92qfinUi/i90IGehr8v+aQkZbnEc
-         mOb1CM4ck5yPM396PR/EqqqGgZ9Ivbffy3Qh8Xr3ZGwv2a7Rfz3zYCZn3FYx2rBiWL
-         +swgakWgxA4lA==
+        b=jdH81+504C2TaP6gx9HufIlfw8IIMaE9uFiGR3yaVJJRfnpL3rpnKiANN+/eBP7hl
+         m15PXsyYE1OfIkODRedBtuxMAQtsq3BqcMPqD0pO1aF5Bh9J3vHTISRGHE4fc2LAky
+         F7HdpvrowMyClU6BmlV4JZrM8BZh7poS7VgHThJxlII8LreS/vzyTsQcxJSTVK9bwb
+         ipNAID5mW1qj68kXATmFM5b+ncEcRB70jS5eEmD0Q4w9VatpCWakqWR3YxtTNg7YeE
+         ppfrzrjUBXAWMd/qereojk/RCkrT4PuDKMnVTnE8U/AkfHnY2nS7kbJmnHOfmAgltX
+         L2MtbmqHjEKVg==
 From:   Miguel Ojeda <ojeda@kernel.org>
 To:     David Gow <davidgow@google.com>,
         Brendan Higgins <brendan.higgins@linux.dev>,
@@ -48,64 +48,47 @@ Cc:     Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
         kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
         rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
         patches@lists.linux.dev,
-        Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-Subject: [PATCH v2 5/7] rust: types: make doctests compilable/testable
-Date:   Tue, 18 Jul 2023 07:27:50 +0200
-Message-ID: <20230718052752.1045248-6-ojeda@kernel.org>
+        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
+        Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
+Subject: [PATCH v2 7/7] MAINTAINERS: add Rust KUnit files to the KUnit entry
+Date:   Tue, 18 Jul 2023 07:27:52 +0200
+Message-ID: <20230718052752.1045248-8-ojeda@kernel.org>
 In-Reply-To: <20230718052752.1045248-1-ojeda@kernel.org>
 References: <20230718052752.1045248-1-ojeda@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Rust documentation tests are going to be build/run-tested
-with the KUnit integration added in a future patch, thus
-update them to make them compilable/testable so that we
-may start enforcing it.
+The KUnit maintainers would like to maintain these files on their
+side too (thanks!), so add them to their entry.
 
-Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+With this in place, `scripts/get_maintainer.pl` prints both sets
+of maintainers/reviewers (i.e. KUnit and Rust) for those files,
+which is the behavior we are looking for.
+
 Reviewed-by: David Gow <davidgow@google.com>
-Reviewed-by: Björn Roy Baron <bjorn3_gh@protonmail.com>
-Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+Reviewed-by: Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
 Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 ---
- rust/kernel/types.rs | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ MAINTAINERS | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/rust/kernel/types.rs b/rust/kernel/types.rs
-index 1e5380b16ed5..696d6c5a3b9d 100644
---- a/rust/kernel/types.rs
-+++ b/rust/kernel/types.rs
-@@ -109,7 +109,7 @@ unsafe fn from_foreign(_: *const core::ffi::c_void) -> Self {}
- /// In the example below, we have multiple exit paths and we want to log regardless of which one is
- /// taken:
- /// ```
--/// # use kernel::ScopeGuard;
-+/// # use kernel::types::ScopeGuard;
- /// fn example1(arg: bool) {
- ///     let _log = ScopeGuard::new(|| pr_info!("example1 completed\n"));
- ///
-@@ -127,7 +127,7 @@ unsafe fn from_foreign(_: *const core::ffi::c_void) -> Self {}
- /// In the example below, we want to log the same message on all early exits but a different one on
- /// the main exit path:
- /// ```
--/// # use kernel::ScopeGuard;
-+/// # use kernel::types::ScopeGuard;
- /// fn example2(arg: bool) {
- ///     let log = ScopeGuard::new(|| pr_info!("example2 returned early\n"));
- ///
-@@ -148,7 +148,7 @@ unsafe fn from_foreign(_: *const core::ffi::c_void) -> Self {}
- /// In the example below, we need a mutable object (the vector) to be accessible within the log
- /// function, so we wrap it in the [`ScopeGuard`]:
- /// ```
--/// # use kernel::ScopeGuard;
-+/// # use kernel::types::ScopeGuard;
- /// fn example3(arg: bool) -> Result {
- ///     let mut vec =
- ///         ScopeGuard::new_with_data(Vec::new(), |v| pr_info!("vec had {} elements\n", v.len()));
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 3be1bdfe8ecc..2a942fe59144 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11372,6 +11372,8 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git k
+ F:	Documentation/dev-tools/kunit/
+ F:	include/kunit/
+ F:	lib/kunit/
++F:	rust/kernel/kunit.rs
++F:	scripts/rustdoc_test_*
+ F:	tools/testing/kunit/
+ 
+ KERNEL USERMODE HELPER
 -- 
 2.41.0
 
