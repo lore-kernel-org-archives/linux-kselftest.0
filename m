@@ -2,195 +2,166 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AABE8EB64DA
-	for <linux-kselftest@archiver.kernel.org>; Thu, 20 Jul 2023 16:40:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AD05EB64DD
+	for <linux-kselftest@archiver.kernel.org>; Thu, 20 Jul 2023 17:15:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231480AbjGTQk3 (ORCPT
+        id S231576AbjGTRPi (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 20 Jul 2023 12:40:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33736 "EHLO
+        Thu, 20 Jul 2023 13:15:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbjGTQkG (ORCPT
+        with ESMTP id S231543AbjGTRPh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Jul 2023 12:40:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC721FED
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Jul 2023 09:38:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689871087;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gPdSzcTTJlOeO2aEdgyECLhQy37txJLWdi6TDmez9kY=;
-        b=LWKi0K/q2ObYXtpQvUhLsqzKoDTeKes4e0GXnlqnYpQMO8NYEmeIrfVOd7bmBuDRriu5GP
-        dGnmn4Qc7SNbRZfSXmNOZ11Fya4QTCNaoIPGnx9qbaULS4N4wFAm0fMTPHRfrUGXN40YN3
-        NtXC7pNwAPZ7tvbknJRn9U7IyABBIuE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-230-kFK-c7oyNgC289gF1X8KZw-1; Thu, 20 Jul 2023 12:34:11 -0400
-X-MC-Unique: kFK-c7oyNgC289gF1X8KZw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4FA07101A54E;
-        Thu, 20 Jul 2023 16:34:08 +0000 (UTC)
-Received: from vschneid.remote.csb (unknown [10.42.28.48])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 29A9240C206F;
-        Thu, 20 Jul 2023 16:33:59 +0000 (UTC)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org,
-        bpf@vger.kernel.org, x86@kernel.org, rcu@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     "Paul E . McKenney" <paulmck@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Zqiang <qiang.zhang1211@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jason Baron <jbaron@akamai.com>,
-        Kees Cook <keescook@chromium.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Juerg Haefliger <juerg.haefliger@canonical.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Nadav Amit <namit@vmware.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Chuang Wang <nashuiliang@gmail.com>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        Petr Mladek <pmladek@suse.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>, Song Liu <song@kernel.org>,
-        Julian Pidancet <julian.pidancet@oracle.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Dionna Glaze <dionnaglaze@google.com>,
-        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Yair Podemsky <ypodemsk@redhat.com>
-Subject: [RFC PATCH v2 16/20] rcu: Make RCU dynticks counter size configurable
-Date:   Thu, 20 Jul 2023 17:30:52 +0100
-Message-Id: <20230720163056.2564824-17-vschneid@redhat.com>
-In-Reply-To: <20230720163056.2564824-1-vschneid@redhat.com>
-References: <20230720163056.2564824-1-vschneid@redhat.com>
+        Thu, 20 Jul 2023 13:15:37 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E84B3;
+        Thu, 20 Jul 2023 10:15:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689873334; x=1721409334;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ajwiDjEM37bJTrbE3/73m8Y1Bz0d/plYeHBMuGcnQlQ=;
+  b=d28e0eJFv2m6nYUAwrkxafUzoaA2suayn+KUyDHNWFbBa8uIsxmxOiCU
+   kmQ6sIsus2yEzePtoimeR7pGi+QGjdw/MNh343/ZIJkTbwZSCuPcD65Va
+   XhJcP+OiiV+piIcQk2PCLYBW48o66H3m+BKl9pjAjBsLV8bCktnqNHwRE
+   1him/MQrE3waM+U7RmQmpA5UG5rp7JW4QlXoEzdMFQXksVFeqAcZCKz52
+   2j09QDKwYPBCuLH4y6YXC6vKo9eSP7ucGPCrYcn6SRX+awPybwltquqZL
+   NaZEnf4HWdzEAS8Q77TBhzgMbwzndcGQb/eH+PltWcodt++LEvd8m1oU3
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="346401618"
+X-IronPort-AV: E=Sophos;i="6.01,219,1684825200"; 
+   d="scan'208";a="346401618"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2023 10:15:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="727776415"
+X-IronPort-AV: E=Sophos;i="6.01,219,1684825200"; 
+   d="scan'208";a="727776415"
+Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 20 Jul 2023 10:15:29 -0700
+Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qMXFM-0006JP-16;
+        Thu, 20 Jul 2023 17:15:25 +0000
+Date:   Fri, 21 Jul 2023 01:14:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Emma Anholt <emma@anholt.net>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kselftest@vger.kernel.org,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        =?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Gow <davidgow@google.com>, kunit-dev@googlegroups.com
+Subject: Re: [PATCH v2 01/11] drm/tests: helpers: Switch to kunit actions
+Message-ID: <202307210148.7gWzLOtn-lkp@intel.com>
+References: <20230720-kms-kunit-actions-rework-v2-1-175017bd56ab@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230720-kms-kunit-actions-rework-v2-1-175017bd56ab@kernel.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-CONTEXT_TRACKING_WORK reduces the size of the dynticks counter to free up
-some bits for work deferral. Paul suggested making the actual counter size
-configurable for rcutorture to poke at, so do that.
+Hi Maxime,
 
-Make it only configurable under RCU_EXPERT. Previous commits have added
-build-time checks that ensure a kernel with problematic dynticks counter
-width can't be built.
+kernel test robot noticed the following build warnings:
 
-Link: http://lore.kernel.org/r/4c2cb573-168f-4806-b1d9-164e8276e66a@paulmck-laptop
-Suggested-by: Paul E. McKenney <paulmck@kernel.org>
-Signed-off-by: Valentin Schneider <vschneid@redhat.com>
----
- include/linux/context_tracking.h       |  3 ++-
- include/linux/context_tracking_state.h |  3 +--
- kernel/rcu/Kconfig                     | 33 ++++++++++++++++++++++++++
- 3 files changed, 36 insertions(+), 3 deletions(-)
+[auto build test WARNING on c58c49dd89324b18a812762a2bfa5a0458e4f252]
 
-diff --git a/include/linux/context_tracking.h b/include/linux/context_tracking.h
-index 8aee086d0a25f..9c0c622bc27bb 100644
---- a/include/linux/context_tracking.h
-+++ b/include/linux/context_tracking.h
-@@ -12,7 +12,8 @@
- 
- #ifdef CONFIG_CONTEXT_TRACKING_WORK
- static_assert(CONTEXT_WORK_MAX_OFFSET <= CONTEXT_WORK_END + 1 - CONTEXT_WORK_START,
--	      "Not enough bits for CONTEXT_WORK");
-+	      "Not enough bits for CONTEXT_WORK, "
-+	      "CONFIG_RCU_DYNTICKS_BITS might be too high");
- #endif
- 
- #ifdef CONFIG_CONTEXT_TRACKING_USER
-diff --git a/include/linux/context_tracking_state.h b/include/linux/context_tracking_state.h
-index 828fcdb801f73..292a0b7c06948 100644
---- a/include/linux/context_tracking_state.h
-+++ b/include/linux/context_tracking_state.h
-@@ -58,8 +58,7 @@ enum ctx_state {
- #define CONTEXT_STATE_START 0
- #define CONTEXT_STATE_END   (bits_per(CONTEXT_MAX - 1) - 1)
- 
--#define RCU_DYNTICKS_BITS  (IS_ENABLED(CONFIG_CONTEXT_TRACKING_WORK) ? 16 : 31)
--#define RCU_DYNTICKS_START (CT_STATE_SIZE - RCU_DYNTICKS_BITS)
-+#define RCU_DYNTICKS_START (CT_STATE_SIZE - CONFIG_RCU_DYNTICKS_BITS)
- #define RCU_DYNTICKS_END   (CT_STATE_SIZE - 1)
- #define RCU_DYNTICKS_IDX   BIT(RCU_DYNTICKS_START)
- 
-diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
-index bdd7eadb33d8f..1ff2aab24e964 100644
---- a/kernel/rcu/Kconfig
-+++ b/kernel/rcu/Kconfig
-@@ -332,4 +332,37 @@ config RCU_DOUBLE_CHECK_CB_TIME
- 	  Say Y here if you need tighter callback-limit enforcement.
- 	  Say N here if you are unsure.
- 
-+config RCU_DYNTICKS_RANGE_BEGIN
-+	int
-+	depends on !RCU_EXPERT
-+	default 31 if !CONTEXT_TRACKING_WORK
-+	default 16 if CONTEXT_TRACKING_WORK
-+
-+config RCU_DYNTICKS_RANGE_BEGIN
-+	int
-+	depends on RCU_EXPERT
-+	default 2
-+
-+config RCU_DYNTICKS_RANGE_END
-+	int
-+	default 31 if !CONTEXT_TRACKING_WORK
-+	default 16 if CONTEXT_TRACKING_WORK
-+
-+config RCU_DYNTICKS_BITS_DEFAULT
-+       int
-+       default 31 if !CONTEXT_TRACKING_WORK
-+       default 16 if CONTEXT_TRACKING_WORK
-+
-+config RCU_DYNTICKS_BITS
-+	int "Dynticks counter width" if CONTEXT_TRACKING_WORK
-+	range RCU_DYNTICKS_RANGE_BEGIN RCU_DYNTICKS_RANGE_END
-+	default RCU_DYNTICKS_BITS_DEFAULT
-+	help
-+	  This option controls the width of the dynticks counter.
-+
-+	  Lower values will make overflows more frequent, which will increase
-+	  the likelihood of extending grace-periods.
-+
-+	  Don't touch this unless you are running some tests.
-+
- endmenu # "RCU Subsystem"
+url:    https://github.com/intel-lab-lkp/linux/commits/Maxime-Ripard/drm-tests-helpers-Switch-to-kunit-actions/20230720-191901
+base:   c58c49dd89324b18a812762a2bfa5a0458e4f252
+patch link:    https://lore.kernel.org/r/20230720-kms-kunit-actions-rework-v2-1-175017bd56ab%40kernel.org
+patch subject: [PATCH v2 01/11] drm/tests: helpers: Switch to kunit actions
+config: arm64-randconfig-r022-20230720 (https://download.01.org/0day-ci/archive/20230721/202307210148.7gWzLOtn-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230721/202307210148.7gWzLOtn-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307210148.7gWzLOtn-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/tests/drm_kunit_helpers.c:53:6: warning: cast from 'void (*)(struct platform_driver *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
+      53 |                                         (kunit_action_t *)platform_driver_unregister,
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/gpu/drm/tests/drm_kunit_helpers.c:61:6: warning: cast from 'void (*)(struct platform_device *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
+      61 |                                         (kunit_action_t *)platform_device_put,
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/tests/drm_kunit_helpers.c:69:6: warning: cast from 'void (*)(struct platform_device *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
+      69 |                                         (kunit_action_t *)platform_device_del,
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/tests/drm_kunit_helpers.c:89:9: warning: cast from 'void (*)(struct platform_device *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
+      89 |                              (kunit_action_t *)platform_device_unregister,
+         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/tests/drm_kunit_helpers.c:93:9: warning: cast from 'void (*)(struct platform_driver *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
+      93 |                              (kunit_action_t *)platform_driver_unregister,
+         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   5 warnings generated.
+
+
+vim +53 drivers/gpu/drm/tests/drm_kunit_helpers.c
+
+    28	
+    29	/**
+    30	 * drm_kunit_helper_alloc_device - Allocate a mock device for a KUnit test
+    31	 * @test: The test context object
+    32	 *
+    33	 * This allocates a fake struct &device to create a mock for a KUnit
+    34	 * test. The device will also be bound to a fake driver. It will thus be
+    35	 * able to leverage the usual infrastructure and most notably the
+    36	 * device-managed resources just like a "real" device.
+    37	 *
+    38	 * Resources will be cleaned up automatically, but the removal can be
+    39	 * forced using @drm_kunit_helper_free_device.
+    40	 *
+    41	 * Returns:
+    42	 * A pointer to the new device, or an ERR_PTR() otherwise.
+    43	 */
+    44	struct device *drm_kunit_helper_alloc_device(struct kunit *test)
+    45	{
+    46		struct platform_device *pdev;
+    47		int ret;
+    48	
+    49		ret = platform_driver_register(&fake_platform_driver);
+    50		KUNIT_ASSERT_EQ(test, ret, 0);
+    51	
+    52		ret = kunit_add_action_or_reset(test,
+  > 53						(kunit_action_t *)platform_driver_unregister,
+    54						&fake_platform_driver);
+    55		KUNIT_ASSERT_EQ(test, ret, 0);
+    56	
+    57		pdev = platform_device_alloc(KUNIT_DEVICE_NAME, PLATFORM_DEVID_NONE);
+    58		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
+    59	
+    60		ret = kunit_add_action_or_reset(test,
+  > 61						(kunit_action_t *)platform_device_put,
+    62						pdev);
+    63		KUNIT_ASSERT_EQ(test, ret, 0);
+    64	
+    65		ret = platform_device_add(pdev);
+    66		KUNIT_ASSERT_EQ(test, ret, 0);
+    67	
+    68		ret = kunit_add_action_or_reset(test,
+    69						(kunit_action_t *)platform_device_del,
+    70						pdev);
+    71		KUNIT_ASSERT_EQ(test, ret, 0);
+    72	
+    73		return &pdev->dev;
+    74	}
+    75	EXPORT_SYMBOL_GPL(drm_kunit_helper_alloc_device);
+    76	
+
 -- 
-2.31.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
