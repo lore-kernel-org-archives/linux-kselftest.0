@@ -2,55 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A287EB64DA
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD106EB64DD
 	for <linux-kselftest@archiver.kernel.org>; Thu, 20 Jul 2023 11:48:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230340AbjGTLsH (ORCPT
+        id S230479AbjGTLsI (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 20 Jul 2023 07:48:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45182 "EHLO
+        Thu, 20 Jul 2023 07:48:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231490AbjGTLr6 (ORCPT
+        with ESMTP id S230456AbjGTLrp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Jul 2023 07:47:58 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E6C32717;
-        Thu, 20 Jul 2023 04:47:49 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id d9443c01a7336-1b8b2b60731so3686065ad.2;
-        Thu, 20 Jul 2023 04:47:49 -0700 (PDT)
+        Thu, 20 Jul 2023 07:47:45 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF21426B1;
+        Thu, 20 Jul 2023 04:47:40 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id d9443c01a7336-1b8a8154f9cso5194335ad.1;
+        Thu, 20 Jul 2023 04:47:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689853668; x=1690458468;
+        d=gmail.com; s=20221208; t=1689853660; x=1690458460;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2fZBKSqD0Jf4EbIjfm4Dlb8jsXARp8sPconxfCXxUFY=;
-        b=TxgaJKo30NHJbsD8qj5iMbi2YtknFcRWNPHNlyvE/r3f5bPpDbeOzcN72Oz9CIwLAM
-         CMW84HXF1VWlyTMRVjhoT9gi+jzZ0lGGNF6AYWU665fUvU7Z0/CcYLBp6OK9WNMLq5qV
-         EgJ+SDo6TjAL8sph1RD1ds3APon9z4j0JLmKuZ1X7Qr3u+4YgwayAUWelgSdOrJffYN2
-         OHKLClpWlsh6LUpg0v3M9WfuqylAQ97YrskOBH4nBu0CGeoVDeEp3LH9miRqRdP1tJob
-         CdkSdtRzoL2RfEn2N2M6amd0gQ1x6fhIWowKfryo7nxvmCr1s2Y/kAzBBVT+983CjwZi
-         doCQ==
+        bh=zsZNEzswzG8LGSiGtSvGiHDvtnXPesXlahtUeg2sYj0=;
+        b=mTmee0o3B7ZyMTS4gt6pCHyLazCNqmiTaCdGL/Iag7wqw7agKdIFYjd0QT1ahfEqMa
+         4LyIhZM7o13kGeJ4m5Ayy5cMXqcKra/QWwnY1r7ZMDhr6gYNBCsrmCGihnSs1l/d4/Un
+         mn8faT1cozcZuKaLt5dm8BQPfffComvSzFmZ1DxWoxWpBwuQ6YL4JUvV8cOzOJdHzcRq
+         3sM/OHWXV+vMYFFGaUiwf77nRoVGsLHampn+qY0kfD8eTHcsUpukNXocTRq0OR7chBB8
+         pDhSSS407cLON2dbwS+sbIjVLjnnymuqpSriZLbkc8MVXGy6V8p/nQyRB7ttWkcM4jYw
+         l3Yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689853668; x=1690458468;
+        d=1e100.net; s=20221208; t=1689853660; x=1690458460;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2fZBKSqD0Jf4EbIjfm4Dlb8jsXARp8sPconxfCXxUFY=;
-        b=aAechK96Yy3LGJbsqY8eKTSRsGCgoCN5DocL177HkJB1BoC5bcKyFc/vsDcbFQ0gPM
-         rD5kTs6RRJ2ZSdRj78Sp3v4Tzszlqp6vSaKnNzDKt96x2QvkgDl+BceQzi85u8XppcnA
-         yKMmieQ4nC7wF8hqLuYq6BZP0rsxX1KjzXlyXUFjKx58bVCW7DbBp+m4UstNtlaq4NGs
-         mUcuvSdw5NSjmFZ6x9qpAYesfWbnGGC345h4h3Zk7Ec1Qto8NvFJDaAoP6SNxsUFq3R2
-         HaapbJsaQIv3XwQ/UWq+SUo9P6BHNiBw7X/pkzJL5PCZr/x2xPMNnM9fPAocQaXrw/3w
-         XbMg==
-X-Gm-Message-State: ABy/qLbKr57DA53+W61jUxy296q0trLcnxUuvHtDtQFDmwxdUPyK6OPk
-        vlG4mC/BBwQCBFcGPTMMzAdnT7mgps1fZJIBxP0=
-X-Google-Smtp-Source: APBJJlF77fVdbFjzM5yk7KZZfObH84Tbjs+A+leFC7VtcZUXAXEtrIo6Y0115xhBd33BKoRTyaS+dA==
-X-Received: by 2002:a17:902:cec3:b0:1b8:1e58:e906 with SMTP id d3-20020a170902cec300b001b81e58e906mr21334755plg.67.1689853668602;
-        Thu, 20 Jul 2023 04:47:48 -0700 (PDT)
+        bh=zsZNEzswzG8LGSiGtSvGiHDvtnXPesXlahtUeg2sYj0=;
+        b=fdmRJ6NQ3GSFlGK8CnbsVxHxAu8Eu0fQmPnn7K7jE6W7drw5mecxVHueOm3WfxUuGn
+         WJJqrSdNr/tXrcC3Z3QnnHMekyMpGMiE160NjCtZd8OMuImgbDo5IknHj4zDWwbAeKH5
+         thFsM6dJCSAH/iRx38yt4T6fly1CzdxOJ2b4IYtsG7dKupKElCS/cqKQqOoXRZ/SBIaY
+         IDjIyPiNQvDDXAQI5BYEPrQzVyykUAlh4zZ2Xza2ykssYoKDpoy9l8PkBf+bzLIebYbK
+         yxr6eWElu4zIOaxzs8ekk7kcVbF0670uht/x0cCcgO276CKvvDzVu7Hjyynso9QBxkMx
+         RWMg==
+X-Gm-Message-State: ABy/qLbvGx/QztJx/YSECixsD4uQCvL6wCoVSBrZWGWaWxLPiPQBlxA4
+        tjcPW8yXoibXlDPH+V1KMCs=
+X-Google-Smtp-Source: APBJJlE5jvZauSRdBA5WjRqe88ogqgtwva+kvzTjOuK4V61Rro/7tnyjvvUZ5uyDwgv01kQ+ZmwGVQ==
+X-Received: by 2002:a17:903:294b:b0:1b6:b703:36f8 with SMTP id li11-20020a170903294b00b001b6b70336f8mr6147948plb.25.1689853659965;
+        Thu, 20 Jul 2023 04:47:39 -0700 (PDT)
 Received: from CLOUDLIANG-MB2.tencent.com ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id u22-20020a170902a61600b001b2069072ccsm1164007plq.18.2023.07.20.04.47.45
+        by smtp.gmail.com with ESMTPSA id u22-20020a170902a61600b001b2069072ccsm1164007plq.18.2023.07.20.04.47.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jul 2023 04:47:48 -0700 (PDT)
+        Thu, 20 Jul 2023 04:47:39 -0700 (PDT)
 From:   Jinrong Liang <ljr.kernel@gmail.com>
 X-Google-Original-From: Jinrong Liang <cloudliang@tencent.com>
 To:     Sean Christopherson <seanjc@google.com>
@@ -66,9 +66,9 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>,
         Jinrong Liang <cloudliang@tencent.com>,
         linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v5 4/6] KVM: selftests: Add test cases for unsupported PMU event filter input values
-Date:   Thu, 20 Jul 2023 19:47:12 +0800
-Message-Id: <20230720114714.34079-5-cloudliang@tencent.com>
+Subject: [PATCH v5 2/6] KVM: selftests: Drop the return of remove_event()
+Date:   Thu, 20 Jul 2023 19:47:10 +0800
+Message-Id: <20230720114714.34079-3-cloudliang@tencent.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230720114714.34079-1-cloudliang@tencent.com>
 References: <20230720114714.34079-1-cloudliang@tencent.com>
@@ -80,69 +80,36 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Jinrong Liang <cloudliang@tencent.com>
 
-Add test cases to verify the handling of unsupported input values for the
-PMU event filter. The tests cover unsupported "action" values, unsupported
-"flags" values, and unsupported "nevents" values. All these cases should
-return an error, as they are currently not supported by the filter.
-Furthermore, the tests also cover the case where setting non-existent
-fixed counters in the fixed bitmap does not fail.
+None of the callers consume remove_event(), and it incorrectly implies
+that the incoming filter isn't modified. Drop the return.
 
 Signed-off-by: Jinrong Liang <cloudliang@tencent.com>
 ---
- .../kvm/x86_64/pmu_event_filter_test.c        | 26 +++++++++++++++++++
- 1 file changed, 26 insertions(+)
+ tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
 diff --git a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
-index 94f5a89aac40..8b8bfee11016 100644
+index 40507ed9fe8a..5ac05e64bec9 100644
 --- a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
 +++ b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
-@@ -32,6 +32,10 @@
- #define MAX_FILTER_EVENTS		300
- #define MAX_TEST_EVENTS		10
- 
-+#define PMU_EVENT_FILTER_INVALID_ACTION		(KVM_PMU_EVENT_DENY + 1)
-+#define PMU_EVENT_FILTER_INVALID_FLAGS			(KVM_PMU_EVENT_FLAGS_VALID_MASK << 1)
-+#define PMU_EVENT_FILTER_INVALID_NEVENTS		(MAX_FILTER_EVENTS + 1)
-+
- /*
-  * This is how the event selector and unit mask are stored in an AMD
-  * core performance event-select register. Intel's format is similar,
-@@ -760,6 +764,8 @@ static int set_pmu_single_event_filter(struct kvm_vcpu *vcpu, uint64_t event,
- 
- static void test_filter_ioctl(struct kvm_vcpu *vcpu)
+@@ -265,8 +265,7 @@ static struct kvm_pmu_event_filter *event_filter(uint32_t action)
+  * Remove the first occurrence of 'event' (if any) from the filter's
+  * event list.
+  */
+-static struct kvm_pmu_event_filter *remove_event(struct kvm_pmu_event_filter *f,
+-						 uint64_t event)
++static void remove_event(struct kvm_pmu_event_filter *f, uint64_t event)
  {
-+	uint8_t nr_fixed_counters = kvm_cpu_property(X86_PROPERTY_PMU_NR_FIXED_COUNTERS);
-+	struct __kvm_pmu_event_filter f;
- 	uint64_t e = ~0ul;
- 	int r;
- 
-@@ -780,6 +786,26 @@ static void test_filter_ioctl(struct kvm_vcpu *vcpu)
- 					KVM_PMU_EVENT_FLAG_MASKED_EVENTS,
- 					KVM_PMU_EVENT_ALLOW);
- 	TEST_ASSERT(r == 0, "Valid PMU Event Filter is failing");
-+
-+	f = base_event_filter;
-+	f.action = PMU_EVENT_FILTER_INVALID_ACTION;
-+	r = do_vcpu_set_pmu_event_filter(vcpu, &f);
-+	TEST_ASSERT(r, "Set invalid action is expected to fail");
-+
-+	f = base_event_filter;
-+	f.flags = PMU_EVENT_FILTER_INVALID_FLAGS;
-+	r = do_vcpu_set_pmu_event_filter(vcpu, &f);
-+	TEST_ASSERT(r, "Set invalid flags is expected to fail");
-+
-+	f = base_event_filter;
-+	f.nevents = PMU_EVENT_FILTER_INVALID_NEVENTS;
-+	r = do_vcpu_set_pmu_event_filter(vcpu, &f);
-+	TEST_ASSERT(r, "Exceeding the max number of filter events should fail");
-+
-+	f = base_event_filter;
-+	f.fixed_counter_bitmap = ~GENMASK_ULL(nr_fixed_counters, 0);
-+	r = do_vcpu_set_pmu_event_filter(vcpu, &f);
-+	TEST_ASSERT(!r, "Masking non-existent fixed counters should be allowed");
+ 	bool found = false;
+ 	int i;
+@@ -279,7 +278,6 @@ static struct kvm_pmu_event_filter *remove_event(struct kvm_pmu_event_filter *f,
+ 	}
+ 	if (found)
+ 		f->nevents--;
+-	return f;
  }
  
- int main(int argc, char *argv[])
+ #define ASSERT_PMC_COUNTING_INSTRUCTIONS()						\
 -- 
 2.39.3
 
