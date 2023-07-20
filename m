@@ -2,194 +2,119 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C194EB64DC
-	for <linux-kselftest@archiver.kernel.org>; Thu, 20 Jul 2023 10:00:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8581EEB64DA
+	for <linux-kselftest@archiver.kernel.org>; Thu, 20 Jul 2023 10:31:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231193AbjGTKAW (ORCPT
+        id S229699AbjGTKbV (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 20 Jul 2023 06:00:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56164 "EHLO
+        Thu, 20 Jul 2023 06:31:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231231AbjGTKAV (ORCPT
+        with ESMTP id S229526AbjGTKbU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Jul 2023 06:00:21 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2062.outbound.protection.outlook.com [40.107.223.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A54ED;
-        Thu, 20 Jul 2023 03:00:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Xv4d8S2hsGwUu91eD1a3AYXVYp2V+KbTyHT4YJGVHLu0jowOXg+eKSkMUJhyvQl5uB0syaYsmYQE8qn4v06GIBZYzvNEZZycOF3fgBs8jKSeupYJmlpjBfG3eyu36+lk3VreLIjI0UGQxMIcr7NcVSALKCaU6Dw+6Sj7wks17OpGt/CdfFdBqEVCjr4HKMrp52nX3xLnBTJD+1bFBTzFDBm+yq++TRoRPEiCQ8+/wSiDX9aenbxJEGK9C3jWUTz8xos2G9s40yu5tLSKMpSiITHMDVq6HaJKolFfr+ezEjOOPpLA3dHcnNnFStIxoDWDBrmZVq2WBTd6vf/VWJ/EoA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FZVYTtLQzoVhZgX3JBXnNFLor5nC7WRuUJfDIjiZ7xw=;
- b=kvQH+VUjt3kGUeGfB2ySjUMRnoFCAxvJXAIjfvDVEMbWoag5J8hoFLx5xijHJLRrYbJ5DN83v6fAFOVb7y4aBgkNneKvFGWSSt8Lueb3EyBhZqJS6qhGRUCUbkCihjmjSyyZuXt82JJpRxI5+YuzoHi+NXJRqMTLEZ1QX+YfN6towUI5EmlDKOBJL9b0dvZiZphkULfPV/SLhPkR0kpQoALoA5BFJZ86eGnoVXtVmu4UPe7TuWTdxWG+Ni4Gz56ELnusJPE3/HQm3F6I63HGmURO3KSSd4tm+8zhJGArCrWvc/W11HuQ1OOUdAb0lrXJA5/3cdBCfOhLb9cQHR36Nw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FZVYTtLQzoVhZgX3JBXnNFLor5nC7WRuUJfDIjiZ7xw=;
- b=ErZm9FxAgrW37vEw4SbBU1XQRFG8mXoU0SF57VWvP7Q75+4eKbagTYz3lgQ00ltSGR1VrmTkttGbUh559wlPLQfm4JY/XDcBHtJDN5f8QFU3j17wO56yfNsfO0SZ4i77l3DWP9lxAYAHdKALnJwMTdv1174DqYw1dU4ctvQqxPobZL2aTL5ARw6Kr0OTTOs46vk1bkrmamOkMHuPxEWWokyXi3drioQQ6dGMf9Swn7iRMzveNvik0Cu6I14JppAT2ugB5usSJ/s8zM6gG8tvBfMzlr+4eX/vg1N3VO00JRiQEy0YblDT7O6CIyatEzUwJ5CJlrXANOPsmD37HJLe5A==
-Received: from BN9PR03CA0180.namprd03.prod.outlook.com (2603:10b6:408:f4::35)
- by CH3PR12MB7665.namprd12.prod.outlook.com (2603:10b6:610:14a::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.33; Thu, 20 Jul
- 2023 10:00:14 +0000
-Received: from BN8NAM11FT074.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:f4:cafe::86) by BN9PR03CA0180.outlook.office365.com
- (2603:10b6:408:f4::35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.33 via Frontend
- Transport; Thu, 20 Jul 2023 10:00:14 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BN8NAM11FT074.mail.protection.outlook.com (10.13.176.154) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6588.34 via Frontend Transport; Thu, 20 Jul 2023 10:00:14 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Thu, 20 Jul 2023
- 03:00:01 -0700
-Received: from yaviefel (10.126.230.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Thu, 20 Jul
- 2023 02:59:58 -0700
-References: <759fe934-2e43-e9ff-8946-4fd579c09b05@alu.unizg.hr>
-User-agent: mu4e 1.8.11; emacs 28.2
-From:   Petr Machata <petrm@nvidia.com>
-To:     Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        <linux-kselftest@vger.kernel.org>, Ido Schimmel <idosch@nvidia.com>
-Subject: Re: [PROBLEM] seltests: net/forwarding/sch_ets.sh [HANG]
-Date:   Thu, 20 Jul 2023 11:43:45 +0200
-In-Reply-To: <759fe934-2e43-e9ff-8946-4fd579c09b05@alu.unizg.hr>
-Message-ID: <87cz0m9a3n.fsf@nvidia.com>
+        Thu, 20 Jul 2023 06:31:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 094C810F1
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Jul 2023 03:31:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A25B61A08
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Jul 2023 10:31:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8535C433C7;
+        Thu, 20 Jul 2023 10:31:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689849078;
+        bh=J75VgyCyMOY4uCVubQ02MoxyKNXvNaiEKCHSA0oocXs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IYhuewxIOIozhxLyaQzjLN74pujj/a3exBH06uQTom5IvOVid8aDiTflLeZzm5uHg
+         08243Z/whH+358t36ORt45RWh+c+Y51XBopl47o8zMbzsIeH/g13QUYcMNSbZMNu8E
+         BUgHDYOh6e8F7lRGY3GkYdw6KCsCg0TfKVbO1ZMwNsgWWeR7hBD+Nn+/lKcN0sQlMW
+         mK9heIEdJxoKkG7YdmJD+nWaNPg0QhK5Q+nvFJl5xqgTWk2aadpt5/MkH1TPndrUbr
+         m/MtFlVmajFkz7AXXLeo+FveOvVRJq9gRfsldq+wK0HNdrpVrsfDlQuc+epFPxoOc0
+         BzRPPehhzfDPw==
+Date:   Thu, 20 Jul 2023 11:31:13 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Shuah Khan <shuah@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2] kselftest/arm64: Exit streaming mode after collecting
+ signal context
+Message-ID: <20230720103113.GA11034@willie-the-truck>
+References: <20230712-arm64-signal-memcpy-fix-v2-1-494f7025caf6@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.126.230.35]
-X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT074:EE_|CH3PR12MB7665:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8291cb39-7641-4ae3-03e7-08db89081d05
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: HHkFj46amgQ6gw0lnIRqsC1mrd8FBCUJ69hssrAniAwC1ePf+LnLO/LiEC37rKwWiAbR0pz6aPR4c4KoNxTj104rPufCa1Ihax2YFn+9ACq/jLrdrmfqozoFQG31irZXyaB1sUMBPwfQC4/t5qu1jlFV/SVOAdPnIp/FAFERwNra6hFv3pwL2CGiTta0qRclSZczDNx7z+ggXsE9KhJxK5ERcLIcHMZT5HbRZEKteyAOe4a/eKU8IQ7iXqFyGYdyJEhc+z+aCgg2HV7EuaG/4iWgmoSRe4psnDgwpBbo35vNyCJoKQeXwExfaMPMGn2U1VjG0gvNt8fIssWDNvVv2c51MUlOeWqXae9/d8Wwv4ZBRtr3a50v20w0kbNesA5q28RY+efJW+/qirq1wgBOd9Pys1ywRhUnqcnqXieY48gikMrg70QTq9ahYdb+UW9UpBLkEHF37V/JoHoskpLOWtOIwSichQcQELWjHnyXBpr4R1bprtt9vYKiPkz33b2F0EHRkVnOVFKB0YIAoGc7YdLbKJlMUv6v0GmHF3+fVvnEzzxxgiIo9LIVV4f6CeDm7bMwD3ZfN8dv56r3Qi2LCAL3T3U9WKrEvXukVjIIlEU7ydL3hI12DnhOYMDR4sjvLA6p4C8STax0HSY385qKc3CPZ9fyBmMzqn/OFTzH6DdUHxrH0LqiY26XLUphfGAoSE3FgegDFj+0XOQFqxip9eNLe1T5Jnw8GdokZBq4lMduSb0Ocu6N5vtkcWL1BVFq
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(39860400002)(136003)(396003)(82310400008)(451199021)(46966006)(40470700004)(36840700001)(8676002)(8936002)(5660300002)(316002)(41300700001)(6916009)(70206006)(4326008)(70586007)(107886003)(54906003)(478600001)(2906002)(6666004)(40460700003)(7636003)(82740400003)(356005)(40480700001)(26005)(186003)(2616005)(426003)(36860700001)(336012)(47076005)(36756003)(16526019)(86362001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jul 2023 10:00:14.0637
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8291cb39-7641-4ae3-03e7-08db89081d05
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT074.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB7665
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230712-arm64-signal-memcpy-fix-v2-1-494f7025caf6@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Hi Mark,
 
-Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr> writes:
+On Wed, Jul 12, 2023 at 12:02:30PM +0100, Mark Brown wrote:
+> When we collect a signal context with one of the SME modes enabled we will
+> have enabled that mode behind the compiler and libc's back so they may
+> issue some instructions not valid in streaming mode, causing spurious
+> failures.
+> 
+> For the code prior to issuing the BRK to trigger signal handling we need to
+> stay in streaming mode if we were already there since that's a part of the
+> signal context the caller is trying to collect. Unfortunately this code
+> includes a memset() which is likely to be heavily optimised and is likely
+> to use FP instructions incompatible with streaming mode. We can avoid this
+> happening by open coding the memset(), inserting a volatile assembly
+> statement to avoid the compiler recognising what's being done and doing
+> something in optimisation. This code is not performance critical so the
+> inefficiency should not be an issue.
+> 
+> After collecting the context we can simply exit streaming mode, avoiding
+> these issues. Use a full SMSTOP for safety to prevent any issues appearing
+> with ZA.
 
-> Using the same config for 6.5-rc2 on Ubuntu 22.04 LTS and 22.10, the execution
-> stop at the exact same line on both boxes (os I reckon it is more than an
-> accident):
->
-> # selftests: net/forwarding: sch_ets.sh
-> # TEST: ping vlan 10                                                  [ OK ]
-> # TEST: ping vlan 11                                                  [ OK ]
-> # TEST: ping vlan 12                                                  [ OK ]
-> # Running in priomap mode
-> # Testing ets bands 3 strict 3, streams 0 1
-> # TEST: band 0                                                        [ OK ]
-> # INFO: Expected ratio >95% Measured ratio 100.00
-> # TEST: band 1                                                        [ OK ]
-> # INFO: Expected ratio <5% Measured ratio 0
-> # Testing ets bands 3 strict 3, streams 1 2
-> # TEST: band 1                                                        [ OK ]
-> # INFO: Expected ratio >95% Measured ratio 100.00
-> # TEST: band 2                                                        [ OK ]
-> # INFO: Expected ratio <5% Measured ratio 0
-> # Testing ets bands 4 strict 1 quanta 5000 2500 1500, streams 0 1
-> # TEST: band 0                                                        [ OK ]
-> # INFO: Expected ratio >95% Measured ratio 100.00
-> # TEST: band 1                                                        [ OK ]
-> # INFO: Expected ratio <5% Measured ratio 0
-> # Testing ets bands 4 strict 1 quanta 5000 2500 1500, streams 1 2
-> # TEST: bands 1:2                                                     [ OK ]
-> # INFO: Expected ratio 2.00 Measured ratio 1.99
-> # Testing ets bands 3 quanta 3300 3300 3300, streams 0 1 2
-> # TEST: bands 0:1                                                     [ OK ]
-> # INFO: Expected ratio 1.00 Measured ratio .99
-> # TEST: bands 0:2                                                     [ OK ]
-> # INFO: Expected ratio 1.00 Measured ratio 1.00
-> # Testing ets bands 3 quanta 5000 3500 1500, streams 0 1 2
-> # TEST: bands 0:1                                                     [ OK ]
-> # INFO: Expected ratio 1.42 Measured ratio 1.42
-> # TEST: bands 0:2                                                     [ OK ]
-> # INFO: Expected ratio 3.33 Measured ratio 3.33
-> # Testing ets bands 3 quanta 5000 8000 1500, streams 0 1 2
-> # TEST: bands 0:1                                                     [ OK ]
-> # INFO: Expected ratio 1.60 Measured ratio 1.59
-> # TEST: bands 0:2                                                     [ OK ]
-> # INFO: Expected ratio 3.33 Measured ratio 3.33
-> # Testing ets bands 2 quanta 5000 2500, streams 0 1
-> # TEST: bands 0:1                                                     [ OK ]
-> # INFO: Expected ratio 2.00 Measured ratio 1.99
-> # Running in classifier mode
-> # Testing ets bands 3 strict 3, streams 0 1
-> # TEST: band 0                                                        [ OK ]
-> # INFO: Expected ratio >95% Measured ratio 100.00
-> # TEST: band 1                                                        [ OK ]
-> # INFO: Expected ratio <5% Measured ratio 0
-> # Testing ets bands 3 strict 3, streams 1 2
-> # TEST: band 1                                                        [ OK ]
-> # INFO: Expected ratio >95% Measured ratio 100.00
-> # TEST: band 2                                                        [ OK ]
-> # INFO: Expected ratio <5% Measured ratio 0
-> # Testing ets bands 4 strict 1 quanta 5000 2500 1500, streams 0 1
->
-> I tried to run 'set -x' enabled version standalone, but that one finished
-> correctly (?).
->
-> It could be something previous scripts left, but right now I don't have a clue.
-> I can attempt to rerun all tests with sch_ets.sh bash 'set -x' enabled later today.
+Thanks for looking at this. Comments inline.
 
-If you run it standalone without set -x, does it finish as well? That
-would imply that the reproducer needs to include the previous tests as
-well.
+> diff --git a/tools/testing/selftests/arm64/signal/test_signals_utils.h b/tools/testing/selftests/arm64/signal/test_signals_utils.h
+> index 222093f51b67..db28409fd44b 100644
+> --- a/tools/testing/selftests/arm64/signal/test_signals_utils.h
+> +++ b/tools/testing/selftests/arm64/signal/test_signals_utils.h
+> @@ -60,13 +60,28 @@ static __always_inline bool get_current_context(struct tdescr *td,
+>  						size_t dest_sz)
+>  {
+>  	static volatile bool seen_already;
+> +	int i;
+> +	char *uc = (char *)dest_uc;
+>  
+>  	assert(td && dest_uc);
+>  	/* it's a genuine invocation..reinit */
+>  	seen_already = 0;
+>  	td->live_uc_valid = 0;
+>  	td->live_sz = dest_sz;
+> -	memset(dest_uc, 0x00, td->live_sz);
+> +
+> +	/*
+> +	 * This is a memset() but we don't want the compiler to
+> +	 * optimise it into either instructions or a library call
+> +	 * which might be incompatible with streaming mode.
+> +	 */
+> +	for (i = 0; i < td->live_sz; i++) {
+> +		asm volatile("nop"
+> +			     : "+m" (*dest_uc)
+> +			     :
+> +			     : "memory");
 
-It looks like the test is stuck in ets_test_mixed in classifier_mode.
-A way to run just this test would be:
+I don't think it's save to use "+m" here, since the compiler can assume
+that the address is used exactly once in the asm. If a post-indexed
+addressing mode is generated, then you can end up with register corruption.
 
-    TESTS="classifier_mode ets_test_mixed" ./sch_ets.sh
+Stepping back, why not use either barrier() or OPTIMIZER_HIDE_VAR()
+instead?
 
-Looking at the code, the only place that I can see that waits on
-anything is the "{ kill %% && wait %%; } 2>/dev/null" line in
-stop_traffic() (in lib.sh). Maybe something like this would let
-us see if that's the case:
+The most robust fix would be to write all of the streaming mode code in
+asm, but I can appreciate that's a tonne of work for a testcase.
 
-modified   tools/testing/selftests/net/forwarding/lib.sh
-@@ -1468,8 +1470,10 @@ start_tcp_traffic()
- 
- stop_traffic()
- {
-+	echo killing MZ
- 	# Suppress noise from killing mausezahn.
- 	{ kill %% && wait %%; } 2>/dev/null
-+	echo killed MZ
- }
+Will
