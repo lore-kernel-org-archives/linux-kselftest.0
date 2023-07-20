@@ -2,42 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4207AEB64DC
-	for <linux-kselftest@archiver.kernel.org>; Thu, 20 Jul 2023 16:32:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ED68FC001DC
+	for <linux-kselftest@archiver.kernel.org>; Thu, 20 Jul 2023 16:33:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230148AbjGTQcl (ORCPT
+        id S231247AbjGTQdY (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 20 Jul 2023 12:32:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56164 "EHLO
+        Thu, 20 Jul 2023 12:33:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231215AbjGTQci (ORCPT
+        with ESMTP id S231190AbjGTQdX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Jul 2023 12:32:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC7031985
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Jul 2023 09:31:46 -0700 (PDT)
+        Thu, 20 Jul 2023 12:33:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3EFF1FF9
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Jul 2023 09:32:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689870705;
+        s=mimecast20190719; t=1689870740;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=itPzsUWzfa/0r+cdUWVW66YAXwbafCm93m3nlhq1CyM=;
-        b=ecaKSYpepi+8t59FPze02b7OuwrAeK0EwY41Z4HxJITytbhHnc8PyroNK5Qj4VU+7NA934
-        grjO7rDaXrywz3ig2dgUn3ONoqQvcBWKviWJkyY35QYqwmYoF3Rqs7HtjfU6hL0dpEA+Ly
-        Cxs9utJ0NjrmOxH8xYG1FvaaurHYPLA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-668-S2s6ay7gNwe_HYPF87xsVQ-1; Thu, 20 Jul 2023 12:31:44 -0400
-X-MC-Unique: S2s6ay7gNwe_HYPF87xsVQ-1
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=D/8mq5c0cbFoNC4kMb4OaVtFnN/bUBn9qmubvCUjumA=;
+        b=Iqa7XZfAbrPeqeIHzZdxZrC8conlXzvzc+DavlGijcQ6qvfMzkxZTMpfQQ/l7woa+R/0YI
+        b43y0Dtnx8Z5ziWnJZ9legigCfrecTGZm2P1dL5Ik3evanDom/jeK2NzeVov2J4mvrR4vN
+        Hq6yfq5m6WNAvGU5DgZzmEwQly5Hb0w=
+Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-99-y6uyriohNKyYlI_N0r9yPA-1; Thu, 20 Jul 2023 12:32:19 -0400
+X-MC-Unique: y6uyriohNKyYlI_N0r9yPA-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3CF61101A54E;
-        Thu, 20 Jul 2023 16:31:40 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 84E3A1C05EAE;
+        Thu, 20 Jul 2023 16:32:16 +0000 (UTC)
 Received: from vschneid.remote.csb (unknown [10.42.28.48])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8B00840C206F;
-        Thu, 20 Jul 2023 16:31:29 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 83E5540C2070;
+        Thu, 20 Jul 2023 16:32:08 +0000 (UTC)
 From:   Valentin Schneider <vschneid@redhat.com>
 To:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org,
@@ -91,9 +92,11 @@ Cc:     Steven Rostedt <rostedt@goodmis.org>,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
         Marcelo Tosatti <mtosatti@redhat.com>,
         Yair Podemsky <ypodemsk@redhat.com>
-Subject: [RFC PATCH v2 00/20] context_tracking,x86: Defer some IPIs until a user->kernel transition
-Date:   Thu, 20 Jul 2023 17:30:36 +0100
-Message-Id: <20230720163056.2564824-1-vschneid@redhat.com>
+Subject: [RFC PATCH v2 03/20] tracing/filters: Enable filtering a scalar field by a cpumask
+Date:   Thu, 20 Jul 2023 17:30:39 +0100
+Message-Id: <20230720163056.2564824-4-vschneid@redhat.com>
+In-Reply-To: <20230720163056.2564824-1-vschneid@redhat.com>
+References: <20230720163056.2564824-1-vschneid@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
@@ -101,257 +104,209 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Context
-=======
+Several events use a scalar field to denote a CPU:
+o sched_wakeup.target_cpu
+o sched_migrate_task.orig_cpu,dest_cpu
+o sched_move_numa.src_cpu,dst_cpu
+o ipi_send_cpu.cpu
+o ...
 
-We've observed within Red Hat that isolated, NOHZ_FULL CPUs running a
-pure-userspace application get regularly interrupted by IPIs sent from
-housekeeping CPUs. Those IPIs are caused by activity on the housekeeping CPUs
-leading to various on_each_cpu() calls, e.g.:
+Filtering these currently requires using arithmetic comparison functions,
+which can be tedious when dealing with interleaved SMT or NUMA CPU ids.
 
-  64359.052209596    NetworkManager       0    1405     smp_call_function_many_cond (cpu=0, func=do_kernel_range_flush)
-    smp_call_function_many_cond+0x1
-    smp_call_function+0x39
-    on_each_cpu+0x2a
-    flush_tlb_kernel_range+0x7b
-    __purge_vmap_area_lazy+0x70
-    _vm_unmap_aliases.part.42+0xdf
-    change_page_attr_set_clr+0x16a
-    set_memory_ro+0x26
-    bpf_int_jit_compile+0x2f9
-    bpf_prog_select_runtime+0xc6
-    bpf_prepare_filter+0x523
-    sk_attach_filter+0x13
-    sock_setsockopt+0x92c
-    __sys_setsockopt+0x16a
-    __x64_sys_setsockopt+0x20
-    do_syscall_64+0x87
-    entry_SYSCALL_64_after_hwframe+0x65
+Allow these to be filtered by a user-provided cpumask, which enables e.g.:
 
-The heart of this series is the thought that while we cannot remove NOHZ_FULL
-CPUs from the list of CPUs targeted by these IPIs, they may not have to execute
-the callbacks immediately. Anything that only affects kernelspace can wait
-until the next user->kernel transition, providing it can be executed "early
-enough" in the entry code.
+$ trace-cmd record -e 'sched_wakeup' -f 'target_cpu & CPUS{2,4,6,8-32}'
 
-The original implementation is from Peter [1]. Nicolas then added kernel TLB
-invalidation deferral to that [2], and I picked it up from there.
+Signed-off-by: Valentin Schneider <vschneid@redhat.com>
+---
+NOTE: I went with an implicit cpumask conversion of the event field, as
+AFAICT predicate_parse() does not support parsing the application of a
+function to a field (e.g. 'CPUS(target_cpu) & CPUS{2,4,6,8-32}')
+---
+ kernel/trace/trace_events_filter.c | 92 ++++++++++++++++++++++++++----
+ 1 file changed, 81 insertions(+), 11 deletions(-)
 
-Deferral approach
-=================
-
-Storing each and every callback, like a secondary call_single_queue turned out
-to be a no-go: the whole point of deferral is to keep NOHZ_FULL CPUs in
-userspace for as long as possible - no signal of any form would be sent when
-deferring an IPI. This means that any form of queuing for deferred callbacks
-would end up as a convoluted memory leak.
-
-Deferred IPIs must thus be coalesced, which this series achieves by assigning
-IPIs a "type" and having a mapping of IPI type to callback, leveraged upon
-kernel entry.
-
-What about IPIs whose callback take a parameter, you may ask?
-
-Peter suggested during OSPM23 [3] that since on_each_cpu() targets
-housekeeping CPUs *and* isolated CPUs, isolated CPUs can access either global or
-housekeeping-CPU-local state to "reconstruct" the data that would have been sent
-via the IPI.
-
-This series does not affect any IPI callback that requires an argument, but the
-approach would remain the same (one coalescable callback executed on kernel
-entry).
-
-Kernel entry vs execution of the deferred operation
-===================================================
-
-There is a non-zero length of code that is executed upon kernel entry before the
-deferred operation can be itself executed (i.e. before we start getting into
-context_tracking.c proper).
-
-This means one must take extra care to what can happen in the early entry code,
-and that <bad things> cannot happen. For instance, we really don't want to hit
-instructions that have been modified by a remote text_poke() while we're on our
-way to execute a deferred sync_core().
-
-Patches
-=======
-
-o Patches 1-9 have been submitted separately and are included for the sake of
-  testing 
-
-o Patches 10-14 focus on having objtool detect problematic static key usage in
-  early entry
-  
-o Patch 15 adds the infrastructure for IPI deferral.
-o Patches 16-17 add some RCU testing infrastructure
-o Patch 18 adds text_poke() IPI deferral.
-
-o Patches 19-20 add vunmap() flush_tlb_kernel_range() IPI deferral
-
-  These ones I'm a lot less confident about, mostly due to lacking
-  instrumentation/verification.
-  
-  The actual deferred callback is also incomplete as it's not properly noinstr:
-    vmlinux.o: warning: objtool: __flush_tlb_all_noinstr+0x19: call to native_write_cr4() leaves .noinstr.text section
-  and it doesn't support PARAVIRT - it's going to need a pv_ops.mmu entry, but I
-  have *no idea* what a sane implementation would be for Xen so I haven't
-  touched that yet.
-
-Patches are also available at:
-
-https://gitlab.com/vschneid/linux.git -b redhat/isolirq/defer/v2
-
-Testing
-=======
-
-Note: this is a different machine than used for v1, because that machine decided
-to act difficult.
-
-Xeon E5-2699 system with SMToff, NOHZ_FULL, isolated CPUs.
-RHEL9 userspace.
-
-Workload is using rteval (kernel compilation + hackbench) on housekeeping CPUs
-and a dummy stay-in-userspace loop on the isolated CPUs. The main invocation is:
-
-$ trace-cmd record -e "csd_queue_cpu" -f "cpu & CPUS{$ISOL_CPUS}" \
- 	           -e "ipi_send_cpumask" -f "cpumask & CPUS{$ISOL_CPUS}" \
-	           -e "ipi_send_cpu"     -f "cpu & CPUS{$ISOL_CPUS}" \
-		   rteval --onlyload --loads-cpulist=$HK_CPUS \
-		   --hackbench-runlowmem=True --duration=$DURATION
-
-This only records IPIs sent to isolated CPUs, so any event there is interference
-(with a bit of fuzz at the start/end of the workload when spawning the
-processes). All tests were done with a duration of 30 minutes.
-
-v6.5-rc1 (+ cpumask filtering patches):
-# This is the actual IPI count
-$ trace-cmd report | grep callback | awk '{ print $(NF) }' | sort | uniq -c | sort -nr
-    338 callback=generic_smp_call_function_single_interrupt+0x0
-
-# These are the different CSD's that caused IPIs    
-$ trace-cmd report | grep csd_queue | awk '{ print $(NF-1) }' | sort | uniq -c | sort -nr
-   9207 func=do_flush_tlb_all
-   1116 func=do_sync_core
-     62 func=do_kernel_range_flush
-      3 func=nohz_full_kick_func
-
-v6.5-rc1 + patches:
-# This is the actual IPI count
-$ trace-cmd report | grep callback | awk '{ print $(NF) }' | sort | uniq -c | sort -nr
-      2 callback=generic_smp_call_function_single_interrupt+0x0
-
-# These are the different CSD's that caused IPIs          
-$ trace-cmd report | grep csd_queue | awk '{ print $(NF-1) }' | sort | uniq -c | sort -nr
-      2 func=nohz_full_kick_func
-
-The incriminating IPIs are all gone, but note that on the machine I used to test
-v1 there were still some do_flush_tlb_all() IPIs caused by
-pcpu_balance_workfn(), since only vmalloc is affected by the deferral
-mechanism.
-
-
-Acknowledgements
-================
-
-Special thanks to:
-o Clark Williams for listening to my ramblings about this and throwing ideas my way
-o Josh Poimboeuf for his guidance regarding objtool and hinting at the
-  .data..ro_after_init section.
-
-Links
-=====
-
-[1]: https://lore.kernel.org/all/20210929151723.162004989@infradead.org/
-[2]: https://github.com/vianpl/linux.git -b ct-work-defer-wip
-[3]: https://youtu.be/0vjE6fjoVVE
-
-Revisions
-=========
-
-RFCv1 -> RFCv2
-++++++++++++++
-
-o Rebased onto v6.5-rc1
-
-o Updated the trace filter patches (Steven)
-
-o Fixed __ro_after_init keys used in modules (Peter)
-o Dropped the extra context_tracking atomic, squashed the new bits in the
-  existing .state field (Peter, Frederic)
-  
-o Added an RCU_EXPERT config for the RCU dynticks counter size, and added an
-  rcutorture case for a low-size counter (Paul)
-
-  The new TREE11 case with a 2-bit dynticks counter seems to pass when ran
-  against this series.
-
-o Fixed flush_tlb_kernel_range_deferrable() definition
-
-Peter Zijlstra (1):
-  jump_label,module: Don't alloc static_key_mod for __ro_after_init keys
-
-Valentin Schneider (19):
-  tracing/filters: Dynamically allocate filter_pred.regex
-  tracing/filters: Enable filtering a cpumask field by another cpumask
-  tracing/filters: Enable filtering a scalar field by a cpumask
-  tracing/filters: Enable filtering the CPU common field by a cpumask
-  tracing/filters: Optimise cpumask vs cpumask filtering when user mask
-    is a single CPU
-  tracing/filters: Optimise scalar vs cpumask filtering when the user
-    mask is a single CPU
-  tracing/filters: Optimise CPU vs cpumask filtering when the user mask
-    is a single CPU
-  tracing/filters: Further optimise scalar vs cpumask comparison
-  tracing/filters: Document cpumask filtering
-  objtool: Flesh out warning related to pv_ops[] calls
-  objtool: Warn about non __ro_after_init static key usage in .noinstr
-  context_tracking: Make context_tracking_key __ro_after_init
-  x86/kvm: Make kvm_async_pf_enabled __ro_after_init
-  context-tracking: Introduce work deferral infrastructure
-  rcu: Make RCU dynticks counter size configurable
-  rcutorture: Add a test config to torture test low RCU_DYNTICKS width
-  context_tracking,x86: Defer kernel text patching IPIs
-  context_tracking,x86: Add infrastructure to defer kernel TLBI
-  x86/mm, mm/vmalloc: Defer flush_tlb_kernel_range() targeting NOHZ_FULL
-    CPUs
-
- Documentation/trace/events.rst                |  14 +
- arch/Kconfig                                  |   9 +
- arch/x86/Kconfig                              |   1 +
- arch/x86/include/asm/context_tracking_work.h  |  20 ++
- arch/x86/include/asm/text-patching.h          |   1 +
- arch/x86/include/asm/tlbflush.h               |   2 +
- arch/x86/kernel/alternative.c                 |  24 +-
- arch/x86/kernel/kprobes/core.c                |   4 +-
- arch/x86/kernel/kprobes/opt.c                 |   4 +-
- arch/x86/kernel/kvm.c                         |   2 +-
- arch/x86/kernel/module.c                      |   2 +-
- arch/x86/mm/tlb.c                             |  40 ++-
- include/asm-generic/sections.h                |   5 +
- include/linux/context_tracking.h              |  26 ++
- include/linux/context_tracking_state.h        |  65 +++-
- include/linux/context_tracking_work.h         |  28 ++
- include/linux/jump_label.h                    |   1 +
- include/linux/trace_events.h                  |   1 +
- init/main.c                                   |   1 +
- kernel/context_tracking.c                     |  53 ++-
- kernel/jump_label.c                           |  49 +++
- kernel/rcu/Kconfig                            |  33 ++
- kernel/time/Kconfig                           |   5 +
- kernel/trace/trace_events_filter.c            | 302 ++++++++++++++++--
- mm/vmalloc.c                                  |  19 +-
- tools/objtool/check.c                         |  22 +-
- tools/objtool/include/objtool/check.h         |   1 +
- tools/objtool/include/objtool/special.h       |   2 +
- tools/objtool/special.c                       |   3 +
- .../selftests/rcutorture/configs/rcu/TREE11   |  19 ++
- .../rcutorture/configs/rcu/TREE11.boot        |   1 +
- 31 files changed, 695 insertions(+), 64 deletions(-)
- create mode 100644 arch/x86/include/asm/context_tracking_work.h
- create mode 100644 include/linux/context_tracking_work.h
- create mode 100644 tools/testing/selftests/rcutorture/configs/rcu/TREE11
- create mode 100644 tools/testing/selftests/rcutorture/configs/rcu/TREE11.boot
-
---
+diff --git a/kernel/trace/trace_events_filter.c b/kernel/trace/trace_events_filter.c
+index cb1863dfa280b..1e14f801685a8 100644
+--- a/kernel/trace/trace_events_filter.c
++++ b/kernel/trace/trace_events_filter.c
+@@ -46,15 +46,19 @@ static const char * ops[] = { OPS };
+ enum filter_pred_fn {
+ 	FILTER_PRED_FN_NOP,
+ 	FILTER_PRED_FN_64,
++	FILTER_PRED_FN_64_CPUMASK,
+ 	FILTER_PRED_FN_S64,
+ 	FILTER_PRED_FN_U64,
+ 	FILTER_PRED_FN_32,
++	FILTER_PRED_FN_32_CPUMASK,
+ 	FILTER_PRED_FN_S32,
+ 	FILTER_PRED_FN_U32,
+ 	FILTER_PRED_FN_16,
++	FILTER_PRED_FN_16_CPUMASK,
+ 	FILTER_PRED_FN_S16,
+ 	FILTER_PRED_FN_U16,
+ 	FILTER_PRED_FN_8,
++	FILTER_PRED_FN_8_CPUMASK,
+ 	FILTER_PRED_FN_S8,
+ 	FILTER_PRED_FN_U8,
+ 	FILTER_PRED_FN_COMM,
+@@ -643,6 +647,39 @@ predicate_parse(const char *str, int nr_parens, int nr_preds,
+ 	return ERR_PTR(ret);
+ }
+ 
++static inline int
++do_filter_cpumask(int op, const struct cpumask *mask, const struct cpumask *cmp)
++{
++	switch (op) {
++	case OP_EQ:
++		return cpumask_equal(mask, cmp);
++	case OP_NE:
++		return !cpumask_equal(mask, cmp);
++	case OP_BAND:
++		return cpumask_intersects(mask, cmp);
++	default:
++		return 0;
++	}
++}
++
++/* Optimisation of do_filter_cpumask() for scalar fields */
++static inline int
++do_filter_scalar_cpumask(int op, unsigned int cpu, const struct cpumask *mask)
++{
++	switch (op) {
++	case OP_EQ:
++		return cpumask_test_cpu(cpu, mask) &&
++			cpumask_nth(1, mask) >= nr_cpu_ids;
++	case OP_NE:
++		return !cpumask_test_cpu(cpu, mask) ||
++			cpumask_nth(1, mask) < nr_cpu_ids;
++	case OP_BAND:
++		return cpumask_test_cpu(cpu, mask);
++	default:
++		return 0;
++	}
++}
++
+ enum pred_cmp_types {
+ 	PRED_CMP_TYPE_NOP,
+ 	PRED_CMP_TYPE_LT,
+@@ -686,6 +723,18 @@ static int filter_pred_##type(struct filter_pred *pred, void *event)	\
+ 	}								\
+ }
+ 
++#define DEFINE_CPUMASK_COMPARISON_PRED(size)					\
++static int filter_pred_##size##_cpumask(struct filter_pred *pred, void *event)	\
++{										\
++	u##size *addr = (u##size *)(event + pred->offset);			\
++	unsigned int cpu = *addr;						\
++										\
++	if (cpu >= nr_cpu_ids)							\
++		return 0;							\
++										\
++	return do_filter_scalar_cpumask(pred->op, cpu, pred->mask);		\
++}
++
+ #define DEFINE_EQUALITY_PRED(size)					\
+ static int filter_pred_##size(struct filter_pred *pred, void *event)	\
+ {									\
+@@ -707,6 +756,11 @@ DEFINE_COMPARISON_PRED(u16);
+ DEFINE_COMPARISON_PRED(s8);
+ DEFINE_COMPARISON_PRED(u8);
+ 
++DEFINE_CPUMASK_COMPARISON_PRED(64);
++DEFINE_CPUMASK_COMPARISON_PRED(32);
++DEFINE_CPUMASK_COMPARISON_PRED(16);
++DEFINE_CPUMASK_COMPARISON_PRED(8);
++
+ DEFINE_EQUALITY_PRED(64);
+ DEFINE_EQUALITY_PRED(32);
+ DEFINE_EQUALITY_PRED(16);
+@@ -891,16 +945,7 @@ static int filter_pred_cpumask(struct filter_pred *pred, void *event)
+ 	const struct cpumask *mask = (event + loc);
+ 	const struct cpumask *cmp = pred->mask;
+ 
+-	switch (pred->op) {
+-	case OP_EQ:
+-		return cpumask_equal(mask, cmp);
+-	case OP_NE:
+-		return !cpumask_equal(mask, cmp);
+-	case OP_BAND:
+-		return cpumask_intersects(mask, cmp);
+-	default:
+-		return 0;
+-	}
++	return do_filter_cpumask(pred->op, mask, cmp);
+ }
+ 
+ /* Filter predicate for COMM. */
+@@ -1351,24 +1396,32 @@ static int filter_pred_fn_call(struct filter_pred *pred, void *event)
+ 	switch (pred->fn_num) {
+ 	case FILTER_PRED_FN_64:
+ 		return filter_pred_64(pred, event);
++	case FILTER_PRED_FN_64_CPUMASK:
++		return filter_pred_64_cpumask(pred, event);
+ 	case FILTER_PRED_FN_S64:
+ 		return filter_pred_s64(pred, event);
+ 	case FILTER_PRED_FN_U64:
+ 		return filter_pred_u64(pred, event);
+ 	case FILTER_PRED_FN_32:
+ 		return filter_pred_32(pred, event);
++	case FILTER_PRED_FN_32_CPUMASK:
++		return filter_pred_32_cpumask(pred, event);
+ 	case FILTER_PRED_FN_S32:
+ 		return filter_pred_s32(pred, event);
+ 	case FILTER_PRED_FN_U32:
+ 		return filter_pred_u32(pred, event);
+ 	case FILTER_PRED_FN_16:
+ 		return filter_pred_16(pred, event);
++	case FILTER_PRED_FN_16_CPUMASK:
++		return filter_pred_16_cpumask(pred, event);
+ 	case FILTER_PRED_FN_S16:
+ 		return filter_pred_s16(pred, event);
+ 	case FILTER_PRED_FN_U16:
+ 		return filter_pred_u16(pred, event);
+ 	case FILTER_PRED_FN_8:
+ 		return filter_pred_8(pred, event);
++	case FILTER_PRED_FN_8_CPUMASK:
++		return filter_pred_8_cpumask(pred, event);
+ 	case FILTER_PRED_FN_S8:
+ 		return filter_pred_s8(pred, event);
+ 	case FILTER_PRED_FN_U8:
+@@ -1606,6 +1659,7 @@ static int parse_pred(const char *str, void *data,
+ 
+ 		switch (field->filter_type) {
+ 		case FILTER_CPUMASK:
++		case FILTER_OTHER:
+ 			break;
+ 		default:
+ 			parse_error(pe, FILT_ERR_ILLEGAL_FIELD_OP, pos + i);
+@@ -1658,8 +1712,24 @@ static int parse_pred(const char *str, void *data,
+ 
+ 		/* Move along */
+ 		i++;
+-		if (field->filter_type == FILTER_CPUMASK)
++		if (field->filter_type == FILTER_CPUMASK) {
+ 			pred->fn_num = FILTER_PRED_FN_CPUMASK;
++		} else {
++			switch (field->size) {
++			case 8:
++				pred->fn_num = FILTER_PRED_FN_64_CPUMASK;
++				break;
++			case 4:
++				pred->fn_num = FILTER_PRED_FN_32_CPUMASK;
++				break;
++			case 2:
++				pred->fn_num = FILTER_PRED_FN_16_CPUMASK;
++				break;
++			case 1:
++				pred->fn_num = FILTER_PRED_FN_8_CPUMASK;
++				break;
++			}
++		}
+ 
+ 	/* This is either a string, or an integer */
+ 	} else if (str[i] == '\'' || str[i] == '"') {
+-- 
 2.31.1
 
