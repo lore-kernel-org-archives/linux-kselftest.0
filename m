@@ -2,48 +2,48 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9480DC001DF
-	for <linux-kselftest@archiver.kernel.org>; Sat, 22 Jul 2023 00:37:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CEA2EB64DD
+	for <linux-kselftest@archiver.kernel.org>; Sat, 22 Jul 2023 00:37:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231336AbjGVAhk (ORCPT
+        id S231304AbjGVAhp (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 21 Jul 2023 20:37:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46594 "EHLO
+        Fri, 21 Jul 2023 20:37:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbjGVAhc (ORCPT
+        with ESMTP id S231316AbjGVAhg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 21 Jul 2023 20:37:32 -0400
+        Fri, 21 Jul 2023 20:37:36 -0400
 Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 184EB3C2D;
-        Fri, 21 Jul 2023 17:37:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F3D93A84;
+        Fri, 21 Jul 2023 17:37:31 -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 8F3196015F;
-        Sat, 22 Jul 2023 02:37:27 +0200 (CEST)
+        by domac.alu.hr (Postfix) with ESMTP id AA7CA6016E;
+        Sat, 22 Jul 2023 02:37:29 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1689986247; bh=dvw4jQyDzBRR25YNVtUBVTam1ATqnuEuxF59MWqbQ3s=;
+        t=1689986249; bh=sWsZGt692J5HLzblOPdvGK1H4fS6uyGBmVHdVo25xyE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OuzaO/4b2xlbzps8wDjDBv1+5LFxOHN9iJGYzUH0prsZJ+YuWvMWcAIBLLqi4TfSp
-         hT3JTkHNC4bWjQjmnHNWj5CIJ0dnWFFN8RxEVyX6yux63lGeb/qq5+ol5AmuGqInpV
-         4wBjNde0MJUMAlQEHVzbmaRp+IGskbTC7UMdIuBk3UahwwM07JQRzmq65QqzUjOI14
-         jaoMt2zks1BgadbQueJcIJ2kQgAVSOvcGcFd0l7CV1s47bPuud01klx4Cdf6wPEZL7
-         LvMDyD1ochnbwcIhr0RxgExxG+hm1v23sqhMKUKFRaw0ZYLijA+2ez6nV6kjQUqial
-         m0gkO2yqjErCA==
+        b=hdep9Oq/WlJCI2xzqQkNIZ0+u3/SEiLmfoKCDOS28kJgR5y8OU85NG+BbmnYIgFcF
+         MCC9ntPCe420CWIQkibZcDUqs/M9i2GtdZl9rgJnqJlPhfholm3FZPOKt88SvGoLLM
+         B68fD8b/q/SCUpII8uMu/1WK+i5UKu3W131LVI9nyY8eqGYF/ba1Jva0AmCYzH18es
+         kIdNvp2Dj/boLPKtcvFNilUfjeZ/9aAtUxJNeeXO7EfvYzv/onDUfcRucl1zLUzfzh
+         AsY8FiNd8W1wlYgVp+NvXyfhxFOPU2MRlB4WlM7OGeIpzM0NmmSQqXyuPAErKY+jS8
+         kbtJO+LvNI/mw==
 X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
 Received: from domac.alu.hr ([127.0.0.1])
         by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id q2_1_dsYMO7E; Sat, 22 Jul 2023 02:37:25 +0200 (CEST)
+        with ESMTP id 79G8b3vzwaBk; Sat, 22 Jul 2023 02:37:27 +0200 (CEST)
 Received: from defiant.. (unknown [94.250.191.183])
-        by domac.alu.hr (Postfix) with ESMTPSA id 800C860186;
+        by domac.alu.hr (Postfix) with ESMTPSA id 9E54760189;
         Sat, 22 Jul 2023 02:37:19 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1689986239; bh=dvw4jQyDzBRR25YNVtUBVTam1ATqnuEuxF59MWqbQ3s=;
+        t=1689986239; bh=sWsZGt692J5HLzblOPdvGK1H4fS6uyGBmVHdVo25xyE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JGZFZjdVFPNrjDD7A3s2/gq/4PS/wVHydLDSUnWPz0JSvb8NYT8RoIXXwvkH5ukN6
-         RN5eBaKDmS5cEpwz5s71AgIDY86Fykd4DpgDt5iKLllqBuFJOHDdBeqmyQSgvF2LdM
-         hBmgr/sKoLlgmvoKd7IVacEgWFj189NOW5k42bTfQp/nSFi1KPSDidG4KGyhtclgpT
-         yl8kwV0d1HF3U1kXaFlxH1VB2bbwk8K/NEK5xpbpt91vuTH+6FU3eQ3ZXLp4QtKElW
-         JpNEaPLs9P6PdEFmBMeBXb11egdu4ygTy+pZBa6zgdngJ83SDE8PfdFfigVYM1URqH
-         VGqMGGKRx7a0Q==
+        b=UrfRg3QhteGDLZWiP859NVNSPoQl3xNBdNBJ8rgEZuost82DAK24QzpCOGEJgrSr9
+         DOxaiPsAv7JQQqKIEZmjXDhXaJT3/iT1/nH0l3Vf6fT94s+QzkzuI0JDk18DXJrGFo
+         QcaNf2S69CaaMWh6Wg1E4x1BQ9lbc9UUstoTiBN8whBDIeqPCagev2zmjuQe4mZLQd
+         Q8zYpECXNnS/s/XkzN8Gr2YX/CpOhBNmBMCJq2VCj3gKagRFF/idVOs77vn7NNEpMC
+         45VdBX1gD1f6QBrn/mHeZQm+PCkm0gN0h6NhAQXIokQmKxgJhAsWKQMus/Yw+PU7UM
+         lRZqR4Z8zep8w==
 From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
 To:     Ido Schimmel <idosch@nvidia.com>,
         "GitAuthor: Mirsad Todorovac" <mirsad.todorovac@alu.unizg.hr>,
@@ -53,9 +53,9 @@ Cc:     "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
-Subject: [PATCH v1 09/11] selftests: forwarding: router_mpath_nh_res.sh: add cleanup for SIGTERM sent by timeout
-Date:   Sat, 22 Jul 2023 02:36:08 +0200
-Message-Id: <20230722003609.380549-9-mirsad.todorovac@alu.unizg.hr>
+Subject: [PATCH v1 11/11] selftests: forwarding: router_multipath.sh: add cleanup for SIGTERM sent by timeout
+Date:   Sat, 22 Jul 2023 02:36:10 +0200
+Message-Id: <20230722003609.380549-11-mirsad.todorovac@alu.unizg.hr>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230722003609.380549-1-mirsad.todorovac@alu.unizg.hr>
 References: <20230722003609.380549-1-mirsad.todorovac@alu.unizg.hr>
@@ -68,20 +68,20 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 Add trap and cleanup for SIGTERM sent by timeout and SIGINT from
 keyboard, for the test times out and leaves incoherent network stack.
 
-Fixes: 386e3792b52a4 ("selftests: forwarding: Add resilient hashing test")
+Fixes: 937eeb3482748 ("selftests: forwarding: Create test topology for multipath routing")
 Cc: Ido Schimmel <idosch@nvidia.com>
 Cc: netdev@vger.kernel.org
 ---
- tools/testing/selftests/net/forwarding/router_mpath_nh_res.sh | 2 +-
+ tools/testing/selftests/net/forwarding/router_multipath.sh | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/net/forwarding/router_mpath_nh_res.sh b/tools/testing/selftests/net/forwarding/router_mpath_nh_res.sh
-index cb08ffe2356a..57e211d6f859 100755
---- a/tools/testing/selftests/net/forwarding/router_mpath_nh_res.sh
-+++ b/tools/testing/selftests/net/forwarding/router_mpath_nh_res.sh
-@@ -389,7 +389,7 @@ if [ $? -ne 0 ]; then
- 	exit $ksft_skip
- fi
+diff --git a/tools/testing/selftests/net/forwarding/router_multipath.sh b/tools/testing/selftests/net/forwarding/router_multipath.sh
+index 464821c587a5..7b3cfe577e00 100755
+--- a/tools/testing/selftests/net/forwarding/router_multipath.sh
++++ b/tools/testing/selftests/net/forwarding/router_multipath.sh
+@@ -332,7 +332,7 @@ ping_ipv6()
+ 	ping6_test $h1 2001:db8:2::2
+ }
  
 -trap cleanup EXIT
 +trap cleanup INT TERM EXIT
