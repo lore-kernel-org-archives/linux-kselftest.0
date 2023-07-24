@@ -2,44 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D426C0015E
-	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Jul 2023 11:04:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B14E0C001B0
+	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Jul 2023 11:04:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233376AbjGXLEZ (ORCPT
+        id S233400AbjGXLE3 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 24 Jul 2023 07:04:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57896 "EHLO
+        Mon, 24 Jul 2023 07:04:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231432AbjGXLEP (ORCPT
+        with ESMTP id S233385AbjGXLEZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Jul 2023 07:04:15 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FFBCFF;
-        Mon, 24 Jul 2023 04:04:13 -0700 (PDT)
+        Mon, 24 Jul 2023 07:04:25 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB9A81B3;
+        Mon, 24 Jul 2023 04:04:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690196653; x=1721732653;
+  t=1690196656; x=1721732656;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=aAXUsuyKGGbCpXCaUQCKZMtfjXOAaLwSJ/Ehi0NXy/Q=;
-  b=B47ozanK+M5x6JoypzENwk7fB0PqaMF71Je77AZnu9m2BkO3F9bbUPFZ
-   ZvXNrF20Jpq8i4uwnZrMB1g+7xxIdxOGe8cwtiume7p6I1D6Or669Rwxy
-   AjQL2UhjyVEh9u+K+NPpxFYCXfA+UPRl3vf39VjHYh213LZOltugBIr7/
-   5i7Bthafj72xkEXdadErDRWfncRoMtptkJPH/eW10m+rGObn5Tbc3WZJj
-   fESUy0/6wJQfor5pdpFfFAmuWBLgRXLVf0bu7oxSsLrTZbCrs77gN+O7q
-   216txGzV/0xx9Ic4via5ZDIYqHJdpN/3MxgqbEetrVPLBMyM0HsmD4b0F
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10780"; a="366301795"
+  bh=n7hWgi3n+9uv44qqUfgpCeLTeQHcAqVitGGJSoCyeqw=;
+  b=eLI1z2pPDzHmZJjBw5mrnUNjsiKCYoXh9S9f31CeY4PhtRCzKT+yumBL
+   ZyLe3tPuSz3E6Jd31RjOJZ+ZCd3tsNnYEvKr27LXN4CbUrb/CMF2ZLnw2
+   N3bUOeNj2FLMSaVW4MZt2+oGkNhBfK0Gf9OC+xqE4t2xJjgB0Z2SpbDmN
+   7l+qTO50WWn/r5KBYJvO+ItnAhkGjaYMh988bQOKVIGgKA9/hyYSySr9P
+   WrrzxBjQxsWj864bbcmpAnNFplEMEyjYjLvHXkPp9iXIXY0506OawQgIL
+   LUH9MPPHNfaIBxQDWzg9/s6A8k440rFmTVSo01TCkOB/wEy3oPvYh/fOi
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10780"; a="347013278"
 X-IronPort-AV: E=Sophos;i="6.01,228,1684825200"; 
-   d="scan'208";a="366301795"
+   d="scan'208";a="347013278"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2023 04:04:13 -0700
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2023 04:04:16 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10780"; a="815775772"
+X-IronPort-AV: E=McAfee;i="6600,9927,10780"; a="815775792"
 X-IronPort-AV: E=Sophos;i="6.01,228,1684825200"; 
-   d="scan'208";a="815775772"
+   d="scan'208";a="815775792"
 Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by FMSMGA003.fm.intel.com with ESMTP; 24 Jul 2023 04:04:12 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 24 Jul 2023 04:04:15 -0700
 From:   Yi Liu <yi.l.liu@intel.com>
 To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
         kevin.tian@intel.com, robin.murphy@arm.com,
@@ -52,9 +52,9 @@ Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
         suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         zhenzhong.duan@intel.com
-Subject: [PATCH v3 03/17] iommufd/hw_pagetable: Use domain_alloc_user op for domain allocation
-Date:   Mon, 24 Jul 2023 04:03:52 -0700
-Message-Id: <20230724110406.107212-4-yi.l.liu@intel.com>
+Subject: [PATCH v3 05/17] iommufd/hw_pagetable: Do not populate user-managed hw_pagetables
+Date:   Mon, 24 Jul 2023 04:03:54 -0700
+Message-Id: <20230724110406.107212-6-yi.l.liu@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230724110406.107212-1-yi.l.liu@intel.com>
 References: <20230724110406.107212-1-yi.l.liu@intel.com>
@@ -64,67 +64,60 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This makes IOMMUFD to use iommu_domain_alloc_user() for iommu_domain
-creation as IOMMUFD needs to support iommu_domain allocation with
-parameters from userspace in nesting support. If the iommu driver
-doesn't provide domain_alloc_user callback then it falls back to use
-iommu_domain_alloc().
+From: Nicolin Chen <nicolinc@nvidia.com>
 
-Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
-Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
-Co-developed-by: Nicolin Chen <nicolinc@nvidia.com>
+A user-managed hw_pagetable does not need to get populated, since it is
+managed by a guest OS. Move the iopt_table_add_domain and list_add_tail
+calls into a helper, where the hwpt pointer will be redirected to its
+hwpt->parent if it's available.
+
 Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
 Signed-off-by: Yi Liu <yi.l.liu@intel.com>
 ---
- drivers/iommu/iommufd/hw_pagetable.c | 21 +++++++++++++++++----
- 1 file changed, 17 insertions(+), 4 deletions(-)
+ drivers/iommu/iommufd/hw_pagetable.c | 21 +++++++++++++++++++--
+ 1 file changed, 19 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/iommu/iommufd/hw_pagetable.c b/drivers/iommu/iommufd/hw_pagetable.c
-index cf2c1504e20d..1371e96653b2 100644
+index 28122a49b529..c7301cf0e85a 100644
 --- a/drivers/iommu/iommufd/hw_pagetable.c
 +++ b/drivers/iommu/iommufd/hw_pagetable.c
-@@ -5,6 +5,7 @@
- #include <linux/iommu.h>
- #include <uapi/linux/iommufd.h>
+@@ -58,6 +58,24 @@ int iommufd_hw_pagetable_enforce_cc(struct iommufd_hw_pagetable *hwpt)
+ 	return 0;
+ }
  
-+#include "../iommu-priv.h"
- #include "iommufd_private.h"
- 
- void iommufd_hw_pagetable_destroy(struct iommufd_object *obj)
-@@ -74,6 +75,7 @@ struct iommufd_hw_pagetable *
- iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
- 			   struct iommufd_device *idev, bool immediate_attach)
- {
-+	const struct iommu_ops *ops = dev_iommu_ops(idev->dev);
- 	struct iommufd_hw_pagetable *hwpt;
- 	int rc;
- 
-@@ -88,10 +90,21 @@ iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
- 	refcount_inc(&ioas->obj.users);
- 	hwpt->ioas = ioas;
- 
--	hwpt->domain = iommu_domain_alloc(idev->dev->bus);
--	if (!hwpt->domain) {
--		rc = -ENOMEM;
--		goto out_abort;
-+	if (ops->domain_alloc_user) {
-+		hwpt->domain = ops->domain_alloc_user(idev->dev,
-+						      IOMMU_HWPT_TYPE_DEFAULT,
-+						      NULL, NULL);
-+		if (IS_ERR(hwpt->domain)) {
-+			rc = PTR_ERR(hwpt->domain);
-+			hwpt->domain = NULL;
-+			goto out_abort;
-+		}
-+	} else {
-+		hwpt->domain = iommu_domain_alloc(idev->dev->bus);
-+		if (!hwpt->domain) {
-+			rc = -ENOMEM;
-+			goto out_abort;
-+		}
++static int iommufd_hw_pagetable_link_ioas(struct iommufd_hw_pagetable *hwpt)
++{
++	int rc;
++
++	/*
++	 * Only a parent hwpt needs to be linked to the IOAS. And a hwpt->parent
++	 * must be linked to the IOAS already, when it's being allocated.
++	 */
++	if (hwpt->parent)
++		return 0;
++
++	rc = iopt_table_add_domain(&hwpt->ioas->iopt, hwpt->domain);
++	if (rc)
++		return rc;
++	list_add_tail(&hwpt->hwpt_item, &hwpt->ioas->hwpt_list);
++	return 0;
++}
++
+ /**
+  * iommufd_hw_pagetable_alloc() - Get an iommu_domain for a device
+  * @ictx: iommufd context
+@@ -160,10 +178,9 @@ iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
+ 			goto out_abort;
  	}
  
- 	/*
+-	rc = iopt_table_add_domain(&hwpt->ioas->iopt, hwpt->domain);
++	rc = iommufd_hw_pagetable_link_ioas(hwpt);
+ 	if (rc)
+ 		goto out_detach;
+-	list_add_tail(&hwpt->hwpt_item, &hwpt->ioas->hwpt_list);
+ 	return hwpt;
+ 
+ out_detach:
 -- 
 2.34.1
 
