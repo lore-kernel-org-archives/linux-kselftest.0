@@ -2,44 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D4041C0015E
-	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Jul 2023 11:14:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E593CC001B0
+	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Jul 2023 11:14:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231951AbjGXLOT (ORCPT
+        id S232453AbjGXLOd (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 24 Jul 2023 07:14:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39586 "EHLO
+        Mon, 24 Jul 2023 07:14:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231927AbjGXLOB (ORCPT
+        with ESMTP id S232048AbjGXLOP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Jul 2023 07:14:01 -0400
+        Mon, 24 Jul 2023 07:14:15 -0400
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C88281B3;
-        Mon, 24 Jul 2023 04:13:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5190F10E3;
+        Mon, 24 Jul 2023 04:13:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690197228; x=1721733228;
+  t=1690197231; x=1721733231;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=kFFC2bK/nCwVQZLA9Z70O9G3InA/Pl+u4zLi4egWg38=;
-  b=nMdUS50/mijbGr/M+mI6LtAQww3p0rFKJzYCzE+Gvs3SFtI9neUjoST5
-   +125JXZTS9iSiO+dvhOpkWEUSjrbaIK8SZqnMKEk+2Bwml21gdUIwd9eE
-   hwXHOQLk+VjfEtHpOpefCQ1nPgsIr6fIQo8RcLPeF2kTmqz40800NGBOT
-   zxKKxYkkW+WXBD2HkyLFAc+//kwzcxf3JDIUHbNq0L+nbe8J0SXfpeJAh
-   +OuxfUVKjuaDxzSy8cpP/Mu7RWnFodSIh6fAHSfZLtxxEHNASDgP0akPy
-   8dRCISJRnUJ2GPXkCxBDLOu6DyhZnqyCUjsW2dKjriCsFxemWUtLM3xrC
+  bh=qDa2X3gdhagGNCK2/GQ0KFX2hlra/0tF2Yc8QKhk5M8=;
+  b=BJos0H5zIokfseFOi/RPzqvGlolFazXbonBM1Qzwktqbn+e5Yzk9ZWdQ
+   XeAuX4Das02aS+NpMrOBmw9Sy3AMJtKzPDRdr+HneSfLyoWzWCH8kW0Nu
+   dxs+r4dNm4EqWlsRyAaTu25rS+kU+GuF6Z9mvyrwiiXW49bttYwVLaglD
+   zhxDMgeMmnP9mpFCcpJS+9KLIXoUGFIZ41FUAKiM3r5R8o9fYYzS73dOr
+   FHSIhErES1lUfUTdtDVYgK6Db5AEq7ouItIKIYK4HYY50ti/lIf5pBSE4
+   jnbLILZtxXQCtoOv2dyRjaoDdy5FGWOOU9ZMwYQM3wEuYnL8wheIqjIGG
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10780"; a="347015038"
+X-IronPort-AV: E=McAfee;i="6600,9927,10780"; a="347015065"
 X-IronPort-AV: E=Sophos;i="6.01,228,1684825200"; 
-   d="scan'208";a="347015038"
+   d="scan'208";a="347015065"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2023 04:13:48 -0700
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2023 04:13:50 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10780"; a="839415576"
+X-IronPort-AV: E=McAfee;i="6600,9927,10780"; a="839415599"
 X-IronPort-AV: E=Sophos;i="6.01,228,1684825200"; 
-   d="scan'208";a="839415576"
+   d="scan'208";a="839415599"
 Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by fmsmga002.fm.intel.com with ESMTP; 24 Jul 2023 04:13:47 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 24 Jul 2023 04:13:49 -0700
 From:   Yi Liu <yi.l.liu@intel.com>
 To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
         kevin.tian@intel.com, robin.murphy@arm.com,
@@ -52,9 +52,9 @@ Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
         suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         zhenzhong.duan@intel.com
-Subject: [PATCH v4 09/12] iommu/vt-d: Add iotlb flush for nested domain
-Date:   Mon, 24 Jul 2023 04:13:31 -0700
-Message-Id: <20230724111335.107427-10-yi.l.liu@intel.com>
+Subject: [PATCH v4 11/12] iommu/vt-d: Implement hw_info for iommu capability query
+Date:   Mon, 24 Jul 2023 04:13:33 -0700
+Message-Id: <20230724111335.107427-12-yi.l.liu@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230724111335.107427-1-yi.l.liu@intel.com>
 References: <20230724111335.107427-1-yi.l.liu@intel.com>
@@ -64,91 +64,95 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This implements the .cache_invalidate_user() callback and sets the
-.cache_invalidate_user_data_len to support iotlb flush for nested domain.
+Add intel_iommu_hw_info() to report cap_reg and ecap_reg information.
 
 Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
 Signed-off-by: Yi Liu <yi.l.liu@intel.com>
 ---
- drivers/iommu/intel/nested.c | 63 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 63 insertions(+)
+ drivers/iommu/intel/iommu.c  | 19 +++++++++++++++++++
+ include/uapi/linux/iommufd.h | 23 +++++++++++++++++++++++
+ 2 files changed, 42 insertions(+)
 
-diff --git a/drivers/iommu/intel/nested.c b/drivers/iommu/intel/nested.c
-index 98164894f22f..2739c0d7880d 100644
---- a/drivers/iommu/intel/nested.c
-+++ b/drivers/iommu/intel/nested.c
-@@ -69,8 +69,71 @@ static void intel_nested_domain_free(struct iommu_domain *domain)
- 	kfree(to_dmar_domain(domain));
+diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+index 6977d320c440..ba34827045e6 100644
+--- a/drivers/iommu/intel/iommu.c
++++ b/drivers/iommu/intel/iommu.c
+@@ -4748,8 +4748,26 @@ static void intel_iommu_remove_dev_pasid(struct device *dev, ioasid_t pasid)
+ 	intel_pasid_tear_down_entry(iommu, dev, pasid, false);
  }
  
-+static void intel_nested_invalidate(struct device *dev,
-+				    struct dmar_domain *domain,
-+				    u64 addr, unsigned long npages)
++static void *intel_iommu_hw_info(struct device *dev, u32 *length)
 +{
 +	struct device_domain_info *info = dev_iommu_priv_get(dev);
 +	struct intel_iommu *iommu = info->iommu;
++	struct iommu_hw_info_vtd *vtd;
 +
-+	if (addr == 0 && npages == -1)
-+		intel_flush_iotlb_all(&domain->domain);
-+	else
-+		iommu_flush_iotlb_psi(iommu, domain,
-+				      addr >> VTD_PAGE_SHIFT,
-+				      npages, 1, 0);
++	vtd = kzalloc(sizeof(*vtd), GFP_KERNEL);
++	if (!vtd)
++		return ERR_PTR(-ENOMEM);
++
++	vtd->cap_reg = iommu->cap;
++	vtd->ecap_reg = iommu->ecap;
++	*length = sizeof(*vtd);
++
++	return vtd;
 +}
 +
-+static int intel_nested_cache_invalidate_user(struct iommu_domain *domain,
-+					      void *user_data)
-+{
-+	struct iommu_hwpt_vtd_s1_invalidate_desc *req = user_data;
-+	struct iommu_hwpt_vtd_s1_invalidate *inv_info = user_data;
-+	struct dmar_domain *dmar_domain = to_dmar_domain(domain);
-+	unsigned int entry_size = inv_info->entry_size;
-+	u64 uptr = inv_info->inv_data_uptr;
-+	u64 nr_uptr = inv_info->entry_nr_uptr;
-+	struct device_domain_info *info;
-+	u32 entry_nr, index;
-+	unsigned long flags;
-+	int ret = 0;
-+
-+	if (get_user(entry_nr, (uint32_t __user *)u64_to_user_ptr(nr_uptr)))
-+		return -EFAULT;
-+
-+	for (index = 0; index < entry_nr; index++) {
-+		ret = copy_struct_from_user(req, sizeof(*req),
-+					    u64_to_user_ptr(uptr + index * entry_size),
-+					    entry_size);
-+		if (ret) {
-+			pr_err_ratelimited("Failed to fetch invalidation request\n");
-+			break;
-+		}
-+
-+		if (req->__reserved || (req->flags & ~IOMMU_VTD_QI_FLAGS_LEAF) ||
-+		    !IS_ALIGNED(req->addr, VTD_PAGE_SIZE)) {
-+			ret = -EINVAL;
-+			break;
-+		}
-+
-+		spin_lock_irqsave(&dmar_domain->lock, flags);
-+		list_for_each_entry(info, &dmar_domain->devices, link)
-+			intel_nested_invalidate(info->dev, dmar_domain,
-+						req->addr, req->npages);
-+		spin_unlock_irqrestore(&dmar_domain->lock, flags);
-+	}
-+
-+	if (put_user(index, (uint32_t __user *)u64_to_user_ptr(nr_uptr)))
-+		return -EFAULT;
-+
-+	return ret;
-+}
-+
- static const struct iommu_domain_ops intel_nested_domain_ops = {
- 	.attach_dev		= intel_nested_attach_dev,
-+	.cache_invalidate_user	= intel_nested_cache_invalidate_user,
-+	.cache_invalidate_user_data_len =
-+		sizeof(struct iommu_hwpt_vtd_s1_invalidate),
- 	.free			= intel_nested_domain_free,
- 	.enforce_cache_coherency = intel_iommu_enforce_cache_coherency,
+ const struct iommu_ops intel_iommu_ops = {
+ 	.capable		= intel_iommu_capable,
++	.hw_info		= intel_iommu_hw_info,
+ 	.domain_alloc		= intel_iommu_domain_alloc,
+ 	.domain_alloc_user	= intel_iommu_domain_alloc_user,
+ 	.probe_device		= intel_iommu_probe_device,
+@@ -4763,6 +4781,7 @@ const struct iommu_ops intel_iommu_ops = {
+ 	.def_domain_type	= device_def_domain_type,
+ 	.remove_dev_pasid	= intel_iommu_remove_dev_pasid,
+ 	.pgsize_bitmap		= SZ_4K,
++	.hw_info_type		= IOMMU_HW_INFO_TYPE_INTEL_VTD,
+ #ifdef CONFIG_INTEL_IOMMU_SVM
+ 	.page_response		= intel_svm_page_response,
+ #endif
+diff --git a/include/uapi/linux/iommufd.h b/include/uapi/linux/iommufd.h
+index 2c1241448c87..0dfb6f3d8dda 100644
+--- a/include/uapi/linux/iommufd.h
++++ b/include/uapi/linux/iommufd.h
+@@ -435,12 +435,35 @@ struct iommu_hwpt_alloc {
  };
+ #define IOMMU_HWPT_ALLOC _IO(IOMMUFD_TYPE, IOMMUFD_CMD_HWPT_ALLOC)
+ 
++/**
++ * struct iommu_hw_info_vtd - Intel VT-d hardware information
++ *
++ * @flags: Must be 0
++ * @__reserved: Must be 0
++ *
++ * @cap_reg: Value of Intel VT-d capability register defined in VT-d spec
++ *           section 11.4.2 Capability Register.
++ * @ecap_reg: Value of Intel VT-d capability register defined in VT-d spec
++ *            section 11.4.3 Extended Capability Register.
++ *
++ * User needs to understand the Intel VT-d specification to decode the
++ * register value.
++ */
++struct iommu_hw_info_vtd {
++	__u32 flags;
++	__u32 __reserved;
++	__aligned_u64 cap_reg;
++	__aligned_u64 ecap_reg;
++};
++
+ /**
+  * enum iommu_hw_info_type - IOMMU Hardware Info Types
+  * @IOMMU_HW_INFO_TYPE_NONE: Used by the drivers that does not report hardware info
++ * @IOMMU_HW_INFO_TYPE_INTEL_VTD: Intel VT-d iommu info type
+  */
+ enum iommu_hw_info_type {
+ 	IOMMU_HW_INFO_TYPE_NONE,
++	IOMMU_HW_INFO_TYPE_INTEL_VTD,
+ };
+ 
+ /**
 -- 
 2.34.1
 
