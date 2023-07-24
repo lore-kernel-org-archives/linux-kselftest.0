@@ -2,26 +2,26 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B60AC001E0
-	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Jul 2023 08:25:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AEABEC41513
+	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Jul 2023 08:25:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbjGXIZi (ORCPT
+        id S231441AbjGXIZk (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 24 Jul 2023 04:25:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53802 "EHLO
+        Mon, 24 Jul 2023 04:25:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230022AbjGXIZg (ORCPT
+        with ESMTP id S231429AbjGXIZi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Jul 2023 04:25:36 -0400
+        Mon, 24 Jul 2023 04:25:38 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 521D01AD;
-        Mon, 24 Jul 2023 01:25:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1E5031BE;
+        Mon, 24 Jul 2023 01:25:36 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E7F22DE0;
-        Mon, 24 Jul 2023 01:26:15 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D18A411FB;
+        Mon, 24 Jul 2023 01:26:19 -0700 (PDT)
 Received: from e125769.cambridge.arm.com (e125769.cambridge.arm.com [10.1.196.26])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 12A4C3F67D;
-        Mon, 24 Jul 2023 01:25:30 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F0D383F67D;
+        Mon, 24 Jul 2023 01:25:34 -0700 (PDT)
 From:   Ryan Roberts <ryan.roberts@arm.com>
 To:     "Andrew Morton" <akpm@linux-foundation.org>,
         "Shuah Khan" <shuah@kernel.org>,
@@ -33,77 +33,132 @@ To:     "Andrew Morton" <akpm@linux-foundation.org>,
         "Peter Xu" <peterx@redhat.com>
 Cc:     Ryan Roberts <ryan.roberts@arm.com>, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v3 0/8] selftests/mm fixes for arm64
-Date:   Mon, 24 Jul 2023 09:25:14 +0100
-Message-Id: <20230724082522.1202616-1-ryan.roberts@arm.com>
+Subject: [PATCH v3 2/8] selftests/mm: Skip soft-dirty tests on arm64
+Date:   Mon, 24 Jul 2023 09:25:16 +0100
+Message-Id: <20230724082522.1202616-3-ryan.roberts@arm.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230724082522.1202616-1-ryan.roberts@arm.com>
+References: <20230724082522.1202616-1-ryan.roberts@arm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi All,
+arm64 does not support the soft-dirty PTE bit. However, the `soft-dirty`
+test suite is currently run unconditionally and therefore generates
+spurious test failures on arm64. There are also some tests in
+`madv_populate` which assume it is supported.
 
-This is v3 of my series to clean up mm selftests so that they run correctly on
-arm64. See [1] for full explanation.
+For `soft-dirty` lets disable the whole suite for arm64; it is no longer
+built and run_vmtests.sh will skip it if its not present.
 
-Only patch 6 has changed vs v2. The rest are the same and already carry
-reviewed/acked-bys. So I'm hoping I can get the final patch reviewed and this
-series is hopefully then good enough to merge?
+For `madv_populate`, we need a runtime mechanism so that the remaining
+tests continue to be run. Unfortunately, the only way to determine if
+the soft-dirty dirty bit is supported is to write to a page, then see if
+the bit is set in /proc/self/pagemap. But the tests that we want to
+conditionally execute are testing precicesly this. So if we introduced
+this feature check, we could accedentally turn a real failure (on a
+system that claims to support soft-dirty) into a skip. So instead, do
+the check based on architecture; for arm64, we report that soft-dirty is
+not supported.
 
-Changes Since v2 [2]
---------------------
+Acked-by: David Hildenbrand <david@redhat.com>
+Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
+---
+ tools/testing/selftests/mm/Makefile        |  5 ++++-
+ tools/testing/selftests/mm/madv_populate.c | 26 ++++++++++++++++++++--
+ tools/testing/selftests/mm/run_vmtests.sh  |  5 ++++-
+ 3 files changed, 32 insertions(+), 4 deletions(-)
 
-  - Patch 6: Change approach to cleaning up child processes; Use "parent death
-    signal", as suggested by David.
-  - Added Reviewed-by/Acked-by tags: thanks to David, Mark and Peter!
-
-Changes Since v1 [1]
---------------------
-
-  - Patch 1: Explicitly set line buffer mode in ksft_print_header()
-  - Dropped v1 patch 2 (set execute permissions): Andrew has taken this into his
-    branch separately.
-  - Patch 2: Don't compile `soft-dirty` suite for arm64 instead of skipping it
-    at runtime.
-  - Patch 2: Declare fewer tests and skip all of test_softdirty() if soft-dirty
-    is not supported, rather than conditionally marking each check as skipped.
-  - Added Reviewed-by tags: thanks DavidH!
-  - Patch 8: Clarified commit message.
-
-
-[1] https://lore.kernel.org/linux-mm/20230713135440.3651409-1-ryan.roberts@arm.com/
-[2] https://lore.kernel.org/linux-mm/20230717103152.202078-1-ryan.roberts@arm.com/
-
-Thanks,
-Ryan
-
-
-Ryan Roberts (8):
-  selftests: Line buffer test program's stdout
-  selftests/mm: Skip soft-dirty tests on arm64
-  selftests/mm: Enable mrelease_test for arm64
-  selftests/mm: Fix thuge-gen test bugs
-  selftests/mm: va_high_addr_switch should skip unsupported arm64
-    configs
-  selftests/mm: Make migration test robust to failure
-  selftests/mm: Optionally pass duration to transhuge-stress
-  selftests/mm: Run all tests from run_vmtests.sh
-
- tools/testing/selftests/kselftest.h           |  9 ++
- tools/testing/selftests/kselftest/runner.sh   |  7 +-
- tools/testing/selftests/mm/Makefile           | 82 ++++++++++---------
- tools/testing/selftests/mm/madv_populate.c    | 26 +++++-
- tools/testing/selftests/mm/migration.c        | 12 ++-
- tools/testing/selftests/mm/mrelease_test.c    |  1 +
- tools/testing/selftests/mm/run_vmtests.sh     | 28 ++++++-
- tools/testing/selftests/mm/settings           |  2 +-
- tools/testing/selftests/mm/thuge-gen.c        |  4 +-
- tools/testing/selftests/mm/transhuge-stress.c | 12 ++-
- .../selftests/mm/va_high_addr_switch.c        |  2 +-
- 11 files changed, 132 insertions(+), 53 deletions(-)
-
---
+diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+index 66d7c07dc177..3514697fc2db 100644
+--- a/tools/testing/selftests/mm/Makefile
++++ b/tools/testing/selftests/mm/Makefile
+@@ -63,12 +63,15 @@ TEST_GEN_PROGS += thuge-gen
+ TEST_GEN_PROGS += transhuge-stress
+ TEST_GEN_PROGS += uffd-stress
+ TEST_GEN_PROGS += uffd-unit-tests
+-TEST_GEN_PROGS += soft-dirty
+ TEST_GEN_PROGS += split_huge_page_test
+ TEST_GEN_PROGS += ksm_tests
+ TEST_GEN_PROGS += ksm_functional_tests
+ TEST_GEN_PROGS += mdwe_test
+ 
++ifneq ($(ARCH),arm64)
++TEST_GEN_PROGS += soft-dirty
++endif
++
+ ifeq ($(ARCH),x86_64)
+ CAN_BUILD_I386 := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_32bit_program.c -m32)
+ CAN_BUILD_X86_64 := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_64bit_program.c)
+diff --git a/tools/testing/selftests/mm/madv_populate.c b/tools/testing/selftests/mm/madv_populate.c
+index 60547245e479..17bcb07f19f3 100644
+--- a/tools/testing/selftests/mm/madv_populate.c
++++ b/tools/testing/selftests/mm/madv_populate.c
+@@ -264,14 +264,35 @@ static void test_softdirty(void)
+ 	munmap(addr, SIZE);
+ }
+ 
++static int system_has_softdirty(void)
++{
++	/*
++	 * There is no way to check if the kernel supports soft-dirty, other
++	 * than by writing to a page and seeing if the bit was set. But the
++	 * tests are intended to check that the bit gets set when it should, so
++	 * doing that check would turn a potentially legitimate fail into a
++	 * skip. Fortunately, we know for sure that arm64 does not support
++	 * soft-dirty. So for now, let's just use the arch as a corse guide.
++	 */
++#if defined(__aarch64__)
++	return 0;
++#else
++	return 1;
++#endif
++}
++
+ int main(int argc, char **argv)
+ {
++	int nr_tests = 16;
+ 	int err;
+ 
+ 	pagesize = getpagesize();
+ 
++	if (system_has_softdirty())
++		nr_tests += 5;
++
+ 	ksft_print_header();
+-	ksft_set_plan(21);
++	ksft_set_plan(nr_tests);
+ 
+ 	sense_support();
+ 	test_prot_read();
+@@ -279,7 +300,8 @@ int main(int argc, char **argv)
+ 	test_holes();
+ 	test_populate_read();
+ 	test_populate_write();
+-	test_softdirty();
++	if (system_has_softdirty())
++		test_softdirty();
+ 
+ 	err = ksft_get_fail_cnt();
+ 	if (err)
+diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+index 3f26f6e15b2a..9e4338aa5e09 100755
+--- a/tools/testing/selftests/mm/run_vmtests.sh
++++ b/tools/testing/selftests/mm/run_vmtests.sh
+@@ -290,7 +290,10 @@ then
+ 	CATEGORY="pkey" run_test ./protection_keys_64
+ fi
+ 
+-CATEGORY="soft_dirty" run_test ./soft-dirty
++if [ -x ./soft-dirty ]
++then
++	CATEGORY="soft_dirty" run_test ./soft-dirty
++fi
+ 
+ # COW tests
+ CATEGORY="cow" run_test ./cow
+-- 
 2.25.1
 
