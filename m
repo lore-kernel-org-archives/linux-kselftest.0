@@ -2,44 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FD8BC0015E
-	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Jul 2023 11:05:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C81B7C0015E
+	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Jul 2023 11:05:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233410AbjGXLFU (ORCPT
+        id S233444AbjGXLFi (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 24 Jul 2023 07:05:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58172 "EHLO
+        Mon, 24 Jul 2023 07:05:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231179AbjGXLFK (ORCPT
+        with ESMTP id S231179AbjGXLFZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Jul 2023 07:05:10 -0400
+        Mon, 24 Jul 2023 07:05:25 -0400
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E96410DE;
-        Mon, 24 Jul 2023 04:04:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E67E5A;
+        Mon, 24 Jul 2023 04:05:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690196685; x=1721732685;
+  t=1690196703; x=1721732703;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=wu92GRhppcU7MkbkHzcmjc/NGunkuHuJrkG4JF9bmNM=;
-  b=HBd3gh2MN1t0DXy55YYzU2w9I1Os1VxvP2JcHFX6qPLfz/2id9h/4lbQ
-   zf5r44/Pp69VqtAVq9i7mW09th+o7ghpuACqs0E6r1LuqOa3qQUqUmhLi
-   2WJlKwMyZdrRMuLaIzLYiNLTR7rSQmIK04WxsvqPmXh6yPd1i37lUVvwE
-   c+8+8SInIbYSdN68edcvhTtPvg8KMjgcr+2kLghffArAqBRnO4RBScdvk
-   dEtNl0v352YtsWPKm7CA1abnb2A4SsyBAC+XbTt46Wmp5L1I7S3PBoOhp
-   YHCOdI/2rOtAondsq26tBCC7VcPE3MMB7d99PGNI6R2QEse2S59vH2zyQ
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10780"; a="347013339"
+  bh=mg550ofGRCkx0TRyX/k25V5Hgrta9fIM/SqDWuOS38s=;
+  b=gj6NQiKc51nKpC8PxC4Ustoo0aWgDUQU1+U+DIC1Cj0waGACJCGaK4wd
+   ISXGQCQPPOXZNx1iIJakdE+kiJUna9rmd6wkEsmE6gg+yHe+sxdglyK7z
+   p6L/Yjb2t0GLPr+L8W1Ez9SZ0Qx9dTTJzrNEE8QXg7hM6/iGdaSBQK+Kj
+   QSy9Xpy7tjbjrSeJM7rlZN6sGxtTQmz5d+Vjr9I4wf6e+75/9X1codcl6
+   76qcibaB+Lx2Qf7FZpiGmH7wsPNSRpvhFrpTe5cencMdF/iiQOfhZCpGh
+   JI/jPoZq9cJKD2Xpj1tRUZxXyPp8erCtpDlKl7MmMz9wdEk2eTIuCdVfI
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10780"; a="347013287"
 X-IronPort-AV: E=Sophos;i="6.01,228,1684825200"; 
-   d="scan'208";a="347013339"
+   d="scan'208";a="347013287"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2023 04:04:25 -0700
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2023 04:04:17 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10780"; a="815775877"
+X-IronPort-AV: E=McAfee;i="6600,9927,10780"; a="815775802"
 X-IronPort-AV: E=Sophos;i="6.01,228,1684825200"; 
-   d="scan'208";a="815775877"
+   d="scan'208";a="815775802"
 Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by FMSMGA003.fm.intel.com with ESMTP; 24 Jul 2023 04:04:22 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 24 Jul 2023 04:04:16 -0700
 From:   Yi Liu <yi.l.liu@intel.com>
 To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
         kevin.tian@intel.com, robin.murphy@arm.com,
@@ -52,9 +52,9 @@ Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
         suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         zhenzhong.duan@intel.com
-Subject: [PATCH v3 13/17] iommufd/selftest: Add coverage for IOMMU_RESV_IOVA_RANGES
-Date:   Mon, 24 Jul 2023 04:04:02 -0700
-Message-Id: <20230724110406.107212-14-yi.l.liu@intel.com>
+Subject: [PATCH v3 06/17] iommufd: Only enforce IOMMU_RESV_SW_MSI when attaching user-managed HWPT
+Date:   Mon, 24 Jul 2023 04:03:55 -0700
+Message-Id: <20230724110406.107212-7-yi.l.liu@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230724110406.107212-1-yi.l.liu@intel.com>
 References: <20230724110406.107212-1-yi.l.liu@intel.com>
@@ -64,120 +64,97 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This adds selftest for ioctl IOMMU_RESV_IOVA_RANGES.
+From: Nicolin Chen <nicolinc@nvidia.com>
 
+Reserved IOVA regions except for the IOMMU_RESV_DIRECT_RELAXABLE type
+should be excluded from the device's DMA address space. For single stage
+translation configuration, such reserved regions are excluded in the
+attaching HWPT that is managed by kernel. While for nested translation
+configuration, there are two stage HWPTs, the reserved regions should be
+excluded in stage-1 HWPT which is managed by userspace. The current code
+always excludes the reserved regions in the stage-2 HWPT which is kernel
+managed. This is incorrect. Instead, the reserved regions should be
+reported to userspace and excluded in stage-1 HWPT.
+
+Besides above, the IOMMU_RESV_SW_MSI type region needs to be excluded in
+the stage-2 HWPT even in the nested translation configuration on ARM. So
+the IOMMU_RESV_SW_MSI type region should always be excluded in the kernel
+managed HWPT.
+
+This adds a boolean argument to enforce IOMMU_RESV_SW_MSI only, if attaching
+HWPT is a user-managed one, i.e. hwpt->parent must be valid, resulting
+"!!hwpt->parent" to be true, hence only add the IOMMU_RESV_SW_MSI region to
+the stage-2 HWPT reserved iovas.
+
+Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
 Signed-off-by: Yi Liu <yi.l.liu@intel.com>
 ---
- tools/testing/selftests/iommu/iommufd.c | 98 +++++++++++++++++++++++++
- 1 file changed, 98 insertions(+)
+ drivers/iommu/iommufd/device.c          | 6 ++++--
+ drivers/iommu/iommufd/io_pagetable.c    | 5 ++++-
+ drivers/iommu/iommufd/iommufd_private.h | 3 ++-
+ 3 files changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/iommu/iommufd.c b/tools/testing/selftests/iommu/iommufd.c
-index 6b075a68b928..bfe0f76f7fb0 100644
---- a/tools/testing/selftests/iommu/iommufd.c
-+++ b/tools/testing/selftests/iommu/iommufd.c
-@@ -1780,4 +1780,102 @@ TEST_F(vfio_compat_mock_domain, huge_map)
+diff --git a/drivers/iommu/iommufd/device.c b/drivers/iommu/iommufd/device.c
+index 97e4e5f5aca0..c0917683097f 100644
+--- a/drivers/iommu/iommufd/device.c
++++ b/drivers/iommu/iommufd/device.c
+@@ -347,7 +347,8 @@ int iommufd_hw_pagetable_attach(struct iommufd_hw_pagetable *hwpt,
  	}
- }
  
-+FIXTURE(iommufd_device_resv_iova)
-+{
-+	int fd;
-+	uint32_t ioas_id;
-+	uint32_t stdev_id;
-+	uint32_t device_id;
-+};
-+
-+FIXTURE_SETUP(iommufd_device_resv_iova)
-+{
-+	self->fd = open("/dev/iommu", O_RDWR);
-+	ASSERT_NE(-1, self->fd);
-+	test_ioctl_ioas_alloc(&self->ioas_id);
-+
-+	test_cmd_mock_domain(self->ioas_id, &self->stdev_id,
-+			     NULL, &self->device_id);
-+}
-+
-+FIXTURE_TEARDOWN(iommufd_device_resv_iova)
-+{
-+	teardown_iommufd(self->fd, _metadata);
-+}
-+
-+TEST_F(iommufd_device_resv_iova, dev_resv_iova_ranges)
-+{
-+	struct iommu_test_cmd test_cmd = {
-+		.size = sizeof(test_cmd),
-+		.op = IOMMU_TEST_OP_DEV_ADD_RESERVED,
-+		.id = self->stdev_id,
-+		.add_dev_reserved = { .start = PAGE_SIZE, .length = PAGE_SIZE },
-+	};
-+	struct iommu_test_cmd test_cmd_del = {
-+		.size = sizeof(test_cmd_del),
-+		.op = IOMMU_TEST_OP_DEV_DEL_RESERVED,
-+		.id = self->stdev_id,
-+	};
-+	struct iommu_resv_iova_range *ranges = buffer;
-+	struct iommu_resv_iova_ranges ranges_cmd = {
-+		.size = sizeof(ranges_cmd),
-+		.dev_id = self->device_id,
-+		.num_iovas = BUFFER_SIZE / sizeof(*ranges),
-+		.resv_iovas = (uintptr_t)ranges,
-+	};
-+
-+	/* Range can be read */
-+	ASSERT_EQ(0, ioctl(self->fd, IOMMU_RESV_IOVA_RANGES, &ranges_cmd));
-+	EXPECT_EQ(0, ranges_cmd.num_iovas);
-+
-+	/* 1 range */
-+	ASSERT_EQ(0,
-+		  ioctl(self->fd, _IOMMU_TEST_CMD(IOMMU_TEST_OP_DEV_ADD_RESERVED),
-+			&test_cmd));
-+	ranges_cmd.num_iovas = BUFFER_SIZE / sizeof(*ranges);
-+	ASSERT_EQ(0, ioctl(self->fd, IOMMU_RESV_IOVA_RANGES, &ranges_cmd));
-+	EXPECT_EQ(1, ranges_cmd.num_iovas);
-+	EXPECT_EQ(PAGE_SIZE, ranges[0].start);
-+	EXPECT_EQ(PAGE_SIZE * 2 - 1, ranges[0].last);
-+
-+	/* Buffer too small */
-+	memset(ranges, 0, BUFFER_SIZE);
-+	ranges_cmd.num_iovas = 0;
-+	EXPECT_ERRNO(EMSGSIZE,
-+		     ioctl(self->fd, IOMMU_RESV_IOVA_RANGES, &ranges_cmd));
-+	EXPECT_EQ(1, ranges_cmd.num_iovas);
-+	EXPECT_EQ(0, ranges[0].start);
-+	EXPECT_EQ(0, ranges[0].last);
-+
-+	/* 2 ranges */
-+	test_cmd.add_dev_reserved.start = PAGE_SIZE * 4;
-+	test_cmd.add_dev_reserved.length = PAGE_SIZE;
-+
-+	ASSERT_EQ(0,
-+		  ioctl(self->fd, _IOMMU_TEST_CMD(IOMMU_TEST_OP_DEV_ADD_RESERVED),
-+			&test_cmd));
-+	ranges_cmd.num_iovas = BUFFER_SIZE / sizeof(*ranges);
-+	ASSERT_EQ(0, ioctl(self->fd, IOMMU_RESV_IOVA_RANGES, &ranges_cmd));
-+	EXPECT_EQ(2, ranges_cmd.num_iovas);
-+	EXPECT_EQ(PAGE_SIZE, ranges[0].start);
-+	EXPECT_EQ(PAGE_SIZE * 2 - 1, ranges[0].last);
-+	EXPECT_EQ(PAGE_SIZE * 4, ranges[1].start);
-+	EXPECT_EQ(PAGE_SIZE * 5 - 1, ranges[1].last);
-+
-+	/* Buffer too small */
-+	memset(ranges, 0, BUFFER_SIZE);
-+	ranges_cmd.num_iovas = 1;
-+	EXPECT_ERRNO(EMSGSIZE, ioctl(self->fd, IOMMU_RESV_IOVA_RANGES,
-+				     &ranges_cmd));
-+	EXPECT_EQ(2, ranges_cmd.num_iovas);
-+	EXPECT_EQ(PAGE_SIZE, ranges[0].start);
-+	EXPECT_EQ(PAGE_SIZE * 2 - 1, ranges[0].last);
-+	EXPECT_EQ(0, ranges[1].start);
-+	EXPECT_EQ(0, ranges[1].last);
-+
-+	ASSERT_EQ(0,
-+		  ioctl(self->fd, _IOMMU_TEST_CMD(IOMMU_TEST_OP_DEV_DEL_RESERVED),
-+			&test_cmd_del));
-+}
-+
- TEST_HARNESS_MAIN
+ 	rc = iopt_table_enforce_dev_resv_regions(&hwpt->ioas->iopt, idev->dev,
+-						 &idev->igroup->sw_msi_start);
++						 &idev->igroup->sw_msi_start,
++						 !!hwpt->parent);
+ 	if (rc)
+ 		goto err_unlock;
+ 
+@@ -445,7 +446,8 @@ iommufd_device_do_replace(struct iommufd_device *idev,
+ 	if (hwpt->ioas != old_hwpt->ioas) {
+ 		list_for_each_entry(cur, &igroup->device_list, group_item) {
+ 			rc = iopt_table_enforce_dev_resv_regions(
+-				&hwpt->ioas->iopt, cur->dev, NULL);
++				&hwpt->ioas->iopt, cur->dev, NULL,
++				!!hwpt->parent);
+ 			if (rc)
+ 				goto err_unresv;
+ 		}
+diff --git a/drivers/iommu/iommufd/io_pagetable.c b/drivers/iommu/iommufd/io_pagetable.c
+index 4d095115c2d0..e658261f44ed 100644
+--- a/drivers/iommu/iommufd/io_pagetable.c
++++ b/drivers/iommu/iommufd/io_pagetable.c
+@@ -1172,7 +1172,8 @@ void iopt_remove_access(struct io_pagetable *iopt,
+ /* Narrow the valid_iova_itree to include reserved ranges from a device. */
+ int iopt_table_enforce_dev_resv_regions(struct io_pagetable *iopt,
+ 					struct device *dev,
+-					phys_addr_t *sw_msi_start)
++					phys_addr_t *sw_msi_start,
++					bool sw_msi_only)
+ {
+ 	struct iommu_resv_region *resv;
+ 	LIST_HEAD(resv_regions);
+@@ -1198,6 +1199,8 @@ int iopt_table_enforce_dev_resv_regions(struct io_pagetable *iopt,
+ 			num_sw_msi++;
+ 		}
+ 
++		if (sw_msi_only && resv->type != IOMMU_RESV_SW_MSI)
++			continue;
+ 		rc = iopt_reserve_iova(iopt, resv->start,
+ 				       resv->length - 1 + resv->start, dev);
+ 		if (rc)
+diff --git a/drivers/iommu/iommufd/iommufd_private.h b/drivers/iommu/iommufd/iommufd_private.h
+index 90dcf4041530..268ae0d5ae12 100644
+--- a/drivers/iommu/iommufd/iommufd_private.h
++++ b/drivers/iommu/iommufd/iommufd_private.h
+@@ -79,7 +79,8 @@ void iopt_table_remove_domain(struct io_pagetable *iopt,
+ 			      struct iommu_domain *domain);
+ int iopt_table_enforce_dev_resv_regions(struct io_pagetable *iopt,
+ 					struct device *dev,
+-					phys_addr_t *sw_msi_start);
++					phys_addr_t *sw_msi_start,
++					bool sw_msi_only);
+ int iopt_set_allow_iova(struct io_pagetable *iopt,
+ 			struct rb_root_cached *allowed_iova);
+ int iopt_reserve_iova(struct io_pagetable *iopt, unsigned long start,
 -- 
 2.34.1
 
