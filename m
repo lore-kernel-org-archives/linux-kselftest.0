@@ -2,26 +2,26 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B373C001DE
-	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Jul 2023 08:25:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6143DC04E69
+	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Jul 2023 08:25:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230479AbjGXIZj (ORCPT
+        id S231458AbjGXIZl (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 24 Jul 2023 04:25:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53524 "EHLO
+        Mon, 24 Jul 2023 04:25:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231424AbjGXIZh (ORCPT
+        with ESMTP id S231400AbjGXIZk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Jul 2023 04:25:37 -0400
+        Mon, 24 Jul 2023 04:25:40 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ED6771B8;
-        Mon, 24 Jul 2023 01:25:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D4C13134;
+        Mon, 24 Jul 2023 01:25:38 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DB53EFEC;
-        Mon, 24 Jul 2023 01:26:17 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C54A715A1;
+        Mon, 24 Jul 2023 01:26:21 -0700 (PDT)
 Received: from e125769.cambridge.arm.com (e125769.cambridge.arm.com [10.1.196.26])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 081BE3F67D;
-        Mon, 24 Jul 2023 01:25:32 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E5F693F67D;
+        Mon, 24 Jul 2023 01:25:36 -0700 (PDT)
 From:   Ryan Roberts <ryan.roberts@arm.com>
 To:     "Andrew Morton" <akpm@linux-foundation.org>,
         "Shuah Khan" <shuah@kernel.org>,
@@ -33,9 +33,9 @@ To:     "Andrew Morton" <akpm@linux-foundation.org>,
         "Peter Xu" <peterx@redhat.com>
 Cc:     Ryan Roberts <ryan.roberts@arm.com>, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v3 1/8] selftests: Line buffer test program's stdout
-Date:   Mon, 24 Jul 2023 09:25:15 +0100
-Message-Id: <20230724082522.1202616-2-ryan.roberts@arm.com>
+Subject: [PATCH v3 3/8] selftests/mm: Enable mrelease_test for arm64
+Date:   Mon, 24 Jul 2023 09:25:17 +0100
+Message-Id: <20230724082522.1202616-4-ryan.roberts@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230724082522.1202616-1-ryan.roberts@arm.com>
 References: <20230724082522.1202616-1-ryan.roberts@arm.com>
@@ -45,74 +45,33 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The selftests runner pipes the test program's stdout to tap_prefix. The
-presence of the pipe means that the test program sets its stdout to be
-fully buffered (as aposed to line buffered when directly connected to
-the terminal). The block buffering means that there is often content in
-the buffer at fork() time, which causes the output to end up duplicated.
-This was causing problems for mm:cow where test results were duplicated
-20-30x.
+mrelease_test defaults to defining __NR_pidfd_open and
+__NR_process_mrelease syscall numbers to -1, if they are not defined
+anywhere else, and the suite would then be marked as skipped as a
+result.
 
-Solve this by using `stdbuf`, when available to force the test program
-to use line buffered mode. This means previously printf'ed results are
-flushed out of the program before any fork().
+arm64 (at least the stock debian toolchain that I'm using) requires
+including <sys/syscall.h> to pull in the defines for these syscalls. So
+let's add this header. With this in place, the test is passing on arm64.
 
-Additionally, explicitly set line buffer mode in ksft_print_header(),
-which means that all test programs that use the ksft framework will
-benefit even if stdbuf is not present on the system.
-
-Reviewed-by: Mark Brown <broonie@kernel.org>
+Reviewed-by: David Hildenbrand <david@redhat.com>
 Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
 ---
- tools/testing/selftests/kselftest.h         | 9 +++++++++
- tools/testing/selftests/kselftest/runner.sh | 7 +++++--
- 2 files changed, 14 insertions(+), 2 deletions(-)
+ tools/testing/selftests/mm/mrelease_test.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
-index 829be379545a..529d29a35900 100644
---- a/tools/testing/selftests/kselftest.h
-+++ b/tools/testing/selftests/kselftest.h
-@@ -113,6 +113,15 @@ static inline int ksft_get_error_cnt(void) { return ksft_cnt.ksft_error; }
- 
- static inline void ksft_print_header(void)
- {
-+	/*
-+	 * Force line buffering; If stdout is not connected to a terminal, it
-+	 * will otherwise default to fully buffered, which can cause output
-+	 * duplication if there is content in the buffer when fork()ing. If
-+	 * there is a crash, line buffering also means the most recent output
-+	 * line will be visible.
-+	 */
-+	setvbuf(stdout, NULL, _IOLBF, 0);
-+
- 	if (!(getenv("KSFT_TAP_LEVEL")))
- 		printf("TAP version 13\n");
- }
-diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
-index 1c952d1401d4..261c73cab41b 100644
---- a/tools/testing/selftests/kselftest/runner.sh
-+++ b/tools/testing/selftests/kselftest/runner.sh
-@@ -105,15 +105,18 @@ run_one()
- 		echo "# Warning: file $TEST is missing!"
- 		echo "not ok $test_num $TEST_HDR_MSG"
- 	else
-+		if [ -x /usr/bin/stdbuf ]; then
-+			stdbuf="/usr/bin/stdbuf --output=L "
-+		fi
- 		eval kselftest_cmd_args="\$${kselftest_cmd_args_ref:-}"
--		cmd="./$BASENAME_TEST $kselftest_cmd_args"
-+		cmd="$stdbuf ./$BASENAME_TEST $kselftest_cmd_args"
- 		if [ ! -x "$TEST" ]; then
- 			echo "# Warning: file $TEST is not executable"
- 
- 			if [ $(head -n 1 "$TEST" | cut -c -2) = "#!" ]
- 			then
- 				interpreter=$(head -n 1 "$TEST" | cut -c 3-)
--				cmd="$interpreter ./$BASENAME_TEST"
-+				cmd="$stdbuf $interpreter ./$BASENAME_TEST"
- 			else
- 				echo "not ok $test_num $TEST_HDR_MSG"
- 				return
+diff --git a/tools/testing/selftests/mm/mrelease_test.c b/tools/testing/selftests/mm/mrelease_test.c
+index dca21042b679..d822004a374e 100644
+--- a/tools/testing/selftests/mm/mrelease_test.c
++++ b/tools/testing/selftests/mm/mrelease_test.c
+@@ -7,6 +7,7 @@
+ #include <stdbool.h>
+ #include <stdio.h>
+ #include <stdlib.h>
++#include <sys/syscall.h>
+ #include <sys/wait.h>
+ #include <unistd.h>
+ #include <asm-generic/unistd.h>
 -- 
 2.25.1
 
