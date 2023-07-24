@@ -2,44 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5AEA4C0015E
-	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Jul 2023 11:04:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98F3CC0015E
+	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Jul 2023 11:05:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231364AbjGXLEx (ORCPT
+        id S233236AbjGXLFJ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 24 Jul 2023 07:04:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58164 "EHLO
+        Mon, 24 Jul 2023 07:05:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232603AbjGXLEm (ORCPT
+        with ESMTP id S231393AbjGXLFC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Jul 2023 07:04:42 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF3C71BC;
-        Mon, 24 Jul 2023 04:04:27 -0700 (PDT)
+        Mon, 24 Jul 2023 07:05:02 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13BEE73;
+        Mon, 24 Jul 2023 04:04:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690196667; x=1721732667;
+  t=1690196676; x=1721732676;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Zr2WqMszpqUfg47WqGxebx7Jn6gU45UPhRPMA0fNuxI=;
-  b=eg7199wLV5n+g8ZCf1EbH00GWNF3JqO63riOq3Gm/IgTZx9376HI8sZA
-   mCnjaOWm8NGpIrOXBKRoONS0NZmk/cGEPgmiBo+YGDR82yL0iwEKpesTX
-   trO3bqDUzRxH2bxgvaWs6uXejukPw++BGAnsdGuiFYNu1wM5yijjqPoY0
-   e9X2z5ii3E+iM6Upc5TXwMisG9YWfZckaE5F5kGRUy757WSV4oopgdPj9
-   5W2qZZkOTD/SQYQOLOpCpd/82+0AT8LgGKIQrBnnyaVSgaIyVsYNrgnVN
-   slHmQJ6+nqBWIGPuKGnMhdhFV56lBTmrsuCuYZEMB+Ezxp4e6wqmIoB8U
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10780"; a="366301822"
+  bh=sy/10kzSsQE8Iw4y4z6S/RygUlRyD0M+tbsCuWgKxuA=;
+  b=oKE/woZbiK1Pj9aexkkDFZRql6RUf925fo1G8xBIHdqUhwwtIIXaIiME
+   pmf/2M1Z59JAWQbqnxQYoWow/wnajaVPZ22ViV76VH4JCTZItPhNL2q2K
+   p84t+TMdM6P3bZASbRblcAyuZ0/mTSR2rC428pEJYzvxEr83l3LRxp8DA
+   EfkG3mAFlUFM7Nlrmjt5AeHC3bMhReUDZdgqAfC35wozjGQNvPL2vBXTe
+   lppjCWPMbuDm+GVzZX6PX+ZODBinmXiFlEOFCAnnklSVY2D4y3KZLSlyP
+   lrdKd7D0pGISW2eEGaKvWNBE+dNL0rpWj8ghTPXE2D32oa2dkiL0XrQcw
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10780"; a="347013313"
 X-IronPort-AV: E=Sophos;i="6.01,228,1684825200"; 
-   d="scan'208";a="366301822"
+   d="scan'208";a="347013313"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2023 04:04:20 -0700
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2023 04:04:25 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10780"; a="815775822"
+X-IronPort-AV: E=McAfee;i="6600,9927,10780"; a="815775861"
 X-IronPort-AV: E=Sophos;i="6.01,228,1684825200"; 
-   d="scan'208";a="815775822"
+   d="scan'208";a="815775861"
 Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by FMSMGA003.fm.intel.com with ESMTP; 24 Jul 2023 04:04:19 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 24 Jul 2023 04:04:21 -0700
 From:   Yi Liu <yi.l.liu@intel.com>
 To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
         kevin.tian@intel.com, robin.murphy@arm.com,
@@ -52,9 +52,9 @@ Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
         suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         zhenzhong.duan@intel.com
-Subject: [PATCH v3 09/17] iommufd: Add IOMMU_HWPT_INVALIDATE
-Date:   Mon, 24 Jul 2023 04:03:58 -0700
-Message-Id: <20230724110406.107212-10-yi.l.liu@intel.com>
+Subject: [PATCH v3 11/17] iommufd/selftest: Add IOMMU_TEST_OP_DEV_[ADD|DEL]_RESERVED to add/del reserved regions to selftest device
+Date:   Mon, 24 Jul 2023 04:04:00 -0700
+Message-Id: <20230724110406.107212-12-yi.l.liu@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230724110406.107212-1-yi.l.liu@intel.com>
 References: <20230724110406.107212-1-yi.l.liu@intel.com>
@@ -64,161 +64,162 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-In nested translation, the stage-1 page table is user-managed and used by
-IOMMU hardware, so update of any present page table entry in the stage-1
-page table should be followed with an IOTLB invalidation.
+This makes test tool able to specify reserved regions to the selftest
+device and hence able to validate the ioctl IOMMU_RESV_IOVA_RANGES.
 
-This adds IOMMU_HWPT_INVALIDATE for stage-1 IOTLB invalidation.
-
-Co-developed-by: Nicolin Chen <nicolinc@nvidia.com>
-Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
 Signed-off-by: Yi Liu <yi.l.liu@intel.com>
 ---
- drivers/iommu/iommufd/hw_pagetable.c    | 45 +++++++++++++++++++++++++
- drivers/iommu/iommufd/iommufd_private.h |  9 +++++
- drivers/iommu/iommufd/main.c            |  3 ++
- include/uapi/linux/iommufd.h            | 22 ++++++++++++
- 4 files changed, 79 insertions(+)
+ drivers/iommu/iommufd/iommufd_test.h |  6 ++
+ drivers/iommu/iommufd/selftest.c     | 82 ++++++++++++++++++++++++++++
+ 2 files changed, 88 insertions(+)
 
-diff --git a/drivers/iommu/iommufd/hw_pagetable.c b/drivers/iommu/iommufd/hw_pagetable.c
-index 97e4114226de..9064e6d181b4 100644
---- a/drivers/iommu/iommufd/hw_pagetable.c
-+++ b/drivers/iommu/iommufd/hw_pagetable.c
-@@ -286,3 +286,48 @@ int iommufd_hwpt_alloc(struct iommufd_ucmd *ucmd)
- 	iommufd_put_object(&idev->obj);
+diff --git a/drivers/iommu/iommufd/iommufd_test.h b/drivers/iommu/iommufd/iommufd_test.h
+index 3f3644375bf1..b7f4bee2ea1b 100644
+--- a/drivers/iommu/iommufd/iommufd_test.h
++++ b/drivers/iommu/iommufd/iommufd_test.h
+@@ -19,6 +19,8 @@ enum {
+ 	IOMMU_TEST_OP_SET_TEMP_MEMORY_LIMIT,
+ 	IOMMU_TEST_OP_MOCK_DOMAIN_REPLACE,
+ 	IOMMU_TEST_OP_ACCESS_REPLACE_IOAS,
++	IOMMU_TEST_OP_DEV_ADD_RESERVED,
++	IOMMU_TEST_OP_DEV_DEL_RESERVED,
+ };
+ 
+ enum {
+@@ -50,6 +52,10 @@ struct iommu_test_cmd {
+ 			__aligned_u64 start;
+ 			__aligned_u64 length;
+ 		} add_reserved;
++		struct {
++			__aligned_u64 start;
++			__aligned_u64 length;
++		} add_dev_reserved;
+ 		struct {
+ 			__u32 out_stdev_id;
+ 			__u32 out_hwpt_id;
+diff --git a/drivers/iommu/iommufd/selftest.c b/drivers/iommu/iommufd/selftest.c
+index 72d0c37e0b5e..271c6c261eb4 100644
+--- a/drivers/iommu/iommufd/selftest.c
++++ b/drivers/iommu/iommufd/selftest.c
+@@ -93,6 +93,8 @@ enum selftest_obj_type {
+ 
+ struct mock_dev {
+ 	struct device dev;
++	struct rw_semaphore reserved_rwsem;
++	struct rb_root_cached reserved_itree;
+ };
+ 
+ struct selftest_obj {
+@@ -385,6 +387,10 @@ static struct mock_dev *mock_dev_create(void)
+ 	mutex_init(&mdev->dev.iommu->lock);
+ 	mdev->dev.iommu->iommu_dev = &mock_iommu_device;
+ 
++	/* Reserve range related fields */
++	init_rwsem(&mdev->reserved_rwsem);
++	mdev->reserved_itree = RB_ROOT_CACHED;
++
+ 	rc = device_add(&mdev->dev);
+ 	if (rc)
+ 		goto err_dev_iommu;
+@@ -407,8 +413,20 @@ static struct mock_dev *mock_dev_create(void)
+ 	return ERR_PTR(rc);
+ }
+ 
++static void mock_dev_remove_reserved_iovas(struct mock_dev *mdev)
++{
++	struct interval_tree_node *node;
++
++	while ((node = interval_tree_iter_first(&mdev->reserved_itree, 0,
++						ULONG_MAX))) {
++		interval_tree_remove(node, &mdev->reserved_itree);
++		kfree(node);
++	}
++}
++
+ static void mock_dev_destroy(struct mock_dev *mdev)
+ {
++	mock_dev_remove_reserved_iovas(mdev);
+ 	iommu_group_remove_device(&mdev->dev);
+ 	device_del(&mdev->dev);
+ 	kfree(mdev->dev.iommu);
+@@ -536,6 +554,64 @@ static int iommufd_test_add_reserved(struct iommufd_ucmd *ucmd,
  	return rc;
  }
-+
-+int iommufd_hwpt_invalidate(struct iommufd_ucmd *ucmd)
+ 
++static int mock_dev_add_reserved_iova(struct mock_dev *mdev,
++				      unsigned long start, unsigned long last)
 +{
-+	struct iommu_hwpt_invalidate *cmd = ucmd->cmd;
-+	struct iommufd_hw_pagetable *hwpt;
-+	u32 user_data_len, klen;
-+	u64 user_ptr;
-+	int rc = 0;
++	struct interval_tree_node *reserved;
 +
-+	if (!cmd->data_len || cmd->__reserved)
-+		return -EOPNOTSUPP;
++	if (interval_tree_iter_first(&mdev->reserved_itree, start, last))
++		return -EADDRINUSE;
 +
-+	hwpt = iommufd_get_hwpt(ucmd, cmd->hwpt_id);
-+	if (IS_ERR(hwpt))
-+		return PTR_ERR(hwpt);
++	reserved = kzalloc(sizeof(*reserved), GFP_KERNEL_ACCOUNT);
++	if (!reserved)
++		return -ENOMEM;
++	reserved->start = start;
++	reserved->last = last;
++	interval_tree_insert(reserved, &mdev->reserved_itree);
++	return 0;
++}
 +
-+	/* Do not allow any kernel-managed hw_pagetable */
-+	if (!hwpt->parent) {
-+		rc = -EINVAL;
-+		goto out_put_hwpt;
-+	}
++/* Add a reserved IOVA region to a device */
++static int iommufd_test_dev_add_reserved(struct iommufd_ucmd *ucmd,
++					 unsigned int device_id,
++					 unsigned long start, size_t length)
++{
++	struct selftest_obj *sobj;
++	struct mock_dev *mdev;
++	int rc;
 +
-+	klen = hwpt->domain->ops->cache_invalidate_user_data_len;
-+	if (!hwpt->domain->ops->cache_invalidate_user || !klen) {
-+		rc = -EOPNOTSUPP;
-+		goto out_put_hwpt;
-+	}
++	sobj = iommufd_test_get_device(ucmd->ictx, device_id);
++	if (IS_ERR(sobj))
++		return PTR_ERR(sobj);
 +
-+	/*
-+	 * Copy the needed fields before reusing the ucmd buffer, this
-+	 * avoids memory allocation in this path.
-+	 */
-+	user_ptr = cmd->data_uptr;
-+	user_data_len = cmd->data_len;
-+
-+	rc = copy_struct_from_user(cmd, klen,
-+				   u64_to_user_ptr(user_ptr), user_data_len);
-+	if (rc)
-+		goto out_put_hwpt;
-+
-+	rc = hwpt->domain->ops->cache_invalidate_user(hwpt->domain, cmd);
-+out_put_hwpt:
-+	iommufd_put_object(&hwpt->obj);
++	mdev = sobj->idev.mock_dev;
++	down_write(&mdev->reserved_rwsem);
++	rc = mock_dev_add_reserved_iova(sobj->idev.mock_dev,
++					start, start + length - 1);
++	up_write(&mdev->reserved_rwsem);
++	iommufd_put_object(&sobj->obj);
 +	return rc;
 +}
-diff --git a/drivers/iommu/iommufd/iommufd_private.h b/drivers/iommu/iommufd/iommufd_private.h
-index 268ae0d5ae12..047317fa4df0 100644
---- a/drivers/iommu/iommufd/iommufd_private.h
-+++ b/drivers/iommu/iommufd/iommufd_private.h
-@@ -270,6 +270,7 @@ iommufd_hw_pagetable_detach(struct iommufd_device *idev);
- void iommufd_hw_pagetable_destroy(struct iommufd_object *obj);
- void iommufd_hw_pagetable_abort(struct iommufd_object *obj);
- int iommufd_hwpt_alloc(struct iommufd_ucmd *ucmd);
-+int iommufd_hwpt_invalidate(struct iommufd_ucmd *ucmd);
- 
- static inline void iommufd_hw_pagetable_put(struct iommufd_ctx *ictx,
- 					    struct iommufd_hw_pagetable *hwpt)
-@@ -281,6 +282,14 @@ static inline void iommufd_hw_pagetable_put(struct iommufd_ctx *ictx,
- 		refcount_dec(&hwpt->obj.users);
- }
- 
-+static inline struct iommufd_hw_pagetable *
-+iommufd_get_hwpt(struct iommufd_ucmd *ucmd, u32 id)
++
++/* Remove all reserved IOVA regions of a device */
++static int iommufd_test_dev_del_reserved(struct iommufd_ucmd *ucmd,
++					 unsigned int device_id)
 +{
-+	return container_of(iommufd_get_object(ucmd->ictx, id,
-+					       IOMMUFD_OBJ_HW_PAGETABLE),
-+			    struct iommufd_hw_pagetable, obj);
++	struct selftest_obj *sobj;
++	struct mock_dev *mdev;
++
++	sobj = iommufd_test_get_device(ucmd->ictx, device_id);
++	if (IS_ERR(sobj))
++		return PTR_ERR(sobj);
++
++	mdev = sobj->idev.mock_dev;
++	down_write(&mdev->reserved_rwsem);
++	mock_dev_remove_reserved_iovas(mdev);
++	up_write(&mdev->reserved_rwsem);
++	iommufd_put_object(&sobj->obj);
++	return 0;
 +}
 +
- struct iommufd_group {
- 	struct kref ref;
- 	struct mutex lock;
-diff --git a/drivers/iommu/iommufd/main.c b/drivers/iommu/iommufd/main.c
-index 5f4420626421..255e8a3c5b0e 100644
---- a/drivers/iommu/iommufd/main.c
-+++ b/drivers/iommu/iommufd/main.c
-@@ -391,6 +391,7 @@ union ucmd_buffer {
- 	struct iommu_destroy destroy;
- 	struct iommu_hw_info info;
- 	struct iommu_hwpt_alloc hwpt;
-+	struct iommu_hwpt_invalidate cache;
- 	struct iommu_ioas_alloc alloc;
- 	struct iommu_ioas_allow_iovas allow_iovas;
- 	struct iommu_ioas_copy ioas_copy;
-@@ -427,6 +428,8 @@ static const struct iommufd_ioctl_op iommufd_ioctl_ops[] = {
- 		 __reserved),
- 	IOCTL_OP(IOMMU_HWPT_ALLOC, iommufd_hwpt_alloc, struct iommu_hwpt_alloc,
- 		 data_uptr),
-+	IOCTL_OP(IOMMU_HWPT_INVALIDATE, iommufd_hwpt_invalidate,
-+		 struct iommu_hwpt_invalidate, data_uptr),
- 	IOCTL_OP(IOMMU_IOAS_ALLOC, iommufd_ioas_alloc_ioctl,
- 		 struct iommu_ioas_alloc, out_ioas_id),
- 	IOCTL_OP(IOMMU_IOAS_ALLOW_IOVAS, iommufd_ioas_allow_iovas,
-diff --git a/include/uapi/linux/iommufd.h b/include/uapi/linux/iommufd.h
-index 73bf9af91e99..034da283cd3a 100644
---- a/include/uapi/linux/iommufd.h
-+++ b/include/uapi/linux/iommufd.h
-@@ -48,6 +48,7 @@ enum {
- 	IOMMUFD_CMD_HWPT_ALLOC,
- 	IOMMUFD_CMD_GET_HW_INFO,
- 	IOMMUFD_CMD_RESV_IOVA_RANGES,
-+	IOMMUFD_CMD_HWPT_INVALIDATE,
- };
- 
- /**
-@@ -486,4 +487,25 @@ struct iommu_resv_iova_ranges {
- 	__aligned_u64 resv_iovas;
- };
- #define IOMMU_RESV_IOVA_RANGES _IO(IOMMUFD_TYPE, IOMMUFD_CMD_RESV_IOVA_RANGES)
-+
-+/**
-+ * struct iommu_hwpt_invalidate - ioctl(IOMMU_HWPT_INVALIDATE)
-+ * @size: sizeof(struct iommu_hwpt_invalidate)
-+ * @hwpt_id: HWPT ID of target hardware page table for the invalidation
-+ * @data_len: Length of the type specific data
-+ * @__reserved: Must be 0
-+ * @data_uptr: User pointer to the type specific data
-+ *
-+ * Invalidate the iommu cache for user-managed page table. Modifications
-+ * on user-managed page table should be followed with this operation to
-+ * sync the IOTLB. The data in @data_uptr differs per the hwpt type.
-+ */
-+struct iommu_hwpt_invalidate {
-+	__u32 size;
-+	__u32 hwpt_id;
-+	__u32 data_len;
-+	__u32 __reserved;
-+	__aligned_u64 data_uptr;
-+};
-+#define IOMMU_HWPT_INVALIDATE _IO(IOMMUFD_TYPE, IOMMUFD_CMD_HWPT_INVALIDATE)
- #endif
+ /* Check that every pfn under each iova matches the pfn under a user VA */
+ static int iommufd_test_md_check_pa(struct iommufd_ucmd *ucmd,
+ 				    unsigned int mockpt_id, unsigned long iova,
+@@ -1025,6 +1101,12 @@ int iommufd_test(struct iommufd_ucmd *ucmd)
+ 		return iommufd_test_add_reserved(ucmd, cmd->id,
+ 						 cmd->add_reserved.start,
+ 						 cmd->add_reserved.length);
++	case IOMMU_TEST_OP_DEV_ADD_RESERVED:
++		return iommufd_test_dev_add_reserved(ucmd, cmd->id,
++						     cmd->add_dev_reserved.start,
++						     cmd->add_dev_reserved.length);
++	case IOMMU_TEST_OP_DEV_DEL_RESERVED:
++		return iommufd_test_dev_del_reserved(ucmd, cmd->id);
+ 	case IOMMU_TEST_OP_MOCK_DOMAIN:
+ 		return iommufd_test_mock_domain(ucmd, cmd);
+ 	case IOMMU_TEST_OP_MOCK_DOMAIN_REPLACE:
 -- 
 2.34.1
 
