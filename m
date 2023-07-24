@@ -2,44 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2FDDC001DE
-	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Jul 2023 11:05:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32A1BC001DF
+	for <linux-kselftest@archiver.kernel.org>; Mon, 24 Jul 2023 11:05:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233408AbjGXLFJ (ORCPT
+        id S233425AbjGXLFL (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 24 Jul 2023 07:05:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58610 "EHLO
+        Mon, 24 Jul 2023 07:05:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230023AbjGXLFD (ORCPT
+        with ESMTP id S232640AbjGXLFG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Jul 2023 07:05:03 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D4B610C3;
-        Mon, 24 Jul 2023 04:04:37 -0700 (PDT)
+        Mon, 24 Jul 2023 07:05:06 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EBC519B2;
+        Mon, 24 Jul 2023 04:04:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690196677; x=1721732677;
+  t=1690196680; x=1721732680;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Jdb8ZB5daKdGFPrTc/NRXCndQLaxOJW2ZTy0hfrrfYc=;
-  b=eAYudO/jVBxCKMJ9eWXTRpjrjtpVWzECmCkofr6AUgxEMLLNQnsMDdAv
-   k4FV73GZ7K1zk5/5qzA+PpePp91RSqzQM380wxA89wwuP+ykyhYOCZkqJ
-   wNEb2QB6tSWSfpLIjdnquMIqSRa2hia8RIgxQlu1rqUA0HbdznO4E/PEV
-   CGakfMMYGMAj1J/A/IW5io+KaBm+7O2Pix7T410+QEBKmLVFWPbzcZwH3
-   ctCRY/vFODNG+eBReRcXRzjuZkaAhW4Tu0gDzyiYAt49sRwX8hb5yeigO
-   gxgwInsdxVl6l+6IyoMNs1SBNX9rfqrKq1l/higY7TnMR0gMLQ6F3q96h
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10780"; a="347013321"
+  bh=TwNnGQoy/O9RF24KvlNH55AuSnmg4Ro5e8QjmX39PRQ=;
+  b=EeBEUj8+PA7hW/BSPLA42M0WYkEeRdyVnol+cm0d/vrbg2HQtzSnn4Sl
+   bnu1R2uovtohva4Hd307vKYvJ0Mo1fcZvrKRbzApS+Uc7gm5J7jkAX71C
+   hbvig/xL36t1LhNQhjalmVkMBwO6teFENtEJjVyp4vS4Psb+rfN+w625y
+   7ijhovuiySnElBp7TyBGTKBqdpqor6+qDA3Gta8TaVeB7ve6q8Z32rzBz
+   Xp+zpUVnR9TRWAv6e0q/MwvLdQ57zJ/r/kgO7ZLl314DuYkbWOhUNMGaM
+   3iU3P2BydKZExkY2q37jWNB2y5k7Lyq9ed6UGE94nCLqgfxF5xE7Hv4oD
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10780"; a="366301786"
 X-IronPort-AV: E=Sophos;i="6.01,228,1684825200"; 
-   d="scan'208";a="347013321"
+   d="scan'208";a="366301786"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2023 04:04:25 -0700
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2023 04:04:12 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10780"; a="815775871"
+X-IronPort-AV: E=McAfee;i="6600,9927,10780"; a="815775757"
 X-IronPort-AV: E=Sophos;i="6.01,228,1684825200"; 
-   d="scan'208";a="815775871"
+   d="scan'208";a="815775757"
 Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by FMSMGA003.fm.intel.com with ESMTP; 24 Jul 2023 04:04:22 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 24 Jul 2023 04:04:11 -0700
 From:   Yi Liu <yi.l.liu@intel.com>
 To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
         kevin.tian@intel.com, robin.murphy@arm.com,
@@ -52,9 +52,9 @@ Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
         suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         zhenzhong.duan@intel.com
-Subject: [PATCH v3 12/17] iommufd/selftest: Add .get_resv_regions() for mock_dev
-Date:   Mon, 24 Jul 2023 04:04:01 -0700
-Message-Id: <20230724110406.107212-13-yi.l.liu@intel.com>
+Subject: [PATCH v3 02/17] iommu: Add nested domain support
+Date:   Mon, 24 Jul 2023 04:03:51 -0700
+Message-Id: <20230724110406.107212-3-yi.l.liu@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230724110406.107212-1-yi.l.liu@intel.com>
 References: <20230724110406.107212-1-yi.l.liu@intel.com>
@@ -64,58 +64,73 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This makes mock_dev to report resv_regions.
+From: Lu Baolu <baolu.lu@linux.intel.com>
 
+Introduce a new domain type for a user I/O page table, which is nested
+on top of another user space address represented by a UNMANAGED domain. The
+mappings of a nested domain are managed by user space software, therefore
+it's unnecessary to have map/unmap callbacks. But the updates of the PTEs
+in the nested domain page table must be propagated to the caches on both
+IOMMU (IOTLB) and devices (DevTLB).
+
+The nested domain is allocated by the domain_alloc_user op, and attached
+to the device through the existing iommu_attach_device/group() interfaces.
+
+A new domain op, named cache_invalidate_user is added for the userspace to
+flush the hardware caches for a nested domain through iommufd. No wrapper
+for it, as it's only supposed to be used by iommufd.
+
+Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+Co-developed-by: Nicolin Chen <nicolinc@nvidia.com>
+Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
 Signed-off-by: Yi Liu <yi.l.liu@intel.com>
 ---
- drivers/iommu/iommufd/selftest.c | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ include/linux/iommu.h | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/drivers/iommu/iommufd/selftest.c b/drivers/iommu/iommufd/selftest.c
-index 271c6c261eb4..e40780db88b5 100644
---- a/drivers/iommu/iommufd/selftest.c
-+++ b/drivers/iommu/iommufd/selftest.c
-@@ -292,6 +292,32 @@ static void mock_domain_set_plaform_dma_ops(struct device *dev)
- 	 */
- }
+diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+index ecbec2627b63..b8f09330b64e 100644
+--- a/include/linux/iommu.h
++++ b/include/linux/iommu.h
+@@ -66,6 +66,9 @@ struct iommu_domain_geometry {
  
-+static void iommufd_test_get_resv_regions(struct device *dev,
-+					  struct list_head *head)
-+{
-+	struct mock_dev *mdev = container_of(dev, struct mock_dev, dev);
-+	struct interval_tree_node *reserved, *next;
+ #define __IOMMU_DOMAIN_SVA	(1U << 4)  /* Shared process address space */
+ 
++#define __IOMMU_DOMAIN_NESTED	(1U << 5)  /* User-managed address space nested
++					      on a stage-2 translation        */
 +
-+	down_read(&mdev->reserved_rwsem);
-+	for (reserved = interval_tree_iter_first(&mdev->reserved_itree, 0, ULONG_MAX);
-+	     reserved; reserved = next) {
-+		struct iommu_resv_region *resv;
-+
-+		next = interval_tree_iter_next(reserved, 0, ULONG_MAX);
-+		/* Only adds IOMMU_RESV_DIRECT so far */
-+		resv = iommu_alloc_resv_region(reserved->start,
-+					       reserved->last + 1 - reserved->start,
-+					       IOMMU_READ | IOMMU_WRITE,
-+					       IOMMU_RESV_DIRECT,
-+					       GFP_ATOMIC);
-+		if (!resv)
-+			break;
-+
-+		list_add_tail(&resv->list, head);
-+	}
-+	up_read(&mdev->reserved_rwsem);
-+}
-+
- static const struct iommu_ops mock_ops = {
- 	.owner = THIS_MODULE,
- 	.pgsize_bitmap = MOCK_IO_PAGE_SIZE,
-@@ -299,6 +325,7 @@ static const struct iommu_ops mock_ops = {
- 	.hw_info = mock_domain_hw_info,
- 	.domain_alloc = mock_domain_alloc,
- 	.capable = mock_domain_capable,
-+	.get_resv_regions = iommufd_test_get_resv_regions,
- 	.set_platform_dma_ops = mock_domain_set_plaform_dma_ops,
- 	.default_domain_ops =
- 		&(struct iommu_domain_ops){
+ #define IOMMU_DOMAIN_ALLOC_FLAGS ~__IOMMU_DOMAIN_DMA_FQ
+ /*
+  * This are the possible domain-types
+@@ -92,6 +95,7 @@ struct iommu_domain_geometry {
+ 				 __IOMMU_DOMAIN_DMA_API |	\
+ 				 __IOMMU_DOMAIN_DMA_FQ)
+ #define IOMMU_DOMAIN_SVA	(__IOMMU_DOMAIN_SVA)
++#define IOMMU_DOMAIN_NESTED	(__IOMMU_DOMAIN_NESTED)
+ 
+ struct iommu_domain {
+ 	unsigned type;
+@@ -350,6 +354,10 @@ struct iommu_ops {
+  * @iotlb_sync_map: Sync mappings created recently using @map to the hardware
+  * @iotlb_sync: Flush all queued ranges from the hardware TLBs and empty flush
+  *            queue
++ * @cache_invalidate_user: Flush hardware TLBs caching user space IO mappings
++ * @cache_invalidate_user_data_len: Defined length of input user data for the
++ *                                  cache_invalidate_user op, being sizeof the
++ *                                  structure in include/uapi/linux/iommufd.h
+  * @iova_to_phys: translate iova to physical address
+  * @enforce_cache_coherency: Prevent any kind of DMA from bypassing IOMMU_CACHE,
+  *                           including no-snoop TLPs on PCIe or other platform
+@@ -379,6 +387,9 @@ struct iommu_domain_ops {
+ 			       size_t size);
+ 	void (*iotlb_sync)(struct iommu_domain *domain,
+ 			   struct iommu_iotlb_gather *iotlb_gather);
++	int (*cache_invalidate_user)(struct iommu_domain *domain,
++				     void *user_data);
++	const size_t cache_invalidate_user_data_len;
+ 
+ 	phys_addr_t (*iova_to_phys)(struct iommu_domain *domain,
+ 				    dma_addr_t iova);
 -- 
 2.34.1
 
