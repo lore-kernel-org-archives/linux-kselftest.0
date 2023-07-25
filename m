@@ -2,60 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98F0FC04A6A
-	for <linux-kselftest@archiver.kernel.org>; Tue, 25 Jul 2023 22:03:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08736C001E0
+	for <linux-kselftest@archiver.kernel.org>; Tue, 25 Jul 2023 22:03:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231991AbjGYWDw (ORCPT
+        id S232045AbjGYWDx (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 25 Jul 2023 18:03:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47562 "EHLO
+        Tue, 25 Jul 2023 18:03:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232045AbjGYWDI (ORCPT
+        with ESMTP id S232066AbjGYWDJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Jul 2023 18:03:08 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9965135B7
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 15:02:43 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-584375eacacso9039517b3.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 15:02:43 -0700 (PDT)
+        Tue, 25 Jul 2023 18:03:09 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB643A86
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 15:02:44 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id 41be03b00d2f7-5634dbfb8b1so2801035a12.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 15:02:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690322551; x=1690927351;
+        d=google.com; s=20221208; t=1690322555; x=1690927355;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2Vk6fb359Stuhm1VcuGIgWqQRYkL2YWLdsbYVpUx5xo=;
-        b=3isJhOUvSruS/8cztZ/vPjCuapGQPFiQqyfoyCyDr1i19srvz/gFuhAYszripqjF++
-         zj5y/djO90jVg+NWQ++1x81HXrIqATvkCywjPSpixoaXW7Qtz+Qkczfc0KvgaMIjzm7q
-         +mqct2o/rQq7e4PoIDn3W63uqMiWWH+lLYX4R4uOUB5TcjIvjoywlQog9Awd/IEdito1
-         0y541Lrx3Cml256bSbVNGjE211P67v2SNF42rceDqtBQcqKEUjSULNfJclR1Tzk5n979
-         EwjRq4LvFY+6YZOsq6U/iM3KFGWFkiyQV1yqh2YfQg5NebW/lGI41/iBRlguY/O8TgFR
-         T7sA==
+        bh=WsBS7k8bBReIl/gHH9kbfcLhxHw1lqqyuWyKVcuOGx4=;
+        b=e5iRB7HbY0HCZBIgKoiJvs6hXr3F1dZh9Vqp9ysCQoH4sFqmNeYyYZIoneskM/b2UZ
+         KRkXQ+0os9CNXTLr9DJf6yZFGc8ncDPoU8RdJTOOtu4LLMMTgu9t7khqF1FmcdG4ncBR
+         74QSRxpYBnaMb68bqn8yyfjfCd3XanDr7a+bEZ5/nhcEkV2aKsbvrCvijBq42VBcToy2
+         PAlp/Q/RAKe+DE6ULklvTY5fxMlO+aAc23Da+F9mZ0dqqAPib3BzgS3on/B8V0BRwmUW
+         /3VSEF4rSux0iZeMUEO4EeFL7xWfnd2GGMgsZW09mJhdy7kKGI9Cny5iyLqEnSOKreef
+         jL6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690322551; x=1690927351;
+        d=1e100.net; s=20221208; t=1690322555; x=1690927355;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2Vk6fb359Stuhm1VcuGIgWqQRYkL2YWLdsbYVpUx5xo=;
-        b=h+L83sP7SKBpixI9nzHePRxq83bYgZZ58BLl2GS2mKJLVUzpOD6y6d64yumuzEY55s
-         rmL4CAAAUE1LPP1AWbIVTOXM5CadIY2mALzBQBZVakeiFlR+a1hAMsr63a7XFbtQejYO
-         vHU+TRimdygP64hXTB3EKThYRrv9Y76mqVlC8GSzwaJc4D7EMPVUMlojap8y/esy0zna
-         5xJryqzjAuAi+H+tnTIaMqaNwje+gK6407Qbehw3OQ0fgIkXGiLnjIu8UEWxgGGKn9Qm
-         x2RlmzdmulojCiLiPRubyEjR9d4MnmqFi+/Dsu6+uppFEaPivHGx4+vXZ/kgjW1/D0ra
-         Y+bA==
-X-Gm-Message-State: ABy/qLYMJbqlT3G1hVXUadz/blkMsE2TLEzVPeR2McM/7g1mf7D8HqLe
-        7VJZF/i1V5yF7xJCJDORLE3fiaRwOYKKlIrBhsfQme279Wie4XnRRpqwSJeVfc4JElLTRf/M5un
-        7Qs5mJUw7OAkJjotwkRixEqKCTRtDzO7aE4Wwupo7fzcuzI0EUyEsXuQUELN4VkEHVc3/ShBxUv
-        tO
-X-Google-Smtp-Source: APBJJlHJNxVmKIptLSML/VG4jEgkiSCBKPUmdc9INK2SjwujEF39iUWqohr1WVYdAnswUzxQMrqsysxI7Hux
+        bh=WsBS7k8bBReIl/gHH9kbfcLhxHw1lqqyuWyKVcuOGx4=;
+        b=WVHd9ARvFLaPYM2myU5LTpWOH6C7niOS/8mBGVY4g1HXCAu1OArHBYFDkFBE8EkoiF
+         bYqLhrN0wpVph4/87nFSxmKBL2NNCKyTlJsQjjFdIR9tIoeDtAANPAlgrlGmqFS3C85W
+         1UWhSsD3ukAuXfVgrSbNod1Aq7Q5l5+079QRt2PjduarqpNVnPm4kUbDuoC9I2BeqEHM
+         wg3KBO2cUM4mV3w6dCd08ZaqyyI+VqLSNsWr+aH57QuPP7upfGHSiJEpbNrhJidmti88
+         us+lEYMTaqxZ+iy+SQKRsSJT86vqwbxzcVsvMzmFje80j7iAUgqsVjnDp5fec8CmpAyz
+         JL1g==
+X-Gm-Message-State: ABy/qLZk6d7l9IqdiEXDuVmnhIvNekV5R1KENJ0FFlAb1z5ibOcpiGjw
+        K/VkV0wiZXCdny5lxAD9wRILfj/YKSBXJHEhQ/+oOKfGW0P1wuLQdoPvUbRtt4EqMYf8TjvyCeP
+        1HD1zBttPh2kuiRlSQQxkyPqCksMGDN4d10T/hcwZVxlcV7H4+u6yRcRZMfn0aIIiN/o7frEajL
+        mD
+X-Google-Smtp-Source: APBJJlHRoMNVyyg+IsDkk5apOFRfJvxDaF0jUd2p0D/mElXiKebhnUs6z5/HZPfO4XBZUEbbn1+u1HIQjkK8
 X-Received: from afranji.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:47f1])
- (user=afranji job=sendgmr) by 2002:a81:ae49:0:b0:580:e6dc:e2df with SMTP id
- g9-20020a81ae49000000b00580e6dce2dfmr3713ywk.9.1690322550887; Tue, 25 Jul
- 2023 15:02:30 -0700 (PDT)
-Date:   Tue, 25 Jul 2023 22:01:15 +0000
+ (user=afranji job=sendgmr) by 2002:a63:7d1a:0:b0:55b:4887:9e99 with SMTP id
+ y26-20020a637d1a000000b0055b48879e99mr2179pgc.1.1690322554792; Tue, 25 Jul
+ 2023 15:02:34 -0700 (PDT)
+Date:   Tue, 25 Jul 2023 22:01:17 +0000
 In-Reply-To: <20230725220132.2310657-1-afranji@google.com>
 Mime-Version: 1.0
 References: <20230725220132.2310657-1-afranji@google.com>
 X-Mailer: git-send-email 2.41.0.487.g6d72f3e995-goog
-Message-ID: <20230725220132.2310657-23-afranji@google.com>
-Subject: [PATCH v4 22/28] KVM: selftests: Add functions to allow mapping as shared
+Message-ID: <20230725220132.2310657-25-afranji@google.com>
+Subject: [PATCH v4 24/28] KVM: selftests: Expose _vm_vaddr_alloc
 From:   Ryan Afranji <afranji@google.com>
 To:     linux-kselftest@vger.kernel.org
 Cc:     pbonzini@redhat.com, seanjc@google.com, isaku.yamahata@intel.com,
@@ -78,142 +78,44 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Ackerley Tng <ackerleytng@google.com>
 
+vm_vaddr_alloc always allocates memory in memslot 0. This allows users
+of this function to choose which memslot to allocate virtual memory
+in.
+
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
-Change-Id: I27676cf732276c544c9abd7e9b8589ca8ffd6ba5
+Change-Id: I2755287f0c0c2983d278094776a3c51d1c9ce448
 Signed-off-by: Ryan Afranji <afranji@google.com>
 ---
- .../selftests/kvm/include/kvm_util_base.h     | 24 ++++++++++++++
- tools/testing/selftests/kvm/lib/kvm_util.c    | 32 +++++++++++++++++++
- .../selftests/kvm/lib/x86_64/processor.c      | 15 +++++++--
- 3 files changed, 69 insertions(+), 2 deletions(-)
+ tools/testing/selftests/kvm/include/kvm_util_base.h | 3 +++
+ tools/testing/selftests/kvm/lib/kvm_util.c          | 2 +-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-index 6ed57162b49d..d793355599e1 100644
+index d793355599e1..4d02d1e6eb53 100644
 --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
 +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-@@ -524,6 +524,8 @@ vm_vaddr_t vm_vaddr_alloc_page(struct kvm_vm *vm);
- 
- void virt_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr,
- 	      unsigned int npages);
-+void virt_map_shared(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr,
-+		     unsigned int npages);
- void *addr_gpa2hva(struct kvm_vm *vm, vm_paddr_t gpa);
- void *addr_gva2hva(struct kvm_vm *vm, vm_vaddr_t gva);
- vm_paddr_t addr_hva2gpa(struct kvm_vm *vm, void *hva);
-@@ -983,6 +985,28 @@ static inline void virt_pg_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr
- 	virt_arch_pg_map(vm, vaddr, paddr);
- }
- 
-+/*
-+ * VM Virtual Page Map as Shared
-+ *
-+ * Input Args:
-+ *   vm - Virtual Machine
-+ *   vaddr - VM Virtual Address
-+ *   paddr - VM Physical Address
-+ *   memslot - Memory region slot for new virtual translation tables
-+ *
-+ * Output Args: None
-+ *
-+ * Return: None
-+ *
-+ * Within @vm, creates a virtual translation for the page starting
-+ * at @vaddr to the page starting at @paddr.
-+ */
-+void virt_arch_pg_map_shared(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr);
-+
-+static inline void virt_pg_map_shared(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr)
-+{
-+	virt_arch_pg_map_shared(vm, vaddr, paddr);
-+}
- 
- /*
-  * Address Guest Virtual to Guest Physical
+@@ -511,6 +511,9 @@ void vm_mem_region_delete(struct kvm_vm *vm, uint32_t slot);
+ struct kvm_vcpu *__vm_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id);
+ void vm_populate_vaddr_bitmap(struct kvm_vm *vm);
+ vm_vaddr_t vm_vaddr_unused_gap(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min);
++vm_vaddr_t _vm_vaddr_alloc(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min,
++			   vm_paddr_t paddr_min, uint32_t data_memslot,
++			   bool encrypt);
+ vm_vaddr_t vm_vaddr_alloc(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min);
+ vm_vaddr_t __vm_vaddr_alloc(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min,
+ 			    enum kvm_mem_region_type type);
 diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index e2a0d979b54f..7db9437505d7 100644
+index 7db9437505d7..bed218c4f8b4 100644
 --- a/tools/testing/selftests/kvm/lib/kvm_util.c
 +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -1551,6 +1551,38 @@ void virt_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr,
- 	}
- }
- 
-+/*
-+ * Map a range of VM virtual address to the VM's physical address as shared
-+ *
-+ * Input Args:
-+ *   vm - Virtual Machine
-+ *   vaddr - Virtuall address to map
-+ *   paddr - VM Physical Address
-+ *   npages - The number of pages to map
-+ *
-+ * Output Args: None
-+ *
-+ * Return: None
-+ *
-+ * Within the VM given by @vm, creates a virtual translation for
-+ * @npages starting at @vaddr to the page range starting at @paddr.
-+ */
-+void virt_map_shared(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr,
-+		     unsigned int npages)
-+{
-+	size_t page_size = vm->page_size;
-+	size_t size = npages * page_size;
-+
-+	TEST_ASSERT(vaddr + size > vaddr, "Vaddr overflow");
-+	TEST_ASSERT(paddr + size > paddr, "Paddr overflow");
-+
-+	while (npages--) {
-+		virt_pg_map_shared(vm, vaddr, paddr);
-+		vaddr += page_size;
-+		paddr += page_size;
-+	}
-+}
-+
- /*
-  * Address VM Physical to Host Virtual
-  *
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-index 4893a778fff5..9283c1e4961e 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-@@ -183,7 +183,8 @@ static uint64_t *virt_create_upper_pte(struct kvm_vm *vm,
- 	return pte;
- }
- 
--void __virt_pg_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr, int level)
-+static void ___virt_pg_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr,
-+			   int level, bool protected)
- {
- 	const uint64_t pg_size = PG_LEVEL_SIZE(level);
- 	uint64_t *pml4e, *pdpe, *pde;
-@@ -229,17 +230,27 @@ void __virt_pg_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr, int level)
- 		    "PTE already present for 4k page at vaddr: 0x%lx\n", vaddr);
- 	*pte = PTE_PRESENT_MASK | PTE_WRITABLE_MASK | (paddr & PHYSICAL_PAGE_MASK);
- 
--	if (vm_is_gpa_protected(vm, paddr))
-+	if (protected)
- 		*pte |= vm->arch.c_bit;
- 	else
- 		*pte |= vm->arch.s_bit;
- }
- 
-+void __virt_pg_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr, int level)
-+{
-+	___virt_pg_map(vm, vaddr, paddr, level, vm_is_gpa_protected(vm, paddr));
-+}
-+
- void virt_arch_pg_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr)
- {
- 	__virt_pg_map(vm, vaddr, paddr, PG_LEVEL_4K);
- }
- 
-+void virt_arch_pg_map_shared(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr)
-+{
-+	___virt_pg_map(vm, vaddr, paddr, PG_LEVEL_4K, false);
-+}
-+
- void virt_map_level(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr,
- 		    uint64_t nr_bytes, int level)
+@@ -1393,7 +1393,7 @@ vm_vaddr_t __vm_vaddr_alloc(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min,
+  * a unique set of pages, with the minimum real allocation being at least
+  * a page.
+  */
+-static vm_vaddr_t
++vm_vaddr_t
+ _vm_vaddr_alloc(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min,
+ 		vm_paddr_t paddr_min, uint32_t data_memslot, bool encrypt)
  {
 -- 
 2.41.0.487.g6d72f3e995-goog
