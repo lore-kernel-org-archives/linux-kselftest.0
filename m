@@ -2,58 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1BAE5C04FDF
-	for <linux-kselftest@archiver.kernel.org>; Tue, 25 Jul 2023 08:44:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 530B8C001E0
+	for <linux-kselftest@archiver.kernel.org>; Tue, 25 Jul 2023 08:44:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231672AbjGYIoI (ORCPT
+        id S231788AbjGYIoJ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 25 Jul 2023 04:44:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60878 "EHLO
+        Tue, 25 Jul 2023 04:44:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233014AbjGYInY (ORCPT
+        with ESMTP id S233161AbjGYIns (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Jul 2023 04:43:24 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 602661FE3
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 01:42:18 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3fd28ae8b90so37135e9.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 01:42:18 -0700 (PDT)
+        Tue, 25 Jul 2023 04:43:48 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21FDF3A86
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 01:42:51 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3fbb07e7155so58665e9.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 01:42:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690274537; x=1690879337;
+        d=google.com; s=20221208; t=1690274569; x=1690879369;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dF+FPN15gaH4vcP0PRyQwuauoPONp3hYihOafEtEyeA=;
-        b=0SncupGj+5GP5Mb6mLfJYz0+/o8S8KmF9u4j4Un+SJyYTWBd3ZzcejnbZXodYgy6Kr
-         sFQdKT8OirTPoMdR5+v+Bczl1hbQDdlJnhH0dWOIyR4WTvKpboNVGX+OGpxCxnn25iuQ
-         hGrpy9hp7DD6OV+N2Yp9g3vhSuLTTh7o4KSJTXz+m3KK9dCAPGmGh1WwmsDkhEdiN/kM
-         HVOt97D0pc5qDshjckVRd2ky5F18yvK9Zk9DLSmQc+AHSCAup/mzSSFDLr8kZZYewRVg
-         wiZ4XVqAN5IOXukRO+krIV4OWImTW5clx7yTojJbIiqvNy3QnUH6oZG97Y8W8ML3+Prz
-         FdsQ==
+        bh=+RDS5NRcLAtuwBHn7yk278x72WmpR8QjmHxYjmbOCqY=;
+        b=RD6xQj7GXScR+Ob7NvKuhFC8uEdbOZirmdVe9sUcWHgoKQIV75hFJLGk1oqxUejk+k
+         AwKQ1zFgnD6s3yOxPMN0zNUqxw8TV4AA2mvH8NCKjwfh+/7VTQAT3GF7ov7YybVtNx52
+         bcVybCCEAGIA0fntIt7TFC+WgP+IEfbzPjZKug44bdwyli88gb028KClJU44N2pNy5/w
+         rmH5vxF+RWbuxYYCDIny9otNn0XTxWoqZAfvMO2RlYJjh4rjP8pxZJQepg8vsSyhi+y6
+         St4ijPUartW4oThXAcsTeCqjkBOMpzU8iTXB+95ziad0wJg4c7mU+dF2dhqKl2/rgdMj
+         zz9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690274537; x=1690879337;
+        d=1e100.net; s=20221208; t=1690274569; x=1690879369;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=dF+FPN15gaH4vcP0PRyQwuauoPONp3hYihOafEtEyeA=;
-        b=OEHidZ1gGLFk/5G+12v7xtL8VVNGfmN08ANMztcG7Es8GMboFd9cfT/gUYw4aBtx+a
-         RVQnu3LQo+48xMiAONBe246gVVp5MlGjMIDcv8qP1VMUqvm9UVvQEOEV9/wFeVssgwVE
-         buwnDcNjPz3KNNG1Cr7MxA4FeVjUd+AuTNvMOWw4G+p3QHw1L2BSwIFj0UI3tJfyZXZk
-         NGtox9L3xysDfOvMXo/l2eJeJVITQc+rviQ4/EZBjSynAcOwLUR82/oFvrpf21TYB6rY
-         MAQojiRo+5QRzQHKWrXDggs83Zosz/g6sPfNHoER6sqhinm7mtME1zhuXjlA4P/tkY3R
-         paJQ==
-X-Gm-Message-State: ABy/qLYQlu24B/YgyaP2DbH6fZrRo44pjynTK7s2hkRHfbQ6OP5VRXgb
-        RvQnx7VUDaiBD2LsAjMkF6CNsG/4J31xyU0E92eW4g==
-X-Google-Smtp-Source: APBJJlEYQvQ7LGPHUHiU+muxsE6z7ZKiP7EIo3l0Qt9m3JTMw9dCByuK1JICVSPHt43vbxvk2OSnbmc9GW2N+p6i1o0=
-X-Received: by 2002:a05:600c:4d10:b0:3f1:70d1:21a6 with SMTP id
- u16-20020a05600c4d1000b003f170d121a6mr54485wmp.0.1690274536751; Tue, 25 Jul
- 2023 01:42:16 -0700 (PDT)
+        bh=+RDS5NRcLAtuwBHn7yk278x72WmpR8QjmHxYjmbOCqY=;
+        b=Is8sZhsXdIoMSYWmWL8Ln/z6ihxvx0etvdURnRBzJKDRcIcD36HL6DfAMxE8Mcrp9r
+         XJTZd4/pXwsHOPWlHKYd9eZFmOtEYKex7oYV/q03mLgSH/9zkNB1EgMS41cOx2NALoed
+         2hb8ws5bfeJ5aNjGqYM+t/Z7Bo9VO7Eel4LpmAbmmiDcVo8weZ6NmgSRCc0vqysoS8CQ
+         huObAzad0ufvvdu1QHkfKH9bjYwyFT1MY7Z0awPQAgDZ8J+5NzlwyjIRS4gSk7Wv0hrc
+         dR0sOmOO0Zsvw1VWw+6hFSzf7PWtqQfaGaPjF/5yEFprgWUvd3MZPDWYzcntDA+eKkNK
+         6WVA==
+X-Gm-Message-State: ABy/qLZUf8UPbWHLzzhghPoF9nXQGpTJ4qWyfYWqDS+LEcERq/AuSLKB
+        gYnuloh8plXYIXN5Fr3CnfM78eW82v7O54xrr21XZA==
+X-Google-Smtp-Source: APBJJlFqVyjYNgKMjQJuIt2opgmQvOpaRtg6cUU0hzKNtoRZzvXWh+ZlcFOOlwb0OGV0GX+Tiuny5Vv28eb5Kn9ksQQ=
+X-Received: by 2002:a05:600c:5111:b0:3f1:73b8:b5fe with SMTP id
+ o17-20020a05600c511100b003f173b8b5femr34645wms.3.1690274569559; Tue, 25 Jul
+ 2023 01:42:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230724162834.1354164-1-rmoar@google.com> <20230724162834.1354164-10-rmoar@google.com>
-In-Reply-To: <20230724162834.1354164-10-rmoar@google.com>
+References: <20230724162834.1354164-1-rmoar@google.com> <20230724162834.1354164-9-rmoar@google.com>
+In-Reply-To: <20230724162834.1354164-9-rmoar@google.com>
 From:   David Gow <davidgow@google.com>
-Date:   Tue, 25 Jul 2023 16:42:03 +0800
-Message-ID: <CABVgOSnWXdpdUdPL498XM3=ienZK1w6PPEfyhwg3Bbdd=nTSWw@mail.gmail.com>
-Subject: Re: [PATCH v2 9/9] kunit: Add documentation of KUnit test attributes
+Date:   Tue, 25 Jul 2023 16:42:35 +0800
+Message-ID: <CABVgOSm2iRBNpZ2_CJ=4LbdQ=Pcp=aWRFBGBW-rQF6o6hCciLA@mail.gmail.com>
+Subject: Re: [PATCH v2 8/9] kunit: add tests for filtering attributes
 To:     Rae Moar <rmoar@google.com>
 Cc:     shuah@kernel.org, dlatypov@google.com, brendan.higgins@linux.dev,
         linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
@@ -61,225 +61,195 @@ Cc:     shuah@kernel.org, dlatypov@google.com, brendan.higgins@linux.dev,
         linux-hardening@vger.kernel.org, jstultz@google.com,
         tglx@linutronix.de, sboyd@kernel.org
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000005c358706014bb5c9"
+        boundary="0000000000004fd50706014bb7d2"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---0000000000005c358706014bb5c9
+--0000000000004fd50706014bb7d2
 Content-Type: text/plain; charset="UTF-8"
 
 On Tue, 25 Jul 2023 at 00:31, Rae Moar <rmoar@google.com> wrote:
 >
-> Add documentation on the use of test attributes under the section "Tips for
-> Running KUnit Tests" in the KUnit docs.
+> Add four tests to executor_test.c to test behavior of filtering attributes.
 >
-> Documentation includes three sections on how to mark tests with attributes,
-> how attributes are reported, and how the user can filter tests using test
-> attributes.
+> - parse_filter_attr_test - to test the parsing of inputted filters
 >
-> Reviewed-by: David Gow <davidgow@google.com>
+> - filter_attr_test - to test the filtering procedure on attributes
+>
+> - filter_attr_empty_test - to test the behavior when all tests are filtered
+>   out
+>
+> - filter_attr_skip_test - to test the configurable filter_action=skip
+>   option
+>
 > Signed-off-by: Rae Moar <rmoar@google.com>
 > ---
 
-This still looks good, but an idea for an improvement (either in this
-patch or a future series) would be to add some docs for --filter and
---filter_action to run_wrapper.rst, which has a list of kunit.py
-options.
+Glad to see some tests for the parser-y bits.
 
+Reviewed-by: David Gow <davidgow@google.com>
+
+Cheers,
+-- David
+
+
+>
 > Changes since v1:
 > - No changes.
->
 > Changes since RFC v2:
-> - Add comment on KUNIT_CASE_SLOW() to documentation.
-> - Add comment on how to expose raw kernel output.
-> - Remove an extra line at the end of file.
->
+> - Change fake suite and test case names.
+> - Add a few ASSERT statements.
 > Changes since RFC v1:
 > - This is a new patch.
 >
->  .../dev-tools/kunit/running_tips.rst          | 166 ++++++++++++++++++
->  1 file changed, 166 insertions(+)
+>  lib/kunit/executor_test.c | 116 ++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 116 insertions(+)
 >
-> diff --git a/Documentation/dev-tools/kunit/running_tips.rst b/Documentation/dev-tools/kunit/running_tips.rst
-> index 8e8c493f17d1..766f9cdea0fa 100644
-> --- a/Documentation/dev-tools/kunit/running_tips.rst
-> +++ b/Documentation/dev-tools/kunit/running_tips.rst
-> @@ -262,3 +262,169 @@ other code executed during boot, e.g.
->         # Reset coverage counters before running the test.
->         $ echo 0 > /sys/kernel/debug/gcov/reset
->         $ modprobe kunit-example-test
+> diff --git a/lib/kunit/executor_test.c b/lib/kunit/executor_test.c
+> index d7ab069324b5..01280cb8d451 100644
+> --- a/lib/kunit/executor_test.c
+> +++ b/lib/kunit/executor_test.c
+> @@ -7,6 +7,7 @@
+>   */
+>
+>  #include <kunit/test.h>
+> +#include <kunit/attributes.h>
+>
+>  static void kfree_at_end(struct kunit *test, const void *to_free);
+>  static struct kunit_suite *alloc_fake_suite(struct kunit *test,
+> @@ -108,11 +109,126 @@ static void filter_suites_to_empty_test(struct kunit *test)
+>                                 "should be empty to indicate no match");
+>  }
+>
+> +static void parse_filter_attr_test(struct kunit *test)
+> +{
+> +       int j, filter_count;
+> +       struct kunit_attr_filter *parsed_filters;
+> +       char *filters = "speed>slow, module!=example";
+> +       int err = 0;
 > +
+> +       filter_count = kunit_get_filter_count(filters);
+> +       KUNIT_EXPECT_EQ(test, filter_count, 2);
 > +
-> +Test Attributes and Filtering
-> +=============================
+> +       parsed_filters = kunit_kcalloc(test, filter_count + 1, sizeof(*parsed_filters),
+> +                       GFP_KERNEL);
+> +       for (j = 0; j < filter_count; j++) {
+> +               parsed_filters[j] = kunit_next_attr_filter(&filters, &err);
+> +               KUNIT_ASSERT_EQ_MSG(test, err, 0, "failed to parse filter '%s'", filters[j]);
+> +       }
 > +
-> +Test suites and cases can be marked with test attributes, such as speed of
-> +test. These attributes will later be printed in test output and can be used to
-> +filter test execution.
+> +       KUNIT_EXPECT_STREQ(test, kunit_attr_filter_name(parsed_filters[0]), "speed");
+> +       KUNIT_EXPECT_STREQ(test, parsed_filters[0].input, ">slow");
 > +
-> +Marking Test Attributes
-> +-----------------------
+> +       KUNIT_EXPECT_STREQ(test, kunit_attr_filter_name(parsed_filters[1]), "module");
+> +       KUNIT_EXPECT_STREQ(test, parsed_filters[1].input, "!=example");
+> +}
 > +
-> +Tests are marked with an attribute by including a ``kunit_attributes`` object
-> +in the test definition.
+> +static struct kunit_case dummy_attr_test_cases[] = {
+> +       /* .run_case is not important, just needs to be non-NULL */
+> +       { .name = "slow", .run_case = dummy_test, .module_name = "dummy",
+> +         .attr.speed = KUNIT_SPEED_SLOW },
+> +       { .name = "normal", .run_case = dummy_test, .module_name = "dummy" },
+> +       {},
+> +};
 > +
-> +Test cases can be marked using the ``KUNIT_CASE_ATTR(test_name, attributes)``
-> +macro to define the test case instead of ``KUNIT_CASE(test_name)``.
+> +static void filter_attr_test(struct kunit *test)
+> +{
+> +       struct kunit_suite *subsuite[3] = {NULL, NULL};
+> +       struct suite_set suite_set = {.start = subsuite, .end = &subsuite[2]};
+> +       struct suite_set got;
+> +       int err = 0;
 > +
-> +.. code-block:: c
+> +       subsuite[0] = alloc_fake_suite(test, "normal_suite", dummy_attr_test_cases);
+> +       subsuite[1] = alloc_fake_suite(test, "slow_suite", dummy_attr_test_cases);
+> +       subsuite[1]->attr.speed = KUNIT_SPEED_SLOW; // Set suite attribute
 > +
-> +       static const struct kunit_attributes example_attr = {
-> +               .speed = KUNIT_VERY_SLOW,
-> +       };
+> +       /*
+> +        * Want: normal_suite(slow, normal), slow_suite(slow, normal),
+> +        *              NULL -> normal_suite(normal), NULL
+> +        *
+> +        * The normal test in slow_suite is filtered out because the speed
+> +        * attribute is unset and thus, the filtering is based on the parent attribute
+> +        * of slow.
+> +        */
+> +       got = kunit_filter_suites(&suite_set, NULL, "speed>slow", NULL, &err);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start);
+> +       KUNIT_ASSERT_EQ(test, err, 0);
+> +       kfree_at_end(test, got.start);
 > +
-> +       static struct kunit_case example_test_cases[] = {
-> +               KUNIT_CASE_ATTR(example_test, example_attr),
-> +       };
+> +       /* Validate we just have normal_suite */
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start[0]);
+> +       KUNIT_EXPECT_STREQ(test, got.start[0]->name, "normal_suite");
+> +       KUNIT_ASSERT_EQ(test, got.end - got.start, 1);
 > +
-> +.. note::
-> +       To mark a test case as slow, you can also use ``KUNIT_CASE_SLOW(test_name)``.
-> +       This is a helpful macro as the slow attribute is the most commonly used.
+> +       /* Now validate we just have normal test case */
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start[0]->test_cases);
+> +       KUNIT_EXPECT_STREQ(test, got.start[0]->test_cases[0].name, "normal");
+> +       KUNIT_EXPECT_FALSE(test, got.start[0]->test_cases[1].name);
+> +}
 > +
-> +Test suites can be marked with an attribute by setting the "attr" field in the
-> +suite definition.
+> +static void filter_attr_empty_test(struct kunit *test)
+> +{
+> +       struct kunit_suite *subsuite[3] = {NULL, NULL};
+> +       struct suite_set suite_set = {.start = subsuite, .end = &subsuite[2]};
+> +       struct suite_set got;
+> +       int err = 0;
 > +
-> +.. code-block:: c
+> +       subsuite[0] = alloc_fake_suite(test, "suite1", dummy_attr_test_cases);
+> +       subsuite[1] = alloc_fake_suite(test, "suite2", dummy_attr_test_cases);
 > +
-> +       static const struct kunit_attributes example_attr = {
-> +               .speed = KUNIT_VERY_SLOW,
-> +       };
+> +       got = kunit_filter_suites(&suite_set, NULL, "module!=dummy", NULL, &err);
+> +       KUNIT_ASSERT_EQ(test, err, 0);
+> +       kfree_at_end(test, got.start); /* just in case */
 > +
-> +       static struct kunit_suite example_test_suite = {
-> +               ...,
-> +               .attr = example_attr,
-> +       };
+> +       KUNIT_EXPECT_PTR_EQ_MSG(test, got.start, got.end,
+> +                               "should be empty to indicate no match");
+> +}
 > +
-> +.. note::
-> +       Not all attributes need to be set in a ``kunit_attributes`` object. Unset
-> +       attributes will remain uninitialized and act as though the attribute is set
-> +       to 0 or NULL. Thus, if an attribute is set to 0, it is treated as unset.
-> +       These unset attributes will not be reported and may act as a default value
-> +       for filtering purposes.
+> +static void filter_attr_skip_test(struct kunit *test)
+> +{
+> +       struct kunit_suite *subsuite[2] = {NULL};
+> +       struct suite_set suite_set = {.start = subsuite, .end = &subsuite[1]};
+> +       struct suite_set got;
+> +       int err = 0;
 > +
-> +Reporting Attributes
-> +--------------------
+> +       subsuite[0] = alloc_fake_suite(test, "suite", dummy_attr_test_cases);
 > +
-> +When a user runs tests, attributes will be present in the raw kernel output (in
-> +KTAP format). Note that attributes will be hidden by default in kunit.py output
-> +for all passing tests but the raw kernel output can be accessed using the
-> +``--raw_output`` flag. This is an example of how test attributes for test cases
-> +will be formatted in kernel output:
+> +       /* Want: suite(slow, normal), NULL -> suite(slow with SKIP, normal), NULL */
+> +       got = kunit_filter_suites(&suite_set, NULL, "speed>slow", "skip", &err);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start);
+> +       KUNIT_ASSERT_EQ(test, err, 0);
+> +       kfree_at_end(test, got.start);
 > +
-> +.. code-block:: none
+> +       /* Validate we have both the slow and normal test */
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start[0]->test_cases);
+> +       KUNIT_ASSERT_EQ(test, kunit_suite_num_test_cases(got.start[0]), 2);
+> +       KUNIT_EXPECT_STREQ(test, got.start[0]->test_cases[0].name, "slow");
+> +       KUNIT_EXPECT_STREQ(test, got.start[0]->test_cases[1].name, "normal");
 > +
-> +       # example_test.speed: slow
-> +       ok 1 example_test
+> +       /* Now ensure slow is skipped and normal is not */
+> +       KUNIT_EXPECT_EQ(test, got.start[0]->test_cases[0].status, KUNIT_SKIPPED);
+> +       KUNIT_EXPECT_FALSE(test, got.start[0]->test_cases[1].status);
+> +}
 > +
-> +This is an example of how test attributes for test suites will be formatted in
-> +kernel output:
-> +
-> +.. code-block:: none
-> +
-> +         KTAP version 2
-> +         # Subtest: example_suite
-> +         # module: kunit_example_test
-> +         1..3
-> +         ...
-> +       ok 1 example_suite
-> +
-> +Additionally, users can output a full attribute report of tests with their
-> +attributes, using the command line flag ``--list_tests_attr``:
-> +
-> +.. code-block:: bash
-> +
-> +       kunit.py run "example" --list_tests_attr
-> +
-> +.. note::
-> +       This report can be accessed when running KUnit manually by passing in the
-> +       module_param ``kunit.action=list_attr``.
-> +
-> +Filtering
-> +---------
-> +
-> +Users can filter tests using the ``--filter`` command line flag when running
-> +tests. As an example:
-> +
-> +.. code-block:: bash
-> +
-> +       kunit.py run --filter speed=slow
-> +
-> +
-> +You can also use the following operations on filters: "<", ">", "<=", ">=",
-> +"!=", and "=". Example:
-> +
-> +.. code-block:: bash
-> +
-> +       kunit.py run --filter "speed>slow"
-> +
-> +This example will run all tests with speeds faster than slow. Note that the
-> +characters < and > are often interpreted by the shell, so they may need to be
-> +quoted or escaped, as above.
-> +
-> +Additionally, you can use multiple filters at once. Simply separate filters
-> +using commas. Example:
-> +
-> +.. code-block:: bash
-> +
-> +       kunit.py run --filter "speed>slow, module=kunit_example_test"
-> +
-> +.. note::
-> +       You can use this filtering feature when running KUnit manually by passing
-> +       the filter as a module param: ``kunit.filter="speed>slow, speed<=normal"``.
-> +
-> +Filtered tests will not run or show up in the test output. You can use the
-> +``--filter_action=skip`` flag to skip filtered tests instead. These tests will be
-> +shown in the test output in the test but will not run. To use this feature when
-> +running KUnit manually, use the module param ``kunit.filter_action=skip``.
-> +
-> +Rules of Filtering Procedure
-> +----------------------------
-> +
-> +Since both suites and test cases can have attributes, there may be conflicts
-> +between attributes during filtering. The process of filtering follows these
-> +rules:
-> +
-> +- Filtering always operates at a per-test level.
-> +
-> +- If a test has an attribute set, then the test's value is filtered on.
-> +
-> +- Otherwise, the value falls back to the suite's value.
-> +
-> +- If neither are set, the attribute has a global "default" value, which is used.
-> +
-> +List of Current Attributes
-> +--------------------------
-> +
-> +``speed``
-> +
-> +This attribute indicates the speed of a test's execution (how slow or fast the
-> +test is).
-> +
-> +This attribute is saved as an enum with the following categories: "normal",
-> +"slow", or "very_slow". The assumed default speed for tests is "normal". This
-> +indicates that the test takes a relatively trivial amount of time (less than
-> +1 second), regardless of the machine it is running on. Any test slower than
-> +this could be marked as "slow" or "very_slow".
-> +
-> +The macro ``KUNIT_CASE_SLOW(test_name)`` can be easily used to set the speed
-> +of a test case to "slow".
-> +
-> +``module``
-> +
-> +This attribute indicates the name of the module associated with the test.
-> +
-> +This attribute is automatically saved as a string and is printed for each suite.
-> +Tests can also be filtered using this attribute.
+>  static struct kunit_case executor_test_cases[] = {
+>         KUNIT_CASE(parse_filter_test),
+>         KUNIT_CASE(filter_suites_test),
+>         KUNIT_CASE(filter_suites_test_glob_test),
+>         KUNIT_CASE(filter_suites_to_empty_test),
+> +       KUNIT_CASE(parse_filter_attr_test),
+> +       KUNIT_CASE(filter_attr_test),
+> +       KUNIT_CASE(filter_attr_empty_test),
+> +       KUNIT_CASE(filter_attr_skip_test),
+>         {}
+>  };
+>
 > --
 > 2.41.0.487.g6d72f3e995-goog
 >
 
---0000000000005c358706014bb5c9
+--0000000000004fd50706014bb7d2
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -346,14 +316,14 @@ jyzYFOHYQyv5IfML/3IBFKlON5OZa+V8EZYULYcNkp03DdWglafj7SXZ1/XgAbVYrC381UvrsYN8
 jndVvoa1GWwe+NVlIIK7Q3uAjV3qLEDQpaNPg1rr0oAn6YmvTccjVMqj2YNwN+RHhKNzgRGxY5ct
 FaN+8fXZhRhpv3bVbAWuPZXoMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABAz5xDls09r2CKyYRqnNbMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCD0
-85YC/d2GHtdpoojpdUaDM/hV43X7Na19IIBNJMnQPzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzA3MjUwODQyMTdaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABAz5xDls09r2CKyYRqnNbMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAM
+cSsNUwGwfGuutWEXqPOXNK9BCNuXTnWlxpodF4NN/TAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzA3MjUwODQyNDlaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEATZLCDr7gipq+yJEfmRS8
-/BW7h8OgoesCZpjbmDIslL+HFHk5W8BF2LtkuLR16Uw8xbN7nqY9fEYTOcyqyAU31wxshBUJO6Kz
-vDrXixrMsq5955WFJVcsixtA63l+EocnPdeIPejj3YsVQ8BAc7KxDeo1GX8Uy4aKKB7EtH0mkcrZ
-olGJf6CjYh1JLF/NW6+3MHA63qQcZHKksuofOAhlvmJj/9Vule9uidf+eq6K4CWd8zrUNJVUC6iW
-aS3R3BERKURB51tMSQI8SvL7D+wzSW9BbWyqKo2LNSmQJpF90Cds7T/zEpGiwyWHg7C8dOnBDFFC
-AOtRVbpHDcY/47xszg==
---0000000000005c358706014bb5c9--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAFfwf2edLxQ31qbL/hbQs
+HcG/TYjNsFVo6eoWD2zoF1RiJNyzJJ/A+8Vedm8IJ0RdPnby7OSArVg041MTugiau0apgoVC1EVr
+OAy4xYyMtOzDS5MBHUW8y21O4UT+YO5kkTDhDHPgAyM9nfQ6Ljk28CYoF9u2AeBkJCOg4dZJierF
+NRgIevSPt0hOa2rHnZhrY2I5hpYj5xZyfnMO5JpyzFbgXHcZ1kd1uLhxA9qA6q8uofzaCeoXmt8q
+0dtChRiKXDMtiC3t1+jSMGqpk3d3CHfgXyMlKI+FdEC4nnOJBumo9nFrvW5lfeodwc+s1WxFkFxN
+Q7R22hC0wIBix6XUWw==
+--0000000000004fd50706014bb7d2--
