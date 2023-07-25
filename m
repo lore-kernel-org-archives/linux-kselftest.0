@@ -2,61 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BC64C04E69
-	for <linux-kselftest@archiver.kernel.org>; Tue, 25 Jul 2023 22:03:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CC4CC001E0
+	for <linux-kselftest@archiver.kernel.org>; Tue, 25 Jul 2023 22:03:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231745AbjGYWDZ (ORCPT
+        id S231754AbjGYWDZ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Tue, 25 Jul 2023 18:03:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48156 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231767AbjGYWCu (ORCPT
+        with ESMTP id S231909AbjGYWDB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Jul 2023 18:02:50 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8374D2D5A
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 15:02:24 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-56942667393so78019337b3.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 15:02:24 -0700 (PDT)
+        Tue, 25 Jul 2023 18:03:01 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9763A30D3
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 15:02:28 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-d10792c7582so2710238276.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jul 2023 15:02:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690322520; x=1690927320;
+        d=google.com; s=20221208; t=1690322530; x=1690927330;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=g4KcxLrzQkXOChykEZFXIv5nUY2y8T7+ZlIOw1AWFkc=;
-        b=fkrYsLWyogUVFgS4vePJWwymNPenlzaFl9gf8Jak3i3FMyFQEfdiYt85RuLv7nnYWq
-         4RNZ8BVD4lIIBvw8v1OiGn8I6qHrsP4bghvqX0r8CTRYxPxc57oeDSeDrRFtZWqZVT7U
-         fLgnE+HTKSsYGyOUcElr+LrKwCgPCE0YspD22KaNwn3TmWJRa2JF4dhyXdFIAgFH5JxV
-         U7be3pIOdvuFA/eWH7c1uy+2IARQb2dU+Sbhj37Fn487aAWBoPCsmWsrbsHUMk+dt8Yw
-         ziELdfhK5qQrLT47kvGQjjWnRq9MRHlHOfE5sS5dRSgGXYiuYpDZ31KyBQIvRdKLkKvu
-         4g0Q==
+        bh=7vlZD+RUk2FGmTNk7BRuTBX431dlCK831LenR/2EDtE=;
+        b=alGLUCOnoKqSiWsrW9zvpPlJgtI0T81njbsib8dWXCTqfeEyUAkoAm0KQygYn7baaT
+         LbLLC0Jccyp4U8EMYxjMOK74zlJgG8AnLVH5PVivthTCe/YwKZ7uxE4tkJJ/1WwjJf9n
+         s9Yux7ERL+jJbEsKMVw+k+Xv2rPzqzuGbizzUIvaFvWDnRYZwuxInLyko2CXhTRzCWu0
+         oSU2kpcd+PQKDFcLyRKBFHOtO6MK2Me1+nfXEDdMEkgtn5JDZLoNB9vKgs/rGTC0hPgC
+         VjT9lXZjUmgiDDzjXV9quyVx30PYuHAF2b0lSCD1f7qlpbT3yaUjRVPjuJ/TBhlsDqVK
+         92tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690322520; x=1690927320;
+        d=1e100.net; s=20221208; t=1690322530; x=1690927330;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=g4KcxLrzQkXOChykEZFXIv5nUY2y8T7+ZlIOw1AWFkc=;
-        b=Qt8BTBTAyzQyBWUtqo6SXGaD1aID+jDMvOzSLz2lcCsv7CBCH1GI6QGUKUQsy7hv6j
-         QNf+y0ANsXjwGN2HuGjJw4gMKiW0dRueOvBUnVsExPoY65MqiD98rRF7ZmD4NMREPM15
-         K0FVjO0xx1dXvS5GKXJo9Te1sgSd8cRUZa3hvkA6PCJ5PUTGclB3J27oHOrp7xW2Fw6z
-         DglIpezqZ1IyzABtqWYPCjIFeuEzyNqfQB/LrwaahTV6txMzjw2cUeBEYLi13BMZ17Jn
-         IqPrsDa4IqEXTCYbXagYtQeBJsHDeQ1oIKUZ/tcGlSe9d/1gggkJ5FsFSp0UeaoTZGhF
-         XgQg==
-X-Gm-Message-State: ABy/qLZUocFs8W0Ca3FF9tdMOmRXh2yaD4eyO6a4X2QpjLrDoSHgCJVB
-        ER12UsvvK2ziwfTOexhZYRgADKQ8MrLiZ2OpfBcl+COpnx/dFeB3xBCC/HEp+HuagZxcw+xPLXk
-        Xyelj+WCRo17MjNZI2W17rJNoyZX5GJHBIgoeXohY3zqp0x/BZm2miMXexIXf5va85AmJG4si1b
-        cO
-X-Google-Smtp-Source: APBJJlGk02QkSJLPp43LDnyvS2p1LTv46fGTg4fQgNMMmRcnaVvnBglLkNtr8PLqRyPqh66JIr5RCPySeD1A
+        bh=7vlZD+RUk2FGmTNk7BRuTBX431dlCK831LenR/2EDtE=;
+        b=CtS39NgtAbgeEwEUExEuWTROPPR1Q1Fv1dabcr2ZMi3+2FVCyDQMd9YUPchXaXs1/R
+         a0vXRa5iNzeZ9SFanPoRgvkcxDj4zghl3pRrc0qJDYo09lCY26hRdMDLYNltCXjG6/Vt
+         KHV+yecLGRg6zL5cMwQ1IZG5FSCN/We5kvMeIJ4cKKJNniqqGPxqvzy8m1qMgG/Cg9GY
+         vS1Wr7T4bB0ysu5aqYr7fA8DbBKIpNBTFrPypbD3FuiQ2rsx0bx2EagfkqMPh4FK9W6g
+         Xzpv9EOMau/ZoCyandYpcQTMg6Ii5TfwZy1Pn24/A9uEoOWPW5MycUp86jTHejpJjnoJ
+         8EuQ==
+X-Gm-Message-State: ABy/qLaWJ9uop9iRJ3gCod+20mfCm65ggHAeV/I+Y5io+fPsAOT/bWwZ
+        wok5aq1ll+rYFVUXDot3PfiG8oMkh5YGJt7DLByBtTlbfr+1DzVYVfDk5EC3e3wgYjZXAeQ3WZD
+        pu/rfw2WVQWNcH23kEtpHcfXQcwdr/l3i6VCgzV/GcwDiqwQQirnDMmoF8BPDpsPeZRRXH7bKCt
+        hB
+X-Google-Smtp-Source: APBJJlER0hruaGOyUvkJom6G95REkZZ55wFPOzpLZDBX5XHD5rGLd81BdrzTpLajV9nrCE/JWWbLat9Fyujh
 X-Received: from afranji.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:47f1])
- (user=afranji job=sendgmr) by 2002:a81:b614:0:b0:579:fc33:b3a2 with SMTP id
- u20-20020a81b614000000b00579fc33b3a2mr4504ywh.10.1690322519981; Tue, 25 Jul
- 2023 15:01:59 -0700 (PDT)
-Date:   Tue, 25 Jul 2023 22:01:00 +0000
+ (user=afranji job=sendgmr) by 2002:a25:74d3:0:b0:d09:b19:fe2c with SMTP id
+ p202-20020a2574d3000000b00d090b19fe2cmr1452ybc.12.1690322530103; Tue, 25 Jul
+ 2023 15:02:10 -0700 (PDT)
+Date:   Tue, 25 Jul 2023 22:01:05 +0000
 In-Reply-To: <20230725220132.2310657-1-afranji@google.com>
 Mime-Version: 1.0
 References: <20230725220132.2310657-1-afranji@google.com>
 X-Mailer: git-send-email 2.41.0.487.g6d72f3e995-goog
-Message-ID: <20230725220132.2310657-8-afranji@google.com>
-Subject: [PATCH v4 07/28] KVM: selftests: TDX: Update load_td_memory_region
- for VM memory backed by guest memfd
+Message-ID: <20230725220132.2310657-13-afranji@google.com>
+Subject: [PATCH v4 12/28] KVM: selftests: TDX: Add basic get_td_vmcall_info test
 From:   Ryan Afranji <afranji@google.com>
 To:     linux-kselftest@vger.kernel.org
 Cc:     pbonzini@redhat.com, seanjc@google.com, isaku.yamahata@intel.com,
@@ -77,96 +76,276 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Ackerley Tng <ackerleytng@google.com>
+From: Sagi Shahar <sagis@google.com>
 
-If guest memory is backed by restricted memfd
+The test calls get_td_vmcall_info from the guest and verifies the
+expected returned values.
 
-+ UPM is being used, hence encrypted memory region has to be
-  registered
-+ Can avoid making a copy of guest memory before getting TDX to
-  initialize the memory region
-
+Signed-off-by: Sagi Shahar <sagis@google.com>
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
-Change-Id: I43a5a444d5d2b5bf0d6750f6ef82c16e3d7d755e
+Change-Id: I6906de835f20c5f48181b6a0734131fa9b62246d
 Signed-off-by: Ryan Afranji <afranji@google.com>
 ---
- .../selftests/kvm/lib/x86_64/tdx/tdx_util.c   | 41 +++++++++++++++----
- 1 file changed, 32 insertions(+), 9 deletions(-)
+ .../selftests/kvm/include/x86_64/tdx/tdx.h    |  3 +
+ .../kvm/include/x86_64/tdx/test_util.h        | 27 +++++++
+ .../selftests/kvm/lib/x86_64/tdx/tdx.c        | 23 ++++++
+ .../selftests/kvm/lib/x86_64/tdx/test_util.c  | 46 +++++++++++
+ .../selftests/kvm/x86_64/tdx_vm_tests.c       | 80 +++++++++++++++++++
+ 5 files changed, 179 insertions(+)
 
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx_util.c b/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx_util.c
-index 95c6fb263583..c30801f4f759 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx_util.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx_util.c
-@@ -199,6 +199,21 @@ static void tdx_td_finalizemr(struct kvm_vm *vm)
- 	tdx_ioctl(vm->fd, KVM_TDX_FINALIZE_VM, 0, NULL);
+diff --git a/tools/testing/selftests/kvm/include/x86_64/tdx/tdx.h b/tools/testing/selftests/kvm/include/x86_64/tdx/tdx.h
+index 1340c1070002..63788012bf94 100644
+--- a/tools/testing/selftests/kvm/include/x86_64/tdx/tdx.h
++++ b/tools/testing/selftests/kvm/include/x86_64/tdx/tdx.h
+@@ -5,6 +5,7 @@
+ #include <stdint.h>
+ #include "kvm_util_base.h"
+ 
++#define TDG_VP_VMCALL_GET_TD_VM_CALL_INFO 0x10000
+ #define TDG_VP_VMCALL_REPORT_FATAL_ERROR 0x10003
+ 
+ #define TDG_VP_VMCALL_INSTRUCTION_IO 30
+@@ -12,5 +13,7 @@ void handle_userspace_tdg_vp_vmcall_exit(struct kvm_vcpu *vcpu);
+ uint64_t tdg_vp_vmcall_instruction_io(uint64_t port, uint64_t size,
+ 				      uint64_t write, uint64_t *data);
+ void tdg_vp_vmcall_report_fatal_error(uint64_t error_code, uint64_t data_gpa);
++uint64_t tdg_vp_vmcall_get_td_vmcall_info(uint64_t *r11, uint64_t *r12,
++					uint64_t *r13, uint64_t *r14);
+ 
+ #endif // SELFTEST_TDX_TDX_H
+diff --git a/tools/testing/selftests/kvm/include/x86_64/tdx/test_util.h b/tools/testing/selftests/kvm/include/x86_64/tdx/test_util.h
+index af0ddbfe8d71..8a9b6a1bec3e 100644
+--- a/tools/testing/selftests/kvm/include/x86_64/tdx/test_util.h
++++ b/tools/testing/selftests/kvm/include/x86_64/tdx/test_util.h
+@@ -4,6 +4,7 @@
+ 
+ #include <stdbool.h>
+ 
++#include "kvm_util_base.h"
+ #include "tdcall.h"
+ 
+ #define TDX_TEST_SUCCESS_PORT 0x30
+@@ -111,4 +112,30 @@ void tdx_test_fatal_with_data(uint64_t error_code, uint64_t data_gpa);
+  */
+ uint64_t tdx_test_report_to_user_space(uint32_t data);
+ 
++/**
++ * Report a 64 bit value from the guest to user space using TDG.VP.VMCALL
++ * <Instruction.IO> call.
++ *
++ * Data is sent to host in 2 calls. LSB is sent (and needs to be read) first.
++ */
++uint64_t tdx_test_send_64bit(uint64_t port, uint64_t data);
++
++/**
++ * Report a 64 bit value from the guest to user space using TDG.VP.VMCALL
++ * <Instruction.IO> call. Data is reported on port TDX_TEST_REPORT_PORT.
++ */
++uint64_t tdx_test_report_64bit_to_user_space(uint64_t data);
++
++/**
++ * Read a 64 bit value from the guest in user space, sent using
++ * tdx_test_send_64bit().
++ */
++uint64_t tdx_test_read_64bit(struct kvm_vcpu *vcpu, uint64_t port);
++
++/**
++ * Read a 64 bit value from the guest in user space, sent using
++ * tdx_test_report_64bit_to_user_space.
++ */
++uint64_t tdx_test_read_64bit_report_from_guest(struct kvm_vcpu *vcpu);
++
+ #endif // SELFTEST_TDX_TEST_UTIL_H
+diff --git a/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx.c b/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx.c
+index b854c3aa34ff..e5a9e13c62e2 100644
+--- a/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx.c
++++ b/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx.c
+@@ -64,3 +64,26 @@ void tdg_vp_vmcall_report_fatal_error(uint64_t error_code, uint64_t data_gpa)
+ 
+ 	__tdx_hypercall(&args, 0);
+ }
++
++uint64_t tdg_vp_vmcall_get_td_vmcall_info(uint64_t *r11, uint64_t *r12,
++					uint64_t *r13, uint64_t *r14)
++{
++	uint64_t ret;
++	struct tdx_hypercall_args args = {
++		.r11 = TDG_VP_VMCALL_GET_TD_VM_CALL_INFO,
++		.r12 = 0,
++	};
++
++	ret = __tdx_hypercall(&args, TDX_HCALL_HAS_OUTPUT);
++
++	if (r11)
++		*r11 = args.r11;
++	if (r12)
++		*r12 = args.r12;
++	if (r13)
++		*r13 = args.r13;
++	if (r14)
++		*r14 = args.r14;
++
++	return ret;
++}
+diff --git a/tools/testing/selftests/kvm/lib/x86_64/tdx/test_util.c b/tools/testing/selftests/kvm/lib/x86_64/tdx/test_util.c
+index 36d2647210da..5ef0429fca5d 100644
+--- a/tools/testing/selftests/kvm/lib/x86_64/tdx/test_util.c
++++ b/tools/testing/selftests/kvm/lib/x86_64/tdx/test_util.c
+@@ -7,6 +7,7 @@
+ #include <unistd.h>
+ 
+ #include "kvm_util_base.h"
++#include "tdx/tdcall.h"
+ #include "tdx/tdx.h"
+ #include "tdx/test_util.h"
+ 
+@@ -53,3 +54,48 @@ uint64_t tdx_test_report_to_user_space(uint32_t data)
+ 					TDG_VP_VMCALL_INSTRUCTION_IO_WRITE,
+ 					&data_64);
+ }
++
++uint64_t tdx_test_send_64bit(uint64_t port, uint64_t data)
++{
++	uint64_t err;
++	uint64_t data_lo = data & 0xFFFFFFFF;
++	uint64_t data_hi = (data >> 32) & 0xFFFFFFFF;
++
++	err = tdg_vp_vmcall_instruction_io(port, 4,
++					   TDG_VP_VMCALL_INSTRUCTION_IO_WRITE,
++					   &data_lo);
++	if (err)
++		return err;
++
++	return tdg_vp_vmcall_instruction_io(port, 4,
++					    TDG_VP_VMCALL_INSTRUCTION_IO_WRITE,
++					    &data_hi);
++}
++
++uint64_t tdx_test_report_64bit_to_user_space(uint64_t data)
++{
++	return tdx_test_send_64bit(TDX_TEST_REPORT_PORT, data);
++}
++
++uint64_t tdx_test_read_64bit(struct kvm_vcpu *vcpu, uint64_t port)
++{
++	uint32_t lo, hi;
++	uint64_t res;
++
++	TDX_TEST_ASSERT_IO(vcpu, port, 4, TDG_VP_VMCALL_INSTRUCTION_IO_WRITE);
++	lo = *(uint32_t *)((void *)vcpu->run + vcpu->run->io.data_offset);
++
++	vcpu_run(vcpu);
++
++	TDX_TEST_ASSERT_IO(vcpu, port, 4, TDG_VP_VMCALL_INSTRUCTION_IO_WRITE);
++	hi = *(uint32_t *)((void *)vcpu->run + vcpu->run->io.data_offset);
++
++	res = hi;
++	res = (res << 32) | lo;
++	return res;
++}
++
++uint64_t tdx_test_read_64bit_report_from_guest(struct kvm_vcpu *vcpu)
++{
++	return tdx_test_read_64bit(vcpu, TDX_TEST_REPORT_PORT);
++}
+diff --git a/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c b/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c
+index d68ace3db097..9e9c3ad08a21 100644
+--- a/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c
++++ b/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c
+@@ -260,6 +260,85 @@ void verify_td_cpuid(void)
+ 	printf("\t ... PASSED\n");
  }
  
 +/*
-+ * Other ioctls
++ * Verifies get_td_vmcall_info functionality.
 + */
-+
-+/**
-+ * Register a memory region that may contain encrypted data in KVM.
-+ */
-+static void register_encrypted_memory_region(
-+	struct kvm_vm *vm, struct userspace_mem_region *region)
++void guest_code_get_td_vmcall_info(void)
 +{
-+	vm_set_memory_attributes(vm, region->region.guest_phys_addr,
-+				 region->region.memory_size,
-+				 KVM_MEMORY_ATTRIBUTE_PRIVATE);
++	uint64_t err;
++	uint64_t r11, r12, r13, r14;
++
++	err = tdg_vp_vmcall_get_td_vmcall_info(&r11, &r12, &r13, &r14);
++	if (err)
++		tdx_test_fatal(err);
++
++	err = tdx_test_report_64bit_to_user_space(r11);
++	if (err)
++		tdx_test_fatal(err);
++
++	err = tdx_test_report_64bit_to_user_space(r12);
++	if (err)
++		tdx_test_fatal(err);
++
++	err = tdx_test_report_64bit_to_user_space(r13);
++	if (err)
++		tdx_test_fatal(err);
++
++	err = tdx_test_report_64bit_to_user_space(r14);
++	if (err)
++		tdx_test_fatal(err);
++
++	tdx_test_success();
 +}
 +
- /*
-  * TD creation/setup/finalization
-  */
-@@ -383,30 +398,38 @@ static void load_td_memory_region(struct kvm_vm *vm,
- 	if (!sparsebit_any_set(pages))
- 		return;
- 
++void verify_get_td_vmcall_info(void)
++{
++	struct kvm_vm *vm;
++	struct kvm_vcpu *vcpu;
 +
-+	if (region->region.gmem_fd != -1)
-+		register_encrypted_memory_region(vm, region);
++	uint64_t r11, r12, r13, r14;
 +
- 	sparsebit_for_each_set_range(pages, i, j) {
- 		const uint64_t size_to_load = (j - i + 1) * vm->page_size;
- 		const uint64_t offset =
- 			(i - lowest_page_in_region) * vm->page_size;
- 		const uint64_t hva = hva_base + offset;
- 		const uint64_t gpa = gpa_base + offset;
--		void *source_addr;
-+		void *source_addr = (void *)hva;
- 
- 		/*
- 		 * KVM_TDX_INIT_MEM_REGION ioctl cannot encrypt memory in place,
- 		 * hence we have to make a copy if there's only one backing
- 		 * memory source
- 		 */
--		source_addr = mmap(NULL, size_to_load, PROT_READ | PROT_WRITE,
--				   MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
--		TEST_ASSERT(
--			source_addr,
--			"Could not allocate memory for loading memory region");
--
--		memcpy(source_addr, (void *)hva, size_to_load);
-+		if (region->region.gmem_fd == -1) {
-+			source_addr = mmap(NULL, size_to_load, PROT_READ | PROT_WRITE,
-+					MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
-+			TEST_ASSERT(
-+				source_addr,
-+				"Could not allocate memory for loading memory region");
++	vm = td_create();
++	td_initialize(vm, VM_MEM_SRC_ANONYMOUS, 0);
++	vcpu = td_vcpu_add(vm, 0, guest_code_get_td_vmcall_info);
++	td_finalize(vm);
 +
-+			memcpy(source_addr, (void *)hva, size_to_load);
-+			memset((void *)hva, 0, size_to_load);
-+		}
++	printf("Verifying TD get vmcall info:\n");
++
++	/* Wait for guest to report r11 value */
++	td_vcpu_run(vcpu);
++	TDX_TEST_CHECK_GUEST_FAILURE(vcpu);
++	r11 = tdx_test_read_64bit_report_from_guest(vcpu);
++
++	/* Wait for guest to report r12 value */
++	td_vcpu_run(vcpu);
++	TDX_TEST_CHECK_GUEST_FAILURE(vcpu);
++	r12 = tdx_test_read_64bit_report_from_guest(vcpu);
++
++	/* Wait for guest to report r13 value */
++	td_vcpu_run(vcpu);
++	TDX_TEST_CHECK_GUEST_FAILURE(vcpu);
++	r13 = tdx_test_read_64bit_report_from_guest(vcpu);
++
++	/* Wait for guest to report r14 value */
++	td_vcpu_run(vcpu);
++	TDX_TEST_CHECK_GUEST_FAILURE(vcpu);
++	r14 = tdx_test_read_64bit_report_from_guest(vcpu);
++
++	ASSERT_EQ(r11, 0);
++	ASSERT_EQ(r12, 0);
++	ASSERT_EQ(r13, 0);
++	ASSERT_EQ(r14, 0);
++
++	/* Wait for guest to complete execution */
++	td_vcpu_run(vcpu);
++	TDX_TEST_CHECK_GUEST_FAILURE(vcpu);
++	TDX_TEST_ASSERT_SUCCESS(vcpu);
++
++	kvm_vm_free(vm);
++	printf("\t ... PASSED\n");
++}
++
+ int main(int argc, char **argv)
+ {
+ 	setbuf(stdout, NULL);
+@@ -273,6 +352,7 @@ int main(int argc, char **argv)
+ 	run_in_new_process(&verify_report_fatal_error);
+ 	run_in_new_process(&verify_td_ioexit);
+ 	run_in_new_process(&verify_td_cpuid);
++	run_in_new_process(&verify_get_td_vmcall_info);
  
- 		tdx_init_mem_region(vm, source_addr, gpa, size_to_load);
- 
--		munmap(source_addr, size_to_load);
-+		if (region->region.gmem_fd == -1)
-+			munmap(source_addr, size_to_load);
- 	}
+ 	return 0;
  }
- 
 -- 
 2.41.0.487.g6d72f3e995-goog
 
