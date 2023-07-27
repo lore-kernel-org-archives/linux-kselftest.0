@@ -2,45 +2,46 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1122EB64DD
-	for <linux-kselftest@archiver.kernel.org>; Thu, 27 Jul 2023 23:27:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28632C001DC
+	for <linux-kselftest@archiver.kernel.org>; Thu, 27 Jul 2023 23:27:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231704AbjG0X1F (ORCPT
+        id S231703AbjG0X1I (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 27 Jul 2023 19:27:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38776 "EHLO
+        Thu, 27 Jul 2023 19:27:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231618AbjG0X1E (ORCPT
+        with ESMTP id S231618AbjG0X1H (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Jul 2023 19:27:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 007EA30D2
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jul 2023 16:27:02 -0700 (PDT)
+        Thu, 27 Jul 2023 19:27:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFDF62D40
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jul 2023 16:27:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A69161F84
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jul 2023 23:27:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91005C433C9;
-        Thu, 27 Jul 2023 23:27:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5FBEF61F8C
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jul 2023 23:27:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46960C433CC;
+        Thu, 27 Jul 2023 23:27:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690500422;
-        bh=Znm9gRTwsFwQfwD1M+msy3+6gP9lF4h25ZTmsNIMG+8=;
+        s=k20201202; t=1690500425;
+        bh=U9eF72eZ37CI1cE+xa8X28h+BbO8qk9SjWJn/oLYilE=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=WXvhCx3tVGtpH7KM3WsPf+wJKi5tzA8AnxDAawXXSng2MmFBYN0/MOXK0hpTf1zmq
-         4OHjaNBIFFH3UAccIjni55fGQFBVuTPLXT+t3urAataGB7cePSb0kFKv2TP1GatcaG
-         aPzOQovlIspJwoFZqRTLmSsj5s+6MiFqj4c7yeALO8SVg9C13lrx6WgmWZvDwCBXbu
-         Boz2mn5Q0wKvEvWiUTD3dL9pEKqA0/mgQypPE/e5U0CEQjYle5JI7JgcLPD2AMcRU1
-         J3ManrUKmRAZnIY9U3lhMr893MAvaOM+1JoBgusZacBW5rkYCQU4MYuyParCK8q1z3
-         mwEhAlv4/o42Q==
+        b=OrYEkASthgU4BOmTQSZsyI6Zu2kEP+1oN+V2Qyabjpcv3eLyHdT8vXXL5m9LNwtGv
+         hjVsCWRewoRwjCgX0zCLlyLfVHd+8zyLW6zjx9fzEasiGhGmBXNY+3h3xBHG465CI+
+         Ks9Lf1Vsi5IbwsSrHwNF3flnjGFS0u4dGN9KYZzDjKZj/Niexr7yS4ofqROTmGYlq+
+         HZBm17eGJgXoa7joDPunZgw30CjYa3FFqA5yuFQiusdJ9dL9G8/YBqmxk0rK1+cscY
+         W0I3QfkL0mCWFk0zzbBT9mhVuN3A6BNoK/Hx1o1SMiJz7cfRj2t+FmnmeVFKyD8CA0
+         BU6U8QIHsGBuw==
 From:   Mark Brown <broonie@kernel.org>
-Date:   Fri, 28 Jul 2023 00:26:14 +0100
-Subject: [PATCH v4 3/6] tools include: Add some common function attributes
+Date:   Fri, 28 Jul 2023 00:26:16 +0100
+Subject: [PATCH v4 5/6] kselftest/arm64: Use shared OPTIMZER_HIDE_VAR()
+ definiton
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230728-arm64-signal-memcpy-fix-v4-3-0c1290db5d46@kernel.org>
+Message-Id: <20230728-arm64-signal-memcpy-fix-v4-5-0c1290db5d46@kernel.org>
 References: <20230728-arm64-signal-memcpy-fix-v4-0-0c1290db5d46@kernel.org>
 In-Reply-To: <20230728-arm64-signal-memcpy-fix-v4-0-0c1290db5d46@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
@@ -49,52 +50,52 @@ To:     Catalin Marinas <catalin.marinas@arm.com>,
 Cc:     linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.13-dev-099c9
-X-Developer-Signature: v=1; a=openpgp-sha256; l=895; i=broonie@kernel.org;
- h=from:subject:message-id; bh=Znm9gRTwsFwQfwD1M+msy3+6gP9lF4h25ZTmsNIMG+8=;
- b=owGbwMvMwMWocq27KDak/QLjabUkhpRDf60vB71y215inrJV+E2EvtuMndOPcufzzNzl5MwV+Hzv
- Vf5vnYzGLAyMXAyyYoosa59lrEoPl9g6/9H8VzCDWJlApjBwcQrARFqY2f/X7OoRrrAS0kqpYioQzq
- nK0o7ktSu1PC/Nt2ihyavyes2Vfp4fb32arL/5T5mD5+M//xgaNiUeCk2XuvaHvccveOu1Z3OdzT46
- a4r0KKaoWcpxNFucLtg/SUw1wK+3kmtGjGKsr8f/CR1GveLSq26zehhIHHTMDP2w0apD/OhHA9Wzsa
- U7/kVMzzHdqHnO91v3ul/PbdbV8i+Qlrp59vyrHas25S+Kcc1/vKPuccdv16k+tuazJfonf7bn6spO
- DnRya1z3pCH2UsqpzR4nKr6fl3OpNvz6cut0pntr1Vh9k2t3HWF0ZU8ICRM6Jc7UweD2OWfqr8aFV2
- /qN0ruOfzjdOr/PBXpYjaHJAdbAA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1124; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=U9eF72eZ37CI1cE+xa8X28h+BbO8qk9SjWJn/oLYilE=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkwv09X8Mjn1yqAaOEMjsKIen70RXP0QJW8nIpTkh3
+ lnMxM1qJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZML9PQAKCRAk1otyXVSH0OI2B/
+ 9hXA4a3MhVplF/KUp49gZNZsDo+mb986YfPqBSVFgJXJR84jb8JBGk33xkR+fP78xIbq1x+YlH3Cor
+ Trtjoa9QCbFbP5CpMW81jl7+0MRED48409wD74jGIxqWDnK9qEtdc+iZGmnC8u9EWP542zl1qZM4jT
+ ZT3uWzmROX6NM1HUHTqy2vu6zsJtG6Gphkx5B0Xi437PUT1HT9deIP1RzLjg7Nih13uwVu1yeWM3aZ
+ qUTXbOdZyXgfv32g2tOrXccCWBLmvRU4mD/biSzv4fH1f6SvqDospwE2+RYxtwMbd46t1i1ZYzjAnD
+ jHeXqfxXILhpxL8v413Cr7UILUrRJe
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-We don't have definitions of __always_unused or __noreturn in the tools
-version of compiler.h, add them so we can use them in kselftests.
+We had open coded the definition of OPTIMIZER_HIDE_VAR() as a fix but now
+that we have the generic tools/include available and that has had a
+definition of OPTIMIZER_HIDE_VAR() we can switch to the define.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- tools/include/linux/compiler.h | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ tools/testing/selftests/arm64/signal/test_signals_utils.h | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/tools/include/linux/compiler.h b/tools/include/linux/compiler.h
-index f75cced41d59..1684216e826a 100644
---- a/tools/include/linux/compiler.h
-+++ b/tools/include/linux/compiler.h
-@@ -42,6 +42,18 @@
- # define __always_inline	inline __attribute__((always_inline))
- #endif
+diff --git a/tools/testing/selftests/arm64/signal/test_signals_utils.h b/tools/testing/selftests/arm64/signal/test_signals_utils.h
+index c7f5627171dd..762c8fe9c54a 100644
+--- a/tools/testing/selftests/arm64/signal/test_signals_utils.h
++++ b/tools/testing/selftests/arm64/signal/test_signals_utils.h
+@@ -8,6 +8,8 @@
+ #include <stdio.h>
+ #include <string.h>
  
-+#ifndef __always_unused
-+#define __always_unused __attribute__((__unused__))
-+#endif
++#include <linux/compiler.h>
 +
-+#ifndef __noreturn
-+#define __noreturn __attribute__((__noreturn__))
-+#endif
-+
-+#ifndef unreachable
-+#define unreachable() __builtin_unreachable()
-+#endif
-+
- #ifndef noinline
- #define noinline
- #endif
+ #include "test_signals.h"
+ 
+ int test_init(struct tdescr *td);
+@@ -76,7 +78,7 @@ static __always_inline bool get_current_context(struct tdescr *td,
+ 	 */
+ 	for (i = 0; i < td->live_sz; i++) {
+ 		uc[i] = 0;
+-		__asm__ ("" : "=r" (uc[i]) : "0" (uc[i]));
++		OPTIMIZER_HIDE_VAR(uc[0]);
+ 	}
+ 
+ 	td->live_uc = dest_uc;
 
 -- 
 2.30.2
