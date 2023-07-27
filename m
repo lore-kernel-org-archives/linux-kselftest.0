@@ -2,121 +2,92 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65D3AEB64DD
-	for <linux-kselftest@archiver.kernel.org>; Thu, 27 Jul 2023 21:36:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08B90C41513
+	for <linux-kselftest@archiver.kernel.org>; Thu, 27 Jul 2023 23:27:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231840AbjG0Vg5 (ORCPT
+        id S229929AbjG0X1F (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 27 Jul 2023 17:36:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56508 "EHLO
+        Thu, 27 Jul 2023 19:27:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229931AbjG0Vg4 (ORCPT
+        with ESMTP id S231605AbjG0X1D (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Jul 2023 17:36:56 -0400
+        Thu, 27 Jul 2023 19:27:03 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3F1C3;
-        Thu, 27 Jul 2023 14:36:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2196130CD
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jul 2023 16:27:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D984A61EB8;
-        Thu, 27 Jul 2023 21:36:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D72AC433C8;
-        Thu, 27 Jul 2023 21:36:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B40E161F7C
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jul 2023 23:27:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4194C433CB;
+        Thu, 27 Jul 2023 23:26:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690493811;
-        bh=duAwVmFYmsUINs8hFVbW/zohvuZX6TUh3Gnxn1i9JaI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VnkrMICyDKHI52bpNsVeWb1AIXCLlOc90Zm+WJzG7JhU/D/eh32guTyhJs9VbOXeY
-         VLunSyQzAZmzTpbjTD0/0bwVy6AP11F0L45gerinT+7xNzw+bUWgc1NJDEOd0uEw7k
-         0oizeR8ID0C2ayjOTINy9zIDUAhG5c3tNnJg2rSvPeFBObmg5Lisx+nvXBwG4+Xl67
-         qM9qBKsNHyW1L5vzqBQ1hNJg2A3IUp0YOwTv0VvVK+IsuC1joDQwV/a5XSzbXqGwPQ
-         WEEaOEhQLooEPvMJ6QS2mIGeMoxc3tmMofUdWTZQq7jpKKXznadVu7vzJ5i57P+phO
-         A0wy5jcHn6vKQ==
-Date:   Thu, 27 Jul 2023 14:36:48 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, loongarch@lists.linux.dev,
-        linux-arch@vger.kernel.org, bpf@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
-Subject: Re: [PATCH v3 1/2] asm-generic: Unify uapi bitsperlong.h for arm64,
- riscv and loongarch
-Message-ID: <20230727213648.GA354736@dev-arch.thelio-3990X>
-References: <1687443219-11946-1-git-send-email-yangtiezhu@loongson.cn>
- <1687443219-11946-2-git-send-email-yangtiezhu@loongson.cn>
+        s=k20201202; t=1690500420;
+        bh=jXMPykm8Sa7SRlmo5xtzHOIlSIk5Hq+qJ6dIW9lIji4=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+        b=gM52nhQMToDrNZbOQX4DUuuR/CzhvuP3nCm0/uSOtAuHCbgUImUxjsue5HeACy+NA
+         6G4nByfh3BVo/4HM7b8CEgr72bc9l8B7oFWMmX3H7fcHpf12i7HJwPCTeRlwLt9Oi0
+         HXlUSMJr/Lh+KYjwnO82u2aPL5VH/kplEMlS7nTe+7je0oyee8oGDDEh8djNIoqp1p
+         rhp8n0vnPkr7IcY06BWpY1R2yFiVVk+TyaSpARzLoKBbqNxgUO+yAttnnePy5RWyiN
+         JKNBjlwz0wzwrpslxSm33c8gjaNgVT8Aqq5LbHO9yqHPFVNv9SkF9rjY5uuyr9t6kF
+         r7NVgg9ZAUjdg==
+From:   Mark Brown <broonie@kernel.org>
+Date:   Fri, 28 Jul 2023 00:26:13 +0100
+Subject: [PATCH v4 2/6] tools compiler.h: Add OPTIMIZER_HIDE_VAR()
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1687443219-11946-2-git-send-email-yangtiezhu@loongson.cn>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230728-arm64-signal-memcpy-fix-v4-2-0c1290db5d46@kernel.org>
+References: <20230728-arm64-signal-memcpy-fix-v4-0-0c1290db5d46@kernel.org>
+In-Reply-To: <20230728-arm64-signal-memcpy-fix-v4-0-0c1290db5d46@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.13-dev-099c9
+X-Developer-Signature: v=1; a=openpgp-sha256; l=845; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=jXMPykm8Sa7SRlmo5xtzHOIlSIk5Hq+qJ6dIW9lIji4=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkwv063LfMOVtDu/PC70CFOI6dnptcjxsMx0BeCTqD
+ G+2FKZKJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZML9OgAKCRAk1otyXVSH0BeqB/
+ 9St4zvcVA9AM5uZQ6iXsgGbrRYpAQ2GF9jDM2QSQZjfgaqcwhNuH8s7zUG1EfjTnUS+fkklj0iISTF
+ 4s/SVoqGco4pKmKSsQaTx2t72WX1P2klXpJosUBr7AJsmezlqabHHc7vXcwIsHkabcALJqHgQUJ/e9
+ 6Sw2X36LvFHp4Qua+RzWH96L5GV6nUNcftVPp5Gx1UnIBKJ+2+w1GCoX8scYJXYTjgxQ1T78sVH27n
+ P4VSH757Cj82weBwXP5Vsv8Dy5m9zGcFjPbiHANEetNZWoSVZx3uaPP4poqby4sdLk6fsqLBuW/ek9
+ YA+RfSx0/GXLhU5yeezLdoBmc81JK2
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Tiezhu and Arnd,
+Port over the definition of OPTIMIZER_HIDE_VAR() so we can use it in
+kselftests.
 
-On Thu, Jun 22, 2023 at 10:13:38PM +0800, Tiezhu Yang wrote:
-> Now we specify the minimal version of GCC as 5.1 and Clang/LLVM as 11.0.0
-> in Documentation/process/changes.rst, __CHAR_BIT__ and __SIZEOF_LONG__ are
-> usable, it is probably fine to unify the definition of __BITS_PER_LONG as
-> (__CHAR_BIT__ * __SIZEOF_LONG__) in asm-generic uapi bitsperlong.h.
-> 
-> In order to keep safe and avoid regression, only unify uapi bitsperlong.h
-> for some archs such as arm64, riscv and loongarch which are using newer
-> toolchains that have the definitions of __CHAR_BIT__ and __SIZEOF_LONG__.
-> 
-> Suggested-by: Xi Ruoyao <xry111@xry111.site>
-> Link: https://lore.kernel.org/all/d3e255e4746de44c9903c4433616d44ffcf18d1b.camel@xry111.site/
-> Suggested-by: Arnd Bergmann <arnd@arndb.de>
-> Link: https://lore.kernel.org/linux-arch/a3a4f48a-07d4-4ed9-bc53-5d383428bdd2@app.fastmail.com/
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> ---
->  arch/arm64/include/uapi/asm/bitsperlong.h          | 24 ----------------------
->  arch/loongarch/include/uapi/asm/bitsperlong.h      |  9 --------
->  arch/riscv/include/uapi/asm/bitsperlong.h          | 14 -------------
->  include/uapi/asm-generic/bitsperlong.h             | 13 +++++++++++-
->  tools/arch/arm64/include/uapi/asm/bitsperlong.h    | 24 ----------------------
->  .../arch/loongarch/include/uapi/asm/bitsperlong.h  |  9 --------
->  tools/arch/riscv/include/uapi/asm/bitsperlong.h    | 14 -------------
->  tools/include/uapi/asm-generic/bitsperlong.h       | 14 ++++++++++++-
->  tools/include/uapi/asm/bitsperlong.h               |  6 ------
->  9 files changed, 25 insertions(+), 102 deletions(-)
->  delete mode 100644 arch/arm64/include/uapi/asm/bitsperlong.h
->  delete mode 100644 arch/loongarch/include/uapi/asm/bitsperlong.h
->  delete mode 100644 arch/riscv/include/uapi/asm/bitsperlong.h
->  delete mode 100644 tools/arch/arm64/include/uapi/asm/bitsperlong.h
->  delete mode 100644 tools/arch/loongarch/include/uapi/asm/bitsperlong.h
->  delete mode 100644 tools/arch/riscv/include/uapi/asm/bitsperlong.h
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ tools/include/linux/compiler.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-I think this change has backwards compatibility concerns, as it breaks
-building certain host tools on the stable releases (at least 6.4 and
-6.1, as that is where I noticed this). I see the following error on my
-aarch64 system:
+diff --git a/tools/include/linux/compiler.h b/tools/include/linux/compiler.h
+index 9d36c8ce1fe7..f75cced41d59 100644
+--- a/tools/include/linux/compiler.h
++++ b/tools/include/linux/compiler.h
+@@ -190,4 +190,10 @@ static __always_inline void __write_once_size(volatile void *p, void *res, int s
+ #define ___PASTE(a, b) a##b
+ #define __PASTE(a, b) ___PASTE(a, b)
+ 
++#ifndef OPTIMIZER_HIDE_VAR
++/* Make the optimizer believe the variable can be manipulated arbitrarily. */
++#define OPTIMIZER_HIDE_VAR(var)						\
++	__asm__ ("" : "=r" (var) : "0" (var))
++#endif
++
+ #endif /* _TOOLS_LINUX_COMPILER_H */
 
-  $ make -skj"$(nproc)" ARCH=x86_64 CROSS_COMPILE=x86_64-linux- mrproper defconfig prepare
-  In file included from /usr/include/asm/bitsperlong.h:1,
-                   from /usr/include/asm-generic/int-ll64.h:12,
-                   from /usr/include/asm-generic/types.h:7,
-                   from /usr/include/asm/types.h:1,
-                   from tools/include/linux/types.h:13,
-                   from tools/arch/x86/include/asm/orc_types.h:9,
-                   from scripts/sorttable.h:96,
-                   from scripts/sorttable.c:201:
-  tools/include/asm-generic/bitsperlong.h:14:2: error: #error Inconsistent word size. Check asm/bitsperlong.h
-     14 | #error Inconsistent word size. Check asm/bitsperlong.h
-        |  ^~~~~
+-- 
+2.30.2
 
-A reverse bisect of 6.4 to 6.5-rc1 points to this patch. This Fedora
-rawhide container has kernel-headers 6.5.0-0.rc2.git0.1.fc39 and the
-error disappears when I downgrade to 6.4.0-0.rc7.git0.1.fc39. I have not
-done a ton of triage/debugging so far, as I am currently hunting down
-other regressions, but I figured I would get an initial report out,
-since I noticed it when validating LLVM from the new release/17.x
-branch. If there is any additional information I can provide or patches
-I can test, I am more than happy to do so.
-
-Cheers,
-Nathan
