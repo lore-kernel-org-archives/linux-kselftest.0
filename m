@@ -2,40 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F98BEB64DD
-	for <linux-kselftest@archiver.kernel.org>; Thu, 27 Jul 2023 20:28:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97985EB64DD
+	for <linux-kselftest@archiver.kernel.org>; Thu, 27 Jul 2023 20:29:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbjG0U2c (ORCPT
+        id S229777AbjG0U3i (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 27 Jul 2023 16:28:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54416 "EHLO
+        Thu, 27 Jul 2023 16:29:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230049AbjG0U2b (ORCPT
+        with ESMTP id S229448AbjG0U3h (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Jul 2023 16:28:31 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 861CE30CD;
-        Thu, 27 Jul 2023 13:28:28 -0700 (PDT)
-X-QQ-mid: bizesmtp77t1690489698t82ph8cm
+        Thu, 27 Jul 2023 16:29:37 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A5BC2688;
+        Thu, 27 Jul 2023 13:29:35 -0700 (PDT)
+X-QQ-mid: bizesmtp65t1690489766t9v338bu
 Received: from linux-lab-host.localdomain ( [61.141.78.189])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 28 Jul 2023 04:28:17 +0800 (CST)
+        id ; Fri, 28 Jul 2023 04:29:25 +0800 (CST)
 X-QQ-SSF: 01200000000000D0X000000A0000000
-X-QQ-FEAT: dKvkn8qoLrE2yLn96qy5k0fzTpwuyKtkiBSpI4LwdFyOeVirP6jaXvT0wq5IB
-        lyhlNscOT+zA2kHB7tqoZ7sJwvbTr525TCosc7zMPGfENlCjXaycc0d9ITayDt+FcvVnqoa
-        CYH8kqgk62UIvsOM6IRf45fZm/tD16k4QVwCphU4X6zJSbEt3vx4jGjLm2aCkaZ0J3EdBhi
-        7B+qe6+RI/NJPVFoMTuzy+BKEtxQcWXRqOEGuzqmBtamF70BLvlykk4dHD5nh7usejRRyLB
-        JCBuYBm7V062gzUOMueR6pXzenYc9e5+ti7FqyhKWD/TTxpPm7P7gsGppuRl9ksU7QLJfXx
-        KcL5CCZD+J3JP9LDFEiXmJZhnWcgiXe2saCrF9nZ6UbWxScnTXfUrYeU7FLGvh2Jk8EGX/e
+X-QQ-FEAT: 3M0okmaRx3hs8KjjHXgV3Mnz1SbuFa76sKO20ziBuLGO5QLIvoP9RFy4OEgee
+        Cy0+ZWIn7BRQWovusTQnisGvElCqSK+hdthX7FIZJa0rDEywrtYE9JwNPGXNfugDB1nTF7U
+        +JD/jIMyAb7+eEg0Bn/XSgdSX5NQVY0+YUYRJWS4/IHQE1Ym0tZSaJxcMRrXSsP6FflLo58
+        ld499Ozr6Eo+sFi2CqSszJD/SCrP5OBpOuy7ATwW2fq0QokE/CUxRfcyR92DNJ5NFMCuU7c
+        TAx3dnUznunh2zaCrxSAqWa6uSZUfImNSRnq/BT2eRS9LgbGmvO6jNZ56OyddZZ0bBhKyOE
+        iCrVoZGvHR+BjNUKyxKqLGA7XIeg1nMUOzYarGvfLMWgJIkVJCEtrVdioJdpq2hM3UldzBO
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 16216814846800268763
+X-BIZMAIL-ID: 17253053822244597306
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     thomas@t-8ch.de, w@1wt.eu
 Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH v3 06/12] selftests/nolibc: customize CROSS_COMPILE for 32/64-bit powerpc
-Date:   Fri, 28 Jul 2023 04:28:17 +0800
-Message-Id: <41e2aa9e4299dd35cfeef9fecc2a6a02a7b49d90.1690489039.git.falcon@tinylab.org>
+Subject: [PATCH v3 07/12] selftests/nolibc: add menuconfig and mrproper for development
+Date:   Fri, 28 Jul 2023 04:29:24 +0800
+Message-Id: <45c0c24e77f4ae78ac3ace099f2e6678d15456e0.1690489039.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1690489039.git.falcon@tinylab.org>
 References: <cover.1690489039.git.falcon@tinylab.org>
@@ -47,43 +47,24 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The little-endian powerpc64le compilers provided by Ubuntu and Fedora
-are able to compile big endian kernel and big endian nolibc-test [1].
+menuconfig and mrproper are frequently used operations during a new
+architecture porting, testing or debugging.
 
-These default CROSS_COMPILE settings allow to test target architectures
-with:
+menuconfig is required to tune and test extra kernel config options for
+tinyconfig.
 
-    $ cd /path/to/tools/testing/selftests/nolibc/
+mrproper is required to get a clean srctree while want to start a new
+building with O= option, the old generated files in srctree must be
+mrproper-ed.
 
-    $ for arch in ppc ppc64 ppc64le; do \
-        make run-user ARCH=$arch | grep "status: "; \
-      done
+differ from local nolibc targets, the menuconfig and mrproper targets
+from top-level Makefile accept different ARCH variable and require extra
+'-C /path/to/srctree', which make development not consistent and
+therefore very painful, let's add local menuconfig and mrproper targets
+too.
 
-If want to use another cross compiler, please simply pass CROSS_COMPILE
-or CC as before.
-
-For example, it is able to build 64-bit nolibc-test with the big endian
-powerpc64-linux-gcc crosstool from [2]:
-
-    $ wget -c https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/x86_64/13.1.0/x86_64-gcc-13.1.0-nolibc-powerpc64-linux.tar.xz
-    $ tar xvf x86_64-gcc-13.1.0-nolibc-powerpc64-linux.tar.xz
-    $ export PATH=$PWD/gcc-13.1.0-nolibc/powerpc64-linux/bin/:$PATH
-
-    $ export CROSS_COMPILE_ppc64=powerpc64-linux-
-    $ export CROSS_COMPILE_ppc64le=powerpc64-linux-
-    $ for arch in ppc64 ppc64le; do \
-        make run-user ARCH=$arch | grep "status: "; \
-      done
-
-Or specify CC directly with full path:
-
-    $ export CC=$PWD/gcc-13.1.0-nolibc/powerpc64-linux/bin/powerpc64-linux-gcc
-    $ for arch in ppc64 ppc64le; do \
-        make run-user ARCH=$arch | grep "status: "; \
-      done
-
-[1]: https://github.com/open-power/skiboot
-[2]: https://mirrors.edge.kernel.org/pub/tools/crosstool/
+To reduce duplicated entries, menuconfig and mrproper are added
+together.
 
 Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
@@ -91,19 +72,19 @@ Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
  1 file changed, 3 insertions(+)
 
 diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index 3f15c7f7ef76..6385915d16c9 100644
+index 6385915d16c9..a214745e0f3e 100644
 --- a/tools/testing/selftests/nolibc/Makefile
 +++ b/tools/testing/selftests/nolibc/Makefile
-@@ -46,6 +46,9 @@ IMAGE            = $(IMAGE_$(XARCH))
- IMAGE_NAME       = $(notdir $(IMAGE))
+@@ -215,6 +215,9 @@ defconfig:
+ 	$(Q)$(srctree)/scripts/kconfig/merge_config.sh -O "$(objtree)" -m "$(KERNEL_CONFIG)" $(foreach c,$(EXTCONFIG),$(wildcard $(CURDIR)/configs/$c))
+ 	$(Q)$(MAKE_KERNEL) KCONFIG_ALLCONFIG="$(KERNEL_CONFIG)" allnoconfig
  
- # CROSS_COMPILE: cross toolchain prefix by architecture
-+CROSS_COMPILE_ppc       ?= powerpc-linux-gnu-
-+CROSS_COMPILE_ppc64     ?= powerpc64le-linux-gnu-
-+CROSS_COMPILE_ppc64le   ?= powerpc64le-linux-gnu-
- CROSS_COMPILE           ?= $(CROSS_COMPILE_$(XARCH))
- 
- # make sure CC is prefixed with CROSS_COMPILE
++menuconfig mrproper:
++	$(Q)$(MAKE_KERNEL) $@
++
+ PHONY += $(KERNEL_CONFIG)
+ $(KERNEL_CONFIG):
+ 	$(Q)if [ ! -f "$(KERNEL_CONFIG)" ]; then $(MAKE) --no-print-directory defconfig; fi
 -- 
 2.25.1
 
