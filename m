@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 793ACC00528
-	for <linux-kselftest@archiver.kernel.org>; Fri, 28 Jul 2023 12:00:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7ED0C001DE
+	for <linux-kselftest@archiver.kernel.org>; Fri, 28 Jul 2023 12:00:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235592AbjG1MAi (ORCPT
+        id S236372AbjG1MAq (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 28 Jul 2023 08:00:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52122 "EHLO
+        Fri, 28 Jul 2023 08:00:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235572AbjG1MAg (ORCPT
+        with ESMTP id S235572AbjG1MAk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 28 Jul 2023 08:00:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 514073C0F
-        for <linux-kselftest@vger.kernel.org>; Fri, 28 Jul 2023 04:59:48 -0700 (PDT)
+        Fri, 28 Jul 2023 08:00:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B6EB1B8
+        for <linux-kselftest@vger.kernel.org>; Fri, 28 Jul 2023 04:59:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1690545587;
+        s=mimecast20190719; t=1690545588;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=eXeilOx5KBy9Prg5ldoblL+XsCnW/JQsirJsBMpScD8=;
-        b=dYWiScQ73FS7LUOoJWABUTHNB16N3LnKCSYx2QSHtDHNa1HG+thbdTUf0xWY280h2R8Kys
-        nKoWVPhP9320Ap7P6aKd57uRvmFbI/Cm5wSUgonHrdJYKD40Sf9GqOQ7cnQlxK9dJrRGZU
-        pVNMxlGWS6HrI/tQj3u4vOOMeRQdEE0=
+        bh=pjPStuiWzD4abw7fhhhYg8bUcmpIOXeytka45p9JxS4=;
+        b=DkP5UYbwrt0MzmVPgclBujvi9y/W0FlsIEMSazkseAPXK6nIv8ss+gegn3Ils3SCvIwpIA
+        bsooIN4FF8vFxaPWYF7xYHzN4vvuaOn5nmaZh8xFqqv9tQH0uKVm2Bp/17BmroFS8BlGIE
+        02ozXR57G0ccs7xCYov0ajeRU3YQ+6Y=
 Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-407-CBjVYuJAOmmm1RDDDjw9Ig-1; Fri, 28 Jul 2023 07:59:44 -0400
-X-MC-Unique: CBjVYuJAOmmm1RDDDjw9Ig-1
+ us-mta-452-Cyxks6VtNWGdydHB6LvT7A-1; Fri, 28 Jul 2023 07:59:43 -0400
+X-MC-Unique: Cyxks6VtNWGdydHB6LvT7A-1
 Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9FDB129A9CA1;
-        Fri, 28 Jul 2023 11:59:43 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 96F023806634;
+        Fri, 28 Jul 2023 11:59:42 +0000 (UTC)
 Received: from RHTPC1VM0NT.redhat.com (unknown [10.22.8.217])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 32EC42017F3E;
-        Fri, 28 Jul 2023 11:59:43 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 296F52017F3E;
+        Fri, 28 Jul 2023 11:59:42 +0000 (UTC)
 From:   Aaron Conole <aconole@redhat.com>
 To:     netdev@vger.kernel.org
 Cc:     dev@openvswitch.org, linux-kselftest@vger.kernel.org,
@@ -49,9 +49,9 @@ Cc:     dev@openvswitch.org, linux-kselftest@vger.kernel.org,
         "David S. Miller" <davem@davemloft.net>,
         Pravin B Shelar <pshelar@ovn.org>,
         Ilya Maximets <i.maximets@ovn.org>
-Subject: [PATCH v2 net-next 4/5] selftests: openvswitch: add basic ct test case parsing
-Date:   Fri, 28 Jul 2023 07:59:39 -0400
-Message-Id: <20230728115940.578658-5-aconole@redhat.com>
+Subject: [PATCH v2 net-next 2/5] selftests: openvswitch: support key masks
+Date:   Fri, 28 Jul 2023 07:59:37 -0400
+Message-Id: <20230728115940.578658-3-aconole@redhat.com>
 In-Reply-To: <20230728115940.578658-1-aconole@redhat.com>
 References: <20230728115940.578658-1-aconole@redhat.com>
 MIME-Version: 1.0
@@ -61,162 +61,188 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Forwarding via ct() action is an important use case for openvswitch, but
-generally would require using a full ovs-vswitchd to get working. Add a
-ct action parser for basic ct test case.
+From: Adrian Moreno <amorenoz@redhat.com>
 
-Signed-off-by: Aaron Conole <aconole@redhat.com>
+From: Adrian Moreno <amorenoz@redhat.com>
+
+The default value for the mask actually depends on the value (e.g: if
+the value is non-null, the default is full-mask), so change the convert
+functions to accept the full, possibly masked string and let them figure
+out how to parse the differnt values.
+
+Also, implement size-aware int parsing.
+
+With this patch we can now express flows such as the following:
+"eth(src=0a:ca:fe:ca:fe:0a/ff:ff:00:00:ff:00)"
+"eth(src=0a:ca:fe:ca:fe:0a)" -> mask = ff:ff:ff:ff:ff:ff
+"ipv4(src=192.168.1.1)" -> mask = 255.255.255.255
+"ipv4(src=192.168.1.1/24)"
+"ipv4(src=192.168.1.1/255.255.255.0)"
+"tcp(src=8080)" -> mask = 0xffff
+"tcp(src=8080/0xf0f0)"
+
+Signed-off-by: Adrian Moreno <amorenoz@redhat.com>
+Acked-by: Aaron Conole <aconole@redhat.com>
 ---
-NOTE: 3 lines flag the line-length checkpatch warning, but there didnt
-      seem to be a really good way of breaking the lines smaller.
+ .../selftests/net/openvswitch/ovs-dpctl.py    | 96 ++++++++++++-------
+ 1 file changed, 64 insertions(+), 32 deletions(-)
 
- .../selftests/net/openvswitch/openvswitch.sh  | 68 +++++++++++++++++++
- .../selftests/net/openvswitch/ovs-dpctl.py    | 39 +++++++++++
- 2 files changed, 107 insertions(+)
-
-diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-index 5d60a9466dab..40a66c72af0f 100755
---- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
-+++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-@@ -12,6 +12,7 @@ TRACING=0
- 
- tests="
- 	arp_ping				eth-arp: Basic arp ping between two NS
-+	ct_connect_v4				ip4-ct-xon: Basic ipv4 tcp connection using ct
- 	connect_v4				ip4-xon: Basic ipv4 ping between two NS
- 	netlink_checks				ovsnl: validate netlink attrs and settings
- 	upcall_interfaces			ovs: test the upcall interfaces"
-@@ -193,6 +194,73 @@ test_arp_ping () {
- 	return 0
- }
- 
-+# ct_connect_v4 test
-+#  - client has 1500 byte MTU
-+#  - server has 1500 byte MTU
-+#  - use ICMP to ping in each direction
-+#  - only allow CT state stuff to pass through new in c -> s
-+test_ct_connect_v4 () {
-+
-+	which nc >/dev/null 2>/dev/null || return $ksft_skip
-+
-+	sbx_add "test_ct_connect_v4" || return $?
-+
-+	ovs_add_dp "test_ct_connect_v4" ct4 || return 1
-+	info "create namespaces"
-+	for ns in client server; do
-+		ovs_add_netns_and_veths "test_ct_connect_v4" "ct4" "$ns" \
-+		    "${ns:0:1}0" "${ns:0:1}1" || return 1
-+	done
-+
-+	ip netns exec client ip addr add 172.31.110.10/24 dev c1
-+	ip netns exec client ip link set c1 up
-+	ip netns exec server ip addr add 172.31.110.20/24 dev s1
-+	ip netns exec server ip link set s1 up
-+
-+	# Add forwarding for ARP and ip packets - completely wildcarded
-+	ovs_add_flow "test_ct_connect_v4" ct4 \
-+		'in_port(1),eth(),eth_type(0x0806),arp()' '2' || return 1
-+	ovs_add_flow "test_ct_connect_v4" ct4 \
-+		'in_port(2),eth(),eth_type(0x0806),arp()' '1' || return 1
-+	ovs_add_flow "test_ct_connect_v4" ct4 \
-+		     'ct_state(-trk),eth(),eth_type(0x0800),ipv4()' \
-+		     'ct(commit),recirc(0x1)' || return 1
-+	ovs_add_flow "test_ct_connect_v4" ct4 \
-+		     'recirc_id(0x1),ct_state(+trk+new),in_port(1),eth(),eth_type(0x0800),ipv4(src=172.31.110.10)' \
-+		     '2' || return 1
-+	ovs_add_flow "test_ct_connect_v4" ct4 \
-+		     'recirc_id(0x1),ct_state(+trk+est),in_port(1),eth(),eth_type(0x0800),ipv4(src=172.31.110.10)' \
-+		     '2' || return 1
-+	ovs_add_flow "test_ct_connect_v4" ct4 \
-+		     'recirc_id(0x1),ct_state(+trk+est),in_port(2),eth(),eth_type(0x0800),ipv4(dst=172.31.110.10)' \
-+		     '1' || return 1
-+	ovs_add_flow "test_ct_connect_v4" ct4 \
-+		     'recirc_id(0x1),ct_state(+trk+inv),eth(),eth_type(0x0800),ipv4()' 'drop' || \
-+		     return 1
-+
-+	# do a ping
-+	ovs_sbx "test_ct_connect_v4" ip netns exec client ping 172.31.110.20 -c 3 || return 1
-+
-+	# create an echo server in 'server'
-+	echo "server" | \
-+		ovs_netns_spawn_daemon "test_ct_connect_v4" "server" \
-+				nc -lvnp 4443
-+	ovs_sbx "test_ct_connect_v4" ip netns exec client nc -i 1 -zv 172.31.110.20 4443 || return 1
-+
-+	# Now test in the other direction (should fail)
-+	echo "client" | \
-+		ovs_netns_spawn_daemon "test_ct_connect_v4" "client" \
-+				nc -lvnp 4443
-+	ovs_sbx "test_ct_connect_v4" ip netns exec client nc -i 1 -zv 172.31.110.10 4443
-+	if [ $? == 0 ]; then
-+	   info "ct connect to client was successful"
-+	   return 1
-+	fi
-+
-+	info "done..."
-+	return 0
-+}
-+
- # connect_v4 test
- #  - client has 1500 byte MTU
- #  - server has 1500 byte MTU
 diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-index 2b869e89c51d..6e258ab9e635 100644
+index a11ba9f7ea6e..2b869e89c51d 100644
 --- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
 +++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-@@ -62,6 +62,15 @@ def macstr(mac):
-     return outstr
+@@ -160,25 +160,45 @@ def parse_ct_state(statestr):
+     return parse_flags(statestr, ct_flags)
  
  
-+def strcspn(str1, str2):
-+    tot = 0
-+    for char in str1:
-+        if str2.find(char) != -1:
-+            return tot
-+        tot += 1
-+    return tot
-+
-+
- def strspn(str1, str2):
-     tot = 0
-     for char in str1:
-@@ -496,6 +505,36 @@ class ovsactions(nla):
-                     actstr = actstr[strspn(actstr, ", ") :]
-                     parsed = True
+-def convert_mac(mac_str, mask=False):
+-    if mac_str is None or mac_str == "":
+-        mac_str = "00:00:00:00:00:00"
+-    if mask is True and mac_str != "00:00:00:00:00:00":
+-        mac_str = "FF:FF:FF:FF:FF:FF"
+-    mac_split = mac_str.split(":")
+-    ret = bytearray([int(i, 16) for i in mac_split])
+-    return bytes(ret)
++def convert_mac(data):
++    def to_bytes(mac):
++        mac_split = mac.split(":")
++        ret = bytearray([int(i, 16) for i in mac_split])
++        return bytes(ret)
  
-+            if parse_starts_block(actstr, "ct(", False):
-+                actstr = actstr[len("ct(") :]
-+                ctact = ovsactions.ctact()
-+
-+                for scan in (
-+                    ("commit", "OVS_CT_ATTR_COMMIT", None),
-+                    ("force_commit", "OVS_CT_ATTR_FORCE_COMMIT", None),
-+                    ("zone", "OVS_CT_ATTR_ZONE", int),
-+                    ("mark", "OVS_CT_ATTR_MARK", int),
-+                    ("helper", "OVS_CT_ATTR_HELPER", lambda x, y: str(x)),
-+                    ("timeout", "OVS_CT_ATTR_TIMEOUT", lambda x, y: str(x)),
-+                ):
-+                    if actstr.startswith(scan[0]):
-+                        actstr = actstr[len(scan[0]) :]
-+                        if scan[2] is not None:
-+                            if actstr[0] != "=":
-+                                raise ValueError("Invalid ct attr")
-+                            actstr = actstr[1:]
-+                            pos = strcspn(actstr, ",)")
-+                            datum = scan[2](actstr[:pos], 0)
-+                            ctact["attrs"].append([scan[1], datum])
-+                            actstr = actstr[pos:]
-+                        else:
-+                            ctact["attrs"].append([scan[1], None])
-+                        actstr = actstr[strspn(actstr, ", ") :]
-+
-+                self["attrs"].append(["OVS_ACTION_ATTR_CT", ctact])
-+                parsed = True
-+
-+            actstr = actstr[strspn(actstr, "), ") :]
-             if not parsed:
-                 raise ValueError("Action str: '%s' not supported" % actstr)
++    mac_str, _, mask_str = data.partition('/')
  
+-def convert_ipv4(ip, mask=False):
+-    if ip is None:
+-        ip = 0
+-    if mask is True:
+-        if ip != 0:
+-            ip = int(ipaddress.IPv4Address(ip)) & 0xFFFFFFFF
++    if not mac_str:
++        mac_str = mask_str = "00:00:00:00:00:00"
++    elif not mask_str:
++        mask_str = "FF:FF:FF:FF:FF:FF"
+ 
+-    return int(ipaddress.IPv4Address(ip))
++    return to_bytes(mac_str), to_bytes(mask_str)
+ 
++def convert_ipv4(data):
++    ip, _, mask = data.partition('/')
++
++    if not ip:
++        ip = mask = 0
++    elif not mask:
++        mask = 0xFFFFFFFF
++    elif mask.isdigit():
++        mask = (0xFFFFFFFF << (32 - int(mask))) & 0xFFFFFFFF
++
++    return int(ipaddress.IPv4Address(ip)), int(ipaddress.IPv4Address(mask))
++
++def convert_int(size):
++    def convert_int_sized(data):
++        value, _, mask = data.partition('/')
++
++        if not value:
++            return 0, 0
++        elif not mask:
++            return int(value, 0), pow(2, size) - 1
++        else:
++            return int(value, 0), int(mask, 0)
++
++    return convert_int_sized
+ 
+ def parse_starts_block(block_str, scanstr, returnskipped, scanregex=False):
+     if scanregex:
+@@ -525,8 +545,10 @@ class ovskey(nla):
+         )
+ 
+         fields_map = (
+-            ("src", "src", "%d", lambda x: int(x) if x is not None else 0),
+-            ("dst", "dst", "%d", lambda x: int(x) if x is not None else 0),
++            ("src", "src", "%d", lambda x: int(x) if x else 0,
++                convert_int(16)),
++            ("dst", "dst", "%d", lambda x: int(x) if x else 0,
++                convert_int(16)),
+         )
+ 
+         def __init__(
+@@ -575,17 +597,13 @@ class ovskey(nla):
+                     data = flowstr[:splitchar]
+                     flowstr = flowstr[splitchar:]
+                 else:
+-                    data = None
++                    data = ""
+ 
+                 if len(f) > 4:
+-                    func = f[4]
+-                else:
+-                    func = f[3]
+-                k[f[0]] = func(data)
+-                if len(f) > 4:
+-                    m[f[0]] = func(data, True)
++                    k[f[0]], m[f[0]] = f[4](data)
+                 else:
+-                    m[f[0]] = func(data)
++                    k[f[0]] = f[3](data)
++                    m[f[0]] = f[3](data)
+ 
+                 flowstr = flowstr[strspn(flowstr, ", ") :]
+                 if len(flowstr) == 0:
+@@ -689,10 +707,14 @@ class ovskey(nla):
+                 int,
+                 convert_ipv4,
+             ),
+-            ("proto", "proto", "%d", lambda x: int(x) if x is not None else 0),
+-            ("tos", "tos", "%d", lambda x: int(x) if x is not None else 0),
+-            ("ttl", "ttl", "%d", lambda x: int(x) if x is not None else 0),
+-            ("frag", "frag", "%d", lambda x: int(x) if x is not None else 0),
++            ("proto", "proto", "%d", lambda x: int(x) if x else 0,
++                convert_int(8)),
++            ("tos", "tos", "%d", lambda x: int(x) if x else 0,
++                convert_int(8)),
++            ("ttl", "ttl", "%d", lambda x: int(x) if x else 0,
++                convert_int(8)),
++            ("frag", "frag", "%d", lambda x: int(x) if x else 0,
++                convert_int(8)),
+         )
+ 
+         def __init__(
+@@ -828,8 +850,8 @@ class ovskey(nla):
+         )
+ 
+         fields_map = (
+-            ("type", "type", "%d", int),
+-            ("code", "code", "%d", int),
++            ("type", "type", "%d", lambda x: int(x) if x else 0),
++            ("code", "code", "%d", lambda x: int(x) if x else 0),
+         )
+ 
+         def __init__(
+@@ -894,7 +916,7 @@ class ovskey(nla):
+                 int,
+                 convert_ipv4,
+             ),
+-            ("op", "op", "%d", lambda x: int(x) if x is not None else 0),
++            ("op", "op", "%d", lambda x: int(x) if x else 0),
+             (
+                 "sha",
+                 "sha",
+@@ -1098,6 +1120,16 @@ class ovskey(nla):
+                 "tcp",
+                 ovskey.ovs_key_tcp,
+             ),
++            (
++                "OVS_KEY_ATTR_UDP",
++                "udp",
++                ovskey.ovs_key_udp,
++            ),
++            (
++                "OVS_KEY_ATTR_ICMP",
++                "icmp",
++                ovskey.ovs_key_icmp,
++            ),
+             (
+                 "OVS_KEY_ATTR_TCP_FLAGS",
+                 "tcp_flags",
 -- 
 2.40.1
 
