@@ -2,96 +2,130 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37623C001E0
-	for <linux-kselftest@archiver.kernel.org>; Fri, 28 Jul 2023 11:13:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 64CC8C001DE
+	for <linux-kselftest@archiver.kernel.org>; Fri, 28 Jul 2023 12:00:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234567AbjG1LNL (ORCPT
+        id S233650AbjG1MAf (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 28 Jul 2023 07:13:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58018 "EHLO
+        Fri, 28 Jul 2023 08:00:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234120AbjG1LNK (ORCPT
+        with ESMTP id S235592AbjG1MAe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 28 Jul 2023 07:13:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FD282723;
-        Fri, 28 Jul 2023 04:13:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        Fri, 28 Jul 2023 08:00:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 294E73ABA
+        for <linux-kselftest@vger.kernel.org>; Fri, 28 Jul 2023 04:59:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1690545587;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0BHreDBBtOfD6Otem1ixa3wNDy4p83cGEAjphqlcKI0=;
+        b=M3LWu7HnJW+Jb4/qkdU0pKi9hjITC7KT/PnqFhohzH41LGE/NK0CKaWM9vfh9JmXDJx9sw
+        IbmU9CMxlFDYD9hycaKQfMJBFMCRRamh2nwvkt5nsd4ZA2Vm/RPo9ngH2Z5hfNIcCTwtGf
+        56H65dc/nBgbXutT4mJ2S8zJPsspnqI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-357-BPOEd2YqN5a_k3MVFewArA-1; Fri, 28 Jul 2023 07:59:43 -0400
+X-MC-Unique: BPOEd2YqN5a_k3MVFewArA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B35E620FD;
-        Fri, 28 Jul 2023 11:13:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E85DCC433C8;
-        Fri, 28 Jul 2023 11:13:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1690542788;
-        bh=SXf0CvhgUkGm+fNUV5KHDN/D2FZxDlPPjw5urZT6Keo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mGv7o46bKMQNQnFbWlWW3EHhpoXV4D8cil6h9KcxnevCmI3Ao5DqUZ3WkB1xbx+s6
-         nrXbrhJPUlIv0ajoKUAB1wwvHp5kdNLesTg8KDWLeZhwV14QJgRqyx0vVFnQcabl+p
-         oIvW56PEpsXwGaCujj1wPVF8JlShTANqmOVIWzCQ=
-Date:   Fri, 28 Jul 2023 13:13:05 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        kernel@collabora.com,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-Subject: Re: WIP: Performance improvements
-Message-ID: <2023072809-mowing-amaze-efb5@gregkh>
-References: <20230727093637.1262110-1-usama.anjum@collabora.com>
- <20230727093637.1262110-3-usama.anjum@collabora.com>
- <CABb0KFFtjTve+uM=CTPChzUbJvJ=Tr3Q8espo_Rr_hutZPPAiw@mail.gmail.com>
- <6b6a4e1c-a9e9-9592-d5b4-3c9210c8b650@collabora.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 22C8286F121;
+        Fri, 28 Jul 2023 11:59:43 +0000 (UTC)
+Received: from RHTPC1VM0NT.redhat.com (unknown [10.22.8.217])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A8E24201EC58;
+        Fri, 28 Jul 2023 11:59:42 +0000 (UTC)
+From:   Aaron Conole <aconole@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     dev@openvswitch.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Pravin B Shelar <pshelar@ovn.org>,
+        Ilya Maximets <i.maximets@ovn.org>
+Subject: [PATCH v2 net-next 3/5] selftests: openvswitch: add a test for ipv4 forwarding
+Date:   Fri, 28 Jul 2023 07:59:38 -0400
+Message-Id: <20230728115940.578658-4-aconole@redhat.com>
+In-Reply-To: <20230728115940.578658-1-aconole@redhat.com>
+References: <20230728115940.578658-1-aconole@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6b6a4e1c-a9e9-9592-d5b4-3c9210c8b650@collabora.com>
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jul 28, 2023 at 04:02:02PM +0500, Muhammad Usama Anjum wrote:
-> We are optimizing for more performance. Please find the change-set below
-> for easy review before next revision and post your comments:
-> 
-> - Replace memcpy() with direct copy as it proving to be very expensive
-> - Don't check if PAGE_IS_FILE if no mask needs it as it is very
->   expensive to check per pte
-> - Add question in comment for discussion purpose
-> - Add fast path for exclusive WP for ptes
+This is a simple ipv4 bidirectional connectivity test.
 
-Please read the kernel documentation for how to properly submit patches
-(i.e. don't mush them all together into one and then properly describe
-what you are doing and why you are doing it).
+Signed-off-by: Aaron Conole <aconole@redhat.com>
+---
+ .../selftests/net/openvswitch/openvswitch.sh  | 40 +++++++++++++++++++
+ 1 file changed, 40 insertions(+)
 
-Also actually test the patch and prove (or disprove) if it does matter
-for performance.
+diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
+index 5cdacb3c8c92..5d60a9466dab 100755
+--- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
++++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
+@@ -12,6 +12,7 @@ TRACING=0
+ 
+ tests="
+ 	arp_ping				eth-arp: Basic arp ping between two NS
++	connect_v4				ip4-xon: Basic ipv4 ping between two NS
+ 	netlink_checks				ovsnl: validate netlink attrs and settings
+ 	upcall_interfaces			ovs: test the upcall interfaces"
+ 
+@@ -192,6 +193,45 @@ test_arp_ping () {
+ 	return 0
+ }
+ 
++# connect_v4 test
++#  - client has 1500 byte MTU
++#  - server has 1500 byte MTU
++#  - use ICMP to ping in each direction
++test_connect_v4 () {
++
++	sbx_add "test_connect_v4" || return $?
++
++	ovs_add_dp "test_connect_v4" cv4 || return 1
++
++	info "create namespaces"
++	for ns in client server; do
++		ovs_add_netns_and_veths "test_connect_v4" "cv4" "$ns" \
++		    "${ns:0:1}0" "${ns:0:1}1" || return 1
++	done
++
++
++	ip netns exec client ip addr add 172.31.110.10/24 dev c1
++	ip netns exec client ip link set c1 up
++	ip netns exec server ip addr add 172.31.110.20/24 dev s1
++	ip netns exec server ip link set s1 up
++
++	# Add forwarding for ARP and ip packets - completely wildcarded
++	ovs_add_flow "test_connect_v4" cv4 \
++		'in_port(1),eth(),eth_type(0x0806),arp()' '2' || return 1
++	ovs_add_flow "test_connect_v4" cv4 \
++		'in_port(2),eth(),eth_type(0x0806),arp()' '1' || return 1
++	ovs_add_flow "test_connect_v4" cv4 \
++		'in_port(1),eth(),eth_type(0x0800),ipv4(src=172.31.110.10)' '2' || return 1
++	ovs_add_flow "test_connect_v4" cv4 \
++		'in_port(2),eth(),eth_type(0x0800),ipv4(src=172.31.110.20)' '1' || return 1
++
++	# do a ping
++	ovs_sbx "test_connect_v4" ip netns exec client ping 172.31.110.20 -c 3 || return 1
++
++	info "done..."
++	return 0
++}
++
+ # netlink_validation
+ # - Create a dp
+ # - check no warning with "old version" simulation
+-- 
+2.40.1
 
-good luck!
-
-greg k-h
