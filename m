@@ -2,88 +2,108 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 36A98C07E8B
-	for <linux-kselftest@archiver.kernel.org>; Fri, 28 Jul 2023 17:29:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86F52C41513
+	for <linux-kselftest@archiver.kernel.org>; Fri, 28 Jul 2023 17:29:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233767AbjG1R3g (ORCPT
+        id S233399AbjG1R3h (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 28 Jul 2023 13:29:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55024 "EHLO
+        Fri, 28 Jul 2023 13:29:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232976AbjG1R3c (ORCPT
+        with ESMTP id S230041AbjG1R3f (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 28 Jul 2023 13:29:32 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E76D3A8B
-        for <linux-kselftest@vger.kernel.org>; Fri, 28 Jul 2023 10:29:31 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id ca18e2360f4ac-7748ca56133so23305639f.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 28 Jul 2023 10:29:31 -0700 (PDT)
+        Fri, 28 Jul 2023 13:29:35 -0400
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F68E35B6
+        for <linux-kselftest@vger.kernel.org>; Fri, 28 Jul 2023 10:29:33 -0700 (PDT)
+Received: by mail-io1-xd2b.google.com with SMTP id ca18e2360f4ac-7748ca56133so23307039f.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 28 Jul 2023 10:29:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1690565370; x=1691170170;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=MRetka3XmHjrduRcLx8auHl/RYMdUC7YkqhFVrnaMJ4=;
-        b=bP89L6dvIsj5o9kT4HZvJTW4rK3q1szR6j8h5AZVFErx80ziNL/0QSsSH0FzC5C7fE
-         8wIjQLGud6CG1XEsMSUDxjnvq+IAFaBOVMbtwQGI+2u3qnecAY8kMMCWGvEgOhIRthZP
-         NQVqr1kjTFzatLhzQDTlaAfpvh91DjUUQYdus=
+        d=linuxfoundation.org; s=google; t=1690565373; x=1691170173;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KuA89WjH66+oRZgNKFoC7RQpjlgTsdzDJBprqnr0FHw=;
+        b=IAy+tr7webKUVIYTbYZ3+jMG9e+SLvCy1lRwlIA6odcD7pfpmsLH4n/Zmptj2QKAN+
+         MjcbIvWBxeRLPNXObo+QhSNvUR5blz1BhmX5B3NYGTkyP7ONmVDuirYJxkDS8cx73hj3
+         Ox5zA+1aTG9Feo6KNRFjFnSS8qc0eIoTzcNL8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690565370; x=1691170170;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MRetka3XmHjrduRcLx8auHl/RYMdUC7YkqhFVrnaMJ4=;
-        b=MSDp/c3VzO88zwEOlYnPA9xe2ahoZJ0nUl9P29/eDSMfrHH3BiKXRjZwZlhPQKuAqc
-         dp731tf/E8jx1oDwjO+TLElI4gEExsoi0In2h03BxsSw6rlgvi54elFLUnxVvWTwldLq
-         uXw+9AEhRze2rbthnXtvWLEjow/bKMVxsSl8VFxiDsXlp/a/v1t7+BUyHVsaHIl489w2
-         PBPmgZ/CNOFdGHa/iuBJDh8rAjFD62bB/nGIIIHOokhjL4hci4l3vr3MsGLp7RR/cnXe
-         C5yioHu9cV55F4GwtzbiJgOyoQl7OfmPuAXP5uxmGLBfeikhAZ+jyMRrI7gpMYe1Tu1n
-         ez+w==
-X-Gm-Message-State: ABy/qLbgzGc5+r7kKKSFA/E2GzZHMAN8WkJZUWOH9gdfCDLy1WOkLyL3
-        2DdcTGGeYItL4jgmW6dshHVnhQ==
-X-Google-Smtp-Source: APBJJlG++dQGjr9Fm6NWZbXMUUHRFA6B5WaaKhVtSvn74pz3s9HPc7XbjI4la4/GVLUyqkW+AyakaQ==
-X-Received: by 2002:a6b:c9d3:0:b0:788:2d78:813c with SMTP id z202-20020a6bc9d3000000b007882d78813cmr248459iof.0.1690565370474;
-        Fri, 28 Jul 2023 10:29:30 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1690565373; x=1691170173;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KuA89WjH66+oRZgNKFoC7RQpjlgTsdzDJBprqnr0FHw=;
+        b=gL9i7hDlS/sxLOaYVLaLh3fIEJcR9u4jiCuaesMMd7o0Zzctwlt+3PJLYsFmBBWsl/
+         7977wpyUKAlT8xnwY7L0ZgPWFeHqPb/ElcA18D8hHRBrhfUwCpNM6ojkyzELpQ6Ozjto
+         7YPChndXBy/KTPmJ/KvN7q09/ASvSjel0JqQTl8swAIXGk3X5NFyFgkyyWBLEkco2Hk7
+         JS3HhPrilCT9AX1XOXU2WRKPhxzC/+SAiVhZknpymc9HpIHAPQ6THBnvAyusyWcpn0Ab
+         9gOQllxz6DOHQfA9WO6u1D7Gs2Nyz8CcFqtkRZEmSBwTplHOPgChwZ8FySfOuZi17+qc
+         xLTA==
+X-Gm-Message-State: ABy/qLYSHoHR6CYSwecMesdnGm/zXBnoKkgBbF2grJeNXz/Sq7Lesq1w
+        8K2AMV8G8HSRVKM7rYqQynfpJQ==
+X-Google-Smtp-Source: APBJJlFzdMGCDX1zblqKU916FlQ1jnF3KuGDuuZWNWcFedwwUFsC2XmS+hROGqQpBAcHWPUDGJ1cBQ==
+X-Received: by 2002:a05:6602:2b91:b0:77a:ee79:652 with SMTP id r17-20020a0566022b9100b0077aee790652mr339316iov.1.1690565372907;
+        Fri, 28 Jul 2023 10:29:32 -0700 (PDT)
 Received: from shuah-tx13.internal ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id b2-20020a029a02000000b0042b37dda71asm1181050jal.136.2023.07.28.10.29.29
+        by smtp.gmail.com with ESMTPSA id b2-20020a029a02000000b0042b37dda71asm1181050jal.136.2023.07.28.10.29.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jul 2023 10:29:30 -0700 (PDT)
+        Fri, 28 Jul 2023 10:29:32 -0700 (PDT)
 From:   Shuah Khan <skhan@linuxfoundation.org>
 To:     shuah@kernel.org, Liam.Howlett@oracle.com,
-        anjali.k.kulkarni@oracle.com, naresh.kamboju@linaro.org,
-        kuba@kernel.org
+        anjali.k.kulkarni@oracle.com, kuba@kernel.org
 Cc:     Shuah Khan <skhan@linuxfoundation.org>, davem@davemloft.net,
-        lkft-triage@lists.linaro.org, netdev@vger.kernel.org,
-        llvm@lists.linux.dev, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH next 0/3] Connector/proc_filter test fixes 
-Date:   Fri, 28 Jul 2023 11:29:25 -0600
-Message-Id: <cover.1690564372.git.skhan@linuxfoundation.org>
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH next 3/3] selftests:connector: Add root check and fix arg error paths to skip
+Date:   Fri, 28 Jul 2023 11:29:28 -0600
+Message-Id: <2c0ac97f9c8e6bd46b60854c136099c0dd4a09f6.1690564372.git.skhan@linuxfoundation.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <cover.1690564372.git.skhan@linuxfoundation.org>
+References: <cover.1690564372.git.skhan@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This 3 patch series consists of fixes to proc_filter test
-found during linun-next testing.
+proc_filter test requires root privileges. Add root privilege check
+and skip the test. Also fix argument parsing paths to skip in their
+error legs.
 
-The first patch fixes the LKFT reported compile error, second
-one adds .gitignore and the third fixes error paths to skip
-instead of fail (root check, and argument checks)
-
-Shuah Khan (3):
-  selftests:connector: Fix Makefile to include KHDR_INCLUDES
-  selftests:connector: Add .gitignore and poupulate it with test
-  selftests:connector: Add root check and fix arg error paths to skip
-
- tools/testing/selftests/connector/.gitignore    | 1 +
- tools/testing/selftests/connector/Makefile      | 2 +-
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+---
  tools/testing/selftests/connector/proc_filter.c | 9 +++++++--
- 3 files changed, 9 insertions(+), 3 deletions(-)
- create mode 100644 tools/testing/selftests/connector/.gitignore
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
+diff --git a/tools/testing/selftests/connector/proc_filter.c b/tools/testing/selftests/connector/proc_filter.c
+index 4fe8c6763fd8..7b2081b98e5c 100644
+--- a/tools/testing/selftests/connector/proc_filter.c
++++ b/tools/testing/selftests/connector/proc_filter.c
+@@ -248,7 +248,7 @@ int main(int argc, char *argv[])
+ 
+ 	if (argc > 2) {
+ 		printf("Expected 0(assume no-filter) or 1 argument(-f)\n");
+-		exit(1);
++		exit(KSFT_SKIP);
+ 	}
+ 
+ 	if (argc == 2) {
+@@ -256,10 +256,15 @@ int main(int argc, char *argv[])
+ 			filter = 1;
+ 		} else {
+ 			printf("Valid option : -f (for filter feature)\n");
+-			exit(1);
++			exit(KSFT_SKIP);
+ 		}
+ 	}
+ 
++	if (geteuid()) {
++		printf("Connector test requires root privileges.\n");
++		exit(KSFT_SKIP);
++	}
++
+ 	if (filter) {
+ 		input.event_type = PROC_EVENT_NONZERO_EXIT;
+ 		input.mcast_op = PROC_CN_MCAST_LISTEN;
 -- 
 2.39.2
 
