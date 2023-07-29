@@ -2,114 +2,166 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E596FC001DC
-	for <linux-kselftest@archiver.kernel.org>; Sat, 29 Jul 2023 07:54:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 47E26C0015E
+	for <linux-kselftest@archiver.kernel.org>; Sat, 29 Jul 2023 08:00:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230285AbjG2Hyo (ORCPT
+        id S229939AbjG2IAA (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 29 Jul 2023 03:54:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52040 "EHLO
+        Sat, 29 Jul 2023 04:00:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230180AbjG2Hym (ORCPT
+        with ESMTP id S229646AbjG2IAA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 29 Jul 2023 03:54:42 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3464149E3;
-        Sat, 29 Jul 2023 00:54:06 -0700 (PDT)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 36T7roZS004303;
-        Sat, 29 Jul 2023 09:53:50 +0200
-Date:   Sat, 29 Jul 2023 09:53:50 +0200
-From:   Willy Tarreau <w@1wt.eu>
+        Sat, 29 Jul 2023 04:00:00 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E05F7F3;
+        Sat, 29 Jul 2023 00:59:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+        t=1690617596; bh=brSfKfj4DiAAIZHsgpMn9L6z+JmdibU3dW+6RUT9wEc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=K4OuXtQijmEPTGOyghioJkQ4dNB2j0T1qCh0gN0A04z1yu8nCVAEJiohbV9I2y9ce
+         zKoUfZE6fcAF/mUbq/by7PNIUF53rkBGxrksa9LWoUkDmxgQoWZkQZDosXihNuY6Yi
+         nwxC+2IXIVD2QzY1OyKBy8K8chJxJkecmnlQisVk=
+Date:   Sat, 29 Jul 2023 09:59:55 +0200
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
 To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, thomas@t-8ch.de
-Subject: Re: [PATCH v2 08/14] selftests/nolibc: string the core targets
-Message-ID: <20230729075350.GI956@1wt.eu>
-References: <20230722125758.GJ17311@1wt.eu>
- <20230725142017.37103-1-falcon@tinylab.org>
+Cc:     w@1wt.eu, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 08/12] selftests/nolibc: allow quit qemu-system when
+ poweroff fails
+Message-ID: <ac2994fd-3131-45d1-aef3-ae8a7e0c3740@t-8ch.de>
+References: <cover.1690489039.git.falcon@tinylab.org>
+ <4b4d792299ca5356f8f5af5fc9a27c687b0e4e38.1690489039.git.falcon@tinylab.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230725142017.37103-1-falcon@tinylab.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <4b4d792299ca5356f8f5af5fc9a27c687b0e4e38.1690489039.git.falcon@tinylab.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 25, 2023 at 10:20:17PM +0800, Zhangjin Wu wrote:
-> > On Wed, Jul 19, 2023 at 09:26:01PM +0800, Zhangjin Wu wrote:
-> > > To avoid run targets one by one manually and boringly, let's string them
-> > > with IMAGE and .config, the MAKE command will trigger the dependencies
-> > > for us.
-> > > 
-> > > Note, to allow do menuconfig before extconfig manually, only trigger
-> > > defconfig while the .config is not there, it means only trigger
-> > > defconfig for the first run or after a mrproper.
-> > > 
-> > > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> > > ---
-> > >  tools/testing/selftests/nolibc/Makefile | 18 +++++++++++++-----
-> > >  1 file changed, 13 insertions(+), 5 deletions(-)
-> > > 
-> > > diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-> > > index 83cb4b017bef..541f3565e584 100644
-> > > --- a/tools/testing/selftests/nolibc/Makefile
-> > > +++ b/tools/testing/selftests/nolibc/Makefile
-> > (...)
-> > > -extconfig:
-> > > +extconfig: $(KERNEL_CONFIG)
-> > >  	$(Q)$(srctree)/scripts/kconfig/merge_config.sh -O "$(objtree)" -m "$(KERNEL_CONFIG)" $(foreach c,$(EXTCONFIG),$(wildcard $(CURDIR)/configs/$c))
-> > >  	$(Q)$(MAKE_KERNEL) KCONFIG_ALLCONFIG="$(KERNEL_CONFIG)" allnoconfig
-> > >  
-> > > -kernel: initramfs
-> > > +kernel: extconfig
-> > > +	$(Q)$(MAKE) --no-print-directory initramfs
-> > 
-> > There seems to be something wrong here. From what I'm seeing, now if I
-> > run "make kernel" it will run extconfig and possibly change the config
-> > I just edited.
-> >
+On 2023-07-28 04:30:31+0800, Zhangjin Wu wrote:
+> The kernel of some architectures can not poweroff qemu-system normally,
+> especially for tinyconfig.
 > 
-> Yeah, extconfig will run for every 'make kernel', it is ok for us to
-> let kernel depends on $(KERNEL_CONFIG), but this requires users to run
-> extconfig explictly, the solution may be:
+> Some architectures may have no kernel poweroff support, the others may
+> require more kernel config options and therefore slow down the
+> tinyconfig build and test. and also, it's very hard (and some even not
+> possible) to find out the exact poweroff related kernel config options
+> for every architecture.
 > 
-> - move extconfig operations to defconfig target and future tinyconfig target (it looks cleaner ...)
+> Since the low-level poweroff support is heavily kernel & qemu dependent,
+> it is not that critical to both nolibc and nolibc-test, let's simply
+> ignore the poweroff required kernel config options for tinyconfig (and
+> even for defconfig) and quit qemu-system after a specified timeout or
+> with an expected system halt or poweroff string (these strings mean our
+> reboot() library routine is perfectly ok).
 > 
->     - but it is not convenient to trigger additional changes introduced by
->       extconfig, not necessary, but really helpful, something like 'menuconfig'
+> QEMU_TIMEOUT can be configured for every architecture based on their
+> time cost requirement of bios boot + kernel boot + test + poweroff.
 > 
-> - let users run extconfig manually after a defconfig or tinyconfig (it is a little complex)
+> By default, 10 seconds timeout is configured, this is enough for most of
+> the architectures, otherwise, customize one by architecture.
 > 
->     - this make users hard to learn what to do, should give up this method
+> To tell users the test running progress in time, some critical running
+> status are also printed and detected.
 > 
-> - run extconfig for every 'make kernel' as it currently do
+> Suggested-by: Willy Tarreau <w@1wt.eu>
+> Link: https://lore.kernel.org/lkml/20230722130248.GK17311@1wt.eu/
+> Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+> ---
+>  tools/testing/selftests/nolibc/Makefile | 30 +++++++++++++++++++++++--
+>  1 file changed, 28 insertions(+), 2 deletions(-)
 > 
->     - this may change something after a menuconfig, but it only trigger minimal
->       required options, the 'hurt' should be minimal, but of course, it may confuse sometimes ;-(
-> 
-> As a summary, let's remove 'extconfig' and move its operations to the defconfig
-> and the future tinyconfig targets? 'extconfig' should be a 'default' config
-> action, let users apply additional ones manually from the top-level 'make
-> menuconfig', what's your idea?
+> diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+> index a214745e0f3e..9a57de3b283c 100644
+> --- a/tools/testing/selftests/nolibc/Makefile
+> +++ b/tools/testing/selftests/nolibc/Makefile
+> @@ -105,6 +105,9 @@ QEMU_ARGS_s390       = -M s390-ccw-virtio -m 1G -append "console=ttyS0 panic=-1
+>  QEMU_ARGS_loongarch  = -M virt -append "console=ttyS0,115200 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+>  QEMU_ARGS            = $(QEMU_ARGS_$(XARCH)) $(QEMU_ARGS_EXTRA)
+>  
+> +# QEMU_TIMEOUT: some architectures can not poweroff normally, especially for tinyconfig
+> +QEMU_TIMEOUT           = $(or $(QEMU_TIMEOUT_$(XARCH)),10)
+> +
+>  # OUTPUT is only set when run from the main makefile, otherwise
+>  # it defaults to this nolibc directory.
+>  OUTPUT ?= $(CURDIR)/
+> @@ -229,16 +232,39 @@ kernel: $(KERNEL_CONFIG)
+>  # common macros for qemu run/rerun targets
+>  QEMU_SYSTEM_RUN = qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(KERNEL_IMAGE)" -serial stdio $(QEMU_ARGS)
+>  
+> +TIMEOUT_CMD = t=$(QEMU_TIMEOUT); past=0; \
+> +	bios_timeout=$$(expr $$t - 7); kernel_timeout=$$(expr $$t - 5); init_timeout=$$(expr $$t - 3); test_timeout=$$(expr $$t - 1);              \
+> +	err=""; bios=0; kernel=0; init=0; test=0; poweredoff=0; panic=0;                                                                           \
+> +	echo "Running $(KERNEL_IMAGE) on qemu-system-$(QEMU_ARCH)";                                                                                \
+> +	while [ $$t -gt 0 ]; do                                                                                                                    \
+> +	    sleep 2; t=$$(expr $$t - 2); past=$$(expr $$past + 2);                                                                                 \
+> +	    if [ $$bios -eq 0 ] && grep -E "Linux version|Kernel command line|printk: console" "$(RUN_OUT)"; then bios=1; fi;                      \
+> +	    if [ $$bios -eq 1 -a $$kernel -eq 0 ] && grep -E "Run .* as init process" "$(RUN_OUT)"; then kernel=1; fi;                             \
+> +	    if [ $$kernel -eq 1 -a $$init -eq 0 ] && grep -E "Running test" "$(RUN_OUT)"; then init=1; fi;                                         \
+> +	    if [ $$init -eq 1 -a $$test -eq 0 ] && grep -E "Leaving init with final status|Exiting with status" "$(RUN_OUT)"; then test=1; fi;     \
+> +	    if [ $$init -eq 1 ] && grep -E "Kernel panic - not syncing: Attempted to kill init" "$(RUN_OUT)"; then err="test"; sleep 1; break; fi; \
+> +	    if [ $$test -eq 1 ] && grep -E "reboot: System halted|reboot: Power down" "$(RUN_OUT)"; then poweredoff=1; sleep 1; break; fi;         \
+> +	    if [ $$past -gt $$bios_timeout -a $$bios -eq 0 ]; then err="bios"; break; fi;                                                          \
+> +	    if [ $$past -gt $$kernel_timeout -a $$kernel -eq 0 ]; then err="kernel"; break; fi;                                                    \
+> +	    if [ $$past -gt $$init_timeout -a $$init -eq 0 ]; then err="init"; break; fi;                                                          \
+> +	    if [ $$past -gt $$test_timeout -a $$test -eq 0 ]; then err="test"; break; fi;                                                          \
+> +	done;                                                                                                                                      \
+> +	if [ -z "$$err" -a $$poweredoff -eq 0 -a $$panic -eq 0 ]; then err="qemu-system-$(QEMU_ARCH)"; fi;                                         \
+> +	if [ -n "$$err" ]; then echo "$$err may timeout, test failed"; tail -10 $(RUN_OUT); else echo "powered off, test finish"; fi;              \
+> +	pkill -15 qemu-system-$(QEMU_ARCH) || true
+> +
+> +TIMEOUT_QEMU_RUN = ($(QEMU_SYSTEM_RUN) > "$(RUN_OUT)" &); $(TIMEOUT_CMD)
+> +
 
-Well, it's important to apply the principle of least surprise for the
-user. You're a developer who spent time working on your config, you
-believe it's OK and you just remind that you've heard about that nolibc
-test thing recently and you think "why not give it a try in case it spots
-something I forgot in my config". Then you just run the test there and
-once done your config was secretly modified. This is exactly an example
-of what *not* to do. We should never modify user's config nor files in
-general without an explicit request from the user. If the user types
-"make defconfig", they're implicitly requesting to replace the config,
-so we can do what we want with it. If they type "make kernel", they
-expect to make a kernel based on this config, not to mollest this
-precious config file and then make a kernel out of it.
+This feels fairly hacky.
 
-So I'm fine with the idea of adding config snippets on top of defconfig
-and tinyconfig to allow the user to generate a working config for a
-given architecture, but not for modifying their config without their
-consent.
+Before we complicated nolibc-test to handle the no-procfs case to save a
+few seconds building the kernel and now we have fairly big timeouts.
+And a statemachine that relies on the specific strings emitted by the
+testsuite.
 
-Willy
+I would like to get back to something more deterministic and obvious,
+even at the cost of some time spent compiling the test kernels.
+(saying this as somebody developing on a 2016 ultrabook)
+
+"Since the low-level poweroff support is heavily kernel & qemu dependent"
+
+The kernel we can control.
+
+How common are qemus with that are missing poweroff support? 
+As this worked before I guess the only architecture where this could
+pose a problem would be ppc.
+
+
+An alternative I would like to put up for discussion:
+
+qemu could provide a watchdog device that is pinged by nolibc-test for
+each testcase.
+After nolibc-test is done and didn't poweroff properly the watchdog will
+reset the machine. ( -watchog-action poweroff ).
+
+The disadvantages are that we would need to add watchdog drivers to the
+kernels and figure out the correct watchdog devices and drivers for each arch.
+
+It seems virtio-watchdog is not yet usable.
+
+>  # run the tests after building the kernel
+>  PHONY += $(KERNEL_IMAGE)
+>  $(KERNEL_IMAGE): kernel
+>  run: $(KERNEL_IMAGE)
+> -	$(Q)$(QEMU_SYSTEM_RUN) > "$(RUN_OUT)"
+> +	$(Q)$(TIMEOUT_QEMU_RUN)
+>  	$(Q)$(REPORT) "$(RUN_OUT)"
+>  
+>  # re-run the tests from an existing kernel
+>  rerun:
+> -	$(Q)$(QEMU_SYSTEM_RUN) > "$(RUN_OUT)"
+> +	$(Q)$(TIMEOUT_QEMU_RUN)
+>  	$(Q)$(REPORT) "$(RUN_OUT)"
+>  
+>  # report with existing test log
+> -- 
+> 2.25.1
+> 
