@@ -2,85 +2,74 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CFD52C001DE
-	for <linux-kselftest@archiver.kernel.org>; Mon, 31 Jul 2023 06:27:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C545C04A94
+	for <linux-kselftest@archiver.kernel.org>; Mon, 31 Jul 2023 06:27:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230077AbjGaG1C (ORCPT
+        id S230149AbjGaG1D (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 31 Jul 2023 02:27:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52794 "EHLO
+        Mon, 31 Jul 2023 02:27:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbjGaG1B (ORCPT
+        with ESMTP id S230064AbjGaG1C (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 31 Jul 2023 02:27:01 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF3D51A3;
-        Sun, 30 Jul 2023 23:27:00 -0700 (PDT)
+        Mon, 31 Jul 2023 02:27:02 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B74E40;
+        Sun, 30 Jul 2023 23:27:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
         s=mail; t=1690784818;
-        bh=k9l2McklzZ+f7yRkzY3nh6NN3e/IqcLnQTelqUxUMw8=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=n9igOyZGuaqKnQVBE5HfbFFsddmIwBR9WR4ZmGbZrNSe25048Ohf6zphGVYGNuWoF
-         G/mcZcfL4ZtiPeReeA39j8/4bmWou/ynYarqyHj14A35hXRgWBQYA1adhm8NDVRIJc
-         JK3pyawT4fz4lGn++rCtyEuDhClYUKJuovYcW2wU=
+        bh=4w2nINR/K2xvwLfxuKBUzbOaWRSRya4sRMSwVWQU2Io=;
+        h=From:Subject:Date:To:Cc:From;
+        b=cdQ3TjA782AVzFjUCU6aXgX0KnvkzowiP74CqFJV3WQODhs/bwjLcYn964JDLkw+y
+         Tk4jXqxQ4S561fjVrtOChB3gm7PCbxHz9RjNCVRpckzio5lRritTk1SxsFJ53CtUtp
+         UScXZA4XYPGqU7QWnciswi9Xj0PV07RZ/JbJIxB4=
 From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date:   Mon, 31 Jul 2023 08:26:57 +0200
-Subject: [PATCH 2/4] selftests/nolibc: drop unused variables
+Subject: [PATCH 0/4] tools/nolibc: enable compiler warnings
+Date:   Mon, 31 Jul 2023 08:26:55 +0200
+Message-Id: <20230731-nolibc-warnings-v1-0-74973d2a52d7@weissschuh.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20230731-nolibc-warnings-v1-2-74973d2a52d7@weissschuh.net>
-References: <20230731-nolibc-warnings-v1-0-74973d2a52d7@weissschuh.net>
-In-Reply-To: <20230731-nolibc-warnings-v1-0-74973d2a52d7@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIAC9Ux2QC/x3MSwqAMAwA0atI1hb6ERWvIi5qjRqQVBpQQXp3i
+ 8u3mHlBMBEKDNULCS8Silxg6grC7nlDRUsxWG2d7pxRHA+ag7p9YuJNVGix6Wzf+KAdlOpMuNL
+ zH8cp5w+dv4tEYQAAAA==
 To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
 Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         Yuan Tan <tanyuan@tinylab.org>,
         Zhangjin Wu <falcon@tinylab.org>,
         =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1690784818; l=1029;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1690784818; l=805;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=k9l2McklzZ+f7yRkzY3nh6NN3e/IqcLnQTelqUxUMw8=;
- b=aJonl+8VdC7MJHCYyAUY48LuP1WOU57ea5CAhF2u1SPA6lIUOjRsfNDoKxZMc047hBCDfCuNU
- zaJ4m2GdcOWCTdv2NApJXy8//W/CSAv1pUpFT0ySGEf+epkGIY6p5Sn
+ bh=4w2nINR/K2xvwLfxuKBUzbOaWRSRya4sRMSwVWQU2Io=;
+ b=Q7VfJ6b1xEUwhtQb6Ewpwi4/cl9YK3gaFVrCi2EYIhdSv28HaFiTbpqtKBoPSWmtfBspjqzC0
+ upIs9s84qkTCkbLBuEGHDaWgQMm5cZlj1spcXvXx8eDnFLqHwhEQprJ
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-These got copied around as new testcases where created.
+To help the developers to avoid mistakes and keep the code smaller let's
+enable compiler warnings.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- tools/testing/selftests/nolibc/nolibc-test.c | 4 ----
- 1 file changed, 4 deletions(-)
+Thomas Weißschuh (4):
+      selftests/nolibc: drop unused test helpers
+      selftests/nolibc: drop unused variables
+      tools/nolibc: drop unused variables
+      selftests/nolibc: enable -Wall compiler warnings
 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 53e2d448eded..3064191681d0 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -786,9 +786,7 @@ int run_syscall(int min, int max)
- int run_stdlib(int min, int max)
- {
- 	int test;
--	int tmp;
- 	int ret = 0;
--	void *p1, *p2;
- 
- 	for (test = min; test >= 0 && test <= max; test++) {
- 		int llen = 0; /* line length */
-@@ -929,9 +927,7 @@ static int expect_vfprintf(int llen, size_t c, const char *expected, const char
- static int run_vfprintf(int min, int max)
- {
- 	int test;
--	int tmp;
- 	int ret = 0;
--	void *p1, *p2;
- 
- 	for (test = min; test >= 0 && test <= max; test++) {
- 		int llen = 0; /* line length */
+ tools/include/nolibc/sys.h                   |   1 -
+ tools/testing/selftests/nolibc/Makefile      |   2 +-
+ tools/testing/selftests/nolibc/nolibc-test.c | 103 ---------------------------
+ 3 files changed, 1 insertion(+), 105 deletions(-)
+---
+base-commit: dfef4fc45d5713eb23d87f0863aff9c33bd4bfaf
+change-id: 20230731-nolibc-warnings-c6e47284ac03
 
+Best regards,
 -- 
-2.41.0
+Thomas Weißschuh <linux@weissschuh.net>
 
