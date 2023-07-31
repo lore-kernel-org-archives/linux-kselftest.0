@@ -2,68 +2,124 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97043C001DE
-	for <linux-kselftest@archiver.kernel.org>; Mon, 31 Jul 2023 15:41:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2EEB5C41513
+	for <linux-kselftest@archiver.kernel.org>; Mon, 31 Jul 2023 15:48:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231624AbjGaPlx (ORCPT
+        id S232503AbjGaPsQ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 31 Jul 2023 11:41:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51732 "EHLO
+        Mon, 31 Jul 2023 11:48:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232180AbjGaPlu (ORCPT
+        with ESMTP id S232487AbjGaPsO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 31 Jul 2023 11:41:50 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3924E6D;
-        Mon, 31 Jul 2023 08:41:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1690818097; bh=/Cx11AsbPTQDsfBUToKatqbK79fehIY0/tu2Jfdvybs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EW9y1XvVLr6Q40ChjfL3aACV0TXMyR9LJqzGdSnUQzfAtsDMB/1iZrBDdu0IeNZ9W
-         IogUKExlqWsxpw+FCB3pYnAiS7XIi+rCn99cauo+fcv3y4kcLmdTyOKNJ2XxgRBWPO
-         PZcx2IIwFz7aBklyFfBoVnQ68MzQthPL4VHzs4hs=
-Date:   Mon, 31 Jul 2023 17:41:36 +0200
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Yuan Tan <tanyuan@tinylab.org>
-Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, w@1wt.eu
-Subject: Re: [PATCH v2 2/2] selftests/nolibc: add testcase for pipe
-Message-ID: <2ba88bae-2986-4e70-9828-824d7b140277@t-8ch.de>
-References: <cover.1690733545.git.tanyuan@tinylab.org>
- <9221753abe0509ef5cbb474a31873012e0e40706.1690733545.git.tanyuan@tinylab.org>
- <a4899657-7d7b-4786-8903-8f51e438535d@t-8ch.de>
- <C3AF612281F87D1A+733ce5c0d1efe1f81423e6885203d92cdb4eaee7.camel@tinylab.org>
+        Mon, 31 Jul 2023 11:48:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87B3710D;
+        Mon, 31 Jul 2023 08:48:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 210FF611BD;
+        Mon, 31 Jul 2023 15:48:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAAFBC433C8;
+        Mon, 31 Jul 2023 15:48:05 +0000 (UTC)
+Date:   Mon, 31 Jul 2023 11:48:03 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        kvm@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org,
+        x86@kernel.org, rcu@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Zqiang <qiang.zhang1211@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Jason Baron <jbaron@akamai.com>,
+        Kees Cook <keescook@chromium.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Juerg Haefliger <juerg.haefliger@canonical.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Nadav Amit <namit@vmware.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Chuang Wang <nashuiliang@gmail.com>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        Petr Mladek <pmladek@suse.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>, Song Liu <song@kernel.org>,
+        Julian Pidancet <julian.pidancet@oracle.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Dionna Glaze <dionnaglaze@google.com>,
+        Thomas =?UTF-8?B?V2Vpw59zY2h1aA==?= <linux@weissschuh.net>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Yair Podemsky <ypodemsk@redhat.com>
+Subject: Re: [RFC PATCH v2 02/20] tracing/filters: Enable filtering a
+ cpumask field by another cpumask
+Message-ID: <20230731114803.019158b9@gandalf.local.home>
+In-Reply-To: <xhsmh4jlks4yw.mognet@vschneid.remote.csb>
+References: <20230720163056.2564824-1-vschneid@redhat.com>
+        <20230720163056.2564824-3-vschneid@redhat.com>
+        <20230726194148.4jhyqqbtn3qqqqsq@treble>
+        <20230729150901.25b9ae0c@rorschach.local.home>
+        <xhsmh4jlks4yw.mognet@vschneid.remote.csb>
+X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <C3AF612281F87D1A+733ce5c0d1efe1f81423e6885203d92cdb4eaee7.camel@tinylab.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2023-07-31 20:35:28+0800, Yuan Tan wrote:
-> On Mon, 2023-07-31 at 08:10 +0200, Thomas Weißschuh wrote:
-> > On 2023-07-31 13:51:00+0800, Yuan Tan wrote:
-> > > Add a testcase of pipe that child process sends message to parent
-> > > process.
-> > 
-> > Thinking about it some more:
-> > 
-> > What's the advantage of going via a child process?
-> > The pipe should work the same within the same process.
-> > 
+On Mon, 31 Jul 2023 12:19:51 +0100
+Valentin Schneider <vschneid@redhat.com> wrote:
+> >
+> > Also, when you do an empty for loop:
+> >
+> >       for (; str[i] && str[i] != '}'; i++);
+> >
+> > Always put the semicolon on the next line, otherwise it is really easy
+> > to think that the next line is part of the for loop. That is, instead
+> > of the above, do:
+> >
+> >       for (; str[i] && str[i] != '}'; i++)
+> >               ;
+> >  
 > 
-> The pipe is commonly used for process communication, and I think as a
-> test case it is supposed to cover the most common scenarios.
+> Interestingly I don't think I've ever encountered that variant, usually
+> having an empty line (which this lacks) and the indentation level is enough
+> to identify these - regardless, I'll change it.
 
-The testcase is supposed to cover the code of nolibc.
-It should be the *minimal* amount of code to be reasonable sure that the
-code in nolibc does the correct thing.
-If pipe() returns a value that behaves like a pipe I see no reason to
-doubt it will also survive fork().
 
-Validating that would mean testing the kernel and not nolibc.
-For the kernel there are different testsuites.
+Do a "git grep -B1 -e '^\s*;\s*$'"
 
-Less code means less work for everyone involved, now and in the future.
+You'll find that it is quite common.
+
+Thanks,
+
+-- Steve
+
