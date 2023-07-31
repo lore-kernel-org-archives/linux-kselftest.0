@@ -2,181 +2,252 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78EFCC001DC
-	for <linux-kselftest@archiver.kernel.org>; Mon, 31 Jul 2023 14:00:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5546C001E0
+	for <linux-kselftest@archiver.kernel.org>; Mon, 31 Jul 2023 14:02:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233176AbjGaOAn (ORCPT
+        id S232268AbjGaOCJ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 31 Jul 2023 10:00:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49326 "EHLO
+        Mon, 31 Jul 2023 10:02:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233193AbjGaOAN (ORCPT
+        with ESMTP id S232243AbjGaOBv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 31 Jul 2023 10:00:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3541459D7;
-        Mon, 31 Jul 2023 06:55:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 95A9261156;
-        Mon, 31 Jul 2023 13:54:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FCDCC433CA;
-        Mon, 31 Jul 2023 13:54:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690811675;
-        bh=o3F0gqwirOzTh8gwGkZMmsXM7Yu/yi+gPnGo/AGnFQM=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=HyAHUFnAoBom0QscdVUThlaenRfRJNHjJi4pUFQt6fi4OceNUG2x7+Fxv8wi74Hqw
-         QRUL9N5YXGPQ4uFBGPWcs3iNCbsR9FiKa8DQLjF8X0N3/RGocVPsljC3mKSD+xd6+L
-         M9FBHJrbsBxv40rc4Uy950yo3vO6FEROOSWCRAKavHF6jDbda49RiJK5k7kVhkF4vp
-         iivUqIPVfFFFdvUBH7wyRSK3o60UIqKj0RbaQcXeu73jOGBbnEr6NbDLe6mPCMhBif
-         oXlIbZiT3f5QoDJ0khYc5lKBVfyzvkYFET5gUENWHoBWxSg5P3MbbPAmeGGNvSj2TC
-         L3puIhC1WPl9g==
-From:   Mark Brown <broonie@kernel.org>
-Date:   Mon, 31 Jul 2023 14:43:45 +0100
-Subject: [PATCH v3 36/36] kselftest/arm64: Enable GCS for the FP stress
- tests
+        Mon, 31 Jul 2023 10:01:51 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F4D1659D
+        for <linux-kselftest@vger.kernel.org>; Mon, 31 Jul 2023 06:56:44 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2b9db1de50cso28449271fa.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 31 Jul 2023 06:56:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares.net; s=google; t=1690811802; x=1691416602;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=//IuSF4aR8dDqdSUTPXRXM7wMeZmyHZKY6Im4lg/WZA=;
+        b=LmkI7deeD2ks/5C8RN/irm6cJromc4pVohQqFgm+kYIyM/FhhiHSbwR/wZtwbsAZ3Y
+         nhki4BBNcC4SYzhXv3w+vyXgnRyrS7U0A9AjcHduigl4wz3qK60pzT+Vaf22lkMNnXS5
+         GArHH+YQttOEsMC9C0qVcKcHFkAiGz5MNM5I5n0fmWRsHxGz79bc0Tr8CD0/zAm9qsGP
+         YtW2dyqPXFmRSfc8iiyhVjq211n8k2vMr8jdS4zOzLnPAxWsHwnTZ3kB2uV22HNnL9C5
+         V7jbptUdpJjN/bAWZzMx7/xvbs/CEKgqpYUZ/I0G8V2A4HzFtx+y+LqbFvaB18dskmWs
+         zf9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690811802; x=1691416602;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=//IuSF4aR8dDqdSUTPXRXM7wMeZmyHZKY6Im4lg/WZA=;
+        b=IIIMzsZc+5epeKdI9ztM8WoQFFaKjxoIrOT3AKDkZYeyhnJ2g4m4E0ZzWbiYDWWT1R
+         8ymUvOUbIObeSsJSEYPJM15tnMXM2CrJOpQMLf/66ijajm6Kb1JRnMf05aHAFjS06tj8
+         m93VzWDGdmcVO1AL4H1Fk+V1mNWZJtw3cKuXW8wEFwUY5jzlee9f86dgaWSlR6S6aRDY
+         3tdEk+ZRKjl9IkIj6ZsEdBQ9yWvLmjODl06sZb7WrAhP47hDZchrfbeiXNAllXb1luT9
+         eihTVc/MDitR6a2iCMR9nKq2gf/JD2k4jklFPSNxX39oaGGAqsKw5EzkNJy1M5JJ7rl3
+         NY3w==
+X-Gm-Message-State: ABy/qLabxRoLEQESMgoxIYoDbZumh6uwtH1wwLEt1Hu9vUSiSPesNofk
+        NxT9wYg7khXBEnBNn2mdwABmNg==
+X-Google-Smtp-Source: APBJJlHKc9Sq7znL8pmKS0GHJT9fHimiY4SCiPYkbNF+F1H/EbJPFLhADxI0WinnSPbnG2LtV5voIQ==
+X-Received: by 2002:a2e:8192:0:b0:2b6:dfef:d526 with SMTP id e18-20020a2e8192000000b002b6dfefd526mr39265ljg.11.1690811801505;
+        Mon, 31 Jul 2023 06:56:41 -0700 (PDT)
+Received: from ?IPV6:2a02:578:8593:1200:98dd:e30:7e10:82aa? ([2a02:578:8593:1200:98dd:e30:7e10:82aa])
+        by smtp.gmail.com with ESMTPSA id i9-20020a1709061cc900b0099b5a71b0bfsm6226337ejh.94.2023.07.31.06.56.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Jul 2023 06:56:41 -0700 (PDT)
+Message-ID: <b1f63c3f-5a26-4c69-af8f-216eaac19b69@tessares.net>
+Date:   Mon, 31 Jul 2023 15:56:40 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230731-arm64-gcs-v3-36-cddf9f980d98@kernel.org>
-References: <20230731-arm64-gcs-v3-0-cddf9f980d98@kernel.org>
-In-Reply-To: <20230731-arm64-gcs-v3-0-cddf9f980d98@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-        Deepak Gupta <debug@rivosinc.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-Cc:     "H.J. Lu" <hjl.tools@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.13-dev-099c9
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3085; i=broonie@kernel.org;
- h=from:subject:message-id; bh=o3F0gqwirOzTh8gwGkZMmsXM7Yu/yi+gPnGo/AGnFQM=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkx7wwuaNHiH/sh5dlS0FVcNvX1DXqSpJdJDB2Ri4e
- iAhgMa6JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZMe8MAAKCRAk1otyXVSH0Mp1B/
- 0a+OKNFEJ0bztbW9lvAaTwmG1BsE4DkLYJj+vztq4EdwjuzZ2sKbuAQxCrVcctCfGJyoDCe8GqOWJ6
- kvpPeNhYj7QUkoRLgNyJ7B072TG36hcpuBLiGoXM6UJoE19BZmVj7JwKVFXj5QyNC764GpgvPfpfRo
- +fx434lX+B1wJTFgGzBQAFrmBTItmcEg8FOzDy0nOLC15FpK4ywvATHTfZ4RBwC7U89hqK7/54g64L
- yI9I5OWAZDyTbXPqQi40k87aQ3ttphHmtn3Kg1xBZO+10EWR2Vjh88ikRALs5S/ZtYcYAOXbBhrM8V
- 6l/GNj9nQU6x77IOKlayvZxRfjMmSW
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [RFC bpf-next v5] bpf: Force to MPTCP
+Content-Language: en-GB
+To:     Stanislav Fomichev <sdf@google.com>
+Cc:     Paul Moore <paul@paul-moore.com>,
+        Geliang Tang <geliang.tang@suse.com>,
+        Alexei Starovoitov <ast@kernel.org>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, mptcp@lists.linux.dev,
+        apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <3076188eb88cca9151a2d12b50ba1e870b11ce09.1689693294.git.geliang.tang@suse.com>
+ <CAHC9VhS_LKdkEmm5_J5y34RpaRcTbg8==fpz8pMThDCjF6nYtQ@mail.gmail.com>
+ <b41babb1-f0f2-dc2f-c2e3-1870107fbd9f@tessares.net>
+ <ZMKxC+CFj4GbCklg@google.com>
+ <1023fdeb-a45a-2e9e-cd2e-7e44e655e8fc@tessares.net>
+ <ZMPyCt2uozns776Q@google.com>
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+In-Reply-To: <ZMPyCt2uozns776Q@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-While it's a bit off topic for them the floating point stress tests do give
-us some coverage of context thrashing cases, and also of active signal
-delivery separate to the relatively complicated framework in the actual
-signals tests. Have the tests enable GCS on startup, ignoring failures so
-they continue to work as before on systems without GCS.
+Hi Stanislav,
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/arm64/fp/assembler.h   | 15 +++++++++++++++
- tools/testing/selftests/arm64/fp/fpsimd-test.S |  2 ++
- tools/testing/selftests/arm64/fp/sve-test.S    |  2 ++
- tools/testing/selftests/arm64/fp/za-test.S     |  2 ++
- tools/testing/selftests/arm64/fp/zt-test.S     |  2 ++
- 5 files changed, 23 insertions(+)
+On 28/07/2023 18:51, Stanislav Fomichev wrote:
+> On 07/28, Matthieu Baerts wrote:
+>> Hi Stanislav,
+>>
+>> On 27/07/2023 20:01, Stanislav Fomichev wrote:
+>>> On 07/27, Matthieu Baerts wrote:
+>>>> Hi Paul, Stanislav,
+>>>>
+>>>> On 18/07/2023 18:14, Paul Moore wrote:
+>>>>> On Tue, Jul 18, 2023 at 11:21 AM Geliang Tang <geliang.tang@suse.com> wrote:
+>>>>>>
+>>>>>> As is described in the "How to use MPTCP?" section in MPTCP wiki [1]:
+>>>>>>
+>>>>>> "Your app can create sockets with IPPROTO_MPTCP as the proto:
+>>>>>> ( socket(AF_INET, SOCK_STREAM, IPPROTO_MPTCP); ). Legacy apps can be
+>>>>>> forced to create and use MPTCP sockets instead of TCP ones via the
+>>>>>> mptcpize command bundled with the mptcpd daemon."
+>>>>>>
+>>>>>> But the mptcpize (LD_PRELOAD technique) command has some limitations
+>>>>>> [2]:
+>>>>>>
+>>>>>>  - it doesn't work if the application is not using libc (e.g. GoLang
+>>>>>> apps)
+>>>>>>  - in some envs, it might not be easy to set env vars / change the way
+>>>>>> apps are launched, e.g. on Android
+>>>>>>  - mptcpize needs to be launched with all apps that want MPTCP: we could
+>>>>>> have more control from BPF to enable MPTCP only for some apps or all the
+>>>>>> ones of a netns or a cgroup, etc.
+>>>>>>  - it is not in BPF, we cannot talk about it at netdev conf.
+>>>>>>
+>>>>>> So this patchset attempts to use BPF to implement functions similer to
+>>>>>> mptcpize.
+>>>>>>
+>>>>>> The main idea is add a hook in sys_socket() to change the protocol id
+>>>>>> from IPPROTO_TCP (or 0) to IPPROTO_MPTCP.
+>>>>>>
+>>>>>> [1]
+>>>>>> https://github.com/multipath-tcp/mptcp_net-next/wiki
+>>>>>> [2]
+>>>>>> https://github.com/multipath-tcp/mptcp_net-next/issues/79
+>>>>>>
+>>>>>> v5:
+>>>>>>  - add bpf_mptcpify helper.
+>>>>>>
+>>>>>> v4:
+>>>>>>  - use lsm_cgroup/socket_create
+>>>>>>
+>>>>>> v3:
+>>>>>>  - patch 8: char cmd[128]; -> char cmd[256];
+>>>>>>
+>>>>>> v2:
+>>>>>>  - Fix build selftests errors reported by CI
+>>>>>>
+>>>>>> Closes: https://github.com/multipath-tcp/mptcp_net-next/issues/79
+>>>>>> Signed-off-by: Geliang Tang <geliang.tang@suse.com>
+>>>>>> ---
+>>>>>>  include/linux/bpf.h                           |   1 +
+>>>>>>  include/linux/lsm_hook_defs.h                 |   2 +-
+>>>>>>  include/linux/security.h                      |   6 +-
+>>>>>>  include/uapi/linux/bpf.h                      |   7 +
+>>>>>>  kernel/bpf/bpf_lsm.c                          |   2 +
+>>>>>>  net/mptcp/bpf.c                               |  20 +++
+>>>>>>  net/socket.c                                  |   4 +-
+>>>>>>  security/apparmor/lsm.c                       |   8 +-
+>>>>>>  security/security.c                           |   2 +-
+>>>>>>  security/selinux/hooks.c                      |   6 +-
+>>>>>>  tools/include/uapi/linux/bpf.h                |   7 +
+>>>>>>  .../testing/selftests/bpf/prog_tests/mptcp.c  | 128 ++++++++++++++++--
+>>>>>>  tools/testing/selftests/bpf/progs/mptcpify.c  |  17 +++
+>>>>>>  13 files changed, 187 insertions(+), 23 deletions(-)
+>>>>>>  create mode 100644 tools/testing/selftests/bpf/progs/mptcpify.c
+>>>>>
+>>>>> ...
+>>>>>
+>>>>>> diff --git a/security/security.c b/security/security.c
+>>>>>> index b720424ca37d..bbebcddce420 100644
+>>>>>> --- a/security/security.c
+>>>>>> +++ b/security/security.c
+>>>>>> @@ -4078,7 +4078,7 @@ EXPORT_SYMBOL(security_unix_may_send);
+>>>>>>   *
+>>>>>>   * Return: Returns 0 if permission is granted.
+>>>>>>   */
+>>>>>> -int security_socket_create(int family, int type, int protocol, int kern)
+>>>>>> +int security_socket_create(int *family, int *type, int *protocol, int kern)
+>>>>>>  {
+>>>>>>         return call_int_hook(socket_create, 0, family, type, protocol, kern);
+>>>>>>  }
+>>>>>
+>>>>> Using the LSM to change the protocol family is not something we want
+>>>>> to allow.  I'm sorry, but you will need to take a different approach.
+>>>>
+>>>> @Paul: Thank you for your feedback. It makes sense and I understand.
+>>>>
+>>>> @Stanislav: Despite the fact the implementation was smaller and reusing
+>>>> more code, it looks like we cannot go in the direction you suggested. Do
+>>>> you think what Geliang suggested before in his v3 [1] can be accepted?
+>>>>
+>>>> (Note that the v3 is the same as the v1, only some fixes in the selftests.)
+>>>
+>>> We have too many hooks in networking, so something that doesn't add
+>>> a new one is preferable :-(
+>>
+>> Thank you for your reply and the explanation, I understand.
+>>
+>>> Moreover, we already have a 'socket init' hook, but it runs a bit late.
+>>
+>> Indeed. And we cannot move it before the creation of the socket.
+>>
+>>> Is existing cgroup/sock completely unworkable? Is it possible to
+>>> expose some new bpf_upgrade_socket_to(IPPROTO_MPTCP) kfunc which would
+>>> call some new net_proto_family->upgrade_to(IPPROTO_MPTCP) to do the surgery?
+>>> Or is it too hacky?
+>>
+>> I cannot judge if it is too hacky or not but if you think it would be
+>> OK, please tell us :)
+> 
+> Maybe try and see how it goes? Doing the surgery to convert from tcp
+> to mptcp is probably hard, but it seems that we should be able to
+> do something like:
+> 
+> int upgrade_to(sock, sk) {
+> 	if (sk is not a tcp one) return -EINVAL;
+> 
+> 	sk_common_release(sk);
+> 	return inet6_create(net, sock, IPPROTO_MPTCP, false);
+> }
+> 
+> ?
+> 
+> The only thing I'm not sure about is whether you can call inet6_create
+> on a socket that has seen sk_common_release'd...
 
-diff --git a/tools/testing/selftests/arm64/fp/assembler.h b/tools/testing/selftests/arm64/fp/assembler.h
-index 9b38a0da407d..7012f9f796de 100644
---- a/tools/testing/selftests/arm64/fp/assembler.h
-+++ b/tools/testing/selftests/arm64/fp/assembler.h
-@@ -65,4 +65,19 @@ endfunction
- 	bl	puts
- .endm
- 
-+#define PR_SET_SHADOW_STACK_STATUS      72
-+# define PR_SHADOW_STACK_ENABLE         (1UL << 0)
-+
-+.macro enable_gcs
-+	// Run with GCS
-+	mov	x0, PR_SET_SHADOW_STACK_STATUS
-+	mov	x1, PR_SHADOW_STACK_ENABLE
-+	mov	x2, xzr
-+	mov	x3, xzr
-+	mov	x4, xzr
-+	mov	x5, xzr
-+	mov	x8, #__NR_prctl
-+	svc	#0
-+.endm
-+
- #endif /* ! ASSEMBLER_H */
-diff --git a/tools/testing/selftests/arm64/fp/fpsimd-test.S b/tools/testing/selftests/arm64/fp/fpsimd-test.S
-index 8b960d01ed2e..b16fb7f42e3e 100644
---- a/tools/testing/selftests/arm64/fp/fpsimd-test.S
-+++ b/tools/testing/selftests/arm64/fp/fpsimd-test.S
-@@ -215,6 +215,8 @@ endfunction
- // Main program entry point
- .globl _start
- function _start
-+	enable_gcs
-+
- 	mov	x23, #0		// signal count
- 
- 	mov	w0, #SIGINT
-diff --git a/tools/testing/selftests/arm64/fp/sve-test.S b/tools/testing/selftests/arm64/fp/sve-test.S
-index 4328895dfc87..486634bc7def 100644
---- a/tools/testing/selftests/arm64/fp/sve-test.S
-+++ b/tools/testing/selftests/arm64/fp/sve-test.S
-@@ -378,6 +378,8 @@ endfunction
- // Main program entry point
- .globl _start
- function _start
-+	enable_gcs
-+
- 	mov	x23, #0		// Irritation signal count
- 
- 	mov	w0, #SIGINT
-diff --git a/tools/testing/selftests/arm64/fp/za-test.S b/tools/testing/selftests/arm64/fp/za-test.S
-index 9dcd70911397..f789694fa3ea 100644
---- a/tools/testing/selftests/arm64/fp/za-test.S
-+++ b/tools/testing/selftests/arm64/fp/za-test.S
-@@ -231,6 +231,8 @@ endfunction
- // Main program entry point
- .globl _start
- function _start
-+	enable_gcs
-+
- 	mov	x23, #0		// signal count
- 
- 	mov	w0, #SIGINT
-diff --git a/tools/testing/selftests/arm64/fp/zt-test.S b/tools/testing/selftests/arm64/fp/zt-test.S
-index d63286397638..ea5e55310705 100644
---- a/tools/testing/selftests/arm64/fp/zt-test.S
-+++ b/tools/testing/selftests/arm64/fp/zt-test.S
-@@ -200,6 +200,8 @@ endfunction
- // Main program entry point
- .globl _start
- function _start
-+	enable_gcs
-+
- 	mov	x23, #0		// signal count
- 
- 	mov	w0, #SIGINT
+Oh sorry, now I better understand your suggestion and the fact it is
+hacky. Good workaround, we can keep this in mind if there is no other
+solutions to avoid these create-release-create operations.
 
+>>> Another option Alexei suggested is to add some fentry-like thing:
+>>>
+>>> noinline int update_socket_protocol(int protocol)
+>>> {
+>>> 	return protocol;
+>>> }
+>>> /* TODO: ^^^ add the above to mod_ret set */
+>>>
+>>> int __sys_socket(int family, int type, int protocol)
+>>> {
+>>> 	...
+>>>
+>>> 	protocol = update_socket_protocol(protocol);
+>>>
+>>> 	...
+>>> }
+>>>
+>>> But it's also too problem specific it seems? And it's not cgroup-aware.
+>>
+>> It looks like it is what Geliang did in his v6. If it is the only
+>> acceptable solution, I guess we can do without cgroup support. We can
+>> continue the discussions in his v6 if that's easier.
+> 
+> Ack, that works too, let's see how other people feel about it. I'm
+> assuming in the bpf program we can always do bpf_get_current_cgroup_id()
+> to filter by cgroup.
+
+Good point, that works too and looks enough!
+
+Cheers,
+Matt
 -- 
-2.30.2
-
+Tessares | Belgium | Hybrid Access Solutions
+www.tessares.net
