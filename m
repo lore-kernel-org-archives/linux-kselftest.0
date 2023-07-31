@@ -2,135 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26D0DC001E0
-	for <linux-kselftest@archiver.kernel.org>; Tue,  1 Aug 2023 11:48:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B42BFC001E0
+	for <linux-kselftest@archiver.kernel.org>; Tue,  1 Aug 2023 11:51:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229541AbjHALsQ (ORCPT
+        id S232815AbjHALvc (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 1 Aug 2023 07:48:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44330 "EHLO
+        Tue, 1 Aug 2023 07:51:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234419AbjHALsJ (ORCPT
+        with ESMTP id S230087AbjHALvb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Aug 2023 07:48:09 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA9E1728;
-        Tue,  1 Aug 2023 04:48:00 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id ADA336017C;
-        Tue,  1 Aug 2023 13:47:52 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1690890472; bh=BVMyjLdmNYq8frJWk79aHYi7fGzAuV+ZzSCG4CYTRDQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=HGJ7KVftL1Fn70I6nmBUJSiG6EmdVllBy9yw75Qsr2gHm+Tk9iYDpvjr+zEnxosLZ
-         GQwhhAaqXMev/uPfJuHkK5G/rO/DA58G/ADe33U0Vf4zaS8HyPw86CSqmafomt1JJJ
-         AczTpebaEmFivUQwzBubhpyR6AIo6g9H9npEpotBNCWwlmmL5ewZvFwHwKFZXHjpow
-         YmhkVx4sSesFpnFC23NnUQTpbQfeo9J9NgUvozqvfbUSFc5ll3BjRUSAbXNSMj/rjW
-         cPOdYxTxyADgqwr1mzrWVl/NB4oZFEX0mBqlY4xnUE+AUH20wefq/iUh8mdyGxSW58
-         dUlYv/gU+hbPw==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id dUBsuvfTHbXF; Tue,  1 Aug 2023 13:47:50 +0200 (CEST)
-Received: from pc-mtodorov.slava.alu.hr (pc-mtodorov.slava.alu.hr [193.198.186.200])
-        by domac.alu.hr (Postfix) with ESMTPSA id 9D0B66015F;
-        Tue,  1 Aug 2023 13:47:49 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1690890470; bh=BVMyjLdmNYq8frJWk79aHYi7fGzAuV+ZzSCG4CYTRDQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Y7DXXWH5A2JGqfy7QCm1GHhdziQweGmxs6ksJaQiZjC5CeDhAGq/Rh6nW6CLmsbMc
-         LIujMs84535v41u7u1BGtN6KskeuMxLT5l/nB3NjMJ+/VmmgVJ5vzVxGYWWuVEBhUR
-         1RcIsB3kog10Vb6RUyZs/WdaHU7+rxG3BzWHVbUHkNrwd3aV5Alw6yzFFMM62rZm4a
-         572LSLC6LZIEuI3fzLffozQ2rdgLSJS32tR75DEcMUyQiCXz+EF6McS+ooa3wsWYcq
-         HX5TtBTP9ti+FR9CG8UVjBx+ktOjp63WnwIYlec28d6EKqHo4X6Hj0svHUTx9Z5CZW
-         0n75xC0H2xG3A==
-From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-To:     Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Tianfei Zhang <tianfei.zhang@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
-        Dan Carpenter <error27@gmail.com>,
-        Takashi Iwai <tiwai@suse.de>,
-        Dan Carpenter <dan.carpenter@linaro.org>
-Subject: [PATCH v1 1/1] test_firmware: fix the memory leaks with the reqs buffer
-Date:   Tue,  1 Aug 2023 13:41:08 +0200
-Message-Id: <20230801114107.15545-1-mirsad.todorovac@alu.unizg.hr>
-X-Mailer: git-send-email 2.39.3
+        Tue, 1 Aug 2023 07:51:31 -0400
+Received: from mail.cothiafon.pl (mail.cothiafon.pl [217.61.106.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFDFC10E
+        for <linux-kselftest@vger.kernel.org>; Tue,  1 Aug 2023 04:51:30 -0700 (PDT)
+Received: by mail.cothiafon.pl (Postfix, from userid 1002)
+        id 4DC988375A; Mon, 31 Jul 2023 10:36:18 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=cothiafon.pl; s=mail;
+        t=1690792619; bh=dwoca0X6C9VXklO/zRgFQCPapTk5LFz4tKaENdvy6Po=;
+        h=Date:From:To:Subject:From;
+        b=tZjqTYx0x92xfXGQNMQsuyx4BhuKQtcSy6CubESd9q787sotlY6F9bua+RfhRjrTV
+         Oa20SRs5jB9uY8yfMesUW7/ANBAidBcbXOEobNTp5G2EmmC4CEe16Pmpjf96zxR+oq
+         K8vGT95nCHDYoVP3sZk+6dqY4QHFVVEBpPsd6vf3cjdQ+zkFovT6QcFxIwUbQ8ilBW
+         knGWfF2e89KwPnTveYXDRg9LoOl0bbJJ2+iNg4iKGfyQQis2aGqGsUO01L1BdxJngi
+         Eht8qu5eZ81FTVEeBuE5f1Dgl4Ei7+oHghPJ4Q6P7FUNZMvf7IhfA0iiiMZhhqqNTK
+         cszdrCG7X1xMg==
+Received: by mail.cothiafon.pl for <linux-kselftest@vger.kernel.org>; Mon, 31 Jul 2023 08:35:48 GMT
+Message-ID: <20230731095940-0.1.28.on67.0.53rio356np@cothiafon.pl>
+Date:   Mon, 31 Jul 2023 08:35:48 GMT
+From:   =?UTF-8?Q? "Rados=C5=82aw_Grabowski" ?= 
+        <radoslaw.grabowski@cothiafon.pl>
+To:     <linux-kselftest@vger.kernel.org>
+Subject: W sprawie samochodu
+X-Mailer: mail.cothiafon.pl
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-[ commit be37bed754ed90b2655382f93f9724b3c1aae847 upstream ]
+Dzie=C5=84 dobry,
 
-Dan Carpenter spotted that test_fw_config->reqs will be leaked if
-trigger_batched_requests_store() is called two or more times.
-The same appears with trigger_batched_requests_async_store().
+chcieliby=C5=9Bmy zapewni=C4=87 Pa=C5=84stwu kompleksowe rozwi=C4=85zania=
+, je=C5=9Bli chodzi o system monitoringu GPS.
 
-This bug wasn't triggered by the tests, but observed by Dan's visual
-inspection of the code.
+Precyzyjne monitorowanie pojazd=C3=B3w na mapach cyfrowych, =C5=9Bledzeni=
+e ich parametr=C3=B3w eksploatacyjnych w czasie rzeczywistym oraz kontrol=
+a paliwa to kluczowe funkcjonalno=C5=9Bci naszego systemu.=20
 
-The recommended workaround was to return -EBUSY if test_fw_config->reqs
-is already allocated.
+Organizowanie pracy pracownik=C3=B3w jest dzi=C4=99ki temu prostsze i bar=
+dziej efektywne, a oszcz=C4=99dno=C5=9Bci i optymalizacja w zakresie pono=
+szonych koszt=C3=B3w, maj=C4=85 dla ka=C5=BCdego przedsi=C4=99biorcy ogro=
+mne znaczenie.
 
-Fixes: c92316bf8e94 ("test_firmware: add batched firmware tests")
-Cc: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Russ Weight <russell.h.weight@intel.com>
-Cc: Tianfei Zhang <tianfei.zhang@intel.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Colin Ian King <colin.i.king@gmail.com>
-Cc: Randy Dunlap <rdunlap@infradead.org>
-Cc: linux-kselftest@vger.kernel.org
-Cc: stable@vger.kernel.org # v4.14
-Suggested-by: Dan Carpenter <error27@gmail.com>
-Suggested-by: Takashi Iwai <tiwai@suse.de>
-Reviewed-by: Dan Carpenter <dan.carpenter@linaro.org>
-Acked-by: Luis Chamberlain <mcgrof@kernel.org>
-Link: https://lore.kernel.org/r/20230509084746.48259-2-mirsad.todorovac@alu.unizg.hr
-Signed-off-by: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+Dopasujemy nasz=C4=85 ofert=C4=99 do Pa=C5=84stwa oczekiwa=C5=84 i potrze=
+b organizacji. Czy mogliby=C5=9Bmy porozmawia=C4=87 o naszej propozycji?
 
-[ This fix is applied against the 4.14 stable branch. There are no changes to the ]
-[ fix in code when compared to the upstread, only the reformatting for backport.  ]
----
- lib/test_firmware.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
 
-diff --git a/lib/test_firmware.c b/lib/test_firmware.c
-index 1c5e5246bf10..5318c5e18acf 100644
---- a/lib/test_firmware.c
-+++ b/lib/test_firmware.c
-@@ -621,6 +621,11 @@ static ssize_t trigger_batched_requests_store(struct device *dev,
- 
- 	mutex_lock(&test_fw_mutex);
- 
-+        if (test_fw_config->reqs) {
-+                rc = -EBUSY;
-+                goto out_bail;
-+        }
-+
- 	test_fw_config->reqs = vzalloc(sizeof(struct test_batched_req) *
- 				       test_fw_config->num_requests * 2);
- 	if (!test_fw_config->reqs) {
-@@ -723,6 +728,11 @@ ssize_t trigger_batched_requests_async_store(struct device *dev,
- 
- 	mutex_lock(&test_fw_mutex);
- 
-+        if (test_fw_config->reqs) {
-+                rc = -EBUSY;
-+                goto out_bail;
-+        }
-+
- 	test_fw_config->reqs = vzalloc(sizeof(struct test_batched_req) *
- 				       test_fw_config->num_requests * 2);
- 	if (!test_fw_config->reqs) {
--- 
-2.39.3
-
+Pozdrawiam
+Rados=C5=82aw Grabowski
