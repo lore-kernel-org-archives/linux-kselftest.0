@@ -2,96 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47A5EC001DE
-	for <linux-kselftest@archiver.kernel.org>; Mon, 31 Jul 2023 15:48:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 64D22C41513
+	for <linux-kselftest@archiver.kernel.org>; Mon, 31 Jul 2023 15:55:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230176AbjGaPss (ORCPT
+        id S232019AbjGaPzM (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 31 Jul 2023 11:48:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55698 "EHLO
+        Mon, 31 Jul 2023 11:55:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232557AbjGaPsk (ORCPT
+        with ESMTP id S232898AbjGaPzK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 31 Jul 2023 11:48:40 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F6B188;
-        Mon, 31 Jul 2023 08:48:33 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 2804F5C01AF;
-        Mon, 31 Jul 2023 11:48:32 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Mon, 31 Jul 2023 11:48:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1690818512; x=1690904912; bh=27RrpVb0fJrKV
-        16IE46CaVHMUvzfYPXPG/0myoO6SvA=; b=0ScKz1Um7XPgRQfzP3imVy6eQKowp
-        CAS7y6PTQeU5jRZV3jC2/+2nRIzYiM/IhsG0Iu2duwmuqjwW1SUOnIaspOxtK8zb
-        22D3y7i1l2+Nnnx9mjGi/IoWO07+++Ne9MmOtWjPDZfBBirk9rxPhyXYVXSzdi7Y
-        hUXp0miove+RoScyeXR/pvr3hrtG4lo3rq6RG/uPYKSHKylil/J/vMgtYeJ3n9kW
-        qPz2nPEOkJKBp47/o5aiiv4sqDzNW2OzkA75k42bgFF07SWySzaRZNzjW7sMGYUm
-        U92BigqhOHpblkjV+WTHjSJKu4oECc48nlZwa6Cy0Ym6nd1U1g8tFdXFQ==
-X-ME-Sender: <xms:z9fHZBXMuQHqUL5mtsFYDtzJ7cByzvUnrNOZLHzJm4tJlsoXaxVsKA>
-    <xme:z9fHZBnfyEqdQ2pTsT86ZLZjunMLIOdSNlkuibGGLOERMtGlhjQDAy6-hBYM_TlQG
-    Lse_UpDUQ4aoZ0>
-X-ME-Received: <xmr:z9fHZNbLY6BdiHHCD7j6zMzw-Yb3zcqEKntThq8ivMVgioO3A7-b6z66l_sP>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrjeeggdeilecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkughoucfu
-    tghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrghtth
-    gvrhhnpefhffejgefhjeehjeevheevhfetveevfefgueduueeivdeijeeihfegheeljefg
-    ueenucffohhmrghinhepghhithhhuhgsrdgtohhmnecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomhepihguohhstghhsehiughoshgthhdrohhrgh
-X-ME-Proxy: <xmx:z9fHZEV6y7XijHDOtZXmiXL4Jf3H-caRWrAgDrACnaZORlnPDV7r9g>
-    <xmx:z9fHZLnRXAESmhq3FwoDgIW0HX_Yno0P7y9oXOieIER9x5BqBneVsw>
-    <xmx:z9fHZBceZD6WKs6cgHiKdLm7qkQp91rkaUc4A3IoUybnTJG11bOemA>
-    <xmx:0NfHZEi29yN6UeRHXSHbMf1zIX8vsIQC9DzGdVU7v6t65zW7JYkbjA>
-Feedback-ID: i494840e7:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 31 Jul 2023 11:48:30 -0400 (EDT)
-Date:   Mon, 31 Jul 2023 18:48:01 +0300
-From:   Ido Schimmel <idosch@idosch.org>
-To:     Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-Cc:     petrm@nvidia.com, razor@blackwall.org,
-        Ido Schimmel <idosch@nvidia.com>, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH v1 01/11] selftests: forwarding:
- custom_multipath_hash.sh: add cleanup for SIGTERM sent by timeout
-Message-ID: <ZMfXsVAfpizMKH/U@shredder>
-References: <ZL6OljQubhVtQjcD@shredder>
- <cab8ea8a-98f4-ef9b-4215-e2a93cccaab1@alu.unizg.hr>
- <ZMEQGIOQXv6so30x@shredder>
- <a9b6d9f5-14ae-a931-ab7b-d31b5e40f5df@alu.unizg.hr>
- <ZMYXABUN9OzfN5D3@shredder>
- <da3f4f4e-47a7-25be-fa61-aebeba1d8d0c@alu.unizg.hr>
- <ZMdouQRypZCGZhV0@shredder>
- <2f203995-5ae0-13bc-d1a6-997c2b36a2b8@alu.unizg.hr>
- <ZMei0VMIH/l1GzVM@shredder>
- <cadad022-b241-398d-c79d-187596356a72@alu.unizg.hr>
+        Mon, 31 Jul 2023 11:55:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA9A173F;
+        Mon, 31 Jul 2023 08:55:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E39D611E1;
+        Mon, 31 Jul 2023 15:55:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 494BDC433C7;
+        Mon, 31 Jul 2023 15:54:55 +0000 (UTC)
+Date:   Mon, 31 Jul 2023 11:54:53 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Dan Carpenter <dan.carpenter@linaro.org>
+Cc:     Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org, x86@kernel.org, rcu@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Zqiang <qiang.zhang1211@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jason Baron <jbaron@akamai.com>,
+        Kees Cook <keescook@chromium.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Juerg Haefliger <juerg.haefliger@canonical.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Nadav Amit <namit@vmware.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Chuang Wang <nashuiliang@gmail.com>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        Petr Mladek <pmladek@suse.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>, Song Liu <song@kernel.org>,
+        Julian Pidancet <julian.pidancet@oracle.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Dionna Glaze <dionnaglaze@google.com>,
+        Thomas =?UTF-8?B?V2Vpw59zY2h1aA==?= <linux@weissschuh.net>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Yair Podemsky <ypodemsk@redhat.com>
+Subject: Re: [RFC PATCH v2 06/20] tracing/filters: Optimise scalar vs
+ cpumask filtering when the user mask is a single CPU
+Message-ID: <20230731115453.395d20c6@gandalf.local.home>
+In-Reply-To: <04f20e58-6b24-4f44-94e2-0d12324a30e4@kadam.mountain>
+References: <20230720163056.2564824-1-vschneid@redhat.com>
+        <20230720163056.2564824-7-vschneid@redhat.com>
+        <20230729155547.35719a1f@rorschach.local.home>
+        <04f20e58-6b24-4f44-94e2-0d12324a30e4@kadam.mountain>
+X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cadad022-b241-398d-c79d-187596356a72@alu.unizg.hr>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jul 31, 2023 at 05:13:37PM +0200, Mirsad Todorovac wrote:
-> You can add:
+On Mon, 31 Jul 2023 15:07:52 +0300
+Dan Carpenter <dan.carpenter@linaro.org> wrote:
+
+> On Sat, Jul 29, 2023 at 03:55:47PM -0400, Steven Rostedt wrote:
+> > > @@ -1761,6 +1761,11 @@ static int parse_pred(const char *str, void *data,
+> > >  				FILTER_PRED_FN_CPUMASK;
+> > >  		} else if (field->filter_type == FILTER_CPU) {
+> > >  			pred->fn_num = FILTER_PRED_FN_CPU_CPUMASK;
+> > > +		} else if (single) {
+> > > +			pred->op = pred->op == OP_BAND ? OP_EQ : pred->op;  
+> > 
+> > Nit, the above can be written as:
+> > 
+> > 			pred->op = pret->op != OP_BAND ? : OP_EQ;
+> >   
 > 
-> Tested-by: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+> Heh.  Those are not equivalent.  The right way to write this is:
 
-Added your tags to all 17 patches. Available here:
-https://github.com/idosch/linux/tree/submit/selftests_fix_v2
+You mean because of my typo?
 
-Will submit later this week (most likely on Wednesday) after I verify
-they don't cause other regressions.
+> 
+> 	if (pred->op == OP_BAND)
+> 		pred->op = OP_EQ;
 
-Thanks for testing and reporting.
+But sure, I'm fine with that, and it's probably more readable too.
+
+-- Steve
