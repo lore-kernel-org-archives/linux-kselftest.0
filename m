@@ -2,270 +2,242 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 155CAC001DF
-	for <linux-kselftest@archiver.kernel.org>; Mon, 31 Jul 2023 06:17:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 58A5DC001DF
+	for <linux-kselftest@archiver.kernel.org>; Mon, 31 Jul 2023 06:21:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230244AbjGaGRw (ORCPT
+        id S229602AbjGaGVx (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 31 Jul 2023 02:17:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46910 "EHLO
+        Mon, 31 Jul 2023 02:21:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230177AbjGaGRj (ORCPT
+        with ESMTP id S229503AbjGaGVw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 31 Jul 2023 02:17:39 -0400
-Received: from mgamail.intel.com (unknown [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E6A1701;
-        Sun, 30 Jul 2023 23:17:27 -0700 (PDT)
+        Mon, 31 Jul 2023 02:21:52 -0400
+Received: from mgamail.intel.com (unknown [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E80510CC;
+        Sun, 30 Jul 2023 23:21:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690784247; x=1722320247;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=5mV52st8S+7Kz9fwv8kMVAqrLyOFoCT+yXcQ6mlNwlM=;
-  b=IFMor3BdYuF53LI3muNEqPYaZMjfr5Gm+JcjUB7MD5SzEPw6AsNYq3tx
-   yr0nwy+eHRf8IIrKjs8F5lm6tBN2nAR4LJD8JQ1X/2jkCf1bEFY8Js7Bz
-   acgvpcrx1Zxz2UdQwivJ1O+7F6CPLQc3sxk+Xe3U/Uc0gG3t+yT2jLVB3
-   uZlcw7EitgfCQEL5+CP83vl1epophVa2ZVkCYKuI9CCoQR7Q9K3AekeUC
-   0PZUYa/gRozM8qf+qYiitCtNcdkaynthg69BR0iiMUL138ujgbdToGJh5
-   aqJ7kyVX1C0AmzH3WFEM9FYC+IlXiC3BjQIoIe8btVr50+YXnt2biQKsZ
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10787"; a="435231379"
+  t=1690784509; x=1722320509;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=DtJhtGZLWLhniI99MrMC9DNivB6b401nedxCW1KjODo=;
+  b=IbNckcIGvVW+/2PHtdwM0sH60nvKMFFBPiaOcAXTI7sTsxDP5c8ujQ6Z
+   J7M4+2Jaw6OcoLBZJ9wVCMfz33TA+vbVjyGdcu2q/WZNon/+MrrehfF3g
+   PEjWjZfb9oOv3H+omx7dFw3dXl4bz6FYaM4o65XjQZjTK8k63LIV5mXtz
+   1XzL4KCrC2GjwGjrE+L2RIRSz1MYzhhZNfJ8bNYiq/4vdukE26dWwhwV9
+   4mloYGA1PZq9HK44e3DQLUc/LWAF8mTsMcaHgWG76tRU4jxUhc1Ldx/H0
+   eoT22flyEIICMjaZEa7kSNvkvNRHbrhsK6NPpPQAtuE7zSgPiLkz9NQ9Q
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10787"; a="353847631"
 X-IronPort-AV: E=Sophos;i="6.01,244,1684825200"; 
-   d="scan'208";a="435231379"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2023 23:16:53 -0700
+   d="scan'208";a="353847631"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2023 23:21:48 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10787"; a="1058827755"
+X-IronPort-AV: E=McAfee;i="6600,9927,10787"; a="851914722"
 X-IronPort-AV: E=Sophos;i="6.01,244,1684825200"; 
-   d="scan'208";a="1058827755"
-Received: from jkrzyszt-mobl2.ger.corp.intel.com (HELO jkrzyszt-mobl2.intranet) ([10.213.1.128])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2023 23:16:49 -0700
-From:   Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
-To:     Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>
-Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        igt-dev@lists.freedesktop.org, intel-xe@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] kunit: Allow kunit test modules to use test filtering
-Date:   Mon, 31 Jul 2023 07:45:56 +0200
-Message-ID: <20230731054552.2145292-8-janusz.krzysztofik@linux.intel.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230731054552.2145292-5-janusz.krzysztofik@linux.intel.com>
-References: <20230731054552.2145292-5-janusz.krzysztofik@linux.intel.com>
+   d="scan'208";a="851914722"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga004.jf.intel.com with ESMTP; 30 Jul 2023 23:21:47 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Sun, 30 Jul 2023 23:21:47 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Sun, 30 Jul 2023 23:21:47 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27 via Frontend Transport; Sun, 30 Jul 2023 23:21:47 -0700
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.176)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.27; Sun, 30 Jul 2023 23:21:46 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=M/SRjRWWK7vqEWqWekb1rN2mLGgkioeYtJnHknDZr+JFLq4UxK4bLWPwIMO6yBMzMHTkeVWM6hYWRkjySdzaLahjNJGfi1zU8N21rDO/sA2l8exMP3kLoY/1pKidPpoPmzptYpeX96zKT68O9nMNut3r5jE2nvK2BJz4BHsDUTq9yWzYRQPQxXmbIWO8JcdawGu8RHwXG4Tf9qDM/coEsVliboL9X3aH9oA8pns/KK/s1ZL66tcFoBIoOhE+3uO4W2QnzG7ZaPOzbUMJqwDcp9zUjmVEJ/SAZEiuDg4zsDzMoXfVheVUVdsr0Cq/8dDfRSQxxVHTJd5ujXFpkFkojQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DtJhtGZLWLhniI99MrMC9DNivB6b401nedxCW1KjODo=;
+ b=d6pO4OkUAlsQGzUDE7r5sj1FmIxhioOyHfb7ynFAFjtDJfmyDdOBtnuiJcLBs2UxumDRnb+50XcbEkgrYOTQC8pWdCTQ0qFbDGHCd/o/F1fq48DzG7dYWmKvP1cbO2MTKd52VTb/WGi/64L4rT6VX82DvhA/kFAEws9vBKvd7dpbtD6DwDeM6ahNyL+uO2jB7aUWcC5mWL//NJggYYwJNVDNOsG8c5PB+ZLlNbfKBdirr880yRGLmOxTBRI6pq/MTrFL/kKa9Lef0mLRqlRrpDva7cr+hBDecaFBjyIgkO1hOyYCOkb/XJvktpQN71TTY06ij4QFkY3pyRyBRbmXig==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by IA1PR11MB6289.namprd11.prod.outlook.com (2603:10b6:208:3e7::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.43; Mon, 31 Jul
+ 2023 06:21:45 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::8b87:d7d:f095:e3f9]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::8b87:d7d:f095:e3f9%6]) with mapi id 15.20.6631.043; Mon, 31 Jul 2023
+ 06:21:45 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>, "Liu, Yi L" <yi.l.liu@intel.com>
+CC:     "joro@8bytes.org" <joro@8bytes.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
+        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "jasowang@redhat.com" <jasowang@redhat.com>,
+        "shameerali.kolothum.thodi@huawei.com" 
+        <shameerali.kolothum.thodi@huawei.com>,
+        "lulu@redhat.com" <lulu@redhat.com>,
+        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
+Subject: RE: [PATCH v3 07/17] iommufd: Add IOMMU_RESV_IOVA_RANGES
+Thread-Topic: [PATCH v3 07/17] iommufd: Add IOMMU_RESV_IOVA_RANGES
+Thread-Index: AQHZvh6fEWZc+XbqW0m1tuFmM2sktq/PejEAgAP2ODA=
+Date:   Mon, 31 Jul 2023 06:21:44 +0000
+Message-ID: <BN9PR11MB52764E058BDC007FCF2F240B8C05A@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20230724110406.107212-1-yi.l.liu@intel.com>
+ <20230724110406.107212-8-yi.l.liu@intel.com> <ZMP+lvbhAwEbhjx/@nvidia.com>
+In-Reply-To: <ZMP+lvbhAwEbhjx/@nvidia.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|IA1PR11MB6289:EE_
+x-ms-office365-filtering-correlation-id: 64f4fdda-3baf-4ad2-8424-08db918e69d4
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: M+Lv976jCFWValwmAzyFE9hyaI9XAKaJMv1SX14Sv4S8zYQI2iXjCwszmN6rTAEUjSHFZFylrO+qDaYz/RIVU0+TAXPJNPODpVn7QE8oe65xEPJjQjRuyWGdKMYVp9Ci3iXDbEwwPR2kqeH/xH9eDrrNotfohaXXFnS5kq69abtrE6h9Rfmm7wFvg6CiIluHR/5opBKcBzBdHIUVdx0m9W5R0D+tWIxJvGDsEnD/bBj6KJ79U5rRtDliY9njy36v86Yp4NBagjPAtuXBwWi59bL7MXiCZrlXZEKmq8S3l2TpR8/Rt8MYD3e2hLfPxSLHi9AaofiSy7PvauhpbQCnDJxFi8nGbuY6nbx1oQ8OL8GIyPPykrewgVZ+CEkUgta3gwbrVhxA/XMiDhAsdUqigXrcmyeDwu6rMLZrlNH3+zi2/LH9PEv5BdBCGN5QA8KwuYK7bWpEpsMsMcTlGJVMmUofmbDv9vgG0T6z6RZ7u13M/0OfLhqYCt+W8eGauszAjENc4AQvCZYjJXKIcMD0lvniKxWlR7k0DE3ok72H2V5LU9xiwggbf0jx+/VlROiSIGmVmsDLEgNH5v8nIbZC7pTHMInQeL1LSEp60sabyU1PEScAk36Rwlyhs8VDdCLZ
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(396003)(376002)(366004)(346002)(39860400002)(451199021)(38100700002)(82960400001)(122000001)(55016003)(86362001)(38070700005)(33656002)(9686003)(478600001)(71200400001)(7696005)(186003)(6506007)(26005)(8676002)(8936002)(7416002)(52536014)(5660300002)(76116006)(6636002)(4326008)(64756008)(66446008)(2906002)(66476007)(66556008)(66946007)(54906003)(110136005)(41300700001)(316002)(83380400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?TdphI1DaBX60q7pnhtEQOOkNIfYnMnKTHPUzEFmEo2ExVmm7SwO/fUhMxfoo?=
+ =?us-ascii?Q?AEwn1m8per2ZxUVltwAEdSm4YPXBW77IAc78hukCV1msnGWuSVYhkPzuzqr8?=
+ =?us-ascii?Q?q/G3dvGoWmTcnIxuKLX28eKj3QHPkkg5mUbO04RqpSFyx+xyqHbbewfhPqWS?=
+ =?us-ascii?Q?oFiF8Y+s4qFPXOA4c+BpC541FZKu7RTsH2SZSgN5A2ETmoL/5ImAtnjdgsBS?=
+ =?us-ascii?Q?f49bNkSBMaqh3WESPuCNNNMhYTHllJy/s3A2pnzSgjlihG6BKv9bGGx3HiVe?=
+ =?us-ascii?Q?C98cQEL1jNsMLdPCxjsjHQtsJrND0m7uBFH9Y9NwzU9LkvI8X08CC+RzWtMf?=
+ =?us-ascii?Q?+CCHipW3rI0Gp71qdxRZlmsTBFV9dEH8ZAsd/JY7ANKqfWLIu3A5pRIxM31h?=
+ =?us-ascii?Q?HsZm7UaH14vjt5hHmu15TM1UxcFDab47tOlXg6GilivE/zF5HWO5e/Mc+N/T?=
+ =?us-ascii?Q?gzWm/2SPtvYaOu4GvWPaCsO316n0jM1HepgwujhZoJ23048BHZkXg7oRoJkZ?=
+ =?us-ascii?Q?uqx9wudX3ISmkctowkQRlR52dlqAHXz9l99y4dNqKfRmo32YH0qojbCKyjMn?=
+ =?us-ascii?Q?Se8gzqomyGZaMNrvri9jfc6jRkB6VKP/LhNw6Euaez3XrN2HdaqaTGASZBsj?=
+ =?us-ascii?Q?99AVnmgINmZTGjtRYlBHrO2L3Flj0Uxm0mH68yviN1FI7dPPgQW1NyuLc61k?=
+ =?us-ascii?Q?CFg9o+K44qnRA4za6CT8i2rRvFYnqUT2BGgHueIEDrHr1y/pxhivBGoRgsIP?=
+ =?us-ascii?Q?rG9gdYmpQFFDcYbSwqIb7I1qPR7kYbIaZvx9zKEgRaYGBo4lVP14dZz0YOMS?=
+ =?us-ascii?Q?LfLMb539zbgDV1/l6yhFB+J8Aft+zu4xrXpCT4W6miQsgCtan3gChearOWEQ?=
+ =?us-ascii?Q?T/QRjHfy3OCpazr1xoBb15Zm7G9he7lGbNx34bnTvmFV+GvpddX9hzjvUfUj?=
+ =?us-ascii?Q?KnqAInS7tXEdsDVeFi7Qq88VwErr/EeHhYn3pzTSrn0kJn806EmTWj2A2ISi?=
+ =?us-ascii?Q?4zaYEg+ZW/Za0P8sXWPo/8DeErFenPIcqVWIo+Zb23UysQ+W9y2gtQemyHvS?=
+ =?us-ascii?Q?QTq57k5/JGmyu2M5pxrJlGAd+4LaQJ6AnMjD77ebNnIRflByc4SakVUaF1+Z?=
+ =?us-ascii?Q?3OEPaEgSIjVJodq/qTCbbN9Tkh99vJ5Evgcec2SY34CMKsu+Zw5Ph00pj33/?=
+ =?us-ascii?Q?xN1IKxXqMt/JByX9caWYFKbmpz1ZXmceXCNiPQl46JoA+4XjNutMt6cxj6Po?=
+ =?us-ascii?Q?L7QF3ReQkOZIs/3EZgcJowIT8BVLyJD4ZVXahtF/w7TN/DBzuw7lNYNoDkbO?=
+ =?us-ascii?Q?Y51IPxVO6NfMcU91rHI4nJZBMqafumX7fiJTyT/ubHgAzBQhXRanzFrRIoL9?=
+ =?us-ascii?Q?+/ToiGWHq40BFOje2ymuk+XUT44LtPOvpR5N7M76mgIGSiaGXAh9LJmsEMIR?=
+ =?us-ascii?Q?1zxkg9eL/LvZjWObY9oyZ/JTqr76ppjOvkLH4tMrGE6DzdDRCDyZzUZTmQoM?=
+ =?us-ascii?Q?Y/90NWZ9Oz8BdlE4+VWAwpKojI6eXWdiwscYnh8E+NxWdc9QFa4rEZoJ2Jxj?=
+ =?us-ascii?Q?uuOEw9qO6ouYBoSSUkaPXEh/09r31hhyOsGonK/P?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 64f4fdda-3baf-4ad2-8424-08db918e69d4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Jul 2023 06:21:44.9551
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: lviBg6C2hHJNSKm5P2t58y5WV70eraXSTEBjQeb+ZFAZm8LTwrXzN6lQVl5wc6yDAZzMhzpe2RoIbarAONbXEQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB6289
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-External tools, e.g., Intel GPU tools (IGT), support execution of
-individual selftests provided by kernel modules.  That could be also
-applicable to kunit test modules if they provided test filtering.  But
-test filtering is now possible only when kunit code is built into the
-kernel.  Moreover, a filter can be specified only at boot time, then
-reboot is required each time a different filter is needed.
+> From: Jason Gunthorpe <jgg@nvidia.com>
+> Sent: Saturday, July 29, 2023 1:45 AM
+>=20
+> On Mon, Jul 24, 2023 at 04:03:56AM -0700, Yi Liu wrote:
+>=20
+> > +/**
+> > + * struct iommu_resv_iova_ranges - ioctl(IOMMU_RESV_IOVA_RANGES)
+> > + * @size: sizeof(struct iommu_resv_iova_ranges)
+> > + * @dev_id: device to read resv iova ranges for
+> > + * @num_iovas: Input/Output total number of resv ranges for the device
+> > + * @__reserved: Must be 0
+> > + * @resv_iovas: Pointer to the output array of struct
+> iommu_resv_iova_range
+> > + *
+> > + * Query a device for ranges of reserved IOVAs. num_iovas will be set =
+to
+> the
+> > + * total number of iovas and the resv_iovas[] will be filled in as spa=
+ce
+> > + * permits.
+> > + *
+> > + * On input num_iovas is the length of the resv_iovas array. On output=
+ it is
+> > + * the total number of iovas filled in. The ioctl will return -EMSGSIZ=
+E and
+> > + * set num_iovas to the required value if num_iovas is too small. In t=
+his
+> > + * case the caller should allocate a larger output array and re-issue =
+the
+> > + * ioctl.
+> > + *
+> > + * Under nested translation, userspace should query the reserved IOVAs
+> for a
+> > + * given device, and report it to the stage-1 I/O page table owner to
+> exclude
+> > + * the reserved IOVAs. The reserved IOVAs can also be used to figure o=
+ut
+> the
+> > + * allowed IOVA ranges for the IOAS that the device is attached to. Fo=
+r
+> detail
+> > + * see ioctl IOMMU_IOAS_IOVA_RANGES.
+>=20
+> I'm not sure I like this, the other APIs here work with the *allowed*
+> IOVAs, which is the inverse of this one which works with the
+> *disallowed* IOVAs.
+>=20
+> It means we can't take the output of this API and feed it into
+> IOMMUFD_CMD_IOAS_ALLOW_IOVAS.. Though I suppose qemu isn't going
+> to do
+> this anyhow.
+>=20
+> On the other hand, it is kind of hard to intersect an allowed list of
+> multiple idevs into a single master list.
+>=20
+> As it is, userspace will have to aggregate the list, sort it, merge
+> adjacent overlapping reserved ranges then invert the list to get an
+> allowed list. This is not entirely simple..
+>=20
+> Did you already write an algorithm to do this in qemu someplace?
 
-Build the test filtering code also when kunit is configured as a module,
-expose test filtering functions to other kunit source files, and use them
-in kunit module notifier callback functions.  Userspace can then reload
-the kunit module with a value of the filter_glob parameter tuned to a
-specific kunit test module every time it wants to limit the scope of tests
-executed on that module load.  Make the kunit.filter_glob parameter
-visible in sysfs for user convenience.
+Qemu is optional to aggregate it for S2 given IOMMU_IOAS_IOVA_RANGES
+is still being used. If the only purpose of using this new cmd is to report
+per-device reserved ranges to the guest then aggregation is not required.
 
-v2: Fix new name of a structure moved to kunit namespace not updated
-    across all uses.
+Arguably IOMMU_IOAS_IOVA_RANGES becomes redundant with this
+new cmd. But it's already there and as you said it's actually more
+convenient to be used if the user doesn't care about per-device
+reserved ranges...
 
-Signed-off-by: Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
----
- include/kunit/test.h | 13 +++++++++++++
- lib/kunit/executor.c | 42 ++++++++++++++++++++++--------------------
- lib/kunit/test.c     | 22 ++++++++++++++++++++++
- 3 files changed, 57 insertions(+), 20 deletions(-)
-
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index 6d693f21a4833..14ff12e72252a 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -190,6 +190,12 @@ struct kunit_suite {
- 	int suite_init_err;
- };
- 
-+/* Stores an array of suites, end points one past the end */
-+struct kunit_suite_set {
-+	struct kunit_suite * const *start;
-+	struct kunit_suite * const *end;
-+};
-+
- /**
-  * struct kunit - represents a running instance of a test.
-  *
-@@ -238,6 +244,7 @@ static inline void kunit_set_failure(struct kunit *test)
- 
- bool kunit_enabled(void);
- const char *kunit_action(void);
-+const char *kunit_filter_glob(void);
- 
- void kunit_init_test(struct kunit *test, const char *name, char *log);
- 
-@@ -248,6 +255,12 @@ size_t kunit_suite_num_test_cases(struct kunit_suite *suite);
- unsigned int kunit_test_case_num(struct kunit_suite *suite,
- 				 struct kunit_case *test_case);
- 
-+struct kunit_suite_set
-+kunit_filter_suites(const struct kunit_suite_set *suite_set,
-+		    const char *filter_glob,
-+		    int *err);
-+void kunit_free_suite_set(struct kunit_suite_set suite_set);
-+
- int __kunit_test_suites_init(struct kunit_suite * const * const suites, int num_suites);
- 
- void __kunit_test_suites_exit(struct kunit_suite **suites, int num_suites);
-diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-index d1c0616569dfd..49fe40cc8f1af 100644
---- a/lib/kunit/executor.c
-+++ b/lib/kunit/executor.c
-@@ -25,14 +25,17 @@ const char *kunit_action(void)
- 	return action_param;
- }
- 
--#if IS_BUILTIN(CONFIG_KUNIT)
--
- static char *filter_glob_param;
- 
--module_param_named(filter_glob, filter_glob_param, charp, 0);
-+module_param_named(filter_glob, filter_glob_param, charp, 0400);
- MODULE_PARM_DESC(filter_glob,
- 		"Filter which KUnit test suites/tests run at boot-time, e.g. list* or list*.*del_test");
- 
-+const char *kunit_filter_glob(void)
-+{
-+	return filter_glob_param;
-+}
-+
- /* glob_match() needs NULL terminated strings, so we need a copy of filter_glob_param. */
- struct kunit_test_filter {
- 	char *suite_glob;
-@@ -96,16 +99,7 @@ kunit_filter_tests(const struct kunit_suite *const suite, const char *test_glob)
- 	return copy;
- }
- 
--static char *kunit_shutdown;
--core_param(kunit_shutdown, kunit_shutdown, charp, 0644);
--
--/* Stores an array of suites, end points one past the end */
--struct suite_set {
--	struct kunit_suite * const *start;
--	struct kunit_suite * const *end;
--};
--
--static void kunit_free_suite_set(struct suite_set suite_set)
-+void kunit_free_suite_set(struct kunit_suite_set suite_set)
- {
- 	struct kunit_suite * const *suites;
- 
-@@ -114,13 +108,14 @@ static void kunit_free_suite_set(struct suite_set suite_set)
- 	kfree(suite_set.start);
- }
- 
--static struct suite_set kunit_filter_suites(const struct suite_set *suite_set,
--					    const char *filter_glob,
--					    int *err)
-+struct kunit_suite_set
-+kunit_filter_suites(const struct kunit_suite_set *suite_set,
-+		    const char *filter_glob,
-+		    int *err)
- {
- 	int i;
- 	struct kunit_suite **copy, *filtered_suite;
--	struct suite_set filtered;
-+	struct kunit_suite_set filtered;
- 	struct kunit_test_filter filter;
- 
- 	const size_t max = suite_set->end - suite_set->start;
-@@ -155,6 +150,11 @@ static struct suite_set kunit_filter_suites(const struct suite_set *suite_set,
- 	return filtered;
- }
- 
-+#if IS_BUILTIN(CONFIG_KUNIT)
-+
-+static char *kunit_shutdown;
-+core_param(kunit_shutdown, kunit_shutdown, charp, 0644);
-+
- static void kunit_handle_shutdown(void)
- {
- 	if (!kunit_shutdown)
-@@ -169,7 +169,7 @@ static void kunit_handle_shutdown(void)
- 
- }
- 
--static void kunit_exec_run_tests(struct suite_set *suite_set)
-+static void kunit_exec_run_tests(struct kunit_suite_set *suite_set)
- {
- 	size_t num_suites = suite_set->end - suite_set->start;
- 
-@@ -179,7 +179,7 @@ static void kunit_exec_run_tests(struct suite_set *suite_set)
- 	__kunit_test_suites_init(suite_set->start, num_suites);
- }
- 
--static void kunit_exec_list_tests(struct suite_set *suite_set)
-+static void kunit_exec_list_tests(struct kunit_suite_set *suite_set)
- {
- 	struct kunit_suite * const *suites;
- 	struct kunit_case *test_case;
-@@ -195,7 +195,9 @@ static void kunit_exec_list_tests(struct suite_set *suite_set)
- 
- int kunit_run_all_tests(void)
- {
--	struct suite_set suite_set = {__kunit_suites_start, __kunit_suites_end};
-+	struct kunit_suite_set suite_set = {
-+		__kunit_suites_start, __kunit_suites_end,
-+	};
- 	int err = 0;
- 	if (!kunit_enabled()) {
- 		pr_info("kunit: disabled\n");
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 413d9fd364a8d..bfc2f65bd1dae 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -757,6 +757,22 @@ EXPORT_SYMBOL_GPL(__kunit_test_suites_exit);
- #ifdef CONFIG_MODULES
- static void kunit_module_init(struct module *mod)
- {
-+	struct kunit_suite_set suite_set = {
-+		mod->kunit_suites, mod->kunit_suites + mod->num_kunit_suites,
-+	};
-+	int err = 0;
-+
-+	suite_set = kunit_filter_suites(&suite_set,
-+					kunit_filter_glob() ?: "*.*", &err);
-+	if (err) {
-+		pr_err("kunit module: error filtering suites: %d\n",
-+		       err);
-+		kfree(suite_set.start);
-+		suite_set.start = NULL;
-+	}
-+	mod->kunit_suites = (struct kunit_suite **)suite_set.start;
-+	mod->num_kunit_suites = suite_set.end - suite_set.start;
-+
- 	if (mod->num_kunit_suites > 0) {
- 		pr_info("KTAP version 1\n");
- 		pr_info("1..%d\n", mod->num_kunit_suites);
-@@ -767,7 +783,13 @@ static void kunit_module_init(struct module *mod)
- 
- static void kunit_module_exit(struct module *mod)
- {
-+	struct kunit_suite_set suite_set = {
-+		mod->kunit_suites, mod->kunit_suites + mod->num_kunit_suites,
-+	};
-+
- 	__kunit_test_suites_exit(mod->kunit_suites, mod->num_kunit_suites);
-+	if (suite_set.start)
-+		kunit_free_suite_set(suite_set);
- }
- 
- static int kunit_module_notify(struct notifier_block *nb, unsigned long val,
--- 
-2.41.0
-
+>=20
+> Anyhow, this should be split out from this series. It seems simple
+> enough to merge it now if someone can confirm what qemu needs.
+>=20
+> Jason
