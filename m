@@ -2,84 +2,129 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 12ED3C04E69
-	for <linux-kselftest@archiver.kernel.org>; Tue,  1 Aug 2023 03:20:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53121EB64DD
+	for <linux-kselftest@archiver.kernel.org>; Tue,  1 Aug 2023 03:47:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231375AbjHADU1 (ORCPT
+        id S229716AbjHADrG (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 31 Jul 2023 23:20:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48612 "EHLO
+        Mon, 31 Jul 2023 23:47:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231197AbjHADUZ (ORCPT
+        with ESMTP id S229703AbjHADrF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 31 Jul 2023 23:20:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2F631BC7;
-        Mon, 31 Jul 2023 20:20:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F0C361407;
-        Tue,  1 Aug 2023 03:20:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C7D3DC4339A;
-        Tue,  1 Aug 2023 03:20:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690860023;
-        bh=iTMikfldINqWqsR1JIcAlJUaV/udL2WHA91wXWhrUS8=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=sA6emx7gv3Ox5ESHA264b0zyShHx16gwFx3Ufigr4DxORTc5k4jis0tIwiJ4z0Uv4
-         kATRdooJbVronWNxx70GsiKwEitMCCGsANs2gc9Dxya76CWAxbNsBAGoVPx5cGipOO
-         QCWyrYMa9yUOOO05JJprHuL/JiebhuMk1kaOOwTV5qRJ6Du+vwtgL/8QEnsLvA0cgT
-         tJZZXEv4EL5Kv7mIl9QzeCOL0yztqkMAehvg+LnnPmQG/17iM/IbN8jH1CojIbQNAw
-         kXqrpxzNkOA9FPR5PCxDLeYknq+KFr9GWrTDLialzQrUe+pIvvPOrK1dx1lfAxW0UB
-         A+Jrm0hoUU/hg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A88DCC64458;
-        Tue,  1 Aug 2023 03:20:23 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 31 Jul 2023 23:47:05 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F131310F5;
+        Mon, 31 Jul 2023 20:47:03 -0700 (PDT)
+Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RFLYn1bQmztRgx;
+        Tue,  1 Aug 2023 11:43:41 +0800 (CST)
+Received: from huawei.com (10.90.53.73) by kwepemi500008.china.huawei.com
+ (7.221.188.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 1 Aug
+ 2023 11:47:00 +0800
+From:   Ruan Jinjie <ruanjinjie@huawei.com>
+To:     <Ast@kernel.org>, <Daniel@iogearbox.net>, <Andrii@kernel.org>,
+        <Martin.lau@linux.dev>, <Song@kernel.org>,
+        <Yonghong.song@linux.dev>, <John.fastabend@gmail.com>,
+        <Kpsingh@kernel.org>, <Sdf@google.com>, <Haoluo@google.com>,
+        <Jolsa@kernel.org>, <Mykolal@fb.com>, <Shuah@kernel.org>,
+        <Benjamin.tissoires@redhat.com>, <Asavkov@redhat.com>,
+        <Memxor@gmail.com>, <Iii@linux.ibm.com>, <Colin.i.king@gmail.com>,
+        <Awkrail01@gmail.com>, <Rdunlap@infradead.org>,
+        <Joannelkoong@gmail.com>, <bpf@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>
+CC:     <ruanjinjie@huawei.com>
+Subject: [PATCH -next] selftests/bpf: Use fallthrough pseudo-keyword
+Date:   Tue, 1 Aug 2023 11:46:23 +0800
+Message-ID: <20230801034624.3412175-1-ruanjinjie@huawei.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [RESEND PATCH v2] selftests:connector: Fix input argument error paths
- to skip
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <169086002368.11962.9239503173923058781.git-patchwork-notify@kernel.org>
-Date:   Tue, 01 Aug 2023 03:20:23 +0000
-References: <20230729002403.4278-1-skhan@linuxfoundation.org>
-In-Reply-To: <20230729002403.4278-1-skhan@linuxfoundation.org>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     shuah@kernel.org, Liam.Howlett@oracle.com,
-        anjali.k.kulkarni@oracle.com, kuba@kernel.org, davem@davemloft.net,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.90.53.73]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemi500008.china.huawei.com (7.221.188.139)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+Replace the existing /* fall through */ comments with the
+new pseudo-keyword macro fallthrough[1]. Also, remove unnecessary
+fall-through markings when it is the case.
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+[1] https://www.kernel.org/doc/html/v5.7/process/deprecated.html?highlight=fallthrough#implicit-switch-case-fall-through
 
-On Fri, 28 Jul 2023 18:24:03 -0600 you wrote:
-> Fix input argument parsing paths to skip from their error legs.
-> This fix helps to avoid false test failure reports without running
-> the test.
-> 
-> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-> ---
-> v2: Removed root check based on Anjali's review comments.
-> Add netdev to RESEND
-> 
-> [...]
+Signed-off-by: Ruan Jinjie <ruanjinjie@huawei.com>
+---
+ tools/testing/selftests/bpf/prog_tests/kfunc_call.c          | 4 ++--
+ tools/testing/selftests/bpf/progs/test_cls_redirect.c        | 2 +-
+ tools/testing/selftests/bpf/progs/test_cls_redirect_dynptr.c | 2 +-
+ tools/testing/selftests/bpf/test_verifier.c                  | 2 +-
+ 4 files changed, 5 insertions(+), 5 deletions(-)
 
-Here is the summary with links:
-  - [RESEND,v2] selftests:connector: Fix input argument error paths to skip
-    https://git.kernel.org/netdev/net-next/c/04786c0659db
-
-You are awesome, thank you!
+diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
+index a543742cd7bd..0fd08172965a 100644
+--- a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
++++ b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
+@@ -101,7 +101,7 @@ static void verify_success(struct kfunc_test_params *param)
+ 	case syscall_test:
+ 		topts.ctx_in = &args;
+ 		topts.ctx_size_in = sizeof(args);
+-		/* fallthrough */
++		fallthrough;
+ 	case syscall_null_ctx_test:
+ 		break;
+ 	case tc_test:
+@@ -167,7 +167,7 @@ static void verify_fail(struct kfunc_test_params *param)
+ 	case syscall_test:
+ 		topts.ctx_in = &args;
+ 		topts.ctx_size_in = sizeof(args);
+-		/* fallthrough */
++		fallthrough;
+ 	case syscall_null_ctx_test:
+ 		break;
+ 	case tc_test:
+diff --git a/tools/testing/selftests/bpf/progs/test_cls_redirect.c b/tools/testing/selftests/bpf/progs/test_cls_redirect.c
+index 66b304982245..f97960759558 100644
+--- a/tools/testing/selftests/bpf/progs/test_cls_redirect.c
++++ b/tools/testing/selftests/bpf/progs/test_cls_redirect.c
+@@ -300,7 +300,7 @@ bool pkt_skip_ipv6_extension_headers(buf_t *pkt,
+ 		case IPPROTO_FRAGMENT:
+ 			*is_fragment = true;
+ 			/* NB: We don't check that hdrlen == 0 as per spec. */
+-			/* fallthrough; */
++			fallthrough;
+ 
+ 		case IPPROTO_HOPOPTS:
+ 		case IPPROTO_ROUTING:
+diff --git a/tools/testing/selftests/bpf/progs/test_cls_redirect_dynptr.c b/tools/testing/selftests/bpf/progs/test_cls_redirect_dynptr.c
+index f41c81212ee9..54dbf307c692 100644
+--- a/tools/testing/selftests/bpf/progs/test_cls_redirect_dynptr.c
++++ b/tools/testing/selftests/bpf/progs/test_cls_redirect_dynptr.c
+@@ -204,7 +204,7 @@ static bool pkt_skip_ipv6_extension_headers(struct bpf_dynptr *dynptr, __u64 *of
+ 		case IPPROTO_FRAGMENT:
+ 			*is_fragment = true;
+ 			/* NB: We don't check that hdrlen == 0 as per spec. */
+-			/* fallthrough; */
++			fallthrough;
+ 
+ 		case IPPROTO_HOPOPTS:
+ 		case IPPROTO_ROUTING:
+diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
+index 31f1c935cd07..5621a4e0a1be 100644
+--- a/tools/testing/selftests/bpf/test_verifier.c
++++ b/tools/testing/selftests/bpf/test_verifier.c
+@@ -1289,7 +1289,7 @@ static int do_prog_test_run(int fd_prog, bool unpriv, uint32_t expected_val,
+ 				printf("Did not run the program (no permission) ");
+ 				return 0;
+ 			}
+-			/* fallthrough; */
++			fallthrough;
+ 		default:
+ 			printf("FAIL: Unexpected bpf_prog_test_run error (%s) ",
+ 				strerror(saved_errno));
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.34.1
 
