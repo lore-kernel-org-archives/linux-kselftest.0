@@ -2,267 +2,103 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 339F5EB64DD
-	for <linux-kselftest@archiver.kernel.org>; Tue,  1 Aug 2023 08:34:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F093EB64DD
+	for <linux-kselftest@archiver.kernel.org>; Tue,  1 Aug 2023 08:50:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230346AbjHAIet (ORCPT
+        id S230368AbjHAIuJ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 1 Aug 2023 04:34:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44686 "EHLO
+        Tue, 1 Aug 2023 04:50:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232250AbjHAIeL (ORCPT
+        with ESMTP id S231384AbjHAIuJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Aug 2023 04:34:11 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA100E6D;
-        Tue,  1 Aug 2023 01:34:09 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 10FF76017C;
-        Tue,  1 Aug 2023 10:34:07 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1690878847; bh=UXWDskgxlw95RIZ0DjzbONRlRD516JvVYJ02jsHHwGA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=XZHlBMd3fRfOOWQeF8DnRoWO3HqV95GxvtIsus0eRxwd2nmCaVJAOlRpHdy0LJprC
-         ulYlxqzwZ4C9oWRSlRe81I8OjKj3qwYq5oYHsnWPeiDFjck24O0bsmtWCGFiDskAXe
-         0vutPT2z/IROmwSjPAPbWMmpg8gzxqOdxabbsEzbPP5yMvgtNjpYF5k/uNcN4Z7Ulc
-         2SHqiFOPHLvvZrAWC3laamXDpG9s5nIDcpqU0r6J0yHSw0vttXVS66XhAIwgX38C0w
-         KvM4svApt2c+mxyjBEDr9B6DWK0OlL09uf8J0byWQ3BonsqJZXCxSHmlgVOvloK5SR
-         6dBkKyQCPwB/A==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id lKnUzbz4rVVF; Tue,  1 Aug 2023 10:34:04 +0200 (CEST)
-Received: from defiant.. (unknown [94.250.191.183])
-        by domac.alu.hr (Postfix) with ESMTPSA id 8EBCC6015F;
-        Tue,  1 Aug 2023 10:33:36 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1690878844; bh=UXWDskgxlw95RIZ0DjzbONRlRD516JvVYJ02jsHHwGA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=DcHjGL7oHDx5sJ02WTfo3qDCrUgfgTVacOu6C+kmz9KpRmhRGw87p0pi+t3l1beNL
-         CmESoOfj4+rY5gZDd+B+hiXYg8ZEcfsDe8ujC8nTQLQsVKIb54eWxdgpssuc8JpM57
-         OGytUFOStnCO7UHowApfPdSwM3xA+N4f3ZRbnz47/9UVcTLXTPk+86+nED/bY2mSYv
-         A/MJqE+FlWIS87jailkZD/cfc/CIwAvdvJZjAMcWsZptaMQnh/9ZeoM02ex5b55OHz
-         c3I97bVeAVUBjqxlNJCL1L9/KdEdakseB0xpfzzbHOGEe3d/fF/MLTcYRl2IR/j8uh
-         /LGgekUICWR9A==
-From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>,
-        linux-kernel@vger.kernel.org
-Cc:     "Luis R . Rodriguez" <mcgrof@kernel.org>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Takashi Iwai <tiwai@suse.de>,
-        Tianfei Zhang <tianfei.zhang@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
-        Dan Carpenter <error27@gmail.com>
-Subject: [PATCH v2 1/1] test_firmware: prevent race conditions by a correct implementation of locking
-Date:   Tue,  1 Aug 2023 10:14:05 +0200
-Message-Id: <20230801081404.56387-1-mirsad.todorovac@alu.unizg.hr>
-X-Mailer: git-send-email 2.34.1
+        Tue, 1 Aug 2023 04:50:09 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1784F10FA;
+        Tue,  1 Aug 2023 01:50:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1690879806;
+        bh=N1HBf/84hnmfCbdnwqZ0eyFfZXSs6A4NmSmQ9HOb62c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NEP53/pBD2koXxSzMV8+FL8/eAf2YWcbL1SJllcRFQxTNqbgN8p1tK0rpvuEERC1U
+         8u2fq72RTBoRIO++oYPD8aSz8tgZnALvIsOIapkhwmZJzcIjfcgme6T6sZ3Bw7az6m
+         Z36a3OEXv44FpL+CrLACjymyPJS8DILcF1Vkoe9c=
+Date:   Tue, 1 Aug 2023 10:50:05 +0200
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yuan Tan <tanyuan@tinylab.org>,
+        Zhangjin Wu <falcon@tinylab.org>
+Subject: Re: [PATCH v2 06/10] selftests/nolibc: make functions static if
+ possible
+Message-ID: <4ad4b853-b89f-4c5a-a50b-28739d7b81c0@t-8ch.de>
+References: <20230801-nolibc-warnings-v2-0-1ba5ca57bd9b@weissschuh.net>
+ <20230801-nolibc-warnings-v2-6-1ba5ca57bd9b@weissschuh.net>
+ <ZMiro1pwVvAzNel5@1wt.eu>
+ <bf97900a-98bb-45dc-9451-b9728173136e@t-8ch.de>
+ <ZMi+k0HsMGJxbs7V@1wt.eu>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZMi+k0HsMGJxbs7V@1wt.eu>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-[ Upstream commit 4acfe3dfde685a5a9eaec5555351918e2d7266a1 ]
+On 2023-08-01 10:13:07+0200, Willy Tarreau wrote:
+> On Tue, Aug 01, 2023 at 09:34:18AM +0200, Thomas Weißschuh wrote:
+> > On 2023-08-01 08:52:19+0200, Willy Tarreau wrote:
+> > > On Tue, Aug 01, 2023 at 07:30:13AM +0200, Thomas Weißschuh wrote:
+> > > > diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+> > > > index 1555759bb164..53a3773c7790 100644
+> > > > --- a/tools/testing/selftests/nolibc/nolibc-test.c
+> > > > +++ b/tools/testing/selftests/nolibc/nolibc-test.c
+> > 
+> > > [..]
+> > 
+> > > >  /* prepare what needs to be prepared for pid 1 (stdio, /dev, /proc, etc) */
+> > > > -int prepare(void)
+> > > > +static int prepare(void)
+> > > >  {
+> > > >  	struct stat stat_buf;
+> > > >  
+> > > > @@ -1208,7 +1208,7 @@ static const struct test test_names[] = {
+> > > >  	{ 0 }
+> > > >  };
+> > >  
+> > > For these ones it will prevent gcc from putting breakpoints there, which
+> > > is counter-productive.
+> > 
+> > Indeed.
+> > 
+> > An alternative would be to add -g to CFLAGS (and remove -s from LDFLAGS).
+> > This way we get full debugability including breakpoints for everything.
+> 
+> It wouldn't change much because while it would allow the debugger to know
+> where the function was possibly inlined, it's still not very convenient:
+> you believe you're in a function but in fact you're in the caller. It
+> really depends what you're debugging but here I don't see all that as
+> providing a value, at least it brings more annoyance and little to no
+> gain IMHO.
 
-Dan Carpenter spotted a race condition in a couple of situations like
-these in the test_firmware driver:
+Even if it doesn't work 100% properly it wouldn't it still be a superset
+of the previous functionality?
+And we don't have to manually keep track of which ones should be static
+and which shouldn't (See this discussion).
 
-static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
-{
-        u8 val;
-        int ret;
+Would it be better with -ggdb?
 
-        ret = kstrtou8(buf, 10, &val);
-        if (ret)
-                return ret;
+If you are still not conviced I'll drop the argument here :-)
+(And the changes in the next revision)
 
-        mutex_lock(&test_fw_mutex);
-        *(u8 *)cfg = val;
-        mutex_unlock(&test_fw_mutex);
+> > I didn't find the reasoning for -s in LDFLAGS.
+> 
+> It's historic, because normally when you want small binaries you strip
+> them, and the command line was reused as-is, but I agree that we could
+> get rid of it!
 
-        /* Always return full write size even if we didn't consume all */
-        return size;
-}
+I'll remove it. It was annoying to figure out why my "-g" CFLAG didn't
+work at all.
 
-static ssize_t config_num_requests_store(struct device *dev,
-                                         struct device_attribute *attr,
-                                         const char *buf, size_t count)
-{
-        int rc;
-
-        mutex_lock(&test_fw_mutex);
-        if (test_fw_config->reqs) {
-                pr_err("Must call release_all_firmware prior to changing config\n");
-                rc = -EINVAL;
-                mutex_unlock(&test_fw_mutex);
-                goto out;
-        }
-        mutex_unlock(&test_fw_mutex);
-
-	// NOTE: HERE is the race!!! Function can be preempted!
-
-	// test_fw_config->reqs can change between the release of
-	// the lock about and acquire of the lock in the
-	// test_dev_config_update_u8()
-
-        rc = test_dev_config_update_u8(buf, count,
-                                       &test_fw_config->num_requests);
-
-out:
-        return rc;
-}
-
-static ssize_t config_read_fw_idx_store(struct device *dev,
-                                        struct device_attribute *attr,
-                                        const char *buf, size_t count)
-{
-        return test_dev_config_update_u8(buf, count,
-                                         &test_fw_config->read_fw_idx);
-}
-
-The function test_dev_config_update_u8() is called from both the locked
-and the unlocked context, function config_num_requests_store() and
-config_read_fw_idx_store() which can both be called asynchronously as
-they are driver's methods, while test_dev_config_update_u8() and siblings
-change their argument pointed to by u8 *cfg or similar pointer.
-
-To avoid deadlock on test_fw_mutex, the lock is dropped before calling
-test_dev_config_update_u8() and re-acquired within test_dev_config_update_u8()
-itself, but alas this creates a race condition.
-
-Having two locks wouldn't assure a race-proof mutual exclusion.
-
-This situation is best avoided by the introduction of a new, unlocked
-function __test_dev_config_update_u8() which can be called from the locked
-context and reducing test_dev_config_update_u8() to:
-
-static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
-{
-        int ret;
-
-        mutex_lock(&test_fw_mutex);
-        ret = __test_dev_config_update_u8(buf, size, cfg);
-        mutex_unlock(&test_fw_mutex);
-
-        return ret;
-}
-
-doing the locking and calling the unlocked primitive, which enables both
-locked and unlocked versions without duplication of code.
-
-Fixes: c92316bf8e948 ("test_firmware: add batched firmware tests")
-Cc: Luis R. Rodriguez <mcgrof@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Russ Weight <russell.h.weight@intel.com>
-Cc: Takashi Iwai <tiwai@suse.de>
-Cc: Tianfei Zhang <tianfei.zhang@intel.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Colin Ian King <colin.i.king@gmail.com>
-Cc: Randy Dunlap <rdunlap@infradead.org>
-Cc: linux-kselftest@vger.kernel.org
-Cc: stable@vger.kernel.org # v5.4
-Suggested-by: Dan Carpenter <error27@gmail.com>
-Link: https://lore.kernel.org/r/20230509084746.48259-1-mirsad.todorovac@alu.unizg.hr
-Signed-off-by: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-
-[ NOTE: This patch is tested against 5.4 stable. Some of the fixes from the upstream ]
-[       patch to stable 5.10+ do not apply.					     ]
-
----
-v2:
- minor clarification and consistency improvements. no change to code.
-
- lib/test_firmware.c | 37 ++++++++++++++++++++++++++++---------
- 1 file changed, 28 insertions(+), 9 deletions(-)
-
-diff --git a/lib/test_firmware.c b/lib/test_firmware.c
-index 38553944e967..92d7195d5b5b 100644
---- a/lib/test_firmware.c
-+++ b/lib/test_firmware.c
-@@ -301,16 +301,26 @@ static ssize_t config_test_show_str(char *dst,
- 	return len;
- }
- 
--static int test_dev_config_update_bool(const char *buf, size_t size,
--				       bool *cfg)
-+static inline int __test_dev_config_update_bool(const char *buf, size_t size,
-+						bool *cfg)
- {
- 	int ret;
- 
--	mutex_lock(&test_fw_mutex);
- 	if (strtobool(buf, cfg) < 0)
- 		ret = -EINVAL;
- 	else
- 		ret = size;
-+
-+	return ret;
-+}
-+
-+static int test_dev_config_update_bool(const char *buf, size_t size,
-+				       bool *cfg)
-+{
-+	int ret;
-+
-+	mutex_lock(&test_fw_mutex);
-+	ret = __test_dev_config_update_bool(buf, size, cfg);
- 	mutex_unlock(&test_fw_mutex);
- 
- 	return ret;
-@@ -340,7 +350,7 @@ static ssize_t test_dev_config_show_int(char *buf, int cfg)
- 	return snprintf(buf, PAGE_SIZE, "%d\n", val);
- }
- 
--static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
-+static inline int __test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
- {
- 	int ret;
- 	long new;
-@@ -352,14 +362,23 @@ static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
- 	if (new > U8_MAX)
- 		return -EINVAL;
- 
--	mutex_lock(&test_fw_mutex);
- 	*(u8 *)cfg = new;
--	mutex_unlock(&test_fw_mutex);
- 
- 	/* Always return full write size even if we didn't consume all */
- 	return size;
- }
- 
-+static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
-+{
-+	int ret;
-+
-+	mutex_lock(&test_fw_mutex);
-+	ret = __test_dev_config_update_u8(buf, size, cfg);
-+	mutex_unlock(&test_fw_mutex);
-+
-+	return ret;
-+}
-+
- static ssize_t test_dev_config_show_u8(char *buf, u8 cfg)
- {
- 	u8 val;
-@@ -392,10 +411,10 @@ static ssize_t config_num_requests_store(struct device *dev,
- 		mutex_unlock(&test_fw_mutex);
- 		goto out;
- 	}
--	mutex_unlock(&test_fw_mutex);
- 
--	rc = test_dev_config_update_u8(buf, count,
--				       &test_fw_config->num_requests);
-+	rc = __test_dev_config_update_u8(buf, count,
-+					 &test_fw_config->num_requests);
-+	mutex_unlock(&test_fw_mutex);
- 
- out:
- 	return rc;
--- 
-2.34.1
-
+Thomas
