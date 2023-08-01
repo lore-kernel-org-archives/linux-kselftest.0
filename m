@@ -2,148 +2,101 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AFF0EB64DD
-	for <linux-kselftest@archiver.kernel.org>; Tue,  1 Aug 2023 09:59:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95FA9EB64DD
+	for <linux-kselftest@archiver.kernel.org>; Tue,  1 Aug 2023 10:15:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231962AbjHAJ7T (ORCPT
+        id S231220AbjHAKPl (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 1 Aug 2023 05:59:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56124 "EHLO
+        Tue, 1 Aug 2023 06:15:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233846AbjHAJ6A (ORCPT
+        with ESMTP id S232369AbjHAKP0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Aug 2023 05:58:00 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C47E7C;
-        Tue,  1 Aug 2023 02:57:39 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 49B1B6015F;
-        Tue,  1 Aug 2023 11:57:26 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1690883846; bh=HvFuOQ+AD9vAeGv0bVGl9kIg9XMWNofn3eX/sGBr77Y=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=IKPUJQJYCCJAkPzbTaVmpITL7DojUgTrFvVl1qtS9um44B4zklEEaqyKKBWSqfmk4
-         yfoeFHALqkEVpaWY+2V6ZO42W9uCHD7goKeX5m3pB/0lQf8fdTZL/FZbUeZ26pH9Jq
-         LrKCozI9LaY7+otVV2Dy7vLyqOZiFmBiBLMaGpBPRFyrobrFOM0uZzyMWCuF1drL9K
-         vQMWjEjcAsQNYRM0igKjI+4/xAjga9EzGq58GP3K3PrWST1vRSugtZZiGqQ97bJOJy
-         tuSWlmcVV13Y766sHbT9BeDsham5GvI2298OdkrtgvOrlYGSeYrXPLuHAem6WCQnQT
-         K1z5ywMP5wsVQ==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 5I306fRjD5hA; Tue,  1 Aug 2023 11:57:23 +0200 (CEST)
-Received: from [193.198.186.200] (pc-mtodorov.slava.alu.hr [193.198.186.200])
-        by domac.alu.hr (Postfix) with ESMTPSA id BF3EF6017C;
-        Tue,  1 Aug 2023 11:57:23 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1690883843; bh=HvFuOQ+AD9vAeGv0bVGl9kIg9XMWNofn3eX/sGBr77Y=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=G0gmK1J1sicJCKLGWrDPHzkP00i6il/3BeFgrnArBclfkcN5ltJjqCO31TYzXIbaS
-         dXY5qEfdnWSV7vRhQB8cQ9SXqG2Z1fkRyhBMt6C5Y+JSHxODo4vtPBe922PRJul6Fh
-         QR0+ucG2hmo/4wFPTjy+Gu4z+2FapEBoLbwM/XHvL510WRHnnSYMGGeG7zY28r0vP4
-         i36yy/6UpGLaJm9TSzRf5xJPTIQmVkQYLMdU4E5BFpYINgnB3E/HRaFyuCqkV4Wiht
-         2qlxa7SfjwCGsC9rROKIe+fzERAPd2EOrrjG5e1yuFXPnVfsi/GsJtl8aVQ4zY4UkK
-         pb40ysdJQMOXA==
-Message-ID: <24d27380-544e-66d1-1cb2-14eb87ce89ac@alu.unizg.hr>
-Date:   Tue, 1 Aug 2023 11:57:19 +0200
+        Tue, 1 Aug 2023 06:15:26 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 020431B7;
+        Tue,  1 Aug 2023 03:15:18 -0700 (PDT)
+X-QQ-mid: bizesmtp73t1690884913tdh90bq6
+Received: from linux-lab-host.localdomain ( [116.30.131.233])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 01 Aug 2023 18:15:12 +0800 (CST)
+X-QQ-SSF: 01200000000000E0X000000A0000000
+X-QQ-FEAT: zT6n3Y95oi30KINxb71iEGkZFmwk0xExAmr450WkSmrjQ6FUOfN0sBKn7EoOM
+        /KDQ7euQ/5SsK+jc6T1XBJOI5kvvq6aKAm4LOI7P18kcXcdpMG4g4EwGP9phDr4bHMIgshD
+        TH1JaXn1dYM926tHusvBNEJJ7iv7nOWFSTluKvsU7ec6LlV8mzLHmpIr8LHGHZrd6XLV6jH
+        +lYfWHc1LLudXDjRxmyWUhQUFem0OVIUzLTmq2A7NitOG7GXOUwPIEWNBo7GDjwZCznLX1/
+        mnBzVYCGwsePZdKH5owmfoWRUYUTZXuGhorv1HpDe53EiRJPIkuhDTE28F36badC3zNN0K4
+        DogQfF0dGbXiQZ1mrGaAlvbXpbL7MCsdiXp45Hmxq+KSNqFuhOWwGFGwM/yCg==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 546874083959870445
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     linux@weissschuh.net
+Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, shuah@kernel.org,
+        tanyuan@tinylab.org, w@1wt.eu
+Subject: Re: [PATCH v2 07/10] selftests/nolibc: avoid unused arguments warnings
+Date:   Tue,  1 Aug 2023 18:15:08 +0800
+Message-Id: <20230801101508.75571-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <6d67a8ed-8cb6-4ab7-8db0-68269981f8df@t-8ch.de>
+References: <6d67a8ed-8cb6-4ab7-8db0-68269981f8df@t-8ch.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v1 1/1] test_firmware: prevent race conditions by a
- correct implementation of locking
-From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        Russ Weight <russell.h.weight@intel.com>,
-        Takashi Iwai <tiwai@suse.de>,
-        Tianfei Zhang <tianfei.zhang@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
-        Dan Carpenter <error27@gmail.com>
-References: <20230731165018.8233-1-mirsad.todorovac@alu.unizg.hr>
- <ZMfvAhOfSP5UXN6l@bombadil.infradead.org>
- <0e3a740f-60dd-e657-8a5c-79b155fa62b3@alu.unizg.hr>
-Content-Language: en-US, hr
-In-Reply-To: <0e3a740f-60dd-e657-8a5c-79b155fa62b3@alu.unizg.hr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/1/23 10:24, Mirsad Todorovac wrote:
-> On 7/31/23 19:27, Luis Chamberlain wrote:
->> On Mon, Jul 31, 2023 at 06:50:19PM +0200, Mirsad Todorovac wrote:
->>> NOTE: This patch is tested against 5.4 stable
->>>
->>> NOTE: This is a patch for the 5.4 stable branch, not for the torvalds tree.
->>>
->>>        The torvalds tree, and stable tree 5.10, 5.15, 6.1 and 6.4 branches
->>>        were fixed in the separate
->>>        commit ID 4acfe3dfde68 ("test_firmware: prevent race conditions by a correct implementation of locking")
->>>        which was incompatible with 5.4
->>>
->>
->> The above part is not part of the original commit, you also forgot to
->> mention the upstream commit:
->>
->> [ Upstream commit 4acfe3dfde685a5a9eaec5555351918e2d7266a1 ]
-> 
-> Will fix. Actually, I wasn't sure if it was required, because this backported patch
-> isn't verbatim equal to commit 4acfe3dfde685a5a9eaec5555351918e2d7266a1 .
-> 
-> Though they are cousins, addressing the same issue.
-> 
-> There is a race to be fixed, despite not all racy functions present in the original commit c92316bf8e948.
-> 
->>> Fixes: c92316bf8e948 ("test_firmware: add batched firmware tests")
->>> Cc: Luis R. Rodriguez <mcgrof@kernel.org>
->>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->>> Cc: Russ Weight <russell.h.weight@intel.com>
->>> Cc: Takashi Iwai <tiwai@suse.de>
->>> Cc: Tianfei Zhang <tianfei.zhang@intel.com>
->>> Cc: Shuah Khan <shuah@kernel.org>
->>> Cc: Colin Ian King <colin.i.king@gmail.com>
->>> Cc: Randy Dunlap <rdunlap@infradead.org>
->>> Cc: linux-kselftest@vger.kernel.org
->>> Cc: stable@vger.kernel.org # v5.4
->>> Suggested-by: Dan Carpenter <error27@gmail.com>
->>
->> Here you can add the above note in brackets:
->>
->> [ explain your changes here from the original commit ]
->>
->> Then, I see two commits upstream on Linus tree which are also fixes
->> but not merged on v5.4, did you want those applied too?
-> 
-> These seem merged in the stable 5.4?
-> 
-> commit 75d9e00f65cd2e0f2ce9ceeb395f821976773489 test_firmware: fix a memory leak with reqs buffer
-> commit 94f3bc7e84af2f17dbfbc7afe93991c2a6f2f25e test_firmware: fix the memory leak of the allocated firmware buffer
-> 
-> Maybe this commit should be backported instead:
-> 
-> test_firmware: return ENOMEM instead of ENOSPC on failed memory allocation
-> [ Upstream commit 7dae593cd226a0bca61201cf85ceb9335cf63682 ]
-> 
-> It was also merged into 6.4, 6.1, 5.15 and 5.10 stable, but not on 5.4
-> 
-> I might also check whether the 4.19 and 4.14 are vulnerable to these memory leaks and this race
-> (Yes, they are, so it might be prudent that we backport this fix.)
+Hi, Thomas
 
-FYI, just checked, the patch applied w/o modifications to 4.19 and 4.14 LTS stable branches.
+> On 2023-08-01 10:07:28+0200, Willy Tarreau wrote:
+> > On Tue, Aug 01, 2023 at 07:30:14AM +0200, Thomas Weißschuh wrote:
+> > > This warnings will be enabled later so avoid triggering it.
+> > > 
+> > > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> > > ---
+> > >  tools/testing/selftests/nolibc/nolibc-test.c | 3 ++-
+> > >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+> > > index 53a3773c7790..cb17cccd0bc7 100644
+> > > --- a/tools/testing/selftests/nolibc/nolibc-test.c
+> > > +++ b/tools/testing/selftests/nolibc/nolibc-test.c
+> > > @@ -1089,7 +1089,8 @@ static int smash_stack(void)
+> > >  	return 1;
+> > >  }
+> > >  
+> > > -static int run_protection(int min, int max)
+> > > +static int run_protection(int __attribute__((unused)) min,
+> > > +			  int __attribute__((unused)) max)
+> > 
+> > This one is used to silence -Wunused-parameter I guess.
+> 
+> Yep.
+> 
+> > It's one of
+> > the rare warnings that I find totally useless in field, because it's
+> > simply against the principle of using function pointers with different
+> > functions having the same interface but different implementations. As
+> > your code evolves you end up with unused on absolutely *all* of the
+> > arguments of *all* such functions, which makes them a real pain to add
+> > and tends to encourage poor practices such as excessive code reuse just
+> > by laziness or boredom. BTW it's one of those that are already disabled
+> > in the kernel and we could very well do the same here.
+> 
+> It's indeed unfortunate.
+> 
+> As long as we don't have too many of them I would prefer to keep the
+> explicit annotations. While they are ugly we then can still reap the
+> positive aspects of the warning.
+> 
+> This is where -std=c89 bites us. With extensions (or C2X) we could also
+> just leave off the argument name to mark it as unused:
+>     run_protection(int, int)
 
-Mirsad
+what about further simply ignore the arguments like we did for main(void)?
 
--- 
-Mirsad Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
-
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
+Thanks,
+Zhangjin
