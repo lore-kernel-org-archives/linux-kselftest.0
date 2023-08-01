@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CFB5C001DF
-	for <linux-kselftest@archiver.kernel.org>; Tue,  1 Aug 2023 12:50:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B629C00528
+	for <linux-kselftest@archiver.kernel.org>; Tue,  1 Aug 2023 12:50:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233968AbjHAMu0 (ORCPT
+        id S233889AbjHAMuh (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 1 Aug 2023 08:50:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47554 "EHLO
+        Tue, 1 Aug 2023 08:50:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233796AbjHAMuM (ORCPT
+        with ESMTP id S233875AbjHAMuR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Aug 2023 08:50:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F28212D
-        for <linux-kselftest@vger.kernel.org>; Tue,  1 Aug 2023 05:49:17 -0700 (PDT)
+        Tue, 1 Aug 2023 08:50:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E593F1FFD
+        for <linux-kselftest@vger.kernel.org>; Tue,  1 Aug 2023 05:49:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1690894156;
+        s=mimecast20190719; t=1690894165;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ZVj1eNQXOQKDlAdeuW3yrTqXO0l5971B6VcwmwMnAdw=;
-        b=GbBPWRdpOWbag395U8npQ/kZnwJWQfuZzOFTm6/66f//Iw4m6LfL0BFgxtPvOzIX9J20s8
-        pHcp+Yjzu/etp7nLboFmReeZSpdCaemxDMjNZF/2ShfNwJTbP6G3Soy7cCxp/KjqdSPFUI
-        3q67BlzUysU1m+wPYgI1XGqGso5bQuI=
+        bh=xJsbOToPWAZq/BUuGCNQ1TQ79o7M/JDjOnzAfc0Kk/Q=;
+        b=duy7OR7dv4bPQERPWUL5bLYAN/ueStojPTiO7n4K2fXG4vqbJBUp0muqTXRwyxbOY6WHnb
+        rjkEUo8BKnzF6z0b+jkM9eBcvmQe/X8H0Shy7YblJ9ehdGgtu0vvfOCYhFzEry6svoXMHe
+        h/qI3Gv4rcKcNkp3HyTvkjFNZI3kInY=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-674-yaGk4Z3HMGqR7gEOj687BA-1; Tue, 01 Aug 2023 08:49:12 -0400
-X-MC-Unique: yaGk4Z3HMGqR7gEOj687BA-1
+ us-mta-617-GAfS87eYOzWzIWNTk4bPuA-1; Tue, 01 Aug 2023 08:49:23 -0400
+X-MC-Unique: GAfS87eYOzWzIWNTk4bPuA-1
 Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8CE761044596;
-        Tue,  1 Aug 2023 12:49:11 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 14FB9800962;
+        Tue,  1 Aug 2023 12:49:23 +0000 (UTC)
 Received: from t14s.fritz.box (unknown [10.39.193.232])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 12865C585A0;
-        Tue,  1 Aug 2023 12:49:07 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4759CC585A1;
+        Tue,  1 Aug 2023 12:49:20 +0000 (UTC)
 From:   David Hildenbrand <david@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
@@ -53,9 +53,9 @@ Cc:     linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
         John Hubbard <jhubbard@nvidia.com>,
         Mel Gorman <mgorman@suse.de>, Shuah Khan <shuah@kernel.org>,
         Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH v2 4/8] mm/gup: don't implicitly set FOLL_HONOR_NUMA_FAULT
-Date:   Tue,  1 Aug 2023 14:48:40 +0200
-Message-ID: <20230801124844.278698-5-david@redhat.com>
+Subject: [PATCH v2 7/8] selftest/mm: ksm_functional_tests: test in mmap_and_merge_range() if anything got merged
+Date:   Tue,  1 Aug 2023 14:48:43 +0200
+Message-ID: <20230801124844.278698-8-david@redhat.com>
 In-Reply-To: <20230801124844.278698-1-david@redhat.com>
 References: <20230801124844.278698-1-david@redhat.com>
 MIME-Version: 1.0
@@ -65,62 +65,119 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Commit 0b9d705297b2 ("mm: numa: Support NUMA hinting page faults from
-gup/gup_fast") from 2012 documented as the primary reason why we would want
-to handle NUMA hinting faults from GUP:
+Let's extend mmap_and_merge_range() to test if anything in the current
+process was merged. range_maps_duplicates() is too unreliable for that
+use case, so instead look at KSM stats.
 
-  KVM secondary MMU page faults will trigger the NUMA hinting page
-  faults through gup_fast -> get_user_pages -> follow_page ->
-  handle_mm_fault.
+Trigger a complete unmerge first, to cleanup the stable tree and
+stabilize accounting of merged pages.
 
-That is still the case today, and relevant KVM code has been converted to
-manually set FOLL_HONOR_NUMA_FAULT. So let's stop setting
-FOLL_HONOR_NUMA_FAULT for all GUP users and cross fingers that not that
-many other ones that really require such handling for autonuma remain.
+Note that we're using /proc/self/ksm_merging_pages instead of
+/proc/self/ksm_stat, because that one is available in more existing
+kernels.
 
-Possible interaction with MMU notifiers:
+If /proc/self/ksm_merging_pages can't be opened, we can't perform any
+checks and simply skip them.
 
- Assume a driver obtains a page using get_user_pages() to map it into
- a secondary MMU, and uses the MMU notifier framework to get notified on
- changes.
-
- Assume get_user_pages() succeeded on a PROT_NONE-mapped page (because
- FOLL_HONOR_NUMA_FAULT is not set) in an accessible VMA and the page is
- mapped into a secondary MMU. Once user space would turn that mapping
- inaccessible using mprotect(PROT_NONE), the actual PTE in the page table
- might not change. If the MMU notifier would be smart and optimize for that
- case "why notify if the PTE didn't change", that could be problematic.
-
- At least change_pmd_range() with MMU_NOTIFY_PROTECTION_VMA for now does an
- unconditional mmu_notifier_invalidate_range_start() ->
- mmu_notifier_invalidate_range_end() and should be fine.
-
- Note that even if a PTE in an accessible VMA is pte_protnone(), the
- underlying page might be accessed by a secondary MMU that does not set
- FOLL_HONOR_NUMA_FAULT, and test_young() MMU notifiers would return "true".
+We have to special-case the shared zeropage for now. But the only user
+-- test_unmerge_zero_pages() -- performs its own merge checks.
 
 Signed-off-by: David Hildenbrand <david@redhat.com>
 ---
- mm/gup.c | 6 ------
- 1 file changed, 6 deletions(-)
+ .../selftests/mm/ksm_functional_tests.c       | 47 +++++++++++++++++++
+ 1 file changed, 47 insertions(+)
 
-diff --git a/mm/gup.c b/mm/gup.c
-index f463d3004ddc..ee4fc15ce88e 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -2244,12 +2244,6 @@ static bool is_valid_gup_args(struct page **pages, int *locked,
- 		gup_flags |= FOLL_UNLOCKABLE;
- 	}
+diff --git a/tools/testing/selftests/mm/ksm_functional_tests.c b/tools/testing/selftests/mm/ksm_functional_tests.c
+index 0de9d33cd565..cb63b600cb4f 100644
+--- a/tools/testing/selftests/mm/ksm_functional_tests.c
++++ b/tools/testing/selftests/mm/ksm_functional_tests.c
+@@ -30,6 +30,7 @@
+ static int ksm_fd;
+ static int ksm_full_scans_fd;
+ static int proc_self_ksm_stat_fd;
++static int proc_self_ksm_merging_pages_fd;
+ static int ksm_use_zero_pages_fd;
+ static int pagemap_fd;
+ static size_t pagesize;
+@@ -88,6 +89,22 @@ static long get_my_ksm_zero_pages(void)
+ 	return my_ksm_zero_pages;
+ }
  
--	/*
--	 * For now, always trigger NUMA hinting faults. Some GUP users like
--	 * KVM really require it to benefit from autonuma.
--	 */
--	gup_flags |= FOLL_HONOR_NUMA_FAULT;
--
- 	/* FOLL_GET and FOLL_PIN are mutually exclusive. */
- 	if (WARN_ON_ONCE((gup_flags & (FOLL_PIN | FOLL_GET)) ==
- 			 (FOLL_PIN | FOLL_GET)))
++static long get_my_merging_pages(void)
++{
++	char buf[10];
++	ssize_t ret;
++
++	if (proc_self_ksm_merging_pages_fd < 0)
++		return proc_self_ksm_merging_pages_fd;
++
++	ret = pread(proc_self_ksm_merging_pages_fd, buf, sizeof(buf) - 1, 0);
++	if (ret <= 0)
++		return -errno;
++	buf[ret] = 0;
++
++	return strtol(buf, NULL, 10);
++}
++
+ static long ksm_get_full_scans(void)
+ {
+ 	char buf[10];
+@@ -120,11 +137,29 @@ static int ksm_merge(void)
+ 	return 0;
+ }
+ 
++static int ksm_unmerge(void)
++{
++	if (write(ksm_fd, "2", 1) != 1)
++		return -errno;
++	return 0;
++}
++
+ static char *mmap_and_merge_range(char val, unsigned long size, bool use_prctl)
+ {
+ 	char *map;
+ 	int ret;
+ 
++	/* Stabilize accounting by disabling KSM completely. */
++	if (ksm_unmerge()) {
++		ksft_test_result_fail("Disabling (unmerging) KSM failed\n");
++		goto unmap;
++	}
++
++	if (get_my_merging_pages() > 0) {
++		ksft_test_result_fail("Still pages merged\n");
++		goto unmap;
++	}
++
+ 	map = mmap(NULL, size, PROT_READ|PROT_WRITE,
+ 		   MAP_PRIVATE|MAP_ANON, -1, 0);
+ 	if (map == MAP_FAILED) {
+@@ -160,6 +195,16 @@ static char *mmap_and_merge_range(char val, unsigned long size, bool use_prctl)
+ 		ksft_test_result_fail("Running KSM failed\n");
+ 		goto unmap;
+ 	}
++
++	/*
++	 * Check if anything was merged at all. Ignore the zero page that is
++	 * accounted differently (depending on kernel support).
++	 */
++	if (val && !get_my_merging_pages()) {
++		ksft_test_result_fail("No pages got merged\n");
++		goto unmap;
++	}
++
+ 	return map;
+ unmap:
+ 	munmap(map, size);
+@@ -473,6 +518,8 @@ int main(int argc, char **argv)
+ 	if (pagemap_fd < 0)
+ 		ksft_exit_skip("open(\"/proc/self/pagemap\") failed\n");
+ 	proc_self_ksm_stat_fd = open("/proc/self/ksm_stat", O_RDONLY);
++	proc_self_ksm_merging_pages_fd = open("/proc/self/ksm_merging_pages",
++					      O_RDONLY);
+ 	ksm_use_zero_pages_fd = open("/sys/kernel/mm/ksm/use_zero_pages", O_RDWR);
+ 
+ 	test_unmerge();
 -- 
 2.41.0
 
