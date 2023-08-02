@@ -2,28 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38A27C001E0
-	for <linux-kselftest@archiver.kernel.org>; Wed,  2 Aug 2023 15:35:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 801B7C04FDF
+	for <linux-kselftest@archiver.kernel.org>; Wed,  2 Aug 2023 15:36:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235247AbjHBPfN (ORCPT
+        id S235288AbjHBPgg (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 2 Aug 2023 11:35:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56334 "EHLO
+        Wed, 2 Aug 2023 11:36:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235297AbjHBPe7 (ORCPT
+        with ESMTP id S232615AbjHBPgW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Aug 2023 11:34:59 -0400
-X-Greylist: delayed 342 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 02 Aug 2023 08:34:33 PDT
-Received: from outbound-smtp01.blacknight.com (outbound-smtp01.blacknight.com [81.17.249.7])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CBBE3C23
-        for <linux-kselftest@vger.kernel.org>; Wed,  2 Aug 2023 08:34:33 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail04.blacknight.ie [81.17.254.17])
-        by outbound-smtp01.blacknight.com (Postfix) with ESMTPS id 3D966C4AB9
-        for <linux-kselftest@vger.kernel.org>; Wed,  2 Aug 2023 16:34:24 +0100 (IST)
-Received: (qmail 29631 invoked from network); 2 Aug 2023 15:34:24 -0000
+        Wed, 2 Aug 2023 11:36:22 -0400
+Received: from outbound-smtp18.blacknight.com (outbound-smtp18.blacknight.com [46.22.139.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFCCC2103
+        for <linux-kselftest@vger.kernel.org>; Wed,  2 Aug 2023 08:35:41 -0700 (PDT)
+Received: from mail.blacknight.com (pemlinmail01.blacknight.ie [81.17.254.10])
+        by outbound-smtp18.blacknight.com (Postfix) with ESMTPS id 184231C4130
+        for <linux-kselftest@vger.kernel.org>; Wed,  2 Aug 2023 16:35:22 +0100 (IST)
+Received: (qmail 28242 invoked from network); 2 Aug 2023 15:35:21 -0000
 Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.20.191])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 2 Aug 2023 15:34:23 -0000
-Date:   Wed, 2 Aug 2023 16:34:21 +0100
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 2 Aug 2023 15:35:21 -0000
+Date:   Wed, 2 Aug 2023 16:35:19 +0100
 From:   Mel Gorman <mgorman@techsingularity.net>
 To:     David Hildenbrand <david@redhat.com>
 Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
@@ -38,29 +37,26 @@ Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         John Hubbard <jhubbard@nvidia.com>,
         Mel Gorman <mgorman@suse.de>, Shuah Khan <shuah@kernel.org>,
         Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH v2 6/8] mm/huge_memory: remove stale NUMA hinting comment
- from follow_trans_huge_pmd()
-Message-ID: <20230802153421.x5455znvogns5dfv@techsingularity.net>
+Subject: Re: [PATCH v2 5/8] pgtable: improve pte_protnone() comment
+Message-ID: <20230802153519.ryds4omveq5zbtex@techsingularity.net>
 References: <20230801124844.278698-1-david@redhat.com>
- <20230801124844.278698-7-david@redhat.com>
+ <20230801124844.278698-6-david@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-15
 Content-Disposition: inline
-In-Reply-To: <20230801124844.278698-7-david@redhat.com>
+In-Reply-To: <20230801124844.278698-6-david@redhat.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Aug 01, 2023 at 02:48:42PM +0200, David Hildenbrand wrote:
-> That comment for pmd_protnone() was added in commit 2b4847e73004
-> ("mm: numa: serialise parallel get_user_page against THP migration"), which
-> noted:
+On Tue, Aug 01, 2023 at 02:48:41PM +0200, David Hildenbrand wrote:
+> Especially the "For PROT_NONE VMAs, the PTEs are not marked
+> _PAGE_PROTNONE" is wrong: doing an mprotect(PROT_NONE) will end up
+> marking all PTEs on x86 as _PAGE_PROTNONE, making pte_protnone()
+> indicate "yes".
 > 
-> 	THP does not unmap pages due to a lack of support for migration
-> 	entries at a PMD level.  This allows races with get_user_pages
-> 
-> Nowadays, we do have PMD migration entries, so the comment no longer
-> applies. Let's drop it.
+> So let's improve the comment, so it's easier to grasp which semantics
+> pte_protnone() actually has.
 > 
 > Signed-off-by: David Hildenbrand <david@redhat.com>
 
