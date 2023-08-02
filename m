@@ -2,28 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8ED33C001E0
-	for <linux-kselftest@archiver.kernel.org>; Wed,  2 Aug 2023 15:28:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 071C4C04E69
+	for <linux-kselftest@archiver.kernel.org>; Wed,  2 Aug 2023 15:28:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232741AbjHBP2F (ORCPT
+        id S233525AbjHBP2H (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 2 Aug 2023 11:28:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47774 "EHLO
+        Wed, 2 Aug 2023 11:28:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233802AbjHBP1l (ORCPT
+        with ESMTP id S232678AbjHBP1m (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Aug 2023 11:27:41 -0400
-X-Greylist: delayed 1031 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 02 Aug 2023 08:25:30 PDT
-Received: from outbound-smtp16.blacknight.com (outbound-smtp16.blacknight.com [46.22.139.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A25E259E0
-        for <linux-kselftest@vger.kernel.org>; Wed,  2 Aug 2023 08:25:30 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail05.blacknight.ie [81.17.254.26])
-        by outbound-smtp16.blacknight.com (Postfix) with ESMTPS id 9127D1C414D
-        for <linux-kselftest@vger.kernel.org>; Wed,  2 Aug 2023 16:16:15 +0100 (IST)
-Received: (qmail 9455 invoked from network); 2 Aug 2023 15:16:15 -0000
+        Wed, 2 Aug 2023 11:27:42 -0400
+Received: from outbound-smtp15.blacknight.com (outbound-smtp15.blacknight.com [46.22.139.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A514559E9
+        for <linux-kselftest@vger.kernel.org>; Wed,  2 Aug 2023 08:25:31 -0700 (PDT)
+Received: from mail.blacknight.com (pemlinmail04.blacknight.ie [81.17.254.17])
+        by outbound-smtp15.blacknight.com (Postfix) with ESMTPS id A698D1C4218
+        for <linux-kselftest@vger.kernel.org>; Wed,  2 Aug 2023 16:08:17 +0100 (IST)
+Received: (qmail 16070 invoked from network); 2 Aug 2023 15:08:17 -0000
 Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.20.191])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 2 Aug 2023 15:16:15 -0000
-Date:   Wed, 2 Aug 2023 16:16:13 +0100
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 2 Aug 2023 15:08:17 -0000
+Date:   Wed, 2 Aug 2023 16:08:16 +0100
 From:   Mel Gorman <mgorman@techsingularity.net>
 To:     David Hildenbrand <david@redhat.com>
 Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
@@ -37,92 +36,135 @@ Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         Jason Gunthorpe <jgg@ziepe.ca>,
         John Hubbard <jhubbard@nvidia.com>,
         Mel Gorman <mgorman@suse.de>, Shuah Khan <shuah@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH v2 2/8] smaps: use vm_normal_page_pmd() instead of
- follow_trans_huge_pmd()
-Message-ID: <20230802151613.3nyg3xof3gyovlxu@techsingularity.net>
+        Paolo Bonzini <pbonzini@redhat.com>, stable@vger.kernel.org
+Subject: Re: [PATCH v2 1/8] mm/gup: reintroduce FOLL_NUMA as
+ FOLL_HONOR_NUMA_FAULT
+Message-ID: <20230802150816.aaubbx4t7745lqik@techsingularity.net>
 References: <20230801124844.278698-1-david@redhat.com>
- <20230801124844.278698-3-david@redhat.com>
+ <20230801124844.278698-2-david@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-15
 Content-Disposition: inline
-In-Reply-To: <20230801124844.278698-3-david@redhat.com>
+In-Reply-To: <20230801124844.278698-2-david@redhat.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Aug 01, 2023 at 02:48:38PM +0200, David Hildenbrand wrote:
-> We shouldn't be using a GUP-internal helper if it can be avoided.
+On Tue, Aug 01, 2023 at 02:48:37PM +0200, David Hildenbrand wrote:
+> Unfortunately commit 474098edac26 ("mm/gup: replace FOLL_NUMA by
+> gup_can_follow_protnone()") missed that follow_page() and
+> follow_trans_huge_pmd() never implicitly set FOLL_NUMA because they really
+> don't want to fail on PROT_NONE-mapped pages -- either due to NUMA hinting
+> or due to inaccessible (PROT_NONE) VMAs.
 > 
-> Similar to smaps_pte_entry() that uses vm_normal_page(), let's use
-> vm_normal_page_pmd() that similarly refuses to return the huge zeropage.
+> As spelled out in commit 0b9d705297b2 ("mm: numa: Support NUMA hinting page
+> faults from gup/gup_fast"): "Other follow_page callers like KSM should not
+> use FOLL_NUMA, or they would fail to get the pages if they use follow_page
+> instead of get_user_pages."
 > 
-> In contrast to follow_trans_huge_pmd(), vm_normal_page_pmd():
+> liubo reported [1] that smaps_rollup results are imprecise, because they
+> miss accounting of pages that are mapped PROT_NONE. Further, it's easy
+> to reproduce that KSM no longer works on inaccessible VMAs on x86-64,
+> because pte_protnone()/pmd_protnone() also indictaes "true" in
+> inaccessible VMAs, and follow_page() refuses to return such pages right
+> now.
 > 
-> (1) Will always return the head page, not a tail page of a THP.
+> As KVM really depends on these NUMA hinting faults, removing the
+> pte_protnone()/pmd_protnone() handling in GUP code completely is not really
+> an option.
 > 
->  If we'd ever call smaps_account with a tail page while setting "compound
->  = true", we could be in trouble, because smaps_account() would look at
->  the memmap of unrelated pages.
+> To fix the issues at hand, let's revive FOLL_NUMA as FOLL_HONOR_NUMA_FAULT
+> to restore the original behavior for now and add better comments.
 > 
->  If we're unlucky, that memmap does not exist at all. Before we removed
->  PG_doublemap, we could have triggered something similar as in
->  commit 24d7275ce279 ("fs/proc: task_mmu.c: don't read mapcount for
->  migration entry").
+> Set FOLL_HONOR_NUMA_FAULT independent of FOLL_FORCE in
+> is_valid_gup_args(), to add that flag for all external GUP users.
 > 
->  This can theoretically happen ever since commit ff9f47f6f00c ("mm: proc:
->  smaps_rollup: do not stall write attempts on mmap_lock"):
+> Note that there are three GUP-internal __get_user_pages() users that don't
+> end up calling is_valid_gup_args() and consequently won't get
+> FOLL_HONOR_NUMA_FAULT set.
 > 
->   (a) We're in show_smaps_rollup() and processed a VMA
->   (b) We release the mmap lock in show_smaps_rollup() because it is
->       contended
->   (c) We merged that VMA with another VMA
->   (d) We collapsed a THP in that merged VMA at that position
+> 1) get_dump_page(): we really don't want to handle NUMA hinting
+>    faults. It specifies FOLL_FORCE and wouldn't have honored NUMA
+>    hinting faults already.
+> 2) populate_vma_page_range(): we really don't want to handle NUMA hinting
+>    faults. It specifies FOLL_FORCE on accessible VMAs, so it wouldn't have
+>    honored NUMA hinting faults already.
+> 3) faultin_vma_page_range(): we similarly don't want to handle NUMA
+>    hinting faults.
 > 
->  If the end address of the original VMA falls into the middle of a THP
->  area, we would call smap_gather_stats() with a start address that falls
->  into a PMD-mapped THP. It's probably very rare to trigger when not
->  really forced.
+> To make the combination of FOLL_FORCE and FOLL_HONOR_NUMA_FAULT work in
+> inaccessible VMAs properly, we have to perform VMA accessibility checks in
+> gup_can_follow_protnone().
 > 
-> (2) Will succeed on a is_pci_p2pdma_page(), like vm_normal_page()
+> As GUP-fast should reject such pages either way in
+> pte_access_permitted()/pmd_access_permitted() -- for example on x86-64 and
+> arm64 that both implement pte_protnone() -- let's just always fallback
+> to ordinary GUP when stumbling over pte_protnone()/pmd_protnone().
 > 
->  Treat such PMDs here just like smaps_pte_entry() would treat such PTEs.
->  If such pages would be anonymous, we most certainly would want to
->  account them.
+> As Linus notes [2], honoring NUMA faults might only make sense for
+> selected GUP users.
 > 
-> (3) Will skip over pmd_devmap(), like vm_normal_page() for pte_devmap()
+> So we should really see if we can instead let relevant GUP callers specify
+> it manually, and not trigger NUMA hinting faults from GUP as default.
+> Prepare for that by making FOLL_HONOR_NUMA_FAULT an external GUP flag
+> and adding appropriate documenation.
 > 
->  As noted in vm_normal_page(), that is only for handling legacy ZONE_DEVICE
->  pages. So just like smaps_pte_entry(), we'll now also ignore such PMD
->  entries.
+> [1] https://lore.kernel.org/r/20230726073409.631838-1-liubo254@huawei.com
+> [2] https://lore.kernel.org/r/CAHk-=wgRiP_9X0rRdZKT8nhemZGNateMtb366t37d8-x7VRs=g@mail.gmail.com
 > 
->  Especially, follow_pmd_mask() never ends up calling
->  follow_trans_huge_pmd() on pmd_devmap(). Instead it calls
->  follow_devmap_pmd() -- which will fail if neither FOLL_GET nor FOLL_PIN
->  is set.
-> 
->  So skipping pmd_devmap() pages seems to be the right thing to do.
-> 
-> (4) Will properly handle VM_MIXEDMAP/VM_PFNMAP, like vm_normal_page()
-> 
->  We won't be returning a memmap that should be ignored by core-mm, or
->  worse, a memmap that does not even exist. Note that while
->  walk_page_range() will skip VM_PFNMAP mappings, walk_page_vma() won't.
-> 
->  Most probably this case doesn't currently really happen on the PMD level,
->  otherwise we'd already be able to trigger kernel crashes when reading
->  smaps / smaps_rollup.
-> 
-> So most probably only (1) is relevant in practice as of now, but could only
-> cause trouble in extreme corner cases.
-> 
-> Fixes: ff9f47f6f00c ("mm: proc: smaps_rollup: do not stall write attempts on mmap_lock")
+> Reported-by: liubo <liubo254@huawei.com>
+> Closes: https://lore.kernel.org/r/20230726073409.631838-1-liubo254@huawei.com
+> Reported-by: Peter Xu <peterx@redhat.com>
+> Closes: https://lore.kernel.org/all/ZMKJjDaqZ7FW0jfe@x1n/
+> Fixes: 474098edac26 ("mm/gup: replace FOLL_NUMA by gup_can_follow_protnone()")
+> Cc: <stable@vger.kernel.org>
 > Signed-off-by: David Hildenbrand <david@redhat.com>
 
-Maybe move the follow_trans_huge_pmd() declaration from linux/huge_mm.h
-to mm/internal.h to discourage future mistakes? Otherwise
+I agree that FOLL_REMOTE probably needs separate treatment but also agree
+that it's outside the context of this patch, particularly as a -stable
+candidate so
 
 Acked-by: Mel Gorman <mgorman@techsingularity.net>
+
+I've a minor nit below that would be nice to get fixed up, but not
+mandatory.
+
+> ---
+>  include/linux/mm.h       | 21 +++++++++++++++------
+>  include/linux/mm_types.h |  9 +++++++++
+>  mm/gup.c                 | 29 +++++++++++++++++++++++------
+>  mm/huge_memory.c         |  2 +-
+>  4 files changed, 48 insertions(+), 13 deletions(-)
+> 
+> diff --git a/mm/gup.c b/mm/gup.c
+> index 2493ffa10f4b..f463d3004ddc 100644
+> --- a/mm/gup.c
+> +++ b/mm/gup.c
+> @@ -2240,6 +2244,12 @@ static bool is_valid_gup_args(struct page **pages, int *locked,
+>  		gup_flags |= FOLL_UNLOCKABLE;
+>  	}
+>  
+> +	/*
+> +	 * For now, always trigger NUMA hinting faults. Some GUP users like
+> +	 * KVM really require it to benefit from autonuma.
+> +	 */
+> +	gup_flags |= FOLL_HONOR_NUMA_FAULT;
+> +
+>  	/* FOLL_GET and FOLL_PIN are mutually exclusive. */
+>  	if (WARN_ON_ONCE((gup_flags & (FOLL_PIN | FOLL_GET)) ==
+>  			 (FOLL_PIN | FOLL_GET)))
+
+Expand on *why* KVM requires it even though I suspect this changes later
+in the series. Maybe "Some GUP users like KVM require the hint to be as
+the calling context of GUP is functionally similar to a memory reference
+from task context"?
+
+Also minor nit -- s/autonuma/NUMA Balancing/ or numab. autonuma refers to
+a specific implementation of automatic balancing that operated similar to
+khugepaged but not merged. If you grep for it, you'll find that autonuma
+is only referenced in powerpc-specific code. It's not important these
+days but very early on, it was very confusing if AutoNUMA was mentioned
+when NUMAB was intended.
 
 -- 
 Mel Gorman
