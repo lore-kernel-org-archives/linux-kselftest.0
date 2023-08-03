@@ -2,97 +2,269 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DBF0C001DF
-	for <linux-kselftest@archiver.kernel.org>; Thu,  3 Aug 2023 14:46:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3F9EC001DF
+	for <linux-kselftest@archiver.kernel.org>; Thu,  3 Aug 2023 14:46:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234740AbjHCOqR (ORCPT
+        id S235254AbjHCOq2 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 3 Aug 2023 10:46:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56814 "EHLO
+        Thu, 3 Aug 2023 10:46:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235304AbjHCOqO (ORCPT
+        with ESMTP id S235729AbjHCOq0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Aug 2023 10:46:14 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5DB71BC3;
-        Thu,  3 Aug 2023 07:46:09 -0700 (PDT)
-X-QQ-mid: bizesmtp88t1691073958thq43qfz
-Received: from linux-lab-host.localdomain ( [116.30.131.233])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 03 Aug 2023 22:45:57 +0800 (CST)
-X-QQ-SSF: 01200000000000E0X000000A0000000
-X-QQ-FEAT: kUim6XnhvqW9dcd6EzLklGa12GVbNXdonLh2Hg+1w3dBPk/x2b5VmNG+MPDn6
-        PEFmwIR3cWR5MbUVbtIZAVws1QPogU+mUqaPc8Z5UL+wjlb/HxUYHDFDvWxvxrn7beB6YEn
-        BJDzwZdTbH+Pnq0s4jmy5USrmMOGCTiHxvHBDfw/upU5HD5rm6FNcWY2ldr2xYwhSoB3WBs
-        PydhNf4Gm9/FF4g1QfFcGO6D/1kY4BgUZfzgZOoFzKDqyTLkcYjUwBmT0W+0+t3inyNao0z
-        f/vv2iK7gyd6zVCAbhLmVK+KbTNnHyFRBSR3I1RimV2DcL7oRA9h0E+76pdW21iRRQWUVYs
-        X2PNNE2eNamVHpyeMuQ3SnFchCFW33O5RCRXPS9FqjSIWkh1GgEQMKggZnremX9J5q+j9qf
-        pKTbbIaUw/s=
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 2311120515883083357
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de, w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, tanyuan@tinylab.org
-Subject: [PATCH v1 2/3] selftests/nolibc: fix up O= option support
-Date:   Thu,  3 Aug 2023 22:45:52 +0800
-Message-Id: <759307255e4ca3b37b67321d333967a21122c422.1691073180.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1691073180.git.falcon@tinylab.org>
-References: <cover.1691073180.git.falcon@tinylab.org>
+        Thu, 3 Aug 2023 10:46:26 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00FEE1990;
+        Thu,  3 Aug 2023 07:46:18 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 860C060182;
+        Thu,  3 Aug 2023 16:46:15 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1691073975; bh=zPRICqcQrDX+dOl4TyFlg90/BDxv5KpvXkkuz6MfLJw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=sO6EiGr5SE2IcALEBhXz0OEzX4s+Pt+uIm88EBTEr2vjiV9dipwFtlUS00kMO9EVl
+         18FSJaJ2eStHmrEjZ0Jtfr1YEBMRrsG8hpUKr369NsTVJTkTy75WEeh/CwWheUtnqm
+         iglC4pstbxrkg+orPupsmOYTIrcDD2SIIg/dP3JF9D1N9DZkUyPEoUJXTLz6fyHRjh
+         hO8kPG2wEEGy1EZCOcNQwJlXxa6Xq4Wnrl1baZO+9s34GHNm4CRWdM3bJ5tDFphZDg
+         7NkFevOcIYMNubPeVwpAbJhwxiRBpabYLSqXgJQXkJhchZ7tX6bUH7LXNyqPFLIJsw
+         a06rZRxvicRXA==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id kycRNmb8NNVd; Thu,  3 Aug 2023 16:46:12 +0200 (CEST)
+Received: from pc-mtodorov.slava.alu.hr (pc-mtodorov.slava.alu.hr [193.198.186.200])
+        by domac.alu.hr (Postfix) with ESMTPSA id 67E1C6017F;
+        Thu,  3 Aug 2023 16:46:12 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1691073972; bh=zPRICqcQrDX+dOl4TyFlg90/BDxv5KpvXkkuz6MfLJw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=wPl9DwfRlX6rACkg83O1zyXRqo1tjYC8s325SYmmMuM0eHkOIDvcKVXAPMhLF6ozc
+         WsSbnVL6mL+i9WpZVqrYrEd9pTOPi3cP0PMGNZDe1N8bOZoUs3Oe/RErdJTAXWHeR3
+         3FZraJaQ95Ia/CHFzTKB9e4vhmv5D94aMdRj5M3NOMT3aO+lBbyjX0rbJzAx8fl0nv
+         7J44VRTVZTN7BuKFNrRB1rvjJU1fUjY9nSxZHQWF3IYC7Dal9vWg7pTW5uVLcpCAdh
+         4I8akP1GUiwtnKtHryOUgOFkxLSomUO4ARD9KZGMmg6HHgZ06r/h0WQqokBuEItmFO
+         RmeggvFvn9jyg==
+From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>,
+        linux-kernel@vger.kernel.org
+Cc:     "Luis R . Rodriguez" <mcgrof@kernel.org>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Takashi Iwai <tiwai@suse.de>,
+        Tianfei Zhang <tianfei.zhang@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Colin Ian King <colin.i.king@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
+        Dan Carpenter <error27@gmail.com>
+Subject: [PATCH v2 1/2] test_firmware: prevent race conditions by a correct implementation of locking
+Date:   Thu,  3 Aug 2023 16:44:51 +0200
+Message-Id: <20230803144451.3571-1-mirsad.todorovac@alu.unizg.hr>
+X-Mailer: git-send-email 2.39.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-To avoid pollute the source code tree and avoid mrproper for every
-architecture switch, the O= argument must be supported.
+[ Upstream commit 4acfe3dfde685a5a9eaec5555351918e2d7266a1 ]
 
-Both IMAGE and .config are from the building directory, let's use
-objtree instead of srctree for them.
+Dan Carpenter spotted a race condition in a couple of situations like
+these in the test_firmware driver:
 
-If no O= option specified, means building kernel in source code tree,
-objtree should be srctree in such case.
+static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
+{
+        u8 val;
+        int ret;
 
-Suggested-by: Willy Tarreau <w@1wt.eu>
-Link: https://lore.kernel.org/lkml/ZK0AB1OXH1s2xYsh@1wt.eu/
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+        ret = kstrtou8(buf, 10, &val);
+        if (ret)
+                return ret;
+
+        mutex_lock(&test_fw_mutex);
+        *(u8 *)cfg = val;
+        mutex_unlock(&test_fw_mutex);
+
+        /* Always return full write size even if we didn't consume all */
+        return size;
+}
+
+static ssize_t config_num_requests_store(struct device *dev,
+                                         struct device_attribute *attr,
+                                         const char *buf, size_t count)
+{
+        int rc;
+
+        mutex_lock(&test_fw_mutex);
+        if (test_fw_config->reqs) {
+                pr_err("Must call release_all_firmware prior to changing config\n");
+                rc = -EINVAL;
+                mutex_unlock(&test_fw_mutex);
+                goto out;
+        }
+        mutex_unlock(&test_fw_mutex);
+
+        // NOTE: HERE is the race!!! Function can be preempted!
+
+        // test_fw_config->reqs can change between the release of
+        // the lock about and acquire of the lock in the
+        // test_dev_config_update_u8()
+
+        rc = test_dev_config_update_u8(buf, count,
+                                       &test_fw_config->num_requests);
+
+out:
+        return rc;
+}
+
+static ssize_t config_read_fw_idx_store(struct device *dev,
+                                        struct device_attribute *attr,
+                                        const char *buf, size_t count)
+{
+        return test_dev_config_update_u8(buf, count,
+                                         &test_fw_config->read_fw_idx);
+}
+
+The function test_dev_config_update_u8() is called from both the locked
+and the unlocked context, function config_num_requests_store() and
+config_read_fw_idx_store() which can both be called asynchronously as
+they are driver's methods, while test_dev_config_update_u8() and siblings
+change their argument pointed to by u8 *cfg or similar pointer.
+
+To avoid deadlock on test_fw_mutex, the lock is dropped before calling
+test_dev_config_update_u8() and re-acquired within test_dev_config_update_u8()
+itself, but alas this creates a race condition.
+
+Having two locks wouldn't assure a race-proof mutual exclusion.
+
+This situation is best avoided by the introduction of a new, unlocked
+function __test_dev_config_update_u8() which can be called from the locked
+context and reducing test_dev_config_update_u8() to:
+
+static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
+{
+        int ret;
+
+        mutex_lock(&test_fw_mutex);
+        ret = __test_dev_config_update_u8(buf, size, cfg);
+        mutex_unlock(&test_fw_mutex);
+
+        return ret;
+}
+
+doing the locking and calling the unlocked primitive, which enables both
+locked and unlocked versions without duplication of code.
+
+Fixes: c92316bf8e948 ("test_firmware: add batched firmware tests")
+Cc: Luis R. Rodriguez <mcgrof@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Russ Weight <russell.h.weight@intel.com>
+Cc: Takashi Iwai <tiwai@suse.de>
+Cc: Tianfei Zhang <tianfei.zhang@intel.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Colin Ian King <colin.i.king@gmail.com>
+Cc: Randy Dunlap <rdunlap@infradead.org>
+Cc: linux-kselftest@vger.kernel.org
+Cc: stable@vger.kernel.org # v5.4, 4.19
+Suggested-by: Dan Carpenter <error27@gmail.com>
+Link: https://lore.kernel.org/r/20230509084746.48259-1-mirsad.todorovac@alu.unizg.hr
+Signed-off-by: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+
+[ This is the patch to fix the racing condition in locking for the 5.4, ]
+[ 4.19 and 4.4 stable branches. Not all the fixes from the upstream     ]
+[ commit apply, but those which do are verbatim equal to those in the   ]
+[ upstream commit.                                                      ]
 ---
- tools/testing/selftests/nolibc/Makefile | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+v2:
+ bundled locking and ENOSPC patches together.
+ tested on 5.4 and 4.19 stable.
 
-diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index 51fef5e6a152..af590aee063a 100644
---- a/tools/testing/selftests/nolibc/Makefile
-+++ b/tools/testing/selftests/nolibc/Makefile
-@@ -9,6 +9,9 @@ ifeq ($(srctree),)
- srctree := $(patsubst %/tools/testing/selftests/,%,$(dir $(CURDIR)))
- endif
+ lib/test_firmware.c | 37 ++++++++++++++++++++++++++++---------
+ 1 file changed, 28 insertions(+), 9 deletions(-)
+
+diff --git a/lib/test_firmware.c b/lib/test_firmware.c
+index 38553944e967..92d7195d5b5b 100644
+--- a/lib/test_firmware.c
++++ b/lib/test_firmware.c
+@@ -301,16 +301,26 @@ static ssize_t config_test_show_str(char *dst,
+ 	return len;
+ }
  
-+# add objtree for O= argument, required by IMAGE and .config
-+objtree ?= $(srctree)
+-static int test_dev_config_update_bool(const char *buf, size_t size,
+-				       bool *cfg)
++static inline int __test_dev_config_update_bool(const char *buf, size_t size,
++						bool *cfg)
+ {
+ 	int ret;
+ 
+-	mutex_lock(&test_fw_mutex);
+ 	if (strtobool(buf, cfg) < 0)
+ 		ret = -EINVAL;
+ 	else
+ 		ret = size;
 +
- ifeq ($(ARCH),)
- include $(srctree)/scripts/subarch.include
- ARCH = $(SUBARCH)
-@@ -217,12 +220,12 @@ kernel: initramfs
++	return ret;
++}
++
++static int test_dev_config_update_bool(const char *buf, size_t size,
++				       bool *cfg)
++{
++	int ret;
++
++	mutex_lock(&test_fw_mutex);
++	ret = __test_dev_config_update_bool(buf, size, cfg);
+ 	mutex_unlock(&test_fw_mutex);
  
- # run the tests after building the kernel
- run: kernel
--	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
-+	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(objtree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
- 	$(Q)$(REPORT) $(CURDIR)/run.out
+ 	return ret;
+@@ -340,7 +350,7 @@ static ssize_t test_dev_config_show_int(char *buf, int cfg)
+ 	return snprintf(buf, PAGE_SIZE, "%d\n", val);
+ }
  
- # re-run the tests from an existing kernel
- rerun:
--	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
-+	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(objtree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
- 	$(Q)$(REPORT) $(CURDIR)/run.out
+-static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
++static inline int __test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
+ {
+ 	int ret;
+ 	long new;
+@@ -352,14 +362,23 @@ static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
+ 	if (new > U8_MAX)
+ 		return -EINVAL;
  
- # report with existing test log
+-	mutex_lock(&test_fw_mutex);
+ 	*(u8 *)cfg = new;
+-	mutex_unlock(&test_fw_mutex);
+ 
+ 	/* Always return full write size even if we didn't consume all */
+ 	return size;
+ }
+ 
++static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
++{
++	int ret;
++
++	mutex_lock(&test_fw_mutex);
++	ret = __test_dev_config_update_u8(buf, size, cfg);
++	mutex_unlock(&test_fw_mutex);
++
++	return ret;
++}
++
+ static ssize_t test_dev_config_show_u8(char *buf, u8 cfg)
+ {
+ 	u8 val;
+@@ -392,10 +411,10 @@ static ssize_t config_num_requests_store(struct device *dev,
+ 		mutex_unlock(&test_fw_mutex);
+ 		goto out;
+ 	}
+-	mutex_unlock(&test_fw_mutex);
+ 
+-	rc = test_dev_config_update_u8(buf, count,
+-				       &test_fw_config->num_requests);
++	rc = __test_dev_config_update_u8(buf, count,
++					 &test_fw_config->num_requests);
++	mutex_unlock(&test_fw_mutex);
+ 
+ out:
+ 	return rc;
 -- 
-2.25.1
+2.39.3
 
