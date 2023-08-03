@@ -2,34 +2,34 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9587DC04A94
-	for <linux-kselftest@archiver.kernel.org>; Thu,  3 Aug 2023 07:28:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7576AC04A6A
+	for <linux-kselftest@archiver.kernel.org>; Thu,  3 Aug 2023 07:29:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232705AbjHCH26 (ORCPT
+        id S233321AbjHCH27 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 3 Aug 2023 03:28:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43068 "EHLO
+        Thu, 3 Aug 2023 03:28:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232080AbjHCH2w (ORCPT
+        with ESMTP id S232135AbjHCH2y (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Aug 2023 03:28:52 -0400
+        Thu, 3 Aug 2023 03:28:54 -0400
 Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 354302D6A;
-        Thu,  3 Aug 2023 00:28:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13F4530D3;
+        Thu,  3 Aug 2023 00:28:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1691047728;
-        bh=iyNHuyFIri0jOYpPmNaXlYmA/yRvazXiYVqNbQvn0aU=;
+        s=mail; t=1691047729;
+        bh=7/upWQanP2NdVX/m2HsjLqivjxgPsVRP62MNXJPVjBs=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=E5yZKMaXfMDcQ/MX0pRsZBQWf6pZojYuI1Pwm4z6w7hhVsVENXrH8a1+Ql5rNZR0m
-         bfRAuZ/hwFedoX0F2vuLwV9GNziF3rkJLk9wijv89ehEts6l574XX6RxK4hO8bFdq4
-         vFyrf1ykG59kT3PVcHZ/PasLqvG8ZaRyKwDwKz0Y=
+        b=pDCJQB/6zSpH57Tm0znGvuuTr48rVmGwWK+gxxzbT1uZ6l9v3D94yJ3zMCx01Yu3w
+         JQSHvrzFzK/d2gggLQtGpaa2ARHTb62C3jdcoXq6jaalffGB7WIk0ALWbXgKfH0Ddh
+         qFtBmd/WR5P6Ek+DZtIkjNC6w2waEIz9YO0PS3MU=
 From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date:   Thu, 03 Aug 2023 09:28:48 +0200
-Subject: [PATCH v3 04/14] tools/nolibc: sys: avoid implicit sign cast
+Date:   Thu, 03 Aug 2023 09:28:54 +0200
+Subject: [PATCH v3 10/14] selftests/nolibc: avoid sign-compare warnings
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20230803-nolibc-warnings-v3-4-bcc1a096ae02@weissschuh.net>
+Message-Id: <20230803-nolibc-warnings-v3-10-bcc1a096ae02@weissschuh.net>
 References: <20230803-nolibc-warnings-v3-0-bcc1a096ae02@weissschuh.net>
 In-Reply-To: <20230803-nolibc-warnings-v3-0-bcc1a096ae02@weissschuh.net>
 To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
@@ -38,38 +38,58 @@ Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         Zhangjin Wu <falcon@tinylab.org>,
         =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1691047727; l=702;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1691047727; l=1503;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=iyNHuyFIri0jOYpPmNaXlYmA/yRvazXiYVqNbQvn0aU=;
- b=SdXAr1nPJemUkaNkDtnvzdItVrwOJcTSgFgDli3ZAyQlj1UF07hIZH3b5znuC4sOs+HytEHEL
- e3r3dEQzSeVDGMN3vbUKh7fFprXjSduqd+F2TbnPDKo5jBq03UZCaOY
+ bh=7/upWQanP2NdVX/m2HsjLqivjxgPsVRP62MNXJPVjBs=;
+ b=xlSvro4wwyBj3Yf5UMu6IxMPThA02+KbWyFtkG9C+3wj3599ZfkxP1KA7qJUBL0Jp5smv3vop
+ 0YnzSAL5MCXC7xBNeaNaIgxqJ24fQr08g30dknm0qRcY66CulIs20ts
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-getauxval() returns an unsigned long but the overall type of the ternary
-operator needs to be signed.
+These warnings will be enabled later so avoid triggering them.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- tools/include/nolibc/sys.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/nolibc/nolibc-test.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-index c151533ba8e9..833d6c5e86dc 100644
---- a/tools/include/nolibc/sys.h
-+++ b/tools/include/nolibc/sys.h
-@@ -466,7 +466,7 @@ static unsigned long getauxval(unsigned long key);
- static __attribute__((unused))
- int getpagesize(void)
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index d6aa12c3f9ff..0ab241d61508 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -737,9 +737,9 @@ int test_stat_timestamps(void)
+ 
+ int test_mmap_munmap(void)
  {
--	return __sysret(getauxval(AT_PAGESZ) ?: -ENOENT);
-+	return __sysret((int)getauxval(AT_PAGESZ) ?: -ENOENT);
- }
+-	int ret, fd, i;
++	int ret, fd, i, page_size;
+ 	void *mem;
+-	size_t page_size, file_size, length;
++	size_t file_size, length;
+ 	off_t offset, pa_offset;
+ 	struct stat stat_buf;
+ 	const char * const files[] = {
+@@ -1021,7 +1021,7 @@ int run_stdlib(int min, int max)
+ #define EXPECT_VFPRINTF(c, expected, fmt, ...)				\
+ 	ret += expect_vfprintf(llen, c, expected, fmt, ##__VA_ARGS__)
  
+-static int expect_vfprintf(int llen, size_t c, const char *expected, const char *fmt, ...)
++static int expect_vfprintf(int llen, int c, const char *expected, const char *fmt, ...)
+ {
+ 	int ret, fd, w, r;
+ 	char buf[100];
+@@ -1045,7 +1045,7 @@ static int expect_vfprintf(int llen, size_t c, const char *expected, const char
+ 	va_end(args);
  
+ 	if (w != c) {
+-		llen += printf(" written(%d) != %d", w, (int) c);
++		llen += printf(" written(%d) != %d", w, c);
+ 		result(llen, FAIL);
+ 		return 1;
+ 	}
 
 -- 
 2.41.0
