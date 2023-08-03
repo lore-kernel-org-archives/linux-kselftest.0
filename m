@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 82424C0015E
-	for <linux-kselftest@archiver.kernel.org>; Thu,  3 Aug 2023 23:20:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8283EC001DB
+	for <linux-kselftest@archiver.kernel.org>; Thu,  3 Aug 2023 23:27:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231331AbjHCXUw (ORCPT
+        id S232235AbjHCX1p (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 3 Aug 2023 19:20:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51444 "EHLO
+        Thu, 3 Aug 2023 19:27:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230471AbjHCXUv (ORCPT
+        with ESMTP id S231947AbjHCX1l (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Aug 2023 19:20:51 -0400
-Received: from out-83.mta0.migadu.com (out-83.mta0.migadu.com [IPv6:2001:41d0:1004:224b::53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F92913E
-        for <linux-kselftest@vger.kernel.org>; Thu,  3 Aug 2023 16:20:50 -0700 (PDT)
-Message-ID: <b201f66c-9588-a234-f5c9-892ec421c93d@linux.dev>
+        Thu, 3 Aug 2023 19:27:41 -0400
+Received: from out-126.mta0.migadu.com (out-126.mta0.migadu.com [IPv6:2001:41d0:1004:224b::7e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A4F30D7
+        for <linux-kselftest@vger.kernel.org>; Thu,  3 Aug 2023 16:27:39 -0700 (PDT)
+Message-ID: <f102f07f-63c3-bca0-47ea-e3ea4357cf1c@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1691104848; h=from:from:reply-to:reply-to:subject:subject:date:date:
+        t=1691105254; h=from:from:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=5F7GF8sJENfzg5tPE4ksqW1Gvi/kE7aeGP7cD2s9CwQ=;
-        b=aX3o94De9+NKcU1rdxpRzj1Osng+xGpXSc163vnpFQdXs2TR+qLUiZLYYvrFdiTmTQ1AiF
-        IQizslfbptnH6HhnTs/PEvB2WPcnc8KqA8LRzwZSJACyRNPs5p911rUnjRU7OrFlnoziBa
-        BLHnXlSGfolTq1qT+ASfB7R8rerws0g=
-Date:   Thu, 3 Aug 2023 16:20:37 -0700
+        bh=yBhJZPJqRLXX01E/GzXAnYcqSPb3bajdDFf4J1LeRdc=;
+        b=oHoEDIxHyqkl0uC8DGaj/6q6TFEL6qT4+NB9Z63CtnWSp9hoxiXjB99juUj+LExQ69L3TW
+        T1gAdbrpUJeXci4aC2qe3alqLVwqdT8AgTRcpKPEUGTKH8d9ZnLa1HmhiBOC4ovtaNpD4U
+        5Lt9t5qegtuhhz8l7MXwnEeuCoaA7Hs=
+Date:   Thu, 3 Aug 2023 16:27:18 -0700
 MIME-Version: 1.0
 Reply-To: yonghong.song@linux.dev
-Subject: Re: [PATCH bpf-next v9 2/4] selftests/bpf: Use random netns name for
- mptcp
+Subject: Re: [PATCH bpf-next v9 3/4] selftests/bpf: Add two mptcp netns
+ helpers
 Content-Language: en-US
 To:     Geliang Tang <geliang.tang@suse.com>,
         Alexei Starovoitov <ast@kernel.org>,
@@ -63,10 +63,10 @@ Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, mptcp@lists.linux.dev,
         apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
         selinux@vger.kernel.org, linux-kselftest@vger.kernel.org
 References: <cover.1691069778.git.geliang.tang@suse.com>
- <54307a065383fd3171a6306ddf30395b686aaccc.1691069778.git.geliang.tang@suse.com>
+ <27d3ccd2d762023b4829ba54e16a3e11925ad75d.1691069778.git.geliang.tang@suse.com>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From:   Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <54307a065383fd3171a6306ddf30395b686aaccc.1691069778.git.geliang.tang@suse.com>
+In-Reply-To: <27d3ccd2d762023b4829ba54e16a3e11925ad75d.1691069778.git.geliang.tang@suse.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
@@ -77,15 +77,11 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
 On 8/3/23 6:41 AM, Geliang Tang wrote:
-> Use rand() to generate a random netns name instead of using the fixed
-> name "mptcp_ns" for every test.
+> Add two netns helpers for mptcp tests: create_netns() and
+> cleanup_netns(). Use them in test_base().
 > 
-> By doing that, we can re-launch the test even if there was an issue
-> removing the previous netns or if by accident, a netns with this generic
-> name already existed on the system.
-> 
-> Note that using a different name each will also help adding more
-> subtests in future commits.
+> These new helpers will be re-used in the following commits introducing
+> new tests.
 > 
 > Signed-off-by: Geliang Tang <geliang.tang@suse.com>
 > Reviewed-by: Matthieu Baerts <matthieu.baerts@tessares.net>
