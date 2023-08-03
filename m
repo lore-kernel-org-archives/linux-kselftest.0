@@ -2,34 +2,34 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1BBA6C04FDF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9587DC04A94
 	for <linux-kselftest@archiver.kernel.org>; Thu,  3 Aug 2023 07:28:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232805AbjHCH25 (ORCPT
+        id S232705AbjHCH26 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 3 Aug 2023 03:28:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43094 "EHLO
+        Thu, 3 Aug 2023 03:28:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232085AbjHCH2y (ORCPT
+        with ESMTP id S232080AbjHCH2w (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Aug 2023 03:28:54 -0400
+        Thu, 3 Aug 2023 03:28:52 -0400
 Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E7630CA;
-        Thu,  3 Aug 2023 00:28:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 354302D6A;
+        Thu,  3 Aug 2023 00:28:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1691047729;
-        bh=FYW5QoP5+S9dB6umlL+oN4HnFsDZi3fajwjXFuBeuUU=;
+        s=mail; t=1691047728;
+        bh=iyNHuyFIri0jOYpPmNaXlYmA/yRvazXiYVqNbQvn0aU=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=oMQtMHW2hK8MsDIGfxKj8QjxtaszAil3iqby3nulpaimVFdvLIt+byK+Hw4lftq0J
-         I701Ixx5pTSl6yAR6mqb62v12M2OtSPZ5Emv4/7csGRX1f3VuAv8OGsWvruJZnRcw2
-         NbJ45WZBMBt4CizWfdJfQd3CjTMOWjUgWt2jbNH4=
+        b=E5yZKMaXfMDcQ/MX0pRsZBQWf6pZojYuI1Pwm4z6w7hhVsVENXrH8a1+Ql5rNZR0m
+         bfRAuZ/hwFedoX0F2vuLwV9GNziF3rkJLk9wijv89ehEts6l574XX6RxK4hO8bFdq4
+         vFyrf1ykG59kT3PVcHZ/PasLqvG8ZaRyKwDwKz0Y=
 From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date:   Thu, 03 Aug 2023 09:28:50 +0200
-Subject: [PATCH v3 06/14] selftests/nolibc: drop unused variables
+Date:   Thu, 03 Aug 2023 09:28:48 +0200
+Subject: [PATCH v3 04/14] tools/nolibc: sys: avoid implicit sign cast
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20230803-nolibc-warnings-v3-6-bcc1a096ae02@weissschuh.net>
+Message-Id: <20230803-nolibc-warnings-v3-4-bcc1a096ae02@weissschuh.net>
 References: <20230803-nolibc-warnings-v3-0-bcc1a096ae02@weissschuh.net>
 In-Reply-To: <20230803-nolibc-warnings-v3-0-bcc1a096ae02@weissschuh.net>
 To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
@@ -38,48 +38,38 @@ Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         Zhangjin Wu <falcon@tinylab.org>,
         =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1691047727; l=1031;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1691047727; l=702;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=FYW5QoP5+S9dB6umlL+oN4HnFsDZi3fajwjXFuBeuUU=;
- b=he62Hb+5paDBtJB0GmwLNxnwaODM5oItQzKuC9iP8SNeUOCQ8UB0xUKooDaG0vcYpYzy2BkES
- vYmj39D9oVlBl2AN9Kk2W+9HV8KtfK4ojW1isYN8e2g73HOKeOxSDDQ
+ bh=iyNHuyFIri0jOYpPmNaXlYmA/yRvazXiYVqNbQvn0aU=;
+ b=SdXAr1nPJemUkaNkDtnvzdItVrwOJcTSgFgDli3ZAyQlj1UF07hIZH3b5znuC4sOs+HytEHEL
+ e3r3dEQzSeVDGMN3vbUKh7fFprXjSduqd+F2TbnPDKo5jBq03UZCaOY
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-These got copied around as new testcases where created.
+getauxval() returns an unsigned long but the overall type of the ternary
+operator needs to be signed.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- tools/testing/selftests/nolibc/nolibc-test.c | 4 ----
- 1 file changed, 4 deletions(-)
+ tools/include/nolibc/sys.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 52489455add8..cff441c17f3e 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -908,9 +908,7 @@ int run_syscall(int min, int max)
- int run_stdlib(int min, int max)
+diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+index c151533ba8e9..833d6c5e86dc 100644
+--- a/tools/include/nolibc/sys.h
++++ b/tools/include/nolibc/sys.h
+@@ -466,7 +466,7 @@ static unsigned long getauxval(unsigned long key);
+ static __attribute__((unused))
+ int getpagesize(void)
  {
- 	int test;
--	int tmp;
- 	int ret = 0;
--	void *p1, *p2;
+-	return __sysret(getauxval(AT_PAGESZ) ?: -ENOENT);
++	return __sysret((int)getauxval(AT_PAGESZ) ?: -ENOENT);
+ }
  
- 	for (test = min; test >= 0 && test <= max; test++) {
- 		int llen = 0; /* line length */
-@@ -1051,9 +1049,7 @@ static int expect_vfprintf(int llen, size_t c, const char *expected, const char
- static int run_vfprintf(int min, int max)
- {
- 	int test;
--	int tmp;
- 	int ret = 0;
--	void *p1, *p2;
  
- 	for (test = min; test >= 0 && test <= max; test++) {
- 		int llen = 0; /* line length */
 
 -- 
 2.41.0
