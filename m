@@ -2,40 +2,41 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 05331EB64DD
-	for <linux-kselftest@archiver.kernel.org>; Thu,  3 Aug 2023 14:45:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DBF0C001DF
+	for <linux-kselftest@archiver.kernel.org>; Thu,  3 Aug 2023 14:46:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233594AbjHCOpV (ORCPT
+        id S234740AbjHCOqR (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 3 Aug 2023 10:45:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56086 "EHLO
+        Thu, 3 Aug 2023 10:46:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbjHCOpU (ORCPT
+        with ESMTP id S235304AbjHCOqO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Aug 2023 10:45:20 -0400
+        Thu, 3 Aug 2023 10:46:14 -0400
 Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F25F6272A;
-        Thu,  3 Aug 2023 07:45:01 -0700 (PDT)
-X-QQ-mid: bizesmtp68t1691073889t4khgjyo
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5DB71BC3;
+        Thu,  3 Aug 2023 07:46:09 -0700 (PDT)
+X-QQ-mid: bizesmtp88t1691073958thq43qfz
 Received: from linux-lab-host.localdomain ( [116.30.131.233])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 03 Aug 2023 22:44:48 +0800 (CST)
+        id ; Thu, 03 Aug 2023 22:45:57 +0800 (CST)
 X-QQ-SSF: 01200000000000E0X000000A0000000
-X-QQ-FEAT: IcCSTr/hHjOY6VEm71/IgqzXpvSKtnkkeAhaXGC6ywTF2cpGNkzcpdx/TKfBR
-        hiT/uimJdY9bSUpyUuSaerHKZybT6bxkLtzpKWPzP4ooH8Q94U9UtiRcBQ3eFczhrRwN0sP
-        b4pn/bUfnf6T2k4b4Fv80z+bDiHCUHDykgviC0pI3DKArvoIjWychyt0uvjPLtexRtVLQx5
-        pU4R/Quxhus+VsmVZ6eOZH5iVH/ob+OX1ILvDCjEkeaYJWleLJOER+TqdX2+vAzvDLswN3O
-        q8BOXHnGwEIhwM+sJs2a4ElA7H7t8fgMjeA19g2jg7owR+VT0XL665E/HiEvaKafzk9JWY+
-        +/sXOyNDWMr9NK7kd0RcSvv4+qaaME1X7G1Y8NPx/JA2YLJAOgRmSVXABKMtA==
+X-QQ-FEAT: kUim6XnhvqW9dcd6EzLklGa12GVbNXdonLh2Hg+1w3dBPk/x2b5VmNG+MPDn6
+        PEFmwIR3cWR5MbUVbtIZAVws1QPogU+mUqaPc8Z5UL+wjlb/HxUYHDFDvWxvxrn7beB6YEn
+        BJDzwZdTbH+Pnq0s4jmy5USrmMOGCTiHxvHBDfw/upU5HD5rm6FNcWY2ldr2xYwhSoB3WBs
+        PydhNf4Gm9/FF4g1QfFcGO6D/1kY4BgUZfzgZOoFzKDqyTLkcYjUwBmT0W+0+t3inyNao0z
+        f/vv2iK7gyd6zVCAbhLmVK+KbTNnHyFRBSR3I1RimV2DcL7oRA9h0E+76pdW21iRRQWUVYs
+        X2PNNE2eNamVHpyeMuQ3SnFchCFW33O5RCRXPS9FqjSIWkh1GgEQMKggZnremX9J5q+j9qf
+        pKTbbIaUw/s=
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 16889210508808416794
+X-BIZMAIL-ID: 2311120515883083357
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     thomas@t-8ch.de, w@1wt.eu
 Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, tanyuan@tinylab.org
-Subject: [PATCH v1 1/3] selftests/nolibc: allow report with existing test log
-Date:   Thu,  3 Aug 2023 22:44:47 +0800
-Message-Id: <a2879d1ef44fd482a63a8d1a41527289ebcd501b.1691073180.git.falcon@tinylab.org>
+Subject: [PATCH v1 2/3] selftests/nolibc: fix up O= option support
+Date:   Thu,  3 Aug 2023 22:45:52 +0800
+Message-Id: <759307255e4ca3b37b67321d333967a21122c422.1691073180.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1691073180.git.falcon@tinylab.org>
 References: <cover.1691073180.git.falcon@tinylab.org>
@@ -47,31 +48,51 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-After the tests finish, it is valuable to report and summarize with
-existing test log.
+To avoid pollute the source code tree and avoid mrproper for every
+architecture switch, the O= argument must be supported.
 
-This avoid rerun or run the tests again when not necessary.
+Both IMAGE and .config are from the building directory, let's use
+objtree instead of srctree for them.
 
+If no O= option specified, means building kernel in source code tree,
+objtree should be srctree in such case.
+
+Suggested-by: Willy Tarreau <w@1wt.eu>
+Link: https://lore.kernel.org/lkml/ZK0AB1OXH1s2xYsh@1wt.eu/
 Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
- tools/testing/selftests/nolibc/Makefile | 4 ++++
- 1 file changed, 4 insertions(+)
+ tools/testing/selftests/nolibc/Makefile | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index 16cc33db54e3..51fef5e6a152 100644
+index 51fef5e6a152..af590aee063a 100644
 --- a/tools/testing/selftests/nolibc/Makefile
 +++ b/tools/testing/selftests/nolibc/Makefile
-@@ -225,6 +225,10 @@ rerun:
- 	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
+@@ -9,6 +9,9 @@ ifeq ($(srctree),)
+ srctree := $(patsubst %/tools/testing/selftests/,%,$(dir $(CURDIR)))
+ endif
+ 
++# add objtree for O= argument, required by IMAGE and .config
++objtree ?= $(srctree)
++
+ ifeq ($(ARCH),)
+ include $(srctree)/scripts/subarch.include
+ ARCH = $(SUBARCH)
+@@ -217,12 +220,12 @@ kernel: initramfs
+ 
+ # run the tests after building the kernel
+ run: kernel
+-	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
++	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(objtree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
  	$(Q)$(REPORT) $(CURDIR)/run.out
  
-+# report with existing test log
-+report:
-+	$(Q)$(REPORT) $(CURDIR)/run.out
-+
- clean:
- 	$(call QUIET_CLEAN, sysroot)
- 	$(Q)rm -rf sysroot
+ # re-run the tests from an existing kernel
+ rerun:
+-	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
++	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(objtree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
+ 	$(Q)$(REPORT) $(CURDIR)/run.out
+ 
+ # report with existing test log
 -- 
 2.25.1
 
