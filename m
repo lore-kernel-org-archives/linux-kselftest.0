@@ -2,228 +2,141 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8731CC41513
-	for <linux-kselftest@archiver.kernel.org>; Thu,  3 Aug 2023 14:35:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DBB86C001DF
+	for <linux-kselftest@archiver.kernel.org>; Thu,  3 Aug 2023 14:37:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236753AbjHCOfL (ORCPT
+        id S236252AbjHCOhl (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 3 Aug 2023 10:35:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44292 "EHLO
+        Thu, 3 Aug 2023 10:37:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236742AbjHCOem (ORCPT
+        with ESMTP id S235381AbjHCOhU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Aug 2023 10:34:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50378211B
-        for <linux-kselftest@vger.kernel.org>; Thu,  3 Aug 2023 07:32:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1691073159;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hi/J18RARw6/Qxc4oFoZIMtkW25pVX+KOdV/ft2I3Ss=;
-        b=FwH5FoULI17Tj5Wqx1YAxkFy+UAulgD4JT/TC4kx2Spj0+a062Ktuaw+c2y7fZ4m4VPv71
-        p9hDdnNG01TDaGcLEXdzOtjZaeYSmAG8K1OTEbAv2VxQKwBMW0pT46YJApHSwktBB0GhCH
-        zQbUWnOBdO8VaqQvhjTjgeyqFk7V/Kk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-650-PGKiOyclP_iO75_O7B9M2w-1; Thu, 03 Aug 2023 10:32:36 -0400
-X-MC-Unique: PGKiOyclP_iO75_O7B9M2w-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 686CE8DC664;
-        Thu,  3 Aug 2023 14:32:35 +0000 (UTC)
-Received: from t14s.fritz.box (unknown [10.39.193.129])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5569C201EE6E;
-        Thu,  3 Aug 2023 14:32:32 +0000 (UTC)
-From:   David Hildenbrand <david@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        liubo <liubo254@huawei.com>, Peter Xu <peterx@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Hugh Dickins <hughd@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mel Gorman <mgorman@suse.de>, Shuah Khan <shuah@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH v3 7/7] selftest/mm: ksm_functional_tests: Add PROT_NONE test
-Date:   Thu,  3 Aug 2023 16:32:08 +0200
-Message-ID: <20230803143208.383663-8-david@redhat.com>
-In-Reply-To: <20230803143208.383663-1-david@redhat.com>
-References: <20230803143208.383663-1-david@redhat.com>
+        Thu, 3 Aug 2023 10:37:20 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E81BA5256;
+        Thu,  3 Aug 2023 07:36:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691073383; x=1722609383;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=5XOAANYi6PhPbrJ+klTCobbNvd+SaqKSvWlM8mBjHuA=;
+  b=jcNrFXIcGGPbGs/XZ/Wthsm8DY8KT7w5UAgREcZGaY6f8505HMNxjrbd
+   nnYN/jsm1wtGnBAIlSIt9D0F7nEtLNMrFUv0CXQcyj8IP9S5G8XoADo9V
+   47bRzyowJMyyT0op6/sBRFgY45tOGvy6lkeCGpiuUzywjSRQDclaPm13C
+   +qbt9I+Uu7vJfQK0Bu7HByrEM3X6XYksleKQS3cR/kGOAO/XSfDP96e1T
+   t/0ZQ1zM+kQu9p6Ro8RKielCNUnC0MrqdvqUlrnYSz823X9WMHsetYchS
+   hZR7BEmIcnldVi5Rv97gssk0UVZOKMJLdSHqjE6wYobtaX+gF+JiRJG/4
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10791"; a="372643344"
+X-IronPort-AV: E=Sophos;i="6.01,252,1684825200"; 
+   d="scan'208";a="372643344"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2023 07:31:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10791"; a="759153147"
+X-IronPort-AV: E=Sophos;i="6.01,252,1684825200"; 
+   d="scan'208";a="759153147"
+Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
+  by orsmga008.jf.intel.com with ESMTP; 03 Aug 2023 07:31:45 -0700
+From:   Yi Liu <yi.l.liu@intel.com>
+To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
+        kevin.tian@intel.com, robin.murphy@arm.com,
+        baolu.lu@linux.intel.com
+Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
+        kvm@vger.kernel.org, mjrosato@linux.ibm.com,
+        chao.p.peng@linux.intel.com, yi.l.liu@intel.com,
+        yi.y.sun@linux.intel.com, peterx@redhat.com, jasowang@redhat.com,
+        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
+        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        zhenzhong.duan@intel.com
+Subject: [PATCH v5 0/4] iommufd: Add iommu hardware info reporting
+Date:   Thu,  3 Aug 2023 07:31:40 -0700
+Message-Id: <20230803143144.200945-1-yi.l.liu@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Let's test whether merging and unmerging in PROT_NONE areas works as
-expected.
+iommufd gives userspace the capability to manipulate iommu subsytem.
+e.g. DMA map/unmap etc. In the near future, it will support iommu nested
+translation. Different platform vendors have different implementation for
+the nested translation. For example, Intel VT-d supports using guest I/O
+page table as the stage-1 translation table. This requires guest I/O page
+table be compatible with hardware IOMMU. So before set up nested translation,
+userspace needs to know the hardware iommu information to understand the
+nested translation requirements.
 
-Pass a page protection to mmap_and_merge_range(), which will trigger
-an mprotect() after writing to the pages, but before enabling merging.
+This series reports the iommu hardware information for a given device
+which has been bound to iommufd. It is preparation work for userspace to
+allocate hwpt for given device. Like the nested translation support[1].
 
-Make sure that unsharing works as expected, by performing a ptrace write
-(using /proc/self/mem) and by setting MADV_UNMERGEABLE.
+This series introduces an iommu op to report the iommu hardware info,
+and an ioctl IOMMU_GET_HW_INFO is added to report such hardware info to
+user. enum iommu_hw_info_type is defined to differentiate the iommu hardware
+info reported to user hence user can decode them. This series only adds the
+framework for iommu hw info reporting, the complete reporting path needs vendor
+specific definition and driver support. The full code is available in [1]
+as well.
 
-Note that this implicitly tests that ptrace writes in an inaccessible
-(PROT_NONE) mapping work as expected.
+[1] https://github.com/yiliu1765/iommufd/tree/wip/iommufd_nesting_08032023-yi
+(only the hw_info report path is the latest, other parts is wip)
 
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
- .../selftests/mm/ksm_functional_tests.c       | 59 ++++++++++++++++---
- 1 file changed, 52 insertions(+), 7 deletions(-)
+Change log:
 
-diff --git a/tools/testing/selftests/mm/ksm_functional_tests.c b/tools/testing/selftests/mm/ksm_functional_tests.c
-index cb63b600cb4f..8fa4889ab4f3 100644
---- a/tools/testing/selftests/mm/ksm_functional_tests.c
-+++ b/tools/testing/selftests/mm/ksm_functional_tests.c
-@@ -27,6 +27,7 @@
- #define KiB 1024u
- #define MiB (1024 * KiB)
- 
-+static int mem_fd;
- static int ksm_fd;
- static int ksm_full_scans_fd;
- static int proc_self_ksm_stat_fd;
-@@ -144,7 +145,8 @@ static int ksm_unmerge(void)
- 	return 0;
- }
- 
--static char *mmap_and_merge_range(char val, unsigned long size, bool use_prctl)
-+static char *mmap_and_merge_range(char val, unsigned long size, int prot,
-+				  bool use_prctl)
- {
- 	char *map;
- 	int ret;
-@@ -176,6 +178,11 @@ static char *mmap_and_merge_range(char val, unsigned long size, bool use_prctl)
- 	/* Make sure each page contains the same values to merge them. */
- 	memset(map, val, size);
- 
-+	if (mprotect(map, size, prot)) {
-+		ksft_test_result_skip("mprotect() failed\n");
-+		goto unmap;
-+	}
-+
- 	if (use_prctl) {
- 		ret = prctl(PR_SET_MEMORY_MERGE, 1, 0, 0, 0);
- 		if (ret < 0 && errno == EINVAL) {
-@@ -218,7 +225,7 @@ static void test_unmerge(void)
- 
- 	ksft_print_msg("[RUN] %s\n", __func__);
- 
--	map = mmap_and_merge_range(0xcf, size, false);
-+	map = mmap_and_merge_range(0xcf, size, PROT_READ | PROT_WRITE, false);
- 	if (map == MAP_FAILED)
- 		return;
- 
-@@ -256,7 +263,7 @@ static void test_unmerge_zero_pages(void)
- 	}
- 
- 	/* Let KSM deduplicate zero pages. */
--	map = mmap_and_merge_range(0x00, size, false);
-+	map = mmap_and_merge_range(0x00, size, PROT_READ | PROT_WRITE, false);
- 	if (map == MAP_FAILED)
- 		return;
- 
-@@ -304,7 +311,7 @@ static void test_unmerge_discarded(void)
- 
- 	ksft_print_msg("[RUN] %s\n", __func__);
- 
--	map = mmap_and_merge_range(0xcf, size, false);
-+	map = mmap_and_merge_range(0xcf, size, PROT_READ | PROT_WRITE, false);
- 	if (map == MAP_FAILED)
- 		return;
- 
-@@ -336,7 +343,7 @@ static void test_unmerge_uffd_wp(void)
- 
- 	ksft_print_msg("[RUN] %s\n", __func__);
- 
--	map = mmap_and_merge_range(0xcf, size, false);
-+	map = mmap_and_merge_range(0xcf, size, PROT_READ | PROT_WRITE, false);
- 	if (map == MAP_FAILED)
- 		return;
- 
-@@ -479,7 +486,7 @@ static void test_prctl_unmerge(void)
- 
- 	ksft_print_msg("[RUN] %s\n", __func__);
- 
--	map = mmap_and_merge_range(0xcf, size, true);
-+	map = mmap_and_merge_range(0xcf, size, PROT_READ | PROT_WRITE, true);
- 	if (map == MAP_FAILED)
- 		return;
- 
-@@ -494,9 +501,42 @@ static void test_prctl_unmerge(void)
- 	munmap(map, size);
- }
- 
-+static void test_prot_none(void)
-+{
-+	const unsigned int size = 2 * MiB;
-+	char *map;
-+	int i;
-+
-+	ksft_print_msg("[RUN] %s\n", __func__);
-+
-+	map = mmap_and_merge_range(0x11, size, PROT_NONE, false);
-+	if (map == MAP_FAILED)
-+		goto unmap;
-+
-+	/* Store a unique value in each page on one half using ptrace */
-+	for (i = 0; i < size / 2; i += pagesize) {
-+		lseek(mem_fd, (uintptr_t) map + i, SEEK_SET);
-+		if (write(mem_fd, &i, sizeof(size)) != sizeof(size)) {
-+			ksft_test_result_fail("ptrace write failed\n");
-+			goto unmap;
-+		}
-+	}
-+
-+	/* Trigger unsharing on the other half. */
-+	if (madvise(map + size / 2, size / 2, MADV_UNMERGEABLE)) {
-+		ksft_test_result_fail("MADV_UNMERGEABLE failed\n");
-+		goto unmap;
-+	}
-+
-+	ksft_test_result(!range_maps_duplicates(map, size),
-+			 "Pages were unmerged\n");
-+unmap:
-+	munmap(map, size);
-+}
-+
- int main(int argc, char **argv)
- {
--	unsigned int tests = 6;
-+	unsigned int tests = 7;
- 	int err;
- 
- #ifdef __NR_userfaultfd
-@@ -508,6 +548,9 @@ int main(int argc, char **argv)
- 
- 	pagesize = getpagesize();
- 
-+	mem_fd = open("/proc/self/mem", O_RDWR);
-+	if (mem_fd < 0)
-+		ksft_exit_fail_msg("opening /proc/self/mem failed\n");
- 	ksm_fd = open("/sys/kernel/mm/ksm/run", O_RDWR);
- 	if (ksm_fd < 0)
- 		ksft_exit_skip("open(\"/sys/kernel/mm/ksm/run\") failed\n");
-@@ -529,6 +572,8 @@ int main(int argc, char **argv)
- 	test_unmerge_uffd_wp();
- #endif
- 
-+	test_prot_none();
-+
- 	test_prctl();
- 	test_prctl_fork();
- 	test_prctl_unmerge();
+v5:
+ - Return hw_info_type in the .hw_info op, hence drop hw_info_type field in iommu_ops (Kevin)
+ - Add Jason's r-b for patch 01
+ - Address coding style comments from Jason and Kevin w.r.t. patch 02, 03 and 04
+
+v4: https://lore.kernel.org/linux-iommu/20230724105936.107042-1-yi.l.liu@intel.com/
+ - Rename ioctl to IOMMU_GET_HW_INFO and structure to iommu_hw_info
+ - Move the iommufd_get_hw_info handler to main.c
+ - Place iommu_hw_info prior to iommu_hwpt_alloc
+ - Update the function namings accordingly
+ - Update uapi kdocs
+
+v3: https://lore.kernel.org/linux-iommu/20230511143024.19542-1-yi.l.liu@intel.com/#t
+ - Add r-b from Baolu
+ - Rename IOMMU_HW_INFO_TYPE_DEFAULT to be IOMMU_HW_INFO_TYPE_NONE to
+   better suit what it means
+ - Let IOMMU_DEVICE_GET_HW_INFO succeed even the underlying iommu driver
+   does not have driver-specific data to report per below remark.
+   https://lore.kernel.org/kvm/ZAcwJSK%2F9UVI9LXu@nvidia.com/
+
+v2: https://lore.kernel.org/linux-iommu/20230309075358.571567-1-yi.l.liu@intel.com/
+ - Drop patch 05 of v1 as it is already covered by other series
+ - Rename the capability info to be iommu hardware info
+
+v1: https://lore.kernel.org/linux-iommu/20230209041642.9346-1-yi.l.liu@intel.com/
+
+Regards,
+	Yi Liu
+
+Lu Baolu (1):
+  iommu: Add new iommu op to get iommu hardware information
+
+Nicolin Chen (1):
+  iommufd/selftest: Add coverage for IOMMU_GET_HW_INFO ioctl
+
+Yi Liu (2):
+  iommu: Move dev_iommu_ops() to private header
+  iommufd: Add IOMMU_GET_HW_INFO
+
+ drivers/iommu/iommu-priv.h                    | 11 +++
+ drivers/iommu/iommufd/iommufd_test.h          |  9 +++
+ drivers/iommu/iommufd/main.c                  | 79 +++++++++++++++++++
+ drivers/iommu/iommufd/selftest.c              | 16 ++++
+ include/linux/iommu.h                         | 20 +++--
+ include/uapi/linux/iommufd.h                  | 44 +++++++++++
+ tools/testing/selftests/iommu/iommufd.c       | 17 +++-
+ tools/testing/selftests/iommu/iommufd_utils.h | 26 ++++++
+ 8 files changed, 210 insertions(+), 12 deletions(-)
+
 -- 
-2.41.0
+2.34.1
 
