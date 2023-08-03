@@ -2,34 +2,34 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CDD9FC0015E
-	for <linux-kselftest@archiver.kernel.org>; Thu,  3 Aug 2023 07:28:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A798C001E0
+	for <linux-kselftest@archiver.kernel.org>; Thu,  3 Aug 2023 07:28:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232590AbjHCH2z (ORCPT
+        id S230523AbjHCH25 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 3 Aug 2023 03:28:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43060 "EHLO
+        Thu, 3 Aug 2023 03:28:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231771AbjHCH2w (ORCPT
+        with ESMTP id S232107AbjHCH2y (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Aug 2023 03:28:52 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46BF6272A;
-        Thu,  3 Aug 2023 00:28:51 -0700 (PDT)
+        Thu, 3 Aug 2023 03:28:54 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07B7730CF;
+        Thu,  3 Aug 2023 00:28:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1691047728;
-        bh=Kc+QdIXEiriZU7G8O0tQxJI0UlyXn+ahx8/7NZv6UOI=;
+        s=mail; t=1691047729;
+        bh=SiXyuOOX0kAfgATp0YbPKnf7iVUwVHLjveWTNqqssiQ=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=BMh1bDsk6/kxaJrHT6o97UVSd6wbtiq/uu64gzptWH2Ws3t3UADHmCGpm//BfQVGt
-         j5Snvsm9ei6gW9FtSFuGmBBJ7olzU1++pvIyRAMpGTlBnn/Zc1n3A02XV39JnD7lc6
-         jMntC4aSUERO6vMVgP4xVmSbJpL11M4rDZqopRk8=
+        b=hezgaGxRLIRMLpdr1R+Wsv3oxbMjbLxk5lOLBNIMFPM20GFGmpZ33B3okuHlqkbKW
+         HgN7x0AvLODroFjwDfuWQlRogfJUAZ6pw4K8d2mCWKAuIFmCcxeZHLFA/sFdMBwMda
+         WnwHWZGA2kX48+4+iRUaufOvWrGotJrOx5GN5xms=
 From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date:   Thu, 03 Aug 2023 09:28:46 +0200
-Subject: [PATCH v3 02/14] tools/nolibc: fix return type of getpagesize()
+Date:   Thu, 03 Aug 2023 09:28:53 +0200
+Subject: [PATCH v3 09/14] selftests/nolibc: avoid unused parameter warnings
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20230803-nolibc-warnings-v3-2-bcc1a096ae02@weissschuh.net>
+Message-Id: <20230803-nolibc-warnings-v3-9-bcc1a096ae02@weissschuh.net>
 References: <20230803-nolibc-warnings-v3-0-bcc1a096ae02@weissschuh.net>
 In-Reply-To: <20230803-nolibc-warnings-v3-0-bcc1a096ae02@weissschuh.net>
 To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
@@ -38,57 +38,38 @@ Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         Zhangjin Wu <falcon@tinylab.org>,
         =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1691047727; l=1272;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1691047727; l=758;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=Kc+QdIXEiriZU7G8O0tQxJI0UlyXn+ahx8/7NZv6UOI=;
- b=u/P0udBpE4q6UzvgDTxFjgz2+bHM5uIMee8vumQczRMeEd5B8Qlfkf4PJu4x4TCaiC/LeylD9
- Es7vLxLlhTADwKVNUwV7OV6umoHFR8m5a6wbNkY/r1bDCLMbDV60y7R
+ bh=SiXyuOOX0kAfgATp0YbPKnf7iVUwVHLjveWTNqqssiQ=;
+ b=Q/BdMVls6YdyJeCvodtEdoB0Szlesfpr7ZaJZrW87s6bj1cDnCYLCF3ffhM7qtMKZ5hSLkYW7
+ ZitYAgLlZwrD7Al8FbR8+cwSAm5D9sDwv++Rtwpkqg4OY1sSjuEm+vu
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-It's documented as returning int which is also implemented by glibc and
-musl, so adopt that return type.
+This warning will be enabled later so avoid triggering it.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- tools/include/nolibc/sys.h                   | 4 ++--
- tools/testing/selftests/nolibc/nolibc-test.c | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ tools/testing/selftests/nolibc/nolibc-test.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-index e12dd962c578..c151533ba8e9 100644
---- a/tools/include/nolibc/sys.h
-+++ b/tools/include/nolibc/sys.h
-@@ -460,11 +460,11 @@ pid_t gettid(void)
- static unsigned long getauxval(unsigned long key);
- 
- /*
-- * long getpagesize(void);
-+ * int getpagesize(void);
-  */
- 
- static __attribute__((unused))
--long getpagesize(void)
-+int getpagesize(void)
- {
- 	return __sysret(getauxval(AT_PAGESZ) ?: -ENOENT);
- }
 diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 3a21bee360ea..52489455add8 100644
+index ea420c794536..d6aa12c3f9ff 100644
 --- a/tools/testing/selftests/nolibc/nolibc-test.c
 +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -636,7 +636,7 @@ int test_getdents64(const char *dir)
+@@ -1112,7 +1112,8 @@ static int smash_stack(void)
+ 	return 1;
+ }
  
- static int test_getpagesize(void)
+-static int run_protection(int min, int max)
++static int run_protection(int min __attribute__((unused)),
++			  int max __attribute__((unused)))
  {
--	long x = getpagesize();
-+	int x = getpagesize();
- 	int c;
- 
- 	if (x < 0)
+ 	pid_t pid;
+ 	int llen = 0, status;
 
 -- 
 2.41.0
