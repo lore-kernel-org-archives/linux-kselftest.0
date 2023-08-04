@@ -2,119 +2,160 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8D48C001DB
-	for <linux-kselftest@archiver.kernel.org>; Fri,  4 Aug 2023 19:36:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B0C2C41513
+	for <linux-kselftest@archiver.kernel.org>; Fri,  4 Aug 2023 21:54:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbjHDTgm (ORCPT
+        id S229621AbjHDVyE (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 4 Aug 2023 15:36:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55706 "EHLO
+        Fri, 4 Aug 2023 17:54:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjHDTgk (ORCPT
+        with ESMTP id S229598AbjHDVyD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 4 Aug 2023 15:36:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DED04E7
-        for <linux-kselftest@vger.kernel.org>; Fri,  4 Aug 2023 12:35:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1691177753;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=/fEGLQTPa3ePRn0SUruCR/akdAF06PibGk+SoDw6oqs=;
-        b=EKepgm59iEW0B4OmUB2n2dIYEg80eS9pWxANbLzawBzMWgFpg6+l4s5Ruko2L5Ly5/KabE
-        KasgEN0ynKNy8fxLQDBeP7t3iisxryDBy6YvUmnFIr1vCi6Kz3ob9aVvxsa7cmmIMULOFc
-        NmCw4HnM4J3dxnEklTAxl+oVQ9xWBlM=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-624-_riD2ztuNEm9K1gKjvzraw-1; Fri, 04 Aug 2023 15:35:51 -0400
-X-MC-Unique: _riD2ztuNEm9K1gKjvzraw-1
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-7659c6caeaeso319686385a.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 04 Aug 2023 12:35:51 -0700 (PDT)
+        Fri, 4 Aug 2023 17:54:03 -0400
+Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97920106;
+        Fri,  4 Aug 2023 14:54:02 -0700 (PDT)
+Received: by mail-vk1-xa2d.google.com with SMTP id 71dfb90a1353d-48716a85f16so712524e0c.3;
+        Fri, 04 Aug 2023 14:54:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1691186041; x=1691790841;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Esa07M2shux5azrFa7lTIRiE3FnlvA6v4xak5W6Yyjk=;
+        b=lslOMdYCeC30UPvTIvI0aosjpBXGZn7sngPRuURDVQ39HLaBeQ6E/lkAuru/lXRBMz
+         m73gHAIS54CrSn65n5Jchg0KoWL48g8oB7eYtld/P90faJs0n6W82Xe8Z0UlGTUmo5bb
+         IvgYdyJQwcRUODos9vjSb7M54g/qLDb6w8KhKe35u9GAje0D1cR+kHcRQ239Ws+AEk03
+         2nHILU3myArnRstOptus5JIOHmwCOFNth6EjpnvwSOZ6AuCPbBPzYG2GOgldSlizDSWx
+         A61CryrSa7G3lGA/7I30HRvCkTrEuX8+ndwXYAXhGu5E9muo7ZFoxixnlI4Dp4Nb5n8+
+         fKhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691177751; x=1691782551;
-        h=user-agent:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/fEGLQTPa3ePRn0SUruCR/akdAF06PibGk+SoDw6oqs=;
-        b=c+DBjkRuu7E7Awm5xmrewU0fjB+9YdBOM6ffH7uL+ouBLYmeWQ/xcoOnDGxZdMgTXk
-         2mBP1jsKGQPOq327eR1UfrEeLyys2jkF9REzDgp5l/uRIym4oeH6wZuMWYfVolAPmDcN
-         sYXP32lMkv6RjKE8FAhOQLmxWSdJkwHNhR5A4GAY9uRQ+BJ1nHmzj1Od7BtOLDo363hX
-         i6lJs1dTE8ZLCxzPZaaXT4VMxjbhe0ixP8eJeM+uCBekCg2Qj2k+IHMyB3dp9unZDcfv
-         GTDPxwP8oX7GlJfRlL5f60sTx/LJCmek0k52FdU8TV9/oRHSxsjA96qt00wyG7NReyxk
-         XubA==
-X-Gm-Message-State: AOJu0YyZO1+hjBqLG8HWVTPRKCWFDIR+/g6O/gpdfnpynHzxCRNb2q4o
-        8vTVDVEtULbkd0keeKHBmYNVvBca7wmsAaBES2ns+SQFSH/xc3hw4kbD5Wo4QDflLlue+pzbo4t
-        P6bJguDkEBNH1o8nltrorJhvfgNDmfPA4iMfmzuq0Og==
-X-Received: by 2002:a05:620a:4456:b0:76c:b476:f712 with SMTP id w22-20020a05620a445600b0076cb476f712mr3876344qkp.51.1691177751274;
-        Fri, 04 Aug 2023 12:35:51 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IF+9eMVqPJLY6YIUSKa4NNv1paAfI3JX7M2BAluopih9iKnho0rRGuzu78ZOQHGnUECV5Khzw==
-X-Received: by 2002:a05:620a:4456:b0:76c:b476:f712 with SMTP id w22-20020a05620a445600b0076cb476f712mr3876330qkp.51.1691177751036;
-        Fri, 04 Aug 2023 12:35:51 -0700 (PDT)
-Received: from fedora ([174.89.37.244])
-        by smtp.gmail.com with ESMTPSA id 4-20020a05620a070400b0076745f352adsm847974qkc.59.2023.08.04.12.35.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Aug 2023 12:35:45 -0700 (PDT)
-Date:   Fri, 4 Aug 2023 15:35:29 -0400
-From:   Lucas Karpinski <lkarpins@redhat.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Muchun Song <muchun.song@linux.dev>, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3] selftests: cgroup: fix test_kmem_basic less than error
-Message-ID: <7d6gcuyzdjcice6qbphrmpmv5skr5jtglg375unnjxqhstvhxc@qkn6dw6bao6v>
+        d=1e100.net; s=20221208; t=1691186041; x=1691790841;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Esa07M2shux5azrFa7lTIRiE3FnlvA6v4xak5W6Yyjk=;
+        b=WprTbY8wMpoNBqHN9Z3yJ+ZIRdOkbNev2GtGqXaaWELL7Yr950X2VwD2DL1ZJYUZGI
+         AGP1hvQMvVBOshJY2aB1i33MfxCFMvoxQ+2FJ3XhYB9MwE2Krwl004tb/rln6U8ZQwov
+         BfgD3z1TViicvoPorjtcVZLdO5b+IYbdIC5jnrhfXv2rS5w5T+z1oukKvPFu9hY8zjYP
+         +sk8BWMsb/hnIuZI0Q6+YSZW21E/N8Kq6h7NE0rvcDcwHbEUY5wVGWIpqjW/n8VLislX
+         sW218Z3dk+qynta6YEXxzyEZKX49HbNkdJ690GT3Uk75PsUowdH68XT9Fo0POpBGUAU6
+         Zvng==
+X-Gm-Message-State: AOJu0YwgP1NQLSM6m5A8Lm6OliPi5Q9AxQx035swA5IgsHS//8nT3roE
+        VCBaKowlwhEdTcZdmXAiR6Yeup+Wi3V9u5r60w0=
+X-Google-Smtp-Source: AGHT+IFahKpzpIJYaivvhmIRXbOcsGuHjA0b6V8skSUZy2IVPHamiQVkLgSl7ceD8hFW+TEIM7u0UyhOIYM9qK4nTCA=
+X-Received: by 2002:a1f:5e04:0:b0:471:17be:ba8d with SMTP id
+ s4-20020a1f5e04000000b0047117beba8dmr2417786vkb.3.1691186041493; Fri, 04 Aug
+ 2023 14:54:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: NeoMutt/20230517
+References: <20230727093637.1262110-1-usama.anjum@collabora.com> <20230727093637.1262110-3-usama.anjum@collabora.com>
+In-Reply-To: <20230727093637.1262110-3-usama.anjum@collabora.com>
+From:   Andrei Vagin <avagin@gmail.com>
+Date:   Fri, 4 Aug 2023 14:53:49 -0700
+Message-ID: <CANaxB-zZFq7VD7tBBUmACUJPE9iVuTyQKfg4Jw82-U_1qw6ALg@mail.gmail.com>
+Subject: Re: [PATCH v26 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-test_kmem_basic creates 100,000 negative dentries, with each one mapping
-to a slab object. After memory.high is set, these are reclaimed through
-the shrink_slab function call which reclaims all 100,000 entries. The
-test passes the majority of the time because when slab1 or current is
-calculated, it is often above 0, however, 0 is also an acceptable value.
+On Thu, Jul 27, 2023 at 2:37=E2=80=AFAM Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+>
 
-Signed-off-by: Lucas Karpinski <lkarpins@redhat.com>
----
-In the previous patch, I missed a change to the variable 'current' even
-after some testing as the issue was so sporadic. Current takes the slab
-size into account and can also face the same issue where it fails since
-the reported value is 0, which is an acceptable value.
+<snip>
 
-Drop: b4abfc19 in mm-unstable
-V2: https://lore.kernel.org/all/ix6vzgjqay2x7bskle7pypoint4nj66fwq7odvd5hektatvp2l@kukoifnfj3dr/
+> +static long do_pagemap_scan(struct mm_struct *mm, unsigned long uarg)
+> +{
+> +       unsigned long walk_start, walk_end;
+> +       struct mmu_notifier_range range;
+> +       struct pagemap_scan_private p;
+> +       size_t n_ranges_out =3D 0;
+> +       int ret;
+> +
+> +       memset(&p, 0, sizeof(p));
+> +       ret =3D pagemap_scan_get_args(&p.arg, uarg);
+> +       if (ret)
+> +               return ret;
+> +
+> +       ret =3D pagemap_scan_init_bounce_buffer(&p);
+> +       if (ret)
+> +               return ret;
+> +
+> +       /* Protection change for the range is going to happen. */
+> +       if (p.arg.flags & PM_SCAN_WP_MATCHING) {
+> +               mmu_notifier_range_init(&range, MMU_NOTIFY_PROTECTION_VMA=
+, 0,
+> +                                       mm, p.arg.start, p.arg.end);
+> +               mmu_notifier_invalidate_range_start(&range);
+> +       }
+> +
+> +       walk_start =3D walk_end =3D p.arg.start;
+> +       for (; walk_end !=3D p.arg.end; walk_start =3D walk_end) {
+> +               int n_out;
+> +
+> +               walk_end =3D min_t(unsigned long,
+> +                                (walk_start + PAGEMAP_WALK_SIZE) & PAGEM=
+AP_WALK_MASK,
+> +                                p.arg.end);
 
- tools/testing/selftests/cgroup/test_kmem.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+This approach has performance implications. The basic program that scans
+its address space takes around 20-30 seconds, but it has just a few
+small mappings. The first optimization that comes to mind is to remove
+the PAGEMAP_WALK_SIZE limit and instead halt walk_page_range when the
+bounce buffer is full. After draining the buffer, the walk_page_range
+function can be restarted.
 
-diff --git a/tools/testing/selftests/cgroup/test_kmem.c b/tools/testing/selftests/cgroup/test_kmem.c
-index 1b2cec9d18a4..ed2e50bb1e76 100644
---- a/tools/testing/selftests/cgroup/test_kmem.c
-+++ b/tools/testing/selftests/cgroup/test_kmem.c
-@@ -75,11 +75,11 @@ static int test_kmem_basic(const char *root)
- 	sleep(1);
- 
- 	slab1 = cg_read_key_long(cg, "memory.stat", "slab ");
--	if (slab1 <= 0)
-+	if (slab1 < 0)
- 		goto cleanup;
- 
- 	current = cg_read_long(cg, "memory.current");
--	if (current <= 0)
-+	if (current < 0)
- 		goto cleanup;
- 
- 	if (slab1 < slab0 / 2 && current < slab0 / 2)
--- 
-2.41.0
+The test program and perf data can be found here:
+https://gist.github.com/avagin/c5a22f3c78f8cb34281602dfe9c43d10
 
+> +
+> +               ret =3D mmap_read_lock_killable(mm);
+> +               if (ret)
+> +                       break;
+> +               ret =3D walk_page_range(mm, walk_start, walk_end,
+> +                                     &pagemap_scan_ops, &p);
+> +               mmap_read_unlock(mm);
+> +
+> +               n_out =3D pagemap_scan_flush_buffer(&p);
+> +               if (n_out < 0)
+> +                       ret =3D n_out;
+> +               else
+> +                       n_ranges_out +=3D n_out;
+> +
+> +               if (ret)
+> +                       break;
+> +       }
+> +
+
+Thanks,
+Andrei
