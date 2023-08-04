@@ -2,141 +2,157 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E219C00528
-	for <linux-kselftest@archiver.kernel.org>; Fri,  4 Aug 2023 21:59:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AFA60C04A6A
+	for <linux-kselftest@archiver.kernel.org>; Fri,  4 Aug 2023 22:10:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229901AbjHDV7s (ORCPT
+        id S230112AbjHDWKn (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 4 Aug 2023 17:59:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57794 "EHLO
+        Fri, 4 Aug 2023 18:10:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbjHDV7s (ORCPT
+        with ESMTP id S229772AbjHDWKm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 4 Aug 2023 17:59:48 -0400
-X-Greylist: delayed 601 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 04 Aug 2023 14:59:44 PDT
-Received: from smtp.uniroma2.it (smtp.uniroma2.it [160.80.6.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDEAB180;
-        Fri,  4 Aug 2023 14:59:44 -0700 (PDT)
-Received: from smtpauth-2019-1.uniroma2.it (smtpauth-2019-1.uniroma2.it [160.80.5.46])
-        by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 374LdqY3031774;
-        Fri, 4 Aug 2023 23:39:58 +0200
-Received: from [192.168.1.55] (host-79-18-185-225.retail.telecomitalia.it [79.18.185.225])
-        by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id 2F7C01209D4;
-        Fri,  4 Aug 2023 23:39:48 +0200 (CEST)
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=uniroma2.it;
-        s=ed201904; t=1691185189; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
+        Fri, 4 Aug 2023 18:10:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD5CE69
+        for <linux-kselftest@vger.kernel.org>; Fri,  4 Aug 2023 15:09:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1691186996;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=L2eY65w4QX2NFbKU1+DDTyYdgcmreNvLmXgo7ENzCQY=;
-        b=z57vFvjdKrtJ+iilaAJJLfVIouzA+c8OFSmCnw4GuawqK8M0dmlNn0k/Fy2e7u96x1ehCF
-        DIOPPKSst3eLXXCQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniroma2.it; s=rsa201904;
-        t=1691185189; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=L2eY65w4QX2NFbKU1+DDTyYdgcmreNvLmXgo7ENzCQY=;
-        b=Ox71sguE0YicW+Ke/W0Pw44zeXJ7qgQKqTLeTdr1t1m7lMROPyrvdm7pHujGvWzolsGQbM
-        r/YxW2A49ma1vaWo3TwleiR8Xnx+Hxpd4zY6dm7cLWU9sKUx437ovbKOK9qop6dUaNIf/a
-        Fev0p2Q8qan4LabWBH7lARiDS7KOeTqSa5ShLVlI8Hpc4jc35iWrjLSKgQ7R00B08OkOHy
-        GTlBxLksejW4WEFrZQoe1cjo3dfvCe4YplSnn1CSddwGDw69bh+bavF2gz0GTuVk8tA9eM
-        E4g4qEEJSMVHKAPJMO5Pvcix+YdUtTXjTDULLD/YGm5BgKJCwxu9Ohp0uM9n8g==
-Message-ID: <f778eef0-a035-0a29-3108-0f6f53a475ed@uniroma2.it>
-Date:   Fri, 4 Aug 2023 23:39:47 +0200
+        bh=evYrVf/iKCZzrXphWuBBZKTjd3mBH9ss4zSdxYs7MUs=;
+        b=VeasDIYTPlIONOCJA9UE7idljjljNYzyejhonPRqXrfewl2R2y4HUHZU1ihYDWX6NhjUkN
+        W1SDxDCup5/jgVqC20/+NIlrKqGyjq01mktVL6+9vKPM4RCLzdzWSBiSvlqiCahc0fGhrP
+        xrrJFk3L06boX+/6+syqW9xwVlHcVB8=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-67-385f2fDBP-2TGh7_wunr-w-1; Fri, 04 Aug 2023 18:09:55 -0400
+X-MC-Unique: 385f2fDBP-2TGh7_wunr-w-1
+Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-5223bdb71e5so1569952a12.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 04 Aug 2023 15:09:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691186994; x=1691791794;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=evYrVf/iKCZzrXphWuBBZKTjd3mBH9ss4zSdxYs7MUs=;
+        b=GQYTiENX5qsD1//ulVT5Sq1IKMe0q/wdYaCE43n7YcNMw85Lm0VUVTlp+kX+m5ibjO
+         MGmE0UIRloSoLlZ6S6vEFn37cRBLHGBhqq+lFZfUrhmtfjvbGw3xgPKaJuyE6w5LplwK
+         KX51j1LGfkeYdKz3411cOPX5tfnJnyLnJwUqqlPg1/9dTWn71A75OSI5nbnsGjSV1LPm
+         a0vx3xJyN4XYcL5dytc+d65U8VoQxmRwChq0Qp8LNaCrYkxvGtyANqBI1anRcwj0n7V5
+         534uBxnfKE3Bo8XUy7MA84Zru/cmG/GrCuM8/hH97GutxV9csoAEcgSgSvU7wl3TJhMU
+         TiHw==
+X-Gm-Message-State: AOJu0YyUQErG7vBvlUqM/joEt6bWOK4MXEyyxFFJ2jy7OEosSdl0vMIH
+        6mQV0JYPy7i2SOJ0VecF7C9M2nvFxKeUX1PxSkXlBZcLugp+/K/xr0nI3Y1P3z8BiyjxGOd5kSW
+        Oaab11eL1bHQMU0EJwu4GzcIIg7D4
+X-Received: by 2002:aa7:c990:0:b0:521:a99b:a233 with SMTP id c16-20020aa7c990000000b00521a99ba233mr2648709edt.10.1691186994115;
+        Fri, 04 Aug 2023 15:09:54 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHBekLNPRykim88ENWzH/K7RT7FRQkvjiPm6lNHDHg7kFI2E3ObIAF2P2Vh1gJoj7x5HPbMiw==
+X-Received: by 2002:aa7:c990:0:b0:521:a99b:a233 with SMTP id c16-20020aa7c990000000b00521a99ba233mr2648687edt.10.1691186993726;
+        Fri, 04 Aug 2023 15:09:53 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
+        by smtp.googlemail.com with ESMTPSA id p12-20020aa7d30c000000b00522ce914f51sm1774622edq.67.2023.08.04.15.09.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Aug 2023 15:09:53 -0700 (PDT)
+Message-ID: <ff7fecca-8413-6625-4d10-a6b3c21fc24d@redhat.com>
+Date:   Sat, 5 Aug 2023 00:09:49 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [net-next 2/2] selftests: seg6: add selftest for NEXT-C-SID
- flavor in SRv6 End.X behavior
-To:     Paolo Abeni <pabeni@redhat.com>,
-        Andrea Mayer <andrea.mayer@uniroma2.it>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        David Ahern <dsahern@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc:     Stefano Salsano <stefano.salsano@uniroma2.it>,
-        Ahmed Abdelsalam <ahabdels.dev@gmail.com>,
-        Hangbin Liu <liuhangbin@gmail.com>,
-        Paolo Lungaroni <paolo.lungaroni@uniroma2.it>
-References: <20230731175117.17376-1-andrea.mayer@uniroma2.it>
- <20230731175117.17376-3-andrea.mayer@uniroma2.it>
- <9916825da00d375a33abdcb0aa773c5520a307e1.camel@redhat.com>
-From:   Paolo Lungaroni <paolo.lungaroni@uniroma2.it>
-In-Reply-To: <9916825da00d375a33abdcb0aa773c5520a307e1.camel@redhat.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] selftests/rseq: Fix build with undefined __weak
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Aaron Lewis <aaronlewis@google.com>, stable@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+References: <20230804-kselftest-rseq-build-v1-1-015830b66aa9@kernel.org>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20230804-kselftest-rseq-build-v1-1-015830b66aa9@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Antivirus: Avast (VPS 230804-6, 4/8/2023), Outbound message
-X-Antivirus-Status: Clean
-X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
-X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Paolo,
-
-please see my answer below, thanks.
-
-Il 03/08/2023 10:07, Paolo Abeni ha scritto:
-> On Mon, 2023-07-31 at 19:51 +0200, Andrea Mayer wrote:
->> From: Paolo Lungaroni <paolo.lungaroni@uniroma2.it>
->>
->> This selftest is designed for testing the support of NEXT-C-SID flavor
->> for SRv6 End.X behavior. It instantiates a virtual network composed of
->> several nodes: hosts and SRv6 routers. Each node is realized using a
->> network namespace that is properly interconnected to others through veth
->> pairs, according to the topology depicted in the selftest script file.
->> The test considers SRv6 routers implementing IPv4/IPv6 L3 VPNs leveraged
->> by hosts for communicating with each other. Such routers i) apply
->> different SRv6 Policies to the traffic received from connected hosts,
->> considering the IPv4 or IPv6 protocols; ii) use the NEXT-C-SID
->> compression mechanism for encoding several SRv6 segments within a single
->> 128-bit SID address, referred to as a Compressed SID (C-SID) container.
->>
->> The NEXT-C-SID is provided as a "flavor" of the SRv6 End.X behavior,
->> enabling it to properly process the C-SID containers. The correct
->> execution of the enabled NEXT-C-SID SRv6 End.X behavior is verified
->> through reachability tests carried out between hosts belonging to the
->> same VPN.
->>
->> Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
->> Signed-off-by: Paolo Lungaroni <paolo.lungaroni@uniroma2.it>
+On 8/4/23 21:22, Mark Brown wrote:
+> Commit 3bcbc20942db ("selftests/rseq: Play nice with binaries statically
+> linked against glibc 2.35+") which is now in Linus' tree introduced uses
+> of __weak but did nothing to ensure that a definition is provided for it
+> resulting in build failures for the rseq tests:
 > 
-> The patches LGTM, but there is a minor issues WRT the tag area. Since
-> this patch contains a
+> rseq.c:41:1: error: unknown type name '__weak'
+> __weak ptrdiff_t __rseq_offset;
+> ^
+> rseq.c:41:17: error: expected ';' after top level declarator
+> __weak ptrdiff_t __rseq_offset;
+>                  ^
+>                  ;
+> rseq.c:42:1: error: unknown type name '__weak'
+> __weak unsigned int __rseq_size;
+> ^
+> rseq.c:43:1: error: unknown type name '__weak'
+> __weak unsigned int __rseq_flags;
 > 
-> From: Paolo Lungaroni <paolo.lungaroni@uniroma2.it>
-> 
-> tag, Paolo's sob should come first.
-> 
-> According to the the newly created shell script comments, it looks like
-> the patch as been co developed by both Paolo abd Andrea.
-> 
-> In that case the correct tag sequence would be:
-> 
-> SoB Paolo
-> Co-devel Andrea
-> SoB Andrea
-> 
-> Since the above is relevant for correct patch authorship attribution I
-> suggest to address that in a new revision.
-
-We will follow your suggestions and we resubmit the v2 patch with
-the tags in the correct order.
-
-> 
-> BTW, I a really appreciate the descriptive-but-not-too-verbose commit
-> message!
-> 
-> Thanks,
-> 
-> Paolo
+> Fix this by using the definition from tools/include compiler.h.
 > 
 
-Ciao,
+Queued, thanks.  Sorry for the breakage.
+
 Paolo
+
+> Fixes: 3bcbc20942db ("selftests/rseq: Play nice with binaries statically linked against glibc 2.35+")
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+> It'd be good if the KVM testing could include builds of the rseq
+> selftests, the KVM tests pull in code from rseq but not the build system
+> which has resulted in multiple failures like this.
+> ---
+>   tools/testing/selftests/rseq/Makefile | 4 +++-
+>   tools/testing/selftests/rseq/rseq.c   | 2 ++
+>   2 files changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/rseq/Makefile b/tools/testing/selftests/rseq/Makefile
+> index b357ba24af06..7a957c7d459a 100644
+> --- a/tools/testing/selftests/rseq/Makefile
+> +++ b/tools/testing/selftests/rseq/Makefile
+> @@ -4,8 +4,10 @@ ifneq ($(shell $(CC) --version 2>&1 | head -n 1 | grep clang),)
+>   CLANG_FLAGS += -no-integrated-as
+>   endif
+>   
+> +top_srcdir = ../../../..
+> +
+>   CFLAGS += -O2 -Wall -g -I./ $(KHDR_INCLUDES) -L$(OUTPUT) -Wl,-rpath=./ \
+> -	  $(CLANG_FLAGS)
+> +	  $(CLANG_FLAGS) -I$(top_srcdir)/tools/include
+>   LDLIBS += -lpthread -ldl
+>   
+>   # Own dependencies because we only want to build against 1st prerequisite, but
+> diff --git a/tools/testing/selftests/rseq/rseq.c b/tools/testing/selftests/rseq/rseq.c
+> index a723da253244..96e812bdf8a4 100644
+> --- a/tools/testing/selftests/rseq/rseq.c
+> +++ b/tools/testing/selftests/rseq/rseq.c
+> @@ -31,6 +31,8 @@
+>   #include <sys/auxv.h>
+>   #include <linux/auxvec.h>
+>   
+> +#include <linux/compiler.h>
+> +
+>   #include "../kselftest.h"
+>   #include "rseq.h"
+>   
+> 
+> ---
+> base-commit: 5d0c230f1de8c7515b6567d9afba1f196fb4e2f4
+> change-id: 20230804-kselftest-rseq-build-9d537942b1de
+> 
+> Best regards,
+
