@@ -2,74 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B28A0C001DB
-	for <linux-kselftest@archiver.kernel.org>; Fri,  4 Aug 2023 15:31:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 249BBC001DB
+	for <linux-kselftest@archiver.kernel.org>; Fri,  4 Aug 2023 15:38:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbjHDPbo (ORCPT
+        id S230353AbjHDPiN (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 4 Aug 2023 11:31:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35122 "EHLO
+        Fri, 4 Aug 2023 11:38:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231979AbjHDPbZ (ORCPT
+        with ESMTP id S232179AbjHDPiH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 4 Aug 2023 11:31:25 -0400
+        Fri, 4 Aug 2023 11:38:07 -0400
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA39B9;
-        Fri,  4 Aug 2023 08:30:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 339D73C3D;
+        Fri,  4 Aug 2023 08:38:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1691163053; bh=n62HmNE3akQNdm2oi6fPb5D4Hbn1tXNoatiXKn3ylUc=;
+        t=1691163484; bh=YCbKHizJ+96nxExfEuzM8vhUtwP+5zZPbpekUwhOb7M=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=K+nzmV/pqyiindTWjfRsKcIM9wGXzo7t2RdAx/B5oHjk65uHK7hSgzjj4UIvmUI/x
-         EQdjpYmfRTM07jZ1HObnLTUhFcC2eVuJ5RYG6j9L4Lkx4laet7jVhjCmMVfq8Yhf1v
-         xLUSbf8Nwu8+hxfc+Qx4s/AMfFBGLc8BQCiSuqhI=
-Date:   Fri, 4 Aug 2023 17:30:52 +0200
+        b=lfUcUpnH3shhL1FXfjVogI81OKWhvuhs7Ruut8ydPey3oxsL/M99hKz75DNWtZeCD
+         2ciDYSG78xRw+3tJi2yFcuidBrpdCXJ2dFWioGSmVFftMC4yAs4+A/WUyaLBak4lH3
+         Wqx74oplKu68ERNBAp5PBRmkUFqtCdXbXcM0dS9k=
+Date:   Fri, 4 Aug 2023 17:38:03 +0200
 From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
 To:     Zhangjin Wu <falcon@tinylab.org>
 Cc:     w@1wt.eu, arnd@arndb.de, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, tanyuan@tinylab.org
-Subject: Re: [PATCH v1 1/3] selftests/nolibc: allow report with existing test
- log
-Message-ID: <fc316639-10c7-46d3-a897-9553606aba2d@t-8ch.de>
+Subject: Re: [PATCH v1 3/3] tools/nolibc: stackprotector.h: make
+ __stack_chk_init static
+Message-ID: <34bf8710-0571-4f69-87bc-b3776264744b@t-8ch.de>
 References: <cover.1691073180.git.falcon@tinylab.org>
- <a2879d1ef44fd482a63a8d1a41527289ebcd501b.1691073180.git.falcon@tinylab.org>
+ <d5eb12e6b9238dcb85935cf6af3ed12ff043f900.1691073180.git.falcon@tinylab.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <a2879d1ef44fd482a63a8d1a41527289ebcd501b.1691073180.git.falcon@tinylab.org>
+In-Reply-To: <d5eb12e6b9238dcb85935cf6af3ed12ff043f900.1691073180.git.falcon@tinylab.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2023-08-03 22:44:47+0800, Zhangjin Wu wrote:
-> After the tests finish, it is valuable to report and summarize with
-> existing test log.
+On 2023-08-03 22:47:01+0800, Zhangjin Wu wrote:
+> This allows to generate smaller text/data/dec size.
 > 
-> This avoid rerun or run the tests again when not necessary.
+> As the _start_c() function added by crt.h, __stack_chk_init() is called
+> from _start_c() instead of the assembly _start. So, it is able to mark
+> it with static now.
 > 
 > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 
 Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
 
 > ---
->  tools/testing/selftests/nolibc/Makefile | 4 ++++
->  1 file changed, 4 insertions(+)
+>  tools/include/nolibc/crt.h            | 2 +-
+>  tools/include/nolibc/stackprotector.h | 5 ++---
+>  2 files changed, 3 insertions(+), 4 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-> index 16cc33db54e3..51fef5e6a152 100644
-> --- a/tools/testing/selftests/nolibc/Makefile
-> +++ b/tools/testing/selftests/nolibc/Makefile
-> @@ -225,6 +225,10 @@ rerun:
->  	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
->  	$(Q)$(REPORT) $(CURDIR)/run.out
+> diff --git a/tools/include/nolibc/crt.h b/tools/include/nolibc/crt.h
+> index 32e128b0fb62..a5f33fef1672 100644
+> --- a/tools/include/nolibc/crt.h
+> +++ b/tools/include/nolibc/crt.h
+> @@ -10,7 +10,7 @@
+>  char **environ __attribute__((weak));
+>  const unsigned long *_auxv __attribute__((weak));
 >  
-> +# report with existing test log
-> +report:
-> +	$(Q)$(REPORT) $(CURDIR)/run.out
-> +
->  clean:
->  	$(call QUIET_CLEAN, sysroot)
->  	$(Q)rm -rf sysroot
+> -void __stack_chk_init(void);
+> +static void __stack_chk_init(void);
+>  static void exit(int);
+>  
+>  void _start_c(long *sp)
+> diff --git a/tools/include/nolibc/stackprotector.h b/tools/include/nolibc/stackprotector.h
+> index b620f2b9578d..13f1d0e60387 100644
+> --- a/tools/include/nolibc/stackprotector.h
+> +++ b/tools/include/nolibc/stackprotector.h
+> @@ -37,8 +37,7 @@ void __stack_chk_fail_local(void)
+>  __attribute__((weak,section(".data.nolibc_stack_chk")))
+>  uintptr_t __stack_chk_guard;
+>  
+> -__attribute__((weak,section(".text.nolibc_stack_chk"))) __no_stack_protector
+> -void __stack_chk_init(void)
+> +static __no_stack_protector void __stack_chk_init(void)
+>  {
+>  	my_syscall3(__NR_getrandom, &__stack_chk_guard, sizeof(__stack_chk_guard), 0);
+>  	/* a bit more randomness in case getrandom() fails, ensure the guard is never 0 */
+> @@ -46,7 +45,7 @@ void __stack_chk_init(void)
+>  		__stack_chk_guard ^= (uintptr_t) &__stack_chk_guard;
+>  }
+>  #else /* !defined(_NOLIBC_STACKPROTECTOR) */
+> -__inline__ void __stack_chk_init(void) {}
+> +static void __stack_chk_init(void) {}
+>  #endif /* defined(_NOLIBC_STACKPROTECTOR) */
+>  
+>  #endif /* _NOLIBC_STACKPROTECTOR_H */
 > -- 
 > 2.25.1
 > 
