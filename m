@@ -2,114 +2,208 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ABB0EC001DB
-	for <linux-kselftest@archiver.kernel.org>; Fri,  4 Aug 2023 15:38:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60D88C001DB
+	for <linux-kselftest@archiver.kernel.org>; Fri,  4 Aug 2023 15:52:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231954AbjHDPin (ORCPT
+        id S232246AbjHDPwz (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 4 Aug 2023 11:38:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39980 "EHLO
+        Fri, 4 Aug 2023 11:52:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231201AbjHDPie (ORCPT
+        with ESMTP id S232248AbjHDPwq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 4 Aug 2023 11:38:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF2A212D
-        for <linux-kselftest@vger.kernel.org>; Fri,  4 Aug 2023 08:37:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1691163467;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=sWUCadNhtS5nrUCHR//9fr6i9W+VBU3reP6ArzIMKD4=;
-        b=gTI9RkgnQxGXLQwQkRynbdbbCaeFM21dVmOHi/4qW6sD7U1xcSA4RPkkTkbXMJVaQCNx5D
-        MVEqQPexFLkFvhpNn8RGwSdbj6QYj0qLJOL3SKqK6QmAoU9mr9hGNTOsyMt8zKoCq/LvOz
-        XhiLNWUGc0cXzkNqUFNL9FGAwxRLvA4=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-679-EEkqjN_-P0iYwwxRrLoCdQ-1; Fri, 04 Aug 2023 11:37:44 -0400
-X-MC-Unique: EEkqjN_-P0iYwwxRrLoCdQ-1
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-76c93466e4cso232630585a.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 04 Aug 2023 08:37:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691163463; x=1691768263;
-        h=user-agent:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sWUCadNhtS5nrUCHR//9fr6i9W+VBU3reP6ArzIMKD4=;
-        b=gEeiprV4oL+hnN5ZoInVztotR0cpkI+IaYZ/1ymKo8fpJdScF90fSC4Y5GqXC28MPp
-         XS+Tzjkz/F9lPKZfKKFGYv1kyipPvS+PMKtuDTbb2aBUy5A6edvDhjqBi9J1I7ZT5Mg+
-         oZEcWbvcGfel8mdUmhGVRK5zvO2yCaJXaucd/fDbnMh1jWqcZulWz1nYN511XsCXn9QP
-         3Y0lxpdughkLv38TSTwy9qHl4El8L3uYilqTSkVvSD7rCSs56JJ7jBZ7qcSqWnJ0UK9t
-         rPnuevhhJEvRQeuBV+qFu3JHRsuZkN6svLB2xUFiRDyr2elqto6MxuYDcfBHnrFnJPfO
-         Kfug==
-X-Gm-Message-State: AOJu0Yzf7H7Uh8mPhusxAl1ukIIUSfEkGl+6H5KsKmTy36iI0y3IDNf1
-        cj5L83n5Hlk81ygFk2q4R//YtsGSLqaSQB3R3he+ZFzwr09yzE0JATfa+jdB8oA4XH5Fxbd8GnD
-        vdNZCJjRKmMp0wigorkuWPe1fggTZ
-X-Received: by 2002:a05:620a:4116:b0:76c:9884:4dce with SMTP id j22-20020a05620a411600b0076c98844dcemr2754757qko.63.1691163463732;
-        Fri, 04 Aug 2023 08:37:43 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IESeoIlDIDyx7XJyX0j8/1BX2ln6R1WxXabBDCtJd/UHzVFZ/vkvY/Etd4WOnHu0SSFDWBpIQ==
-X-Received: by 2002:a05:620a:4116:b0:76c:9884:4dce with SMTP id j22-20020a05620a411600b0076c98844dcemr2754733qko.63.1691163463425;
-        Fri, 04 Aug 2023 08:37:43 -0700 (PDT)
-Received: from fedora ([174.89.37.244])
-        by smtp.gmail.com with ESMTPSA id a4-20020a05620a124400b0076c71c1d2f5sm723985qkl.34.2023.08.04.08.37.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Aug 2023 08:37:42 -0700 (PDT)
-Date:   Fri, 4 Aug 2023 11:37:33 -0400
-From:   Lucas Karpinski <lkarpins@redhat.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Muchun Song <muchun.song@linux.dev>, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: cgroup: fix test_kmem_memcg_deletion false
- positives
-Message-ID: <edpx3ejic2cxolhoynxvwal2i4a35akopg6hshcfxker6oxcn7@l32pzfyucgec>
+        Fri, 4 Aug 2023 11:52:46 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3260D4C21;
+        Fri,  4 Aug 2023 08:52:38 -0700 (PDT)
+X-QQ-mid: bizesmtp83t1691164345te33whu7
+Received: from linux-lab-host.localdomain ( [116.30.131.233])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 04 Aug 2023 23:52:23 +0800 (CST)
+X-QQ-SSF: 01200000000000E0X000000A0000000
+X-QQ-FEAT: QityeSR92A2WHQhmoeg7K5p+HHxaQw1CAzbcXhBB+k9MHkxF255k+wK2V27sg
+        OuRVc4CWgf+AnDmbDSlD24XVMySgqQ03CDw+ZDomb9YVO75v6D3LSlHBbLbh0thUg8RMq51
+        evWGOq4hPqHAcKZFGyiUfaKRchAbMyUEaFT+8pd7/IE2UGKuiMVVxYh7Wc5nepDn5P092F7
+        vaboTHhKJ5gRvkCZPCfOW4JoPAnLvfPiWOk0HWKn5rPgoACioAfCazLGYYraEvdtix3SqOm
+        dWVcBFOXbcN/sPmo10zbPUGvTu60vJ/Y8MTNa6UArGAh4weoifkehMKILv0z37qRBIUb2uq
+        oPZNsSHCSy6W4JaAuxEQBn3lcIAq0BEAhw3qtLGMg/fVJe7IMmg/JOpmoCWSA==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 1441371231323318569
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de
+Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, tanyuan@tinylab.org, w@1wt.eu
+Subject: Re: [PATCH v1 2/3] selftests/nolibc: fix up O= option support
+Date:   Fri,  4 Aug 2023 23:52:18 +0800
+Message-Id: <20230804155218.293995-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <058a264d-45bd-4f1f-8af3-56ed337b3251@t-8ch.de>
+References: <058a264d-45bd-4f1f-8af3-56ed337b3251@t-8ch.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: NeoMutt/20230517
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The test allocates dcache inside a cgroup, then destroys the cgroups and
-then checks the sanity of numbers on the parent level. The reason it
-fails is because dentries are freed with an RCU delay - a debugging
-sleep shows that usage drops as expected shortly after.
+> On 2023-08-04 15:43:42+0800, Zhangjin Wu wrote:
+> > Hi, Thomas
+> > 
+> > > On 2023-08-03 22:45:52+0800, Zhangjin Wu wrote:
+> > > > To avoid pollute the source code tree and avoid mrproper for every
+> > > > architecture switch, the O= argument must be supported.
+> > > > 
+> > > > Both IMAGE and .config are from the building directory, let's use
+> > > > objtree instead of srctree for them.
+> > > > 
+> > > > If no O= option specified, means building kernel in source code tree,
+> > > > objtree should be srctree in such case.
+> > > > 
+> > > > Suggested-by: Willy Tarreau <w@1wt.eu>
+> > > > Link: https://lore.kernel.org/lkml/ZK0AB1OXH1s2xYsh@1wt.eu/
+> > > > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+> > > > ---
+> > > >  tools/testing/selftests/nolibc/Makefile | 7 +++++--
+> > > >  1 file changed, 5 insertions(+), 2 deletions(-)
+> > > > 
+> > > > diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+> > > > index 51fef5e6a152..af590aee063a 100644
+> > > > --- a/tools/testing/selftests/nolibc/Makefile
+> > > > +++ b/tools/testing/selftests/nolibc/Makefile
+> > > > @@ -9,6 +9,9 @@ ifeq ($(srctree),)
+> > > >  srctree := $(patsubst %/tools/testing/selftests/,%,$(dir $(CURDIR)))
+> > > >  endif
+> > > >  
+> > > > +# add objtree for O= argument, required by IMAGE and .config
+> > > > +objtree ?= $(srctree)
+> > > 
+> > > Isn't this already set by the included tools/scripts/Makefile.include?
+> > >
+> > 
+> > Good question, but it is empty if no O= specified, checked it several
+> > times before ;-)
+> 
+> For me it is not empty when I am in tools/testing/selftests/nolibc/.
+>
 
-Insert a 1s sleep after completing the cgroup creation/deletions. This
-should be good enough, assuming that machines running those tests are
-otherwise not very busy. This commit is directly inspired by Johannes
-over at the link below.
+Interesting, here is the code I added to check the value:
 
-Link: https://lore.kernel.org/all/20230801135632.1768830-1-hannes@cmpxchg.org/
+    diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+    index 22f1e1d73fa8..1ae19e896e24 100644
+    --- a/tools/testing/selftests/nolibc/Makefile
+    +++ b/tools/testing/selftests/nolibc/Makefile
+    @@ -12,6 +12,8 @@ include $(srctree)/scripts/subarch.include
+     ARCH = $(SUBARCH)
+     endif
+    
+    +$(error objtree=$(objtree), srctree=$(srctree))
+    +
 
-Signed-off-by: Lucas Karpinski <lkarpins@redhat.com>
----
- tools/testing/selftests/cgroup/test_kmem.c | 3 +++
- 1 file changed, 3 insertions(+)
+Whenever I do defconfig or run,
 
-diff --git a/tools/testing/selftests/cgroup/test_kmem.c b/tools/testing/selftests/cgroup/test_kmem.c
-index 67cc0182058d..7ac384bbfdd5 100644
---- a/tools/testing/selftests/cgroup/test_kmem.c
-+++ b/tools/testing/selftests/cgroup/test_kmem.c
-@@ -183,6 +183,9 @@ static int test_kmem_memcg_deletion(const char *root)
- 	if (cg_run_in_subcgroups(parent, alloc_kmem_smp, NULL, 100))
- 		goto cleanup;
- 
-+	/* wait for RCU freeing */
-+	sleep(1);
-+
- 	current = cg_read_long(parent, "memory.current");
- 	slab = cg_read_key_long(parent, "memory.stat", "slab ");
- 	anon = cg_read_key_long(parent, "memory.stat", "anon ");
--- 
-2.41.0
+    $ make help
+    Makefile:15: *** objtree=, srctree=/labs/linux-lab/src/linux-stable.  Stop.
 
+It is only not empty when we pass O explicitly:
+
+    $ mkdir out
+    $ make help O=out
+    Makefile:15: *** objtree=out, srctree=/labs/linux-lab/src/linux-stable.  Stop.
+    $ make help O=$PWD/out
+    Makefile:15: *** objtree=/labs/linux-lab/src/linux-stable/tools/testing/selftests/nolibc/out, srctree=/labs/linux-lab/src/linux-stable.  Stop.
+
+> > > Also I'm not entirely if O= works as intended currently.
+> > > When using O=foo in the $LINUX/tools/testing/selftests/nolibc directory
+> > 
+> > It does work, I have used it to test all of the run targets of the
+> > tinyconfig patches like this:
+> > 
+> >     $ make run O=kernel-$arch RUN_OUT=run.$arch.out ...
+> > 
+> > Everything about the kernel will be built in $(O).
+> 
+> It does not work for me:
+> 
+> $ cd $HOME/src/linux/tools/testing/selftests/nolibc
+> $ make O=out kernel
+> ../../../scripts/Makefile.include:4: *** O=out does not exist.  Stop.
+> $ mkdir out
+> $ make O=out kernel
+> ... Stuff happens
+> ... all the output is in $HOME/src/linux/out not in
+>     tools/testing/selftests/nolibc/out where I would expect it.
+>     The new out directory for which an error was reported before is
+>     completely empty.
+>
+
+Oh, yeah, my fault, I have always used the absolute path, but pasted a relative
+one above, this is the one I really used for every test:
+
+    $ make run O=$PWD/kernel-$arch RUN_OUT=run.$arch.out ...
+
+> > Just rechecked the O variable in top-level Makefile, selftests/nolibc Makefile
+> > and tools/nolibc Makefile, all of them get the right O value from command line.
+> 
+> But the one from the command line is a relative path. And it seems to be
+> resolved from the kernel source tree instead of from where make is
+> executed.
+>
+
+That's exactly:
+
+    $ make defconfig O=out
+    Makefile:15: objtree=out, srctree=/labs/linux-lab/src/linux-stable
+    Makefile:114: O=/labs/linux-lab/src/linux-stable/tools/testing/selftests/nolibc/out
+
+The COMMAND_O suggested by you have prefixed $(PWD) for us, it is the right way
+we should apply. Seems I have passed O=something to all kernel targets before,
+but that is a little ugly, and when the O=$PWD/out always work for me, I even
+forgot to check the simpler O=out again.
+
+And it also works perfectly with $PWD:
+
+    $ make defconfig O=$PWD/out
+    Makefile:15: objtree=/labs/linux-lab/src/linux-stable/tools/testing/selftests/nolibc/out, srctree=/labs/linux-lab/src/linux-stable
+    Makefile:114: O=/labs/linux-lab/src/linux-stable/tools/testing/selftests/nolibc/out
+
+> > From my Makefile experience, an option from command line will be passed
+> > to every sub Makefile via $(-*-command-variables-*-), it has the highest
+> > priority then the others, except when we use 'override' keyword
+> > internally.
+> > 
+> > > the build instead is happening in $LINUX/foo. But the Makefile first
+> > > validates that $LINUX/tools/testing/selftests/nolibc/foo exists.
+> > >
+> > 
+> > Sorry, I didn't get your meaning above?
+> > 
+> > Do you mean this line:
+> > 
+> >     srctree := $(patsubst %/tools/testing/selftests/,%,$(dir $(CURDIR)))
+> > 
+> > by removing tools/testing/selftests/ of curdir's dir (means no nolibc itself),
+> > srctree above is just the top-level kernel source code tree.
+> 
+> No, srctree should be fine.
+> 
+> > > It seems we need to pass $(COMMAND_O) to the recursive calls to $(MAKE),
+> > > too?
+> > >
+> > 
+> > So, no need to pass O or COMMAND_O.
+> 
+> As above, it doesn't work for me.
+> 
+> If I add COMMAND_O to all the $(MAKE) commands that are executed
+> explicitly, how it is also done in Makefile.include itself, things start
+> to work as I would expect:
+> All the kernel build output is in out/ in the current directory.
+> 
+
+Ok, let's use it. Thanks very much.
+
+After align the empty objtree value with you, will renew this patch.
+
+Best regards,
+Zhangjin
