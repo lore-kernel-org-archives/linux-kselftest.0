@@ -2,42 +2,45 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E908C001DB
-	for <linux-kselftest@archiver.kernel.org>; Sat,  5 Aug 2023 18:38:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81FC5C001DB
+	for <linux-kselftest@archiver.kernel.org>; Sat,  5 Aug 2023 18:40:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbjHESih (ORCPT
+        id S229628AbjHESkv (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 5 Aug 2023 14:38:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44618 "EHLO
+        Sat, 5 Aug 2023 14:40:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjHESig (ORCPT
+        with ESMTP id S229441AbjHESku (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 5 Aug 2023 14:38:36 -0400
-Received: from smtpbgsg2.qq.com (smtpbgsg2.qq.com [54.254.200.128])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E0EB7;
-        Sat,  5 Aug 2023 11:38:33 -0700 (PDT)
-X-QQ-mid: bizesmtp73t1691260702tguljiwh
+        Sat, 5 Aug 2023 14:40:50 -0400
+Received: from smtpbgeu2.qq.com (smtpbgeu2.qq.com [18.194.254.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E5FB7;
+        Sat,  5 Aug 2023 11:40:44 -0700 (PDT)
+X-QQ-mid: bizesmtp77t1691260833tbkk0zgs
 Received: from linux-lab-host.localdomain ( [116.30.131.233])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Sun, 06 Aug 2023 02:38:21 +0800 (CST)
+        id ; Sun, 06 Aug 2023 02:40:32 +0800 (CST)
 X-QQ-SSF: 01200000000000E0X000B00A0000000
-X-QQ-FEAT: b+hmI1kBZ2/hxcBf0Koj5y0uX2XNXtX4qBs7ULCP73q4T4FRMsQHk2KrVXF9g
-        nUZPQMTfY+YM5+8MkX4FX2fNfY1vC5MVSPJloDp9ctyishM5lgyF9JzRzNNF2PbUsv5RJhx
-        GQKWmNreEoPSq/8u8nXCjew8OXpA8Yb3wF3MxAwsKc8fEV3Fgs1mqOInn9X7NajuCySnarp
-        DWCxfipSmjnUJeTl+kxxXwwNwKxG6WEaqfG5MX7N5Liw7eKNaJkI7FxsMh5G+dz3XSfdyzc
-        GkIarPZsZsTwS0jGN1vadIagDEokOpby8ihlMcwTJTZuE/56mwsKlp/hMa+20MR+SA6gvOD
-        kMv/GgmMRbfrSXkQVwxxUJ8JvmfEFkk1JU0IR/nkccLVxn94zFS9v3u2N4CjQ==
+X-QQ-FEAT: 96VJ2VzXm/qdtVNFs2llxvJYD1e7vTK/6sALo+w7KpYnEx5xxyFVMgmbni986
+        I+ubWSZeNYyKq7ve3SC2kqvKaunRY+GWoCA9DxAFziLaMTjrTAEzJnMm54xMLRQrBRO1vpt
+        UElu7Wn3n99SnR7UnCtVyGOrhb433wF9G9nvE5EafhPnryICXtaazTBbnRwTdeieN6GqEzp
+        hxlufo1G+WxGmiOppTQYcrDrtun2YC6ofAup1A2/xTBvhBIUZhVUzTZxOCOwiD4fbfPiGYT
+        yzImKaZ1m145V2VTqnF/f/tb5BfBILZYAY2vGfcsnhDzcg90DgjIgcTt1Rv/DvvjNZ4JCaP
+        HZQUN5Gj87cuy8toh2/opdzwH3Lf5a5FCUifUKg2JwHb+gX9QqWWCANxMiTCSweA39za5wi
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 1465333361310842956
+X-BIZMAIL-ID: 16661133259475389670
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     w@1wt.eu
 Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, tanyuan@tinylab.org,
-        thomas@t-8ch.de
-Subject: [PATCH v6 0/8] tools/nolibc: add 32/64-bit powerpc support
-Date:   Sun,  6 Aug 2023 02:38:20 +0800
-Message-Id: <cover.1691259983.git.falcon@tinylab.org>
+        thomas@t-8ch.de,
+        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Subject: [PATCH v6 2/8] tools/nolibc: add support for powerpc64
+Date:   Sun,  6 Aug 2023 02:40:31 +0800
+Message-Id: <aee1833915ecd814a6c692071b6461d7c15d4f2e.1691259983.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1691259983.git.falcon@tinylab.org>
+References: <cover.1691259983.git.falcon@tinylab.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -47,72 +50,74 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi, Willy
+This follows the 64-bit PowerPC ABI [1], refers to the slides: "A new
+ABI for little-endian PowerPC64 Design & Implementation" [2] and the
+musl code in arch/powerpc64/crt_arch.h.
 
-Now, the dependent pmac32_defconfig patch has been merged into the
-powerpc next-test branch [1] ;-)
+First, stdu and clrrdi are used instead of stwu and clrrwi for
+powerpc64.
 
-v6 here with a clean up of the CFLAGS for ppc variants, removed the
-redundant -Wl options and call cc-option to check the -mmultiple option
-for llvm as kernel does. v5 is [2].
+Second, the stack frame size is increased to 32 bytes for powerpc64, 32
+bytes is the minimal stack frame size supported described in [2].
 
-Tests run with local toolchains and latest toolchains.
+Besides, the TOC pointer (GOT pointer) must be saved to r2.
 
-    $ for arch in ppc ppc64 ppc64le; do \
-        make run-user XARCH=$arch | grep "status: "; \
-      done
-    166 test(s): 158 passed,   8 skipped,   0 failed => status: warning
-    166 test(s): 158 passed,   8 skipped,   0 failed => status: warning
-    166 test(s): 158 passed,   8 skipped,   0 failed => status: warning
+This works on both little endian and big endian 64-bit PowerPC.
 
-    $ for arch in ppc ppc64 ppc64le; do \
-        make run-user XARCH=$arch CC=/labs/linux-lab/prebuilt/toolchains/ppc64/gcc-13.1.0-nolibc/powerpc64-linux/bin/powerpc64-linux-gcc | grep "status: "; \
-      done
-    166 test(s): 158 passed,   8 skipped,   0 failed => status: warning
-    166 test(s): 158 passed,   8 skipped,   0 failed => status: warning
-    166 test(s): 158 passed,   8 skipped,   0 failed => status: warning
+[1]: https://refspecs.linuxfoundation.org/ELF/ppc64/PPC-elf64abi.pdf
+[2]: https://www.llvm.org/devmtg/2014-04/PDFs/Talks/Euro-LLVM-2014-Weigand.pdf
 
-Changes from v5 --> v6:
-
-* selftests/nolibc: add test support for ppc
-  selftests/nolibc: add test support for ppc64le
-  selftests/nolibc: add test support for ppc64
-
-    Removed the -Wl options.
-
-    As comment from arch/powerpc/Makefile, use -mmultiple with cc-option for llvm has no such options.
-
-* tools/nolibc: add support for powerpc
-  tools/nolibc: add support for powerpc64
-  selftests/nolibc: add XARCH and ARCH mapping support
-  selftests/nolibc: allow customize CROSS_COMPILE by architecture
-  selftests/nolibc: customize CROSS_COMPILE for 32/64-bit powerpc
-
-    No changes.
-
-
-BR,
-Zhangjin Wu
+Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
-[1]: https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/commit/?h=next-test
-[2]: https://lore.kernel.org/lkml/cover.1691062722.git.falcon@tinylab.org/
+ tools/include/nolibc/arch-powerpc.h | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-Zhangjin Wu (8):
-  tools/nolibc: add support for powerpc
-  tools/nolibc: add support for powerpc64
-  selftests/nolibc: add XARCH and ARCH mapping support
-  selftests/nolibc: add test support for ppc
-  selftests/nolibc: add test support for ppc64le
-  selftests/nolibc: add test support for ppc64
-  selftests/nolibc: allow customize CROSS_COMPILE by architecture
-  selftests/nolibc: customize CROSS_COMPILE for 32/64-bit powerpc
-
- tools/include/nolibc/arch-powerpc.h     | 213 ++++++++++++++++++++++++
- tools/include/nolibc/arch.h             |   2 +
- tools/testing/selftests/nolibc/Makefile |  74 ++++++--
- 3 files changed, 277 insertions(+), 12 deletions(-)
- create mode 100644 tools/include/nolibc/arch-powerpc.h
-
+diff --git a/tools/include/nolibc/arch-powerpc.h b/tools/include/nolibc/arch-powerpc.h
+index 8332c9d3e5d6..76c3784f9dc7 100644
+--- a/tools/include/nolibc/arch-powerpc.h
++++ b/tools/include/nolibc/arch-powerpc.h
+@@ -172,6 +172,7 @@
+ 	_ret;                                                                \
+ })
+ 
++#ifndef __powerpc64__
+ /* FIXME: For 32-bit PowerPC, with newer gcc compilers (e.g. gcc 13.1.0),
+  * "omit-frame-pointer" fails with __attribute__((no_stack_protector)) but
+  * works with __attribute__((__optimize__("-fno-stack-protector")))
+@@ -180,10 +181,24 @@
+ #undef __no_stack_protector
+ #define __no_stack_protector __attribute__((__optimize__("-fno-stack-protector")))
+ #endif
++#endif /* !__powerpc64__ */
+ 
+ /* startup code */
+ void __attribute__((weak, noreturn, optimize("Os", "omit-frame-pointer"))) __no_stack_protector _start(void)
+ {
++#ifdef __powerpc64__
++	/* On 64-bit PowerPC, save TOC/GOT pointer to r2 */
++	extern char TOC __asm__ (".TOC.");
++	register volatile long r2 __asm__ ("r2") = (void *)&TOC - (void *)_start;
++
++	__asm__ volatile (
++		"mr     3, 1\n"         /* save stack pointer to r3, as arg1 of _start_c */
++		"clrrdi 1, 1, 4\n"      /* align the stack to 16 bytes                   */
++		"li     0, 0\n"         /* zero the frame pointer                        */
++		"stdu   1, -32(1)\n"    /* the initial stack frame                       */
++		"bl     _start_c\n"     /* transfer to c runtime                         */
++	);
++#else
+ 	__asm__ volatile (
+ 		"mr     3, 1\n"         /* save stack pointer to r3, as arg1 of _start_c */
+ 		"clrrwi 1, 1, 4\n"      /* align the stack to 16 bytes                   */
+@@ -191,6 +206,7 @@ void __attribute__((weak, noreturn, optimize("Os", "omit-frame-pointer"))) __no_
+ 		"stwu   1, -16(1)\n"    /* the initial stack frame                       */
+ 		"bl     _start_c\n"     /* transfer to c runtime                         */
+ 	);
++#endif
+ 	__builtin_unreachable();
+ }
+ 
 -- 
 2.25.1
 
