@@ -2,44 +2,45 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 475AEC001DE
-	for <linux-kselftest@archiver.kernel.org>; Sat,  5 Aug 2023 18:47:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60B83C001DB
+	for <linux-kselftest@archiver.kernel.org>; Sat,  5 Aug 2023 19:38:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230140AbjHESr1 (ORCPT
+        id S230302AbjHETi1 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 5 Aug 2023 14:47:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48658 "EHLO
+        Sat, 5 Aug 2023 15:38:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbjHESr0 (ORCPT
+        with ESMTP id S230300AbjHETi0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 5 Aug 2023 14:47:26 -0400
-Received: from smtpbgau1.qq.com (smtpbgau1.qq.com [54.206.16.166])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670622D72;
-        Sat,  5 Aug 2023 11:47:22 -0700 (PDT)
-X-QQ-mid: bizesmtp82t1691261231ty7dc1hm
+        Sat, 5 Aug 2023 15:38:26 -0400
+X-Greylist: delayed 114 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 05 Aug 2023 12:38:22 PDT
+Received: from bg5.exmail.qq.com (bg5.exmail.qq.com [43.155.80.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F0B919B2
+        for <linux-kselftest@vger.kernel.org>; Sat,  5 Aug 2023 12:38:21 -0700 (PDT)
+X-QQ-mid: bizesmtp82t1691264283te037nhn
 Received: from linux-lab-host.localdomain ( [116.30.131.233])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Sun, 06 Aug 2023 02:47:10 +0800 (CST)
+        id ; Sun, 06 Aug 2023 03:38:01 +0800 (CST)
 X-QQ-SSF: 01200000000000E0X000B00A0000000
-X-QQ-FEAT: IflLXxRcVR1gTGRr2ilcxmRzcus46IF74wtKQ1oFpYWF072KtLJW0K9dIyVlQ
-        tohiSan5e61KVmLF1i837mkqkFeEpBoKGRNFKxoJR7iO7LtaKY504LrTMtnCdLw3BYmNgR0
-        uAi3fjj2iGvwuTi3rX88NGC8qRmaNrQaKg1Z9XcDF7Lj0ZJrxsHLZIh4VM2TT+i3H1cW0y7
-        qcJ+At/jX0gv6Djuqg7s54+B6Il6vJ24id4luOv9ZOxNwnxIXbeIPQr5OH2x0C04z0ga7vt
-        Hxy0/9GCxzQbl2AlPzJ6lKTqHblp+b1WlhabeplbLHHAzCY/Vvi5tTAuJrvo/1ny6BZSttY
-        kHzK8vCDkB0l2k6jjCiaTu9GUsveogjLy9M0n/VrT6raAe5sFlMMbf46ftfwEgLPzuxUDYw
+X-QQ-FEAT: +Fw3Sd5mYDVqz4iAmVsa/lmFOKZPfF6chMKgeqPNECbG7H6X5GX9IjhBCT5TW
+        FMmSjX/F+mQ4P9NIraT9+IyeVmeqTbHBFi70LeA2rhjEC3NSD8ZkH5KuwG14X1t0z2KhjKk
+        CkCoYpnHjhx1P1T2+CVVfgZH9og9o6+WdcRYyvxeWSuR3AXvp4WCkSWJbaCOT5O2bghaC4J
+        SKVKn7NDb2JJELT65wI4MiVAbycc0wUs7mkvQf1cyNwjmxXQCcmb56Ie2fFtmGZHGAUrK7p
+        vywfLbTylX1T6dyP+kGsKuA24+NXuWpol8WAarUqpjw3s4OEc9g8OSfsWjrbF7rnlEqqIGD
+        ZXRuhcGEuPoB7ao2/Bq4seBiVd3XsKYblhrG9FrE8hCwl7pUN57qAyC7fsKIPf3YCTrDXf/
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 2403698746126952363
+X-BIZMAIL-ID: 7154856130623740030
 From:   Zhangjin Wu <falcon@tinylab.org>
 To:     w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
+Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, tanyuan@tinylab.org,
         thomas@t-8ch.de
-Subject: [PATCH v6 8/8] selftests/nolibc: customize CROSS_COMPILE for 32/64-bit powerpc
-Date:   Sun,  6 Aug 2023 02:47:09 +0800
-Message-Id: <2c3ac4542621ddc4b2cab006ae8e3a7b709921f1.1691259983.git.falcon@tinylab.org>
+Subject: [PATCH v1 1/4] selftests/nolibc: allow use x86_64 toolchain for i386
+Date:   Sun,  6 Aug 2023 03:38:01 +0800
+Message-Id: <4b0af38b9a799835b1bb89445da7a40b0df79b54.1691263493.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1691259983.git.falcon@tinylab.org>
-References: <cover.1691259983.git.falcon@tinylab.org>
+In-Reply-To: <cover.1691263493.git.falcon@tinylab.org>
+References: <cover.1691263493.git.falcon@tinylab.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
@@ -48,65 +49,27 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The little-endian powerpc64le compilers provided by Ubuntu and Fedora
-are able to compile big endian kernel and big endian nolibc-test [1].
+This allows to share the same x86_64 toolchain for i386 architecture.
 
-These default CROSS_COMPILE settings allow to test target architectures
-with:
-
-    $ cd /path/to/tools/testing/selftests/nolibc/
-
-    $ for arch in ppc ppc64 ppc64le; do \
-        make run-user XARCH=$arch | grep "status: "; \
-      done
-
-If want to use another cross compiler, please simply pass CROSS_COMPILE
-or CC as before.
-
-For example, it is able to build 64-bit nolibc-test with the big endian
-powerpc64-linux-gcc crosstool from [2]:
-
-    $ wget -c https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/x86_64/13.1.0/x86_64-gcc-13.1.0-nolibc-powerpc64-linux.tar.xz
-    $ tar xvf x86_64-gcc-13.1.0-nolibc-powerpc64-linux.tar.xz
-    $ export PATH=$PWD/gcc-13.1.0-nolibc/powerpc64-linux/bin/:$PATH
-
-    $ export CROSS_COMPILE_ppc=powerpc64-linux-
-    $ export CROSS_COMPILE_ppc64=powerpc64-linux-
-    $ export CROSS_COMPILE_ppc64le=powerpc64-linux-
-    $ for arch in ppc ppc64 ppc64le; do \
-        make run-user XARCH=$arch | grep "status: "; \
-      done
-
-Or specify CC directly with full path:
-
-    $ export CC=$PWD/gcc-13.1.0-nolibc/powerpc64-linux/bin/powerpc64-linux-gcc
-    $ for arch in ppc ppc64 ppc64le; do \
-        make run-user XARCH=$arch | grep "status: "; \
-      done
-
-[1]: https://github.com/open-power/skiboot
-[2]: https://mirrors.edge.kernel.org/pub/tools/crosstool/
+Pass '-m32' CFLAGS to tell x86_64 toolchains to generate i386 executable.
 
 Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
- tools/testing/selftests/nolibc/Makefile | 3 +++
- 1 file changed, 3 insertions(+)
+ tools/testing/selftests/nolibc/Makefile | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index 45d231b9c5c2..b4171a754eb2 100644
+index b4171a754eb2..e2b02761ad44 100644
 --- a/tools/testing/selftests/nolibc/Makefile
 +++ b/tools/testing/selftests/nolibc/Makefile
-@@ -56,6 +56,9 @@ IMAGE            = $(IMAGE_$(XARCH))
- IMAGE_NAME       = $(notdir $(IMAGE))
+@@ -122,6 +122,7 @@ else
+ Q=@
+ endif
  
- # CROSS_COMPILE: cross toolchain prefix by architecture
-+CROSS_COMPILE_ppc       ?= powerpc-linux-gnu-
-+CROSS_COMPILE_ppc64     ?= powerpc64le-linux-gnu-
-+CROSS_COMPILE_ppc64le   ?= powerpc64le-linux-gnu-
- CROSS_COMPILE           ?= $(CROSS_COMPILE_$(XARCH))
- 
- # make sure CC is prefixed with CROSS_COMPILE
++CFLAGS_i386 = -m32
+ CFLAGS_ppc = -m32 -mbig-endian -mno-vsx $(call cc-option,-mmultiple)
+ CFLAGS_ppc64 = -m64 -mbig-endian -mno-vsx $(call cc-option,-mmultiple)
+ CFLAGS_ppc64le = -m64 -mlittle-endian -mno-vsx $(call cc-option,-mabi=elfv2)
 -- 
 2.25.1
-
 
