@@ -2,104 +2,116 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00404C04FDF
-	for <linux-kselftest@archiver.kernel.org>; Sat,  5 Aug 2023 03:38:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2732EB64DD
+	for <linux-kselftest@archiver.kernel.org>; Sat,  5 Aug 2023 06:10:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbjHEDi6 (ORCPT
+        id S229511AbjHEGKR (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 4 Aug 2023 23:38:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43610 "EHLO
+        Sat, 5 Aug 2023 02:10:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbjHEDi4 (ORCPT
+        with ESMTP id S229493AbjHEGKQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 4 Aug 2023 23:38:56 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE1F24ED8;
-        Fri,  4 Aug 2023 20:38:54 -0700 (PDT)
-Received: from dggpeml500012.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RHpDH703GzVk4V;
-        Sat,  5 Aug 2023 11:37:03 +0800 (CST)
-Received: from localhost.localdomain (10.67.175.61) by
- dggpeml500012.china.huawei.com (7.185.36.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Sat, 5 Aug 2023 11:38:52 +0800
-From:   Zheng Yejian <zhengyejian1@huawei.com>
-To:     <rostedt@goodmis.org>, <mhiramat@kernel.org>,
-        <vnagarnaik@google.com>, <shuah@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>
-Subject: [PATCH v2 1/2] tracing: Fix cpu buffers unavailable due to 'record_disabled' messed
-Date:   Sat, 5 Aug 2023 11:38:15 +0800
-Message-ID: <20230805033816.3284594-2-zhengyejian1@huawei.com>
+        Sat, 5 Aug 2023 02:10:16 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73D934ED0;
+        Fri,  4 Aug 2023 23:10:13 -0700 (PDT)
+X-QQ-mid: bizesmtp64t1691215799t7z7uzec
+Received: from linux-lab-host.localdomain ( [116.30.131.233])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sat, 05 Aug 2023 14:09:58 +0800 (CST)
+X-QQ-SSF: 01200000000000E0X000000A0000000
+X-QQ-FEAT: QityeSR92A3gbNDFPhPkOKhTf88+3peFT35F7/3eUiboDR7f37GWnwpwapJmz
+        rMbA7hYOKcn4xFz+GEE2tLbdxYlGB3zH+XF9G1wmLGwYgPUR9Lf8XCegHEqrJGvgJuFshh1
+        tiASfgNkOiCxQhelU2F515xVOZaDIXmKrl5B/ZaJ/+8u3pE8NnLDr2AvSdJBzfB+RizdTL/
+        0RE8uUNaR6kL2TioLKninLlqrNc6W3qDpdi6ZzznMeZo/HeTQixLLars6FgqHpBL0QU7rAi
+        SGbysSc8e6kEcdHUttkbprRhOHKxdi4lrnl1Q2K9eYhtgYQg45L03uJMjXwDwWyTMVEPXKT
+        +Vuw7YWmy9Sdl/hXyAEcM9/zlO3xwomxTPBXZUvirpZXCfWI8T3UdQKIDLsFg==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 16134705412048347800
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de, w@1wt.eu
+Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH v2 0/3] selftests/nolibc: add misc improvments
+Date:   Sat,  5 Aug 2023 14:09:57 +0800
+Message-Id: <cover.1691215074.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230805033816.3284594-1-zhengyejian1@huawei.com>
-References: <20230805033816.3284594-1-zhengyejian1@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.175.61]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml500012.china.huawei.com (7.185.36.15)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Trace ring buffer can no longer record anything after executing
-following commands at the shell prompt:
+Hi, Willy, Hi Thomas
 
-  # cd /sys/kernel/tracing
-  # cat tracing_cpumask
-  fff
-  # echo 0 > tracing_cpumask
-  # echo 1 > snapshot
-  # echo fff > tracing_cpumask
-  # echo 1 > tracing_on
-  # echo "hello world" > trace_marker
-  -bash: echo: write error: Bad file descriptor
+Based on Thomas' suggestion, V2 comes here with relative path support
+for O= option, v1 is [1].
 
-The root cause is that:
-  1. After `echo 0 > tracing_cpumask`, 'record_disabled' of cpu buffers
-     in 'tr->array_buffer.buffer' became 1 (see tracing_set_cpumask());
-  2. After `echo 1 > snapshot`, 'tr->array_buffer.buffer' is swapped
-     with 'tr->max_buffer.buffer', then the 'record_disabled' became 0
-     (see update_max_tr());
-  3. After `echo fff > tracing_cpumask`, the 'record_disabled' become -1;
-Then array_buffer and max_buffer are both unavailable due to value of
-'record_disabled' is not 0.
+    // subdir
+    $ pwd
+    /labs/linux-lab/src/linux-stable/tools/testing/selftests/nolibc
+    $ mkdir -p out
+    $ make run-user O=out -C /labs/linux-lab/src/linux-stable/tools/testing/selftests/nolibc/ -j4 | grep status
+    Makefile:122: srctree=/labs/linux-lab/src/linux-stable
+    Makefile:123: objtree: out
+    Makefile:124: COMMAND_O: O=/labs/linux-lab/src/linux-stable/tools/testing/selftests/nolibc/out
+    Makefile:125: OUTPUT=/labs/linux-lab/src/linux-stable/tools/testing/selftests/nolibc/out/
+    166 test(s): 158 passed,   8 skipped,   0 failed => status: warning
 
-To fix it, enable or disable both array_buffer and max_buffer at the same
-time in tracing_set_cpumask().
+    // topdir
+    $ pwd
+    /labs/linux-lab/src/linux-stable
+    $ mkdir -p out
+    $ make run-user O=out -C /labs/linux-lab/src/linux-stable/tools/testing/selftests/nolibc/ -j4 | grep status
+    Makefile:122: srctree=/labs/linux-lab/src/linux-stable
+    Makefile:123: objtree: out
+    Makefile:124: COMMAND_O: O=/labs/linux-lab/src/linux-stable/out
+    Makefile:125: OUTPUT=/labs/linux-lab/src/linux-stable/out/
+    166 test(s): 158 passed,   8 skipped,   0 failed => status: warning
 
-Fixes: 71babb2705e2 ("tracing: change CPU ring buffer state from tracing_cpumask")
-Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
+    // outside
+    $ pwd
+    /labs/linux-lab/build
+    $ mkdir -p out
+    $ make run-user O=out -C /labs/linux-lab/src/linux-stable/tools/testing/selftests/nolibc/ -j4 | grep status
+    Makefile:122: srctree=/labs/linux-lab/src/linux-stable
+    Makefile:123: objtree: out
+    Makefile:124: COMMAND_O: O=/labs/linux-lab/build/out
+    Makefile:125: OUTPUT=/labs/linux-lab/build/out/
+    166 test(s): 158 passed,   8 skipped,   0 failed => status: warning
+
+Changes from v1 --> v2:
+
+* selftests/nolibc: allow report with existing test log
+  tools/nolibc: stackprotector.h: make __stack_chk_init static
+
+    Add Reviewed-by line from Thomas
+
+* selftests/nolibc: fix up O= option support
+
+    Now with relative path support with the help of $(COMMAND_O).
+
+    Suggested by Thomas.
+
+Thanks!
+Zhangjin
 ---
- kernel/trace/trace.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+[1]: https://lore.kernel.org/lkml/cover.1691073180.git.falcon@tinylab.org/
 
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index b8870078ef58..b0e8eb6ea8ac 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -5277,11 +5277,17 @@ int tracing_set_cpumask(struct trace_array *tr,
- 				!cpumask_test_cpu(cpu, tracing_cpumask_new)) {
- 			atomic_inc(&per_cpu_ptr(tr->array_buffer.data, cpu)->disabled);
- 			ring_buffer_record_disable_cpu(tr->array_buffer.buffer, cpu);
-+#ifdef CONFIG_TRACER_MAX_TRACE
-+			ring_buffer_record_disable_cpu(tr->max_buffer.buffer, cpu);
-+#endif
- 		}
- 		if (!cpumask_test_cpu(cpu, tr->tracing_cpumask) &&
- 				cpumask_test_cpu(cpu, tracing_cpumask_new)) {
- 			atomic_dec(&per_cpu_ptr(tr->array_buffer.data, cpu)->disabled);
- 			ring_buffer_record_enable_cpu(tr->array_buffer.buffer, cpu);
-+#ifdef CONFIG_TRACER_MAX_TRACE
-+			ring_buffer_record_enable_cpu(tr->max_buffer.buffer, cpu);
-+#endif
- 		}
- 	}
- 	arch_spin_unlock(&tr->max_lock);
+Zhangjin Wu (3):
+  selftests/nolibc: allow report with existing test log
+  tools/nolibc: stackprotector.h: make __stack_chk_init static
+  selftests/nolibc: fix up O= option support
+
+ tools/include/nolibc/crt.h              |  2 +-
+ tools/include/nolibc/stackprotector.h   |  5 ++---
+ tools/testing/selftests/nolibc/Makefile | 19 +++++++++++++------
+ 3 files changed, 16 insertions(+), 10 deletions(-)
+
 -- 
 2.25.1
 
