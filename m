@@ -2,120 +2,132 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 50AC5C0015E
-	for <linux-kselftest@archiver.kernel.org>; Sun,  6 Aug 2023 15:18:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A72A4C001B0
+	for <linux-kselftest@archiver.kernel.org>; Sun,  6 Aug 2023 16:37:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229584AbjHFPSd (ORCPT
+        id S230199AbjHFQhU (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 6 Aug 2023 11:18:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57764 "EHLO
+        Sun, 6 Aug 2023 12:37:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjHFPSb (ORCPT
+        with ESMTP id S229436AbjHFQhT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 6 Aug 2023 11:18:31 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9135E114;
-        Sun,  6 Aug 2023 08:18:30 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-6873a30d02eso2429110b3a.3;
-        Sun, 06 Aug 2023 08:18:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691335110; x=1691939910;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=RdojjPd8jvPUy+VY2bdrww/YrOG4FByQTZ03QZtrm54=;
-        b=JXCDXpwu+g6gyowY8O0u01Gj0laYagxCnjlPvk5TAa9d1pafaYRjonaQw+SDEIUNg0
-         se4xChJ18bF8mRvnrNsi0lH7jnYi0U4q7HJ4u6abgsdJCTU/U+PmktiLQ0u1kGHfNGy2
-         uB0RM4690coQNSG33cWjFy5bzb0SJvL+beWvNv5GrdyppYxM0xEYWK214q+9U7CyU2OH
-         hf8b6/mp2NhV/qU9Sok1OXXCm/Dcsvpf/Dikk9gGtClQxz03aU18afsh42ScP5HckIn1
-         Wf18CMjtl01b8BRiwSfdxEpDhKzmbkCmx7VZj5rjd+3foDMADvhaDMhSnKnFq7Yqdi+C
-         TuhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691335110; x=1691939910;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RdojjPd8jvPUy+VY2bdrww/YrOG4FByQTZ03QZtrm54=;
-        b=U7zsi0vM5gFhxhliSWunIuYhjHdmuHIYNWaipYs0nC5MYxyvFUt8CKRyJAnvF89sur
-         Ql11G58v6SCAa5+9EbRtgXbjQVnrx+vbcjMVXSg1/QN8+FF9TBdxIbUcQ6YyVJO3WtI+
-         3xuX4E00TExsuPy3xyo+BuPS4ogrMmuOgMnTtYGyVIG8CQbnp8ShxzTm/sNAoYx9MymD
-         UsPTU1fSPT/ikphnpXYCc8Bwqy2IYrE9Is8TdQB8c20bIh9innkDI0BADQ6ite/ILqe2
-         ICCFrHQwu8LRCkjERfM4/Ep3J197K85/1/QQ0c2naQv6MV3fedFW7PJmnIr+8dAmp9bc
-         ou8w==
-X-Gm-Message-State: AOJu0YxsKyUxx7XLz3M1bp/qoFfNDhCd8wt049DIlyKVOEqqWuQxdAyd
-        KQ+frxE+Kq28+A/wDXnhjmg=
-X-Google-Smtp-Source: AGHT+IGcQtcV98NulZ42qCdFzvMwUafqFsrmOr1yoV2WX84uBk8XgJSlMW7dsx57V7WIvBcT/LmPRQ==
-X-Received: by 2002:a05:6a21:1f14:b0:13d:56cb:6b9d with SMTP id ry20-20020a056a211f1400b0013d56cb6b9dmr5514964pzb.32.1691335109433;
-        Sun, 06 Aug 2023 08:18:29 -0700 (PDT)
-Received: from Osmten.. ([103.84.150.75])
-        by smtp.gmail.com with ESMTPSA id n27-20020a638f1b000000b00551df489590sm3654374pgd.12.2023.08.06.08.18.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Aug 2023 08:18:29 -0700 (PDT)
-From:   Osama Muhammad <osmtendev@gmail.com>
-To:     shuah@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Osama Muhammad <osmtendev@gmail.com>
-Subject: [PATCH] selftests: prctl: Add prctl test for PR_GET_NAME
-Date:   Sun,  6 Aug 2023 20:18:10 +0500
-Message-Id: <20230806151810.9958-1-osmtendev@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Sun, 6 Aug 2023 12:37:19 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF06111D;
+        Sun,  6 Aug 2023 09:37:16 -0700 (PDT)
+X-QQ-mid: bizesmtp90t1691339815tf3mfofw
+Received: from linux-lab-host.localdomain ( [116.30.130.12])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 07 Aug 2023 00:36:54 +0800 (CST)
+X-QQ-SSF: 01200000000000E0X000000A0000000
+X-QQ-FEAT: XBN7tc9DADInN8U5ppsCisi3RZ5SA9E9aHrNLARhnRb83W5yceAnL7ygRBtPo
+        VRi6xhmYy0FF45PiA9HVB3ovZHaIf4Ca6GWqwkqLspm4G7vv8GmEtyXZyT81U8+LHlqathU
+        +hLY4bqSMNJRHAkz/PyzVpJk63lMirWrArQNpSspKfGRJa+hulIZSQifTdsrD4uRnkjFkrU
+        FRZCEkdJ+HIbvviyToJDsB4nhhzv4ejKL0JAnZrHi1akmEbEpF9CWzuK2By3XsTOVC4PrHz
+        kjoqORd+TYtZi7Nnk/xb5644gYX0nCwryE6nHisddkyJOJOZeg14QkWlPWNv6OKVwTuK/dP
+        Dqf9+ihqImDzQtkhfWnPlYAVrJM4A==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 18061832696655097200
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     arnd@arndb.de, david.laight@aculab.com, falcon@tinylab.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        thomas@t-8ch.de
+Subject: Re: [PATCH] tools/nolibc: fix up size inflate regression
+Date:   Mon,  7 Aug 2023 00:36:49 +0800
+Message-Id: <20230806163649.185843-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230806134348.GA19145@1wt.eu>
+References: <20230806134348.GA19145@1wt.eu>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch covers the testing of PR_GET_NAME by
-reading it's value from proc/self/task/pid/comm
-and matching it by the value returned by  PR_GET_NAME.
+Hi, Willy
 
-Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
----
- .../selftests/prctl/set-process-name.c        | 25 +++++++++++++++++++
- 1 file changed, 25 insertions(+)
+> On Sun, Aug 06, 2023 at 09:19:21PM +0800, Zhangjin Wu wrote:
+> > As reported and suggested by Willy, the inline __sysret() helper
+> > introduces three types of conversions and increases the size:
+> 
+> Thanks Zhangjin. A few things:
+> 
+> > --- a/tools/include/nolibc/compiler.h
+> > +++ b/tools/include/nolibc/compiler.h
+> > @@ -22,4 +22,13 @@
+> >  #  define __no_stack_protector __attribute__((__optimize__("-fno-stack-protector")))
+> >  #endif /* defined(__has_attribute) */
+> >  
+> > +/*
+> > + * from include/linux/compiler.h
+> > + *
+> > + * Whether 'type' is a signed type or an unsigned type. Supports scalar types,
+> > + * bool and also pointer types.
+> > + */
+> > +#define is_signed_type(type)   (((type)(-1)) < (type)1)
+> > +#define is_unsigned_type(type) (!is_signed_type(type))
+> 
+> These names may conflict with application's local definitions. And since
+> there's a single call place we should probably just inline it instead.
+>
 
-diff --git a/tools/testing/selftests/prctl/set-process-name.c b/tools/testing/selftests/prctl/set-process-name.c
-index 3bc5e0e09..41f4b105d 100644
---- a/tools/testing/selftests/prctl/set-process-name.c
-+++ b/tools/testing/selftests/prctl/set-process-name.c
-@@ -47,6 +47,28 @@ int check_null_pointer(char *check_name)
- 	return res;
- }
- 
-+int check_name(void)
-+{
-+
-+	int pid;
-+
-+	pid = getpid();
-+	FILE *fptr;
-+	char path[50] = {};
-+	int j;
-+
-+	j = snprintf(path, 50, "/proc/self/task/%d/comm", pid);
-+	fptr = fopen(path, "r");
-+	char name[TASK_COMM_LEN] = {};
-+	int res = prctl(PR_GET_NAME, name, NULL, NULL, NULL);
-+	char output[TASK_COMM_LEN] = {};
-+
-+	fscanf(fptr, "%s", output);
-+
-+	return !strcmp(output, name);
-+
-+}
-+
- TEST(rename_process) {
- 
- 	EXPECT_GE(set_name(CHANGE_NAME), 0);
-@@ -57,6 +79,9 @@ TEST(rename_process) {
- 
- 	EXPECT_GE(set_name(CHANGE_NAME), 0);
- 	EXPECT_LT(check_null_pointer(CHANGE_NAME), 0);
-+
-+	EXPECT_TRUE(check_name());
-+
- }
- 
- TEST_HARNESS_MAIN
--- 
-2.34.1
+Let's remove them and define a new one with __ prefix in sys.h, it is
+not readable if we simply 'inline' the comparison in the already complex
+macro ;-)
 
+> > +#define __sysret(arg)                                                           \
+> > +({                                                                              \
+> > +	__typeof__(arg) __sysret_arg = (arg);                                   \
+> > +	if (is_signed_type(__typeof__(arg))) {                                  \
+> > +		if (__sysret_arg < 0) {                                         \
+> > +			SET_ERRNO(-(int)__sysret_arg);                          \
+> > +			__sysret_arg = -1L;                                     \
+> > +		}                                                               \
+> > +	} else {                                                                \
+> > +		if ((unsigned long)__sysret_arg >= (unsigned long)-MAX_ERRNO) { \
+> > +			SET_ERRNO(-(int)__sysret_arg);                          \
+> > +			__sysret_arg = -1L;                                     \
+> > +		}                                                               \
+> > +	}                                                                       \
+> > +	__sysret_arg;                                                           \
+> > +})
+> 
+> I also found during my tests that this one can return a build error if
+> the arg has "const" in its type, due to the error assignment. We need
+> to think about reworking it as a ternary evaluation, it will be more
+> reliable even if less readable. But let's not change this now, I'm on
+> the changelog already.
+>
+
+The __auto_type in new enough version does work well with 'const', but
+for the old version, we need to restoring the 'long' type and the
+conversion ;-(
+
+> >  /* Functions in this file only describe syscalls. They're declared static so
+> >   * that the compiler usually decides to inline them while still being allowed
+> > @@ -94,7 +101,7 @@ void *sbrk(intptr_t inc)
+> >  	if (ret && sys_brk(ret + inc) == ret + inc)
+> >  		return ret + inc;
+> >  
+> > -	return (void *)__sysret(-ENOMEM);
+> > +	return (void *)__sysret((unsigned long)-ENOMEM);
+> 
+> I noticed that one as well during my tests, but if we're purist, we're
+> supposed to use (void*) for the cast and not (unsigned long), and it
+> should allow to get rid of the outer cast.
+>
+
+To accept "void *", more conversions are required ...
+
+A new 'ugly' version are ready for review soon, it compiles and get less size
+on gcc-4.8 too ;-)
+
+Thanks,
+Zhangjin
+
+> Regards,
+> Willy
