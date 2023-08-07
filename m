@@ -2,230 +2,137 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CDE1C41513
-	for <linux-kselftest@archiver.kernel.org>; Mon,  7 Aug 2023 23:02:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80535C001B0
+	for <linux-kselftest@archiver.kernel.org>; Mon,  7 Aug 2023 23:12:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231444AbjHGXCl (ORCPT
+        id S230225AbjHGXMc (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 7 Aug 2023 19:02:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41114 "EHLO
+        Mon, 7 Aug 2023 19:12:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbjHGXCR (ORCPT
+        with ESMTP id S230200AbjHGXMU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Aug 2023 19:02:17 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 200341FC9
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Aug 2023 16:01:49 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-585f04ffa3eso65814187b3.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Aug 2023 16:01:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1691449308; x=1692054108;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=IGhoZooqadODHcw0sKitGtx/x1DrGCR27u12EaEc5Bk=;
-        b=u3QTOXFm9OBaQwq6T7BIR0Q+bo9nIq4PtS/Gtd/NlHHiWA75p5FU8hLg8GrlR6JTSv
-         nrusB4nabH9ryjjrQ7I4j9ROJwbZwrwaKsa8CrPgwuOHhP50Y2KDNbdKPKpX/fHRxy81
-         G8RPWfOA4YE/Udx3DhY8BK1fLBC2SonctbBdOi6o84iJ+7a8JiOh30rt/h754ZQc7yWk
-         LP4WzrMp9p9au1SC/1Ig3p5XCFuAMSYSvdPpx8/fYaKAOITQKfm/VVAGfP5UzJ/k0fUc
-         apGgcpo18O21U9BdUL1r9W5BQRH6jcGHUToKZe3ZTopV/Wh3lIbtQjTKs60PD2anls+p
-         7EsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691449308; x=1692054108;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IGhoZooqadODHcw0sKitGtx/x1DrGCR27u12EaEc5Bk=;
-        b=IR68UY/rMXGc6p4M6LL54SEppP9ycMbwkchJc+PVuiuxis/s3ZAIj9w/7AvTjm8Gco
-         80zAueDTsL9A84L0ep/i3BfxvVZv6ORU7LtF6yNvL0CHVKopEMvrgg13f6aEknWo7tWI
-         q35GZ6ZkaG3RSfzbe5ArBkujlhHGhuFMOpNo7nZTNqU7Giy4grcrQR8Cw+96s1oSWK0t
-         yTkoNbON/ffUOBOmwVfEFG5GL5HQROrXmhUneaZqyERuLpO1jZB2Xk8+E1kkWBZrzgO2
-         MiH0Gol+Oq8ksNmAL3ir6Lvv9au+QA8WvPF7x7Dl8Pg+T5basXD/hYPL+thfEu2GVd51
-         JyfQ==
-X-Gm-Message-State: AOJu0Yz4++2RUz46ZT5pH+AqyC3eIcFc+D9MLmR/4M/nu3hzkR8U3Y8M
-        O46KpNuBfA6YsoGF/ZzNLCSOh//mXX2usyXbIQ==
-X-Google-Smtp-Source: AGHT+IH9f9RoYdTDwcLqKlgV75d0SH2uiiILMo3c1b9SEmL2dgda9SBOo94a94VqNiHt5g21Tkl3iy4Z5sOB9n5Vpg==
-X-Received: from ackerleytng-ctop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:13f8])
- (user=ackerleytng job=sendgmr) by 2002:a25:8052:0:b0:d3d:74b6:e085 with SMTP
- id a18-20020a258052000000b00d3d74b6e085mr61692ybn.8.1691449308117; Mon, 07
- Aug 2023 16:01:48 -0700 (PDT)
-Date:   Mon,  7 Aug 2023 23:01:13 +0000
-In-Reply-To: <cover.1691446946.git.ackerleytng@google.com>
-Mime-Version: 1.0
-References: <cover.1691446946.git.ackerleytng@google.com>
-X-Mailer: git-send-email 2.41.0.640.ga95def55d0-goog
-Message-ID: <6244c632343298a1ee785a20f3eb6d6b1f3d3e0a.1691446946.git.ackerleytng@google.com>
-Subject: [RFC PATCH 10/11] KVM: selftests: Generalize migration functions from sev_migrate_tests.c
-From:   Ackerley Tng <ackerleytng@google.com>
-To:     pbonzini@redhat.com, seanjc@google.com, tglx@linutronix.de,
-        x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, shuah@kernel.org, andrew.jones@linux.dev,
-        ricarkol@google.com, chao.p.peng@linux.intel.com, tabba@google.com,
-        jarkko@kernel.org, yu.c.zhang@linux.intel.com,
-        vannapurve@google.com, ackerleytng@google.com,
-        erdemaktas@google.com, mail@maciej.szmigiero.name, vbabka@suse.cz,
-        david@redhat.com, qperret@google.com, michael.roth@amd.com,
-        wei.w.wang@intel.com, liam.merwick@oracle.com,
-        isaku.yamahata@gmail.com, kirill.shutemov@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
+        Mon, 7 Aug 2023 19:12:20 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E0B83C33;
+        Mon,  7 Aug 2023 16:10:42 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id A89986016E;
+        Tue,  8 Aug 2023 01:09:25 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1691449765; bh=5kH3G7SOdJsK3v0zmGHR2YGa5sxralM4yYJ6vyKKQF8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=MIZSO1E4Q9EAcqYFHs4xLh7tvjSBsVZ5cxD7d3uGFQBIBgiAcTuSsPS9BiRHw8eOJ
+         BkFCwZEulYD164KZNT4R7tmjH+PG6WG87PvFrJPOhVMB7KTwcOAUmzWmIRiZkIez/4
+         FpB0XlNtcUm3CxZAnEEM6Lq+CbxxQANKGCF6A5jij4yNvmx+/PUETdvafMhPDJFuac
+         4tsA+H+ceofSjDP+FsQGYNKpfR5MEz3HL1oBuR/d9sQrD1sgYUZsEf6Z3lRJCYb7D+
+         Z6nMEOuoTj8IhcvrejgeMMpbwMU4uWIwqLlSJVX5b8wzEEW6HDp0aXilgHaB+VbYn8
+         fNNNkvxMVaVHQ==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id hJz7glUKPKCV; Tue,  8 Aug 2023 01:09:23 +0200 (CEST)
+Received: from [192.168.1.6] (unknown [94.250.191.183])
+        by domac.alu.hr (Postfix) with ESMTPSA id 8A7946015F;
+        Tue,  8 Aug 2023 01:09:08 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1691449763; bh=5kH3G7SOdJsK3v0zmGHR2YGa5sxralM4yYJ6vyKKQF8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=z51qnLKhhBZGiD0+HvaTrQsNIDgkAgAj2HRABb68liPOwvh3zfwwhMXC75gir+1lg
+         n9QgWhaDdk6fJmo9ZhJLQryileun0o4rXRyHXtvypXZSjxacIOCCX8DAJWdqwRiU08
+         +9G9sCZ1AJFsGvTMFNit1zYDeTKYKjihsTtQmx/UO5wc/O0uH6cY2OMXJBzRy9NiOG
+         L76+hihzAm2XkvBtA7L0q82vwve+E0MxpPbl4BwN/zWVzp5eT7aLKMzzMXpFZ7MpGo
+         JkrFIieEct8+pe1sXhXwKLNaIy2n04SydrM+zH1e7GN7q6Tm+AAscJEM4xFdDsq+9s
+         +W97wZsxowuLw==
+Message-ID: <ba4da366-b8cf-ca36-e2dc-cce7260cccf8@alu.unizg.hr>
+Date:   Tue, 8 Aug 2023 01:09:03 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: selftests: net/af_unix test_unix_oob [FAILED]
+To:     Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc:     alexander@mihalicyn.com, davem@davemloft.net, edumazet@google.com,
+        fw@strlen.de, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, shuah@kernel.org
+References: <abf98942-0058-f2ad-8e55-fbdd83b7c2d6@alu.unizg.hr>
+ <20230807204648.50070-1-kuniyu@amazon.com>
+Content-Language: en-US
+From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <20230807204648.50070-1-kuniyu@amazon.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-These functions will be used in private (guest mem) migration tests.
+On 8/7/23 22:46, Kuniyuki Iwashima wrote:
+> From: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+> Date: Mon, 7 Aug 2023 21:44:41 +0200
+>> Hi all,
+>>
+>> In the kernel 6.5-rc5 build on Ubuntu 22.04 LTS (jammy jellyfish) on a Ryzen 7950 assembled box,
+>> vanilla torvalds tree kernel, the test test_unix_oob unexpectedly fails:
+>>
+>> # selftests: net/af_unix: test_unix_oob
+>> # Test 2 failed, sigurg 23 len 63 OOB %
+>>
+>> It is this code:
+>>
+>>           /* Test 2:
+>>            * Verify that the first OOB is over written by
+>>            * the 2nd one and the first OOB is returned as
+>>            * part of the read, and sigurg is received.
+>>            */
+>>           wait_for_data(pfd, POLLIN | POLLPRI);
+>>           len = 0;
+>>           while (len < 70)
+>>                   len = recv(pfd, buf, 1024, MSG_PEEK);
+>>           len = read_data(pfd, buf, 1024);
+>>           read_oob(pfd, &oob);
+>>           if (!signal_recvd || len != 127 || oob != '#') {
+>>                   fprintf(stderr, "Test 2 failed, sigurg %d len %d OOB %c\n",
+>>                   signal_recvd, len, oob);
+>>                   die(1);
+>>           }
+>>
+>> In 6.5-rc4, this test was OK, so it might mean we have a regression?
+> 
+> Thanks for reporting.
+> 
+> I confirmed the test doesn't fail on net-next at least, but it's based
+> on v6.5-rc4.
+> 
+>    ---8<---
+>    [root@localhost ~]# ./test_unix_oob
+>    [root@localhost ~]# echo $?
+>    0
+>    [root@localhost ~]# uname -r
+>    6.5.0-rc4-01192-g66244337512f
+>    ---8<---
+> 
+> I'll check 6.5-rc5 later.
 
-Signed-off-by: Ackerley Tng <ackerleytng@google.com>
----
- .../selftests/kvm/include/kvm_util_base.h     | 13 +++++
- .../selftests/kvm/x86_64/sev_migrate_tests.c  | 48 +++++++------------
- 2 files changed, 30 insertions(+), 31 deletions(-)
+Hi, Kuniyuki,
 
-diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-index 868925b26a7b..af6ebead5bc3 100644
---- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-@@ -331,6 +331,19 @@ static inline void vm_enable_cap(struct kvm_vm *vm, uint32_t cap, uint64_t arg0)
- 	vm_ioctl(vm, KVM_ENABLE_CAP, &enable_cap);
- }
- 
-+static inline int __vm_migrate_from(struct kvm_vm *dst, struct kvm_vm *src)
-+{
-+	return __vm_enable_cap(dst, KVM_CAP_VM_MOVE_ENC_CONTEXT_FROM, src->fd);
-+}
-+
-+static inline void vm_migrate_from(struct kvm_vm *dst, struct kvm_vm *src)
-+{
-+	int ret;
-+
-+	ret = __vm_migrate_from(dst, src);
-+	TEST_ASSERT(!ret, "Migration failed, ret: %d, errno: %d\n", ret, errno);
-+}
-+
- static inline void vm_set_memory_attributes(struct kvm_vm *vm, uint64_t gpa,
- 					    uint64_t size, uint64_t attributes)
- {
-diff --git a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
-index c7ef97561038..cee8219fe8d2 100644
---- a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
-+++ b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
-@@ -80,20 +80,6 @@ static struct kvm_vm *aux_vm_create(bool with_vcpus)
- 	return vm;
- }
- 
--static int __sev_migrate_from(struct kvm_vm *dst, struct kvm_vm *src)
--{
--	return __vm_enable_cap(dst, KVM_CAP_VM_MOVE_ENC_CONTEXT_FROM, src->fd);
--}
--
--
--static void sev_migrate_from(struct kvm_vm *dst, struct kvm_vm *src)
--{
--	int ret;
--
--	ret = __sev_migrate_from(dst, src);
--	TEST_ASSERT(!ret, "Migration failed, ret: %d, errno: %d\n", ret, errno);
--}
--
- static void test_sev_migrate_from(bool es)
- {
- 	struct kvm_vm *src_vm;
-@@ -105,13 +91,13 @@ static void test_sev_migrate_from(bool es)
- 		dst_vms[i] = aux_vm_create(true);
- 
- 	/* Initial migration from the src to the first dst. */
--	sev_migrate_from(dst_vms[0], src_vm);
-+	vm_migrate_from(dst_vms[0], src_vm);
- 
- 	for (i = 1; i < NR_MIGRATE_TEST_VMS; i++)
--		sev_migrate_from(dst_vms[i], dst_vms[i - 1]);
-+		vm_migrate_from(dst_vms[i], dst_vms[i - 1]);
- 
- 	/* Migrate the guest back to the original VM. */
--	ret = __sev_migrate_from(src_vm, dst_vms[NR_MIGRATE_TEST_VMS - 1]);
-+	ret = __vm_migrate_from(src_vm, dst_vms[NR_MIGRATE_TEST_VMS - 1]);
- 	TEST_ASSERT(ret == -1 && errno == EIO,
- 		    "VM that was migrated from should be dead. ret %d, errno: %d\n", ret,
- 		    errno);
-@@ -133,7 +119,7 @@ static void *locking_test_thread(void *arg)
- 
- 	for (i = 0; i < NR_LOCK_TESTING_ITERATIONS; ++i) {
- 		j = i % NR_LOCK_TESTING_THREADS;
--		__sev_migrate_from(input->vm, input->source_vms[j]);
-+		__vm_migrate_from(input->vm, input->source_vms[j]);
- 	}
- 
- 	return NULL;
-@@ -170,7 +156,7 @@ static void test_sev_migrate_parameters(void)
- 
- 	vm_no_vcpu = vm_create_barebones();
- 	vm_no_sev = aux_vm_create(true);
--	ret = __sev_migrate_from(vm_no_vcpu, vm_no_sev);
-+	ret = __vm_migrate_from(vm_no_vcpu, vm_no_sev);
- 	TEST_ASSERT(ret == -1 && errno == EINVAL,
- 		    "Migrations require SEV enabled. ret %d, errno: %d\n", ret,
- 		    errno);
-@@ -184,25 +170,25 @@ static void test_sev_migrate_parameters(void)
- 	sev_ioctl(sev_es_vm_no_vmsa->fd, KVM_SEV_ES_INIT, NULL);
- 	__vm_vcpu_add(sev_es_vm_no_vmsa, 1);
- 
--	ret = __sev_migrate_from(sev_vm, sev_es_vm);
-+	ret = __vm_migrate_from(sev_vm, sev_es_vm);
- 	TEST_ASSERT(
- 		ret == -1 && errno == EINVAL,
- 		"Should not be able migrate to SEV enabled VM. ret: %d, errno: %d\n",
- 		ret, errno);
- 
--	ret = __sev_migrate_from(sev_es_vm, sev_vm);
-+	ret = __vm_migrate_from(sev_es_vm, sev_vm);
- 	TEST_ASSERT(
- 		ret == -1 && errno == EINVAL,
- 		"Should not be able migrate to SEV-ES enabled VM. ret: %d, errno: %d\n",
- 		ret, errno);
- 
--	ret = __sev_migrate_from(vm_no_vcpu, sev_es_vm);
-+	ret = __vm_migrate_from(vm_no_vcpu, sev_es_vm);
- 	TEST_ASSERT(
- 		ret == -1 && errno == EINVAL,
- 		"SEV-ES migrations require same number of vCPUS. ret: %d, errno: %d\n",
- 		ret, errno);
- 
--	ret = __sev_migrate_from(vm_no_vcpu, sev_es_vm_no_vmsa);
-+	ret = __vm_migrate_from(vm_no_vcpu, sev_es_vm_no_vmsa);
- 	TEST_ASSERT(
- 		ret == -1 && errno == EINVAL,
- 		"SEV-ES migrations require UPDATE_VMSA. ret %d, errno: %d\n",
-@@ -355,14 +341,14 @@ static void test_sev_move_copy(void)
- 
- 	sev_mirror_create(mirror_vm, sev_vm);
- 
--	sev_migrate_from(dst_mirror_vm, mirror_vm);
--	sev_migrate_from(dst_vm, sev_vm);
-+	vm_migrate_from(dst_mirror_vm, mirror_vm);
-+	vm_migrate_from(dst_vm, sev_vm);
- 
--	sev_migrate_from(dst2_vm, dst_vm);
--	sev_migrate_from(dst2_mirror_vm, dst_mirror_vm);
-+	vm_migrate_from(dst2_vm, dst_vm);
-+	vm_migrate_from(dst2_mirror_vm, dst_mirror_vm);
- 
--	sev_migrate_from(dst3_mirror_vm, dst2_mirror_vm);
--	sev_migrate_from(dst3_vm, dst2_vm);
-+	vm_migrate_from(dst3_mirror_vm, dst2_mirror_vm);
-+	vm_migrate_from(dst3_vm, dst2_vm);
- 
- 	kvm_vm_free(dst_vm);
- 	kvm_vm_free(sev_vm);
-@@ -384,8 +370,8 @@ static void test_sev_move_copy(void)
- 
- 	sev_mirror_create(mirror_vm, sev_vm);
- 
--	sev_migrate_from(dst_mirror_vm, mirror_vm);
--	sev_migrate_from(dst_vm, sev_vm);
-+	vm_migrate_from(dst_mirror_vm, mirror_vm);
-+	vm_migrate_from(dst_vm, sev_vm);
- 
- 	kvm_vm_free(mirror_vm);
- 	kvm_vm_free(dst_mirror_vm);
--- 
-2.41.0.640.ga95def55d0-goog
+It seems that there is a new development. I could reproduce the error with the failed test 2
+as early as 6.0-rc1. However, the gotcha is that the error appears to be sporadically manifested
+(possibly a race)?
 
+I am currently attempting a bisect.
+
+Kind regards,
+Mirsad
+
+>> marvin@defiant:~/linux/kernel/linux_torvalds$ grep test_unix_oob ../kselftest-6.5-rc4-1.log
+>> /net/af_unix/test_unix_oob
+>> # selftests: net/af_unix: test_unix_oob
+>> ok 2 selftests: net/af_unix: test_unix_oob
+>> marvin@defiant:~/linux/kernel/linux_torvalds$
+>>
+>> Hope this helps.
+>>
+>> NOTE: the kernel is vanilla torvalds tree, only "dirty" because the selftests were modified.
+>>
+>> Kind regards,
+>> Mirsad Todorovac
