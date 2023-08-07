@@ -2,121 +2,106 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 788D6C001B0
-	for <linux-kselftest@archiver.kernel.org>; Mon,  7 Aug 2023 10:26:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E7D6C41513
+	for <linux-kselftest@archiver.kernel.org>; Mon,  7 Aug 2023 10:28:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230376AbjHGK0c (ORCPT
+        id S231140AbjHGK2c (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 7 Aug 2023 06:26:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52298 "EHLO
+        Mon, 7 Aug 2023 06:28:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbjHGK0b (ORCPT
+        with ESMTP id S229926AbjHGK2b (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Aug 2023 06:26:31 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF97610F4;
-        Mon,  7 Aug 2023 03:26:30 -0700 (PDT)
+        Mon, 7 Aug 2023 06:28:31 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B764210F4;
+        Mon,  7 Aug 2023 03:28:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691403990; x=1722939990;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=oYkA/eVfWqMWYQih0P/5J8PKnMH0gpzlXW9H1/RklVY=;
-  b=k846RlCXcqoKaDgnlJv3mN29eqcZgfhH1qg8p7qOdk/O3YObvndTEoSG
-   eG5FKwGOsGIcDIyJfUcsO0588nvMfwqJwPibQfR0xnVEk3dfwhozYFJdo
-   FiaETGUg681hbTd6zMlGGHMWXE/lXUBSKbXd66i122u0ljyfWqbpBQTDU
-   Via+lZEjctpbmZr3j88H2lgVD7Y8lScZtPjdcyOPa4EOBZbJk2eHfPpYq
-   tmdTmGuBFKeu1DnU4qNADqtXqF+QQ1OLEhVPLu21xUiwGVspsBvHHCUCh
-   XcIsYXakQWR5tfYvNA4RwkgYjEHy86bvApzUT4wZmtc6Qy0goCTA/yKG2
+  t=1691404110; x=1722940110;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=dkHorrBffv4xQS+bxgJDmsQVKSSR++utvuao/xqLQqw=;
+  b=KB1HzHMVJ2OXbCG6iF/Grlc4tFUzzG1raPQhzd1EFQCKWveyHmYbJyI2
+   ghTrYZvpN+BfHiXh3eBf3S6QSKjagXccSIadCMOmH9K3hFd/+CKTzhWI+
+   46aqABLXPXHLNnCv2VFo/C53gOqHbOX0vR150jhbR9hKJqoxAXtdeTYgI
+   1FznqpPmQp3WXsWMy9poUIcro3u5fKRUWjP/wmFVAxZjvHCry07/NqZcN
+   LqFFnXkDHPLVWwu4pFh6Y3ca6oba1GsAsygkzXqqKTKy4OSHQCQqsHrgU
+   HI5YTSNMayzwhXOiCz6ta6KdvwP/u+zHKq2vSSb/Vg15HJjhA7xUjdxJE
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10794"; a="434357177"
+X-IronPort-AV: E=McAfee;i="6600,9927,10794"; a="350818181"
 X-IronPort-AV: E=Sophos;i="6.01,261,1684825200"; 
-   d="scan'208";a="434357177"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2023 03:26:30 -0700
+   d="scan'208";a="350818181"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2023 03:28:29 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10794"; a="800897150"
+X-IronPort-AV: E=McAfee;i="6600,9927,10794"; a="730909195"
 X-IronPort-AV: E=Sophos;i="6.01,261,1684825200"; 
-   d="scan'208";a="800897150"
-Received: from siminapx-mobl1.ger.corp.intel.com ([10.251.210.150])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2023 03:26:27 -0700
-Date:   Mon, 7 Aug 2023 13:26:25 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     "Wieczor-Retman, Maciej" <maciej.wieczor-retman@intel.com>
-cc:     Reinette Chatre <reinette.chatre@intel.com>,
-        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 07/19] selftests/resctrl: Refactor remount_resctrl(bool
- mum_resctrlfs) to mount_resctrl()
-In-Reply-To: <903b5c02-7d7b-11c7-167b-c4f0f3862ae0@intel.com>
-Message-ID: <e19fb06b-5dad-e854-3dc-b73c635d7bb1@linux.intel.com>
-References: <20230713131932.133258-1-ilpo.jarvinen@linux.intel.com> <20230713131932.133258-8-ilpo.jarvinen@linux.intel.com> <09605219-19db-ba2d-aaad-9e279543f461@intel.com> <2c1f4d5f-7d6f-1178-7ec4-7f8b862b26e9@linux.intel.com>
- <903b5c02-7d7b-11c7-167b-c4f0f3862ae0@intel.com>
+   d="scan'208";a="730909195"
+Received: from kornelo-mobl2.ger.corp.intel.com (HELO jkrzyszt-mobl2.ger.corp.intel.com) ([10.213.30.73])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2023 03:28:22 -0700
+From:   Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
+To:     Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        igt-dev@lists.freedesktop.org, intel-xe@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Rae Moar <rmoar@google.com>,
+        Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
+Subject: [PATCH v5 0/3] kunit: Expose some built-in features to modules
+Date:   Mon,  7 Aug 2023 12:23:53 +0200
+Message-ID: <20230807102352.4607-5-janusz.krzysztofik@linux.intel.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-276558506-1691403989=:9752"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Submit the top-level headers also from the kunit test module notifier
+initialization callback, so external tools that are parsing dmesg for
+kunit test output are able to tell how many test suites should be expected
+and whether to continue parsing after complete output from the first test
+suite is collected.
 
---8323329-276558506-1691403989=:9752
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Extend kunit module notifier initialization callback with a processing
+path for only listing the tests provided by a module if the kunit action
+parameter is set to "list", so external tools can obtain a list of test
+cases to be executed in advance and can make a better job on assigning
+kernel messages interleaved with kunit output to specific tests. 
 
-On Mon, 24 Jul 2023, Wieczor-Retman, Maciej wrote:
-> On 14.07.2023 13:03, Ilpo Järvinen wrote:
-> > On Thu, 13 Jul 2023, Reinette Chatre wrote:
-> >> On 7/13/2023 6:19 AM, Ilpo Järvinen wrote:
-> >>> -int remount_resctrlfs(bool mum_resctrlfs)
-> >>> +int mount_resctrlfs(void)
-> >>>  {
-> >>> -	char mountpoint[256];
-> >>>  	int ret;
-> >>>  
-> >>> -	ret = find_resctrl_mount(mountpoint);
-> >>> -	if (ret)
-> >>> -		strcpy(mountpoint, RESCTRL_PATH);
-> >>> -
-> >>> -	if (!ret && mum_resctrlfs && umount(mountpoint))
-> >>> -		ksft_print_msg("Fail: unmounting \"%s\"\n", mountpoint);
-> >>> -
-> >>> -	if (!ret && !mum_resctrlfs)
-> >>> -		return 0;
-> >>> +	ret = find_resctrl_mount(NULL);
-> >>> +	if (!ret)
-> >>> +		return -1;
-> >>
-> >> This treats "ret == 0" as a failure. What about -ENXIO? It seems to
-> >> me that only "ret == -ENOENT" is "success".
-> > 
-> > Yes, it's a good catch.
-> > 
-> 
-> I had an idea about a small redesign of find_resctrl_mount
-> return values so it is easier to see what the function tries
-> to accomplish.
-> 
-> When there is an error (-ENXIO for example) it could 
-> return the negative error value. When no mount is found
-> it could return a zero (instead of the -ENOENT error code).
-> Finally when a mount point was found it could return a positive
-> value (for example return 1). This way errors could be 
-> separate from regular return values and in my opinion the
-> function logic would be more transparent.
-> 
-> What do you think about it?
+Use test filtering functions in kunit module notifier callback functions,
+so external tools are able to execute individual test cases from kunit
+test modules in order to still better isolate their potential impact on
+kernel messages that appear interleaved with output from other tests.
+    
+v5: Fix new name of a structure moved to kunit namespace not updated in
+    executor_test functions (lkp@intel.com),
+  - refresh on tpp of attributes filtering fix.
+v4: Use kunit_exec_run_tests() (Mauro, Rae), but prevent it from
+    emitting the headers when called on load of non-test modules, 
+  - don't use a different list format, use kunit_exec_list_tests() (Rae),
+  - refresh on top of newly introduced attributes patches, handle newly
+    introduced kunit.action=list_attr case (Rae).
+v3: Fix CONFIG_GLOB, required by filtering functions, not selected when
+    building as a module (lkp@intel.com).
+v2: Fix new name of a structure moved to kunit namespace not updated
+    across all uses (lkp@intel.com).
 
-Yes, it's a great idea. It would be more logical and thus easier to 
-comprehend.
+Janusz Krzysztofik (3):
+  kunit: Report the count of test suites in a module
+  kunit: Make 'list' action available to kunit test modules
+  kunit: Allow kunit test modules to use test filtering
 
-Since this already wast applied, it has to be done in another change.
+ include/kunit/test.h      |  21 +++++++
+ lib/kunit/Kconfig         |   2 +-
+ lib/kunit/executor.c      | 115 ++++++++++++++++++++++----------------
+ lib/kunit/executor_test.c |  36 ++++++++----
+ lib/kunit/test.c          |  37 +++++++++++-
+ 5 files changed, 149 insertions(+), 62 deletions(-)
 
 
+base-commit: 1c9fd080dffe5e5ad763527fbc2aa3f6f8c653e9
 -- 
- i.
+2.41.0
 
---8323329-276558506-1691403989=:9752--
