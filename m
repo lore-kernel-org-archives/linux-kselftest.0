@@ -2,200 +2,201 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 58829C001DB
-	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Aug 2023 15:54:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0113DC001DB
+	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Aug 2023 15:58:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230465AbjHHPy1 (ORCPT
+        id S231329AbjHHP6o (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 8 Aug 2023 11:54:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40802 "EHLO
+        Tue, 8 Aug 2023 11:58:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjHHPwb (ORCPT
+        with ESMTP id S229941AbjHHP5O (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Aug 2023 11:52:31 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on0621.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe0d::621])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 833925273;
-        Tue,  8 Aug 2023 08:43:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WhR8nzJDi67Jj8GJ6kQuQ/Dk3+OOFzE7ipPT91oq0YY=;
- b=RgX4rGtKfTMK3etolpqPr4/tFK/CapLJEqPkb2J5n52ZtSvlnig7vFKHqqkcxl7gYR8CyYGBcPoXMAtDOff/3IHRnhwPhi++yGGXSX4hOREFmpO/rV4Lkzl/UQ1E05FZewzrSg+bsaK3fpMBuYFlAmVSMpuP77BqWMLocCoPYTA=
-Received: from AS9P194CA0019.EURP194.PROD.OUTLOOK.COM (2603:10a6:20b:46d::23)
- by PAVPR08MB8989.eurprd08.prod.outlook.com (2603:10a6:102:320::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.27; Tue, 8 Aug
- 2023 08:21:29 +0000
-Received: from AM7EUR03FT036.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:20b:46d:cafe::60) by AS9P194CA0019.outlook.office365.com
- (2603:10a6:20b:46d::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.26 via Frontend
- Transport; Tue, 8 Aug 2023 08:21:29 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
- client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
- pr=C
-Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
- AM7EUR03FT036.mail.protection.outlook.com (100.127.140.93) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6678.17 via Frontend Transport; Tue, 8 Aug 2023 08:21:28 +0000
-Received: ("Tessian outbound f9124736ff4f:v145"); Tue, 08 Aug 2023 08:21:28 +0000
-X-CheckRecipientChecked: true
-X-CR-MTA-CID: ff87e41f44a6bd0b
-X-CR-MTA-TID: 64aa7808
-Received: from ea06c7611131.2
-        by 64aa7808-outbound-1.mta.getcheckrecipient.com id E6AD5EB6-09D2-41A7-AF28-C91632198147.1;
-        Tue, 08 Aug 2023 08:21:22 +0000
-Received: from EUR03-AM7-obe.outbound.protection.outlook.com
-    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id ea06c7611131.2
-    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
-    Tue, 08 Aug 2023 08:21:22 +0000
+        Tue, 8 Aug 2023 11:57:14 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2074.outbound.protection.outlook.com [40.107.94.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AC3B1BCA;
+        Tue,  8 Aug 2023 08:43:58 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=deQQipEitUkSFn+qABM+3WJnKbOU5xLfA4rGltgF06WPzotVuxQb0b6vfbMkE2lbaWmVn0HGAuL6KS+/gIwBENpL4GSJfG0Oy21Y/tPI5sqPunTzp+QblZmSvmF5EjkPzHEDe1LFCoVQoSV5DqzvaelVFq2z6kXNMM/gGiY91IStpya+IOE4GS2iN3waf1bvo0X2Mga0N27OIofr9YbIX0AoL0lHoy8ZIyVA3Sb3KawEdTJJEqtnKbp+Vj0mXX0GaZgx/1avFfP/f3UYTA4AxazDiysZEWb0FU78wxvqp8xEdld1QVTPoEBN6j/4i7OelpwV5irduEbbYAU833185A==
+ b=N3HrmxFmViPcdNCJxW6Cnz5FU7gmAp9ourx7dHTkj5qrVOV+s8Aa97Jbn4NKKQHAufPR4NjYtp07dU9xIc9MemqGZ+lFm8i3CHma3J/66rqYFXoVijPVlZfvV/L9dkroLmc/dI5zLkXHdwyJ0wXmKO5kj7saiu2Dge1EIGWqdIyoOL9lmqVdsorpMZr7671wUpf2BxKgNSNTB5E4e0R0DdzUbb+nhtEk9WAuOS68f7T8OFpmknI8S91hh5L/wShaG/6nQ04SwJFkWV4Bkq7706zKvOrYkcIIyABWxKWz2i3A1mhl4rPJv5ab2ipqpteFPhZ/PFAdicZnoDsCsW2IWw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WhR8nzJDi67Jj8GJ6kQuQ/Dk3+OOFzE7ipPT91oq0YY=;
- b=VdxkacirVL0JeQf/5A/MwPGoZjXZczXN/eDtyAa4beLBgsg+JNtmuBxDx4Ioih1KhUJQl3qgI2IspDKbFeqxPGVP5ml30q+iC+9CvwTbSf4oRCiHNaYwgE6Kyrf1zO8tS4bR31P+T/Ph0t0FM8HxWhTLKageiezMGXyoIP+78CaYiYTsnm/FVbVP6/PhYcM36EpYzL/OMSu0DGKWAvyC9dMekbkQDWpTGx+Bp2Yieid8fedT615urcJ06YRdOuFYF9OK2LISj95rC7vNzWqoSFgIc9L6lMc/iKuMOxr2pPeTdweC8WKHMbbK7XMzXG6pTKso4IkRWCPKLThMvGhKHA==
+ bh=/EA0a5l7/B1TbC4Kfrp2BiKerjI32F6sruvnOj7BuBo=;
+ b=HUoelnPbg6sJl9ftq4skdvD1hYP75uvGCiQQyL/EQ1WKuEzZMkHPZewfoIh0oAc4jQZzsJFrGB/y/4AXWyh32GAUdxa48c+SMVZ7hLrfWFSO4heRmDDwOh4pprDMY8naIjv65WtdkfBwwnlZRXEkaY/HmQyr944ahwudlgs4z5x9wub/YdZH9tkB1W6H5lPBCTPTJJ1GPvmpPnLE/146tW6byXx3BZFyCY8qAOgZQ7z1BiEb/A1riKMVmsUiKBePMnc+7VzWFWXHKLWGCkaiyGC2BVZ6uwioj/U8Wdd0O2tcqojO+Pa5sNSHextesZg9/5nfOQxbpNlutu41La4ZJQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WhR8nzJDi67Jj8GJ6kQuQ/Dk3+OOFzE7ipPT91oq0YY=;
- b=RgX4rGtKfTMK3etolpqPr4/tFK/CapLJEqPkb2J5n52ZtSvlnig7vFKHqqkcxl7gYR8CyYGBcPoXMAtDOff/3IHRnhwPhi++yGGXSX4hOREFmpO/rV4Lkzl/UQ1E05FZewzrSg+bsaK3fpMBuYFlAmVSMpuP77BqWMLocCoPYTA=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from DB9PR08MB7179.eurprd08.prod.outlook.com (2603:10a6:10:2cc::19)
- by AS8PR08MB8468.eurprd08.prod.outlook.com (2603:10a6:20b:566::16) with
+ bh=/EA0a5l7/B1TbC4Kfrp2BiKerjI32F6sruvnOj7BuBo=;
+ b=YTa2E/fI3LgJKx/yg+gzSjvLunNucPB2insDQeRGK0jNZQ0HrB+JKXodgTbJSRN3MoseNsOlHeSR0UAbrsQIzmcn00+xfSa109flRpqqiCH5b4RrFBL4Iimcq8Jf9sof8AFgJimXcaVTqnqz9HFeSg/20b/GYgiF/ix6wh6IdUY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by MW6PR12MB7088.namprd12.prod.outlook.com (2603:10b6:303:238::17) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.27; Tue, 8 Aug
- 2023 08:21:19 +0000
-Received: from DB9PR08MB7179.eurprd08.prod.outlook.com
- ([fe80::adb0:61cb:8733:6db2]) by DB9PR08MB7179.eurprd08.prod.outlook.com
- ([fe80::adb0:61cb:8733:6db2%7]) with mapi id 15.20.6652.026; Tue, 8 Aug 2023
- 08:21:19 +0000
-Date:   Tue, 8 Aug 2023 09:21:03 +0100
-From:   Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-        Deepak Gupta <debug@rivosinc.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        "H.J. Lu" <hjl.tools@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v3 21/36] arm64/mm: Implement map_shadow_stack()
-Message-ID: <ZNH679dDPtvotp5j@arm.com>
-References: <20230731-arm64-gcs-v3-0-cddf9f980d98@kernel.org>
- <20230731-arm64-gcs-v3-21-cddf9f980d98@kernel.org>
- <ZNDFioFIM34VcsuV@arm.com>
- <3a077ff3-8627-4337-9b4a-6a8828eda0e7@sirena.org.uk>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <3a077ff3-8627-4337-9b4a-6a8828eda0e7@sirena.org.uk>
-X-ClientProxiedBy: LO4P265CA0197.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:318::13) To DB9PR08MB7179.eurprd08.prod.outlook.com
- (2603:10a6:10:2cc::19)
+ 2023 15:43:12 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::36f9:ffa7:c770:d146]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::36f9:ffa7:c770:d146%7]) with mapi id 15.20.6652.026; Tue, 8 Aug 2023
+ 15:43:12 +0000
+Message-ID: <91e640d6-6d1b-48bc-87b9-755869af87dc@amd.com>
+Date:   Tue, 8 Aug 2023 10:43:09 -0500
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V1 1/6] ACPI: CPPC: Add get the highest performance cppc
+ control
+Content-Language: en-US
+To:     Meng Li <li.meng@amd.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Huang Rui <ray.huang@amd.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-acpi@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Shimmer Huang <shimmer.huang@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>
+References: <20230808081001.2215240-1-li.meng@amd.com>
+ <20230808081001.2215240-2-li.meng@amd.com>
+From:   Mario Limonciello <mario.limonciello@amd.com>
+In-Reply-To: <20230808081001.2215240-2-li.meng@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: DM6PR02CA0048.namprd02.prod.outlook.com
+ (2603:10b6:5:177::25) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic: DB9PR08MB7179:EE_|AS8PR08MB8468:EE_|AM7EUR03FT036:EE_|PAVPR08MB8989:EE_
-X-MS-Office365-Filtering-Correlation-Id: a0123b49-2837-4b14-675e-08db97e8772f
-x-checkrecipientrouted: true
-NoDisclaimer: true
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|MW6PR12MB7088:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7ff48565-3392-42e1-fb6e-08db98262c36
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: Ft622fNMGkEQ6+U1Ce0LU6Aq4negHwuHPibsTTSdzyK+Biad/755YGKa6pq5qUSdpsqDafb6SVQuq6m2l8mMxammMVF15MqfMb20Nxehvrbijcx1bvFbWh6OW2HZn7dXVHozhsE3mUV49GJO1p7rSRGs6n7X4Oh2f4XiR/7agqAYyuRGajGpCMCsJTCaXed3m32sy3+gRTxkYZ4XdcIokUZoBL6c4EKdXlxPqK7LbLjCgL4IWsgzUZV+lOaLjhlxITZGXui0Ol+AcPS4mU+VEFwtvA5KLBQgsvDeTEyHCJWv21CG75G8tnlc0vMdlTBmBR9/iwLlGE40Tudyy2UonNpWVIjhnEbDK6esI9cYiWBBfeQrkA1kGjE4MMm0SujeI9qeHLrdGyeKOk9SVaalSF1DGh+JVWcdNDZXR+eCL91C3/CeCcCa2skQ9v30dgN162PgVDR87srpDLNiV+WIkZeOygyGwvRevGp4KUf7uQOGvzg5zLR25zrCDYgRYIhZpaNcvw2oWsxFFt9niZPBNdggshVvnaKYILWXR9ABo/AMsYoXn0IXCMuHccgzHO0xP6SUrClzkpHHrHMVJ6nWAFsHm8e1ZQMpnPL8sYMRDtZUux8pImG1zrbKxKrKCHRnw9IA6Sn+35V6vQxyzJHEpQ==
-X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR08MB7179.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(346002)(396003)(39860400002)(366004)(376002)(186006)(1800799003)(90021799007)(90011799007)(451199021)(2616005)(26005)(6506007)(6512007)(6486002)(6666004)(478600001)(54906003)(38100700002)(36756003)(66476007)(66556008)(66946007)(4326008)(6916009)(316002)(41300700001)(8936002)(8676002)(5660300002)(7416002)(2906002)(86362001);DIR:OUT;SFP:1101;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR08MB8468
-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: AM7EUR03FT036.eop-EUR03.prod.protection.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: d408608a-4334-4b70-2817-08db97e87015
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7VUCtesAYY7l/y2l147ZWR/0xvqoYv3cCYJEdWnKTZKBns6nGG/7mUbKmO8V7rHJFBjRhuf0ZnXrUYw6OXrtMr50FaFbbi2Wf0MMHDkvle1kUWDbpO5FXA5eg5eJrnw5stxi//UaeyLzKkfEn6VyWAkQk38WawIrBl/ZKmiEYCl++RFvPMg5JYSGSSAEQymPfAb/lSgu2QZvWkk6E72tFolPQCz1z2+Iqd3WkhBDgp1YYDth8zttb4Nnzd4WIULVFzmvh+5hl6EyVID9/nmdAQ3bdYZj7YlzlCpkvjOsxPjEU4YCDSup5PV9gxWHib+WSnkRx2QHakoV3uBbYpkKyoM55KaoEdDFG6RxEBEt+zAxifmOKD23LC3uWHA0+y4+gC/fTphAzdC5S899cIsJod2cCvbJ54i1hVHHVkR+Oc+88BJPIEgCCCwepxDitowKNUWfCeex3a0OsI3P1mbpNYWAM0HT6AuqKBIEqjn5zo++70uwQvAoj8PLdKlUZcu2vWkNq/B5gY7bKD9R4uvQIGeAPAR3R9hjhxrx9wRSCyZKD2bpETFNLnDHRW0tcRMu90WWoPgG1ENEpqqXIH8czHR8w7sVuqHZ2y5Py8vww2WiCuavUUY5oAmqPDnQsz8FtNGAldggzQU8L5jCvOkuCuhqmDJoaLJwmAzmED2HGKGpQyq6fN1xGREgfpI6uWLs/PpHubASFTeHM0UL/vDndrPyadywNvi1CTMd7syh/BqvqmEJvEeDfQ+wAOCegapIyhlNCDaF1zCc5eYA1Ih4IgwiisTXEG4r1OJ342mMlR7h+prdu19j4XYuMIK0X1Mo
-X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(346002)(396003)(136003)(1800799003)(90021799007)(186006)(451199021)(90011799007)(82310400008)(40470700004)(46966006)(36840700001)(81166007)(356005)(478600001)(6512007)(82740400003)(36860700001)(86362001)(6486002)(450100002)(107886003)(26005)(6506007)(70586007)(70206006)(4326008)(54906003)(6666004)(2616005)(316002)(336012)(40460700003)(41300700001)(2906002)(40480700001)(47076005)(36756003)(5660300002)(6862004)(8936002)(8676002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Aug 2023 08:21:28.9453
+X-Microsoft-Antispam-Message-Info: Y/pHRyMwv7VcP80f0XVhJjwtXrC9LKkpNWIbu8hcWelMCn/tnTWDbzu1GlN1rpRQmuZBBm2SP7taVrVWLwwdRMeeBxE3jfiuLgE+fZ4vK4gpzD0hraAdZwSYtdEG8C7qvr6AvB3pdjAuIkAi4eLU1pHA+B5z51RkSWFZdOYj1mKEzKTPXT7IM0RTelqi/EkcwJDL7E8ujY2brUz62AkuqRQSOUx4PFDeGhSjcHBch61dbV2T/EZ0o5a8kCz9yyXpX0FvUZS9ErmZ697x4WuJnvGo3owU/FG+JrMRoaVuR977VqUwnYx7795d9IbDWmPc03Brnzsw+NAkw+Hzmn7LSOUEe0YKyXckEXK7Er/N213SQL0ewDF/uy3GJMAbWLxsNJfDPcS+JALpKL+AZCN54UERJXUFPrAe7jbNcuN7JRz7CpNLdLocOTSLfvFdA0LVPGM8z9DtVJU8pDGgENmPc8WNnN+4r9ZBMd3DQUwQYHrDlmUNjgSM7hpHutCsIs1DQTGsS1Dw3U0gI/mZel34Rl6r2ONdlX/mog8b4oW9ExnR/zmRkhIncEiAIaqYXhqWTP0MigfCABM6Ww0YOakVPxDzX5/ihhfeGN8a9KcD0szDTJhrkR/ccBgrcRiIyh9ti5TCGN6UYCh7f+uV8x9wK97pH84yjipSGKyn3QHer2M=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(39860400002)(366004)(396003)(346002)(451199021)(186006)(1800799003)(38100700002)(53546011)(6506007)(26005)(2616005)(83380400001)(36756003)(2906002)(5660300002)(8936002)(8676002)(44832011)(66476007)(110136005)(478600001)(31696002)(966005)(86362001)(6512007)(6666004)(6486002)(54906003)(316002)(41300700001)(4326008)(6636002)(66946007)(66556008)(31686004)(15583001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Qk1wMmhaSS85UmE3WDFnY1R1VzlYdnlOQUxzS21IN1VrWE1BY2FlRHdwSG9Z?=
+ =?utf-8?B?N25EQjNtNTB5akVJS0VQZ2FoR0FPTzhuWkRBSUwxTVhROExVbmhocjZReWRH?=
+ =?utf-8?B?dDd6YkZJWjJROXVDL1dYUnVqdnk3a1dpbkpST2NQVDlGb0loWmpkdzJscUdr?=
+ =?utf-8?B?dStBSUdadGJZVkV0ZnBHdmRrV3VCcTh4V1grTmFiZGk5OUFvQURlY3MyT0Rw?=
+ =?utf-8?B?aW5oajZiVHNFQ1MxdmhsZG1hUW9tWFVFVlJLS3RhNmRaS3hEVzI1TXdHZ0lj?=
+ =?utf-8?B?VFVFbGdqV0dOQ2tFdjBNcnFwNWhmMjZMSTNFK3pvUHZwRTRRbnpCaEZCNjUz?=
+ =?utf-8?B?SkUvaVJBMkdLSVBNaG5oVVM5S2lvdFl4U1liYmsxbXBBd2pNUGsrY3ZmTWhl?=
+ =?utf-8?B?Y0ZDOFpsS3lqakV2N1BWSGxTZGFiWVF1UXA0RklrbXcvWUFKUWNiaEJFT2tF?=
+ =?utf-8?B?aWdOcXFMNm5oTDJaM3k2bDNLN0JFSUFHMVZiSE54RHNjQTNZUUxielFudGNO?=
+ =?utf-8?B?b3FEUXhIRGdETmlMMUNTR2FYakZPV1htNGZ0RUVVa2xhbzJEbEtsSGN1ZDBY?=
+ =?utf-8?B?NnptNGpKVFlmTVIrZ0srTy9FYXBuS1A3dEE1blIzT3d2MFA1SnJpRDNCWERC?=
+ =?utf-8?B?N1BKY2wrSzR6dzJKUWNORnVQZFZXalEvY1ZXejgxM1FJY2M5QzVLQlBLVU5u?=
+ =?utf-8?B?M0hQNFZpNmVlb0Q3Qkg5YThtYmNROVVPUzFaUDF6cXE0eDNMTUhuTFdZTm83?=
+ =?utf-8?B?bUpCakRrWSs5cXFXVmIwM0swMzh3RTlmK0NyVnBhTG9XWGg5L0ZZTHVNSXpY?=
+ =?utf-8?B?SXNKcGlHeXlWenh2YTFsOGVsUGpRSkFzbGY5bUlYQmhONElkb1U5TnhjYndS?=
+ =?utf-8?B?UCtuLzZwNXJTeWpDRXBCcnp3SXExRkVXQjhVOUtFMVZIdG9RNzEwTW52NUcz?=
+ =?utf-8?B?SWZqZnA0YVRKQ3FEL3AxYmRKendZZ1VNbWdvKzhPTDlWbjhTbDZqM1hzWXBW?=
+ =?utf-8?B?L0xpUStjdnJVSjEwcm5lQVJKYjNCZTdKZ3QxRWtaVDZtSjBVK2E2b2NNN3FU?=
+ =?utf-8?B?bS9hR1VseWtjRWVZTXRtcnpDVVpnVDRxS2U4b3BhSnl5RzN1Mm0vM3h4Z0Fs?=
+ =?utf-8?B?UkVvT1BvUVp4d3dJdXVJaGlndERUUEVlWG9HY1hTQjZmY2xEV1MwaXVGV3pB?=
+ =?utf-8?B?TjY1UFJiVzk0N3l5OXFGK25qSkxpZ0xWUTFnZ3AxWHFHTlpXU0pIREluQThu?=
+ =?utf-8?B?M1FUb0ZFOUNkS2JuQUYvUk5rbmtER2tydmRSc3hyN0g4TThSeGVsajFsd3Jr?=
+ =?utf-8?B?bXhnWU5LU0JKZGhHck53Sk52L0hPNWpTT2JUdk9jOU1QYWx4bExsalBMNUsw?=
+ =?utf-8?B?ZDhEMTRJbktZRHhVeEZtMmVlUE8wRFJUOFdrdXRlWDh1VzY2MjVvKzhGSDIx?=
+ =?utf-8?B?NFBYbG44L21EOHBJZWFVOWR0RkRoY09zMXRqOWowckRmbHpSaEpiTTJOZ2JS?=
+ =?utf-8?B?UTBDYnpIZ2sxN2RRZTNka1FjaldsRXZtN1JMRGxDOWFCQWhSSDVNL1RqdVZ0?=
+ =?utf-8?B?Yi85VDFpZGY3NkxxbGZTVDZvcFpsMkpMU2dUeXR0YWs1MW56aTlranVkNjU3?=
+ =?utf-8?B?dUVMbzczZmprOEF1S29LTkVKM21CWGxaZUJaR1NEL25WRFdXSnhtQmU3SG5a?=
+ =?utf-8?B?ZmlVRkU1Qm5ST1ZNcXBVTk1lYWJSZS9lSjVTd1JIOGRlZTdNUGVCZ21HTlA3?=
+ =?utf-8?B?N1ViaHIzWWF6Q00rSWNZQnpOb09iZ1NHWTY1QXVLM0VyNEJPdndFT2dxUGtL?=
+ =?utf-8?B?cjk4akNkbUVTRVdlbzJzOWxya2lsU2ZVL2I2WXNSZlFlYW1WNlRSYXdqb1Vk?=
+ =?utf-8?B?RURZZHlsVjBnMVZJbTRmUmgxOWh2UXZSQzJ3bFVRdjB4djZzT3RBM0gwbjZ1?=
+ =?utf-8?B?OFFQZTh0dmx5V0IzV0FiMVlNKzMxMnJiei81NUhMTllYNW4wTTFLb1pYQmds?=
+ =?utf-8?B?YWwrTFo0MkpIQ1U1V1FzRVorSVExNk1JSWNzRVZKQm1sNFd0OGtUVXprYXVJ?=
+ =?utf-8?B?WWZNYmVOeGVlYjdmcU5QaEdUYjVVOVRRRlo3RlN5MWJsaHpkRFNqbUUrbURJ?=
+ =?utf-8?Q?VRIjcAFAWmx/DutnX13/Yf4A2?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7ff48565-3392-42e1-fb6e-08db98262c36
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Aug 2023 15:43:12.3416
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a0123b49-2837-4b14-675e-08db97e8772f
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
-X-MS-Exchange-CrossTenant-AuthSource: AM7EUR03FT036.eop-EUR03.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAVPR08MB8989
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: C1DlWGqsoUjVsDba3WeXvVJFexL0uMON5gxi/zHv54IT9XDvIdlzRV8vNOZ3R0uZn+lgl2tHj35WR0083rNS/w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR12MB7088
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The 08/07/2023 14:00, Mark Brown wrote:
-> On Mon, Aug 07, 2023 at 11:20:58AM +0100, Szabolcs Nagy wrote:
-> > The 07/31/2023 14:43, Mark Brown wrote:
-> > > +SYSCALL_DEFINE3(map_shadow_stack, unsigned long, addr, unsigned long, size, unsigned int, flags)
-> > > +{
-> > > +	unsigned long alloc_size;
-> > > +	unsigned long __user *cap_ptr;
-> > > +	unsigned long cap_val;
-> > > +	int ret;
-> > > +
-> > > +	if (!system_supports_gcs())
-> > > +		return -EOPNOTSUPP;
-> > > +
-> > > +	if (flags)
-> > > +		return -EINVAL;
-> > > +
-> > > +	if (addr % 16)
-> > > +		return -EINVAL;
+On 8/8/2023 03:09, Meng Li wrote:
+> Add support for getting the highest performance to the
+> generic CPPC driver. This enables downstream drivers
+> such as amd-pstate to discover and use these values.
 > 
-> > mmap addr must be page aligned (and there is no align req on size).
-> 
-> > i'd expect similar api here.
-> 
-> That's not what the manual page or a quick check of the code suggest
-> that mmap() does, they say that the kernel just takes it as a hint and
 
-i should have said that i expect MAP_FIXED_NOREPLACE semantics
-(since the x86 code seemed to use that) and then the mapped
-address must match exactly thus page aligned.
+I suggest adding this to commit message:
 
-> chooses a nearby page boundary, though I didn't test.  I'm not sure why
-> I have that alignment check at all TBH, and to the extent it's needed I
-> could just be 8 - this level of code doesn't really care.
-> 
-> > > +	if (size == 16 || size % 16)
-> > > +		return -EINVAL;
-> 
-> > why %16 and not %8 ?
-> 
-> I don't think that's needed any more - there was some stuff in an
-> earlier version of the code but no longer.
+Link: 
+https://uefi.org/specs/ACPI/6.5/08_Processor_Configuration_and_Control.html?highlight=cppc#cpc-continuous-performance-control
 
-it's kind of important to know the exact logic so the cap token
-location can be computed in userspace for arbitrary size.
+> Signed-off-by: Meng Li <li.meng@amd.com>
 
-(this is why i wanted to see the map_shadow_stack man page first
-but i was told that comes separately on linux..)
+Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+
+> ---
+>   drivers/acpi/cppc_acpi.c | 13 +++++++++++++
+>   include/acpi/cppc_acpi.h |  5 +++++
+>   2 files changed, 18 insertions(+)
+> 
+> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+> index 7ff269a78c20..ad388a0e8484 100644
+> --- a/drivers/acpi/cppc_acpi.c
+> +++ b/drivers/acpi/cppc_acpi.c
+> @@ -1154,6 +1154,19 @@ int cppc_get_nominal_perf(int cpunum, u64 *nominal_perf)
+>   	return cppc_get_perf(cpunum, NOMINAL_PERF, nominal_perf);
+>   }
+>   
+> +/**
+> + * cppc_get_highest_perf - Get the highest performance register value.
+> + * @cpunum: CPU from which to get highest performance.
+> + * @highest_perf: Return address.
+> + *
+> + * Return: 0 for success, -EIO otherwise.
+> + */
+> +int cppc_get_highest_perf(int cpunum, u64 *highest_perf)
+> +{
+> +	return cppc_get_perf(cpunum, HIGHEST_PERF, highest_perf);
+> +}
+> +EXPORT_SYMBOL_GPL(cppc_get_highest_perf);
+> +
+>   /**
+>    * cppc_get_epp_perf - Get the epp register value.
+>    * @cpunum: CPU from which to get epp preference value.
+> diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
+> index 6126c977ece0..c0b69ffe7bdb 100644
+> --- a/include/acpi/cppc_acpi.h
+> +++ b/include/acpi/cppc_acpi.h
+> @@ -139,6 +139,7 @@ struct cppc_cpudata {
+>   #ifdef CONFIG_ACPI_CPPC_LIB
+>   extern int cppc_get_desired_perf(int cpunum, u64 *desired_perf);
+>   extern int cppc_get_nominal_perf(int cpunum, u64 *nominal_perf);
+> +extern int cppc_get_highest_perf(int cpunum, u64 *highest_perf);
+>   extern int cppc_get_perf_ctrs(int cpu, struct cppc_perf_fb_ctrs *perf_fb_ctrs);
+>   extern int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls);
+>   extern int cppc_set_enable(int cpu, bool enable);
+> @@ -165,6 +166,10 @@ static inline int cppc_get_nominal_perf(int cpunum, u64 *nominal_perf)
+>   {
+>   	return -ENOTSUPP;
+>   }
+> +static inline int cppc_get_highest_perf(int cpunum, u64 *highest_perf)
+> +{
+> +	return -ENOTSUPP;
+> +}
+>   static inline int cppc_get_perf_ctrs(int cpu, struct cppc_perf_fb_ctrs *perf_fb_ctrs)
+>   {
+>   	return -ENOTSUPP;
+
