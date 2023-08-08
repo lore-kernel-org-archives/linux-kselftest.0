@@ -2,35 +2,35 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B704C001B0
-	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Aug 2023 16:12:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C575FC001B0
+	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Aug 2023 16:12:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231817AbjHHQLz (ORCPT
+        id S232059AbjHHQMf (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 8 Aug 2023 12:11:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57000 "EHLO
+        Tue, 8 Aug 2023 12:12:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231818AbjHHQJz (ORCPT
+        with ESMTP id S231942AbjHHQLD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Aug 2023 12:09:55 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A5007AA6
-        for <linux-kselftest@vger.kernel.org>; Tue,  8 Aug 2023 08:46:32 -0700 (PDT)
-Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RKjdq4djTzrS9m;
-        Tue,  8 Aug 2023 14:17:19 +0800 (CST)
+        Tue, 8 Aug 2023 12:11:03 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFDF47D8A
+        for <linux-kselftest@vger.kernel.org>; Tue,  8 Aug 2023 08:46:44 -0700 (PDT)
+Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RKjbC1vFFzNmrS;
+        Tue,  8 Aug 2023 14:15:03 +0800 (CST)
 Received: from huawei.com (10.175.103.91) by kwepemi500024.china.huawei.com
  (7.221.188.100) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 8 Aug
- 2023 14:18:29 +0800
+ 2023 14:18:30 +0800
 From:   Zeng Heng <zengheng4@huawei.com>
 To:     <kristina.martsenko@arm.com>, <shuah@kernel.org>,
         <catalin.marinas@arm.com>, <broonie@kernel.org>, <will@kernel.org>
 CC:     <zengheng4@huawei.com>, <linux-kselftest@vger.kernel.org>,
         <xiexiuqi@huawei.com>, <linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH 4/5] kselftest/arm64: add test item that support to capturing the SIGBUS signal
-Date:   Tue, 8 Aug 2023 14:13:54 +0800
-Message-ID: <20230808061356.2215158-4-zengheng4@huawei.com>
+Subject: [PATCH 0/5] kselftest/arm64: add features check to hwcap test
+Date:   Tue, 8 Aug 2023 14:13:56 +0800
+Message-ID: <20230808061356.2215158-6-zengheng4@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230808061356.2215158-1-zengheng4@huawei.com>
 References: <20230808061356.2215158-1-zengheng4@huawei.com>
@@ -45,120 +45,143 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Some enhanced features, such as the LSE2 feature, do not result in
-SILLILL if LSE2 is missing and LSE is present, but will generate a
-SIGBUS exception when atomic access unaligned.
+Add new feature checks and provide testing item to support capturing
+SIGBUS exception signal.
 
-Therefore, we add test item to test this type of features.
+The following is a log snippet from my local testing environment:
+~~~
+ TAP version 13
+ 1..90
+ # CRC32 present
+ ok 1 cpuinfo_match_CRC32
+ ok 2 sigill_CRC32
+ ok 3 # SKIP sigbus_CRC32
+ ok 4 cpuinfo_match_CSSC
+ # sigill_reported for CSSC
+ ok 5 # SKIP sigill_CSSC
+ ok 6 # SKIP sigbus_CSSC
+ # FP present
+ ok 7 cpuinfo_match_FP
+ ok 8 sigill_FP
+ ok 9 # SKIP sigbus_FP
+ # LRCPC present
+ ok 10 cpuinfo_match_LRCPC
+ ok 11 sigill_LRCPC
+ ok 12 # SKIP sigbus_LRCPC
+ # LRCPC2 present
+ ok 13 cpuinfo_match_LRCPC2
+ ok 14 sigill_LRCPC2
+ ok 15 # SKIP sigbus_LRCPC2
+ # LSE present
+ ok 16 cpuinfo_match_LSE
+ ok 17 sigill_LSE
+ ok 18 # SKIP sigbus_LSE
+ # LSE2 present
+ ok 19 cpuinfo_match_LSE2
+ ok 20 sigill_LSE2
+ ok 21 sigbus_LSE2
+ ok 22 cpuinfo_match_MOPS
+ ok 23 sigill_MOPS
+ ok 24 # SKIP sigbus_MOPS
+ # RNG present
+ ok 25 cpuinfo_match_RNG
+ ok 26 sigill_RNG
+ ok 27 # SKIP sigbus_RNG
+ ok 28 cpuinfo_match_RPRFM
+ ok 29 # SKIP sigill_RPRFM
+ ok 30 # SKIP sigbus_RPRFM
+ ok 31 cpuinfo_match_SME
+ ok 32 sigill_SME
+ ok 33 # SKIP sigbus_SME
+ ok 34 cpuinfo_match_SME2
+ ok 35 sigill_SME2
+ ok 36 # SKIP sigbus_SME2
+ ok 37 cpuinfo_match_SME 2.1
+ # sigill_reported for SME 2.1
+ ok 38 # SKIP sigill_SME 2.1
+ ok 39 # SKIP sigbus_SME 2.1
+ ok 40 cpuinfo_match_SME I16I32
+ # sigill_reported for SME I16I32
+ ok 41 # SKIP sigill_SME I16I32
+ ok 42 # SKIP sigbus_SME I16I32
+ ok 43 cpuinfo_match_SME BI32I32
+ # sigill_reported for SME BI32I32
+ ok 44 # SKIP sigill_SME BI32I32
+ ok 45 # SKIP sigbus_SME BI32I32
+ ok 46 cpuinfo_match_SME B16B16
+ # sigill_reported for SME B16B16
+ ok 47 # SKIP sigill_SME B16B16
+ ok 48 # SKIP sigbus_SME B16B16
+ ok 49 cpuinfo_match_SME F16F16
+ # sigill_reported for SME F16F16
+ ok 50 # SKIP sigill_SME F16F16
+ ok 51 # SKIP sigbus_SME F16F16
+ # SVE present
+ ok 52 cpuinfo_match_SVE
+ ok 53 sigill_SVE
+ ok 54 # SKIP sigbus_SVE
+ ok 55 cpuinfo_match_SVE 2
+ # sigill_reported for SVE 2
+ ok 56 # SKIP sigill_SVE 2
+ ok 57 # SKIP sigbus_SVE 2
+ ok 58 cpuinfo_match_SVE 2.1
+ # sigill_reported for SVE 2.1
+ ok 59 # SKIP sigill_SVE 2.1
+ ok 60 # SKIP sigbus_SVE 2.1
+ ok 61 cpuinfo_match_SVE AES
+ # sigill_reported for SVE AES
+ ok 62 # SKIP sigill_SVE AES
+ ok 63 # SKIP sigbus_SVE AES
+ ok 64 cpuinfo_match_SVE2 PMULL
+ # sigill_reported for SVE2 PMULL
+ ok 65 # SKIP sigill_SVE2 PMULL
+ ok 66 # SKIP sigbus_SVE2 PMULL
+ ok 67 cpuinfo_match_SVE2 BITPERM
+ # sigill_reported for SVE2 BITPERM
+ ok 68 # SKIP sigill_SVE2 BITPERM
+ ok 69 # SKIP sigbus_SVE2 BITPERM
+ ok 70 cpuinfo_match_SVE2 SHA3
+ # sigill_reported for SVE2 SHA3
+ ok 71 # SKIP sigill_SVE2 SHA3
+ ok 72 # SKIP sigbus_SVE2 SHA3
+ ok 73 cpuinfo_match_SVE2 SM4
+ # sigill_reported for SVE2 SM4
+ ok 74 # SKIP sigill_SVE2 SM4
+ ok 75 # SKIP sigbus_SVE2 SM4
+ # SVE2 I8MM present
+ ok 76 cpuinfo_match_SVE2 I8MM
+ ok 77 sigill_SVE2 I8MM
+ ok 78 # SKIP sigbus_SVE2 I8MM
+ # SVE2 F32MM present
+ ok 79 cpuinfo_match_SVE2 F32MM
+ ok 80 sigill_SVE2 F32MM
+ ok 81 # SKIP sigbus_SVE2 F32MM
+ # SVE2 F64MM present
+ ok 82 cpuinfo_match_SVE2 F64MM
+ ok 83 sigill_SVE2 F64MM
+ ok 84 # SKIP sigbus_SVE2 F64MM
+ # SVE2 BF16 present
+ ok 85 cpuinfo_match_SVE2 BF16
+ ok 86 sigill_SVE2 BF16
+ ok 87 # SKIP sigbus_SVE2 BF16
+ ok 88 cpuinfo_match_SVE2 EBF16
+ ok 89 # SKIP sigill_SVE2 EBF16
+ ok 90 # SKIP sigbus_SVE2 EBF16
+ # Totals: pass:46 fail:0 xfail:0 xpass:0 skip:44 error:0
+~~~
 
-Notice that testing for SIGBUS only makes sense after make sure that
-the instruction does not cause a SIGILL signal.
+Zeng Heng (5):
+  kselftest/arm64: add float-point feature to hwcap test
+  kselftest/arm64: add crc32 feature to hwcap test
+  kselftest/arm64: add DEF_SIGHANDLER_FUNC() and DEF_INST_RAISE_SIG()
+    helpers
+  kselftest/arm64: add test item that support to capturing the SIGBUS
+    signal
+  kselftest/arm64: add lse and lse2 features to hwcap test
 
-Signed-off-by: Zeng Heng <zengheng4@huawei.com>
----
- tools/testing/selftests/arm64/abi/hwcap.c | 33 ++++++++++++++++-------
- 1 file changed, 23 insertions(+), 10 deletions(-)
+ tools/testing/selftests/arm64/abi/hwcap.c | 201 ++++++++++++++++------
+ 1 file changed, 151 insertions(+), 50 deletions(-)
 
-diff --git a/tools/testing/selftests/arm64/abi/hwcap.c b/tools/testing/selftests/arm64/abi/hwcap.c
-index eebadb2bc9bf..bc1491075987 100644
---- a/tools/testing/selftests/arm64/abi/hwcap.c
-+++ b/tools/testing/selftests/arm64/abi/hwcap.c
-@@ -19,19 +19,20 @@
- 
- #include "../../kselftest.h"
- 
--#define TESTS_PER_HWCAP 2
-+#define TESTS_PER_HWCAP 3
- 
- /*
-- * Function expected to generate SIGILL when the feature is not
-- * supported and return when it is supported. If SIGILL is generated
-- * then the handler must be able to skip over the instruction safely.
-+ * Function expected to generate exception when the feature is not
-+ * supported and return when it is supported. If the specific exception
-+ * is generated then the handler must be able to skip over the
-+ * instruction safely.
-  *
-  * Note that it is expected that for many architecture extensions
-  * there are no specific traps due to no architecture state being
-  * added so we may not fault if running on a kernel which doesn't know
-  * to add the hwcap.
-  */
--typedef void (*sigill_fn)(void);
-+typedef void (*sig_fn)(void);
- 
- static void crc32_sigill(void)
- {
-@@ -237,8 +238,10 @@ static const struct hwcap_data {
- 	unsigned long at_hwcap;
- 	unsigned long hwcap_bit;
- 	const char *cpuinfo;
--	sigill_fn sigill_fn;
-+	sig_fn sigill_fn;
- 	bool sigill_reliable;
-+	sig_fn sigbus_fn;
-+	bool sigbus_reliable;
- } hwcaps[] = {
- 	{
- 		.name = "CRC32",
-@@ -454,6 +457,7 @@ static void handle_##SIG(int sig, siginfo_t *info, void *context)	\
- }
- 
- DEF_SIGHANDLER_FUNC(sigill, SIGILL);
-+DEF_SIGHANDLER_FUNC(sigbus, SIGBUS);
- 
- bool cpuinfo_present(const char *name)
- {
-@@ -508,7 +512,7 @@ static int install_sigaction(int signum, sighandler_fn handler)
- 	sigemptyset(&sa.sa_mask);
- 	ret = sigaction(signum, &sa, NULL);
- 	if (ret < 0)
--		ksft_exit_fail_msg("Failed to install SIGILL handler: %s (%d)\n",
-+		ksft_exit_fail_msg("Failed to install SIGNAL handler: %s (%d)\n",
- 				   strerror(errno), errno);
- 
- 	return ret;
-@@ -517,7 +521,7 @@ static int install_sigaction(int signum, sighandler_fn handler)
- static void uninstall_sigaction(int signum)
- {
- 	if (sigaction(signum, NULL, NULL) < 0)
--		ksft_exit_fail_msg("Failed to uninstall SIGILL handler: %s (%d)\n",
-+		ksft_exit_fail_msg("Failed to uninstall SIGNAL handler: %s (%d)\n",
- 				   strerror(errno), errno);
- }
- 
-@@ -558,12 +562,13 @@ static bool inst_raise_##SIG(const struct hwcap_data *hwcap,		\
- }
- 
- DEF_INST_RAISE_SIG(sigill, SIGILL);
-+DEF_INST_RAISE_SIG(sigbus, SIGBUS);
- 
- int main(void)
- {
- 	int i;
- 	const struct hwcap_data *hwcap;
--	bool have_cpuinfo, have_hwcap;
-+	bool have_cpuinfo, have_hwcap, raise_sigill;
- 
- 	ksft_print_header();
- 	ksft_set_plan(ARRAY_SIZE(hwcaps) * TESTS_PER_HWCAP);
-@@ -580,7 +585,15 @@ int main(void)
- 		ksft_test_result(have_hwcap == have_cpuinfo,
- 				 "cpuinfo_match_%s\n", hwcap->name);
- 
--		inst_raise_sigill(hwcap, have_hwcap);
-+		/*
-+		 * Testing for SIGBUS only makes sense after make sure
-+		 * that the instruction does not cause a SIGILL signal.
-+		 */
-+		raise_sigill = inst_raise_sigill(hwcap, have_hwcap);
-+		if (!raise_sigill)
-+			inst_raise_sigbus(hwcap, have_hwcap);
-+		else
-+			ksft_test_result_skip("sigbus_%s\n", hwcap->name);
- 	}
- 
- 	ksft_print_cnts();
--- 
+--
 2.25.1
 
