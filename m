@@ -2,56 +2,77 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 82398C04A6A
-	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Aug 2023 19:20:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD657C04A6A
+	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Aug 2023 19:24:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236060AbjHHTUQ (ORCPT
+        id S233994AbjHHTYo (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 8 Aug 2023 15:20:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44274 "EHLO
+        Tue, 8 Aug 2023 15:24:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236051AbjHHTUC (ORCPT
+        with ESMTP id S231809AbjHHTYb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Aug 2023 15:20:02 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646E816566;
-        Tue,  8 Aug 2023 09:43:51 -0700 (PDT)
-Received: from localhost.localdomain (unknown [59.103.218.230])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 949086607203;
-        Tue,  8 Aug 2023 11:43:48 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1691491434;
-        bh=Mo1XH1UBRenLTz5BwK9wfXpLgt7ICRwepxhynxV74M4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=k0FKLCXqy5zalIsSNo963PsSTgeTYuU9myTG4EXy/smDd6h3Bs8gvz+BjsChLuog/
-         v14FIXSSfpqWpzkT1tpzFBYLkEOXCYMwHCVXlAyv6iJFt1LXnqhqx+hf2HhPIVFJiB
-         A94AjQlxHmHkv4TirftQqzzZObq1ySDs7aRcvLBURg5uRXE329fpfroJZWvrbzBFdC
-         7DeUPSjwy642Hl1lCfa4jh++YjM/xGLcrhM42akTIMgA439oyY9QRPFOboAW/dRhI0
-         gS9hzvbBTV1wlOOCoupQYMittCndBzhL89GgLAsVK/4ET5K9expMuwmYbuIqRj7LiH
-         q2Zm0XOLtAICA==
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-To:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
+        Tue, 8 Aug 2023 15:24:31 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272F016D0F2;
+        Tue,  8 Aug 2023 12:21:28 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-d5eeb722a82so143040276.0;
+        Tue, 08 Aug 2023 12:21:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1691522487; x=1692127287;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=diySgYB/+o5ldcXShApfWPeWlXdCLBpgzXr+03nag2s=;
+        b=aI86kVcP5RX4GTYucp3JU2R1gispSFteGcvwqhB5v+uYh7lcaprwx/MvsiOux+7dVV
+         FFTmPer/GsrHdWL9j/bC/KWEeoGTrZpUO47fwt/mV+10/Hu3EKMNvfEBqSbXbB00sYoR
+         hRX5bHwEgspX/uOCtN77niYpyyOiMriJM0k5xj+6ISQ3+EXFKDYoML2VRJ1K4vfPoP85
+         BSEDZ7jJ2ZRd1COxOLZZ9aTxlVrNmDjU7uJ7dYXmEyYsU5u8s79gWzDLoFdCjAfDOJwq
+         PO6pjyJaiVBjmwDI63B0SRwDiN/KKCjI8gtWXmhsACnd6YuRIplqMyjIm3yJMQzZz+YL
+         e6LQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691522487; x=1692127287;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=diySgYB/+o5ldcXShApfWPeWlXdCLBpgzXr+03nag2s=;
+        b=GmbKAGog9a3FtxS35aPx1HGMUtiUeYhBqb75eikpgEPjGuvacKtkfY2cZ8DjDWkApa
+         AKb5g5n863fJ8Kvve3U9rIjnuQ6xgRYWqvH4y4kN4PUQC9y+oQvrHLcWie08f3AZJPUq
+         eCHgONeIY2OwLusi/4eSWK00d/ADVeuu86s06Pwitqwi27Vhinm1uHdiIm37GrogT4sn
+         qUQzJjU9RonkUkwhFPTu/IRjOKCSwerlIwvkWdHaw0rKSYWMsFIcnGgRYtQB9u9F4PJO
+         uUIo9XEJ8zLYjSZG/WIi6pqJp8JsVurbTGVpRQWSpp8GTmDZ5COcwNpTK3Z5fyWL9pqh
+         JSdQ==
+X-Gm-Message-State: AOJu0YwEWrzG6rtEJWUnF63B7B4CPFUxJCL2SVOQvdRF+RB8YJPj756j
+        tNRpLnHZrTB8k4T8LKOFACpzrTtBbcl406CkJ6w=
+X-Google-Smtp-Source: AGHT+IG5d90bapjIOlJBGA8irxOFPeCaIv3uCJP0B3jPOYPbIPyqiMre2cM/diK+xvgImaerO4LitHR/iRqNuHbzkeQ=
+X-Received: by 2002:a25:aaaa:0:b0:d43:a0d8:8db4 with SMTP id
+ t39-20020a25aaaa000000b00d43a0d88db4mr11596435ybi.11.1691522486684; Tue, 08
+ Aug 2023 12:21:26 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230808104309.357852-1-usama.anjum@collabora.com> <20230808104309.357852-3-usama.anjum@collabora.com>
+In-Reply-To: <20230808104309.357852-3-usama.anjum@collabora.com>
+From:   Andrei Vagin <avagin@gmail.com>
+Date:   Tue, 8 Aug 2023 12:21:10 -0700
+Message-ID: <CANaxB-ww6AcO4QThubYw62Mdeid4e3FOQAXvA_GZ=wu4J60-AQ@mail.gmail.com>
+Subject: Re: [PATCH v27 2/6] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <emmir@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
         Danylo Mocherniuk <mdanylo@google.com>,
         Paul Gofman <pgofman@codeweavers.com>,
         Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
         Shuah Khan <shuah@kernel.org>,
         Christian Brauner <brauner@kernel.org>,
         Yang Shi <shy828301@gmail.com>,
         Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@Oracle.com>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
         Yun Zhou <yun.zhou@windriver.com>,
         Suren Baghdasaryan <surenb@google.com>,
         Alex Sierra <alex.sierra@amd.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
         Matthew Wilcox <willy@infradead.org>,
         Pasha Tatashin <pasha.tatashin@soleen.com>,
         Axel Rasmussen <axelrasmussen@google.com>,
@@ -59,117 +80,142 @@ Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Dan Williams <dan.j.williams@intel.com>,
         linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: [PATCH v27 5/6] mm/pagemap: add documentation of PAGEMAP_SCAN IOCTL
-Date:   Tue,  8 Aug 2023 15:43:08 +0500
-Message-Id: <20230808104309.357852-6-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230808104309.357852-1-usama.anjum@collabora.com>
-References: <20230808104309.357852-1-usama.anjum@collabora.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add some explanation and method to use write-protection and written-to
-on memory range.
+On Tue, Aug 8, 2023 at 3:43=E2=80=AFAM Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
 
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
-Changes in v26:
-- Update documentation according to latest revision
+....
 
-Changes in v21:
-- Update according to changed interface
+> +static int pagemap_scan_output(unsigned long categories,
+> +                              struct pagemap_scan_private *p,
+> +                              unsigned long addr, unsigned long *end)
+> +{
+> +       unsigned long n_pages, total_pages;
+> +       int ret =3D 0;
+> +
+> +       if (!p->vec_buf)
+> +               return 0;
+> +
+> +       categories &=3D p->arg.return_mask;
+> +
+> +       n_pages =3D (*end - addr) / PAGE_SIZE;
+> +       if (check_add_overflow(p->found_pages, n_pages, &total_pages) || =
+//TODO
 
-Changes in v20:
-- Add new flag in documentation
+Need to fix this TODO.
 
-Changes in v19:
-- Improved documentatiom with punctuation marks
+> +           total_pages > p->arg.max_pages) {
+> +               size_t n_too_much =3D total_pages - p->arg.max_pages;
+> +               *end -=3D n_too_much * PAGE_SIZE;
+> +               n_pages -=3D n_too_much;
+> +               ret =3D -ENOSPC;
+> +       }
+> +
+> +       if (!pagemap_scan_push_range(categories, p, addr, *end)) {
+> +               *end =3D addr;
+> +               n_pages =3D 0;
+> +               ret =3D -ENOSPC;
+> +       }
+> +
+> +       p->found_pages +=3D n_pages;
+> +       if (ret)
+> +               p->walk_end_addr =3D *end;
+> +
+> +       return ret;
+> +}
+> +
 
-Changes in v16:
-- Update the documentation
+...
 
-Changes in v11:
-- Add more documentation
----
- Documentation/admin-guide/mm/pagemap.rst | 64 ++++++++++++++++++++++++
- 1 file changed, 64 insertions(+)
+> +static long do_pagemap_scan(struct mm_struct *mm, unsigned long uarg)
+> +{
+> +       struct mmu_notifier_range range;
+> +       struct pagemap_scan_private p;
+> +       unsigned long walk_start;
+> +       size_t n_ranges_out =3D 0;
+> +       int ret;
+> +
+> +       memset(&p, 0, sizeof(p));
+> +       ret =3D pagemap_scan_get_args(&p.arg, uarg);
+> +       if (ret)
+> +               return ret;
+> +
+> +       p.masks_of_interest =3D MASKS_OF_INTEREST(p.arg);
+> +       ret =3D pagemap_scan_init_bounce_buffer(&p);
+> +       if (ret)
+> +               return ret;
+> +
+> +       /* Protection change for the range is going to happen. */
+> +       if (p.arg.flags & PM_SCAN_WP_MATCHING) {
+> +               mmu_notifier_range_init(&range, MMU_NOTIFY_PROTECTION_VMA=
+, 0,
+> +                                       mm, p.arg.start, p.arg.end);
+> +               mmu_notifier_invalidate_range_start(&range);
+> +       }
+> +
+> +       walk_start =3D p.arg.start;
+> +       for (; walk_start < p.arg.end; walk_start =3D p.arg.walk_end) {
+> +               int n_out;
+> +
+> +               if (fatal_signal_pending(current)) {
+> +                       ret =3D -EINTR;
+> +                       break;
+> +               }
+> +
+> +               ret =3D mmap_read_lock_killable(mm);
+> +               if (ret)
+> +                       break;
+> +               ret =3D walk_page_range(mm, walk_start, p.arg.end,
+> +                                     &pagemap_scan_ops, &p);
+> +               mmap_read_unlock(mm);
+> +
+> +               n_out =3D pagemap_scan_flush_buffer(&p);
+> +               if (n_out < 0)
+> +                       ret =3D n_out;
+> +               else
+> +                       n_ranges_out +=3D n_out;
+> +
+> +               if (ret !=3D -ENOSPC || p.arg.vec_len - 1 =3D=3D 0 ||
+> +                   p.found_pages =3D=3D p.arg.max_pages) {
+> +                       p.walk_end_addr =3D p.arg.end;
 
-diff --git a/Documentation/admin-guide/mm/pagemap.rst b/Documentation/admin-guide/mm/pagemap.rst
-index c8f380271cad8..ea18e4575902a 100644
---- a/Documentation/admin-guide/mm/pagemap.rst
-+++ b/Documentation/admin-guide/mm/pagemap.rst
-@@ -227,3 +227,67 @@ Before Linux 3.11 pagemap bits 55-60 were used for "page-shift" (which is
- always 12 at most architectures). Since Linux 3.11 their meaning changes
- after first clear of soft-dirty bits. Since Linux 4.2 they are used for
- flags unconditionally.
-+
-+Pagemap Scan IOCTL
-+==================
-+
-+The ``PAGEMAP_SCAN`` IOCTL on the pagemap file can be used to get or optionally
-+clear the info about page table entries. The following operations are supported
-+in this IOCTL:
-+- Get the information if the pages have Async Write-Protection enabled
-+  (``PAGE_IS_WPALLOWED``), have been written to (``PAGE_IS_WRITTEN``), file mapped
-+  (``PAGE_IS_FILE``), present (``PAGE_IS_PRESENT``), swapped (``PAGE_IS_SWAPPED``)
-+  or page has pfn zero (``PAGE_IS_PFNZERO``).
-+- Find pages which have been written to and/or write protect
-+  (atomic ``PM_SCAN_WP_MATCHING + PM_SCAN_CHECK_WPASYNC``) the pages atomically.
-+  The (``PM_SCAN_WP_MATCHING``) is used to WP the matched pages. The
-+  (``PM_SCAN_CHECK_WPASYNC``) aborts the operation if non-Async-Write-Protected
-+  pages are found.
-+
-+The ``struct pm_scan_arg`` is used as the argument of the IOCTL.
-+ 1. The size of the ``struct pm_scan_arg`` must be specified in the ``size``
-+    field. This field will be helpful in recognizing the structure if extensions
-+    are done later.
-+ 2. The flags can be specified in the ``flags`` field. The ``PM_SCAN_WP_MATCHING``
-+    and ``PM_SCAN_CHECK_WPASYNC`` are the only added flags at this time. The get
-+    operation is optionally performed depending upon if the output buffer is
-+    provided or not.
-+ 3. The range is specified through ``start`` and ``end``.
-+ 4. The output buffer of ``struct page_region`` array and size is specified in
-+    ``vec`` and ``vec_len``.
-+ 5. The optional maximum requested pages are specified in the ``max_pages``.
-+ 6. The masks are specified in ``category_mask``, ``category_anyof_mask``,
-+    ``category_inverted`` and ``return_mask``.
-+    1.  To find if ``PAGE_IS_WRITTEN`` flag is set for pages which have
-+        ``PAGE_IS_FILE`` set and ``PAGE_IS_SWAPPED`` unset, ``category_mask``
-+        is set to ``PAGE_IS_FILE | PAGE_IS_SWAPPED``, ``category_inverted`` is
-+        set to ``PAGE_IS_SWAPPED`` and ``return_mask`` is set to ``PAGE_IS_WRITTEN``.
-+        The output buffer in ``vec`` and length must be specified in ``vec_len``.
-+    2. To find pages which have either ``PAGE_IS_FILE`` or ``PAGE_IS_SWAPPED``
-+       set, ``category_anyof_mask`` is set to  ``PAGE_IS_FILE | PAGE_IS_SWAPPED``.
-+    3. To find written pages and engage write protect, ``PAGE_IS_WRITTEN`` is
-+       specified in ``category_mask`` and ``return_mask``. In addition to
-+       specifying the output buffer in ``vec`` and length in ``vec_len``, the
-+       ``PM_SCAN_WP_MATCHING`` is specified in ``flags`` to perform write protect
-+       on the range as well.
-+
-+The ``PAGE_IS_WRITTEN`` flag can be considered as the better and correct
-+alternative of soft-dirty flag. It doesn't get affected by housekeeping chores
-+(VMA merging) of the kernel and hence the user can find the true soft-dirty pages
-+only. This IOCTL adds the atomic way to find which pages have been written and
-+write protect those pages again. This kind of operation is needed to efficiently
-+find out which pages have changed in the memory.
-+
-+To get information about which pages have been written to or optionally write
-+protect the pages, following must be performed first in order:
-+ 1. The userfaultfd file descriptor is created with ``userfaultfd`` syscall.
-+ 2. The ``UFFD_FEATURE_WP_UNPOPULATED`` and ``UFFD_FEATURE_WP_ASYNC`` features
-+    are set by ``UFFDIO_API`` IOCTL.
-+ 3. The memory range is registered with ``UFFDIO_REGISTER_MODE_WP`` mode
-+    through ``UFFDIO_REGISTER`` IOCTL.
-+ 4. Then any part of the registered memory or the whole memory region must
-+    be write protected using ``PAGEMAP_SCAN`` IOCTL with flag ``PM_SCAN_OP_WP``
-+    or the ``UFFDIO_WRITEPROTECT`` IOCTL can be used. Both of these perform the
-+    same operation. The former is better in terms of performance.
-+ 5. Now the ``PAGEMAP_SCAN`` IOCTL can be used to either just find pages which
-+    have been written to and/or optionally write protect the pages as well.
--- 
-2.39.2
+You should not change p.walk_end_addr If ret is ENOSPC. Pls add a test
+case to check this.
 
+> +                       break;
+> +               }
+> +       }
+> +
+> +       if (p.cur_buf.start !=3D p.cur_buf.end) {
+> +               if (copy_to_user(p.vec_out, &p.cur_buf, sizeof(p.cur_buf)=
+))
+> +                       ret =3D -EFAULT;
+> +               else
+> +                       ++n_ranges_out;
+> +       }
+> +
+> +       /* ENOSPC signifies early stop (buffer full) from the walk. */
+> +       if (!ret || ret =3D=3D -ENOSPC)
+> +               ret =3D n_ranges_out;
+> +
+> +       p.arg.walk_end =3D p.walk_end_addr ? p.walk_end_addr : walk_start=
+;
+> +       if (pagemap_scan_writeback_args(&p.arg, uarg))
+> +               ret =3D -EFAULT;
+> +
+> +       if (p.arg.flags & PM_SCAN_WP_MATCHING)
+> +               mmu_notifier_invalidate_range_end(&range);
+> +
+> +       kfree(p.vec_buf);
+> +       return ret;
+> +}
+
+Thanks,
+Andrei
