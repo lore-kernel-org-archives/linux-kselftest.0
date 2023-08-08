@@ -2,91 +2,84 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72546C001B0
-	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Aug 2023 17:37:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D530DC04A6A
+	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Aug 2023 17:47:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234846AbjHHRht (ORCPT
+        id S231458AbjHHRrL (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 8 Aug 2023 13:37:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44992 "EHLO
+        Tue, 8 Aug 2023 13:47:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234992AbjHHRhO (ORCPT
+        with ESMTP id S234853AbjHHRps (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Aug 2023 13:37:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAF676CC5
-        for <linux-kselftest@vger.kernel.org>; Tue,  8 Aug 2023 09:16:16 -0700 (PDT)
+        Tue, 8 Aug 2023 13:45:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD3BE25EFE
+        for <linux-kselftest@vger.kernel.org>; Tue,  8 Aug 2023 09:20:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 01D5F624EC
-        for <linux-kselftest@vger.kernel.org>; Tue,  8 Aug 2023 12:25:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 785D1C433C8;
-        Tue,  8 Aug 2023 12:25:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BF11A6249C
+        for <linux-kselftest@vger.kernel.org>; Tue,  8 Aug 2023 13:52:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A087C433C9;
+        Tue,  8 Aug 2023 13:52:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691497529;
-        bh=sC4E02/BINj7pWyMVS4nyFpH+D3+VLo6Wp6B42jku/4=;
+        s=k20201202; t=1691502760;
+        bh=4iyLn+x1TmF4WWToJEC2HsGa+X2k94nNgpKP+jyM4f4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Q28XMu64mWD15itogR6BMxaA6ubBhoSOaubWdiTCnaglTpbF66HSqigAVm33dEQUj
-         smQ1R876W6LEBgC36amH/C6R61bi/IQIBZaEa4wXXbIoVG39LgPzNu0P///zk1Gqbt
-         44nvYmCZcclX8NwhkQRREdroBbso7PgiwC8kl8RP5OiCjnup9NGU8IlsqBmKIB1NXx
-         K5h4XO86/EIzty9ilZuPGaBqSb2qIiyTsqpC7of+PdXf1nBEtGjW783PoRt3+GAKow
-         rTggNw9zo6LD+r6SxqzNvFwnINZ2zuzAfiQZmv++589imen0Toqvz/EEkWoXpcuV4d
-         0DuCj6jSyasRA==
-Date:   Tue, 8 Aug 2023 13:25:24 +0100
+        b=Ugc3uuKzJeh0JASWcMYsik0xMY5cWseW1BcOG73TXl+3VQ21fB7XTD1PmGXvqdEbx
+         TGkSAhJ40zyd8FhylAD2mgOv+Il7YLExqK55diJXmq0KJwbB/5quClhaMXekuD404Y
+         LrSPzNTDlbyqwSVUogpShSoRwgFSpgLkuOyP9gGDj30lOhkbqlXOOs6GD4iERS/sei
+         L0qEGrU7MIujv81mh/tvaH0ZD0rVuTwCFukE0TXfxffHzqOOZ6FCM1jA01AkqE0TmR
+         gzPpfVhTsuTXSZ35N8ZNPhZX9tVm3bQzWYAJywhYIzFyEaA4V9rn7HQP4US7MfsT1Q
+         KpGJtQKnzf5KQ==
+Date:   Tue, 8 Aug 2023 14:52:35 +0100
 From:   Mark Brown <broonie@kernel.org>
 To:     Zeng Heng <zengheng4@huawei.com>
-Cc:     kristina.martsenko@arm.com, shuah@kernel.org,
-        catalin.marinas@arm.com, will@kernel.org,
-        linux-kselftest@vger.kernel.org, xiexiuqi@huawei.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 1/5] kselftest/arm64: add float-point feature to hwcap
- test
-Message-ID: <29093701-3fd7-443b-b5c5-4333a6812c4f@sirena.org.uk>
-References: <20230808061356.2215158-1-zengheng4@huawei.com>
+Cc:     kristina.martsenko@arm.com, catalin.marinas@arm.com,
+        will@kernel.org, shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, xiexiuqi@huawei.com
+Subject: Re: [PATCH v2 0/5] kselftest/arm64: add features check to hwcap test
+Message-ID: <770859b2-aa8f-4437-814c-ad995844424b@sirena.org.uk>
+References: <20230808134036.668954-1-zengheng4@huawei.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ahY/9JK6eeajWjO0"
+        protocol="application/pgp-signature"; boundary="N7V7gCANib/hPHqs"
 Content-Disposition: inline
-In-Reply-To: <20230808061356.2215158-1-zengheng4@huawei.com>
+In-Reply-To: <20230808134036.668954-1-zengheng4@huawei.com>
 X-Cookie: You need not be present to win.
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
---ahY/9JK6eeajWjO0
+--N7V7gCANib/hPHqs
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Tue, Aug 08, 2023 at 02:13:51PM +0800, Zeng Heng wrote:
+On Tue, Aug 08, 2023 at 09:40:31PM +0800, Zeng Heng wrote:
+> Add new feature checks and provide testing item to support capturing
+> SIGBUS exception signal.
 
-> +static void fp_sigill(void)
-> +{
-> +	/* FMOV	S0, #1 */
-> +	asm volatile(".inst 0x1e2e1000" : : : );
-> +}
-> +
-
-That should assemble even with the toolchain configured for v8.0 so
-there shouldn't be any need to hand encode here.  Otherwise
+Please carry tags from old versions forward if there haven't been
+changes that invalidate them:
 
 Reviewed-by: Mark Brown <broonie@kernel.org>
 
---ahY/9JK6eeajWjO0
+--N7V7gCANib/hPHqs
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTSNDMACgkQJNaLcl1U
-h9Clbgf/fyRUUr0Fm7raPd7+oEvUJK1+OOiSohJBBi1FrE3WKR4utWBFUSdAVix0
-LszS7Z2FbT2LZA2XDiCLzrdkcwTxaA+qsjrZ3q6RndKF/1AW8vXAWiLl+mvAmxl4
-dDsDwzziKlLZTROTLTo6YV+jnIDHutCst33/1PwUULQBKx64rJQ7GiESrs5Yp2pH
-JG3pyFBCNbEY51poQ716+E7RI8CMCyJBUqqc4D+YtBA7ftD/0ppDUdzUxTpqF7PV
-x8ZXs4iys74O0I/qAYDv7z/KcPf4g0DHCsdEU7mEVCLr/U0cJgNQsQEefa0c1mDW
-iUsPGrvwX5o4LCa/rpDQeIWDzmigIA==
-=c5Q1
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTSSKIACgkQJNaLcl1U
+h9A4VQf/eUVU0fnrDbwOQcdeW9a/F71EnU+FR4eDRpZklvwUGc8XS44KElpdKZYH
+5bXZ0wa5duj9nUWSHwFGmWexezi8S9pSi8pcSlaopz+7egja/zKFl86ZdgS513Y/
+ajfuNWrlrdy7sI8z52YmlRA31xm0s5X1EF/BNFN0em57hbCsMWDwWz7Fy8ydr51i
+dLu8Av1o9Q+o2Lj3n4gVCuHSjEeePV5aCeicWrrfidIbbBYVVfvwKTnEmQsQ9WZ5
+Q8MNDp84rZmrX7uu8usRe76BdPVs9M+56sqY2OHn1Nonw4M62yP8TiNJ8ggqUh6m
+evd4oEPV8vDA4hWPAkwgc/Bx/A1MHA==
+=gjW3
 -----END PGP SIGNATURE-----
 
---ahY/9JK6eeajWjO0--
+--N7V7gCANib/hPHqs--
