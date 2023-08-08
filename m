@@ -2,144 +2,92 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2A04C04FE2
-	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Aug 2023 16:29:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D390BC001B0
+	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Aug 2023 16:44:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232653AbjHHQ3c (ORCPT
+        id S233303AbjHHQog (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 8 Aug 2023 12:29:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58592 "EHLO
+        Tue, 8 Aug 2023 12:44:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232692AbjHHQ2G (ORCPT
+        with ESMTP id S233001AbjHHQnm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Aug 2023 12:28:06 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A222B11F44;
-        Tue,  8 Aug 2023 08:50:55 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 154DC6016E;
-        Tue,  8 Aug 2023 08:25:00 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1691475900; bh=rdkWAy74MmPIPfmSWwye6pBDQ406/q2KSxXyYpG4R9Q=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=pgNyyx5oLmIYMKJTAWksgcEEpnM827k30wzBo4uOeL3zl3yI27e/Xi5RX03G9jJV3
-         5YdAv6TGDLl4yvcRFE8FAXhbQrZ8DFkTqcrfjUAOb1E7NErT9/nI20/MmsbxzE+DDu
-         XevniqjE227/Q3YTIPt+yYIvFe/+/2n7w5ayNVWNAGl3bFgi8NSlmKlckWBEtxjy5V
-         1iNYod3KFxZkvxVTsuz2hBlqKBj8juZXIcBXw5KDwOmT4ob2LTAwYf8Ni660qXABTI
-         xuc+GDWvoM2d+RyQoQ4cEDoRt7QGJMU+PLIpYg+fJe6jIjR3MSesYoueUYEiDdqn8/
-         IsKRZIdeQfZvg==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id oqWFrB4_ikyt; Tue,  8 Aug 2023 08:24:57 +0200 (CEST)
-Received: from [192.168.1.6] (unknown [94.250.191.183])
-        by domac.alu.hr (Postfix) with ESMTPSA id AA3076015F;
-        Tue,  8 Aug 2023 08:24:56 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1691475897; bh=rdkWAy74MmPIPfmSWwye6pBDQ406/q2KSxXyYpG4R9Q=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=IT3+Zmmo6uKBwamBs+nX0kOHHPMMCfbKBxKPlGaFbUEsTEQ/vUuAngC5+J+F6xf+p
-         kwGrFIPckiy/TwVGxSY3xmOgBqEkAkx7yLBJXlTO8fLrYPEB7iOb+4DPi1WUC/MpRt
-         AxyyXK+dMdi4pGxPTUjr5CCQkKwfftzkCzoVQ22YKloOlqAMB2SebOwYeulyqBBnWy
-         QmAadHUXgfcFXr8DRuZxU+tAZ8mmraH91EnwKfIg1F0VrTm1zMyfhFzs1AFDYoXDl/
-         s1qJZftAemVhn7h5ptdANwu/LHSeG/dITbp8F+1qoigulv/WU66QBdfQlmw7t3voUl
-         IiOevszC17NXg==
-Message-ID: <1269af66-bd86-0fab-e4ec-968f14371279@alu.unizg.hr>
-Date:   Tue, 8 Aug 2023 08:24:43 +0200
+        Tue, 8 Aug 2023 12:43:42 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FDE891A8;
+        Tue,  8 Aug 2023 08:55:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691510154; x=1723046154;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=e71Q+6dkdo7GKNkQOotvTjy2V6wO+hHkaKK74hljBDQ=;
+  b=F89qZTFWqrse8lWvaZYNaA5Pj3PQv5jEq2TlITz9BCp7hUlKHMCQZUiD
+   OgRB50SUNq5FXyKyXwD8Qa5wWqp3lsi08VI4lEExvaR5jQYPn69l83TxX
+   MoZgE/aNjgkfWx/nCPyL9uDMyWgt+GQNV4jXco9Jjz+EolYYYZfdF14+n
+   gsoRCIwPdPsgRKRmOOpIqbL1kP1jXXnQe3UD55lqog6MXcTsCGITnD+BE
+   s1J5Bwc1UhLamLRdkNsCiSbq+I2o3La/DLZvKGJN2t1hcKKzLsYgxDKaV
+   MqiaDQBYqo9xhnTfy3nJNbRgwDy2J0pB8cic/3SUrRMQZ1RS507rscotb
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="437097728"
+X-IronPort-AV: E=Sophos;i="6.01,263,1684825200"; 
+   d="scan'208";a="437097728"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2023 02:16:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="977776785"
+X-IronPort-AV: E=Sophos;i="6.01,263,1684825200"; 
+   d="scan'208";a="977776785"
+Received: from mtofeni-mobl.ger.corp.intel.com (HELO ijarvine-mobl2.ger.corp.intel.com) ([10.252.48.21])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2023 02:16:36 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+Cc:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 0/7] selftests/resctrl: Rework benchmark command handling
+Date:   Tue,  8 Aug 2023 12:16:18 +0300
+Message-Id: <20230808091625.12760-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH v3 4.14 1/1] test_firmware: fix the memory leaks with the
- reqs buffer
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Tianfei Zhang <tianfei.zhang@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
-        Dan Carpenter <error27@gmail.com>, Takashi Iwai <tiwai@suse.de>
-References: <20230804170017.92671-1-mirsad.todorovac@alu.unizg.hr>
- <2023080705-poet-nickname-5e08@gregkh>
- <a9e443c7-c7b5-63ce-08d9-5604ac545bf6@alu.unizg.hr>
- <2023080802-moonrise-cascade-a4c0@gregkh>
-Content-Language: en-US
-From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <2023080802-moonrise-cascade-a4c0@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/8/23 06:28, Greg Kroah-Hartman wrote:
-> On Mon, Aug 07, 2023 at 08:28:04PM +0200, Mirsad Todorovac wrote:
->> On 8/7/23 11:15, Greg Kroah-Hartman wrote:
->>> On Fri, Aug 04, 2023 at 07:00:18PM +0200, Mirsad Todorovac wrote:
->>>> [ commit be37bed754ed90b2655382f93f9724b3c1aae847 upstream ]
->>>>
->>>> Dan Carpenter spotted that test_fw_config->reqs will be leaked if
->>>> trigger_batched_requests_store() is called two or more times.
->>>> The same appears with trigger_batched_requests_async_store().
->>>>
->>>> This bug wasn't triggered by the tests, but observed by Dan's visual
->>>> inspection of the code.
->>>>
->>>> The recommended workaround was to return -EBUSY if test_fw_config->reqs
->>>> is already allocated.
->>>>
->>>> Fixes: c92316bf8e94 ("test_firmware: add batched firmware tests")
->>>> Cc: Luis Chamberlain <mcgrof@kernel.org>
->>>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->>>> Cc: Russ Weight <russell.h.weight@intel.com>
->>>> Cc: Tianfei Zhang <tianfei.zhang@intel.com>
->>>> Cc: Shuah Khan <shuah@kernel.org>
->>>> Cc: Colin Ian King <colin.i.king@gmail.com>
->>>> Cc: Randy Dunlap <rdunlap@infradead.org>
->>>> Cc: linux-kselftest@vger.kernel.org
->>>> Cc: stable@vger.kernel.org # v4.14
->>>> Suggested-by: Dan Carpenter <error27@gmail.com>
->>>> Suggested-by: Takashi Iwai <tiwai@suse.de>
->>>> Link: https://lore.kernel.org/r/20230509084746.48259-2-mirsad.todorovac@alu.unizg.hr
->>>> Signed-off-by: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
->>>>
->>>> [ This fix is applied against the 4.14 stable branch. There are no changes to the ]
->>>> [ fix in code when compared to the upstread, only the reformatting for backport.  ]
->>>
->>> Thanks for all of these, now queued up.
->>
->> No problem, I should have done it right the first time to reduce your load.
->>
->> I really believe that backporting bug fix patches is important because many systems
->> cannot upgrade because of the legacy apps and hardware, to state the obvious.
-> 
-> What "legacy apps" rely on a specific kernel version?
+The benchmark command handling (-b) in resctrl selftests is overly
+complicated code. This series turns the benchmark command immutable to
+preserve it for all selftests and improves benchmark command related
+error handling.
 
-Hi, Mr. Greg,
+This series also ends up removing the strcpy() calls which were pointed
+out earlier.
 
-Actually, in our particular case, it was the Eprints that required old mysql on Debian stretch
-rather than MariaDB that came with Buster. So, the release required particular kernel version (4.9).
+Ilpo Järvinen (7):
+  selftests/resctrl: Ensure the benchmark commands fits to its array
+  selftests/resctrl: Correct benchmark command help
+  selftests/resctrl: Remove bw_report and bm_type from main()
+  selftests/resctrl: Simplify span lifetime
+  selftests/resctrl: Use pointers to build benchmark cmd and make it
+    const
+  selftests/resctrl: remove ben_count variable
+  selftests/resctrl: Cleanup benchmark argument parsing
 
-Of course, we can upgrade to any mainline kernel, but that is no longer a tested distro kernel,
-and faults would be blamed on me entirely. Plus the overhead of regular patching ...
+ tools/testing/selftests/resctrl/cache.c       |  5 +-
+ tools/testing/selftests/resctrl/cat_test.c    | 13 +--
+ tools/testing/selftests/resctrl/cmt_test.c    | 32 +++++--
+ tools/testing/selftests/resctrl/mba_test.c    |  4 +-
+ tools/testing/selftests/resctrl/mbm_test.c    |  7 +-
+ tools/testing/selftests/resctrl/resctrl.h     | 22 +++--
+ .../testing/selftests/resctrl/resctrl_tests.c | 88 ++++++++-----------
+ tools/testing/selftests/resctrl/resctrl_val.c | 10 ++-
+ 8 files changed, 98 insertions(+), 83 deletions(-)
 
-This is what I now do, but the old hardware at work still requires 60 minutes to build a decent
-vanilla tree kernel ...
+-- 
+2.30.2
 
-> As for hardware, just get the needed drivers merged into Linus's tree
-> and then you can upgrade to newer kernels.  What is preventing that from
-> happening?
-
-As I said, the problem is with reliability and testing. We used to have only the production virtual
-servers w/o the testing ones, so the environment would be difficult to reproduce w/o interrupting
-the services we run because of.
-
-The Croatian universities are traditionally scarce in equipment. :-(
-
-Kind regards,
-Mirsad
-
-> thanks,
-> 
-> greg k-h
