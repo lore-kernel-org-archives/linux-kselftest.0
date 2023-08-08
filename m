@@ -2,118 +2,164 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A991C41513
-	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Aug 2023 18:55:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11D03C04A94
+	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Aug 2023 18:59:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233895AbjHHSzb (ORCPT
+        id S231956AbjHHS7T (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 8 Aug 2023 14:55:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56244 "EHLO
+        Tue, 8 Aug 2023 14:59:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233963AbjHHSzL (ORCPT
+        with ESMTP id S229484AbjHHS7B (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Aug 2023 14:55:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2B2463F52
-        for <linux-kselftest@vger.kernel.org>; Tue,  8 Aug 2023 10:09:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1691514542;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=shf77ttmFOuwEPRuUfK1N01vHtXf9AN1dtY0xeqDGqo=;
-        b=eVWe2b40hTh+SYEtdT66XKGC1vcenA7US72nNxF1v9DhkVM7+sLY/BDo7k8qMz4E/2EO3b
-        bnM1mYRWNfX1qFvfi60NOS4cwXzEi5Nu3O31HC+l4ywrFTMtt1N2Am+yl4uYKpv5lc65kN
-        CYyT8rwAhYZSmqTce3WrPvfX/kAQZ8U=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-453-zCjKAKxCNqiqib2gqbaQRg-1; Tue, 08 Aug 2023 05:01:23 -0400
-X-MC-Unique: zCjKAKxCNqiqib2gqbaQRg-1
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3fe1bef4223so33023895e9.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 08 Aug 2023 02:01:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691485282; x=1692090082;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=shf77ttmFOuwEPRuUfK1N01vHtXf9AN1dtY0xeqDGqo=;
-        b=Sh3c0EIdOkmlUegINeESb0nOwhu7X1oH501DENIUU4dnsztmgyTJkCH5siysbeASM6
-         Ktg94zmVRLvk81ABVCOpYEhz4iITYqLODP9s81XKS6+nl4eqA5rf1m9o5c5iPVXsjx4I
-         Blx6OI0/d3FIHKImD/vrdScpQBanTMW9d6tLdvcr6Wqsn2/kMjcyTwLrJtaeranh+p1Q
-         ZMLp7eBwBXZmtDS5/98Lo4bxNQZhYyfaW2qP8PBu+x4GWS7g17WnK2P5I2DrTUqUFps5
-         8AoTOTuLBVRWfggxtGeR3tEk7LySqTF7JzcrnVseeFKYJ4vnOtAO1u7+L7WpDsv6b01X
-         slVA==
-X-Gm-Message-State: AOJu0YxxoPlcgZAVu1GBHlAzcYwRNJ/2+M2Sg3x9gCE/Yz/loW66rJo8
-        V5+buXclIJO20enE9+2/xZMi1GivlaI4daIJs36/cnzBVuJPc/ik9VZ0lyDRPly82M+2XFH3h+9
-        KYjITEI7cjUhvRJyTTo4CnshkBJaA
-X-Received: by 2002:a7b:cbd0:0:b0:3fe:6199:9393 with SMTP id n16-20020a7bcbd0000000b003fe61999393mr2034340wmi.27.1691485281901;
-        Tue, 08 Aug 2023 02:01:21 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGFA5Seop9fNnaQkYPBraxOC6MTzn8Sh8rEy/VzyB1IOBl8ajH4lLtxy9feUh5m6i1Su9ndJw==
-X-Received: by 2002:a7b:cbd0:0:b0:3fe:6199:9393 with SMTP id n16-20020a7bcbd0000000b003fe61999393mr2034323wmi.27.1691485281593;
-        Tue, 08 Aug 2023 02:01:21 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c74c:4500:a7dd:abc0:e4c2:4b31? (p200300cbc74c4500a7ddabc0e4c24b31.dip0.t-ipconnect.de. [2003:cb:c74c:4500:a7dd:abc0:e4c2:4b31])
-        by smtp.gmail.com with ESMTPSA id p20-20020a1c7414000000b003fe215e4492sm13146195wmc.4.2023.08.08.02.01.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Aug 2023 02:01:20 -0700 (PDT)
-Message-ID: <b545cac8-76f7-e3c3-0e1c-3cb922c9c9ae@redhat.com>
-Date:   Tue, 8 Aug 2023 11:01:19 +0200
+        Tue, 8 Aug 2023 14:59:01 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB421775A1
+        for <linux-kselftest@vger.kernel.org>; Tue,  8 Aug 2023 10:20:51 -0700 (PDT)
+Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4RKvTZ15Fmz1hwHK;
+        Tue,  8 Aug 2023 21:40:50 +0800 (CST)
+Received: from huawei.com (10.175.103.91) by kwepemi500024.china.huawei.com
+ (7.221.188.100) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 8 Aug
+ 2023 21:43:38 +0800
+From:   Zeng Heng <zengheng4@huawei.com>
+To:     <kristina.martsenko@arm.com>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <broonie@kernel.org>, <shuah@kernel.org>
+CC:     <linux-kselftest@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <xiexiuqi@huawei.com>,
+        <zengheng4@huawei.com>
+Subject: [PATCH v2 4/5] kselftest/arm64: add test item that support to capturing the SIGBUS signal
+Date:   Tue, 8 Aug 2023 21:40:35 +0800
+Message-ID: <20230808134036.668954-5-zengheng4@huawei.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230808134036.668954-1-zengheng4@huawei.com>
+References: <20230808134036.668954-1-zengheng4@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v2 5/7] mm: thp: split huge page to any lower order pages.
-Content-Language: en-US
-To:     Zi Yan <ziy@nvidia.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>,
-        linux-mm@kvack.org
-Cc:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Ryan Roberts <ryan.roberts@arm.com>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Zach O'Keefe <zokeefe@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20230329011712.3242298-1-zi.yan@sent.com>
- <20230329011712.3242298-6-zi.yan@sent.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230329011712.3242298-6-zi.yan@sent.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemi500024.china.huawei.com (7.221.188.100)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 29.03.23 03:17, Zi Yan wrote:
-> From: Zi Yan <ziy@nvidia.com>
-> 
-> To split a THP to any lower order pages, we need to reform THPs on
-> subpages at given order and add page refcount based on the new page
-> order. Also we need to reinitialize page_deferred_list after removing
-> the page from the split_queue, otherwise a subsequent split will see
-> list corruption when checking the page_deferred_list again.
-> 
-> It has many uses, like minimizing the number of pages after
-> truncating a huge pagecache page. For anonymous THPs, we can only split
-> them to order-0 like before until we add support for any size anonymous
-> THPs.
->
+Some enhanced features, such as the LSE2 feature, do not result in
+SILLILL if LSE2 is missing and LSE is present, but will generate a
+SIGBUS exception when atomic access unaligned.
 
-Because I'm currently looking into something that would also not be 
-compatible with order-1 for now:
+Therefore, we add test item to test this type of features.
 
-You should make it clear that order-1 is not supported, like:
+Notice that testing for SIGBUS only makes sense after make sure that
+the instruction does not cause a SIGILL signal.
 
-"mm: thp: split huge page to any lower order pages (except order 1)"
+Signed-off-by: Zeng Heng <zengheng4@huawei.com>
+---
+ tools/testing/selftests/arm64/abi/hwcap.c | 33 ++++++++++++++++-------
+ 1 file changed, 23 insertions(+), 10 deletions(-)
 
-And clarify in the subject why that is the case.
+diff --git a/tools/testing/selftests/arm64/abi/hwcap.c b/tools/testing/selftests/arm64/abi/hwcap.c
+index 141e50c16f21..69234a8e8c59 100644
+--- a/tools/testing/selftests/arm64/abi/hwcap.c
++++ b/tools/testing/selftests/arm64/abi/hwcap.c
+@@ -19,19 +19,20 @@
 
--- 
-Cheers,
+ #include "../../kselftest.h"
 
-David / dhildenb
+-#define TESTS_PER_HWCAP 2
++#define TESTS_PER_HWCAP 3
+
+ /*
+- * Function expected to generate SIGILL when the feature is not
+- * supported and return when it is supported. If SIGILL is generated
+- * then the handler must be able to skip over the instruction safely.
++ * Function expected to generate exception when the feature is not
++ * supported and return when it is supported. If the specific exception
++ * is generated then the handler must be able to skip over the
++ * instruction safely.
+  *
+  * Note that it is expected that for many architecture extensions
+  * there are no specific traps due to no architecture state being
+  * added so we may not fault if running on a kernel which doesn't know
+  * to add the hwcap.
+  */
+-typedef void (*sigill_fn)(void);
++typedef void (*sig_fn)(void);
+
+ static void crc32_sigill(void)
+ {
+@@ -235,8 +236,10 @@ static const struct hwcap_data {
+ 	unsigned long at_hwcap;
+ 	unsigned long hwcap_bit;
+ 	const char *cpuinfo;
+-	sigill_fn sigill_fn;
++	sig_fn sigill_fn;
+ 	bool sigill_reliable;
++	sig_fn sigbus_fn;
++	bool sigbus_reliable;
+ } hwcaps[] = {
+ 	{
+ 		.name = "CRC32",
+@@ -452,6 +455,7 @@ static void handle_##SIG(int sig, siginfo_t *info, void *context)	\
+ }
+
+ DEF_SIGHANDLER_FUNC(sigill, SIGILL);
++DEF_SIGHANDLER_FUNC(sigbus, SIGBUS);
+
+ bool cpuinfo_present(const char *name)
+ {
+@@ -506,7 +510,7 @@ static int install_sigaction(int signum, sighandler_fn handler)
+ 	sigemptyset(&sa.sa_mask);
+ 	ret = sigaction(signum, &sa, NULL);
+ 	if (ret < 0)
+-		ksft_exit_fail_msg("Failed to install SIGILL handler: %s (%d)\n",
++		ksft_exit_fail_msg("Failed to install SIGNAL handler: %s (%d)\n",
+ 				   strerror(errno), errno);
+
+ 	return ret;
+@@ -515,7 +519,7 @@ static int install_sigaction(int signum, sighandler_fn handler)
+ static void uninstall_sigaction(int signum)
+ {
+ 	if (sigaction(signum, NULL, NULL) < 0)
+-		ksft_exit_fail_msg("Failed to uninstall SIGILL handler: %s (%d)\n",
++		ksft_exit_fail_msg("Failed to uninstall SIGNAL handler: %s (%d)\n",
+ 				   strerror(errno), errno);
+ }
+
+@@ -556,12 +560,13 @@ static bool inst_raise_##SIG(const struct hwcap_data *hwcap,		\
+ }
+
+ DEF_INST_RAISE_SIG(sigill, SIGILL);
++DEF_INST_RAISE_SIG(sigbus, SIGBUS);
+
+ int main(void)
+ {
+ 	int i;
+ 	const struct hwcap_data *hwcap;
+-	bool have_cpuinfo, have_hwcap;
++	bool have_cpuinfo, have_hwcap, raise_sigill;
+
+ 	ksft_print_header();
+ 	ksft_set_plan(ARRAY_SIZE(hwcaps) * TESTS_PER_HWCAP);
+@@ -578,7 +583,15 @@ int main(void)
+ 		ksft_test_result(have_hwcap == have_cpuinfo,
+ 				 "cpuinfo_match_%s\n", hwcap->name);
+
+-		inst_raise_sigill(hwcap, have_hwcap);
++		/*
++		 * Testing for SIGBUS only makes sense after make sure
++		 * that the instruction does not cause a SIGILL signal.
++		 */
++		raise_sigill = inst_raise_sigill(hwcap, have_hwcap);
++		if (!raise_sigill)
++			inst_raise_sigbus(hwcap, have_hwcap);
++		else
++			ksft_test_result_skip("sigbus_%s\n", hwcap->name);
+ 	}
+
+ 	ksft_print_cnts();
+--
+2.25.1
 
