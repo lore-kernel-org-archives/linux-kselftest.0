@@ -2,160 +2,118 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D726C001DB
-	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Aug 2023 18:38:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A991C41513
+	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Aug 2023 18:55:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232081AbjHHSiB (ORCPT
+        id S233895AbjHHSzb (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 8 Aug 2023 14:38:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34772 "EHLO
+        Tue, 8 Aug 2023 14:55:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232037AbjHHSha (ORCPT
+        with ESMTP id S233963AbjHHSzL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Aug 2023 14:37:30 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99CC014FDA;
-        Tue,  8 Aug 2023 09:39:03 -0700 (PDT)
-Received: from localhost.localdomain (unknown [59.103.218.230])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7C0AB66071FF;
-        Tue,  8 Aug 2023 11:43:36 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1691491421;
-        bh=8GLPcDiIM54Mi7lYvOuYJH3K/M4uc0JKwxg63FI/vKw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=l+/6PNCbz0uJwFktAVC2zKgUcdMUfX5EjHPHkvuzDBQQGObPhV6Gqpfa+csvaBUFO
-         nVZLcSDkH3jJn1pvqMsn653dePEUTRwTgshcD9kCLJkl8CCAgRoNPwx4sjU3YfZLKk
-         T0wdW83ckyCwsSPgigCyDZLkoka1qGV/qILxxx/UrxklXYBcHxbhhJbLk9Kxt49WzJ
-         wkj8TUDQvEqeLyIsshDktKwZyaqK1ahNYmUINqZv6WrqbSyrA82N76bpm7mMDhOVGZ
-         9Oq+dO2dS7jDEMnN8VAv11vvSmtcd3PCj8FgwQE1DLJPUPiJ4boDbpbyjVDc0erSTC
-         /1iMkLFc9srgg==
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-To:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <emmir@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@Oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: [PATCH v27 3/6] fs/proc/task_mmu: Add fast paths to get/clear PAGE_IS_WRITTEN flag
-Date:   Tue,  8 Aug 2023 15:43:06 +0500
-Message-Id: <20230808104309.357852-4-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230808104309.357852-1-usama.anjum@collabora.com>
-References: <20230808104309.357852-1-usama.anjum@collabora.com>
+        Tue, 8 Aug 2023 14:55:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2B2463F52
+        for <linux-kselftest@vger.kernel.org>; Tue,  8 Aug 2023 10:09:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1691514542;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=shf77ttmFOuwEPRuUfK1N01vHtXf9AN1dtY0xeqDGqo=;
+        b=eVWe2b40hTh+SYEtdT66XKGC1vcenA7US72nNxF1v9DhkVM7+sLY/BDo7k8qMz4E/2EO3b
+        bnM1mYRWNfX1qFvfi60NOS4cwXzEi5Nu3O31HC+l4ywrFTMtt1N2Am+yl4uYKpv5lc65kN
+        CYyT8rwAhYZSmqTce3WrPvfX/kAQZ8U=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-453-zCjKAKxCNqiqib2gqbaQRg-1; Tue, 08 Aug 2023 05:01:23 -0400
+X-MC-Unique: zCjKAKxCNqiqib2gqbaQRg-1
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3fe1bef4223so33023895e9.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 08 Aug 2023 02:01:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691485282; x=1692090082;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=shf77ttmFOuwEPRuUfK1N01vHtXf9AN1dtY0xeqDGqo=;
+        b=Sh3c0EIdOkmlUegINeESb0nOwhu7X1oH501DENIUU4dnsztmgyTJkCH5siysbeASM6
+         Ktg94zmVRLvk81ABVCOpYEhz4iITYqLODP9s81XKS6+nl4eqA5rf1m9o5c5iPVXsjx4I
+         Blx6OI0/d3FIHKImD/vrdScpQBanTMW9d6tLdvcr6Wqsn2/kMjcyTwLrJtaeranh+p1Q
+         ZMLp7eBwBXZmtDS5/98Lo4bxNQZhYyfaW2qP8PBu+x4GWS7g17WnK2P5I2DrTUqUFps5
+         8AoTOTuLBVRWfggxtGeR3tEk7LySqTF7JzcrnVseeFKYJ4vnOtAO1u7+L7WpDsv6b01X
+         slVA==
+X-Gm-Message-State: AOJu0YxxoPlcgZAVu1GBHlAzcYwRNJ/2+M2Sg3x9gCE/Yz/loW66rJo8
+        V5+buXclIJO20enE9+2/xZMi1GivlaI4daIJs36/cnzBVuJPc/ik9VZ0lyDRPly82M+2XFH3h+9
+        KYjITEI7cjUhvRJyTTo4CnshkBJaA
+X-Received: by 2002:a7b:cbd0:0:b0:3fe:6199:9393 with SMTP id n16-20020a7bcbd0000000b003fe61999393mr2034340wmi.27.1691485281901;
+        Tue, 08 Aug 2023 02:01:21 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGFA5Seop9fNnaQkYPBraxOC6MTzn8Sh8rEy/VzyB1IOBl8ajH4lLtxy9feUh5m6i1Su9ndJw==
+X-Received: by 2002:a7b:cbd0:0:b0:3fe:6199:9393 with SMTP id n16-20020a7bcbd0000000b003fe61999393mr2034323wmi.27.1691485281593;
+        Tue, 08 Aug 2023 02:01:21 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c74c:4500:a7dd:abc0:e4c2:4b31? (p200300cbc74c4500a7ddabc0e4c24b31.dip0.t-ipconnect.de. [2003:cb:c74c:4500:a7dd:abc0:e4c2:4b31])
+        by smtp.gmail.com with ESMTPSA id p20-20020a1c7414000000b003fe215e4492sm13146195wmc.4.2023.08.08.02.01.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Aug 2023 02:01:20 -0700 (PDT)
+Message-ID: <b545cac8-76f7-e3c3-0e1c-3cb922c9c9ae@redhat.com>
+Date:   Tue, 8 Aug 2023 11:01:19 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v2 5/7] mm: thp: split huge page to any lower order pages.
+Content-Language: en-US
+To:     Zi Yan <ziy@nvidia.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>,
+        linux-mm@kvack.org
+Cc:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Ryan Roberts <ryan.roberts@arm.com>,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Zach O'Keefe <zokeefe@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20230329011712.3242298-1-zi.yan@sent.com>
+ <20230329011712.3242298-6-zi.yan@sent.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230329011712.3242298-6-zi.yan@sent.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Adding fast code paths to handle specifically only get and/or clear
-operation of PAGE_IS_WRITTEN, increases its performance by 0-35%.
-The results of some test cases are given below:
+On 29.03.23 03:17, Zi Yan wrote:
+> From: Zi Yan <ziy@nvidia.com>
+> 
+> To split a THP to any lower order pages, we need to reform THPs on
+> subpages at given order and add page refcount based on the new page
+> order. Also we need to reinitialize page_deferred_list after removing
+> the page from the split_queue, otherwise a subsequent split will see
+> list corruption when checking the page_deferred_list again.
+> 
+> It has many uses, like minimizing the number of pages after
+> truncating a huge pagecache page. For anonymous THPs, we can only split
+> them to order-0 like before until we add support for any size anonymous
+> THPs.
+>
 
-Test-case-1
-t1 = (Get + WP) time
-t2 = WP time
-                       t1            t2
-Without this patch:    140-170mcs    90-115mcs
-With this patch:       110mcs        80mcs
-Worst case diff:       35% faster    30% faster
+Because I'm currently looking into something that would also not be 
+compatible with order-1 for now:
 
-Test-case-2
-t3 = atomic Get and WP
-                      t3
-Without this patch:   120-140mcs
-With this patch:      100-110mcs
-Worst case diff:      21% faster
+You should make it clear that order-1 is not supported, like:
 
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
-The test to measure the performance can be found: https://is.gd/FtSKcD
-8 8192 3 1 0 and 8 8192 3 1 1 arguments have been used to produce the
-above mentioned results.
----
- fs/proc/task_mmu.c | 38 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+"mm: thp: split huge page to any lower order pages (except order 1)"
 
-diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-index 6131dc04cceb3..2c3349b76b067 100644
---- a/fs/proc/task_mmu.c
-+++ b/fs/proc/task_mmu.c
-@@ -2107,6 +2107,43 @@ static int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
- 		return 0;
- 	}
- 
-+	if (!p->vec_out) {
-+		/* Fast path for performing exclusive WP */
-+		for (addr = start; addr != end; pte++, addr += PAGE_SIZE) {
-+			if (pte_uffd_wp(ptep_get(pte)))
-+				continue;
-+			make_uffd_wp_pte(vma, addr, pte);
-+			if (!flush) {
-+				start = addr;
-+				flush = true;
-+			}
-+		}
-+		goto flush_and_return;
-+	}
-+
-+	if (!p->arg.category_anyof_mask && !p->arg.category_inverted &&
-+	    p->arg.category_mask == PAGE_IS_WRITTEN &&
-+	    p->arg.return_mask == PAGE_IS_WRITTEN) {
-+		for (addr = start; addr < end; pte++, addr += PAGE_SIZE) {
-+			unsigned long next = addr + PAGE_SIZE;
-+
-+			if (pte_uffd_wp(ptep_get(pte)))
-+				continue;
-+			ret = pagemap_scan_output(p->cur_vma_category | PAGE_IS_WRITTEN,
-+						  p, addr, &next);
-+			if (next == addr)
-+				break;
-+			if (~p->arg.flags & PM_SCAN_WP_MATCHING)
-+				continue;
-+			make_uffd_wp_pte(vma, addr, pte);
-+			if (!flush) {
-+				start = addr;
-+				flush = true;
-+			}
-+		}
-+		goto flush_and_return;
-+	}
-+
- 	for (addr = start; addr != end; pte++, addr += PAGE_SIZE) {
- 		unsigned long categories = p->cur_vma_category |
- 					   pagemap_page_category(p, vma, addr, ptep_get(pte));
-@@ -2131,6 +2168,7 @@ static int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
- 		}
- 	}
- 
-+flush_and_return:
- 	if (flush)
- 		flush_tlb_range(vma, start, addr);
- 
+And clarify in the subject why that is the case.
+
 -- 
-2.39.2
+Cheers,
+
+David / dhildenb
 
