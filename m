@@ -2,96 +2,190 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F34D6C41513
-	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Aug 2023 17:29:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93F25C001B0
+	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Aug 2023 17:29:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234542AbjHHR3Q (ORCPT
+        id S232114AbjHHR3p (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 8 Aug 2023 13:29:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48140 "EHLO
+        Tue, 8 Aug 2023 13:29:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234537AbjHHR2i (ORCPT
+        with ESMTP id S234102AbjHHR3J (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Aug 2023 13:28:38 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B5121271;
-        Tue,  8 Aug 2023 09:12:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=sVOpQeHQbYuQD4XI26KPaEpE0Ea50S0OE5ZKW/Qlwrk=; b=vBY1RJPhnM/HaHosbTPNbA0y+k
-        roLU7f2LM1KWTAdAPeqZkAlhJ5Ab8Re7s0iwaZwqSZprpCBxXCMEWquufSVGSbn0jTaeOOJi9GALc
-        aL58KPV029NgS2NJcA1srEgzDTITQm2Y0zStY4InWwRK1L3x55bSR2UMgRfp6tYP4egf9saBEs105
-        pgsZlVmaxnJCiU0TqSY1IV+Gv0P9TcJ380PGW+kbQFiKsGqnUJjn8VhsDpDx9o6NUCbWY8ka4ka7l
-        dvyV3Hz16nCucR6dJTvjYIrQ3jzL2LkFW1eNkWspLGQdY93oj+Rf118Vry0KT8dX668jIw93Wa2ii
-        vW0mj53Q==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qTIlN-00Gbn4-GF; Tue, 08 Aug 2023 09:12:26 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1FF0A30003A;
-        Tue,  8 Aug 2023 11:12:25 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 0748227E4826F; Tue,  8 Aug 2023 11:12:25 +0200 (CEST)
-Date:   Tue, 8 Aug 2023 11:12:24 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Meng Li <li.meng@amd.com>
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Huang Rui <ray.huang@amd.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-acpi@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Shimmer Huang <shimmer.huang@amd.com>,
-        Perry Yuan <Perry.Yuan@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>
-Subject: Re: [PATCH V1 3/6] cpufreq: Add a notification message that the
- highest perf has changed
-Message-ID: <20230808091224.GW212435@hirez.programming.kicks-ass.net>
-References: <20230808081001.2215240-1-li.meng@amd.com>
- <20230808081001.2215240-4-li.meng@amd.com>
+        Tue, 8 Aug 2023 13:29:09 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF2A20369
+        for <linux-kselftest@vger.kernel.org>; Tue,  8 Aug 2023 09:12:34 -0700 (PDT)
+Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RKvVZ33DmzVk3N;
+        Tue,  8 Aug 2023 21:41:42 +0800 (CST)
+Received: from huawei.com (10.175.103.91) by kwepemi500024.china.huawei.com
+ (7.221.188.100) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 8 Aug
+ 2023 21:43:35 +0800
+From:   Zeng Heng <zengheng4@huawei.com>
+To:     <kristina.martsenko@arm.com>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <broonie@kernel.org>, <shuah@kernel.org>
+CC:     <linux-kselftest@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <xiexiuqi@huawei.com>,
+        <zengheng4@huawei.com>
+Subject: [PATCH v2 0/5] kselftest/arm64: add features check to hwcap test
+Date:   Tue, 8 Aug 2023 21:40:31 +0800
+Message-ID: <20230808134036.668954-1-zengheng4@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230808081001.2215240-4-li.meng@amd.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemi500024.china.huawei.com (7.221.188.100)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Aug 08, 2023 at 04:09:58PM +0800, Meng Li wrote:
-> Please refer to the ACPI_Spec for details on the highest
-> performance and notify events of CPPC.
+Add new feature checks and provide testing item to support capturing
+SIGBUS exception signal.
 
-Please summarise so that we don't get to click random links on the
-interweb just to try and make sense of things.
+The following is a log snippet from my local testing environment:
+~~~
+ TAP version 13
+ 1..90
+ # CRC32 present
+ ok 1 cpuinfo_match_CRC32
+ ok 2 sigill_CRC32
+ ok 3 # SKIP sigbus_CRC32
+ ok 4 cpuinfo_match_CSSC
+ # sigill_reported for CSSC
+ ok 5 # SKIP sigill_CSSC
+ ok 6 # SKIP sigbus_CSSC
+ # FP present
+ ok 7 cpuinfo_match_FP
+ ok 8 sigill_FP
+ ok 9 # SKIP sigbus_FP
+ # LRCPC present
+ ok 10 cpuinfo_match_LRCPC
+ ok 11 sigill_LRCPC
+ ok 12 # SKIP sigbus_LRCPC
+ # LRCPC2 present
+ ok 13 cpuinfo_match_LRCPC2
+ ok 14 sigill_LRCPC2
+ ok 15 # SKIP sigbus_LRCPC2
+ # LSE present
+ ok 16 cpuinfo_match_LSE
+ ok 17 sigill_LSE
+ ok 18 # SKIP sigbus_LSE
+ # LSE2 present
+ ok 19 cpuinfo_match_LSE2
+ ok 20 sigill_LSE2
+ ok 21 sigbus_LSE2
+ ok 22 cpuinfo_match_MOPS
+ ok 23 sigill_MOPS
+ ok 24 # SKIP sigbus_MOPS
+ # RNG present
+ ok 25 cpuinfo_match_RNG
+ ok 26 sigill_RNG
+ ok 27 # SKIP sigbus_RNG
+ ok 28 cpuinfo_match_RPRFM
+ ok 29 # SKIP sigill_RPRFM
+ ok 30 # SKIP sigbus_RPRFM
+ ok 31 cpuinfo_match_SME
+ ok 32 sigill_SME
+ ok 33 # SKIP sigbus_SME
+ ok 34 cpuinfo_match_SME2
+ ok 35 sigill_SME2
+ ok 36 # SKIP sigbus_SME2
+ ok 37 cpuinfo_match_SME 2.1
+ # sigill_reported for SME 2.1
+ ok 38 # SKIP sigill_SME 2.1
+ ok 39 # SKIP sigbus_SME 2.1
+ ok 40 cpuinfo_match_SME I16I32
+ # sigill_reported for SME I16I32
+ ok 41 # SKIP sigill_SME I16I32
+ ok 42 # SKIP sigbus_SME I16I32
+ ok 43 cpuinfo_match_SME BI32I32
+ # sigill_reported for SME BI32I32
+ ok 44 # SKIP sigill_SME BI32I32
+ ok 45 # SKIP sigbus_SME BI32I32
+ ok 46 cpuinfo_match_SME B16B16
+ # sigill_reported for SME B16B16
+ ok 47 # SKIP sigill_SME B16B16
+ ok 48 # SKIP sigbus_SME B16B16
+ ok 49 cpuinfo_match_SME F16F16
+ # sigill_reported for SME F16F16
+ ok 50 # SKIP sigill_SME F16F16
+ ok 51 # SKIP sigbus_SME F16F16
+ # SVE present
+ ok 52 cpuinfo_match_SVE
+ ok 53 sigill_SVE
+ ok 54 # SKIP sigbus_SVE
+ ok 55 cpuinfo_match_SVE 2
+ # sigill_reported for SVE 2
+ ok 56 # SKIP sigill_SVE 2
+ ok 57 # SKIP sigbus_SVE 2
+ ok 58 cpuinfo_match_SVE 2.1
+ # sigill_reported for SVE 2.1
+ ok 59 # SKIP sigill_SVE 2.1
+ ok 60 # SKIP sigbus_SVE 2.1
+ ok 61 cpuinfo_match_SVE AES
+ # sigill_reported for SVE AES
+ ok 62 # SKIP sigill_SVE AES
+ ok 63 # SKIP sigbus_SVE AES
+ ok 64 cpuinfo_match_SVE2 PMULL
+ # sigill_reported for SVE2 PMULL
+ ok 65 # SKIP sigill_SVE2 PMULL
+ ok 66 # SKIP sigbus_SVE2 PMULL
+ ok 67 cpuinfo_match_SVE2 BITPERM
+ # sigill_reported for SVE2 BITPERM
+ ok 68 # SKIP sigill_SVE2 BITPERM
+ ok 69 # SKIP sigbus_SVE2 BITPERM
+ ok 70 cpuinfo_match_SVE2 SHA3
+ # sigill_reported for SVE2 SHA3
+ ok 71 # SKIP sigill_SVE2 SHA3
+ ok 72 # SKIP sigbus_SVE2 SHA3
+ ok 73 cpuinfo_match_SVE2 SM4
+ # sigill_reported for SVE2 SM4
+ ok 74 # SKIP sigill_SVE2 SM4
+ ok 75 # SKIP sigbus_SVE2 SM4
+ # SVE2 I8MM present
+ ok 76 cpuinfo_match_SVE2 I8MM
+ ok 77 sigill_SVE2 I8MM
+ ok 78 # SKIP sigbus_SVE2 I8MM
+ # SVE2 F32MM present
+ ok 79 cpuinfo_match_SVE2 F32MM
+ ok 80 sigill_SVE2 F32MM
+ ok 81 # SKIP sigbus_SVE2 F32MM
+ # SVE2 F64MM present
+ ok 82 cpuinfo_match_SVE2 F64MM
+ ok 83 sigill_SVE2 F64MM
+ ok 84 # SKIP sigbus_SVE2 F64MM
+ # SVE2 BF16 present
+ ok 85 cpuinfo_match_SVE2 BF16
+ ok 86 sigill_SVE2 BF16
+ ok 87 # SKIP sigbus_SVE2 BF16
+ ok 88 cpuinfo_match_SVE2 EBF16
+ ok 89 # SKIP sigill_SVE2 EBF16
+ ok 90 # SKIP sigbus_SVE2 EBF16
+ # Totals: pass:46 fail:0 xfail:0 xpass:0 skip:44 error:0
+~~~
 
-> Signed-off-by: Meng Li <li.meng@amd.com>
-> Link: https://uefi.org/htmlspecs/AddCPI_Spec_6_4_html/08_Processor_Configuration_and_Control/declaring-processors.html?highlight=0x85#highest-performance
-> ---
->  drivers/acpi/processor_driver.c |  6 ++++++
->  drivers/cpufreq/cpufreq.c       | 13 +++++++++++++
->  include/linux/cpufreq.h         |  4 ++++
->  3 files changed, 23 insertions(+)
-> 
-> diff --git a/drivers/acpi/processor_driver.c b/drivers/acpi/processor_driver.c
-> index 4bd16b3f0781..29b2fb68a35d 100644
-> --- a/drivers/acpi/processor_driver.c
-> +++ b/drivers/acpi/processor_driver.c
-> @@ -27,6 +27,7 @@
->  #define ACPI_PROCESSOR_NOTIFY_PERFORMANCE 0x80
->  #define ACPI_PROCESSOR_NOTIFY_POWER	0x81
->  #define ACPI_PROCESSOR_NOTIFY_THROTTLING	0x82
-> +#define ACPI_PROCESSOR_NOTIFY_HIGEST_PERF_CHANGED	0x85
+Zeng Heng (5):
+  kselftest/arm64: add float-point feature to hwcap test
+  kselftest/arm64: add crc32 feature to hwcap test
+  kselftest/arm64: add DEF_SIGHANDLER_FUNC() and DEF_INST_RAISE_SIG()
+    helpers
+  kselftest/arm64: add test item that support to capturing the SIGBUS
+    signal
+  kselftest/arm64: add lse and lse2 features to hwcap test
 
-Isn't that spelled: 'highest' ?
-                        ^
+ tools/testing/selftests/arm64/abi/hwcap.c | 201 ++++++++++++++++------
+ 1 file changed, 151 insertions(+), 50 deletions(-)
+
+---
+v1 -> v2:
+  - switch fp and crc32 instructions from hand encode to assemble language.
+    There is no logical changes between versions.
+
+--
+2.25.1
 
