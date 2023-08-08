@@ -2,214 +2,426 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F197C001DB
-	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Aug 2023 21:14:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 547BFC04A94
+	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Aug 2023 21:18:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236403AbjHHVOi (ORCPT
+        id S236609AbjHHVSx (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 8 Aug 2023 17:14:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36522 "EHLO
+        Tue, 8 Aug 2023 17:18:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236381AbjHHVO1 (ORCPT
+        with ESMTP id S236197AbjHHVSo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Aug 2023 17:14:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B66EF08;
-        Tue,  8 Aug 2023 13:25:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E447662972;
-        Tue,  8 Aug 2023 20:25:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 642B0C433C7;
-        Tue,  8 Aug 2023 20:25:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691526321;
-        bh=smwaBn/3bhNSBudLMySHNd7VdPh0ay51eRzjOUAiv8k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Z7qPau380MtqBH1YfBjf3ydSe5ZPYOXHkvrPUe9NueiqGF06irfTF61HfBlWIgEFM
-         Xene2NE0cZsbfc2/THaiH2McN+fJdiUtfouEeeC+uTCqNKj3ibgNrxGiBbpzXM2Rfr
-         SLP2dNBoB4rAy2dAR+EjA+W5kuwIc3bsOHQmGjDMAjdbaal6lB4m2K1kA6RktTFbmO
-         02t7XsWWSbtTXvIUWrk8iMcnEOIvFO7Y/cWPTnAO+6lk64SAs11bpXJ/uRCtzNh6CR
-         cFThQj0MCTV2OyT9PlJbicNhDswQ0VbfX2XhKiU6rRGAMW/+MAkZniDHdnmuLuo+LK
-         255m/CZ2eUo6w==
-Date:   Tue, 8 Aug 2023 21:25:11 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Will Deacon <will@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-        Deepak Gupta <debug@rivosinc.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v3 00/36] arm64/gcs: Provide support for GCS in userspace
-Message-ID: <f279ec25-e1c7-48e6-bd9d-5c753e829aad@sirena.org.uk>
-References: <20230731-arm64-gcs-v3-0-cddf9f980d98@kernel.org>
- <20230801141319.GC26253@willie-the-truck>
- <09b7a94d-cc88-4372-85de-52db26bc2daf@sirena.org.uk>
- <20230808133857.GC2369@willie-the-truck>
+        Tue, 8 Aug 2023 17:18:44 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D8449CE
+        for <linux-kselftest@vger.kernel.org>; Tue,  8 Aug 2023 14:16:24 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3fe2d620d17so10415e9.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 08 Aug 2023 14:16:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1691529382; x=1692134182;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GBdvRieiB8dFFT8uavZWsfJqKc+2lRPExOCUtNLgaBw=;
+        b=Mgpa25MNfI0MQEyzTW2SGw5hCallSXKKOBEgRFwKQ9K8BpRfTQjMGiH4zgKV1UzotL
+         pes26JYXGS3kBm7+gHLNEaErV1uM5T6vke19Y0a6mCKBzSUw0tE5sVqIVf9LOtYxd5Fd
+         QaVT02QLqic9i+hEVSL5R01EBVpru9BqWdJKuZciKx9Z4cI7VElKR7Lxv2q3ZWqtHNGk
+         NrXxZcRT78Mi/lkQxYd+iFcWeAgbh1h8mJZFiazrLUhO+Al1aWZNkW7MT45H5IPrQRE2
+         upNoWAHDgWiP1C6iAMdUW+ijN7Cmj+0F6+SZaeLn+D8NBkoSyglo3pqKGAeQLgbvkJG5
+         dJWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691529382; x=1692134182;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GBdvRieiB8dFFT8uavZWsfJqKc+2lRPExOCUtNLgaBw=;
+        b=VPZ2hakE0XdP8/xPYKywtkmnerubVbUZ4+0uyoL8Od6/GhvP5Tvosj5PaqI4Ldp2S1
+         UfvGHRLspbT+YkM+q72g82NcxSlYaAxYh76BQV5WCSaMpUkuHdmDRVsvim4NAFXeXOBM
+         1O1ilfp2TN15//pVjZgnQ/p1Je6cMsdiwzoc0lQQ/h1bNqdEF9AEmN9d3VjDQRVSHuRu
+         VBGs5QEt4Oa0orbDFTl3nSjB4QU7QDl4qgeKyWGYDqvJC2ifUf8tzv0hNak0ryFDl0uk
+         m/3qWyLwv+v6YgrPVCBXfclt9wL4U5OTDUYXHyQmyIcLyoZaKXuzLh3WUxggemhtmz8d
+         YzqQ==
+X-Gm-Message-State: AOJu0Yz5n5GzYMSKg4/aSiFSkCzs5RDZxwZwlBv420nvyi/Z2bcDWLIt
+        lA+t7PXNeqmuo3nlZru5kIO5doE7VqNzcANxAbrn4g==
+X-Google-Smtp-Source: AGHT+IFMvidr0Y453JFit3OPdEG9OaGVnlUt5kE+YPKrUlrcVhzvv3TnV+Frkbsb/U+SJ9s9qEGSVgN62ildHbgMQrc=
+X-Received: by 2002:a05:600c:1c1f:b0:3f4:fb7:48d4 with SMTP id
+ j31-20020a05600c1c1f00b003f40fb748d4mr2180wms.3.1691529382353; Tue, 08 Aug
+ 2023 14:16:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2iuCE+Z3sT2tGztq"
-Content-Disposition: inline
-In-Reply-To: <20230808133857.GC2369@willie-the-truck>
-X-Cookie: You need not be present to win.
+References: <20230808123529.4725-1-rf@opensource.cirrus.com> <20230808123529.4725-3-rf@opensource.cirrus.com>
+In-Reply-To: <20230808123529.4725-3-rf@opensource.cirrus.com>
+From:   Rae Moar <rmoar@google.com>
+Date:   Tue, 8 Aug 2023 17:16:11 -0400
+Message-ID: <CA+GJov79EJLbdptX+hhTqa90C7A0aJ-wzjxF1LDn++jWHeNXFA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/6] kunit: kunit-test: Add test cases for extending
+ log buffer
+To:     Richard Fitzgerald <rf@opensource.cirrus.com>
+Cc:     brendan.higgins@linux.dev, davidgow@google.com,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Tue, Aug 8, 2023 at 8:35=E2=80=AFAM Richard Fitzgerald
+<rf@opensource.cirrus.com> wrote:
+>
+> Add test cases for the dynamically-extending log buffer.
+>
+> kunit_log_extend_test_1() logs a series of numbered lines then tests
+> that the resulting log contains all the lines.
+>
+> kunit_log_extend_test_2() logs a large number of lines of varying length
+> to create many fragments, then tests that all lines are present.
+>
+> kunit_log_frag_sized_line_test() logs a line that exactly fills a
+> fragment. This should not cause an extension of the log or truncation
+> of the line.
+>
+> kunit_log_newline_test() has a new test to append a line that is exactly
+> the length of the available space in the current fragment and check that
+> the resulting log has a trailing '\n'.
+>
+> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
 
---2iuCE+Z3sT2tGztq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hello!
 
-On Tue, Aug 08, 2023 at 02:38:58PM +0100, Will Deacon wrote:
+I am happy to see so many tests in this patch series. I've been
+working with these patches and the debugfs logs seem to be working
+well.
 
-> But seriously, I think the question is more about what this brings us
-> *on top of* SCS, since for the forseeable future folks that care about
-> this stuff (like Android) will be using SCS. GCS on its own doesn't make
-> sense to me, given the recompilation effort to remove SCS and the lack
-> of hardware, so then you have to look at what it brings in addition to
-> GCS and balance that against the performance cost.
+However, when I ran the new kunit-log-test tests three of the tests
+failed: kunit_log_extend_test_1(), kunit_log_extend_test_2(), and
+kunit_log_newline_test().
 
-> Given that, is anybody planning to ship a distribution with this enabled?
+The diagnostic info for kunit_log_extend_test_1() reports:
 
-I'm not sure that your assumption that the only people would would
-consider deploying this are those who have deployed SCS is a valid one,
-SCS users are definitely part of the mix but GCS is expected to be much
-more broadly applicable.  As you say SCS is very invasive, requires a
-rebuild of everything with different code generated and as Szabolcs
-outlined has ABI challenges for general distros.  Any code built (or
-JITed) with anything other than clang is going to require some explicit
-support to do SCS (eg, the kernel's SCS support does nothing for
-assembly code) and there's a bunch of runtime support.  It's very much a
-specialist feature, mainly practical in well controlled somewhat
-vertical systems - I've not seen any suggestion that general purpose
-distros are considering using it.
+[20:55:27] # kunit_log_extend_test_1: EXPECTATION FAILED at
+lib/kunit/kunit-test.c:705
+[20:55:27] Expected p =3D=3D line, but
+[20:55:27]     p =3D=3D "xxxxxx=E2=80=A6xxxx12345678"
+[20:55:27]     line =3D=3D "The quick brown fox jumps over the lazy penguin=
+ 0"
+=E2=80=A6
+[20:55:27] # kunit_log_extend_test_1: EXPECTATION FAILED at
+lib/kunit/kunit-test.c:705
+[20:55:27] Expected p =3D=3D line, but
+[20:55:27]     p =3D=3D "The quick brown fox jumps over the lazy penguin 1"
+[20:55:27]     line =3D=3D "The quick brown fox jumps over the lazy penguin=
+ 4"
+[20:55:27] # kunit_log_extend_test_1: EXPECTATION FAILED at
+lib/kunit/kunit-test.c:705
+[20:55:27] Expected p =3D=3D line, but
+[20:55:27]     p =3D=3D "The quick brown fox jumps over the lazy penguin 2"
+[20:55:27]     line =3D=3D "The quick brown fox jumps over the lazy penguin=
+ 5"
+=E2=80=A6
+[20:55:27] # kunit_log_extend_test_1: EXPECTATION FAILED at
+lib/kunit/kunit-test.c:709
+[20:55:27] Expected i =3D=3D num_lines, but
+[20:55:27]     i =3D=3D 64 (0x40)
+[20:55:27]     num_lines =3D=3D 141 (0x8d)
 
-In contrast in the case of GCS one of the nice features is that for most
-code it's very much non-invasive, much less so than things like PAC/BTI
-and SCS, which means that the audience is much wider than it is for SCS
-- it's a *much* easier sell for general purpose distros to enable GCS
-than to enable SCS.  For the majority of programs all the support that
-is needed is in the kernel and libgcc/libc, there's no impact on the
-code generation.  There are no extra instructions in the normal flow
-which will impact systems without the feature, and there are no extra
-registers in use, so even if the binaries are run on a system without
-GCS or for some reason someone decides that it's best to turn the
-feature off on a system that is capable of using it the fact that it's
-just using the existing bl/ret pairs means that there is minimal
-overhead.  This all means that it's much more practical to deploy in
-general purpose distros.  On the other hand when active it affects all
-code, this improves coverage but the improved coverage can be a worry.
+So it looks like the log contains a different number of lines than
+expected which is causing the difference of 3 between expected and
+what was obtained. Potentially the log is not getting cleared/freed
+properly in between test cases?
 
-I can see that systems that have gone through all the effort of enabling
-SCS might not rush to implement GCS, though there should be no harm in
-having the two features running side by side beyond the doubled memory
-requirements so you can at least have a transition plan (GCS does have
-some allowances which enable hardware to mitigate some of the memory
-bandwidth requirements at least).  You do still get the benefit of the
-additional hardware protections GCS offers, and the coverage of all
-branch and ret instructions will be of interest both for security and
-for unwinders.  It's definitely offers less of an incremental
-improvement on top of SCS than it is without SCS though.
+The diagnostic info for kunit_log_extend_test_2() reports:
 
-GCS and SCS are comparable features in terms of the protection they aim
-to add but their system integration impacts are different.
+[20:55:27]     # kunit_log_extend_test_2: EXPECTATION FAILED at
+lib/kunit/kunit-test.c:776
+[20:55:27]     Expected p =3D=3D &line[i], but
+[20:55:27]         p =3D=3D
+"xxxxx...xxxxx123456780123456789abcdef101112131415161718191a1b1c1d1e1f20212=
+2232425262728292a2b2c2d2e2f30313233343536373839"
+[20:55:27]         &line[i] =3D=3D
+"0123456789abcdef101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c=
+2d2e2f30313233343536373839"
+[20:55:27]     # kunit_log_extend_test_2: EXPECTATION FAILED at
+lib/kunit/kunit-test.c:781
+[20:55:27]     Expected n =3D=3D num_lines, but
+[20:55:27]         n =3D=3D 147 (0x93)
+[20:55:27]         num_lines =3D=3D 155 (0x9b)
+[20:55:27] Not enough lines.
 
-> If not, why are we bothering? If so, how much of that distribution has
-> been brought up and how does the "dynamic linker or other startup code"
-> decide what to do?
+Similar difference in the number of lines here.
 
-There is active interest in the x86 shadow stack support from distros,
-GCS is a lot earlier on in the process but isn't fundamentally different
-so it is expected that this will translate.  There is also a chicken and
-egg thing where upstream support gates a lot of people's interest, what
-people will consider carrying out of tree is different to what they'll
-enable.  Architecture specific feedback on the implementation can also
-be fed back into the still ongoing review of the ABI that is being
-established for x86, there will doubtless be pushback about variations
-between architectures from userspace people.
+The diagnostic info for kunit_log_newline_test() reports that the test
+fails on this line:
 
-The userspace decision about enablement will primarily be driven by an
-ELF marking which the dynamic linker looks at to determine if the
-binaries it is loading can support GCS, a later dlopen() can either
-refuse to load an additional library if the process currently has GCS
-enabled, ignore the issue and hope things work out (there's a good
-chance they will but obviously that's not safe) or (more complicatedly)
-go round all the threads and disable GCS before proceeding.  The main
-reason any sort of rebuild is required for most code is to add the ELF
-marking, there will be a compiler option to select it.  Static binaries
-should know if everything linked into them is GCS compatible and enable
-GCS if appropriate in their startup code.
+KUNIT_EXPECT_EQ(test, p[strlen(p) - 1], '\n');
 
-The majority of the full distro work at this point is on the x86 side
-given the hardware availability, we are looking at that within Arm of
-course.  I'm not aware of any huge blockers we have encountered thus
-far.
+Let me know if you are seeing similar errors. I can post the full log
+if that would be helpful.
 
-It is fair to say that there's less active interest on the arm64 side
-since as you say the feature is quite a way off making it's way into
-hardware, though there are also long lead times on getting the full
-software stack to end users and kernel support becomes a blocker for
-the userspace stack.
+-Rae
 
-> After the mess we had with BTI and mprotect(), I'm hesitant to merge
-> features like this without knowing that the ABI can stand real code.
-
-The equivalent x86 feature is in current hardware[1], there has been
-some distro work (I believe one of the issues x86 has had is coping with
-a distro which shipped an early out of tree ABI, that experience has
-informed the current ABI which as the cover letter says we are following
-closely).  AIUI the biggest blocker on userspace work for x86 right now
-is landing the kernel side of things so that everyone else has a stable
-ABI to work from and don't need to carry out of tree patches, I've heard
-frustration expressed at the deployment being held up.  IIRC Fedora were
-on the leading edge in terms of active interest, they tend to be given
-that they're one of the most quickly iterating distros. =20
-
-This definitely does rely fairly heavily on the x86 experience for
-confidence in the ABI, and to be honest one of the big unknowns at this
-point is if you or Catalin will have opinions on how things are being
-done.
-
-[1] https://edc.intel.com/content/www/us/en/design/ipla/software-developmen=
-t-platforms/client/platforms/alder-lake-desktop/12th-generation-intel-core-=
-processors-datasheet-volume-1-of-2/009/shadow-stack/
-
---2iuCE+Z3sT2tGztq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTSpKYACgkQJNaLcl1U
-h9Bm7wf/TWEY6FZexKo9ZslcLVc8FfZTGr2JbqBTjc0hIyi6JIvIUPaBtV8B4GKh
-aJOvjQlkWGfIrVsezaRToCVgoxhsnRmsKCDr1gABiWQuJDCL5mLR1BRMF6XfJC+g
-FANZz3+vabPD5HlypgtGUsdgtm1d3vPwRnOcI1XK5ARt53I+3Wbd1Gc/Kzsv8qz2
-KmEbIIR0tk/KpUJwAokBaHnsH6pnZKxUDy0Ei3i9zFBtcRjqWOJSgjJ0fKKscJQa
-uIKhZ7no7GVtdNnfO1XBllyefendmwyKNc9QdFsNgE3WgXy2iiaMbWmp4JJU6GHr
-BamhHq9n+PvDZVvrISCsTZxmnjcGVg==
-=YAxR
------END PGP SIGNATURE-----
-
---2iuCE+Z3sT2tGztq--
+> ---
+>  lib/kunit/kunit-test.c | 204 +++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 204 insertions(+)
+>
+> diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
+> index 54dc011c8980..48967d12e053 100644
+> --- a/lib/kunit/kunit-test.c
+> +++ b/lib/kunit/kunit-test.c
+> @@ -7,6 +7,7 @@
+>   */
+>  #include <kunit/test.h>
+>  #include <kunit/test-bug.h>
+> +#include <linux/prandom.h>
+>
+>  #include "try-catch-impl.h"
+>
+> @@ -530,6 +531,31 @@ static struct kunit_suite kunit_resource_test_suite =
+=3D {
+>         .test_cases =3D kunit_resource_test_cases,
+>  };
+>
+> +static char *get_concatenated_log(struct kunit *test, const struct list_=
+head *log,
+> +                                 int *num_frags)
+> +{
+> +       struct kunit_log_frag *frag;
+> +       size_t len =3D 0;
+> +       int frag_count =3D 0;
+> +       char *p;
+> +
+> +       list_for_each_entry(frag, log, list)
+> +               len +=3D strlen(frag->buf);
+> +
+> +       len++; /* for terminating '\0' */
+> +       p =3D kunit_kmalloc(test, len, GFP_KERNEL);
+> +
+> +       list_for_each_entry(frag, log, list) {
+> +               strlcat(p, frag->buf, len);
+> +               ++frag_count;
+> +       }
+> +
+> +       if (num_frags)
+> +               *num_frags =3D frag_count;
+> +
+> +       return p;
+> +}
+> +
+>  static void kunit_log_test(struct kunit *test)
+>  {
+>         struct kunit_suite suite;
+> @@ -568,7 +594,9 @@ static void kunit_log_test(struct kunit *test)
+>
+>  static void kunit_log_newline_test(struct kunit *test)
+>  {
+> +       struct kunit_suite suite;
+>         struct kunit_log_frag *frag;
+> +       char *p;
+>
+>         kunit_info(test, "Add newline\n");
+>         if (test->log) {
+> @@ -576,14 +604,190 @@ static void kunit_log_newline_test(struct kunit *t=
+est)
+>                 KUNIT_ASSERT_NOT_NULL_MSG(test, strstr(frag->buf, "Add ne=
+wline\n"),
+>                         "Missing log line, full log:\n%s", frag->buf);
+>                 KUNIT_EXPECT_NULL(test, strstr(frag->buf, "Add newline\n\=
+n"));
+> +
+> +               suite.log =3D kunit_kzalloc(test, sizeof(*suite.log), GFP=
+_KERNEL);
+> +               KUNIT_ASSERT_NOT_ERR_OR_NULL(test, suite.log);
+> +               INIT_LIST_HEAD(suite.log);
+> +               frag =3D kunit_kmalloc(test, sizeof(*frag), GFP_KERNEL);
+> +               KUNIT_ASSERT_NOT_ERR_OR_NULL(test, frag);
+> +               kunit_init_log_frag(frag);
+> +               list_add_tail(&frag->list, suite.log);
+> +
+> +               /* String that exactly fills fragment leaving no room for=
+ \n */
+> +               memset(frag->buf, 0, sizeof(frag->buf));
+> +               memset(frag->buf, 'x', sizeof(frag->buf) - 9);
+> +               kunit_log_append(suite.log, "12345678");
+> +               p =3D get_concatenated_log(test, suite.log, NULL);
+> +               KUNIT_ASSERT_NOT_ERR_OR_NULL(test, p);
+> +               KUNIT_EXPECT_NOT_NULL_MSG(test, strstr(p, "x12345678\n"),
+> +                       "Newline not appended when fragment is full. Log =
+is:\n'%s'", p);
+>         } else {
+>                 kunit_skip(test, "only useful when debugfs is enabled");
+>         }
+>  }
+>
+> +static void kunit_log_extend_test_1(struct kunit *test)
+> +{
+> +#ifdef CONFIG_KUNIT_DEBUGFS
+> +       struct kunit_suite suite;
+> +       struct kunit_log_frag *frag;
+> +       char line[60];
+> +       char *p, *pn;
+> +       size_t len, n;
+> +       int num_lines, num_frags, i;
+> +
+> +       suite.log =3D kunit_kzalloc(test, sizeof(*suite.log), GFP_KERNEL)=
+;
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, suite.log);
+> +       INIT_LIST_HEAD(suite.log);
+> +       frag =3D kunit_kmalloc(test, sizeof(*frag), GFP_KERNEL);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, frag);
+> +       kunit_init_log_frag(frag);
+> +       KUNIT_EXPECT_EQ(test, frag->buf[0], '\0');
+> +       list_add_tail(&frag->list, suite.log);
+> +
+> +       i =3D 0;
+> +       len =3D 0;
+> +       do {
+> +               n =3D snprintf(line, sizeof(line),
+> +                            "The quick brown fox jumps over the lazy pen=
+guin %d\n", i);
+> +               KUNIT_ASSERT_LT(test, n, sizeof(line));
+> +               kunit_log_append(suite.log, line);
+> +               ++i;
+> +               len +=3D n;
+> +       }  while (len < (sizeof(frag->buf) * 30));
+> +       num_lines =3D i;
+> +
+> +       p =3D get_concatenated_log(test, suite.log, &num_frags);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, p);
+> +       KUNIT_EXPECT_GT(test, num_frags, 1);
+> +
+> +       kunit_info(test, "num lines:%d num_frags:%d total len:%zu\n",
+> +                  num_lines, num_frags, strlen(p));
+> +
+> +       i =3D 0;
+> +       while ((pn =3D strchr(p, '\n')) !=3D NULL) {
+> +               *pn =3D '\0';
+> +               snprintf(line, sizeof(line),
+> +                        "The quick brown fox jumps over the lazy penguin=
+ %d", i);
+> +               KUNIT_EXPECT_STREQ(test, p, line);
+> +               p =3D pn + 1;
+> +               ++i;
+> +       }
+> +       KUNIT_EXPECT_EQ(test, i, num_lines);
+> +#else
+> +       kunit_skip(test, "only useful when debugfs is enabled");
+> +#endif
+> +}
+> +
+> +static void kunit_log_extend_test_2(struct kunit *test)
+> +{
+> +#ifdef CONFIG_KUNIT_DEBUGFS
+> +       struct kunit_suite suite;
+> +       struct kunit_log_frag *frag;
+> +       struct rnd_state rnd;
+> +       char line[101];
+> +       char *p, *pn;
+> +       size_t len;
+> +       int num_lines, num_frags, n, i;
+> +
+> +       suite.log =3D kunit_kzalloc(test, sizeof(*suite.log), GFP_KERNEL)=
+;
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, suite.log);
+> +       INIT_LIST_HEAD(suite.log);
+> +       frag =3D kunit_kmalloc(test, sizeof(*frag), GFP_KERNEL);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, frag);
+> +       kunit_init_log_frag(frag);
+> +       KUNIT_EXPECT_EQ(test, frag->buf[0], '\0');
+> +       list_add_tail(&frag->list, suite.log);
+> +
+> +       /* Build log line of varying content */
+> +       line[0] =3D '\0';
+> +       i =3D 0;
+> +       do {
+> +               char tmp[9];
+> +
+> +               snprintf(tmp, sizeof(tmp), "%x", i++);
+> +               len =3D strlcat(line, tmp, sizeof(line));
+> +       } while (len < sizeof(line) - 1);
+> +
+> +       /*
+> +        * Log lines of different lengths until we have created
+> +        * many fragments.
+> +        * The "randomness" must be repeatable.
+> +        */
+> +       prandom_seed_state(&rnd, 3141592653589793238ULL);
+> +       i =3D 0;
+> +       len =3D 0;
+> +       num_lines =3D 0;
+> +       do {
+> +               kunit_log_append(suite.log, "%s\n", &line[i]);
+> +               len +=3D sizeof(line) - i;
+> +               num_lines++;
+> +               i =3D prandom_u32_state(&rnd) % (sizeof(line) - 1);
+> +       } while (len < (sizeof(frag->buf) * 30));
+> +
+> +       /* There must be more than one buffer fragment now */
+> +       KUNIT_EXPECT_FALSE(test, list_is_singular(suite.log));
+> +
+> +       p =3D get_concatenated_log(test, suite.log, &num_frags);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, p);
+> +       KUNIT_EXPECT_GT(test, num_frags, 1);
+> +
+> +       kunit_info(test, "num lines:%d num_frags:%d total len:%zu\n",
+> +                  num_lines, num_frags, strlen(p));
+> +
+> +       prandom_seed_state(&rnd, 3141592653589793238ULL);
+> +       i =3D 0;
+> +       n =3D 0;
+> +       while ((pn =3D strchr(p, '\n')) !=3D NULL) {
+> +               *pn =3D '\0';
+> +               KUNIT_EXPECT_STREQ(test, p, &line[i]);
+> +               p =3D pn + 1;
+> +               n++;
+> +               i =3D prandom_u32_state(&rnd) % (sizeof(line) - 1);
+> +       }
+> +       KUNIT_EXPECT_EQ_MSG(test, n, num_lines, "Not enough lines.");
+> +#else
+> +       kunit_skip(test, "only useful when debugfs is enabled");
+> +#endif
+> +}
+> +
+> +static void kunit_log_frag_sized_line_test(struct kunit *test)
+> +{
+> +#ifdef CONFIG_KUNIT_DEBUGFS
+> +       struct kunit_suite suite;
+> +       struct kunit_log_frag *frag, *src;
+> +
+> +       suite.log =3D kunit_kzalloc(test, sizeof(*suite.log), GFP_KERNEL)=
+;
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, suite.log);
+> +       INIT_LIST_HEAD(suite.log);
+> +       frag =3D kunit_kmalloc(test, sizeof(*frag), GFP_KERNEL);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, frag);
+> +       kunit_init_log_frag(frag);
+> +       KUNIT_EXPECT_EQ(test, frag->buf[0], '\0');
+> +       list_add_tail(&frag->list, suite.log);
+> +
+> +       src =3D kunit_kzalloc(test, sizeof(*src), GFP_KERNEL);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, src);
+> +       memset(src->buf, 'x', sizeof(src->buf) - 2);
+> +       KUNIT_ASSERT_EQ(test, strlen(src->buf), sizeof(src->buf) - 2);
+> +
+> +       /* Log a string that exactly fills the fragment */
+> +       kunit_log_append(suite.log, "%s\n", src->buf);
+> +       KUNIT_EXPECT_TRUE(test, list_is_singular(suite.log));
+> +       KUNIT_EXPECT_EQ(test, strlen(frag->buf), sizeof(frag->buf) - 1);
+> +       strlcat(src->buf, "\n", sizeof(src->buf));
+> +       KUNIT_EXPECT_STREQ(test, frag->buf, src->buf);
+> +#else
+> +       kunit_skip(test, "only useful when debugfs is enabled");
+> +#endif
+> +}
+> +
+>  static struct kunit_case kunit_log_test_cases[] =3D {
+>         KUNIT_CASE(kunit_log_test),
+>         KUNIT_CASE(kunit_log_newline_test),
+> +       KUNIT_CASE(kunit_log_extend_test_1),
+> +       KUNIT_CASE(kunit_log_extend_test_2),
+> +       KUNIT_CASE(kunit_log_frag_sized_line_test),
+>         {}
+>  };
+>
+> --
+> 2.30.2
+>
