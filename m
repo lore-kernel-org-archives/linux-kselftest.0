@@ -2,146 +2,183 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B593C001B0
-	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Aug 2023 17:02:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66B35C001B0
+	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Aug 2023 17:02:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233880AbjHHRCh (ORCPT
+        id S231374AbjHHRCr (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 8 Aug 2023 13:02:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36420 "EHLO
+        Tue, 8 Aug 2023 13:02:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233973AbjHHRBl (ORCPT
+        with ESMTP id S233771AbjHHRBs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Aug 2023 13:01:41 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94AD78692;
-        Tue,  8 Aug 2023 09:01:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691510469; x=1723046469;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=C/p/UlsErt6IGhM1ajayheMt/yvaha/yxJzT6j1NczA=;
-  b=OO/nDBtgbNMLjyfBOpg+rfi9160OrKvaIQ8bnnWAoxkSWWr/IMgFBP0J
-   owwn03zFZGtaopSBA+LNGbr6XJinSavz+lXZJWFHYQ1FyN4+Ea/SKlRPB
-   RVyKjX9AHcFab2PTy6R/RYyIpQwP+6a67OSY48/5UFn0QxwVChlbIRb5l
-   khobzH2eL7dlPGcWKpjd/EQUYhZYzhDGnWJKqDdXY1Bo2Je5lobKeSJAQ
-   HwjPjBxgUe0Aaf7P9na1Ft0amS3Wc/6ccNwOxmOQdFXDc2FtLcudOiP/R
-   Bt/y2wPPgVRzTQlv0PByStxggYJTBOkwbTV4psT6DZh2potqM7Dfd4zI2
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="350449280"
-X-IronPort-AV: E=Sophos;i="6.01,156,1684825200"; 
-   d="scan'208";a="350449280"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2023 08:35:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="855126966"
-X-IronPort-AV: E=Sophos;i="6.01,156,1684825200"; 
-   d="scan'208";a="855126966"
-Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by orsmga004.jf.intel.com with ESMTP; 08 Aug 2023 08:35:11 -0700
-From:   Yi Liu <yi.l.liu@intel.com>
-To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
-        kevin.tian@intel.com, robin.murphy@arm.com,
-        baolu.lu@linux.intel.com
-Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
-        kvm@vger.kernel.org, mjrosato@linux.ibm.com,
-        chao.p.peng@linux.intel.com, yi.l.liu@intel.com,
-        yi.y.sun@linux.intel.com, peterx@redhat.com, jasowang@redhat.com,
-        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
-        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        zhenzhong.duan@intel.com
-Subject: [PATCH v6 0/4] iommufd: Add iommu hardware info reporting
-Date:   Tue,  8 Aug 2023 08:35:06 -0700
-Message-Id: <20230808153510.4170-1-yi.l.liu@intel.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 8 Aug 2023 13:01:48 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB0D258F8D;
+        Tue,  8 Aug 2023 09:01:13 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id A6E1660173;
+        Tue,  8 Aug 2023 10:53:57 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1691484837; bh=tkIdjaCIZxuCMCril+uMFLD30L4EwBbIMx25+pZyiFc=;
+        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+        b=VTLtJO2lgounct7FeM0VWk10tM5AnVCMV4tbccq2a60ZGpktif0DKBZ+jtTIYUQVA
+         +sUNTnfJBLIF1h/vs9TR07doW69kzMxWd+yVYtw50SZrAcie/VngdXdI56CLL1XL8H
+         reHAb/5NnPHwdM5y2jE51baWzrLXsTZQitqxN+wlzg4OMqFaiuKyy8hzb90a4DrAsB
+         ifMFQ06sOhXA1VgtuXViMuNwkuybVEhnHL3IVeFOrUNoqy3zewvwXoRpf/nXEM4VuK
+         9kpMBrRhvNWkUtbQ0qBzzj/a1I2eqZYy2frVrRgl27TPT8Hexu97JN7tMCbZyHEhOz
+         CGZz1dJREIXyA==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id mWdK7oF-jwBA; Tue,  8 Aug 2023 10:53:55 +0200 (CEST)
+Received: from [192.168.1.6] (unknown [94.250.191.183])
+        by domac.alu.hr (Postfix) with ESMTPSA id BB78A6015F;
+        Tue,  8 Aug 2023 10:53:40 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1691484835; bh=tkIdjaCIZxuCMCril+uMFLD30L4EwBbIMx25+pZyiFc=;
+        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+        b=0PBv/ik5TAMYekzrraheXTmOBkzHPVfCKFbBTr4cLyaU/wGwFwV+Qk/h4kUe9Nj3W
+         irzHthPYuUUrelWzDSrSF2uG9OJbth6JsfP69OzdWtsgchBQdXXERWOGHCfZYIzeUs
+         nMsTZi+vXGBXIadoE9ZL/SIKI/XYBYsPgba6W4OQRVGE0g22SOPa1gUUiKiXx4YHrh
+         GLDbdmUPvt9qF2w6glJL3BgwpRj/E2MIfS49cRaPJhhaCDFu35H9UqfOseyumD3OJ5
+         8/Tjzdgp4gR/eCoZfrFsgDyxqwT96XKx/HrEuIB+VjWYuj9vjFz1y6u697+Q8ys18/
+         NHxw6XzrbPsww==
+Message-ID: <25d01cd0-e6a1-1701-a066-f96a23767361@alu.unizg.hr>
+Date:   Tue, 8 Aug 2023 10:53:36 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+Subject: Re: selftests: net/af_unix test_unix_oob [FAILED]
+To:     Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc:     alexander@mihalicyn.com, davem@davemloft.net, edumazet@google.com,
+        fw@strlen.de, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, shuah@kernel.org
+References: <abf98942-0058-f2ad-8e55-fbdd83b7c2d6@alu.unizg.hr>
+ <20230807204648.50070-1-kuniyu@amazon.com>
+ <ba4da366-b8cf-ca36-e2dc-cce7260cccf8@alu.unizg.hr>
+Content-Language: en-US
+In-Reply-To: <ba4da366-b8cf-ca36-e2dc-cce7260cccf8@alu.unizg.hr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-iommufd gives userspace the capability to manipulate iommu subsytem.
-e.g. DMA map/unmap etc. In the near future, it will support iommu nested
-translation. Different platform vendors have different implementation for
-the nested translation. For example, Intel VT-d supports using guest I/O
-page table as the stage-1 translation table. This requires guest I/O page
-table be compatible with hardware IOMMU. So before set up nested translation,
-userspace needs to know the hardware iommu information to understand the
-nested translation requirements.
+On 8/8/23 01:09, Mirsad Todorovac wrote:
+> On 8/7/23 22:46, Kuniyuki Iwashima wrote:
+>> From: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+>> Date: Mon, 7 Aug 2023 21:44:41 +0200
+>>> Hi all,
+>>>
+>>> In the kernel 6.5-rc5 build on Ubuntu 22.04 LTS (jammy jellyfish) on a Ryzen 7950 assembled box,
+>>> vanilla torvalds tree kernel, the test test_unix_oob unexpectedly fails:
+>>>
+>>> # selftests: net/af_unix: test_unix_oob
+>>> # Test 2 failed, sigurg 23 len 63 OOB %
+>>>
+>>> It is this code:
+>>>
+>>>           /* Test 2:
+>>>            * Verify that the first OOB is over written by
+>>>            * the 2nd one and the first OOB is returned as
+>>>            * part of the read, and sigurg is received.
+>>>            */
+>>>           wait_for_data(pfd, POLLIN | POLLPRI);
+>>>           len = 0;
+>>>           while (len < 70)
+>>>                   len = recv(pfd, buf, 1024, MSG_PEEK);
+>>>           len = read_data(pfd, buf, 1024);
+>>>           read_oob(pfd, &oob);
+>>>           if (!signal_recvd || len != 127 || oob != '#') {
+>>>                   fprintf(stderr, "Test 2 failed, sigurg %d len %d OOB %c\n",
+>>>                   signal_recvd, len, oob);
+>>>                   die(1);
+>>>           }
+>>>
+>>> In 6.5-rc4, this test was OK, so it might mean we have a regression?
+>>
+>> Thanks for reporting.
+>>
+>> I confirmed the test doesn't fail on net-next at least, but it's based
+>> on v6.5-rc4.
+>>
+>>    ---8<---
+>>    [root@localhost ~]# ./test_unix_oob
+>>    [root@localhost ~]# echo $?
+>>    0
+>>    [root@localhost ~]# uname -r
+>>    6.5.0-rc4-01192-g66244337512f
+>>    ---8<---
+>>
+>> I'll check 6.5-rc5 later.
+> 
+> Hi, Kuniyuki,
+> 
+> It seems that there is a new development. I could reproduce the error with the failed test 2
+> as early as 6.0-rc1. However, the gotcha is that the error appears to be sporadically manifested
+> (possibly a race)?
+> 
+> I am currently attempting a bisect.
 
-This series reports the iommu hardware information for a given device
-which has been bound to iommufd. It is preparation work for userspace to
-allocate hwpt for given device. Like the nested translation support[1].
+Bisect had shown that the condition existed already at 5.11 torvalds tree.
 
-This series introduces an iommu op to report the iommu hardware info,
-and an ioctl IOMMU_GET_HW_INFO is added to report such hardware info to
-user. enum iommu_hw_info_type is defined to differentiate the iommu hardware
-info reported to user hence user can decode them. This series only adds the
-framework for iommu hw info reporting, the complete reporting path needs vendor
-specific definition and driver support. The full code is available in [1]
-as well.
+It has to do with the configs chosen (I used the configs from seltests/*/config merged), but it
+is also present in the Ubuntu production build:
 
-[1] https://github.com/yiliu1765/iommufd/tree/wip/iommufd_nesting_08082023-yi
-(only the hw_info report path is the latest, other parts is wip)
+marvin@defiant:~$ cd linux/kernel/linux_torvalds
+marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+Test 2 failed, sigurg 23 len 63 OOB %
+marvin@defiant:~/linux/kernel/linux_torvalds$ uname -rms
+Linux 6.4.8-060408-generic x86_64
+marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..1000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+Test 1 failed sigurg 0 len 63
+marvin@defiant:~/linux/kernel/linux_torvalds$
 
-Change log:
+It happens on rare occasions, so it seems to be a hard-to-spot race.
 
-v6:
- - Add Jingqi's comment on patch 02
- - Add Baolu's r-b to patch 03
- - Address Jason's comment on patch 03
+Normal test running test_unix_oob once never noticed that, save by accident, which brought the problem to attention ...
 
-v5: https://lore.kernel.org/linux-iommu/20230803143144.200945-1-yi.l.liu@intel.com/
- - Return hw_info_type in the .hw_info op, hence drop hw_info_type field in iommu_ops (Kevin)
- - Add Jason's r-b for patch 01
- - Address coding style comments from Jason and Kevin w.r.t. patch 02, 03 and 04
+However, the problem seems to be config-driven rather than kernel-version-driven.
 
-v4: https://lore.kernel.org/linux-iommu/20230724105936.107042-1-yi.l.liu@intel.com/
- - Rename ioctl to IOMMU_GET_HW_INFO and structure to iommu_hw_info
- - Move the iommufd_get_hw_info handler to main.c
- - Place iommu_hw_info prior to iommu_hwpt_alloc
- - Update the function namings accordingly
- - Update uapi kdocs
+marvin@defiant:~/linux/kernel/linux_torvalds$ for a in {0..100000}; do tools/testing/selftests/net/af_unix/test_unix_oob ; done
+Test 3.1 Inline failed, len 1 oob % atmark 0
+Test 1 Inline failed, sigurg 0 len 63
+Test 1 Inline failed, sigurg 0 len 63
+Test 1 Inline failed, sigurg 0 len 63
+Test 2 Inline failed, len 63 atmark 1
+Test 3 Inline failed, sigurg 23 len 63 data x
+Test 3 Inline failed, sigurg 23 len 63 data x
+Test 3 Inline failed, sigurg 23 len 63 data x
+Test 3 Inline failed, sigurg 23 len 63 data x
+Test 2 Inline failed, len 63 atmark 1
+Test 3.1 Inline failed, len 1 oob % atmark 0
+Test 2 failed, sigurg 23 len 63 OOB %
+marvin@defiant:~/linux/kernel/linux_torvalds$ uname -rms
+Linux 6.5.0-060500rc4-generic x86_64
+marvin@defiant:~/linux/kernel/linux_torvalds$
 
-v3: https://lore.kernel.org/linux-iommu/20230511143024.19542-1-yi.l.liu@intel.com/#t
- - Add r-b from Baolu
- - Rename IOMMU_HW_INFO_TYPE_DEFAULT to be IOMMU_HW_INFO_TYPE_NONE to
-   better suit what it means
- - Let IOMMU_DEVICE_GET_HW_INFO succeed even the underlying iommu driver
-   does not have driver-specific data to report per below remark.
-   https://lore.kernel.org/kvm/ZAcwJSK%2F9UVI9LXu@nvidia.com/
+At moments, I was able to reproduce with certain configs, but now something odd happens.
 
-v2: https://lore.kernel.org/linux-iommu/20230309075358.571567-1-yi.l.liu@intel.com/
- - Drop patch 05 of v1 as it is already covered by other series
- - Rename the capability info to be iommu hardware info
+I will keep investigating.
 
-v1: https://lore.kernel.org/linux-iommu/20230209041642.9346-1-yi.l.liu@intel.com/
-
-Regards,
-	Yi Liu
-
-Lu Baolu (1):
-  iommu: Add new iommu op to get iommu hardware information
-
-Nicolin Chen (1):
-  iommufd/selftest: Add coverage for IOMMU_GET_HW_INFO ioctl
-
-Yi Liu (2):
-  iommu: Move dev_iommu_ops() to private header
-  iommufd: Add IOMMU_GET_HW_INFO
-
- drivers/iommu/iommu-priv.h                    | 11 +++
- drivers/iommu/iommufd/iommufd_test.h          |  9 ++
- drivers/iommu/iommufd/main.c                  | 97 +++++++++++++++++++
- drivers/iommu/iommufd/selftest.c              | 16 +++
- include/linux/iommu.h                         | 20 ++--
- include/uapi/linux/iommufd.h                  | 45 +++++++++
- tools/testing/selftests/iommu/iommufd.c       | 17 +++-
- tools/testing/selftests/iommu/iommufd_utils.h | 26 +++++
- 8 files changed, 229 insertions(+), 12 deletions(-)
-
--- 
-2.34.1
-
+Kind regards,
+Mirsad
