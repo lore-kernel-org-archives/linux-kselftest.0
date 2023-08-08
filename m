@@ -2,112 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E732C05051
-	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Aug 2023 17:25:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F34D6C41513
+	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Aug 2023 17:29:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234490AbjHHRZv (ORCPT
+        id S234542AbjHHR3Q (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 8 Aug 2023 13:25:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42246 "EHLO
+        Tue, 8 Aug 2023 13:29:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234537AbjHHRZ3 (ORCPT
+        with ESMTP id S234537AbjHHR2i (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Aug 2023 13:25:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0038F20278;
-        Tue,  8 Aug 2023 09:10:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Tue, 8 Aug 2023 13:28:38 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B5121271;
+        Tue,  8 Aug 2023 09:12:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=sVOpQeHQbYuQD4XI26KPaEpE0Ea50S0OE5ZKW/Qlwrk=; b=vBY1RJPhnM/HaHosbTPNbA0y+k
+        roLU7f2LM1KWTAdAPeqZkAlhJ5Ab8Re7s0iwaZwqSZprpCBxXCMEWquufSVGSbn0jTaeOOJi9GALc
+        aL58KPV029NgS2NJcA1srEgzDTITQm2Y0zStY4InWwRK1L3x55bSR2UMgRfp6tYP4egf9saBEs105
+        pgsZlVmaxnJCiU0TqSY1IV+Gv0P9TcJ380PGW+kbQFiKsGqnUJjn8VhsDpDx9o6NUCbWY8ka4ka7l
+        dvyV3Hz16nCucR6dJTvjYIrQ3jzL2LkFW1eNkWspLGQdY93oj+Rf118Vry0KT8dX668jIw93Wa2ii
+        vW0mj53Q==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qTIlN-00Gbn4-GF; Tue, 08 Aug 2023 09:12:26 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 38CA5624EE;
-        Tue,  8 Aug 2023 13:39:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B716DC433C8;
-        Tue,  8 Aug 2023 13:39:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691501946;
-        bh=RnXjxseYsnFe6Wnck1M4XbqKJfcYUVsYZpbGiHCNKCw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dOsRv8DPnz3szlVVqAIekC0oAa1YWjq756EOBKQHNrWkdjOHTpZrdXFvoiy0dPstL
-         zHVpr1V7MDywHBGGU4vstj24/ddQ2YUijhLOHhv21OptJRcyHiqH4PCaeITgRuOsQP
-         xhcNw4WURUix63jdw9L0KUAaoaYuVRg6y2L3/+0DCRQV91VgQjhNmhSn7gmTUld4CN
-         PukbIQT3kIDYfuJo8nq7Ezq5aseMpKv9N4/sMDanxbzcf38L9HyofcxB5+sD0FXxB4
-         LdhMsPJhZIcf39N6w/S5fgwPEA8bYg9AZCO455XBxu4iag2rRXSA1EHP7TfDTdQEgX
-         lr0A4nNsxMLIQ==
-Date:   Tue, 8 Aug 2023 14:38:58 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-        Deepak Gupta <debug@rivosinc.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v3 00/36] arm64/gcs: Provide support for GCS in userspace
-Message-ID: <20230808133857.GC2369@willie-the-truck>
-References: <20230731-arm64-gcs-v3-0-cddf9f980d98@kernel.org>
- <20230801141319.GC26253@willie-the-truck>
- <09b7a94d-cc88-4372-85de-52db26bc2daf@sirena.org.uk>
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1FF0A30003A;
+        Tue,  8 Aug 2023 11:12:25 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 0748227E4826F; Tue,  8 Aug 2023 11:12:25 +0200 (CEST)
+Date:   Tue, 8 Aug 2023 11:12:24 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Meng Li <li.meng@amd.com>
+Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Huang Rui <ray.huang@amd.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-acpi@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Shimmer Huang <shimmer.huang@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>
+Subject: Re: [PATCH V1 3/6] cpufreq: Add a notification message that the
+ highest perf has changed
+Message-ID: <20230808091224.GW212435@hirez.programming.kicks-ass.net>
+References: <20230808081001.2215240-1-li.meng@amd.com>
+ <20230808081001.2215240-4-li.meng@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <09b7a94d-cc88-4372-85de-52db26bc2daf@sirena.org.uk>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20230808081001.2215240-4-li.meng@amd.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Aug 01, 2023 at 04:09:58PM +0100, Mark Brown wrote:
-> On Tue, Aug 01, 2023 at 03:13:20PM +0100, Will Deacon wrote:
-> > On Mon, Jul 31, 2023 at 02:43:09PM +0100, Mark Brown wrote:
+On Tue, Aug 08, 2023 at 04:09:58PM +0800, Meng Li wrote:
+> Please refer to the ACPI_Spec for details on the highest
+> performance and notify events of CPPC.
+
+Please summarise so that we don't get to click random links on the
+interweb just to try and make sense of things.
+
+> Signed-off-by: Meng Li <li.meng@amd.com>
+> Link: https://uefi.org/htmlspecs/AddCPI_Spec_6_4_html/08_Processor_Configuration_and_Control/declaring-processors.html?highlight=0x85#highest-performance
+> ---
+>  drivers/acpi/processor_driver.c |  6 ++++++
+>  drivers/cpufreq/cpufreq.c       | 13 +++++++++++++
+>  include/linux/cpufreq.h         |  4 ++++
+>  3 files changed, 23 insertions(+)
 > 
-> > > The arm64 Guarded Control Stack (GCS) feature provides support for
-> > > hardware protected stacks of return addresses, intended to provide
-> > > hardening against return oriented programming (ROP) attacks and to make
-> > > it easier to gather call stacks for applications such as profiling.
-> 
-> > Why is this better than Clang's software shadow stack implementation? It
-> > would be nice to see some justification behind adding all this, rather
-> > than it being an architectural tick-box exercise.
-> 
-> Mainly that it's hardware enforced (as the quoted paragraph says).  This
-> makes it harder to attack, and hopefully it's also a bit faster (how
-> measurable that might be will be an open question, but even NOPs in
-> function entry/exit tend to get noticed).
+> diff --git a/drivers/acpi/processor_driver.c b/drivers/acpi/processor_driver.c
+> index 4bd16b3f0781..29b2fb68a35d 100644
+> --- a/drivers/acpi/processor_driver.c
+> +++ b/drivers/acpi/processor_driver.c
+> @@ -27,6 +27,7 @@
+>  #define ACPI_PROCESSOR_NOTIFY_PERFORMANCE 0x80
+>  #define ACPI_PROCESSOR_NOTIFY_POWER	0x81
+>  #define ACPI_PROCESSOR_NOTIFY_THROTTLING	0x82
+> +#define ACPI_PROCESSOR_NOTIFY_HIGEST_PERF_CHANGED	0x85
 
-I dunno, "hardware enforced" can also mean worse security nowadays ;)
+Isn't that spelled: 'highest' ?
+                        ^
 
-But seriously, I think the question is more about what this brings us
-*on top of* SCS, since for the forseeable future folks that care about
-this stuff (like Android) will be using SCS. GCS on its own doesn't make
-sense to me, given the recompilation effort to remove SCS and the lack
-of hardware, so then you have to look at what it brings in addition to
-GCS and balance that against the performance cost.
-
-Given that, is anybody planning to ship a distribution with this enabled?
-If not, why are we bothering? If so, how much of that distribution has
-been brought up and how does the "dynamic linker or other startup code"
-decide what to do?
-
-After the mess we had with BTI and mprotect(), I'm hesitant to merge
-features like this without knowing that the ABI can stand real code.
-
-Will
