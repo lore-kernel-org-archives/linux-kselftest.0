@@ -2,70 +2,220 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A92F2C04A6A
-	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Aug 2023 18:00:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5918FC001DB
+	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Aug 2023 18:15:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231880AbjHHSA7 (ORCPT
+        id S235444AbjHHSPW (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 8 Aug 2023 14:00:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45756 "EHLO
+        Tue, 8 Aug 2023 14:15:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232053AbjHHSAe (ORCPT
+        with ESMTP id S235487AbjHHSOx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Aug 2023 14:00:34 -0400
+        Tue, 8 Aug 2023 14:14:53 -0400
 Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 309968938
-        for <linux-kselftest@vger.kernel.org>; Tue,  8 Aug 2023 09:27:47 -0700 (PDT)
-Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RKtGV0CQHzVk0R;
-        Tue,  8 Aug 2023 20:46:10 +0800 (CST)
-Received: from [10.174.179.163] (10.174.179.163) by
- kwepemi500024.china.huawei.com (7.221.188.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Tue, 8 Aug 2023 20:48:02 +0800
-Message-ID: <974f65e3-239f-b487-30a5-dffd9bec39f8@huawei.com>
-Date:   Tue, 8 Aug 2023 20:48:01 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/5] kselftest/arm64: add float-point feature to hwcap
- test
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-CC:     <kristina.martsenko@arm.com>, <shuah@kernel.org>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <xiexiuqi@huawei.com>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20230808061356.2215158-1-zengheng4@huawei.com>
- <29093701-3fd7-443b-b5c5-4333a6812c4f@sirena.org.uk>
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3200D783F9
+        for <linux-kselftest@vger.kernel.org>; Tue,  8 Aug 2023 10:21:22 -0700 (PDT)
+Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RKvSp10DczNn26;
+        Tue,  8 Aug 2023 21:40:10 +0800 (CST)
+Received: from huawei.com (10.175.103.91) by kwepemi500024.china.huawei.com
+ (7.221.188.100) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 8 Aug
+ 2023 21:43:37 +0800
 From:   Zeng Heng <zengheng4@huawei.com>
-In-Reply-To: <29093701-3fd7-443b-b5c5-4333a6812c4f@sirena.org.uk>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.163]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+To:     <kristina.martsenko@arm.com>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <broonie@kernel.org>, <shuah@kernel.org>
+CC:     <linux-kselftest@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <xiexiuqi@huawei.com>,
+        <zengheng4@huawei.com>
+Subject: [PATCH v2 3/5] kselftest/arm64: add DEF_SIGHANDLER_FUNC() and DEF_INST_RAISE_SIG() helpers
+Date:   Tue, 8 Aug 2023 21:40:34 +0800
+Message-ID: <20230808134036.668954-4-zengheng4@huawei.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230808134036.668954-1-zengheng4@huawei.com>
+References: <20230808134036.668954-1-zengheng4@huawei.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
  kwepemi500024.china.huawei.com (7.221.188.100)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Add macro definition functions DEF_SIGHANDLER_FUNC() and
+DEF_INST_RAISE_SIG() helpers.
 
-在 2023/8/8 20:25, Mark Brown 写道:
-> On Tue, Aug 08, 2023 at 02:13:51PM +0800, Zeng Heng wrote:
->
->> +static void fp_sigill(void)
->> +{
->> +	/* FMOV	S0, #1 */
->> +	asm volatile(".inst 0x1e2e1000" : : : );
->> +}
->> +
-> That should assemble even with the toolchain configured for v8.0 so
-> there shouldn't be any need to hand encode here.  Otherwise
->
-> Reviewed-by: Mark Brown <broonie@kernel.org>
+Furthermore, there is no need to modify the default SIGILL handling
+function throughout the entire testing lifecycle in the main() function.
+It is reasonable to narrow the scope to the context of the sig_fn
+function only.
 
-I would update to assemble language in V2.
+This is a pre-patch for the subsequent SIGBUS handler patch.
 
-Zeng Heng
+Signed-off-by: Zeng Heng <zengheng4@huawei.com>
+---
+ tools/testing/selftests/arm64/abi/hwcap.c | 118 ++++++++++++++--------
+ 1 file changed, 75 insertions(+), 43 deletions(-)
+
+diff --git a/tools/testing/selftests/arm64/abi/hwcap.c b/tools/testing/selftests/arm64/abi/hwcap.c
+index 70850bdb0e35..141e50c16f21 100644
+--- a/tools/testing/selftests/arm64/abi/hwcap.c
++++ b/tools/testing/selftests/arm64/abi/hwcap.c
+@@ -438,18 +438,21 @@ static const struct hwcap_data {
+ 	},
+ };
+
+-static bool seen_sigill;
+-
+-static void handle_sigill(int sig, siginfo_t *info, void *context)
+-{
+-	ucontext_t *uc = context;
+-
+-	seen_sigill = true;
+-
+-	/* Skip over the offending instruction */
+-	uc->uc_mcontext.pc += 4;
++typedef void (*sighandler_fn)(int, siginfo_t *, void *);
++
++#define DEF_SIGHANDLER_FUNC(SIG, NUM)					\
++static bool seen_##SIG;							\
++static void handle_##SIG(int sig, siginfo_t *info, void *context)	\
++{									\
++	ucontext_t *uc = context;					\
++									\
++	seen_##SIG = true;						\
++	/* Skip over the offending instruction */			\
++	uc->uc_mcontext.pc += 4;					\
+ }
+
++DEF_SIGHANDLER_FUNC(sigill, SIGILL);
++
+ bool cpuinfo_present(const char *name)
+ {
+ 	FILE *f;
+@@ -492,25 +495,77 @@ bool cpuinfo_present(const char *name)
+ 	return false;
+ }
+
+-int main(void)
++static int install_sigaction(int signum, sighandler_fn handler)
+ {
+-	const struct hwcap_data *hwcap;
+-	int i, ret;
+-	bool have_cpuinfo, have_hwcap;
++	int ret;
+ 	struct sigaction sa;
+
+-	ksft_print_header();
+-	ksft_set_plan(ARRAY_SIZE(hwcaps) * TESTS_PER_HWCAP);
+-
+ 	memset(&sa, 0, sizeof(sa));
+-	sa.sa_sigaction = handle_sigill;
++	sa.sa_sigaction = handler;
+ 	sa.sa_flags = SA_RESTART | SA_SIGINFO;
+ 	sigemptyset(&sa.sa_mask);
+-	ret = sigaction(SIGILL, &sa, NULL);
++	ret = sigaction(signum, &sa, NULL);
+ 	if (ret < 0)
+ 		ksft_exit_fail_msg("Failed to install SIGILL handler: %s (%d)\n",
+ 				   strerror(errno), errno);
+
++	return ret;
++}
++
++static void uninstall_sigaction(int signum)
++{
++	if (sigaction(signum, NULL, NULL) < 0)
++		ksft_exit_fail_msg("Failed to uninstall SIGILL handler: %s (%d)\n",
++				   strerror(errno), errno);
++}
++
++#define DEF_INST_RAISE_SIG(SIG, NUM)					\
++static bool inst_raise_##SIG(const struct hwcap_data *hwcap,		\
++				bool have_hwcap)			\
++{									\
++	if (!hwcap->SIG##_fn) {						\
++		ksft_test_result_skip(#SIG"_%s\n", hwcap->name);	\
++		/* assume that it would raise exception in default */	\
++		return true;						\
++	}								\
++									\
++	install_sigaction(NUM, handle_##SIG);				\
++									\
++	seen_##SIG = false;						\
++	hwcap->SIG##_fn();						\
++									\
++	if (have_hwcap) {						\
++		/* Should be able to use the extension */		\
++		ksft_test_result(!seen_##SIG,				\
++				#SIG"_%s\n", hwcap->name);		\
++	} else if (hwcap->SIG##_reliable) {				\
++		/* Guaranteed a SIGNAL */				\
++		ksft_test_result(seen_##SIG,				\
++				#SIG"_%s\n", hwcap->name);		\
++	} else {							\
++		/* Missing SIGNAL might be fine */			\
++		ksft_print_msg(#SIG"_%sreported for %s\n",		\
++				seen_##SIG ? "" : "not ",		\
++				hwcap->name);				\
++		ksft_test_result_skip(#SIG"_%s\n",			\
++					hwcap->name);			\
++	}								\
++									\
++	uninstall_sigaction(NUM);					\
++	return seen_##SIG;						\
++}
++
++DEF_INST_RAISE_SIG(sigill, SIGILL);
++
++int main(void)
++{
++	int i;
++	const struct hwcap_data *hwcap;
++	bool have_cpuinfo, have_hwcap;
++
++	ksft_print_header();
++	ksft_set_plan(ARRAY_SIZE(hwcaps) * TESTS_PER_HWCAP);
++
+ 	for (i = 0; i < ARRAY_SIZE(hwcaps); i++) {
+ 		hwcap = &hwcaps[i];
+
+@@ -523,30 +578,7 @@ int main(void)
+ 		ksft_test_result(have_hwcap == have_cpuinfo,
+ 				 "cpuinfo_match_%s\n", hwcap->name);
+
+-		if (hwcap->sigill_fn) {
+-			seen_sigill = false;
+-			hwcap->sigill_fn();
+-
+-			if (have_hwcap) {
+-				/* Should be able to use the extension */
+-				ksft_test_result(!seen_sigill, "sigill_%s\n",
+-						 hwcap->name);
+-			} else if (hwcap->sigill_reliable) {
+-				/* Guaranteed a SIGILL */
+-				ksft_test_result(seen_sigill, "sigill_%s\n",
+-						 hwcap->name);
+-			} else {
+-				/* Missing SIGILL might be fine */
+-				ksft_print_msg("SIGILL %sreported for %s\n",
+-					       seen_sigill ? "" : "not ",
+-					       hwcap->name);
+-				ksft_test_result_skip("sigill_%s\n",
+-						      hwcap->name);
+-			}
+-		} else {
+-			ksft_test_result_skip("sigill_%s\n",
+-					      hwcap->name);
+-		}
++		inst_raise_sigill(hwcap, have_hwcap);
+ 	}
+
+ 	ksft_print_cnts();
+--
+2.25.1
 
