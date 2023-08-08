@@ -2,426 +2,138 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 547BFC04A94
-	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Aug 2023 21:18:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28415C001E0
+	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Aug 2023 21:53:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236609AbjHHVSx (ORCPT
+        id S232110AbjHHVxS (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 8 Aug 2023 17:18:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48974 "EHLO
+        Tue, 8 Aug 2023 17:53:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236197AbjHHVSo (ORCPT
+        with ESMTP id S231659AbjHHVxJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Aug 2023 17:18:44 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D8449CE
-        for <linux-kselftest@vger.kernel.org>; Tue,  8 Aug 2023 14:16:24 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3fe2d620d17so10415e9.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 08 Aug 2023 14:16:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1691529382; x=1692134182;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GBdvRieiB8dFFT8uavZWsfJqKc+2lRPExOCUtNLgaBw=;
-        b=Mgpa25MNfI0MQEyzTW2SGw5hCallSXKKOBEgRFwKQ9K8BpRfTQjMGiH4zgKV1UzotL
-         pes26JYXGS3kBm7+gHLNEaErV1uM5T6vke19Y0a6mCKBzSUw0tE5sVqIVf9LOtYxd5Fd
-         QaVT02QLqic9i+hEVSL5R01EBVpru9BqWdJKuZciKx9Z4cI7VElKR7Lxv2q3ZWqtHNGk
-         NrXxZcRT78Mi/lkQxYd+iFcWeAgbh1h8mJZFiazrLUhO+Al1aWZNkW7MT45H5IPrQRE2
-         upNoWAHDgWiP1C6iAMdUW+ijN7Cmj+0F6+SZaeLn+D8NBkoSyglo3pqKGAeQLgbvkJG5
-         dJWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691529382; x=1692134182;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GBdvRieiB8dFFT8uavZWsfJqKc+2lRPExOCUtNLgaBw=;
-        b=VPZ2hakE0XdP8/xPYKywtkmnerubVbUZ4+0uyoL8Od6/GhvP5Tvosj5PaqI4Ldp2S1
-         UfvGHRLspbT+YkM+q72g82NcxSlYaAxYh76BQV5WCSaMpUkuHdmDRVsvim4NAFXeXOBM
-         1O1ilfp2TN15//pVjZgnQ/p1Je6cMsdiwzoc0lQQ/h1bNqdEF9AEmN9d3VjDQRVSHuRu
-         VBGs5QEt4Oa0orbDFTl3nSjB4QU7QDl4qgeKyWGYDqvJC2ifUf8tzv0hNak0ryFDl0uk
-         m/3qWyLwv+v6YgrPVCBXfclt9wL4U5OTDUYXHyQmyIcLyoZaKXuzLh3WUxggemhtmz8d
-         YzqQ==
-X-Gm-Message-State: AOJu0Yz5n5GzYMSKg4/aSiFSkCzs5RDZxwZwlBv420nvyi/Z2bcDWLIt
-        lA+t7PXNeqmuo3nlZru5kIO5doE7VqNzcANxAbrn4g==
-X-Google-Smtp-Source: AGHT+IFMvidr0Y453JFit3OPdEG9OaGVnlUt5kE+YPKrUlrcVhzvv3TnV+Frkbsb/U+SJ9s9qEGSVgN62ildHbgMQrc=
-X-Received: by 2002:a05:600c:1c1f:b0:3f4:fb7:48d4 with SMTP id
- j31-20020a05600c1c1f00b003f40fb748d4mr2180wms.3.1691529382353; Tue, 08 Aug
- 2023 14:16:22 -0700 (PDT)
+        Tue, 8 Aug 2023 17:53:09 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 500E091241;
+        Tue,  8 Aug 2023 10:32:05 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id BFE2A5C009D;
+        Tue,  8 Aug 2023 13:32:04 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Tue, 08 Aug 2023 13:32:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=devkernel.io; h=
+        cc:cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1691515924; x=1691602324; bh=rM
+        UaHZaSAI4l93e7AeZWrkXodMmRgdTWwjGdICmzDaY=; b=QIb8cGi7i1UpCeFo5r
+        lPDUKHa3UY9ysLj4xsmXkoQgvBnocxeYG0J5izW/BE4h7jAd0iuMvoFXviIVuqjU
+        klbeJ0cZ8iy+M0HSct94mQUeO5Anw0ggFpYldatqYosC+89HxfY4nRT2YxEwZ87N
+        AUa032AxMKzHx3eOvh/u8IzjecbYVvlnIzVdGqs9PdD/Vjj0AYzNjyRK5GoGoghU
+        YzvDY5hvLZOvbYdJXEhDPqjPbnOt9pIAIj1lFWq+DPxlbT2/6y5yuaF9kWuKSexX
+        bbxGShvrwZaCorxqbR4fQ1X553N6umvdv5D2sIt373aRzFqA4rHe5VrG9ZQqBXF5
+        i56g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1691515924; x=1691602324; bh=rMUaHZaSAI4l9
+        3e7AeZWrkXodMmRgdTWwjGdICmzDaY=; b=l7U6RjUGhd233kTpEmkm+1CLdkldm
+        P/2Bkl4+Awfzq9S1G9OmEPBEy+17nWwdTGB4KB18+fV+EFau+oDwheZDXD2FyPb5
+        zSGkfWbcI5YIyZcV9ligquRd8/vW/gdugihmSiZQMDAEUQYvwv2Wb1DxOdpog+DD
+        0gnFnOGvfevxWVD0eQ+2GapGhe8QOdDe7bTDCqvje3wDMcwzlPJPFlk8NxvfsT2J
+        nXM9C0cIQjlBuspJUlHzmkjyjAvaSlO0+JvfMMdnCS3OYa7YBjKIOR2/sElWcFXe
+        O/7mfnzROWwl3puMBQXllZdeMhRIxCjAeSZvrP00SpXm8tVF6IdrW1x4A==
+X-ME-Sender: <xms:FHzSZMTGHEnq7zDK1mIf5aLNFwb-rsYwg34gMlfZrRrosCiTnUUzGA>
+    <xme:FHzSZJzVeniscGdjhruJMk1lVnAJa1Z81GpRZLlOULuY1vPspgjeAhT3JvgUQPUYB
+    RnEELaBVO9M0_eRKPk>
+X-ME-Received: <xmr:FHzSZJ1zZ9PeCvuflHXT4OGmzhHugInOtK-hxKlOQLlTyf9wKX2m4SknA5x72tgHwrUSjjRNDYUy6Fmd-rIzOIYrFVCOE58151IDrfL5HCjn>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrledvgdduudefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfhgfhffvvefuffgjkfggtgesthdtredttdertdenucfhrhhomhepufhtvghf
+    rghnucftohgvshgthhcuoehshhhrseguvghvkhgvrhhnvghlrdhioheqnecuggftrfgrth
+    htvghrnhepveelgffghfehudeitdehjeevhedthfetvdfhledutedvgeeikeeggefgudeg
+    uedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsh
+    hhrhesuggvvhhkvghrnhgvlhdrihho
+X-ME-Proxy: <xmx:FHzSZAC0ivTxstdOr3eWUaee0pkAovRjRbMc_Bvxe6iBw2ViHBBH5g>
+    <xmx:FHzSZFhoCulsZuDMQnDf0QX8RnXxp-vDECZNYiceJ-rKjCylbKZfHw>
+    <xmx:FHzSZMoZNJWXhrGmrXm5ALc1DBlfE3uRX6Hd-Vu2maNn3B-0Q3H2iw>
+    <xmx:FHzSZAozjPgXYOkeAjtH_oqX0kF4XAk7otsZsyd0Md4QNHXHdDcx_Q>
+Feedback-ID: i84614614:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 8 Aug 2023 13:32:03 -0400 (EDT)
+References: <20230728163952.4634-1-ayush.jain3@amd.com>
+User-agent: mu4e 1.10.1; emacs 28.2.50
+From:   Stefan Roesch <shr@devkernel.io>
+To:     Ayush Jain <ayush.jain3@amd.com>
+Cc:     akpm@linux-foundation.org, shuah@kernel.org,
+        pasha.tatashin@soleen.com, zhansayabagdaulet@gmail.com,
+        tyhicks@linux.microsoft.com, raghavendra.kt@amd.com,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Narasimhan.V@amd.com,
+        Santosh.Shukla@amd.com, David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH v2 1/2] selftests: mm: ksm: Fix incorrect evaluation of
+ parameter
+Date:   Tue, 08 Aug 2023 10:31:24 -0700
+In-reply-to: <20230728163952.4634-1-ayush.jain3@amd.com>
+Message-ID: <qvqwfs4tphip.fsf@devbig1114.prn1.facebook.com>
 MIME-Version: 1.0
-References: <20230808123529.4725-1-rf@opensource.cirrus.com> <20230808123529.4725-3-rf@opensource.cirrus.com>
-In-Reply-To: <20230808123529.4725-3-rf@opensource.cirrus.com>
-From:   Rae Moar <rmoar@google.com>
-Date:   Tue, 8 Aug 2023 17:16:11 -0400
-Message-ID: <CA+GJov79EJLbdptX+hhTqa90C7A0aJ-wzjxF1LDn++jWHeNXFA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/6] kunit: kunit-test: Add test cases for extending
- log buffer
-To:     Richard Fitzgerald <rf@opensource.cirrus.com>
-Cc:     brendan.higgins@linux.dev, davidgow@google.com,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Aug 8, 2023 at 8:35=E2=80=AFAM Richard Fitzgerald
-<rf@opensource.cirrus.com> wrote:
+
+Ayush Jain <ayush.jain3@amd.com> writes:
+
+> A missing break in kms_tests leads to kselftest hang when the
+> parameter -s is used.
+> In current code flow because of missing break in -s, -t parses
+> args spilled from -s and as -t accepts only valid values as 0,1
+> so any arg in -s >1 or <0, gets in ksm_test failure
 >
-> Add test cases for the dynamically-extending log buffer.
+> This went undetected since, before the addition of option -t,
+> the next case -M would immediately break out of the switch
+> statement but that is no longer the case
 >
-> kunit_log_extend_test_1() logs a series of numbered lines then tests
-> that the resulting log contains all the lines.
+> Add the missing break statement.
 >
-> kunit_log_extend_test_2() logs a large number of lines of varying length
-> to create many fragments, then tests that all lines are present.
+> ----Before----
+> ./ksm_tests -H -s 100
+> Invalid merge type
 >
-> kunit_log_frag_sized_line_test() logs a line that exactly fills a
-> fragment. This should not cause an extension of the log or truncation
-> of the line.
+> ----After----
+> ./ksm_tests -H -s 100
+> Number of normal pages:    0
+> Number of huge pages:    50
+> Total size:    100 MiB
+> Total time:    0.401732682 s
+> Average speed:  248.922 MiB/s
 >
-> kunit_log_newline_test() has a new test to append a line that is exactly
-> the length of the available space in the current fragment and check that
-> the resulting log has a trailing '\n'.
+> Fixes: 07115fcc15b4 ("selftests/mm: add new selftests for KSM")
 >
-> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
-
-Hello!
-
-I am happy to see so many tests in this patch series. I've been
-working with these patches and the debugfs logs seem to be working
-well.
-
-However, when I ran the new kunit-log-test tests three of the tests
-failed: kunit_log_extend_test_1(), kunit_log_extend_test_2(), and
-kunit_log_newline_test().
-
-The diagnostic info for kunit_log_extend_test_1() reports:
-
-[20:55:27] # kunit_log_extend_test_1: EXPECTATION FAILED at
-lib/kunit/kunit-test.c:705
-[20:55:27] Expected p =3D=3D line, but
-[20:55:27]     p =3D=3D "xxxxxx=E2=80=A6xxxx12345678"
-[20:55:27]     line =3D=3D "The quick brown fox jumps over the lazy penguin=
- 0"
-=E2=80=A6
-[20:55:27] # kunit_log_extend_test_1: EXPECTATION FAILED at
-lib/kunit/kunit-test.c:705
-[20:55:27] Expected p =3D=3D line, but
-[20:55:27]     p =3D=3D "The quick brown fox jumps over the lazy penguin 1"
-[20:55:27]     line =3D=3D "The quick brown fox jumps over the lazy penguin=
- 4"
-[20:55:27] # kunit_log_extend_test_1: EXPECTATION FAILED at
-lib/kunit/kunit-test.c:705
-[20:55:27] Expected p =3D=3D line, but
-[20:55:27]     p =3D=3D "The quick brown fox jumps over the lazy penguin 2"
-[20:55:27]     line =3D=3D "The quick brown fox jumps over the lazy penguin=
- 5"
-=E2=80=A6
-[20:55:27] # kunit_log_extend_test_1: EXPECTATION FAILED at
-lib/kunit/kunit-test.c:709
-[20:55:27] Expected i =3D=3D num_lines, but
-[20:55:27]     i =3D=3D 64 (0x40)
-[20:55:27]     num_lines =3D=3D 141 (0x8d)
-
-So it looks like the log contains a different number of lines than
-expected which is causing the difference of 3 between expected and
-what was obtained. Potentially the log is not getting cleared/freed
-properly in between test cases?
-
-The diagnostic info for kunit_log_extend_test_2() reports:
-
-[20:55:27]     # kunit_log_extend_test_2: EXPECTATION FAILED at
-lib/kunit/kunit-test.c:776
-[20:55:27]     Expected p =3D=3D &line[i], but
-[20:55:27]         p =3D=3D
-"xxxxx...xxxxx123456780123456789abcdef101112131415161718191a1b1c1d1e1f20212=
-2232425262728292a2b2c2d2e2f30313233343536373839"
-[20:55:27]         &line[i] =3D=3D
-"0123456789abcdef101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c=
-2d2e2f30313233343536373839"
-[20:55:27]     # kunit_log_extend_test_2: EXPECTATION FAILED at
-lib/kunit/kunit-test.c:781
-[20:55:27]     Expected n =3D=3D num_lines, but
-[20:55:27]         n =3D=3D 147 (0x93)
-[20:55:27]         num_lines =3D=3D 155 (0x9b)
-[20:55:27] Not enough lines.
-
-Similar difference in the number of lines here.
-
-The diagnostic info for kunit_log_newline_test() reports that the test
-fails on this line:
-
-KUNIT_EXPECT_EQ(test, p[strlen(p) - 1], '\n');
-
-Let me know if you are seeing similar errors. I can post the full log
-if that would be helpful.
-
--Rae
-
+> Signed-off-by: Ayush Jain <ayush.jain3@amd.com>
+> Reviewed-by: David Hildenbrand <david@redhat.com>
 > ---
->  lib/kunit/kunit-test.c | 204 +++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 204 insertions(+)
+> v1 -> v2
+> collect Reviewed-by from David
+> Updated Fixes tag from commit 9e7cb94ca218 to 07115fcc15b4
 >
-> diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
-> index 54dc011c8980..48967d12e053 100644
-> --- a/lib/kunit/kunit-test.c
-> +++ b/lib/kunit/kunit-test.c
-> @@ -7,6 +7,7 @@
->   */
->  #include <kunit/test.h>
->  #include <kunit/test-bug.h>
-> +#include <linux/prandom.h>
+>  tools/testing/selftests/mm/ksm_tests.c | 1 +
+>  1 file changed, 1 insertion(+)
 >
->  #include "try-catch-impl.h"
->
-> @@ -530,6 +531,31 @@ static struct kunit_suite kunit_resource_test_suite =
-=3D {
->         .test_cases =3D kunit_resource_test_cases,
->  };
->
-> +static char *get_concatenated_log(struct kunit *test, const struct list_=
-head *log,
-> +                                 int *num_frags)
-> +{
-> +       struct kunit_log_frag *frag;
-> +       size_t len =3D 0;
-> +       int frag_count =3D 0;
-> +       char *p;
-> +
-> +       list_for_each_entry(frag, log, list)
-> +               len +=3D strlen(frag->buf);
-> +
-> +       len++; /* for terminating '\0' */
-> +       p =3D kunit_kmalloc(test, len, GFP_KERNEL);
-> +
-> +       list_for_each_entry(frag, log, list) {
-> +               strlcat(p, frag->buf, len);
-> +               ++frag_count;
-> +       }
-> +
-> +       if (num_frags)
-> +               *num_frags =3D frag_count;
-> +
-> +       return p;
-> +}
-> +
->  static void kunit_log_test(struct kunit *test)
->  {
->         struct kunit_suite suite;
-> @@ -568,7 +594,9 @@ static void kunit_log_test(struct kunit *test)
->
->  static void kunit_log_newline_test(struct kunit *test)
->  {
-> +       struct kunit_suite suite;
->         struct kunit_log_frag *frag;
-> +       char *p;
->
->         kunit_info(test, "Add newline\n");
->         if (test->log) {
-> @@ -576,14 +604,190 @@ static void kunit_log_newline_test(struct kunit *t=
-est)
->                 KUNIT_ASSERT_NOT_NULL_MSG(test, strstr(frag->buf, "Add ne=
-wline\n"),
->                         "Missing log line, full log:\n%s", frag->buf);
->                 KUNIT_EXPECT_NULL(test, strstr(frag->buf, "Add newline\n\=
-n"));
-> +
-> +               suite.log =3D kunit_kzalloc(test, sizeof(*suite.log), GFP=
-_KERNEL);
-> +               KUNIT_ASSERT_NOT_ERR_OR_NULL(test, suite.log);
-> +               INIT_LIST_HEAD(suite.log);
-> +               frag =3D kunit_kmalloc(test, sizeof(*frag), GFP_KERNEL);
-> +               KUNIT_ASSERT_NOT_ERR_OR_NULL(test, frag);
-> +               kunit_init_log_frag(frag);
-> +               list_add_tail(&frag->list, suite.log);
-> +
-> +               /* String that exactly fills fragment leaving no room for=
- \n */
-> +               memset(frag->buf, 0, sizeof(frag->buf));
-> +               memset(frag->buf, 'x', sizeof(frag->buf) - 9);
-> +               kunit_log_append(suite.log, "12345678");
-> +               p =3D get_concatenated_log(test, suite.log, NULL);
-> +               KUNIT_ASSERT_NOT_ERR_OR_NULL(test, p);
-> +               KUNIT_EXPECT_NOT_NULL_MSG(test, strstr(p, "x12345678\n"),
-> +                       "Newline not appended when fragment is full. Log =
-is:\n'%s'", p);
->         } else {
->                 kunit_skip(test, "only useful when debugfs is enabled");
->         }
->  }
->
-> +static void kunit_log_extend_test_1(struct kunit *test)
-> +{
-> +#ifdef CONFIG_KUNIT_DEBUGFS
-> +       struct kunit_suite suite;
-> +       struct kunit_log_frag *frag;
-> +       char line[60];
-> +       char *p, *pn;
-> +       size_t len, n;
-> +       int num_lines, num_frags, i;
-> +
-> +       suite.log =3D kunit_kzalloc(test, sizeof(*suite.log), GFP_KERNEL)=
-;
-> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, suite.log);
-> +       INIT_LIST_HEAD(suite.log);
-> +       frag =3D kunit_kmalloc(test, sizeof(*frag), GFP_KERNEL);
-> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, frag);
-> +       kunit_init_log_frag(frag);
-> +       KUNIT_EXPECT_EQ(test, frag->buf[0], '\0');
-> +       list_add_tail(&frag->list, suite.log);
-> +
-> +       i =3D 0;
-> +       len =3D 0;
-> +       do {
-> +               n =3D snprintf(line, sizeof(line),
-> +                            "The quick brown fox jumps over the lazy pen=
-guin %d\n", i);
-> +               KUNIT_ASSERT_LT(test, n, sizeof(line));
-> +               kunit_log_append(suite.log, line);
-> +               ++i;
-> +               len +=3D n;
-> +       }  while (len < (sizeof(frag->buf) * 30));
-> +       num_lines =3D i;
-> +
-> +       p =3D get_concatenated_log(test, suite.log, &num_frags);
-> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, p);
-> +       KUNIT_EXPECT_GT(test, num_frags, 1);
-> +
-> +       kunit_info(test, "num lines:%d num_frags:%d total len:%zu\n",
-> +                  num_lines, num_frags, strlen(p));
-> +
-> +       i =3D 0;
-> +       while ((pn =3D strchr(p, '\n')) !=3D NULL) {
-> +               *pn =3D '\0';
-> +               snprintf(line, sizeof(line),
-> +                        "The quick brown fox jumps over the lazy penguin=
- %d", i);
-> +               KUNIT_EXPECT_STREQ(test, p, line);
-> +               p =3D pn + 1;
-> +               ++i;
-> +       }
-> +       KUNIT_EXPECT_EQ(test, i, num_lines);
-> +#else
-> +       kunit_skip(test, "only useful when debugfs is enabled");
-> +#endif
-> +}
-> +
-> +static void kunit_log_extend_test_2(struct kunit *test)
-> +{
-> +#ifdef CONFIG_KUNIT_DEBUGFS
-> +       struct kunit_suite suite;
-> +       struct kunit_log_frag *frag;
-> +       struct rnd_state rnd;
-> +       char line[101];
-> +       char *p, *pn;
-> +       size_t len;
-> +       int num_lines, num_frags, n, i;
-> +
-> +       suite.log =3D kunit_kzalloc(test, sizeof(*suite.log), GFP_KERNEL)=
-;
-> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, suite.log);
-> +       INIT_LIST_HEAD(suite.log);
-> +       frag =3D kunit_kmalloc(test, sizeof(*frag), GFP_KERNEL);
-> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, frag);
-> +       kunit_init_log_frag(frag);
-> +       KUNIT_EXPECT_EQ(test, frag->buf[0], '\0');
-> +       list_add_tail(&frag->list, suite.log);
-> +
-> +       /* Build log line of varying content */
-> +       line[0] =3D '\0';
-> +       i =3D 0;
-> +       do {
-> +               char tmp[9];
-> +
-> +               snprintf(tmp, sizeof(tmp), "%x", i++);
-> +               len =3D strlcat(line, tmp, sizeof(line));
-> +       } while (len < sizeof(line) - 1);
-> +
-> +       /*
-> +        * Log lines of different lengths until we have created
-> +        * many fragments.
-> +        * The "randomness" must be repeatable.
-> +        */
-> +       prandom_seed_state(&rnd, 3141592653589793238ULL);
-> +       i =3D 0;
-> +       len =3D 0;
-> +       num_lines =3D 0;
-> +       do {
-> +               kunit_log_append(suite.log, "%s\n", &line[i]);
-> +               len +=3D sizeof(line) - i;
-> +               num_lines++;
-> +               i =3D prandom_u32_state(&rnd) % (sizeof(line) - 1);
-> +       } while (len < (sizeof(frag->buf) * 30));
-> +
-> +       /* There must be more than one buffer fragment now */
-> +       KUNIT_EXPECT_FALSE(test, list_is_singular(suite.log));
-> +
-> +       p =3D get_concatenated_log(test, suite.log, &num_frags);
-> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, p);
-> +       KUNIT_EXPECT_GT(test, num_frags, 1);
-> +
-> +       kunit_info(test, "num lines:%d num_frags:%d total len:%zu\n",
-> +                  num_lines, num_frags, strlen(p));
-> +
-> +       prandom_seed_state(&rnd, 3141592653589793238ULL);
-> +       i =3D 0;
-> +       n =3D 0;
-> +       while ((pn =3D strchr(p, '\n')) !=3D NULL) {
-> +               *pn =3D '\0';
-> +               KUNIT_EXPECT_STREQ(test, p, &line[i]);
-> +               p =3D pn + 1;
-> +               n++;
-> +               i =3D prandom_u32_state(&rnd) % (sizeof(line) - 1);
-> +       }
-> +       KUNIT_EXPECT_EQ_MSG(test, n, num_lines, "Not enough lines.");
-> +#else
-> +       kunit_skip(test, "only useful when debugfs is enabled");
-> +#endif
-> +}
-> +
-> +static void kunit_log_frag_sized_line_test(struct kunit *test)
-> +{
-> +#ifdef CONFIG_KUNIT_DEBUGFS
-> +       struct kunit_suite suite;
-> +       struct kunit_log_frag *frag, *src;
-> +
-> +       suite.log =3D kunit_kzalloc(test, sizeof(*suite.log), GFP_KERNEL)=
-;
-> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, suite.log);
-> +       INIT_LIST_HEAD(suite.log);
-> +       frag =3D kunit_kmalloc(test, sizeof(*frag), GFP_KERNEL);
-> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, frag);
-> +       kunit_init_log_frag(frag);
-> +       KUNIT_EXPECT_EQ(test, frag->buf[0], '\0');
-> +       list_add_tail(&frag->list, suite.log);
-> +
-> +       src =3D kunit_kzalloc(test, sizeof(*src), GFP_KERNEL);
-> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, src);
-> +       memset(src->buf, 'x', sizeof(src->buf) - 2);
-> +       KUNIT_ASSERT_EQ(test, strlen(src->buf), sizeof(src->buf) - 2);
-> +
-> +       /* Log a string that exactly fills the fragment */
-> +       kunit_log_append(suite.log, "%s\n", src->buf);
-> +       KUNIT_EXPECT_TRUE(test, list_is_singular(suite.log));
-> +       KUNIT_EXPECT_EQ(test, strlen(frag->buf), sizeof(frag->buf) - 1);
-> +       strlcat(src->buf, "\n", sizeof(src->buf));
-> +       KUNIT_EXPECT_STREQ(test, frag->buf, src->buf);
-> +#else
-> +       kunit_skip(test, "only useful when debugfs is enabled");
-> +#endif
-> +}
-> +
->  static struct kunit_case kunit_log_test_cases[] =3D {
->         KUNIT_CASE(kunit_log_test),
->         KUNIT_CASE(kunit_log_newline_test),
-> +       KUNIT_CASE(kunit_log_extend_test_1),
-> +       KUNIT_CASE(kunit_log_extend_test_2),
-> +       KUNIT_CASE(kunit_log_frag_sized_line_test),
->         {}
->  };
->
-> --
-> 2.30.2
->
+> diff --git a/tools/testing/selftests/mm/ksm_tests.c b/tools/testing/selftests/mm/ksm_tests.c
+> index 435acebdc325..380b691d3eb9 100644
+> --- a/tools/testing/selftests/mm/ksm_tests.c
+> +++ b/tools/testing/selftests/mm/ksm_tests.c
+> @@ -831,6 +831,7 @@ int main(int argc, char *argv[])
+>  				printf("Size must be greater than 0\n");
+>  				return KSFT_FAIL;
+>  			}
+> +			break;
+>  		case 't':
+>  			{
+>  				int tmp = atoi(optarg);
+
+Acked-by: Stefan Roesch <shr@devkernel.io>
