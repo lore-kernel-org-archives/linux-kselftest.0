@@ -2,120 +2,150 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EF74C04FDF
-	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Aug 2023 17:01:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1607CC05052
+	for <linux-kselftest@archiver.kernel.org>; Tue,  8 Aug 2023 17:01:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233953AbjHHRBj (ORCPT
+        id S233972AbjHHRBl (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 8 Aug 2023 13:01:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36192 "EHLO
+        Tue, 8 Aug 2023 13:01:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233712AbjHHRBA (ORCPT
+        with ESMTP id S233828AbjHHRBB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Aug 2023 13:01:00 -0400
+        Tue, 8 Aug 2023 13:01:01 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80EAA8685;
-        Tue,  8 Aug 2023 09:00:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A8768681;
+        Tue,  8 Aug 2023 09:00:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 85C99623A0;
-        Tue,  8 Aug 2023 07:35:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 607DBC433C8;
-        Tue,  8 Aug 2023 07:35:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1691480120;
-        bh=2X/NGOteLx4UL3AZkQJT72BA3+ipWBqs7JqK5Lor0b8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Su9ocHgjU00cWfZv6OLYZoas6jUlRqbWOEtcbT1kZAr/ElT/82cIeISg8oVmdK5fL
-         j8w/eEwG/vrvr4fk9sP8HvryDnGXUuXUcABLYP68xSlz7J6p8mli5w2jy6aQjoIFiC
-         80rf2TYDsg8WV2Ye4sT6LmGwDeF+MX56LM7BaMnA=
-Date:   Tue, 8 Aug 2023 09:35:17 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-Cc:     linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Tianfei Zhang <tianfei.zhang@intel.com>,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 396B8624C2;
+        Tue,  8 Aug 2023 11:12:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87B77C433C7;
+        Tue,  8 Aug 2023 11:12:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691493129;
+        bh=1QMm2qYYenzfqrS9JtfJhviMwybOhFCTNjTSNEl8Uq4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Pac1+sdY1mCBsPtQKAp6KfSZke3+ZBoIRZKAq4FOZYbRqr3J1FmN1eYHV24JD+vWP
+         8rXqfnrUS7PT+9ReDUlUeSB3dy8aNma2jcigPfN1Xc7fVYYRfv0ja/Ce83eULQnwpb
+         XViufpw39qsVaOpRvFR8jsCujgepLFVxZ+Su+ULX8NTvV/OGwHjSvwsrKjv5tERC+X
+         BmvFyy5T3jDSNAh6afNl3pVM3QRaYoA+s5iqziwsiQjlcxAHGyso1yzzbzqNGvIa3i
+         n77zRhws7zWBAx27h8GEQwAmQE0Ss/XkGz1YXHZuN2REA6IA8apT+hhHu6ElBm+Csk
+         hrRwlqbGY3yjw==
+Received: from [104.132.45.110] (helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1qTKdC-00377i-VX;
+        Tue, 08 Aug 2023 12:12:07 +0100
+Date:   Tue, 08 Aug 2023 12:12:13 +0100
+Message-ID: <87y1ilpz3m.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Anup Patel <anup@brainfault.org>
+Cc:     oliver.upton@linux.dev, xiaobo55x@gmail.com,
+        ajones@ventanamicro.com, seanjc@google.com,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Atish Patra <atishp@atishpatra.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
         Shuah Khan <shuah@kernel.org>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
-        Dan Carpenter <error27@gmail.com>, Takashi Iwai <tiwai@suse.de>
-Subject: Re: [PATCH v3 4.14 1/1] test_firmware: fix the memory leaks with the
- reqs buffer
-Message-ID: <2023080817-why-shawl-8ac1@gregkh>
-References: <20230804170017.92671-1-mirsad.todorovac@alu.unizg.hr>
- <2023080705-poet-nickname-5e08@gregkh>
- <a9e443c7-c7b5-63ce-08d9-5604ac545bf6@alu.unizg.hr>
- <2023080802-moonrise-cascade-a4c0@gregkh>
- <1269af66-bd86-0fab-e4ec-968f14371279@alu.unizg.hr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1269af66-bd86-0fab-e4ec-968f14371279@alu.unizg.hr>
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Like Xu <likexu@tencent.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org,
+        Haibo Xu <haibo1.xu@intel.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
+Subject: Re: [PATCH v6 00/13] RISCV: Add KVM_GET_REG_LIST API
+In-Reply-To: <CAAhSdy0yug=J0nxnnPoLYL=0MiT0w6qgPYOcv0QwMRe+fsQn8Q@mail.gmail.com>
+References: <cover.1690273969.git.haibo1.xu@intel.com>
+        <CAAhSdy0yug=J0nxnnPoLYL=0MiT0w6qgPYOcv0QwMRe+fsQn8Q@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 104.132.45.110
+X-SA-Exim-Rcpt-To: anup@brainfault.org, oliver.upton@linux.dev, xiaobo55x@gmail.com, ajones@ventanamicro.com, seanjc@google.com, pbonzini@redhat.com, corbet@lwn.net, atishp@atishpatra.org, paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, shuah@kernel.org, james.morse@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, ricarkol@google.com, vannapurve@google.com, likexu@tencent.com, vipinsh@google.com, dmatlack@google.com, coltonlewis@google.com, kvm@vger.kernel.org, haibo1.xu@intel.com, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Aug 08, 2023 at 08:24:43AM +0200, Mirsad Todorovac wrote:
-> On 8/8/23 06:28, Greg Kroah-Hartman wrote:
-> > On Mon, Aug 07, 2023 at 08:28:04PM +0200, Mirsad Todorovac wrote:
-> > > On 8/7/23 11:15, Greg Kroah-Hartman wrote:
-> > > > On Fri, Aug 04, 2023 at 07:00:18PM +0200, Mirsad Todorovac wrote:
-> > > > > [ commit be37bed754ed90b2655382f93f9724b3c1aae847 upstream ]
-> > > > > 
-> > > > > Dan Carpenter spotted that test_fw_config->reqs will be leaked if
-> > > > > trigger_batched_requests_store() is called two or more times.
-> > > > > The same appears with trigger_batched_requests_async_store().
-> > > > > 
-> > > > > This bug wasn't triggered by the tests, but observed by Dan's visual
-> > > > > inspection of the code.
-> > > > > 
-> > > > > The recommended workaround was to return -EBUSY if test_fw_config->reqs
-> > > > > is already allocated.
-> > > > > 
-> > > > > Fixes: c92316bf8e94 ("test_firmware: add batched firmware tests")
-> > > > > Cc: Luis Chamberlain <mcgrof@kernel.org>
-> > > > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > > > Cc: Russ Weight <russell.h.weight@intel.com>
-> > > > > Cc: Tianfei Zhang <tianfei.zhang@intel.com>
-> > > > > Cc: Shuah Khan <shuah@kernel.org>
-> > > > > Cc: Colin Ian King <colin.i.king@gmail.com>
-> > > > > Cc: Randy Dunlap <rdunlap@infradead.org>
-> > > > > Cc: linux-kselftest@vger.kernel.org
-> > > > > Cc: stable@vger.kernel.org # v4.14
-> > > > > Suggested-by: Dan Carpenter <error27@gmail.com>
-> > > > > Suggested-by: Takashi Iwai <tiwai@suse.de>
-> > > > > Link: https://lore.kernel.org/r/20230509084746.48259-2-mirsad.todorovac@alu.unizg.hr
-> > > > > Signed-off-by: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-> > > > > 
-> > > > > [ This fix is applied against the 4.14 stable branch. There are no changes to the ]
-> > > > > [ fix in code when compared to the upstread, only the reformatting for backport.  ]
-> > > > 
-> > > > Thanks for all of these, now queued up.
-> > > 
-> > > No problem, I should have done it right the first time to reduce your load.
-> > > 
-> > > I really believe that backporting bug fix patches is important because many systems
-> > > cannot upgrade because of the legacy apps and hardware, to state the obvious.
-> > 
-> > What "legacy apps" rely on a specific kernel version?
-> 
-> Hi, Mr. Greg,
-> 
-> Actually, in our particular case, it was the Eprints that required old mysql on Debian stretch
-> rather than MariaDB that came with Buster. So, the release required particular kernel version (4.9).
+On Mon, 07 Aug 2023 04:48:33 +0100,
+Anup Patel <anup@brainfault.org> wrote:
+>=20
+> Hi Marc, Hi Oliver,
+>=20
+> On Tue, Jul 25, 2023 at 2:05=E2=80=AFPM Haibo Xu <haibo1.xu@intel.com> wr=
+ote:
+> >
+> > KVM_GET_REG_LIST will dump all register IDs that are available to
+> > KVM_GET/SET_ONE_REG and It's very useful to identify some platform
+> > regression issue during VM migration.
+> >
+> > Patch 1-7 re-structured the get-reg-list test in aarch64 to make some
+> > of the code as common test framework that can be shared by riscv.
+> >
+> > Patch 8 move reject_set check logic to a function so as to check for
+> > different errno for different registers.
+> > Patch 9 move finalize_vcpu back to run_test so that riscv can implement
+> > its specific operation.
+> > Patch 10 change to do the get/set operation only on present-blessed lis=
+t.
+> > Patch 11 add the skip_set facilities so that riscv can skip set operati=
+on
+> > on some registers.
+> > Patch 12 enabled the KVM_GET_REG_LIST API in riscv.
+> > patch 13 added the corresponding kselftest for checking possible
+> > register regressions.
+> >
+> > The get-reg-list kvm selftest was ported from aarch64 and tested with
+> > Linux v6.5-rc3 on a Qemu riscv64 virt machine.
+> >
+> > ---
+> > Changed since v5:
+> >   * Rebase to v6.5-rc3
+> >   * Minor fix for Andrew's comments
+> >
+> > Andrew Jones (7):
+> >   KVM: arm64: selftests: Replace str_with_index with strdup_printf
+> >   KVM: arm64: selftests: Drop SVE cap check in print_reg
+> >   KVM: arm64: selftests: Remove print_reg's dependency on vcpu_config
+> >   KVM: arm64: selftests: Rename vcpu_config and add to kvm_util.h
+> >   KVM: arm64: selftests: Delete core_reg_fixup
+> >   KVM: arm64: selftests: Split get-reg-list test code
+> >   KVM: arm64: selftests: Finish generalizing get-reg-list
+> >
+> > Haibo Xu (6):
+> >   KVM: arm64: selftests: Move reject_set check logic to a function
+> >   KVM: arm64: selftests: Move finalize_vcpu back to run_test
+> >   KVM: selftests: Only do get/set tests on present blessed list
+> >   KVM: selftests: Add skip_set facility to get_reg_list test
+> >   KVM: riscv: Add KVM_GET_REG_LIST API support
+> >   KVM: riscv: selftests: Add get-reg-list test
+>=20
+> Are you okay for this series to go through the KVM RISC-V tree ?
 
-So what happens when this kernel becomes end-of-life?
+Sure, seems fine from my point of view. But please put it on an
+immutable topic branch so that we can also merge it in the arm64 tree,
+should we need to resolve any conflicts.
 
-> Of course, we can upgrade to any mainline kernel, but that is no longer a tested distro kernel,
-> and faults would be blamed on me entirely. Plus the overhead of regular patching ...
+Thanks,
 
-You should be doing regular patching for any LTS kernel as well, right?
-Same for testing, there should not be any difference in testing any
-kernel update be it on a LTS branch, or between major versions.
+	M.
 
-anyway, good luck!
-
-greg k-h
+--=20
+Without deviation from the norm, progress is not possible.
