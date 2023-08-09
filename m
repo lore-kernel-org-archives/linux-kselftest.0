@@ -2,33 +2,33 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E854EB64DD
-	for <linux-kselftest@archiver.kernel.org>; Wed,  9 Aug 2023 12:59:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 418B0EB64DD
+	for <linux-kselftest@archiver.kernel.org>; Wed,  9 Aug 2023 12:59:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230127AbjHIM7j convert rfc822-to-8bit (ORCPT
+        id S230151AbjHIM7n convert rfc822-to-8bit (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 9 Aug 2023 08:59:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55194 "EHLO
+        Wed, 9 Aug 2023 08:59:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231708AbjHIM7j (ORCPT
+        with ESMTP id S230501AbjHIM7n (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Aug 2023 08:59:39 -0400
-Received: from us-smtp-delivery-44.mimecast.com (us-smtp-delivery-44.mimecast.com [205.139.111.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C0421FF9
-        for <linux-kselftest@vger.kernel.org>; Wed,  9 Aug 2023 05:59:38 -0700 (PDT)
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-304-tyAun_tROBu7SrWS_9vBrg-1; Wed, 09 Aug 2023 08:59:32 -0400
-X-MC-Unique: tyAun_tROBu7SrWS_9vBrg-1
+        Wed, 9 Aug 2023 08:59:43 -0400
+Received: from us-smtp-delivery-44.mimecast.com (unknown [207.211.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6E1B1FF6
+        for <linux-kselftest@vger.kernel.org>; Wed,  9 Aug 2023 05:59:42 -0700 (PDT)
+Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-107-4zjUEokNM8OHUhZVgKvMLQ-1; Wed, 09 Aug 2023 08:59:23 -0400
+X-MC-Unique: 4zjUEokNM8OHUhZVgKvMLQ-1
 Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 80CF2101A5B4;
-        Wed,  9 Aug 2023 12:59:31 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D2EC838008B3;
+        Wed,  9 Aug 2023 12:59:22 +0000 (UTC)
 Received: from hog.localdomain (unknown [10.45.224.100])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A49212166B25;
-        Wed,  9 Aug 2023 12:59:29 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 010482166B25;
+        Wed,  9 Aug 2023 12:59:20 +0000 (UTC)
 From:   Sabrina Dubroca <sd@queasysnail.net>
 To:     netdev@vger.kernel.org
 Cc:     Sabrina Dubroca <sd@queasysnail.net>,
@@ -42,9 +42,9 @@ Cc:     Sabrina Dubroca <sd@queasysnail.net>,
         Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
         Gal Pressman <gal@nvidia.com>,
         Marcel Holtmann <marcel@holtmann.org>
-Subject: [PATCH net-next v3 5/6] selftests: tls: add key_generation argument to tls_crypto_info_init
-Date:   Wed,  9 Aug 2023 14:58:54 +0200
-Message-Id: <083539d66583652cf972ab1f5898025b55079dda.1691584074.git.sd@queasysnail.net>
+Subject: [PATCH net-next v3 1/6] tls: remove tls_context argument from tls_set_sw_offload
+Date:   Wed,  9 Aug 2023 14:58:50 +0200
+Message-Id: <49bb1e97ace3d18c7b57b2ae6a5011643d351f0a.1691584074.git.sd@queasysnail.net>
 In-Reply-To: <cover.1691584074.git.sd@queasysnail.net>
 References: <cover.1691584074.git.sd@queasysnail.net>
 MIME-Version: 1.0
@@ -57,79 +57,105 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This allows us to generate different keys, so that we can test that
-rekey is using the correct one.
+It's not really needed since we end up refetching it as tls_ctx. We
+can also remove the NULL check, since we have already dereferenced ctx
+in do_tls_setsockopt_conf.
 
-v3: update for newly added tests
+v2: reverse xmas tree
 
 Signed-off-by: Sabrina Dubroca <sd@queasysnail.net>
 ---
- tools/testing/selftests/net/tls.c | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
+ net/tls/tls.h        |  2 +-
+ net/tls/tls_device.c |  2 +-
+ net/tls/tls_main.c   |  4 ++--
+ net/tls/tls_sw.c     | 17 +++++++----------
+ 4 files changed, 11 insertions(+), 14 deletions(-)
 
-diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftests/net/tls.c
-index 4b63708c6a81..8d05748a0f57 100644
---- a/tools/testing/selftests/net/tls.c
-+++ b/tools/testing/selftests/net/tls.c
-@@ -41,9 +41,11 @@ struct tls_crypto_info_keys {
- };
+diff --git a/net/tls/tls.h b/net/tls/tls.h
+index 164d6a955e26..6916ff4fbde6 100644
+--- a/net/tls/tls.h
++++ b/net/tls/tls.h
+@@ -89,7 +89,7 @@ void update_sk_prot(struct sock *sk, struct tls_context *ctx);
+ int wait_on_pending_writer(struct sock *sk, long *timeo);
+ void tls_err_abort(struct sock *sk, int err);
  
- static void tls_crypto_info_init(uint16_t tls_version, uint16_t cipher_type,
--				 struct tls_crypto_info_keys *tls12)
-+				 struct tls_crypto_info_keys *tls12,
-+				 char key_generation)
+-int tls_set_sw_offload(struct sock *sk, struct tls_context *ctx, int tx);
++int tls_set_sw_offload(struct sock *sk, int tx);
+ void tls_update_rx_zc_capable(struct tls_context *tls_ctx);
+ void tls_sw_strparser_arm(struct sock *sk, struct tls_context *ctx);
+ void tls_sw_strparser_done(struct tls_context *tls_ctx);
+diff --git a/net/tls/tls_device.c b/net/tls/tls_device.c
+index 5df18f696d7f..cc1918a279d4 100644
+--- a/net/tls/tls_device.c
++++ b/net/tls/tls_device.c
+@@ -1275,7 +1275,7 @@ int tls_set_device_offload_rx(struct sock *sk, struct tls_context *ctx)
+ 	context->resync_nh_reset = 1;
+ 
+ 	ctx->priv_ctx_rx = context;
+-	rc = tls_set_sw_offload(sk, ctx, 0);
++	rc = tls_set_sw_offload(sk, 0);
+ 	if (rc)
+ 		goto release_ctx;
+ 
+diff --git a/net/tls/tls_main.c b/net/tls/tls_main.c
+index 7dbb8cd8f809..ffc50454758e 100644
+--- a/net/tls/tls_main.c
++++ b/net/tls/tls_main.c
+@@ -799,7 +799,7 @@ static int do_tls_setsockopt_conf(struct sock *sk, sockptr_t optval,
+ 			TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSTXDEVICE);
+ 			TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSCURRTXDEVICE);
+ 		} else {
+-			rc = tls_set_sw_offload(sk, ctx, 1);
++			rc = tls_set_sw_offload(sk, 1);
+ 			if (rc)
+ 				goto err_crypto_info;
+ 			TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSTXSW);
+@@ -813,7 +813,7 @@ static int do_tls_setsockopt_conf(struct sock *sk, sockptr_t optval,
+ 			TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSRXDEVICE);
+ 			TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSCURRRXDEVICE);
+ 		} else {
+-			rc = tls_set_sw_offload(sk, ctx, 0);
++			rc = tls_set_sw_offload(sk, 0);
+ 			if (rc)
+ 				goto err_crypto_info;
+ 			TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSRXSW);
+diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
+index 5c122d7bb784..2ca0eb90a2a5 100644
+--- a/net/tls/tls_sw.c
++++ b/net/tls/tls_sw.c
+@@ -2581,25 +2581,22 @@ void tls_update_rx_zc_capable(struct tls_context *tls_ctx)
+ 		tls_ctx->prot_info.version != TLS_1_3_VERSION;
+ }
+ 
+-int tls_set_sw_offload(struct sock *sk, struct tls_context *ctx, int tx)
++int tls_set_sw_offload(struct sock *sk, int tx)
  {
--	memset(tls12, 0, sizeof(*tls12));
-+	memset(tls12, key_generation, sizeof(*tls12));
-+	memset(tls12, 0, sizeof(struct tls_crypto_info));
+-	struct tls_context *tls_ctx = tls_get_ctx(sk);
+-	struct tls_prot_info *prot = &tls_ctx->prot_info;
+-	struct tls_crypto_info *crypto_info;
++	u16 nonce_size, tag_size, iv_size, rec_seq_size, salt_size;
++	char *iv, *rec_seq, *key, *salt, *cipher_name;
+ 	struct tls_sw_context_tx *sw_ctx_tx = NULL;
+ 	struct tls_sw_context_rx *sw_ctx_rx = NULL;
++	struct tls_context *ctx = tls_get_ctx(sk);
++	struct tls_crypto_info *crypto_info;
+ 	struct cipher_context *cctx;
++	struct tls_prot_info *prot;
+ 	struct crypto_aead **aead;
+-	u16 nonce_size, tag_size, iv_size, rec_seq_size, salt_size;
+ 	struct crypto_tfm *tfm;
+-	char *iv, *rec_seq, *key, *salt, *cipher_name;
+ 	size_t keysize;
+ 	int rc = 0;
  
- 	switch (cipher_type) {
- 	case TLS_CIPHER_CHACHA20_POLY1305:
-@@ -322,7 +324,7 @@ FIXTURE_SETUP(tls)
- 		SKIP(return, "Unsupported cipher in FIPS mode");
+-	if (!ctx) {
+-		rc = -EINVAL;
+-		goto out;
+-	}
++	prot = &ctx->prot_info;
  
- 	tls_crypto_info_init(variant->tls_version, variant->cipher_type,
--			     &tls12);
-+			     &tls12, 0);
- 
- 	ulp_sock_pair(_metadata, &self->fd, &self->cfd, &self->notls);
- 
-@@ -1092,7 +1094,7 @@ TEST_F(tls, bidir)
- 		struct tls_crypto_info_keys tls12;
- 
- 		tls_crypto_info_init(variant->tls_version, variant->cipher_type,
--				     &tls12);
-+				     &tls12, 0);
- 
- 		ret = setsockopt(self->fd, SOL_TLS, TLS_RX, &tls12,
- 				 tls12.len);
-@@ -1500,7 +1502,7 @@ FIXTURE_SETUP(tls_err)
- 	int ret;
- 
- 	tls_crypto_info_init(variant->tls_version, TLS_CIPHER_AES_GCM_128,
--			     &tls12);
-+			     &tls12, 0);
- 
- 	ulp_sock_pair(_metadata, &self->fd, &self->cfd, &self->notls);
- 	ulp_sock_pair(_metadata, &self->fd2, &self->cfd2, &self->notls);
-@@ -1922,7 +1924,7 @@ TEST(tls_v6ops) {
- 	int sfd, ret, fd;
- 	socklen_t len, len2;
- 
--	tls_crypto_info_init(TLS_1_2_VERSION, TLS_CIPHER_AES_GCM_128, &tls12);
-+	tls_crypto_info_init(TLS_1_2_VERSION, TLS_CIPHER_AES_GCM_128, &tls12, 0);
- 
- 	addr.sin6_family = AF_INET6;
- 	addr.sin6_addr = in6addr_any;
-@@ -1981,7 +1983,7 @@ TEST(prequeue) {
- 	len = sizeof(addr);
- 	memrnd(buf, sizeof(buf));
- 
--	tls_crypto_info_init(TLS_1_2_VERSION, TLS_CIPHER_AES_GCM_256, &tls12);
-+	tls_crypto_info_init(TLS_1_2_VERSION, TLS_CIPHER_AES_GCM_256, &tls12, 0);
- 
- 	addr.sin_family = AF_INET;
- 	addr.sin_addr.s_addr = htonl(INADDR_ANY);
+ 	if (tx) {
+ 		if (!ctx->priv_ctx_tx) {
 -- 
 2.40.1
 
