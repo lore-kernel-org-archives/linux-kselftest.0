@@ -2,33 +2,33 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 929D1C001B0
-	for <linux-kselftest@archiver.kernel.org>; Wed,  9 Aug 2023 12:59:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E854EB64DD
+	for <linux-kselftest@archiver.kernel.org>; Wed,  9 Aug 2023 12:59:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbjHIM71 convert rfc822-to-8bit (ORCPT
+        id S230127AbjHIM7j convert rfc822-to-8bit (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 9 Aug 2023 08:59:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34664 "EHLO
+        Wed, 9 Aug 2023 08:59:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230501AbjHIM70 (ORCPT
+        with ESMTP id S231708AbjHIM7j (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Aug 2023 08:59:26 -0400
+        Wed, 9 Aug 2023 08:59:39 -0400
 Received: from us-smtp-delivery-44.mimecast.com (us-smtp-delivery-44.mimecast.com [205.139.111.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61D681FF5
-        for <linux-kselftest@vger.kernel.org>; Wed,  9 Aug 2023 05:59:25 -0700 (PDT)
-Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-354-VfHXE0NLNFKdLa8hkAYfpA-1; Wed, 09 Aug 2023 08:59:21 -0400
-X-MC-Unique: VfHXE0NLNFKdLa8hkAYfpA-1
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C0421FF9
+        for <linux-kselftest@vger.kernel.org>; Wed,  9 Aug 2023 05:59:38 -0700 (PDT)
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-304-tyAun_tROBu7SrWS_9vBrg-1; Wed, 09 Aug 2023 08:59:32 -0400
+X-MC-Unique: tyAun_tROBu7SrWS_9vBrg-1
 Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B873F38008B4;
-        Wed,  9 Aug 2023 12:59:20 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 80CF2101A5B4;
+        Wed,  9 Aug 2023 12:59:31 +0000 (UTC)
 Received: from hog.localdomain (unknown [10.45.224.100])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 561452166B25;
-        Wed,  9 Aug 2023 12:59:18 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A49212166B25;
+        Wed,  9 Aug 2023 12:59:29 +0000 (UTC)
 From:   Sabrina Dubroca <sd@queasysnail.net>
 To:     netdev@vger.kernel.org
 Cc:     Sabrina Dubroca <sd@queasysnail.net>,
@@ -41,11 +41,12 @@ Cc:     Sabrina Dubroca <sd@queasysnail.net>,
         John Fastabend <john.fastabend@gmail.com>,
         Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
         Gal Pressman <gal@nvidia.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Subject: [PATCH net-next v3 0/6] tls: implement key updates for TLS1.3
-Date:   Wed,  9 Aug 2023 14:58:49 +0200
-Message-Id: <cover.1691584074.git.sd@queasysnail.net>
+        Marcel Holtmann <marcel@holtmann.org>
+Subject: [PATCH net-next v3 5/6] selftests: tls: add key_generation argument to tls_crypto_info_init
+Date:   Wed,  9 Aug 2023 14:58:54 +0200
+Message-Id: <083539d66583652cf972ab1f5898025b55079dda.1691584074.git.sd@queasysnail.net>
+In-Reply-To: <cover.1691584074.git.sd@queasysnail.net>
+References: <cover.1691584074.git.sd@queasysnail.net>
 MIME-Version: 1.0
 X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
 X-Mimecast-Spam-Score: 0
@@ -56,105 +57,79 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This adds support for receiving KeyUpdate messages (RFC 8446, 4.6.3
-[1]). A sender transmits a KeyUpdate message and then changes its TX
-key. The receiver should react by updating its RX key before
-processing the next message.
+This allows us to generate different keys, so that we can test that
+rekey is using the correct one.
 
-This patchset implements key updates by:
- 1. pausing decryption when a KeyUpdate message is received, to avoid
-    attempting to use the old key to decrypt a record encrypted with
-    the new key
- 2. returning -EKEYEXPIRED to syscalls that cannot receive the
-    KeyUpdate message, until the rekey has been performed by userspace
- 3. passing the KeyUpdate message to userspace as a control message
- 4. allowing updates of the crypto_info via the TLS_TX/TLS_RX
-    setsockopts
+v3: update for newly added tests
 
-This API has been tested with gnutls to make sure that it allows
-userspace libraries to implement key updates [2]. Thanks to Frantisek
-Krenzelok <fkrenzel@redhat.com> for providing the implementation in
-gnutls and testing the kernel patches.
+Signed-off-by: Sabrina Dubroca <sd@queasysnail.net>
+---
+ tools/testing/selftests/net/tls.c | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
 
-
-=======================================================================
-Discussions around v2 of this patchset focused on how HW offload would
-interact with rekey.
-
-RX
- - The existing SW path will handle all records between the KeyUpdate
-   message signaling the change of key and the new key becoming known
-   to the kernel -- those will be queued encrypted, and decrypted in
-   SW as they are read by userspace (once the key is provided, ie same
-   as this patchset)
- - Call ->tls_dev_del + ->tls_dev_add immediately during
-   setsockopt(TLS_RX)
-
-TX
- - After setsockopt(TLS_TX), switch to the existing SW path (not the
-   current device_fallback) until we're able to re-enable HW offload
-   - tls_device_sendmsg will call into tls_sw_sendmsg under lock_sock
-     to avoid changing socket ops during the rekey while another
-     thread might be waiting on the lock
- - We only re-enable HW offload (call ->tls_dev_add to install the new
-   key in HW) once all records sent with the old key have been
-   ACKed. At this point, all unacked records are SW-encrypted with the
-   new key, and the old key is unused by both HW and retransmissions.
-   - If there are no unacked records when userspace does
-     setsockopt(TLS_TX), we can (try to) install the new key in HW
-     immediately.
-   - If yet another key has been provided via setsockopt(TLS_TX), we
-     don't install intermediate keys, only the latest.
-   - TCP notifies ktls of ACKs via the icsk_clean_acked callback. In
-     case of a rekey, tls_icsk_clean_acked will record when all data
-     sent with the most recent past key has been sent. The next call
-     to sendmsg will install the new key in HW.
-   - We close and push the current SW record before reenabling
-     offload.
-
-If ->tls_dev_add fails to install the new key in HW, we stay in SW
-mode. We can add a counter to keep track of this.
-
-
-In addition:
-
-Because we can't change socket ops during a rekey, we'll also have to
-modify do_tls_setsockopt_conf to check ctx->tx_conf and only call
-either tls_set_device_offload or tls_set_sw_offload. RX already uses
-the same ops for both TLS_HW and TLS_SW, so we could switch between HW
-and SW mode on rekey.
-
-An alternative would be to have a common sendmsg which locks
-the socket and then calls the correct implementation. We'll need that
-anyway for the offload under rekey case, so that would only add a test
-to the SW path's ops (compared to the current code). That should allow
-us to simplify build_protos a bit, but might have a performance
-impact - we'll need to check it if we want to go that route.
-=======================================================================
-
-Note: in a future series, I'll clean up tls_set_sw_offload and
-eliminate the per-cipher copy-paste using tls_cipher_size_desc.
-
-[1] https://www.rfc-editor.org/rfc/rfc8446#section-4.6.3
-[2] https://gitlab.com/gnutls/gnutls/-/merge_requests/1625
-
-Sabrina Dubroca (6):
-  tls: remove tls_context argument from tls_set_sw_offload
-  tls: block decryption when a rekey is pending
-  tls: implement rekey for TLS1.3
-  docs: tls: document TLS1.3 key updates
-  selftests: tls: add key_generation argument to tls_crypto_info_init
-  selftests: tls: add rekey tests
-
- Documentation/networking/tls.rst  |  21 ++
- include/net/tls.h                 |   3 +
- net/tls/tls.h                     |   3 +-
- net/tls/tls_device.c              |   2 +-
- net/tls/tls_main.c                |  47 ++-
- net/tls/tls_sw.c                  | 184 +++++++++---
- tools/testing/selftests/net/tls.c | 466 +++++++++++++++++++++++++++++-
- 7 files changed, 661 insertions(+), 65 deletions(-)
-
+diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftests/net/tls.c
+index 4b63708c6a81..8d05748a0f57 100644
+--- a/tools/testing/selftests/net/tls.c
++++ b/tools/testing/selftests/net/tls.c
+@@ -41,9 +41,11 @@ struct tls_crypto_info_keys {
+ };
+ 
+ static void tls_crypto_info_init(uint16_t tls_version, uint16_t cipher_type,
+-				 struct tls_crypto_info_keys *tls12)
++				 struct tls_crypto_info_keys *tls12,
++				 char key_generation)
+ {
+-	memset(tls12, 0, sizeof(*tls12));
++	memset(tls12, key_generation, sizeof(*tls12));
++	memset(tls12, 0, sizeof(struct tls_crypto_info));
+ 
+ 	switch (cipher_type) {
+ 	case TLS_CIPHER_CHACHA20_POLY1305:
+@@ -322,7 +324,7 @@ FIXTURE_SETUP(tls)
+ 		SKIP(return, "Unsupported cipher in FIPS mode");
+ 
+ 	tls_crypto_info_init(variant->tls_version, variant->cipher_type,
+-			     &tls12);
++			     &tls12, 0);
+ 
+ 	ulp_sock_pair(_metadata, &self->fd, &self->cfd, &self->notls);
+ 
+@@ -1092,7 +1094,7 @@ TEST_F(tls, bidir)
+ 		struct tls_crypto_info_keys tls12;
+ 
+ 		tls_crypto_info_init(variant->tls_version, variant->cipher_type,
+-				     &tls12);
++				     &tls12, 0);
+ 
+ 		ret = setsockopt(self->fd, SOL_TLS, TLS_RX, &tls12,
+ 				 tls12.len);
+@@ -1500,7 +1502,7 @@ FIXTURE_SETUP(tls_err)
+ 	int ret;
+ 
+ 	tls_crypto_info_init(variant->tls_version, TLS_CIPHER_AES_GCM_128,
+-			     &tls12);
++			     &tls12, 0);
+ 
+ 	ulp_sock_pair(_metadata, &self->fd, &self->cfd, &self->notls);
+ 	ulp_sock_pair(_metadata, &self->fd2, &self->cfd2, &self->notls);
+@@ -1922,7 +1924,7 @@ TEST(tls_v6ops) {
+ 	int sfd, ret, fd;
+ 	socklen_t len, len2;
+ 
+-	tls_crypto_info_init(TLS_1_2_VERSION, TLS_CIPHER_AES_GCM_128, &tls12);
++	tls_crypto_info_init(TLS_1_2_VERSION, TLS_CIPHER_AES_GCM_128, &tls12, 0);
+ 
+ 	addr.sin6_family = AF_INET6;
+ 	addr.sin6_addr = in6addr_any;
+@@ -1981,7 +1983,7 @@ TEST(prequeue) {
+ 	len = sizeof(addr);
+ 	memrnd(buf, sizeof(buf));
+ 
+-	tls_crypto_info_init(TLS_1_2_VERSION, TLS_CIPHER_AES_GCM_256, &tls12);
++	tls_crypto_info_init(TLS_1_2_VERSION, TLS_CIPHER_AES_GCM_256, &tls12, 0);
+ 
+ 	addr.sin_family = AF_INET;
+ 	addr.sin_addr.s_addr = htonl(INADDR_ANY);
 -- 
 2.40.1
 
