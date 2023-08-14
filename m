@@ -2,110 +2,101 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5783EC001B0
-	for <linux-kselftest@archiver.kernel.org>; Mon, 14 Aug 2023 13:23:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0AE6C41513
+	for <linux-kselftest@archiver.kernel.org>; Mon, 14 Aug 2023 13:24:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbjHNNWr (ORCPT
+        id S230337AbjHNNXv (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 14 Aug 2023 09:22:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44680 "EHLO
+        Mon, 14 Aug 2023 09:23:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231148AbjHNNWe (ORCPT
+        with ESMTP id S230450AbjHNNXf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Aug 2023 09:22:34 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8B8C5E77;
-        Mon, 14 Aug 2023 06:22:31 -0700 (PDT)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 37EDM8bS019276;
-        Mon, 14 Aug 2023 15:22:08 +0200
-Date:   Mon, 14 Aug 2023 15:22:08 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     "'Zhangjin Wu'" <falcon@tinylab.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "thomas@t-8ch.de" <thomas@t-8ch.de>
-Subject: Re: [PATCH v5] tools/nolibc: fix up size inflate regression
-Message-ID: <20230814132208.GC18837@1wt.eu>
-References: <20230814082224.GA16761@1wt.eu>
- <20230814104226.7094-1-falcon@tinylab.org>
- <6fef903020954515abdcee7261918903@AcuMS.aculab.com>
- <20230814120941.GA18837@1wt.eu>
- <e3a6bd5b7a4d4ac2bccbaac21e0fc1a0@AcuMS.aculab.com>
+        Mon, 14 Aug 2023 09:23:35 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA20810E4;
+        Mon, 14 Aug 2023 06:23:33 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 37E5t3EI003856;
+        Mon, 14 Aug 2023 08:23:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=
+        from:to:cc:subject:date:message-id:in-reply-to:references
+        :mime-version:content-transfer-encoding:content-type; s=
+        PODMain02222019; bh=Tu5hYj0cENcnReD71Hf/Ug24TIdVaaEFqB1yCIa77wM=; b=
+        PzkquUQPH3Be0u83loyK39r6rppogO3iGnV+BlckNjHR0L2gaIKJwpMcLtaesb2u
+        XRue+MEB6BFUFRceCI+ME7tkGYz078i73BA6DY5ZYwkPVK6caRt/P0x+L6k8mgt4
+        5kGaYHr30877M3kqDqDKSd+l1fl1NU62oapXNcDtzBaNwcCDaLMtLP7M+4onbI2A
+        PA1gqOHlL4+ilrFunXdFt9W3BB2cKCU1XmNNKQ+pEpUpYsbeHAvOb/Da29psqv1r
+        j0HeCrepdNcRrpibF5fUDyF035WqbF1uHZhtCZwQlr7aqTtFi02Ze1J2ifzdxdwD
+        qmrpQofOePddkwJb4J04xg==
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3se8kqt6x8-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Aug 2023 08:23:15 -0500 (CDT)
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Mon, 14 Aug
+ 2023 14:23:12 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.30 via Frontend Transport; Mon, 14 Aug 2023 14:23:12 +0100
+Received: from EDIN4L06LR3.ad.cirrus.com (EDIN4L06LR3.ad.cirrus.com [198.61.65.68])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 5AF99458;
+        Mon, 14 Aug 2023 13:23:12 +0000 (UTC)
+From:   Richard Fitzgerald <rf@opensource.cirrus.com>
+To:     <brendan.higgins@linux.dev>, <davidgow@google.com>,
+        <rmoar@google.com>
+CC:     <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
+        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>
+Subject: [PATCH v4 02/10] kunit: string-stream: Don't create a fragment for empty strings
+Date:   Mon, 14 Aug 2023 14:23:01 +0100
+Message-ID: <20230814132309.32641-3-rf@opensource.cirrus.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230814132309.32641-1-rf@opensource.cirrus.com>
+References: <20230814132309.32641-1-rf@opensource.cirrus.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e3a6bd5b7a4d4ac2bccbaac21e0fc1a0@AcuMS.aculab.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: D4ds0hHj5j_C3xMvSDa2VQ9hXlvwwMec
+X-Proofpoint-GUID: D4ds0hHj5j_C3xMvSDa2VQ9hXlvwwMec
+X-Proofpoint-Spam-Reason: safe
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Aug 14, 2023 at 12:27:48PM +0000, David Laight wrote:
-> From: Willy Tarreau
-> > Sent: 14 August 2023 13:10
-> > 
-> > Hi David,
-> > 
-> > On Mon, Aug 14, 2023 at 11:15:51AM +0000, David Laight wrote:
-> > > From: Zhangjin Wu
-> > > > Sent: 14 August 2023 11:42
-> > > ...
-> > > > [...]
-> > > > > > > Sure it's not pretty, and I'd rather just go back to SET_ERRNO() to be
-> > > > > > > honest, because we're there just because of the temptation to remove
-> > > > > > > lines that were not causing any difficulties :-/
-> > > > > > >
-> > > > > > > I think we can do something in-between and deal only with signed returns,
-> > > > > > > and explicitly place the test for MAX_ERRNO on the two unsigned ones
-> > > > > > > (brk and mmap). It should look approximately like this:
-> > > > > > >
-> > > > > > >  #define __sysret(arg)                                                \
-> > > > > > >  ({                                                                   \
-> > > > > > >  	__typeof__(arg) __sysret_arg = (arg);                           \
-> > > > > > >  	(__sysret_arg < 0) ? ({           /* error ? */                 \
-> > > > > > >  		SET_ERRNO(-__sysret_arg); /* yes: errno != -ret */      \
-> > > > > > >  		((__typeof__(arg)) -1);   /*      return -1 */          \
-> > >
-> > > I'm pretty sure you don't need the explicit cast.
-> > > (It would be needed for a pointer type.)
-> > > Can you use __arg < ? SET_ERRNO(-__arg), -1 : __arg
-> > >
-> > > Thinking, maybe it should be:
-> > >
-> > > #define __sysret(syscall_fn_args)
-> > > ({
-> > > 	__typeof__(syscall_fn_args) __rval = syscall_fn_args;
-> > > 	__rval >= 0 ? __rval : SET_ERRNO(-__rval), -1;
-> > > })
-> > 
-> > Yeah almost, since arg is necessarily signed in this version, it's
-> > just that I manually edited the previous macro in the mail and limited
-> > the amount of changes to what was necessary. It's just that SET_ERRNO
-> > only is an instruction, not an expression:
-> > 
-> >    #define SET_ERRNO(v) do { errno = (v); } while (0)
-> > 
-> > Thus the return value doesn't even pass through it. That's why it was
-> > so much simpler before. The rationale behind this was to bring the
-> > ability to completely drop errno for programs where you didn't care
-> > about it. It's particularly interesting when you don't need any other
-> > data either as the program gets strunk from a complete section.
-> 
-> Actually something like:
-> 
-> #define SET_ERRNO(v) (errno = -(long)(v), __typeof__(v)-1)
-> 
-> seems to work and allows the errno assignment be removed.
-> Also works for pointer types (after a different compare).
+If the result of the formatted string is an empty string just return
+instead of creating an empty fragment.
 
-Yes, that's something we can do (with the parenthesis around
-__typeof__(v) though).
+Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+---
+ lib/kunit/string-stream.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-> A quick check with godbolt doesn't show any sign extensions happening.
+diff --git a/lib/kunit/string-stream.c b/lib/kunit/string-stream.c
+index cc32743c1171..ed24d86af9f5 100644
+--- a/lib/kunit/string-stream.c
++++ b/lib/kunit/string-stream.c
+@@ -50,11 +50,17 @@ int string_stream_vadd(struct string_stream *stream,
+ 	/* Make a copy because `vsnprintf` could change it */
+ 	va_copy(args_for_counting, args);
+ 
+-	/* Need space for null byte. */
+-	len = vsnprintf(NULL, 0, fmt, args_for_counting) + 1;
++	/* Evaluate length of formatted string */
++	len = vsnprintf(NULL, 0, fmt, args_for_counting);
+ 
+ 	va_end(args_for_counting);
+ 
++	if (len == 0)
++		return 0;
++
++	/* Need space for null byte. */
++	len++;
++
+ 	frag_container = alloc_string_stream_fragment(stream->test,
+ 						      len,
+ 						      stream->gfp);
+-- 
+2.30.2
 
-I agree there's none here. 
-
-Willy
