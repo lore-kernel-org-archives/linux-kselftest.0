@@ -2,109 +2,209 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8218BC04A6A
-	for <linux-kselftest@archiver.kernel.org>; Mon, 14 Aug 2023 02:18:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F69EC04A94
+	for <linux-kselftest@archiver.kernel.org>; Mon, 14 Aug 2023 02:21:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbjHNCRr (ORCPT
+        id S229948AbjHNCVD (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 13 Aug 2023 22:17:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40322 "EHLO
+        Sun, 13 Aug 2023 22:21:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229827AbjHNCRe (ORCPT
+        with ESMTP id S230292AbjHNCVC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 13 Aug 2023 22:17:34 -0400
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A2F18E;
-        Sun, 13 Aug 2023 19:17:32 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4RPJ2G4ln2z4f3mJl;
-        Mon, 14 Aug 2023 10:17:26 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.124.27])
-        by APP4 (Coremail) with SMTP id gCh0CgD31Ke4jtlk5G6lAg--.6563S2;
-        Mon, 14 Aug 2023 10:17:29 +0800 (CST)
-From:   Kemeng Shi <shikemeng@huaweicloud.com>
-To:     brendan.higgins@linux.dev, davidgow@google.com,
-        dlatypov@google.com, skhan@linuxfoundation.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-Cc:     shikemeng@huaweicloud.com
-Subject: [PATCH] kunit: replace KUNIT_TRIGGER_STATIC_STUB macro with KUNIT_STATIC_STUB_REDIRECT
-Date:   Mon, 14 Aug 2023 18:17:32 +0800
-Message-Id: <20230814101732.3733165-1-shikemeng@huaweicloud.com>
-X-Mailer: git-send-email 2.30.0
+        Sun, 13 Aug 2023 22:21:02 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A7EA8
+        for <linux-kselftest@vger.kernel.org>; Sun, 13 Aug 2023 19:21:01 -0700 (PDT)
+Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RPJ2F0TzrztRtq;
+        Mon, 14 Aug 2023 10:17:25 +0800 (CST)
+Received: from huawei.com (10.175.103.91) by kwepemi500024.china.huawei.com
+ (7.221.188.100) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Mon, 14 Aug
+ 2023 10:20:58 +0800
+From:   Zeng Heng <zengheng4@huawei.com>
+To:     <shuah@kernel.org>, <catalin.marinas@arm.com>, <will@kernel.org>,
+        <broonie@kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kselftest@vger.kernel.org>, <xiexiuqi@huawei.com>,
+        <zengheng4@huawei.com>
+Subject: [PATCH -next 0/4] kselftest/arm64: Add crypto-related feature checks to hwcap test
+Date:   Mon, 14 Aug 2023 10:17:43 +0800
+Message-ID: <20230814021747.1784812-1-zengheng4@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgD31Ke4jtlk5G6lAg--.6563S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Kr48uF13Zr4ktw4xurWruFg_yoW8uFyxpa
-        s3CFykur15JFs2kFyxZFW8tr1ak3yxJrWjyr43Ww4fuay8Wr4fJa1DKrWrK3yUW3ykXa98
-        Z3sxtry5Ka1DArJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvF14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2jI8I6cxK62vIxIIY0VWUZVW8XwA2ocxC64kIII
-        0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xv
-        wVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4
-        x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG
-        64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r
-        1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAq
-        YI8I648v4I1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
-        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-        0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AK
-        xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
-        TRNgAwUUUUU
-X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemi500024.china.huawei.com (7.221.188.100)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-We mix up KUNIT_TRIGGER_STATIC_STUB and KUNIT_STATIC_STUB_REDIRECT in
-static_stub header. Just correct KUNIT_TRIGGER_STATIC_STUB to
-KUNIT_STATIC_STUB_REDIRECT which is documented.
+Add new feature checks related to crypto to the hwcap test.
 
-Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
-Fixes: e047c5eaa763 ("kunit: Expose 'static stub' API to redirect functions")
-Reviewed-by: David Gow <davidgow@google.com>
+The following is a log snippet from my local testing environment
+based on for-next/selftests:
+~~~
+ TAP version 13
+ 1..111
+ # AES present
+ ok 1 cpuinfo_match_AES
+ ok 2 sigill_AES
+ ok 3 # SKIP sigbus_AES
+ # CRC32 present
+ ok 4 cpuinfo_match_CRC32
+ ok 5 sigill_CRC32
+ ok 6 # SKIP sigbus_CRC32
+ ok 7 cpuinfo_match_CSSC
+ # sigill_reported for CSSC
+ ok 8 # SKIP sigill_CSSC
+ ok 9 # SKIP sigbus_CSSC
+ # FP present
+ ok 10 cpuinfo_match_FP
+ ok 11 sigill_FP
+ ok 12 # SKIP sigbus_FP
+ # JSCVT present
+ ok 13 cpuinfo_match_JSCVT
+ ok 14 sigill_JSCVT
+ ok 15 # SKIP sigbus_JSCVT
+ # LRCPC present
+ ok 16 cpuinfo_match_LRCPC
+ ok 17 sigill_LRCPC
+ ok 18 # SKIP sigbus_LRCPC
+ # LRCPC2 present
+ ok 19 cpuinfo_match_LRCPC2
+ ok 20 sigill_LRCPC2
+ ok 21 # SKIP sigbus_LRCPC2
+ # LSE present
+ ok 22 cpuinfo_match_LSE
+ ok 23 sigill_LSE
+ ok 24 # SKIP sigbus_LSE
+ # LSE2 present
+ ok 25 cpuinfo_match_LSE2
+ ok 26 sigill_LSE2
+ ok 27 sigbus_LSE2
+ ok 28 cpuinfo_match_MOPS
+ ok 29 sigill_MOPS
+ ok 30 # SKIP sigbus_MOPS
+ # RNG present
+ ok 31 cpuinfo_match_RNG
+ ok 32 sigill_RNG
+ ok 33 # SKIP sigbus_RNG
+ # PMULL present
+ ok 34 cpuinfo_match_PMULL
+ ok 35 sigill_PMULL
+ ok 36 # SKIP sigbus_PMULL
+ ok 37 cpuinfo_match_RPRFM
+ ok 38 # SKIP sigill_RPRFM
+ ok 39 # SKIP sigbus_RPRFM
+ # SHA1 present
+ ok 40 cpuinfo_match_SHA1
+ ok 41 sigill_SHA1
+ ok 42 # SKIP sigbus_SHA1
+ # SHA2 present
+ ok 43 cpuinfo_match_SHA2
+ ok 44 sigill_SHA2
+ ok 45 # SKIP sigbus_SHA2
+ # SHA512 present
+ ok 46 cpuinfo_match_SHA512
+ ok 47 sigill_SHA512
+ ok 48 # SKIP sigbus_SHA512
+ ok 49 cpuinfo_match_SME
+ ok 50 sigill_SME
+ ok 51 # SKIP sigbus_SME
+ ok 52 cpuinfo_match_SME2
+ ok 53 sigill_SME2
+ ok 54 # SKIP sigbus_SME2
+ ok 55 cpuinfo_match_SME 2.1
+ # sigill_reported for SME 2.1
+ ok 56 # SKIP sigill_SME 2.1
+ ok 57 # SKIP sigbus_SME 2.1
+ ok 58 cpuinfo_match_SME I16I32
+ # sigill_reported for SME I16I32
+ ok 59 # SKIP sigill_SME I16I32
+ ok 60 # SKIP sigbus_SME I16I32
+ ok 61 cpuinfo_match_SME BI32I32
+ # sigill_reported for SME BI32I32
+ ok 62 # SKIP sigill_SME BI32I32
+ ok 63 # SKIP sigbus_SME BI32I32
+ ok 64 cpuinfo_match_SME B16B16
+ # sigill_reported for SME B16B16
+ ok 65 # SKIP sigill_SME B16B16
+ ok 66 # SKIP sigbus_SME B16B16
+ ok 67 cpuinfo_match_SME F16F16
+ # sigill_reported for SME F16F16
+ ok 68 # SKIP sigill_SME F16F16
+ ok 69 # SKIP sigbus_SME F16F16
+ # SVE present
+ ok 70 cpuinfo_match_SVE
+ ok 71 sigill_SVE
+ ok 72 # SKIP sigbus_SVE
+ ok 73 cpuinfo_match_SVE 2
+ # sigill_reported for SVE 2
+ ok 74 # SKIP sigill_SVE 2
+ ok 75 # SKIP sigbus_SVE 2
+ ok 76 cpuinfo_match_SVE 2.1
+ # sigill_reported for SVE 2.1
+ ok 77 # SKIP sigill_SVE 2.1
+ ok 78 # SKIP sigbus_SVE 2.1
+ ok 79 cpuinfo_match_SVE AES
+ # sigill_reported for SVE AES
+ ok 80 # SKIP sigill_SVE AES
+ ok 81 # SKIP sigbus_SVE AES
+ ok 82 cpuinfo_match_SVE2 PMULL
+ # sigill_reported for SVE2 PMULL
+ ok 83 # SKIP sigill_SVE2 PMULL
+ ok 84 # SKIP sigbus_SVE2 PMULL
+ ok 85 cpuinfo_match_SVE2 BITPERM
+ # sigill_reported for SVE2 BITPERM
+ ok 86 # SKIP sigill_SVE2 BITPERM
+ ok 87 # SKIP sigbus_SVE2 BITPERM
+ ok 88 cpuinfo_match_SVE2 SHA3
+ # sigill_reported for SVE2 SHA3
+ ok 89 # SKIP sigill_SVE2 SHA3
+ ok 90 # SKIP sigbus_SVE2 SHA3
+ ok 91 cpuinfo_match_SVE2 SM4
+ # sigill_reported for SVE2 SM4
+ ok 92 # SKIP sigill_SVE2 SM4
+ ok 93 # SKIP sigbus_SVE2 SM4
+ # SVE2 I8MM present
+ ok 94 cpuinfo_match_SVE2 I8MM
+ ok 95 sigill_SVE2 I8MM
+ ok 96 # SKIP sigbus_SVE2 I8MM
+ # SVE2 F32MM present
+ ok 97 cpuinfo_match_SVE2 F32MM
+ ok 98 sigill_SVE2 F32MM
+ ok 99 # SKIP sigbus_SVE2 F32MM
+ # SVE2 F64MM present
+ ok 100 cpuinfo_match_SVE2 F64MM
+ ok 101 sigill_SVE2 F64MM
+ ok 102 # SKIP sigbus_SVE2 F64MM
+ # SVE2 BF16 present
+ ok 103 cpuinfo_match_SVE2 BF16
+ ok 104 sigill_SVE2 BF16
+ ok 105 # SKIP sigbus_SVE2 BF16
+ ok 106 cpuinfo_match_SVE2 EBF16
+ ok 107 # SKIP sigill_SVE2 EBF16
+ ok 108 # SKIP sigbus_SVE2 EBF16
+ ok 109 cpuinfo_match_HBC
+ ok 110 sigill_HBC
+ ok 111 # SKIP sigbus_HBC
+ # Totals: pass:60 fail:0 xfail:0 xpass:0 skip:51 error:0
+~~~
 
----
-v1->v2:
--Fix typo
--Add Fixes tag.
--Collect RVB from David
----
- include/kunit/static_stub.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Zeng Heng (4):
+  kselftest/arm64: add SHA1 and related features to hwcap test
+  kselftest/arm64: add AES feature check to hwcap test
+  kselftest/arm64: add pmull feature to hwcap test
+  kselftest/arm64: add jscvt feature to hwcap test
 
-diff --git a/include/kunit/static_stub.h b/include/kunit/static_stub.h
-index 9b80150a5d62..85315c80b303 100644
---- a/include/kunit/static_stub.h
-+++ b/include/kunit/static_stub.h
-@@ -11,7 +11,7 @@
- #if !IS_ENABLED(CONFIG_KUNIT)
- 
- /* If CONFIG_KUNIT is not enabled, these stubs quietly disappear. */
--#define KUNIT_TRIGGER_STATIC_STUB(real_fn_name, args...) do {} while (0)
-+#define KUNIT_STATIC_STUB_REDIRECT(real_fn_name, args...) do {} while (0)
- 
- #else
- 
-@@ -30,7 +30,7 @@
-  * This is a function prologue which is used to allow calls to the current
-  * function to be redirected by a KUnit test. KUnit tests can call
-  * kunit_activate_static_stub() to pass a replacement function in. The
-- * replacement function will be called by KUNIT_TRIGGER_STATIC_STUB(), which
-+ * replacement function will be called by KUNIT_STATIC_STUB_REDIRECT(), which
-  * will then return from the function. If the caller is not in a KUnit context,
-  * the function will continue execution as normal.
-  *
-@@ -87,7 +87,7 @@ void __kunit_activate_static_stub(struct kunit *test,
-  * When activated, calls to real_fn_addr from within this test (even if called
-  * indirectly) will instead call replacement_addr. The function pointed to by
-  * real_fn_addr must begin with the static stub prologue in
-- * KUNIT_TRIGGER_STATIC_STUB() for this to work. real_fn_addr and
-+ * KUNIT_STATIC_STUB_REDIRECT() for this to work. real_fn_addr and
-  * replacement_addr must have the same type.
-  *
-  * The redirection can be disabled again with kunit_deactivate_static_stub().
--- 
-2.30.0
+ tools/testing/selftests/arm64/abi/hwcap.c | 77 +++++++++++++++++++++++
+ 1 file changed, 77 insertions(+)
+
+--
+2.25.1
 
