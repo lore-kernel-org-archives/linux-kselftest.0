@@ -2,77 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B845C001DE
-	for <linux-kselftest@archiver.kernel.org>; Mon, 14 Aug 2023 03:16:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B047C001DB
+	for <linux-kselftest@archiver.kernel.org>; Mon, 14 Aug 2023 07:17:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232382AbjHNDP4 (ORCPT
+        id S232918AbjHNHQw (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 13 Aug 2023 23:15:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44094 "EHLO
+        Mon, 14 Aug 2023 03:16:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232804AbjHNDPN (ORCPT
+        with ESMTP id S234071AbjHNHQl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 13 Aug 2023 23:15:13 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32B0124;
-        Sun, 13 Aug 2023 20:15:07 -0700 (PDT)
-Received: from dggpemm500016.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4RPKFR0hlyz2Bd2B;
-        Mon, 14 Aug 2023 11:12:11 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by dggpemm500016.china.huawei.com
- (7.185.36.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Mon, 14 Aug
- 2023 11:15:05 +0800
-From:   Yipeng Zou <zouyipeng@huawei.com>
-To:     <andrii@kernel.org>, <mykolal@fb.com>, <ast@kernel.org>,
-        <daniel@iogearbox.net>, <martin.lau@linux.dev>, <song@kernel.org>,
-        <yonghong.song@linux.dev>, <john.fastabend@gmail.com>,
-        <kpsingh@kernel.org>, <sdf@google.com>, <haoluo@google.com>,
-        <jolsa@kernel.org>, <shuah@kernel.org>,
-        <benjamin.tissoires@redhat.com>, <void@manifault.com>,
-        <memxor@gmail.com>, <iii@linux.ibm.com>, <colin.i.king@gmail.com>,
-        <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-CC:     <zouyipeng@huawei.com>
-Subject: [bpf-next] selftests/bpf: fix repeat option when kfunc_call verify fail
-Date:   Mon, 14 Aug 2023 11:14:34 +0800
-Message-ID: <20230814031434.3077944-1-zouyipeng@huawei.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 14 Aug 2023 03:16:41 -0400
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 45B3FE71;
+        Mon, 14 Aug 2023 00:16:34 -0700 (PDT)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 37E7GLEA016686;
+        Mon, 14 Aug 2023 09:16:21 +0200
+Date:   Mon, 14 Aug 2023 09:16:21 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Zhangjin Wu <falcon@tinylab.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        tanyuan@tinylab.org, thomas@t-8ch.de
+Subject: Re: [PATCH v2 5/7] selftests/nolibc: customize CROSS_COMPILE for all
+ architectures
+Message-ID: <20230814071621.GB14322@1wt.eu>
+References: <20230813091625.GG8237@1wt.eu>
+ <20230813101805.10885-1-falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.90.53.73]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500016.china.huawei.com (7.185.36.25)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230813101805.10885-1-falcon@tinylab.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-There is no way to set topts.repeat=1 when tc_test going to verify fail.
+On Sun, Aug 13, 2023 at 06:18:05PM +0800, Zhangjin Wu wrote:
+> > Given that we don't support mips64, I'd suggest to ust mips-linux-
+> > instead here for now. That doesn't seem right to ask users to
+> > download a toolchain for a different architecture than the one
+> > supported just because we can adapt to it.
+> >
+> 
+> Agree very much, and the one below from patch 7/7 [1]:
+> 
+>     +CROSS_COMPILE_arm64     ?= aarch64-linux- aarch64-linux-gnu-
+>     +CROSS_COMPILE_arm       ?= arm-linux-gnueabi- arm-none-eabi-
+>     +CROSS_COMPILE_mips      ?= mips64-linux- mips64el-linux-gnuabi64-
+> 
+> It should be:
+> 
+>     +CROSS_COMPILE_mips      ?= mips-linux- mips-linux-gnu-gcc
+> 
+> And if necessary, the mips64-linux- line in the commit message of [1] should be
+> corrected too.
 
-Maybe it's clerical error, fix it directly.
+I just did that (and fixed mips-linux-gnu- instead of mips-linux-gnu-gcc
+above).
 
-Fixes: fb66223a244f ("selftests/bpf: add test for accessing ctx from syscall program type")
-Signed-off-by: Yipeng Zou <zouyipeng@huawei.com>
-Reviewed-by: Li Zetao <lizetao1@huawei.com>
----
- tools/testing/selftests/bpf/prog_tests/kfunc_call.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-index a543742cd7bd..2eb71559713c 100644
---- a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-+++ b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-@@ -173,8 +173,8 @@ static void verify_fail(struct kfunc_test_params *param)
- 	case tc_test:
- 		topts.data_in = &pkt_v4;
- 		topts.data_size_in = sizeof(pkt_v4);
--		break;
- 		topts.repeat = 1;
-+		break;
- 	}
- 
- 	skel = kfunc_call_fail__open_opts(&opts);
--- 
-2.34.1
-
+Thanks,
+Willy
