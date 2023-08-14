@@ -2,37 +2,39 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F69EC04A94
-	for <linux-kselftest@archiver.kernel.org>; Mon, 14 Aug 2023 02:21:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51750C04A6A
+	for <linux-kselftest@archiver.kernel.org>; Mon, 14 Aug 2023 02:22:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229948AbjHNCVD (ORCPT
+        id S230292AbjHNCVg (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 13 Aug 2023 22:21:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58918 "EHLO
+        Sun, 13 Aug 2023 22:21:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230292AbjHNCVC (ORCPT
+        with ESMTP id S232381AbjHNCVD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 13 Aug 2023 22:21:02 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A7EA8
-        for <linux-kselftest@vger.kernel.org>; Sun, 13 Aug 2023 19:21:01 -0700 (PDT)
+        Sun, 13 Aug 2023 22:21:03 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB7C11D
+        for <linux-kselftest@vger.kernel.org>; Sun, 13 Aug 2023 19:21:02 -0700 (PDT)
 Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RPJ2F0TzrztRtq;
-        Mon, 14 Aug 2023 10:17:25 +0800 (CST)
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4RPJ314PPWz2Bd2d;
+        Mon, 14 Aug 2023 10:18:05 +0800 (CST)
 Received: from huawei.com (10.175.103.91) by kwepemi500024.china.huawei.com
  (7.221.188.100) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Mon, 14 Aug
- 2023 10:20:58 +0800
+ 2023 10:20:59 +0800
 From:   Zeng Heng <zengheng4@huawei.com>
 To:     <shuah@kernel.org>, <catalin.marinas@arm.com>, <will@kernel.org>,
         <broonie@kernel.org>
 CC:     <linux-arm-kernel@lists.infradead.org>,
         <linux-kselftest@vger.kernel.org>, <xiexiuqi@huawei.com>,
         <zengheng4@huawei.com>
-Subject: [PATCH -next 0/4] kselftest/arm64: Add crypto-related feature checks to hwcap test
-Date:   Mon, 14 Aug 2023 10:17:43 +0800
-Message-ID: <20230814021747.1784812-1-zengheng4@huawei.com>
+Subject: [PATCH -next 2/4] kselftest/arm64: add AES feature check to hwcap test
+Date:   Mon, 14 Aug 2023 10:17:45 +0800
+Message-ID: <20230814021747.1784812-3-zengheng4@huawei.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230814021747.1784812-1-zengheng4@huawei.com>
+References: <20230814021747.1784812-1-zengheng4@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -44,167 +46,44 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add new feature checks related to crypto to the hwcap test.
+Add the AES feature check in the set of hwcap tests.
 
-The following is a log snippet from my local testing environment
-based on for-next/selftests:
-~~~
- TAP version 13
- 1..111
- # AES present
- ok 1 cpuinfo_match_AES
- ok 2 sigill_AES
- ok 3 # SKIP sigbus_AES
- # CRC32 present
- ok 4 cpuinfo_match_CRC32
- ok 5 sigill_CRC32
- ok 6 # SKIP sigbus_CRC32
- ok 7 cpuinfo_match_CSSC
- # sigill_reported for CSSC
- ok 8 # SKIP sigill_CSSC
- ok 9 # SKIP sigbus_CSSC
- # FP present
- ok 10 cpuinfo_match_FP
- ok 11 sigill_FP
- ok 12 # SKIP sigbus_FP
- # JSCVT present
- ok 13 cpuinfo_match_JSCVT
- ok 14 sigill_JSCVT
- ok 15 # SKIP sigbus_JSCVT
- # LRCPC present
- ok 16 cpuinfo_match_LRCPC
- ok 17 sigill_LRCPC
- ok 18 # SKIP sigbus_LRCPC
- # LRCPC2 present
- ok 19 cpuinfo_match_LRCPC2
- ok 20 sigill_LRCPC2
- ok 21 # SKIP sigbus_LRCPC2
- # LSE present
- ok 22 cpuinfo_match_LSE
- ok 23 sigill_LSE
- ok 24 # SKIP sigbus_LSE
- # LSE2 present
- ok 25 cpuinfo_match_LSE2
- ok 26 sigill_LSE2
- ok 27 sigbus_LSE2
- ok 28 cpuinfo_match_MOPS
- ok 29 sigill_MOPS
- ok 30 # SKIP sigbus_MOPS
- # RNG present
- ok 31 cpuinfo_match_RNG
- ok 32 sigill_RNG
- ok 33 # SKIP sigbus_RNG
- # PMULL present
- ok 34 cpuinfo_match_PMULL
- ok 35 sigill_PMULL
- ok 36 # SKIP sigbus_PMULL
- ok 37 cpuinfo_match_RPRFM
- ok 38 # SKIP sigill_RPRFM
- ok 39 # SKIP sigbus_RPRFM
- # SHA1 present
- ok 40 cpuinfo_match_SHA1
- ok 41 sigill_SHA1
- ok 42 # SKIP sigbus_SHA1
- # SHA2 present
- ok 43 cpuinfo_match_SHA2
- ok 44 sigill_SHA2
- ok 45 # SKIP sigbus_SHA2
- # SHA512 present
- ok 46 cpuinfo_match_SHA512
- ok 47 sigill_SHA512
- ok 48 # SKIP sigbus_SHA512
- ok 49 cpuinfo_match_SME
- ok 50 sigill_SME
- ok 51 # SKIP sigbus_SME
- ok 52 cpuinfo_match_SME2
- ok 53 sigill_SME2
- ok 54 # SKIP sigbus_SME2
- ok 55 cpuinfo_match_SME 2.1
- # sigill_reported for SME 2.1
- ok 56 # SKIP sigill_SME 2.1
- ok 57 # SKIP sigbus_SME 2.1
- ok 58 cpuinfo_match_SME I16I32
- # sigill_reported for SME I16I32
- ok 59 # SKIP sigill_SME I16I32
- ok 60 # SKIP sigbus_SME I16I32
- ok 61 cpuinfo_match_SME BI32I32
- # sigill_reported for SME BI32I32
- ok 62 # SKIP sigill_SME BI32I32
- ok 63 # SKIP sigbus_SME BI32I32
- ok 64 cpuinfo_match_SME B16B16
- # sigill_reported for SME B16B16
- ok 65 # SKIP sigill_SME B16B16
- ok 66 # SKIP sigbus_SME B16B16
- ok 67 cpuinfo_match_SME F16F16
- # sigill_reported for SME F16F16
- ok 68 # SKIP sigill_SME F16F16
- ok 69 # SKIP sigbus_SME F16F16
- # SVE present
- ok 70 cpuinfo_match_SVE
- ok 71 sigill_SVE
- ok 72 # SKIP sigbus_SVE
- ok 73 cpuinfo_match_SVE 2
- # sigill_reported for SVE 2
- ok 74 # SKIP sigill_SVE 2
- ok 75 # SKIP sigbus_SVE 2
- ok 76 cpuinfo_match_SVE 2.1
- # sigill_reported for SVE 2.1
- ok 77 # SKIP sigill_SVE 2.1
- ok 78 # SKIP sigbus_SVE 2.1
- ok 79 cpuinfo_match_SVE AES
- # sigill_reported for SVE AES
- ok 80 # SKIP sigill_SVE AES
- ok 81 # SKIP sigbus_SVE AES
- ok 82 cpuinfo_match_SVE2 PMULL
- # sigill_reported for SVE2 PMULL
- ok 83 # SKIP sigill_SVE2 PMULL
- ok 84 # SKIP sigbus_SVE2 PMULL
- ok 85 cpuinfo_match_SVE2 BITPERM
- # sigill_reported for SVE2 BITPERM
- ok 86 # SKIP sigill_SVE2 BITPERM
- ok 87 # SKIP sigbus_SVE2 BITPERM
- ok 88 cpuinfo_match_SVE2 SHA3
- # sigill_reported for SVE2 SHA3
- ok 89 # SKIP sigill_SVE2 SHA3
- ok 90 # SKIP sigbus_SVE2 SHA3
- ok 91 cpuinfo_match_SVE2 SM4
- # sigill_reported for SVE2 SM4
- ok 92 # SKIP sigill_SVE2 SM4
- ok 93 # SKIP sigbus_SVE2 SM4
- # SVE2 I8MM present
- ok 94 cpuinfo_match_SVE2 I8MM
- ok 95 sigill_SVE2 I8MM
- ok 96 # SKIP sigbus_SVE2 I8MM
- # SVE2 F32MM present
- ok 97 cpuinfo_match_SVE2 F32MM
- ok 98 sigill_SVE2 F32MM
- ok 99 # SKIP sigbus_SVE2 F32MM
- # SVE2 F64MM present
- ok 100 cpuinfo_match_SVE2 F64MM
- ok 101 sigill_SVE2 F64MM
- ok 102 # SKIP sigbus_SVE2 F64MM
- # SVE2 BF16 present
- ok 103 cpuinfo_match_SVE2 BF16
- ok 104 sigill_SVE2 BF16
- ok 105 # SKIP sigbus_SVE2 BF16
- ok 106 cpuinfo_match_SVE2 EBF16
- ok 107 # SKIP sigill_SVE2 EBF16
- ok 108 # SKIP sigbus_SVE2 EBF16
- ok 109 cpuinfo_match_HBC
- ok 110 sigill_HBC
- ok 111 # SKIP sigbus_HBC
- # Totals: pass:60 fail:0 xfail:0 xpass:0 skip:51 error:0
-~~~
+Signed-off-by: Zeng Heng <zengheng4@huawei.com>
+---
+ tools/testing/selftests/arm64/abi/hwcap.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-Zeng Heng (4):
-  kselftest/arm64: add SHA1 and related features to hwcap test
-  kselftest/arm64: add AES feature check to hwcap test
-  kselftest/arm64: add pmull feature to hwcap test
-  kselftest/arm64: add jscvt feature to hwcap test
-
- tools/testing/selftests/arm64/abi/hwcap.c | 77 +++++++++++++++++++++++
- 1 file changed, 77 insertions(+)
-
---
+diff --git a/tools/testing/selftests/arm64/abi/hwcap.c b/tools/testing/selftests/arm64/abi/hwcap.c
+index c87a2e167ee8..d9a49b1467ac 100644
+--- a/tools/testing/selftests/arm64/abi/hwcap.c
++++ b/tools/testing/selftests/arm64/abi/hwcap.c
+@@ -34,6 +34,12 @@
+  */
+ typedef void (*sig_fn)(void);
+ 
++static void aes_sigill(void)
++{
++	/* AESE V0.16B, V0.16B */
++	asm volatile(".inst 0x4e284800" : : : );
++}
++
+ static void atomics_sigill(void)
+ {
+ 	/* STADD W0, [SP] */
+@@ -280,6 +286,13 @@ static const struct hwcap_data {
+ 	sig_fn sigbus_fn;
+ 	bool sigbus_reliable;
+ } hwcaps[] = {
++	{
++		.name = "AES",
++		.at_hwcap = AT_HWCAP,
++		.hwcap_bit = HWCAP_AES,
++		.cpuinfo = "aes",
++		.sigill_fn = aes_sigill,
++	},
+ 	{
+ 		.name = "CRC32",
+ 		.at_hwcap = AT_HWCAP,
+-- 
 2.25.1
 
