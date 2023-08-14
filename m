@@ -2,243 +2,147 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A667C41513
-	for <linux-kselftest@archiver.kernel.org>; Mon, 14 Aug 2023 13:43:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E3C0C001B0
+	for <linux-kselftest@archiver.kernel.org>; Mon, 14 Aug 2023 14:19:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230363AbjHNNms (ORCPT
+        id S229524AbjHNOTM (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 14 Aug 2023 09:42:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60792 "EHLO
+        Mon, 14 Aug 2023 10:19:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230399AbjHNNm3 (ORCPT
+        with ESMTP id S232248AbjHNOTE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Aug 2023 09:42:29 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F0310E4;
-        Mon, 14 Aug 2023 06:42:26 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-686be3cbea0so3598960b3a.0;
-        Mon, 14 Aug 2023 06:42:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692020546; x=1692625346;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IvHLE1G4I90f+nf16fsbrAMJ1svZraVgMPkDGTs4isg=;
-        b=bWbRgdGT7PvEPb8o676YuWJLDh9pGsZ3yLABdOYpmue4gwTls2uibHibiNse+SJlSr
-         QzTIh7/kSIozfoFDqaOAk7GQAnNYHRJGG/QBq3UN4AlQUDXDym8t6l/3NulqfdxpwugZ
-         SRP3PdW71TQaiPr5czlGvZgBDXG9ZAI9WJ9129/48xLC3b0bMvFMkukpuyZbpVpjrUfJ
-         V68KuKj9TV9ta3MF6gS8Ujkg3Sc1Ywl57zv4/ZL3M7u0RJvQBrPN/V4ZGFpcIRFJnUsn
-         5mDe9x1rtGtzh2D45MWk6bPwuHl+f5YykcgUAKgehToryVk2YTb6+btTEL3GK9uKUkam
-         Xziw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692020546; x=1692625346;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IvHLE1G4I90f+nf16fsbrAMJ1svZraVgMPkDGTs4isg=;
-        b=EQshigAPI5vgf+zK4EIL4sJhMHQ1tngd/ZNqTkBYfSufADEGpCx485wqn/wOG5jgRa
-         pXqgG/jFAnJ4PaExTYzhrlsWL9Muf9Q4ICRSi/UXSVGAxH6BiIsbzCd3yZ2ORRj592TJ
-         Ma+sO661c+oTurGvuWhvWraBSRwtOKcPw3biebbKAXgdXePJvlWGwSAZVGv4T4DzDlCU
-         1KXR3VckUuQOJNQmy+JJ1VgvRzoDNgJVFZ+oejGtBLgFDqNQH34LaZc5Q6sA445W5V+2
-         q0C7vfafofiyUQ0htWeQR/2lFpYgkHmGL4MFcoQmhkl0WnGcLDQlrV2TUnv2gZghkgpA
-         Z/Hw==
-X-Gm-Message-State: AOJu0YwsiQ/se7fVDw8e49CnKoEv3yucunoYkiwWhtLmrJoVPCmVEcvM
-        bXfmshOZs+qMSuBg1k9rg9mYQYpFZJok6UnC
-X-Google-Smtp-Source: AGHT+IEDOpTrYMCOqRryz7xUyxIXrQAMw833n5fbfEpJDnnc6djVGiM+IhwPRMyZyPw7LKphNL867w==
-X-Received: by 2002:a05:6a21:99a6:b0:13d:7f7b:1926 with SMTP id ve38-20020a056a2199a600b0013d7f7b1926mr15615937pzb.11.1692020545798;
-        Mon, 14 Aug 2023 06:42:25 -0700 (PDT)
-Received: from localhost.localdomain (bb219-74-209-211.singnet.com.sg. [219.74.209.211])
-        by smtp.gmail.com with ESMTPSA id m3-20020a638c03000000b0055c02b8688asm8555583pgd.20.2023.08.14.06.42.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Aug 2023 06:42:25 -0700 (PDT)
-From:   Leon Hwang <hffilwlqm@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, x86@kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, mykolal@fb.com,
-        shuah@kernel.org, davem@davemloft.net, dsahern@kernel.org,
-        hffilwlqm@gmail.com, tangyeechou@gmail.com,
-        kernel-patches-bot@fb.com, maciej.fijalkowski@intel.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [RFC PATCH bpf-next 1/2] bpf, x64: Fix tailcall infinite loop bug
-Date:   Mon, 14 Aug 2023 21:41:46 +0800
-Message-ID: <20230814134147.70289-2-hffilwlqm@gmail.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230814134147.70289-1-hffilwlqm@gmail.com>
-References: <20230814134147.70289-1-hffilwlqm@gmail.com>
+        Mon, 14 Aug 2023 10:19:04 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4902EB5;
+        Mon, 14 Aug 2023 07:19:02 -0700 (PDT)
+X-QQ-mid: bizesmtp71t1692022713tipf0ac0
+Received: from linux-lab-host.localdomain ( [116.30.128.116])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 14 Aug 2023 22:18:32 +0800 (CST)
+X-QQ-SSF: 01200000000000E0X000000A0000000
+X-QQ-FEAT: +ynUkgUhZJnVKMRPdEQMhoiCR4FCJkcCBXOej9bUdzwUIQ6MhBjDnysPFwL91
+        sShkDTh2uTtA3OJg3JinOFmGfsr4TQh96NT4zjPTdLbrTVYRHq81ob9/GppTB6rNPsBp/9U
+        bgRKrdOqYh4VbEynpnLj/FU3ZPcKbyzAYBpMesH9VXdewiPKKhbf1S/idYVA+CTjc1fd7cE
+        giGlkuli1c6kYwYMiJPlmJ1RbHtwrVNd/DYYjgxCw1bMCp3ZgG8jevRh7tqcaZzDgJwsKK8
+        FCLL/grkJmvTL0lhZaR6QrChdhy3h4GCa+XGGsiAIDtGp7c25MkHamdQKcH7jBWBpcJFoAJ
+        ugGSAMUvRGR4dH8UNMXrB/FFBSinQpy/zx2WxDTIu0jX5itzng=
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 15692046616011566384
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     David.Laight@ACULAB.COM, arnd@arndb.de, falcon@tinylab.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        thomas@t-8ch.de
+Subject: Re: [PATCH v5] tools/nolibc: fix up size inflate regression
+Date:   Mon, 14 Aug 2023 22:18:31 +0800
+Message-Id: <20230814141831.163031-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230814132208.GC18837@1wt.eu>
+References: <20230814132208.GC18837@1wt.eu>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From commit ebf7d1f508a73871 ("bpf, x64: rework pro/epilogue and tailcall
-handling in JIT"), the tailcall on x64 works better than before.
+> On Mon, Aug 14, 2023 at 12:27:48PM +0000, David Laight wrote:
+> > From: Willy Tarreau
+> > > Sent: 14 August 2023 13:10
+> > > 
+> > > Hi David,
+> > > 
+> > > On Mon, Aug 14, 2023 at 11:15:51AM +0000, David Laight wrote:
+> > > > From: Zhangjin Wu
+> > > > > Sent: 14 August 2023 11:42
+> > > > ...
+> > > > > [...]
+> > > > > > > > Sure it's not pretty, and I'd rather just go back to SET_ERRNO() to be
+> > > > > > > > honest, because we're there just because of the temptation to remove
+> > > > > > > > lines that were not causing any difficulties :-/
+> > > > > > > >
+> > > > > > > > I think we can do something in-between and deal only with signed returns,
+> > > > > > > > and explicitly place the test for MAX_ERRNO on the two unsigned ones
+> > > > > > > > (brk and mmap). It should look approximately like this:
+> > > > > > > >
+> > > > > > > >  #define __sysret(arg)                                                \
+> > > > > > > >  ({                                                                   \
+> > > > > > > >  	__typeof__(arg) __sysret_arg = (arg);                           \
+> > > > > > > >  	(__sysret_arg < 0) ? ({           /* error ? */                 \
+> > > > > > > >  		SET_ERRNO(-__sysret_arg); /* yes: errno != -ret */      \
+> > > > > > > >  		((__typeof__(arg)) -1);   /*      return -1 */          \
+> > > >
+> > > > I'm pretty sure you don't need the explicit cast.
+> > > > (It would be needed for a pointer type.)
+> > > > Can you use __arg < ? SET_ERRNO(-__arg), -1 : __arg
+> > > >
+> > > > Thinking, maybe it should be:
+> > > >
+> > > > #define __sysret(syscall_fn_args)
+> > > > ({
+> > > > 	__typeof__(syscall_fn_args) __rval = syscall_fn_args;
+> > > > 	__rval >= 0 ? __rval : SET_ERRNO(-__rval), -1;
+> > > > })
+> > > 
+> > > Yeah almost, since arg is necessarily signed in this version, it's
+> > > just that I manually edited the previous macro in the mail and limited
+> > > the amount of changes to what was necessary. It's just that SET_ERRNO
+> > > only is an instruction, not an expression:
+> > > 
+> > >    #define SET_ERRNO(v) do { errno = (v); } while (0)
+> > > 
+> > > Thus the return value doesn't even pass through it. That's why it was
+> > > so much simpler before. The rationale behind this was to bring the
+> > > ability to completely drop errno for programs where you didn't care
+> > > about it. It's particularly interesting when you don't need any other
+> > > data either as the program gets strunk from a complete section.
+> > 
+> > Actually something like:
+> > 
+> > #define SET_ERRNO(v) (errno = -(long)(v), __typeof__(v)-1)
+> > 
+> > seems to work and allows the errno assignment be removed.
+> > Also works for pointer types (after a different compare).
+> 
+> Yes, that's something we can do (with the parenthesis around
+> __typeof__(v) though).
+>
 
-From commit e411901c0b775a3a ("bpf: allow for tailcalls in BPF subprograms
-for x64 JIT"), tailcall is able to run in BPF subprograms on x64.
+Yes, we need the parenthesis, this works:
 
-From commit 5b92a28aae4dd0f8 ("bpf: Support attaching tracing BPF program
-to other BPF programs"), BPF program is able to trace other BPF programs.
+    #define SET_ERRNO(v) ( errno = -(long)(v), ((__typeof__(v))-1))
 
-How about combining them all together?
+    #define __is_unsigned_type(v) ((__typeof__(v))(-1) > (__typeof__(v))1)
+    #define __is_syserr(v)        (__is_unsigned_type(v) ? (long)v & ~(-4095UL) : (v + 1 < (__typeof__(v))1))
 
-1. FENTRY/FEXIT on a BPF subprogram.
-2. A tailcall runs in the BPF subprogram.
-3. The tailcall calls itself.
+    #define __sysret(arg)                                                          \
+    ({                                                                             \
+            __typeof__(arg) __sysret_arg = (arg);                                  \
+            (!__is_syserr(__sysret_arg)) ? __sysret_arg : SET_ERRNO(__sysret_arg); \
+    })
 
-As a result, a tailcall infinite loop comes up. And the loop halts the
-machine.
+It looks better now, even for 'void *'.
 
-As we know, in tail call context, the tail_call_cnt propagates by stack
-and RAX register between BPF subprograms. So do it in FENTRY/FEXIT
-trampolines.
+'(long)x & ~(-4095UL)' saves another 2+ bytes in some architectures:
 
-Fixes: ebf7d1f508a7 ("bpf, x64: rework pro/epilogue and tailcall handling in JIT")
-Fixes: e411901c0b77 ("bpf: allow for tailcalls in BPF subprograms for x64 JIT")
-Signed-off-by: Leon Hwang <hffilwlqm@gmail.com>
----
- arch/x86/net/bpf_jit_comp.c | 23 +++++++++++++++++++----
- include/linux/bpf.h         |  6 ++++++
- kernel/bpf/trampoline.c     |  5 +++--
- kernel/bpf/verifier.c       |  9 +++++++--
- 4 files changed, 35 insertions(+), 8 deletions(-)
+     i386: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 19256
+   x86_64: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 21740
+    arm64: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 25812
+      arm: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 22856
+     mips: 160 test(s): 157 passed,   3 skipped,   0 failed => status: warning 22756
+      ppc: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 26380
+    ppc64: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 26756
+  ppc64le: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 27364
+    riscv: 160 test(s): 158 passed,   2 skipped,   0 failed => status: warning 21758
+     s390: 160 test(s): 157 passed,   3 skipped,   0 failed => status: warning 21936
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index a5930042139d3..ca5366d97ad04 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -1018,6 +1018,10 @@ static void emit_shiftx(u8 **pprog, u32 dst_reg, u8 src_reg, bool is64, u8 op)
- 
- #define INSN_SZ_DIFF (((addrs[i] - addrs[i - 1]) - (prog - temp)))
- 
-+/* mov rax, qword ptr [rbp - rounded_stack_depth - 8] */
-+#define RESTORE_TAIL_CALL_CNT(stack)				\
-+	EMIT3_off32(0x48, 0x8B, 0x85, -round_up(stack, 8) - 8)
-+
- static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image, u8 *rw_image,
- 		  int oldproglen, struct jit_context *ctx, bool jmp_padding)
- {
-@@ -1623,9 +1627,7 @@ st:			if (is_imm8(insn->off))
- 
- 			func = (u8 *) __bpf_call_base + imm32;
- 			if (tail_call_reachable) {
--				/* mov rax, qword ptr [rbp - rounded_stack_depth - 8] */
--				EMIT3_off32(0x48, 0x8B, 0x85,
--					    -round_up(bpf_prog->aux->stack_depth, 8) - 8);
-+				RESTORE_TAIL_CALL_CNT(bpf_prog->aux->stack_depth);
- 				if (!imm32)
- 					return -EINVAL;
- 				offs = 7 + x86_call_depth_emit_accounting(&prog, func);
-@@ -2464,6 +2466,8 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image, void *i
- 	else
- 		/* sub rsp, stack_size */
- 		EMIT4(0x48, 0x83, 0xEC, stack_size);
-+	if (flags & BPF_TRAMP_F_TAIL_CALL_CTX)
-+		EMIT1(0x50);		/* push rax */
- 	/* mov QWORD PTR [rbp - rbx_off], rbx */
- 	emit_stx(&prog, BPF_DW, BPF_REG_FP, BPF_REG_6, -rbx_off);
- 
-@@ -2516,6 +2520,12 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image, void *i
- 		restore_regs(m, &prog, regs_off);
- 		save_args(m, &prog, arg_stack_off, true);
- 
-+		if (flags & BPF_TRAMP_F_TAIL_CALL_CTX)
-+			/* Before calling the original function, restore the
-+			 * tail_call_cnt from stack.
-+			 */
-+			RESTORE_TAIL_CALL_CNT(stack_size);
-+
- 		if (flags & BPF_TRAMP_F_ORIG_STACK) {
- 			emit_ldx(&prog, BPF_DW, BPF_REG_0, BPF_REG_FP, 8);
- 			EMIT2(0xff, 0xd0); /* call *rax */
-@@ -2569,7 +2579,12 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image, void *i
- 			ret = -EINVAL;
- 			goto cleanup;
- 		}
--	}
-+	} else if (flags & BPF_TRAMP_F_TAIL_CALL_CTX)
-+		/* Before running the original function, restore the
-+		 * tail_call_cnt from stack.
-+		 */
-+		RESTORE_TAIL_CALL_CNT(stack_size);
-+
- 	/* restore return value of orig_call or fentry prog back into RAX */
- 	if (save_ret)
- 		emit_ldx(&prog, BPF_DW, BPF_REG_0, BPF_REG_FP, -8);
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index cfabbcf47bdb8..55c72086034ef 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1028,6 +1028,11 @@ struct btf_func_model {
-  */
- #define BPF_TRAMP_F_SHARE_IPMODIFY	BIT(6)
- 
-+/* Indicate that current trampoline is in a tail call context. Then, it has to
-+ * cache and restore tail_call_cnt to avoid infinite tail call loop.
-+ */
-+#define BPF_TRAMP_F_TAIL_CALL_CTX	BIT(7)
-+
- /* Each call __bpf_prog_enter + call bpf_func + call __bpf_prog_exit is ~50
-  * bytes on x86.
-  */
-@@ -1147,6 +1152,7 @@ struct bpf_attach_target_info {
- 	struct module *tgt_mod;
- 	const char *tgt_name;
- 	const struct btf_type *tgt_type;
-+	bool tail_call_ctx;
- };
- 
- #define BPF_DISPATCHER_MAX 48 /* Fits in 2048B */
-diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-index 78acf28d48732..0fae334e3f7b8 100644
---- a/kernel/bpf/trampoline.c
-+++ b/kernel/bpf/trampoline.c
-@@ -415,8 +415,8 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr, bool lock_direct_mut
- 		goto out;
- 	}
- 
--	/* clear all bits except SHARE_IPMODIFY */
--	tr->flags &= BPF_TRAMP_F_SHARE_IPMODIFY;
-+	/* clear all bits except SHARE_IPMODIFY and TAIL_CALL_CTX */
-+	tr->flags &= (BPF_TRAMP_F_SHARE_IPMODIFY | BPF_TRAMP_F_TAIL_CALL_CTX);
- 
- 	if (tlinks[BPF_TRAMP_FEXIT].nr_links ||
- 	    tlinks[BPF_TRAMP_MODIFY_RETURN].nr_links) {
-@@ -783,6 +783,7 @@ struct bpf_trampoline *bpf_trampoline_get(u64 key,
- 
- 	memcpy(&tr->func.model, &tgt_info->fmodel, sizeof(tgt_info->fmodel));
- 	tr->func.addr = (void *)tgt_info->tgt_addr;
-+	tr->flags = (tgt_info->tail_call_ctx ? BPF_TRAMP_F_TAIL_CALL_CTX : 0);
- out:
- 	mutex_unlock(&tr->mutex);
- 	return tr;
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 4ccca1f6c9981..a78e5a2ae5c72 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -19400,10 +19400,15 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
- 			return -EINVAL;
- 		fallthrough;
- 	case BPF_MODIFY_RETURN:
--	case BPF_LSM_MAC:
--	case BPF_LSM_CGROUP:
- 	case BPF_TRACE_FENTRY:
- 	case BPF_TRACE_FEXIT:
-+		if (tgt_prog && subprog > 0 &&
-+		    tgt_prog->aux->func[subprog]->is_func &&
-+		    tgt_prog->aux->tail_call_reachable)
-+			tgt_info->tail_call_ctx = true;
-+		fallthrough;
-+	case BPF_LSM_MAC:
-+	case BPF_LSM_CGROUP:
- 		if (!btf_type_is_func(t)) {
- 			bpf_log(log, "attach_btf_id %u is not a function\n",
- 				btf_id);
--- 
-2.41.0
+BR,
+Zhangjin
 
+> > A quick check with godbolt doesn't show any sign extensions happening.
+> 
+> I agree there's none here. 
+> 
+> Willy
