@@ -2,86 +2,81 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 67516C04E69
-	for <linux-kselftest@archiver.kernel.org>; Mon, 14 Aug 2023 16:51:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A40CC001E0
+	for <linux-kselftest@archiver.kernel.org>; Mon, 14 Aug 2023 17:23:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231477AbjHNQum (ORCPT
+        id S230104AbjHNRXA (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 14 Aug 2023 12:50:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49580 "EHLO
+        Mon, 14 Aug 2023 13:23:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231755AbjHNQuX (ORCPT
+        with ESMTP id S229685AbjHNRWz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Aug 2023 12:50:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D165DD2
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Aug 2023 09:50:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 710BF63996
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Aug 2023 16:50:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C1D57C433C8;
-        Mon, 14 Aug 2023 16:50:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692031821;
-        bh=gSw/rfK9rDCtWo7WJkWyrukDQU0jwq/A2F5w8MfrBus=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=O9McTadFqOMin6HMc6AShKjk8QWnWyoSYH7Cw+jVgrkCQxS4LhyRZI/Gtewddlkag
-         HqD3zUmESWc+BL9NiNCDDoZ/LqDDGZoezSK4B9cpzJnOuHtjfj7JX8+ZQ9jF4EaKkM
-         I52kUB4h4zXQQOT6GPhdHqSCmK0mdqnan1utbBa/JhaPnBK7R7Qu6K4In4LkE/l8sn
-         FXOOOgNGUJOP49CMUfq/7eto5vZCdsHLZabeMHA8p0sl0JiyD0s23bjtIVpuVG6h2p
-         U6retJlTW5cVxn3SQ9eKyGtezSp1P2arXo0gjECIOdlyXml/WueaI5OTfTJDpe7GcD
-         +TU6FyDfBoVEQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A55F7E93B37;
-        Mon, 14 Aug 2023 16:50:21 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 14 Aug 2023 13:22:55 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E6C710C1;
+        Mon, 14 Aug 2023 10:22:53 -0700 (PDT)
+X-QQ-mid: bizesmtp91t1692033755tkim2wmr
+Received: from linux-lab-host.localdomain ( [116.30.128.116])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 15 Aug 2023 01:22:34 +0800 (CST)
+X-QQ-SSF: 01200000000000E0Y000000A0000000
+X-QQ-FEAT: vqhsT3OOnzR9LD9Gd1HPzic9UXiyfWbi6XYBGvCn5B7s21lPPnFfU0hrCl7Wh
+        5Ezczu//vm9r7Gu49K9JEAVCQZoBrIlQ41AJEqhisxTGNOuwhI0g3b+/WqhyPgBUNdpAWd8
+        zx/J190zV9UrAruxwe9UtUptv8RDRd8vuW819KCnlC712lE1P/054TzIXPy0VntY3p54fcQ
+        x+rlVbgVUYwiqm/TfCO9TLHKu8Kh4B/LOmnAqW4Z0Rdrp9eBAI374MEfW105P5WPQcLNDyR
+        zAAkXMzotrDLQM+QXs5YbS2odJ2Ru9P/5UU3h0iuxZzx2cl/22sExXDYHITwQuawo8LFIFZ
+        Bw7zW7M70dIJlOyu5o=
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 3663684764056122485
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     falcon@tinylab.org
+Cc:     arnd@arndb.de, david.laight@aculab.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        thomas@t-8ch.de, w@1wt.eu
+Subject: Re: [PATCH v5] tools/nolibc: fix up size inflate regression
+Date:   Tue, 15 Aug 2023 01:22:33 +0800
+Message-Id: <20230814172233.225944-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230814104226.7094-1-falcon@tinylab.org>
+References: <20230814104226.7094-1-falcon@tinylab.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [bpf-next] selftests/bpf: clean-up fmod_ret in bench_rename test
- script
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <169203182167.3806.17645689182437041748.git-patchwork-notify@kernel.org>
-Date:   Mon, 14 Aug 2023 16:50:21 +0000
-References: <20230814030727.3010390-1-zouyipeng@huawei.com>
-In-Reply-To: <20230814030727.3010390-1-zouyipeng@huawei.com>
-To:     Yipeng Zou <zouyipeng@huawei.com>
-Cc:     ast@kernel.org, daniel@iogearbox.ne, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        bpf@vger.kernel.org, toke@redhat.com
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+Hi, Willy
 
-This patch was applied to bpf/bpf-next.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
-
-On Mon, 14 Aug 2023 11:07:27 +0800 you wrote:
-> [root@localhost bpf]# ./benchs/run_bench_rename.sh
-> base      :    0.819 ± 0.012M/s
-> kprobe    :    0.538 ± 0.009M/s
-> kretprobe :    0.503 ± 0.004M/s
-> rawtp     :    0.779 ± 0.020M/s
-> fentry    :    0.726 ± 0.007M/s
-> fexit     :    0.691 ± 0.007M/s
-> benchmark 'rename-fmodret' not found
-> 
 > [...]
+> > > 
+> > >     /* __systry2() is used to select one of two provided low level syscalls */
+> > >     #define __systry2(a, sys_a, sys_b) \
+> > >     	((NOLIBC__NR_##a != NOLIBC__NR_NOSYS) ? (sys_a) : (sys_b))
+> > 
+> > But this supposes that all of them are manually defined as you did above.
+> > I'd rather implement an ugly is_numeric() macro based on argument
+> > resolution. I've done it once in another project, I don't remember
+> > precisely where it is but I vaguely remember that it used to check
+> > that the string resolution of the argument gave a letter (when it
+> > does not exist) or a digit (when it does). I can look into that later
+> > if needed. But please avoid extra macro definitions as much as possible,
+> > they're a real pain to handle in the code. There's no error when one is
+> > missing or has a typo, it's difficult to follow them and they don't
+> > appear in the debugger.
+> >
+> 
+> Yeah, your reply inspired me to look into the IS_ENABLED() from
+> ../include/linux/kconfig.h macro again, there was a __is_defined() there, let's
+> throw away the ugly sysnr.h. I thought of IS_ENABLED() was only for y/n/m
+> before, but it does return 0 when the macro is not defined, it uses the same
+> trick in syscall() to calculate the number of arguments, if the macro is not
+> defined, then, 0 "argument".
+>
 
-Here is the summary with links:
-  - [bpf-next] selftests/bpf: clean-up fmod_ret in bench_rename test script
-    https://git.kernel.org/bpf/bpf-next/c/83a89c4b6ae9
+The above trick is only for ""#define something 1" ;-)
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+BR,
+Zhangjin
