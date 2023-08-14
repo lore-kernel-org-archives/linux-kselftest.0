@@ -2,92 +2,117 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9256AC04A94
-	for <linux-kselftest@archiver.kernel.org>; Mon, 14 Aug 2023 08:26:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12BC8C04FDF
+	for <linux-kselftest@archiver.kernel.org>; Mon, 14 Aug 2023 08:42:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233162AbjHNI0N (ORCPT
+        id S233886AbjHNIly (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 14 Aug 2023 04:26:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46362 "EHLO
+        Mon, 14 Aug 2023 04:41:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234843AbjHNIZ7 (ORCPT
+        with ESMTP id S234904AbjHNIls (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Aug 2023 04:25:59 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D55B61997;
-        Mon, 14 Aug 2023 01:25:36 -0700 (PDT)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 37E8PMSp017215;
-        Mon, 14 Aug 2023 10:25:22 +0200
-Date:   Mon, 14 Aug 2023 10:25:22 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        tanyuan@tinylab.org, thomas@t-8ch.de
-Subject: Re: [PATCH v2 0/7] selftests/nolibc: customize CROSS_COMPILE for all
- supported architectures
-Message-ID: <20230814082522.GA17212@1wt.eu>
-References: <20230814071850.GC14322@1wt.eu>
- <20230814073854.13444-1-falcon@tinylab.org>
- <20230814082500.GB16761@1wt.eu>
+        Mon, 14 Aug 2023 04:41:48 -0400
+Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [IPv6:2001:67c:2050:0:465::202])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3927127;
+        Mon, 14 Aug 2023 01:41:45 -0700 (PDT)
+Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:b231:465::202])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4RPSYd70PJz9slh;
+        Mon, 14 Aug 2023 10:41:41 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cyphar.com; s=MBO0001;
+        t=1692002502;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=79RoJoR/fwEl868XiYEwCuZo1mWc1anAic2p8X8NglE=;
+        b=p1mH3+eN9eCVXdi/TxEUdL6OIDyTpQYTMvtKaZZl79SDtqiMak9oJhVRBoeaG94oNA8btJ
+        PXKhAtBfpm7RHIgirGHwamL0Dqr5iJzMUBPRM7gjZR47hIhN/BQmCcoL7ufFIkmwRd7HqN
+        mVSznBoc06lgSX95l1aKE8O5Iqd0oGrgrweoODmiJ5QxpRealAixDosNM60Yo40IYyHmgg
+        UYfjbMmbOD9Hz5BIR3vTbMmxgQcmoaVDW7Tiy9rJ0hv/5isMvaFDnVF17zljfHsxF5j7Ls
+        UyjsKXdyA9wOQ660D6kuX8HSkD2lACAmd416Q3kl9z/0UdxSYT4GZVOm+puhqA==
+From:   Aleksa Sarai <cyphar@cyphar.com>
+Date:   Mon, 14 Aug 2023 18:40:59 +1000
+Subject: [PATCH v2 3/5] memfd: improve userspace warnings for missing
+ exec-related flags
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230814082500.GB16761@1wt.eu>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230814-memfd-vm-noexec-uapi-fixes-v2-3-7ff9e3e10ba6@cyphar.com>
+References: <20230814-memfd-vm-noexec-uapi-fixes-v2-0-7ff9e3e10ba6@cyphar.com>
+In-Reply-To: <20230814-memfd-vm-noexec-uapi-fixes-v2-0-7ff9e3e10ba6@cyphar.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Jeff Xu <jeffxu@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Daniel Verkamp <dverkamp@chromium.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        stable@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, Aleksa Sarai <cyphar@cyphar.com>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2138; i=cyphar@cyphar.com;
+ h=from:subject:message-id; bh=RhSvSYmzoCDTkzH6eBS7S4EFPaKzfTKNkGx9zoaFDXg=;
+ b=owGbwMvMwCWmMf3Xpe0vXfIZT6slMaTcfLHKkqnzauO+Q1m9W/cV6QoIafZdM/7bxXw//nBq8
+ PzZ8dumdpSyMIhxMciKKbJs8/MM3TR/8ZXkTyvZYOawMoEMYeDiFICJPFNl+F/zy9EjaynTW+l7
+ ofv84tUT6+bn3924QbCv9tcRc+nsOj5GhjfxJfaqHXPWTy+PW/w4KtRJ8Llqn1Da/fm3D9eIrua
+ pYQcA
+X-Developer-Key: i=cyphar@cyphar.com; a=openpgp;
+ fpr=C9C370B246B09F6DBCFC744C34401015D1D2D386
+X-Rspamd-Queue-Id: 4RPSYd70PJz9slh
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Aug 14, 2023 at 10:25:00AM +0200, Willy Tarreau wrote:
-> On Mon, Aug 14, 2023 at 03:38:54PM +0800, Zhangjin Wu wrote:
-> > > On Sun, Aug 13, 2023 at 06:05:03PM +0800, Zhangjin Wu wrote:
-> > > > > I think that later I'll further extend XARCH with new variants to
-> > > > > support ARMv5 and Thumb2, because we have different code for this
-> > > > > and I continue to manually change the CFLAGS to test both.
-> > > > >
-> > > > 
-> > > > Ok, what about further add x86_64 as the default variant for x86 (like ppc for
-> > > > powerpc)? and then it is able to only resereve the variables for x86_64. I have
-> > > > prepared a patch for this goal in our new tinyconfig patchset, it will further
-> > > > avoid adding the same nolibc-test-x86.config and nolibc-test-x86_64.config.
-> > > 
-> > > I'm confused, x86 already defaults to x86_64, it's just that it depends
-> > > on the .config itself to figure whether to produce a 32- or 64-bit kernel.
-> > > But for example it starts qemu in 64-bit mode. Am I missing anything ?
-> > >
-> > 
-> > In kernel side, it is, but in our nolibc-test, we have added a copy of x86_64
-> > for x86:
-> > 
-> >     $ grep -E "_x86" tools/testing/selftests/nolibc/Makefile 
-> >     IMAGE_x86_64     = arch/x86/boot/bzImage
-> >     IMAGE_x86        = arch/x86/boot/bzImage
-> >     CROSS_COMPILE_x86_64    ?= x86_64-linux- x86_64-linux-gnu-
-> >     CROSS_COMPILE_x86       ?= x86_64-linux- x86_64-linux-gnu-
-> >     DEFCONFIG_x86_64     = defconfig
-> >     DEFCONFIG_x86        = defconfig
-> >     QEMU_ARCH_x86_64     = x86_64
-> >     QEMU_ARCH_x86        = x86_64
-> >     QEMU_ARGS_x86_64     = -M pc -append "console=ttyS0,9600 i8042.noaux panic=-1 $(TEST:%=NOLIBC_TEST=%)"
-> >     QEMU_ARGS_x86        = -M pc -append "console=ttyS0,9600 i8042.noaux panic=-1 $(TEST:%=NOLIBC_TEST=%)"
-> > 
-> > With 'XARCH', the "_x86" copy of them can be simply replaced with such a line:
-> > 
-> >      # configure default variants for target kernel supported architectures
-> >      XARCH_powerpc    = ppc
-> >     +XARCH_x86        = x86_64
-> >      XARCH            = $(or $(XARCH_$(ARCH)),$(ARCH))
-> > 
-> > And therefore, the future nolibc-test-x86_64.config is also enough for x86.
-> > 
-> > But I have seen the 'x86' exception in tools/include/nolibc/Makefile, just a
-> > confirm on if this replacement is ok.
-> 
-> Ah I thought you meant the opposite, i.e. that ppc did map to powerpc
-> that I was not seeing anywhere else. Yes we can probably do that and
-> remove the x86-specific lines later.
+In order to incentivise userspace to switch to passing MFD_EXEC and
+MFD_NOEXEC_SEAL, we need to provide a warning on each attempt to call
+memfd_create() without the new flags. pr_warn_once() is not useful
+because on most systems the one warning is burned up during the boot
+process (on my system, systemd does this within the first second of
+boot) and thus userspace will in practice never see the warnings to push
+them to switch to the new flags.
 
-by "later" I mean "further" in the file.
+The original patchset[1] used pr_warn_ratelimited(), however there were
+concerns about the degree of spam in the kernel log[2,3]. The resulting
+inability to detect every case was flagged as an issue at the time[4].
 
-Willy
+While we could come up with an alternative rate-limiting scheme such as
+only outputting the message if vm.memfd_noexec has been modified, or
+only outputting the message once for a given task, these alternatives
+have downsides that don't make sense given how low-stakes a single
+kernel warning message is. Switching to pr_info_ratelimited() instead
+should be fine -- it's possible some monitoring tool will be unhappy
+with a stream of warning-level messages but there's already plenty of
+info-level message spam in dmesg.
+
+[1]: https://lore.kernel.org/20221215001205.51969-4-jeffxu@google.com/
+[2]: https://lore.kernel.org/202212161233.85C9783FB@keescook/
+[3]: https://lore.kernel.org/Y5yS8wCnuYGLHMj4@x1n/
+[4]: https://lore.kernel.org/f185bb42-b29c-977e-312e-3349eea15383@linuxfoundation.org/
+
+Cc: stable@vger.kernel.org # v6.3+
+Fixes: 105ff5339f49 ("mm/memfd: add MFD_NOEXEC_SEAL and MFD_EXEC")
+Signed-off-by: Aleksa Sarai <cyphar@cyphar.com>
+---
+ mm/memfd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mm/memfd.c b/mm/memfd.c
+index d65485c762de..aa46521057ab 100644
+--- a/mm/memfd.c
++++ b/mm/memfd.c
+@@ -315,7 +315,7 @@ SYSCALL_DEFINE2(memfd_create,
+ 		return -EINVAL;
+ 
+ 	if (!(flags & (MFD_EXEC | MFD_NOEXEC_SEAL))) {
+-		pr_warn_once(
++		pr_info_ratelimited(
+ 			"%s[%d]: memfd_create() called without MFD_EXEC or MFD_NOEXEC_SEAL set\n",
+ 			current->comm, task_pid_nr(current));
+ 	}
+
+-- 
+2.41.0
+
