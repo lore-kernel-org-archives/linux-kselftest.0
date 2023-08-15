@@ -2,78 +2,88 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 123A2C001B0
-	for <linux-kselftest@archiver.kernel.org>; Tue, 15 Aug 2023 04:04:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77039C41513
+	for <linux-kselftest@archiver.kernel.org>; Tue, 15 Aug 2023 04:07:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230368AbjHOEDj (ORCPT
+        id S234687AbjHOEGd (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 15 Aug 2023 00:03:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32818 "EHLO
+        Tue, 15 Aug 2023 00:06:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234739AbjHOEBO (ORCPT
+        with ESMTP id S234661AbjHOEEX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Aug 2023 00:01:14 -0400
+        Tue, 15 Aug 2023 00:04:23 -0400
 Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D747813E
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Aug 2023 20:57:48 -0700 (PDT)
-Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RPyB32DbLzrRxd;
-        Tue, 15 Aug 2023 11:56:27 +0800 (CST)
-Received: from [10.174.179.163] (10.174.179.163) by
- kwepemi500024.china.huawei.com (7.221.188.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.31; Tue, 15 Aug 2023 11:57:45 +0800
-Message-ID: <89d94875-5267-a2aa-a2aa-38f4b10f0e7e@huawei.com>
-Date:   Tue, 15 Aug 2023 11:57:45 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH -next 3/4] kselftest/arm64: add pmull feature to hwcap
- test
-To:     Mark Brown <broonie@kernel.org>
-CC:     <shuah@kernel.org>, <catalin.marinas@arm.com>, <will@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kselftest@vger.kernel.org>, <xiexiuqi@huawei.com>
-References: <20230814021747.1784812-1-zengheng4@huawei.com>
- <20230814021747.1784812-4-zengheng4@huawei.com>
- <3864eda1-0d02-42a2-ae9c-0d1eb3195a19@sirena.org.uk>
-Content-Language: en-US
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734101FD2
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Aug 2023 21:02:21 -0700 (PDT)
+Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RPyDh26c0ztRs5;
+        Tue, 15 Aug 2023 11:58:44 +0800 (CST)
+Received: from huawei.com (10.175.103.91) by kwepemi500024.china.huawei.com
+ (7.221.188.100) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Tue, 15 Aug
+ 2023 12:02:18 +0800
 From:   Zeng Heng <zengheng4@huawei.com>
-In-Reply-To: <3864eda1-0d02-42a2-ae9c-0d1eb3195a19@sirena.org.uk>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.163]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+To:     <will@kernel.org>, <catalin.marinas@arm.com>, <shuah@kernel.org>,
+        <broonie@kernel.org>
+CC:     <zengheng4@huawei.com>, <xiexiuqi@huawei.com>,
+        <linux-kselftest@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: [PATCH -next 3/4] kselftest/arm64: add pmull feature to hwcap test
+Date:   Tue, 15 Aug 2023 11:58:49 +0800
+Message-ID: <20230815035850.3947870-4-zengheng4@huawei.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230815035850.3947870-1-zengheng4@huawei.com>
+References: <20230815035850.3947870-1-zengheng4@huawei.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
  kwepemi500024.china.huawei.com (7.221.188.100)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Add the pmull feature check in the set of hwcap tests.
 
-在 2023/8/15 0:38, Mark Brown 写道:
-> On Mon, Aug 14, 2023 at 10:17:46AM +0800, Zeng Heng wrote:
->
->>   	asm volatile("mrs x0, S3_3_C2_C4_0" : : : "x0");
->> @@ -359,6 +365,13 @@ static const struct hwcap_data {
->>   		.cpuinfo = "rng",
->>   		.sigill_fn = rng_sigill,
->>   	},
->> +	{
->> +		.name = "PMULL",
->> +		.at_hwcap = AT_HWCAP,
->> +		.hwcap_bit = HWCAP_PMULL,
->> +		.cpuinfo = "pmull",
->> +		.sigill_fn = pmull_sigill,
->> +	},
-> Please keep the table alphabatically sorted - the function is in the
-> right place but this seems to have got reordered.
+Signed-off-by: Zeng Heng <zengheng4@huawei.com>
+---
+ tools/testing/selftests/arm64/abi/hwcap.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-Oops, sorry for that. I would update v2 and resend with your reviewed 
-tag soon.
-
-Thanks for your review.
-
-
-Zeng Heng
+diff --git a/tools/testing/selftests/arm64/abi/hwcap.c b/tools/testing/selftests/arm64/abi/hwcap.c
+index d9a49b1467ac..df7a62659aa2 100644
+--- a/tools/testing/selftests/arm64/abi/hwcap.c
++++ b/tools/testing/selftests/arm64/abi/hwcap.c
+@@ -88,6 +88,12 @@ static void mops_sigill(void)
+ 		     : "cc", "memory");
+ }
+ 
++static void pmull_sigill(void)
++{
++	/* PMULL V0.1Q, V0.1D, V0.1D */
++	asm volatile(".inst 0x0ee0e000" : : : );
++}
++
+ static void rng_sigill(void)
+ {
+ 	asm volatile("mrs x0, S3_3_C2_C4_0" : : : "x0");
+@@ -352,6 +358,13 @@ static const struct hwcap_data {
+ 		.sigill_fn = mops_sigill,
+ 		.sigill_reliable = true,
+ 	},
++	{
++		.name = "PMULL",
++		.at_hwcap = AT_HWCAP,
++		.hwcap_bit = HWCAP_PMULL,
++		.cpuinfo = "pmull",
++		.sigill_fn = pmull_sigill,
++	},
+ 	{
+ 		.name = "RNG",
+ 		.at_hwcap = AT_HWCAP2,
+-- 
+2.25.1
 
