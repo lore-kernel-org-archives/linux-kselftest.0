@@ -2,191 +2,227 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 794C1C001DE
-	for <linux-kselftest@archiver.kernel.org>; Tue, 15 Aug 2023 06:20:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE60FC001B0
+	for <linux-kselftest@archiver.kernel.org>; Tue, 15 Aug 2023 06:22:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234948AbjHOGUB (ORCPT
+        id S235087AbjHOGWI (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 15 Aug 2023 02:20:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39680 "EHLO
+        Tue, 15 Aug 2023 02:22:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235066AbjHOGTW (ORCPT
+        with ESMTP id S235186AbjHOGVT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Aug 2023 02:19:22 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2087.outbound.protection.outlook.com [40.107.220.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51EDC2D42;
-        Mon, 14 Aug 2023 23:17:38 -0700 (PDT)
+        Tue, 15 Aug 2023 02:21:19 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2069.outbound.protection.outlook.com [40.107.212.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 611B13A9E;
+        Mon, 14 Aug 2023 23:19:10 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cwbS2qY1le5pxV+06Ofjn+5LOoqb1/kBf9GJVEXq/mLto+Y0/i5kSwivfxTTu5QUiHNwDP9u5cILIYHd2aD8qhXXzStF/eFBIbiIAvcyTTSXYBciPv1CWdJrbvKVp7EyFiGzB85nLXnt3AluVFSBYad0jXome67x4OEpa7b6HGaENNyOmaaQe9TTBnUXyJT2m6VM2Lk8E+ylVO2oJQ8Bc+ozEvu+gAQ2u/y8Z7aDycQdqFSCZH4HbbYYXIwmqB5xLFBrhpNNhh9htppKxH+fHpVnV3+vpGy5ikyq4PNL9Lh5TOaaeKFZ3n5u+ICoROZNQZ5798QwdqItKehDf+mdHw==
+ b=Sq6D+PEyk2wOlCrDqd7t0kivyCfMFdFIF19QfLHQEP757QkMU9g6DR+p3e/ZYYNVyAYb9pfvoWqEKBIQ+qJiGWCDRuJhE2E9Sz5ihuq821j9cVUlR2oRIVqreZ3fAcd+uOY6yiaiSMMJEIikHRNTmDRNvZ89TvLcFdBN0HwMzbUGBq5pF8TSZtG0i2Sjz/BNOaWZ0rKjgHOxLf6ZCcnujgztZIKNLE+47NQWcVefXk67fGYAjkyTd1oQqyb9zbq/kvx3bDPQ6xrca0jRiz8goSOjMtvGQzlUvBwMYihpR/bgsiJyvXJFxYkQrWgyeS5G6TwUie/3ZGI8J5prGO+JUg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UatvUdnAHKDm3NQ3MVcDdoeY7zuTYCcF2McOkq3aFNQ=;
- b=QRwcroT9IMFWNxEIcUcX6UT5m3WtExObUtsbYVllsFV5NMY9lkM4muWK62pcagqUpbUMyg3n0IqgPwhPp6AVRqnXTOkRwNd2x7fjKuTv1zXAZnoRTF28XtqlA4ztbCUgPfD5HCfj9JsLF4sgQdZCcx2lQ5q7cC3F3lMl2DSErnHHxjL70NdXIRb+v1tAOCs2leaTjpECVdv0x2TrFAKGATrMyf1OJokHu+mtBGmta4uuVEcUMtxtGFRLTyUD5pbN77HyXB/WlasojjRiBMxQKwQXOLSk6cyGIlpCWX7QCCYlEmyuF4TpC7UGnmckD4BRkSgfVBINqejG6+Odw8avIQ==
+ bh=FZwS7FskMnaQKUKk2d98edQHxbswOuQza+DxRrTTVuI=;
+ b=mSO3TiDOBeJNFqjgDqzMqS2EgG+r7Wwk8F0Hm0kAeoj0LcFm2a+0bPJ9NoZZibCGa77tgqgLY04gzJLxEM/07znYePTMLlQ2m28ZtTw9ZenJzouaJqu2sq2jnuh+Xcs6eLDEvVhkcEv4+Ce8XNrJjTKlJE9jl7XiuKoFdTRCEQe0ZmSmqEsAUt10THxq4CvRV4RnTGWQTHCCUO90lMdzMLt0DuxLBG/Fp7AeHLJsVwT8ftCw5Jmu1sS1yciIi+i0isJmdnFapRE4WwNjGZmlblpGSe9SxPOss0rrK+4GIeSyQ6Xmnp6rbssMybIUEUtEZ0URxlwbH5TTQv/a7OLKaQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ 216.228.117.160) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UatvUdnAHKDm3NQ3MVcDdoeY7zuTYCcF2McOkq3aFNQ=;
- b=pSSn3YUckvG4Tb99X0V6xppmeeuIltFlybJOUnwGqa54gM5pRVCpluxwlf6mSUP03Ezez1dxpA4U0fx5ft7YZneaMKVi+ITAnoeUtfYeTHOrtFtbnNbtTHXJ6WWuDJZ5AqusV3MMaFewDqGUGzkZ262aw61hC7Ti/FJHFL5jVvo=
-Received: from MW4P223CA0004.NAMP223.PROD.OUTLOOK.COM (2603:10b6:303:80::9) by
- CH2PR12MB4103.namprd12.prod.outlook.com (2603:10b6:610:7e::17) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6678.26; Tue, 15 Aug 2023 06:17:33 +0000
-Received: from CO1PEPF000044F9.namprd21.prod.outlook.com
- (2603:10b6:303:80:cafe::a4) by MW4P223CA0004.outlook.office365.com
- (2603:10b6:303:80::9) with Microsoft SMTP Server (version=TLS1_2,
+ bh=FZwS7FskMnaQKUKk2d98edQHxbswOuQza+DxRrTTVuI=;
+ b=HEzZ/LmeqjskRlsYkgBPI41tkSvhuPfcyXglhiFtXz/Qe4U3cZpHGXQBcDgeSajAfksuXtvE2FTubnlye3UWhIgdwDTaOdN7tyZTSpJ3boHGcVrO4XOArQfiNkSZv0+BNNZuejmz3o2O41r5UJvU6OUM4/CdqfmX76fg0TorTHlDwQRllKAWhsImeQxlyhzu4WJ3ezbL1kJLvg8KpKzqqrEKnUtduQeCx4oA2L3blXVUNGmhlJAdKYKy1cnTTIVNaEzSqqWjC4bSdzyRmMqbVygFgTlZrD7lp2U+dWzeYOAv0asoa6gMvH3lN2cw7WIfjSXiRpmYH9Dwcgs+Wml4NQ==
+Received: from PH0PR07CA0026.namprd07.prod.outlook.com (2603:10b6:510:5::31)
+ by MN0PR12MB5835.namprd12.prod.outlook.com (2603:10b6:208:37a::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6678.24; Tue, 15 Aug
+ 2023 06:19:08 +0000
+Received: from SA2PEPF000015C9.namprd03.prod.outlook.com
+ (2603:10b6:510:5:cafe::47) by PH0PR07CA0026.outlook.office365.com
+ (2603:10b6:510:5::31) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.33 via Frontend
- Transport; Tue, 15 Aug 2023 06:17:32 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1PEPF000044F9.mail.protection.outlook.com (10.167.241.199) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6723.3 via Frontend Transport; Tue, 15 Aug 2023 06:17:32 +0000
-Received: from jasmine-meng.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 15 Aug
- 2023 01:17:22 -0500
-From:   Meng Li <li.meng@amd.com>
-To:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Huang Rui <ray.huang@amd.com>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <x86@kernel.org>, <linux-acpi@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        <linux-kselftest@vger.kernel.org>,
-        "Nathan Fontenot" <nathan.fontenot@amd.com>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Shimmer Huang <shimmer.huang@amd.com>,
-        "Perry Yuan" <Perry.Yuan@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>, Meng Li <li.meng@amd.com>
-Subject: [PATCH V2 6/7] Documentation: amd-pstate: introduce AMD Pstate Preferred Core
-Date:   Tue, 15 Aug 2023 14:15:45 +0800
-Message-ID: <20230815061546.3556083-7-li.meng@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230815061546.3556083-1-li.meng@amd.com>
-References: <20230815061546.3556083-1-li.meng@amd.com>
+ Transport; Tue, 15 Aug 2023 06:19:07 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ SA2PEPF000015C9.mail.protection.outlook.com (10.167.241.199) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6699.14 via Frontend Transport; Tue, 15 Aug 2023 06:19:07 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 14 Aug 2023
+ 23:18:50 -0700
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Mon, 14 Aug
+ 2023 23:18:49 -0700
+Received: from Asurada-Nvidia (10.127.8.13) by mail.nvidia.com (10.129.68.8)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37 via Frontend
+ Transport; Mon, 14 Aug 2023 23:18:48 -0700
+Date:   Mon, 14 Aug 2023 23:18:46 -0700
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>, "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>
+CC:     "joro@8bytes.org" <joro@8bytes.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
+        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "jasowang@redhat.com" <jasowang@redhat.com>,
+        "shameerali.kolothum.thodi@huawei.com" 
+        <shameerali.kolothum.thodi@huawei.com>,
+        "lulu@redhat.com" <lulu@redhat.com>,
+        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
+Subject: Re: [PATCH v4 09/12] iommu/vt-d: Add iotlb flush for nested domain
+Message-ID: <ZNsYxta9Pi7USDoR@Asurada-Nvidia>
+References: <ZNPlGd4/72dahSs4@Asurada-Nvidia>
+ <ZNPmpW3/zDnjqxyU@nvidia.com>
+ <ZNP0UKGU6id5wfc6@Asurada-Nvidia>
+ <BN9PR11MB527683351B687B97AB84B51B8C13A@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <ZNUI0D7ZMvLWlBNx@nvidia.com>
+ <ZNUa/VmeiIo0YA0v@Asurada-Nvidia>
+ <ZNU6BnTgNEWlwNYQ@nvidia.com>
+ <ZNVQcmYp27ap7h30@Asurada-Nvidia>
+ <BN9PR11MB5276D0B3E0106C73C498B8018C10A@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <ZNZlnh+/Q5Vk5Kul@Asurada-Nvidia>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <ZNZlnh+/Q5Vk5Kul@Asurada-Nvidia>
+X-NV-OnPremToCloud: ExternallySecured
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PEPF000044F9:EE_|CH2PR12MB4103:EE_
-X-MS-Office365-Filtering-Correlation-Id: a918cc8e-b72e-43a6-d2e9-08db9d574fc2
+X-MS-TrafficTypeDiagnostic: SA2PEPF000015C9:EE_|MN0PR12MB5835:EE_
+X-MS-Office365-Filtering-Correlation-Id: ad8caa0d-6d5e-445a-b423-08db9d578853
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7oYhXr0457ow6ofVQ5sTjl7cbcQw7n0zgXmKH/1oG74PQWkzEiqptSzx52KXWlJ7EkryHJrrM7rEjslgXLWE6bTyxdWdvM8Jp7g2T6DOUJT61zqocXiVKjHFTRVbuj/wM4GGn3lBudDpKClQ0aXYfnU9UYjWW+EuM3FZyvwIiYFVeuCUDlbnZ9G2Cqi+HkUVcoQo8mhNIVGDQqDqU9VPFOgLeBBCxW7m5j5GguGIJIc5+pLxceI1J0riYFgnWNoIfqqRHiQ5j+XYwF3EdUD/MXVf1g9S/SVjzlvmJ+nRG3vHKp3IBpi7oOb8G2q1wKdUvrgF3P2BSy2MY0e2qDcja1DKmdx7aR8HijeWFV8otTnrAAvyMajfATxA887+UQjIwrLYjnUxWhVnUWeq7kmERpUEBk4u6wh47ZYYQfVZLVp8PBnvEOKgr6xmJ9zw4hxDsCSo0FJpsRnCfqLT5Ljg3bjSqetx2TP6yAkvUQy4MLPxYQ8HCD1CRI4ThLRn5FU9SHgh2qHSt9cj2HItYR1AVp9pDjrRMCflsD7xO294ZFVQQTCg6tq+7WO3ApYhcLRo6I1aIYrVs7xJlZGtlC/8ejv9DwHPDaw2ZBiu7B3wg5g2aHZTZP1Idz5geKEJ8iYvbomRI+EOztw2sqYf+C0fnctNG61JlQ7pabFfhOjZtOvJjYQKnEYS23+nKT2lsAfDTHv9zsRo3Hi00RlE+N210NZzwL/yr317eypmoNmNeH7WyiT1hdPjXX8mqF7KvaZELwPMiRyCK/JY8wTVuZz5Nw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(346002)(376002)(396003)(1800799006)(186006)(82310400008)(451199021)(40470700004)(46966006)(36840700001)(40480700001)(40460700003)(356005)(478600001)(81166007)(82740400003)(8676002)(6666004)(8936002)(4326008)(110136005)(70206006)(41300700001)(316002)(6636002)(54906003)(70586007)(36860700001)(83380400001)(47076005)(7696005)(2616005)(1076003)(26005)(426003)(336012)(16526019)(86362001)(2906002)(5660300002)(36756003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Aug 2023 06:17:32.7378
+X-Microsoft-Antispam-Message-Info: o5MVQmuOE0kTj5pHekgSZIfklaNoptJJ3XnXoPpkm1z+pDzL5E7g3vGpMZIBqZ+zfkX3KchsJllHHV1+exHMWkD6L0Yst1BRoVzPilnnaJgADysrZ3+6sXbWbZCBhTELq6046pSLNPIS1uK1NoyafOQRw4/ZqmxNw63edZEyR2yeTzqa/s33bH4fxo1ftzVXX8Ok3aRgH/VacRxm5B4uYhXb2ur+kH5xicxugPLdAlrAEyELRaxNmHAsB7I0ON8OQO3/wY00xwUG7uUfGgKeAxn51iFOWfTckLf0d8rdYA0G0je0q2Scv0hEIOF+d72HzFKDv1+h51/XR5ATC16DxkimRpGeq0zTwzDqZbmKbkfZXyKml5Q+z9FY9pE3DuPracmBqKp9TZ4w3hGnKh0AFX6vLxo+0tQ262cje6dg4J+TcGZrG3SjdqNyW2WQUd75Fm/gm8YYcjVMbpWOjM1bZWw9HqUEz/v8FsZXEuQM6WpYKYjyJhLDJyxELiBC+f3/JrFJ28XMX7NcgonSDk0hq82so9aAHJl2hiTbp1Z2Ds/FWDsIbySyWByyQQBO8N3JYEmWB2sGx5b04n/Tf3TeKZ1NcYemZisI0oSnrzUzEKO9IZHfDPE0yOLIvgSJr14MdHprFDFsXWyXufznWb3wxnxezaVAjl+OPXE6fWN/ggWcaBA3pR6/MT4S7j/gLUPVM54CzhB4AbX/y41lkYYmJ3H2i0G5yw8hghboEXU+sw/Pbh0j1e1NrZLy37K9KkMB
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(376002)(136003)(396003)(186006)(1800799006)(451199021)(82310400008)(40470700004)(36840700001)(46966006)(83380400001)(426003)(33716001)(336012)(47076005)(36860700001)(86362001)(40480700001)(55016003)(41300700001)(478600001)(356005)(7636003)(54906003)(70586007)(70206006)(9686003)(316002)(8676002)(110136005)(5660300002)(4326008)(82740400003)(8936002)(40460700003)(26005)(2906002)(7416002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Aug 2023 06:19:07.6553
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a918cc8e-b72e-43a6-d2e9-08db9d574fc2
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF000044F9.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ad8caa0d-6d5e-445a-b423-08db9d578853
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: SA2PEPF000015C9.namprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4103
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5835
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Introduce AMD Pstate Preferred Core.
+On Fri, Aug 11, 2023 at 09:45:21AM -0700, Nicolin Chen wrote:
 
-check preferred core state:
-$ cat /sys/devices/system/cpu/amd-pstate/prefcore_state
+> > But if stepping back a bit supporting an array-based non-native format
+> > could simplify the uAPI design and allows code sharing for array among
+> > vendor drivers. You can still keep the entry as native format then the
+> > only difference with future in-kernel fast path is just on walking an array
+> > vs. walking a ring. And VMM doesn't need to expose non-invalidate
+> > cmds to the kernel and then be skipped.
+> 
+> Ah, so we might still design the uAPI to be ring based at this
+> moment, yet don't support a case CONS > 0 to leave that to an
+> upgrade in the future.
+> 
+> I will try estimating a bit how complicated to implement the
+> ring, to see if we could just start with that. Otherwise, will
+> just start with an array.
 
-Signed-off-by: Meng Li <li.meng@amd.com>
----
- Documentation/admin-guide/pm/amd-pstate.rst | 54 +++++++++++++++++++++
- 1 file changed, 54 insertions(+)
+I drafted a uAPI structure for a ring-based SW queue. While I am
+trying an implementation, I'd like to collect some comments at the
+structure, to see if it overall makes sense.
 
-diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
-index 1cf40f69278c..ef2b69935311 100644
---- a/Documentation/admin-guide/pm/amd-pstate.rst
-+++ b/Documentation/admin-guide/pm/amd-pstate.rst
-@@ -353,6 +353,48 @@ is activated.  In this mode, driver requests minimum and maximum performance
- level and the platform autonomously selects a performance level in this range
- and appropriate to the current workload.
- 
-+AMD Pstate Preferred Core
-+=================================
-+
-+The core frequency is subjected to the process variation in semiconductors.
-+Not all cores are able to reach the maximum frequency respecting the
-+infrastructure limits. Consequently, AMD has redefined the concept of
-+maximum frequency of a part. This means that a fraction of cores can reach
-+maximum frequency. To find the best process scheduling policy for a given
-+scenario, OS needs to know the core ordering informed by the platform through
-+highest performance capability register of the CPPC interface.
-+
-+``AMD Pstate Preferred Core`` enable the scheduler to favor scheduling on cores
-+can be get a higher frequency with lower voltage under preferred core.
-+And it has the ability to dynamically change the preferred core based on the
-+workload and platform conditions and accounting for thermals and aging.
-+
-+The priority metric will be initialized by the AMD Pstate driver. The AMD Pstate
-+driver will also determine whether or not ``AMD Pstate Preferred Core`` is
-+supported by the platform.
-+
-+AMD Pstate driver will provide an initial core ordering when the system boots.
-+The platform uses the CPPC interfaces to communicate the core ranking to the
-+operating system and scheduler to make sure that OS is choosing the cores
-+with highest performance firstly for scheduling the process. When AMD Pstate
-+driver receives a message with the highest performance change, it will
-+update the core ranking and set the cpu's priority.
-+
-+AMD Preferred Core Switch
-+=================================
-+Kernel Parameters
-+-----------------
-+
-+``AMD Pstate Preferred Core`` has two states: enable and disable.
-+Enable/disable states can be chosen by different kernel parameters.
-+Default enable ``AMD Pstate Preferred Core``.
-+
-+``amd_prefcore=disable``
-+
-+If ``amd_prefcore=disable`` is passed to kernel command line option
-+then disable ``AMD Pstate Preferred Core`` if platform can support
-+the Preferred Core feature.
-+
- User Space Interface in ``sysfs`` - General
- ===========================================
- 
-@@ -385,6 +427,18 @@ control its functionality at the system level.  They are located in the
-         to the operation mode represented by that string - or to be
-         unregistered in the "disable" case.
- 
-+``prefcore``
-+	Preferred Core state of the driver: "enabled" or "disabled".
-+
-+	"enabled"
-+		Enable the AMD Preferred Core.
-+
-+	"disabled"
-+		Disable the AMD Preferred Core
-+
-+
-+        This attribute is read-only to check the state of Preferred Core.
-+
- ``cpupower`` tool support for ``amd-pstate``
- ===============================================
- 
--- 
-2.34.1
+One thing that I couldn't add to this common structure for SMMU
+is the hardware error code, which should be encoded in the higher
+bits of the consumer index register, following the SMMU spec:
+    ERR, bits [30:24] Error reason code.
+    - When a command execution error is detected, ERR is set to a
+      reason code and then the SMMU_GERROR.CMDQ_ERR global error
+      becomes active.
+    - The value in this field is UNKNOWN when the CMDQ_ERR global
+      error is not active. This field resets to an UNKNOWN value.
 
+But, I feel it odd to do the same to the generic structure. So,
+perhaps an optional @out_error can be added to this structure. Or
+some other idea?
+
+Thanks
+Nic
+
+/**
+ * struct iommu_hwpt_invalidate - ioctl(IOMMU_HWPT_INVALIDATE)
+ * @size: sizeof(struct iommu_hwpt_invalidate)
+ * @hwpt_id: HWPT ID of target hardware page table for the invalidation
+ * @q_uptr: User pointer to an invalidation queue, which can be used as a flat
+ *          array or a circular ring queue. The entiry(s) in the queue must be
+ *          at a fixed width @q_entry_len, containing a user data structure for
+ *          an invalidation request, specific to the given hardware pagetable.
+ * @q_cons_uptr: User pointer to the consumer index (with its wrap flag) of an
+ *               invalidation queue. This pointer must point to a __u32 type of
+ *               memory location. The consumer index tells kernel to read from
+ *               the entry pointed by it (and then its next entry) until kernel
+ *               reaches the entry pointed by the producer index @q_prod, and
+ *               allows kernel to update the consumer index to where it stops:
+ *               on success, it should be updated to @q_prod; otherwise, to the
+ *               index pointing to the failed entry.
+ * @q_prod: Producer index (with its wrap flag) of an invalidation queue. This
+ *          index points to the entry next to the last requested entry in the
+ *          invalidation queue. In case of using the queue as a flat array, it
+ *          equals to the number of entries @q_entry_num.
+ * @q_index_bits: Effective bits of both indexes. Defines the maximum value an
+ *                index can be. Must not be greater than 31 bits. A wrap flag
+ *                is defined at the next higher bit adjacent to the index bits:
+ *                e.g. if @q_index_bits is 20, @q_prod[19:0] are the index bits
+ *                and @q_prod[20] is the wrap flag. The wrap flag, acting like
+ *                a sign flag, must be toggled each time an index overflow and
+ *                wraps to the lower end of the circular queue.
+ * @q_entry_num: Totaly number of the entries in an invalidation queue
+ * @q_entry_len: Length (in bytes) of an entry of an invalidation queue
+ *
+ * Invalidate the iommu cache for user-managed page table. Modifications on a
+ * user-managed page table should be followed by this operation to sync cache.
+ *
+ * One request supports multiple invalidations via a multi-entry queue:
+ *   |<----------- Length of Queue = @q_entry_num * @q_entry_len ------------>|
+ *   --------------------------------------------------------------------------
+ *   | 0 | 1 | 2 | 3 | ... | @q_entry_num-3 | @q_entry_num-2 | @q_entry_num-1 |
+ *   --------------------------------------------------------------------------
+ *   ^           ^                          ^                |<-@q_entry_len->|
+ *   |           |                          |
+ * @q_uptr  @q_cons_uptr                 @q_prod
+ *
+ * A queue index can wrap its index bits off the high end of the queue and back
+ * onto the low end by toggling its wrap flag: e.g. when @q_entry_num=0x10 and
+ * @q_index_bits=4, *@q_cons_uptr=0xf and @q_prod=0x11 inputs mean the producer
+ * index is wrapped to 0x1 with its wrap flag set, so kernel reads/handles the
+ * entry starting from by the consumer index (0xf) and wraps it back to 0x0 and
+ * 0x1 by toggling the wrap flag, i.e. *@q_cons_uptr has a final value of 0x11.
+ */
+struct iommu_hwpt_invalidate {
+	__u32 size;
+	__u32 hwpt_id;
+	__aligned_u64 q_uptr;
+	__aligned_u64 q_cons_uptr;
+	__u32 q_prod;
+	__u32 q_index_bits;
+	__u32 q_entry_num;
+	__u32 q_entry_len;
+};
+#define IOMMU_HWPT_INVALIDATE _IO(IOMMUFD_TYPE, IOMMUFD_CMD_HWPT_INVALIDATE)
