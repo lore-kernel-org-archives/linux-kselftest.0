@@ -2,151 +2,101 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7734BC41513
-	for <linux-kselftest@archiver.kernel.org>; Tue, 15 Aug 2023 14:26:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7ED7CC41513
+	for <linux-kselftest@archiver.kernel.org>; Tue, 15 Aug 2023 14:36:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233893AbjHOOZ5 (ORCPT
+        id S235683AbjHOOgO (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 15 Aug 2023 10:25:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39138 "EHLO
+        Tue, 15 Aug 2023 10:36:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237635AbjHOOZy (ORCPT
+        with ESMTP id S237698AbjHOOf5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Aug 2023 10:25:54 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D862BB8
-        for <linux-kselftest@vger.kernel.org>; Tue, 15 Aug 2023 07:25:52 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id ca18e2360f4ac-77dcff76e35so59459539f.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 15 Aug 2023 07:25:52 -0700 (PDT)
+        Tue, 15 Aug 2023 10:35:57 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3D3719A6;
+        Tue, 15 Aug 2023 07:35:54 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-5234b80e9b6so7461639a12.2;
+        Tue, 15 Aug 2023 07:35:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1692109552; x=1692714352;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=n++fu5lgK8bUrOQTFhHxiUW13bKpyZhkEp2AxLuZIps=;
-        b=PPkwoLdeBQwvyBdlONtZeVF4UZQ5s/LzgIClqs9grEot6Izdv9Ke/ikyhLX8pPIjd/
-         sZTfr1PeTrhVoKX9UoF8VYWBEjJBkbQt5lSoDhylx66e6929F3MSO/W2d0E2FIfmC6Mo
-         tWEcISBSOtjqdnJz3A1ArCnKxozU3gH+jTLTg=
+        d=gmail.com; s=20221208; t=1692110153; x=1692714953;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=5ExkU1aXgwbVZAT4/86NsHH+oPTHRo8kokP8esTR6pM=;
+        b=T8JfBGRKfRbUqDuTJiwMDTGkrsRIKO5jTVuAqeDt45jhDd+MoPa0r9rX6d+JXB2SLH
+         +PdVegksVN7bVdmYt0loLcqvellOQIle4Gh8C4S0uUSTNbGFG/T1RJl2QvLFUj6BVGsi
+         fpLg6c77iRfXi/coDfTa7VaY7bVSsXhSeZmxhUS0UEWcVpiUmO2MkQoZFY6YHpkt9Ltv
+         XzWstHS/9nWlHwYLdZhEtS2nCeZx3HXivTZv7prynNSMvoL5EfqyMFQJFwL4WjM0xpZm
+         N/tnxa2KLrWGXfxKLLIqTwz+bs1lST0+VmoajwsrbVuLtgVk/XpaFyfJZXlHNXb58Qyw
+         Cizw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692109552; x=1692714352;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=n++fu5lgK8bUrOQTFhHxiUW13bKpyZhkEp2AxLuZIps=;
-        b=ZWNnftcGyqAYXp4UWJ7o2KuzBY9QmUV03IahgO3C6w4YHHy58MTa5UZXLfA4jQBs4y
-         7yXQxh2+wNEhz/lnVv17oFuCb2Hn7LzyO/ZX1bUGj4GYEtt/WBYz5Gk5VKQC8jypj0Hm
-         d6XZG3oHcG6zJlMAZdsJj0kWZSmLpazR5IRbRAIB0jOdeFldKygnWDW3AIUUVCW4exBT
-         /KFNOyVFl54ujG0ZaQXwN8WDTZBshESM8FCTSUd8faXgHMy/hc42DS45pevD4ytJMSKQ
-         jQSsWVI1C5rPq1Y3QM3XOqPXo2Dkmuhx3X9Um8iCxH/fLBiv+k9G1c21Hsdqj9W4MwXw
-         yzbQ==
-X-Gm-Message-State: AOJu0YwF3VzWhbaAL3wRRl+ip1yMj2kJwo4fYCvi8/didMt5C11J9K/w
-        Ug3CwwnNdlwpadNJiaKyWycEUMIyj/kr2uPKMxw=
-X-Google-Smtp-Source: AGHT+IGwqEa3upbwsHqNdEkwQ7urSGaTr4VyveV6m36h3gTUy2GHNdUExTNgQZUhjJQBn5mYuliEJA==
-X-Received: by 2002:a92:c749:0:b0:349:5c87:e712 with SMTP id y9-20020a92c749000000b003495c87e712mr14072947ilp.1.1692109552265;
-        Tue, 15 Aug 2023 07:25:52 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id t1-20020a056e02060100b0034a9a9a2016sm1760463ils.23.2023.08.15.07.25.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Aug 2023 07:25:51 -0700 (PDT)
-Message-ID: <3efa3710-4e8b-d187-a24d-ff85858e37fe@linuxfoundation.org>
-Date:   Tue, 15 Aug 2023 08:25:51 -0600
+        d=1e100.net; s=20221208; t=1692110153; x=1692714953;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5ExkU1aXgwbVZAT4/86NsHH+oPTHRo8kokP8esTR6pM=;
+        b=iLrb6NVavHradzfYV9cbPUdV03q0U14iyiR5YoXPjcZGWczPo7NcDHjg7tE8T3UeHv
+         k7kNNzcwt0HzKC2gJCoLbpPaVwX2+Rcu/zRU/gMOwmF/3rVh5K1ZZf60NG0Mwl4ysk8D
+         Vveoxik8QYJiGyLv6DgQkF4LhKXxnm4d7rdneeulkxUS2r3Nm0NUBldMR+KRf4KeQmem
+         xLJS+Flsc5eRp3qb/5MdRKHBlL6spE1mEZeKiZeSaORiGTmBWMW9yCsXtvwpksAaMJoM
+         IpcdDvuzDy1fA+RL/AL90f/s1xHoqiUff4Q/MrYzzMUj1AmqiKVmGvZF06w6XB1cc+EC
+         lgGg==
+X-Gm-Message-State: AOJu0Yw/Qy1GpeZvuMV+OLBGQB7ouGOF9SraQlfNiJkXhnGe5eyNw+QF
+        LdgR6nChaItJ9/Ke9GXNOdvbxIDsIl/csA==
+X-Google-Smtp-Source: AGHT+IFsmByXjHI0wnLzrSXkFNHsDb7aGcOCiExsey2xd2N/qfCGkxS21qOBHQU7rf4CmMMPM/mEAg==
+X-Received: by 2002:aa7:c612:0:b0:522:20a0:7eb8 with SMTP id h18-20020aa7c612000000b0052220a07eb8mr9909900edq.33.1692110152723;
+        Tue, 15 Aug 2023 07:35:52 -0700 (PDT)
+Received: from [192.168.1.95] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
+        by smtp.gmail.com with ESMTPSA id n19-20020aa7c453000000b0052328d4268asm6831254edr.81.2023.08.15.07.35.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Aug 2023 07:35:52 -0700 (PDT)
+Message-ID: <841306f0691a7d56be72be0bb3c7472eadcc3367.camel@gmail.com>
+Subject: Re: [RFC PATCH bpf-next 1/2] bpf, x64: Fix tailcall infinite loop
+ bug
+From:   Eduard Zingerman <eddyz87@gmail.com>
+To:     Leon Hwang <hffilwlqm@gmail.com>, bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, x86@kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, mykolal@fb.com,
+        shuah@kernel.org, davem@davemloft.net, dsahern@kernel.org,
+        tangyeechou@gmail.com, kernel-patches-bot@fb.com,
+        maciej.fijalkowski@intel.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Date:   Tue, 15 Aug 2023 17:35:50 +0300
+In-Reply-To: <43201fd2-dca7-9294-1dea-8460a9e99296@gmail.com>
+References: <20230814134147.70289-1-hffilwlqm@gmail.com>
+         <20230814134147.70289-2-hffilwlqm@gmail.com>
+         <ad3db96c97aea916d555c76069490a176f634ccb.camel@gmail.com>
+         <43201fd2-dca7-9294-1dea-8460a9e99296@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [GIT PULL] nolibc changes for 6.6-rc1
-To:     Willy Tarreau <w@1wt.eu>, "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        shuah <shuah@kernel.org>
-References: <20230806172245.GA26239@1wt.eu>
-Content-Language: en-US
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230806172245.GA26239@1wt.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/6/23 11:22, Willy Tarreau wrote:
-> Hi Shuah, hi Paul,
-> 
-> I'm sending you the list of planned nolibc changes for 6.6. A doc update
-> may possibly follow a bit later to try to document the contribution
-> process. We also noticed a slight increase in binary sizes that might
-> be fixed soon but I wouldn't bet on this since it will require lot of
-> testing again and I'd rather postpone this by default. In any case I
-> have no intent to push any significant updates/fixes for 6.6 at this
-> point.
-> 
-> I'm also pasting a summary of the changes in this pull request, feel
-> free to use it for the merge commit message if you need.
-> 
-> For any question or if anything is not clear, do not hesitate to ask!
-> 
-> Thanks,
-> Willy
-> 
-> ----- changes ------
-> Nolibc:
->    - improved portability by removing build errors with -ENOSYS
->    - added syscall6() on MIPS to support pselect6() and mmap()
->    - added setvbuf(), rmdir(), pipe(), pipe2()
->    - add support for ppc/ppc64
->    - environ is no longer optional
->    - fixed frame pointer issues at -O0
->    - dropped sys_stat() in favor of sys_statx()
->    - centralized _start_c() to remove lots of asm code
->    - switched size_t to __SIZE_TYPE__
-> 
-> Selftests:
->    - improved status reporting (success/warning/failure counts, path to log file)
->    - various code cleanups (indent, unused variables, ...)
->    - more consistent test numbering
->    - enabled compiler warnings
->    - dropped unreliable chmod_net test
->    - improved reliability (create /dev/zero & /tmp, rely less on /proc)
->    - new tests (brk/sbrk/mmap/munmap)
->    - improved compatibility with musl
->    - new run-nolibc-test target to build and run natively
->    - new run-libc-test target to build and run against native libc
->    - made the cmdline parser more reliable against boolean arguments
->    - dropped dependency on memfd for vfprintf() test
->    - nolibc-test is no longer stripped
->    - added support for extending ARCH via XARCH
-> 
-> Other:
->    - add Thomas as co-maintainer
-> -----------
-> 
-> The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
-> 
->    Linux 6.5-rc1 (2023-07-09 13:53:13 -0700)
-> 
-> are available in the Git repository at:
-> 
->    https://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git/ 20230806-for-6.6-1
-> 
-> for you to fetch changes up to d98c1e27e46e47a3ae67e1d048f153598ba82611:
-> 
->    tools/nolibc: stackprotector.h: make __stack_chk_init static (2023-08-06 18:44:47 +0200)
-> 
+On Tue, 2023-08-15 at 11:01 +0800, Leon Hwang wrote:
+[...]
+> a) Initial value of RAX is in emit_prologue().
+> 	if (!ebpf_from_cbpf) {
+> 		if (tail_call_reachable && !is_subprog)
+> 			/* When it's the entry of the whole
+> 			 * tailcall context, zeroing the RAX
+> 			 * means init tail_call_cnt.
+> 			 */
+> 			EMIT2(0x31, 0xC0); /* xor eax, eax */
+> 		else
+> 			// Keep the same asm layout.
+> 			EMIT2(0x66, 0x90); /* nop2 */
+> 	}
+>    I'd like to add this comment to emit_prologue().
 
-Hi Willy,
+Got it, thank you.
 
-I am sorry for the delay on this. I was traveling last week
-and getting back to digging myself out of emails.
 
-I am having trouble pulling this request though:
-
-git request-pull https://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git/ 20230806-for-6.6-1
-
-gives me the following error
-
-fatal: Not a valid revision: git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git/
-
-I don't see a tag at https://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git
-
-thanks,
--- Shuah
+[...]
