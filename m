@@ -2,34 +2,34 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 547BBC04A6A
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A68B6C04A94
 	for <linux-kselftest@archiver.kernel.org>; Tue, 15 Aug 2023 15:57:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238355AbjHOP5F (ORCPT
+        id S238380AbjHOP5G (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 15 Aug 2023 11:57:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41668 "EHLO
+        Tue, 15 Aug 2023 11:57:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238375AbjHOP4d (ORCPT
+        with ESMTP id S238371AbjHOP4d (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Tue, 15 Aug 2023 11:56:33 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7B95319B3;
-        Tue, 15 Aug 2023 08:56:32 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 92054143D;
-        Tue, 15 Aug 2023 08:57:14 -0700 (PDT)
-Received: from donnerap.arm.com (donnerap.manchester.arm.com [10.32.100.58])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 431D13F6C4;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8A4CA1B6;
         Tue, 15 Aug 2023 08:56:31 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5A37C11FB;
+        Tue, 15 Aug 2023 08:57:13 -0700 (PDT)
+Received: from donnerap.arm.com (donnerap.manchester.arm.com [10.32.100.58])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0B2773F6C4;
+        Tue, 15 Aug 2023 08:56:29 -0700 (PDT)
 From:   Andre Przywara <andre.przywara@arm.com>
 To:     Shuah Khan <shuah@kernel.org>, Nhat Pham <nphamcs@gmail.com>,
         Johannes Weiner <hannes@cmpxchg.org>
 Cc:     linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 2/3] selftests: cachestat: use proper syscall number macro
-Date:   Tue, 15 Aug 2023 16:56:11 +0100
-Message-Id: <20230815155612.2535947-3-andre.przywara@arm.com>
+Subject: [PATCH 1/3] selftests: cachestat: properly link in librt
+Date:   Tue, 15 Aug 2023 16:56:10 +0100
+Message-Id: <20230815155612.2535947-2-andre.przywara@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230815155612.2535947-1-andre.przywara@arm.com>
 References: <20230815155612.2535947-1-andre.przywara@arm.com>
@@ -39,56 +39,41 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-At the moment the cachestat syscall number is hard coded into the test
-source code.
-Remove that and replace it with the proper __NR_cachestat macro.
-That ensures compatibility should other architectures pick a different
-number.
+Libraries should be listed last on the compiler's command line, so that
+the linker can look for and find still unresolved symbols. The librt
+library, required for the shm_* functions, was announced using CFLAGS,
+which puts the library *before* the source files, and fails compilation
+on my system:
+======================
+gcc -isystem /src/linux-selftests/usr/include -Wall -lrt test_cachestat.c
+  -o /src/linux-selftests/kselftest/cachestat/test_cachestat
+/usr/bin/ld: /tmp/cceQWO3u.o: in function `test_cachestat_shmem':
+test_cachestat.c:(.text+0x890): undefined reference to `shm_open'
+/usr/bin/ld: test_cachestat.c:(.text+0x99c): undefined reference to `shm_unlink'
+collect2: error: ld returned 1 exit status
+make[4]: *** [../lib.mk:181: /src/linux-selftests/kselftest/cachestat/test_cachestat] Error 1
+======================
+
+Announce the library using the LDLIBS variable, which ensures the proper
+ordering on the command line.
 
 Signed-off-by: Andre Przywara <andre.przywara@arm.com>
 ---
- tools/testing/selftests/cachestat/test_cachestat.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ tools/testing/selftests/cachestat/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/cachestat/test_cachestat.c b/tools/testing/selftests/cachestat/test_cachestat.c
-index 54d09b820ed4b..a5a4ac8dcb76c 100644
---- a/tools/testing/selftests/cachestat/test_cachestat.c
-+++ b/tools/testing/selftests/cachestat/test_cachestat.c
-@@ -19,7 +19,6 @@ static const char * const dev_files[] = {
- 	"/dev/zero", "/dev/null", "/dev/urandom",
- 	"/proc/version", "/proc"
- };
--static const int cachestat_nr = 451;
+diff --git a/tools/testing/selftests/cachestat/Makefile b/tools/testing/selftests/cachestat/Makefile
+index fca73aaa7d141..778b54ebb0364 100644
+--- a/tools/testing/selftests/cachestat/Makefile
++++ b/tools/testing/selftests/cachestat/Makefile
+@@ -3,6 +3,6 @@ TEST_GEN_PROGS := test_cachestat
  
- void print_cachestat(struct cachestat *cs)
- {
-@@ -126,7 +125,7 @@ bool test_cachestat(const char *filename, bool write_random, bool create,
- 		}
- 	}
+ CFLAGS += $(KHDR_INCLUDES)
+ CFLAGS += -Wall
+-CFLAGS += -lrt
++LDLIBS += -lrt
  
--	syscall_ret = syscall(cachestat_nr, fd, &cs_range, &cs, 0);
-+	syscall_ret = syscall(__NR_cachestat, fd, &cs_range, &cs, 0);
- 
- 	ksft_print_msg("Cachestat call returned %ld\n", syscall_ret);
- 
-@@ -152,7 +151,7 @@ bool test_cachestat(const char *filename, bool write_random, bool create,
- 			ksft_print_msg("fsync fails.\n");
- 			ret = false;
- 		} else {
--			syscall_ret = syscall(cachestat_nr, fd, &cs_range, &cs, 0);
-+			syscall_ret = syscall(__NR_cachestat, fd, &cs_range, &cs, 0);
- 
- 			ksft_print_msg("Cachestat call (after fsync) returned %ld\n",
- 				syscall_ret);
-@@ -213,7 +212,7 @@ bool test_cachestat_shmem(void)
- 		goto close_fd;
- 	}
- 
--	syscall_ret = syscall(cachestat_nr, fd, &cs_range, &cs, 0);
-+	syscall_ret = syscall(__NR_cachestat, fd, &cs_range, &cs, 0);
- 
- 	if (syscall_ret) {
- 		ksft_print_msg("Cachestat returned non-zero.\n");
+ include ../lib.mk
 -- 
 2.25.1
 
