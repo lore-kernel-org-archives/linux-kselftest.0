@@ -2,80 +2,115 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AADA6C41513
-	for <linux-kselftest@archiver.kernel.org>; Wed, 16 Aug 2023 18:26:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 70729C04FE2
+	for <linux-kselftest@archiver.kernel.org>; Wed, 16 Aug 2023 18:27:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234162AbjHPSZ6 (ORCPT
+        id S1345525AbjHPS0b (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 16 Aug 2023 14:25:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60272 "EHLO
+        Wed, 16 Aug 2023 14:26:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345521AbjHPSZk (ORCPT
+        with ESMTP id S1345530AbjHPS0X (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Aug 2023 14:25:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52BD410C1
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Aug 2023 11:25:36 -0700 (PDT)
+        Wed, 16 Aug 2023 14:26:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DFE310C1;
+        Wed, 16 Aug 2023 11:26:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CD83360AD7
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Aug 2023 18:25:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4806C433C8;
-        Wed, 16 Aug 2023 18:25:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C88E6271D;
+        Wed, 16 Aug 2023 18:26:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3A3AC433C9;
+        Wed, 16 Aug 2023 18:26:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692210335;
-        bh=3OB+0jGpxFwrZAsIyEldxAoXpAeGJJFDaADP02UbZ6Y=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pLPA/M2b43PpYjHnx+0qs78n7RbS7ICWBdrhoE9miyi4i/k9arS1LhLlwomsWht9C
-         QtnHQsjVLfI/T7zgbVKl204VS6bOCWFZJmnKQ8YhypCTl68mjXGGOJ8Kmx7fh+BpAR
-         MW248OtcPR4ggqrZhhfLEqCjt9QiIaestczNAsnOZBaS/4l5OQOv7fVen6X9kTgG1v
-         Vxvj5w/yfUjW37MCYaZUpA+I7BX286WkUUK4mMwq/HNDMNlhHa3fEktWtAlNirOmPP
-         fX+Qz57JmZ5E0LC1dA0cEaYpQbayd8YhpMTttHEJF1sKqUy5jv2rJi0UbtyBAnYsql
-         wo4XaatP2rv5w==
-From:   Will Deacon <will@kernel.org>
-To:     Andre Przywara <andre.przywara@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     kernel-team@android.com, Will Deacon <will@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] kselftest/arm64: build BTI tests in output directory
-Date:   Wed, 16 Aug 2023 19:25:23 +0100
-Message-Id: <169219342837.1947103.11802774487228057167.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20230815145931.2522557-1-andre.przywara@arm.com>
-References: <20230815145931.2522557-1-andre.przywara@arm.com>
+        s=k20201202; t=1692210381;
+        bh=3lwZH0aCkN4fuwrTeQAhsYruTaew5rtoMeyWR8imUko=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QK3Ss4gYQANpF0kfjVDMhwPaCBnN7jcXmU+ud+rNTZoFKIrBrSXEwPGVGIBxSuBVa
+         WPNXG6eJZ3FhK9KAyp3GfSYJ/zb+pE+4rCQknlaNheucXLhnJ67mh3RWIhFfKZTGL8
+         uXPBJpIcABURnESDC2XbooGsuC9LHy75ijzMgREdvGtpEQg9D9hhP7mVnrfKs6wg5o
+         GOpKTl8nyoHQ5Shobze8RiECk2mqQteHONzc9PyVM6x2gHC7QohvJDw2aydMjS7K0r
+         di+cOUZk4aPspJCVQsxXx0I5aMt2LWQ+6+xgwfkyKddkNk49YFt7sLHwaNqVbtpCJJ
+         jeHDFcRu2mgxQ==
+Date:   Wed, 16 Aug 2023 19:26:12 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+        Deepak Gupta <debug@rivosinc.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v4 07/36] arm64/gcs: Provide copy_to_user_gcs()
+Message-ID: <60eeefc9-96db-4d4a-b0e4-751cba540471@sirena.org.uk>
+References: <20230807-arm64-gcs-v4-0-68cfa37f9069@kernel.org>
+ <20230807-arm64-gcs-v4-7-68cfa37f9069@kernel.org>
+ <ZNZjdXTJw2p5vh7C@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="tm7DmRva30JRxCzT"
+Content-Disposition: inline
+In-Reply-To: <ZNZjdXTJw2p5vh7C@arm.com>
+X-Cookie: Old soldiers never die.  Young ones do.
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 15 Aug 2023 15:59:31 +0100, Andre Przywara wrote:
-> The arm64 BTI selftests are currently built in the source directory,
-> then the generated binaries are copied to the output directory.
-> This leaves the object files around in a potentially otherwise pristine
-> source tree, tainting it for out-of-tree kernel builds.
-> 
-> Prepend $(OUTPUT) to every reference to an object file in the Makefile,
-> and remove the extra handling and copying. This puts all generated files
-> under the output directory.
-> 
-> [...]
 
-Applied to arm64 (for-next/selftests), thanks!
+--tm7DmRva30JRxCzT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-[1/1] kselftest/arm64: build BTI tests in output directory
-      https://git.kernel.org/arm64/c/e08302ee46c9
+On Fri, Aug 11, 2023 at 05:36:05PM +0100, Catalin Marinas wrote:
+> On Mon, Aug 07, 2023 at 11:00:12PM +0100, Mark Brown wrote:
+> > +static inline int copy_to_user_gcs(unsigned long __user *addr,
+> > +				   unsigned long *val,
+> > +				   int count)
 
-Cheers,
--- 
-Will
+> I think it makes more sense to have a put_user_gcs() of a single
+> element. I've only seen it used with 2 elements in the signal code but
+> we could as well do two put_user_gcs() calls (as we do for other stuff
+> that we push to the signal frame).
 
-https://fixes.arm64.dev
-https://next.arm64.dev
-https://will.arm64.dev
+Right, it's just the two element array in the signals code and the one
+element for the context token in map_shadow_stack().  I can refactor to
+a single read/write operation, I'd originally written it that way but I
+wasn't thrilled with either writing a load of fun macros to mirror the
+way vanilla put_user() is written or having code that looked very
+different to the other similarly named functions were done.
+
+--tm7DmRva30JRxCzT
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTdFMMACgkQJNaLcl1U
+h9DYQQf+Nxve6dTX12KVeA30x+OuPZrZ9604olhrpuQpYtFjAW9Y1s1V/zuJQfpi
+m2RUZwNwL8KLj0HHROEn6zCjxEWEgWDmYL0jocaZPRXfaXYATOaeKq/4ZNuZPTz0
+T8WOwgOm1V+Oojr0s9tTF3eeU+TbqH2Pjn54/5nAm3/ZO3A3K/NA3aG1qVRgUg30
+KC4cwnyO6b+WqMiy4HglvqDJiCFZXFEw8yTpaLuznzdX/t6qZ+XIkuiqDKn/ek2M
+Gzey1zWBfgdiqCsZDxAb+7rOoEnnyLh8qxMRQWzZCCEb2y/qihOUuFcyPsimZ8mU
+avhuox/i9muYxS6uDyrWVVaaN2t4bg==
+=OnPi
+-----END PGP SIGNATURE-----
+
+--tm7DmRva30JRxCzT--
