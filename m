@@ -2,37 +2,37 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 50BA5C41513
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 727F6C04FE2
 	for <linux-kselftest@archiver.kernel.org>; Wed, 16 Aug 2023 11:32:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244533AbjHPLbp (ORCPT
+        id S244559AbjHPLbr (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 16 Aug 2023 07:31:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51768 "EHLO
+        Wed, 16 Aug 2023 07:31:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244504AbjHPLbZ (ORCPT
+        with ESMTP id S244509AbjHPLbi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Aug 2023 07:31:25 -0400
+        Wed, 16 Aug 2023 07:31:38 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E1341B4;
-        Wed, 16 Aug 2023 04:31:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 240BC1B4;
+        Wed, 16 Aug 2023 04:31:37 -0700 (PDT)
 Received: from localhost.localdomain (unknown [59.103.216.185])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id A19F26607204;
-        Wed, 16 Aug 2023 12:31:17 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A42FD6607204;
+        Wed, 16 Aug 2023 12:31:29 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1692185483;
-        bh=xDf3+oLHAaPp7qBRh6+bqrklOrWfQnDa6cvcD0WAiPk=;
+        s=mail; t=1692185496;
+        bh=++7ZMwIn+CSvHBOzFMinKuXCGuCZi9t/HjmM0x59zug=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cFOWNpJCrTUuk6VU+0LobPMmJWERDhogNASN4oU54q/bhJ+A1I1MEHXImAF8hN4D4
-         n/+79tnuBtTLn6zVYrNy2uK78tNRgpojZP61qTWKkWe0MCkLHs1KXU3jCquBwaZppE
-         OWxDUJo9t6MbLhgezxBD8SGCqnrko9E5K3kue9aVN2OYw3jPSdj/3QDJ16Xa9Altc0
-         w/g38aA6oO2jFaPdIgC4iZkOho1vB677rcHY+DzPgltVpxFFLPjM2WqsFtqukjaUon
-         dgHedefhP8Gho7aKGla7AhxzkeEhlhnVRA6JTVibrphg7s9BGZ/OMzp76AoAhAyK6s
-         gMjoGcjlp0zvQ==
+        b=G+tzRsRTLPsNY1r/xmhpjcBwYcDzsFkNWkC22UAyZeYgSS8hQJGErw3DJASu/u79z
+         smxwydrB1oY5d0kDruvbUGZhirQiMEwK5gtP5bGmTumoSkyqUK3muTvgdvyRzHibXW
+         SFRay0iR4XMxGWTd6eMEgHlNilP26ZCvXyWeoB49gBed4xCy92EqLEcutlb4ecWoBg
+         x+dg8BFB8MiWNPs7s+Tqofz+Q0hwEoUue1sKpPMx3ixzoT/71NhQT7oLhCcuDHbHTQ
+         RbAMF6rRAM+WbdHySgeuZ6p4JGKmoO+UVebX6Z54P/ptCKvvvfNiv72nBhkQdCRUiu
+         z3Ue9n8MqRJlw==
 From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
 To:     Peter Xu <peterx@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -61,9 +61,9 @@ Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Cyrill Gorcunov <gorcunov@gmail.com>,
         Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
         David Hildenbrand <david@redhat.com>
-Subject: [PATCH v32 3/6] fs/proc/task_mmu: Add fast paths to get/clear PAGE_IS_WRITTEN flag
-Date:   Wed, 16 Aug 2023 16:30:46 +0500
-Message-Id: <20230816113049.1697849-4-usama.anjum@collabora.com>
+Subject: [PATCH v32 5/6] mm/pagemap: add documentation of PAGEMAP_SCAN IOCTL
+Date:   Wed, 16 Aug 2023 16:30:48 +0500
+Message-Id: <20230816113049.1697849-6-usama.anjum@collabora.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230816113049.1697849-1-usama.anjum@collabora.com>
 References: <20230816113049.1697849-1-usama.anjum@collabora.com>
@@ -73,91 +73,135 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Adding fast code paths to handle specifically only get and/or clear
-operation of PAGE_IS_WRITTEN, increases its performance by 0-35%.
-The results of some test cases are given below:
-
-Test-case-1
-t1 = (Get + WP) time
-t2 = WP time
-                       t1            t2
-Without this patch:    140-170mcs    90-115mcs
-With this patch:       110mcs        80mcs
-Worst case diff:       35% faster    30% faster
-
-Test-case-2
-t3 = atomic Get and WP
-                      t3
-Without this patch:   120-140mcs
-With this patch:      100-110mcs
-Worst case diff:      21% faster
+Add some explanation and method to use write-protection and written-to
+on memory range.
 
 Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 ---
-The test to measure the performance can be found: https://is.gd/FtSKcD
-8 8192 3 1 0 and 8 8192 3 1 1 arguments have been used to produce the
-above mentioned results.
+Changes in v30:
+- Minor changes
 
 Changes in v29:
-- Minor updates in flush logic following the original patch
----
- fs/proc/task_mmu.c | 36 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+- Revamp the documentation and make it better
 
-diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-index 0903e10e5fc08..5b61ba093ff3e 100644
---- a/fs/proc/task_mmu.c
-+++ b/fs/proc/task_mmu.c
-@@ -2121,6 +2121,41 @@ static int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
- 		return 0;
- 	}
- 
-+	if (!p->vec_out) {
-+		/* Fast path for performing exclusive WP */
-+		for (addr = start; addr != end; pte++, addr += PAGE_SIZE) {
-+			if (pte_uffd_wp(ptep_get(pte)))
-+				continue;
-+			make_uffd_wp_pte(vma, addr, pte);
-+			if (!flush_end)
-+				start = addr;
-+			flush_end = addr + PAGE_SIZE;
-+		}
-+		goto flush_and_return;
-+	}
+Changes in v26:
+- Update documentation according to latest revision
+
+Changes in v21:
+- Update according to changed interface
+
+Changes in v20:
+- Add new flag in documentation
+
+Changes in v19:
+- Improved documentatiom with punctuation marks
+
+Changes in v16:
+- Update the documentation
+
+Changes in v11:
+- Add more documentation
+---
+ Documentation/admin-guide/mm/pagemap.rst | 89 ++++++++++++++++++++++++
+ 1 file changed, 89 insertions(+)
+
+diff --git a/Documentation/admin-guide/mm/pagemap.rst b/Documentation/admin-guide/mm/pagemap.rst
+index c8f380271cad8..fe17cf2104265 100644
+--- a/Documentation/admin-guide/mm/pagemap.rst
++++ b/Documentation/admin-guide/mm/pagemap.rst
+@@ -227,3 +227,92 @@ Before Linux 3.11 pagemap bits 55-60 were used for "page-shift" (which is
+ always 12 at most architectures). Since Linux 3.11 their meaning changes
+ after first clear of soft-dirty bits. Since Linux 4.2 they are used for
+ flags unconditionally.
 +
-+	if (!p->arg.category_anyof_mask && !p->arg.category_inverted &&
-+	    p->arg.category_mask == PAGE_IS_WRITTEN &&
-+	    p->arg.return_mask == PAGE_IS_WRITTEN) {
-+		for (addr = start; addr < end; pte++, addr += PAGE_SIZE) {
-+			unsigned long next = addr + PAGE_SIZE;
++Pagemap Scan IOCTL
++==================
 +
-+			if (pte_uffd_wp(ptep_get(pte)))
-+				continue;
-+			ret = pagemap_scan_output(p->cur_vma_category | PAGE_IS_WRITTEN,
-+						  p, addr, &next);
-+			if (next == addr)
-+				break;
-+			if (~p->arg.flags & PM_SCAN_WP_MATCHING)
-+				continue;
-+			make_uffd_wp_pte(vma, addr, pte);
-+			if (!flush_end)
-+				start = addr;
-+			flush_end = next;
-+		}
-+		goto flush_and_return;
-+	}
++The ``PAGEMAP_SCAN`` IOCTL on the pagemap file can be used to get or optionally
++clear the info about page table entries. The following operations are supported
++in this IOCTL:
 +
- 	for (addr = start; addr != end; pte++, addr += PAGE_SIZE) {
- 		unsigned long categories = p->cur_vma_category |
- 					   pagemap_page_category(p, vma, addr, ptep_get(pte));
-@@ -2144,6 +2179,7 @@ static int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
- 		flush_end = next;
- 	}
- 
-+flush_and_return:
- 	if (flush_end)
- 		flush_tlb_range(vma, start, addr);
- 
++- Scan the address range and get the memory ranges matching the provided criteria.
++  This is performed when the output buffer is specified.
++- Write-protect the pages. The ``PM_SCAN_WP_MATCHING`` is used to write-protect
++  the pages of interest. The ``PM_SCAN_CHECK_WPASYNC`` aborts the operation if
++  non-Async Write Protected pages are found. The ``PM_SCAN_WP_MATCHING`` can be
++  used with or without ``PM_SCAN_CHECK_WPASYNC``.
++- Both of those operations can be combined into one atomic operation where we can
++  get and write protect the pages as well.
++
++Following flags about pages are currently supported:
++
++- ``PAGE_IS_WPALLOWED`` - Page has async-write-protection enabled
++- ``PAGE_IS_WRITTEN`` - Page has been written to from the time it was write protected
++- ``PAGE_IS_FILE`` - Page is file backed
++- ``PAGE_IS_PRESENT`` - Page is present in the memory
++- ``PAGE_IS_SWAPPED`` - Page is in swapped
++- ``PAGE_IS_PFNZERO`` - Page has zero PFN
++- ``PAGE_IS_HUGE`` - Page is THP or Hugetlb backed
++
++The ``struct pm_scan_arg`` is used as the argument of the IOCTL.
++
++ 1. The size of the ``struct pm_scan_arg`` must be specified in the ``size``
++    field. This field will be helpful in recognizing the structure if extensions
++    are done later.
++ 2. The flags can be specified in the ``flags`` field. The ``PM_SCAN_WP_MATCHING``
++    and ``PM_SCAN_CHECK_WPASYNC`` are the only added flags at this time. The get
++    operation is optionally performed depending upon if the output buffer is
++    provided or not.
++ 3. The range is specified through ``start`` and ``end``.
++ 4. The walk can abort before visiting the complete range such as the user buffer
++    can get full etc. The walk ending address is specified in``end_walk``.
++ 5. The output buffer of ``struct page_region`` array and size is specified in
++    ``vec`` and ``vec_len``.
++ 6. The optional maximum requested pages are specified in the ``max_pages``.
++ 7. The masks are specified in ``category_mask``, ``category_anyof_mask``,
++    ``category_inverted`` and ``return_mask``.
++
++Find pages which have been written and WP them as well::
++
++   struct pm_scan_arg arg = {
++   .size = sizeof(arg),
++   .flags = PM_SCAN_CHECK_WPASYNC | PM_SCAN_CHECK_WPASYNC,
++   ..
++   .category_mask = PAGE_IS_WRITTEN,
++   .return_mask = PAGE_IS_WRITTEN,
++   };
++
++Find pages which have been written, are file backed, not swapped and either
++present or huge::
++
++   struct pm_scan_arg arg = {
++   .size = sizeof(arg),
++   .flags = 0,
++   ..
++   .category_mask = PAGE_IS_WRITTEN | PAGE_IS_SWAPPED,
++   .category_inverted = PAGE_IS_SWAPPED,
++   .category_anyof_mask = PAGE_IS_PRESENT | PAGE_IS_HUGE,
++   .return_mask = PAGE_IS_WRITTEN | PAGE_IS_SWAPPED |
++                  PAGE_IS_PRESENT | PAGE_IS_HUGE,
++   };
++
++The ``PAGE_IS_WRITTEN`` flag can be considered as a better-performing alternative
++of soft-dirty flag. It doesn't get affected by VMA merging of the kernel and hence
++the user can find the true soft-dirty pages in case of normal pages. (There may
++still be extra dirty pages reported for THP or Hugetlb pages.)
++
++"PAGE_IS_WRITTEN" category is used with uffd write protect-enabled ranges to
++implement memory dirty tracking in userspace:
++
++ 1. The userfaultfd file descriptor is created with ``userfaultfd`` syscall.
++ 2. The ``UFFD_FEATURE_WP_UNPOPULATED`` and ``UFFD_FEATURE_WP_ASYNC`` features
++    are set by ``UFFDIO_API`` IOCTL.
++ 3. The memory range is registered with ``UFFDIO_REGISTER_MODE_WP`` mode
++    through ``UFFDIO_REGISTER`` IOCTL.
++ 4. Then any part of the registered memory or the whole memory region must
++    be write protected using ``PAGEMAP_SCAN`` IOCTL with flag ``PM_SCAN_WP_MATCHING``
++    or the ``UFFDIO_WRITEPROTECT`` IOCTL can be used. Both of these perform the
++    same operation. The former is better in terms of performance.
++ 5. Now the ``PAGEMAP_SCAN`` IOCTL can be used to either just find pages which
++    have been written to since they were last marked and/or optionally write protect
++    the pages as well.
 -- 
 2.40.1
 
