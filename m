@@ -2,89 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A35DC41513
-	for <linux-kselftest@archiver.kernel.org>; Thu, 17 Aug 2023 16:22:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5503CC41513
+	for <linux-kselftest@archiver.kernel.org>; Thu, 17 Aug 2023 16:54:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353596AbjHQQVw (ORCPT
+        id S1352159AbjHQQxv (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 17 Aug 2023 12:21:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51164 "EHLO
+        Thu, 17 Aug 2023 12:53:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353603AbjHQQVU (ORCPT
+        with ESMTP id S1351937AbjHQQxb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Aug 2023 12:21:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A6F02D4A
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Aug 2023 09:20:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1692289243;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LKsXf14yPomkD3tSZWQknLH0bmhrzoGBJO+LGRQq7Mg=;
-        b=McxGmioc64553H4PFqZ+PVsSEwV99YvGaSLJSnaJcUJrGyLX7oBiE0TD2BMtTEMk15tPug
-        PUoXLcvJsoWqPFStOSuT6QQZ87Wrnm63m8TujYsaTxquf7L47Lmus0++iNjVuXJa8kBeNY
-        uXc9Fo8/jnSlpk6O16VByJCCR8kW+e8=
-Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-148-e5jtcWMRP6mhMfLTjIMZVQ-1; Thu, 17 Aug 2023 12:20:35 -0400
-X-MC-Unique: e5jtcWMRP6mhMfLTjIMZVQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B851B3C0D86D;
-        Thu, 17 Aug 2023 16:18:07 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.224.39])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 38C5EC15BAE;
-        Thu, 17 Aug 2023 16:18:03 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Thu, 17 Aug 2023 18:17:23 +0200 (CEST)
-Date:   Thu, 17 Aug 2023 18:17:18 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        Petr Skocik <pskocik@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jens Axboe <axboe@kernel.dk>, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        Marco Elver <elver@google.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        "haifeng.xu" <haifeng.xu@shopee.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] [RFC] signal: Add KUnit tests
-Message-ID: <20230817161718.GA4121@redhat.com>
-References: <20230814210508.never.871-kees@kernel.org>
- <87bkf68g5m.fsf@email.froward.int.ebiederm.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87bkf68g5m.fsf@email.froward.int.ebiederm.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+        Thu, 17 Aug 2023 12:53:31 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 153DE171F
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Aug 2023 09:53:30 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-d72e09f1263so92576276.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Aug 2023 09:53:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1692291209; x=1692896009;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=I7rXeOmhjPgxKDblBxPwExmctn5hjyWOkPZnPOO6tEA=;
+        b=QCg2g5rmwWj+zLcHzdHJ1+EJZ/K1e3el0bmzR4K6W+/DqLyCnaEB2jXi4RVnUxQ7HA
+         zNntzNGgwdhZjtyukJHm343Kpt+depwFg3XKmq0qQTaH8fG6GomRgbFX7T3OaQ3kiejv
+         4cew6icSeaNsJFajQi2bq7r85j6lcf+8hvHK6vE3Hb82p6Zmf9kdx20OXvzC15Fw1r4t
+         bZ4fZdpX8HJ/64uTMFZCCYNw9oliMO+ovSVkPZDFo0wr3ZDbhRXieruuCaXcrMBLr55E
+         nqLc5YdgtvdoEvgz1FmuZQ36lahtcY0IiPDW2fRzLMJlOYKnkDtew0uJkPfCWNV+SxF5
+         Q7fQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692291209; x=1692896009;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=I7rXeOmhjPgxKDblBxPwExmctn5hjyWOkPZnPOO6tEA=;
+        b=Cn3NPHDDU5YMtFAV8Cyvy9ma3agm7T7xazYoSux0v5va0iAH1PULYGs9TWxtpwd6m0
+         dq2wDKohtx9rl6IPB4q1h75pp6MZY5ryTjHr9Bx9rMj58R4MKK+Fg/Tvqx9ISZkoLr+L
+         yTAIyYbxpsMSZINRLALQptoWs1lx3ucxqdxylYaFTUkMAk5vUp3y3bsn4rOvCBe1JGa9
+         5Oy0bsertEWCWa/+LDfl3wEhAP+dAKzW/P6Zx4OXmMiggO0gCJMyI2DfWMeHwnVZSemL
+         wCoKgETDN3Oy3YGL7MxsS9BLBg/Mt+RyhVKldrAwyGRJDzfuJqjkk30a+BDpZxulqcPz
+         YBXA==
+X-Gm-Message-State: AOJu0YwPvuKs8uEV0+tiwFgG07d3LVcIVy+U41I+6Kt+E9VC8XGA/9ax
+        3Vtha+YQ615pEN9FiX+fXWQ2WNtr8Vq+hTlfKA==
+X-Google-Smtp-Source: AGHT+IEBX+yMZkeBzDlPXRL1+LjipK2s6Ler1D8A2V7HQdX1BXDLPWihauoUm2Na2jqlBWq8P0DlEOIoOk9EtRDR3w==
+X-Received: from ackerleytng-ctop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:13f8])
+ (user=ackerleytng job=sendgmr) by 2002:a25:bed0:0:b0:d4d:5407:3710 with SMTP
+ id k16-20020a25bed0000000b00d4d54073710mr963ybm.4.1692291209254; Thu, 17 Aug
+ 2023 09:53:29 -0700 (PDT)
+Date:   Thu, 17 Aug 2023 16:53:27 +0000
+In-Reply-To: <d6858d5c-7db6-6e4c-7f07-92ff3340e02b@redhat.com> (message from
+ Paolo Bonzini on Thu, 10 Aug 2023 16:03:16 +0200)
+Mime-Version: 1.0
+Message-ID: <diqz5y5dvce0.fsf@ackerleytng-ctop.c.googlers.com>
+Subject: Re: [RFC PATCH 08/11] KVM: x86: Let moving encryption context be configurable
+From:   Ackerley Tng <ackerleytng@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     seanjc@google.com, tglx@linutronix.de, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, shuah@kernel.org,
+        andrew.jones@linux.dev, ricarkol@google.com,
+        chao.p.peng@linux.intel.com, tabba@google.com, jarkko@kernel.org,
+        yu.c.zhang@linux.intel.com, vannapurve@google.com,
+        erdemaktas@google.com, mail@maciej.szmigiero.name, vbabka@suse.cz,
+        david@redhat.com, qperret@google.com, michael.roth@amd.com,
+        wei.w.wang@intel.com, liam.merwick@oracle.com,
+        isaku.yamahata@gmail.com, kirill.shutemov@linux.intel.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 08/16, Eric W. Biederman wrote:
+Paolo Bonzini <pbonzini@redhat.com> writes:
+
+> On 8/8/23 01:01, Ackerley Tng wrote:
+>> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+>> index 75d48379d94d..a1a28dd77b94 100644
+>> --- a/arch/x86/kvm/x86.c
+>> +++ b/arch/x86/kvm/x86.c
+>> @@ -6351,7 +6351,14 @@ static int kvm_vm_move_enc_context_from(struct kvm *kvm, unsigned int source_fd)
+>>   	if (r)
+>>   		goto out_mark_migration_done;
+>>   
+>> -	r = static_call(kvm_x86_vm_move_enc_context_from)(kvm, source_kvm);
+>> +	/*
+>> +	 * Different types of VMs will allow userspace to define if moving
+>> +	 * encryption context should be supported.
+>> +	 */
+>> +	if (kvm->arch.vm_move_enc_ctxt_supported &&
+>> +	    kvm_x86_ops.vm_move_enc_context_from) {
+>> +		r = static_call(kvm_x86_vm_move_enc_context_from)(kvm, source_kvm);
+>> +	}
 >
-> Arguably we can skip this as well.  There are only 3 uses of
-> do_each_thread (pivot_root, SAK, and ia64 backtrace) and they all should
-> be changed to be for_each_process_thread.
+> Rather than "supported" this is more "required".  So  perhaps 
+> kvm->arch.use_vm_enc_ctxt_op?
+>
+> Paolo
 
-Hmm. I thought that do_each_thread() was already killed ...
-Let me send the trivial patch.
-
-We also need to kill (or rework) while_each_thread() and next_thread(),
-I'll try to do this tomorrow.
-
-Oleg.
-
+Thanks, that is a great suggestion, I'll incorporate this in the next
+revision!
