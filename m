@@ -2,92 +2,88 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF70EC3DA4E
-	for <linux-kselftest@archiver.kernel.org>; Thu, 17 Aug 2023 16:01:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0940AC3DA4E
+	for <linux-kselftest@archiver.kernel.org>; Thu, 17 Aug 2023 16:18:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353001AbjHQQAy (ORCPT
+        id S1353573AbjHQQSG (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 17 Aug 2023 12:00:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48788 "EHLO
+        Thu, 17 Aug 2023 12:18:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353417AbjHQQAj (ORCPT
+        with ESMTP id S1353583AbjHQQRs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Aug 2023 12:00:39 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BDF0F2
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Aug 2023 09:00:39 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-6887c3aac15so1970130b3a.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Aug 2023 09:00:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692288038; x=1692892838;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zlT9fFwxzSwTM1kaYJgDOCQu0UvIzKLj9qZMmOR6x28=;
-        b=VmNUeJRQXAVcshDfrSK3Et1LD6PprjNbVNeGttwgD+xwqPFRoSJiXV01a/6kluD9I+
-         qRytK1na28nWsFpvtf2Th9yg9VI9aY+xddy856SeQyHAmS7Pn5YZd6d/soyTyTnk7WAw
-         +5uIgH9MEcHinqYXrTCmkmGrkBK/dXuP/vrYAP+rOfJmEudxia9o73P9cwDKq0nErq5A
-         GVWrQHGqkJETkGsiHFGLFJZoIcNFHgzm7Ma2oBaiPjLF0mmHAOZKkjhkMfBFJ8XfTiLk
-         8Txue3l0eRnHlah7YJAo4+8nXL/DsAAUE8Sw1+StyynHrx9pIuEsBBHRTfgF8IFfBkHu
-         YcKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692288038; x=1692892838;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zlT9fFwxzSwTM1kaYJgDOCQu0UvIzKLj9qZMmOR6x28=;
-        b=RKWUVlXFfL4Vq4gFZCs2j5f/68l3kLxup1Mkq6efHU24I5e2B5VLZ9LjtmgsqHLGGR
-         iwEO1KWhV6AedaeZZh2PfLqc9RrUAViF6tOwEPV86ePWDcnMkDsXbRrITtKzteFPw+WS
-         swF8LdACdNFoDNDzn5Nr4LcbonXtvMdzcMHW/dzkMsGnTaWHZ7yNPCAbgE6r1IrevjQB
-         3Vb5Np27ppN/nOLS2zz+klX6lEaSTSaXH9hYQPLpUCuG88mero4Af/t9J9dqC9jDAKTn
-         3u2GdNj4iBnz2xFnuKahLPIv1YQ//IcjDa0SVMRol2kE5VpJxn4e9yxR8Vvkpr7/4ksT
-         y3xA==
-X-Gm-Message-State: AOJu0Ywkipfg3Zz1AobXIQinXd1saGUwODWZxhi2VM8VrOn6kpfCfLe3
-        NldfrtIrF/gkU+edmN76tFE=
-X-Google-Smtp-Source: AGHT+IFbJG9KVcf0ORQF/w7iO7Nxg7X/MOZC4YGa5PCrSmP+GBVynwoW31tJgL6Bs6PF1VubX6ZEtw==
-X-Received: by 2002:a05:6a00:850:b0:689:f586:4add with SMTP id q16-20020a056a00085000b00689f5864addmr810149pfk.31.1692288038267;
-        Thu, 17 Aug 2023 09:00:38 -0700 (PDT)
-Received: from fanta-System-Product-Name.. ([222.252.65.171])
-        by smtp.gmail.com with ESMTPSA id s24-20020aa78298000000b00666b3706be6sm13018779pfm.107.2023.08.17.09.00.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Aug 2023 09:00:37 -0700 (PDT)
-From:   Anh Tuan Phan <tuananhlfc@gmail.com>
-To:     akpm@linux-foundation.org, shuah@kernel.org
-Cc:     Anh Tuan Phan <tuananhlfc@gmail.com>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Subject: [PATCH v1] selftests/mm: Fix WARNING comparing pointer to 0
-Date:   Thu, 17 Aug 2023 23:00:33 +0700
-Message-Id: <20230817160033.90079-1-tuananhlfc@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 17 Aug 2023 12:17:48 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C37D5273F;
+        Thu, 17 Aug 2023 09:17:47 -0700 (PDT)
+Received: from notapiano (unknown [IPv6:2600:4041:5b1a:cd00:524d:e95d:1a9c:492a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A709E660721F;
+        Thu, 17 Aug 2023 17:17:42 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1692289065;
+        bh=0Uqouu18aJtJnWmk5w1rhn0/Y7zubvIQmjLGUoT/VeI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QcbQo2iJTz/mX0oydHhXWpkB7ja3aNjvDZTn6MV8Afmqo1NdCJQfz5D7Px1PwD9LB
+         fxUuk8DkCNO6T7/q4PZI10igZRKtZknAj2oFVpIGPqOHQS+mGq13EbXiXMxnoNS5xv
+         56DvNJAvjXl2QY4gxT19+6Esoeb8HGRq7QqXH948q8dDJurnvcE1G/OmXjDnsb9ZeJ
+         axAQWy8LN0EhiceR2ydjizQ+KpLzhiE+USqkn0ooKDh7vfEulK6FhyEkro14DXAiBQ
+         oRBSK+lpHW7zABYCb72an3YoAWoD5wjrPABmBpECjMmrO2XbkNqgMyPaZoL4zLYGwP
+         CkG77/opLodqw==
+Date:   Thu, 17 Aug 2023 12:17:38 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, cocci@inria.fr,
+        Nicolas Palix <nicolas.palix@imag.fr>,
+        kernelci@lists.linux.dev, Julia Lawall <Julia.Lawall@inria.fr>,
+        Bjorn Andersson <andersson@kernel.org>, kernel@collabora.com,
+        Guenter Roeck <groeck@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH 2/2] kselftest: Add Devicetree unprobed devices test
+Message-ID: <439f66c9-8dc1-40d0-ae36-fb8beee5a6f1@notapiano>
+References: <20230810202413.1780286-1-nfraprado@collabora.com>
+ <20230810202413.1780286-3-nfraprado@collabora.com>
+ <ZNY9sBgzrEQVVQT+@finisterre.sirena.org.uk>
+ <b4b1f56b-94c0-4849-a7fc-9228b4e40dc7@notapiano>
+ <117448a6-671e-4f30-90c6-808a319caf32@sirena.org.uk>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <117448a6-671e-4f30-90c6-808a319caf32@sirena.org.uk>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Remove comparing pointer to 0 to avoid this warning from coccinelle:
+On Thu, Aug 17, 2023 at 01:26:05PM +0100, Mark Brown wrote:
+> On Fri, Aug 11, 2023 at 10:16:52AM -0400, Nícolas F. R. A. Prado wrote:
+> > On Fri, Aug 11, 2023 at 02:54:56PM +0100, Mark Brown wrote:
+> 
+> > > This doesn't appear to produce KTAP output which is going to make it
+> > > less useful for generic kselftest runners.
+> 
+> > Right, I'm going to need to rewrite it in C for that, but since I already had
+> > the shell script done, I decided to send it as is for the RFC, since I wanted to
+> > get feedback on the general approach more than anything.
+> 
+> I'm not clear why KTAP would require C?
 
-./tools/testing/selftests/mm/map_populate.c:80:16-17: WARNING comparing pointer to 0, suggest !E
-./tools/testing/selftests/mm/map_populate.c:80:16-17: WARNING comparing pointer to 0
+When going through the documentation there was only mention of the C headers for
+the kselftest framework which outputs using the KTAP format, so I thought that
+was the only acceptable option.
 
-Signed-off-by: Anh Tuan Phan <tuananhlfc@gmail.com>
----
- tools/testing/selftests/mm/map_populate.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+But in the meantime while looking through the other tests I saw you've recently
+added ktap output to ftrace/ftracetest. The newly added test in
+net/mptcp/mptcp_lib.sh also has its own helpers for outputting in KTAP. There
+are also a couple other cases of this in python.
 
-diff --git a/tools/testing/selftests/mm/map_populate.c b/tools/testing/selftests/mm/map_populate.c
-index 240f2d9dae7a..7945d0754875 100644
---- a/tools/testing/selftests/mm/map_populate.c
-+++ b/tools/testing/selftests/mm/map_populate.c
-@@ -77,7 +77,7 @@ int main(int argc, char **argv)
- 	unsigned long *smap;
- 
- 	ftmp = tmpfile();
--	BUG_ON(ftmp == 0, "tmpfile()");
-+	BUG_ON(!ftmp, "tmpfile()");
- 
- 	ret = ftruncate(fileno(ftmp), MMAP_SZ);
- 	BUG_ON(ret, "ftruncate()");
--- 
-2.34.1
+So I can definitely do the same for this test.
 
+Thanks,
+Nícolas
