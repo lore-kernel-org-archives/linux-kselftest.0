@@ -2,122 +2,196 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14B75C2FC0F
-	for <linux-kselftest@archiver.kernel.org>; Thu, 17 Aug 2023 02:51:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5C85C2FC15
+	for <linux-kselftest@archiver.kernel.org>; Thu, 17 Aug 2023 05:04:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347688AbjHQCvM (ORCPT
+        id S1347692AbjHQFEG (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 16 Aug 2023 22:51:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35918 "EHLO
+        Thu, 17 Aug 2023 01:04:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347701AbjHQCvC (ORCPT
+        with ESMTP id S1347773AbjHQFD5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Aug 2023 22:51:02 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D9A26AA;
-        Wed, 16 Aug 2023 19:51:00 -0700 (PDT)
-Received: from dggpemm500016.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RR8bz6bRYzrSXv;
-        Thu, 17 Aug 2023 10:49:35 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by dggpemm500016.china.huawei.com
- (7.185.36.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Thu, 17 Aug
- 2023 10:50:57 +0800
-From:   Yipeng Zou <zouyipeng@huawei.com>
-To:     <rostedt@goodmis.org>, <mhiramat@kernel.org>, <shuah@kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>
-CC:     <zouyipeng@huawei.com>
-Subject: [PATCH v2] selftests/ftrace: traceonoff_triggers: strip off names
-Date:   Thu, 17 Aug 2023 10:50:28 +0800
-Message-ID: <20230817025028.3953490-1-zouyipeng@huawei.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 17 Aug 2023 01:03:57 -0400
+Received: from out203-205-221-202.mail.qq.com (out203-205-221-202.mail.qq.com [203.205.221.202])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0D821BF8;
+        Wed, 16 Aug 2023 22:03:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1692248633;
+        bh=T7TfJXiMpcyXbu9o9Q8h0T9b4Y34G7YUL6yYCw+gTrA=;
+        h=From:To:Cc:Subject:Date;
+        b=mOFc0EJSl9mrI7nysR+HrED1oEWHz70mSYgbuKCBgLYecQ9gGGQbD9tPYZ3o3a1oF
+         AbjmAjFEE61K6JIRMe6YCinkpbDY8yQCCnH0QcYB/bOOYskhD8Ki8wu63u/lx7B//9
+         DEtjQz5d7M3AEa3x+KR5+Z+oqd9D4nlzQWNnVwnE=
+Received: from localhost.localdomain ([39.156.73.12])
+        by newxmesmtplogicsvrszc5-0.qq.com (NewEsmtp) with SMTP
+        id F0B4CB3; Thu, 17 Aug 2023 13:03:48 +0800
+X-QQ-mid: xmsmtpt1692248628tspf448hc
+Message-ID: <tencent_0E9E1A1C0981678D5E7EA9E4BDBA8EE2200A@qq.com>
+X-QQ-XMAILINFO: NQR8mRxMnur9GVejZOqymyN36NH0ARIDPyGuZGfMhvTF9JfxgZh5uiyOvC/Ly3
+         S/Z8uaPJD/x8t2A5367q/E/ug4cJlzMT8F1jfbMhPd7SPeGnpGbePR8PM02WhtMOs0pk3I2zMWVT
+         /DfBJVQa/6r2VavXQdbMwK5BQS8DOtAxS50w3Y2+qXPAj+/5W3ex4xSBzlitEagzn9mmGjHW3kWr
+         Bwiun6SzNzusdAds6vgDm9XMO3FevHVBMuz/JHY1nOeZmE/zMEMihWmNkCUb/NF3ZNGmqsziUVQh
+         KcQfjlDTj2Gq5M1PDGaHRyhs8V76N3QocpDm2dieSVVCtbD7p83LaZHpRnFurn14nqiWbT/jQVTa
+         Z4gmKnWaPv7J/vx7hDEjnNgnFDlaE/NJl0/GhlbIwf3aVxwaodjoYXrKf7YKHIAMNXM85igx0svg
+         vg7SKgiaCTMVIlL29XWR3ImV2+5ERg40ECkYzrroTPC3Fk5P7FI8raMwk+RgpkR2/MgzjxWRWWl9
+         cFuNIYfIibVuTPJLtlic8DxkdMcEkotbofWkvss2xpcy5YExxWjHQKqrBJao+i0AAIc6d2Q3cDvq
+         Yv4GMsTdLYQF2eUjFhopwetoFih4hTWaWF/JD2b+1YtRBlJjat93LB8xJgpmgACBAXjbAOqC/FqW
+         hkOaMLMJLSHqGxL/dh/ieKWwcvbbS+/BcsbCMNP7hkN8OZWd9knG9N11hB092bkdTNxiOar3P2cf
+         d9xIGuV3ouyZ8O0NQpjgzMgVrLeQf9O5pjguQEhh4wr17COTT2Lv8B4TUaAEpnNmRpVECbnNGv8h
+         wFN6hvKz92Q7NB+8jhH3nRa5NsdphAjj/RsDl0+ONwF8iWgwbsIOasthdRLCJqfOj546H94m4HOd
+         2cnLowjFpMwnU6VcJHD0Ze0ebalOf2xmq/cg1wwN7BNNzUD9OFBIdfD+8/lXH5umACzZUVAl7NyU
+         obtj/Y1ZzOJWu3CpT0eWVzNPRjVXLW/O4Um36H3mamGhqHM/Qt45HGh1fHcl4mCLy9gkrzGuI32k
+         Gz09D/MqusJRUn3xCa+6BPPPpCV3zzbnBDCjb0ubcOJdts32Uis/6VhiJKomE=
+X-QQ-XMRINFO: NS+P29fieYNw95Bth2bWPxk=
+From:   Rong Tao <rtoax@foxmail.com>
+To:     sdf@google.com, daniel@iogearbox.net, andrii@kernel.org
+Cc:     rongtao@cestc.cn, rtoax@foxmail.com,
+        Alexei Starovoitov <ast@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>,
+        Yonghong Song <yonghong.song@linux.dev>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+        Shuah Khan <shuah@kernel.org>,
+        bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and
+        Tools)),
+        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH bpf-next v5] selftests/bpf: trace_helpers.c: optimize kallsyms cache
+Date:   Thu, 17 Aug 2023 13:03:45 +0800
+X-OQ-MSGID: <20230817050346.19619-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.39.3
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.90.53.73]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500016.china.huawei.com (7.185.36.25)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The func_traceonoff_triggers.tc sometimes goes to fail
-on my board, Kunpeng-920.
+From: Rong Tao <rongtao@cestc.cn>
 
-[root@localhost]# ./ftracetest ./test.d/ftrace/func_traceonoff_triggers.tc -l fail.log
-=== Ftrace unit tests ===
-[1] ftrace - test for function traceon/off triggers     [FAIL]
-[2] (instance)  ftrace - test for function traceon/off triggers [UNSUPPORTED]
+Static ksyms often have problems because the number of symbols exceeds the
+MAX_SYMS limit. Like changing the MAX_SYMS from 300000 to 400000 in
+commit e76a014334a6("selftests/bpf: Bump and validate MAX_SYMS") solves
+the problem somewhat, but it's not the perfect way.
 
-I look up the log, and it shows that the md5sum is different between csum1 and csum2.
+This commit uses dynamic memory allocation, which completely solves the
+problem caused by the limitation of the number of kallsyms.
 
-++ cnt=611
-++ sleep .1
-+++ cnt_trace
-+++ grep -v '^#' trace
-+++ wc -l
-++ cnt2=611
-++ '[' 611 -ne 611 ']'
-+++ cat tracing_on
-++ on=0
-++ '[' 0 '!=' 0 ']'
-+++ md5sum trace
-++ csum1='76896aa74362fff66a6a5f3cf8a8a500  trace'
-++ sleep .1
-+++ md5sum trace
-++ csum2='ee8625a21c058818fc26e45c1ed3f6de  trace'
-++ '[' '76896aa74362fff66a6a5f3cf8a8a500  trace' '!=' 'ee8625a21c058818fc26e45c1ed3f6de  trace' ']'
-++ fail 'Tracing file is still changing'
-++ echo Tracing file is still changing
-Tracing file is still changing
-++ exit_fail
-++ exit 1
-
-So I directly dump the trace file before md5sum, the diff shows that:
-
-[root@localhost]# diff trace_1.log trace_2.log -y --suppress-common-lines
-dockerd-12285   [036] d.... 18385.510290: sched_stat | <...>-12285   [036] d.... 18385.510290: sched_stat
-dockerd-12285   [036] d.... 18385.510291: sched_swit | <...>-12285   [036] d.... 18385.510291: sched_swit
-<...>-740       [044] d.... 18385.602859: sched_stat | kworker/44:1-740 [044] d.... 18385.602859: sched_stat
-<...>-740       [044] d.... 18385.602860: sched_swit | kworker/44:1-740 [044] d.... 18385.602860: sched_swit
-
-And we can see that <...> filed be filled with names.
-
-We can strip off the names there to fix that.
-
-After strip off the names:
-
-kworker/u257:0-12 [019] d..2.  2528.758910: sched_stat | -12 [019] d..2.  2528.758910: sched_stat_runtime: comm=k
-kworker/u257:0-12 [019] d..2.  2528.758912: sched_swit | -12 [019] d..2.  2528.758912: sched_switch: prev_comm=kw
-<idle>-0          [000] d.s5.  2528.762318: sched_waki | -0  [000] d.s5.  2528.762318: sched_waking: comm=sshd pi
-<idle>-0          [037] dNh2.  2528.762326: sched_wake | -0  [037] dNh2.  2528.762326: sched_wakeup: comm=sshd pi
-<idle>-0          [037] d..2.  2528.762334: sched_swit | -0  [037] d..2.  2528.762334: sched_switch: prev_comm=sw
-
-Fixes: d87b29179aa0 ("selftests: ftrace: Use md5sum to take less time of checking logs")
-Suggested-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Signed-off-by: Yipeng Zou <zouyipeng@huawei.com>
+Acked-by: Stanislav Fomichev <sdf@google.com>
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
 ---
- .../ftrace/test.d/ftrace/func_traceonoff_triggers.tc          | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+v5: Release the allocated memory once the load_kallsyms_refresh() upon error
+    given it's dynamically allocated.
+v4: https://lore.kernel.org/lkml/tencent_59C74613113F0C728524B2A82FE5540A5E09@qq.com/
+    Make sure most cases we don't need the realloc() path to begin with,
+    and check strdup() return value.
+v3: https://lore.kernel.org/lkml/tencent_50B4B2622FE7546A5FF9464310650C008509@qq.com/
+    Do not use structs and judge ksyms__add_symbol function return value.
+v2: https://lore.kernel.org/lkml/tencent_B655EE5E5D463110D70CD2846AB3262EED09@qq.com/
+    Do the usual len/capacity scheme here to amortize the cost of realloc, and
+    don't free symbols.
+v1: https://lore.kernel.org/lkml/tencent_AB461510B10CD484E0B2F62E3754165F2909@qq.com/
+---
+ tools/testing/selftests/bpf/trace_helpers.c | 62 +++++++++++++++++----
+ 1 file changed, 52 insertions(+), 10 deletions(-)
 
-diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func_traceonoff_triggers.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func_traceonoff_triggers.tc
-index aee22289536b..c5783999582d 100644
---- a/tools/testing/selftests/ftrace/test.d/ftrace/func_traceonoff_triggers.tc
-+++ b/tools/testing/selftests/ftrace/test.d/ftrace/func_traceonoff_triggers.tc
-@@ -90,9 +90,9 @@ if [ $on != "0" ]; then
-     fail "Tracing is not off"
- fi
+diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
+index f83d9f65c65b..0053ba22f0cb 100644
+--- a/tools/testing/selftests/bpf/trace_helpers.c
++++ b/tools/testing/selftests/bpf/trace_helpers.c
+@@ -18,10 +18,47 @@
+ #define TRACEFS_PIPE	"/sys/kernel/tracing/trace_pipe"
+ #define DEBUGFS_PIPE	"/sys/kernel/debug/tracing/trace_pipe"
  
--csum1=`md5sum trace`
-+csum1=`cat trace | sed -e 's/^ *[^ ]*\(-[0-9][0-9]*\)/\1/' | md5sum`
- sleep $SLEEP_TIME
--csum2=`md5sum trace`
-+csum2=`cat trace | sed -e 's/^ *[^ ]*\(-[0-9][0-9]*\)/\1/' | md5sum`
+-#define MAX_SYMS 400000
+-static struct ksym syms[MAX_SYMS];
++static struct ksym *syms;
++static int sym_cap;
+ static int sym_cnt;
  
- if [ "$csum1" != "$csum2" ]; then
-     fail "Tracing file is still changing"
++static int ksyms__add_symbol(const char *name, unsigned long addr)
++{
++	void *tmp;
++	unsigned int new_cap;
++
++	if (sym_cnt + 1 > sym_cap) {
++		new_cap = sym_cap * 4 / 3;
++		tmp = realloc(syms, sizeof(struct ksym) * new_cap);
++		if (!tmp)
++			return -ENOMEM;
++		syms = tmp;
++		sym_cap = new_cap;
++	}
++
++	tmp = strdup(name);
++	if (!tmp)
++		return -ENOMEM;
++	syms[sym_cnt].addr = addr;
++	syms[sym_cnt].name = tmp;
++
++	sym_cnt++;
++
++	return 0;
++}
++
++static void ksyms__free(void)
++{
++	unsigned int i;
++
++	if (!syms)
++		return;
++
++	for (i = 0; i < sym_cnt; i++)
++		free(syms[i].name);
++	free(syms);
++}
++
+ static int ksym_cmp(const void *p1, const void *p2)
+ {
+ 	return ((struct ksym *)p1)->addr - ((struct ksym *)p2)->addr;
+@@ -33,9 +70,14 @@ int load_kallsyms_refresh(void)
+ 	char func[256], buf[256];
+ 	char symbol;
+ 	void *addr;
+-	int i = 0;
++	int ret;
+ 
++	/* Make sure most cases we don't need the realloc() path to begin with */
++	sym_cap = 400000;
+ 	sym_cnt = 0;
++	syms = malloc(sizeof(struct ksym) * sym_cap);
++	if (!syms)
++		return -ENOMEM;
+ 
+ 	f = fopen("/proc/kallsyms", "r");
+ 	if (!f)
+@@ -46,17 +88,17 @@ int load_kallsyms_refresh(void)
+ 			break;
+ 		if (!addr)
+ 			continue;
+-		if (i >= MAX_SYMS)
+-			return -EFBIG;
+-
+-		syms[i].addr = (long) addr;
+-		syms[i].name = strdup(func);
+-		i++;
++		ret = ksyms__add_symbol(func, (unsigned long)addr);
++		if (ret)
++			goto error;
+ 	}
+ 	fclose(f);
+-	sym_cnt = i;
+ 	qsort(syms, sym_cnt, sizeof(struct ksym), ksym_cmp);
+ 	return 0;
++
++error:
++	ksyms__free();
++	return ret;
+ }
+ 
+ int load_kallsyms(void)
 -- 
-2.34.1
+2.39.3
 
