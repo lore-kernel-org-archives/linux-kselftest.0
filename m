@@ -2,196 +2,382 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D5C85C2FC15
-	for <linux-kselftest@archiver.kernel.org>; Thu, 17 Aug 2023 05:04:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 36FCAC2FC04
+	for <linux-kselftest@archiver.kernel.org>; Thu, 17 Aug 2023 05:07:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347692AbjHQFEG (ORCPT
+        id S1347861AbjHQFHT (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 17 Aug 2023 01:04:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41428 "EHLO
+        Thu, 17 Aug 2023 01:07:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347773AbjHQFD5 (ORCPT
+        with ESMTP id S1347725AbjHQFGx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Aug 2023 01:03:57 -0400
-Received: from out203-205-221-202.mail.qq.com (out203-205-221-202.mail.qq.com [203.205.221.202])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0D821BF8;
-        Wed, 16 Aug 2023 22:03:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1692248633;
-        bh=T7TfJXiMpcyXbu9o9Q8h0T9b4Y34G7YUL6yYCw+gTrA=;
-        h=From:To:Cc:Subject:Date;
-        b=mOFc0EJSl9mrI7nysR+HrED1oEWHz70mSYgbuKCBgLYecQ9gGGQbD9tPYZ3o3a1oF
-         AbjmAjFEE61K6JIRMe6YCinkpbDY8yQCCnH0QcYB/bOOYskhD8Ki8wu63u/lx7B//9
-         DEtjQz5d7M3AEa3x+KR5+Z+oqd9D4nlzQWNnVwnE=
-Received: from localhost.localdomain ([39.156.73.12])
-        by newxmesmtplogicsvrszc5-0.qq.com (NewEsmtp) with SMTP
-        id F0B4CB3; Thu, 17 Aug 2023 13:03:48 +0800
-X-QQ-mid: xmsmtpt1692248628tspf448hc
-Message-ID: <tencent_0E9E1A1C0981678D5E7EA9E4BDBA8EE2200A@qq.com>
-X-QQ-XMAILINFO: NQR8mRxMnur9GVejZOqymyN36NH0ARIDPyGuZGfMhvTF9JfxgZh5uiyOvC/Ly3
-         S/Z8uaPJD/x8t2A5367q/E/ug4cJlzMT8F1jfbMhPd7SPeGnpGbePR8PM02WhtMOs0pk3I2zMWVT
-         /DfBJVQa/6r2VavXQdbMwK5BQS8DOtAxS50w3Y2+qXPAj+/5W3ex4xSBzlitEagzn9mmGjHW3kWr
-         Bwiun6SzNzusdAds6vgDm9XMO3FevHVBMuz/JHY1nOeZmE/zMEMihWmNkCUb/NF3ZNGmqsziUVQh
-         KcQfjlDTj2Gq5M1PDGaHRyhs8V76N3QocpDm2dieSVVCtbD7p83LaZHpRnFurn14nqiWbT/jQVTa
-         Z4gmKnWaPv7J/vx7hDEjnNgnFDlaE/NJl0/GhlbIwf3aVxwaodjoYXrKf7YKHIAMNXM85igx0svg
-         vg7SKgiaCTMVIlL29XWR3ImV2+5ERg40ECkYzrroTPC3Fk5P7FI8raMwk+RgpkR2/MgzjxWRWWl9
-         cFuNIYfIibVuTPJLtlic8DxkdMcEkotbofWkvss2xpcy5YExxWjHQKqrBJao+i0AAIc6d2Q3cDvq
-         Yv4GMsTdLYQF2eUjFhopwetoFih4hTWaWF/JD2b+1YtRBlJjat93LB8xJgpmgACBAXjbAOqC/FqW
-         hkOaMLMJLSHqGxL/dh/ieKWwcvbbS+/BcsbCMNP7hkN8OZWd9knG9N11hB092bkdTNxiOar3P2cf
-         d9xIGuV3ouyZ8O0NQpjgzMgVrLeQf9O5pjguQEhh4wr17COTT2Lv8B4TUaAEpnNmRpVECbnNGv8h
-         wFN6hvKz92Q7NB+8jhH3nRa5NsdphAjj/RsDl0+ONwF8iWgwbsIOasthdRLCJqfOj546H94m4HOd
-         2cnLowjFpMwnU6VcJHD0Ze0ebalOf2xmq/cg1wwN7BNNzUD9OFBIdfD+8/lXH5umACzZUVAl7NyU
-         obtj/Y1ZzOJWu3CpT0eWVzNPRjVXLW/O4Um36H3mamGhqHM/Qt45HGh1fHcl4mCLy9gkrzGuI32k
-         Gz09D/MqusJRUn3xCa+6BPPPpCV3zzbnBDCjb0ubcOJdts32Uis/6VhiJKomE=
-X-QQ-XMRINFO: NS+P29fieYNw95Bth2bWPxk=
-From:   Rong Tao <rtoax@foxmail.com>
-To:     sdf@google.com, daniel@iogearbox.net, andrii@kernel.org
-Cc:     rongtao@cestc.cn, rtoax@foxmail.com,
-        Alexei Starovoitov <ast@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>,
-        Yonghong Song <yonghong.song@linux.dev>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
-        Shuah Khan <shuah@kernel.org>,
-        bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and
-        Tools)),
-        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH bpf-next v5] selftests/bpf: trace_helpers.c: optimize kallsyms cache
-Date:   Thu, 17 Aug 2023 13:03:45 +0800
-X-OQ-MSGID: <20230817050346.19619-1-rtoax@foxmail.com>
-X-Mailer: git-send-email 2.39.3
+        Thu, 17 Aug 2023 01:06:53 -0400
+X-Greylist: delayed 3497 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 16 Aug 2023 22:06:52 PDT
+Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 131B71BF8;
+        Wed, 16 Aug 2023 22:06:51 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:40088)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1qWUJD-00BV35-MI; Wed, 16 Aug 2023 22:08:31 -0600
+Received: from ip68-227-168-167.om.om.cox.net ([68.227.168.167]:41098 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1qWUJB-000nJO-ON; Wed, 16 Aug 2023 22:08:31 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        Petr Skocik <pskocik@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jens Axboe <axboe@kernel.dk>, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        Marco Elver <elver@google.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        "haifeng.xu" <haifeng.xu@shopee.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <20230814210508.never.871-kees@kernel.org>
+Date:   Wed, 16 Aug 2023 23:08:21 -0500
+In-Reply-To: <20230814210508.never.871-kees@kernel.org> (Kees Cook's message
+        of "Mon, 14 Aug 2023 14:05:12 -0700")
+Message-ID: <87bkf68g5m.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-XM-SPF: eid=1qWUJB-000nJO-ON;;;mid=<87bkf68g5m.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.168.167;;;frm=ebiederm@xmission.com;;;spf=pass
+X-XM-AID: U2FsdGVkX19bfqe96MqsVOjFxcODXAV3vKGoe2wqSKQ=
+X-SA-Exim-Connect-IP: 68.227.168.167
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+Subject: Re: [PATCH] [RFC] signal: Add KUnit tests
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Rong Tao <rongtao@cestc.cn>
+Kees Cook <keescook@chromium.org> writes:
 
-Static ksyms often have problems because the number of symbols exceeds the
-MAX_SYMS limit. Like changing the MAX_SYMS from 300000 to 400000 in
-commit e76a014334a6("selftests/bpf: Bump and validate MAX_SYMS") solves
-the problem somewhat, but it's not the perfect way.
+> This is a continuation of the proposal[1] for mocking init_task for
+> KUnit testing. Changing the behavior of kill_something_info() is moving
+> forward[2] and I'd _really_ like to have some unit tests in place to
+> actually test the behavioral changes.
+>
+> I tried to incorporate feedback from Daniel and David, and I think the
+> result is fairly workable -- the only tricky part is building valid
+> task_struct instances. :)
+>
+> Notably, I haven't actually gotten as far as testing the actual proposed
+> behavioral change since I wanted to make sure this approach wasn't going
+> to totally crash and burn.
+>
+> Thoughts?
 
-This commit uses dynamic memory allocation, which completely solves the
-problem caused by the limitation of the number of kallsyms.
+Overall this looks like a nice start.  More comments below.
 
-Acked-by: Stanislav Fomichev <sdf@google.com>
-Signed-off-by: Rong Tao <rongtao@cestc.cn>
----
-v5: Release the allocated memory once the load_kallsyms_refresh() upon error
-    given it's dynamically allocated.
-v4: https://lore.kernel.org/lkml/tencent_59C74613113F0C728524B2A82FE5540A5E09@qq.com/
-    Make sure most cases we don't need the realloc() path to begin with,
-    and check strdup() return value.
-v3: https://lore.kernel.org/lkml/tencent_50B4B2622FE7546A5FF9464310650C008509@qq.com/
-    Do not use structs and judge ksyms__add_symbol function return value.
-v2: https://lore.kernel.org/lkml/tencent_B655EE5E5D463110D70CD2846AB3262EED09@qq.com/
-    Do the usual len/capacity scheme here to amortize the cost of realloc, and
-    don't free symbols.
-v1: https://lore.kernel.org/lkml/tencent_AB461510B10CD484E0B2F62E3754165F2909@qq.com/
----
- tools/testing/selftests/bpf/trace_helpers.c | 62 +++++++++++++++++----
- 1 file changed, 52 insertions(+), 10 deletions(-)
+I do wonder though.  Would it perhaps be easier to create a pid
+namespace with just the processes you want in it?
 
-diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
-index f83d9f65c65b..0053ba22f0cb 100644
---- a/tools/testing/selftests/bpf/trace_helpers.c
-+++ b/tools/testing/selftests/bpf/trace_helpers.c
-@@ -18,10 +18,47 @@
- #define TRACEFS_PIPE	"/sys/kernel/tracing/trace_pipe"
- #define DEBUGFS_PIPE	"/sys/kernel/debug/tracing/trace_pipe"
- 
--#define MAX_SYMS 400000
--static struct ksym syms[MAX_SYMS];
-+static struct ksym *syms;
-+static int sym_cap;
- static int sym_cnt;
- 
-+static int ksyms__add_symbol(const char *name, unsigned long addr)
-+{
-+	void *tmp;
-+	unsigned int new_cap;
-+
-+	if (sym_cnt + 1 > sym_cap) {
-+		new_cap = sym_cap * 4 / 3;
-+		tmp = realloc(syms, sizeof(struct ksym) * new_cap);
-+		if (!tmp)
-+			return -ENOMEM;
-+		syms = tmp;
-+		sym_cap = new_cap;
-+	}
-+
-+	tmp = strdup(name);
-+	if (!tmp)
-+		return -ENOMEM;
-+	syms[sym_cnt].addr = addr;
-+	syms[sym_cnt].name = tmp;
-+
-+	sym_cnt++;
-+
-+	return 0;
-+}
-+
-+static void ksyms__free(void)
-+{
-+	unsigned int i;
-+
-+	if (!syms)
-+		return;
-+
-+	for (i = 0; i < sym_cnt; i++)
-+		free(syms[i].name);
-+	free(syms);
-+}
-+
- static int ksym_cmp(const void *p1, const void *p2)
- {
- 	return ((struct ksym *)p1)->addr - ((struct ksym *)p2)->addr;
-@@ -33,9 +70,14 @@ int load_kallsyms_refresh(void)
- 	char func[256], buf[256];
- 	char symbol;
- 	void *addr;
--	int i = 0;
-+	int ret;
- 
-+	/* Make sure most cases we don't need the realloc() path to begin with */
-+	sym_cap = 400000;
- 	sym_cnt = 0;
-+	syms = malloc(sizeof(struct ksym) * sym_cap);
-+	if (!syms)
-+		return -ENOMEM;
- 
- 	f = fopen("/proc/kallsyms", "r");
- 	if (!f)
-@@ -46,17 +88,17 @@ int load_kallsyms_refresh(void)
- 			break;
- 		if (!addr)
- 			continue;
--		if (i >= MAX_SYMS)
--			return -EFBIG;
--
--		syms[i].addr = (long) addr;
--		syms[i].name = strdup(func);
--		i++;
-+		ret = ksyms__add_symbol(func, (unsigned long)addr);
-+		if (ret)
-+			goto error;
- 	}
- 	fclose(f);
--	sym_cnt = i;
- 	qsort(syms, sym_cnt, sizeof(struct ksym), ksym_cmp);
- 	return 0;
-+
-+error:
-+	ksyms__free();
-+	return ret;
- }
- 
- int load_kallsyms(void)
--- 
-2.39.3
+I am wondering because you failed to mock find_vpid and so you
+are actually testing sending signals to kernel threads.
 
+Eric
+
+> [1] https://lore.kernel.org/all/202212012008.D6F6109@keescook/
+> [2] https://lore.kernel.org/all/87jzu12pjh.fsf_-_@email.froward.int.ebiederm.org
+>
+> Cc: Brendan Higgins <brendan.higgins@linux.dev>
+> Cc: David Gow <davidgow@google.com>
+> Cc: "Eric W. Biederman" <ebiederm@xmission.com>
+> Cc: Petr Skocik <pskocik@gmail.com>
+> Cc: Oleg Nesterov <oleg@redhat.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Jens Axboe <axboe@kernel.dk>
+> Cc: linux-kselftest@vger.kernel.org
+> Cc: kunit-dev@googlegroups.com
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  include/kunit/resource.h     |  15 ++++
+>  include/linux/sched/signal.h |  11 ++-
+>  kernel/signal.c              | 135 +++++++++++++++++++++++++++++++++++
+>  3 files changed, 158 insertions(+), 3 deletions(-)
+>
+> diff --git a/include/kunit/resource.h b/include/kunit/resource.h
+> index c7383e90f5c9..dbf84a58f7a6 100644
+> --- a/include/kunit/resource.h
+> +++ b/include/kunit/resource.h
+> @@ -479,4 +479,19 @@ void kunit_remove_action(struct kunit *test,
+>  void kunit_release_action(struct kunit *test,
+>  			  kunit_action_t *action,
+>  			  void *ctx);
+> +
+> +#define kunit_get_mock_pointer(name, actual) ({			\
+> +	typeof(*(actual)) *ptr = actual;			\
+> +	struct kunit_resource *resource;			\
+> +								\
+> +	if (kunit_get_current_test()) {				\
+> +		resource = kunit_find_named_resource(current->kunit_test, name); \
+> +		if (resource) {					\
+> +			ptr = resource->data;			\
+> +			kunit_put_resource(resource);		\
+> +		}						\
+> +	}							\
+> +	ptr;							\
+> +})
+> +
+>  #endif /* _KUNIT_RESOURCE_H */
+> diff --git a/include/linux/sched/signal.h b/include/linux/sched/signal.h
+> index 669e8cff40c7..700271f43491 100644
+> --- a/include/linux/sched/signal.h
+> +++ b/include/linux/sched/signal.h
+> @@ -637,14 +637,19 @@ static inline unsigned long sigsp(unsigned long sp, struct ksignal *ksig)
+>  extern void __cleanup_sighand(struct sighand_struct *);
+>  extern void flush_itimer_signals(void);
+>  
+> +/* This is used for KUnit mocking. */
+> +#ifndef __init_task_ptr
+> +#define __init_task_ptr	(&init_task)
+> +#endif
+> +
+>  #define tasklist_empty() \
+> -	list_empty(&init_task.tasks)
+> +	list_empty(&__init_task_ptr->tasks)
+
+This exposes an implementation detail that makes my brain hurt.
+
+I think somewhere we should just have a global variable
+"struct list_head tasklist;" and use all of the modern list accessors
+on it.  Instead of placing that list in the first idle task for no
+reason.  That would allow decoupling all of the idle threads not
+just the first one from the tasklist.
+
+More importantly this has only a single user and that user is an assert
+that the per_cpu idle tasks come up before we start any other tasks.
+
+So we can just skip instrumenting this.
+
+
+Given what your tests have to do to emulate the init_task without
+it actually being an init_task in the long term it probably makes
+sense to form the cleanup and just get init_task out of the
+picture entirely.
+
+Maybe that is too much right now, but it feels like the clean way
+to handle this situation.
+
+>  #define next_task(p) \
+>  	list_entry_rcu((p)->tasks.next, struct task_struct, tasks)
+>  
+>  #define for_each_process(p) \
+> -	for (p = &init_task ; (p = next_task(p)) != &init_task ; )
+> +	for (p = __init_task_ptr ; (p = next_task(p)) != __init_task_ptr ; )
+>  
+>  extern bool current_is_single_threaded(void);
+>  
+> @@ -653,7 +658,7 @@ extern bool current_is_single_threaded(void);
+>   *          'break' will not work as expected - use goto instead.
+>   */
+>  #define do_each_thread(g, t) \
+> -	for (g = t = &init_task ; (g = t = next_task(g)) != &init_task ; ) do
+> +	for (g = t = __init_task_ptr ; (g = t = next_task(g)) != __init_task_ptr ; ) do
+>
+
+Arguably we can skip this as well.  There are only 3 uses of
+do_each_thread (pivot_root, SAK, and ia64 backtrace) and they all should
+be changed to be for_each_process_thread.
+
+>  #define while_each_thread(g, t) \
+>  	while ((t = next_thread(t)) != g)
+> diff --git a/kernel/signal.c b/kernel/signal.c
+> index b5370fe5c198..7607d302ebb9 100644
+> --- a/kernel/signal.c
+> +++ b/kernel/signal.c
+> @@ -11,6 +11,14 @@
+>   *		to allow signals to be sent reliably.
+>   */
+>  
+> +#if IS_ENABLED(CONFIG_KUNIT)
+> +/* This must be defined before we include include/linux/sched/signal.h */
+> +#define __init_task_ptr kunit_get_mock_pointer("mock_init_task", &init_task)
+> +
+> +#include <kunit/resource.h>
+> +#include <kunit/test-bug.h>
+> +#endif
+> +
+>  #include <linux/slab.h>
+>  #include <linux/export.h>
+>  #include <linux/init.h>
+> @@ -4842,3 +4850,130 @@ void kdb_send_sig(struct task_struct *t, int sig)
+>  		kdb_printf("Signal %d is sent to process %d.\n", sig, t->pid);
+>  }
+>  #endif	/* CONFIG_KGDB_KDB */
+> +
+> +#if IS_ENABLED(CONFIG_KUNIT)
+> +static void test_empty_task_list(struct kunit *test)
+> +{
+> +	struct kunit_resource resource;
+> +	static struct task_struct empty_task_list = {
+> +			.tasks	= LIST_HEAD_INIT(empty_task_list.tasks),
+> +		};
+> +	struct task_struct *p;
+> +	int count = 0;
+> +
+> +	kunit_add_named_resource(test, NULL, NULL, &resource,
+> +				 "mock_init_task", &empty_task_list);
+> +
+> +	KUNIT_EXPECT_TRUE(test, tasklist_empty());
+> +
+> +	for_each_process(p)
+> +		count++;
+> +
+> +	/* System hangs without this... */
+> +	kunit_remove_resource(test, &resource);
+> +
+> +	KUNIT_EXPECT_EQ(test, count, 0);
+> +}
+
+We should be able to just skip this test.
+
+> +
+> +static void test_for_each_process(struct kunit *test)
+> +{
+> +	struct kunit_resource resource;
+> +	static struct task_struct task1 = {
+> +			.pid = 1,
+> +			.tasks	= LIST_HEAD_INIT(task1.tasks),
+> +		};
+> +	static struct task_struct task2 = {
+> +			.pid = 2,
+> +		}, task3 = {
+> +			.pid = 3,
+> +		};
+
+Note that these pid values in the tasks are not used by
+signal delivery. 
+
+> +	struct task_struct *p;
+> +	int count = 0;
+> +
+> +	list_add(&task2.tasks, &task1.tasks);
+> +	list_add(&task3.tasks, &task1.tasks);
+        ^^^^^
+To match fork these should be list_add_tail.
+> +
+> +	kunit_add_named_resource(test, NULL, NULL, &resource,
+> +				 "mock_init_task", &task1);
+> +
+> +	/* Walk the process list backwards. */
+
+The comment is wrong. You built your list backwards, the process list is
+not walked backwards.
+
+> +	for_each_process(p) {
+> +		KUNIT_EXPECT_EQ(test, 3 - count, p->pid);
+> +		count++;
+> +	}
+> +
+> +	/* System hangs without this... */
+> +	kunit_remove_resource(test, &resource);
+> +
+> +	/* init_task isn't counted... */
+> +	KUNIT_EXPECT_EQ(test, count, 2);
+> +}
+> +
+> +static void test_kill_something_info(struct kunit *test)
+> +{
+> +	struct kunit_resource resource;
+> +	static struct task_struct task1 = {
+> +			.pid = 1,
+> +			.tasks	= LIST_HEAD_INIT(task1.tasks),
+> +		};
+> +	static struct task_struct task2 = {
+> +			.pid = 2,
+> +		}, task3 = {
+> +			.pid = 3,
+> +		};
+> +	struct kernel_siginfo siginfo = {
+> +			.si_code = SI_KERNEL,
+> +		};
+> +	struct task_struct *p;
+> +	int count = 0;
+> +
+> +	list_add(&task2.tasks, &task1.tasks);
+> +	list_add(&task3.tasks, &task1.tasks);
+
+These should also be list_add_tail.
+
+> +
+> +	kunit_add_named_resource(test, NULL, NULL, &resource,
+> +				 "mock_init_task", &task1);
+> +
+> +	/* Make sure we have a process list. */
+> +	for_each_process(p)
+> +		count++;
+> +	KUNIT_EXPECT_EQ(test, count, 2);
+> +
+> +	/* INT_MIN pid must return ESRCH */
+> +	KUNIT_EXPECT_EQ(test, -ESRCH,
+> +		kill_something_info(SIGHUP, SEND_SIG_NOINFO, INT_MIN));
+> +
+> +	/* Invalid signal: EINVAL */
+> +	KUNIT_EXPECT_EQ(test, -EINVAL,
+> +		kill_something_info(_NSIG + 1, SEND_SIG_NOINFO, 2));
+> +
+> +	/* Missing pid: ESRCH */
+> +	KUNIT_EXPECT_EQ(test, -ESRCH,
+> +		kill_something_info(SIGHUP, SEND_SIG_NOINFO, 42));
+
+This confirms you don't have a process with pid #42 your system when
+the test is run.
+
+> +	/* Bypass permission checks with SEND_SIG_NOINFO. */
+> +	KUNIT_EXPECT_EQ(test, 0,
+> +		kill_something_info(SIGHUP, SEND_SIG_NOINFO, 2));
+
+This confirms you a process with pid #2 aka kthread on your system when
+the test is run.
+
+> +
+> +	/* XXX: Hm, I was expecting this to explode in cred deref... */
+> +	KUNIT_EXPECT_EQ(test, 0,
+> +		kill_something_info(SIGHUP, &siginfo, 3));
+
+This confirms you have a process with pid #3 on your system when the
+test is run.  Pid #3 on my system refers to a kthread.
+
+> +
+> +	/* XXX more tests here, perhaps after mocking out group_send_sig_info() ... */
+> +
+
+You need to mock find_vpid before you test sending to processes.
+
+Right now your tests are not testing sending signals to your mocked
+tasks but instead to real tasks.
+
+> +	/* System hangs without this... */
+> +	kunit_remove_resource(test, &resource);
+> +}
+> +
+> +static struct kunit_case test_cases[] = {
+> +	KUNIT_CASE(test_empty_task_list),
+> +	KUNIT_CASE(test_for_each_process),
+> +	KUNIT_CASE(test_kill_something_info),
+> +	{}
+> +};
+> +
+> +static struct kunit_suite test_suite = {
+> +	.name = "signal",
+> +	.test_cases = test_cases,
+> +};
+> +kunit_test_suite(test_suite);
+> +#endif	/* CONFIG_KUNIT */
