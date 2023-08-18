@@ -2,176 +2,141 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FD73C7112B
-	for <linux-kselftest@archiver.kernel.org>; Fri, 18 Aug 2023 09:56:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D5A4C7113C
+	for <linux-kselftest@archiver.kernel.org>; Fri, 18 Aug 2023 10:12:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359445AbjHRJ4W (ORCPT
+        id S1359760AbjHRKMK (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 18 Aug 2023 05:56:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34706 "EHLO
+        Fri, 18 Aug 2023 06:12:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359439AbjHRJz6 (ORCPT
+        with ESMTP id S1359844AbjHRKLv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Aug 2023 05:55:58 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B8A130DC;
-        Fri, 18 Aug 2023 02:55:51 -0700 (PDT)
-Received: from [192.168.100.7] (unknown [39.34.185.42])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 33CE8660723E;
-        Fri, 18 Aug 2023 10:55:41 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1692352549;
-        bh=jSm113VK4O5di5c9amVgQ+0TBD3Pa6bZ1kfgpxOAP9M=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=UkcqyLrBG7zmA6SoRIwPH7RykRwITDLpCgmJzIMdpZSSGhWDnrqRYMckR2Ls97+1O
-         0KztY/htn/6tBVPKzD01airJtHNIkqolcF/lC4qxZdCcCIz0gKOCCLv2FjRpMskBkk
-         UeZiPrsN3/kUd9pD3jXw+oIN5b/NJFtUmtohzW+ITtuPbs7qXaJx5LSdvXHazL9IEL
-         kvf1bfULa2BqMZenCP6KxI8mWcvO8ZeR4dqMraAPw/0NXKm2QCqvYCXIoJygu4Usld
-         p15w4ECqknF0FBilW+t7TgLKsYAPiwMeekZe3NUEtFlJ2WI1ff5f7dfE/Z3k+L9w7X
-         Y3wx4Hg2pc+OA==
-Message-ID: <ea2af063-67da-137b-1dc4-bace40568187@collabora.com>
-Date:   Fri, 18 Aug 2023 14:55:36 +0500
+        Fri, 18 Aug 2023 06:11:51 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6B2230C2;
+        Fri, 18 Aug 2023 03:11:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692353485; x=1723889485;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=fe5keaRRZoV2YWbVwMtrDDrbxfsPkN3V0+LTY8Uy8EQ=;
+  b=RenY9K2xP0zupbJxZv0zrWG7LYIV25nGzKKMIJUM7YwyW5JlGSHFjBXb
+   8l5ua5gMDT2WCIWXZ2462sAsclWnFcJ1R15dSBISLTdKqkyiZLMQr8dmQ
+   kzRqutOEzZLLrL91/yrLnfnrsyq891BezavpzalCurougK72maa82Nh0Z
+   sqzwV/4u9fVBFI/+i444nmg3CHpXv5YiJIlCSHBmZBUJU/ZqR29OM54aK
+   q7iBM9/Aoi9BJBWMjWt9VgFMaeG+/juD0DwPO92CpDFOWyruoxAqN1Izi
+   uniqaZnTDkVCKyTu02WnBHc6PkO1YtohsfLwsX6MJW4HJjGUONG4zhcBK
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="370526291"
+X-IronPort-AV: E=Sophos;i="6.01,182,1684825200"; 
+   d="scan'208";a="370526291"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2023 03:10:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="858624990"
+X-IronPort-AV: E=Sophos;i="6.01,182,1684825200"; 
+   d="scan'208";a="858624990"
+Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
+  by orsmga004.jf.intel.com with ESMTP; 18 Aug 2023 03:10:35 -0700
+From:   Yi Liu <yi.l.liu@intel.com>
+To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
+        kevin.tian@intel.com, robin.murphy@arm.com,
+        baolu.lu@linux.intel.com
+Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
+        kvm@vger.kernel.org, mjrosato@linux.ibm.com,
+        chao.p.peng@linux.intel.com, yi.l.liu@intel.com,
+        yi.y.sun@linux.intel.com, peterx@redhat.com, jasowang@redhat.com,
+        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
+        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        zhenzhong.duan@intel.com
+Subject: [PATCH v9 2/5] iommu: Add new iommu op to get iommu hardware information
+Date:   Fri, 18 Aug 2023 03:10:30 -0700
+Message-Id: <20230818101033.4100-3-yi.l.liu@intel.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230818101033.4100-1-yi.l.liu@intel.com>
+References: <20230818101033.4100-1-yi.l.liu@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.1
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        oe-kbuild-all@lists.linux.dev,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Greg KH <greg@kroah.com>,
-        kernel@collabora.com, Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>
-Subject: Re: [PATCH v32 2/6] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-To:     kernel test robot <lkp@intel.com>, Peter Xu <peterx@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
-        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>
-References: <20230816113049.1697849-3-usama.anjum@collabora.com>
- <202308181520.yCq9Z26w-lkp@intel.com>
-Content-Language: en-US
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <202308181520.yCq9Z26w-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/18/23 12:16 PM, kernel test robot wrote:
-> Hi Muhammad,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on akpm-mm/mm-everything]
-> [also build test ERROR on next-20230817]
-> [cannot apply to linus/master v6.5-rc6]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Muhammad-Usama-Anjum/userfaultfd-UFFD_FEATURE_WP_ASYNC/20230816-193454
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-> patch link:    https://lore.kernel.org/r/20230816113049.1697849-3-usama.anjum%40collabora.com
-> patch subject: [PATCH v32 2/6] fs/proc/task_mmu: Implement IOCTL to get and optionally clear info about PTEs
-> config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20230818/202308181520.yCq9Z26w-lkp@intel.com/config)
-> compiler: arceb-elf-gcc (GCC) 12.3.0
-> reproduce: (https://download.01.org/0day-ci/archive/20230818/202308181520.yCq9Z26w-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202308181520.yCq9Z26w-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->    fs/proc/task_mmu.c: In function 'pagemap_scan_thp_entry':
->>> fs/proc/task_mmu.c:2077:28: error: 'HPAGE_SIZE' undeclared (first use in this function); did you mean 'PAGE_SIZE'?
->     2077 |         if (end != start + HPAGE_SIZE) {
->          |                            ^~~~~~~~~~
->          |                            PAGE_SIZE
-I've been emailing arc maintainers for resolution of this error from April,
-but nobody replies there:
-https://lore.kernel.org/all/0e6b318a-bbf8-3701-00af-1802c6347897@collabora.com
+From: Lu Baolu <baolu.lu@linux.intel.com>
 
->    fs/proc/task_mmu.c:2077:28: note: each undeclared identifier is reported only once for each function it appears in
-> 
-> 
-> vim +2077 fs/proc/task_mmu.c
-> 
->   2044	
->   2045	static int pagemap_scan_thp_entry(pmd_t *pmd, unsigned long start,
->   2046					  unsigned long end, struct mm_walk *walk)
->   2047	{
->   2048	#ifdef CONFIG_TRANSPARENT_HUGEPAGE
->   2049		struct pagemap_scan_private *p = walk->private;
->   2050		struct vm_area_struct *vma = walk->vma;
->   2051		unsigned long categories;
->   2052		spinlock_t *ptl;
->   2053		int ret = 0;
->   2054	
->   2055		ptl = pmd_trans_huge_lock(pmd, vma);
->   2056		if (!ptl)
->   2057			return -ENOENT;
->   2058	
->   2059		categories = p->cur_vma_category | pagemap_thp_category(*pmd);
->   2060	
->   2061		if (!pagemap_scan_is_interesting_page(categories, p))
->   2062			goto out_unlock;
->   2063	
->   2064		ret = pagemap_scan_output(categories, p, start, &end);
->   2065		if (start == end)
->   2066			goto out_unlock;
->   2067	
->   2068		if (~p->arg.flags & PM_SCAN_WP_MATCHING)
->   2069			goto out_unlock;
->   2070		if (~categories & PAGE_IS_WRITTEN)
->   2071			goto out_unlock;
->   2072	
->   2073		/*
->   2074		 * Break huge page into small pages if the WP operation
->   2075		 * needs to be performed on a portion of the huge page.
->   2076		 */
->> 2077		if (end != start + HPAGE_SIZE) {
->   2078			spin_unlock(ptl);
->   2079			split_huge_pmd(vma, pmd, start);
->   2080			pagemap_scan_backout_range(p, start, end);
->   2081			/* Report as if there was no THP */
->   2082			return -ENOENT;
->   2083		}
->   2084	
->   2085		make_uffd_wp_pmd(vma, start, pmd);
->   2086		flush_tlb_range(vma, start, end);
->   2087	out_unlock:
->   2088		spin_unlock(ptl);
->   2089		return ret;
->   2090	#else /* !CONFIG_TRANSPARENT_HUGEPAGE */
->   2091		return -ENOENT;
->   2092	#endif
->   2093	}
->   2094	
-> 
+Introduce a new iommu op to get the IOMMU hardware capabilities for
+iommufd. This information will be used by any vIOMMU driver which is owned
+by userspace.
 
+This op chooses to make the special parameters opaque to the core. This
+suits the current usage model where accessing any of the IOMMU device
+special parameters does require a userspace driver that matches the kernel
+driver. If a need for common parameters, implemented similarly by several
+drivers, arises then there's room in the design to grow a generic
+parameter set as well. No wrapper API is added as it is supposed to be
+used by iommufd only.
+
+Different IOMMU hardware would have different hardware information. So the
+information reported differs as well. To let the external user understand
+the difference, enum iommu_hw_info_type is defined. For the iommu drivers
+that are capable to report hardware information, it should have a unique
+iommu_hw_info_type and return to caller. For the driver doesn't report
+hardware information, caller just uses IOMMU_HW_INFO_TYPE_NONE if a type
+is required.
+
+Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+Co-developed-by: Nicolin Chen <nicolinc@nvidia.com>
+Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+Signed-off-by: Yi Liu <yi.l.liu@intel.com>
+---
+ include/linux/iommu.h        | 5 +++++
+ include/uapi/linux/iommufd.h | 9 +++++++++
+ 2 files changed, 14 insertions(+)
+
+diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+index e0245aa82b75..bd6a1110b294 100644
+--- a/include/linux/iommu.h
++++ b/include/linux/iommu.h
+@@ -228,6 +228,10 @@ struct iommu_iotlb_gather {
+ /**
+  * struct iommu_ops - iommu ops and capabilities
+  * @capable: check capability
++ * @hw_info: report iommu hardware information. The data buffer returned by this
++ *           op is allocated in the iommu driver and freed by the caller after
++ *           use. The information type is one of enum iommu_hw_info_type defined
++ *           in include/uapi/linux/iommufd.h.
+  * @domain_alloc: allocate iommu domain
+  * @probe_device: Add device to iommu driver handling
+  * @release_device: Remove device from iommu driver handling
+@@ -257,6 +261,7 @@ struct iommu_iotlb_gather {
+  */
+ struct iommu_ops {
+ 	bool (*capable)(struct device *dev, enum iommu_cap);
++	void *(*hw_info)(struct device *dev, u32 *length, u32 *type);
+ 
+ 	/* Domain allocation and freeing by the iommu driver */
+ 	struct iommu_domain *(*domain_alloc)(unsigned iommu_domain_type);
+diff --git a/include/uapi/linux/iommufd.h b/include/uapi/linux/iommufd.h
+index 8245c01adca6..ac11ace21edb 100644
+--- a/include/uapi/linux/iommufd.h
++++ b/include/uapi/linux/iommufd.h
+@@ -370,4 +370,13 @@ struct iommu_hwpt_alloc {
+ 	__u32 __reserved;
+ };
+ #define IOMMU_HWPT_ALLOC _IO(IOMMUFD_TYPE, IOMMUFD_CMD_HWPT_ALLOC)
++
++/**
++ * enum iommu_hw_info_type - IOMMU Hardware Info Types
++ * @IOMMU_HW_INFO_TYPE_NONE: Used by the drivers that do not report hardware
++ *                           info
++ */
++enum iommu_hw_info_type {
++	IOMMU_HW_INFO_TYPE_NONE,
++};
+ #endif
 -- 
-BR,
-Muhammad Usama Anjum
+2.34.1
+
