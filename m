@@ -2,271 +2,93 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED70EC678DC
-	for <linux-kselftest@archiver.kernel.org>; Fri, 18 Aug 2023 10:13:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98051C7113D
+	for <linux-kselftest@archiver.kernel.org>; Fri, 18 Aug 2023 12:21:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359783AbjHRKMm (ORCPT
+        id S1352456AbjHRMVH (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 18 Aug 2023 06:12:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41334 "EHLO
+        Fri, 18 Aug 2023 08:21:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359866AbjHRKMQ (ORCPT
+        with ESMTP id S1376830AbjHRMUf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Aug 2023 06:12:16 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210D835B7;
-        Fri, 18 Aug 2023 03:11:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692353510; x=1723889510;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=NANXOqPO9mA+tD1mza6QZUiylWqQVK7FXQhG/Sae5Zg=;
-  b=LYkZo3OQmBldAQJMuaa18Z02YqnKytje43xCSkMVfOizfAl/CymHIy3N
-   uT+hFL/L+bpjxZqS55tMFY5aq4Gr802DwIhYXCKkG/EeLrIdWUNJGX4Dj
-   rEYIloIJkgsieclFgx9eGqDose/m7qWVj+A6TT69laU+uzPwdyZjCbVA6
-   8B/EVynmRwXxzwKhI5sftlNBQy0cyBUn9o37K7sRXEhvVymQT5rPOveHl
-   5YgaN+CTz7agi3NqY1SHnanneGXuwuRvxATsRaw13VE2gu/meCu3icfTG
-   5RBA7NYI4A1uE4brYbVqcpfkPuqum6cUjH4Fhw7RUKuxaFlfJIHDOQ5Xk
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="370526305"
-X-IronPort-AV: E=Sophos;i="6.01,182,1684825200"; 
-   d="scan'208";a="370526305"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2023 03:10:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="858624995"
-X-IronPort-AV: E=Sophos;i="6.01,182,1684825200"; 
-   d="scan'208";a="858624995"
-Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by orsmga004.jf.intel.com with ESMTP; 18 Aug 2023 03:10:36 -0700
-From:   Yi Liu <yi.l.liu@intel.com>
-To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
-        kevin.tian@intel.com, robin.murphy@arm.com,
-        baolu.lu@linux.intel.com
-Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
-        kvm@vger.kernel.org, mjrosato@linux.ibm.com,
-        chao.p.peng@linux.intel.com, yi.l.liu@intel.com,
-        yi.y.sun@linux.intel.com, peterx@redhat.com, jasowang@redhat.com,
-        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
-        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
+        Fri, 18 Aug 2023 08:20:35 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EB3EE7C;
+        Fri, 18 Aug 2023 05:20:34 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2b9c907bc68so13735051fa.2;
+        Fri, 18 Aug 2023 05:20:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692361232; x=1692966032;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ub/I7oAE9mdMgYXjiwcngorSvPiNnL2dbcUUsmv0BaM=;
+        b=VE39zB3hz+/hpT86z6kZOUoTGs5MqqSARYdAdgBz5CZh5WSlVQoy6wSdR5gKsBFN7a
+         9g8hqj7CIhDUaYhsmdlpZ7qQ4QcbbZPoO/3+zewtJCDoxkrMjoa3JA/yA8sIaZKfhrHI
+         0MnERjdQ3t9JzbeuRgB+KJqisopkWELf4ai1gRv/xshPNvoS6sFdF8tIxqDYzRPiEUxn
+         2qbyQ7Ah+6Sm6RK2VoBEDcaJlMOyGgYd2/Q6ni7W9XyFLTR+ck7pbu/GMbm5vwXSLb0u
+         JwLzvjvHABjeb/l4+lyuUdHW2hXqPXMNiTxU2pmASETn8NLVTar6DBcAcvnBEJM7sDoY
+         ms7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692361232; x=1692966032;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ub/I7oAE9mdMgYXjiwcngorSvPiNnL2dbcUUsmv0BaM=;
+        b=bUuw1sqDu1rVxHHI3DqzDXAlhKcZLEBoJka8tmEHcNtimWbvM5d+fZLRRanXzhioT+
+         qWx/2jvonzp3CRWF3xdqyTjr7IRN3gl0c21lB02yFbKKHPVMvGLURIR/KMMoOgrPgM2S
+         YdlX3SYJgNeG/ZZU+TPCGD5mZl84qhiD2UzwmACq5QuHZnbQpZY97mi0brdl/1FTC8oL
+         8s8OeanqK9nwCXLB3+jCNh2MTQntpCP5D29T1Z+sKIx1i6nxtMfxjobiGXh2SxMuo2b5
+         TLH1JQ8PKuBHkSv2pZ+vcQP1NJA5NkZ3t8JZR5Ua0/lp0z7VHSFp1EU+ztLE8ueYp8S5
+         3wjg==
+X-Gm-Message-State: AOJu0YxwCKB4seCUWXakzWoiW3d0tl2ab8Q8RljcInFCT/sBdO+eSbJr
+        H36uM/BRbgYWOUK4YP5KrPF3i154K8s=
+X-Google-Smtp-Source: AGHT+IHV52geStyhoBCayJBaDaML4sW80xlSCoF/9FKRxiUPiGgYa512JUA3YuFsbgb7NjJkzRhyKg==
+X-Received: by 2002:a05:651c:216:b0:2b9:412a:111d with SMTP id y22-20020a05651c021600b002b9412a111dmr1720287ljn.42.1692361232222;
+        Fri, 18 Aug 2023 05:20:32 -0700 (PDT)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id d11-20020a17090694cb00b009934b1eb577sm1120514ejy.77.2023.08.18.05.20.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Aug 2023 05:20:31 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Fri, 18 Aug 2023 14:20:29 +0200
+To:     Rong Tao <rtoax@foxmail.com>
+Cc:     olsajiri@gmail.com, andrii@kernel.org, ast@kernel.org,
+        bpf@vger.kernel.org, daniel@iogearbox.net, haoluo@google.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        zhenzhong.duan@intel.com
-Subject: [PATCH v9 3/5] iommufd: Add IOMMU_GET_HW_INFO
-Date:   Fri, 18 Aug 2023 03:10:31 -0700
-Message-Id: <20230818101033.4100-4-yi.l.liu@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230818101033.4100-1-yi.l.liu@intel.com>
-References: <20230818101033.4100-1-yi.l.liu@intel.com>
+        martin.lau@linux.dev, mykolal@fb.com, rongtao@cestc.cn,
+        sdf@google.com, shuah@kernel.org, song@kernel.org,
+        yonghong.song@linux.dev
+Subject: Re: [PATCH bpf-next v5] selftests/bpf: trace_helpers.c: optimize
+ kallsyms cache
+Message-ID: <ZN9iDSj3/vdk5pRX@krava>
+References: <ZN3YeyMkgEg1IoKP@krava>
+ <tencent_03EBFD524265EA7560341E91C5E04F083405@qq.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <tencent_03EBFD524265EA7560341E91C5E04F083405@qq.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Under nested IOMMU translation, userspace owns the stage-1 translation
-table (e.g. the stage-1 page table of Intel VT-d or the context table of
-ARM SMMUv3, and etc.). Stage-1 translation tables are vendor specific, and
-need to be compatible with the underlying IOMMU hardware. Hence, userspace
-should know the IOMMU hardware capability before creating and configuring
-the stage-1 translation table to kernel.
+On Fri, Aug 18, 2023 at 09:39:32AM +0800, Rong Tao wrote:
+> Hi, Jiri. Thanks for your reply.
+> 
+> libbpf_ensure_mem() is in libbpf_internal.h, samples/bpf/ can't see it, do we
+> reposition the function declaration?
 
-This adds IOMMU_GET_HW_INFO ioctl to query the IOMMU hardware information
-(a.k.a capability) for a given device. The returned data is vendor
-specific, userspace needs to decode it with the structure by the output
-@out_data_type field.
+I see, I had no idea trace_helpers.[ch] is included in samples/bpf
 
-As only physical devices have IOMMU hardware, so this will return error if
-the given device is not a physical device.
+but it seems to have libbpf linked statically.. so you could just
+include libbpf_internal.h and it should work, right? like we do
+in selftests
 
-Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-Co-developed-by: Nicolin Chen <nicolinc@nvidia.com>
-Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-Signed-off-by: Yi Liu <yi.l.liu@intel.com>
----
- drivers/iommu/iommufd/device.c          | 73 +++++++++++++++++++++++++
- drivers/iommu/iommufd/iommufd_private.h |  1 +
- drivers/iommu/iommufd/main.c            |  3 +
- include/uapi/linux/iommufd.h            | 39 +++++++++++++
- 4 files changed, 116 insertions(+)
+jirka
 
-diff --git a/drivers/iommu/iommufd/device.c b/drivers/iommu/iommufd/device.c
-index 90f88c295ce0..ce78c3671539 100644
---- a/drivers/iommu/iommufd/device.c
-+++ b/drivers/iommu/iommufd/device.c
-@@ -4,6 +4,7 @@
- #include <linux/iommufd.h>
- #include <linux/slab.h>
- #include <linux/iommu.h>
-+#include <uapi/linux/iommufd.h>
- #include "../iommu-priv.h"
- 
- #include "io_pagetable.h"
-@@ -1119,3 +1120,75 @@ int iommufd_access_rw(struct iommufd_access *access, unsigned long iova,
- 	return rc;
- }
- EXPORT_SYMBOL_NS_GPL(iommufd_access_rw, IOMMUFD);
-+
-+int iommufd_get_hw_info(struct iommufd_ucmd *ucmd)
-+{
-+	struct iommu_hw_info *cmd = ucmd->cmd;
-+	void __user *user_ptr = u64_to_user_ptr(cmd->data_uptr);
-+	const struct iommu_ops *ops;
-+	struct iommufd_device *idev;
-+	unsigned int data_len;
-+	unsigned int copy_len;
-+	void *data;
-+	int rc;
-+
-+	if (cmd->flags || cmd->__reserved)
-+		return -EOPNOTSUPP;
-+
-+	idev = iommufd_get_device(ucmd, cmd->dev_id);
-+	if (IS_ERR(idev))
-+		return PTR_ERR(idev);
-+
-+	ops = dev_iommu_ops(idev->dev);
-+	if (ops->hw_info) {
-+		data = ops->hw_info(idev->dev, &data_len, &cmd->out_data_type);
-+		if (IS_ERR(data)) {
-+			rc = PTR_ERR(data);
-+			goto out_put;
-+		}
-+
-+		/*
-+		 * drivers that have hw_info callback should have a unique
-+		 * iommu_hw_info_type.
-+		 */
-+		if (WARN_ON_ONCE(cmd->out_data_type ==
-+				 IOMMU_HW_INFO_TYPE_NONE)) {
-+			rc = -ENODEV;
-+			goto out_free;
-+		}
-+	} else {
-+		cmd->out_data_type = IOMMU_HW_INFO_TYPE_NONE;
-+		data_len = 0;
-+		data = NULL;
-+	}
-+
-+	copy_len = min(cmd->data_len, data_len);
-+	if (copy_to_user(user_ptr, data, copy_len)) {
-+		rc = -EFAULT;
-+		goto out_free;
-+	}
-+
-+	/*
-+	 * Zero the trailing bytes if the user buffer is bigger than the
-+	 * data size kernel actually has.
-+	 */
-+	if (copy_len < cmd->data_len) {
-+		if (clear_user(user_ptr + copy_len, cmd->data_len - copy_len)) {
-+			rc = -EFAULT;
-+			goto out_free;
-+		}
-+	}
-+
-+	/*
-+	 * We return the length the kernel supports so userspace may know what
-+	 * the kernel capability is. It could be larger than the input buffer.
-+	 */
-+	cmd->data_len = data_len;
-+
-+	rc = iommufd_ucmd_respond(ucmd, sizeof(*cmd));
-+out_free:
-+	kfree(data);
-+out_put:
-+	iommufd_put_object(&idev->obj);
-+	return rc;
-+}
-diff --git a/drivers/iommu/iommufd/iommufd_private.h b/drivers/iommu/iommufd/iommufd_private.h
-index 5a45b8ba2e26..2c58670011fe 100644
---- a/drivers/iommu/iommufd/iommufd_private.h
-+++ b/drivers/iommu/iommufd/iommufd_private.h
-@@ -296,6 +296,7 @@ iommufd_get_device(struct iommufd_ucmd *ucmd, u32 id)
- }
- 
- void iommufd_device_destroy(struct iommufd_object *obj);
-+int iommufd_get_hw_info(struct iommufd_ucmd *ucmd);
- 
- struct iommufd_access {
- 	struct iommufd_object obj;
-diff --git a/drivers/iommu/iommufd/main.c b/drivers/iommu/iommufd/main.c
-index 5f7e9fa45502..e71523cbd0de 100644
---- a/drivers/iommu/iommufd/main.c
-+++ b/drivers/iommu/iommufd/main.c
-@@ -305,6 +305,7 @@ static int iommufd_option(struct iommufd_ucmd *ucmd)
- 
- union ucmd_buffer {
- 	struct iommu_destroy destroy;
-+	struct iommu_hw_info info;
- 	struct iommu_hwpt_alloc hwpt;
- 	struct iommu_ioas_alloc alloc;
- 	struct iommu_ioas_allow_iovas allow_iovas;
-@@ -337,6 +338,8 @@ struct iommufd_ioctl_op {
- 	}
- static const struct iommufd_ioctl_op iommufd_ioctl_ops[] = {
- 	IOCTL_OP(IOMMU_DESTROY, iommufd_destroy, struct iommu_destroy, id),
-+	IOCTL_OP(IOMMU_GET_HW_INFO, iommufd_get_hw_info, struct iommu_hw_info,
-+		 __reserved),
- 	IOCTL_OP(IOMMU_HWPT_ALLOC, iommufd_hwpt_alloc, struct iommu_hwpt_alloc,
- 		 __reserved),
- 	IOCTL_OP(IOMMU_IOAS_ALLOC, iommufd_ioas_alloc_ioctl,
-diff --git a/include/uapi/linux/iommufd.h b/include/uapi/linux/iommufd.h
-index ac11ace21edb..e01d5ac00dc3 100644
---- a/include/uapi/linux/iommufd.h
-+++ b/include/uapi/linux/iommufd.h
-@@ -46,6 +46,7 @@ enum {
- 	IOMMUFD_CMD_OPTION,
- 	IOMMUFD_CMD_VFIO_IOAS,
- 	IOMMUFD_CMD_HWPT_ALLOC,
-+	IOMMUFD_CMD_GET_HW_INFO,
- };
- 
- /**
-@@ -379,4 +380,42 @@ struct iommu_hwpt_alloc {
- enum iommu_hw_info_type {
- 	IOMMU_HW_INFO_TYPE_NONE,
- };
-+
-+/**
-+ * struct iommu_hw_info - ioctl(IOMMU_GET_HW_INFO)
-+ * @size: sizeof(struct iommu_hw_info)
-+ * @flags: Must be 0
-+ * @dev_id: The device bound to the iommufd
-+ * @data_len: Input the length of a user buffer in bytes. Output the length of
-+ *            data that kernel supports
-+ * @data_uptr: User pointer to a user-space buffer used by the kernel to fill
-+ *             the iommu type specific hardware information data
-+ * @out_data_type: Output the iommu hardware info type as defined in the enum
-+ *                 iommu_hw_info_type.
-+ * @__reserved: Must be 0
-+ *
-+ * Query an iommu type specific hardware information data from an iommu behind
-+ * a given device that has been bound to iommufd. This hardware info data will
-+ * be used to sync capabilities between the virtual iommu and the physical
-+ * iommu, e.g. a nested translation setup needs to check the hardware info, so
-+ * a guest stage-1 page table can be compatible with the physical iommu.
-+ *
-+ * To capture an iommu type specific hardware information data, @data_uptr and
-+ * its length @data_len must be provided. Trailing bytes will be zeroed if the
-+ * user buffer is larger than the data that kernel has. Otherwise, kernel only
-+ * fills the buffer using the given length in @data_len. If the ioctl succeeds,
-+ * @data_len will be updated to the length that kernel actually supports,
-+ * @out_data_type will be filled to decode the data filled in the buffer
-+ * pointed by @data_uptr. Input @data_len == zero is allowed.
-+ */
-+struct iommu_hw_info {
-+	__u32 size;
-+	__u32 flags;
-+	__u32 dev_id;
-+	__u32 data_len;
-+	__aligned_u64 data_uptr;
-+	__u32 out_data_type;
-+	__u32 __reserved;
-+};
-+#define IOMMU_GET_HW_INFO _IO(IOMMUFD_TYPE, IOMMUFD_CMD_GET_HW_INFO)
- #endif
--- 
-2.34.1
-
+> 
+> Good Day
+> Rong Tao
+> 
