@@ -2,129 +2,153 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E7FCEE49A6
-	for <linux-kselftest@archiver.kernel.org>; Sat, 19 Aug 2023 03:38:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65B38EE49A5
+	for <linux-kselftest@archiver.kernel.org>; Sat, 19 Aug 2023 11:50:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230477AbjHSDiY (ORCPT
+        id S229947AbjHSLur (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 18 Aug 2023 23:38:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57398 "EHLO
+        Sat, 19 Aug 2023 07:50:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230344AbjHSDiV (ORCPT
+        with ESMTP id S229577AbjHSLuq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Aug 2023 23:38:21 -0400
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE859B;
-        Fri, 18 Aug 2023 20:38:19 -0700 (PDT)
-Received: by mail-ot1-x332.google.com with SMTP id 46e09a7af769-6bd0a0a675dso1234619a34.2;
-        Fri, 18 Aug 2023 20:38:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692416299; x=1693021099;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dmTd9LPLzzWYKe3BqlMTtEt2CsxGySX/14bhS+6KcNo=;
-        b=g/LRQqKy++m0sndFrKKwqZAMccTOZ0/tvSbN1sxEsR29MIRiyXp0YIHl+DaLSJgklD
-         jF5IBX8YLz9/4UUrAGAjTlzoYLSqmW/3AXwn9GekCH4zU0w4yIgBzcV9q8K0cntkSlLm
-         2+KSeAhHcAm50zuaY/FIYh+Jc7GCjloxTka1vX9+eFMKS7l0FBvFqiQ+JB3vu3WUsJoR
-         hBGRJNjNBnFMG8zJbvvIs8DqRnQKr7G2JlYXeaaq6SAiHb+bhtj3gzb8sSc6CvfcOQBn
-         VcDleBIip5m4isw213VzpTshW5/exltZGgpG8mMlO6t+O35WL9nn9jiD8cEcY34ORtkf
-         bqBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692416299; x=1693021099;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dmTd9LPLzzWYKe3BqlMTtEt2CsxGySX/14bhS+6KcNo=;
-        b=eVQ407k4TO4KegclkXaWftxTMwezIRC4mWgX4jEQ/UCmGiBNeOn7CHrk3xiSdaa9uC
-         21259h7XSTl49xJxAOc0ubuVs1qFc6Vba8xzolJ8ydGy9jTLXSNT1JNaxg1eihOroab0
-         kEcB8LP3fxTE2tLFKC2+jhgm8oS98Z1IaQaPNMHGqoRu70NE0emygbF8IqZ8sDEbYBoK
-         1s8bRg9HDi++BTZkh47wLdDwSMlo09DLALp6/rw41eHkwo0Sbz280j48jnftdPHupXXy
-         98Kapu/W1SXlQ7zE7pMFzCxvGUDS5LbtzAzK2nORrcfI8xG9HqVtJgSdj5X6Uo5e8tAV
-         qMvA==
-X-Gm-Message-State: AOJu0Yx8z+5m+sH8AmkxNORyqJZpFD/YTrJW8jTpnhAlRVPYylwyA/pX
-        hlIkQjy+ugP26/RXlRy5NQI=
-X-Google-Smtp-Source: AGHT+IHONxuWE7fXMBMP5Zji20fF4bK2e+h+CQmlY3olaUvkTvy4kiBwPWfbYAjc1gzQv7zmLiQdFA==
-X-Received: by 2002:a05:6870:2051:b0:1c0:219b:17f4 with SMTP id l17-20020a056870205100b001c0219b17f4mr1437619oad.5.1692416299037;
-        Fri, 18 Aug 2023 20:38:19 -0700 (PDT)
-Received: from [192.168.1.12] (bb219-74-209-211.singnet.com.sg. [219.74.209.211])
-        by smtp.gmail.com with ESMTPSA id 20-20020a17090a199400b00262d6ac0140sm2434749pji.9.2023.08.18.20.38.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Aug 2023 20:38:18 -0700 (PDT)
-Message-ID: <fb6ec982-a0b4-2217-fda3-151cc37ad9a4@gmail.com>
-Date:   Sat, 19 Aug 2023 11:38:10 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.14.0
-Subject: Re: [RFC PATCH bpf-next 1/2] bpf, x64: Fix tailcall infinite loop bug
-Content-Language: en-US
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>,
-        Yonghong Song <yonghong.song@linux.dev>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        X86 ML <x86@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Mykola Lysenko <mykolal@fb.com>,
-        Shuah Khan <shuah@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
+        Sat, 19 Aug 2023 07:50:46 -0400
+Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-ve1eur01on2138.outbound.protection.outlook.com [40.107.14.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC0E1BB;
+        Sat, 19 Aug 2023 04:48:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nKrusq/slLMp0IryObhtMxQxa7UGN0+Lhl7r1+flItVnHE+oOxh8CB+BY+LEZLQJ3EMqfAP2CnauqkTjw76itQbG5Fh3sZ0Oe0I8cyxN5qfzHtgbsDCD/i2T8i5AsE6/w1qQT11A4RFVKKQz4qWhE2Sk9XwdUGZiH0Hsg7qlRc6yHBojYFCYZ9TW/zZr7HI0KuW7pquOmiK2aSKeP9FiVm0n1rpwN24T2ehaUCM4rz2A9q4Ygc7lQbOl+pjXXst6QZ3nolj0pz+RiZz4HB4p2WQukjlbeG88cuVhLTqagCa0L1bHTuZxSTSv6Q6hJumxIB7qCCZdTeIEZMXv0YmMEg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9SL8nOcAO/BtKhkv7QDpKtzLve5uNk53bKxzsPAbm8E=;
+ b=iWuPt1ecmKQbg3NiIMqfY/JCsDkzhJPuJp+l1IUhvgxmNgOeWyQp5sKfWj2SpWisMwtq6ClXyuMDAEsAXMqvnqHIdOGEwofFsWOSKPVO6nN8NtIEpCakMEFzSnyqLsIjUjMMrM3U6Jxz32f4vOwm4zoncCB3nXNMSQPIKK9SqOm++PrQFsqDRhB/VDC4jrAShbxkhADWXynrIdFRIABDDSXj20v4BJu9u8TXPXY0qbwimV/p0yCicrKCMqELmkpnSPPrEc5vaxPiH5UiGUrsTUAj5xm2kxFe8qf7S6SPE/IdEGs3ClGGy+m85mW3vcszYFcOREZPtplKUb0pswpkGQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=est.tech; dmarc=pass action=none header.from=est.tech;
+ dkim=pass header.d=est.tech; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=estab.onmicrosoft.com;
+ s=selector2-estab-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9SL8nOcAO/BtKhkv7QDpKtzLve5uNk53bKxzsPAbm8E=;
+ b=UYDtJjjC+6Wz2j6+Xw4mmam9kCCRw7G7EuHijE3AL7pt8HSlpt84cBtYh3NyS0cR24Gxq/9oV2231oPBYnwl9rM/Re52kcceYJSzOjVb7I4rCjnTnskgK3OU2YHDCWXB08jAWE/KXpGA/tysDs+2RimLE8h67jo9jogZ3luIBm0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=est.tech;
+Received: from DBBP189MB1433.EURP189.PROD.OUTLOOK.COM (2603:10a6:10:1e7::15)
+ by VE1P189MB1133.EURP189.PROD.OUTLOOK.COM (2603:10a6:800:14a::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.20; Sat, 19 Aug
+ 2023 11:48:31 +0000
+Received: from DBBP189MB1433.EURP189.PROD.OUTLOOK.COM
+ ([fe80::759b:94eb:c2e8:c670]) by DBBP189MB1433.EURP189.PROD.OUTLOOK.COM
+ ([fe80::759b:94eb:c2e8:c670%6]) with mapi id 15.20.6699.020; Sat, 19 Aug 2023
+ 11:48:31 +0000
+From:   Sriram Yagnaraman <sriram.yagnaraman@est.tech>
+Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
         David Ahern <dsahern@kernel.org>,
-        Yizhou Tang <tangyeechou@gmail.com>, kernel-patches-bot@fb.com,
-        "Fijalkowski, Maciej" <maciej.fijalkowski@intel.com>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-References: <20230814134147.70289-1-hffilwlqm@gmail.com>
- <20230814134147.70289-2-hffilwlqm@gmail.com>
- <20230817223143.jyclrtf3a6kmtgh5@macbook-pro-8.dhcp.thefacebook.com>
- <fea59b79-3f28-c580-185b-8c64dc21a399@gmail.com>
- <CAADnVQKVKPpbMNV9XNc+yJCuaWRupsB5EBjghv++jGqYTnv6QQ@mail.gmail.com>
-From:   Leon Hwang <hffilwlqm@gmail.com>
-In-Reply-To: <CAADnVQKVKPpbMNV9XNc+yJCuaWRupsB5EBjghv++jGqYTnv6QQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+        Ido Schimmel <idosch@nvidia.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Sriram Yagnaraman <sriram.yagnaraman@est.tech>
+Subject: [PATCH 0/3] Avoid TCP resets when using ECMP for load-balancing between multiple servers.
+Date:   Sat, 19 Aug 2023 13:48:22 +0200
+Message-Id: <20230819114825.30867-1-sriram.yagnaraman@est.tech>
+X-Mailer: git-send-email 2.34.1
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: GV3P280CA0096.SWEP280.PROD.OUTLOOK.COM
+ (2603:10a6:150:8::35) To DBBP189MB1433.EURP189.PROD.OUTLOOK.COM
+ (2603:10a6:10:1e7::15)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DBBP189MB1433:EE_|VE1P189MB1133:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6a6c5367-d9b5-4b36-e18b-08dba0aa35b1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: sex9Nrhw2XfQhWQxHUt0Jc5R4buQear+NUpXs61rohzciK6LK90QhRhWVfDUTTvUV9OBW40iKn1s0ynH3Hx+fhr5CYGogLsDZwJe1DyWhyuhp2aZZyJBUJyR9QFIUTQgDuaXZoioKA7iBhelUpDxEBIEweezEt+wLLp7r4sriI8vAiJiy4coLZs5XYHEJqyV+szuKvS4D1dm+LPBPsw3jGlS/BecT3YTFzLIvi+N0EJQPu+uQ5C1YtSg/z7vDqAAOuSJuVzWCqrwFK43XLb4DJ4tuGCyJSCzHOMJwO9gioWyprAJcNQlxQzr6GcawktlpCSikFt1+DiriFCMtowXPtCo6hCdPSCo+w8yutMI6p2v+leSosTtK8wni7Lzvb/jqdMz1mo2x2SqhdpjbLcOWTtlcmbpH7SAnuX1EthouwMdYuCnXN8UBHDTmBQw8QhN1BdGjvmRH4eAPQ8DuJxhxUq5VMIMUmG0yth3lJa9fCC2Gpzo4ZBUBARsUpkmu7SQuKqO7EeFm7qIpdJWWGxmpP495yWPnWz0zutqco2yOTuS+co7/QN6nrxchiFoRH0Z2/nKPqzU4kYYZJ/c2c7VFIkdonNbSElRpD8EiH5hC9zoeUtcdv1rH+wK5Ch9pZTg
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBP189MB1433.EURP189.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(396003)(376002)(39830400003)(136003)(346002)(451199024)(1800799009)(109986022)(186009)(66556008)(66946007)(54906003)(66476007)(2906002)(4326008)(8676002)(8936002)(41300700001)(316002)(70586007)(966005)(6666004)(6486002)(5660300002)(44832011)(6506007)(478600001)(6512007)(2616005)(1076003)(26005)(83380400001)(38100700002)(66574015)(86362001)(36756003)(266003)(37730700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?kolXSpP8jT9FtOgqLHX2XIfvcJL2JfnlrTAr65jk+Rmi3gN44q5rZCwqY4Fx?=
+ =?us-ascii?Q?rir7eMoq37a/JY1Psu9Fz0uksyVsIG8hlDo6dAnI9fZoqKVzU/JGw006cN+7?=
+ =?us-ascii?Q?jwvPhZ4SeQGoXFZpFoKL8iyD/TBdYuwQnoM8yGFaF5EGIoKuX3ZQYI62dkvV?=
+ =?us-ascii?Q?rxXaa/bzhapLiqbSLHlGWEiQr5EUwNYYsym400VEt7DyMsyYwnkXo2Fb5O0/?=
+ =?us-ascii?Q?TAO/TMBHhoOHkw01iFkUAGFN1Z+GffQujdIZLbI8+p0QVOPSMsi2XE3fkvQN?=
+ =?us-ascii?Q?MmObzXB7ZbihU/ajJoN1r3OMOylQEvkKy361Ia5gO8Q9/phXUjFUz0oiCCJq?=
+ =?us-ascii?Q?VTwvULDRYFqpON8YrBAHrkCayiPqC2J2W181If6GGg1B5dXrJzNP1/KfSlM4?=
+ =?us-ascii?Q?koG/OVafOhAPA5O6t8+M+PVyf/5+FjqY5lOu4rZKWftCExDGgrjVekmWAcVg?=
+ =?us-ascii?Q?3R2MfDIPIq033+foLIMA4yaQyu1Y8KrYmatR+xEVDpLkn2O1fa0AB+p0lnm5?=
+ =?us-ascii?Q?3oRcMjw36GJHjqhg11h6dtf6ZCy/7VOlgm//hGNBaJIkcxx/ZDJGwyxFtSkf?=
+ =?us-ascii?Q?iMzGXRTa529KHom7ibSmGojVZGmNFr68s8Vp+709M5UldQBvXu8PsaCxOvwD?=
+ =?us-ascii?Q?CZNH4zxtKWy4EEAl/lqcz0pla6NUsmqDfIfjXUW9wbLUT6Zi5QEBK9WkFf2/?=
+ =?us-ascii?Q?B6ipGKOsjm+3S0pSQYqdUag2XjA+hV82QyrojxjfXDDs3GrqfTTDOIU67ifQ?=
+ =?us-ascii?Q?qxmP9C52qhPDcj8CNDF9+69AuUCh+QiDNxoz1+nkKZK3EcwZPZSnPJZtEMaM?=
+ =?us-ascii?Q?ingla+cG9auFCSrduXxK2HdiDp++JWG0zpkkUpp1OrikotjvLFjliNTywztp?=
+ =?us-ascii?Q?prS04nVnvEWQdS2GJx3/u1IoJhrMou/hWi+Q/p6OSeyQn9uxMt7gYk4tFOu4?=
+ =?us-ascii?Q?PHvYQkNrNYtcFWmky3v1ebLCtGkKdX5FRmO00lnhCGi/Cd7TdxlmalJdx0+L?=
+ =?us-ascii?Q?ayvb//+kQY5C+naaEHJO/q7RRtmX2YkrFhZ1ru1rGknHOJlM/LXn3IqwVBTA?=
+ =?us-ascii?Q?zjChX0d19lGX4PglS6zc8FB+cpHdhjiI84CwTm3eztxwfJ6f/FJLznR43Om+?=
+ =?us-ascii?Q?EMw38v3STYH0cBQpySqfOhhnlm+6TInlE6T5QKOSTfuRYNaJND8ie1wZMa0J?=
+ =?us-ascii?Q?Mo4kPCuGMJqO2c30YOYfllCmfeA1Z3h1tfvKnU1Kcfg8ngzgn1LXCZnFnc09?=
+ =?us-ascii?Q?0auHK72eJWJih8c4p0IqCTeviJdaQyrbektc2hO98t7BhzmcHFGuNFYXeW7h?=
+ =?us-ascii?Q?8iOx8NlGyNd7nebKM5zaorfmxLocN2ylHqyMcig6FejdJQTr48LSKLgjydpS?=
+ =?us-ascii?Q?/6OJFOfdK/UuRZYdm4dWEzHd87qeTc8NbubEgFINM6YxPkHMl11eelDq8NXB?=
+ =?us-ascii?Q?iR2JggsJo0xVX8j4RVsxACKJf77Sfl7QNTyeii0D2Ujktamq6zip6Wi3y5xC?=
+ =?us-ascii?Q?p998OY2zdjpJd2J5mar5PJFJxpsMUrk0gxhJ42YtYFEBQcEERgone8Yd0jh5?=
+ =?us-ascii?Q?ZTI61AJg9+EisFlIMJ47vyd/Tg51BWinW7mtzGxA4CQm419cuxHjrM3mNyfe?=
+ =?us-ascii?Q?Pw=3D=3D?=
+X-OriginatorOrg: est.tech
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6a6c5367-d9b5-4b36-e18b-08dba0aa35b1
+X-MS-Exchange-CrossTenant-AuthSource: DBBP189MB1433.EURP189.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Aug 2023 11:48:30.9939
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: d2585e63-66b9-44b6-a76e-4f4b217d97fd
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: U491Vl94Ympbqj0w9mHuMithEpz+2jo2oqT94exZzgzLqtxaA97obRvfg1hyHyL2KppWnY/KK1C+PabZVA34r/3PtWgIItzLwDxOjfrxNPE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1P189MB1133
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+All packets in the same flow (L3/L4 depending on multipath hash policy)
+should be directed to the same target, but after [0]/[1] we see stray
+packets directed towards other targets. This, for instance, causes RST
+to be sent on TCP connections.
 
+The first two patches solve the problem by ignoring route hints for
+destinations that are part of multipath group, by using new SKB flags
+for IPv4 and IPv6. The third patch is a selftest that tests the
+scenario.
 
-On 2023/8/19 03:59, Alexei Starovoitov wrote:
-> On Thu, Aug 17, 2023 at 7:10 PM Leon Hwang <hffilwlqm@gmail.com> wrote:
->>
->>
->>
->> On 18/8/23 06:31, Alexei Starovoitov wrote:
->>> On Mon, Aug 14, 2023 at 09:41:46PM +0800, Leon Hwang wrote:
->>>> @@ -1147,6 +1152,7 @@ struct bpf_attach_target_info {
->>>>      struct module *tgt_mod;
->>>>      const char *tgt_name;
->>>>      const struct btf_type *tgt_type;
->>>> +    bool tail_call_ctx;
->>>
->>> Instead of extra flag here can you check tgt_prog->aux->tail_call_reachable in check_attach_btf_id()
->>> and set tr->flags there?
->>
->> Should we check tgt_prog->aux->func[subprog]->is_func? Or, tgt_prog->aux->tail_call_reachable
->> is enough?
-> 
-> Please let the thread continue to a logical conclusion before resending
-> new version. Will reply there.
+Thanks to Ido, for reviewing and suggesting a way forward in [2].
 
-Sorry for the new version without logical conclusion.
+[0]: commit 02b24941619f ("ipv4: use dst hint for ipv4 list receive")
+[1]: commit 197dbf24e360 
+        ("ipv6: introduce and uses route look hints for list input.")
+[2]: https://lore.kernel.org/netdev/20230815201048.1796-1-sriram.yagnaraman@est.tech/
 
-I'll do it better in the future.
+Sriram Yagnaraman (3):
+  ipv4: ignore dst hint for multipath routes
+  ipv6: ignore dst hint for multipath routes
+  selftests: forwarding: Add test for load-balancing between multiple
+    servers
 
-Additionally, I'm looking forward to fix it, and then planning to add a
-feature to trace tailcalls with trampoline.
+ include/linux/ipv6.h                          |   1 +
+ include/net/ip.h                              |   1 +
+ net/ipv4/ip_input.c                           |   3 +-
+ net/ipv4/route.c                              |   1 +
+ net/ipv6/ip6_input.c                          |   3 +-
+ net/ipv6/route.c                              |   2 +
+ .../testing/selftests/net/forwarding/Makefile |   1 +
+ .../net/forwarding/router_multipath_vip.sh    | 403 ++++++++++++++++++
+ 8 files changed, 413 insertions(+), 2 deletions(-)
+ create mode 100755 tools/testing/selftests/net/forwarding/router_multipath_vip.sh
 
-Thanks,
-Leon
+-- 
+2.34.1
+
