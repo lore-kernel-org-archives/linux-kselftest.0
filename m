@@ -2,55 +2,54 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73E85EE49AF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8648CEE49AD
 	for <linux-kselftest@archiver.kernel.org>; Sun, 20 Aug 2023 00:10:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229482AbjHTAJ7 (ORCPT
+        id S229461AbjHTAJ7 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Sat, 19 Aug 2023 20:09:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41878 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbjHTAJu (ORCPT
+        with ESMTP id S229589AbjHTAJt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 19 Aug 2023 20:09:50 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45BEB6A864;
-        Sat, 19 Aug 2023 12:50:46 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3fedba79923so10620545e9.2;
-        Sat, 19 Aug 2023 12:50:46 -0700 (PDT)
+        Sat, 19 Aug 2023 20:09:49 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E00D17DDC2;
+        Sat, 19 Aug 2023 12:50:22 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3fe12baec61so19445695e9.2;
+        Sat, 19 Aug 2023 12:50:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692474644; x=1693079444;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ed1L9DO87oWFUUO+hp/1iqQshAPP0RxGE8TIKJiSCVI=;
-        b=ermcIWZ7aKo/ZIQrmHAtx9i82fs+DGo+8+rdar7aCA9iNpKRHZC6bf3Y1UMuhhDvhS
-         OEKlPDS4iwOpeE9WRZsgadEkAS6l1oBb1Fy4SiSBf6HhaOpulUf6WBqmZ/8BEHVvqfgo
-         CUdqJpfieU5a7o2IEywBAfO4WGusMddJDGeDfDZwTtUiiHmgj8mnCfDuDrLiysMNpZL2
-         m9yjNFdpr/zpEBe6EQOQ3foIV1FnqSfEYUo85ZAr3kW8PuPxKIcdZw8HV8jVyzfTDG5u
-         Qu5VseudUycp3ygf1mQq69cHeP1r9AeHw6Mh+qyXwVlcpcWiZqoKU93/hjCG4o/B5vba
-         k2dw==
+        d=gmail.com; s=20221208; t=1692474621; x=1693079421;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sSB6bHkjwrLrFphZRXjaDm3kSiCaocff/7800VaCd8Q=;
+        b=gxUCaWSEn7y8qaC48/Ir3tNWSAROgPfUfqvIKkyE+gRVYZPhjJ03GFaN+8tnraN79e
+         215Yp1dgiehqEmpGGHGLDCCF4SDEwTUC/z7HLOhqLD5zrsNj/7LmI/7ma4NblW/opOqg
+         bQFVrmpiGSmPbZ2Yg5boXNgBv8m4wT+bVWuJxsHz+UIKd9LGyb8pPUvqxx5qco3gv6Wv
+         n6HJtAo55rpgB+aCczFTOiZFEvKDbrcwOFP538A4l/z/0wTDZZib2RxZhOX1UDGGUmz4
+         5L54+7N/YAfeV7+rfPelZlkEAV8A/rsDlOmoiH+oQI4x8PHykbo9JIWuT9PO/jpJz2WJ
+         +vpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692474644; x=1693079444;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ed1L9DO87oWFUUO+hp/1iqQshAPP0RxGE8TIKJiSCVI=;
-        b=P0TpFKom131tZkmonNEnh9r9T66OI4/j4aTKe7duqvFyHOLk/TKd45Sz6V/kuCD9FZ
-         cSFgsk+K2/Rxf0RK6VDsDVkoxKvoDA0bZ1GlHgRTa1eaDqsQFL7U62y8eAmZWnjQX+Bb
-         fT5rwp4iyOvuWUOzOVTQwheZV6ONQIBkqeXZEq9VAmeyVR3OxsFvIgII4uu/LA8zvTOB
-         0GLKQHTmkdfHsUIdEX7AUY5GoPMy03R/7Zzfd2xXUZWYk9RvLrIQdDotnq/ByBeRt2Bh
-         yr2JAD2tVnx7al5Savur/e76mqhzhSASrFP/SQyZkuUOu9oTIyLQ94tp7ZPoxqrlD2aX
-         FZLg==
-X-Gm-Message-State: AOJu0Yy4DvRBPcuyS+651/qEGFCyri92L+shBo4GSK2EkN0nmko7aHW8
-        WvgIF9H9AXDBj8MxDcOLe5FwUV4P+sd/2yYR
-X-Google-Smtp-Source: AGHT+IGGsfzB1e+jD2yQqE1ZxZhkWAdlFaDNtEQytVeoXH1m7gO9tnE8fsk5i7jvoJSe14A7P6Fkdg==
-X-Received: by 2002:a7b:c8d0:0:b0:3fc:7d2:e0c0 with SMTP id f16-20020a7bc8d0000000b003fc07d2e0c0mr1819335wml.27.1692474644304;
-        Sat, 19 Aug 2023 12:50:44 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1692474621; x=1693079421;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sSB6bHkjwrLrFphZRXjaDm3kSiCaocff/7800VaCd8Q=;
+        b=ByVdfBkFb1V/b7ojVxLHNdEhCsgRdoWJ5hs+ksmTyIPbMoloJQN+go4HpaUvhxMQ+z
+         JoriyaGJcmtGKKkRQwCZe4zJozDJ9iD9xaV1iP67sHRsmert7u55tHkpRd9+bq/ibvXm
+         nsBWVn5QDGiF+gQ4/7KPuQfv8s0hiqKdQKG0kghhT9xq+KmnZS5BFN0b3Pw5o9TSZYUu
+         pidUR3pIZK46ZpzGlWP5lpkhTA/EAlmBH2bQRdw1zahevARujz7SM/JLAuLK5cOZhaTB
+         pHpN12mkjId/AO7QkgoUUOqewmu7nz+i32N/wiHTNGdKZlpBdxKAAw8q6jDOIBS1DgZF
+         IRDA==
+X-Gm-Message-State: AOJu0YyG8tJB2BXTeRIUecpCfnCUzN6Dia1Zk0SnL/smGb0goOEV2dd8
+        viUMVah8Ngfa6lwEHoiPx/4WI8RMIpx5LIe3
+X-Google-Smtp-Source: AGHT+IHahhec10BYrPqz/QP1HfNcaB3/uicy40ATMZ7BLndPcptrIvIFgo8k7y6MTcL3w2uqTpqEmA==
+X-Received: by 2002:a1c:6a16:0:b0:3fa:98c3:7dbd with SMTP id f22-20020a1c6a16000000b003fa98c37dbdmr1935691wmc.41.1692474620596;
+        Sat, 19 Aug 2023 12:50:20 -0700 (PDT)
 Received: from mmaatuq-HP-Laptop-15-dy2xxx.. ([5.194.84.172])
-        by smtp.gmail.com with ESMTPSA id l19-20020a1c7913000000b003fe26bf65e7sm6861382wme.13.2023.08.19.12.50.41
+        by smtp.gmail.com with ESMTPSA id l19-20020a1c7913000000b003fe26bf65e7sm6861382wme.13.2023.08.19.12.50.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Aug 2023 12:50:43 -0700 (PDT)
+        Sat, 19 Aug 2023 12:50:20 -0700 (PDT)
 From:   Mahmoud Maatuq <mahmoudmatook.mm@gmail.com>
 To:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         kuba@kernel.org, netdev@vger.kernel.org,
@@ -58,107 +57,35 @@ To:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         pabeni@redhat.com, edumazet@google.com, shuah@kernel.org
 Cc:     linux-kernel-mentees@lists.linuxfoundation.org,
         Mahmoud Maatuq <mahmoudmatook.mm@gmail.com>
-Subject: [PATCH 2/2] selftests/net: replace ternary operator with min()/max()
-Date:   Sat, 19 Aug 2023 23:50:05 +0400
-Message-Id: <20230819195005.99387-3-mahmoudmatook.mm@gmail.com>
+Subject: [PATCH 0/2] selftests: Introduce common min()/max() and apply them in net tests
+Date:   Sat, 19 Aug 2023 23:50:03 +0400
+Message-Id: <20230819195005.99387-1-mahmoudmatook.mm@gmail.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230819195005.99387-1-mahmoudmatook.mm@gmail.com>
-References: <20230819195005.99387-1-mahmoudmatook.mm@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Fix the following coccicheck warning:
-tools/testing/selftests/net/udpgso_bench_tx.c:297:18-19: WARNING opportunity for min()
-tools/testing/selftests/net/udpgso_bench_tx.c:354:27-28: WARNING opportunity for min()
-tools/testing/selftests/net/so_txtime.c:129:24-26: WARNING opportunity for max()
-tools/testing/selftests/net/so_txtime.c:96:30-31: WARNING opportunity for max()
+The first patch introduces a common definition of 
+the min() and max() macros for use in multiple files under selftests. 
+This avoids the redundancy of having scattered local definitions 
+and prepares the groundwork for other files to simply include kselftest.h.
 
-Signed-off-by: Mahmoud Maatuq <mahmoudmatook.mm@gmail.com>
----
+The second patch then applies these new macros in the selftests/net files, 
+replacing the ternary operations. This directly addresses several 
+coccicheck warnings, making the code cleaner and more maintainable
+
+Mahmoud Maatuq (2):
+  selftests: Provide local define of min() and max()
+  selftests/net: replace ternary operator with min()/max()
+
+ tools/testing/selftests/kselftest.h           | 7 +++++++
  tools/testing/selftests/net/Makefile          | 2 ++
  tools/testing/selftests/net/so_txtime.c       | 7 ++++---
  tools/testing/selftests/net/udpgso_bench_tx.c | 6 +++---
- 3 files changed, 9 insertions(+), 6 deletions(-)
+ 4 files changed, 16 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index 7f3ab2a93ed6..a06cc25489f9 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -3,6 +3,8 @@
- 
- CFLAGS =  -Wall -Wl,--no-as-needed -O2 -g
- CFLAGS += -I../../../../usr/include/ $(KHDR_INCLUDES)
-+# Additional include paths needed by kselftest.h
-+CFLAGS += -I../
- 
- TEST_PROGS := run_netsocktests run_afpackettests test_bpf.sh netdevice.sh \
- 	      rtnetlink.sh xfrm_policy.sh test_blackhole_dev.sh
-diff --git a/tools/testing/selftests/net/so_txtime.c b/tools/testing/selftests/net/so_txtime.c
-index 2672ac0b6d1f..2936174e7de4 100644
---- a/tools/testing/selftests/net/so_txtime.c
-+++ b/tools/testing/selftests/net/so_txtime.c
-@@ -33,6 +33,8 @@
- #include <unistd.h>
- #include <poll.h>
- 
-+#include "kselftest.h"
-+
- static int	cfg_clockid	= CLOCK_TAI;
- static uint16_t	cfg_port	= 8000;
- static int	cfg_variance_us	= 4000;
-@@ -93,8 +95,7 @@ static void do_send_one(int fdt, struct timed_send *ts)
- 		msg.msg_controllen = sizeof(control);
- 
- 		tdeliver = glob_tstart + ts->delay_us * 1000;
--		tdeliver_max = tdeliver_max > tdeliver ?
--			       tdeliver_max : tdeliver;
-+		tdeliver_max = max(tdeliver_max, tdeliver);
- 
- 		cm = CMSG_FIRSTHDR(&msg);
- 		cm->cmsg_level = SOL_SOCKET;
-@@ -126,7 +127,7 @@ static void do_recv_one(int fdr, struct timed_send *ts)
- 		error(1, 0, "read: %dB", ret);
- 
- 	tstop = (gettime_ns(cfg_clockid) - glob_tstart) / 1000;
--	texpect = ts->delay_us >= 0 ? ts->delay_us : 0;
-+	texpect = max(ts->delay_us, 0);
- 
- 	fprintf(stderr, "payload:%c delay:%lld expected:%lld (us)\n",
- 			rbuf[0], (long long)tstop, (long long)texpect);
-diff --git a/tools/testing/selftests/net/udpgso_bench_tx.c b/tools/testing/selftests/net/udpgso_bench_tx.c
-index 477392715a9a..e92a7a753959 100644
---- a/tools/testing/selftests/net/udpgso_bench_tx.c
-+++ b/tools/testing/selftests/net/udpgso_bench_tx.c
-@@ -25,7 +25,7 @@
- #include <sys/types.h>
- #include <unistd.h>
- 
--#include "../kselftest.h"
-+#include "kselftest.h"
- 
- #ifndef ETH_MAX_MTU
- #define ETH_MAX_MTU 0xFFFFU
-@@ -294,7 +294,7 @@ static int send_udp(int fd, char *data)
- 	total_len = cfg_payload_len;
- 
- 	while (total_len) {
--		len = total_len < cfg_mss ? total_len : cfg_mss;
-+		len = min(total_len, cfg_mss);
- 
- 		ret = sendto(fd, data, len, cfg_zerocopy ? MSG_ZEROCOPY : 0,
- 			     cfg_connected ? NULL : (void *)&cfg_dst_addr,
-@@ -351,7 +351,7 @@ static int send_udp_sendmmsg(int fd, char *data)
- 			error(1, 0, "sendmmsg: exceeds max_nr_msg");
- 
- 		iov[i].iov_base = data + off;
--		iov[i].iov_len = cfg_mss < left ? cfg_mss : left;
-+		iov[i].iov_len = min(cfg_mss, left);
- 
- 		mmsgs[i].msg_hdr.msg_iov = iov + i;
- 		mmsgs[i].msg_hdr.msg_iovlen = 1;
 -- 
 2.34.1
 
