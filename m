@@ -2,106 +2,163 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C9AEEE4993
-	for <linux-kselftest@archiver.kernel.org>; Sat, 19 Aug 2023 16:25:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73E85EE49AF
+	for <linux-kselftest@archiver.kernel.org>; Sun, 20 Aug 2023 00:10:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233950AbjHSQZs (ORCPT
+        id S229482AbjHTAJ7 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 19 Aug 2023 12:25:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38496 "EHLO
+        Sat, 19 Aug 2023 20:09:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233930AbjHSQZs (ORCPT
+        with ESMTP id S229596AbjHTAJu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 19 Aug 2023 12:25:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBEAA12748;
-        Sat, 19 Aug 2023 09:25:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A4ED61D26;
-        Sat, 19 Aug 2023 16:25:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DD61C433C8;
-        Sat, 19 Aug 2023 16:25:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692462344;
-        bh=Gm54xopY5U1g+dtLdCK5BXvhK5nJLYt1xvvTvw4Ipn0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=T6GsYfmlM2iBvguNjtaNVEn5Yfpe+DOYTsuVXVxaORC11cv1yKBJRbUmjgoFq0hH2
-         IP3h6MQ3AWE0RREdvLTdNk3vIN2xwCjSAW4mFrbB1N913sJoWsMPA8sHMoIivoPgFW
-         N95ys0niXO9pPKSvWzCM1EJ28Yjd4gK6ein72TNAIe0EiIHGlq8ONX/BSZ6JbmBWbc
-         aJW1ZeOJi8nGsrGgAWFUPzum08ulHkNO/X09PvmX5f/I+24m/qx+/SVl3aBdJYQBmZ
-         H6l5XkWy2OPV1ZDByOKieYjp14fehrhWO+NuOGHE2HopHVbeuoNV7nLDDaM4GlvXly
-         erBEyGNLS670Q==
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>,
-        linux-kernel@vger.kernel.org (open list),
-        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Subject: [PATCH v2] selftests/tpm2: tpm2-parse-error.py
-Date:   Sat, 19 Aug 2023 16:25:37 +0000
-Message-Id: <20230819162540.5717-1-jarkko@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Sat, 19 Aug 2023 20:09:50 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45BEB6A864;
+        Sat, 19 Aug 2023 12:50:46 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3fedba79923so10620545e9.2;
+        Sat, 19 Aug 2023 12:50:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692474644; x=1693079444;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ed1L9DO87oWFUUO+hp/1iqQshAPP0RxGE8TIKJiSCVI=;
+        b=ermcIWZ7aKo/ZIQrmHAtx9i82fs+DGo+8+rdar7aCA9iNpKRHZC6bf3Y1UMuhhDvhS
+         OEKlPDS4iwOpeE9WRZsgadEkAS6l1oBb1Fy4SiSBf6HhaOpulUf6WBqmZ/8BEHVvqfgo
+         CUdqJpfieU5a7o2IEywBAfO4WGusMddJDGeDfDZwTtUiiHmgj8mnCfDuDrLiysMNpZL2
+         m9yjNFdpr/zpEBe6EQOQ3foIV1FnqSfEYUo85ZAr3kW8PuPxKIcdZw8HV8jVyzfTDG5u
+         Qu5VseudUycp3ygf1mQq69cHeP1r9AeHw6Mh+qyXwVlcpcWiZqoKU93/hjCG4o/B5vba
+         k2dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692474644; x=1693079444;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ed1L9DO87oWFUUO+hp/1iqQshAPP0RxGE8TIKJiSCVI=;
+        b=P0TpFKom131tZkmonNEnh9r9T66OI4/j4aTKe7duqvFyHOLk/TKd45Sz6V/kuCD9FZ
+         cSFgsk+K2/Rxf0RK6VDsDVkoxKvoDA0bZ1GlHgRTa1eaDqsQFL7U62y8eAmZWnjQX+Bb
+         fT5rwp4iyOvuWUOzOVTQwheZV6ONQIBkqeXZEq9VAmeyVR3OxsFvIgII4uu/LA8zvTOB
+         0GLKQHTmkdfHsUIdEX7AUY5GoPMy03R/7Zzfd2xXUZWYk9RvLrIQdDotnq/ByBeRt2Bh
+         yr2JAD2tVnx7al5Savur/e76mqhzhSASrFP/SQyZkuUOu9oTIyLQ94tp7ZPoxqrlD2aX
+         FZLg==
+X-Gm-Message-State: AOJu0Yy4DvRBPcuyS+651/qEGFCyri92L+shBo4GSK2EkN0nmko7aHW8
+        WvgIF9H9AXDBj8MxDcOLe5FwUV4P+sd/2yYR
+X-Google-Smtp-Source: AGHT+IGGsfzB1e+jD2yQqE1ZxZhkWAdlFaDNtEQytVeoXH1m7gO9tnE8fsk5i7jvoJSe14A7P6Fkdg==
+X-Received: by 2002:a7b:c8d0:0:b0:3fc:7d2:e0c0 with SMTP id f16-20020a7bc8d0000000b003fc07d2e0c0mr1819335wml.27.1692474644304;
+        Sat, 19 Aug 2023 12:50:44 -0700 (PDT)
+Received: from mmaatuq-HP-Laptop-15-dy2xxx.. ([5.194.84.172])
+        by smtp.gmail.com with ESMTPSA id l19-20020a1c7913000000b003fe26bf65e7sm6861382wme.13.2023.08.19.12.50.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 19 Aug 2023 12:50:43 -0700 (PDT)
+From:   Mahmoud Maatuq <mahmoudmatook.mm@gmail.com>
+To:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        willemdebruijn.kernel@gmail.com, davem@davemloft.net,
+        pabeni@redhat.com, edumazet@google.com, shuah@kernel.org
+Cc:     linux-kernel-mentees@lists.linuxfoundation.org,
+        Mahmoud Maatuq <mahmoudmatook.mm@gmail.com>
+Subject: [PATCH 2/2] selftests/net: replace ternary operator with min()/max()
+Date:   Sat, 19 Aug 2023 23:50:05 +0400
+Message-Id: <20230819195005.99387-3-mahmoudmatook.mm@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230819195005.99387-1-mahmoudmatook.mm@gmail.com>
+References: <20230819195005.99387-1-mahmoudmatook.mm@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a script to quickly parse any TPM error code. This can be useful, e.g.
-when parsing klog output when TPM fails in an internal kernel operation.
+Fix the following coccicheck warning:
+tools/testing/selftests/net/udpgso_bench_tx.c:297:18-19: WARNING opportunity for min()
+tools/testing/selftests/net/udpgso_bench_tx.c:354:27-28: WARNING opportunity for min()
+tools/testing/selftests/net/so_txtime.c:129:24-26: WARNING opportunity for max()
+tools/testing/selftests/net/so_txtime.c:96:30-31: WARNING opportunity for max()
 
-Example transcript:
-
-$ python3 tpm2-parse-error.py 0x1C4
-TPM_RC_VALUE: rc=0x000001c4
-
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+Signed-off-by: Mahmoud Maatuq <mahmoudmatook.mm@gmail.com>
 ---
-v2:
-Makefile: s/tpm2-parse-error/tpm2-parse-error.py/
----
- tools/testing/selftests/tpm2/Makefile           |  2 +-
- .../testing/selftests/tpm2/tpm2-parse-error.py  | 17 +++++++++++++++++
- 2 files changed, 18 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/tpm2/tpm2-parse-error.py
+ tools/testing/selftests/net/Makefile          | 2 ++
+ tools/testing/selftests/net/so_txtime.c       | 7 ++++---
+ tools/testing/selftests/net/udpgso_bench_tx.c | 6 +++---
+ 3 files changed, 9 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/tpm2/Makefile b/tools/testing/selftests/tpm2/Makefile
-index a9bf9459fb25..dbff77612785 100644
---- a/tools/testing/selftests/tpm2/Makefile
-+++ b/tools/testing/selftests/tpm2/Makefile
-@@ -2,4 +2,4 @@
- include ../lib.mk
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index 7f3ab2a93ed6..a06cc25489f9 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -3,6 +3,8 @@
  
- TEST_PROGS := test_smoke.sh test_space.sh test_async.sh
--TEST_PROGS_EXTENDED := tpm2.py tpm2_tests.py
-+TEST_PROGS_EXTENDED := tpm2.py tpm2_tests.py tpm2-parse-error.py
-diff --git a/tools/testing/selftests/tpm2/tpm2-parse-error.py b/tools/testing/selftests/tpm2/tpm2-parse-error.py
-new file mode 100644
-index 000000000000..8eed72681af1
---- /dev/null
-+++ b/tools/testing/selftests/tpm2/tpm2-parse-error.py
-@@ -0,0 +1,17 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
+ CFLAGS =  -Wall -Wl,--no-as-needed -O2 -g
+ CFLAGS += -I../../../../usr/include/ $(KHDR_INCLUDES)
++# Additional include paths needed by kselftest.h
++CFLAGS += -I../
+ 
+ TEST_PROGS := run_netsocktests run_afpackettests test_bpf.sh netdevice.sh \
+ 	      rtnetlink.sh xfrm_policy.sh test_blackhole_dev.sh
+diff --git a/tools/testing/selftests/net/so_txtime.c b/tools/testing/selftests/net/so_txtime.c
+index 2672ac0b6d1f..2936174e7de4 100644
+--- a/tools/testing/selftests/net/so_txtime.c
++++ b/tools/testing/selftests/net/so_txtime.c
+@@ -33,6 +33,8 @@
+ #include <unistd.h>
+ #include <poll.h>
+ 
++#include "kselftest.h"
 +
-+from argparse import ArgumentParser
-+from argparse import FileType
-+import os
-+import sys
-+import tpm2
-+
-+def main():
-+    parser = ArgumentParser(description='Parse a TPM error code')
-+    parser.add_argument('rc', type=(lambda x: int(x, 0)))
-+    args = parser.parse_args()
-+    print(str(tpm2.ProtocolError(None, args.rc)))
-+
-+if __name__ == '__main__':
-+    main()
+ static int	cfg_clockid	= CLOCK_TAI;
+ static uint16_t	cfg_port	= 8000;
+ static int	cfg_variance_us	= 4000;
+@@ -93,8 +95,7 @@ static void do_send_one(int fdt, struct timed_send *ts)
+ 		msg.msg_controllen = sizeof(control);
+ 
+ 		tdeliver = glob_tstart + ts->delay_us * 1000;
+-		tdeliver_max = tdeliver_max > tdeliver ?
+-			       tdeliver_max : tdeliver;
++		tdeliver_max = max(tdeliver_max, tdeliver);
+ 
+ 		cm = CMSG_FIRSTHDR(&msg);
+ 		cm->cmsg_level = SOL_SOCKET;
+@@ -126,7 +127,7 @@ static void do_recv_one(int fdr, struct timed_send *ts)
+ 		error(1, 0, "read: %dB", ret);
+ 
+ 	tstop = (gettime_ns(cfg_clockid) - glob_tstart) / 1000;
+-	texpect = ts->delay_us >= 0 ? ts->delay_us : 0;
++	texpect = max(ts->delay_us, 0);
+ 
+ 	fprintf(stderr, "payload:%c delay:%lld expected:%lld (us)\n",
+ 			rbuf[0], (long long)tstop, (long long)texpect);
+diff --git a/tools/testing/selftests/net/udpgso_bench_tx.c b/tools/testing/selftests/net/udpgso_bench_tx.c
+index 477392715a9a..e92a7a753959 100644
+--- a/tools/testing/selftests/net/udpgso_bench_tx.c
++++ b/tools/testing/selftests/net/udpgso_bench_tx.c
+@@ -25,7 +25,7 @@
+ #include <sys/types.h>
+ #include <unistd.h>
+ 
+-#include "../kselftest.h"
++#include "kselftest.h"
+ 
+ #ifndef ETH_MAX_MTU
+ #define ETH_MAX_MTU 0xFFFFU
+@@ -294,7 +294,7 @@ static int send_udp(int fd, char *data)
+ 	total_len = cfg_payload_len;
+ 
+ 	while (total_len) {
+-		len = total_len < cfg_mss ? total_len : cfg_mss;
++		len = min(total_len, cfg_mss);
+ 
+ 		ret = sendto(fd, data, len, cfg_zerocopy ? MSG_ZEROCOPY : 0,
+ 			     cfg_connected ? NULL : (void *)&cfg_dst_addr,
+@@ -351,7 +351,7 @@ static int send_udp_sendmmsg(int fd, char *data)
+ 			error(1, 0, "sendmmsg: exceeds max_nr_msg");
+ 
+ 		iov[i].iov_base = data + off;
+-		iov[i].iov_len = cfg_mss < left ? cfg_mss : left;
++		iov[i].iov_len = min(cfg_mss, left);
+ 
+ 		mmsgs[i].msg_hdr.msg_iov = iov + i;
+ 		mmsgs[i].msg_hdr.msg_iovlen = 1;
 -- 
-2.39.2
+2.34.1
 
