@@ -2,334 +2,162 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BA654EE49AF
-	for <linux-kselftest@archiver.kernel.org>; Tue, 22 Aug 2023 14:20:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C841EE4993
+	for <linux-kselftest@archiver.kernel.org>; Tue, 22 Aug 2023 14:35:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236423AbjHVOUe (ORCPT
+        id S236814AbjHVOfE (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 22 Aug 2023 10:20:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53750 "EHLO
+        Tue, 22 Aug 2023 10:35:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236134AbjHVOUb (ORCPT
+        with ESMTP id S234968AbjHVOfE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Aug 2023 10:20:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F73CC1;
-        Tue, 22 Aug 2023 07:20:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8133A65772;
-        Tue, 22 Aug 2023 14:05:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24BC1C43395;
-        Tue, 22 Aug 2023 14:05:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692713125;
-        bh=pTf0v4Nwr1c2atopY90/GZ4bcDLJRrAaZS5Juu/K/wc=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=RqTPgN/Syt+4uEDWPBWzuOq4DfgJHj5yIAyIhU3LQ2hZlJZWwroKIla+zSt2T7mdp
-         bHmjwAPBcY67Scx7yaD0aF6C9owyz9vp4q3eMb7rutXTwjzNEwbsmz99cuNz1nTyAB
-         jOcqJ5jHo7Hvt5tXbsIh50vRvO1Uqg+nPAM3nDoUSNlZx6rlllyzuIDy7LQCwx66PD
-         kg+EIbak1WMTnF+ZYgpoqgRrn6ItNI1gKLvGoWaGnHvMALQ+UuccxHjAI6sC9rFAQu
-         ZXQG8me22Pcj4JQHtLx7b9sGaq/zFNq0U73etvi3UwezBMZaHQ0pekr/WRRROnIpll
-         pzlM8alInqnQA==
-From:   Mark Brown <broonie@kernel.org>
-Date:   Tue, 22 Aug 2023 14:56:56 +0100
-Subject: [PATCH v5 23/37] arm64/signal: Set up and restore the GCS context
- for signal handlers
+        Tue, 22 Aug 2023 10:35:04 -0400
+Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ABDECC6;
+        Tue, 22 Aug 2023 07:35:01 -0700 (PDT)
+Received: by mail-ua1-x932.google.com with SMTP id a1e0cc1a2514c-79a83720538so1584010241.1;
+        Tue, 22 Aug 2023 07:35:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692714900; x=1693319700;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=T+ZNfPtU0Cttw+VeDpq9OnUhCaE60SVpp2lMWarUKUc=;
+        b=Bj7XacAvfZ6coerNUiXEwJdKVf0xGC+OXqZOwA3lUpa0JTkpxgekOtmtlCEoHSHDle
+         0rdnLCQK5kZHsIJpziI+2ieYFVI0Q3BIg3STTzrNcv29doMqCMlw2lLNYqQutEBCjNvA
+         fPvDYrqsSQAyEl5JiSCdsiOGyoW0E6jitN37eev4m62r96FccmWTjz3VtAWT28dQZQyE
+         zP5f5qCwIYqz4IqGIi3GXHNKSPsRmbb86pq8pSmUJymLPTy1gE9ysg262GMr13XF06r0
+         j+me8PoNw2hZAZnF1/BADEZRRkyc22+pJmq0cueWsivAxvSA5rXNdItT5DrEPRzEMMLn
+         kGpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692714900; x=1693319700;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=T+ZNfPtU0Cttw+VeDpq9OnUhCaE60SVpp2lMWarUKUc=;
+        b=P3PcvBA7xDkJhJRBtjTIP9+8X2p5pXPk9sgAXDJsUIYyR/n/tuJjcGpQr7WZ5LEVR8
+         BBoiwLJ5J9uv1xlicNCu0LAyxQcE4Qk8lfi6gv17ml66U46H52x4nDvH89eJ/F0Uw3Y1
+         uBNsWMy97lWQrovdMg9Rs9sXT90mJBm5tn5jj6GoT87Qb2OA3PF4Rq4hoT8q3LfwxAX9
+         oXwXL/xrH868+x4nXzA9gH5ymS16Jj1JDNtreXCLklZSeCfefzBQj0fcXPmtjqC1btnG
+         r8RPWp1nCodlp5oNjleJoVHk3z/as4G22vp8afEkHmivij0cAhq71ytA3LwqB/FkJQgI
+         TuIA==
+X-Gm-Message-State: AOJu0YyWkFaXPbM7gLthDrptPXX6vTca5T0zqndQQAWGdLfLr0Nt46lf
+        jq+ydbRrOlq0r22WIeqVr2pjNwgCf0ODLiMCnDc=
+X-Google-Smtp-Source: AGHT+IEvbFTcsJ11ZJwXI8CgYZaY1++rsw/zqgyPEs0rJFQr7S29crCoaZwGW1YOUQIFFNY97PInmJjBGmiMX7a+ttA=
+X-Received: by 2002:a05:6102:2446:b0:44d:5b62:bcd5 with SMTP id
+ g6-20020a056102244600b0044d5b62bcd5mr2330918vss.23.1692714900235; Tue, 22 Aug
+ 2023 07:35:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230822-arm64-gcs-v5-23-9ef181dd6324@kernel.org>
-References: <20230822-arm64-gcs-v5-0-9ef181dd6324@kernel.org>
-In-Reply-To: <20230822-arm64-gcs-v5-0-9ef181dd6324@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-        Deepak Gupta <debug@rivosinc.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-Cc:     "H.J. Lu" <hjl.tools@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.13-dev-034f2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7272; i=broonie@kernel.org;
- h=from:subject:message-id; bh=pTf0v4Nwr1c2atopY90/GZ4bcDLJRrAaZS5Juu/K/wc=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBk5MABbrLFWcCwIhWQO+8yGnoa6yEke/SWgDcMI8OK
- /Sx/f5KJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZOTAAQAKCRAk1otyXVSH0FptB/
- 9rR4g5V4VeC6QgdZnQOvu8AFx/V0oZgsu/P9pOisxXYqyT6s+GW0joKF34fF5aKOn4WvtbQQHESlh6
- RzBmGodHgERHsJkrwpxMVeZWmiINmFg04hRiywofXUwOYwSpN2SdidGqR2naKt1A8Isu+urZI6IyuE
- sgX6+fz/0SewTtzjZfBbMv1m96rUqnrYdvCEoEqUnENhSmV6AtL9FDyripzu+u/9SFNKDJ115tktZH
- IlH84atxbzFtvpuKoy/AZBhlnovnI62EBXVsPwqeJ6amm62ZpKkIR13ftobJQhMy9KXWUA24i2onec
- UHItrMYxTs0R9g0W1wYp0HsL6xmqDx
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+References: <20230819195005.99387-1-mahmoudmatook.mm@gmail.com>
+ <20230819195005.99387-2-mahmoudmatook.mm@gmail.com> <64e22df53d1e6_3580162945b@willemb.c.googlers.com.notmuch>
+ <7e8c2597c71647f38cd4672cbef53a66@AcuMS.aculab.com>
+In-Reply-To: <7e8c2597c71647f38cd4672cbef53a66@AcuMS.aculab.com>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Tue, 22 Aug 2023 10:34:23 -0400
+Message-ID: <CAF=yD-+6cWTiDgpsu=hUV+OvzDFRaT2ZUmtQo9qTrCB9i-+7ng@mail.gmail.com>
+Subject: Re: [PATCH 1/2] selftests: Provide local define of min() and max()
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Mahmoud Maatuq <mahmoudmatook.mm@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "linux-kernel-mentees@lists.linuxfoundation.org" 
+        <linux-kernel-mentees@lists.linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When invoking a signal handler we use the GCS configuration and stack
-for the current thread.
+On Mon, Aug 21, 2023 at 9:05=E2=80=AFAM David Laight <David.Laight@aculab.c=
+om> wrote:
+>
+> From: Willem de Bruijn
+> > Sent: Sunday, August 20, 2023 4:15 PM
+> >
+> > Mahmoud Maatuq wrote:
+> > > to avoid manual calculation of min and max values
+> > > and fix coccinelle warnings such WARNING opportunity for min()/max()
+> > > adding one common definition that could be used in multiple files
+> > > under selftests.
+> > > there are also some defines for min/max scattered locally inside sour=
+ces
+> > > under selftests.
+> > > this also prepares for cleaning up those redundant defines and includ=
+e
+> > > kselftest.h instead.
+> > >
+> > > Signed-off-by: Mahmoud Maatuq <mahmoudmatook.mm@gmail.com>
+> > > ---
+> > >  tools/testing/selftests/kselftest.h | 7 +++++++
+> > >  1 file changed, 7 insertions(+)
+> > >
+> > > diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/self=
+tests/kselftest.h
+> > > index 829be379545a..e8eb7e9afbc6 100644
+> > > --- a/tools/testing/selftests/kselftest.h
+> > > +++ b/tools/testing/selftests/kselftest.h
+> > > @@ -55,6 +55,13 @@
+> > >  #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
+> > >  #endif
+> > >
+> > > +#ifndef min
+> > > +# define min(x, y) ((x) < (y) ? (x) : (y))
+> > > +#endif
+> > > +#ifndef max
+> > > +# define max(x, y) ((x) < (y) ? (y) : (x))
+> > > +#endif
+> > > +
+> >
+> > Should this more closely follow include/linux/minmax.h, which is a lot
+> > more strict?
+> >
+> > I'm fine with this simpler, more relaxed, version for testing, but
+> > calling it out for people to speak up.
+> >
+> > Only the first two of these comments in minmax.h apply to this
+> > userspace code.
+> >
+> > /*
+> >  * min()/max()/clamp() macros must accomplish three things:
+> >  *
+> >  * - avoid multiple evaluations of the arguments (so side-effects like
+> >  *   "x++" happen only once) when non-constant.
+> >  * - perform strict type-checking (to generate warnings instead of
+> >  *   nasty runtime surprises). See the "unnecessary" pointer comparison
+> >  *   in __typecheck().
+> >  * - retain result as a constant expressions when called with only
+> >  *   constant expressions (to avoid tripping VLA warnings in stack
+> >  *   allocation usage).
+> >  */
+> >
+> > Note that a more strict version that includes __typecheck would
+> > warn on the type difference between total_len and cfg_mss. Fine
+> > with changing the type of cfg_mss in the follow-on patch to address
+> > that.
+>
+> That typecheck() is horrid.
+> It may well have caused more bugs due to incorrect casts that
+> it actually detected.
+>
+> I'd suggest the version that just avoids multiple evaluations.
+> Or just error signed v unsigned comparisons.
+> See  https://lore.kernel.org/all/b4ce9dad748e489f9314a2dc95615033@AcuMS.a=
+culab.com/
+> for an example patch set.
 
-Since we implement signal return by calling the signal handler with a
-return address set up pointing to a trampoline in the vDSO we need to
-also configure any active GCS for this by pushing a frame for the
-trampoline onto the GCS.  If we do not do this then signal return will
-generate a GCS protection fault.
+Interesting, thanks. That is also simpler.
 
-In order to guard against attempts to bypass GCS protections via signal
-return we only allow returning with GCSPR_EL0 pointing to an address
-where it was previously preempted by a signal.  We do this by pushing a
-cap onto the GCS, this takes the form of an architectural GCS cap token
-with the top bit set which we add on signal entry and validate and pop
-off on signal return.  Since the top bit is set address validation for
-the token will fail if an attempt is made to use it with the stack
-switch instructions.
+Also, the existing patch is no worse than the open coded code today,
+so even without code to avoid multiple evaluations, I guess it's okay
+to merge.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- arch/arm64/include/asm/gcs.h |   2 +
- arch/arm64/kernel/signal.c   | 130 +++++++++++++++++++++++++++++++++++++++++--
- arch/arm64/mm/gcs.c          |   1 +
- 3 files changed, 128 insertions(+), 5 deletions(-)
-
-diff --git a/arch/arm64/include/asm/gcs.h b/arch/arm64/include/asm/gcs.h
-index c150e76869a1..65496103d462 100644
---- a/arch/arm64/include/asm/gcs.h
-+++ b/arch/arm64/include/asm/gcs.h
-@@ -8,6 +8,8 @@
- #include <asm/types.h>
- #include <asm/uaccess.h>
- 
-+struct ksignal;
-+
- static inline void gcsb_dsync(void)
- {
- 	asm volatile(".inst 0xd503227f" : : : "memory");
-diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
-index 0e8beb3349ea..97004c52aea3 100644
---- a/arch/arm64/kernel/signal.c
-+++ b/arch/arm64/kernel/signal.c
-@@ -25,6 +25,7 @@
- #include <asm/elf.h>
- #include <asm/exception.h>
- #include <asm/cacheflush.h>
-+#include <asm/gcs.h>
- #include <asm/ucontext.h>
- #include <asm/unistd.h>
- #include <asm/fpsimd.h>
-@@ -34,6 +35,36 @@
- #include <asm/traps.h>
- #include <asm/vdso.h>
- 
-+#ifdef CONFIG_ARM64_GCS
-+/* Extra bit set in the address distinguishing a signal cap token. */
-+#define GCS_SIGNAL_CAP_FLAG BIT(63)
-+
-+#define GCS_SIGNAL_CAP(addr) (GCS_CAP(addr) | GCS_SIGNAL_CAP_FLAG)
-+
-+static bool gcs_signal_cap_valid(u64 addr, u64 val)
-+{
-+	/*
-+	 * The top bit should be set, this is an invalid address for
-+	 * EL0 and will only be set for caps created by signals.
-+	 */
-+	if (!(val & GCS_SIGNAL_CAP_FLAG))
-+		return false;
-+
-+	/* The rest should be a standard architectural cap token. */
-+	val &= ~GCS_SIGNAL_CAP_FLAG;
-+
-+	/* The cap must have the low bits set to a token value */
-+	if (GCS_CAP_TOKEN(val) != GCS_CAP_VALID_TOKEN)
-+		return false;
-+
-+	/* The cap must store the VA the cap was stored at */
-+	if (GCS_CAP_ADDR(addr) != GCS_CAP_ADDR(val))
-+		return false;
-+
-+	return true;
-+}
-+#endif
-+
- /*
-  * Do a signal return; undo the signal stack. These are aligned to 128-bit.
-  */
-@@ -815,6 +846,45 @@ static int restore_sigframe(struct pt_regs *regs,
- 	return err;
- }
- 
-+#ifdef CONFIG_ARM64_GCS
-+static int gcs_restore_signal(void)
-+{
-+	u64 gcspr_el0, cap;
-+	int ret;
-+
-+	if (!system_supports_gcs())
-+		return 0;
-+
-+	if (!(current->thread.gcs_el0_mode & PR_SHADOW_STACK_ENABLE))
-+		return 0;
-+
-+	gcspr_el0 = read_sysreg_s(SYS_GCSPR_EL0);
-+
-+	/*
-+	 * GCSPR_EL0 should be pointing at a capped GCS, read the cap...
-+	 */
-+	gcsb_dsync();
-+	ret = copy_from_user(&cap, (__user void*)gcspr_el0, sizeof(cap));
-+	if (ret)
-+		return -EFAULT;
-+
-+	/*
-+	 * ...then check that the cap is the actual GCS before
-+	 * restoring it.
-+	 */
-+	if (!gcs_signal_cap_valid(gcspr_el0, cap))
-+		return -EINVAL;
-+
-+	current->thread.gcspr_el0 = gcspr_el0 + sizeof(cap);
-+	write_sysreg_s(current->thread.gcspr_el0, SYS_GCSPR_EL0);
-+
-+	return 0;
-+}
-+
-+#else
-+static int gcs_restore_signal(void) { return 0; }
-+#endif
-+
- SYSCALL_DEFINE0(rt_sigreturn)
- {
- 	struct pt_regs *regs = current_pt_regs();
-@@ -841,6 +911,9 @@ SYSCALL_DEFINE0(rt_sigreturn)
- 	if (restore_altstack(&frame->uc.uc_stack))
- 		goto badframe;
- 
-+	if (gcs_restore_signal())
-+		goto badframe;
-+
- 	return regs->regs[0];
- 
- badframe:
-@@ -1071,7 +1144,52 @@ static int get_sigframe(struct rt_sigframe_user_layout *user,
- 	return 0;
- }
- 
--static void setup_return(struct pt_regs *regs, struct k_sigaction *ka,
-+#ifdef CONFIG_ARM64_GCS
-+
-+static int gcs_signal_entry(__sigrestore_t sigtramp, struct ksignal *ksig)
-+{
-+	unsigned long __user *gcspr_el0;
-+	unsigned long cap[2];
-+	int ret;
-+
-+	if (!system_supports_gcs())
-+		return 0;
-+
-+	if (!task_gcs_el0_enabled(current))
-+		return 0;
-+
-+	/*
-+	 * We are entering a signal handler, current register state is
-+	 * active.
-+	 */
-+	gcspr_el0 = (unsigned long __user *)read_sysreg_s(SYS_GCSPR_EL0);
-+
-+	/*
-+	 * Push a cap and the GCS entry for the trampoline onto the GCS.
-+	 */
-+	cap[1] = GCS_SIGNAL_CAP(gcspr_el0 - 1);
-+	cap[0] = (unsigned long)sigtramp;
-+	ret = copy_to_user_gcs(gcspr_el0 - 2, cap, ARRAY_SIZE(cap));
-+	if (ret != 0)
-+		return ret;
-+
-+	gcsb_dsync();
-+
-+	gcspr_el0 -= 2;
-+	write_sysreg_s((unsigned long)gcspr_el0, SYS_GCSPR_EL0);
-+
-+	return 0;
-+}
-+#else
-+
-+static int gcs_signal_entry(__sigrestore_t sigtramp, struct ksignal *ksig)
-+{
-+	return 0;
-+}
-+
-+#endif
-+
-+static int setup_return(struct pt_regs *regs, struct ksignal *ksig,
- 			 struct rt_sigframe_user_layout *user, int usig)
- {
- 	__sigrestore_t sigtramp;
-@@ -1079,7 +1197,7 @@ static void setup_return(struct pt_regs *regs, struct k_sigaction *ka,
- 	regs->regs[0] = usig;
- 	regs->sp = (unsigned long)user->sigframe;
- 	regs->regs[29] = (unsigned long)&user->next_frame->fp;
--	regs->pc = (unsigned long)ka->sa.sa_handler;
-+	regs->pc = (unsigned long)ksig->ka.sa.sa_handler;
- 
- 	/*
- 	 * Signal delivery is a (wacky) indirect function call in
-@@ -1119,12 +1237,14 @@ static void setup_return(struct pt_regs *regs, struct k_sigaction *ka,
- 		sme_smstop();
- 	}
- 
--	if (ka->sa.sa_flags & SA_RESTORER)
--		sigtramp = ka->sa.sa_restorer;
-+	if (ksig->ka.sa.sa_flags & SA_RESTORER)
-+		sigtramp = ksig->ka.sa.sa_restorer;
- 	else
- 		sigtramp = VDSO_SYMBOL(current->mm->context.vdso, sigtramp);
- 
- 	regs->regs[30] = (unsigned long)sigtramp;
-+
-+	return gcs_signal_entry(sigtramp, ksig);
- }
- 
- static int setup_rt_frame(int usig, struct ksignal *ksig, sigset_t *set,
-@@ -1147,7 +1267,7 @@ static int setup_rt_frame(int usig, struct ksignal *ksig, sigset_t *set,
- 	err |= __save_altstack(&frame->uc.uc_stack, regs->sp);
- 	err |= setup_sigframe(&user, regs, set);
- 	if (err == 0) {
--		setup_return(regs, &ksig->ka, &user, usig);
-+		err = setup_return(regs, ksig, &user, usig);
- 		if (ksig->ka.sa.sa_flags & SA_SIGINFO) {
- 			err |= copy_siginfo_to_user(&frame->info, &ksig->info);
- 			regs->regs[1] = (unsigned long)&frame->info;
-diff --git a/arch/arm64/mm/gcs.c b/arch/arm64/mm/gcs.c
-index 2963041d1d64..6251c362a7f9 100644
---- a/arch/arm64/mm/gcs.c
-+++ b/arch/arm64/mm/gcs.c
-@@ -6,6 +6,7 @@
- #include <linux/types.h>
- 
- #include <asm/cpufeature.h>
-+#include <asm/gcs.h>
- #include <asm/page.h>
- 
- static unsigned long alloc_gcs(unsigned long addr, unsigned long size,
-
--- 
-2.30.2
-
+The coccinelle warnings are arguably false positives, using checks for
+kernel code, but being run against userspace code that has no access
+to those helpers. But fine to silence them.
