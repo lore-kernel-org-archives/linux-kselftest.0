@@ -2,157 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B6D4DEE4993
-	for <linux-kselftest@archiver.kernel.org>; Tue, 22 Aug 2023 13:16:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A753EE4993
+	for <linux-kselftest@archiver.kernel.org>; Tue, 22 Aug 2023 13:58:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234300AbjHVNQB (ORCPT
+        id S234735AbjHVN6q (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 22 Aug 2023 09:16:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50604 "EHLO
+        Tue, 22 Aug 2023 09:58:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234173AbjHVNQA (ORCPT
+        with ESMTP id S233421AbjHVN6q (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Aug 2023 09:16:00 -0400
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 691C5BE;
-        Tue, 22 Aug 2023 06:15:58 -0700 (PDT)
-Received: by mail-ot1-x329.google.com with SMTP id 46e09a7af769-6bd0a96e63dso3419144a34.2;
-        Tue, 22 Aug 2023 06:15:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692710157; x=1693314957;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=RgPksFBxOItSqlc53rqP9sg2Ql5BRaniyvUG/S3vZQA=;
-        b=Lqq7rBZlgW/W8/NpNTDcQpJStlieAl/FDDb81Yz+mVx6VVYYbh6O81p+kg1tZKNWi1
-         44vmOYZr8UPr0GQsdoy2tOail7xtPFRGfVpF2NowHee2zCYShOhK+w40x6SX6HoLx0/m
-         TGxQBaGZ01FBMTs1+unFMNzvimZFCAV1eKanwdTtKe+rGs3Eya2EeZpxlWDmVkMjZ3Xm
-         YHJR8zn/QRiaXCZORJbA9MpcAExO1lEFuE4GYAmK9Pxwok5hI+PgRT1j6a0j6a5C0wwR
-         9h/YayxcJ95TB/VId6DUH/7c/PXXaIOEbO7eQLvO0OTZT6YZqX/iXc+gMsXGSInY0uK4
-         KiwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692710157; x=1693314957;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RgPksFBxOItSqlc53rqP9sg2Ql5BRaniyvUG/S3vZQA=;
-        b=NgWsmfXSFcr9K9cRS0TvtaZV7TDlC0wcFyyUI08632dorI9/qwg16Ki0yE7LaumZWw
-         12qBm/WNi2uTfxXedmT6A9MDOIAj7goir7SRRRWIInkJCxclRy4KdahNUNuFgA/Imh17
-         vljY8s1j92BToq/JTwHXPRpRzWerx81tXA1Tworik2h1P00MI7BqVnXXe+JNQQ3+jmJV
-         bEYf77ConL5LOwzKw/3hzoqC7rKWfICmot3vOvgpCse54rtxHBoWqFxsZUZGeZfR61gn
-         J6ayiTyC3ishUWFQdvSj4oZNGnJVJiPec1JoWX1b+zfiDr3QXUDY3Ul8kWnir3hpLNxz
-         LpBg==
-X-Gm-Message-State: AOJu0YyDgUJHqDyb5NFEdA5PDqF1rNGg7d+fdO6gGc2el23PSwJM3ol9
-        zMKT5fTavQL/DT9SG/8zHnY=
-X-Google-Smtp-Source: AGHT+IGo8zeIWBKn82j/jvQCjzmHYpJVCtYbV2axFg8O5ZXrTSIe63shHY3sDxMgIUHBR3S1rBwiKQ==
-X-Received: by 2002:a9d:6295:0:b0:6b9:4216:c209 with SMTP id x21-20020a9d6295000000b006b94216c209mr10586169otk.12.1692710157602;
-        Tue, 22 Aug 2023 06:15:57 -0700 (PDT)
-Received: from debian.lan ([168.227.196.240])
-        by smtp.gmail.com with ESMTPSA id t15-20020a9d748f000000b006b9cbad68a8sm4486071otk.30.2023.08.22.06.15.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Aug 2023 06:15:56 -0700 (PDT)
-From:   "Ricardo B. Marliere" <rbmarliere@gmail.com>
-To:     broonie@kernel.org, skhan@linuxfoundation.org
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Ricardo B. Marliere" <rbmarliere@gmail.com>
-Subject: [PATCH] selftests: alsa: make LDLIBS consistent
-Date:   Tue, 22 Aug 2023 10:15:45 -0300
-Message-Id: <20230822131544.38152-1-rbmarliere@gmail.com>
-X-Mailer: git-send-email 2.40.1
+        Tue, 22 Aug 2023 09:58:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E4B61B2;
+        Tue, 22 Aug 2023 06:58:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F2AF06574E;
+        Tue, 22 Aug 2023 13:58:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9BBAC433C7;
+        Tue, 22 Aug 2023 13:58:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692712723;
+        bh=B6tuRrgtGwA0ObKW3bBPsxHlaa4WJhLQYNJCAXb4G3k=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Z4WPe1gs3kGTXUTXQ4c9FhqAO4seP+gWMKw+YudQbTTBGuoZwETQW08UOZujk+RK/
+         015adPhyv8KqlQjMYKqpSuFWuuruCdZ29147L+bKClPO+mwzggp8L2JvwcbvuE8XF6
+         Ky/+hvZkmiP38BdaF1amER7CsXpBF2llMzOHTxQNFGCTI21e/872FBm5iYseH4zlOy
+         Z6+leGWyDEJkPJiA3F+re6psBrYq24dfZ8fWKh+7p8785Pi2LXzWLZvMl9yADuiEKo
+         CevnzOCDenypavD851IeA2oP/M6Mb+UHvCPxlUvFcwML0Ejtn7O7bb5xVGk5DvZSym
+         3eDSALKyS+E5w==
+From:   =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
+To:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
+        Benjamin Poirier <bpoirier@nvidia.com>,
+        Jonathan Toppins <jtoppins@redhat.com>
+Subject: [PATCH] selftests: Keep symlinks, when possible
+Date:   Tue, 22 Aug 2023 15:58:37 +0200
+Message-Id: <20230822135837.280967-1-bjorn@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-In kselftest_deps.sh script, the level 3 parser is broken for the alsa
-subsystem Makefile.
+From: Björn Töpel <bjorn@rivosinc.com>
 
-Output before patch:
+When kselftest is built/installed with the 'gen_tar' target, rsync is
+used for the installation step to copy files. Extra care is needed for
+tests that have symlinks. Commit ae108c48b5d2 ("selftests: net: Fix
+cross-tree inclusion of scripts") added '-L' (transform symlink into
+referent file/dir) to rsync, to fix dangling links. However, that
+broke some tests where the symlink (being a symlink) is part of the
+test (e.g. exec:execveat).
 
-$ ./kselftest_deps.sh gcc alsa
-========================================================
-Kselftest Dependency Check for [./kselftest_deps.sh gcc alsa] results...
-========================================================
-Checked tests defining LDLIBS dependencies
---------------------------------------------------------
-Total tests with Dependencies:
-6 Pass: 2 Fail: 4
---------------------------------------------------------
-PASS: alsa/Makefile dependency check passed -lasound
-PASS: alsa/Makefile dependency check passed -lpthread
---------------------------------------------------------
-Targets passed build dependency check on system:
-alsa
---------------------------------------------------------
-FAIL: alsa/Makefile dependency check: $(shell
-FAIL: alsa/Makefile dependency check: pkg-config
-FAIL: alsa/Makefile dependency check: --libs
-FAIL: alsa/Makefile dependency check: alsa)
---------------------------------------------------------
-Targets failed build dependency check on system:
-alsa
---------------------------------------------------------
-Missing libraries system
-$(shell alsa) --libs pkg-config
---------------------------------------------------------
-========================================================
+Use rsync's '--copy-unsafe-links' that does right thing.
 
-Output after patch:
-
-$ ./kselftest_deps.sh gcc alsa
-========================================================
-Kselftest Dependency Check for [./kselftest_deps.sh gcc alsa] results...
-========================================================
-Checked tests defining LDLIBS dependencies
---------------------------------------------------------
-Total tests with Dependencies:
-2 Pass: 2 Fail: 0
---------------------------------------------------------
-PASS: alsa/Makefile dependency check passed -lasound
-PASS: alsa/Makefile dependency check passed -lpthread
---------------------------------------------------------
-Targets passed build dependency check on system:
-alsa
---------------------------------------------------------
-========================================================
-
-Signed-off-by: Ricardo B. Marliere <rbmarliere@gmail.com>
+Fixes: ae108c48b5d2 ("selftests: net: Fix cross-tree inclusion of scripts")
+Signed-off-by: Björn Töpel <bjorn@rivosinc.com>
 ---
- tools/testing/selftests/alsa/Makefile | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ tools/testing/selftests/lib.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/alsa/Makefile b/tools/testing/selftests/alsa/Makefile
-index 5af9ba8a4645..b5670049c4e5 100644
---- a/tools/testing/selftests/alsa/Makefile
-+++ b/tools/testing/selftests/alsa/Makefile
-@@ -2,13 +2,13 @@
- #
+diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+index d17854285f2b..118e0964bda9 100644
+--- a/tools/testing/selftests/lib.mk
++++ b/tools/testing/selftests/lib.mk
+@@ -106,7 +106,7 @@ endef
+ run_tests: all
+ ifdef building_out_of_srctree
+ 	@if [ "X$(TEST_PROGS)$(TEST_PROGS_EXTENDED)$(TEST_FILES)" != "X" ]; then \
+-		rsync -aLq $(TEST_PROGS) $(TEST_PROGS_EXTENDED) $(TEST_FILES) $(OUTPUT); \
++		rsync -aq --copy-unsafe-links $(TEST_PROGS) $(TEST_PROGS_EXTENDED) $(TEST_FILES) $(OUTPUT); \
+ 	fi
+ 	@if [ "X$(TEST_PROGS)" != "X" ]; then \
+ 		$(call RUN_TESTS, $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) \
+@@ -120,7 +120,7 @@ endif
  
- CFLAGS += $(shell pkg-config --cflags alsa)
--LDLIBS += $(shell pkg-config --libs alsa)
--ifeq ($(LDLIBS),)
--LDLIBS += -lasound
-+VAR_LDLIBS += $(shell pkg-config --libs alsa)
-+ifeq ($(VAR_LDLIBS),)
-+VAR_LDLIBS += -lasound
- endif
- CFLAGS += -L$(OUTPUT) -Wl,-rpath=./
+ define INSTALL_SINGLE_RULE
+ 	$(if $(INSTALL_LIST),@mkdir -p $(INSTALL_PATH))
+-	$(if $(INSTALL_LIST),rsync -aL $(INSTALL_LIST) $(INSTALL_PATH)/)
++	$(if $(INSTALL_LIST),rsync -a --copy-unsafe-links $(INSTALL_LIST) $(INSTALL_PATH)/)
+ endef
  
--LDLIBS+=-lpthread
-+VAR_LDLIBS+=-lpthread
- 
- OVERRIDE_TARGETS = 1
- 
-@@ -21,7 +21,7 @@ TEST_FILES := conf.d pcm-test.conf
- include ../lib.mk
- 
- $(OUTPUT)/libatest.so: conf.c alsa-local.h
--	$(CC) $(CFLAGS) -shared -fPIC $< $(LDLIBS) -o $@
-+	$(CC) $(CFLAGS) -shared -fPIC $< $(VAR_LDLIBS) -o $@
- 
- $(OUTPUT)/%: %.c $(TEST_GEN_PROGS_EXTENDED) alsa-local.h
--	$(CC) $(CFLAGS) $< $(LDLIBS) -latest -o $@
-+	$(CC) $(CFLAGS) $< $(VAR_LDLIBS) -latest -o $@
+ define INSTALL_RULE
+
+base-commit: f7757129e3dea336c407551c98f50057c22bb266
 -- 
-2.40.1
+2.39.2
 
