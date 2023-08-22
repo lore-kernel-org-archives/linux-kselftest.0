@@ -2,93 +2,156 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3DB8EE4993
-	for <linux-kselftest@archiver.kernel.org>; Tue, 22 Aug 2023 14:07:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA0C3EE4993
+	for <linux-kselftest@archiver.kernel.org>; Tue, 22 Aug 2023 14:07:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbjHVOHi (ORCPT
+        id S236527AbjHVOHw (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 22 Aug 2023 10:07:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34164 "EHLO
+        Tue, 22 Aug 2023 10:07:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236519AbjHVOHh (ORCPT
+        with ESMTP id S236003AbjHVOHt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Aug 2023 10:07:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B77AE7A;
-        Tue, 22 Aug 2023 07:07:15 -0700 (PDT)
+        Tue, 22 Aug 2023 10:07:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43866E54;
+        Tue, 22 Aug 2023 07:07:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E1866205E;
-        Tue, 22 Aug 2023 14:05:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E7CDC433C8;
-        Tue, 22 Aug 2023 14:05:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E941657EB;
+        Tue, 22 Aug 2023 14:06:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D456BC433C9;
+        Tue, 22 Aug 2023 14:06:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692713131;
-        bh=3U3Rd6RqE2N05R7KVqOROMjjsKW6c4W4zLzqCOf9ay4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=F2s6UlGCXF+cUbq3M7PeDm9IkcQdEuvUyFC0tSNNxx4pgd4BYjY4y7eNgpLtELI3r
-         2rxR4sa03dX7S7fWJszjxkU0O1v+p5yprItIJ0mNJxKNdRgb9OHayLsY/WjajVM0aH
-         rsGcAVcpHH7DrEV/U/G6sc+bKozccuD8Iw2JHxLhaSU9TW0PfVJh626FiOdkXkof3J
-         9PrenxlbewwZ6jTyn/8LQApnrGQwdWbskKdmkHPpAekP+QZofOY676C9uNcMhn+sJB
-         PD1W9W7ZWoCHabqnfnR2SsdwBM8Nq9lzCS4xZLfoOA62rRk7ZkZth3WGSrh0BS9vp3
-         hhPi8jdSSyqaQ==
-Date:   Tue, 22 Aug 2023 15:05:27 +0100
+        s=k20201202; t=1692713174;
+        bh=JCh6BoCIOxePO8zZIr/FO/CERnc7ZRYHEz9dpM/Qpg4=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+        b=gtfQ2eW31f6EPU9vC6jaCRN6ETmWtVfR2JPeox/XV6bFDROD9T8s41V0GwPsdAem6
+         7LDDumT9QjrJcQxARUyWQrdQ8r2+ycpGiVtD9zW3j1SpgBIAdcfjlrnB5t078QEBJ/
+         DD4Xmy3gAmUpRwzV8Ub8mq5ZUD9oQF9PMPUQaf+wL1MnA7IXwexTme3IzgczB1tiTb
+         ksrN+PpzLSpiSCNVo4IchLh16Xn+sbaI3igTa9UuBzQiWj7FjIxDIc0+1YhWosYP8D
+         J6SXnLIBasAt6auBVfvnhR6k6LIrvw5dKo7urlKjiztwctP+QP9e2gd0bukiQOSW/e
+         H582JM0FJVAqQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     "Ricardo B. Marliere" <rbmarliere@gmail.com>
-Cc:     skhan@linuxfoundation.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests: alsa: make LDLIBS consistent
-Message-ID: <2fd85cbe-9909-4200-be38-450d4c57425b@sirena.org.uk>
-References: <20230822131544.38152-1-rbmarliere@gmail.com>
+Date:   Tue, 22 Aug 2023 14:57:03 +0100
+Subject: [PATCH v5 30/37] kselftest/arm64: Allow signals tests to specify
+ an expected si_code
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="YnYJW5zIJUoht6iF"
-Content-Disposition: inline
-In-Reply-To: <20230822131544.38152-1-rbmarliere@gmail.com>
-X-Cookie: MIT:
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230822-arm64-gcs-v5-30-9ef181dd6324@kernel.org>
+References: <20230822-arm64-gcs-v5-0-9ef181dd6324@kernel.org>
+In-Reply-To: <20230822-arm64-gcs-v5-0-9ef181dd6324@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+        Deepak Gupta <debug@rivosinc.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
+Cc:     "H.J. Lu" <hjl.tools@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.13-dev-034f2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2627; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=JCh6BoCIOxePO8zZIr/FO/CERnc7ZRYHEz9dpM/Qpg4=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBk5MAHcjsNO7smB/74EiLS77FhppKM7afGt2YS6K5l
+ nBpEcyaJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZOTABwAKCRAk1otyXVSH0OtxB/
+ 4jPEVKdIAA0EEkMwF/8Q0alre/8aJFx1dJApbT94iIbPK0Y4+ycUhtoft7gWrnvejV/z1RAHs+lpww
+ xZNxzxjleB1SeaTkhxO0iU5fieOPtAeMQZNkZCIAqM/LttFE3qr5bqvbLVqp0a9kADY1UcsSurmssy
+ hDnQRZtJ8fbUNg7WzFAMkDvUqMwPkJnBHyduNhextwpvEXcDcrFoUGUb3Yj0qVbXqmrN+Jfx1oreqs
+ y79wUbM4DcNg6qdoOPdeF0qSMk3mPWa0J+vornvymgF44G3A7Z0TfmyGnJt7El3KWQTFtyEShTbFOH
+ 3fkRz7gP+qwymWNRCDfIDUHfizUtAq
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Currently we ignore si_code unless the expected signal is a SIGSEGV, in
+which case we enforce it being SEGV_ACCERR. Allow test cases to specify
+exactly which si_code should be generated so we can validate this, and
+test for other segfault codes.
 
---YnYJW5zIJUoht6iF
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ .../testing/selftests/arm64/signal/test_signals.h  |  4 +++
+ .../selftests/arm64/signal/test_signals_utils.c    | 29 ++++++++++++++--------
+ 2 files changed, 23 insertions(+), 10 deletions(-)
 
-On Tue, Aug 22, 2023 at 10:15:45AM -0300, Ricardo B. Marliere wrote:
+diff --git a/tools/testing/selftests/arm64/signal/test_signals.h b/tools/testing/selftests/arm64/signal/test_signals.h
+index 7ada43688c02..ee75a2c25ce7 100644
+--- a/tools/testing/selftests/arm64/signal/test_signals.h
++++ b/tools/testing/selftests/arm64/signal/test_signals.h
+@@ -71,6 +71,10 @@ struct tdescr {
+ 	 * Zero when no signal is expected on success
+ 	 */
+ 	int			sig_ok;
++	/*
++	 * expected si_code for sig_ok, or 0 to not check
++	 */
++	int			sig_ok_code;
+ 	/* signum expected on unsupported CPU features. */
+ 	int			sig_unsupp;
+ 	/* a timeout in second for test completion */
+diff --git a/tools/testing/selftests/arm64/signal/test_signals_utils.c b/tools/testing/selftests/arm64/signal/test_signals_utils.c
+index 89ef95c1af0e..63deca32b0df 100644
+--- a/tools/testing/selftests/arm64/signal/test_signals_utils.c
++++ b/tools/testing/selftests/arm64/signal/test_signals_utils.c
+@@ -143,16 +143,25 @@ static bool handle_signal_ok(struct tdescr *td,
+ 			"current->token ZEROED...test is probably broken!\n");
+ 		abort();
+ 	}
+-	/*
+-	 * Trying to narrow down the SEGV to the ones generated by Kernel itself
+-	 * via arm64_notify_segfault(). This is a best-effort check anyway, and
+-	 * the si_code check may need to change if this aspect of the kernel
+-	 * ABI changes.
+-	 */
+-	if (td->sig_ok == SIGSEGV && si->si_code != SEGV_ACCERR) {
+-		fprintf(stdout,
+-			"si_code != SEGV_ACCERR...test is probably broken!\n");
+-		abort();
++	if (td->sig_ok_code) {
++		if (si->si_code != td->sig_ok_code) {
++			fprintf(stdout, "si_code is %d not %d\n",
++				si->si_code, td->sig_ok_code);
++			abort();
++		}
++	} else {
++		/*
++		 * Trying to narrow down the SEGV to the ones
++		 * generated by Kernel itself via
++		 * arm64_notify_segfault(). This is a best-effort
++		 * check anyway, and the si_code check may need to
++		 * change if this aspect of the kernel ABI changes.
++		 */
++		if (td->sig_ok == SIGSEGV && si->si_code != SEGV_ACCERR) {
++			fprintf(stdout,
++				"si_code != SEGV_ACCERR...test is probably broken!\n");
++			abort();
++		}
+ 	}
+ 	td->pass = 1;
+ 	/*
 
-> In kselftest_deps.sh script, the level 3 parser is broken for the alsa
-> subsystem Makefile.
+-- 
+2.30.2
 
->  CFLAGS += $(shell pkg-config --cflags alsa)
-> -LDLIBS += $(shell pkg-config --libs alsa)
-> -ifeq ($(LDLIBS),)
-> -LDLIBS += -lasound
-> +VAR_LDLIBS += $(shell pkg-config --libs alsa)
-> +ifeq ($(VAR_LDLIBS),)
-> +VAR_LDLIBS += -lasound
-
-This seems like an undocumented bodge for whatever limitation the
-checker script has.  If nothing else someone might come along later and
-switch back to using the standard variable name, and TBH it does feel
-like it'd be better to teach the checker to understand the pkg-config
-idiom here.
-
---YnYJW5zIJUoht6iF
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTkwKYACgkQJNaLcl1U
-h9C/mAf/dy7AeSeT+7PvbyRWCvx9XCNcPEx+JDgZvbkKkU/DDfSUXKjRAvl0bIlp
-TSb4eNOmHbp42ttNfU7tV26sG4o/1zYoNuXBLJiHWAjZtEJQHIPyjieLSOdKRhAr
-NxTDSk6Swmq9ja5qCy/2JQxjpafjn2PydtFN5jWnICunvzg9lsqlUT4oe7cUeR7g
-j9w+8iGRmmDNt1VMz5YERDNY9QO9IE6bGyWUazjXXEklPEQ8LFxn8JfPnrn6hG3K
-J1zVyFhW581rcXKtwFi3lWQGKVpv/B3v3o0Q3pEvqRBpv+NmGlSExhAdxe8btNvD
-KhJHx/F806ENSlx9Q0VMpS3SoCvJBA==
-=FABK
------END PGP SIGNATURE-----
-
---YnYJW5zIJUoht6iF--
