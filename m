@@ -2,295 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B3AFC6FA8F
-	for <linux-kselftest@archiver.kernel.org>; Thu, 24 Aug 2023 14:34:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DCAAC7EE43
+	for <linux-kselftest@archiver.kernel.org>; Thu, 24 Aug 2023 15:44:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238387AbjHXOdp (ORCPT
+        id S242274AbjHXPnv (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 24 Aug 2023 10:33:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45592 "EHLO
+        Thu, 24 Aug 2023 11:43:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240251AbjHXOdP (ORCPT
+        with ESMTP id S242167AbjHXPnj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 24 Aug 2023 10:33:15 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 483271BE;
-        Thu, 24 Aug 2023 07:33:13 -0700 (PDT)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 37OBiqaV023544;
-        Thu, 24 Aug 2023 09:31:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=
-        from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding:content-type; s=
-        PODMain02222019; bh=1ecAzTTgRFxOlByV7wi+Nk1UaCCQVNJNqnvAOANu3Pc=; b=
-        luc97vUigU33Ncepo/uD6U+21wRb+YDbW2MP8lk29vhEmuuAenHaOSTnHf6IBTdr
-        J1VPfAFf0rDTV6MJRX+GxDes1NRRbSaR+aRQ8mDn9BlfRVGkvCcYY9u+MpdfgRkA
-        bi9ZdEU99p7hdmQqRESRboxzVmPl0ZEWGj1bplCI/gQb4yIbH1DMAb2Zj7JFS4zJ
-        v2luCSKHp9zUaRXEdv0F3C1VXtOwg+MLjoEEBwtMl77rA1R36k/yfLVW4xwHkFaJ
-        ER1+GX3MvfwhVQ1TAF/0oMEV6J9lnPeXOQYaPGPd9vsI8zuWAa5lnch0KNQieVfJ
-        +4Nd/Bw1MPsSGsDOWk4SUQ==
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3sp1w8geq3-5
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 24 Aug 2023 09:31:34 -0500 (CDT)
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Thu, 24 Aug
- 2023 15:31:30 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.30 via Frontend Transport; Thu, 24 Aug 2023 15:31:30 +0100
-Received: from edi-sw-dsktp-006.ad.cirrus.com (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.75])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 2B7FF46B;
-        Thu, 24 Aug 2023 14:31:30 +0000 (UTC)
-From:   Richard Fitzgerald <rf@opensource.cirrus.com>
-To:     <brendan.higgins@linux.dev>, <davidgow@google.com>,
-        <rmoar@google.com>
-CC:     <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
-        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>,
-        "Richard Fitzgerald" <rf@opensource.cirrus.com>
-Subject: [PATCH v5 08/10] kunit: string-stream: Add tests for freeing resource-managed string_stream
-Date:   Thu, 24 Aug 2023 15:31:27 +0100
-Message-ID: <20230824143129.1957914-9-rf@opensource.cirrus.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230824143129.1957914-1-rf@opensource.cirrus.com>
-References: <20230824143129.1957914-1-rf@opensource.cirrus.com>
+        Thu, 24 Aug 2023 11:43:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6EB11B0;
+        Thu, 24 Aug 2023 08:43:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8479E672AF;
+        Thu, 24 Aug 2023 15:43:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D722EC433C8;
+        Thu, 24 Aug 2023 15:43:23 +0000 (UTC)
+Date:   Thu, 24 Aug 2023 16:43:19 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+        Deepak Gupta <debug@rivosinc.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        "H.J. Lu" <hjl.tools@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v4 03/36] arm64/gcs: Document the ABI for Guarded Control
+ Stacks
+Message-ID: <ZOd6lzj29VksAp7L@arm.com>
+References: <f4cec4b3-c386-4873-aa1d-90528e062f2a@sirena.org.uk>
+ <ZN+qki9EaZ6f9XNi@arm.com>
+ <aaea542c-929c-4c9b-8caa-ca67e0eb9c1e@sirena.org.uk>
+ <ZOTnL1SDJWZjHPUW@arm.com>
+ <43ec219d-bf20-47b8-a5f8-32bc3b64d487@sirena.org.uk>
+ <ZOXa98SqwYPwxzNP@arm.com>
+ <227e6552-353c-40a9-86c1-280587a40e3c@sirena.org.uk>
+ <ZOY3lz+Zyhd5ZyQ9@arm.com>
+ <ZOZEmO6WGyVAcOqK@arm.com>
+ <ef7272d2-d807-428f-9915-6fc9febadb5c@sirena.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: mTKF2H5FQLoUs9yJM53hlDVgCVMV2QKm
-X-Proofpoint-ORIG-GUID: mTKF2H5FQLoUs9yJM53hlDVgCVMV2QKm
-X-Proofpoint-Spam-Reason: safe
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ef7272d2-d807-428f-9915-6fc9febadb5c@sirena.org.uk>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-string_stream_managed_free_test() allocates a resource-managed
-string_stream and tests that kunit_free_string_stream() calls
-string_stream_destroy().
+On Wed, Aug 23, 2023 at 07:16:52PM +0100, Mark Brown wrote:
+> On Wed, Aug 23, 2023 at 06:40:40PM +0100, Szabolcs Nagy wrote:
+> > i don't know if we can allow disabled gcs thread creation with locked
+> > gcs state. (i can see arguments both ways, so further prctl flag may
+> > be needed which may be another divergence from x86)
+> 
+> I think that if we do add a new flag that'd just be new functionality,
+> the divergence would be in allowing configuration via clone3() rather
+> than the flag.  TBH I'm not sure I see a use case for locking but
+> providing a mechanism for getting out of the lock, that seems very
+> questionable.
 
-string_stream_resource_free_test() allocates a resource-managed
-string_stream and tests that string_stream_destroy() is called
-when the test resources are cleaned up.
+You are right, once the configuration is locked a plain clone() or
+clone3() without a GCS pointer should be rejected.
 
-The old string_stream_init_test() has been split into two tests,
-one for kunit_alloc_string_stream() and the other for
-alloc_string_stream().
+Is there a use-case for the unlocked configuration to allow disabling
+the GCS implicitly via a clone syscall?
 
-Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
----
-Changes since V4:
-- Added test case for kunit_free_string_stream().
-- Split the initialization test into separate tests for managed and
-  unmanaged allocations.
----
- lib/kunit/string-stream-test.c | 135 ++++++++++++++++++++++++++++++++-
- lib/kunit/string-stream.c      |   3 +
- 2 files changed, 134 insertions(+), 4 deletions(-)
+If we go for extending clone3, I wonder whether we should also introduce
+a sigaltstack2/3 ;). I haven't checked what the current patches do and
+won't have time until early September (on holiday from the end of today).
 
-diff --git a/lib/kunit/string-stream-test.c b/lib/kunit/string-stream-test.c
-index 45a2d221f1b5..6897c57e0db7 100644
---- a/lib/kunit/string-stream-test.c
-+++ b/lib/kunit/string-stream-test.c
-@@ -6,11 +6,25 @@
-  * Author: Brendan Higgins <brendanhiggins@google.com>
-  */
- 
-+#include <kunit/static_stub.h>
- #include <kunit/test.h>
- #include <linux/slab.h>
- 
- #include "string-stream.h"
- 
-+struct string_stream_test_priv {
-+	/* For testing resource-managed free. */
-+	struct string_stream *freed_stream;
-+	bool stream_free_again;
-+};
-+
-+static void cleanup_raw_stream(void *p)
-+{
-+	struct string_stream *stream = p;
-+
-+	string_stream_destroy(stream);
-+}
-+
- static char *get_concatenated_string(struct kunit *test, struct string_stream *stream)
- {
- 	char *str = string_stream_get_string(stream);
-@@ -21,11 +35,12 @@ static char *get_concatenated_string(struct kunit *test, struct string_stream *s
- 	return str;
- }
- 
--/* string_stream object is initialized correctly. */
--static void string_stream_init_test(struct kunit *test)
-+/* Managed string_stream object is initialized correctly. */
-+static void string_stream_managed_init_test(struct kunit *test)
- {
- 	struct string_stream *stream;
- 
-+	/* Resource-managed initialization. */
- 	stream = kunit_alloc_string_stream(test, GFP_KERNEL);
- 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream);
- 
-@@ -37,6 +52,101 @@ static void string_stream_init_test(struct kunit *test)
- 	KUNIT_EXPECT_TRUE(test, string_stream_is_empty(stream));
- }
- 
-+/* Unmanaged string_stream object is initialized correctly. */
-+static void string_stream_unmanaged_init_test(struct kunit *test)
-+{
-+	struct string_stream *stream;
-+
-+	stream = alloc_string_stream(GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream);
-+	kunit_add_action(test, cleanup_raw_stream, stream);
-+
-+	KUNIT_EXPECT_EQ(test, stream->length, 0);
-+	KUNIT_EXPECT_TRUE(test, list_empty(&stream->fragments));
-+	KUNIT_EXPECT_EQ(test, stream->gfp, GFP_KERNEL);
-+	KUNIT_EXPECT_FALSE(test, stream->append_newlines);
-+
-+	KUNIT_EXPECT_TRUE(test, string_stream_is_empty(stream));
-+}
-+
-+static void string_stream_destroy_stub(struct string_stream *stream)
-+{
-+	struct kunit *fake_test = kunit_get_current_test();
-+	struct string_stream_test_priv *priv = fake_test->priv;
-+
-+	if (priv->freed_stream)
-+		priv->stream_free_again = true;
-+
-+	priv->freed_stream = stream;
-+
-+	/*
-+	 * Avoid calling deactivate_static_stub() or changing
-+	 * current->kunit_test during cleanup. Leave the stream to
-+	 * be freed during the test exit.
-+	 */
-+}
-+
-+/* kunit_free_string_stream() calls string_stream_desrtoy() */
-+static void string_stream_managed_free_test(struct kunit *test)
-+{
-+	struct string_stream_test_priv *priv = test->priv;
-+	struct string_stream *stream;
-+
-+	priv->freed_stream = NULL;
-+	priv->stream_free_again = false;
-+	kunit_activate_static_stub(test,
-+				   string_stream_destroy,
-+				   string_stream_destroy_stub);
-+
-+	stream = kunit_alloc_string_stream(test, GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream);
-+
-+	/* This should call the stub function. */
-+	kunit_free_string_stream(test, stream);
-+
-+	KUNIT_EXPECT_PTR_EQ(test, priv->freed_stream, stream);
-+	KUNIT_EXPECT_FALSE(test, priv->stream_free_again);
-+}
-+
-+/* string_stream object is freed when test is cleaned up. */
-+static void string_stream_resource_free_test(struct kunit *test)
-+{
-+	struct string_stream_test_priv *priv = test->priv;
-+	struct kunit *fake_test;
-+	struct string_stream *stream;
-+
-+	fake_test = kunit_kzalloc(test, sizeof(*fake_test), GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, fake_test);
-+
-+	kunit_init_test(fake_test, "string_stream_fake_test", NULL);
-+	fake_test->priv = priv;
-+
-+	/*
-+	 * Activate stub before creating string_stream so the
-+	 * string_stream will be cleaned up first.
-+	 */
-+	priv->freed_stream = NULL;
-+	priv->stream_free_again = false;
-+	kunit_activate_static_stub(fake_test,
-+				   string_stream_destroy,
-+				   string_stream_destroy_stub);
-+
-+	stream = kunit_alloc_string_stream(fake_test, GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream);
-+
-+	/* Set current->kunit_test to fake_test so the static stub will be called. */
-+	current->kunit_test = fake_test;
-+
-+	/* Cleanup test - the stub function should be called */
-+	kunit_cleanup(fake_test);
-+
-+	/* Set current->kunit_test back to current test. */
-+	current->kunit_test = test;
-+
-+	KUNIT_EXPECT_PTR_EQ(test, priv->freed_stream, stream);
-+	KUNIT_EXPECT_FALSE(test, priv->stream_free_again);
-+}
-+
- /*
-  * Add a series of lines to a string_stream. Check that all lines
-  * appear in the correct order and no characters are dropped.
-@@ -327,8 +437,24 @@ static void string_stream_auto_newline_test(struct kunit *test)
- 			   "One\nTwo\nThree\nFour\nFive\nSix\nSeven\n\nEight\n");
- }
- 
-+static int string_stream_test_init(struct kunit *test)
-+{
-+	struct string_stream_test_priv *priv;
-+
-+	priv = kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	test->priv = priv;
-+
-+	return 0;
-+}
-+
- static struct kunit_case string_stream_test_cases[] = {
--	KUNIT_CASE(string_stream_init_test),
-+	KUNIT_CASE(string_stream_managed_init_test),
-+	KUNIT_CASE(string_stream_unmanaged_init_test),
-+	KUNIT_CASE(string_stream_managed_free_test),
-+	KUNIT_CASE(string_stream_resource_free_test),
- 	KUNIT_CASE(string_stream_line_add_test),
- 	KUNIT_CASE(string_stream_variable_length_line_test),
- 	KUNIT_CASE(string_stream_append_test),
-@@ -341,6 +467,7 @@ static struct kunit_case string_stream_test_cases[] = {
- 
- static struct kunit_suite string_stream_test_suite = {
- 	.name = "string-stream-test",
--	.test_cases = string_stream_test_cases
-+	.test_cases = string_stream_test_cases,
-+	.init = string_stream_test_init,
- };
- kunit_test_suites(&string_stream_test_suite);
-diff --git a/lib/kunit/string-stream.c b/lib/kunit/string-stream.c
-index c39f1cba3bcd..d2ded5207e9e 100644
---- a/lib/kunit/string-stream.c
-+++ b/lib/kunit/string-stream.c
-@@ -6,6 +6,7 @@
-  * Author: Brendan Higgins <brendanhiggins@google.com>
-  */
- 
-+#include <kunit/static_stub.h>
- #include <kunit/test.h>
- #include <linux/list.h>
- #include <linux/slab.h>
-@@ -170,6 +171,8 @@ struct string_stream *alloc_string_stream(gfp_t gfp)
- 
- void string_stream_destroy(struct string_stream *stream)
- {
-+	KUNIT_STATIC_STUB_REDIRECT(string_stream_destroy, stream);
-+
- 	if (!stream)
- 		return;
- 
 -- 
-2.30.2
-
+Catalin
