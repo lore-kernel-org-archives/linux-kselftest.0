@@ -2,186 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 832CCC71133
-	for <linux-kselftest@archiver.kernel.org>; Fri, 25 Aug 2023 08:38:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 20FF4C3DA66
+	for <linux-kselftest@archiver.kernel.org>; Fri, 25 Aug 2023 09:09:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240951AbjHYIhw (ORCPT
+        id S231379AbjHYJJN (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 25 Aug 2023 04:37:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42674 "EHLO
+        Fri, 25 Aug 2023 05:09:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243785AbjHYIhh (ORCPT
+        with ESMTP id S244111AbjHYJIk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Aug 2023 04:37:37 -0400
-X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 25 Aug 2023 01:37:30 PDT
-Received: from esa19.fujitsucc.c3s2.iphmx.com (esa19.fujitsucc.c3s2.iphmx.com [216.71.158.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 002551FF9
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Aug 2023 01:37:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj1;
-  t=1692952651; x=1724488651;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=yM3Y3XnkoB1Ur/qbUGfNGOn1Az9b7OEd+uoFz42mw1k=;
-  b=Zrr1Mjh+KR1XXr3FU3o6mpDNuGyDlGkApF8N9szUNqEXSLNPKj1N7Tpv
-   uZIShR9GZz9p+yfqiXVfahaYBL4EZJDhqCjikZELFNKM+NGIGWuEZKE0W
-   Y4phnkHbEDCWPISjkjqs/1NOIBbo8xV4fkRV+i4nPqwG1Rc2xRY6si+17
-   ghpPa+dWRwe3u1QHSVFgGzxHLEaShWbsIWIJ3tSkWayOJ1y7Px5fbsJPi
-   JjW9gFmhkWFX/Jie2OvskD1TCFrDlGZA5FPP1ZxNkkQvDbgSYyg1U2jEQ
-   1gWVjamAP4Kv2Uh4BlZvfHKibx2cJti/mvowNCPqW3aHjWOUcCcfZ3BRB
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10812"; a="92712441"
-X-IronPort-AV: E=Sophos;i="6.02,195,1688396400"; 
-   d="scan'208";a="92712441"
-Received: from mail-os0jpn01lp2109.outbound.protection.outlook.com (HELO JPN01-OS0-obe.outbound.protection.outlook.com) ([104.47.23.109])
-  by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2023 17:36:23 +0900
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oJx1g+QxusAj8hF71soUwqLgA3P5OOwxgK9Ce9mocDnQdxwjLU7n3poUYteANakNwmFEvjimtc/cDvk4/kWUQo6O+45B/TN7i1EMk9YJqcIBY0Gmc/6tKBepPUyxI03yg56zuM1IHLZoCayJoD0QKBkECfL29PU2jqswOG9TW1xpXgu5zSGQcsGwpw73LhsuKt1ul0CVEJnrZ58IByCYInL3CU9nVlq9+5nTJ0GonJ53b+NCg0hw8PY2CqgQoSrAq/U89ocLshakvkeKLoAyHkqkSNmcxexuKjh7+SEl0J6+EBUwknlm4iyDSBMseEyX0XKb/Oo2ZzSOoEUvM/UEpQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yM3Y3XnkoB1Ur/qbUGfNGOn1Az9b7OEd+uoFz42mw1k=;
- b=kUhgU2QkSn8lRe0hZ/scx72yOetaKaIeXbSToBeaeSe0za5NJZCQOccCOjj8C9mLfTRjfXYiua2teQ675GAXFTJAf1JsO52kp4tt45i6f1FmoKliqWyBuAhSxnhXulphLNUc9AbgLxcnMT2k7AZxYKY8LQGJ1YKQ6H8TafKQWRx2QSRtlq1LDyxiqiBl0/rbh4ZE4CzXmsyCgg6dHeD9BsaZy8h3Hwk7/VvkMO+dGWJcnedzMeVB+7MaIZUUrmmah7IeXyuPg0VGCSi3wXFKdzyNOYrXNqrxIlbwGIhtkS7YC2jWyyr1I8mFHwIayEe3OA1t1VCAFoKpsWRxLYIIyQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fujitsu.com; dmarc=pass action=none header.from=fujitsu.com;
- dkim=pass header.d=fujitsu.com; arc=none
-Received: from TYAPR01MB6330.jpnprd01.prod.outlook.com (2603:1096:402:3e::12)
- by TYVPR01MB10780.jpnprd01.prod.outlook.com (2603:1096:400:2ad::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.29; Fri, 25 Aug
- 2023 08:36:19 +0000
-Received: from TYAPR01MB6330.jpnprd01.prod.outlook.com
- ([fe80::59bd:366a:131b:3f26]) by TYAPR01MB6330.jpnprd01.prod.outlook.com
- ([fe80::59bd:366a:131b:3f26%3]) with mapi id 15.20.6699.028; Fri, 25 Aug 2023
- 08:36:19 +0000
-From:   "Shaopeng Tan (Fujitsu)" <tan.shaopeng@fujitsu.com>
-To:     =?utf-8?B?J0lscG8gSsOkcnZpbmVuJw==?= 
-        <ilpo.jarvinen@linux.intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-CC:     Fenghua Yu <fenghua.yu@intel.com>, Babu Moger <babu.moger@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v3 0/7] selftests/resctrl: Rework benchmark command
- handling
-Thread-Topic: [PATCH v3 0/7] selftests/resctrl: Rework benchmark command
- handling
-Thread-Index: AQHZ1cQCNwslrA8IOkaCtYhsBIOTlq/6r3Fw
-Date:   Fri, 25 Aug 2023 08:36:19 +0000
-Message-ID: <TYAPR01MB633016A1769EEF44D79351BD8BE3A@TYAPR01MB6330.jpnprd01.prod.outlook.com>
-References: <20230823131556.27617-1-ilpo.jarvinen@linux.intel.com>
-In-Reply-To: <20230823131556.27617-1-ilpo.jarvinen@linux.intel.com>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: =?utf-8?B?TVNJUF9MYWJlbF9hNzI5NWNjMS1kMjc5LTQyYWMtYWI0ZC0zYjBmNGZlY2Uw?=
- =?utf-8?B?NTBfQWN0aW9uSWQ9ODBkNjdhOGEtMTY2YS00ZDNiLThjMzQtYTc0ZmYwYjc1?=
- =?utf-8?B?M2Q1O01TSVBfTGFiZWxfYTcyOTVjYzEtZDI3OS00MmFjLWFiNGQtM2IwZjRm?=
- =?utf-8?B?ZWNlMDUwX0NvbnRlbnRCaXRzPTA7TVNJUF9MYWJlbF9hNzI5NWNjMS1kMjc5?=
- =?utf-8?B?LTQyYWMtYWI0ZC0zYjBmNGZlY2UwNTBfRW5hYmxlZD10cnVlO01TSVBfTGFi?=
- =?utf-8?B?ZWxfYTcyOTVjYzEtZDI3OS00MmFjLWFiNGQtM2IwZjRmZWNlMDUwX01ldGhv?=
- =?utf-8?B?ZD1TdGFuZGFyZDtNU0lQX0xhYmVsX2E3Mjk1Y2MxLWQyNzktNDJhYy1hYjRk?=
- =?utf-8?B?LTNiMGY0ZmVjZTA1MF9OYW1lPUZVSklUU1UtUkVTVFJJQ1RFRO+/ou++gA==?=
- =?utf-8?B?776LO01TSVBfTGFiZWxfYTcyOTVjYzEtZDI3OS00MmFjLWFiNGQtM2IwZjRm?=
- =?utf-8?B?ZWNlMDUwX1NldERhdGU9MjAyMy0wOC0yNVQwODoyMzo1NVo7TVNJUF9MYWJl?=
- =?utf-8?B?bF9hNzI5NWNjMS1kMjc5LTQyYWMtYWI0ZC0zYjBmNGZlY2UwNTBfU2l0ZUlk?=
- =?utf-8?Q?=3Da19f121d-81e1-4858-a9d8-736e267fd4c7;?=
-x-shieldmailcheckerpolicyversion: FJ-ISEC-20181130-VDI-enc
-x-shieldmailcheckermailid: 6fb79273c2484446a322a14be1722901
-x-securitypolicycheck: OK by SHieldMailChecker v2.6.2
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=fujitsu.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TYAPR01MB6330:EE_|TYVPR01MB10780:EE_
-x-ms-office365-filtering-correlation-id: 64810dbd-cc29-4e61-e873-08dba5465b14
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 5FCfgqE/LE8tjhYHp1esem11zCcrpFY705duyxPUIyNU41BzKkPZpJsyeRaHPWOzUaCjtvclCLYaN8NDeWbdIMO+PPEn2HlEbn+RqreLhxQcMmXyb1trP0l1mYPZFu1FEHVN02n672B59OQ5/pq2QHBTSpEI4MnBfep9+WHNzLr+ZmAjq2lNRUUjbfVcUsD5uXlwx7a1tl3Npkk8xB7cQ4hh5j27F3djm/mQ2RsBqOGxWThrjyKQFaI4Vc65az9U+SHGp0CDllrAo3HAfhWIRM7NRKSJKxmXMEp/xC81sMnHyMhIzrAjLebxY/bXzGuBvF3uLglXvIS8wzpCDmXOfxZ8imfFGf67GxwDXPIhwJ23Zneq68fA/QKo/oKeJH/l6dS9XgC0n4LD1uQW8ZkPl3H/qWRJPHBAcUxOHYQXEGIDaVG5p59EzcuHroB1ZL07GwvlEbsxesKaa07WjW+EhD7xIgFgBTPPinXDgObIapeyKbMj8rVBspOxQqA39ajm7RorjvGm7sOlJ0OBNN0y6JgGudbX+PStY4Gv87JenjDO/MxoxVOZDdP1Z48krkvc1fCznnxnZgQ8Gke4qT0dw9S30BrK6F37arhX3VkTABdO/aIZHM/qX/d4ANeV1ItijsSkV2j4abzUIVDG1YklMw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYAPR01MB6330.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(396003)(366004)(376002)(136003)(39860400002)(1800799009)(451199024)(1590799021)(186009)(9686003)(26005)(478600001)(55016003)(5660300002)(52536014)(2906002)(8676002)(8936002)(4326008)(1580799018)(82960400001)(38070700005)(38100700002)(122000001)(66476007)(66556008)(110136005)(66946007)(76116006)(86362001)(71200400001)(41300700001)(85182001)(64756008)(54906003)(6506007)(558084003)(7696005)(66446008)(33656002)(316002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WjkrVlNocGhMNVUwUGxBNlREQ0Vvb1kvVGxVRHFBQmhaKzdxZnNkdDZVMVdO?=
- =?utf-8?B?aUE0N09oYWp6RDNwd2ZZNkJwK1BtYk90RjByZ3YwV2VMOVpuQUowQ0RPekQz?=
- =?utf-8?B?TW9GNXRCd2NQV3dzQ0NTWFdHcWZkUW82eXVEckJxWHNRaC9VdWljd0lTdVda?=
- =?utf-8?B?OGtGcFVMQjhoV1NMNXdvNVU0M2x6cGxUR2M5YVhDY2llYnh0L2hldDR1Skd3?=
- =?utf-8?B?aTF4VkQ3U1k3cXJmTFNDUWNFMkFNUXZnY3Z3ZmVCbTU0ckFoeGR3WU15ZjBR?=
- =?utf-8?B?Y3luajBIZmFjSUwwMjZUQ1BPTE1OVzZ5VzYrZlBtUmNCVDlYRU8zakxtNG03?=
- =?utf-8?B?eUJsb3hWWVR5V2Zmd2tiMVpmZWk2Z2loUVR0cVZWZ3VCdlhldUg3am03R2dT?=
- =?utf-8?B?Qlc0YXg0eG42ZU9QdHkwVkE3ZEVLdWthek9Wb1l2UlhQTUVTS0FrNFJhc1lO?=
- =?utf-8?B?dldlN09ITWkza1AyaW1iWTNBbWZrSGRzeFV1MzBNaTBqdEZRSCswZkN2V2da?=
- =?utf-8?B?dWVucGp3SDRmbTBla0wrV285WmY5TWR6T2dwVEZsbVg5ektNSHBYZHFKcUxw?=
- =?utf-8?B?RCtZenRXSnpma2xmS3Y4U1V2SC95SVpCZVFEVnMveWxVOUZBVzN5RU9ab0FQ?=
- =?utf-8?B?NTNGVFRnRkc5VmhEajFQNzRrdHV5aFdMZXF5SDhtbTQyZTBVTTNrUmZBRWJh?=
- =?utf-8?B?VnIycjh2b29IZHp5a0loRy9ScmtwdDBKckxSTHVNZ2w1clFmZkZhVGx6NlZ0?=
- =?utf-8?B?WlFNRGE1SmdFRnFCMTgyOVNSUHZURXV5ZGNnSzV4eDRuak1xc3BqMHl4Mi8z?=
- =?utf-8?B?UmlpRnBhUmZ6Vm5xbkFuZFBFNWY0cVVDdXAwOVlmNXRwTW5TU0J6d1BmYVN5?=
- =?utf-8?B?Ykp1TUgxUlFGZisxWW1RK2E4amhJU2Robi9LZUtpbEFVMUVYRXRrZFlCRE5k?=
- =?utf-8?B?b1FaNStnSHVPUXBZZ0Qvakgrck5OSjFLaDMyZXdIS0x0Zk92cXRtVXBubzZ4?=
- =?utf-8?B?bTh4L3RLWGc1c2hhek5HMXYycWJaaUEwYTVFcWNtOWdWQjN0dGVJN1k0SU4v?=
- =?utf-8?B?ckR4YWxaaGJXTzI4emNZRDhhdW9oYkhNRXlsZHg2Ni94SnQ2T1ZSQXNhWWN6?=
- =?utf-8?B?akdqK0dibFJZNTh3N01JRlpGbjV0L3B3L21EbE5kRlM5NWlFbXZsdzhva2Q5?=
- =?utf-8?B?MWVBVHcxVFBSbGRkRWtTQXZrUms2QmgrVWRaV2lGNmpKUkUrOVZId2RURkFG?=
- =?utf-8?B?dEZiNlR6NFE5MW9peHZFNFFOWGRLK0VvUWZSd0V6c3FYTUtOa2o3Z0N4RnY5?=
- =?utf-8?B?TUg4NEJzbUVqdjF5S1lNaVdRSnJodUdWZklmS3JqWGpMN0E2UzF5YVg3VGRx?=
- =?utf-8?B?WFlnVWtiUlpibmJaNk1uSWJra2grTjBmRHQ0bWhTNit6dGxVMUxFbFFmclo3?=
- =?utf-8?B?ZjVXZE5xZHZyUGYxdk00VkxiVVM0ZEFKZXdYWGYzbDJHT2FZcTdNMHpRVFZv?=
- =?utf-8?B?RWUwVHo0QVFQZzFNZ3M0RzgxMWV4V0E5N1ZiVFVrczdlNEdIT0kxNHNkKzJU?=
- =?utf-8?B?QmdleGdGS3FQYTA4RldETkZteTVvWTl5VEpDSVp6OERZVHlnZ0dqdlA4VFRU?=
- =?utf-8?B?SndFd21nVHV4cUFhV01SWDZiVnlSaWcvOS9XSXBMM0R4WXRXSDlKUVVTdGZz?=
- =?utf-8?B?MGtLTVlQZ0tIM3haaTNhRks4cUVXOWZVY05CKzdUQTBVZm9pazd0RnArZWJt?=
- =?utf-8?B?WDRnTHlQaCtVcGxudnRSbFYreENKekdRQ3NIUVBzdVNIbjRYaGZ6RE5mZ0wz?=
- =?utf-8?B?bU5oV0g3Z3VyMGNiYzZ2VHEzMjJvR0kxQlhVbUdEZ3ZFZ0ZxRERFbVVyZHFN?=
- =?utf-8?B?WG53ZTVMWU9NYzVadGovMHl3aHFzMWw4dFArYjRNSnlETkNnc0xJZWhVVWNB?=
- =?utf-8?B?S2lscjZLKzJROW1kNW9RemluQVpLNkR2Mi9uNEpKMitIOUF4U1FDd0RiNUxD?=
- =?utf-8?B?Y0JrNUJ5eGkxeUhic2VLd1RUb1lNenZHdk9jSGFCUzNvaWZsL24wZEg2ektZ?=
- =?utf-8?B?bFRxUE15bEYzc1M5MUJmaE80TDZJZVgycXZHZzI0blBzSWNzcHViMjAxOUcr?=
- =?utf-8?B?aHhDZXFGb1haRWl5TENCdUphMG45Vjk4YVBvanRUOWo0UEZtVlQzTUxLT3cr?=
- =?utf-8?B?d3c9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Fri, 25 Aug 2023 05:08:40 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3AF1FDF;
+        Fri, 25 Aug 2023 02:08:27 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-50043cf2e29so980461e87.2;
+        Fri, 25 Aug 2023 02:08:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692954505; x=1693559305;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XGH+s8GQ40mAY7Hi7ApsqsxBdjwgwNJM3n/9eQfKme0=;
+        b=hBNy8K0NdYE+g2rzEg13gMbP6TT+aNG2JduaqcPrtOdXXPc+jSJY9oDIlffzLUK0yJ
+         lEmIcQv2ws72vXRM5LnszfoKMmnnKoxIhM7f92uW5ykpDzHWA+8h3JydgU/VAGVWOYL8
+         Z8wp7/su8He2W1k+Seig/exREsn5NPCt1MKk57wK6puoslCuO7XJYz/seyYm7NPRU/aW
+         QHwj1YqxUkp5Jg/z8E0jniCKTrszqisZnbn18w+hTNgZtPfN+M7dFbOJpSSHmV6s7Xdq
+         Vx69d4Puk9drw9+rn2NffgaGzyT0cHRjX2JhF8HKSY+RZ727cIeNvQDm2PJsvuOMljgN
+         7uyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692954505; x=1693559305;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XGH+s8GQ40mAY7Hi7ApsqsxBdjwgwNJM3n/9eQfKme0=;
+        b=Tvu5XMdQ5gOSwet6bNcZuWEFEwlGuoZkPLLpkQJ6c/TKai7qe3I8ODnMg0bZgKRgFq
+         LeZjjK7B4HCwar+nx23CZgUfrvMApy3HRLlO1dF3Rl6aGXapkzDDi0n+rbR2N4Rq1IKr
+         9oCbC+2PrSk2IUgqJnG44K0WNlYbnbY5FvRFJB0HaoBKBrybLhEF9IhbJZqwfP+ADTI+
+         Dk1ZwJhs8nnNvsiZYd4hZYSE9DIdVTKCM2lSrUQxzX5hxN5oyps5jszZ/Lwh69kwOi0A
+         WO07CnXmHxMVcqCnju6DGI/iDrgfMbiAxHfZ2t0tWdlxzIQpq5QLoCMjWL/kiJW6gALQ
+         sX4Q==
+X-Gm-Message-State: AOJu0YxRhVCSd4OS6M/Q87W1DzT8X8X4Vd2VoNuom3etoQYN8i8ciD39
+        Zp/R4xBmIW9K/w2htghxj5Y=
+X-Google-Smtp-Source: AGHT+IGlMotjqDaVIjnPhJ0aBiH+sa14MKKRgk9Gr7+xNEBZbFXr0QcZClmRgTXLoibUTxZ/LbxPCw==
+X-Received: by 2002:a05:6512:3b9e:b0:500:9a67:d40e with SMTP id g30-20020a0565123b9e00b005009a67d40emr6058180lfv.60.1692954505226;
+        Fri, 25 Aug 2023 02:08:25 -0700 (PDT)
+Received: from krava (ip-94-113-247-30.net.vodafone.cz. [94.113.247.30])
+        by smtp.gmail.com with ESMTPSA id qo8-20020a170907212800b0099cd008c1a4sm739997ejb.136.2023.08.25.02.08.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Aug 2023 02:08:24 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Fri, 25 Aug 2023 11:08:22 +0200
+To:     Rong Tao <rtoax@foxmail.com>
+Cc:     olsajiri@gmail.com, andrii@kernel.org, ast@kernel.org,
+        bpf@vger.kernel.org, daniel@iogearbox.net, haoluo@google.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        martin.lau@linux.dev, mykolal@fb.com, rongtao@cestc.cn,
+        sdf@google.com, shuah@kernel.org, song@kernel.org,
+        yonghong.song@linux.dev
+Subject: Re: [PATCH bpf-next v6] selftests/bpf: trace_helpers.c: optimize
+ kallsyms cache
+Message-ID: <ZOhvhnUTxtD6YYzl@krava>
+References: <ZOMiqE0QY2Lrw2UC@krava>
+ <tencent_492BE2E81E62BEC199106096C025954AFD06@qq.com>
 MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?SWFGcXZabXdDb3ZsWmN5cmxqblpKMURrajg2a0FNK2pIZkpJZ1ZGL2Vzdjc4?=
- =?utf-8?B?YVlJaTRuZFJyNXNMNDBjUHZMb0FwcmpET0pFOS9xakc1MGJ3UEUxK3JEYkNl?=
- =?utf-8?B?NHFzbzZLMXIraE1hckFpTHBIa01LT1haeHZpVE1YcDVMMHF1aWlzQzJsVEhJ?=
- =?utf-8?B?eDlKd241WURienNjamRzakZaUTVhcGZNS0x3STZCTWZxQnN3RzNPbkFPb3Mv?=
- =?utf-8?B?OXlEV2FVRmJ3ajlzekFBbjl2eDFIRENBcWVWRi8xUW96VmZYMTc4UkJqUEVU?=
- =?utf-8?B?b2xHbHJXUjlZRzh3Nk1FUCtUQmpEZEx2cURmU3ZpaFh4U3E4UmlQcGRlaG9D?=
- =?utf-8?B?WGFBYVcyNUlPNGMycWdPSk9kNGxhSnFFMmprZkNDT250NEVJL3grVDV0d1hS?=
- =?utf-8?B?NEhDQmx4TnRtMmMxc3RmRW83bDJLSHpWb3hacXRQVTB6REhpU3ZqcWdqbkRE?=
- =?utf-8?B?RnMvOHdCb3BtUnpjNDJkSy9mQ3NZM2JCNG1sREZMUk53dS9LREw5dkFBaWE0?=
- =?utf-8?B?OHZocytCOWxwdHZ4b3RnNTRqYzlFVUtaWm02Ky9VY0t2YkQxaUZHZHhkWUpw?=
- =?utf-8?B?SGgvYXQvNC9BSVc1MzNUUnMvQysyZ29ZWU5Mcm84NFZycmVod04xVHZVWGVa?=
- =?utf-8?B?NUdDeHdlWklJOXRnYms0MlNuQWhKbTZqZ1RrZ0hzWUF5U2VpT25hYnpHTktR?=
- =?utf-8?B?TWlPK0RTTHF5RHlGbWRKZEtjcGlydFc3S0o0QUVOZDVnS1E2ZVJvTW8vZXo5?=
- =?utf-8?B?TkUvSVhzTVRDb1QrZzJtaWdnUXFnZFNhMEM1NkU4K2RmdFBnU3JjMWM3R1RK?=
- =?utf-8?B?c2lRbWU3cTdCSzNsY3FIcnpleVRhNHp0d2RySUZ6Y3RpV2JsakhyWldyM2l3?=
- =?utf-8?B?N05uZ2VZaGVPN1dNQUdiLytuSDZEcHBHZlpPbXg0THQwY3hJRUs0N0dwRHEy?=
- =?utf-8?B?VFZGQ0w4by82bWswTHBBdHdSb3NlQ3NOQlFReHBpdDFpQURuMEZWcEIvUE1C?=
- =?utf-8?B?T2phRHZHUWNHaDVlSUVudG9aeWNaZm5aMFV4UmFtaDdlMEdtc2NsUVFxeEM5?=
- =?utf-8?B?b3Y3N3JXSlUwakxaOXN1a3I5bUxuNS93NHc0RWJnMjB2c0t5NEpsdlQ1Rm00?=
- =?utf-8?B?UFFaYXdVVzRlYWl3d3lzcUJLVVkzOXhQNmxVM0dlWjV0SHRFWHV5dGxMa3Z6?=
- =?utf-8?B?bmFRbDZ0ZE1RUFJWTEQ2cTB6VEh2RzNiWExMT0c4QWVLeVcybUZaSjA2endV?=
- =?utf-8?Q?FDZs2eAO237lhS3?=
-X-OriginatorOrg: fujitsu.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYAPR01MB6330.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 64810dbd-cc29-4e61-e873-08dba5465b14
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Aug 2023 08:36:19.6938
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: K/1eLRrJ1AVYTt/aAqf3fPOuV8vSXVpsYGyJ3k9YgJcIF0pm1visyMNXj8iF/aY5/XnwN7F1uopghAi7b2jSH2VqEdoBp3K2f2+RkaqGgAQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYVPR01MB10780
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <tencent_492BE2E81E62BEC199106096C025954AFD06@qq.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-SGVsbG8gSWxwbywNCg0KSSByZXZpZXdlZCBhbmQgdGVzdGVkIHRoaXMgcGF0Y2ggc2VyaWVzLCBp
-dCBsb29rcyBmaW5lLg0KDQo8UmV2aWV3ZWQtYnk6dGFuLnNoYW9wZW5nQGpwLmZ1aml0c3UuY29t
-Pg0KPFRlc3RlZC1ieTp0YW4uc2hhb3BlbmdAanAuZnVqaXRzdS5jb20+DQoNCkJlc3QgcmVnYXJk
-cywNClNoYW9wZW5nIFRBTg0K
+On Tue, Aug 22, 2023 at 08:38:58AM +0800, Rong Tao wrote:
+> > I think you need to fix this on samples/bpf side
+> > 
+> > I tried to play with the samples/bpf/ includes, but couldn't find a way to
+> > make this work.. selftests base includes on tools/include, while samples
+> > have $(objtree)/usr/include as first include and AFAICS the __must_check is
+> > defined under __KERNEL__ ifdef
+> > 
+> > I guess the reason samples use $(objtree)/usr/include is to get some struct
+> > definitions which are not in tools/include, but looks like some samples objects
+> > already use vmlinux.h include, so that could be the way forward to fix that
+> 
+> I tried the method you suggested, and some unexpected problems occurred. Maybe,
+> we can apply v5 [0] first, and then solve this problem?
+
+how about change below, seem to work for me
+
+jirka
+
+
+---
+diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
+index 151ec320818b..3115f054dca7 100644
+--- a/samples/bpf/Makefile
++++ b/samples/bpf/Makefile
+@@ -316,6 +316,8 @@ XDP_SAMPLE_CFLAGS += -Wall -O2 \
+ $(obj)/$(XDP_SAMPLE): TPROGS_CFLAGS = $(XDP_SAMPLE_CFLAGS)
+ $(obj)/$(XDP_SAMPLE): $(src)/xdp_sample_user.h $(src)/xdp_sample_shared.h
+ 
++$(obj)/$(TRACE_HELPERS): TPROGS_CFLAGS := $(TPROGS_CFLAGS) -D__must_check=
++
+ -include $(BPF_SAMPLES_PATH)/Makefile.target
+ 
+ VMLINUX_BTF_PATHS ?= $(abspath $(if $(O),$(O)/vmlinux))				\
+diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
+index 316a7874a12b..551547ba6829 100644
+--- a/tools/testing/selftests/bpf/trace_helpers.c
++++ b/tools/testing/selftests/bpf/trace_helpers.c
+@@ -14,9 +14,6 @@
+ #include <linux/limits.h>
+ #include <libelf.h>
+ #include <gelf.h>
+-#ifndef __must_check
+-#define __must_check
+-#endif
+ #include "bpf/libbpf_internal.h"
+ 
+ #define TRACEFS_PIPE	"/sys/kernel/tracing/trace_pipe"
