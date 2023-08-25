@@ -2,88 +2,80 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 205E1EE49A5
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 421A1EE49AD
 	for <linux-kselftest@archiver.kernel.org>; Fri, 25 Aug 2023 06:50:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242465AbjHYGtx (ORCPT
+        id S242495AbjHYGtz (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 25 Aug 2023 02:49:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47152 "EHLO
+        Fri, 25 Aug 2023 02:49:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242631AbjHYGtk (ORCPT
+        with ESMTP id S242478AbjHYGt1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Aug 2023 02:49:40 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B4ED1FEC
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Aug 2023 23:49:36 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3fef2fafee2so66115e9.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Aug 2023 23:49:36 -0700 (PDT)
+        Fri, 25 Aug 2023 02:49:27 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD461FE4
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Aug 2023 23:49:25 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3fef2fafee2so66015e9.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Aug 2023 23:49:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1692946174; x=1693550974; darn=vger.kernel.org;
+        d=google.com; s=20221208; t=1692946164; x=1693550964; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XdpvXI3JerO9huEmX+3MJyDkMRtns3aoW79VkhEAlR4=;
-        b=xtblidW4/39L6dUb2oVzWAy0qz4Srg3jWizT9o8OES8Ja4AKPSbMEGviOe0D/nwjBN
-         oLJY028Stabawutwk20/H6gGMu/IOS8/KPaYfv6/Z5sJfpbkUO9nOjpGFXFWjyDdsgQj
-         Wzvjb3nIuoIiZ2epfxJXiRzmrnq5quZpOoQd6HF6romwG69rwJhr23Gy9DN2k4hsjN6e
-         l3zK8RP5yxJ1VUniLBgKJBdOeLjp4WUxCvV3G4z0AFF1D/t5wSb4vIkYVYCmB+k3rrHt
-         oSV+TcoBfIDeUWOOG5QcpH8b1wPiIz2BdNk30qBG0MPKenXqVXTcs+BnivU4Q1LsdQGO
-         V23A==
+        bh=uNKGwTwoIm07EQ2OqMnboJ7mZtl5WeDZFH0Chu5TRZ8=;
+        b=Er5AF2U/itDTK9d2n4caJHPpFDpF18NAQwVE1yXljtoshKPggSIiDfUjHb55c0bQ2h
+         8rpciWSpK8eUZBjGzC68Sj/s1vG8lb90BpWW4pqWRRmDsHkcMoKjswmY50+DtjCAgEiW
+         duOd1Aa1vFZmS6PiY8TDfpK5PTXxPdqxCjviMWk/8Vb74RforVBIIFm+B1CngGHNUf7T
+         95Nt017IK/db8VjlvJzlFzsSaCNvx7sKLKZp1QhDdnGARIsdjdGHVkYhwrXQ/9qWPzP/
+         txAJtR0kjspH3R+R+UDP+ZsHtsYl0Tg60ZAWfbQBCgwDIv7FDmaIgCxsceCA9eUHXhSU
+         9Arg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692946174; x=1693550974;
+        d=1e100.net; s=20221208; t=1692946164; x=1693550964;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=XdpvXI3JerO9huEmX+3MJyDkMRtns3aoW79VkhEAlR4=;
-        b=PMMSHS3ovS7msRaJHbIodBfN263h0MrJ7e461bXMFywIFSXn6MnhpQjbCqcGCNz3bC
-         MjhnomkFqJl8Q7b9gv+EEy/wQS/4/cb3j30zjHyL2/xKB3SquJ6ZHlo7gFexHWN2/iue
-         ETeAcfbKRNBv2713aB+6EzXQAq4lILCYlZ2fI3dnJB59YdjDsFLQnNt1OhaUsh6NBlxi
-         2MtycNkscUfrkADZEgAODG3SxOFKKBtLTC5tmYNSvkdcaSjoHO7DSrn+NrdvS20i3L2/
-         zmNyU0a6QUbiw9/r7PBpDpbTxesAlkcKJ0xM4D2Sc4nPBVgDkDtb/zSnRQZAlci/4J7V
-         dVaA==
-X-Gm-Message-State: AOJu0YxwX66MvYabENnNjF4/tzb0Ylo6Q/ovQ+8qL1oou6ZsUYa8o8N9
-        dDk5/okglvjU7btAT+TikfgKITDOdB3WAcvOq2d6WvjqLKyy2tSaAwA=
-X-Google-Smtp-Source: AGHT+IGJraIU0fZ5/69pyZ8GbcuquzermKaYyruReb+AsR8I8LGh79gXTPGlLm2cC8YBaMekWlv5qT+lCaF4V3hIPVs=
-X-Received: by 2002:a05:600c:600b:b0:3f6:f4b:d4a6 with SMTP id
- az11-20020a05600c600b00b003f60f4bd4a6mr99315wmb.7.1692946174748; Thu, 24 Aug
- 2023 23:49:34 -0700 (PDT)
+        bh=uNKGwTwoIm07EQ2OqMnboJ7mZtl5WeDZFH0Chu5TRZ8=;
+        b=AzKg4u3tVEplNVQNJtssEA5qxJlbqzYwncJdcjq0DZfj/df0geEhTykRnflm+79lxN
+         mTmSbVkJCTFOq9V5VL57VZUrtq6785VMQGLRcyiqiSZY0GRg6tVA/mVZS9CjJ2u+DsZ2
+         nHBneI/48jLeaVBEjhSf5AVThlw1AJGVO7WENWqC9Kdnyb/I4QBWGNBNyA5LWYlTokho
+         VAY15g6JVPEiHrNL1k77pitkuSCbGuJVelpSvFD3uQwBnNEENpidk0FBG+4elcjrljTX
+         3nNlSwOGJjcGjakUTsElf9WSQ73m0bbWAzPNwQt4Lliy60sSgsYxr9RIzNq4Gc2Jj3Ui
+         KP4A==
+X-Gm-Message-State: AOJu0YysANVvMAttk1l1Equy80XN7t80uUMZNfDI0sBYDWFJwk/UWz9M
+        3gpRBiV7XvGuJBaSFzovakssn4jdVTy6w3P4YvI4iA==
+X-Google-Smtp-Source: AGHT+IHi6UV3hxpZcE5QYhwsQ02MwSt5B/SL2pzP9cVLW1Zlb+CUcK44V6+nF1iRSWVDwAMMCdfwCJ1wpzNxiot9Inw=
+X-Received: by 2002:a05:600c:1c92:b0:3fe:f32f:c57f with SMTP id
+ k18-20020a05600c1c9200b003fef32fc57fmr138490wms.0.1692946163972; Thu, 24 Aug
+ 2023 23:49:23 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230824143129.1957914-1-rf@opensource.cirrus.com> <20230824143129.1957914-4-rf@opensource.cirrus.com>
-In-Reply-To: <20230824143129.1957914-4-rf@opensource.cirrus.com>
+References: <20230824143129.1957914-1-rf@opensource.cirrus.com> <20230824143129.1957914-2-rf@opensource.cirrus.com>
+In-Reply-To: <20230824143129.1957914-2-rf@opensource.cirrus.com>
 From:   David Gow <davidgow@google.com>
-Date:   Fri, 25 Aug 2023 14:49:22 +0800
-Message-ID: <CABVgOSkbB2TNTf_TqbpGnw4rOTHjksCYdU=Kh9s-HOpbUmxoeQ@mail.gmail.com>
-Subject: Re: [PATCH v5 03/10] kunit: string-stream: Add option to make all
- lines end with newline
+Date:   Fri, 25 Aug 2023 14:49:11 +0800
+Message-ID: <CABVgOSk+7XXT3GarvUUQuy7odEfqW9g1=GY4tHF=TyhaS=n5_Q@mail.gmail.com>
+Subject: Re: [PATCH v5 01/10] kunit: string-stream: Don't create a fragment
+ for empty strings
 To:     Richard Fitzgerald <rf@opensource.cirrus.com>
 Cc:     brendan.higgins@linux.dev, rmoar@google.com,
         linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
         linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000623d910603b9bfaa"
+        boundary="000000000000c0e9240603b9be49"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---000000000000623d910603b9bfaa
+--000000000000c0e9240603b9be49
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, 24 Aug 2023 at 22:32, Richard Fitzgerald
-<rf@opensource.cirrus.com> wrote:
+On Thu, 24 Aug 2023 at 22:32, 'Richard Fitzgerald' via KUnit
+Development <kunit-dev@googlegroups.com> wrote:
 >
-> Add an optional feature to string_stream that will append a newline to
-> any added string that does not already end with a newline. The purpose
-> of this is so that string_stream can be used to collect log lines.
->
-> This is enabled/disabled by calling string_stream_set_append_newlines().
+> If the result of the formatted string is an empty string just return
+> instead of creating an empty fragment.
 >
 > Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
 > ---
-
-This is the same as v4, patch 4, and still looks good.
-
-(In the future, feel free to leave the Reviewed-by: tag from the
-previous version, so long as there are no significant changes.)
 
 Reviewed-by: David Gow <davidgow@google.com>
 
@@ -91,96 +83,42 @@ Cheers,
 -- David
 
 
->  lib/kunit/string-stream.c | 28 +++++++++++++++++++++-------
->  lib/kunit/string-stream.h |  7 +++++++
->  2 files changed, 28 insertions(+), 7 deletions(-)
+>  lib/kunit/string-stream.c | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
 >
 > diff --git a/lib/kunit/string-stream.c b/lib/kunit/string-stream.c
-> index ed24d86af9f5..1dcf6513b692 100644
+> index cc32743c1171..ed24d86af9f5 100644
 > --- a/lib/kunit/string-stream.c
 > +++ b/lib/kunit/string-stream.c
-> @@ -44,32 +44,46 @@ int string_stream_vadd(struct string_stream *stream,
->                        va_list args)
->  {
->         struct string_stream_fragment *frag_container;
-> -       int len;
-> +       int buf_len, result_len;
->         va_list args_for_counting;
->
+> @@ -50,11 +50,17 @@ int string_stream_vadd(struct string_stream *stream,
 >         /* Make a copy because `vsnprintf` could change it */
 >         va_copy(args_for_counting, args);
 >
->         /* Evaluate length of formatted string */
-> -       len = vsnprintf(NULL, 0, fmt, args_for_counting);
-> +       buf_len = vsnprintf(NULL, 0, fmt, args_for_counting);
+> -       /* Need space for null byte. */
+> -       len = vsnprintf(NULL, 0, fmt, args_for_counting) + 1;
+> +       /* Evaluate length of formatted string */
+> +       len = vsnprintf(NULL, 0, fmt, args_for_counting);
 >
 >         va_end(args_for_counting);
 >
-> -       if (len == 0)
-> +       if (buf_len == 0)
->                 return 0;
->
-> +       /* Reserve one extra for possible appended newline. */
-> +       if (stream->append_newlines)
-> +               buf_len++;
+> +       if (len == 0)
+> +               return 0;
 > +
->         /* Need space for null byte. */
-> -       len++;
-> +       buf_len++;
->
+> +       /* Need space for null byte. */
+> +       len++;
+> +
 >         frag_container = alloc_string_stream_fragment(stream->test,
-> -                                                     len,
-> +                                                     buf_len,
+>                                                       len,
 >                                                       stream->gfp);
->         if (IS_ERR(frag_container))
->                 return PTR_ERR(frag_container);
->
-> -       len = vsnprintf(frag_container->fragment, len, fmt, args);
-> +       if (stream->append_newlines) {
-> +               /* Don't include reserved newline byte in writeable length. */
-> +               result_len = vsnprintf(frag_container->fragment, buf_len - 1, fmt, args);
-> +
-> +               /* Append newline if necessary. */
-> +               if (frag_container->fragment[result_len - 1] != '\n')
-> +                       result_len = strlcat(frag_container->fragment, "\n", buf_len);
-> +       } else {
-> +               result_len = vsnprintf(frag_container->fragment, buf_len, fmt, args);
-> +       }
-> +
->         spin_lock(&stream->lock);
-> -       stream->length += len;
-> +       stream->length += result_len;
->         list_add_tail(&frag_container->node, &stream->fragments);
->         spin_unlock(&stream->lock);
->
-> diff --git a/lib/kunit/string-stream.h b/lib/kunit/string-stream.h
-> index b669f9a75a94..048930bf97f0 100644
-> --- a/lib/kunit/string-stream.h
-> +++ b/lib/kunit/string-stream.h
-> @@ -25,6 +25,7 @@ struct string_stream {
->         spinlock_t lock;
->         struct kunit *test;
->         gfp_t gfp;
-> +       bool append_newlines;
->  };
->
->  struct kunit;
-> @@ -47,4 +48,10 @@ bool string_stream_is_empty(struct string_stream *stream);
->
->  void string_stream_destroy(struct string_stream *stream);
->
-> +static inline void string_stream_set_append_newlines(struct string_stream *stream,
-> +                                                    bool append_newlines)
-> +{
-> +       stream->append_newlines = append_newlines;
-> +}
-> +
->  #endif /* _KUNIT_STRING_STREAM_H */
 > --
 > 2.30.2
 >
+> --
+> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20230824143129.1957914-2-rf%40opensource.cirrus.com.
 
---000000000000623d910603b9bfaa
+--000000000000c0e9240603b9be49
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -247,14 +185,14 @@ impZAng7ccvvK09K3ZuhwTIxJMsPXCZYsrXWORTw5sczRAP6XvKbPBJnsJoSTe5dFBPBHOQJOGhU
 qWfEfWnWMJPF3LxSGLpLFQXO3RwQqmxv08avwXfVPouh1xuB3FX7rpDabT8YDhu9JgIZkLEKko7L
 yQt6zWwng7k8YF/jGbiAta6VMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCV
-RRQyFtiSamRpVbg7OVzC8f420XR6ev9ZWgMrmJd+LzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzA4MjUwNjQ5MzRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCB7
+ehKB6A8Lh54+T2VTvr61rg7UOhAjBbgt2pODpTTMTDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzA4MjUwNjQ5MjRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAd0QVybmyXwwidtRPps4H
-iipzSZJ2gRKa3Dkb7yXifQEuuum9gcigSA0yFWLGbPxCO+MfEqvh8v237eF4p71UT9B3qXXonpjr
-WrMmdnBk4sLA3140fIW+2tPwByYqVEWTAG+BG1aq8Sp51dkYwJ9TVuUB1q+mWitT5lg7nnR8nWAi
-QQTrgkcItS3BFSGKxE1+qBxuMioFfOkSlHo7uUnT/fKq02ea7cJ3EJlEttXWvgNvFnOz93eraWMW
-3AAzwDcGwKh50iILXSmPmqXtNiFs8mQlclJen2yLsGUnOyKXzK5Sw1otz1K9OdBWsZCFallnWThH
-5Opi4f13U00IPFwKRg==
---000000000000623d910603b9bfaa--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAGiz2dQa53lXiOII54hLg
+fvklJnh77XYo0dB4DY8V6+5DSwNE9UAh9UE90phHFlXsos4D/iFF+UYBih0yML6n8ApAnwIA2QLT
+vj98xJjSNcU0FgVxKeEnP9kcvsQoPI7qTAR48zP1Uaf7iX3XNadVrzgqLkd1CcUIHnXXJtOtXzsP
+cVfBtHNgmA2qk7AgjA5HzZQ7k+0Mb3sBfoheSTI5D2ZTjE5/hhbdbhVyeY4HcayQd30Hodt9vrjc
+Cjl6bv7QUEKkkqYmDyjSPNkbwic8FsxDJWegY/LSheMP2xPfL+/o6ifJg8z4Yh4BL0kQT2gjzo/E
+zPfmss1GvnjXokRdRw==
+--000000000000c0e9240603b9be49--
