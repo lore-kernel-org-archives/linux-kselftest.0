@@ -2,348 +2,189 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DB59C71133
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D105AC3DA66
 	for <linux-kselftest@archiver.kernel.org>; Fri, 25 Aug 2023 06:50:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242514AbjHYGu0 (ORCPT
+        id S242623AbjHYGu1 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 25 Aug 2023 02:50:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59334 "EHLO
+        Fri, 25 Aug 2023 02:50:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242625AbjHYGuF (ORCPT
+        with ESMTP id S242637AbjHYGuQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Aug 2023 02:50:05 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C751FCB
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Aug 2023 23:50:01 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-4009fdc224dso42385e9.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Aug 2023 23:50:01 -0700 (PDT)
+        Fri, 25 Aug 2023 02:50:16 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C69419AC
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Aug 2023 23:50:14 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3fe2d620d17so61065e9.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Aug 2023 23:50:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1692946200; x=1693551000; darn=vger.kernel.org;
+        d=google.com; s=20221208; t=1692946212; x=1693551012; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=0FA/+Ol2iP4xqokbaojLMTC5najdd/YvWpKxhAyMj9I=;
-        b=PNIsfJjtG7HYETBfCMMovu/UTixhoCEwZBJotuzkKrU01zedMLJtbOOdO0TxsOQD7F
-         /HyrVRxG1d/NqL7bBfg+HTQP447WsPzxPDCb+MsMHQlyF/Uubh6Gh/y/5KpUREroYSy5
-         Hvy0kWsayIvQsV5u0x6YuC/3o0EbcBc9cRzroxWFzHf3wUQMQxx8X7w3Do+kpBPZKdN6
-         kZ0NxxE62QkKLQie4qujI/Xz4pdlGjkt9JKab+lbiTQg7BY6rf2iYMoN2WpggHWuPAts
-         KXNZoQ1BupvKghlJ5L1t8PuEZ/b1Gqd4Z3jLVUoyILr9x6NllTsNj5y1wt2osh5ALuGX
-         VNLA==
+        bh=4XJGEuSsUNJ0FvFh6tPXOVHQh5DqJ89Ot95xIgwaI24=;
+        b=GbTF8qzdnr25XPnLrraPj+DBcTjB8B+QIhuHH3paEn0iB6E5i3yBn1/+8EZ86qFqCW
+         koaGwtpwfT166KzTxM5Nvo7h2h50gt5+rPAMNsM61vavN4ognx4BsNnl2iPDzL/RFi2w
+         LSMMw2F+lcfkuC1S7NxFOb0ULV9y5y3Yqgb+O5nBUzhuqqdKq0+e2MOMoHSRrqC4zMa3
+         Chiq20DU3fLUGAwFASkT/TCzZYY8gXNIfS5BDUM8PF5v/a9f4KGPdjLSwZC2c8VdZWm7
+         vFpme1yct0J+Z/YUzO4C5BWWQnDIpyBjzP2m7g2zw/o1ze839c7BH+XeGPXA+VjyNjaR
+         kV0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692946200; x=1693551000;
+        d=1e100.net; s=20221208; t=1692946212; x=1693551012;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=0FA/+Ol2iP4xqokbaojLMTC5najdd/YvWpKxhAyMj9I=;
-        b=OIftVrG2+kYRg8bPqr7NDgeXN71sicXCAF7exiYG6HVy91qHYepV79FPG+l7gj9WPF
-         pbtBzS191wIyD+/qX+HjOcGduhaD/UExtrnxhCWC9V4QIZ644j7bljghO7CyPQEfNKhX
-         wm6uDutBBx8CxJXBHEJUfAK645Q9fUPf/744m8O5WBQaAxBaMBD0qx8PSReLmsF9r3dR
-         yriOvo7cIrch1RN6likZdysvTIH08JcGUgMt0XTQAQ61yGZu8d/amVRpx1uWXHmuDexf
-         gzJBABCiccpjCcOG1wPfvT8oXARolTpsrf3ML9fa/lrMxIKGkk1Od3Hl2vi/iTyI1MN7
-         BOxw==
-X-Gm-Message-State: AOJu0YzhyXFNhwNl/RV4TPZ+zi9UjaEewC04Y6ROeQa2vhx9Cipn9EVt
-        GYZWL+3fsjnYkeJ7wyWVfUeGh3X2Jq8vILTGdF1sDg==
-X-Google-Smtp-Source: AGHT+IHJ4qPPsVqQj0XX6AWmzratqc1OJGZA4PLhuZHNXFUuOpEpIUYDMR9sDIAyXf0uBZWz+7y6lu8bwI2JxNGGvAU=
-X-Received: by 2002:a05:600c:3b02:b0:400:46db:1bf2 with SMTP id
- m2-20020a05600c3b0200b0040046db1bf2mr134613wms.2.1692946199992; Thu, 24 Aug
- 2023 23:49:59 -0700 (PDT)
+        bh=4XJGEuSsUNJ0FvFh6tPXOVHQh5DqJ89Ot95xIgwaI24=;
+        b=GF+Q5MRjB/iY2hAK2FgDFBfSj2KBob72krGrhsOFrqhil7t5fWFGasji3tkDpz+sJ4
+         eoVGIxeRZ6LnGfDHkWIBImq2NhaGPHFqsJZ3Ac5unoxXtn0n5ht2qb8/fSLgm+elpWkG
+         T6U6zaMKC/vHJRFFedLBYWFNN/eDZVO9uU/tbMqQz4q39oEmwD54S8mubbYWHUTrSz49
+         ELCvbtDuBUkLUKbfip69j6U3gBtT4KkQwwFVAkASFuNnQmiGLmwTVlOV3GckpRS3jPJ4
+         ypWqIR1AQsDEEA1i7d8ZGcyZYzy2GOixUOlSNWqvweqhMyj0cLDCHlnAfflRHkfF6Q8S
+         tZrQ==
+X-Gm-Message-State: AOJu0YwawWEhjwKTpkL6VksNQCmq2JWPYaTX/NFeMRvAnEDAqyZ2AiJl
+        bzi92TUOEpPQLImf+poEoIPyCWE1OuD5t17DvuF/LQ==
+X-Google-Smtp-Source: AGHT+IEcXa9pqxTHYq38o4Zreb4PndfleV2GPv3W1rPmWJXHnKgAuyA3HbDgKPVnV8cXVtQoU4gjurQQaQG3DzrTKdw=
+X-Received: by 2002:a05:600c:3d8e:b0:3fe:e9ea:9653 with SMTP id
+ bi14-20020a05600c3d8e00b003fee9ea9653mr130296wmb.4.1692946212639; Thu, 24 Aug
+ 2023 23:50:12 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230824143129.1957914-1-rf@opensource.cirrus.com> <20230824143129.1957914-9-rf@opensource.cirrus.com>
-In-Reply-To: <20230824143129.1957914-9-rf@opensource.cirrus.com>
+References: <20230824143129.1957914-1-rf@opensource.cirrus.com> <20230824143129.1957914-11-rf@opensource.cirrus.com>
+In-Reply-To: <20230824143129.1957914-11-rf@opensource.cirrus.com>
 From:   David Gow <davidgow@google.com>
-Date:   Fri, 25 Aug 2023 14:49:48 +0800
-Message-ID: <CABVgOSnG8epucY52ppNW7-vC_-QL3Lau9zsaw20dXgWTC0GV+Q@mail.gmail.com>
-Subject: Re: [PATCH v5 08/10] kunit: string-stream: Add tests for freeing
- resource-managed string_stream
+Date:   Fri, 25 Aug 2023 14:50:00 +0800
+Message-ID: <CABVgOSk+wEegL2QzR1hJAxyeuy9cgQ8GuyChJvd22W0Qpj_B=A@mail.gmail.com>
+Subject: Re: [PATCH v5 10/10] kunit: string-stream: Test performance of string_stream
 To:     Richard Fitzgerald <rf@opensource.cirrus.com>
 Cc:     brendan.higgins@linux.dev, rmoar@google.com,
         linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
         linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000e488dc0603b9c0bd"
+        boundary="000000000000a4d3950603b9c168"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---000000000000e488dc0603b9c0bd
+--000000000000a4d3950603b9c168
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, 24 Aug 2023 at 22:32, 'Richard Fitzgerald' via KUnit
-Development <kunit-dev@googlegroups.com> wrote:
+On Thu, 24 Aug 2023 at 22:33, Richard Fitzgerald
+<rf@opensource.cirrus.com> wrote:
 >
-> string_stream_managed_free_test() allocates a resource-managed
-> string_stream and tests that kunit_free_string_stream() calls
-> string_stream_destroy().
+> Add a test of the speed and memory use of string_stream.
 >
-> string_stream_resource_free_test() allocates a resource-managed
-> string_stream and tests that string_stream_destroy() is called
-> when the test resources are cleaned up.
+> string_stream_performance_test() doesn't actually "test" anything (it
+> cannot fail unless the system has run out of allocatable memory) but it
+> measures the speed and memory consumption of the string_stream and reports
+> the result.
 >
-> The old string_stream_init_test() has been split into two tests,
-> one for kunit_alloc_string_stream() and the other for
-> alloc_string_stream().
+> This allows changes in the string_stream implementation to be compared.
 >
 > Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
 > ---
-> Changes since V4:
-> - Added test case for kunit_free_string_stream().
-> - Split the initialization test into separate tests for managed and
->   unmanaged allocations.
-> ---
 
-Looking over this again, I'm not convinced the streams are actually
-getting freed. Once the stub has finished, the stream is removed from
-the list of deferred actions / resources.
+Still looks good to me, so still:
 
-I'll have another look tomorrow in case I missed anything, but if so,
-this might need to be explained further / made more obvious.
+Reviewed-by: David Gow <davidgow@google.com>
 
+My results are:
+   # string_stream_performance_test: Time elapsed:           4457 us
+   # string_stream_performance_test: Total string length:    573890
+   # string_stream_performance_test: Bytes requested:        823922
+   # string_stream_performance_test: Actual bytes allocated: 1048280
+
+Cheers,
 -- David
 
->  lib/kunit/string-stream-test.c | 135 ++++++++++++++++++++++++++++++++-
->  lib/kunit/string-stream.c      |   3 +
->  2 files changed, 134 insertions(+), 4 deletions(-)
+
+
+>  lib/kunit/string-stream-test.c | 54 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 54 insertions(+)
 >
 > diff --git a/lib/kunit/string-stream-test.c b/lib/kunit/string-stream-test.c
-> index 45a2d221f1b5..6897c57e0db7 100644
+> index 6897c57e0db7..7d81d139b8f8 100644
 > --- a/lib/kunit/string-stream-test.c
 > +++ b/lib/kunit/string-stream-test.c
-> @@ -6,11 +6,25 @@
->   * Author: Brendan Higgins <brendanhiggins@google.com>
->   */
+> @@ -8,7 +8,9 @@
 >
-> +#include <kunit/static_stub.h>
+>  #include <kunit/static_stub.h>
 >  #include <kunit/test.h>
+> +#include <linux/ktime.h>
 >  #include <linux/slab.h>
+> +#include <linux/timekeeping.h>
 >
 >  #include "string-stream.h"
 >
-> +struct string_stream_test_priv {
-> +       /* For testing resource-managed free. */
-> +       struct string_stream *freed_stream;
-> +       bool stream_free_again;
-> +};
-> +
-> +static void cleanup_raw_stream(void *p)
-> +{
-> +       struct string_stream *stream = p;
-> +
-> +       string_stream_destroy(stream);
-> +}
-
-Is this worth having here? It's only used once, and it could easily be
-replaced with a manual call to string_stream_destroy() at the end of
-the function.
-
-If it were likely that list_empty() or string_stream_is_empty() would
-crash, it would be more worthwhile to make sure the cleanup happens
-anyway, but as-is, I think it's safe enough either way.
-
-> +
->  static char *get_concatenated_string(struct kunit *test, struct string_stream *stream)
->  {
->         char *str = string_stream_get_string(stream);
-> @@ -21,11 +35,12 @@ static char *get_concatenated_string(struct kunit *test, struct string_stream *s
->         return str;
+> @@ -437,6 +439,57 @@ static void string_stream_auto_newline_test(struct kunit *test)
+>                            "One\nTwo\nThree\nFour\nFive\nSix\nSeven\n\nEight\n");
 >  }
 >
-> -/* string_stream object is initialized correctly. */
-> -static void string_stream_init_test(struct kunit *test)
-> +/* Managed string_stream object is initialized correctly. */
-> +static void string_stream_managed_init_test(struct kunit *test)
->  {
->         struct string_stream *stream;
->
-> +       /* Resource-managed initialization. */
->         stream = kunit_alloc_string_stream(test, GFP_KERNEL);
->         KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream);
->
-> @@ -37,6 +52,101 @@ static void string_stream_init_test(struct kunit *test)
->         KUNIT_EXPECT_TRUE(test, string_stream_is_empty(stream));
->  }
->
-> +/* Unmanaged string_stream object is initialized correctly. */
-> +static void string_stream_unmanaged_init_test(struct kunit *test)
+> +/*
+> + * This doesn't actually "test" anything. It reports time taken
+> + * and memory used for logging a large number of lines.
+> + */
+> +static void string_stream_performance_test(struct kunit *test)
 > +{
+> +       struct string_stream_fragment *frag_container;
 > +       struct string_stream *stream;
-> +
-> +       stream = alloc_string_stream(GFP_KERNEL);
-> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream);
-> +       kunit_add_action(test, cleanup_raw_stream, stream);
-> +
-> +       KUNIT_EXPECT_EQ(test, stream->length, 0);
-> +       KUNIT_EXPECT_TRUE(test, list_empty(&stream->fragments));
-> +       KUNIT_EXPECT_EQ(test, stream->gfp, GFP_KERNEL);
-> +       KUNIT_EXPECT_FALSE(test, stream->append_newlines);
-> +
-> +       KUNIT_EXPECT_TRUE(test, string_stream_is_empty(stream));
-> +}
-> +
-> +static void string_stream_destroy_stub(struct string_stream *stream)
-> +{
-> +       struct kunit *fake_test = kunit_get_current_test();
-> +       struct string_stream_test_priv *priv = fake_test->priv;
-> +
-> +       if (priv->freed_stream)
-> +               priv->stream_free_again = true;
-> +
-> +       priv->freed_stream = stream;
-> +
-> +       /*
-> +        * Avoid calling deactivate_static_stub() or changing
-> +        * current->kunit_test during cleanup. Leave the stream to
-> +        * be freed during the test exit.
-> +        */
-
-Are we ever actually freeing this during test exit? I don't think so.
-
-I think you'd need to either free 'stream' here, or free it (either
-manually or with a deferred action) at the end of every test which
-uses this stub.
-
-That being said, I'd agree it's best to avoid manually calling
-deactivate_static_stub() and/or changin current->kunit_test during
-cleanup. While it should actually be safe, as far as I can tell, it'd
-be very confusing.
-
-> +}
-> +
-> +/* kunit_free_string_stream() calls string_stream_desrtoy() */
-> +static void string_stream_managed_free_test(struct kunit *test)
-> +{
-> +       struct string_stream_test_priv *priv = test->priv;
-> +       struct string_stream *stream;
-> +
-> +       priv->freed_stream = NULL;
-> +       priv->stream_free_again = false;
-> +       kunit_activate_static_stub(test,
-> +                                  string_stream_destroy,
-> +                                  string_stream_destroy_stub);
+> +       char test_line[101];
+> +       ktime_t start_time, end_time;
+> +       size_t len, bytes_requested, actual_bytes_used, total_string_length;
+> +       int offset, i;
 > +
 > +       stream = kunit_alloc_string_stream(test, GFP_KERNEL);
 > +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream);
 > +
-> +       /* This should call the stub function. */
-> +       kunit_free_string_stream(test, stream);
+> +       memset(test_line, 'x', sizeof(test_line) - 1);
+> +       test_line[sizeof(test_line) - 1] = '\0';
 > +
-> +       KUNIT_EXPECT_PTR_EQ(test, priv->freed_stream, stream);
-> +       KUNIT_EXPECT_FALSE(test, priv->stream_free_again);
-
-Stream is never freed here?
-
-> +}
-> +
-> +/* string_stream object is freed when test is cleaned up. */
-> +static void string_stream_resource_free_test(struct kunit *test)
-> +{
-> +       struct string_stream_test_priv *priv = test->priv;
-> +       struct kunit *fake_test;
-> +       struct string_stream *stream;
-> +
-> +       fake_test = kunit_kzalloc(test, sizeof(*fake_test), GFP_KERNEL);
-> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, fake_test);
-> +
-> +       kunit_init_test(fake_test, "string_stream_fake_test", NULL);
-> +       fake_test->priv = priv;
+> +       start_time = ktime_get();
+> +       for (i = 0; i < 10000; i++) {
+> +               offset = i % (sizeof(test_line) - 1);
+> +               string_stream_add(stream, "%s: %d\n", &test_line[offset], i);
+> +       }
+> +       end_time = ktime_get();
 > +
 > +       /*
-> +        * Activate stub before creating string_stream so the
-> +        * string_stream will be cleaned up first.
+> +        * Calculate memory used. This doesn't include invisible
+> +        * overhead due to kernel allocator fragment size rounding.
 > +        */
-> +       priv->freed_stream = NULL;
-> +       priv->stream_free_again = false;
-> +       kunit_activate_static_stub(fake_test,
-> +                                  string_stream_destroy,
-> +                                  string_stream_destroy_stub);
+> +       bytes_requested = sizeof(*stream);
+> +       actual_bytes_used = ksize(stream);
+> +       total_string_length = 0;
 > +
-> +       stream = kunit_alloc_string_stream(fake_test, GFP_KERNEL);
-> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream);
+> +       list_for_each_entry(frag_container, &stream->fragments, node) {
+> +               bytes_requested += sizeof(*frag_container);
+> +               actual_bytes_used += ksize(frag_container);
 > +
-> +       /* Set current->kunit_test to fake_test so the static stub will be called. */
-> +       current->kunit_test = fake_test;
+> +               len = strlen(frag_container->fragment);
+> +               total_string_length += len;
+> +               bytes_requested += len + 1; /* +1 for '\0' */
+> +               actual_bytes_used += ksize(frag_container->fragment);
+> +       }
 > +
-> +       /* Cleanup test - the stub function should be called */
-> +       kunit_cleanup(fake_test);
-> +
-> +       /* Set current->kunit_test back to current test. */
-> +       current->kunit_test = test;
-> +
-> +       KUNIT_EXPECT_PTR_EQ(test, priv->freed_stream, stream);
-> +       KUNIT_EXPECT_FALSE(test, priv->stream_free_again);
-
-We need to free stream here.
-
-
+> +       kunit_info(test, "Time elapsed:           %lld us\n",
+> +                  ktime_us_delta(end_time, start_time));
+> +       kunit_info(test, "Total string length:    %zu\n", total_string_length);
+> +       kunit_info(test, "Bytes requested:        %zu\n", bytes_requested);
+> +       kunit_info(test, "Actual bytes allocated: %zu\n", actual_bytes_used);
 > +}
 > +
->  /*
->   * Add a series of lines to a string_stream. Check that all lines
->   * appear in the correct order and no characters are dropped.
-> @@ -327,8 +437,24 @@ static void string_stream_auto_newline_test(struct kunit *test)
->                            "One\nTwo\nThree\nFour\nFive\nSix\nSeven\n\nEight\n");
->  }
->
-> +static int string_stream_test_init(struct kunit *test)
-> +{
-> +       struct string_stream_test_priv *priv;
-> +
-> +       priv = kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
-> +       if (!priv)
-> +               return -ENOMEM;
-> +
-> +       test->priv = priv;
-> +
-> +       return 0;
-> +}
-> +
->  static struct kunit_case string_stream_test_cases[] = {
-> -       KUNIT_CASE(string_stream_init_test),
-> +       KUNIT_CASE(string_stream_managed_init_test),
-> +       KUNIT_CASE(string_stream_unmanaged_init_test),
-> +       KUNIT_CASE(string_stream_managed_free_test),
-> +       KUNIT_CASE(string_stream_resource_free_test),
->         KUNIT_CASE(string_stream_line_add_test),
->         KUNIT_CASE(string_stream_variable_length_line_test),
->         KUNIT_CASE(string_stream_append_test),
-> @@ -341,6 +467,7 @@ static struct kunit_case string_stream_test_cases[] = {
->
->  static struct kunit_suite string_stream_test_suite = {
->         .name = "string-stream-test",
-> -       .test_cases = string_stream_test_cases
-> +       .test_cases = string_stream_test_cases,
-> +       .init = string_stream_test_init,
->  };
->  kunit_test_suites(&string_stream_test_suite);
-> diff --git a/lib/kunit/string-stream.c b/lib/kunit/string-stream.c
-> index c39f1cba3bcd..d2ded5207e9e 100644
-> --- a/lib/kunit/string-stream.c
-> +++ b/lib/kunit/string-stream.c
-> @@ -6,6 +6,7 @@
->   * Author: Brendan Higgins <brendanhiggins@google.com>
->   */
->
-> +#include <kunit/static_stub.h>
->  #include <kunit/test.h>
->  #include <linux/list.h>
->  #include <linux/slab.h>
-> @@ -170,6 +171,8 @@ struct string_stream *alloc_string_stream(gfp_t gfp)
->
->  void string_stream_destroy(struct string_stream *stream)
+>  static int string_stream_test_init(struct kunit *test)
 >  {
-> +       KUNIT_STATIC_STUB_REDIRECT(string_stream_destroy, stream);
-> +
->         if (!stream)
->                 return;
+>         struct string_stream_test_priv *priv;
+> @@ -462,6 +515,7 @@ static struct kunit_case string_stream_test_cases[] = {
+>         KUNIT_CASE(string_stream_append_empty_string_test),
+>         KUNIT_CASE(string_stream_no_auto_newline_test),
+>         KUNIT_CASE(string_stream_auto_newline_test),
+> +       KUNIT_CASE(string_stream_performance_test),
+>         {}
+>  };
 >
 > --
 > 2.30.2
 >
-> --
-> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20230824143129.1957914-9-rf%40opensource.cirrus.com.
 
---000000000000e488dc0603b9c0bd
+--000000000000a4d3950603b9c168
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -410,14 +251,14 @@ impZAng7ccvvK09K3ZuhwTIxJMsPXCZYsrXWORTw5sczRAP6XvKbPBJnsJoSTe5dFBPBHOQJOGhU
 qWfEfWnWMJPF3LxSGLpLFQXO3RwQqmxv08avwXfVPouh1xuB3FX7rpDabT8YDhu9JgIZkLEKko7L
 yQt6zWwng7k8YF/jGbiAta6VMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDb
-NOn358ej0DGQrwPIF2NSgmZy3cpNOogXbaUkwmLVDzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzA4MjUwNjUwMDBaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDs
+bBm7SNrdjWEn69clZnamsrqbpSIjXSf9YGWuSV3qADAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzA4MjUwNjUwMTJaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAm2zMDzbCRxZplIfgjyMn
-PdqCZ/ox10zFQPDWi871FWlLGgl1ujxQsBGefbFtNWr0pHO9DlVjQ/RhpGbU5Yz9kXG9SIYcQlvB
-A4KzVrWVk+kal6KIVo7jSbklW9NGXf+kZv/pCrpcTNq1kxOqtInBsKo+q86EDVwuhFoEyB85PaN7
-8cEB49W2vJBoBk0h8vBKOXM9Ovrd9od17g2LConnGDGYpdM4Qbq7q0QOACe0msHSCJagbdD/KEU4
-ZJAZGC14sFjO1p4Vf6ZrSUW0aWrfCzhMb8TZ97zbaV10ff5sDsaHyx+ibGzK3uZYrXHD4R+cQC48
-GUuQA+5diGNHn3t8kA==
---000000000000e488dc0603b9c0bd--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAK6auv3Zd5NH/IFdGaEcQ
+ScJCqEemHKzDqV3MRPbEzSTUHUryz2BWHxFd52SJfu5gokfTNA8OAEXzMRfKGekpf/p+whUGWECR
+Ms4uFLoQTW5SjwTpP+Aifs/IUQa8UgehExTzZ2PZaoxeTK4CxzRc1g30IMNX5+eODYvWqAY9rbtT
+3Lxwg3vDWugxsBuCnvu5hB6Zf/Qxd33ZLSdwwzGFx7YSrKf4DVv581039C6vhS1A+2rTqqdXCPNQ
+j13A4S8bQgtEnFP+kNHTwEigQJaOXUkV0jugyJwPCJ7J+Ci1Jb9lUPJIrWBHxzTTy8p0MDO38tCy
+XqDjS1gzC7oIOEH/1A==
+--000000000000a4d3950603b9c168--
