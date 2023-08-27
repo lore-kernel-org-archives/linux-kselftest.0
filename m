@@ -2,103 +2,151 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CDEAAC83F13
-	for <linux-kselftest@archiver.kernel.org>; Sun, 27 Aug 2023 08:01:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B5336C83F01
+	for <linux-kselftest@archiver.kernel.org>; Sun, 27 Aug 2023 08:33:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229807AbjH0IAc (ORCPT
+        id S230115AbjH0IdP (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 27 Aug 2023 04:00:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46926 "EHLO
+        Sun, 27 Aug 2023 04:33:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbjH0IAY (ORCPT
+        with ESMTP id S230120AbjH0Icx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 27 Aug 2023 04:00:24 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 355B7DC;
-        Sun, 27 Aug 2023 01:00:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1693123218;
-        bh=Zc+0e7HEVg0QwGCWDx6Xu2P8HO+18jc06c3eNrQ5BSs=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=ec+EMVZIv96OcaBWHX1Rmpn5YjoeVsw1mZMFSxZQEsxQgIzEZL5qEzWqCFfsCqsXu
-         mbomHMNudf4kDljpmngnvkXvborebxr33JqisSF32DeloJA/Y+w3wM9/4XtNnLALVs
-         JaHMDM3Uerind5XSNZfQWpSJr6RVWp/+1nO55aOg=
-From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date:   Sun, 27 Aug 2023 10:00:15 +0200
-Subject: [PATCH 1/2] tools/nolibc: add stdarg.h header
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20230827-nolibc-nostdinc-v1-1-995d1811f1f3@weissschuh.net>
-References: <20230827-nolibc-nostdinc-v1-0-995d1811f1f3@weissschuh.net>
-In-Reply-To: <20230827-nolibc-nostdinc-v1-0-995d1811f1f3@weissschuh.net>
-To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
-Cc:     Zhangjin Wu <falcon@tinylab.org>, Yuan Tan <tanyuan@tinylab.org>,
+        Sun, 27 Aug 2023 04:32:53 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB11C121;
+        Sun, 27 Aug 2023 01:32:48 -0700 (PDT)
+X-QQ-mid: bizesmtp75t1693125151t58h728m
+Received: from linux-lab-host.localdomain ( [116.30.127.49])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sun, 27 Aug 2023 16:32:30 +0800 (CST)
+X-QQ-SSF: 01200000000000E0Y000000A0000000
+X-QQ-FEAT: k0mQ4ihyJQPOdSn7dTAaVLBa7NqkFcrJ34wVkvTNsdtNa88dEEAJ2cwCQF/hC
+        SiRr0vUWgzEAc1+oOUlteiVH2abPI6prbg6lFUGGzvLl/6In7zMRBuRk7NEQ2lxGJ0Y2QeG
+        F71lMpy8ZqUQoLdDnXpvpjbZ8WpZ48zsp2Wpk39KKR4RHlLllEqYV9Vgi5t4tTwdXpp48Ff
+        HQatNTyBrHeileClzp9zdOvq++4GU5sYRh+cLaRruTXa+62BZ4A3Hal2RXmMuA10dZXvYvU
+        +VVFnkQcO3Pg1HV0W32C1cpRN0PBOJTF9BRuQ0swgoPG1DOmcPsmP6lBoxjq+7mjl4Kf/Jh
+        BO1NKR0qRwkgyqsuNBvG4oMpVly9T2Gj6Bs2wgYev8VvKiwek+nShd46MR8WBW+oB+1qSZU
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 11048618283240064082
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     falcon@tinylab.org, arnd@arndb.de, david.laight@aculab.com,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1693123218; l=1624;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=Zc+0e7HEVg0QwGCWDx6Xu2P8HO+18jc06c3eNrQ5BSs=;
- b=I3cB+FO3c/qRP1Az43SKg/JA1ENpSisFWRhvYaaPOIOpzgPQbco5F2Y1C3KSz2989lekn3Oil
- ClDYmtw+LBqCS5fj2sckq0WUYqvgpaUvgBqzVNCF4/GCJ2mlMrTmPbM
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+        thomas@t-8ch.de, tanyuan@tinylab.org
+Subject: [RFC] tools/nolibc: replace duplicated -ENOSYS return with single -ENOSYS return
+Date:   Sun, 27 Aug 2023 16:32:25 +0800
+Message-Id: <20230827083225.7534-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This allows nolic to work with `-nostdinc` avoiding any reliance on
-system headers.
+Hi, Willy
 
-The implementation has been lifted from musl libc 1.2.4.
-There is already an implementation of stdarg.h in include/linux/stdarg.h
-but that is GPL licensed and therefore not suitable for nolibc.
+Since we have already finished the size inflate regression task [1], to share
+and discuss the progress about the -ENOSYS return work, here launchs a new
+thread, it is split from [2].
 
-The used compiler builtins have been validated to be at least available
-since GCC 4.1.2 and clang 3.0.0.
+[1]: https://lore.kernel.org/lkml/ZNtszQeigYuItaKA@1wt.eu/
+[2]: https://lore.kernel.org/lkml/20230814172233.225944-1-falcon@tinylab.org/#R
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- tools/include/nolibc/Makefile |  1 +
- tools/include/nolibc/stdarg.h | 16 ++++++++++++++++
- 2 files changed, 17 insertions(+)
+This is only for brain storming, it is far from a solution ;-)
 
-diff --git a/tools/include/nolibc/Makefile b/tools/include/nolibc/Makefile
-index 909b6eb500fe..e69c26abe1ea 100644
---- a/tools/include/nolibc/Makefile
-+++ b/tools/include/nolibc/Makefile
-@@ -34,6 +34,7 @@ all_files := \
- 		signal.h \
- 		stackprotector.h \
- 		std.h \
-+		stdarg.h \
- 		stdint.h \
- 		stdlib.h \
- 		string.h \
-diff --git a/tools/include/nolibc/stdarg.h b/tools/include/nolibc/stdarg.h
-new file mode 100644
-index 000000000000..c628b5783da6
---- /dev/null
-+++ b/tools/include/nolibc/stdarg.h
-@@ -0,0 +1,16 @@
-+/* SPDX-License-Identifier: LGPL-2.1 OR MIT */
-+/*
-+ * Variadic argument support for NOLIBC
-+ * Copyright (C) 2005-2020 Rich Felker, et al.
-+ */
-+
-+#ifndef _NOLIBC_STDARG_H
-+#define _NOLIBC_STDARG_H
-+
-+typedef __builtin_va_list va_list;
-+#define va_start(v, l)   __builtin_va_start(v, l)
-+#define va_end(v)        __builtin_va_end(v)
-+#define va_arg(v, l)     __builtin_va_arg(v, l)
-+#define va_copy(d, s)    __builtin_va_copy(d, s)
-+
-+#endif /* _NOLIBC_STDARG_H */
+> 
+> > [...]
+> > > > 
+> > > >     /* __systry2() is used to select one of two provided low level syscalls */
+> > > >     #define __systry2(a, sys_a, sys_b) \
+> > > >     	((NOLIBC__NR_##a != NOLIBC__NR_NOSYS) ? (sys_a) : (sys_b))
+> > > 
+> > > But this supposes that all of them are manually defined as you did above.
+> > > I'd rather implement an ugly is_numeric() macro based on argument
+> > > resolution. I've done it once in another project, I don't remember
+> > > precisely where it is but I vaguely remember that it used to check
+> > > that the string resolution of the argument gave a letter (when it
+> > > does not exist) or a digit (when it does). I can look into that later
+> > > if needed. But please avoid extra macro definitions as much as possible,
+> > > they're a real pain to handle in the code. There's no error when one is
+> > > missing or has a typo, it's difficult to follow them and they don't
+> > > appear in the debugger.
+> > >
+> > 
+> > Yeah, your reply inspired me to look into the IS_ENABLED() from
+> > ../include/linux/kconfig.h macro again, there was a __is_defined() there, let's
+> > throw away the ugly sysnr.h. I thought of IS_ENABLED() was only for y/n/m
+> > before, but it does return 0 when the macro is not defined, it uses the same
+> > trick in syscall() to calculate the number of arguments, if the macro is not
+> > defined, then, 0 "argument".
+> >
+> 
+> The above trick is only for ""#define something 1" ;-)
+>
 
--- 
-2.42.0
+Here shares a little progress on this, I have found it is easy to implement an
+ugly is_numeric() like macro as following:
 
+    /* Imported from include/linux/stringify.h */
+    #define __stringify_1(x...)     #x
+    #define __stringify(x...)       __stringify_1(x)
+
+    /*
+     * Check __NR_* definition by stringizing
+     *
+     * - The stringizing is to silence compile error about undefined macro
+     * - If defined, the result looks like "3", "(4000 + 168)", not begin with '_'
+     * - If not defined, the result looks like "__NR_read", begins with '_'
+     */
+
+    #define __is_nr_defined(nr)     ___is_nr_defined(__stringify(nr))
+    #define ___is_nr_defined(str)   (str[0] != '_')
+
+__is_nr_defined() is able to check if __NR_xxx is defined, but the harder part
+is getting the number of defined __NR_* without the error about undefined
+macro.
+
+Of course, we can also use the __stringify() trick to do so, but it is
+expensive (bigger size, worse performance) to unstringify and get the number
+again, the expensive atoi() 'works' for the numeric __NR_*, but not work for
+(__NR_*_base + offset) like __NR_* definitions (used by ARM and MIPS), a simple
+interpreter is required for such cases and it is more expensive than atoi().
+
+    /* not for ARM and MIPS */
+
+    static int atoi(const char *s);
+    #define __get_nr(name)          __nr_atoi(__stringify(__NR_##name))
+    #define __nr_atoi(str)          (str[0] == '_' ? -1L : ___nr_atoi(str))
+    #define ___nr_atoi(str)         (str[0] == '(' ? -1L : atoi(str))
+
+Welcome more discussion or let's simply throw away this direction ;-)
+
+But it may really help us to drop tons of duplicated code pieces like this:
+
+    #ifdef __NR_xxxx
+    ...
+    #else
+        return -ENOSYS;
+    #endif
+
+David, Thomas and Arnd, any inspiration on this, or is this really impossible
+(or make things worse) in language level? ;-)
+
+What I'm thinking about is something like this or similar (As Willy commented
+before, the __sysdef() itself is not that good, please ignore itself, the core
+target here is using a single -ENOSYS return for all of the undefined
+branches):
+
+    #define __sysdef(name, ...)     \
+    	(__is_nr_defined(__NR_##name) ? my_syscall(__get_nr(name), ##__VA_ARGS__) : (long)-ENOSYS)
+
+Or as Arnd replied in an old email thread before, perhaps the whole #ifdef's
+code piece (and even the input types and return types of sys_*) above can be
+generated from .tbl or the generic unistd.h automatically in the sysroot
+installation stage?
+
+BR,
+Zhangjin
