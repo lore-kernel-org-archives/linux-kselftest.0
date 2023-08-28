@@ -2,149 +2,77 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF3C1C83F17
-	for <linux-kselftest@archiver.kernel.org>; Mon, 28 Aug 2023 09:57:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95409C83F16
+	for <linux-kselftest@archiver.kernel.org>; Mon, 28 Aug 2023 09:57:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230205AbjH1J4n (ORCPT
+        id S230231AbjH1J5P (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 28 Aug 2023 05:56:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41242 "EHLO
+        Mon, 28 Aug 2023 05:57:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230267AbjH1J4i (ORCPT
+        with ESMTP id S230240AbjH1J4v (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 28 Aug 2023 05:56:38 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7715B10C;
-        Mon, 28 Aug 2023 02:56:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693216595; x=1724752595;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=MwJO9kVVLHDRdzipUSYQDkBXMcwUOolgXO2rJ0yrZgg=;
-  b=I7xjsNyCI1LrxfV61cHl47CfLyNfSF/gLXH7Us1zfVA0J34w9cq8B2yI
-   XAyP+mUS7OagnprnqaDfDbtKrxG/REb9orUF/1Gsqh5ABPNbFarvMUrR+
-   CGkHa08ZnOsZ5ncEm5Gvy3+a1kQ0/S8iU5ZWJEBy2Hu3+96rv1nVjf1f+
-   SXBem4vnygKfxsKvdWcH+xPzsExyQ2hnTy94JSJ6yaBq/qq/wCxoGDi6g
-   1+sbxSU3jYYeIqsV7/NxYLgutbm6/GwJ7jzuZLOvk4ptpr78VaODdeTjR
-   K/7zI5vOOhU7fcG+ROci/qGFkGNulj9knsxGZj5YcfPV2/kx/F+YMQia7
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10815"; a="365266311"
-X-IronPort-AV: E=Sophos;i="6.02,207,1688454000"; 
-   d="scan'208";a="365266311"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2023 02:56:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10815"; a="803650168"
-X-IronPort-AV: E=Sophos;i="6.02,207,1688454000"; 
-   d="scan'208";a="803650168"
-Received: from nwiklans-mobl.ger.corp.intel.com (HELO wieczorr-mobl1.intel.com) ([10.213.22.120])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2023 02:56:19 -0700
-From:   "Wieczor-Retman, Maciej" <maciej.wieczor-retman@intel.com>
-To:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org, fenghua.yu@intel.com, reinette.chatre@intel.com
-Cc:     ilpo.jarvinen@linux.intel.com
-Subject: [PATCH v2 1/2] selftests/resctrl: Fix schemata write error check
-Date:   Mon, 28 Aug 2023 11:56:07 +0200
-Message-ID: <6c263fdd2b09060e667d179be13ce8f989821673.1693213468.git.maciej.wieczor-retman@intel.com>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <cover.1693213468.git.maciej.wieczor-retman@intel.com>
-References: <cover.1693213468.git.maciej.wieczor-retman@intel.com>
+        Mon, 28 Aug 2023 05:56:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F1010C;
+        Mon, 28 Aug 2023 02:56:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 04B156362B;
+        Mon, 28 Aug 2023 09:56:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7562C433C7;
+        Mon, 28 Aug 2023 09:56:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1693216608;
+        bh=n3ZveLCRiywPM51R3UgAxLkq2oP2wEOsDu10F1AptNA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JNLHP+peq8UXHf72xcyBxH4HegIk/sP6rv57/7Opan+gvE4Or3ydfBSwPLVxN0Zf8
+         Rt0CCHHaW0aZsoHKtXJVIOsjzuZaTyRGXEiDYltL/WzfGxRPrQ7Hm149KkGX57uDDn
+         +lkKhnNOL4TdS3hKKD4gg7Tq+9FpzZUpRAIR1c1M=
+Date:   Mon, 28 Aug 2023 11:56:40 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     stable@vger.kernel.org, "Paul E. McKenney" <paulmck@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, rcu@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5.15 1/2] torture: Avoid torture-test reboot loops
+Message-ID: <2023082815-job-hull-9b54@gregkh>
+References: <20230827215741.246948-1-joel@joelfernandes.org>
+ <2023082812-pampers-uptown-69a2@gregkh>
+ <CAEXW_YTP9mm2f5YEL=Dbr399KomN6jd8Rwx+N1MXOuefs-vzoA@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEXW_YTP9mm2f5YEL=Dbr399KomN6jd8Rwx+N1MXOuefs-vzoA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Writing bitmasks to the schemata can fail when the bitmask doesn't
-adhere to some constraints defined by what a particular CPU supports.
-Some example of constraints are max length or having contiguous bits.
-The driver should properly return errors when any rule concerning
-bitmask format is broken.
+On Sun, Aug 27, 2023 at 06:31:55PM -0400, Joel Fernandes wrote:
+> On Sun, Aug 27, 2023 at 6:27 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Sun, Aug 27, 2023 at 09:57:39PM +0000, Joel Fernandes (Google) wrote:
+> > > From: "Paul E. McKenney" <paulmck@kernel.org>
+> > >
+> > > [ Upstream commit 10f84c2cfb5045e37d78cb5d4c8e8321e06ae18f ]
+> >
+> > I don't see this commit in Linus's tree, am I just missing it somewhere?
+> >
+> 
+> Ah, this particular patch might not be in Linus's tree yet. It is in
+> Paul's tree. Feel free to ignore it for now if you want and I'll
+> resend it later (and likewise for the 5.10 one).
 
-Resctrl FS returns error codes from fprintf() only when fclose() is
-called. Current error checking scheme allows invalid bitmasks to be
-written into schemata file and the selftest doesn't notice because the
-fclose() error code isn't checked.
+Yeah, please just send it later, once it has landed in a -rc release
+otherwise there's nothing we can do with it now, sorry.
 
-Substitute fopen(), flose() and fprintf() with open(), close() and
-write() to avoid error code buffering between fprintf() and fclose().
+thanks,
 
-Add newline to the end of the schema string so it satisfies rdt
-schemata writing requirements.
-
-Remove newline character from the schemat string after writing it to
-the schemata file so it prints correctly before function return.
-
-Pass the string generated with strerror() to the "reason" buffer so
-the error message is more verbose. Extend "reason" buffer so it can hold
-longer messages.
-
-Changelog v2:
-- Rewrite patch message.
-- Double "reason" buffer size to fit longer error explanation.
-- Redo file interactions with syscalls instead of stdio functions.
-
-Signed-off-by: Wieczor-Retman, Maciej <maciej.wieczor-retman@intel.com>
----
- tools/testing/selftests/resctrl/resctrlfs.c | 24 +++++++++++----------
- 1 file changed, 13 insertions(+), 11 deletions(-)
-
-diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
-index bd36ee206602..0f9644e5a25e 100644
---- a/tools/testing/selftests/resctrl/resctrlfs.c
-+++ b/tools/testing/selftests/resctrl/resctrlfs.c
-@@ -488,9 +488,8 @@ int write_bm_pid_to_resctrl(pid_t bm_pid, char *ctrlgrp, char *mongrp,
-  */
- int write_schemata(char *ctrlgrp, char *schemata, int cpu_no, char *resctrl_val)
- {
--	char controlgroup[1024], schema[1024], reason[64];
--	int resource_id, ret = 0;
--	FILE *fp;
-+	char controlgroup[1024], schema[1024], reason[128];
-+	int resource_id, fp, ret = 0;
- 
- 	if (strncmp(resctrl_val, MBA_STR, sizeof(MBA_STR)) &&
- 	    strncmp(resctrl_val, MBM_STR, sizeof(MBM_STR)) &&
-@@ -518,27 +517,30 @@ int write_schemata(char *ctrlgrp, char *schemata, int cpu_no, char *resctrl_val)
- 
- 	if (!strncmp(resctrl_val, CAT_STR, sizeof(CAT_STR)) ||
- 	    !strncmp(resctrl_val, CMT_STR, sizeof(CMT_STR)))
--		sprintf(schema, "%s%d%c%s", "L3:", resource_id, '=', schemata);
-+		snprintf(schema, sizeof(schema), "%s%d%c%s\n", "L3:",
-+			 resource_id, '=', schemata);
- 	if (!strncmp(resctrl_val, MBA_STR, sizeof(MBA_STR)) ||
- 	    !strncmp(resctrl_val, MBM_STR, sizeof(MBM_STR)))
--		sprintf(schema, "%s%d%c%s", "MB:", resource_id, '=', schemata);
-+		snprintf(schema, sizeof(schema), "%s%d%c%s\n", "MB:",
-+			 resource_id, '=', schemata);
- 
--	fp = fopen(controlgroup, "w");
-+	fp = open(controlgroup, O_WRONLY);
- 	if (!fp) {
- 		sprintf(reason, "Failed to open control group");
- 		ret = -1;
- 
- 		goto out;
- 	}
--
--	if (fprintf(fp, "%s\n", schema) < 0) {
--		sprintf(reason, "Failed to write schemata in control group");
--		fclose(fp);
-+	if (write(fp, schema, strlen(schema)) < 0) {
-+		snprintf(reason, sizeof(reason),
-+			 "write() failed : %s", strerror(errno));
-+		close(fp);
- 		ret = -1;
- 
- 		goto out;
- 	}
--	fclose(fp);
-+	close(fp);
-+	schema[strcspn(schema, "\n")] = 0;
- 
- out:
- 	ksft_print_msg("Write schema \"%s\" to resctrl FS%s%s\n",
--- 
-2.42.0
-
+greg k-h
