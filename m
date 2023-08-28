@@ -2,103 +2,207 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6713DC71153
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC2E7C83F13
 	for <linux-kselftest@archiver.kernel.org>; Mon, 28 Aug 2023 09:57:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230192AbjH1J4n (ORCPT
+        id S230019AbjH1J4n (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Mon, 28 Aug 2023 05:56:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41220 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230265AbjH1J4h (ORCPT
+        with ESMTP id S230268AbjH1J4i (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 28 Aug 2023 05:56:37 -0400
+        Mon, 28 Aug 2023 05:56:38 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC107110;
-        Mon, 28 Aug 2023 02:56:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1F67CA;
+        Mon, 28 Aug 2023 02:56:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693216594; x=1724752594;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=83BH7b4GlvBh9TptjxL2A1sfhSS1AvOLrnGkC7t0Q4k=;
-  b=TVjQDslwbd5JatAe2eXQGW06LIaDhxaPHM+ZXQ4DI/gx5FLAWoJz4B+H
-   qph5QcBSEFI2oqMUHWB+WDM6SifQVOLlLCSUjLjmLFzE/Z+GWXC3Rr611
-   57aAYsyGsrfr9JeTQRze1EjCoagc6UiTaO7X5/z4mWC141UZujY95DloH
-   /qBqi7Gsa79Tf7pz9MS0MsuEm5Vh2fHD/SFG2g7Q98Ys303WH7run9dhV
-   MdOQfmA1S1o18pEwIL4eUUpzxwb8c8xX/p/RiOKK3xwGk/0veAXQ3Ydpd
-   ZFFNmSSq7I5klvZG8X8CHeJ06fDdz0QXP5pYYaJbSc6ahyTmShosk4AeV
+  t=1693216595; x=1724752595;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=H89TLv6wv6gErS1qZLGjMTMvbnqWuUsT01peqKrPBbI=;
+  b=eSJvlS16cUKtj9ot1Kyuj3PN1riWii6EbcIj/FF+t4GARyn24LUfG9ap
+   /UJ9ULoUHtuN7GmXBa5xQP0tCQSAdqTW4qHnOdPS3VxEghQ++4UG58kQ+
+   SEjdvCoDo1Wti7d8kfw6HOT4ZOyDzqpxsh964F1Uc2C5bK/2BlrS/cbq5
+   OqM5LnSpqA9U+9LSvQ6dvSsHwAk1QkGOgho0O1jPpJMoPoaUXW3whjeUJ
+   ZhyPFefHzKNMOTMVfX3df549jQOKoQ+D5RJcJ/I1QlzPM695ji6CBpgtq
+   tPFas4+vlYKQlXLxYEHHZgZxIqTqw3fBJQ3mpoe7A59QexubFbJLRoj+v
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10815"; a="365266305"
+X-IronPort-AV: E=McAfee;i="6600,9927,10815"; a="365266315"
 X-IronPort-AV: E=Sophos;i="6.02,207,1688454000"; 
-   d="scan'208";a="365266305"
+   d="scan'208";a="365266315"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2023 02:56:19 -0700
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2023 02:56:23 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10815"; a="803650165"
+X-IronPort-AV: E=McAfee;i="6600,9927,10815"; a="803650171"
 X-IronPort-AV: E=Sophos;i="6.02,207,1688454000"; 
-   d="scan'208";a="803650165"
+   d="scan'208";a="803650171"
 Received: from nwiklans-mobl.ger.corp.intel.com (HELO wieczorr-mobl1.intel.com) ([10.213.22.120])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2023 02:56:17 -0700
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2023 02:56:21 -0700
 From:   "Wieczor-Retman, Maciej" <maciej.wieczor-retman@intel.com>
 To:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         shuah@kernel.org, fenghua.yu@intel.com, reinette.chatre@intel.com
 Cc:     ilpo.jarvinen@linux.intel.com
-Subject: [PATCH v2 0/2] selftests/resctrl: Bug fix and optimizations
-Date:   Mon, 28 Aug 2023 11:56:06 +0200
-Message-ID: <cover.1693213468.git.maciej.wieczor-retman@intel.com>
+Subject: [PATCH v2 2/2] selftests/resctrl: Move run_benchmark() to a more fitting file
+Date:   Mon, 28 Aug 2023 11:56:08 +0200
+Message-ID: <e527be8b871212823ff83f3800b6eecc2a75e455.1693213468.git.maciej.wieczor-retman@intel.com>
 X-Mailer: git-send-email 2.42.0
+In-Reply-To: <cover.1693213468.git.maciej.wieczor-retman@intel.com>
+References: <cover.1693213468.git.maciej.wieczor-retman@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Write_schemata() uses fprintf() to write a bitmask into a schemata file
-inside resctrl FS. It checks fprintf() return value but it doesn't check
-fclose() return value. Error codes from fprintf() such as write errors,
-are flushed back to the user only after fclose() is executed which means
-any invalid bitmask can be written into the schemata file.
+Resctrlfs.c file contains mostly functions that interact in some way
+with resctrl FS entries while functions inside resctrl_val.c deal with
+measurements and benchmarking.
 
-Rewrite write_schemata() to use syscalls instead of stdio functions to
-interact with the schemata file.
+Run_benchmark() function is located in resctrlfs.c file even though it's
+purpose is not interacting with the resctrl FS but to execute cache
+checking logic.
 
-Change sprintf() to snprintf() in write_schemata().
+Move run_benchmark() to resctrl_val.c just before resctrl_val() function
+that makes use of run_benchmark().
 
-In case of write() returning an error pass the string acquired with
-strerror() to the "reason" buffer.
-
-Extend "reason" buffer by a factor of two so it can hold longer error
-messages.
-
-The resctrlfs.c file defines functions that interact with the resctrl FS
-while resctrl_val.c file defines functions that perform measurements on
-the cache. Run_benchmark() fits logically into the second file before
-resctrl_val() function that uses it.
-
-Move run_benchmark() from resctrlfs.c to resctrl_val.c just before
-resctrl_val() function definition.
-
-Series is based on kselftest next branch.
+Remove return comment from kernel-doc since the function is type void.
 
 Changelog v2:
-- Change sprintf() to snprintf() in write_schemata().
-- Redo write_schemata() with syscalls instead of stdio functions.
-- Fix typos and missing dots in patch messages.
-- Branch printf attribute patch to a separate series.
+- Add dots at the end of patch msg sentences.
+- Remove "Return: void" from run_benchmark() kernel-doc comment.
 
-[v1] https://lore.kernel.org/all/cover.1692880423.git.maciej.wieczor-retman@intel.com/
+Signed-off-by: Wieczor-Retman, Maciej <maciej.wieczor-retman@intel.com>
+---
+ tools/testing/selftests/resctrl/resctrl_val.c | 50 ++++++++++++++++++
+ tools/testing/selftests/resctrl/resctrlfs.c   | 52 -------------------
+ 2 files changed, 50 insertions(+), 52 deletions(-)
 
-Wieczor-Retman, Maciej (2):
-  selftests/resctrl: Fix schemata write error check
-  selftests/resctrl: Move run_benchmark() to a more fitting file
-
- tools/testing/selftests/resctrl/resctrl_val.c | 50 ++++++++++++
- tools/testing/selftests/resctrl/resctrlfs.c   | 76 ++++---------------
- 2 files changed, 63 insertions(+), 63 deletions(-)
-
-
-base-commit: 13eb52f6293dbda02890698d92f3d9913d8d5aeb
+diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
+index f0f6c5f6e98b..5c8dc0a7bab9 100644
+--- a/tools/testing/selftests/resctrl/resctrl_val.c
++++ b/tools/testing/selftests/resctrl/resctrl_val.c
+@@ -621,6 +621,56 @@ measure_vals(struct resctrl_val_param *param, unsigned long *bw_resc_start)
+ 	return 0;
+ }
+ 
++/*
++ * run_benchmark - Run a specified benchmark or fill_buf (default benchmark)
++ *		   in specified signal. Direct benchmark stdio to /dev/null.
++ * @signum:	signal number
++ * @info:	signal info
++ * @ucontext:	user context in signal handling
++ */
++void run_benchmark(int signum, siginfo_t *info, void *ucontext)
++{
++	int operation, ret, memflush;
++	char **benchmark_cmd;
++	size_t span;
++	bool once;
++	FILE *fp;
++
++	benchmark_cmd = info->si_ptr;
++
++	/*
++	 * Direct stdio of child to /dev/null, so that only parent writes to
++	 * stdio (console)
++	 */
++	fp = freopen("/dev/null", "w", stdout);
++	if (!fp)
++		PARENT_EXIT("Unable to direct benchmark status to /dev/null");
++
++	if (strcmp(benchmark_cmd[0], "fill_buf") == 0) {
++		/* Execute default fill_buf benchmark */
++		span = strtoul(benchmark_cmd[1], NULL, 10);
++		memflush =  atoi(benchmark_cmd[2]);
++		operation = atoi(benchmark_cmd[3]);
++		if (!strcmp(benchmark_cmd[4], "true"))
++			once = true;
++		else if (!strcmp(benchmark_cmd[4], "false"))
++			once = false;
++		else
++			PARENT_EXIT("Invalid once parameter");
++
++		if (run_fill_buf(span, memflush, operation, once))
++			fprintf(stderr, "Error in running fill buffer\n");
++	} else {
++		/* Execute specified benchmark */
++		ret = execvp(benchmark_cmd[0], benchmark_cmd);
++		if (ret)
++			perror("wrong\n");
++	}
++
++	fclose(stdout);
++	PARENT_EXIT("Unable to run specified benchmark");
++}
++
+ /*
+  * resctrl_val:	execute benchmark and measure memory bandwidth on
+  *			the benchmark
+diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
+index 0f9644e5a25e..72dd8c3f655a 100644
+--- a/tools/testing/selftests/resctrl/resctrlfs.c
++++ b/tools/testing/selftests/resctrl/resctrlfs.c
+@@ -291,58 +291,6 @@ int taskset_benchmark(pid_t bm_pid, int cpu_no)
+ 	return 0;
+ }
+ 
+-/*
+- * run_benchmark - Run a specified benchmark or fill_buf (default benchmark)
+- *		   in specified signal. Direct benchmark stdio to /dev/null.
+- * @signum:	signal number
+- * @info:	signal info
+- * @ucontext:	user context in signal handling
+- *
+- * Return: void
+- */
+-void run_benchmark(int signum, siginfo_t *info, void *ucontext)
+-{
+-	int operation, ret, memflush;
+-	char **benchmark_cmd;
+-	size_t span;
+-	bool once;
+-	FILE *fp;
+-
+-	benchmark_cmd = info->si_ptr;
+-
+-	/*
+-	 * Direct stdio of child to /dev/null, so that only parent writes to
+-	 * stdio (console)
+-	 */
+-	fp = freopen("/dev/null", "w", stdout);
+-	if (!fp)
+-		PARENT_EXIT("Unable to direct benchmark status to /dev/null");
+-
+-	if (strcmp(benchmark_cmd[0], "fill_buf") == 0) {
+-		/* Execute default fill_buf benchmark */
+-		span = strtoul(benchmark_cmd[1], NULL, 10);
+-		memflush =  atoi(benchmark_cmd[2]);
+-		operation = atoi(benchmark_cmd[3]);
+-		if (!strcmp(benchmark_cmd[4], "true"))
+-			once = true;
+-		else if (!strcmp(benchmark_cmd[4], "false"))
+-			once = false;
+-		else
+-			PARENT_EXIT("Invalid once parameter");
+-
+-		if (run_fill_buf(span, memflush, operation, once))
+-			fprintf(stderr, "Error in running fill buffer\n");
+-	} else {
+-		/* Execute specified benchmark */
+-		ret = execvp(benchmark_cmd[0], benchmark_cmd);
+-		if (ret)
+-			perror("wrong\n");
+-	}
+-
+-	fclose(stdout);
+-	PARENT_EXIT("Unable to run specified benchmark");
+-}
+-
+ /*
+  * create_grp - Create a group only if one doesn't exist
+  * @grp_name:	Name of the group
 -- 
 2.42.0
 
