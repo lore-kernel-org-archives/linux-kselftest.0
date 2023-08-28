@@ -2,265 +2,213 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5C9BC83F13
-	for <linux-kselftest@archiver.kernel.org>; Mon, 28 Aug 2023 10:27:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DC9C3C83F13
+	for <linux-kselftest@archiver.kernel.org>; Mon, 28 Aug 2023 10:42:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231222AbjH1K1A (ORCPT
+        id S231728AbjH1Klc (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 28 Aug 2023 06:27:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55998 "EHLO
+        Mon, 28 Aug 2023 06:41:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231223AbjH1K0e (ORCPT
+        with ESMTP id S231839AbjH1Kl3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 28 Aug 2023 06:26:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B16BAB;
-        Mon, 28 Aug 2023 03:26:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9468A63B14;
-        Mon, 28 Aug 2023 10:26:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80F66C433BB;
-        Mon, 28 Aug 2023 10:26:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1693218391;
-        bh=OA/S58v6LhfALqigNs/3TLHurKf7FxzbJREmAHkJVGo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V+OTZnJjsR1/Ok5QbcUst8/oSJrwNH9aSGCzBxqxB3xfwRW+FwrcQqSy3eGTCHDVD
-         4YZdKYopEL2E0YUsLueQmH/gTFycdKvPUo4UmfynslEc206JooTrnOwkJST1OIpAD7
-         sLJtf/VLJFzfyIj1S1/Ezki1Mezj1ZfzjSL63mG0=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev, Luis Chamberlain <mcgrof@kernel.org>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Takashi Iwai <tiwai@suse.de>,
-        Tianfei Zhang <tianfei.zhang@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-kselftest@vger.kernel.org, Dan Carpenter <error27@gmail.com>,
-        Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Subject: [PATCH 4.19 071/129] test_firmware: prevent race conditions by a correct implementation of locking
-Date:   Mon, 28 Aug 2023 12:12:45 +0200
-Message-ID: <20230828101155.947513225@linuxfoundation.org>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20230828101153.030066927@linuxfoundation.org>
-References: <20230828101153.030066927@linuxfoundation.org>
-User-Agent: quilt/0.67
-X-stable: review
-X-Patchwork-Hint: ignore
+        Mon, 28 Aug 2023 06:41:29 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEF0B10D;
+        Mon, 28 Aug 2023 03:41:26 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 37SABuZ6031648;
+        Mon, 28 Aug 2023 05:41:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=
+        from:to:cc:subject:date:message-id:in-reply-to:references
+        :mime-version:content-transfer-encoding:content-type; s=
+        PODMain02222019; bh=RkZ8xCcZ3UMTGogkeydC7OX2TEr2MncOm2cw4C1tpFU=; b=
+        Cs6bmFuPk1hNLC+BomMoX9EjNgMc19YxA9GAtebXTBCyPqPhM+GA+SAw85eerWXm
+        vBvH6n10N6gvlvjV8QfiIOCOmmOIT8KkT+QLud+VFnNo8onrBjo2dKwO1RvziW0I
+        IlVCddsXA8qByBbRnx9uahfSbsSkpkiyWXZ+Kou3+4s+OqA6Oza05jg74cfpDsav
+        W76mahzOYRhfwmeb8HsfDBIaK2Mku6j3mV6ABHKhYRVe79/DvXj9Xp24Ulp+IcJs
+        Eq/GmBNus5t/Do0i7fFQEOqK9TkFN13iomYsk2WFE7lP6nQHjOsKrdATchVmpFag
+        2lHRhSg1uugRMeS6Osrg4Q==
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3sqdtj1my9-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Aug 2023 05:41:14 -0500 (CDT)
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.37; Mon, 28 Aug
+ 2023 11:41:12 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.37 via Frontend Transport; Mon, 28 Aug 2023 11:41:12 +0100
+Received: from edi-sw-dsktp-006.ad.cirrus.com (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.75])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 3B90746B;
+        Mon, 28 Aug 2023 10:41:12 +0000 (UTC)
+From:   Richard Fitzgerald <rf@opensource.cirrus.com>
+To:     <brendan.higgins@linux.dev>, <davidgow@google.com>,
+        <rmoar@google.com>
+CC:     <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
+        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>,
+        "Richard Fitzgerald" <rf@opensource.cirrus.com>
+Subject: [PATCH v6 04/10] kunit: string-stream-test: Add cases for string_stream newline appending
+Date:   Mon, 28 Aug 2023 11:41:05 +0100
+Message-ID: <20230828104111.2394344-5-rf@opensource.cirrus.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230828104111.2394344-1-rf@opensource.cirrus.com>
+References: <20230828104111.2394344-1-rf@opensource.cirrus.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: F6mP4e2phWsvW7AoK6LOWJHWyYx-b_w7
+X-Proofpoint-GUID: F6mP4e2phWsvW7AoK6LOWJHWyYx-b_w7
+X-Proofpoint-Spam-Reason: safe
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-4.19-stable review patch.  If anyone has any objections, please let me know.
+Add test cases for testing the string_stream feature that appends a
+newline to strings that do not already end with a newline.
 
-------------------
+string_stream_no_auto_newline_test() tests with this feature disabled.
+Newlines should not be added or dropped.
 
-From: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+string_stream_auto_newline_test() tests with this feature enabled.
+Newlines should be added to lines that do not end with a newline.
 
-commit 4acfe3dfde685a5a9eaec5555351918e2d7266a1 upstream.
+string_stream_append_auto_newline_test() tests appending the
+content of one stream to another stream when the target stream
+has newline appending enabled.
 
-Dan Carpenter spotted a race condition in a couple of situations like
-these in the test_firmware driver:
-
-static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
-{
-        u8 val;
-        int ret;
-
-        ret = kstrtou8(buf, 10, &val);
-        if (ret)
-                return ret;
-
-        mutex_lock(&test_fw_mutex);
-        *(u8 *)cfg = val;
-        mutex_unlock(&test_fw_mutex);
-
-        /* Always return full write size even if we didn't consume all */
-        return size;
-}
-
-static ssize_t config_num_requests_store(struct device *dev,
-                                         struct device_attribute *attr,
-                                         const char *buf, size_t count)
-{
-        int rc;
-
-        mutex_lock(&test_fw_mutex);
-        if (test_fw_config->reqs) {
-                pr_err("Must call release_all_firmware prior to changing config\n");
-                rc = -EINVAL;
-                mutex_unlock(&test_fw_mutex);
-                goto out;
-        }
-        mutex_unlock(&test_fw_mutex);
-
-        rc = test_dev_config_update_u8(buf, count,
-                                       &test_fw_config->num_requests);
-
-out:
-        return rc;
-}
-
-static ssize_t config_read_fw_idx_store(struct device *dev,
-                                        struct device_attribute *attr,
-                                        const char *buf, size_t count)
-{
-        return test_dev_config_update_u8(buf, count,
-                                         &test_fw_config->read_fw_idx);
-}
-
-The function test_dev_config_update_u8() is called from both the locked
-and the unlocked context, function config_num_requests_store() and
-config_read_fw_idx_store() which can both be called asynchronously as
-they are driver's methods, while test_dev_config_update_u8() and siblings
-change their argument pointed to by u8 *cfg or similar pointer.
-
-To avoid deadlock on test_fw_mutex, the lock is dropped before calling
-test_dev_config_update_u8() and re-acquired within test_dev_config_update_u8()
-itself, but alas this creates a race condition.
-
-Having two locks wouldn't assure a race-proof mutual exclusion.
-
-This situation is best avoided by the introduction of a new, unlocked
-function __test_dev_config_update_u8() which can be called from the locked
-context and reducing test_dev_config_update_u8() to:
-
-static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
-{
-        int ret;
-
-        mutex_lock(&test_fw_mutex);
-        ret = __test_dev_config_update_u8(buf, size, cfg);
-        mutex_unlock(&test_fw_mutex);
-
-        return ret;
-}
-
-doing the locking and calling the unlocked primitive, which enables both
-locked and unlocked versions without duplication of code.
-
-The similar approach was applied to all functions called from the locked
-and the unlocked context, which safely mitigates both deadlocks and race
-conditions in the driver.
-
-__test_dev_config_update_bool(), __test_dev_config_update_u8() and
-__test_dev_config_update_size_t() unlocked versions of the functions
-were introduced to be called from the locked contexts as a workaround
-without releasing the main driver's lock and thereof causing a race
-condition.
-
-The test_dev_config_update_bool(), test_dev_config_update_u8() and
-test_dev_config_update_size_t() locked versions of the functions
-are being called from driver methods without the unnecessary multiplying
-of the locking and unlocking code for each method, and complicating
-the code with saving of the return value across lock.
-
-Fixes: 7feebfa487b92 ("test_firmware: add support for request_firmware_into_buf")
-Cc: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Russ Weight <russell.h.weight@intel.com>
-Cc: Takashi Iwai <tiwai@suse.de>
-Cc: Tianfei Zhang <tianfei.zhang@intel.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Colin Ian King <colin.i.king@gmail.com>
-Cc: Randy Dunlap <rdunlap@infradead.org>
-Cc: linux-kselftest@vger.kernel.org
-Cc: stable@vger.kernel.org # v5.4
-Suggested-by: Dan Carpenter <error27@gmail.com>
-Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Link: https://lore.kernel.org/r/20230509084746.48259-1-mirsad.todorovac@alu.unizg.hr
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+Reviewed-by: Rae Moar <rmoar@google.com>
+Reviewed-by: David Gow <davidgow@google.com>
 ---
- lib/test_firmware.c |   37 ++++++++++++++++++++++++++++---------
- 1 file changed, 28 insertions(+), 9 deletions(-)
+ lib/kunit/string-stream-test.c | 93 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 93 insertions(+)
 
---- a/lib/test_firmware.c
-+++ b/lib/test_firmware.c
-@@ -284,16 +284,26 @@ static ssize_t config_test_show_str(char
- 	return len;
+diff --git a/lib/kunit/string-stream-test.c b/lib/kunit/string-stream-test.c
+index 7e17307ca78c..f117c4b7389b 100644
+--- a/lib/kunit/string-stream-test.c
++++ b/lib/kunit/string-stream-test.c
+@@ -32,6 +32,7 @@ static void string_stream_init_test(struct kunit *test)
+ 	KUNIT_EXPECT_TRUE(test, list_empty(&stream->fragments));
+ 	KUNIT_EXPECT_PTR_EQ(test, stream->test, test);
+ 	KUNIT_EXPECT_TRUE(test, (stream->gfp == GFP_KERNEL));
++	KUNIT_EXPECT_FALSE(test, stream->append_newlines);
+ 	KUNIT_EXPECT_TRUE(test, string_stream_is_empty(stream));
  }
  
--static int test_dev_config_update_bool(const char *buf, size_t size,
--				       bool *cfg)
-+static inline int __test_dev_config_update_bool(const char *buf, size_t size,
-+						bool *cfg)
- {
- 	int ret;
+@@ -215,6 +216,45 @@ static void string_stream_append_test(struct kunit *test)
+ 	KUNIT_EXPECT_STREQ(test, get_concatenated_string(test, stream_1), stream_2_content);
+ }
  
--	mutex_lock(&test_fw_mutex);
- 	if (strtobool(buf, cfg) < 0)
- 		ret = -EINVAL;
- 	else
- 		ret = size;
++/* Appending the content of one string stream to one with auto-newlining. */
++static void string_stream_append_auto_newline_test(struct kunit *test)
++{
++	struct string_stream *stream_1, *stream_2;
 +
-+	return ret;
++	/* Stream 1 has newline appending enabled */
++	stream_1 = alloc_string_stream(test, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream_1);
++	string_stream_set_append_newlines(stream_1, true);
++	KUNIT_EXPECT_TRUE(test, stream_1->append_newlines);
++
++	/* Stream 2 does not append newlines */
++	stream_2 = alloc_string_stream(test, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream_2);
++
++	/* Appending a stream with a newline should not add another newline */
++	string_stream_add(stream_1, "Original string\n");
++	string_stream_add(stream_2, "Appended content\n");
++	string_stream_add(stream_2, "More stuff\n");
++	string_stream_append(stream_1, stream_2);
++	KUNIT_EXPECT_STREQ(test, get_concatenated_string(test, stream_1),
++			   "Original string\nAppended content\nMore stuff\n");
++
++	string_stream_destroy(stream_2);
++	stream_2 = alloc_string_stream(test, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream_2);
++
++	/*
++	 * Appending a stream without newline should add a final newline.
++	 * The appended string_stream is treated as a single string so newlines
++	 * should not be inserted between fragments.
++	 */
++	string_stream_add(stream_2, "Another");
++	string_stream_add(stream_2, "And again");
++	string_stream_append(stream_1, stream_2);
++	KUNIT_EXPECT_STREQ(test, get_concatenated_string(test, stream_1),
++			   "Original string\nAppended content\nMore stuff\nAnotherAnd again\n");
 +}
 +
-+static int test_dev_config_update_bool(const char *buf, size_t size,
-+				       bool *cfg)
-+{
-+	int ret;
-+
-+	mutex_lock(&test_fw_mutex);
-+	ret = __test_dev_config_update_bool(buf, size, cfg);
- 	mutex_unlock(&test_fw_mutex);
- 
- 	return ret;
-@@ -323,7 +333,7 @@ static ssize_t test_dev_config_show_int(
- 	return snprintf(buf, PAGE_SIZE, "%d\n", val);
- }
- 
--static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
-+static inline int __test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
+ /* Adding an empty string should not create a fragment. */
+ static void string_stream_append_empty_string_test(struct kunit *test)
  {
- 	int ret;
- 	long new;
-@@ -335,14 +345,23 @@ static int test_dev_config_update_u8(con
- 	if (new > U8_MAX)
- 		return -EINVAL;
- 
--	mutex_lock(&test_fw_mutex);
- 	*(u8 *)cfg = new;
--	mutex_unlock(&test_fw_mutex);
- 
- 	/* Always return full write size even if we didn't consume all */
- 	return size;
+@@ -238,12 +278,65 @@ static void string_stream_append_empty_string_test(struct kunit *test)
+ 	KUNIT_EXPECT_STREQ(test, get_concatenated_string(test, stream), "Add this line");
  }
  
-+static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
++/* Adding strings without automatic newline appending */
++static void string_stream_no_auto_newline_test(struct kunit *test)
 +{
-+	int ret;
++	struct string_stream *stream;
 +
-+	mutex_lock(&test_fw_mutex);
-+	ret = __test_dev_config_update_u8(buf, size, cfg);
-+	mutex_unlock(&test_fw_mutex);
++	stream = alloc_string_stream(test, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream);
 +
-+	return ret;
++	/*
++	 * Add some strings with and without newlines. All formatted newlines
++	 * should be preserved. It should not add any extra newlines.
++	 */
++	string_stream_add(stream, "One");
++	string_stream_add(stream, "Two\n");
++	string_stream_add(stream, "%s\n", "Three");
++	string_stream_add(stream, "%s", "Four\n");
++	string_stream_add(stream, "Five\n%s", "Six");
++	string_stream_add(stream, "Seven\n\n");
++	string_stream_add(stream, "Eight");
++	KUNIT_EXPECT_STREQ(test, get_concatenated_string(test, stream),
++			   "OneTwo\nThree\nFour\nFive\nSixSeven\n\nEight");
 +}
 +
- static ssize_t test_dev_config_show_u8(char *buf, u8 cfg)
- {
- 	u8 val;
-@@ -375,10 +394,10 @@ static ssize_t config_num_requests_store
- 		mutex_unlock(&test_fw_mutex);
- 		goto out;
- 	}
--	mutex_unlock(&test_fw_mutex);
++/* Adding strings with automatic newline appending */
++static void string_stream_auto_newline_test(struct kunit *test)
++{
++	struct string_stream *stream;
++
++	stream = alloc_string_stream(test, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream);
++
++	string_stream_set_append_newlines(stream, true);
++	KUNIT_EXPECT_TRUE(test, stream->append_newlines);
++
++	/*
++	 * Add some strings with and without newlines. Newlines should
++	 * be appended to lines that do not end with \n, but newlines
++	 * resulting from the formatting should not be changed.
++	 */
++	string_stream_add(stream, "One");
++	string_stream_add(stream, "Two\n");
++	string_stream_add(stream, "%s\n", "Three");
++	string_stream_add(stream, "%s", "Four\n");
++	string_stream_add(stream, "Five\n%s", "Six");
++	string_stream_add(stream, "Seven\n\n");
++	string_stream_add(stream, "Eight");
++	KUNIT_EXPECT_STREQ(test, get_concatenated_string(test, stream),
++			   "One\nTwo\nThree\nFour\nFive\nSix\nSeven\n\nEight\n");
++}
++
+ static struct kunit_case string_stream_test_cases[] = {
+ 	KUNIT_CASE(string_stream_init_test),
+ 	KUNIT_CASE(string_stream_line_add_test),
+ 	KUNIT_CASE(string_stream_variable_length_line_test),
+ 	KUNIT_CASE(string_stream_append_test),
++	KUNIT_CASE(string_stream_append_auto_newline_test),
+ 	KUNIT_CASE(string_stream_append_empty_string_test),
++	KUNIT_CASE(string_stream_no_auto_newline_test),
++	KUNIT_CASE(string_stream_auto_newline_test),
+ 	{}
+ };
  
--	rc = test_dev_config_update_u8(buf, count,
--				       &test_fw_config->num_requests);
-+	rc = __test_dev_config_update_u8(buf, count,
-+					 &test_fw_config->num_requests);
-+	mutex_unlock(&test_fw_mutex);
- 
- out:
- 	return rc;
-
+-- 
+2.30.2
 
