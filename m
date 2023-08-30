@@ -2,221 +2,98 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2A24C83F1E
-	for <linux-kselftest@archiver.kernel.org>; Wed, 30 Aug 2023 18:45:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CC76C6FA8F
+	for <linux-kselftest@archiver.kernel.org>; Wed, 30 Aug 2023 18:45:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238267AbjH3Sha (ORCPT
+        id S238306AbjH3Shg (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 30 Aug 2023 14:37:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57920 "EHLO
+        Wed, 30 Aug 2023 14:37:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245654AbjH3Ps6 (ORCPT
+        with ESMTP id S243872AbjH3MCi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 30 Aug 2023 11:48:58 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8332B19A;
-        Wed, 30 Aug 2023 08:48:55 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 7294A5C0125;
-        Wed, 30 Aug 2023 11:48:52 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Wed, 30 Aug 2023 11:48:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1693410532; x=1693496932; bh=OBnVGQWEM3kMS
-        4B7KKbSwDUGaRUbADHZE4qYXlfiygM=; b=PvLNe5kKHYWU/kPp5/cS8VLuYCn9I
-        4lNckk7tMtgEHmv4VNrGWwF88UPNyjelrIt7RkQqqlHto6gN4L8mntb0sbyqBSia
-        86Gxu5hZr2/RTRD6MpIRfKuS2vc5Ib803/E+YRRgtv87koxrbg/1fwaDM87f5LwZ
-        fowfKR72EM4xuLyc7Asu7O+tYYurB3QEkL6epRmM73azPWKMMRcNuzzT61Aj+JDq
-        Br8aqCnp2Pvk1u9LMniYDnKecBb4IfHVIHOJkV4l+qvocqwDgFi/EpST95gUeyG0
-        hUCw6NhUXB62k+XdF81EXT88acnubjpR1msWjpKWG/4AqtGRdnKNT5CGQ==
-X-ME-Sender: <xms:5GTvZCaczUmjdeSEq0nl0ximLjWr1U7ozfldVZiKrqZPkz2nnpudAg>
-    <xme:5GTvZFa801WI9x03l1A-ufF_yqbejNTdsiL_3h1XBVRzonkRW18yeoZop7EMD1jfe
-    yN0haE1F5pSnWg>
-X-ME-Received: <xmr:5GTvZM_MBPGrGMELEqs7Jdgkr7_MKzoZbntMVUU6iV1q_jBu2RQsOXHW-rDA45CY8wO5nez5mf_0o1qQwyIquIhXKBsBlw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudefkedgleeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepkfguohcu
-    ufgthhhimhhmvghluceoihguohhstghhsehiughoshgthhdrohhrgheqnecuggftrfgrth
-    htvghrnhepvddufeevkeehueegfedtvdevfefgudeifeduieefgfelkeehgeelgeejjeeg
-    gefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepih
-    guohhstghhsehiughoshgthhdrohhrgh
-X-ME-Proxy: <xmx:5GTvZEqaxIQAAKiuq-FIvjQDhoLF0v9aUNUpPLz5BxSjyFAAHJKzuw>
-    <xmx:5GTvZNrxz85PDRLg9sUaNoLDszxQmtGMjusVDuZzD3pCtt6FCdJTCA>
-    <xmx:5GTvZCRysmOkjJ1pC5TIDwgLB72K86VK-Ju0Jx1Jznt93zQ_Sc4fSQ>
-    <xmx:5GTvZBeHTOFhHHRduGki5e_tMbXpiDxjr4ZJN18IgrzifRAN7wSrUA>
-Feedback-ID: i494840e7:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 30 Aug 2023 11:48:51 -0400 (EDT)
-Date:   Wed, 30 Aug 2023 18:48:46 +0300
-From:   Ido Schimmel <idosch@idosch.org>
-To:     Sriram Yagnaraman <sriram.yagnaraman@est.tech>
-Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        David Ahern <dsahern@kernel.org>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Shuah Khan <shuah@kernel.org>, Petr Machata <petrm@nvidia.com>
-Subject: Re: [PATCH net v4 3/3] selftests: fib_tests: Add multipath list
- receive tests
-Message-ID: <ZO9k3kSVHpxO1owX@shredder>
-References: <20230830091341.17273-1-sriram.yagnaraman@est.tech>
- <20230830091341.17273-4-sriram.yagnaraman@est.tech>
+        Wed, 30 Aug 2023 08:02:38 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A6A21B0;
+        Wed, 30 Aug 2023 05:02:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693396955; x=1724932955;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=1degSlUV8LRbIbk2hC2XASw2C2v2cLyXXAVR2XjG63I=;
+  b=HL2zdzEHWGjDIniG24gabe3BKC2YJy7bvTOZTRJbKv05PErp7k293Esh
+   1Gyx/B+xd9H2uvDPrKClCc/MUOvHCVdYJ6NLwq+Rt62vAriws7r0ezI49
+   6TU5cnC92H1kiav1C/FdxciO1NqxOB1ciP5kEwAY0ADQMSCrnSXuFYvuC
+   DNU1sVLcG5mcOGpkdwkA9BcbDxDiQytMemzFw5O1xpWA0L+fNGiiOcIGw
+   ri9qJLHiJ0AU9+5k8XI06ZkFdNAs6XbnZRYOO11MmZAbjCOfzP/cJHMSb
+   P4eTtgwv9qN7dACPmUvgXZa4bAVkefm53X1i9/T9DLE9jiQXLpTnMWCWy
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10817"; a="375577493"
+X-IronPort-AV: E=Sophos;i="6.02,213,1688454000"; 
+   d="scan'208";a="375577493"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2023 05:02:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10817"; a="774093734"
+X-IronPort-AV: E=Sophos;i="6.02,213,1688454000"; 
+   d="scan'208";a="774093734"
+Received: from aghiriba-mobl.ger.corp.intel.com ([10.251.213.104])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2023 05:02:19 -0700
+Date:   Wed, 30 Aug 2023 15:02:17 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     "Wieczor-Retman, Maciej" <maciej.wieczor-retman@intel.com>
+cc:     Shuah Khan <shuah@kernel.org>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        "Wieczor-Retman, Maciej" <maciej.wieczor-retman@intel.com>,
+        Wieczor-Retman@linux.intel.com, linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 5/6] selftests/sigaltstack: Fix wrong format specifier
+In-Reply-To: <613189f12a8c15df7dc725e4b7ed66ffa4b30fb5.1693216959.git.maciej.wieczor-retman@intel.com>
+Message-ID: <46e34e14-165-348f-aefd-372afe2e492@linux.intel.com>
+References: <cover.1693216959.git.maciej.wieczor-retman@intel.com> <613189f12a8c15df7dc725e4b7ed66ffa4b30fb5.1693216959.git.maciej.wieczor-retman@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230830091341.17273-4-sriram.yagnaraman@est.tech>
+Content-Type: multipart/mixed; boundary="8323329-454672902-1693396941=:1710"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Aug 30, 2023 at 11:13:41AM +0200, Sriram Yagnaraman wrote:
-> +link_stats_get()
-> +{
-> +	local ns=$1; shift
-> +        local dev=$1; shift
-> +        local dir=$1; shift
-> +        local stat=$1; shift
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Indentation is off...
+--8323329-454672902-1693396941=:1710
+Content-Type: text/plain; charset=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
 
-> +
-> +        ip -n $ns -j -s link show dev $dev \
-> +                | jq '.[]["stats64"]["'$dir'"]["'$stat'"]'
-> +}
-> +
-> +list_rcv_eval()
-> +{
-> +	local name=$1; shift
-> +	local file=$1; shift
-> +	local expected=$1; shift
-> +	local exp=$1; shift
+On Mon, 28 Aug 2023, Wieczor-Retman, Maciej wrote:
 
-Nit: You can drop the first and last arguments since they don't change
-between both invocations.
-
-> +
-> +
-
-Unnecessary blank line
-
-
-> +	local count=$(tail -n 1 $file | jq '.["counter-value"] | tonumber | floor')
-> +	local ratio=$(echo "scale=2; $count / $expected" | bc -l)
-> +	local res=$(echo "$ratio $exp" | bc)
-> +	[[ $res -eq 1 ]]
-> +	log_test $? 0 "$name route hit ratio ($ratio)"
-> +}
-> +
-> +ipv4_mpath_list_test()
-> +{
-> +	echo
-> +	echo "IPv4 multipath list receive tests"
-> +
-> +	mpath_dep_check || return 1
-> +
-> +	route_setup
-> +
-> +	set -e
-> +	run_cmd "ip netns exec ns1 ethtool -K veth1 tcp-segmentation-offload off"
-> +
-> +	run_cmd "ip netns exec ns2 bash -c \"echo 20000 > /sys/class/net/veth2/gro_flush_timeout\""
-> +	run_cmd "ip netns exec ns2 bash -c \"echo 1 > /sys/class/net/veth2/napi_defer_hard_irqs\""
-> +	run_cmd "ip netns exec ns2 ethtool -K veth2 generic-receive-offload on"
-> +	run_cmd "ip -n ns2 link add name nh1 up type dummy"
-> +	run_cmd "ip -n ns2 link add name nh2 up type dummy"
-> +	run_cmd "ip -n ns2 address add 172.16.201.1/24 dev nh1"
-> +	run_cmd "ip -n ns2 address add 172.16.202.1/24 dev nh2"
-> +	run_cmd "ip -n ns2 neigh add 172.16.201.2 lladdr 00:11:22:33:44:55 nud perm dev nh1"
-> +	run_cmd "ip -n ns2 neigh add 172.16.202.2 lladdr 00:aa:bb:cc:dd:ee nud perm dev nh2"
-> +	run_cmd "ip -n ns2 route add 203.0.113.0/24
-> +		nexthop via 172.16.201.2 nexthop via 172.16.202.2"
-> +	run_cmd "ip netns exec ns2 sysctl -qw net.ipv4.fib_multipath_hash_policy=1"
-> +	set +e
-> +
-> +	local dmac=$(ip -n ns2 -j link show dev veth2 | jq -r '.[]["address"]')
-> +	local tmp_file=$(mktemp)
-> +	local cmd="ip netns exec ns1 mausezahn veth1 -a own -b $dmac
-> +		-A 172.16.101.1 -B 203.0.113.1 -t udp 'sp=12345,dp=0-65535' -q"
-> +
-> +	# Packets forwarded in a list using a multipath route must not reuse a
-> +	# cached result so that a flow always hits the same nexthop. In other
-> +	# words, the FIB lookup tracepoint needs to be triggered for every
-> +	# packet.
-> +	local t0_rx_pkts=$(link_stats_get ns2 veth2 rx packets)
-> +	run_cmd "perf stat -e fib:fib_table_lookup --filter 'err == 0' -j -o $tmp_file -- $cmd"
-> +	local t1_rx_pkts=$(link_stats_get ns2 veth2 rx packets)
-> +	local diff=$(echo $t1_rx_pkts - $t0_rx_pkts | bc -l)
-> +	list_rcv_eval "Multipath" $tmp_file $diff ">= 0.95"
-> +
-> +	rm $tmp_file
-> +	route_cleanup
-> +}
-> +
-> +ipv6_mpath_list_test()
-> +{
-> +	echo
-> +	echo "IPv6 multipath list receive tests"
-> +
-> +	mpath_dep_check || return 1
-> +
-> +	route_setup
-> +
-> +	set -e
-> +	run_cmd "ip netns exec ns1 ethtool -K veth1 tcp-segmentation-offload off"
-> +
-> +	run_cmd "ip netns exec ns2 bash -c \"echo 20000 > /sys/class/net/veth2/gro_flush_timeout\""
-> +	run_cmd "ip netns exec ns2 bash -c \"echo 1 > /sys/class/net/veth2/napi_defer_hard_irqs\""
-> +	run_cmd "ip netns exec ns2 ethtool -K veth2 generic-receive-offload on"
-> +	run_cmd "ip -n ns2 link add name nh1 up type dummy"
-> +	run_cmd "ip -n ns2 link add name nh2 up type dummy"
-> +	run_cmd "ip -n ns2 -6 address add 2001:db8:201::1/64 dev nh1"
-> +	run_cmd "ip -n ns2 -6 address add 2001:db8:202::1/64 dev nh2"
-> +	run_cmd "ip -n ns2 -6 neigh add 2001:db8:201::2 lladdr 00:11:22:33:44:55 nud perm dev nh1"
-> +	run_cmd "ip -n ns2 -6 neigh add 2001:db8:202::2 lladdr 00:aa:bb:cc:dd:ee nud perm dev nh2"
-> +	run_cmd "ip -n ns2 -6 route add 2001:db8:301::/64
-> +		nexthop via 2001:db8:201::2 nexthop via 2001:db8:202::2"
-> +	run_cmd "ip netns exec ns2 sysctl -qw net.ipv6.fib_multipath_hash_policy=1"
-> +	set +e
-> +
-> +	local dmac=$(ip -n ns2 -j link show dev veth2 | jq -r '.[]["address"]')
-> +	local tmp_file=$(mktemp)
-> +	local cmd="ip netns exec ns1 mausezahn -6 veth1 -a own -b $dmac
-> +		-A 2001:db8:101::1 -B 2001:db8:301::1 -t udp 'sp=12345,dp=0-65535' -q"
-> +
-> +	# Packets forwarded in a list using a multipath route must not reuse a
-> +	# cached result so that a flow always hits the same nexthop. In other
-> +	# words, the FIB lookup tracepoint needs to be triggered for every
-> +	# packet.
-> +	local t0_rx_pkts=$(link_stats_get ns2 veth2 rx packets)
-> +	run_cmd "perf stat -e fib6:fib6_table_lookup --filter 'err == 0' -j -o $tmp_file -- $cmd"
-> +	local t1_rx_pkts=$(link_stats_get ns2 veth2 rx packets)
-> +	local diff=$(echo $t1_rx_pkts - $t0_rx_pkts | bc -l)
-> +	list_rcv_eval "Multipath" $tmp_file $diff ">= 0.95"
-> +
-> +	rm $tmp_file
-> +	route_cleanup
-> +}
-> +
->  ################################################################################
->  # usage
->  
-> @@ -2433,6 +2587,8 @@ do
->  	ipv6_mangle)			ipv6_mangle_test;;
->  	ipv4_bcast_neigh)		ipv4_bcast_neigh_test;;
->  	fib6_gc_test|ipv6_gc)		fib6_gc_test;;
-> +	ipv4_mpath_list)		ipv4_mpath_list_test;;
-> +	ipv6_mpath_list)		ipv6_mpath_list_test;;
->  
->  	help) echo "Test names: $TESTS"; exit 0;;
->  	esac
-> -- 
-> 2.34.1
+> The format specifier inside ksft printing function expects a long
+> unsigned int but the passed variable is of unsigned int type.
 > 
+> Fix the format specifier so it matches the passed variable.
 > 
+> Signed-off-by: Wieczor-Retman, Maciej <maciej.wieczor-retman@intel.com>
+> ---
+>  tools/testing/selftests/sigaltstack/sas.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/sigaltstack/sas.c b/tools/testing/selftests/sigaltstack/sas.c
+> index 98d37cb744fb..07227fab1cc9 100644
+> --- a/tools/testing/selftests/sigaltstack/sas.c
+> +++ b/tools/testing/selftests/sigaltstack/sas.c
+> @@ -111,7 +111,7 @@ int main(void)
+>  
+>  	/* Make sure more than the required minimum. */
+>  	stack_size = getauxval(AT_MINSIGSTKSZ) + SIGSTKSZ;
+> -	ksft_print_msg("[NOTE]\tthe stack size is %lu\n", stack_size);
+> +	ksft_print_msg("[NOTE]\tthe stack size is %u\n", stack_size);
+>  
+>  	ksft_print_header();
+>  	ksft_set_plan(3);
+
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+
+-- 
+ i.
+
+--8323329-454672902-1693396941=:1710--
