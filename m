@@ -2,222 +2,181 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E31AC83F17
-	for <linux-kselftest@archiver.kernel.org>; Wed, 30 Aug 2023 18:38:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BCA5EC83F1A
+	for <linux-kselftest@archiver.kernel.org>; Wed, 30 Aug 2023 18:38:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238069AbjH3ShR (ORCPT
+        id S238092AbjH3ShS (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 30 Aug 2023 14:37:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43954 "EHLO
+        Wed, 30 Aug 2023 14:37:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242528AbjH3I7w (ORCPT
+        with ESMTP id S244654AbjH3NkY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 30 Aug 2023 04:59:52 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB32ECC9;
-        Wed, 30 Aug 2023 01:59:49 -0700 (PDT)
+        Wed, 30 Aug 2023 09:40:24 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DBB71B0;
+        Wed, 30 Aug 2023 06:40:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693385988; x=1724921988;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=z8x/3nfrUutct/LzfYQeniWhx4NZGD8mqmiFRcdPHEk=;
-  b=MdYEsNCxuiTqF6FphzThHQd0G2bCArAiSjRXW6xKVU19OonDWEnhghTa
-   sJjEH8VXDFdGKPiHotb8+vxJk84nGUZMeCWonGNCfGMZHwdvLAf1XAlcn
-   JLWU/27YRuTDAabxFDqhwEX7QEhwdgPzjpyTsymrNLa35KouJctDWba2u
-   lF6ovzJRxH7HKLzdLYuv4s+sPoA52KWBWKgvL17jPIM1+ilEGyN1BTHNV
-   DLMoJrAD214KTDWi7YW2aUk9AESaaShzyrYRfXCMYlfVbZ5yAmFRhstBI
-   Pb/s7I8FhL6KAFJpjH0jJYMF9lrD2uY3oaZdDz3In2ols6CHLZg4EB8QT
+  t=1693402822; x=1724938822;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=mGUvoLw8hw2TWDxXd0tp7T6XOlpg2G3FqdXCCbW83WE=;
+  b=NrfY4Yfr64aLjQBwOz6ogKJNT8o98W575pNcGnG5YlLpCyQnUBinQuvC
+   h+BLb2RWOks+JAPcnMnHE27L2+Uz5qWHcx4p+4S/ns7zUcwqtzCFw0xTM
+   b/UlV427NgPkOPDglY7f7VzKR8Qqc02JaRs5uwei8YgAcr+VsHWkpwLHi
+   dSnWiR62mxbygKAqVSguotT1xJr3jnWN2NI/BwOYPkKEZWLLx504/mjSC
+   mSHfab59hFe0SpL1tDaO/u1aGygkvtasI7B3QT2Pu1xgfHZRNaQ5vUTDA
+   jZfb6wkMvwfX1uK5ia6MTbb8s9QbK8rXU/F+RgGCMNfdW3lf5diW75mAn
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10817"; a="355901947"
+X-IronPort-AV: E=McAfee;i="6600,9927,10818"; a="374556041"
 X-IronPort-AV: E=Sophos;i="6.02,213,1688454000"; 
-   d="scan'208";a="355901947"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2023 01:59:47 -0700
+   d="scan'208";a="374556041"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2023 06:40:21 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10817"; a="715824203"
+X-IronPort-AV: E=McAfee;i="6600,9927,10818"; a="732634790"
 X-IronPort-AV: E=Sophos;i="6.02,213,1688454000"; 
-   d="scan'208";a="715824203"
-Received: from aghiriba-mobl.ger.corp.intel.com ([10.251.213.104])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2023 01:59:45 -0700
-Date:   Wed, 30 Aug 2023 11:59:39 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Babu Moger <babu.moger@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
-Subject: Re: [PATCH v3 5/7] selftests/resctrl: Make benchmark command const
- and build it with pointers
-In-Reply-To: <bafde7cd-01ae-56ff-c1f5-53be610c2b10@intel.com>
-Message-ID: <184bd8bb-5622-64f9-9f65-6674db935a21@linux.intel.com>
-References: <20230823131556.27617-1-ilpo.jarvinen@linux.intel.com> <20230823131556.27617-6-ilpo.jarvinen@linux.intel.com> <bafde7cd-01ae-56ff-c1f5-53be610c2b10@intel.com>
+   d="scan'208";a="732634790"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga007.jf.intel.com with ESMTP; 30 Aug 2023 06:40:21 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Wed, 30 Aug 2023 06:40:20 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Wed, 30 Aug 2023 06:40:20 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27 via Frontend Transport; Wed, 30 Aug 2023 06:40:20 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.168)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.27; Wed, 30 Aug 2023 06:40:20 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=koC0TQ56D7KHMAu/xMmKyIDhAjvBzD+1IjLTFAtItIjhsNKgr59Se9+ln1ipvqTNkgQBbjmLW+n+ES00G84mqYAoWArurCmmblTSeUeZf/EdU59InqxJl23wCK+ui0eSUbCcvhyWD2UvgY9jj2wA2q6vUvmGiMHxhr5ujfDMAG9b43lPKJ+gk9HQHNJIQjRVsSUEscyGry219UEy3Exw4NBOXuOtwKFTOajtv9pU5OgbURabVzQlZX/PswITKmd0QK4asnrJVLPfFiB34qWF2YqsId8rjH24C4lFDt+OgtFgZgSmVBH/ttxuI3Ov/ERLx10uDjk2DsT/UYBEofnY3g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2vrutIHB8GJljhEyHIHyE0nB4zB+ASrA7HHF1K2205w=;
+ b=ANW44ds/FGzoVDZXUtvFFUF4gDNV3LwQaapBrEEgByzKjXYZ4jVhQsuLTXbDU6fDrjNWHmMpmKZf7qIArXRVLdQ58aKrfqSeblQYq8EJb//BA483Lwj7wf4WuzoxfJqISvxtcSxvJO7Kt9CqeysY9aFfiFBGP1AdHKVOBvYcSq7toUiT+ag9kW7zshnNZhUeuYiDIWAXCDRqnNrYxD+94MtzjhrRng5vjs9dHYwd3OkmBE6oNIya9nyyZXUfB1H3AkSR6pnM8S1QW5NfMwVkfGk/hECjgmsqlpr5ZAqL2L9KbOCwnf36tL22yzjvhlW/m4PrkOtue6KnjbkYJphx1A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB6239.namprd11.prod.outlook.com (2603:10b6:8:a7::20) by
+ MN2PR11MB4679.namprd11.prod.outlook.com (2603:10b6:208:26b::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6745.18; Wed, 30 Aug
+ 2023 13:40:18 +0000
+Received: from DM4PR11MB6239.namprd11.prod.outlook.com
+ ([fe80::8a29:8895:64:8fd7]) by DM4PR11MB6239.namprd11.prod.outlook.com
+ ([fe80::8a29:8895:64:8fd7%5]) with mapi id 15.20.6745.015; Wed, 30 Aug 2023
+ 13:40:18 +0000
+Date:   Wed, 30 Aug 2023 15:40:10 +0200
+From:   Maciej =?utf-8?Q?Wiecz=C3=B3r-Retman?= 
+        <maciej.wieczor-retman@intel.com>
+To:     Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
+CC:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 6/6] selftests/kvm: Replace attribute with macro
+Message-ID: <fw6nuuhzmkp36bumrn6xuy7etxslr2iybazigaoo57iy22x2k7@nord6jkch73n>
+References: <cover.1693216959.git.maciej.wieczor-retman@intel.com>
+ <82ed62dd7070203701b4ca326e62862404dd5f72.1693216959.git.maciej.wieczor-retman@intel.com>
+ <fc618e8c-f8b-c339-9aa6-1d2c2865b42e@linux.intel.com>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <fc618e8c-f8b-c339-9aa6-1d2c2865b42e@linux.intel.com>
+X-ClientProxiedBy: BE1P281CA0182.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:b10:8d::15) To DM4PR11MB6239.namprd11.prod.outlook.com
+ (2603:10b6:8:a7::20)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1703911292-1693385988=:1710"
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR11MB6239:EE_|MN2PR11MB4679:EE_
+X-MS-Office365-Filtering-Correlation-Id: 92640114-b954-4694-f486-08dba95ea5b9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: aj5oto1aWzZ8J90ILzyx8L64VfRCFvGDVbAaYgMvnj7BxRiIyiC+jUC0vVjY5eX1XB9+DsEtoHM/YDMXU9zo2HiQ83+HJQ4KJKOR6xx9eNu1ggu47oY8NRYiRVSHLnEclUVxbYkyqucFsBEUzVCzK6iYTfcYg4XPwFnWc9pBUMDgThQRpixgDjDGkDUkUsjpUJBXsUmCgSA4fXVMTB9h2hjgzctEFUEAE2cXzMLBQCCY1ulOvlL1wp+LOi/8SGd422+0+PABCMz2HtTVVdNzfZBmuec8XHYJCLL4tt+FTTSWMOEQits8avsr+mCe7/6T8XiLFn4vJ/JP4INQ4dDybV+zoG2reMaEwbyVdw1BNASYCtTjP9mzM0x4134iliGUDZBVrpkbulLxZ5a4EpMzDPiPI97A+9Ya2Car/aOyVQ/TarFNvuZHO5KxsHEpDMsxDtH7ZIkTfsN4WdXjGI/tCB714weK5GI9HeCGb42zpyyfHG7jzK1U88LnG9m3JoOUv/YqFtao2FCCheocZK2QnWyCgvO078HsHK4nsXuDvrv6G9R2eRPhkJ8OL0S99COU
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6239.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7916004)(396003)(346002)(136003)(376002)(366004)(39860400002)(1800799009)(186009)(451199024)(8936002)(6666004)(53546011)(478600001)(6506007)(66556008)(66946007)(66476007)(54906003)(6486002)(6916009)(316002)(38100700002)(41300700001)(82960400001)(9686003)(6512007)(8676002)(5660300002)(83380400001)(2906002)(33716001)(4744005)(86362001)(26005)(66574015)(4326008);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?fOXWyvaiWWb6QtLJtRJZw+gEZ/NDkz8ZSlQJoBFIQuAk3LsjsJaCb07VYB?=
+ =?iso-8859-1?Q?Z5QdW4aq3cj9LrERDnH8o/LL/KgxC06gNyJlV5pWWcISClV3UZh8Y4zCvg?=
+ =?iso-8859-1?Q?ioWlldd/6EepFWlxMgzU9LJfEUqzknajS/cDITNI/tULqI2CwZkT5SFMY3?=
+ =?iso-8859-1?Q?UoPbi0uoC2469gUpKINhzF/Kmyh5Y6ktBQH/Ep+SV2veZZAzaun6VsDWBS?=
+ =?iso-8859-1?Q?3MQFQF85Oeu1+w1Qx8tphOuPMTIEesyOHyjhiIhYPUZfz19CwjjK6JMQDI?=
+ =?iso-8859-1?Q?E02ZOx8A6cjFUhHPrg8JR3DTSEvuGUVDzIwOU5c2HkpkJ5YCZQ63Mxd2w5?=
+ =?iso-8859-1?Q?DjmEmfaHmBh9FRPUqNCvsH7tj0/e35gaXySwdve5P8ENrJX6kWyUluzD/Q?=
+ =?iso-8859-1?Q?sqYW+ztOYzPBILogZZNtF/jvoBYN7C+x8GlsmJ/qk8nFgW7Ph7BNdq+9+f?=
+ =?iso-8859-1?Q?aYGWdttckUu0+3XEVV60IMPFPF97kvgBz+8BCZ/TixnNMYK05lj0noXpVZ?=
+ =?iso-8859-1?Q?vh36iQge/B17feosb8Omfm7lSNmq//n46bp5yYsEikxHov6CEtJAldSpIk?=
+ =?iso-8859-1?Q?1cYP3wg7dBBJqj3nETkjoyUHKfEyPU1ilcrcT7gQBpt58dHccstA7drGAd?=
+ =?iso-8859-1?Q?fGLTnTSntcYcBmGh5/C4rp4o7vnxnohi4+uG9UMkEGHGiYxd/J+anby3t9?=
+ =?iso-8859-1?Q?i5HJyK4VHnOcL7ZCyeS+xdqbIGffEqvW7McA9gvbCl9SjgEjDhtyfz5kF9?=
+ =?iso-8859-1?Q?ZfgGt0Mma9eLk74sJjFUgCvG6zsQh86VdQVqe+XiyvipcqenZ0s0gi14j+?=
+ =?iso-8859-1?Q?Lu22X+iP41G/XahOYgkq1XUEXwHg413AR1QQPKgS6L9dg9QUa9xtapfRPb?=
+ =?iso-8859-1?Q?/tLlx9vtOOQR1twpf+aZxJSLnhs3F3j2aIrjKJjMxQMpjU1lsSlZ584P0v?=
+ =?iso-8859-1?Q?XCtUt05zGKHr28KTu3S5RgzLMVmzs9CtQ4e6KAsgXw16jDt+5SRFkBE1fX?=
+ =?iso-8859-1?Q?Hq9Zfm4OB5S7HOrJLNA0NUBQDeLMGJ/Ks+esTV1D5KCRB9sfxKNuzvwDno?=
+ =?iso-8859-1?Q?aeAQQgN1Evw9V/5eYf2AMCT9xzkBU0eAop9dUugt5gvNKSMEGWws0hE1qf?=
+ =?iso-8859-1?Q?kpLmgOh8zcT1ZnXol+B5KEfSMA3QU8k/dDMQ+y73tII22igSFReShxIi2k?=
+ =?iso-8859-1?Q?+WiP+iLrD1IbxgtP1KhoYyhfhwspBHnP347NOebwEIQ++3v8VyeHGdMdDb?=
+ =?iso-8859-1?Q?NF7pmIQ1mNkqlVrMuyH9o6ivhr8/IN7DOmvbcBJvSeXXf/b+OdolmNk5hL?=
+ =?iso-8859-1?Q?jbvhuuX3pELhGBXGnNuHsCKMplr+jy04M25b9aPy2V6uZWV/Yo5Rdnm445?=
+ =?iso-8859-1?Q?c3RvvZbPOvKbD8xDeDDWLG6w7PjzEiglrwKlCOwtHNC2S6/kvTNow0Qj4l?=
+ =?iso-8859-1?Q?W4DN8C7ftDblzrwZCLc1XFwM9TmV6YWgVV6l87VyABRphE2giOPajsoKjj?=
+ =?iso-8859-1?Q?9wCtfcI53oGm3VcB/GtPjtr5ba+CRuxpG1bBteyOCdJhfMIaihmXiUckdz?=
+ =?iso-8859-1?Q?OSmiheww5ePW4xUW+3uBzBGnyUrl0MbxxxKAGs3Uj/VRMpfFq+7nyqUw2g?=
+ =?iso-8859-1?Q?uQFJUcfwysb85cq5k4VVXv+GY35tM4unmOxyGB+pP6XA3QfEIAc81+L8OR?=
+ =?iso-8859-1?Q?PTG0tkvw19QbkXmlVLU=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 92640114-b954-4694-f486-08dba95ea5b9
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6239.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Aug 2023 13:40:18.0164
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qBGWtS8rZZg2O573dtxzRsXF8bA1YURe6EnDAGF8UFd3OzuMV8DomeUB/G/XBu81fteqPMVnAGOUoQDDRCJ1pGRj3meb0ITfIYNsZFWZmL8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4679
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-1703911292-1693385988=:1710
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-
-On Tue, 29 Aug 2023, Reinette Chatre wrote:
-> On 8/23/2023 6:15 AM, Ilpo JÃ¤rvinen wrote:
-> ...
-> > diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-> > index bcd0d2060f81..32d23e665697 100644
-> > --- a/tools/testing/selftests/resctrl/resctrl.h
-> > +++ b/tools/testing/selftests/resctrl/resctrl.h
-> > @@ -97,11 +100,11 @@ int write_bm_pid_to_resctrl(pid_t bm_pid, char *ctrlgrp, char *mongrp,
-> >  int perf_event_open(struct perf_event_attr *hw_event, pid_t pid, int cpu,
-> >  		    int group_fd, unsigned long flags);
-> >  int run_fill_buf(size_t span, int memflush, int op, bool once);
-> > -int resctrl_val(char **benchmark_cmd, struct resctrl_val_param *param);
-> > -int mbm_bw_change(int cpu_no, char **benchmark_cmd);
-> > +int resctrl_val(const char * const *benchmark_cmd, struct resctrl_val_param *param);
-> > +int mbm_bw_change(int cpu_no, const char * const *benchmark_cmd);
-> >  void tests_cleanup(void);
-> >  void mbm_test_cleanup(void);
-> > -int mba_schemata_change(int cpu_no, char **benchmark_cmd);
-> > +int mba_schemata_change(int cpu_no, const char *const *benchmark_cmd);
-> 
-> Could you please use consistent spacing ("char * const" vs "char *const")?
+On 2023-08-30 at 15:22:57 +0300, Ilpo Järvinen wrote:
+>On Mon, 28 Aug 2023, Wieczor-Retman, Maciej wrote:
 >
-> > @@ -120,7 +117,7 @@ static void run_mba_test(char **benchmark_cmd, int cpu_no)
-> >  	umount_resctrlfs();
-> >  }
-> >  
-> > -static void run_cmt_test(char **benchmark_cmd, int cpu_no)
-> > +static void run_cmt_test(const char **benchmark_cmd, int cpu_no)
-> >  {
-> >  	int res;
-> >  
-> 
-> Could you please elaborate why the above functions have
-> "const char **" instead of "const char * const *"?
+>> The __printf() macro is used in many tools in the linux kernel to
+>> validate the format specifiers in functions that use printf. Some
+>> selftests use it without putting it in a macro definition and some tests
+>> import the kselftests.h header.
+>
+>"Some" and yet this only converts one? Please be more precise in the 
+>wording.
 
-Thanks for the review!
+Okay, I'll mention them by subsystem.
 
-Sure. I'll make them consistent.
+>> Use __printf() attribute instead of the full attribute since the macro
+>> is inside kselftests.h and the header is already imported.
+>
+>IMO, this would be enough:
+>
+>Use __printf() from kselftests.h instead of the full attribute.
 
-> > @@ -173,11 +170,13 @@ static void run_cat_test(int cpu_no, int no_of_bits)
-> >  int main(int argc, char **argv)
-> >  {
-> >  	bool has_ben = false, mbm_test = true, mba_test = true, cmt_test = true;
-> > -	char benchmark_cmd_area[BENCHMARK_ARGS][BENCHMARK_ARG_SIZE];
-> >  	int c, cpu_no = 1, argc_new = argc, i, no_of_bits = 0;
-> > -	char *benchmark_cmd[BENCHMARK_ARGS];
-> > +	const char *benchmark_cmd[BENCHMARK_ARGS];
-> >  	int ben_ind, ben_count, tests = 0;
-> > +	char *span_str = NULL;
-> >  	bool cat_test = true;
-> > +	char *skip_reason;
-> > +	int ret;
-> >  
-> >  	for (i = 0; i < argc; i++) {
-> >  		if (strcmp(argv[i], "-b") == 0) {
-> > @@ -257,31 +256,31 @@ int main(int argc, char **argv)
-> >  			ksft_exit_fail_msg("Too long benchmark command.\n");
-> >  
-> >  		/* Extract benchmark command from command line. */
-> > -		for (i = ben_ind; i < argc; i++) {
-> > -			benchmark_cmd[i - ben_ind] = benchmark_cmd_area[i];
-> > -			if (strlen(argv[i]) >= BENCHMARK_ARG_SIZE - 1)
-> > -				ksft_exit_fail_msg("Too long benchmark command argument.\n");
-> > -			sprintf(benchmark_cmd[i - ben_ind], "%s", argv[i]);
-> > -		}
-> > +		for (i = 0; i < argc - ben_ind; i++)
-> > +			benchmark_cmd[i] = argv[i + ben_ind];
-> >  		benchmark_cmd[ben_count] = NULL;
-> >  	} else {
-> >  		/* If no benchmark is given by "-b" argument, use fill_buf. */
-> > -		for (i = 0; i < 5; i++)
-> > -			benchmark_cmd[i] = benchmark_cmd_area[i];
-> > -
-> > -		strcpy(benchmark_cmd[0], "fill_buf");
-> > -		sprintf(benchmark_cmd[1], "%u", DEFAULT_SPAN);
-> > -		strcpy(benchmark_cmd[2], "1");
-> > -		strcpy(benchmark_cmd[3], "0");
-> > -		strcpy(benchmark_cmd[4], "false");
-> > +		benchmark_cmd[0] = "fill_buf";
-> > +		ret = asprintf(&span_str, "%u", DEFAULT_SPAN);
-> > +		if (ret < 0)
-> > +			ksft_exit_fail_msg("Out of memory!\n");
-> > +		benchmark_cmd[1] = span_str;
-> > +		benchmark_cmd[2] = "1";
-> > +		benchmark_cmd[3] = "0";
-> > +		benchmark_cmd[4] = "false";
-> >  		benchmark_cmd[5] = NULL;
-> >  	}
-> >  
-> > -	if (!check_resctrlfs_support())
-> > -		return ksft_exit_skip("resctrl FS does not exist. Enable X86_CPU_RESCTRL config option.\n");
-> > +	if (!check_resctrlfs_support()) {
-> > +		skip_reason = "resctrl FS does not exist. Enable X86_CPU_RESCTRL config option.\n";
-> > +		goto free_span;
-> > +	}
-> >  
-> > -	if (umount_resctrlfs())
-> > -		return ksft_exit_skip("resctrl FS unmount failed.\n");
-> > +	if (umount_resctrlfs()) {
-> > +		skip_reason = "resctrl FS unmount failed.\n";
-> > +		goto free_span;
-> > +	}
-> >  
-> >  	filter_dmesg();
-> >  
-> > @@ -299,5 +298,10 @@ int main(int argc, char **argv)
-> >  	if (cat_test)
-> >  		run_cat_test(cpu_no, no_of_bits);
-> >  
-> > +	free(span_str);
-> >  	ksft_finished();
-> > +
-> > +free_span:
-> > +	free(span_str);
-> > +	return ksft_exit_skip(skip_reason);
-> >  }
-> 
-> This is a tricky one. If I understand correctly this goto target makes
-> some assumptions about the state (no test plan created yet) and exit
-> reason (it has to be skipped). A temporary variable is also thrown into
-> the mix.
+Fair enough, I'll change the paragraph to that.
 
-So in the end the symmetry proved to be not as simple as was depicted 
-earlier but "tricky"... I tried to warn about this and it's why I wished 
-to avoid the allocation entirely. Without allocation, there would have not 
-been need for the temporary variable nor adjusting the control flow with 
-that label.
+>Was there a reason why you didn't convert mm/pkey-helpers.h one?
 
-> Can this not be simplified by moving the snippet where
-> benchmark_cmd[] is initialized to fill_buf to be just before the tests 
-> are run? Perhaps right before ksft_set_plan()?
-
-So I throw a temporary variable into the mix (has_ben) to keep track when 
-benchmark_cmd needs to be initialized to the default command? It doesn't 
-play well with what I've in queue after this when user parameters are 
-collected into a struct which is initialized to default value by a helper 
-function before any argument processing. That is, initializing the 
-parameters to defaults needs to be split before and after the parameter 
-parsing code.
-
-> This may be an easier move to consider
-> when the changes in patch 7 are taken into account.
-
-Perhaps you could consider accepting my earlier approach which avoided 
-the allocation entirely now that you've seen where this leads to? ...At 
-least you should understand my reasoning for that on much deeper level 
-now.
-
+Sorry, must have just missed it somehow. Thank you for pointing it out.
 
 -- 
- i.
-
---8323329-1703911292-1693385988=:1710--
+Kind regards
+Maciej Wieczór-Retman
