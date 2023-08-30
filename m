@@ -2,75 +2,66 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 895F9C83F27
-	for <linux-kselftest@archiver.kernel.org>; Wed, 30 Aug 2023 18:36:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF39AC83F17
+	for <linux-kselftest@archiver.kernel.org>; Wed, 30 Aug 2023 18:36:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236463AbjH3Sgw (ORCPT
+        id S230247AbjH3Sgx (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 30 Aug 2023 14:36:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57904 "EHLO
+        Wed, 30 Aug 2023 14:36:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343632AbjH3QVQ (ORCPT
+        with ESMTP id S245180AbjH3Okt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 30 Aug 2023 12:21:16 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A29661A4
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Aug 2023 09:21:13 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-76-NLkRhACHMZubfs6D4dRRWg-1; Wed, 30 Aug 2023 17:21:10 +0100
-X-MC-Unique: NLkRhACHMZubfs6D4dRRWg-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 30 Aug
- 2023 17:21:02 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Wed, 30 Aug 2023 17:21:02 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Ammar Faizi' <ammarfaizi2@gnuweeb.org>,
+        Wed, 30 Aug 2023 10:40:49 -0400
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE57193;
+        Wed, 30 Aug 2023 07:40:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1693406445;
+        bh=Sqm9WGzqpqqQN5xhJwy1ko4NvRStWPPRXC3trcKcTWs=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To;
+        b=qRgJN3yC0fglpLslA5ZUye7ZKns6b1Ra5JEIUommdVq4UVaO2lKtUc1k7bJezAHPM
+         s/rJh0IhZ13MvjP3MIUwsybBeMgdeX3d6DQ8MjQbvOMejFwlLk/bEJbz9jwLkx0miR
+         XEPZagMOcPgQVdVESLea3yOp8LAJk7ND9r6dJiVunzOG511D1X4Ho6UpZzNj3N0Ydx
+         TJBCtz1if77C05+267Od7MvqHufkhFNfaHmSBPXf0VGO735dCVATn4qN+HcUV1UdUD
+         cT4t867tbcFxKHyH80MtmNwFxThJHEaG0Fyu/2hZ1bQfBah1OKg/KGq78iBtxiDWay
+         R//vJfyn5ZNag==
+Received: from [10.20.0.2] (unknown [182.253.126.208])
+        by gnuweeb.org (Postfix) with ESMTPSA id 40FAE24B336;
+        Wed, 30 Aug 2023 21:40:41 +0700 (WIB)
+Message-ID: <6f93ea82-f157-e921-2028-5b4fae4ad341@gnuweeb.org>
+Date:   Wed, 30 Aug 2023 21:40:37 +0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+To:     David Laight <David.Laight@ACULAB.COM>,
         Zhangjin Wu <falcon@tinylab.org>, Willy Tarreau <w@1wt.eu>
-CC:     Arnd Bergmann <arnd@arndb.de>,
-        =?utf-8?B?VGhvbWFzIFdlacOfc2NodWg=?= <thomas@t-8ch.de>,
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <thomas@t-8ch.de>,
         Yuan Tan <tanyuan@tinylab.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Kselftest Mailing List 
         <linux-kselftest@vger.kernel.org>
-Subject: RE: [RFC] tools/nolibc: replace duplicated -ENOSYS return with single
- -ENOSYS return
-Thread-Topic: [RFC] tools/nolibc: replace duplicated -ENOSYS return with
- single -ENOSYS return
-Thread-Index: AdnbXfVru8RTG9gTQ+SsAG5ax7hYow==
-Date:   Wed, 30 Aug 2023 16:21:02 +0000
-Message-ID: <2d52dbd55e6240d5a91ebdce67fe0b7b@AcuMS.aculab.com>
 References: <20230827083225.7534-1-falcon@tinylab.org>
  <4bbdea1710464fa2943663a25bf370c9@AcuMS.aculab.com>
- <6f93ea82-f157-e921-2028-5b4fae4ad341@gnuweeb.org>
-In-Reply-To: <6f93ea82-f157-e921-2028-5b4fae4ad341@gnuweeb.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
-MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Subject: Re: RE: [RFC] tools/nolibc: replace duplicated -ENOSYS return with
+ single -ENOSYS return
+In-Reply-To: <4bbdea1710464fa2943663a25bf370c9@AcuMS.aculab.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-RnJvbTogQW1tYXIgRmFpemkNCj4gU2VudDogMzAgQXVndXN0IDIwMjMgMTU6NDENCj4gDQo+IE9u
-IDgvMjgvMjMgNDo1MSBBTSwgRGF2aWQgTGFpZ2h0IHdyb3RlOg0KPiA+IEkganVzdCBmb3VuZCBh
-KG5vdGhlcikgY2xhbmcgYnVnOg0KPiA+IAlpbnQgZih2b2lkKSB7IHJldHVybiAiYSJbMl07IH0N
-Cj4gPiBjb21waWxlcyB0byBqdXN0IGEgJ3JldHVybicuDQo+IA0KPiBJIGRvbid0IHRoaW5rIHRo
-YXQncyBhIGJ1Zy4gSXQncyB1bmRlZmluZWQgYmVoYXZpb3IgZHVlIHRvIGFuDQo+IG91dC1vZi1i
-b3VuZCByZWFkLiBXaGF0IGRvIHlvdSBleHBlY3QgaXQgdG8gcmV0dXJuPw0KDQpJIHdhcyBhY3R1
-YWxseSBleHBlY3RpbmcgYSB3YXJuaW5nL2Vycm9yIGlmIGl0IGRpZG4ndCBqdXN0IHJlYWQNCnRo
-ZSBieXRlIGFmdGVyIHRoZSBlbmQgb2YgdGhlIHN0cmluZy4NCg0KSnVzdCBzaWxlbnRseSBkb2lu
-ZyBub3RoaW5nIGRpZG4ndCBzZWVtIHJpZ2h0IGZvciBhIG1vZGVybiBjb21waWxlci4NCg0KCURh
-dmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3Vu
-dCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3
-Mzg2IChXYWxlcykNCg==
+On 8/28/23 4:51 AM, David Laight wrote:
+> I just found a(nother) clang bug:
+> 	int f(void) { return "a"[2]; }
+> compiles to just a 'return'.
 
+I don't think that's a bug. It's undefined behavior due to an
+out-of-bound read. What do you expect it to return?
+
+-- 
+Ammar Faizi
