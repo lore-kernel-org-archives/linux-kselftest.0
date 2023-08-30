@@ -2,47 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 12034C83F1D
-	for <linux-kselftest@archiver.kernel.org>; Wed, 30 Aug 2023 18:45:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2A24C83F1E
+	for <linux-kselftest@archiver.kernel.org>; Wed, 30 Aug 2023 18:45:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238284AbjH3Shd (ORCPT
+        id S238267AbjH3Sha (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 30 Aug 2023 14:37:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46940 "EHLO
+        Wed, 30 Aug 2023 14:37:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242666AbjH3JOD (ORCPT
+        with ESMTP id S245654AbjH3Ps6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 30 Aug 2023 05:14:03 -0400
-Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2107.outbound.protection.outlook.com [40.107.241.107])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 841C1CCB;
-        Wed, 30 Aug 2023 02:14:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=P8NOQRWlKfiZ8I/JZfmQg/tWGpcResoeUcvUiA3Xlywra/K3JLjB4iaWxJURYT7b7eb1Es4qeK3a5UUDVV9UmdXCcNJPMFwYjPMPqIEHOgDk86T0SGvieVjKr4Dk+sCoHwlDV6t3aFeOdTOXvXEXet6nSV8n2HCqgqoFVpfRMrVBMrZwUHaXJHtqMnWPl4CfUyc6qngySybNC5R5FvgD2y3qIITPfNgArzgsQZDGmJqZXVmAkMBQR6uXzkTUAhOjQtuoFdayA37aeaj7soi8H1MCUvVPSYWcN6HBoSI52gJ0jH7VAZ2drD7PUq7QRVVWM4Rwph/6x+5/4BwzrEDH6g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3fL4EOwO86H1EP4PmvHyNW6IT3Che41u35CFBg7cURI=;
- b=k9FdkeenSrJQEcTV7KeQDoot1m0kLN8BxQX07uotgELG13p7114/0mc+nlK9CNYJWhm1Y5WnsQYl7zOgCj2pJrz+DcjbUkboce6WPs4fWgdXwuP5hVMBlfYosWU+DEfXhJBU2479oEzljuaRcahIB97syFPYAywkIzFwu1Yc64mGtpYybfVxDdFlwzFVqvxMoWZvwiGHYfURti8lyWqfu4nT7Reb17Amh4KGam5CQRcpT0btvzIiwPMXWAfaKZVZWatPsjA/c0iQZr9ncGJL3R2qWlZWw6yJu4awewq0aqf1xjRqgHG+3f1OpEQ6i4cRCOR75RTnQfPSSzvaKfav4w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=est.tech; dmarc=pass action=none header.from=est.tech;
- dkim=pass header.d=est.tech; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=estab.onmicrosoft.com;
- s=selector2-estab-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3fL4EOwO86H1EP4PmvHyNW6IT3Che41u35CFBg7cURI=;
- b=awuXy1hCLxULs+0vAh0D6KEl2C5hFEXXQup+PRMav+Iot6bIMk6ymtIDTHiEVYyayUdYtT2c6VeflSKDjiy0mK/OdCROSmMjR8X/7qTNAQGjZ9s3wgrSU9vkoKLilmTW8MJ6ou6mutOdCUK9DIQiQhaoLBx4NaWImVRiBzjJtTk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=est.tech;
-Received: from DBBP189MB1433.EURP189.PROD.OUTLOOK.COM (2603:10a6:10:1e7::15)
- by AS8P189MB2096.EURP189.PROD.OUTLOOK.COM (2603:10a6:20b:52d::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.36; Wed, 30 Aug
- 2023 09:13:58 +0000
-Received: from DBBP189MB1433.EURP189.PROD.OUTLOOK.COM
- ([fe80::759b:94eb:c2e8:c670]) by DBBP189MB1433.EURP189.PROD.OUTLOOK.COM
- ([fe80::759b:94eb:c2e8:c670%6]) with mapi id 15.20.6745.020; Wed, 30 Aug 2023
- 09:13:57 +0000
-From:   Sriram Yagnaraman <sriram.yagnaraman@est.tech>
+        Wed, 30 Aug 2023 11:48:58 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8332B19A;
+        Wed, 30 Aug 2023 08:48:55 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 7294A5C0125;
+        Wed, 30 Aug 2023 11:48:52 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Wed, 30 Aug 2023 11:48:52 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1693410532; x=1693496932; bh=OBnVGQWEM3kMS
+        4B7KKbSwDUGaRUbADHZE4qYXlfiygM=; b=PvLNe5kKHYWU/kPp5/cS8VLuYCn9I
+        4lNckk7tMtgEHmv4VNrGWwF88UPNyjelrIt7RkQqqlHto6gN4L8mntb0sbyqBSia
+        86Gxu5hZr2/RTRD6MpIRfKuS2vc5Ib803/E+YRRgtv87koxrbg/1fwaDM87f5LwZ
+        fowfKR72EM4xuLyc7Asu7O+tYYurB3QEkL6epRmM73azPWKMMRcNuzzT61Aj+JDq
+        Br8aqCnp2Pvk1u9LMniYDnKecBb4IfHVIHOJkV4l+qvocqwDgFi/EpST95gUeyG0
+        hUCw6NhUXB62k+XdF81EXT88acnubjpR1msWjpKWG/4AqtGRdnKNT5CGQ==
+X-ME-Sender: <xms:5GTvZCaczUmjdeSEq0nl0ximLjWr1U7ozfldVZiKrqZPkz2nnpudAg>
+    <xme:5GTvZFa801WI9x03l1A-ufF_yqbejNTdsiL_3h1XBVRzonkRW18yeoZop7EMD1jfe
+    yN0haE1F5pSnWg>
+X-ME-Received: <xmr:5GTvZM_MBPGrGMELEqs7Jdgkr7_MKzoZbntMVUU6iV1q_jBu2RQsOXHW-rDA45CY8wO5nez5mf_0o1qQwyIquIhXKBsBlw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudefkedgleeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepkfguohcu
+    ufgthhhimhhmvghluceoihguohhstghhsehiughoshgthhdrohhrgheqnecuggftrfgrth
+    htvghrnhepvddufeevkeehueegfedtvdevfefgudeifeduieefgfelkeehgeelgeejjeeg
+    gefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepih
+    guohhstghhsehiughoshgthhdrohhrgh
+X-ME-Proxy: <xmx:5GTvZEqaxIQAAKiuq-FIvjQDhoLF0v9aUNUpPLz5BxSjyFAAHJKzuw>
+    <xmx:5GTvZNrxz85PDRLg9sUaNoLDszxQmtGMjusVDuZzD3pCtt6FCdJTCA>
+    <xmx:5GTvZCRysmOkjJ1pC5TIDwgLB72K86VK-Ju0Jx1Jznt93zQ_Sc4fSQ>
+    <xmx:5GTvZBeHTOFhHHRduGki5e_tMbXpiDxjr4ZJN18IgrzifRAN7wSrUA>
+Feedback-ID: i494840e7:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 30 Aug 2023 11:48:51 -0400 (EDT)
+Date:   Wed, 30 Aug 2023 18:48:46 +0300
+From:   Ido Schimmel <idosch@idosch.org>
+To:     Sriram Yagnaraman <sriram.yagnaraman@est.tech>
 Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
         "David S . Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
@@ -50,132 +62,161 @@ Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Paolo Abeni <pabeni@redhat.com>,
         David Ahern <dsahern@kernel.org>,
         Ido Schimmel <idosch@nvidia.com>,
-        Shuah Khan <shuah@kernel.org>, Petr Machata <petrm@nvidia.com>,
-        Sriram Yagnaraman <sriram.yagnaraman@est.tech>
-Subject: [PATCH net v4 2/3] ipv6: ignore dst hint for multipath routes
-Date:   Wed, 30 Aug 2023 11:13:40 +0200
-Message-Id: <20230830091341.17273-3-sriram.yagnaraman@est.tech>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230830091341.17273-1-sriram.yagnaraman@est.tech>
+        Shuah Khan <shuah@kernel.org>, Petr Machata <petrm@nvidia.com>
+Subject: Re: [PATCH net v4 3/3] selftests: fib_tests: Add multipath list
+ receive tests
+Message-ID: <ZO9k3kSVHpxO1owX@shredder>
 References: <20230830091341.17273-1-sriram.yagnaraman@est.tech>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: GVX0EPF000013E4.SWEP280.PROD.OUTLOOK.COM
- (2603:10a6:144:1::24) To DBBP189MB1433.EURP189.PROD.OUTLOOK.COM
- (2603:10a6:10:1e7::15)
+ <20230830091341.17273-4-sriram.yagnaraman@est.tech>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DBBP189MB1433:EE_|AS8P189MB2096:EE_
-X-MS-Office365-Filtering-Correlation-Id: d62f3f34-7ed5-4b72-e114-08dba9397107
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: bd4eQHHy2ttlAp8ElzgoPQARFRidZuSs3nAG2iUKwS1dXs4IEUXEoS7DeDBSdhoJE3bwe9NxDzrhbLeNXjfWzYlUdY1H2PPVqxdS6CV6hRzWkS3HRdYqE0lnsM4ZFJRbJPwkliMOwA0Y7gw3Q0dmgQp0DjqjVTYY4IABJUNT5Vxarvpv20kM4hUyEenomtMCniwQlrAbJXuURUlcYvNsWF+aM7DrARjht6hOz1i/JieqXERbr6uTT3AnywoOkT9xFv8o92BWTKFhdCetZV6CND11BXSZJPbBgYFAwxaewOiM9M5dx6zSeiNGTsIcld0eAKuzgFmwXWE0u3hOlleEjYUJISZUxGDoQqwkIjTfdJY5ECyAM/AgBjZDG+xKUVdvoOJpvwgMXmpKHkcj2mjMnrNkhXc39Nb5H/ZhRMerIuUVaz5Uxr4PYn7Kffx2Y30uvB69CyeucacAQv1y0OxsbVAxcKgSP0fXCCoY1gC6f9sG2m5ue9RXXHkOApRf4QqLod5NkUa2jnr0qDFNyYO7XVOlewlvW5o1SSKeXl/kMleCYOMELahMkVE8PWhKntVPZ44NvBP4qXirzIKEc+ov/WZl3TrnGVChrXzG6miVcS2V9UQXqJF9SSyfHlXN/3FFfQ6qKQ5UXaGeXJziSDMPbw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBP189MB1433.EURP189.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(346002)(136003)(376002)(396003)(39840400004)(1800799009)(109986022)(186009)(451199024)(8936002)(6666004)(478600001)(70586007)(66556008)(6506007)(66946007)(66476007)(54906003)(6486002)(316002)(38100700002)(41300700001)(6512007)(26005)(44832011)(5660300002)(8676002)(36756003)(1076003)(83380400001)(2906002)(2616005)(86362001)(7416002)(4326008)(266003)(37730700002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?T+RiLultxA/SYVX3cIG1wvER8pH2QxM4knGhEvJrmUjpFh7/jtg5Rk7uwg5F?=
- =?us-ascii?Q?ciYt3mHo5oXv02D/EaDH2Jg1yCvqe6GxkUW9EZxZLhh5eAtiLR1ZUYKd4jpp?=
- =?us-ascii?Q?KAlHn4sKX/bBUWn4eqwjP1LaUbTnl1bO0syKG2tYsZUk+lD/5OeV/5aiXOLy?=
- =?us-ascii?Q?1hT2siDc6qfVNlwLbOig8+27I24Q26rsdiGE21boR13tme5zh+WA47A61DqK?=
- =?us-ascii?Q?uFVAH2c61Q2u1m5TLlprFdxuwDTvosxxeRXeVDSskUe8POUeg52leiVPyO7F?=
- =?us-ascii?Q?ngMlExZ0/JElDHKC8UzqbObdA2dpT1f3I0LdWqT+thnVmC5Kji4h4yMEjawK?=
- =?us-ascii?Q?TgAqxPGw1x9vHnHNGLb6pwYjmkddXxBxh1MwFQXG8B09C4Oa+ibDHBu+4jvc?=
- =?us-ascii?Q?H247H0IrN4byQFXahIxItvxwuBFyFcj9oCwBHfvswOkp6x55KpY2WH/z7kpJ?=
- =?us-ascii?Q?zvPCTJ4Q+xa/CqU8bgvP8JtS/cBWYwQ+3ovynX46qTfpGKS1uFyYW+RlL/x4?=
- =?us-ascii?Q?xwyBnpkh94ZVV0nUhkE5VQIhn2Vfhx3PIkjgHGm3U1YYADVLprU93BOmV0nq?=
- =?us-ascii?Q?G8Lli+1pOj9NJi4b5jhDAMVf82/yP5uho9Mu3zV9t2eNeL1NwD5+geffUvmV?=
- =?us-ascii?Q?j06+Jf9JjrDQ4N5ZzcrFWJUhhLjDmXYoNkKZbVCoxPgfZkeYVLwiLISAFczz?=
- =?us-ascii?Q?JLhUDFXHa8Z3pFs4F8V/kSWgj0vhHRPUsiGFDsQ1WruqTsu8JR2dTmHHUAPp?=
- =?us-ascii?Q?QIhvJbnxPxUqRMAgnYvqjE3mXhiSnAfLP8LYj+QbbuKqFTTU/JBPr3WSikla?=
- =?us-ascii?Q?7W+8sl9oPUJDWBsjkKH7Ndl6muRtMvK7f+vsTHhojyJEoU/oHa9cIV+/RwFl?=
- =?us-ascii?Q?AC+Eswef70rg3ysuVUi165V3jdF4GyoXMZJ9k71DD54XrDwXKI0tZAjvXbWj?=
- =?us-ascii?Q?xW3mqjyaYcKK5HlcIbGQ4kQmgX/MNiEuHvrMB3uQ3glqPDQy5XkXSJB6DnqK?=
- =?us-ascii?Q?ABV9mqPSUgdnE1u/e6XSXjGoK47HqEkPKQ82yQCmRPIUBYX4/dOzZuLQoJo8?=
- =?us-ascii?Q?j+ZE9eq5x9CVA10ReMifywJp4DKD9e906putg1UdiNTUT9/W/tP95VU0H4mH?=
- =?us-ascii?Q?c2VnQ/SxiVJZ6NmJRovHiKQGL2HghPHj5EFQmSAnZIyo97suy+Gq5SjMMav5?=
- =?us-ascii?Q?broWKFktFYcCnljy3/F0ieqkE2JvcbYOsrHNwZvRQ+HQwequU/ldcvx7nkuw?=
- =?us-ascii?Q?tFWQXWYlbwF4p3gkwO3H41tI7NHY1Z54RpajlYMBISYXOFQo+3+K289L89L4?=
- =?us-ascii?Q?O41k4OC8H0pKgxjpzauJiQUtkHdSHdhsgvS43nn/d6YFdLzX1a8jWlvemkIo?=
- =?us-ascii?Q?vamKIRl4FDEKv/Dg9vIrmmhIn2wuMwFi/qprno/O7tRI3wNGa+onub3DBrZd?=
- =?us-ascii?Q?h4q4hh4Ktmbm5PxVPKaZu8SEgnRfX/Y+JTotFktjfj21vFdIY/ORrT+tNeQw?=
- =?us-ascii?Q?ro1NW1A8SWqpIBu6r2pDXWo3SwbMVozLoOVf7esWgt0Lb0ODNK1se69LVFcI?=
- =?us-ascii?Q?D8/akUqJxXUwFatgn8O971YCzLE2wwspMAEZBZsOq4vy9mjSyflQV7mJTEf3?=
- =?us-ascii?Q?TQ=3D=3D?=
-X-OriginatorOrg: est.tech
-X-MS-Exchange-CrossTenant-Network-Message-Id: d62f3f34-7ed5-4b72-e114-08dba9397107
-X-MS-Exchange-CrossTenant-AuthSource: DBBP189MB1433.EURP189.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Aug 2023 09:13:57.8781
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: d2585e63-66b9-44b6-a76e-4f4b217d97fd
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ZEePKVyK8d66Za/KN+kM89UX5LrfZ4zngyOKhH+nGgf3E7bsBQ61I9y1FTYEzxEKMAE1sGmfLwhjWhg3cQFi35nYP2fgqy7EzpRO57NTwVA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8P189MB2096
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230830091341.17273-4-sriram.yagnaraman@est.tech>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Route hints when the nexthop is part of a multipath group causes packets
-in the same receive batch to be sent to the same nexthop irrespective of
-the multipath hash of the packet. So, do not extract route hint for
-packets whose destination is part of a multipath group.
+On Wed, Aug 30, 2023 at 11:13:41AM +0200, Sriram Yagnaraman wrote:
+> +link_stats_get()
+> +{
+> +	local ns=$1; shift
+> +        local dev=$1; shift
+> +        local dir=$1; shift
+> +        local stat=$1; shift
 
-A new SKB flag IP6SKB_MULTIPATH is introduced for this purpose, set the
-flag when route is looked up in fib6_select_path() and use it in
-ip6_can_use_hint() to check for the existence of the flag.
+Indentation is off...
 
-Fixes: 197dbf24e360 ("ipv6: introduce and uses route look hints for list input.")
-Signed-off-by: Sriram Yagnaraman <sriram.yagnaraman@est.tech>
-Reviewed-by: Ido Schimmel <idosch@nvidia.com>
-Reviewed-by: David Ahern <dsahern@kernel.org>
----
- include/linux/ipv6.h | 1 +
- net/ipv6/ip6_input.c | 3 ++-
- net/ipv6/route.c     | 3 +++
- 3 files changed, 6 insertions(+), 1 deletion(-)
+> +
+> +        ip -n $ns -j -s link show dev $dev \
+> +                | jq '.[]["stats64"]["'$dir'"]["'$stat'"]'
+> +}
+> +
+> +list_rcv_eval()
+> +{
+> +	local name=$1; shift
+> +	local file=$1; shift
+> +	local expected=$1; shift
+> +	local exp=$1; shift
 
-diff --git a/include/linux/ipv6.h b/include/linux/ipv6.h
-index 5883551b1ee8..af8a771a053c 100644
---- a/include/linux/ipv6.h
-+++ b/include/linux/ipv6.h
-@@ -147,6 +147,7 @@ struct inet6_skb_parm {
- #define IP6SKB_JUMBOGRAM      128
- #define IP6SKB_SEG6	      256
- #define IP6SKB_FAKEJUMBO      512
-+#define IP6SKB_MULTIPATH      1024
- };
- 
- #if defined(CONFIG_NET_L3_MASTER_DEV)
-diff --git a/net/ipv6/ip6_input.c b/net/ipv6/ip6_input.c
-index d94041bb4287..b8378814532c 100644
---- a/net/ipv6/ip6_input.c
-+++ b/net/ipv6/ip6_input.c
-@@ -99,7 +99,8 @@ static bool ip6_can_use_hint(const struct sk_buff *skb,
- static struct sk_buff *ip6_extract_route_hint(const struct net *net,
- 					      struct sk_buff *skb)
- {
--	if (fib6_routes_require_src(net) || fib6_has_custom_rules(net))
-+	if (fib6_routes_require_src(net) || fib6_has_custom_rules(net) ||
-+	    IP6CB(skb)->flags & IP6SKB_MULTIPATH)
- 		return NULL;
- 
- 	return skb;
-diff --git a/net/ipv6/route.c b/net/ipv6/route.c
-index 846aec8e0093..01d6d352850a 100644
---- a/net/ipv6/route.c
-+++ b/net/ipv6/route.c
-@@ -423,6 +423,9 @@ void fib6_select_path(const struct net *net, struct fib6_result *res,
- 	if (match->nh && have_oif_match && res->nh)
- 		return;
- 
-+	if (skb)
-+		IP6CB(skb)->flags |= IP6SKB_MULTIPATH;
-+
- 	/* We might have already computed the hash for ICMPv6 errors. In such
- 	 * case it will always be non-zero. Otherwise now is the time to do it.
- 	 */
--- 
-2.34.1
+Nit: You can drop the first and last arguments since they don't change
+between both invocations.
 
+> +
+> +
+
+Unnecessary blank line
+
+
+> +	local count=$(tail -n 1 $file | jq '.["counter-value"] | tonumber | floor')
+> +	local ratio=$(echo "scale=2; $count / $expected" | bc -l)
+> +	local res=$(echo "$ratio $exp" | bc)
+> +	[[ $res -eq 1 ]]
+> +	log_test $? 0 "$name route hit ratio ($ratio)"
+> +}
+> +
+> +ipv4_mpath_list_test()
+> +{
+> +	echo
+> +	echo "IPv4 multipath list receive tests"
+> +
+> +	mpath_dep_check || return 1
+> +
+> +	route_setup
+> +
+> +	set -e
+> +	run_cmd "ip netns exec ns1 ethtool -K veth1 tcp-segmentation-offload off"
+> +
+> +	run_cmd "ip netns exec ns2 bash -c \"echo 20000 > /sys/class/net/veth2/gro_flush_timeout\""
+> +	run_cmd "ip netns exec ns2 bash -c \"echo 1 > /sys/class/net/veth2/napi_defer_hard_irqs\""
+> +	run_cmd "ip netns exec ns2 ethtool -K veth2 generic-receive-offload on"
+> +	run_cmd "ip -n ns2 link add name nh1 up type dummy"
+> +	run_cmd "ip -n ns2 link add name nh2 up type dummy"
+> +	run_cmd "ip -n ns2 address add 172.16.201.1/24 dev nh1"
+> +	run_cmd "ip -n ns2 address add 172.16.202.1/24 dev nh2"
+> +	run_cmd "ip -n ns2 neigh add 172.16.201.2 lladdr 00:11:22:33:44:55 nud perm dev nh1"
+> +	run_cmd "ip -n ns2 neigh add 172.16.202.2 lladdr 00:aa:bb:cc:dd:ee nud perm dev nh2"
+> +	run_cmd "ip -n ns2 route add 203.0.113.0/24
+> +		nexthop via 172.16.201.2 nexthop via 172.16.202.2"
+> +	run_cmd "ip netns exec ns2 sysctl -qw net.ipv4.fib_multipath_hash_policy=1"
+> +	set +e
+> +
+> +	local dmac=$(ip -n ns2 -j link show dev veth2 | jq -r '.[]["address"]')
+> +	local tmp_file=$(mktemp)
+> +	local cmd="ip netns exec ns1 mausezahn veth1 -a own -b $dmac
+> +		-A 172.16.101.1 -B 203.0.113.1 -t udp 'sp=12345,dp=0-65535' -q"
+> +
+> +	# Packets forwarded in a list using a multipath route must not reuse a
+> +	# cached result so that a flow always hits the same nexthop. In other
+> +	# words, the FIB lookup tracepoint needs to be triggered for every
+> +	# packet.
+> +	local t0_rx_pkts=$(link_stats_get ns2 veth2 rx packets)
+> +	run_cmd "perf stat -e fib:fib_table_lookup --filter 'err == 0' -j -o $tmp_file -- $cmd"
+> +	local t1_rx_pkts=$(link_stats_get ns2 veth2 rx packets)
+> +	local diff=$(echo $t1_rx_pkts - $t0_rx_pkts | bc -l)
+> +	list_rcv_eval "Multipath" $tmp_file $diff ">= 0.95"
+> +
+> +	rm $tmp_file
+> +	route_cleanup
+> +}
+> +
+> +ipv6_mpath_list_test()
+> +{
+> +	echo
+> +	echo "IPv6 multipath list receive tests"
+> +
+> +	mpath_dep_check || return 1
+> +
+> +	route_setup
+> +
+> +	set -e
+> +	run_cmd "ip netns exec ns1 ethtool -K veth1 tcp-segmentation-offload off"
+> +
+> +	run_cmd "ip netns exec ns2 bash -c \"echo 20000 > /sys/class/net/veth2/gro_flush_timeout\""
+> +	run_cmd "ip netns exec ns2 bash -c \"echo 1 > /sys/class/net/veth2/napi_defer_hard_irqs\""
+> +	run_cmd "ip netns exec ns2 ethtool -K veth2 generic-receive-offload on"
+> +	run_cmd "ip -n ns2 link add name nh1 up type dummy"
+> +	run_cmd "ip -n ns2 link add name nh2 up type dummy"
+> +	run_cmd "ip -n ns2 -6 address add 2001:db8:201::1/64 dev nh1"
+> +	run_cmd "ip -n ns2 -6 address add 2001:db8:202::1/64 dev nh2"
+> +	run_cmd "ip -n ns2 -6 neigh add 2001:db8:201::2 lladdr 00:11:22:33:44:55 nud perm dev nh1"
+> +	run_cmd "ip -n ns2 -6 neigh add 2001:db8:202::2 lladdr 00:aa:bb:cc:dd:ee nud perm dev nh2"
+> +	run_cmd "ip -n ns2 -6 route add 2001:db8:301::/64
+> +		nexthop via 2001:db8:201::2 nexthop via 2001:db8:202::2"
+> +	run_cmd "ip netns exec ns2 sysctl -qw net.ipv6.fib_multipath_hash_policy=1"
+> +	set +e
+> +
+> +	local dmac=$(ip -n ns2 -j link show dev veth2 | jq -r '.[]["address"]')
+> +	local tmp_file=$(mktemp)
+> +	local cmd="ip netns exec ns1 mausezahn -6 veth1 -a own -b $dmac
+> +		-A 2001:db8:101::1 -B 2001:db8:301::1 -t udp 'sp=12345,dp=0-65535' -q"
+> +
+> +	# Packets forwarded in a list using a multipath route must not reuse a
+> +	# cached result so that a flow always hits the same nexthop. In other
+> +	# words, the FIB lookup tracepoint needs to be triggered for every
+> +	# packet.
+> +	local t0_rx_pkts=$(link_stats_get ns2 veth2 rx packets)
+> +	run_cmd "perf stat -e fib6:fib6_table_lookup --filter 'err == 0' -j -o $tmp_file -- $cmd"
+> +	local t1_rx_pkts=$(link_stats_get ns2 veth2 rx packets)
+> +	local diff=$(echo $t1_rx_pkts - $t0_rx_pkts | bc -l)
+> +	list_rcv_eval "Multipath" $tmp_file $diff ">= 0.95"
+> +
+> +	rm $tmp_file
+> +	route_cleanup
+> +}
+> +
+>  ################################################################################
+>  # usage
+>  
+> @@ -2433,6 +2587,8 @@ do
+>  	ipv6_mangle)			ipv6_mangle_test;;
+>  	ipv4_bcast_neigh)		ipv4_bcast_neigh_test;;
+>  	fib6_gc_test|ipv6_gc)		fib6_gc_test;;
+> +	ipv4_mpath_list)		ipv4_mpath_list_test;;
+> +	ipv6_mpath_list)		ipv6_mpath_list_test;;
+>  
+>  	help) echo "Test names: $TESTS"; exit 0;;
+>  	esac
+> -- 
+> 2.34.1
+> 
+> 
