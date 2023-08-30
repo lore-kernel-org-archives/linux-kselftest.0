@@ -2,136 +2,247 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3704AC83F18
-	for <linux-kselftest@archiver.kernel.org>; Wed, 30 Aug 2023 18:37:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BBBA6C83F17
+	for <linux-kselftest@archiver.kernel.org>; Wed, 30 Aug 2023 18:37:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237840AbjH3Sg7 (ORCPT
+        id S237871AbjH3ShA (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 30 Aug 2023 14:36:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33198 "EHLO
+        Wed, 30 Aug 2023 14:37:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244622AbjH3Nc7 (ORCPT
+        with ESMTP id S242184AbjH3HXm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 30 Aug 2023 09:32:59 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3220611F;
-        Wed, 30 Aug 2023 06:32:56 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b9c907bc68so84357581fa.2;
-        Wed, 30 Aug 2023 06:32:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693402374; x=1694007174; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=MnDE+pbhmyZZgibTtE5/3/lahQ2s3Jiv+g1RsGQj064=;
-        b=h76hn8ZrFVEpRL2Lwcb15amvXHlKGuHq8jL+9WkscAnkUIK7L9rj5ImXDspGuFLbl4
-         Ik7WwFY5KdSrBJpZHRp+em6LDvC1hGgJaDn7gJjBIvx5XUU3wfjabcDySjLLNlin68/2
-         TvUhxqaVsNuzHzgduDwNTZvDuxFWOJYRkAJcUN34cE2MvzgDAsDdvGyYdX01a2Rf32Aq
-         mOAzco+pD/FZyATDOR1lZYRWevezIQOlLhzpodkIHVsQo7JZU7zsaClNbZdpr4VaJKVS
-         zHAIb24j9YSMRte/I7uU/YkwSXSGScQ+OGPNcBsHfKRvqCw8xHJElrcnXOYUw3Odyyls
-         NktA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693402374; x=1694007174;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MnDE+pbhmyZZgibTtE5/3/lahQ2s3Jiv+g1RsGQj064=;
-        b=OVcM7CXCLITrn37YEbnIZB0jyoP0EWlt/2z0qjJ1DwtGbDGcbdPr8HIlqFjJrY+ais
-         hm7jW8XHMWgWKnDkN69q9AOFlp0vJ7xsudvzTeyiBMJetgYsKlj8Mz1GOulp5OjGMyVm
-         GEDX4zC1uKwlwcaxVWrmBaGUjgwf00T/UkN4RSX0qMb87dPIJ9wFuGQjdcV1J5G6xggQ
-         5jUzVfxN9CmrpywRrJYAf33SSatcS6csWV/b4I69c4CpSwJV4wXT3eNALdTqOHPsApOx
-         Wv7SNqvjbYBzr8blXRYPIk1QhArDGxCUUeR0xmU3RoJmtF7ENKIS1MiE4S60787ir5Iv
-         G82g==
-X-Gm-Message-State: AOJu0YxNSmdeGohVydObQwNhMCyIL/G/5EbYVUAwGqJuqzhdCjEPyW4Z
-        vl7W0b+wh5JUyZFNDr45OiFvW54pGNKIExTB
-X-Google-Smtp-Source: AGHT+IGi8ro0DR7fyFjZnSw3v3zPDry2Iuy00rD3+/FoIo1eybxV5kiHIB75fOisLiLy0+bcmuD+Lw==
-X-Received: by 2002:a2e:9303:0:b0:2bd:1bca:ebee with SMTP id e3-20020a2e9303000000b002bd1bcaebeemr1784959ljh.19.1693402374285;
-        Wed, 30 Aug 2023 06:32:54 -0700 (PDT)
-Received: from [127.0.1.1] (91-118-163-37.static.upcbusiness.at. [91.118.163.37])
-        by smtp.gmail.com with ESMTPSA id lu9-20020a170906fac900b009a1e73f2b4bsm7160374ejb.48.2023.08.30.06.32.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Aug 2023 06:32:53 -0700 (PDT)
-From:   Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Date:   Wed, 30 Aug 2023 15:32:39 +0200
-Subject: [PATCH] selftests: static_keys: fix messages
+        Wed, 30 Aug 2023 03:23:42 -0400
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 168C61BB;
+        Wed, 30 Aug 2023 00:23:37 -0700 (PDT)
+Received: (from willy@localhost)
+        by mail.home.local (8.17.1/8.17.1/Submit) id 37U7NBLX025225;
+        Wed, 30 Aug 2023 09:23:11 +0200
+Date:   Wed, 30 Aug 2023 09:23:11 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc:     Shuah Khan <shuah@kernel.org>, Zhangjin Wu <falcon@tinylab.org>,
+        Yuan Tan <tanyuan@tinylab.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 1/2] tools/nolibc: add stdarg.h header
+Message-ID: <ZO7uX2C3OAN634tV@1wt.eu>
+References: <20230827-nolibc-nostdinc-v1-0-995d1811f1f3@weissschuh.net>
+ <20230827-nolibc-nostdinc-v1-1-995d1811f1f3@weissschuh.net>
+ <ZO2QC/fw6LKdtLSb@1wt.eu>
+ <2b6c62f1-c1f1-4f2c-ba0c-981e066f4268@t-8ch.de>
+ <ZO25u3crGixkGKWe@1wt.eu>
+ <b2c2ca69-b9bb-40b1-a05a-6d2f66e01034@t-8ch.de>
+ <ZO3gvcoe8wZM+f5A@1wt.eu>
+ <3663d244-627f-4928-ab2e-0328cd6a8fb1@t-8ch.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230830-feature-static_keys_selftest_messages-v1-1-49bb58c508a7@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAPZE72QC/x2NTQrCMBQGr1KyNhCbYtSriIT8fGkf1ljyUlFK7
- 25wObOY2QSjEFhcu00UvInplRscD50Ik8sjJMXGole9VmetZIKra4Hk6ioF+8CXLWNOFVztE8x
- uBMs46Hgy0ZuLGURreceQvrgcplbL6zw3uRQk+vznt/u+/wDx0cSsjAAAAA==
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ivan.orlov0322@gmail.com,
-        Javier Carrasco <javier.carrasco.cruz@gmail.com>
-X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1693402373; l=2062;
- i=javier.carrasco.cruz@gmail.com; s=20230509; h=from:subject:message-id;
- bh=oWvFN7xOGkU7bcs3lDFa6vK7FIsOV5vZtf+uQm0sw9k=;
- b=Mc+Ml1gSrzo1GBG7gW7JleZmEtAVVegiL5pOr8qR3D4f8IYdevKiTpqTfPY9UBvtA1Erw0egw
- I6PMjjkZmu6CxmpMgck4XfOo8C4vo+z/eLJjqMMtOkf5BWFDw/X2qkF
-X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
- pk=tIGJV7M+tCizagNijF0eGMBGcOsPD+0cWGfKjl4h6K8=
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <3663d244-627f-4928-ab2e-0328cd6a8fb1@t-8ch.de>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Use "static_keys" (name of the test itself) consistently instead of mixing
-"static_key" and "static_keys" at the beginning of the messages in the
-test_static_keys script.
+On Wed, Aug 30, 2023 at 08:21:51AM +0200, Thomas Weißschuh wrote:
+> On 2023-08-29 14:12:45+0200, Willy Tarreau wrote:
+> > On Tue, Aug 29, 2023 at 12:16:23PM +0200, Thomas Weißschuh wrote:
+> > > > OK. But then, doesn't it mean that if we don't provide our stdarg.h,
+> > > > the compilers' will be used ? I'm asking because we're already using
+> > > > va_list and va_args, for example in vfprintf() in stdio.h, which
+> > > > precisely includes <stdarg.h> so it must indeed come from the compiler.
+> > > 
+> > > It will be used *iff* -nostdinc is *not* passed.
+> > > 
+> > > I think we need to clarify the definition of the word "provided".
+> > > For me it means that the compiler ships an implementation of this header
+> > > file in the compiler-specific include directory.
+> > > 
+> > > If -nostdinc is passed this include directory is not actually usable.
+> > 
+> > OK I understand better now. I thought it was always usable.
+> > 
+> > > If a user wants to avoid the implicit usage of any system-provided
+> > > headers they need to pass -nostdinc, as far as I know there is no flag
+> > > to keep only the compiler-specific include directories.
+> > 
+> > So that means we may also have to implement our own stddef.h to move
+> > size_t there, and limits.h and move *MAX there as well if we want to
+> > support this. I'm not necessarily against this, it's just that we need
+> > to be consistent.
+> 
+> We would have to, *iff* the goal is to provide *all* headers in nolibc.
 
-Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
----
-This single-patch series fixes a minor inconsistency in the
-'test_static_keys' script from the static_keys selftest. As a general
-rule, the selftest name is provided at the beginning of every log
-message.
+That has never been my goal (especially for those already provided by
+the compiler).
 
-Apply the selftest name for all log messages consequently.
----
- tools/testing/selftests/static_keys/test_static_keys.sh | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+> > Also something is puzzling me. If a normal program builds with -nostdinc,
+> > it means it does *not* want the libc's (nor the compiler's) headers to be
+> > included, probably because it comes with its own. In this case why would
+> > we impose ours ? For example, let's consider this tiny code snippet:
+> > 
+> >   $ cat arg.c
+> >   #include <stdarg.h>
+> >   va_list blah;
+> > 
+> >   $ gcc -c arg.c 
+> >   $ gcc -nostdinc -c arg.c
+> >   arg.c:1:20: error: no include path in which to search for stdarg.h
+> >       1 | #include <stdarg.h>
+> >         |                    ^
+> >   arg.c:2:1: error: unknown type name 'va_list'
+> >       2 | va_list blah;
+> >         | ^~~~~~~
+> >   arg.c:1:1: note: 'va_list' is defined in header '<stdarg.h>'; did you forget to '#include <stdarg.h>'?
+> >     +++ |+#include <stdarg.h>
+> >       1 | #include <stdarg.h>
+> >  
+> > You see, that's why I'm finding it confusing that we define headers that
+> > are supposed *not* to be defined with -nostdinc.
+> 
+> I'm confused.
+> 
+> If the user doesn't want to use nolibc they should not explicitly add it
+> to the include path.
 
-diff --git a/tools/testing/selftests/static_keys/test_static_keys.sh b/tools/testing/selftests/static_keys/test_static_keys.sh
-index fc9f8cde7d42..3b0f17b81ac2 100755
---- a/tools/testing/selftests/static_keys/test_static_keys.sh
-+++ b/tools/testing/selftests/static_keys/test_static_keys.sh
-@@ -6,18 +6,18 @@
- ksft_skip=4
- 
- if ! /sbin/modprobe -q -n test_static_key_base; then
--	echo "static_key: module test_static_key_base is not found [SKIP]"
-+	echo "static_keys: module test_static_key_base is not found [SKIP]"
- 	exit $ksft_skip
- fi
- 
- if ! /sbin/modprobe -q -n test_static_keys; then
--	echo "static_key: module test_static_keys is not found [SKIP]"
-+	echo "static_keys: module test_static_keys is not found [SKIP]"
- 	exit $ksft_skip
- fi
- 
- if /sbin/modprobe -q test_static_key_base; then
- 	if /sbin/modprobe -q test_static_keys; then
--		echo "static_key: ok"
-+		echo "static_keys: ok"
- 		/sbin/modprobe -q -r test_static_keys
- 		/sbin/modprobe -q -r test_static_key_base
- 	else
-@@ -25,6 +25,6 @@ if /sbin/modprobe -q test_static_key_base; then
- 		/sbin/modprobe -q -r test_static_key_base
- 	fi
- else
--	echo "static_key: [FAIL]"
-+	echo "static_keys: [FAIL]"
- 	exit 1
- fi
+I didn't understand that it was what you were seeking, I thought you
+wanted to build like above, hence my confusion, see below.
 
----
-base-commit: 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5
-change-id: 20230830-feature-static_keys_selftest_messages-d43d67db7974
+> > I think we need to carefully check what is supposed to be defined and
+> > what not when -nostdinc is used normally so that we defined what programs
+> > expect and not what they expect us *not* to define. Recently we've been
+> > empirically fixing nolibc-test build failures but it's just a test program
+> > that comes with its own biases. Maybe trying to build some portable libs
+> > that use very little from a libc (e.g. xxhash, liblzo etc) could give us
+> > some hints about certain basic assumptions that we do not fulfill.
+> 
+> It makes sense to figure out what is needed by larger projects from a
+> libc. But it feels to me like a bug vs. feature discussion.
+> 
+> Making larger real-world applications work is a feature while making the
+> following work is a bugfix:
+> 
+> $ cat nolibc.c
+> #include "nolibc.h"
+> 
+> int main(void)
+> {
+> 	return 0;
+> }
+> 
+> $ gcc -nostdinc -Isysroot/x86/include -c nolibc.c
+> In file included from sysroot/x86/include/nolibc.h:98,
+>                  from nolibc-test.c:1:
+> sysroot/x86/include/sys.h:10:10: fatal error: stdarg.h: No such file or directory
+>    10 | #include <stdarg.h>
+>       |          ^~~~~~~~~~
 
-Best regards,
--- 
-Javier Carrasco <javier.carrasco.cruz@gmail.com>
+This one definitely is a bug, I totally agree. And I didn't understand
+this from your initial patch, my understanding was that users would
+want to use -nostdinc yet build using regular includes that we'd
+provide.
 
+> > > It's all about supporting -nostdinc.
+
+Yes, but "-nostdinc" with "-include nolibc.h". It was probably obvious
+to you since you were trying to make it work but I really didn't grasp
+it.
+
+> > But unless I'm mistaken (and my example above seems to support this),
+> > a normal libc doesn't build with -nostdinc. That's the point I'd like
+> > us to clarify.
+> 
+> musl:
+> 
+> $ cat /usr/lib/musl/lib/musl-gcc.specs
+> ...
+> *cc1:
+> %(cc1_cpu) -nostdinc -isystem /usr/lib/musl/include -isystem include%s
+> ...
+> 
+> 
+> dietlibc:
+> 
+> $ cat Makefile
+> ...
+> DEFAULTCFLAGS=-pipe -nostdinc -D_REENTRANT $(EXTRACFLAGS)
+> ...
+
+OK.
+
+> klibc re-adds the compilers include path,
+> This is an alternative we could also use:
+> 
+> $ cat Makefile
+> ...
+> NOSTDINC_FLAGS := -nostdlib -nostdinc -isystem $(shell $(CC) -print-file-name=include)
+> ...
+
+Another approach but not easy to pass to end-users.
+
+> There was also a longer discussion on LKML about linux/stdarg.h [0]
+
+Thanks for the link, interesting indeed!
+
+> The gcc authors argue that Linux should not ship a custom stdarg.h.
+> But in reality Linux, musl, dietlibc (and probably some more) today are
+> shipping their own stdarg.h.
+
+I think the main problem precisely is that -nostdinc excludes both the
+system libc's and the compiler's headers (that last point I didn't know).
+If there was a standard way to say "no system includes but please keep
+the compiler's headers as they're the only exposed interface we have" it
+would be much easier. So yes, I understand what you ended up on: you in
+fact want to be sure not to inherit from the local system headers and as
+a side effect you lose the compiler ones so you need to redefine them.
+Then of course that's fine.
+
+> > We have an interesting comment at the top of nolibc.h which says:
+> > 
+> >  * The available standard (but limited) include files are:
+> >  *   ctype.h, errno.h, signal.h, stdio.h, stdlib.h, string.h, time.h
+> 
+> This is out of date. It's missing signal.h, stdint.h, unistd.h.
+
+Yes very likely, but I found it interesting to find this split that was
+done a while ago.
+
+> >  *
+> >  * In addition, the following ones are expected to be provided by the compiler:
+> >  *   float.h, stdarg.h, stddef.h
+> 
+> What does "expected" mean here?
+> nolibc itself is perfectly fine without float.h and stddef.h.
+
+i.e. "if needed we'll use these ones".
+
+> >  * The following ones which are part to the C standard are not provided:
+> >  *   assert.h, locale.h, math.h, setjmp.h, limits.h
+> 
+> While true, a lot of other headers are also not provided.
+
+Sure, but these were the ones I identified by then.
+
+> > I think I draw the line based on what my compilers have always provided.
+> > That's definitely something we can redefine (and update the comment),
+> > I'm just seeking consistency, and I think you can understand :-/
+> 
+> I do understand.
+> 
+> To reiterate it here explicitly, in my opinion it's a worthwhile and
+> consistent goal to make "nolibc usable standalone with -nostdinc" for
+> maximal control by the user.
+
+I agree now. I think we need to make it clear that it's for when we're
+including the all-in-one "nolibc.h" as an alternative to regular headers.
+
+> If not, I'd like to use the "-nostdinc -I$(cc -print-file-name=include)"
+> method to avoid dependencies on system header for nolibc-test
+> specifically.
+
+It's a bit ugly and not always easy to stuff into projects. The fact that
+nolibc itself isn't self-sustaining anymore with -nostdinc is a concern
+and I agree with addressing it like you proposed.
+
+Thanks for the clarification!
+Willy
