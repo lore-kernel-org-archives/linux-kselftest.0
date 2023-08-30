@@ -2,101 +2,222 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F0C9FC83F20
-	for <linux-kselftest@archiver.kernel.org>; Wed, 30 Aug 2023 18:37:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E31AC83F17
+	for <linux-kselftest@archiver.kernel.org>; Wed, 30 Aug 2023 18:38:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238040AbjH3ShR (ORCPT
+        id S238069AbjH3ShR (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Wed, 30 Aug 2023 14:37:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49506 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244049AbjH3MYZ (ORCPT
+        with ESMTP id S242528AbjH3I7w (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 30 Aug 2023 08:24:25 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613E8CC5;
-        Wed, 30 Aug 2023 05:24:22 -0700 (PDT)
+        Wed, 30 Aug 2023 04:59:52 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB32ECC9;
+        Wed, 30 Aug 2023 01:59:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693398262; x=1724934262;
+  t=1693385988; x=1724921988;
   h=date:from:to:cc:subject:in-reply-to:message-id:
    references:mime-version;
-  bh=/DxvYklHe20nQbJbPnAFJlahY5gcOY8BRtA5KbVsT14=;
-  b=YzqDbZbgkEm8RG4ar9WNc+5G7K1wxSGSBdQFCV23VbLiuje36zXmRkmH
-   Bhw04G03iIp/kMeia9UOtQ4Xxs/5NIhjUjLMAP6NbibqmmrMoLp7l6hmi
-   5Xj7knpe+NOrSBkfpJMWTGlGy/KJElDDfHqrDhDgP5iJZb2uBGKa3w6GR
-   JRHmvqgkaQ1AaU+jBgQB3zlxfus9I3nGPcYlPP5GYCEifn/Sq160+KMq4
-   uxEqWrL3lgxDPCzwm4JvlIcTf+J2My74yD1h8UX1aKwRb8VwEGWlE2v8B
-   abwbH1CzcZS30ksLtmaWhioSO1caFppHlyz+kkXkvOTWle6qCePSYGoqc
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10818"; a="374537192"
+  bh=z8x/3nfrUutct/LzfYQeniWhx4NZGD8mqmiFRcdPHEk=;
+  b=MdYEsNCxuiTqF6FphzThHQd0G2bCArAiSjRXW6xKVU19OonDWEnhghTa
+   sJjEH8VXDFdGKPiHotb8+vxJk84nGUZMeCWonGNCfGMZHwdvLAf1XAlcn
+   JLWU/27YRuTDAabxFDqhwEX7QEhwdgPzjpyTsymrNLa35KouJctDWba2u
+   lF6ovzJRxH7HKLzdLYuv4s+sPoA52KWBWKgvL17jPIM1+ilEGyN1BTHNV
+   DLMoJrAD214KTDWi7YW2aUk9AESaaShzyrYRfXCMYlfVbZ5yAmFRhstBI
+   Pb/s7I8FhL6KAFJpjH0jJYMF9lrD2uY3oaZdDz3In2ols6CHLZg4EB8QT
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10817"; a="355901947"
 X-IronPort-AV: E=Sophos;i="6.02,213,1688454000"; 
-   d="scan'208";a="374537192"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2023 05:23:02 -0700
+   d="scan'208";a="355901947"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2023 01:59:47 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10818"; a="853710746"
+X-IronPort-AV: E=McAfee;i="6600,9927,10817"; a="715824203"
 X-IronPort-AV: E=Sophos;i="6.02,213,1688454000"; 
-   d="scan'208";a="853710746"
+   d="scan'208";a="715824203"
 Received: from aghiriba-mobl.ger.corp.intel.com ([10.251.213.104])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2023 05:22:59 -0700
-Date:   Wed, 30 Aug 2023 15:22:57 +0300 (EEST)
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2023 01:59:45 -0700
+Date:   Wed, 30 Aug 2023 11:59:39 +0300 (EEST)
 From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     "Wieczor-Retman, Maciej" <maciej.wieczor-retman@intel.com>
-cc:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        "Wieczor-Retman, Maciej" <maciej.wieczor-retman@intel.com>,
-        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 6/6] selftests/kvm: Replace attribute with macro
-In-Reply-To: <82ed62dd7070203701b4ca326e62862404dd5f72.1693216959.git.maciej.wieczor-retman@intel.com>
-Message-ID: <fc618e8c-f8b-c339-9aa6-1d2c2865b42e@linux.intel.com>
-References: <cover.1693216959.git.maciej.wieczor-retman@intel.com> <82ed62dd7070203701b4ca326e62862404dd5f72.1693216959.git.maciej.wieczor-retman@intel.com>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Babu Moger <babu.moger@amd.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+Subject: Re: [PATCH v3 5/7] selftests/resctrl: Make benchmark command const
+ and build it with pointers
+In-Reply-To: <bafde7cd-01ae-56ff-c1f5-53be610c2b10@intel.com>
+Message-ID: <184bd8bb-5622-64f9-9f65-6674db935a21@linux.intel.com>
+References: <20230823131556.27617-1-ilpo.jarvinen@linux.intel.com> <20230823131556.27617-6-ilpo.jarvinen@linux.intel.com> <bafde7cd-01ae-56ff-c1f5-53be610c2b10@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: multipart/mixed; boundary="8323329-1703911292-1693385988=:1710"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 28 Aug 2023, Wieczor-Retman, Maciej wrote:
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-> The __printf() macro is used in many tools in the linux kernel to
-> validate the format specifiers in functions that use printf. Some
-> selftests use it without putting it in a macro definition and some tests
-> import the kselftests.h header.
+--8323329-1703911292-1693385988=:1710
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
-"Some" and yet this only converts one? Please be more precise in the 
-wording.
+On Tue, 29 Aug 2023, Reinette Chatre wrote:
+> On 8/23/2023 6:15 AM, Ilpo Järvinen wrote:
+> ...
+> > diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
+> > index bcd0d2060f81..32d23e665697 100644
+> > --- a/tools/testing/selftests/resctrl/resctrl.h
+> > +++ b/tools/testing/selftests/resctrl/resctrl.h
+> > @@ -97,11 +100,11 @@ int write_bm_pid_to_resctrl(pid_t bm_pid, char *ctrlgrp, char *mongrp,
+> >  int perf_event_open(struct perf_event_attr *hw_event, pid_t pid, int cpu,
+> >  		    int group_fd, unsigned long flags);
+> >  int run_fill_buf(size_t span, int memflush, int op, bool once);
+> > -int resctrl_val(char **benchmark_cmd, struct resctrl_val_param *param);
+> > -int mbm_bw_change(int cpu_no, char **benchmark_cmd);
+> > +int resctrl_val(const char * const *benchmark_cmd, struct resctrl_val_param *param);
+> > +int mbm_bw_change(int cpu_no, const char * const *benchmark_cmd);
+> >  void tests_cleanup(void);
+> >  void mbm_test_cleanup(void);
+> > -int mba_schemata_change(int cpu_no, char **benchmark_cmd);
+> > +int mba_schemata_change(int cpu_no, const char *const *benchmark_cmd);
+> 
+> Could you please use consistent spacing ("char * const" vs "char *const")?
+>
+> > @@ -120,7 +117,7 @@ static void run_mba_test(char **benchmark_cmd, int cpu_no)
+> >  	umount_resctrlfs();
+> >  }
+> >  
+> > -static void run_cmt_test(char **benchmark_cmd, int cpu_no)
+> > +static void run_cmt_test(const char **benchmark_cmd, int cpu_no)
+> >  {
+> >  	int res;
+> >  
+> 
+> Could you please elaborate why the above functions have
+> "const char **" instead of "const char * const *"?
 
-> Use __printf() attribute instead of the full attribute since the macro
-> is inside kselftests.h and the header is already imported.
+Thanks for the review!
 
-IMO, this would be enough:
+Sure. I'll make them consistent.
 
-Use __printf() from kselftests.h instead of the full attribute.
+> > @@ -173,11 +170,13 @@ static void run_cat_test(int cpu_no, int no_of_bits)
+> >  int main(int argc, char **argv)
+> >  {
+> >  	bool has_ben = false, mbm_test = true, mba_test = true, cmt_test = true;
+> > -	char benchmark_cmd_area[BENCHMARK_ARGS][BENCHMARK_ARG_SIZE];
+> >  	int c, cpu_no = 1, argc_new = argc, i, no_of_bits = 0;
+> > -	char *benchmark_cmd[BENCHMARK_ARGS];
+> > +	const char *benchmark_cmd[BENCHMARK_ARGS];
+> >  	int ben_ind, ben_count, tests = 0;
+> > +	char *span_str = NULL;
+> >  	bool cat_test = true;
+> > +	char *skip_reason;
+> > +	int ret;
+> >  
+> >  	for (i = 0; i < argc; i++) {
+> >  		if (strcmp(argv[i], "-b") == 0) {
+> > @@ -257,31 +256,31 @@ int main(int argc, char **argv)
+> >  			ksft_exit_fail_msg("Too long benchmark command.\n");
+> >  
+> >  		/* Extract benchmark command from command line. */
+> > -		for (i = ben_ind; i < argc; i++) {
+> > -			benchmark_cmd[i - ben_ind] = benchmark_cmd_area[i];
+> > -			if (strlen(argv[i]) >= BENCHMARK_ARG_SIZE - 1)
+> > -				ksft_exit_fail_msg("Too long benchmark command argument.\n");
+> > -			sprintf(benchmark_cmd[i - ben_ind], "%s", argv[i]);
+> > -		}
+> > +		for (i = 0; i < argc - ben_ind; i++)
+> > +			benchmark_cmd[i] = argv[i + ben_ind];
+> >  		benchmark_cmd[ben_count] = NULL;
+> >  	} else {
+> >  		/* If no benchmark is given by "-b" argument, use fill_buf. */
+> > -		for (i = 0; i < 5; i++)
+> > -			benchmark_cmd[i] = benchmark_cmd_area[i];
+> > -
+> > -		strcpy(benchmark_cmd[0], "fill_buf");
+> > -		sprintf(benchmark_cmd[1], "%u", DEFAULT_SPAN);
+> > -		strcpy(benchmark_cmd[2], "1");
+> > -		strcpy(benchmark_cmd[3], "0");
+> > -		strcpy(benchmark_cmd[4], "false");
+> > +		benchmark_cmd[0] = "fill_buf";
+> > +		ret = asprintf(&span_str, "%u", DEFAULT_SPAN);
+> > +		if (ret < 0)
+> > +			ksft_exit_fail_msg("Out of memory!\n");
+> > +		benchmark_cmd[1] = span_str;
+> > +		benchmark_cmd[2] = "1";
+> > +		benchmark_cmd[3] = "0";
+> > +		benchmark_cmd[4] = "false";
+> >  		benchmark_cmd[5] = NULL;
+> >  	}
+> >  
+> > -	if (!check_resctrlfs_support())
+> > -		return ksft_exit_skip("resctrl FS does not exist. Enable X86_CPU_RESCTRL config option.\n");
+> > +	if (!check_resctrlfs_support()) {
+> > +		skip_reason = "resctrl FS does not exist. Enable X86_CPU_RESCTRL config option.\n";
+> > +		goto free_span;
+> > +	}
+> >  
+> > -	if (umount_resctrlfs())
+> > -		return ksft_exit_skip("resctrl FS unmount failed.\n");
+> > +	if (umount_resctrlfs()) {
+> > +		skip_reason = "resctrl FS unmount failed.\n";
+> > +		goto free_span;
+> > +	}
+> >  
+> >  	filter_dmesg();
+> >  
+> > @@ -299,5 +298,10 @@ int main(int argc, char **argv)
+> >  	if (cat_test)
+> >  		run_cat_test(cpu_no, no_of_bits);
+> >  
+> > +	free(span_str);
+> >  	ksft_finished();
+> > +
+> > +free_span:
+> > +	free(span_str);
+> > +	return ksft_exit_skip(skip_reason);
+> >  }
+> 
+> This is a tricky one. If I understand correctly this goto target makes
+> some assumptions about the state (no test plan created yet) and exit
+> reason (it has to be skipped). A temporary variable is also thrown into
+> the mix.
 
-Was there a reason why you didn't convert mm/pkey-helpers.h one?
+So in the end the symmetry proved to be not as simple as was depicted 
+earlier but "tricky"... I tried to warn about this and it's why I wished 
+to avoid the allocation entirely. Without allocation, there would have not 
+been need for the temporary variable nor adjusting the control flow with 
+that label.
+
+> Can this not be simplified by moving the snippet where
+> benchmark_cmd[] is initialized to fill_buf to be just before the tests 
+> are run? Perhaps right before ksft_set_plan()?
+
+So I throw a temporary variable into the mix (has_ben) to keep track when 
+benchmark_cmd needs to be initialized to the default command? It doesn't 
+play well with what I've in queue after this when user parameters are 
+collected into a struct which is initialized to default value by a helper 
+function before any argument processing. That is, initializing the 
+parameters to defaults needs to be split before and after the parameter 
+parsing code.
+
+> This may be an easier move to consider
+> when the changes in patch 7 are taken into account.
+
+Perhaps you could consider accepting my earlier approach which avoided 
+the allocation entirely now that you've seen where this leads to? ...At 
+least you should understand my reasoning for that on much deeper level 
+now.
+
 
 -- 
  i.
 
-
-> Signed-off-by: Wieczor-Retman, Maciej <maciej.wieczor-retman@intel.com>
-> ---
->  tools/testing/selftests/kvm/include/test_util.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
-> index a6e9f215ce70..710a8a78e8ce 100644
-> --- a/tools/testing/selftests/kvm/include/test_util.h
-> +++ b/tools/testing/selftests/kvm/include/test_util.h
-> @@ -33,7 +33,7 @@ static inline int _no_printf(const char *format, ...) { return 0; }
->  #define pr_info(...) _no_printf(__VA_ARGS__)
->  #endif
->  
-> -void print_skip(const char *fmt, ...) __attribute__((format(printf, 1, 2)));
-> +void __printf(1, 2) print_skip(const char *fmt, ...);
->  #define __TEST_REQUIRE(f, fmt, ...)				\
->  do {								\
->  	if (!(f))						\
-> 
+--8323329-1703911292-1693385988=:1710--
