@@ -2,95 +2,136 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72489C6FA8F
-	for <linux-kselftest@archiver.kernel.org>; Wed, 30 Aug 2023 18:37:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3704AC83F18
+	for <linux-kselftest@archiver.kernel.org>; Wed, 30 Aug 2023 18:37:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233773AbjH3Sg4 (ORCPT
+        id S237840AbjH3Sg7 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 30 Aug 2023 14:36:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44302 "EHLO
+        Wed, 30 Aug 2023 14:36:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242561AbjH3JB7 (ORCPT
+        with ESMTP id S244622AbjH3Nc7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 30 Aug 2023 05:01:59 -0400
-Received: from smtp-bc0a.mail.infomaniak.ch (smtp-bc0a.mail.infomaniak.ch [IPv6:2001:1600:4:17::bc0a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF012CCB
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Aug 2023 02:01:53 -0700 (PDT)
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4RbJFW2w2VzMqSYV;
-        Wed, 30 Aug 2023 09:01:51 +0000 (UTC)
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4RbJFV6lhYzMpp9y;
-        Wed, 30 Aug 2023 11:01:50 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1693386111;
-        bh=GPuobfew1UhhdtqGSwSghFtfdXBk0VcPKhAtepB/RTQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=o1bRc4GkTkSUL/c1YwpOHDzHtq0/J3LM4hmcOG9H7JEuR37BFeK1khzjwlKpgoC+x
-         2kh+DS9foGoCP7Lef8MAhV3iBtVjRws/N/bNsBxTxNgs9aYBPqZDxxCP5RjPzT/RSg
-         x8KcJ3O6FnvaS+tGwebfCE0jMZuIN8GPsy/cU3Tg=
-Date:   Wed, 30 Aug 2023 11:01:47 +0200
-From:   =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To:     Ding Xiang <dingxiang@cmss.chinamobile.com>
-Cc:     shuah@kernel.org, linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/landlock: Fix a resource leak
-Message-ID: <20230830.Ahqu4iepha4I@digikod.net>
-References: <20230830060858.2841-1-dingxiang@cmss.chinamobile.com>
+        Wed, 30 Aug 2023 09:32:59 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3220611F;
+        Wed, 30 Aug 2023 06:32:56 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b9c907bc68so84357581fa.2;
+        Wed, 30 Aug 2023 06:32:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1693402374; x=1694007174; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MnDE+pbhmyZZgibTtE5/3/lahQ2s3Jiv+g1RsGQj064=;
+        b=h76hn8ZrFVEpRL2Lwcb15amvXHlKGuHq8jL+9WkscAnkUIK7L9rj5ImXDspGuFLbl4
+         Ik7WwFY5KdSrBJpZHRp+em6LDvC1hGgJaDn7gJjBIvx5XUU3wfjabcDySjLLNlin68/2
+         TvUhxqaVsNuzHzgduDwNTZvDuxFWOJYRkAJcUN34cE2MvzgDAsDdvGyYdX01a2Rf32Aq
+         mOAzco+pD/FZyATDOR1lZYRWevezIQOlLhzpodkIHVsQo7JZU7zsaClNbZdpr4VaJKVS
+         zHAIb24j9YSMRte/I7uU/YkwSXSGScQ+OGPNcBsHfKRvqCw8xHJElrcnXOYUw3Odyyls
+         NktA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693402374; x=1694007174;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MnDE+pbhmyZZgibTtE5/3/lahQ2s3Jiv+g1RsGQj064=;
+        b=OVcM7CXCLITrn37YEbnIZB0jyoP0EWlt/2z0qjJ1DwtGbDGcbdPr8HIlqFjJrY+ais
+         hm7jW8XHMWgWKnDkN69q9AOFlp0vJ7xsudvzTeyiBMJetgYsKlj8Mz1GOulp5OjGMyVm
+         GEDX4zC1uKwlwcaxVWrmBaGUjgwf00T/UkN4RSX0qMb87dPIJ9wFuGQjdcV1J5G6xggQ
+         5jUzVfxN9CmrpywRrJYAf33SSatcS6csWV/b4I69c4CpSwJV4wXT3eNALdTqOHPsApOx
+         Wv7SNqvjbYBzr8blXRYPIk1QhArDGxCUUeR0xmU3RoJmtF7ENKIS1MiE4S60787ir5Iv
+         G82g==
+X-Gm-Message-State: AOJu0YxNSmdeGohVydObQwNhMCyIL/G/5EbYVUAwGqJuqzhdCjEPyW4Z
+        vl7W0b+wh5JUyZFNDr45OiFvW54pGNKIExTB
+X-Google-Smtp-Source: AGHT+IGi8ro0DR7fyFjZnSw3v3zPDry2Iuy00rD3+/FoIo1eybxV5kiHIB75fOisLiLy0+bcmuD+Lw==
+X-Received: by 2002:a2e:9303:0:b0:2bd:1bca:ebee with SMTP id e3-20020a2e9303000000b002bd1bcaebeemr1784959ljh.19.1693402374285;
+        Wed, 30 Aug 2023 06:32:54 -0700 (PDT)
+Received: from [127.0.1.1] (91-118-163-37.static.upcbusiness.at. [91.118.163.37])
+        by smtp.gmail.com with ESMTPSA id lu9-20020a170906fac900b009a1e73f2b4bsm7160374ejb.48.2023.08.30.06.32.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Aug 2023 06:32:53 -0700 (PDT)
+From:   Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Date:   Wed, 30 Aug 2023 15:32:39 +0200
+Subject: [PATCH] selftests: static_keys: fix messages
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230830060858.2841-1-dingxiang@cmss.chinamobile.com>
-X-Infomaniak-Routing: alpha
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230830-feature-static_keys_selftest_messages-v1-1-49bb58c508a7@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAPZE72QC/x2NTQrCMBQGr1KyNhCbYtSriIT8fGkf1ljyUlFK7
+ 25wObOY2QSjEFhcu00UvInplRscD50Ik8sjJMXGole9VmetZIKra4Hk6ioF+8CXLWNOFVztE8x
+ uBMs46Hgy0ZuLGURreceQvrgcplbL6zw3uRQk+vznt/u+/wDx0cSsjAAAAA==
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ivan.orlov0322@gmail.com,
+        Javier Carrasco <javier.carrasco.cruz@gmail.com>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1693402373; l=2062;
+ i=javier.carrasco.cruz@gmail.com; s=20230509; h=from:subject:message-id;
+ bh=oWvFN7xOGkU7bcs3lDFa6vK7FIsOV5vZtf+uQm0sw9k=;
+ b=Mc+Ml1gSrzo1GBG7gW7JleZmEtAVVegiL5pOr8qR3D4f8IYdevKiTpqTfPY9UBvtA1Erw0egw
+ I6PMjjkZmu6CxmpMgck4XfOo8C4vo+z/eLJjqMMtOkf5BWFDw/X2qkF
+X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
+ pk=tIGJV7M+tCizagNijF0eGMBGcOsPD+0cWGfKjl4h6K8=
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
+Use "static_keys" (name of the test itself) consistently instead of mixing
+"static_key" and "static_keys" at the beginning of the messages in the
+test_static_keys script.
 
-Thanks for this fix. A few suggestions:
+Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+---
+This single-patch series fixes a minor inconsistency in the
+'test_static_keys' script from the static_keys selftest. As a general
+rule, the selftest name is provided at the beginning of every log
+message.
 
-On Wed, Aug 30, 2023 at 02:08:58PM +0800, Ding Xiang wrote:
-> The opened file should be closed before return,
-> otherwise resource leak will occur
-> 
-> Signed-off-by: Ding Xiang <dingxiang@cmss.chinamobile.com>
-> ---
->  tools/testing/selftests/landlock/fs_test.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
-> index 83d565569512..687a66ea9799 100644
-> --- a/tools/testing/selftests/landlock/fs_test.c
-> +++ b/tools/testing/selftests/landlock/fs_test.c
-> @@ -124,13 +124,17 @@ static bool supports_filesystem(const char *const filesystem)
->  		return true;
->  
->  	/* filesystem can be null for bind mounts. */
-> -	if (!filesystem)
-> +	if (!filesystem) {
-> +		fclose(inf);
->  		return true;
+Apply the selftest name for all log messages consequently.
+---
+ tools/testing/selftests/static_keys/test_static_keys.sh | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Can you please change these two lines (and the next hunk) with a
-`goto out` (and then don't add the if braces), initialize res to true
-when it is declared, and add the `out` label below?
+diff --git a/tools/testing/selftests/static_keys/test_static_keys.sh b/tools/testing/selftests/static_keys/test_static_keys.sh
+index fc9f8cde7d42..3b0f17b81ac2 100755
+--- a/tools/testing/selftests/static_keys/test_static_keys.sh
++++ b/tools/testing/selftests/static_keys/test_static_keys.sh
+@@ -6,18 +6,18 @@
+ ksft_skip=4
+ 
+ if ! /sbin/modprobe -q -n test_static_key_base; then
+-	echo "static_key: module test_static_key_base is not found [SKIP]"
++	echo "static_keys: module test_static_key_base is not found [SKIP]"
+ 	exit $ksft_skip
+ fi
+ 
+ if ! /sbin/modprobe -q -n test_static_keys; then
+-	echo "static_key: module test_static_keys is not found [SKIP]"
++	echo "static_keys: module test_static_keys is not found [SKIP]"
+ 	exit $ksft_skip
+ fi
+ 
+ if /sbin/modprobe -q test_static_key_base; then
+ 	if /sbin/modprobe -q test_static_keys; then
+-		echo "static_key: ok"
++		echo "static_keys: ok"
+ 		/sbin/modprobe -q -r test_static_keys
+ 		/sbin/modprobe -q -r test_static_key_base
+ 	else
+@@ -25,6 +25,6 @@ if /sbin/modprobe -q test_static_key_base; then
+ 		/sbin/modprobe -q -r test_static_key_base
+ 	fi
+ else
+-	echo "static_key: [FAIL]"
++	echo "static_keys: [FAIL]"
+ 	exit 1
+ fi
 
-> +	}
->  
->  	len = snprintf(str, sizeof(str), "nodev\t%s\n", filesystem);
-> -	if (len >= sizeof(str))
-> +	if (len >= sizeof(str)) {
-> +		fclose(inf);
->  		/* Ignores too-long filesystem names. */
->  		return true;
-> +	}
->  
->  	res = fgrep(inf, str);
+---
+base-commit: 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5
+change-id: 20230830-feature-static_keys_selftest_messages-d43d67db7974
 
-out:
->  	fclose(inf);
-> -- 
-> 2.38.1
-> 
-> 
-> 
+Best regards,
+-- 
+Javier Carrasco <javier.carrasco.cruz@gmail.com>
+
