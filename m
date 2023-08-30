@@ -2,247 +2,107 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BBBA6C83F17
-	for <linux-kselftest@archiver.kernel.org>; Wed, 30 Aug 2023 18:37:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 684D4C83F1B
+	for <linux-kselftest@archiver.kernel.org>; Wed, 30 Aug 2023 18:37:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237871AbjH3ShA (ORCPT
+        id S231518AbjH3ShB (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 30 Aug 2023 14:37:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59942 "EHLO
+        Wed, 30 Aug 2023 14:37:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242184AbjH3HXm (ORCPT
+        with ESMTP id S245671AbjH3Pwp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 30 Aug 2023 03:23:42 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 168C61BB;
-        Wed, 30 Aug 2023 00:23:37 -0700 (PDT)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 37U7NBLX025225;
-        Wed, 30 Aug 2023 09:23:11 +0200
-Date:   Wed, 30 Aug 2023 09:23:11 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc:     Shuah Khan <shuah@kernel.org>, Zhangjin Wu <falcon@tinylab.org>,
-        Yuan Tan <tanyuan@tinylab.org>, linux-kernel@vger.kernel.org,
+        Wed, 30 Aug 2023 11:52:45 -0400
+Received: from sonic310-21.consmr.mail.gq1.yahoo.com (sonic310-21.consmr.mail.gq1.yahoo.com [98.137.69.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4CDD19A
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Aug 2023 08:52:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.ca; s=s2048; t=1693410761; bh=8CTksIvAv2QdlANLJfYI5FQM3vInY3fXsMesns0e+O8=; h=Date:From:Subject:To:Cc:References:From:Subject:Reply-To; b=h4Ew7GjVk0rHjLoaxnXW2fOnrXN6Qkmyqt/ockRwGKKNNUO9Q1K4S9hl6PcKid9I8nZWpn76BICXuMRs6SD4XuSGeA42SlYesHMpdxi4XqyvQ/NvssDkQLFCtfW13v8s+M2pNU7uLcJUKoBBuoFtl8banchWttJ65Sq5VzVNRBQ0MM1fTHtMI3C7Gx1xcNDAkG60zw+2nA4FtIqzoka5FeoeBzeYDdRgh587ATX762DhZN2yojL/nzcCDdfBVrmtJCjOAb6C/ao+PuYs2wkit/ypLYXUx7VSpIg8yi9aW613+KyfOM7+kOWqwgUa/astVF1KYZlm5wxbnO2iJ2y2Ug==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1693410761; bh=0lrHScO/I7vSWMOyh4mLKLzRypQUeQIwcNAt3n0VJXy=; h=X-Sonic-MF:Date:From:Subject:To:From:Subject; b=l3bfb6XhIfnmyFq1o1ds8OmStgAEJ4ApeW8hGAYWmH5oEZyQCHJL0uyecqmynGvexWtyl3ERCv1d9BgI2JaBl0fbxUtNVqFjdA7KqgiqVqkn3nkjecoctz5bU2HlI4C8HV36FX2BhuTBEwUf2Y/lQeJna2s9cHOKL/00mETrX4mNbv4boiHFju7tB2DR3eBN0fGo0qjwf6jW9qGEH1CemZsxUz5akQY/B0LloUQ5QDuG4ra3MNtjhX67/qCEYpoqIsvtJola0bv2a355n4hKjxEI884RP7o/uNJ3GTdX7uusdF3r2Tf2nNP5e4q/NWbs66dUf24WJ3cR6TQw1sYDDA==
+X-YMail-OSG: Xa6wI1YVM1lKeIRWpDr1AtIlgVLEYFo0v9ci1dUfIkYd8YgZSbJZMd5Z6AigbfQ
+ A7O53H22YJFHIzl5OyX9bO7wl1uE28enUNkq428eq4kF_0a5XfRJPsb2pBvDlf1jzbdlQGF0Ub3l
+ eaVBJ6_a9xryUh1KFeKoovKeiZLbhFvirUREIZoWD1NnLP4LfnREKTElIGOij3e4LgB7NURH25kE
+ pxqvrvZERCA6c1lS5DfkiF3G2xDX14sVVAjSbdrAa.1SSywTTjMytOjZiDct9EyexVA627nBx1YP
+ 5fLGF0Cm_5cewxyNGjLNQrph.TTy3ehjR1QXRXHR7bDivKoMjbOxTM2Zm.GjeJbDHNRSe_uXJuoZ
+ V5ihPc.1DQGgsEuirtorvxCwkK.qahVjuXAc0xgQxwC9SPgrwvtJN2MCJfFoclv7rrBOkvoPNNmW
+ ghFMLvRqZWHuBEygbhoVa_msekk5dbf1ZLLckyxByS2WATt90MaQHNv27wpE3cipHLkBjtOtORiO
+ 7Ru0RGWzAdHuGwBghTfwEezSULxeV2h67f4vV635SwynulUf944skjMbQ5HCxzvCDVH0RxJVTJIT
+ eR.vmq_WNOSYisA3O2y7_c1ZvEkwikcqXbYpjJyXW92qrgYl4BIfJUIJy24B6MOjrgxKLsXj7iEE
+ lyzJGQPSRgUxhl4enVJ8ZefNSN2kIQ_YJoZmfYcIbVIapc0MIB4QYl2UaJwptbBrWd2FXIlzUrAN
+ IWZv1bYafbhyrUF6XYLw8G5Q6dnswNokfhs_0.3MH_HOSsdcCOt6hDIwXS3cMjCP966owrnL1.ln
+ U4GxXIaFzyygZ0yvReAYNEkKiona.yqn7qIVTvVjduu3zmo0nUvQjmsda4x6zJK71l8mQ0rgFmv2
+ d37OLFS16usypVYbqZGfcdzOFg8ac6tnP_FUNwslCURftaJgdvG7TZtKDecdfiIAqpqZPBzcfZ2y
+ aJqi3XmCBc09ax8UFuT_mWiJXRXg0TjldbNSXLZpcFkI0ufZegynyJh7hV6lNRy.Gkz6GKMuDJK6
+ tGileUy.8y8_2UdHOHsnJo3CY151SwR6j7njsF5NXQukAYUFIiMo7yEJ0LWP1NtTFd6qTowRbasX
+ WOCvX1xEz_KswN2GvOYeGIz_fEuvgEkqzl2WWTDXBPWuOXfyy1aU7eckSb8QA3UuPg2PFuOB9Zic
+ EiN3rmuD0oe13P1Pc.hzcPhlohOA5q4U2hxrJCLf7T1tjcyyA2h2oyjZtXhe3uWRkVyqCl6fT5fS
+ bpcqlbaa.jMfc2TxuQ7c4Mzecjfme25IDRMZEVyVSQDI5.X5gkRCie3ei1xNdqAiiwVV7Akbaj8A
+ .44ZRb1L5eeZ8kryjfgx65c_RO9504qVqM4m8TaSS085FSBlGN36JWf_V9aVw6tDUc.P0wfbJcA5
+ fZjZH4lpL1KsRGtZVSFusDKNFTom4rJe5bDipNC7Xn0PVTiwTQVYt2POmxeTFQgHXJEfwivJQLLb
+ xFYo1tEQMmeM2cS2R8.SjcOpyBmMiwmU3cUSGZCAZ0AyEEur1g8NL2nrNSjaANY1Ydsfd_IFTtE8
+ cKMxJXEz88VHFn6UJa4FJhV3pXRb7AtWc1kQTRwz.8AC_fQNiSzLAjP_Ds42vkuSVJpFx25dOcp4
+ k_TLHN2SorhUoiMrsopSNGLTOOkRe8G5ZyEX_0Am8ORuWDOC0MztNrxzT59q2FNXgWYs4_A7XoaG
+ axvY0hyP15l.ho0IPEkW_rgkY5u6iDrz2H3KEfp0Qjn5aUA..pABbJceqCATDailqB5.n0nxIhUc
+ jmjVRBhyo3CPqfVnOUql.eay.Uxr_8oWXUggfZvWIkrHGgUIryUyRhnObHbjpbU8zOcX70uqYkeb
+ qEgPb0nODHOyYmatt1PBwBBY2pi_9fg8x_xlnKC3yzq1vcxnNhTYSQsjpFWtsM3bKWRgFUtQzjeQ
+ ivXMrPzTMjUiQqZQuXOCyOpIXOJ600QIf.qh_hv2PvhCPLGkJSa5fq_pULf51A.V_L6AYKUgDBd.
+ DfheRPe1.AHwseXPANVWkDoianH9KV_dRS1gbFSfRQDQ6r_JPBf5hpxLGdxNWKduQrpycQbZvI_T
+ Xj5UzC_.zUwIoDu2Q1lz4r3RyPJtLyBdHwiTIlLaYDuVruJwMFlN0dJ40DON_q.vbo4t9Z6UCQu3
+ e4qa8ch3iI8SPXFyuSuvIXpTXiY1C4vS9qanUqvS8FBtxpj_uUzerP54kfcAwu9lbWhAuS1IiTfU
+ LwDYqbtDGgtBayFBSE.1ptvrrqSEw78uvqkgvdE2MSDSu9oUIWX16Zg--
+X-Sonic-MF: <alex_y_xu@yahoo.ca>
+X-Sonic-ID: c1ca1027-4a5d-4fb6-8760-830c245382b5
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.gq1.yahoo.com with HTTP; Wed, 30 Aug 2023 15:52:41 +0000
+Received: by hermes--production-bf1-865889d799-xc84r (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 0bd111ed5816a0df5a4f025ef033cea4;
+          Wed, 30 Aug 2023 15:52:37 +0000 (UTC)
+Date:   Wed, 30 Aug 2023 11:52:33 -0400
+From:   "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>
+Subject: Don't fill the kernel log with memfd_create messages
+To:     Christian Brauner <brauner@kernel.org>,
+        Aleksa Sarai <cyphar@cyphar.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Jeff Xu <jeffxu@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Daniel Verkamp <dverkamp@chromium.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        stable@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 1/2] tools/nolibc: add stdarg.h header
-Message-ID: <ZO7uX2C3OAN634tV@1wt.eu>
-References: <20230827-nolibc-nostdinc-v1-0-995d1811f1f3@weissschuh.net>
- <20230827-nolibc-nostdinc-v1-1-995d1811f1f3@weissschuh.net>
- <ZO2QC/fw6LKdtLSb@1wt.eu>
- <2b6c62f1-c1f1-4f2c-ba0c-981e066f4268@t-8ch.de>
- <ZO25u3crGixkGKWe@1wt.eu>
- <b2c2ca69-b9bb-40b1-a05a-6d2f66e01034@t-8ch.de>
- <ZO3gvcoe8wZM+f5A@1wt.eu>
- <3663d244-627f-4928-ab2e-0328cd6a8fb1@t-8ch.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3663d244-627f-4928-ab2e-0328cd6a8fb1@t-8ch.de>
+Message-Id: <1693408388.rwssx8r1h9.none@localhost>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+References: <1693408388.rwssx8r1h9.none.ref@localhost>
+X-Mailer: WebService/1.1.21763 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Aug 30, 2023 at 08:21:51AM +0200, Thomas Weißschuh wrote:
-> On 2023-08-29 14:12:45+0200, Willy Tarreau wrote:
-> > On Tue, Aug 29, 2023 at 12:16:23PM +0200, Thomas Weißschuh wrote:
-> > > > OK. But then, doesn't it mean that if we don't provide our stdarg.h,
-> > > > the compilers' will be used ? I'm asking because we're already using
-> > > > va_list and va_args, for example in vfprintf() in stdio.h, which
-> > > > precisely includes <stdarg.h> so it must indeed come from the compiler.
-> > > 
-> > > It will be used *iff* -nostdinc is *not* passed.
-> > > 
-> > > I think we need to clarify the definition of the word "provided".
-> > > For me it means that the compiler ships an implementation of this header
-> > > file in the compiler-specific include directory.
-> > > 
-> > > If -nostdinc is passed this include directory is not actually usable.
-> > 
-> > OK I understand better now. I thought it was always usable.
-> > 
-> > > If a user wants to avoid the implicit usage of any system-provided
-> > > headers they need to pass -nostdinc, as far as I know there is no flag
-> > > to keep only the compiler-specific include directories.
-> > 
-> > So that means we may also have to implement our own stddef.h to move
-> > size_t there, and limits.h and move *MAX there as well if we want to
-> > support this. I'm not necessarily against this, it's just that we need
-> > to be consistent.
-> 
-> We would have to, *iff* the goal is to provide *all* headers in nolibc.
+Hi all,
 
-That has never been my goal (especially for those already provided by
-the compiler).
+Recently "memfd: improve userspace warnings for missing exec-related=20
+flags" was merged. On my system, this is a regression, not an=20
+improvement, because the entire 256k kernel log buffer (default on x86)=20
+is filled with these warnings and "__do_sys_memfd_create: 122 callbacks=20
+suppressed". I haven't investigated too closely, but the most likely=20
+cause is Wayland libraries.
 
-> > Also something is puzzling me. If a normal program builds with -nostdinc,
-> > it means it does *not* want the libc's (nor the compiler's) headers to be
-> > included, probably because it comes with its own. In this case why would
-> > we impose ours ? For example, let's consider this tiny code snippet:
-> > 
-> >   $ cat arg.c
-> >   #include <stdarg.h>
-> >   va_list blah;
-> > 
-> >   $ gcc -c arg.c 
-> >   $ gcc -nostdinc -c arg.c
-> >   arg.c:1:20: error: no include path in which to search for stdarg.h
-> >       1 | #include <stdarg.h>
-> >         |                    ^
-> >   arg.c:2:1: error: unknown type name 'va_list'
-> >       2 | va_list blah;
-> >         | ^~~~~~~
-> >   arg.c:1:1: note: 'va_list' is defined in header '<stdarg.h>'; did you forget to '#include <stdarg.h>'?
-> >     +++ |+#include <stdarg.h>
-> >       1 | #include <stdarg.h>
-> >  
-> > You see, that's why I'm finding it confusing that we define headers that
-> > are supposed *not* to be defined with -nostdinc.
-> 
-> I'm confused.
-> 
-> If the user doesn't want to use nolibc they should not explicitly add it
-> to the include path.
+This is too serious of a consequence for using an old API, especially=20
+considering how recently the flags were added. The vast majority of=20
+software has not had time to add the flags: glibc does not define the=20
+macros until 2.38 which was released less than one month ago, man-pages=20
+does not document the flags, and according to Debian Code Search, only=20
+systemd, stress-ng, and strace actually pass either of these flags.
 
-I didn't understand that it was what you were seeking, I thought you
-wanted to build like above, hence my confusion, see below.
+Furthermore, since old kernels reject unknown flags, it's not just a=20
+matter of defining and passing the flag; every program needs to=20
+add logic to handle EINVAL and try again.
 
-> > I think we need to carefully check what is supposed to be defined and
-> > what not when -nostdinc is used normally so that we defined what programs
-> > expect and not what they expect us *not* to define. Recently we've been
-> > empirically fixing nolibc-test build failures but it's just a test program
-> > that comes with its own biases. Maybe trying to build some portable libs
-> > that use very little from a libc (e.g. xxhash, liblzo etc) could give us
-> > some hints about certain basic assumptions that we do not fulfill.
-> 
-> It makes sense to figure out what is needed by larger projects from a
-> libc. But it feels to me like a bug vs. feature discussion.
-> 
-> Making larger real-world applications work is a feature while making the
-> following work is a bugfix:
-> 
-> $ cat nolibc.c
-> #include "nolibc.h"
-> 
-> int main(void)
-> {
-> 	return 0;
-> }
-> 
-> $ gcc -nostdinc -Isysroot/x86/include -c nolibc.c
-> In file included from sysroot/x86/include/nolibc.h:98,
->                  from nolibc-test.c:1:
-> sysroot/x86/include/sys.h:10:10: fatal error: stdarg.h: No such file or directory
->    10 | #include <stdarg.h>
->       |          ^~~~~~~~~~
+Some other way needs to be found to encourage userspace to add the=20
+flags; otherwise, this message will be patched out because the kernel=20
+log becomes unusable after running unupdated programs, which will still=20
+exist even after upstreams are fixed. In particular, AppImages,=20
+flatpaks, snaps, and similar app bundles contain vendored Wayland=20
+libraries which can be difficult or impossible to update.
 
-This one definitely is a bug, I totally agree. And I didn't understand
-this from your initial patch, my understanding was that users would
-want to use -nostdinc yet build using regular includes that we'd
-provide.
-
-> > > It's all about supporting -nostdinc.
-
-Yes, but "-nostdinc" with "-include nolibc.h". It was probably obvious
-to you since you were trying to make it work but I really didn't grasp
-it.
-
-> > But unless I'm mistaken (and my example above seems to support this),
-> > a normal libc doesn't build with -nostdinc. That's the point I'd like
-> > us to clarify.
-> 
-> musl:
-> 
-> $ cat /usr/lib/musl/lib/musl-gcc.specs
-> ...
-> *cc1:
-> %(cc1_cpu) -nostdinc -isystem /usr/lib/musl/include -isystem include%s
-> ...
-> 
-> 
-> dietlibc:
-> 
-> $ cat Makefile
-> ...
-> DEFAULTCFLAGS=-pipe -nostdinc -D_REENTRANT $(EXTRACFLAGS)
-> ...
-
-OK.
-
-> klibc re-adds the compilers include path,
-> This is an alternative we could also use:
-> 
-> $ cat Makefile
-> ...
-> NOSTDINC_FLAGS := -nostdlib -nostdinc -isystem $(shell $(CC) -print-file-name=include)
-> ...
-
-Another approach but not easy to pass to end-users.
-
-> There was also a longer discussion on LKML about linux/stdarg.h [0]
-
-Thanks for the link, interesting indeed!
-
-> The gcc authors argue that Linux should not ship a custom stdarg.h.
-> But in reality Linux, musl, dietlibc (and probably some more) today are
-> shipping their own stdarg.h.
-
-I think the main problem precisely is that -nostdinc excludes both the
-system libc's and the compiler's headers (that last point I didn't know).
-If there was a standard way to say "no system includes but please keep
-the compiler's headers as they're the only exposed interface we have" it
-would be much easier. So yes, I understand what you ended up on: you in
-fact want to be sure not to inherit from the local system headers and as
-a side effect you lose the compiler ones so you need to redefine them.
-Then of course that's fine.
-
-> > We have an interesting comment at the top of nolibc.h which says:
-> > 
-> >  * The available standard (but limited) include files are:
-> >  *   ctype.h, errno.h, signal.h, stdio.h, stdlib.h, string.h, time.h
-> 
-> This is out of date. It's missing signal.h, stdint.h, unistd.h.
-
-Yes very likely, but I found it interesting to find this split that was
-done a while ago.
-
-> >  *
-> >  * In addition, the following ones are expected to be provided by the compiler:
-> >  *   float.h, stdarg.h, stddef.h
-> 
-> What does "expected" mean here?
-> nolibc itself is perfectly fine without float.h and stddef.h.
-
-i.e. "if needed we'll use these ones".
-
-> >  * The following ones which are part to the C standard are not provided:
-> >  *   assert.h, locale.h, math.h, setjmp.h, limits.h
-> 
-> While true, a lot of other headers are also not provided.
-
-Sure, but these were the ones I identified by then.
-
-> > I think I draw the line based on what my compilers have always provided.
-> > That's definitely something we can redefine (and update the comment),
-> > I'm just seeking consistency, and I think you can understand :-/
-> 
-> I do understand.
-> 
-> To reiterate it here explicitly, in my opinion it's a worthwhile and
-> consistent goal to make "nolibc usable standalone with -nostdinc" for
-> maximal control by the user.
-
-I agree now. I think we need to make it clear that it's for when we're
-including the all-in-one "nolibc.h" as an alternative to regular headers.
-
-> If not, I'd like to use the "-nostdinc -I$(cc -print-file-name=include)"
-> method to avoid dependencies on system header for nolibc-test
-> specifically.
-
-It's a bit ugly and not always easy to stuff into projects. The fact that
-nolibc itself isn't self-sustaining anymore with -nostdinc is a concern
-and I agree with addressing it like you proposed.
-
-Thanks for the clarification!
-Willy
+Thanks,
+Alex.
