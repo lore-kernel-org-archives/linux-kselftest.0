@@ -2,102 +2,115 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BCFA3C6FA8F
-	for <linux-kselftest@archiver.kernel.org>; Wed, 30 Aug 2023 18:37:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CD69C83F1B
+	for <linux-kselftest@archiver.kernel.org>; Wed, 30 Aug 2023 18:37:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237922AbjH3ShI (ORCPT
+        id S233542AbjH3ShJ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 30 Aug 2023 14:37:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38388 "EHLO
+        Wed, 30 Aug 2023 14:37:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242212AbjH3H2B (ORCPT
+        with ESMTP id S243723AbjH3Lfx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 30 Aug 2023 03:28:01 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 948751BB;
-        Wed, 30 Aug 2023 00:27:58 -0700 (PDT)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 37U7Rjoa025275;
-        Wed, 30 Aug 2023 09:27:45 +0200
-Date:   Wed, 30 Aug 2023 09:27:45 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc:     Shuah Khan <shuah@kernel.org>, Zhangjin Wu <falcon@tinylab.org>,
-        Yuan Tan <tanyuan@tinylab.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 1/2] tools/nolibc: add stdarg.h header
-Message-ID: <ZO7vcTwa4GjWkPDe@1wt.eu>
-References: <20230827-nolibc-nostdinc-v1-0-995d1811f1f3@weissschuh.net>
- <20230827-nolibc-nostdinc-v1-1-995d1811f1f3@weissschuh.net>
+        Wed, 30 Aug 2023 07:35:53 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E02132;
+        Wed, 30 Aug 2023 04:35:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693395350; x=1724931350;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=h3ZazSER22rib2B9TYZzPIsIlIRyHDfzHJ5qdZQmJFY=;
+  b=jvcdbe2CrJhKIHfOiQIwPBxJsnLKt9D2hugknRyumlv4mzF0tdW5tiyq
+   C8cqm4diCGsCNTTgaCMMBM27vQTFxPg23jpNoJ24YEJ+i6WU9Ws9oaw29
+   xQgp29uRPaau4Irh3inYPJG8d230779wlyQLcmCBbqIhdMC+Oa95SvFVW
+   Jss2hFQ5EtjoP7Uan7QOSHBtBSKV+6wstnZm0wJnYYmQSCWWiG9tvcmia
+   jPjGpZqn+8xHHj7ddK+VXxh2KlDNBt2LiBpvS6ibc3rUX5iXUqxuSEfTi
+   UMSIiRw9mkzCc4vJJbM4spfZiPmuAqWP3uAtXdQqOG/SYtzeN9ztR6GbI
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10817"; a="441981272"
+X-IronPort-AV: E=Sophos;i="6.02,213,1688454000"; 
+   d="scan'208";a="441981272"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2023 04:35:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10817"; a="732585103"
+X-IronPort-AV: E=Sophos;i="6.02,213,1688454000"; 
+   d="scan'208";a="732585103"
+Received: from jkrzyszt-mobl2.ger.corp.intel.com ([10.213.15.207])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2023 04:35:47 -0700
+From:   Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        intel-xe@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH] kunit: Fix test log size limit too low for some tests
+Date:   Wed, 30 Aug 2023 13:35:45 +0200
+Message-ID: <4506938.LvFx2qVVIh@jkrzyszt-mobl2.ger.corp.intel.com>
+Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173,
+ 80-298 Gdansk - KRS 101882 - NIP 957-07-52-316
+In-Reply-To: <CABVgOSmZ56p8BBFHNXqigNrH95O_YjMZxfpbhWcZJFrSMS3CDA@mail.gmail.com>
+References: <20230830075419.26484-2-janusz.krzysztofik@linux.intel.com>
+ <CABVgOSmZ56p8BBFHNXqigNrH95O_YjMZxfpbhWcZJFrSMS3CDA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230827-nolibc-nostdinc-v1-1-995d1811f1f3@weissschuh.net>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Aug 27, 2023 at 10:00:15AM +0200, Thomas Weiﬂschuh wrote:
-> This allows nolic to work with `-nostdinc` avoiding any reliance on
-> system headers.
+On Wednesday, 30 August 2023 11:23:43 CEST David Gow wrote:
+> On Wed, 30 Aug 2023 at 15:55, Janusz Krzysztofik
+> <janusz.krzysztofik@linux.intel.com> wrote:
+> >
+> > Now we have memory space available to a kunit test case log exposed via
+> > debugfs limited to 2048 bytes, while some parametrized test cases, e.g.,
+> > drm_framebuffer.drm_test_framebuffer_create, need more.  For this reason,
+> > debugfs results from affected test cases get truncated silently, and
+> > external tools that rely on parsing of debugfs results can fail.
+> >
+> > Increase kunit test case log size limit to 4096 bytes.
+> >
+> > Signed-off-by: Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
+> > ---
 > 
-> The implementation has been lifted from musl libc 1.2.4.
-> There is already an implementation of stdarg.h in include/linux/stdarg.h
-> but that is GPL licensed and therefore not suitable for nolibc.
+> There's a patch series we're hoping to take for 6.7 which allows the
+> log to grow to fit whatever's written into it, which should make this
+> patch obsolete:
+> https://lore.kernel.org/linux-kselftest/20230828104111.2394344-1-rf@opensource.cirrus.com/T/
 > 
-> The used compiler builtins have been validated to be at least available
-> since GCC 4.1.2 and clang 3.0.0.
+> Would that work for you?
+
+Yeah, that's going to work perfectly for us, thank you.
+
+Janusz
+
 > 
-> Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
-> ---
->  tools/include/nolibc/Makefile |  1 +
->  tools/include/nolibc/stdarg.h | 16 ++++++++++++++++
->  2 files changed, 17 insertions(+)
+> -- David
 > 
-> diff --git a/tools/include/nolibc/Makefile b/tools/include/nolibc/Makefile
-> index 909b6eb500fe..e69c26abe1ea 100644
-> --- a/tools/include/nolibc/Makefile
-> +++ b/tools/include/nolibc/Makefile
-> @@ -34,6 +34,7 @@ all_files := \
->  		signal.h \
->  		stackprotector.h \
->  		std.h \
-> +		stdarg.h \
->  		stdint.h \
->  		stdlib.h \
->  		string.h \
-> diff --git a/tools/include/nolibc/stdarg.h b/tools/include/nolibc/stdarg.h
-> new file mode 100644
-> index 000000000000..c628b5783da6
-> --- /dev/null
-> +++ b/tools/include/nolibc/stdarg.h
-> @@ -0,0 +1,16 @@
-> +/* SPDX-License-Identifier: LGPL-2.1 OR MIT */
-> +/*
-> + * Variadic argument support for NOLIBC
-> + * Copyright (C) 2005-2020 Rich Felker, et al.
-> + */
-> +
-> +#ifndef _NOLIBC_STDARG_H
-> +#define _NOLIBC_STDARG_H
-> +
-> +typedef __builtin_va_list va_list;
-> +#define va_start(v, l)   __builtin_va_start(v, l)
-> +#define va_end(v)        __builtin_va_end(v)
-> +#define va_arg(v, l)     __builtin_va_arg(v, l)
-> +#define va_copy(d, s)    __builtin_va_copy(d, s)
-> +
-> +#endif /* _NOLIBC_STDARG_H */
+> >  include/kunit/test.h | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/include/kunit/test.h b/include/kunit/test.h
+> > index d33114097d0d0..d20eb1884edfa 100644
+> > --- a/include/kunit/test.h
+> > +++ b/include/kunit/test.h
+> > @@ -34,7 +34,7 @@ DECLARE_STATIC_KEY_FALSE(kunit_running);
+> >  struct kunit;
+> >
+> >  /* Size of log associated with test. */
+> > -#define KUNIT_LOG_SIZE 2048
+> > +#define KUNIT_LOG_SIZE 4096
+> >
+> >  /* Maximum size of parameter description string. */
+> >  #define KUNIT_PARAM_DESC_SIZE 128
+> > --
+> > 2.41.0
+> >
+> 
 
-Now with your other explanation I agree, however we need to change:
 
-  #include <stdarg.h>
 
-to
 
-  #include "stdarg.h"
-
-in stdio.h and sys.h so that we always use ours from now on.
-
-Willy
