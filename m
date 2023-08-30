@@ -2,162 +2,101 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8293FC83F01
-	for <linux-kselftest@archiver.kernel.org>; Wed, 30 Aug 2023 18:37:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0C9FC83F20
+	for <linux-kselftest@archiver.kernel.org>; Wed, 30 Aug 2023 18:37:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232799AbjH3ShQ (ORCPT
+        id S238040AbjH3ShR (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 30 Aug 2023 14:37:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37376 "EHLO
+        Wed, 30 Aug 2023 14:37:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245304AbjH3PHX (ORCPT
+        with ESMTP id S244049AbjH3MYZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 30 Aug 2023 11:07:23 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1DA01A4;
-        Wed, 30 Aug 2023 08:07:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1693408036;
-        bh=8FIja9IFIvy0ghblU2pMnjY5DcbONT7SKYZbKgOAbVY=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=B4a8ElQ83YuPnV6polCeO4SrrT9XumGWQZUfyHL307vjC52fc0POVPfoLO1v8+ioU
-         tZYfa/Xy/XC2H8ZFWxuHsQ+9sCA8jO+5coszHm2HiTsn3JrLcxufMGZo87ry+IlNzR
-         kl7MQpTgsq24H+hprf3DZK7XRbG8t4ZrCtAn81ic=
-From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date:   Wed, 30 Aug 2023 17:07:12 +0200
-Subject: [PATCH v2 1/2] tools/nolibc: add stdarg.h header
+        Wed, 30 Aug 2023 08:24:25 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613E8CC5;
+        Wed, 30 Aug 2023 05:24:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693398262; x=1724934262;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=/DxvYklHe20nQbJbPnAFJlahY5gcOY8BRtA5KbVsT14=;
+  b=YzqDbZbgkEm8RG4ar9WNc+5G7K1wxSGSBdQFCV23VbLiuje36zXmRkmH
+   Bhw04G03iIp/kMeia9UOtQ4Xxs/5NIhjUjLMAP6NbibqmmrMoLp7l6hmi
+   5Xj7knpe+NOrSBkfpJMWTGlGy/KJElDDfHqrDhDgP5iJZb2uBGKa3w6GR
+   JRHmvqgkaQ1AaU+jBgQB3zlxfus9I3nGPcYlPP5GYCEifn/Sq160+KMq4
+   uxEqWrL3lgxDPCzwm4JvlIcTf+J2My74yD1h8UX1aKwRb8VwEGWlE2v8B
+   abwbH1CzcZS30ksLtmaWhioSO1caFppHlyz+kkXkvOTWle6qCePSYGoqc
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10818"; a="374537192"
+X-IronPort-AV: E=Sophos;i="6.02,213,1688454000"; 
+   d="scan'208";a="374537192"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2023 05:23:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10818"; a="853710746"
+X-IronPort-AV: E=Sophos;i="6.02,213,1688454000"; 
+   d="scan'208";a="853710746"
+Received: from aghiriba-mobl.ger.corp.intel.com ([10.251.213.104])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2023 05:22:59 -0700
+Date:   Wed, 30 Aug 2023 15:22:57 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     "Wieczor-Retman, Maciej" <maciej.wieczor-retman@intel.com>
+cc:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        "Wieczor-Retman, Maciej" <maciej.wieczor-retman@intel.com>,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 6/6] selftests/kvm: Replace attribute with macro
+In-Reply-To: <82ed62dd7070203701b4ca326e62862404dd5f72.1693216959.git.maciej.wieczor-retman@intel.com>
+Message-ID: <fc618e8c-f8b-c339-9aa6-1d2c2865b42e@linux.intel.com>
+References: <cover.1693216959.git.maciej.wieczor-retman@intel.com> <82ed62dd7070203701b4ca326e62862404dd5f72.1693216959.git.maciej.wieczor-retman@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20230830-nolibc-nostdinc-v2-1-c5b1387b4a77@weissschuh.net>
-References: <20230830-nolibc-nostdinc-v2-0-c5b1387b4a77@weissschuh.net>
-In-Reply-To: <20230830-nolibc-nostdinc-v2-0-c5b1387b4a77@weissschuh.net>
-To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
-Cc:     Zhangjin Wu <falcon@tinylab.org>, Yuan Tan <tanyuan@tinylab.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1693408035; l=3407;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=8FIja9IFIvy0ghblU2pMnjY5DcbONT7SKYZbKgOAbVY=;
- b=0H2FPq1DK3HALGiANLknXK96oNZsN2fGV3pIP3M0i55YkJEHHW3DeizcEAi2e/LBE7LCq8DvL
- Qcn32rg9lOMBd/I9wLuzSmTbUBzigjZM4QUHC/V9WVXJEK4+2zp6+EX
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This allows nolic to work with `-nostdinc` avoiding any reliance on
-system headers.
+On Mon, 28 Aug 2023, Wieczor-Retman, Maciej wrote:
 
-The implementation has been lifted from musl libc 1.2.4.
-There is already an implementation of stdarg.h in include/linux/stdarg.h
-but that is GPL licensed and therefore not suitable for nolibc.
+> The __printf() macro is used in many tools in the linux kernel to
+> validate the format specifiers in functions that use printf. Some
+> selftests use it without putting it in a macro definition and some tests
+> import the kselftests.h header.
 
-The used compiler builtins have been validated to be at least available
-since GCC 4.1.2 and clang 3.0.0.
+"Some" and yet this only converts one? Please be more precise in the 
+wording.
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- tools/include/nolibc/Makefile |  1 +
- tools/include/nolibc/nolibc.h |  4 ++--
- tools/include/nolibc/stdarg.h | 16 ++++++++++++++++
- tools/include/nolibc/stdio.h  |  3 +--
- tools/include/nolibc/sys.h    |  2 +-
- 5 files changed, 21 insertions(+), 5 deletions(-)
+> Use __printf() attribute instead of the full attribute since the macro
+> is inside kselftests.h and the header is already imported.
 
-diff --git a/tools/include/nolibc/Makefile b/tools/include/nolibc/Makefile
-index 909b6eb500fe..e69c26abe1ea 100644
---- a/tools/include/nolibc/Makefile
-+++ b/tools/include/nolibc/Makefile
-@@ -34,6 +34,7 @@ all_files := \
- 		signal.h \
- 		stackprotector.h \
- 		std.h \
-+		stdarg.h \
- 		stdint.h \
- 		stdlib.h \
- 		string.h \
-diff --git a/tools/include/nolibc/nolibc.h b/tools/include/nolibc/nolibc.h
-index 1f8d821000ac..989e707263a4 100644
---- a/tools/include/nolibc/nolibc.h
-+++ b/tools/include/nolibc/nolibc.h
-@@ -74,10 +74,10 @@
-  *            -I../nolibc -o hello hello.c -lgcc
-  *
-  * The available standard (but limited) include files are:
-- *   ctype.h, errno.h, signal.h, stdio.h, stdlib.h, string.h, time.h
-+ *   ctype.h, errno.h, signal.h, stdarg.h, stdio.h, stdlib.h, string.h, time.h
-  *
-  * In addition, the following ones are expected to be provided by the compiler:
-- *   float.h, stdarg.h, stddef.h
-+ *   float.h, stddef.h
-  *
-  * The following ones which are part to the C standard are not provided:
-  *   assert.h, locale.h, math.h, setjmp.h, limits.h
-diff --git a/tools/include/nolibc/stdarg.h b/tools/include/nolibc/stdarg.h
-new file mode 100644
-index 000000000000..c628b5783da6
---- /dev/null
-+++ b/tools/include/nolibc/stdarg.h
-@@ -0,0 +1,16 @@
-+/* SPDX-License-Identifier: LGPL-2.1 OR MIT */
-+/*
-+ * Variadic argument support for NOLIBC
-+ * Copyright (C) 2005-2020 Rich Felker, et al.
-+ */
-+
-+#ifndef _NOLIBC_STDARG_H
-+#define _NOLIBC_STDARG_H
-+
-+typedef __builtin_va_list va_list;
-+#define va_start(v, l)   __builtin_va_start(v, l)
-+#define va_end(v)        __builtin_va_end(v)
-+#define va_arg(v, l)     __builtin_va_arg(v, l)
-+#define va_copy(d, s)    __builtin_va_copy(d, s)
-+
-+#endif /* _NOLIBC_STDARG_H */
-diff --git a/tools/include/nolibc/stdio.h b/tools/include/nolibc/stdio.h
-index cae402c11e57..d7ef43973916 100644
---- a/tools/include/nolibc/stdio.h
-+++ b/tools/include/nolibc/stdio.h
-@@ -7,13 +7,12 @@
- #ifndef _NOLIBC_STDIO_H
- #define _NOLIBC_STDIO_H
- 
--#include <stdarg.h>
--
- #include "std.h"
- #include "arch.h"
- #include "errno.h"
- #include "types.h"
- #include "sys.h"
-+#include "stdarg.h"
- #include "stdlib.h"
- #include "string.h"
- 
-diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-index fdb6bd6c0e2f..b478750c9004 100644
---- a/tools/include/nolibc/sys.h
-+++ b/tools/include/nolibc/sys.h
-@@ -7,7 +7,6 @@
- #ifndef _NOLIBC_SYS_H
- #define _NOLIBC_SYS_H
- 
--#include <stdarg.h>
- #include "std.h"
- 
- /* system includes */
-@@ -25,6 +24,7 @@
- 
- #include "arch.h"
- #include "errno.h"
-+#include "stdarg.h"
- #include "types.h"
- 
- 
+IMO, this would be enough:
+
+Use __printf() from kselftests.h instead of the full attribute.
+
+Was there a reason why you didn't convert mm/pkey-helpers.h one?
 
 -- 
-2.42.0
+ i.
 
+
+> Signed-off-by: Wieczor-Retman, Maciej <maciej.wieczor-retman@intel.com>
+> ---
+>  tools/testing/selftests/kvm/include/test_util.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
+> index a6e9f215ce70..710a8a78e8ce 100644
+> --- a/tools/testing/selftests/kvm/include/test_util.h
+> +++ b/tools/testing/selftests/kvm/include/test_util.h
+> @@ -33,7 +33,7 @@ static inline int _no_printf(const char *format, ...) { return 0; }
+>  #define pr_info(...) _no_printf(__VA_ARGS__)
+>  #endif
+>  
+> -void print_skip(const char *fmt, ...) __attribute__((format(printf, 1, 2)));
+> +void __printf(1, 2) print_skip(const char *fmt, ...);
+>  #define __TEST_REQUIRE(f, fmt, ...)				\
+>  do {								\
+>  	if (!(f))						\
+> 
