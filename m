@@ -2,218 +2,107 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E400AC83F10
-	for <linux-kselftest@archiver.kernel.org>; Thu, 31 Aug 2023 11:32:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6905AC83F01
+	for <linux-kselftest@archiver.kernel.org>; Thu, 31 Aug 2023 12:29:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245546AbjHaLc7 (ORCPT
+        id S1346248AbjHaM34 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 31 Aug 2023 07:32:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57666 "EHLO
+        Thu, 31 Aug 2023 08:29:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345819AbjHaLJN (ORCPT
+        with ESMTP id S231799AbjHaM34 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 31 Aug 2023 07:09:13 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6422CF4;
-        Thu, 31 Aug 2023 04:09:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693480148; x=1725016148;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=dXDTVUiX/h0fdGvLLgkltFDc8ikvcI1oMV8K1LuXl4E=;
-  b=n9lpOMy61y+8i73Fk46n93Wd2yjE3K+aNmxMrZxSBT8609fqgBOFSWfr
-   g37lPifcQstieswjbmtCRCgZuMhVNffT9O96sDxx73lUYQ9dNHZSH2u6p
-   v+us5/u9NA+wu0V75FkpUx0k+bbCLESnFJvHRj03DEnBR6Skj8Gj/BxEo
-   NvDPItBPGavIqCFusuU1FKFMMAAnmcc+cJTArVpVUiuYkYYBfvirc5mh+
-   uSL3B5x8gRl0+oxHUloH5cC3V12GN+3qFoOT1eaNqzVPeWs6pG9L3EZyH
-   hyEiY2lb3yRGmoZnl5qRQUqNtRrMihV66wQ0+USpBplO1vhE7NR1UlLC5
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10818"; a="439852233"
-X-IronPort-AV: E=Sophos;i="6.02,216,1688454000"; 
-   d="scan'208";a="439852233"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2023 04:09:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10818"; a="863020990"
-X-IronPort-AV: E=Sophos;i="6.02,216,1688454000"; 
-   d="scan'208";a="863020990"
-Received: from pshishpo-mobl1.ger.corp.intel.com (HELO ijarvine-mobl2.ger.corp.intel.com) ([10.251.214.20])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2023 04:09:05 -0700
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>,
-        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
-Cc:     Fenghua Yu <fenghua.yu@intel.com>, Babu Moger <babu.moger@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v4 3/8] selftests/resctrl: Remove bw_report and bm_type from main()
-Date:   Thu, 31 Aug 2023 14:08:38 +0300
-Message-Id: <20230831110843.26719-4-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230831110843.26719-1-ilpo.jarvinen@linux.intel.com>
-References: <20230831110843.26719-1-ilpo.jarvinen@linux.intel.com>
+        Thu, 31 Aug 2023 08:29:56 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C955CFF;
+        Thu, 31 Aug 2023 05:29:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=AuoeT0q4LJbl7muZqjyyTpJkzqz+1kv2o9BGttWzdfA=; b=Lt9RdBHrmbU1Mkao1QA3gcXnYe
+        M9KpP2B1pWSPLH+626tGR1/Dc6oK66sR7E1ZpnHZ95/nKwkPQPOLIQ8d1iXSuGI7g+njLLs/qEhVM
+        dQbAbyveGyiF/MxPXdLoNFpN9D7/Lz2oDIICpkmWyRr82WN/J8LwGobTfvzGaSYGOy01mG0ezsRTJ
+        PEFXKEtB12QUWB67nxgDRZsa7Gfz0wGmaZyt1xEcE+jkgkC9cZ0B/02UusnBh/BtR715BmqT61N6Q
+        cAxt/15DGDr5JTp2+M7gevgmhKXVUXoqQf/8q/Krclunplquh2Dzx7K5doqvzuGyMXJGciV57uzsx
+        G2fCf+zA==;
+Received: from sslproxy01.your-server.de ([78.46.139.224])
+        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1qbgnw-0003yI-N6; Thu, 31 Aug 2023 14:29:45 +0200
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1qbgnw-0004pD-KU; Thu, 31 Aug 2023 14:29:44 +0200
+Subject: Re: [PATCH bpf-next] selftests/bpf: Include build flavors for install
+ target
+To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, bpf@vger.kernel.org
+Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230828183329.546959-1-bjorn@kernel.org>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <abe27949-6e35-07e6-ef29-bbc749fc40d5@iogearbox.net>
+Date:   Thu, 31 Aug 2023 14:29:44 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20230828183329.546959-1-bjorn@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.8/27017/Thu Aug 31 09:40:48 2023)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-bw_report is always set to "reads" and bm_type is set to "fill_buf" but
-is never used.
+On 8/28/23 8:33 PM, Björn Töpel wrote:
+> From: Björn Töpel <bjorn@rivosinc.com>
+> 
+> When using the "install" or targets depending on install,
+> e.g. "gen_tar", the BPF machine flavors weren't included.
+> 
+> A command like:
+>    | make ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu- O=/workspace/kbuild \
+>    |    HOSTCC=gcc FORMAT= SKIP_TARGETS="arm64 ia64 powerpc sparc64 x86 sgx" \
+>    |    -C tools/testing/selftests gen_tar
+> would not include bpf/no_alu32, bpf/cpuv4, or bpf/bpf-gcc.
+> 
+> Include the BPF machine flavors for "install" make target.
+> 
+> Signed-off-by: Björn Töpel <bjorn@rivosinc.com>
 
-Set bw_report directly to "reads" in MBA/MBM test and remove bm_type.
+Looks good and BPF CI also seems to be fine with it, wrt INSTDIRS could we use
+a more appropriate location where we define it? Was thinking sth like:
 
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Tested-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
-Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
-Reviewed-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
----
- tools/testing/selftests/resctrl/mba_test.c     |  4 ++--
- tools/testing/selftests/resctrl/mbm_test.c     |  4 ++--
- tools/testing/selftests/resctrl/resctrl.h      |  4 ++--
- .../testing/selftests/resctrl/resctrl_tests.c  | 18 +++++++-----------
- 4 files changed, 13 insertions(+), 17 deletions(-)
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 7c77a21c3371..8b724efb8b7f 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -50,14 +50,17 @@ TEST_GEN_PROGS = test_verifier test_tag test_maps test_lru_map test_lpm_map test
+         test_cgroup_storage \
+         test_tcpnotify_user test_sysctl \
+         test_progs-no_alu32
++TEST_INST_SUBDIRS := no_alu32
 
-diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
-index 4d2f145804b8..094424d835d0 100644
---- a/tools/testing/selftests/resctrl/mba_test.c
-+++ b/tools/testing/selftests/resctrl/mba_test.c
-@@ -141,7 +141,7 @@ void mba_test_cleanup(void)
- 	remove(RESULT_FILE_NAME);
- }
- 
--int mba_schemata_change(int cpu_no, char *bw_report, char **benchmark_cmd)
-+int mba_schemata_change(int cpu_no, char **benchmark_cmd)
- {
- 	struct resctrl_val_param param = {
- 		.resctrl_val	= MBA_STR,
-@@ -149,7 +149,7 @@ int mba_schemata_change(int cpu_no, char *bw_report, char **benchmark_cmd)
- 		.mongrp		= "m1",
- 		.cpu_no		= cpu_no,
- 		.filename	= RESULT_FILE_NAME,
--		.bw_report	= bw_report,
-+		.bw_report	= "reads",
- 		.setup		= mba_setup
- 	};
- 	int ret;
-diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
-index c7de6f5977f6..3e4a800e0e40 100644
---- a/tools/testing/selftests/resctrl/mbm_test.c
-+++ b/tools/testing/selftests/resctrl/mbm_test.c
-@@ -109,7 +109,7 @@ void mbm_test_cleanup(void)
- 	remove(RESULT_FILE_NAME);
- }
- 
--int mbm_bw_change(size_t span, int cpu_no, char *bw_report, char **benchmark_cmd)
-+int mbm_bw_change(size_t span, int cpu_no, char **benchmark_cmd)
- {
- 	struct resctrl_val_param param = {
- 		.resctrl_val	= MBM_STR,
-@@ -118,7 +118,7 @@ int mbm_bw_change(size_t span, int cpu_no, char *bw_report, char **benchmark_cmd
- 		.span		= span,
- 		.cpu_no		= cpu_no,
- 		.filename	= RESULT_FILE_NAME,
--		.bw_report	=  bw_report,
-+		.bw_report	= "reads",
- 		.setup		= mbm_setup
- 	};
- 	int ret;
-diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index 838d1a438f33..f3446ac664c2 100644
---- a/tools/testing/selftests/resctrl/resctrl.h
-+++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -98,10 +98,10 @@ int perf_event_open(struct perf_event_attr *hw_event, pid_t pid, int cpu,
- 		    int group_fd, unsigned long flags);
- int run_fill_buf(size_t span, int memflush, int op, bool once);
- int resctrl_val(char **benchmark_cmd, struct resctrl_val_param *param);
--int mbm_bw_change(size_t span, int cpu_no, char *bw_report, char **benchmark_cmd);
-+int mbm_bw_change(size_t span, int cpu_no, char **benchmark_cmd);
- void tests_cleanup(void);
- void mbm_test_cleanup(void);
--int mba_schemata_change(int cpu_no, char *bw_report, char **benchmark_cmd);
-+int mba_schemata_change(int cpu_no, char **benchmark_cmd);
- void mba_test_cleanup(void);
- int get_cbm_mask(char *cache_type, char *cbm_mask);
- int get_cache_size(int cpu_no, char *cache_type, unsigned long *cache_size);
-diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
-index ca973532e8e6..7028ff1b8f41 100644
---- a/tools/testing/selftests/resctrl/resctrl_tests.c
-+++ b/tools/testing/selftests/resctrl/resctrl_tests.c
-@@ -70,8 +70,7 @@ void tests_cleanup(void)
- 	cat_test_cleanup();
- }
- 
--static void run_mbm_test(char **benchmark_cmd, size_t span,
--			 int cpu_no, char *bw_report)
-+static void run_mbm_test(char **benchmark_cmd, size_t span, int cpu_no)
- {
- 	int res;
- 
-@@ -88,7 +87,7 @@ static void run_mbm_test(char **benchmark_cmd, size_t span,
- 		goto umount;
- 	}
- 
--	res = mbm_bw_change(span, cpu_no, bw_report, benchmark_cmd);
-+	res = mbm_bw_change(span, cpu_no, benchmark_cmd);
- 	ksft_test_result(!res, "MBM: bw change\n");
- 	if ((get_vendor() == ARCH_INTEL) && res)
- 		ksft_print_msg("Intel MBM may be inaccurate when Sub-NUMA Clustering is enabled. Check BIOS configuration.\n");
-@@ -97,7 +96,7 @@ static void run_mbm_test(char **benchmark_cmd, size_t span,
- 	umount_resctrlfs();
- }
- 
--static void run_mba_test(char **benchmark_cmd, int cpu_no, char *bw_report)
-+static void run_mba_test(char **benchmark_cmd, int cpu_no)
- {
- 	int res;
- 
-@@ -114,7 +113,7 @@ static void run_mba_test(char **benchmark_cmd, int cpu_no, char *bw_report)
- 		goto umount;
- 	}
- 
--	res = mba_schemata_change(cpu_no, bw_report, benchmark_cmd);
-+	res = mba_schemata_change(cpu_no, benchmark_cmd);
- 	ksft_test_result(!res, "MBA: schemata change\n");
- 
- umount:
-@@ -174,9 +173,9 @@ static void run_cat_test(int cpu_no, int no_of_bits)
- int main(int argc, char **argv)
- {
- 	bool has_ben = false, mbm_test = true, mba_test = true, cmt_test = true;
--	char *benchmark_cmd[BENCHMARK_ARGS], bw_report[64], bm_type[64];
- 	char benchmark_cmd_area[BENCHMARK_ARGS][BENCHMARK_ARG_SIZE];
- 	int c, cpu_no = 1, argc_new = argc, i, no_of_bits = 0;
-+	char *benchmark_cmd[BENCHMARK_ARGS];
- 	int ben_ind, ben_count, tests = 0;
- 	size_t span = 250 * MB;
- 	bool cat_test = true;
-@@ -279,9 +278,6 @@ int main(int argc, char **argv)
- 		benchmark_cmd[5] = NULL;
- 	}
- 
--	sprintf(bw_report, "reads");
--	sprintf(bm_type, "fill_buf");
--
- 	if (!check_resctrlfs_support())
- 		return ksft_exit_skip("resctrl FS does not exist. Enable X86_CPU_RESCTRL config option.\n");
- 
-@@ -293,10 +289,10 @@ int main(int argc, char **argv)
- 	ksft_set_plan(tests ? : 4);
- 
- 	if (mbm_test)
--		run_mbm_test(benchmark_cmd, span, cpu_no, bw_report);
-+		run_mbm_test(benchmark_cmd, span, cpu_no);
- 
- 	if (mba_test)
--		run_mba_test(benchmark_cmd, cpu_no, bw_report);
-+		run_mba_test(benchmark_cmd, cpu_no);
- 
- 	if (cmt_test)
- 		run_cmt_test(benchmark_cmd, cpu_no);
--- 
-2.30.2
+  # Also test bpf-gcc, if present
+  ifneq ($(BPF_GCC),)
+  TEST_GEN_PROGS += test_progs-bpf_gcc
++TEST_INST_SUBDIRS += bpf_gcc
+  endif
 
+  ifneq ($(CLANG_CPUV4),)
+  TEST_GEN_PROGS += test_progs-cpuv4
++TEST_INST_SUBDIRS += cpuv4
+  endif
+
+[...]
+
+Thanks,
+Daniel
