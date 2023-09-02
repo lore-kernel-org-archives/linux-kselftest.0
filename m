@@ -2,46 +2,47 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F8B3CA0FF6
-	for <linux-kselftest@archiver.kernel.org>; Sat,  2 Sep 2023 04:41:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE263CA0FF8
+	for <linux-kselftest@archiver.kernel.org>; Sat,  2 Sep 2023 04:42:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237963AbjIBElQ (ORCPT
+        id S1350818AbjIBEma (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 2 Sep 2023 00:41:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51970 "EHLO
+        Sat, 2 Sep 2023 00:42:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232991AbjIBElQ (ORCPT
+        with ESMTP id S1351488AbjIBEm3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 2 Sep 2023 00:41:16 -0400
-Received: from out203-205-221-153.mail.qq.com (out203-205-221-153.mail.qq.com [203.205.221.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4102F10F8
-        for <linux-kselftest@vger.kernel.org>; Fri,  1 Sep 2023 21:41:09 -0700 (PDT)
+        Sat, 2 Sep 2023 00:42:29 -0400
+Received: from out203-205-251-84.mail.qq.com (unknown [203.205.251.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B817C1711
+        for <linux-kselftest@vger.kernel.org>; Fri,  1 Sep 2023 21:42:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1693629668;
-        bh=TB5AzkK7BN11nl5AAqPvegLlqHhbbgXPppq8dVRYyGk=;
-        h=From:To:Cc:Subject:Date;
-        b=nxlvie0mTV55LYVcYJ/Gmk8LRZfwJHGF6m+eeR52DrzTLIlpZGMqKOIaZyRxYYxCo
-         LyOPeDv+A7MXPQ3vRRO10B+BQgMUoM4psX7L5AEleJ6g/Uv5thOg8gs59HN/esVI43
-         FeGc84H/ykOkbW1TJohDEnuv7W2jf1BEGoQdDzuU=
+        s=s201512; t=1693629738;
+        bh=VDeJU94IWnvseyKaMxC4IUln27g8AmHmoNXDqEplCe8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=LkVhl7Tw1XoBWDKsxT8iWaFBUDhACP8sUZDECEndI52B3TwNCAPJCjTUf/zx26KWm
+         t3mWgxVqoaIAJ5LDF8fR/PBPVEsjrLzmZbcQO75Rd5HQpx6We366cUHdJJL/JBWicA
+         smn82tgqDCRcq6rGDdFCuq8+agLvcNe072FduVak=
 Received: from rtoax.lan ([120.245.114.63])
         by newxmesmtplogicsvrsza12-0.qq.com (NewEsmtp) with SMTP
         id A4223C8B; Sat, 02 Sep 2023 12:41:02 +0800
-X-QQ-mid: xmsmtpt1693629662tcmxrwzup
-Message-ID: <tencent_4F0CF08592B31A2E69546C5E174785109F09@qq.com>
-X-QQ-XMAILINFO: NPwOoMPVnumVrk0WlvgQ5/KlGSuOPPLb/zmXV3pzh/F3IfZonwXumnrpV9lLkg
-         7o6VwApLYu4nGrGgJY1tEkoTBdrZhhzxqfnxMa6Emkk7yY3xHIw7Ggrwrk5sj6dMdcMwBOOoTK9l
-         luJ3Dr/NyTXk/UrqSKzyWBhWQ391LtIERaJ1eXe2Ws8Zd8VyxwR54VWfkIxjxF3lni1Q588FuvwD
-         qu4fU4Z0nSW4mKndGMXvmi9x28DkYh2Bk5OhEkcTv5IFYeug7BP4gtnP3PLqQ62U/tmfnQFCvP41
-         XLGEHnyiVz28fut8LCXOHnuBKWUQv++vB4g9RzBzSRCMwiDX5YrxMHKN7zmUajqN9VT5Cg0S5Y5h
-         Ep1zeL13fJrRRB+JyC6877ky7yuL4fHTLSMao3qC6Vh9UhiXHLb25+S8UQzhXGgYVBmorgSeZSOi
-         JTzWR8UnzVImO8kjHghviILQ0iu1kQagqsCnMlA5xWRtu+0IG2l+KU3W898/wlAN5n/2bu+uBFs3
-         lGsY8gspUVIjmsUupGqXK19A4t7LiXqTnic+iS3ISE+L6Nojm9isJ7gkienl+O9b5Di2Qb7UDsN6
-         IerJz6Qbaj80eRtVEnH1l4C3qSaW4E3xamBF8yl1BtT+NObRJMepXBAt2KbvoAKfyoL9dSviyTTt
-         hQ3Glsi1vAfydQjdhAhxOUzLbCgubquVQxzG9dVhaTgXlxvWk3bQYgGB5de1qNCRBihYKCSXUFDV
-         1qB4q9u3/gGvkJM5GUQH77lXomx/MYE80Gv4JKTQ5FeJbbP3OjU+Rm0ppf1jgwCCCh43rAxwLKCm
-         LCSRmnnil4DGk1oVk3RqAq2NT9axBFaA3FjnlV7fRcirjsWLQKCaNqdjaCRtSK5Rbuz6Dx2InhJn
-         f6tnLIVH4ZK9kaFd6hbtMguPZ1HzBsdKW1tfx+sY4aTu/jLTbIGKESCZZxoUEacjXmmmd4NL3FgA
-         ynugw/E2d48JFUlSi65uAWvgfYf/F+
+X-QQ-mid: xmsmtpt1693629710t5d0r7m38
+Message-ID: <tencent_51C8597C97032AF5AFDAA30C887206014208@qq.com>
+X-QQ-XMAILINFO: OUUXHEo9i1ukFJYgSO1dj9mwONQKPyftWMC5kUq9pKAIUP2tf+OHYc6I9HtYAo
+         0f/3PO0B89VA74pYjo2DdVEIauYDaRoTfC/fxGDITJPujGHJDeyNGhoELfvoSafZFrz8N0I1Iwx/
+         b5wnVASGROPcyRToyEOmu4Rz028wqnA91sDkamJRvqvJvToBng6ow7WFal2FSRl+iz4DHAekn27S
+         Y+Aev9kKWjxfNh1atT9Io/mpSrNg/0kJt8jZxG1jFnLlMT13jT0/nfcJ9zlaSEHNsrYCdkmbfAjo
+         uBsgsbn/tv04U5TqmT0zGJBMvSLOgS6iEcbL42cKYqeEVieSCrkTYZgb9J1aw5ZgRrAUyC1mxpOR
+         qJs9KF8nyVoMOTq0Jd/MJNXQjmwqQPENuk3/oeVwcWsU79j0AhKwWnYdDbF1z6AIEHDQZwamJ3Ek
+         b6I7Qs891Z6CYjheDKyVdJBourSAfgfnaWgQ3W6TCPa7F2LJdvndwY1fxm1v9zrT+i24FnxsKijV
+         47P+BPxXknxt5RgTMvkfHeWAdPyKw1crODvsOsEGU19La88qzRmwO24wussXD982sNjJTgf11jGY
+         m6He9LF8i6XHshm80wZCvObkHjBdStTOBcs/4qYBLZf1Wshi6+uOKj2aPVzRC1c5qp5BwfEnB9dZ
+         awYQEjtmuLXBglrdOLZzBLnHlgVEmhe38VTjqVNA3LA4+Mp8jXpQuawh1zvvtLyLzAI15Oyomg/1
+         nWl9De49ikMIlgXQCobvBWVPATu3h0eCf4W89BVufWF0xl6OX0NMwAaU+DN7LdhbS7QfD/JBXEh9
+         qXyQI6uSl4rCI+i8lBE10blxb+5WFO/IsECuJQnc1d3vBo646W4+sspxPh7MHZlt9AszkWq01rZP
+         wg1yWqZ7AoUx+54hGZ61gWlbaj42ncOHAF+xl+duHm7YkKvgFZtL+Yy+Q2Dl98tK7d69w+sIv2DW
+         crF9/kDKBIcbyZGxJDCldrA6qnI/E0o9n2Uqj+X5BbpGES4l3JNp10kQFsdZTLTxTHJavji3zW1n
+         IPf1Xi53Pw+YzJ+55e
 X-QQ-XMRINFO: MPJ6Tf5t3I/ycC2BItcBVIA=
 From:   Rong Tao <rtoax@foxmail.com>
 To:     olsajiri@gmail.com, andrii@kernel.org, daniel@iogearbox.net,
@@ -64,10 +65,12 @@ Cc:     Rong Tao <rongtao@cestc.cn>, Alexei Starovoitov <ast@kernel.org>,
         ARCHITECTURE),
         linux-arm-kernel@lists.infradead.org (moderated list:ARM/STM32
         ARCHITECTURE)
-Subject: [PATCH bpf-next v10 0/2] selftests/bpf: Optimize kallsyms cache
-Date:   Sat,  2 Sep 2023 12:40:17 +0800
-X-OQ-MSGID: <20230902044040.137804-1-rtoax@foxmail.com>
+Subject: [PATCH bpf-next v10 2/2] selftests/bpf: trace_helpers.c: Add a global ksyms initialization mutex
+Date:   Sat,  2 Sep 2023 12:40:19 +0800
+X-OQ-MSGID: <20230902044040.137804-3-rtoax@foxmail.com>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230902044040.137804-1-rtoax@foxmail.com>
+References: <20230902044040.137804-1-rtoax@foxmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -76,22 +79,47 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Rong Tao <rongtao@cestc.cn>
 
-We need to optimize the kallsyms cache, including optimizations for the
-number of symbols limit, and, some test cases add new kernel symbols
-(such as testmods) and we need to refresh kallsyms (reload or refresh).
+As Jirka said [0], we just need to make sure that global ksyms
+initialization won't race.
 
-Rong Tao (2):
-  selftests/bpf: trace_helpers.c: optimize kallsyms cache
-  selftests/bpf: trace_helpers.c: Add a global ksyms initialization
-    mutex
+[0] https://lore.kernel.org/lkml/ZPCbAs3ItjRd8XVh@krava/
 
- samples/bpf/Makefile                          |   4 +
- .../selftests/bpf/prog_tests/fill_link_info.c |   9 +-
- .../prog_tests/kprobe_multi_testmod_test.c    |  24 ++-
- tools/testing/selftests/bpf/trace_helpers.c   | 141 +++++++++++++-----
- tools/testing/selftests/bpf/trace_helpers.h   |  10 +-
- 5 files changed, 141 insertions(+), 47 deletions(-)
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
+---
+ tools/testing/selftests/bpf/trace_helpers.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
+diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
+index d64c4ef336e1..500b60226e5e 100644
+--- a/tools/testing/selftests/bpf/trace_helpers.c
++++ b/tools/testing/selftests/bpf/trace_helpers.c
+@@ -7,6 +7,7 @@
+ #include <errno.h>
+ #include <fcntl.h>
+ #include <poll.h>
++#include <pthread.h>
+ #include <unistd.h>
+ #include <linux/perf_event.h>
+ #include <sys/mman.h>
+@@ -26,6 +27,7 @@ struct ksyms {
+ };
+ 
+ static struct ksyms *ksyms;
++static pthread_mutex_t ksyms_mutex = PTHREAD_MUTEX_INITIALIZER;
+ 
+ static int ksyms__add_symbol(struct ksyms *ksyms, const char *name,
+ 							 unsigned long addr)
+@@ -115,8 +117,10 @@ struct ksyms *load_kallsyms_local(void)
+ 
+ int load_kallsyms(void)
+ {
++	pthread_mutex_lock(&ksyms_mutex);
+ 	if (!ksyms)
+ 		ksyms = load_kallsyms_local();
++	pthread_mutex_unlock(&ksyms_mutex);
+ 	return ksyms ? 0 : 1;
+ }
+ 
 -- 
 2.41.0
 
