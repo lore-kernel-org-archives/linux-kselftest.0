@@ -2,70 +2,70 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 69DF0CA0FE3
-	for <linux-kselftest@archiver.kernel.org>; Sun,  3 Sep 2023 15:13:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4DD0C83F2D
+	for <linux-kselftest@archiver.kernel.org>; Sun,  3 Sep 2023 15:13:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243412AbjICPNp (ORCPT
+        id S243833AbjICPNu (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 3 Sep 2023 11:13:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53722 "EHLO
+        Sun, 3 Sep 2023 11:13:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243389AbjICPNm (ORCPT
+        with ESMTP id S243470AbjICPNp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 3 Sep 2023 11:13:42 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15855115
-        for <linux-kselftest@vger.kernel.org>; Sun,  3 Sep 2023 08:13:39 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id ca18e2360f4ac-792707f78b5so37988539f.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 03 Sep 2023 08:13:39 -0700 (PDT)
+        Sun, 3 Sep 2023 11:13:45 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB01111D
+        for <linux-kselftest@vger.kernel.org>; Sun,  3 Sep 2023 08:13:40 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id ca18e2360f4ac-792717ef3c9so18311439f.3
+        for <linux-kselftest@vger.kernel.org>; Sun, 03 Sep 2023 08:13:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1693754018; x=1694358818; darn=vger.kernel.org;
+        d=joelfernandes.org; s=google; t=1693754020; x=1694358820; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Oa7N2sPH/lilO/UwWqLMR+jDCHXNj+j722SD4+8DAS8=;
-        b=p3ecb/r3Oez3FeX0zxpD3f9Ziln558UEzDLpuqh8HNXSknzOxmT4SPodW6rM8VjH8D
-         Azrhc/vJThEJlKmycWClmEDvDZx4Giojf1un9nRL8S2WIhPxg8+KOoamMha3GHXFz0Wo
-         +qIziE2JNDpIejHJ5haC6paenH8shfjHOMx2c=
+        bh=3i4JKzyyHPJXK5xbz9I2FYDU9mp4fFQ0BqGZeRR+IkI=;
+        b=FTlhbyia5QMCbrtLFXMkUmgVcb+mZtdvE4C2xiUXUbtiUDneBOuatj8RUARk0V/4zr
+         M4hQmMSKtICjpEc0hHUIrB2+cXl13nTfFVXlLUp3rSD++8cPriJMSsl+78pMLBv9debc
+         c3w6G9A3fkJCeWnwIaPVdDApuafr1lpaDtS4U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693754018; x=1694358818;
+        d=1e100.net; s=20221208; t=1693754020; x=1694358820;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Oa7N2sPH/lilO/UwWqLMR+jDCHXNj+j722SD4+8DAS8=;
-        b=Jatum3/pSGH7X4HMoeI4vrBNgMolv2rUrBkfu8Szx+zeZCTnw4n0CjPb08pbyooUgK
-         4F4x2b39zSwzrAVH/ZQKvZfrTSZfBciF10Qyw5fC13dTHM3suZo34ao0idXWCM7HOSzE
-         CNx2SCMyTch6jE4rKkp4JqDcH674AffIu8rdMaYdt0bw3EyWpAP9np5RoJuxzFuHwKNq
-         UZuVqP7ZmUE50XmiA4SV5rl6iD+X+4Q71CnVrTFgTBlkPE5J6yZWoKXh73ro3xRFkmly
-         68Lez0JqI6eH5DJaPKRu8bdu1jENrklikBHyE3pYWjyz36j5KFu5MuRSI9UG0qyHavwp
-         qeww==
-X-Gm-Message-State: AOJu0YxVBvBsuDzwbtLTGdiSCnMzRemfCBeuBxhGdc2cFP/Lz5a9F6NJ
-        x2ucHkO4iq46ZH94M+dvOdtD8w==
-X-Google-Smtp-Source: AGHT+IGTBN7+8BUOuxu3HzD4jDZmr/y5lg4NupMcQKdCe0g07b+paLWsn6FtLb2h4fhMmD0ruozikg==
-X-Received: by 2002:a05:6602:210b:b0:787:169a:927 with SMTP id x11-20020a056602210b00b00787169a0927mr8408605iox.20.1693754018437;
-        Sun, 03 Sep 2023 08:13:38 -0700 (PDT)
+        bh=3i4JKzyyHPJXK5xbz9I2FYDU9mp4fFQ0BqGZeRR+IkI=;
+        b=ER3M/s0FaDNPHDh2E2YauidSfubUyFni+VYhgTItL/yfgY6ixvoLx/kZu5mWEnZKwp
+         t58//Zb/G6QEklGpG52R2aOX/qPnpAhPzLy7BQ62GDbRYyKXGfF/aIFU0S4+uJwP1cdh
+         CAqovZA15arLga2N6x0kCwvMsTn2Xa28LS2cuYTqFluHMz8vHbkvYkOEqYbOnwmiu4+R
+         hN75bP46j9enwX4tL4Hh9cJaWFy3bZ4TKtKtxLrgINLziJ3P1be9h4RfrK5KP5Qo3h7B
+         5SlRN9/JhxN95C42peampyhsXW3Xf1FZzwFn3uQKOBkJKRsPehrgEt1w53M+Cao1O8cz
+         oywg==
+X-Gm-Message-State: AOJu0YybnQV/gf2J3lXunprdnV3A137KM8/nzg7kqf+OSjt7fGAhURdY
+        qZlw0dO336+DTDAgVdLu6C5BKQ==
+X-Google-Smtp-Source: AGHT+IHONBzFDHNEJj9fUdFbCOcAZGQgCkRLbDItObOX2Jewvf4Oe2vlmaZIITxIM+/izWF1P0j3xg==
+X-Received: by 2002:a5e:aa0a:0:b0:792:4d29:ecc7 with SMTP id s10-20020a5eaa0a000000b007924d29ecc7mr7910869ioe.15.1693754020233;
+        Sun, 03 Sep 2023 08:13:40 -0700 (PDT)
 Received: from joelboxx5.corp.google.com (156.190.123.34.bc.googleusercontent.com. [34.123.190.156])
-        by smtp.gmail.com with ESMTPSA id f5-20020a6b5105000000b007835a305f61sm2605897iob.36.2023.09.03.08.13.37
+        by smtp.gmail.com with ESMTPSA id f5-20020a6b5105000000b007835a305f61sm2605897iob.36.2023.09.03.08.13.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Sep 2023 08:13:37 -0700 (PDT)
+        Sun, 03 Sep 2023 08:13:39 -0700 (PDT)
 From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
         linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
         Shuah Khan <shuah@kernel.org>,
         Vlastimil Babka <vbabka@suse.cz>,
         Michal Hocko <mhocko@suse.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
         Kirill A Shutemov <kirill@shutemov.name>,
         "Liam R. Howlett" <liam.howlett@oracle.com>,
         "Paul E. McKenney" <paulmck@kernel.org>,
         Suren Baghdasaryan <surenb@google.com>,
         Kalesh Singh <kaleshsingh@google.com>,
         Lokesh Gidra <lokeshgidra@google.com>
-Subject: [PATCH v6 2/7] mm/mremap: Allow moves within the same VMA for stack moves
-Date:   Sun,  3 Sep 2023 15:13:23 +0000
-Message-ID: <20230903151328.2981432-3-joel@joelfernandes.org>
+Subject: [PATCH v6 4/7] selftests: mm: Add a test for mutually aligned moves > PMD size
+Date:   Sun,  3 Sep 2023 15:13:25 +0000
+Message-ID: <20230903151328.2981432-5-joel@joelfernandes.org>
 X-Mailer: git-send-email 2.42.0.283.g2d96d420d3-goog
 In-Reply-To: <20230903151328.2981432-1-joel@joelfernandes.org>
 References: <20230903151328.2981432-1-joel@joelfernandes.org>
@@ -75,147 +75,64 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-For the stack move happening in shift_arg_pages(), the move is happening
-within the same VMA which spans the old and new ranges.
+This patch adds a test case to check if a PMD-alignment optimization
+successfully happens.
 
-In case the aligned address happens to fall within that VMA, allow such
-moves and don't abort the mremap alignment optimization.
+I add support to make sure there is some room before the source mapping,
+otherwise the optimization to trigger PMD-aligned move will be disabled
+as the kernel will detect that a mapping before the source exists and
+such optimization becomes impossible.
 
-In the regular non-stack mremap case, we cannot allow any such moves as
-will end up destroying some part of the mapping (either the source of
-the move, or part of the existing mapping). So just avoid it for stack
-moves.
-
+Reviewed-by: Lorenzo Stoakes <lstoakes@gmail.com>
 Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 ---
- fs/exec.c          |  2 +-
- include/linux/mm.h |  2 +-
- mm/mremap.c        | 33 +++++++++++++++++++--------------
- 3 files changed, 21 insertions(+), 16 deletions(-)
+ tools/testing/selftests/mm/mremap_test.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/fs/exec.c b/fs/exec.c
-index 1a827d55ba94..244925307958 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -712,7 +712,7 @@ static int shift_arg_pages(struct vm_area_struct *vma, unsigned long shift)
- 	 * process cleanup to remove whatever mess we made.
- 	 */
- 	if (length != move_page_tables(vma, old_start,
--				       vma, new_start, length, false))
-+				       vma, new_start, length, false, true))
- 		return -ENOMEM;
+diff --git a/tools/testing/selftests/mm/mremap_test.c b/tools/testing/selftests/mm/mremap_test.c
+index 6822d657f589..6304eb0947a3 100644
+--- a/tools/testing/selftests/mm/mremap_test.c
++++ b/tools/testing/selftests/mm/mremap_test.c
+@@ -44,6 +44,7 @@ enum {
+ 	_1MB = 1ULL << 20,
+ 	_2MB = 2ULL << 20,
+ 	_4MB = 4ULL << 20,
++	_5MB = 5ULL << 20,
+ 	_1GB = 1ULL << 30,
+ 	_2GB = 2ULL << 30,
+ 	PMD = _2MB,
+@@ -235,6 +236,11 @@ static void *get_source_mapping(struct config c)
+ 	unsigned long long mmap_min_addr;
  
- 	lru_add_drain();
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 406ab9ea818f..e635d1fc73b6 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -2458,7 +2458,7 @@ int get_cmdline(struct task_struct *task, char *buffer, int buflen);
- extern unsigned long move_page_tables(struct vm_area_struct *vma,
- 		unsigned long old_addr, struct vm_area_struct *new_vma,
- 		unsigned long new_addr, unsigned long len,
--		bool need_rmap_locks);
-+		bool need_rmap_locks, bool for_stack);
+ 	mmap_min_addr = get_mmap_min_addr();
++	/*
++	 * For some tests, we need to not have any mappings below the
++	 * source mapping. Add some headroom to mmap_min_addr for this.
++	 */
++	mmap_min_addr += 10 * _4MB;
  
- /*
-  * Flags used by change_protection().  For now we make it a bitmap so
-diff --git a/mm/mremap.c b/mm/mremap.c
-index 1011326b7b80..2b51f8b7cad8 100644
---- a/mm/mremap.c
-+++ b/mm/mremap.c
-@@ -490,12 +490,13 @@ static bool move_pgt_entry(enum pgt_entry entry, struct vm_area_struct *vma,
+ retry:
+ 	addr += c.src_alignment;
+@@ -434,7 +440,7 @@ static int parse_args(int argc, char **argv, unsigned int *threshold_mb,
+ 	return 0;
  }
  
- /*
-- * A helper to check if a previous mapping exists. Required for
-- * move_page_tables() and realign_addr() to determine if a previous mapping
-- * exists before we can do realignment optimizations.
-+ * A helper to check if aligning down is OK. The aligned address should fall
-+ * on *no mapping*. For the stack moving down, that's a special move within
-+ * the VMA that is created to span the source and destination of the move,
-+ * so we make an exception for it.
-  */
- static bool can_align_down(struct vm_area_struct *vma, unsigned long addr_to_align,
--			       unsigned long mask)
-+			    unsigned long mask, bool for_stack)
+-#define MAX_TEST 13
++#define MAX_TEST 14
+ #define MAX_PERF_TEST 3
+ int main(int argc, char **argv)
  {
- 	unsigned long addr_masked = addr_to_align & mask;
+@@ -500,6 +506,10 @@ int main(int argc, char **argv)
+ 	test_cases[12] = MAKE_TEST(PUD, PUD, _2GB, NON_OVERLAPPING, EXPECT_SUCCESS,
+ 				   "2GB mremap - Source PUD-aligned, Destination PUD-aligned");
  
-@@ -504,9 +505,13 @@ static bool can_align_down(struct vm_area_struct *vma, unsigned long addr_to_ali
- 	 * of the corresponding VMA, we can't align down or we will destroy part
- 	 * of the current mapping.
- 	 */
--	if (vma->vm_start != addr_to_align)
-+	if (!for_stack && vma->vm_start != addr_to_align)
- 		return false;
- 
-+	/* In the stack case we explicitly permit in-VMA alignment. */
-+	if (for_stack && addr_masked >= vma->vm_start)
-+		return true;
++	/* Src and Dest addr 1MB aligned. 5MB mremap. */
++	test_cases[13] = MAKE_TEST(_1MB, _1MB, _5MB, NON_OVERLAPPING, EXPECT_SUCCESS,
++				  "5MB mremap - Source 1MB-aligned, Destination 1MB-aligned");
 +
+ 	perf_test_cases[0] =  MAKE_TEST(page_size, page_size, _1GB, NON_OVERLAPPING, EXPECT_SUCCESS,
+ 					"1GB mremap - Source PTE-aligned, Destination PTE-aligned");
  	/*
- 	 * Make sure the realignment doesn't cause the address to fall on an
- 	 * existing mapping.
-@@ -517,7 +522,7 @@ static bool can_align_down(struct vm_area_struct *vma, unsigned long addr_to_ali
- /* Opportunistically realign to specified boundary for faster copy. */
- static void try_realign_addr(unsigned long *old_addr, struct vm_area_struct *old_vma,
- 			     unsigned long *new_addr, struct vm_area_struct *new_vma,
--			     unsigned long mask)
-+			     unsigned long mask, bool for_stack)
- {
- 	/* Skip if the addresses are already aligned. */
- 	if ((*old_addr & ~mask) == 0)
-@@ -528,8 +533,8 @@ static void try_realign_addr(unsigned long *old_addr, struct vm_area_struct *old
- 		return;
- 
- 	/* Ensure realignment doesn't cause overlap with existing mappings. */
--	if (!can_align_down(old_vma, *old_addr, mask) ||
--	    !can_align_down(new_vma, *new_addr, mask))
-+	if (!can_align_down(old_vma, *old_addr, mask, for_stack) ||
-+	    !can_align_down(new_vma, *new_addr, mask, for_stack))
- 		return;
- 
- 	*old_addr = *old_addr & mask;
-@@ -539,7 +544,7 @@ static void try_realign_addr(unsigned long *old_addr, struct vm_area_struct *old
- unsigned long move_page_tables(struct vm_area_struct *vma,
- 		unsigned long old_addr, struct vm_area_struct *new_vma,
- 		unsigned long new_addr, unsigned long len,
--		bool need_rmap_locks)
-+		bool need_rmap_locks, bool for_stack)
- {
- 	unsigned long extent, old_end;
- 	struct mmu_notifier_range range;
-@@ -559,9 +564,9 @@ unsigned long move_page_tables(struct vm_area_struct *vma,
- 	 * If possible, realign addresses to PMD boundary for faster copy.
- 	 * Only realign if the mremap copying hits a PMD boundary.
- 	 */
--	if ((vma != new_vma)
--		&& (len >= PMD_SIZE - (old_addr & ~PMD_MASK)))
--		try_realign_addr(&old_addr, vma, &new_addr, new_vma, PMD_MASK);
-+	if (len >= PMD_SIZE - (old_addr & ~PMD_MASK))
-+		try_realign_addr(&old_addr, vma, &new_addr, new_vma, PMD_MASK,
-+				 for_stack);
- 
- 	flush_cache_range(vma, old_addr, old_end);
- 	mmu_notifier_range_init(&range, MMU_NOTIFY_UNMAP, 0, vma->vm_mm,
-@@ -708,7 +713,7 @@ static unsigned long move_vma(struct vm_area_struct *vma,
- 	}
- 
- 	moved_len = move_page_tables(vma, old_addr, new_vma, new_addr, old_len,
--				     need_rmap_locks);
-+				     need_rmap_locks, false);
- 	if (moved_len < old_len) {
- 		err = -ENOMEM;
- 	} else if (vma->vm_ops && vma->vm_ops->mremap) {
-@@ -722,7 +727,7 @@ static unsigned long move_vma(struct vm_area_struct *vma,
- 		 * and then proceed to unmap new area instead of old.
- 		 */
- 		move_page_tables(new_vma, new_addr, vma, old_addr, moved_len,
--				 true);
-+				 true, false);
- 		vma = new_vma;
- 		old_len = new_len;
- 		old_addr = new_addr;
 -- 
 2.42.0.283.g2d96d420d3-goog
 
