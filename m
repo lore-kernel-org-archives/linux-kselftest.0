@@ -2,44 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2727CC83F3F
-	for <linux-kselftest@archiver.kernel.org>; Mon,  4 Sep 2023 09:54:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 946ADCA0FF3
+	for <linux-kselftest@archiver.kernel.org>; Mon,  4 Sep 2023 09:54:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239606AbjIDJyq (ORCPT
+        id S232912AbjIDJys (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 4 Sep 2023 05:54:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37946 "EHLO
+        Mon, 4 Sep 2023 05:54:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352733AbjIDJym (ORCPT
+        with ESMTP id S240555AbjIDJyr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 4 Sep 2023 05:54:42 -0400
+        Mon, 4 Sep 2023 05:54:47 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E0461AB;
-        Mon,  4 Sep 2023 02:54:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B74E31AD;
+        Mon,  4 Sep 2023 02:54:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693821264; x=1725357264;
+  t=1693821268; x=1725357268;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=eSx1zJM3KtE7WuZSLuns2rfRmMmTMdKSlrgoe3aP1DY=;
-  b=ddZxE/QC1kdpsPBx0Gga7qW4d6SCnvkxo7XL8CC1yTcjCBcRqF+ef2SN
-   rG0cuWruUigPilOh4ErD8f8f51qlrFhu/mcUa9sjLqH7bmgM+dCnE0pj0
-   gzqfkuMRKsf5YiC3yCzYpQTdd4NQqqZQFAD13DRNbt8VbcfE2I6s68s+x
-   WVV/ClMT89sk2b7gd9gR1fdD4R5RBsO30oxCKMwIcbwiL9VMwSkid8cKt
-   rMIfxtG4/Zg89ftxQHoIAOke0CpVMJSS78e8RjHWz2lzPOyzmJCf+mb4I
-   gh4OBTiQQHDGwLTGdMJDpG4+ADtAyovyyrRmFkYDeFF/spx5dXztM6Q4q
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10822"; a="356880707"
+  bh=4f0ZiGdP9qvMi+chEUCuJ8YtsHh7qkSv3SZMl6phZyU=;
+  b=gLSHv8+S7zJ/vv2wYNIwueCY9n90faVoqUcRoQlCnCDFYrFSvVUi7I22
+   f5CC9m5LbQzl2dDeOrGuxhcIxkim35vo2J98CIEWKR4na64rUKTr8d4Hy
+   JFK/iXRnFj7FPDj2izbVbpI6/rF+vQ6pkOachGw/U08PYsavmELeK8qzM
+   mkfe6fWQ63bJiq7dJrtsJArssDA3paIvtej0GQMWc/uR43B8I9nKgcLrd
+   1sFRJ+keG79GyvhTi6gKlGZ3mObE8HI8Y3fcmCaRjjW0akQ/ZraFoW2wb
+   PCNHboLVKLvqUainOJCzcJbW+SPhay5ScQsjiLuqBc4BAPTit4gefUfN5
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10822"; a="356880738"
 X-IronPort-AV: E=Sophos;i="6.02,226,1688454000"; 
-   d="scan'208";a="356880707"
+   d="scan'208";a="356880738"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2023 02:54:17 -0700
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2023 02:54:26 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10822"; a="740700682"
+X-IronPort-AV: E=McAfee;i="6600,9927,10822"; a="740700700"
 X-IronPort-AV: E=Sophos;i="6.02,226,1688454000"; 
-   d="scan'208";a="740700682"
+   d="scan'208";a="740700700"
 Received: from okozlyk-mobl.ger.corp.intel.com (HELO ijarvine-mobl2.ger.corp.intel.com) ([10.249.44.17])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2023 02:54:13 -0700
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2023 02:54:23 -0700
 From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     Reinette Chatre <reinette.chatre@intel.com>,
         Shuah Khan <skhan@linuxfoundation.org>,
@@ -51,9 +51,9 @@ Cc:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
         Babu Moger <babu.moger@amd.com>,
         LKML <linux-kernel@vger.kernel.org>,
         =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v5 5/8] selftests/resctrl: Reorder resctrl FS prep code and benchmark_cmd init
-Date:   Mon,  4 Sep 2023 12:53:36 +0300
-Message-Id: <20230904095339.11321-6-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v5 7/8] selftests/resctrl: Remove ben_count variable
+Date:   Mon,  4 Sep 2023 12:53:38 +0300
+Message-Id: <20230904095339.11321-8-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230904095339.11321-1-ilpo.jarvinen@linux.intel.com>
 References: <20230904095339.11321-1-ilpo.jarvinen@linux.intel.com>
@@ -64,57 +64,50 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Benchmark command is initialized before resctrl FS check and
-preparation code that can call ksft_exit_skip(). There is no strong
-reason why the resctrl FS support check and unmounting it (if already
-mounted), has to be done after the benchmark command initialization.
+ben_count is only used to write the terminator for the list. It is
+enough to use i from the loop so no need for another variable.
 
-Move benchmark command initialization such that it is done not until
-right before the tests commence. This simplifies rollback handling when
-benchmark command initialization starts to use dynamic allocation (in a
-change following this).
+Remove ben_count variable as it is not needed.
 
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Tested-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
 Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
+Reviewed-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
 Reviewed-by: "Wieczor-Retman, Maciej" <maciej.wieczor-retman@intel.com>
 ---
- tools/testing/selftests/resctrl/resctrl_tests.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ tools/testing/selftests/resctrl/resctrl_tests.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
 diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
-index 64e28bde5131..f105e00d6099 100644
+index 89edde416f07..48e5afb1530c 100644
 --- a/tools/testing/selftests/resctrl/resctrl_tests.c
 +++ b/tools/testing/selftests/resctrl/resctrl_tests.c
-@@ -252,6 +252,14 @@ int main(int argc, char **argv)
- 	if (geteuid() != 0)
- 		return ksft_exit_skip("Not running as root. Skipping...\n");
- 
-+	if (!check_resctrlfs_support())
-+		return ksft_exit_skip("resctrl FS does not exist. Enable X86_CPU_RESCTRL config option.\n");
-+
-+	if (umount_resctrlfs())
-+		return ksft_exit_skip("resctrl FS unmount failed.\n");
-+
-+	filter_dmesg();
-+
- 	if (has_ben) {
- 		if (argc - ben_ind >= BENCHMARK_ARGS)
- 			ksft_exit_fail_msg("Too long benchmark command.\n");
-@@ -277,14 +285,6 @@ int main(int argc, char **argv)
- 		benchmark_cmd[5] = NULL;
- 	}
- 
--	if (!check_resctrlfs_support())
--		return ksft_exit_skip("resctrl FS does not exist. Enable X86_CPU_RESCTRL config option.\n");
--
--	if (umount_resctrlfs())
--		return ksft_exit_skip("resctrl FS unmount failed.\n");
--
--	filter_dmesg();
--
- 	ksft_set_plan(tests ? : 4);
- 
- 	if (mbm_test)
+@@ -172,7 +172,7 @@ int main(int argc, char **argv)
+ 	bool has_ben = false, mbm_test = true, mba_test = true, cmt_test = true;
+ 	int c, cpu_no = 1, argc_new = argc, i, no_of_bits = 0;
+ 	const char *benchmark_cmd[BENCHMARK_ARGS];
+-	int ben_ind, ben_count, tests = 0;
++	int ben_ind, tests = 0;
+ 	char *span_str = NULL;
+ 	bool cat_test = true;
+ 	int ret;
+@@ -180,7 +180,6 @@ int main(int argc, char **argv)
+ 	for (i = 0; i < argc; i++) {
+ 		if (strcmp(argv[i], "-b") == 0) {
+ 			ben_ind = i + 1;
+-			ben_count = argc - ben_ind;
+ 			argc_new = ben_ind - 1;
+ 			has_ben = true;
+ 			break;
+@@ -265,7 +264,7 @@ int main(int argc, char **argv)
+ 		/* Extract benchmark command from command line. */
+ 		for (i = 0; i < argc - ben_ind; i++)
+ 			benchmark_cmd[i] = argv[i + ben_ind];
+-		benchmark_cmd[ben_count] = NULL;
++		benchmark_cmd[i] = NULL;
+ 	} else {
+ 		/* If no benchmark is given by "-b" argument, use fill_buf. */
+ 		benchmark_cmd[0] = "fill_buf";
 -- 
 2.30.2
 
