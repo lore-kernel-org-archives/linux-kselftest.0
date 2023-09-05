@@ -2,297 +2,214 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E0BCCA1008
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24815CA1005
 	for <linux-kselftest@archiver.kernel.org>; Tue,  5 Sep 2023 16:07:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239169AbjIEQH0 (ORCPT
+        id S239160AbjIEQHZ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 5 Sep 2023 12:07:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34660 "EHLO
+        Tue, 5 Sep 2023 12:07:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353683AbjIEHNp (ORCPT
+        with ESMTP id S1354471AbjIELzZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Sep 2023 03:13:45 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D43CC2
-        for <linux-kselftest@vger.kernel.org>; Tue,  5 Sep 2023 00:13:40 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-52c96d5df86so16252a12.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 05 Sep 2023 00:13:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1693898019; x=1694502819; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/tKLxD+gN1zixDT+CN7RoSGgjaoaC0QEpeT8gEho2zE=;
-        b=CfImJeCzt5IYM/A2aVBmyMe5kK+gc2eDO05BTM0Lc5iSc1Zs/FcDH3or5fbqyThtCM
-         BAGJfZyQ4FynWBSmeKPnL6K7QAMkW4MR1WeZTtTQPpaYzOs9syxRHxxi6CnJSoAeMT7E
-         oFTTub1eAhbblGJ/vqSa9po5zGLo6unpCMwAxGiRONXbz+yg6YbqTNV9BaQfmX2/MB6+
-         h9aQ6ha5pHjo3IIsM5EysDB+v1hS3q44A47KaMopKnk3+UGJPfvouQdFDGCzq4YVratm
-         frjmJkuPaOyWQJ+ZLpIKhpoquONJiLtDyE3oxnccQp3fd/RDpBKVNdjDAgsSxUx8q8lc
-         HGDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693898019; x=1694502819;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/tKLxD+gN1zixDT+CN7RoSGgjaoaC0QEpeT8gEho2zE=;
-        b=OJcDIs/vhBNTNP19qfGjSbzOKNvM6Nrz8buqc9tBVaZ09i2UYsaxdk8LiAHdyhoKaN
-         QjStq6qZZ0HF1jwcI7U/2duvn9JfZkvWfRai7Y1qkJ12S8T3w+f4IKwLXAfzLEje5hmQ
-         Rp2L4BiqSA2AQ8IRJV5yiE5qHp5ZTdcHO3Y0ZgWdoE2F9i+cDhJIlCVVTakgPyTaenFI
-         U3+ZXp5CxWhZR3+/QlH5mnPiEV6Ub9X9aMbFiMVU6V52Ydpex4xdXnRekyMq6rwNb/PX
-         +jUr6Qj3PdkWCwNIqtjLua3hKxzIXfz18GF2a5zI4Rqwu3Hoz247aYxMZBidFxdL7yG7
-         QFoQ==
-X-Gm-Message-State: AOJu0YxX19VWU2Fqw/PT4d0+raqHKJ4dfbFzMU2GKEPgK49Syqv4qlpq
-        cDDrPM2hTI3iV8+9WrNQc3TeLqOIM59gcUBnRruyHtPGn6qm+YKFcdyQ+g==
-X-Google-Smtp-Source: AGHT+IGOM/Vf225apo+BFAqzLAArYSjs9L9GwkEC9UwfUzRqw1vyTpdj9ZZG25VMrKT+GCP3kcEPryDX5/xZbeMTPiU=
-X-Received: by 2002:a50:9f6f:0:b0:506:b280:4993 with SMTP id
- b102-20020a509f6f000000b00506b2804993mr277376edf.2.1693898018759; Tue, 05 Sep
- 2023 00:13:38 -0700 (PDT)
+        Tue, 5 Sep 2023 07:55:25 -0400
+Received: from mail.avm.de (mail.avm.de [IPv6:2001:bf0:244:244::119])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF5A51BE;
+        Tue,  5 Sep 2023 04:55:20 -0700 (PDT)
+Received: from mail-auth.avm.de (unknown [IPv6:2001:bf0:244:244::71])
+        by mail.avm.de (Postfix) with ESMTPS;
+        Tue,  5 Sep 2023 13:49:50 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
+        t=1693914590; bh=9CzF9wwiQ2iiDMYvUIonfLdBdIiRKAnlIBWP9H0gNS0=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+        b=w0g7TxUzuvW16z0e/fQ7D7kb18uJDzxO4+kNBeJBmBvXGsgCsLbnYkzLPCjEM3wUl
+         LFnQQq/1LKMI9fy7LaG0EYxVthTtqA73awAqhb3ike696Q7G+7vSsLzHMlGlBFhFQy
+         GqAo25J+kI2CLKl2DPMPlk9xii36Z079Oi6br7YA=
+Received: from localhost (unknown [172.17.88.63])
+        by mail-auth.avm.de (Postfix) with ESMTPSA id 539ED82160;
+        Tue,  5 Sep 2023 13:49:50 +0200 (CEST)
+From:   Johannes Nixdorf <jnixdorf-oss@avm.de>
+Date:   Tue, 05 Sep 2023 13:47:20 +0200
+Subject: [PATCH net-next v3 3/6] net: bridge: Track and limit dynamically
+ learned FDB entries
 MIME-Version: 1.0
-References: <20230903071028.1518913-1-ruanjinjie@huawei.com> <20230903071028.1518913-4-ruanjinjie@huawei.com>
-In-Reply-To: <20230903071028.1518913-4-ruanjinjie@huawei.com>
-From:   David Gow <davidgow@google.com>
-Date:   Tue, 5 Sep 2023 15:13:27 +0800
-Message-ID: <CABVgOS=5mA6eaHNnn0yrZt3g03ZaAW112KotaBO6u2Lm+66aEA@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] kunit: Fix possible null-ptr-deref in kunit_parse_glob_filter()
-To:     Jinjie Ruan <ruanjinjie@huawei.com>
-Cc:     brendan.higgins@linux.dev, skhan@linuxfoundation.org,
-        jk@codeconstruct.com.au, dlatypov@google.com, rmoar@google.com,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000b609d80604975def"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230905-fdb_limit-v3-3-7597cd500a82@avm.de>
+References: <20230905-fdb_limit-v3-0-7597cd500a82@avm.de>
+In-Reply-To: <20230905-fdb_limit-v3-0-7597cd500a82@avm.de>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Andrew Lunn <andrew@lunn.ch>, David Ahern <dsahern@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     bridge@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Johannes Nixdorf <jnixdorf-oss@avm.de>
+X-Mailer: b4 0.12.3
+X-purgate-ID: 149429::1693914590-B34BF98B-EB37643D/0/0
+X-purgate-type: clean
+X-purgate-size: 5689
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
+X-purgate: clean
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---000000000000b609d80604975def
-Content-Type: text/plain; charset="UTF-8"
+A malicious actor behind one bridge port may spam the kernel with packets
+with a random source MAC address, each of which will create an FDB entry,
+each of which is a dynamic allocation in the kernel.
 
-On Sun, 3 Sept 2023 at 15:11, 'Jinjie Ruan' via KUnit Development
-<kunit-dev@googlegroups.com> wrote:
->
-> Inject fault while probing kunit-example-test.ko, if kzalloc fails
-> in kunit_parse_glob_filter(), strcpy() or strncpy() to NULL will
-> cause below null-ptr-deref bug. So check NULL for kzalloc() and
-> return int instead of void for kunit_parse_glob_filter().
->
->  Unable to handle kernel paging request at virtual address dfff800000000000
->  KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
->  Mem abort info:
->    ESR = 0x0000000096000005
->    EC = 0x25: DABT (current EL), IL = 32 bits
->    SET = 0, FnV = 0
->    EA = 0, S1PTW = 0
->    FSC = 0x05: level 1 translation fault
->  Data abort info:
->    ISV = 0, ISS = 0x00000005, ISS2 = 0x00000000
->    CM = 0, WnR = 0, TnD = 0, TagAccess = 0
->    GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
->  [dfff800000000000] address between user and kernel address ranges
->  Internal error: Oops: 0000000096000005 [#1] PREEMPT SMP
->  Modules linked in: kunit_example_test cfg80211 rfkill 8021q garp mrp stp llc ipv6 [last unloaded: kunit_example_test]
->  CPU: 4 PID: 6047 Comm: modprobe Tainted: G        W        N 6.5.0-next-20230829+ #141
->  Hardware name: linux,dummy-virt (DT)
->  pstate: 80000005 (Nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->  pc : strncpy+0x58/0xc0
->  lr : kunit_filter_suites+0x15c/0xa84
->  sp : ffff800082a17420
->  x29: ffff800082a17420 x28: 0000000000000000 x27: 0000000000000004
->  x26: 0000000000000000 x25: ffffa847e40a5320 x24: 0000000000000001
->  x23: 0000000000000000 x22: 0000000000000001 x21: dfff800000000000
->  x20: 000000000000002a x19: 0000000000000000 x18: 00000000750b3b54
->  x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
->  x14: 0000000000000000 x13: 34393178302f3039 x12: ffff7508fcea4ec1
->  x11: 1ffff508fcea4ec0 x10: ffff7508fcea4ec0 x9 : dfff800000000000
->  x8 : ffff6051b1a7f86a x7 : ffff800082a17270 x6 : 0000000000000002
->  x5 : 0000000000000098 x4 : ffff028d9817b250 x3 : 0000000000000000
->  x2 : 0000000000000000 x1 : ffffa847e40a5320 x0 : 0000000000000000
->  Call trace:
->   strncpy+0x58/0xc0
->   kunit_filter_suites+0x15c/0xa84
->   kunit_module_notify+0x1b0/0x3ac
->   blocking_notifier_call_chain+0xc4/0x128
->   do_init_module+0x250/0x594
->   load_module+0x37b0/0x44b4
->   init_module_from_file+0xd4/0x128
->   idempotent_init_module+0x2c8/0x524
->   __arm64_sys_finit_module+0xac/0x100
->   invoke_syscall+0x6c/0x258
->   el0_svc_common.constprop.0+0x160/0x22c
->   do_el0_svc+0x44/0x5c
->   el0_svc+0x38/0x78
->   el0t_64_sync_handler+0x13c/0x158
->   el0t_64_sync+0x190/0x194
->  Code: 5400028a d343fe63 12000a62 39400034 (38f56863)
->  ---[ end trace 0000000000000000 ]---
->  Kernel panic - not syncing: Oops: Fatal exception
->  SMP: stopping secondary CPUs
->  Kernel Offset: 0x284761400000 from 0xffff800080000000
->  PHYS_OFFSET: 0xfffffd7380000000
->  CPU features: 0x88000203,3c020000,1000421b
->  Memory Limit: none
->  Rebooting in 1 seconds..
->
-> Fixes: a127b154a8f2 ("kunit: tool: allow filtering test cases via glob")
-> Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
-> Reviewed-by: Rae Moar <rmoar@google.com>
-> Reviewed-by: David Gow <davidgow@google.com>
-> ---
-> v2:
-> - goto the new add identical purpose free_copy label.
-> ---
+There are roughly 2^48 different MAC addresses, further limited by the
+rhashtable they are stored in to 2^31. Each entry is of the type struct
+net_bridge_fdb_entry, which is currently 128 bytes big. This means the
+maximum amount of memory allocated for FDB entries is 2^31 * 128B =
+256GiB, which is too much for most computers.
 
-Looks good to me.
+Mitigate this by maintaining a per bridge count of those automatically
+generated entries in fdb_n_learned_entries, and a limit in
+fdb_max_learned_entries. If the limit is hit new entries are not learned
+anymore.
 
-This is still,
-Reviewed-by: David Gow <davidgow@google.com>
+For backwards compatibility the default setting of 0 disables the limit.
 
-Cheers,
--- David
+User-added entries by netlink or from bridge or bridge port addresses
+are never blocked and do not count towards that limit.
 
+Introduce a new fdb entry flag BR_FDB_DYNAMIC_LEARNED to keep track of
+whether an FDB entry is included in the count. The flag is enabled for
+dynamically learned entries, and disabled for all other entries. This
+should be equivalent to BR_FDB_ADDED_BY_USER and BR_FDB_LOCAL being unset,
+but contrary to the two flags it can be toggled atomically.
 
->  lib/kunit/executor.c | 23 +++++++++++++++++++----
->  1 file changed, 19 insertions(+), 4 deletions(-)
->
-> diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-> index 0eda42b0c9bb..28f144de748b 100644
-> --- a/lib/kunit/executor.c
-> +++ b/lib/kunit/executor.c
-> @@ -65,7 +65,7 @@ struct kunit_glob_filter {
->  };
->
->  /* Split "suite_glob.test_glob" into two. Assumes filter_glob is not empty. */
-> -static void kunit_parse_glob_filter(struct kunit_glob_filter *parsed,
-> +static int kunit_parse_glob_filter(struct kunit_glob_filter *parsed,
->                                     const char *filter_glob)
->  {
->         const int len = strlen(filter_glob);
-> @@ -73,16 +73,28 @@ static void kunit_parse_glob_filter(struct kunit_glob_filter *parsed,
->
->         if (!period) {
->                 parsed->suite_glob = kzalloc(len + 1, GFP_KERNEL);
-> +               if (!parsed->suite_glob)
-> +                       return -ENOMEM;
-> +
->                 parsed->test_glob = NULL;
->                 strcpy(parsed->suite_glob, filter_glob);
-> -               return;
-> +               return 0;
->         }
->
->         parsed->suite_glob = kzalloc(period - filter_glob + 1, GFP_KERNEL);
-> +       if (!parsed->suite_glob)
-> +               return -ENOMEM;
-> +
->         parsed->test_glob = kzalloc(len - (period - filter_glob) + 1, GFP_KERNEL);
-> +       if (!parsed->test_glob) {
-> +               kfree(parsed->suite_glob);
-> +               return -ENOMEM;
-> +       }
->
->         strncpy(parsed->suite_glob, filter_glob, period - filter_glob);
->         strncpy(parsed->test_glob, period + 1, len - (period - filter_glob));
-> +
-> +       return 0;
->  }
->
->  /* Create a copy of suite with only tests that match test_glob. */
-> @@ -152,8 +164,11 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
->         }
->         copy_start = copy;
->
-> -       if (filter_glob)
-> -               kunit_parse_glob_filter(&parsed_glob, filter_glob);
-> +       if (filter_glob) {
-> +               *err = kunit_parse_glob_filter(&parsed_glob, filter_glob);
-> +               if (*err)
-> +                       goto free_copy;
-> +       }
->
->         /* Parse attribute filters */
->         if (filters) {
-> --
-> 2.34.1
->
-> --
-> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20230903071028.1518913-4-ruanjinjie%40huawei.com.
+Atomicity is required here, as there are multiple callers that modify the
+flags, but are not under a common lock (br_fdb_update is the exception
+for br->hash_lock, br_fdb_external_learn_add for RTNL).
 
---000000000000b609d80604975def
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+Signed-off-by: Johannes Nixdorf <jnixdorf-oss@avm.de>
+---
+ net/bridge/br_fdb.c     | 34 ++++++++++++++++++++++++++++++++--
+ net/bridge/br_private.h |  4 ++++
+ 2 files changed, 36 insertions(+), 2 deletions(-)
 
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-ddIn9n5Jt6Z1o79zxraLMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQBtHFwIgQZjer5K
-H+4Q+wns10k7qN+4wN2Uf+JsyOYjukaMEgdLErfA1wwtQ9uHkoYQZcWBuVVkQFa5hI+sqI2m1Weq
-riMCFSiU38s1tADdMX12IMfJRN60Nznhrw+nPyDRZqRhUTW24TwnHorkDnFPW8PHo7fAw4FrpI0n
-impZAng7ccvvK09K3ZuhwTIxJMsPXCZYsrXWORTw5sczRAP6XvKbPBJnsJoSTe5dFBPBHOQJOGhU
-qWfEfWnWMJPF3LxSGLpLFQXO3RwQqmxv08avwXfVPouh1xuB3FX7rpDabT8YDhu9JgIZkLEKko7L
-yQt6zWwng7k8YF/jGbiAta6VMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCD+
-ojkSFyC2ov7UrzIhM1lncq35cCzT8qI7BBIOVvr7gzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzA5MDUwNzEzMzlaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAJowAclDVFph6QK4Z7ieG
-fMPLr+ug1dFmul67ULh2+20V5Gu4GYTBTD0gKMOP7htTlKqOGUpmAgEyPsz6KmEg1ARCy7bnDvIW
-e+NceZJuq4V5BSNj1vUELbkI4+73FuT/m+RV+9tOp5hh8Jn7VXZQXYPgp137WGZrzYr2L32rkpHB
-vRloE/BE+ypJ5cgUWqYADX0xl0cYvn1R7OB5ti8PUcd+VmBbxYDeBmC1jt5EVyqrOMQH5cvlDmzM
-9Y9hF3nEKOS1x/k2Na/bqMaIgqtb0ih7gOG/A45LVKjt2RdvzJCcKgq7/iAzyBnYud3csvkYCGwr
-3Ui/5bQbDNeTZ0PI6Q==
---000000000000b609d80604975def--
+diff --git a/net/bridge/br_fdb.c b/net/bridge/br_fdb.c
+index 06e28ef8d9ff..f8a96ed9a338 100644
+--- a/net/bridge/br_fdb.c
++++ b/net/bridge/br_fdb.c
+@@ -329,11 +329,18 @@ static void fdb_delete(struct net_bridge *br, struct net_bridge_fdb_entry *f,
+ 	hlist_del_init_rcu(&f->fdb_node);
+ 	rhashtable_remove_fast(&br->fdb_hash_tbl, &f->rhnode,
+ 			       br_fdb_rht_params);
++	if (test_bit(BR_FDB_DYNAMIC_LEARNED, &f->flags))
++		atomic_dec(&br->fdb_n_learned_entries);
+ 	fdb_notify(br, f, RTM_DELNEIGH, swdev_notify);
+ 	call_rcu(&f->rcu, fdb_rcu_free);
+ }
+ 
+-/* Delete a local entry if no other port had the same address. */
++/* Delete a local entry if no other port had the same address.
++ *
++ * This function should only be called on entries with BR_FDB_LOCAL set,
++ * so even with BR_FDB_ADDED_BY_USER cleared we never need to increase
++ * the accounting for dynamically learned entries again.
++ */
+ static void fdb_delete_local(struct net_bridge *br,
+ 			     const struct net_bridge_port *p,
+ 			     struct net_bridge_fdb_entry *f)
+@@ -388,9 +395,20 @@ static struct net_bridge_fdb_entry *fdb_create(struct net_bridge *br,
+ 					       __u16 vid,
+ 					       unsigned long flags)
+ {
++	bool learned = !test_bit(BR_FDB_ADDED_BY_USER, &flags) &&
++		       !test_bit(BR_FDB_LOCAL, &flags);
++	u32 max_learned = READ_ONCE(br->fdb_max_learned_entries);
+ 	struct net_bridge_fdb_entry *fdb;
+ 	int err;
+ 
++	if (likely(learned)) {
++		int n_learned = atomic_read(&br->fdb_n_learned_entries);
++
++		if (unlikely(max_learned && n_learned >= max_learned))
++			return NULL;
++		__set_bit(BR_FDB_DYNAMIC_LEARNED, &flags);
++	}
++
+ 	fdb = kmem_cache_alloc(br_fdb_cache, GFP_ATOMIC);
+ 	if (!fdb)
+ 		return NULL;
+@@ -407,6 +425,9 @@ static struct net_bridge_fdb_entry *fdb_create(struct net_bridge *br,
+ 		return NULL;
+ 	}
+ 
++	if (likely(learned))
++		atomic_inc(&br->fdb_n_learned_entries);
++
+ 	hlist_add_head_rcu(&fdb->fdb_node, &br->fdb_list);
+ 
+ 	return fdb;
+@@ -893,8 +914,11 @@ void br_fdb_update(struct net_bridge *br, struct net_bridge_port *source,
+ 					clear_bit(BR_FDB_LOCKED, &fdb->flags);
+ 			}
+ 
+-			if (unlikely(test_bit(BR_FDB_ADDED_BY_USER, &flags)))
++			if (unlikely(test_bit(BR_FDB_ADDED_BY_USER, &flags))) {
+ 				set_bit(BR_FDB_ADDED_BY_USER, &fdb->flags);
++				if (test_and_clear_bit(BR_FDB_DYNAMIC_LEARNED, &fdb->flags))
++					atomic_dec(&br->fdb_n_learned_entries);
++			}
+ 			if (unlikely(fdb_modified)) {
+ 				trace_br_fdb_update(br, source, addr, vid, flags);
+ 				fdb_notify(br, fdb, RTM_NEWNEIGH, true);
+@@ -1071,6 +1095,8 @@ static int fdb_add_entry(struct net_bridge *br, struct net_bridge_port *source,
+ 		}
+ 
+ 		set_bit(BR_FDB_ADDED_BY_USER, &fdb->flags);
++		if (test_and_clear_bit(BR_FDB_DYNAMIC_LEARNED, &fdb->flags))
++			atomic_dec(&br->fdb_n_learned_entries);
+ 	}
+ 
+ 	if (fdb_to_nud(br, fdb) != state) {
+@@ -1445,6 +1471,10 @@ int br_fdb_external_learn_add(struct net_bridge *br, struct net_bridge_port *p,
+ 		if (!p)
+ 			set_bit(BR_FDB_LOCAL, &fdb->flags);
+ 
++		if ((swdev_notify || !p) &&
++		    test_and_clear_bit(BR_FDB_DYNAMIC_LEARNED, &fdb->flags))
++			atomic_dec(&br->fdb_n_learned_entries);
++
+ 		if (modified)
+ 			fdb_notify(br, fdb, RTM_NEWNEIGH, swdev_notify);
+ 	}
+diff --git a/net/bridge/br_private.h b/net/bridge/br_private.h
+index a63b32c1638e..675cc40ae1dc 100644
+--- a/net/bridge/br_private.h
++++ b/net/bridge/br_private.h
+@@ -274,6 +274,7 @@ enum {
+ 	BR_FDB_NOTIFY,
+ 	BR_FDB_NOTIFY_INACTIVE,
+ 	BR_FDB_LOCKED,
++	BR_FDB_DYNAMIC_LEARNED,
+ };
+ 
+ struct net_bridge_fdb_key {
+@@ -554,6 +555,9 @@ struct net_bridge {
+ 	struct kobject			*ifobj;
+ 	u32				auto_cnt;
+ 
++	atomic_t			fdb_n_learned_entries;
++	u32				fdb_max_learned_entries;
++
+ #ifdef CONFIG_NET_SWITCHDEV
+ 	/* Counter used to make sure that hardware domains get unique
+ 	 * identifiers in case a bridge spans multiple switchdev instances.
+
+-- 
+2.42.0
+
