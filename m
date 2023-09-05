@@ -2,214 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24815CA1005
-	for <linux-kselftest@archiver.kernel.org>; Tue,  5 Sep 2023 16:07:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C619CA0FF8
+	for <linux-kselftest@archiver.kernel.org>; Tue,  5 Sep 2023 16:07:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239160AbjIEQHZ (ORCPT
+        id S239189AbjIEQH1 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 5 Sep 2023 12:07:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37126 "EHLO
+        Tue, 5 Sep 2023 12:07:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354471AbjIELzZ (ORCPT
+        with ESMTP id S1354754AbjIEOFW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Sep 2023 07:55:25 -0400
-Received: from mail.avm.de (mail.avm.de [IPv6:2001:bf0:244:244::119])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF5A51BE;
-        Tue,  5 Sep 2023 04:55:20 -0700 (PDT)
-Received: from mail-auth.avm.de (unknown [IPv6:2001:bf0:244:244::71])
-        by mail.avm.de (Postfix) with ESMTPS;
-        Tue,  5 Sep 2023 13:49:50 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
-        t=1693914590; bh=9CzF9wwiQ2iiDMYvUIonfLdBdIiRKAnlIBWP9H0gNS0=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=w0g7TxUzuvW16z0e/fQ7D7kb18uJDzxO4+kNBeJBmBvXGsgCsLbnYkzLPCjEM3wUl
-         LFnQQq/1LKMI9fy7LaG0EYxVthTtqA73awAqhb3ike696Q7G+7vSsLzHMlGlBFhFQy
-         GqAo25J+kI2CLKl2DPMPlk9xii36Z079Oi6br7YA=
-Received: from localhost (unknown [172.17.88.63])
-        by mail-auth.avm.de (Postfix) with ESMTPSA id 539ED82160;
-        Tue,  5 Sep 2023 13:49:50 +0200 (CEST)
-From:   Johannes Nixdorf <jnixdorf-oss@avm.de>
-Date:   Tue, 05 Sep 2023 13:47:20 +0200
-Subject: [PATCH net-next v3 3/6] net: bridge: Track and limit dynamically
- learned FDB entries
+        Tue, 5 Sep 2023 10:05:22 -0400
+Received: from out162-62-57-252.mail.qq.com (out162-62-57-252.mail.qq.com [162.62.57.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F9F1A6
+        for <linux-kselftest@vger.kernel.org>; Tue,  5 Sep 2023 07:05:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1693922711;
+        bh=8KlD3VW8L/5ayf8Ou0ZPfzGKalOanhbYs3ssojj7Rzo=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=LdVlag21s+/faTL1akapXYiZja4GG2XtDEo/qT8ygWc1hYPXmDbomZTX/1SqGEdAm
+         1faIpbJ6D99z6I3eyi78bGWA9Jq8nOgSsbiwIz3xMkyYuvRvFtvDXNYuKBuJjIf8ry
+         j71sRqHv8E65mEMHc6/VFQeqVYZGeY8FUPOnUtwU=
+Received: from rtoax.lan ([120.245.114.157])
+        by newxmesmtplogicsvrszc2-0.qq.com (NewEsmtp) with SMTP
+        id 12C80033; Tue, 05 Sep 2023 22:04:44 +0800
+X-QQ-mid: xmsmtpt1693922699t0dv0dw9r
+Message-ID: <tencent_B44B7295FED7E0D11EC445032021F2AC8107@qq.com>
+X-QQ-XMAILINFO: OUMxvQDaATieCv4GzYM8TxrYu4PTLFyfFshfV5c5Zjsi/jYVNr1yaBkldHod6j
+         lYb/2nctmJPtCLSeVterfhWNKVaSC1Hw1IXm43J7JQKHcZIHEC9/ml08GA/RSOOeoNzFyUEefE+G
+         EcbQwZL+CtmgWlY1tjnHgI5jqlM7igrBcNXLotQDNdy5OzBrGYwgf6k4JeyF0ecgqV+DhVnSHl5n
+         6W7lM0BN4e/QdFYJ7r1V1lLKkjc6iKJeGKMpY9v09jTX2frjav0WIJUBfJyoVLqewoumV1fFJ9f0
+         BjCrtVPjE5S7tYSI4mPRBc/ikuw021AYVYfeWA6r04p0/3j06WyA7o2pFG8yxA59plf/l2eucODK
+         6An1iUGxxsciTjCmIRqwtTpOuHyAxgB/cCJR1D7wghzgtsNhRG/9BGUCsJ+iYwXWxJOpJB7EEHNT
+         bUE7o/v/mPmH+2UZHR+zKDSEbHXdjX8fNHF77RXU0cTe17g/AdlYz8YSzIWzI4TnKHWMPtNYiJLo
+         Z70i7AQlD+Us/ppjvPnz+OeSH24eMqUwPpqUhQRNYv3VXA9CpN9Ie2nslF7+YHK1b7pHHAHDtDUp
+         OIH0ODulB6EktMufPvGYl1gni9Sfi0K7YQAJ8IdzEO30axwlkYFhuwzmHrYattgHmdWqYe5sQoYg
+         6DyVDjIWY8VMSjs693sQJG7Z8z6Yoj3PHu3CbkERAE5/kQbR4E/DcVbBIT8E70up71mZ+YWjGbvt
+         eFexZLgVTmf2sr5VSQwAji+5jgtjLwWQUM4z4x3XU3O7/uHtHluy+nxAU8doCLvYhrV8ejNAdD/2
+         BFafAQZYJqO1AGuvtio+OjbA6aIfOEdV372IlMFvxpQRrx3TNbvGho+r3bZSu1KTB/6aewSIrVDj
+         EiUd3ONBwTPXksWhId9V1Yqb+holqTA+CJglFgFPvsa/YQOw318nFbLHlFnlGX0mAXLOoIrTzaGt
+         yf2hthNx0TYpClbb7kny+hHDO2iXTLOlYdc9Gf2FjBdZXYmGbooTzu+Kl02Wwc
+X-QQ-XMRINFO: NS+P29fieYNw95Bth2bWPxk=
+From:   Rong Tao <rtoax@foxmail.com>
+To:     olsajiri@gmail.com, andrii@kernel.org, daniel@iogearbox.net,
+        sdf@google.com
+Cc:     Rong Tao <rongtao@cestc.cn>, Alexei Starovoitov <ast@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>,
+        Yonghong Song <yonghong.song@linux.dev>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Yafang Shao <laoar.shao@gmail.com>,
+        bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and
+        Tools)), linux-kernel@vger.kernel.org (open list),
+        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
+        linux-stm32@st-md-mailman.stormreply.com (moderated list:ARM/STM32
+        ARCHITECTURE),
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/STM32
+        ARCHITECTURE)
+Subject: [PATCH bpf-next v11 2/2] selftests/bpf: trace_helpers.c: Add a global ksyms initialization mutex
+Date:   Tue,  5 Sep 2023 22:04:19 +0800
+X-OQ-MSGID: <b554ee17328a8bab6a815d1d3b8e7ecf6124cc68.1693922135.git.rongtao@cestc.cn>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <cover.1693922135.git.rongtao@cestc.cn>
+References: <cover.1693922135.git.rongtao@cestc.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230905-fdb_limit-v3-3-7597cd500a82@avm.de>
-References: <20230905-fdb_limit-v3-0-7597cd500a82@avm.de>
-In-Reply-To: <20230905-fdb_limit-v3-0-7597cd500a82@avm.de>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Andrew Lunn <andrew@lunn.ch>, David Ahern <dsahern@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     bridge@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Johannes Nixdorf <jnixdorf-oss@avm.de>
-X-Mailer: b4 0.12.3
-X-purgate-ID: 149429::1693914590-B34BF98B-EB37643D/0/0
-X-purgate-type: clean
-X-purgate-size: 5689
-X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
-X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
-X-purgate: clean
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-A malicious actor behind one bridge port may spam the kernel with packets
-with a random source MAC address, each of which will create an FDB entry,
-each of which is a dynamic allocation in the kernel.
+From: Rong Tao <rongtao@cestc.cn>
 
-There are roughly 2^48 different MAC addresses, further limited by the
-rhashtable they are stored in to 2^31. Each entry is of the type struct
-net_bridge_fdb_entry, which is currently 128 bytes big. This means the
-maximum amount of memory allocated for FDB entries is 2^31 * 128B =
-256GiB, which is too much for most computers.
+As Jirka said [0], we just need to make sure that global ksyms
+initialization won't race.
 
-Mitigate this by maintaining a per bridge count of those automatically
-generated entries in fdb_n_learned_entries, and a limit in
-fdb_max_learned_entries. If the limit is hit new entries are not learned
-anymore.
+[0] https://lore.kernel.org/lkml/ZPCbAs3ItjRd8XVh@krava/
 
-For backwards compatibility the default setting of 0 disables the limit.
-
-User-added entries by netlink or from bridge or bridge port addresses
-are never blocked and do not count towards that limit.
-
-Introduce a new fdb entry flag BR_FDB_DYNAMIC_LEARNED to keep track of
-whether an FDB entry is included in the count. The flag is enabled for
-dynamically learned entries, and disabled for all other entries. This
-should be equivalent to BR_FDB_ADDED_BY_USER and BR_FDB_LOCAL being unset,
-but contrary to the two flags it can be toggled atomically.
-
-Atomicity is required here, as there are multiple callers that modify the
-flags, but are not under a common lock (br_fdb_update is the exception
-for br->hash_lock, br_fdb_external_learn_add for RTNL).
-
-Signed-off-by: Johannes Nixdorf <jnixdorf-oss@avm.de>
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
 ---
- net/bridge/br_fdb.c     | 34 ++++++++++++++++++++++++++++++++--
- net/bridge/br_private.h |  4 ++++
- 2 files changed, 36 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/trace_helpers.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/net/bridge/br_fdb.c b/net/bridge/br_fdb.c
-index 06e28ef8d9ff..f8a96ed9a338 100644
---- a/net/bridge/br_fdb.c
-+++ b/net/bridge/br_fdb.c
-@@ -329,11 +329,18 @@ static void fdb_delete(struct net_bridge *br, struct net_bridge_fdb_entry *f,
- 	hlist_del_init_rcu(&f->fdb_node);
- 	rhashtable_remove_fast(&br->fdb_hash_tbl, &f->rhnode,
- 			       br_fdb_rht_params);
-+	if (test_bit(BR_FDB_DYNAMIC_LEARNED, &f->flags))
-+		atomic_dec(&br->fdb_n_learned_entries);
- 	fdb_notify(br, f, RTM_DELNEIGH, swdev_notify);
- 	call_rcu(&f->rcu, fdb_rcu_free);
- }
- 
--/* Delete a local entry if no other port had the same address. */
-+/* Delete a local entry if no other port had the same address.
-+ *
-+ * This function should only be called on entries with BR_FDB_LOCAL set,
-+ * so even with BR_FDB_ADDED_BY_USER cleared we never need to increase
-+ * the accounting for dynamically learned entries again.
-+ */
- static void fdb_delete_local(struct net_bridge *br,
- 			     const struct net_bridge_port *p,
- 			     struct net_bridge_fdb_entry *f)
-@@ -388,9 +395,20 @@ static struct net_bridge_fdb_entry *fdb_create(struct net_bridge *br,
- 					       __u16 vid,
- 					       unsigned long flags)
- {
-+	bool learned = !test_bit(BR_FDB_ADDED_BY_USER, &flags) &&
-+		       !test_bit(BR_FDB_LOCAL, &flags);
-+	u32 max_learned = READ_ONCE(br->fdb_max_learned_entries);
- 	struct net_bridge_fdb_entry *fdb;
- 	int err;
- 
-+	if (likely(learned)) {
-+		int n_learned = atomic_read(&br->fdb_n_learned_entries);
-+
-+		if (unlikely(max_learned && n_learned >= max_learned))
-+			return NULL;
-+		__set_bit(BR_FDB_DYNAMIC_LEARNED, &flags);
-+	}
-+
- 	fdb = kmem_cache_alloc(br_fdb_cache, GFP_ATOMIC);
- 	if (!fdb)
- 		return NULL;
-@@ -407,6 +425,9 @@ static struct net_bridge_fdb_entry *fdb_create(struct net_bridge *br,
- 		return NULL;
- 	}
- 
-+	if (likely(learned))
-+		atomic_inc(&br->fdb_n_learned_entries);
-+
- 	hlist_add_head_rcu(&fdb->fdb_node, &br->fdb_list);
- 
- 	return fdb;
-@@ -893,8 +914,11 @@ void br_fdb_update(struct net_bridge *br, struct net_bridge_port *source,
- 					clear_bit(BR_FDB_LOCKED, &fdb->flags);
- 			}
- 
--			if (unlikely(test_bit(BR_FDB_ADDED_BY_USER, &flags)))
-+			if (unlikely(test_bit(BR_FDB_ADDED_BY_USER, &flags))) {
- 				set_bit(BR_FDB_ADDED_BY_USER, &fdb->flags);
-+				if (test_and_clear_bit(BR_FDB_DYNAMIC_LEARNED, &fdb->flags))
-+					atomic_dec(&br->fdb_n_learned_entries);
-+			}
- 			if (unlikely(fdb_modified)) {
- 				trace_br_fdb_update(br, source, addr, vid, flags);
- 				fdb_notify(br, fdb, RTM_NEWNEIGH, true);
-@@ -1071,6 +1095,8 @@ static int fdb_add_entry(struct net_bridge *br, struct net_bridge_port *source,
- 		}
- 
- 		set_bit(BR_FDB_ADDED_BY_USER, &fdb->flags);
-+		if (test_and_clear_bit(BR_FDB_DYNAMIC_LEARNED, &fdb->flags))
-+			atomic_dec(&br->fdb_n_learned_entries);
- 	}
- 
- 	if (fdb_to_nud(br, fdb) != state) {
-@@ -1445,6 +1471,10 @@ int br_fdb_external_learn_add(struct net_bridge *br, struct net_bridge_port *p,
- 		if (!p)
- 			set_bit(BR_FDB_LOCAL, &fdb->flags);
- 
-+		if ((swdev_notify || !p) &&
-+		    test_and_clear_bit(BR_FDB_DYNAMIC_LEARNED, &fdb->flags))
-+			atomic_dec(&br->fdb_n_learned_entries);
-+
- 		if (modified)
- 			fdb_notify(br, fdb, RTM_NEWNEIGH, swdev_notify);
- 	}
-diff --git a/net/bridge/br_private.h b/net/bridge/br_private.h
-index a63b32c1638e..675cc40ae1dc 100644
---- a/net/bridge/br_private.h
-+++ b/net/bridge/br_private.h
-@@ -274,6 +274,7 @@ enum {
- 	BR_FDB_NOTIFY,
- 	BR_FDB_NOTIFY_INACTIVE,
- 	BR_FDB_LOCKED,
-+	BR_FDB_DYNAMIC_LEARNED,
+diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
+index 7d026c128252..411f87d5aac7 100644
+--- a/tools/testing/selftests/bpf/trace_helpers.c
++++ b/tools/testing/selftests/bpf/trace_helpers.c
+@@ -7,6 +7,7 @@
+ #include <errno.h>
+ #include <fcntl.h>
+ #include <poll.h>
++#include <pthread.h>
+ #include <unistd.h>
+ #include <linux/perf_event.h>
+ #include <sys/mman.h>
+@@ -26,6 +27,7 @@ struct ksyms {
  };
  
- struct net_bridge_fdb_key {
-@@ -554,6 +555,9 @@ struct net_bridge {
- 	struct kobject			*ifobj;
- 	u32				auto_cnt;
+ static struct ksyms *ksyms;
++static pthread_mutex_t ksyms_mutex = PTHREAD_MUTEX_INITIALIZER;
  
-+	atomic_t			fdb_n_learned_entries;
-+	u32				fdb_max_learned_entries;
-+
- #ifdef CONFIG_NET_SWITCHDEV
- 	/* Counter used to make sure that hardware domains get unique
- 	 * identifiers in case a bridge spans multiple switchdev instances.
-
+ static int ksyms__add_symbol(struct ksyms *ksyms, const char *name,
+ 			     unsigned long addr)
+@@ -110,8 +112,10 @@ struct ksyms *load_kallsyms_local(struct ksyms *ksyms)
+ 
+ int load_kallsyms(void)
+ {
++	pthread_mutex_lock(&ksyms_mutex);
+ 	if (!ksyms)
+ 		ksyms = load_kallsyms_local(NULL);
++	pthread_mutex_unlock(&ksyms_mutex);
+ 	return ksyms ? 0 : 1;
+ }
+ 
 -- 
-2.42.0
+2.41.0
 
