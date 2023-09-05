@@ -2,139 +2,186 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 615E7CA100A
-	for <linux-kselftest@archiver.kernel.org>; Tue,  5 Sep 2023 16:07:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A094CCA100D
+	for <linux-kselftest@archiver.kernel.org>; Tue,  5 Sep 2023 16:07:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239018AbjIEQHR (ORCPT
+        id S239061AbjIEQHS (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 5 Sep 2023 12:07:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33168 "EHLO
+        Tue, 5 Sep 2023 12:07:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245149AbjIEBw1 (ORCPT
+        with ESMTP id S1354291AbjIEKgX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 4 Sep 2023 21:52:27 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2069.outbound.protection.outlook.com [40.107.223.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC48CC5;
-        Mon,  4 Sep 2023 18:52:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LOJqaabI1TNuI3jIbpNxVXwWT/iVdJtPzkkL8A2F+hMIu0E08sPF68s7srdpyQAgIscURrs7aHE23olnYTVBJ8GJcx/jfMhEcr00zUZx+upmTooetaEBCJFHjNGJ+6jLAm2SlmiBmXn7WgMgLEBgRPEeqZUAhLjrn7WayDVJfI2+z06qpaiSizIAxo6empN2prm1SKDLL5OCt6JuJJ6jZTHcLLVYwc+wtifxICsEP2wtaDpdxkkLtI5N7vV1myKhD+Hwgw/PUl7JMSIACh55EofrQ9NgUeDs8ysCF0JhFlTkC4zT2H/kaKXmojxlnmcPtyfC/It9KOjs6A9pDlGerw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=k806WqW+2azCUUAWHat1FO47DTtuctO5wUBOpKQwBFE=;
- b=iWOY66CMqZ2wHQnDcN6GuvCBKiTyJ1LKt1rYS5W5QYxtEPegqjlDv8m3cgKGCgHSSHK5Mv3vdFPkfqZKTgWxeda2ppn1UdCDBbw1N47lG+/t6Nwi8BAjQUk0ctifcuW42BFd4KZodBMfKmadW5HWhnfHYCoxYsS8zRVHrMBIXY1JWYVfMYCkQkTeFhysNIsbVGqieQfOy0CgpmHFxxJYhpXngRt8X6x8tmp+ghd/pO9/W/O3dNTRjpLxcPN0uc6l77LoSRtgdcNlPFSt+Yg7h2Y/UJEicp9GvhkD6OTtVeS8GBy6zOO6j5AcNc/4q1JlKei6OGdVo7fhPMH/teCIjg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=k806WqW+2azCUUAWHat1FO47DTtuctO5wUBOpKQwBFE=;
- b=PsDIogYJYtZ3pVT53lkmBqLZ2wQ6Kt2IXn5s2eBewNcmweCC6WSTRIWkrb+T33hfbDKXC0JSE0499Ooxlf6fP3suigl4J26iPj/ibyLCBdS564QnlqFs4AfEktyJY3CogPjjrxOHp96VB88euPJQN5LCZL6TMZJeA+9zX4Evl7A=
-Received: from DS7PR03CA0182.namprd03.prod.outlook.com (2603:10b6:5:3b6::7) by
- MN0PR12MB6149.namprd12.prod.outlook.com (2603:10b6:208:3c7::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6745.30; Tue, 5 Sep
- 2023 01:52:20 +0000
-Received: from CY4PEPF0000EDD3.namprd03.prod.outlook.com
- (2603:10b6:5:3b6:cafe::e1) by DS7PR03CA0182.outlook.office365.com
- (2603:10b6:5:3b6::7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6745.33 via Frontend
- Transport; Tue, 5 Sep 2023 01:52:20 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CY4PEPF0000EDD3.mail.protection.outlook.com (10.167.241.207) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6768.25 via Frontend Transport; Tue, 5 Sep 2023 01:52:20 +0000
-Received: from jasmine-meng.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 4 Sep
- 2023 20:52:15 -0500
-From:   Meng Li <li.meng@amd.com>
-To:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Huang Rui <ray.huang@amd.com>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <x86@kernel.org>, <linux-acpi@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        <linux-kselftest@vger.kernel.org>,
-        "Nathan Fontenot" <nathan.fontenot@amd.com>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Shimmer Huang <shimmer.huang@amd.com>,
-        "Perry Yuan" <Perry.Yuan@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>, Meng Li <li.meng@amd.com>,
-        Wyes Karny <wyes.karny@amd.com>
-Subject: [PATCH V5 7/7] Documentation: introduce amd-pstate preferrd core mode kernel command line options
-Date:   Tue, 5 Sep 2023 09:51:16 +0800
-Message-ID: <20230905015116.2268926-8-li.meng@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230905015116.2268926-1-li.meng@amd.com>
-References: <20230905015116.2268926-1-li.meng@amd.com>
+        Tue, 5 Sep 2023 06:36:23 -0400
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2049199
+        for <linux-kselftest@vger.kernel.org>; Tue,  5 Sep 2023 03:36:19 -0700 (PDT)
+Received: by mail-ej1-x642.google.com with SMTP id a640c23a62f3a-99bf3f59905so356032066b.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 05 Sep 2023 03:36:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1693910178; x=1694514978; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Nfqw6iJ4ruL8BEmtuLRWIN/7uvJd+Y/QPLQc2ETsH8Q=;
+        b=XV9PLVD3fdr42GJfQOoeFU5sVtu/bfHdL1XWsFUlf2FdWbfasCwXtTnX+44W1A5T3P
+         d3bTRGKEWOHTji+OxuC9IpAxwEGU2WK2afbvTpevUhDt7PM6efa++JBSlgr7bVAjP2Oo
+         liQMt58vI8tiyOap++lHpgb1NzDsl2wdJHEpWdAIDB3OxWvJqnPl27m4HNbN7sYJJ2oo
+         AUlPH9N7m2bFib6dY/qx3uNaXxZe15YkMVmZGqJrlBsmyG94YGr8jYzHeXsKFnoeAMdh
+         2Kb+N8AY3V5Da/ALXQ8eTex3bhCEQALMYowlIhJBwtLVFpDBwvo0Ig2PhgB+S58ojtsO
+         Ev0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693910178; x=1694514978;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Nfqw6iJ4ruL8BEmtuLRWIN/7uvJd+Y/QPLQc2ETsH8Q=;
+        b=NLkPzPYOTJttxyHwDAvORJK/CG3TR+SRGmyZu4HNWcPL2VizBlMFIONCj8z3LgEphh
+         1aWDfKVRFlCogKYXRoj2E2m6/6ETHrJkPoKfpYX/pQSAlPykfrAdt95QvZ5J3yRUidlU
+         p5j2T67vms6UY5/6KzN+7hQH2NPXYhufMc0o6V4aqu99j1ust79dL64IsMGOXygyqudt
+         D1RThpZG5Go3QPxjCXwaO9YRanjdsmafK9N7+U80g9hddwdKI7oNBwPi3xwCIpZJkNh5
+         ZQqSA/pLlX44N3KD2OQGntEhtBrxDsHxyWq6/rbsio7EtyElHKikLbZNlYqCTgMqZFul
+         z1Cg==
+X-Gm-Message-State: AOJu0Yyj8BpnPmwalKks6tEnbHz5KDPFVBxNw237lfx3SWu0vmv3Y1xI
+        47YViVhbtM6pww9298Xn5RjyNA==
+X-Google-Smtp-Source: AGHT+IHkRyEbp0w5QIZbj1GlQvlGuscWTdMpQO8f95QsDXvDTy2lmlAWjOWJLe7UTlpwG3PDaD3ODQ==
+X-Received: by 2002:a17:906:10db:b0:9a1:e395:2d10 with SMTP id v27-20020a17090610db00b009a1e3952d10mr9165785ejv.75.1693910178039;
+        Tue, 05 Sep 2023 03:36:18 -0700 (PDT)
+Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
+        by smtp.gmail.com with ESMTPSA id l13-20020a170906a40d00b0099bc0daf3d7sm7484299ejz.182.2023.09.05.03.36.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Sep 2023 03:36:17 -0700 (PDT)
+Date:   Tue, 5 Sep 2023 12:36:16 +0200
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Haibo Xu <haibo1.xu@intel.com>
+Cc:     xiaobo55x@gmail.com, Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Guo Ren <guoren@kernel.org>, wchen <waylingii@gmail.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        Aaron Lewis <aaronlewis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Mingwei Zhang <mizhang@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Ackerley Tng <ackerleytng@google.com>,
+        Lei Wang <lei4.wang@intel.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Peter Gonda <pgonda@google.com>,
+        Thomas Huth <thuth@redhat.com>, Like Xu <likexu@tencent.com>,
+        Philippe =?utf-8?Q?Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Michal Luczaj <mhal@rbox.co>, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvm-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 0/8] RISCV: Add kvm Sstc timer selftest
+Message-ID: <20230905-eb7998dbd945ed9dd12659ea@orel>
+References: <cover.1693659382.git.haibo1.xu@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000EDD3:EE_|MN0PR12MB6149:EE_
-X-MS-Office365-Filtering-Correlation-Id: c2be2836-8fdc-442d-ce9e-08dbadb2be0f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YiyulUUoQ7RHhNG7+ugLgXuNHeKPOt3OyOSEI52gBPv8vdifE4UsVlKgHa+Vaund+FSQTijxRVm6rvPKS1U5vo96kVXVjP/4nyYdd2Bl98djbo7+4bUxjXwDfsDB688gPVFeBvH99GvdzkZANX0aZ1ez5pqudwgPALDmxPQAqemkz2V8A0c/RDTd0NBRsLWFAu5E7JozTpbXiR82eHFFolYDCIhYAqgNp+Yqc/OvofbZGYE7DaMsLBmUP6yjTI/8fcesycE8eCt/pFlnp5ZtF47YhmE/1aXEEVNVvnsLR/EUxlF2rKn9DDbKkbrhvSvCaDO1zBfSi9u6vtbXqJIQZpJtYGIXTICBM1/9Eeutg9rSGcxEqSFYvA1sDkZ2vpcfkBTYwdDbSFs78L8hMlX1OllRBflfNVWZlFFRQmg5xThkf2b0FawdjXzHWZVVHv5lQlRIjp+ZZKici/a78q//FBdPjgSOm9E9CxdkPtN/uLB7cUjBGxPBiMYwyL3FnS0fFDXZ5aGyZxxkZ9i5YKtbnOuQKUiwuBsO837Kw7ewfKRCeqHDzzw6ioDaGvysXwu4H5yghJKiA5oJj4fLYi6EwSFKMPbMC5olPUp/+lqY8iCDD7Bjjj3gsBck453t4yx27KP2QrDxCR+aMoIPgI6zRlOajMmieqFGhdiZMPuqUOVXaH38YJ1ADAtyjQTNoRqctYSBxV1OqonjTVtAC0WM7r3WWdMUu0e73AtRtxI5fI/vI4kH0Ogyi3r5sN5cxFssu7e/3lUI6zTflrepqBEoPLE/y9UyM2PEwjlZVnzmNdWA3aVB+Qa/WWIBWjV7U7GJ
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(396003)(39860400002)(346002)(376002)(136003)(186009)(451199024)(1800799009)(82310400011)(36840700001)(46966006)(40470700004)(54906003)(86362001)(316002)(110136005)(6636002)(2906002)(36756003)(70206006)(70586007)(40480700001)(8936002)(5660300002)(8676002)(4326008)(41300700001)(40460700003)(36860700001)(2616005)(426003)(83380400001)(16526019)(336012)(1076003)(47076005)(26005)(478600001)(81166007)(356005)(82740400003)(7696005)(36900700001)(14943795004);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2023 01:52:20.6454
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c2be2836-8fdc-442d-ce9e-08dbadb2be0f
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000EDD3.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6149
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1693659382.git.haibo1.xu@intel.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-amd-pstate driver support enable/disable preferred core.
-Default enabled on platforms supporting amd-pstate preferred core.
-Disable amd-pstate preferred core with
-"amd_prefcore=disable" added to the kernel command line.
+Hi Haibo,
 
-Signed-off-by: Meng Li <li.meng@amd.com>
-Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-Reviewed-by: Wyes Karny <wyes.karny@amd.com>
----
- Documentation/admin-guide/kernel-parameters.txt | 5 +++++
- 1 file changed, 5 insertions(+)
+Some of your patch summaries say 'selftest' instead of 'selftests'. Please
+correct those for the next version.
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 0c38a8af95ce..3145782b3c00 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -363,6 +363,11 @@
- 			  selects a performance level in this range and appropriate
- 			  to the current workload.
- 
-+	amd_prefcore=
-+			[X86]
-+			disable
-+			  Disable amd-pstate preferred core.
-+
- 	amijoy.map=	[HW,JOY] Amiga joystick support
- 			Map of devices attached to JOY0DAT and JOY1DAT
- 			Format: <a>,<b>
--- 
-2.34.1
+Thanks,
+drew
 
+On Sat, Sep 02, 2023 at 08:59:22PM +0800, Haibo Xu wrote:
+> The RISC-V arch_timer selftest is used to validate Sstc timer
+> functionality in a guest, which sets up periodic timer interrupts
+> and check the basic interrupt status upon its receipt.
+> 
+> This KVM selftest was ported from aarch64 arch_timer and tested
+> with Linux v6.5-rc5 on a Qemu riscv64 virt machine.
+> 
+> ---
+> Changed since v1:
+>   * Rebase to kvm-riscv/riscv_kvm_next
+>   * Cherry-pick Sean's kselftest guest printf patch set
+>     https://lore.kernel.org/all/20230729003643.1053367-1-seanjc@google.com/
+>   * Copy the entire csr.h verbatim
+>   * Unified the function names for exception vector table setup
+>     void vm_init_vector_tables(struct kvm_vm *vm);
+>     void vcpu_init_vector_tables(struct kvm_vcpu *vcpu);
+>   * Format the handler.S asm file per Andrew's comments
+>   * Consolidate the timer test code for arm64 and riscv
+>     based on Andrew's and Sean's suggestion
+> 
+> Haibo Xu (8):
+>   KVM: selftests: Unify the codes for guest exception handling
+>   KVM: arm64: selftest: Split arch_timer test code
+>   tools: riscv: Add header file csr.h
+>   KVM: riscv: selftests: Switch to use macro from csr.h
+>   KVM: riscv: selftests: Add exception handling support
+>   KVM: riscv: selftests: Add guest helper to get vcpu id
+>   KVM: riscv: selftest: Change vcpu_has_ext to a common function
+>   KVM: riscv: selftests: Add sstc timer test
+> 
+>  tools/arch/riscv/include/asm/csr.h            | 521 ++++++++++++++++++
+>  tools/testing/selftests/kvm/Makefile          |  11 +-
+>  .../selftests/kvm/aarch64/arch_timer.c        | 292 +---------
+>  .../selftests/kvm/aarch64/debug-exceptions.c  |   4 +-
+>  .../selftests/kvm/aarch64/page_fault_test.c   |   4 +-
+>  .../testing/selftests/kvm/aarch64/vgic_irq.c  |   4 +-
+>  tools/testing/selftests/kvm/arch_timer.c      | 261 +++++++++
+>  .../selftests/kvm/include/aarch64/processor.h |  12 +-
+>  .../selftests/kvm/include/kvm_util_base.h     |   9 +
+>  .../selftests/kvm/include/riscv/arch_timer.h  |  80 +++
+>  .../selftests/kvm/include/riscv/processor.h   |  60 +-
+>  .../selftests/kvm/include/timer_test.h        |  58 ++
+>  .../selftests/kvm/include/x86_64/processor.h  |   5 -
+>  .../selftests/kvm/lib/aarch64/processor.c     |   6 +-
+>  .../selftests/kvm/lib/riscv/handlers.S        | 101 ++++
+>  .../selftests/kvm/lib/riscv/processor.c       |  86 +++
+>  .../selftests/kvm/lib/x86_64/processor.c      |   4 +-
+>  .../testing/selftests/kvm/riscv/arch_timer.c  | 130 +++++
+>  .../selftests/kvm/riscv/get-reg-list.c        |  14 -
+>  tools/testing/selftests/kvm/x86_64/amx_test.c |   4 +-
+>  .../selftests/kvm/x86_64/fix_hypercall_test.c |   4 +-
+>  .../selftests/kvm/x86_64/hyperv_evmcs.c       |   4 +-
+>  .../selftests/kvm/x86_64/hyperv_features.c    |   8 +-
+>  .../testing/selftests/kvm/x86_64/hyperv_ipi.c |   6 +-
+>  .../selftests/kvm/x86_64/kvm_pv_test.c        |   4 +-
+>  .../selftests/kvm/x86_64/monitor_mwait_test.c |   4 +-
+>  .../kvm/x86_64/pmu_event_filter_test.c        |   8 +-
+>  .../smaller_maxphyaddr_emulation_test.c       |   4 +-
+>  .../selftests/kvm/x86_64/svm_int_ctl_test.c   |   4 +-
+>  .../kvm/x86_64/svm_nested_shutdown_test.c     |   4 +-
+>  .../kvm/x86_64/svm_nested_soft_inject_test.c  |   4 +-
+>  .../kvm/x86_64/ucna_injection_test.c          |   8 +-
+>  .../kvm/x86_64/userspace_msr_exit_test.c      |   4 +-
+>  .../vmx_exception_with_invalid_guest_state.c  |   4 +-
+>  .../selftests/kvm/x86_64/vmx_pmu_caps_test.c  |   4 +-
+>  .../selftests/kvm/x86_64/xapic_ipi_test.c     |   4 +-
+>  .../selftests/kvm/x86_64/xcr0_cpuid_test.c    |   4 +-
+>  .../selftests/kvm/x86_64/xen_shinfo_test.c    |   4 +-
+>  38 files changed, 1376 insertions(+), 376 deletions(-)
+>  create mode 100644 tools/arch/riscv/include/asm/csr.h
+>  create mode 100644 tools/testing/selftests/kvm/arch_timer.c
+>  create mode 100644 tools/testing/selftests/kvm/include/riscv/arch_timer.h
+>  create mode 100644 tools/testing/selftests/kvm/include/timer_test.h
+>  create mode 100644 tools/testing/selftests/kvm/lib/riscv/handlers.S
+>  create mode 100644 tools/testing/selftests/kvm/riscv/arch_timer.c
+> 
+> -- 
+> 2.34.1
+> 
