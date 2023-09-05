@@ -2,186 +2,225 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A094CCA100D
-	for <linux-kselftest@archiver.kernel.org>; Tue,  5 Sep 2023 16:07:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97B7ECA0FF3
+	for <linux-kselftest@archiver.kernel.org>; Tue,  5 Sep 2023 16:07:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239061AbjIEQHS (ORCPT
+        id S239107AbjIEQHU (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 5 Sep 2023 12:07:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40940 "EHLO
+        Tue, 5 Sep 2023 12:07:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354291AbjIEKgX (ORCPT
+        with ESMTP id S1354489AbjIEMBT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Sep 2023 06:36:23 -0400
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2049199
-        for <linux-kselftest@vger.kernel.org>; Tue,  5 Sep 2023 03:36:19 -0700 (PDT)
-Received: by mail-ej1-x642.google.com with SMTP id a640c23a62f3a-99bf3f59905so356032066b.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 05 Sep 2023 03:36:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1693910178; x=1694514978; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Nfqw6iJ4ruL8BEmtuLRWIN/7uvJd+Y/QPLQc2ETsH8Q=;
-        b=XV9PLVD3fdr42GJfQOoeFU5sVtu/bfHdL1XWsFUlf2FdWbfasCwXtTnX+44W1A5T3P
-         d3bTRGKEWOHTji+OxuC9IpAxwEGU2WK2afbvTpevUhDt7PM6efa++JBSlgr7bVAjP2Oo
-         liQMt58vI8tiyOap++lHpgb1NzDsl2wdJHEpWdAIDB3OxWvJqnPl27m4HNbN7sYJJ2oo
-         AUlPH9N7m2bFib6dY/qx3uNaXxZe15YkMVmZGqJrlBsmyG94YGr8jYzHeXsKFnoeAMdh
-         2Kb+N8AY3V5Da/ALXQ8eTex3bhCEQALMYowlIhJBwtLVFpDBwvo0Ig2PhgB+S58ojtsO
-         Ev0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693910178; x=1694514978;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Nfqw6iJ4ruL8BEmtuLRWIN/7uvJd+Y/QPLQc2ETsH8Q=;
-        b=NLkPzPYOTJttxyHwDAvORJK/CG3TR+SRGmyZu4HNWcPL2VizBlMFIONCj8z3LgEphh
-         1aWDfKVRFlCogKYXRoj2E2m6/6ETHrJkPoKfpYX/pQSAlPykfrAdt95QvZ5J3yRUidlU
-         p5j2T67vms6UY5/6KzN+7hQH2NPXYhufMc0o6V4aqu99j1ust79dL64IsMGOXygyqudt
-         D1RThpZG5Go3QPxjCXwaO9YRanjdsmafK9N7+U80g9hddwdKI7oNBwPi3xwCIpZJkNh5
-         ZQqSA/pLlX44N3KD2OQGntEhtBrxDsHxyWq6/rbsio7EtyElHKikLbZNlYqCTgMqZFul
-         z1Cg==
-X-Gm-Message-State: AOJu0Yyj8BpnPmwalKks6tEnbHz5KDPFVBxNw237lfx3SWu0vmv3Y1xI
-        47YViVhbtM6pww9298Xn5RjyNA==
-X-Google-Smtp-Source: AGHT+IHkRyEbp0w5QIZbj1GlQvlGuscWTdMpQO8f95QsDXvDTy2lmlAWjOWJLe7UTlpwG3PDaD3ODQ==
-X-Received: by 2002:a17:906:10db:b0:9a1:e395:2d10 with SMTP id v27-20020a17090610db00b009a1e3952d10mr9165785ejv.75.1693910178039;
-        Tue, 05 Sep 2023 03:36:18 -0700 (PDT)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id l13-20020a170906a40d00b0099bc0daf3d7sm7484299ejz.182.2023.09.05.03.36.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Sep 2023 03:36:17 -0700 (PDT)
-Date:   Tue, 5 Sep 2023 12:36:16 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Haibo Xu <haibo1.xu@intel.com>
-Cc:     xiaobo55x@gmail.com, Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Guo Ren <guoren@kernel.org>, wchen <waylingii@gmail.com>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        Aaron Lewis <aaronlewis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Mingwei Zhang <mizhang@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Lei Wang <lei4.wang@intel.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Peter Gonda <pgonda@google.com>,
-        Thomas Huth <thuth@redhat.com>, Like Xu <likexu@tencent.com>,
-        Philippe =?utf-8?Q?Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Michal Luczaj <mhal@rbox.co>, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        kvm-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 0/8] RISCV: Add kvm Sstc timer selftest
-Message-ID: <20230905-eb7998dbd945ed9dd12659ea@orel>
-References: <cover.1693659382.git.haibo1.xu@intel.com>
+        Tue, 5 Sep 2023 08:01:19 -0400
+Received: from mail.avm.de (mail.avm.de [IPv6:2001:bf0:244:244::120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA44DCE4;
+        Tue,  5 Sep 2023 05:00:05 -0700 (PDT)
+Received: from mail-auth.avm.de (dovecot-mx-01.avm.de [212.42.244.71])
+        by mail.avm.de (Postfix) with ESMTPS;
+        Tue,  5 Sep 2023 13:49:48 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
+        t=1693914588; bh=y0Z8uS0jGL6JIldZzeA/+r6i6F/i5k0+Bi7Q1VDh2Tw=;
+        h=From:Date:Subject:To:Cc:From;
+        b=mYtk9pFkvK+PC4NOfBSh/p95Rr7q2/hadfRFx+N/DO+0ABB2jQnfFn6N3HpHe1/PX
+         lHbYLopzvxPhASR8O3FvuHf8k1iJvjpt493oBEYodV4S6+UYI/puDiOX4D2abK7oZv
+         UcF3z7+REb9NdmgY5x7fNeOVVa9lvFk90j2A05u0=
+Received: from localhost (unknown [172.17.88.63])
+        by mail-auth.avm.de (Postfix) with ESMTPSA id B613B82160;
+        Tue,  5 Sep 2023 13:49:49 +0200 (CEST)
+From:   Johannes Nixdorf <jnixdorf-oss@avm.de>
+Date:   Tue, 05 Sep 2023 13:47:26 +0200
+Subject: [PATCH iproute2-next v3] iplink: bridge: Add support for bridge
+ FDB learning limits
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1693659382.git.haibo1.xu@intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230905-fdb_limit-v3-1-34bb124556d8@avm.de>
+X-B4-Tracking: v=1; b=H4sIAE0V92QC/x3MWwqAIBBA0a3EfCeYvdtKRJhONVAWaiFEe0/6P
+ HC5Dzi0hA665AGLNzk6TESeJqBWaRZkpKNBcJHzlpds1tO40U6eSYVZUdWqkk0BsT8tzhT+Vw9
+ 02uPyKJjB4GF43w+p9A/AagAAAA==
+To:     "David S. Miller" <davem@davemloft.net>,
+        Andrew Lunn <andrew@lunn.ch>, David Ahern <dsahern@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     bridge@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Johannes Nixdorf <jnixdorf-oss@avm.de>
+X-Mailer: b4 0.12.3
+X-purgate-ID: 149429::1693914588-237FCDFA-E2BDE4C9/0/0
+X-purgate-type: clean
+X-purgate-size: 5416
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
+X-purgate: clean
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Haibo,
+Support setting the FDB limit through ip link. The arguments is:
+ - fdb_max_learned_entries: A 32-bit unsigned integer specifying the
+                            maximum number of learned FDB entries, with 0
+                            disabling the limit.
 
-Some of your patch summaries say 'selftest' instead of 'selftests'. Please
-correct those for the next version.
+Also support reading back the current number of learned FDB entries in
+the bridge by this count. The returned value's name is:
+ - fdb_n_learned_entries: A 32-bit unsigned integer specifying the
+                          current number of learned FDB entries.
 
-Thanks,
-drew
+Example:
 
-On Sat, Sep 02, 2023 at 08:59:22PM +0800, Haibo Xu wrote:
-> The RISC-V arch_timer selftest is used to validate Sstc timer
-> functionality in a guest, which sets up periodic timer interrupts
-> and check the basic interrupt status upon its receipt.
-> 
-> This KVM selftest was ported from aarch64 arch_timer and tested
-> with Linux v6.5-rc5 on a Qemu riscv64 virt machine.
-> 
-> ---
-> Changed since v1:
->   * Rebase to kvm-riscv/riscv_kvm_next
->   * Cherry-pick Sean's kselftest guest printf patch set
->     https://lore.kernel.org/all/20230729003643.1053367-1-seanjc@google.com/
->   * Copy the entire csr.h verbatim
->   * Unified the function names for exception vector table setup
->     void vm_init_vector_tables(struct kvm_vm *vm);
->     void vcpu_init_vector_tables(struct kvm_vcpu *vcpu);
->   * Format the handler.S asm file per Andrew's comments
->   * Consolidate the timer test code for arm64 and riscv
->     based on Andrew's and Sean's suggestion
-> 
-> Haibo Xu (8):
->   KVM: selftests: Unify the codes for guest exception handling
->   KVM: arm64: selftest: Split arch_timer test code
->   tools: riscv: Add header file csr.h
->   KVM: riscv: selftests: Switch to use macro from csr.h
->   KVM: riscv: selftests: Add exception handling support
->   KVM: riscv: selftests: Add guest helper to get vcpu id
->   KVM: riscv: selftest: Change vcpu_has_ext to a common function
->   KVM: riscv: selftests: Add sstc timer test
-> 
->  tools/arch/riscv/include/asm/csr.h            | 521 ++++++++++++++++++
->  tools/testing/selftests/kvm/Makefile          |  11 +-
->  .../selftests/kvm/aarch64/arch_timer.c        | 292 +---------
->  .../selftests/kvm/aarch64/debug-exceptions.c  |   4 +-
->  .../selftests/kvm/aarch64/page_fault_test.c   |   4 +-
->  .../testing/selftests/kvm/aarch64/vgic_irq.c  |   4 +-
->  tools/testing/selftests/kvm/arch_timer.c      | 261 +++++++++
->  .../selftests/kvm/include/aarch64/processor.h |  12 +-
->  .../selftests/kvm/include/kvm_util_base.h     |   9 +
->  .../selftests/kvm/include/riscv/arch_timer.h  |  80 +++
->  .../selftests/kvm/include/riscv/processor.h   |  60 +-
->  .../selftests/kvm/include/timer_test.h        |  58 ++
->  .../selftests/kvm/include/x86_64/processor.h  |   5 -
->  .../selftests/kvm/lib/aarch64/processor.c     |   6 +-
->  .../selftests/kvm/lib/riscv/handlers.S        | 101 ++++
->  .../selftests/kvm/lib/riscv/processor.c       |  86 +++
->  .../selftests/kvm/lib/x86_64/processor.c      |   4 +-
->  .../testing/selftests/kvm/riscv/arch_timer.c  | 130 +++++
->  .../selftests/kvm/riscv/get-reg-list.c        |  14 -
->  tools/testing/selftests/kvm/x86_64/amx_test.c |   4 +-
->  .../selftests/kvm/x86_64/fix_hypercall_test.c |   4 +-
->  .../selftests/kvm/x86_64/hyperv_evmcs.c       |   4 +-
->  .../selftests/kvm/x86_64/hyperv_features.c    |   8 +-
->  .../testing/selftests/kvm/x86_64/hyperv_ipi.c |   6 +-
->  .../selftests/kvm/x86_64/kvm_pv_test.c        |   4 +-
->  .../selftests/kvm/x86_64/monitor_mwait_test.c |   4 +-
->  .../kvm/x86_64/pmu_event_filter_test.c        |   8 +-
->  .../smaller_maxphyaddr_emulation_test.c       |   4 +-
->  .../selftests/kvm/x86_64/svm_int_ctl_test.c   |   4 +-
->  .../kvm/x86_64/svm_nested_shutdown_test.c     |   4 +-
->  .../kvm/x86_64/svm_nested_soft_inject_test.c  |   4 +-
->  .../kvm/x86_64/ucna_injection_test.c          |   8 +-
->  .../kvm/x86_64/userspace_msr_exit_test.c      |   4 +-
->  .../vmx_exception_with_invalid_guest_state.c  |   4 +-
->  .../selftests/kvm/x86_64/vmx_pmu_caps_test.c  |   4 +-
->  .../selftests/kvm/x86_64/xapic_ipi_test.c     |   4 +-
->  .../selftests/kvm/x86_64/xcr0_cpuid_test.c    |   4 +-
->  .../selftests/kvm/x86_64/xen_shinfo_test.c    |   4 +-
->  38 files changed, 1376 insertions(+), 376 deletions(-)
->  create mode 100644 tools/arch/riscv/include/asm/csr.h
->  create mode 100644 tools/testing/selftests/kvm/arch_timer.c
->  create mode 100644 tools/testing/selftests/kvm/include/riscv/arch_timer.h
->  create mode 100644 tools/testing/selftests/kvm/include/timer_test.h
->  create mode 100644 tools/testing/selftests/kvm/lib/riscv/handlers.S
->  create mode 100644 tools/testing/selftests/kvm/riscv/arch_timer.c
-> 
-> -- 
-> 2.34.1
-> 
+ # ip -d -j -p link show br0
+[ {
+...
+        "linkinfo": {
+            "info_kind": "bridge",
+            "info_data": {
+...
+                "fdb_n_learned_entries": 2,
+                "fdb_max_learned_entries": 0,
+...
+            }
+        },
+...
+    } ]
+ # ip link set br0 type bridge fdb_max_learned_entries 1024
+ # ip -d -j -p link show br0
+[ {
+...
+        "linkinfo": {
+            "info_kind": "bridge",
+            "info_data": {
+...
+                "fdb_n_learned_entries": 2,
+                "fdb_max_learned_entries": 1024,
+...
+            }
+        },
+...
+    } ]
+
+Signed-off-by: Johannes Nixdorf <jnixdorf-oss@avm.de>
+---
+Changes since v2:
+ - Properly split the net-next and iproute2-next threads. (from review)
+ - Changed to *_n_* instead of *_cur_*. (from review)
+ - Use strcmp() instead of matches(). (from review)
+ - Made names in code and documentation consistent. (from review)
+ - Various documentation fixes. (from review)
+
+Changes since v1:
+ - Sent out the first corresponding iproute2 patches.
+
+net-next v3: https://lore.kernel.org/netdev/20230905-fdb_limit-v3-0-7597cd500a82@avm.de/
+
+v2: https://lore.kernel.org/netdev/20230619071444.14625-1-jnixdorf-oss@avm.de/
+v1: https://lore.kernel.org/netdev/20230515085046.4457-1-jnixdorf-oss@avm.de/
+---
+ include/uapi/linux/if_link.h |  2 ++
+ ip/iplink_bridge.c           | 21 +++++++++++++++++++++
+ man/man8/ip-link.8.in        | 10 ++++++++++
+ 3 files changed, 33 insertions(+)
+
+diff --git a/include/uapi/linux/if_link.h b/include/uapi/linux/if_link.h
+index c2ca7a6add0e..51cf58e3171c 100644
+--- a/include/uapi/linux/if_link.h
++++ b/include/uapi/linux/if_link.h
+@@ -508,6 +508,8 @@ enum {
+ 	IFLA_BR_VLAN_STATS_PER_PORT,
+ 	IFLA_BR_MULTI_BOOLOPT,
+ 	IFLA_BR_MCAST_QUERIER_STATE,
++	IFLA_BR_FDB_N_LEARNED_ENTRIES,
++	IFLA_BR_FDB_MAX_LEARNED_ENTRIES,
+ 	__IFLA_BR_MAX,
+ };
+ 
+diff --git a/ip/iplink_bridge.c b/ip/iplink_bridge.c
+index 7e4e62c81c0c..f08754618e0f 100644
+--- a/ip/iplink_bridge.c
++++ b/ip/iplink_bridge.c
+@@ -34,6 +34,7 @@ static void print_explain(FILE *f)
+ 		"		  [ group_fwd_mask MASK ]\n"
+ 		"		  [ group_address ADDRESS ]\n"
+ 		"		  [ no_linklocal_learn NO_LINKLOCAL_LEARN ]\n"
++		"		  [ fdb_max_learned_entries FDB_MAX_LEARNED_ENTRIES ]\n"
+ 		"		  [ vlan_filtering VLAN_FILTERING ]\n"
+ 		"		  [ vlan_protocol VLAN_PROTOCOL ]\n"
+ 		"		  [ vlan_default_pvid VLAN_DEFAULT_PVID ]\n"
+@@ -168,6 +169,14 @@ static int bridge_parse_opt(struct link_util *lu, int argc, char **argv,
+ 				bm.optval |= no_ll_learn_bit;
+ 			else
+ 				bm.optval &= ~no_ll_learn_bit;
++		} else if (strcmp(*argv, "fdb_max_learned_entries") == 0) {
++			__u32 fdb_max_learned_entries;
++
++			NEXT_ARG();
++			if (get_u32(&fdb_max_learned_entries, *argv, 0))
++				invarg("invalid fdb_max_learned_entries", *argv);
++
++			addattr32(n, 1024, IFLA_BR_FDB_MAX_LEARNED_ENTRIES, fdb_max_learned_entries);
+ 		} else if (matches(*argv, "fdb_flush") == 0) {
+ 			addattr(n, 1024, IFLA_BR_FDB_FLUSH);
+ 		} else if (matches(*argv, "vlan_default_pvid") == 0) {
+@@ -544,6 +553,18 @@ static void bridge_print_opt(struct link_util *lu, FILE *f, struct rtattr *tb[])
+ 	if (tb[IFLA_BR_GC_TIMER])
+ 		_bridge_print_timer(f, "gc_timer", tb[IFLA_BR_GC_TIMER]);
+ 
++	if (tb[IFLA_BR_FDB_N_LEARNED_ENTRIES])
++		print_uint(PRINT_ANY,
++			   "fdb_n_learned_entries",
++			   "fdb_n_learned_entries %u ",
++			   rta_getattr_u32(tb[IFLA_BR_FDB_N_LEARNED_ENTRIES]));
++
++	if (tb[IFLA_BR_FDB_MAX_LEARNED_ENTRIES])
++		print_uint(PRINT_ANY,
++			   "fdb_max_learned_entries",
++			   "fdb_max_learned_entries %u ",
++			   rta_getattr_u32(tb[IFLA_BR_FDB_MAX_LEARNED_ENTRIES]));
++
+ 	if (tb[IFLA_BR_VLAN_DEFAULT_PVID])
+ 		print_uint(PRINT_ANY,
+ 			   "vlan_default_pvid",
+diff --git a/man/man8/ip-link.8.in b/man/man8/ip-link.8.in
+index 7365d0c6b14f..184ae9183712 100644
+--- a/man/man8/ip-link.8.in
++++ b/man/man8/ip-link.8.in
+@@ -1630,6 +1630,8 @@ the following additional arguments are supported:
+ ] [
+ .BI no_linklocal_learn " NO_LINKLOCAL_LEARN "
+ ] [
++.BI fdb_max_learned_entries " FDB_MAX_LEARNED_ENTRIES "
++] [
+ .BI vlan_filtering " VLAN_FILTERING "
+ ] [
+ .BI vlan_protocol " VLAN_PROTOCOL "
+@@ -1741,6 +1743,14 @@ or off
+ When disabled, the bridge will not learn from link-local frames (default:
+ enabled).
+ 
++.BI fdb_max_learned_entries " FDB_MAX_LEARNED_ENTRIES "
++- set the maximum number of learned FDB entries. If
++.RI ( FDB_MAX_LEARNED_ENTRIES " == 0) "
++the feature is disabled. Default is
++.BR 0 .
++.I FDB_MAX_LEARNED_ENTRIES
++is a 32bit unsigned integer.
++
+ .BI vlan_filtering " VLAN_FILTERING "
+ - turn VLAN filtering on
+ .RI ( VLAN_FILTERING " > 0) "
+
+---
+base-commit: 865dd3ab1580092221c73317a844ee65f032c9e8
+change-id: 20230905-fdb_limit-ace1467c6a84
+
+Best regards,
+-- 
+Johannes Nixdorf <jnixdorf-oss@avm.de>
+
