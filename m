@@ -2,24 +2,23 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24117CA100F
-	for <linux-kselftest@archiver.kernel.org>; Tue,  5 Sep 2023 20:08:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC01ECA1008
+	for <linux-kselftest@archiver.kernel.org>; Tue,  5 Sep 2023 20:32:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242609AbjIEUIl (ORCPT
+        id S237654AbjIEUcm (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 5 Sep 2023 16:08:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45604 "EHLO
+        Tue, 5 Sep 2023 16:32:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235180AbjIEUIl (ORCPT
+        with ESMTP id S230285AbjIEUcl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Sep 2023 16:08:41 -0400
-X-Greylist: delayed 3733 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 05 Sep 2023 13:08:37 PDT
+        Tue, 5 Sep 2023 16:32:41 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B728113;
-        Tue,  5 Sep 2023 13:08:36 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2B1FC433BA;
-        Tue,  5 Sep 2023 18:45:33 +0000 (UTC)
-Date:   Tue, 5 Sep 2023 14:45:52 -0400
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47408CC;
+        Tue,  5 Sep 2023 13:32:38 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8EE2C433C9;
+        Tue,  5 Sep 2023 20:32:36 +0000 (UTC)
+Date:   Tue, 5 Sep 2023 16:32:55 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     Zheng Yejian <zhengyejian1@huawei.com>
 Cc:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
@@ -31,13 +30,14 @@ Cc:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
         Ye Weihua <yeweihua4@huawei.com>
 Subject: Re: [PATCH] selftests/ftrace: Correctly enable event in
  instance-event.tc
-Message-ID: <20230905144552.3b390a7a@gandalf.local.home>
-In-Reply-To: <1cb3aee2-19af-c472-e265-05176fe9bd84@huawei.com>
+Message-ID: <20230905163255.1bda4d2f@gandalf.local.home>
+In-Reply-To: <20230905144552.3b390a7a@gandalf.local.home>
 References: <20230626001144.2635956-1-zhengyejian1@huawei.com>
         <20230626191114.8c5a66fbaa28af3c303923bd@kernel.org>
         <20230626191255.53baab4ed48d7111dcd44cad@kernel.org>
         <20230710183741.78f04c68@gandalf.local.home>
         <1cb3aee2-19af-c472-e265-05176fe9bd84@huawei.com>
+        <20230905144552.3b390a7a@gandalf.local.home>
 X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -46,18 +46,25 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 5 Sep 2023 20:54:40 +0800
-Zheng Yejian <zhengyejian1@huawei.com> wrote:
+On Tue, 5 Sep 2023 14:45:52 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-> Hi, Steve, Ajay,
+> On Tue, 5 Sep 2023 20:54:40 +0800
+> Zheng Yejian <zhengyejian1@huawei.com> wrote:
 > 
-> After this patch and run this testcase, I got an use-after-free report
-> by KASAN. Short log see [1], full logs see attach "panic.log".
+> > Hi, Steve, Ajay,
+> > 
+> > After this patch and run this testcase, I got an use-after-free report
+> > by KASAN. Short log see [1], full logs see attach "panic.log".
+> > 
+> > And by simple bisect, I found it may be introduced by:
+> > 
+> >    27152bceea1d ("eventfs: Move tracing/events to eventfs")  
 > 
-> And by simple bisect, I found it may be introduced by:
-> 
->    27152bceea1d ("eventfs: Move tracing/events to eventfs")
+> Can you send me your config?
+>
 
-Can you send me your config?
+Never mind, I triggered it. I believe I see the bug.
 
 -- Steve
+
