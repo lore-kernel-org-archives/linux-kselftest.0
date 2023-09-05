@@ -2,448 +2,329 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B746CA101C
-	for <linux-kselftest@archiver.kernel.org>; Tue,  5 Sep 2023 16:17:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1414ECA0FFA
+	for <linux-kselftest@archiver.kernel.org>; Tue,  5 Sep 2023 16:18:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239439AbjIEQHz (ORCPT
+        id S239346AbjIEQHr (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 5 Sep 2023 12:07:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41100 "EHLO
+        Tue, 5 Sep 2023 12:07:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354751AbjIEOFJ (ORCPT
+        with ESMTP id S1353920AbjIEIhk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Sep 2023 10:05:09 -0400
-Received: from out203-205-221-149.mail.qq.com (out203-205-221-149.mail.qq.com [203.205.221.149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA811A7
-        for <linux-kselftest@vger.kernel.org>; Tue,  5 Sep 2023 07:05:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1693922700;
-        bh=u+8uND27fHOL7cd38nCWurfctiCmuno8c6px9KKJYXo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=Ad3lXtCDVLcKy1FOGi9wZcAxJeWkwWtGOtf+EA+EVXhCkRUGC/OfvhwKhTynP3+Xi
-         OvKeDQ4DSG1M7umT5XXM5UBs/EyueEIG5C3QQpTpwK7Yjjbaauf0lNyZql/9q13uqi
-         +sxbpFz35SWgWAEXvC/OH6lqVlwQ5dg+xbFFTvBg=
-Received: from rtoax.lan ([120.245.114.157])
-        by newxmesmtplogicsvrszc2-0.qq.com (NewEsmtp) with SMTP
-        id 12C80033; Tue, 05 Sep 2023 22:04:44 +0800
-X-QQ-mid: xmsmtpt1693922688tiop0164w
-Message-ID: <tencent_F9CAE827E2BA8193D06796FBE58ECAD16B06@qq.com>
-X-QQ-XMAILINFO: MF096ickW6xY/zoy2Sg//r1A/7Vh74lPDp3a1unP4K5RATK2d+3nC6eM57KKmc
-         9Efw1q4UomTwa8jG5fhW43lkORocZkZleZbKNCifuEQ4r6iXx9b7x5qttDg0t111kN2QKjV3U7fj
-         F0672ol90u76Hqh83d8MMRqop7ntYB9TkCufF4YDyw8i/+2l1al7oSPbd7r0Y1nFCYEteorfM1sI
-         iSlRARTD1cturhfwjHipwvKpXHt9A1B8IP/M0ySPG3RVpvHipLYWrFeEjIJPQkxrgBWuZ8sV3EJ/
-         Sb1M8M5GdbecglziDl8lVhEIfKPrIO+f7O48NDfQuZtGWbBc4Qj7Ncsask6e3+OahNlTOjO5dQe4
-         8A2MSEIIqmM30QWFnOq+R4eE30IHvD7VVDT7ALOm0PlQt30e/AZFFmq7QgpTUbmwYE7jgOAKHlk7
-         mcRZ2dtjamDkcGAai6vnjyZJgAvaXEHz8kM/X/78ZbxmMigz7AtQuHs3VLSBhQ8qM4RunrSvI32j
-         nmj3yIbYNbJxOtk+gc1yijO8CVJueZw2JGnf97kQAj+lsSv/sBJWJduHIhk3GqGcb+6zOfd7qSsb
-         CNN+J2+OpBEWDubW7lFJo5KtuzdD+Q5yqAIYZR7MbHsmIX+wjeu3d4kY9H3z9CDtu39PtcPZocXy
-         U/KTjY/Ks/mxegGyT9peqaPrSRAy5RI+buFbMJQ0v32Rst8l3/jcgz/vVBfzmHmHhJqcAZr9Bshs
-         pSnjF4D2NZpFH3wtwprvZxoiSihNd8DHJ2mGIit/7BWsYbvzdzFA40hDj2keikl4QugIh5yR2BmG
-         HmGdX5egwtOgpvvoxzKLCFcna3JMgLs5T4ujivIp8RViAnJtWt6g7yE3VUpxu4hXoks/fyHxZU3k
-         bhNUN0t4J/u0AazqpNXQ8vxPkQomzJlruf8cm8d/vM9VxMJ7jFJNNO9jSg1xh9CyqwUPAv/P2mCu
-         leML+EdKNBcVBbgtmGjEYpS3B2D1UV9QvFA6qt5jIEC7gBbHRKoD/5KAG4A4H7tpNtvib/Ddg=
-X-QQ-XMRINFO: MPJ6Tf5t3I/ycC2BItcBVIA=
-From:   Rong Tao <rtoax@foxmail.com>
-To:     olsajiri@gmail.com, andrii@kernel.org, daniel@iogearbox.net,
-        sdf@google.com
-Cc:     Rong Tao <rongtao@cestc.cn>, Alexei Starovoitov <ast@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>,
-        Yonghong Song <yonghong.song@linux.dev>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+        Tue, 5 Sep 2023 04:37:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 666C0CC7;
+        Tue,  5 Sep 2023 01:37:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 26528B810DD;
+        Tue,  5 Sep 2023 08:37:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0789DC433C7;
+        Tue,  5 Sep 2023 08:37:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1693903053;
+        bh=nWeFZ6k8Xp2HYyQVWrIflEtvKs0At25doDrjBv8b9Xc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=a3KHuyxON2Cfx5cByngTSUvF71JgIUfFtllAa+zWBn9rRYKAHtQ9ka6PE+09g79Hz
+         sX+sNvCxZLg2to1VPXIkSdgKsgfQcA6xCMYt7VcWyd9XjDpdo7ldqBve5ALXm0xDdZ
+         botAFOkfLQsBhy6M1ekNwvEZ00SKJ6UT1xgTMg5SO+gSjG1/E2fENKSQ16vknBKPsu
+         lf9dLvshd2atW9l4L2oGMdbhZ2EwWQaV29c2PW5o3DSfINtmyz5rDHTTfgzpTf9NCy
+         ldWaLCjTq+pzip/g28puzBobSJnYRwS/NzcE+6zYHzbjxhKuMavqULzt8AoJJR6uxn
+         m4ziyG4KZGCZw==
+Date:   Tue, 5 Sep 2023 10:37:27 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     =?utf-8?B?TWljaGHFgiBDxYJhcGnFhHNraQ==?= <mclapinski@google.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
         Shuah Khan <shuah@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Yafang Shao <laoar.shao@gmail.com>,
-        bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and
-        Tools)), linux-kernel@vger.kernel.org (open list),
-        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
-        linux-stm32@st-md-mailman.stormreply.com (moderated list:ARM/STM32
-        ARCHITECTURE),
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/STM32
-        ARCHITECTURE)
-Subject: [PATCH bpf-next v11 1/2] selftests/bpf: trace_helpers.c: optimize kallsyms cache
-Date:   Tue,  5 Sep 2023 22:04:18 +0800
-X-OQ-MSGID: <1c62d5773db397b29f47b33f58e999bd674e77b0.1693922135.git.rongtao@cestc.cn>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <cover.1693922135.git.rongtao@cestc.cn>
-References: <cover.1693922135.git.rongtao@cestc.cn>
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jeff Xu <jeffxu@google.com>, Aleksa Sarai <cyphar@cyphar.com>,
+        Daniel Verkamp <dverkamp@chromium.org>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 1/2] fcntl: add fcntl(F_CHECK_ORIGINAL_MEMFD)
+Message-ID: <20230905-ungehalten-umkehren-9cff581cffce@brauner>
+References: <20230831203647.558079-1-mclapinski@google.com>
+ <20230831203647.558079-2-mclapinski@google.com>
+ <20230901-lockt-erbfolge-e1f9a26f0d63@brauner>
+ <CAAi7L5f1KYrAyCYLzUN0dSy6xuQCGcC7SQML4+KUdxnQ6RaFfg@mail.gmail.com>
+ <202309011133.10D66D0785@keescook>
+ <20230904-meistens-umeinander-3366194553a1@brauner>
+ <CAAi7L5eW1ZOfwvFz4b9As7-MkKyCgCQcG-41VMv6vfYpyRW_eA@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAAi7L5eW1ZOfwvFz4b9As7-MkKyCgCQcG-41VMv6vfYpyRW_eA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Rong Tao <rongtao@cestc.cn>
+On Mon, Sep 04, 2023 at 07:57:03PM +0200, Michał Cłapiński wrote:
+> On Mon, Sep 4, 2023 at 9:29 AM Christian Brauner <brauner@kernel.org> wrote:
+> >
+> > On Fri, Sep 01, 2023 at 11:34:32AM -0700, Kees Cook wrote:
+> > > On Fri, Sep 01, 2023 at 04:50:53PM +0200, Michał Cłapiński wrote:
+> > > > On Fri, Sep 1, 2023 at 2:56 PM Christian Brauner <brauner@kernel.org> wrote:
+> > > > >
+> > > > > On Thu, Aug 31, 2023 at 10:36:46PM +0200, Michal Clapinski wrote:
+> > > > > > Add a way to check if an fd points to the memfd's original open fd
+> > > > > > (the one created by memfd_create).
+> > > > > > Useful because only the original open fd can be both writable and
+> > > > > > executable.
+> > > > > >
+> > > > > > Signed-off-by: Michal Clapinski <mclapinski@google.com>
+> > > > > > ---
+> > > > > >  fs/fcntl.c                 | 3 +++
+> > > > > >  include/uapi/linux/fcntl.h | 9 +++++++++
+> > > > > >  2 files changed, 12 insertions(+)
+> > > > > >
+> > > > > > diff --git a/fs/fcntl.c b/fs/fcntl.c
+> > > > > > index e871009f6c88..301527e07a4d 100644
+> > > > > > --- a/fs/fcntl.c
+> > > > > > +++ b/fs/fcntl.c
+> > > > > > @@ -419,6 +419,9 @@ static long do_fcntl(int fd, unsigned int cmd, unsigned long arg,
+> > > > > >       case F_SET_RW_HINT:
+> > > > > >               err = fcntl_rw_hint(filp, cmd, arg);
+> > > > > >               break;
+> > > > > > +     case F_CHECK_ORIGINAL_MEMFD:
+> > > > > > +             err = !(filp->f_mode & FMODE_WRITER);
 
-Static ksyms often have problems because the number of symbols exceeds the
-MAX_SYMS limit. Like changing the MAX_SYMS from 300000 to 400000 in
-commit e76a014334a6("selftests/bpf: Bump and validate MAX_SYMS") solves
-the problem somewhat, but it's not the perfect way.
+That by the way is broken or at least misleading.
 
-This commit uses dynamic memory allocation, which completely solves the
-problem caused by the limitation of the number of kallsyms. At the same
-time, add APIs:
+Looking at the sealing stuff, it's only available for memfds, i.e.,
+memfd_create(). Any non-memfds have F_SEAL_SEAL set meaning that setting
+seals on any non-memfds fails.
 
-    load_kallsyms_local()
-    ksym_search_local()
-    ksym_get_addr_local()
-    free_kallsyms_local()
+But your check is available on any tmpfs or hugetlbfs file in addition
+to memfds. In fact, it available for any file/fd...
 
-There are used to solve the problem of selftests/bpf updating kallsyms
-after attach new symbols during testmod testing.
+But it has unclear meaning for anything that isn't a memfd_create() memfd.
 
-Acked-by: Stanislav Fomichev <sdf@google.com>
-Signed-off-by: Rong Tao <rongtao@cestc.cn>
----
-v11: Remove useless load_kallsyms_refresh() and modify code some format
-v10: https://lore.kernel.org/lkml/tencent_0A73B402B1D440480838ABF7124CE5EA5505@qq.com/
-    Keep the original load_kallsyms().
-v9: https://lore.kernel.org/lkml/tencent_254B7015EED7A5D112C45E033DA1822CF107@qq.com/
-    Add load_kallsyms_local,ksym_search_local,ksym_get_addr_local functions.
-v8: https://lore.kernel.org/lkml/tencent_6D23FE187408D965E95DFAA858BC7E8C760A@qq.com/
-    Resolves inter-thread contention for ksyms global variables.
-v7: https://lore.kernel.org/lkml/tencent_BD6E19C00BF565CD5C36A9A0BD828CFA210A@qq.com/
-    Fix __must_check macro.
-v6: https://lore.kernel.org/lkml/tencent_4A09A36F883A06EA428A593497642AF8AF08@qq.com/
-    Apply libbpf_ensure_mem()
-v5: https://lore.kernel.org/lkml/tencent_0E9E1A1C0981678D5E7EA9E4BDBA8EE2200A@qq.com/
-    Release the allocated memory once the load_kallsyms_refresh() upon error
-    given it's dynamically allocated.
-v4: https://lore.kernel.org/lkml/tencent_59C74613113F0C728524B2A82FE5540A5E09@qq.com/
-    Make sure most cases we don't need the realloc() path to begin with,
-    and check strdup() return value.
-v3: https://lore.kernel.org/lkml/tencent_50B4B2622FE7546A5FF9464310650C008509@qq.com/
-    Do not use structs and judge ksyms__add_symbol function return value.
-v2: https://lore.kernel.org/lkml/tencent_B655EE5E5D463110D70CD2846AB3262EED09@qq.com/
-    Do the usual len/capacity scheme here to amortize the cost of realloc, and
-    don't free symbols.
-v1: https://lore.kernel.org/lkml/tencent_AB461510B10CD484E0B2F62E3754165F2909@qq.com/
----
- samples/bpf/Makefile                          |   4 +
- .../selftests/bpf/prog_tests/fill_link_info.c |   2 +-
- .../prog_tests/kprobe_multi_testmod_test.c    |  20 ++-
- tools/testing/selftests/bpf/trace_helpers.c   | 132 +++++++++++++-----
- tools/testing/selftests/bpf/trace_helpers.h   |   9 +-
- 5 files changed, 122 insertions(+), 45 deletions(-)
+> > > > > > +             break;
+> > > > >
+> > > > > Honestly, make this an ioctl on memfds. This is so specific that it
+> > > > > really doesn't belong into fcntl().
+> > > >
+> > > > I've never touched ioctls but if I'm correct, I can't just add it to
+> > > > memfd. I would have to add it to the underlying fs, so hugetlbfs and
+> > > > shmem (which I think can be defined as ramfs so also there). File
+> > > > sealing fcntl is already memfd specific. Are you sure ioctl will be a
+> > > > better idea?
+> >
+> > fcntl() should be generic. Frankly, the sealing stuff should've gone
+> > into an ioctl as well and only upgraded to a fcntl() once multiple fd
+> > types support it.
+> >
+> 
+> But ioctl is good for stuff related to the underlying fs, which this
+> isn't. I'm worried if I rewrite it as an ioctl and put it in 3
+> different places, the maintainers of shmem, hugetlbfs and ramfs will
+> tell me to rewrite it as an fcntl. If a new filesystem pops up that
+> can be used as the backend for memfd, the ioctl will also have to be
+> added there.
 
-diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-index 4ccf4236031c..6c707ebcebb9 100644
---- a/samples/bpf/Makefile
-+++ b/samples/bpf/Makefile
-@@ -175,6 +175,7 @@ TPROGS_CFLAGS += -I$(srctree)/tools/testing/selftests/bpf/
- TPROGS_CFLAGS += -I$(LIBBPF_INCLUDE)
- TPROGS_CFLAGS += -I$(srctree)/tools/include
- TPROGS_CFLAGS += -I$(srctree)/tools/perf
-+TPROGS_CFLAGS += -I$(srctree)/tools/lib
- TPROGS_CFLAGS += -DHAVE_ATTR_TEST=0
- 
- ifdef SYSROOT
-@@ -314,6 +315,9 @@ XDP_SAMPLE_CFLAGS += -Wall -O2 \
- 
- $(obj)/$(XDP_SAMPLE): TPROGS_CFLAGS = $(XDP_SAMPLE_CFLAGS)
- $(obj)/$(XDP_SAMPLE): $(src)/xdp_sample_user.h $(src)/xdp_sample_shared.h
-+# Override includes for trace_helpers.o because __must_check won't be defined
-+# in our include path.
-+$(obj)/$(TRACE_HELPERS): TPROGS_CFLAGS := $(TPROGS_CFLAGS) -D__must_check=
- 
- -include $(BPF_SAMPLES_PATH)/Makefile.target
- 
-diff --git a/tools/testing/selftests/bpf/prog_tests/fill_link_info.c b/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
-index 9d768e083714..97142a4db374 100644
---- a/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
-@@ -308,7 +308,7 @@ void test_fill_link_info(void)
- 		return;
- 
- 	/* load kallsyms to compare the addr */
--	if (!ASSERT_OK(load_kallsyms_refresh(), "load_kallsyms_refresh"))
-+	if (!ASSERT_OK(load_kallsyms(), "load_kallsyms"))
- 		goto cleanup;
- 
- 	kprobe_addr = ksym_get_addr(KPROBE_FUNC);
-diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_testmod_test.c b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_testmod_test.c
-index 1fbe7e4ac00a..8a8ad0613861 100644
---- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_testmod_test.c
-+++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_testmod_test.c
-@@ -4,6 +4,8 @@
- #include "trace_helpers.h"
- #include "bpf/libbpf_internal.h"
- 
-+static struct ksyms *ksyms;
-+
- static void kprobe_multi_testmod_check(struct kprobe_multi *skel)
- {
- 	ASSERT_EQ(skel->bss->kprobe_testmod_test1_result, 1, "kprobe_test1_result");
-@@ -50,12 +52,12 @@ static void test_testmod_attach_api_addrs(void)
- 	LIBBPF_OPTS(bpf_kprobe_multi_opts, opts);
- 	unsigned long long addrs[3];
- 
--	addrs[0] = ksym_get_addr("bpf_testmod_fentry_test1");
--	ASSERT_NEQ(addrs[0], 0, "ksym_get_addr");
--	addrs[1] = ksym_get_addr("bpf_testmod_fentry_test2");
--	ASSERT_NEQ(addrs[1], 0, "ksym_get_addr");
--	addrs[2] = ksym_get_addr("bpf_testmod_fentry_test3");
--	ASSERT_NEQ(addrs[2], 0, "ksym_get_addr");
-+	addrs[0] = ksym_get_addr_local(ksyms, "bpf_testmod_fentry_test1");
-+	ASSERT_NEQ(addrs[0], 0, "ksym_get_addr_local");
-+	addrs[1] = ksym_get_addr_local(ksyms, "bpf_testmod_fentry_test2");
-+	ASSERT_NEQ(addrs[1], 0, "ksym_get_addr_local");
-+	addrs[2] = ksym_get_addr_local(ksyms, "bpf_testmod_fentry_test3");
-+	ASSERT_NEQ(addrs[2], 0, "ksym_get_addr_local");
- 
- 	opts.addrs = (const unsigned long *) addrs;
- 	opts.cnt = ARRAY_SIZE(addrs);
-@@ -79,11 +81,15 @@ static void test_testmod_attach_api_syms(void)
- 
- void serial_test_kprobe_multi_testmod_test(void)
- {
--	if (!ASSERT_OK(load_kallsyms_refresh(), "load_kallsyms_refresh"))
-+	ksyms = load_kallsyms_local(NULL);
-+	if (!ASSERT_OK_PTR(ksyms, "load_kallsyms_local"))
- 		return;
- 
- 	if (test__start_subtest("testmod_attach_api_syms"))
- 		test_testmod_attach_api_syms();
-+
- 	if (test__start_subtest("testmod_attach_api_addrs"))
- 		test_testmod_attach_api_addrs();
-+
-+	free_kallsyms_local(ksyms);
+I see your concern but first, the fact that memfd_create() was
+implemented as a multiplexer over different filesystem types was a
+deliberate choice. But that's not an argument to make us absorb an
+ill-defined fcntl() addition. We're just up for a repeat if you decide
+to add yet more fcntl()s later.
+
+Second, looking at:
+
+memfd_fcntl()
+-> memfd_get_seals()
+   -> memfd_file_seals_ptr()
+      {
+              if (shmem_file(file))
+                      return &SHMEM_I(file_inode(file))->seals;
+      
+      #ifdef CONFIG_HUGETLBFS
+              if (is_file_hugepages(file))
+                      return &HUGETLBFS_I(file_inode(file))->seals;
+      #endif
+      
+              return NULL;
+      }
+
+If you have a third backend then you need to handle that anyway. You
+even need to add a new seals inode member to that new backend. So you
+already fiddle with each backend to accomodate memfds.
+
+Whether you do that to as a wrapper located in mm/memfd.c that's
+callable from the fses ioctl implementation or through memfd_fcntl()
+really isn't any more complicated.
+
+(UNTESTED, FAILS TO COMPILE ON PURPOSE)
+
+diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
+index 316c4cebd3f3..bbdddcdc8936 100644
+--- a/fs/hugetlbfs/inode.c
++++ b/fs/hugetlbfs/inode.c
+@@ -1324,6 +1324,12 @@ static void init_once(void *foo)
+ 	inode_init_once(&ei->vfs_inode);
  }
-diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
-index f83d9f65c65b..7d026c128252 100644
---- a/tools/testing/selftests/bpf/trace_helpers.c
-+++ b/tools/testing/selftests/bpf/trace_helpers.c
-@@ -14,104 +14,166 @@
- #include <linux/limits.h>
- #include <libelf.h>
- #include <gelf.h>
-+#include "bpf/libbpf_internal.h"
  
- #define TRACEFS_PIPE	"/sys/kernel/tracing/trace_pipe"
- #define DEBUGFS_PIPE	"/sys/kernel/debug/tracing/trace_pipe"
- 
--#define MAX_SYMS 400000
--static struct ksym syms[MAX_SYMS];
--static int sym_cnt;
-+struct ksyms {
-+	struct ksym *syms;
-+	size_t sym_cap;
-+	size_t sym_cnt;
-+};
-+
-+static struct ksyms *ksyms;
-+
-+static int ksyms__add_symbol(struct ksyms *ksyms, const char *name,
-+			     unsigned long addr)
++static int hugetlbfs_file_ioctl(struct file *file, unsigned int cmd, unsigned int arg)
 +{
-+	void *tmp;
-+
-+	tmp = strdup(name);
-+	if (!tmp)
-+		return -ENOMEM;
-+	ksyms->syms[ksyms->sym_cnt].addr = addr;
-+	ksyms->syms[ksyms->sym_cnt].name = tmp;
-+
-+	ksyms->sym_cnt++;
-+
-+	return 0;
++	return memfd_ioctl(file, cmd, arg);
 +}
 +
-+void free_kallsyms_local(struct ksyms *ksyms)
+ const struct file_operations hugetlbfs_file_operations = {
+ 	.read_iter		= hugetlbfs_read_iter,
+ 	.mmap			= hugetlbfs_file_mmap,
+@@ -1331,6 +1337,8 @@ const struct file_operations hugetlbfs_file_operations = {
+ 	.get_unmapped_area	= hugetlb_get_unmapped_area,
+ 	.llseek			= default_llseek,
+ 	.fallocate		= hugetlbfs_fallocate,
++	.unlocked_ioctl		= hugetlbfs_file_ioctl,
++	.compat_ioctl		= hugetlbfs_file_ioctl,
+ };
+ 
+ static const struct inode_operations hugetlbfs_dir_inode_operations = {
+diff --git a/include/linux/memfd.h b/include/linux/memfd.h
+index e7abf6fa4c52..7e3c97ad842f 100644
+--- a/include/linux/memfd.h
++++ b/include/linux/memfd.h
+@@ -6,11 +6,16 @@
+ 
+ #ifdef CONFIG_MEMFD_CREATE
+ extern long memfd_fcntl(struct file *file, unsigned int cmd, unsigned int arg);
++long memfd_ioctl(struct file *file, unsigned int cmd, unsigned int arg);
+ #else
+ static inline long memfd_fcntl(struct file *f, unsigned int c, unsigned int a)
+ {
+ 	return -EINVAL;
+ }
++static inline long memfd_ioctl(struct file *file, unsigned int cmd, unsigned int arg)
 +{
-+	unsigned int i;
+
+	PROPERLY DETECT A memfd_create() MEMFD INSTEAD OF F_SEAL_SEAL
+
++	return -EINVAL;
++}
+ #endif
+ 
+ #endif /* __LINUX_MEMFD_H */
+diff --git a/mm/memfd.c b/mm/memfd.c
+index 1cad1904fc26..4a26df1f4a91 100644
+--- a/mm/memfd.c
++++ b/mm/memfd.c
+@@ -243,6 +243,7 @@ static int memfd_get_seals(struct file *file)
+ 	return seals ? *seals : -EINVAL;
+ }
+ 
++/* new memfd specific functionality goes into memfd_ioctl() */
+ long memfd_fcntl(struct file *file, unsigned int cmd, unsigned int arg)
+ {
+ 	long error;
+@@ -254,6 +255,12 @@ long memfd_fcntl(struct file *file, unsigned int cmd, unsigned int arg)
+ 	case F_GET_SEALS:
+ 		error = memfd_get_seals(file);
+ 		break;
++	case F_SOMETHING_1:
++		error = memfd_something_1(file);
++		break;
++	case F_SOMETHING_1:
++		error = memfd_something_2(file);
++		break;
+ 	default:
+ 		error = -EINVAL;
+ 		break;
+@@ -262,6 +269,22 @@ long memfd_fcntl(struct file *file, unsigned int cmd, unsigned int arg)
+ 	return error;
+ }
+ 
++long memfd_ioctl(struct file *file, unsigned int cmd, unsigned int arg)
++{
++	long error;
 +
-+	if (!ksyms)
-+		return;
-+
-+	if (!ksyms->syms) {
-+		free(ksyms);
-+		return;
++	switch (cmd) {
++	case F_SOMETHING_1:
++		error = memfd_something_1(file);
++		break;
++	case F_SOMETHING_1:
++		error = memfd_something_2(file);
++		break;
 +	}
 +
-+	for (i = 0; i < ksyms->sym_cnt; i++)
-+		free(ksyms->syms[i].name);
-+	free(ksyms->syms);
-+	free(ksyms);
-+}
- 
- static int ksym_cmp(const void *p1, const void *p2)
- {
- 	return ((struct ksym *)p1)->addr - ((struct ksym *)p2)->addr;
- }
- 
--int load_kallsyms_refresh(void)
-+struct ksyms *load_kallsyms_local(struct ksyms *ksyms)
- {
- 	FILE *f;
- 	char func[256], buf[256];
- 	char symbol;
- 	void *addr;
--	int i = 0;
-+	int ret;
- 
--	sym_cnt = 0;
-+	/* flush kallsyms, free the previously allocated dynamic memory */
-+	free_kallsyms_local(ksyms);
- 
- 	f = fopen("/proc/kallsyms", "r");
- 	if (!f)
--		return -ENOENT;
-+		return NULL;
-+
-+	ksyms = calloc(1, sizeof(struct ksyms));
-+	if (!ksyms)
-+		return NULL;
- 
- 	while (fgets(buf, sizeof(buf), f)) {
- 		if (sscanf(buf, "%p %c %s", &addr, &symbol, func) != 3)
- 			break;
- 		if (!addr)
- 			continue;
--		if (i >= MAX_SYMS)
--			return -EFBIG;
- 
--		syms[i].addr = (long) addr;
--		syms[i].name = strdup(func);
--		i++;
-+		ret = libbpf_ensure_mem((void **) &ksyms->syms, &ksyms->sym_cap,
-+					sizeof(struct ksym), ksyms->sym_cnt + 1);
-+		if (ret)
-+			goto error;
-+		ret = ksyms__add_symbol(ksyms, func, (unsigned long)addr);
-+		if (ret)
-+			goto error;
- 	}
- 	fclose(f);
--	sym_cnt = i;
--	qsort(syms, sym_cnt, sizeof(struct ksym), ksym_cmp);
--	return 0;
-+	qsort(ksyms->syms, ksyms->sym_cnt, sizeof(struct ksym), ksym_cmp);
-+	return ksyms;
-+
-+error:
-+	free_kallsyms_local(ksyms);
-+	return NULL;
- }
- 
- int load_kallsyms(void)
- {
--	/*
--	 * This is called/used from multiplace places,
--	 * load symbols just once.
--	 */
--	if (sym_cnt)
--		return 0;
--	return load_kallsyms_refresh();
-+	if (!ksyms)
-+		ksyms = load_kallsyms_local(NULL);
-+	return ksyms ? 0 : 1;
- }
- 
--struct ksym *ksym_search(long key)
-+struct ksym *ksym_search_local(struct ksyms *ksyms, long key)
- {
--	int start = 0, end = sym_cnt;
-+	int start = 0, end = ksyms->sym_cnt;
- 	int result;
- 
-+	if (!ksyms)
-+		return NULL;
-+
- 	/* kallsyms not loaded. return NULL */
--	if (sym_cnt <= 0)
-+	if (ksyms->sym_cnt <= 0)
- 		return NULL;
- 
- 	while (start < end) {
- 		size_t mid = start + (end - start) / 2;
- 
--		result = key - syms[mid].addr;
-+		result = key - ksyms->syms[mid].addr;
- 		if (result < 0)
- 			end = mid;
- 		else if (result > 0)
- 			start = mid + 1;
- 		else
--			return &syms[mid];
-+			return &ksyms->syms[mid];
- 	}
- 
--	if (start >= 1 && syms[start - 1].addr < key &&
--	    key < syms[start].addr)
-+	if (start >= 1 && ksyms->syms[start - 1].addr < key &&
-+	    key < ksyms->syms[start].addr)
- 		/* valid ksym */
--		return &syms[start - 1];
-+		return &ksyms->syms[start - 1];
- 
- 	/* out of range. return _stext */
--	return &syms[0];
-+	return &ksyms->syms[0];
- }
- 
--long ksym_get_addr(const char *name)
-+struct ksym *ksym_search(long key)
-+{
-+	if (!ksyms)
-+		return NULL;
-+	return ksym_search_local(ksyms, key);
++	return memfd_fcntl(file, cmd, arg);
 +}
 +
-+long ksym_get_addr_local(struct ksyms *ksyms, const char *name)
- {
- 	int i;
- 
--	for (i = 0; i < sym_cnt; i++) {
--		if (strcmp(syms[i].name, name) == 0)
--			return syms[i].addr;
-+	for (i = 0; i < ksyms->sym_cnt; i++) {
-+		if (strcmp(ksyms->syms[i].name, name) == 0)
-+			return ksyms->syms[i].addr;
- 	}
- 
+ #define MFD_NAME_PREFIX "memfd:"
+ #define MFD_NAME_PREFIX_LEN (sizeof(MFD_NAME_PREFIX) - 1)
+ #define MFD_NAME_MAX_LEN (NAME_MAX - MFD_NAME_PREFIX_LEN)
+diff --git a/mm/shmem.c b/mm/shmem.c
+index 02e62fccc80d..6f580b2bf004 100644
+--- a/mm/shmem.c
++++ b/mm/shmem.c
+@@ -4445,6 +4445,11 @@ static int shmem_error_remove_page(struct address_space *mapping,
  	return 0;
  }
  
-+long ksym_get_addr(const char *name)
++static inline shmem_file_ioctl(struct file *file, unsigned int cmd, unsigned int arg)
 +{
-+	if (!ksyms)
-+		return 0;
-+	return ksym_get_addr_local(ksyms, name);
++	return memfd_ioctl(file, cmd, arg);
 +}
 +
- /* open kallsyms and read symbol addresses on the fly. Without caching all symbols,
-  * this is faster than load + find.
-  */
-diff --git a/tools/testing/selftests/bpf/trace_helpers.h b/tools/testing/selftests/bpf/trace_helpers.h
-index 876f3e711df6..d6eeec85a5e4 100644
---- a/tools/testing/selftests/bpf/trace_helpers.h
-+++ b/tools/testing/selftests/bpf/trace_helpers.h
-@@ -11,13 +11,18 @@ struct ksym {
- 	long addr;
- 	char *name;
+ const struct address_space_operations shmem_aops = {
+ 	.writepage	= shmem_writepage,
+ 	.dirty_folio	= noop_dirty_folio,
+@@ -4471,6 +4476,8 @@ static const struct file_operations shmem_file_operations = {
+ 	.splice_read	= shmem_file_splice_read,
+ 	.splice_write	= iter_file_splice_write,
+ 	.fallocate	= shmem_fallocate,
++	.unlocked_ioctl	= shmem_file_ioctl,
++	.compat_ioctl	= shmem_file_ioctl,
+ #endif
  };
-+struct ksyms;
  
- int load_kallsyms(void);
--int load_kallsyms_refresh(void);
--
- struct ksym *ksym_search(long key);
- long ksym_get_addr(const char *name);
- 
-+struct ksyms *load_kallsyms_local(struct ksyms *ksyms);
-+struct ksym *ksym_search_local(struct ksyms *ksyms, long key);
-+long ksym_get_addr_local(struct ksyms *ksyms, const char *name);
-+
-+void free_kallsyms_local(struct ksyms *ksyms);
-+
- /* open kallsyms and find addresses on the fly, faster than load + search. */
- int kallsyms_find(const char *sym, unsigned long long *addr);
- 
--- 
-2.41.0
+> 
+> > >
+> > > Does this check "mean" anything for other files? Because if it's
+> > > generically useful (and got renamed) it maybe would be right for
+> > > fcntl...
+> >
+> > For regular files it just means that the file has gotten write access to
+> > the underlying fs and we use this flag to release the necessary
+> > refcounts/protections once the file is closed.
+> >
+> > If this check has any meaning beyond that than it only has meaning for
+> > memfd. I'm also not sure why this checks FMODE_WRITER and not
+> > FMODE_WRITE as FMODE_WRITER is almost an entirely internal thing that
+> > only very specific codepaths need to know about.
+> 
+> If you reopen the memfd via /proc/<pid>/fd/ with O_RDWR, both file
+> objects (the original and the reopened one) have FMODE_WRITE, so
+> knowing if the flag is set gives me nothing. FMODE_WRITER is the only
+> difference between the original fd and the reopened one. This flag
+> also dictates whether `inode->i_writecount` will be decremented on
+> close (in `put_file_access`) which influences exec()ability of the
+> other fd. It surprised me too that this flag theoretically means
+> "write access to underlying fs" but it's used to determine whether to
+> decrement i_writecount.
 
+It's not surprising at all. It's how read-write fds are created.
+memfd_create() is the oddball because it uses an internal tmpfs
+kernmount that's never remountable read-only afaict otherwise this would
+be pretty broken as memfd_create() doesn't do the usual mark sb writable
+and get write access to the mount dance and so the mount or sb could go
+ro behind it's back.
+
+And this has zero meaning for non-memfd. So NAK on fcntl(). However, as
+an ioctl() on memfd backends we won't care.
+
+And I would suggest to figure out a nicer way to differentiate between
+memfd_create() and regular tmpfs/hugetlbfs files. So you can explicitly
+detect them instead of this implict F_SEAL_SEALS dance. For example,
+abuse a higher flag bit in unsigned int seals that both tmpfs and
+hugetlbfs already have and set F_MEMFD or whatever. Or some other
+mechanism. Just a thought.
+
+Really, fcntl() is wrong here.
