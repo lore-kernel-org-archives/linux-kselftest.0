@@ -2,202 +2,145 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DD3DCA0FFB
-	for <linux-kselftest@archiver.kernel.org>; Tue,  5 Sep 2023 16:07:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 834F9C83F2C
+	for <linux-kselftest@archiver.kernel.org>; Tue,  5 Sep 2023 16:17:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239224AbjIEQHa (ORCPT
+        id S230049AbjIEQHd (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 5 Sep 2023 12:07:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43316 "EHLO
+        Tue, 5 Sep 2023 12:07:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245091AbjIEBvz (ORCPT
+        with ESMTP id S1354467AbjIELzY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 4 Sep 2023 21:51:55 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3529BCC6;
-        Mon,  4 Sep 2023 18:51:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WAmiZ/rW+Ir+OyFCN19eHXDgFjumMBdOjDdksAGvmkyaY483bX8ibP8gBKOocctMrNepnsJG/SSFOdsTn4akhhq/ak+eicRFUnEIGqMi+z9ZeecAWJvRyeQnvI1qftWQ4ee1AMosGt18vlUX/xdM0bMH0HHIAsqSCHAYYm2LygsVJHX2pbSSFNmG9C5x6LVxcXFMj654A8PeiRS32k+UlvA7S3xmK8+GeJY7h2ch7fNuwELolv5280dZbxd2OMDQExenVJw6HT5C29As+kdoUAu/uEanbV8vICpPFJ05CMBC4WMMW/x/q44nMDzuX76k1tkDeGGn8sPsCamJq93N5A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wBaHOq6ndVbIuYsTuruhF9Qt51VCssQon0WUuIKHkH0=;
- b=XXKbiVrY4xpzgRunPkLqqUz0H3hSHHM1s2eho8jGhGdf2cOVu3A08tpPVcMtu+jubxGi9LibjHFuaEkdVElTEdBzdn0tfE5KJJosKERyAU/xvZha8m8EfNBqJDDwMk+xmYbv6IpIv5o64XqdsBEr6K0Z7XDd6pSiCqYLKpL/8rejrJlLKysdybm4386a1aELHV9i6mCpaw/HFcqKGfo8YE62JYPuGVQl/z3dYublmW4+0sOfn92DGV4A6iuTczP1DHXHnPWKseAkWNPwi1CSEf1QeXBbgtIGQBF48tFVX/CnfLdVSNmk+djy4vLkIQk4MZybVMiAQrOub+NRNARRGA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wBaHOq6ndVbIuYsTuruhF9Qt51VCssQon0WUuIKHkH0=;
- b=F7wV8+tQqgXh5QT8XDt9a+tiGPNIrxtKFHahaJz6uKC0YpWMEjhAJLnZofhkCMzUkXhMWkEuaWw4Z5MKCLEcmykxG9bnrhzmGVY4tEIMnbFTk7uXsGaRl/tL0WOWol+AugQoFm28LtKP8axO/pdOFMuRkNsEmCDwQLwVxlSV7/0=
-Received: from DM6PR03CA0046.namprd03.prod.outlook.com (2603:10b6:5:100::23)
- by BL0PR12MB4914.namprd12.prod.outlook.com (2603:10b6:208:1c4::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6745.33; Tue, 5 Sep
- 2023 01:51:48 +0000
-Received: from DS1PEPF00017093.namprd03.prod.outlook.com
- (2603:10b6:5:100:cafe::56) by DM6PR03CA0046.outlook.office365.com
- (2603:10b6:5:100::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6745.30 via Frontend
- Transport; Tue, 5 Sep 2023 01:51:47 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DS1PEPF00017093.mail.protection.outlook.com (10.167.17.136) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6768.25 via Frontend Transport; Tue, 5 Sep 2023 01:51:47 +0000
-Received: from jasmine-meng.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 4 Sep
- 2023 20:51:43 -0500
-From:   Meng Li <li.meng@amd.com>
-To:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Huang Rui <ray.huang@amd.com>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <x86@kernel.org>, <linux-acpi@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        <linux-kselftest@vger.kernel.org>,
-        "Nathan Fontenot" <nathan.fontenot@amd.com>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Shimmer Huang <shimmer.huang@amd.com>,
-        "Perry Yuan" <Perry.Yuan@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>, Meng Li <li.meng@amd.com>
-Subject: [PATCH V5 0/7] amd-pstate preferred core
-Date:   Tue, 5 Sep 2023 09:51:09 +0800
-Message-ID: <20230905015116.2268926-1-li.meng@amd.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 5 Sep 2023 07:55:24 -0400
+Received: from mail.avm.de (mail.avm.de [212.42.244.94])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DDBB1AE;
+        Tue,  5 Sep 2023 04:55:20 -0700 (PDT)
+Received: from mail-auth.avm.de (unknown [IPv6:2001:bf0:244:244::71])
+        by mail.avm.de (Postfix) with ESMTPS;
+        Tue,  5 Sep 2023 13:49:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
+        t=1693914590; bh=KyKR2i+DGj/6JbddwGXrO2TV0yqaQ4X+XFsdxioIsO4=;
+        h=From:Subject:Date:To:Cc:From;
+        b=Il/S80Jk4rxGPM8D/O5EE86iJVccCG0FzuVlQrvkksGAejUEqu/5fh+XecO6rUulR
+         u7G4ZbPvMzSn5XgEhal0ubPb8BT2ZhW+w1DciDw2OV9n3ExY45ldpEAm1bSfSvfwx+
+         cqRKH4L1LeRsgnNwC8fryg7WyqmoU2CqUVBTjENY=
+Received: from localhost (unknown [172.17.88.63])
+        by mail-auth.avm.de (Postfix) with ESMTPSA id DAA8482158;
+        Tue,  5 Sep 2023 13:49:49 +0200 (CEST)
+From:   Johannes Nixdorf <jnixdorf-oss@avm.de>
+Subject: [PATCH net-next v3 0/6] bridge: Add a limit on learned FDB entries
+Date:   Tue, 05 Sep 2023 13:47:17 +0200
+Message-Id: <20230905-fdb_limit-v3-0-7597cd500a82@avm.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS1PEPF00017093:EE_|BL0PR12MB4914:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7520ae53-24ff-4f11-13d1-08dbadb2aa7d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: afIeJhO1SkFYq3fY0JRjF7rlAIYoGYvgiCnJ+xoZDfxp/ukFNq844wuP2E57T0orI+IaM3y5UTb+9UcQIkpHT5s5LZoEjGXEigkRkj5dxJaNWWLdW5sMURv4tmsvTGCXuyvfRvSIO4WHN75QNIqRyoiYQFP/noRB/2Q04FHtMocUquaFHWpRRIfmp2QzyJQSetCdblSb3VCvZ6efoup6khZ6TfMxCL89HdAHmkP59TggoX8Qgo3B5iUeWBOUylWGxB3LVK8uGogqdb/x5KhEWYAXFckKlKdJatqGnIhencB6EaLi3mNvx8cFbPzxaMkvNsQCeBClK35tAz8mITZTXI6EcO0ZLlESU3i8MiZlqXAXjwrfzxmjKa/dWniHffpGPNofjTgAsOOTVJEwAFSHbJeF4xhLB7P207dkgXJUCTo78UuRkR/grzfp0RZVqKchc68gOD99NizazFpXB2wFKy3TzKOH01P5AzgHsFsIrkwA1TjzwH3erWTbH3NHFD7QFKKRlyOcm/Xbmxcdpy1AdjZfUIseqQQTLqygV74w5Qr06Se9icSSefqJRUvSwZpWsH8ylTIJHUPbxFsHCOH8CXJrP+jqk4mL13duK3KXiQXX3m8OcY2WIVXES46zkKtvKavkHgdzPsFAushVibhgkBR706ib5InPS0SlFvQK45fW3UyygxezhdjsspSw4Ee03CXmhTfbRJQmhtE10W3zheT9dsqfLZCLsv28V16jBsDaw06ZPFhfNvlNtrLXF6F9BtFWdRv33qRj4Fgo/Rv/ZA==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(39860400002)(136003)(376002)(396003)(346002)(82310400011)(451199024)(1800799009)(186009)(46966006)(40470700004)(36840700001)(8936002)(8676002)(5660300002)(316002)(2906002)(6636002)(54906003)(110136005)(36756003)(70586007)(70206006)(4326008)(40460700003)(41300700001)(7696005)(36860700001)(426003)(16526019)(336012)(26005)(1076003)(47076005)(40480700001)(356005)(82740400003)(81166007)(6666004)(478600001)(2616005)(83380400001)(86362001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2023 01:51:47.8383
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7520ae53-24ff-4f11-13d1-08dbadb2aa7d
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF00017093.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB4914
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAEUV92QC/x3MQQqAIBBA0avErBMsK6yrRITWWANloRJCePek5
+ YPPf8GjI/QwFC84fMjTZTNEWcCyK7shozUbal4L3vOGmVXPB50UmFHYam2qbpEScn87NBT/1wg
+ WA7MYA0wpfYVzNOllAAAA
+To:     "David S. Miller" <davem@davemloft.net>,
+        Andrew Lunn <andrew@lunn.ch>, David Ahern <dsahern@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     bridge@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Johannes Nixdorf <jnixdorf-oss@avm.de>
+X-Mailer: b4 0.12.3
+X-purgate-ID: 149429::1693914590-514F145F-D2900F6B/0/0
+X-purgate-type: clean
+X-purgate-size: 3779
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
+X-purgate: clean
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi all:
+Introduce a limit on the amount of learned FDB entries on a bridge,
+configured by netlink with a build time default on bridge creation in
+the kernel config.
 
-The core frequency is subjected to the process variation in semiconductors.
-Not all cores are able to reach the maximum frequency respecting the
-infrastructure limits. Consequently, AMD has redefined the concept of
-maximum frequency of a part. This means that a fraction of cores can reach
-maximum frequency. To find the best process scheduling policy for a given
-scenario, OS needs to know the core ordering informed by the platform through
-highest performance capability register of the CPPC interface.
+For backwards compatibility the kernel config default is disabling the
+limit (0).
 
-Earlier implementations of amd-pstate preferred core only support a static
-core ranking and targeted performance. Now it has the ability to dynamically
-change the preferred core based on the workload and platform conditions and
-accounting for thermals and aging.
+Without any limit a malicious actor may OOM a kernel by spamming packets
+with changing MAC addresses on their bridge port, so allow the bridge
+creator to limit the number of entries.
 
-Amd-pstate driver utilizes the functions and data structures provided by
-the ITMT architecture to enable the scheduler to favor scheduling on cores
-which can be get a higher frequency with lower voltage.
-We call it amd-pstate preferred core.
+Currently the manual entries are identified by the bridge flags
+BR_FDB_LOCAL or BR_FDB_ADDED_BY_USER, atomically bundled under the new
+flag BR_FDB_DYNAMIC_LEARNED. This means the limit also applies to
+entries created with BR_FDB_ADDED_BY_EXT_LEARN but none of BR_FDB_LOCAL
+or BR_FDB_ADDED_BY_USER, e.g. ones added by SWITCHDEV_FDB_ADD_TO_BRIDGE.
 
-Here sched_set_itmt_core_prio() is called to set priorities and
-sched_set_itmt_support() is called to enable ITMT feature.
-Amd-pstate driver uses the highest performance value to indicate
-the priority of CPU. The higher value has a higher priority.
+Changes since v2:
+ - Fixed the flags for fdb_create in fdb_add_entry to use
+   BIT(...). Previously we passed garbage. (from review)
+ - Set strict_start_type for br_policy. (from review)
+ - Split out the combined accounting and limit patch, and the netlink
+   patch from the combined patch in v2. (from review)
+ - Count atomically, remove the newly introduced lock. (from review)
+ - Added the new attributes to br_policy. (from review)
+ - Added a selftest for the new feature. (from review)
 
-Amd-pstate driver will provide an initial core ordering at boot time.
-It relies on the CPPC interface to communicate the core ranking to the
-operating system and scheduler to make sure that OS is choosing the cores
-with highest performance firstly for scheduling the process. When amd-pstate
-driver receives a message with the highest performance change, it will
-update the core ranking.
+Changes since v1:
+ - Added BR_FDB_ADDED_BY_USER earlier in fdb_add_entry to ensure the
+   limit is not applied.
+ - Do not initialize fdb_*_entries to 0. (from review)
+ - Do not skip decrementing on 0. (from review)
+ - Moved the counters to a conditional hole in struct net_bridge to
+   avoid growing the struct. (from review, it still grows the struct as
+   there are 2 32-bit values)
+ - Add IFLA_BR_FDB_CUR_LEARNED_ENTRIES (from review)
+ - Fix br_get_size() with the added attributes.
+ - Only limit learned entries, rename to
+   *_(CUR|MAX)_LEARNED_ENTRIES. (from review)
+ - Added a default limit in Kconfig. (deemed acceptable in review
+   comments, helps with embedded use-cases where a special purpose kernel
+   is built anyways)
+ - Added an iproute2 patch for easier testing.
 
-Changes form V4->V5:
-- cpufreq: amd-pstate:
-- - modify sysfs attribute for CPPC highest perf.
-- - modify warning about comments
-- - rebase linux-next
-- cpufreq: 
-- - Moidfy warning about function declarations.
-- Documentation: amd-pstate:
-- - align with ``amd-pstat``
+Obsolete v1 review comments:
+ - Return better errors to users: Due to limiting the limit to
+   automatically created entries, netlink fdb add requests and changing
+   bridge ports are never rejected, so they do not yet need a more
+   friendly error returned.
 
-Changes form V3->V4:
-- Documentation: amd-pstate:
-- - Modify inappropriate descriptions.
+iproute2-next v3: https://lore.kernel.org/netdev/20230905-fdb_limit-v3-1-34bb124556d8@avm.de/
 
-Changes form V2->V3:
-- x86:
-- - Modify kconfig and description.
-- cpufreq: amd-pstate: 
-- - Add Co-developed-by tag in commit message.
-- cpufreq:
-- - Modify commit message.
-- Documentation: amd-pstate:
-- - Modify inappropriate descriptions.
+v2: https://lore.kernel.org/netdev/20230619071444.14625-1-jnixdorf-oss@avm.de/
+v1: https://lore.kernel.org/netdev/20230515085046.4457-1-jnixdorf-oss@avm.de/
 
-Changes form V1->V2:
-- acpi: cppc:
-- - Add reference link.
-- cpufreq:
-- - Moidfy link error.
-- cpufreq: amd-pstate: 
-- - Init the priorities of all online CPUs
-- - Use a single variable to represent the status of preferred core.
-- Documentation:
-- - Default enabled preferred core.
-- Documentation: amd-pstate: 
-- - Modify inappropriate descriptions.
-- - Default enabled preferred core.
-- - Use a single variable to represent the status of preferred core.
+Signed-off-by: Johannes Nixdorf <jnixdorf-oss@avm.de>
+---
+Johannes Nixdorf (6):
+      net: bridge: Set BR_FDB_ADDED_BY_USER early in fdb_add_entry
+      net: bridge: Set strict_start_type for br_policy
+      net: bridge: Track and limit dynamically learned FDB entries
+      net: bridge: Add netlink knobs for number / max learned FDB entries
+      net: bridge: Add a configurable default FDB learning limit
+      selftests: forwarding: bridge_fdb_learning_limit: Add a new selftest
 
-Meng Li (7):
-  x86: Drop CPU_SUP_INTEL from SCHED_MC_PRIO for the expansion.
-  acpi: cppc: Add get the highest performance cppc control
-  cpufreq: amd-pstate: Enable amd-pstate preferred core supporting.
-  cpufreq: Add a notification message that the highest perf has changed
-  cpufreq: amd-pstate: Update amd-pstate preferred core ranking
-    dynamically
-  Documentation: amd-pstate: introduce amd-pstate preferred core
-  Documentation: introduce amd-pstate preferrd core mode kernel command
-    line options
+ include/uapi/linux/if_link.h                       |   2 +
+ net/bridge/Kconfig                                 |  13 +
+ net/bridge/br_device.c                             |   2 +
+ net/bridge/br_fdb.c                                |  40 ++-
+ net/bridge/br_netlink.c                            |  16 +-
+ net/bridge/br_private.h                            |   4 +
+ .../net/forwarding/bridge_fdb_learning_limit.sh    | 283 +++++++++++++++++++++
+ 7 files changed, 354 insertions(+), 6 deletions(-)
+---
+base-commit: 2dde18cd1d8fac735875f2e4987f11817cc0bc2c
+change-id: 20230904-fdb_limit-fae5bbf16c88
 
- .../admin-guide/kernel-parameters.txt         |   5 +
- Documentation/admin-guide/pm/amd-pstate.rst   |  68 ++++++-
- arch/x86/Kconfig                              |   5 +-
- drivers/acpi/cppc_acpi.c                      |  13 ++
- drivers/acpi/processor_driver.c               |   6 +
- drivers/cpufreq/amd-pstate.c                  | 167 ++++++++++++++++--
- drivers/cpufreq/cpufreq.c                     |  13 ++
- include/acpi/cppc_acpi.h                      |   5 +
- include/linux/amd-pstate.h                    |  11 ++
- include/linux/cpufreq.h                       |   5 +
- 10 files changed, 277 insertions(+), 21 deletions(-)
-
+Best regards,
 -- 
-2.34.1
+Johannes Nixdorf <jnixdorf-oss@avm.de>
 
