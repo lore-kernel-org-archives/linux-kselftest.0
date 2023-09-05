@@ -2,227 +2,174 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C778CA1003
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4A76CA1005
 	for <linux-kselftest@archiver.kernel.org>; Tue,  5 Sep 2023 16:07:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238984AbjIEQHP (ORCPT
+        id S239004AbjIEQHQ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 5 Sep 2023 12:07:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59792 "EHLO
+        Tue, 5 Sep 2023 12:07:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353570AbjIEGrh (ORCPT
+        with ESMTP id S245106AbjIEBwG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Sep 2023 02:47:37 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD171B4;
-        Mon,  4 Sep 2023 23:47:34 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-401d6f6b2e0so17633265e9.1;
-        Mon, 04 Sep 2023 23:47:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693896452; x=1694501252; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=AsIlpZm/Q7WJcI9ZjnlyhKhWKNwVjgPwx9B6UP2Qye4=;
-        b=p4UQEVyyLLID4qwRo0eACsleVjtxdbutGEUnaaaq8d506+s9czA1398BsxOSJFMgCp
-         qiHDD2SBnw7m3JatvYmAudBB+hcD19rpqkUvkPuC7dA5dA9cL0Od57vKyimnXKBQHrgp
-         tBnmpgyuZYc9T1CGO/ami4UCNPfG+IEk/EhihYh30SoYF2NedhGuJvcjL2N6oJ+YdOrR
-         jWK6ZLMgZiq/glrchiJOUdH42m8lpo01njuQI18F3P8B0g9SGNXKiFONK7snWB/qcECM
-         KB/lZV8Z4NPqrFSYHLQ+BEqmab7mB3OKW/t3TpxVCewhalb8T5atK+wBgSlmDkDX0twZ
-         +sLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693896452; x=1694501252;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AsIlpZm/Q7WJcI9ZjnlyhKhWKNwVjgPwx9B6UP2Qye4=;
-        b=AUMaEEPUElb/QWfH/FgNperOPVBdTpia/YxGFA59rKFE6wIgm24OPfkFdTeHGu2j6v
-         M08R83SCbl4FVnEswvtU1IlSV8CIVYrOusQxD4qIMkgz3n43AAFUKJewiqJ+8+f5Hpu5
-         uFB5QUFBdFrERXwVIrrBeyO1mYy0doFZsA6U7kyRkAXEvN9cv2xw0BgnnM+xlAIW/IaR
-         dGjijHp97jyK/wHri/sbU8LqBu4JXTnj86dQv8OT0NZ//1r8e3GTdLAqIAL7K5M56znH
-         jv/2BDSr9frOCsDrktj+XtZIF7h5kxMe3RaMj01ljr8rchSnVt512BHHdui5VgHwH/rL
-         sUGA==
-X-Gm-Message-State: AOJu0YyhWMSRU4e8zpj/hUmSP/8NByPyu3r4bVCBMVakvOl07JUNgdfX
-        i50u9vHvhgQjuIVhvqXHJhg=
-X-Google-Smtp-Source: AGHT+IGpONnR47VKjbPdCEkGwBQyJ0MB1IECKLwIQe4RgkuBECQNtizBE8jYG7Guj/7+91bWfg6FUg==
-X-Received: by 2002:a5d:6451:0:b0:317:52ba:81f2 with SMTP id d17-20020a5d6451000000b0031752ba81f2mr11051958wrw.16.1693896452209;
-        Mon, 04 Sep 2023 23:47:32 -0700 (PDT)
-Received: from localhost ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
-        by smtp.gmail.com with ESMTPSA id c20-20020a7bc854000000b003feef5b0bb7sm15846529wml.40.2023.09.04.23.47.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Sep 2023 23:47:31 -0700 (PDT)
-Date:   Tue, 5 Sep 2023 07:47:30 +0100
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Kirill A Shutemov <kirill@shutemov.name>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Lokesh Gidra <lokeshgidra@google.com>
-Subject: Re: [PATCH v6 2/7] mm/mremap: Allow moves within the same VMA for
- stack moves
-Message-ID: <a26f9ef0-5102-4e2b-928d-14307633dee3@lucifer.local>
-References: <20230903151328.2981432-1-joel@joelfernandes.org>
- <20230903151328.2981432-3-joel@joelfernandes.org>
+        Mon, 4 Sep 2023 21:52:06 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2087.outbound.protection.outlook.com [40.107.93.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C0F2CC6;
+        Mon,  4 Sep 2023 18:52:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iTrjf0oqiMFjZpZ6c+jnsJagu1o/fY7Iy7JutLeQlq/Hyb+8xNeJWtGFbkM6iWiN2+ZYWm2/vquLqtzlww4uUXce/2sSr8oo0WuEjL5EExK8ww1OoGjWCF6nidSuBiQgXRh2BrYZnzuiPg6IEA5HwKimghBbKFgT6/o9ifri8G0vnOMrHefvgJ0ZA1ivjQchgyWkZ7BZtMVbf1Ag2fAmOdDBvHqeKvrnidZje5puVeDtMyvaB2w1fhER1J4B4XQsrpgEHpMBUA6ZBofxdkvucJ4KaPZNf3987jBKMMKGLB3A5YGXfHIIbGjesoPj7ZyWd6GLeelaY41tEuwAPmlRSA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Ws2yf4YYsM18t4BNSIPeY2jo1PNGYVhD5jWIe4u2ENI=;
+ b=jjwXHO8IuKcs7xnPNHAojVEJhXrJ9yyN3avhGRwl+/p8Q8CWrc+y+dm8e8jfJ1zRw0KR+ubYyX+nyLOE3ZaAu2tl9O8nt/DNvrjfScfkRMfI/vilynKjp3yFUtny0slLagkYk3EyFVKZJn4FPcZWh8d4zhIOEuRgzyu9Vr4mU0fvXWOVCsaA18Cpx+LnI2r0VcB76VXsa4HEB+uI+Bo2aJWIIlQc9w+Q+z1m6rZ4KYaKnqv09aFbtIAr2v1EjcnbxlKXcVdTMVLgibJlJHsuTeJLuEDN7Ze8TFQoIWiNT7R5T9YYB+2LBaezW8bCCVzmeGviO5LwzTWOA2deIKjSHw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Ws2yf4YYsM18t4BNSIPeY2jo1PNGYVhD5jWIe4u2ENI=;
+ b=Eh3uai1HrJCHy90FgJH0LuabRvYhIl8Mlgi1sT0bHAzpKB+/5Aja6w0CpTnhZ3Jw/W/BubRu71nW5TIcjHFrtFg9CUJV+8ZH9E4Y5tbRkxH3jsnwfHY+RcTpE73bWURXaOo7SQ2Cm2M3etkQhiJ3uzDzEj5hW1d0mnnrelRtkx8=
+Received: from DS7PR03CA0187.namprd03.prod.outlook.com (2603:10b6:5:3b6::12)
+ by DM4PR12MB8558.namprd12.prod.outlook.com (2603:10b6:8:187::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6745.30; Tue, 5 Sep
+ 2023 01:51:57 +0000
+Received: from CY4PEPF0000EDD3.namprd03.prod.outlook.com
+ (2603:10b6:5:3b6:cafe::9) by DS7PR03CA0187.outlook.office365.com
+ (2603:10b6:5:3b6::12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6745.33 via Frontend
+ Transport; Tue, 5 Sep 2023 01:51:57 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CY4PEPF0000EDD3.mail.protection.outlook.com (10.167.241.207) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6768.25 via Frontend Transport; Tue, 5 Sep 2023 01:51:57 +0000
+Received: from jasmine-meng.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 4 Sep
+ 2023 20:51:52 -0500
+From:   Meng Li <li.meng@amd.com>
+To:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Huang Rui <ray.huang@amd.com>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <x86@kernel.org>, <linux-acpi@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        <linux-kselftest@vger.kernel.org>,
+        "Nathan Fontenot" <nathan.fontenot@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Shimmer Huang <shimmer.huang@amd.com>,
+        "Perry Yuan" <Perry.Yuan@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>, Meng Li <li.meng@amd.com>,
+        Wyes Karny <wyes.karny@amd.com>
+Subject: [PATCH V5 2/7] acpi: cppc: Add get the highest performance cppc control
+Date:   Tue, 5 Sep 2023 09:51:11 +0800
+Message-ID: <20230905015116.2268926-3-li.meng@amd.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230905015116.2268926-1-li.meng@amd.com>
+References: <20230905015116.2268926-1-li.meng@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230903151328.2981432-3-joel@joelfernandes.org>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000EDD3:EE_|DM4PR12MB8558:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5d6848bc-7f2c-4300-c552-08dbadb2b031
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: JcYr3VaIOjM1Zi7R6CUufjJGsJ5TZ85JqXXMxfoWBYv/Xh+hqjzaFuMCyC8ZDZsTJWX48wJw1gnQASbSe2JCIauln3VLnyEDhhd0XtwB3KryHa4DoOBSPTWlJTCkYwA5lgg5ZDU0bzf4PVtZ4om2vzg7wPqx/vkfRHiaXS6IUkwqU7Xjegbd5IZNJB3uoeiGt/tb+U0xVT/s3Hpa80sfHMF5KnYVyimuOm0zHiv0mFXesNm9+qrjRcF1qvgwni/C2K2xhWy9esRGpXtar1PwzaceI8SUn9OespmEzdE52VwFvfWXnUZrBa9JEjOIlgfn1AXYypV7YN9GjQ+WPoKYBfZMkK3Xp0vHe3J+BOOil72PAaEHXPx3bSC/YMQcvGj9/sfSeox8YnzN3r1YO+w/4Y3o7ri/BDZR2pPBGPnxdyOz7SIpX4bELAQJKzL4h4vx24oYKzEFgryCqq9K3dMuUS2jwMTb/s1FR1+/KSFrAMMWWUfz7Vl2dHwp169EHdqexH5CNsgjyzau70n2LN+BKDcqKPZ196Nzp7NRek8i96gFGb/Egn1C5K3tXEmoeC4izMcrDIV1xW0cz5a6QuqW65Kv5jTij84aZvetljPlyKtR2DV6LlcyZQ3g1cSLuJLyRzlXg1TdhoYpskk2hSmOfo6k737nKYESaurXNiNab7OUhu+CXHEP+2qg3jF7irISp7nhqxDGMcEWJLRNVDQA1k9DQpXmNkoVLXoRoBIj5Q0VFyEYw4lh5eYJhJvCJFW4aXZKZdwYnfmpUXIGh7xHpUr92hDMar94JXVU3PMTq0g=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(396003)(39860400002)(376002)(136003)(346002)(1800799009)(451199024)(186009)(82310400011)(46966006)(36840700001)(40470700004)(70206006)(316002)(6636002)(36756003)(110136005)(54906003)(86362001)(70586007)(2906002)(40480700001)(8936002)(5660300002)(8676002)(4326008)(40460700003)(41300700001)(1076003)(36860700001)(336012)(2616005)(426003)(16526019)(47076005)(26005)(966005)(478600001)(81166007)(356005)(82740400003)(7696005)(6666004)(15583001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2023 01:51:57.3799
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5d6848bc-7f2c-4300-c552-08dbadb2b031
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000EDD3.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB8558
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Sep 03, 2023 at 03:13:23PM +0000, Joel Fernandes (Google) wrote:
-> For the stack move happening in shift_arg_pages(), the move is happening
-> within the same VMA which spans the old and new ranges.
->
-> In case the aligned address happens to fall within that VMA, allow such
-> moves and don't abort the mremap alignment optimization.
->
-> In the regular non-stack mremap case, we cannot allow any such moves as
-> will end up destroying some part of the mapping (either the source of
-> the move, or part of the existing mapping). So just avoid it for stack
-> moves.
->
-> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> ---
->  fs/exec.c          |  2 +-
->  include/linux/mm.h |  2 +-
->  mm/mremap.c        | 33 +++++++++++++++++++--------------
->  3 files changed, 21 insertions(+), 16 deletions(-)
->
-> diff --git a/fs/exec.c b/fs/exec.c
-> index 1a827d55ba94..244925307958 100644
-> --- a/fs/exec.c
-> +++ b/fs/exec.c
-> @@ -712,7 +712,7 @@ static int shift_arg_pages(struct vm_area_struct *vma, unsigned long shift)
->  	 * process cleanup to remove whatever mess we made.
->  	 */
->  	if (length != move_page_tables(vma, old_start,
-> -				       vma, new_start, length, false))
-> +				       vma, new_start, length, false, true))
->  		return -ENOMEM;
->
->  	lru_add_drain();
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 406ab9ea818f..e635d1fc73b6 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -2458,7 +2458,7 @@ int get_cmdline(struct task_struct *task, char *buffer, int buflen);
->  extern unsigned long move_page_tables(struct vm_area_struct *vma,
->  		unsigned long old_addr, struct vm_area_struct *new_vma,
->  		unsigned long new_addr, unsigned long len,
-> -		bool need_rmap_locks);
-> +		bool need_rmap_locks, bool for_stack);
->
->  /*
->   * Flags used by change_protection().  For now we make it a bitmap so
-> diff --git a/mm/mremap.c b/mm/mremap.c
-> index 1011326b7b80..2b51f8b7cad8 100644
-> --- a/mm/mremap.c
-> +++ b/mm/mremap.c
-> @@ -490,12 +490,13 @@ static bool move_pgt_entry(enum pgt_entry entry, struct vm_area_struct *vma,
->  }
->
->  /*
-> - * A helper to check if a previous mapping exists. Required for
-> - * move_page_tables() and realign_addr() to determine if a previous mapping
-> - * exists before we can do realignment optimizations.
-> + * A helper to check if aligning down is OK. The aligned address should fall
-> + * on *no mapping*. For the stack moving down, that's a special move within
-> + * the VMA that is created to span the source and destination of the move,
-> + * so we make an exception for it.
->   */
->  static bool can_align_down(struct vm_area_struct *vma, unsigned long addr_to_align,
-> -			       unsigned long mask)
-> +			    unsigned long mask, bool for_stack)
->  {
->  	unsigned long addr_masked = addr_to_align & mask;
->
-> @@ -504,9 +505,13 @@ static bool can_align_down(struct vm_area_struct *vma, unsigned long addr_to_ali
->  	 * of the corresponding VMA, we can't align down or we will destroy part
->  	 * of the current mapping.
->  	 */
-> -	if (vma->vm_start != addr_to_align)
-> +	if (!for_stack && vma->vm_start != addr_to_align)
->  		return false;
->
-> +	/* In the stack case we explicitly permit in-VMA alignment. */
-> +	if (for_stack && addr_masked >= vma->vm_start)
-> +		return true;
-> +
->  	/*
->  	 * Make sure the realignment doesn't cause the address to fall on an
->  	 * existing mapping.
-> @@ -517,7 +522,7 @@ static bool can_align_down(struct vm_area_struct *vma, unsigned long addr_to_ali
->  /* Opportunistically realign to specified boundary for faster copy. */
->  static void try_realign_addr(unsigned long *old_addr, struct vm_area_struct *old_vma,
->  			     unsigned long *new_addr, struct vm_area_struct *new_vma,
-> -			     unsigned long mask)
-> +			     unsigned long mask, bool for_stack)
->  {
->  	/* Skip if the addresses are already aligned. */
->  	if ((*old_addr & ~mask) == 0)
-> @@ -528,8 +533,8 @@ static void try_realign_addr(unsigned long *old_addr, struct vm_area_struct *old
->  		return;
->
->  	/* Ensure realignment doesn't cause overlap with existing mappings. */
-> -	if (!can_align_down(old_vma, *old_addr, mask) ||
-> -	    !can_align_down(new_vma, *new_addr, mask))
-> +	if (!can_align_down(old_vma, *old_addr, mask, for_stack) ||
-> +	    !can_align_down(new_vma, *new_addr, mask, for_stack))
->  		return;
->
->  	*old_addr = *old_addr & mask;
-> @@ -539,7 +544,7 @@ static void try_realign_addr(unsigned long *old_addr, struct vm_area_struct *old
->  unsigned long move_page_tables(struct vm_area_struct *vma,
->  		unsigned long old_addr, struct vm_area_struct *new_vma,
->  		unsigned long new_addr, unsigned long len,
-> -		bool need_rmap_locks)
-> +		bool need_rmap_locks, bool for_stack)
->  {
->  	unsigned long extent, old_end;
->  	struct mmu_notifier_range range;
-> @@ -559,9 +564,9 @@ unsigned long move_page_tables(struct vm_area_struct *vma,
->  	 * If possible, realign addresses to PMD boundary for faster copy.
->  	 * Only realign if the mremap copying hits a PMD boundary.
->  	 */
-> -	if ((vma != new_vma)
-> -		&& (len >= PMD_SIZE - (old_addr & ~PMD_MASK)))
-> -		try_realign_addr(&old_addr, vma, &new_addr, new_vma, PMD_MASK);
-> +	if (len >= PMD_SIZE - (old_addr & ~PMD_MASK))
-> +		try_realign_addr(&old_addr, vma, &new_addr, new_vma, PMD_MASK,
-> +				 for_stack);
->
->  	flush_cache_range(vma, old_addr, old_end);
->  	mmu_notifier_range_init(&range, MMU_NOTIFY_UNMAP, 0, vma->vm_mm,
-> @@ -708,7 +713,7 @@ static unsigned long move_vma(struct vm_area_struct *vma,
->  	}
->
->  	moved_len = move_page_tables(vma, old_addr, new_vma, new_addr, old_len,
-> -				     need_rmap_locks);
-> +				     need_rmap_locks, false);
->  	if (moved_len < old_len) {
->  		err = -ENOMEM;
->  	} else if (vma->vm_ops && vma->vm_ops->mremap) {
-> @@ -722,7 +727,7 @@ static unsigned long move_vma(struct vm_area_struct *vma,
->  		 * and then proceed to unmap new area instead of old.
->  		 */
->  		move_page_tables(new_vma, new_addr, vma, old_addr, moved_len,
-> -				 true);
-> +				 true, false);
->  		vma = new_vma;
->  		old_len = new_len;
->  		old_addr = new_addr;
-> --
-> 2.42.0.283.g2d96d420d3-goog
->
+Add support for getting the highest performance to the
+generic CPPC driver. This enables downstream drivers
+such as amd-pstate to discover and use these values.
 
-Looks good to me, thanks
+Please refer to the ACPI_Spec for details on continuous
+performance control of CPPC.
 
-Reviewed-by: Lorenzo Stoakes <lstoakes@gmail.com>
+Signed-off-by: Meng Li <li.meng@amd.com>
+Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+Reviewed-by: Wyes Karny <wyes.karny@amd.com>
+Link: https://uefi.org/specs/ACPI/6.5/08_Processor_Configuration_and_Control.html?highlight=cppc#cpc-continuous-performance-control
+---
+ drivers/acpi/cppc_acpi.c | 13 +++++++++++++
+ include/acpi/cppc_acpi.h |  5 +++++
+ 2 files changed, 18 insertions(+)
+
+diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+index 7ff269a78c20..ad388a0e8484 100644
+--- a/drivers/acpi/cppc_acpi.c
++++ b/drivers/acpi/cppc_acpi.c
+@@ -1154,6 +1154,19 @@ int cppc_get_nominal_perf(int cpunum, u64 *nominal_perf)
+ 	return cppc_get_perf(cpunum, NOMINAL_PERF, nominal_perf);
+ }
+ 
++/**
++ * cppc_get_highest_perf - Get the highest performance register value.
++ * @cpunum: CPU from which to get highest performance.
++ * @highest_perf: Return address.
++ *
++ * Return: 0 for success, -EIO otherwise.
++ */
++int cppc_get_highest_perf(int cpunum, u64 *highest_perf)
++{
++	return cppc_get_perf(cpunum, HIGHEST_PERF, highest_perf);
++}
++EXPORT_SYMBOL_GPL(cppc_get_highest_perf);
++
+ /**
+  * cppc_get_epp_perf - Get the epp register value.
+  * @cpunum: CPU from which to get epp preference value.
+diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
+index 6126c977ece0..c0b69ffe7bdb 100644
+--- a/include/acpi/cppc_acpi.h
++++ b/include/acpi/cppc_acpi.h
+@@ -139,6 +139,7 @@ struct cppc_cpudata {
+ #ifdef CONFIG_ACPI_CPPC_LIB
+ extern int cppc_get_desired_perf(int cpunum, u64 *desired_perf);
+ extern int cppc_get_nominal_perf(int cpunum, u64 *nominal_perf);
++extern int cppc_get_highest_perf(int cpunum, u64 *highest_perf);
+ extern int cppc_get_perf_ctrs(int cpu, struct cppc_perf_fb_ctrs *perf_fb_ctrs);
+ extern int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls);
+ extern int cppc_set_enable(int cpu, bool enable);
+@@ -165,6 +166,10 @@ static inline int cppc_get_nominal_perf(int cpunum, u64 *nominal_perf)
+ {
+ 	return -ENOTSUPP;
+ }
++static inline int cppc_get_highest_perf(int cpunum, u64 *highest_perf)
++{
++	return -ENOTSUPP;
++}
+ static inline int cppc_get_perf_ctrs(int cpu, struct cppc_perf_fb_ctrs *perf_fb_ctrs)
+ {
+ 	return -ENOTSUPP;
+-- 
+2.34.1
+
