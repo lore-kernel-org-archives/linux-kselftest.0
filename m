@@ -2,55 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39C20EE14D6
-	for <linux-kselftest@archiver.kernel.org>; Wed,  6 Sep 2023 18:33:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A0E4EE14D7
+	for <linux-kselftest@archiver.kernel.org>; Wed,  6 Sep 2023 18:33:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242007AbjIFSdz (ORCPT
+        id S234422AbjIFSd4 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 6 Sep 2023 14:33:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57794 "EHLO
+        Wed, 6 Sep 2023 14:33:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229955AbjIFSdv (ORCPT
+        with ESMTP id S238652AbjIFSdv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Wed, 6 Sep 2023 14:33:51 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 945851738;
-        Wed,  6 Sep 2023 11:33:29 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-402cc6b8bedso1984295e9.1;
-        Wed, 06 Sep 2023 11:33:29 -0700 (PDT)
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 794A9172C;
+        Wed,  6 Sep 2023 11:33:26 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-31ae6bf91a9so156768f8f.2;
+        Wed, 06 Sep 2023 11:33:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694025207; x=1694630007; darn=vger.kernel.org;
+        d=gmail.com; s=20221208; t=1694025205; x=1694630005; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zDHabXQ3v0V6rVN5TewLut1ATi0BNX0QhXwmwgrIhV4=;
-        b=Y1f8RY8kFgNQWx6xYtjRwTyP+AbvdqOxK/KMhPDk3RIdLqxlrrg+09VXuXuyw3F7L8
-         EqGQNZLcRdJR2z7mvI6R42GW/qDYIa/jY/Qv1AbLMxfgvAVYe7KhlRFQa45P/ZwYzuDW
-         qG7IgjacfktU9Wr5D1kkGABciPQvUM5eVHVLmSHt55NPkxrHbRAWQB4a7/q7PvQHWOoa
-         wFn8u+oohlV1vUBGkvXmfZnOh9E9u8Tkl/Uk8Q9bMpzs63DaWeiJTQlqUhElv2VY2i4p
-         ZxxMCIlyDX8KOJn+hkdaAiUT63Lblx1GBpjOdnTLRNrrjt1cVd9l3hxiB+yR5xJ5NoSE
-         +QKw==
+        bh=HtDAfb39ZYubUMCOEk1qZOBpZCAofwQ4xmthOS0X+3o=;
+        b=aT/CweoZ6rmWSwATUjyDMl/gOX2I6aB9yOyNCR1spO9PyJBymo6qJjxXY1ljnacKih
+         ZToWxIceAUGcKt2I4PScrGfM+dN5kcE/sUJz3Z0UGprrliaFX5UCVwIjLfTz7W4/EAhe
+         /3BqGhqKKIE+t3hwmfQqWfMuoOo1xqkORvo+iEiHEkfioTtwFaNPmLZsYA/j7DLfNA1U
+         pxkv5vjtOuztbPeJXIcJYx9905p6vC+uWkZhU+p/b1VyeyLxIAvzu5VhzKzPGWn15NSY
+         cMaKotxCnCGE37nmeyU0ddpeCopxo+XIG4TT30MPV1qVHo4S9aCfioUqKbeL96pQdKx3
+         Hpfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1694025207; x=1694630007;
+        d=1e100.net; s=20221208; t=1694025205; x=1694630005;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=zDHabXQ3v0V6rVN5TewLut1ATi0BNX0QhXwmwgrIhV4=;
-        b=lK9GEynF9/TpfqVDJGrgOct26x+/qdasvsLpDkrXqs69syNHmXfTH2DpFRnhlhwKkD
-         jCV96bPB2XUIRwm00RVE5qF5rDi+Djk0NCgTjl3JklBrWXIZEeCZyU66xYUCScXnkGgA
-         venA+ta1RvOkrwxXU1Fe6Ba2upIAGIbhy6cXFrDSxgfJH55I0b08XhX401H0Pl1SOmsL
-         2EcyqtwgQ/R8b+RhobcyrQBnNw23KN5fkPI3xm57PTH1ijkq1f6dU8yCUdK8Hyz34ves
-         +bSTgUxy3Qlz/1Gm9VD791t5CszllmAh250Yf4C9NMNoS+kRWt1SEGeBZv0iqMqNjN4S
-         +daw==
-X-Gm-Message-State: AOJu0YxwnFRoCvggCl/JKLSKfHQrIgtF1xtThxGyuHC0KgAimZye3w36
-        3YQgQKO8Xtn5BFc58y9kj7I=
-X-Google-Smtp-Source: AGHT+IF6zrzuB7dNZDvwoFD7KuzrYKg3eZVeC4tkmJLvhV11HRZ0cFMPbVge1Wr5VIdOESNSbBmymA==
-X-Received: by 2002:a05:600c:2285:b0:401:5443:5598 with SMTP id 5-20020a05600c228500b0040154435598mr2887693wmf.25.1694025207327;
-        Wed, 06 Sep 2023 11:33:27 -0700 (PDT)
+        bh=HtDAfb39ZYubUMCOEk1qZOBpZCAofwQ4xmthOS0X+3o=;
+        b=OTFq3cnRIk7oBmYUvtCTAOxSO6DUtr/73wmA2C5maKj4dnBvnNO/5HArUul9Q42+sx
+         g/Kuolc/Xk74maiCuMkToWmt2KRM9jfVZzh61jIEbgbAAoDEVUNfS0PQGxmJewDFJD31
+         e+6jNQmYnB+an9BK5ifFUVAEWx6Zfh3Zo7aWb+3UCRytS9FzcgXJ4jXtSowt/97n43Kp
+         f5c62O1jegu76ItFx+CzqrGwWIeGktWJamvd3QILHwg527f3FY4CRTbBBaeILr52soDP
+         eTE+brY2DHiL3JjKe8ltHxlxLNAE819O1WuujhIPiQrfDUd1mapWuXisHa3ebU0J2+vu
+         9pFA==
+X-Gm-Message-State: AOJu0YzSBQXGcKKaOlrWU5TSpbjFBB2BplRw1vhirJ9XpvgiWTY9D3PV
+        sdim2oa2RyjDa5V8IduZRFM=
+X-Google-Smtp-Source: AGHT+IEz+QlAVOBpdX9sT0us/nqZrZxdKYyxIUBbGgJapKwG6O9eU5K+6bwfnP0GpW0fTAgNhALN4w==
+X-Received: by 2002:adf:efc2:0:b0:317:3b13:94c3 with SMTP id i2-20020adfefc2000000b003173b1394c3mr3037733wrp.41.1694025204750;
+        Wed, 06 Sep 2023 11:33:24 -0700 (PDT)
 Received: from ip-172-31-30-46.eu-west-1.compute.internal (ec2-54-170-241-106.eu-west-1.compute.amazonaws.com. [54.170.241.106])
-        by smtp.gmail.com with ESMTPSA id l10-20020a5d4bca000000b003180155493esm21094891wrt.67.2023.09.06.11.33.26
+        by smtp.gmail.com with ESMTPSA id l10-20020a5d4bca000000b003180155493esm21094891wrt.67.2023.09.06.11.33.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Sep 2023 11:33:27 -0700 (PDT)
+        Wed, 06 Sep 2023 11:33:24 -0700 (PDT)
 From:   Puranjay Mohan <puranjay12@gmail.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -68,9 +68,9 @@ To:     Alexei Starovoitov <ast@kernel.org>,
         bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     puranjay12@gmail.com
-Subject: [PATCH bpf-next v2 7/8] selftest, bpf: enable cpu v4 tests for arm32
-Date:   Wed,  6 Sep 2023 18:33:19 +0000
-Message-Id: <20230906183320.1959008-8-puranjay12@gmail.com>
+Subject: [PATCH bpf-next v2 4/8] arm32, bpf: add support for unconditional bswap instruction
+Date:   Wed,  6 Sep 2023 18:33:16 +0000
+Message-Id: <20230906183320.1959008-5-puranjay12@gmail.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230906183320.1959008-1-puranjay12@gmail.com>
 References: <20230906183320.1959008-1-puranjay12@gmail.com>
@@ -80,88 +80,39 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Now that all the cpuv4 instructions are supported by the arm32 JIT,
-enable the selftests for arm32.
+The cpuv4 added a new unconditional bswap instruction with following
+behaviour:
+
+BPF_ALU64 | BPF_TO_LE | BPF_END with imm = 16/32/64 means:
+dst = bswap16(dst)
+dst = bswap32(dst)
+dst = bswap64(dst)
+
+As we already support converting to big-endian from little-endian we can
+use the same for unconditional bswap. just treat the unconditional scenario
+the same as big-endian conversion.
 
 Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
 ---
- tools/testing/selftests/bpf/progs/verifier_bswap.c | 3 ++-
- tools/testing/selftests/bpf/progs/verifier_gotol.c | 3 ++-
- tools/testing/selftests/bpf/progs/verifier_ldsx.c  | 3 ++-
- tools/testing/selftests/bpf/progs/verifier_movsx.c | 3 ++-
- tools/testing/selftests/bpf/progs/verifier_sdiv.c  | 3 ++-
- 5 files changed, 10 insertions(+), 5 deletions(-)
+ arch/arm/net/bpf_jit_32.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_bswap.c b/tools/testing/selftests/bpf/progs/verifier_bswap.c
-index 8893094725f0..5d54f8eae6a1 100644
---- a/tools/testing/selftests/bpf/progs/verifier_bswap.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_bswap.c
-@@ -5,7 +5,8 @@
- #include "bpf_misc.h"
- 
- #if (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) || \
--     (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && __clang_major__ >= 18
-+	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64) || defined(__TARGET_ARCH_arm)) && \
-+	__clang_major__ >= 18
- 
- SEC("socket")
- __description("BSWAP, 16")
-diff --git a/tools/testing/selftests/bpf/progs/verifier_gotol.c b/tools/testing/selftests/bpf/progs/verifier_gotol.c
-index 2dae5322a18e..aa54ecd5829e 100644
---- a/tools/testing/selftests/bpf/progs/verifier_gotol.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_gotol.c
-@@ -5,7 +5,8 @@
- #include "bpf_misc.h"
- 
- #if (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) || \
--     (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && __clang_major__ >= 18
-+	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64) || defined(__TARGET_ARCH_arm)) && \
-+	__clang_major__ >= 18
- 
- SEC("socket")
- __description("gotol, small_imm")
-diff --git a/tools/testing/selftests/bpf/progs/verifier_ldsx.c b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
-index 0c638f45aaf1..1e1bc379c44f 100644
---- a/tools/testing/selftests/bpf/progs/verifier_ldsx.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
-@@ -5,7 +5,8 @@
- #include "bpf_misc.h"
- 
- #if (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) || \
--     (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && __clang_major__ >= 18
-+	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64) || defined(__TARGET_ARCH_arm)) && \
-+	__clang_major__ >= 18
- 
- SEC("socket")
- __description("LDSX, S8")
-diff --git a/tools/testing/selftests/bpf/progs/verifier_movsx.c b/tools/testing/selftests/bpf/progs/verifier_movsx.c
-index 3c8ac2c57b1b..ca11fd5dafd1 100644
---- a/tools/testing/selftests/bpf/progs/verifier_movsx.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_movsx.c
-@@ -5,7 +5,8 @@
- #include "bpf_misc.h"
- 
- #if (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) || \
--     (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && __clang_major__ >= 18
-+	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64) || defined(__TARGET_ARCH_arm)) && \
-+	__clang_major__ >= 18
- 
- SEC("socket")
- __description("MOV32SX, S8")
-diff --git a/tools/testing/selftests/bpf/progs/verifier_sdiv.c b/tools/testing/selftests/bpf/progs/verifier_sdiv.c
-index 0990f8825675..fb039722b639 100644
---- a/tools/testing/selftests/bpf/progs/verifier_sdiv.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_sdiv.c
-@@ -5,7 +5,8 @@
- #include "bpf_misc.h"
- 
- #if (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) || \
--     (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && __clang_major__ >= 18
-+	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64) || defined(__TARGET_ARCH_arm)) && \
-+	__clang_major__ >= 18
- 
- SEC("socket")
- __description("SDIV32, non-zero imm divisor, check 1")
+diff --git a/arch/arm/net/bpf_jit_32.c b/arch/arm/net/bpf_jit_32.c
+index 56ea8022e989..f837db5c71b1 100644
+--- a/arch/arm/net/bpf_jit_32.c
++++ b/arch/arm/net/bpf_jit_32.c
+@@ -1633,8 +1633,10 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx)
+ 	/* dst = htobe(dst) */
+ 	case BPF_ALU | BPF_END | BPF_FROM_LE:
+ 	case BPF_ALU | BPF_END | BPF_FROM_BE:
++	/* dst = bswap(dst) */
++	case BPF_ALU64 | BPF_END | BPF_TO_LE:
+ 		rd = arm_bpf_get_reg64(dst, tmp, ctx);
+-		if (BPF_SRC(code) == BPF_FROM_LE)
++		if (BPF_SRC(code) == BPF_FROM_LE && BPF_CLASS(code) != BPF_ALU64)
+ 			goto emit_bswap_uxt;
+ 		switch (imm) {
+ 		case 16:
 -- 
 2.39.2
 
