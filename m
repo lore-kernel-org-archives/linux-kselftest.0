@@ -2,55 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73969EE14C3
-	for <linux-kselftest@archiver.kernel.org>; Wed,  6 Sep 2023 18:33:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BDFAEE14D4
+	for <linux-kselftest@archiver.kernel.org>; Wed,  6 Sep 2023 18:34:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243598AbjIFSd6 (ORCPT
+        id S243610AbjIFSd7 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 6 Sep 2023 14:33:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57770 "EHLO
+        Wed, 6 Sep 2023 14:33:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243336AbjIFSdw (ORCPT
+        with ESMTP id S243292AbjIFSdw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Wed, 6 Sep 2023 14:33:52 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC8A1732;
-        Wed,  6 Sep 2023 11:33:28 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-31c6cd238e0so888015f8f.0;
-        Wed, 06 Sep 2023 11:33:28 -0700 (PDT)
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14ECA1739;
+        Wed,  6 Sep 2023 11:33:29 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-401d80f4ef8so1889295e9.1;
+        Wed, 06 Sep 2023 11:33:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694025207; x=1694630007; darn=vger.kernel.org;
+        d=gmail.com; s=20221208; t=1694025208; x=1694630008; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WUt+dyxz40exkjK9taO3HDdxqeOqcwLVkDTATrnPFLo=;
-        b=GI71Z96si3hO1Ew1di7rNz8EJwT8z9//dGuig6WOle3J+Od6GGQBIm/yk1vdmHSCmD
-         gYpZXkWqYHCsrzNRmTAw/oB1B+zr0yZqZJYu3v0oCJjHCTtFrEkwnmhtzXkw89h8FG6k
-         rJz8C3ZbCApCnLixS5zGu2LWTXEecNd0jxWStt1zY0Vyb4WG68590WxOpBTffsZjGV/g
-         N/fI/9dqqkoCFsaDuVrp1/1+9q1SRVfa7bEKrfVa1XzCJw4hVcp8dbGi5kkWAzMe09ot
-         BBbUzoCjFoN1GcaEFkOpuJ73igyLTNPfpp+Uqh2m+BVe6F38tRlro8Ke6W4eeD4u2hZI
-         uUnw==
+        bh=JXVC/JwrfhCwCFZ9CTtjljVWM7ojc7dibWwdrN2Ohcw=;
+        b=UNS1Gqo1DdXmAcd90wtLFNDoepfWSNlSNibeuhKwyWAR8B8x3inEcHXviPRzzcPlCg
+         PO8sEn350Q/hG6T95IPXjulneRgC7neQTKyr++SSwEvfBuyLZytJ7L5tlESR25O/L6BH
+         7CZnNuxagtDVdR7bTknT0iVkRX+fxOsCviohUVT9Pi/+HRp6YdKs+kjjzSHOREBKDecm
+         NUHqdAfSOGyIV0nKWHFjqiZS2ehRI8NoUGBAuESOXy/2rr8AA5pnI0K/LufZBmNtE6RA
+         cSh0/f2IRReGh51xCjQOtPMMidUOJCtrVOiqwnrrIdx2kK3GUQSYRCU+sWS/KRm9Pqyf
+         2AOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1694025207; x=1694630007;
+        d=1e100.net; s=20221208; t=1694025208; x=1694630008;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WUt+dyxz40exkjK9taO3HDdxqeOqcwLVkDTATrnPFLo=;
-        b=E8sWEA38McI0bJxUgaQpigfvwRAukR7IZUAnab+g8ViFLJ4r2uNDlpPrmRB6bKGDmY
-         gdTD0GCtx62CMO9oLVNqC2XGFlplz/Gs0xgPng9p9Ypd2x96AssMNMF5rcdDRu9WgsJZ
-         lVUQ+M4QfFeFg/hZo0MJguwH3CFPSsLJp476HywVN4nEYEZuu26AZkCgimZ0Edv9l3mE
-         jRmQuo4D3eyQONmRaw875lg9kCtzBTxueKCR6YHFyE58181/6KXX9lR2u+021GTRKJ5O
-         6BinMiX3OX9EW4sK1n4RnR7f6u5E6T8JYUwTRdM+R1DO/LV1SO9Gc01M3o8JLC+QaRH5
-         keqQ==
-X-Gm-Message-State: AOJu0Yx2IX+o9zUhVxDIFT8YJibyIjEumhZRSHmk9abqJZ8Rnard5K5b
-        RhYqS/fWmkHxdZo7fr8JFPU=
-X-Google-Smtp-Source: AGHT+IFrO5jwdurbEz3PKbgmlCluOb/v9aDMZxmZf4IJcL8LgSRB+3e9NzLDRMKG5Dn7RHUkSuyB1w==
-X-Received: by 2002:adf:d4c9:0:b0:313:f38d:555f with SMTP id w9-20020adfd4c9000000b00313f38d555fmr280174wrk.24.1694025206551;
-        Wed, 06 Sep 2023 11:33:26 -0700 (PDT)
+        bh=JXVC/JwrfhCwCFZ9CTtjljVWM7ojc7dibWwdrN2Ohcw=;
+        b=Pd/Rn0GIE1rwfWaBCcTigAGUR5blAySVmpl+UMoD+R90qlOyFTPpVrfo2QWpUfyEdI
+         o+eJJvBeOAjX05CZmlGUp6FDfdf/0up87J0GEVujZsQSXCWpIW1PbFd9QoYgOf+XmqQa
+         paJKGpTHI2N3gI2attATXfF4mDSSsAAs05Edazdfp7w2VNSVdA8/wT4ddZA7A1WbeN4c
+         iQSWzUbs0o7YHbKm4HAdusuwHGWA/H2JTY42pKOF03HyXDEUpOTXgQ7ZhdLVeeQm4T8T
+         +eLlOqKvuu6/YUag4V7pAl8tIV+K8PrG1fYBnLmFkZ/zWkoJ7F9wg5ryIEWhXFN4JR7P
+         inEg==
+X-Gm-Message-State: AOJu0YzVnpqoGcNglQWqA5QM8JLQL46YN5SVvGZ26mKZbpDYUSxudTVH
+        nyQiCmVOLisOiTk2zZS8sO4=
+X-Google-Smtp-Source: AGHT+IEvuuyOhEYeYiFyTZwzLJs0tKvnAKREJ96x/oGjHaA5sh8RfpDvjoFLxBHJddv/67hEG+QLYA==
+X-Received: by 2002:adf:e409:0:b0:31a:e772:ddf6 with SMTP id g9-20020adfe409000000b0031ae772ddf6mr3078630wrm.39.1694025208214;
+        Wed, 06 Sep 2023 11:33:28 -0700 (PDT)
 Received: from ip-172-31-30-46.eu-west-1.compute.internal (ec2-54-170-241-106.eu-west-1.compute.amazonaws.com. [54.170.241.106])
-        by smtp.gmail.com with ESMTPSA id l10-20020a5d4bca000000b003180155493esm21094891wrt.67.2023.09.06.11.33.25
+        by smtp.gmail.com with ESMTPSA id l10-20020a5d4bca000000b003180155493esm21094891wrt.67.2023.09.06.11.33.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Sep 2023 11:33:26 -0700 (PDT)
+        Wed, 06 Sep 2023 11:33:27 -0700 (PDT)
 From:   Puranjay Mohan <puranjay12@gmail.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -68,9 +68,9 @@ To:     Alexei Starovoitov <ast@kernel.org>,
         bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     puranjay12@gmail.com
-Subject: [PATCH bpf-next v2 6/8] arm32, bpf: add support for 64 bit division instruction
-Date:   Wed,  6 Sep 2023 18:33:18 +0000
-Message-Id: <20230906183320.1959008-7-puranjay12@gmail.com>
+Subject: [PATCH bpf-next v2 8/8] bpf/tests: add tests for cpuv4 instructions
+Date:   Wed,  6 Sep 2023 18:33:20 +0000
+Message-Id: <20230906183320.1959008-9-puranjay12@gmail.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230906183320.1959008-1-puranjay12@gmail.com>
 References: <20230906183320.1959008-1-puranjay12@gmail.com>
@@ -80,180 +80,524 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-ARM32 doesn't have instructions to do 64-bit/64-bit divisions. So, to
-implement the following instructions:
-BPF_ALU64 | BPF_DIV
-BPF_ALU64 | BPF_MOD
-BPF_ALU64 | BPF_SDIV
-BPF_ALU64 | BPF_SMOD
+The BPF JITs now support cpuv4 instructions. Add tests for these new
+instructions to the test suite:
 
-We implement the above instructions by doing function calls to div64_u64()
-and div64_u64_rem() for unsigned division/mod and calls to div64_s64()
-for signed division/mod.
+1. Sign extended Load
+2. Sign extended Mov
+3. Unconditional byte swap
+4. Unconditional jump with 32-bit offset
+5. Signed division and modulo
 
 Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
 ---
- arch/arm/net/bpf_jit_32.c | 119 +++++++++++++++++++++++++++++++++++++-
- 1 file changed, 118 insertions(+), 1 deletion(-)
+ include/linux/filter.h |  50 +++++-
+ lib/test_bpf.c         | 371 +++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 417 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm/net/bpf_jit_32.c b/arch/arm/net/bpf_jit_32.c
-index 91b3294963bc..ff4cd749c2f8 100644
---- a/arch/arm/net/bpf_jit_32.c
-+++ b/arch/arm/net/bpf_jit_32.c
-@@ -2,6 +2,7 @@
- /*
-  * Just-In-Time compiler for eBPF filters on 32bit ARM
-  *
-+ * Copyright (c) 2023 Puranjay Mohan <puranjay12@gmail.com>
-  * Copyright (c) 2017 Shubham Bansal <illusionist.neo@gmail.com>
-  * Copyright (c) 2011 Mircea Gherzan <mgherzan@gmail.com>
-  */
-@@ -15,6 +16,7 @@
- #include <linux/string.h>
- #include <linux/slab.h>
- #include <linux/if_vlan.h>
-+#include <linux/math64.h>
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 761af6b3cf2b..0138832ad571 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -117,21 +117,25 @@ struct ctl_table_header;
  
- #include <asm/cacheflush.h>
- #include <asm/hwcap.h>
-@@ -238,6 +240,34 @@ static s32 jit_smod32(s32 dividend, s32 divisor)
- 	return dividend % divisor;
- }
+ /* ALU ops on immediates, bpf_add|sub|...: dst_reg += imm32 */
  
-+/* Wrappers for 64-bit div/mod */
-+static u64 jit_udiv64(u64 dividend, u64 divisor)
-+{
-+	return div64_u64(dividend, divisor);
-+}
-+
-+static u64 jit_mod64(u64 dividend, u64 divisor)
-+{
-+	u64 rem;
-+
-+	div64_u64_rem(dividend, divisor, &rem);
-+	return rem;
-+}
-+
-+static s64 jit_sdiv64(s64 dividend, s64 divisor)
-+{
-+	return div64_s64(dividend, divisor);
-+}
-+
-+static s64 jit_smod64(s64 dividend, s64 divisor)
-+{
-+	u64 q;
-+
-+	q = div64_s64(dividend, divisor);
-+
-+	return dividend - q * divisor;
-+}
-+
- static inline void _emit(int cond, u32 inst, struct jit_ctx *ctx)
- {
- 	inst |= (cond << 28);
-@@ -555,6 +585,81 @@ static inline void emit_udivmod(u8 rd, u8 rm, u8 rn, struct jit_ctx *ctx, u8 op,
- 		emit(ARM_MOV_R(ARM_R0, tmp[1]), ctx);
- }
+-#define BPF_ALU64_IMM(OP, DST, IMM)				\
++#define BPF_ALU64_IMM_OFF(OP, DST, IMM, OFF)			\
+ 	((struct bpf_insn) {					\
+ 		.code  = BPF_ALU64 | BPF_OP(OP) | BPF_K,	\
+ 		.dst_reg = DST,					\
+ 		.src_reg = 0,					\
+-		.off   = 0,					\
++		.off   = OFF,					\
+ 		.imm   = IMM })
++#define BPF_ALU64_IMM(OP, DST, IMM)				\
++	BPF_ALU64_IMM_OFF(OP, DST, IMM, 0)
  
-+static inline void emit_udivmod64(const s8 *rd, const s8 *rm, const s8 *rn, struct jit_ctx *ctx,
-+				  u8 op, u8 sign)
-+{
-+	u32 dst;
+-#define BPF_ALU32_IMM(OP, DST, IMM)				\
++#define BPF_ALU32_IMM_OFF(OP, DST, IMM, OFF)			\
+ 	((struct bpf_insn) {					\
+ 		.code  = BPF_ALU | BPF_OP(OP) | BPF_K,		\
+ 		.dst_reg = DST,					\
+ 		.src_reg = 0,					\
+-		.off   = 0,					\
++		.off   = OFF,					\
+ 		.imm   = IMM })
++#define BPF_ALU32_IMM(OP, DST, IMM)				\
++	BPF_ALU32_IMM_OFF(OP, DST, IMM, 0)
+ 
+ /* Endianess conversion, cpu_to_{l,b}e(), {l,b}e_to_cpu() */
+ 
+@@ -143,6 +147,16 @@ struct ctl_table_header;
+ 		.off   = 0,					\
+ 		.imm   = LEN })
+ 
++/* Byte Swap, bswap16/32/64 */
 +
-+	/* Push caller-saved registers on stack */
-+	emit(ARM_PUSH(CALLER_MASK), ctx);
++#define BPF_BSWAP(DST, LEN)					\
++	((struct bpf_insn) {					\
++		.code  = BPF_ALU64 | BPF_END | BPF_SRC(BPF_TO_LE),	\
++		.dst_reg = DST,					\
++		.src_reg = 0,					\
++		.off   = 0,					\
++		.imm   = LEN })
 +
-+	/*
-+	 * As we are implementing 64-bit div/mod as function calls, We need to put the dividend in
-+	 * R0-R1 and the divisor in R2-R3. As we have already pushed these registers on the stack,
-+	 * we can recover them later after returning from the function call.
-+	 */
-+	if (rm[1] != ARM_R0 || rn[1] != ARM_R2) {
-+		/*
-+		 * Move Rm to {R1, R0} if it is not already there.
-+		 */
-+		if (rm[1] != ARM_R0) {
-+			if (rn[1] == ARM_R0)
-+				emit(ARM_PUSH(BIT(ARM_R0) | BIT(ARM_R1)), ctx);
-+			emit(ARM_MOV_R(ARM_R1, rm[0]), ctx);
-+			emit(ARM_MOV_R(ARM_R0, rm[1]), ctx);
-+			if (rn[1] == ARM_R0) {
-+				emit(ARM_POP(BIT(ARM_R2) | BIT(ARM_R3)), ctx);
-+				goto cont;
-+			}
-+		}
-+		/*
-+		 * Move Rn to {R3, R2} if it is not already there.
-+		 */
-+		if (rn[1] != ARM_R2) {
-+			emit(ARM_MOV_R(ARM_R3, rn[0]), ctx);
-+			emit(ARM_MOV_R(ARM_R2, rn[1]), ctx);
-+		}
-+	}
+ /* Short form of mov, dst_reg = src_reg */
+ 
+ #define BPF_MOV64_REG(DST, SRC)					\
+@@ -179,6 +193,24 @@ struct ctl_table_header;
+ 		.off   = 0,					\
+ 		.imm   = IMM })
+ 
++/* Short form of movsx, dst_reg = (s8,s16,s32)src_reg */
 +
-+cont:
++#define BPF_MOVSX64_REG(DST, SRC, OFF)				\
++	((struct bpf_insn) {					\
++		.code  = BPF_ALU64 | BPF_MOV | BPF_X,		\
++		.dst_reg = DST,					\
++		.src_reg = SRC,					\
++		.off   = OFF,					\
++		.imm   = 0 })
 +
-+	/* Call appropriate function */
-+	if (sign) {
-+		if (op == BPF_DIV)
-+			dst = (u32)jit_sdiv64;
-+		else
-+			dst = (u32)jit_smod64;
-+	} else {
-+		if (op == BPF_DIV)
-+			dst = (u32)jit_udiv64;
-+		else
-+			dst = (u32)jit_mod64;
-+	}
++#define BPF_MOVSX32_REG(DST, SRC, OFF)				\
++	((struct bpf_insn) {					\
++		.code  = BPF_ALU | BPF_MOV | BPF_X,		\
++		.dst_reg = DST,					\
++		.src_reg = SRC,					\
++		.off   = OFF,					\
++		.imm   = 0 })
 +
-+	emit_mov_i(ARM_IP, dst, ctx);
-+	emit_blx_r(ARM_IP, ctx);
+ /* Special form of mov32, used for doing explicit zero extension on dst. */
+ #define BPF_ZEXT_REG(DST)					\
+ 	((struct bpf_insn) {					\
+@@ -263,6 +295,16 @@ static inline bool insn_is_zext(const struct bpf_insn *insn)
+ 		.off   = OFF,					\
+ 		.imm   = 0 })
+ 
++/* Memory load, dst_reg = *(signed size *) (src_reg + off16) */
 +
-+	/* Save return value */
-+	if (rd[1] != ARM_R0) {
-+		emit(ARM_MOV_R(rd[0], ARM_R1), ctx);
-+		emit(ARM_MOV_R(rd[1], ARM_R0), ctx);
-+	}
++#define BPF_LDX_MEMSX(SIZE, DST, SRC, OFF)			\
++	((struct bpf_insn) {					\
++		.code  = BPF_LDX | BPF_SIZE(SIZE) | BPF_MEMSX,	\
++		.dst_reg = DST,					\
++		.src_reg = SRC,					\
++		.off   = OFF,					\
++		.imm   = 0 })
 +
-+	/* Recover {R3, R2} and {R1, R0} from stack if they are not Rd */
-+	if (rd[1] != ARM_R0 && rd[1] != ARM_R2) {
-+		emit(ARM_POP(BIT(ARM_R0) | BIT(ARM_R1)), ctx);
-+		emit(ARM_POP(BIT(ARM_R2) | BIT(ARM_R3)), ctx);
-+	} else if (rd[1] != ARM_R0) {
-+		emit(ARM_POP(BIT(ARM_R0) | BIT(ARM_R1)), ctx);
-+		emit(ARM_ADD_I(ARM_SP, ARM_SP, 8), ctx);
-+	} else if (rd[1] != ARM_R2) {
-+		emit(ARM_ADD_I(ARM_SP, ARM_SP, 8), ctx);
-+		emit(ARM_POP(BIT(ARM_R2) | BIT(ARM_R3)), ctx);
-+	} else {
-+		emit(ARM_ADD_I(ARM_SP, ARM_SP, 16), ctx);
-+	}
-+}
-+
- /* Is the translated BPF register on stack? */
- static bool is_stacked(s8 reg)
- {
-@@ -1578,7 +1683,19 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx)
- 	case BPF_ALU64 | BPF_DIV | BPF_X:
- 	case BPF_ALU64 | BPF_MOD | BPF_K:
- 	case BPF_ALU64 | BPF_MOD | BPF_X:
--		goto notyet;
-+		rd = arm_bpf_get_reg64(dst, tmp2, ctx);
-+		switch (BPF_SRC(code)) {
-+		case BPF_X:
-+			rs = arm_bpf_get_reg64(src, tmp, ctx);
-+			break;
-+		case BPF_K:
-+			rs = tmp;
-+			emit_a32_mov_se_i64(is64, rs, imm, ctx);
-+			break;
-+		}
-+		emit_udivmod64(rd, rd, rs, ctx, BPF_OP(code), off);
-+		arm_bpf_put_reg64(dst, rd, ctx);
-+		break;
- 	/* dst = dst << imm */
- 	/* dst = dst >> imm */
- 	/* dst = dst >> imm (signed) */
+ /* Memory store, *(uint *) (dst_reg + off16) = src_reg */
+ 
+ #define BPF_STX_MEM(SIZE, DST, SRC, OFF)			\
+diff --git a/lib/test_bpf.c b/lib/test_bpf.c
+index ecde4216201e..7916503e6a6a 100644
+--- a/lib/test_bpf.c
++++ b/lib/test_bpf.c
+@@ -5111,6 +5111,104 @@ static struct bpf_test tests[] = {
+ 		{ },
+ 		{ { 0, 0xffffffff } }
+ 	},
++	/* MOVSX32 */
++	{
++		"ALU_MOVSX | BPF_B",
++		.u.insns_int = {
++			BPF_LD_IMM64(R2, 0x00000000ffffffefLL),
++			BPF_LD_IMM64(R3, 0xdeadbeefdeadbeefLL),
++			BPF_MOVSX32_REG(R1, R3, 8),
++			BPF_JMP_REG(BPF_JEQ, R2, R1, 2),
++			BPF_MOV32_IMM(R0, 2),
++			BPF_EXIT_INSN(),
++			BPF_MOV32_IMM(R0, 1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0x1 } },
++	},
++	{
++		"ALU_MOVSX | BPF_H",
++		.u.insns_int = {
++			BPF_LD_IMM64(R2, 0x00000000ffffbeefLL),
++			BPF_LD_IMM64(R3, 0xdeadbeefdeadbeefLL),
++			BPF_MOVSX32_REG(R1, R3, 16),
++			BPF_JMP_REG(BPF_JEQ, R2, R1, 2),
++			BPF_MOV32_IMM(R0, 2),
++			BPF_EXIT_INSN(),
++			BPF_MOV32_IMM(R0, 1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0x1 } },
++	},
++	{
++		"ALU_MOVSX | BPF_W",
++		.u.insns_int = {
++			BPF_LD_IMM64(R2, 0x00000000deadbeefLL),
++			BPF_LD_IMM64(R3, 0xdeadbeefdeadbeefLL),
++			BPF_MOVSX32_REG(R1, R3, 32),
++			BPF_JMP_REG(BPF_JEQ, R2, R1, 2),
++			BPF_MOV32_IMM(R0, 2),
++			BPF_EXIT_INSN(),
++			BPF_MOV32_IMM(R0, 1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0x1 } },
++	},
++	/* MOVSX64 REG */
++	{
++		"ALU64_MOVSX | BPF_B",
++		.u.insns_int = {
++			BPF_LD_IMM64(R2, 0xffffffffffffffefLL),
++			BPF_LD_IMM64(R3, 0xdeadbeefdeadbeefLL),
++			BPF_MOVSX64_REG(R1, R3, 8),
++			BPF_JMP_REG(BPF_JEQ, R2, R1, 2),
++			BPF_MOV32_IMM(R0, 2),
++			BPF_EXIT_INSN(),
++			BPF_MOV32_IMM(R0, 1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0x1 } },
++	},
++	{
++		"ALU64_MOVSX | BPF_H",
++		.u.insns_int = {
++			BPF_LD_IMM64(R2, 0xffffffffffffbeefLL),
++			BPF_LD_IMM64(R3, 0xdeadbeefdeadbeefLL),
++			BPF_MOVSX64_REG(R1, R3, 16),
++			BPF_JMP_REG(BPF_JEQ, R2, R1, 2),
++			BPF_MOV32_IMM(R0, 2),
++			BPF_EXIT_INSN(),
++			BPF_MOV32_IMM(R0, 1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0x1 } },
++	},
++	{
++		"ALU64_MOVSX | BPF_W",
++		.u.insns_int = {
++			BPF_LD_IMM64(R2, 0xffffffffdeadbeefLL),
++			BPF_LD_IMM64(R3, 0xdeadbeefdeadbeefLL),
++			BPF_MOVSX64_REG(R1, R3, 32),
++			BPF_JMP_REG(BPF_JEQ, R2, R1, 2),
++			BPF_MOV32_IMM(R0, 2),
++			BPF_EXIT_INSN(),
++			BPF_MOV32_IMM(R0, 1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0x1 } },
++	},
+ 	/* BPF_ALU | BPF_ADD | BPF_X */
+ 	{
+ 		"ALU_ADD_X: 1 + 2 = 3",
+@@ -6105,6 +6203,106 @@ static struct bpf_test tests[] = {
+ 		{ },
+ 		{ { 0, 2 } },
+ 	},
++	/* BPF_ALU | BPF_DIV | BPF_X off=1 (SDIV) */
++	{
++		"ALU_SDIV_X: -6 / 2 = -3",
++		.u.insns_int = {
++			BPF_LD_IMM64(R0, -6),
++			BPF_ALU32_IMM(BPF_MOV, R1, 2),
++			BPF_ALU32_REG_OFF(BPF_DIV, R0, R1, 1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, -3 } },
++	},
++	/* BPF_ALU | BPF_DIV | BPF_K off=1 (SDIV) */
++	{
++		"ALU_SDIV_K: -6 / 2 = -3",
++		.u.insns_int = {
++			BPF_LD_IMM64(R0, -6),
++			BPF_ALU32_IMM_OFF(BPF_DIV, R0, 2, 1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, -3 } },
++	},
++	/* BPF_ALU64 | BPF_DIV | BPF_X off=1 (SDIV64) */
++	{
++		"ALU64_SDIV_X: -6 / 2 = -3",
++		.u.insns_int = {
++			BPF_LD_IMM64(R0, -6),
++			BPF_ALU32_IMM(BPF_MOV, R1, 2),
++			BPF_ALU64_REG_OFF(BPF_DIV, R0, R1, 1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, -3 } },
++	},
++	/* BPF_ALU64 | BPF_DIV | BPF_K off=1 (SDIV64) */
++	{
++		"ALU64_SDIV_K: -6 / 2 = -3",
++		.u.insns_int = {
++			BPF_LD_IMM64(R0, -6),
++			BPF_ALU64_IMM_OFF(BPF_DIV, R0, 2, 1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, -3 } },
++	},
++	/* BPF_ALU | BPF_MOD | BPF_X off=1 (SMOD) */
++	{
++		"ALU_SMOD_X: -7 % 2 = -1",
++		.u.insns_int = {
++			BPF_LD_IMM64(R0, -7),
++			BPF_ALU32_IMM(BPF_MOV, R1, 2),
++			BPF_ALU32_REG_OFF(BPF_MOD, R0, R1, 1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, -1 } },
++	},
++	/* BPF_ALU | BPF_MOD | BPF_K off=1 (SMOD) */
++	{
++		"ALU_SMOD_K: -7 % 2 = -1",
++		.u.insns_int = {
++			BPF_LD_IMM64(R0, -7),
++			BPF_ALU32_IMM_OFF(BPF_MOD, R0, 2, 1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, -1 } },
++	},
++	/* BPF_ALU64 | BPF_MOD | BPF_X off=1 (SMOD64) */
++	{
++		"ALU64_SMOD_X: -7 % 2 = -1",
++		.u.insns_int = {
++			BPF_LD_IMM64(R0, -7),
++			BPF_ALU32_IMM(BPF_MOV, R1, 2),
++			BPF_ALU64_REG_OFF(BPF_MOD, R0, R1, 1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, -1 } },
++	},
++	/* BPF_ALU64 | BPF_MOD | BPF_K off=1 (SMOD64) */
++	{
++		"ALU64_SMOD_X: -7 % 2 = -1",
++		.u.insns_int = {
++			BPF_LD_IMM64(R0, -7),
++			BPF_ALU64_IMM_OFF(BPF_MOD, R0, 2, 1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, -1 } },
++	},
+ 	/* BPF_ALU | BPF_AND | BPF_X */
+ 	{
+ 		"ALU_AND_X: 3 & 2 = 2",
+@@ -7837,6 +8035,104 @@ static struct bpf_test tests[] = {
+ 		{ },
+ 		{ { 0, (u32) (cpu_to_le64(0xfedcba9876543210ULL) >> 32) } },
+ 	},
++	/* BSWAP */
++	{
++		"BSWAP 16: 0x0123456789abcdef -> 0xefcd",
++		.u.insns_int = {
++			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
++			BPF_BSWAP(R0, 16),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0xefcd } },
++	},
++	{
++		"BSWAP 32: 0x0123456789abcdef -> 0xefcdab89",
++		.u.insns_int = {
++			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
++			BPF_BSWAP(R0, 32),
++			BPF_ALU64_REG(BPF_MOV, R1, R0),
++			BPF_ALU64_IMM(BPF_RSH, R1, 32),
++			BPF_ALU32_REG(BPF_ADD, R0, R1), /* R1 = 0 */
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0xefcdab89 } },
++	},
++	{
++		"BSWAP 64: 0x0123456789abcdef -> 0x67452301",
++		.u.insns_int = {
++			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
++			BPF_BSWAP(R0, 64),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0x67452301 } },
++	},
++	{
++		"BSWAP 64: 0x0123456789abcdef >> 32 -> 0xefcdab89",
++		.u.insns_int = {
++			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
++			BPF_BSWAP(R0, 64),
++			BPF_ALU64_IMM(BPF_RSH, R0, 32),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0xefcdab89 } },
++	},
++	/* BSWAP, reversed */
++	{
++		"BSWAP 16: 0xfedcba9876543210 -> 0x1032",
++		.u.insns_int = {
++			BPF_LD_IMM64(R0, 0xfedcba9876543210ULL),
++			BPF_BSWAP(R0, 16),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0x1032 } },
++	},
++	{
++		"BSWAP 32: 0xfedcba9876543210 -> 0x10325476",
++		.u.insns_int = {
++			BPF_LD_IMM64(R0, 0xfedcba9876543210ULL),
++			BPF_BSWAP(R0, 32),
++			BPF_ALU64_REG(BPF_MOV, R1, R0),
++			BPF_ALU64_IMM(BPF_RSH, R1, 32),
++			BPF_ALU32_REG(BPF_ADD, R0, R1), /* R1 = 0 */
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0x10325476 } },
++	},
++	{
++		"BSWAP 64: 0xfedcba9876543210 -> 0x98badcfe",
++		.u.insns_int = {
++			BPF_LD_IMM64(R0, 0xfedcba9876543210ULL),
++			BPF_BSWAP(R0, 64),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0x98badcfe } },
++	},
++	{
++		"BSWAP 64: 0xfedcba9876543210 >> 32 -> 0x10325476",
++		.u.insns_int = {
++			BPF_LD_IMM64(R0, 0xfedcba9876543210ULL),
++			BPF_BSWAP(R0, 64),
++			BPF_ALU64_IMM(BPF_RSH, R0, 32),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0x10325476 } },
++	},
+ 	/* BPF_LDX_MEM B/H/W/DW */
+ 	{
+ 		"BPF_LDX_MEM | BPF_B, base",
+@@ -8228,6 +8524,67 @@ static struct bpf_test tests[] = {
+ 		{ { 32, 0 } },
+ 		.stack_depth = 0,
+ 	},
++	/* BPF_LDX_MEMSX B/H/W */
++	{
++		"BPF_LDX_MEMSX | BPF_B",
++		.u.insns_int = {
++			BPF_LD_IMM64(R1, 0xdead0000000000f0ULL),
++			BPF_LD_IMM64(R2, 0xfffffffffffffff0ULL),
++			BPF_STX_MEM(BPF_DW, R10, R1, -8),
++#ifdef __BIG_ENDIAN
++			BPF_LDX_MEMSX(BPF_B, R0, R10, -1),
++#else
++			BPF_LDX_MEMSX(BPF_B, R0, R10, -8),
++#endif
++			BPF_JMP_REG(BPF_JNE, R0, R2, 1),
++			BPF_ALU64_IMM(BPF_MOV, R0, 0),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0 } },
++		.stack_depth = 8,
++	},
++	{
++		"BPF_LDX_MEMSX | BPF_H",
++		.u.insns_int = {
++			BPF_LD_IMM64(R1, 0xdead00000000f123ULL),
++			BPF_LD_IMM64(R2, 0xfffffffffffff123ULL),
++			BPF_STX_MEM(BPF_DW, R10, R1, -8),
++#ifdef __BIG_ENDIAN
++			BPF_LDX_MEMSX(BPF_H, R0, R10, -2),
++#else
++			BPF_LDX_MEMSX(BPF_H, R0, R10, -8),
++#endif
++			BPF_JMP_REG(BPF_JNE, R0, R2, 1),
++			BPF_ALU64_IMM(BPF_MOV, R0, 0),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0 } },
++		.stack_depth = 8,
++	},
++	{
++		"BPF_LDX_MEMSX | BPF_W",
++		.u.insns_int = {
++			BPF_LD_IMM64(R1, 0x00000000deadbeefULL),
++			BPF_LD_IMM64(R2, 0xffffffffdeadbeefULL),
++			BPF_STX_MEM(BPF_DW, R10, R1, -8),
++#ifdef __BIG_ENDIAN
++			BPF_LDX_MEMSX(BPF_W, R0, R10, -4),
++#else
++			BPF_LDX_MEMSX(BPF_W, R0, R10, -8),
++#endif
++			BPF_JMP_REG(BPF_JNE, R0, R2, 1),
++			BPF_ALU64_IMM(BPF_MOV, R0, 0),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0 } },
++		.stack_depth = 8,
++	},
+ 	/* BPF_STX_MEM B/H/W/DW */
+ 	{
+ 		"BPF_STX_MEM | BPF_B",
+@@ -9474,6 +9831,20 @@ static struct bpf_test tests[] = {
+ 		{ },
+ 		{ { 0, 1 } },
+ 	},
++	/* BPF_JMP32 | BPF_JA */
++	{
++		"JMP32_JA: Unconditional jump: if (true) return 1",
++		.u.insns_int = {
++			BPF_ALU32_IMM(BPF_MOV, R0, 0),
++			BPF_JMP32_IMM(BPF_JA, 0, 1, 0),
++			BPF_EXIT_INSN(),
++			BPF_ALU32_IMM(BPF_MOV, R0, 1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 1 } },
++	},
+ 	/* BPF_JMP | BPF_JSLT | BPF_K */
+ 	{
+ 		"JMP_JSLT_K: Signed jump: if (-2 < -1) return 1",
 -- 
 2.39.2
 
