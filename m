@@ -2,87 +2,176 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62F32EC8742
-	for <linux-kselftest@archiver.kernel.org>; Thu,  7 Sep 2023 16:08:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 581DEEC8738
+	for <linux-kselftest@archiver.kernel.org>; Thu,  7 Sep 2023 16:14:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232526AbjIGQIq (ORCPT
+        id S238751AbjIGQOy (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 7 Sep 2023 12:08:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54830 "EHLO
+        Thu, 7 Sep 2023 12:14:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240098AbjIGQIM (ORCPT
+        with ESMTP id S239217AbjIGQOb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 7 Sep 2023 12:08:12 -0400
-Received: from pandora.armlinux.org.uk (unknown [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 934A022A5A;
-        Thu,  7 Sep 2023 09:01:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=9U7UtfEdSnnxywMPXF+OgzCTVp9iErjz0p+rF6sp5Y0=; b=j9Li/W6nKb0IVyyG1BmtWdAX8C
-        bZYGlkAGnOk7pfVpG2QKqvGz0sPbf0EDV3Ch8AI+syL6yRGMdkJe8qHcQagYsDXKWpvLEQmSpq4xI
-        n9ilcx6wkDkHH3MJzjXDFTT9LRipQzTlYYPxeTNBqOwM4OD7i0z/g0d5ekH9MnsBwBhl3B4KjbuR9
-        Xs9e6uLj+1ipCampQCEJSX75IWoAg9v6K4pP4gS4mzDTYk7ca6TdpEmblimXsVXf198bMikhDZaIQ
-        0tnnIT9ENJdnmuiv8c/XxfKdfHBEBj3RZL1ngj2RhsnI/yQgBO36kyWkGnFdq9hk18ZiYSgghLWoU
-        Lcyj5ppw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35872)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.96)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1qeAhM-0001fF-2I;
-        Thu, 07 Sep 2023 09:49:12 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1qeAhM-0005hP-MX; Thu, 07 Sep 2023 09:49:12 +0100
-Date:   Thu, 7 Sep 2023 09:49:12 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Puranjay Mohan <puranjay12@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>,
-        Yonghong Song <yonghong.song@linux.dev>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shubham Bansal <illusionist.neo@gmail.com>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 5/8] arm32, bpf: add support for 32-bit
- signed division
-Message-ID: <ZPmOiF9UsPf8FN5V@shell.armlinux.org.uk>
-References: <20230906183320.1959008-1-puranjay12@gmail.com>
- <20230906183320.1959008-6-puranjay12@gmail.com>
+        Thu, 7 Sep 2023 12:14:31 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0DFD1FE8;
+        Thu,  7 Sep 2023 09:10:57 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-52c88a03f99so1467246a12.2;
+        Thu, 07 Sep 2023 09:10:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1694102993; x=1694707793; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EBBEzL7qY3uq6+ZqigJzuGuvME9kRMD/negQGQFd1kU=;
+        b=SVZ3HxdXmiXzCR3Sg4YkbUiQK5WHwETv3O3BrTFQ+jw5sKWGBZM6Hag0a7249Uogof
+         wSEz0ad57FX0XyHKFUSS0OsMHVwclj6u2mnqyNBkikj07KP0KPREzy6M5zZYh68eU8yo
+         ONg6MZfg949Er1TgPsYZRWEibT1sQpXGkg5KBcCsVQCs9ocsQyxcwYSWFL1etUPTNDg6
+         E0mUxI4/E0M0t6arTvkEoP2ZH0S3b824Lx6OJVknSr5nrsaXyYBaYdH9dxfltVCszhE6
+         apK4S0ZTozlj/xr+clcCGc9QPg70gERbhJ/eFCRc3mk1pJovU7uzQIS/pjfvn5M8JcPr
+         HL9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1694102993; x=1694707793;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EBBEzL7qY3uq6+ZqigJzuGuvME9kRMD/negQGQFd1kU=;
+        b=kXjMsZ79g/QSnre9deS0wouUz0mQiiUQfDIc97dqKYnPkI2Jf5rnbyRsE7iZQ7FOwJ
+         zBSFF3hKb0PBepgqvxyrTixzf38tQ1cMCoY3jzz/PMFhYMrNuglv2mtCuma+l/epaZy8
+         t9th/jd/aLK4yIV0EZOLbgGu/H946K08IJicBZ0NVTCoUoviWOwTDyCZYEnhM/neJTk9
+         ZtU0sEUdgZc6ZOktQx7knsp32KDeBy3gmGXzIsFZkjmUtht50GQTOQUgryDxOqc439S0
+         +/7t9J9YJxqyspyMlVuM+IszxMAzhtH+2AClPxTPUp8+Wt5cHnQw2O0jc9UARb/AXRDr
+         kGSw==
+X-Gm-Message-State: AOJu0YzkuZaO5kygphD4AF86Si5fHxv7D7nJszdsZ0JNiiN33hN35BWF
+        4yCxKdk3ylOeMLYVziYegSbKFcrXeLcXxkds+Hi0vQFj
+X-Google-Smtp-Source: AGHT+IF10+wenAf/r4lgyEOBY89UZGCOdwUC3J+LpxGhdoe1wYTW/cIeqheprklSo2IBVjz46fa7sLxs5xkSY5w4zLI=
+X-Received: by 2002:a2e:804c:0:b0:2bc:c830:4cbb with SMTP id
+ p12-20020a2e804c000000b002bcc8304cbbmr3729686ljg.45.1694078317171; Thu, 07
+ Sep 2023 02:18:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230906183320.1959008-6-puranjay12@gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+References: <cover.1693659382.git.haibo1.xu@intel.com> <b6ef1b031e3a581f481cf19a26623388163444b4.1693659382.git.haibo1.xu@intel.com>
+ <20230904-aa8b0d8d23d391586686038a@orel> <CAJve8ok5cU+h1K+WJ+aDpB+u+PBo8XosUyyVbMGy-xR0XiWFdw@mail.gmail.com>
+ <CAJve8om+dLcG+4trDfG1yx8vhj52RhPZrJoF-emWDX+OPM088A@mail.gmail.com> <20230907-bde62d037a3aaeedfe31f964@orel>
+In-Reply-To: <20230907-bde62d037a3aaeedfe31f964@orel>
+From:   Haibo Xu <xiaobo55x@gmail.com>
+Date:   Thu, 7 Sep 2023 17:18:25 +0800
+Message-ID: <CAJve8okJOHofRK=0VRG8QPetOgk_WexEui_3UtEKk+4x1iPwMA@mail.gmail.com>
+Subject: Re: [PATCH v2 7/8] KVM: riscv: selftest: Change vcpu_has_ext to a
+ common function
+To:     Andrew Jones <ajones@ventanamicro.com>
+Cc:     Haibo Xu <haibo1.xu@intel.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Guo Ren <guoren@kernel.org>,
+        Daniel Henrique Barboza <dbarboza@ventanamicro.com>,
+        wchen <waylingii@gmail.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Vishal Annapurve <vannapurve@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Aaron Lewis <aaronlewis@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Ackerley Tng <ackerleytng@google.com>,
+        Mingwei Zhang <mizhang@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Lei Wang <lei4.wang@intel.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Like Xu <likexu@tencent.com>, Peter Gonda <pgonda@google.com>,
+        Thomas Huth <thuth@redhat.com>,
+        =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <philmd@linaro.org>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Michal Luczaj <mhal@rbox.co>, Paul Durrant <paul@xen.org>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvm-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Sep 06, 2023 at 06:33:17PM +0000, Puranjay Mohan wrote:
-> The cpuv4 added a new BPF_SDIV instruction that does signed division.
-> The encoding is similar to BPF_DIV but BPF_SDIV sets offset=1.
-> 
-> ARM32 already supports 32-bit BPF_DIV which can be easily extended to
-> support BPF_SDIV as ARM32 has the SDIV instruction. When the CPU is not
-> ARM-v7, we implement that SDIV/SMOD with the function call similar to
-> the implementation of DIV/MOD.
-> 
-> Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
+On Thu, Sep 7, 2023 at 5:01=E2=80=AFPM Andrew Jones <ajones@ventanamicro.co=
+m> wrote:
+>
+> On Thu, Sep 07, 2023 at 11:57:00AM +0800, Haibo Xu wrote:
+> > On Wed, Sep 6, 2023 at 6:10=E2=80=AFPM Haibo Xu <xiaobo55x@gmail.com> w=
+rote:
+> > >
+> > > On Mon, Sep 4, 2023 at 10:04=E2=80=AFPM Andrew Jones <ajones@ventanam=
+icro.com> wrote:
+> > > >
+> > > > On Sat, Sep 02, 2023 at 08:59:29PM +0800, Haibo Xu wrote:
+> > > > > diff --git a/tools/testing/selftests/kvm/riscv/get-reg-list.c b/t=
+ools/testing/selftests/kvm/riscv/get-reg-list.c
+> > > > > index d8ecacd03ecf..c4028bf32e3f 100644
+> > > > > --- a/tools/testing/selftests/kvm/riscv/get-reg-list.c
+> > > > > +++ b/tools/testing/selftests/kvm/riscv/get-reg-list.c
+> > > > > @@ -44,20 +44,6 @@ bool check_reject_set(int err)
+> > > > >       return err =3D=3D EINVAL;
+> > > > >  }
+> > > > >
+> > > > > -static inline bool vcpu_has_ext(struct kvm_vcpu *vcpu, int ext)
+> > > > > -{
+> > > > > -     int ret;
+> > > > > -     unsigned long value;
+> > > > > -
+> > > > > -     ret =3D __vcpu_get_reg(vcpu, RISCV_ISA_EXT_REG(ext), &value=
+);
+> > > > > -     if (ret) {
+> > > > > -             printf("Failed to get ext %d", ext);
+> > > > > -             return false;
+> > > > > -     }
+> > > > > -
+> > > > > -     return !!value;
+> > > >
+> > > > get-reg-list will now assert on get-reg when an extension isn't pre=
+sent,
+> > > > rather than failing the __TEST_REQUIRE(), which would do a skip ins=
+tead.
+> > > > We need both the return false version and the assert version.
+> > > >
+> > >
+> > > Ok, Will keep this one for get-reg-list and add another one for
+> > > arch-timer specific usage.
+> > >
+> >
+> > Just thought about it again, maybe we only need the "return false"
+> > version for both get-reg-list
+> > and arch-timer tests since if an extension was not available, the test
+> > can be skipped with a message.
+> >
+> > bool vcpu_has_ext(struct kvm_vcpu *vcpu, int ext)
+> > {
+> >        unsigned long value =3D 0;
+> >
+> >        __vcpu_get_reg(vcpu, RISCV_ISA_EXT_REG(ext), &value);
+> >
+> >        return !!value;
+> > }
+>
+> Yup, I had actually seen that when reviewing a later patch in this series=
+,
+> but I wasn't concerned if we added the assert type anyway, since we
+> frequently end up with the two function types for KVM queries. If we don'=
+t
+> have a need for an assert type yet, then we don't need to introduce it.
+> However, we should introduce the non-assert type as __vcpu_has_ext(),
+> reserving the vcpu_has_ext() name for the assert type, per the kvm
+> selftests naming convention.
+>
 
-Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Sure, thanks!
 
-Thanks, this is a lot more clear!
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+> Thanks,
+> drew
