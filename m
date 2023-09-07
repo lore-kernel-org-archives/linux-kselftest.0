@@ -2,55 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BC43ACCFA0A
-	for <linux-kselftest@archiver.kernel.org>; Thu,  7 Sep 2023 23:06:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CCBCEC875F
+	for <linux-kselftest@archiver.kernel.org>; Thu,  7 Sep 2023 23:06:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237551AbjIGXGT (ORCPT
+        id S237644AbjIGXGX (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 7 Sep 2023 19:06:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40698 "EHLO
+        Thu, 7 Sep 2023 19:06:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238642AbjIGXGH (ORCPT
+        with ESMTP id S240873AbjIGXGT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 7 Sep 2023 19:06:07 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D232C1BD7;
-        Thu,  7 Sep 2023 16:06:01 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-401c90ed2ecso16246365e9.0;
-        Thu, 07 Sep 2023 16:06:01 -0700 (PDT)
+        Thu, 7 Sep 2023 19:06:19 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12A3E1BFC;
+        Thu,  7 Sep 2023 16:06:03 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-401d10e3e54so15627185e9.2;
+        Thu, 07 Sep 2023 16:06:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694127960; x=1694732760; darn=vger.kernel.org;
+        d=gmail.com; s=20221208; t=1694127962; x=1694732762; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zDHabXQ3v0V6rVN5TewLut1ATi0BNX0QhXwmwgrIhV4=;
-        b=jz4yCofb1X8TBpYGMxSSD88nS01Pirv+Gvu+nl7NaPNUfQjQ0FxnQw1e2pgPduRiiY
-         dxFkMXXaYhbaBT6ihaJX/4eSsvfUP9IljiVBW3Q8GyuGZ9F8IdnIN3RBk3UCsinFIgSY
-         rDEpjnMdOr7YaEOi2yNrxFXKzRZghK25EjF/YprgCx2E0K99agp0coXQZA4Sb2rfMjta
-         ZVyd/LrZXJE4BT4TkiRum0O3J4IFai1ZSvuDaFyKSvdsbJHoJN/Fq66Ye0DKwLAWiOyF
-         2ysNXLQrcZ0k28JjAFq5HlL2kQVSTACVlupqlErvR9DB4Zkx3F4kj6uEPIZ4FwhKVlLN
-         hxoQ==
+        bh=q1A01Vb7M9/CvOvvy/tRz9MhOl+QjbGTZcIw1h515GI=;
+        b=mKWtIaKrBaVznTA8yFnY5c71MiCJRUdeFo6YRqHkMbPGnAIuPBg+TbPlQBdOWDcj9A
+         apy7GX6GSY7em99Ozk3Lwignh52BosRnsoGXKHCqrIgZFnazVbwpspRYtx2BG0QmF29f
+         UXORV0jrNZ4opmGPWACoVtX5cNQfAYma2ztsfyj4YCSDhHO3PrOofDTyvt71ZiDHNMdJ
+         rNlXm7w9ygAne5EDj+g8JdGBze+7T+juPCvKw3L60rASlHHuqBdChHMa5QYsCdHjZRCu
+         BXChlvfCUmN+RHhyVaQWKtT7aIln+sBMWgRIaloMpAN+6TZChio+o/TLrfDeSfLpm3ev
+         fN0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694127960; x=1694732760;
+        d=1e100.net; s=20230601; t=1694127962; x=1694732762;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=zDHabXQ3v0V6rVN5TewLut1ATi0BNX0QhXwmwgrIhV4=;
-        b=WqSWonyMCC4//vDVCtcalsBrsFJPG9oD3XpxQ4emz00SDB6B2DmJppyy/cZFPUmMmK
-         Z05xt7mfQ/3QiBzjoSoFZHe0uUuuGc45ZA4kV4SKWoP26LUwiv1tuIcUu8ngw9ZKS1U3
-         sBVWxjRXB/ZhtZ/YKIEM+YldyZJtaASVnRRGOfZqv2BGL8qBxMJNLhAPiQrmKsTWdt6A
-         LyLfX3oyvc0Np65q/mXEs7D3/3rNbHDUVeX/GFonU7hjGxGvwVX5UyPOWTxe+XkX9Et9
-         Cso7lmU1z9iJcYAB1oI4u01qf7qhIP1Jf/0A9x/WpMx87OCSNiNkycoE5sdQsKSl14Vk
-         ygYg==
-X-Gm-Message-State: AOJu0YzdLIZuWfh6IQrZ3RhlQZsyCVvwAkebIWT01/SIdSh8cYnOS9TK
-        Bit96QK5eUsFuYZDM+t7Z+c=
-X-Google-Smtp-Source: AGHT+IEmcguzVBEHfttctnJtLySpXnF4gFIkspE8p80QSVVNZnxtnM0EMW80+VyiApNxEnhZNdT1wg==
-X-Received: by 2002:a5d:4702:0:b0:31a:d9bc:47a2 with SMTP id y2-20020a5d4702000000b0031ad9bc47a2mr479062wrq.53.1694127959738;
-        Thu, 07 Sep 2023 16:05:59 -0700 (PDT)
+        bh=q1A01Vb7M9/CvOvvy/tRz9MhOl+QjbGTZcIw1h515GI=;
+        b=RzhnxM1vDTIoJ7VFu1wO0dTx0lhYFCTXd/QYPKzVRvLuo4rTLvOlY1qnVlwHv2AcvO
+         MmHnjgPZi1DBf0Pfb+/ZRF962Dl5siLDUfd/UOYkZHeyBNI0FyOGA0FSDAOfeuJrZbOv
+         MmPEfMN1MDCSKCFu1V9PNa7U6VhFNJQ+Bci1YjbviDLf6pgfJB7r9ozzOhpyrSqwFHBg
+         K7E4F/3ypN8a3UCVeYQV7KXklcBftwBnq8oQVnzyDpIZGCKxtWcZBPaC5TmSEGzPfCyr
+         vkfcFg78rmmfh0DHcSHVxAryUamzogq4aGFqMszeSnw+sJ7g4HctATNmPH+PjwmTpIqS
+         EBEQ==
+X-Gm-Message-State: AOJu0YwTiURgEIJPsju7ZZD5Xnwys+hD8hlCNkxSmLJZqfI/KdTlUzcY
+        ZU+o6h3eEOoRHntHxwlCYsM=
+X-Google-Smtp-Source: AGHT+IEpV5PqBqA3OEVDFiT2Vm2tbW+TW3MN5AIhRzxdbQ8A3vlFQuu/IE9Jn54Y4o4unYmMHZiyag==
+X-Received: by 2002:adf:f709:0:b0:317:69d2:35be with SMTP id r9-20020adff709000000b0031769d235bemr518704wrp.30.1694127962041;
+        Thu, 07 Sep 2023 16:06:02 -0700 (PDT)
 Received: from ip-172-31-30-46.eu-west-1.compute.internal (ec2-3-249-32-32.eu-west-1.compute.amazonaws.com. [3.249.32.32])
-        by smtp.gmail.com with ESMTPSA id n13-20020a5d484d000000b0031f3b04e7cdsm491358wrs.109.2023.09.07.16.05.58
+        by smtp.gmail.com with ESMTPSA id n13-20020a5d484d000000b0031f3b04e7cdsm491358wrs.109.2023.09.07.16.06.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Sep 2023 16:05:59 -0700 (PDT)
+        Thu, 07 Sep 2023 16:06:01 -0700 (PDT)
 From:   Puranjay Mohan <puranjay12@gmail.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -68,9 +68,9 @@ To:     Alexei Starovoitov <ast@kernel.org>,
         bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     puranjay12@gmail.com
-Subject: [PATCH bpf-next v3 7/9] selftest, bpf: enable cpu v4 tests for arm32
-Date:   Thu,  7 Sep 2023 23:05:48 +0000
-Message-Id: <20230907230550.1417590-8-puranjay12@gmail.com>
+Subject: [PATCH bpf-next v3 9/9] MAINTAINERS: Add myself for ARM32 BPF JIT maintainer.
+Date:   Thu,  7 Sep 2023 23:05:50 +0000
+Message-Id: <20230907230550.1417590-10-puranjay12@gmail.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230907230550.1417590-1-puranjay12@gmail.com>
 References: <20230907230550.1417590-1-puranjay12@gmail.com>
@@ -80,88 +80,30 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Now that all the cpuv4 instructions are supported by the arm32 JIT,
-enable the selftests for arm32.
+As Shubham has been inactive since 2017, Add myself for ARM32 BPF JIT.
 
 Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
 ---
- tools/testing/selftests/bpf/progs/verifier_bswap.c | 3 ++-
- tools/testing/selftests/bpf/progs/verifier_gotol.c | 3 ++-
- tools/testing/selftests/bpf/progs/verifier_ldsx.c  | 3 ++-
- tools/testing/selftests/bpf/progs/verifier_movsx.c | 3 ++-
- tools/testing/selftests/bpf/progs/verifier_sdiv.c  | 3 ++-
- 5 files changed, 10 insertions(+), 5 deletions(-)
+ MAINTAINERS | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_bswap.c b/tools/testing/selftests/bpf/progs/verifier_bswap.c
-index 8893094725f0..5d54f8eae6a1 100644
---- a/tools/testing/selftests/bpf/progs/verifier_bswap.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_bswap.c
-@@ -5,7 +5,8 @@
- #include "bpf_misc.h"
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 612d6d1dbf36..c241856819bd 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3602,9 +3602,10 @@ F:	Documentation/devicetree/bindings/iio/accel/bosch,bma400.yaml
+ F:	drivers/iio/accel/bma400*
  
- #if (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) || \
--     (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && __clang_major__ >= 18
-+	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64) || defined(__TARGET_ARCH_arm)) && \
-+	__clang_major__ >= 18
+ BPF JIT for ARM
+-M:	Shubham Bansal <illusionist.neo@gmail.com>
++M:	Puranjay Mohan <puranjay12@gmail.com>
++R:	Shubham Bansal <illusionist.neo@gmail.com>
+ L:	bpf@vger.kernel.org
+-S:	Odd Fixes
++S:	Maintained
+ F:	arch/arm/net/
  
- SEC("socket")
- __description("BSWAP, 16")
-diff --git a/tools/testing/selftests/bpf/progs/verifier_gotol.c b/tools/testing/selftests/bpf/progs/verifier_gotol.c
-index 2dae5322a18e..aa54ecd5829e 100644
---- a/tools/testing/selftests/bpf/progs/verifier_gotol.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_gotol.c
-@@ -5,7 +5,8 @@
- #include "bpf_misc.h"
- 
- #if (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) || \
--     (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && __clang_major__ >= 18
-+	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64) || defined(__TARGET_ARCH_arm)) && \
-+	__clang_major__ >= 18
- 
- SEC("socket")
- __description("gotol, small_imm")
-diff --git a/tools/testing/selftests/bpf/progs/verifier_ldsx.c b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
-index 0c638f45aaf1..1e1bc379c44f 100644
---- a/tools/testing/selftests/bpf/progs/verifier_ldsx.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
-@@ -5,7 +5,8 @@
- #include "bpf_misc.h"
- 
- #if (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) || \
--     (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && __clang_major__ >= 18
-+	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64) || defined(__TARGET_ARCH_arm)) && \
-+	__clang_major__ >= 18
- 
- SEC("socket")
- __description("LDSX, S8")
-diff --git a/tools/testing/selftests/bpf/progs/verifier_movsx.c b/tools/testing/selftests/bpf/progs/verifier_movsx.c
-index 3c8ac2c57b1b..ca11fd5dafd1 100644
---- a/tools/testing/selftests/bpf/progs/verifier_movsx.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_movsx.c
-@@ -5,7 +5,8 @@
- #include "bpf_misc.h"
- 
- #if (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) || \
--     (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && __clang_major__ >= 18
-+	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64) || defined(__TARGET_ARCH_arm)) && \
-+	__clang_major__ >= 18
- 
- SEC("socket")
- __description("MOV32SX, S8")
-diff --git a/tools/testing/selftests/bpf/progs/verifier_sdiv.c b/tools/testing/selftests/bpf/progs/verifier_sdiv.c
-index 0990f8825675..fb039722b639 100644
---- a/tools/testing/selftests/bpf/progs/verifier_sdiv.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_sdiv.c
-@@ -5,7 +5,8 @@
- #include "bpf_misc.h"
- 
- #if (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) || \
--     (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && __clang_major__ >= 18
-+	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64) || defined(__TARGET_ARCH_arm)) && \
-+	__clang_major__ >= 18
- 
- SEC("socket")
- __description("SDIV32, non-zero imm divisor, check 1")
+ BPF JIT for ARM64
 -- 
 2.39.2
 
