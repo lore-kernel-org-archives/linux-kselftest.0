@@ -2,166 +2,117 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F48FEC875F
-	for <linux-kselftest@archiver.kernel.org>; Thu,  7 Sep 2023 22:55:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57594EB8FD7
+	for <linux-kselftest@archiver.kernel.org>; Thu,  7 Sep 2023 23:05:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241495AbjIGWzC (ORCPT
+        id S231969AbjIGXF7 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 7 Sep 2023 18:55:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58876 "EHLO
+        Thu, 7 Sep 2023 19:05:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241510AbjIGWzA (ORCPT
+        with ESMTP id S234220AbjIGXF7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 7 Sep 2023 18:55:00 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5D3B1BD7;
-        Thu,  7 Sep 2023 15:54:55 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93B1AC433C7;
-        Thu,  7 Sep 2023 22:54:54 +0000 (UTC)
-Date:   Thu, 7 Sep 2023 18:55:07 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Beau Belgrave <beaub@linux.microsoft.com>
-Cc:     shuah@kernel.org, mhiramat@kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        broonie@kernel.org, naresh.kamboju@linaro.org,
-        anders.roxell@linaro.org, arnd@arndb.de
-Subject: Re: [PATCH] selftests/user_events: Fix failures when user_events is
- not installed
-Message-ID: <20230907185507.7928b589@gandalf.local.home>
-In-Reply-To: <20230907223536.731-1-beaub@linux.microsoft.com>
-References: <20230907223536.731-1-beaub@linux.microsoft.com>
-X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 7 Sep 2023 19:05:59 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9B3B1BD7;
+        Thu,  7 Sep 2023 16:05:54 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-4018af1038cso15841095e9.0;
+        Thu, 07 Sep 2023 16:05:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1694127953; x=1694732753; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=E7MCer4dzNlIUrYZ4qbOCKZtdgoy8+2fUxF9mWt007c=;
+        b=q0oJiv6kUlZZBamRG/jI6Tw1Tx7+9469Vqmk9WobzkYjGAa64oWlKX+6ZM5gOJRn36
+         2zb26Dqavz/JVMi2kiDH7jbbM4ke2dxUgCUygpcPH0RI7rpFf1+YTSPEBQbK3OmneE3b
+         s7l3b2d31Me+T6fKAe7u5JQrYEb5n4r19UiO9l4BgoDQIpnSrexyurF86b0cBFEhobki
+         C9Kb40XMCDEGczde4eTG3CCEFEy5WanPQ0qszOw/dP2pbGLFqhscAudJUxdQJrXasFRu
+         ec6gPyt+hPfh2mA+7nygpDQuGnbmUZejZ0K0db11wmQwryXbltwo8/6sMzZpOKhmm22v
+         RjXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694127953; x=1694732753;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=E7MCer4dzNlIUrYZ4qbOCKZtdgoy8+2fUxF9mWt007c=;
+        b=umL7pMyaU13QvyeTxIdXo2FCUi8+s8KNkD0kwAzmDPd8nh7lZusgJcnJEVPoyd50hv
+         OzQDsGxRhvTjwa7WnAKX18SZWjSkjA4xIspKGaZJjE21wUPYjOEq+1kJGMTTylmBPsg9
+         aWnu16IRXvM6x0hu9HBXWdrYbzlbpEW8W9Pb/crTt45dMc5LIjForguCY0oGbpw99iTN
+         ASJnrHhcT4jROSI3np/Oa270Dzxii6dXbrS0+nTdjbXz20H7bythgPhrT7OtPAVbXcH9
+         kcRTO7yAwwYyOXBrMKvURbpCFPhuHcxs8Y7PUACousPFnJf6EDZbYRy1J0P178Y11wLY
+         mDFQ==
+X-Gm-Message-State: AOJu0YzUHpLix15K+NFe8W5bcqiN71+nchCShQ3X/1P0xZuEoo7ruslw
+        Fz6XLKlUPXSOguo2k0GcM7o=
+X-Google-Smtp-Source: AGHT+IH9o2UfFc+G8/B5qOhq5Vk/ilA/8Z9RngR6VQ+AS57swmupXMZktoFeNyX6dUzwShmKqH2HRQ==
+X-Received: by 2002:a7b:c456:0:b0:401:cc0b:29c8 with SMTP id l22-20020a7bc456000000b00401cc0b29c8mr757013wmi.29.1694127953347;
+        Thu, 07 Sep 2023 16:05:53 -0700 (PDT)
+Received: from ip-172-31-30-46.eu-west-1.compute.internal (ec2-3-249-32-32.eu-west-1.compute.amazonaws.com. [3.249.32.32])
+        by smtp.gmail.com with ESMTPSA id n13-20020a5d484d000000b0031f3b04e7cdsm491358wrs.109.2023.09.07.16.05.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Sep 2023 16:05:52 -0700 (PDT)
+From:   Puranjay Mohan <puranjay12@gmail.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>,
+        Yonghong Song <yonghong.song@linux.dev>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shubham Bansal <illusionist.neo@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     puranjay12@gmail.com
+Subject: [PATCH bpf-next v3 1/9] arm32, bpf: add support for 32-bit offset jmp instruction
+Date:   Thu,  7 Sep 2023 23:05:42 +0000
+Message-Id: <20230907230550.1417590-2-puranjay12@gmail.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230907230550.1417590-1-puranjay12@gmail.com>
+References: <20230907230550.1417590-1-puranjay12@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu,  7 Sep 2023 22:35:36 +0000
-Beau Belgrave <beaub@linux.microsoft.com> wrote:
+The cpuv4 adds unconditional jump with 32-bit offset where the immediate
+field of the instruction is to be used to calculate the jump offset.
 
-> diff --git a/tools/testing/selftests/user_events/user_events_selftests.h b/tools/testing/selftests/user_events/user_events_selftests.h
-> new file mode 100644
-> index 000000000000..72692e62c709
-> --- /dev/null
-> +++ b/tools/testing/selftests/user_events/user_events_selftests.h
-> @@ -0,0 +1,103 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +
-> +#ifndef _USER_EVENTS_SELFTESTS_H
-> +#define _USER_EVENTS_SELFTESTS_H
-> +
-> +#include <sys/types.h>
-> +#include <sys/mount.h>
-> +#include <unistd.h>
-> +#include <errno.h>
-> +
-> +#include "../kselftest.h"
-> +
-> +static inline bool tracefs_enabled(char **message, bool *fail)
-> +{
-> +	int fd;
-> +
-> +	*message = "";
-> +	*fail = false;
-> +
-> +	/* Ensure tracefs is installed */
-> +	fd = open("/sys/kernel/tracing", O_RDONLY);
+BPF_JA | BPF_K | BPF_JMP32 => gotol +imm => PC += imm.
 
-Instead of opening the directory, I believe that "stat()" is the preferred
-method of testing existence.
+Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
+Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+---
+ arch/arm/net/bpf_jit_32.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-> +
-> +	if (fd == -1) {
-> +		*message = "Tracefs is not installed";
-> +		return false;
-> +	}
-> +
-> +	close(fd);
-> +
-> +	/* Ensure mounted tracefs */
-> +	fd = open("/sys/kernel/tracing/README", O_RDONLY);
-> +
-> +	if (fd == -1 && errno == ENOENT) {
-> +		if (mount(NULL, "/sys/kernel/tracing", "tracefs", 0, NULL) != 0) {
-> +			*message = "Cannot mount tracefs";
-> +			*fail = true;
-> +			return false;
-> +		}
-> +
-> +		fd = open("/sys/kernel/tracing/README", O_RDONLY);
-
-Same here, unless you want to make sure you can also read it.
-
-> +	}
-> +
-> +	if (fd == -1) {
-> +		*message = "Cannot access tracefs";
-> +		*fail = true;
-> +		return false;
-> +	}
-> +
-> +	close(fd);
-> +
-> +	return true;
-> +}
-> +
-> +static inline bool user_events_enabled(char **message, bool *fail)
-> +{
-> +	int fd;
-> +
-> +	*message = "";
-> +	*fail = false;
-> +
-> +	if (getuid() != 0) {
-> +		*message = "Must be run as root";
-> +		*fail = true;
-> +		return false;
-> +	}
-> +
-> +	if (!tracefs_enabled(message, fail))
-> +		return false;
-> +
-> +	/* Ensure user_events is installed */
-> +	fd = open("/sys/kernel/tracing/user_events_data", O_RDONLY);
-
-ditto.
-
--- Steve
-
-> +
-> +	if (fd == -1) {
-> +		switch (errno) {
-> +		case ENOENT:
-> +			*message = "user_events is not installed";
-> +			return false;
-> +
-> +		default:
-> +			*message = "Cannot access user_events_data";
-> +			*fail = true;
-> +			return false;
-> +		}
-> +	}
-> +
-> +	close(fd);
-> +
-> +	return true;
-> +}
-> +
-> +#define USER_EVENT_FIXTURE_SETUP(statement) do { \
-> +	char *message; \
-> +	bool fail; \
-> +	if (!user_events_enabled(&message, &fail)) { \
-> +		if (fail) { \
-> +			TH_LOG("Setup failed due to: %s", message); \
-> +			ASSERT_FALSE(fail); \
-> +		} \
-> +		SKIP(statement, "Skipping due to: %s", message); \
-> +	} \
-> +} while (0)
-> +
-> +#endif /* _USER_EVENTS_SELFTESTS_H */
-> 
-> base-commit: 9b1db732866bee060b9bca9493e5ebf5e8874c48
+diff --git a/arch/arm/net/bpf_jit_32.c b/arch/arm/net/bpf_jit_32.c
+index 6a1c9fca5260..c03600fe86f6 100644
+--- a/arch/arm/net/bpf_jit_32.c
++++ b/arch/arm/net/bpf_jit_32.c
+@@ -1761,10 +1761,15 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx)
+ 		break;
+ 	/* JMP OFF */
+ 	case BPF_JMP | BPF_JA:
++	case BPF_JMP32 | BPF_JA:
+ 	{
+-		if (off == 0)
++		if (BPF_CLASS(code) == BPF_JMP32 && imm != 0)
++			jmp_offset = bpf2a32_offset(i + imm, i, ctx);
++		else if (BPF_CLASS(code) == BPF_JMP && off != 0)
++			jmp_offset = bpf2a32_offset(i + off, i, ctx);
++		else
+ 			break;
+-		jmp_offset = bpf2a32_offset(i+off, i, ctx);
++
+ 		check_imm24(jmp_offset);
+ 		emit(ARM_B(jmp_offset), ctx);
+ 		break;
+-- 
+2.39.2
 
