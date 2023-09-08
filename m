@@ -2,124 +2,179 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A8F5EE8011
-	for <linux-kselftest@archiver.kernel.org>; Fri,  8 Sep 2023 14:50:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6021FEE8015
+	for <linux-kselftest@archiver.kernel.org>; Fri,  8 Sep 2023 16:04:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244116AbjIHOuR (ORCPT
+        id S240812AbjIHQES (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 8 Sep 2023 10:50:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60766 "EHLO
+        Fri, 8 Sep 2023 12:04:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244103AbjIHOuO (ORCPT
+        with ESMTP id S244761AbjIHQER (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 8 Sep 2023 10:50:14 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B6B1BF9;
-        Fri,  8 Sep 2023 07:50:08 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-500c7796d8eso3615175e87.1;
-        Fri, 08 Sep 2023 07:50:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694184607; x=1694789407; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xkXpaqnjNB3MgoeN751DpK68gZT03o5yCj8DA/y5H7A=;
-        b=o6c0WpbVBnvM7aBUGrytTaB7PeBA7UAKRsLybXqcUodQ3k3FhLN4JVwKEsW9ACTJPF
-         WhlxYqlLKPPBpM0ZkqXNOyoLXQ/mrfa6rTQvVwifYt7Yqge8rQ1URCmYCgfE4SbaXLd6
-         cPEnjEr55q91d+eL3G6aTZX4k/+/VsZb8JkathBi5MrniHV6jmO3VLqSDXh9yRSSgtcJ
-         1t9OItP9A2bMNSDgp57/V1HGV7fiq4uQWNzLkmRdctl8EZi0NCWFph6+EmaI+BycCHAT
-         1K9aCHCV7RHUIu4ATgtlSlGTs7zUwGUZZ4BWISTta9YMHWeB/gCfvdWaj2ly0A4UILYV
-         BVzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694184607; x=1694789407;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xkXpaqnjNB3MgoeN751DpK68gZT03o5yCj8DA/y5H7A=;
-        b=LA+cTpIYWscDR9DwPFpD8nQAu9LghpXdkzU6Zf05pObSoCLFWyH/YufC1FbuYNDrFt
-         bdbNJU6gkvPb2f3cneLRNmLMSUHyCytL6n3r9/m6csdjwu0EkTqYeC9rjdr1Hi/4QWjc
-         xncivhLR2V1KBGlxC9iV3xM/GSsJAsuumE9zFgMToe6Bd+YpLReYp3tpguYdpyCyTuig
-         FkIN+OGV49QGbt+PLj0axjlsOLDT9wfx5tD0PeTIrU7iG2aDfmNUbdrW1R6nd3VHjEbr
-         /1CKvK9IbSvCWoA8vxh1d6T8bDgSd/wmCSHHic1+Vovlb8C/okKNN052zu/Z18dzFWKq
-         pAwg==
-X-Gm-Message-State: AOJu0YxRTHjOmMukB+hygPpW8cCC1Hh5SuU/qOaU0q7iP5mUPuleRuwi
-        ozqx/KEqWjSSvUTKuGF4VsBVK5xKpusp/y7RZHU=
-X-Google-Smtp-Source: AGHT+IGjut71Cuf1/3pmiqmLb02iNPUrU25uVCWP3M7RvsHnz8LT9ZQ55XWw9sho3xxF+7tpfhEqQEs2hgIUqnclj2A=
-X-Received: by 2002:a19:691c:0:b0:500:9f85:6e84 with SMTP id
- e28-20020a19691c000000b005009f856e84mr1757538lfc.3.1694184606718; Fri, 08 Sep
- 2023 07:50:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230907230550.1417590-1-puranjay12@gmail.com>
- <20230907230550.1417590-10-puranjay12@gmail.com> <ZPrdQEhw4f+TK8TB@shell.armlinux.org.uk>
- <1a4bc20a-b7ff-3697-5859-a2bb868c575f@iogearbox.net>
-In-Reply-To: <1a4bc20a-b7ff-3697-5859-a2bb868c575f@iogearbox.net>
-From:   Puranjay Mohan <puranjay12@gmail.com>
-Date:   Fri, 8 Sep 2023 16:49:55 +0200
-Message-ID: <CANk7y0izCD1Cwqpkf_i2Vi+QyS4ggdOEhJP0Uq_QWkLhp4zHwQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 9/9] MAINTAINERS: Add myself for ARM32 BPF JIT maintainer.
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>,
-        Yonghong Song <yonghong.song@linux.dev>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shubham Bansal <illusionist.neo@gmail.com>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Fri, 8 Sep 2023 12:04:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B91911FDE
+        for <linux-kselftest@vger.kernel.org>; Fri,  8 Sep 2023 09:03:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1694189015;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8QArWqYjany3/3Kdac4mEmfhyAbXGy4THe9mhs3GeTM=;
+        b=Y6qBqgnQFIWMIuSOBESqLLWVrc/sInb2umZVcxL/nOIGME6ZgPKRJyEHezlKLPnXHaJVuL
+        ZHoPPifEcC1RIN1Wudq8DR41hPSdmWMZJeDORyT4MwG7ETARsbqCSVyROHTORJCwECGL2y
+        Mm0+dMz8ZrkouZQibkDo34q06ZEP1mg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-230-ChoFSJu6N1CkSRVz_hnIRQ-1; Fri, 08 Sep 2023 12:03:32 -0400
+X-MC-Unique: ChoFSJu6N1CkSRVz_hnIRQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C7392101CA84;
+        Fri,  8 Sep 2023 16:03:31 +0000 (UTC)
+Received: from warthog.procyon.org.com (unknown [10.42.28.148])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0C70F2026D4B;
+        Fri,  8 Sep 2023 16:03:29 +0000 (UTC)
+From:   David Howells <dhowells@redhat.com>
+To:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     David Howells <dhowells@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Christian Brauner <brauner@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: [PATCH 1/3] iov_iter: Fix iov_iter_extract_pages()
+Date:   Fri,  8 Sep 2023 17:03:20 +0100
+Message-ID: <20230908160322.1714302-2-dhowells@redhat.com>
+In-Reply-To: <20230908160322.1714302-1-dhowells@redhat.com>
+References: <20230908160322.1714302-1-dhowells@redhat.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Sep 8, 2023 at 3:49=E2=80=AFPM Daniel Borkmann <daniel@iogearbox.ne=
-t> wrote:
->
-> On 9/8/23 10:37 AM, Russell King (Oracle) wrote:
-> > On Thu, Sep 07, 2023 at 11:05:50PM +0000, Puranjay Mohan wrote:
-> >> As Shubham has been inactive since 2017, Add myself for ARM32 BPF JIT.
-> >>
-> >> Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
-> >> ---
-> >>   MAINTAINERS | 5 +++--
-> >>   1 file changed, 3 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git a/MAINTAINERS b/MAINTAINERS
-> >> index 612d6d1dbf36..c241856819bd 100644
-> >> --- a/MAINTAINERS
-> >> +++ b/MAINTAINERS
-> >> @@ -3602,9 +3602,10 @@ F:    Documentation/devicetree/bindings/iio/acc=
-el/bosch,bma400.yaml
-> >>   F: drivers/iio/accel/bma400*
-> >>
-> >>   BPF JIT for ARM
-> >> -M:  Shubham Bansal <illusionist.neo@gmail.com>
-> >> +M:  Puranjay Mohan <puranjay12@gmail.com>
-> >> +R:  Shubham Bansal <illusionist.neo@gmail.com>
-> >
-> > Don't forget that I also want to review the changes, but I guess my
-> > arch/arm entry will cover this too.
->
-> If there are no objections from all parties, it would be nice/better if b=
-oth of
-> you (Puranjay & Russell) could be explicitly added here as maintainers.
+iov_iter_extract_pages() doesn't correctly handle skipping over initial
+zero-length entries in ITER_KVEC and ITER_BVEC-type iterators.  The problem is
+that it accidentally reduces maxsize to 0 when it skipping and thus runs to
+the end of the array and returns 0.
 
-Yes, I agree with that. Russell knows more about ARM than anyone else!
+Fix this by sticking the calculated size-to-copy in a new variable rather
+than back in maxsize.
 
-If I send another version for any other comments I get, I will include
-this change.
-But if this version of the series is applied, can you make this change
-while applying the patch?
+Fixes: 7d58fe731028 ("iov_iter: Add a function to extract a page list from an iterator")
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Christoph Hellwig <hch@lst.de>
+cc: Christian Brauner <brauner@kernel.org>
+cc: Jens Axboe <axboe@kernel.dk>
+cc: Al Viro <viro@zeniv.linux.org.uk>
+cc: David Hildenbrand <david@redhat.com>
+cc: John Hubbard <jhubbard@nvidia.com>
+cc: linux-mm@kvack.org
+cc: linux-block@vger.kernel.org
+cc: linux-fsdevel@vger.kernel.org
+---
+ lib/iov_iter.c | 30 +++++++++++++++---------------
+ 1 file changed, 15 insertions(+), 15 deletions(-)
 
->
-> Thanks,
-> Daniel
+diff --git a/lib/iov_iter.c b/lib/iov_iter.c
+index b31597b0ca20..27234a820eeb 100644
+--- a/lib/iov_iter.c
++++ b/lib/iov_iter.c
+@@ -1654,14 +1654,14 @@ static ssize_t iov_iter_extract_bvec_pages(struct iov_iter *i,
+ 					   size_t *offset0)
+ {
+ 	struct page **p, *page;
+-	size_t skip = i->iov_offset, offset;
++	size_t skip = i->iov_offset, offset, size;
+ 	int k;
+ 
+ 	for (;;) {
+ 		if (i->nr_segs == 0)
+ 			return 0;
+-		maxsize = min(maxsize, i->bvec->bv_len - skip);
+-		if (maxsize)
++		size = min(maxsize, i->bvec->bv_len - skip);
++		if (size)
+ 			break;
+ 		i->iov_offset = 0;
+ 		i->nr_segs--;
+@@ -1674,16 +1674,16 @@ static ssize_t iov_iter_extract_bvec_pages(struct iov_iter *i,
+ 	offset = skip % PAGE_SIZE;
+ 	*offset0 = offset;
+ 
+-	maxpages = want_pages_array(pages, maxsize, offset, maxpages);
++	maxpages = want_pages_array(pages, size, offset, maxpages);
+ 	if (!maxpages)
+ 		return -ENOMEM;
+ 	p = *pages;
+ 	for (k = 0; k < maxpages; k++)
+ 		p[k] = page + k;
+ 
+-	maxsize = min_t(size_t, maxsize, maxpages * PAGE_SIZE - offset);
+-	iov_iter_advance(i, maxsize);
+-	return maxsize;
++	size = min_t(size_t, size, maxpages * PAGE_SIZE - offset);
++	iov_iter_advance(i, size);
++	return size;
+ }
+ 
+ /*
+@@ -1698,14 +1698,14 @@ static ssize_t iov_iter_extract_kvec_pages(struct iov_iter *i,
+ {
+ 	struct page **p, *page;
+ 	const void *kaddr;
+-	size_t skip = i->iov_offset, offset, len;
++	size_t skip = i->iov_offset, offset, len, size;
+ 	int k;
+ 
+ 	for (;;) {
+ 		if (i->nr_segs == 0)
+ 			return 0;
+-		maxsize = min(maxsize, i->kvec->iov_len - skip);
+-		if (maxsize)
++		size = min(maxsize, i->kvec->iov_len - skip);
++		if (size)
+ 			break;
+ 		i->iov_offset = 0;
+ 		i->nr_segs--;
+@@ -1717,13 +1717,13 @@ static ssize_t iov_iter_extract_kvec_pages(struct iov_iter *i,
+ 	offset = (unsigned long)kaddr & ~PAGE_MASK;
+ 	*offset0 = offset;
+ 
+-	maxpages = want_pages_array(pages, maxsize, offset, maxpages);
++	maxpages = want_pages_array(pages, size, offset, maxpages);
+ 	if (!maxpages)
+ 		return -ENOMEM;
+ 	p = *pages;
+ 
+ 	kaddr -= offset;
+-	len = offset + maxsize;
++	len = offset + size;
+ 	for (k = 0; k < maxpages; k++) {
+ 		size_t seg = min_t(size_t, len, PAGE_SIZE);
+ 
+@@ -1737,9 +1737,9 @@ static ssize_t iov_iter_extract_kvec_pages(struct iov_iter *i,
+ 		kaddr += PAGE_SIZE;
+ 	}
+ 
+-	maxsize = min_t(size_t, maxsize, maxpages * PAGE_SIZE - offset);
+-	iov_iter_advance(i, maxsize);
+-	return maxsize;
++	size = min_t(size_t, size, maxpages * PAGE_SIZE - offset);
++	iov_iter_advance(i, size);
++	return size;
+ }
+ 
+ /*
 
-Thanks,
-Puranjay
