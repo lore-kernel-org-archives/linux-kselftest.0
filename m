@@ -2,148 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A416EEB562
-	for <linux-kselftest@archiver.kernel.org>; Fri,  8 Sep 2023 19:02:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BC1A6EEB56C
+	for <linux-kselftest@archiver.kernel.org>; Fri,  8 Sep 2023 20:02:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232839AbjIHTCa (ORCPT
+        id S230457AbjIHUDB (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 8 Sep 2023 15:02:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49094 "EHLO
+        Fri, 8 Sep 2023 16:03:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229957AbjIHTCa (ORCPT
+        with ESMTP id S234042AbjIHUDA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 8 Sep 2023 15:02:30 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DDB3E46;
-        Fri,  8 Sep 2023 12:02:15 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA40DC433B9;
-        Fri,  8 Sep 2023 18:02:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694196158;
-        bh=FmxEL57wKOoZ8HJxy0Z4z4fZQdqvVjWyGKLslaCRunI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NCWx3QEeLhI15S/s7ziKkv2DjgUp5MHzPu8GlLgAcmJPSj0HqcKM/H8z4ixFbArGj
-         cI0Wt9/5SjELaBW6GF8SS+nUW64BirzFLwheDn/dmPYIyFApI4GSOgYsGOnJq5HVwT
-         xl1gd6/dNVyjtaze3JRIbqlhkwWgMovBVG1P3MnOIEFItPckO/WNVNm8qgE1PyaZ48
-         UaECkcBNMwcR6QVQMnt3CkrjRtqqm/8to+hCwJtczERZVj4rLxnWSYSxNXsqwXvSaO
-         bJtbdzA0ZraCGhpsMxpueQKohtTShtESJivc+zqFamg2YwPzqXItwgOxikoYQytbve
-         TTn6pk8mKroLA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Zhangjin Wu <falcon@tinylab.org>,
-        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-        Willy Tarreau <w@1wt.eu>, Sasha Levin <sashal@kernel.org>,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 10/10] selftests/nolibc: fix up kernel parameters support
-Date:   Fri,  8 Sep 2023 14:02:02 -0400
-Message-Id: <20230908180203.3458330-10-sashal@kernel.org>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230908180203.3458330-1-sashal@kernel.org>
-References: <20230908180203.3458330-1-sashal@kernel.org>
+        Fri, 8 Sep 2023 16:03:00 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F267210DF;
+        Fri,  8 Sep 2023 13:02:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694203359; x=1725739359;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=R88nXWWc0OUb6aIDazZdF1rypv5AxHZtVExhYQzX2hM=;
+  b=XG4DuEg7Rt6taSiKZKPn/NP0NwDAy7Qjgf+WM2OhKopD6y/OX/9MO+sV
+   qdlZqqUKfJ9HaV2ax6IC4uJ9+2MerKQLqfkjF8+XjBxOVBrSNcaWUAzRL
+   YJxlF2QyIOkuroetY8MRFCYw7KSPvl33sXZ18YRdPLftA8AMllp6keODx
+   /SvPWsLyZccz0rtG8fBxClUnt/4wkgVS/RWfafaJSFHQHwUUkmzk2356a
+   kvynUR0GFOTUnaCTZAHGL/+a0T7pCZsYOY3k1+dtcBUp61ZCCr1F6Bm6Q
+   pN2Ukn1iZ/6pl2jOhUsCUI0X9JwgpHjA/ruqVK+0SRoJ+QlwefKurnKlL
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10827"; a="357200341"
+X-IronPort-AV: E=Sophos;i="6.02,237,1688454000"; 
+   d="scan'208";a="357200341"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2023 13:02:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10827"; a="885782557"
+X-IronPort-AV: E=Sophos;i="6.02,237,1688454000"; 
+   d="scan'208";a="885782557"
+Received: from lkp-server01.sh.intel.com (HELO 59b3c6e06877) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 08 Sep 2023 13:02:10 -0700
+Received: from kbuild by 59b3c6e06877 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qehgP-0002Yc-0X;
+        Fri, 08 Sep 2023 20:02:25 +0000
+Date:   Sat, 9 Sep 2023 04:02:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Michal Clapinski <mclapinski@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, Yi Liu <yi.l.liu@intel.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Steve French <stfrench@microsoft.com>,
+        Simon Ser <contact@emersion.fr>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Luca Vizzarro <Luca.Vizzarro@arm.com>,
+        Jeff Xu <jeffxu@google.com>, Aleksa Sarai <cyphar@cyphar.com>,
+        Kees Cook <keescook@chromium.org>,
+        Daniel Verkamp <dverkamp@chromium.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Michal Clapinski <mclapinski@google.com>
+Subject: Re: [PATCH v2 1/2] mm/memfd: add ioctl(MEMFD_CHECK_IF_ORIGINAL)
+Message-ID: <202309090301.rMwXPz1I-lkp@intel.com>
+References: <20230908175738.41895-2-mclapinski@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.52
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230908175738.41895-2-mclapinski@google.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Zhangjin Wu <falcon@tinylab.org>
+Hi Michal,
 
-[ Upstream commit c388c9920da2679f62bec48d00ca9e80e9d0a364 ]
+kernel test robot noticed the following build warnings:
 
-kernel parameters allow pass two types of strings, one type is like
-'noapic', another type is like 'panic=5', the first type is passed as
-arguments of the init program, the second type is passed as environment
-variables of the init program.
+[auto build test WARNING on akpm-mm/mm-everything]
 
-when users pass kernel parameters like this:
+url:    https://github.com/intel-lab-lkp/linux/commits/Michal-Clapinski/mm-memfd-add-ioctl-MEMFD_CHECK_IF_ORIGINAL/20230909-020048
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20230908175738.41895-2-mclapinski%40google.com
+patch subject: [PATCH v2 1/2] mm/memfd: add ioctl(MEMFD_CHECK_IF_ORIGINAL)
+config: riscv-allnoconfig (https://download.01.org/0day-ci/archive/20230909/202309090301.rMwXPz1I-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230909/202309090301.rMwXPz1I-lkp@intel.com/reproduce)
 
-    noapic NOLIBC_TEST=syscall
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309090301.rMwXPz1I-lkp@intel.com/
 
-our nolibc-test program will use the test setting from argv[1] and
-ignore the one from NOLIBC_TEST environment variable, and at last, it
-will print the following line and ignore the whole test setting.
+All warnings (new ones prefixed by >>):
 
-    Ignoring unknown test name 'noapic'
+>> mm/shmem.c:4480:13: warning: 'shmem_file_ioctl' defined but not used [-Wunused-function]
+    4480 | static long shmem_file_ioctl(struct file *file, unsigned int cmd,
+         |             ^~~~~~~~~~~~~~~~
 
-reversing the parsing order does solve the above issue:
 
-    test = getenv("NOLIBC_TEST");
-    if (test)
-        test = argv[1];
+vim +/shmem_file_ioctl +4480 mm/shmem.c
 
-but it still doesn't work with such kernel parameters (without
-NOLIBC_TEST environment variable):
+  4479	
+> 4480	static long shmem_file_ioctl(struct file *file, unsigned int cmd,
+  4481				     unsigned long arg)
+  4482	{
+  4483		return memfd_ioctl(file, cmd, arg);
+  4484	}
+  4485	
 
-    noapic FOO=bar
-
-To support all of the potential kernel parameters, let's verify the test
-setting from both of argv[1] and NOLIBC_TEST environment variable.
-
-Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-Signed-off-by: Willy Tarreau <w@1wt.eu>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/nolibc/nolibc-test.c | 33 ++++++++++++++++++--
- 1 file changed, 31 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 78bced95ac630..f8e8e8d2a5e18 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -630,6 +630,35 @@ static struct test test_names[] = {
- 	{ 0 }
- };
- 
-+int is_setting_valid(char *test)
-+{
-+	int idx, len, test_len, valid = 0;
-+	char delimiter;
-+
-+	if (!test)
-+		return valid;
-+
-+	test_len = strlen(test);
-+
-+	for (idx = 0; test_names[idx].name; idx++) {
-+		len = strlen(test_names[idx].name);
-+		if (test_len < len)
-+			continue;
-+
-+		if (strncmp(test, test_names[idx].name, len) != 0)
-+			continue;
-+
-+		delimiter = test[len];
-+		if (delimiter != ':' && delimiter != ',' && delimiter != '\0')
-+			continue;
-+
-+		valid = 1;
-+		break;
-+	}
-+
-+	return valid;
-+}
-+
- int main(int argc, char **argv, char **envp)
- {
- 	int min = 0;
-@@ -655,10 +684,10 @@ int main(int argc, char **argv, char **envp)
- 	 *    syscall:5-15[:.*],stdlib:8-10
- 	 */
- 	test = argv[1];
--	if (!test)
-+	if (!is_setting_valid(test))
- 		test = getenv("NOLIBC_TEST");
- 
--	if (test) {
-+	if (is_setting_valid(test)) {
- 		char *comma, *colon, *dash, *value;
- 
- 		do {
 -- 
-2.40.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
