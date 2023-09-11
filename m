@@ -2,101 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DA544CA0ECE
-	for <linux-kselftest@archiver.kernel.org>; Mon, 11 Sep 2023 21:27:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 27156CA0EC3
+	for <linux-kselftest@archiver.kernel.org>; Mon, 11 Sep 2023 21:27:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344708AbjIKVTB (ORCPT
+        id S240584AbjIKVTF (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 11 Sep 2023 17:19:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53044 "EHLO
+        Mon, 11 Sep 2023 17:19:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243392AbjIKRI7 (ORCPT
+        with ESMTP id S236739AbjIKLTp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 11 Sep 2023 13:08:59 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 743571A5;
-        Mon, 11 Sep 2023 10:08:54 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92AAEC433C7;
-        Mon, 11 Sep 2023 17:08:53 +0000 (UTC)
-Date:   Mon, 11 Sep 2023 13:09:09 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     Shuah Khan <shuah@kernel.org>, Mark Brown <broonie@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [FIX PATCH] selftests: tracing: Fix to unmount tracefs for
- recovering environment
-Message-ID: <20230911130909.6d3054af@gandalf.local.home>
-In-Reply-To: <169425219871.184380.8584599358250186540.stgit@devnote2>
-References: <169425219871.184380.8584599358250186540.stgit@devnote2>
-X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 11 Sep 2023 07:19:45 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF646CDD;
+        Mon, 11 Sep 2023 04:19:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694431181; x=1725967181;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=yqt71S8DV4uklxfQ6XN+QALw6bb2cljgW00oOz7TuTU=;
+  b=ciYUWcejtKBTfUhYTwHCGH4i82PHXa/3HTo5BPWZ0Jok4G4tDn8H4Vf4
+   FYqKMTwYEmtBUBgKeo2i1DHI0STcL2+otooOi3+crM57FZZErdWxwpzb+
+   W33xOJqsz7YK+B6s3mKgKlxANAU2txwXASU+CEohJtHKJgqsN4/wPTn90
+   p7gpi8mrjXI+oJf+lDZVMQh7DFlEQB+XCGHM/r4H1EJtgnSGPtQ9MmmOd
+   PAoFUDHv7p4wNb8VyBxQalmDEAHeRK4vtm2q8d5pIkP79q+GDExO4xJhk
+   +YETy+pcyvegANSXMJHQkk8bSqkfsV7VeSZCMXW7LU1T6OQe9krTUx+nW
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10829"; a="464428583"
+X-IronPort-AV: E=Sophos;i="6.02,243,1688454000"; 
+   d="scan'208";a="464428583"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 04:19:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10829"; a="916990544"
+X-IronPort-AV: E=Sophos;i="6.02,243,1688454000"; 
+   d="scan'208";a="916990544"
+Received: from mzarkov-mobl3.ger.corp.intel.com (HELO ijarvine-mobl2.ger.corp.intel.com) ([10.252.36.200])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 04:19:38 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Reinette Chatre <reinette.chatre@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org,
+        =?UTF-8?q?Maciej=20Wiecz=C3=B3r-Retman?= 
+        <maciej.wieczor-retman@intel.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 0/5] selftests/resctrl: Fixes to failing tests
+Date:   Mon, 11 Sep 2023 14:19:25 +0300
+Message-Id: <20230911111930.16088-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat,  9 Sep 2023 18:36:39 +0900
-"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+Fix three issues with resctrl selftests.
 
-> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> 
-> Fix to unmount the tracefs if the ftracetest mounted it for recovering
-> system environment. If the tracefs is already mounted, this does nothing.
-> 
-> Suggested-by: Mark Brown <broonie@kernel.org>
-> Link: https://lore.kernel.org/all/29fce076-746c-4650-8358-b4e0fa215cf7@sirena.org.uk/
-> Fixes: cbd965bde74c ("ftrace/selftests: Return the skip code when tracing directory not configured in kernel")
-> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> ---
->  tools/testing/selftests/ftrace/ftracetest |    8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
-> index cb5f18c06593..89c212d82256 100755
-> --- a/tools/testing/selftests/ftrace/ftracetest
-> +++ b/tools/testing/selftests/ftrace/ftracetest
-> @@ -31,6 +31,9 @@ err_ret=1
->  # kselftest skip code is 4
->  err_skip=4
->  
-> +# umount required
-> +UMOUNT_DIR=""
-> +
->  # cgroup RT scheduling prevents chrt commands from succeeding, which
->  # induces failures in test wakeup tests.  Disable for the duration of
->  # the tests.
-> @@ -45,6 +48,9 @@ setup() {
->  
->  cleanup() {
->    echo $sched_rt_runtime_orig > $sched_rt_runtime
-> +  if [ "${UMOUNT_DIR}" ]; then
+The signal handling fix became necessary after the mount/umount fixes.
 
-Shouldn't the above be:
+The other two came up when I ran resctrl selftests across the server
+fleet in our lab to validate the upcoming CAT test rewrite (the rewrite
+is not part of this series).
 
-     if [ ! -z "${UNMOUNT_DIR}" ]; then
+These are developed and should apply cleanly at least on top the
+benchmark cleanup series (might apply cleanly also w/o the benchmark
+series, I didn't test).
 
-?
+Ilpo Järvinen (5):
+  selftests/resctrl: Extend signal handler coverage to unmount on
+    receiving signal
+  selftests/resctrl: Remove duplicate feature check from CMT test
+  selftests/resctrl: Refactor feature check to use resource and feature
+    name
+  selftests/resctrl: Fix feature checks
+  selftests/resctrl: Reduce failures due to outliers in MBA/MBM tests
 
--- Steve
+ tools/testing/selftests/resctrl/cat_test.c    |  8 ---
+ tools/testing/selftests/resctrl/cmt_test.c    |  3 -
+ tools/testing/selftests/resctrl/mba_test.c    |  2 +-
+ tools/testing/selftests/resctrl/mbm_test.c    |  2 +-
+ tools/testing/selftests/resctrl/resctrl.h     |  6 +-
+ .../testing/selftests/resctrl/resctrl_tests.c | 37 ++++++++--
+ tools/testing/selftests/resctrl/resctrl_val.c | 22 +++---
+ tools/testing/selftests/resctrl/resctrlfs.c   | 69 ++++++++-----------
+ 8 files changed, 73 insertions(+), 76 deletions(-)
 
-> +    umount ${UMOUNT_DIR} ||:
-> +  fi
->  }
->  
->  errexit() { # message
-> @@ -160,11 +166,13 @@ if [ -z "$TRACING_DIR" ]; then
->  	    mount -t tracefs nodev /sys/kernel/tracing ||
->  	      errexit "Failed to mount /sys/kernel/tracing"
->  	    TRACING_DIR="/sys/kernel/tracing"
-> +	    UMOUNT_DIR=${TRACING_DIR}
->  	# If debugfs exists, then so does /sys/kernel/debug
->  	elif [ -d "/sys/kernel/debug" ]; then
->  	    mount -t debugfs nodev /sys/kernel/debug ||
->  	      errexit "Failed to mount /sys/kernel/debug"
->  	    TRACING_DIR="/sys/kernel/debug/tracing"
-> +	    UMOUNT_DIR=${TRACING_DIR}
->  	else
->  	    err_ret=$err_skip
->  	    errexit "debugfs and tracefs are not configured in this kernel"
+-- 
+2.30.2
 
