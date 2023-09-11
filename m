@@ -2,100 +2,129 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C84F3CA0EC4
-	for <linux-kselftest@archiver.kernel.org>; Mon, 11 Sep 2023 21:27:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A618CA0ECB
+	for <linux-kselftest@archiver.kernel.org>; Mon, 11 Sep 2023 21:27:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345047AbjIKVTP (ORCPT
+        id S1345049AbjIKVTT (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 11 Sep 2023 17:19:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54900 "EHLO
+        Mon, 11 Sep 2023 17:19:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242978AbjIKQiy (ORCPT
+        with ESMTP id S236126AbjIKJvW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 11 Sep 2023 12:38:54 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 402C0E0;
-        Mon, 11 Sep 2023 09:38:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694450328; x=1725986328;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=CyXiEIA0NDK841I9Ihuf4Iuy+Pl5nH6gQ03aphA8PVQ=;
-  b=a7+DH6HG4f+85MZTZ+qRWAVvLKUUfHqVxd8W3S7D60z92qzYdTRH57pE
-   hkZXcl1uEZ04M6XOU8PErUOdr3zRUsN57hCqI6DCX3S4Y14JyaofHjB9G
-   KBKF3cP2uokE3Md7acpex+vxqPjrg8wrERm9nzWzEpD/VJiiU8O6o2rR9
-   08O6hhjUn0wu7Zkx+y93oyDLIeIgjrhht+mrHbthNNna5/WjxM47MJMQk
-   uOU4y5ASuOZVNVlQz6CKwhpXFkaZDVzqowacHcuJkpoppbLa+nE8j4rLb
-   Vo8z4UCrT9n9m/6h5QzqLd/Mja+nTlgOka9Zrv+eIQYqgP60oHdu+RzKM
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="442137748"
-X-IronPort-AV: E=Sophos;i="6.02,244,1688454000"; 
-   d="scan'208";a="442137748"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 09:10:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="693141455"
-X-IronPort-AV: E=Sophos;i="6.02,244,1688454000"; 
-   d="scan'208";a="693141455"
-Received: from newjersey.igk.intel.com ([10.102.20.203])
-  by orsmga003.jf.intel.com with ESMTP; 11 Sep 2023 09:10:26 -0700
-From:   Alexander Lobakin <aleksander.lobakin@intel.com>
-To:     Shuah Khan <shuah@kernel.org>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Cc:     Alexander Lobakin <aleksander.lobakin@intel.com>,
-        Beau Belgrave <beaub@linux.microsoft.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] tracing/user_events: fix long size check in the ABI selftest
-Date:   Mon, 11 Sep 2023 18:09:35 +0200
-Message-ID: <20230911160935.10720-1-aleksander.lobakin@intel.com>
-X-Mailer: git-send-email 2.41.0
+        Mon, 11 Sep 2023 05:51:22 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91150E44;
+        Mon, 11 Sep 2023 02:51:18 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B657AC433CC;
+        Mon, 11 Sep 2023 09:51:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1694425878;
+        bh=n39qjqZdna7s4aCBSr+Q6tsGFUv34ZNjq8iqqrLVaKg=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+        b=ZeoL1/kUHKOlVAzAFsVO97NPTxM/vmkW9yVfZFiR7o1ir8KqlTcCKnnGOvOxGMFA0
+         1tcvRhd6AKrG1u0bppmbD9BDjzcPOunJoNxUTiz4Q2V7TBEjMbIUwr83faKGyMXaLP
+         RWCayMzbaJakOFimPqacGJy2Ps06jwL00JapzLZv+FQp7ZVAIdAUSuby0PutrABk0F
+         iIOW4oCXAx+nUV8YpDAvH4G6xX1m8EOLmU8J8gjzhwsE5dmpbaIfDgiaZhQawRObNh
+         rI3rj8bGYwR/5+ICGViQHgSbv9/78FuSSPPotKUFxVpBvNa4K7L1kY2z/yFf+X1asy
+         MZHABQZ8oeX+A==
+From:   Maxime Ripard <mripard@kernel.org>
+Date:   Mon, 11 Sep 2023 11:51:06 +0200
+Subject: [PATCH 2/2] drm/tests: Flag slow tests as such
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230911-kms-slow-tests-v1-2-d3800a69a1a1@kernel.org>
+References: <20230911-kms-slow-tests-v1-0-d3800a69a1a1@kernel.org>
+In-Reply-To: <20230911-kms-slow-tests-v1-0-d3800a69a1a1@kernel.org>
+To:     Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     =?utf-8?q?Ma=C3=ADra_Canal?= <mairacanal@riseup.net>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Maxime Ripard <mripard@kernel.org>
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2575; i=mripard@kernel.org;
+ h=from:subject:message-id; bh=n39qjqZdna7s4aCBSr+Q6tsGFUv34ZNjq8iqqrLVaKg=;
+ b=owGbwMvMwCX2+D1vfrpE4FHG02pJDCn/HvP+StiTeqav+O31b0s/Zr3nt3v7ospZ+nn9k8cXz
+ v6TvxZ1uKOUhUGMi0FWTJElRth8SdypWa872fjmwcxhZQIZwsDFKQATcQpm+F+yMnequ1KKWpCB
+ Y4tZ8Jnt2qoahce5T3wV/6Z/g/nwQ25GhoPChiud5wusvn6/eyu7H/+C9SdnvD4jsK+ielv13/s
+ 2T/kA
+X-Developer-Key: i=mripard@kernel.org; a=openpgp;
+ fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The current check for 64-bit architecture is double-bugged.
-First of all, %BITS_PER_LONG is not available in the userspace,
-the underscored version from <asm/bitsperlong.h> must be used.
-The following check:
+Kunit recently gained a speed attribute that allows to filter out slow
+tests. A slow test is defined in the documentation as a test taking more
+than a second to execute.
 
- #if BITS_PER_LONG == 0
- #error
- #endif
+Let's flag the few tests that are doing so on my machine when running:
 
-triggers the error in this source file -- the macro is undefined and
-thus is implicitly evaluated to 0.
-Next, %BITS_PER_LONG means "bits", not "bytes". In the Linux kernel,
-it can be 32 or 64, never 8. Given that the tests guarded by that check
-are meant to be run on a 64-bit system, the correct value would be 64.
+./tools/testing/kunit/kunit.py run --kunitconfig=drivers/gpu/drm/tests \
+	--cross_compile aarch64-linux-gnu- --arch arm64
 
-Prefix the macro name and fix the value it's compared to.
-
-Fixes: 60b1af8de8c1 ("tracing/user_events: Add ABI self-test")
-Cc: stable@vger.kernel.org # 6.4+
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-Signed-off-by: Alexander Lobakin <aleksander.lobakin@intel.com>
+Suggested-by: David Gow <davidgow@google.com>
+Signed-off-by: Maxime Ripard <mripard@kernel.org>
 ---
- tools/testing/selftests/user_events/abi_test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/tests/drm_buddy_test.c |  2 +-
+ drivers/gpu/drm/tests/drm_mm_test.c    | 14 +++++++-------
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/user_events/abi_test.c b/tools/testing/selftests/user_events/abi_test.c
-index 5125c42efe65..4b30461fc741 100644
---- a/tools/testing/selftests/user_events/abi_test.c
-+++ b/tools/testing/selftests/user_events/abi_test.c
-@@ -129,7 +129,7 @@ TEST_F(user, bit_sizes) {
- 	ASSERT_EQ(0, reg_disable(&self->check, 0));
- 	ASSERT_EQ(0, reg_disable(&self->check, 31));
+diff --git a/drivers/gpu/drm/tests/drm_buddy_test.c b/drivers/gpu/drm/tests/drm_buddy_test.c
+index 09ee6f6af896..6f79cde2df55 100644
+--- a/drivers/gpu/drm/tests/drm_buddy_test.c
++++ b/drivers/gpu/drm/tests/drm_buddy_test.c
+@@ -742,7 +742,7 @@ static struct kunit_case drm_buddy_tests[] = {
+ 	KUNIT_CASE(drm_test_buddy_alloc_range),
+ 	KUNIT_CASE(drm_test_buddy_alloc_optimistic),
+ 	KUNIT_CASE(drm_test_buddy_alloc_pessimistic),
+-	KUNIT_CASE(drm_test_buddy_alloc_smoke),
++	KUNIT_CASE_SLOW(drm_test_buddy_alloc_smoke),
+ 	KUNIT_CASE(drm_test_buddy_alloc_pathological),
+ 	{}
+ };
+diff --git a/drivers/gpu/drm/tests/drm_mm_test.c b/drivers/gpu/drm/tests/drm_mm_test.c
+index 186b28dc7038..c1e662c2a76c 100644
+--- a/drivers/gpu/drm/tests/drm_mm_test.c
++++ b/drivers/gpu/drm/tests/drm_mm_test.c
+@@ -2228,23 +2228,23 @@ module_param(max_prime, uint, 0400);
+ static struct kunit_case drm_mm_tests[] = {
+ 	KUNIT_CASE(drm_test_mm_init),
+ 	KUNIT_CASE(drm_test_mm_debug),
+-	KUNIT_CASE(drm_test_mm_reserve),
+-	KUNIT_CASE(drm_test_mm_insert),
+-	KUNIT_CASE(drm_test_mm_replace),
+-	KUNIT_CASE(drm_test_mm_insert_range),
++	KUNIT_CASE_SLOW(drm_test_mm_reserve),
++	KUNIT_CASE_SLOW(drm_test_mm_insert),
++	KUNIT_CASE_SLOW(drm_test_mm_replace),
++	KUNIT_CASE_SLOW(drm_test_mm_insert_range),
+ 	KUNIT_CASE(drm_test_mm_frag),
+ 	KUNIT_CASE(drm_test_mm_align),
+ 	KUNIT_CASE(drm_test_mm_align32),
+ 	KUNIT_CASE(drm_test_mm_align64),
+-	KUNIT_CASE(drm_test_mm_evict),
++	KUNIT_CASE_SLOW(drm_test_mm_evict),
+ 	KUNIT_CASE(drm_test_mm_evict_range),
+ 	KUNIT_CASE(drm_test_mm_topdown),
+ 	KUNIT_CASE(drm_test_mm_bottomup),
+ 	KUNIT_CASE(drm_test_mm_lowest),
+ 	KUNIT_CASE(drm_test_mm_highest),
+ 	KUNIT_CASE(drm_test_mm_color),
+-	KUNIT_CASE(drm_test_mm_color_evict),
+-	KUNIT_CASE(drm_test_mm_color_evict_range),
++	KUNIT_CASE_SLOW(drm_test_mm_color_evict),
++	KUNIT_CASE_SLOW(drm_test_mm_color_evict_range),
+ 	{}
+ };
  
--#if BITS_PER_LONG == 8
-+#if __BITS_PER_LONG == 64
- 	/* Allow 0-64 bits for 64-bit */
- 	ASSERT_EQ(0, reg_enable(&self->check, sizeof(long), 63));
- 	ASSERT_NE(0, reg_enable(&self->check, sizeof(long), 64));
+
 -- 
 2.41.0
 
