@@ -2,110 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A2F53CA0EC2
-	for <linux-kselftest@archiver.kernel.org>; Mon, 11 Sep 2023 21:28:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BAFDCA0EC2
+	for <linux-kselftest@archiver.kernel.org>; Mon, 11 Sep 2023 21:28:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345392AbjIKVUN (ORCPT
+        id S1345397AbjIKVUQ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 11 Sep 2023 17:20:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38302 "EHLO
+        Mon, 11 Sep 2023 17:20:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236123AbjIKJvR (ORCPT
+        with ESMTP id S236751AbjIKLUG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 11 Sep 2023 05:51:17 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93594CE6;
-        Mon, 11 Sep 2023 02:51:12 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDFE4C433C7;
-        Mon, 11 Sep 2023 09:51:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694425872;
-        bh=k9hqH3sPaYwqFo8Oa0hcfW2HQ0WmwXu5RzJHIPp+VFA=;
-        h=From:Subject:Date:To:Cc:From;
-        b=r14eTcVwefBmq+cDh4FRg3zniV/NPqQ1h6rDVMFFDFRioza5917OEAnU+UnuxubiF
-         PljQ1JstPHzCj1d+ojt6Rv53i/jKJWgbDn1uQerzpTk171Yfx17dK2iiNI1r+Wc1Mi
-         66j+FiHx5YOynJ1DYzBDg64QgJQDKeK8ETOkqO/aBkedtPsQPWqzjNlcQ4TVS7+syO
-         /Y5PRhiABoPZkwPjdROR0XDV5Ouu25LJHkkIRc+V3orUoaVyAcDReSwF+S/N8+wg9o
-         mmnwIhipRlhM9B2yLippIVWf6IfYlrvCxhSavp6xSLx1yFqs4Bl58YHZyowly9z1x2
-         PyK8Ceuh1fjAQ==
-From:   Maxime Ripard <mripard@kernel.org>
-Subject: [PATCH 0/2] drm/tests: Flag slow kunit tests as such
-Date:   Mon, 11 Sep 2023 11:51:04 +0200
-Message-Id: <20230911-kms-slow-tests-v1-0-d3800a69a1a1@kernel.org>
+        Mon, 11 Sep 2023 07:20:06 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD869CDD;
+        Mon, 11 Sep 2023 04:20:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694431202; x=1725967202;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=qVo58leRfHfx78TMUsQ9bFhX9krqsCC7gNZleGpHRMg=;
+  b=N33mWU54WRfvoBR9KZvg/lHODg6GHHsFyuhtjDHz7vZj7YkpJNBDE6CN
+   LcrREw3VpAtdx7iCzn22LxreZimvLdVicO9wJsI4HZti5fwJm5xPTe6Y+
+   FIHK9PexuFULjtHaHSmbxV2A+xKXVf6586bDST/YjGAYuVTBF3hFuZIJR
+   1bTaYOIJcWiZPAPCeq2bxj7Ig1XEX6W/y+BEOlDyuCTLVjibfzELFTBwY
+   a2KGwsERLrLbKE8ge9Ok3zakID7Fp/qTvCDr4RNGieIkNnW0/h7mZ+GHB
+   LEI0fa328bB3AALujlf1zCYoGHk/g44umiKyjFmmMZq8+ZLLjeeErVwJa
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10829"; a="464428640"
+X-IronPort-AV: E=Sophos;i="6.02,243,1688454000"; 
+   d="scan'208";a="464428640"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 04:20:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10829"; a="916990588"
+X-IronPort-AV: E=Sophos;i="6.02,243,1688454000"; 
+   d="scan'208";a="916990588"
+Received: from mzarkov-mobl3.ger.corp.intel.com (HELO ijarvine-mobl2.ger.corp.intel.com) ([10.252.36.200])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 04:19:59 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Reinette Chatre <reinette.chatre@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org,
+        =?UTF-8?q?Maciej=20Wiecz=C3=B3r-Retman?= 
+        <maciej.wieczor-retman@intel.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 5/5] selftests/resctrl: Reduce failures due to outliers in MBA/MBM tests
+Date:   Mon, 11 Sep 2023 14:19:30 +0300
+Message-Id: <20230911111930.16088-6-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230911111930.16088-1-ilpo.jarvinen@linux.intel.com>
+References: <20230911111930.16088-1-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAjj/mQC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI2MDS0ND3ezcYt3inPxy3ZLU4pJiXQMjM8Ok1FTLRFOTJCWgpoKi1LTMCrC
- B0bG1tQBb9Va5YAAAAA==
-To:     Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     =?utf-8?q?Ma=C3=ADra_Canal?= <mairacanal@riseup.net>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Maxime Ripard <mripard@kernel.org>
-X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1470; i=mripard@kernel.org;
- h=from:subject:message-id; bh=k9hqH3sPaYwqFo8Oa0hcfW2HQ0WmwXu5RzJHIPp+VFA=;
- b=owGbwMvMwCX2+D1vfrpE4FHG02pJDCn/HvNGO/2M1XOb90ZlxhV17jcN1Uevn88I/X156a2Uj
- tQvgkJXOkpZGMS4GGTFFFlihM2XxJ2a9bqTjW8ezBxWJpAhDFycAjCRrdMYGVYcfBrac0qpnCvP
- M/B97Smrl/rdJ2sEpi7g/TJ35cW3P9cz/NNRcLi79GBkmP+Ruxd3hW7qkvVjnV2ifeFO82rj2ex
- xzpwA
-X-Developer-Key: i=mripard@kernel.org; a=openpgp;
- fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
+5% difference upper bound for success is a bit on the low side for the
+MBA and MBM tests. Some platforms produce outliers that are slightly
+above that, typically 6-7%.
 
-Here's a series that sets the speed attribute to slow on DRM tests that
-are taking a while to execute.
+Relaxing the MBA/MBM success bound to 8% removes most of the failures
+due those frequent outliers.
 
-With those patches, an initial run of the drm tests on arm64 were taking
-59s to execute with:
-
-$ ./tools/testing/kunit/kunit.py run \
-	--kunitconfig=drivers/gpu/drm/tests \
-	--arch arm64 \
-	--cross_compile aarch64-linux-gnu-
-...
-[11:50:07] Testing complete. Ran 340 tests: passed: 340
-[11:50:07] Elapsed time: 62.261s total, 0.001s configuring, 2.703s building, 59.532s running
-
-and are now taking 1.7s when filtering out the slow tests:
-
-$ ./tools/testing/kunit/kunit.py run \
-	--kunitconfig=drivers/gpu/drm/tests \
-	--arch arm64 \
-	--cross_compile aarch64-linux-gnu- \
-	--filter "speed>slow"
-...
-[11:47:52] Testing complete. Ran 332 tests: passed: 332
-[11:47:52] Elapsed time: 6.449s total, 0.001s configuring, 4.728s building, 1.678s running
-
-Let me know what you think,
-Maxime
-
-Signed-off-by: Maxime Ripard <mripard@kernel.org>
+Fixes: 06bd03a57f8c ("selftests/resctrl: Fix MBA/MBM results reporting format")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
-Maxime Ripard (2):
-      kunit: Warn if tests are slow
-      drm/tests: Flag slow tests as such
+ tools/testing/selftests/resctrl/mba_test.c | 2 +-
+ tools/testing/selftests/resctrl/mbm_test.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- drivers/gpu/drm/tests/drm_buddy_test.c |  2 +-
- drivers/gpu/drm/tests/drm_mm_test.c    | 14 +++++++-------
- lib/kunit/test.c                       | 16 ++++++++++++++++
- 3 files changed, 24 insertions(+), 8 deletions(-)
----
-base-commit: 0bb80ecc33a8fb5a682236443c1e740d5c917d1d
-change-id: 20230911-kms-slow-tests-0261bee9a54b
-
-Best regards,
+diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
+index cf8284dadcb2..d3bf4368341e 100644
+--- a/tools/testing/selftests/resctrl/mba_test.c
++++ b/tools/testing/selftests/resctrl/mba_test.c
+@@ -12,7 +12,7 @@
+ 
+ #define RESULT_FILE_NAME	"result_mba"
+ #define NUM_OF_RUNS		5
+-#define MAX_DIFF_PERCENT	5
++#define MAX_DIFF_PERCENT	8
+ #define ALLOCATION_MAX		100
+ #define ALLOCATION_MIN		10
+ #define ALLOCATION_STEP		10
+diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
+index 1ae131a2e246..d3c0d30c676a 100644
+--- a/tools/testing/selftests/resctrl/mbm_test.c
++++ b/tools/testing/selftests/resctrl/mbm_test.c
+@@ -11,7 +11,7 @@
+ #include "resctrl.h"
+ 
+ #define RESULT_FILE_NAME	"result_mbm"
+-#define MAX_DIFF_PERCENT	5
++#define MAX_DIFF_PERCENT	8
+ #define NUM_OF_RUNS		5
+ 
+ static int
 -- 
-Maxime Ripard <mripard@kernel.org>
+2.30.2
 
