@@ -2,209 +2,678 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BB60CA0EC1
-	for <linux-kselftest@archiver.kernel.org>; Mon, 11 Sep 2023 21:28:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6881CCA0EC1
+	for <linux-kselftest@archiver.kernel.org>; Mon, 11 Sep 2023 21:28:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345314AbjIKVTb (ORCPT
+        id S1345345AbjIKVTf (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 11 Sep 2023 17:19:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34278 "EHLO
+        Mon, 11 Sep 2023 17:19:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235490AbjIKIoH (ORCPT
+        with ESMTP id S236413AbjIKKep (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 11 Sep 2023 04:44:07 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2067.outbound.protection.outlook.com [40.107.244.67])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EE5F125;
-        Mon, 11 Sep 2023 01:44:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZAcNrI3BJ20mbiuts070uxZwO3Hns7gQj/pxtKGU7iiBGuCkjuYiPCKQBguz5/2DhZtkiRHAHp5BlOtRJGpLmpxc6xhELGVt5irjjS7XStLu4b5emUSa92B4RgPMFukEzgv5TbcWpHijQ3PsHAhqBjJsyGxOIC5oOCKFbyHw+QQ7OYEqo/zwmUQdmUrXRic/EjzwqA2u9QRukX/WjLf/Z5uGI8++O1ATEknh74awIMMa1fZ87G1ZFN9JHoKLBQBr11H4374Yg9XECPbCvSpGT1GUNuPbT7vlpQK928CRSvEFevyAZ2pksTvtkWLiUsihpeOxcj7jeDv/TZq8bhYyRg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=U1V9j6vu9hJ8aINllAtwkAovPybu+lwMDibnRLp4Slg=;
- b=keGvbtaWFIgzmCoyteGxvlIxcr3iFGLqSzj525cYrLEKVLDQhZcI7UgeORc+PtQeQcyN7FE3WcG+Vgh2YmYK1d4OwAWhuAaJ2uMygExxfNET6q8hNEg3i6+jDiMpcx66cq9DwfQ8PGwIK4VAzfKDQVpMcXF+4oBdOnxbIxKhqXbBF28W1Aeu0p7oS31VM2omTjPJIlqeuKqHw9bbjtJdqvTjamGLIJ8Kn1hPR7UPOkCB0QH8IUD3oRBgYOGqsIrCNfUOdy9FWUfnm2AZGprhO9zfgJukD/y3/9n/MLoro2QNUZe15r7k4lqTDKnUWsGUxj67a5hDK/FcJK5i+ecuYg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=U1V9j6vu9hJ8aINllAtwkAovPybu+lwMDibnRLp4Slg=;
- b=yyC4J/1YfK2HxXlLscwSZgVfRSA6OdvFAJqpbP/9BP+D5rmrIWo04ejNVOTZ59eVF6g0opIKgTb7TQmb7U4UkeeSFz6izzhEdWsiW4GbwXAYs2UMb8p74/UPxotUG0GBPKUDIyvJ1XJfP99HAgBF/7vJWD0iB+CecSo3mAx/w7w=
-Received: from DM4PR12MB6351.namprd12.prod.outlook.com (2603:10b6:8:a2::6) by
- CH0PR12MB5073.namprd12.prod.outlook.com (2603:10b6:610:e0::10) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6768.35; Mon, 11 Sep 2023 08:43:59 +0000
-Received: from DM4PR12MB6351.namprd12.prod.outlook.com
- ([fe80::d713:8aa1:8769:af10]) by DM4PR12MB6351.namprd12.prod.outlook.com
- ([fe80::d713:8aa1:8769:af10%7]) with mapi id 15.20.6768.029; Mon, 11 Sep 2023
- 08:43:59 +0000
-From:   "Meng, Li (Jassmine)" <Li.Meng@amd.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-CC:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        "Huang, Ray" <Ray.Huang@amd.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
-        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
-        "Yuan, Perry" <Perry.Yuan@amd.com>,
-        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>
-Subject: RE: [PATCH V5 4/7] cpufreq: Add a notification message that the
- highest perf has changed
-Thread-Topic: [PATCH V5 4/7] cpufreq: Add a notification message that the
- highest perf has changed
-Thread-Index: AQHZ35uTcby90ScWIUu95x3lucaRQrAQ8D8AgARnniA=
-Date:   Mon, 11 Sep 2023 08:43:59 +0000
-Message-ID: <DM4PR12MB63511F8BB2B229120DC8D9AFF7F2A@DM4PR12MB6351.namprd12.prod.outlook.com>
-References: <20230905015116.2268926-1-li.meng@amd.com>
- <20230905015116.2268926-5-li.meng@amd.com>
- <20230908132402.GH19320@noisy.programming.kicks-ass.net>
-In-Reply-To: <20230908132402.GH19320@noisy.programming.kicks-ass.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=8661df81-ca34-4eb2-90ac-08801417f685;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=0;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2023-09-11T08:39:55Z;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM4PR12MB6351:EE_|CH0PR12MB5073:EE_
-x-ms-office365-filtering-correlation-id: 2bfaf359-4926-4356-2076-08dbb2a33e0c
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: j/FweT1YQYJfgoG/4y1zUfkPqU92nqSmW1ulCCwQilzMRH8nQpX9ElYSWe9f9yhe4E8T3iktKsLjI/pApW+poZ7MBwAF0y67WcnQUQ0KmIIK9FMYNwORX2qmulpQ3puZ2SmfVfC7JXna81hFdaFgp7GSSpHKPiRUQqU0wDdPJXefWKZKImJIEsCP1uXANEaPxgTaF1fO6QbTYMZvIUYYgeLmsc+5ZqLXF8TG3jBeR1o606YPTnctWWFiBbY5ExMFXmOCT5KP3bwRFxz5kW938wQ032O9KvogpunagVidFdElPOtJGsVfMXvd8CNdLnWZkxd6cnhrDxG/VZhl+U3N9voOxksHqMdPStsES2mi6bTjektpJskooBP3v/fMxSn4Kzmukn548vcHP/z9HSvoFwIoksplMb4LVXArCZeHCGzo5soSnWaobHMFQfN1QCOnRw5UdUZxa/uNnTE67aD7kP9JvQxWy4y2hl2jknUDLLELZCWVyR24Gyw7hcDhrEiadqZeOr/ZKQfebrR/3M38cexup2lPdhcutlHT7xQ4gZQmohW5DRwWbA8P7GfizLo/KYdUkt50mzvvcLf2sGeEIjJ9BYRoPPI9avNvClkPEBLsFpz3tVSIbR626qmfgR5HH9QGmhl273DqnJiBf5bFhoB1mbpVoTXaSEJwzHvC5NM=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6351.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(136003)(376002)(366004)(39860400002)(346002)(451199024)(1800799009)(186009)(2906002)(26005)(86362001)(83380400001)(7696005)(9686003)(53546011)(55016003)(71200400001)(15650500001)(6506007)(33656002)(7416002)(38070700005)(38100700002)(122000001)(478600001)(966005)(52536014)(5660300002)(4326008)(8676002)(8936002)(66556008)(66476007)(66446008)(316002)(6916009)(64756008)(54906003)(41300700001)(76116006)(66946007)(226483002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?aqQRm7P9IZWV0c971EB+carEwjJnar8CscVpDB0ebEAj9IETE1ynBpuwgmSS?=
- =?us-ascii?Q?m4CZ/YugRdnFlBhBc8hPX2Vm2v6hb787ZNMmcrEEVF7L5LfK2iGDEbfJqELs?=
- =?us-ascii?Q?37Ky4G+2dhk57KlhrikGsMTL9KiLhtqAfsW86O5uN9dKP76u3/RWHIZYMUX7?=
- =?us-ascii?Q?dEbBlHAKQ87pSKeXYzSZF3dbg6B7U4cKRIRxnsM+Fdy1gRrX4GLzpZo21R82?=
- =?us-ascii?Q?L+h3Sxjx09TqBgEGaOc6DPL+0geWgqOhmpcpTt0Zmba0TTOkyfvDZEVQvXkp?=
- =?us-ascii?Q?/4zftZ6HsyGLKiL4yqOFP1LMC/NcsJJohmz1XFMuV293HfXfvCWHNnuSz9ED?=
- =?us-ascii?Q?f3vVPvJFkmAW5G+j36WsR09s3mS9I+G4g0GfLCDITPfTdyg+tSGrSLYlw1Ik?=
- =?us-ascii?Q?S9COFuYLpKxWMDDPdACNmRewXrtukzXH+3Z7+Rik6mve7HSWVHwxm09+IZz4?=
- =?us-ascii?Q?cJT3ScT7rpQTBdJsejY6lbCLb/xmuwLX2C8T+UVgqYhIIXq2o4bcbPZaVrtp?=
- =?us-ascii?Q?WviYaEmwNofOKT03g2H5cRQ6Ws3DS5YtWwGNcgwnTkOTCado/0Li2dBTAYnR?=
- =?us-ascii?Q?Xb6Nzm9Jx1QlvdHszcOdfPYgZNg6SIgrJhpO93qUYT4PVmO+t1A1K84s5fJA?=
- =?us-ascii?Q?KeBGvZ0zdlHAWoQ5ucZZhUeK4pB54git5BwLTgmWWiw3H9hbjFiLoOgPV1V2?=
- =?us-ascii?Q?by6VHYnHbJSk8mtgB1ePxb/HlM4d3992IqLOc9hGn102W11y6/452sjSmQf+?=
- =?us-ascii?Q?GQlUGi6zsfSAKegqyQARiwjzV/VQ93MvSzsKuhFsKvYCz6XRi/YfAQ8cjtyA?=
- =?us-ascii?Q?b+LXTUwcTVhbvXS69yFLe/ZDdTDxBhQXYdwFbf/nE6AfCL2EZja+LP6pWpgu?=
- =?us-ascii?Q?DVQdYbmI6GeGrPl93wADeg7HrUP+mYqrHz/ttc5TIqoSKbbnBh7byjqfsdo+?=
- =?us-ascii?Q?IGixEQwWGGLmDC8K+01IBuYQ0zOwez6WcQXVc0sXMgrVmEmptloTN0seb2RF?=
- =?us-ascii?Q?khE13iXc+lec98qVfV6s9UOIB6CoCvNPo5xG1l8zxY01qWgWsdevttJ3fTz5?=
- =?us-ascii?Q?WGWwZxtoysdS32FHcFXPeWbM9+PHkRJcdByIhYeRZrYdC9fDu/mSfofs0iUG?=
- =?us-ascii?Q?5LXm3ffoCyZ+h21gt5JjNmjbbQGSDyyLV4tx8U78UxeYnrgt30WudL+DYXve?=
- =?us-ascii?Q?Huy3m8L3HcWwPZWnj8AKRhMDLbAsNvodljlIfpMRyAYqDndWcKLRvypS9bYA?=
- =?us-ascii?Q?EScyAKYOD2qTge6SeNY30u0tq+64HcacpWbbLjY6R8RyQhBvuIWz/Q+/Vetu?=
- =?us-ascii?Q?evc/OCQE1OpU0AyjiDn/uSN8cNWgYjKc7RraumJHmsFs17AN/xBq0uShboay?=
- =?us-ascii?Q?S+5oae6yCgncOWwY5wxfpJDB5L+yClvQJhBeLHnWlpnTNKksgRz8Azcuqelv?=
- =?us-ascii?Q?8OyDSxt9QEkpaqTBcWUxXrGE36YaRmrXiqnaNQrL43ze+yuQZbTMxpQyxfjA?=
- =?us-ascii?Q?YkPgD3ApkCoBRgasYU4HPDMWYDFT2cfg4VIIW62TT9iU4JDXR+42zEzmzc0K?=
- =?us-ascii?Q?Uz7rLopUJnJY8ei8FuU=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 11 Sep 2023 06:34:45 -0400
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A0A3120;
+        Mon, 11 Sep 2023 03:34:39 -0700 (PDT)
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-9a58dbd5daeso560708866b.2;
+        Mon, 11 Sep 2023 03:34:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694428478; x=1695033278;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=B9zL1pmqINyZLXRlcnhMXvmJgzBzwPRNb5BCtJUaRIM=;
+        b=djWXp/nyhoDwGTfRRp1VDIXXd+Y1zFdtOPaXbZAd1q6AubDA5aZ5ByiChwvSnzHtPz
+         e5W2t0jDWC3PYJNoVQi/0roxNOjQ8AsCvyYPwrpUxAH9S8LJZVESl9h4l/4O/2dIZG7J
+         8A0gdG0xG/eRS86Ol1+GMqVkJ6ZsDu2BPtoCsMI5AvLac64g79Sj2/WREm3EpK/Xq2OI
+         OItJ185Tq/UmmnhI2p1aMrUicy8i3oVf1pRRWNhEMlANRqQpgfuNn+gjaIbzjjXSO8VC
+         Ko1lcXlU+lJRPxlq+aQv73Ob//UYN40/BZPx0mGmimzdcVxU/MjBCIMgIri2/n9Dvgm8
+         fLOw==
+X-Gm-Message-State: AOJu0Yxhu4s3Lb8+v/mpCzq7hvwO3L88ka2P7gPIJOiA+evrVbvud0Jv
+        WRcyoxv/P7rl0cq/6wOM3b0=
+X-Google-Smtp-Source: AGHT+IGan85eJL3k+7WmQDESk+9Zinrj8rDnKQeCJHeFU6qGhsNmoVgpkUeShEYgwcwZtqDNLjLoHw==
+X-Received: by 2002:a17:907:7795:b0:9a1:db97:62a1 with SMTP id ky21-20020a170907779500b009a1db9762a1mr7028205ejc.46.1694428477772;
+        Mon, 11 Sep 2023 03:34:37 -0700 (PDT)
+Received: from localhost (fwdproxy-cln-004.fbsv.net. [2a03:2880:31ff:4::face:b00c])
+        by smtp.gmail.com with ESMTPSA id me15-20020a170906aecf00b009a193a5acffsm5073750ejb.121.2023.09.11.03.34.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Sep 2023 03:34:37 -0700 (PDT)
+From:   Breno Leitao <leitao@debian.org>
+To:     sdf@google.com, axboe@kernel.dk, asml.silence@gmail.com,
+        willemdebruijn.kernel@gmail.com, kuba@kernel.org,
+        martin.lau@linux.dev, krisman@suse.de,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, io-uring@vger.kernel.org,
+        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
+Subject: [PATCH v5 4/8] selftests/net: Extract uring helpers to be reusable
+Date:   Mon, 11 Sep 2023 03:34:03 -0700
+Message-Id: <20230911103407.1393149-5-leitao@debian.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230911103407.1393149-1-leitao@debian.org>
+References: <20230911103407.1393149-1-leitao@debian.org>
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6351.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2bfaf359-4926-4356-2076-08dbb2a33e0c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Sep 2023 08:43:59.3447
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: yOrj+wnhURJK4OIRXpzDXwW8wObGiM1KjtmiiSrYfRXWCI0Il04hA5DM8zPPaDhUBi2U5KQNAJ3RD3Z7+xZZTQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5073
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-[AMD Official Use Only - General]
+Instead of defining basic io_uring functions in the test case, move them
+to a common directory, so, other tests can use them.
 
-Hi Peter:
+This simplify the test code and reuse the common "mini" liburing
+infrastructure. This is basically a copy of what we have in
+io_uring_zerocopy_tx with some minor improvements.
 
-> -----Original Message-----
-> From: Peter Zijlstra <peterz@infradead.org>
-> Sent: Friday, September 8, 2023 9:24 PM
-> To: Meng, Li (Jassmine) <Li.Meng@amd.com>
-> Cc: Rafael J . Wysocki <rafael.j.wysocki@intel.com>; Huang, Ray
-> <Ray.Huang@amd.com>; linux-pm@vger.kernel.org; linux-
-> kernel@vger.kernel.org; x86@kernel.org; linux-acpi@vger.kernel.org; Shuah
-> Khan <skhan@linuxfoundation.org>; linux-kselftest@vger.kernel.org;
-> Fontenot, Nathan <Nathan.Fontenot@amd.com>; Sharma, Deepak
-> <Deepak.Sharma@amd.com>; Deucher, Alexander
-> <Alexander.Deucher@amd.com>; Limonciello, Mario
-> <Mario.Limonciello@amd.com>; Huang, Shimmer
-> <Shimmer.Huang@amd.com>; Yuan, Perry <Perry.Yuan@amd.com>; Du,
-> Xiaojian <Xiaojian.Du@amd.com>; Viresh Kumar <viresh.kumar@linaro.org>;
-> Borislav Petkov <bp@alien8.de>
-> Subject: Re: [PATCH V5 4/7] cpufreq: Add a notification message that the
-> highest perf has changed
->
-> Caution: This message originated from an External Source. Use proper
-> caution when opening attachments, clicking links, or responding.
->
->
-> On Tue, Sep 05, 2023 at 09:51:13AM +0800, Meng Li wrote:
-> > ACPI 6.5 section 8.4.6.1.1.1 specifies that Notify event 0x85 can be
-> > emmitted to cause the the OSPM to re-evaluate the highest performance
-> > register. Add support for this event.
-> >
-> > Signed-off-by: Meng Li <li.meng@amd.com>
-> > Link:
-> > https://uefi.org/specs/ACPI/6.5/08_Processor_Configuration_and_Control
-> > .html?highlight=3Dcppc#cpc-continuous-performance-control
-> > ---
-> >  drivers/acpi/processor_driver.c |  6 ++++++
-> >  drivers/cpufreq/cpufreq.c       | 13 +++++++++++++
-> >  include/linux/cpufreq.h         |  5 +++++
-> >  3 files changed, 24 insertions(+)
-> >
-> > diff --git a/drivers/acpi/processor_driver.c
-> > b/drivers/acpi/processor_driver.c index 4bd16b3f0781..29b2fb68a35d
-> > 100644
-> > --- a/drivers/acpi/processor_driver.c
-> > +++ b/drivers/acpi/processor_driver.c
-> > @@ -27,6 +27,7 @@
-> >  #define ACPI_PROCESSOR_NOTIFY_PERFORMANCE 0x80  #define
-> > ACPI_PROCESSOR_NOTIFY_POWER  0x81
-> >  #define ACPI_PROCESSOR_NOTIFY_THROTTLING     0x82
-> > +#define ACPI_PROCESSOR_NOTIFY_HIGEST_PERF_CHANGED    0x85
-> >
-> >  MODULE_AUTHOR("Paul Diefenbaugh");
-> >  MODULE_DESCRIPTION("ACPI Processor Driver"); @@ -83,6 +84,11 @@
-> > static void acpi_processor_notify(acpi_handle handle, u32 event, void
-> *data)
-> >               acpi_bus_generate_netlink_event(device->pnp.device_class,
-> >                                                 dev_name(&device->dev),=
- event, 0);
-> >               break;
-> > +     case ACPI_PROCESSOR_NOTIFY_HIGEST_PERF_CHANGED:
-> > +             cpufreq_update_highest_perf(pr->id);
-> > +             acpi_bus_generate_netlink_event(device->pnp.device_class,
-> > +                                               dev_name(&device->dev),=
- event, 0);
-> > +             break;
-> >       default:
-> >               acpi_handle_debug(handle, "Unsupported event [0x%x]\n", e=
-vent);
-> >               break;
->
-> I've obviously not read the link, but the above seems to suggest that eve=
-ry
-> CPU that has its limits changed gets the 'interrupt' ?
-[Meng, Li (Jassmine)]
-Yes.
-I will modify the link to https://uefi.org/specs/ACPI/6.5/05_ACPI_Software_=
-Programming_Model.html#processor-device-notification-values
+A follow-up test will use the same helpers in a BPF sockopt test.
+
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+ tools/include/io_uring/mini_liburing.h        | 292 ++++++++++++++++++
+ tools/testing/selftests/net/Makefile          |   1 +
+ .../selftests/net/io_uring_zerocopy_tx.c      | 268 +---------------
+ 3 files changed, 295 insertions(+), 266 deletions(-)
+ create mode 100644 tools/include/io_uring/mini_liburing.h
+
+diff --git a/tools/include/io_uring/mini_liburing.h b/tools/include/io_uring/mini_liburing.h
+new file mode 100644
+index 000000000000..e0e1e76def25
+--- /dev/null
++++ b/tools/include/io_uring/mini_liburing.h
+@@ -0,0 +1,292 @@
++/* SPDX-License-Identifier: MIT */
++
++#include <linux/io_uring.h>
++#include <sys/mman.h>
++#include <sys/syscall.h>
++#include <stdio.h>
++#include <string.h>
++#include <unistd.h>
++
++struct io_sq_ring {
++	unsigned int *head;
++	unsigned int *tail;
++	unsigned int *ring_mask;
++	unsigned int *ring_entries;
++	unsigned int *flags;
++	unsigned int *array;
++};
++
++struct io_cq_ring {
++	unsigned int *head;
++	unsigned int *tail;
++	unsigned int *ring_mask;
++	unsigned int *ring_entries;
++	struct io_uring_cqe *cqes;
++};
++
++struct io_uring_sq {
++	unsigned int *khead;
++	unsigned int *ktail;
++	unsigned int *kring_mask;
++	unsigned int *kring_entries;
++	unsigned int *kflags;
++	unsigned int *kdropped;
++	unsigned int *array;
++	struct io_uring_sqe *sqes;
++
++	unsigned int sqe_head;
++	unsigned int sqe_tail;
++
++	size_t ring_sz;
++};
++
++struct io_uring_cq {
++	unsigned int *khead;
++	unsigned int *ktail;
++	unsigned int *kring_mask;
++	unsigned int *kring_entries;
++	unsigned int *koverflow;
++	struct io_uring_cqe *cqes;
++
++	size_t ring_sz;
++};
++
++struct io_uring {
++	struct io_uring_sq sq;
++	struct io_uring_cq cq;
++	int ring_fd;
++};
++
++#if defined(__x86_64) || defined(__i386__)
++#define read_barrier()	__asm__ __volatile__("":::"memory")
++#define write_barrier()	__asm__ __volatile__("":::"memory")
++#else
++#define read_barrier()	__sync_synchronize()
++#define write_barrier()	__sync_synchronize()
++#endif
++
++static inline int io_uring_mmap(int fd, struct io_uring_params *p,
++				struct io_uring_sq *sq, struct io_uring_cq *cq)
++{
++	size_t size;
++	void *ptr;
++	int ret;
++
++	sq->ring_sz = p->sq_off.array + p->sq_entries * sizeof(unsigned int);
++	ptr = mmap(0, sq->ring_sz, PROT_READ | PROT_WRITE,
++		   MAP_SHARED | MAP_POPULATE, fd, IORING_OFF_SQ_RING);
++	if (ptr == MAP_FAILED)
++		return -errno;
++	sq->khead = ptr + p->sq_off.head;
++	sq->ktail = ptr + p->sq_off.tail;
++	sq->kring_mask = ptr + p->sq_off.ring_mask;
++	sq->kring_entries = ptr + p->sq_off.ring_entries;
++	sq->kflags = ptr + p->sq_off.flags;
++	sq->kdropped = ptr + p->sq_off.dropped;
++	sq->array = ptr + p->sq_off.array;
++
++	size = p->sq_entries * sizeof(struct io_uring_sqe);
++	sq->sqes = mmap(0, size, PROT_READ | PROT_WRITE,
++			MAP_SHARED | MAP_POPULATE, fd, IORING_OFF_SQES);
++	if (sq->sqes == MAP_FAILED) {
++		ret = -errno;
++err:
++		munmap(sq->khead, sq->ring_sz);
++		return ret;
++	}
++
++	cq->ring_sz = p->cq_off.cqes + p->cq_entries * sizeof(struct io_uring_cqe);
++	ptr = mmap(0, cq->ring_sz, PROT_READ | PROT_WRITE,
++		   MAP_SHARED | MAP_POPULATE, fd, IORING_OFF_CQ_RING);
++	if (ptr == MAP_FAILED) {
++		ret = -errno;
++		munmap(sq->sqes, p->sq_entries * sizeof(struct io_uring_sqe));
++		goto err;
++	}
++	cq->khead = ptr + p->cq_off.head;
++	cq->ktail = ptr + p->cq_off.tail;
++	cq->kring_mask = ptr + p->cq_off.ring_mask;
++	cq->kring_entries = ptr + p->cq_off.ring_entries;
++	cq->koverflow = ptr + p->cq_off.overflow;
++	cq->cqes = ptr + p->cq_off.cqes;
++	return 0;
++}
++
++static inline int io_uring_setup(unsigned int entries,
++				 struct io_uring_params *p)
++{
++	return syscall(__NR_io_uring_setup, entries, p);
++}
++
++static inline int io_uring_enter(int fd, unsigned int to_submit,
++				 unsigned int min_complete,
++				 unsigned int flags, sigset_t *sig)
++{
++	return syscall(__NR_io_uring_enter, fd, to_submit, min_complete,
++		       flags, sig, _NSIG / 8);
++}
++
++static inline int io_uring_queue_init(unsigned int entries,
++				      struct io_uring *ring,
++				      unsigned int flags)
++{
++	struct io_uring_params p;
++	int fd, ret;
++
++	memset(ring, 0, sizeof(*ring));
++	memset(&p, 0, sizeof(p));
++	p.flags = flags;
++
++	fd = io_uring_setup(entries, &p);
++	if (fd < 0)
++		return fd;
++	ret = io_uring_mmap(fd, &p, &ring->sq, &ring->cq);
++	if (!ret)
++		ring->ring_fd = fd;
++	else
++		close(fd);
++	return ret;
++}
++
++/* Get a sqe */
++static inline struct io_uring_sqe *io_uring_get_sqe(struct io_uring *ring)
++{
++	struct io_uring_sq *sq = &ring->sq;
++
++	if (sq->sqe_tail + 1 - sq->sqe_head > *sq->kring_entries)
++		return NULL;
++	return &sq->sqes[sq->sqe_tail++ & *sq->kring_mask];
++}
++
++static inline int io_uring_wait_cqe(struct io_uring *ring,
++				    struct io_uring_cqe **cqe_ptr)
++{
++	struct io_uring_cq *cq = &ring->cq;
++	const unsigned int mask = *cq->kring_mask;
++	unsigned int head = *cq->khead;
++	int ret;
++
++	*cqe_ptr = NULL;
++	do {
++		read_barrier();
++		if (head != *cq->ktail) {
++			*cqe_ptr = &cq->cqes[head & mask];
++			break;
++		}
++		ret = io_uring_enter(ring->ring_fd, 0, 1,
++				     IORING_ENTER_GETEVENTS, NULL);
++		if (ret < 0)
++			return -errno;
++	} while (1);
++
++	return 0;
++}
++
++static inline int io_uring_submit(struct io_uring *ring)
++{
++	struct io_uring_sq *sq = &ring->sq;
++	const unsigned int mask = *sq->kring_mask;
++	unsigned int ktail, submitted, to_submit;
++	int ret;
++
++	read_barrier();
++	if (*sq->khead != *sq->ktail) {
++		submitted = *sq->kring_entries;
++		goto submit;
++	}
++	if (sq->sqe_head == sq->sqe_tail)
++		return 0;
++
++	ktail = *sq->ktail;
++	to_submit = sq->sqe_tail - sq->sqe_head;
++	for (submitted = 0; submitted < to_submit; submitted++) {
++		read_barrier();
++		sq->array[ktail++ & mask] = sq->sqe_head++ & mask;
++	}
++	if (!submitted)
++		return 0;
++
++	if (*sq->ktail != ktail) {
++		write_barrier();
++		*sq->ktail = ktail;
++		write_barrier();
++	}
++submit:
++	ret = io_uring_enter(ring->ring_fd, submitted, 0,
++			     IORING_ENTER_GETEVENTS, NULL);
++	return ret < 0 ? -errno : ret;
++}
++
++static inline void io_uring_queue_exit(struct io_uring *ring)
++{
++	struct io_uring_sq *sq = &ring->sq;
++
++	munmap(sq->sqes, *sq->kring_entries * sizeof(struct io_uring_sqe));
++	munmap(sq->khead, sq->ring_sz);
++	close(ring->ring_fd);
++}
++
++/* Prepare and send the SQE */
++static inline void io_uring_prep_cmd(struct io_uring_sqe *sqe, int op,
++				     int sockfd,
++				     int level, int optname,
++				     const void *optval,
++				     const socklen_t optlen)
++{
++	memset(sqe, 0, sizeof(*sqe));
++	sqe->opcode = (__u8)IORING_OP_URING_CMD;
++	sqe->fd = sockfd;
++	sqe->cmd_op = op;
++
++	sqe->level = level;
++	sqe->optname = optname;
++	sqe->optval = (unsigned long long)optval;
++	sqe->optlen = (unsigned long long)optlen;
++}
++
++static inline void io_uring_prep_cmd_get(struct io_uring_sqe *sqe, int op,
++					 int sockfd,
++					 int level, int optname,
++					 const void *optval,
++					 const socklen_t *optlen)
++{
++	io_uring_prep_cmd(sqe, op, sockfd, level, optname, optval, 0);
++	sqe->optlen = (unsigned long long)optlen;
++}
++
++static inline int io_uring_register_buffers(struct io_uring *ring,
++					    const struct iovec *iovecs,
++					    unsigned int nr_iovecs)
++{
++	int ret;
++
++	ret = syscall(__NR_io_uring_register, ring->ring_fd,
++		      IORING_REGISTER_BUFFERS, iovecs, nr_iovecs);
++	return (ret < 0) ? -errno : ret;
++}
++
++static inline void io_uring_prep_send(struct io_uring_sqe *sqe, int sockfd,
++				      const void *buf, size_t len, int flags)
++{
++	memset(sqe, 0, sizeof(*sqe));
++	sqe->opcode = (__u8)IORING_OP_SEND;
++	sqe->fd = sockfd;
++	sqe->addr = (unsigned long)buf;
++	sqe->len = len;
++	sqe->msg_flags = (__u32)flags;
++}
++
++static inline void io_uring_prep_sendzc(struct io_uring_sqe *sqe, int sockfd,
++					const void *buf, size_t len, int flags,
++					unsigned int zc_flags)
++{
++	io_uring_prep_send(sqe, sockfd, buf, len, flags);
++	sqe->opcode = (__u8)IORING_OP_SEND_ZC;
++	sqe->ioprio = zc_flags;
++}
++
++static inline void io_uring_cqe_seen(struct io_uring *ring)
++{
++	*(&ring->cq)->khead += 1;
++	write_barrier();
++}
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index 8b017070960d..f8d99837b9dc 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -98,6 +98,7 @@ $(OUTPUT)/reuseport_bpf_numa: LDLIBS += -lnuma
+ $(OUTPUT)/tcp_mmap: LDLIBS += -lpthread -lcrypto
+ $(OUTPUT)/tcp_inq: LDLIBS += -lpthread
+ $(OUTPUT)/bind_bhash: LDLIBS += -lpthread
++$(OUTPUT)/io_uring_zerocopy_tx: CFLAGS += -I../../../include/
+ 
+ # Rules to generate bpf obj nat6to4.o
+ CLANG ?= clang
+diff --git a/tools/testing/selftests/net/io_uring_zerocopy_tx.c b/tools/testing/selftests/net/io_uring_zerocopy_tx.c
+index 154287740172..76e604e4810e 100644
+--- a/tools/testing/selftests/net/io_uring_zerocopy_tx.c
++++ b/tools/testing/selftests/net/io_uring_zerocopy_tx.c
+@@ -36,6 +36,8 @@
+ #include <sys/un.h>
+ #include <sys/wait.h>
+ 
++#include <io_uring/mini_liburing.h>
++
+ #define NOTIF_TAG 0xfffffffULL
+ #define NONZC_TAG 0
+ #define ZC_TAG 1
+@@ -60,272 +62,6 @@ static struct sockaddr_storage cfg_dst_addr;
+ 
+ static char payload[IP_MAXPACKET] __attribute__((aligned(4096)));
+ 
+-struct io_sq_ring {
+-	unsigned *head;
+-	unsigned *tail;
+-	unsigned *ring_mask;
+-	unsigned *ring_entries;
+-	unsigned *flags;
+-	unsigned *array;
+-};
+-
+-struct io_cq_ring {
+-	unsigned *head;
+-	unsigned *tail;
+-	unsigned *ring_mask;
+-	unsigned *ring_entries;
+-	struct io_uring_cqe *cqes;
+-};
+-
+-struct io_uring_sq {
+-	unsigned *khead;
+-	unsigned *ktail;
+-	unsigned *kring_mask;
+-	unsigned *kring_entries;
+-	unsigned *kflags;
+-	unsigned *kdropped;
+-	unsigned *array;
+-	struct io_uring_sqe *sqes;
+-
+-	unsigned sqe_head;
+-	unsigned sqe_tail;
+-
+-	size_t ring_sz;
+-};
+-
+-struct io_uring_cq {
+-	unsigned *khead;
+-	unsigned *ktail;
+-	unsigned *kring_mask;
+-	unsigned *kring_entries;
+-	unsigned *koverflow;
+-	struct io_uring_cqe *cqes;
+-
+-	size_t ring_sz;
+-};
+-
+-struct io_uring {
+-	struct io_uring_sq sq;
+-	struct io_uring_cq cq;
+-	int ring_fd;
+-};
+-
+-#ifdef __alpha__
+-# ifndef __NR_io_uring_setup
+-#  define __NR_io_uring_setup		535
+-# endif
+-# ifndef __NR_io_uring_enter
+-#  define __NR_io_uring_enter		536
+-# endif
+-# ifndef __NR_io_uring_register
+-#  define __NR_io_uring_register	537
+-# endif
+-#else /* !__alpha__ */
+-# ifndef __NR_io_uring_setup
+-#  define __NR_io_uring_setup		425
+-# endif
+-# ifndef __NR_io_uring_enter
+-#  define __NR_io_uring_enter		426
+-# endif
+-# ifndef __NR_io_uring_register
+-#  define __NR_io_uring_register	427
+-# endif
+-#endif
+-
+-#if defined(__x86_64) || defined(__i386__)
+-#define read_barrier()	__asm__ __volatile__("":::"memory")
+-#define write_barrier()	__asm__ __volatile__("":::"memory")
+-#else
+-
+-#define read_barrier()	__sync_synchronize()
+-#define write_barrier()	__sync_synchronize()
+-#endif
+-
+-static int io_uring_setup(unsigned int entries, struct io_uring_params *p)
+-{
+-	return syscall(__NR_io_uring_setup, entries, p);
+-}
+-
+-static int io_uring_enter(int fd, unsigned int to_submit,
+-			  unsigned int min_complete,
+-			  unsigned int flags, sigset_t *sig)
+-{
+-	return syscall(__NR_io_uring_enter, fd, to_submit, min_complete,
+-			flags, sig, _NSIG / 8);
+-}
+-
+-static int io_uring_register_buffers(struct io_uring *ring,
+-				     const struct iovec *iovecs,
+-				     unsigned nr_iovecs)
+-{
+-	int ret;
+-
+-	ret = syscall(__NR_io_uring_register, ring->ring_fd,
+-		      IORING_REGISTER_BUFFERS, iovecs, nr_iovecs);
+-	return (ret < 0) ? -errno : ret;
+-}
+-
+-static int io_uring_mmap(int fd, struct io_uring_params *p,
+-			 struct io_uring_sq *sq, struct io_uring_cq *cq)
+-{
+-	size_t size;
+-	void *ptr;
+-	int ret;
+-
+-	sq->ring_sz = p->sq_off.array + p->sq_entries * sizeof(unsigned);
+-	ptr = mmap(0, sq->ring_sz, PROT_READ | PROT_WRITE,
+-		   MAP_SHARED | MAP_POPULATE, fd, IORING_OFF_SQ_RING);
+-	if (ptr == MAP_FAILED)
+-		return -errno;
+-	sq->khead = ptr + p->sq_off.head;
+-	sq->ktail = ptr + p->sq_off.tail;
+-	sq->kring_mask = ptr + p->sq_off.ring_mask;
+-	sq->kring_entries = ptr + p->sq_off.ring_entries;
+-	sq->kflags = ptr + p->sq_off.flags;
+-	sq->kdropped = ptr + p->sq_off.dropped;
+-	sq->array = ptr + p->sq_off.array;
+-
+-	size = p->sq_entries * sizeof(struct io_uring_sqe);
+-	sq->sqes = mmap(0, size, PROT_READ | PROT_WRITE,
+-			MAP_SHARED | MAP_POPULATE, fd, IORING_OFF_SQES);
+-	if (sq->sqes == MAP_FAILED) {
+-		ret = -errno;
+-err:
+-		munmap(sq->khead, sq->ring_sz);
+-		return ret;
+-	}
+-
+-	cq->ring_sz = p->cq_off.cqes + p->cq_entries * sizeof(struct io_uring_cqe);
+-	ptr = mmap(0, cq->ring_sz, PROT_READ | PROT_WRITE,
+-			MAP_SHARED | MAP_POPULATE, fd, IORING_OFF_CQ_RING);
+-	if (ptr == MAP_FAILED) {
+-		ret = -errno;
+-		munmap(sq->sqes, p->sq_entries * sizeof(struct io_uring_sqe));
+-		goto err;
+-	}
+-	cq->khead = ptr + p->cq_off.head;
+-	cq->ktail = ptr + p->cq_off.tail;
+-	cq->kring_mask = ptr + p->cq_off.ring_mask;
+-	cq->kring_entries = ptr + p->cq_off.ring_entries;
+-	cq->koverflow = ptr + p->cq_off.overflow;
+-	cq->cqes = ptr + p->cq_off.cqes;
+-	return 0;
+-}
+-
+-static int io_uring_queue_init(unsigned entries, struct io_uring *ring,
+-			       unsigned flags)
+-{
+-	struct io_uring_params p;
+-	int fd, ret;
+-
+-	memset(ring, 0, sizeof(*ring));
+-	memset(&p, 0, sizeof(p));
+-	p.flags = flags;
+-
+-	fd = io_uring_setup(entries, &p);
+-	if (fd < 0)
+-		return fd;
+-	ret = io_uring_mmap(fd, &p, &ring->sq, &ring->cq);
+-	if (!ret)
+-		ring->ring_fd = fd;
+-	else
+-		close(fd);
+-	return ret;
+-}
+-
+-static int io_uring_submit(struct io_uring *ring)
+-{
+-	struct io_uring_sq *sq = &ring->sq;
+-	const unsigned mask = *sq->kring_mask;
+-	unsigned ktail, submitted, to_submit;
+-	int ret;
+-
+-	read_barrier();
+-	if (*sq->khead != *sq->ktail) {
+-		submitted = *sq->kring_entries;
+-		goto submit;
+-	}
+-	if (sq->sqe_head == sq->sqe_tail)
+-		return 0;
+-
+-	ktail = *sq->ktail;
+-	to_submit = sq->sqe_tail - sq->sqe_head;
+-	for (submitted = 0; submitted < to_submit; submitted++) {
+-		read_barrier();
+-		sq->array[ktail++ & mask] = sq->sqe_head++ & mask;
+-	}
+-	if (!submitted)
+-		return 0;
+-
+-	if (*sq->ktail != ktail) {
+-		write_barrier();
+-		*sq->ktail = ktail;
+-		write_barrier();
+-	}
+-submit:
+-	ret = io_uring_enter(ring->ring_fd, submitted, 0,
+-				IORING_ENTER_GETEVENTS, NULL);
+-	return ret < 0 ? -errno : ret;
+-}
+-
+-static inline void io_uring_prep_send(struct io_uring_sqe *sqe, int sockfd,
+-				      const void *buf, size_t len, int flags)
+-{
+-	memset(sqe, 0, sizeof(*sqe));
+-	sqe->opcode = (__u8) IORING_OP_SEND;
+-	sqe->fd = sockfd;
+-	sqe->addr = (unsigned long) buf;
+-	sqe->len = len;
+-	sqe->msg_flags = (__u32) flags;
+-}
+-
+-static inline void io_uring_prep_sendzc(struct io_uring_sqe *sqe, int sockfd,
+-				        const void *buf, size_t len, int flags,
+-				        unsigned zc_flags)
+-{
+-	io_uring_prep_send(sqe, sockfd, buf, len, flags);
+-	sqe->opcode = (__u8) IORING_OP_SEND_ZC;
+-	sqe->ioprio = zc_flags;
+-}
+-
+-static struct io_uring_sqe *io_uring_get_sqe(struct io_uring *ring)
+-{
+-	struct io_uring_sq *sq = &ring->sq;
+-
+-	if (sq->sqe_tail + 1 - sq->sqe_head > *sq->kring_entries)
+-		return NULL;
+-	return &sq->sqes[sq->sqe_tail++ & *sq->kring_mask];
+-}
+-
+-static int io_uring_wait_cqe(struct io_uring *ring, struct io_uring_cqe **cqe_ptr)
+-{
+-	struct io_uring_cq *cq = &ring->cq;
+-	const unsigned mask = *cq->kring_mask;
+-	unsigned head = *cq->khead;
+-	int ret;
+-
+-	*cqe_ptr = NULL;
+-	do {
+-		read_barrier();
+-		if (head != *cq->ktail) {
+-			*cqe_ptr = &cq->cqes[head & mask];
+-			break;
+-		}
+-		ret = io_uring_enter(ring->ring_fd, 0, 1,
+-					IORING_ENTER_GETEVENTS, NULL);
+-		if (ret < 0)
+-			return -errno;
+-	} while (1);
+-
+-	return 0;
+-}
+-
+-static inline void io_uring_cqe_seen(struct io_uring *ring)
+-{
+-	*(&ring->cq)->khead += 1;
+-	write_barrier();
+-}
+-
+ static unsigned long gettimeofday_ms(void)
+ {
+ 	struct timeval tv;
+-- 
+2.34.1
 
