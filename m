@@ -2,250 +2,212 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B4E5CA0EC0
-	for <linux-kselftest@archiver.kernel.org>; Mon, 11 Sep 2023 21:28:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66C5DCA0EC0
+	for <linux-kselftest@archiver.kernel.org>; Mon, 11 Sep 2023 21:29:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345411AbjIKVUT (ORCPT
+        id S1345419AbjIKVUX (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 11 Sep 2023 17:20:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49702 "EHLO
+        Mon, 11 Sep 2023 17:20:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243612AbjIKRYM (ORCPT
+        with ESMTP id S237892AbjIKNTc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 11 Sep 2023 13:24:12 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BC02F5
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 Sep 2023 10:24:04 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id ca18e2360f4ac-77dcff76e35so54673339f.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 Sep 2023 10:24:04 -0700 (PDT)
+        Mon, 11 Sep 2023 09:19:32 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6988AEE;
+        Mon, 11 Sep 2023 06:19:26 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-9a9cd066db5so563945366b.0;
+        Mon, 11 Sep 2023 06:19:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1694453044; x=1695057844; darn=vger.kernel.org;
-        h=subject:from:cc:to:content-language:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=sphhBNof8zq1/caB4nqaNWdPiAfc/xDFKkO3FH9aqFw=;
-        b=FAalRym1fnQhG167KJjjqHUA5oDh7BuYJrCUoAo2zpeSzDPNUb5tDtRsNezXqTq3Jb
-         +RwGU1/bjIcHblaQQ25SNvEGYr/28Gf6wgnJtZYMNEZgX6O+Hdyg2dMlQl99xxj2Dz16
-         3K5lWSj7pF6h+ntJ6a3gT79WaMSGK/2CqnAqY=
+        d=gmail.com; s=20221208; t=1694438365; x=1695043165; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=oYApqvgaLw3ymGGIpb89h6zPjC6eHwEbBV7sAXEoTx4=;
+        b=loGRq68sbDK7K+nxJ7ch/PVyC1246xfq++YioxtPOK0QK623lWmq4XvGfVMA0zc7dZ
+         N9rYdqPxhOTftehIlGYdg5VzWoQ5Yn6z7PpuYfv+i1AneAyuHITELVt6GXBCOrRHmGj7
+         AI2egPnVwy/4M0hWrv2IA6Dw4vPANpGpvFMUS8PSpaXavDaTkcXMcOZrnSIi2MQxG7d0
+         kIEc/ckl83J5JV83D7Lm8PYdUXHbXQGWXkOfAh7JncTzR+smytQ+DGozX95j4fx2sEyM
+         sJOuOW/lHSVKAtUyGyCQwdo8JXvT1m/IYofv58vYKHW5cXiMe3GS9/DR/RmBdrag5n5R
+         cpAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694453044; x=1695057844;
-        h=subject:from:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sphhBNof8zq1/caB4nqaNWdPiAfc/xDFKkO3FH9aqFw=;
-        b=CrUeI9v6hrB/YVDifMosE2JdQ8vwScEGLJwDlde40quE9ew66E1FRjI4qN4+rzFK/K
-         EgA4W+xG6HnuiDrFmC/Th5WL7C74K6zrkRykUTlRxpfpHcOSsurEcYmbtwNIopxgdvKd
-         2Jt+KFnq3EeOefA03mTC/UvY++S10ZUXcrF4ojaQIVJvPQr8NlO99jOjXKmO9M9iCNkn
-         d67JihiiNPsEHJEFJzY4TIIgwFX9UJK8XwDBtGKRpTAG09zJ6RK8oA7WDjnyROiO/wi/
-         yzYuTWrmFY/SC4nPcrEZKlJCBvD7n1HQ2+KAmWCWJZ9Loj2pNgvwyJlqChZkpVsTjZLi
-         ax6w==
-X-Gm-Message-State: AOJu0Ywtgky2cd+aQfuXQfW5EO/BwOlSTa14CdUCIcNh0jjqDd8ST/Eo
-        +zdLyAmx/rHQilGQ3hSmOU+A/z1HBQ6tpRth71M=
-X-Google-Smtp-Source: AGHT+IFbPp+CfbE1tmZWB+A8e6PyXi82Tle2mAGJx5YIB6jIjrlb44dzOhAyXsLG8p3bV2QyoQByDQ==
-X-Received: by 2002:a05:6e02:60d:b0:345:e438:7381 with SMTP id t13-20020a056e02060d00b00345e4387381mr11302429ils.2.1694453043753;
-        Mon, 11 Sep 2023 10:24:03 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id x16-20020a920610000000b0034f3faebfddsm552048ilg.77.2023.09.11.10.24.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Sep 2023 10:24:03 -0700 (PDT)
-Content-Type: multipart/mixed; boundary="------------F4BtTa1otajnCWynCa05KEj6"
-Message-ID: <d08e3af8-b48d-ee6f-9e9c-b9a0129de405@linuxfoundation.org>
-Date:   Mon, 11 Sep 2023 11:24:02 -0600
+        d=1e100.net; s=20230601; t=1694438365; x=1695043165;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oYApqvgaLw3ymGGIpb89h6zPjC6eHwEbBV7sAXEoTx4=;
+        b=suqx47OM+1kVz72Q+zpnI4+zrKPblhEsyj5q8ZigmJ4wL7VT4DFFkIjF3FoyNUtO+K
+         CwpLTt37fw/A9S5UfI4IlM9SZ4ApniUU1Nt3sQOBKbj/iUI+SdLSU9JsjI+ZvSUwsGzG
+         lr8aLT+sghJZpu2vVZqoErOElBls0w9YyMwoJJ1nSV8pDIu5Aj85HqfSuiCpWQPEMGXl
+         BXsXdXe+vsjrCmL4IYlCEgd/USFot24W+C4MdhllG7G8tjNSDYmPKO7JwlzU2Sgm8dhk
+         ryoGRnFBGxu77ssW50p+BFE8uK/bpPbK7hybgM5tPSeaQ689fBErjiHEACDkJ6OPkAla
+         Kkmw==
+X-Gm-Message-State: AOJu0Yx8U/CDwFHwmnv2EBIoKgxSWdn1xFcSMCohTLjPJNY22MUxhsdY
+        NDIblvLVD0eVe179zH5Ngq1DMXCYHx0=
+X-Google-Smtp-Source: AGHT+IF8gRl9y19pvIHmim64bQq1N0gu6atCEteh1ulReooZA/H5+YH+OytdKZ0jIXcwJe1ywmIUSw==
+X-Received: by 2002:a17:906:301b:b0:9a1:c39a:8bfd with SMTP id 27-20020a170906301b00b009a1c39a8bfdmr7755321ejz.57.1694438363659;
+        Mon, 11 Sep 2023 06:19:23 -0700 (PDT)
+Received: from [192.168.1.95] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
+        by smtp.gmail.com with ESMTPSA id h3-20020a170906718300b0098e34446464sm5359448ejk.25.2023.09.11.06.19.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Sep 2023 06:19:23 -0700 (PDT)
+Message-ID: <d168d22ba2133d3b38a09ee0e8dbbe0fa97f72d0.camel@gmail.com>
+Subject: Re: [PATCH v2 1/3] selftests/hid: ensure we can compile the tests
+ on kernels pre-6.3
+From:   Eduard Zingerman <eddyz87@gmail.com>
+To:     Justin Stitt <justinstitt@google.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        Benjamin Tissoires <bentiss@kernel.org>
+Date:   Mon, 11 Sep 2023 16:19:21 +0300
+In-Reply-To: <20230908-kselftest-09-08-v2-1-0def978a4c1b@google.com>
+References: <20230908-kselftest-09-08-v2-0-0def978a4c1b@google.com>
+         <20230908-kselftest-09-08-v2-1-0def978a4c1b@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     shuah <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Subject: [GIT PULL] Kselftest fixes update for Linux 6.6-rc2
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------F4BtTa1otajnCWynCa05KEj6
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+On Fri, 2023-09-08 at 22:22 +0000, Justin Stitt wrote:
+> From: Benjamin Tissoires <bentiss@kernel.org>
+>=20
+> For the hid-bpf tests to compile, we need to have the definition of
+> struct hid_bpf_ctx. This definition is an internal one from the kernel
+> and it is supposed to be defined in the generated vmlinux.h.
+>=20
+> This vmlinux.h header is generated based on the currently running kernel
+> or if the kernel was already compiled in the tree. If you just compile
+> the selftests without compiling the kernel beforehand and you are running
+> on a 6.2 kernel, you'll end up with a vmlinux.h without the hid_bpf_ctx
+> definition.
+>=20
+> Use the clever trick from tools/testing/selftests/bpf/progs/bpf_iter.h
+> to force the definition of that symbol in case we don't find it in the
+> BTF and also add __attribute__((preserve_access_index)) to further
+> support CO-RE functionality for these tests.
+>=20
+> Signed-off-by: Justin Stitt <justinstitt@google.com>
+> Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
+> ---
+>  tools/testing/selftests/hid/progs/hid.c            |  3 --
+>  .../testing/selftests/hid/progs/hid_bpf_helpers.h  | 49 ++++++++++++++++=
+++++++
+>  2 files changed, 49 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/tools/testing/selftests/hid/progs/hid.c b/tools/testing/self=
+tests/hid/progs/hid.c
+> index 88c593f753b5..1e558826b809 100644
+> --- a/tools/testing/selftests/hid/progs/hid.c
+> +++ b/tools/testing/selftests/hid/progs/hid.c
+> @@ -1,8 +1,5 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>  /* Copyright (c) 2022 Red hat */
+> -#include "vmlinux.h"
+> -#include <bpf/bpf_helpers.h>
+> -#include <bpf/bpf_tracing.h>
+>  #include "hid_bpf_helpers.h"
+> =20
+>  char _license[] SEC("license") =3D "GPL";
+> diff --git a/tools/testing/selftests/hid/progs/hid_bpf_helpers.h b/tools/=
+testing/selftests/hid/progs/hid_bpf_helpers.h
+> index 4fff31dbe0e7..ab3b18ba48c4 100644
+> --- a/tools/testing/selftests/hid/progs/hid_bpf_helpers.h
+> +++ b/tools/testing/selftests/hid/progs/hid_bpf_helpers.h
+> @@ -5,6 +5,55 @@
+>  #ifndef __HID_BPF_HELPERS_H
+>  #define __HID_BPF_HELPERS_H
+> =20
+> +/* "undefine" structs in vmlinux.h, because we "override" them below */
 
-Hi Linus,
+Hi Justin,
 
-Please pull the following Kselftest fixes update for Linux 6.6-rc2.
+What you have here should work, however I still think that the trick
+with "___local" suffix I refer to in [1] is a bit less hacky, e.g.:
 
-This kselftest fixes update for Linux 6.6-rc2 consists of fixes
+    enum hid_report_type___local { ... };
+    struct hid_bpf_ctx___local {
+       __u32 index;
+       const struct hid_device *hid; // this one should be in vmlinux.h wit=
+h any config
+       __u32 allocated_size;
+       enum hid_report_type___local report_type;
+       union {
+           __s32 retval;
+           __s32 size;
+       };
+    } __attribute__((preserve_access_index));
+   =20
+    enum hid_class_request___local { ... };
+    enum hid_bpf_attach_flags___local { ... };
+    ...
+    extern __u8 *hid_bpf_get_data(struct hid_bpf_ctx___local *ctx,
+                                  unsigned int offset,
 
--- kselftest runner script to propagate SIGTERM to runner child
-    to avoid kselftest hang.
--- to install symlinks required for test execution to avoid test
-    failures.
--- kselftest dependency checker script argument parsing.
 
-diff is attached.
+(sorry for being a bore, won't bring this up anymore).
 
-thanks,
--- Shuah
+Thanks,
+Eduard
 
-----------------------------------------------------------------
-The following changes since commit 9b1db732866bee060b9bca9493e5ebf5e8874c48:
+[1] https://lore.kernel.org/bpf/e99b4226bd450fedfebd4eb5c37054f032432b4f.ca=
+mel@gmail.com/
 
-   selftests: cachestat: use proper syscall number macro (2023-08-16 11:12:44 -0600)
+> +#define hid_bpf_ctx hid_bpf_ctx___not_used
+> +#define hid_report_type hid_report_type___not_used
+> +#define hid_class_request hid_class_request___not_used
+> +#define hid_bpf_attach_flags hid_bpf_attach_flags___not_used
+> +#include "vmlinux.h"
+> +#undef hid_bpf_ctx
+> +#undef hid_report_type
+> +#undef hid_class_request
+> +#undef hid_bpf_attach_flags
+> +
+> +#include <bpf/bpf_helpers.h>
+> +#include <bpf/bpf_tracing.h>
+> +#include <linux/const.h>
+> +
+> +enum hid_report_type {
+> +	HID_INPUT_REPORT		=3D 0,
+> +	HID_OUTPUT_REPORT		=3D 1,
+> +	HID_FEATURE_REPORT		=3D 2,
+> +
+> +	HID_REPORT_TYPES,
+> +};
+> +
+> +struct hid_bpf_ctx {
+> +	__u32 index;
+> +	const struct hid_device *hid;
+> +	__u32 allocated_size;
+> +	enum hid_report_type report_type;
+> +	union {
+> +		__s32 retval;
+> +		__s32 size;
+> +	};
+> +} __attribute__((preserve_access_index));
+> +
+> +enum hid_class_request {
+> +	HID_REQ_GET_REPORT		=3D 0x01,
+> +	HID_REQ_GET_IDLE		=3D 0x02,
+> +	HID_REQ_GET_PROTOCOL		=3D 0x03,
+> +	HID_REQ_SET_REPORT		=3D 0x09,
+> +	HID_REQ_SET_IDLE		=3D 0x0A,
+> +	HID_REQ_SET_PROTOCOL		=3D 0x0B,
+> +};
+> +
+> +enum hid_bpf_attach_flags {
+> +	HID_BPF_FLAG_NONE =3D 0,
+> +	HID_BPF_FLAG_INSERT_HEAD =3D _BITUL(0),
+> +	HID_BPF_FLAG_MAX,
+> +};
+> +
+>  /* following are kfuncs exported by HID for HID-BPF */
+>  extern __u8 *hid_bpf_get_data(struct hid_bpf_ctx *ctx,
+>  			      unsigned int offset,
+>=20
 
-are available in the Git repository at:
-
-   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-next-6.6-rc2
-
-for you to fetch changes up to 3f3f384139ed147c71e1d770accf610133d5309b:
-
-   selftests: Keep symlinks, when possible (2023-09-08 10:06:56 -0600)
-
-----------------------------------------------------------------
-linux-kselftest-next-6.6-rc2
-
-This kselftest fixes update for Linux 6.6-rc2 consists of fixes
-
--- kselftest runner script to propagate SIGTERM to runner child
-    to avoid kselftest hang.
--- to install symlinks required for test execution to avoid test
-    failures.
--- kselftest dependency checker script argument parsing.
-
-----------------------------------------------------------------
-Björn Töpel (2):
-       kselftest/runner.sh: Propagate SIGTERM to runner child
-       selftests: Keep symlinks, when possible
-
-Ricardo B. Marliere (1):
-       selftests: fix dependency checker script
-
-Zheng Yejian (1):
-       selftests/ftrace: Correctly enable event in instance-event.tc
-
-  .../ftrace/test.d/instances/instance-event.tc      |  2 +-
-  tools/testing/selftests/kselftest/runner.sh        |  3 +-
-  tools/testing/selftests/kselftest_deps.sh          | 77 ++++++++++++++++++----
-  tools/testing/selftests/lib.mk                     |  4 +-
-  4 files changed, 70 insertions(+), 16 deletions(-)
-----------------------------------------------------------------
---------------F4BtTa1otajnCWynCa05KEj6
-Content-Type: text/x-patch; charset=UTF-8;
- name="linux-kselftest-next-6.6-rc2.diff"
-Content-Disposition: attachment; filename="linux-kselftest-next-6.6-rc2.diff"
-Content-Transfer-Encoding: base64
-
-ZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2Z0cmFjZS90ZXN0LmQvaW5z
-dGFuY2VzL2luc3RhbmNlLWV2ZW50LnRjIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvZnRy
-YWNlL3Rlc3QuZC9pbnN0YW5jZXMvaW5zdGFuY2UtZXZlbnQudGMKaW5kZXggMGViNDdmYmIz
-ZjQ0Li40MjQyMmU0MjUxMDcgMTAwNjQ0Ci0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3Rz
-L2Z0cmFjZS90ZXN0LmQvaW5zdGFuY2VzL2luc3RhbmNlLWV2ZW50LnRjCisrKyBiL3Rvb2xz
-L3Rlc3Rpbmcvc2VsZnRlc3RzL2Z0cmFjZS90ZXN0LmQvaW5zdGFuY2VzL2luc3RhbmNlLWV2
-ZW50LnRjCkBAIC0zOSw3ICszOSw3IEBAIGluc3RhbmNlX3JlYWQoKSB7CiAKIGluc3RhbmNl
-X3NldCgpIHsKICAgICAgICAgd2hpbGUgOjsgZG8KLSAgICAgICAgICAgICAgICBlY2hvIDEg
-PiBmb28vZXZlbnRzL3NjaGVkL3NjaGVkX3N3aXRjaAorICAgICAgICAgICAgICAgIGVjaG8g
-MSA+IGZvby9ldmVudHMvc2NoZWQvc2NoZWRfc3dpdGNoL2VuYWJsZQogICAgICAgICBkb25l
-IDI+IC9kZXYvbnVsbAogfQogCmRpZmYgLS1naXQgYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0
-cy9rc2VsZnRlc3QvcnVubmVyLnNoIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMva3NlbGZ0
-ZXN0L3J1bm5lci5zaAppbmRleCAxYzk1MmQxNDAxZDQuLjcwZTBhNDY1ZTMwZCAxMDA2NDQK
-LS0tIGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMva3NlbGZ0ZXN0L3J1bm5lci5zaAorKysg
-Yi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9rc2VsZnRlc3QvcnVubmVyLnNoCkBAIC0zNiw3
-ICszNiw4IEBAIHRhcF90aW1lb3V0KCkKIHsKIAkjIE1ha2Ugc3VyZSB0ZXN0cyB3aWxsIHRp
-bWUgb3V0IGlmIHV0aWxpdHkgaXMgYXZhaWxhYmxlLgogCWlmIFsgLXggL3Vzci9iaW4vdGlt
-ZW91dCBdIDsgdGhlbgotCQkvdXNyL2Jpbi90aW1lb3V0IC0tZm9yZWdyb3VuZCAiJGtzZWxm
-dGVzdF90aW1lb3V0IiAkMQorCQkvdXNyL2Jpbi90aW1lb3V0IC0tZm9yZWdyb3VuZCAiJGtz
-ZWxmdGVzdF90aW1lb3V0IiBcCisJCQkvdXNyL2Jpbi90aW1lb3V0ICIka3NlbGZ0ZXN0X3Rp
-bWVvdXQiICQxCiAJZWxzZQogCQkkMQogCWZpCmRpZmYgLS1naXQgYS90b29scy90ZXN0aW5n
-L3NlbGZ0ZXN0cy9rc2VsZnRlc3RfZGVwcy5zaCBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3Rz
-L2tzZWxmdGVzdF9kZXBzLnNoCmluZGV4IDRiYzE0ZDllOGZmMS4uZGU1OWNjOGYwM2MzIDEw
-MDc1NQotLS0gYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9rc2VsZnRlc3RfZGVwcy5zaAor
-KysgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9rc2VsZnRlc3RfZGVwcy5zaApAQCAtNDYs
-MTEgKzQ2LDExIEBAIGZpCiBwcmludF90YXJnZXRzPTAKIAogd2hpbGUgZ2V0b3B0cyAicCIg
-YXJnOyBkbwotICAgIGNhc2UgJGFyZyBpbgotICAgICAgICBwKQorCWNhc2UgJGFyZyBpbgor
-CQlwKQogCQlwcmludF90YXJnZXRzPTEKIAlzaGlmdDs7Ci0gICAgZXNhYworCWVzYWMKIGRv
-bmUKIAogaWYgWyAkIyAtZXEgMCBdCkBAIC05Miw2ICs5MiwxMCBAQCBwYXNzX2NudD0wCiAj
-IEdldCBhbGwgVEFSR0VUUyBmcm9tIHNlbGZ0ZXN0cyBNYWtlZmlsZQogdGFyZ2V0cz0kKGdy
-ZXAgLUUgIl5UQVJHRVRTICt8XlRBUkdFVFMgPSIgTWFrZWZpbGUgfCBjdXQgLWQgIj0iIC1m
-MikKIAorIyBJbml0aWFsbHksIGluIExETElCUyByZWxhdGVkIGxpbmVzLCB0aGUgZGVwIGNo
-ZWNrZXIgbmVlZHMKKyMgdG8gaWdub3JlIGxpbmVzIGNvbnRhaW5pbmcgdGhlIGZvbGxvd2lu
-ZyBzdHJpbmdzOgorZmlsdGVyPSJcJChWQVJfTERMSUJTKVx8cGtnLWNvbmZpZ1x8UEtHX0NP
-TkZJR1x8SU9VUklOR19FWFRSQV9MSUJTIgorCiAjIFNpbmdsZSB0ZXN0IGNhc2UKIGlmIFsg
-JCMgLWVxIDIgXQogdGhlbgpAQCAtMTAwLDYgKzEwNCw4IEBAIHRoZW4KIAlsMV90ZXN0ICR0
-ZXN0CiAJbDJfdGVzdCAkdGVzdAogCWwzX3Rlc3QgJHRlc3QKKwlsNF90ZXN0ICR0ZXN0CisJ
-bDVfdGVzdCAkdGVzdAogCiAJcHJpbnRfcmVzdWx0cyAkMSAkMgogCWV4aXQgJD8KQEAgLTEx
-Myw3ICsxMTksNyBAQCBmaQogIyBBcHBlbmQgc3BhY2UgYXQgdGhlIGVuZCBvZiB0aGUgbGlz
-dCB0byBhcHBlbmQgbW9yZSB0ZXN0cy4KIAogbDFfdGVzdHM9JChncmVwIC1yIC0taW5jbHVk
-ZT1NYWtlZmlsZSAiXkxETElCUyIgfCBcCi0JCWdyZXAgLXYgIlZBUl9MRExJQlMiIHwgYXdr
-IC1GOiAne3ByaW50ICQxfScpCisJCWdyZXAgLXYgIiRmaWx0ZXIiIHwgYXdrIC1GOiAne3By
-aW50ICQxfScgfCB1bmlxKQogCiAjIExldmVsIDI6IExETElCUyBzZXQgZHluYW1pY2FsbHku
-CiAjCkBAIC0xMjYsNyArMTMyLDcgQEAgbDFfdGVzdHM9JChncmVwIC1yIC0taW5jbHVkZT1N
-YWtlZmlsZSAiXkxETElCUyIgfCBcCiAjIEFwcGVuZCBzcGFjZSBhdCB0aGUgZW5kIG9mIHRo
-ZSBsaXN0IHRvIGFwcGVuZCBtb3JlIHRlc3RzLgogCiBsMl90ZXN0cz0kKGdyZXAgLXIgLS1p
-bmNsdWRlPU1ha2VmaWxlICI6IExETElCUyIgfCBcCi0JCWdyZXAgLXYgIlZBUl9MRExJQlMi
-IHwgYXdrIC1GOiAne3ByaW50ICQxfScpCisJCWdyZXAgLXYgIiRmaWx0ZXIiIHwgYXdrIC1G
-OiAne3ByaW50ICQxfScgfCB1bmlxKQogCiAjIExldmVsIDMKICMgbWVtZmQgYW5kIG90aGVy
-cyB1c2UgcGtnLWNvbmZpZyB0byBmaW5kIG1vdW50IGFuZCBmdXNlIGxpYnMKQEAgLTEzOCwx
-MSArMTQ0LDMyIEBAIGwyX3Rlc3RzPSQoZ3JlcCAtciAtLWluY2x1ZGU9TWFrZWZpbGUgIjog
-TERMSUJTIiB8IFwKICMJVkFSX0xETElCUyA6PSAkKHNoZWxsIHBrZy1jb25maWcgZnVzZSAt
-LWxpYnMgMj4vZGV2L251bGwpCiAKIGwzX3Rlc3RzPSQoZ3JlcCAtciAtLWluY2x1ZGU9TWFr
-ZWZpbGUgIl5WQVJfTERMSUJTIiB8IFwKLQkJZ3JlcCAtdiAicGtnLWNvbmZpZyIgfCBhd2sg
-LUY6ICd7cHJpbnQgJDF9JykKKwkJZ3JlcCAtdiAicGtnLWNvbmZpZ1x8UEtHX0NPTkZJRyIg
-fCBhd2sgLUY6ICd7cHJpbnQgJDF9JyB8IHVuaXEpCiAKLSNlY2hvICRsMV90ZXN0cwotI2Vj
-aG8gJGwyXzFfdGVzdHMKLSNlY2hvICRsM190ZXN0cworIyBMZXZlbCA0CisjIHNvbWUgdGVz
-dHMgbWF5IGZhbGwgYmFjayB0byBkZWZhdWx0IHVzaW5nIGB8fCBlY2hvIC1sPGxpYm5hbWU+
-YAorIyBpZiBwa2ctY29uZmlnIGRvZXNuJ3QgZmluZCB0aGUgbGlicywgaW5zdGVhZCBvZiB1
-c2luZyBWQVJfTERMSUJTCisjIGFzIHBlciBsZXZlbCAzIGNoZWNrcy4KKyMgZS5nOgorIyBu
-ZXRmaWx0ZXIvTWFrZWZpbGUKKyMJTERMSUJTICs9ICQoc2hlbGwgJChIT1NUUEtHX0NPTkZJ
-RykgLS1saWJzIGxpYm1ubCAyPi9kZXYvbnVsbCB8fCBlY2hvIC1sbW5sKQorbDRfdGVzdHM9
-JChncmVwIC1yIC0taW5jbHVkZT1NYWtlZmlsZSAiXkxETElCUyIgfCBcCisJCWdyZXAgInBr
-Zy1jb25maWdcfFBLR19DT05GSUciIHwgYXdrIC1GOiAne3ByaW50ICQxfScgfCB1bmlxKQor
-CisjIExldmVsIDUKKyMgc29tZSB0ZXN0cyBtYXkgdXNlIElPVVJJTkdfRVhUUkFfTElCUyB0
-byBhZGQgZXh0cmEgbGlicyB0byBMRExJQlMsCisjIHdoaWNoIGluIHR1cm4gbWF5IGJlIGRl
-ZmluZWQgaW4gYSBzdWItTWFrZWZpbGUKKyMgZS5nLjoKKyMgbW0vTWFrZWZpbGUKKyMJJChP
-VVRQVVQpL2d1cF9sb25ndGVybTogTERMSUJTICs9ICQoSU9VUklOR19FWFRSQV9MSUJTKQor
-bDVfdGVzdHM9JChncmVwIC1yIC0taW5jbHVkZT1NYWtlZmlsZSAiTERMSUJTICs9LipcJChJ
-T1VSSU5HX0VYVFJBX0xJQlMpIiB8IFwKKwlhd2sgLUY6ICd7cHJpbnQgJDF9JyB8IHVuaXEp
-CisKKyNlY2hvIGwxX3Rlc3RzICRsMV90ZXN0cworI2VjaG8gbDJfdGVzdHMgJGwyX3Rlc3Rz
-CisjZWNobyBsM190ZXN0cyAkbDNfdGVzdHMKKyNlY2hvIGw0X3Rlc3RzICRsNF90ZXN0cwor
-I2VjaG8gbDVfdGVzdHMgJGw1X3Rlc3RzCiAKIGFsbF90ZXN0cwogcHJpbnRfcmVzdWx0cyAk
-MSAkMgpAQCAtMTY0LDI0ICsxOTEsMzIgQEAgYWxsX3Rlc3RzKCkKIAlmb3IgdGVzdCBpbiAk
-bDNfdGVzdHM7IGRvCiAJCWwzX3Rlc3QgJHRlc3QKIAlkb25lCisKKwlmb3IgdGVzdCBpbiAk
-bDRfdGVzdHM7IGRvCisJCWw0X3Rlc3QgJHRlc3QKKwlkb25lCisKKwlmb3IgdGVzdCBpbiAk
-bDVfdGVzdHM7IGRvCisJCWw1X3Rlc3QgJHRlc3QKKwlkb25lCiB9CiAKICMgVXNlIHNhbWUg
-cGFyc2luZyB1c2VkIGZvciBsMV90ZXN0cyBhbmQgcGljayBsaWJyYXJpZXMgdGhpcyB0aW1l
-LgogbDFfdGVzdCgpCiB7CiAJdGVzdF9saWJzPSQoZ3JlcCAtLWluY2x1ZGU9TWFrZWZpbGUg
-Il5MRExJQlMiICR0ZXN0IHwgXAotCQkJZ3JlcCAtdiAiVkFSX0xETElCUyIgfCBcCisJCQln
-cmVwIC12ICIkZmlsdGVyIiB8IFwKIAkJCXNlZCAtZSAncy9cOi8gLycgfCBcCiAJCQlzZWQg
-LWUgJ3MvKy8gLycgfCBjdXQgLWQgIj0iIC1mIDIpCiAKIAljaGVja19saWJzICR0ZXN0ICR0
-ZXN0X2xpYnMKIH0KIAotIyBVc2Ugc2FtZSBwYXJzaW5nIHVzZWQgZm9yIGwyX190ZXN0cyBh
-bmQgcGljayBsaWJyYXJpZXMgdGhpcyB0aW1lLgorIyBVc2Ugc2FtZSBwYXJzaW5nIHVzZWQg
-Zm9yIGwyX3Rlc3RzIGFuZCBwaWNrIGxpYnJhcmllcyB0aGlzIHRpbWUuCiBsMl90ZXN0KCkK
-IHsKIAl0ZXN0X2xpYnM9JChncmVwIC0taW5jbHVkZT1NYWtlZmlsZSAiOiBMRExJQlMiICR0
-ZXN0IHwgXAotCQkJZ3JlcCAtdiAiVkFSX0xETElCUyIgfCBcCisJCQlncmVwIC12ICIkZmls
-dGVyIiB8IFwKIAkJCXNlZCAtZSAncy9cOi8gLycgfCBzZWQgLWUgJ3MvKy8gLycgfCBcCiAJ
-CQljdXQgLWQgIj0iIC1mIDIpCiAKQEAgLTE5Nyw2ICsyMzIsMjQgQEAgbDNfdGVzdCgpCiAJ
-Y2hlY2tfbGlicyAkdGVzdCAkdGVzdF9saWJzCiB9CiAKK2w0X3Rlc3QoKQoreworCXRlc3Rf
-bGlicz0kKGdyZXAgLS1pbmNsdWRlPU1ha2VmaWxlICJeVkFSX0xETElCU1x8XkxETElCUyIg
-JHRlc3QgfCBcCisJCQlncmVwICJcKHBrZy1jb25maWdcfFBLR19DT05GSUdcKS4qfHwgZWNo
-byAiIHwgXAorCQkJc2VkIC1lICdzLy4qfHwgZWNobyAvLycgfCBzZWQgLWUgJ3MvKSQvLycp
-CisKKwljaGVja19saWJzICR0ZXN0ICR0ZXN0X2xpYnMKK30KKworbDVfdGVzdCgpCit7CisJ
-dGVzdHM9JChmaW5kICQoZGlybmFtZSAiJHRlc3QiKSAtdHlwZSBmIC1uYW1lICIqLm1rIikK
-Kwl0ZXN0X2xpYnM9JChncmVwICJeSU9VUklOR19FWFRSQV9MSUJTICtcPz0iICR0ZXN0cyB8
-IFwKKwkJCWN1dCAtZCAiPSIgLWYgMikKKworCWNoZWNrX2xpYnMgJHRlc3QgJHRlc3RfbGli
-cworfQorCiBjaGVja19saWJzKCkKIHsKIApkaWZmIC0tZ2l0IGEvdG9vbHMvdGVzdGluZy9z
-ZWxmdGVzdHMvbGliLm1rIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvbGliLm1rCmluZGV4
-IGQxNzg1NDI4NWYyYi4uMTE4ZTA5NjRiZGE5IDEwMDY0NAotLS0gYS90b29scy90ZXN0aW5n
-L3NlbGZ0ZXN0cy9saWIubWsKKysrIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvbGliLm1r
-CkBAIC0xMDYsNyArMTA2LDcgQEAgZW5kZWYKIHJ1bl90ZXN0czogYWxsCiBpZmRlZiBidWls
-ZGluZ19vdXRfb2Zfc3JjdHJlZQogCUBpZiBbICJYJChURVNUX1BST0dTKSQoVEVTVF9QUk9H
-U19FWFRFTkRFRCkkKFRFU1RfRklMRVMpIiAhPSAiWCIgXTsgdGhlbiBcCi0JCXJzeW5jIC1h
-THEgJChURVNUX1BST0dTKSAkKFRFU1RfUFJPR1NfRVhURU5ERUQpICQoVEVTVF9GSUxFUykg
-JChPVVRQVVQpOyBcCisJCXJzeW5jIC1hcSAtLWNvcHktdW5zYWZlLWxpbmtzICQoVEVTVF9Q
-Uk9HUykgJChURVNUX1BST0dTX0VYVEVOREVEKSAkKFRFU1RfRklMRVMpICQoT1VUUFVUKTsg
-XAogCWZpCiAJQGlmIFsgIlgkKFRFU1RfUFJPR1MpIiAhPSAiWCIgXTsgdGhlbiBcCiAJCSQo
-Y2FsbCBSVU5fVEVTVFMsICQoVEVTVF9HRU5fUFJPR1MpICQoVEVTVF9DVVNUT01fUFJPR1Mp
-IFwKQEAgLTEyMCw3ICsxMjAsNyBAQCBlbmRpZgogCiBkZWZpbmUgSU5TVEFMTF9TSU5HTEVf
-UlVMRQogCSQoaWYgJChJTlNUQUxMX0xJU1QpLEBta2RpciAtcCAkKElOU1RBTExfUEFUSCkp
-Ci0JJChpZiAkKElOU1RBTExfTElTVCkscnN5bmMgLWFMICQoSU5TVEFMTF9MSVNUKSAkKElO
-U1RBTExfUEFUSCkvKQorCSQoaWYgJChJTlNUQUxMX0xJU1QpLHJzeW5jIC1hIC0tY29weS11
-bnNhZmUtbGlua3MgJChJTlNUQUxMX0xJU1QpICQoSU5TVEFMTF9QQVRIKS8pCiBlbmRlZgog
-CiBkZWZpbmUgSU5TVEFMTF9SVUxFCg==
-
---------------F4BtTa1otajnCWynCa05KEj6--
