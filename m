@@ -2,135 +2,112 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 927EBCA0EC4
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4A42CA0EC6
 	for <linux-kselftest@archiver.kernel.org>; Mon, 11 Sep 2023 21:28:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242099AbjIKVTj (ORCPT
+        id S1345348AbjIKVTm (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 11 Sep 2023 17:19:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33724 "EHLO
+        Mon, 11 Sep 2023 17:19:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236280AbjIKKHq (ORCPT
+        with ESMTP id S236749AbjIKLUD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 11 Sep 2023 06:07:46 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594E7101;
-        Mon, 11 Sep 2023 03:07:42 -0700 (PDT)
+        Mon, 11 Sep 2023 07:20:03 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 108CFCDD;
+        Mon, 11 Sep 2023 04:19:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694426862; x=1725962862;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=oh0Zy/V3VyMAu5In2Ipg/gMQQV8/i4gpEGPeqw7tFXI=;
-  b=PUtX8EWJ7889ia3CxNJ0vCuyNykqr+UM54a895lj/V7+5QR8JB3kqUNE
-   2azyUzKXm4uqRMhEXb6ZjtbzJIi77CIdn98lFAQnMzISUYsdcvK1pKqmt
-   ou8656UWlev5Vd44GL8qc9M5Uwqqva0Pi5xo5lQo2CZjO6qffSVGpWFQ4
-   yFAQIsHRcj+kw8JRPutNML4ERBCvGnFqZiow9lQjeQ1HihUFAgT4peW+9
-   Z5J0uqEv225BehkgqxA10dpnCzKfLs132UlZfW6+s6HSyJT8wUYh7VE+0
-   3IGxrn22OWP1OHCoP/3THv8UplvysQWss+Wev8JheJbfbKrr9iN1EfKbu
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10829"; a="357484290"
+  t=1694431199; x=1725967199;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=eIbMDqgI1VdHnVLRbKO7jTB1Ubvov6e0AspTTuCSqIU=;
+  b=YWpbo5ef7TbIDBzbOR6eZkQ8BYvDHzUyQ9qvRFX9ymqAk1u5+WgRNYtw
+   f6jY3mKj3JvRt3Gjp4bNBX1YApKO99nDkHCyvZx3HroM5noJvELR8x9Va
+   9N/19sxkBiFIzaDH21Pbee8TcgO2J8DSaqzJ/zFxKLSaiWi9XzuVa3n5Y
+   3EgX1JVmwgfqvi6J4YGuUpLzZ2+XYIPrGk6RfRYIPp9/DVABBTI6nfYQ5
+   3sHXU3L8Nwa1VP64O+1T7NsCcYuq8qpvtnTvY8opz3GTt+AkxAFAwvmJ/
+   oOBVaCqfWD4lB2b1dldoym1wQNLolQZNUmi2D13jrfkKECv0uRrvNRpbJ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10829"; a="464428629"
 X-IronPort-AV: E=Sophos;i="6.02,243,1688454000"; 
-   d="scan'208";a="357484290"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 03:07:41 -0700
+   d="scan'208";a="464428629"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 04:19:58 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10829"; a="719938160"
+X-IronPort-AV: E=McAfee;i="6600,9927,10829"; a="916990571"
 X-IronPort-AV: E=Sophos;i="6.02,243,1688454000"; 
-   d="scan'208";a="719938160"
-Received: from kschuele-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.63.119])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 03:07:37 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Maxime Ripard <mripard@kernel.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     linux-kernel@vger.kernel.org, Maxime Ripard <mripard@kernel.org>,
-        =?utf-8?Q?Ma=C3=ADra?= Canal <mairacanal@riseup.net>,
-        dri-devel@lists.freedesktop.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com
-Subject: Re: [PATCH 1/2] kunit: Warn if tests are slow
-In-Reply-To: <20230911-kms-slow-tests-v1-1-d3800a69a1a1@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20230911-kms-slow-tests-v1-0-d3800a69a1a1@kernel.org>
- <20230911-kms-slow-tests-v1-1-d3800a69a1a1@kernel.org>
-Date:   Mon, 11 Sep 2023 13:07:35 +0300
-Message-ID: <87leddf2fs.fsf@intel.com>
+   d="scan'208";a="916990571"
+Received: from mzarkov-mobl3.ger.corp.intel.com (HELO ijarvine-mobl2.ger.corp.intel.com) ([10.252.36.200])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 04:19:56 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Reinette Chatre <reinette.chatre@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org,
+        =?UTF-8?q?Maciej=20Wiecz=C3=B3r-Retman?= 
+        <maciej.wieczor-retman@intel.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 4/5] selftests/resctrl: Fix feature checks
+Date:   Mon, 11 Sep 2023 14:19:29 +0300
+Message-Id: <20230911111930.16088-5-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230911111930.16088-1-ilpo.jarvinen@linux.intel.com>
+References: <20230911111930.16088-1-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 11 Sep 2023, Maxime Ripard <mripard@kernel.org> wrote:
-> Kunit recently gained support to setup attributes, the first one being
-> the speed of a given test, then allowing to filter out slow tests.
->
-> A slow test is defined in the documentation as taking more than one
-> second. There's an another speed attribute called "super slow" but whose
-> definition is less clear.
->
-> Add support to the test runner to check the test execution time, and
-> report tests that should be marked as slow but aren't.
->
-> Signed-off-by: Maxime Ripard <mripard@kernel.org>
-> ---
->  lib/kunit/test.c | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
->
-> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> index 49698a168437..a3b924501f3d 100644
-> --- a/lib/kunit/test.c
-> +++ b/lib/kunit/test.c
-> @@ -379,6 +379,9 @@ static void kunit_run_case_internal(struct kunit *test,
->  				    struct kunit_suite *suite,
->  				    struct kunit_case *test_case)
->  {
-> +	struct timespec64 start, end;
-> +	struct timespec64 duration;
-> +
->  	if (suite->init) {
->  		int ret;
->  
-> @@ -390,7 +393,20 @@ static void kunit_run_case_internal(struct kunit *test,
->  		}
->  	}
->  
-> +	ktime_get_ts64(&start);
-> +
->  	test_case->run_case(test);
-> +
-> +	ktime_get_ts64(&end);
-> +
-> +	duration = timespec64_sub(end, start);
-> +
-> +	if (duration.tv_sec >= 1 &&
-> +	    (test_case->attr.speed == KUNIT_SPEED_UNSET ||
-> +	     test_case->attr.speed >= KUNIT_SPEED_NORMAL))
-> +		kunit_warn(test,
-> +			   "Test should be marked slow (runtime: %lld.%09lds)",
-> +			   duration.tv_sec, duration.tv_nsec);
+The MBA and CMT tests expect support of other features to be able to
+run.
 
-Two thoughts:
+When platform only supports MBA but not MBM, MBA test will fail with:
+Failed to open total bw file: No such file or directory
 
-Should there be some tolerance here? Otherwise we're flagging this on
-the slowest machines, and we'll be defining tests slow based on
-that. Like, warn if it takes more than 2 seconds.
+When platform only supports CMT but not CAT, CMT test will fail with:
+Failed to open bit mask file '/sys/fs/resctrl/info/L3/cbm_mask': No such file or directory
 
-What if someone makes a test faster, but forgets to update the
-attribute? Should we also flag slow tests that are in fact fast?
+Extend feature checks to cover these two conditions.
 
+Fixes: ee0415681eb6 ("selftests/resctrl: Use resctrl/info for feature detection")
+Cc: <stable@vger.kernel.org> # selftests/resctrl: Refactor feature check to use resource and feature name
+Cc: <stable@vger.kernel.org> # selftests/resctrl: Remove duplicate feature check from CMT test
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+---
+ tools/testing/selftests/resctrl/resctrl_tests.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-BR,
-Jani.
-
-
->  }
->  
->  static void kunit_case_internal_cleanup(struct kunit *test)
-
+diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
+index 3052394ca884..4e9b392d28dc 100644
+--- a/tools/testing/selftests/resctrl/resctrl_tests.c
++++ b/tools/testing/selftests/resctrl/resctrl_tests.c
+@@ -118,7 +118,9 @@ static void run_mba_test(const char * const *benchmark_cmd, int cpu_no)
+ 		return;
+ 	}
+ 
+-	if (!validate_resctrl_feature_request("MB", NULL) || (get_vendor() != ARCH_INTEL)) {
++	if (!validate_resctrl_feature_request("MB", NULL) ||
++	    !validate_resctrl_feature_request("L3_MON", "mbm_local_bytes") ||
++	    (get_vendor() != ARCH_INTEL)) {
+ 		ksft_test_result_skip("Hardware does not support MBA or MBA is disabled\n");
+ 		goto umount;
+ 	}
+@@ -148,7 +150,8 @@ static void run_cmt_test(const char * const *benchmark_cmd, int cpu_no)
+ 		return;
+ 	}
+ 
+-	if (!validate_resctrl_feature_request("L3_MON", "llc_occupancy")) {
++	if (!validate_resctrl_feature_request("L3_MON", "llc_occupancy") ||
++	    !validate_resctrl_feature_request("L3", NULL)) {
+ 		ksft_test_result_skip("Hardware does not support CMT or CMT is disabled\n");
+ 		goto umount;
+ 	}
 -- 
-Jani Nikula, Intel Open Source Graphics Center
+2.30.2
+
