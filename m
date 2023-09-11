@@ -2,78 +2,106 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DDC28CA0EE7
-	for <linux-kselftest@archiver.kernel.org>; Mon, 11 Sep 2023 21:27:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C23ACA0EC4
+	for <linux-kselftest@archiver.kernel.org>; Mon, 11 Sep 2023 21:27:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235623AbjIKVSj (ORCPT
+        id S244233AbjIKVSo (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 11 Sep 2023 17:18:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38352 "EHLO
+        Mon, 11 Sep 2023 17:18:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240561AbjIKOrT (ORCPT
+        with ESMTP id S238249AbjIKNwY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 11 Sep 2023 10:47:19 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F53E40;
-        Mon, 11 Sep 2023 07:47:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1694443633;
-        bh=aUWLB29r0a9TYsvda4pRCCh9tA1GN6DQXSmmKb9Dj38=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fN7dshKiZHKAqsfaN0r2KVj5ZB9eHpVD12wnp3zIz1ogPNo4K8MNN6YVWxvciU0rR
-         +iqRvnz1NlGpAsLJFlzGMB0V68HNkJ4n8+L3W0vTqXagytHxLqflAyS/ghZgD2yVZB
-         tRIp/qORrIHOFpL7G+Mpe59QuXcKOAPoQENcGhs0=
-Date:   Mon, 11 Sep 2023 16:47:12 +0200
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/nolibc: libc-test: avoid -Wstringop-overflow
- warnings
-Message-ID: <96597a87-89f2-4ec0-bf89-d1d8920f0d29@t-8ch.de>
-References: <20230910-nolibc-poll-fault-v1-1-2b7a16f48259@weissschuh.net>
- <ZP6uAT0jmseRHkzG@1wt.eu>
- <cf5a2308-e241-4146-85c6-67ad924fb67c@t-8ch.de>
- <ZP8kgXhP/UjsMoD4@1wt.eu>
+        Mon, 11 Sep 2023 09:52:24 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA035CD7;
+        Mon, 11 Sep 2023 06:52:20 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D32B7C433CA;
+        Mon, 11 Sep 2023 13:52:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1694440340;
+        bh=G+uYgBverc1Ro/xgHPw6sRBSg+pKfkM04MdXBtul8Ys=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=zAa4SXRRmgVZFAyg8O4lK6YGb/A1l92rZqVK2b3brRAqh1V3aY8FlNEDTfBH4RIqa
+         MdU3LwywjdNmZOZ9VgV3eZMRY2twybZHLb+rXK3Nu8BAYUGWXeHQuU1VC+9s1crcf1
+         SK0CAkyO4infzSgIxq+QVLyxneSg7iAom8Fl7M8c=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     stable@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        patches@lists.linux.dev, Shuah Khan <shuah@kernel.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>,
+        linux-kselftest@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 6.5 019/739] selftests/harness: Actually report SKIP for signal tests
+Date:   Mon, 11 Sep 2023 15:36:58 +0200
+Message-ID: <20230911134651.576399076@linuxfoundation.org>
+X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20230911134650.921299741@linuxfoundation.org>
+References: <20230911134650.921299741@linuxfoundation.org>
+User-Agent: quilt/0.67
+X-stable: review
+X-Patchwork-Hint: ignore
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZP8kgXhP/UjsMoD4@1wt.eu>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2023-09-11 16:30:25+0200, Willy Tarreau wrote:
-> On Mon, Sep 11, 2023 at 04:26:41PM +0200, Thomas Weißschuh wrote:
-> > On 2023-09-11 08:04:49+0200, Willy Tarreau wrote:
-> > > On Sun, Sep 10, 2023 at 09:29:01PM +0200, Thomas Weißschuh wrote:
-> > > > Newer versions of glibc annotate the poll() function with
-> > > > __attribute__(access) which triggers a compiler warning inside the
-> > > > testcase poll_fault.
-> > > > Avoid this by using a plain NULL which is enough for the testcase.
-> > > > To avoid potential future warnings also adapt the other EFAULT
-> > > > testcases, except select_fault as NULL is a valid value for its
-> > > > argument.
-> > > (...)
-> > > 
-> > > Looks good to me. I wouldn't be surprised if we're soon forced to do
-> > > the same with select() on some archs where it might be emulated.
-> > > 
-> > > Feel free to push it to the shared repo.
-> > 
-> > Thanks, I pushed it to the "next" branch.
-> > 
-> > I'd also like to rebase the next branch onto v6.6-rc1, any objections?
-> 
-> Yes, please go on!
+6.5-stable review patch.  If anyone has any objections, please let me know.
 
-Done.
+------------------
 
-I used "git rebase --signoff" and dropped the duplicate signoffs it
-generated on my own commits.
+From: Kees Cook <keescook@chromium.org>
 
-It's also pushed to git.kernel.org, could you double-check it?
+[ Upstream commit b3d46e11fec0c5a8972e5061bb1462119ae5736d ]
 
-Thanks,
-Thomas
+Tests that were expecting a signal were not correctly checking for a
+SKIP condition. Move the check before the signal checking when
+processing test result.
+
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Andy Lutomirski <luto@amacapital.net>
+Cc: Will Drewry <wad@chromium.org>
+Cc: linux-kselftest@vger.kernel.org
+Fixes: 9847d24af95c ("selftests/harness: Refactor XFAIL into SKIP")
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/kselftest_harness.h | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
+
+diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+index 5fd49ad0c696f..e05ac82610467 100644
+--- a/tools/testing/selftests/kselftest_harness.h
++++ b/tools/testing/selftests/kselftest_harness.h
+@@ -938,7 +938,11 @@ void __wait_for_test(struct __test_metadata *t)
+ 		fprintf(TH_LOG_STREAM,
+ 			"# %s: Test terminated by timeout\n", t->name);
+ 	} else if (WIFEXITED(status)) {
+-		if (t->termsig != -1) {
++		if (WEXITSTATUS(status) == 255) {
++			/* SKIP */
++			t->passed = 1;
++			t->skip = 1;
++		} else if (t->termsig != -1) {
+ 			t->passed = 0;
+ 			fprintf(TH_LOG_STREAM,
+ 				"# %s: Test exited normally instead of by signal (code: %d)\n",
+@@ -950,11 +954,6 @@ void __wait_for_test(struct __test_metadata *t)
+ 			case 0:
+ 				t->passed = 1;
+ 				break;
+-			/* SKIP */
+-			case 255:
+-				t->passed = 1;
+-				t->skip = 1;
+-				break;
+ 			/* Other failure, assume step report. */
+ 			default:
+ 				t->passed = 0;
+-- 
+2.40.1
+
+
+
