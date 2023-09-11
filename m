@@ -2,97 +2,51 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 216DACA0EC2
-	for <linux-kselftest@archiver.kernel.org>; Mon, 11 Sep 2023 21:29:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95344CA0EC2
+	for <linux-kselftest@archiver.kernel.org>; Mon, 11 Sep 2023 21:29:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345445AbjIKVUe (ORCPT
+        id S1345437AbjIKVUb (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 11 Sep 2023 17:20:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59722 "EHLO
+        Mon, 11 Sep 2023 17:20:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239801AbjIKO3J (ORCPT
+        with ESMTP id S241128AbjIKPCd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 11 Sep 2023 10:29:09 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FC09F0;
-        Mon, 11 Sep 2023 07:29:04 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC4D1C433CB;
-        Mon, 11 Sep 2023 14:29:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694442544;
-        bh=AigyTmddvwvr5mfoNvzt6guQgCiVr/QlkeCPzes3DpE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XLI6T+Pp+fXc6eZt4Rlqy8LMVXTEOollEM8Ic8DUPtv5m5HijnH7t2DTBjAO32w6q
-         VVhhOd05/0L6qET6YIoB+rzt/mnqUZF6H6yQ2ylqmKbtvSUTcyKuvRh3R3BesS9qEr
-         Cgn+8FFSCeMyQfj3qnRcURWBTYSbRABZ4AKHqWKGSaRZoMDO8zne5qTHKG2aidDeBF
-         q6bH3iA798CQr4f6nTMh1SFXk+Zi0qIcviqrpkLkiBHoHEOSjN9ieLLifj3Xy/PSA2
-         bCq1o4NOgH31hEaVOnUflk77kd0PkpKdjNuFcGsnV0jm5j7axwkUn2A26u4aXea4SZ
-         McvPpsjB4m1vQ==
-Date:   Mon, 11 Sep 2023 15:29:00 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
-        <nfraprado@collabora.com>
-Cc:     Takashi Iwai <tiwai@suse.com>, kernel@collabora.com,
-        Jaroslav Kysela <perex@perex.cz>,
-        Shuah Khan <shuah@kernel.org>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] kselftest/alsa: Mark test plan as skipped when no cards
- are available
-Message-ID: <ZP8kLM5ln2YBCHap@finisterre.sirena.org.uk>
-References: <20230908181242.95714-1-nfraprado@collabora.com>
- <0fa0901e-d271-438d-bc2b-11399ad3b07c@sirena.org.uk>
- <868a8f08-ba39-4550-8e7b-0572ea03c4e7@notapiano>
+        Mon, 11 Sep 2023 11:02:33 -0400
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 65975125;
+        Mon, 11 Sep 2023 08:02:29 -0700 (PDT)
+Received: (from willy@localhost)
+        by mail.home.local (8.17.1/8.17.1/Submit) id 38BF2FsM017336;
+        Mon, 11 Sep 2023 17:02:15 +0200
+Date:   Mon, 11 Sep 2023 17:02:15 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/nolibc: libc-test: avoid -Wstringop-overflow
+ warnings
+Message-ID: <ZP8r97kYS6lT4xNq@1wt.eu>
+References: <20230910-nolibc-poll-fault-v1-1-2b7a16f48259@weissschuh.net>
+ <ZP6uAT0jmseRHkzG@1wt.eu>
+ <cf5a2308-e241-4146-85c6-67ad924fb67c@t-8ch.de>
+ <ZP8kgXhP/UjsMoD4@1wt.eu>
+ <96597a87-89f2-4ec0-bf89-d1d8920f0d29@t-8ch.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="upLhFwPGUAS0CWZq"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <868a8f08-ba39-4550-8e7b-0572ea03c4e7@notapiano>
-X-Cookie: Save energy:  Drive a smaller shell.
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <96597a87-89f2-4ec0-bf89-d1d8920f0d29@t-8ch.de>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Mon, Sep 11, 2023 at 04:47:12PM +0200, Thomas Weißschuh wrote:
+> I used "git rebase --signoff" and dropped the duplicate signoffs it
+> generated on my own commits.
+> 
+> It's also pushed to git.kernel.org, could you double-check it?
 
---upLhFwPGUAS0CWZq
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Looks good to me, thank you!
 
-On Mon, Sep 11, 2023 at 08:35:37AM -0400, N=EDcolas F. R. A. Prado wrote:
-> On Sat, Sep 09, 2023 at 12:08:22AM +0100, Mark Brown wrote:
-
-> > Why?
-
-> To better reflect the actual test plan status. If 0 tests were run, it do=
-esn't
-> really make sense to say that the test plan passed, rather it was skipped=
- since
-> nothing was run. So with this change, if there's a regression that preven=
-ts the
-> soundcard driver from even probing, the result won't be "pass", but "skip=
-", and
-> the reason 'No soundcard available' will be in the logs.
-
-So, I would interpret the overall result for the suite as being "No
-errors were found in any of the cards discovered" if there is no
-configuration file specified which enumerates the set of cards that are
-expected (if there is a config file that's a different matter, we know
-what we're expecting).  I'm not sure that the different behaviour for 0
-cards is super useful.
-
---upLhFwPGUAS0CWZq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmT/JCsACgkQJNaLcl1U
-h9BPVAf/RSFHSOlUvU0zkBcxBW+G0eqxamHxmKQmBzKhecWQfBvToFYzyPMTI8hj
-1nkjmK70vMjHhjLZZri+srrnWwBLzVknDtJbaMFXkzFQibRN3P/60ChXGtg9WC1X
-5YzCyo+Na071zvmceag5yoyC55RoWZiMknKj89Y4DjL6cnExT7MEHuBGlwioUjjP
-1NApQduQGNWL8TNDcUkbDRa+ZPAkB6LspNVY4J7+S+R8jCqIINtX/YlKK+1oz60a
-50FFhWVNgjGigFqy/yGMaAocWDhSkTrf5xqHb5CjlaleQlhSW1Lh/TVaClZNPI9E
-0F0Aj163sUBtchAoz9QUWSmzw0qWDg==
-=bHB7
------END PGP SIGNATURE-----
-
---upLhFwPGUAS0CWZq--
+Willy
