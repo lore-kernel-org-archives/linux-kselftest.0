@@ -2,129 +2,152 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A618CA0ECB
-	for <linux-kselftest@archiver.kernel.org>; Mon, 11 Sep 2023 21:27:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D328CA0EC0
+	for <linux-kselftest@archiver.kernel.org>; Mon, 11 Sep 2023 21:28:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345049AbjIKVTT (ORCPT
+        id S1345299AbjIKVT2 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 11 Sep 2023 17:19:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57944 "EHLO
+        Mon, 11 Sep 2023 17:19:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236126AbjIKJvW (ORCPT
+        with ESMTP id S236778AbjIKLZb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 11 Sep 2023 05:51:22 -0400
+        Mon, 11 Sep 2023 07:25:31 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91150E44;
-        Mon, 11 Sep 2023 02:51:18 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B657AC433CC;
-        Mon, 11 Sep 2023 09:51:17 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 354C9CF0;
+        Mon, 11 Sep 2023 04:25:27 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F433C433C7;
+        Mon, 11 Sep 2023 11:25:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694425878;
-        bh=n39qjqZdna7s4aCBSr+Q6tsGFUv34ZNjq8iqqrLVaKg=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=ZeoL1/kUHKOlVAzAFsVO97NPTxM/vmkW9yVfZFiR7o1ir8KqlTcCKnnGOvOxGMFA0
-         1tcvRhd6AKrG1u0bppmbD9BDjzcPOunJoNxUTiz4Q2V7TBEjMbIUwr83faKGyMXaLP
-         RWCayMzbaJakOFimPqacGJy2Ps06jwL00JapzLZv+FQp7ZVAIdAUSuby0PutrABk0F
-         iIOW4oCXAx+nUV8YpDAvH4G6xX1m8EOLmU8J8gjzhwsE5dmpbaIfDgiaZhQawRObNh
-         rI3rj8bGYwR/5+ICGViQHgSbv9/78FuSSPPotKUFxVpBvNa4K7L1kY2z/yFf+X1asy
-         MZHABQZ8oeX+A==
+        s=k20201202; t=1694431526;
+        bh=EawFgFNxTGjsJlWqhpuJ848r9v1XFD1NX8Vu8QQ6TjY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jO0WffPeuErMHhfcC3J7dNtdQz66zQu2iwFfVzC1cMw8x/yE8ao1Bull7dXvgGRYu
+         5cL2043vY5RhN4nqTmdXw6AgkX5DGJUzMs+Ul+hrPKtnyC2JFu2JFbuUVo/iZ7gmaL
+         FesHFRoiYdYdWqcLu/cWHT5zryfwqQoqPN+eePSqCOqlWrXG6HdinHg+mzFvMyW8ii
+         6PhKr/X39RAIPqc4noWg1Kqtqy0KemXXHgh0eGgQCHEOuSinP033sRAWIhUAaMHlm6
+         4n8wQoox3WtnQpp4YGrcNtnKop/TQu9A9FT98fbrMzGVovmRJ4bZZkbCTExfJ9JwAT
+         8eo2dzc+W1Dxg==
+Date:   Mon, 11 Sep 2023 13:25:23 +0200
 From:   Maxime Ripard <mripard@kernel.org>
-Date:   Mon, 11 Sep 2023 11:51:06 +0200
-Subject: [PATCH 2/2] drm/tests: Flag slow tests as such
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230911-kms-slow-tests-v1-2-d3800a69a1a1@kernel.org>
-References: <20230911-kms-slow-tests-v1-0-d3800a69a1a1@kernel.org>
-In-Reply-To: <20230911-kms-slow-tests-v1-0-d3800a69a1a1@kernel.org>
-To:     Brendan Higgins <brendan.higgins@linux.dev>,
+To:     Jani Nikula <jani.nikula@linux.intel.com>
+Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
         David Gow <davidgow@google.com>,
         David Airlie <airlied@gmail.com>,
         Daniel Vetter <daniel@ffwll.ch>,
         Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     =?utf-8?q?Ma=C3=ADra_Canal?= <mairacanal@riseup.net>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Maxime Ripard <mripard@kernel.org>
-X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2575; i=mripard@kernel.org;
- h=from:subject:message-id; bh=n39qjqZdna7s4aCBSr+Q6tsGFUv34ZNjq8iqqrLVaKg=;
- b=owGbwMvMwCX2+D1vfrpE4FHG02pJDCn/HvP+StiTeqav+O31b0s/Zr3nt3v7ospZ+nn9k8cXz
- v6TvxZ1uKOUhUGMi0FWTJElRth8SdypWa872fjmwcxhZQIZwsDFKQATcQpm+F+yMnequ1KKWpCB
- Y4tZ8Jnt2qoahce5T3wV/6Z/g/nwQ25GhoPChiud5wusvn6/eyu7H/+C9SdnvD4jsK+ielv13/s
- 2T/kA
-X-Developer-Key: i=mripard@kernel.org; a=openpgp;
- fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org,
+        =?utf-8?B?TWHDrXJh?= Canal <mairacanal@riseup.net>,
+        dri-devel@lists.freedesktop.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com
+Subject: Re: [PATCH 1/2] kunit: Warn if tests are slow
+Message-ID: <l2eeghk7kz4rzsvlvvsj4vayo5s4ctnrizwkjolhaa2p3xdz75@jcczdtol52y7>
+References: <20230911-kms-slow-tests-v1-0-d3800a69a1a1@kernel.org>
+ <20230911-kms-slow-tests-v1-1-d3800a69a1a1@kernel.org>
+ <87leddf2fs.fsf@intel.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rllaj5tmvs7jz32f"
+Content-Disposition: inline
+In-Reply-To: <87leddf2fs.fsf@intel.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Kunit recently gained a speed attribute that allows to filter out slow
-tests. A slow test is defined in the documentation as a test taking more
-than a second to execute.
 
-Let's flag the few tests that are doing so on my machine when running:
+--rllaj5tmvs7jz32f
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-./tools/testing/kunit/kunit.py run --kunitconfig=drivers/gpu/drm/tests \
-	--cross_compile aarch64-linux-gnu- --arch arm64
+Hi Jani,
 
-Suggested-by: David Gow <davidgow@google.com>
-Signed-off-by: Maxime Ripard <mripard@kernel.org>
----
- drivers/gpu/drm/tests/drm_buddy_test.c |  2 +-
- drivers/gpu/drm/tests/drm_mm_test.c    | 14 +++++++-------
- 2 files changed, 8 insertions(+), 8 deletions(-)
+On Mon, Sep 11, 2023 at 01:07:35PM +0300, Jani Nikula wrote:
+> On Mon, 11 Sep 2023, Maxime Ripard <mripard@kernel.org> wrote:
+> > Kunit recently gained support to setup attributes, the first one being
+> > the speed of a given test, then allowing to filter out slow tests.
+> >
+> > A slow test is defined in the documentation as taking more than one
+> > second. There's an another speed attribute called "super slow" but whose
+> > definition is less clear.
+> >
+> > Add support to the test runner to check the test execution time, and
+> > report tests that should be marked as slow but aren't.
+> >
+> > Signed-off-by: Maxime Ripard <mripard@kernel.org>
+> > ---
+> >  lib/kunit/test.c | 16 ++++++++++++++++
+> >  1 file changed, 16 insertions(+)
+> >
+> > diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> > index 49698a168437..a3b924501f3d 100644
+> > --- a/lib/kunit/test.c
+> > +++ b/lib/kunit/test.c
+> > @@ -379,6 +379,9 @@ static void kunit_run_case_internal(struct kunit *t=
+est,
+> >  				    struct kunit_suite *suite,
+> >  				    struct kunit_case *test_case)
+> >  {
+> > +	struct timespec64 start, end;
+> > +	struct timespec64 duration;
+> > +
+> >  	if (suite->init) {
+> >  		int ret;
+> > =20
+> > @@ -390,7 +393,20 @@ static void kunit_run_case_internal(struct kunit *=
+test,
+> >  		}
+> >  	}
+> > =20
+> > +	ktime_get_ts64(&start);
+> > +
+> >  	test_case->run_case(test);
+> > +
+> > +	ktime_get_ts64(&end);
+> > +
+> > +	duration =3D timespec64_sub(end, start);
+> > +
+> > +	if (duration.tv_sec >=3D 1 &&
+> > +	    (test_case->attr.speed =3D=3D KUNIT_SPEED_UNSET ||
+> > +	     test_case->attr.speed >=3D KUNIT_SPEED_NORMAL))
+> > +		kunit_warn(test,
+> > +			   "Test should be marked slow (runtime: %lld.%09lds)",
+> > +			   duration.tv_sec, duration.tv_nsec);
+>=20
+> Two thoughts:
+>=20
+> Should there be some tolerance here? Otherwise we're flagging this on
+> the slowest machines, and we'll be defining tests slow based on
+> that. Like, warn if it takes more than 2 seconds.
 
-diff --git a/drivers/gpu/drm/tests/drm_buddy_test.c b/drivers/gpu/drm/tests/drm_buddy_test.c
-index 09ee6f6af896..6f79cde2df55 100644
---- a/drivers/gpu/drm/tests/drm_buddy_test.c
-+++ b/drivers/gpu/drm/tests/drm_buddy_test.c
-@@ -742,7 +742,7 @@ static struct kunit_case drm_buddy_tests[] = {
- 	KUNIT_CASE(drm_test_buddy_alloc_range),
- 	KUNIT_CASE(drm_test_buddy_alloc_optimistic),
- 	KUNIT_CASE(drm_test_buddy_alloc_pessimistic),
--	KUNIT_CASE(drm_test_buddy_alloc_smoke),
-+	KUNIT_CASE_SLOW(drm_test_buddy_alloc_smoke),
- 	KUNIT_CASE(drm_test_buddy_alloc_pathological),
- 	{}
- };
-diff --git a/drivers/gpu/drm/tests/drm_mm_test.c b/drivers/gpu/drm/tests/drm_mm_test.c
-index 186b28dc7038..c1e662c2a76c 100644
---- a/drivers/gpu/drm/tests/drm_mm_test.c
-+++ b/drivers/gpu/drm/tests/drm_mm_test.c
-@@ -2228,23 +2228,23 @@ module_param(max_prime, uint, 0400);
- static struct kunit_case drm_mm_tests[] = {
- 	KUNIT_CASE(drm_test_mm_init),
- 	KUNIT_CASE(drm_test_mm_debug),
--	KUNIT_CASE(drm_test_mm_reserve),
--	KUNIT_CASE(drm_test_mm_insert),
--	KUNIT_CASE(drm_test_mm_replace),
--	KUNIT_CASE(drm_test_mm_insert_range),
-+	KUNIT_CASE_SLOW(drm_test_mm_reserve),
-+	KUNIT_CASE_SLOW(drm_test_mm_insert),
-+	KUNIT_CASE_SLOW(drm_test_mm_replace),
-+	KUNIT_CASE_SLOW(drm_test_mm_insert_range),
- 	KUNIT_CASE(drm_test_mm_frag),
- 	KUNIT_CASE(drm_test_mm_align),
- 	KUNIT_CASE(drm_test_mm_align32),
- 	KUNIT_CASE(drm_test_mm_align64),
--	KUNIT_CASE(drm_test_mm_evict),
-+	KUNIT_CASE_SLOW(drm_test_mm_evict),
- 	KUNIT_CASE(drm_test_mm_evict_range),
- 	KUNIT_CASE(drm_test_mm_topdown),
- 	KUNIT_CASE(drm_test_mm_bottomup),
- 	KUNIT_CASE(drm_test_mm_lowest),
- 	KUNIT_CASE(drm_test_mm_highest),
- 	KUNIT_CASE(drm_test_mm_color),
--	KUNIT_CASE(drm_test_mm_color_evict),
--	KUNIT_CASE(drm_test_mm_color_evict_range),
-+	KUNIT_CASE_SLOW(drm_test_mm_color_evict),
-+	KUNIT_CASE_SLOW(drm_test_mm_color_evict_range),
- 	{}
- };
- 
+I'm not sure what the expectation from David and Brendan are here. I'll
+follow what they suggest, but with a couple of hundreds tests like we
+have in DRM at the moment, the difference in run time can be up to 5
+minutes :/
 
--- 
-2.41.0
+> What if someone makes a test faster, but forgets to update the
+> attribute? Should we also flag slow tests that are in fact fast?
 
+I'm not sure we can do that actually, because it certainly depends on
+the hardware running the tests. So I would definitely expect most of the
+slow tests to be running faster on some hardware.
+
+Like, running kunit natively on my workstation clears all the DRM tests
+in 6s, while it takes about 60s using qemu to test it on arm64, so they
+would be considered slow on arm64 but not by default.
+
+Maxime
+
+--rllaj5tmvs7jz32f
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZP75IwAKCRDj7w1vZxhR
+xTcYAP9N6vHg5h6885y/C3Tc0z1f6IQ0dk+FGmjUeus+bW/YOQEAl7UhCwI0k+Hm
+xYUWCTOJcXuebaOI4VfAA+udV4uSJgM=
+=sWMz
+-----END PGP SIGNATURE-----
+
+--rllaj5tmvs7jz32f--
