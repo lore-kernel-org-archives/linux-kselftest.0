@@ -2,97 +2,106 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27156CA0EC3
-	for <linux-kselftest@archiver.kernel.org>; Mon, 11 Sep 2023 21:27:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1245CCA0EC0
+	for <linux-kselftest@archiver.kernel.org>; Mon, 11 Sep 2023 21:27:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240584AbjIKVTF (ORCPT
+        id S1344647AbjIKVSw (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 11 Sep 2023 17:19:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33352 "EHLO
+        Mon, 11 Sep 2023 17:18:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236739AbjIKLTp (ORCPT
+        with ESMTP id S241296AbjIKPGG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 11 Sep 2023 07:19:45 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF646CDD;
-        Mon, 11 Sep 2023 04:19:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694431181; x=1725967181;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=yqt71S8DV4uklxfQ6XN+QALw6bb2cljgW00oOz7TuTU=;
-  b=ciYUWcejtKBTfUhYTwHCGH4i82PHXa/3HTo5BPWZ0Jok4G4tDn8H4Vf4
-   FYqKMTwYEmtBUBgKeo2i1DHI0STcL2+otooOi3+crM57FZZErdWxwpzb+
-   W33xOJqsz7YK+B6s3mKgKlxANAU2txwXASU+CEohJtHKJgqsN4/wPTn90
-   p7gpi8mrjXI+oJf+lDZVMQh7DFlEQB+XCGHM/r4H1EJtgnSGPtQ9MmmOd
-   PAoFUDHv7p4wNb8VyBxQalmDEAHeRK4vtm2q8d5pIkP79q+GDExO4xJhk
-   +YETy+pcyvegANSXMJHQkk8bSqkfsV7VeSZCMXW7LU1T6OQe9krTUx+nW
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10829"; a="464428583"
-X-IronPort-AV: E=Sophos;i="6.02,243,1688454000"; 
-   d="scan'208";a="464428583"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 04:19:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10829"; a="916990544"
-X-IronPort-AV: E=Sophos;i="6.02,243,1688454000"; 
-   d="scan'208";a="916990544"
-Received: from mzarkov-mobl3.ger.corp.intel.com (HELO ijarvine-mobl2.ger.corp.intel.com) ([10.252.36.200])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 04:19:38 -0700
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org,
-        =?UTF-8?q?Maciej=20Wiecz=C3=B3r-Retman?= 
-        <maciej.wieczor-retman@intel.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 0/5] selftests/resctrl: Fixes to failing tests
-Date:   Mon, 11 Sep 2023 14:19:25 +0300
-Message-Id: <20230911111930.16088-1-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
+        Mon, 11 Sep 2023 11:06:06 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FD8BE40;
+        Mon, 11 Sep 2023 08:06:01 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7BF2C433C7;
+        Mon, 11 Sep 2023 15:06:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1694444761;
+        bh=esm69iuRQACi1l3kV/rSJP+4DAXFLFoir62lsDfT7MI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=uTizd1eq6iffpoXJNzJkXKuUDwFqyhTlo2TKk0CuZUoS7OG3gMBlDRbVefEdSIJVZ
+         kFZkyV7S8EnWX3FbzPPy25Wl8GMD+Qn5uiKyyDYEfR+Ji5bCGqx9ToRddu3z0+jvf4
+         OcB4d9YmUVOEqFHSAwlJV490yVKxubAnu3qPLwl4=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     stable@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        patches@lists.linux.dev, Shuah Khan <shuah@kernel.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>,
+        linux-kselftest@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 6.1 106/600] selftests/harness: Actually report SKIP for signal tests
+Date:   Mon, 11 Sep 2023 15:42:19 +0200
+Message-ID: <20230911134636.727403296@linuxfoundation.org>
+X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20230911134633.619970489@linuxfoundation.org>
+References: <20230911134633.619970489@linuxfoundation.org>
+User-Agent: quilt/0.67
+X-stable: review
+X-Patchwork-Hint: ignore
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Fix three issues with resctrl selftests.
+6.1-stable review patch.  If anyone has any objections, please let me know.
 
-The signal handling fix became necessary after the mount/umount fixes.
+------------------
 
-The other two came up when I ran resctrl selftests across the server
-fleet in our lab to validate the upcoming CAT test rewrite (the rewrite
-is not part of this series).
+From: Kees Cook <keescook@chromium.org>
 
-These are developed and should apply cleanly at least on top the
-benchmark cleanup series (might apply cleanly also w/o the benchmark
-series, I didn't test).
+[ Upstream commit b3d46e11fec0c5a8972e5061bb1462119ae5736d ]
 
-Ilpo Järvinen (5):
-  selftests/resctrl: Extend signal handler coverage to unmount on
-    receiving signal
-  selftests/resctrl: Remove duplicate feature check from CMT test
-  selftests/resctrl: Refactor feature check to use resource and feature
-    name
-  selftests/resctrl: Fix feature checks
-  selftests/resctrl: Reduce failures due to outliers in MBA/MBM tests
+Tests that were expecting a signal were not correctly checking for a
+SKIP condition. Move the check before the signal checking when
+processing test result.
 
- tools/testing/selftests/resctrl/cat_test.c    |  8 ---
- tools/testing/selftests/resctrl/cmt_test.c    |  3 -
- tools/testing/selftests/resctrl/mba_test.c    |  2 +-
- tools/testing/selftests/resctrl/mbm_test.c    |  2 +-
- tools/testing/selftests/resctrl/resctrl.h     |  6 +-
- .../testing/selftests/resctrl/resctrl_tests.c | 37 ++++++++--
- tools/testing/selftests/resctrl/resctrl_val.c | 22 +++---
- tools/testing/selftests/resctrl/resctrlfs.c   | 69 ++++++++-----------
- 8 files changed, 73 insertions(+), 76 deletions(-)
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Andy Lutomirski <luto@amacapital.net>
+Cc: Will Drewry <wad@chromium.org>
+Cc: linux-kselftest@vger.kernel.org
+Fixes: 9847d24af95c ("selftests/harness: Refactor XFAIL into SKIP")
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/kselftest_harness.h | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
+diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+index 25f4d54067c0e..584687c3286dd 100644
+--- a/tools/testing/selftests/kselftest_harness.h
++++ b/tools/testing/selftests/kselftest_harness.h
+@@ -937,7 +937,11 @@ void __wait_for_test(struct __test_metadata *t)
+ 		fprintf(TH_LOG_STREAM,
+ 			"# %s: Test terminated by timeout\n", t->name);
+ 	} else if (WIFEXITED(status)) {
+-		if (t->termsig != -1) {
++		if (WEXITSTATUS(status) == 255) {
++			/* SKIP */
++			t->passed = 1;
++			t->skip = 1;
++		} else if (t->termsig != -1) {
+ 			t->passed = 0;
+ 			fprintf(TH_LOG_STREAM,
+ 				"# %s: Test exited normally instead of by signal (code: %d)\n",
+@@ -949,11 +953,6 @@ void __wait_for_test(struct __test_metadata *t)
+ 			case 0:
+ 				t->passed = 1;
+ 				break;
+-			/* SKIP */
+-			case 255:
+-				t->passed = 1;
+-				t->skip = 1;
+-				break;
+ 			/* Other failure, assume step report. */
+ 			default:
+ 				t->passed = 0;
 -- 
-2.30.2
+2.40.1
+
+
 
