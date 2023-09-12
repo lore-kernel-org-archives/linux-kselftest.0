@@ -2,107 +2,143 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A739ACA0ECA
-	for <linux-kselftest@archiver.kernel.org>; Tue, 12 Sep 2023 08:38:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E947FCA0ECA
+	for <linux-kselftest@archiver.kernel.org>; Tue, 12 Sep 2023 10:24:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232755AbjILIil (ORCPT
+        id S231560AbjILKYB (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 12 Sep 2023 04:38:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50842 "EHLO
+        Tue, 12 Sep 2023 06:24:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232812AbjILIil (ORCPT
+        with ESMTP id S231222AbjILKX5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 12 Sep 2023 04:38:41 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A945E7A;
-        Tue, 12 Sep 2023 01:38:37 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-991c786369cso709125266b.1;
-        Tue, 12 Sep 2023 01:38:36 -0700 (PDT)
+        Tue, 12 Sep 2023 06:23:57 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAE49B9
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 Sep 2023 03:23:53 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1c3887039d4so26881995ad.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 Sep 2023 03:23:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694507915; x=1695112715; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=d5WzW7udVB3HdwrirrUGrjvkqjfIkPOdv3DY3SpLmXk=;
-        b=kprj7FtczO5+01Xw1n/tLGqFrn4h+aI1W4RCgmCVk+sgHNEZc0gI6y5r8U/p2JwwW5
-         ijqy/USEumr+x1/XvTAv1GXBTosc4MM0GtlQafqXNg8c74CNffK7KHZatwRgFQhTDHwW
-         ScZv7b/m1d2fmkZWNakXFByd5l9XhcMF4uey2lA/6ojOa2AkvQ8zeMOiaSVfI4KDesLN
-         Hnh7K1zD1SrDjHh7CX5mk1LYnzRQrbTwRqB4PowqDm4CAhigzyH9SiC793x3A5UD2ODu
-         HPXUiBGU7VLYLtGEMtKlVYdJZdvHx/3YF9NPODYyrspCwmX0Ck8LuIxnK0IjItnegm+D
-         6JJw==
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1694514233; x=1695119033; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=M9LIb5haVVHTJnBYry+OCoJloq0Q0VbbRaGISgkSZ5M=;
+        b=tryLHP29ZbXlPBFjTBr263izMLZmsewcCZvRVp0cRmWLtTsuW36plvaco8xMVaTw9f
+         xof/EiVgtpnXBOmt/1+mU+uLrXsi0lTwFPapYp4V73rJyX4lrgVQ7zHn1amY6WtGUQQf
+         PFjHtcENePCGYFczxn+E22Y3I8LbBPEbyyo/BUiguRxFyk4iFa0es6JOyBQWpn7vHxo8
+         rbaqls1UJXvP29j8i7Qk+VYl+j9wVJEM9q/jVIcmITP3Sy9QoD1ZEDYB1fIf5HxwqPXF
+         PKr9gq1qVGaw3fhjeKZd3u6/CZo+lO/KEPzZK4ulK9GWD3u+zIRTsCkPidfOjju+WOHU
+         rRDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694507915; x=1695112715;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1694514233; x=1695119033;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=d5WzW7udVB3HdwrirrUGrjvkqjfIkPOdv3DY3SpLmXk=;
-        b=qZVBYYtIWwEVInH8hGiAszcRGWrrxYKTMKvIh9AfBZzwvUx2pqAXoi2vZekPPrKULZ
-         1rJmLgkn6Lv5O6PO9JMahv7ewml6u4zQ04w4F2rmB1XCnNYT+SWIqmRXxilKygvUfdKK
-         cru2aCXDZ6wYWVAAKrqmX3OLesRJZ9zsg8fmkn/hKNGYzuYIpR9hFVwws4FZbV9Ee0Of
-         3DpfXu/2f9KGASMg23A0dAAH0UPFjGXtmoNXL1JB6+1Ef/uMLwy1cSD6sfsB3NBQ7eXU
-         q259zZXsZ+D4Yx2hhrqJf/415NOcTNuwoVpNNKyODPZIvQuJ1KHoDWDEPOVwVZV5TsRd
-         JcsA==
-X-Gm-Message-State: AOJu0YyIX7ggiTBoYhauachN8gbtAAnpMFPW0CtSK20Rd1nexbuHD+rj
-        +K3BHh3g/imOtuxROr+GhL4=
-X-Google-Smtp-Source: AGHT+IEwPItuktnWOR0gh0mbE4XlHJQpgYLFMu1sfdxplQaopwaTpT2qalC3/qPX5N1G4uxUV65OHA==
-X-Received: by 2002:a17:906:5350:b0:9aa:1020:8c39 with SMTP id j16-20020a170906535000b009aa10208c39mr8166508ejo.18.1694507915324;
-        Tue, 12 Sep 2023 01:38:35 -0700 (PDT)
-Received: from lelloman-5950.. (host-87-10-35-251.retail.telecomitalia.it. [87.10.35.251])
-        by smtp.gmail.com with ESMTPSA id b10-20020a170906038a00b0099b76c3041csm6511726eja.7.2023.09.12.01.38.34
+        bh=M9LIb5haVVHTJnBYry+OCoJloq0Q0VbbRaGISgkSZ5M=;
+        b=OD8OSTJXv4Adz/Mys1dkVAEP1xh8xxhhrBGkk8SEBWxNs5rgnQrMNbjy4kKNC8Pn4D
+         3TTzsaI4sSZ6P77gUhWVU4aGlGXxgbbTYpMGfihhIZn4E6f2UgWWYaNVPH4LVLd+ijHx
+         TpnO6D9mW/gqShct3LA3E6NtfWm9JChMHL7WbNmGb1Kq5nRuEaOYxdtZ+HuuM9cgE7eM
+         8mfZ6pKO9/+PsPCT4gKGB8qTXzQPTkt9b+65IL0DhyVbH+uokfQLkC9n5Yf0i1tc6HMb
+         d2D6kR1Xot2+NScJbRAqbbcLMKcLTaSk6uylZCzZVcXJ3stzT3+MHJB300wj/QdU2No8
+         +YlQ==
+X-Gm-Message-State: AOJu0YzxaMlU2ikygN/yWSRkz2fvlBmxNyzFAgm0Wn+R57/YQX896noa
+        Dm5uN7VvNT5nx+r7Y8zGQgKwqg==
+X-Google-Smtp-Source: AGHT+IEmgdDEUJ9JrQjm0gbzQ86T5t9CvRObKuPE3dADfCJu9EHt7NCkdJcWeSSlEO+b9rD4JiFnaQ==
+X-Received: by 2002:a17:903:2282:b0:1c0:bcbc:d78 with SMTP id b2-20020a170903228200b001c0bcbc0d78mr12208361plh.14.1694514233421;
+        Tue, 12 Sep 2023 03:23:53 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id bc7-20020a170902930700b001beef2c9bffsm1576553plb.85.2023.09.12.03.23.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Sep 2023 01:38:34 -0700 (PDT)
-From:   Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-To:     dan.carpenter@linaro.org, akpm@linux-foundation.org,
-        kernel-team@meta.com, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-Subject: [PATCH] selftests: cgroup: fix test_zswap error path and meaningless check
-Date:   Tue, 12 Sep 2023 10:38:00 +0200
-Message-Id: <20230912083800.57435-1-cerasuolodomenico@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 12 Sep 2023 03:23:52 -0700 (PDT)
+Message-ID: <65003c38.170a0220.c6d7b.5009@mx.google.com>
+Date:   Tue, 12 Sep 2023 03:23:52 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: fixes
+X-Kernelci-Tree: kselftest
+X-Kernelci-Kernel: v6.6-rc1-3-g7ab6fe6625c9
+X-Kernelci-Report-Type: build
+Subject: kselftest/fixes build: 6 builds: 0 failed, 6 passed,
+ 1 warning (v6.6-rc1-3-g7ab6fe6625c9)
+To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Replace destruction paths with simple returns before the test cgroup is
-created, there is nothing to free or destroy at that point.
+kselftest/fixes build: 6 builds: 0 failed, 6 passed, 1 warning (v6.6-rc1-3-=
+g7ab6fe6625c9)
 
-Remove pointless check, stored_pages is a size_t and cannot be < 0.
+Full Build Summary: https://kernelci.org/build/kselftest/branch/fixes/kerne=
+l/v6.6-rc1-3-g7ab6fe6625c9/
 
-Fixes: a549f9f31561 ("selftests: cgroup: add test_zswap with no kmem bypass test")
-Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+Tree: kselftest
+Branch: fixes
+Git Describe: v6.6-rc1-3-g7ab6fe6625c9
+Git Commit: 7ab6fe6625c9bdcb8fa5f61c8f8e30e13f689284
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
+est.git
+Built: 4 unique architectures
+
+Warnings Detected:
+
+arm64:
+
+arm:
+
+i386:
+
+x86_64:
+    x86_64_defconfig+kselftest (clang-16): 1 warning
+
+
+Warnings summary:
+
+    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to=
+ !ENDBR: .text+0x1393eb
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 1 w=
+arning, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to !END=
+BR: .text+0x1393eb
+
 ---
- tools/testing/selftests/cgroup/test_zswap.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/cgroup/test_zswap.c b/tools/testing/selftests/cgroup/test_zswap.c
-index 49def87a909b..5257106776d5 100644
---- a/tools/testing/selftests/cgroup/test_zswap.c
-+++ b/tools/testing/selftests/cgroup/test_zswap.c
-@@ -178,10 +178,10 @@ static int test_no_kmem_bypass(const char *root)
- 
- 	/* Set up test memcg */
- 	if (cg_write(root, "cgroup.subtree_control", "+memory"))
--		goto out;
-+		return KSFT_FAIL;
- 	test_group = cg_name(root, "kmem_bypass_test");
- 	if (!test_group)
--		goto out;
-+		return KSFT_FAIL;
- 
- 	/* Spawn memcg child and wait for it to allocate */
- 	set_min_free_kb(min_free_kb_low);
-@@ -208,8 +208,6 @@ static int test_no_kmem_bypass(const char *root)
- 		free(trigger_allocation);
- 		if (get_zswap_stored_pages(&stored_pages))
- 			break;
--		if (stored_pages < 0)
--			break;
- 		/* If memory was pushed to zswap, verify it belongs to memcg */
- 		if (stored_pages > stored_pages_threshold) {
- 			int zswapped = cg_read_key_long(test_group, "memory.stat", "zswapped ");
--- 
-2.34.1
-
+For more info write to <info@kernelci.org>
