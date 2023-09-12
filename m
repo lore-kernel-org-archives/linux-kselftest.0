@@ -2,32 +2,34 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C0ADCA0ECB
-	for <linux-kselftest@archiver.kernel.org>; Tue, 12 Sep 2023 02:59:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AC73CA0ECD
+	for <linux-kselftest@archiver.kernel.org>; Tue, 12 Sep 2023 03:02:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241201AbjILC7W (ORCPT
+        id S241357AbjILDCv (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 11 Sep 2023 22:59:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57058 "EHLO
+        Mon, 11 Sep 2023 23:02:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241222AbjILC7G (ORCPT
+        with ESMTP id S241471AbjILDCi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 11 Sep 2023 22:59:06 -0400
+        Mon, 11 Sep 2023 23:02:38 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B4A11E162;
-        Mon, 11 Sep 2023 18:24:38 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27B1AC116AE;
-        Tue, 12 Sep 2023 01:24:37 +0000 (UTC)
-Date:   Mon, 11 Sep 2023 21:24:53 -0400
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D0F91A4BE3;
+        Mon, 11 Sep 2023 18:32:26 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D4ADC3278E;
+        Tue, 12 Sep 2023 00:57:01 +0000 (UTC)
+Date:   Mon, 11 Sep 2023 20:57:18 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
 Cc:     Shuah Khan <shuah@kernel.org>, Mark Brown <broonie@kernel.org>,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [FIX PATCH v2] selftests: tracing: Fix to unmount tracefs for
+Subject: Re: [FIX PATCH] selftests: tracing: Fix to unmount tracefs for
  recovering environment
-Message-ID: <20230911212453.58b9082a@gandalf.local.home>
-In-Reply-To: <169448103881.242465.4589561134225171701.stgit@devnote2>
-References: <169448103881.242465.4589561134225171701.stgit@devnote2>
+Message-ID: <20230911205718.5bc23f8d@gandalf.local.home>
+In-Reply-To: <20230912095457.e5b89f84e168ed06072ea3d5@kernel.org>
+References: <169425219871.184380.8584599358250186540.stgit@devnote2>
+        <20230911130909.6d3054af@gandalf.local.home>
+        <20230912095457.e5b89f84e168ed06072ea3d5@kernel.org>
 X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -36,24 +38,20 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 12 Sep 2023 10:10:39 +0900
-"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+On Tue, 12 Sep 2023 09:54:57 +0900
+Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
 
-> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > Shouldn't the above be:
+> > 
+> >      if [ ! -z "${UNMOUNT_DIR}" ]; then
+> > 
+> > ?  
 > 
-> Fix to unmount the tracefs if the ftracetest mounted it for recovering
-> system environment. If the tracefs is already mounted, this does nothing.
+> I think both are good.
+> What about using '-n' explictly?
 > 
-> Suggested-by: Mark Brown <broonie@kernel.org>
-> Link: https://lore.kernel.org/all/29fce076-746c-4650-8358-b4e0fa215cf7@sirena.org.uk/
-> Fixes: cbd965bde74c ("ftrace/selftests: Return the skip code when tracing directory not configured in kernel")
-> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> ---
->  Changes in v2:
->    - use -n option explictly for testing the string is non-zero.
-> ---
->  tool
+> [ -n "${UNMOUNT_DIR}" ]
 
-Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Even better. Heh, I never even knew about that switch :-p
 
 -- Steve
