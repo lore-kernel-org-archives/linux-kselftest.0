@@ -2,67 +2,84 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8102ACA0EF4
-	for <linux-kselftest@archiver.kernel.org>; Tue, 12 Sep 2023 16:14:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08750CA0EF1
+	for <linux-kselftest@archiver.kernel.org>; Tue, 12 Sep 2023 17:12:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236570AbjILQOO (ORCPT
+        id S232252AbjILRMt (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 12 Sep 2023 12:14:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44352 "EHLO
+        Tue, 12 Sep 2023 13:12:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236606AbjILQON (ORCPT
+        with ESMTP id S237034AbjILRMp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 12 Sep 2023 12:14:13 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E8010EB;
-        Tue, 12 Sep 2023 09:14:08 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 71CB7C433CB;
-        Tue, 12 Sep 2023 16:14:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694535248;
-        bh=/FjwSFPnmjxyH/07JZ7vLlixqqmmPb4pIEr8nop5Bcc=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=ajfA3yRTK9NhJIypz2zP5sQA/phlH1oyBlYt8nCGXb23lFqEwHK3HrFz0s+RZ97h5
-         8Cqk/tXH7tqdvWJT/jYKepGtHB/j/C0MvkBKsvtMB/JUPo714GAJ7VaopOmoKYIeJj
-         mj44koUFbcmH7RavQomZ3lFfCcM8U35E/IwW8e40LfUovzx03FxQSoKKuTGWIaN8il
-         WF60C3bSithRaGWZIOA3oExRXo0tNQWqTSavmvIRLCYX7Tmw4Thf1J8ALgDPKV/eYm
-         8J3r+UclePxultWyRcfowiOEmme3JvTFKzuF8BKnNXNPskSH6DUJJpUnqpYRTxo8jg
-         lt1Ak1IDLY0Tg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5D7ACE1C280;
-        Tue, 12 Sep 2023 16:14:08 +0000 (UTC)
-Subject: Re: [GIT PULL] KUnit fixes update for Linux 6.6-rc2
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <4928e6cd-f45e-20e9-08f6-acdb1281a2e6@linuxfoundation.org>
-References: <4928e6cd-f45e-20e9-08f6-acdb1281a2e6@linuxfoundation.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <4928e6cd-f45e-20e9-08f6-acdb1281a2e6@linuxfoundation.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-6.6-rc2
-X-PR-Tracked-Commit-Id: 9076bc476d7ebf0565903c4b048442131825c1c3
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: fb52c87a06324e3a9223bf7bb3b087557524f96e
-Message-Id: <169453524837.14950.3380264296964637016.pr-tracker-bot@kernel.org>
-Date:   Tue, 12 Sep 2023 16:14:08 +0000
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        shuah <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
-        David Gow <davidgow@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+        Tue, 12 Sep 2023 13:12:45 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A16481720;
+        Tue, 12 Sep 2023 10:12:40 -0700 (PDT)
+Received: from DESKTOP-4OLSCEK. (unknown [76.135.27.212])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 53D2E212BC14;
+        Tue, 12 Sep 2023 10:12:39 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 53D2E212BC14
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1694538759;
+        bh=h6VnK4CFQH+xSRKq/T+c2LRxcbNukp7Ia0Dn9Y5C0Zo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WG41fQ5setfYxTQEQvoEHsCEaI/JaUCgy3kETvWDYa1S0UvOBzVz45pOZTjtkq1xM
+         Dc8Fv1tRtzVPX7UWLPG+mY2k+bn0XU+icHF3sIjLJPxLy7eHg0KR54ZPjsUvT60MLG
+         84Zw6f0Pn+7KYjtMMqEh7kSbzn6Exwp6UdhpTCYM=
+Date:   Tue, 12 Sep 2023 10:12:34 -0700
+From:   Beau Belgrave <beaub@linux.microsoft.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Mark Brown <broonie@kernel.org>, shuah@kernel.org,
+        mhiramat@kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, naresh.kamboju@linaro.org,
+        anders.roxell@linaro.org, arnd@arndb.de
+Subject: Re: [PATCH v2] selftests/user_events: Fix failures when user_events
+ is not installed
+Message-ID: <20230912171234.GA3704-beaub@linux.microsoft.com>
+References: <20230908201916.562-1-beaub@linux.microsoft.com>
+ <29fce076-746c-4650-8358-b4e0fa215cf7@sirena.org.uk>
+ <20230908212712.211a4964@gandalf.local.home>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230908212712.211a4964@gandalf.local.home>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The pull request you sent on Mon, 11 Sep 2023 10:20:43 -0600:
+On Fri, Sep 08, 2023 at 09:27:12PM -0400, Steven Rostedt wrote:
+> On Sat, 9 Sep 2023 00:33:05 +0100
+> Mark Brown <broonie@kernel.org> wrote:
+> 
+> > On Fri, Sep 08, 2023 at 08:19:16PM +0000, Beau Belgrave wrote:
+> > 
+> > > Add common methods to detect if tracefs and user_events is enabled. If
+> > > either is not enabled skip the test. If tracefs is enabled, but is not
+> > > mounted, mount tracefs and fail if there were any errors. Fail if not
+> > > run as root.  
+> > 
+> > This will leave tracefs mounted if it was not already mounted which is a
+> > change to the system configuration.  While that may happen if things go
+> > wrong during a test we should probably avoid actively doing this and
+> > either only skip or try to umount at the end of the test if we mounted
+> > ourselves.
+> 
+> LOL! Beau just asked me yesterday if anyone would care if the test mounted
+> tracefs and left it mounted. I told him "no" as ftracetest in the selftests
+> already do that.
+> 
+> I guess I was wrong and some people do care ;-)
+> 
+> -- Steve
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-6.6-rc2
+It looks like this change got applied [1] to the fixes branch of
+linux-kselftest. I can either send a V3 with this addressed or build a
+patch based upon the fixes branch on top of this one to address it.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/fb52c87a06324e3a9223bf7bb3b087557524f96e
+Which way do you all prefer?
 
-Thank you!
+Thanks,
+-Beau
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+1. https://git.kernel.org/shuah/linux-kselftest/c/a06023a8f78d
