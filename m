@@ -2,209 +2,101 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DC647EEB596
-	for <linux-kselftest@archiver.kernel.org>; Wed, 13 Sep 2023 05:59:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 610B3CA5500
+	for <linux-kselftest@archiver.kernel.org>; Wed, 13 Sep 2023 07:17:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230219AbjIMF7T (ORCPT
+        id S235421AbjIMHR3 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 13 Sep 2023 01:59:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35184 "EHLO
+        Wed, 13 Sep 2023 03:17:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230188AbjIMF7S (ORCPT
+        with ESMTP id S236875AbjIMHR2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 13 Sep 2023 01:59:18 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD29DC;
-        Tue, 12 Sep 2023 22:59:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694584754; x=1726120754;
-  h=date:from:to:cc:subject:message-id:references:
-   content-transfer-encoding:in-reply-to:mime-version;
-  bh=SacvpCQm01o69x6JqF8Hk3lA16pR/KCgLJZT1LlHFwg=;
-  b=KoiJbCD92cFgJM87Ys8aKf2xCmbxXHCbfhHGMWiewiFSyTyTm9nu49NN
-   6ZfXNJpIz9qPIoAWgqg83cG/ryUTAQbsd0SzIpLtSumMiSc03mlXE/wWF
-   /32YyhOE5wdyTNmuiVq5WoM4g4YU52GGDhbWawhv79J8TmuEsxrItjvZ4
-   +N4NsJ61SE6Gl7IhXGvp+07/oSImdsPi6wDBoG0ThbBEtCNJ8s8Mk6K06
-   KEvYMawic3R2d4F5HnPUOmmBbF9Hoyi053V6pNqr1tVuhelT8ixvYlY4K
-   09H6TKLjOgIitjfqfI79igzii1uRZlAWWcLLmU7FzzbRFADpDF4yFHS2W
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="381270126"
-X-IronPort-AV: E=Sophos;i="6.02,142,1688454000"; 
-   d="scan'208";a="381270126"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2023 22:59:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="720688634"
-X-IronPort-AV: E=Sophos;i="6.02,142,1688454000"; 
-   d="scan'208";a="720688634"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orsmga006.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 12 Sep 2023 22:59:13 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32; Tue, 12 Sep 2023 22:59:13 -0700
-Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32; Tue, 12 Sep 2023 22:59:12 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32 via Frontend Transport; Tue, 12 Sep 2023 22:59:12 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.168)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.32; Tue, 12 Sep 2023 22:59:12 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=L/mx9yzo3iESED9Vc9eBcyiciUjX6fk5qEaaOE3SIT5H+fN2mfL9xX325x/NOKM5LZs7zM7Q6q3GvRX2cDlv9GTveqFpylr3vmxwKDB6G/NFmBBL9LlfxwIY1RaEc/bR6gFqX4R39kL80QEjz4gakJ21NSGMltRXYfJEKfnQzFfA9DLMVDd0cpJPIahTwR4aH98GuoSdJ9z66IUEI0ODslRe3dhHDSHHZtpYa7e1Vc+X9WcH+ugZaF5wI7ht7mieZmilK4O9cM7nhvUtn9vLVx5COaFMZitoTOvlQ2GoBIbUrY9TNIX3AwTwiiB7fZsT3O4d/9DVHbw9otOpdZySLQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oFkGO4veBBH4eB/8TKhJthLpb9/K+yz9f3WRy3JkWsI=;
- b=XNPX+FIn4Y4HWyMvmOo5wRB3nM3apE8QTR+6KKQDx8qqgAXg6DHDEZlLj8yiMVDSQrW+XXIWRA5NIm8c8ax9IxB2dVDTx2rbpQ2fzrO/pwfV34uH2d1e+s5CZ8SGObyp6/6khNPpwVUuidYI6mvcPj1j86OltplkxPya7idn8+jYayJX8SXpgrZ6yZYhJzDmJYvmUMpgy4+DhxHGLi/EKnaAWne7lN270CM3wms4WBSDTFVrR4HBAxzlR36W9e/8gowXpw8/ow9hEFlyrOnfykIbwBehrEsix00O53Q2iQIr9bbVbroex8Nv6JoVAoshXK73ju7vkfE3ScUXdUVl6A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MN0PR11MB6231.namprd11.prod.outlook.com (2603:10b6:208:3c4::15)
- by CH0PR11MB5491.namprd11.prod.outlook.com (2603:10b6:610:d6::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.19; Wed, 13 Sep
- 2023 05:59:11 +0000
-Received: from MN0PR11MB6231.namprd11.prod.outlook.com
- ([fe80::8824:ea30:b0ab:f107]) by MN0PR11MB6231.namprd11.prod.outlook.com
- ([fe80::8824:ea30:b0ab:f107%4]) with mapi id 15.20.6745.034; Wed, 13 Sep 2023
- 05:59:11 +0000
-Date:   Wed, 13 Sep 2023 07:59:04 +0200
-From:   Maciej =?utf-8?Q?Wiecz=C3=B3r-Retman?= 
-        <maciej.wieczor-retman@intel.com>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-CC:     Fenghua Yu <fenghua.yu@intel.com>, Shuah Khan <shuah@kernel.org>,
-        <ilpo.jarvinen@linux.intel.com>, <linux-kernel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH RESEND v3 1/2] selftests/resctrl: Fix schemata write
- error check
-Message-ID: <jyxp5mspjn7xbmclj5sumbsuwd424fqmdvntiiuq24tiz5yqb4@qunho7whbamf>
-References: <cover.1693575451.git.maciej.wieczor-retman@intel.com>
- <960b5302cee8e5bb0e83dcf20cd2ef4d353b7b0b.1693575451.git.maciej.wieczor-retman@intel.com>
- <99eabc5c-f5e3-27dd-0a29-ad0cdb7b4239@intel.com>
- <sr6ana6d7ebtuxbhjuo6kcnhnn2zzvg3ivve6mndqeb3nxrzo7@mrfmtzlxlwdh>
- <a7f0dfb9-c841-b240-fca9-b908517a44d0@intel.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a7f0dfb9-c841-b240-fca9-b908517a44d0@intel.com>
-X-ClientProxiedBy: FR2P281CA0108.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:9c::19) To MN0PR11MB6231.namprd11.prod.outlook.com
- (2603:10b6:208:3c4::15)
+        Wed, 13 Sep 2023 03:17:28 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD4E1984;
+        Wed, 13 Sep 2023 00:17:24 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-68fbb10dea4so2637445b3a.3;
+        Wed, 13 Sep 2023 00:17:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1694589444; x=1695194244; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Acu4nw1FXdQveACPv6+swZOIpF9eDwL9S1R/+hJY+40=;
+        b=LdnBnjyXqPFfdorvMxFpe/7TnH2mowSHcBuo+m62lLVd3lKkDViTX0ZLV5dCj6GNz5
+         +4eBaw/YtM6pr/tjJcU+LVLP2Mkm7tNMcfctSrftOPnPk7xXE1sHe+8XphArjCU4I/TN
+         sCW+M/VdjQ3NsjUFex7zE23Wqbe0dfHu2kcASJY0UdWvhkDrlFWn0hYWoUnR+/LGm+EU
+         F4m2hONIVNREvZnPzFzEUx3sm/BnMYDsY5mQR6R3JIywYziqFFvuZPaOZIBvOyWklhwm
+         3sqeqDn81hKFoyPiu+OZTDi88rfLPF2RgNzFRlMGPVnxOlBCXivEw6peO4CZpaihfc3P
+         0FfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694589444; x=1695194244;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Acu4nw1FXdQveACPv6+swZOIpF9eDwL9S1R/+hJY+40=;
+        b=ZlbyDJVq/S+wWYSkeLF0ackG1r8z2jsAD99lKU5Zvcx97nPes89/GbxkE2zpo0b11y
+         GGSDMxSYhWw37mN3hoMq3QT4y60Vuh+KU3j1nOR06erxOASW6g1gRge01PZT7FGwygPL
+         2g/jucePppcKzc/Vmo4KUDMZrFzPK2ivRnnw0QqiVQ6eO1uqqaslozTn2fpMaWKUqmIb
+         ghR5sqYJPPownNNHc4ua5Pcj2SCSbN5zeVPECgRm8wHsSUondbRFX3hjZLvsynfjzUKL
+         Gfc1hvZkq/PaX26kyWDHSK4aWzIoXaHhAH6S+0jiNOQ20dcT5XXOJ4k7eew3hLhxN2BQ
+         lj2A==
+X-Gm-Message-State: AOJu0YwyFYA+ZTuxyK07MPVlH62acaLB9WRMJTCLCGifhH634cGq4TrR
+        CKINQiiI1ZzgarOm4DvP/K1o9RGhe487ur4BsHk=
+X-Google-Smtp-Source: AGHT+IGCsNzD/UpJA9G+hgegxKBvYQkpYChDDeCF7oHQOnNF6IHt41a6oPe9d8KBv4u1GXGEvqZas0QcYddQ4NoqoQQ=
+X-Received: by 2002:a05:6a00:18a0:b0:68f:b2f3:7737 with SMTP id
+ x32-20020a056a0018a000b0068fb2f37737mr2305803pfh.15.1694589444020; Wed, 13
+ Sep 2023 00:17:24 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR11MB6231:EE_|CH0PR11MB5491:EE_
-X-MS-Office365-Filtering-Correlation-Id: a0fddcea-dc62-423e-bd17-08dbb41e8cd3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: DFyDfLcYupBjEluppPD0Rdrtlo4gBLKSk4pk7w8eGmcMhV6+XFu01loQ3ctRBB9Nwbgyq8Tx8j24/jI+6HQ85cxcx5GrjFioHzaT8xtwMDRyA6fIaOSwpiRkk2L23/N8FMATgBXuPGL7JwMBLCvhvZMn54cgmvDihfF84pg8n1KdrrQYC1+VwdsR+lormEru/C06dHXb7WIfy2/4xrIIecAPUlRNvlT34+mLRX5J2GXQ4NgHIgtcufxn54c91JHuV/7bFgNULDzTWxojXwlmqFWr734UVWN/Px4peWEZhYDwaAw9XFqANhCJh95fTegUBa42i7Slj0bbBSXCav7CtWrDSNXVr87WYA+plP70UYF1LNeCHjuGD+BTD7g1VSYII5E8dKtrz5ShWIOhF3R4kRA68koKLmyLzukVkB167Ng82NjFATSvKnkg1Q42Fe2BHjV3GH1KyFqgIE4g6JC0tBqjgUugKUFn1HRXVsX/UAn3v84L08xJLOmeyVe4/IrmgH077ynlmJhgiXptDUqMCw232BvxlY466Yty56SZnQh8V2v3eMql+CSSdkOywKNd
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6231.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7916004)(376002)(39860400002)(136003)(366004)(396003)(346002)(1800799009)(186009)(451199024)(6666004)(6506007)(53546011)(6486002)(86362001)(38100700002)(82960400001)(26005)(66574015)(2906002)(9686003)(6512007)(478600001)(83380400001)(4326008)(6862004)(5660300002)(8676002)(41300700001)(8936002)(33716001)(6636002)(66476007)(316002)(54906003)(66556008)(66946007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QnZNK1RSTXp4RGVLNldlSnltQ25kYnpESmk0VzFwQm4wYUF3aEdtS3I2RDJi?=
- =?utf-8?B?QmpVcTFIRytKd3hHM2x6YXhJV0YvRU1PdHRobGtQdlZNcVdUakw4RnAzT3Uv?=
- =?utf-8?B?anRoRmVvNzlDNlVTSVg2WVZiVXRLeWRsd0x2VVphTUl5WEVOUG9tT1Z6SUNp?=
- =?utf-8?B?R2s0N3Z1ZHZlRStaaHl5aUs0Y0t6ZGg5TmFCUHpTYStlUzFEVDFxaUxmWGh1?=
- =?utf-8?B?NnB3a1IxNFZrUVZJVVR2Vktma2EyS21DSlhQL1Q1eGlRVkorRXRIWjlpM1Jm?=
- =?utf-8?B?Z1FocFMyNnRFNHBFK3FRa2VOai94ZWtlVkJPS0VJbmh6eTBHaDZqR05WUFI0?=
- =?utf-8?B?bUpSQXdFRXo1ODJVbTVBNGVRR0t2d2crWkZIQWQxRlVzbnBGOHpnNnZOSytG?=
- =?utf-8?B?akVmZDdhZjJ3cG04bWlFVnFTZDJJQnh1NEJjS2tUZnRaQ21JaUlScmwvcXNN?=
- =?utf-8?B?b2hBU05zWVdWOUROZFo5c1RpL1BDSWxvOTZFSksvbzRsMjVSb1JXRmcvV1Bq?=
- =?utf-8?B?U3BTR3A3UGZ0OFlkamd4VFZQcDRNa3V3aGY1bUhweVpwK25kajRCaGkrcExK?=
- =?utf-8?B?bkppN0ZZWXIxQXRhb1NhMHBHQ1Rrbm1lMDM3YVR1TktVaXQ3TjdzckY2N2FM?=
- =?utf-8?B?Z01LN1M2Rm9BdW80Qno2YmRUZWcyb2hCSHpkcGg4SEdVQnhGVlduQm4xUDlX?=
- =?utf-8?B?c2ViWTdYNHZUeVlVQncrV1VLWjlxajJ3UVpzM0FZWGQ2V25wMlFEcno5TkZo?=
- =?utf-8?B?ZUFvbkFHTE51OGVzci9jVEM5YTBDZk54TTFHS3dOQTM1SXBEek9RNG5UNi9F?=
- =?utf-8?B?dWNyZ3M4ZngzNm9FQktjbmMzcHQ1ZTdjUnFRRmR2UTc2eTlrSmNZYnFlZko5?=
- =?utf-8?B?TWF2cVNVZDBNOEFoN2d6Q1RLcGswdExUSUdsK1dZZmRucDY0dDRxV1R2Wjh3?=
- =?utf-8?B?UlVycURYRDA2M1dDOGxOU3RNNmFnNFg3VS9scm90NElpR2dVcXhJejEzZFNo?=
- =?utf-8?B?Q1lCR2t4SFBiVDJUNEtocWdvMVVMTTZGMFdkYlpGelB1MjFqZUdDT3oxZXpx?=
- =?utf-8?B?OWVGMGZ0ekZXZlZER3hBM293M05LM2JMN3FWU052RE5xY2xDcDUwK2lvQk9L?=
- =?utf-8?B?aG1kaUlwMCtTZmhUWkNTUVcvQWw3QjI3SGMwNldOVmo1RmpoeG1vSlhpSmh6?=
- =?utf-8?B?V29rOVNHV2tZcEVuVEhZdGdXckNxYXNobXJZN2NSZmZSeE96MzdEKzlvOFZy?=
- =?utf-8?B?MXBodmZnNzFDQUh3SkdWR0lYa3N0dDlEY0RKT3lSODdwdDBwelZNSjNQVm0v?=
- =?utf-8?B?RTcxWlJOZDVaaHVrOW1DbktzVmFWbmE1amVhWHNIU3k5UHdhNTEyQ2FFbE9v?=
- =?utf-8?B?QS9EWS9FM1ZYR0hIUWg2Y0JQcGVNZjRWcnE1M0tZbi9OOCtZT0M5YWpYc2JC?=
- =?utf-8?B?RGM4U1pNZW45M3UrQmZSZCtOeG1UVnA1bnNCbTRBZ1RjWWVqemlIMlEwOVla?=
- =?utf-8?B?a1BFSHlOTHVlTXpmZmpaWWpmdFYrQzVxV2p0UlFpc01uL3MzQjhvMVl3czJu?=
- =?utf-8?B?QVA5b1I4bGNubkR1aTJ1TTByMnFONzI4TVJOVC9VL0IzQzdDWjRVVHQxa0tD?=
- =?utf-8?B?dG1vb3NvTm53Y3NsdWh4L0YrMnlwSTFNcENEYmlFUnAvOHFuNGZLQ3hOTTI3?=
- =?utf-8?B?clpPMkdiZHNMd0FWM3R4eXlqVUFRK2xZa2MyRFlmTUZrQkE3bmQvSkgwc2J1?=
- =?utf-8?B?eFdxeFVOR0tyTVNJS0NWaHZ3OWxTdFp4UmlINldMSGl5VmhjVzlYaXR0RCtl?=
- =?utf-8?B?bU9uVFNkZHZMV0xqcFlyQk84ekhIdXFEZ1RQV1h5WnBEWnpuMmd0RGR3T216?=
- =?utf-8?B?OE9XMGg0elZVS0hKZkZHUjN6WnhOdThPaXZzemZCY2w3dHpDYkM0dmlDUjNz?=
- =?utf-8?B?bVFCZnlGZ0MxcnBDN015R2x3aFN2ZnlIajZkWFpidyt5VDluWEJ6aW9melN6?=
- =?utf-8?B?Wm56c3M2TUduamxRVzR3YUhPS3lyMVgwOVAxeGJLNEdmQkFHbGRTclRGcTZS?=
- =?utf-8?B?VGk4N1F5Nno0K0JabkhlWGYyWStzVHZhbGFDcTJsODdKNEh5U2ZORlNEWnIw?=
- =?utf-8?B?WndRVzR0OXg5QVZlU29jbUQwcmlRbnhSVW13dDVtMG5DYVJ0THp4cUdYcWVG?=
- =?utf-8?Q?tazPb6vs7Oa6Zws2HAmCjj4=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: a0fddcea-dc62-423e-bd17-08dbb41e8cd3
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6231.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Sep 2023 05:59:10.9558
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: o/vTWtak+E+xvo8MUEHggATR4PFfOgcQ2xIlnBheo5j07zYla2d5itRIFUaIBqddD/vzQNL3pMeOkyINYtqLVrSXHrrE8Tmjl0Wo6mjCgvs=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5491
-X-OriginatorOrg: intel.com
+References: <20230912083800.57435-1-cerasuolodomenico@gmail.com> <20230912101802.25b280ac306694ff02001706@linux-foundation.org>
+In-Reply-To: <20230912101802.25b280ac306694ff02001706@linux-foundation.org>
+From:   Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+Date:   Wed, 13 Sep 2023 09:17:12 +0200
+Message-ID: <CA+CLi1gtgwa7JZC_NvynOKhM59j_hYpAnc+ivTjXobOqHkQb-A@mail.gmail.com>
+Subject: Re: [PATCH] selftests: cgroup: fix test_zswap error path and
+ meaningless check
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     dan.carpenter@linaro.org, kernel-team@meta.com,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2023-09-12 at 09:00:28 -0700, Reinette Chatre wrote:
->Hi Maciej,
+On Tue, Sep 12, 2023 at 7:18=E2=80=AFPM Andrew Morton <akpm@linux-foundatio=
+n.org> wrote:
 >
->On 9/11/2023 11:32 PM, Maciej Wieczór-Retman wrote:
->> On 2023-09-11 at 09:59:06 -0700, Reinette Chatre wrote:
->>> Hi Maciej,
->>> When I build the tests with this applied I encounter the following:
->>>
->>> resctrlfs.c: In function ‘write_schemata’:
->>> resctrlfs.c:475:14: warning: implicit declaration of function ‘open’; did you mean ‘popen’? [-Wimplicit-function-declaration]
->>>  475 |         fd = open(controlgroup, O_WRONLY);
->>>      |              ^~~~
->>>      |              popen
->>> resctrlfs.c:475:33: error: ‘O_WRONLY’ undeclared (first use in this function)
->>>  475 |         fd = open(controlgroup, O_WRONLY);
->>>      |                                 ^~~~~~~~
->>> resctrlfs.c:475:33: note: each undeclared identifier is reported only once for each function it appears in
->> 
->> Hmm, that's odd. How do you build the tests?
+> On Tue, 12 Sep 2023 10:38:00 +0200 Domenico Cerasuolo <cerasuolodomenico@=
+gmail.com> wrote:
 >
->I applied this series on top of kselftest repo's "next" branch.
+> > Replace destruction paths with simple returns before the test cgroup is
+> > created, there is nothing to free or destroy at that point.
+> >
+> > Remove pointless check, stored_pages is a size_t and cannot be < 0.
+> >
+> > ...
+> >
+> > @@ -208,8 +208,6 @@ static int test_no_kmem_bypass(const char *root)
+> >               free(trigger_allocation);
+> >               if (get_zswap_stored_pages(&stored_pages))
+> >                       break;
+> > -             if (stored_pages < 0)
+> > -                     break;
+> >               /* If memory was pushed to zswap, verify it belongs to me=
+mcg */
+> >               if (stored_pages > stored_pages_threshold) {
+> >                       int zswapped =3D cg_read_key_long(test_group, "me=
+mory.stat", "zswapped ");
 >
->I use a separate build directory and first ran "make headers". After that,
->$ make O=<build dir> -C tools/testing/selftests/resctrl
+> stored_pages will be set to -1 on error.  It would be better to cast
+> stored_pages to ssize_t in the check, rather than simply ignoring
+> errors?
 
-I do the same, just without the build directory, but that shouldn't
-matter here I guess.
-
->> I use "make -C tools/testing/selftests/resctrl" while in the root kernel
->> source directory. I tried to get the same error you experienced by
->> compiling some dummy test program with "open" and "O_WRONLY". From the
->> experiment I found that the "resctrl.h" header provides the declarations
->> that are causing your errors.
->
->From what I can tell resctrl.h does not include fcntl.h that provides
->what is needed.
-
-I found out you can run "gcc -M <file>" and it will recursively tell you
-what headers are including other headers.
-
-Using this I found that "resctrl.h" includes <sys/mount.h> which in turn
-includes <fcntl.h> out of /usr/include/sys directory. Is that also the
-case on your system?
-
--- 
-Kind regards
-Maciej Wieczór-Retman
+I'm not sure I understood, isn't it safe to just rely on the return value o=
+f
+get_zswap_stored_pages a few lines above? In that case we break the loop an=
+d
+the value of stored_pages is not used.
