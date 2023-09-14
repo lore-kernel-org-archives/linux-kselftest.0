@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18078EEAA7C
-	for <linux-kselftest@archiver.kernel.org>; Thu, 14 Sep 2023 22:16:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 56912EEAA7A
+	for <linux-kselftest@archiver.kernel.org>; Thu, 14 Sep 2023 22:16:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbjINWQn (ORCPT
+        id S230114AbjINWQs (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 14 Sep 2023 18:16:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37826 "EHLO
+        Thu, 14 Sep 2023 18:16:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbjINWQb (ORCPT
+        with ESMTP id S229931AbjINWQm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 Sep 2023 18:16:31 -0400
+        Thu, 14 Sep 2023 18:16:42 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 67ED6270B
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Sep 2023 15:15:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6DDC9271D
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Sep 2023 15:15:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1694729738;
+        s=mimecast20190719; t=1694729747;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=71Btu3XYwWZK+FmqHCgDmjFCfU/69a0+IvtQoWaiN/g=;
-        b=iX0tvl0+xK40dBRkSgAi35/lr+OTB58Xpq1Ut4qlJCnXo1ueHBlLeZgav2ui6wgYH1uzwf
-        g+gE8XU7jsnfcixwPHKs2sd4/xCbsNO6mFGoI3p7mjVka13NPfJTdnUh7sxlkG3H6J7s8M
-        Dn9zgJnPN3iSH86I8xqXGIcL2RWmAec=
+        bh=0wrDnIJNvyLeCaZ76kAPm12sjpZAz+xrWcuHtRTLq38=;
+        b=Es9zOP1UM4DHBtAhVGI8R82vP+q3cfyKv7tapYBvG5YdIXBd/sk+sUqMrXZScMI3QNR7SX
+        i4s6k6WwYSl5wsRMShEjA01X86Qwqq9Rbdvn/14AuNN4d0w6PLHUOHKnH4KHEp5PGJoL38
+        5jq/Zu18O891VjZljr2xxltL2efqr1w=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-611-xSilx-EINMK-s9yGWPKnCA-1; Thu, 14 Sep 2023 18:15:34 -0400
-X-MC-Unique: xSilx-EINMK-s9yGWPKnCA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+ us-mta-489-UiPT6vSiMGSaaoOG4V0fzA-1; Thu, 14 Sep 2023 18:15:43 -0400
+X-MC-Unique: UiPT6vSiMGSaaoOG4V0fzA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 855E3857A9C;
-        Thu, 14 Sep 2023 22:15:33 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 919D8857A9E;
+        Thu, 14 Sep 2023 22:15:42 +0000 (UTC)
 Received: from warthog.procyon.org.com (unknown [10.42.28.216])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2331E2026D4B;
-        Thu, 14 Sep 2023 22:15:31 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3A6DF40C2070;
+        Thu, 14 Sep 2023 22:15:40 +0000 (UTC)
 From:   David Howells <dhowells@redhat.com>
 To:     Al Viro <viro@zeniv.linux.org.uk>,
         Linus Torvalds <torvalds@linux-foundation.org>
@@ -52,30 +52,24 @@ Cc:     David Howells <dhowells@redhat.com>, Jens Axboe <axboe@kernel.dk>,
         linux-block@vger.kernel.org, linux-mm@kvack.org,
         netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
         kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        Johannes Thumshirn <Johannes.Thumshirn@wdc.com>,
         Christian Brauner <brauner@kernel.org>,
         David Hildenbrand <david@redhat.com>,
         John Hubbard <jhubbard@nvidia.com>
-Subject: [RFC PATCH 1/9] iov_iter: Fix some checkpatch complaints in kunit tests
-Date:   Thu, 14 Sep 2023 23:15:18 +0100
-Message-ID: <20230914221526.3153402-2-dhowells@redhat.com>
+Subject: [RFC PATCH 4/9] iov_iter: Consolidate bvec pattern checking
+Date:   Thu, 14 Sep 2023 23:15:21 +0100
+Message-ID: <20230914221526.3153402-5-dhowells@redhat.com>
 In-Reply-To: <20230914221526.3153402-1-dhowells@redhat.com>
 References: <20230914221526.3153402-1-dhowells@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Fix some checkpatch complaints in the new iov_iter kunit tests:
+Make the BVEC-testing functions use the consolidated pattern checking
+functions to reduce the amount of duplicated code.
 
- (1) Some lines had eight spaces instead of a tab at the start.
-
- (2) Checkpatch doesn't like (void*)(unsigned long)0xnnnnnULL, so switch to
-     using POISON_POINTER_DELTA plus an offset instead.
-
-Reported-by: Johannes Thumshirn <Johannes.Thumshirn@wdc.com>
 Signed-off-by: David Howells <dhowells@redhat.com>
 cc: Christoph Hellwig <hch@lst.de>
 cc: Christian Brauner <brauner@kernel.org>
@@ -90,56 +84,107 @@ cc: kunit-dev@googlegroups.com
 cc: linux-mm@kvack.org
 cc: linux-fsdevel@vger.kernel.org
 ---
- lib/kunit_iov_iter.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ lib/kunit_iov_iter.c | 42 +++++++++++-------------------------------
+ 1 file changed, 11 insertions(+), 31 deletions(-)
 
 diff --git a/lib/kunit_iov_iter.c b/lib/kunit_iov_iter.c
-index 859b67c4d697..4a6c0efd33f5 100644
+index 4925ca37cde6..eb86371b67d0 100644
 --- a/lib/kunit_iov_iter.c
 +++ b/lib/kunit_iov_iter.c
-@@ -53,7 +53,7 @@ static void *__init iov_kunit_create_buffer(struct kunit *test,
- 	void *buffer;
+@@ -107,9 +107,11 @@ static void iov_kunit_build_to_reference_pattern(struct kunit *test, u8 *scratch
+ 	int i, patt = 0;
  
- 	pages = kunit_kcalloc(test, npages, sizeof(struct page *), GFP_KERNEL);
--        KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pages);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pages);
- 	*ppages = pages;
+ 	memset(scratch, 0, bufsize);
+-	for (; pr->page >= 0; pr++)
++	for (; pr->page >= 0; pr++) {
++		u8 *p = scratch + pr->page * PAGE_SIZE;
+ 		for (i = pr->from; i < pr->to; i++)
+-			scratch[i] = pattern(patt++);
++			p[i] = pattern(patt++);
++	}
+ }
  
- 	got = alloc_pages_bulk_array(GFP_KERNEL, npages, pages);
-@@ -63,7 +63,7 @@ static void *__init iov_kunit_create_buffer(struct kunit *test,
- 	}
+ /*
+@@ -124,8 +126,10 @@ static void iov_kunit_build_from_reference_pattern(struct kunit *test, u8 *buffe
  
- 	buffer = vmap(pages, npages, VM_MAP | VM_MAP_PUT_PAGES, PAGE_KERNEL);
--        KUNIT_ASSERT_NOT_ERR_OR_NULL(test, buffer);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, buffer);
+ 	memset(buffer, 0, bufsize);
+ 	for (; pr->page >= 0; pr++) {
++		size_t patt = pr->page * PAGE_SIZE;
++
+ 		for (j = pr->from; j < pr->to; j++) {
+-			buffer[i++] = pattern(j);
++			buffer[i++] = pattern(patt + j);
+ 			if (i >= bufsize)
+ 				return;
+ 		}
+@@ -287,13 +291,12 @@ static void __init iov_kunit_load_bvec(struct kunit *test,
+  */
+ static void __init iov_kunit_copy_to_bvec(struct kunit *test)
+ {
+-	const struct iov_kunit_range *pr;
+ 	struct iov_iter iter;
+ 	struct bio_vec bvec[8];
+ 	struct page **spages, **bpages;
+ 	u8 *scratch, *buffer;
+ 	size_t bufsize, npages, size, copied;
+-	int i, patt;
++	int i;
  
- 	kunit_add_action_or_reset(test, iov_kunit_unmap, buffer);
- 	return buffer;
-@@ -548,7 +548,7 @@ static void __init iov_kunit_extract_pages_kvec(struct kunit *test)
- 		size_t offset0 = LONG_MAX;
+ 	bufsize = 0x100000;
+ 	npages = bufsize / PAGE_SIZE;
+@@ -315,16 +318,7 @@ static void __init iov_kunit_copy_to_bvec(struct kunit *test)
+ 	KUNIT_EXPECT_EQ(test, iter.count, 0);
+ 	KUNIT_EXPECT_EQ(test, iter.nr_segs, 0);
  
- 		for (i = 0; i < ARRAY_SIZE(pagelist); i++)
--			pagelist[i] = (void *)(unsigned long)0xaa55aa55aa55aa55ULL;
-+			pagelist[i] = (void *)POISON_POINTER_DELTA + 0x5a;
+-	/* Build the expected image in the scratch buffer. */
+-	patt = 0;
+-	memset(scratch, 0, bufsize);
+-	for (pr = bvec_test_ranges; pr->page >= 0; pr++) {
+-		u8 *p = scratch + pr->page * PAGE_SIZE;
+-
+-		for (i = pr->from; i < pr->to; i++)
+-			p[i] = pattern(patt++);
+-	}
+-
++	iov_kunit_build_to_reference_pattern(test, scratch, bufsize, bvec_test_ranges);
+ 	iov_kunit_check_pattern(test, buffer, scratch, bufsize);
+ 	KUNIT_SUCCEED();
+ }
+@@ -334,13 +328,12 @@ static void __init iov_kunit_copy_to_bvec(struct kunit *test)
+  */
+ static void __init iov_kunit_copy_from_bvec(struct kunit *test)
+ {
+-	const struct iov_kunit_range *pr;
+ 	struct iov_iter iter;
+ 	struct bio_vec bvec[8];
+ 	struct page **spages, **bpages;
+ 	u8 *scratch, *buffer;
+ 	size_t bufsize, npages, size, copied;
+-	int i, j;
++	int i;
  
- 		len = iov_iter_extract_pages(&iter, &pages, 100 * 1024,
- 					     ARRAY_SIZE(pagelist), 0, &offset0);
-@@ -626,7 +626,7 @@ static void __init iov_kunit_extract_pages_bvec(struct kunit *test)
- 		size_t offset0 = LONG_MAX;
+ 	bufsize = 0x100000;
+ 	npages = bufsize / PAGE_SIZE;
+@@ -362,20 +355,7 @@ static void __init iov_kunit_copy_from_bvec(struct kunit *test)
+ 	KUNIT_EXPECT_EQ(test, iter.count, 0);
+ 	KUNIT_EXPECT_EQ(test, iter.nr_segs, 0);
  
- 		for (i = 0; i < ARRAY_SIZE(pagelist); i++)
--			pagelist[i] = (void *)(unsigned long)0xaa55aa55aa55aa55ULL;
-+			pagelist[i] = (void *)POISON_POINTER_DELTA + 0x5a;
- 
- 		len = iov_iter_extract_pages(&iter, &pages, 100 * 1024,
- 					     ARRAY_SIZE(pagelist), 0, &offset0);
-@@ -709,7 +709,7 @@ static void __init iov_kunit_extract_pages_xarray(struct kunit *test)
- 			size_t offset0 = LONG_MAX;
- 
- 			for (i = 0; i < ARRAY_SIZE(pagelist); i++)
--				pagelist[i] = (void *)(unsigned long)0xaa55aa55aa55aa55ULL;
-+				pagelist[i] = (void *)POISON_POINTER_DELTA + 0x5a;
- 
- 			len = iov_iter_extract_pages(&iter, &pages, 100 * 1024,
- 						     ARRAY_SIZE(pagelist), 0, &offset0);
+-	/* Build the expected image in the main buffer. */
+-	i = 0;
+-	memset(buffer, 0, bufsize);
+-	for (pr = bvec_test_ranges; pr->page >= 0; pr++) {
+-		size_t patt = pr->page * PAGE_SIZE;
+-
+-		for (j = pr->from; j < pr->to; j++) {
+-			buffer[i++] = pattern(patt + j);
+-			if (i >= bufsize)
+-				goto stop;
+-		}
+-	}
+-stop:
+-
++	iov_kunit_build_from_reference_pattern(test, buffer, bufsize, bvec_test_ranges);
+ 	iov_kunit_check_pattern(test, buffer, scratch, bufsize);
+ 	KUNIT_SUCCEED();
+ }
 
