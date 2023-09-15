@@ -2,103 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BD7EEE645B
-	for <linux-kselftest@archiver.kernel.org>; Fri, 15 Sep 2023 12:23:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7168BEE645A
+	for <linux-kselftest@archiver.kernel.org>; Fri, 15 Sep 2023 12:37:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234903AbjIOMX1 (ORCPT
+        id S234959AbjIOMhK (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 15 Sep 2023 08:23:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41720 "EHLO
+        Fri, 15 Sep 2023 08:37:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234871AbjIOMXV (ORCPT
+        with ESMTP id S234961AbjIOMhG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 15 Sep 2023 08:23:21 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBCDC268E;
-        Fri, 15 Sep 2023 05:23:08 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8E1BC433C9;
-        Fri, 15 Sep 2023 12:23:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694780588;
-        bh=PRDjBgGWGghQhg/tWPb7ZH7iDykrzxmqhs+gMi1vJbU=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=UxTbdnVzk/rl5KN+mfS/89f0Dw9IHQShwifrRADrhMRVqYSF2hnVh+EPqAW12jQsO
-         9NrfvN3/tA1TlRFZ7RMii9GnuAvZqYcD1CDYtQ01RCLN8g4qse4QUPFvAstXZ9W9Nj
-         gTb8MQbG19B66JbkMRZuVBdfYFXH8gfm031BuiOYUQGrlbNY33KMQdSZCUmgg4sN6e
-         1qJOwdYq7Gj6g5ZgaoY1RcsTWHYOe6TBlOMjD1N3eFvgvx+tWswstfhGdThTuhLETL
-         aS/REbNFaSrCngkOy1OwD38ysS4jDEqy8DpjYyip20qPq1dGZl4sn9CoFC2H+QFqy4
-         QfVSAMKtnPS/g==
-From:   Mark Brown <broonie@kernel.org>
-Date:   Fri, 15 Sep 2023 13:18:07 +0100
-Subject: [PATCH 2/2] kselftest/arm64: Verify HWCAP2_SVE_B16B16
+        Fri, 15 Sep 2023 08:37:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4F1E9DD
+        for <linux-kselftest@vger.kernel.org>; Fri, 15 Sep 2023 05:36:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1694781376;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hiYpz5dXhxfUZTQa6zmGlfzr3xCWWU+duccDm51H4g4=;
+        b=VFdUfudYlw9pIAdYR5pJ0Q0tIm2kLUqoCgR5ns6wzND0LjuPmRQBYmmC1ne7UzzMZyPrsS
+        alnoirfERGa8ajL9W3zTeZFb2YBAWAMHGBL+c09PrB4Z9BYpoGslXIgiKMEv7B7Vp0TlKo
+        c22rHEGTRavwPdgZWTi/nNzOJLAskFw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-151-cqmwHRoKMT67BfSo_FuhuQ-1; Fri, 15 Sep 2023 08:36:10 -0400
+X-MC-Unique: cqmwHRoKMT67BfSo_FuhuQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2E060811E86;
+        Fri, 15 Sep 2023 12:36:09 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.216])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id BB98F200BFE3;
+        Fri, 15 Sep 2023 12:36:06 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <72e93605b28742c2a496ce4890ecaa80@AcuMS.aculab.com>
+References: <72e93605b28742c2a496ce4890ecaa80@AcuMS.aculab.com> <5017b9fa177f4deaa5d481a5d8914ab4@AcuMS.aculab.com> <dcc6543d71524ac488ca2a56dd430118@AcuMS.aculab.com> <20230914221526.3153402-1-dhowells@redhat.com> <20230914221526.3153402-10-dhowells@redhat.com> <3370515.1694772627@warthog.procyon.org.uk> <3449352.1694776980@warthog.procyon.org.uk>
+To:     David Laight <David.Laight@ACULAB.COM>
+Cc:     dhowells@redhat.com, Al Viro <viro@zeniv.linux.org.uk>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>, "Christoph Hellwig" <hch@lst.de>,
+        Christian Brauner <christian@brauner.io>,
+        "Matthew Wilcox" <willy@infradead.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "kunit-dev@googlegroups.com" <kunit-dev@googlegroups.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        "David Hildenbrand" <david@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: Re: [RFC PATCH 9/9] iov_iter: Add benchmarking kunit tests for UBUF/IOVEC
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230915-arm64-zfr-b16b16-el0-v1-2-f9aba807bdb5@kernel.org>
-References: <20230915-arm64-zfr-b16b16-el0-v1-0-f9aba807bdb5@kernel.org>
-In-Reply-To: <20230915-arm64-zfr-b16b16-el0-v1-0-f9aba807bdb5@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.13-dev-034f2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1151; i=broonie@kernel.org;
- h=from:subject:message-id; bh=PRDjBgGWGghQhg/tWPb7ZH7iDykrzxmqhs+gMi1vJbU=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBlBEyh1Q1DxfXjmIM7NFRHNM28YeA0Up8sAZxwpEBS
- 4xytz1yJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZQRMoQAKCRAk1otyXVSH0MtfB/
- 0dvicZBlBgZ+uDGQ4PBgtDBYjKlsrCXDnBnj56PbVHU5UQHrG8MeMq3H+0kVYDFV6RWi7EM2epLgK9
- o5Ta85uCkZ3loQvECa0hIwiYB1AsZXhABAGs+Gy84UtgtFooW509jKu8BGSdhoaNFO19TdV7XbfIwp
- Q41i8vhrx7p2vt/Ytcgt4qY5Zd9VH2MXk/dkeI6KZwQr5yVWQ5i2VK2ZiXXs/+YInmfOFls0pgGUub
- jSd+Ht1wO7VJYUiJUkJSaZQez5y+dGcmMSsSyY31C27RE0OniqLGinnluJ3JwrTVYvGrJDwqVRjuJM
- suABRzG539sdZdoSd2y3JMh5M0hpfD
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <3585403.1694781366.1@warthog.procyon.org.uk>
+Date:   Fri, 15 Sep 2023 13:36:06 +0100
+Message-ID: <3585404.1694781366@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Validate that SVE B16B16 support is reported correctly and consistently to
-userspace.
+David Laight <David.Laight@ACULAB.COM> wrote:
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/arm64/abi/hwcap.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+> I was thinking of import_iovec() - or whatever its current
+> name is.
 
-diff --git a/tools/testing/selftests/arm64/abi/hwcap.c b/tools/testing/selftests/arm64/abi/hwcap.c
-index e3d262831d91..d8a144213d04 100644
---- a/tools/testing/selftests/arm64/abi/hwcap.c
-+++ b/tools/testing/selftests/arm64/abi/hwcap.c
-@@ -226,6 +226,12 @@ static void sveaes_sigill(void)
- 	asm volatile(".inst 0x4522e400" : : : "z0");
- }
- 
-+static void sveb16b16_sigill(void)
-+{
-+	/* BFADD ZA.H[W0, 0], {Z0.H-Z1.H} */
-+	asm volatile(".inst 0xC1E41C00" : : : );
-+}
-+
- static void svepmull_sigill(void)
- {
- 	/* PMULLB Z0.Q, Z0.D, Z0.D */
-@@ -493,6 +499,13 @@ static const struct hwcap_data {
- 		.cpuinfo = "sveaes",
- 		.sigill_fn = sveaes_sigill,
- 	},
-+	{
-+		.name = "SVE2 B16B16",
-+		.at_hwcap = AT_HWCAP2,
-+		.hwcap_bit = HWCAP2_SVE_B16B16,
-+		.cpuinfo = "sveb16b16",
-+		.sigill_fn = sveb16b16_sigill,
-+	},
- 	{
- 		.name = "SVE2 PMULL",
- 		.at_hwcap = AT_HWCAP2,
+That doesn't actually access the buffer described by the iovec[].
 
--- 
-2.30.2
+> That really needs a single structure that contains the iov_iter
+> and the cache[] (which the caller pretty much always allocates
+> in the same place).
+
+cache[]?
+
+> Fiddling with that is ok until you find what io_uring does.
+> Then it all gets entirely horrid.
+
+That statement sounds like back-of-the-OLS-T-shirt material ;-)
+
+David
 
