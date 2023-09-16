@@ -2,34 +2,34 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A6186CD37BA
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C735CCD37BD
 	for <linux-kselftest@archiver.kernel.org>; Sat, 16 Sep 2023 07:14:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238817AbjIPHO0 (ORCPT
+        id S233357AbjIPHO0 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Sat, 16 Sep 2023 03:14:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58524 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231906AbjIPHN5 (ORCPT
+        with ESMTP id S231889AbjIPHN4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 16 Sep 2023 03:13:57 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6C73CD8;
-        Sat, 16 Sep 2023 00:13:49 -0700 (PDT)
+        Sat, 16 Sep 2023 03:13:56 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A03C11BC7;
+        Sat, 16 Sep 2023 00:13:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
         s=mail; t=1694848422;
-        bh=N0u5CeBhd0jeZ72RH1KvQRJvme7lnR8v86eiHR768eA=;
+        bh=HuKIsAyLFmZmHBEu40qJ+1hV5Zu0Xnhs4WVhae5Lnlk=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=augLYVjbQcljGggD5qeSqYYRU5WC7gfXQEiSnnCrypztUS3jhu2zLHTz/2dS/JyYE
-         o+RlvUUAomea51gY787k3m90sbwPo2kWvivjFSoxH6IinQSKPN2KnGqiN3p6z/pijy
-         6ntMLymfLzmK329uMjt861kPaOq0RPPQM3U89xgQ=
+        b=UABtFaabbXO8SbirT/kI4iR1QM2pkgAqQ+w7eIW7IdbX8h4v0YYjd5C9FR47ixMgq
+         8Kzva2sxm5JkNOJ2ft+cmFL3JPtvXDmtCzdqVmKCgkGP221/hobrIwbveyQS28yf81
+         XxZkf7lfJ+dAFW25za7OuQNQZzNqVZ7z4Xh6U3Bw=
 From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date:   Sat, 16 Sep 2023 09:13:27 +0200
-Subject: [PATCH RFC 1/3] kbuild: add toplevel target for usr/gen_init_cpio
+Date:   Sat, 16 Sep 2023 09:13:29 +0200
+Subject: [PATCH RFC 3/3] selftests/nolibc: drop target "rerun"
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20230916-nolibc-initramfs-v1-1-4416ecedca6d@weissschuh.net>
+Message-Id: <20230916-nolibc-initramfs-v1-3-4416ecedca6d@weissschuh.net>
 References: <20230916-nolibc-initramfs-v1-0-4416ecedca6d@weissschuh.net>
 In-Reply-To: <20230916-nolibc-initramfs-v1-0-4416ecedca6d@weissschuh.net>
 To:     Masahiro Yamada <masahiroy@kernel.org>,
@@ -41,49 +41,48 @@ Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
         =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1694848421; l=887;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1694848421; l=1248;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=N0u5CeBhd0jeZ72RH1KvQRJvme7lnR8v86eiHR768eA=;
- b=D/hhNRXl2GztEC1PQG3thapDENVP/CxmF97SvrXxLGAzYCCHDXpFLXQBLdh/P/leibxfDH+yN
- 5qLcNhqpDb9BB9AnpCG8CBg082F5DayoQ4Wwasi2WdoTwtDoM3J8a0W
+ bh=HuKIsAyLFmZmHBEu40qJ+1hV5Zu0Xnhs4WVhae5Lnlk=;
+ b=2btfW1pmngj98gPHBzBmyfY828dC96EUdzPmE3JwmSsRA3/LEXZl1R4xP7vuHIPHZVC/7bGem
+ bxgIFHXU/cNAIXaWKHvMpdY13KvWcL/mvFbqUHq9zCmC+53X4Ji0T1f
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The nolibc testsuite wants to generate an initrams without linking it
-into the kernel for which it needs access to gen_init_cpio.
-Add a new toplevel target for it so it can be built standalone.
+Now that the target "run" does not relink the kernel all the time
+anymore it is much faster and we don't need "rerun" anymore.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 
 ---
 
-Kbuild maintainers:
+Willy:
 
-If there is a way that does not require modification of the toplevel
-Makefile that would be nice, too.
-I followed the example of the "scripts_unifdef" target.
+This is an optional commit, "rerun" is still a bit faster than "run".
+Also maybe it should be squashed into the previous commit.
 ---
- Makefile | 4 ++++
- 1 file changed, 4 insertions(+)
+ tools/testing/selftests/nolibc/Makefile | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index ceb23eed4dce..1caa4429eceb 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1812,6 +1812,10 @@ endif
+diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+index c62efc62a060..ca9ec9c6f2f4 100644
+--- a/tools/testing/selftests/nolibc/Makefile
++++ b/tools/testing/selftests/nolibc/Makefile
+@@ -212,11 +212,6 @@ run: kernel initramfs.cpio
+ 	qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -initrd initramfs.cpio -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
+ 	$(Q)$(REPORT) $(CURDIR)/run.out
  
- endif # KBUILD_EXTMOD
- 
-+PHONY += usr_gen_init_cpio
-+usr_gen_init_cpio:
-+	$(Q)$(MAKE) $(build)=usr usr/gen_init_cpio
-+
- # ---------------------------------------------------------------------------
- # Modules
- 
+-# re-run the tests from an existing kernel
+-rerun:
+-	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -initrd initramfs.cpio -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
+-	$(Q)$(REPORT) $(CURDIR)/run.out
+-
+ # report with existing test log
+ report:
+ 	$(Q)$(REPORT) $(CURDIR)/run.out
 
 -- 
 2.42.0
