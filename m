@@ -2,109 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DFD6FCD13CF
-	for <linux-kselftest@archiver.kernel.org>; Sun, 17 Sep 2023 21:44:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E1E0C46CA1
+	for <linux-kselftest@archiver.kernel.org>; Mon, 18 Sep 2023 05:12:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239092AbjIQVoQ (ORCPT
+        id S231475AbjIRFMG (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 17 Sep 2023 17:44:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52622 "EHLO
+        Mon, 18 Sep 2023 01:12:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239228AbjIQVnq (ORCPT
+        with ESMTP id S236290AbjIRFL4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 17 Sep 2023 17:43:46 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA828130
-        for <linux-kselftest@vger.kernel.org>; Sun, 17 Sep 2023 14:43:40 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1c39f2b4f5aso26930495ad.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 17 Sep 2023 14:43:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google; t=1694987020; x=1695591820; darn=vger.kernel.org;
-        h=thread-index:content-language:content-transfer-encoding
-         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=EjYEVDeyXWGRfU5iV7LvJBf6c7N982G1lGvpbIPmcJ8=;
-        b=KX8FblGrPINTGWJ+F+2OsLf/gAyXu98qR4yxI8s4WMVP0eTwMSfN6urkULb+FAZHtd
-         rxzE+RJAhk50qj6AOC0t/OjpLK0vLxPsruIpQMsdUd0B5RfFHJTZ1NfRtGW2GNiwwAmX
-         IQoHt9NRjqo7K0Yp7DjoEcV1TkJ9bGCmHIy49f9WKA8octbvKA/t1MtXI2yp6ZSVxCta
-         IWXLEZewwro8H7U0M0RTvddQQjcFbDpSM6KTad4o/86uHXJazghPsvMQ/xXX8r6e1XTs
-         c3J4COS3Wg46b4qkzZa6C2nxw7P/ZSrlehVzVRaYPFL6yaG7lBnDr4hdpFW+jN2Iyygf
-         nOTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694987020; x=1695591820;
-        h=thread-index:content-language:content-transfer-encoding
-         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EjYEVDeyXWGRfU5iV7LvJBf6c7N982G1lGvpbIPmcJ8=;
-        b=gEOsgG5zMcXnkf+zXxGNWGBWg2Eyx45jBUXYBlYBcO6LlAcoNnfb3ML4Lp16MnAP2Z
-         KBzu29LbsfuM9QryN5Jh5x7InANqqLHMgHreVAsMzUYErLtDO9NeaJaX0LwRSBV+CUZX
-         qOhxGjlA1uL7o/YjcPigQN3IQvzdhIoDpjDuGq2UZo68Pl6YP6kbSpBEyxYxinLOB8tn
-         HCNg1MgzLArhKJ4+8t3qaWRCp/lMIHq8soukOutFlFDudBF/SqN1UJfOZI/7mGlw7ClZ
-         S7FZHG7zQN/V/iLfxnnuGIA77e6t4RkyhRxKT3wrsvjVxRX2XayvnYFwYwfqM1N/xGcR
-         pxGA==
-X-Gm-Message-State: AOJu0YwWmMq+TiLOvbL0z7eskRSyM5TVjmtded6rOBH5ccWbu/VxKbew
-        Y3oNIuyQE+NdONq4ySR8cpYnvg==
-X-Google-Smtp-Source: AGHT+IFfMGfQ5zQmDSFheljxqnHWoOfv4bT82d7KBJ5y1wKvmf3MnOTX9NMedjj7EKPWak+DvfqHCA==
-X-Received: by 2002:a17:903:25ca:b0:1c4:48c4:969b with SMTP id jc10-20020a17090325ca00b001c448c4969bmr4358364plb.52.1694987020400;
-        Sun, 17 Sep 2023 14:43:40 -0700 (PDT)
-Received: from DougS18 (s66-183-142-209.bc.hsia.telus.net. [66.183.142.209])
-        by smtp.gmail.com with ESMTPSA id h21-20020a170902f7d500b001ae0a4b1d3fsm7047393plw.153.2023.09.17.14.43.39
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 17 Sep 2023 14:43:39 -0700 (PDT)
-From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'Mario Limonciello'" <mario.limonciello@amd.com>,
-        "'Swapnil Sapkal'" <swapnil.sapkal@amd.com>
-Cc:     <rafael.j.wysocki@intel.com>, <Ray.Huang@amd.com>,
-        <li.meng@amd.com>, <shuah@kernel.org>, <sukrut.bellary@gmail.com>,
-        <gautham.shenoy@amd.com>, <wyes.karny@amd.com>,
-        <Perry.Yuan@amd.com>, <zwisler@chromium.org>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>,
-        "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>,
-        "Doug Smythies" <dsmythies@telus.net>
-References: <20230915104057.132210-1-swapnil.sapkal@amd.com>    <20230915104057.132210-3-swapnil.sapkal@amd.com>        <00b201d9e819$b2447e80$16cd7b80$@telus.net>     <2fd025a9-52f3-4922-99cf-82355b0e35fe@amd.com> <CAAYoRsUhusVzOnaGHjPoMWYy2_iPFAjFLoCrj6vSX26EHNWGiw@mail.gmail.com>
-In-Reply-To: <CAAYoRsUhusVzOnaGHjPoMWYy2_iPFAjFLoCrj6vSX26EHNWGiw@mail.gmail.com>
-Subject: RE: [PATCH 2/2] tools/power/x86/intel_pstate_tracer: Use pygnuplot package for Gnuplot
-Date:   Sun, 17 Sep 2023 14:43:42 -0700
-Message-ID: <001c01d9e9b0$073fadf0$15bf09d0$@telus.net>
+        Mon, 18 Sep 2023 01:11:56 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7BED10F;
+        Sun, 17 Sep 2023 22:11:50 -0700 (PDT)
+Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4RptBw4rnmz15Mq8;
+        Mon, 18 Sep 2023 13:09:44 +0800 (CST)
+Received: from huawei.com (10.90.53.73) by kwepemi500008.china.huawei.com
+ (7.221.188.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Mon, 18 Sep
+ 2023 13:11:47 +0800
+From:   Jinjie Ruan <ruanjinjie@huawei.com>
+To:     <sj@kernel.org>, <akpm@linux-foundation.org>,
+        <brendan.higgins@linux.dev>, <feng.tang@intel.com>,
+        <damon@lists.linux.dev>, <linux-mm@kvack.org>,
+        <kunit-dev@googlegroups.com>, <linux-kselftest@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <ruanjinjie@huawei.com>
+Subject: [PATCH RESEND 0/2] mm/damon/core-test: Fix memory leaks in core-test
+Date:   Mon, 18 Sep 2023 13:10:42 +0800
+Message-ID: <20230918051044.3814018-1-ruanjinjie@huawei.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: en-ca
-Thread-Index: AQKwVkrK5CGttHhKf0ienv16Lobu0QKE+b5tAruzzQ4BoCijAABix5Z4rjiS0sA=
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.90.53.73]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemi500008.china.huawei.com (7.221.188.139)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2023.09.17 15:17 Doug wrote:
-> On Fri, Sep 15, 2023 at 2:31=E2=80=AFPM Mario Limonciello
->> On 9/15/2023 16:15, Doug Smythies wrote:
->>> On 2023.09.15 03:41 Swapnil Sapkal wrote:
-...
->>> Not really related, but for a few years now I have been meaning to
->>> change the minimum python version prerequisite to >=3D 3.0 and
->>> to change the shebang line.
-...
->>  Besides the shebang, you should also
->> use a helper like 2to3 to look for any other changes.
+There are a few memory leak in core-test which is detected by kmemleak,
+the patch set fix the above issue.
 
-Hi Mario,
+Jinjie Ruan (2):
+  mm/damon/core-test: Fix memory leak in damon_new_region()
+  mm/damon/core-test: Fix memory leak in damon_new_ctx()
 
-I was not aware of the 2to3 helper.
-Thank you mentioning it.
-The 2to3 helper only changed one line,
-which I included in the minimum python version
-patch I just submitted.
+ mm/damon/core-test.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-> I already did the python 3 patch in January, 2020:
-> commit e749e09db30c38f1a275945814b0109e530a07b0
-> tools/power/x86/intel_pstate_tracer: changes for python 3 =
-compatibility
->=20
-> I haven't had any issues since, shebang aside.
-
-... Doug
-
+-- 
+2.34.1
 
