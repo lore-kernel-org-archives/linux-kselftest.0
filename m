@@ -2,40 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95141CD5BA7
-	for <linux-kselftest@archiver.kernel.org>; Tue, 19 Sep 2023 12:17:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B5279CD5BAA
+	for <linux-kselftest@archiver.kernel.org>; Tue, 19 Sep 2023 12:17:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231803AbjISMRn (ORCPT
+        id S231945AbjISMRo (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 19 Sep 2023 08:17:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60110 "EHLO
+        Tue, 19 Sep 2023 08:17:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232038AbjISMR1 (ORCPT
+        with ESMTP id S232043AbjISMR1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Tue, 19 Sep 2023 08:17:27 -0400
-Received: from mail.avm.de (mail.avm.de [212.42.244.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A228CFF;
-        Tue, 19 Sep 2023 05:16:37 -0700 (PDT)
-Received: from mail-auth.avm.de (unknown [IPv6:2001:bf0:244:244::71])
+Received: from mail.avm.de (mail.avm.de [212.42.244.94])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903E7CF5;
+        Tue, 19 Sep 2023 05:16:36 -0700 (PDT)
+Received: from mail-auth.avm.de (dovecot-mx-01.avm.de [212.42.244.71])
         by mail.avm.de (Postfix) with ESMTPS;
         Tue, 19 Sep 2023 14:16:34 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
-        t=1695125794; bh=4WWlKNadMGkTnmL4PvXNuKsmDGQzVnZw8UxCfJCcdGo=;
+        t=1695125794; bh=FwyAToRIE29YQYTXCZD36dnr5jrFFg1GpuCyJILagjE=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=AQhHrDYWb6C5/W81I+QHjRKyGz9lFv7uqkddFFFLGz4p7PDwnoRUFQBdFQcmaU3Vh
-         4iGpkpELubYLVuPqKg5TGMUyr/xqsodyGqZMsQvIruePXSkTr77dL27BvlDEpNYRlO
-         pv+xymiJ+XycD3vfVZa6B5UuF/OdDZbEyezHt/v4=
+        b=bDYGCiaNi2SMoB4Lq20YNO9OSX5appH2rXn5siz/Drn8RfD4iF4K36cjToWpcDfVd
+         e7nJU4MIKMYNVCEJD42MsX0LP/2rgxBnmhBJGysdHEYleoFVkLdO38xxlor72DgWLG
+         QWwGswxJmMDtXDRXD2HfMSdkTiOFUFCBZACOzzZ8=
 Received: from localhost (unknown [172.17.88.63])
-        by mail-auth.avm.de (Postfix) with ESMTPSA id B029981FF3;
+        by mail-auth.avm.de (Postfix) with ESMTPSA id 15F5981FF3;
         Tue, 19 Sep 2023 14:16:34 +0200 (CEST)
 From:   Johannes Nixdorf <jnixdorf-oss@avm.de>
-Date:   Tue, 19 Sep 2023 10:12:52 +0200
-Subject: [PATCH net-next v4 5/6] net: bridge: Add a configurable default
- FDB learning limit
+Date:   Tue, 19 Sep 2023 10:12:48 +0200
+Subject: [PATCH net-next v4 1/6] net: bridge: Set BR_FDB_ADDED_BY_USER
+ early in fdb_add_entry
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230919-fdb_limit-v4-5-39f0293807b8@avm.de>
+Message-Id: <20230919-fdb_limit-v4-1-39f0293807b8@avm.de>
 References: <20230919-fdb_limit-v4-0-39f0293807b8@avm.de>
 In-Reply-To: <20230919-fdb_limit-v4-0-39f0293807b8@avm.de>
 To:     "David S. Miller" <davem@davemloft.net>,
@@ -53,16 +53,16 @@ Cc:     bridge@lists.linux-foundation.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Johannes Nixdorf <jnixdorf-oss@avm.de>
 X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1695111167; l=1565;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1695111167; l=1376;
  i=jnixdorf-oss@avm.de; s=20230906; h=from:subject:message-id;
- bh=4WWlKNadMGkTnmL4PvXNuKsmDGQzVnZw8UxCfJCcdGo=;
- b=3HzsbfRG3KYhjoiwx/RBTjUfK2g+eK0Drdteo88S8c9J1zbRGXz4OWkMv4rEWPGO3oxFM69eM
- rnRUxWTpRKnD1uWCZGXa6BZiqvjxwL7gW+l8doEF/Z1HfVuyzdAN4D1
+ bh=FwyAToRIE29YQYTXCZD36dnr5jrFFg1GpuCyJILagjE=;
+ b=4H9SGHafMlvvhzLNe+S2ZC1itIhii7CabVi/bmpupLrRj5CyQXRME/UGIiDnlNZgJoDI3FcKL
+ 1f27fMU577fAiVdzuph2/KCHWC8a67UWmmHku7Jz7fuUjk4Pqxt9Kcl
 X-Developer-Key: i=jnixdorf-oss@avm.de; a=ed25519;
  pk=KMraV4q7ANHRrwjf9EVhvU346JsqGGNSbPKeNILOQfo=
-X-purgate-ID: 149429::1695125794-81FD3D8B-3590D177/0/0
+X-purgate-ID: 149429::1695125794-54606D5A-73B3AB27/0/0
 X-purgate-type: clean
-X-purgate-size: 1567
+X-purgate-size: 1378
 X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
 X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
 X-purgate: clean
@@ -70,53 +70,47 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a Kconfig option to configure a default FDB learning limit system
-wide, so a distributor building a special purpose kernel can limit all
-created bridges by default.
-
-The limit is only a soft default setting and overrideable on a per bridge
-basis using netlink.
+In preparation of the following fdb limit for dynamically learned entries,
+allow fdb_create to detect that the entry was added by the user. This
+way it can skip applying the limit in this case.
 
 Signed-off-by: Johannes Nixdorf <jnixdorf-oss@avm.de>
 ---
- net/bridge/Kconfig     | 13 +++++++++++++
- net/bridge/br_device.c |  2 ++
- 2 files changed, 15 insertions(+)
+ net/bridge/br_fdb.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/net/bridge/Kconfig b/net/bridge/Kconfig
-index 3c8ded7d3e84..c0d9c08088c4 100644
---- a/net/bridge/Kconfig
-+++ b/net/bridge/Kconfig
-@@ -84,3 +84,16 @@ config BRIDGE_CFM
- 	  Say N to exclude this support and reduce the binary size.
+diff --git a/net/bridge/br_fdb.c b/net/bridge/br_fdb.c
+index e69a872bfc1d..f517ea92132c 100644
+--- a/net/bridge/br_fdb.c
++++ b/net/bridge/br_fdb.c
+@@ -1056,7 +1056,8 @@ static int fdb_add_entry(struct net_bridge *br, struct net_bridge_port *source,
+ 		if (!(flags & NLM_F_CREATE))
+ 			return -ENOENT;
  
- 	  If unsure, say N.
-+
-+config BRIDGE_DEFAULT_FDB_MAX_LEARNED
-+	int "Default FDB learning limit"
-+	default 0
-+	depends on BRIDGE
-+	help
-+	  Sets a default limit on the number of learned FDB entries on
-+	  new bridges. This limit can be overwritten via netlink on a
-+	  per bridge basis.
-+
-+	  The default of 0 disables the limit.
-+
-+	  If unsure, say 0.
-diff --git a/net/bridge/br_device.c b/net/bridge/br_device.c
-index 9a5ea06236bd..3214391c15a0 100644
---- a/net/bridge/br_device.c
-+++ b/net/bridge/br_device.c
-@@ -531,6 +531,8 @@ void br_dev_setup(struct net_device *dev)
- 	br->bridge_ageing_time = br->ageing_time = BR_DEFAULT_AGEING_TIME;
- 	dev->max_mtu = ETH_MAX_MTU;
+-		fdb = fdb_create(br, source, addr, vid, 0);
++		fdb = fdb_create(br, source, addr, vid,
++				 BIT(BR_FDB_ADDED_BY_USER));
+ 		if (!fdb)
+ 			return -ENOMEM;
  
-+	br->fdb_max_learned = CONFIG_BRIDGE_DEFAULT_FDB_MAX_LEARNED;
+@@ -1069,6 +1070,8 @@ static int fdb_add_entry(struct net_bridge *br, struct net_bridge_port *source,
+ 			WRITE_ONCE(fdb->dst, source);
+ 			modified = true;
+ 		}
 +
- 	br_netfilter_rtable_init(br);
- 	br_stp_timer_init(br);
- 	br_multicast_init(br);
++		set_bit(BR_FDB_ADDED_BY_USER, &fdb->flags);
+ 	}
+ 
+ 	if (fdb_to_nud(br, fdb) != state) {
+@@ -1100,8 +1103,6 @@ static int fdb_add_entry(struct net_bridge *br, struct net_bridge_port *source,
+ 	if (fdb_handle_notify(fdb, notify))
+ 		modified = true;
+ 
+-	set_bit(BR_FDB_ADDED_BY_USER, &fdb->flags);
+-
+ 	fdb->used = jiffies;
+ 	if (modified) {
+ 		if (refresh)
 
 -- 
 2.42.0
