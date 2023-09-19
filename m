@@ -2,202 +2,87 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A74ACD54B8
-	for <linux-kselftest@archiver.kernel.org>; Tue, 19 Sep 2023 11:48:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1831ECD5BA3
+	for <linux-kselftest@archiver.kernel.org>; Tue, 19 Sep 2023 12:11:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231130AbjISLsz (ORCPT
+        id S231459AbjISML3 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 19 Sep 2023 07:48:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45372 "EHLO
+        Tue, 19 Sep 2023 08:11:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjISLsy (ORCPT
+        with ESMTP id S231489AbjISML2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Sep 2023 07:48:54 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30FF2E3;
-        Tue, 19 Sep 2023 04:48:42 -0700 (PDT)
-Received: from leknes.fjasle.eu ([46.142.99.103]) by mrelayeu.kundenserver.de
- (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MpD39-1rU32D0eCt-00qh95; Tue, 19 Sep 2023 13:47:54 +0200
-Received: by leknes.fjasle.eu (Postfix, from userid 1000)
-        id B7DBF3E9B4; Tue, 19 Sep 2023 13:47:47 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
-        t=1695124068; bh=nmeuXLZk5BWSMOsNpfSkXKF7Qd+tLy4N88pMrtO1oXU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qCmBEC4q10JGX3wyfYWBNDaMKIUnF8accmx4H16x9sZAC04P4H6r5Ka3GMfe8WRaV
-         40NxV5h3JWUlxIaDruehebrYkIRj/rNhS/0tWybDTGy1/UG3PfUvBPGYR/vjHSN8bB
-         mY9Q1iJmkvNSZYd/8PrZC54Zb87jDE1Hhin6Wt0s=
-Date:   Tue, 19 Sep 2023 13:47:47 +0200
-From:   Nicolas Schier <nicolas@fjasle.eu>
-To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC v2] selftests/nolibc: don't embed initramfs into
- kernel image
-Message-ID: <ZQmKYz6WRkznqdWV@fjasle.eu>
-References: <20230917-nolibc-initramfs-v2-1-f0f293a8b198@weissschuh.net>
+        Tue, 19 Sep 2023 08:11:28 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BBE0100
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Sep 2023 05:11:22 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id af79cd13be357-773a5bb6fb6so301434385a.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Sep 2023 05:11:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1695125481; x=1695730281; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=aoyU9rzOy2BlH5KRJkQm4RzvdmE5afgsiRMrXPWn1pU=;
+        b=gLpB6zQbJshv3krQTRKex0GrNT3IPA9krHe5nJXqUtt+YFJtVyUc1/cd2loBixvrwg
+         UGj8l9NZ+uSieALoansEOT5DXd4E6pc+WFXRXgc+70U1LO1ubzl7azIhWY0hdiKChbCg
+         ABGXqbX/aevuG9BY+OEgreUKLIjUKLlNjfeRDqI5/5lYkqNbInJLkTbOxOGWyeS6LZfI
+         9p2FUyoVEWd5sLDc5pRgR/ySl1MIJ+gNF3h/7ykY/JO3F0iLEjWK+66Gc8pNhN+ixs3q
+         eE8F/vrW5ZWNe3B2J1oMYGUfhIIY8wSWHoNipt1XbP+WP76ATw9zBaTBeWYgZAmgz4Ci
+         0Z3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695125481; x=1695730281;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aoyU9rzOy2BlH5KRJkQm4RzvdmE5afgsiRMrXPWn1pU=;
+        b=CxKwOqIx5BGRwP+dk/aIqVwsW7z04507N4B5NZxZXMvS1PsuGOgrVxolq1UjazYtj0
+         eiNjRV4llEWVh3yCp3U7VGCUDPJHRcBbTiCoxpTd4kWrGY2XC47N2fMLuMvkeJ6X8ufR
+         kIKX63FZDlWBAjLtj/+/NQ/1ShksI9DLA1HnLPe00r1b5zBuVCfcBe7i9u/1IlxgrWHc
+         XD6m3PX401pKv7b6ckGzkdoyUD/9w7SVSHFCLqU/0ZXTICPCa9A194vvasVPjHVwZfgB
+         mb3jDU/m6Z42TFeFK7ka321H95Zai7EkicsLGORZpU/RHcIEJTu9XnFmr3c8FUJzXfhC
+         4AqQ==
+X-Gm-Message-State: AOJu0YxoDcuePy+eSFGAHHG+bVx2cPwj94YzAG670jWXGuYWySFHYcyh
+        K8MBzS1vGSo3biKi2PUlT4TDAQ==
+X-Google-Smtp-Source: AGHT+IHVTs08d8NaR/JqyVVIELGCXA1MekrWnfCHt/Y23q2QJTj4sfAfOGSXAGhdaB90Vcbx/q+Srw==
+X-Received: by 2002:a05:620a:e07:b0:773:ad9b:4c81 with SMTP id y7-20020a05620a0e0700b00773ad9b4c81mr8836359qkm.23.1695125481742;
+        Tue, 19 Sep 2023 05:11:21 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-68-26-201.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.26.201])
+        by smtp.gmail.com with ESMTPSA id g27-20020a05620a13db00b0076cdc3b5beasm3909448qkl.86.2023.09.19.05.11.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Sep 2023 05:11:20 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1qiZZW-000EC9-OI;
+        Tue, 19 Sep 2023 09:11:18 -0300
+Date:   Tue, 19 Sep 2023 09:11:18 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     GuokaiXu <xuguokai@ucas.com.cn>
+Cc:     kevin.tian@intel.com, shuah@kernel.org, iommu@lists.linux.dev,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] tools/testing/selftests/iommu:Fixed spelling errors
+ in comments
+Message-ID: <20230919121118.GS13795@ziepe.ca>
+References: <31680D47D9533D91+20230904023236.GA12494@xgk8823>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230917-nolibc-initramfs-v2-1-f0f293a8b198@weissschuh.net>
-Organisation: AVM GmbH
-X-Provags-ID: V03:K1:AI4RW+U+z5OjltmaIRmDpMq9Q94TiDilXlDL2Na8kATQIRVHK2U
- rvgZ+e6sn5Qrq/blRej4g7jml4Ufb2swextL9aaZl3mrs4oxYlNgHx+X5ccpNQLh5sLC8bm
- yMuiFQuewMJuwj2Xx1b0zOPI1FWO6vIyjfurdZlYab/x0naFSyIXG3Mq/GYtdn5DJHGqxL2
- a88o60KQgKHRSYrBKgqeQ==
-UI-OutboundReport: notjunk:1;M01:P0:C8fldALX24o=;hb7CL7PypnMZNCdVxrYDUL6lXHq
- 1Pu0+2F+BzCGlUAO1XSxCiy4otYNzeVcXrhMbSV21T5lRYEVQkxkFW5RE13qARi//mRf7LUt4
- oynsMb7z7ok91YhFUE17Hk+7qufvGAzuNObSFXc/j3tUZIJfRCBc946cWLGHtBupzjgh15Yg+
- J7jw0migdb4ylgFsfdPM+RLnVO0BcG0p2xxSilCLmEypOFyhIXKN/LaODbu9vnplGGqu/5M0c
- aIwctndOEyouFqvQb1uJoEqKhiitlumtknro7KqHUlox4kUGWD/+PVfGLlPeYYdyQ5QrqUWis
- zrkfOnJwp9/F3yRmU9bOp/TpGzTVdMXQgaazKxtqcaZEnON2LB75MhpU3XE6I+VSz1wARMMD2
- l48JeFGPnt8mApTxGqIfHaWGamobEw7zrZLJl6zSdoNKZMe91VeiIBzeIOFPGkdbMTbUhGN3y
- FeAxV/GesH34B6scnzdmamseurScz1Tjb9Sdw1w671XLhIRJeWYLy8ek0NyZ/bhC0QWvuXLDR
- TSx8ozJg28CRXcUukIvcZLA92SRAL/w9nCNVIqR7PXzPoyhdUKCsyvqOAG2JnbZe4H+p5uLKO
- tGtYKuUs4z0lxhUvrn9FxseGVl5u/GPaARRioDo74fSt/1mNGosFA3DDk1kzSgTd4tSe0cVbW
- FmyHc8yIvSVLI28kP3utjpZZnh6/ZV9unHGQAYez6qFdlATfOBlZzF9r+sOh2HIjqn17+xN3q
- CveBOWco372asafdXoD2dvw2gCe6mfI34sz9wHuP9jMqLgZVsh5rXukXtSBw7YAp/ugrmgGnJ
- uW69NP/Ky8K3oyK261sV9SPmjUeLWmvbfIbjfpFrfH0JyVQ+kXqMClDtyS3WlkumQgAloX8B8
- Zhy2GyAzCOYBH9g==
+In-Reply-To: <31680D47D9533D91+20230904023236.GA12494@xgk8823>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Sep 17, 2023 at 05:21:38PM +0200 Thomas Weißschuh wrote:
-> When the initramfs is embedded into the kernel each rebuild of it will
-> trigger a full kernel relink and all the expensive postprocessing steps.
+On Mon, Sep 04, 2023 at 10:32:36AM +0800, GuokaiXu wrote:
+> From c4e404036e0a7ffcaedc5760bee234713ccfe4a4 Mon Sep 17 00:00:00 2001
+> From: GuokaiXu <xuguokai@ucas.com.cn>
+> Date: Mon, 4 Sep 2023 10:18:04 +0800
+> Subject: [PATCH 1/1] Fix the spelling errors in comments
 > 
-> Currently nolibc-test and therefore the initramfs are always rebuild,
-> even without source changes, leading to lots of slow kernel relinks.
-> 
-> Instead of linking the initramfs into the kernel assemble it manually
-> and pass it explicitly to qemu.
-> This avoids all of the kernel relinks.
-> 
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> Signed-off-by: GuokaiXu <xuguokai@ucas.com.cn>
 > ---
-> Currently the nolibc testsuite embeds the test executable into a kernel
-> image with CONFIG_INITRAMFS_SOURCE.
-> This forces a full kernel relink everytime the test executable is
-> updated.
-> 
-> This relinking step dominates the test cycle.
-> It is slower than building and running the test in qemu together.
-> 
-> With a bit of Makefile-shuffling the relinking can be avoided.
-> ---
-> Changes in v2:
-> - avoid need to modify top-level Makefile
-> - drop patch removing "rerun" target
-> - add kernel-standalone target
-> - Link to v1: https://lore.kernel.org/r/20230916-nolibc-initramfs-v1-0-4416ecedca6d@weissschuh.net
-> ---
+>  tools/testing/selftests/iommu/iommufd.c          | 2 +-
+>  tools/testing/selftests/iommu/iommufd_fail_nth.c | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks, seems to work as described (and I am surprised how fast the 'run'
-target is) and patch looks good to me.
+Applied to for-next, thanks
 
-Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
-
-
->  tools/testing/selftests/nolibc/Makefile | 42 ++++++++++++++++++++-------------
->  1 file changed, 26 insertions(+), 16 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-> index 689658f81a19..ee6a9ad28cfd 100644
-> --- a/tools/testing/selftests/nolibc/Makefile
-> +++ b/tools/testing/selftests/nolibc/Makefile
-> @@ -131,18 +131,20 @@ REPORT  ?= awk '/\[OK\][\r]*$$/{p++} /\[FAIL\][\r]*$$/{if (!f) printf("\n"); f++
->  
->  help:
->  	@echo "Supported targets under selftests/nolibc:"
-> -	@echo "  all          call the \"run\" target below"
-> -	@echo "  help         this help"
-> -	@echo "  sysroot      create the nolibc sysroot here (uses \$$ARCH)"
-> -	@echo "  nolibc-test  build the executable (uses \$$CC and \$$CROSS_COMPILE)"
-> -	@echo "  libc-test    build an executable using the compiler's default libc instead"
-> -	@echo "  run-user     runs the executable under QEMU (uses \$$XARCH, \$$TEST)"
-> -	@echo "  initramfs    prepare the initramfs with nolibc-test"
-> -	@echo "  defconfig    create a fresh new default config (uses \$$XARCH)"
-> -	@echo "  kernel       (re)build the kernel with the initramfs (uses \$$XARCH)"
-> -	@echo "  run          runs the kernel in QEMU after building it (uses \$$XARCH, \$$TEST)"
-> -	@echo "  rerun        runs a previously prebuilt kernel in QEMU (uses \$$XARCH, \$$TEST)"
-> -	@echo "  clean        clean the sysroot, initramfs, build and output files"
-> +	@echo "  all               call the \"run\" target below"
-> +	@echo "  help              this help"
-> +	@echo "  sysroot           create the nolibc sysroot here (uses \$$ARCH)"
-> +	@echo "  nolibc-test       build the executable (uses \$$CC and \$$CROSS_COMPILE)"
-> +	@echo "  libc-test         build an executable using the compiler's default libc instead"
-> +	@echo "  run-user          runs the executable under QEMU (uses \$$XARCH, \$$TEST)"
-> +	@echo "  initramfs.cpio    prepare the initramfs archive with nolibc-test"
-> +	@echo "  initramfs         prepare the initramfs tree with nolibc-test"
-> +	@echo "  defconfig         create a fresh new default config (uses \$$XARCH)"
-> +	@echo "  kernel            (re)build the kernel (uses \$$XARCH)"
-> +	@echo "  kernel-standalone (re)build the kernel with the initramfs (uses \$$XARCH)"
-> +	@echo "  run               runs the kernel in QEMU after building it (uses \$$XARCH, \$$TEST)"
-> +	@echo "  rerun             runs a previously prebuilt kernel in QEMU (uses \$$XARCH, \$$TEST)"
-> +	@echo "  clean             clean the sysroot, initramfs, build and output files"
->  	@echo ""
->  	@echo "The output file is \"run.out\". Test ranges may be passed using \$$TEST."
->  	@echo ""
-> @@ -195,6 +197,9 @@ run-user: nolibc-test
->  	$(Q)qemu-$(QEMU_ARCH) ./nolibc-test > "$(CURDIR)/run.out" || :
->  	$(Q)$(REPORT) $(CURDIR)/run.out
->  
-> +initramfs.cpio: kernel nolibc-test
-> +	$(QUIET_GEN)echo 'file /init nolibc-test 755 0 0' | $(srctree)/usr/gen_init_cpio - > initramfs.cpio
-> +
->  initramfs: nolibc-test
->  	$(QUIET_MKDIR)mkdir -p initramfs
->  	$(call QUIET_INSTALL, initramfs/init)
-> @@ -203,17 +208,20 @@ initramfs: nolibc-test
->  defconfig:
->  	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper $(DEFCONFIG) prepare
->  
-> -kernel: initramfs
-> +kernel:
-> +	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(IMAGE_NAME)
-> +
-> +kernel-standalone: initramfs
->  	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(IMAGE_NAME) CONFIG_INITRAMFS_SOURCE=$(CURDIR)/initramfs
->  
->  # run the tests after building the kernel
-> -run: kernel
-> -	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
-> +run: kernel initramfs.cpio
-> +	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -initrd initramfs.cpio -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
->  	$(Q)$(REPORT) $(CURDIR)/run.out
->  
->  # re-run the tests from an existing kernel
->  rerun:
-> -	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
-> +	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -initrd initramfs.cpio -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
->  	$(Q)$(REPORT) $(CURDIR)/run.out
->  
->  # report with existing test log
-> @@ -227,6 +235,8 @@ clean:
->  	$(Q)rm -f nolibc-test
->  	$(call QUIET_CLEAN, libc-test)
->  	$(Q)rm -f libc-test
-> +	$(call QUIET_CLEAN, initramfs.cpio)
-> +	$(Q)rm -rf initramfs.cpio
->  	$(call QUIET_CLEAN, initramfs)
->  	$(Q)rm -rf initramfs
->  	$(call QUIET_CLEAN, run.out)
-> 
-> ---
-> base-commit: 3f79a57865b33f49fdae6655510bd27c8e6610e0
-> change-id: 20230916-nolibc-initramfs-4fd00eac3256
-> 
-> Best regards,
-> -- 
-> Thomas Weißschuh <linux@weissschuh.net>
-
--- 
-epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
-↳ gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
-     -- frykten for herren er opphav til kunnskap --
+Jason
