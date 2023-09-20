@@ -2,174 +2,360 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1696CCE79D0
-	for <linux-kselftest@archiver.kernel.org>; Wed, 20 Sep 2023 13:06:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72270CE79CE
+	for <linux-kselftest@archiver.kernel.org>; Wed, 20 Sep 2023 13:06:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236470AbjITNGl (ORCPT
+        id S236606AbjITNGl (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Wed, 20 Sep 2023 09:06:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55614 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236609AbjITNGQ (ORCPT
+        with ESMTP id S236480AbjITNGR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Sep 2023 09:06:16 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2055.outbound.protection.outlook.com [40.107.94.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2D4812C;
-        Wed, 20 Sep 2023 06:06:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=A5IGsPCGHUpMkGLoKLzDuxxhqIYClxibxbfsgwljHwGoS4Sp3BQWBikohze4By6YaQeM9xGznBEQmpVBOTKQVciYzAAw7PVILnVID1oePAczlo1dYpsO7opv8cvbSp1xGHQ+BigLEwKb9uAt8tpNU7HSTKKdQC2jOo8daST+GWX7jPKy95BgEF8M0EZirGnq73bVC1pAobUCi5ZrzL5paKByETfQChwk9kCGabszL/vbCS5jxi2rnNMWre+hrfbuyJDKxexowRAM+jv1TCy/eoCMK6qjA/oBMzi+y3n4cKsaWfvPuRcGhRfBJcTEN4jwhh/JDRYyF2gQGYF8TZKVfg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fe4+S66gf29+FXm2gzbSuqN876eR0BbQWbEoIA2/ilE=;
- b=YKtJfYfHibRZRJzW7k1WYXXvJfkLNqSNbrgKyqQFdyDbu1iY4YSEN5a9rx1mWjd6yV2K5D7r0waCSkHKArCYjGvDaEPuXPE19CrFfiDUXcY2jWH0yd664DcjvQeUEKt8yhvak5dhneFnGv9HIMS8DxvU52GIPi+M0p3VaKBXgOh/kj9JVTz13M5/yINU6ZNnwbJqtTdTjs9NidPZXnjWVBWxxq/k8/q0Qhe4LS3YtYvR+CcRaa3bB0TGFhfdhJfSvLeWRY3ThgvbFG+kAFUGTaoKLUNU5qbarzFaoE897+9uAXb5OVhv2sjzrJUr6TD5WCGenjKvgABCFseEknWTzQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fe4+S66gf29+FXm2gzbSuqN876eR0BbQWbEoIA2/ilE=;
- b=eO9XGf9yvI9MqzhMnhij1HRU1meBlUPeZB5sW59tKXnMm8bzG+WK1eIYF7D4Pbr7aJbwbh1r/EFE4ilw5Pa+xJ0aTszMXUYRp+NRDTKfPcFzPENq+jnhzZ3IJiqlfu5kAWgeDTxF9vgj7RpZx2Um0BjRe5lGNVIQeiu+wlOD5IoVvaXjTSUP3sQIH5AeXZghjy1eR8Zo8Yb0PCcSpPJQDhkKeE7yCL+x9aJqUzOhFBro1PIRmnVqOpZwjoLp8MgZINw+jv3HDd9kiXBeZNQPuCtQXT4KFAEmxMuoZsCB7Inu1Fv8hov6YIw94aLXcxvQlt3SlCQJRWHKOuUIMC1A7g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by BL0PR12MB5010.namprd12.prod.outlook.com (2603:10b6:208:17c::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6813.19; Wed, 20 Sep
- 2023 13:06:08 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::faf:4cd0:ae27:1073]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::faf:4cd0:ae27:1073%6]) with mapi id 15.20.6792.026; Wed, 20 Sep 2023
- 13:06:08 +0000
-Date:   Wed, 20 Sep 2023 10:06:06 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     "Yang, Weijiang" <weijiang.yang@intel.com>
-Cc:     Yi Liu <yi.l.liu@intel.com>, "joro@8bytes.org" <joro@8bytes.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>,
-        "Martins, Joao" <joao.m.martins@oracle.com>
-Subject: Re: [PATCH 6/6] iommu/vt-d: Add domain_alloc_user op
-Message-ID: <20230920130606.GW13733@nvidia.com>
-References: <20230919092523.39286-1-yi.l.liu@intel.com>
- <20230919092523.39286-7-yi.l.liu@intel.com>
- <74533792-7dcd-d745-dc07-671260bc9e22@intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <74533792-7dcd-d745-dc07-671260bc9e22@intel.com>
-X-ClientProxiedBy: SJ0PR03CA0291.namprd03.prod.outlook.com
- (2603:10b6:a03:39e::26) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Wed, 20 Sep 2023 09:06:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C5FC9
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 Sep 2023 06:05:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1695215120;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YJCqPShPuxX0OSXQWhEKRturENKmTo+NpvJVS0wCU18=;
+        b=BdTBgZcw2n0MWIEQtVd5jHURAmnrqJQSaqjUPzgS0C3l9gsv4fK6ZFFrI1t5+23mZwaDTN
+        VkiISJTTAhCvZENYgVgvewk4AcgjXawX+MrPvlJJZQWhi93JECMH91IjMzZ/tPNWAERPDY
+        W+cxJhQDnWb7MmuexNe6GT2BV/w7U3A=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-688-aNGlfMQdOTe2VK1zYWIPzQ-1; Wed, 20 Sep 2023 09:05:14 -0400
+X-MC-Unique: aNGlfMQdOTe2VK1zYWIPzQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C3D67858F19;
+        Wed, 20 Sep 2023 13:05:13 +0000 (UTC)
+Received: from warthog.procyon.org.com (unknown [10.42.28.216])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7BAA02156701;
+        Wed, 20 Sep 2023 13:05:11 +0000 (UTC)
+From:   David Howells <dhowells@redhat.com>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     David Howells <dhowells@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Christian Brauner <christian@brauner.io>,
+        David Laight <David.Laight@ACULAB.COM>,
+        Matthew Wilcox <willy@infradead.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>, linux-fsdevel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-mm@kvack.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        Christian Brauner <brauner@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: [RFC PATCH v2 8/9] iov_iter: Add benchmarking kunit tests
+Date:   Wed, 20 Sep 2023 14:03:59 +0100
+Message-ID: <20230920130400.203330-9-dhowells@redhat.com>
+In-Reply-To: <20230920130400.203330-1-dhowells@redhat.com>
+References: <20230920130400.203330-1-dhowells@redhat.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|BL0PR12MB5010:EE_
-X-MS-Office365-Filtering-Correlation-Id: bf3eb000-d0b3-4bcd-9792-08dbb9da5b30
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: MIp904ELSQl5zQTQr+dwa6YRTnAOcw6KHzTGOJm/WN3oLgYad+KFgaBuoRce1/RywskaPd7iw3Zs7pv41WcGtR0Qi42RNPo5Teci7VQJ1xgKT7VqFFABsCKjWIpR7NPlEk8SQVh/2vFcXvmBC4XxD/MQv13xtZIMiQ71H3VkRITyh7bQAIgZMRM6kIxiVg4J5evH0XjAKL7aygP6JLLjttfduyFj4ibP8QyWkdZ4W/J68uEE0p7QNQMNcCRkMzxLPdEBwW+HDOAu17iYBgGxvaDex2VRHxkmFnEANxrNX8msmINcay1A50WJEHT69o3m5Vg8jzZ+PrTq+jnMW2RZXyFR/MLygH2wCV/QZcd5L7yAqU5pQ8FPhubT10fvJeRdK6ha8Wia6dNL4xWNBzfX6rxTQ37bW7IH8NqPTOueIHc9YLMKud/rp8SxRjT3fiAHVbWMWkju3abL5jzR4DSdZ2HjT+yvI0MAw+tutfabDAg/kS74h0ZMBhF9Ezh1UnUE/OB++P86R3id0EXS984f7j+jSvE06GlEYyLRcc6qVMIV2zSgcjUdUwNWx9bOQM0W
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(396003)(376002)(136003)(39860400002)(366004)(451199024)(186009)(1800799009)(53546011)(6512007)(6486002)(6506007)(86362001)(36756003)(38100700002)(33656002)(26005)(7416002)(2906002)(2616005)(1076003)(478600001)(83380400001)(5660300002)(8676002)(8936002)(4326008)(316002)(6916009)(66476007)(66556008)(41300700001)(66946007)(54906003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?D4rkl82Hu1n0TJ8QKH3YHotC3irnBUhDTcZIgpcdkSPhD0vfToA0tjyRyvIt?=
- =?us-ascii?Q?421qU+MsafAfGLR17uxzp7ciUWYwDglfljC5eWuvKNVoh/MHHSBLeMrrweK+?=
- =?us-ascii?Q?iq2kvkB7ER66PLWgEZiWb3AsY/ivZ9mg+Ro7CSAV0hU4t6NIOrzo07ey3m8A?=
- =?us-ascii?Q?OccjhzkvUoBJJq30BXPV9jkrEhFoBGcEd+806sqknVT88JtsiB5Iffh/j7TC?=
- =?us-ascii?Q?wugbJdeCtvVDynqe51Bmjnir4GcF8EikgIqEaDcDWLfh0LqOgHd2IxzUCiOu?=
- =?us-ascii?Q?GoFsHnywO5KeGBSaFqtsGkkw093KGuueaRPvX0J30MdpbxOubF/KtMaEHwHM?=
- =?us-ascii?Q?stvw9Io4VWJLnL8T3TIp5ub6Q7914oneh4L1zrb4J2MrE2Sk2lLk1Z+bWX/O?=
- =?us-ascii?Q?kzgofsZodySoem69aVSdz4AKA5eZcTL3Kr+dFSb+ENR/3FTWQ1ZtlTXnRVU+?=
- =?us-ascii?Q?1sVBw3uSvE1wSOjtLNJiYt9cdYL4RG5Ukbzl5Mr10f0EjrO7m5VyzNsNJYoy?=
- =?us-ascii?Q?veZvArUohrBiu1RRCbEnUNoEFVoM4IXiuzkCLesAbiWUTYykAsRAKhFRlZzF?=
- =?us-ascii?Q?pEhvYx5nteofua56kf3ISH6IYagVVXajD9MC793BbTHwtAJS+A0EBRHPmqwF?=
- =?us-ascii?Q?PcAviW1eS3oOQQrp/APP521ngDqHRj9IUHTNdwfHEvqCDSdr3b60GNctFIZ2?=
- =?us-ascii?Q?e5Znnyp1b64/wUSQ6f1DFK+70jObiC/1Ir5GSWCHv8fQYBfBncMpg+4rkAVO?=
- =?us-ascii?Q?N3bPzW/DTq4QF4Xe5424DDgvqBhf4rXlVSGXPeYGsP+e63LXnqX0KFlexvDC?=
- =?us-ascii?Q?Cuq9/WZk/FkGx2uzThgbfYUHCD4CeaqZw42jjhtZZ4aNpTCm4VSQQad/VslL?=
- =?us-ascii?Q?fO0NI+Vugzaq59aQnkHy/gkfP+bc9yeNViHIWGhku9WXdcvPcerVhQ58Uk4c?=
- =?us-ascii?Q?0bQvVP9yANkHlq8vE86u78BWfgmM80DLYUdv3JkhX9ScboRGqJmv6XlC+QGC?=
- =?us-ascii?Q?0WYceC2utQT+bYUIWjb36EwOCZt2wWk+5wC0lBY85yGR2FnJiSIrNFBBzonQ?=
- =?us-ascii?Q?KV0kg3T6jGEYBL570B/Pp7ZD00ZpEcSnb+M4P3khvu5Gwrhr93qqe1I+o6+U?=
- =?us-ascii?Q?sYKlbRqP8elcWly0OameeEwCuCZH570SF0guy9Ashh/3UAr1tH589mvFG0y/?=
- =?us-ascii?Q?eXUyuAFDAkYlk1CuqT600MdyJMAZtBK6Ko25hzxe2h8c/Plg4/hOvDCIsilS?=
- =?us-ascii?Q?mqcMFRy7LAb7W7/Hh8sJ9Rd2GkbVKGV0+ZoH/7bQflp4ISiTERR2Nfe5fN0F?=
- =?us-ascii?Q?zVbiKpXpeOXvEvvoq2UUKKNyLIjZVQMbS+JXqo86fpUExgscF/fQPuYulQMl?=
- =?us-ascii?Q?8spiKAtcSy0WNNOMCUYHD09z+SThoKiScjQksgNeFRzwmKEQeaMRDr7StsrE?=
- =?us-ascii?Q?Jol6GFv6l4iKXoQ145SgqGwpGGmdefbeKNsm6pKbCUMHdsZe8cT+grMC7hW9?=
- =?us-ascii?Q?qtL4kUM321x6Cw7VYVdpMuuUSA2iyLFb2DnxPOXR80Wbl5Pu7qgSLwqlPZA1?=
- =?us-ascii?Q?pkWUkNhN2pQYElTkKR/ZZptBJ4wZeW1Mip2FIE9B?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bf3eb000-d0b3-4bcd-9792-08dbb9da5b30
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Sep 2023 13:06:08.8287
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2Et7aFklTYQwedAYLKouOwjZdI+u0WdWGgl8WmlMDqMEKY6P8aRnjxRJ7NxwVb/5
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB5010
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Sep 20, 2023 at 01:41:07PM +0800, Yang, Weijiang wrote:
-> On 9/19/2023 5:25 PM, Yi Liu wrote:
-> > This adds the domain_alloc_user op implementation. It supports allocating
-> > domains to be used as parent under nested translation.
-> > 
-> > Signed-off-by: Yi Liu <yi.l.liu@intel.com>
-> > ---
-> >   drivers/iommu/intel/iommu.c | 20 ++++++++++++++++++++
-> >   1 file changed, 20 insertions(+)
-> > 
-> > diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-> > index 5db283c17e0d..491bcde1ff96 100644
-> > --- a/drivers/iommu/intel/iommu.c
-> > +++ b/drivers/iommu/intel/iommu.c
-> > @@ -4074,6 +4074,25 @@ static struct iommu_domain *intel_iommu_domain_alloc(unsigned type)
-> >   	return NULL;
-> >   }
-> > +static struct iommu_domain *
-> > +intel_iommu_domain_alloc_user(struct device *dev, u32 flags)
-> > +{
-> > +	struct iommu_domain *domain;
-> > +	struct intel_iommu *iommu;
-> > +
-> > +	iommu = device_to_iommu(dev, NULL, NULL);
-> > +	if (!iommu)
-> > +		return ERR_PTR(-ENODEV);
-> > +
-> > +	if ((flags & IOMMU_HWPT_ALLOC_NEST_PARENT) && !ecap_nest(iommu->ecap))
-> > +		return ERR_PTR(-EOPNOTSUPP);
-> 
-> The outer caller has checked (flags & IOMMU_HWPT_ALLOC_NEST_PARENT) before it comes here.
-> If this callback is dedicated for nested domain allocation, then you may omit the condition here.
+Add kunit tests to benchmark 256MiB copies to a KVEC iterator, a BVEC
+iterator, an XARRAY iterator and to a loop that allocates 256-page BVECs
+and fills them in (similar to a maximal bio struct being set up).
 
-No, please don't.
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Christoph Hellwig <hch@lst.de>
+cc: Christian Brauner <brauner@kernel.org>
+cc: Jens Axboe <axboe@kernel.dk>
+cc: Al Viro <viro@zeniv.linux.org.uk>
+cc: David Hildenbrand <david@redhat.com>
+cc: John Hubbard <jhubbard@nvidia.com>
+cc: Brendan Higgins <brendanhiggins@google.com>
+cc: David Gow <davidgow@google.com>
+cc: linux-kselftest@vger.kernel.org
+cc: kunit-dev@googlegroups.com
+cc: linux-fsdevel@vger.kernel.org
+cc: linux-mm@kvack.org
+---
+ lib/kunit_iov_iter.c | 251 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 251 insertions(+)
 
-The point of the flags is to be passed to the driver. The driver
-should validate them, not the core code.
+diff --git a/lib/kunit_iov_iter.c b/lib/kunit_iov_iter.c
+index 2994c3f348ab..17f85f24b239 100644
+--- a/lib/kunit_iov_iter.c
++++ b/lib/kunit_iov_iter.c
+@@ -1261,6 +1261,253 @@ static void __init iov_kunit_extract_pages_xarray(struct kunit *test)
+ 	KUNIT_SUCCEED();
+ }
+ 
++static void iov_kunit_free_page(void *data)
++{
++	__free_page(data);
++}
++
++#define IOV_KUNIT_NR_SAMPLES 16
++static void __init iov_kunit_benchmark_print_stats(struct kunit *test,
++						   unsigned int *samples)
++{
++	unsigned long long sumsq = 0;
++	unsigned long total = 0, mean, stddev;
++	unsigned int n = IOV_KUNIT_NR_SAMPLES;
++	int i;
++
++	//for (i = 0; i < n; i++)
++	//	kunit_info(test, "run %x: %u uS\n", i, samples[i]);
++
++	/* Ignore the 0th sample as that may include extra overhead such as
++	 * setting up PTEs.
++	 */
++	samples++;
++	n--;
++	for (i = 0; i < n; i++)
++		total += samples[i];
++	mean = total / n;
++
++	for (i = 0; i < n; i++) {
++		long s = samples[i] - mean;
++
++		sumsq += s * s;
++	}
++	stddev = int_sqrt64(sumsq);
++
++	kunit_info(test, "avg %lu uS, stddev %lu uS\n", mean, stddev);
++}
++
++/*
++ * Create a source buffer for benchmarking.
++ */
++static void *__init iov_kunit_create_source(struct kunit *test, size_t npages)
++{
++	struct page *page, **pages;
++	void *scratch;
++	size_t i;
++
++	/* Allocate a page and tile it repeatedly in the buffer. */
++	page = alloc_page(GFP_KERNEL);
++	KUNIT_ASSERT_NOT_NULL(test, page);
++	kunit_add_action_or_reset(test, iov_kunit_free_page, page);
++
++	pages = kunit_kmalloc_array(test, npages, sizeof(pages[0]), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_NULL(test, pages);
++	for (i = 0; i < npages; i++) {
++		pages[i] = page;
++		get_page(page);
++	}
++
++	scratch = vmap(pages, npages, VM_MAP | VM_MAP_PUT_PAGES, PAGE_KERNEL);
++	KUNIT_ASSERT_NOT_NULL(test, scratch);
++	kunit_add_action_or_reset(test, iov_kunit_unmap, scratch);
++	return scratch;
++}
++
++/*
++ * Time copying 256MiB through an ITER_KVEC.
++ */
++static void __init iov_kunit_benchmark_kvec(struct kunit *test)
++{
++	struct iov_iter iter;
++	struct kvec kvec[8];
++	unsigned int samples[IOV_KUNIT_NR_SAMPLES];
++	ktime_t a, b;
++	ssize_t copied;
++	size_t size = 256 * 1024 * 1024, npages = size / PAGE_SIZE, part;
++	void *scratch, *buffer;
++	int i;
++
++	/* Allocate a huge buffer and populate it with pages. */
++	buffer = iov_kunit_create_source(test, npages);
++
++	/* Create a single large buffer to copy to/from. */
++	scratch = iov_kunit_create_source(test, npages);
++
++	/* Split the target over a number of kvecs */
++	copied = 0;
++	for (i = 0; i < ARRAY_SIZE(kvec); i++) {
++		part = size / ARRAY_SIZE(kvec);
++		kvec[i].iov_base = buffer + copied;
++		kvec[i].iov_len = part;
++		copied += part;
++	}
++	kvec[i - 1].iov_len += size - part;
++
++	/* Perform and time a bunch of copies. */
++	kunit_info(test, "Benchmarking copy_to_iter() over KVEC:\n");
++	for (i = 0; i < IOV_KUNIT_NR_SAMPLES; i++) {
++		iov_iter_kvec(&iter, ITER_SOURCE, kvec, ARRAY_SIZE(kvec), size);
++
++		a = ktime_get_real();
++		copied = copy_from_iter(scratch, size, &iter);
++		b = ktime_get_real();
++		KUNIT_EXPECT_EQ(test, copied, size);
++		samples[i] = ktime_to_us(ktime_sub(b, a));
++	}
++
++	iov_kunit_benchmark_print_stats(test, samples);
++	KUNIT_SUCCEED();
++}
++
++/*
++ * Time copying 256MiB through an ITER_BVEC.
++ */
++static void __init iov_kunit_benchmark_bvec(struct kunit *test)
++{
++	struct iov_iter iter;
++	struct bio_vec *bvec;
++	struct page *page;
++	unsigned int samples[IOV_KUNIT_NR_SAMPLES];
++	ktime_t a, b;
++	ssize_t copied;
++	size_t size = 256 * 1024 * 1024, npages = size / PAGE_SIZE;
++	void *scratch;
++	int i;
++
++	/* Allocate a page and tile it repeatedly in the buffer. */
++	page = alloc_page(GFP_KERNEL);
++	KUNIT_ASSERT_NOT_NULL(test, page);
++	kunit_add_action_or_reset(test, iov_kunit_free_page, page);
++
++	bvec = kunit_kmalloc_array(test, npages, sizeof(bvec[0]), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_NULL(test, bvec);
++	for (i = 0; i < npages; i++)
++		bvec_set_page(&bvec[i], page, PAGE_SIZE, 0);
++
++	/* Create a single large buffer to copy to/from. */
++	scratch = iov_kunit_create_source(test, npages);
++
++	/* Perform and time a bunch of copies. */
++	kunit_info(test, "Benchmarking copy_to_iter() over BVEC:\n");
++	for (i = 0; i < IOV_KUNIT_NR_SAMPLES; i++) {
++		iov_iter_bvec(&iter, ITER_SOURCE, bvec, npages, size);
++		a = ktime_get_real();
++		copied = copy_from_iter(scratch, size, &iter);
++		b = ktime_get_real();
++		KUNIT_EXPECT_EQ(test, copied, size);
++		samples[i] = ktime_to_us(ktime_sub(b, a));
++	}
++
++	iov_kunit_benchmark_print_stats(test, samples);
++	KUNIT_SUCCEED();
++}
++
++/*
++ * Time copying 256MiB through an ITER_BVEC in 256 page chunks.
++ */
++static void __init iov_kunit_benchmark_bvec_split(struct kunit *test)
++{
++	struct iov_iter iter;
++	struct bio_vec *bvec;
++	struct page *page;
++	unsigned int samples[IOV_KUNIT_NR_SAMPLES];
++	ktime_t a, b;
++	ssize_t copied;
++	size_t size, npages = 64;
++	void *scratch;
++	int i, j;
++
++	/* Allocate a page and tile it repeatedly in the buffer. */
++	page = alloc_page(GFP_KERNEL);
++	KUNIT_ASSERT_NOT_NULL(test, page);
++	kunit_add_action_or_reset(test, iov_kunit_free_page, page);
++
++	/* Create a single large buffer to copy to/from. */
++	scratch = iov_kunit_create_source(test, npages);
++
++	/* Perform and time a bunch of copies. */
++	kunit_info(test, "Benchmarking copy_to_iter() over BVEC:\n");
++	for (i = 0; i < IOV_KUNIT_NR_SAMPLES; i++) {
++		size = 256 * 1024 * 1024;
++		a = ktime_get_real();
++		do {
++			size_t part = min_t(size_t, size, npages * PAGE_SIZE);
++
++			bvec = kunit_kmalloc_array(test, npages, sizeof(bvec[0]), GFP_KERNEL);
++			KUNIT_ASSERT_NOT_NULL(test, bvec);
++			for (j = 0; j < npages; j++)
++				bvec_set_page(&bvec[j], page, PAGE_SIZE, 0);
++
++			iov_iter_bvec(&iter, ITER_SOURCE, bvec, npages, part);
++			copied = copy_from_iter(scratch, part, &iter);
++			KUNIT_EXPECT_EQ(test, copied, part);
++			size -= part;
++		} while (size > 0);
++		b = ktime_get_real();
++		samples[i] = ktime_to_us(ktime_sub(b, a));
++	}
++
++	iov_kunit_benchmark_print_stats(test, samples);
++	KUNIT_SUCCEED();
++}
++
++/*
++ * Time copying 256MiB through an ITER_XARRAY.
++ */
++static void __init iov_kunit_benchmark_xarray(struct kunit *test)
++{
++	struct iov_iter iter;
++	struct xarray *xarray;
++	struct page *page;
++	unsigned int samples[IOV_KUNIT_NR_SAMPLES];
++	ktime_t a, b;
++	ssize_t copied;
++	size_t size = 256 * 1024 * 1024, npages = size / PAGE_SIZE;
++	void *scratch;
++	int i;
++
++	/* Allocate a page and tile it repeatedly in the buffer. */
++	page = alloc_page(GFP_KERNEL);
++	KUNIT_ASSERT_NOT_NULL(test, page);
++	kunit_add_action_or_reset(test, iov_kunit_free_page, page);
++
++	xarray = iov_kunit_create_xarray(test);
++
++	for (i = 0; i < npages; i++) {
++		void *x = xa_store(xarray, i, page, GFP_KERNEL);
++
++		KUNIT_ASSERT_FALSE(test, xa_is_err(x));
++	}
++
++	/* Create a single large buffer to copy to/from. */
++	scratch = iov_kunit_create_source(test, npages);
++
++	/* Perform and time a bunch of copies. */
++	kunit_info(test, "Benchmarking copy_to_iter() over XARRAY:\n");
++	for (i = 0; i < IOV_KUNIT_NR_SAMPLES; i++) {
++		iov_iter_xarray(&iter, ITER_SOURCE, xarray, 0, size);
++		a = ktime_get_real();
++		copied = copy_from_iter(scratch, size, &iter);
++		b = ktime_get_real();
++		KUNIT_EXPECT_EQ(test, copied, size);
++		samples[i] = ktime_to_us(ktime_sub(b, a));
++	}
++
++	iov_kunit_benchmark_print_stats(test, samples);
++	KUNIT_SUCCEED();
++}
++
+ static struct kunit_case __refdata iov_kunit_cases[] = {
+ 	KUNIT_CASE(iov_kunit_copy_to_ubuf),
+ 	KUNIT_CASE(iov_kunit_copy_from_ubuf),
+@@ -1277,6 +1524,10 @@ static struct kunit_case __refdata iov_kunit_cases[] = {
+ 	KUNIT_CASE(iov_kunit_extract_pages_kvec),
+ 	KUNIT_CASE(iov_kunit_extract_pages_bvec),
+ 	KUNIT_CASE(iov_kunit_extract_pages_xarray),
++	KUNIT_CASE(iov_kunit_benchmark_kvec),
++	KUNIT_CASE(iov_kunit_benchmark_bvec),
++	KUNIT_CASE(iov_kunit_benchmark_bvec_split),
++	KUNIT_CASE(iov_kunit_benchmark_xarray),
+ 	{}
+ };
+ 
 
-We will add more flags, I don't want to change every driver to do
-this.
-
-Jason
