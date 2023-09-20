@@ -2,88 +2,83 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22EF7C04AA7
-	for <linux-kselftest@archiver.kernel.org>; Wed, 20 Sep 2023 16:26:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 154BBC04AB4
+	for <linux-kselftest@archiver.kernel.org>; Wed, 20 Sep 2023 16:32:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234572AbjITQ0Q (ORCPT
+        id S234157AbjITQca (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 20 Sep 2023 12:26:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33890 "EHLO
+        Wed, 20 Sep 2023 12:32:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233691AbjITQ0P (ORCPT
+        with ESMTP id S236890AbjITP7p (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Sep 2023 12:26:15 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD7F9C2;
-        Wed, 20 Sep 2023 09:26:06 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B0705221CC;
-        Wed, 20 Sep 2023 16:26:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1695227164; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OLn8yWRXNtM1vzeh+k8IzT+RT5YudYxnSIDB4ufkXsA=;
-        b=sVt4nV0GM8aBnWV5AaWOmn/g3abQZs8Fu97MDTWPbAcDOIsHeN3BeuJ7UZvdCDOHFGV3+I
-        5QxdcL0y+6RH+3DmElbXvHJI8oH1KZIboR4BSjf8E6/9AFWw/gjUiGYCIrcMs6VdPNSQ5+
-        N3HgmhWpBrItxa2xdXlwNaFPOWsA6L8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1695227164;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OLn8yWRXNtM1vzeh+k8IzT+RT5YudYxnSIDB4ufkXsA=;
-        b=p8FsJlTCf5DaWE9S3MfPxSeY2Db97u6w7H4FXAkFhBw7uPaC3tcTWwA65QCoSSjWlVrGXq
-        ldg6DUvQW3khmxDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 76CC61333E;
-        Wed, 20 Sep 2023 16:26:04 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id xQMJHBwdC2WoZQAAMHmgww
-        (envelope-from <tiwai@suse.de>); Wed, 20 Sep 2023 16:26:04 +0000
-Date:   Wed, 20 Sep 2023 18:26:04 +0200
-Message-ID: <87bkdwvmjn.wl-tiwai@suse.de>
-From:   Takashi Iwai <tiwai@suse.de>
-To:     =?ISO-8859-1?Q?=22N=EDcolas_F=2E_R=2E_A=2E_Prado=22?= 
+        Wed, 20 Sep 2023 11:59:45 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 518FDC2;
+        Wed, 20 Sep 2023 08:59:39 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB1E8C433C8;
+        Wed, 20 Sep 2023 15:59:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1695225578;
+        bh=TgtnsvbGOUf8/0QiUmZytL37sBH2oYZX/bZUhckgbWU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZJkPEMCBo+sXlFkUNsfJxYxt0aDsH8bSEpxSVkhOlXV8YRypx58EO6CWrZiWsKb1M
+         FDDK6ykYVM6VWpu993IiZiF8hm8CrMlDczIeOuLFFqVbU1QNta1+1PLawVO5tlEdid
+         B10WocAKfwAbIkD3GggqrFQsJ79ofEPp+h8eNjStcr0U1ncEdM9XHTAwcu8wi+a23X
+         4NcyNZHzvgT2KtQk33pbRHMNVRK4qAsq7C2L3qIbvI4RIyeI402aF6vuSg2PE30b55
+         zQ9hd9WNZSDs7qD6KaXrh93CPnjJZkjfHKERT7BFjIcri9H4Yjrie3P04D/Ykha+0U
+         rEF/Zj6gdaI1A==
+Date:   Wed, 20 Sep 2023 16:59:33 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
         <nfraprado@collabora.com>
 Cc:     Takashi Iwai <tiwai@suse.com>, kernel@collabora.com,
         Jaroslav Kysela <perex@perex.cz>,
-        Mark Brown <broonie@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] kselftest/alsa: pcm-test: Report cards declared in config but missing
-In-Reply-To: <20230919152702.100617-1-nfraprado@collabora.com>
+        Shuah Khan <shuah@kernel.org>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] kselftest/alsa: pcm-test: Report cards declared in
+ config but missing
+Message-ID: <b1658cfc-74b6-44c5-9e2b-816772ff58a1@sirena.org.uk>
 References: <20230919152702.100617-1-nfraprado@collabora.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="TR7m/tl8KYNB3BtE"
+Content-Disposition: inline
+In-Reply-To: <20230919152702.100617-1-nfraprado@collabora.com>
+X-Cookie: Even a hawk is an eagle among crows.
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 19 Sep 2023 17:26:21 +0200,
-Nícolas F. R. A. Prado wrote:
-> 
+
+--TR7m/tl8KYNB3BtE
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, Sep 19, 2023 at 11:26:21AM -0400, N=EDcolas F. R. A. Prado wrote:
 > When parsing the configs, keep track of card configurations that match
 > the current system but haven't matched any card, and report those as
 > test failures as they represent that a card which was expected to be
 > present on the system is missing. This allows the configuration files to
 > not only be used to detect missing PCM devices (which is currently
 > possible) but also that the soundcard hasn't been registered at all.
-> 
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
-Applied now.  Thanks.
+Reviewed-by: Mark Brown <broonie@kernel.org>
 
+--TR7m/tl8KYNB3BtE
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Takashi
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmULFuQACgkQJNaLcl1U
+h9Ahigf/dKE+gXp9ZH4jZ1QZyixn2tKUPrKHFW0rcLc22QxUNfiy8PHk75LjKCXJ
+o+rCl7qjgygLrfSiPNOsBbqeoW+v4G932AuYCGpMZKI2/u1oDTNg7NTnBcJTw4xz
+fDYMOrZ+1z96gZHeOAZJa3C10hgkWMz72duAVMWb4b1S03kyRY7EboUzFc5bgqSi
+SpnwJoQweI0DRjAsK4FoITvWctL4krn1l5eMOClIIA9CgHZKjORGeQD6ReIDZ16N
+Dwkc6jRHnprFA4bWxcMCHzCAIY4MdP+EA6B2i7baLfwodjo1tRNRCUDXPXworCwP
+e7QJf2nIQGkX9IvdZXSwXkwcZxgWMg==
+=XtEC
+-----END PGP SIGNATURE-----
+
+--TR7m/tl8KYNB3BtE--
