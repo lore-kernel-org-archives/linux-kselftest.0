@@ -2,95 +2,156 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C663EC04AA9
-	for <linux-kselftest@archiver.kernel.org>; Wed, 20 Sep 2023 15:59:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65722C04AAA
+	for <linux-kselftest@archiver.kernel.org>; Wed, 20 Sep 2023 16:12:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235575AbjITP7R (ORCPT
+        id S234561AbjITQMH (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 20 Sep 2023 11:59:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47062 "EHLO
+        Wed, 20 Sep 2023 12:12:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235560AbjITP7R (ORCPT
+        with ESMTP id S234100AbjITQMG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Sep 2023 11:59:17 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C66EC6
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 Sep 2023 08:59:10 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-52bcb8b199aso8801198a12.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 Sep 2023 08:59:10 -0700 (PDT)
+        Wed, 20 Sep 2023 12:12:06 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C983C2
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 Sep 2023 09:11:59 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-404f881aa48so132395e9.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 Sep 2023 09:11:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1695225549; x=1695830349; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rTOJJcBmIOT1+zi0OT/D2Ib8E/xBZc3n9UZuUTQAznk=;
-        b=Gl6FWXk6yzKOoc0d6MY67zjOaZFsQ/eWn4xMYvkewbV9nojS9o1XGFL8ALbRZbVdBh
-         oLY/DONYIwK+TerP4LruP8ZWUmVS9V7xFniM9CpUlGPp7PAQ8KJMCTdHGCI+sDx+eLFd
-         DFrPyrkwF6fyyd/k+pNtHu/fAQoD8ztisoC1fim2dxX53zIG6TobzbqtEo+7wlqLGsKY
-         KatU1jv9qrnI9oeVcUY+u6ftC8dwHJqzSIofU6G16gDz1yHesZwy28Nrnr2OwdWQ9bmT
-         umU5TgE3T/XYc4NntsUbsr0rYlqdmuMv3ZfYm+ImF455bz6XtBJSizl/bh+Wc0tglOWG
-         aQJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695225549; x=1695830349;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1695226318; x=1695831118; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rTOJJcBmIOT1+zi0OT/D2Ib8E/xBZc3n9UZuUTQAznk=;
-        b=pj/VLdMPECyz+hbLVKz2Lz3C2NirOb/mNFcZWYnjL5OWHv46KH6jNtpk/iB4NVMdiU
-         oO86v6851RM2jwKcziaVzGWJB0XCE9RuRPa5xGfN3im26HXl63u93eS7OVw02MTd2S6X
-         AqM1a5fBsyawj7fyoFQFevYwK9m0ALE5B+4nKMUviqBrQ4aOlRsXTNN0iuX6FeJqjXMC
-         aPU60wWIc6GU9pzboyHYlbfPC/6D86uDbLGtOh9KCd8LfjfScaF14kXyd3vrt5/IBrvK
-         /EVve7/osko8uMG6xovPGvhrj6TWXDIUHGioy39V9x1iKZAQghwabK4rOuT6krvZ93rs
-         gU4w==
-X-Gm-Message-State: AOJu0Yw5iqIu8TMFxR42qHk7no50ikbSgtIBVfar6fHXfDlCh3sVbjq1
-        eDf662bmPYdsJCJmfTIqgGZTuQ==
-X-Google-Smtp-Source: AGHT+IHW9j1u4BZK6Q94x+QFx47AjJOr1ij3Eo4Zz9gh+6BWeijfKQS2YiZAaLykAhzJF3l96vQ3Sg==
-X-Received: by 2002:a17:907:2cd9:b0:9ae:4d6d:ba5b with SMTP id hg25-20020a1709072cd900b009ae4d6dba5bmr1730696ejc.40.1695225548942;
-        Wed, 20 Sep 2023 08:59:08 -0700 (PDT)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id v14-20020a17090606ce00b00993cc1242d4sm9573744ejb.151.2023.09.20.08.59.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Sep 2023 08:59:08 -0700 (PDT)
-Date:   Wed, 20 Sep 2023 17:59:07 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Atish Patra <atishp@rivosinc.com>
-Subject: Re: [PATCH v2 4/4] KVM: riscv: selftests: Selectively filter-out AIA
- registers
-Message-ID: <20230920-e3fc5272a2818c67a17cd90c@orel>
-References: <20230920154608.1447057-1-apatel@ventanamicro.com>
- <20230920154608.1447057-5-apatel@ventanamicro.com>
+        bh=zAzaV/SRyN9p4hGa3qLm9e9pe4b6sS/pBR+spEyhDRk=;
+        b=ykRO6/aQLekA98nOaQvIq7FB1HNsM73wcdJHn/clyUtUifdQGDM3cSRQBOtgI5EkJ6
+         /geqgE6ZR/dpIdFX7TGZanL5UsqE0wSRgrdBkMYXVSvbNpDaVWMF7qzSB4OEorvrKNfi
+         p42EJrrRawOyugxca/Qv+WytRtnImmV3Eoz+KQm9Sk70rd/aD8ZgBcsBc/rJ/mgVpVGe
+         Ujh2TRQm8wzzekKlTcvF40pPt5DH+fCkDZEEuN0dPbg+p6IMjYVLdY9Xim7ovl7sgtgB
+         CeaUyU2bEtODc3/tlamxnffS7S5N0YmvwZR/y/grAslsZieiAEv+fPy7fjVXkBXdWBx6
+         iRZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695226318; x=1695831118;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zAzaV/SRyN9p4hGa3qLm9e9pe4b6sS/pBR+spEyhDRk=;
+        b=c5dDBKlxekC6C8ztCCL3SUoLXaKTTEHgw3SG//HeYLkakLnlyIeR4l15hsDTgVuFjW
+         Q48KkpEp+XMDy38XhMf5Lep1unV6ZUqkoasozuTrYtTHqshaETB/3LQTU3Qvc8wqhX+b
+         v14XhJLdGw5DmwldIpP7NSIdu1wD35hsRO06TyZkNBd3Xpz86SBLgJ4PzcmMGF0abaIQ
+         tWvqhZZ3VxcHQV/eSvqiuEqjeWr9+Vzn+SiuFd4zu+yrl0+MHcmpqgxQn2GaEDucJ9kW
+         Wf0kvpLrrYhWr3xr6VamrAKgzc6niB+wr9Rf8ZiupHCsKSGEFqypBEstWtGtXMZdWorb
+         kThg==
+X-Gm-Message-State: AOJu0YwGNxcgUSE8jSKcJ385zZ/0G550CyhYIrEXl+DuZX6cmeL4GM98
+        auL93OhT0TdQgbW62qdmPqAMnuqzeUs1sJcAzssTSQ==
+X-Google-Smtp-Source: AGHT+IHy0hvFkvPj2pc9M2fqH7uFFxdkVHYrAu/hwKzERNMYWLTY0Kzs43mFyS5OI/qFiRhyWmIsIIv0zWuuaq9PecI=
+X-Received: by 2002:a05:600c:3217:b0:3f7:3e85:36a with SMTP id
+ r23-20020a05600c321700b003f73e85036amr88893wmp.7.1695226317753; Wed, 20 Sep
+ 2023 09:11:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230920154608.1447057-5-apatel@ventanamicro.com>
+References: <20230914152620.2743033-1-surenb@google.com> <20230914152620.2743033-3-surenb@google.com>
+ <CAG48ez0gN_nC8NrMOeq44QmUDT27EpT0bFuNu1ReVKDBt3zy7Q@mail.gmail.com>
+ <CAJuCfpGdbc70aZPu=cNgemK1EFUyvLfZU8ELSjseZtfpSF+EEg@mail.gmail.com>
+ <CAG48ez212+UjQMB94vKvyV4YAEgg=jBhdzg_1b4BRe6=SO09fA@mail.gmail.com> <CAJuCfpGEPPmEW6GqCjQXB5g04PA=BwhNgLVooM+DcroQj8RjyA@mail.gmail.com>
+In-Reply-To: <CAJuCfpGEPPmEW6GqCjQXB5g04PA=BwhNgLVooM+DcroQj8RjyA@mail.gmail.com>
+From:   Jann Horn <jannh@google.com>
+Date:   Wed, 20 Sep 2023 18:11:19 +0200
+Message-ID: <CAG48ez0WQiZvBzYBHXVP8ZVFXJEfRsHxNuXvMTFL+ietgyB9yQ@mail.gmail.com>
+Subject: Re: [PATCH 2/3] userfaultfd: UFFDIO_REMAP uABI
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
+        brauner@kernel.org, shuah@kernel.org, aarcange@redhat.com,
+        lokeshgidra@google.com, peterx@redhat.com, david@redhat.com,
+        hughd@google.com, mhocko@suse.com, axelrasmussen@google.com,
+        rppt@kernel.org, willy@infradead.org, Liam.Howlett@oracle.com,
+        zhangpeng362@huawei.com, bgeffon@google.com,
+        kaleshsingh@google.com, ngeoffray@google.com, jdduke@google.com,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Sep 20, 2023 at 09:16:08PM +0530, Anup Patel wrote:
-> Currently the AIA ONE_REG registers are reported by get-reg-list
-> as new registers for various vcpu_reg_list configs whenever Ssaia
-> is available on the host because Ssaia extension can only be
-> disabled by Smstateen extension which is not always available.
-> 
-> To tackle this, we should filter-out AIA ONE_REG registers only
-> when Ssaia can't be disabled for a VCPU.
-> 
-> Fixes: 477069398ed6 ("KVM: riscv: selftests: Add get-reg-list test")
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> Reviewed-by: Atish Patra <atishp@rivosinc.com>
+On Wed, Sep 20, 2023 at 3:49=E2=80=AFAM Suren Baghdasaryan <surenb@google.c=
+om> wrote:
+> On Tue, Sep 19, 2023 at 4:51=E2=80=AFPM Jann Horn <jannh@google.com> wrot=
+e:
+> > On Wed, Sep 20, 2023 at 1:08=E2=80=AFAM Suren Baghdasaryan <surenb@goog=
+le.com> wrote:
+> > > On Thu, Sep 14, 2023 at 7:28=E2=80=AFPM Jann Horn <jannh@google.com> =
+wrote:
+> > > > On Thu, Sep 14, 2023 at 5:26=E2=80=AFPM Suren Baghdasaryan <surenb@=
+google.com> wrote:
+> > > > > From: Andrea Arcangeli <aarcange@redhat.com>
+> > > > >
+> > > > > This implements the uABI of UFFDIO_REMAP.
+> > > > >
+> > > > > Notably one mode bitflag is also forwarded (and in turn known) by=
+ the
+> > > > > lowlevel remap_pages method.
+> > [...]
+> > > > > diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+> > [...]
+> > > > > +int remap_pages_huge_pmd(struct mm_struct *dst_mm,
+> > > > > +                        struct mm_struct *src_mm,
+> > > > > +                        pmd_t *dst_pmd, pmd_t *src_pmd,
+> > > > > +                        pmd_t dst_pmdval,
+> > > > > +                        struct vm_area_struct *dst_vma,
+> > > > > +                        struct vm_area_struct *src_vma,
+> > > > > +                        unsigned long dst_addr,
+> > > > > +                        unsigned long src_addr)
+> > > > > +{
+> > > > > +       pmd_t _dst_pmd, src_pmdval;
+> > > > > +       struct page *src_page;
+> > > > > +       struct anon_vma *src_anon_vma, *dst_anon_vma;
+> > > > > +       spinlock_t *src_ptl, *dst_ptl;
+> > > > > +       pgtable_t pgtable;
+> > > > > +       struct mmu_notifier_range range;
+> > > > > +
+> > > > > +       src_pmdval =3D *src_pmd;
+> > > > > +       src_ptl =3D pmd_lockptr(src_mm, src_pmd);
+> > > > > +
+> > > > > +       BUG_ON(!pmd_trans_huge(src_pmdval));
+> > > > > +       BUG_ON(!pmd_none(dst_pmdval));
+> > > >
+> > > > Why can we assert that pmd_none(dst_pmdval) is true here? Can we no=
+t
+> > > > have concurrent faults (or userfaultfd operations) populating that
+> > > > PMD?
+> > >
+> > > IIUC dst_pmdval is a copy of the value from dst_pmd, so that local
+> > > copy should not change even if some concurrent operation changes
+> > > dst_pmd. We can assert that it's pmd_none because we checked for that
+> > > before calling remap_pages_huge_pmd. Later on we check if dst_pmd
+> > > changed from under us (see pmd_same(*dst_pmd, dst_pmdval) check) and
+> > > retry if that happened.
+> >
+> > Oh, right, I don't know what I was thinking when I typed that.
+> >
+> > But now I wonder about the check directly above that: What does this
+> > code do for swap PMDs? It looks like that might splat on the
+> > BUG_ON(!pmd_trans_huge(src_pmdval)). All we've checked on the path to
+> > here is that the virtual memory area is aligned, that the destination
+> > PMD is empty, and that pmd_trans_huge_lock() succeeded; but
+> > pmd_trans_huge_lock() explicitly permits swap PMDs (which is the
+> > swapped-out version of transhuge PMDs):
+> >
+> > static inline spinlock_t *pmd_trans_huge_lock(pmd_t *pmd,
+> >                 struct vm_area_struct *vma)
+> > {
+> >         if (is_swap_pmd(*pmd) || pmd_trans_huge(*pmd) || pmd_devmap(*pm=
+d))
+> >                 return __pmd_trans_huge_lock(pmd, vma);
+> >         else
+> >                 return NULL;
+> > }
+>
+> Yeah... Ok, I think I'm missing a check for  pmd_trans_huge(*src_pmd)
+> after we lock it with pmd_trans_huge_lock(src_pmd, src_vma). And we
+> can remove the above BUG_ON(). Would that address your concern?
 
-I guess you missed my reply to myself where I corrected my analysis and
-gave an r-b. Anyway, here it is again, and thanks for fixing up the nits.
-
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-
-Thanks,
-drew
+Sounds good. It'll end up splitting huge swap entries but I guess the
+extra code for moving huge swap entries might not be worth it.
