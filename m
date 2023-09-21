@@ -2,122 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E581E7D0A3
-	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Sep 2023 17:29:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BC5D3E7D0A5
+	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Sep 2023 17:29:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230018AbjIUR3T (ORCPT
+        id S229614AbjIUR3W (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 21 Sep 2023 13:29:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55016 "EHLO
+        Thu, 21 Sep 2023 13:29:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230251AbjIUR2o (ORCPT
+        with ESMTP id S230270AbjIUR2r (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Sep 2023 13:28:44 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55695AD25;
-        Thu, 21 Sep 2023 10:11:20 -0700 (PDT)
+        Thu, 21 Sep 2023 13:28:47 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C2653649;
+        Thu, 21 Sep 2023 10:16:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695316280; x=1726852280;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=cxZTRu44xkZvSgweNgQ/ax7l1RyCji4jcedyDtK8Vag=;
-  b=XVON4yOg04xCNnkdgBFkWMeci+MqVoSO6VSmPOUxgf+qdoJKSgTZBKpf
-   731eLZwmO1IABgPBwORUH6NkuErTzFZWagfjhlM6ioDiDsQsleAa6eayD
-   P2+rsgeUousP1BLPqdZJjCHKRasQooszd604jI4jfM8+sO4m7GBAIXnVJ
-   BUQpfc6n9PKvCbz1SNWfWDLF7H8rfJ+9SC6SCfimOLvFQ8KwKvqUaDoLz
-   Rw74R5IFxabZfA0qx1mi39TB/fBb/pim9B8TN5tdpsdZBvYwueyPAy9cH
-   Nf3BFgXWUjDmbQ0mI0JclQet+AHMj4BONJzhRcgG+NdROVKNUUrCQzDe2
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="370764470"
-X-IronPort-AV: E=Sophos;i="6.03,164,1694761200"; 
-   d="scan'208";a="370764470"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 00:54:52 -0700
+  t=1695316605; x=1726852605;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=C2g69B99mcxWi9Q2D69yxsBnzZaEHHrRxUrs3EY2EDM=;
+  b=L0ejLB3pv5OS8qPgBezhNlZxNQyd0vYTcs4TcTksd18yFwppNgFBsFLR
+   oM16mdfyhu0nDNBBW4dfStLsXVoOks6GsQFX1JAEdlNmvDCRb3mfGbCn6
+   zcNvOU14AktmfvKdX+NA2iNXFJnuAHzy6CvoQ4Fb/g8z7M4ZCa7/YG7qe
+   boEax8Hai7G42yunaJEXVmuEhHiDlV7xfClAJDnIpYxFWflyP2QqoI0v9
+   l6/PK6TBtllsEPVrA/BfYu06JDMYmhcqDWfxR1C5aCu6VLFNCrfxOtZ9/
+   ExfvlJBe6U5bQtRlJMnZOPVNk8tXftWnFAjJ8B7IOSje3JPKiLZ8lB4gw
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="444606275"
+X-IronPort-AV: E=Sophos;i="6.03,165,1694761200"; 
+   d="scan'208";a="444606275"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 05:12:12 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="812523171"
-X-IronPort-AV: E=Sophos;i="6.03,164,1694761200"; 
-   d="scan'208";a="812523171"
-Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by fmsmga008.fm.intel.com with ESMTP; 21 Sep 2023 00:54:52 -0700
-From:   Yi Liu <yi.l.liu@intel.com>
-To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
-        kevin.tian@intel.com, robin.murphy@arm.com,
-        baolu.lu@linux.intel.com
-Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
-        kvm@vger.kernel.org, mjrosato@linux.ibm.com,
-        chao.p.peng@linux.intel.com, yi.l.liu@intel.com,
-        yi.y.sun@linux.intel.com, peterx@redhat.com, jasowang@redhat.com,
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="920706101"
+X-IronPort-AV: E=Sophos;i="6.03,165,1694761200"; 
+   d="scan'208";a="920706101"
+Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.254.213.213]) ([10.254.213.213])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 05:12:06 -0700
+Message-ID: <0d37a1b1-e7ef-fa73-d17c-629cd254ae75@linux.intel.com>
+Date:   Thu, 21 Sep 2023 20:12:03 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Cc:     baolu.lu@linux.intel.com, cohuck@redhat.com, eric.auger@redhat.com,
+        nicolinc@nvidia.com, kvm@vger.kernel.org, mjrosato@linux.ibm.com,
+        chao.p.peng@linux.intel.com, yi.y.sun@linux.intel.com,
+        peterx@redhat.com, jasowang@redhat.com,
         shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
         suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         zhenzhong.duan@intel.com, joao.m.martins@oracle.com
-Subject: [PATCH v5 08/11] iommu/vt-d: Make iotlb flush helpers to be extern
-Date:   Thu, 21 Sep 2023 00:54:28 -0700
-Message-Id: <20230921075431.125239-9-yi.l.liu@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230921075431.125239-1-yi.l.liu@intel.com>
-References: <20230921075431.125239-1-yi.l.liu@intel.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v4 01/17] iommu: Add hwpt_type with user_data for
+ domain_alloc_user op
+Content-Language: en-US
+To:     Yi Liu <yi.l.liu@intel.com>, joro@8bytes.org,
+        alex.williamson@redhat.com, jgg@nvidia.com, kevin.tian@intel.com,
+        robin.murphy@arm.com
+References: <20230921075138.124099-1-yi.l.liu@intel.com>
+ <20230921075138.124099-2-yi.l.liu@intel.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20230921075138.124099-2-yi.l.liu@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This makes the helpers visible to nested.c.
+On 2023/9/21 15:51, Yi Liu wrote:
+> diff --git a/include/uapi/linux/iommufd.h b/include/uapi/linux/iommufd.h
+> index 4a7c5c8fdbb4..3c8660fe9bb1 100644
+> --- a/include/uapi/linux/iommufd.h
+> +++ b/include/uapi/linux/iommufd.h
+> @@ -357,6 +357,14 @@ enum iommufd_hwpt_alloc_flags {
+>   	IOMMU_HWPT_ALLOC_NEST_PARENT = 1 << 0,
+>   };
+>   
+> +/**
+> + * enum iommu_hwpt_type - IOMMU HWPT Type
+> + * @IOMMU_HWPT_TYPE_DEFAULT: default
 
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-Signed-off-by: Yi Liu <yi.l.liu@intel.com>
----
- drivers/iommu/intel/iommu.c | 10 +++++-----
- drivers/iommu/intel/iommu.h |  6 ++++++
- 2 files changed, 11 insertions(+), 5 deletions(-)
+How about s/default/vendor agnostic/ ?
 
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 7b75f407c623..c93c91ed4ee2 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -1511,10 +1511,10 @@ static void domain_flush_pasid_iotlb(struct intel_iommu *iommu,
- 	spin_unlock_irqrestore(&domain->lock, flags);
- }
- 
--static void iommu_flush_iotlb_psi(struct intel_iommu *iommu,
--				  struct dmar_domain *domain,
--				  unsigned long pfn, unsigned int pages,
--				  int ih, int map)
-+void iommu_flush_iotlb_psi(struct intel_iommu *iommu,
-+			   struct dmar_domain *domain,
-+			   unsigned long pfn, unsigned int pages,
-+			   int ih, int map)
- {
- 	unsigned int aligned_pages = __roundup_pow_of_two(pages);
- 	unsigned int mask = ilog2(aligned_pages);
-@@ -1587,7 +1587,7 @@ static inline void __mapping_notify_one(struct intel_iommu *iommu,
- 		iommu_flush_write_buffer(iommu);
- }
- 
--static void intel_flush_iotlb_all(struct iommu_domain *domain)
-+void intel_flush_iotlb_all(struct iommu_domain *domain)
- {
- 	struct dmar_domain *dmar_domain = to_dmar_domain(domain);
- 	struct iommu_domain_info *info;
-diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
-index 411cde769787..ac23b9d22d20 100644
---- a/drivers/iommu/intel/iommu.h
-+++ b/drivers/iommu/intel/iommu.h
-@@ -865,6 +865,12 @@ void device_block_translation(struct device *dev);
- int prepare_domain_attach_device(struct iommu_domain *domain,
- 				 struct device *dev);
- void domain_update_iommu_cap(struct dmar_domain *domain);
-+void iommu_flush_iotlb_psi(struct intel_iommu *iommu,
-+			   struct dmar_domain *domain,
-+			   unsigned long pfn, unsigned int pages,
-+			   int ih, int map);
-+void intel_flush_iotlb_all(struct iommu_domain *domain);
-+
- 
- int dmar_ir_support(void);
- 
--- 
-2.34.1
+> + */
+> +enum iommu_hwpt_type {
+> +	IOMMU_HWPT_TYPE_DEFAULT,
+> +};
+> +
+>   /**
+>    * struct iommu_hwpt_alloc - ioctl(IOMMU_HWPT_ALLOC)
+>    * @size: sizeof(struct iommu_hwpt_alloc)
 
+Best regards,
+baolu
