@@ -2,44 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8DD9E7D0AA
-	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Sep 2023 19:05:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1B7AE7D0A8
+	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Sep 2023 19:28:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbjIUTFQ (ORCPT
+        id S230414AbjIUT2k (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 21 Sep 2023 15:05:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34970 "EHLO
+        Thu, 21 Sep 2023 15:28:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231250AbjIUTE3 (ORCPT
+        with ESMTP id S230412AbjIUT2Z (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Sep 2023 15:04:29 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88D99417CF;
-        Thu, 21 Sep 2023 10:49:46 -0700 (PDT)
+        Thu, 21 Sep 2023 15:28:25 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4990576B6;
+        Thu, 21 Sep 2023 10:10:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695318586; x=1726854586;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=YklQvM01f0djWHMXvFMLwaLIOjNmAe73GMb89vbfk9Y=;
-  b=W6wuM3I9z02x7IGNrJRKjpvGRig3tmP0m2IVrP0/zfUpZbJilmDEv3rS
-   YUA8a61Sqo4RPAftmqWYL2mXlAfJ1ZzNckWvihIjTMtJCrI2kiV1jSXXJ
-   dLLEuwsr1yVwLghmuSfsm4bNvevZnlvkpGot9lHqiVNC7vGW7yQ+9ztdX
-   QGk5SmF/HE4/ZvhO7uK8XNa7p54O/VRfeRK4A4XPDqdOViKKdxW11XBcz
-   taGHvWKJeaa56ek8vnD8f+c2FzL7aVLVpFW5Ii58dRyWGw/9KR3QFSssR
-   x9QDX/GR2j8CRqDczjCGjkHlXPOC7FjcBGBebKxpOK/T+inQajHaC4B8l
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="359832813"
+  t=1695316220; x=1726852220;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=X9BBfgk8l9qrBPqgGMYev0KIhH/OZFgWEJbj0DqM7ps=;
+  b=aQOyF2nRK+tn5jfi9VgKf5gncIlneS1E5shoEImI3P8xl+Ox9gECyWTm
+   5RfYqOD/gbxVRzS8hXF7RY9DArGFgs9HKqbMMcaauWJN6uiPHmWCo3tqZ
+   wQzKOZwCU28scH2FDR+QVpGwNmDX2KMBT5D6rBv2DRtsLx0YWzCZt6xoC
+   r2mOGlge/GNDLCS9vcONkJjVxlvXP8T59OaTpJSZg1BA1PWwrgeFzq2QK
+   2qTaGRmCXcCM/xdnPm/ko4JB/8wo5LGC9Xp4e0bTDB8HOxImIDc/SN7GI
+   nUNqVhYXtAwos0/9Eh0jkuh3FOFEDFvFysZk3spEYt23FG/eZUt+bm42r
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="370764359"
 X-IronPort-AV: E=Sophos;i="6.03,164,1694761200"; 
-   d="scan'208";a="359832813"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 00:52:08 -0700
+   d="scan'208";a="370764359"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 00:54:43 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="723649496"
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="812522971"
 X-IronPort-AV: E=Sophos;i="6.03,164,1694761200"; 
-   d="scan'208";a="723649496"
+   d="scan'208";a="812522971"
 Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by orsmga006.jf.intel.com with ESMTP; 21 Sep 2023 00:52:08 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 21 Sep 2023 00:54:42 -0700
 From:   Yi Liu <yi.l.liu@intel.com>
 To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
         kevin.tian@intel.com, robin.murphy@arm.com,
@@ -52,154 +52,137 @@ Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
         suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         zhenzhong.duan@intel.com, joao.m.martins@oracle.com
-Subject: [PATCH v4 02/17] iommu: Add nested domain support
-Date:   Thu, 21 Sep 2023 00:51:23 -0700
-Message-Id: <20230921075138.124099-3-yi.l.liu@intel.com>
+Subject: [PATCH v5 00/11] Add Intel VT-d nested translation
+Date:   Thu, 21 Sep 2023 00:54:20 -0700
+Message-Id: <20230921075431.125239-1-yi.l.liu@intel.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230921075138.124099-1-yi.l.liu@intel.com>
-References: <20230921075138.124099-1-yi.l.liu@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Lu Baolu <baolu.lu@linux.intel.com>
+This is to add Intel VT-d nested translation based on IOMMUFD nesting
+infrastructure. As the iommufd nesting infrastructure series[1], iommu
+core supports new ops to report iommu hardware information, allocate
+domains with user data and invalidate stage-1 IOTLB when there is mapping
+changed in stage-1 page table. The data required in the three paths are
+vendor-specific, so
 
-Introduce a new domain type for a user I/O page table, which is nested on
-top of another user space address represented by a UNMANAGED domain. The
-mappings of a nested domain are managed by user space software, so it is
-not necessary to have map/unmap callbacks. But the updates of the PTEs in
-the nested page table will be propagated to the hardware caches on both
-IOMMU (IOTLB) and devices (DevTLB/ATC).
+1) IOMMU_HWPT_TYPE_VTD_S1 is defined for the Intel VT-d stage-1 page
+   table, it will be used in the stage-1 domain allocation and IOTLB
+   syncing path. struct iommu_hwpt_vtd_s1 is defined to pass user_data
+   for the Intel VT-d stage-1 domain allocation.
+   struct iommu_hwpt_vtd_s1_invalidate is defined to pass the data for
+   the Intel VT-d stage-1 IOTLB invalidation.
+2) IOMMU_HW_INFO_TYPE_INTEL_VTD and struct iommu_hw_info_vtd are defined
+   to report iommu hardware information for Intel VT-d.
 
-A nested domain is allocated by the domain_alloc_user op, and attached to
-a device through the existing iommu_attach_device/group() interfaces.
+With above IOMMUFD extensions, the intel iommu driver implements the three
+paths to support nested translation.
 
-Add a new domain op cache_invalidate_user for the userspace to flush the
-hardware caches for a nested domain through iommufd. No wrapper for it,
-as it's only supposed to be used by iommufd.
+The first Intel platform supporting nested translation is Sapphire
+Rapids which, unfortunately, has a hardware errata [2] requiring special
+treatment. This errata happens when a stage-1 page table page (either
+level) is located in a stage-2 read-only region. In that case the IOMMU
+hardware may ignore the stage-2 RO permission and still set the A/D bit
+in stage-1 page table entries during page table walking.
 
-Pass in invalidation requests to the cache_invalidate_user op, in form of
-a user data array that conatins a number of invalidation entries. Add an
-iommu_user_data_array struct and an iommu_copy_user_data_from_array helper
-for iommu drivers to walk through the invalidation request array and fetch
-the data entry inside.
+A flag IOMMU_HW_INFO_VTD_ERRATA_772415_SPR17 is introduced to report
+this errata to userspace. With that restriction the user should either
+disable nested translation to favor RO stage-2 mappings or ensure no
+RO stage-2 mapping to enable nested translation.
 
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-Co-developed-by: Nicolin Chen <nicolinc@nvidia.com>
-Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-Signed-off-by: Yi Liu <yi.l.liu@intel.com>
----
- include/linux/iommu.h | 59 +++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 59 insertions(+)
+Intel-iommu driver is armed with necessary checks to prevent such mix
+in patch12 of this series.
 
-diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-index 12e12e5563e6..439e295c91a3 100644
---- a/include/linux/iommu.h
-+++ b/include/linux/iommu.h
-@@ -66,6 +66,9 @@ struct iommu_domain_geometry {
- 
- #define __IOMMU_DOMAIN_SVA	(1U << 4)  /* Shared process address space */
- 
-+#define __IOMMU_DOMAIN_NESTED	(1U << 5)  /* User-managed address space nested
-+					      on a stage-2 translation        */
-+
- #define IOMMU_DOMAIN_ALLOC_FLAGS ~__IOMMU_DOMAIN_DMA_FQ
- /*
-  * This are the possible domain-types
-@@ -92,6 +95,7 @@ struct iommu_domain_geometry {
- 				 __IOMMU_DOMAIN_DMA_API |	\
- 				 __IOMMU_DOMAIN_DMA_FQ)
- #define IOMMU_DOMAIN_SVA	(__IOMMU_DOMAIN_SVA)
-+#define IOMMU_DOMAIN_NESTED	(__IOMMU_DOMAIN_NESTED)
- 
- struct iommu_domain {
- 	unsigned type;
-@@ -241,6 +245,21 @@ struct iommu_user_data {
- 	size_t len;
- };
- 
-+/**
-+ * struct iommu_user_data_array - iommu driver specific user space data array
-+ * @uptr: Pointer to the user buffer array for copy_from_user()
-+ * @entry_len: The fixed-width length of a entry in the array, in bytes
-+ * @entry_num: The number of total entries in the array
-+ *
-+ * A array having a @entry_num number of @entry_len sized entries, each entry is
-+ * user space data, i.e. an uAPI that is defined in include/uapi/linux/iommufd.h
-+ */
-+struct iommu_user_data_array {
-+	void __user *uptr;
-+	size_t entry_len;
-+	int entry_num;
-+};
-+
- /**
-  * iommu_copy_user_data - Copy iommu driver specific user space data
-  * @dst_data: Pointer to an iommu driver specific user data that is defined in
-@@ -263,6 +282,34 @@ static inline int iommu_copy_user_data(void *dst_data,
- 				     src_data->uptr, src_data->len);
- }
- 
-+/**
-+ * iommu_copy_user_data_from_array - Copy iommu driver specific user space data
-+ *                                   from an iommu_user_data_array input
-+ * @dst_data: Pointer to an iommu driver specific user data that is defined in
-+ *            include/uapi/linux/iommufd.h
-+ * @src_data: Pointer to a struct iommu_user_data_array for user space data array
-+ * @index: Index to offset the location in the array to copy user data from
-+ * @data_len: Length of current user data structure, i.e. sizeof(struct _dst)
-+ * @min_len: Initial length of user data structure for backward compatibility.
-+ *           This should be offsetofend using the last member in the user data
-+ *           struct that was initially added to include/uapi/linux/iommufd.h
-+ */
-+static inline int
-+iommu_copy_user_data_from_array(void *dst_data,
-+				const struct iommu_user_data_array *src_array,
-+				int index, size_t data_len, size_t min_len)
-+{
-+	struct iommu_user_data src_data;
-+
-+	if (WARN_ON(!src_array || index >= src_array->entry_num))
-+		return -EINVAL;
-+	if (!src_array->entry_num)
-+		return -EINVAL;
-+	src_data.uptr = src_array->uptr + src_array->entry_len * index;
-+	src_data.len = src_array->entry_len;
-+	return iommu_copy_user_data(dst_data, &src_data, data_len, min_len);
-+}
-+
- /**
-  * struct iommu_ops - iommu ops and capabilities
-  * @capable: check capability
-@@ -374,6 +421,15 @@ struct iommu_ops {
-  * @iotlb_sync_map: Sync mappings created recently using @map to the hardware
-  * @iotlb_sync: Flush all queued ranges from the hardware TLBs and empty flush
-  *            queue
-+ * @cache_invalidate_user: Flush hardware cache for user space IO page table.
-+ *                         The @domain must be IOMMU_DOMAIN_NESTED. The @array
-+ *                         passes in the cache invalidation requests, in form
-+ *                         of a driver data structure. The driver must update
-+ *                         array->entry_num to report the number of handled
-+ *                         invalidation requests. The 32-bit @error_code can
-+ *                         forward a driver specific error code to user space.
-+ *                         Both the driver data structure and the error code
-+ *                         must be defined in  include/uapi/linux/iommufd.h
-  * @iova_to_phys: translate iova to physical address
-  * @enforce_cache_coherency: Prevent any kind of DMA from bypassing IOMMU_CACHE,
-  *                           including no-snoop TLPs on PCIe or other platform
-@@ -403,6 +459,9 @@ struct iommu_domain_ops {
- 			       size_t size);
- 	void (*iotlb_sync)(struct iommu_domain *domain,
- 			   struct iommu_iotlb_gather *iotlb_gather);
-+	int (*cache_invalidate_user)(struct iommu_domain *domain,
-+				     struct iommu_user_data_array *array,
-+				     u32 *error_code);
- 
- 	phys_addr_t (*iova_to_phys)(struct iommu_domain *domain,
- 				    dma_addr_t iova);
+Qemu currently does add RO mappings though. The vfio agent in Qemu
+simply maps all valid regions in the GPA address space which certainly
+includes RO regions e.g. vbios.
+
+In reality we don't know a usage relying on DMA reads from the BIOS
+region. Hence finding a way to skip RO regions (e.g. via a discard manager)
+in Qemu might be an acceptable tradeoff. The actual change needs more
+discussion in Qemu community. For now we just hacked Qemu to test.
+
+Complete code can be found in [3], corresponding QEMU could can be found
+in [4].
+
+[1] https://lore.kernel.org/linux-iommu/20230921075138.124099-1-yi.l.liu@intel.com/
+[2] https://www.intel.com/content/www/us/en/content-details/772415/content-details.html
+[3] https://github.com/yiliu1765/iommufd/tree/iommufd_nesting
+[4] https://github.com/yiliu1765/qemu/tree/zhenzhong/wip/iommufd_nesting_rfcv1
+
+Change log:
+
+v5:
+ - Add Kevin's r-b for patch 2, 3 ,5 8, 10
+ - Drop enforce_cache_coherency callback from the nested type domain ops (Kevin)
+ - Remove duplicate agaw check in patch 04 (Kevin)
+ - Remove duplicate domain_update_iommu_cap() in patch 06 (Kevin)
+ - Check parent's force_snooping to set pgsnp in the pasid entry (Kevin)
+ - uapi data structure check (Kevin)
+ - Simplify the errata handling as user can allocate nested parent domain
+
+v4: https://lore.kernel.org/linux-iommu/20230724111335.107427-1-yi.l.liu@intel.com/
+ - Remove ascii art tables (Jason)
+ - Drop EMT (Tina, Jason)
+ - Drop MTS and related definitions (Kevin)
+ - Rename macro IOMMU_VTD_PGTBL_ to IOMMU_VTD_S1_ (Kevin)
+ - Rename struct iommu_hwpt_intel_vtd_ to iommu_hwpt_vtd_ (Kevin)
+ - Rename struct iommu_hwpt_intel_vtd to iommu_hwpt_vtd_s1 (Kevin)
+ - Put the vendor specific hwpt alloc data structure before enuma iommu_hwpt_type (Kevin)
+ - Do not trim the higher page levels of S2 domain in nested domain attachment as the
+   S2 domain may have been used independently. (Kevin)
+ - Remove the first-stage pgd check against the maximum address of s2_domain as hw
+   can check it anyhow. It makes sense to check every pfns used in the stage-1 page
+   table. But it cannot make it. So just leave it to hw. (Kevin)
+ - Split the iotlb flush part into an order of uapi, helper and callback implementation (Kevin)
+ - Change the policy of VT-d nesting errata, disallow RO mapping once a domain is used
+   as parent domain of a nested domain. This removes the nested_users counting. (Kevin)
+ - Minor fix for "make htmldocs"
+
+v3: https://lore.kernel.org/linux-iommu/20230511145110.27707-1-yi.l.liu@intel.com/
+ - Further split the patches into an order of adding helpers for nested
+   domain, iotlb flush, nested domain attachment and nested domain allocation
+   callback, then report the hw_info to userspace.
+ - Add batch support in cache invalidation from userspace
+ - Disallow nested translation usage if RO mappings exists in stage-2 domain
+   due to errata on readonly mappings on Sapphire Rapids platform.
+
+v2: https://lore.kernel.org/linux-iommu/20230309082207.612346-1-yi.l.liu@intel.com/
+ - The iommufd infrastructure is split to be separate series.
+
+v1: https://lore.kernel.org/linux-iommu/20230209043153.14964-1-yi.l.liu@intel.com/
+
+Regards,
+	Yi Liu
+
+Lu Baolu (5):
+  iommu/vt-d: Extend dmar_domain to support nested domain
+  iommu/vt-d: Add helper for nested domain allocation
+  iommu/vt-d: Add helper to setup pasid nested translation
+  iommu/vt-d: Add nested domain allocation
+  iommu/vt-d: Disallow read-only mappings to nest parent domain
+
+Yi Liu (6):
+  iommufd: Add data structure for Intel VT-d stage-1 domain allocation
+  iommu/vt-d: Make domain attach helpers to be extern
+  iommu/vt-d: Set the nested domain to a device
+  iommufd: Add data structure for Intel VT-d stage-1 cache invalidation
+  iommu/vt-d: Make iotlb flush helpers to be extern
+  iommu/vt-d: Add iotlb flush for nested domain
+
+ drivers/iommu/intel/Makefile |   2 +-
+ drivers/iommu/intel/iommu.c  |  60 +++++++++----
+ drivers/iommu/intel/iommu.h  |  51 +++++++++--
+ drivers/iommu/intel/nested.c | 162 +++++++++++++++++++++++++++++++++++
+ drivers/iommu/intel/pasid.c  | 125 +++++++++++++++++++++++++++
+ drivers/iommu/intel/pasid.h  |   2 +
+ include/uapi/linux/iommufd.h |  76 +++++++++++++++-
+ 7 files changed, 452 insertions(+), 26 deletions(-)
+ create mode 100644 drivers/iommu/intel/nested.c
+
 -- 
 2.34.1
 
