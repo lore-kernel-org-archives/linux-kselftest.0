@@ -2,176 +2,277 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0353FE7D0A7
-	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Sep 2023 19:30:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D871DE7D0A2
+	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Sep 2023 19:36:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230502AbjIUTaV (ORCPT
+        id S230241AbjIUTg7 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 21 Sep 2023 15:30:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43402 "EHLO
+        Thu, 21 Sep 2023 15:36:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231127AbjIUT3s (ORCPT
+        with ESMTP id S229798AbjIUTgz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Sep 2023 15:29:48 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA6CADF1F
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Sep 2023 11:04:44 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-59bc956b029so15266217b3.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Sep 2023 11:04:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695319484; x=1695924284; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AdMCh/+yCsduMbxg3dBOP8pPO/0inss321VX5z7Cslw=;
-        b=4cF7X2KPVdvj/7607ekIQaEkhcmXERPq1+VVvEJRyxyWaezd5rbC9thCnzqB94ztKQ
-         +TfEJjXpFjfWkyJ7KrTjFUq/3rbF6WwXPHNTkgibkgKgzTNtmgz6JLTqCy7o63154Lw3
-         JkijIXtRuB5qgVnzVQDXUkKyg8OcoA9NjUM5tN1WkyYYZ/MTOyy3tiwOJUzqcpq7ffVi
-         mppntYxKiaZkni8p7pmOPe1W7cLQWJ6GIpyVeefZ94o1e7MaT8OitlV73/fewMZGB8gU
-         ec6vw1Nrqc9ThSRrDbZO2GoHt7qiX1QK5AIYPua8zhISucW8WmL7bZS3PgjfWV60lQU2
-         Ip4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695319484; x=1695924284;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AdMCh/+yCsduMbxg3dBOP8pPO/0inss321VX5z7Cslw=;
-        b=XyQS5WgzQCcSG5gKMdfcnkb2PV1Z+2ilBS/Y1wCPuxXuiJN0j4TiNf7kF2WMD//Y0I
-         uAyVDCWqI09J+TcDLZ+fud2/Ebv0VaHmy7IV7tIhnO1zecLmGrBcHflMxIaeQllpjoR9
-         13yVorBTkjgz1Dn+9tmeo858CCRQaj25Jbswc8RzCG0gnS4YZ+Ie7O/te0HYr3wPZdVg
-         Q0QwqR9IWGv7CN9Q7ndpriHgkmjIp7VDjDga1+vXLTrwnq2+3Q8BraRI9wC1Sh5c4PXA
-         oC2z67V35DDCNz5olcQmmtvndwwaMrXByLZpE1PCSp+ec9b+O4TXubz2TKAWFfOI+egF
-         vBxw==
-X-Gm-Message-State: AOJu0YyHclP6BdQKQmgTqKEgHnYbs/XpBobkWWhjJl/Fvxr9O48BbEUH
-        wiB1nrchnQhztivIwJ3xEtWVhyGhB3/MNZYCZhA/rg==
-X-Google-Smtp-Source: AGHT+IFlXUKdQWPSBHJn1j/MDvMjTmPT/VMWQg4H/xOs81/J/jwuJ8JJXX1pfb+Adw8urZJBbplJpBr1hxqfZ6IXHLI=
-X-Received: by 2002:a25:dbca:0:b0:d5c:ce73:6528 with SMTP id
- g193-20020a25dbca000000b00d5cce736528mr5584392ybf.35.1695319483599; Thu, 21
- Sep 2023 11:04:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230914152620.2743033-1-surenb@google.com> <20230914152620.2743033-3-surenb@google.com>
- <ZQNMze6SXdIm13CW@casper.infradead.org> <e77b75f9-ab9e-f20b-6484-22f73524c159@redhat.com>
- <f6e350f4-1bf3-ca10-93f8-c11db44ce62b@redhat.com>
-In-Reply-To: <f6e350f4-1bf3-ca10-93f8-c11db44ce62b@redhat.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Thu, 21 Sep 2023 18:04:30 +0000
-Message-ID: <CAJuCfpGqt1V5puRMhLkjG6F2T4xtsDY8qy--ZfBPNL9kxPyWtg@mail.gmail.com>
-Subject: Re: [PATCH 2/3] userfaultfd: UFFDIO_REMAP uABI
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Matthew Wilcox <willy@infradead.org>, akpm@linux-foundation.org,
-        viro@zeniv.linux.org.uk, brauner@kernel.org, shuah@kernel.org,
-        aarcange@redhat.com, lokeshgidra@google.com, peterx@redhat.com,
-        hughd@google.com, mhocko@suse.com, axelrasmussen@google.com,
-        rppt@kernel.org, Liam.Howlett@oracle.com, jannh@google.com,
-        zhangpeng362@huawei.com, bgeffon@google.com,
-        kaleshsingh@google.com, ngeoffray@google.com, jdduke@google.com,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        Thu, 21 Sep 2023 15:36:55 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2917F49F7;
+        Thu, 21 Sep 2023 10:49:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695318596; x=1726854596;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=8IS/ASlzbqKpd5WSnRHltdzVLjrxm5nAvbgy9B03xM8=;
+  b=h3eRW2qNIAXD/o5ROA+nq7owl2PZu7xZUf85HcGVJGXJtAYLVf6sYozS
+   RG0Vlf0YV30kugI2DBZWTNH1U9G2p2YmYCEPniMoes9G/oXqwIIPfJY2g
+   ytjt5aSB1f0PvarKBU22Ho0Z2mi9E/hgGh+/a8J6GOIzK8Zlkeg7SIWhi
+   XLRTsNDyzlCYZdneWuDep+swI0vPabAs+QXfzazhaaxCn7rIKufk+/kX6
+   bOIDPtvajXVH1NcjiUptrB25Iac/JPTfcb5LuY13Pvt1rLDO77E0Tx0/p
+   gD3lJjV5Gt4NPrAWFS1FB3CJKAIE01PHRzEgadP/i89WqfhcDzpPbsEK+
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="359832960"
+X-IronPort-AV: E=Sophos;i="6.03,164,1694761200"; 
+   d="scan'208";a="359832960"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 00:52:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="723649582"
+X-IronPort-AV: E=Sophos;i="6.03,164,1694761200"; 
+   d="scan'208";a="723649582"
+Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
+  by orsmga006.jf.intel.com with ESMTP; 21 Sep 2023 00:52:18 -0700
+From:   Yi Liu <yi.l.liu@intel.com>
+To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
+        kevin.tian@intel.com, robin.murphy@arm.com,
+        baolu.lu@linux.intel.com
+Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
+        kvm@vger.kernel.org, mjrosato@linux.ibm.com,
+        chao.p.peng@linux.intel.com, yi.l.liu@intel.com,
+        yi.y.sun@linux.intel.com, peterx@redhat.com, jasowang@redhat.com,
+        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
+        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        zhenzhong.duan@intel.com, joao.m.martins@oracle.com
+Subject: [PATCH v4 14/17] iommufd/selftest: Add coverage for IOMMU_HWPT_ALLOC with nested HWPTs
+Date:   Thu, 21 Sep 2023 00:51:35 -0700
+Message-Id: <20230921075138.124099-15-yi.l.liu@intel.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230921075138.124099-1-yi.l.liu@intel.com>
+References: <20230921075138.124099-1-yi.l.liu@intel.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Sep 14, 2023 at 6:45=E2=80=AFPM David Hildenbrand <david@redhat.com=
-> wrote:
->
-> On 14.09.23 20:43, David Hildenbrand wrote:
-> > On 14.09.23 20:11, Matthew Wilcox wrote:
-> >> On Thu, Sep 14, 2023 at 08:26:12AM -0700, Suren Baghdasaryan wrote:
-> >>> +++ b/include/linux/userfaultfd_k.h
-> >>> @@ -93,6 +93,23 @@ extern int mwriteprotect_range(struct mm_struct *d=
-st_mm,
-> >>>    extern long uffd_wp_range(struct vm_area_struct *vma,
-> >>>                       unsigned long start, unsigned long len, bool en=
-able_wp);
-> >>>
-> >>> +/* remap_pages */
-> >>> +extern void double_pt_lock(spinlock_t *ptl1, spinlock_t *ptl2);
-> >>> +extern void double_pt_unlock(spinlock_t *ptl1, spinlock_t *ptl2);
-> >>> +extern ssize_t remap_pages(struct mm_struct *dst_mm,
-> >>> +                      struct mm_struct *src_mm,
-> >>> +                      unsigned long dst_start,
-> >>> +                      unsigned long src_start,
-> >>> +                      unsigned long len, __u64 flags);
-> >>> +extern int remap_pages_huge_pmd(struct mm_struct *dst_mm,
-> >>> +                           struct mm_struct *src_mm,
-> >>> +                           pmd_t *dst_pmd, pmd_t *src_pmd,
-> >>> +                           pmd_t dst_pmdval,
-> >>> +                           struct vm_area_struct *dst_vma,
-> >>> +                           struct vm_area_struct *src_vma,
-> >>> +                           unsigned long dst_addr,
-> >>> +                           unsigned long src_addr);
-> >>
-> >> Drop the 'extern' markers from function declarations.
-> >>
-> >>> +int remap_pages_huge_pmd(struct mm_struct *dst_mm,
-> >>> +                    struct mm_struct *src_mm,
-> >>> +                    pmd_t *dst_pmd, pmd_t *src_pmd,
-> >>> +                    pmd_t dst_pmdval,
-> >>> +                    struct vm_area_struct *dst_vma,
-> >>> +                    struct vm_area_struct *src_vma,
-> >>> +                    unsigned long dst_addr,
-> >>> +                    unsigned long src_addr)
-> >>> +{
-> >>> +   pmd_t _dst_pmd, src_pmdval;
-> >>> +   struct page *src_page;
-> >>> +   struct anon_vma *src_anon_vma, *dst_anon_vma;
-> >>> +   spinlock_t *src_ptl, *dst_ptl;
-> >>> +   pgtable_t pgtable;
-> >>> +   struct mmu_notifier_range range;
-> >>> +
-> >>> +   src_pmdval =3D *src_pmd;
-> >>> +   src_ptl =3D pmd_lockptr(src_mm, src_pmd);
-> >>> +
-> >>> +   BUG_ON(!pmd_trans_huge(src_pmdval));
-> >>> +   BUG_ON(!pmd_none(dst_pmdval));
-> >>> +   BUG_ON(!spin_is_locked(src_ptl));
-> >>> +   mmap_assert_locked(src_mm);
-> >>> +   mmap_assert_locked(dst_mm);
-> >>> +   BUG_ON(src_addr & ~HPAGE_PMD_MASK);
-> >>> +   BUG_ON(dst_addr & ~HPAGE_PMD_MASK);
-> >>> +
-> >>> +   src_page =3D pmd_page(src_pmdval);
-> >>> +   BUG_ON(!PageHead(src_page));
-> >>> +   BUG_ON(!PageAnon(src_page));
-> >>
-> >> Better to add a src_folio =3D page_folio(src_page);
-> >> and then folio_test_anon() here.
-> >>
-> >>> +   if (unlikely(page_mapcount(src_page) !=3D 1)) {
-> >>
-> >> Brr, this is going to miss PTE mappings of this folio.  I think you
-> >> actually want folio_mapcount() instead, although it'd be more efficien=
-t
-> >> to look at folio->_entire_mapcount =3D=3D 1 and _nr_pages_mapped =3D=
-=3D 0.
-> >> Not wure what a good name for that predicate would be.
-> >
-> > We have
-> >
-> >    * It only works on non shared anonymous pages because those can
-> >    * be relocated without generating non linear anon_vmas in the rmap
-> >    * code.
-> >    *
-> >    * It provides a zero copy mechanism to handle userspace page faults.
-> >    * The source vma pages should have mapcount =3D=3D 1, which can be
-> >    * enforced by using madvise(MADV_DONTFORK) on src vma.
-> >
-> > Use PageAnonExclusive(). As long as KSM is not involved and you don't
-> > use fork(), that flag should be good enough for that use case here.
-> >
-> ... and similarly don't do any of that swapcount stuff and only check if
-> the swap pte is anon exclusive.
+From: Nicolin Chen <nicolinc@nvidia.com>
 
-I'm preparing v2 and this is the only part left for me to address but
-I'm not clear how. David, could you please clarify how I should be
-checking swap pte to be exclusive without swapcount?
+The IOMMU_HWPT_ALLOC ioctl now supports passing user_data to allocate a
+user-managed domain for nested HWPTs. Add its coverage for that. Also,
+update _test_cmd_hwpt_alloc() and add test_cmd/err_hwpt_alloc_nested().
 
->
-> --
-> Cheers,
->
-> David / dhildenb
->
+Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+Signed-off-by: Yi Liu <yi.l.liu@intel.com>
+---
+ tools/testing/selftests/iommu/iommufd.c       | 115 ++++++++++++++++++
+ .../selftests/iommu/iommufd_fail_nth.c        |   3 +-
+ tools/testing/selftests/iommu/iommufd_utils.h |  31 +++--
+ 3 files changed, 141 insertions(+), 8 deletions(-)
+
+diff --git a/tools/testing/selftests/iommu/iommufd.c b/tools/testing/selftests/iommu/iommufd.c
+index 7a29d68bd1d2..db5e59e4abab 100644
+--- a/tools/testing/selftests/iommu/iommufd.c
++++ b/tools/testing/selftests/iommu/iommufd.c
+@@ -264,6 +264,121 @@ TEST_F(iommufd_ioas, ioas_destroy)
+ 	}
+ }
+ 
++TEST_F(iommufd_ioas, alloc_hwpt_nested)
++{
++	const uint32_t min_data_len =
++		offsetofend(struct iommu_hwpt_selftest, iotlb);
++	struct iommu_hwpt_selftest data = {
++		.iotlb =  IOMMU_TEST_IOTLB_DEFAULT,
++	};
++	uint32_t nested_hwpt_id[2] = {};
++	uint32_t parent_hwpt_id = 0;
++	uint32_t parent_hwpt_id_not_work = 0;
++	uint32_t test_hwpt_id = 0;
++
++	if (self->device_id) {
++		/* Negative tests */
++		test_err_hwpt_alloc(ENOENT, self->ioas_id, self->device_id,
++				    0, &test_hwpt_id);
++		test_err_hwpt_alloc(EINVAL, self->device_id,
++				    self->device_id, 0, &test_hwpt_id);
++
++		test_cmd_hwpt_alloc(self->device_id, self->ioas_id,
++				    IOMMU_HWPT_ALLOC_NEST_PARENT,
++				    &parent_hwpt_id);
++
++		test_cmd_hwpt_alloc(self->device_id, self->ioas_id,
++				    0, &parent_hwpt_id_not_work);
++
++		/* Negative nested tests */
++		test_err_hwpt_alloc_nested(EINVAL,
++					   self->device_id, parent_hwpt_id,
++					   0, &nested_hwpt_id[0],
++					   IOMMU_HWPT_TYPE_DEFAULT,
++					   &data, sizeof(data));
++		test_err_hwpt_alloc_nested(EINVAL,
++					   self->device_id, parent_hwpt_id,
++					   0, &nested_hwpt_id[0],
++					   IOMMU_HWPT_TYPE_SELFTEST,
++					   &data, min_data_len - 1);
++		test_err_hwpt_alloc_nested(EFAULT,
++					   self->device_id, parent_hwpt_id,
++					   0, &nested_hwpt_id[0],
++					   IOMMU_HWPT_TYPE_SELFTEST,
++					   NULL, sizeof(data));
++		test_err_hwpt_alloc_nested(EINVAL,
++					   self->device_id, parent_hwpt_id,
++					   IOMMU_HWPT_ALLOC_NEST_PARENT,
++					   &nested_hwpt_id[0],
++					   IOMMU_HWPT_TYPE_SELFTEST,
++					   &data, sizeof(data));
++		test_err_hwpt_alloc_nested(EINVAL, self->device_id,
++					   parent_hwpt_id_not_work,
++					   0, &nested_hwpt_id[0],
++					   IOMMU_HWPT_TYPE_SELFTEST,
++					   &data, sizeof(data));
++
++		/* Allocate two nested hwpts sharing one common parent hwpt */
++		test_cmd_hwpt_alloc_nested(self->device_id, parent_hwpt_id,
++					   0, &nested_hwpt_id[0],
++					   IOMMU_HWPT_TYPE_SELFTEST,
++					   &data, sizeof(data));
++		test_cmd_hwpt_alloc_nested(self->device_id, parent_hwpt_id,
++					   0, &nested_hwpt_id[1],
++					   IOMMU_HWPT_TYPE_SELFTEST,
++					   &data, sizeof(data));
++
++		/* Negative test: a nested hwpt on top of a nested hwpt */
++		test_err_hwpt_alloc_nested(EINVAL,
++					   self->device_id, nested_hwpt_id[0],
++					   0, &test_hwpt_id,
++					   IOMMU_HWPT_TYPE_SELFTEST,
++					   &data, sizeof(data));
++		/* Negative test: parent hwpt now cannot be freed */
++		EXPECT_ERRNO(EBUSY,
++			     _test_ioctl_destroy(self->fd, parent_hwpt_id));
++
++		/* Attach device to nested_hwpt_id[0] that then will be busy */
++		test_cmd_mock_domain_replace(self->stdev_id,
++					     nested_hwpt_id[0]);
++		EXPECT_ERRNO(EBUSY,
++			     _test_ioctl_destroy(self->fd, nested_hwpt_id[0]));
++
++		/* Switch from nested_hwpt_id[0] to nested_hwpt_id[1] */
++		test_cmd_mock_domain_replace(self->stdev_id,
++					     nested_hwpt_id[1]);
++		EXPECT_ERRNO(EBUSY,
++			     _test_ioctl_destroy(self->fd, nested_hwpt_id[1]));
++		test_ioctl_destroy(nested_hwpt_id[0]);
++
++		/* Detach from nested_hwpt_id[1] and destroy it */
++		test_cmd_mock_domain_replace(self->stdev_id, parent_hwpt_id);
++		test_ioctl_destroy(nested_hwpt_id[1]);
++
++		/* Detach from the parent hw_pagetable and destroy it */
++		test_cmd_mock_domain_replace(self->stdev_id, self->ioas_id);
++		test_ioctl_destroy(parent_hwpt_id);
++		test_ioctl_destroy(parent_hwpt_id_not_work);
++	} else {
++		test_err_hwpt_alloc(ENOENT, self->device_id, self->ioas_id,
++				    0, &parent_hwpt_id);
++		test_err_hwpt_alloc_nested(ENOENT,
++					   self->device_id, parent_hwpt_id,
++					   0, &nested_hwpt_id[0],
++					   IOMMU_HWPT_TYPE_SELFTEST,
++					   &data, sizeof(data));
++		test_err_hwpt_alloc_nested(ENOENT,
++					   self->device_id, parent_hwpt_id,
++					   0, &nested_hwpt_id[1],
++					   IOMMU_HWPT_TYPE_SELFTEST,
++					   &data, sizeof(data));
++		test_err_mock_domain_replace(ENOENT,
++					     self->stdev_id, nested_hwpt_id[0]);
++		test_err_mock_domain_replace(ENOENT,
++					     self->stdev_id, nested_hwpt_id[1]);
++	}
++}
++
+ TEST_F(iommufd_ioas, hwpt_attach)
+ {
+ 	/* Create a device attached directly to a hwpt */
+diff --git a/tools/testing/selftests/iommu/iommufd_fail_nth.c b/tools/testing/selftests/iommu/iommufd_fail_nth.c
+index 3d7838506bfe..d3f47f262c04 100644
+--- a/tools/testing/selftests/iommu/iommufd_fail_nth.c
++++ b/tools/testing/selftests/iommu/iommufd_fail_nth.c
+@@ -615,7 +615,8 @@ TEST_FAIL_NTH(basic_fail_nth, device)
+ 	if (_test_cmd_get_hw_info(self->fd, idev_id, &info, sizeof(info)))
+ 		return -1;
+ 
+-	if (_test_cmd_hwpt_alloc(self->fd, idev_id, ioas_id, 0, &hwpt_id))
++	if (_test_cmd_hwpt_alloc(self->fd, idev_id, ioas_id, 0, &hwpt_id,
++				 IOMMU_HWPT_TYPE_DEFAULT, 0, 0))
+ 		return -1;
+ 
+ 	if (_test_cmd_mock_domain_replace(self->fd, stdev_id, ioas_id2, NULL))
+diff --git a/tools/testing/selftests/iommu/iommufd_utils.h b/tools/testing/selftests/iommu/iommufd_utils.h
+index be4970a84977..21d7c7e53bd4 100644
+--- a/tools/testing/selftests/iommu/iommufd_utils.h
++++ b/tools/testing/selftests/iommu/iommufd_utils.h
+@@ -103,13 +103,17 @@ static int _test_cmd_mock_domain_replace(int fd, __u32 stdev_id, __u32 pt_id,
+ 							   pt_id, NULL))
+ 
+ static int _test_cmd_hwpt_alloc(int fd, __u32 device_id, __u32 pt_id,
+-				__u32 flags, __u32 *hwpt_id)
++				__u32 flags, __u32 *hwpt_id, __u32 hwpt_type,
++				void *data, size_t data_len)
+ {
+ 	struct iommu_hwpt_alloc cmd = {
+ 		.size = sizeof(cmd),
+ 		.flags = flags,
+ 		.dev_id = device_id,
+ 		.pt_id = pt_id,
++		.hwpt_type = hwpt_type,
++		.data_len = data_len,
++		.data_uptr = (uint64_t)data,
+ 	};
+ 	int ret;
+ 
+@@ -121,12 +125,25 @@ static int _test_cmd_hwpt_alloc(int fd, __u32 device_id, __u32 pt_id,
+ 	return 0;
+ }
+ 
+-#define test_cmd_hwpt_alloc(device_id, pt_id, flags, hwpt_id) \
+-	ASSERT_EQ(0, _test_cmd_hwpt_alloc(self->fd, device_id, \
+-					  pt_id, flags, hwpt_id))
+-#define test_err_hwpt_alloc(_errno, device_id, pt_id, flags, hwpt_id) \
+-	EXPECT_ERRNO(_errno, _test_cmd_hwpt_alloc(self->fd, device_id, \
+-						  pt_id, flags, hwpt_id))
++#define test_cmd_hwpt_alloc(device_id, pt_id, flags, hwpt_id)                \
++	ASSERT_EQ(0, _test_cmd_hwpt_alloc(self->fd, device_id, pt_id, flags, \
++					  hwpt_id, IOMMU_HWPT_TYPE_DEFAULT,  \
++					  NULL, 0))
++#define test_err_hwpt_alloc(_errno, device_id, pt_id, flags, hwpt_id)         \
++	EXPECT_ERRNO(_errno, _test_cmd_hwpt_alloc(self->fd, device_id, pt_id, \
++						  flags, hwpt_id,             \
++						  IOMMU_HWPT_TYPE_DEFAULT,    \
++						  NULL, 0))
++
++#define test_cmd_hwpt_alloc_nested(device_id, pt_id, flags, hwpt_id,          \
++				   hwpt_type, data, data_len)                 \
++	ASSERT_EQ(0, _test_cmd_hwpt_alloc(self->fd, device_id, pt_id, flags,  \
++					  hwpt_id, hwpt_type, data, data_len))
++#define test_err_hwpt_alloc_nested(_errno, device_id, pt_id, flags, hwpt_id,  \
++				   hwpt_type, data, data_len)                 \
++	EXPECT_ERRNO(_errno,                                                  \
++		     _test_cmd_hwpt_alloc(self->fd, device_id, pt_id, flags,  \
++					  hwpt_id, hwpt_type, data, data_len))
+ 
+ static int _test_cmd_access_replace_ioas(int fd, __u32 access_id,
+ 					 unsigned int ioas_id)
+-- 
+2.34.1
+
