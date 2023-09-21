@@ -2,87 +2,90 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AD3AE7109A
-	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Sep 2023 17:02:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6561E7109A
+	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Sep 2023 17:05:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbjIURCx (ORCPT
+        id S229505AbjIURFU (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 21 Sep 2023 13:02:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44648 "EHLO
+        Thu, 21 Sep 2023 13:05:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbjIURCY (ORCPT
+        with ESMTP id S230168AbjIURE4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Sep 2023 13:02:24 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4A8EE5C
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Sep 2023 10:01:10 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-4009fdc224dso2285e9.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Sep 2023 10:01:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695315616; x=1695920416; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eu8S1LBasF2ZhEspa4c1U6bTj1yYPvFYUvyFdE5+sh0=;
-        b=DBKEBBi3H+XhRBJ3SF52v85y+9R/yvJyS9lp1iw4V6FiMfTkjJFDd1yIXXEVnIU+6Y
-         Lk9tkvo4O2JCECa5bOTrLHC9kqU3YvNo7uShGlYdtI9LFHupfnrv0917JMP4dpjjXTmW
-         ZwXinYdEjNAcEceeKU5t+teT4OszoAjbsvoNZpP5qfq7EB6spg9Or+QpZ74lKN3ltbK3
-         zavwzcqHo8lJKHFA7g48xBC2pSyIQbArl57kQfB7pfao9rIJPMEgHUasLy1/QyOp6KqQ
-         qiL0TX30xbtHIK1vzgT9qCD62MksaEeOXKymW6NKFD0p2Zs/A9Wha/fdmtpXIyfxElxn
-         Xagw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695315616; x=1695920416;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eu8S1LBasF2ZhEspa4c1U6bTj1yYPvFYUvyFdE5+sh0=;
-        b=Qo2zRA6fgMoHs7xVwX8Hv+ajsiGXT+jwPDeTUi67SI8t5JuBr81o1fW3I2ivnqtW6T
-         HyFwEQTvmcqvSP4BT9hI/kUGX28PPJaW2R0CL4NuVVYFp330vzhZGJVx0MbGSLx7Z4Q4
-         zTlzXt+GoCe9S3WlSGlN1CP0oZDpnv+CQ0qGYV8MSbPlNSkVrFCpeepMT2VvdVi5x/4A
-         P21BkPpVrZFDMdV1PZvlV4Ag0HiLj6IyMp90A9kZO1uQjGOU4sY2olmbWocmMmOvT7p6
-         dYTjItEn/lSO7DgZkGftPmH08riNVS50l4LUTuq7waxEx57q6JZofo1cy/+NTXtvqpZ/
-         btxw==
-X-Gm-Message-State: AOJu0Yx4LoFLxrLSh/3FwmXVVDniRnhnaB2u9OETsUCWRUJrYlvi5nMI
-        9SRuU28o51nd3B3dUzN2PfQmHKhtw/hSwvtndYJK2w==
-X-Google-Smtp-Source: AGHT+IEsCsrSbKfig0oNoRzoceXo3paYU9sVVaDSOMikZhbSNVKsbvQENPu2CUkyElIndXJBCQ7CbIY2CAmctRCJmqI=
-X-Received: by 2002:a05:600c:5006:b0:404:74f8:f47c with SMTP id
- n6-20020a05600c500600b0040474f8f47cmr91268wmr.5.1695315616287; Thu, 21 Sep
- 2023 10:00:16 -0700 (PDT)
+        Thu, 21 Sep 2023 13:04:56 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5612111;
+        Thu, 21 Sep 2023 10:02:39 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id A363832009CF;
+        Thu, 21 Sep 2023 08:13:18 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Thu, 21 Sep 2023 08:13:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1695298398; x=1695384798; bh=qL6/VmfuEG0N5
+        xc6Mz2PvEm3VWqhSA+Pyx12f0FNgWU=; b=NNL8lLZ+nJLyfc6TshaXc4SDbglQp
+        a5ODaObdGtjszpBwKJ0Noyh3s/ouKVzOk3ISKCOGJ3XNBvbqe5AeN/048pZRLjiv
+        iBeXMcn5Gi7b6wms38bJmdhePlZtGCQ+5HjCoS3OQvYf2yjeN0DWol9H/ihvIlDs
+        B1BHuUigB92bXlPuGOFtLqzAKW3g4AEQYixtrwoJIEpt6B7/FO+9wvNzOBG2L5hx
+        sswKQwV9JYGbLdkR2oUkpP+YqpSyQzc6UG1sXviI8XOuUUXYG6ogPgML+mfJlpO0
+        qq9W6KkzK9vIs9UL/dRRcEqKyy6fVp8LwO6Gcl48X8QEQG6hrxKy0BQMA==
+X-ME-Sender: <xms:XTMMZU558zdbFxDVrw_Ze1QeomT43lgk6oMhblaUrxvWoyO7G_QfMw>
+    <xme:XTMMZV7WhFGkfhy9cDBfZoImR4-U9VV7Mi4kFtDuSncH_98CDVb_P4hub8H-HR-yc
+    OBI4cjlhYaZV1Y>
+X-ME-Received: <xmr:XTMMZTcSMCggTH-WN0omJfhlEc3mEWy01SQXRyhqoBeTbUYjI0E6aEzV7OtjGHYb_W0usouEZjkh-1JGP-0H5cRPMxaSrA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudekiedggeekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtrodttddtvdenucfhrhhomhepkfguohcu
+    ufgthhhimhhmvghluceoihguohhstghhsehiughoshgthhdrohhrgheqnecuggftrfgrth
+    htvghrnhepfeefueegheehleelgeehjefgieeltdeuteekkeefheejudffleefgfeludeh
+    hfejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepih
+    guohhstghhsehiughoshgthhdrohhrgh
+X-ME-Proxy: <xmx:XTMMZZKXbA6vPaFCLmzHouZnZ4RYukMibMg83PSsC7kY1pdEfS-2sA>
+    <xmx:XTMMZYJ5RUdkPQnNAdANDWlG2JlM3L6gEl3iA6nHkf9F4yaJLjFrgw>
+    <xmx:XTMMZawkfgR8HELWgXaCFL5B3mVVXvyaTzTDKMBF4Vk_o0qllOJ0lw>
+    <xmx:XjMMZV5p-3tjzZoiv3kOV5hCZK4mJttyW-Lf9t0syPcIwKPKyijm1A>
+Feedback-ID: i494840e7:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 21 Sep 2023 08:13:16 -0400 (EDT)
+Date:   Thu, 21 Sep 2023 15:13:12 +0300
+From:   Ido Schimmel <idosch@idosch.org>
+To:     Johannes Nixdorf <jnixdorf-oss@avm.de>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Andrew Lunn <andrew@lunn.ch>, David Ahern <dsahern@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        bridge@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v4 1/6] net: bridge: Set BR_FDB_ADDED_BY_USER
+ early in fdb_add_entry
+Message-ID: <ZQwzWINOPagvLgbS@shredder>
+References: <20230919-fdb_limit-v4-0-39f0293807b8@avm.de>
+ <20230919-fdb_limit-v4-1-39f0293807b8@avm.de>
 MIME-Version: 1.0
-References: <20230914152620.2743033-1-surenb@google.com> <20230914152620.2743033-3-surenb@google.com>
- <CAG48ez0gN_nC8NrMOeq44QmUDT27EpT0bFuNu1ReVKDBt3zy7Q@mail.gmail.com>
-In-Reply-To: <CAG48ez0gN_nC8NrMOeq44QmUDT27EpT0bFuNu1ReVKDBt3zy7Q@mail.gmail.com>
-From:   Jann Horn <jannh@google.com>
-Date:   Thu, 21 Sep 2023 18:59:39 +0200
-Message-ID: <CAG48ez1kBzoeYAvXVneuQqU_0zXKWV7UZGef=WnyNc32vNQLhg@mail.gmail.com>
-Subject: Re: [PATCH 2/3] userfaultfd: UFFDIO_REMAP uABI
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
-        brauner@kernel.org, shuah@kernel.org, aarcange@redhat.com,
-        lokeshgidra@google.com, peterx@redhat.com, david@redhat.com,
-        hughd@google.com, mhocko@suse.com, axelrasmussen@google.com,
-        rppt@kernel.org, willy@infradead.org, Liam.Howlett@oracle.com,
-        zhangpeng362@huawei.com, bgeffon@google.com,
-        kaleshsingh@google.com, ngeoffray@google.com, jdduke@google.com,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230919-fdb_limit-v4-1-39f0293807b8@avm.de>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Sep 14, 2023 at 9:28=E2=80=AFPM Jann Horn <jannh@google.com> wrote:
-> Though, uuuuuh, I guess if that's true, the existing
-> vma_is_anonymous() is broken, since that also just checks ->vm_ops?
-> I'm not sure what the consequences of that would be... Either way,
-> vma_is_anonymous() might be the better way to check for anonymous VMAs
-> here, and someone should figure out whether vma_is_anonymous() needs
-> to be fixed.
+On Tue, Sep 19, 2023 at 10:12:48AM +0200, Johannes Nixdorf wrote:
+> In preparation of the following fdb limit for dynamically learned entries,
+> allow fdb_create to detect that the entry was added by the user. This
+> way it can skip applying the limit in this case.
+> 
+> Signed-off-by: Johannes Nixdorf <jnixdorf-oss@avm.de>
 
-(Not really relevant to the rest of the thread, but just as a
-sidenote: Turns out this is not an issue; since commit bfd40eaff5ab
-("mm: fix vma_is_anonymous() false-positives"), VMAs where the ->mmap
-handler does not set an operations pointer end up with a dummy
-operations pointer.)
+Reviewed-by: Ido Schimmel <idosch@nvidia.com>
