@@ -2,143 +2,139 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 927E9E7D0A2
-	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Sep 2023 18:13:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1ABB9E7D0A4
+	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Sep 2023 18:35:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229493AbjIUSN7 (ORCPT
+        id S229997AbjIUSfe (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 21 Sep 2023 14:13:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46936 "EHLO
+        Thu, 21 Sep 2023 14:35:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229848AbjIUSNb (ORCPT
+        with ESMTP id S229906AbjIUSfW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Sep 2023 14:13:31 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15B5084F04;
-        Thu, 21 Sep 2023 10:37:39 -0700 (PDT)
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38LAn48G031167;
-        Thu, 21 Sep 2023 11:00:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : reply-to : to : cc : date : in-reply-to : references : content-type
- : mime-version : content-transfer-encoding; s=pp1;
- bh=p8EsBeNIrJi9VQT0CnLm9BaoTVOkiFg8QdPNBbVzQY4=;
- b=S3h5NUBBeOy2OWmbxAgmfZe/8u0fehWLI8SSSAfMWXwNig8LRqUO8aMsJPof7bcNQVAD
- BgKx2Zyrs96OKtsfONvrEYqj0p+vK68J2WUIOdbrNRn4YlYBP/JMr+wpE9NWOqgUrGkL
- 7V7K/ayr08XYl14FmYAjCUwNHsHmJrpV0ZxGS1TF9aWEMR3JvjgnZOQkbUkszZSya18M
- vbHM8IjhVHYO+gxnancZ4jjRAaYFNc76QX8suBmJCLZZxaU6hn2dYpBP9dWLBYvzDBpQ
- j0OA5jSb8nDdGoAuiUmhR1JR+YVxt6l+yBbfp6sIPns8E1dv0WFRy8/vYY6cgh9qGz1H Aw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3t803f0b1n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 21 Sep 2023 11:00:28 +0000
-Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 38LB07Yc016358;
-        Thu, 21 Sep 2023 11:00:27 GMT
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3t803f0b16-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 21 Sep 2023 11:00:27 +0000
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-        by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 38LAjd0p010385;
-        Thu, 21 Sep 2023 11:00:26 GMT
-Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
-        by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3t5rwkqsu5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 21 Sep 2023 11:00:26 +0000
-Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
-        by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 38LB0P1866060618
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 21 Sep 2023 11:00:25 GMT
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D1C105806A;
-        Thu, 21 Sep 2023 11:00:24 +0000 (GMT)
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B952C5805D;
-        Thu, 21 Sep 2023 11:00:20 +0000 (GMT)
-Received: from li-34d1fccc-27cd-11b2-a85c-c167793e56f7.ibm.com (unknown [9.204.200.131])
-        by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 21 Sep 2023 11:00:20 +0000 (GMT)
-Message-ID: <50798cd4558299eb62e2c3a11e367a6dbe11f915.camel@linux.vnet.ibm.com>
-Subject: Re: [RFC v3 1/2] powerpc/cpuidle: cpuidle wakeup latency based on
- IPI and timer events
-From:   Aboorva Devarajan <aboorvad@linux.vnet.ibm.com>
-Reply-To: 87a5trvw88.fsf@mail.lhotse
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     sshegde@linux.vnet.ibm.com, srikar@linux.vnet.ibm.com,
-        npiggin@gmail.com, rmclure@linux.ibm.com, arnd@arndb.de,
-        joel@jms.id.au, shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        pratik.r.sampat@gmail.com
-Date:   Thu, 21 Sep 2023 16:30:19 +0530
-In-Reply-To: <87a5trvw88.fsf@mail.lhotse>
-References: <20230911053620.87973-1-aboorvad@linux.vnet.ibm.com>
-         <20230911053620.87973-2-aboorvad@linux.vnet.ibm.com>
-         <87a5trvw88.fsf@mail.lhotse>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: U6OLfEr1xVJJ58ZvUgMVyFoD8lhjrPU0
-X-Proofpoint-ORIG-GUID: 4TT-OWudeNNSff_lXJVKJf0lNCiNhmfS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-09-21_07,2023-09-20_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- adultscore=0 suspectscore=0 clxscore=1011 malwarescore=0 spamscore=0
- mlxscore=0 phishscore=0 impostorscore=0 mlxlogscore=744 lowpriorityscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2308100000 definitions=main-2309210092
+        Thu, 21 Sep 2023 14:35:22 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF915A75E6
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Sep 2023 11:13:33 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-50435ad51bbso205568e87.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Sep 2023 11:13:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=blackwall-org.20230601.gappssmtp.com; s=20230601; t=1695320011; x=1695924811; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pywDHr26aMIdNlh92ssNp5yeq0EGO9N0Av0l9CJtRTM=;
+        b=qR56VhNb7kZl20EJBF7Odaa9/YIQShR0mlzQENCe5sLOdyZ20jrix5g0kDgQFYrrXB
+         FLD5cTgGb9I8e96mDH4qHBxzpdJpxz6u9qfCipfB4qy2/WKgbEbBLpW9OW+H7CtnFpwC
+         abybRiL6occfqlG5EfqcFF6qsezLLgFeyD0ihIB7tEZxsl7I+p6s1Oo0l5FVF0XYiEMd
+         bImCD6lZg5m0s+tN7m8bdBvV3pKGUGta48f0LFQ7P4v1EQNb5VOhIejDlEvzS0A8VI1b
+         xQKqP5fdqmVK38Djv0xkgf+b/yPESR0u4eC7I/1oPuOItJkjrxdfPz6WEO8Q2Ukcb1O/
+         +vrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695320011; x=1695924811;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pywDHr26aMIdNlh92ssNp5yeq0EGO9N0Av0l9CJtRTM=;
+        b=H7Dj4CBiU7JESynVweKixlKWyQMvLRVruNRA5AfCCiDauJijQD6DCc5H2tpRn5smHt
+         R3BbYPyeYCN7D1NFIFaIONfKLU791sy/WfHO/s/XeL7mEer7ixRz+zHITyqj1KZls8nv
+         3zRKdaJewXVkTND9D/IN32nlUIZvlopajOSZaLa8Kx2tgkPJ9cSw0nY8DkMAmWvps9fR
+         aJO2qrAWU2J2BZryUSg6lQW2jbwrA/aLTAOtbJfv5JZ/yTFq4sd//JtyrzjJp27qnBbJ
+         eFKI/mFFdpc45f9xjVJoyJ20wUW9Jd63X4nsrLTueMsUc9HrM9culkiDOrJUb16X6ufI
+         jDIA==
+X-Gm-Message-State: AOJu0YwGPbeCehz/UJ01hMONZDLzBFKCHkKFW0TgNedd1tJ5eOMukgOV
+        CW9GrzFHeevdrxe/nHAc85glzR9kvo76F3b6NAzGSgyu
+X-Google-Smtp-Source: AGHT+IFUh8Z6+6dwNLbxx67rrWJIEXMVs5stNBlOW661Y3biNTu5BIifVeQlIvAWerbPmTitQNmJ2g==
+X-Received: by 2002:a17:906:2088:b0:9ae:3d8e:b635 with SMTP id 8-20020a170906208800b009ae3d8eb635mr4348407ejq.24.1695300707453;
+        Thu, 21 Sep 2023 05:51:47 -0700 (PDT)
+Received: from [192.168.0.105] (haunt.prize.volia.net. [93.72.109.136])
+        by smtp.gmail.com with ESMTPSA id h9-20020a17090619c900b009ae54eba5casm998745ejd.102.2023.09.21.05.51.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Sep 2023 05:51:47 -0700 (PDT)
+Message-ID: <6d06e629-3d6b-98dc-fecc-c5336c434d81@blackwall.org>
+Date:   Thu, 21 Sep 2023 15:51:45 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH net-next v4 4/6] net: bridge: Add netlink knobs for number
+ / max learned FDB entries
+Content-Language: en-US
+From:   Nikolay Aleksandrov <razor@blackwall.org>
+To:     Johannes Nixdorf <jnixdorf-oss@avm.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Andrew Lunn <andrew@lunn.ch>, David Ahern <dsahern@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     bridge@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20230919-fdb_limit-v4-0-39f0293807b8@avm.de>
+ <20230919-fdb_limit-v4-4-39f0293807b8@avm.de>
+ <0ae67e4d-0d51-5290-1255-1fe1b699ca14@blackwall.org>
+In-Reply-To: <0ae67e4d-0d51-5290-1255-1fe1b699ca14@blackwall.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 2023-09-13 at 08:54 +1000, Michael Ellerman wrote:
-> Aboorva Devarajan <aboorvad@linux.vnet.ibm.com> writes:
-> > From: Pratik R. Sampat <psampat@linux.ibm.com>
-> > 
-> > Introduce a mechanism to fire directed IPIs from a source CPU to a
-> > specified target CPU and measure the time incurred on waking up the
-> > target CPU in response.
-> > 
-> > Also, introduce a mechanism to queue a hrtimer on a specified CPU
-> > and
-> > subsequently measure the time taken to wakeup the CPU.
-> > 
-> > Define a simple debugfs interface that allows for adjusting the
-> > settings to trigger IPI and timer events on a designated CPU, and
-> > to
-> > observe the resulting cpuidle wakeup latencies.
-> > 
-> > Reviewed-by: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-> > Signed-off-by: Pratik R. Sampat <psampat@linux.ibm.com>
-> > Signed-off-by: Aboorva Devarajan <aboorvad@linux.vnet.ibm.com>
-> > ---
-> >  arch/powerpc/Kconfig.debug                 |  10 ++
-> >  arch/powerpc/kernel/Makefile               |   1 +
-> >  arch/powerpc/kernel/test_cpuidle_latency.c | 154
-> > +++++++++++++++++++++
->   
-> I don't see anything here that's powerpc specific?
+On 9/21/23 15:41, Nikolay Aleksandrov wrote:
+> On 9/19/23 11:12, Johannes Nixdorf wrote:
+>> The previous patch added accounting and a limit for the number of
+>> dynamically learned FDB entries per bridge. However it did not provide
+>> means to actually configure those bounds or read back the count. This
+>> patch does that.
+>>
+>> Two new netlink attributes are added for the accounting and limit of
+>> dynamically learned FDB entries:
+>>   - IFLA_BR_FDB_N_LEARNED (RO) for the number of entries accounted for
+>>     a single bridge.
+>>   - IFLA_BR_FDB_MAX_LEARNED (RW) for the configured limit of entries for
+>>     the bridge.
+>>
+>> The new attributes are used like this:
+>>
+>>   # ip link add name br up type bridge fdb_max_learned 256
+>>   # ip link add name v1 up master br type veth peer v2
+>>   # ip link set up dev v2
+>>   # mausezahn -a rand -c 1024 v2
+>>   0.01 seconds (90877 packets per second
+>>   # bridge fdb | grep -v permanent | wc -l
+>>   256
+>>   # ip -d link show dev br
+>>   13: br: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 [...]
+>>       [...] fdb_n_learned 256 fdb_max_learned 256
+>>
+>> Signed-off-by: Johannes Nixdorf <jnixdorf-oss@avm.de>
+>> ---
+>>   include/uapi/linux/if_link.h |  2 ++
+>>   net/bridge/br_netlink.c      | 15 ++++++++++++++-
+>>   2 files changed, 16 insertions(+), 1 deletion(-)
+[snip]
+>> @@ -1670,7 +1680,10 @@ static int br_fill_info(struct sk_buff *skb, 
+>> const struct net_device *brdev)
+>>           nla_put_u8(skb, IFLA_BR_TOPOLOGY_CHANGE_DETECTED,
+>>                  br->topology_change_detected) ||
+>>           nla_put(skb, IFLA_BR_GROUP_ADDR, ETH_ALEN, br->group_addr) ||
+>> -        nla_put(skb, IFLA_BR_MULTI_BOOLOPT, sizeof(bm), &bm))
+>> +        nla_put(skb, IFLA_BR_MULTI_BOOLOPT, sizeof(bm), &bm) ||
+>> +        nla_put_u32(skb, IFLA_BR_FDB_N_LEARNED,
+>> +            atomic_read(&br->fdb_n_learned)) ||
+>> +        nla_put_u32(skb, IFLA_BR_FDB_MAX_LEARNED, br->fdb_max_learned))
+>>           return -EMSGSIZE;
+>>   #ifdef CONFIG_BRIDGE_VLAN_FILTERING
+>>
 > 
-> Which makes me wonder 1) could this be done with some existing
-> generic
-> mechanism?, and 2) if not can this test code be made generic.
+> Actually you're using atomic for counting, but using a u32 for the 
+> limit, you should cap it because the count can overflow. Or you should
+> use atomic64 for the counting.
 > 
-> At the very least this should be Cc'ed to the cpuidle lists &
-> maintainers given it's a test for cpuidle latency :)
-> 
-> cheers
 
-Hi Michael,
-
-Thanks a lot for taking a look at this.
-
-Yes, this test-case can be used as a generic benchmark for evaluating
-CPU idle latencies across different architectures, as it has thus far
-been exclusively tested and used on PowerPC, so we thought it would be
-more beneficial to incorporate it into a PowerPC specific self-test
-suite. But I will work on making it a generic self-test and send across
-a v4.
+Scratch all that, I'm speaking nonsense. Need to refresh my mind. :)
+EVerything's alright. Sorry for the noise.
 
