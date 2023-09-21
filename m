@@ -2,65 +2,65 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2755E7D0A2
-	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Sep 2023 18:54:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 89EDDE7D0A6
+	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Sep 2023 18:54:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbjIUSyV (ORCPT
+        id S229630AbjIUSyu (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 21 Sep 2023 14:54:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46484 "EHLO
+        Thu, 21 Sep 2023 14:54:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230166AbjIUSyE (ORCPT
+        with ESMTP id S230442AbjIUSyk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Sep 2023 14:54:04 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C18C6E477
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Sep 2023 10:56:17 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-9a648f9d8e3so163870266b.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Sep 2023 10:56:17 -0700 (PDT)
+        Thu, 21 Sep 2023 14:54:40 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 863E7D2053
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Sep 2023 11:41:34 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-53136a13cd4so1533136a12.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Sep 2023 11:41:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20230601.gappssmtp.com; s=20230601; t=1695318944; x=1695923744; darn=vger.kernel.org;
+        d=blackwall-org.20230601.gappssmtp.com; s=20230601; t=1695321693; x=1695926493; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=4cxYqhV2vF1/qTyjoXVFQ+TzTovUXbNHaLzLCCyWR1E=;
-        b=oakJ3bx1BNmpRvlqs7o+QyIE2tfGH9K6pB8tY6I6UUD0aHvS3Jsyk6KHZS40sXAxnB
-         zElAkxrYp+6GPkuOEllvW4a+KM/OVhXNnShusaYPN5jADUMVEebYIoZeLl/7Y9QWxd9J
-         3hr+tQWOBVBTplGwcForI3nC/6YNd76iAZrFECrJFX1A8N+nmd8xJiZZ8j8Pmf7C4dIk
-         pJ6uJG/VfBWHmGJDsbwAuIN/qVQRX18vb/hDGyXz+ScJbYns5xMzkvwMWCmwvgnP4S7R
-         msIWwEZn+E8WvWj3G0YKJ2/zPpBKtVsYiEAGrKoWlXbmcfEI+Fzsg0R3GLEkBsILtL1/
-         C4Fw==
+        bh=Fv18euYIHxUyDyU2umf2N7sAa5N8tvwc+B+kdZWr598=;
+        b=g5eLE0uAtMdyuDGiM1URIED9vABaRCGof0yeQVTe5DQcNJtA5KKP/Id6NR1d0dzJJT
+         OdT/WNczk47SDhmPqTL8E2p1/zqCtC/d2RiLhLsPg9Eo/hD1diNXG82v1td05F4cQLhH
+         spknhsxhkvx3mfQhES4RUdoScajaHJDtpDyLJPLD+pQNbTqml+xG+jyF7ON7LLuuRvTq
+         DDHvlVftS3kW2WBmy8Wi2qd6otvGRruIXbAM0Yk4FfWSO4fHkld1yVdZKor49GHEdcdS
+         ifbYn1iE+N4k8iNtfmAbQzgMsQ5St/hfGwEuLrxxN9GvOx2hWXavegEadCHtJdNx6Mwn
+         HZww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695318944; x=1695923744;
+        d=1e100.net; s=20230601; t=1695321693; x=1695926493;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4cxYqhV2vF1/qTyjoXVFQ+TzTovUXbNHaLzLCCyWR1E=;
-        b=rKV56vq0FVqpS99gNvwuA3Z1VQt1mJILGH+jAYWz2tndQVOfI8wY6xwwMEMKMPJv85
-         DW5R/+L9bs5O16KjYRtWZDxlQhju7C4TFNIZWXtAODzK1iJWRHet3pgwpRyHIrEmXf8h
-         KofqIfCGsRiKkhgkxszC2QXSQWJOQ6PzbfFmZOaJMvkbXjCnMgyhB7HKOKiuXEKznKQq
-         AFcGvaj4BNjFy8Su2fQTW04DjVhEgzq3m9WbGWLT1APjdX2GT3F4cZvbN6KOEKD69TAC
-         ylr90sZD9H0429duz5u1fkxtgP0Hih48uf5mlxXDC13+9mnglMy3xjgRNjERFVyOzR4q
-         6VGw==
-X-Gm-Message-State: AOJu0YzHh3K0/rNVVJCDS54RqaTcI1KgmxZVjrATsG2Tlip2ZcZIOIgL
-        bU9UoghgF2m1QKJqzNThAljc1AxtMAx2ZvqSX0PuHTM6
-X-Google-Smtp-Source: AGHT+IGvFbJ6Db71oV5a8RSKNQD5duku5npuZ17s6sJi9JPyuKunEwciIHFTyflTn2v/2DkUgSn7gA==
-X-Received: by 2002:a17:907:75f2:b0:9ae:567f:6f78 with SMTP id jz18-20020a17090775f200b009ae567f6f78mr2060971ejc.19.1695291586361;
-        Thu, 21 Sep 2023 03:19:46 -0700 (PDT)
+        bh=Fv18euYIHxUyDyU2umf2N7sAa5N8tvwc+B+kdZWr598=;
+        b=WWRh1jS/GlmIaUm/DpJ2t3Ey+vgxtPXLd7oGs0g/NgwrIRE54xdHyCMab86m3BorWf
+         5NQvKh6MjQrOXcKPs0hgkeSQsB7rcz1rgI5xY+Oy0htGbNzTs5zeIHrPjYm0mgV4cmPT
+         Rdk/BudpxvY8Z5byRxyPNK/xEIDVY69CR9jdt/Yrpvr9QBrzXqQzvDiETw8RYA2l8vfk
+         sdpm+kW2bjy9XEnUemXFK7Vm/dboKJc9JOJ+125PTxphGFTgt1RWd9CGwdMAq9Xv1aLs
+         jbwDFJ7l7cLHNTrAeWrhgV1LTro7W9DvAJiwaQwmOtpebGijw7w4rMdRTTGPuRf9387R
+         L5gQ==
+X-Gm-Message-State: AOJu0Yx5Jn1dPgMXh3C4UfDg0C5z4Jjl7dmZAhSrFg1NrVzPKYUZMDSs
+        qyj5ooCZXNT1Ugl9/oyjU8NbJEWa/J5zD+WStZ2a/Qi1
+X-Google-Smtp-Source: AGHT+IF7yqREQn2rdmQ5jUsI6c21sqgqAn9leaUuvmmsTe+epR2XbZ0CTk+dmINmAhslhc7LZaZeeg==
+X-Received: by 2002:a17:906:9b94:b0:9a1:debe:6b9b with SMTP id dd20-20020a1709069b9400b009a1debe6b9bmr6177440ejc.35.1695300113099;
+        Thu, 21 Sep 2023 05:41:53 -0700 (PDT)
 Received: from [192.168.0.105] (haunt.prize.volia.net. [93.72.109.136])
-        by smtp.gmail.com with ESMTPSA id s2-20020a170906354200b0098ec690e6d7sm814062eja.73.2023.09.21.03.19.45
+        by smtp.gmail.com with ESMTPSA id i22-20020a17090671d600b0099bcdfff7cbsm991440ejk.160.2023.09.21.05.41.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Sep 2023 03:19:46 -0700 (PDT)
-Message-ID: <50814314-55a3-6cff-2e9e-2abf93fa5f1b@blackwall.org>
-Date:   Thu, 21 Sep 2023 13:19:44 +0300
+        Thu, 21 Sep 2023 05:41:52 -0700 (PDT)
+Message-ID: <0ae67e4d-0d51-5290-1255-1fe1b699ca14@blackwall.org>
+Date:   Thu, 21 Sep 2023 15:41:50 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: [PATCH net-next v4 5/6] net: bridge: Add a configurable default
- FDB learning limit
+Subject: Re: [PATCH net-next v4 4/6] net: bridge: Add netlink knobs for number
+ / max learned FDB entries
 Content-Language: en-US
-To:     Johannes Nixdorf <jnixdorf-oss@avm.de>
-Cc:     "David S. Miller" <davem@davemloft.net>,
+To:     Johannes Nixdorf <jnixdorf-oss@avm.de>,
+        "David S. Miller" <davem@davemloft.net>,
         Andrew Lunn <andrew@lunn.ch>, David Ahern <dsahern@gmail.com>,
         Eric Dumazet <edumazet@google.com>,
         Florian Fainelli <f.fainelli@gmail.com>,
@@ -69,101 +69,116 @@ Cc:     "David S. Miller" <davem@davemloft.net>,
         Oleksij Rempel <linux@rempel-privat.de>,
         Paolo Abeni <pabeni@redhat.com>,
         Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        bridge@lists.linux-foundation.org, netdev@vger.kernel.org,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     bridge@lists.linux-foundation.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 References: <20230919-fdb_limit-v4-0-39f0293807b8@avm.de>
- <20230919-fdb_limit-v4-5-39f0293807b8@avm.de>
- <cc14cd4a-f3bb-3d6f-5b38-ec73cad32570@blackwall.org>
- <ZQv5aNbgqxCuOKyr@u-jnixdorf.ads.avm.de>
+ <20230919-fdb_limit-v4-4-39f0293807b8@avm.de>
 From:   Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <ZQv5aNbgqxCuOKyr@u-jnixdorf.ads.avm.de>
+In-Reply-To: <20230919-fdb_limit-v4-4-39f0293807b8@avm.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 9/21/23 11:06, Johannes Nixdorf wrote:
-> On Wed, Sep 20, 2023 at 02:00:27PM +0300, Nikolay Aleksandrov wrote:
->> On 9/19/23 11:12, Johannes Nixdorf wrote:
->>> Add a Kconfig option to configure a default FDB learning limit system
->>> wide, so a distributor building a special purpose kernel can limit all
->>> created bridges by default.
->>>
->>> The limit is only a soft default setting and overrideable on a per bridge
->>> basis using netlink.
->>>
->>> Signed-off-by: Johannes Nixdorf <jnixdorf-oss@avm.de>
->>> ---
->>>    net/bridge/Kconfig     | 13 +++++++++++++
->>>    net/bridge/br_device.c |  2 ++
->>>    2 files changed, 15 insertions(+)
->>>
->>> diff --git a/net/bridge/Kconfig b/net/bridge/Kconfig
->>> index 3c8ded7d3e84..c0d9c08088c4 100644
->>> --- a/net/bridge/Kconfig
->>> +++ b/net/bridge/Kconfig
->>> @@ -84,3 +84,16 @@ config BRIDGE_CFM
->>>    	  Say N to exclude this support and reduce the binary size.
->>>    	  If unsure, say N.
->>> +
->>> +config BRIDGE_DEFAULT_FDB_MAX_LEARNED
->>> +	int "Default FDB learning limit"
->>> +	default 0
->>> +	depends on BRIDGE
->>> +	help
->>> +	  Sets a default limit on the number of learned FDB entries on
->>> +	  new bridges. This limit can be overwritten via netlink on a
-
-overwritten doesn't sound good, how about This limit can be set (or changed)
-
->>> +	  per bridge basis.
->>> +
->>> +	  The default of 0 disables the limit.
->>> +
->>> +	  If unsure, say 0.
->>> diff --git a/net/bridge/br_device.c b/net/bridge/br_device.c
->>> index 9a5ea06236bd..3214391c15a0 100644
->>> --- a/net/bridge/br_device.c
->>> +++ b/net/bridge/br_device.c
->>> @@ -531,6 +531,8 @@ void br_dev_setup(struct net_device *dev)
->>>    	br->bridge_ageing_time = br->ageing_time = BR_DEFAULT_AGEING_TIME;
->>>    	dev->max_mtu = ETH_MAX_MTU;
->>> +	br->fdb_max_learned = CONFIG_BRIDGE_DEFAULT_FDB_MAX_LEARNED;
->>> +
->>>    	br_netfilter_rtable_init(br);
->>>    	br_stp_timer_init(br);
->>>    	br_multicast_init(br);
->>>
->>
->> This one I'm not sure about at all. Distributions can just create the bridge
->> with a predefined limit. This is not flexible and just adds
->> one more kconfig option that is rather unnecessary. Why having a kconfig
->> knob is better than bridge creation time limit setting? You still have
->> to create the bridge, so why not set the limit then?
+On 9/19/23 11:12, Johannes Nixdorf wrote:
+> The previous patch added accounting and a limit for the number of
+> dynamically learned FDB entries per bridge. However it did not provide
+> means to actually configure those bounds or read back the count. This
+> patch does that.
 > 
-> The problem I'm trying to solve here are unaware applications. Assuming
-> this change lands in the next Linux release there will still be quite
-> some time until the major applications that create bridges (distribution
-> specific or common network management tools, the container solution of
-> they day, for embedded some random vendor tools, etc.) will pick it
-> up. In this series I chose a default of 0 to not break existing setups
-> that rely on some arbitrary amount of FDB entries, so those unaware
-> applications will create bridges without limits. I added the Kconfig
-> setting so someone who knows their use cases can still set a more fitting
-> default limit.
+> Two new netlink attributes are added for the accounting and limit of
+> dynamically learned FDB entries:
+>   - IFLA_BR_FDB_N_LEARNED (RO) for the number of entries accounted for
+>     a single bridge.
+>   - IFLA_BR_FDB_MAX_LEARNED (RW) for the configured limit of entries for
+>     the bridge.
 > 
-> More specifically to our use case as an embedded vendor that builds their
-> own kernels and knows they have no use case that requires huge FDB tables,
-> the kernel config allows us to set a safe default limit before starting
-> to teach all our applications and our upstream vendors' code about the
-> new netlink attribute. As this patch is relatively simple, we can also
-> keep it downstream if there is opposition to it here though.
+> The new attributes are used like this:
+> 
+>   # ip link add name br up type bridge fdb_max_learned 256
+>   # ip link add name v1 up master br type veth peer v2
+>   # ip link set up dev v2
+>   # mausezahn -a rand -c 1024 v2
+>   0.01 seconds (90877 packets per second
+>   # bridge fdb | grep -v permanent | wc -l
+>   256
+>   # ip -d link show dev br
+>   13: br: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 [...]
+>       [...] fdb_n_learned 256 fdb_max_learned 256
+> 
+> Signed-off-by: Johannes Nixdorf <jnixdorf-oss@avm.de>
+> ---
+>   include/uapi/linux/if_link.h |  2 ++
+>   net/bridge/br_netlink.c      | 15 ++++++++++++++-
+>   2 files changed, 16 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/uapi/linux/if_link.h b/include/uapi/linux/if_link.h
+> index ce3117df9cec..0486f314c176 100644
+> --- a/include/uapi/linux/if_link.h
+> +++ b/include/uapi/linux/if_link.h
+> @@ -510,6 +510,8 @@ enum {
+>   	IFLA_BR_VLAN_STATS_PER_PORT,
+>   	IFLA_BR_MULTI_BOOLOPT,
+>   	IFLA_BR_MCAST_QUERIER_STATE,
+> +	IFLA_BR_FDB_N_LEARNED,
+> +	IFLA_BR_FDB_MAX_LEARNED,
+>   	__IFLA_BR_MAX,
+>   };
+>   
+> diff --git a/net/bridge/br_netlink.c b/net/bridge/br_netlink.c
+> index 505683ef9a26..f5d49a05e61b 100644
+> --- a/net/bridge/br_netlink.c
+> +++ b/net/bridge/br_netlink.c
+> @@ -1267,6 +1267,8 @@ static const struct nla_policy br_policy[IFLA_BR_MAX + 1] = {
+>   	[IFLA_BR_VLAN_STATS_PER_PORT] = { .type = NLA_U8 },
+>   	[IFLA_BR_MULTI_BOOLOPT] =
+>   		NLA_POLICY_EXACT_LEN(sizeof(struct br_boolopt_multi)),
+> +	[IFLA_BR_FDB_N_LEARNED] = { .type = NLA_U32 },
+> +	[IFLA_BR_FDB_MAX_LEARNED] = { .type = NLA_U32 },
+>   };
+>   
+>   static int br_changelink(struct net_device *brdev, struct nlattr *tb[],
+> @@ -1541,6 +1543,12 @@ static int br_changelink(struct net_device *brdev, struct nlattr *tb[],
+>   			return err;
+>   	}
+>   
+> +	if (data[IFLA_BR_FDB_MAX_LEARNED]) {
+> +		u32 val = nla_get_u32(data[IFLA_BR_FDB_MAX_LEARNED]);
+> +
+> +		WRITE_ONCE(br->fdb_max_learned, val);
+> +	}
+> +
+>   	return 0;
+>   }
+>   
+> @@ -1595,6 +1603,8 @@ static size_t br_get_size(const struct net_device *brdev)
+>   	       nla_total_size_64bit(sizeof(u64)) + /* IFLA_BR_TOPOLOGY_CHANGE_TIMER */
+>   	       nla_total_size_64bit(sizeof(u64)) + /* IFLA_BR_GC_TIMER */
+>   	       nla_total_size(ETH_ALEN) +       /* IFLA_BR_GROUP_ADDR */
+> +	       nla_total_size(sizeof(u32)) +    /* IFLA_BR_FDB_N_LEARNED */
+> +	       nla_total_size(sizeof(u32)) +    /* IFLA_BR_FDB_MAX_LEARNED */
+>   #ifdef CONFIG_BRIDGE_IGMP_SNOOPING
+>   	       nla_total_size(sizeof(u8)) +     /* IFLA_BR_MCAST_ROUTER */
+>   	       nla_total_size(sizeof(u8)) +     /* IFLA_BR_MCAST_SNOOPING */
+> @@ -1670,7 +1680,10 @@ static int br_fill_info(struct sk_buff *skb, const struct net_device *brdev)
+>   	    nla_put_u8(skb, IFLA_BR_TOPOLOGY_CHANGE_DETECTED,
+>   		       br->topology_change_detected) ||
+>   	    nla_put(skb, IFLA_BR_GROUP_ADDR, ETH_ALEN, br->group_addr) ||
+> -	    nla_put(skb, IFLA_BR_MULTI_BOOLOPT, sizeof(bm), &bm))
+> +	    nla_put(skb, IFLA_BR_MULTI_BOOLOPT, sizeof(bm), &bm) ||
+> +	    nla_put_u32(skb, IFLA_BR_FDB_N_LEARNED,
+> +			atomic_read(&br->fdb_n_learned)) ||
+> +	    nla_put_u32(skb, IFLA_BR_FDB_MAX_LEARNED, br->fdb_max_learned))
+>   		return -EMSGSIZE;
+>   
+>   #ifdef CONFIG_BRIDGE_VLAN_FILTERING
+> 
 
-I'm not strongly against, just IMO it is unnecessary. I won't block the 
-set because of this, but it would be nice to get input from others as
-well. If you can recompile your kernel to set a limit, it should be 
-easier to change your app to set the same limit via netlink, but I'm not 
-familiar with your use case.
+Actually you're using atomic for counting, but using a u32 for the 
+limit, you should cap it because the count can overflow. Or you should
+use atomic64 for the counting.
+
+
 
