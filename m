@@ -2,135 +2,173 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C2DF3E7D0A3
-	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Sep 2023 17:51:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A5049E7D0A8
+	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Sep 2023 18:12:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229998AbjIURvo (ORCPT
+        id S229909AbjIUSMg (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 21 Sep 2023 13:51:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47002 "EHLO
+        Thu, 21 Sep 2023 14:12:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbjIURvZ (ORCPT
+        with ESMTP id S230398AbjIUSMM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Sep 2023 13:51:25 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1547946DF7
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Sep 2023 10:25:57 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-40535597f01so9206045e9.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Sep 2023 10:25:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20230601.gappssmtp.com; s=20230601; t=1695317154; x=1695921954; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Oet/D+JdIKmqqEXMeGgkoE2/3Tw5UCJOvyH76c8x0dQ=;
-        b=qxj6vJrFg99h2//xNWVEafXUbt8d7YfAKtjvPItx5YArVcXqayk6YCLzWKBk1lukxC
-         Tf+QWaKfrUG0TPvQD839tTg0Lm1Xi254GdfVGawC+VigQmZbpZ7c+QIKZX8wPj+YrJEo
-         N+0spPtfs+WrOktVOulQbr6E5UaOzL7fk4ghbZTGHYLB2+XrccAIdCKTV18kJ6SZ9C2k
-         kDEkl3aOh3FMylB3Eam+jXqOh5uMCfrw6McJFQ8GQutQR7p9W0w9CtS8VIpcmkZAmFLG
-         fU1DwCQMGp/GrJNquShZyBqbNzeyxqAvttDrd5X0ZFcLNUwpUQuwjfSpdPhlPc+REhlD
-         hftg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695317154; x=1695921954;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Oet/D+JdIKmqqEXMeGgkoE2/3Tw5UCJOvyH76c8x0dQ=;
-        b=FSM72M3T1dang7OJb4duSugBO7EdzLs6niJx9fOTjzsLyWBP6W6vcMSRySupfKu0PX
-         ntr//NVU7FHbcSJYCT2STUIv8qSvOOsQehrL6lRridd7i4ThAHs9OfryIEFg+pVMcEAj
-         GcHh7E3kMWagKLj9K2LNPH8ukAEM3dn5Q/egpsoBvHPprjMtdVzFeIutuFXbviIhIUWZ
-         LrvFy+LM1P26u8F6dUgvH0HeyrsFkeDGi1c7dV15Du3Ii7OHHNaDpbYWAcKN7Zpm4KQs
-         zy+Bo8CcSIbmJ3+GZg+qPga5/hg4B9sEJeHXG4MIrh5VaazhJ1jBsN40XGa11Arp5H2j
-         74Aw==
-X-Gm-Message-State: AOJu0YxXxa32xSZYJABoB/eGQqa6W/Xa8cQksUBRhQui7VUhEZu0O98a
-        HSkwkS4DaERRO9A/MUuKlnYpCSgrnMqQfktmfAEL2lXz
-X-Google-Smtp-Source: AGHT+IGSqpABR6NJIutspbmDVZEhOKpxYfh5Gelph+0yVDatq2aZ3E+NWHnq2oOH1AMJw/MFATUt/Q==
-X-Received: by 2002:ac2:5b1c:0:b0:503:314f:affe with SMTP id v28-20020ac25b1c000000b00503314faffemr4577024lfn.17.1695291285601;
-        Thu, 21 Sep 2023 03:14:45 -0700 (PDT)
-Received: from [192.168.0.105] (haunt.prize.volia.net. [93.72.109.136])
-        by smtp.gmail.com with ESMTPSA id ay15-20020a056402202f00b00532c32e2b2dsm622021edb.18.2023.09.21.03.14.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Sep 2023 03:14:45 -0700 (PDT)
-Message-ID: <ab1130bb-38ce-1804-7981-6a4532d6ff7b@blackwall.org>
-Date:   Thu, 21 Sep 2023 13:14:43 +0300
+        Thu, 21 Sep 2023 14:12:12 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18EB530E0;
+        Thu, 21 Sep 2023 10:49:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695318588; x=1726854588;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=e0P+FnWlKseFjytOLElZ5wxbsLbUiz397Z6YutC//Gc=;
+  b=QLKnpsCyN4H4dps5sQpR08dmPE72WQx0GPIFA7TGd7uxxPyPvWIcJxU7
+   Kz1g82zBjmnU+Hax83BcjfcmR0U/qYvGib8Pi580s2GL4mCjPg7ciuzmq
+   xf03GqY4Kiaoe4dumNdrv3kLGgVEDU1K5lwgBrlUnJohZzazvAqKJ7k/B
+   svD4JAwc7kCnmxsCjo4zNbraq3MUaOgigKNNLoi7d4If2g3HSP7oQQIQo
+   ZYfJcgmUY6r1B0JnCHeBkUDpc+nwtTwh/O4kAp0JMp7U5sOm0y4nJyQpA
+   +HeZlBkE1S819AiuhEuNlA6qRqzxjLi7sSSPA9U6fm974GVEduoLMq1jF
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="359832836"
+X-IronPort-AV: E=Sophos;i="6.03,164,1694761200"; 
+   d="scan'208";a="359832836"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 00:52:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="723649513"
+X-IronPort-AV: E=Sophos;i="6.03,164,1694761200"; 
+   d="scan'208";a="723649513"
+Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
+  by orsmga006.jf.intel.com with ESMTP; 21 Sep 2023 00:52:10 -0700
+From:   Yi Liu <yi.l.liu@intel.com>
+To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
+        kevin.tian@intel.com, robin.murphy@arm.com,
+        baolu.lu@linux.intel.com
+Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
+        kvm@vger.kernel.org, mjrosato@linux.ibm.com,
+        chao.p.peng@linux.intel.com, yi.l.liu@intel.com,
+        yi.y.sun@linux.intel.com, peterx@redhat.com, jasowang@redhat.com,
+        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
+        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        zhenzhong.duan@intel.com, joao.m.martins@oracle.com
+Subject: [PATCH v4 04/17] iommufd: Pass in hwpt_type/user_data to iommufd_hw_pagetable_alloc()
+Date:   Thu, 21 Sep 2023 00:51:25 -0700
+Message-Id: <20230921075138.124099-5-yi.l.liu@intel.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230921075138.124099-1-yi.l.liu@intel.com>
+References: <20230921075138.124099-1-yi.l.liu@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH net-next v4 2/6] net: bridge: Set strict_start_type for
- br_policy
-Content-Language: en-US
-To:     Johannes Nixdorf <jnixdorf-oss@avm.de>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Andrew Lunn <andrew@lunn.ch>, David Ahern <dsahern@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        bridge@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20230919-fdb_limit-v4-0-39f0293807b8@avm.de>
- <20230919-fdb_limit-v4-2-39f0293807b8@avm.de>
- <1c12b8f2-b28b-f326-b24f-f1ea602832d7@blackwall.org>
- <ZQvvgiz4rE8u6vba@u-jnixdorf.ads.avm.de>
-From:   Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <ZQvvgiz4rE8u6vba@u-jnixdorf.ads.avm.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 9/21/23 10:23, Johannes Nixdorf wrote:
-> On Wed, Sep 20, 2023 at 01:46:02PM +0300, Nikolay Aleksandrov wrote:
->> On 9/19/23 11:12, Johannes Nixdorf wrote:
->>> Set any new attributes added to br_policy to be parsed strictly, to
->>> prevent userspace from passing garbage.
->>>
->>> Signed-off-by: Johannes Nixdorf <jnixdorf-oss@avm.de>
->>> ---
->>>    net/bridge/br_netlink.c | 2 ++
->>>    1 file changed, 2 insertions(+)
->>>
->>> diff --git a/net/bridge/br_netlink.c b/net/bridge/br_netlink.c
->>> index 10f0d33d8ccf..505683ef9a26 100644
->>> --- a/net/bridge/br_netlink.c
->>> +++ b/net/bridge/br_netlink.c
->>> @@ -1229,6 +1229,8 @@ static size_t br_port_get_slave_size(const struct net_device *brdev,
->>>    }
->>>    static const struct nla_policy br_policy[IFLA_BR_MAX + 1] = {
->>> +	[IFLA_BR_UNSPEC]	= { .strict_start_type =
->>> +				    IFLA_BR_MCAST_QUERIER_STATE + 1 },
->>>    	[IFLA_BR_FORWARD_DELAY]	= { .type = NLA_U32 },
->>>    	[IFLA_BR_HELLO_TIME]	= { .type = NLA_U32 },
->>>    	[IFLA_BR_MAX_AGE]	= { .type = NLA_U32 },
->>>
->>
->> instead of IFLA_BR_MCAST_QUERIER_STATE + 1, why not move around the patch
->> and just use the new attribute name?
->> These are uapi, they won't change.
-> 
-> I wanted to avoid having a state between the two commits where the new
-> attributes are already added, but not yet strictly verified. Otherwise
-> they would present a slightly different UAPI at that one commit boundary
-> than after this commit.
-> 
+iommu core already supports accepting user_data and hwpt_type to allocate
+a user iommu_domain, which allows the caller iommufd_hw_pagetable_alloc()
+to accept the hwpt_type and user_data too. Thus, pass them in.
 
-That's not really a problem, the attribute is the same.
+Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+Co-developed-by: Nicolin Chen <nicolinc@nvidia.com>
+Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+Signed-off-by: Yi Liu <yi.l.liu@intel.com>
+---
+ drivers/iommu/iommufd/device.c          |  3 ++-
+ drivers/iommu/iommufd/hw_pagetable.c    | 17 ++++++++++++++---
+ drivers/iommu/iommufd/iommufd_private.h |  3 +++
+ 3 files changed, 19 insertions(+), 4 deletions(-)
 
-> This is also not the only place in the kernel where strict_start_type
-> is specified that way. See e.g. commit c00041cf1cb8 ("net: bridge: Set
-> strict_start_type at two policies"), even though that seems mostly be
-> done to turn on strict_start_type preemtively, not in the same series
-> that adds the new attribute.
-
-Please, just use the new attribute to be more explicit where the strict 
-parsing starts.
-
-Thanks,
-  Nik
-
+diff --git a/drivers/iommu/iommufd/device.c b/drivers/iommu/iommufd/device.c
+index e88fa73a45e6..e04900f101f1 100644
+--- a/drivers/iommu/iommufd/device.c
++++ b/drivers/iommu/iommufd/device.c
+@@ -540,7 +540,8 @@ iommufd_device_auto_get_domain(struct iommufd_device *idev,
+ 	}
+ 
+ 	hwpt = iommufd_hw_pagetable_alloc(idev->ictx, ioas, idev,
+-					  0, immediate_attach);
++					  0, IOMMU_HWPT_TYPE_DEFAULT,
++					  NULL, immediate_attach);
+ 	if (IS_ERR(hwpt)) {
+ 		destroy_hwpt = ERR_CAST(hwpt);
+ 		goto out_unlock;
+diff --git a/drivers/iommu/iommufd/hw_pagetable.c b/drivers/iommu/iommufd/hw_pagetable.c
+index 1d7378a6cbb3..554a9c3d740f 100644
+--- a/drivers/iommu/iommufd/hw_pagetable.c
++++ b/drivers/iommu/iommufd/hw_pagetable.c
+@@ -62,6 +62,8 @@ int iommufd_hw_pagetable_enforce_cc(struct iommufd_hw_pagetable *hwpt)
+  * @ioas: IOAS to associate the domain with
+  * @idev: Device to get an iommu_domain for
+  * @flags: Flags from userspace
++ * @hwpt_type: Requested type of hw_pagetable
++ * @user_data: Optional user_data pointer
+  * @immediate_attach: True if idev should be attached to the hwpt
+  *
+  * Allocate a new iommu_domain and return it as a hw_pagetable. The HWPT
+@@ -75,6 +77,8 @@ int iommufd_hw_pagetable_enforce_cc(struct iommufd_hw_pagetable *hwpt)
+ struct iommufd_hw_pagetable *
+ iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
+ 			   struct iommufd_device *idev, u32 flags,
++			   enum iommu_hwpt_type hwpt_type,
++			   struct iommu_user_data *user_data,
+ 			   bool immediate_attach)
+ {
+ 	const struct iommu_ops *ops = dev_iommu_ops(idev->dev);
+@@ -86,6 +90,11 @@ iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
+ 	if ((flags & IOMMU_HWPT_ALLOC_NEST_PARENT) && !ops->domain_alloc_user)
+ 		return ERR_PTR(-EOPNOTSUPP);
+ 
++	if (user_data && hwpt_type == IOMMU_HWPT_TYPE_DEFAULT)
++		return ERR_PTR(-EINVAL);
++	if (user_data && !ops->domain_alloc_user)
++		return ERR_PTR(-EOPNOTSUPP);
++
+ 	hwpt = iommufd_object_alloc(ictx, hwpt, IOMMUFD_OBJ_HW_PAGETABLE);
+ 	if (IS_ERR(hwpt))
+ 		return hwpt;
+@@ -97,8 +106,8 @@ iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
+ 
+ 	if (ops->domain_alloc_user) {
+ 		hwpt->domain = ops->domain_alloc_user(idev->dev, flags,
+-						      IOMMU_HWPT_TYPE_DEFAULT,
+-						      NULL, NULL);
++						      hwpt_type, NULL,
++						      user_data);
+ 		if (IS_ERR(hwpt->domain)) {
+ 			rc = PTR_ERR(hwpt->domain);
+ 			hwpt->domain = NULL;
+@@ -174,7 +183,9 @@ int iommufd_hwpt_alloc(struct iommufd_ucmd *ucmd)
+ 
+ 	mutex_lock(&ioas->mutex);
+ 	hwpt = iommufd_hw_pagetable_alloc(ucmd->ictx, ioas,
+-					  idev, cmd->flags, false);
++					  idev, cmd->flags,
++					  IOMMU_HWPT_TYPE_DEFAULT,
++					  NULL, false);
+ 	if (IS_ERR(hwpt)) {
+ 		rc = PTR_ERR(hwpt);
+ 		goto out_unlock;
+diff --git a/drivers/iommu/iommufd/iommufd_private.h b/drivers/iommu/iommufd/iommufd_private.h
+index 947a797536e3..1d3b1a74e854 100644
+--- a/drivers/iommu/iommufd/iommufd_private.h
++++ b/drivers/iommu/iommufd/iommufd_private.h
+@@ -13,6 +13,7 @@ struct iommu_domain;
+ struct iommu_group;
+ struct iommu_option;
+ struct iommufd_device;
++struct iommu_user_data;
+ 
+ struct iommufd_ctx {
+ 	struct file *file;
+@@ -248,6 +249,8 @@ struct iommufd_hw_pagetable {
+ struct iommufd_hw_pagetable *
+ iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
+ 			   struct iommufd_device *idev, u32 flags,
++			   enum iommu_hwpt_type hwpt_type,
++			   struct iommu_user_data *user_data,
+ 			   bool immediate_attach);
+ int iommufd_hw_pagetable_enforce_cc(struct iommufd_hw_pagetable *hwpt);
+ int iommufd_hw_pagetable_attach(struct iommufd_hw_pagetable *hwpt,
+-- 
+2.34.1
 
