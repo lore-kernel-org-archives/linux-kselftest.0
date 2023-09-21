@@ -2,325 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B95BE7D0AB
-	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Sep 2023 21:02:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CDE4CE7D0AB
+	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Sep 2023 21:19:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232203AbjIUVCL (ORCPT
+        id S232474AbjIUVTS (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 21 Sep 2023 17:02:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37474 "EHLO
+        Thu, 21 Sep 2023 17:19:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232216AbjIUVBp (ORCPT
+        with ESMTP id S232715AbjIUVTE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Sep 2023 17:01:45 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AE6186E69
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Sep 2023 10:38:25 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-51e28cac164so5194106a12.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Sep 2023 10:38:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695317904; x=1695922704; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=gjA+Mxd9CUA1gMUBtiDdZZJ99kNAYftACXbwoegb0fE=;
-        b=XdFDpJFe4RKKPonZgFOi8DujkNJyT5xG8zcuT6FEFHoQjrflRMi4qY8V6yPV0dWjxi
-         EkNQK04hBCzxussTlmwaFNcFU8MNAY5E6dawyx0eBtF8bn0Cj4gHpHDjeoURLQwVOvVB
-         ID5uWJYxamTpXzFlSAbXgySTYjLa0VhzyUy/V7uPvGedoLaFsptz/D09fpuaWbxxw11/
-         lmSH9KcJYLNuXtteSkFsNXgrN+DupiUv71yirvtafI95n9c+UEIsZTVc/iQ8O8GvPQTJ
-         ziCXjJMNFObg7rgPODzjr8hD3LWjm7B6gCssmyVqWVTQQvmv5OHOtNMkFbembPTuuPyo
-         w9kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695317904; x=1695922704;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gjA+Mxd9CUA1gMUBtiDdZZJ99kNAYftACXbwoegb0fE=;
-        b=srJ5tMDTxtUg9MQ3tNwtg07B2zQ7sFu9lvXOp2OVSfYhG127cDR9EFKRGWoYQhRDt3
-         ktac4HAQOruaoXp86YJ+8YlaHwe2njH3WObzXeswTSFEaHGPIYwCSsxZAOCYULUp24K/
-         YILt++uoMxeXuUU0ohiBCW311wiRvgZHX2WzPkW1e3tyG4t/5NgR6XIMHZYwbDQnclIL
-         HyAS2flc1zDtMlN0G5ip9xw0Zu/S0lNSvqw4sCtOEBavmL4s0G7IzP1SXDZpKT7dviOZ
-         K2D6IVG7D5G3tPHCYocrTwLfp0CJQz32ssXB0EczBkckajuoBo2JSIrMZJUcehsx7KXm
-         bYZA==
-X-Gm-Message-State: AOJu0YxHtvHk7nAPVs1e8XIhATPD4bFWbHUz3gKDrYgPzuYfSIm5oW76
-        /Nm4Fff3uSENENjGTZhoBGnTULaveEGxVsM84vV+yI3gUSXw3dkN1RcIAg==
-X-Google-Smtp-Source: AGHT+IEi4egvatu3MXYSUVcda+PBdFb8WpFjn0pEOpuMiv8dD8UMWy9NPC3KZ6jeiL7DipgB5U5DIlLbSy/fTyO31xs=
-X-Received: by 2002:a05:6402:35c2:b0:530:cc8c:9e41 with SMTP id
- z2-20020a05640235c200b00530cc8c9e41mr12079592edc.19.1695307787146; Thu, 21
- Sep 2023 07:49:47 -0700 (PDT)
+        Thu, 21 Sep 2023 17:19:04 -0400
+Received: from mail.avm.de (mail.avm.de [IPv6:2001:bf0:244:244::120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97F2A659B;
+        Thu, 21 Sep 2023 11:00:03 -0700 (PDT)
+Received: from mail-auth.avm.de (dovecot-mx-01.avm.de [212.42.244.71])
+        by mail.avm.de (Postfix) with ESMTPS;
+        Thu, 21 Sep 2023 09:23:46 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
+        t=1695281026; bh=MGHRpPfMK3dwPqFHNJENwclFJsK7s432jc0AWt8qpKo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lMv+D89SeUIroDzj3vpDvYr7y3M0PoPLmr9tkOthBnQGSLo+hcx1XT9UFQM0hgSlH
+         xHaAXKtsZeL6XEjJmPq0Q4wHjoS0ePKH/Wgj4XjyHyUqWm4LTZ6KyEeZ6ykYL7Hb2p
+         9EHrhm5VgBl1R5uzbSvyn+aOT7kXqu9MTNT9n8oM=
+Received: from localhost (unknown [172.17.88.63])
+        by mail-auth.avm.de (Postfix) with ESMTPSA id E88A582147;
+        Thu, 21 Sep 2023 09:23:46 +0200 (CEST)
+Date:   Thu, 21 Sep 2023 09:23:46 +0200
+From:   Johannes Nixdorf <jnixdorf-oss@avm.de>
+To:     Nikolay Aleksandrov <razor@blackwall.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Andrew Lunn <andrew@lunn.ch>, David Ahern <dsahern@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        bridge@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v4 2/6] net: bridge: Set strict_start_type for
+ br_policy
+Message-ID: <ZQvvgiz4rE8u6vba@u-jnixdorf.ads.avm.de>
+References: <20230919-fdb_limit-v4-0-39f0293807b8@avm.de>
+ <20230919-fdb_limit-v4-2-39f0293807b8@avm.de>
+ <1c12b8f2-b28b-f326-b24f-f1ea602832d7@blackwall.org>
 MIME-Version: 1.0
-References: <CA+G9fYtio=EY-fitOJZgAWsgVHX8XhgdNQnfMoUBVFrnSP5TZg@mail.gmail.com>
- <ZQr_yqLJHesRRMjR@FVFF77S0Q05N.cambridge.arm.com>
-In-Reply-To: <ZQr_yqLJHesRRMjR@FVFF77S0Q05N.cambridge.arm.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 21 Sep 2023 16:49:34 +0200
-Message-ID: <CA+G9fYtjhZAKM4hRZNELmYBzaugibKZcM8oT6LJ=uC=zME27rA@mail.gmail.com>
-Subject: Re: selftests: user_events: ftrace_test: Internal error: Oops: 0000000096000021
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     lkft-triage@lists.linaro.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Beau Belgrave <beaub@linux.microsoft.com>,
-        Mark Brown <broonie@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1c12b8f2-b28b-f326-b24f-f1ea602832d7@blackwall.org>
+X-purgate-ID: 149429::1695281026-306BAD89-D1FD54B6/0/0
+X-purgate-type: clean
+X-purgate-size: 1728
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
+X-purgate: clean
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 20 Sept 2023 at 16:21, Mark Rutland <mark.rutland@arm.com> wrote:
->
-> Hi Naresh,
->
-> As a general thing, for arm64 issues could you please Cc the linux-arm-kernel
-> mailing list?
->
-> On Wed, Sep 20, 2023 at 02:40:24PM +0200, Naresh Kamboju wrote:
-> > Following selftests: user_events: ftrace_test running on arm64 Juno-r2
-> > Linux next-20230919.
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> >
-> > kselftest: Running tests in user_events
-> > TAP version 13
-> > 1..4
-> > # timeout set to 90
-> > # selftests: user_events: ftrace_test
-> > [ 1138.755735] Unable to handle kernel paging request at virtual address ffff00082fc89ed4
-> > [ 1138.763768] Mem abort info:
-> > [ 1138.766692]   ESR = 0x0000000096000021
-> > [ 1138.770495]   EC = 0x25: DABT (current EL), IL = 32 bits
-> > [ 1138.775879]   SET = 0, FnV = 0
-> > [ 1138.779018]   EA = 0, S1PTW = 0
-> > [ 1138.782264]   FSC = 0x21: alignment fault
->
-> So this is an alignment fault, to a 4-byte aligned address...
->
-> > [ 1138.786399] Data abort info:
-> > [ 1138.789356]   ISV = 0, ISS = 0x00000021, ISS2 = 0x00000000
-> > [ 1138.794969]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
-> > [ 1138.800095]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
-> > [ 1138.805436] swapper pgtable: 4k pages, 48-bit VAs, pgdp=000000008265b000
-> > [ 1138.812175] [ffff00082fc89ed4] pgd=18000009ffdf8003,
-> > p4d=18000009ffdf8003, pud=18000009ffa0e003, pmd=18000009ff88f003,
-> > pte=00680008afc89707
-> > [ 1138.824824] Internal error: Oops: 0000000096000021 [#1] PREEMPT SMP
-> > # TAP[ 1138.831117] Modules linked in: tda998x hdlcd onboard_usb_hub
-> > crct10dif_ce cec drm_dma_helper drm_kms_helper drm fuse backlight
-> > dm_mod ip_tables x_tables
-> > [ 1138.845227] CPU: 1 PID: 4752 Comm: ftrace_test Not tainted
-> > 6.6.0-rc2-next-20230919 #1
-> > v[e r1s1i3o8n. 81533080] Hardware name: ARM Juno development board (r2) (DT)
-> >
-> > # 1..6
-> > # # Starting 6 tests from 1 test cases.
-> > # #  RUN           user.register_events ...
-> > [ 1138.868317] pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> > [ 1138.875291] pc : user_event_enabler_write
-> > (arch/arm64/include/asm/atomic_ll_sc.h:210 (discriminator 2)
-> > arch/arm64/include/asm/atomic.h:64 (discriminator 2)
-> > include/linux/atomic/atomic-arch-fallback.h:3656 (discriminator 2)
-> > include/linux/atomic/atomic-long.h:964 (discriminator 2)
->
-> ... as part of some atomic_long_*() operation, where atomic_long_t should be
-> 8-byte aligned, so we've got a dodgy address.
->
-> > include/asm-generic/bitops/atomic.h:25 (discriminator 2)
-> > include/asm-generic/bitops/instrumented-atomic.h:42 (discriminator 2)
-> > kernel/trace/trace_events_user.c:520 (discriminator 2))
-> > [ 1138.880362] lr : user_event_enabler_write
-> > (kernel/trace/trace_events_user.c:503 (discriminator 1))
-> > [ 1138.885337] sp : ffff80008a593b70
-> > [ 1138.888656] x29: ffff80008a593b70 x28: ffff000800908040 x27: ffff00082767ac40
-> > [ 1138.895817] x26: 0000000000000000 x25: ffff000827732600 x24: 0000ffffc2a46ca0
-> > [ 1138.902972] x23: 0000000000000000 x22: ffff000822773a00 x21: 0000000000000ed4
-> > [ 1138.910128] x20: ffff80008a593c40 x19: ffff00082767ac40 x18: 0000000000000000
-> > [ 1138.917283] x17: ffff8000816f1aa0 x16: ffff80008002ce90 x15: ffff800081cea0b8
-> > [ 1138.924439] x14: ffffffffffffffff x13: 0000ffffadc52000 x12: 1fffe001048d5b21
-> > [ 1138.931597] x11: ffff0008246ad900 x10: ffff0008246ad908 x9 : ffff80008003bc40
-> > [ 1138.938752] x8 : ffff80008a5937d8 x7 : 0000000000000000 x6 : 0000000000000001
-> > [ 1138.945905] x5 : 0000000000000001 x4 : fffffc0020bf2240 x3 : 000000000000001f
-> > [ 1138.953058] x2 : 0000000000000000 x1 : 0000000080000000 x0 : ffff00082fc89ed4
-> > [ 1138.960212] Call trace:
-> > [ 1138.962656] user_event_enabler_write
-> > (arch/arm64/include/asm/atomic_ll_sc.h:210 (discriminator 2)
-> > arch/arm64/include/asm/atomic.h:64 (discriminator 2)
-> > include/linux/atomic/atomic-arch-fallback.h:3656 (discriminator 2)
-> > include/linux/atomic/atomic-long.h:964 (discriminator 2)
-> > include/asm-generic/bitops/atomic.h:25 (discriminator 2)
-> > include/asm-generic/bitops/instrumented-atomic.h:42 (discriminator 2)
-> > kernel/trace/trace_events_user.c:520 (discriminator 2))
-> > [ 1138.967372] user_events_ioctl (kernel/trace/trace_events_user.c:858
-> > kernel/trace/trace_events_user.c:2314
-> > kernel/trace/trace_events_user.c:2475)
-> > [ 1138.971477] __arm64_sys_ioctl (fs/ioctl.c:52 fs/ioctl.c:871
-> > fs/ioctl.c:857 fs/ioctl.c:857)
-> > [ 1138.975497] invoke_syscall (arch/arm64/include/asm/current.h:19
-> > arch/arm64/kernel/syscall.c:56)
-> > [ 1138.979255] el0_svc_common.constprop.0
-> > (include/linux/thread_info.h:127 (discriminator 2)
-> > arch/arm64/kernel/syscall.c:144 (discriminator 2))
-> > [ 1138.984056] do_el0_svc (arch/arm64/kernel/syscall.c:156)
-> > [ 1138.987377] el0_svc (arch/arm64/include/asm/daifflags.h:28
-> > arch/arm64/kernel/entry-common.c:133
-> > arch/arm64/kernel/entry-common.c:144
-> > arch/arm64/kernel/entry-common.c:679)
-> > [ 1138.990439] el0t_64_sync_handler (arch/arm64/kernel/entry-common.c:697)
-> > [ 1138.994805] el0t_64_sync (arch/arm64/kernel/entry.S:591)
-> > [ 1138.998474] Code: 14000009 f821301f 17ffffed f9800011 (c85f7c02)
-> > All code
-> > ========
-> >    0:* 09 00                or     %eax,(%rax) <-- trapping instruction
-> >    2: 00 14 1f              add    %dl,(%rdi,%rbx,1)
-> >    5: 30 21                xor    %ah,(%rcx)
-> >    7: f8                    clc
-> >    8: ed                    in     (%dx),%eax
-> >    9: ff                    (bad)
-> >    a: ff 17                callq  *(%rdi)
-> >    c: 11 00                adc    %eax,(%rax)
-> >    e: 80 f9 02              cmp    $0x2,%cl
-> >   11: 7c 5f                jl     0x72
-> >   13: c8                    .byte 0xc8
-> >
-> > Code starting with the faulting instruction
-> > ===========================================
-> >    0: 02 7c 5f c8          add    -0x38(%rdi,%rbx,2),%bh
->
-> As a general thing, can you *please* fix the code dump to decode as arm64 as
-> arm64 rather than as x86?
->
-> Every arm64 report I've seen has this bogus decoding, and it's completely
-> useless.
+On Wed, Sep 20, 2023 at 01:46:02PM +0300, Nikolay Aleksandrov wrote:
+> On 9/19/23 11:12, Johannes Nixdorf wrote:
+> > Set any new attributes added to br_policy to be parsed strictly, to
+> > prevent userspace from passing garbage.
+> > 
+> > Signed-off-by: Johannes Nixdorf <jnixdorf-oss@avm.de>
+> > ---
+> >   net/bridge/br_netlink.c | 2 ++
+> >   1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/net/bridge/br_netlink.c b/net/bridge/br_netlink.c
+> > index 10f0d33d8ccf..505683ef9a26 100644
+> > --- a/net/bridge/br_netlink.c
+> > +++ b/net/bridge/br_netlink.c
+> > @@ -1229,6 +1229,8 @@ static size_t br_port_get_slave_size(const struct net_device *brdev,
+> >   }
+> >   static const struct nla_policy br_policy[IFLA_BR_MAX + 1] = {
+> > +	[IFLA_BR_UNSPEC]	= { .strict_start_type =
+> > +				    IFLA_BR_MCAST_QUERIER_STATE + 1 },
+> >   	[IFLA_BR_FORWARD_DELAY]	= { .type = NLA_U32 },
+> >   	[IFLA_BR_HELLO_TIME]	= { .type = NLA_U32 },
+> >   	[IFLA_BR_MAX_AGE]	= { .type = NLA_U32 },
+> > 
+> 
+> instead of IFLA_BR_MCAST_QUERIER_STATE + 1, why not move around the patch
+> and just use the new attribute name?
+> These are uapi, they won't change.
 
-My apology for the wrong stack dump.
-Here is the stack dump decode for arm64.
+I wanted to avoid having a state between the two commits where the new
+attributes are already added, but not yet strictly verified. Otherwise
+they would present a slightly different UAPI at that one commit boundary
+than after this commit.
 
-Test log:
--------
-kselftest: Running tests in user_events
-TAP version 13
-1..4
-# timeout set to 90
-# selftests: user_events: ftrace_test
-[ 1138.755735] Unable to handle kernel paging request at virtual
-address ffff00082fc89ed4
-[ 1138.763768] Mem abort info:
-[ 1138.766692]   ESR = 0x0000000096000021
-[ 1138.770495]   EC = 0x25: DABT (current EL), IL = 32 bits
-[ 1138.775879]   SET = 0, FnV = 0
-[ 1138.779018]   EA = 0, S1PTW = 0
-[ 1138.782264]   FSC = 0x21: alignment fault
-[ 1138.786399] Data abort info:
-[ 1138.789356]   ISV = 0, ISS = 0x00000021, ISS2 = 0x00000000
-[ 1138.794969]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
-[ 1138.800095]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
-[ 1138.805436] swapper pgtable: 4k pages, 48-bit VAs, pgdp=000000008265b000
-[ 1138.812175] [ffff00082fc89ed4] pgd=18000009ffdf8003,
-p4d=18000009ffdf8003, pud=18000009ffa0e003, pmd=18000009ff88f003,
-pte=00680008afc89707
-[ 1138.824824] Internal error: Oops: 0000000096000021 [#1] PREEMPT SMP
-# TAP[ 1138.831117] Modules linked in: tda998x hdlcd onboard_usb_hub
-crct10dif_ce cec drm_dma_helper drm_kms_helper drm fuse backlight
-dm_mod ip_tables x_tables
-[ 1138.845227] CPU: 1 PID: 4752 Comm: ftrace_test Not tainted
-6.6.0-rc2-next-20230919 #1
-v[e r1s1i3o8n. 81533080] Hardware name: ARM Juno development board (r2) (DT)
-
-# 1..6
-# # Starting 6 tests from 1 test cases.
-# #  RUN           user.register_events ...
-[ 1138.868317] pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[ 1138.875291] pc : user_event_enabler_write
-(arch/arm64/include/asm/atomic_ll_sc.h:210 (discriminator 2)
-arch/arm64/include/asm/atomic.h:64 (discriminator 2)
-include/linux/atomic/atomic-arch-fallback.h:3656 (discriminator 2)
-include/linux/atomic/atomic-long.h:964 (discriminator 2)
-include/asm-generic/bitops/atomic.h:25 (discriminator 2)
-include/asm-generic/bitops/instrumented-atomic.h:42 (discriminator 2)
-kernel/trace/trace_events_user.c:520 (discriminator 2))
-[ 1138.880362] lr : user_event_enabler_write
-(kernel/trace/trace_events_user.c:503 (discriminator 1))
-[ 1138.885337] sp : ffff80008a593b70
-[ 1138.888656] x29: ffff80008a593b70 x28: ffff000800908040 x27: ffff00082767ac40
-[ 1138.895817] x26: 0000000000000000 x25: ffff000827732600 x24: 0000ffffc2a46ca0
-[ 1138.902972] x23: 0000000000000000 x22: ffff000822773a00 x21: 0000000000000ed4
-[ 1138.910128] x20: ffff80008a593c40 x19: ffff00082767ac40 x18: 0000000000000000
-[ 1138.917283] x17: ffff8000816f1aa0 x16: ffff80008002ce90 x15: ffff800081cea0b8
-[ 1138.924439] x14: ffffffffffffffff x13: 0000ffffadc52000 x12: 1fffe001048d5b21
-[ 1138.931597] x11: ffff0008246ad900 x10: ffff0008246ad908 x9 : ffff80008003bc40
-[ 1138.938752] x8 : ffff80008a5937d8 x7 : 0000000000000000 x6 : 0000000000000001
-[ 1138.945905] x5 : 0000000000000001 x4 : fffffc0020bf2240 x3 : 000000000000001f
-[ 1138.953058] x2 : 0000000000000000 x1 : 0000000080000000 x0 : ffff00082fc89ed4
-[ 1138.960212] Call trace:
-[ 1138.962656] user_event_enabler_write
-(arch/arm64/include/asm/atomic_ll_sc.h:210 (discriminator 2)
-arch/arm64/include/asm/atomic.h:64 (discriminator 2)
-include/linux/atomic/atomic-arch-fallback.h:3656 (discriminator 2)
-include/linux/atomic/atomic-long.h:964 (discriminator 2)
-include/asm-generic/bitops/atomic.h:25 (discriminator 2)
-include/asm-generic/bitops/instrumented-atomic.h:42 (discriminator 2)
-kernel/trace/trace_events_user.c:520 (discriminator 2))
-[ 1138.967372] user_events_ioctl (kernel/trace/trace_events_user.c:858
-kernel/trace/trace_events_user.c:2314
-kernel/trace/trace_events_user.c:2475)
-[ 1138.971477] __arm64_sys_ioctl (fs/ioctl.c:52 fs/ioctl.c:871
-fs/ioctl.c:857 fs/ioctl.c:857)
-[ 1138.975497] invoke_syscall (arch/arm64/include/asm/current.h:19
-arch/arm64/kernel/syscall.c:56)
-[ 1138.979255] el0_svc_common.constprop.0
-(include/linux/thread_info.h:127 (discriminator 2)
-arch/arm64/kernel/syscall.c:144 (discriminator 2))
-[ 1138.984056] do_el0_svc (arch/arm64/kernel/syscall.c:156)
-[ 1138.987377] el0_svc (arch/arm64/include/asm/daifflags.h:28
-arch/arm64/kernel/entry-common.c:133
-arch/arm64/kernel/entry-common.c:144
-arch/arm64/kernel/entry-common.c:679)
-[ 1138.990439] el0t_64_sync_handler (arch/arm64/kernel/entry-common.c:697)
-[ 1138.994805] el0t_64_sync (arch/arm64/kernel/entry.S:591)
-[ 1138.998474] Code: 14000009 f821301f 17ffffed f9800011 (c85f7c02)
-All code
-========
-   0: 14000009 b 0x24
-   4: f821301f stset x1, [x0]
-   8: 17ffffed b 0xffffffffffffffbc
-   c: f9800011 prfm pstl1strm, [x0]
-  10:* c85f7c02 ldxr x2, [x0] <-- trapping instruction
-
-Code starting with the faulting instruction
-===========================================
-   0: c85f7c02 ldxr x2, [x0]
-[ 1139.004575] ---[ end trace 0000000000000000 ]---
-# # register_events: Test terminated by timeout
-# #          FAIL  user.register_events
-# not ok 1 user.register_events
-# #  RUN           user.write_events ...
-# # write_events: Test terminated by timeout
-# #          FAIL  user.write_events
-# not ok 2 user.write_events
-# #  RUN           user.write_empty_events ...
-
-
-> Thanks,
-> Mark.
->
-> > [ 1139.004575] ---[ end trace 0000000000000000 ]---
-> > # # register_events: Test terminated by timeout
-> > # #          FAIL  user.register_events
-> > # not ok 1 user.register_events
-> > # #  RUN           user.write_events ...
-> > # # write_events: Test terminated by timeout
-> > # #          FAIL  user.write_events
-> > # not ok 2 user.write_events
-> > # #  RUN           user.write_empty_events ...
-> >
-> >
-> > Log:
-> >  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230919/testrun/20073395/suite/log-parser-test/test/check-kernel-oops/log
-> >  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230919/testrun/20073395/suite/log-parser-test/test/check-kernel-oops/details/
-> >  - https://storage.tuxsuite.com/public/linaro/lkft/builds/2VbYWmjbGM16bFDtcoFx62Kdds2/
-> >
-
-- Naresh
+This is also not the only place in the kernel where strict_start_type
+is specified that way. See e.g. commit c00041cf1cb8 ("net: bridge: Set
+strict_start_type at two policies"), even though that seems mostly be
+done to turn on strict_start_type preemtively, not in the same series
+that adds the new attribute.
