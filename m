@@ -2,102 +2,136 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 55B02E71094
-	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Sep 2023 17:00:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97044E7109A
+	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Sep 2023 17:02:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbjIURAZ (ORCPT
+        id S229849AbjIURCl (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 21 Sep 2023 13:00:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44030 "EHLO
+        Thu, 21 Sep 2023 13:02:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbjIURAV (ORCPT
+        with ESMTP id S229633AbjIURCJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Sep 2023 13:00:21 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ADF1E73
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Sep 2023 09:59:18 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-4121130e7afso7416911cf.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Sep 2023 09:59:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1695315557; x=1695920357; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=S9nCvb9CrO2GaZq009DzYQ8CxVOSv0DQu3f44RpIAl4=;
-        b=cQ9/egk3+iGU+nnFDE3GfLYKcXMSG/eXqyR2G8uPWYZaM3SGteyTCf5hN04FHGhtI/
-         vZ8pPAorCK8cDuH1W9GAG4VrkegH+6QkFaK9zFtYI+x6buiH8lTU6pQ7sfEbW86qyWhL
-         NxJwO7NMH8gF6K2ojBV6lZeUchRe1JfQ0YXqFqeVzZAEIujNLdk9muv/fh9+L4t8ZAqw
-         mZ0UasVPig0HULVpBHqoWFrCgyysJIVjuk3Ee349vMH1YjDq55DFGiwL3v7Cn/w1rLjQ
-         7GqnZOURKjyY1loV1EtyXfdxtQk2JSAj6wmC50agHQ4vnkggWhVWNGNfgFvJrZQtO/gX
-         Z5+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695315557; x=1695920357;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=S9nCvb9CrO2GaZq009DzYQ8CxVOSv0DQu3f44RpIAl4=;
-        b=FXLV4UuTIxLicnKTzxPl+BKLMkC/WS7rsIa632Dd3oviXjZC9RbCOxMn7WY7zZCUjS
-         JRlS8x35WQD5wxXt81e5WZ1ZhuRcmyVTExs1dK1BVaLxYSnRgBECDQokxoDEfUesNk/N
-         Bp4smRn4WCjVD2Y+Hy99BoqAMcC0uxLov+wVknjr19KY7Q0cC2kPvZHCuq0ELmZgpvwi
-         BUiZ8Q3VpvzBdNNbvZ4u+UnhXLI8KteEYnYvfDvvp/2BGiZEzMJOJS7gOHPPzwfZhLzU
-         wbmFInuAKqFD57Iyx78hw4o9tz2FqdKpX2R1rISov9hbIk7NFEM54ibPS2XZOqEH6eSc
-         PPvA==
-X-Gm-Message-State: AOJu0YytpZ5XDmrfNV6TmKsrLd+V59MbwQOQ0e8YSSfUHQEKaAwG9mBz
-        oaiu4TtVEODcnLhFvY0uPgJQD7SVrC30416LGXdvBWW+GCcgGKtoo+o=
-X-Google-Smtp-Source: AGHT+IHVPuhFW+sGrMGW2iY7pMa14QvaelEddHySWV/HAgZhZpuV4DDEx4xNG/hsPPFcqiqQeUvbDngd1S9ogJ2JCoI=
-X-Received: by 2002:a17:90a:c08a:b0:268:553f:1938 with SMTP id
- o10-20020a17090ac08a00b00268553f1938mr4569172pjs.4.1695273761830; Wed, 20 Sep
- 2023 22:22:41 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230920154608.1447057-1-apatel@ventanamicro.com>
-In-Reply-To: <20230920154608.1447057-1-apatel@ventanamicro.com>
-From:   Anup Patel <apatel@ventanamicro.com>
-Date:   Thu, 21 Sep 2023 10:52:29 +0530
-Message-ID: <CAK9=C2WXtRLTFA5JeWbkyKt+1qyTat0nw7v3-b6oQ-YO_37tdA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/4] KVM RISC-V fixes for ONE_REG interface
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Andrew Jones <ajones@ventanamicro.com>, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        Thu, 21 Sep 2023 13:02:09 -0400
+Received: from mail.avm.de (mail.avm.de [IPv6:2001:bf0:244:244::94])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 510FB2112;
+        Thu, 21 Sep 2023 10:01:14 -0700 (PDT)
+Received: from mail-auth.avm.de (unknown [IPv6:2001:bf0:244:244::71])
+        by mail.avm.de (Postfix) with ESMTPS;
+        Thu, 21 Sep 2023 10:06:01 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
+        t=1695283566; bh=EzGmNrSKOJc7ZUWqu95aGt4JAKmhiqLPdGsju567CAk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=s5BAmOkMuI+eBqvoX4jxWJ6gSAWinUICiwcr9FCuzw16BjWz/LRBk2pOKtoc289IH
+         LLJsqZbrXEYCAGHSdUrrGPH+OErDMkrB5B6yA98g/ZVu5NLG3t/vI0+YXCJQzJw16Z
+         0CqlBe9j3IF5pEnsxff5BskDQAnpen3+7kaJM3Fo=
+Received: from localhost (unknown [172.17.88.63])
+        by mail-auth.avm.de (Postfix) with ESMTPSA id 1044581C20;
+        Thu, 21 Sep 2023 10:06:01 +0200 (CEST)
+Date:   Thu, 21 Sep 2023 10:06:00 +0200
+From:   Johannes Nixdorf <jnixdorf-oss@avm.de>
+To:     Nikolay Aleksandrov <razor@blackwall.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Andrew Lunn <andrew@lunn.ch>, David Ahern <dsahern@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        bridge@lists.linux-foundation.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH net-next v4 5/6] net: bridge: Add a configurable default
+ FDB learning limit
+Message-ID: <ZQv5aNbgqxCuOKyr@u-jnixdorf.ads.avm.de>
+References: <20230919-fdb_limit-v4-0-39f0293807b8@avm.de>
+ <20230919-fdb_limit-v4-5-39f0293807b8@avm.de>
+ <cc14cd4a-f3bb-3d6f-5b38-ec73cad32570@blackwall.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cc14cd4a-f3bb-3d6f-5b38-ec73cad32570@blackwall.org>
+X-purgate-ID: 149429::1695283561-FD4345D2-604B728F/0/0
+X-purgate-type: clean
+X-purgate-size: 3303
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
+X-purgate: clean
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Sep 20, 2023 at 9:16=E2=80=AFPM Anup Patel <apatel@ventanamicro.com=
-> wrote:
->
-> This series includes few assorted fixes for KVM RISC-V ONE_REG interface
-> and KVM_GET_REG_LIST API.
->
-> These patches can also be found in riscv_kvm_onereg_fixes_v2 branch at:
-> https://github.com/avpatel/linux.git
->
-> Changes since v1:
->  - Addressed Drew's comments in PATCH4
->
-> Anup Patel (4):
->   RISC-V: KVM: Fix KVM_GET_REG_LIST API for ISA_EXT registers
->   RISC-V: KVM: Fix riscv_vcpu_get_isa_ext_single() for missing
->     extensions
->   KVM: riscv: selftests: Fix ISA_EXT register handling in get-reg-list
->   KVM: riscv: selftests: Selectively filter-out AIA registers
+On Wed, Sep 20, 2023 at 02:00:27PM +0300, Nikolay Aleksandrov wrote:
+> On 9/19/23 11:12, Johannes Nixdorf wrote:
+> > Add a Kconfig option to configure a default FDB learning limit system
+> > wide, so a distributor building a special purpose kernel can limit all
+> > created bridges by default.
+> > 
+> > The limit is only a soft default setting and overrideable on a per bridge
+> > basis using netlink.
+> > 
+> > Signed-off-by: Johannes Nixdorf <jnixdorf-oss@avm.de>
+> > ---
+> >   net/bridge/Kconfig     | 13 +++++++++++++
+> >   net/bridge/br_device.c |  2 ++
+> >   2 files changed, 15 insertions(+)
+> > 
+> > diff --git a/net/bridge/Kconfig b/net/bridge/Kconfig
+> > index 3c8ded7d3e84..c0d9c08088c4 100644
+> > --- a/net/bridge/Kconfig
+> > +++ b/net/bridge/Kconfig
+> > @@ -84,3 +84,16 @@ config BRIDGE_CFM
+> >   	  Say N to exclude this support and reduce the binary size.
+> >   	  If unsure, say N.
+> > +
+> > +config BRIDGE_DEFAULT_FDB_MAX_LEARNED
+> > +	int "Default FDB learning limit"
+> > +	default 0
+> > +	depends on BRIDGE
+> > +	help
+> > +	  Sets a default limit on the number of learned FDB entries on
+> > +	  new bridges. This limit can be overwritten via netlink on a
+> > +	  per bridge basis.
+> > +
+> > +	  The default of 0 disables the limit.
+> > +
+> > +	  If unsure, say 0.
+> > diff --git a/net/bridge/br_device.c b/net/bridge/br_device.c
+> > index 9a5ea06236bd..3214391c15a0 100644
+> > --- a/net/bridge/br_device.c
+> > +++ b/net/bridge/br_device.c
+> > @@ -531,6 +531,8 @@ void br_dev_setup(struct net_device *dev)
+> >   	br->bridge_ageing_time = br->ageing_time = BR_DEFAULT_AGEING_TIME;
+> >   	dev->max_mtu = ETH_MAX_MTU;
+> > +	br->fdb_max_learned = CONFIG_BRIDGE_DEFAULT_FDB_MAX_LEARNED;
+> > +
+> >   	br_netfilter_rtable_init(br);
+> >   	br_stp_timer_init(br);
+> >   	br_multicast_init(br);
+> > 
+> 
+> This one I'm not sure about at all. Distributions can just create the bridge
+> with a predefined limit. This is not flexible and just adds
+> one more kconfig option that is rather unnecessary. Why having a kconfig
+> knob is better than bridge creation time limit setting? You still have
+> to create the bridge, so why not set the limit then?
 
-Queued this series for 6.6-rcX fixes
+The problem I'm trying to solve here are unaware applications. Assuming
+this change lands in the next Linux release there will still be quite
+some time until the major applications that create bridges (distribution
+specific or common network management tools, the container solution of
+they day, for embedded some random vendor tools, etc.) will pick it
+up. In this series I chose a default of 0 to not break existing setups
+that rely on some arbitrary amount of FDB entries, so those unaware
+applications will create bridges without limits. I added the Kconfig
+setting so someone who knows their use cases can still set a more fitting
+default limit.
 
-Thanks,
-Anup
-
->
->  arch/riscv/kvm/vcpu_onereg.c                  |  7 ++-
->  .../selftests/kvm/riscv/get-reg-list.c        | 58 ++++++++++++++-----
->  2 files changed, 47 insertions(+), 18 deletions(-)
->
-> --
-> 2.34.1
->
+More specifically to our use case as an embedded vendor that builds their
+own kernels and knows they have no use case that requires huge FDB tables,
+the kernel config allows us to set a safe default limit before starting
+to teach all our applications and our upstream vendors' code about the
+new netlink attribute. As this patch is relatively simple, we can also
+keep it downstream if there is opposition to it here though.
