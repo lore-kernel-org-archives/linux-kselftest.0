@@ -2,44 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3507DE7D0A8
-	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Sep 2023 20:20:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DD7CE7D0A8
+	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Sep 2023 20:20:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbjIUUUR (ORCPT
+        id S230010AbjIUUUV (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 21 Sep 2023 16:20:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53706 "EHLO
+        Thu, 21 Sep 2023 16:20:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230010AbjIUUT0 (ORCPT
+        with ESMTP id S231921AbjIUUUE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Sep 2023 16:19:26 -0400
+        Thu, 21 Sep 2023 16:20:04 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF75D7EC4;
-        Thu, 21 Sep 2023 10:11:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF62FAD21;
+        Thu, 21 Sep 2023 10:11:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695316261; x=1726852261;
+  t=1695316280; x=1726852280;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=8kLHHoEGx8VOMsxlCOgaSdq9RP42gUjf6mYcaQ0jE14=;
-  b=RUnbErXMBGqXSAaid93iOklccURgEiJnbkOhAy/V5qhJEAEYn6WJsT6O
-   H5Rg1aUFhJuCsK4JpPfBVdiuzswelqWLTdP6XvovTOEsMjIUymGnYor2H
-   /FEfquaYXh8E+KW5puSGdyjzxbWMH4qZ0ZNf26H2baeY/HlE5lnd9BbZP
-   kuh7jut5IB2YkYppHPu76fwWVCrgjbA0AE8x4f03rrWSKOM2a9nZqJ6RI
-   FW1XJfdMeTpi2jo9E0z2jfhVN1ozJQCZVREHhBgIpMxL6Ib+Ue4NRiYRb
-   wX5xnVGAqQN3mVbma7hXQj0eAL2BWBne8CPwBW4w3XChmzm81h0llWmVt
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="370764411"
+  bh=S7OPx85gN2G+8RHarCfjHgmntx38eLMzDBOfexGdmYM=;
+  b=jcDgCkeNqhdoytre2wP3usuY6Ibq/k2L8CW0yCKU1TLPiDv+v3HyxDnS
+   aXzEpvR7Rytu27rkHs2qXsAS3Yw/n/BjTR9/ayUwEL3TU9f0nheYRuPts
+   PIwsZkHF+dGYp0s+AK6HN6VnXQVESjr/hBQ50DPGjjVlne7pGVZGy+H+6
+   MfE1hYK2fHZT01uhnhikNx/EC+XDe0izY15KvBsWrgcbcQfALqKCznqOz
+   C5tolYr0haI8xyDPIzVCDh8MohakGLPH6/VSd7PnHDxx5WXjDP2ttP+qw
+   yn8vFN4LJegOghvfva0y8B/E0MSDOlrr0X/LrAArw56x6YMis28F8RINI
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="370764450"
 X-IronPort-AV: E=Sophos;i="6.03,164,1694761200"; 
-   d="scan'208";a="370764411"
+   d="scan'208";a="370764450"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 00:54:48 -0700
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 00:54:52 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="812523097"
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="812523164"
 X-IronPort-AV: E=Sophos;i="6.03,164,1694761200"; 
-   d="scan'208";a="812523097"
+   d="scan'208";a="812523164"
 Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by fmsmga008.fm.intel.com with ESMTP; 21 Sep 2023 00:54:47 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 21 Sep 2023 00:54:51 -0700
 From:   Yi Liu <yi.l.liu@intel.com>
 To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
         kevin.tian@intel.com, robin.murphy@arm.com,
@@ -51,11 +51,10 @@ Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
         shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
         suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        zhenzhong.duan@intel.com, joao.m.martins@oracle.com,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>
-Subject: [PATCH v5 04/11] iommu/vt-d: Add helper to setup pasid nested translation
-Date:   Thu, 21 Sep 2023 00:54:24 -0700
-Message-Id: <20230921075431.125239-5-yi.l.liu@intel.com>
+        zhenzhong.duan@intel.com, joao.m.martins@oracle.com
+Subject: [PATCH v5 07/11] iommufd: Add data structure for Intel VT-d stage-1 cache invalidation
+Date:   Thu, 21 Sep 2023 00:54:27 -0700
+Message-Id: <20230921075431.125239-8-yi.l.liu@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230921075431.125239-1-yi.l.liu@intel.com>
 References: <20230921075431.125239-1-yi.l.liu@intel.com>
@@ -65,184 +64,63 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Lu Baolu <baolu.lu@linux.intel.com>
+This adds the data structure for flushing iotlb for the nested domain
+allocated with IOMMU_HWPT_TYPE_VTD_S1 type.
 
-The configurations are passed in from the user when the user domain is
-allocated. This helper interprets these configurations according to the
-data structure defined in uapi/linux/iommufd.h. The EINVAL error will be
-returned if any of configurations are not compatible with the hardware
-capabilities. The caller can retry with another compatible user domain.
-The encoding of fields of each pasid entry is defined in section 9.6 of
-the VT-d spec.
+This only supports invalidating IOTLB, but no for device-TLB as device-TLB
+invalidation will be covered automatically in the IOTLB invalidation if the
+underlying IOMMU driver has enabled ATS for the affected device.
 
-Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 Signed-off-by: Yi Liu <yi.l.liu@intel.com>
 ---
- drivers/iommu/intel/pasid.c | 125 ++++++++++++++++++++++++++++++++++++
- drivers/iommu/intel/pasid.h |   2 +
- 2 files changed, 127 insertions(+)
+ include/uapi/linux/iommufd.h | 34 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/drivers/iommu/intel/pasid.c b/drivers/iommu/intel/pasid.c
-index 8f92b92f3d2a..8a290ab07697 100644
---- a/drivers/iommu/intel/pasid.c
-+++ b/drivers/iommu/intel/pasid.c
-@@ -335,6 +335,15 @@ static inline void pasid_set_fault_enable(struct pasid_entry *pe)
- 	pasid_set_bits(&pe->val[0], 1 << 1, 0);
- }
+diff --git a/include/uapi/linux/iommufd.h b/include/uapi/linux/iommufd.h
+index 18a502e206c3..3050efbceb57 100644
+--- a/include/uapi/linux/iommufd.h
++++ b/include/uapi/linux/iommufd.h
+@@ -510,6 +510,40 @@ struct iommu_hw_info {
+ };
+ #define IOMMU_GET_HW_INFO _IO(IOMMUFD_TYPE, IOMMUFD_CMD_GET_HW_INFO)
  
-+/*
-+ * Setup the SRE(Supervisor Request Enable) field (Bit 128) of a
-+ * scalable mode PASID entry.
++/**
++ * enum iommu_hwpt_vtd_s1_invalidate_flags - Flags for Intel VT-d
++ *                                           stage-1 cache invalidation
++ * @IOMMU_VTD_QI_FLAGS_LEAF: The LEAF flag indicates whether only the
++ *                           leaf PTE caching needs to be invalidated
++ *                           and other paging structure caches can be
++ *                           preserved.
 + */
-+static inline void pasid_set_sre(struct pasid_entry *pe)
-+{
-+	pasid_set_bits(&pe->val[2], 1 << 0, 1);
-+}
-+
- /*
-  * Setup the WPE(Write Protect Enable) field (Bit 132) of a
-  * scalable mode PASID entry.
-@@ -402,6 +411,15 @@ pasid_set_flpm(struct pasid_entry *pe, u64 value)
- 	pasid_set_bits(&pe->val[2], GENMASK_ULL(3, 2), value << 2);
- }
- 
-+/*
-+ * Setup the Extended Access Flag Enable (EAFE) field (Bit 135)
-+ * of a scalable mode PASID entry.
-+ */
-+static inline void pasid_set_eafe(struct pasid_entry *pe)
-+{
-+	pasid_set_bits(&pe->val[2], 1 << 7, 1 << 7);
-+}
-+
- static void
- pasid_cache_invalidation_with_pasid(struct intel_iommu *iommu,
- 				    u16 did, u32 pasid)
-@@ -713,3 +731,110 @@ void intel_pasid_setup_page_snoop_control(struct intel_iommu *iommu,
- 	if (!cap_caching_mode(iommu->cap))
- 		devtlb_invalidation_with_pasid(iommu, dev, pasid);
- }
++enum iommu_hwpt_vtd_s1_invalidate_flags {
++	IOMMU_VTD_QI_FLAGS_LEAF = 1 << 0,
++};
 +
 +/**
-+ * intel_pasid_setup_nested() - Set up PASID entry for nested translation.
-+ * @iommu:      IOMMU which the device belong to
-+ * @dev:        Device to be set up for translation
-+ * @pasid:      PASID to be programmed in the device PASID table
-+ * @domain:     User first-level domain nested on a s2 domain
++ * struct iommu_hwpt_vtd_s1_invalidate - Intel VT-d cache invalidation
++ *                                       (IOMMU_HWPT_TYPE_VTD_S1)
++ * @addr: The start address of the addresses to be invalidated.
++ * @npages: Number of contiguous 4K pages to be invalidated.
++ * @flags: Combination of enum iommu_hwpt_vtd_s1_invalidate_flags
++ * @__reserved: Must be 0
 + *
-+ * This is used for nested translation based vIOMMU. e.g. guest IOVA and
-+ * guest shared virtual address. In this case, the first-level page tables
-+ * are used for GVA/GIOVA-GPA translation in the guest, the second-level
-+ * page tables are used for GPA-HPA translation.
++ * The Intel VT-d specific invalidation data for user-managed stage-1 cache
++ * invalidation under nested translation. Userspace uses this structure to
++ * tell host about the impacted caches after modifying the stage-1 page table.
++ *
++ * Invalidating all the caches related to the page table by setting @addr
++ * to be 0 and @npages to be __aligned_u64(-1).
 + */
-+int intel_pasid_setup_nested(struct intel_iommu *iommu, struct device *dev,
-+			     u32 pasid, struct dmar_domain *domain)
-+{
-+	struct iommu_hwpt_vtd_s1 *s1_cfg = &domain->s1_cfg;
-+	pgd_t *s1_gpgd = (pgd_t *)(uintptr_t)domain->s1_pgtbl;
-+	struct dmar_domain *s2_domain = domain->s2_domain;
-+	u16 did = domain_id_iommu(domain, iommu);
-+	struct dma_pte *pgd = s2_domain->pgd;
-+	struct pasid_entry *pte;
++struct iommu_hwpt_vtd_s1_invalidate {
++	__aligned_u64 addr;
++	__aligned_u64 npages;
++	__u32 flags;
++	__u32 __reserved;
++};
 +
-+	if (!ecap_nest(iommu->ecap)) {
-+		pr_err_ratelimited("%s: No nested translation support\n",
-+				   iommu->name);
-+		return -ENODEV;
-+	}
-+
-+	/*
-+	 * Address width should match in two dimensions: CPU vs. IOMMU,
-+	 * guest vs. host.
-+	 */
-+	switch (s1_cfg->addr_width) {
-+	case ADDR_WIDTH_4LEVEL:
-+		break;
-+#ifdef CONFIG_X86
-+	case ADDR_WIDTH_5LEVEL:
-+		if (!cpu_feature_enabled(X86_FEATURE_LA57) ||
-+		    !cap_fl5lp_support(iommu->cap)) {
-+			dev_err_ratelimited(dev,
-+					    "5-level paging not supported\n");
-+			return -EINVAL;
-+		}
-+		break;
-+#endif
-+	default:
-+		dev_err_ratelimited(dev, "Invalid guest address width %d\n",
-+				    s1_cfg->addr_width);
-+		return -EINVAL;
-+	}
-+
-+	if ((s1_cfg->flags & IOMMU_VTD_S1_SRE) && !ecap_srs(iommu->ecap)) {
-+		pr_err_ratelimited("No supervisor request support on %s\n",
-+				   iommu->name);
-+		return -EINVAL;
-+	}
-+
-+	if ((s1_cfg->flags & IOMMU_VTD_S1_EAFE) && !ecap_eafs(iommu->ecap)) {
-+		pr_err_ratelimited("No extended access flag support on %s\n",
-+				   iommu->name);
-+		return -EINVAL;
-+	}
-+
-+	spin_lock(&iommu->lock);
-+	pte = intel_pasid_get_entry(dev, pasid);
-+	if (!pte) {
-+		spin_unlock(&iommu->lock);
-+		return -ENODEV;
-+	}
-+	if (pasid_pte_is_present(pte)) {
-+		spin_unlock(&iommu->lock);
-+		return -EBUSY;
-+	}
-+
-+	pasid_clear_entry(pte);
-+
-+	if (s1_cfg->addr_width == ADDR_WIDTH_5LEVEL)
-+		pasid_set_flpm(pte, 1);
-+
-+	pasid_set_flptr(pte, (uintptr_t)s1_gpgd);
-+
-+	if (s1_cfg->flags & IOMMU_VTD_S1_SRE) {
-+		pasid_set_sre(pte);
-+		if (s1_cfg->flags & IOMMU_VTD_S1_WPE)
-+			pasid_set_wpe(pte);
-+	}
-+
-+	if (s1_cfg->flags & IOMMU_VTD_S1_EAFE)
-+		pasid_set_eafe(pte);
-+
-+	if (s2_domain->force_snooping)
-+		pasid_set_pgsnp(pte);
-+
-+	pasid_set_slptr(pte, virt_to_phys(pgd));
-+	pasid_set_fault_enable(pte);
-+	pasid_set_domain_id(pte, did);
-+	pasid_set_address_width(pte, s2_domain->agaw);
-+	pasid_set_page_snoop(pte, !!ecap_smpwc(iommu->ecap));
-+	pasid_set_translation_type(pte, PASID_ENTRY_PGTT_NESTED);
-+	pasid_set_present(pte);
-+	spin_unlock(&iommu->lock);
-+
-+	pasid_flush_caches(iommu, pte, pasid, did);
-+
-+	return 0;
-+}
-diff --git a/drivers/iommu/intel/pasid.h b/drivers/iommu/intel/pasid.h
-index 4e9e68c3c388..7906d73f4ded 100644
---- a/drivers/iommu/intel/pasid.h
-+++ b/drivers/iommu/intel/pasid.h
-@@ -109,6 +109,8 @@ int intel_pasid_setup_second_level(struct intel_iommu *iommu,
- int intel_pasid_setup_pass_through(struct intel_iommu *iommu,
- 				   struct dmar_domain *domain,
- 				   struct device *dev, u32 pasid);
-+int intel_pasid_setup_nested(struct intel_iommu *iommu, struct device *dev,
-+			     u32 pasid, struct dmar_domain *domain);
- void intel_pasid_tear_down_entry(struct intel_iommu *iommu,
- 				 struct device *dev, u32 pasid,
- 				 bool fault_ignore);
+ /**
+  * struct iommu_hwpt_invalidate - ioctl(IOMMU_HWPT_INVALIDATE)
+  * @size: sizeof(struct iommu_hwpt_invalidate)
 -- 
 2.34.1
 
