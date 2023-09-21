@@ -2,170 +2,191 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5632AE7D0A8
-	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Sep 2023 20:10:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6FC7E7D0A2
+	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Sep 2023 20:14:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbjIUUKm (ORCPT
+        id S231310AbjIUUOv (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 21 Sep 2023 16:10:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52238 "EHLO
+        Thu, 21 Sep 2023 16:14:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232158AbjIUUKY (ORCPT
+        with ESMTP id S230001AbjIUUOe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Sep 2023 16:10:24 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C8FE9012;
-        Thu, 21 Sep 2023 10:11:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695316261; x=1726852261;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=t+k2G75egWOCXj1vZiBpp5H5yozqcf2ftiKJs05q63Y=;
-  b=Z5qZI3t17/SEWbtr33vbiDnrXcX4YECTIwGXhvStZRbGTpHdss3c+4yy
-   qMQbDU3KNcsZtdZThbVp6is14/B5+6FppgvOmDA3Rse8COaRXfgoxTjMq
-   USbesgx0wW1HHFGMPI5kMcyv3uK/YI7qsY337cq01ariemYi3x7mxORNp
-   mpNjO1e/C6p2j/80MQIL3dDWlID2EpMHND+XUKYiR17xlIVsCDqtVWRzw
-   uVzh/opRmqzKBCDGxyEJ12maTPgB3i7ns5TNcRESnYAZzSeyv8N7iHk+r
-   Q2IMEe52bd0JLkRMGgSIllqsiwvbRPo6sJIphy4bNDDI2TJZkUgzffp0W
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="370764399"
-X-IronPort-AV: E=Sophos;i="6.03,164,1694761200"; 
-   d="scan'208";a="370764399"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 00:54:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="812523067"
-X-IronPort-AV: E=Sophos;i="6.03,164,1694761200"; 
-   d="scan'208";a="812523067"
-Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by fmsmga008.fm.intel.com with ESMTP; 21 Sep 2023 00:54:46 -0700
-From:   Yi Liu <yi.l.liu@intel.com>
-To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
-        kevin.tian@intel.com, robin.murphy@arm.com,
-        baolu.lu@linux.intel.com
-Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
-        kvm@vger.kernel.org, mjrosato@linux.ibm.com,
-        chao.p.peng@linux.intel.com, yi.l.liu@intel.com,
-        yi.y.sun@linux.intel.com, peterx@redhat.com, jasowang@redhat.com,
-        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
-        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        zhenzhong.duan@intel.com, joao.m.martins@oracle.com,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>
-Subject: [PATCH v5 03/11] iommu/vt-d: Add helper for nested domain allocation
-Date:   Thu, 21 Sep 2023 00:54:23 -0700
-Message-Id: <20230921075431.125239-4-yi.l.liu@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230921075431.125239-1-yi.l.liu@intel.com>
-References: <20230921075431.125239-1-yi.l.liu@intel.com>
+        Thu, 21 Sep 2023 16:14:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BC4ACB999
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Sep 2023 11:18:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1695320271;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MzTcdyGI2+mbR4kqUecFI/lIF7d7z4fF019Uf7kMsFc=;
+        b=JYDrhLw3BKbCNplIUR762TBwcHsRP2QlY8YLgWkjc2EGOvS1maU9utY0bYmOR22Z7nz8i2
+        Rk1FQhWeJI9twCV/Hyb7GkFEx1I3TMn4bzDCkJatPDQabISc1w4GyX+nd4A9ErnOvJI+b2
+        nNhnsTGHBlXlXmvp+lHwBaqUEtjtkzM=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-682-sXgkFp04NbuD0joDS7rpXg-1; Thu, 21 Sep 2023 14:17:49 -0400
+X-MC-Unique: sXgkFp04NbuD0joDS7rpXg-1
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-40309efe8b1so9529395e9.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Sep 2023 11:17:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695320267; x=1695925067;
+        h=content-transfer-encoding:in-reply-to:organization:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MzTcdyGI2+mbR4kqUecFI/lIF7d7z4fF019Uf7kMsFc=;
+        b=D/WuaZ+qC21Z0KoAoQ+NC6vXITQH1/Kib3rcWt2cbmgOe+sB7zItlxQvycdb+XWzQf
+         EDbI+M9nu4W1fUqXgkc8Hi3SbuEinvXHxNaEFyOQ6etUpP4ZzGbvMXRSgj0YuoTOju7Y
+         1NB39V18tqAS5Mr3QXg9sNvIgySz+GT8R0z+HONbX5uHkXOCfrX7lZgdWgtwr9jdcN3q
+         WJ0eGipYasyZiOCVR1xNB0fLN8888FJfaaOcQ0pT7dqIJJI+aGyHgtjPjkQV7YED1Us5
+         tfK8uKGyzg95TyBZq7bkM642rx+V8K3970GLho0qfDTO0Clf/zACqekF88aKgxyLueh4
+         wKhg==
+X-Gm-Message-State: AOJu0YxVVBCYb4bRPX+H4QG3G1Evys4p6bIKkoB4tlJHhJQiuMQmPVfN
+        fAQz8YJKNtRlh9KcDNIsdOlRv9pnVrMnoA1sw0wy7pKzpH/09piBJMGLid6X2P7RT2lODaUvLae
+        YbrBOYUXHyKXfrPl5ra5ay/B4FfNP
+X-Received: by 2002:a1c:740f:0:b0:401:daf2:2735 with SMTP id p15-20020a1c740f000000b00401daf22735mr5528374wmc.31.1695320267487;
+        Thu, 21 Sep 2023 11:17:47 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHnVaSJCzaFK2qmY3g4W/8mz+pVzeGQKzxpMU+YTexuT26Aj3jV+KbrvHxK+ANFw1c9j6a+MA==
+X-Received: by 2002:a1c:740f:0:b0:401:daf2:2735 with SMTP id p15-20020a1c740f000000b00401daf22735mr5528356wmc.31.1695320267022;
+        Thu, 21 Sep 2023 11:17:47 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c70d:3c00:9eab:fce5:e6f3:e626? (p200300cbc70d3c009eabfce5e6f3e626.dip0.t-ipconnect.de. [2003:cb:c70d:3c00:9eab:fce5:e6f3:e626])
+        by smtp.gmail.com with ESMTPSA id o17-20020a05600c379100b003fe1a96845bsm5414170wmr.2.2023.09.21.11.17.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Sep 2023 11:17:46 -0700 (PDT)
+Message-ID: <354f2508-74d5-2723-502c-32d009f77a3e@redhat.com>
+Date:   Thu, 21 Sep 2023 20:17:45 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH 2/3] userfaultfd: UFFDIO_REMAP uABI
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Matthew Wilcox <willy@infradead.org>, akpm@linux-foundation.org,
+        viro@zeniv.linux.org.uk, brauner@kernel.org, shuah@kernel.org,
+        aarcange@redhat.com, lokeshgidra@google.com, peterx@redhat.com,
+        hughd@google.com, mhocko@suse.com, axelrasmussen@google.com,
+        rppt@kernel.org, Liam.Howlett@oracle.com, jannh@google.com,
+        zhangpeng362@huawei.com, bgeffon@google.com,
+        kaleshsingh@google.com, ngeoffray@google.com, jdduke@google.com,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kernel-team@android.com
+References: <20230914152620.2743033-1-surenb@google.com>
+ <20230914152620.2743033-3-surenb@google.com>
+ <ZQNMze6SXdIm13CW@casper.infradead.org>
+ <e77b75f9-ab9e-f20b-6484-22f73524c159@redhat.com>
+ <f6e350f4-1bf3-ca10-93f8-c11db44ce62b@redhat.com>
+ <CAJuCfpGqt1V5puRMhLkjG6F2T4xtsDY8qy--ZfBPNL9kxPyWtg@mail.gmail.com>
+Content-Language: en-US
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <CAJuCfpGqt1V5puRMhLkjG6F2T4xtsDY8qy--ZfBPNL9kxPyWtg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Lu Baolu <baolu.lu@linux.intel.com>
+On 21.09.23 20:04, Suren Baghdasaryan wrote:
+> On Thu, Sep 14, 2023 at 6:45 PM David Hildenbrand <david@redhat.com> wrote:
+>>
+>> On 14.09.23 20:43, David Hildenbrand wrote:
+>>> On 14.09.23 20:11, Matthew Wilcox wrote:
+>>>> On Thu, Sep 14, 2023 at 08:26:12AM -0700, Suren Baghdasaryan wrote:
+>>>>> +++ b/include/linux/userfaultfd_k.h
+>>>>> @@ -93,6 +93,23 @@ extern int mwriteprotect_range(struct mm_struct *dst_mm,
+>>>>>     extern long uffd_wp_range(struct vm_area_struct *vma,
+>>>>>                        unsigned long start, unsigned long len, bool enable_wp);
+>>>>>
+>>>>> +/* remap_pages */
+>>>>> +extern void double_pt_lock(spinlock_t *ptl1, spinlock_t *ptl2);
+>>>>> +extern void double_pt_unlock(spinlock_t *ptl1, spinlock_t *ptl2);
+>>>>> +extern ssize_t remap_pages(struct mm_struct *dst_mm,
+>>>>> +                      struct mm_struct *src_mm,
+>>>>> +                      unsigned long dst_start,
+>>>>> +                      unsigned long src_start,
+>>>>> +                      unsigned long len, __u64 flags);
+>>>>> +extern int remap_pages_huge_pmd(struct mm_struct *dst_mm,
+>>>>> +                           struct mm_struct *src_mm,
+>>>>> +                           pmd_t *dst_pmd, pmd_t *src_pmd,
+>>>>> +                           pmd_t dst_pmdval,
+>>>>> +                           struct vm_area_struct *dst_vma,
+>>>>> +                           struct vm_area_struct *src_vma,
+>>>>> +                           unsigned long dst_addr,
+>>>>> +                           unsigned long src_addr);
+>>>>
+>>>> Drop the 'extern' markers from function declarations.
+>>>>
+>>>>> +int remap_pages_huge_pmd(struct mm_struct *dst_mm,
+>>>>> +                    struct mm_struct *src_mm,
+>>>>> +                    pmd_t *dst_pmd, pmd_t *src_pmd,
+>>>>> +                    pmd_t dst_pmdval,
+>>>>> +                    struct vm_area_struct *dst_vma,
+>>>>> +                    struct vm_area_struct *src_vma,
+>>>>> +                    unsigned long dst_addr,
+>>>>> +                    unsigned long src_addr)
+>>>>> +{
+>>>>> +   pmd_t _dst_pmd, src_pmdval;
+>>>>> +   struct page *src_page;
+>>>>> +   struct anon_vma *src_anon_vma, *dst_anon_vma;
+>>>>> +   spinlock_t *src_ptl, *dst_ptl;
+>>>>> +   pgtable_t pgtable;
+>>>>> +   struct mmu_notifier_range range;
+>>>>> +
+>>>>> +   src_pmdval = *src_pmd;
+>>>>> +   src_ptl = pmd_lockptr(src_mm, src_pmd);
+>>>>> +
+>>>>> +   BUG_ON(!pmd_trans_huge(src_pmdval));
+>>>>> +   BUG_ON(!pmd_none(dst_pmdval));
+>>>>> +   BUG_ON(!spin_is_locked(src_ptl));
+>>>>> +   mmap_assert_locked(src_mm);
+>>>>> +   mmap_assert_locked(dst_mm);
+>>>>> +   BUG_ON(src_addr & ~HPAGE_PMD_MASK);
+>>>>> +   BUG_ON(dst_addr & ~HPAGE_PMD_MASK);
+>>>>> +
+>>>>> +   src_page = pmd_page(src_pmdval);
+>>>>> +   BUG_ON(!PageHead(src_page));
+>>>>> +   BUG_ON(!PageAnon(src_page));
+>>>>
+>>>> Better to add a src_folio = page_folio(src_page);
+>>>> and then folio_test_anon() here.
+>>>>
+>>>>> +   if (unlikely(page_mapcount(src_page) != 1)) {
+>>>>
+>>>> Brr, this is going to miss PTE mappings of this folio.  I think you
+>>>> actually want folio_mapcount() instead, although it'd be more efficient
+>>>> to look at folio->_entire_mapcount == 1 and _nr_pages_mapped == 0.
+>>>> Not wure what a good name for that predicate would be.
+>>>
+>>> We have
+>>>
+>>>     * It only works on non shared anonymous pages because those can
+>>>     * be relocated without generating non linear anon_vmas in the rmap
+>>>     * code.
+>>>     *
+>>>     * It provides a zero copy mechanism to handle userspace page faults.
+>>>     * The source vma pages should have mapcount == 1, which can be
+>>>     * enforced by using madvise(MADV_DONTFORK) on src vma.
+>>>
+>>> Use PageAnonExclusive(). As long as KSM is not involved and you don't
+>>> use fork(), that flag should be good enough for that use case here.
+>>>
+>> ... and similarly don't do any of that swapcount stuff and only check if
+>> the swap pte is anon exclusive.
+> 
+> I'm preparing v2 and this is the only part left for me to address but
+> I'm not clear how. David, could you please clarify how I should be
+> checking swap pte to be exclusive without swapcount?
 
-This adds helper for accepting user parameters and allocate a nested
-domain.
+If you have a real swp pte (not a non-swap pte like migration entries) 
+you should be able to just use pte_swp_exclusive().
 
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-Signed-off-by: Yi Liu <yi.l.liu@intel.com>
----
- drivers/iommu/intel/Makefile |  2 +-
- drivers/iommu/intel/iommu.h  |  2 ++
- drivers/iommu/intel/nested.c | 54 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 57 insertions(+), 1 deletion(-)
- create mode 100644 drivers/iommu/intel/nested.c
-
-diff --git a/drivers/iommu/intel/Makefile b/drivers/iommu/intel/Makefile
-index 7af3b8a4f2a0..5dabf081a779 100644
---- a/drivers/iommu/intel/Makefile
-+++ b/drivers/iommu/intel/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- obj-$(CONFIG_DMAR_TABLE) += dmar.o
--obj-$(CONFIG_INTEL_IOMMU) += iommu.o pasid.o
-+obj-$(CONFIG_INTEL_IOMMU) += iommu.o pasid.o nested.o
- obj-$(CONFIG_DMAR_TABLE) += trace.o cap_audit.o
- obj-$(CONFIG_DMAR_PERF) += perf.o
- obj-$(CONFIG_INTEL_IOMMU_DEBUGFS) += debugfs.o
-diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
-index 4a7f1cc16afa..a82e232abae0 100644
---- a/drivers/iommu/intel/iommu.h
-+++ b/drivers/iommu/intel/iommu.h
-@@ -865,6 +865,8 @@ void *alloc_pgtable_page(int node, gfp_t gfp);
- void free_pgtable_page(void *vaddr);
- void iommu_flush_write_buffer(struct intel_iommu *iommu);
- struct intel_iommu *device_to_iommu(struct device *dev, u8 *bus, u8 *devfn);
-+struct iommu_domain *intel_nested_domain_alloc(struct iommu_domain *s2_domain,
-+					       const struct iommu_user_data *user_data);
- 
- #ifdef CONFIG_INTEL_IOMMU_SVM
- void intel_svm_check(struct intel_iommu *iommu);
-diff --git a/drivers/iommu/intel/nested.c b/drivers/iommu/intel/nested.c
-new file mode 100644
-index 000000000000..012d5ff60265
---- /dev/null
-+++ b/drivers/iommu/intel/nested.c
-@@ -0,0 +1,54 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * nested.c - nested mode translation support
-+ *
-+ * Copyright (C) 2023 Intel Corporation
-+ *
-+ * Author: Lu Baolu <baolu.lu@linux.intel.com>
-+ *         Jacob Pan <jacob.jun.pan@linux.intel.com>
-+ */
-+
-+#define pr_fmt(fmt)	"DMAR: " fmt
-+
-+#include <linux/iommu.h>
-+
-+#include "iommu.h"
-+
-+static void intel_nested_domain_free(struct iommu_domain *domain)
-+{
-+	kfree(to_dmar_domain(domain));
-+}
-+
-+static const struct iommu_domain_ops intel_nested_domain_ops = {
-+	.free			= intel_nested_domain_free,
-+};
-+
-+struct iommu_domain *intel_nested_domain_alloc(struct iommu_domain *s2_domain,
-+					       const struct iommu_user_data *user_data)
-+{
-+	const size_t min_len = offsetofend(struct iommu_hwpt_vtd_s1, __reserved);
-+	struct iommu_hwpt_vtd_s1 vtd;
-+	struct dmar_domain *domain;
-+	int ret;
-+
-+	ret = iommu_copy_user_data(&vtd, user_data, sizeof(vtd), min_len);
-+	if (ret)
-+		return ERR_PTR(ret);
-+
-+	domain = kzalloc(sizeof(*domain), GFP_KERNEL_ACCOUNT);
-+	if (!domain)
-+		return NULL;
-+
-+	domain->use_first_level = true;
-+	domain->s2_domain = to_dmar_domain(s2_domain);
-+	domain->s1_pgtbl = vtd.pgtbl_addr;
-+	domain->s1_cfg = vtd;
-+	domain->domain.ops = &intel_nested_domain_ops;
-+	domain->domain.type = IOMMU_DOMAIN_NESTED;
-+	INIT_LIST_HEAD(&domain->devices);
-+	INIT_LIST_HEAD(&domain->dev_pasids);
-+	spin_lock_init(&domain->lock);
-+	xa_init(&domain->iommu_array);
-+
-+	return &domain->domain;
-+}
 -- 
-2.34.1
+Cheers,
+
+David / dhildenb
 
