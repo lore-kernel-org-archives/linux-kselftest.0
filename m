@@ -2,187 +2,176 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A1B7AE7D0A8
-	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Sep 2023 19:28:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0353FE7D0A7
+	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Sep 2023 19:30:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230414AbjIUT2k (ORCPT
+        id S230502AbjIUTaV (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 21 Sep 2023 15:28:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43708 "EHLO
+        Thu, 21 Sep 2023 15:30:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230412AbjIUT2Z (ORCPT
+        with ESMTP id S231127AbjIUT3s (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Sep 2023 15:28:25 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4990576B6;
-        Thu, 21 Sep 2023 10:10:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695316220; x=1726852220;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=X9BBfgk8l9qrBPqgGMYev0KIhH/OZFgWEJbj0DqM7ps=;
-  b=aQOyF2nRK+tn5jfi9VgKf5gncIlneS1E5shoEImI3P8xl+Ox9gECyWTm
-   5RfYqOD/gbxVRzS8hXF7RY9DArGFgs9HKqbMMcaauWJN6uiPHmWCo3tqZ
-   wQzKOZwCU28scH2FDR+QVpGwNmDX2KMBT5D6rBv2DRtsLx0YWzCZt6xoC
-   r2mOGlge/GNDLCS9vcONkJjVxlvXP8T59OaTpJSZg1BA1PWwrgeFzq2QK
-   2qTaGRmCXcCM/xdnPm/ko4JB/8wo5LGC9Xp4e0bTDB8HOxImIDc/SN7GI
-   nUNqVhYXtAwos0/9Eh0jkuh3FOFEDFvFysZk3spEYt23FG/eZUt+bm42r
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="370764359"
-X-IronPort-AV: E=Sophos;i="6.03,164,1694761200"; 
-   d="scan'208";a="370764359"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 00:54:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="812522971"
-X-IronPort-AV: E=Sophos;i="6.03,164,1694761200"; 
-   d="scan'208";a="812522971"
-Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by fmsmga008.fm.intel.com with ESMTP; 21 Sep 2023 00:54:42 -0700
-From:   Yi Liu <yi.l.liu@intel.com>
-To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
-        kevin.tian@intel.com, robin.murphy@arm.com,
-        baolu.lu@linux.intel.com
-Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
-        kvm@vger.kernel.org, mjrosato@linux.ibm.com,
-        chao.p.peng@linux.intel.com, yi.l.liu@intel.com,
-        yi.y.sun@linux.intel.com, peterx@redhat.com, jasowang@redhat.com,
-        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
-        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        zhenzhong.duan@intel.com, joao.m.martins@oracle.com
-Subject: [PATCH v5 00/11] Add Intel VT-d nested translation
-Date:   Thu, 21 Sep 2023 00:54:20 -0700
-Message-Id: <20230921075431.125239-1-yi.l.liu@intel.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 21 Sep 2023 15:29:48 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA6CADF1F
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Sep 2023 11:04:44 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-59bc956b029so15266217b3.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Sep 2023 11:04:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1695319484; x=1695924284; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AdMCh/+yCsduMbxg3dBOP8pPO/0inss321VX5z7Cslw=;
+        b=4cF7X2KPVdvj/7607ekIQaEkhcmXERPq1+VVvEJRyxyWaezd5rbC9thCnzqB94ztKQ
+         +TfEJjXpFjfWkyJ7KrTjFUq/3rbF6WwXPHNTkgibkgKgzTNtmgz6JLTqCy7o63154Lw3
+         JkijIXtRuB5qgVnzVQDXUkKyg8OcoA9NjUM5tN1WkyYYZ/MTOyy3tiwOJUzqcpq7ffVi
+         mppntYxKiaZkni8p7pmOPe1W7cLQWJ6GIpyVeefZ94o1e7MaT8OitlV73/fewMZGB8gU
+         ec6vw1Nrqc9ThSRrDbZO2GoHt7qiX1QK5AIYPua8zhISucW8WmL7bZS3PgjfWV60lQU2
+         Ip4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695319484; x=1695924284;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AdMCh/+yCsduMbxg3dBOP8pPO/0inss321VX5z7Cslw=;
+        b=XyQS5WgzQCcSG5gKMdfcnkb2PV1Z+2ilBS/Y1wCPuxXuiJN0j4TiNf7kF2WMD//Y0I
+         uAyVDCWqI09J+TcDLZ+fud2/Ebv0VaHmy7IV7tIhnO1zecLmGrBcHflMxIaeQllpjoR9
+         13yVorBTkjgz1Dn+9tmeo858CCRQaj25Jbswc8RzCG0gnS4YZ+Ie7O/te0HYr3wPZdVg
+         Q0QwqR9IWGv7CN9Q7ndpriHgkmjIp7VDjDga1+vXLTrwnq2+3Q8BraRI9wC1Sh5c4PXA
+         oC2z67V35DDCNz5olcQmmtvndwwaMrXByLZpE1PCSp+ec9b+O4TXubz2TKAWFfOI+egF
+         vBxw==
+X-Gm-Message-State: AOJu0YyHclP6BdQKQmgTqKEgHnYbs/XpBobkWWhjJl/Fvxr9O48BbEUH
+        wiB1nrchnQhztivIwJ3xEtWVhyGhB3/MNZYCZhA/rg==
+X-Google-Smtp-Source: AGHT+IFlXUKdQWPSBHJn1j/MDvMjTmPT/VMWQg4H/xOs81/J/jwuJ8JJXX1pfb+Adw8urZJBbplJpBr1hxqfZ6IXHLI=
+X-Received: by 2002:a25:dbca:0:b0:d5c:ce73:6528 with SMTP id
+ g193-20020a25dbca000000b00d5cce736528mr5584392ybf.35.1695319483599; Thu, 21
+ Sep 2023 11:04:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230914152620.2743033-1-surenb@google.com> <20230914152620.2743033-3-surenb@google.com>
+ <ZQNMze6SXdIm13CW@casper.infradead.org> <e77b75f9-ab9e-f20b-6484-22f73524c159@redhat.com>
+ <f6e350f4-1bf3-ca10-93f8-c11db44ce62b@redhat.com>
+In-Reply-To: <f6e350f4-1bf3-ca10-93f8-c11db44ce62b@redhat.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Thu, 21 Sep 2023 18:04:30 +0000
+Message-ID: <CAJuCfpGqt1V5puRMhLkjG6F2T4xtsDY8qy--ZfBPNL9kxPyWtg@mail.gmail.com>
+Subject: Re: [PATCH 2/3] userfaultfd: UFFDIO_REMAP uABI
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Matthew Wilcox <willy@infradead.org>, akpm@linux-foundation.org,
+        viro@zeniv.linux.org.uk, brauner@kernel.org, shuah@kernel.org,
+        aarcange@redhat.com, lokeshgidra@google.com, peterx@redhat.com,
+        hughd@google.com, mhocko@suse.com, axelrasmussen@google.com,
+        rppt@kernel.org, Liam.Howlett@oracle.com, jannh@google.com,
+        zhangpeng362@huawei.com, bgeffon@google.com,
+        kaleshsingh@google.com, ngeoffray@google.com, jdduke@google.com,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This is to add Intel VT-d nested translation based on IOMMUFD nesting
-infrastructure. As the iommufd nesting infrastructure series[1], iommu
-core supports new ops to report iommu hardware information, allocate
-domains with user data and invalidate stage-1 IOTLB when there is mapping
-changed in stage-1 page table. The data required in the three paths are
-vendor-specific, so
+On Thu, Sep 14, 2023 at 6:45=E2=80=AFPM David Hildenbrand <david@redhat.com=
+> wrote:
+>
+> On 14.09.23 20:43, David Hildenbrand wrote:
+> > On 14.09.23 20:11, Matthew Wilcox wrote:
+> >> On Thu, Sep 14, 2023 at 08:26:12AM -0700, Suren Baghdasaryan wrote:
+> >>> +++ b/include/linux/userfaultfd_k.h
+> >>> @@ -93,6 +93,23 @@ extern int mwriteprotect_range(struct mm_struct *d=
+st_mm,
+> >>>    extern long uffd_wp_range(struct vm_area_struct *vma,
+> >>>                       unsigned long start, unsigned long len, bool en=
+able_wp);
+> >>>
+> >>> +/* remap_pages */
+> >>> +extern void double_pt_lock(spinlock_t *ptl1, spinlock_t *ptl2);
+> >>> +extern void double_pt_unlock(spinlock_t *ptl1, spinlock_t *ptl2);
+> >>> +extern ssize_t remap_pages(struct mm_struct *dst_mm,
+> >>> +                      struct mm_struct *src_mm,
+> >>> +                      unsigned long dst_start,
+> >>> +                      unsigned long src_start,
+> >>> +                      unsigned long len, __u64 flags);
+> >>> +extern int remap_pages_huge_pmd(struct mm_struct *dst_mm,
+> >>> +                           struct mm_struct *src_mm,
+> >>> +                           pmd_t *dst_pmd, pmd_t *src_pmd,
+> >>> +                           pmd_t dst_pmdval,
+> >>> +                           struct vm_area_struct *dst_vma,
+> >>> +                           struct vm_area_struct *src_vma,
+> >>> +                           unsigned long dst_addr,
+> >>> +                           unsigned long src_addr);
+> >>
+> >> Drop the 'extern' markers from function declarations.
+> >>
+> >>> +int remap_pages_huge_pmd(struct mm_struct *dst_mm,
+> >>> +                    struct mm_struct *src_mm,
+> >>> +                    pmd_t *dst_pmd, pmd_t *src_pmd,
+> >>> +                    pmd_t dst_pmdval,
+> >>> +                    struct vm_area_struct *dst_vma,
+> >>> +                    struct vm_area_struct *src_vma,
+> >>> +                    unsigned long dst_addr,
+> >>> +                    unsigned long src_addr)
+> >>> +{
+> >>> +   pmd_t _dst_pmd, src_pmdval;
+> >>> +   struct page *src_page;
+> >>> +   struct anon_vma *src_anon_vma, *dst_anon_vma;
+> >>> +   spinlock_t *src_ptl, *dst_ptl;
+> >>> +   pgtable_t pgtable;
+> >>> +   struct mmu_notifier_range range;
+> >>> +
+> >>> +   src_pmdval =3D *src_pmd;
+> >>> +   src_ptl =3D pmd_lockptr(src_mm, src_pmd);
+> >>> +
+> >>> +   BUG_ON(!pmd_trans_huge(src_pmdval));
+> >>> +   BUG_ON(!pmd_none(dst_pmdval));
+> >>> +   BUG_ON(!spin_is_locked(src_ptl));
+> >>> +   mmap_assert_locked(src_mm);
+> >>> +   mmap_assert_locked(dst_mm);
+> >>> +   BUG_ON(src_addr & ~HPAGE_PMD_MASK);
+> >>> +   BUG_ON(dst_addr & ~HPAGE_PMD_MASK);
+> >>> +
+> >>> +   src_page =3D pmd_page(src_pmdval);
+> >>> +   BUG_ON(!PageHead(src_page));
+> >>> +   BUG_ON(!PageAnon(src_page));
+> >>
+> >> Better to add a src_folio =3D page_folio(src_page);
+> >> and then folio_test_anon() here.
+> >>
+> >>> +   if (unlikely(page_mapcount(src_page) !=3D 1)) {
+> >>
+> >> Brr, this is going to miss PTE mappings of this folio.  I think you
+> >> actually want folio_mapcount() instead, although it'd be more efficien=
+t
+> >> to look at folio->_entire_mapcount =3D=3D 1 and _nr_pages_mapped =3D=
+=3D 0.
+> >> Not wure what a good name for that predicate would be.
+> >
+> > We have
+> >
+> >    * It only works on non shared anonymous pages because those can
+> >    * be relocated without generating non linear anon_vmas in the rmap
+> >    * code.
+> >    *
+> >    * It provides a zero copy mechanism to handle userspace page faults.
+> >    * The source vma pages should have mapcount =3D=3D 1, which can be
+> >    * enforced by using madvise(MADV_DONTFORK) on src vma.
+> >
+> > Use PageAnonExclusive(). As long as KSM is not involved and you don't
+> > use fork(), that flag should be good enough for that use case here.
+> >
+> ... and similarly don't do any of that swapcount stuff and only check if
+> the swap pte is anon exclusive.
 
-1) IOMMU_HWPT_TYPE_VTD_S1 is defined for the Intel VT-d stage-1 page
-   table, it will be used in the stage-1 domain allocation and IOTLB
-   syncing path. struct iommu_hwpt_vtd_s1 is defined to pass user_data
-   for the Intel VT-d stage-1 domain allocation.
-   struct iommu_hwpt_vtd_s1_invalidate is defined to pass the data for
-   the Intel VT-d stage-1 IOTLB invalidation.
-2) IOMMU_HW_INFO_TYPE_INTEL_VTD and struct iommu_hw_info_vtd are defined
-   to report iommu hardware information for Intel VT-d.
+I'm preparing v2 and this is the only part left for me to address but
+I'm not clear how. David, could you please clarify how I should be
+checking swap pte to be exclusive without swapcount?
 
-With above IOMMUFD extensions, the intel iommu driver implements the three
-paths to support nested translation.
-
-The first Intel platform supporting nested translation is Sapphire
-Rapids which, unfortunately, has a hardware errata [2] requiring special
-treatment. This errata happens when a stage-1 page table page (either
-level) is located in a stage-2 read-only region. In that case the IOMMU
-hardware may ignore the stage-2 RO permission and still set the A/D bit
-in stage-1 page table entries during page table walking.
-
-A flag IOMMU_HW_INFO_VTD_ERRATA_772415_SPR17 is introduced to report
-this errata to userspace. With that restriction the user should either
-disable nested translation to favor RO stage-2 mappings or ensure no
-RO stage-2 mapping to enable nested translation.
-
-Intel-iommu driver is armed with necessary checks to prevent such mix
-in patch12 of this series.
-
-Qemu currently does add RO mappings though. The vfio agent in Qemu
-simply maps all valid regions in the GPA address space which certainly
-includes RO regions e.g. vbios.
-
-In reality we don't know a usage relying on DMA reads from the BIOS
-region. Hence finding a way to skip RO regions (e.g. via a discard manager)
-in Qemu might be an acceptable tradeoff. The actual change needs more
-discussion in Qemu community. For now we just hacked Qemu to test.
-
-Complete code can be found in [3], corresponding QEMU could can be found
-in [4].
-
-[1] https://lore.kernel.org/linux-iommu/20230921075138.124099-1-yi.l.liu@intel.com/
-[2] https://www.intel.com/content/www/us/en/content-details/772415/content-details.html
-[3] https://github.com/yiliu1765/iommufd/tree/iommufd_nesting
-[4] https://github.com/yiliu1765/qemu/tree/zhenzhong/wip/iommufd_nesting_rfcv1
-
-Change log:
-
-v5:
- - Add Kevin's r-b for patch 2, 3 ,5 8, 10
- - Drop enforce_cache_coherency callback from the nested type domain ops (Kevin)
- - Remove duplicate agaw check in patch 04 (Kevin)
- - Remove duplicate domain_update_iommu_cap() in patch 06 (Kevin)
- - Check parent's force_snooping to set pgsnp in the pasid entry (Kevin)
- - uapi data structure check (Kevin)
- - Simplify the errata handling as user can allocate nested parent domain
-
-v4: https://lore.kernel.org/linux-iommu/20230724111335.107427-1-yi.l.liu@intel.com/
- - Remove ascii art tables (Jason)
- - Drop EMT (Tina, Jason)
- - Drop MTS and related definitions (Kevin)
- - Rename macro IOMMU_VTD_PGTBL_ to IOMMU_VTD_S1_ (Kevin)
- - Rename struct iommu_hwpt_intel_vtd_ to iommu_hwpt_vtd_ (Kevin)
- - Rename struct iommu_hwpt_intel_vtd to iommu_hwpt_vtd_s1 (Kevin)
- - Put the vendor specific hwpt alloc data structure before enuma iommu_hwpt_type (Kevin)
- - Do not trim the higher page levels of S2 domain in nested domain attachment as the
-   S2 domain may have been used independently. (Kevin)
- - Remove the first-stage pgd check against the maximum address of s2_domain as hw
-   can check it anyhow. It makes sense to check every pfns used in the stage-1 page
-   table. But it cannot make it. So just leave it to hw. (Kevin)
- - Split the iotlb flush part into an order of uapi, helper and callback implementation (Kevin)
- - Change the policy of VT-d nesting errata, disallow RO mapping once a domain is used
-   as parent domain of a nested domain. This removes the nested_users counting. (Kevin)
- - Minor fix for "make htmldocs"
-
-v3: https://lore.kernel.org/linux-iommu/20230511145110.27707-1-yi.l.liu@intel.com/
- - Further split the patches into an order of adding helpers for nested
-   domain, iotlb flush, nested domain attachment and nested domain allocation
-   callback, then report the hw_info to userspace.
- - Add batch support in cache invalidation from userspace
- - Disallow nested translation usage if RO mappings exists in stage-2 domain
-   due to errata on readonly mappings on Sapphire Rapids platform.
-
-v2: https://lore.kernel.org/linux-iommu/20230309082207.612346-1-yi.l.liu@intel.com/
- - The iommufd infrastructure is split to be separate series.
-
-v1: https://lore.kernel.org/linux-iommu/20230209043153.14964-1-yi.l.liu@intel.com/
-
-Regards,
-	Yi Liu
-
-Lu Baolu (5):
-  iommu/vt-d: Extend dmar_domain to support nested domain
-  iommu/vt-d: Add helper for nested domain allocation
-  iommu/vt-d: Add helper to setup pasid nested translation
-  iommu/vt-d: Add nested domain allocation
-  iommu/vt-d: Disallow read-only mappings to nest parent domain
-
-Yi Liu (6):
-  iommufd: Add data structure for Intel VT-d stage-1 domain allocation
-  iommu/vt-d: Make domain attach helpers to be extern
-  iommu/vt-d: Set the nested domain to a device
-  iommufd: Add data structure for Intel VT-d stage-1 cache invalidation
-  iommu/vt-d: Make iotlb flush helpers to be extern
-  iommu/vt-d: Add iotlb flush for nested domain
-
- drivers/iommu/intel/Makefile |   2 +-
- drivers/iommu/intel/iommu.c  |  60 +++++++++----
- drivers/iommu/intel/iommu.h  |  51 +++++++++--
- drivers/iommu/intel/nested.c | 162 +++++++++++++++++++++++++++++++++++
- drivers/iommu/intel/pasid.c  | 125 +++++++++++++++++++++++++++
- drivers/iommu/intel/pasid.h  |   2 +
- include/uapi/linux/iommufd.h |  76 +++++++++++++++-
- 7 files changed, 452 insertions(+), 26 deletions(-)
- create mode 100644 drivers/iommu/intel/nested.c
-
--- 
-2.34.1
-
+>
+> --
+> Cheers,
+>
+> David / dhildenb
+>
