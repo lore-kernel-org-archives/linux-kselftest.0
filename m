@@ -2,137 +2,189 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 33C4DE7D0A2
-	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Sep 2023 18:39:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 796D5E7D0A2
+	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Sep 2023 18:52:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230406AbjIUSj0 (ORCPT
+        id S230394AbjIUSw4 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 21 Sep 2023 14:39:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49434 "EHLO
+        Thu, 21 Sep 2023 14:52:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230224AbjIUSjS (ORCPT
+        with ESMTP id S230424AbjIUSwi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Sep 2023 14:39:18 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 403CFA5D6C
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Sep 2023 10:59:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1695281192;
-        bh=DL8YQ5E8Zv2eZGMa34HZreA4MM1po6Pq4Ubem3mz4wk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=rr3oPnwnGwBUfGBN0YhjJfwFk6yaDy62debC2Rb8kgDzD5hQnCoEvoPDP8eEL4C/H
-         J0eEjae3Kg4KwYax7kmerM4W6XHW0cKjSZpzGf3th//c7p0U0ELDjXkxlrl5wRhYvr
-         4fqEVlqGHReRHAHT1KDdC/UnKpxBoJWDJS18rFOlil0EEC669ao+UhlWVi5VW8EqQ3
-         mIQMkuuAclpMJ3psIN/fRG0Rq/mIWWPNF5FVkbOIMegAoPGZ6e+O8wQRFU+KZuiVFJ
-         /5tb5/E3uMPBCmcBWZhtSgvTRclT1x6n4a8BfZ+O/0C6p/Cfok3Gre1WI9WdoQ4rxC
-         jln558KihtYdQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Rrn5M6TMFz4xPR;
-        Thu, 21 Sep 2023 17:26:31 +1000 (AEST)
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     <linuxppc-dev@lists.ozlabs.org>
-Cc:     <linux-kselftest@vger.kernel.org>, <skhan@linuxfoundation.org>,
-        <keescook@chromium.org>
-Subject: [PATCH] selftests/powerpc: Fix emit_tests to work with run_kselftest.sh
-Date:   Thu, 21 Sep 2023 17:26:10 +1000
-Message-ID: <20230921072623.828772-1-mpe@ellerman.id.au>
-X-Mailer: git-send-email 2.41.0
+        Thu, 21 Sep 2023 14:52:38 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BC683A84;
+        Thu, 21 Sep 2023 10:49:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695318592; x=1726854592;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Yi3c68gD4hTElDHskv0VcpfkQgw6vI/1kl3oI770f+E=;
+  b=cSWmsMhGqWV7OteKQqTngpFY/v0HROD3PLPH+xV0QyR0OIILPT9r7zIg
+   Ljry7lPJkNWd6Q0J/NQV4nGL478g2yzrVoDq9F5JPUx8gcP/hV+ZJb7WW
+   w1lSr0ES3hF3SL/kHhdhB28Ipc6EnQlFMpLEJrSjOjz9qGdji3f7Df74i
+   yIwpjPqWcoek9XlsxK8b0ZDOUSlyX2J99w6fIXrkjk517CxVkVzmJA901
+   afFSCXnQW/oTZUBZW3tkOIvEqV2hvahTNZRjHlEQ8PtHAMfa0sm4er7QT
+   2NZ96ZnWX0taW9MpzIYHZrLgIPb+j40ww5Vnxw3e3rJ3mB5VPadVhmSMA
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="359832848"
+X-IronPort-AV: E=Sophos;i="6.03,164,1694761200"; 
+   d="scan'208";a="359832848"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 00:52:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="723649516"
+X-IronPort-AV: E=Sophos;i="6.03,164,1694761200"; 
+   d="scan'208";a="723649516"
+Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
+  by orsmga006.jf.intel.com with ESMTP; 21 Sep 2023 00:52:10 -0700
+From:   Yi Liu <yi.l.liu@intel.com>
+To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
+        kevin.tian@intel.com, robin.murphy@arm.com,
+        baolu.lu@linux.intel.com
+Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
+        kvm@vger.kernel.org, mjrosato@linux.ibm.com,
+        chao.p.peng@linux.intel.com, yi.l.liu@intel.com,
+        yi.y.sun@linux.intel.com, peterx@redhat.com, jasowang@redhat.com,
+        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
+        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        zhenzhong.duan@intel.com, joao.m.martins@oracle.com
+Subject: [PATCH v4 05/17] iommufd: Separate kernel-managed HWPT alloc/destroy/abort functions
+Date:   Thu, 21 Sep 2023 00:51:26 -0700
+Message-Id: <20230921075138.124099-6-yi.l.liu@intel.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230921075138.124099-1-yi.l.liu@intel.com>
+References: <20230921075138.124099-1-yi.l.liu@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-In order to use run_kselftest.sh the list of tests must be emitted to
-populate kselftest-list.txt.
+From: Nicolin Chen <nicolinc@nvidia.com>
 
-The powerpc Makefile is written to use EMIT_TESTS. But support for
-EMIT_TESTS was dropped in commit d4e59a536f50 ("selftests: Use runner.sh
-for emit targets"). Although prior to that commit a548de0fe8e1
-("selftests: lib.mk: add test execute bit check to EMIT_TESTS") had
-already broken run_kselftest.sh for powerpc due to the executable check
-using the wrong path.
+As one of the previous commits mentioned, a user-managed HWPT will have
+some different attributes/members. It'd be more clear by having separate
+allocators. Since the existing iommufd_hw_pagetable_alloc() serves well
+kernel-managed HWPTs, apply some minimal updates to mark it as a kernel-
+managed HWPT allocator.
 
-It can be fixed by replacing the EMIT_TESTS definitions with actual
-emit_tests rules in the powerpc Makefiles. This makes run_kselftest.sh
-able to run powerpc tests:
+Also, add a pair of function pointers (abort and destroy) in the struct,
+to separate different cleanup routines. Then rename the existing cleanup
+functions to iommufd_kernel_managed_hwpt_destroy/abort() linked to the
+HWPT in the allocator.
 
-  $ cd linux
-  $ export ARCH=powerpc
-  $ export CROSS_COMPILE=powerpc64le-linux-gnu-
-  $ make headers
-  $ make -j -C tools/testing/selftests install
-  $ grep -c "^powerpc" tools/testing/selftests/kselftest_install/kselftest-list.txt
-  182
-
-Fixes: d4e59a536f50 ("selftests: Use runner.sh for emit targets")
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+Signed-off-by: Yi Liu <yi.l.liu@intel.com>
 ---
- tools/testing/selftests/powerpc/Makefile     |  7 +++----
- tools/testing/selftests/powerpc/pmu/Makefile | 11 ++++++-----
- 2 files changed, 9 insertions(+), 9 deletions(-)
+ drivers/iommu/iommufd/hw_pagetable.c    | 34 ++++++++++++++++++++-----
+ drivers/iommu/iommufd/iommufd_private.h |  3 +++
+ 2 files changed, 31 insertions(+), 6 deletions(-)
 
-I'll plan to merge this via the powerpc tree.
-
-cheers
-
-diff --git a/tools/testing/selftests/powerpc/Makefile b/tools/testing/selftests/powerpc/Makefile
-index 49f2ad1793fd..7ea42fa02eab 100644
---- a/tools/testing/selftests/powerpc/Makefile
-+++ b/tools/testing/selftests/powerpc/Makefile
-@@ -59,12 +59,11 @@ override define INSTALL_RULE
- 	done;
- endef
+diff --git a/drivers/iommu/iommufd/hw_pagetable.c b/drivers/iommu/iommufd/hw_pagetable.c
+index 554a9c3d740f..1cc7178121d1 100644
+--- a/drivers/iommu/iommufd/hw_pagetable.c
++++ b/drivers/iommu/iommufd/hw_pagetable.c
+@@ -8,7 +8,7 @@
+ #include "../iommu-priv.h"
+ #include "iommufd_private.h"
  
--override define EMIT_TESTS
-+emit_tests:
- 	+@for TARGET in $(SUB_DIRS); do \
- 		BUILD_TARGET=$(OUTPUT)/$$TARGET;	\
--		$(MAKE) OUTPUT=$$BUILD_TARGET -s -C $$TARGET emit_tests;\
-+		$(MAKE) OUTPUT=$$BUILD_TARGET -s -C $$TARGET $@;\
- 	done;
--endef
+-void iommufd_hw_pagetable_destroy(struct iommufd_object *obj)
++static void iommufd_kernel_managed_hwpt_destroy(struct iommufd_object *obj)
+ {
+ 	struct iommufd_hw_pagetable *hwpt =
+ 		container_of(obj, struct iommufd_hw_pagetable, obj);
+@@ -27,7 +27,12 @@ void iommufd_hw_pagetable_destroy(struct iommufd_object *obj)
+ 	refcount_dec(&hwpt->ioas->obj.users);
+ }
  
- override define CLEAN
- 	+@for TARGET in $(SUB_DIRS); do \
-@@ -77,4 +76,4 @@ endef
- tags:
- 	find . -name '*.c' -o -name '*.h' | xargs ctags
+-void iommufd_hw_pagetable_abort(struct iommufd_object *obj)
++void iommufd_hw_pagetable_destroy(struct iommufd_object *obj)
++{
++	container_of(obj, struct iommufd_hw_pagetable, obj)->destroy(obj);
++}
++
++static void iommufd_kernel_managed_hwpt_abort(struct iommufd_object *obj)
+ {
+ 	struct iommufd_hw_pagetable *hwpt =
+ 		container_of(obj, struct iommufd_hw_pagetable, obj);
+@@ -42,6 +47,11 @@ void iommufd_hw_pagetable_abort(struct iommufd_object *obj)
+ 	iommufd_hw_pagetable_destroy(obj);
+ }
  
--.PHONY: tags $(SUB_DIRS)
-+.PHONY: tags $(SUB_DIRS) emit_tests
-diff --git a/tools/testing/selftests/powerpc/pmu/Makefile b/tools/testing/selftests/powerpc/pmu/Makefile
-index 2b95e44d20ff..a284fa874a9f 100644
---- a/tools/testing/selftests/powerpc/pmu/Makefile
-+++ b/tools/testing/selftests/powerpc/pmu/Makefile
-@@ -30,13 +30,14 @@ override define RUN_TESTS
- 	+TARGET=event_code_tests; BUILD_TARGET=$$OUTPUT/$$TARGET; $(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET run_tests
- endef
++void iommufd_hw_pagetable_abort(struct iommufd_object *obj)
++{
++	container_of(obj, struct iommufd_hw_pagetable, obj)->abort(obj);
++}
++
+ int iommufd_hw_pagetable_enforce_cc(struct iommufd_hw_pagetable *hwpt)
+ {
+ 	if (hwpt->enforce_cache_coherency)
+@@ -57,7 +67,7 @@ int iommufd_hw_pagetable_enforce_cc(struct iommufd_hw_pagetable *hwpt)
+ }
  
--DEFAULT_EMIT_TESTS := $(EMIT_TESTS)
--override define EMIT_TESTS
--	$(DEFAULT_EMIT_TESTS)
-+emit_tests:
-+	for TEST in $(TEST_GEN_PROGS); do \
-+		BASENAME_TEST=`basename $$TEST`;	\
-+		echo "$(COLLECTION):$$BASENAME_TEST";	\
-+	done
- 	+TARGET=ebb; BUILD_TARGET=$$OUTPUT/$$TARGET; $(MAKE) OUTPUT=$$BUILD_TARGET -s -C $$TARGET emit_tests
- 	+TARGET=sampling_tests; BUILD_TARGET=$$OUTPUT/$$TARGET; $(MAKE) OUTPUT=$$BUILD_TARGET -s -C $$TARGET emit_tests
- 	+TARGET=event_code_tests; BUILD_TARGET=$$OUTPUT/$$TARGET; $(MAKE) OUTPUT=$$BUILD_TARGET -s -C $$TARGET emit_tests
--endef
+ /**
+- * iommufd_hw_pagetable_alloc() - Get an iommu_domain for a device
++ * iommufd_hw_pagetable_alloc() - Get a kernel-managed iommu_domain for a device
+  * @ictx: iommufd context
+  * @ioas: IOAS to associate the domain with
+  * @idev: Device to get an iommu_domain for
+@@ -66,9 +76,9 @@ int iommufd_hw_pagetable_enforce_cc(struct iommufd_hw_pagetable *hwpt)
+  * @user_data: Optional user_data pointer
+  * @immediate_attach: True if idev should be attached to the hwpt
+  *
+- * Allocate a new iommu_domain and return it as a hw_pagetable. The HWPT
+- * will be linked to the given ioas and upon return the underlying iommu_domain
+- * is fully popoulated.
++ * Allocate a new iommu_domain (must be IOMMU_DOMAIN_UNMANAGED) and return it as
++ * a kernel-managed hw_pagetable. The HWPT will be linked to the given ioas and
++ * upon return the underlying iommu_domain is fully popoulated.
+  *
+  * The caller must hold the ioas->mutex until after
+  * iommufd_object_abort_and_destroy() or iommufd_object_finalize() is called on
+@@ -103,6 +113,8 @@ iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
+ 	/* Pairs with iommufd_hw_pagetable_destroy() */
+ 	refcount_inc(&ioas->obj.users);
+ 	hwpt->ioas = ioas;
++	hwpt->abort = iommufd_kernel_managed_hwpt_abort;
++	hwpt->destroy = iommufd_kernel_managed_hwpt_destroy;
  
- DEFAULT_INSTALL_RULE := $(INSTALL_RULE)
- override define INSTALL_RULE
-@@ -64,4 +65,4 @@ sampling_tests:
- event_code_tests:
- 	TARGET=$@; BUILD_TARGET=$$OUTPUT/$$TARGET; mkdir -p $$BUILD_TARGET; $(MAKE) OUTPUT=$$BUILD_TARGET -k -C $$TARGET all
+ 	if (ops->domain_alloc_user) {
+ 		hwpt->domain = ops->domain_alloc_user(idev->dev, flags,
+@@ -121,6 +133,16 @@ iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
+ 		}
+ 	}
  
--.PHONY: all run_tests ebb sampling_tests event_code_tests
-+.PHONY: all run_tests ebb sampling_tests event_code_tests emit_tests
++	if (WARN_ON_ONCE(hwpt->domain->type != IOMMU_DOMAIN_UNMANAGED)) {
++		rc = -EINVAL;
++		goto out_abort;
++	}
++	/* Driver is buggy by mixing user-managed op in kernel-managed ops */
++	if (WARN_ON_ONCE(hwpt->domain->ops->cache_invalidate_user)) {
++		rc = -EINVAL;
++		goto out_abort;
++	}
++
+ 	/*
+ 	 * Set the coherency mode before we do iopt_table_add_domain() as some
+ 	 * iommus have a per-PTE bit that controls it and need to decide before
+diff --git a/drivers/iommu/iommufd/iommufd_private.h b/drivers/iommu/iommufd/iommufd_private.h
+index 1d3b1a74e854..3e89c3d530f3 100644
+--- a/drivers/iommu/iommufd/iommufd_private.h
++++ b/drivers/iommu/iommufd/iommufd_private.h
+@@ -234,6 +234,9 @@ struct iommufd_hw_pagetable {
+ 	struct iommufd_object obj;
+ 	struct iommu_domain *domain;
+ 
++	void (*abort)(struct iommufd_object *obj);
++	void (*destroy)(struct iommufd_object *obj);
++
+ 	union {
+ 		struct { /* kernel-managed */
+ 			struct iommufd_ioas *ioas;
 -- 
-2.41.0
+2.34.1
 
