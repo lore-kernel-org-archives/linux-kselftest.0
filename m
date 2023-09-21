@@ -2,173 +2,143 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5049E7D0A8
-	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Sep 2023 18:12:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 927E9E7D0A2
+	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Sep 2023 18:13:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbjIUSMg (ORCPT
+        id S229493AbjIUSN7 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 21 Sep 2023 14:12:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54246 "EHLO
+        Thu, 21 Sep 2023 14:13:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230398AbjIUSMM (ORCPT
+        with ESMTP id S229848AbjIUSNb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Sep 2023 14:12:12 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18EB530E0;
-        Thu, 21 Sep 2023 10:49:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695318588; x=1726854588;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=e0P+FnWlKseFjytOLElZ5wxbsLbUiz397Z6YutC//Gc=;
-  b=QLKnpsCyN4H4dps5sQpR08dmPE72WQx0GPIFA7TGd7uxxPyPvWIcJxU7
-   Kz1g82zBjmnU+Hax83BcjfcmR0U/qYvGib8Pi580s2GL4mCjPg7ciuzmq
-   xf03GqY4Kiaoe4dumNdrv3kLGgVEDU1K5lwgBrlUnJohZzazvAqKJ7k/B
-   svD4JAwc7kCnmxsCjo4zNbraq3MUaOgigKNNLoi7d4If2g3HSP7oQQIQo
-   ZYfJcgmUY6r1B0JnCHeBkUDpc+nwtTwh/O4kAp0JMp7U5sOm0y4nJyQpA
-   +HeZlBkE1S819AiuhEuNlA6qRqzxjLi7sSSPA9U6fm974GVEduoLMq1jF
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="359832836"
-X-IronPort-AV: E=Sophos;i="6.03,164,1694761200"; 
-   d="scan'208";a="359832836"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 00:52:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="723649513"
-X-IronPort-AV: E=Sophos;i="6.03,164,1694761200"; 
-   d="scan'208";a="723649513"
-Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by orsmga006.jf.intel.com with ESMTP; 21 Sep 2023 00:52:10 -0700
-From:   Yi Liu <yi.l.liu@intel.com>
-To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
-        kevin.tian@intel.com, robin.murphy@arm.com,
-        baolu.lu@linux.intel.com
-Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
-        kvm@vger.kernel.org, mjrosato@linux.ibm.com,
-        chao.p.peng@linux.intel.com, yi.l.liu@intel.com,
-        yi.y.sun@linux.intel.com, peterx@redhat.com, jasowang@redhat.com,
-        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
-        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        zhenzhong.duan@intel.com, joao.m.martins@oracle.com
-Subject: [PATCH v4 04/17] iommufd: Pass in hwpt_type/user_data to iommufd_hw_pagetable_alloc()
-Date:   Thu, 21 Sep 2023 00:51:25 -0700
-Message-Id: <20230921075138.124099-5-yi.l.liu@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230921075138.124099-1-yi.l.liu@intel.com>
-References: <20230921075138.124099-1-yi.l.liu@intel.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Thu, 21 Sep 2023 14:13:31 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15B5084F04;
+        Thu, 21 Sep 2023 10:37:39 -0700 (PDT)
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38LAn48G031167;
+        Thu, 21 Sep 2023 11:00:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : mime-version : content-transfer-encoding; s=pp1;
+ bh=p8EsBeNIrJi9VQT0CnLm9BaoTVOkiFg8QdPNBbVzQY4=;
+ b=S3h5NUBBeOy2OWmbxAgmfZe/8u0fehWLI8SSSAfMWXwNig8LRqUO8aMsJPof7bcNQVAD
+ BgKx2Zyrs96OKtsfONvrEYqj0p+vK68J2WUIOdbrNRn4YlYBP/JMr+wpE9NWOqgUrGkL
+ 7V7K/ayr08XYl14FmYAjCUwNHsHmJrpV0ZxGS1TF9aWEMR3JvjgnZOQkbUkszZSya18M
+ vbHM8IjhVHYO+gxnancZ4jjRAaYFNc76QX8suBmJCLZZxaU6hn2dYpBP9dWLBYvzDBpQ
+ j0OA5jSb8nDdGoAuiUmhR1JR+YVxt6l+yBbfp6sIPns8E1dv0WFRy8/vYY6cgh9qGz1H Aw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3t803f0b1n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 21 Sep 2023 11:00:28 +0000
+Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 38LB07Yc016358;
+        Thu, 21 Sep 2023 11:00:27 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3t803f0b16-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 21 Sep 2023 11:00:27 +0000
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+        by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 38LAjd0p010385;
+        Thu, 21 Sep 2023 11:00:26 GMT
+Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
+        by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3t5rwkqsu5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 21 Sep 2023 11:00:26 +0000
+Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
+        by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 38LB0P1866060618
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 21 Sep 2023 11:00:25 GMT
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D1C105806A;
+        Thu, 21 Sep 2023 11:00:24 +0000 (GMT)
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B952C5805D;
+        Thu, 21 Sep 2023 11:00:20 +0000 (GMT)
+Received: from li-34d1fccc-27cd-11b2-a85c-c167793e56f7.ibm.com (unknown [9.204.200.131])
+        by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 21 Sep 2023 11:00:20 +0000 (GMT)
+Message-ID: <50798cd4558299eb62e2c3a11e367a6dbe11f915.camel@linux.vnet.ibm.com>
+Subject: Re: [RFC v3 1/2] powerpc/cpuidle: cpuidle wakeup latency based on
+ IPI and timer events
+From:   Aboorva Devarajan <aboorvad@linux.vnet.ibm.com>
+Reply-To: 87a5trvw88.fsf@mail.lhotse
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     sshegde@linux.vnet.ibm.com, srikar@linux.vnet.ibm.com,
+        npiggin@gmail.com, rmclure@linux.ibm.com, arnd@arndb.de,
+        joel@jms.id.au, shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        pratik.r.sampat@gmail.com
+Date:   Thu, 21 Sep 2023 16:30:19 +0530
+In-Reply-To: <87a5trvw88.fsf@mail.lhotse>
+References: <20230911053620.87973-1-aboorvad@linux.vnet.ibm.com>
+         <20230911053620.87973-2-aboorvad@linux.vnet.ibm.com>
+         <87a5trvw88.fsf@mail.lhotse>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: U6OLfEr1xVJJ58ZvUgMVyFoD8lhjrPU0
+X-Proofpoint-ORIG-GUID: 4TT-OWudeNNSff_lXJVKJf0lNCiNhmfS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-09-21_07,2023-09-20_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ adultscore=0 suspectscore=0 clxscore=1011 malwarescore=0 spamscore=0
+ mlxscore=0 phishscore=0 impostorscore=0 mlxlogscore=744 lowpriorityscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2308100000 definitions=main-2309210092
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-iommu core already supports accepting user_data and hwpt_type to allocate
-a user iommu_domain, which allows the caller iommufd_hw_pagetable_alloc()
-to accept the hwpt_type and user_data too. Thus, pass them in.
+On Wed, 2023-09-13 at 08:54 +1000, Michael Ellerman wrote:
+> Aboorva Devarajan <aboorvad@linux.vnet.ibm.com> writes:
+> > From: Pratik R. Sampat <psampat@linux.ibm.com>
+> > 
+> > Introduce a mechanism to fire directed IPIs from a source CPU to a
+> > specified target CPU and measure the time incurred on waking up the
+> > target CPU in response.
+> > 
+> > Also, introduce a mechanism to queue a hrtimer on a specified CPU
+> > and
+> > subsequently measure the time taken to wakeup the CPU.
+> > 
+> > Define a simple debugfs interface that allows for adjusting the
+> > settings to trigger IPI and timer events on a designated CPU, and
+> > to
+> > observe the resulting cpuidle wakeup latencies.
+> > 
+> > Reviewed-by: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+> > Signed-off-by: Pratik R. Sampat <psampat@linux.ibm.com>
+> > Signed-off-by: Aboorva Devarajan <aboorvad@linux.vnet.ibm.com>
+> > ---
+> >  arch/powerpc/Kconfig.debug                 |  10 ++
+> >  arch/powerpc/kernel/Makefile               |   1 +
+> >  arch/powerpc/kernel/test_cpuidle_latency.c | 154
+> > +++++++++++++++++++++
+>   
+> I don't see anything here that's powerpc specific?
+> 
+> Which makes me wonder 1) could this be done with some existing
+> generic
+> mechanism?, and 2) if not can this test code be made generic.
+> 
+> At the very least this should be Cc'ed to the cpuidle lists &
+> maintainers given it's a test for cpuidle latency :)
+> 
+> cheers
 
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-Co-developed-by: Nicolin Chen <nicolinc@nvidia.com>
-Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-Signed-off-by: Yi Liu <yi.l.liu@intel.com>
----
- drivers/iommu/iommufd/device.c          |  3 ++-
- drivers/iommu/iommufd/hw_pagetable.c    | 17 ++++++++++++++---
- drivers/iommu/iommufd/iommufd_private.h |  3 +++
- 3 files changed, 19 insertions(+), 4 deletions(-)
+Hi Michael,
 
-diff --git a/drivers/iommu/iommufd/device.c b/drivers/iommu/iommufd/device.c
-index e88fa73a45e6..e04900f101f1 100644
---- a/drivers/iommu/iommufd/device.c
-+++ b/drivers/iommu/iommufd/device.c
-@@ -540,7 +540,8 @@ iommufd_device_auto_get_domain(struct iommufd_device *idev,
- 	}
- 
- 	hwpt = iommufd_hw_pagetable_alloc(idev->ictx, ioas, idev,
--					  0, immediate_attach);
-+					  0, IOMMU_HWPT_TYPE_DEFAULT,
-+					  NULL, immediate_attach);
- 	if (IS_ERR(hwpt)) {
- 		destroy_hwpt = ERR_CAST(hwpt);
- 		goto out_unlock;
-diff --git a/drivers/iommu/iommufd/hw_pagetable.c b/drivers/iommu/iommufd/hw_pagetable.c
-index 1d7378a6cbb3..554a9c3d740f 100644
---- a/drivers/iommu/iommufd/hw_pagetable.c
-+++ b/drivers/iommu/iommufd/hw_pagetable.c
-@@ -62,6 +62,8 @@ int iommufd_hw_pagetable_enforce_cc(struct iommufd_hw_pagetable *hwpt)
-  * @ioas: IOAS to associate the domain with
-  * @idev: Device to get an iommu_domain for
-  * @flags: Flags from userspace
-+ * @hwpt_type: Requested type of hw_pagetable
-+ * @user_data: Optional user_data pointer
-  * @immediate_attach: True if idev should be attached to the hwpt
-  *
-  * Allocate a new iommu_domain and return it as a hw_pagetable. The HWPT
-@@ -75,6 +77,8 @@ int iommufd_hw_pagetable_enforce_cc(struct iommufd_hw_pagetable *hwpt)
- struct iommufd_hw_pagetable *
- iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
- 			   struct iommufd_device *idev, u32 flags,
-+			   enum iommu_hwpt_type hwpt_type,
-+			   struct iommu_user_data *user_data,
- 			   bool immediate_attach)
- {
- 	const struct iommu_ops *ops = dev_iommu_ops(idev->dev);
-@@ -86,6 +90,11 @@ iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
- 	if ((flags & IOMMU_HWPT_ALLOC_NEST_PARENT) && !ops->domain_alloc_user)
- 		return ERR_PTR(-EOPNOTSUPP);
- 
-+	if (user_data && hwpt_type == IOMMU_HWPT_TYPE_DEFAULT)
-+		return ERR_PTR(-EINVAL);
-+	if (user_data && !ops->domain_alloc_user)
-+		return ERR_PTR(-EOPNOTSUPP);
-+
- 	hwpt = iommufd_object_alloc(ictx, hwpt, IOMMUFD_OBJ_HW_PAGETABLE);
- 	if (IS_ERR(hwpt))
- 		return hwpt;
-@@ -97,8 +106,8 @@ iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
- 
- 	if (ops->domain_alloc_user) {
- 		hwpt->domain = ops->domain_alloc_user(idev->dev, flags,
--						      IOMMU_HWPT_TYPE_DEFAULT,
--						      NULL, NULL);
-+						      hwpt_type, NULL,
-+						      user_data);
- 		if (IS_ERR(hwpt->domain)) {
- 			rc = PTR_ERR(hwpt->domain);
- 			hwpt->domain = NULL;
-@@ -174,7 +183,9 @@ int iommufd_hwpt_alloc(struct iommufd_ucmd *ucmd)
- 
- 	mutex_lock(&ioas->mutex);
- 	hwpt = iommufd_hw_pagetable_alloc(ucmd->ictx, ioas,
--					  idev, cmd->flags, false);
-+					  idev, cmd->flags,
-+					  IOMMU_HWPT_TYPE_DEFAULT,
-+					  NULL, false);
- 	if (IS_ERR(hwpt)) {
- 		rc = PTR_ERR(hwpt);
- 		goto out_unlock;
-diff --git a/drivers/iommu/iommufd/iommufd_private.h b/drivers/iommu/iommufd/iommufd_private.h
-index 947a797536e3..1d3b1a74e854 100644
---- a/drivers/iommu/iommufd/iommufd_private.h
-+++ b/drivers/iommu/iommufd/iommufd_private.h
-@@ -13,6 +13,7 @@ struct iommu_domain;
- struct iommu_group;
- struct iommu_option;
- struct iommufd_device;
-+struct iommu_user_data;
- 
- struct iommufd_ctx {
- 	struct file *file;
-@@ -248,6 +249,8 @@ struct iommufd_hw_pagetable {
- struct iommufd_hw_pagetable *
- iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
- 			   struct iommufd_device *idev, u32 flags,
-+			   enum iommu_hwpt_type hwpt_type,
-+			   struct iommu_user_data *user_data,
- 			   bool immediate_attach);
- int iommufd_hw_pagetable_enforce_cc(struct iommufd_hw_pagetable *hwpt);
- int iommufd_hw_pagetable_attach(struct iommufd_hw_pagetable *hwpt,
--- 
-2.34.1
+Thanks a lot for taking a look at this.
+
+Yes, this test-case can be used as a generic benchmark for evaluating
+CPU idle latencies across different architectures, as it has thus far
+been exclusively tested and used on PowerPC, so we thought it would be
+more beneficial to incorporate it into a PowerPC specific self-test
+suite. But I will work on making it a generic self-test and send across
+a v4.
 
