@@ -2,129 +2,146 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 944D5E7D0AE
-	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Sep 2023 21:19:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C183CE7D0AB
+	for <linux-kselftest@archiver.kernel.org>; Thu, 21 Sep 2023 21:32:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231769AbjIUVTS (ORCPT
+        id S230480AbjIUVcM (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 21 Sep 2023 17:19:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43014 "EHLO
+        Thu, 21 Sep 2023 17:32:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230238AbjIUVTE (ORCPT
+        with ESMTP id S232590AbjIUVb5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Sep 2023 17:19:04 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E38BC7DBA;
-        Thu, 21 Sep 2023 10:10:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695316242; x=1726852242;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=2qafvDTEA4tHJGGUOtUPjMOBwx7ln2B9qY4E8ARD9Lg=;
-  b=kXGNE3tnjII73oaq+TCn5QHy2JltX0wmnnWnFwAj0MMCJzLexs/Ub+/M
-   4CVR4+9m2SQ7RPbKSZ2aOyQOjwnAvR3kSspiK+B3XskX/4DU1eZqwgh62
-   ngl9z2yq9jKJdJKlhpxfC0PbIO6wqz4duzzXYIUTtKgALRYa0vO/ji+7K
-   Bgmxe6PXX0O7jrZMBYvumQ4ntEtQudiU8nFe8nqSTgmAYWhx5c97LfeY2
-   wjc1L1xSPUKIpa9ptPx7ggSTNImIlkEvOcig4miYnFokle3PoJ6DpxJBi
-   RBSgi6qNPNGfH4+ZDn/zIEhIxrEn0DV827iQhfxouOCF/fOzOGKyUAlcz
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="370764386"
-X-IronPort-AV: E=Sophos;i="6.03,164,1694761200"; 
-   d="scan'208";a="370764386"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 00:54:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="812523053"
-X-IronPort-AV: E=Sophos;i="6.03,164,1694761200"; 
-   d="scan'208";a="812523053"
-Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by fmsmga008.fm.intel.com with ESMTP; 21 Sep 2023 00:54:44 -0700
-From:   Yi Liu <yi.l.liu@intel.com>
-To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
-        kevin.tian@intel.com, robin.murphy@arm.com,
-        baolu.lu@linux.intel.com
-Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
-        kvm@vger.kernel.org, mjrosato@linux.ibm.com,
-        chao.p.peng@linux.intel.com, yi.l.liu@intel.com,
-        yi.y.sun@linux.intel.com, peterx@redhat.com, jasowang@redhat.com,
-        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
-        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        zhenzhong.duan@intel.com, joao.m.martins@oracle.com
-Subject: [PATCH v5 02/11] iommu/vt-d: Extend dmar_domain to support nested domain
-Date:   Thu, 21 Sep 2023 00:54:22 -0700
-Message-Id: <20230921075431.125239-3-yi.l.liu@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230921075431.125239-1-yi.l.liu@intel.com>
-References: <20230921075431.125239-1-yi.l.liu@intel.com>
+        Thu, 21 Sep 2023 17:31:57 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 415DBAFC1E;
+        Thu, 21 Sep 2023 14:08:06 -0700 (PDT)
+Received: from notapiano.myfiosgateway.com (unknown [IPv6:2600:4041:5b1a:cd00:524d:e95d:1a9c:492a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E071366072A2;
+        Thu, 21 Sep 2023 22:08:03 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1695330485;
+        bh=4WzhXX1uaBfz0iPkLduXsSe9s+j07QrDW6eVjUz4YQc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Xq+7sEqKMT1vt4K2chwQVwiFPZh87u8UZcHR85YtRTxEST+m/bOEzap9pEDI/jlvN
+         Bc2E4iawedB1CvcQfsWQ+SdjoYUMhCQ6w5uIybBe4T4KSyGY2ZH3qEyepqXCq8TylO
+         REOdNMAuaQ95GP79HV1mStHUe0Zb1hued3xRm6AhJgpipF59NKVzsvi9fe2x3b4p0Y
+         dWp3gWQsUx+IbolK/IvPrioWEF97/lKb6ENurhUFp9thNde9DqTs/n15P4CGbvoyO5
+         w/glxgy8t7xhjp2/QuKtQ1ZHA2VftQ23iKelU92xiazICGo+rMJeA9B2Wq76p6J1Am
+         p6bhSKYwpqY8g==
+From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
+To:     Takashi Iwai <tiwai@suse.com>
+Cc:     kernel@collabora.com,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, alsa-devel@alsa-project.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: [RFC PATCH] kselftest/alsa: Add configuration for mt8192-asurada-spherion
+Date:   Thu, 21 Sep 2023 17:07:42 -0400
+Message-ID: <20230921210800.230330-1-nfraprado@collabora.com>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Lu Baolu <baolu.lu@linux.intel.com>
+Add a configuration file for the mt8192-asurada-spherion platform to
+validate that the card and PCMs used for speaker, headphone and
+microphones (internal and headset) are correctly exposed to userspace.
 
-The nested domain fields are exclusive to those that used for a DMA
-remapping domain. Use union to avoid memory waste.
+Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-Signed-off-by: Yi Liu <yi.l.liu@intel.com>
 ---
- drivers/iommu/intel/iommu.h | 35 +++++++++++++++++++++++++++++------
- 1 file changed, 29 insertions(+), 6 deletions(-)
+Sending this patch as RFC because I'd like to ask a question. What would
+be the most suitable entry to identify the card in a future-proof way?
 
-diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
-index c18fb699c87a..4a7f1cc16afa 100644
---- a/drivers/iommu/intel/iommu.h
-+++ b/drivers/iommu/intel/iommu.h
-@@ -597,15 +597,38 @@ struct dmar_domain {
- 	struct list_head devices;	/* all devices' list */
- 	struct list_head dev_pasids;	/* all attached pasids */
- 
--	struct dma_pte	*pgd;		/* virtual address */
--	int		gaw;		/* max guest address width */
--
--	/* adjusted guest address width, 0 is level 2 30-bit */
--	int		agaw;
- 	int		iommu_superpage;/* Level of superpages supported:
- 					   0 == 4KiB (no superpages), 1 == 2MiB,
- 					   2 == 1GiB, 3 == 512GiB, 4 == 1TiB */
--	u64		max_addr;	/* maximum mapped address */
-+	union {
-+		/* DMA remapping domain */
-+		struct {
-+			/* virtual address */
-+			struct dma_pte	*pgd;
-+			/* max guest address width */
-+			int		gaw;
-+			/*
-+			 * adjusted guest address width:
-+			 *   0: level 2 30-bit
-+			 *   1: level 3 39-bit
-+			 *   2: level 4 48-bit
-+			 *   3: level 5 57-bit
-+			 */
-+			int		agaw;
-+			/* maximum mapped address */
-+			u64		max_addr;
-+		};
+I have used the card ID here, but given that it is generated at runtime
+with the purpose of being unique among the cards present on the system
+(and I couldn't find any documentation that states it is stable), I'm
+not sure it is supposed to be relied on.
+
+The card ID is derived from the driver name or card longname, which are
+themselves stable given userspace (alsa-ucm-conf) relies on them, but
+those aren't exposed through sysfs so I can't check for them here.
+
+Another option would be to look for the card number 0. But in the (very
+unlikely) case that another soundcard would be connected to the platform
+and detected first during boot, it wouldn't work.
+
+Yet another option would be to look at the device's uevent file for
+the compatible as defined in the Devicetree, ie
+
+        path "device/uevent"
+        regex "OF_COMPATIBLE_.*=mediatek,mt8192_mt6359_rt1015p_rt5682"
+
+Though it is possible (in rare circumstances) for the compatible in the
+Devicetree to need to be updated to enable a driver behavior that isn't
+backward compatible.
+
+I realize most of these issues are very rare and probably won't ever
+occur, but it seems worthwhile to use the most future-proof mechanism
+available to identify the card to avoid unnecessary maintenance, even
+more so considering the example would be followed by future
+configurations.
+
+Thanks,
+Nícolas
+
+ .../alsa/conf.d/mt8192-asurada-spherion.conf  | 32 +++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+ create mode 100644 tools/testing/selftests/alsa/conf.d/mt8192-asurada-spherion.conf
+
+diff --git a/tools/testing/selftests/alsa/conf.d/mt8192-asurada-spherion.conf b/tools/testing/selftests/alsa/conf.d/mt8192-asurada-spherion.conf
+new file mode 100644
+index 000000000000..6a7e15dc17da
+--- /dev/null
++++ b/tools/testing/selftests/alsa/conf.d/mt8192-asurada-spherion.conf
+@@ -0,0 +1,32 @@
++sysfs [
++	{
++		path "firmware/devicetree/base/compatible"
++		regex "google,spherion"
++	}
++]
 +
-+		/* Nested user domain */
-+		struct {
-+			/* parent page table which the user domain is nested on */
-+			struct dmar_domain *s2_domain;
-+			/* user page table pointer (in GPA) */
-+			unsigned long s1_pgtbl;
-+			/* page table attributes */
-+			struct iommu_hwpt_vtd_s1 s1_cfg;
-+		};
-+	};
- 
- 	struct iommu_domain domain;	/* generic domain data structure for
- 					   iommu core */
++card.mt8192 {
++	sysfs [
++		{
++			path "id"
++			regex "mt8192mt6359rt1"
++		}
++	]
++
++	pcm.0.0 {
++		PLAYBACK {
++		}
++	}
++	pcm.3.0 {
++		PLAYBACK {
++		}
++	}
++	pcm.10.0 {
++		CAPTURE {
++		}
++	}
++	pcm.11.0 {
++		CAPTURE {
++		}
++	}
++}
 -- 
-2.34.1
+2.42.0
 
