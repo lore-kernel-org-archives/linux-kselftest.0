@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 49021E7D0D6
-	for <linux-kselftest@archiver.kernel.org>; Fri, 22 Sep 2023 07:11:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ABEAAE7D0D9
+	for <linux-kselftest@archiver.kernel.org>; Fri, 22 Sep 2023 07:11:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230386AbjIVHLI (ORCPT
+        id S229623AbjIVHLK (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 22 Sep 2023 03:11:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46288 "EHLO
+        Fri, 22 Sep 2023 03:11:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230402AbjIVHLH (ORCPT
+        with ESMTP id S230405AbjIVHLJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 22 Sep 2023 03:11:07 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 042AAC2
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 Sep 2023 00:11:01 -0700 (PDT)
-Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RsNc25C0xztSwS;
-        Fri, 22 Sep 2023 15:06:42 +0800 (CST)
+        Fri, 22 Sep 2023 03:11:09 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A53196
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 Sep 2023 00:11:03 -0700 (PDT)
+Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RsNcf15xLzGpq4;
+        Fri, 22 Sep 2023 15:07:14 +0800 (CST)
 Received: from huawei.com (10.90.53.73) by kwepemi500008.china.huawei.com
  (7.221.188.139) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Fri, 22 Sep
- 2023 15:10:58 +0800
+ 2023 15:11:01 +0800
 From:   Jinjie Ruan <ruanjinjie@huawei.com>
 To:     <brendan.higgins@linux.dev>, <davidgow@google.com>,
         <skhan@linuxfoundation.org>, <dlatypov@google.com>,
         <rmoar@google.com>, <janusz.krzysztofik@linux.intel.com>,
         <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>
 CC:     <ruanjinjie@huawei.com>
-Subject: [PATCH v3 1/4] kunit: Fix missed memory release in kunit_free_suite_set()
-Date:   Fri, 22 Sep 2023 15:10:17 +0800
-Message-ID: <20230922071020.2554677-2-ruanjinjie@huawei.com>
+Subject: [PATCH v3 3/4] kunit: Fix possible memory leak in kunit_filter_suites()
+Date:   Fri, 22 Sep 2023 15:10:19 +0800
+Message-ID: <20230922071020.2554677-4-ruanjinjie@huawei.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230922071020.2554677-1-ruanjinjie@huawei.com>
 References: <20230922071020.2554677-1-ruanjinjie@huawei.com>
@@ -46,64 +46,81 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-modprobe cpumask_kunit and rmmod cpumask_kunit, kmemleak detect
-a suspected memory leak as below.
+If the outer layer for loop is iterated more than once and it fails not
+in the first iteration, the filtered_suite and filtered_suite->test_cases
+allocated in the last kunit_filter_attr_tests() in last inner for loop
+is leaked.
 
-If kunit_filter_suites() in kunit_module_init() succeeds, the
-suite_set.start will not be NULL and the kunit_free_suite_set() in
-kunit_module_exit() should free all the memory which has not
-been freed. However the test_cases in suites is left out.
+So add a new free_filtered_suite err label and free the filtered_suite
+and filtered_suite->test_cases so far. And change kmalloc_array of copy
+to kcalloc to Clear the copy to make the kfree safe.
 
-unreferenced object 0xffff54ac47e83200 (size 512):
-  comm "modprobe", pid 592, jiffies 4294913238 (age 1367.612s)
-  hex dump (first 32 bytes):
-    84 13 1a f0 d3 b6 ff ff 30 68 1a f0 d3 b6 ff ff  ........0h......
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<000000008dec63a2>] slab_post_alloc_hook+0xb8/0x368
-    [<00000000ec280d8e>] __kmem_cache_alloc_node+0x174/0x290
-    [<00000000896c7740>] __kmalloc+0x60/0x2c0
-    [<000000007a50fa06>] kunit_filter_suites+0x254/0x5b8
-    [<0000000078cc98e2>] kunit_module_notify+0xf4/0x240
-    [<0000000033cea952>] notifier_call_chain+0x98/0x17c
-    [<00000000973d05cc>] notifier_call_chain_robust+0x4c/0xa4
-    [<000000005f95895f>] blocking_notifier_call_chain_robust+0x4c/0x74
-    [<0000000048e36fa7>] load_module+0x1a2c/0x1c40
-    [<0000000004eb8a91>] init_module_from_file+0x94/0xcc
-    [<0000000037dbba28>] idempotent_init_module+0x184/0x278
-    [<00000000161b75cb>] __arm64_sys_finit_module+0x68/0xa8
-    [<000000006dc1669b>] invoke_syscall+0x44/0x100
-    [<00000000fa87e304>] el0_svc_common.constprop.1+0x68/0xe0
-    [<000000009d8ad866>] do_el0_svc+0x1c/0x28
-    [<000000005b83c607>] el0_svc+0x3c/0xc4
-
-Fixes: e5857d396f35 ("kunit: flatten kunit_suite*** to kunit_suite** in .kunit_test_suites")
-Fixes: b67abaad4d25 ("kunit: Allow kunit test modules to use test filtering")
+Fixes: 5d31f71efcb6 ("kunit: add kunit.filter_glob cmdline option to filter suites")
+Fixes: 529534e8cba3 ("kunit: Add ability to filter attributes")
 Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
 Reviewed-by: Rae Moar <rmoar@google.com>
 ---
 v2:
 - Add Reviewed-by.
 ---
- lib/kunit/executor.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ lib/kunit/executor.c | 17 +++++++++++++----
+ 1 file changed, 13 insertions(+), 4 deletions(-)
 
 diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-index a6348489d45f..a037a46fae5e 100644
+index 9358ed2df839..1236b3cd2fbb 100644
 --- a/lib/kunit/executor.c
 +++ b/lib/kunit/executor.c
-@@ -137,8 +137,10 @@ void kunit_free_suite_set(struct kunit_suite_set suite_set)
- {
- 	struct kunit_suite * const *suites;
+@@ -157,10 +157,11 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
+ 	struct kunit_suite_set filtered = {NULL, NULL};
+ 	struct kunit_glob_filter parsed_glob;
+ 	struct kunit_attr_filter *parsed_filters = NULL;
++	struct kunit_suite * const *suites;
  
--	for (suites = suite_set.start; suites < suite_set.end; suites++)
-+	for (suites = suite_set.start; suites < suite_set.end; suites++) {
-+		kfree((*suites)->test_cases);
- 		kfree(*suites);
+ 	const size_t max = suite_set->end - suite_set->start;
+ 
+-	copy = kmalloc_array(max, sizeof(*filtered.start), GFP_KERNEL);
++	copy = kcalloc(max, sizeof(*filtered.start), GFP_KERNEL);
+ 	if (!copy) { /* won't be able to run anything, return an empty set */
+ 		return filtered;
+ 	}
+@@ -195,7 +196,7 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
+ 					parsed_glob.test_glob);
+ 			if (IS_ERR(filtered_suite)) {
+ 				*err = PTR_ERR(filtered_suite);
+-				goto free_parsed_filters;
++				goto free_filtered_suite;
+ 			}
+ 		}
+ 		if (filter_count > 0 && parsed_filters != NULL) {
+@@ -212,11 +213,11 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
+ 				filtered_suite = new_filtered_suite;
+ 
+ 				if (*err)
+-					goto free_parsed_filters;
++					goto free_filtered_suite;
+ 
+ 				if (IS_ERR(filtered_suite)) {
+ 					*err = PTR_ERR(filtered_suite);
+-					goto free_parsed_filters;
++					goto free_filtered_suite;
+ 				}
+ 				if (!filtered_suite)
+ 					break;
+@@ -231,6 +232,14 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
+ 	filtered.start = copy_start;
+ 	filtered.end = copy;
+ 
++free_filtered_suite:
++	if (*err) {
++		for (suites = copy_start; suites < copy; suites++) {
++			kfree((*suites)->test_cases);
++			kfree(*suites);
++		}
 +	}
- 	kfree(suite_set.start);
- }
- 
++
+ free_parsed_filters:
+ 	if (filter_count)
+ 		kfree(parsed_filters);
 -- 
 2.34.1
 
