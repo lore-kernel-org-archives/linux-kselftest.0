@@ -2,32 +2,32 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3F2FCE7A8A
-	for <linux-kselftest@archiver.kernel.org>; Sun, 24 Sep 2023 13:29:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0767ACE7A8D
+	for <linux-kselftest@archiver.kernel.org>; Sun, 24 Sep 2023 13:30:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231222AbjIXN3b (ORCPT
+        id S231373AbjIXNal (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 24 Sep 2023 09:29:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38670 "EHLO
+        Sun, 24 Sep 2023 09:30:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230391AbjIXN3E (ORCPT
+        with ESMTP id S232101AbjIXNaI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 24 Sep 2023 09:29:04 -0400
+        Sun, 24 Sep 2023 09:30:08 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E88910F0;
-        Sun, 24 Sep 2023 06:20:03 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC907C43391;
-        Sun, 24 Sep 2023 13:20:01 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95DA0172D;
+        Sun, 24 Sep 2023 06:19:15 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 284BDC43395;
+        Sun, 24 Sep 2023 13:19:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695561602;
+        s=k20201202; t=1695561555;
         bh=AKMbxIXU7jc1GL3a0yAsu+u13xMrK1/jx44MAxc/mTA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CYoZ3PkFZVwXaciehrS4kgm2wS2GGAnZ6sHIabeGNpEo0nIUSdBWR8tze86LcQ9FO
-         bcnwCWdoVIlZGvwTlomDiT0YvlINr08fSSAsic7O21pat58p2ED1zaym9TT0/G9eJG
-         Wdwynd7YINRiD/6PV5MRIrNVQdhA/cw1z4WS144QNpwUgif9SdPQYU/Zc1pNmoRDDI
-         Kw+gsmrxd6b1S4hjyaWYam687Pne48C2ZEmSN2znHMPc5AzPDSChS9dYoW3jAhxqVS
-         x5ZUIPtoKRudOw/bE3bvXZgK/i99Gqi/EJDIKd/YiH61iYH1LjJcMzs8QKIdOqHw9V
-         ZsZIzbD6Rhsng==
+        b=dOCevSaXpPYh4E8KVnevrk+6CPT7U/2TI5h5wQIUKeZFaV83Ymnd6GSUAFvuMTD5S
+         5ssWjh5ewDxige4bITtdZoJP74clXrFX4ECl8k2eWRB+dL98pxP4EV1Z1MTaGSY9vK
+         ku+jjpVqe8XAEwutVgqXYJ/c9TkjFdyJAphv9g0Sb+e/SB041fhXLh9C3Fo5F3W9EG
+         9e1H6h4mTERRYv2ecoAUeB2EW/FrDUfQe8Z7pnhIFRrhh0B3xRrLaUKkvLl6LqJe7F
+         MtTUa5jt1/Fvh6bMF+OcXJdbu2HMBSZfbNG+3FHGMUMO3QeMz5fJCWjivUXcMq8h5U
+         2tIfnz+tgi06w==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Zheng Yejian <zhengyejian1@huawei.com>,
@@ -36,16 +36,16 @@ Cc:     Zheng Yejian <zhengyejian1@huawei.com>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
         linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 06/13] selftests/ftrace: Correctly enable event in instance-event.tc
-Date:   Sun, 24 Sep 2023 09:19:36 -0400
-Message-Id: <20230924131945.1276562-6-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 07/18] selftests/ftrace: Correctly enable event in instance-event.tc
+Date:   Sun, 24 Sep 2023 09:18:44 -0400
+Message-Id: <20230924131857.1276330-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230924131945.1276562-1-sashal@kernel.org>
-References: <20230924131945.1276562-1-sashal@kernel.org>
+In-Reply-To: <20230924131857.1276330-1-sashal@kernel.org>
+References: <20230924131857.1276330-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.197
+X-stable-base: Linux 5.15.133
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
