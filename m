@@ -2,48 +2,48 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EEA8DCE7A8B
-	for <linux-kselftest@archiver.kernel.org>; Sun, 24 Sep 2023 13:32:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2EFBCE7A8A
+	for <linux-kselftest@archiver.kernel.org>; Sun, 24 Sep 2023 13:36:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231835AbjIXNcj (ORCPT
+        id S230155AbjIXNg3 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 24 Sep 2023 09:32:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38242 "EHLO
+        Sun, 24 Sep 2023 09:36:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231200AbjIXNcI (ORCPT
+        with ESMTP id S231328AbjIXN3p (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 24 Sep 2023 09:32:08 -0400
+        Sun, 24 Sep 2023 09:29:45 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9C8349CE;
-        Sun, 24 Sep 2023 06:20:05 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD2CDC433D9;
-        Sun, 24 Sep 2023 13:20:04 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623AE1FE4;
+        Sun, 24 Sep 2023 06:19:19 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 347DAC433AB;
+        Sun, 24 Sep 2023 13:19:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695561605;
-        bh=PC4z+wf7F1uuG0RUwmXVtrKutdbhW/2g+iCqU0SAxg4=;
+        s=k20201202; t=1695561559;
+        bh=mZD8K+XKZIUsW6TDggjQTORgULfmYsaS6S4IbgnSZ8g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=L8+aGf7lDFBDQQwR5HHq8hDTJdBQBZXw9mSlw2rjI+evbrQPCisWlO3KKXIBaZZTl
-         /egVAyJEWmowlr8rf4I0gKcz9vA7HeIimYa3dLOTR3OPn75Oyo/70c9n/1JlkBImz5
-         FPmS8kEURPnV8PK8GsLiYYO8d0+fglWTSKAhgJKyh9Psf0xemJOnOOgCHioZTtuM/m
-         AglBC34q8dhFrUf5q1qskYhkT735KjIPTakGn4DBkQrqdk6Ed/UOC1kFxk21KKLOFL
-         5CB82nKAWe+UfCx/h5nUbRjHlRuRHwRy3Okw2Xkmxv7Tv/4Mq7I1VjFg6GFtHbn+rO
-         Cmi0E6hOPXt6w==
+        b=bpuw/DT+Dab+Gz1PrT4mr9uXhCWDGkN8kz9Qk76GNL6grHrC5CEnJJ6WDwlGYG7VQ
+         FlCuZguRi61meVNdoHj+mNll5gXNfTEiwrQBOaHJDTy6ZctrDrh5QpK9FZM4Z3b4U7
+         QtMwy0uKbp5HmRtIImRlmYn1M+Ztc7Jo0eEz9TLinP+evDvUuaI3Hp4vbiXZ+Hz32s
+         syJ0mc3b4gP77VmWIpQnHVpS6f7gXp5HeLuW/sTN2L7IHjccpuTZGrS6IcYl6kp0cj
+         c7X7IzMlk8mnZtahzJFx7QQZ3fFYLPE6Cz4+bejRg1pqKjWgqs0p54LYArAuUCg131
+         O3yFJUoNE18qw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     "Ricardo B. Marliere" <rbmarliere@gmail.com>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 08/13] selftests: fix dependency checker script
-Date:   Sun, 24 Sep 2023 09:19:38 -0400
-Message-Id: <20230924131945.1276562-8-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 10/18] selftests: fix dependency checker script
+Date:   Sun, 24 Sep 2023 09:18:47 -0400
+Message-Id: <20230924131857.1276330-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230924131945.1276562-1-sashal@kernel.org>
-References: <20230924131945.1276562-1-sashal@kernel.org>
+In-Reply-To: <20230924131857.1276330-1-sashal@kernel.org>
+References: <20230924131857.1276330-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.197
+X-stable-base: Linux 5.15.133
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
@@ -66,7 +66,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 65 insertions(+), 12 deletions(-)
 
 diff --git a/tools/testing/selftests/kselftest_deps.sh b/tools/testing/selftests/kselftest_deps.sh
-index bbc04646346b2..e6010de678200 100755
+index 00e60d6eb16bc..7e51f4a373d35 100755
 --- a/tools/testing/selftests/kselftest_deps.sh
 +++ b/tools/testing/selftests/kselftest_deps.sh
 @@ -46,11 +46,11 @@ fi
@@ -121,8 +121,8 @@ index bbc04646346b2..e6010de678200 100755
 +		grep -v "$filter" | awk -F: '{print $1}' | uniq)
  
  # Level 3
- # gpio,  memfd and others use pkg-config to find mount and fuse libs
-@@ -140,11 +146,32 @@ l2_tests=$(grep -r --include=Makefile ": LDLIBS" | \
+ # memfd and others use pkg-config to find mount and fuse libs
+@@ -138,11 +144,32 @@ l2_tests=$(grep -r --include=Makefile ": LDLIBS" | \
  #	VAR_LDLIBS := $(shell pkg-config fuse --libs 2>/dev/null)
  
  l3_tests=$(grep -r --include=Makefile "^VAR_LDLIBS" | \
@@ -159,7 +159,7 @@ index bbc04646346b2..e6010de678200 100755
  
  all_tests
  print_results $1 $2
-@@ -166,24 +193,32 @@ all_tests()
+@@ -164,24 +191,32 @@ all_tests()
  	for test in $l3_tests; do
  		l3_test $test
  	done
@@ -195,7 +195,7 @@ index bbc04646346b2..e6010de678200 100755
  			sed -e 's/\:/ /' | sed -e 's/+/ /' | \
  			cut -d "=" -f 2)
  
-@@ -199,6 +234,24 @@ l3_test()
+@@ -197,6 +232,24 @@ l3_test()
  	check_libs $test $test_libs
  }
  
