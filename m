@@ -2,32 +2,32 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1BB08CE7A8B
-	for <linux-kselftest@archiver.kernel.org>; Sun, 24 Sep 2023 13:24:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EED1CE7A8A
+	for <linux-kselftest@archiver.kernel.org>; Sun, 24 Sep 2023 13:25:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbjIXNYS (ORCPT
+        id S230123AbjIXNZa (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 24 Sep 2023 09:24:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34432 "EHLO
+        Sun, 24 Sep 2023 09:25:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230446AbjIXNX6 (ORCPT
+        with ESMTP id S230487AbjIXNYU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 24 Sep 2023 09:23:58 -0400
+        Sun, 24 Sep 2023 09:24:20 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC1FA270D;
-        Sun, 24 Sep 2023 06:21:00 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D2E7C43391;
-        Sun, 24 Sep 2023 13:20:59 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF904EFE;
+        Sun, 24 Sep 2023 06:20:28 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AEBAC433C9;
+        Sun, 24 Sep 2023 13:20:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695561660;
-        bh=Ax92uLF+mFc+4b+RGE4rUCa62HUyHWgvfs9snGBJ8j0=;
+        s=k20201202; t=1695561628;
+        bh=Fly4wWpTO5IDypLkx4t6fiAgcBDlsgiBtf87rD/WXAw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jiQe+IVvB4Z0JOAcRSdoC5GvRO+Ih56xl6j4gykoLS+nC5Fj7Px5uhobHNcVOZLr6
-         C2VPZc5oiolMxooibTXOtgDfUvs8dboA14WfZwPibTJjHjapaFtEV7mstnHyDbIV+8
-         Brf18hvNeuInaORWHnoIhNL/IvIzClDeBr9VWFyj90s3Xu0aN3Nd7jPFjTmWtBkJa6
-         XP0gY4Xnh2LnJ/p9A2i6ohTrmd6EW1V9xbZpIYfYdq4wkGq5B7tKtOTn9ar3qtlH3u
-         5rfnOTOR+afceB1CFYfinE8MH1nhB11VXTTKZ6ITjQ7itWvvpzwAKXz9AHI87FcVlf
-         xUV3NpGnDed3Q==
+        b=B/svroqnyCohMFM5MIrDUILAXWXFRY1gkbDcLze2uItwS5roMp6LR/Dl7yeyS/Twd
+         zXnxF4+KPJ1TTjVpB8EI2hcU7TKqbnoC/5I0etR/751sascPDiyubveOBSFpQ64XgF
+         jL9eCRjFQiFFJoTImgOU1k9vCkhIqMWgJMdfzm/qCGiuzTLohlA29qjw0LbMHS0pMk
+         YSl+SqV7CrwwIkLtb/iuDHrlxtWgccpI6JGai+HBCD3nNPMXNbiSyMHBysZ9MOWFL2
+         ediL/STUZZFz7OzPh7O2W0S5D8CGq1DlOZXIzFkCIqHbqnqEOJM+sk1zdAfcR1FyEH
+         kx2Q1Y4uXiaQg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Zheng Yejian <zhengyejian1@huawei.com>,
@@ -36,16 +36,16 @@ Cc:     Zheng Yejian <zhengyejian1@huawei.com>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
         linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 4/6] selftests/ftrace: Correctly enable event in instance-event.tc
-Date:   Sun, 24 Sep 2023 09:20:47 -0400
-Message-Id: <20230924132050.1277021-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 5/7] selftests/ftrace: Correctly enable event in instance-event.tc
+Date:   Sun, 24 Sep 2023 09:20:12 -0400
+Message-Id: <20230924132015.1276811-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230924132050.1277021-1-sashal@kernel.org>
-References: <20230924132050.1277021-1-sashal@kernel.org>
+In-Reply-To: <20230924132015.1276811-1-sashal@kernel.org>
+References: <20230924132015.1276811-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 4.14.326
+X-stable-base: Linux 5.4.257
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
@@ -82,7 +82,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/ftrace/test.d/instances/instance-event.tc b/tools/testing/selftests/ftrace/test.d/instances/instance-event.tc
-index d7f48b55df51c..ee11b42014c83 100644
+index 4fa0f79144f4a..9473934a573a1 100644
 --- a/tools/testing/selftests/ftrace/test.d/instances/instance-event.tc
 +++ b/tools/testing/selftests/ftrace/test.d/instances/instance-event.tc
 @@ -43,7 +43,7 @@ instance_read() {
