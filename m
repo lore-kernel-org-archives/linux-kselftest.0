@@ -2,176 +2,153 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DEF3CE7AB4
-	for <linux-kselftest@archiver.kernel.org>; Mon, 25 Sep 2023 17:58:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 181C2CE7AB9
+	for <linux-kselftest@archiver.kernel.org>; Mon, 25 Sep 2023 18:12:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232462AbjIYR6K (ORCPT
+        id S231226AbjIYSM4 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 25 Sep 2023 13:58:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37438 "EHLO
+        Mon, 25 Sep 2023 14:12:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232554AbjIYR6G (ORCPT
+        with ESMTP id S229584AbjIYSMz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 25 Sep 2023 13:58:06 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7157B1A7
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Sep 2023 10:57:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695664678; x=1727200678;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=GZYYgPqw7ohm87675/5XKWP5wf2DjbWIEkF5V01oH7M=;
-  b=EZo3ekO5VuaUIbr+pkkdafBPYJx0mX4nlqgGRPpycyFltI98qOBkZTV6
-   Yy3pCOhp9KTTYF06y6y9dLxCSM+wfOtRjFOjqG6yY1aPrHaeaDKhTB46p
-   VWt/gVde1n9fjcaD4+PHx//chmKvET2jneEy1GMWDSBcw6nT0KRkTGs0M
-   RudbFv5kpGHJMytMEscZMOrNDMr416aFU00jipgVB50HvmaUBQcwShrWW
-   hPULOktK3E0gvlKRHE5kY5kJ0j0H3H1OiposCJ4vk0KGH1Fp8iL/geLZl
-   HLtnwfgWVX5SeRN9k/RrhzYAlJcin5QEgn0eQJHoOEFoTt1nkfVbw89tx
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10843"; a="371643653"
-X-IronPort-AV: E=Sophos;i="6.03,175,1694761200"; 
-   d="scan'208";a="371643653"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2023 10:57:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10843"; a="995489273"
-X-IronPort-AV: E=Sophos;i="6.03,175,1694761200"; 
-   d="scan'208";a="995489273"
-Received: from mwajdecz-mobl.ger.corp.intel.com ([10.249.131.28])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2023 10:57:56 -0700
-From:   Michal Wajdeczko <michal.wajdeczko@intel.com>
-To:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Cc:     Michal Wajdeczko <michal.wajdeczko@intel.com>,
-        David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>
-Subject: [PATCH 2/4] kunit: Fix indentation level of suite messages
-Date:   Mon, 25 Sep 2023 19:57:31 +0200
-Message-Id: <20230925175733.1379-3-michal.wajdeczko@intel.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20230925175733.1379-1-michal.wajdeczko@intel.com>
-References: <20230925175733.1379-1-michal.wajdeczko@intel.com>
+        Mon, 25 Sep 2023 14:12:55 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 823EC10F
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Sep 2023 11:12:46 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id 41be03b00d2f7-578d0dcd4e1so4170377a12.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Sep 2023 11:12:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1695665566; x=1696270366; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=KsRIBM7dOdcj87tvwe4EQo8GqJ5cXnTOsGKKYnAPAk4=;
+        b=p+wkVPXVac2IdmsmXQNOMTyp2QGxdpZV3v/ms7JJKanYUFUYLKgISa5R1YS+SEeIIS
+         18CeoB5wYm/sXkounIH9X9nPLVJnJ//R6FcgQTUUZAz81tTZF4aJWTqRaOO4yBhLJNo4
+         VR8FNMHCD1A7CH4kYo7DDFXZMYwjcOosINnUgCrFlHY3CFqe1ROXIQ+0gjBdZ3er4D49
+         eAw29SCzpnniBEQ9JSC5ykrydO+XY9ouTjHyVakOPsB5IQGH1Nio39p9sBHNlv12qwtg
+         ef13lc71Tba9GoFQuOkwgHMcJ3MqjnfOx6CiGbhufL/4XMuXqc9EhOpw0uvzfrXKs/WS
+         qeHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695665566; x=1696270366;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KsRIBM7dOdcj87tvwe4EQo8GqJ5cXnTOsGKKYnAPAk4=;
+        b=tLocskQn6ju8xL4ooZiO+CKYGdH2jnEFxPLTZYG9QTuTDc5h7YtipENWPh7G6/UlbV
+         sMEkI7oSLeTVXtsm9Sfs6l9PVuclaNwRwHzblVu8NG95CWily5I4l51C8EROEc6HMhqe
+         4XwkKtyKI3+voNssHdPSy21OuIqpPMpnKvOKKf5RbDnxtYnh8q1tEuQPDSnRwmkNVM9D
+         XO23R2BlDJMonizFV43/b3jUIfXkaLkrnPMLwR6HDbqbz3uqgE54zyrkXV151hn0hsMB
+         TqTFii1RCQGJ1jGRp6MHv73gpmna32MNl6o08Rt5E92PwBNsP3TfUUHwClhLtxV9L62z
+         F7bw==
+X-Gm-Message-State: AOJu0Yx6+phK+9RHxpGtWki/XU4duB8yJhX3wopE1DoeAfMJgZtzoVRA
+        Hj749DUg7rAgHvuG+FB+XJTc9g==
+X-Google-Smtp-Source: AGHT+IEITTnOWUqqZd2QQfvnjuWHs46rWx0fKoZhZxeSiyP6OtQJWAzOWXHuNzwpn4hPs7lDCludXw==
+X-Received: by 2002:a17:90b:2386:b0:267:faba:705 with SMTP id mr6-20020a17090b238600b00267faba0705mr3779807pjb.10.1695665565853;
+        Mon, 25 Sep 2023 11:12:45 -0700 (PDT)
+Received: from ghost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id az14-20020a17090b028e00b002777001ee76sm949619pjb.18.2023.09.25.11.12.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Sep 2023 11:12:45 -0700 (PDT)
+Date:   Mon, 25 Sep 2023 11:12:42 -0700
+From:   Charlie Jenkins <charlie@rivosinc.com>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Conor Dooley <conor@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Mayuresh Chitale <mchitale@ventanamicro.com>,
+        devicetree@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 2/9] RISC-V: Detect XVentanaCondOps from ISA string
+Message-ID: <ZRHNmuv8KzUU7u0r@ghost>
+References: <20230925133859.1735879-1-apatel@ventanamicro.com>
+ <20230925133859.1735879-3-apatel@ventanamicro.com>
+ <ZRHH25IyJJLWSolC@ghost>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZRHH25IyJJLWSolC@ghost>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-A kunit suite is a top level test from the KTAP point of view but
-all suite diagnostic messages are printed at the subtest level:
+On Mon, Sep 25, 2023 at 10:48:11AM -0700, Charlie Jenkins wrote:
+> On Mon, Sep 25, 2023 at 07:08:52PM +0530, Anup Patel wrote:
+> > The Veyron-V1 CPU supports custom conditional arithmetic and
+> > conditional-select/move operations referred to as XVentanaCondOps
+> > extension. In fact, QEMU RISC-V also has support for emulating
+> > XVentanaCondOps extension.
+> > 
+> > Let us detect XVentanaCondOps extension from ISA string available
+> > through DT or ACPI.
+> > 
+> > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> > Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+> > ---
+> >  arch/riscv/include/asm/hwcap.h | 1 +
+> >  arch/riscv/kernel/cpufeature.c | 1 +
+> >  2 files changed, 2 insertions(+)
+> > 
+> > diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
+> > index 0f520f7d058a..b7efe9e2fa89 100644
+> > --- a/arch/riscv/include/asm/hwcap.h
+> > +++ b/arch/riscv/include/asm/hwcap.h
+> > @@ -59,6 +59,7 @@
+> >  #define RISCV_ISA_EXT_ZIFENCEI		41
+> >  #define RISCV_ISA_EXT_ZIHPM		42
+> >  #define RISCV_ISA_EXT_SMSTATEEN		43
+> > +#define RISCV_ISA_EXT_XVENTANACONDOPS	44
+> >  
+> >  #define RISCV_ISA_EXT_MAX		64
+> >  
+> > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+> > index 3755a8c2a9de..3a31d34fe709 100644
+> > --- a/arch/riscv/kernel/cpufeature.c
+> > +++ b/arch/riscv/kernel/cpufeature.c
+> > @@ -182,6 +182,7 @@ const struct riscv_isa_ext_data riscv_isa_ext[] = {
+> >  	__RISCV_ISA_EXT_DATA(svinval, RISCV_ISA_EXT_SVINVAL),
+> >  	__RISCV_ISA_EXT_DATA(svnapot, RISCV_ISA_EXT_SVNAPOT),
+> >  	__RISCV_ISA_EXT_DATA(svpbmt, RISCV_ISA_EXT_SVPBMT),
+> > +	__RISCV_ISA_EXT_DATA(xventanacondops, RISCV_ISA_EXT_XVENTANACONDOPS),
+> >  };
+> >  
+> >  const size_t riscv_isa_ext_count = ARRAY_SIZE(riscv_isa_ext);
+> > -- 
+> > 2.34.1
+> > 
+> > 
+> > _______________________________________________
+> > linux-riscv mailing list
+> > linux-riscv@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-riscv
+> 
+> I worry about storing vendor extensions in this file. Because vendor
+> extensions are not standardized, they can only be expected to have the
+> desired behavior on hardware with the appropriate vendor id. A couple
+> months ago I sent a patch to address this by handling vector extensions
+> independently for each vendor [1]. I dropped the patch because it
+> relied upon Heiko's T-Head vector extension support that he stopped
+> working on. However, I can revive this patch so you can build off of it.
+> 
+> This scheme has the added benefit that vendors do not have to worry
+> about conficting extensions, and the kernel does not have to act as a
+> key registry for vendors.
+> 
+> What are your thoughts?
+> 
+> - Charlie
+> 
+> [1] https://lore.kernel.org/lkml/20230705-thead_vendor_extensions-v1-2-ad6915349c4d@rivosinc.com/
+> 
 
-    $ ./tools/testing/kunit/kunit.py run --raw_output \
-        --kunitconfig ./lib/kunit/.kunitconfig "example.*simple*"
+I guess I don't need to revive the patch, you could just take the code
+and update it for xventanacondops.
 
-    KTAP version 1
-    1..1
-        # example: initializing suite
-        # example: failed to initialize (-ENODEV)
-    not ok 1 example
-
-    KTAP version 1
-    1..1
-        # example: initializing suite
-        KTAP version 1
-        # Subtest: example
-        # module: kunit_example_test
-        1..1
-        # example_simple_test: initializing
-        # example_simple_test: cleaning up
-        ok 1 example_simple_test
-        # example: exiting suite
-    ok 1 example
-
-Replace hardcoded indent in kunit_printk() with flexible
-indentation based on the argument type (test or suite):
-
-    KTAP version 1
-    1..1
-    # example: initializing suite
-    # example: failed to initialize (-ENODEV)
-    not ok 1 example
-
-    KTAP version 1
-    1..1
-    # example: initializing suite
-        KTAP version 1
-        # Subtest: example
-        # module: kunit_example_test
-        1..1
-        # example_simple_test: initializing
-        # example_simple_test: cleaning up
-        ok 1 example_simple_test
-    # example: exiting suite
-    ok 1 example
-
-Signed-off-by: Michal Wajdeczko <michal.wajdeczko@intel.com>
-Cc: David Gow <davidgow@google.com>
-Cc: Rae Moar <rmoar@google.com>
----
- include/kunit/test.h | 24 ++++++++++++++++++++++--
- lib/kunit/test.c     |  7 -------
- 2 files changed, 22 insertions(+), 9 deletions(-)
-
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index 20ed9f9275c9..158876c4cb43 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -509,6 +509,21 @@ void __printf(2, 3) kunit_log_append(struct string_stream *log, const char *fmt,
- 		kunit_try_catch_throw(&((test_or_suite)->try_catch));	\
- 	} while (0)
- 
-+/* Currently supported test levels */
-+enum {
-+	KUNIT_LEVEL_SUITE = 0,
-+	KUNIT_LEVEL_CASE,
-+	KUNIT_LEVEL_CASE_PARAM,
-+};
-+
-+#define kunit_level(test_or_suite)					\
-+	_Generic((test_or_suite),					\
-+		 struct kunit_suite * : KUNIT_LEVEL_SUITE,		\
-+		 struct kunit * : KUNIT_LEVEL_CASE)
-+
-+#define kunit_indent_level(test_or_suite)				\
-+	(KUNIT_INDENT_LEN * kunit_level(test_or_suite))
-+
- /*
-  * printk and log to per-test or per-suite log buffer.  Logging only done
-  * if CONFIG_KUNIT_DEBUGFS is 'y'; if it is 'n', no log is allocated/used.
-@@ -520,9 +535,14 @@ void __printf(2, 3) kunit_log_append(struct string_stream *log, const char *fmt,
- 				 ##__VA_ARGS__);			\
- 	} while (0)
- 
-+#define kunit_log_indent(lvl, test_or_suite, fmt, ...)			\
-+	kunit_log(lvl, test_or_suite, "%*s" fmt,			\
-+		  kunit_indent_level(test_or_suite), "",		\
-+		  ##__VA_ARGS__)
-+
- #define kunit_printk(lvl, test, fmt, ...)				\
--	kunit_log(lvl, test, KUNIT_SUBTEST_INDENT "# %s: " fmt,		\
--		  (test)->name,	##__VA_ARGS__)
-+	kunit_log_indent(lvl, test, "# %s: " fmt,			\
-+			 (test)->name, ##__VA_ARGS__)
- 
- /**
-  * kunit_info() - Prints an INFO level message associated with @test.
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index fb5981ce578d..d10e6d610e20 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -135,13 +135,6 @@ size_t kunit_suite_num_test_cases(struct kunit_suite *suite)
- }
- EXPORT_SYMBOL_GPL(kunit_suite_num_test_cases);
- 
--/* Currently supported test levels */
--enum {
--	KUNIT_LEVEL_SUITE = 0,
--	KUNIT_LEVEL_CASE,
--	KUNIT_LEVEL_CASE_PARAM,
--};
--
- static void kunit_print_suite_start(struct kunit_suite *suite)
- {
- 	/*
--- 
-2.25.1
-
+- Charlie
