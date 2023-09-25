@@ -2,78 +2,107 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE9BCCE7AB3
-	for <linux-kselftest@archiver.kernel.org>; Mon, 25 Sep 2023 17:58:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D1103CE7AB5
+	for <linux-kselftest@archiver.kernel.org>; Mon, 25 Sep 2023 17:58:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231263AbjIYR6J (ORCPT
+        id S230319AbjIYR6M (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 25 Sep 2023 13:58:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37370 "EHLO
+        Mon, 25 Sep 2023 13:58:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232548AbjIYR6G (ORCPT
+        with ESMTP id S232248AbjIYR6I (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 25 Sep 2023 13:58:06 -0400
+        Mon, 25 Sep 2023 13:58:08 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9187E19E
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Sep 2023 10:57:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A9DD11D
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Sep 2023 10:58:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695664677; x=1727200677;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=FNtO6GAEV5vAdrVcg9C+rRwuTzaz5sN93qtjUy9BdYc=;
-  b=SH5yx1Cr9Z9O6MHVNAgg1/RQRbbNc/p4JPYJ2xCeGN+cuIExXULBAa8a
-   NCMrV63Ub1NXWx76a+kTgQXEbNvc0e96pI0sPKpbpFMg5lye2W+LZE6sg
-   LZFVDZuKt/76T2Q9gaY1FNuHcyZ6DdlLW+CqVCu9BXhPq8xzKeQLZ4bWU
-   MqaqmHR2ljE29JYlhXsEcdQ/VRYzVyhBsSHPWzccryXCEK6IkNJjku//c
-   QrG65aeVlScN2skFGgFhpMXlwDcQzWtkaMqdsp0fBKODpbGySHzWzQtjn
-   U1SCvPcWhbV5K04FAkLJJeEReWM8FRhdliH0TknQpCeMuWbrlbJOnx7KV
+  t=1695664682; x=1727200682;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=03C41OMffArkupQnMzMOXyeB8LKSiHhumuP6kOtlVCU=;
+  b=LJfZ338Hm/tGUc6esvgMEHhLY11KRNpCEY7G4OtGKUVttmxwZy53jbak
+   nhrzw3cJV70mAWdfUcAwN1zqmA5JEpBx/DYIn9i5gkI/Je5TEagIRNGfl
+   gSjndp0mehIteLTBt2pmPU6j5fnfbI/PHkwf65tc85gtToP8qsG8rlYLr
+   sRFfDngxXgde8J6cmjnqmyFzYlNX3iUT5BMV8NF2LStufVDYXetI2F+Aq
+   +EMdsWbuQyUXzyLAAqbAC9F4Uj1TEycbpgjQ7M6j2mXN3bbdt5mlfDtlV
+   am+VcjVYNeRfBy/DK8vBpLIDSkzzJHM+6z/MerIJaa6/aQPddlw6QSK0r
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10843"; a="371643638"
+X-IronPort-AV: E=McAfee;i="6600,9927,10843"; a="371643663"
 X-IronPort-AV: E=Sophos;i="6.03,175,1694761200"; 
-   d="scan'208";a="371643638"
+   d="scan'208";a="371643663"
 Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2023 10:57:54 -0700
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2023 10:58:01 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10843"; a="995489251"
+X-IronPort-AV: E=McAfee;i="6600,9927,10843"; a="995489289"
 X-IronPort-AV: E=Sophos;i="6.03,175,1694761200"; 
-   d="scan'208";a="995489251"
+   d="scan'208";a="995489289"
 Received: from mwajdecz-mobl.ger.corp.intel.com ([10.249.131.28])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2023 10:57:52 -0700
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2023 10:58:00 -0700
 From:   Michal Wajdeczko <michal.wajdeczko@intel.com>
 To:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
 Cc:     Michal Wajdeczko <michal.wajdeczko@intel.com>,
         David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>
-Subject: [PATCH 0/4] kunit: Fix indentation of parameterized tests messages
-Date:   Mon, 25 Sep 2023 19:57:29 +0200
-Message-Id: <20230925175733.1379-1-michal.wajdeczko@intel.com>
+Subject: [PATCH 4/4] kunit: Prepare test plan for parameterized subtests
+Date:   Mon, 25 Sep 2023 19:57:33 +0200
+Message-Id: <20230925175733.1379-5-michal.wajdeczko@intel.com>
 X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20230925175733.1379-1-michal.wajdeczko@intel.com>
+References: <20230925175733.1379-1-michal.wajdeczko@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The indentation of parameterized tests messages is currently broken in kunit.
-Try to fix that by introducing a test level attribute, that will be increased
-during nested parameterized tests execution, and use it to generate correct
-indent at the runtime when printing message or writing them to the log.
+In case of parameterized tests we are not providing a test plan
+so we can't detect if any result is missing.
 
-Also improve kunit by providing test plan for the parameterized tests.
+Count available params using the same generator as during a test
+execution
 
+Signed-off-by: Michal Wajdeczko <michal.wajdeczko@intel.com>
 Cc: David Gow <davidgow@google.com>
 Cc: Rae Moar <rmoar@google.com>
-    
-Michal Wajdeczko (4):
-  kunit: Drop redundant text from suite init failure message
-  kunit: Fix indentation level of suite messages
-  kunit: Fix indentation of parameterized tests messages
-  kunit: Prepare test plan for parameterized subtests
+---
+ lib/kunit/test.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
- include/kunit/test.h | 25 ++++++++++++--
- lib/kunit/test.c     | 79 +++++++++++++++++++++++---------------------
- 2 files changed, 65 insertions(+), 39 deletions(-)
-
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index 43c3efc286e4..55eabb324f39 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -540,6 +540,20 @@ static void kunit_accumulate_stats(struct kunit_result_stats *total,
+ 	total->total += add.total;
+ }
+ 
++static size_t count_test_case_params(struct kunit_case *test_case)
++{
++	char param_desc[KUNIT_PARAM_DESC_SIZE];
++	const void *param_value = NULL;
++	size_t num = 0;
++
++	if (test_case->generate_params)
++		while ((param_value = test_case->generate_params(param_value,
++								 param_desc)))
++			num++;
++
++	return num;
++}
++
+ int kunit_run_tests(struct kunit_suite *suite)
+ {
+ 	char param_desc[KUNIT_PARAM_DESC_SIZE];
+@@ -585,6 +599,8 @@ int kunit_run_tests(struct kunit_suite *suite)
+ 			test_case->status = KUNIT_SKIPPED;
+ 			kunit_log_indent(KERN_INFO, &test, "KTAP version 1\n");
+ 			kunit_log_indent(KERN_INFO, &test, "# Subtest: %s", test_case->name);
++			kunit_log_indent(KERN_INFO, &test, "1..%zd\n",
++					 count_test_case_params(test_case));
+ 
+ 			while (test.param_value) {
+ 				kunit_run_case_catch_errors(suite, test_case, &test);
 -- 
 2.25.1
 
