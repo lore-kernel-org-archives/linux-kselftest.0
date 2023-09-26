@@ -2,44 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44B2FE7D273
-	for <linux-kselftest@archiver.kernel.org>; Tue, 26 Sep 2023 09:27:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F9EEE7D26E
+	for <linux-kselftest@archiver.kernel.org>; Tue, 26 Sep 2023 09:27:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234161AbjIZJ1P (ORCPT
+        id S234252AbjIZJ1V (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 26 Sep 2023 05:27:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43032 "EHLO
+        Tue, 26 Sep 2023 05:27:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234203AbjIZJ1E (ORCPT
+        with ESMTP id S234225AbjIZJ1J (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 Sep 2023 05:27:04 -0400
+        Tue, 26 Sep 2023 05:27:09 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC2319C;
-        Tue, 26 Sep 2023 02:26:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06FC180;
+        Tue, 26 Sep 2023 02:27:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695720416; x=1727256416;
+  t=1695720421; x=1727256421;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=ZZ706XgBqFXI4No2/MKm+Way87feEQ56EhlqdiEeakk=;
-  b=g9yZWLTBX0dES4Vf5cMiMZrt3WKqgNblbP2fXVTB7NrOHKHAx+HDiCkk
-   depNODDM3ZxAR/30rfRmtQq2FY24TxY4F7pjUfT0WvrFbWg6pbKWm9It2
-   4LCB2x/xVloudgVtzQ2jAOp3TIU6len4Y8LwPG93nIO/cG+3B3qHytoDD
-   FaXPMKwfGhjHn+zE1k9hS+yo+D2WqVZsle5M9LDkH5bvhWHhhqxbJUCFS
-   co2oRmiCHzFnasvWy0ZasXEpDYlSJ8omF35nF1ZibjBvZj4L/Ca2llzlP
-   2rL5vLFAfz1ymO9N0mbiz+3MJYnixC3Sop5AF5OSsj6IK5AID4NPg3QYJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10843"; a="360905337"
+  bh=tELGKlAxmeADdF4ld9vnejjAoaOKCJs8DhQxlm40mrY=;
+  b=fZfH2qXaKpxphc6s476ON0BQFdtdCz6zQraN0MP6RDRM9d04n1seUR05
+   Ciu4m+L6ORyNMscQ3/C0fxgHhvmpq1BARXLwhlaBtVSqQ/1OiYwYmmMXU
+   diRqF9pzOciBUCHRUSS1+6Aq2Mstr1PuGno5JsU/qKysTYLjy6NY5uKgO
+   gd9j/It0bsvsLzcg6Yr4nKfsGP+S1XW1JUjDOBXSY+c4X6ubgyEVhtcuJ
+   rJ0pja5ONp3w2jrUylw4PlL0Qcor3/8GzLfoRSxjn8aU3jO3EaAvt2zZ0
+   sChv65GEAvtMuFU91NsnTrWItHFRb9Hw3OtgEo4SF159vghZnYaqs0kpv
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10843"; a="360905405"
 X-IronPort-AV: E=Sophos;i="6.03,177,1694761200"; 
-   d="scan'208";a="360905337"
+   d="scan'208";a="360905405"
 Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2023 02:26:55 -0700
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2023 02:27:00 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10843"; a="1079642520"
+X-IronPort-AV: E=McAfee;i="6600,9927,10843"; a="1079642567"
 X-IronPort-AV: E=Sophos;i="6.03,177,1694761200"; 
-   d="scan'208";a="1079642520"
+   d="scan'208";a="1079642567"
 Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by fmsmga005.fm.intel.com with ESMTP; 26 Sep 2023 02:26:54 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 26 Sep 2023 02:26:59 -0700
 From:   Yi Liu <yi.l.liu@intel.com>
 To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
         kevin.tian@intel.com, robin.murphy@arm.com,
@@ -52,9 +52,9 @@ Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
         suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         zhenzhong.duan@intel.com, joao.m.martins@oracle.com
-Subject: [RFC 1/8] iommu: Introduce a replace API for device pasid
-Date:   Tue, 26 Sep 2023 02:26:44 -0700
-Message-Id: <20230926092651.17041-2-yi.l.liu@intel.com>
+Subject: [RFC 6/8] iommufd/selftest: Add test ops to test pasid attach/detach
+Date:   Tue, 26 Sep 2023 02:26:49 -0700
+Message-Id: <20230926092651.17041-7-yi.l.liu@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230926092651.17041-1-yi.l.liu@intel.com>
 References: <20230926092651.17041-1-yi.l.liu@intel.com>
@@ -64,146 +64,174 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Lu Baolu <baolu.lu@linux.intel.com>
+This adds 4 test ops for pasid attach/replace/detach testing. There are
+ops to attach/detach pasid, and also op to check the attached domain of
+a pasid.
 
-Provide a high-level API to allow replacements of one domain with
-another for specific pasid of a device. This is similar to
-iommu_group_replace_domain() and it is also expected to be used
-only by IOMMUFD.
-
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 Signed-off-by: Yi Liu <yi.l.liu@intel.com>
 ---
- drivers/iommu/iommu-priv.h |  2 ++
- drivers/iommu/iommu.c      | 73 ++++++++++++++++++++++++++++++--------
- 2 files changed, 60 insertions(+), 15 deletions(-)
+ drivers/iommu/iommufd/iommufd_test.h | 24 +++++++
+ drivers/iommu/iommufd/selftest.c     | 98 ++++++++++++++++++++++++++++
+ 2 files changed, 122 insertions(+)
 
-diff --git a/drivers/iommu/iommu-priv.h b/drivers/iommu/iommu-priv.h
-index 2024a2313348..5c32637f6325 100644
---- a/drivers/iommu/iommu-priv.h
-+++ b/drivers/iommu/iommu-priv.h
-@@ -19,6 +19,8 @@ static inline const struct iommu_ops *dev_iommu_ops(struct device *dev)
+diff --git a/drivers/iommu/iommufd/iommufd_test.h b/drivers/iommu/iommufd/iommufd_test.h
+index 65a363f5e81e..e2ab61251ef9 100644
+--- a/drivers/iommu/iommufd/iommufd_test.h
++++ b/drivers/iommu/iommufd/iommufd_test.h
+@@ -21,6 +21,10 @@ enum {
+ 	IOMMU_TEST_OP_ACCESS_REPLACE_IOAS,
+ 	IOMMU_TEST_OP_MD_CHECK_IOTLB,
+ 	IOMMU_TEST_OP_DEV_CHECK_DATA,
++	IOMMU_TEST_OP_PASID_ATTACH,
++	IOMMU_TEST_OP_PASID_REPLACE,
++	IOMMU_TEST_OP_PASID_DETACH,
++	IOMMU_TEST_OP_PASID_CHECK_DOMAIN,
+ };
  
- int iommu_group_replace_domain(struct iommu_group *group,
- 			       struct iommu_domain *new_domain);
-+int iommu_replace_device_pasid(struct iommu_domain *domain,
-+			       struct device *dev, ioasid_t pasid);
+ enum {
+@@ -109,6 +113,26 @@ struct iommu_test_cmd {
+ 		struct {
+ 			__u32 val;
+ 		} check_dev_data;
++		struct {
++			__u32 pasid;
++			__u32 pt_id;
++			/* @id is stdev_id for IOMMU_TEST_OP_PASID_ATTACH */
++		} pasid_attach;
++		struct {
++			__u32 pasid;
++			__u32 pt_id;
++			/* @id is stdev_id for IOMMU_TEST_OP_PASID_ATTACH */
++		} pasid_replace;
++		struct {
++			__u32 pasid;
++			/* @id is stdev_id for IOMMU_TEST_OP_PASID_DETACH */
++		} pasid_detach;
++		struct {
++			__u32 pasid;
++			__u32 hwpt_id;
++			__u64 out_result_ptr;
++			/* @id is stdev_id for IOMMU_TEST_OP_HWPT_GET_DOMAIN */
++		} pasid_check;
+ 	};
+ 	__u32 last;
+ };
+diff --git a/drivers/iommu/iommufd/selftest.c b/drivers/iommu/iommufd/selftest.c
+index 1f2ce4ffee4e..bfc81615e9f9 100644
+--- a/drivers/iommu/iommufd/selftest.c
++++ b/drivers/iommu/iommufd/selftest.c
+@@ -1238,6 +1238,96 @@ static_assert((unsigned int)MOCK_ACCESS_RW_WRITE == IOMMUFD_ACCESS_RW_WRITE);
+ static_assert((unsigned int)MOCK_ACCESS_RW_SLOW_PATH ==
+ 	      __IOMMUFD_ACCESS_RW_SLOW_PATH);
  
- int iommu_device_register_bus(struct iommu_device *iommu,
- 			      const struct iommu_ops *ops, struct bus_type *bus,
-diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-index e53c9e659ae6..b47581c7b1c6 100644
---- a/drivers/iommu/iommu.c
-+++ b/drivers/iommu/iommu.c
-@@ -3382,6 +3382,27 @@ static void __iommu_remove_group_pasid(struct iommu_group *group,
- 	}
- }
- 
-+static int __iommu_group_attach_pasid(struct iommu_domain *domain,
-+				      struct iommu_group *group, ioasid_t pasid)
++static int iommufd_test_pasid_attach(struct iommufd_ucmd *ucmd,
++				     struct iommu_test_cmd *cmd)
 +{
-+	void *curr;
-+	int ret;
++	struct selftest_obj *sobj;
++	int rc;
 +
-+	lockdep_assert_held(&group->mutex);
++	sobj = iommufd_test_get_self_test_device(ucmd->ictx, cmd->id);
++	if (IS_ERR(sobj))
++		return PTR_ERR(sobj);
 +
-+	curr = xa_cmpxchg(&group->pasid_array, pasid, NULL, domain, GFP_KERNEL);
-+	if (curr)
-+		return xa_err(curr) ? : -EBUSY;
++	rc = iommufd_device_pasid_attach(sobj->idev.idev,
++					 cmd->pasid_attach.pasid,
++					 &cmd->pasid_attach.pt_id);
++	iommufd_put_object(&sobj->obj);
++	return rc;
++}
 +
-+	ret = __iommu_set_group_pasid(domain, group, pasid);
-+	if (ret) {
-+		__iommu_remove_group_pasid(group, pasid);
-+		xa_erase(&group->pasid_array, pasid);
++static int iommufd_test_pasid_replace(struct iommufd_ucmd *ucmd,
++				      struct iommu_test_cmd *cmd)
++{
++	struct selftest_obj *sobj;
++	int rc;
++
++	sobj = iommufd_test_get_self_test_device(ucmd->ictx, cmd->id);
++	if (IS_ERR(sobj))
++		return PTR_ERR(sobj);
++
++	rc = iommufd_device_pasid_replace(sobj->idev.idev,
++					  cmd->pasid_attach.pasid,
++					  &cmd->pasid_attach.pt_id);
++	iommufd_put_object(&sobj->obj);
++	return rc;
++}
++
++static int iommufd_test_pasid_detach(struct iommufd_ucmd *ucmd,
++				     struct iommu_test_cmd *cmd)
++{
++	struct selftest_obj *sobj;
++
++	sobj = iommufd_test_get_self_test_device(ucmd->ictx, cmd->id);
++	if (IS_ERR(sobj))
++		return PTR_ERR(sobj);
++
++	iommufd_device_pasid_detach(sobj->idev.idev,
++				    cmd->pasid_detach.pasid);
++	iommufd_put_object(&sobj->obj);
++	return 0;
++}
++
++static int iommufd_test_pasid_check_domain(struct iommufd_ucmd *ucmd,
++					   struct iommu_test_cmd *cmd)
++{
++	struct iommu_domain *attached_domain, *expect_domain = NULL;
++	struct iommufd_hw_pagetable *hwpt = NULL;
++	struct selftest_obj *sobj;
++	struct mock_dev *mdev;
++	bool result;
++	int rc = 0;
++
++	sobj = iommufd_test_get_self_test_device(ucmd->ictx, cmd->id);
++	if (IS_ERR(sobj))
++		return PTR_ERR(sobj);
++
++	mdev = sobj->idev.mock_dev;
++
++	attached_domain = iommu_get_domain_for_dev_pasid(&mdev->dev,
++							 cmd->pasid_check.pasid, 0);
++	if (IS_ERR(attached_domain))
++		attached_domain = NULL;
++
++	if (cmd->pasid_check.hwpt_id) {
++		hwpt = iommufd_get_hwpt(ucmd, cmd->pasid_check.hwpt_id);
++		if (IS_ERR(hwpt)) {
++			rc = PTR_ERR(hwpt);
++			goto out_put_dev;
++		}
++		expect_domain = hwpt->domain;
 +	}
 +
-+	return ret;
++	result = (attached_domain == expect_domain) ? 1 : 0;
++	if (copy_to_user(u64_to_user_ptr(cmd->pasid_check.out_result_ptr),
++			 &result, sizeof(result)))
++		rc = -EFAULT;
++	if (hwpt)
++		iommufd_put_object(&hwpt->obj);
++out_put_dev:
++	iommufd_put_object(&sobj->obj);
++	return rc;
 +}
 +
- /*
-  * iommu_attach_device_pasid() - Attach a domain to pasid of device
-  * @domain: the iommu domain.
-@@ -3394,7 +3415,6 @@ int iommu_attach_device_pasid(struct iommu_domain *domain,
- 			      struct device *dev, ioasid_t pasid)
+ void iommufd_selftest_destroy(struct iommufd_object *obj)
  {
- 	struct iommu_group *group;
--	void *curr;
- 	int ret;
- 
- 	if (!domain->ops->set_dev_pasid)
-@@ -3405,19 +3425,9 @@ int iommu_attach_device_pasid(struct iommu_domain *domain,
- 		return -ENODEV;
- 
- 	mutex_lock(&group->mutex);
--	curr = xa_cmpxchg(&group->pasid_array, pasid, NULL, domain, GFP_KERNEL);
--	if (curr) {
--		ret = xa_err(curr) ? : -EBUSY;
--		goto out_unlock;
--	}
--
--	ret = __iommu_set_group_pasid(domain, group, pasid);
--	if (ret) {
--		__iommu_remove_group_pasid(group, pasid);
--		xa_erase(&group->pasid_array, pasid);
--	}
--out_unlock:
-+	ret = __iommu_group_attach_pasid(domain, group, pasid);
- 	mutex_unlock(&group->mutex);
-+
- 	iommu_group_put(group);
- 
- 	return ret;
-@@ -3433,8 +3443,8 @@ EXPORT_SYMBOL_GPL(iommu_attach_device_pasid);
-  * The @domain must have been attached to @pasid of the @dev with
-  * iommu_attach_device_pasid().
-  */
--void iommu_detach_device_pasid(struct iommu_domain *domain, struct device *dev,
--			       ioasid_t pasid)
-+void iommu_detach_device_pasid(struct iommu_domain *domain,
-+			       struct device *dev, ioasid_t pasid)
- {
- 	struct iommu_group *group = iommu_group_get(dev);
- 
-@@ -3447,6 +3457,39 @@ void iommu_detach_device_pasid(struct iommu_domain *domain, struct device *dev,
- }
- EXPORT_SYMBOL_GPL(iommu_detach_device_pasid);
- 
-+/**
-+ * iommu_replace_device_pasid - replace the domain that a pasid is attached to
-+ * @domain: new IOMMU domain to replace with
-+ * @dev: the physical device
-+ * @pasid: pasid that will be attached to the new domain
-+ *
-+ * This API allows the pasid to switch domains. Return 0 on success, or an
-+ * error. The pasid will roll back to use the old domain if failure. The
-+ * caller could call iommu_detach_device_pasid() before free the old domain
-+ * in order to avoid use-after-free case.
-+ */
-+int iommu_replace_device_pasid(struct iommu_domain *domain,
-+			       struct device *dev, ioasid_t pasid)
-+{
-+	struct iommu_group *group = dev->iommu_group;
-+	int ret;
-+
-+	if (!domain)
-+		return -EINVAL;
-+
-+	if (!group)
-+		return -ENODEV;
-+
-+	mutex_lock(&group->mutex);
-+	__iommu_remove_group_pasid(group, pasid);
-+	xa_erase(&group->pasid_array, pasid);
-+	ret = __iommu_group_attach_pasid(domain, group, pasid);
-+	mutex_unlock(&group->mutex);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_NS_GPL(iommu_replace_device_pasid, IOMMUFD_INTERNAL);
-+
- /*
-  * iommu_get_domain_for_dev_pasid() - Retrieve domain for @pasid of @dev
-  * @dev: the queried device
+ 	struct selftest_obj *sobj = container_of(obj, struct selftest_obj, obj);
+@@ -1309,6 +1399,14 @@ int iommufd_test(struct iommufd_ucmd *ucmd)
+ 			return -EINVAL;
+ 		iommufd_test_memory_limit = cmd->memory_limit.limit;
+ 		return 0;
++	case IOMMU_TEST_OP_PASID_ATTACH:
++		return iommufd_test_pasid_attach(ucmd, cmd);
++	case IOMMU_TEST_OP_PASID_REPLACE:
++		return iommufd_test_pasid_replace(ucmd, cmd);
++	case IOMMU_TEST_OP_PASID_DETACH:
++		return iommufd_test_pasid_detach(ucmd, cmd);
++	case IOMMU_TEST_OP_PASID_CHECK_DOMAIN:
++		return iommufd_test_pasid_check_domain(ucmd, cmd);
+ 	default:
+ 		return -EOPNOTSUPP;
+ 	}
 -- 
 2.34.1
 
