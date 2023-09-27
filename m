@@ -2,206 +2,90 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BFF05E81815
-	for <linux-kselftest@archiver.kernel.org>; Wed, 27 Sep 2023 04:33:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11A0EE80A81
+	for <linux-kselftest@archiver.kernel.org>; Wed, 27 Sep 2023 04:34:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbjI0Edz (ORCPT
+        id S229473AbjI0Eet (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 27 Sep 2023 00:33:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48540 "EHLO
+        Wed, 27 Sep 2023 00:34:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbjI0EdG (ORCPT
+        with ESMTP id S229553AbjI0Edt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 27 Sep 2023 00:33:06 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D71DA59E8
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Sep 2023 20:16:38 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1c46b30a1ceso91090595ad.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Sep 2023 20:16:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1695784598; x=1696389398; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=NRXSdqdZ2XooTxHH7SmT622Y7CVRdyNai4aU3Bo30yE=;
-        b=WN+LIvsgavEDUi3fn7t1QLLmP0FDfR/yAI9Tqg4hmNOxMXkQEWMUsOE0/VI/IUKlkI
-         WidIIebaFW7JtEo5TnFCkmBiya4OHH5EwRNuliAQ72sp4gWlNVYsykpLYKJRit140Yn2
-         K1Odg7S7Co1kSM08UWlQ5TP/VSPmm7bKfsqZM5Wc5SFSvWcNu/LxbB4Ms3uXHH42UAS5
-         ITx1LRwVgdQMgx8zJg7xJVKRLuiVo9cULDtxni+QS5HxRWVUoiIdjoVK0wiLbo8ddK8K
-         4/bEnwPBvChiG9VP3LQj0YsKqTjR0y8SByroDjlztQcPJhjtFygss8WAZkLEn4p/ramD
-         7Q8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695784598; x=1696389398;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NRXSdqdZ2XooTxHH7SmT622Y7CVRdyNai4aU3Bo30yE=;
-        b=XP9ntjkraYrnOcvBnBDKsfnNAnEoXrmQn8E2HX5Moj7UZN/7ySAawpnibjNmn0WdBT
-         cbH3apWNvn/G0hX5tIapUOgmUZexhUlsDwp1Mq/E/KpQ5UiF5SyFrZKsdtnwv6YxXZwO
-         s72j5RdJ3PwcFTH6uIW9B/Josn67XxRquOZzi56h8IsP/tP1C6VSd2T3EohgakWvfqWi
-         5FWI+SB0lCrLrjM+HNX83mzOtCfAPn41VTVOcLf+mSg7hEPCJKSoPOOg6mEfRU1K0wKZ
-         VLWcGfoxU6VtWThFmzT4W0V/s159eIvVwQDMIugph466OiQFKFMgv/ATwoD7O06sEH2P
-         ILPg==
-X-Gm-Message-State: AOJu0YyXrkoO6lsc1piOucpd6PdfSylYwXZ/pJihVTm4wYwmsRtknzAu
-        ACtJJ57cILtKdRTwMyae2Aj8dw==
-X-Google-Smtp-Source: AGHT+IEWuo0tVkysZ614gWok1PKtdV0dpxSBpQqnzYD2OuS3fdKQy3i7pKue/3OQk+U4FRPBnbu5Gw==
-X-Received: by 2002:a17:902:ab56:b0:1c5:d354:93b6 with SMTP id ij22-20020a170902ab5600b001c5d35493b6mr572714plb.67.1695784598279;
-        Tue, 26 Sep 2023 20:16:38 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id b10-20020a170903228a00b001b881a8251bsm4793421plh.106.2023.09.26.20.16.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Sep 2023 20:16:35 -0700 (PDT)
-Message-ID: <65139e93.170a0220.c7008.3738@mx.google.com>
-Date:   Tue, 26 Sep 2023 20:16:35 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 27 Sep 2023 00:33:49 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC056AD06;
+        Tue, 26 Sep 2023 19:52:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695783169; x=1727319169;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=QK5sue7sVnpxLM6QQCdPLLJ+pS+Be6ivtxWAV2EGffI=;
+  b=hL+tNoDsgV6wVCGRGOfakjAEbSf53oF0fPcLAfQPgMRB9PM1cKhMVmsc
+   AeWAqZwRtsKRJ0OI3XHVLCz9j4gfiPOZacsCqfj03zt0N3shCh19ZTirg
+   W9WORABQT+safWeEPs7L5K41aG3+Nxhoz0f8yId1u9iWBuFZbdJomtO43
+   DZR2OWu5nOXDUsTaLtyndh+gYhbf0S7THXTeErU2NtbMrGElCqL9bk3Q7
+   d+mSGGYLupKygAsKIlE9WjpPr4hw3quEAjsV6bHdf5haLadU8/GPOHYsQ
+   TsbI1XGHwVpPCrDuIfmupFpz61v6x2/wyfpkvH3kWf3SFSPqGfeVqaM7V
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="366776768"
+X-IronPort-AV: E=Sophos;i="6.03,179,1694761200"; 
+   d="scan'208";a="366776768"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2023 19:52:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="1079958724"
+X-IronPort-AV: E=Sophos;i="6.03,179,1694761200"; 
+   d="scan'208";a="1079958724"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.127]) ([10.239.159.127])
+  by fmsmga005.fm.intel.com with ESMTP; 26 Sep 2023 19:52:43 -0700
+Message-ID: <cd258ee3-52ca-f944-7553-6a1cd01c5f7a@linux.intel.com>
+Date:   Wed, 27 Sep 2023 10:49:29 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: fixes
-X-Kernelci-Tree: kselftest
-X-Kernelci-Kernel: linux-kselftest-fixes-6.6-rc4-1-g6f874fa021df
-X-Kernelci-Report-Type: test
-Subject: kselftest/fixes kselftest-lib: 3 runs,
- 3 regressions (linux-kselftest-fixes-6.6-rc4-1-g6f874fa021df)
-To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Cc:     baolu.lu@linux.intel.com, cohuck@redhat.com, eric.auger@redhat.com,
+        nicolinc@nvidia.com, kvm@vger.kernel.org, mjrosato@linux.ibm.com,
+        chao.p.peng@linux.intel.com, yi.y.sun@linux.intel.com,
+        peterx@redhat.com, jasowang@redhat.com,
+        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
+        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        zhenzhong.duan@intel.com, joao.m.martins@oracle.com
+Subject: Re: [RFC 3/8] iommufd: Support attach/replace hwpt per pasid
+Content-Language: en-US
+To:     Yi Liu <yi.l.liu@intel.com>, joro@8bytes.org,
+        alex.williamson@redhat.com, jgg@nvidia.com, kevin.tian@intel.com,
+        robin.murphy@arm.com
+References: <20230926092651.17041-1-yi.l.liu@intel.com>
+ <20230926092651.17041-4-yi.l.liu@intel.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20230926092651.17041-4-yi.l.liu@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kselftest/fixes kselftest-lib: 3 runs, 3 regressions (linux-kselftest-fixes=
--6.6-rc4-1-g6f874fa021df)
+On 9/26/23 5:26 PM, Yi Liu wrote:
+> From: Kevin Tian<kevin.tian@intel.com>
+> 
+> This introduces three APIs for device drivers to manage pasid attach/
+> replace/detach.
+> 
+>      int iommufd_device_pasid_attach(struct iommufd_device *idev,
+> 				    u32 pasid, u32 *pt_id);
+>      int iommufd_device_pasid_replace(struct iommufd_device *idev,
+> 				     u32 pasid, u32 *pt_id);
+>      void iommufd_device_pasid_detach(struct iommufd_device *idev,
+> 				     u32 pasid);
 
-Regressions Summary
--------------------
+I am a bit puzzled. Do we really need both attach and replace interfaces
+to install a hwpt onto a pasid on device? The IOMMUFD already tracks the
+connections between hwpt and {device, pasid}, so it could easily call
+the right iommu interfaces (attach vs. replace). Perhaps I overlooked
+previous discussion on this.
 
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-meson-g12b-a311d-khadas-vim3 | arm64 | lab-collabora | gcc-10   | defconfig=
-+kselftest          | 1          =
-
-meson-gxl-s905x-libretech-cc | arm64 | lab-broonie   | gcc-10   | defconfig=
-+kselftest          | 1          =
-
-mt8173-elm-hana              | arm64 | lab-collabora | gcc-10   | defconfig=
-+kse...4-chromebook | 1          =
-
-
-  Details:  https://kernelci.org/test/job/kselftest/branch/fixes/kernel/lin=
-ux-kselftest-fixes-6.6-rc4-1-g6f874fa021df/plan/kselftest-lib/
-
-  Test:     kselftest-lib
-  Tree:     kselftest
-  Branch:   fixes
-  Describe: linux-kselftest-fixes-6.6-rc4-1-g6f874fa021df
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
-lftest.git
-  SHA:      6f874fa021dfc7bf37f4f37da3a5aaa41fe9c39c =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-meson-g12b-a311d-khadas-vim3 | arm64 | lab-collabora | gcc-10   | defconfig=
-+kselftest          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6513924e19c9deb3d48a0a4b
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//kselftest/fixes/linux-kselftes=
-t-fixes-6.6-rc4-1-g6f874fa021df/arm64/defconfig+kselftest/gcc-10/lab-collab=
-ora/kselftest-lib-meson-g12b-a311d-khadas-vim3.txt
-  HTML log:    https://storage.kernelci.org//kselftest/fixes/linux-kselftes=
-t-fixes-6.6-rc4-1-g6f874fa021df/arm64/defconfig+kselftest/gcc-10/lab-collab=
-ora/kselftest-lib-meson-g12b-a311d-khadas-vim3.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20230623.0/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-lib.login: https://kernelci.org/test/case/id/6513924e19c9deb3=
-d48a0a4c
-        failing since 344 days (last pass: linux-kselftest-fixes-6.0-rc3, f=
-irst fail: v6.1-rc1) =
-
- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-meson-gxl-s905x-libretech-cc | arm64 | lab-broonie   | gcc-10   | defconfig=
-+kselftest          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/651394d4f12a3a434d8a0a85
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//kselftest/fixes/linux-kselftes=
-t-fixes-6.6-rc4-1-g6f874fa021df/arm64/defconfig+kselftest/gcc-10/lab-brooni=
-e/kselftest-lib-meson-gxl-s905x-libretech-cc.txt
-  HTML log:    https://storage.kernelci.org//kselftest/fixes/linux-kselftes=
-t-fixes-6.6-rc4-1-g6f874fa021df/arm64/defconfig+kselftest/gcc-10/lab-brooni=
-e/kselftest-lib-meson-gxl-s905x-libretech-cc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20230623.0/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-lib.login: https://kernelci.org/test/case/id/651394d4f12a3a43=
-4d8a0a86
-        failing since 331 days (last pass: linux-kselftest-fixes-6.0-rc3, f=
-irst fail: linux-kselftest-fixes-6.1-rc3-2-g3d982441308e) =
-
- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-mt8173-elm-hana              | arm64 | lab-collabora | gcc-10   | defconfig=
-+kse...4-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/651392dbf6c180beda8a0a49
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest+arm64-chromebook
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//kselftest/fixes/linux-kselftes=
-t-fixes-6.6-rc4-1-g6f874fa021df/arm64/defconfig+kselftest+arm64-chromebook/=
-gcc-10/lab-collabora/kselftest-lib-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//kselftest/fixes/linux-kselftes=
-t-fixes-6.6-rc4-1-g6f874fa021df/arm64/defconfig+kselftest+arm64-chromebook/=
-gcc-10/lab-collabora/kselftest-lib-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20230623.0/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-lib.login: https://kernelci.org/test/case/id/651392dbf6c180be=
-da8a0a4a
-        failing since 342 days (last pass: linux-kselftest-fixes-6.0-rc3, f=
-irst fail: v6.1-rc1-5-gcb05c81ada76) =
-
- =20
+Best regards,
+baolu
