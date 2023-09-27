@@ -2,313 +2,204 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18D29E810A3
-	for <linux-kselftest@archiver.kernel.org>; Wed, 27 Sep 2023 07:57:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C817CE810A3
+	for <linux-kselftest@archiver.kernel.org>; Wed, 27 Sep 2023 08:08:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230090AbjI0H56 (ORCPT
+        id S230057AbjI0IIG (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 27 Sep 2023 03:57:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50722 "EHLO
+        Wed, 27 Sep 2023 04:08:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230075AbjI0H55 (ORCPT
+        with ESMTP id S229993AbjI0IIE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 27 Sep 2023 03:57:57 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C01513A
-        for <linux-kselftest@vger.kernel.org>; Wed, 27 Sep 2023 00:57:54 -0700 (PDT)
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id BF59B3F674
-        for <linux-kselftest@vger.kernel.org>; Wed, 27 Sep 2023 07:57:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1695801472;
-        bh=ip6/ccZiNvOX6hccEjrHN08lTPqfzJb4ULfAfkXBgJM=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=j2ApeW2x05hDbbSseCK5OFJGwMUDtu7AwAqJibNbPWR8XMRLfgg94QcaUW82WUhmE
-         6epeOkdojGKynyxY1++uET1fEvanGgi4+A6WX2420PfkBgCkpBt2WirEgBpA7IXvKB
-         +5phKPvUMOPtzunDXweVwbaVfN/A2qpT2jvLo6nBg6PtmT7eHqGMaby5Ao7d0LzfLe
-         WDdJdgLvezfI5E/elZJON385pzSYxffqGhDB33HBLZeVdPLB2+/nBKkc1DNCEZmTpp
-         KpQTGr0d3eH5Nk+eJQXgNjkLqCD8eYhVa4toP3UhUWuiO04FxiZ69jXfXYm5tAc5Cd
-         2ZuNLkB+Lv9vQ==
-Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-690bccb0db8so12030512b3a.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 27 Sep 2023 00:57:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695801471; x=1696406271;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ip6/ccZiNvOX6hccEjrHN08lTPqfzJb4ULfAfkXBgJM=;
-        b=u8DTY6nzdLG7Vy2ZytzGIipHT8pQur8RQ0+EzjiIUWXEGeMDbR8SYATvhnjnI2ncdN
-         3H1rBLvuHOYpI7gnyaZUS4Rcs1/IK2w3d82vdmPcvptUvCZtTuHRdKgANYa0z2a4KB1p
-         zkmZu/91ZbA2roo9nn2JYQDByFwbmVZymVkp7x44zrFf34oBQsj1Xjhq2sLyoqMekVO5
-         CrPxqjUpNuEIc/5m16LAxAHhz5FQ67uOeMV4iroU+q6NSwITt6kEzXXQvrY0hr+3dACm
-         JUBNR132yApXHAyjJcWwCSxiXj/OMOM59M+Vtw1ShGMOmTdFAYOp7PKGMAPQJbcjN287
-         o7tg==
-X-Gm-Message-State: AOJu0YxEQCATfGQ4sm6IUNCt6hAL9XKTRB7AQg53/qQyVBk9S3jrgKLo
-        k/iVEZoE71jfqp6bxLbf47W0IRnS9JKSn1Jp4zD9is0Kz2xGqXAA3VhFAuzX9oPe9btHlyncrqg
-        GbqFklXZW8Dd73ssIvDBUa67dt0zYsyWi9kUJpKbQ9gWB6w==
-X-Received: by 2002:a05:6a00:3908:b0:68b:e6e0:5047 with SMTP id fh8-20020a056a00390800b0068be6e05047mr1315121pfb.14.1695801470952;
-        Wed, 27 Sep 2023 00:57:50 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHx/mG27sIh93gB6l2LsEMvHdKnrXh9xI6T0JaEJiOHd6Tv23J+iWR3GET7sPIMo+r+pFJuyQ==
-X-Received: by 2002:a05:6a00:3908:b0:68b:e6e0:5047 with SMTP id fh8-20020a056a00390800b0068be6e05047mr1315106pfb.14.1695801470608;
-        Wed, 27 Sep 2023 00:57:50 -0700 (PDT)
-Received: from zlab.. ([2403:5814:1313:1:68e8:66ff:feab:9acb])
-        by smtp.gmail.com with ESMTPSA id s4-20020a056a00178400b00692b6fe1c7asm8660643pfg.179.2023.09.27.00.57.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Sep 2023 00:57:50 -0700 (PDT)
-From:   Trent Lloyd <trent.lloyd@canonical.com>
-To:     Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
-Cc:     Trent Lloyd <trent.lloyd@canonical.com>,
-        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH] bridge: MTU auto tuning ignores IFLA_MTU on NEWLINK
-Date:   Wed, 27 Sep 2023 07:57:12 +0000
-Message-Id: <20230927075713.1253681-1-trent.lloyd@canonical.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 27 Sep 2023 04:08:04 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2D14B3;
+        Wed, 27 Sep 2023 01:08:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695802083; x=1727338083;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=Rih9x4uKO7X2zbzxbyVhACcK28Wg1CQcOLHs6un1tZQ=;
+  b=WKakc0e21qs+7FAedQHma5rRWU+CHExKDRw2v1Vrby17B7S3Ys8PVJDB
+   mSeOyAOxKEIBgwiedE20B+fjl1KBTs9R/6PuiqirE+Qv4CftOIDw5FgOG
+   1e++WbgP7UNlhP8I35TMU05NRRb8Wf6aJXLg8D9ql7GEGnZdn+HRU4cBx
+   eRr48TYlVMrOEjM2NIoyQpuW/Sl9cN7r/aYUGyN19ijebTGe/DR9AXDLv
+   C6cPyaN2YjID9h+aKITue8VM2/s+Hu2Jm3e3/wun6Cb5Q5oVvbnKe+GJy
+   mMBp36Izlx9KkUHqxQeBuVUW8lYLD3QQfBCf1M1pHaPAVNGvQWTmUmFBN
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="385616476"
+X-IronPort-AV: E=Sophos;i="6.03,179,1694761200"; 
+   d="scan'208";a="385616476"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2023 01:07:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="839340385"
+X-IronPort-AV: E=Sophos;i="6.03,179,1694761200"; 
+   d="scan'208";a="839340385"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by FMSMGA003.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 27 Sep 2023 01:07:59 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32; Wed, 27 Sep 2023 01:07:58 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32 via Frontend Transport; Wed, 27 Sep 2023 01:07:58 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.171)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.32; Wed, 27 Sep 2023 01:07:58 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hht6u43fmjE3Ukcel3XUNYIkXJ5FnbbmZZUXPsYz5hYm2HbqT0a+ccMrQGbwaEPC0+1x2fBWpG67TcPM6nuVi+JVwsP9rRsDRZ21c+rKhmuPe10Gvopk3GOQw6C6PxL5QJgM+D0GHzu/7S8q13w8z6fN7ail7Ppin3KwEn7vi4FOdowOZ6AmOhLwp2TsaI+DHOz5bhNVr93OAlse7cnmzJNSVPAvrcGlfVey5aCPc3c+n6l+Y9QuvDoRF8JGwXk1zMQK+fF3wchBkBhLYcahXV+YFkfwS2kwLiR8t4bsG+hEpDRuRah7c2esicNQX42voQwNuJSsADlJWzgLYCZh2w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9Kcg7mH4NG04NJ+nF+3+GE2tKiS35+QSsncIBOCiKIk=;
+ b=WYTQfckU66RX01Q/Gg03QQoDvDnUb4uE0LE4VI9xn5qLYQqS0N6msXqqUHHhK9Wt4gs95GuCvX95pm87IyAh4w72cp9uxPgR7bZOCCCri9N6XBzRqh+3I05yuzK2jYRGLXwkCJZofP+IGJDaDUnUYWdLdw+L3LOHH+IqXnLNzpGL+lyZXVF8BPpyitqPLtARUYWcVBJsVfoXbysiLgw5V75aZoTGlxOcw1g7WKU9AvWse6bkThBTcwGJmENA86I0/00d3H4b3B1D2IHSOMZc8oSV7YVnEcyY2LkygZhswBsooxuBPs/RbHrG3WM3iHDEoQmF5IgKAwgH35EFId4zbQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by MN2PR11MB4518.namprd11.prod.outlook.com (2603:10b6:208:24f::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6813.28; Wed, 27 Sep
+ 2023 08:07:55 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::1bfc:7af0:dc68:839d]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::1bfc:7af0:dc68:839d%4]) with mapi id 15.20.6813.017; Wed, 27 Sep 2023
+ 08:07:55 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     "Liu, Yi L" <yi.l.liu@intel.com>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "jgg@nvidia.com" <jgg@nvidia.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>
+CC:     "joro@8bytes.org" <joro@8bytes.org>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
+        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "jasowang@redhat.com" <jasowang@redhat.com>,
+        "shameerali.kolothum.thodi@huawei.com" 
+        <shameerali.kolothum.thodi@huawei.com>,
+        "lulu@redhat.com" <lulu@redhat.com>,
+        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>,
+        "Martins, Joao" <joao.m.martins@oracle.com>
+Subject: RE: [RFC 3/3] vfio/pci: Expose PCIe PASID capability to userspace
+Thread-Topic: [RFC 3/3] vfio/pci: Expose PCIe PASID capability to userspace
+Thread-Index: AQHZ8FxBOJ6q7SodUkevUoT08ZF/YrAuTq0g
+Date:   Wed, 27 Sep 2023 08:07:54 +0000
+Message-ID: <BN9PR11MB5276375C4BE33AC0632321A68CC2A@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20230926093121.18676-1-yi.l.liu@intel.com>
+ <20230926093121.18676-4-yi.l.liu@intel.com>
+In-Reply-To: <20230926093121.18676-4-yi.l.liu@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|MN2PR11MB4518:EE_
+x-ms-office365-filtering-correlation-id: 68febf0f-db79-48b4-7b29-08dbbf30da8b
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: rVn1PvPh894LNAp0E6VlqvBTOhf77OTHg5jQLrRCkti4UJZELp0hfchcarja/2664By4gbG9c6iw0vuS71yhJf5XtGgvyRHWLR4xEVv3mGoHV9Ns5aKVfFLukKMaWfNrZS7dD96hlggWa0g391vFhmMmPTkHfc7HKTtgvYlycrxnjMrspnR/znX86RZETl6GYDRFJJsfSdEX0mX6jb40eenpBqPHBrFYbqI9nKJvJEaDTl0wn6touPnUfO2FUNBl74VVWfDZkrRfQ5FqXSE54elXW5sVGnsIcs68hy/9blXjP45kpDnJD7sc3veX1doNUKQ2bjkK0PL+cBfjP9COKloKoUz39vR95sDOwkPfPzar/ZIWH2Da8tnKXFaFA0zpwnQORjZri7lVkGPH3HhlHb4GaAf9jn3LKkOtO8K3FlEahBxPmWobc9YZKkMfl6gInOCNcGiQdhMm9o/lXIXhYdOLXfdh01tZ8KmVXZSHrtjj/mFjOnP+1SR6BAV/dHx6rdgOIu/q+JkJuT3Tl+uc/Tbf+sK25C4pLUYSbO7vYRmjNgZvih1mkbG47CyEDLbMFolvDR8sXd7sttSrGJlv7SnmikkVn1uFRpYIEZzNtkPIwfTiI5xlYih8M32/mqCYuUiso4027kP/ZF3FJNyGXA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(376002)(39860400002)(396003)(366004)(346002)(230922051799003)(1800799009)(186009)(451199024)(66946007)(7696005)(26005)(6506007)(9686003)(82960400001)(38100700002)(86362001)(38070700005)(55016003)(33656002)(122000001)(41300700001)(316002)(8676002)(8936002)(4326008)(66556008)(66446008)(66476007)(54906003)(5660300002)(110136005)(52536014)(76116006)(7416002)(2906002)(64756008)(45080400002)(71200400001)(966005)(478600001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Dho1NIsZ4hPazxZNzxDxlky3M5zPzyuTX6al1/aGgcAlmyMHhOnwNwq9kwwR?=
+ =?us-ascii?Q?/3umITh7ZH2xwRG6MCTcmZOvB1uQpfU8LkwpTOf3U+jYPeqJNtUlGA86YFME?=
+ =?us-ascii?Q?slG23MwjrZYTlvrYn8wa92/aLF7siDzqGjjvV2Ty9ty3Xd79uoK3ZVY7MkdW?=
+ =?us-ascii?Q?ThLFRAlZ5HMilfxX2nnSBzlHMmWQitrJ2TLXylI6kx3aBc3Za9PnvLhW8IV4?=
+ =?us-ascii?Q?ZVDaPyiLMT5OfuX5ZMVbHOM0dOIFQI3/Ezb8XKENx/9k07cQrSldx4/JEJyP?=
+ =?us-ascii?Q?PRaj+M1Qguy84CL/S23FqZAgEQM+wD512aMhlG2lOLS7bTEef4G7M41IvSMr?=
+ =?us-ascii?Q?sNzCgn5t3vchS4/jjzgAgTLomYGVLBsUx2NfgA/pLY2di0CkcUU9V4Ci5QN5?=
+ =?us-ascii?Q?0Lw0yeupctckJejFbAEmE8TL3o1RFZwRcN/1/i67zuENlOrIudGe7kHn0IZm?=
+ =?us-ascii?Q?MqWHeGnuWRUv67/udeQ1/DkEBzN7CD2i4B+yzEc4Cy/suP6CR8mk6lp2WFRp?=
+ =?us-ascii?Q?uffXRDOzCCkwXLb0KanXVT65+wAALR/SJSesTTmop3f+DP6fKTCNkKfiC8tK?=
+ =?us-ascii?Q?tzG2Wm3c+M4F4AM8avFZR81fbnhQxp886EkdY+NleZk/u+0+Nn/V8SUmKNV6?=
+ =?us-ascii?Q?W6T5DzJZxsfpLE5G5ixO5Geeq9O4CAGTsSh9stXTZVtlrpXQQsxWsOLby1hm?=
+ =?us-ascii?Q?sMHobHVhYITijSs2SqDADiXpjIWvuJ4AW9cDUOiAGXo1oNtSnuwI/9LUOMFJ?=
+ =?us-ascii?Q?ukLR72RV6IzTlzcTPoVyv0I6XoQ0VdPQEl56m9yV9FD0XmmaP/vbFFacxy7e?=
+ =?us-ascii?Q?dytQk1dsCpYkUbWQOahIrzBSPCJrMdnSfCwf8XxtuhDMUm4HyPC4NkvRKUMO?=
+ =?us-ascii?Q?FY9D1UnalfCxAK/gBqPxgkNu+SYwyOmJJNQAjvqgSsPX/2/hqtufXAgKHe1x?=
+ =?us-ascii?Q?O1uCOiZvIlmROFKJyGjil9Pgc/EO4gKGvI8rr89LoivLY4sCVx92ZEIPul1j?=
+ =?us-ascii?Q?IZ3S7UyZcBAgdNvRE0D8/NFKzxHeZGSsVeN+Wst2I0DKlHzSF/QBLY/H9K0v?=
+ =?us-ascii?Q?a4Hq5v3L/9ojBoQsotmzmfSrjhN3wxqQoQu3ic3gH4t464n3IMwjilVQg4GC?=
+ =?us-ascii?Q?//B+MdFn4myNfcBGYdPIhqFJ9wcbUy4tFI8fJAugfz6ugz6iTmBQaIn62+sI?=
+ =?us-ascii?Q?QQLNLEAK8Iz9oU4o3KYGef1V4fW9712FhidRi9m/VFmITD1SE9pkRadWnl1A?=
+ =?us-ascii?Q?u69Fqv2drDhW+ZfQzDqwou8GLtefKxiphFAi3ltCH/rM07lu8h0Mx6QRpevj?=
+ =?us-ascii?Q?f/ClrBSvqgSanumVr7Cso6sZzwvTBm6BtMto72VxK8sNM7No3AmHIwrHiiv3?=
+ =?us-ascii?Q?d/j1MITg7x2W32cPylxceLe9THQrEYr4Z6a3gDOlQRCedJuM/FMQW5QMvRVh?=
+ =?us-ascii?Q?gz4zcMIYlOdht0SeJ+Vl+MJWET6b0JVcYpDWpbtcmhOH5H6x6ogEuSslIK1F?=
+ =?us-ascii?Q?UqycnIGwMCYTLDzf67VuHSrCGT+eX6Kdw7zen8qMVHIqrDAxKJBgI02vFoue?=
+ =?us-ascii?Q?Iy4cptq+Qt+uS3U82+UuewSC6Nk0yGtn6hYpxGMQ?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 68febf0f-db79-48b4-7b29-08dbbf30da8b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Sep 2023 08:07:54.8411
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: yJ6ES+5pzmIuCW9yKAx79nijgnU/NYq/p4udPCScdXKWHXevTkpORB0QIiniaiwmJJZ8D2dwOO5BLDdvLUp7XA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4518
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Commit 804b854d374e ("net: bridge: disable bridge MTU auto tuning if it
-was set manually") disabled auto-tuning of the bridge MTU when the MTU
-was explicitly set by the user, however that would only happen when the
-MTU was set after creation. This commit ensures auto-tuning is also
-disabled when the MTU is set during bridge creation.
+> From: Liu, Yi L <yi.l.liu@intel.com>
+> Sent: Tuesday, September 26, 2023 5:31 PM
+>=20
+> This exposes PCIe PASID capability to userspace and where to emulate this
+> capability if wants to further expose it to VM.
+>=20
+> And this only exposes PASID capability for devices which has PCIe PASID
+> extended struture in its configuration space. While for VFs, userspace
+> is still unable to see this capability as SR-IOV spec forbides VF to
+> implement PASID capability extended structure. It is a TODO in future.
+> Related discussion can be found in below links:
+>=20
+> https://lore.kernel.org/kvm/20200407095801.648b1371@w520.home/
+> https://lore.kernel.org/kvm/BL1PR11MB5271A60035EF591A5BE8AC878C01A
+> @BL1PR11MB5271.namprd11.prod.outlook.com/
+>=20
 
-Currently when the br_netdev_ops br_change_mtu function is called, the
-flag BROPT_MTU_SET_BY_USER is set. However this function is only called
-when the MTU is changed after interface creation and is not called if
-the MTU is specified during creation with IFLA_MTU (br_dev_newlink).
+Yes, we need a decision for VF case.
 
-br_change_mtu also does not get called if the MTU is set to the same
-value it currently has, which makes it difficult to work around this
-issue (especially for the default MTU of 1500) as you have to first
-change the MTU to some other value and then back to the desired value.
+If the consensus is to continue exposing the PASID capability in vfio-pci
+config space by developing a kernel quirk mechanism to find offset for
+VF, then this patch for PF is orthogonal to that VF work and can go as it i=
+s.
 
-Add new selftests to ensure the bridge MTU is handled correctly:
- - Bridge created with user-specified MTU (1500)
- - Bridge created with user-specified MTU (2000)
- - Bridge created without user-specified MTU
- - Bridge created with user-specified MTU set after creation (2000)
+But if the decision is to have a device feature for the user to enumerate
+the vPASID capability and let the VMM take care of finding the vPASID
+cap offset, then better we start doing that for PF too since it's not good
+to have two enumeration interfaces for PF/VF respectively.
 
-Regression risk: Any workload which erroneously specified an MTU during
-creation but accidentally relied upon auto-tuning to a different value
-may be broken by this change.
+My preference is via device feature given Qemu already includes lots of
+quirks for vfio-pci devices. Another reason is that when supporting vPASID
+with SIOV there are some arch constraints which the driver needs to
+report to the user to follow (e.g.  don't assign ENQCMD-capable sibling
+vdev's to a same guest, etc.). A device feature interface can better
+encapsulate everything related to vPASID in one place.
 
-Link: https://bugs.launchpad.net/ubuntu/+source/linux/+bug/2034099
-Fixes: 804b854d374e ("net: bridge: disable bridge MTU auto tuning if it was set manually")
-Signed-off-by: Trent Lloyd <trent.lloyd@canonical.com>
----
- net/bridge/br_netlink.c                       |   3 +
- .../selftests/drivers/net/bridge/Makefile     |  10 ++
- .../drivers/net/bridge/bridge-user-mtu.sh     | 148 ++++++++++++++++++
- .../drivers/net/bridge/net_forwarding_lib.sh  |   1 +
- 4 files changed, 162 insertions(+)
- create mode 100644 tools/testing/selftests/drivers/net/bridge/Makefile
- create mode 100755 tools/testing/selftests/drivers/net/bridge/bridge-user-mtu.sh
- create mode 120000 tools/testing/selftests/drivers/net/bridge/net_forwarding_lib.sh
-
-diff --git a/net/bridge/br_netlink.c b/net/bridge/br_netlink.c
-index 10f0d33d8ccf..8aff7d077848 100644
---- a/net/bridge/br_netlink.c
-+++ b/net/bridge/br_netlink.c
-@@ -1559,6 +1559,9 @@ static int br_dev_newlink(struct net *src_net, struct net_device *dev,
- 		spin_unlock_bh(&br->lock);
- 	}
- 
-+	if (tb[IFLA_MTU])
-+		br_opt_toggle(br, BROPT_MTU_SET_BY_USER, true);
-+
- 	err = br_changelink(dev, tb, data, extack);
- 	if (err)
- 		br_dev_delete(dev, NULL);
-diff --git a/tools/testing/selftests/drivers/net/bridge/Makefile b/tools/testing/selftests/drivers/net/bridge/Makefile
-new file mode 100644
-index 000000000000..23e407c75a7f
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/bridge/Makefile
-@@ -0,0 +1,10 @@
-+# SPDX-License-Identifier: GPL-2.0
-+# Makefile for net selftests
-+
-+TEST_PROGS := \
-+	bridge-user-mtu.sh
-+
-+TEST_FILES := \
-+	net_forwarding_lib.sh
-+
-+include ../../../lib.mk
-diff --git a/tools/testing/selftests/drivers/net/bridge/bridge-user-mtu.sh b/tools/testing/selftests/drivers/net/bridge/bridge-user-mtu.sh
-new file mode 100755
-index 000000000000..07e0ac972b00
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/bridge/bridge-user-mtu.sh
-@@ -0,0 +1,148 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Ensure a bridge MTU does not automatically change when it has been specified
-+# by the user.
-+#
-+# To run independently:
-+# make TARGETS=drivers/net/bridge kselftest
-+
-+ALL_TESTS="
-+	bridge_created_with_user_specified_mtu
-+	bridge_created_without_user_specified_mtu
-+	bridge_with_late_user_specified_mtu
-+"
-+
-+REQUIRE_MZ=no
-+NUM_NETIFS=0
-+lib_dir=$(dirname "$0")
-+source "${lib_dir}"/net_forwarding_lib.sh
-+
-+setup_prepare()
-+{
-+	for i in 1 3 5; do
-+		ip link add "vtest${i}" mtu 9000 type veth peer name "vtest${i}b" mtu 9000
-+	done
-+}
-+
-+cleanup()
-+{
-+	for interface in vtest1 vtest3 vtest5 br-test0 br-test1 br-test2; do
-+		if [[ -d "/sys/class/net/${interface}" ]]; then
-+			ip link del "${interface}" &> /dev/null
-+		fi
-+	done
-+}
-+
-+check_mtu()
-+{
-+	cur_mtu=$(<"/sys/class/net/$1/mtu")
-+	[[ ${cur_mtu} -eq $2 ]]
-+	exit_status=$?
-+	return "${exit_status}"
-+}
-+
-+check_bridge_user_specified_mtu()
-+{
-+	if [[ -z $1 ]]
-+	then
-+		exit 1
-+	fi
-+	mtu=$1
-+
-+	RET=0
-+
-+	ip link add dev br-test0 mtu "${mtu}" type bridge
-+	ip link set br-test0 up
-+	check_mtu br-test0 "${mtu}"
-+	check_err $? "Bridge was not created with the user-specified MTU"
-+
-+	check_mtu vtest1 9000
-+	check_err $? "vtest1 does not have MTU 9000"
-+
-+	ip link set dev vtest1 master br-test0
-+	check_mtu br-test0 "${mtu}"
-+	check_err $? "Bridge user-specified MTU incorrectly changed after adding an interface"
-+
-+	log_test "Bridge created with user-specified MTU (${mtu})"
-+
-+	ip link del br-test0
-+}
-+
-+bridge_created_with_user_specified_mtu() {
-+	# Check two user-specified MTU values
-+	# - 1500: To ensure the default MTU (1500) is not special-cased, you
-+	#         should be able to lock a bridge to the default MTU.
-+	# - 2000: Ensure bridges are actually created with a user-specified MTU
-+	check_bridge_user_specified_mtu 1500
-+	check_bridge_user_specified_mtu 2000
-+}
-+
-+bridge_created_without_user_specified_mtu()
-+{
-+	RET=0
-+	ip link add dev br-test1 type bridge
-+	ip link set br-test1 up
-+	check_mtu br-test1 1500
-+	check_err $? "Bridge was not created with the user-specified MTU"
-+
-+	ip link set dev vtest3 master br-test1
-+	check_mtu br-test1 9000
-+	check_err $? "Bridge without user-specified MTU did not change MTU"
-+
-+	log_test "Bridge created without user-specified MTU"
-+
-+	ip link del br-test1
-+}
-+
-+check_bridge_late_user_specified_mtu()
-+{
-+	if [[ -z $1 ]]
-+	then
-+		exit 1
-+	fi
-+	mtu=$1
-+
-+	RET=0
-+	ip link add dev br-test2 type bridge
-+	ip link set br-test2 up
-+	check_mtu br-test2 1500
-+	check_err $? "Bridge was not created with default MTU (1500)"
-+
-+	ip link set br-test2 mtu "${mtu}"
-+	check_mtu br-test2 "${mtu}"
-+	check_err $? "User-specified MTU set after creation was not set"
-+	check_mtu vtest5 9000
-+	check_err $? "vtest5 does not have MTU 9000"
-+
-+	ip link set dev vtest5 master br-test2
-+	check_mtu br-test2 "${mtu}"
-+	check_err $? "Bridge late-specified MTU incorrectly changed after adding an interface"
-+
-+	log_test "Bridge created without user-specified MTU and changed after (${mtu})"
-+
-+	ip link del br-test2
-+}
-+
-+bridge_with_late_user_specified_mtu()
-+{
-+	# Note: Unfortunately auto-tuning is not disabled when you set the MTU
-+	# to it's current value, including the default of 1500. The reason is
-+	# that dev_set_mtu_ext skips notifying any handlers if the MTU is set
-+	# to the current value. Normally that makes sense, but is confusing
-+	# since you might expect "ip link set br0 mtu 1500" to lock the MTU to
-+	# 1500 but that will only happen if the MTU was not already 1500. So we
-+	# only check a non-default value of 2000 here unlike the earlier
-+	# bridge_created_with_user_specified_mtu test
-+
-+	# Check one user-specified MTU value
-+	# - 2000: Ensure bridges actually change to a user-specified MTU
-+	check_bridge_late_user_specified_mtu 2000
-+}
-+
-+trap cleanup EXIT
-+
-+setup_prepare
-+tests_run
-+
-+exit "${EXIT_STATUS}"
-diff --git a/tools/testing/selftests/drivers/net/bridge/net_forwarding_lib.sh b/tools/testing/selftests/drivers/net/bridge/net_forwarding_lib.sh
-new file mode 120000
-index 000000000000..39c96828c5ef
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/bridge/net_forwarding_lib.sh
-@@ -0,0 +1 @@
-+../../../net/forwarding/lib.sh
-\ No newline at end of file
--- 
-2.34.1
-
+Thanks
+Kevin
