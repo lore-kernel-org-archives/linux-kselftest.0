@@ -2,125 +2,143 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2D68E7F150
-	for <linux-kselftest@archiver.kernel.org>; Wed, 27 Sep 2023 02:54:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6013E7F154
+	for <linux-kselftest@archiver.kernel.org>; Wed, 27 Sep 2023 03:10:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233663AbjI0Cy2 (ORCPT
+        id S229527AbjI0DK2 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 26 Sep 2023 22:54:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43998 "EHLO
+        Tue, 26 Sep 2023 23:10:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235055AbjI0Cw1 (ORCPT
+        with ESMTP id S229570AbjI0DI1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 Sep 2023 22:52:27 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 277A965A1
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Sep 2023 18:26:37 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id ca18e2360f4ac-7748ca56133so68283139f.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Sep 2023 18:26:37 -0700 (PDT)
+        Tue, 26 Sep 2023 23:08:27 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 917C4126
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 Sep 2023 19:18:21 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-1dd1db54d42so2826464fac.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 Sep 2023 19:18:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1695777996; x=1696382796; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=k0LsinjnQ0psiRqDV4BJbkShjH1QSE7MgPkz+IEjFHc=;
-        b=P27TWAM76pouKVhn9k7uJh0d2mxC3rLFsCOMyLN740kl7yA3Tk0HiOW1c5W6/vxm6o
-         VEzCjGWMZo90auylb5OiKB0raT2ZtqhqVO/EZn2N+ePDCIqcWmQNUIar9D7kGovSbhQJ
-         EKH+Z0Ojbn34xLHt77dNfPCjCWR+lCDllm/+w=
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1695781101; x=1696385901; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=IPGwCwd+jVA93ZpKj+iEhwPhKtiUIJB4pw4J1MAfToQ=;
+        b=bqkeD9DdHXnV/N7Yev6jzHFrKytmZNTNt2wGf/+BhXqGannD5lY9MIEsyn3JydrZKr
+         cfwN+6sAdeiAX6c0X0hdQNADoH0gSBbQ/ptjL0LecWdPje8wZXOJQimp/LhZPvZtTFYs
+         0DWGvSSV4dZlALPpcbHduaqpEM0ZL4zMCr5jLjpyIvjtegmny68QnOHNacSTKIdnOh6j
+         SfO0D+aLp0W2Bwdtm6Rt7Df2MQq/nI9nUmUrNJ6NUlXBIUxZoCT1aDrmERvFQ/vSNpzh
+         55elIP2kqGRd0cqLxg7QNR3cbSmqWI4H6kCv5Gnp0mK+EDFmTCe791mBSxhOV1U1+nWO
+         q36Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695777996; x=1696382796;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k0LsinjnQ0psiRqDV4BJbkShjH1QSE7MgPkz+IEjFHc=;
-        b=eLlKPpMqkBEWuB1FV6M0GUw6eXJ6eQ/LjJoAM4w0KxemB6jan1gjtIrZqN1P8ZVmCo
-         bBGPwVhYaNWXhM5yW3otJVBrgl/4Bz58n54EgiFo0Hd8Xm/sB9Vgn+if+uXXHAbvucO0
-         3wM3/O7D+5PffG1tPl77XmNFrwXLqbycyKBRMtFWES6J4kTNJIYO6xnUbHWM5CHsb65G
-         kOwJJQmHyvf58S57S9z+rHa/EnubSQsWJvzSZJv+Yk5uVHGsewgGyzwCvpDsnMlwzHWH
-         Gm06QEFM56DYkOrNVOjRZfSsAwUaBIY/Vni6qGjFgOi2ZB/1OIh36jq2XnxBKHKRu44J
-         /MLg==
-X-Gm-Message-State: AOJu0Yx0Oo6v0yLZdzeo9gMOIlOTkXH1pGV5UDdLlEWuBZnbDdD7ei+d
-        SVgzZy+4KFKBysKQWdfUBM0RwQ==
-X-Google-Smtp-Source: AGHT+IFCOJWMcvH/PMk6PXaOABE9naegOE1OjxmKKpTl8Tq0vbJU2EbQZCuBXNzabPcsOTBAqRoEHA==
-X-Received: by 2002:a92:cac7:0:b0:351:54db:c1c9 with SMTP id m7-20020a92cac7000000b0035154dbc1c9mr594374ilq.1.1695777996416;
-        Tue, 26 Sep 2023 18:26:36 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id y3-20020a92d203000000b0034f3220c086sm2393099ily.12.2023.09.26.18.26.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Sep 2023 18:26:35 -0700 (PDT)
-Message-ID: <cd11111a-321e-3b29-3d7b-8844189f791e@linuxfoundation.org>
-Date:   Tue, 26 Sep 2023 19:26:34 -0600
+        d=1e100.net; s=20230601; t=1695781101; x=1696385901;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IPGwCwd+jVA93ZpKj+iEhwPhKtiUIJB4pw4J1MAfToQ=;
+        b=dXI4UBLYTKhocRB7W0kQ6FpV6QhicpClvEsC+N+4QhD//P2HZTyO2ibRNrFTAcDofi
+         ePaC+1yeOIqhz2PFHjQ+k2O3ONoVhcRr7zcw+7jQ2qfB0EAqFBJjnZKdu7vH8Klbfyku
+         qOfwLM3BeprSeBti3v7qyeByrcy9b0PH/l8Gni/1LorGE2+yn0qWBx25kMrU8HAQOwS+
+         MMQ7d8X6utvFs2Y7Q31hndLHnzkoQDEZi+bE+IOzfFwQAaX8kjmwt/XEVqGSGFU7a/la
+         sCqi3KVhmJ9vCbz37FANlOCGv+6fpCFdnOKGNEn2VByJXXEFiMFdkjTN/nzPLNGj/CyB
+         JQcw==
+X-Gm-Message-State: AOJu0YxBIK7JjFJ4DHydUIaSvfWCd9laoxjD9zcvZzmGZ8N32BpHd/BL
+        PM9CCnUvAm4oLdn3117GrQRqgA==
+X-Google-Smtp-Source: AGHT+IFc9IYBu1zqddIz1v9zc+ox7s0KhsWJsK0q39C+3JTGcAydZYHF9subG7266xmN07b81HJNJA==
+X-Received: by 2002:a05:6358:5e0c:b0:140:f00a:ee2c with SMTP id q12-20020a0563585e0c00b00140f00aee2cmr976215rwn.11.1695781100663;
+        Tue, 26 Sep 2023 19:18:20 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id m10-20020a63940a000000b00584d035c08asm1770824pge.24.2023.09.26.19.18.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Sep 2023 19:18:19 -0700 (PDT)
+Message-ID: <651390eb.630a0220.fc64f.731b@mx.google.com>
+Date:   Tue, 26 Sep 2023 19:18:19 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH] selftests/rseq: fix kselftest Clang build warnings
-Content-Language: en-US
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Justin Stitt <justinstitt@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        llvm@lists.linux.dev, Shuah Khan <skhan@linuxfoundation.org>
-References: <20230912-kselftest-param_test-c-v1-1-80a6cffc7374@google.com>
- <CAFhGd8on9_DJUZqT5uKgPzOtJNn99sY3TprcPzD5pm3GmYx8oQ@mail.gmail.com>
- <eabe9db0-c934-af2d-e5a9-9d644593851c@efficios.com>
- <63dd7222-99dc-8e11-3a51-b132e4115ac5@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <63dd7222-99dc-8e11-3a51-b132e4115ac5@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: fixes
+X-Kernelci-Tree: kselftest
+X-Kernelci-Kernel: linux-kselftest-fixes-6.6-rc4-1-g6f874fa021df
+X-Kernelci-Report-Type: build
+Subject: kselftest/fixes build: 6 builds: 0 failed, 6 passed,
+ 1 warning (linux-kselftest-fixes-6.6-rc4-1-g6f874fa021df)
+To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 9/26/23 14:39, Shuah Khan wrote:
-> On 9/26/23 13:02, Mathieu Desnoyers wrote:
->> On 9/26/23 08:20, Justin Stitt wrote:
->>> Ping.
->>>
->>> Looking to get this patch and [1] slated for 6.7 which fixes some
->>> kselftest builds on older kernels.
->>>
->>> On Wed, Sep 13, 2023 at 6:03 AM Justin Stitt <justinstitt@google.com> wrote:
->>>>
->>>> When building with Clang, I am getting many warnings from the selftests/rseq tree.
->>>>
->>>> Here's one such example from rseq tree:
->>>> |  param_test.c:1234:10: error: address argument to atomic operation must be a pointer to _Atomic type ('intptr_t *' (aka 'long *') invalid)
->>>> |   1234 |         while (!atomic_load(&args->percpu_list_ptr)) {}
->>>> |        |                 ^           ~~~~~~~~~~~~~~~~~~~~~~
->>>> |  /usr/local/google/home/justinstitt/repos/tc-build/build/llvm/final/lib/clang/18/include/stdatomic.h:140:29: note: expanded from macro 'atomic_load'
->>>> |    140 | #define atomic_load(object) __c11_atomic_load(object, __ATOMIC_SEQ_CST)
->>>> |        |                             ^                 ~~~~~~
->>>>
->>>> Use compiler builtins `__atomic_load_n()` and `__atomic_store_n()` with
->>>> accompanying __ATOMIC_ACQUIRE and __ATOMIC_RELEASE, respectively. This
->>>> will fix the warnings because the compiler builtins do not expect their
->>>> arguments to have _Atomic type. This should also make TSAN happier.
->>>>
->>>> Link: https://github.com/ClangBuiltLinux/linux/issues/1698
->>>> Link: https://github.com/ClangBuiltLinux/continuous-integration2/issues/61
->>>> Suggested-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
->>>> Signed-off-by: Justin Stitt <justinstitt@google.com>
->>
->> Reviewed-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
->>
->> Peter, should this go through tip ?
->>
->> Shuah, should to go through selftests ?
->>
-> 
-> I can take this through selftests and apply it - hoping there
-> are no conflicts with what's in Peter's tree.
-> 
+kselftest/fixes build: 6 builds: 0 failed, 6 passed, 1 warning (linux-kself=
+test-fixes-6.6-rc4-1-g6f874fa021df)
 
-Applied to linux-kselftest next for Linux 6.7-rc1
+Full Build Summary: https://kernelci.org/build/kselftest/branch/fixes/kerne=
+l/linux-kselftest-fixes-6.6-rc4-1-g6f874fa021df/
 
-thanks,
--- Shuah
+Tree: kselftest
+Branch: fixes
+Git Describe: linux-kselftest-fixes-6.6-rc4-1-g6f874fa021df
+Git Commit: 6f874fa021dfc7bf37f4f37da3a5aaa41fe9c39c
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
+est.git
+Built: 4 unique architectures
 
+Warnings Detected:
+
+arm64:
+
+arm:
+
+i386:
+
+x86_64:
+    x86_64_defconfig+kselftest (clang-16): 1 warning
+
+
+Warnings summary:
+
+    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to=
+ !ENDBR: .text+0x13950b
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 1 w=
+arning, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to !END=
+BR: .text+0x13950b
+
+---
+For more info write to <info@kernelci.org>
