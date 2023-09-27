@@ -2,95 +2,148 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 693B5E7F150
-	for <linux-kselftest@archiver.kernel.org>; Wed, 27 Sep 2023 02:02:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72645E7F150
+	for <linux-kselftest@archiver.kernel.org>; Wed, 27 Sep 2023 02:42:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230363AbjI0CCp (ORCPT
+        id S235378AbjI0CmT (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 26 Sep 2023 22:02:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39364 "EHLO
+        Tue, 26 Sep 2023 22:42:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234819AbjI0CAo (ORCPT
+        with ESMTP id S235498AbjI0CkS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 Sep 2023 22:00:44 -0400
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAEAD35AE
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Sep 2023 18:18:30 -0700 (PDT)
-Received: by mail-il1-x134.google.com with SMTP id e9e14a558f8ab-351265d0d67so5547315ab.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Sep 2023 18:18:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1695777510; x=1696382310; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pSK45h5LTS9VqkVC57gaj2Wd82aeyGKZrEYe4dJCVic=;
-        b=bxVM6N7U4F+Ynjj38INwi6ASqm3IBKUZ2yJDT7Ckbee+wq9E3UZNBRzyGfQcYS34Zm
-         390zUF6zyX1jXsJs0qezpAIk0Fh/LHYP2jTC2k9Oekg0LvZ2uiw1Xok3H/KHren2K1Kj
-         zuzTpI7pO+/1KMER6qwgrgRDhYD6SZbd/b9wM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695777510; x=1696382310;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pSK45h5LTS9VqkVC57gaj2Wd82aeyGKZrEYe4dJCVic=;
-        b=NV3OvxfSdqqnm8d/YL5eQvmQN0ZJvlESgxIULLahKDviPY8u9/z5x4VIpa0WaIKXY6
-         Y28ljsGzpt/iS2VvGciGnMWTrDsBnG0xS8ZWbX2aY4lUSKSLOw4Eg3sWw31PIs+CKnqt
-         OwCE1W/6KEhiEoU4XtQ74OFtKh5cV9fxnLcpJHlHsTEWYWWsDa3XtLMzkv9ppgoSifen
-         KDHi9Qqk+rQjyGlaW/km4MmOxySLfv2w2fNwlCJGm/XwVqfYDwUbmAo/EyhqAbfWHPui
-         nIuVcTWTpRwjm8KuZ5WGc8fnK/1ZuYgIRobNpuiioBhsDWMypfA5GqfotGRJzydPxdt8
-         Ba6g==
-X-Gm-Message-State: AOJu0YxPCJ9WG1rWWjAzR3TIchtnr5w5YGQHZb9nIVGAF1tVdTv+ECiW
-        uOeAE/cxp9nV+++J767P19luHg==
-X-Google-Smtp-Source: AGHT+IE2jaCutfBvakslg8GPNafee+TlzK+8frCnXrODTVfbk9z1YRbburEMP7cvS9iSP7ZFw0fvlQ==
-X-Received: by 2002:a92:cc46:0:b0:350:f353:4017 with SMTP id t6-20020a92cc46000000b00350f3534017mr614948ilq.0.1695777510062;
-        Tue, 26 Sep 2023 18:18:30 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id y3-20020a92d203000000b0034f3220c086sm2389624ily.12.2023.09.26.18.18.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Sep 2023 18:18:29 -0700 (PDT)
-Message-ID: <fc915b30-5842-5851-bd76-71c2133685b9@linuxfoundation.org>
-Date:   Tue, 26 Sep 2023 19:18:28 -0600
+        Tue, 26 Sep 2023 22:40:18 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E6DD1BC1;
+        Tue, 26 Sep 2023 19:08:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695780492; x=1727316492;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=jiTLn3Vg5DjW5KMS+3IRSYx4PUzUN/fR9h6uUPmnC/8=;
+  b=AZrw6dH8U7x4Wo5ICcGz9XsZq8MRYfi2eCZxpRcFunSZou8NgiaJ9wIT
+   eWBY/vvmEJ/QupUWNm8oam9zC1d8iNdAX8CvdqIZp2BM/D5z7nrWH5Lrw
+   onLk2e4NzX/36ctYz62ScIDa3l5TUXKpYUoLwmeoSFOteCroRpRh2z5QX
+   yZVMuCTJ2r1fxTbo60aU8HuOTGeplDlYk4+XOe7SYSqQiu60REF7VqJLJ
+   9PTe1K0GLcwPEfBmbSJIKl7682pUHpm0pcV33Lg1prVvjsuHlq9yZMVa3
+   euFLEFv3Sz48nJX8G3DqUGhRF90PJI0efPI6Fx/JjDpE9Ipk64lms4zLi
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="361963137"
+X-IronPort-AV: E=Sophos;i="6.03,179,1694761200"; 
+   d="scan'208";a="361963137"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2023 19:08:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.03,179,1694761200"; 
+   d="scan'208";a="373163"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.127]) ([10.239.159.127])
+  by orviesa001.jf.intel.com with ESMTP; 26 Sep 2023 19:07:35 -0700
+Message-ID: <a5e18b46-cccc-a2f7-91ae-aa5c942cd887@linux.intel.com>
+Date:   Wed, 27 Sep 2023 10:04:51 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.15.1
-Subject: Re: [PATCH] selftests: Fix wrong TARGET in kselftest top level
- Makefile
+Cc:     baolu.lu@linux.intel.com, cohuck@redhat.com, eric.auger@redhat.com,
+        nicolinc@nvidia.com, kvm@vger.kernel.org, mjrosato@linux.ibm.com,
+        chao.p.peng@linux.intel.com, yi.y.sun@linux.intel.com,
+        peterx@redhat.com, jasowang@redhat.com,
+        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
+        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        zhenzhong.duan@intel.com, joao.m.martins@oracle.com
+Subject: Re: [RFC 1/8] iommu: Introduce a replace API for device pasid
+To:     Yi Liu <yi.l.liu@intel.com>, joro@8bytes.org,
+        alex.williamson@redhat.com, jgg@nvidia.com, kevin.tian@intel.com,
+        robin.murphy@arm.com
+References: <20230926092651.17041-1-yi.l.liu@intel.com>
+ <20230926092651.17041-2-yi.l.liu@intel.com>
 Content-Language: en-US
-To:     Juntong Deng <juntong.deng@outlook.com>, shuah@kernel.org,
-        mic@digikod.net, brauner@kernel.org, keescook@chromium.org,
-        tony.luck@intel.com, gpiccoli@igalia.com, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-hardening@vger.kernel.org, linux-riscv@lists.infradead.org,
-        bpf@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <VI1P193MB0752596147F224B9F921C85199C3A@VI1P193MB0752.EURP193.PROD.OUTLOOK.COM>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <VI1P193MB0752596147F224B9F921C85199C3A@VI1P193MB0752.EURP193.PROD.OUTLOOK.COM>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20230926092651.17041-2-yi.l.liu@intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 9/26/23 12:03, Juntong Deng wrote:
-> The 'uevents' subdirectory does not exist in tools/testing/selftests/
-> and adding 'uevents' to the TARGETS list results in the following error:
+On 9/26/23 5:26 PM, Yi Liu wrote:
+> From: Lu Baolu <baolu.lu@linux.intel.com>
 > 
-> make[1]: Entering directory 'xx/tools/testing/selftests/uevents'
-> make[1]: *** No targets specified and no makefile found. Stop.
-> make[1]: Leaving directory 'xx/tools/testing/selftests/uevents'
+> Provide a high-level API to allow replacements of one domain with
+> another for specific pasid of a device. This is similar to
+> iommu_group_replace_domain() and it is also expected to be used
+> only by IOMMUFD.
 > 
-> What actually exists in tools/testing/selftests/ is the 'uevent'
-> subdirectory.
-> 
-> Signed-off-by: Juntong Deng <juntong.deng@outlook.com>
+> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+> Signed-off-by: Yi Liu <yi.l.liu@intel.com>
 > ---
+>   drivers/iommu/iommu-priv.h |  2 ++
+>   drivers/iommu/iommu.c      | 73 ++++++++++++++++++++++++++++++--------
+>   2 files changed, 60 insertions(+), 15 deletions(-)
+> 
 
-Thank you. Applied now to linux-kselftest fixes for the next rc
+[...]
 
-thanks,
--- Shuah
+> @@ -3433,8 +3443,8 @@ EXPORT_SYMBOL_GPL(iommu_attach_device_pasid);
+>    * The @domain must have been attached to @pasid of the @dev with
+>    * iommu_attach_device_pasid().
+>    */
+> -void iommu_detach_device_pasid(struct iommu_domain *domain, struct device *dev,
+> -			       ioasid_t pasid)
+> +void iommu_detach_device_pasid(struct iommu_domain *domain,
+> +			       struct device *dev, ioasid_t pasid)
 
+Above change is irrelevant.
+
+>   {
+>   	struct iommu_group *group = iommu_group_get(dev);
+>   
+> @@ -3447,6 +3457,39 @@ void iommu_detach_device_pasid(struct iommu_domain *domain, struct device *dev,
+>   }
+>   EXPORT_SYMBOL_GPL(iommu_detach_device_pasid);
+>   
+> +/**
+> + * iommu_replace_device_pasid - replace the domain that a pasid is attached to
+> + * @domain: new IOMMU domain to replace with
+> + * @dev: the physical device
+> + * @pasid: pasid that will be attached to the new domain
+> + *
+> + * This API allows the pasid to switch domains. Return 0 on success, or an
+> + * error. The pasid will roll back to use the old domain if failure. The
+> + * caller could call iommu_detach_device_pasid() before free the old domain
+> + * in order to avoid use-after-free case.
+
+The comment does not match the actual behavior of the code. We need to
+discuss and agree on which state the PASID should park in if replacing
+the domain fails.
+
+> + */
+> +int iommu_replace_device_pasid(struct iommu_domain *domain,
+> +			       struct device *dev, ioasid_t pasid)
+> +{
+> +	struct iommu_group *group = dev->iommu_group;
+> +	int ret;
+> +
+> +	if (!domain)
+> +		return -EINVAL;
+> +
+> +	if (!group)
+> +		return -ENODEV;
+> +
+> +	mutex_lock(&group->mutex);
+> +	__iommu_remove_group_pasid(group, pasid);
+> +	xa_erase(&group->pasid_array, pasid);
+> +	ret = __iommu_group_attach_pasid(domain, group, pasid);
+> +	mutex_unlock(&group->mutex);
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_NS_GPL(iommu_replace_device_pasid, IOMMUFD_INTERNAL);
+> +
+>   /*
+>    * iommu_get_domain_for_dev_pasid() - Retrieve domain for @pasid of @dev
+>    * @dev: the queried device
+
+Best regards,
+baolu
