@@ -2,39 +2,37 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CBFC9E810AD
-	for <linux-kselftest@archiver.kernel.org>; Wed, 27 Sep 2023 09:04:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59C86E810A8
+	for <linux-kselftest@archiver.kernel.org>; Wed, 27 Sep 2023 09:04:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230084AbjI0JE0 (ORCPT
+        id S230165AbjI0JEs (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 27 Sep 2023 05:04:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43484 "EHLO
+        Wed, 27 Sep 2023 05:04:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230085AbjI0JE0 (ORCPT
+        with ESMTP id S229531AbjI0JEs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 27 Sep 2023 05:04:26 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 451ABBF
-        for <linux-kselftest@vger.kernel.org>; Wed, 27 Sep 2023 02:04:24 -0700 (PDT)
-Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4RwVvC1hclzMlvM;
-        Wed, 27 Sep 2023 17:00:39 +0800 (CST)
+        Wed, 27 Sep 2023 05:04:48 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB62CC
+        for <linux-kselftest@vger.kernel.org>; Wed, 27 Sep 2023 02:04:46 -0700 (PDT)
+Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4RwVwp6gPkz15NTr;
+        Wed, 27 Sep 2023 17:02:02 +0800 (CST)
 Received: from huawei.com (10.90.53.73) by kwepemi500008.china.huawei.com
  (7.221.188.139) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Wed, 27 Sep
- 2023 17:04:21 +0800
+ 2023 17:04:17 +0800
 From:   Jinjie Ruan <ruanjinjie@huawei.com>
 To:     <brendan.higgins@linux.dev>, <davidgow@google.com>,
         <skhan@linuxfoundation.org>, <dlatypov@google.com>,
         <rmoar@google.com>, <janusz.krzysztofik@linux.intel.com>,
         <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>
 CC:     <ruanjinjie@huawei.com>
-Subject: [PATCH v4 3/4] kunit: Fix possible memory leak in kunit_filter_suites()
-Date:   Wed, 27 Sep 2023 17:03:49 +0800
-Message-ID: <20230927090350.1220972-4-ruanjinjie@huawei.com>
+Subject: [PATCH v4 0/4] kunit: Fix some bugs in kunit
+Date:   Wed, 27 Sep 2023 17:03:46 +0800
+Message-ID: <20230927090350.1220972-1-ruanjinjie@huawei.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230927090350.1220972-1-ruanjinjie@huawei.com>
-References: <20230927090350.1220972-1-ruanjinjie@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -46,84 +44,42 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-If the outer layer for loop is iterated more than once and it fails not
-in the first iteration, the filtered_suite and filtered_suite->test_cases
-allocated in the last kunit_filter_attr_tests() in last inner for loop
-is leaked.
+The test_cases is not freed in kunit_free_suite_set().
 
-So add a new free_filtered_suite err label and free the filtered_suite
-and filtered_suite->test_cases so far. And change kmalloc_array of copy
-to kcalloc to Clear the copy to make the kfree safe.
+And the copy pointer may be moved in kunit_filter_suites().
 
-Fixes: 529534e8cba3 ("kunit: Add ability to filter attributes")
-Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
-Reviewed-by: Rae Moar <rmoar@google.com>
-Reviewed-by: David Gow <davidgow@google.com>
----
-v4:
+The filtered_suite and filtered_suite->test_cases allocated in the last
+kunit_filter_attr_tests() in last inner for loop may be leaked if
+kunit_filter_suites() fails.
+
+If kunit_filter_suites() succeeds, not only copy but also filtered_suite
+and filtered_suite->test_cases should be freed.
+
+Changes in v4:
+- Make free_suite_set() take a void * for the 4th patch.
+- Add Suggested-by and Reviewed-by.
 - Correct the fix tag.
-- Add Reviewed-by.
-v2:
-- Add Reviewed-by.
----
- lib/kunit/executor.c | 17 +++++++++++++----
- 1 file changed, 13 insertions(+), 4 deletions(-)
 
-diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-index 9358ed2df839..1236b3cd2fbb 100644
---- a/lib/kunit/executor.c
-+++ b/lib/kunit/executor.c
-@@ -157,10 +157,11 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
- 	struct kunit_suite_set filtered = {NULL, NULL};
- 	struct kunit_glob_filter parsed_glob;
- 	struct kunit_attr_filter *parsed_filters = NULL;
-+	struct kunit_suite * const *suites;
- 
- 	const size_t max = suite_set->end - suite_set->start;
- 
--	copy = kmalloc_array(max, sizeof(*filtered.start), GFP_KERNEL);
-+	copy = kcalloc(max, sizeof(*filtered.start), GFP_KERNEL);
- 	if (!copy) { /* won't be able to run anything, return an empty set */
- 		return filtered;
- 	}
-@@ -195,7 +196,7 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
- 					parsed_glob.test_glob);
- 			if (IS_ERR(filtered_suite)) {
- 				*err = PTR_ERR(filtered_suite);
--				goto free_parsed_filters;
-+				goto free_filtered_suite;
- 			}
- 		}
- 		if (filter_count > 0 && parsed_filters != NULL) {
-@@ -212,11 +213,11 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
- 				filtered_suite = new_filtered_suite;
- 
- 				if (*err)
--					goto free_parsed_filters;
-+					goto free_filtered_suite;
- 
- 				if (IS_ERR(filtered_suite)) {
- 					*err = PTR_ERR(filtered_suite);
--					goto free_parsed_filters;
-+					goto free_filtered_suite;
- 				}
- 				if (!filtered_suite)
- 					break;
-@@ -231,6 +232,14 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
- 	filtered.start = copy_start;
- 	filtered.end = copy;
- 
-+free_filtered_suite:
-+	if (*err) {
-+		for (suites = copy_start; suites < copy; suites++) {
-+			kfree((*suites)->test_cases);
-+			kfree(*suites);
-+		}
-+	}
-+
- free_parsed_filters:
- 	if (filter_count)
- 		kfree(parsed_filters);
+Changes in v3:
+- Update the kfree_at_end() to use kunit_free_suite_set() for 4th patch.
+- Update the commit message for the 4th patch.
+
+Changes in v2:
+- Add Reviewed-by.
+- Add the memory leak backtrace for the 4th patch.
+- Remove the unused func kernel test robot noticed for the 4th patch.
+- Update the commit message for the 4th patch.
+
+Jinjie Ruan (4):
+  kunit: Fix missed memory release in kunit_free_suite_set()
+  kunit: Fix the wrong kfree of copy for kunit_filter_suites()
+  kunit: Fix possible memory leak in kunit_filter_suites()
+  kunit: test: Fix the possible memory leak in executor_test
+
+ lib/kunit/executor.c      | 23 +++++++++++++++++------
+ lib/kunit/executor_test.c | 36 ++++++++++++++++++++++--------------
+ 2 files changed, 39 insertions(+), 20 deletions(-)
+
 -- 
 2.34.1
 
