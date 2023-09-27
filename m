@@ -2,169 +2,179 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0531BE810DA
-	for <linux-kselftest@archiver.kernel.org>; Wed, 27 Sep 2023 13:30:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76881E80AAD
+	for <linux-kselftest@archiver.kernel.org>; Wed, 27 Sep 2023 14:02:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231940AbjI0NaZ (ORCPT
+        id S232041AbjI0OCp (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 27 Sep 2023 09:30:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37340 "EHLO
+        Wed, 27 Sep 2023 10:02:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231921AbjI0NaY (ORCPT
+        with ESMTP id S231758AbjI0OCo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 27 Sep 2023 09:30:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADFC611D
-        for <linux-kselftest@vger.kernel.org>; Wed, 27 Sep 2023 06:29:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1695821380;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=G2hv5CuQPn74NEvKQKxD/ubIeG0HKIdGdn5RcarEG6U=;
-        b=HuXzarHLLaxmu+0QeI+x89WfBtKFV5HJIfdWwxTFAciKzgp0yBdMFQwgJ1x0wNVMt3rUpt
-        C8R9HuZ9gx5l2KDovxmd+CHId8020Biep4kWwa7/SiKefI9QSMjNOynxpiXSubNMjkacbs
-        G/jAAxMlcDoGKJANNvF7BrkdAXvRl68=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-659-mJTADcSHMje6DqO7g6oAEQ-1; Wed, 27 Sep 2023 09:29:38 -0400
-X-MC-Unique: mJTADcSHMje6DqO7g6oAEQ-1
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-40642a1e13bso15955095e9.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 27 Sep 2023 06:29:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695821378; x=1696426178;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :content-language:references:cc:to:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=G2hv5CuQPn74NEvKQKxD/ubIeG0HKIdGdn5RcarEG6U=;
-        b=TfKx2Ec4KVc0gWsASzATc95f2NYJtGyI5TZN22Hx4PjUYuWuGGMWF34xySBcvVr1mG
-         +QkXJjrWo+sCuF49Kwn+zDOCHWFk/cNdN5kNDWzel2ikmzV0QcKJCNDOZAq9P3aA8gas
-         FEnwpNe0lB5VoOtI0T0krBjOK1s6TTRY7LjmTirXdpEAKCgMG4XUNEUJH7/tXjvJ7ySS
-         sOYcIL+wkgYmHhiR23oigizxhuIJ6gcxyJFjVoKxmP5hC2+cBnYoZahSflTFk1n6JfAu
-         yNeNzV9r7nZ8oDRRwbfvBECU8yE+ShmSowz8GvIy4DJg+PBqV9l7gu+JglJoYaJ66ze5
-         vSrQ==
-X-Gm-Message-State: AOJu0YxRxXQpphspsDBqWjuQKaZWQc3tohZz1QEkhaHbUUYyDqyAp1EC
-        CQj0Y37PtW4YORgMQADGA/GV2W2eALFC35VHXURunZCcvz4RwsFaUo8SVSeI4LQ9wW9lc2ZW0j2
-        Jb3uA20Z7txOQ2y2IJozAmv1DNLl8
-X-Received: by 2002:a7b:c8cd:0:b0:405:3a63:6d12 with SMTP id f13-20020a7bc8cd000000b004053a636d12mr1881899wml.17.1695821377606;
-        Wed, 27 Sep 2023 06:29:37 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEmM/Vcbhyu+gFvAqhqp6gDueEI1OOogKEfv68sNWi+zB+gBfd/bHDtz9MAW7eJXY1rkpiOgg==
-X-Received: by 2002:a7b:c8cd:0:b0:405:3a63:6d12 with SMTP id f13-20020a7bc8cd000000b004053a636d12mr1881872wml.17.1695821377080;
-        Wed, 27 Sep 2023 06:29:37 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c749:6900:3a06:bd5:2f7b:e6eb? (p200300cbc74969003a060bd52f7be6eb.dip0.t-ipconnect.de. [2003:cb:c749:6900:3a06:bd5:2f7b:e6eb])
-        by smtp.gmail.com with ESMTPSA id u2-20020a05600c210200b004063d8b43e7sm3920879wml.48.2023.09.27.06.29.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Sep 2023 06:29:36 -0700 (PDT)
-Message-ID: <03f95e90-82bd-6ee2-7c0d-d4dc5d3e15ee@redhat.com>
-Date:   Wed, 27 Sep 2023 15:29:35 +0200
+        Wed, 27 Sep 2023 10:02:44 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2087.outbound.protection.outlook.com [40.107.6.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1936121;
+        Wed, 27 Sep 2023 07:02:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cEphZ7FSAyhFA2gyPB5fSFck49IXGee0EHT1BdmiAgY=;
+ b=5Ab4Y5tzLAGhgDjLLGh54MhvwGmLAs1NyAVkA4UIK2grMeKrZg1hlmV1TVwfHLz7stzrZtPXP/KVM9hjDUkKnCjoD9BoSXP8/D+EcWMiyE3vDM3S39FsaSpgRmAyWHzccOBRaw7rvQBaKEK8I0REHfDX3Djm9X+ASieBGS/OUtc=
+Received: from AS9P251CA0007.EURP251.PROD.OUTLOOK.COM (2603:10a6:20b:50f::9)
+ by PAVPR08MB9061.eurprd08.prod.outlook.com (2603:10a6:102:325::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6813.28; Wed, 27 Sep
+ 2023 14:02:39 +0000
+Received: from AM7EUR03FT045.eop-EUR03.prod.protection.outlook.com
+ (2603:10a6:20b:50f:cafe::78) by AS9P251CA0007.outlook.office365.com
+ (2603:10a6:20b:50f::9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6838.21 via Frontend
+ Transport; Wed, 27 Sep 2023 14:02:39 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
+ smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
+ client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
+ pr=C
+Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
+ AM7EUR03FT045.mail.protection.outlook.com (100.127.140.150) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6838.22 via Frontend Transport; Wed, 27 Sep 2023 14:02:39 +0000
+Received: ("Tessian outbound fb5c0777b309:v211"); Wed, 27 Sep 2023 14:02:39 +0000
+X-CheckRecipientChecked: true
+X-CR-MTA-CID: fa27c0bf9af9bd5d
+X-CR-MTA-TID: 64aa7808
+Received: from 2ea7227955ac.1
+        by 64aa7808-outbound-1.mta.getcheckrecipient.com id C42703F0-08CF-4811-87E8-7D027541B34C.1;
+        Wed, 27 Sep 2023 14:01:49 +0000
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com
+    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id 2ea7227955ac.1
+    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
+    Wed, 27 Sep 2023 14:01:49 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VhY2LWKO9C0VvSLR6ovgW5y7O832Bb3a8WKiXY9XO+tZtQD7bWTiGpkZLfQMuONPwqVl3t1Uaaohnc+yrURC5FspKo4zx9arUz8ltzgYaIfXD+AJtR6zpCUiZA6a330Oj4nosz5s+MSpEo1webgnU2nO7EvLrwoBu8sF087ncNpAoX6V/tKBSuziL4MkeGKnMoZEbz3flI8ERmeVfWubwptH/8Qgdzi3MH4zlLKRw098iMx74S7jUKKq0OnNHPyKilyiua8Q9gmry3ZEsP3ZitkKoz0OaM2kiAWfKrOFyg7dmN58fr43lbMei6jaBsSjCrh0b/marAfbsgKkyArWdQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cEphZ7FSAyhFA2gyPB5fSFck49IXGee0EHT1BdmiAgY=;
+ b=ehHhM1heIzlzjpIs/Uha3TjD1IEgUssuYpWuHfsOa5b5u5nJAuIlKCz8LeJr1nlXYx0J12dl2oZTYGDkFzRCHRbz4ugfzESDkKZYxwssdeLV9DdsQTycOMI1JwXlYo9Qvc9ZTCj+bZgi11cnAJbmbER022U1eW1VGZdYlCBMnPmY804rI1ny+DlxppyB8iUlPO967P4kQA7juhu2E891Lo5oAV48B0O2xsyhfy+4wk0jhtyjHgM/4K3QStLuhbQd6pygBObhvBaVJi1QEwOFJeN4Rc40L0HCWLzyBCyn4t8kKCRnNUllg9RpjOjkNwG9d9S+8HLV476l8OwvHQSNGA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 40.67.248.234) smtp.rcpttodomain=lists.infradead.org smtp.mailfrom=arm.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=arm.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cEphZ7FSAyhFA2gyPB5fSFck49IXGee0EHT1BdmiAgY=;
+ b=5Ab4Y5tzLAGhgDjLLGh54MhvwGmLAs1NyAVkA4UIK2grMeKrZg1hlmV1TVwfHLz7stzrZtPXP/KVM9hjDUkKnCjoD9BoSXP8/D+EcWMiyE3vDM3S39FsaSpgRmAyWHzccOBRaw7rvQBaKEK8I0REHfDX3Djm9X+ASieBGS/OUtc=
+Received: from DB9PR05CA0013.eurprd05.prod.outlook.com (2603:10a6:10:1da::18)
+ by AS2PR08MB8718.eurprd08.prod.outlook.com (2603:10a6:20b:55e::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6838.21; Wed, 27 Sep
+ 2023 14:01:47 +0000
+Received: from DBAEUR03FT051.eop-EUR03.prod.protection.outlook.com
+ (2603:10a6:10:1da:cafe::e7) by DB9PR05CA0013.outlook.office365.com
+ (2603:10a6:10:1da::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6838.21 via Frontend
+ Transport; Wed, 27 Sep 2023 14:01:47 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 40.67.248.234)
+ smtp.mailfrom=arm.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 40.67.248.234 as permitted sender) receiver=protection.outlook.com;
+ client-ip=40.67.248.234; helo=nebula.arm.com; pr=C
+Received: from nebula.arm.com (40.67.248.234) by
+ DBAEUR03FT051.mail.protection.outlook.com (100.127.142.148) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6838.21 via Frontend Transport; Wed, 27 Sep 2023 14:01:47 +0000
+Received: from AZ-NEU-EX02.Emea.Arm.com (10.251.26.5) by AZ-NEU-EX03.Arm.com
+ (10.251.24.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Wed, 27 Sep
+ 2023 14:01:39 +0000
+Received: from AZ-NEU-EX03.Arm.com (10.251.24.31) by AZ-NEU-EX02.Emea.Arm.com
+ (10.251.26.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Wed, 27 Sep
+ 2023 14:01:38 +0000
+Received: from e124191.cambridge.arm.com (10.1.197.45) by mail.arm.com
+ (10.251.24.31) with Microsoft SMTP Server id 15.1.2507.27 via Frontend
+ Transport; Wed, 27 Sep 2023 14:01:38 +0000
+From:   Joey Gouly <joey.gouly@arm.com>
+To:     <linux-arm-kernel@lists.infradead.org>
+CC:     <nd@arm.com>, <akpm@linux-foundation.org>,
+        <aneesh.kumar@linux.ibm.com>, <catalin.marinas@arm.com>,
+        <dave.hansen@linux.intel.com>, <joey.gouly@arm.com>,
+        <maz@kernel.org>, <oliver.upton@linux.dev>, <shuah@kernel.org>,
+        <will@kernel.org>, <kvmarm@lists.linux.dev>,
+        <linux-fsdevel@vger.kernel.org>, <linux-mm@kvack.org>,
+        <linux-kselftest@vger.kernel.org>
+Subject: [PATCH v1 10/20] arm64: mask out POIndex when modifying a PTE
+Date:   Wed, 27 Sep 2023 15:01:13 +0100
+Message-ID: <20230927140123.5283-11-joey.gouly@arm.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230927140123.5283-1-joey.gouly@arm.com>
+References: <20230927140123.5283-1-joey.gouly@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-To:     Jann Horn <jannh@google.com>,
-        Suren Baghdasaryan <surenb@google.com>
-Cc:     akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
-        brauner@kernel.org, shuah@kernel.org, aarcange@redhat.com,
-        lokeshgidra@google.com, peterx@redhat.com, hughd@google.com,
-        mhocko@suse.com, axelrasmussen@google.com, rppt@kernel.org,
-        willy@infradead.org, Liam.Howlett@oracle.com,
-        zhangpeng362@huawei.com, bgeffon@google.com,
-        kaleshsingh@google.com, ngeoffray@google.com, jdduke@google.com,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kernel-team@android.com
-References: <20230923013148.1390521-1-surenb@google.com>
- <20230923013148.1390521-3-surenb@google.com>
- <CAG48ez1N2kryy08eo0dcJ5a9O-3xMT8aOrgrcD+CqBN=cBfdDw@mail.gmail.com>
-Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v2 2/3] userfaultfd: UFFDIO_REMAP uABI
-In-Reply-To: <CAG48ez1N2kryy08eo0dcJ5a9O-3xMT8aOrgrcD+CqBN=cBfdDw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic: DBAEUR03FT051:EE_|AS2PR08MB8718:EE_|AM7EUR03FT045:EE_|PAVPR08MB9061:EE_
+X-MS-Office365-Filtering-Correlation-Id: a6a19a76-a5ab-49a6-0b60-08dbbf626940
+x-checkrecipientrouted: true
+NoDisclaimer: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original: AhozLqvD/pQmxSKeVXhotmDCw+96hsgWioF2MeqpnGubt2mzspKsM9RprcSvKVCF+naCllJlaYBncoVfcj6kPfD1yt8fKpH+d/OEcQ0OyYEmrZBxgSznTdnXtgmtYu5jozqaMXE2OKfPUnuRl9FzL9lhtfP5IGJNh2jDlOZxeYoYkYuSzY5X4HzPnWEqQ7q5gPYCO8wyhfpPR8mdau4tPyH4/7PPwD/dtvSujvNL78lc4fIEf7vSwnarLA/YSdFjEt6CGSy1enWJV06xs5ZEGarT63G2YIWQPmhLPBZYWwzaUnS7Dt7eyR7OwbamkgdDIXGYiV/lSx42TGkcggHegqjzVci7fWVLDKtTUx+tIOHChzOINrqK+AMZcY2uWBw6ne3AOcvsjJeS3REZDB1ZxSjYXQ1Um1ncKHALU1GecvqF7DwZIZxjWWxnmLVKMCT1NVFJuPRzQpv64vHIKTRz5YNJUBQ8SPgR/363AUn7szDrl5tsFlEs3gBgT0lyAt8tKMd3TWjpTN2Vb03gsImSAQkzfjurRM2SW19ya6iziLYuGgQ7mHpEW/b4wKmZ08/5XgKl4242g2vf6HzGdFlZG4h/nsaa0Hv4dHOvqm3IxMc5mrS2SDmEEIs5V1wqEAjP8Fm5XrOVjnEv1pV37QNuC6oEzsbejoDu60ShhTj0R1BWyfcPLKk8QxfIoZy/ku8bkcZkEpMeZFwChtQqSaFHR92Dr9laUnhhQJHyZFOps09WgdzfheMthAreK1a564uM7BQo2oSF6aMEKEC3G5S9FQ==
+X-Forefront-Antispam-Report-Untrusted: CIP:40.67.248.234;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:nebula.arm.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(136003)(376002)(346002)(396003)(39860400002)(230922051799003)(82310400011)(186009)(1800799009)(451199024)(46966006)(40470700004)(36840700001)(40460700003)(44832011)(7696005)(6666004)(70206006)(81166007)(356005)(2616005)(70586007)(6916009)(54906003)(316002)(478600001)(86362001)(36860700001)(47076005)(426003)(336012)(82740400003)(1076003)(83380400001)(26005)(5660300002)(40480700001)(41300700001)(36756003)(4326008)(2906002)(8676002)(8936002)(7416002)(36900700001);DIR:OUT;SFP:1101;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS2PR08MB8718
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: AM7EUR03FT045.eop-EUR03.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs: b42636de-6186-4c5e-744e-08dbbf6249ec
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: PH4biOUt2iy0TDFyFUx3mkSmrX1WhS6Vyvuh0FeQUjo0VTnWBZyJ9nzeQFhYaCU79uneMGhwEZUh6xZTzB+VNYb6hvf1dcKNjgAKoS8IQLUvoKH+RXHFWfnmSfHzB4VgOUBTBBv4xI0YIP3xnqNVVffm/NMMTDf3L2DsLpe8DClxrCGzgD8xNQwL+jjsVns3l/RnYapUnnHxazmFCUrFNWGKbVkOX2iK8M6ow1nMwKPvmN39ANrkYQHgy9Hp9x2Kk1ZdURiez+iY/CKag+5UTI3UrzNXFxP4q6/L4QAMYtmoYbUraCsZwhYh3K8t3mt0b9aVa07B8b/MmWkf7bPKMrRCV11Vn75gTdBYo+edsKBHCy+yoctzhP8UMiKn9YQFxfoEjJ8l4k5SD5A6WQDV1AoftLhrCc1HpJ5rA+FzZmlKVNSLjQ6oS8595ILG82Q9lnG5rvJpu0jjpA5WMlYNDMRgP28GFFImAoq4uu2ja/0wZHtLu+B+DHhU0jF+fNCUcwIXbXdBO2aWHUJGah0rpxGG/dEnVpslmE0dP14r2LZm7S5O2rUKyfCbSNUqi7zdpWZ8AqIsSGni5gKwnUFJ2tbwPItwFmnRNhdT7rqHw0OkTV24pt7VKayTiknXez8+p1ef5p42AUsDuUkejPrT02Z9xsVGIMZ4kuK4ln+frjmWA834mk2tbJFmdEhZhiF8lm9S/+obe2TnAWWSBS5/GUc5lOpgvR5b3P4uoH00fqibNudYoxlhxTIm4GSzFI9Z
+X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230031)(4636009)(136003)(39860400002)(396003)(346002)(376002)(230922051799003)(451199024)(82310400011)(1800799009)(186009)(46966006)(40470700004)(36840700001)(83380400001)(7696005)(6666004)(2616005)(40460700003)(86362001)(36756003)(40480700001)(81166007)(36860700001)(82740400003)(336012)(426003)(2906002)(8676002)(26005)(478600001)(47076005)(1076003)(8936002)(6862004)(4326008)(5660300002)(41300700001)(450100002)(44832011)(316002)(70206006)(54906003)(70586007);DIR:OUT;SFP:1101;
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Sep 2023 14:02:39.5781
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a6a19a76-a5ab-49a6-0b60-08dbbf626940
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
+X-MS-Exchange-CrossTenant-AuthSource: AM7EUR03FT045.eop-EUR03.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAVPR08MB9061
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
->> +static int remap_anon_pte(struct mm_struct *dst_mm, struct mm_struct *src_mm,
->> +                         struct vm_area_struct *dst_vma,
->> +                         struct vm_area_struct *src_vma,
->> +                         unsigned long dst_addr, unsigned long src_addr,
->> +                         pte_t *dst_pte, pte_t *src_pte,
->> +                         pte_t orig_dst_pte, pte_t orig_src_pte,
->> +                         spinlock_t *dst_ptl, spinlock_t *src_ptl,
->> +                         struct folio *src_folio)
->> +{
->> +       struct anon_vma *dst_anon_vma;
->> +
->> +       double_pt_lock(dst_ptl, src_ptl);
->> +
->> +       if (!pte_same(*src_pte, orig_src_pte) ||
->> +           !pte_same(*dst_pte, orig_dst_pte) ||
->> +           folio_test_large(src_folio) ||
->> +           folio_estimated_sharers(src_folio) != 1) {
+When a PTE is modified, the POIndex must be masked off so that it can be modified.
 
-^ here you should check PageAnonExclusive. Please get rid of any 
-implicit explicit/implcit mapcount checks.
+Signed-off-by: Joey Gouly <joey.gouly@arm.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+---
+ arch/arm64/include/asm/pgtable.h | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
->> +               double_pt_unlock(dst_ptl, src_ptl);
->> +               return -EAGAIN;
->> +       }
->> +
->> +       BUG_ON(!folio_test_anon(src_folio));
->> +
->> +       dst_anon_vma = (void *)dst_vma->anon_vma + PAGE_MAPPING_ANON;
->> +       WRITE_ONCE(src_folio->mapping,
->> +                  (struct address_space *) dst_anon_vma);
-
-I have some cleanups pending for page_move_anon_rmap(), that moves the 
-SetPageAnonExclusive hunk out. Here we should be using 
-page_move_anon_rmap() [or rather, folio_move_anon_rmap() after my cleanups]
-
-I'll send them out soonish.
-
->> +       WRITE_ONCE(src_folio->index, linear_page_index(dst_vma,
->> +                                                     dst_addr)); >> +
->> +       orig_src_pte = ptep_clear_flush(src_vma, src_addr, src_pte);
->> +       orig_dst_pte = mk_pte(&src_folio->page, dst_vma->vm_page_prot);
->> +       orig_dst_pte = maybe_mkwrite(pte_mkdirty(orig_dst_pte),
->> +                                    dst_vma);
-> 
-> I think there's still a theoretical issue here that you could fix by
-> checking for the AnonExclusive flag, similar to the huge page case.
-> 
-> Consider the following scenario:
-> 
-> 1. process P1 does a write fault in a private anonymous VMA, creating
-> and mapping a new anonymous page A1
-> 2. process P1 forks and creates two children P2 and P3. afterwards, A1
-> is mapped in P1, P2 and P3 as a COW page, with mapcount 3.
-> 3. process P1 removes its mapping of A1, dropping its mapcount to 2.
-> 4. process P2 uses vmsplice() to grab a reference to A1 with get_user_pages()
-> 5. process P2 removes its mapping of A1, dropping its mapcount to 1.
-> 
-> If at this point P3 does a write fault on its mapping of A1, it will
-> still trigger copy-on-write thanks to the AnonExclusive mechanism; and
-> this is necessary to avoid P3 mapping A1 as writable and writing data
-> into it that will become visible to P2, if P2 and P3 are in different
-> security contexts.
-> 
-> But if P3 instead moves its mapping of A1 to another address with
-> remap_anon_pte() which only does a page mapcount check, the
-> maybe_mkwrite() will directly make the mapping writable, circumventing
-> the AnonExclusive mechanism.
-> 
-
-Yes, can_change_pte_writable() contains the exact logic when we can turn 
-something easily writable even if it wasn't writable before. which 
-includes that PageAnonExclusive is set. (but with uffd-wp or softdirty 
-tracking, there is more to consider)
-
+diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+index 7f7d9b1df4e5..98ccfda05716 100644
+--- a/arch/arm64/include/asm/pgtable.h
++++ b/arch/arm64/include/asm/pgtable.h
+@@ -818,9 +818,10 @@ static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
+ 	 * Normal and Normal-Tagged are two different memory types and indices
+ 	 * in MAIR_EL1. The mask below has to include PTE_ATTRINDX_MASK.
+ 	 */
+-	const pteval_t mask = PTE_USER | PTE_PXN | PTE_UXN | PTE_RDONLY |
++	pteval_t mask = PTE_USER | PTE_PXN | PTE_UXN | PTE_RDONLY |
+ 			      PTE_PROT_NONE | PTE_VALID | PTE_WRITE | PTE_GP |
+-			      PTE_ATTRINDX_MASK;
++			      PTE_ATTRINDX_MASK | PTE_PO_IDX_MASK;
++
+ 	/* preserve the hardware dirty information */
+ 	if (pte_hw_dirty(pte))
+ 		pte = set_pte_bit(pte, __pgprot(PTE_DIRTY));
 -- 
-Cheers,
-
-David / dhildenb
+2.25.1
 
