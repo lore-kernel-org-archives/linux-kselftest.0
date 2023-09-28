@@ -2,44 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57D76CE7B04
-	for <linux-kselftest@archiver.kernel.org>; Thu, 28 Sep 2023 07:15:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 41C76CE7B08
+	for <linux-kselftest@archiver.kernel.org>; Thu, 28 Sep 2023 07:15:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230401AbjI1HPi (ORCPT
+        id S231183AbjI1HPj (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 28 Sep 2023 03:15:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36400 "EHLO
+        Thu, 28 Sep 2023 03:15:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231271AbjI1HPe (ORCPT
+        with ESMTP id S231246AbjI1HPd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 28 Sep 2023 03:15:34 -0400
+        Thu, 28 Sep 2023 03:15:33 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53018CC1;
-        Thu, 28 Sep 2023 00:15:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC041B2;
+        Thu, 28 Sep 2023 00:15:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695885333; x=1727421333;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=2u453SswpKakc0NOsEhGqMN9HDyZwW3XZ2U2N48J7YQ=;
-  b=bRsbCqsjStpeOY40igeSQZ4spXGTYYTWuUKvdeoYZs62TCLPt1YULpgU
-   LcKQPS7tc4INFyeVZhEMPsvc9BXZMNgqnIXKONItbL11a8Zh8T7345ynp
-   1wEE/kjYSNqRY5pRgi/8XYqgNVZ4m0zOiJr6L61mce8sZ3AtrgIWKqUkn
-   HFo8kGxEZrZN3cxXWF3GWyQjgdknUCxvW+eUzduk7P1c7hC20amszj/P/
-   5YwivSCByqLcL9lF6geeltn3HpV0G4vpXCzw9I8mT5e6jyjs6H0N9Nqwb
-   dpf0iT+5ps/bGvNWsFuXOXIsikcYVroESs/YiFlbejQCvt8DD+aaZazs9
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10846"; a="412914835"
+  t=1695885331; x=1727421331;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Wn3wXR37JoGGgItNRNp+OOoXXPlkBH9261CwXM5sCbI=;
+  b=jI8IrMhYRBlshiNNQKlu4aWa2NYg4d++uIhmAsDBi0B6EanfrnPaCPje
+   d4gaMzQR7+I/3C2aYyI4ppDn/TdaKA/9hywDGI/+MUVhg6MKnVPSRevnx
+   /CBJiHGJreHMi8SIZi34E6XgUrNyIIZbTwW+BAXe1a1srZFl73Rzso0WK
+   7vc2TfGebw+CnzouT/s3b365CTCQu8qXfimcdWU0MbsGE93SE+lF7Moay
+   KJZECdfsOVvtqgEBVfiBX9uBtlrk65qaFX4gKRZzDgGhbEshd0TxvS7Im
+   bFBAubR1lS6NDqokWwelF6d3OlNm9Ueoek1LghDLr6tTlSkom6GXGTxnx
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10846"; a="412914813"
 X-IronPort-AV: E=Sophos;i="6.03,183,1694761200"; 
-   d="scan'208";a="412914835"
+   d="scan'208";a="412914813"
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2023 00:15:32 -0700
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2023 00:15:30 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10846"; a="784601980"
+X-IronPort-AV: E=McAfee;i="6600,9927,10846"; a="784601954"
 X-IronPort-AV: E=Sophos;i="6.03,183,1694761200"; 
-   d="scan'208";a="784601980"
+   d="scan'208";a="784601954"
 Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by orsmga001.jf.intel.com with ESMTP; 28 Sep 2023 00:15:32 -0700
+  by orsmga001.jf.intel.com with ESMTP; 28 Sep 2023 00:15:30 -0700
 From:   Yi Liu <yi.l.liu@intel.com>
 To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
         kevin.tian@intel.com, robin.murphy@arm.com,
@@ -52,78 +52,76 @@ Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
         suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         zhenzhong.duan@intel.com, joao.m.martins@oracle.com
-Subject: [PATCH v2 2/6] iommufd/hw_pagetable: Use domain_alloc_user op for domain allocation
-Date:   Thu, 28 Sep 2023 00:15:24 -0700
-Message-Id: <20230928071528.26258-3-yi.l.liu@intel.com>
+Subject: [PATCH v2 0/6] iommufd support allocating nested parent domain
+Date:   Thu, 28 Sep 2023 00:15:22 -0700
+Message-Id: <20230928071528.26258-1-yi.l.liu@intel.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230928071528.26258-1-yi.l.liu@intel.com>
-References: <20230928071528.26258-1-yi.l.liu@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This makes IOMMUFD to use iommu_domain_alloc_user() for iommu_domain
-creation as IOMMUFD needs to support iommu_domain allocation with
-parameters from userspace in nested support. If the iommu driver
-doesn't provide domain_alloc_user callback then IOMMUFD falls back to
-use iommu_domain_alloc().
+IOMMU hardwares that support nested translation would have two stages
+address translation (normally mentioned as stage-1 and stage-2). The page
+table formats of the stage-1 and stage-2 can be different. e.g., VT-d has
+different page table formats for stage-1 and stage-2.
 
-Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
-Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-Co-developed-by: Nicolin Chen <nicolinc@nvidia.com>
-Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-Signed-off-by: Yi Liu <yi.l.liu@intel.com>
----
- drivers/iommu/iommufd/hw_pagetable.c | 19 +++++++++++++++----
- 1 file changed, 15 insertions(+), 4 deletions(-)
+Nested parent domain is the iommu domain used to represent the stage-2
+translation. In IOMMUFD, both stage-1 and stage-2 translation are tracked
+as HWPT (a.k.a. iommu domain). Stage-2 HWPT is parent of stage-1 HWPT as
+stage-1 cannot work alone in nested translation. In the cases of stage-1 and
+stage-2 page table format are different, the parent HWPT should use exactly
+the stage-2 page table format. However, the existing kernel hides the format
+selection in iommu drivers, so the domain allocated via IOMMU_HWPT_ALLOC can
+use either stage-1 page table format or stage-2 page table format, there is
+no guarantees for it.
 
-diff --git a/drivers/iommu/iommufd/hw_pagetable.c b/drivers/iommu/iommufd/hw_pagetable.c
-index cf2c1504e20d..48874f896521 100644
---- a/drivers/iommu/iommufd/hw_pagetable.c
-+++ b/drivers/iommu/iommufd/hw_pagetable.c
-@@ -5,6 +5,7 @@
- #include <linux/iommu.h>
- #include <uapi/linux/iommufd.h>
- 
-+#include "../iommu-priv.h"
- #include "iommufd_private.h"
- 
- void iommufd_hw_pagetable_destroy(struct iommufd_object *obj)
-@@ -74,6 +75,7 @@ struct iommufd_hw_pagetable *
- iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
- 			   struct iommufd_device *idev, bool immediate_attach)
- {
-+	const struct iommu_ops *ops = dev_iommu_ops(idev->dev);
- 	struct iommufd_hw_pagetable *hwpt;
- 	int rc;
- 
-@@ -88,10 +90,19 @@ iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
- 	refcount_inc(&ioas->obj.users);
- 	hwpt->ioas = ioas;
- 
--	hwpt->domain = iommu_domain_alloc(idev->dev->bus);
--	if (!hwpt->domain) {
--		rc = -ENOMEM;
--		goto out_abort;
-+	if (ops->domain_alloc_user) {
-+		hwpt->domain = ops->domain_alloc_user(idev->dev, 0);
-+		if (IS_ERR(hwpt->domain)) {
-+			rc = PTR_ERR(hwpt->domain);
-+			hwpt->domain = NULL;
-+			goto out_abort;
-+		}
-+	} else {
-+		hwpt->domain = iommu_domain_alloc(idev->dev->bus);
-+		if (!hwpt->domain) {
-+			rc = -ENOMEM;
-+			goto out_abort;
-+		}
- 	}
- 
- 	/*
+To enforce the page table format of the nested parent domain, this series
+introduces a new iommu op (domain_alloc_user) which can accept user flags
+to allocate domain as userspace requires. It also converts IOMMUFD to use
+the new domain_alloc_user op for domain allocation if supported, then extends
+the IOMMU_HWPT_ALLOC ioctl to pass down a NEST_PARENT flag to allocate a HWPT
+which can be used as parent. This series implements the new op in Intel iommu
+driver to have a complete picture. It is a preparation for adding nesting
+support in IOMMUFD/IOMMU.
+
+Complete code can be found:
+https://github.com/yiliu1765/iommufd/tree/iommufd_alloc_user_v2
+
+Change log:
+
+v2:
+ - Require domain_alloc_user op if IOMMU_HWPT_ALLOC passes non-zero flags (Kevin)
+ - IOMMUFD core should check kernel known flags while iommu driver needs
+   to check supported flags as well (Jason)
+ - Minor tweaks per Baolu's comment
+
+v1: https://lore.kernel.org/linux-iommu/20230919092523.39286-1-yi.l.liu@intel.com/
+
+Regards,
+	Yi Liu
+
+Yi Liu (6):
+  iommu: Add new iommu op to create domains owned by userspace
+  iommufd/hw_pagetable: Use domain_alloc_user op for domain allocation
+  iommufd/hw_pagetable: Accepts user flags for domain allocation
+  iommufd/hw_pagetable: Support allocating nested parent domain
+  iommufd/selftest: Add domain_alloc_user() support in iommu mock
+  iommu/vt-d: Add domain_alloc_user op
+
+ drivers/iommu/intel/iommu.c                   | 28 +++++++++++++++++
+ drivers/iommu/iommufd/device.c                |  2 +-
+ drivers/iommu/iommufd/hw_pagetable.c          | 31 ++++++++++++++-----
+ drivers/iommu/iommufd/iommufd_private.h       |  3 +-
+ drivers/iommu/iommufd/selftest.c              | 19 ++++++++++++
+ include/linux/iommu.h                         | 11 ++++++-
+ include/uapi/linux/iommufd.h                  | 12 ++++++-
+ tools/testing/selftests/iommu/iommufd.c       | 24 +++++++++++---
+ .../selftests/iommu/iommufd_fail_nth.c        |  2 +-
+ tools/testing/selftests/iommu/iommufd_utils.h | 11 +++++--
+ 10 files changed, 124 insertions(+), 19 deletions(-)
+
 -- 
 2.34.1
 
