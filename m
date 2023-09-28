@@ -2,44 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 41C76CE7B08
-	for <linux-kselftest@archiver.kernel.org>; Thu, 28 Sep 2023 07:15:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DEC5FCE7B04
+	for <linux-kselftest@archiver.kernel.org>; Thu, 28 Sep 2023 07:15:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231183AbjI1HPj (ORCPT
+        id S231393AbjI1HPl (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 28 Sep 2023 03:15:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33340 "EHLO
+        Thu, 28 Sep 2023 03:15:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231246AbjI1HPd (ORCPT
+        with ESMTP id S230111AbjI1HPi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 28 Sep 2023 03:15:33 -0400
+        Thu, 28 Sep 2023 03:15:38 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC041B2;
-        Thu, 28 Sep 2023 00:15:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C5CBE;
+        Thu, 28 Sep 2023 00:15:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695885331; x=1727421331;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Wn3wXR37JoGGgItNRNp+OOoXXPlkBH9261CwXM5sCbI=;
-  b=jI8IrMhYRBlshiNNQKlu4aWa2NYg4d++uIhmAsDBi0B6EanfrnPaCPje
-   d4gaMzQR7+I/3C2aYyI4ppDn/TdaKA/9hywDGI/+MUVhg6MKnVPSRevnx
-   /CBJiHGJreHMi8SIZi34E6XgUrNyIIZbTwW+BAXe1a1srZFl73Rzso0WK
-   7vc2TfGebw+CnzouT/s3b365CTCQu8qXfimcdWU0MbsGE93SE+lF7Moay
-   KJZECdfsOVvtqgEBVfiBX9uBtlrk65qaFX4gKRZzDgGhbEshd0TxvS7Im
-   bFBAubR1lS6NDqokWwelF6d3OlNm9Ueoek1LghDLr6tTlSkom6GXGTxnx
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10846"; a="412914813"
+  t=1695885336; x=1727421336;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=ZbmgDv3TXndc8FlXP9Hwf4R9VBmB58wZHJMvSo5a+l0=;
+  b=gjdAgFkVgRl0ElXuSJwdw/itOZoSd78eqpmQIjiCSOyZRmuojwyUbHpi
+   3MWY94UpS2Rtl9CGAjRcYPZpjFIx0duE3Xb8rdet4/tVnDTypiTgshs11
+   vbehTu7KaN+pFRwrb/Ch1ieYutZ717r8CGcCYf9pshrOoPTPj3Ktv7OEB
+   u1+5hZvSfUGt+xyKQzeSw/wUva9vrDyO+wZN9A8IbOhmU2/X68yNdsMOf
+   YkUyhxdk2qKcVuuX//+jd5bqUthy4V9erlq8pvc6ophwTzqtS3xT1QyGL
+   JGOE6Jic13oKAOqRz+vXNEZ5g7jC7H4XPiWhX6S7mZPJtbAtYN0PP8DWs
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10846"; a="412914850"
 X-IronPort-AV: E=Sophos;i="6.03,183,1694761200"; 
-   d="scan'208";a="412914813"
+   d="scan'208";a="412914850"
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2023 00:15:30 -0700
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2023 00:15:36 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10846"; a="784601954"
+X-IronPort-AV: E=McAfee;i="6600,9927,10846"; a="784602027"
 X-IronPort-AV: E=Sophos;i="6.03,183,1694761200"; 
-   d="scan'208";a="784601954"
+   d="scan'208";a="784602027"
 Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by orsmga001.jf.intel.com with ESMTP; 28 Sep 2023 00:15:30 -0700
+  by orsmga001.jf.intel.com with ESMTP; 28 Sep 2023 00:15:33 -0700
 From:   Yi Liu <yi.l.liu@intel.com>
 To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
         kevin.tian@intel.com, robin.murphy@arm.com,
@@ -52,76 +52,96 @@ Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
         suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         zhenzhong.duan@intel.com, joao.m.martins@oracle.com
-Subject: [PATCH v2 0/6] iommufd support allocating nested parent domain
-Date:   Thu, 28 Sep 2023 00:15:22 -0700
-Message-Id: <20230928071528.26258-1-yi.l.liu@intel.com>
+Subject: [PATCH v2 3/6] iommufd/hw_pagetable: Accepts user flags for domain allocation
+Date:   Thu, 28 Sep 2023 00:15:25 -0700
+Message-Id: <20230928071528.26258-4-yi.l.liu@intel.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230928071528.26258-1-yi.l.liu@intel.com>
+References: <20230928071528.26258-1-yi.l.liu@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-IOMMU hardwares that support nested translation would have two stages
-address translation (normally mentioned as stage-1 and stage-2). The page
-table formats of the stage-1 and stage-2 can be different. e.g., VT-d has
-different page table formats for stage-1 and stage-2.
+This extends iommufd_hw_pagetable_alloc() to accepts user flags.
 
-Nested parent domain is the iommu domain used to represent the stage-2
-translation. In IOMMUFD, both stage-1 and stage-2 translation are tracked
-as HWPT (a.k.a. iommu domain). Stage-2 HWPT is parent of stage-1 HWPT as
-stage-1 cannot work alone in nested translation. In the cases of stage-1 and
-stage-2 page table format are different, the parent HWPT should use exactly
-the stage-2 page table format. However, the existing kernel hides the format
-selection in iommu drivers, so the domain allocated via IOMMU_HWPT_ALLOC can
-use either stage-1 page table format or stage-2 page table format, there is
-no guarantees for it.
+Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+Signed-off-by: Yi Liu <yi.l.liu@intel.com>
+---
+ drivers/iommu/iommufd/device.c          | 2 +-
+ drivers/iommu/iommufd/hw_pagetable.c    | 9 ++++++---
+ drivers/iommu/iommufd/iommufd_private.h | 3 ++-
+ 3 files changed, 9 insertions(+), 5 deletions(-)
 
-To enforce the page table format of the nested parent domain, this series
-introduces a new iommu op (domain_alloc_user) which can accept user flags
-to allocate domain as userspace requires. It also converts IOMMUFD to use
-the new domain_alloc_user op for domain allocation if supported, then extends
-the IOMMU_HWPT_ALLOC ioctl to pass down a NEST_PARENT flag to allocate a HWPT
-which can be used as parent. This series implements the new op in Intel iommu
-driver to have a complete picture. It is a preparation for adding nesting
-support in IOMMUFD/IOMMU.
-
-Complete code can be found:
-https://github.com/yiliu1765/iommufd/tree/iommufd_alloc_user_v2
-
-Change log:
-
-v2:
- - Require domain_alloc_user op if IOMMU_HWPT_ALLOC passes non-zero flags (Kevin)
- - IOMMUFD core should check kernel known flags while iommu driver needs
-   to check supported flags as well (Jason)
- - Minor tweaks per Baolu's comment
-
-v1: https://lore.kernel.org/linux-iommu/20230919092523.39286-1-yi.l.liu@intel.com/
-
-Regards,
-	Yi Liu
-
-Yi Liu (6):
-  iommu: Add new iommu op to create domains owned by userspace
-  iommufd/hw_pagetable: Use domain_alloc_user op for domain allocation
-  iommufd/hw_pagetable: Accepts user flags for domain allocation
-  iommufd/hw_pagetable: Support allocating nested parent domain
-  iommufd/selftest: Add domain_alloc_user() support in iommu mock
-  iommu/vt-d: Add domain_alloc_user op
-
- drivers/iommu/intel/iommu.c                   | 28 +++++++++++++++++
- drivers/iommu/iommufd/device.c                |  2 +-
- drivers/iommu/iommufd/hw_pagetable.c          | 31 ++++++++++++++-----
- drivers/iommu/iommufd/iommufd_private.h       |  3 +-
- drivers/iommu/iommufd/selftest.c              | 19 ++++++++++++
- include/linux/iommu.h                         | 11 ++++++-
- include/uapi/linux/iommufd.h                  | 12 ++++++-
- tools/testing/selftests/iommu/iommufd.c       | 24 +++++++++++---
- .../selftests/iommu/iommufd_fail_nth.c        |  2 +-
- tools/testing/selftests/iommu/iommufd_utils.h | 11 +++++--
- 10 files changed, 124 insertions(+), 19 deletions(-)
-
+diff --git a/drivers/iommu/iommufd/device.c b/drivers/iommu/iommufd/device.c
+index ce78c3671539..e88fa73a45e6 100644
+--- a/drivers/iommu/iommufd/device.c
++++ b/drivers/iommu/iommufd/device.c
+@@ -540,7 +540,7 @@ iommufd_device_auto_get_domain(struct iommufd_device *idev,
+ 	}
+ 
+ 	hwpt = iommufd_hw_pagetable_alloc(idev->ictx, ioas, idev,
+-					  immediate_attach);
++					  0, immediate_attach);
+ 	if (IS_ERR(hwpt)) {
+ 		destroy_hwpt = ERR_CAST(hwpt);
+ 		goto out_unlock;
+diff --git a/drivers/iommu/iommufd/hw_pagetable.c b/drivers/iommu/iommufd/hw_pagetable.c
+index 48874f896521..5be7a31cbd9c 100644
+--- a/drivers/iommu/iommufd/hw_pagetable.c
++++ b/drivers/iommu/iommufd/hw_pagetable.c
+@@ -61,6 +61,7 @@ int iommufd_hw_pagetable_enforce_cc(struct iommufd_hw_pagetable *hwpt)
+  * @ictx: iommufd context
+  * @ioas: IOAS to associate the domain with
+  * @idev: Device to get an iommu_domain for
++ * @flags: Flags from userspace
+  * @immediate_attach: True if idev should be attached to the hwpt
+  *
+  * Allocate a new iommu_domain and return it as a hw_pagetable. The HWPT
+@@ -73,7 +74,8 @@ int iommufd_hw_pagetable_enforce_cc(struct iommufd_hw_pagetable *hwpt)
+  */
+ struct iommufd_hw_pagetable *
+ iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
+-			   struct iommufd_device *idev, bool immediate_attach)
++			   struct iommufd_device *idev, u32 flags,
++			   bool immediate_attach)
+ {
+ 	const struct iommu_ops *ops = dev_iommu_ops(idev->dev);
+ 	struct iommufd_hw_pagetable *hwpt;
+@@ -91,7 +93,7 @@ iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
+ 	hwpt->ioas = ioas;
+ 
+ 	if (ops->domain_alloc_user) {
+-		hwpt->domain = ops->domain_alloc_user(idev->dev, 0);
++		hwpt->domain = ops->domain_alloc_user(idev->dev, flags);
+ 		if (IS_ERR(hwpt->domain)) {
+ 			rc = PTR_ERR(hwpt->domain);
+ 			hwpt->domain = NULL;
+@@ -166,7 +168,8 @@ int iommufd_hwpt_alloc(struct iommufd_ucmd *ucmd)
+ 	}
+ 
+ 	mutex_lock(&ioas->mutex);
+-	hwpt = iommufd_hw_pagetable_alloc(ucmd->ictx, ioas, idev, false);
++	hwpt = iommufd_hw_pagetable_alloc(ucmd->ictx, ioas,
++					  idev, cmd->flags, false);
+ 	if (IS_ERR(hwpt)) {
+ 		rc = PTR_ERR(hwpt);
+ 		goto out_unlock;
+diff --git a/drivers/iommu/iommufd/iommufd_private.h b/drivers/iommu/iommufd/iommufd_private.h
+index 2c58670011fe..3064997a0181 100644
+--- a/drivers/iommu/iommufd/iommufd_private.h
++++ b/drivers/iommu/iommufd/iommufd_private.h
+@@ -242,7 +242,8 @@ struct iommufd_hw_pagetable {
+ 
+ struct iommufd_hw_pagetable *
+ iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
+-			   struct iommufd_device *idev, bool immediate_attach);
++			   struct iommufd_device *idev, u32 flags,
++			   bool immediate_attach);
+ int iommufd_hw_pagetable_enforce_cc(struct iommufd_hw_pagetable *hwpt);
+ int iommufd_hw_pagetable_attach(struct iommufd_hw_pagetable *hwpt,
+ 				struct iommufd_device *idev);
 -- 
 2.34.1
 
