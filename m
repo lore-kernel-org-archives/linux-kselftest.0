@@ -2,42 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1644AE7B604
-	for <linux-kselftest@archiver.kernel.org>; Wed,  4 Oct 2023 12:48:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BC86DE7B60F
+	for <linux-kselftest@archiver.kernel.org>; Wed,  4 Oct 2023 12:48:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242469AbjJDMss (ORCPT
+        id S242507AbjJDMsy (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 4 Oct 2023 08:48:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57336 "EHLO
+        Wed, 4 Oct 2023 08:48:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242481AbjJDMss (ORCPT
+        with ESMTP id S242491AbjJDMsw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 Oct 2023 08:48:48 -0400
+        Wed, 4 Oct 2023 08:48:52 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFBF7D8;
-        Wed,  4 Oct 2023 05:48:44 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98219C433C8;
-        Wed,  4 Oct 2023 12:48:42 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1335693;
+        Wed,  4 Oct 2023 05:48:49 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00C65C433C9;
+        Wed,  4 Oct 2023 12:48:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696423724;
-        bh=6WYm0QAkHROFtznZ1wtrRyn0Hg3tizoNA4DjPeeCKhQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=id+lIPc/S1N9uh1vYCyOj8zuYxrHSja3cnTjcJQWVwZGp148U0se12TmgjWVVSn4r
-         uB864HMagHQTift/X0AsbICKwd8SG00N8OfNGhvxuhM74Xhzf394sOWXAMQUPwZiG3
-         uJVuq79glRRC0ZddkQ+c9zjCRPK38GoGskZ4cOg7Oa59ixC+zEqrhknPSpK11XuDOI
-         DB2Ol/aUC/X3jr+tvPDwYlE0u5NTYnPpUdbmglZr0b4PHdspFA7DF8wVYJnxquHJpd
-         hPVOvWwfaWrQgj3SaOcZ0PDWz/Ew2GRBIjgVdFlY6O10ycUiRjsOeput3usxmd/DmT
-         ghbIfw6Du3CEg==
+        s=k20201202; t=1696423728;
+        bh=GCXPtG2gS4xIl3E4smfsoQMIyJon1TmicxEyAyK0wVg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=cXzreQBMuuF74CBgHzSwEN2XP6h0oZD0m2xCM0zXXfhTbBayi7b7BfShjv/w/GuwX
+         dcleLXW/kTjBlrlwrCkSAwOnrkrUMQ8ZPR+MPv8maO0c5cpLYMSxcSCA3hTnnBG3fx
+         FpSawKI8+A2WhDqTGl1Sqqb7u0eQJa82fgEHccU6kdfKq3uCPVskQmzIqGFrXPeZgE
+         Tl0+U0BvwXOvIl0LC2W7igEasQ2LnMESCOjarMQOSEaItwmZXGox9RenhfWE5waGQq
+         5Bys358TN2G57KT8cRrUbO9E8U3MPS1t45ikV712Dys5mBOly9cdjewrOSjsULg9Zv
+         VWHL+PeaBg7Hw==
 From:   =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
 To:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         Masahiro Yamada <masahiroy@kernel.org>,
         linux-kbuild@vger.kernel.org, Shuah Khan <shuah@kernel.org>
 Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
         bpf@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH 0/2] kbuild: kselftest-merge target improvements
-Date:   Wed,  4 Oct 2023 14:48:35 +0200
-Message-Id: <20231004124837.56536-1-bjorn@kernel.org>
+Subject: [PATCH 2/2] kbuild: Merge per-arch config for kselftest-merge target
+Date:   Wed,  4 Oct 2023 14:48:37 +0200
+Message-Id: <20231004124837.56536-3-bjorn@kernel.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20231004124837.56536-1-bjorn@kernel.org>
+References: <20231004124837.56536-1-bjorn@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -47,23 +49,29 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Björn Töpel <bjorn@rivosinc.com>
 
-Two minor changes to the kselftest-merge target:
+Some kselftests has a per-arch config,
+e.g. tools/testing/selftests/bpf/config.s390x.
 
-1. Let builtin have presedence over modules when merging configs
-2. Merge per-arch configs, if available
+Make sure these configs are picked up by the kselftest-merge target.
 
+Signed-off-by: Björn Töpel <bjorn@rivosinc.com>
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Björn
-
-Björn Töpel (2):
-  kbuild: Let builtin have precedence over modules for kselftest-merge
-  kbuild: Merge per-arch config for kselftest-merge target
-
- Makefile | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-
-base-commit: cbf3a2cb156a2c911d8f38d8247814b4c07f49a2
+diff --git a/Makefile b/Makefile
+index 170fb2f5e378..0303acb311cc 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1367,7 +1367,7 @@ kselftest-%: headers FORCE
+ PHONY += kselftest-merge
+ kselftest-merge:
+ 	$(if $(wildcard $(objtree)/.config),, $(error No .config exists, config your kernel first!))
+-	$(Q)find $(srctree)/tools/testing/selftests -name config | \
++	$(Q)find $(srctree)/tools/testing/selftests -name config -o -name config.$(UTS_MACHINE) | \
+ 		xargs $(srctree)/scripts/kconfig/merge_config.sh -y -m $(objtree)/.config
+ 	$(Q)$(MAKE) -f $(srctree)/Makefile olddefconfig
+ 
 -- 
 2.39.2
 
