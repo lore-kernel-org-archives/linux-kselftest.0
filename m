@@ -2,101 +2,84 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25E1EE7C4ED
-	for <linux-kselftest@archiver.kernel.org>; Wed,  4 Oct 2023 19:00:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0852BE936E3
+	for <linux-kselftest@archiver.kernel.org>; Wed,  4 Oct 2023 20:40:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244931AbjJDTAr (ORCPT
+        id S233286AbjJDUkd (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 4 Oct 2023 15:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45362 "EHLO
+        Wed, 4 Oct 2023 16:40:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245140AbjJDS6q (ORCPT
+        with ESMTP id S232954AbjJDUkc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 Oct 2023 14:58:46 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A0C510CC;
-        Wed,  4 Oct 2023 11:55:11 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-690fe10b6a4so91319b3a.3;
-        Wed, 04 Oct 2023 11:55:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696445711; x=1697050511; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zRoTTT+olEk9QPCtVtm8UsKlLIAIQzhUpSB6cf5g+W4=;
-        b=ELKGviabcfJvis9/3KS2V7eQjvWzWrsNyBOPj6LS5q65IkXfFNWMaty9nwAHNT8huN
-         V4FEj/cUUihwgkTtnxvjHtIDb7BKFXUAeUtbEOLQak+t60omQx0G4fU+8srp2fZs0wk4
-         0qKfxxStyQYcJgUJp+3aUymMpt882f9ct2Gn1LJ5hd15piiVJ6sn2eIlHokOTUerdYrE
-         YhHg04zDhXCcWNBIjHNJQNJz+v1k2sLlA/nb6BYrTZmDj1yxYu8XwBCsWhWnjXJBDi49
-         ydpC9cIJ8n10ahbcTKZ7Zu+BYXBEDLwEwVHgJHvUtPqRQm8SL2uofG3ylkkoIMQvOpgA
-         uBpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696445711; x=1697050511;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zRoTTT+olEk9QPCtVtm8UsKlLIAIQzhUpSB6cf5g+W4=;
-        b=AfUQ8RyO12vb9cXZ0RfbIoAm2c5GhdRqq9a0prm+O0z+2qN0o1yZJYVZkDYHKjRsf9
-         rs0QExupDpD8fL/DZnIznARsQ0SJFQRbeljngYVeMQqeASGnKOjGFSep1EkTRf9F6JnM
-         Oeb9UOIRrkij3GISwPqvWgklzgjUQnDYgzH62gvLvfK0FnPxM3cbVajTlj4EW2mb2Mr+
-         gZKrKqXIq33KjSVweY0DI99LQIG/ndFrgx7YV1OJ8bB0TwyEFfJ439OcBhNZPhQsQmHs
-         bapaZ3Eg7bbVatsFNyVKWWoDJpPK/i/BqOOuljRi06inr5vkV7J55VIFXwqhVPikMhg/
-         ApZA==
-X-Gm-Message-State: AOJu0YytF14cvbCzS2uV32feGZdMoVzP34LGRGmB1sUj3esKTnyJwByr
-        EXGuHecJFWdETRuxicKYTfP2uryyRga3Fw==
-X-Google-Smtp-Source: AGHT+IGH8UOAeBNqXCXrrve+eWueFektU2xFOfxd9ExxG1b9dFbSOBg1Qrj4IRC8VsavCM7LocsfCw==
-X-Received: by 2002:a05:6a20:3d85:b0:133:f0b9:856d with SMTP id s5-20020a056a203d8500b00133f0b9856dmr3619962pzi.17.1696445711098;
-        Wed, 04 Oct 2023 11:55:11 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::4:cef])
-        by smtp.gmail.com with ESMTPSA id d8-20020aa78688000000b0068fece22469sm3537444pfo.4.2023.10.04.11.55.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Oct 2023 11:55:10 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 4 Oct 2023 08:55:08 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Pierre Gondois <pierre.gondois@arm.com>
-Subject: Re: [PATCH-cgroup v2] cgroup/cpuset: Enable invalid to valid local
- partition transition
-Message-ID: <ZR21DHx3oJJWs8AI@slm.duckdns.org>
-References: <20231003144420.2895515-1-longman@redhat.com>
+        Wed, 4 Oct 2023 16:40:32 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94FB1B8;
+        Wed,  4 Oct 2023 13:40:28 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 34070C433C7;
+        Wed,  4 Oct 2023 20:40:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1696452028;
+        bh=9yZh2beLb9G2aKpM6U7zBwPSD2FoKcYtlW6kX68GteU=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=GpfoRLTt6lNmVwofbWMhFGJxZ82HcDCnBclDn3BiHTGVC2EMtiOR6DfEUsPdCfzUw
+         cfVlMOixBU8LEKwB8yg1gvR/3BWMeE5zwvyBhv02z3h9DlMLEBJe2OjOYcOL56Stsy
+         8F3eOcxrVdyiiDdD1vx18RRAF8tKPyefmV3OleIjCDkjvavNSNE3w2VucDIe4rGxS4
+         Mj46nrbflO6qS+K9Sz04L5NIQI5CIEHQWAoa5znvmoQxlj829ML08rd/VS3JTWGKMN
+         M3Y6zdnYdHeLFrZmTA4YgYm8cW5GHfjxhpCnHA5JM5m6OAUAOHM3GU3JHu6AyxUeVD
+         fY9z58Em1TiIA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 158A0C595D2;
+        Wed,  4 Oct 2023 20:40:28 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231003144420.2895515-1-longman@redhat.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next 0/3] selftest/bpf,
+ riscv: Improved cross-building support
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <169645202808.14504.11589049001858545591.git-patchwork-notify@kernel.org>
+Date:   Wed, 04 Oct 2023 20:40:28 +0000
+References: <20231004122721.54525-1-bjorn@kernel.org>
+In-Reply-To: <20231004122721.54525-1-bjorn@kernel.org>
+To:     =?utf-8?b?QmrDtnJuIFTDtnBlbCA8Ympvcm5Aa2VybmVsLm9yZz4=?=@ci.codeaurora.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        mykolal@fb.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
+        bjorn@rivosinc.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Oct 03, 2023 at 10:44:20AM -0400, Waiman Long wrote:
-> When a local partition becomes invalid, it won't transition back to
-> valid partition automatically if a proper "cpuset.cpus.exclusive" or
-> "cpuset.cpus" change is made. Instead, system administrators have to
-> explicitly echo "root" or "isolated" into the "cpuset.cpus.partition"
-> file at the partition root.
-> 
-> This patch now enables the automatic transition of an invalid local
-> partition back to valid when there is a proper "cpuset.cpus.exclusive"
-> or "cpuset.cpus" change.
-> 
-> Automatic transition of an invalid remote partition to a valid one,
-> however, is not covered by this patch. They still need an explicit
-> write to "cpuset.cpus.partition" to become valid again.
-> 
-> The test_cpuset_prs.sh test script is updated to add new test cases to
-> test this automatic state transition.
-> 
-> Reported-by: Pierre Gondois <pierre.gondois@arm.com>
-> Link: https://lore.kernel.org/lkml/9777f0d2-2fdf-41cb-bd01-19c52939ef42@arm.com
-> Signed-off-by: Waiman Long <longman@redhat.com>
+Hello:
 
-Applied to cgroup/for-6.7.
+This series was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
 
-Thanks.
+On Wed,  4 Oct 2023 14:27:18 +0200 you wrote:
+> From: Björn Töpel <bjorn@rivosinc.com>
+> 
+> Yet another "more cross-building support for RISC-V" series.
+> 
+> An example how to invoke a gen_tar build:
+> 
+>   | make ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu- CC=riscv64-linux-gnu-gcc \
+>   |    HOSTCC=gcc O=/workspace/kbuild FORMAT= \
+>   |    SKIP_TARGETS="arm64 ia64 powerpc sparc64 x86 sgx" -j $(($(nproc)-1)) \
+>   |    -C tools/testing/selftests gen_tar
+> 
+> [...]
 
+Here is the summary with links:
+  - [bpf-next,1/3] selftests/bpf: Add cross-build support for urandom_read et al
+    https://git.kernel.org/bpf/bpf-next/c/97a79e502e25
+  - [bpf-next,2/3] selftests/bpf: Enable lld usage for RISC-V
+    https://git.kernel.org/bpf/bpf-next/c/72fae6319962
+  - [bpf-next,3/3] selftests/bpf: Add uprobe_multi to gen_tar target
+    https://git.kernel.org/bpf/bpf-next/c/e096ab9d9f45
+
+You are awesome, thank you!
 -- 
-tejun
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
