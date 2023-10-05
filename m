@@ -2,33 +2,33 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78A77E92707
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8D60E9270D
 	for <linux-kselftest@archiver.kernel.org>; Thu,  5 Oct 2023 14:43:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238747AbjJEOnY (ORCPT
+        id S235101AbjJEOnZ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 5 Oct 2023 10:43:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35400 "EHLO
+        Thu, 5 Oct 2023 10:43:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235101AbjJEOiK (ORCPT
+        with ESMTP id S238723AbjJEOk6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 5 Oct 2023 10:38:10 -0400
+        Thu, 5 Oct 2023 10:40:58 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CC464E35B;
-        Thu,  5 Oct 2023 07:03:27 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9E67C43140;
-        Thu,  5 Oct 2023 14:02:58 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 654B029B31;
+        Thu,  5 Oct 2023 07:14:57 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3C7CC43397;
+        Thu,  5 Oct 2023 14:14:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696514582;
-        bh=RaU8PyS3Juh4uPmlquRJ62Q+vaLeeK+Z3T1wFe01crc=;
+        s=k20201202; t=1696515297;
+        bh=nZ2pQOUK1xxCQH8F9rUTMa70XO6gjHFBAjV0L7xLvLk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HMJLX4Jwhiykgs4Cq+f3yLOA9BsMfok4LpMhVftEUKIafUFAvwkDxsVx1chffBReC
-         Jqbo6eRegYDlntHTOonvkXsyRc9Ai+zLJt/JOUFzJUciUBSjTbiVspTN409EtQMcIM
-         Oq069NykAKgV7OfpeSO2d/PWls11uvY1sFsUx1tludYcBtcMAalrgAdFTL/g4GwvlU
-         seIOpTs/gCoWeypK162fftUEfPcxhVwzs19R6/MPygyf9KETrz9L257lk6PBLbIUCP
-         u6d8+CCYmk2Hr1a4PcK1cMUAEjMnmfgOIIQhYz6dEMSZ0p6PPgGpd0OzrFFODc6Nk4
-         kiKBvIRDB5obQ==
-Date:   Thu, 5 Oct 2023 15:02:55 +0100
+        b=k/3oqz6L0PP/o7CzLKBlV9IstV7GdqYsIOhHkOf7881CYhujPH4Xo9jAQV9vlXdbf
+         atjwhOs0mbg0dI/BknjgmeVxqCsvQFYT92lhaCTz3TizCZxFLiJAgPtpZbCw2YHUbP
+         tKAhEmwYlC7JgANOh7aodswZAsQHnfJAFZmq6sxlNFYjJd7XsECJ0/Ru7szVzCz1WU
+         ZHW4XKMSsaOGXWDxzV2eLNPhvORwm0Gzn2z7Z41KbEk2x3OiBXZx00tC2aRQuJ6fsR
+         a7IBL6wekJ+8cSyjJqXr2x1ux2g6gzgoZ4YAivHYhalfYwOrUPSGscyo32Ufn8UdVF
+         6nU44bEEg2FyA==
+Date:   Thu, 5 Oct 2023 15:14:50 +0100
 From:   Mark Brown <broonie@kernel.org>
 To:     Joey Gouly <joey.gouly@arm.com>
 Cc:     linux-arm-kernel@lists.infradead.org, nd@arm.com,
@@ -38,46 +38,52 @@ Cc:     linux-arm-kernel@lists.infradead.org, nd@arm.com,
         will@kernel.org, kvmarm@lists.linux.dev,
         linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
         linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v1 02/20] arm64/sysreg: update CPACR_EL1 register
-Message-ID: <f7b73c66-f73f-48a8-b93e-81a06f7c2ee0@sirena.org.uk>
+Subject: Re: [PATCH v1 05/20] arm64: context switch POR_EL0 register
+Message-ID: <b1e43c42-111f-43e3-9e24-89ddef76fedc@sirena.org.uk>
 References: <20230927140123.5283-1-joey.gouly@arm.com>
- <20230927140123.5283-3-joey.gouly@arm.com>
+ <20230927140123.5283-6-joey.gouly@arm.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="VCdXJZMZf3fTQbCW"
+        protocol="application/pgp-signature"; boundary="4H61ssqIvNduKjuy"
 Content-Disposition: inline
-In-Reply-To: <20230927140123.5283-3-joey.gouly@arm.com>
+In-Reply-To: <20230927140123.5283-6-joey.gouly@arm.com>
 X-Cookie: Avoid contact with eyes.
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
---VCdXJZMZf3fTQbCW
+--4H61ssqIvNduKjuy
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Wed, Sep 27, 2023 at 03:01:05PM +0100, Joey Gouly wrote:
-> Add E0POE bit that traps accesses to POR_EL0 from EL0.
-> Updated according to DDI0601 2023-03.
+On Wed, Sep 27, 2023 at 03:01:08PM +0100, Joey Gouly wrote:
 
-Reviewed-by: Mark Brown <broonie@kernel.org>
+> +/* Initial value for Permission Overlay Extension for EL0 */
+> +#define POR_EL0_INIT	UL(0x7)
 
-It's also up to date with DDI 0601 2023-09 it seems.
+Might be useful to explain why this is the default (and possibly also
+define in terms of the constants for POR values)?
 
---VCdXJZMZf3fTQbCW
+> +static void permission_overlay_switch(struct task_struct *next)
+> +{
+> +	if (alternative_has_cap_unlikely(ARM64_HAS_S1POE)) {
+
+Why the _unlikely here?
+
+--4H61ssqIvNduKjuy
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmUewg4ACgkQJNaLcl1U
-h9Az5wf+LW2neVBVQtzKINBTCYISrlW0ST22ksCmpQjJy1GF3WT7U7uhTKweuk6n
-KXrPF96SPQMMOvFvoeigaLUtzjOiINuHvSGi7q7q7rWTorfVDY4QnXqltawuG6tg
-QEj31Rp9EHyqTBapdsrSuw3p0OCfBgmL1oyPCTc/ClN6A0yVZCT6F47mUgXC/0zK
-VzJcszQMWR6AjMO5femeB8CqLaGEqG2WN61Dkj+qjwejvtnSXGfDMxSAu/PYcsE3
-jqg+bVpmL2rRzyrKSsbI0OsPF0sdpFTVrDmPZ2oy51fe9OE/zbjODLNMxvVvNKG0
-7gQ1i/DzGPKrT2Dtb8l9dN/0EIRRdg==
-=DVPv
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmUexNoACgkQJNaLcl1U
+h9CQ+wf/eLvm0CgQ5tFcdi0/EMV/QJXOwQ3Pb8kGAib65/Ata6WMaKI1N2beahsU
+VTMz/iPUnZXCok+njXMxfoF4O1FjDeho8dLcBSWfh5S9DRAvhvmIBbRkmJODaTFN
+j2uSWM4RlVZ5LNxnvynwMXSdVILPAsaDIVEMQLqNGE3J74VUv/TRO6wZtmMk63WJ
+Y9y1PsJ6Sr9IVrZ2cavoG5eVqs3EsnlrZSPjJ1ka27So6JTH11ehf3o2kZOUeStI
+VrPGQbIvi84UKyag5Za1tuUPkf6oqJhTYT32Z2PCvl0DKiwhfI83M6WbphaNExdG
+YhLY8PLIbi/ZatgqpS2eg+SlLPdA2w==
+=kkEH
 -----END PGP SIGNATURE-----
 
---VCdXJZMZf3fTQbCW--
+--4H61ssqIvNduKjuy--
