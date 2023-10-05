@@ -2,140 +2,175 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A62EE75451
-	for <linux-kselftest@archiver.kernel.org>; Thu,  5 Oct 2023 16:46:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 38974E71D4F
+	for <linux-kselftest@archiver.kernel.org>; Thu,  5 Oct 2023 16:57:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230443AbjJEQpm (ORCPT
+        id S229488AbjJEQ5G (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 5 Oct 2023 12:45:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58180 "EHLO
+        Thu, 5 Oct 2023 12:57:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231899AbjJEQpD (ORCPT
+        with ESMTP id S229845AbjJEQ4E (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 5 Oct 2023 12:45:03 -0400
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C0D30F3;
-        Thu,  5 Oct 2023 09:39:33 -0700 (PDT)
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-523100882f2so1987895a12.2;
-        Thu, 05 Oct 2023 09:39:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696523972; x=1697128772;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CXe2b1SQetsxvQIMHBxAgfGGNR39eEXqqOWXi1pgTdY=;
-        b=BEupe08wG2NSjwr/AnTOaNHKobTDgcxq6lOvdHG5r1Q5VNgRLIyeUwbrWuFwJsTZMd
-         VxHwQKOAcOpZb3/Rhkyq3NbukwXxZMP+z2xK+9oXHoQaojPIxR5qVpMH9Eq9O71cJ4Hu
-         IG0gXrTtgyaJEJeSx7HS0mCelvvGNSwEqtHeeJYTrQv7E1mvDS7wehNM3w8MHpugj9jc
-         7z0smVv06CvxNG6Rwx2jHZBA82oQDuzvF+22I5OB3MaPLaXhmmqy5L76bv5dpNIXD3yi
-         Og1UR8H9bmsKXMRat4xmlcbM/iYg/FCoExkBw3yNqSjrpdP1tt0GJLcDCUDzFTjVJ+Qo
-         LOFg==
-X-Gm-Message-State: AOJu0YzrZKTbu+XBURvkMuQxsTcF4QXP4OxfI63USZtRjpJqFaQIPxxt
-        Fya7G31WlNrr+Z1VpguUZNM=
-X-Google-Smtp-Source: AGHT+IGYDnp74cV0Byj3XwLIm6spdtkEqH5f+zeVjCF1kcvzcQHqph+sJjv4ryOmfqgXWAqfOPwhPg==
-X-Received: by 2002:a17:906:2191:b0:9ae:5246:233a with SMTP id 17-20020a170906219100b009ae5246233amr4855817eju.20.1696523971836;
-        Thu, 05 Oct 2023 09:39:31 -0700 (PDT)
-Received: from localhost (fwdproxy-cln-001.fbsv.net. [2a03:2880:31ff:1::face:b00c])
-        by smtp.gmail.com with ESMTPSA id v24-20020a1709067d9800b009b2c5363ebasm1441273ejo.26.2023.10.05.09.39.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Oct 2023 09:39:31 -0700 (PDT)
-From:   Breno Leitao <leitao@debian.org>
-To:     mike.kravetz@oracle.com, muchun.song@linux.dev,
-        akpm@linux-foundation.org, Shuah Khan <shuah@kernel.org>
-Cc:     linux-mm@kvack.org, riel@surriel.com,
-        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2 1/2] selftests/mm: export get_free_hugepages()
-Date:   Thu,  5 Oct 2023 09:39:21 -0700
-Message-Id: <20231005163922.87568-2-leitao@debian.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231005163922.87568-1-leitao@debian.org>
-References: <20231005163922.87568-1-leitao@debian.org>
+        Thu, 5 Oct 2023 12:56:04 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E72A6709;
+        Thu,  5 Oct 2023 09:45:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1696524324;
+        bh=Wc1ok2Vt/Cz1nLVIzQ7UVMt9OEsxSir8ZCwThJY4DII=;
+        h=From:Date:Subject:To:Cc:From;
+        b=pf6MI9w02YAqmeQoh5kTBhBv1hZ+Nx2heGQD+43k8y0+++2HopB7ZHD4gTa5c8GLB
+         Msuu5LS7U36v41vTIgkiLTnWvUaMPtdYq2ybR5OIpLTTc68tATr2M0hjlMj3OPBgbK
+         WVHS41sgn38d/ze/FIrvAOLJEcAjGzhagVvzjjC8=
+From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Date:   Thu, 05 Oct 2023 18:45:07 +0200
+Subject: [PATCH RFC] tools/nolibc: add support for constructors and
+ destructors
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+Message-Id: <20231005-nolibc-constructors-v1-1-776d56bbe917@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIABLoHmUC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI2NDAwNT3bz8nMykZN3k/LzikqLS5JL8omLdJKPE1KS0tFTLJDNTJaDOgqL
+ UtMwKsKnRSkFuzkqxtbUAg2H1n2oAAAA=
+To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1696524324; l=4282;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=Wc1ok2Vt/Cz1nLVIzQ7UVMt9OEsxSir8ZCwThJY4DII=;
+ b=vdgrOYquQea5IRXxwz7Ybi5UIa6ZR7BpUl/sKN4wBErVSIS/mB/R+TMRG/F4lDRMRlcnlDofg
+ DbzWTbul1utBj9Y4hk++QZoxOPWCrI0nmDzXb1vRi9eHJpHHvZ0G05W
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-get_free_hugepages() is helpful for other hugepage tests. Export it to
-the common file (vm_util.c) to be reused.
+With the startup code moved to C, implementing support for
+constructors and deconstructors is fairly easy to implement.
 
-Signed-off-by: Breno Leitao <leitao@debian.org>
+Examples for code size impact:
+
+   text	   data	    bss	    dec	    hex	filename
+  21837	    104	     88	  22029	   560d	nolibc-test.before
+  22135	    120	     88	  22343	   5747	nolibc-test.after
+  21970	    104	     88	  22162	   5692 nolibc-test.after-only-crt.h-changes
+
+The sections are defined by [0].
+
+[0] https://refspecs.linuxfoundation.org/elf/gabi4+/ch5.dynamic.html
+
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- tools/testing/selftests/mm/hugetlb-madvise.c | 19 -------------------
- tools/testing/selftests/mm/vm_util.c         | 19 +++++++++++++++++++
- tools/testing/selftests/mm/vm_util.h         |  1 +
- 3 files changed, 20 insertions(+), 19 deletions(-)
+Note:
 
-diff --git a/tools/testing/selftests/mm/hugetlb-madvise.c b/tools/testing/selftests/mm/hugetlb-madvise.c
-index d55322df4b73..f32d99565c5e 100644
---- a/tools/testing/selftests/mm/hugetlb-madvise.c
-+++ b/tools/testing/selftests/mm/hugetlb-madvise.c
-@@ -36,25 +36,6 @@
- unsigned long huge_page_size;
- unsigned long base_page_size;
+This is only an RFC as I'm not 100% sure it belong into nolibc.
+But at least the code is visible as an example.
+
+Also it is one prerequisite for full ksefltest_harness.h support in
+nolibc, should we want that.
+---
+ tools/include/nolibc/crt.h                   | 23 ++++++++++++++++++++++-
+ tools/testing/selftests/nolibc/nolibc-test.c | 16 ++++++++++++++++
+ 2 files changed, 38 insertions(+), 1 deletion(-)
+
+diff --git a/tools/include/nolibc/crt.h b/tools/include/nolibc/crt.h
+index a5f33fef1672..c1176611d9a9 100644
+--- a/tools/include/nolibc/crt.h
++++ b/tools/include/nolibc/crt.h
+@@ -13,11 +13,22 @@ const unsigned long *_auxv __attribute__((weak));
+ static void __stack_chk_init(void);
+ static void exit(int);
  
--unsigned long get_free_hugepages(void)
--{
--	unsigned long fhp = 0;
--	char *line = NULL;
--	size_t linelen = 0;
--	FILE *f = fopen("/proc/meminfo", "r");
--
--	if (!f)
--		return fhp;
--	while (getline(&line, &linelen, f) > 0) {
--		if (sscanf(line, "HugePages_Free:      %lu", &fhp) == 1)
--			break;
--	}
--
--	free(line);
--	fclose(f);
--	return fhp;
--}
--
- void write_fault_pages(void *addr, unsigned long nr_pages)
++extern void (*const __preinit_array_start[])(void) __attribute__((weak));
++extern void (*const __preinit_array_end[])(void) __attribute__((weak));
++
++extern void (*const __init_array_start[])(void) __attribute__((weak));
++extern void (*const __init_array_end[])(void) __attribute__((weak));
++
++extern void (*const __fini_array_start[])(void) __attribute__((weak));
++extern void (*const __fini_array_end[])(void) __attribute__((weak));
++
+ void _start_c(long *sp)
  {
- 	unsigned long i;
-diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-index 558c9cd8901c..3082b40492dd 100644
---- a/tools/testing/selftests/mm/vm_util.c
-+++ b/tools/testing/selftests/mm/vm_util.c
-@@ -269,3 +269,22 @@ int uffd_unregister(int uffd, void *addr, uint64_t len)
+ 	long argc;
+ 	char **argv;
+ 	char **envp;
++	int exitcode;
++	void (* const *func)(void);
+ 	const unsigned long *auxv;
+ 	/* silence potential warning: conflicting types for 'main' */
+ 	int _nolibc_main(int, char **, char **) __asm__ ("main");
+@@ -54,8 +65,18 @@ void _start_c(long *sp)
+ 		;
+ 	_auxv = auxv;
  
- 	return ret;
++	for (func = __preinit_array_start; func < __preinit_array_end; func++)
++		(*func)();
++	for (func = __init_array_start; func < __init_array_end; func++)
++		(*func)();
++
+ 	/* go to application */
+-	exit(_nolibc_main(argc, argv, envp));
++	exitcode = _nolibc_main(argc, argv, envp);
++
++	for (func = __fini_array_end - 1; func >= __fini_array_start; func--)
++		(*func)();
++
++	exit(exitcode);
  }
-+
-+unsigned long get_free_hugepages(void)
-+{
-+	unsigned long fhp = 0;
-+	char *line = NULL;
-+	size_t linelen = 0;
-+	FILE *f = fopen("/proc/meminfo", "r");
-+
-+	if (!f)
-+		return fhp;
-+	while (getline(&line, &linelen, f) > 0) {
-+		if (sscanf(line, "HugePages_Free:      %lu", &fhp) == 1)
-+			break;
-+	}
-+
-+	free(line);
-+	fclose(f);
-+	return fhp;
-+}
-diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
-index c7fa61f0dff8..c02990bbd56f 100644
---- a/tools/testing/selftests/mm/vm_util.h
-+++ b/tools/testing/selftests/mm/vm_util.h
-@@ -51,6 +51,7 @@ int uffd_register(int uffd, void *addr, uint64_t len,
- int uffd_unregister(int uffd, void *addr, uint64_t len);
- int uffd_register_with_ioctls(int uffd, void *addr, uint64_t len,
- 			      bool miss, bool wp, bool minor, uint64_t *ioctls);
-+unsigned long get_free_hugepages(void);
  
- /*
-  * On ppc64 this will only work with radix 2M hugepage size
+ #endif /* _NOLIBC_CRT_H */
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index a3ee4496bf0a..f166b425613a 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -57,6 +57,9 @@ static int test_argc;
+ /* will be used by some test cases as readable file, please don't write it */
+ static const char *argv0;
+ 
++/* will be used by constructor tests */
++static int constructor_test_value;
++
+ /* definition of a series of tests */
+ struct test {
+ 	const char *name;              /* test name */
+@@ -594,6 +597,18 @@ int expect_strne(const char *expr, int llen, const char *cmp)
+ #define CASE_TEST(name) \
+ 	case __LINE__: llen += printf("%d %s", test, #name);
+ 
++__attribute__((constructor))
++static void constructor1(void)
++{
++	constructor_test_value = 1;
++}
++
++__attribute__((constructor))
++static void constructor2(void)
++{
++	constructor_test_value *= 2;
++}
++
+ int run_startup(int min, int max)
+ {
+ 	int test;
+@@ -631,6 +646,7 @@ int run_startup(int min, int max)
+ 		CASE_TEST(auxv_addr);        EXPECT_PTRGT(test_auxv != (void *)-1, test_auxv, brk); break;
+ 		CASE_TEST(auxv_AT_UID);      EXPECT_EQ(1, getauxval(AT_UID), getuid()); break;
+ 		CASE_TEST(auxv_AT_PAGESZ);   EXPECT_GE(1, getauxval(AT_PAGESZ), 4096); break;
++		CASE_TEST(constructor);      EXPECT_EQ(1, constructor_test_value, 2); break;
+ 		case __LINE__:
+ 			return ret; /* must be last */
+ 		/* note: do not set any defaults so as to permit holes above */
+
+---
+base-commit: ab663cc32912914258bc8a2fbd0e753f552ee9d8
+change-id: 20231005-nolibc-constructors-b2aebffe9b65
+
+Best regards,
 -- 
-2.34.1
+Thomas Weißschuh <linux@weissschuh.net>
 
