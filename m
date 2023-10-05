@@ -2,50 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2EEB6E92707
-	for <linux-kselftest@archiver.kernel.org>; Thu,  5 Oct 2023 15:01:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 38E8FE92706
+	for <linux-kselftest@archiver.kernel.org>; Thu,  5 Oct 2023 15:03:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbjJEPBN (ORCPT
+        id S230455AbjJEPDV (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 5 Oct 2023 11:01:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46488 "EHLO
+        Thu, 5 Oct 2023 11:03:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231479AbjJEO7p (ORCPT
+        with ESMTP id S233255AbjJEPCE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 5 Oct 2023 10:59:45 -0400
+        Thu, 5 Oct 2023 11:02:04 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 384F499D5
-        for <linux-kselftest@vger.kernel.org>; Thu,  5 Oct 2023 07:38:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 631C4195
+        for <linux-kselftest@vger.kernel.org>; Thu,  5 Oct 2023 07:39:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1696516724;
+        s=mimecast20190719; t=1696516750;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Dv/Tj9QdaUN/Br120dwAsxWiHl/rp7FzLwgEPtUXlX4=;
-        b=GVac4B7acrHxw1YkUFH3e7DEaeDJdjw/AD43y+b8QlU8DT35Uxl5zUvsv1pIwHMDJoKsJV
-        NVnlKZIrNsh9yg3nFUeTynwB6Kc81TuX6r/JKPUlHUwez2YL996oNytOZ56fg4dcJMwrdk
-        VSKaXxyacFSlKRmDhn8d8C41S8dha2E=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-487-JabyE1AROsuedgPQHMod8A-1; Thu, 05 Oct 2023 10:38:42 -0400
-X-MC-Unique: JabyE1AROsuedgPQHMod8A-1
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WtdGx+OPUYNJ/AOWymXa/bx8UKj2Lj0Mpvrei971DGA=;
+        b=H+iFeVkaBh44cDXQI3wd0YhnWNOV9Dh6vZ89zFzaO9by5Wvz1paenm6DmCjfpWyWocD+1E
+        dgfnIWGkLBtMGl5ZMj2Mjm+nvDxsByyRTo/3M1aKbJZmQ0pCKpWZp/o8ya9RYAdVWWbzF8
+        Ic3WFAXJugx9k7Lp5oyHTBmJTK2bf3U=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-149-NqYKoLAoM822Sr1SzOzEGQ-1; Thu, 05 Oct 2023 10:38:54 -0400
+X-MC-Unique: NqYKoLAoM822Sr1SzOzEGQ-1
 Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4DDC8803498;
-        Thu,  5 Oct 2023 14:38:42 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AEA673C1E9D1;
+        Thu,  5 Oct 2023 14:38:52 +0000 (UTC)
 Received: from thuth-p1g4.redhat.com (unknown [10.39.192.168])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8C9F940C6EA8;
-        Thu,  5 Oct 2023 14:38:40 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7F5C340C6EA8;
+        Thu,  5 Oct 2023 14:38:51 +0000 (UTC)
 From:   Thomas Huth <thuth@redhat.com>
 To:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
 Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 0/7] Use TAP in some more x86 KVM selftests
-Date:   Thu,  5 Oct 2023 16:38:32 +0200
-Message-ID: <20231005143839.365297-1-thuth@redhat.com>
+Subject: [PATCH v2 7/7] KVM: selftests: x86: Use TAP interface in the userspace_msr_exit test
+Date:   Thu,  5 Oct 2023 16:38:39 +0200
+Message-ID: <20231005143839.365297-8-thuth@redhat.com>
+In-Reply-To: <20231005143839.365297-1-thuth@redhat.com>
+References: <20231005143839.365297-1-thuth@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
@@ -53,46 +56,82 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Here's a follow-up from my RFC series last year:
+Use the kselftest_harness.h interface in this test to get TAP
+output, so that it is easier for the user to see what the test
+is doing.
 
- https://lore.kernel.org/lkml/20221004093131.40392-1-thuth@redhat.com/T/
+Note: We're not using the KVM_ONE_VCPU_TEST() macro here (but the
+generic TEST() macro from kselftest_harness.h) since each of the
+tests needs a different guest code function.
 
-and from v1 earlier this year:
+Signed-off-by: Thomas Huth <thuth@redhat.com>
+---
+ .../kvm/x86_64/userspace_msr_exit_test.c      | 19 ++++++-------------
+ 1 file changed, 6 insertions(+), 13 deletions(-)
 
- https://lore.kernel.org/kvm/20230712075910.22480-1-thuth@redhat.com/
-
-Basic idea of this series is now to use the kselftest_harness.h
-framework to get TAP output in the tests, so that it is easier
-for the user to see what is going on, and e.g. to be able to
-detect whether a certain test is part of the test binary or not
-(which is useful when tests get extended in the course of time).
-
-v2:
-- Dropped the "Rename the ASSERT_EQ macro" patch (already merged)
-- Split the fixes in the sync_regs_test into separate patches
-  (see the first two patches)
-- Introduce the KVM_ONE_VCPU_TEST_SUITE() macro as suggested
-  by Sean (see third patch) and use it in the following patches
-- Add a new patch to convert vmx_pmu_caps_test.c, too
-
-Thomas Huth (7):
-  KVM: selftests: x86: sync_regs_test: Use vcpu_run() where appropriate
-  KVM: selftests: x86: sync_regs_test: Get regs structure before
-    modifying it
-  KVM: selftests: Add a macro to define a test with one vcpu
-  KVM: selftests: x86: Use TAP interface in the sync_regs test
-  KVM: selftests: x86: Use TAP interface in the fix_hypercall test
-  KVM: selftests: x86: Use TAP interface in the vmx_pmu_caps test
-  KVM: selftests: x86: Use TAP interface in the userspace_msr_exit test
-
- .../selftests/kvm/include/kvm_test_harness.h  |  35 +++++
- .../selftests/kvm/x86_64/fix_hypercall_test.c |  27 ++--
- .../selftests/kvm/x86_64/sync_regs_test.c     | 121 +++++++++++++-----
- .../kvm/x86_64/userspace_msr_exit_test.c      |  19 +--
- .../selftests/kvm/x86_64/vmx_pmu_caps_test.c  |  50 ++------
- 5 files changed, 160 insertions(+), 92 deletions(-)
- create mode 100644 tools/testing/selftests/kvm/include/kvm_test_harness.h
-
+diff --git a/tools/testing/selftests/kvm/x86_64/userspace_msr_exit_test.c b/tools/testing/selftests/kvm/x86_64/userspace_msr_exit_test.c
+index 3533dc2fbfeeb..9843528bba0c6 100644
+--- a/tools/testing/selftests/kvm/x86_64/userspace_msr_exit_test.c
++++ b/tools/testing/selftests/kvm/x86_64/userspace_msr_exit_test.c
+@@ -8,6 +8,7 @@
+ #define _GNU_SOURCE /* for program_invocation_short_name */
+ #include <sys/ioctl.h>
+ 
++#include "kselftest_harness.h"
+ #include "test_util.h"
+ #include "kvm_util.h"
+ #include "vmx.h"
+@@ -527,7 +528,7 @@ static void run_guest_then_process_ucall_done(struct kvm_vcpu *vcpu)
+ 	process_ucall_done(vcpu);
+ }
+ 
+-static void test_msr_filter_allow(void)
++TEST(msr_filter_allow)
+ {
+ 	struct kvm_vcpu *vcpu;
+ 	struct kvm_vm *vm;
+@@ -646,7 +647,7 @@ static void handle_wrmsr(struct kvm_run *run)
+ 	}
+ }
+ 
+-static void test_msr_filter_deny(void)
++TEST(msr_filter_deny)
+ {
+ 	struct kvm_vcpu *vcpu;
+ 	struct kvm_vm *vm;
+@@ -693,7 +694,7 @@ static void test_msr_filter_deny(void)
+ 	kvm_vm_free(vm);
+ }
+ 
+-static void test_msr_permission_bitmap(void)
++TEST(msr_permission_bitmap)
+ {
+ 	struct kvm_vcpu *vcpu;
+ 	struct kvm_vm *vm;
+@@ -786,7 +787,7 @@ static void run_msr_filter_flag_test(struct kvm_vm *vm)
+ }
+ 
+ /* Test that attempts to write to the unused bits in a flag fails. */
+-static void test_user_exit_msr_flags(void)
++TEST(user_exit_msr_flags)
+ {
+ 	struct kvm_vcpu *vcpu;
+ 	struct kvm_vm *vm;
+@@ -804,13 +805,5 @@ static void test_user_exit_msr_flags(void)
+ 
+ int main(int argc, char *argv[])
+ {
+-	test_msr_filter_allow();
+-
+-	test_msr_filter_deny();
+-
+-	test_msr_permission_bitmap();
+-
+-	test_user_exit_msr_flags();
+-
+-	return 0;
++	return test_harness_run(argc, argv);
+ }
 -- 
 2.41.0
 
