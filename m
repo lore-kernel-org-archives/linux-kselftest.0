@@ -2,122 +2,126 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F357EE92709
-	for <linux-kselftest@archiver.kernel.org>; Thu,  5 Oct 2023 14:34:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48D64E9270A
+	for <linux-kselftest@archiver.kernel.org>; Thu,  5 Oct 2023 14:34:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233815AbjJEOex (ORCPT
+        id S234111AbjJEOex (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Thu, 5 Oct 2023 10:34:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38894 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235037AbjJEOcq (ORCPT
+        with ESMTP id S235593AbjJEOdV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 5 Oct 2023 10:32:46 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FE1C2618F;
-        Thu,  5 Oct 2023 05:06:32 -0700 (PDT)
-Received: from [192.168.100.7] (unknown [39.34.184.141])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 71FB1660731C;
-        Thu,  5 Oct 2023 13:06:27 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1696507590;
-        bh=LdOVFJ/CYTynGHR1c4xxHz9cnN943FYHgYIwv7MK744=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=WnsEjPQ9UUsfCljQpV2ZUWJ8LvLt69qmKb9NmZ9h8SL8ElBPu5mRSLIeqkcgU0f2x
-         T0rDPNS28EGIvhBrDIhF5wFRYljOiTewRM1+mb50uzpSQ2BwJ47OQsiDI242g5sFNg
-         gznE4hhq9z/LZJFXToBgRUPbC3aK7+WHOGkk0Ym9tTQG2R2OvaMWQjbeZjzYPBQQx3
-         lol1SSOkU/oXzE8YVJvZ0aqDsUVJUWul5JpjBUIC2qfz9ecmfto4tyno6MTeGfWIZJ
-         t30gk02uaYhQKZ47GIhN/v3V1iMSqpH3ALW0ES0AHbODQ81G8BcxFvHARSuTP174/1
-         UBslRlbgTpryg==
-Message-ID: <51273ffa-e323-44e8-8a93-bc04ee356df0@collabora.com>
-Date:   Thu, 5 Oct 2023 17:06:21 +0500
+        Thu, 5 Oct 2023 10:33:21 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51AD66183
+        for <linux-kselftest@vger.kernel.org>; Wed,  4 Oct 2023 23:06:01 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-27751ac0653so424587a91.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Oct 2023 23:06:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20230601.gappssmtp.com; s=20230601; t=1696485960; x=1697090760; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=i+OzM9WN1Dh21ubOEAVeEY0lIe+PfmIXwuMmmkct6SM=;
+        b=3epmckszdy4PjWzn5YVDphkhm9OrhQM7y7LAUm4eew3ZWJ6bwKrZlEq+Umbmmz5raV
+         vQm8MSbe6MN5MA4J4DVh5+RVZp+a4R5+/kLoMdCJVRupOLMQI4sxF65IdguQAMN/+ubT
+         BbonGFbERKH/jLvTjtE0H+chxQRxMlYOremQIcjTNpU56P0tNbIyZyLlYrDWMB+xvcT9
+         pioobganbB3Ey9jmXZRFQlnj3K3WZzE6PKBgdJYbHqTgHsB6R+GjNEh1NKaK8ohq77x0
+         saCP6CEtk4x5f6BIWhgmGAnbJtOwe4mFIGW7ayR1mZ165u7hQQdUzViADIkKXqcP1Eyj
+         uOAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696485960; x=1697090760;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=i+OzM9WN1Dh21ubOEAVeEY0lIe+PfmIXwuMmmkct6SM=;
+        b=aG4VrzBFwA9EL7FnmjLm3oKlpDjVlQZAw/E8PT6BQI3UjKa/79JJrd0HGjkqrj4aJs
+         85YuTn6LivdJpF+3zC/zlrIEqQBM0p+alGw/MuLC8tVh06yCYeiOSqyGflv3UnSasArG
+         v7VGnJcDIpl7G74Hku3lnLVEXtpP5yFSU33t5hPy38tVBvKinqDCztwEphE7ed8EgcWQ
+         tlp2UQ42sifsw2NW3B7ud1nLpnydY8l4ldXzbm4iUKoTfQqVYILsKVRkvy/DdXPofFRA
+         a3BBWy5dR4r2hThb/8e1FMk3LLIvpqY3J2K6F1mgbDAsma1ESXErOTdWydO1YTG+0j1J
+         pzhA==
+X-Gm-Message-State: AOJu0YzitFJSRB0pPAaXNbd/SILRmFPyZbM6o3SruCnjS4AgvvFgl45g
+        JjanhMf+psEej1zbCX21qybcQ0RJdchtg1DMk6Yj+A==
+X-Google-Smtp-Source: AGHT+IG1fxwb2v6SLkh4Fkaz8cqMSdUWu3blXiCEco3U0En8uebQJpE7wswsbpc3LD+Oi31mdQhRZwbY+N7+m1uQ3rk=
+X-Received: by 2002:a17:90b:84:b0:268:15dd:c5c7 with SMTP id
+ bb4-20020a17090b008400b0026815ddc5c7mr3855515pjb.40.1696485960557; Wed, 04
+ Oct 2023 23:06:00 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>,
-        Shuah Khan <shuah@kernel.org>, kernel@collabora.com,
+References: <20231003035226.1945725-1-apatel@ventanamicro.com>
+In-Reply-To: <20231003035226.1945725-1-apatel@ventanamicro.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Thu, 5 Oct 2023 11:35:50 +0530
+Message-ID: <CAAhSdy0P=5WiFfFyMHjkd63JKCcjsTsvhLTNgUB+LOCd8A9iOQ@mail.gmail.com>
+Subject: Re: [PATCH v3 0/6] KVM RISC-V Conditional Operations
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Conor Dooley <conor@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Mayuresh Chitale <mchitale@ventanamicro.com>,
+        devicetree@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 6/6] selftests: futex: remove duplicate unneeded defines
-To:     Ingo Molnar <mingo@kernel.org>
-References: <20230805073809.1753462-1-usama.anjum@collabora.com>
- <20230805073809.1753462-6-usama.anjum@collabora.com>
- <ZRvU8DXRWL9sgKug@gmail.com>
-Content-Language: en-US
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <ZRvU8DXRWL9sgKug@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 10/3/23 1:46 PM, Ingo Molnar wrote:
-> 
-> * Muhammad Usama Anjum <usama.anjum@collabora.com> wrote:
-> 
->> Kselftests are kernel tests and must be build with kernel headers from
->> same source version. These duplicate defines should automatically
->> picked up from kernel headers. Use KHDR_INCLUDES to add kernel header
->> files.
->>
->> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
->> ---
->>  .../selftests/futex/include/futextest.h       | 22 -------------------
->>  1 file changed, 22 deletions(-)
->>
->> diff --git a/tools/testing/selftests/futex/include/futextest.h b/tools/testing/selftests/futex/include/futextest.h
->> index ddbcfc9b7bac4..59f66af3a6d10 100644
->> --- a/tools/testing/selftests/futex/include/futextest.h
->> +++ b/tools/testing/selftests/futex/include/futextest.h
->> @@ -25,28 +25,6 @@
->>  typedef volatile u_int32_t futex_t;
->>  #define FUTEX_INITIALIZER 0
->>  
->> -/* Define the newer op codes if the system header file is not up to date. */
->> -#ifndef FUTEX_WAIT_BITSET
->> -#define FUTEX_WAIT_BITSET		9
->> -#endif
->> -#ifndef FUTEX_WAKE_BITSET
->> -#define FUTEX_WAKE_BITSET		10
->> -#endif
->> -#ifndef FUTEX_WAIT_REQUEUE_PI
->> -#define FUTEX_WAIT_REQUEUE_PI		11
->> -#endif
->> -#ifndef FUTEX_CMP_REQUEUE_PI
->> -#define FUTEX_CMP_REQUEUE_PI		12
->> -#endif
->> -#ifndef FUTEX_WAIT_REQUEUE_PI_PRIVATE
->> -#define FUTEX_WAIT_REQUEUE_PI_PRIVATE	(FUTEX_WAIT_REQUEUE_PI | \
->> -					 FUTEX_PRIVATE_FLAG)
->> -#endif
->> -#ifndef FUTEX_REQUEUE_PI_PRIVATE
->> -#define FUTEX_CMP_REQUEUE_PI_PRIVATE	(FUTEX_CMP_REQUEUE_PI | \
->> -					 FUTEX_PRIVATE_FLAG)
->> -#endif
-> 
-> AFAICT I cannot really pick this up into the locking tree as-is, as this patch
-> relies on the KHDR_INCLUDES change in patch #1, so that all self-tests get the
-> kernel headers included, correct?
-No this patch is self contained and doesn't depend on the patch #1.
-KHDR_INCLUDES was included several releases back in kselftest's Makefile
-and in kselftests of futex. Correct headers are being included already. In
-this patch, I'm removing just the un-needed dead code. Other patches were
-already picked up by other maintainers.
+On Tue, Oct 3, 2023 at 9:22=E2=80=AFAM Anup Patel <apatel@ventanamicro.com>=
+ wrote:
+>
+> This series extends KVM RISC-V to allow Guest/VM discover and use
+> conditional operations related ISA extensions (namely XVentanaCondOps
+> and Zicond).
+>
+> To try these patches, use KVMTOOL from riscv_zbx_zicntr_smstateen_condops=
+_v1
+> branch at: https://github.com/avpatel/kvmtool.git
+>
+> These patches are based upon the latest riscv_kvm_queue and can also be
+> found in the riscv_kvm_condops_v3 branch at:
+> https://github.com/avpatel/linux.git
+>
+> Changes since v2:
+>  - Dropped patch1, patch2, and patch5 since these patches don't meet
+>    the requirements of patch acceptance policy.
+>
+> Changes since v1:
+>  - Rebased the series on riscv_kvm_queue
+>  - Split PATCH1 and PATCH2 of v1 series into two patches
+>  - Added separate test configs for XVentanaCondOps and Zicond in PATCH7
+>    of v1 series.
+>
+> Anup Patel (6):
+>   dt-bindings: riscv: Add Zicond extension entry
+>   RISC-V: Detect Zicond from ISA string
+>   RISC-V: KVM: Allow Zicond extension for Guest/VM
+>   KVM: riscv: selftests: Add senvcfg register to get-reg-list test
+>   KVM: riscv: selftests: Add smstateen registers to get-reg-list test
+>   KVM: riscv: selftests: Add condops extensions to get-reg-list test
 
-> 
-> Thanks,
-> 
-> 	Ingo
+Queued this series for Linux-6.7
 
--- 
-BR,
-Muhammad Usama Anjum
+Thanks,
+Anup
+
+>
+>  .../devicetree/bindings/riscv/extensions.yaml |  6 +++
+>  arch/riscv/include/asm/hwcap.h                |  1 +
+>  arch/riscv/include/uapi/asm/kvm.h             |  1 +
+>  arch/riscv/kernel/cpufeature.c                |  1 +
+>  arch/riscv/kvm/vcpu_onereg.c                  |  2 +
+>  .../selftests/kvm/riscv/get-reg-list.c        | 54 +++++++++++++++++++
+>  6 files changed, 65 insertions(+)
+>
+> --
+> 2.34.1
+>
