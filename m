@@ -2,33 +2,33 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D8D60E9270D
-	for <linux-kselftest@archiver.kernel.org>; Thu,  5 Oct 2023 14:43:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CBCEE9270C
+	for <linux-kselftest@archiver.kernel.org>; Thu,  5 Oct 2023 14:46:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235101AbjJEOnZ (ORCPT
+        id S232020AbjJEOp3 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 5 Oct 2023 10:43:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36378 "EHLO
+        Thu, 5 Oct 2023 10:45:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238723AbjJEOk6 (ORCPT
+        with ESMTP id S237013AbjJEOnS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 5 Oct 2023 10:40:58 -0400
+        Thu, 5 Oct 2023 10:43:18 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 654B029B31;
-        Thu,  5 Oct 2023 07:14:57 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3C7CC43397;
-        Thu,  5 Oct 2023 14:14:53 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BA8C919DA;
+        Thu,  5 Oct 2023 07:19:54 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68249C43397;
+        Thu,  5 Oct 2023 14:19:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696515297;
-        bh=nZ2pQOUK1xxCQH8F9rUTMa70XO6gjHFBAjV0L7xLvLk=;
+        s=k20201202; t=1696515594;
+        bh=ioyqBCfpdobqYs4clL9FnA6RQauvcrnCtnIY+oIl3ck=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=k/3oqz6L0PP/o7CzLKBlV9IstV7GdqYsIOhHkOf7881CYhujPH4Xo9jAQV9vlXdbf
-         atjwhOs0mbg0dI/BknjgmeVxqCsvQFYT92lhaCTz3TizCZxFLiJAgPtpZbCw2YHUbP
-         tKAhEmwYlC7JgANOh7aodswZAsQHnfJAFZmq6sxlNFYjJd7XsECJ0/Ru7szVzCz1WU
-         ZHW4XKMSsaOGXWDxzV2eLNPhvORwm0Gzn2z7Z41KbEk2x3OiBXZx00tC2aRQuJ6fsR
-         a7IBL6wekJ+8cSyjJqXr2x1ux2g6gzgoZ4YAivHYhalfYwOrUPSGscyo32Ufn8UdVF
-         6nU44bEEg2FyA==
-Date:   Thu, 5 Oct 2023 15:14:50 +0100
+        b=GIsqUURLhZOqQrT8yqDukkzp/1YgQY1ROgEwjUz57ZEPdfgKZjPe426e4Fvn9zz7V
+         5W2kN9i08ucNfL5N+zAMlaSyp35xM/kwIaIbVQL6N/mlLN7VZ4IGjV/aT+Wwn0aTdG
+         ThFUH4f6FgDmOrP/QtlK0dKAxs3L1IeEdUVP8pg8tbdFOGa+aAAHvdkLNE/nULGPtR
+         fNeN/434onptlavHdk5MRITgZEDtzW8ndfWhgGhqrybKCp5PRj2ouvdOD/kVIpQNYX
+         t6XUrQ61pLOADBtGOxtpZXguSf4mEm4rZYxkKAxyrAbLF4J01ZbUavemlx5xZqX5VV
+         LvMj+j5h0/0UQ==
+Date:   Thu, 5 Oct 2023 15:19:48 +0100
 From:   Mark Brown <broonie@kernel.org>
 To:     Joey Gouly <joey.gouly@arm.com>
 Cc:     linux-arm-kernel@lists.infradead.org, nd@arm.com,
@@ -38,52 +38,83 @@ Cc:     linux-arm-kernel@lists.infradead.org, nd@arm.com,
         will@kernel.org, kvmarm@lists.linux.dev,
         linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
         linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v1 05/20] arm64: context switch POR_EL0 register
-Message-ID: <b1e43c42-111f-43e3-9e24-89ddef76fedc@sirena.org.uk>
+Subject: Re: [PATCH v1 07/20] arm64: enable the Permission Overlay Extension
+ for EL0
+Message-ID: <e857348d-2726-45cb-b088-0f6368b44514@sirena.org.uk>
 References: <20230927140123.5283-1-joey.gouly@arm.com>
- <20230927140123.5283-6-joey.gouly@arm.com>
+ <20230927140123.5283-8-joey.gouly@arm.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4H61ssqIvNduKjuy"
+        protocol="application/pgp-signature"; boundary="8+AeTyjR3Dtj+J8t"
 Content-Disposition: inline
-In-Reply-To: <20230927140123.5283-6-joey.gouly@arm.com>
+In-Reply-To: <20230927140123.5283-8-joey.gouly@arm.com>
 X-Cookie: Avoid contact with eyes.
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
---4H61ssqIvNduKjuy
+--8+AeTyjR3Dtj+J8t
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 27, 2023 at 03:01:08PM +0100, Joey Gouly wrote:
+On Wed, Sep 27, 2023 at 03:01:10PM +0100, Joey Gouly wrote:
 
-> +/* Initial value for Permission Overlay Extension for EL0 */
-> +#define POR_EL0_INIT	UL(0x7)
-
-Might be useful to explain why this is the default (and possibly also
-define in terms of the constants for POR values)?
-
-> +static void permission_overlay_switch(struct task_struct *next)
+> --- a/arch/arm64/kernel/cpufeature.c
+> +++ b/arch/arm64/kernel/cpufeature.c
+> @@ -400,6 +400,7 @@ static const struct arm64_ftr_bits ftr_id_aa64mmfr2[]=
+ =3D {
+>  };
+> =20
+>  static const struct arm64_ftr_bits ftr_id_aa64mmfr3[] =3D {
+> +	ARM64_FTR_BITS(FTR_VISIBLE, FTR_NONSTRICT, FTR_LOWER_SAFE, ID_AA64MMFR3=
+_EL1_S1POE_SHIFT, 4, 0),
+>  	ARM64_FTR_BITS(FTR_HIDDEN, FTR_NONSTRICT, FTR_LOWER_SAFE, ID_AA64MMFR3_=
+EL1_S1PIE_SHIFT, 4, 0),
+>  	ARM64_FTR_BITS(FTR_HIDDEN, FTR_NONSTRICT, FTR_LOWER_SAFE, ID_AA64MMFR3_=
+EL1_TCRX_SHIFT, 4, 0),
+>  	ARM64_FTR_END,
+> @@ -2220,6 +2221,12 @@ static void cpu_enable_mops(const struct arm64_cpu=
+_capabilities *__unused)
+>  	sysreg_clear_set(sctlr_el1, 0, SCTLR_EL1_MSCEn);
+>  }
+> =20
+> +static void cpu_enable_poe(const struct arm64_cpu_capabilities *__unused)
 > +{
-> +	if (alternative_has_cap_unlikely(ARM64_HAS_S1POE)) {
+> +	sysreg_clear_set(REG_TCR2_EL1, 0, TCR2_EL1x_E0POE);
+> +	sysreg_clear_set(CPACR_EL1, 0, CPACR_ELx_E0POE);
+> +}
+> +
+>  /* Internal helper functions to match cpu capability type */
+>  static bool
+>  cpucap_late_cpu_optional(const struct arm64_cpu_capabilities *cap)
+> @@ -2724,6 +2731,7 @@ static const struct arm64_cpu_capabilities arm64_fe=
+atures[] =3D {
+>  		.capability =3D ARM64_HAS_S1POE,
+>  		.type =3D ARM64_CPUCAP_BOOT_CPU_FEATURE,
+>  		.matches =3D has_cpuid_feature,
+> +		.cpu_enable =3D cpu_enable_poe,
+>  		ARM64_CPUID_FIELDS(ID_AA64MMFR3_EL1, S1POE, IMP)
+>  	},
+>  	{},
+> diff --git a/arch/arm64/kernel/cpuinfo.c b/arch/arm64/kernel/cpuinfo.c
 
-Why the _unlikely here?
+I'd also expect to see an update to arm64_elf_hwcaps[]?
 
---4H61ssqIvNduKjuy
+--8+AeTyjR3Dtj+J8t
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmUexNoACgkQJNaLcl1U
-h9CQ+wf/eLvm0CgQ5tFcdi0/EMV/QJXOwQ3Pb8kGAib65/Ata6WMaKI1N2beahsU
-VTMz/iPUnZXCok+njXMxfoF4O1FjDeho8dLcBSWfh5S9DRAvhvmIBbRkmJODaTFN
-j2uSWM4RlVZ5LNxnvynwMXSdVILPAsaDIVEMQLqNGE3J74VUv/TRO6wZtmMk63WJ
-Y9y1PsJ6Sr9IVrZ2cavoG5eVqs3EsnlrZSPjJ1ka27So6JTH11ehf3o2kZOUeStI
-VrPGQbIvi84UKyag5Za1tuUPkf6oqJhTYT32Z2PCvl0DKiwhfI83M6WbphaNExdG
-YhLY8PLIbi/ZatgqpS2eg+SlLPdA2w==
-=kkEH
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmUexgMACgkQJNaLcl1U
+h9DdPQf+MoPCKizqQ2zaY8Y1D5V8WlIwkYZFtGS3u88oO01OvQ1NPnw0FIt5QylA
+Av4l9yfYPeZEMD7/ccIalJdq7OZxyZe6w2AZi9vmY/FQvckPiy8my6ylpWo/E5Sb
+zy9JRySG9T492QO1sMtK7SQFtqB8fVStFx1epxfYkC6Qk2HvvY8vtRgugfbjr07d
+JaAUguuI3036XzLPLPtCjN7pVts/CJzbRWss8plygg6ayJ9Unum/Fledih0ST4FK
+tZlXrfrYID19A0I1VckKNazmKaJBUXn4flaOOkUn0dmTxS67krjSK1sVxMyW7cUG
+N7vWOPNUlOm8odz/vH7c+5G0YiihgA==
+=Uz9V
 -----END PGP SIGNATURE-----
 
---4H61ssqIvNduKjuy--
+--8+AeTyjR3Dtj+J8t--
