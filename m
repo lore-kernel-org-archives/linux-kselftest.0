@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13CA4E81E08
-	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Oct 2023 15:14:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 27D07E81E05
+	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Oct 2023 15:14:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232750AbjJFPOA (ORCPT
+        id S232746AbjJFPOS (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 6 Oct 2023 11:14:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51492 "EHLO
+        Fri, 6 Oct 2023 11:14:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232829AbjJFPN4 (ORCPT
+        with ESMTP id S232785AbjJFPOP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 6 Oct 2023 11:13:56 -0400
+        Fri, 6 Oct 2023 11:14:15 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AF5AE4
-        for <linux-kselftest@vger.kernel.org>; Fri,  6 Oct 2023 08:13:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D35CE9
+        for <linux-kselftest@vger.kernel.org>; Fri,  6 Oct 2023 08:13:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1696605188;
+        s=mimecast20190719; t=1696605190;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=a3BtezrsO4g/f4wdN64oWX3Tfa1nQARVL1ef9IRoW74=;
-        b=NJ7EybVb4xtq77p5zhy4xcHJt29QbTD1gBzEvb1Id6GC/UKDkyR2hx6V1rctMoh14wMBJk
-        4SHiPQhgdjsWJQBFymUx+tL9YqrABum6zK4+JFXhlrN4jl6UWX5yUGWa7QofOF4M7kD2Kd
-        Nz5yGqeahDjkS5edxyP68FZCT+/k7Sg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-446-ocmP3CosMayolbt9PTMNog-1; Fri, 06 Oct 2023 11:13:02 -0400
-X-MC-Unique: ocmP3CosMayolbt9PTMNog-1
+        bh=BBBTecis4bs5YluD0BKJX2HGCbDC8Ki7O67H1hXsk1U=;
+        b=AVSkpYhZYHFl70XdrUID0/m3sLYBxOd08yyJKT7W6hjw2y1yfUd7bn/IS/yx1JWHbyb6go
+        NrgsJqnay2Sl08e2isoM1bnnuIxP1CEZ7dAhMiPhl9UDtH68vU7sV5es3wRpFucMf3DyPL
+        bFlKB1G7NlQbh3qFfOzjgUE7ZBKPYgA=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-22-J__u-p-BPL6NobSryWhYgw-1; Fri, 06 Oct 2023 11:13:02 -0400
+X-MC-Unique: J__u-p-BPL6NobSryWhYgw-1
 Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3A290811E88;
-        Fri,  6 Oct 2023 15:13:00 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E2FF23C1E9D3;
+        Fri,  6 Oct 2023 15:13:01 +0000 (UTC)
 Received: from RHTPC1VM0NT.lan (unknown [10.22.33.74])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C017940D1EA;
-        Fri,  6 Oct 2023 15:12:59 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 65D6A40D1EA;
+        Fri,  6 Oct 2023 15:13:01 +0000 (UTC)
 From:   Aaron Conole <aconole@redhat.com>
 To:     netdev@vger.kernel.org
 Cc:     dev@openvswitch.org, linux-kselftest@vger.kernel.org,
@@ -49,9 +49,9 @@ Cc:     dev@openvswitch.org, linux-kselftest@vger.kernel.org,
         Paolo Abeni <pabeni@redhat.com>,
         Adrian Moreno <amorenoz@redhat.com>,
         Eelco Chaudron <echaudro@redhat.com>
-Subject: [PATCH net 1/4] selftests: openvswitch: Add version check for pyroute2
-Date:   Fri,  6 Oct 2023 11:12:55 -0400
-Message-Id: <20231006151258.983906-2-aconole@redhat.com>
+Subject: [PATCH net 4/4] selftests: openvswitch: Fix the ct_tuple for v4
+Date:   Fri,  6 Oct 2023 11:12:58 -0400
+Message-Id: <20231006151258.983906-5-aconole@redhat.com>
 In-Reply-To: <20231006151258.983906-1-aconole@redhat.com>
 References: <20231006151258.983906-1-aconole@redhat.com>
 MIME-Version: 1.0
@@ -61,67 +61,34 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Paolo Abeni reports that on some systems the pyroute2 version isn't
-new enough to run the test suite.  Ensure that we support a minimum
-version of 0.6 for all cases (which does include the existing ones).
-The 0.6.1 version was released in May of 2021, so should be
-propagated to most installations at this point.
+Caught during code review.
 
-The alternative that Paolo proposed was to only skip when the
-add-flow is being run.  This would be okay for most cases, except
-if a future test case is added that needs to do flow dump without
-an associated add (just guessing).  In that case, it could also be
-broken and we would need additional skip logic anyway.  Just draw
-a line in the sand now.
-
-Fixes: 25f16c873fb1 ("selftests: add openvswitch selftest suite")
-Reported-by: Paolo Abeni <pabeni@redhat.com>
-Closes: https://lore.kernel.org/lkml/8470c431e0930d2ea204a9363a60937289b7fdbe.camel@redhat.com/
+Fixes: e52b07aa1a54 ("selftests: openvswitch: add flow dump support")
 Signed-off-by: Aaron Conole <aconole@redhat.com>
 ---
- tools/testing/selftests/net/openvswitch/openvswitch.sh | 2 +-
- tools/testing/selftests/net/openvswitch/ovs-dpctl.py   | 8 ++++++++
- 2 files changed, 9 insertions(+), 1 deletion(-)
+ tools/testing/selftests/net/openvswitch/ovs-dpctl.py | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-index 9c2012d70b08e..220c3356901ef 100755
---- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
-+++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-@@ -525,7 +525,7 @@ run_test() {
- 	fi
- 
- 	if python3 ovs-dpctl.py -h 2>&1 | \
--	     grep "Need to install the python" >/dev/null 2>&1; then
-+	     grep -E "Need to (install|upgrade) the python" >/dev/null 2>&1; then
- 		stdbuf -o0 printf "TEST: %-60s  [PYLIB]\n" "${tdesc}"
- 		return $ksft_skip
- 	fi
 diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-index 912dc8c490858..9686ca30d516d 100644
+index 153042c1e8c13..ed7bef7ca6883 100644
 --- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
 +++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-@@ -28,6 +28,8 @@ try:
-     from pyroute2.netlink import nlmsg_atoms
-     from pyroute2.netlink.exceptions import NetlinkError
-     from pyroute2.netlink.generic import GenericNetlinkSocket
-+    import pyroute2
-+
- except ModuleNotFoundError:
-     print("Need to install the python pyroute2 package.")
-     sys.exit(0)
-@@ -1998,6 +2000,12 @@ def main(argv):
-     nlmsg_atoms.ovskey = ovskey
-     nlmsg_atoms.ovsactions = ovsactions
- 
-+    # version check for pyroute2
-+    prverscheck = pyroute2.__version__.split(".")
-+    if int(prverscheck[0]) == 0 and int(prverscheck[1]) < 6:
-+        print("Need to upgrade the python pyroute2 package.")
-+        sys.exit(0)
-+
-     parser = argparse.ArgumentParser()
-     parser.add_argument(
-         "-v",
+@@ -1119,12 +1119,14 @@ class ovskey(nla):
+                 "src",
+                 lambda x: str(ipaddress.IPv4Address(x)),
+                 int,
++                convert_ipv4,
+             ),
+             (
+                 "dst",
+                 "dst",
+-                lambda x: str(ipaddress.IPv6Address(x)),
++                lambda x: str(ipaddress.IPv4Address(x)),
+                 int,
++                convert_ipv4,
+             ),
+             ("tp_src", "tp_src", "%d", int),
+             ("tp_dst", "tp_dst", "%d", int),
 -- 
 2.40.1
 
