@@ -2,118 +2,154 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 49A95E81DE9
-	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Oct 2023 12:17:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C542E81DEC
+	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Oct 2023 12:31:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232202AbjJFMRM (ORCPT
+        id S232220AbjJFMbJ (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 6 Oct 2023 08:17:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37432 "EHLO
+        Fri, 6 Oct 2023 08:31:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232140AbjJFMRL (ORCPT
+        with ESMTP id S232029AbjJFMbD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 6 Oct 2023 08:17:11 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A555C6;
-        Fri,  6 Oct 2023 05:17:10 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55541C433C7;
-        Fri,  6 Oct 2023 12:17:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696594630;
-        bh=EqGDo44ijwt3PzVq3fJt0gXvMnUdPHnl13/q3Gh+IJA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=D6ltmfDmvp/75b1XYAh+EJYFw/UiG6APNmLiR0Md1c9oGsu9Fiy31mMH20KZXQuYw
-         FKgRMGjTR644c3uzTx61Cm80OZQhHhsiyjqVSP+9hqVdDS0OVgHeu/G8tpH/31UT+b
-         0YUh9zl6+KPXMGMBPuckQKhdexTkruFBEKPFFXXQBC/eLNKiLVjlv2VGlAJZHHCa0p
-         lfCcMGqLD5ybTYvxe7rNBO1RZGUbORUTxeQIcTKtggoyf5KQ/ljs9Xi34jkXztew5n
-         5Tr5syleMJi8nkG5skjcn/oaxRzGS0K/pDWsXyFl+a9uj+kpWutmxRROX/rZ7FFEdK
-         fdZspU9mRq+gw==
-Date:   Fri, 6 Oct 2023 13:17:01 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-        Deepak Gupta <debug@rivosinc.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        "H.J. Lu" <hjl.tools@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v4 03/36] arm64/gcs: Document the ABI for Guarded Control
- Stacks
-Message-ID: <638a7be5-6662-471d-a3ce-0de0ac768e99@sirena.org.uk>
-References: <aaea542c-929c-4c9b-8caa-ca67e0eb9c1e@sirena.org.uk>
- <ZOTnL1SDJWZjHPUW@arm.com>
- <43ec219d-bf20-47b8-a5f8-32bc3b64d487@sirena.org.uk>
- <ZOXa98SqwYPwxzNP@arm.com>
- <ZOYFazB1gYjzDRdA@arm.com>
- <ZRWw7aa3C0LlMPTH@arm.com>
- <38edb5c3-367e-4ab7-8cb7-aa1a5c0e330c@sirena.org.uk>
- <ZRvUxLgMse8QYlGS@arm.com>
- <a7d2fd66-c06b-4033-bca2-4b14afc4904f@sirena.org.uk>
- <ZR7w/mr0xZbpIPc5@arm.com>
+        Fri, 6 Oct 2023 08:31:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F76AE4
+        for <linux-kselftest@vger.kernel.org>; Fri,  6 Oct 2023 05:30:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1696595411;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8It8tkqkVjlZ4hD1o0BfKil40eztbarnBcDIj9TIgRw=;
+        b=AL9bsp/99fpiM5GAJnm9dLb9vECeBmidViIy+eNTRYUecjJ8vdqF1pmRP75DC08GpV4SjG
+        v22CdJwFE2mMKCcINJgwuYO08/hTKTZsz1Qq6GKR49WXWiOcSie9XFcT3s+QTCAPYjJAhF
+        FtBEACJgy7GoGbVMEb6kHR5xGY4QEmY=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-605-SMYE5Iu4M5GNWVmDFCIirw-1; Fri, 06 Oct 2023 08:30:09 -0400
+X-MC-Unique: SMYE5Iu4M5GNWVmDFCIirw-1
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-40570ccc497so15258435e9.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 06 Oct 2023 05:30:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696595408; x=1697200208;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8It8tkqkVjlZ4hD1o0BfKil40eztbarnBcDIj9TIgRw=;
+        b=ZRkEeh5j3vaRBUGFshLQ6Fnziszox3g1VsNtG1BN0VKZhG7YUMJplOeadjyJ7BXecb
+         +P6TxcRatsa1FT0DtvR7UC8OzUHc7iM2s97kM1SA6+cgrwjNNftlfdam6P44vVGUg7dI
+         wdNT9PQs18nu5Jdtd1DRP45cxHKg8KbYHjsQeCjfc9ekNUTUHtcKJbaog23wLgtJZXNK
+         vl34BYHl/4Lr7rA2PlIBVK2e+0uYPLtxpob5UEutvwbtbKcBK+nWLBm2CMKm1KK56w0y
+         ZEV1pZnRUYvzdhpKJtlKJAxHc/hHwka8t4UnSKeemiJisqR+cLBlnKSG0+D61lKUhJQ+
+         Hp3w==
+X-Gm-Message-State: AOJu0YzFGxDwPPLv3eCvULbk+IT157pWxE0YgrX5PXht/55w7o4IsOoG
+        06WJKyzB+YBOFn785/DsKy698TIIgRpichJsHVQcwkk0531wlmedRf0T8xarTVFUN7t82MFVYRe
+        T8NvKccZXPxgbvdyy9bbTHGAV+/Gw
+X-Received: by 2002:a5d:654e:0:b0:31d:db92:31ae with SMTP id z14-20020a5d654e000000b0031ddb9231aemr7724611wrv.44.1696595408361;
+        Fri, 06 Oct 2023 05:30:08 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHPeDl/jbLTAu2J7xcFjLubeMat581zk8oYiD1AECauqAehKlE4r1vrKnp4LPajXvYKo35KQw==
+X-Received: by 2002:a5d:654e:0:b0:31d:db92:31ae with SMTP id z14-20020a5d654e000000b0031ddb9231aemr7724581wrv.44.1696595407844;
+        Fri, 06 Oct 2023 05:30:07 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c715:ee00:4e24:cf8e:3de0:8819? (p200300cbc715ee004e24cf8e3de08819.dip0.t-ipconnect.de. [2003:cb:c715:ee00:4e24:cf8e:3de0:8819])
+        by smtp.gmail.com with ESMTPSA id g7-20020a056000118700b003143c9beeaesm1559784wrx.44.2023.10.06.05.30.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Oct 2023 05:30:07 -0700 (PDT)
+Message-ID: <df0ccf08-1bbb-418c-0b3b-57c7288a9871@redhat.com>
+Date:   Fri, 6 Oct 2023 14:30:06 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fv2LrnWqf0aiVt0H"
-Content-Disposition: inline
-In-Reply-To: <ZR7w/mr0xZbpIPc5@arm.com>
-X-Cookie: Rome wasn't burnt in a day.
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Content-Language: en-US
+To:     Lokesh Gidra <lokeshgidra@google.com>,
+        Suren Baghdasaryan <surenb@google.com>
+Cc:     Peter Xu <peterx@redhat.com>, Jann Horn <jannh@google.com>,
+        akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
+        brauner@kernel.org, shuah@kernel.org, aarcange@redhat.com,
+        hughd@google.com, mhocko@suse.com, axelrasmussen@google.com,
+        rppt@kernel.org, willy@infradead.org, Liam.Howlett@oracle.com,
+        zhangpeng362@huawei.com, bgeffon@google.com,
+        kaleshsingh@google.com, ngeoffray@google.com, jdduke@google.com,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kernel-team@android.com
+References: <ZRXHK3hbdjfQvCCp@x1n>
+ <fc27ce41-bc97-91a7-deb6-67538689021c@redhat.com> <ZRrf8NligMzwqx97@x1n>
+ <CA+EESO5VtrfXv-kvDsotPLXcpMgOK5t5c+tbXZ7KWRU2O_0PBQ@mail.gmail.com>
+ <CA+EESO4W2jmBSpyHkkqZV0LHnA_OyWQcvwSkfPcWmWCsAF5UWw@mail.gmail.com>
+ <9434ef94-15e8-889c-0c31-3e875060a2f7@redhat.com>
+ <CA+EESO4GuDXZ6newN-oF43WOxrfsZ9Ejq8RJNF2wOYq571zmDA@mail.gmail.com>
+ <CAJuCfpE_h7Bj41sBiADswkUfVCoLXANuQmctdYUEgYjn6fHSCw@mail.gmail.com>
+ <ZRx31TKFDGRatoC8@x1n> <c837fc02-3dbd-ba88-dacb-cf150272a4c4@redhat.com>
+ <ZRyFnurIgVFVD8hd@x1n>
+ <CAJuCfpFggFpPxJjx9uGe05x0fTNONgoUf=QzkpCHLx43Tbryjg@mail.gmail.com>
+ <CA+EESO5UPJrWpUKLg6m=1EmG6P9oXW6ADRkbRKjijVxj641qFQ@mail.gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v2 2/3] userfaultfd: UFFDIO_REMAP uABI
+In-Reply-To: <CA+EESO5UPJrWpUKLg6m=1EmG6P9oXW6ADRkbRKjijVxj641qFQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On 04.10.23 01:39, Lokesh Gidra wrote:
+> On Tue, Oct 3, 2023 at 11:26 PM Suren Baghdasaryan <surenb@google.com> wrote:
+>>
+>> On Tue, Oct 3, 2023 at 2:21 PM Peter Xu <peterx@redhat.com> wrote:
+>>>
+>>> On Tue, Oct 03, 2023 at 11:08:07PM +0200, David Hildenbrand wrote:
+>>>> Sorry I have to ask: has this ever been discussed on the list? I don't see
+>>>> any pointers. If not, then probably the number of people that know about the
+>>>> history can be counted with my two hands and that shouldn't be the basis for
+>>>> making decisions.
+>>>
+>>> For example:
+>>>
+>>> https://lore.kernel.org/all/1425575884-2574-21-git-send-email-aarcange@redhat.com/
 
---fv2LrnWqf0aiVt0H
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Sorry, I had to process a family NMI the last couple of days.
 
-On Thu, Oct 05, 2023 at 06:23:10PM +0100, Catalin Marinas wrote:
+>>
+>> There was another submission in 2019:
+>> https://lore.kernel.org/all/cover.1547251023.git.blake.caldwell@colorado.edu/
 
-> It's not just the default size that I dislike (I think the x86
-> RLIMIT_STACK or clone3() stack_size is probably good enough) but the
-> kernel allocating the shadow stack and inserting it into the user
-> address space. The actual thread stack is managed by the user but the
-> shadow stack is not (and we don't do this very often). Anyway, I don't
-> have a better solution for direct uses of clone() or clone3(), other
-> than running those threads with the shadow stack disabled. Not sure
-> that's desirable.
+It would be good to link them in the cover letter and shortly explain 
+why that wasn't merged back then (if there was any reason).
 
-Running threads with the shadow stack disabled if they don't explicitly
-request it feels like it's asking for trouble - as well as the escape
-route from the protection it'd provide I'd expect there to be trouble
-for things that do stack pivots, potentially random issues if there's a
-mix of ways threads are started.  It's going to be a tradeoff whatever
-we do.
+>>
+>> Though both times it did not generate much discussion. I don't have a
+>> strong preference though MOVE sounds more generic to me TBH (it
+>> specifies the operation rather than REMAP which hints on how that
+>> operation is carried out). But again, I'm fine either way.
+> 
+> That's a good point. IMHO, if in future we want to have the fallback
+> implemented, then MOVE would be a more appropriate name than REMAP.
+> 
+>> As for UFFDIO_MOVE_ZERO_COPY_ONLY vs UFFDIO_MOVE_MODE_ALLOW_COPY, I
+>> find it weird that the default (the most efficient/desired) mode of
+>> operation needs a flag. I would prefer to have no flag initially and
+>> add UFFDIO_MOVE_MODE_ALLOW_COPY or whatever name is more appropriate
+>> when/if we ever need it. Makes sense?
+> 
+> Agreed!
 
---fv2LrnWqf0aiVt0H
-Content-Type: application/pgp-signature; name="signature.asc"
+I agree. One could have UFFDIO_MOVE that is best-effort and documented 
+like that, and a to-be-named future extension that always works but 
+might be more expensive.
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmUf+rwACgkQJNaLcl1U
-h9AHQQf7BUjbkJGRbqVL5lGyELqXE64nUXJxqNVQXzkHQ1ujZqDV/cLF9uojqJh6
-yo1MngEonxyKeJjgqupcA6TzR0LGD9KvuzahtnPwSfluLAxLQG5iY2L+sA2Tdwb4
-kPqoRiUS0++v1w/Oud9y0kcF6an3/im18MenqLAPGtnHPH+xE3EHipQsrYN53Fos
-vsFAhXwuDhqGVonMiS+J1OxVsYZ9cRcVlStwZI0JbcCPGjS/vMUsCiE1j8ERuLYr
-ZUNLyxMMQy35iW2uIdk67nRdv03mjTOw9yYr3akjxNW5eJeFrc804fBdZZ7YqrEE
-Ju28oLb7xq1zQUOX3lYKlNKWsex4KA==
-=iNQp
------END PGP SIGNATURE-----
+Ideally we'd have an interface that does not expose and/or rely on such 
+low-level information and simply always works, but getting that would 
+mean that we'd have to implement the fallback immediately ... so I guess 
+we'll have to expose a best-effort interface first.
 
---fv2LrnWqf0aiVt0H--
+-- 
+Cheers,
+
+David / dhildenb
+
