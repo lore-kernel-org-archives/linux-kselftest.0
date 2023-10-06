@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98E2DE81E05
-	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Oct 2023 15:14:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13CA4E81E08
+	for <linux-kselftest@archiver.kernel.org>; Fri,  6 Oct 2023 15:14:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232654AbjJFPN7 (ORCPT
+        id S232750AbjJFPOA (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 6 Oct 2023 11:13:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51482 "EHLO
+        Fri, 6 Oct 2023 11:14:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232801AbjJFPNu (ORCPT
+        with ESMTP id S232829AbjJFPN4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 6 Oct 2023 11:13:50 -0400
+        Fri, 6 Oct 2023 11:13:56 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A71BA6
-        for <linux-kselftest@vger.kernel.org>; Fri,  6 Oct 2023 08:13:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AF5AE4
+        for <linux-kselftest@vger.kernel.org>; Fri,  6 Oct 2023 08:13:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1696605185;
+        s=mimecast20190719; t=1696605188;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=7IoOSdAcWEnoM23if8NwRWqcJLrYCXde/SbXH5MuvOk=;
-        b=AUQmzpqNfS8uBau4L9akyTe7LdBZvP5dfTm06+ZtJbPjVTCP+19v7ntaUmXrbzrfdfAtm4
-        PBhjjg0Nww5NLi2tc5pGNr0JNJUmFq/vCLNhTISclhY31+7uQtvRq6dQXQcAqBVyzjI4OP
-        AtSFR8zr1kWeC1nBvpUqQhrpunVLj94=
+        bh=a3BtezrsO4g/f4wdN64oWX3Tfa1nQARVL1ef9IRoW74=;
+        b=NJ7EybVb4xtq77p5zhy4xcHJt29QbTD1gBzEvb1Id6GC/UKDkyR2hx6V1rctMoh14wMBJk
+        4SHiPQhgdjsWJQBFymUx+tL9YqrABum6zK4+JFXhlrN4jl6UWX5yUGWa7QofOF4M7kD2Kd
+        Nz5yGqeahDjkS5edxyP68FZCT+/k7Sg=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-46-83qTOefDP0Ww2bJv63tvwg-1; Fri, 06 Oct 2023 11:13:02 -0400
-X-MC-Unique: 83qTOefDP0Ww2bJv63tvwg-1
+ us-mta-446-ocmP3CosMayolbt9PTMNog-1; Fri, 06 Oct 2023 11:13:02 -0400
+X-MC-Unique: ocmP3CosMayolbt9PTMNog-1
 Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 56724801E91;
-        Fri,  6 Oct 2023 15:13:01 +0000 (UTC)
-Received: from RHTPC1VM0NT.lan (unknown [10.22.33.74])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DBC3640D1BE;
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3A290811E88;
         Fri,  6 Oct 2023 15:13:00 +0000 (UTC)
+Received: from RHTPC1VM0NT.lan (unknown [10.22.33.74])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C017940D1EA;
+        Fri,  6 Oct 2023 15:12:59 +0000 (UTC)
 From:   Aaron Conole <aconole@redhat.com>
 To:     netdev@vger.kernel.org
 Cc:     dev@openvswitch.org, linux-kselftest@vger.kernel.org,
@@ -49,9 +49,9 @@ Cc:     dev@openvswitch.org, linux-kselftest@vger.kernel.org,
         Paolo Abeni <pabeni@redhat.com>,
         Adrian Moreno <amorenoz@redhat.com>,
         Eelco Chaudron <echaudro@redhat.com>
-Subject: [PATCH net 3/4] selftests: openvswitch: Skip drop testing on older kernels
-Date:   Fri,  6 Oct 2023 11:12:57 -0400
-Message-Id: <20231006151258.983906-4-aconole@redhat.com>
+Subject: [PATCH net 1/4] selftests: openvswitch: Add version check for pyroute2
+Date:   Fri,  6 Oct 2023 11:12:55 -0400
+Message-Id: <20231006151258.983906-2-aconole@redhat.com>
 In-Reply-To: <20231006151258.983906-1-aconole@redhat.com>
 References: <20231006151258.983906-1-aconole@redhat.com>
 MIME-Version: 1.0
@@ -61,115 +61,67 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Kernels that don't have support for openvswitch drop reasons also
-won't have the drop counter reasons, so we should skip the test
-completely.  It previously wasn't possible to build a test case
-for this without polluting the datapath, so we introduce a mechanism
-to clear all the flows from a datapath allowing us to test for
-explicit drop actions, and then clear the flows to build the
-original test case.
+Paolo Abeni reports that on some systems the pyroute2 version isn't
+new enough to run the test suite.  Ensure that we support a minimum
+version of 0.6 for all cases (which does include the existing ones).
+The 0.6.1 version was released in May of 2021, so should be
+propagated to most installations at this point.
 
-Fixes: 4242029164d6 ("selftests: openvswitch: add explicit drop testcase")
+The alternative that Paolo proposed was to only skip when the
+add-flow is being run.  This would be okay for most cases, except
+if a future test case is added that needs to do flow dump without
+an associated add (just guessing).  In that case, it could also be
+broken and we would need additional skip logic anyway.  Just draw
+a line in the sand now.
+
+Fixes: 25f16c873fb1 ("selftests: add openvswitch selftest suite")
+Reported-by: Paolo Abeni <pabeni@redhat.com>
+Closes: https://lore.kernel.org/lkml/8470c431e0930d2ea204a9363a60937289b7fdbe.camel@redhat.com/
 Signed-off-by: Aaron Conole <aconole@redhat.com>
 ---
- .../selftests/net/openvswitch/openvswitch.sh  | 17 ++++++++++
- .../selftests/net/openvswitch/ovs-dpctl.py    | 34 +++++++++++++++++++
- 2 files changed, 51 insertions(+)
+ tools/testing/selftests/net/openvswitch/openvswitch.sh | 2 +-
+ tools/testing/selftests/net/openvswitch/ovs-dpctl.py   | 8 ++++++++
+ 2 files changed, 9 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-index 2a0112be7ead5..ca7090e71bff2 100755
+index 9c2012d70b08e..220c3356901ef 100755
 --- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
 +++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-@@ -144,6 +144,12 @@ ovs_add_flow () {
- 	return 0
- }
+@@ -525,7 +525,7 @@ run_test() {
+ 	fi
  
-+ovs_del_flows () {
-+	info "Deleting all flows from DP: sbx:$1 br:$2"
-+	ovs_sbx "$1" python3 $ovs_base/ovs-dpctl.py del-flows "$2"
-+        return 0
-+}
-+
- ovs_drop_record_and_run () {
- 	local sbx=$1
- 	shift
-@@ -200,6 +206,17 @@ test_drop_reason() {
- 	ip netns exec server ip addr add 172.31.110.20/24 dev s1
- 	ip netns exec server ip link set s1 up
- 
-+	# Check if drop reasons can be sent
-+	ovs_add_flow "test_drop_reason" dropreason \
-+		'in_port(1),eth(),eth_type(0x0806),arp()' 'drop(10)' 2>/dev/null
-+	if [ $? == 1 ]; then
-+		info "no support for drop reasons - skipping"
-+		ovs_exit_sig
-+		return $ksft_skip
-+	fi
-+
-+	ovs_del_flows "test_drop_reason" dropreason
-+
- 	# Allow ARP
- 	ovs_add_flow "test_drop_reason" dropreason \
- 		'in_port(1),eth(),eth_type(0x0806),arp()' '2' || return 1
+ 	if python3 ovs-dpctl.py -h 2>&1 | \
+-	     grep "Need to install the python" >/dev/null 2>&1; then
++	     grep -E "Need to (install|upgrade) the python" >/dev/null 2>&1; then
+ 		stdbuf -o0 printf "TEST: %-60s  [PYLIB]\n" "${tdesc}"
+ 		return $ksft_skip
+ 	fi
 diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-index 9686ca30d516d..153042c1e8c13 100644
+index 912dc8c490858..9686ca30d516d 100644
 --- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
 +++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-@@ -1906,6 +1906,32 @@ class OvsFlow(GenericNetlinkSocket):
-             raise ne
-         return reply
- 
-+    def del_flows(self, dpifindex):
-+        """
-+        Send a del message to the kernel that will drop all flows.
+@@ -28,6 +28,8 @@ try:
+     from pyroute2.netlink import nlmsg_atoms
+     from pyroute2.netlink.exceptions import NetlinkError
+     from pyroute2.netlink.generic import GenericNetlinkSocket
++    import pyroute2
 +
-+        dpifindex should be a valid datapath obtained by calling
-+        into the OvsDatapath lookup
-+        """
-+
-+        flowmsg = OvsFlow.ovs_flow_msg()
-+        flowmsg["cmd"] = OVS_FLOW_CMD_DEL
-+        flowmsg["version"] = OVS_DATAPATH_VERSION
-+        flowmsg["reserved"] = 0
-+        flowmsg["dpifindex"] = dpifindex
-+
-+        try:
-+            reply = self.nlm_request(
-+                flowmsg,
-+                msg_type=self.prid,
-+                msg_flags=NLM_F_REQUEST | NLM_F_ACK,
-+            )
-+            reply = reply[0]
-+        except NetlinkError as ne:
-+            print(flowmsg)
-+            raise ne
-+        return reply
-+
-     def dump(self, dpifindex, flowspec=None):
-         """
-         Returns a list of messages containing flows.
-@@ -2068,6 +2094,9 @@ def main(argv):
-     addflcmd.add_argument("flow", help="Flow specification")
-     addflcmd.add_argument("acts", help="Flow actions")
+ except ModuleNotFoundError:
+     print("Need to install the python pyroute2 package.")
+     sys.exit(0)
+@@ -1998,6 +2000,12 @@ def main(argv):
+     nlmsg_atoms.ovskey = ovskey
+     nlmsg_atoms.ovsactions = ovsactions
  
-+    delfscmd = subparsers.add_parser("del-flows")
-+    delfscmd.add_argument("flsbr", help="Datapath name")
++    # version check for pyroute2
++    prverscheck = pyroute2.__version__.split(".")
++    if int(prverscheck[0]) == 0 and int(prverscheck[1]) < 6:
++        print("Need to upgrade the python pyroute2 package.")
++        sys.exit(0)
 +
-     args = parser.parse_args()
- 
-     if args.verbose > 0:
-@@ -2151,6 +2180,11 @@ def main(argv):
-         flow = OvsFlow.ovs_flow_msg()
-         flow.parse(args.flow, args.acts, rep["dpifindex"])
-         ovsflow.add_flow(rep["dpifindex"], flow)
-+    elif hasattr(args, "flsbr"):
-+        rep = ovsdp.info(args.flsbr, 0)
-+        if rep is None:
-+            print("DP '%s' not found." % args.flsbr)
-+        ovsflow.del_flows(rep["dpifindex"])
- 
-     return 0
- 
+     parser = argparse.ArgumentParser()
+     parser.add_argument(
+         "-v",
 -- 
 2.40.1
 
