@@ -2,44 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 15103E95A97
-	for <linux-kselftest@archiver.kernel.org>; Mon,  9 Oct 2023 08:51:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08D50E95A99
+	for <linux-kselftest@archiver.kernel.org>; Mon,  9 Oct 2023 08:51:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345623AbjJIIvn (ORCPT
+        id S1345563AbjJIIvx (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 9 Oct 2023 04:51:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46882 "EHLO
+        Mon, 9 Oct 2023 04:51:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345609AbjJIIvg (ORCPT
+        with ESMTP id S1345645AbjJIIvm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 9 Oct 2023 04:51:36 -0400
+        Mon, 9 Oct 2023 04:51:42 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0022F102;
-        Mon,  9 Oct 2023 01:51:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76C7DFD;
+        Mon,  9 Oct 2023 01:51:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696841493; x=1728377493;
+  t=1696841499; x=1728377499;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=1yMPZv0+hy/FoeMbAtBKKDM1b/wty0WUySVOG2Kdxzs=;
-  b=OU+rXxQOXeqqApHuqeAtYdMWE8prkmHe58jlq9BFXir9LqfW8WBN1o/A
-   s9n1LIlJ6L+lFr42tRI6QQpraLt9m1+HJE6BD3It8fqQyV3cIS3/r13F+
-   a/mt+rRJ/TRWQaF4G+hSF1vzNT/rPmWqMPlfOImlTnibjgnnR1PHfJwZ0
-   wtLxQN23oKVCuq3bvmm1yKgkKaaqp08LyjkzCNNKUgIUw7D5pGSp6UkIa
-   j29RukifBR8dW4AZVMTZTBlL70ZXkEnt3HzAkd14LolcNnMASqXqVZ30Z
-   gHpFbkOCMxVowr5eL+GueYnkTzjVUbADgctkHnPCBlE00pP9Lw+IHRpC+
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10857"; a="364390800"
+  bh=JSeUpuRex7a51lDX14t/GdpSs0DuR6eKWST5rPe8kAg=;
+  b=GVoTCM/ib6Ixolmle+fm37gk7TMAGiMliqYIOeZ6KN0qDmI7LRpj531s
+   p6BU4oYCje14RXgR7K/V15lbpieGhQgWoE+OEo7O4xWqmXKXvGif/NUiT
+   kXf9TudwMgEu7OEejIV36Tow2UwI0n1AF6qjNkVG3mygQZg0kRYoKBNPK
+   BD7IBXRViCyBWhwR/DFP34+xEmiv/24ZHQgas+ZkcI76dpAHLIQeVbhNF
+   2sUZ/gpDuizp47y1j49rLXrOKuOXMYayPbj2yF7hxIZLXh7wX+E17PfwE
+   /UoF7Bs4PDENBPF2RBD7z9hiB8SHBwCWFIWqlTQVJvnjkzRefDw40vqUs
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10857"; a="364390850"
 X-IronPort-AV: E=Sophos;i="6.03,209,1694761200"; 
-   d="scan'208";a="364390800"
+   d="scan'208";a="364390850"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2023 01:51:32 -0700
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2023 01:51:39 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10857"; a="818781671"
+X-IronPort-AV: E=McAfee;i="6600,9927,10857"; a="818781724"
 X-IronPort-AV: E=Sophos;i="6.03,209,1694761200"; 
-   d="scan'208";a="818781671"
+   d="scan'208";a="818781724"
 Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by fmsmga008.fm.intel.com with ESMTP; 09 Oct 2023 01:51:31 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 09 Oct 2023 01:51:38 -0700
 From:   Yi Liu <yi.l.liu@intel.com>
 To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
         kevin.tian@intel.com, robin.murphy@arm.com,
@@ -52,9 +52,9 @@ Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
         suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         zhenzhong.duan@intel.com, joao.m.martins@oracle.com
-Subject: [RFC 3/7] iommufd: Add iommufd_device_bind_pasid()
-Date:   Mon,  9 Oct 2023 01:51:19 -0700
-Message-Id: <20231009085123.463179-4-yi.l.liu@intel.com>
+Subject: [RFC 7/7] vfio: Add vfio_register_pasid_iommu_dev()
+Date:   Mon,  9 Oct 2023 01:51:23 -0700
+Message-Id: <20231009085123.463179-8-yi.l.liu@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231009085123.463179-1-yi.l.liu@intel.com>
 References: <20231009085123.463179-1-yi.l.liu@intel.com>
@@ -66,158 +66,146 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Kevin Tian <kevin.tian@intel.com>
 
-Intel SIOV allows creating virtual devices of which the vRID is
-represented by a pasid of a physical device. So such device can be
-bound to an iommufd as physical device does and then later be attached
-to an IOAS/hwpt using that pasid.
+This adds vfio_register_pasid_iommu_dev() for device driver to register
+virtual devices which are isolated per PASID in physical IOMMU. The major
+usage is for the SIOV devices which allows device driver to tag the DMAs
+out of virtual devices within it with different PASIDs.
 
-Binding a virtual device has different security contract comparing
-to binding a physical device. There is no DMA ownership claim per
-pasid since the parent device is already claimed by the parent driver
-including the entire pasid space. With that we simply store the pasid
-in the object once it passes other checks.
+For a given vfio device, VFIO core creates both group user interface and
+device user interface (device cdev) if configured. However, for the virtual
+devices backed by PASID of the device, VFIO core shall only create device
+user interface as there is no plan to support such devices in the legacy
+vfio_iommu drivers which is a must if creating group user interface for
+such virtual devices. This introduces a VFIO_PASID_IOMMU group type for
+the device driver to register PASID virtual devices, and provides a wrapper
+API for it. In particular no iommu group (neither fake group or real group)
+exists per PASID, hence no group interface for this type.
 
 Signed-off-by: Kevin Tian <kevin.tian@intel.com>
 Signed-off-by: Yi Liu <yi.l.liu@intel.com>
 ---
- drivers/iommu/iommufd/device.c          | 72 ++++++++++++++++++++++++-
- drivers/iommu/iommufd/iommufd_private.h |  7 +++
- include/linux/iommufd.h                 |  3 ++
- 3 files changed, 80 insertions(+), 2 deletions(-)
+ drivers/vfio/group.c     | 18 ++++++++++++++++++
+ drivers/vfio/vfio.h      |  8 ++++++++
+ drivers/vfio/vfio_main.c | 10 ++++++++++
+ include/linux/vfio.h     |  1 +
+ 4 files changed, 37 insertions(+)
 
-diff --git a/drivers/iommu/iommufd/device.c b/drivers/iommu/iommufd/device.c
-index 9dd76d92b7f6..35c1419ee96b 100644
---- a/drivers/iommu/iommufd/device.c
-+++ b/drivers/iommu/iommufd/device.c
-@@ -5,6 +5,7 @@
- #include <linux/slab.h>
- #include <linux/iommu.h>
- #include <uapi/linux/iommufd.h>
-+#include <linux/msi.h>
- #include "../iommu-priv.h"
+diff --git a/drivers/vfio/group.c b/drivers/vfio/group.c
+index 610a429c6191..20771d0feb37 100644
+--- a/drivers/vfio/group.c
++++ b/drivers/vfio/group.c
+@@ -407,6 +407,9 @@ int vfio_device_block_group(struct vfio_device *device)
+ 	struct vfio_group *group = device->group;
+ 	int ret = 0;
  
- #include "io_pagetable.h"
-@@ -139,8 +140,10 @@ void iommufd_device_destroy(struct iommufd_object *obj)
- 	WARN_ON(!xa_empty(&idev->pasid_hwpts));
- 	if (idev->has_user_data)
- 		dev_iommu_ops(idev->dev)->unset_dev_user_data(idev->dev);
--	iommu_device_release_dma_owner(idev->dev);
--	iommufd_put_group(idev->igroup);
-+	if (idev->igroup) {
-+		iommu_device_release_dma_owner(idev->dev);
-+		iommufd_put_group(idev->igroup);
-+	}
- 	if (!iommufd_selftest_is_mock_dev(idev->dev))
- 		iommufd_ctx_put(idev->ictx);
- }
-@@ -257,6 +260,71 @@ struct iommufd_device *iommufd_device_bind(struct iommufd_ctx *ictx,
- }
- EXPORT_SYMBOL_NS_GPL(iommufd_device_bind, IOMMUFD);
++	if (!group)
++		return 0;
++
+ 	mutex_lock(&group->group_lock);
+ 	if (group->opened_file) {
+ 		ret = -EBUSY;
+@@ -424,6 +427,8 @@ void vfio_device_unblock_group(struct vfio_device *device)
+ {
+ 	struct vfio_group *group = device->group;
  
-+/**
-+ * iommufd_device_bind_pasid - Bind a virtual device to an iommu fd
-+ * @ictx: iommufd file descriptor
-+ * @dev: Pointer to the parent physical device struct
-+ * @pasid: the pasid value representing vRID of this virtual device
-+ * @id: Output ID number to return to userspace for this device
-+ *
-+ * The virtual device always tags its DMA with the provided pasid.
-+ * A successful bind allows the pasid to be used in other iommufd
-+ * operations e.g. attach/detach and returns struct iommufd_device
-+ * pointer, otherwise returns error pointer.
-+ *
-+ * There is no ownership check per pasid. A driver using this API
-+ * must already claim the DMA ownership over the parent device and
-+ * the pasid is allocated by the driver itself.
-+ *
-+ * PASID is a device capability so unlike iommufd_device_bind() it
-+ * has no iommu group associated.
-+ *
-+ * The caller must undo this with iommufd_device_unbind()
++	if (!group)
++		return;
+ 	mutex_lock(&group->group_lock);
+ 	group->cdev_device_open_cnt--;
+ 	mutex_unlock(&group->group_lock);
+@@ -704,6 +709,10 @@ int vfio_device_set_group(struct vfio_device *device,
+ {
+ 	struct vfio_group *group;
+ 
++	/* No group associate with a device with pasid */
++	if (type == VFIO_PASID_IOMMU)
++		return 0;
++
+ 	if (type == VFIO_IOMMU)
+ 		group = vfio_group_find_or_alloc(device->dev);
+ 	else
+@@ -722,6 +731,9 @@ void vfio_device_remove_group(struct vfio_device *device)
+ 	struct vfio_group *group = device->group;
+ 	struct iommu_group *iommu_group;
+ 
++	if (!group)
++		return;
++
+ 	if (group->type == VFIO_NO_IOMMU || group->type == VFIO_EMULATED_IOMMU)
+ 		iommu_group_remove_device(device->dev);
+ 
+@@ -766,6 +778,9 @@ void vfio_device_remove_group(struct vfio_device *device)
+ 
+ void vfio_device_group_register(struct vfio_device *device)
+ {
++	if (!device->group)
++		return;
++
+ 	mutex_lock(&device->group->device_lock);
+ 	list_add(&device->group_next, &device->group->device_list);
+ 	mutex_unlock(&device->group->device_lock);
+@@ -773,6 +788,9 @@ void vfio_device_group_register(struct vfio_device *device)
+ 
+ void vfio_device_group_unregister(struct vfio_device *device)
+ {
++	if (!device->group)
++		return;
++
+ 	mutex_lock(&device->group->device_lock);
+ 	list_del(&device->group_next);
+ 	mutex_unlock(&device->group->device_lock);
+diff --git a/drivers/vfio/vfio.h b/drivers/vfio/vfio.h
+index d228cdb6b345..1ccc9aba6dc7 100644
+--- a/drivers/vfio/vfio.h
++++ b/drivers/vfio/vfio.h
+@@ -48,6 +48,14 @@ enum vfio_group_type {
+ 	 */
+ 	VFIO_IOMMU,
+ 
++	/*
++	 * Virtual device with IOMMU backing. The user of these devices can
++	 * trigger DMAs which are all tagged with a pasid. Pasid itself is
++	 * a device resource so there is no group associated. The VFIO core
++	 * doesn't create a vfio_group for such devices.
++	 */
++	VFIO_PASID_IOMMU,
++
+ 	/*
+ 	 * Virtual device without IOMMU backing. The VFIO core fakes up an
+ 	 * iommu_group as the iommu_group sysfs interface is part of the
+diff --git a/drivers/vfio/vfio_main.c b/drivers/vfio/vfio_main.c
+index 850bbaebdd29..362de0ad36ce 100644
+--- a/drivers/vfio/vfio_main.c
++++ b/drivers/vfio/vfio_main.c
+@@ -334,6 +334,16 @@ int vfio_register_emulated_iommu_dev(struct vfio_device *device)
+ }
+ EXPORT_SYMBOL_GPL(vfio_register_emulated_iommu_dev);
+ 
++/*
++ * Register a virtual device with IOMMU pasid protection. The user of
++ * this device can trigger DMA as long as all of its outgoing DMAs are
++ * always tagged with a pasid.
 + */
-+struct iommufd_device *iommufd_device_bind_pasid(struct iommufd_ctx *ictx,
-+						 struct device *dev,
-+						 u32 pasid, u32 *id)
++int vfio_register_pasid_iommu_dev(struct vfio_device *device)
 +{
-+	struct iommufd_device *idev;
-+	int rc;
-+
-+	/*
-+	 * iommufd always sets IOMMU_CACHE because we offer no way for userspace
-+	 * to restore cache coherency.
-+	 */
-+	if (!device_iommu_capable(dev, IOMMU_CAP_CACHE_COHERENCY))
-+		return ERR_PTR(-EINVAL);
-+
-+	/*
-+	 * No iommu supports pasid-granular msi message today. Here we
-+	 * just check whether the parent device can do safe interrupts.
-+	 * Isolation between virtual devices within the parent device
-+	 * relies on the parent driver to enforce.
-+	 */
-+	if (!iommufd_selftest_is_mock_dev(dev) &&
-+	    !msi_device_has_isolated_msi(dev)) {
-+		rc = iommufd_allow_unsafe_interrupts(dev);
-+		if (rc)
-+			return ERR_PTR(rc);
-+	}
-+
-+	idev = iommufd_alloc_device(ictx, dev);
-+	if (IS_ERR(idev))
-+		return idev;
-+	idev->default_pasid = pasid;
-+
-+	/*
-+	 * If the caller fails after this success it must call
-+	 * iommufd_unbind_device() which is safe since we hold this refcount.
-+	 * This also means the device is a leaf in the graph and no other
-+	 * object can take a reference on it.
-+	 */
-+	iommufd_object_finalize(ictx, &idev->obj);
-+	*id = idev->obj.id;
-+	return idev;
++	return __vfio_register_dev(device, VFIO_PASID_IOMMU);
 +}
-+EXPORT_SYMBOL_NS_GPL(iommufd_device_bind_pasid, IOMMUFD);
 +
- /**
-  * iommufd_ctx_has_group - True if any device within the group is bound
-  *                         to the ictx
-diff --git a/drivers/iommu/iommufd/iommufd_private.h b/drivers/iommu/iommufd/iommufd_private.h
-index 06ebee4c87c5..7b3405fd6fd3 100644
---- a/drivers/iommu/iommufd/iommufd_private.h
-+++ b/drivers/iommu/iommufd/iommufd_private.h
-@@ -332,10 +332,17 @@ struct iommufd_group {
- struct iommufd_device {
- 	struct iommufd_object obj;
- 	struct iommufd_ctx *ictx;
-+	/* valid if this is a physical device */
- 	struct iommufd_group *igroup;
- 	struct list_head group_item;
- 	/* always the physical device */
- 	struct device *dev;
-+	/*
-+	 * valid if this is a virtual device which gains pasid-granular
-+	 * DMA isolation in IOMMU. The default pasid is used when attaching
-+	 * this device to a IOAS/hwpt.
-+	 */
-+	u32 default_pasid;
- 	struct xarray pasid_hwpts;
- 	bool enforce_cache_coherency;
- 	bool has_user_data;
-diff --git a/include/linux/iommufd.h b/include/linux/iommufd.h
-index 0b007c376306..402320d6eba1 100644
---- a/include/linux/iommufd.h
-+++ b/include/linux/iommufd.h
-@@ -20,6 +20,9 @@ struct iommu_group;
+ /*
+  * Decrement the device reference count and wait for the device to be
+  * removed.  Open file descriptors for the device... */
+diff --git a/include/linux/vfio.h b/include/linux/vfio.h
+index 7b06d1bc7cb3..2662f2ece924 100644
+--- a/include/linux/vfio.h
++++ b/include/linux/vfio.h
+@@ -281,6 +281,7 @@ static inline void vfio_put_device(struct vfio_device *device)
  
- struct iommufd_device *iommufd_device_bind(struct iommufd_ctx *ictx,
- 					   struct device *dev, u32 *id);
-+struct iommufd_device *iommufd_device_bind_pasid(struct iommufd_ctx *ictx,
-+						 struct device *dev,
-+						 u32 pasid, u32 *id);
- void iommufd_device_unbind(struct iommufd_device *idev);
+ int vfio_register_group_dev(struct vfio_device *device);
+ int vfio_register_emulated_iommu_dev(struct vfio_device *device);
++int vfio_register_pasid_iommu_dev(struct vfio_device *device);
+ void vfio_unregister_group_dev(struct vfio_device *device);
  
- int iommufd_device_attach(struct iommufd_device *idev, u32 *pt_id);
+ int vfio_assign_device_set(struct vfio_device *device, void *set_id);
 -- 
 2.34.1
 
