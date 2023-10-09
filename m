@@ -2,40 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44782E95A99
-	for <linux-kselftest@archiver.kernel.org>; Mon,  9 Oct 2023 12:21:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 71A1AE95A91
+	for <linux-kselftest@archiver.kernel.org>; Mon,  9 Oct 2023 12:21:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346591AbjJIMVs (ORCPT
+        id S1376323AbjJIMVw (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 9 Oct 2023 08:21:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35228 "EHLO
+        Mon, 9 Oct 2023 08:21:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346686AbjJIMVR (ORCPT
+        with ESMTP id S1346444AbjJIMVU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 9 Oct 2023 08:21:17 -0400
+        Mon, 9 Oct 2023 08:21:20 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31B28C6;
-        Mon,  9 Oct 2023 05:13:47 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 922A0C433C9;
-        Mon,  9 Oct 2023 12:13:40 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FA011FE8;
+        Mon,  9 Oct 2023 05:14:20 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3630C433CD;
+        Mon,  9 Oct 2023 12:14:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696853626;
-        bh=HKr5dcgoD1HRE8Dfu3M7S45WXlztyGX1cPv4uDvvFRM=;
+        s=k20201202; t=1696853660;
+        bh=OYaAyRMLSn6kTs6FMYnMtTS8W24+WIO4Ly8HwzP8d7o=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=H39Ysk/jv3RNdJhL+Jsv7sBxcXZHRih+ROezijJvWx9EN4JvZ8YLVnCFWuh5eiiAl
-         J3BcFT9L59aj2K0HyS0TQb5id7+eKSVp9IjZACZ4PEq4aEUJjOSP7GkJfDBzcp2Jrb
-         u93V6DlJLKNe93rxNaei3Ow4LXKe+OKHKlwDOxFWm1SDJ76Ri39wH5qX2/YhNNY5DJ
-         oZm3ml3SR7XSkXmMZ2NeCqJMYBJ305rEf0L35tZkyRCWXvoBdQFqFuMqNZgytHtcPR
-         nvWKeRmVjuWn6bsz71J5LB+/nVGpBcBAqwMVSDG3VYjbyzwNtsmi2AWTk0W5qcRWwU
-         zkc7oXD/SsHuA==
+        b=aRNZd3pInrVeMdKBw7H6QrC9eqFo/kLOrdLcZwp6V+ul7HAC9gLTUyM1GwvLQB1xc
+         63PWfOonUjUAaZfItFjlrBSYj0C1UcPcMcnTdWr5qP0HwSHUCIy9tFx5enWS0I8iGd
+         wjWnfqGYjjOFM/9uuXGnODB0Zd9KJOmfqfQ/gBUBt2IPK/IELuF8BE8/T0iAWJl0RN
+         mvrxsrT3AkWz/G0c38Ss4zwSuGHoGW3LdHsPvzWcdBrnOND7PG6AsRZFb6C77RTVUz
+         GIOt7HzNDVv+43GI4Uj9im0YHhm9U7UGFLKfwCWJ1Im7sMe7ZhKQk6x5XnqFgvUaas
+         Y9JWtr+JTJzBw==
 From:   Mark Brown <broonie@kernel.org>
-Date:   Mon, 09 Oct 2023 13:09:01 +0100
-Subject: [PATCH v6 27/38] arm64: Add Kconfig for Guarded Control Stack
- (GCS)
+Date:   Mon, 09 Oct 2023 13:09:06 +0100
+Subject: [PATCH v6 32/38] kselftest/arm64: Always run signals tests with
+ GCS enabled
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20231009-arm64-gcs-v6-27-78e55deaa4dd@kernel.org>
+Message-Id: <20231009-arm64-gcs-v6-32-78e55deaa4dd@kernel.org>
 References: <20231009-arm64-gcs-v6-0-78e55deaa4dd@kernel.org>
 In-Reply-To: <20231009-arm64-gcs-v6-0-78e55deaa4dd@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
@@ -66,59 +66,115 @@ Cc:     "H.J. Lu" <hjl.tools@gmail.com>,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org, Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.13-dev-0438c
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1334; i=broonie@kernel.org;
- h=from:subject:message-id; bh=HKr5dcgoD1HRE8Dfu3M7S45WXlztyGX1cPv4uDvvFRM=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBlI+2m6LbrIKImLz43AhLYkdJ+mn8/n/WtjdVAC+Y3
- I5cZkuiJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZSPtpgAKCRAk1otyXVSH0C9JB/
- 9PeuQ7odFNzac2es7G1H21MYtcjVH9+a2Xh/QADOSwBO/AZwG1T+Q4oNOVnGIYZhsMy5AUgOtQDFOg
- zDd8RXL2Yzchc4BhE4Ekw1h1A8Fde16BC4U8J5YyfbQTWzzV5ZjYMZRgWLWLEmJ82HR2bI/yfKju2O
- yiag57d6zPB3jBl31kU7tVUGxpZ+W2N3e3w0Lsn0dB/LatGzkRPssH45VRWQSLCiWocphZV2S0FttF
- 8NdpTgTettJANn4cQtR8Ybduqa7BR2LVBS9TWMxRVAdrv8KMfeizfOEaa1rfjudAGqmDa9T2OYofSN
- a9bEGUta99nzCir41mnHoSZ0Cwo785
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3590; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=OYaAyRMLSn6kTs6FMYnMtTS8W24+WIO4Ly8HwzP8d7o=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBlI+2q4BjYkOhejyoKKvxOrxbGdTheXJOcb2eROkLO
+ TpWR1lWJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZSPtqgAKCRAk1otyXVSH0JmAB/
+ sF/bW4NV1xIXh7KwGzExoXmOWHnZry7NDDHROu0qS/35UQvrwfrBi6tTQNyeIn3v23ghEC2izYQe5/
+ xF4AI4iosNEQXMNfGRX3CemNMDMILSqO4k6FKtNbqu+VFvTfUZwG8xYNORtZ45iW3tBPk3TCpX09M4
+ XfPi8G9lx+Y0oWjPDQNtH0cOJA2ummMCDEBK2GKpN6raQ0++tWx80btDNgehnvMePinSWSnYZcbrpO
+ 4YNGY4kE3Tbh20tWr65zqBWE7rqLO6TTsxbHF4VghVQs3K5htXUqYipLcCJk3YKHM8IM9rPSG4lWz8
+ x7N6aOifCEoSoXFiW/0gq1RcqyV0xO
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Provide a Kconfig option allowing the user to select if GCS support is
-built into the kernel.
+Since it is not possible to return from the function that enabled GCS
+without disabling GCS it is very inconvenient to use the signal handling
+tests to cover GCS when GCS is not enabled by the toolchain and runtime,
+something that no current distribution does. Since none of the testcases
+do anything with stacks that would cause problems with GCS we can sidestep
+this issue by unconditionally enabling GCS on startup and exiting with a
+call to exit() rather than a return from main().
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/Kconfig | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ .../testing/selftests/arm64/signal/test_signals.c  | 17 ++++++++++++-
+ .../selftests/arm64/signal/test_signals_utils.h    | 29 ++++++++++++++++++++++
+ 2 files changed, 45 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index b10515c0200b..d235e725177b 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -2060,6 +2060,25 @@ config ARM64_EPAN
- 	  if the cpu does not implement the feature.
- endmenu # "ARMv8.7 architectural features"
+diff --git a/tools/testing/selftests/arm64/signal/test_signals.c b/tools/testing/selftests/arm64/signal/test_signals.c
+index 00051b40d71e..30e95f50db19 100644
+--- a/tools/testing/selftests/arm64/signal/test_signals.c
++++ b/tools/testing/selftests/arm64/signal/test_signals.c
+@@ -7,6 +7,10 @@
+  * Each test provides its own tde struct tdescr descriptor to link with
+  * this wrapper. Framework provides common helpers.
+  */
++
++#include <sys/auxv.h>
++#include <sys/prctl.h>
++
+ #include <kselftest.h>
  
-+menu "v9.4 architectural features"
+ #include "test_signals.h"
+@@ -16,6 +20,16 @@ struct tdescr *current = &tde;
+ 
+ int main(int argc, char *argv[])
+ {
++	/*
++	 * Ensure GCS is at least enabled throughout the tests if
++	 * supported, otherwise the inability to return from the
++	 * function that enabled GCS makes it very inconvenient to set
++	 * up test cases.  The prctl() may fail if GCS was locked by
++	 * libc setup code.
++	 */
++	if (getauxval(AT_HWCAP2) & HWCAP2_GCS)
++		gcs_set_state(PR_SHADOW_STACK_ENABLE);
 +
-+config ARM64_GCS
-+	bool "Enable support for Guarded Control Stack (GCS)"
-+	default y
-+	select ARCH_USES_HIGH_VMA_FLAGS
-+	help
-+	  Guarded Control Stack (GCS) provides support for a separate
-+	  stack with restricted access which contains only return
-+	  addresses.  This can be used to harden against some attacks
-+	  by comparing return address used by the program with what is
-+	  stored in the GCS, and may also be used to efficiently obtain
-+	  the call stack for applications such as profiling.
+ 	ksft_print_msg("%s :: %s\n", current->name, current->descr);
+ 	if (test_setup(current) && test_init(current)) {
+ 		test_run(current);
+@@ -23,5 +37,6 @@ int main(int argc, char *argv[])
+ 	}
+ 	test_result(current);
+ 
+-	return current->result;
++	/* Do not return in case GCS was enabled */
++	exit(current->result);
+ }
+diff --git a/tools/testing/selftests/arm64/signal/test_signals_utils.h b/tools/testing/selftests/arm64/signal/test_signals_utils.h
+index 762c8fe9c54a..1e80808ee105 100644
+--- a/tools/testing/selftests/arm64/signal/test_signals_utils.h
++++ b/tools/testing/selftests/arm64/signal/test_signals_utils.h
+@@ -18,6 +18,35 @@ void test_cleanup(struct tdescr *td);
+ int test_run(struct tdescr *td);
+ void test_result(struct tdescr *td);
+ 
++#ifndef __NR_prctl
++#define __NR_prctl 167
++#endif
 +
-+	  The feature is detected at runtime, and will remain disabled
-+	  if the system does not implement the feature.
++/*
++ * The prctl takes 1 argument but we need to ensure that the other
++ * values passed in registers to the syscall are zero since the kernel
++ * validates them.
++ */
++#define gcs_set_state(state)					\
++	({								\
++		register long _num  __asm__ ("x8") = __NR_prctl;	\
++		register long _arg1 __asm__ ("x0") =  PR_SET_SHADOW_STACK_STATUS; \
++		register long _arg2 __asm__ ("x1") = (long)(state);	\
++		register long _arg3 __asm__ ("x2") = 0;			\
++		register long _arg4 __asm__ ("x3") = 0;			\
++		register long _arg5 __asm__ ("x4") = 0;			\
++	                                                                      \
++		__asm__  volatile (					\
++			"svc #0\n"					\
++			: "=r"(_arg1)					\
++			: "r"(_arg1), "r"(_arg2),			\
++			  "r"(_arg3), "r"(_arg4),			\
++			  "r"(_arg5), "r"(_num)				\
++			: "memory", "cc"				\
++			);						\
++		_arg1;							\
++	})
 +
-+endmenu # "v9.4 architectural features"
-+
- config ARM64_SVE
- 	bool "ARM Scalable Vector Extension support"
- 	default y
+ static inline bool feats_ok(struct tdescr *td)
+ {
+ 	if (td->feats_incompatible & td->feats_supported)
 
 -- 
 2.30.2
