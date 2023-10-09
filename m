@@ -2,40 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 29D7AE95A8E
-	for <linux-kselftest@archiver.kernel.org>; Mon,  9 Oct 2023 12:21:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44782E95A99
+	for <linux-kselftest@archiver.kernel.org>; Mon,  9 Oct 2023 12:21:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346556AbjJIMVr (ORCPT
+        id S1346591AbjJIMVs (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 9 Oct 2023 08:21:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35138 "EHLO
+        Mon, 9 Oct 2023 08:21:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346733AbjJIMVR (ORCPT
+        with ESMTP id S1346686AbjJIMVR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Mon, 9 Oct 2023 08:21:17 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A821700;
-        Mon,  9 Oct 2023 05:14:14 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2050BC433CA;
-        Mon,  9 Oct 2023 12:14:06 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31B28C6;
+        Mon,  9 Oct 2023 05:13:47 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 922A0C433C9;
+        Mon,  9 Oct 2023 12:13:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696853653;
-        bh=JCh6BoCIOxePO8zZIr/FO/CERnc7ZRYHEz9dpM/Qpg4=;
+        s=k20201202; t=1696853626;
+        bh=HKr5dcgoD1HRE8Dfu3M7S45WXlztyGX1cPv4uDvvFRM=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=QqdXYEHvz3FTUT3Np9Qa0P6bHjgBrWxF6k+IAbQRqvtWpL8f6b+VeSy4m8x2oqy71
-         ADwkVHK0JFtJgVJ5MDSiHXkPXaq+hz4ZoRNtnQckXdlxuenDWIAYNqzUj2udq8xmWv
-         oqmTU5Xq0li9wHBGqSBQ9sbmY68Wy9ELc94DNATmv5qg1tuxaqe14CnmERaNXDshN3
-         YGMpDNvjMxKOu7vCPbagRBZXjN7AxL5vq6Dr75uspEg6TvefipEPwHbAiexRXLz0us
-         4piL/W6e/otK64TWJnoDDkE96YS9XRVE2WxPCrqYCLcrgnmfnfelhep/y3yXK/EPoy
-         GOyBlVw4eSQGw==
+        b=H39Ysk/jv3RNdJhL+Jsv7sBxcXZHRih+ROezijJvWx9EN4JvZ8YLVnCFWuh5eiiAl
+         J3BcFT9L59aj2K0HyS0TQb5id7+eKSVp9IjZACZ4PEq4aEUJjOSP7GkJfDBzcp2Jrb
+         u93V6DlJLKNe93rxNaei3Ow4LXKe+OKHKlwDOxFWm1SDJ76Ri39wH5qX2/YhNNY5DJ
+         oZm3ml3SR7XSkXmMZ2NeCqJMYBJ305rEf0L35tZkyRCWXvoBdQFqFuMqNZgytHtcPR
+         nvWKeRmVjuWn6bsz71J5LB+/nVGpBcBAqwMVSDG3VYjbyzwNtsmi2AWTk0W5qcRWwU
+         zkc7oXD/SsHuA==
 From:   Mark Brown <broonie@kernel.org>
-Date:   Mon, 09 Oct 2023 13:09:05 +0100
-Subject: [PATCH v6 31/38] kselftest/arm64: Allow signals tests to specify
- an expected si_code
+Date:   Mon, 09 Oct 2023 13:09:01 +0100
+Subject: [PATCH v6 27/38] arm64: Add Kconfig for Guarded Control Stack
+ (GCS)
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20231009-arm64-gcs-v6-31-78e55deaa4dd@kernel.org>
+Message-Id: <20231009-arm64-gcs-v6-27-78e55deaa4dd@kernel.org>
 References: <20231009-arm64-gcs-v6-0-78e55deaa4dd@kernel.org>
 In-Reply-To: <20231009-arm64-gcs-v6-0-78e55deaa4dd@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
@@ -66,87 +66,59 @@ Cc:     "H.J. Lu" <hjl.tools@gmail.com>,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org, Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.13-dev-0438c
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2627; i=broonie@kernel.org;
- h=from:subject:message-id; bh=JCh6BoCIOxePO8zZIr/FO/CERnc7ZRYHEz9dpM/Qpg4=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBlI+2pduXLA8Gjeg0HRP3GD5uX7WzcCSjwA/7BD3Ya
- AfDkNXOJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZSPtqQAKCRAk1otyXVSH0A4rB/
- 9GhG9VGix0tl/HuVXdlcFfNVXuRxD5QJ/rim/BQuE9TdegqTB4Wa2IPeR/UkMT+d56/JEjvZOzEQ5M
- mvpXoA6JburaUxhI8T0E4Yc+9WN6ZN72KU53GP7ixO51ZHtnuzYJ+axiuZMHjHJmnOvyTrHsuaFlRa
- pKqWLEU8GFt7IoIyqmpj21zg4HhmbtMQ7IWGy+3YdPAj5r4hLtJBHVPBhZkLoMRt+ZoNg2YUxhLDvI
- KEnc7LR1GkFwfDUfbZBnLtErAFDiafdmn1l/24451Gi4FrVLEenZJhWKLdQUG86uJWwoG4Ni//UTnF
- eICANpkRccnJT0BR2Nuleg4KrbUqsy
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1334; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=HKr5dcgoD1HRE8Dfu3M7S45WXlztyGX1cPv4uDvvFRM=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBlI+2m6LbrIKImLz43AhLYkdJ+mn8/n/WtjdVAC+Y3
+ I5cZkuiJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZSPtpgAKCRAk1otyXVSH0C9JB/
+ 9PeuQ7odFNzac2es7G1H21MYtcjVH9+a2Xh/QADOSwBO/AZwG1T+Q4oNOVnGIYZhsMy5AUgOtQDFOg
+ zDd8RXL2Yzchc4BhE4Ekw1h1A8Fde16BC4U8J5YyfbQTWzzV5ZjYMZRgWLWLEmJ82HR2bI/yfKju2O
+ yiag57d6zPB3jBl31kU7tVUGxpZ+W2N3e3w0Lsn0dB/LatGzkRPssH45VRWQSLCiWocphZV2S0FttF
+ 8NdpTgTettJANn4cQtR8Ybduqa7BR2LVBS9TWMxRVAdrv8KMfeizfOEaa1rfjudAGqmDa9T2OYofSN
+ a9bEGUta99nzCir41mnHoSZ0Cwo785
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently we ignore si_code unless the expected signal is a SIGSEGV, in
-which case we enforce it being SEGV_ACCERR. Allow test cases to specify
-exactly which si_code should be generated so we can validate this, and
-test for other segfault codes.
+Provide a Kconfig option allowing the user to select if GCS support is
+built into the kernel.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- .../testing/selftests/arm64/signal/test_signals.h  |  4 +++
- .../selftests/arm64/signal/test_signals_utils.c    | 29 ++++++++++++++--------
- 2 files changed, 23 insertions(+), 10 deletions(-)
+ arch/arm64/Kconfig | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/tools/testing/selftests/arm64/signal/test_signals.h b/tools/testing/selftests/arm64/signal/test_signals.h
-index 7ada43688c02..ee75a2c25ce7 100644
---- a/tools/testing/selftests/arm64/signal/test_signals.h
-+++ b/tools/testing/selftests/arm64/signal/test_signals.h
-@@ -71,6 +71,10 @@ struct tdescr {
- 	 * Zero when no signal is expected on success
- 	 */
- 	int			sig_ok;
-+	/*
-+	 * expected si_code for sig_ok, or 0 to not check
-+	 */
-+	int			sig_ok_code;
- 	/* signum expected on unsupported CPU features. */
- 	int			sig_unsupp;
- 	/* a timeout in second for test completion */
-diff --git a/tools/testing/selftests/arm64/signal/test_signals_utils.c b/tools/testing/selftests/arm64/signal/test_signals_utils.c
-index 89ef95c1af0e..63deca32b0df 100644
---- a/tools/testing/selftests/arm64/signal/test_signals_utils.c
-+++ b/tools/testing/selftests/arm64/signal/test_signals_utils.c
-@@ -143,16 +143,25 @@ static bool handle_signal_ok(struct tdescr *td,
- 			"current->token ZEROED...test is probably broken!\n");
- 		abort();
- 	}
--	/*
--	 * Trying to narrow down the SEGV to the ones generated by Kernel itself
--	 * via arm64_notify_segfault(). This is a best-effort check anyway, and
--	 * the si_code check may need to change if this aspect of the kernel
--	 * ABI changes.
--	 */
--	if (td->sig_ok == SIGSEGV && si->si_code != SEGV_ACCERR) {
--		fprintf(stdout,
--			"si_code != SEGV_ACCERR...test is probably broken!\n");
--		abort();
-+	if (td->sig_ok_code) {
-+		if (si->si_code != td->sig_ok_code) {
-+			fprintf(stdout, "si_code is %d not %d\n",
-+				si->si_code, td->sig_ok_code);
-+			abort();
-+		}
-+	} else {
-+		/*
-+		 * Trying to narrow down the SEGV to the ones
-+		 * generated by Kernel itself via
-+		 * arm64_notify_segfault(). This is a best-effort
-+		 * check anyway, and the si_code check may need to
-+		 * change if this aspect of the kernel ABI changes.
-+		 */
-+		if (td->sig_ok == SIGSEGV && si->si_code != SEGV_ACCERR) {
-+			fprintf(stdout,
-+				"si_code != SEGV_ACCERR...test is probably broken!\n");
-+			abort();
-+		}
- 	}
- 	td->pass = 1;
- 	/*
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index b10515c0200b..d235e725177b 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -2060,6 +2060,25 @@ config ARM64_EPAN
+ 	  if the cpu does not implement the feature.
+ endmenu # "ARMv8.7 architectural features"
+ 
++menu "v9.4 architectural features"
++
++config ARM64_GCS
++	bool "Enable support for Guarded Control Stack (GCS)"
++	default y
++	select ARCH_USES_HIGH_VMA_FLAGS
++	help
++	  Guarded Control Stack (GCS) provides support for a separate
++	  stack with restricted access which contains only return
++	  addresses.  This can be used to harden against some attacks
++	  by comparing return address used by the program with what is
++	  stored in the GCS, and may also be used to efficiently obtain
++	  the call stack for applications such as profiling.
++
++	  The feature is detected at runtime, and will remain disabled
++	  if the system does not implement the feature.
++
++endmenu # "v9.4 architectural features"
++
+ config ARM64_SVE
+ 	bool "ARM Scalable Vector Extension support"
+ 	default y
 
 -- 
 2.30.2
