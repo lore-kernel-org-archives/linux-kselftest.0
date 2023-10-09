@@ -2,58 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48C6FE95A91
-	for <linux-kselftest@archiver.kernel.org>; Mon,  9 Oct 2023 06:42:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4103E95A8E
+	for <linux-kselftest@archiver.kernel.org>; Mon,  9 Oct 2023 06:42:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345298AbjJIGmj (ORCPT
+        id S1345354AbjJIGmy (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 9 Oct 2023 02:42:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35162 "EHLO
+        Mon, 9 Oct 2023 02:42:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345303AbjJIGmj (ORCPT
+        with ESMTP id S1345336AbjJIGmv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 9 Oct 2023 02:42:39 -0400
+        Mon, 9 Oct 2023 02:42:51 -0400
 Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFFF3C5
-        for <linux-kselftest@vger.kernel.org>; Sun,  8 Oct 2023 23:42:37 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-59b59e1ac70so66624797b3.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 08 Oct 2023 23:42:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 305C9E9
+        for <linux-kselftest@vger.kernel.org>; Sun,  8 Oct 2023 23:42:42 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5a234ffeb90so63793407b3.3
+        for <linux-kselftest@vger.kernel.org>; Sun, 08 Oct 2023 23:42:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696833757; x=1697438557; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1696833762; x=1697438562; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GMzA+bY5iQ55icqv7/c58xVjlf8IiONnVGODeN5A6AA=;
-        b=bVDwtzWtwc1VM4vQGrACZvNw57uyX10S4ICovNdmKLlGBwAwXVt37DKrZ8fYdL+i6s
-         hg/S5stmKoEql8LybZzVlqpG+Pz9UQvORdFX+wTv3OyhcHlW9NQOhkjkHl/iS0EDhb6H
-         SZ0UO1RKmg//m24u1crbacIuBCwM3kvDIs2NR73ct6bSeVuTPW1YmQhujjjHuBBWRbXp
-         ozrIQXnECsYK0I2maQFKV7syjcTk9GXMjfKYsNNe4Se2e9YdbXQ21H9zkxX7UpKjYAa/
-         JKzmQAjBHM13eetlwt1Dz5TWT7ccI94TsKSumlFFdfTLpWG6eQpJqd+QonllWgCYVoOB
-         7Jtg==
+        bh=50i/QdEI5D071LaRqB1M3KzWwtbx6nE7wmO2EXtVHvA=;
+        b=lpP38/5JvlOaMlcq0JFOwzSjg6eLfiYW4s5QkK51KNbANf+OXr6w7n33JYk1zTj0rs
+         pVM2v46jUSwZPq0Q2bVwvqSWkCdmx2vXjzTswb0gxENj9JDem5tgj20Y+Up0ceiHTyO2
+         OTVxvl7zKgj9Ll56qF3PgtNjcwYY04VD62qypBcELy+5khsnbbkhxrA8oKkUEcgJq6B0
+         irT+1WcXalDxbPyP+Z1ZVAcEqV1Pe+qum34WgnA1iNREWLR00x8bgoBO8BQ8FhxgV244
+         LoBl7HvZ+HN+jjnFGJlZqPOCFm/CIh9TiKZlomEL361vcNsiQXL3/7rNxKRD+sej3qAt
+         NKLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696833757; x=1697438557;
+        d=1e100.net; s=20230601; t=1696833762; x=1697438562;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GMzA+bY5iQ55icqv7/c58xVjlf8IiONnVGODeN5A6AA=;
-        b=UkFxIltycQHDl3LzjGq14ZiCdUQWUePlFmqd72bTubRCW6PinZ3uo4vsvITVnR9bpW
-         7i/P4yr2m5RER9fCZZtEsMsqWK/RolOabsDduDnGe3URKBikD2/iL5HBRoUJWuUXI8mq
-         MYdhFM4hU5r6xbIMTeAoyhCfgkuajnSqnTjwMPe3f1n5KtergJKKpSHEAn9lqu0tECOp
-         ultWFIwCE7yGjZaJQM1q+WxDDsPp4JGWCjYs5SZxv68j9jMiLsDoUzgMZOHY3Oy8vs5G
-         XM0cxp9XLAckaYtXU4Jz5PtMzd7tAXqHzj3zwLBqg7DD51tvJWtfmttWia4EXcfBnYie
-         xsqw==
-X-Gm-Message-State: AOJu0Yxw7l1/5pkBJub8uyHM3pKIq2Xgg3z+Tn6z1WItswlvtqPz49aS
-        LKGRtaZqiIoV9kjbpj+TqY9HHksg8y4=
-X-Google-Smtp-Source: AGHT+IFtPbkNFD9Rxrba570q5f/tqYHiGOqoU9c9uHOquBYgh1LiUto5yoJwsPheCUdVazB3Qxt4pauoLww=
+        bh=50i/QdEI5D071LaRqB1M3KzWwtbx6nE7wmO2EXtVHvA=;
+        b=S/vxvzq4+AR+5dGaVInQSNCrq7846AkJExcwQbpxBQHZxr0Tx6FazAXUh6DsZr7a46
+         chHTdaIN1j43vwekMfDushyHs5i+G6jcC1BRwGCudWQ6BIqkNVYr6pwsUO4T1KJ10i7M
+         F33CUtnS+fd3tN7vcp3glCeIaQNc3LBZIjHZG4YiIRbexwIPOLjLWTR2Eze5u4UQbMCx
+         R9oWS0OGosz/ksPlAqJJ6ZxaTtC9qMtnq7vuSzlwbDbu6i/StSNv2+NSClZP/RSBGXFV
+         SQByYQyF2hpmlnyeqmNHD3i4XixtTMRcZ+q1yLIgWSa+B83bpPbrb15DjiEWwjXsbehL
+         e7Ng==
+X-Gm-Message-State: AOJu0Yz2Zq+nIk0+4dQKTmr8NCtd1H7AIpctBj3fuGcMyqEjUujL3IIu
+        LIbwWSxLxY/XlPd8d64Piri/hJvUUYg=
+X-Google-Smtp-Source: AGHT+IE3ENVpgSSY9jHiu1FOcPq/GRVi/eysZgrxroKYd6Fm4a1cG8w7FQlArfhqzdMAUqw7rMWUDxE9tZI=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:3e83:601e:dc42:a455])
- (user=surenb job=sendgmr) by 2002:a81:a809:0:b0:59b:ebe0:9fce with SMTP id
- f9-20020a81a809000000b0059bebe09fcemr261242ywh.5.1696833757037; Sun, 08 Oct
- 2023 23:42:37 -0700 (PDT)
-Date:   Sun,  8 Oct 2023 23:42:26 -0700
+ (user=surenb job=sendgmr) by 2002:a25:68ce:0:b0:d86:56bc:e289 with SMTP id
+ d197-20020a2568ce000000b00d8656bce289mr225181ybc.4.1696833762182; Sun, 08 Oct
+ 2023 23:42:42 -0700 (PDT)
+Date:   Sun,  8 Oct 2023 23:42:28 -0700
 In-Reply-To: <20231009064230.2952396-1-surenb@google.com>
 Mime-Version: 1.0
 References: <20231009064230.2952396-1-surenb@google.com>
 X-Mailer: git-send-email 2.42.0.609.gbb76f46606-goog
-Message-ID: <20231009064230.2952396-2-surenb@google.com>
-Subject: [PATCH v3 1/3] mm/rmap: support move to different root anon_vma in folio_move_anon_rmap()
+Message-ID: <20231009064230.2952396-4-surenb@google.com>
+Subject: [PATCH v3 3/3] selftests/mm: add UFFDIO_MOVE ioctl test
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     viro@zeniv.linux.org.uk, brauner@kernel.org, shuah@kernel.org,
@@ -70,86 +70,184 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Andrea Arcangeli <aarcange@redhat.com>
+Add a test for new UFFDIO_MOVE ioctl which uses uffd to move source
+into destination buffer while checking the contents of both after
+remapping. After the operation the content of the destination buffer
+should match the original source buffer's content while the source
+buffer should be zeroed.
 
-For now, folio_move_anon_rmap() was only used to move a folio to a
-different anon_vma after fork(), whereby the root anon_vma stayed
-unchanged. For that, it was sufficient to hold the folio lock when
-calling folio_move_anon_rmap().
-
-However, we want to make use of folio_move_anon_rmap() to move folios
-between VMAs that have a different root anon_vma. As folio_referenced()
-performs an RMAP walk without holding the folio lock but only holding the
-anon_vma in read mode, holding the folio lock is insufficient.
-
-When moving to an anon_vma with a different root anon_vma, we'll have to
-hold both, the folio lock and the anon_vma lock in write mode.
-Consequently, whenever we succeeded in folio_lock_anon_vma_read() to
-read-lock the anon_vma, we have to re-check if the mapping was changed
-in the meantime. If that was the case, we have to retry.
-
-Note that folio_move_anon_rmap() must only be called if the anon page is
-exclusive to a process, and must not be called on KSM folios.
-
-This is a preparation for UFFDIO_MOVE, which will hold the folio lock,
-the anon_vma lock in write mode, and the mmap_lock in read mode.
-
-Signed-off-by: Andrea Arcangeli <aarcange@redhat.com>
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 ---
- mm/rmap.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ tools/testing/selftests/mm/uffd-common.c     | 41 ++++++++++++-
+ tools/testing/selftests/mm/uffd-common.h     |  1 +
+ tools/testing/selftests/mm/uffd-unit-tests.c | 62 ++++++++++++++++++++
+ 3 files changed, 102 insertions(+), 2 deletions(-)
 
-diff --git a/mm/rmap.c b/mm/rmap.c
-index c1f11c9dbe61..f9ddc50269d2 100644
---- a/mm/rmap.c
-+++ b/mm/rmap.c
-@@ -542,7 +542,9 @@ struct anon_vma *folio_lock_anon_vma_read(struct folio *folio,
- 	struct anon_vma *root_anon_vma;
- 	unsigned long anon_mapping;
- 
-+retry:
- 	rcu_read_lock();
-+retry_under_rcu:
- 	anon_mapping = (unsigned long)READ_ONCE(folio->mapping);
- 	if ((anon_mapping & PAGE_MAPPING_FLAGS) != PAGE_MAPPING_ANON)
- 		goto out;
-@@ -552,6 +554,16 @@ struct anon_vma *folio_lock_anon_vma_read(struct folio *folio,
- 	anon_vma = (struct anon_vma *) (anon_mapping - PAGE_MAPPING_ANON);
- 	root_anon_vma = READ_ONCE(anon_vma->root);
- 	if (down_read_trylock(&root_anon_vma->rwsem)) {
-+		/*
-+		 * folio_move_anon_rmap() might have changed the anon_vma as we
-+		 * might not hold the folio lock here.
-+		 */
-+		if (unlikely((unsigned long)READ_ONCE(folio->mapping) !=
-+			     anon_mapping)) {
-+			up_read(&root_anon_vma->rwsem);
-+			goto retry_under_rcu;
-+		}
+diff --git a/tools/testing/selftests/mm/uffd-common.c b/tools/testing/selftests/mm/uffd-common.c
+index 02b89860e193..ecc1244f1c2b 100644
+--- a/tools/testing/selftests/mm/uffd-common.c
++++ b/tools/testing/selftests/mm/uffd-common.c
+@@ -52,6 +52,13 @@ static int anon_allocate_area(void **alloc_area, bool is_src)
+ 		*alloc_area = NULL;
+ 		return -errno;
+ 	}
 +
- 		/*
- 		 * If the folio is still mapped, then this anon_vma is still
- 		 * its anon_vma, and holding the mutex ensures that it will
-@@ -586,6 +598,18 @@ struct anon_vma *folio_lock_anon_vma_read(struct folio *folio,
- 	rcu_read_unlock();
- 	anon_vma_lock_read(anon_vma);
- 
-+	/*
-+	 * folio_move_anon_rmap() might have changed the anon_vma as we might
-+	 * not hold the folio lock here.
-+	 */
-+	if (unlikely((unsigned long)READ_ONCE(folio->mapping) !=
-+		     anon_mapping)) {
-+		anon_vma_unlock_read(anon_vma);
-+		put_anon_vma(anon_vma);
-+		anon_vma = NULL;
-+		goto retry;
++	/* Prevent source pages from collapsing into THPs */
++	if (madvise(*alloc_area, nr_pages * page_size, MADV_NOHUGEPAGE)) {
++		*alloc_area = NULL;
++		return -errno;
 +	}
 +
- 	if (atomic_dec_and_test(&anon_vma->refcount)) {
- 		/*
- 		 * Oops, we held the last refcount, release the lock
+ 	return 0;
+ }
+ 
+@@ -484,8 +491,14 @@ void uffd_handle_page_fault(struct uffd_msg *msg, struct uffd_args *args)
+ 		offset = (char *)(unsigned long)msg->arg.pagefault.address - area_dst;
+ 		offset &= ~(page_size-1);
+ 
+-		if (copy_page(uffd, offset, args->apply_wp))
+-			args->missing_faults++;
++		/* UFFD_MOVE is supported for anon non-shared mappings. */
++		if (uffd_test_ops == &anon_uffd_test_ops && !map_shared) {
++			if (move_page(uffd, offset))
++				args->missing_faults++;
++		} else {
++			if (copy_page(uffd, offset, args->apply_wp))
++				args->missing_faults++;
++		}
+ 	}
+ }
+ 
+@@ -620,6 +633,30 @@ int copy_page(int ufd, unsigned long offset, bool wp)
+ 	return __copy_page(ufd, offset, false, wp);
+ }
+ 
++int move_page(int ufd, unsigned long offset)
++{
++	struct uffdio_move uffdio_move;
++
++	if (offset >= nr_pages * page_size)
++		err("unexpected offset %lu\n", offset);
++	uffdio_move.dst = (unsigned long) area_dst + offset;
++	uffdio_move.src = (unsigned long) area_src + offset;
++	uffdio_move.len = page_size;
++	uffdio_move.mode = UFFDIO_MOVE_MODE_ALLOW_SRC_HOLES;
++	uffdio_move.move = 0;
++	if (ioctl(ufd, UFFDIO_MOVE, &uffdio_move)) {
++		/* real retval in uffdio_move.move */
++		if (uffdio_move.move != -EEXIST)
++			err("UFFDIO_MOVE error: %"PRId64,
++			    (int64_t)uffdio_move.move);
++		wake_range(ufd, uffdio_move.dst, page_size);
++	} else if (uffdio_move.move != page_size) {
++		err("UFFDIO_MOVE error: %"PRId64, (int64_t)uffdio_move.move);
++	} else
++		return 1;
++	return 0;
++}
++
+ int uffd_open_dev(unsigned int flags)
+ {
+ 	int fd, uffd;
+diff --git a/tools/testing/selftests/mm/uffd-common.h b/tools/testing/selftests/mm/uffd-common.h
+index 7c4fa964c3b0..f4d79e169a3d 100644
+--- a/tools/testing/selftests/mm/uffd-common.h
++++ b/tools/testing/selftests/mm/uffd-common.h
+@@ -111,6 +111,7 @@ void wp_range(int ufd, __u64 start, __u64 len, bool wp);
+ void uffd_handle_page_fault(struct uffd_msg *msg, struct uffd_args *args);
+ int __copy_page(int ufd, unsigned long offset, bool retry, bool wp);
+ int copy_page(int ufd, unsigned long offset, bool wp);
++int move_page(int ufd, unsigned long offset);
+ void *uffd_poll_thread(void *arg);
+ 
+ int uffd_open_dev(unsigned int flags);
+diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
+index 2709a34a39c5..f0ded3b34367 100644
+--- a/tools/testing/selftests/mm/uffd-unit-tests.c
++++ b/tools/testing/selftests/mm/uffd-unit-tests.c
+@@ -824,6 +824,10 @@ static void uffd_events_test_common(bool wp)
+ 	char c;
+ 	struct uffd_args args = { 0 };
+ 
++	/* Prevent source pages from being mapped more than once */
++	if (madvise(area_src, nr_pages * page_size, MADV_DONTFORK))
++		err("madvise(MADV_DONTFORK) failed");
++
+ 	fcntl(uffd, F_SETFL, uffd_flags | O_NONBLOCK);
+ 	if (uffd_register(uffd, area_dst, nr_pages * page_size,
+ 			  true, wp, false))
+@@ -1062,6 +1066,58 @@ static void uffd_poison_test(uffd_test_args_t *targs)
+ 	uffd_test_pass();
+ }
+ 
++static void uffd_move_test(uffd_test_args_t *targs)
++{
++	unsigned long nr;
++	pthread_t uffd_mon;
++	char c;
++	unsigned long long count;
++	struct uffd_args args = { 0 };
++
++	if (uffd_register(uffd, area_dst, nr_pages * page_size,
++			  true, false, false))
++		err("register failure");
++
++	if (pthread_create(&uffd_mon, NULL, uffd_poll_thread, &args))
++		err("uffd_poll_thread create");
++
++	/*
++	 * Read each of the pages back using the UFFD-registered mapping. We
++	 * expect that the first time we touch a page, it will result in a missing
++	 * fault. uffd_poll_thread will resolve the fault by remapping source
++	 * page to destination.
++	 */
++	for (nr = 0; nr < nr_pages; nr++) {
++		/* Check area_src content */
++		count = *area_count(area_src, nr);
++		if (count != count_verify[nr])
++			err("nr %lu source memory invalid %llu %llu\n",
++			    nr, count, count_verify[nr]);
++
++		/* Faulting into area_dst should remap the page */
++		count = *area_count(area_dst, nr);
++		if (count != count_verify[nr])
++			err("nr %lu memory corruption %llu %llu\n",
++			    nr, count, count_verify[nr]);
++
++		/* Re-check area_src content which should be empty */
++		count = *area_count(area_src, nr);
++		if (count != 0)
++			err("nr %lu move failed %llu %llu\n",
++			    nr, count, count_verify[nr]);
++	}
++
++	if (write(pipefd[1], &c, sizeof(c)) != sizeof(c))
++		err("pipe write");
++	if (pthread_join(uffd_mon, NULL))
++		err("join() failed");
++
++	if (args.missing_faults != nr_pages || args.minor_faults != 0)
++		uffd_test_fail("stats check error");
++	else
++		uffd_test_pass();
++}
++
+ /*
+  * Test the returned uffdio_register.ioctls with different register modes.
+  * Note that _UFFDIO_ZEROPAGE is tested separately in the zeropage test.
+@@ -1139,6 +1195,12 @@ uffd_test_case_t uffd_tests[] = {
+ 		.mem_targets = MEM_ALL,
+ 		.uffd_feature_required = 0,
+ 	},
++	{
++		.name = "move",
++		.uffd_fn = uffd_move_test,
++		.mem_targets = MEM_ANON,
++		.uffd_feature_required = UFFD_FEATURE_MOVE,
++	},
+ 	{
+ 		.name = "wp-fork",
+ 		.uffd_fn = uffd_wp_fork_test,
 -- 
 2.42.0.609.gbb76f46606-goog
 
