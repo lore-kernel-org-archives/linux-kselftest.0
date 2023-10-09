@@ -2,64 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51D52E95A8E
-	for <linux-kselftest@archiver.kernel.org>; Mon,  9 Oct 2023 10:07:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C792E95A91
+	for <linux-kselftest@archiver.kernel.org>; Mon,  9 Oct 2023 10:07:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346055AbjJIKHO (ORCPT
+        id S1346035AbjJIKHP (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 9 Oct 2023 06:07:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39572 "EHLO
+        Mon, 9 Oct 2023 06:07:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346102AbjJIKHK (ORCPT
+        with ESMTP id S1346104AbjJIKHL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 9 Oct 2023 06:07:10 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2070.outbound.protection.outlook.com [40.107.93.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B5C101;
-        Mon,  9 Oct 2023 03:07:08 -0700 (PDT)
+        Mon, 9 Oct 2023 06:07:11 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2060.outbound.protection.outlook.com [40.107.92.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F40109;
+        Mon,  9 Oct 2023 03:07:09 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZVadqHtty/Bjsaybik7fXGrzxwJBbLGlrqjeS/WSjbKpLq9JVMJWpl32xbmincXlbjyHuhwHkERsUmaM1GLU1WqeK2U256ssuaA54kRzRN3YfEZiEkQY3ofmiXA6cCMfmlI8FWAJwkbWpBueHgVfreQMtJ37ZHWGccYV7zBZB4LVHP8aSgRc9HRdC5dlVIhpAE6kYGnnq3DnyemOqzmiDdrCXyzIzAfHqVAeHSQxvL3O/8xM4uOnq6PlqZQNpWlF8xfiee1dkh/pHlalYbVxicR6HsvhPc6CozOTdc+HOnlBigg5K3lcQNVdHFVflt0FzwPO7jtBrgmzqBuTWTHorg==
+ b=nEllMDNGAF8ssNtKfbUZdbZMGt34h8xCB19ly//rfJmPyZxRgwnUdWD256YfN0bx7yw8ApfxQvAJn7pZ7FWFZrKkTwtrfhJgoM4mWp/YGchLeQYTuSnLTUlBXXBH54D/VUoe39b/fk3rgy0b6oiFzowFIAhIZdix4s941whBHZ845UbZrRMZnYdoDMWvI5aCgGr0D5w0JAtQQ3c8TSnZMgKg0FayfApYJFwXKxpzs50OsnN1FrOEMX9Jj7Ga3yIEvSEy65e9bcvOjcXksWgQhHev3K3zharhdCIu74kPM2O9qtbjEfXHniwQ3be2VoLefZzI48TZf0gjat/HtTI9Qg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SgU32kMQJx+V3Xklh3fbskuhi5Xd+GA4Kqhc5xoDvuM=;
- b=U+DD0XjBbKZbDA2TyifDyKIOwKX2yFx6CbxAi0LkrUWdhb2np4AbrjOp0AuyGrNTH05C/Pi/3lf0/4LPwi6diNa861dDgZmCjcarM3FdB+raIQdQFNiA38VlLz+2XH1InO6FmUvTLeDyPwyMPnK41MYXOFvwWv0GAk/GqQwPwJviYf5FuBqefp8dYtJgsJ5wowsQ8XBvftHfsvwfGt5PoN5s6MCwdprBITsVCMrvrsKjrWFrRjbF94AilY8ATUJYZFYjbIf9HO+8Bhs1rA/aLsrX5YVxDWWFlfxkkTqMhB57pw54oAFDevuegk2qhT8z3Ys/yi3zDoHcY1bt1Iroxw==
+ bh=ath0yXoGX+w26Wh+M+ziarUJMEcVX0Kme1m4YZaKbFc=;
+ b=acEHQGaKC9IJOTgVnHFBKxusPqveTrwmG2UEh0T35uzP5IUgrH/F0GJhbIoNViSodv5tU1T1XWXZ1BEG804roUvGPfHvf/Est6Xv14Yo0PTUQmyzP+Mvd3xqqaRXg4GmgydvD1za02bZtcDbkMzfr4bUQSX+fUxvT+xJMzrOXvXwf8Vbuin2050Vgcy4kce8Z6EEgU3zIG4rDl0m05/xx2vRwo1i2auXbo4eR6ejQZ5QI7nQA9ed+mstS46qhYIaH7STcCtZnvD2barcCAu6H/9+l4XIXZJlB2qgwZfBbmPSq39wCcAQLdfuiSvkNXJh9ogqA8yFGbup55EKWqsZqw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ 216.228.117.160) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SgU32kMQJx+V3Xklh3fbskuhi5Xd+GA4Kqhc5xoDvuM=;
- b=J30yKq1y2v7cBEwxKY15KNaDVQI0WCtWrV+8c0RP+wKYl8bdecZh7dERZ86io41gSnOqGclJKhYKcE5xCKOWAnS4JANdUHJwcXQa/OzwYECNsvLVJrVM+IDo9S5fmXraipCVqToiLNtvjZ/TiXnTzPcFNhsN86hklvXur6qUqyndTKBWviNul1U5ECRsYJaDhSujYlQqnoOn2I44UxPsQ7UhT6DA2PoGsUFI9I81d0S0TV9ClXOyuBGwZqi6rugjAlYnDECEM9yHlecQq5KJ7+XEb2dXFPnnBtEJmB24RRNOzZLaINc9aZOeefWqavOp2c8GISE5J682ijJZXuwt8g==
-Received: from SJ0PR05CA0182.namprd05.prod.outlook.com (2603:10b6:a03:330::7)
- by BY5PR12MB4275.namprd12.prod.outlook.com (2603:10b6:a03:20a::18) with
+ bh=ath0yXoGX+w26Wh+M+ziarUJMEcVX0Kme1m4YZaKbFc=;
+ b=gCjyhapyDjpT0yQPWISKKc+wlKbi/a4B9bY8kIGN9R2gTL1Db+7wGEJhHh4SO1xSU7qJybZ0dLrIr5YqVA89FiOZ4+p0UUwgfrj9W5zwDkqZQttHfmFCh/n2ttC2+XNHWtqt3HeBp1KAaByB5FJrKrAuzPwUPVj0fZW+r4OL8MjJ/Idz8BkNH6jIinsDBxS//qZYNDVJe8vnv5cDMNvgYM88E69f7kJilYvJh/U2ATmFoIGfXyuAZZ21Cdo7ZIst7i5SSrMLEf76FwkeoetrW50+weYygoMRirikx4XI9CzLSezT2fLFkzZFAoyJRFon4VKknPmkOqvOPNeiA+UUSg==
+Received: from DM6PR07CA0109.namprd07.prod.outlook.com (2603:10b6:5:330::17)
+ by SN7PR12MB6690.namprd12.prod.outlook.com (2603:10b6:806:272::6) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.38; Mon, 9 Oct
- 2023 10:07:06 +0000
-Received: from MWH0EPF000989EC.namprd02.prod.outlook.com
- (2603:10b6:a03:330:cafe::d4) by SJ0PR05CA0182.outlook.office365.com
- (2603:10b6:a03:330::7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6886.15 via Frontend
- Transport; Mon, 9 Oct 2023 10:07:06 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6838.31; Mon, 9 Oct
+ 2023 10:07:07 +0000
+Received: from DS2PEPF0000343F.namprd02.prod.outlook.com
+ (2603:10b6:5:330:cafe::23) by DM6PR07CA0109.outlook.office365.com
+ (2603:10b6:5:330::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.37 via Frontend
+ Transport; Mon, 9 Oct 2023 10:07:07 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- MWH0EPF000989EC.mail.protection.outlook.com (10.167.241.139) with Microsoft
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ DS2PEPF0000343F.mail.protection.outlook.com (10.167.18.42) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6838.14 via Frontend Transport; Mon, 9 Oct 2023 10:07:06 +0000
+ 15.20.6838.14 via Frontend Transport; Mon, 9 Oct 2023 10:07:07 +0000
 Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 9 Oct 2023
- 03:06:51 -0700
+ 03:06:58 -0700
 Received: from dev-r-vrt-155.mtr.labs.mlnx (10.126.230.35) by
  rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Mon, 9 Oct 2023 03:06:47 -0700
+ 15.2.986.41; Mon, 9 Oct 2023 03:06:54 -0700
 From:   Amit Cohen <amcohen@nvidia.com>
 To:     <netdev@vger.kernel.org>
 CC:     <mlxsw@nvidia.com>, <idosch@nvidia.com>, <kuba@kernel.org>,
@@ -67,11 +67,13 @@ CC:     <mlxsw@nvidia.com>, <idosch@nvidia.com>, <kuba@kernel.org>,
         <razor@blackwall.org>, <shuah@kernel.org>, <pabeni@redhat.com>,
         <bridge@lists.linux-foundation.org>,
         <linux-kselftest@vger.kernel.org>,
-        "Amit Cohen" <amcohen@nvidia.com>
-Subject: [PATCH net-next 00/11] Extend VXLAN driver to support FDB flushing
-Date:   Mon, 9 Oct 2023 13:06:07 +0300
-Message-ID: <20231009100618.2911374-1-amcohen@nvidia.com>
+        "Amit Cohen" <amcohen@nvidia.com>, Petr Machata <petrm@nvidia.com>
+Subject: [PATCH net-next 02/11] vxlan: vxlan_core: Make vxlan_flush() more generic for future use
+Date:   Mon, 9 Oct 2023 13:06:09 +0300
+Message-ID: <20231009100618.2911374-3-amcohen@nvidia.com>
 X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20231009100618.2911374-1-amcohen@nvidia.com>
+References: <20231009100618.2911374-1-amcohen@nvidia.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -80,81 +82,110 @@ X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
  rnnvmail201.nvidia.com (10.129.68.8)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWH0EPF000989EC:EE_|BY5PR12MB4275:EE_
-X-MS-Office365-Filtering-Correlation-Id: a6c76b04-f939-4e9f-6dc2-08dbc8af7df3
+X-MS-TrafficTypeDiagnostic: DS2PEPF0000343F:EE_|SN7PR12MB6690:EE_
+X-MS-Office365-Filtering-Correlation-Id: 35b6ce3b-f2f2-45cb-d127-08dbc8af7edf
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: GKkz3jnJYziJQys2mg4pOkdZmUXwCnirakjGx6aqGiSyVgn/WWKWRRcpVQxXo/eXl8qxCl9d3SNbKtlhsCMqYdVHtVaXoCJrAIT7I8vnoTqCIYnv4S5yEDvJsmdi/jDRn+Sn5yY1TtIpIJCy1490w08nLFCwjESkuyjsOBdHlEgDf5xQcZvJPdKwm639R4mjXFGxCS/MUJZV6MFAWvaij8L4bDTI4TiAW6tmOMuQo9s4ff6L7iRRtjh9lohptanbCR/pyx8MLjltQIu5ubYZotRKe5yavJpcqWmIqp8ckYGhE3Sjg/Pl38oka/BVfypJ6pWywK9bNnA4WK4p3nfapMah0/CyPYyY1TdRZ585PyOd3W7+s3kbzqUF3ev9jF9qS+iCjAVd/hglrdZFJnXxct0LoYsJQEqtP1eSCqUXYpQZVV936Sva6XslhfGcrD4enCKR1cICUmFlo9e8hDi37HAnM1DSvlsUrHIGrDcovygw/sNdRaX3n7c5g42je6Jv2AXInyLVjAjHXBJeQU/jTzprYOHa5XR5Sn8nEtv7b1XVb+ClKUhQomeK9Wk3JgDGSTX9/p6mUm5PniHMrZxzFkCRms9I2WUOVzIyYbgBMDv1JA5+cmnBoOdEnj5mSn4OBOMs4BFKA1lyF3lLi3XOVGStERDkwk/bvKPAfdD5fax3+FWFAUnG0jsGuoaIqC2qfzBZ+1wWv9/kRIp5rlGRcw==
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230031)(4636009)(136003)(346002)(39860400002)(396003)(376002)(230922051799003)(64100799003)(451199024)(1800799009)(186009)(82310400011)(36840700001)(46966006)(2616005)(1076003)(426003)(26005)(336012)(16526019)(40480700001)(36756003)(86362001)(82740400003)(356005)(7636003)(107886003)(83380400001)(8676002)(4326008)(2906002)(478600001)(6666004)(47076005)(36860700001)(66574015)(8936002)(41300700001)(5660300002)(6916009)(316002)(54906003)(70586007)(70206006);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: GyFUeD4jDjyqbFEqEhImjmcUDc9KQSjPs+KIZrMdIeU67sPs+RfHoeEk3FXg0qxoPjHHdGtkixnZ8pbxzWDIYoyutsmtn4lzdHrvmt5NvNIwwuH+lqyg/RI6PBoS02mTIJYhtyU6g6lhHHFaHHQf8qFrhYO5trueZe8mXORMXzzuUJTRNh3wmgnNRrUwyqnWW5FFZ3w/s9tTvyIphlHfqXJnOgydfuNNWQ8ms9Di2k71iKh63U9MtWP3dki7B4OagmaAtvvGcCZZy1uK5eieItaLruvQmY90iGN7Qw3OlMtjSuw20RZjHhAeZR8Sr5jvROtSvTCP3OdnHfGFX3XBLGLaDZkeF+7XcRUlkodeDP/BMOCTv+quRXuth0ve3k0F/Qeo6pOwpXIgpB6a0H1/ofsJPsUaNGidKVMxXvTrv11KLrQvk1PXSilNsf25Mie06ygNXXlhcsO4HmgdHluPOc2PPZLitY1sO3duaeLPGmlqxUr5RNRRE5TMqQkAYWlJIOK6KMb41I53zM496rmxvqNJ8Y01Dyf0NFY4RGb3touMqfHsn4WQFvHz54HtYJUuJ3ydwiQQ4zkIKTz+gcRcWcSS3IBaH11F2q/kyBd3I30YCEKu3r1cyFhtNjUktMf1iGDgKvPJFc2yMHRb3slnvbRfJPL9lNelVt9hg35fAZP03co9I3CJWMKvDVEtERejevthltClMUV7GLvPfx6KuS93Uh4F3htTlIyX3Qbn+EtccOr8Vbv8UQoN99Onk3XA1/7aiKXKoeugVqf4TtejXw==
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230031)(4636009)(346002)(39860400002)(136003)(396003)(376002)(230922051799003)(1800799009)(82310400011)(186009)(64100799003)(451199024)(40470700004)(36840700001)(46966006)(40460700003)(40480700001)(26005)(1076003)(7636003)(2616005)(107886003)(16526019)(336012)(8936002)(54906003)(70206006)(426003)(356005)(316002)(70586007)(6916009)(478600001)(41300700001)(4326008)(6666004)(8676002)(36860700001)(83380400001)(47076005)(82740400003)(36756003)(86362001)(2906002)(5660300002)(41533002);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Oct 2023 10:07:06.0057
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Oct 2023 10:07:07.5080
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a6c76b04-f939-4e9f-6dc2-08dbc8af7df3
+X-MS-Exchange-CrossTenant-Network-Message-Id: 35b6ce3b-f2f2-45cb-d127-08dbc8af7edf
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: MWH0EPF000989EC.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DS2PEPF0000343F.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4275
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6690
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The merge commit 92716869375b ("Merge branch 'br-flush-filtering'") added
-support for FDB flushing in bridge driver. Extend VXLAN driver to support
-FDB flushing also. Add support for filtering by fields which are relevant
-for VXLAN FDBs:
-* Source VNI
-* Nexthop ID
-* 'router' flag
-* Destination VNI
-* Destination Port
-* Destination IP
+The function vxlan_flush() gets a boolean called 'do_all' and in case
+that it is false, it does not flush entries with state 'NUD_PERMANENT'
+or 'NUD_NOARP'. The following patches will add support for FDB flush
+with parameters from user space. Make the function more generic, so it
+can be used later.
 
-Without this set, flush for VXLAN device fails:
-$ bridge fdb flush dev vx10
-RTNETLINK answers: Operation not supported
+Signed-off-by: Amit Cohen <amcohen@nvidia.com>
+Reviewed-by: Petr Machata <petrm@nvidia.com>
+Reviewed-by: Ido Schimmel <idosch@nvidia.com>
+---
+ drivers/net/vxlan/vxlan_core.c | 30 ++++++++++++++++++++++++++----
+ 1 file changed, 26 insertions(+), 4 deletions(-)
 
-With this set, such flush works with the relevant arguments, for example:
-$ bridge fdb flush dev vx10 vni 5000 dst 193.2.2.1
-< flush all vx10 entries with VNI 5000 and destination IP 193.2.2.1>
-
-Some preparations are required, handle them before adding flushing support
-in VXLAN driver. See more details in commit messages.
-
-Patch set overview:
-Patch #1 prepares flush policy to be used by VXLAN driver
-Patches #2-#3 are preparations in VXLAN driver
-Patch #4 adds an initial support for flushing in VXLAN driver
-Patches #5-#9 add support for filtering by several attributes
-Patch #10 adds a test for FDB flush with VXLAN
-Patch #11 extends the test to check FDB flush with bridge
-
-Amit Cohen (11):
-  net: Handle bulk delete policy in bridge driver
-  vxlan: vxlan_core: Make vxlan_flush() more generic for future use
-  vxlan: vxlan_core: Do not skip default entry in vxlan_flush() by
-    default
-  vxlan: vxlan_core: Add support for FDB flush
-  vxlan: vxlan_core: Support FDB flushing by source VNI
-  vxlan: vxlan_core: Support FDB flushing by nexthop ID
-  vxlan: vxlan_core: Support FDB flushing by destination VNI
-  vxlan: vxlan_core: Support FDB flushing by destination port
-  vxlan: vxlan_core: Support FDB flushing by destination IP
-  selftests: Add test cases for FDB flush with VXLAN device
-  selftests: fdb_flush: Add test cases for FDB flush with bridge device
-
- drivers/net/vxlan/vxlan_core.c           | 207 +++++-
- include/linux/netdevice.h                |   8 +-
- net/bridge/br_fdb.c                      |  29 +-
- net/bridge/br_private.h                  |   3 +-
- net/core/rtnetlink.c                     |  27 +-
- tools/testing/selftests/net/Makefile     |   1 +
- tools/testing/selftests/net/fdb_flush.sh | 812 +++++++++++++++++++++++
- 7 files changed, 1049 insertions(+), 38 deletions(-)
- create mode 100755 tools/testing/selftests/net/fdb_flush.sh
-
+diff --git a/drivers/net/vxlan/vxlan_core.c b/drivers/net/vxlan/vxlan_core.c
+index 5b5597073b00..1c58fddb7df4 100644
+--- a/drivers/net/vxlan/vxlan_core.c
++++ b/drivers/net/vxlan/vxlan_core.c
+@@ -3022,8 +3022,23 @@ static int vxlan_open(struct net_device *dev)
+ 	return ret;
+ }
+ 
++struct vxlan_fdb_flush_desc {
++	unsigned long                   state;
++	unsigned long			state_mask;
++};
++
++static bool vxlan_fdb_flush_matches(const struct vxlan_fdb *f,
++				    const struct vxlan_fdb_flush_desc *desc)
++{
++	if (desc->state_mask && (f->state & desc->state_mask) != desc->state)
++		return false;
++
++	return true;
++}
++
+ /* Purge the forwarding table */
+-static void vxlan_flush(struct vxlan_dev *vxlan, bool do_all)
++static void vxlan_flush(struct vxlan_dev *vxlan,
++			const struct vxlan_fdb_flush_desc *desc)
+ {
+ 	unsigned int h;
+ 
+@@ -3034,8 +3049,10 @@ static void vxlan_flush(struct vxlan_dev *vxlan, bool do_all)
+ 		hlist_for_each_safe(p, n, &vxlan->fdb_head[h]) {
+ 			struct vxlan_fdb *f
+ 				= container_of(p, struct vxlan_fdb, hlist);
+-			if (!do_all && (f->state & (NUD_PERMANENT | NUD_NOARP)))
++
++			if (!vxlan_fdb_flush_matches(f, desc))
+ 				continue;
++
+ 			/* the all_zeros_mac entry is deleted at vxlan_uninit */
+ 			if (is_zero_ether_addr(f->eth_addr) &&
+ 			    f->vni == vxlan->cfg.vni)
+@@ -3050,12 +3067,16 @@ static void vxlan_flush(struct vxlan_dev *vxlan, bool do_all)
+ static int vxlan_stop(struct net_device *dev)
+ {
+ 	struct vxlan_dev *vxlan = netdev_priv(dev);
++	struct vxlan_fdb_flush_desc desc = {
++		.state = 0,
++		.state_mask = NUD_PERMANENT | NUD_NOARP,
++	};
+ 
+ 	vxlan_multicast_leave(vxlan);
+ 
+ 	del_timer_sync(&vxlan->age_timer);
+ 
+-	vxlan_flush(vxlan, false);
++	vxlan_flush(vxlan, &desc);
+ 	vxlan_sock_release(vxlan);
+ 
+ 	return 0;
+@@ -4294,8 +4315,9 @@ static int vxlan_changelink(struct net_device *dev, struct nlattr *tb[],
+ static void vxlan_dellink(struct net_device *dev, struct list_head *head)
+ {
+ 	struct vxlan_dev *vxlan = netdev_priv(dev);
++	struct vxlan_fdb_flush_desc desc = {};
+ 
+-	vxlan_flush(vxlan, true);
++	vxlan_flush(vxlan, &desc);
+ 
+ 	list_del(&vxlan->next);
+ 	unregister_netdevice_queue(dev, head);
 -- 
 2.40.1
 
