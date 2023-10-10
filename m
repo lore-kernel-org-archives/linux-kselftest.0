@@ -2,194 +2,74 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E84CFCD68F8
-	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Oct 2023 07:56:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE7A3CD68F9
+	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Oct 2023 07:56:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442603AbjJJH4h (ORCPT
+        id S1442607AbjJJH4q (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 10 Oct 2023 03:56:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48870 "EHLO
+        Tue, 10 Oct 2023 03:56:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442514AbjJJH4f (ORCPT
+        with ESMTP id S1442514AbjJJH4n (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 Oct 2023 03:56:35 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 532E3AC;
-        Tue, 10 Oct 2023 00:56:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696924594; x=1728460594;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=13xQlZVS/d3Fnw5Uih4vnyyNxo0vPH4oWAoiObRGY2Y=;
-  b=PzW1ZCF16hDRC3JSn8doMU/oHYATwft5KS79m6vgqEkgt+CZKveSJlAF
-   Lt5Q4DuIudz9y9t35kGjtxJRGh1lHhpcBKB4kFWFjio/xsGaJmLk/Fx2A
-   IOA0MHX1HgTPQgNKCxfZxxIUN9UT4ebJdYqbmibpyeC+w+pKi1CE7uDCa
-   WQ5xNYOZCzCKkWz3rIIah/ROOIW4/ZvRXdMCXc7psKPyHdYnU8QccN+lo
-   iC1la9jFkWmjDSl0y6FetifWDXnXtAj82XAvkJE1mBPWCFmFm0x3AAv2R
-   /cED0TNO2TxGfny39Nn7gJKgq+jJfWn6F+afV32TEEy3mCqqyhW9vMPfn
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10858"; a="448527693"
-X-IronPort-AV: E=Sophos;i="6.03,212,1694761200"; 
-   d="scan'208";a="448527693"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2023 00:56:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10858"; a="782787982"
-X-IronPort-AV: E=Sophos;i="6.03,212,1694761200"; 
-   d="scan'208";a="782787982"
-Received: from asalaman-mobl.ger.corp.intel.com (HELO wieczorr-mobl1.intel.com) ([10.213.16.145])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2023 00:56:30 -0700
-From:   Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-To:     Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     ilpo.jarvinen@linux.intel.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH v7 1/2] selftests/resctrl: Fix schemata write error check
-Date:   Tue, 10 Oct 2023 09:56:11 +0200
-Message-ID: <7d463146d208304e61cd97c60e718372fc2c21d6.1696923907.git.maciej.wieczor-retman@intel.com>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <cover.1696923907.git.maciej.wieczor-retman@intel.com>
-References: <cover.1696923907.git.maciej.wieczor-retman@intel.com>
+        Tue, 10 Oct 2023 03:56:43 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89DF891;
+        Tue, 10 Oct 2023 00:56:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=F3J7/sD9MnoAxBVvtMX9s8ZlPemFuT1rR2twFtWmelo=; b=lwXgjzTcYUgKc9Ar1zv62glWnE
+        qG7MR0438bkr0VRcBxMCsnSqZvm9G2p/2z2aVWyd0tf5TUfgj4bhxNa0qI1vP/coZ4Z09HJJwaKaE
+        06nORU4TikE/mHz0g02Y4YFmRXn+vImHUcPcQt+fRo7Z9mtuNYF8UnDoergShTF0mKjrwQxrwPcQf
+        Xb5s2ASm8kyW66a/tI+zbQjsTVeXfD8o9smrw1Wfb+lzLr7vbNOAckphy+TnGRMo1sB5pO9EF6qJx
+        /3jc8MSL0ZLy6dKaFMJv5aEmOWTxMNQynV2IhU537cDIhjq2/yvSDIwfc7m8KyD013gnr8bGewee7
+        cz13/8Qw==;
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1qq7bR-000Nq6-OI; Tue, 10 Oct 2023 09:56:30 +0200
+Received: from [178.197.249.27] (helo=linux.home)
+        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1qq7bR-000UjG-Bk; Tue, 10 Oct 2023 09:56:29 +0200
+Subject: Re: [PATCH] selftests: bpf: remove unused variables
+To:     zhujun2 <zhujun2@cmss.chinamobile.com>, shuah@kernel.org
+Cc:     ast@kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, andrii@kernel.org
+References: <20231010070001.10125-1-zhujun2@cmss.chinamobile.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <2e4c17ac-9a61-4901-8f98-c783242eec28@iogearbox.net>
+Date:   Tue, 10 Oct 2023 09:56:28 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20231010070001.10125-1-zhujun2@cmss.chinamobile.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.10/27056/Mon Oct  9 09:40:11 2023)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Writing bitmasks to the schemata can fail when the bitmask doesn't
-adhere to constraints defined by what a particular CPU supports.
-Some example of constraints are max length or having contiguous bits.
-The driver should properly return errors when any rule concerning
-bitmask format is broken.
+On 10/10/23 9:00 AM, zhujun2 wrote:
+> These variables are never referenced in the code, just remove them.
+> 
+> Signed-off-by: zhujun2 <zhujun2@cmss.chinamobile.com>
+> ---
+>   tools/testing/selftests/bpf/prog_tests/atomic_bounds.c      | 1 -
+>   tools/testing/selftests/bpf/prog_tests/kfree_skb.c          | 2 --
+>   tools/testing/selftests/bpf/prog_tests/perf_branches.c      | 6 +-----
+>   .../testing/selftests/bpf/prog_tests/probe_read_user_str.c  | 4 ++--
+>   tools/testing/selftests/bpf/prog_tests/test_overhead.c      | 4 ++--
+>   tools/testing/selftests/bpf/prog_tests/xdp_synproxy.c       | 1 -
+>   6 files changed, 5 insertions(+), 13 deletions(-)
 
-Resctrl FS returns error codes from fprintf() only when fclose() is
-called. Current error checking scheme allows invalid bitmasks to be
-written into schemata file and the selftest doesn't notice because the
-fclose() error code isn't checked.
-
-Substitute fopen(), flose() and fprintf() with open(), close() and
-write() to avoid error code buffering between fprintf() and fclose().
-
-Remove newline character from the schema string after writing it to
-the schemata file so it prints correctly before function return.
-
-Pass the string generated with strerror() to the "reason" buffer so
-the error message is more verbose. Extend "reason" buffer so it can hold
-longer messages.
-
-Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
----
-Changelog v7:
-- Add label for non-empty schema error case. (Reinette)
-- Add Reinette's reviewed-by tag.
-
-Changelog v6:
-- Align schema_len error checking with typical snprintf format.
-  (Reinette)
-- Initialize schema string for early return eventuality. (Reinette)
-
-Changelog v5:
-- Add Ilpo's reviewed-by tag.
-- Fix wrong open() error checking. (Reinette)
-- Add error checking to schema_len variable.
-
-Changelog v4:
-- Unify error checking between open() and write(). (Reinette)
-- Add fcntl.h for glibc backward compatiblitiy. (Reinette)
-
-Changelog v3:
-- Rename fp to fd. (Ilpo)
-- Remove strlen, strcspn and just use the snprintf value instead. (Ilpo)
-
-Changelog v2:
-- Rewrite patch message.
-- Double "reason" buffer size to fit longer error explanation.
-- Redo file interactions with syscalls instead of stdio functions.
-
- tools/testing/selftests/resctrl/resctrlfs.c | 41 +++++++++++++--------
- 1 file changed, 26 insertions(+), 15 deletions(-)
-
-diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
-index 3a8111362d26..05390afd4d6f 100644
---- a/tools/testing/selftests/resctrl/resctrlfs.c
-+++ b/tools/testing/selftests/resctrl/resctrlfs.c
-@@ -8,6 +8,7 @@
-  *    Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>,
-  *    Fenghua Yu <fenghua.yu@intel.com>
-  */
-+#include <fcntl.h>
- #include <limits.h>
- 
- #include "resctrl.h"
-@@ -490,9 +491,8 @@ int write_bm_pid_to_resctrl(pid_t bm_pid, char *ctrlgrp, char *mongrp,
-  */
- int write_schemata(char *ctrlgrp, char *schemata, int cpu_no, char *resctrl_val)
- {
--	char controlgroup[1024], schema[1024], reason[64];
--	int resource_id, ret = 0;
--	FILE *fp;
-+	char controlgroup[1024], reason[128], schema[1024] = {};
-+	int resource_id, fd, schema_len = -1, ret = 0;
- 
- 	if (strncmp(resctrl_val, MBA_STR, sizeof(MBA_STR)) &&
- 	    strncmp(resctrl_val, MBM_STR, sizeof(MBM_STR)) &&
-@@ -520,28 +520,39 @@ int write_schemata(char *ctrlgrp, char *schemata, int cpu_no, char *resctrl_val)
- 
- 	if (!strncmp(resctrl_val, CAT_STR, sizeof(CAT_STR)) ||
- 	    !strncmp(resctrl_val, CMT_STR, sizeof(CMT_STR)))
--		sprintf(schema, "%s%d%c%s", "L3:", resource_id, '=', schemata);
-+		schema_len = snprintf(schema, sizeof(schema), "%s%d%c%s\n",
-+				      "L3:", resource_id, '=', schemata);
- 	if (!strncmp(resctrl_val, MBA_STR, sizeof(MBA_STR)) ||
- 	    !strncmp(resctrl_val, MBM_STR, sizeof(MBM_STR)))
--		sprintf(schema, "%s%d%c%s", "MB:", resource_id, '=', schemata);
--
--	fp = fopen(controlgroup, "w");
--	if (!fp) {
--		sprintf(reason, "Failed to open control group");
-+		schema_len = snprintf(schema, sizeof(schema), "%s%d%c%s\n",
-+				      "MB:", resource_id, '=', schemata);
-+	if (schema_len < 0 || schema_len >= sizeof(schema)) {
-+		snprintf(reason, sizeof(reason),
-+			 "snprintf() failed with return value : %d", schema_len);
- 		ret = -1;
--
- 		goto out;
- 	}
- 
--	if (fprintf(fp, "%s\n", schema) < 0) {
--		sprintf(reason, "Failed to write schemata in control group");
--		fclose(fp);
-+	fd = open(controlgroup, O_WRONLY);
-+	if (fd < 0) {
-+		snprintf(reason, sizeof(reason),
-+			 "open() failed : %s", strerror(errno));
- 		ret = -1;
- 
--		goto out;
-+		goto err_schema_not_empty;
- 	}
--	fclose(fp);
-+	if (write(fd, schema, schema_len) < 0) {
-+		snprintf(reason, sizeof(reason),
-+			 "write() failed : %s", strerror(errno));
-+		close(fd);
-+		ret = -1;
-+
-+		goto err_schema_not_empty;
-+	}
-+	close(fd);
- 
-+err_schema_not_empty:
-+	schema[schema_len - 1] = 0;
- out:
- 	ksft_print_msg("Write schema \"%s\" to resctrl FS%s%s\n",
- 		       schema, ret ? " # " : "",
--- 
-2.42.0
-
+You did not even try to compile-test it, otherwise you would have noticed that the
+build fails after your patches..
