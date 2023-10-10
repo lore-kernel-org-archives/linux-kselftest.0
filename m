@@ -2,34 +2,35 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DD6BCD80C3
-	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Oct 2023 12:34:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4FB5CD80C1
+	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Oct 2023 12:34:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232014AbjJJMeV (ORCPT
+        id S231959AbjJJMeU (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 10 Oct 2023 08:34:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55150 "EHLO
+        Tue, 10 Oct 2023 08:34:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231963AbjJJMeR (ORCPT
+        with ESMTP id S231926AbjJJMeR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Tue, 10 Oct 2023 08:34:17 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00A8C11B;
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF3D5115;
         Tue, 10 Oct 2023 05:34:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
         s=mail; t=1696941245;
-        bh=WxAUHJdppCeTHqWPxWpmIL5UmHFcwDBRqVdmTVlGl0U=;
+        bh=fsO74MWqtM4jVQuGUdntQXoI033jmuUmq363SjvsrzE=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=VEUfNKVPa1jAF4dH/OyzXoKzbUul33LreA4uDaGopOnVixMFIEsnEKf8w1zTyA67o
-         /BVTpB6u1/jw6W6yJ1YCcXJ4B1sCMEI9PZSMbCTZ3PHO2mRm97tRQKb9dpdpq4Ytw5
-         K6BpTXC/OwCtATJeHVQqXe0Za+nn2ObdUIEJ/VOM=
+        b=PMAns0zZx3Np5CZIIV5quub/x4ZRSTDxPXg9ff+629CjRY8nc8NJM7Lb+juwV3XHz
+         5KOj4pqFlmZnMPymL4SehEzB/S9U7gpIiZn/UZsgeG9eZ7bzbpMcPdfPFhAEvxrjjR
+         SAyA16qH6ln4og1bVtnXt/unzItw1kGTT+tU//Qw=
 From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date:   Tue, 10 Oct 2023 14:33:59 +0200
-Subject: [PATCH 4/5] selftests/nolibc: support out-of-tree builds
+Date:   Tue, 10 Oct 2023 14:33:56 +0200
+Subject: [PATCH 1/5] selftests/nolibc: use qemu-system-ppc64 also for
+ ppc64le
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20231010-nolibc-out-of-tree-v1-4-b6a263859596@weissschuh.net>
+Message-Id: <20231010-nolibc-out-of-tree-v1-1-b6a263859596@weissschuh.net>
 References: <20231010-nolibc-out-of-tree-v1-0-b6a263859596@weissschuh.net>
 In-Reply-To: <20231010-nolibc-out-of-tree-v1-0-b6a263859596@weissschuh.net>
 To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
@@ -37,108 +38,42 @@ Cc:     Zhangjin Wu <falcon@tinylab.org>, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1696941244; l=3951;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1696941244; l=992;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=WxAUHJdppCeTHqWPxWpmIL5UmHFcwDBRqVdmTVlGl0U=;
- b=/UOEch0A9EzSGr6yYRgdHzLhXIl9y7lRmAKNd1nuNPkIzI2sd3nn09koPBt6Crej7vYWswndr
- lGWQRved7EQCJ2CVmPRuAkpL/QjE2k/JMU3S/GKy7DF/1OGERqN19YQ
+ bh=fsO74MWqtM4jVQuGUdntQXoI033jmuUmq363SjvsrzE=;
+ b=wBSRpTIRiZpeQkBRJz5IkeqbVATp2Vm3/3mSLvtxPjEqug6p2AE6S8BcC7VaMG9QkRctG4DKq
+ 1EpwfekvHEACtwJLn0KV+nDLNowX1elG/TuCScWOv7UJCRd/xdY4xNn
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Out of tree builds are much more convenient when building for multiple
-architectures or configurations in parallel.
+qemu-system-ppc64 can handle both big and little endian kernels.
 
-Only absolute O= parameters are supported as Makefile.include will
-always resolve relative paths in relation to $(srctree) instead of the
-current directory.
+While some setups, like Debian, provide a symlink to execute
+qemu-system-ppc64 as qemu-system-ppc64le, others, like ArchLinux, do not.
 
-Add a call to "make outputmakefile" to verify that the sourcetree is
-clean.
+So always use qemu-system-ppc64 directly.
 
-This is based on Zhangjins out-of-tree patch.
-It extends that work for get_init_cpio support and also drops relative
-O= specifications explicitly.
-
-Link: https://lore.kernel.org/lkml/06d96bd81fe812a9718098a383678ad3beba98b1.1691215074.git.falcon@tinylab.org/
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- tools/testing/selftests/nolibc/Makefile | 18 ++++++++++++++----
- 1 file changed, 14 insertions(+), 4 deletions(-)
+ tools/testing/selftests/nolibc/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index 598d53c5cb7b..21e3f7da2ecf 100644
+index 891aa396163d..af60e07d3c12 100644
 --- a/tools/testing/selftests/nolibc/Makefile
 +++ b/tools/testing/selftests/nolibc/Makefile
-@@ -1,9 +1,16 @@
- # SPDX-License-Identifier: GPL-2.0
- # Makefile for nolibc tests
- include ../../../scripts/Makefile.include
-+include ../../../scripts/utilities.mak
- # We need this for the "cc-option" macro.
- include ../../../build/Build.include
- 
-+ifneq ($(O),)
-+ifneq ($(call is-absolute,$(O)),y)
-+$(error Only absolute O= parameters are supported)
-+endif
-+endif
-+
- # we're in ".../tools/testing/selftests/nolibc"
- ifeq ($(srctree),)
- srctree := $(patsubst %/tools/testing/selftests/,%,$(dir $(CURDIR)))
-@@ -14,6 +21,8 @@ include $(srctree)/scripts/subarch.include
- ARCH = $(SUBARCH)
- endif
- 
-+objtree ?= $(srctree)
-+
- # XARCH extends the kernel's ARCH with a few variants of the same
- # architecture that only differ by the configuration, the toolchain
- # and the Qemu program used. It is copied as-is into ARCH except for
-@@ -52,7 +61,7 @@ IMAGE_ppc64le    = arch/powerpc/boot/zImage
- IMAGE_riscv      = arch/riscv/boot/Image
- IMAGE_s390       = arch/s390/boot/bzImage
- IMAGE_loongarch  = arch/loongarch/boot/vmlinuz.efi
--IMAGE            = $(IMAGE_$(XARCH))
-+IMAGE            = $(objtree)/$(IMAGE_$(XARCH))
- IMAGE_NAME       = $(notdir $(IMAGE))
- 
- # default kernel configurations that appear to be usable
-@@ -167,6 +176,7 @@ sysroot: sysroot/$(ARCH)/include
- sysroot/$(ARCH)/include:
- 	$(Q)rm -rf sysroot/$(ARCH) sysroot/sysroot
- 	$(QUIET_MKDIR)mkdir -p sysroot
-+	$(Q)$(MAKE) -C $(srctree) outputmakefile
- 	$(Q)$(MAKE) -C $(srctree)/tools/include/nolibc ARCH=$(ARCH) OUTPUT=$(CURDIR)/sysroot/ headers_standalone
- 	$(Q)mv sysroot/sysroot sysroot/$(ARCH)
- 
-@@ -199,7 +209,7 @@ run-user: nolibc-test
- 	$(Q)$(REPORT) $(CURDIR)/run.out
- 
- initramfs.cpio: kernel nolibc-test
--	$(QUIET_GEN)echo 'file /init nolibc-test 755 0 0' | $(srctree)/usr/gen_init_cpio - > initramfs.cpio
-+	$(QUIET_GEN)echo 'file /init nolibc-test 755 0 0' | $(objtree)/usr/gen_init_cpio - > initramfs.cpio
- 
- initramfs: nolibc-test
- 	$(QUIET_MKDIR)mkdir -p initramfs
-@@ -217,12 +227,12 @@ kernel-standalone: initramfs
- 
- # run the tests after building the kernel
- run: kernel initramfs.cpio
--	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -initrd initramfs.cpio -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
-+	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(IMAGE)" -initrd initramfs.cpio -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
- 	$(Q)$(REPORT) $(CURDIR)/run.out
- 
- # re-run the tests from an existing kernel
- rerun:
--	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -initrd initramfs.cpio -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
-+	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(IMAGE)" -initrd initramfs.cpio -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
- 	$(Q)$(REPORT) $(CURDIR)/run.out
- 
- # report with existing test log
+@@ -82,7 +82,7 @@ QEMU_ARCH_arm        = arm
+ QEMU_ARCH_mips       = mipsel  # works with malta_defconfig
+ QEMU_ARCH_ppc        = ppc
+ QEMU_ARCH_ppc64      = ppc64
+-QEMU_ARCH_ppc64le    = ppc64le
++QEMU_ARCH_ppc64le    = ppc64
+ QEMU_ARCH_riscv      = riscv64
+ QEMU_ARCH_s390       = s390x
+ QEMU_ARCH_loongarch  = loongarch64
 
 -- 
 2.42.0
