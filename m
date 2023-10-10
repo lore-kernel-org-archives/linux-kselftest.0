@@ -2,84 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CCA3CCD80C0
-	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Oct 2023 12:34:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BC51CD80BD
+	for <linux-kselftest@archiver.kernel.org>; Tue, 10 Oct 2023 12:34:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231978AbjJJMeT (ORCPT
+        id S231941AbjJJMeT (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Tue, 10 Oct 2023 08:34:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55084 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231905AbjJJMeR (ORCPT
+        with ESMTP id S231927AbjJJMeR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Tue, 10 Oct 2023 08:34:17 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 907ECF0;
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8824116;
         Tue, 10 Oct 2023 05:34:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
         s=mail; t=1696941245;
-        bh=kXS7WhluAd4PiUUxRUCXnsXLrFdoS1vueCxpn04VTXE=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=R0WpHc8XQvn1Lji8rx5D6JKLLm6M9P6qaJYMFzgOu2iTe1Qg8jh7jI8TK+CjuABax
-         ojMk4Heqk1IAnnbBYg7nOSp8qbKSO3FVazcdarSvueJfHW8l+e6AGYosXVvN7VoG4A
-         Rhvxgg7pawEKVX3K8e6iEg8+3tUFU8o9y/qpW6LU=
+        bh=xz9AlPCf/z9+9TDfxkF37vrowjGHyQ40QbM+LPmN6os=;
+        h=From:Subject:Date:To:Cc:From;
+        b=oXUzPnSAYh2LiwGrAzzO0xJa6M9hD8I9THxfvMpWrJGPknP/aLt40dBsAJu2op+cV
+         k4p1p3ZJpmaNKZFmNvDTyl8Sp8xL8z5T6MlYpCQPzlrGDj3k7y2TOi7RvewJkBPzz0
+         BjpB20L/cDI85LTB8JHTFOJYP625B5uM9AyQInQg=
 From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date:   Tue, 10 Oct 2023 14:33:57 +0200
-Subject: [PATCH 2/5] selftests/nolibc: use EFI -bios for LoongArch qemu
+Subject: [PATCH 0/5] selftests/nolibc: various build improvements
+Date:   Tue, 10 Oct 2023 14:33:55 +0200
+Message-Id: <20231010-nolibc-out-of-tree-v1-0-b6a263859596@weissschuh.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20231010-nolibc-out-of-tree-v1-2-b6a263859596@weissschuh.net>
-References: <20231010-nolibc-out-of-tree-v1-0-b6a263859596@weissschuh.net>
-In-Reply-To: <20231010-nolibc-out-of-tree-v1-0-b6a263859596@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIALNEJWUC/x3MQQqAIBBA0avErBvQDImuEi1qGmsgNLQiCO+et
+ HyL/19IHIUT9NULkW9JEnyBriugbfIroyzF0KjGaKUV+rDLTBiuE4PDMzLjbG3XkiWn2EAJj8h
+ Onn86jDl/NR3GN2QAAAA=
 To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
 Cc:     Zhangjin Wu <falcon@tinylab.org>, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1696941244; l=1717;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1696941244; l=2014;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=kXS7WhluAd4PiUUxRUCXnsXLrFdoS1vueCxpn04VTXE=;
- b=mRJ10rNacYK1RUuAziauqWSviXnEL+7fllM4ClTgv0Qep9/tmh+FYPxesyXQHxDXpKS8EIs7m
- uxCVv7/ALa2BuA2ZMIFijBikPeE+RdpiMB6+7/7LSYovSINaHjBTpSn
+ bh=xz9AlPCf/z9+9TDfxkF37vrowjGHyQ40QbM+LPmN6os=;
+ b=CrPfvVlqiWfhjmAup1YvUArcIdL1+aNanpjgYlEzkGRyXr2XiDKZOwWKIrC1g30WkaYlTUNUI
+ 4wl7NN/QdAoDzxQK+h6kJvWHLvhU4G6w4xAl16iiJF3/AY2Mc6QtcPG
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-qemu for LoongArch does not work properly with direct kernel boot.
-The kernel will panic during initialization and hang without any output.
+With the out-of-tree builds it's possible do incremental tests fairly fast:
 
-When booting in EFI mode everything work correctly.
+$ time ./run-tests.sh
+i386:          160 test(s): 160 passed,   0 skipped,   0 failed => status: success
+x86_64:        160 test(s): 160 passed,   0 skipped,   0 failed => status: success
+arm64:         160 test(s): 160 passed,   0 skipped,   0 failed => status: success
+arm:           160 test(s): 160 passed,   0 skipped,   0 failed => status: success
+mips:          160 test(s): 159 passed,   1 skipped,   0 failed => status: warning
+ppc:           160 test(s): 160 passed,   0 skipped,   0 failed => status: success
+ppc64:         160 test(s): 160 passed,   0 skipped,   0 failed => status: success
+ppc64le:       160 test(s): 160 passed,   0 skipped,   0 failed => status: success
+riscv:         160 test(s): 160 passed,   0 skipped,   0 failed => status: success
+s390:          160 test(s): 159 passed,   1 skipped,   0 failed => status: warning
+loongarch:     160 test(s): 159 passed,   1 skipped,   0 failed => status: warning
 
-While users most likely don't have the LoongArch EFI binary installed at
-least an explicit error about 'file not found' is better than a hanging
-test without output that can never succeed.
+real    3m11.735s
+user    4m20.354s
+sys     1m11.880s
 
-Link: https://lore.kernel.org/loongarch/1738d60a-df3a-4102-b1da-d16a29b6e06a@t-8ch.de/
+This is with an incremental kernel rebuild and testrun inside qemu.
+
+Note:
+
+"selftests/nolibc: use qemu-system-ppc64 also for ppc64le" was already
+submitted standalone but I included it here again for easier testing and
+review.
+
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-
 ---
-Note: I'm wondering how this worked for anybody else.
+Thomas Weißschuh (5):
+      selftests/nolibc: use qemu-system-ppc64 also for ppc64le
+      selftests/nolibc: use EFI -bios for LoongArch qemu
+      selftests/nolibc: anchor paths in $(srcdir) if possible
+      selftests/nolibc: support out-of-tree builds
+      selftests/nolibc: generate config automatically
+
+ tools/testing/selftests/nolibc/Makefile | 36 +++++++++++++++++++++------------
+ 1 file changed, 23 insertions(+), 13 deletions(-)
 ---
- tools/testing/selftests/nolibc/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+base-commit: d423dcd4ac21041618ab83455c09440d76dbc099
+change-id: 20231010-nolibc-out-of-tree-b6684c6cf0e3
 
-diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index af60e07d3c12..258293639572 100644
---- a/tools/testing/selftests/nolibc/Makefile
-+++ b/tools/testing/selftests/nolibc/Makefile
-@@ -100,7 +100,7 @@ QEMU_ARGS_ppc64      = -M powernv -append "console=hvc0 panic=-1 $(TEST:%=NOLIBC
- QEMU_ARGS_ppc64le    = -M powernv -append "console=hvc0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS_riscv      = -M virt -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS_s390       = -M s390-ccw-virtio -m 1G -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
--QEMU_ARGS_loongarch  = -M virt -append "console=ttyS0,115200 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
-+QEMU_ARGS_loongarch  = -M virt -append "console=ttyS0,115200 panic=-1 $(TEST:%=NOLIBC_TEST=%)" -bios /usr/share/edk2/loongarch64/OVMF_CODE.fd
- QEMU_ARGS            = $(QEMU_ARGS_$(XARCH)) $(QEMU_ARGS_EXTRA)
- 
- # OUTPUT is only set when run from the main makefile, otherwise
-
+Best regards,
 -- 
-2.42.0
+Thomas Weißschuh <linux@weissschuh.net>
 
