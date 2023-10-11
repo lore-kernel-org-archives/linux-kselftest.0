@@ -2,42 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A6D1ACDB482
-	for <linux-kselftest@archiver.kernel.org>; Wed, 11 Oct 2023 19:50:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8BDC5CDB47E
+	for <linux-kselftest@archiver.kernel.org>; Wed, 11 Oct 2023 19:50:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233170AbjJKTue (ORCPT
+        id S233442AbjJKTue (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
         Wed, 11 Oct 2023 15:50:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32796 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233125AbjJKTud (ORCPT
+        with ESMTP id S233103AbjJKTud (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Wed, 11 Oct 2023 15:50:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D0D94
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Oct 2023 12:49:43 -0700 (PDT)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F1AB8
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Oct 2023 12:49:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1697053782;
+        s=mimecast20190719; t=1697053786;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=dBw9jQqyC4NTEUrlFCMr+yRaRJ2fHw1SppPxUk03e4k=;
-        b=cLJqCcqhfphFicNXORiMvWuQB9FpDLPNC1ECYs3Q+McBEyPfmVEa1QnvNKzYWhhzXLuwlQ
-        v8+ytCUocvbCrpcFzyHcG612G1pfRifOIADdcUwUQquKLHa0QrQm+02HMlWzuOw9UTrrXy
-        bI0PfyYitu1eyo0+uUUqlL8kpAiuJ8g=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=91TzyC8lAiMG2w2YCIi0bUrneGmE9j31gOJx7+kZs/U=;
+        b=CSjO0Xa2oPYQECu7+7rIelXQzZ861s7Rhqx+udvoOLFBzL9bQzDKTRJudwIF0tEPz0VE0E
+        q+vVIQzU8yUhLyaqwp2+Jy7fCPERwSeqoRSaPxazZGPHZP21DeFlur6COmp7rhzAD5rGkW
+        yOhEOX5cQk9ci983uXOk+ieXeYA473Y=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-625-8nc4PH9ONs2n_JXZ4hQRYw-1; Wed, 11 Oct 2023 15:49:41 -0400
-X-MC-Unique: 8nc4PH9ONs2n_JXZ4hQRYw-1
+ us-mta-652-vX6TnARzM2up3P1Duj4RCQ-1; Wed, 11 Oct 2023 15:49:43 -0400
+X-MC-Unique: vX6TnARzM2up3P1Duj4RCQ-1
 Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 69BEE832D33;
-        Wed, 11 Oct 2023 19:49:40 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3228A832D6D;
+        Wed, 11 Oct 2023 19:49:42 +0000 (UTC)
 Received: from RHTPC1VM0NT.lan (unknown [10.22.34.140])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A511A1C060B5;
-        Wed, 11 Oct 2023 19:49:39 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8A2DC1C060B5;
+        Wed, 11 Oct 2023 19:49:41 +0000 (UTC)
 From:   Aaron Conole <aconole@redhat.com>
 To:     netdev@vger.kernel.org
 Cc:     dev@openvswitch.org, linux-kselftest@vger.kernel.org,
@@ -48,9 +49,11 @@ Cc:     dev@openvswitch.org, linux-kselftest@vger.kernel.org,
         Paolo Abeni <pabeni@redhat.com>,
         Adrian Moreno <amorenoz@redhat.com>,
         Eelco Chaudron <echaudro@redhat.com>, shuah@kernel.org
-Subject: [PATCH net v2 0/4] selftests: openvswitch: Minor fixes for some systems
-Date:   Wed, 11 Oct 2023 15:49:35 -0400
-Message-ID: <20231011194939.704565-1-aconole@redhat.com>
+Subject: [PATCH net v2 2/4] selftests: openvswitch: Catch cases where the tests are killed
+Date:   Wed, 11 Oct 2023 15:49:37 -0400
+Message-ID: <20231011194939.704565-3-aconole@redhat.com>
+In-Reply-To: <20231011194939.704565-1-aconole@redhat.com>
+References: <20231011194939.704565-1-aconole@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
@@ -58,23 +61,28 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-A number of corner cases were caught when trying to run the selftests on
-older systems.  Missed skip conditions, some error cases, and outdated
-python setups would all report failures but the issue would actually be
-related to some other condition rather than the selftest suite.
+In case of fatal signal, or early abort at least cleanup the current
+test case.
 
-Address these individual cases.
+Fixes: 25f16c873fb1 ("selftests: add openvswitch selftest suite")
+Signed-off-by: Aaron Conole <aconole@redhat.com>
+---
+ tools/testing/selftests/net/openvswitch/openvswitch.sh | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Aaron Conole (4):
-  selftests: openvswitch: Add version check for pyroute2
-  selftests: openvswitch: Catch cases where the tests are killed
-  selftests: openvswitch: Skip drop testing on older kernels
-  selftests: openvswitch: Fix the ct_tuple for v4
-
- .../selftests/net/openvswitch/openvswitch.sh  | 21 +++++++-
- .../selftests/net/openvswitch/ovs-dpctl.py    | 48 ++++++++++++++++++-
- 2 files changed, 66 insertions(+), 3 deletions(-)
-
+diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
+index 220c3356901ef..2a0112be7ead5 100755
+--- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
++++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
+@@ -3,6 +3,8 @@
+ #
+ # OVS kernel module self tests
+ 
++trap ovs_exit_sig EXIT TERM INT ERR
++
+ # Kselftest framework requirement - SKIP code is 4.
+ ksft_skip=4
+ 
 -- 
 2.41.0
 
