@@ -2,176 +2,98 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89163C41513
-	for <linux-kselftest@archiver.kernel.org>; Wed, 11 Oct 2023 19:51:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ACF4ECDB465
+	for <linux-kselftest@archiver.kernel.org>; Thu, 12 Oct 2023 01:52:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235053AbjJKTvX (ORCPT
+        id S234003AbjJLBww (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 11 Oct 2023 15:51:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60932 "EHLO
+        Wed, 11 Oct 2023 21:52:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233119AbjJKTvW (ORCPT
+        with ESMTP id S233989AbjJLBww (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 11 Oct 2023 15:51:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB639C9
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Oct 2023 12:49:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1697053787;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Iw1db1f9U7DoYdHPvbNT3gp9obI4+XkIvnwgO5EvR7c=;
-        b=BBWDv44lrWVLKNZQi5h8/W3/5dJZaXXjZ7Udv3OY8RdEMKlsfVZQdMEc0rT1ziRxuWKgf8
-        ZwNHJveWtirvHsHnXtoPoSVNKYkYfymAiyKD7hq8QDQ9lrje3+QwW+2n7jIe6wcQ2yZntI
-        mHu8tU4tzavVQ9MEVGpGEALNskRnqYs=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-115-7XB-f4rcMai1ZDVvhylk9A-1; Wed, 11 Oct 2023 15:49:44 -0400
-X-MC-Unique: 7XB-f4rcMai1ZDVvhylk9A-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DAAD6185A79C;
-        Wed, 11 Oct 2023 19:49:43 +0000 (UTC)
-Received: from RHTPC1VM0NT.lan (unknown [10.22.34.140])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 433551C060B5;
-        Wed, 11 Oct 2023 19:49:42 +0000 (UTC)
-From:   Aaron Conole <aconole@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     dev@openvswitch.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Pravin B Shelar <pshelar@ovn.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Adrian Moreno <amorenoz@redhat.com>,
-        Eelco Chaudron <echaudro@redhat.com>, shuah@kernel.org
-Subject: [PATCH net v2 3/4] selftests: openvswitch: Skip drop testing on older kernels
-Date:   Wed, 11 Oct 2023 15:49:38 -0400
-Message-ID: <20231011194939.704565-4-aconole@redhat.com>
-In-Reply-To: <20231011194939.704565-1-aconole@redhat.com>
-References: <20231011194939.704565-1-aconole@redhat.com>
+        Wed, 11 Oct 2023 21:52:52 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A09A5B6;
+        Wed, 11 Oct 2023 18:52:45 -0700 (PDT)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8BxJvFsUSdl2zoxAA--.29454S3;
+        Thu, 12 Oct 2023 09:52:44 +0800 (CST)
+Received: from [10.130.0.149] (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cxzt5pUSdlsjYhAA--.6621S3;
+        Thu, 12 Oct 2023 09:52:41 +0800 (CST)
+Subject: Re: [PATCH v2 0/2] Modify vDSO selftests
+To:     Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+References: <1689069425-17414-1-git-send-email-yangtiezhu@loongson.cn>
+ <6aafe4f7-5b20-e791-12c1-413f2db3417b@loongson.cn>
+Cc:     linux-kselftest@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
+        Andrew Morton <akpm@linux-foundation.org>
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <379c1f53-3e32-0033-3658-6689f43e7f1f@loongson.cn>
+Date:   Thu, 12 Oct 2023 09:52:41 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
+In-Reply-To: <6aafe4f7-5b20-e791-12c1-413f2db3417b@loongson.cn>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8Cxzt5pUSdlsjYhAA--.6621S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj9xXoWrtr1ftw4xKryDXw45KFW5CFX_yoWfurbE9a
+        y8uas3tws7ZF9xAF4Sgw13ZryDJayIyr4UKr17Way7Xry3ZFWUWF4kur48u3WrWa17trZ2
+        yF4UZasavryDXosvyTuYvTs0mTUanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvT
+        s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+        cSsGvfJTRUUUbDAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+        vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+        w2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+        W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+        Gr0_Gr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
+        kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWU
+        twAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMx
+        k0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l
+        4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxV
+        WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI
+        7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
+        1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+        42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j5o7tUUUUU=
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Kernels that don't have support for openvswitch drop reasons also
-won't have the drop counter reasons, so we should skip the test
-completely.  It previously wasn't possible to build a test case
-for this without polluting the datapath, so we introduce a mechanism
-to clear all the flows from a datapath allowing us to test for
-explicit drop actions, and then clear the flows to build the
-original test case.
+Cc: Andrew Morton <akpm@linux-foundation.org>
 
-Fixes: 4242029164d6 ("selftests: openvswitch: add explicit drop testcase")
-Signed-off-by: Aaron Conole <aconole@redhat.com>
----
-v2: Address intermingled tabs vs. spaces
+On 08/17/2023 03:20 PM, Tiezhu Yang wrote:
+> Hi Shuah,
+>
+> On 07/11/2023 05:57 PM, Tiezhu Yang wrote:
+>> v2: Rebase on 6.5-rc1 and update the commit message
+>>
+>> Tiezhu Yang (2):
+>>   selftests/vDSO: Add support for LoongArch
+>>   selftests/vDSO: Get version and name for all archs
+>>
+>>  tools/testing/selftests/vDSO/vdso_config.h         |  6 ++++-
+>>  tools/testing/selftests/vDSO/vdso_test_getcpu.c    | 16 +++++--------
+>>  .../selftests/vDSO/vdso_test_gettimeofday.c        | 26
+>> ++++++----------------
+>>  3 files changed, 18 insertions(+), 30 deletions(-)
+>>
+>
+> Any comments? I guess this should go through the linux-kselftest tree.
+>
+> Thanks,
+> Tiezhu
+>
 
- .../selftests/net/openvswitch/openvswitch.sh  | 17 ++++++++++
- .../selftests/net/openvswitch/ovs-dpctl.py    | 34 +++++++++++++++++++
- 2 files changed, 51 insertions(+)
+What are the status of these patches?
 
-diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-index 2a0112be7ead5..f8499d4c87f3f 100755
---- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
-+++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-@@ -144,6 +144,12 @@ ovs_add_flow () {
- 	return 0
- }
- 
-+ovs_del_flows () {
-+	info "Deleting all flows from DP: sbx:$1 br:$2"
-+	ovs_sbx "$1" python3 $ovs_base/ovs-dpctl.py del-flows "$2"
-+	return 0
-+}
-+
- ovs_drop_record_and_run () {
- 	local sbx=$1
- 	shift
-@@ -200,6 +206,17 @@ test_drop_reason() {
- 	ip netns exec server ip addr add 172.31.110.20/24 dev s1
- 	ip netns exec server ip link set s1 up
- 
-+	# Check if drop reasons can be sent
-+	ovs_add_flow "test_drop_reason" dropreason \
-+		'in_port(1),eth(),eth_type(0x0806),arp()' 'drop(10)' 2>/dev/null
-+	if [ $? == 1 ]; then
-+		info "no support for drop reasons - skipping"
-+		ovs_exit_sig
-+		return $ksft_skip
-+	fi
-+
-+	ovs_del_flows "test_drop_reason" dropreason
-+
- 	# Allow ARP
- 	ovs_add_flow "test_drop_reason" dropreason \
- 		'in_port(1),eth(),eth_type(0x0806),arp()' '2' || return 1
-diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-index e4c24d5edf20c..10b8f31548f84 100644
---- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-+++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-@@ -1906,6 +1906,32 @@ class OvsFlow(GenericNetlinkSocket):
-             raise ne
-         return reply
- 
-+    def del_flows(self, dpifindex):
-+        """
-+        Send a del message to the kernel that will drop all flows.
-+
-+        dpifindex should be a valid datapath obtained by calling
-+        into the OvsDatapath lookup
-+        """
-+
-+        flowmsg = OvsFlow.ovs_flow_msg()
-+        flowmsg["cmd"] = OVS_FLOW_CMD_DEL
-+        flowmsg["version"] = OVS_DATAPATH_VERSION
-+        flowmsg["reserved"] = 0
-+        flowmsg["dpifindex"] = dpifindex
-+
-+        try:
-+            reply = self.nlm_request(
-+                flowmsg,
-+                msg_type=self.prid,
-+                msg_flags=NLM_F_REQUEST | NLM_F_ACK,
-+            )
-+            reply = reply[0]
-+        except NetlinkError as ne:
-+            print(flowmsg)
-+            raise ne
-+        return reply
-+
-     def dump(self, dpifindex, flowspec=None):
-         """
-         Returns a list of messages containing flows.
-@@ -2068,6 +2094,9 @@ def main(argv):
-     addflcmd.add_argument("flow", help="Flow specification")
-     addflcmd.add_argument("acts", help="Flow actions")
- 
-+    delfscmd = subparsers.add_parser("del-flows")
-+    delfscmd.add_argument("flsbr", help="Datapath name")
-+
-     args = parser.parse_args()
- 
-     if args.verbose > 0:
-@@ -2151,6 +2180,11 @@ def main(argv):
-         flow = OvsFlow.ovs_flow_msg()
-         flow.parse(args.flow, args.acts, rep["dpifindex"])
-         ovsflow.add_flow(rep["dpifindex"], flow)
-+    elif hasattr(args, "flsbr"):
-+        rep = ovsdp.info(args.flsbr, 0)
-+        if rep is None:
-+            print("DP '%s' not found." % args.flsbr)
-+        ovsflow.del_flows(rep["dpifindex"])
- 
-     return 0
- 
--- 
-2.41.0
+https://lore.kernel.org/lkml/1689069425-17414-1-git-send-email-yangtiezhu@loongson.cn/
+
+This is a ping message, maybe you have forgot them?
+
+Thanks,
+Tiezhu
 
