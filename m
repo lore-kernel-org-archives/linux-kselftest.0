@@ -2,110 +2,166 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CBABCDB465
-	for <linux-kselftest@archiver.kernel.org>; Mon, 16 Oct 2023 13:08:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E2088CDB482
+	for <linux-kselftest@archiver.kernel.org>; Mon, 16 Oct 2023 13:45:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232764AbjJPNI3 (ORCPT
+        id S233947AbjJPNpk (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 16 Oct 2023 09:08:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48750 "EHLO
+        Mon, 16 Oct 2023 09:45:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231508AbjJPNI2 (ORCPT
+        with ESMTP id S233586AbjJPNpj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 Oct 2023 09:08:28 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3E1D9
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Oct 2023 06:08:26 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1c9daca2b85so32681515ad.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Oct 2023 06:08:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1697461706; x=1698066506; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tfy1ziPitTIKCgP7hgWatYcJeB1MWA1vHtQFUnRwmZU=;
-        b=O80akG8HMtlEwCSfu7ToJqjUfOBwqyuB/N+7UgY2tM3TzKU7F6JMqdayHK08mRe1rJ
-         ZqykConvOfOciejVhe/MZC35rkgQglss+K+TZ+9Q0wejP2hmeOqWxhOyNu/Bm7HLNt2V
-         8JbCWQ1waGDllker+kN9OIaTzuy/WmHtUgZnNEunIiZrYsD1YwO6d1BpOPddFcNDyJHC
-         ANjTrg9cc8Zyi3QF4klfPamU0rvLrTxDLAiJKXa1OiYdjaGwFsY7YTLcLKYGaEF1x4A6
-         h7CBSD4vG/YN5WGOQTqxkjfW2lhj5QQ2Phux001IEBE0+xMfD56ym/mljoVRpijgfpQc
-         W7vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697461706; x=1698066506;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tfy1ziPitTIKCgP7hgWatYcJeB1MWA1vHtQFUnRwmZU=;
-        b=OAzrfSA2tE3NN8fEBf1pc+W4MqPmfkUk+vpJZsON+wY6y/ERT4v+CYSjiAiq49TdS5
-         TwNpcWe4Yh1TUWy+Ul6s58yogfUAiHr5bhwRdWZ7fHr0UYbX1MLw6sEtQk3uX2QQAdAg
-         n5Lk22eA1aa9EtI+/VJNfGV2Glm7Qqeqx7jy9GSfiH3oKanuxj25Smfan4Veah2ZZ97Z
-         Q17kK+jeDsm1xQEs9fiE5rMEmrYIX74zQkXiaurvDTZoIdzknN9poSbyXRUdnJM1A9ES
-         Vbyq2w+sTzAlqz1gNNujn37+3l4/n4cdT+6jKIwXb46BVobS0PDO8ykYJ9aZRPdDfE5i
-         naxA==
-X-Gm-Message-State: AOJu0Yzr00SdYucEBgk1gXaaohQs1Q+EjvQkRlzoPgrPdV0H1hTHtWO9
-        06gbuBL+IWxCSpzPVJbYlx89og==
-X-Google-Smtp-Source: AGHT+IEFoc6AGYZwR5/ObdpuzM9hbI7UWGokG/QIvGghVbavGZhqHMPuFgH+U+30ml7a/ChTLmr1wA==
-X-Received: by 2002:a17:903:1ce:b0:1c7:27a1:a9e5 with SMTP id e14-20020a17090301ce00b001c727a1a9e5mr10234801plh.33.1697461706303;
-        Mon, 16 Oct 2023 06:08:26 -0700 (PDT)
-Received: from ?IPV6:2400:4050:a840:1e00:78d2:b862:10a7:d486? ([2400:4050:a840:1e00:78d2:b862:10a7:d486])
-        by smtp.gmail.com with ESMTPSA id l13-20020a170902eb0d00b001b890009634sm8420579plb.139.2023.10.16.06.08.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Oct 2023 06:08:26 -0700 (PDT)
-Message-ID: <ecb37173-4b49-466b-b92d-4ff710eee998@daynix.com>
-Date:   Mon, 16 Oct 2023 22:08:21 +0900
+        Mon, 16 Oct 2023 09:45:39 -0400
+Received: from mail.avm.de (mail.avm.de [IPv6:2001:bf0:244:244::120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C00193;
+        Mon, 16 Oct 2023 06:45:35 -0700 (PDT)
+Received: from mail-auth.avm.de (unknown [IPv6:2001:bf0:244:244::71])
+        by mail.avm.de (Postfix) with ESMTPS;
+        Mon, 16 Oct 2023 15:45:31 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
+        t=1697463931; bh=EPObz722Vs1eIc36kzRf0JZ++mCdUwdHHlHoaN/c4AI=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+        b=T5WbMJYkpioGZNFYPZN8MWGcGIZTuYNARpLc8sz40pIWruBTOTMwTh3juHSRsFwBs
+         v7/RHAVBGs8JQpF3jKx6dqycAwH0KmshxX4W2Y4tG6jZONYDpo5EsoEXHtYwaPEikv
+         0lJoicK7nGvUR3/SU/hwgzgxsdE7omSchYNnsR7U=
+Received: from localhost (unknown [172.17.88.63])
+        by mail-auth.avm.de (Postfix) with ESMTPSA id 8B05B80A44;
+        Mon, 16 Oct 2023 15:45:32 +0200 (CEST)
+From:   Johannes Nixdorf <jnixdorf-oss@avm.de>
+Date:   Mon, 16 Oct 2023 15:27:22 +0200
+Subject: [PATCH net-next v5 3/5] net: bridge: Add netlink knobs for number
+ / max learned FDB entries
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3] selftests/bpf: Use pkg-config to determine ld
- flags
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>,
-        Yonghong Song <yonghong.song@linux.dev>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, Nick Terrell <terrelln@fb.com>,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20231016124313.60220-1-akihiko.odaki@daynix.com>
- <f44993c9-1934-746f-aa3a-a1005459320a@iogearbox.net>
-Content-Language: en-US
-From:   Akihiko Odaki <akihiko.odaki@daynix.com>
-In-Reply-To: <f44993c9-1934-746f-aa3a-a1005459320a@iogearbox.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20231016-fdb_limit-v5-3-32cddff87758@avm.de>
+References: <20231016-fdb_limit-v5-0-32cddff87758@avm.de>
+In-Reply-To: <20231016-fdb_limit-v5-0-32cddff87758@avm.de>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Andrew Lunn <andrew@lunn.ch>, David Ahern <dsahern@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     bridge@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Johannes Nixdorf <jnixdorf-oss@avm.de>
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1697462840; l=3678;
+ i=jnixdorf-oss@avm.de; s=20230906; h=from:subject:message-id;
+ bh=EPObz722Vs1eIc36kzRf0JZ++mCdUwdHHlHoaN/c4AI=;
+ b=TeQovn3tgBHG/nrdzrgh/219G9pnG7RnGC7yRwAvA73HuUcYct6vowXq2mW9EuGPiqiwZ7wDZ
+ v4sY2Jg8FmcDaIvmIr1EtrWT8d0laDYkXAI2Je5MngH1G/dJWI2PW8v
+X-Developer-Key: i=jnixdorf-oss@avm.de; a=ed25519;
+ pk=KMraV4q7ANHRrwjf9EVhvU346JsqGGNSbPKeNILOQfo=
+X-purgate-ID: 149429::1697463931-307EED95-C8FDF38B/0/0
+X-purgate-type: clean
+X-purgate-size: 3680
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
+X-purgate: clean
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2023/10/16 21:52, Daniel Borkmann wrote:
-> On 10/16/23 2:43 PM, Akihiko Odaki wrote:
->> When linking statically, libraries may require other dependencies to be
->> included to ld flags. In particular, libelf may require libzstd. Use
->> pkg-config to determine such dependencies.
->>
->> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
->> ---
->> V2 -> V3: Added missing "echo".
->> V1 -> V2: Implemented fallback, referring to HOSTPKG_CONFIG.
-> 
-> Same issue in v3. Please don't resend your patches too quickly, but 
-> properly set up an
-> environment where you can test that this fallback works first :
-> 
-> https://github.com/kernel-patches/bpf/actions/runs/6533309175/job/17738285759
+The previous patch added accounting and a limit for the number of
+dynamically learned FDB entries per bridge. However it did not provide
+means to actually configure those bounds or read back the count. This
+patch does that.
 
-I think you are looking at a wrong run. The run checks out:
-https://github.com/kernel-patches/bpf/commit/0c184cb0b561d2fb60b2dc79c2917cd7ff8cd8a2
+Two new netlink attributes are added for the accounting and limit of
+dynamically learned FDB entries:
+ - IFLA_BR_FDB_N_LEARNED (RO) for the number of entries accounted for
+   a single bridge.
+ - IFLA_BR_FDB_MAX_LEARNED (RW) for the configured limit of entries for
+   the bridge.
 
-This is v2. I think the correct one is:
-https://github.com/kernel-patches/bpf/actions/runs/6533797864
+The new attributes are used like this:
 
-That said, I found spurious error messages with the run. I tested it by 
-setting PKG_CONFIG=false, but I should have tested it with 
-PKG_CONFIG=a-command-that-does-not-exist. Now I sent v4, which does no 
-longer emit noisy error messages and is properly tested.
+ # ip link add name br up type bridge fdb_max_learned 256
+ # ip link add name v1 up master br type veth peer v2
+ # ip link set up dev v2
+ # mausezahn -a rand -c 1024 v2
+ 0.01 seconds (90877 packets per second
+ # bridge fdb | grep -v permanent | wc -l
+ 256
+ # ip -d link show dev br
+ 13: br: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 [...]
+     [...] fdb_n_learned 256 fdb_max_learned 256
+
+Signed-off-by: Johannes Nixdorf <jnixdorf-oss@avm.de>
+---
+ include/uapi/linux/if_link.h |  2 ++
+ net/bridge/br_netlink.c      | 15 ++++++++++++++-
+ 2 files changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/include/uapi/linux/if_link.h b/include/uapi/linux/if_link.h
+index ce3117df9cec..0486f314c176 100644
+--- a/include/uapi/linux/if_link.h
++++ b/include/uapi/linux/if_link.h
+@@ -510,6 +510,8 @@ enum {
+ 	IFLA_BR_VLAN_STATS_PER_PORT,
+ 	IFLA_BR_MULTI_BOOLOPT,
+ 	IFLA_BR_MCAST_QUERIER_STATE,
++	IFLA_BR_FDB_N_LEARNED,
++	IFLA_BR_FDB_MAX_LEARNED,
+ 	__IFLA_BR_MAX,
+ };
+ 
+diff --git a/net/bridge/br_netlink.c b/net/bridge/br_netlink.c
+index 10f0d33d8ccf..0c3cf6e6dea2 100644
+--- a/net/bridge/br_netlink.c
++++ b/net/bridge/br_netlink.c
+@@ -1265,6 +1265,8 @@ static const struct nla_policy br_policy[IFLA_BR_MAX + 1] = {
+ 	[IFLA_BR_VLAN_STATS_PER_PORT] = { .type = NLA_U8 },
+ 	[IFLA_BR_MULTI_BOOLOPT] =
+ 		NLA_POLICY_EXACT_LEN(sizeof(struct br_boolopt_multi)),
++	[IFLA_BR_FDB_N_LEARNED] = { .type = NLA_REJECT },
++	[IFLA_BR_FDB_MAX_LEARNED] = { .type = NLA_U32 },
+ };
+ 
+ static int br_changelink(struct net_device *brdev, struct nlattr *tb[],
+@@ -1539,6 +1541,12 @@ static int br_changelink(struct net_device *brdev, struct nlattr *tb[],
+ 			return err;
+ 	}
+ 
++	if (data[IFLA_BR_FDB_MAX_LEARNED]) {
++		u32 val = nla_get_u32(data[IFLA_BR_FDB_MAX_LEARNED]);
++
++		WRITE_ONCE(br->fdb_max_learned, val);
++	}
++
+ 	return 0;
+ }
+ 
+@@ -1593,6 +1601,8 @@ static size_t br_get_size(const struct net_device *brdev)
+ 	       nla_total_size_64bit(sizeof(u64)) + /* IFLA_BR_TOPOLOGY_CHANGE_TIMER */
+ 	       nla_total_size_64bit(sizeof(u64)) + /* IFLA_BR_GC_TIMER */
+ 	       nla_total_size(ETH_ALEN) +       /* IFLA_BR_GROUP_ADDR */
++	       nla_total_size(sizeof(u32)) +    /* IFLA_BR_FDB_N_LEARNED */
++	       nla_total_size(sizeof(u32)) +    /* IFLA_BR_FDB_MAX_LEARNED */
+ #ifdef CONFIG_BRIDGE_IGMP_SNOOPING
+ 	       nla_total_size(sizeof(u8)) +     /* IFLA_BR_MCAST_ROUTER */
+ 	       nla_total_size(sizeof(u8)) +     /* IFLA_BR_MCAST_SNOOPING */
+@@ -1668,7 +1678,10 @@ static int br_fill_info(struct sk_buff *skb, const struct net_device *brdev)
+ 	    nla_put_u8(skb, IFLA_BR_TOPOLOGY_CHANGE_DETECTED,
+ 		       br->topology_change_detected) ||
+ 	    nla_put(skb, IFLA_BR_GROUP_ADDR, ETH_ALEN, br->group_addr) ||
+-	    nla_put(skb, IFLA_BR_MULTI_BOOLOPT, sizeof(bm), &bm))
++	    nla_put(skb, IFLA_BR_MULTI_BOOLOPT, sizeof(bm), &bm) ||
++	    nla_put_u32(skb, IFLA_BR_FDB_N_LEARNED,
++			atomic_read(&br->fdb_n_learned)) ||
++	    nla_put_u32(skb, IFLA_BR_FDB_MAX_LEARNED, br->fdb_max_learned))
+ 		return -EMSGSIZE;
+ 
+ #ifdef CONFIG_BRIDGE_VLAN_FILTERING
+
+-- 
+2.42.0
+
