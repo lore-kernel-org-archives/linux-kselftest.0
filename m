@@ -2,120 +2,117 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AAF63CDB47E
-	for <linux-kselftest@archiver.kernel.org>; Wed, 18 Oct 2023 19:06:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9829BCDB482
+	for <linux-kselftest@archiver.kernel.org>; Wed, 18 Oct 2023 19:07:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbjJRTGL (ORCPT
+        id S231230AbjJRTHd (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 18 Oct 2023 15:06:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34188 "EHLO
+        Wed, 18 Oct 2023 15:07:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbjJRTGK (ORCPT
+        with ESMTP id S230284AbjJRTHc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 18 Oct 2023 15:06:10 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA94120
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Oct 2023 12:06:08 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id ca18e2360f4ac-7a66bf80fa3so18820439f.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Oct 2023 12:06:08 -0700 (PDT)
+        Wed, 18 Oct 2023 15:07:32 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89304119
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Oct 2023 12:07:30 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id ca18e2360f4ac-7a66bf80fa3so18854239f.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Oct 2023 12:07:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1697655967; x=1698260767; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1697656050; x=1698260850; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=lEb1OnMbnE/3xh/jjCRB6JHIn7BETIF78iBYXYVKbMU=;
-        b=BBtHsPZeoXVhRwxObkEaEJjatZSMJj4O2iJyHP71a1jnaicH61PJh7plGP7X04wrp8
-         EevoGd/b7Z3OfyiwPL8vDWLObof7EFzEV+jJ5+88pCYJBNap5Z/LfFWiwHbHvHnGnViV
-         9FJFrEuIeQAhpV9b2fDFgRDPR3VXxSymGvBe0=
+        bh=/7T63UFHo2QxZQJJnC9K/ZprAjRwwywsiaee/Wxi3/8=;
+        b=OiQgogza0racz/81GhemwyeUfek2BI7m5m/yEPl381PAlvEq36CtB35Q9SqC/rgfr8
+         Pf0U3Pzz1FDA/J5xeRheFcdFCHap+xwBc1SBnowR71PgaHYYvsfWvrkj2ayS5s68Rsh8
+         IvV1VHc1AnXnBR1VcneGrjiCqS1lBnhIFYlws=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697655967; x=1698260767;
+        d=1e100.net; s=20230601; t=1697656050; x=1698260850;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lEb1OnMbnE/3xh/jjCRB6JHIn7BETIF78iBYXYVKbMU=;
-        b=ZxLmSTJ15/wJFi6/28q8SVm707m+mQdWkrEVP26hjWYQfK+mhgGb0TnuvvbV0uNPKm
-         Ca0C6+bldzIV6xhN2+tSEK1UFQ9pewDoajU/ympY3rhFLZJLl3aDl5gpYXELNzdrl4vr
-         yjbGDOeuib0P2cewt3PgDd0GlVqtj611JvyN0tErw4gGM2SoWc52gbZp58Axxg30tUOx
-         0to/pZivk1hwJ+wAKuKitEDno34dTYGi33h+LtSeohesDAL+fjb/e8wgNxY6Ihc0iFJq
-         onIwMMT4kgA3OlHDScA3EPq7iXMcldLkzTEjf/Qj0hYXGjoOWsMplgMvhZXLt5Kn8mRK
-         nt9A==
-X-Gm-Message-State: AOJu0YzuDKNRk+pPTLpDcHlEzgZ9TO1DTopzwlzzYrvymo4B3zKLuSis
-        Q7JuFnxPYDRGF6tRFIpbqOoNT52iKMl5xQOdVkA=
-X-Google-Smtp-Source: AGHT+IGykDGK+FYXboMz1MPDHX2tholkwEpLzvl+kko0W8HA9sUZ9vw2stEpw8i5dTNkQgSmQR17Tw==
-X-Received: by 2002:a05:6602:3986:b0:790:958e:a667 with SMTP id bw6-20020a056602398600b00790958ea667mr161131iob.2.1697655967353;
-        Wed, 18 Oct 2023 12:06:07 -0700 (PDT)
+        bh=/7T63UFHo2QxZQJJnC9K/ZprAjRwwywsiaee/Wxi3/8=;
+        b=N9va4hmqUMZqLNpaU6RXW7rWfK+QUhkyK72dJzQ5wkq2Cbq4oNLOAEwTSgvIcfZ9uW
+         dK42BmiZhntShB7SfBVFoiGbHynATuG8Ef6cVw3Eb/N+xNnQaNgC/SRIT7QUIcmXN/SU
+         A17jCCmxmprR3k99KV5sGHiLnkMQy71Wz/SF+vHYVTaBFdzEspNlNop10PwkjT8Lwnv3
+         WaYEqq2NvtG+/n/LU2gE5QiQQ+eM2t7fBVsiMqsEl+EqHe8pEjovm7Af1nlRf7lnPUZk
+         oRdYg+1t46rSYsPysgC+cH7eXfJRKBJfONmHx3hqEgLo40Ub+dOYc/MEYi5qCfdN/SAx
+         rJOw==
+X-Gm-Message-State: AOJu0YyciXHfOt3wbvFFQSaWRND7jvGn9lPzf7Qi4sSBGTv+13AGfVFA
+        9UDnikI2/ImwH8DYGyTNgc1hJw==
+X-Google-Smtp-Source: AGHT+IHCjWF0kEx5u5i8Nu4z+5QEo0u28FkahGZqewYvMftykH8QjzHzfdOaLODX9xhoe2VSG3/H0Q==
+X-Received: by 2002:a6b:5801:0:b0:79f:a8c2:290d with SMTP id m1-20020a6b5801000000b0079fa8c2290dmr234365iob.0.1697656049907;
+        Wed, 18 Oct 2023 12:07:29 -0700 (PDT)
 Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id 9-20020a5d9c09000000b0079199e52035sm269584ioe.52.2023.10.18.12.06.05
+        by smtp.gmail.com with ESMTPSA id 9-20020a5d9c09000000b0079199e52035sm269584ioe.52.2023.10.18.12.07.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Oct 2023 12:06:05 -0700 (PDT)
-Message-ID: <24cacac8-e67e-47e6-89b4-131d64de786b@linuxfoundation.org>
-Date:   Wed, 18 Oct 2023 13:06:04 -0600
+        Wed, 18 Oct 2023 12:07:29 -0700 (PDT)
+Message-ID: <2ec50632-15ae-44c3-9851-02660584dd05@linuxfoundation.org>
+Date:   Wed, 18 Oct 2023 13:07:28 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/clone3: Report descriptive test names
+Subject: Re: [PATCH v2 1/1] selftests/resctrl: Fix MBM test failure when MBA
+ unavailable
 Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
+To:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
         Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+Cc:     Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org, Fenghua Yu <fenghua.yu@intel.com>,
         Shuah Khan <skhan@linuxfoundation.org>
-References: <20231018-kselftest-clone3-output-v1-1-12b7c50ea2cf@kernel.org>
+References: <20231018075526.2251-1-ilpo.jarvinen@linux.intel.com>
+ <9965dc22-16fb-cadc-2b5f-ff7c2c91a173@linux.intel.com>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20231018-kselftest-clone3-output-v1-1-12b7c50ea2cf@kernel.org>
+In-Reply-To: <9965dc22-16fb-cadc-2b5f-ff7c2c91a173@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 10/17/23 17:01, Mark Brown wrote:
-> The clone3() selftests currently report test results in a format that does
-> not mesh entirely well with automation. They log output for each test such
-> as:
+On 10/18/23 02:10, Ilpo Järvinen wrote:
+> On Wed, 18 Oct 2023, Ilpo Järvinen wrote:
 > 
->    # [1382411] Trying clone3() with flags 0 (size 0)
->    # I am the parent (1382411). My child's pid is 1382412
->    # I am the child, my PID is 1382412
->    # [1382411] clone3() with flags says: 0 expected 0
->    ok 1 [1382411] Result (0) matches expectation (0)
+>> Commit 20d96b25cc4c ("selftests/resctrl: Fix schemata write error
+>> check") exposed a problem in feature detection logic in MBM selftest.
+>> If schemata does not support MB:x=x entries, the schemata write to
+>> initialize 100% memory bandwidth allocation in mbm_setup() will now
+>> fail with -EINVAL due to the error handling corrected by the commit
+>> 20d96b25cc4c ("selftests/resctrl: Fix schemata write error check").
+>> That commit just uncovers the failed write, it is not wrong itself.
+>>
+>> If MB:x=x is not supported by schemata, it is safe to assume 100%
+>> memory bandwidth is always set. Therefore, the previously ignored error
+>> does not make the MBM test itself wrong.
+>>
+>> Restore the previous behavior of MBM test by checking MB support before
+>> attempting to write it into schemata which results in behavior
+>> equivalent to ignoring the write error.
+>>
+>> Fixes: 20d96b25cc4c ("selftests/resctrl: Fix schemata write error check")
+>> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+>> Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
+>> ---
 > 
-> This is not ideal for automated parsers since the text after the "ok 1" is
-> treated as the test name when comparing runs by a lot of automation (tests
-> routinely get renumbered due to things like new tests being added based on
-> logical groupings). The PID means that the test names will frequently vary
-> and the rest of the name being a description of results means several tests
-> have identical text there.
+> It seems it's too early morning for me so I entirely forgot to describe
+> the changes I made... doh. So here it is (nothing earth-shattering here
+> really):
 > 
-> Address this by refactoring things so that we have a static descriptive
-> name for each test which we use when logging passes, failures and skips
-> and since we now have a stable name for the test to hand log that before
-> starting the test to address the common issue reading logs where the test
-> name is only printed after any diagnostics. The result is:
-> 
->   # Running test 'simple clone3()'
->   # [1562777] Trying clone3() with flags 0 (size 0)
->   # I am the parent (1562777). My child's pid is 1562778
->   # I am the child, my PID is 1562778
->   # [1562777] clone3() with flags says: 0 expected 0
->   ok 1 simple clone3()
-> 
-> In order to handle skips a bit more neatly this is done in a moderately
-> invasive fashion where we move from a sequence of function calls to having
-> an array of test parameters. This hopefully also makes it a little easier
-> to see what the tests are doing when looking at both the source and the
-> logs.
+> v2:
+> - Make checkpatch --strict happy.
+>    - Remove () that --strict called "extra".
+>    - Duplicate the referenced commit description in the changelog
+>      to follow the commit formatting guidelines.
+>    - Alter the wording at one of the references into the commit
+>      20d96b25cc4c in order to avoid having to copy the description
+>      there too.
+> - Added Reinette's rev-by.
 > 
 
 
-Good change. Thank you.
-
-Applied to linux-kselftest next for Linux 6.7-rc1.
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
->   tools/testing/selftests/clone3/clone3.c | 265 +++++++++++++++++++++++---------
->   1 file changed, 192 insertions(+), 73 deletions(-)
-> 
+Thank you. Applied to linux-kselftest next for Linux 6.7-rc1
 
 thanks,
 -- Shuah
-
