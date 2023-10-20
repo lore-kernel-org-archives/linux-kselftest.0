@@ -2,627 +2,175 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FE38CDB47E
-	for <linux-kselftest@archiver.kernel.org>; Fri, 20 Oct 2023 09:20:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 62E36CDB474
+	for <linux-kselftest@archiver.kernel.org>; Fri, 20 Oct 2023 09:23:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376627AbjJTJUn (ORCPT
+        id S1376593AbjJTJXA (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 20 Oct 2023 05:20:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52542 "EHLO
+        Fri, 20 Oct 2023 05:23:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376676AbjJTJUS (ORCPT
+        with ESMTP id S1376743AbjJTJWr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 20 Oct 2023 05:20:18 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFDD0D60;
-        Fri, 20 Oct 2023 02:20:02 -0700 (PDT)
+        Fri, 20 Oct 2023 05:22:47 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1A06D7E;
+        Fri, 20 Oct 2023 02:22:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697793602; x=1729329602;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=9EgME6PzSlZ5ig0d0uUH6Pd7j77lK3/DCO/qMVd1eog=;
-  b=chl+AomvM95Ge/puiFRRv7kOW9dx3tmn1cbASgBqW8NjNcuNyg4lEVTT
-   +ymT4NnkTvFBhXj5Ou3SesT9a9DB0JwWAvguAghM/WSAqYeG0s7ANAuTn
-   hJeybchJ+hz8Ex8vqHUIBt1hQV0X4EFzmFUnvagO6j3Jx7ADbIpf41l7h
-   Nr+x4q7PLtEn8aiih6JwUXnL2yX0YhyPHw3v+IWB9LOwYSuCzG3nnOQFy
-   zDQWs4zqeTWqcSCMFXvya5RPOYIuYt0tVsZTZV57zMLw1Kc3za5RuCctE
-   DW/54lAk3SUH752tE6a/XRH3jLG+9zOHVI35JNMc5W+9/qSFW5DLpovd6
+  t=1697793738; x=1729329738;
+  h=from:to:cc:subject:date:message-id:
+   content-transfer-encoding:mime-version;
+  bh=TqqSqvxGgaA7ur9Wt86j29F82tEcjiTSCY/9DmzPSFk=;
+  b=GVr1TEWzhh9nOzLz+nWs3L1y9Ms///FE6SrOLb/0aKb806zTqfmHXTAl
+   mhrQueOWRSPDQIekd7ITMfCkfO3eYY6FAd/wQ19FQXieReq9ehsTC7fhN
+   XT0bMa4SSUX697Bh5DzbcqCBzTx7w5NoHqO58+AIjOxo3REO9ZmHrEEcn
+   gS6L+lnf86qQBNxpBYl68d4B6nxVBCiVq68evx8i+S4vuuqZMC8bQmS2q
+   n5HnGG6WpNRMsCnqHh/rudlKalWrgcQW6J7VcYCpIbKZD0/Uz4ajMzpSx
+   cP4VhCem8xRNj6eOQwKvODzOQUlka2RpmjJhoZjd6hL2fe1H+dyzvAIEP
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10868"; a="366693397"
+X-IronPort-AV: E=McAfee;i="6600,9927,10868"; a="390347410"
 X-IronPort-AV: E=Sophos;i="6.03,238,1694761200"; 
-   d="scan'208";a="366693397"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2023 02:20:01 -0700
+   d="scan'208";a="390347410"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2023 02:22:17 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10868"; a="707179453"
+X-IronPort-AV: E=McAfee;i="6600,9927,10868"; a="823180580"
 X-IronPort-AV: E=Sophos;i="6.03,238,1694761200"; 
-   d="scan'208";a="707179453"
-Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by orsmga003.jf.intel.com with ESMTP; 20 Oct 2023 02:20:01 -0700
-From:   Yi Liu <yi.l.liu@intel.com>
-To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
-        kevin.tian@intel.com, robin.murphy@arm.com,
-        baolu.lu@linux.intel.com
-Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
-        kvm@vger.kernel.org, mjrosato@linux.ibm.com,
-        chao.p.peng@linux.intel.com, yi.l.liu@intel.com,
-        yi.y.sun@linux.intel.com, peterx@redhat.com, jasowang@redhat.com,
-        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
-        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        zhenzhong.duan@intel.com, joao.m.martins@oracle.com,
-        xin.zeng@intel.com
-Subject: [PATCH v5 05/10] iommufd: Derive iommufd_hwpt_paging from iommufd_hw_pagetable
-Date:   Fri, 20 Oct 2023 02:19:41 -0700
-Message-Id: <20231020091946.12173-6-yi.l.liu@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231020091946.12173-1-yi.l.liu@intel.com>
-References: <20231020091946.12173-1-yi.l.liu@intel.com>
-MIME-Version: 1.0
+   d="scan'208";a="823180580"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by fmsmga008.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 20 Oct 2023 02:22:17 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32; Fri, 20 Oct 2023 02:22:16 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32 via Frontend Transport; Fri, 20 Oct 2023 02:22:16 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.169)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.32; Fri, 20 Oct 2023 02:22:15 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ONpRncANEaucK1Gh8PBtKKJYD5mBQDGeYa9CnmKmjDZfPRLjIZ7gJ/NWzwLtg9Bjo691irMWhM9D2J2zwM/0WTllGwrcM7cCABVk+fmzk8GNLCbwKq/fTX4SJJlRnQ8qVjBDrvgohTdy7kkYYRNLem/IhJK2EF9OsK8ng9ag1D5MkwZPaWvcM1Bpos43qecGpsGs3azdO0/WeOwRtO0VD8pj56o/X4Jq5orDVNGdOz8EBLyv4TEC5P67PkM4yBBYagQR5K9NNzouo01sv0UcrCAQelGEGXYHyISR7O5RFcWJEgKWOU0SrXxwkZihUI42UBcG9+kn1gOl21MmXL5UOQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vt/pVCV0GyRmBJOdKR3vsgLyS9rnL1K4dIwfJmQw6wE=;
+ b=fu22fP4R4Vxd1Tv5Bjzg7MK9hTgJSWAOKEZAJ1ha5glSXhnLUKnJXiu5udrw6NVENtS237eoI3pTBRNFIcXAf+liA68gp+FI0z0lc8LsgKqG9ReKvWVvpe8NLScIW2bXcM8DGuvSaiSCo7KvjYAZouxaOLMmtTJMIR7ntkLNtb88FJxXv6aWEuk2kOTIeXOzWQiF+o5PxS7QvOoYMdRhYkUiLBsgzG6RZFm3L+zKSrOI4js0O6iPj2nU+cWaiWmu+do68UaJJkej1zOXC85yXIh/V4UPtAgxyowRwr7mdAqplGuU78VCcLbe7o0v7q3vSIp7/HEdPOEdr6hh2XNejw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB5373.namprd11.prod.outlook.com (2603:10b6:5:394::7) by
+ PH8PR11MB6877.namprd11.prod.outlook.com (2603:10b6:510:22b::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6907.26; Fri, 20 Oct
+ 2023 09:22:08 +0000
+Received: from DM4PR11MB5373.namprd11.prod.outlook.com
+ ([fe80::cc5d:d2c9:b39a:3de7]) by DM4PR11MB5373.namprd11.prod.outlook.com
+ ([fe80::cc5d:d2c9:b39a:3de7%3]) with mapi id 15.20.6907.025; Fri, 20 Oct 2023
+ 09:22:07 +0000
+From:   =?UTF-8?q?Micha=C5=82=20Winiarski?= <michal.winiarski@intel.com>
+To:     <llvm@lists.linux.dev>, <linux-um@lists.infradead.org>,
+        <linux-doc@vger.kernel.org>, <kunit-dev@googlegroups.com>,
+        <linux-kselftest@vger.kernel.org>
+CC:     Tom Rix <trix@redhat.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Richard Weinberger <richard@nod.at>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "David Gow" <davidgow@google.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        =?UTF-8?q?Micha=C5=82=20Winiarski?= <michal.winiarski@intel.com>
+Subject: [PATCH 0/2] um: kunit: Add Clang support for CONFIG_GCOV
+Date:   Fri, 20 Oct 2023 11:21:57 +0200
+Message-ID: <20231020092159.2486063-1-michal.winiarski@intel.com>
+X-Mailer: git-send-email 2.42.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: WA0P291CA0010.POLP291.PROD.OUTLOOK.COM
+ (2603:10a6:1d0:1::12) To DM4PR11MB5373.namprd11.prod.outlook.com
+ (2603:10b6:5:394::7)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR11MB5373:EE_|PH8PR11MB6877:EE_
+X-MS-Office365-Filtering-Correlation-Id: 86b6f9f3-586a-4881-77e9-08dbd14e0782
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: VVW0Tu0XVheuAmFhubeVhitTX5w8wQNehBkesOSXdK8CCekpTN6R5lPKuX1hK9/joOS3z/Ue+Z5KWonWDYQ2WI0glu34rDTev2oyEFaxXC+c9HdZCcuBMj8DOfrcMk9SoTD7lLOLtpAT06AZNWrHvphT8TTxv9PVNlOWtRyt+Dju63ypcqPI+7dlt0259GYHIvqn6PyvGOn6j+d822ixO85nAx4cwsI8QrDrLlu9bNC2imDgenSN8jow/j/fkeaoX7t/UxWejEeRoYL9+/8kBCGjXSKxWU5N+tT6yxAmH3SOJNcx74iMVMmZDpVMEowKlqJN94hDWr6mf5bjFtZZEaRZ4VRUZxXEyTmOJjKLv8NMNxKyDuYim5EiVCrdEl6tWUOri0aQceNoDnuZhsuBsvebh4IxjZtXdyCF5PmAFvq6QSRJWbHiKYk9EkJGHalAEJ+csmdNOdGHkU7hQ3+hOtaCcpPDH67UFvdoDM2dHyx5mcyjxKt+6OWUntlMl74v2zAWAShNYeyama/oI9+mQC1crSyntNOi6tGO0ntWykdMWEj2enmUGzKattdSCUFk
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5373.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(396003)(346002)(366004)(136003)(376002)(230922051799003)(451199024)(186009)(1800799009)(64100799003)(2906002)(5660300002)(82960400001)(36756003)(86362001)(4744005)(7416002)(26005)(478600001)(83380400001)(6506007)(6486002)(316002)(2616005)(1076003)(6512007)(8676002)(4326008)(107886003)(8936002)(41300700001)(6666004)(54906003)(66946007)(66556008)(66476007)(38100700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bWNsek5tdkNCckF0UVhrRVRIdVNDZ3pzeWxqYWhwU1NOajQwM1FzMWpIMUto?=
+ =?utf-8?B?aHkwTkl6c3dheXRYdUJpWVJTUFFzaEc1bGZ0YnBjUmhJbFZWblpxTHk5cmhL?=
+ =?utf-8?B?NXNlTVR2ZXc4NWhDd0dlZVMwYlZYcnhLaTFiSEZEQmRjSklPTmhML1IvWmZO?=
+ =?utf-8?B?NHNDTysxckxIaG9qbmJpNHlZL2dEbnpUbjlzalRHZFlzc1lDQWdlRlgxTHFq?=
+ =?utf-8?B?VWtsZ1k2cjJCWldqc0N3WnViamI0Y3ArRmxYYWRQdGhuc2haMDRYcHBoNTJs?=
+ =?utf-8?B?UjlTZHBDOVF4Z2cxWkJFMk9zd0FQWTJLZzVKV294R1FyYk9CbEY3dUtuTzY1?=
+ =?utf-8?B?enFMR0Ixb2NRWCtJTkNUNTN4TkJ6d2tqSDNkb0pHQmUwMWVERUxGVVZBK2No?=
+ =?utf-8?B?eVVUazZaM0x0MHphWkMxM0lpT2hicGxaU1E4M1gzMmFwUjVaRFZyam1MZEhF?=
+ =?utf-8?B?dnFqaW0veSt5ZjZ5eFYyUUYxdlNLVWszU2lmZWVmTzUxcFU2dFJ0MVFlSDNs?=
+ =?utf-8?B?Mk9uK0h0S2RVbzY5K2NPTU9US2doc3FRMTRwT3R1RjJzL2dqV0NHSVJyMEtB?=
+ =?utf-8?B?WW8yeGRFN2dPT2Q5VmowS3NobzAxNFV3eUVvMWtWZmZOL3d3ZWo2ZzhHQXBV?=
+ =?utf-8?B?NVJDbE5NWU9WbTdLMVJ5U0ZjRFpIYURwUXZ1QnBmNXRBMUtoU1BFaWdZT2dw?=
+ =?utf-8?B?OCs4eXlIS0xtZERGSEt6S1g2SlduM2V1WVZ1UkYveFBVWjBHMitybWcwMFJZ?=
+ =?utf-8?B?R3UwME9zSkNyeHcvSVhCaEtMZzRXeVg0S0JzNFFrSEFodnp2MERrblFxODZT?=
+ =?utf-8?B?Lzg5dmdlR0dpeE92eHpmcEV2YWV5K3RtNk1oYnk5NHkxaU9lM1U4cFNmV3N2?=
+ =?utf-8?B?bHUrdjRMZnJZK0FhdXdZNTJJalN3OEpxbmphNmphanBxQ3dFOHFxcXgvNU1u?=
+ =?utf-8?B?Tld2VUh3T2JOL0hrd3R1ZFRxL2JEYnRYQ0VuS3VWUkRhY2c3M0VvTEdTbU42?=
+ =?utf-8?B?OXJ2b2VNNTZmdGVmTkhuRGZ6K2hYZmRPemE3ZGpMU2ZWY0hwZjJkRHFqNkgz?=
+ =?utf-8?B?RkpLV25WSDFqSVQxenpJK0toZFlUMUYwUk5hc3N5VzVTMUNadU9kSWNvc25N?=
+ =?utf-8?B?VEdwRmlhV0RSYXFzSjZWelRlRXBkOEprMU84bGJGV3lNUDFHQUgramsxb1dQ?=
+ =?utf-8?B?RDV6U3AwZ0tqcnkrWHBzZ09ZSnBmN1hnY2ZNVWt0U0FRUzA0ajNVNjVjcHRJ?=
+ =?utf-8?B?N1BZWE05Yjk3WGR5YmtBZU5hOFpqWXRUOVhHbjFZTWpodmltNmRRajhTUkVQ?=
+ =?utf-8?B?M0dmNEJkZ2JlUzFHa3pjQ21aUjJ6MXAwTXExYWI1UWxtcVc1WjdMYm0rc2lx?=
+ =?utf-8?B?c3FZY1NRKzRPZm5EQWdwdTlrMHBPalJJUys3bmRYMEZOQVp4cTlQU29RZVpv?=
+ =?utf-8?B?b043aDU2VGdCdkxDdUlHbmlFYmNzSnZUQVdUd3lZK3hpek9QdU92bjA0TURQ?=
+ =?utf-8?B?THBPV0hjbElBNFU2K0d4OEszS0VNRUJaVGVoQndxQTRrcVMzSUJVQTBWVjVt?=
+ =?utf-8?B?Z25zeW1WOHluUm9Tc0pCOS9uWkVjZWdOZDd6WVRZTjYwSytwTjZvWlc4RkVR?=
+ =?utf-8?B?SytINHFhcGNkUXRBWFZYRGZDWURSV0RrQVpXSCtaWXZVUjZXT29wTHpXOHNW?=
+ =?utf-8?B?ZmViTmRVbGZhcFlEYTB6bjNidk9JSWdMTDRQeHoxWXJvN3BnY1BWSWY5YU5D?=
+ =?utf-8?B?UUU3d3h5MkJGdjdqeWsrQkFsUWp1UCtuUkpNMEZ5UW9aUlN6K0xUb295Nm5J?=
+ =?utf-8?B?Z0tsZGNEaTZZQWZveHFLRzdtVWxFbE1FaVFMMmF0aGVmeStwanhqcmFrNzlG?=
+ =?utf-8?B?bjk1NmtHbnIrK2x0NFNnbzdGcnNXVFRpMjFGUWg3MUpBbUswb01SbUp5SFhr?=
+ =?utf-8?B?SGZjVUVwTnA2Rmt2Q1BnQ292a1drck8xbkFycnBLZzRrTGswbnh5VzdORnNx?=
+ =?utf-8?B?UTYxanQ4K0RLV0RtOWFJNm1hanNrSzBVZ0JHMVpjTFJMKzlxcXp0SVJ3dHZq?=
+ =?utf-8?B?U0JCVkI2cnNGVWs0Tm1NckdDYzZXMFozY0lFY3JVUDN0a0JqK2JVRFQ5SCt4?=
+ =?utf-8?B?akRXVkZRczJCeEVuR01lazNPWTB4b3VqMCtBRFA1M3NkZnpZeEQzb0tldFV2?=
+ =?utf-8?B?Z2c9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 86b6f9f3-586a-4881-77e9-08dbd14e0782
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5373.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Oct 2023 09:22:06.7962
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ycQHkeQBu5Mx5C7Zyg9Kh1CJygbF98iUSXqcklGUjTpX58gEUKkVxvYM6HYilH1eRUPas1/5NiFUfjxlGH4jhjxGqpm+QDDEubv1nV7AcRI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR11MB6877
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Nicolin Chen <nicolinc@nvidia.com>
+Clang uses a different set of CLI args for coverage, and the output
+needs to be processed by a different set of tools.
+Update the Makefile and add an example of usage in kunit docs.
 
-To prepare for IOMMUFD_OBJ_HWPT_NESTED, derive struct iommufd_hwpt_paging
-from struct iommufd_hw_pagetable, by leaving the common members in struct
-iommufd_hw_pagetable. Add a __iommufd_object_alloc and to_hwpt_paging()
-helpers for the new structure.
+Michał Winiarski (2):
+  arch: um: Add Clang coverage support
+  Documentation: kunit: Add clang UML coverage example
 
-Then, update "hwpt" to "hwpt_paging" throughout the files, accordingly.
+ Documentation/dev-tools/kunit/running_tips.rst | 11 +++++++++++
+ arch/um/Makefile-skas                          |  5 +++++
+ 2 files changed, 16 insertions(+)
 
-Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
-Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-Signed-off-by: Yi Liu <yi.l.liu@intel.com>
----
- drivers/iommu/iommufd/device.c          | 78 ++++++++++++--------
- drivers/iommu/iommufd/hw_pagetable.c    | 98 ++++++++++++++-----------
- drivers/iommu/iommufd/iommufd_private.h | 37 +++++++---
- drivers/iommu/iommufd/main.c            |  4 +-
- drivers/iommu/iommufd/vfio_compat.c     |  6 +-
- 5 files changed, 131 insertions(+), 92 deletions(-)
-
-diff --git a/drivers/iommu/iommufd/device.c b/drivers/iommu/iommufd/device.c
-index 3414276bbd15..cc9f5d0e5b7e 100644
---- a/drivers/iommu/iommufd/device.c
-+++ b/drivers/iommu/iommufd/device.c
-@@ -293,7 +293,7 @@ u32 iommufd_device_to_id(struct iommufd_device *idev)
- EXPORT_SYMBOL_NS_GPL(iommufd_device_to_id, IOMMUFD);
- 
- static int iommufd_group_setup_msi(struct iommufd_group *igroup,
--				   struct iommufd_hw_pagetable *hwpt)
-+				   struct iommufd_hwpt_paging *hwpt_paging)
- {
- 	phys_addr_t sw_msi_start = igroup->sw_msi_start;
- 	int rc;
-@@ -311,8 +311,9 @@ static int iommufd_group_setup_msi(struct iommufd_group *igroup,
- 	 * matches what the IRQ layer actually expects in a newly created
- 	 * domain.
- 	 */
--	if (sw_msi_start != PHYS_ADDR_MAX && !hwpt->msi_cookie) {
--		rc = iommu_get_msi_cookie(hwpt->domain, sw_msi_start);
-+	if (sw_msi_start != PHYS_ADDR_MAX && !hwpt_paging->msi_cookie) {
-+		rc = iommu_get_msi_cookie(hwpt_paging->common.domain,
-+					  sw_msi_start);
- 		if (rc)
- 			return rc;
- 
-@@ -320,12 +321,12 @@ static int iommufd_group_setup_msi(struct iommufd_group *igroup,
- 		 * iommu_get_msi_cookie() can only be called once per domain,
- 		 * it returns -EBUSY on later calls.
- 		 */
--		hwpt->msi_cookie = true;
-+		hwpt_paging->msi_cookie = true;
- 	}
- 	return 0;
- }
- 
--static int iommufd_hwpt_paging_attach(struct iommufd_hw_pagetable *hwpt,
-+static int iommufd_hwpt_paging_attach(struct iommufd_hwpt_paging *hwpt_paging,
- 				      struct iommufd_device *idev)
- {
- 	int rc;
-@@ -334,20 +335,22 @@ static int iommufd_hwpt_paging_attach(struct iommufd_hw_pagetable *hwpt,
- 
- 	/* Try to upgrade the domain we have */
- 	if (idev->enforce_cache_coherency) {
--		rc = iommufd_hw_pagetable_enforce_cc(hwpt);
-+		rc = iommufd_hwpt_paging_enforce_cc(hwpt_paging);
- 		if (rc)
- 			return rc;
- 	}
- 
--	rc = iopt_table_enforce_dev_resv_regions(&hwpt->ioas->iopt, idev->dev,
-+	rc = iopt_table_enforce_dev_resv_regions(&hwpt_paging->ioas->iopt,
-+						 idev->dev,
- 						 &idev->igroup->sw_msi_start);
- 	if (rc)
- 		return rc;
- 
- 	if (list_empty(&idev->igroup->device_list)) {
--		rc = iommufd_group_setup_msi(idev->igroup, hwpt);
-+		rc = iommufd_group_setup_msi(idev->igroup, hwpt_paging);
- 		if (rc) {
--			iopt_remove_reserved_iova(&hwpt->ioas->iopt, idev->dev);
-+			iopt_remove_reserved_iova(&hwpt_paging->ioas->iopt,
-+						  idev->dev);
- 			return rc;
- 		}
- 	}
-@@ -367,7 +370,7 @@ int iommufd_hw_pagetable_attach(struct iommufd_hw_pagetable *hwpt,
- 	}
- 
- 	if (hwpt_is_paging(hwpt)) {
--		rc = iommufd_hwpt_paging_attach(hwpt, idev);
-+		rc = iommufd_hwpt_paging_attach(to_hwpt_paging(hwpt), idev);
- 		if (rc)
- 			goto err_unlock;
- 	}
-@@ -391,7 +394,8 @@ int iommufd_hw_pagetable_attach(struct iommufd_hw_pagetable *hwpt,
- 	return 0;
- err_unresv:
- 	if (hwpt_is_paging(hwpt))
--		iopt_remove_reserved_iova(&hwpt->ioas->iopt, idev->dev);
-+		iopt_remove_reserved_iova(&to_hwpt_paging(hwpt)->ioas->iopt,
-+					  idev->dev);
- err_unlock:
- 	mutex_unlock(&idev->igroup->lock);
- 	return rc;
-@@ -409,7 +413,8 @@ iommufd_hw_pagetable_detach(struct iommufd_device *idev)
- 		idev->igroup->hwpt = NULL;
- 	}
- 	if (hwpt_is_paging(hwpt))
--		iopt_remove_reserved_iova(&hwpt->ioas->iopt, idev->dev);
-+		iopt_remove_reserved_iova(&to_hwpt_paging(hwpt)->ioas->iopt,
-+					  idev->dev);
- 	mutex_unlock(&idev->igroup->lock);
- 
- 	/* Caller must destroy hwpt */
-@@ -428,19 +433,20 @@ iommufd_device_do_attach(struct iommufd_device *idev,
- 	return NULL;
- }
- 
--static void iommufd_group_remove_reserved_iova(struct iommufd_group *igroup,
--					       struct iommufd_hw_pagetable *hwpt)
-+static void
-+iommufd_group_remove_reserved_iova(struct iommufd_group *igroup,
-+				   struct iommufd_hwpt_paging *hwpt_paging)
- {
- 	struct iommufd_device *cur;
- 
- 	lockdep_assert_held(&igroup->lock);
- 
- 	list_for_each_entry(cur, &igroup->device_list, group_item)
--		iopt_remove_reserved_iova(&hwpt->ioas->iopt, cur->dev);
-+		iopt_remove_reserved_iova(&hwpt_paging->ioas->iopt, cur->dev);
- }
- 
- static int iommufd_group_do_replace_paging(struct iommufd_group *igroup,
--					   struct iommufd_hw_pagetable *hwpt)
-+					   struct iommufd_hwpt_paging *hwpt_paging)
- {
- 	struct iommufd_hw_pagetable *old_hwpt = igroup->hwpt;
- 	struct iommufd_device *cur;
-@@ -451,27 +457,28 @@ static int iommufd_group_do_replace_paging(struct iommufd_group *igroup,
- 	/* Try to upgrade the domain we have */
- 	list_for_each_entry(cur, &igroup->device_list, group_item) {
- 		if (cur->enforce_cache_coherency) {
--			rc = iommufd_hw_pagetable_enforce_cc(hwpt);
-+			rc = iommufd_hwpt_paging_enforce_cc(hwpt_paging);
- 			if (rc)
- 				return rc;
- 		}
- 	}
- 
--	if (hwpt_is_paging(old_hwpt) && hwpt->ioas != old_hwpt->ioas) {
-+	if (hwpt_is_paging(old_hwpt) &&
-+	    hwpt_paging->ioas != to_hwpt_paging(old_hwpt)->ioas) {
- 		list_for_each_entry(cur, &igroup->device_list, group_item) {
- 			rc = iopt_table_enforce_dev_resv_regions(
--				&hwpt->ioas->iopt, cur->dev, NULL);
-+				&hwpt_paging->ioas->iopt, cur->dev, NULL);
- 			if (rc)
- 				goto err_unresv;
- 		}
- 	}
--	rc = iommufd_group_setup_msi(igroup, hwpt);
-+	rc = iommufd_group_setup_msi(igroup, hwpt_paging);
- 	if (rc)
- 		goto err_unresv;
- 	return 0;
- 
- err_unresv:
--	iommufd_group_remove_reserved_iova(igroup, hwpt);
-+	iommufd_group_remove_reserved_iova(igroup, hwpt_paging);
- 	return rc;
- }
- 
-@@ -498,7 +505,8 @@ iommufd_device_do_replace(struct iommufd_device *idev,
- 	}
- 
- 	if (hwpt_is_paging(hwpt)) {
--		rc = iommufd_group_do_replace_paging(igroup, hwpt);
-+		rc = iommufd_group_do_replace_paging(igroup,
-+						     to_hwpt_paging(hwpt));
- 		if (rc)
- 			goto err_unlock;
- 	}
-@@ -509,8 +517,10 @@ iommufd_device_do_replace(struct iommufd_device *idev,
- 
- 	old_hwpt = igroup->hwpt;
- 	if (hwpt_is_paging(old_hwpt) &&
--	    (!hwpt_is_paging(hwpt) || hwpt->ioas != old_hwpt->ioas))
--		iommufd_group_remove_reserved_iova(igroup, old_hwpt);
-+	    (!hwpt_is_paging(hwpt) ||
-+	     to_hwpt_paging(hwpt)->ioas != to_hwpt_paging(old_hwpt)->ioas))
-+		iommufd_group_remove_reserved_iova(igroup,
-+						   to_hwpt_paging(old_hwpt));
- 
- 	igroup->hwpt = hwpt;
- 
-@@ -530,7 +540,8 @@ iommufd_device_do_replace(struct iommufd_device *idev,
- 	return old_hwpt;
- err_unresv:
- 	if (hwpt_is_paging(hwpt))
--		iommufd_group_remove_reserved_iova(igroup, hwpt);
-+		iommufd_group_remove_reserved_iova(igroup,
-+						   to_hwpt_paging(old_hwpt));
- err_unlock:
- 	mutex_unlock(&idev->igroup->lock);
- 	return ERR_PTR(rc);
-@@ -558,6 +569,7 @@ iommufd_device_auto_get_domain(struct iommufd_device *idev,
- 	 */
- 	bool immediate_attach = do_attach == iommufd_device_do_attach;
- 	struct iommufd_hw_pagetable *destroy_hwpt;
-+	struct iommufd_hwpt_paging *hwpt_paging;
- 	struct iommufd_hw_pagetable *hwpt;
- 
- 	/*
-@@ -566,10 +578,11 @@ iommufd_device_auto_get_domain(struct iommufd_device *idev,
- 	 * other.
- 	 */
- 	mutex_lock(&ioas->mutex);
--	list_for_each_entry(hwpt, &ioas->hwpt_list, hwpt_item) {
--		if (!hwpt->auto_domain)
-+	list_for_each_entry(hwpt_paging, &ioas->hwpt_list, hwpt_item) {
-+		if (!hwpt_paging->auto_domain)
- 			continue;
- 
-+		hwpt = &hwpt_paging->common;
- 		if (!iommufd_lock_obj(&hwpt->obj))
- 			continue;
- 		destroy_hwpt = (*do_attach)(idev, hwpt);
-@@ -590,12 +603,13 @@ iommufd_device_auto_get_domain(struct iommufd_device *idev,
- 		goto out_unlock;
- 	}
- 
--	hwpt = iommufd_hw_pagetable_alloc(idev->ictx, ioas, idev,
--					  0, immediate_attach);
--	if (IS_ERR(hwpt)) {
--		destroy_hwpt = ERR_CAST(hwpt);
-+	hwpt_paging = iommufd_hwpt_paging_alloc(idev->ictx, ioas, idev,
-+						 0, immediate_attach);
-+	if (IS_ERR(hwpt_paging)) {
-+		destroy_hwpt = ERR_CAST(hwpt_paging);
- 		goto out_unlock;
- 	}
-+	hwpt = &hwpt_paging->common;
- 
- 	if (!immediate_attach) {
- 		destroy_hwpt = (*do_attach)(idev, hwpt);
-@@ -605,7 +619,7 @@ iommufd_device_auto_get_domain(struct iommufd_device *idev,
- 		destroy_hwpt = NULL;
- 	}
- 
--	hwpt->auto_domain = true;
-+	hwpt_paging->auto_domain = true;
- 	*pt_id = hwpt->obj.id;
- 
- 	iommufd_object_finalize(idev->ictx, &hwpt->obj);
-diff --git a/drivers/iommu/iommufd/hw_pagetable.c b/drivers/iommu/iommufd/hw_pagetable.c
-index e100caa502ed..52df5b2bb329 100644
---- a/drivers/iommu/iommufd/hw_pagetable.c
-+++ b/drivers/iommu/iommufd/hw_pagetable.c
-@@ -8,56 +8,60 @@
- #include "../iommu-priv.h"
- #include "iommufd_private.h"
- 
--void iommufd_hw_pagetable_destroy(struct iommufd_object *obj)
-+void iommufd_hwpt_paging_destroy(struct iommufd_object *obj)
- {
--	struct iommufd_hw_pagetable *hwpt =
--		container_of(obj, struct iommufd_hw_pagetable, obj);
-+	struct iommufd_hwpt_paging *hwpt_paging =
-+		container_of(obj, struct iommufd_hwpt_paging, common.obj);
- 
--	if (!list_empty(&hwpt->hwpt_item)) {
--		mutex_lock(&hwpt->ioas->mutex);
--		list_del(&hwpt->hwpt_item);
--		mutex_unlock(&hwpt->ioas->mutex);
-+	if (!list_empty(&hwpt_paging->hwpt_item)) {
-+		mutex_lock(&hwpt_paging->ioas->mutex);
-+		list_del(&hwpt_paging->hwpt_item);
-+		mutex_unlock(&hwpt_paging->ioas->mutex);
- 
--		iopt_table_remove_domain(&hwpt->ioas->iopt, hwpt->domain);
-+		iopt_table_remove_domain(&hwpt_paging->ioas->iopt,
-+					 hwpt_paging->common.domain);
- 	}
- 
--	if (hwpt->domain)
--		iommu_domain_free(hwpt->domain);
-+	if (hwpt_paging->common.domain)
-+		iommu_domain_free(hwpt_paging->common.domain);
- 
--	refcount_dec(&hwpt->ioas->obj.users);
-+	refcount_dec(&hwpt_paging->ioas->obj.users);
- }
- 
--void iommufd_hw_pagetable_abort(struct iommufd_object *obj)
-+void iommufd_hwpt_paging_abort(struct iommufd_object *obj)
- {
--	struct iommufd_hw_pagetable *hwpt =
--		container_of(obj, struct iommufd_hw_pagetable, obj);
-+	struct iommufd_hwpt_paging *hwpt_paging =
-+		container_of(obj, struct iommufd_hwpt_paging, common.obj);
- 
- 	/* The ioas->mutex must be held until finalize is called. */
--	lockdep_assert_held(&hwpt->ioas->mutex);
-+	lockdep_assert_held(&hwpt_paging->ioas->mutex);
- 
--	if (!list_empty(&hwpt->hwpt_item)) {
--		list_del_init(&hwpt->hwpt_item);
--		iopt_table_remove_domain(&hwpt->ioas->iopt, hwpt->domain);
-+	if (!list_empty(&hwpt_paging->hwpt_item)) {
-+		list_del_init(&hwpt_paging->hwpt_item);
-+		iopt_table_remove_domain(&hwpt_paging->ioas->iopt,
-+					 hwpt_paging->common.domain);
- 	}
--	iommufd_hw_pagetable_destroy(obj);
-+	iommufd_hwpt_paging_destroy(obj);
- }
- 
--int iommufd_hw_pagetable_enforce_cc(struct iommufd_hw_pagetable *hwpt)
-+int iommufd_hwpt_paging_enforce_cc(struct iommufd_hwpt_paging *hwpt_paging)
- {
--	if (hwpt->enforce_cache_coherency)
-+	struct iommu_domain *paging_domain = hwpt_paging->common.domain;
-+
-+	if (hwpt_paging->enforce_cache_coherency)
- 		return 0;
- 
--	if (hwpt->domain->ops->enforce_cache_coherency)
--		hwpt->enforce_cache_coherency =
--			hwpt->domain->ops->enforce_cache_coherency(
--				hwpt->domain);
--	if (!hwpt->enforce_cache_coherency)
-+	if (paging_domain->ops->enforce_cache_coherency)
-+		hwpt_paging->enforce_cache_coherency =
-+			paging_domain->ops->enforce_cache_coherency(
-+				paging_domain);
-+	if (!hwpt_paging->enforce_cache_coherency)
- 		return -EINVAL;
- 	return 0;
- }
- 
- /**
-- * iommufd_hw_pagetable_alloc() - Get an iommu_domain for a device
-+ * iommufd_hwpt_paging_alloc() - Get a PAGING iommu_domain for a device
-  * @ictx: iommufd context
-  * @ioas: IOAS to associate the domain with
-  * @idev: Device to get an iommu_domain for
-@@ -72,12 +76,13 @@ int iommufd_hw_pagetable_enforce_cc(struct iommufd_hw_pagetable *hwpt)
-  * iommufd_object_abort_and_destroy() or iommufd_object_finalize() is called on
-  * the returned hwpt.
-  */
--struct iommufd_hw_pagetable *
--iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
--			   struct iommufd_device *idev, u32 flags,
--			   bool immediate_attach)
-+struct iommufd_hwpt_paging *
-+iommufd_hwpt_paging_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
-+			  struct iommufd_device *idev, u32 flags,
-+			  bool immediate_attach)
- {
- 	const struct iommu_ops *ops = dev_iommu_ops(idev->dev);
-+	struct iommufd_hwpt_paging *hwpt_paging;
- 	struct iommufd_hw_pagetable *hwpt;
- 	int rc;
- 
-@@ -86,14 +91,17 @@ iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
- 	if (flags && !ops->domain_alloc_user)
- 		return ERR_PTR(-EOPNOTSUPP);
- 
--	hwpt = iommufd_object_alloc(ictx, hwpt, IOMMUFD_OBJ_HWPT_PAGING);
--	if (IS_ERR(hwpt))
--		return hwpt;
-+	hwpt_paging = __iommufd_object_alloc(ictx, hwpt_paging,
-+					     IOMMUFD_OBJ_HWPT_PAGING,
-+					     common.obj);
-+	if (IS_ERR(hwpt_paging))
-+		return ERR_CAST(hwpt_paging);
-+	hwpt = &hwpt_paging->common;
- 
--	INIT_LIST_HEAD(&hwpt->hwpt_item);
-+	INIT_LIST_HEAD(&hwpt_paging->hwpt_item);
- 	/* Pairs with iommufd_hw_pagetable_destroy() */
- 	refcount_inc(&ioas->obj.users);
--	hwpt->ioas = ioas;
-+	hwpt_paging->ioas = ioas;
- 
- 	if (ops->domain_alloc_user) {
- 		hwpt->domain = ops->domain_alloc_user(idev->dev, flags,
-@@ -119,7 +127,7 @@ iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
- 	 * a new domain.
- 	 */
- 	if (idev->enforce_cache_coherency) {
--		rc = iommufd_hw_pagetable_enforce_cc(hwpt);
-+		rc = iommufd_hwpt_paging_enforce_cc(hwpt_paging);
- 		if (WARN_ON(rc))
- 			goto out_abort;
- 	}
-@@ -136,11 +144,11 @@ iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
- 			goto out_abort;
- 	}
- 
--	rc = iopt_table_add_domain(&hwpt->ioas->iopt, hwpt->domain);
-+	rc = iopt_table_add_domain(&ioas->iopt, hwpt->domain);
- 	if (rc)
- 		goto out_detach;
--	list_add_tail(&hwpt->hwpt_item, &hwpt->ioas->hwpt_list);
--	return hwpt;
-+	list_add_tail(&hwpt_paging->hwpt_item, &ioas->hwpt_list);
-+	return hwpt_paging;
- 
- out_detach:
- 	if (immediate_attach)
-@@ -153,6 +161,7 @@ iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
- int iommufd_hwpt_alloc(struct iommufd_ucmd *ucmd)
- {
- 	struct iommu_hwpt_alloc *cmd = ucmd->cmd;
-+	struct iommufd_hwpt_paging *hwpt_paging;
- 	struct iommufd_hw_pagetable *hwpt;
- 	struct iommufd_device *idev;
- 	struct iommufd_ioas *ioas;
-@@ -172,12 +181,13 @@ int iommufd_hwpt_alloc(struct iommufd_ucmd *ucmd)
- 	}
- 
- 	mutex_lock(&ioas->mutex);
--	hwpt = iommufd_hw_pagetable_alloc(ucmd->ictx, ioas,
--					  idev, cmd->flags, false);
--	if (IS_ERR(hwpt)) {
--		rc = PTR_ERR(hwpt);
-+	hwpt_paging = iommufd_hwpt_paging_alloc(ucmd->ictx, ioas, idev,
-+						cmd->flags, false);
-+	if (IS_ERR(hwpt_paging)) {
-+		rc = PTR_ERR(hwpt_paging);
- 		goto out_unlock;
- 	}
-+	hwpt = &hwpt_paging->common;
- 
- 	cmd->out_hwpt_id = hwpt->obj.id;
- 	rc = iommufd_ucmd_respond(ucmd, sizeof(*cmd));
-diff --git a/drivers/iommu/iommufd/iommufd_private.h b/drivers/iommu/iommufd/iommufd_private.h
-index 6244ffddee6e..a7ed384717a5 100644
---- a/drivers/iommu/iommufd/iommufd_private.h
-+++ b/drivers/iommu/iommufd/iommufd_private.h
-@@ -171,7 +171,7 @@ struct iommufd_object *_iommufd_object_alloc(struct iommufd_ctx *ictx,
- 					     size_t size,
- 					     enum iommufd_object_type type);
- 
--#define iommufd_object_alloc(ictx, ptr, type)                                  \
-+#define __iommufd_object_alloc(ictx, ptr, type, obj)                           \
- 	container_of(_iommufd_object_alloc(                                    \
- 			     ictx,                                             \
- 			     sizeof(*(ptr)) + BUILD_BUG_ON_ZERO(               \
-@@ -180,6 +180,9 @@ struct iommufd_object *_iommufd_object_alloc(struct iommufd_ctx *ictx,
- 			     type),                                            \
- 		     typeof(*(ptr)), obj)
- 
-+#define iommufd_object_alloc(ictx, ptr, type)                                  \
-+	__iommufd_object_alloc(ictx, ptr, type, obj)
-+
- /*
-  * The IO Address Space (IOAS) pagetable is a virtual page table backed by the
-  * io_pagetable object. It is a user controlled mapping of IOVA -> PFNs. The
-@@ -231,8 +234,12 @@ int iommufd_vfio_ioas(struct iommufd_ucmd *ucmd);
-  */
- struct iommufd_hw_pagetable {
- 	struct iommufd_object obj;
--	struct iommufd_ioas *ioas;
- 	struct iommu_domain *domain;
-+};
-+
-+struct iommufd_hwpt_paging {
-+	struct iommufd_hw_pagetable common;
-+	struct iommufd_ioas *ioas;
- 	bool auto_domain : 1;
- 	bool enforce_cache_coherency : 1;
- 	bool msi_cookie : 1;
-@@ -245,24 +252,32 @@ static inline bool hwpt_is_paging(struct iommufd_hw_pagetable *hwpt)
- 	return hwpt->obj.type == IOMMUFD_OBJ_HWPT_PAGING;
- }
- 
--struct iommufd_hw_pagetable *
--iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
--			   struct iommufd_device *idev, u32 flags,
--			   bool immediate_attach);
--int iommufd_hw_pagetable_enforce_cc(struct iommufd_hw_pagetable *hwpt);
-+static inline struct iommufd_hwpt_paging *
-+to_hwpt_paging(struct iommufd_hw_pagetable *hwpt)
-+{
-+	return container_of(hwpt, struct iommufd_hwpt_paging, common);
-+}
-+
-+struct iommufd_hwpt_paging *
-+iommufd_hwpt_paging_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
-+			  struct iommufd_device *idev, u32 flags,
-+			  bool immediate_attach);
-+int iommufd_hwpt_paging_enforce_cc(struct iommufd_hwpt_paging *hwpt_paging);
- int iommufd_hw_pagetable_attach(struct iommufd_hw_pagetable *hwpt,
- 				struct iommufd_device *idev);
- struct iommufd_hw_pagetable *
- iommufd_hw_pagetable_detach(struct iommufd_device *idev);
--void iommufd_hw_pagetable_destroy(struct iommufd_object *obj);
--void iommufd_hw_pagetable_abort(struct iommufd_object *obj);
-+void iommufd_hwpt_paging_destroy(struct iommufd_object *obj);
-+void iommufd_hwpt_paging_abort(struct iommufd_object *obj);
- int iommufd_hwpt_alloc(struct iommufd_ucmd *ucmd);
- 
- static inline void iommufd_hw_pagetable_put(struct iommufd_ctx *ictx,
- 					    struct iommufd_hw_pagetable *hwpt)
- {
--	lockdep_assert_not_held(&hwpt->ioas->mutex);
--	if (hwpt->auto_domain)
-+	struct iommufd_hwpt_paging *hwpt_paging = to_hwpt_paging(hwpt);
-+
-+	lockdep_assert_not_held(&hwpt_paging->ioas->mutex);
-+	if (hwpt_paging->auto_domain)
- 		iommufd_object_deref_user(ictx, &hwpt->obj);
- 	else
- 		refcount_dec(&hwpt->obj.users);
-diff --git a/drivers/iommu/iommufd/main.c b/drivers/iommu/iommufd/main.c
-index ad7c8c9ea46a..b4a24ef041e6 100644
---- a/drivers/iommu/iommufd/main.c
-+++ b/drivers/iommu/iommufd/main.c
-@@ -483,8 +483,8 @@ static const struct iommufd_object_ops iommufd_object_ops[] = {
- 		.destroy = iommufd_ioas_destroy,
- 	},
- 	[IOMMUFD_OBJ_HWPT_PAGING] = {
--		.destroy = iommufd_hw_pagetable_destroy,
--		.abort = iommufd_hw_pagetable_abort,
-+		.destroy = iommufd_hwpt_paging_destroy,
-+		.abort = iommufd_hwpt_paging_abort,
- 	},
- #ifdef CONFIG_IOMMUFD_TEST
- 	[IOMMUFD_OBJ_SELFTEST] = {
-diff --git a/drivers/iommu/iommufd/vfio_compat.c b/drivers/iommu/iommufd/vfio_compat.c
-index 6c810bf80f99..538fbf76354d 100644
---- a/drivers/iommu/iommufd/vfio_compat.c
-+++ b/drivers/iommu/iommufd/vfio_compat.c
-@@ -255,7 +255,7 @@ static int iommufd_vfio_unmap_dma(struct iommufd_ctx *ictx, unsigned int cmd,
- 
- static int iommufd_vfio_cc_iommu(struct iommufd_ctx *ictx)
- {
--	struct iommufd_hw_pagetable *hwpt;
-+	struct iommufd_hwpt_paging *hwpt_paging;
- 	struct iommufd_ioas *ioas;
- 	int rc = 1;
- 
-@@ -264,8 +264,8 @@ static int iommufd_vfio_cc_iommu(struct iommufd_ctx *ictx)
- 		return PTR_ERR(ioas);
- 
- 	mutex_lock(&ioas->mutex);
--	list_for_each_entry(hwpt, &ioas->hwpt_list, hwpt_item) {
--		if (!hwpt->enforce_cache_coherency) {
-+	list_for_each_entry(hwpt_paging, &ioas->hwpt_list, hwpt_item) {
-+		if (!hwpt_paging->enforce_cache_coherency) {
- 			rc = 0;
- 			break;
- 		}
 -- 
-2.34.1
+2.42.0
 
