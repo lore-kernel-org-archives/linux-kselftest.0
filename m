@@ -2,44 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF1BAC19F5C
-	for <linux-kselftest@archiver.kernel.org>; Fri, 20 Oct 2023 09:33:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6223C001DF
+	for <linux-kselftest@archiver.kernel.org>; Fri, 20 Oct 2023 09:33:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376649AbjJTJdJ (ORCPT
+        id S1376769AbjJTJdL (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 20 Oct 2023 05:33:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60198 "EHLO
+        Fri, 20 Oct 2023 05:33:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376708AbjJTJc7 (ORCPT
+        with ESMTP id S1376728AbjJTJdD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 20 Oct 2023 05:32:59 -0400
+        Fri, 20 Oct 2023 05:33:03 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 868BED55;
-        Fri, 20 Oct 2023 02:32:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0CD2D63;
+        Fri, 20 Oct 2023 02:32:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697794374; x=1729330374;
+  t=1697794376; x=1729330376;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Ib1IMmuWc4reT62H1wiulcc7gMI+m46FXf0FSrS+Cos=;
-  b=Dc4z6UaXI8oaeVQBnI/cSI7NbEZyXoCRmb4FZr0+qrUQxq1eyljZIhsO
-   gVj21uhxqNQHmj03dKAl50BWq8m5HpuEcJKGDdKAheN02vxHofCft1so5
-   B2+6KU4pv+Cnyd6sVj2Gs44WHNgaJz/+Cwj1Z8HA1Qlc4VEgd/HFalCcJ
-   Ly18nTgKG9kWesvDURfQdaDcM8ECtOmOduC5qEvBw7Z97+a/JAAWz6XA2
-   sM0GGVlOBPSfP0jc9HNKEgaHVp4dtSioLfQm5jVoUl+05hDuXNjpPJCl4
-   5T2zb3nKbpNPlPykERMhxmPHrkW8BaW3cnNYCo9SAVxhQuiUplsV4ynw/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10868"; a="450691725"
+  bh=KFY6DFqQdqzEYR8dbOOBhT/l5R4uXZhFdyT3GIHn4js=;
+  b=b8yipmwxKtahFd/uMSiql8+IDUeohAWadYqTasLREw5pBUvfQBOl2hRE
+   LrOwCi8KcfVkJq7J3/aZgX7UPt+Byfv3tYAFf5/QiPteOscIdRvs6r6Xs
+   X7f5Guv2lOFQlThW6XuiEpGv3xwbnFdNAk4IrHCiafJxUC0Hm7UqcVrOp
+   ICXLlJ+AOGjgsfOT/s+XyPjqXTStOdZl8s+3UHjgOuZZysHsLH5Zugm/F
+   TvzUietGs/ufI+sb6mceGZb+XRb98KW9uR3ayooj96qznhDuMca35/4SJ
+   1lGgjzgl0P7kZXRtcFunH7K1j9l+RJ/xLef3LtfgVuNLeLlOfOEtijMo7
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10868"; a="450691761"
 X-IronPort-AV: E=Sophos;i="6.03,238,1694761200"; 
-   d="scan'208";a="450691725"
+   d="scan'208";a="450691761"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2023 02:32:54 -0700
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2023 02:32:56 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10868"; a="733906305"
+X-IronPort-AV: E=McAfee;i="6600,9927,10868"; a="733906314"
 X-IronPort-AV: E=Sophos;i="6.03,238,1694761200"; 
-   d="scan'208";a="733906305"
+   d="scan'208";a="733906314"
 Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by orsmga006.jf.intel.com with ESMTP; 20 Oct 2023 02:32:53 -0700
+  by orsmga006.jf.intel.com with ESMTP; 20 Oct 2023 02:32:56 -0700
 From:   Yi Liu <yi.l.liu@intel.com>
 To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
         kevin.tian@intel.com, robin.murphy@arm.com,
@@ -53,9 +53,9 @@ Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         zhenzhong.duan@intel.com, joao.m.martins@oracle.com,
         xin.zeng@intel.com
-Subject: [PATCH v6 5/8] iommu/vt-d: Make domain attach helpers to be extern
-Date:   Fri, 20 Oct 2023 02:32:43 -0700
-Message-Id: <20231020093246.17015-6-yi.l.liu@intel.com>
+Subject: [PATCH v6 8/8] iommu/vt-d: Disallow read-only mappings to nest parent domain
+Date:   Fri, 20 Oct 2023 02:32:46 -0700
+Message-Id: <20231020093246.17015-9-yi.l.liu@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231020093246.17015-1-yi.l.liu@intel.com>
 References: <20231020093246.17015-1-yi.l.liu@intel.com>
@@ -65,95 +65,107 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This makes the helpers visible to nested.c.
+From: Lu Baolu <baolu.lu@linux.intel.com>
 
-Suggested-by: Lu Baolu <baolu.lu@linux.intel.com>
+When remapping hardware is configured by system software in scalable mode
+as Nested (PGTT=011b) and with PWSNP field Set in the PASID-table-entry,
+it may Set Accessed bit and Dirty bit (and Extended Access bit if enabled)
+in first-stage page-table entries even when second-stage mappings indicate
+that corresponding first-stage page-table is Read-Only.
+
+As the result, contents of pages designated by VMM as Read-Only can be
+modified by IOMMU via PML5E (PML4E for 4-level tables) access as part of
+address translation process due to DMAs issued by Guest.
+
+This disallows read-only mappings in the domain that is supposed to be used
+as nested parent. Reference from Sapphire Rapids Specification Update [1],
+errata details, SPR17. Userspace should know this limitation by checking
+the IOMMU_HW_INFO_VTD_ERRATA_772415_SPR17 flag reported in the IOMMU_GET_HW_INFO
+ioctl.
+
+[1] https://www.intel.com/content/www/us/en/content-details/772415/content-details.html
+
 Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 Signed-off-by: Yi Liu <yi.l.liu@intel.com>
 ---
- drivers/iommu/intel/iommu.c | 15 ++++++---------
- drivers/iommu/intel/iommu.h |  7 +++++++
- 2 files changed, 13 insertions(+), 9 deletions(-)
+ drivers/iommu/intel/iommu.c  |  9 +++++++++
+ drivers/iommu/intel/iommu.h  |  1 +
+ include/uapi/linux/iommufd.h | 12 +++++++++++-
+ 3 files changed, 21 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 8d78149e793e..b47025fbdea4 100644
+index c7704e7efd4a..a0341a069fbf 100644
 --- a/drivers/iommu/intel/iommu.c
 +++ b/drivers/iommu/intel/iommu.c
-@@ -282,7 +282,6 @@ static LIST_HEAD(dmar_satc_units);
- #define for_each_rmrr_units(rmrr) \
- 	list_for_each_entry(rmrr, &dmar_rmrr_units, list)
+@@ -2193,6 +2193,11 @@ __domain_mapping(struct dmar_domain *domain, unsigned long iov_pfn,
+ 	if ((prot & (DMA_PTE_READ|DMA_PTE_WRITE)) == 0)
+ 		return -EINVAL;
  
--static void device_block_translation(struct device *dev);
- static void intel_iommu_domain_free(struct iommu_domain *domain);
++	if (!(prot & DMA_PTE_WRITE) && domain->is_nested_parent) {
++		pr_err_ratelimited("Read-only mapping is disallowed on the domain which serves as the parent in a nested configuration, due to HW errata (ERRATA_772415_SPR17)\n");
++		return -EINVAL;
++	}
++
+ 	attr = prot & (DMA_PTE_READ | DMA_PTE_WRITE | DMA_PTE_SNP);
+ 	attr |= DMA_FL_PTE_PRESENT;
+ 	if (domain->use_first_level) {
+@@ -4101,6 +4106,9 @@ intel_iommu_domain_alloc_user(struct device *dev, u32 flags,
+ 		domain = iommu_domain_alloc(dev->bus);
+ 		if (!domain)
+ 			return ERR_PTR(-ENOMEM);
++		container_of(domain,
++			     struct dmar_domain,
++			     domain)->is_nested_parent = request_nest_parent;
+ 		return domain;
+ 	}
  
- int dmar_disabled = !IS_ENABLED(CONFIG_INTEL_IOMMU_DEFAULT_ON);
-@@ -560,7 +559,7 @@ static unsigned long domain_super_pgsize_bitmap(struct dmar_domain *domain)
- }
+@@ -4839,6 +4847,7 @@ static void *intel_iommu_hw_info(struct device *dev, u32 *length, u32 *type)
+ 	if (!vtd)
+ 		return ERR_PTR(-ENOMEM);
  
- /* Some capabilities may be different across iommus */
--static void domain_update_iommu_cap(struct dmar_domain *domain)
-+void domain_update_iommu_cap(struct dmar_domain *domain)
- {
- 	domain_update_iommu_coherency(domain);
- 	domain->iommu_superpage = domain_update_iommu_superpage(domain, NULL);
-@@ -1778,8 +1777,7 @@ static struct dmar_domain *alloc_domain(unsigned int type)
- 	return domain;
- }
- 
--static int domain_attach_iommu(struct dmar_domain *domain,
--			       struct intel_iommu *iommu)
-+int domain_attach_iommu(struct dmar_domain *domain, struct intel_iommu *iommu)
- {
- 	struct iommu_domain_info *info, *curr;
- 	unsigned long ndomains;
-@@ -1828,8 +1826,7 @@ static int domain_attach_iommu(struct dmar_domain *domain,
- 	return ret;
- }
- 
--static void domain_detach_iommu(struct dmar_domain *domain,
--				struct intel_iommu *iommu)
-+void domain_detach_iommu(struct dmar_domain *domain, struct intel_iommu *iommu)
- {
- 	struct iommu_domain_info *info;
- 
-@@ -3974,7 +3971,7 @@ static void dmar_remove_one_dev_info(struct device *dev)
-  * all DMA requests without PASID from the device are blocked. If the page
-  * table has been set, clean up the data structures.
-  */
--static void device_block_translation(struct device *dev)
-+void device_block_translation(struct device *dev)
- {
- 	struct device_domain_info *info = dev_iommu_priv_get(dev);
- 	struct intel_iommu *iommu = info->iommu;
-@@ -4109,8 +4106,8 @@ static void intel_iommu_domain_free(struct iommu_domain *domain)
- 		domain_exit(to_dmar_domain(domain));
- }
- 
--static int prepare_domain_attach_device(struct iommu_domain *domain,
--					struct device *dev)
-+int prepare_domain_attach_device(struct iommu_domain *domain,
-+				 struct device *dev)
- {
- 	struct dmar_domain *dmar_domain = to_dmar_domain(domain);
- 	struct intel_iommu *iommu;
++	vtd->flags = IOMMU_HW_INFO_VTD_ERRATA_772415_SPR17;
+ 	vtd->cap_reg = iommu->cap;
+ 	vtd->ecap_reg = iommu->ecap;
+ 	*length = sizeof(*vtd);
 diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
-index ff55184456dd..b4560983b8b9 100644
+index b4560983b8b9..0539a0f47557 100644
 --- a/drivers/iommu/intel/iommu.h
 +++ b/drivers/iommu/intel/iommu.h
-@@ -860,6 +860,13 @@ int qi_submit_sync(struct intel_iommu *iommu, struct qi_desc *desc,
-  */
- #define QI_OPT_WAIT_DRAIN		BIT(0)
+@@ -593,6 +593,7 @@ struct dmar_domain {
+ 					 * otherwise, goes through the second
+ 					 * level.
+ 					 */
++	u8 is_nested_parent:1;		/* has other domains nested on it */
  
-+int domain_attach_iommu(struct dmar_domain *domain, struct intel_iommu *iommu);
-+void domain_detach_iommu(struct dmar_domain *domain, struct intel_iommu *iommu);
-+void device_block_translation(struct device *dev);
-+int prepare_domain_attach_device(struct iommu_domain *domain,
-+				 struct device *dev);
-+void domain_update_iommu_cap(struct dmar_domain *domain);
+ 	spinlock_t lock;		/* Protect device tracking lists */
+ 	struct list_head devices;	/* all devices' list */
+diff --git a/include/uapi/linux/iommufd.h b/include/uapi/linux/iommufd.h
+index 9b843a197ea8..c8f523a7bc06 100644
+--- a/include/uapi/linux/iommufd.h
++++ b/include/uapi/linux/iommufd.h
+@@ -439,10 +439,20 @@ struct iommu_hwpt_alloc {
+ };
+ #define IOMMU_HWPT_ALLOC _IO(IOMMUFD_TYPE, IOMMUFD_CMD_HWPT_ALLOC)
+ 
++/**
++ * enum iommu_hw_info_vtd_flags - Flags for VT-d hw_info
++ * @IOMMU_HW_INFO_VTD_ERRATA_772415_SPR17: If set, disallow nesting on domains
++ *                                   with read-only mapping.
++ *                                   https://www.intel.com/content/www/us/en/content-details/772415/content-details.html
++ */
++enum iommu_hw_info_vtd_flags {
++	IOMMU_HW_INFO_VTD_ERRATA_772415_SPR17 = 1 << 0,
++};
 +
- int dmar_ir_support(void);
- 
- void *alloc_pgtable_page(int node, gfp_t gfp);
+ /**
+  * struct iommu_hw_info_vtd - Intel VT-d hardware information
+  *
+- * @flags: Must be 0
++ * @flags: Combination of enum iommu_hw_info_vtd_flags
+  * @__reserved: Must be 0
+  *
+  * @cap_reg: Value of Intel VT-d capability register defined in VT-d spec
 -- 
 2.34.1
 
