@@ -2,83 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DDC57C07545
-	for <linux-kselftest@archiver.kernel.org>; Tue, 24 Oct 2023 16:14:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8A07C07545
+	for <linux-kselftest@archiver.kernel.org>; Tue, 24 Oct 2023 16:17:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234931AbjJXQOQ (ORCPT
+        id S234517AbjJXQR2 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 24 Oct 2023 12:14:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49790 "EHLO
+        Tue, 24 Oct 2023 12:17:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234736AbjJXQOP (ORCPT
+        with ESMTP id S229557AbjJXQR1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 Oct 2023 12:14:15 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B1286A1;
-        Tue, 24 Oct 2023 09:14:13 -0700 (PDT)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 39OGDsID004135;
-        Tue, 24 Oct 2023 18:13:54 +0200
-Date:   Tue, 24 Oct 2023 18:13:54 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas@t-8ch.de>
-Cc:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+        Tue, 24 Oct 2023 12:17:27 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D3C7AF;
+        Tue, 24 Oct 2023 09:17:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+        t=1698164242; bh=xMerMwIRbX/BQGxUkjEFes54aHCoVW+4DDPVS38Dwms=;
+        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+        b=oVxZaOjWKwAGFLkFEzeXZ4MhPTf7YbBG4oZsHpNoqgwM9A43hm1pnn+0bMICMcbkY
+         s+jkihVxCSly1ChuG67OqcrdkIjs8Ci0r5FwK1iX336umpLUsGamJPy0RuTVkTW+jq
+         Mq4Nj9spjcW8CYz4ZWXuZ56R+SPt2hRZg9p63Cx8=
+Date:   Tue, 24 Oct 2023 18:17:06 +0200 (GMT+02:00)
+From:   =?UTF-8?Q?Thomas_Wei=C3=9Fschuh_?= <thomas@t-8ch.de>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
         Shuah Khan <shuah@kernel.org>,
         Zhangjin Wu <falcon@tinylab.org>,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/5] selftests/nolibc: use EFI -bios for LoongArch qemu
-Message-ID: <ZTftQtrB0LL0nNK/@1wt.eu>
-References: <20231010-nolibc-out-of-tree-v1-0-b6a263859596@weissschuh.net>
- <20231010-nolibc-out-of-tree-v1-2-b6a263859596@weissschuh.net>
- <20231022092046.GC2669@1wt.eu>
- <74f121c7-5356-4e58-87ca-e93fe48ccc39@t-8ch.de>
+Message-ID: <4b1a25de-f405-4267-8720-d611acc4f134@t-8ch.de>
+In-Reply-To: <20231022093651.GF2669@1wt.eu>
+References: <20231010-nolibc-out-of-tree-v1-0-b6a263859596@weissschuh.net> <20231010-nolibc-out-of-tree-v1-5-b6a263859596@weissschuh.net> <20231022093651.GF2669@1wt.eu>
+Subject: Re: [PATCH 5/5] selftests/nolibc: generate config automatically
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <74f121c7-5356-4e58-87ca-e93fe48ccc39@t-8ch.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Correlation-ID: <4b1a25de-f405-4267-8720-d611acc4f134@t-8ch.de>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Oct 24, 2023 at 06:06:11PM +0200, Thomas Weißschuh  wrote:
-> Oct 22, 2023 11:21:16 Willy Tarreau <w@1wt.eu>:
-> 
-> > On Tue, Oct 10, 2023 at 02:33:57PM +0200, Thomas Weißschuh wrote:
-> >> qemu for LoongArch does not work properly with direct kernel boot.
-> >> The kernel will panic during initialization and hang without any output.
-> >>
-> >> When booting in EFI mode everything work correctly.
-> >>
-> >> While users most likely don't have the LoongArch EFI binary installed at
-> >> least an explicit error about 'file not found' is better than a hanging
-> >> test without output that can never succeed.
-> >
-> > Agreed. Let's hope at least users will be able to figure what's
-> > missing depending on the message. There's one thing, though, you
-> > hard-coded the path to the file system, and it's unlikely to be
-> > located at the same place for everyone:
-> >
-> >    -bios /usr/share/edk2/loongarch64/OVMF_CODE.fd
-> >
-> > Sure, it's also possible to force QEMU_ARGS but it's becoming complicated
-> > due to the numerous arguments. Maybe use a QEMU_BIOS_loongarch variable
-> > for this ? This way if this starts to generalize to other archs, we can
-> > later simplify it and automatically append -bios when needed.
-> 
-> My hope was for it to be a purely temporary bandaid.
-> But you are right, let's do it properly from the beginning.
+Oct 22, 2023 11:37:05 Willy Tarreau <w@1wt.eu>:
 
-The right way to think about temporary code is that if it's supposed to
-be quick to address, you don't want to introduce a temporary way of
-proceeding that will change later as the change will annoy some users.
-And if the reason for the temporary step is a temporary difficulty, you
-can be certain nobody will ever try to address it and that temporary
-will be definitive. So thinking "temporary" should generally ring a
-bell "am I going to annoy users for no reason or am I putting myself in
-a wrong corner". That's why I really try to avoid anything "temporary".
-(But there's no problem with making the wrong choice and regretting
-later, of course ;-)).
+> On Tue, Oct 10, 2023 at 02:34:00PM +0200, Thomas Wei=C3=9Fschuh wrote:
+>> This new target generates a .config if none exists yet.
+>>
+>> Also drop the defconfig target with its hidden call to 'mrproper' which
+>> is fairly invasive.
+>> If users want to overwrite their kernel existing kernel configuration
+>> they can do so easily from the toplevel directory.
+>
+> Hmmm I'm not sure about that one, I pretty much remember seeing failing
+> arm64 builds when mrproper and prepare were missing.
+>
+> I would argue that someone starting "make defconfig" does expect the
+> config to be dropped, hence mrproper to be called as well.
+>
+> What specific issue did you face with it ? Maybe we can restrict it to
+> only a few cases ?
 
-Cheers,
-Willy
+It was mostly a quality improvement for my testscript, where the config was=
+ generated
+automatically.
+
+And then I dropped the combined defconfig target
+because it seemed unnecessary.
+
+Let's drop this patch.
+
+Thomas
