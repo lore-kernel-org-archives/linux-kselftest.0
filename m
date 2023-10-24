@@ -2,44 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6265DC00A8F
-	for <linux-kselftest@archiver.kernel.org>; Tue, 24 Oct 2023 09:32:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 83D25C25B48
+	for <linux-kselftest@archiver.kernel.org>; Tue, 24 Oct 2023 09:32:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234332AbjJXJb7 (ORCPT
+        id S234140AbjJXJcI (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 24 Oct 2023 05:31:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51546 "EHLO
+        Tue, 24 Oct 2023 05:32:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234200AbjJXJ2e (ORCPT
+        with ESMTP id S234182AbjJXJbP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 Oct 2023 05:28:34 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5564C198B;
-        Tue, 24 Oct 2023 02:28:05 -0700 (PDT)
+        Tue, 24 Oct 2023 05:31:15 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3780C2705;
+        Tue, 24 Oct 2023 02:29:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698139685; x=1729675685;
+  t=1698139794; x=1729675794;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=xQ4Iamz+/JmjBX3VE4Wk06Rysb+pZgl6ZLrtubjENSo=;
-  b=cEDWO9Wq6P+6UOptHf4mtm620h3vYsQOXc8JiHv+G4Q8iW+1k6yCVmdh
-   dK/sW7vJyr36LhHC+7YHL2hcG6JAdnw3PqE1ZTamHWyKw/qZFuMCS57I3
-   Vv7KF03slkuwO/1DikChzA7Os5AYPV874DE6/N1WbTD+bwuCCIwggYGJu
-   BMM9M5w5CtVMzK18sULRcdRcKGiA7JWQlnnF5y1fSbZlncp/s1OxzHVUY
-   uoOMwQbit90KxJd4hvViCohWcU3zIj36Sgn/n0VzotcwtUPZI/afDWLku
-   KTdYeKklUOieN2d3CY1FAi9K5t2VIgEN933c93e8FYUuz6lN2qXZFGdoo
+  bh=ZIUmCvVW4L+pkZbqBv4Kna6ZMFqvsl2rUCxsV99jydw=;
+  b=jZTkEc/q2oDnapkTvXlQ45KmEFAbL7TLrWR2KaagbnJU/rLtzYaNUKPQ
+   OkYsLF0RydkZtQK0Ta3VPPhVJKJI2wXsF4p2DlADJskga8L7aE2bo23pt
+   HFQ9Twnc2fxSubOIboKx6XSuB0UKfhhC4Pjtt3OIugE9OVNdq4Lvqy833
+   B9rIwxqSo+EV+Vq634w6g1BdJSPNaBWTeESHMtJEgqqu9voj3r+C/Kq/1
+   F/2BneIk6Vr5AFciNgqfFNGKGv7Q6wQYY3N+lipZvH+WwF0ikGCccsl8U
+   eISLofR75PCwcN2fxthTXusf+UFVal7T3ZjWhhRJ5zmF5lXzLsIb/HFoX
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="451251781"
+X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="5644386"
 X-IronPort-AV: E=Sophos;i="6.03,247,1694761200"; 
-   d="scan'208";a="451251781"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 02:28:04 -0700
+   d="scan'208";a="5644386"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 02:29:53 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="1089785972"
+X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="758410182"
 X-IronPort-AV: E=Sophos;i="6.03,247,1694761200"; 
-   d="scan'208";a="1089785972"
+   d="scan'208";a="758410182"
 Received: from hprosing-mobl.ger.corp.intel.com (HELO localhost) ([10.249.40.219])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 02:28:00 -0700
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 02:29:50 -0700
 From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     linux-kselftest@vger.kernel.org,
         Reinette Chatre <reinette.chatre@intel.com>,
@@ -50,9 +50,9 @@ To:     linux-kselftest@vger.kernel.org,
         Fenghua Yu <fenghua.yu@intel.com>
 Cc:     linux-kernel@vger.kernel.org,
         =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 09/24] selftests/resctrl: Remove unnecessary __u64 -> unsigned long conversion
-Date:   Tue, 24 Oct 2023 12:26:19 +0300
-Message-Id: <20231024092634.7122-10-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 22/24] selftests/resctrl: Add test groups and name L3 CAT test L3_CAT
+Date:   Tue, 24 Oct 2023 12:26:32 +0300
+Message-Id: <20231024092634.7122-23-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20231024092634.7122-1-ilpo.jarvinen@linux.intel.com>
 References: <20231024092634.7122-1-ilpo.jarvinen@linux.intel.com>
@@ -63,144 +63,89 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Perf counters are __u64 but the code converts them to unsigned long
-before printing them out.
+To select test to run -t parameter can be used. However, -t cat
+currently maps to L3 CAT test which is confusing after L2 CAT test is
+be the next change.
 
-Remove unnecessary type conversion and the potential loss of meaningful
-bits due to different sizes of types.
+Allow selecting tests as groups and call L3 CAT test L3_CAT, "CAT"
+group will enable to both L3 and L2 CAT tests.
 
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- tools/testing/selftests/resctrl/cache.c    | 21 ++++++++-------------
- tools/testing/selftests/resctrl/cat_test.c |  8 ++++----
- tools/testing/selftests/resctrl/resctrl.h  |  3 +--
- 3 files changed, 13 insertions(+), 19 deletions(-)
+ tools/testing/selftests/resctrl/cat_test.c      |  3 ++-
+ tools/testing/selftests/resctrl/resctrl.h       |  2 ++
+ tools/testing/selftests/resctrl/resctrl_tests.c | 16 +++++++++++-----
+ 3 files changed, 15 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/resctrl/cache.c b/tools/testing/selftests/resctrl/cache.c
-index 95489d4b42b7..d39ef4eebc37 100644
---- a/tools/testing/selftests/resctrl/cache.c
-+++ b/tools/testing/selftests/resctrl/cache.c
-@@ -84,9 +84,8 @@ static int reset_enable_llc_perf(pid_t pid, int cpu_no)
-  *
-  * Return: =0 on success.  <0 on failure.
-  */
--static int get_llc_perf(unsigned long *llc_perf_miss)
-+static int get_llc_perf(__u64 *llc_perf_miss)
- {
--	__u64 total_misses;
- 	int ret;
- 
- 	/* Stop counters after one span to get miss rate */
-@@ -99,8 +98,7 @@ static int get_llc_perf(unsigned long *llc_perf_miss)
- 		return -1;
- 	}
- 
--	total_misses = rf_cqm.values[0].value;
--	*llc_perf_miss = total_misses;
-+	*llc_perf_miss = rf_cqm.values[0].value;
- 
- 	return 0;
- }
-@@ -148,14 +146,12 @@ static int get_llc_occu_resctrl(unsigned long *llc_occupancy)
-  *
-  * Return:		0 on success. non-zero on failure.
-  */
--static int print_results_cache(char *filename, int bm_pid,
--			       unsigned long llc_value)
-+static int print_results_cache(char *filename, int bm_pid, __u64 llc_value)
- {
- 	FILE *fp;
- 
- 	if (strcmp(filename, "stdio") == 0 || strcmp(filename, "stderr") == 0) {
--		printf("Pid: %d \t LLC_value: %lu\n", bm_pid,
--		       llc_value);
-+		printf("Pid: %d \t LLC_value: %llu\n", bm_pid, llc_value);
- 	} else {
- 		fp = fopen(filename, "a");
- 		if (!fp) {
-@@ -163,7 +159,7 @@ static int print_results_cache(char *filename, int bm_pid,
- 
- 			return errno;
- 		}
--		fprintf(fp, "Pid: %d \t llc_value: %lu\n", bm_pid, llc_value);
-+		fprintf(fp, "Pid: %d \t llc_value: %llu\n", bm_pid, llc_value);
- 		fclose(fp);
- 	}
- 
-@@ -172,7 +168,7 @@ static int print_results_cache(char *filename, int bm_pid,
- 
- static int measure_llc_perf(struct resctrl_val_param *param, int bm_pid)
- {
--	unsigned long llc_perf_miss = 0;
-+	__u64 llc_perf_miss = 0;
- 	int ret;
- 
- 	/*
-@@ -273,11 +269,10 @@ int cat_val(struct resctrl_val_param *param, size_t span)
-  * @cache_span:		cache span
-  * @lines:		cache span in lines or bytes
-  */
--void show_cache_info(int no_of_bits, unsigned long avg_llc_val,
--		     size_t cache_span, bool lines)
-+void show_cache_info(int no_of_bits, __u64 avg_llc_val, size_t cache_span, bool lines)
- {
- 	ksft_print_msg("Number of bits: %d\n", no_of_bits);
--	ksft_print_msg("Average LLC val: %lu\n", avg_llc_val);
-+	ksft_print_msg("Average LLC val: %llu\n", avg_llc_val);
- 	ksft_print_msg("Cache span (%s): %zu\n", !lines ? "bytes" : "lines",
- 		       cache_span);
- }
 diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-index 32f6d612a3e7..2106cc3601d9 100644
+index 1ef047cadf4c..48a96acd9e31 100644
 --- a/tools/testing/selftests/resctrl/cat_test.c
 +++ b/tools/testing/selftests/resctrl/cat_test.c
-@@ -41,12 +41,12 @@ static int cat_setup(struct resctrl_val_param *p)
- 	return ret;
+@@ -282,7 +282,8 @@ static int cat_run_test(const struct resctrl_test *test, const struct user_param
  }
  
--static int show_results_info(unsigned long sum_llc_val, int no_of_bits,
-+static int show_results_info(__u64 sum_llc_val, int no_of_bits,
- 			     unsigned long cache_span, unsigned long max_diff,
- 			     unsigned long max_diff_percent, unsigned long num_of_runs,
- 			     bool platform)
- {
--	unsigned long avg_llc_val = 0;
-+	__u64 avg_llc_val = 0;
- 	float diff_percent;
- 	int ret;
- 
-@@ -68,7 +68,7 @@ static int show_results_info(unsigned long sum_llc_val, int no_of_bits,
- static int check_results(struct resctrl_val_param *param, size_t span)
- {
- 	char *token_array[8], temp[512];
--	unsigned long sum_llc_perf_miss = 0;
-+	__u64 sum_llc_perf_miss = 0;
- 	int runs = 0, no_of_bits = 0;
- 	FILE *fp;
- 
-@@ -93,7 +93,7 @@ static int check_results(struct resctrl_val_param *param, size_t span)
- 		 * setup transition phase.
- 		 */
- 		if (runs > 0)
--			sum_llc_perf_miss += strtoul(token_array[3], NULL, 0);
-+			sum_llc_perf_miss += strtoull(token_array[3], NULL, 0);
- 		runs++;
- 	}
- 
+ struct resctrl_test l3_cat_test = {
+-	.name = "CAT",
++	.name = "L3_CAT",
++	.group = "CAT",
+ 	.resource = "L3",
+ 	.feature_check = test_resource_feature_check,
+ 	.run_test = cat_run_test,
 diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index c7655714b23f..033c49784581 100644
+index c148998bf6ad..f9a4cfd981f8 100644
 --- a/tools/testing/selftests/resctrl/resctrl.h
 +++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -115,8 +115,7 @@ unsigned int count_bits(unsigned long n);
- void cmt_test_cleanup(void);
- int get_core_sibling(int cpu_no);
- int measure_llc_resctrl(struct resctrl_val_param *param, int bm_pid);
--void show_cache_info(int no_of_bits, unsigned long avg_llc_val,
--		     size_t cache_span, bool lines);
-+void show_cache_info(int no_of_bits, __u64 avg_llc_val, size_t cache_span, bool lines);
- 
+@@ -62,6 +62,7 @@ struct user_params {
  /*
-  * cache_size - Calculate the size of a cache portion
+  * resctrl_test:	resctrl test definition
+  * @name:		Test name
++ * @group:		Test group (e.g., L2 and L3 CAT test belong to CAT group), can be NULL
+  * @resource:		Resource to test (e.g., MB, L3, L2, etc.)
+  * @vendor_specific:	Bitmask for vendor-specific tests (can be 0 for universal tests)
+  * @disabled:		Test is disabled
+@@ -70,6 +71,7 @@ struct user_params {
+  */
+ struct resctrl_test {
+ 	const char	*name;
++	const char	*group;
+ 	const char	*resource;
+ 	unsigned int	vendor_specific;
+ 	bool		disabled;
+diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
+index 7846260e3f68..d89179541d7b 100644
+--- a/tools/testing/selftests/resctrl/resctrl_tests.c
++++ b/tools/testing/selftests/resctrl/resctrl_tests.c
+@@ -61,11 +61,15 @@ static void cmd_help(void)
+ 	printf("usage: resctrl_tests [-h] [-t test list] [-n no_of_bits] [-b benchmark_cmd [option]...]\n");
+ 	printf("\t-b benchmark_cmd [option]...: run specified benchmark for MBM, MBA and CMT\n");
+ 	printf("\t   default benchmark is builtin fill_buf\n");
+-	printf("\t-t test list: run tests specified in the test list, ");
++	printf("\t-t test list: run tests/groups specified by the list, ");
+ 	printf("e.g. -t mbm,mba,cmt,cat\n");
+-	printf("\t\tSupported tests:\n");
+-	for (i = 0; i < ARRAY_SIZE(resctrl_tests); i++)
+-		printf("\t\t\t%s\n", resctrl_tests[i]->name);
++	printf("\t\tSupported tests (group):\n");
++	for (i = 0; i < ARRAY_SIZE(resctrl_tests); i++) {
++		if (resctrl_tests[i]->group)
++			printf("\t\t\t%s (%s)\n", resctrl_tests[i]->name, resctrl_tests[i]->group);
++		else
++			printf("\t\t\t%s\n", resctrl_tests[i]->name);
++	}
+ 	printf("\t-n no_of_bits: run cache tests using specified no of bits in cache bit mask\n");
+ 	printf("\t-p cpu_no: specify CPU number to run the test. 1 is default\n");
+ 	printf("\t-h: help\n");
+@@ -193,7 +197,9 @@ int main(int argc, char **argv)
+ 				bool found = false;
+ 
+ 				for (i = 0; i < ARRAY_SIZE(resctrl_tests); i++) {
+-					if (!strcasecmp(token, resctrl_tests[i]->name)) {
++					if (!strcasecmp(token, resctrl_tests[i]->name) ||
++					    (resctrl_tests[i]->group &&
++					     !strcasecmp(token, resctrl_tests[i]->group))) {
+ 						if (resctrl_tests[i]->disabled)
+ 							tests++;
+ 						resctrl_tests[i]->disabled = false;
 -- 
 2.30.2
 
