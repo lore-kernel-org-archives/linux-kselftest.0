@@ -2,44 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 33887C27C47
-	for <linux-kselftest@archiver.kernel.org>; Tue, 24 Oct 2023 15:27:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 62BF5C00A8F
+	for <linux-kselftest@archiver.kernel.org>; Tue, 24 Oct 2023 15:34:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343729AbjJXP1V (ORCPT
+        id S234946AbjJXPeq (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 24 Oct 2023 11:27:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43228 "EHLO
+        Tue, 24 Oct 2023 11:34:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234893AbjJXP1D (ORCPT
+        with ESMTP id S234879AbjJXPeo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 Oct 2023 11:27:03 -0400
+        Tue, 24 Oct 2023 11:34:44 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E34F2699;
-        Tue, 24 Oct 2023 08:25:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C6981FCF;
+        Tue, 24 Oct 2023 08:25:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698161151; x=1729697151;
+  t=1698161147; x=1729697147;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=yaXPXgiHPft1t+FfYx+gcc9MnjEET03QhJxsh9MS9DU=;
-  b=TfNxncsiPQGawNwwvRp6vU0YMdU2d0et4x7RhQnWuY/6YnI00BF0JgS+
-   TMS36MLXIwYqKD3BZmMnGMFatZzjSTM7x1xHV8qV0VoTNVHZKWFTJMvf8
-   chun5fBr79PN1KvbL3o8CkCZZ5gj3O5qlH3gfDQrAsgKWJJE7KlyRwTeV
-   w9VELrZcJ1s3c5mFWMkRAmdgyDehFaJ6L8LRjttaQAZguc8fNYG41UoE4
-   oRVZ28iogysKFUjVXgJ5dTJy15ZiRbgGa2V1mX4O9xexALstUWtCbKHog
-   0GKNB1g3WEIDdxX8X0jjYO99TiP/2VYdXAk6kIV33T6+rlWXaHHBkWPbZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10873"; a="418212168"
+  bh=GhzoVAbGJrM+7KU7vz4DC0AvB+1skOqf7bv981Kl1Qk=;
+  b=ADUvOSiufnTGz8XKyQUQhgd49PhWUn7LczUPjsI7D5V9vgY4d0lbPKW4
+   gJzt1FOZFls3BiWTF5BS+SHvZ2LURBOLfBSvTViVq5fODQ6buz+5XOqAF
+   mTl3zfCjOPN2FihroxOf5UjUVCfUftv5VMCtXlu8PgQs11Du9EaQM3qr+
+   lmu5CHCEg+gU4O1YezPcFgi1guDbebgNt1X+WM1LE4jLWqpN0QzVUeU5Z
+   41N6X3qjuNfsdTN1A++HdRlziEIcDe5aoAI/uKs4ISVSKeQ8i5nEgzqC7
+   8NTWSbZdgfS3vejUkITU7xoke/okDHf4FMHpDHIUUVsOVyhoH/P9acS62
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10873"; a="418212098"
 X-IronPort-AV: E=Sophos;i="6.03,248,1694761200"; 
-   d="scan'208";a="418212168"
+   d="scan'208";a="418212098"
 Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 08:14:17 -0700
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 08:14:15 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10873"; a="1005688921"
+X-IronPort-AV: E=McAfee;i="6600,9927,10873"; a="1005688900"
 X-IronPort-AV: E=Sophos;i="6.03,248,1694761200"; 
-   d="scan'208";a="1005688921"
+   d="scan'208";a="1005688900"
 Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by fmsmga006.fm.intel.com with ESMTP; 24 Oct 2023 08:14:16 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 24 Oct 2023 08:14:14 -0700
 From:   Yi Liu <yi.l.liu@intel.com>
 To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
         kevin.tian@intel.com, robin.murphy@arm.com,
@@ -52,9 +52,9 @@ Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
         suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         zhenzhong.duan@intel.com, joao.m.martins@oracle.com
-Subject: [PATCH v7 5/8] iommu/vt-d: Make domain attach helpers to be extern
-Date:   Tue, 24 Oct 2023 08:14:09 -0700
-Message-Id: <20231024151412.50046-6-yi.l.liu@intel.com>
+Subject: [PATCH v7 2/8] iommu/vt-d: Extend dmar_domain to support nested domain
+Date:   Tue, 24 Oct 2023 08:14:06 -0700
+Message-Id: <20231024151412.50046-3-yi.l.liu@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231024151412.50046-1-yi.l.liu@intel.com>
 References: <20231024151412.50046-1-yi.l.liu@intel.com>
@@ -64,96 +64,75 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This makes the helpers visible to nested.c.
+From: Lu Baolu <baolu.lu@linux.intel.com>
 
-Suggested-by: Lu Baolu <baolu.lu@linux.intel.com>
+The nested domain fields are exclusive to those that used for a DMA
+remapping domain. Use union to avoid memory waste.
+
 Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
+Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 Signed-off-by: Yi Liu <yi.l.liu@intel.com>
 ---
- drivers/iommu/intel/iommu.c | 15 ++++++---------
- drivers/iommu/intel/iommu.h |  7 +++++++
- 2 files changed, 13 insertions(+), 9 deletions(-)
+ drivers/iommu/intel/iommu.h | 36 ++++++++++++++++++++++++++++++------
+ 1 file changed, 30 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index cb64759b3d95..292baa64188b 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -282,7 +282,6 @@ static LIST_HEAD(dmar_satc_units);
- #define for_each_rmrr_units(rmrr) \
- 	list_for_each_entry(rmrr, &dmar_rmrr_units, list)
- 
--static void device_block_translation(struct device *dev);
- static void intel_iommu_domain_free(struct iommu_domain *domain);
- 
- int dmar_disabled = !IS_ENABLED(CONFIG_INTEL_IOMMU_DEFAULT_ON);
-@@ -561,7 +560,7 @@ static unsigned long domain_super_pgsize_bitmap(struct dmar_domain *domain)
- }
- 
- /* Some capabilities may be different across iommus */
--static void domain_update_iommu_cap(struct dmar_domain *domain)
-+void domain_update_iommu_cap(struct dmar_domain *domain)
- {
- 	domain_update_iommu_coherency(domain);
- 	domain->iommu_superpage = domain_update_iommu_superpage(domain, NULL);
-@@ -1779,8 +1778,7 @@ static struct dmar_domain *alloc_domain(unsigned int type)
- 	return domain;
- }
- 
--static int domain_attach_iommu(struct dmar_domain *domain,
--			       struct intel_iommu *iommu)
-+int domain_attach_iommu(struct dmar_domain *domain, struct intel_iommu *iommu)
- {
- 	struct iommu_domain_info *info, *curr;
- 	unsigned long ndomains;
-@@ -1829,8 +1827,7 @@ static int domain_attach_iommu(struct dmar_domain *domain,
- 	return ret;
- }
- 
--static void domain_detach_iommu(struct dmar_domain *domain,
--				struct intel_iommu *iommu)
-+void domain_detach_iommu(struct dmar_domain *domain, struct intel_iommu *iommu)
- {
- 	struct iommu_domain_info *info;
- 
-@@ -3975,7 +3972,7 @@ static void dmar_remove_one_dev_info(struct device *dev)
-  * all DMA requests without PASID from the device are blocked. If the page
-  * table has been set, clean up the data structures.
-  */
--static void device_block_translation(struct device *dev)
-+void device_block_translation(struct device *dev)
- {
- 	struct device_domain_info *info = dev_iommu_priv_get(dev);
- 	struct intel_iommu *iommu = info->iommu;
-@@ -4128,8 +4125,8 @@ static void intel_iommu_domain_free(struct iommu_domain *domain)
- 		domain_exit(to_dmar_domain(domain));
- }
- 
--static int prepare_domain_attach_device(struct iommu_domain *domain,
--					struct device *dev)
-+int prepare_domain_attach_device(struct iommu_domain *domain,
-+				 struct device *dev)
- {
- 	struct dmar_domain *dmar_domain = to_dmar_domain(domain);
- 	struct intel_iommu *iommu;
 diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
-index 43108424f315..d5aaaedf2094 100644
+index cc7301579773..244f111ea0bb 100644
 --- a/drivers/iommu/intel/iommu.h
 +++ b/drivers/iommu/intel/iommu.h
-@@ -878,6 +878,13 @@ int qi_submit_sync(struct intel_iommu *iommu, struct qi_desc *desc,
-  */
- #define QI_OPT_WAIT_DRAIN		BIT(0)
+@@ -25,6 +25,7 @@
  
-+int domain_attach_iommu(struct dmar_domain *domain, struct intel_iommu *iommu);
-+void domain_detach_iommu(struct dmar_domain *domain, struct intel_iommu *iommu);
-+void device_block_translation(struct device *dev);
-+int prepare_domain_attach_device(struct iommu_domain *domain,
-+				 struct device *dev);
-+void domain_update_iommu_cap(struct dmar_domain *domain);
+ #include <asm/cacheflush.h>
+ #include <asm/iommu.h>
++#include <uapi/linux/iommufd.h>
+ 
+ /*
+  * VT-d hardware uses 4KiB page size regardless of host page size.
+@@ -605,15 +606,38 @@ struct dmar_domain {
+ 	struct list_head devices;	/* all devices' list */
+ 	struct list_head dev_pasids;	/* all attached pasids */
+ 
+-	struct dma_pte	*pgd;		/* virtual address */
+-	int		gaw;		/* max guest address width */
+-
+-	/* adjusted guest address width, 0 is level 2 30-bit */
+-	int		agaw;
+ 	int		iommu_superpage;/* Level of superpages supported:
+ 					   0 == 4KiB (no superpages), 1 == 2MiB,
+ 					   2 == 1GiB, 3 == 512GiB, 4 == 1TiB */
+-	u64		max_addr;	/* maximum mapped address */
++	union {
++		/* DMA remapping domain */
++		struct {
++			/* virtual address */
++			struct dma_pte	*pgd;
++			/* max guest address width */
++			int		gaw;
++			/*
++			 * adjusted guest address width:
++			 *   0: level 2 30-bit
++			 *   1: level 3 39-bit
++			 *   2: level 4 48-bit
++			 *   3: level 5 57-bit
++			 */
++			int		agaw;
++			/* maximum mapped address */
++			u64		max_addr;
++		};
 +
- int dmar_ir_support(void);
++		/* Nested user domain */
++		struct {
++			/* parent page table which the user domain is nested on */
++			struct dmar_domain *s2_domain;
++			/* user page table pointer (in GPA) */
++			unsigned long s1_pgtbl;
++			/* page table attributes */
++			struct iommu_hwpt_vtd_s1 s1_cfg;
++		};
++	};
  
- void *alloc_pgtable_page(int node, gfp_t gfp);
+ 	struct iommu_domain domain;	/* generic domain data structure for
+ 					   iommu core */
 -- 
 2.34.1
 
