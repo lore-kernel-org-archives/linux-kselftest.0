@@ -2,43 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1FAAC25B6C
-	for <linux-kselftest@archiver.kernel.org>; Tue, 24 Oct 2023 15:10:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F79AC07545
+	for <linux-kselftest@archiver.kernel.org>; Tue, 24 Oct 2023 15:27:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343581AbjJXPKg (ORCPT
+        id S234982AbjJXP1N (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 24 Oct 2023 11:10:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55794 "EHLO
+        Tue, 24 Oct 2023 11:27:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234696AbjJXPKV (ORCPT
+        with ESMTP id S234978AbjJXP1A (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 Oct 2023 11:10:21 -0400
+        Tue, 24 Oct 2023 11:27:00 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7721210F7;
-        Tue, 24 Oct 2023 08:10:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD731FC6;
+        Tue, 24 Oct 2023 08:25:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698160206; x=1729696206;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=gNGCnNDGdTQFs9gXbPTF7NHqDllgZWxNgdtOO6a+rHc=;
-  b=OvS8UH33Rs+5fo8/5tTRX6jqORT7zAZNzstK96CAhyGGdEx7YyvNjjWo
-   Mfr5ZcnvtCQlHFnzNuzLryCzY7gQ5wo3HId0AX57qH0Xwy6w4T1dStD9n
-   sICQRNbzwpdBdiot6IgxwLkjQmJcrnOp0NU65hI7tyihoH+affWPpqha/
-   /MqurWW+qYmTr+rxM1viQdoIZXCPTwFBNEgqb4Rf6INopz8ZnX4llzNp9
-   ndDjLre6K6vcsxiz9MWoAHqJqNQQJ5lQPFjE5L/Kh0SOgonaw80VubXag
-   KlciDRO74s4muFKRP9gYu3bFItpok5Uq1BwIj/Y1lWH+hccY1UaDwoGAW
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10873"; a="418203124"
+  t=1698161144; x=1729697144;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=7iDYVOsh5BrWuiySUpHbO305n/DgqlYk5+oWJw/Eq3M=;
+  b=GRyARqnd1llx5LCJEUBNoIbfte8Kmw3brVCj11eUodJdlXiB7UlztPKl
+   b4yUKtzQ80n2HZAs47c9JIrvsfyO5c9kHtP0kjRRInEzetwnAAtp+O1XA
+   3W5QKGCvxy7385WISXxMMH3zipJ6e+I9bRfpWRXRp07eIMT2Y460z492I
+   QmHIHxhpnfBkyUUTVESlSgMYCUUXNljSXBv+sKeXTRo0A8X6MKkb9CLke
+   CxxjbDqWi6vcrbJWE2C9ydq6wll26FfB3zWCIFBqIcdPvUxHgCO46PQ/H
+   GgI+f+sCr/6pHT+zGRAq9U8ZEX3LWWIm51xSZ5+RWeOhFcx4Sfz51bTrR
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10873"; a="418212063"
 X-IronPort-AV: E=Sophos;i="6.03,248,1694761200"; 
-   d="scan'208";a="418203124"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 08:06:32 -0700
+   d="scan'208";a="418212063"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 08:14:13 -0700
 X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10873"; a="1005688881"
 X-IronPort-AV: E=Sophos;i="6.03,248,1694761200"; 
-   d="scan'208";a="6486196"
+   d="scan'208";a="1005688881"
 Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by fmviesa001.fm.intel.com with ESMTP; 24 Oct 2023 08:06:24 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 24 Oct 2023 08:14:12 -0700
 From:   Yi Liu <yi.l.liu@intel.com>
 To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
         kevin.tian@intel.com, robin.murphy@arm.com,
@@ -51,280 +52,136 @@ Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
         suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         zhenzhong.duan@intel.com, joao.m.martins@oracle.com
-Subject: [PATCH v6 09/10] iommufd/selftest: Add nested domain allocation for mock domain
-Date:   Tue, 24 Oct 2023 08:06:08 -0700
-Message-Id: <20231024150609.46884-10-yi.l.liu@intel.com>
+Subject: [PATCH v7 0/8] Add Intel VT-d nested translation (part 1/2)
+Date:   Tue, 24 Oct 2023 08:14:04 -0700
+Message-Id: <20231024151412.50046-1-yi.l.liu@intel.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231024150609.46884-1-yi.l.liu@intel.com>
-References: <20231024150609.46884-1-yi.l.liu@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Nicolin Chen <nicolinc@nvidia.com>
+This is the first part to add Intel VT-d nested translation based on IOMMUFD
+nesting infrastructure. As the iommufd nesting infrastructure series[1],
+iommu core supports new ops to allocate domains with user data. For nesting,
+the user data is vendor-specific, IOMMU_HWPT_DATA_VTD_S1 is defined for
+the Intel VT-d stage-1 page table, it will be used in the stage-1 domain
+allocation path. struct iommu_hwpt_vtd_s1 is defined to pass user_data
+for the Intel VT-d stage-1 domain allocation. This series does not have
+the cache invalidation path, it would be added in part 2/2.
 
-Add nested domain support in the ->domain_alloc_user op with some proper
-sanity checks. Then, add a domain_nested_ops for all nested domains and
-split the get_md_pagetable helper into paging and nested helpers.
+The first Intel platform supporting nested translation is Sapphire
+Rapids which, unfortunately, has a hardware errata [2] requiring special
+treatment. This errata happens when a stage-1 page table page (either
+level) is located in a stage-2 read-only region. In that case the IOMMU
+hardware may ignore the stage-2 RO permission and still set the A/D bit
+in stage-1 page table entries during page table walking.
 
-Also, add an iotlb as a testing property of a nested domain.
+A flag IOMMU_HW_INFO_VTD_ERRATA_772415_SPR17 is introduced to report
+this errata to userspace. With that restriction the user should either
+disable nested translation to favor RO stage-2 mappings or ensure no
+RO stage-2 mapping to enable nested translation.
 
-Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-Signed-off-by: Yi Liu <yi.l.liu@intel.com>
----
- drivers/iommu/iommufd/iommufd_test.h |  18 ++++
- drivers/iommu/iommufd/selftest.c     | 150 +++++++++++++++++++++------
- 2 files changed, 138 insertions(+), 30 deletions(-)
+Intel-iommu driver is armed with necessary checks to prevent such mix
+in patch8 of this series.
 
-diff --git a/drivers/iommu/iommufd/iommufd_test.h b/drivers/iommu/iommufd/iommufd_test.h
-index 1f2e93d3d4e8..cf7d999a55bb 100644
---- a/drivers/iommu/iommufd/iommufd_test.h
-+++ b/drivers/iommu/iommufd/iommufd_test.h
-@@ -46,6 +46,11 @@ enum {
- 	MOCK_FLAGS_DEVICE_NO_DIRTY = 1 << 0,
- };
- 
-+enum {
-+	MOCK_NESTED_DOMAIN_IOTLB_ID_MAX = 3,
-+	MOCK_NESTED_DOMAIN_IOTLB_NUM = 4,
-+};
-+
- struct iommu_test_cmd {
- 	__u32 size;
- 	__u32 op;
-@@ -130,4 +135,17 @@ struct iommu_test_hw_info {
- 	__u32 test_reg;
- };
- 
-+/* Should not be equal to any defined value in enum iommu_hwpt_data_type */
-+#define IOMMU_HWPT_DATA_SELFTEST	0xdead
-+
-+/**
-+ * struct iommu_hwpt_selftest
-+ *
-+ * @iotlb: default mock iotlb value, IOMMU_TEST_IOTLB_DEFAULT
-+ */
-+struct iommu_hwpt_selftest {
-+#define IOMMU_TEST_IOTLB_DEFAULT	0xbadbeef
-+	__u32 iotlb;
-+};
-+
- #endif
-diff --git a/drivers/iommu/iommufd/selftest.c b/drivers/iommu/iommufd/selftest.c
-index d71007234896..bf9a88193367 100644
---- a/drivers/iommu/iommufd/selftest.c
-+++ b/drivers/iommu/iommufd/selftest.c
-@@ -93,6 +93,12 @@ struct mock_iommu_domain {
- 	struct xarray pfns;
- };
- 
-+struct mock_iommu_domain_nested {
-+	struct iommu_domain domain;
-+	struct mock_iommu_domain *parent;
-+	u32 iotlb[MOCK_NESTED_DOMAIN_IOTLB_NUM];
-+};
-+
- enum selftest_obj_type {
- 	TYPE_IDEV,
- };
-@@ -217,54 +223,97 @@ const struct iommu_dirty_ops dirty_ops = {
- };
- 
- static const struct iommu_ops mock_ops;
-+static struct iommu_domain_ops domain_nested_ops;
- 
--static struct iommu_domain *mock_domain_alloc(unsigned int iommu_domain_type)
-+static struct iommu_domain *
-+__mock_domain_alloc_paging(unsigned int iommu_domain_type, bool needs_dirty_ops)
- {
- 	struct mock_iommu_domain *mock;
- 
--	if (iommu_domain_type == IOMMU_DOMAIN_BLOCKED)
--		return &mock_blocking_domain;
--
--	if (iommu_domain_type != IOMMU_DOMAIN_UNMANAGED)
--		return NULL;
--
- 	mock = kzalloc(sizeof(*mock), GFP_KERNEL);
- 	if (!mock)
--		return NULL;
-+		return ERR_PTR(-ENOMEM);
- 	mock->domain.geometry.aperture_start = MOCK_APERTURE_START;
- 	mock->domain.geometry.aperture_end = MOCK_APERTURE_LAST;
- 	mock->domain.pgsize_bitmap = MOCK_IO_PAGE_SIZE;
- 	mock->domain.ops = mock_ops.default_domain_ops;
-+	if (needs_dirty_ops)
-+		mock->domain.dirty_ops = &dirty_ops;
- 	mock->domain.type = iommu_domain_type;
- 	xa_init(&mock->pfns);
- 	return &mock->domain;
- }
- 
-+static struct iommu_domain *
-+__mock_domain_alloc_nested(struct mock_iommu_domain *mock_parent,
-+			   const struct iommu_hwpt_selftest *user_cfg)
-+{
-+	struct mock_iommu_domain_nested *mock_nested;
-+	int i;
-+
-+	mock_nested = kzalloc(sizeof(*mock_nested), GFP_KERNEL);
-+	if (!mock_nested)
-+		return ERR_PTR(-ENOMEM);
-+	mock_nested->parent = mock_parent;
-+	mock_nested->domain.ops = &domain_nested_ops;
-+	mock_nested->domain.type = IOMMU_DOMAIN_NESTED;
-+	for (i = 0; i < MOCK_NESTED_DOMAIN_IOTLB_NUM; i++)
-+		mock_nested->iotlb[i] = user_cfg->iotlb;
-+	return &mock_nested->domain;
-+}
-+
-+static struct iommu_domain *mock_domain_alloc(unsigned int iommu_domain_type)
-+{
-+	struct iommu_domain *domain;
-+
-+	if (iommu_domain_type == IOMMU_DOMAIN_BLOCKED)
-+		return &mock_blocking_domain;
-+	if (iommu_domain_type != IOMMU_DOMAIN_UNMANAGED)
-+		return NULL;
-+	domain = __mock_domain_alloc_paging(iommu_domain_type, false);
-+	if (IS_ERR(domain))
-+		domain = NULL;
-+	return domain;
-+}
-+
- static struct iommu_domain *
- mock_domain_alloc_user(struct device *dev, u32 flags,
- 		       struct iommu_domain *parent,
- 		       const struct iommu_user_data *user_data)
- {
--	struct mock_dev *mdev = container_of(dev, struct mock_dev, dev);
--	struct iommu_domain *domain;
-+	struct mock_iommu_domain *mock_parent;
-+	struct iommu_hwpt_selftest user_cfg;
-+	int rc;
- 
--	if (flags &
--	    (~(IOMMU_HWPT_ALLOC_NEST_PARENT | IOMMU_HWPT_ALLOC_DIRTY_TRACKING)))
--		return ERR_PTR(-EOPNOTSUPP);
-+	if (!user_data) {	/* must be mock_domain */
-+		struct mock_dev *mdev = container_of(dev, struct mock_dev, dev);
-+		bool has_dirty_flag = flags & IOMMU_HWPT_ALLOC_DIRTY_TRACKING;
-+		bool no_dirty_ops = mdev->flags & MOCK_FLAGS_DEVICE_NO_DIRTY;
-+
-+		if (parent)
-+			return ERR_PTR(-EINVAL);
-+		if (has_dirty_flag && no_dirty_ops)
-+			return ERR_PTR(-EOPNOTSUPP);
-+		return __mock_domain_alloc_paging(IOMMU_DOMAIN_UNMANAGED,
-+						  has_dirty_flag);
-+	}
- 
--	if (parent || user_data)
-+	/* must be mock_domain_nested */
-+	if (user_data->type != IOMMU_HWPT_DATA_SELFTEST)
- 		return ERR_PTR(-EOPNOTSUPP);
-+	if (!parent || parent->ops != mock_ops.default_domain_ops)
-+		return ERR_PTR(-EINVAL);
- 
--	if ((flags & IOMMU_HWPT_ALLOC_DIRTY_TRACKING) &&
--	    (mdev->flags & MOCK_FLAGS_DEVICE_NO_DIRTY))
--		return ERR_PTR(-EOPNOTSUPP);
-+	mock_parent = container_of(parent, struct mock_iommu_domain, domain);
-+	if (!mock_parent)
-+		return ERR_PTR(-EINVAL);
- 
--	domain = mock_domain_alloc(IOMMU_DOMAIN_UNMANAGED);
--	if (domain && !(mdev->flags & MOCK_FLAGS_DEVICE_NO_DIRTY))
--		domain->dirty_ops = &dirty_ops;
--	if (!domain)
--		domain = ERR_PTR(-ENOMEM);
--	return domain;
-+	rc = iommu_copy_struct_from_user(&user_cfg, user_data,
-+					 IOMMU_HWPT_DATA_SELFTEST, iotlb);
-+	if (rc)
-+		return ERR_PTR(rc);
-+
-+	return __mock_domain_alloc_nested(mock_parent, &user_cfg);
- }
- 
- static void mock_domain_free(struct iommu_domain *domain)
-@@ -434,19 +483,41 @@ static const struct iommu_ops mock_ops = {
- 		},
- };
- 
-+static void mock_domain_free_nested(struct iommu_domain *domain)
-+{
-+	struct mock_iommu_domain_nested *mock_nested =
-+		container_of(domain, struct mock_iommu_domain_nested, domain);
-+
-+	kfree(mock_nested);
-+}
-+
-+static struct iommu_domain_ops domain_nested_ops = {
-+	.free = mock_domain_free_nested,
-+	.attach_dev = mock_domain_nop_attach,
-+};
-+
- static inline struct iommufd_hw_pagetable *
--get_md_pagetable(struct iommufd_ucmd *ucmd, u32 mockpt_id,
--		 struct mock_iommu_domain **mock)
-+__get_md_pagetable(struct iommufd_ucmd *ucmd, u32 mockpt_id, u32 hwpt_type)
- {
--	struct iommufd_hw_pagetable *hwpt;
- 	struct iommufd_object *obj;
- 
--	obj = iommufd_get_object(ucmd->ictx, mockpt_id,
--				 IOMMUFD_OBJ_HWPT_PAGING);
-+	obj = iommufd_get_object(ucmd->ictx, mockpt_id, hwpt_type);
- 	if (IS_ERR(obj))
- 		return ERR_CAST(obj);
--	hwpt = container_of(obj, struct iommufd_hw_pagetable, obj);
--	if (hwpt->domain->ops != mock_ops.default_domain_ops) {
-+	return container_of(obj, struct iommufd_hw_pagetable, obj);
-+}
-+
-+static inline struct iommufd_hw_pagetable *
-+get_md_pagetable(struct iommufd_ucmd *ucmd, u32 mockpt_id,
-+		 struct mock_iommu_domain **mock)
-+{
-+	struct iommufd_hw_pagetable *hwpt;
-+
-+	hwpt = __get_md_pagetable(ucmd, mockpt_id, IOMMUFD_OBJ_HWPT_PAGING);
-+	if (IS_ERR(hwpt))
-+		return hwpt;
-+	if (hwpt->domain->type != IOMMU_DOMAIN_UNMANAGED ||
-+	    hwpt->domain->ops != mock_ops.default_domain_ops) {
- 		iommufd_put_object(&hwpt->obj);
- 		return ERR_PTR(-EINVAL);
- 	}
-@@ -454,6 +525,25 @@ get_md_pagetable(struct iommufd_ucmd *ucmd, u32 mockpt_id,
- 	return hwpt;
- }
- 
-+static inline struct iommufd_hw_pagetable *
-+get_md_pagetable_nested(struct iommufd_ucmd *ucmd, u32 mockpt_id,
-+			struct mock_iommu_domain_nested **mock_nested)
-+{
-+	struct iommufd_hw_pagetable *hwpt;
-+
-+	hwpt = __get_md_pagetable(ucmd, mockpt_id, IOMMUFD_OBJ_HWPT_NESTED);
-+	if (IS_ERR(hwpt))
-+		return hwpt;
-+	if (hwpt->domain->type != IOMMU_DOMAIN_NESTED ||
-+	    hwpt->domain->ops != &domain_nested_ops) {
-+		iommufd_put_object(&hwpt->obj);
-+		return ERR_PTR(-EINVAL);
-+	}
-+	*mock_nested = container_of(hwpt->domain,
-+				    struct mock_iommu_domain_nested, domain);
-+	return hwpt;
-+}
-+
- struct mock_bus_type {
- 	struct bus_type bus;
- 	struct notifier_block nb;
+Qemu currently does add RO mappings though. The vfio agent in Qemu
+simply maps all valid regions in the GPA address space which certainly
+includes RO regions e.g. vbios.
+
+In reality we don't know a usage relying on DMA reads from the BIOS
+region. Hence finding a way to skip RO regions (e.g. via a discard manager)
+in Qemu might be an acceptable tradeoff. The actual change needs more
+discussion in Qemu community. For now we just hacked Qemu to test.
+
+Complete code can be found in [3], corresponding QEMU could can be found
+in [4].
+
+[1] https://lore.kernel.org/linux-iommu/20231024150609.46884-1-yi.l.liu@intel.com/
+[2] https://www.intel.com/content/www/us/en/content-details/772415/content-details.html
+[3] https://github.com/yiliu1765/iommufd/tree/iommufd_nesting
+[4] https://github.com/yiliu1765/qemu/tree/zhenzhong/wip/iommufd_nesting_rfcv1
+
+Change log:
+
+v7:
+ - Rebase on top of latest iommufd nesting part 1/2
+ - Add the nested_parent flag in patch 07 and sanitize it for nested domain
+   allocation (Baolu)
+ - Fail the nested domain allocation if dirty tracking flag is set
+
+v6: https://lore.kernel.org/linux-iommu/20231020093246.17015-1-yi.l.liu@intel.com/
+ - Add Kevin's r-b for patch 1 and 8
+ - Drop Kevin's r-b for patch 7
+ - Address comments from Kevin
+ - Split the VT-d nesting series into two parts 1/2 and 2/2
+
+v5: https://lore.kernel.org/linux-iommu/20230921075431.125239-1-yi.l.liu@intel.com/
+ - Add Kevin's r-b for patch 2, 3 ,5 8, 10
+ - Drop enforce_cache_coherency callback from the nested type domain ops (Kevin)
+ - Remove duplicate agaw check in patch 04 (Kevin)
+ - Remove duplicate domain_update_iommu_cap() in patch 06 (Kevin)
+ - Check parent's force_snooping to set pgsnp in the pasid entry (Kevin)
+ - uapi data structure check (Kevin)
+ - Simplify the errata handling as user can allocate nested parent domain
+
+v4: https://lore.kernel.org/linux-iommu/20230724111335.107427-1-yi.l.liu@intel.com/
+ - Remove ascii art tables (Jason)
+ - Drop EMT (Tina, Jason)
+ - Drop MTS and related definitions (Kevin)
+ - Rename macro IOMMU_VTD_PGTBL_ to IOMMU_VTD_S1_ (Kevin)
+ - Rename struct iommu_hwpt_intel_vtd_ to iommu_hwpt_vtd_ (Kevin)
+ - Rename struct iommu_hwpt_intel_vtd to iommu_hwpt_vtd_s1 (Kevin)
+ - Put the vendor specific hwpt alloc data structure before enuma iommu_hwpt_type (Kevin)
+ - Do not trim the higher page levels of S2 domain in nested domain attachment as the
+   S2 domain may have been used independently. (Kevin)
+ - Remove the first-stage pgd check against the maximum address of s2_domain as hw
+   can check it anyhow. It makes sense to check every pfns used in the stage-1 page
+   table. But it cannot make it. So just leave it to hw. (Kevin)
+ - Split the iotlb flush part into an order of uapi, helper and callback implementation (Kevin)
+ - Change the policy of VT-d nesting errata, disallow RO mapping once a domain is used
+   as parent domain of a nested domain. This removes the nested_users counting. (Kevin)
+ - Minor fix for "make htmldocs"
+
+v3: https://lore.kernel.org/linux-iommu/20230511145110.27707-1-yi.l.liu@intel.com/
+ - Further split the patches into an order of adding helpers for nested
+   domain, iotlb flush, nested domain attachment and nested domain allocation
+   callback, then report the hw_info to userspace.
+ - Add batch support in cache invalidation from userspace
+ - Disallow nested translation usage if RO mappings exists in stage-2 domain
+   due to errata on readonly mappings on Sapphire Rapids platform.
+
+v2: https://lore.kernel.org/linux-iommu/20230309082207.612346-1-yi.l.liu@intel.com/
+ - The iommufd infrastructure is split to be separate series.
+
+v1: https://lore.kernel.org/linux-iommu/20230209043153.14964-1-yi.l.liu@intel.com/
+
+Regards,
+	Yi Liu
+
+Lu Baolu (5):
+  iommu/vt-d: Extend dmar_domain to support nested domain
+  iommu/vt-d: Add helper for nested domain allocation
+  iommu/vt-d: Add helper to setup pasid nested translation
+  iommu/vt-d: Add nested domain allocation
+  iommu/vt-d: Disallow read-only mappings to nest parent domain
+
+Yi Liu (3):
+  iommufd: Add data structure for Intel VT-d stage-1 domain allocation
+  iommu/vt-d: Make domain attach helpers to be extern
+  iommu/vt-d: Set the nested domain to a device
+
+ drivers/iommu/intel/Makefile |   2 +-
+ drivers/iommu/intel/iommu.c  |  88 +++++++++++++++++----------
+ drivers/iommu/intel/iommu.h  |  46 ++++++++++++--
+ drivers/iommu/intel/nested.c | 109 ++++++++++++++++++++++++++++++++++
+ drivers/iommu/intel/pasid.c  | 112 +++++++++++++++++++++++++++++++++++
+ drivers/iommu/intel/pasid.h  |   2 +
+ include/uapi/linux/iommufd.h |  42 ++++++++++++-
+ 7 files changed, 362 insertions(+), 39 deletions(-)
+ create mode 100644 drivers/iommu/intel/nested.c
+
 -- 
 2.34.1
 
