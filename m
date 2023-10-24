@@ -2,44 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A97AC25B6C
-	for <linux-kselftest@archiver.kernel.org>; Tue, 24 Oct 2023 15:27:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05874C25B6F
+	for <linux-kselftest@archiver.kernel.org>; Tue, 24 Oct 2023 15:27:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234838AbjJXP1N (ORCPT
+        id S1343577AbjJXP1S (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 24 Oct 2023 11:27:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43212 "EHLO
+        Tue, 24 Oct 2023 11:27:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234779AbjJXP1C (ORCPT
+        with ESMTP id S234820AbjJXP1F (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 Oct 2023 11:27:02 -0400
+        Tue, 24 Oct 2023 11:27:05 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19085210C;
-        Tue, 24 Oct 2023 08:25:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A65626B0;
+        Tue, 24 Oct 2023 08:25:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698161150; x=1729697150;
+  t=1698161154; x=1729697154;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=dAd8yqkYmiu7MLFmlRMuk0Qk6KIOoPZsI4zu663OHR0=;
-  b=N8g/xM/iKWuw3/uOf0dw1x2BmjhX4P9d38WtjfLSPqdltbOe/1+dezRV
-   sLrhHNXFk1x2q7Evqopt4RO+v4wWvRcLMV+A3Nzar1AFDkkVEYfa8Yygh
-   +vJ9WPPw3SMg/fPBAP+QW3FC3zd5F7aNCqq0r896O7vTtrEfE1quRqdio
-   4OIk4R3CH/ZyeaCsfPdK0G6zi+swOMhhfU+Dii04fMGyssbQAwqBDgyWF
-   1TeCX6/WadDLmar8BZ8bFD4d34Him8EADqEOwYbUUvUgPJCNuffyuHFEy
-   hiEcCLk3186/8BxRTagUkSDlAvi4uX8qAKVtjVQKuX3O0xY+RDmx/054L
+  bh=EvYYap6jVoXeJ39dE5VX3YkM1fWw70nq/hojBtiJ2Lc=;
+  b=Zb8y2Tq7DrRWnrpOPGfFV6DBz4Izfm0ojzpUClO4PpC7cTI4WBZJJe2C
+   VwGW7wNy464ZsNipgPIO4OdRgMrQmupeEKwd8/qv6qmW4XlLmtRiq2J5u
+   QSje+2MZM97HQf7JGYSqhHlkH8RXR2K+QKf3+LCbWwdoCuKxwZMfehVjL
+   pcpmkQuNVPUBfzGzpou6V6Toqi/Fl3TWLPqyci78pmFGX5+0DTwsQmL9f
+   MhPhV5f9rZee/+vH327H9G+PVsB/SddCmAMBerbfNSPPJiEyPa4llfKCC
+   uEiVkA7u8iF5TlqFFPN2oBV33g/Y4CwZm8XQlaSuiZ16hdQVAjeO25npW
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10873"; a="418212151"
+X-IronPort-AV: E=McAfee;i="6600,9927,10873"; a="418212230"
 X-IronPort-AV: E=Sophos;i="6.03,248,1694761200"; 
-   d="scan'208";a="418212151"
+   d="scan'208";a="418212230"
 Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 08:14:16 -0700
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 08:14:19 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10873"; a="1005688917"
+X-IronPort-AV: E=McAfee;i="6600,9927,10873"; a="1005688935"
 X-IronPort-AV: E=Sophos;i="6.03,248,1694761200"; 
-   d="scan'208";a="1005688917"
+   d="scan'208";a="1005688935"
 Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by fmsmga006.fm.intel.com with ESMTP; 24 Oct 2023 08:14:15 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 24 Oct 2023 08:14:18 -0700
 From:   Yi Liu <yi.l.liu@intel.com>
 To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
         kevin.tian@intel.com, robin.murphy@arm.com,
@@ -51,11 +51,10 @@ Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
         shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
         suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        zhenzhong.duan@intel.com, joao.m.martins@oracle.com,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>
-Subject: [PATCH v7 4/8] iommu/vt-d: Add helper to setup pasid nested translation
-Date:   Tue, 24 Oct 2023 08:14:08 -0700
-Message-Id: <20231024151412.50046-5-yi.l.liu@intel.com>
+        zhenzhong.duan@intel.com, joao.m.martins@oracle.com
+Subject: [PATCH v7 8/8] iommu/vt-d: Disallow read-only mappings to nest parent domain
+Date:   Tue, 24 Oct 2023 08:14:12 -0700
+Message-Id: <20231024151412.50046-9-yi.l.liu@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231024151412.50046-1-yi.l.liu@intel.com>
 References: <20231024151412.50046-1-yi.l.liu@intel.com>
@@ -67,169 +66,82 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Lu Baolu <baolu.lu@linux.intel.com>
 
-The configurations are passed in from the user when the user domain is
-allocated. This helper interprets these configurations according to the
-data structure defined in uapi/linux/iommufd.h. The EINVAL error will be
-returned if any of configurations are not compatible with the hardware
-capabilities. The caller can retry with another compatible user domain.
-The encoding of fields of each pasid entry is defined in section 9.6 of
-the VT-d spec.
+When remapping hardware is configured by system software in scalable mode
+as Nested (PGTT=011b) and with PWSNP field Set in the PASID-table-entry,
+it may Set Accessed bit and Dirty bit (and Extended Access bit if enabled)
+in first-stage page-table entries even when second-stage mappings indicate
+that corresponding first-stage page-table is Read-Only.
 
-Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+As the result, contents of pages designated by VMM as Read-Only can be
+modified by IOMMU via PML5E (PML4E for 4-level tables) access as part of
+address translation process due to DMAs issued by Guest.
+
+This disallows read-only mappings in the domain that is supposed to be used
+as nested parent. Reference from Sapphire Rapids Specification Update [1],
+errata details, SPR17. Userspace should know this limitation by checking
+the IOMMU_HW_INFO_VTD_ERRATA_772415_SPR17 flag reported in the IOMMU_GET_HW_INFO
+ioctl.
+
+[1] https://www.intel.com/content/www/us/en/content-details/772415/content-details.html
+
+Reviewed-by: Kevin Tian <kevin.tian@intel.com>
 Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 Signed-off-by: Yi Liu <yi.l.liu@intel.com>
 ---
- drivers/iommu/intel/pasid.c | 112 ++++++++++++++++++++++++++++++++++++
- drivers/iommu/intel/pasid.h |   2 +
- 2 files changed, 114 insertions(+)
+ drivers/iommu/intel/iommu.c  |  6 ++++++
+ include/uapi/linux/iommufd.h | 12 +++++++++++-
+ 2 files changed, 17 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/iommu/intel/pasid.c b/drivers/iommu/intel/pasid.c
-index b9264b9174e8..74e8e4c17e81 100644
---- a/drivers/iommu/intel/pasid.c
-+++ b/drivers/iommu/intel/pasid.c
-@@ -370,6 +370,15 @@ static inline bool pasid_get_ssade(struct pasid_entry *pe)
- 	return pasid_get_bits(&pe->val[0]) & (1 << 9);
- }
+diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+index 85366862fb5e..1a50d3f53713 100644
+--- a/drivers/iommu/intel/iommu.c
++++ b/drivers/iommu/intel/iommu.c
+@@ -2194,6 +2194,11 @@ __domain_mapping(struct dmar_domain *domain, unsigned long iov_pfn,
+ 	if ((prot & (DMA_PTE_READ|DMA_PTE_WRITE)) == 0)
+ 		return -EINVAL;
  
-+/*
-+ * Setup the SRE(Supervisor Request Enable) field (Bit 128) of a
-+ * scalable mode PASID entry.
-+ */
-+static inline void pasid_set_sre(struct pasid_entry *pe)
-+{
-+	pasid_set_bits(&pe->val[2], 1 << 0, 1);
-+}
++	if (!(prot & DMA_PTE_WRITE) && domain->nested_parent) {
++		pr_err_ratelimited("Read-only mapping is disallowed on the domain which serves as the parent in a nested configuration, due to HW errata (ERRATA_772415_SPR17)\n");
++		return -EINVAL;
++	}
 +
- /*
-  * Setup the WPE(Write Protect Enable) field (Bit 132) of a
-  * scalable mode PASID entry.
-@@ -437,6 +446,15 @@ pasid_set_flpm(struct pasid_entry *pe, u64 value)
- 	pasid_set_bits(&pe->val[2], GENMASK_ULL(3, 2), value << 2);
- }
+ 	attr = prot & (DMA_PTE_READ | DMA_PTE_WRITE | DMA_PTE_SNP);
+ 	attr |= DMA_FL_PTE_PRESENT;
+ 	if (domain->use_first_level) {
+@@ -4872,6 +4877,7 @@ static void *intel_iommu_hw_info(struct device *dev, u32 *length, u32 *type)
+ 	if (!vtd)
+ 		return ERR_PTR(-ENOMEM);
  
-+/*
-+ * Setup the Extended Access Flag Enable (EAFE) field (Bit 135)
-+ * of a scalable mode PASID entry.
-+ */
-+static inline void pasid_set_eafe(struct pasid_entry *pe)
-+{
-+	pasid_set_bits(&pe->val[2], 1 << 7, 1 << 7);
-+}
-+
- static void
- pasid_cache_invalidation_with_pasid(struct intel_iommu *iommu,
- 				    u16 did, u32 pasid)
-@@ -822,3 +840,97 @@ void intel_pasid_setup_page_snoop_control(struct intel_iommu *iommu,
- 	if (!cap_caching_mode(iommu->cap))
- 		devtlb_invalidation_with_pasid(iommu, dev, pasid);
- }
-+
++	vtd->flags = IOMMU_HW_INFO_VTD_ERRATA_772415_SPR17;
+ 	vtd->cap_reg = iommu->cap;
+ 	vtd->ecap_reg = iommu->ecap;
+ 	*length = sizeof(*vtd);
+diff --git a/include/uapi/linux/iommufd.h b/include/uapi/linux/iommufd.h
+index 3a66d3888393..cb7d17e3b4e7 100644
+--- a/include/uapi/linux/iommufd.h
++++ b/include/uapi/linux/iommufd.h
+@@ -444,10 +444,20 @@ struct iommu_hwpt_alloc {
+ };
+ #define IOMMU_HWPT_ALLOC _IO(IOMMUFD_TYPE, IOMMUFD_CMD_HWPT_ALLOC)
+ 
 +/**
-+ * intel_pasid_setup_nested() - Set up PASID entry for nested translation.
-+ * @iommu:      IOMMU which the device belong to
-+ * @dev:        Device to be set up for translation
-+ * @pasid:      PASID to be programmed in the device PASID table
-+ * @domain:     User stage-1 domain nested on a stage-2 domain
-+ *
-+ * This is used for nested translation. The input domain should be
-+ * nested type and nested on a parent with 'is_nested_parent' flag
-+ * set.
++ * enum iommu_hw_info_vtd_flags - Flags for VT-d hw_info
++ * @IOMMU_HW_INFO_VTD_ERRATA_772415_SPR17: If set, disallow nesting on domains
++ *                                   with read-only mapping.
++ *                                   https://www.intel.com/content/www/us/en/content-details/772415/content-details.html
 + */
-+int intel_pasid_setup_nested(struct intel_iommu *iommu, struct device *dev,
-+			     u32 pasid, struct dmar_domain *domain)
-+{
-+	struct iommu_hwpt_vtd_s1 *s1_cfg = &domain->s1_cfg;
-+	pgd_t *s1_gpgd = (pgd_t *)(uintptr_t)domain->s1_pgtbl;
-+	struct dmar_domain *s2_domain = domain->s2_domain;
-+	u16 did = domain_id_iommu(domain, iommu);
-+	struct dma_pte *pgd = s2_domain->pgd;
-+	struct pasid_entry *pte;
++enum iommu_hw_info_vtd_flags {
++	IOMMU_HW_INFO_VTD_ERRATA_772415_SPR17 = 1 << 0,
++};
 +
-+	/* Address width should match the address width supported by hardware */
-+	switch (s1_cfg->addr_width) {
-+	case ADDR_WIDTH_4LEVEL:
-+		break;
-+	case ADDR_WIDTH_5LEVEL:
-+		if (!cap_fl5lp_support(iommu->cap)) {
-+			dev_err_ratelimited(dev,
-+					    "5-level paging not supported\n");
-+			return -EINVAL;
-+		}
-+		break;
-+	default:
-+		dev_err_ratelimited(dev, "Invalid stage-1 address width %d\n",
-+				    s1_cfg->addr_width);
-+		return -EINVAL;
-+	}
-+
-+	if ((s1_cfg->flags & IOMMU_VTD_S1_SRE) && !ecap_srs(iommu->ecap)) {
-+		pr_err_ratelimited("No supervisor request support on %s\n",
-+				   iommu->name);
-+		return -EINVAL;
-+	}
-+
-+	if ((s1_cfg->flags & IOMMU_VTD_S1_EAFE) && !ecap_eafs(iommu->ecap)) {
-+		pr_err_ratelimited("No extended access flag support on %s\n",
-+				   iommu->name);
-+		return -EINVAL;
-+	}
-+
-+	spin_lock(&iommu->lock);
-+	pte = intel_pasid_get_entry(dev, pasid);
-+	if (!pte) {
-+		spin_unlock(&iommu->lock);
-+		return -ENODEV;
-+	}
-+	if (pasid_pte_is_present(pte)) {
-+		spin_unlock(&iommu->lock);
-+		return -EBUSY;
-+	}
-+
-+	pasid_clear_entry(pte);
-+
-+	if (s1_cfg->addr_width == ADDR_WIDTH_5LEVEL)
-+		pasid_set_flpm(pte, 1);
-+
-+	pasid_set_flptr(pte, (uintptr_t)s1_gpgd);
-+
-+	if (s1_cfg->flags & IOMMU_VTD_S1_SRE) {
-+		pasid_set_sre(pte);
-+		if (s1_cfg->flags & IOMMU_VTD_S1_WPE)
-+			pasid_set_wpe(pte);
-+	}
-+
-+	if (s1_cfg->flags & IOMMU_VTD_S1_EAFE)
-+		pasid_set_eafe(pte);
-+
-+	if (s2_domain->force_snooping)
-+		pasid_set_pgsnp(pte);
-+
-+	pasid_set_slptr(pte, virt_to_phys(pgd));
-+	pasid_set_fault_enable(pte);
-+	pasid_set_domain_id(pte, did);
-+	pasid_set_address_width(pte, s2_domain->agaw);
-+	pasid_set_page_snoop(pte, !!ecap_smpwc(iommu->ecap));
-+	pasid_set_translation_type(pte, PASID_ENTRY_PGTT_NESTED);
-+	pasid_set_present(pte);
-+	spin_unlock(&iommu->lock);
-+
-+	pasid_flush_caches(iommu, pte, pasid, did);
-+
-+	return 0;
-+}
-diff --git a/drivers/iommu/intel/pasid.h b/drivers/iommu/intel/pasid.h
-index 958050b093aa..dd37611175cc 100644
---- a/drivers/iommu/intel/pasid.h
-+++ b/drivers/iommu/intel/pasid.h
-@@ -113,6 +113,8 @@ int intel_pasid_setup_dirty_tracking(struct intel_iommu *iommu,
- int intel_pasid_setup_pass_through(struct intel_iommu *iommu,
- 				   struct dmar_domain *domain,
- 				   struct device *dev, u32 pasid);
-+int intel_pasid_setup_nested(struct intel_iommu *iommu, struct device *dev,
-+			     u32 pasid, struct dmar_domain *domain);
- void intel_pasid_tear_down_entry(struct intel_iommu *iommu,
- 				 struct device *dev, u32 pasid,
- 				 bool fault_ignore);
+ /**
+  * struct iommu_hw_info_vtd - Intel VT-d hardware information
+  *
+- * @flags: Must be 0
++ * @flags: Combination of enum iommu_hw_info_vtd_flags
+  * @__reserved: Must be 0
+  *
+  * @cap_reg: Value of Intel VT-d capability register defined in VT-d spec
 -- 
 2.34.1
 
