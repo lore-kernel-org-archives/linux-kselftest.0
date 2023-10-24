@@ -2,44 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 431D2C25B6E
-	for <linux-kselftest@archiver.kernel.org>; Tue, 24 Oct 2023 15:34:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BF8AC25B48
+	for <linux-kselftest@archiver.kernel.org>; Tue, 24 Oct 2023 15:34:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234739AbjJXPet (ORCPT
+        id S1343746AbjJXPez (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 24 Oct 2023 11:34:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39474 "EHLO
+        Tue, 24 Oct 2023 11:34:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234931AbjJXPep (ORCPT
+        with ESMTP id S1343730AbjJXPer (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 Oct 2023 11:34:45 -0400
+        Tue, 24 Oct 2023 11:34:47 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57E831FCB;
-        Tue, 24 Oct 2023 08:25:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E74C01FD5;
+        Tue, 24 Oct 2023 08:25:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698161146; x=1729697146;
+  t=1698161148; x=1729697148;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=HxxDxm+pmr+CG9d+qPDASdBIZigfxNwo47Fkj5u+VjE=;
-  b=U8/XyhXSMDHlz9avuLIpfC/0Tfq7DO9/PustChdZxkudDit69FbYnzcx
-   8Jb72EI9L5+pFW5C9qKiDpQPX3SUY1+E5haTp6MtCfFHBfq+MAKrhdKLH
-   PZdP6gML/U6UjLCEKxWTbXTbEd2LGh6UhJuRl2R6uZ2rr3vMRBmtGdK9S
-   fyf6o9areE3d/tViQZwwURb72Y8Y2ZrN5x8wwBUjis+r4ch7JVYLH25za
-   t5+NoFzJuYNmcWwa1jW5D/r2SqhFBen78QBdA894eqZsEDFHOKcKb5oof
-   SfPBUvsbBLRAVnK27r/KZ1WmdDirQ3XWTXANjbW2VZ5CV6szIAphh5cBm
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10873"; a="418212082"
+  bh=yc31Hj1XFcKLSYQzFgKTkbbG88zsmwpxwtOXR4n5QGQ=;
+  b=LG3E6WeKKdR/ODTzkvmVYWD8z0cmG9QwjyAiLbR1hgecsQ5oJNckBt1g
+   JcvleUG34DJvszhXIjnNlJ2/VrlsXB1gR8KV9oaT8vlZER1/radjJq5KG
+   yNV77uyV/ZPpPZtlMLWaQcLT6VobCKBZur/h5bApBpdgV7QgM0AEvu0Zf
+   TTvw/2z7f3wj1Xv6yxQbfyrglK5LmEMgqwRkqgR0+Nd9sEbg/nTpCZT6T
+   jLlqiL8+VXCn9ggyypzj/5lmP2YwBLOnJV7eZlbPyJn5RgY48mrxHvAyu
+   n5ox25ZxmhzW+E+4spoZTTf5Ghwkm9Baf8xcAvpvfUg319eX8Xu/1GzgN
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10873"; a="418212129"
 X-IronPort-AV: E=Sophos;i="6.03,248,1694761200"; 
-   d="scan'208";a="418212082"
+   d="scan'208";a="418212129"
 Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 08:14:14 -0700
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 08:14:15 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10873"; a="1005688893"
+X-IronPort-AV: E=McAfee;i="6600,9927,10873"; a="1005688908"
 X-IronPort-AV: E=Sophos;i="6.03,248,1694761200"; 
-   d="scan'208";a="1005688893"
+   d="scan'208";a="1005688908"
 Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by fmsmga006.fm.intel.com with ESMTP; 24 Oct 2023 08:14:13 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 24 Oct 2023 08:14:15 -0700
 From:   Yi Liu <yi.l.liu@intel.com>
 To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
         kevin.tian@intel.com, robin.murphy@arm.com,
@@ -51,10 +51,11 @@ Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
         shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
         suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        zhenzhong.duan@intel.com, joao.m.martins@oracle.com
-Subject: [PATCH v7 1/8] iommufd: Add data structure for Intel VT-d stage-1 domain allocation
-Date:   Tue, 24 Oct 2023 08:14:05 -0700
-Message-Id: <20231024151412.50046-2-yi.l.liu@intel.com>
+        zhenzhong.duan@intel.com, joao.m.martins@oracle.com,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>
+Subject: [PATCH v7 3/8] iommu/vt-d: Add helper for nested domain allocation
+Date:   Tue, 24 Oct 2023 08:14:07 -0700
+Message-Id: <20231024151412.50046-4-yi.l.liu@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231024151412.50046-1-yi.l.liu@intel.com>
 References: <20231024151412.50046-1-yi.l.liu@intel.com>
@@ -64,63 +65,108 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This adds IOMMU_HWPT_DATA_VTD_S1 for stage-1 hw_pagetable of Intel
-VT-d and the corressponding data structure for userspace specified parameter
-for the domain allocation.
+From: Lu Baolu <baolu.lu@linux.intel.com>
+
+This adds helper for accepting user parameters and allocate a nested
+domain.
 
 Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 Signed-off-by: Yi Liu <yi.l.liu@intel.com>
 ---
- include/uapi/linux/iommufd.h | 30 ++++++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ drivers/iommu/intel/Makefile |  2 +-
+ drivers/iommu/intel/iommu.h  |  2 ++
+ drivers/iommu/intel/nested.c | 55 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 58 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/iommu/intel/nested.c
 
-diff --git a/include/uapi/linux/iommufd.h b/include/uapi/linux/iommufd.h
-index aa9282ebbc7e..3a66d3888393 100644
---- a/include/uapi/linux/iommufd.h
-+++ b/include/uapi/linux/iommufd.h
-@@ -362,12 +362,42 @@ enum iommufd_hwpt_alloc_flags {
- 	IOMMU_HWPT_ALLOC_DIRTY_TRACKING = 1 << 1,
- };
+diff --git a/drivers/iommu/intel/Makefile b/drivers/iommu/intel/Makefile
+index 7af3b8a4f2a0..5dabf081a779 100644
+--- a/drivers/iommu/intel/Makefile
++++ b/drivers/iommu/intel/Makefile
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ obj-$(CONFIG_DMAR_TABLE) += dmar.o
+-obj-$(CONFIG_INTEL_IOMMU) += iommu.o pasid.o
++obj-$(CONFIG_INTEL_IOMMU) += iommu.o pasid.o nested.o
+ obj-$(CONFIG_DMAR_TABLE) += trace.o cap_audit.o
+ obj-$(CONFIG_DMAR_PERF) += perf.o
+ obj-$(CONFIG_INTEL_IOMMU_DEBUGFS) += debugfs.o
+diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
+index 244f111ea0bb..43108424f315 100644
+--- a/drivers/iommu/intel/iommu.h
++++ b/drivers/iommu/intel/iommu.h
+@@ -884,6 +884,8 @@ void *alloc_pgtable_page(int node, gfp_t gfp);
+ void free_pgtable_page(void *vaddr);
+ void iommu_flush_write_buffer(struct intel_iommu *iommu);
+ struct intel_iommu *device_to_iommu(struct device *dev, u8 *bus, u8 *devfn);
++struct iommu_domain *intel_nested_domain_alloc(struct iommu_domain *s2_domain,
++					       const struct iommu_user_data *user_data);
  
-+/**
-+ * enum iommu_hwpt_vtd_s1_flags - Intel VT-d stage-1 page table
-+ *                                entry attributes
-+ * @IOMMU_VTD_S1_SRE: Supervisor request
-+ * @IOMMU_VTD_S1_EAFE: Extended access enable
-+ * @IOMMU_VTD_S1_WPE: Write protect enable
+ #ifdef CONFIG_INTEL_IOMMU_SVM
+ void intel_svm_check(struct intel_iommu *iommu);
+diff --git a/drivers/iommu/intel/nested.c b/drivers/iommu/intel/nested.c
+new file mode 100644
+index 000000000000..859c60bead05
+--- /dev/null
++++ b/drivers/iommu/intel/nested.c
+@@ -0,0 +1,55 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * nested.c - nested mode translation support
++ *
++ * Copyright (C) 2023 Intel Corporation
++ *
++ * Author: Lu Baolu <baolu.lu@linux.intel.com>
++ *         Jacob Pan <jacob.jun.pan@linux.intel.com>
++ *         Yi Liu <yi.l.liu@intel.com>
 + */
-+enum iommu_hwpt_vtd_s1_flags {
-+	IOMMU_VTD_S1_SRE = 1 << 0,
-+	IOMMU_VTD_S1_EAFE = 1 << 1,
-+	IOMMU_VTD_S1_WPE = 1 << 2,
++
++#define pr_fmt(fmt)	"DMAR: " fmt
++
++#include <linux/iommu.h>
++
++#include "iommu.h"
++
++static void intel_nested_domain_free(struct iommu_domain *domain)
++{
++	kfree(to_dmar_domain(domain));
++}
++
++static const struct iommu_domain_ops intel_nested_domain_ops = {
++	.free			= intel_nested_domain_free,
 +};
 +
-+/**
-+ * struct iommu_hwpt_vtd_s1 - Intel VT-d stage-1 page table
-+ *                            info (IOMMU_HWPT_DATA_VTD_S1)
-+ * @flags: Combination of enum iommu_hwpt_vtd_s1_flags
-+ * @pgtbl_addr: The base address of the stage-1 page table.
-+ * @addr_width: The address width of the stage-1 page table
-+ * @__reserved: Must be 0
-+ */
-+struct iommu_hwpt_vtd_s1 {
-+	__aligned_u64 flags;
-+	__aligned_u64 pgtbl_addr;
-+	__u32 addr_width;
-+	__u32 __reserved;
-+};
++struct iommu_domain *intel_nested_domain_alloc(struct iommu_domain *s2_domain,
++					       const struct iommu_user_data *user_data)
++{
++	struct iommu_hwpt_vtd_s1 vtd;
++	struct dmar_domain *domain;
++	int ret;
 +
- /**
-  * enum iommu_hwpt_data_type - IOMMU HWPT Data Type
-  * @IOMMU_HWPT_DATA_NONE: no data
-+ * @IOMMU_HWPT_DATA_VTD_S1: Intel VT-d stage-1 page table
-  */
- enum iommu_hwpt_data_type {
- 	IOMMU_HWPT_DATA_NONE,
-+	IOMMU_HWPT_DATA_VTD_S1,
- };
- 
- /**
++	ret = iommu_copy_struct_from_user(&vtd, user_data,
++					  IOMMU_HWPT_DATA_VTD_S1, __reserved);
++	if (ret)
++		return ERR_PTR(ret);
++
++	domain = kzalloc(sizeof(*domain), GFP_KERNEL_ACCOUNT);
++	if (!domain)
++		return ERR_PTR(-ENOMEM);
++
++	domain->use_first_level = true;
++	domain->s2_domain = to_dmar_domain(s2_domain);
++	domain->s1_pgtbl = vtd.pgtbl_addr;
++	domain->s1_cfg = vtd;
++	domain->domain.ops = &intel_nested_domain_ops;
++	domain->domain.type = IOMMU_DOMAIN_NESTED;
++	INIT_LIST_HEAD(&domain->devices);
++	INIT_LIST_HEAD(&domain->dev_pasids);
++	spin_lock_init(&domain->lock);
++	xa_init(&domain->iommu_array);
++
++	return &domain->domain;
++}
 -- 
 2.34.1
 
