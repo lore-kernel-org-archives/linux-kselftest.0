@@ -2,171 +2,77 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BF8AC25B48
-	for <linux-kselftest@archiver.kernel.org>; Tue, 24 Oct 2023 15:34:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 484D9C00A8F
+	for <linux-kselftest@archiver.kernel.org>; Tue, 24 Oct 2023 15:51:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343746AbjJXPez (ORCPT
+        id S234724AbjJXPv4 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 24 Oct 2023 11:34:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44340 "EHLO
+        Tue, 24 Oct 2023 11:51:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343730AbjJXPer (ORCPT
+        with ESMTP id S233628AbjJXPv4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 Oct 2023 11:34:47 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E74C01FD5;
-        Tue, 24 Oct 2023 08:25:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698161148; x=1729697148;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=yc31Hj1XFcKLSYQzFgKTkbbG88zsmwpxwtOXR4n5QGQ=;
-  b=LG3E6WeKKdR/ODTzkvmVYWD8z0cmG9QwjyAiLbR1hgecsQ5oJNckBt1g
-   JcvleUG34DJvszhXIjnNlJ2/VrlsXB1gR8KV9oaT8vlZER1/radjJq5KG
-   yNV77uyV/ZPpPZtlMLWaQcLT6VobCKBZur/h5bApBpdgV7QgM0AEvu0Zf
-   TTvw/2z7f3wj1Xv6yxQbfyrglK5LmEMgqwRkqgR0+Nd9sEbg/nTpCZT6T
-   jLlqiL8+VXCn9ggyypzj/5lmP2YwBLOnJV7eZlbPyJn5RgY48mrxHvAyu
-   n5ox25ZxmhzW+E+4spoZTTf5Ghwkm9Baf8xcAvpvfUg319eX8Xu/1GzgN
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10873"; a="418212129"
-X-IronPort-AV: E=Sophos;i="6.03,248,1694761200"; 
-   d="scan'208";a="418212129"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 08:14:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10873"; a="1005688908"
-X-IronPort-AV: E=Sophos;i="6.03,248,1694761200"; 
-   d="scan'208";a="1005688908"
-Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by fmsmga006.fm.intel.com with ESMTP; 24 Oct 2023 08:14:15 -0700
-From:   Yi Liu <yi.l.liu@intel.com>
-To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
-        kevin.tian@intel.com, robin.murphy@arm.com,
-        baolu.lu@linux.intel.com
-Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
-        kvm@vger.kernel.org, mjrosato@linux.ibm.com,
-        chao.p.peng@linux.intel.com, yi.l.liu@intel.com,
-        yi.y.sun@linux.intel.com, peterx@redhat.com, jasowang@redhat.com,
-        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
-        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        zhenzhong.duan@intel.com, joao.m.martins@oracle.com,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>
-Subject: [PATCH v7 3/8] iommu/vt-d: Add helper for nested domain allocation
-Date:   Tue, 24 Oct 2023 08:14:07 -0700
-Message-Id: <20231024151412.50046-4-yi.l.liu@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231024151412.50046-1-yi.l.liu@intel.com>
-References: <20231024151412.50046-1-yi.l.liu@intel.com>
+        Tue, 24 Oct 2023 11:51:56 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7404CDE;
+        Tue, 24 Oct 2023 08:51:54 -0700 (PDT)
+Received: from localhost.localdomain (unknown [116.71.169.209])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 04D0A660732E;
+        Tue, 24 Oct 2023 16:51:47 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1698162713;
+        bh=YeYy3+CWlsTYWmE3ZY32EUBI7hsgZl3/P6viV1Tr3jo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=lRD69P3Cm7hmctulCRoxmdcSFIIHWL4f6Yx+BmQrOIU8+qh2zV/lI0najChNE2Fs0
+         x6BqwVKEpJvPqYQ55vvI/5i8DAZeGa8MNIt6fmhT8z/2Je+0RKAXsTP0KXRBGUrVpv
+         iY3oiKE9pC4u3SjZr0NwOA2vRRo4GIRZ9r11xOkZD1D5RHLASoOalp6UVLDe9NlDUW
+         dGsM0eDdETHP0cxx4yyOP7oVmZ4yCk863OE5Zu+q2+pVPk3DkcvYsNsASIG2+MvnAu
+         N+quqP64kjvEnpw/tTn9HRp8ozlgqHkfgHaER7XB8ciQKGQNAyM9rFDYD/dFwm4e6l
+         9APAUG98fGlmg==
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+To:     Shuah Khan <shuah@kernel.org>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     kernel@collabora.com, Aishwarya TCV <aishwarya.tcv@arm.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests: core: include linux/close_range.h for CLOSE_RANGE_* macros
+Date:   Tue, 24 Oct 2023 20:51:25 +0500
+Message-ID: <20231024155137.219700-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Lu Baolu <baolu.lu@linux.intel.com>
+Correct header file is needed for getting CLOSE_RANGE_* macros.
+Previously it was tested with newer glibc which didn't show the need to
+include the header which was a mistake.
 
-This adds helper for accepting user parameters and allocate a nested
-domain.
-
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-Signed-off-by: Yi Liu <yi.l.liu@intel.com>
+Fixes: ec54424923cf ("selftests: core: remove duplicate defines")
+Reported-by: Aishwarya TCV <aishwarya.tcv@arm.com>
+Link: https://lore.kernel.org/all/7161219e-0223-d699-d6f3-81abd9abf13b@arm.com
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 ---
- drivers/iommu/intel/Makefile |  2 +-
- drivers/iommu/intel/iommu.h  |  2 ++
- drivers/iommu/intel/nested.c | 55 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 58 insertions(+), 1 deletion(-)
- create mode 100644 drivers/iommu/intel/nested.c
+ tools/testing/selftests/core/close_range_test.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/iommu/intel/Makefile b/drivers/iommu/intel/Makefile
-index 7af3b8a4f2a0..5dabf081a779 100644
---- a/drivers/iommu/intel/Makefile
-+++ b/drivers/iommu/intel/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- obj-$(CONFIG_DMAR_TABLE) += dmar.o
--obj-$(CONFIG_INTEL_IOMMU) += iommu.o pasid.o
-+obj-$(CONFIG_INTEL_IOMMU) += iommu.o pasid.o nested.o
- obj-$(CONFIG_DMAR_TABLE) += trace.o cap_audit.o
- obj-$(CONFIG_DMAR_PERF) += perf.o
- obj-$(CONFIG_INTEL_IOMMU_DEBUGFS) += debugfs.o
-diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
-index 244f111ea0bb..43108424f315 100644
---- a/drivers/iommu/intel/iommu.h
-+++ b/drivers/iommu/intel/iommu.h
-@@ -884,6 +884,8 @@ void *alloc_pgtable_page(int node, gfp_t gfp);
- void free_pgtable_page(void *vaddr);
- void iommu_flush_write_buffer(struct intel_iommu *iommu);
- struct intel_iommu *device_to_iommu(struct device *dev, u8 *bus, u8 *devfn);
-+struct iommu_domain *intel_nested_domain_alloc(struct iommu_domain *s2_domain,
-+					       const struct iommu_user_data *user_data);
+diff --git a/tools/testing/selftests/core/close_range_test.c b/tools/testing/selftests/core/close_range_test.c
+index 534576f06df1c..c59e4adb905df 100644
+--- a/tools/testing/selftests/core/close_range_test.c
++++ b/tools/testing/selftests/core/close_range_test.c
+@@ -12,6 +12,7 @@
+ #include <syscall.h>
+ #include <unistd.h>
+ #include <sys/resource.h>
++#include <linux/close_range.h>
  
- #ifdef CONFIG_INTEL_IOMMU_SVM
- void intel_svm_check(struct intel_iommu *iommu);
-diff --git a/drivers/iommu/intel/nested.c b/drivers/iommu/intel/nested.c
-new file mode 100644
-index 000000000000..859c60bead05
---- /dev/null
-+++ b/drivers/iommu/intel/nested.c
-@@ -0,0 +1,55 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * nested.c - nested mode translation support
-+ *
-+ * Copyright (C) 2023 Intel Corporation
-+ *
-+ * Author: Lu Baolu <baolu.lu@linux.intel.com>
-+ *         Jacob Pan <jacob.jun.pan@linux.intel.com>
-+ *         Yi Liu <yi.l.liu@intel.com>
-+ */
-+
-+#define pr_fmt(fmt)	"DMAR: " fmt
-+
-+#include <linux/iommu.h>
-+
-+#include "iommu.h"
-+
-+static void intel_nested_domain_free(struct iommu_domain *domain)
-+{
-+	kfree(to_dmar_domain(domain));
-+}
-+
-+static const struct iommu_domain_ops intel_nested_domain_ops = {
-+	.free			= intel_nested_domain_free,
-+};
-+
-+struct iommu_domain *intel_nested_domain_alloc(struct iommu_domain *s2_domain,
-+					       const struct iommu_user_data *user_data)
-+{
-+	struct iommu_hwpt_vtd_s1 vtd;
-+	struct dmar_domain *domain;
-+	int ret;
-+
-+	ret = iommu_copy_struct_from_user(&vtd, user_data,
-+					  IOMMU_HWPT_DATA_VTD_S1, __reserved);
-+	if (ret)
-+		return ERR_PTR(ret);
-+
-+	domain = kzalloc(sizeof(*domain), GFP_KERNEL_ACCOUNT);
-+	if (!domain)
-+		return ERR_PTR(-ENOMEM);
-+
-+	domain->use_first_level = true;
-+	domain->s2_domain = to_dmar_domain(s2_domain);
-+	domain->s1_pgtbl = vtd.pgtbl_addr;
-+	domain->s1_cfg = vtd;
-+	domain->domain.ops = &intel_nested_domain_ops;
-+	domain->domain.type = IOMMU_DOMAIN_NESTED;
-+	INIT_LIST_HEAD(&domain->devices);
-+	INIT_LIST_HEAD(&domain->dev_pasids);
-+	spin_lock_init(&domain->lock);
-+	xa_init(&domain->iommu_array);
-+
-+	return &domain->domain;
-+}
+ #include "../kselftest_harness.h"
+ #include "../clone3/clone3_selftests.h"
 -- 
-2.34.1
+2.42.0
 
