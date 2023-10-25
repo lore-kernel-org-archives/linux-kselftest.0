@@ -2,119 +2,262 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 999C1C0032E
-	for <linux-kselftest@archiver.kernel.org>; Wed, 25 Oct 2023 12:32:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BE30C07545
+	for <linux-kselftest@archiver.kernel.org>; Wed, 25 Oct 2023 18:26:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234869AbjJYMcy (ORCPT
+        id S234790AbjJYS04 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 25 Oct 2023 08:32:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41776 "EHLO
+        Wed, 25 Oct 2023 14:26:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234838AbjJYMcy (ORCPT
+        with ESMTP id S233980AbjJYS0z (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 25 Oct 2023 08:32:54 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32FA129;
-        Wed, 25 Oct 2023 05:32:49 -0700 (PDT)
-Received: from notapiano (zone.collabora.co.uk [167.235.23.81])
+        Wed, 25 Oct 2023 14:26:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61731138
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Oct 2023 11:26:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1698258369;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nT8mn+CYHK0/rYux6OcfYs1wPw2RH0li5fDfUDzstNM=;
+        b=VuOXilVIOTy4z1efYMEY8uGzD2K+Xyqz73v6nrkfkhNylyGFZD3WPNNg4u46LmpLnAdyzi
+        zwwb6F92rzxpobGVRFAyGChnZytkvbbdZtMmmV1+a8pRAXKkLzpUTSUDwfeHtxTkTb2AAR
+        cw0VSZ1/Ye5rXbJlk412BYWel+oH/ks=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-524-wO03y3iBPN-YCn9WTbCEuw-1; Wed,
+ 25 Oct 2023 14:26:04 -0400
+X-MC-Unique: wO03y3iBPN-YCn9WTbCEuw-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 203A466057B6;
-        Wed, 25 Oct 2023 13:32:47 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1698237168;
-        bh=/4dXk3Un/vaxtCsUQZxzPGs3gNA8QPr1cZShAvmvMvg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MpzRZNViuoPfy7pkhZLcZ03fqKpTu+dsSqM9MQFDtpjGQyMoOn9XNNgSR3yW5xeWJ
-         VvlYQx4lfunbCLN45YIQDePd+aSfBWTbuBFCgsLnlpQH+Uy78/j1kxgfk1z725LrXb
-         zgVxxfEFsTnBRas8zpPnoKMfD0DRYx3zER6C640CW1xL+u3fhUc9YVVKByT0f86vf1
-         KsAjoZLnve4eBIv3pf2AEwtWdVKg8KrnBklzts0mBAmsLo3XncB2sMQsD8b7NQHDg2
-         Nns0czgK5QvlF3sugJbQDTG6WRr5aiyVDlxMSADoR5BJRCsWimtLRr32Y5pxtMBOhI
-         AgKvgG2i7zuKQ==
-Date:   Wed, 25 Oct 2023 08:32:42 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Shuah Khan <shuah@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-        devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-usb@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-kselftest@vger.kernel.org, kernel@collabora.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 2/2] kselftest: devices: Add board file for
- google,spherion
-Message-ID: <e49c63c4-2b24-4428-801c-1f854a98c593@notapiano>
-References: <20231024211818.365844-1-nfraprado@collabora.com>
- <20231024211818.365844-3-nfraprado@collabora.com>
- <2023102546-filled-onboard-3dfb@gregkh>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DC7363C021A2;
+        Wed, 25 Oct 2023 18:26:02 +0000 (UTC)
+Received: from llong.com (unknown [10.22.32.140])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3C348492BFA;
+        Wed, 25 Oct 2023 18:26:02 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Peter Hunt <pehunt@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH v2 2/4] selftests/cgroup: Minor code cleanup and reorganization of test_cpuset_prs.sh
+Date:   Wed, 25 Oct 2023 14:25:53 -0400
+Message-Id: <20231025182555.4155614-3-longman@redhat.com>
+In-Reply-To: <20231025182555.4155614-1-longman@redhat.com>
+References: <20231025182555.4155614-1-longman@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <2023102546-filled-onboard-3dfb@gregkh>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.10
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Oct 25, 2023 at 12:32:15PM +0200, Greg Kroah-Hartman wrote:
-> On Tue, Oct 24, 2023 at 05:18:00PM -0400, Nícolas F. R. A. Prado wrote:
-> > Add the list of devices expected to be probed from the USB and PCI
-> > busses on the google,spherion machine. The USB host controller at
-> > 11200000 is shared between two busses, for USB2 and USB3, so an
-> > additional match is used to select the USB2 bus.
-> > 
-> > Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> > ---
-> > 
-> >  tools/testing/selftests/devices/boards/google,spherion | 3 +++
-> >  1 file changed, 3 insertions(+)
-> >  create mode 100644 tools/testing/selftests/devices/boards/google,spherion
-> > 
-> > diff --git a/tools/testing/selftests/devices/boards/google,spherion b/tools/testing/selftests/devices/boards/google,spherion
-> > new file mode 100644
-> > index 000000000000..ba86ffcfe43c
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/devices/boards/google,spherion
-> > @@ -0,0 +1,3 @@
-> > +usb camera 11200000,PRODUCT=.*/2/.* 1.4.1 1 0,1
-> > +usb bluetooth 11200000,PRODUCT=.*/2/.* 1.4.2 1 0,1
-> > +pci wifi 11230000 0.0/0.0
-> 
-> USB busses (and PCI ids) are not determinisitic and can, and will,
-> change values randomly.  So while it is nice to test "did the devices
-> show up properly", you can not do that based on bus ids at all, sorry.
-> 
-> Unless I'm reading these values wrong?  What are the fields
-> representing?  Perhaps a comment at the top to describe them so that we
-> know how to parse them?
+Minor cleanup of test matrix and relocation of test_isolated() function
+to prepare for the next patch. There is no functional change.
 
-Hi Greg,
+Signed-off-by: Waiman Long <longman@redhat.com>
+---
+ .../selftests/cgroup/test_cpuset_prs.sh       | 142 +++++++++---------
+ 1 file changed, 71 insertions(+), 71 deletions(-)
 
-I have described the fields in the commit message of patch 1. Here they are:
+diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+index a6e9848189d6..2b825019f806 100755
+--- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
++++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+@@ -146,71 +146,6 @@ test_add_proc()
+ 	echo $$ > $CGROUP2/cgroup.procs	# Move out the task
+ }
+ 
+-#
+-# Testing the new "isolated" partition root type
+-#
+-test_isolated()
+-{
+-	cd $CGROUP2/test
+-	echo 2-3 > cpuset.cpus
+-	TYPE=$(cat cpuset.cpus.partition)
+-	[[ $TYPE = member ]] || echo member > cpuset.cpus.partition
+-
+-	console_msg "Change from member to root"
+-	test_partition root
+-
+-	console_msg "Change from root to isolated"
+-	test_partition isolated
+-
+-	console_msg "Change from isolated to member"
+-	test_partition member
+-
+-	console_msg "Change from member to isolated"
+-	test_partition isolated
+-
+-	console_msg "Change from isolated to root"
+-	test_partition root
+-
+-	console_msg "Change from root to member"
+-	test_partition member
+-
+-	#
+-	# Testing partition root with no cpu
+-	#
+-	console_msg "Distribute all cpus to child partition"
+-	echo +cpuset > cgroup.subtree_control
+-	test_partition root
+-
+-	mkdir A1
+-	cd A1
+-	echo 2-3 > cpuset.cpus
+-	test_partition root
+-	test_effective_cpus 2-3
+-	cd ..
+-	test_effective_cpus ""
+-
+-	console_msg "Moving task to partition test"
+-	test_add_proc "No space left"
+-	cd A1
+-	test_add_proc ""
+-	cd ..
+-
+-	console_msg "Shrink and expand child partition"
+-	cd A1
+-	echo 2 > cpuset.cpus
+-	cd ..
+-	test_effective_cpus 3
+-	cd A1
+-	echo 2-3 > cpuset.cpus
+-	cd ..
+-	test_effective_cpus ""
+-
+-	# Cleaning up
+-	console_msg "Cleaning up"
+-	echo $$ > $CGROUP2/cgroup.procs
+-	[[ -d A1 ]] && rmdir A1
+-}
+-
+ #
+ # Cpuset controller state transition test matrix.
+ #
+@@ -304,7 +239,7 @@ TEST_MATRIX=(
+ 								       A1:P0,A2:P2,A3:P1 2-4"
+ 	" C0-4:X2-4:S+ C1-4:X2-4:S+:P2 C2-4:X4:P1 \
+ 				   .      .      X5      .      .    0 A1:0-4,A2:1-4,A3:2-4 \
+-								       A1:P0,A2:P-2,A3:P-1 ."
++								       A1:P0,A2:P-2,A3:P-1"
+ 	" C0-4:X2-4:S+ C1-4:X2-4:S+:P2 C2-4:X4:P1 \
+ 				   .      .      .      X1      .    0 A1:0-1,A2:2-4,A3:2-4 \
+ 								       A1:P0,A2:P2,A3:P-1 2-4"
+@@ -347,10 +282,10 @@ TEST_MATRIX=(
+ 	# cpus_allowed/exclusive_cpus update tests
+ 	" C0-3:X2-3:S+ C1-3:X2-3:S+ C2-3:X2-3 \
+ 				   .     C4      .      P2     .     0 A1:4,A2:4,XA2:,XA3:,A3:4 \
+-								       A1:P0,A3:P-2 ."
++								       A1:P0,A3:P-2"
+ 	" C0-3:X2-3:S+ C1-3:X2-3:S+ C2-3:X2-3 \
+ 				   .     X1      .      P2     .     0 A1:0-3,A2:1-3,XA1:1,XA2:,XA3:,A3:2-3 \
+-								       A1:P0,A3:P-2 ."
++								       A1:P0,A3:P-2"
+ 	" C0-3:X2-3:S+ C1-3:X2-3:S+ C2-3:X2-3 \
+ 				   .      .     C3      P2     .     0 A1:0-2,A2:0-2,XA2:3,XA3:3,A3:3 \
+ 								       A1:P0,A3:P2 3"
+@@ -359,13 +294,13 @@ TEST_MATRIX=(
+ 								       A1:P0,A3:P2 3"
+ 	" C0-3:X2-3:S+ C1-3:X2-3:S+ C2-3:X2-3:P2 \
+ 				   .      .     X3      .      .     0 A1:0-3,A2:1-3,XA2:3,XA3:3,A3:2-3 \
+-								       A1:P0,A3:P-2 ."
++								       A1:P0,A3:P-2"
+ 	" C0-3:X2-3:S+ C1-3:X2-3:S+ C2-3:X2-3:P2 \
+ 				   .      .     C3      .      .     0 A1:0-3,A2:3,XA2:3,XA3:3,A3:3 \
+-								       A1:P0,A3:P-2 ."
++								       A1:P0,A3:P-2"
+ 	" C0-3:X2-3:S+ C1-3:X2-3:S+ C2-3:X2-3:P2 \
+ 				   .     C4      .      .      .     0 A1:4,A2:4,A3:4,XA1:,XA2:,XA3 \
+-								       A1:P0,A3:P-2 ."
++								       A1:P0,A3:P-2"
+ 
+ 	#  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate ISOLCPUS
+ 	#  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------ --------
+@@ -804,6 +739,71 @@ run_state_test()
+ 	echo "All $I tests of $TEST PASSED."
+ }
+ 
++#
++# Testing the new "isolated" partition root type
++#
++test_isolated()
++{
++	cd $CGROUP2/test
++	echo 2-3 > cpuset.cpus
++	TYPE=$(cat cpuset.cpus.partition)
++	[[ $TYPE = member ]] || echo member > cpuset.cpus.partition
++
++	console_msg "Change from member to root"
++	test_partition root
++
++	console_msg "Change from root to isolated"
++	test_partition isolated
++
++	console_msg "Change from isolated to member"
++	test_partition member
++
++	console_msg "Change from member to isolated"
++	test_partition isolated
++
++	console_msg "Change from isolated to root"
++	test_partition root
++
++	console_msg "Change from root to member"
++	test_partition member
++
++	#
++	# Testing partition root with no cpu
++	#
++	console_msg "Distribute all cpus to child partition"
++	echo +cpuset > cgroup.subtree_control
++	test_partition root
++
++	mkdir A1
++	cd A1
++	echo 2-3 > cpuset.cpus
++	test_partition root
++	test_effective_cpus 2-3
++	cd ..
++	test_effective_cpus ""
++
++	console_msg "Moving task to partition test"
++	test_add_proc "No space left"
++	cd A1
++	test_add_proc ""
++	cd ..
++
++	console_msg "Shrink and expand child partition"
++	cd A1
++	echo 2 > cpuset.cpus
++	cd ..
++	test_effective_cpus 3
++	cd A1
++	echo 2-3 > cpuset.cpus
++	cd ..
++	test_effective_cpus ""
++
++	# Cleaning up
++	console_msg "Cleaning up"
++	echo $$ > $CGROUP2/cgroup.procs
++	[[ -d A1 ]] && rmdir A1
++}
++
+ #
+ # Wait for inotify event for the given file and read it
+ # $1: cgroup file to wait for
+-- 
+2.39.3
 
-usb <test_name> <controller_address>[,<additional_match>] <ports_path> <configuration> <interfaces>
-
-pci <test_name> <controller_address> <device-function_pairs_path>
-
-I'm aware that bus IDs are assigned at runtime, and that's exactly why I've
-avoided those in the test definitions, instead describing the hardware topology,
-which won't ever change.
-
-And just to be extra clear, by hardware topology I mean:
-
-For USB, we find the USB bus based on the address of its controller (and
-optionally its productID if two busses share the same controller for USB2 and
-USB3), and then find the device by following the ports at each hub. The
-configuration number and interfaces then describe what interfaces to check for
-presence and driver binding.
-
-For PCI, we find the controller again based on its address, and follow the
-device-function pairs at each level in the topology until we arrive at the
-desired device.
-
-We don't rely on the USB bus number, nor on the PCI domain and bus number, since
-these are all assigned at runtime.
-
-Thanks,
-Nícolas
