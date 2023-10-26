@@ -2,44 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D659FC25B48
-	for <linux-kselftest@archiver.kernel.org>; Thu, 26 Oct 2023 04:43:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55618C25B6B
+	for <linux-kselftest@archiver.kernel.org>; Thu, 26 Oct 2023 04:43:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233132AbjJZEnO (ORCPT
+        id S234787AbjJZEnP (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 26 Oct 2023 00:43:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54844 "EHLO
+        Thu, 26 Oct 2023 00:43:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235072AbjJZEm4 (ORCPT
+        with ESMTP id S233183AbjJZEm6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 26 Oct 2023 00:42:56 -0400
+        Thu, 26 Oct 2023 00:42:58 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAD9B1734;
-        Wed, 25 Oct 2023 21:42:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 368B419A;
+        Wed, 25 Oct 2023 21:42:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698295371; x=1729831371;
+  t=1698295375; x=1729831375;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=kJQbhlGr3UHL/vwCI8YpVWg6//iOWpSzH/c2w2J/uEw=;
-  b=ZFOZPb1T3Gj1YYCYU+F6E0D5EgWm4vkkAKtZmjyRtg15IlhoYyVAV0Tq
-   Di3kvMw9F/7q+WM5pIM9pdofavzIgEr9GKKhjCVqqGp0ff/QTqZ2NgPES
-   FgPyl51/fni3P0chEkzUpkW/itGFeYCD8w/EJZWbiMhdHua2RbzmLqong
-   sIfuty+nznhyAwKXfm7g4EFA8UtO6IrhFsvHqrkTRZt89K+xzWslYp5in
-   x+iQZLspbt7nwaPSXV3egkrXQQjuQnshQgXyHvJa24i9B8C2OVy4oDfd3
-   f47FVrZ9zB4JKknXFNdTPOEVQFscL6oGsBkCoHeHAS+scXCJqtL6RgZI2
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10874"; a="367670720"
+  bh=RvKdWV+FSUYNPeoWJYd2Pc/eewINNmcStt1FxD5aggM=;
+  b=EOUTxwlE4VoTEci/1YGtzyeo/jPaYbui15bJUCCXt0pDEIi35aZz48tU
+   u9ktDonPIKI1gLyLNVecwsKlgjzSUaJDo6ndrVsCSJ3UVukbmiTkBqNKz
+   BtH3kj90SBYeOMhv9ePJhfgsSAnx5n1OIMRLiMLVx1CtJt2LEl6sDchNT
+   O4yjYV5nAO0iMxIVCfJEyjFXVdiZBAi9YC2eUzGddt4300tMB76I14rk9
+   YL1UZmt21BD/PeHunayEdk1doS7iZaEnPb86c50h1sZ7Ea5EHeIr3GNSK
+   7ql9eVl06+5lQknNfVSeYQPgltL1v2zvojiPG2R49eenvvJyYQa50XRNA
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10874"; a="367670766"
 X-IronPort-AV: E=Sophos;i="6.03,252,1694761200"; 
-   d="scan'208";a="367670720"
+   d="scan'208";a="367670766"
 Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2023 21:42:20 -0700
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2023 21:42:26 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10874"; a="829478509"
+X-IronPort-AV: E=McAfee;i="6600,9927,10874"; a="829478571"
 X-IronPort-AV: E=Sophos;i="6.03,252,1694761200"; 
-   d="scan'208";a="829478509"
+   d="scan'208";a="829478571"
 Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by fmsmga004.fm.intel.com with ESMTP; 25 Oct 2023 21:42:19 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 25 Oct 2023 21:42:24 -0700
 From:   Yi Liu <yi.l.liu@intel.com>
 To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
         kevin.tian@intel.com, robin.murphy@arm.com,
@@ -53,9 +53,9 @@ Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         zhenzhong.duan@intel.com, joao.m.martins@oracle.com,
         xin.zeng@intel.com
-Subject: [PATCH v8 1/8] iommufd: Add data structure for Intel VT-d stage-1 domain allocation
-Date:   Wed, 25 Oct 2023 21:42:09 -0700
-Message-Id: <20231026044216.64964-2-yi.l.liu@intel.com>
+Subject: [PATCH v8 5/8] iommu/vt-d: Make domain attach helpers to be extern
+Date:   Wed, 25 Oct 2023 21:42:13 -0700
+Message-Id: <20231026044216.64964-6-yi.l.liu@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231026044216.64964-1-yi.l.liu@intel.com>
 References: <20231026044216.64964-1-yi.l.liu@intel.com>
@@ -65,64 +65,97 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This adds IOMMU_HWPT_DATA_VTD_S1 for stage-1 hw_pagetable of Intel
-VT-d and the corressponding data structure for userspace specified parameter
-for the domain allocation.
+This makes the helpers visible to nested.c.
 
+Suggested-by: Lu Baolu <baolu.lu@linux.intel.com>
 Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
 Signed-off-by: Yi Liu <yi.l.liu@intel.com>
 Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 ---
- include/uapi/linux/iommufd.h | 30 ++++++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ drivers/iommu/intel/iommu.c | 15 ++++++---------
+ drivers/iommu/intel/iommu.h |  7 +++++++
+ 2 files changed, 13 insertions(+), 9 deletions(-)
 
-diff --git a/include/uapi/linux/iommufd.h b/include/uapi/linux/iommufd.h
-index d816deac906f..3ce5ee5f09b6 100644
---- a/include/uapi/linux/iommufd.h
-+++ b/include/uapi/linux/iommufd.h
-@@ -361,12 +361,42 @@ enum iommufd_hwpt_alloc_flags {
- 	IOMMU_HWPT_ALLOC_DIRTY_TRACKING = 1 << 1,
- };
+diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+index cb64759b3d95..292baa64188b 100644
+--- a/drivers/iommu/intel/iommu.c
++++ b/drivers/iommu/intel/iommu.c
+@@ -282,7 +282,6 @@ static LIST_HEAD(dmar_satc_units);
+ #define for_each_rmrr_units(rmrr) \
+ 	list_for_each_entry(rmrr, &dmar_rmrr_units, list)
  
-+/**
-+ * enum iommu_hwpt_vtd_s1_flags - Intel VT-d stage-1 page table
-+ *                                entry attributes
-+ * @IOMMU_VTD_S1_SRE: Supervisor request
-+ * @IOMMU_VTD_S1_EAFE: Extended access enable
-+ * @IOMMU_VTD_S1_WPE: Write protect enable
-+ */
-+enum iommu_hwpt_vtd_s1_flags {
-+	IOMMU_VTD_S1_SRE = 1 << 0,
-+	IOMMU_VTD_S1_EAFE = 1 << 1,
-+	IOMMU_VTD_S1_WPE = 1 << 2,
-+};
-+
-+/**
-+ * struct iommu_hwpt_vtd_s1 - Intel VT-d stage-1 page table
-+ *                            info (IOMMU_HWPT_DATA_VTD_S1)
-+ * @flags: Combination of enum iommu_hwpt_vtd_s1_flags
-+ * @pgtbl_addr: The base address of the stage-1 page table.
-+ * @addr_width: The address width of the stage-1 page table
-+ * @__reserved: Must be 0
-+ */
-+struct iommu_hwpt_vtd_s1 {
-+	__aligned_u64 flags;
-+	__aligned_u64 pgtbl_addr;
-+	__u32 addr_width;
-+	__u32 __reserved;
-+};
-+
- /**
-  * enum iommu_hwpt_data_type - IOMMU HWPT Data Type
-  * @IOMMU_HWPT_DATA_NONE: no data
-+ * @IOMMU_HWPT_DATA_VTD_S1: Intel VT-d stage-1 page table
+-static void device_block_translation(struct device *dev);
+ static void intel_iommu_domain_free(struct iommu_domain *domain);
+ 
+ int dmar_disabled = !IS_ENABLED(CONFIG_INTEL_IOMMU_DEFAULT_ON);
+@@ -561,7 +560,7 @@ static unsigned long domain_super_pgsize_bitmap(struct dmar_domain *domain)
+ }
+ 
+ /* Some capabilities may be different across iommus */
+-static void domain_update_iommu_cap(struct dmar_domain *domain)
++void domain_update_iommu_cap(struct dmar_domain *domain)
+ {
+ 	domain_update_iommu_coherency(domain);
+ 	domain->iommu_superpage = domain_update_iommu_superpage(domain, NULL);
+@@ -1779,8 +1778,7 @@ static struct dmar_domain *alloc_domain(unsigned int type)
+ 	return domain;
+ }
+ 
+-static int domain_attach_iommu(struct dmar_domain *domain,
+-			       struct intel_iommu *iommu)
++int domain_attach_iommu(struct dmar_domain *domain, struct intel_iommu *iommu)
+ {
+ 	struct iommu_domain_info *info, *curr;
+ 	unsigned long ndomains;
+@@ -1829,8 +1827,7 @@ static int domain_attach_iommu(struct dmar_domain *domain,
+ 	return ret;
+ }
+ 
+-static void domain_detach_iommu(struct dmar_domain *domain,
+-				struct intel_iommu *iommu)
++void domain_detach_iommu(struct dmar_domain *domain, struct intel_iommu *iommu)
+ {
+ 	struct iommu_domain_info *info;
+ 
+@@ -3975,7 +3972,7 @@ static void dmar_remove_one_dev_info(struct device *dev)
+  * all DMA requests without PASID from the device are blocked. If the page
+  * table has been set, clean up the data structures.
   */
- enum iommu_hwpt_data_type {
- 	IOMMU_HWPT_DATA_NONE,
-+	IOMMU_HWPT_DATA_VTD_S1,
- };
+-static void device_block_translation(struct device *dev)
++void device_block_translation(struct device *dev)
+ {
+ 	struct device_domain_info *info = dev_iommu_priv_get(dev);
+ 	struct intel_iommu *iommu = info->iommu;
+@@ -4128,8 +4125,8 @@ static void intel_iommu_domain_free(struct iommu_domain *domain)
+ 		domain_exit(to_dmar_domain(domain));
+ }
  
- /**
+-static int prepare_domain_attach_device(struct iommu_domain *domain,
+-					struct device *dev)
++int prepare_domain_attach_device(struct iommu_domain *domain,
++				 struct device *dev)
+ {
+ 	struct dmar_domain *dmar_domain = to_dmar_domain(domain);
+ 	struct intel_iommu *iommu;
+diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
+index f59a9374f62d..6a97711f947a 100644
+--- a/drivers/iommu/intel/iommu.h
++++ b/drivers/iommu/intel/iommu.h
+@@ -878,6 +878,13 @@ int qi_submit_sync(struct intel_iommu *iommu, struct qi_desc *desc,
+  */
+ #define QI_OPT_WAIT_DRAIN		BIT(0)
+ 
++int domain_attach_iommu(struct dmar_domain *domain, struct intel_iommu *iommu);
++void domain_detach_iommu(struct dmar_domain *domain, struct intel_iommu *iommu);
++void device_block_translation(struct device *dev);
++int prepare_domain_attach_device(struct iommu_domain *domain,
++				 struct device *dev);
++void domain_update_iommu_cap(struct dmar_domain *domain);
++
+ int dmar_ir_support(void);
+ 
+ void *alloc_pgtable_page(int node, gfp_t gfp);
 -- 
 2.34.1
 
