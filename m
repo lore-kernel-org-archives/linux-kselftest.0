@@ -2,58 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37A56C27C4A
-	for <linux-kselftest@archiver.kernel.org>; Sat, 28 Oct 2023 00:38:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A5AD4C27C4A
+	for <linux-kselftest@archiver.kernel.org>; Sat, 28 Oct 2023 00:38:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232877AbjJ1Ai3 (ORCPT
+        id S235206AbjJ1Aiq (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Fri, 27 Oct 2023 20:38:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42418 "EHLO
+        Fri, 27 Oct 2023 20:38:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231481AbjJ1Ai2 (ORCPT
+        with ESMTP id S1346757AbjJ1Aie (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 Oct 2023 20:38:28 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8C431BD
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Oct 2023 17:38:25 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5a7b9e83b70so24976797b3.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Oct 2023 17:38:25 -0700 (PDT)
+        Fri, 27 Oct 2023 20:38:34 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7164ED40
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Oct 2023 17:38:32 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5aecf6e30e9so26458487b3.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Oct 2023 17:38:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1698453505; x=1699058305; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1698453511; x=1699058311; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hd9WkLbC3/9tKbDr398vMG9sjKzgB6769/dIszrNtnA=;
-        b=0WMvlORCh5eNdKteXyjztoAPal+jeVc94WtxFTyTPkacbGB6Uy7qO0oopPVCMS9Kd1
-         R6uAt5fpwgyCJTj6v7zu5LWroSrxw7hWH7F/AskFMri4nDXpZkTWBMaZW5AVkZQ0Eb9T
-         jaDFBOuWJSii9w/2Cm/unGNPKIB8qRnOenqt+O5DWva8wHHvYiCmxo9awZtx1LPi3Apq
-         LPrhLrbJ/r3UdBs9s+lelrfO58TjmSAnP3SWoou9mSBNB5lEebCs5TllNteyXojSprgu
-         a6rNx+UM8kpYJMO1nM1Ty7iSYJGeNOx5rsG217WxbZEvhhW1P2LLKscvERjDHj3XKy3G
-         /+Aw==
+        bh=s1R+gkPO6QWaqP2nXLyUZQJ5I/za0dgAKVF5I8CkZ8w=;
+        b=MoGenRuyo4nfv3eG/+W2TGVWy3LqwicSEKy2wXR/9lXKmOqWVxFcjjzXvspsM1tASD
+         k6RBuyAZ9R99YE/B3j6vrNdwKX2g3WvJhCM/0rORbZt64i3CF+pjbrXNdqjsiKxGyhP4
+         4LGCzBrMpVyUAisxqFtwCm7gfWGLTdoMos3BwWnFNlqyC2lPzzz9Gv9HxGtVZh4pUAEg
+         z+gprFp78wOpuY9rwMBnhMOxfQSGGSwgr7kZRSh9jUV0BWVKQe8J9y0BElTwvTFOfhas
+         WoJbbYmBXt6HAzCEfs6A+jK1hGoOq3cRGUysCFHpwOSP1FxQkkVwcKn5bkHr4H4uXMS0
+         YRsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698453505; x=1699058305;
+        d=1e100.net; s=20230601; t=1698453511; x=1699058311;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hd9WkLbC3/9tKbDr398vMG9sjKzgB6769/dIszrNtnA=;
-        b=OEY7W3whWaFHhVue5wLfeavBx58v1Xl2Rh1gbpbv6uoyPWo4atiWynqtpoxkjRYbf8
-         +P2YxvtXwf1a75YCp+afj62PP8lQZp3MtAV897rjod9yupKl3suTmUq4ah18LhWpxE8e
-         ys1/lSNKbpSzT3Vx3fI5Di7xJlrHdi6voSBNL0uxgLKSUDhUsSCt/WqOUqUNm4xa+kPw
-         7V2/WtxFWH29lpcs6RUh+ZBuXOQpFd0/5Xt+EKdS6AetRf71XIqZMEW6YX1Q/2A8XLPW
-         9fzh7F8f0cNsx7Pq0y47mS7zEUSKCoWX2FhCtvBTt36mmhfJlxkopJ/IhOiNCJYSSqMe
-         YUMA==
-X-Gm-Message-State: AOJu0YzP8YTbYycRho+qCPRSUWNTgLK4OEdIR0U6WFCJIGbr4iQYYyRZ
-        0iPuWbgmCkmhvX6GZ2nhvbmWyLJB0go=
-X-Google-Smtp-Source: AGHT+IEhFUjmYdEXljORLOc7MoR1TUT63j0H8MtfIU3FFKJvRVJyyGkKkhRak6IgKRfrZGiSU7tVlIjlryE=
+        bh=s1R+gkPO6QWaqP2nXLyUZQJ5I/za0dgAKVF5I8CkZ8w=;
+        b=VlnaM2yq/4HFMM8U3ni3gD5LbPrHOw4b+GiKrCZSh6qNj5JXRnN44fmHTfgPhQ5iCR
+         iJ6tiKXmkzTXecjuhZmvv1H4xXkC/HFlI6nVG+jXpWWu1or1kGgzVG28Iie979q4wcE1
+         NOUyHa0whYYNjaR1T2AsHp5FUA3mO3Q2MC8ijt1eGFo+gPjlGbnFBHuBtVY2+pffq7/c
+         KBqEhgHP5oFrV10KsKUg+rfiMmcXzvt40JWbtI2NG9bsmt437jxbxWjzY0djGw14fg24
+         jtjClZtd9qjBGKPIpSolVyzetHa6etdEzoR0YfIW1lEFWqSM2JxnCtEd1yrMv20c0HJ4
+         zoDA==
+X-Gm-Message-State: AOJu0YyLaxv8m6v+OaFhY4PYWV1t4UQOqaMMLDuWPTGg7kHeciz0zJ74
+        B2oj+sRBwcMwOgtQkfJlhXwQ0xiSgRM=
+X-Google-Smtp-Source: AGHT+IH6BjNAe/I3oWPFyDFCzaaFiNnvB+GO/X2zJTyzdisgvbx30Yvihy8swuf1y6CJmKyolAmFsT8binI=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:cba3:7e7f:79e4:fa57])
- (user=surenb job=sendgmr) by 2002:a81:7648:0:b0:59b:b0b1:d75a with SMTP id
- j8-20020a817648000000b0059bb0b1d75amr194570ywk.4.1698453504908; Fri, 27 Oct
- 2023 17:38:24 -0700 (PDT)
-Date:   Fri, 27 Oct 2023 17:38:11 -0700
+ (user=surenb job=sendgmr) by 2002:a81:4895:0:b0:5af:6717:1c52 with SMTP id
+ v143-20020a814895000000b005af67171c52mr94902ywa.0.1698453511616; Fri, 27 Oct
+ 2023 17:38:31 -0700 (PDT)
+Date:   Fri, 27 Oct 2023 17:38:14 -0700
 In-Reply-To: <20231028003819.652322-1-surenb@google.com>
 Mime-Version: 1.0
 References: <20231028003819.652322-1-surenb@google.com>
 X-Mailer: git-send-email 2.42.0.820.g83a721a137-goog
-Message-ID: <20231028003819.652322-2-surenb@google.com>
-Subject: [PATCH v4 1/5] mm/rmap: support move to different root anon_vma in folio_move_anon_rmap()
+Message-ID: <20231028003819.652322-5-surenb@google.com>
+Subject: [PATCH v4 4/5] selftests/mm: add uffd_test_case_ops to allow test
+ case-specific operations
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     viro@zeniv.linux.org.uk, brauner@kernel.org, shuah@kernel.org,
@@ -70,85 +71,131 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Andrea Arcangeli <aarcange@redhat.com>
+Currently each test can specify unique operations using uffd_test_ops,
+however these operations are per-memory type and not per-test. Add
+uffd_test_case_ops which each test case can customize for its own needs
+regardless of the memory type being used. Post- and pre- allocation and
+release operations are added, some of which will be used in the next
+patch to implement test-specific customizations like area re-alignment,
+page size overrides and madvise after memory allocations but before
+memory is accessed.
 
-For now, folio_move_anon_rmap() was only used to move a folio to a
-different anon_vma after fork(), whereby the root anon_vma stayed
-unchanged. For that, it was sufficient to hold the folio lock when
-calling folio_move_anon_rmap().
-
-However, we want to make use of folio_move_anon_rmap() to move folios
-between VMAs that have a different root anon_vma. As folio_referenced()
-performs an RMAP walk without holding the folio lock but only holding the
-anon_vma in read mode, holding the folio lock is insufficient.
-
-When moving to an anon_vma with a different root anon_vma, we'll have to
-hold both, the folio lock and the anon_vma lock in write mode.
-Consequently, whenever we succeeded in folio_lock_anon_vma_read() to
-read-lock the anon_vma, we have to re-check if the mapping was changed
-in the meantime. If that was the case, we have to retry.
-
-Note that folio_move_anon_rmap() must only be called if the anon page is
-exclusive to a process, and must not be called on KSM folios.
-
-This is a preparation for UFFDIO_MOVE, which will hold the folio lock,
-the anon_vma lock in write mode, and the mmap_lock in read mode.
-
-Signed-off-by: Andrea Arcangeli <aarcange@redhat.com>
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 ---
- mm/rmap.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ tools/testing/selftests/mm/uffd-common.c     | 25 ++++++++++++++++++++
+ tools/testing/selftests/mm/uffd-common.h     |  9 +++++++
+ tools/testing/selftests/mm/uffd-unit-tests.c |  2 ++
+ 3 files changed, 36 insertions(+)
 
-diff --git a/mm/rmap.c b/mm/rmap.c
-index 7a27a2b41802..525c5bc0b0b3 100644
---- a/mm/rmap.c
-+++ b/mm/rmap.c
-@@ -542,6 +542,7 @@ struct anon_vma *folio_lock_anon_vma_read(struct folio *folio,
- 	struct anon_vma *root_anon_vma;
- 	unsigned long anon_mapping;
+diff --git a/tools/testing/selftests/mm/uffd-common.c b/tools/testing/selftests/mm/uffd-common.c
+index 583e5a4cc0fd..69e6653ad255 100644
+--- a/tools/testing/selftests/mm/uffd-common.c
++++ b/tools/testing/selftests/mm/uffd-common.c
+@@ -17,6 +17,7 @@ bool map_shared;
+ bool test_uffdio_wp = true;
+ unsigned long long *count_verify;
+ uffd_test_ops_t *uffd_test_ops;
++uffd_test_case_ops_t *uffd_test_case_ops;
  
-+retry:
- 	rcu_read_lock();
- 	anon_mapping = (unsigned long)READ_ONCE(folio->mapping);
- 	if ((anon_mapping & PAGE_MAPPING_FLAGS) != PAGE_MAPPING_ANON)
-@@ -552,6 +553,17 @@ struct anon_vma *folio_lock_anon_vma_read(struct folio *folio,
- 	anon_vma = (struct anon_vma *) (anon_mapping - PAGE_MAPPING_ANON);
- 	root_anon_vma = READ_ONCE(anon_vma->root);
- 	if (down_read_trylock(&root_anon_vma->rwsem)) {
-+		/*
-+		 * folio_move_anon_rmap() might have changed the anon_vma as we
-+		 * might not hold the folio lock here.
-+		 */
-+		if (unlikely((unsigned long)READ_ONCE(folio->mapping) !=
-+			     anon_mapping)) {
-+			up_read(&root_anon_vma->rwsem);
-+			rcu_read_unlock();
-+			goto retry;
-+		}
+ static int uffd_mem_fd_create(off_t mem_size, bool hugetlb)
+ {
+@@ -286,11 +287,17 @@ void uffd_test_ctx_clear(void)
+ 		uffd = -1;
+ 	}
+ 
++	if (uffd_test_case_ops && uffd_test_case_ops->pre_release)
++		uffd_test_case_ops->pre_release();
 +
- 		/*
- 		 * If the folio is still mapped, then this anon_vma is still
- 		 * its anon_vma, and holding the mutex ensures that it will
-@@ -586,6 +598,18 @@ struct anon_vma *folio_lock_anon_vma_read(struct folio *folio,
- 	rcu_read_unlock();
- 	anon_vma_lock_read(anon_vma);
+ 	munmap_area((void **)&area_src);
+ 	munmap_area((void **)&area_src_alias);
+ 	munmap_area((void **)&area_dst);
+ 	munmap_area((void **)&area_dst_alias);
+ 	munmap_area((void **)&area_remap);
++
++	if (uffd_test_case_ops && uffd_test_case_ops->post_release)
++		uffd_test_case_ops->post_release();
+ }
  
-+	/*
-+	 * folio_move_anon_rmap() might have changed the anon_vma as we might
-+	 * not hold the folio lock here.
-+	 */
-+	if (unlikely((unsigned long)READ_ONCE(folio->mapping) !=
-+		     anon_mapping)) {
-+		anon_vma_unlock_read(anon_vma);
-+		put_anon_vma(anon_vma);
-+		anon_vma = NULL;
-+		goto retry;
+ int uffd_test_ctx_init(uint64_t features, const char **errmsg)
+@@ -298,6 +305,15 @@ int uffd_test_ctx_init(uint64_t features, const char **errmsg)
+ 	unsigned long nr, cpu;
+ 	int ret;
+ 
++	if (uffd_test_case_ops && uffd_test_case_ops->pre_alloc) {
++		ret = uffd_test_case_ops->pre_alloc();
++		if (ret) {
++			if (errmsg)
++				*errmsg = "pre-allocation operation failed";
++			return ret;
++		}
 +	}
 +
- 	if (atomic_dec_and_test(&anon_vma->refcount)) {
- 		/*
- 		 * Oops, we held the last refcount, release the lock
+ 	ret = uffd_test_ops->allocate_area((void **)&area_src, true);
+ 	ret |= uffd_test_ops->allocate_area((void **)&area_dst, false);
+ 	if (ret) {
+@@ -306,6 +322,15 @@ int uffd_test_ctx_init(uint64_t features, const char **errmsg)
+ 		return ret;
+ 	}
+ 
++	if (uffd_test_case_ops && uffd_test_case_ops->post_alloc) {
++		ret = uffd_test_case_ops->post_alloc();
++		if (ret) {
++			if (errmsg)
++				*errmsg = "post-allocation operation failed";
++			return ret;
++		}
++	}
++
+ 	ret = userfaultfd_open(&features);
+ 	if (ret) {
+ 		if (errmsg)
+diff --git a/tools/testing/selftests/mm/uffd-common.h b/tools/testing/selftests/mm/uffd-common.h
+index 870776b5a323..19930fd6682b 100644
+--- a/tools/testing/selftests/mm/uffd-common.h
++++ b/tools/testing/selftests/mm/uffd-common.h
+@@ -90,6 +90,14 @@ struct uffd_test_ops {
+ };
+ typedef struct uffd_test_ops uffd_test_ops_t;
+ 
++struct uffd_test_case_ops {
++	int (*pre_alloc)(void);
++	int (*post_alloc)(void);
++	void (*pre_release)(void);
++	void (*post_release)(void);
++};
++typedef struct uffd_test_case_ops uffd_test_case_ops_t;
++
+ extern unsigned long nr_cpus, nr_pages, nr_pages_per_cpu, page_size;
+ extern char *area_src, *area_src_alias, *area_dst, *area_dst_alias, *area_remap;
+ extern int uffd, uffd_flags, finished, *pipefd, test_type;
+@@ -102,6 +110,7 @@ extern uffd_test_ops_t anon_uffd_test_ops;
+ extern uffd_test_ops_t shmem_uffd_test_ops;
+ extern uffd_test_ops_t hugetlb_uffd_test_ops;
+ extern uffd_test_ops_t *uffd_test_ops;
++extern uffd_test_case_ops_t *uffd_test_case_ops;
+ 
+ void uffd_stats_report(struct uffd_args *args, int n_cpus);
+ int uffd_test_ctx_init(uint64_t features, const char **errmsg);
+diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
+index e7d43c198041..debc423bdbf4 100644
+--- a/tools/testing/selftests/mm/uffd-unit-tests.c
++++ b/tools/testing/selftests/mm/uffd-unit-tests.c
+@@ -78,6 +78,7 @@ typedef struct {
+ 	uffd_test_fn uffd_fn;
+ 	unsigned int mem_targets;
+ 	uint64_t uffd_feature_required;
++	uffd_test_case_ops_t *test_case_ops;
+ } uffd_test_case_t;
+ 
+ static void uffd_test_report(void)
+@@ -185,6 +186,7 @@ uffd_setup_environment(uffd_test_args_t *args, uffd_test_case_t *test,
+ {
+ 	map_shared = mem_type->shared;
+ 	uffd_test_ops = mem_type->mem_ops;
++	uffd_test_case_ops = test->test_case_ops;
+ 
+ 	if (mem_type->mem_flag & (MEM_HUGETLB_PRIVATE | MEM_HUGETLB))
+ 		page_size = default_huge_page_size();
 -- 
 2.42.0.820.g83a721a137-goog
 
