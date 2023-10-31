@@ -2,95 +2,86 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 787A6C4167D
-	for <linux-kselftest@archiver.kernel.org>; Tue, 31 Oct 2023 20:37:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 45854C00142
+	for <linux-kselftest@archiver.kernel.org>; Tue, 31 Oct 2023 20:37:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233691AbjJaUhH (ORCPT
+        id S233888AbjJaUhI (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 31 Oct 2023 16:37:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33566 "EHLO
+        Tue, 31 Oct 2023 16:37:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbjJaUhG (ORCPT
+        with ESMTP id S231546AbjJaUhG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Tue, 31 Oct 2023 16:37:06 -0400
 Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CA72F5;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B5CFE;
         Tue, 31 Oct 2023 13:37:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
         s=mail; t=1698784621;
-        bh=jlAbfNYACjNJjKtpx27+AybaIT1vLObKwRQCYdPObvM=;
-        h=From:Subject:Date:To:Cc:From;
-        b=hNWbXGf5HtjYYV+0IjPNEgLqRpHSl9Dq9AJ1js9ZF8ziFGmwgYpABdF/nQTpRvKcw
-         2bLFuZQAdVJuKaATCkOskOPNK1Rs5i0Gp9Gz2/LfaZriwtmZrQHwrgr9OMLTqQsS2F
-         lFStoFFVCnTGcyjt1PZM45ZLoIuK4hi2EFLu5HyE=
+        bh=EnUH+FVtH/2LFDhbHmODszdfsWGWE/DcG346HqhXK2g=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+        b=ILFzcJGCaPzR71nWlxIIPD1cs/We2OEt3ALO3BSVTtTWr1NTNNNy+kbFajQCMI0rl
+         UF15W+0CBkN7+cnM5kKPHx5P2LpT9+waoCNmMjIiPA1ObsZCIp5EZVAISb71fAJuTp
+         xD6mT5FVK/xv+w5le+r09255Ut6k1Vq+S1WHeUhk=
 From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH 0/3] selftests/nolibc: various build improvements
-Date:   Tue, 31 Oct 2023 21:36:57 +0100
-Message-Id: <20231031-nolibc-out-of-tree-v1-0-47c92f73590a@weissschuh.net>
+Date:   Tue, 31 Oct 2023 21:36:59 +0100
+Subject: [PATCH 2/3] selftests/nolibc: anchor paths in $(srcdir) if
+ possible
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAGllQWUC/x3MQQqAIBBA0avErBvQDImuEi1qGmsgNLQiCO+et
- HyL/19IHIUT9NULkW9JEnyBriugbfIroyzF0KjGaKUV+rDLTBiuE4PDMzLjbG3XkiWn2EAJj8h
- Onn86jDl/NR3GN2QAAAA=
+Message-Id: <20231031-nolibc-out-of-tree-v1-2-47c92f73590a@weissschuh.net>
+References: <20231031-nolibc-out-of-tree-v1-0-47c92f73590a@weissschuh.net>
+In-Reply-To: <20231031-nolibc-out-of-tree-v1-0-47c92f73590a@weissschuh.net>
 To:     Willy Tarreau <w@1wt.eu>,
         =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
         Shuah Khan <shuah@kernel.org>
 Cc:     Zhangjin Wu <falcon@tinylab.org>, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
 X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1698784620; l=1914;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1698784620; l=1515;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=jlAbfNYACjNJjKtpx27+AybaIT1vLObKwRQCYdPObvM=;
- b=39z+cJviAk93z1WR2YzBPJR6rzhr9MZIud9TBlyeTMawOGUrta8txC71uaEvxzf3aXef1AnSO
- dMLBlwcnhNHBf2cdpFaKzfGfDeidtx0+sQJQqfd8mPdKGx68QMDUrFy
+ bh=EnUH+FVtH/2LFDhbHmODszdfsWGWE/DcG346HqhXK2g=;
+ b=RyW5XWFgW1+NuFvftheWO5iwivD2gAnupVLHTHp8ifnMh4hICk7oPe+PXPm7mzSOXQmGA6qel
+ RDDWr1IzXaRB4e+KhoiljXuY/mGYwi8aa8cQa/37gAFhDwayUvEqas3
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-With the out-of-tree builds it's possible do incremental tests fairly fast:
+It is easier to recognize paths from their well-known location in the
+source tree than having to resolve the relative path in ones head.
 
-time ./run-tests.sh 
-i386:          162 test(s): 162 passed,   0 skipped,   0 failed => status: success
-x86_64:        162 test(s): 162 passed,   0 skipped,   0 failed => status: success
-arm64:         162 test(s): 162 passed,   0 skipped,   0 failed => status: success
-arm:           162 test(s): 162 passed,   0 skipped,   0 failed => status: success
-mips:          162 test(s): 161 passed,   1 skipped,   0 failed => status: warning
-ppc:           162 test(s): 162 passed,   0 skipped,   0 failed => status: success
-ppc64:         162 test(s): 162 passed,   0 skipped,   0 failed => status: success
-ppc64le:       162 test(s): 162 passed,   0 skipped,   0 failed => status: success
-riscv:         162 test(s): 162 passed,   0 skipped,   0 failed => status: success
-s390:          162 test(s): 161 passed,   1 skipped,   0 failed => status: warning
-loongarch:     162 test(s): 161 passed,   1 skipped,   0 failed => status: warning
-
-real	1m56.226s
-user	2m42.457s
-sys	0m57.979s
-
-This is with an incremental kernel rebuild and testrun inside qemu.
-
+Acked-by: Willy Tarreau <w@1wt.eu>
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
-Changes in v2:
-- Drop already applied qemu-system-ppc64le patch
-- Drop config generation patch
-- Add Co-developed-by for out-of-tree patch
-- Link to v1: https://lore.kernel.org/lkml/20231010-nolibc-out-of-tree-v1-0-b6a263859596@weissschuh.net/
+ tools/testing/selftests/nolibc/Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
----
-Thomas Weißschuh (3):
-      selftests/nolibc: use EFI -bios for LoongArch qemu
-      selftests/nolibc: anchor paths in $(srcdir) if possible
-      selftests/nolibc: support out-of-tree builds
+diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+index eb258ae1d948..b1129be98376 100644
+--- a/tools/testing/selftests/nolibc/Makefile
++++ b/tools/testing/selftests/nolibc/Makefile
+@@ -174,7 +174,7 @@ sysroot: sysroot/$(ARCH)/include
+ sysroot/$(ARCH)/include:
+ 	$(Q)rm -rf sysroot/$(ARCH) sysroot/sysroot
+ 	$(QUIET_MKDIR)mkdir -p sysroot
+-	$(Q)$(MAKE) -C ../../../include/nolibc ARCH=$(ARCH) OUTPUT=$(CURDIR)/sysroot/ headers_standalone
++	$(Q)$(MAKE) -C $(srctree)/tools/include/nolibc ARCH=$(ARCH) OUTPUT=$(CURDIR)/sysroot/ headers_standalone
+ 	$(Q)mv sysroot/sysroot sysroot/$(ARCH)
+ 
+ ifneq ($(NOLIBC_SYSROOT),0)
+@@ -184,7 +184,7 @@ nolibc-test: nolibc-test.c nolibc-test-linkage.c sysroot/$(ARCH)/include
+ else
+ nolibc-test: nolibc-test.c nolibc-test-linkage.c
+ 	$(QUIET_CC)$(CC) $(CFLAGS) $(LDFLAGS) -o $@ \
+-	  -nostdlib -static -include ../../../include/nolibc/nolibc.h nolibc-test.c nolibc-test-linkage.c -lgcc
++	  -nostdlib -static -include $(srctree)/tools/include/nolibc/nolibc.h nolibc-test.c nolibc-test-linkage.c -lgcc
+ endif
+ 
+ libc-test: nolibc-test.c nolibc-test-linkage.c
 
- tools/testing/selftests/nolibc/Makefile | 31 ++++++++++++++++++++++++-------
- 1 file changed, 24 insertions(+), 7 deletions(-)
----
-base-commit: 5a6a09e97199d6600d31383055f9d43fbbcbe86f
-change-id: 20231010-nolibc-out-of-tree-b6684c6cf0e3
-
-Best regards,
 -- 
-Thomas Weißschuh <linux@weissschuh.net>
+2.42.0
 
