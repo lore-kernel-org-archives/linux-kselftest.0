@@ -2,118 +2,119 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A395EC001DD
-	for <linux-kselftest@archiver.kernel.org>; Thu,  2 Nov 2023 16:34:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5193C4332F
+	for <linux-kselftest@archiver.kernel.org>; Thu,  2 Nov 2023 17:36:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376929AbjKBQeG (ORCPT
+        id S229525AbjKBRgh (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Thu, 2 Nov 2023 12:34:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42002 "EHLO
+        Thu, 2 Nov 2023 13:36:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347656AbjKBQeE (ORCPT
+        with ESMTP id S229479AbjKBRgh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 2 Nov 2023 12:34:04 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23AC013D;
-        Thu,  2 Nov 2023 09:33:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698942839; x=1730478839;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=8b2lW3eo74qPEH0+9VzElndbmy1zGlp6Ujy7Gd2vHyU=;
-  b=AmaOE2qtMikWedmjeBqGgVzNTdBFuLxpQy3Z+vKKxz3rPsIqsd1ttYZD
-   PONBMZx6TwYQKPs5CSptGksGlzVgCMXrGu/7Dm7Zb4KsjQ0yhliHDvWsm
-   Mc0zjo/PkDyNLe1LXFy+Igetso837e6ZIWBNonnwX80fyVch16q13pWzf
-   eVur08M1fYy2OH82ZrLDeVSOAMdFHxpwsHtjYdT2IS3ZbBK68Fk5P9/L1
-   +Xs2m1aQVRt3Yr3dpaiSF5zNsE0nsADM71EcKq/bLp8tezuAlHC4UTqwe
-   T598HG2GRO6FJKidRpuXkiwmCsTvUZjG0aRsDax4YdfPPFvdGhe2yhkgH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10882"; a="388571110"
-X-IronPort-AV: E=Sophos;i="6.03,272,1694761200"; 
-   d="scan'208";a="388571110"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2023 09:33:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.03,272,1694761200"; 
-   d="scan'208";a="9448535"
-Received: from arthur-vostro-3668.sh.intel.com ([10.239.159.65])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2023 09:33:34 -0700
-From:   Zeng Guang <guang.zeng@intel.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        David Hildenbrand <david@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.linux.dev, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, Zeng Guang <guang.zeng@intel.com>
-Subject: [RFC PATCH v1 7/8] KVM: selftests: x86: Support vcpu run in user mode
-Date:   Thu,  2 Nov 2023 23:51:10 +0800
-Message-Id: <20231102155111.28821-8-guang.zeng@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20231102155111.28821-1-guang.zeng@intel.com>
-References: <20231102155111.28821-1-guang.zeng@intel.com>
+        Thu, 2 Nov 2023 13:36:37 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C8B812E;
+        Thu,  2 Nov 2023 10:36:31 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7937FC433C7;
+        Thu,  2 Nov 2023 17:36:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1698946591;
+        bh=E1TTEAOAkqbcpJE5z717MbPqX+Y4ObtvXO4GZpIrpbs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nS8RJb4GMZsLnV33wab1tAIurl5vrN/BaXAd984kYUysKdv9QSUmVI6QvhdB/Qd84
+         T/rMu9CeKSFoCZ41Yi4ed53YPC9RMOAU3wueinCnNiWh3/nLB5Egs4GTEPuLb/hP64
+         Vh10jMfNcgncDKB2M0aEneEm1eE+xBkhJngpNv2ILjvBRV7qWGpYdxHQNhgIQojn0j
+         BTlSPCB6tL5T2++8TKNUxucf8I7PIbwzWGy1L6flKxQ4O7haW1KoVOMAWJ7lYOeaW6
+         ubZaiAuvSzi4Aa4M0bgpZCMjrVSQAJinmbj6xdCSzIEwEZVXV61risvTQNWlPxVNO8
+         zsiiXOAauJMPw==
+Date:   Thu, 2 Nov 2023 17:36:25 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Aishwarya TCV <aishwarya.tcv@arm.com>,
+        =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
+        <nfraprado@collabora.com>, kernelci@lists.linux.dev,
+        kernel@collabora.com, Guenter Roeck <groeck@chromium.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH v3 3/3] kselftest: Add new test for detecting unprobed
+ Devicetree devices
+Message-ID: <e72e144a-c617-4a9e-adfb-e25ddabeb4c7@sirena.org.uk>
+References: <20230828211424.2964562-1-nfraprado@collabora.com>
+ <20230828211424.2964562-4-nfraprado@collabora.com>
+ <e90cb52f-d55b-d3ba-3933-6cc7b43fcfbc@arm.com>
+ <CA+G9fYsbq28w7m-sf6LhMscXHdPs0cGXU7kK6YzjKdUFKuQ+6A@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="PzOuAaApHfvNPDUY"
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYsbq28w7m-sf6LhMscXHdPs0cGXU7kK6YzjKdUFKuQ+6A@mail.gmail.com>
+X-Cookie: A is for Apple.
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Introduce vcpu_setup_user_mode() to support vcpu run in user mode.
 
-Signed-off-by: Zeng Guang <guang.zeng@intel.com>
----
- .../selftests/kvm/include/x86_64/processor.h  |  1 +
- .../selftests/kvm/lib/x86_64/processor.c      | 19 +++++++++++++++++++
- 2 files changed, 20 insertions(+)
+--PzOuAaApHfvNPDUY
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-index 9c8224c80664..2534bdf8aa71 100644
---- a/tools/testing/selftests/kvm/include/x86_64/processor.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-@@ -800,6 +800,7 @@ static inline void cpu_relax(void)
- struct kvm_x86_state *vcpu_save_state(struct kvm_vcpu *vcpu);
- void vcpu_load_state(struct kvm_vcpu *vcpu, struct kvm_x86_state *state);
- void kvm_x86_state_cleanup(struct kvm_x86_state *state);
-+void vcpu_setup_user_mode(struct kvm_vcpu *vcpu, void *guest_code);
- 
- const struct kvm_msr_list *kvm_get_msr_index_list(void);
- const struct kvm_msr_list *kvm_get_feature_msr_index_list(void);
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-index 7647c3755ca2..c84292b35f2d 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-@@ -1071,6 +1071,25 @@ void vcpu_load_state(struct kvm_vcpu *vcpu, struct kvm_x86_state *state)
- 		vcpu_nested_state_set(vcpu, &state->nested);
- }
- 
-+void vcpu_setup_user_mode(struct kvm_vcpu *vcpu, void *guest_code)
-+{
-+	struct kvm_sregs sregs;
-+	struct kvm_regs regs;
-+	struct kvm_vm *vm = vcpu->vm;
-+
-+	vcpu_sregs_get(vcpu, &sregs);
-+	kvm_seg_set_code_64bit(vm, USER_CODE_SELECTOR, &sregs.cs);
-+	kvm_seg_set_data_64bit(vm, USER_DATA_SELECTOR, &sregs.ds);
-+	kvm_seg_set_data_64bit(vm, USER_DATA_SELECTOR, &sregs.es);
-+	kvm_seg_set_data_64bit(vm, USER_DATA_SELECTOR, &sregs.ss);
-+	vcpu_sregs_set(vcpu, &sregs);
-+
-+	vcpu_regs_get(vcpu, &regs);
-+	regs.rsp = vcpu->stack_vaddr - (DEFAULT_STACK_PGS >> 1) * getpagesize();
-+	regs.rip = (unsigned long) guest_code;
-+	vcpu_regs_set(vcpu, &regs);
-+}
-+
- void kvm_x86_state_cleanup(struct kvm_x86_state *state)
- {
- 	free(state->xsave);
--- 
-2.21.3
+On Thu, Nov 02, 2023 at 07:15:58PM +0530, Naresh Kamboju wrote:
+> On Thu, 2 Nov 2023 at 17:41, Aishwarya TCV <aishwarya.tcv@arm.com> wrote:
 
+> > https://storage.kernelci.org/mainline/master/v6.6-9152-gdeefd5024f07/arm64/defconfig%2Bkselftest/gcc-10/logs/kselftest.log
+
+...
+
+> May be due to, A loop of symlinks that are pointing to self / same files ?
+
+Right, it does look like something bad is going on with symlinks:
+
+> > '/tmp/kci/linux/tools/testing/selftests/../../../build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/tools/testing/selftests/powerpc/vphn/vphn.c'
+
+> Please build by using tuxmake and validate builds are working.
+
+Note that tuxmake does an in tree build of kselftest:
+
+  make --silent --keep-going --jobs=8 O=/home/tuxbuild/.cache/tuxmake/builds/1/build INSTALL_PATH=/home/tuxbuild/.cache/tuxmake/builds/1/build/kselftest_install ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_COMPAT=arm-linux-gnueabihf- 'CC=sccache aarch64-linux-gnu-gcc' 'HOSTCC=sccache gcc' kselftest-install
+
+and does it's own tarball build too, whereas kernelci does an out of
+tree build and uses kselftest-gen_tar:
+
+  make KBUILD_BUILD_USER=KernelCI FORMAT=.xz ARCH=arm64 HOSTCC=gcc CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_COMPAT=arm-linux-gnueabihf- CC="ccache aarch64-linux-gnu-gcc" O=/tmp/kci/linux/build -C/tmp/kci/linux -j10 kselftest-gen_tar
+
+and that the error is in the dt-extract-compatibles program which is
+part of the kernel (well, imported into the kernel from dtc upstream):
+
+  File "/tmp/kci/linux/tools/testing/selftests/../../../scripts/dtc/dt-extract-compatibles", line 107, in <module>
+    compat_ignore_list.extend(parse_compatibles_to_ignore(f))
+
+This all suggests that something to do with how the build is set up is
+resulting in the source symlink that gets created for out of tree builds
+blowing up, I guess it's not specifically the DT stuff that's blowing it
+up but rather that it's tripping over an existing bug.  Really does look
+like a legitimate bug though, the source link is set up by the in tree
+kernel build infrastructure.
+
+I did poke a bit at reproducing outside of the KernelCI scripts but
+didn't manage to yet.
+
+--PzOuAaApHfvNPDUY
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmVD3hgACgkQJNaLcl1U
+h9CV1Af/XvDWEqs0dEvo3YSlq7hdCU87XwG4tii0WazqGAe4BTjhDtd9QMjkuiHa
+jbGSp4XI1Ip54USgUpM5MkQSXo2VAz+gAVSnK8Xv6OGHEbSS7ECve7ZUTBnyE7ld
+F6o2OIR3omBOfmdI8dXZbfemhcsBOMGzos8C1u/AmffeRtn7l75zyARxo2rsO5Dy
+2Ljz9xf1g3U2hQySTGRRYpF4ZmsQcevnh3lFoh1mwV6rr2E6+05khAIbpTvGUDhL
+o0d8MBGvot0pxqdlciZi3LX1Hd6UPe66pHnpf8HDvi1OgM6QTrngIbuCM2tdrVp5
+1QLv1gI2QfDJgR47QoV2AzS24XcHcw==
+=JKT+
+-----END PGP SIGNATURE-----
+
+--PzOuAaApHfvNPDUY--
