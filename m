@@ -2,60 +2,244 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E57FC4332F
-	for <linux-kselftest@archiver.kernel.org>; Sat,  4 Nov 2023 04:58:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51348C4167B
+	for <linux-kselftest@archiver.kernel.org>; Sun,  5 Nov 2023 09:23:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234587AbjKDE6V (ORCPT
+        id S229454AbjKEJXU (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sat, 4 Nov 2023 00:58:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60892 "EHLO
+        Sun, 5 Nov 2023 04:23:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234509AbjKDE6U (ORCPT
+        with ESMTP id S229447AbjKEJXU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 4 Nov 2023 00:58:20 -0400
-X-Greylist: delayed 4280 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 03 Nov 2023 21:58:12 PDT
-Received: from mail.profitpathwaygo.com (mail.profitpathwaygo.com [141.94.21.238])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE40BD53
-        for <linux-kselftest@vger.kernel.org>; Fri,  3 Nov 2023 21:58:12 -0700 (PDT)
-Received: by mail.profitpathwaygo.com (Postfix, from userid 1002)
-        id 1AFC454D0E; Tue, 31 Oct 2023 08:31:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=profitpathwaygo.com;
-        s=mail; t=1698741572;
-        bh=qp3Ofokho6Ql+WtI8ZPVilyHYhskXL7fod7u9CWs8W4=;
-        h=Date:From:To:Subject:From;
-        b=ovdDAClxY4rBipcJiKN7LdAStlDzFBg9iK2y9cmdxYV7PK0nt6F8A4WRTNgzF3En4
-         dBIcxDcUfKtfs7tDs5JKOfx9s+c5Rw5CbayQbqiR6IGxGSvXC5Zbot8b4iwO42uq3L
-         qfBlEWmsObaTbGiLmJtB9e/4zECLXnfqRWsQu6jl8o8/02u8CoSFXbPhsSxJb1U5iw
-         GntPINKVOkwOIOs7NKguyLFPyar8Q1SaAFqZtkZq01eD2X1oappgumeqe11E/QxJrn
-         TNcbANGky4XHpJ04IYLXp0gwvBmgRGwmnOmEIihm6V7XodaJ/Guirm4/2SzW7mFGUZ
-         UCS0+K/flYYog==
-Received: by mail.profitpathwaygo.com for <linux-kselftest@vger.kernel.org>; Tue, 31 Oct 2023 08:30:48 GMT
-Message-ID: <20231031074500-0.1.2t.15rw2.0.76ni6l7mdd@profitpathwaygo.com>
-Date:   Tue, 31 Oct 2023 08:30:48 GMT
-From:   "Adam Charachuta" <adam.charachuta@profitpathwaygo.com>
-To:     <linux-kselftest@vger.kernel.org>
-Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania_?=
-X-Mailer: mail.profitpathwaygo.com
+        Sun, 5 Nov 2023 04:23:20 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB1C4B7;
+        Sun,  5 Nov 2023 01:23:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1699176193;
+        bh=j8PcThGx3mpq5Jh2hv3IlWEW7IiGh9ygGl/ih0v4824=;
+        h=From:Date:Subject:To:Cc:From;
+        b=VJpquioRBVX+p3sb64Rx92m74toUilcWuMQJxWZ/yvRYiktC6DLsKVbbdKsryMv2X
+         kKAQJsGfzt3wTbWpn72b/oq4BaitmQiBbRYsve7OjoYOAx/Xu8ZPW4v9qPzxcr4WL8
+         Fgwz+cF3gcMerLeNgNCAl8eghBvopaObTCs7EvYs=
+From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Date:   Sun, 05 Nov 2023 10:23:05 +0100
+Subject: [PATCH] selftests/nolibc: add script to run testsuite
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20231105-nolibc-run-tests-v1-1-b59ff770a978@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIAPheR2UC/x3MwQpAQBCA4VfRnE3NjhJeRQ6swZSWdpCSd7c5f
+ of/f8Akqhg02QNRLjXdQoLLM/BLH2ZBHZOBiQvniDFsqw4e4xnwEDsMe6moJibHUkLK9iiT3v+
+ y7d73AyO1zI1iAAAA
+To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
+Cc:     Zhangjin Wu <falcon@tinylab.org>, Yuan Tan <tanyuan@tinylab.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.12.4
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1699176188; l=5534;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=j8PcThGx3mpq5Jh2hv3IlWEW7IiGh9ygGl/ih0v4824=;
+ b=3en1cXJjaeZBKtLgqlGIC9g06e5sylB+6REcTgeD9HSp6O3AyrSuAotDVAF3FxC9u6Inn5DlX
+ l2aFh5usF/xDGtw1CGXVSRxBhJ0Ql7ZFoiOq7u08KbK7cuRZI/FaCin
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Dzie=C5=84 dobry,
+The script can run the testsuite for multiple architectures and provides
+an overall test report.
 
-zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
-=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
-o dalszych rozm=C3=B3w.=20
+Furthermore it can automatically download crosstools from
+mirrors.kernel.org if requested by the user.
 
-Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
-=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
-=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
-strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
+Example execution:
 
-Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
+$ ./run-tests.sh
+i386:          162 test(s): 162 passed,   0 skipped,   0 failed => status: success
+x86_64:        162 test(s): 162 passed,   0 skipped,   0 failed => status: success
+arm64:         162 test(s): 162 passed,   0 skipped,   0 failed => status: success
+arm:           162 test(s): 162 passed,   0 skipped,   0 failed => status: success
+mips:          162 test(s): 161 passed,   1 skipped,   0 failed => status: warning
+ppc:           162 test(s): 162 passed,   0 skipped,   0 failed => status: success
+ppc64:         162 test(s): 162 passed,   0 skipped,   0 failed => status: success
+ppc64le:       162 test(s): 162 passed,   0 skipped,   0 failed => status: success
+riscv:         162 test(s): 162 passed,   0 skipped,   0 failed => status: success
+s390:          162 test(s): 161 passed,   1 skipped,   0 failed => status: warning
+loongarch:     162 test(s): 161 passed,   1 skipped,   0 failed => status: warning
 
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+ tools/testing/selftests/nolibc/run-tests.sh | 153 ++++++++++++++++++++++++++++
+ 1 file changed, 153 insertions(+)
 
-Pozdrawiam serdecznie
-Adam Charachuta
+diff --git a/tools/testing/selftests/nolibc/run-tests.sh b/tools/testing/selftests/nolibc/run-tests.sh
+new file mode 100755
+index 000000000000..1bf020d49f54
+--- /dev/null
++++ b/tools/testing/selftests/nolibc/run-tests.sh
+@@ -0,0 +1,153 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++# Test runner for nolibc tests
++
++set -e
++
++trap 'echo Aborting...' 'ERR'
++
++crosstool_version=13.2.0
++hostarch=x86_64
++nproc=$(( $(nproc) + 2))
++cache_dir="${XDG_CACHE_HOME:-"$HOME"/.cache}"
++download_location="${cache_dir}/crosstools/"
++build_location="$(realpath "${cache_dir}"/nolibc-tests/)"
++perform_download=0
++archs="i386 x86_64 arm64 arm mips ppc ppc64 ppc64le riscv s390 loongarch"
++
++TEMP=$(getopt -o 'j:d:c:b:a:ph' -n "$0" -- "$@")
++
++eval set -- "$TEMP"
++unset TEMP
++
++print_usage() {
++	cat <<EOF
++Run nolibc testsuite for multiple architectures with crosstools
++
++Usage:
++ $0 [options] <architectures>
++
++Known architectures:
++ ${archs}
++
++Options:
++ -j [N]         Allow N jobs at once (default: ${nproc})
++ -p             Allow download of toolchains
++ -d [DIR]       Download location for toolchains (default: ${download_location})
++ -c [VERSION]   Version of toolchains to use (default: ${crosstool_version})
++ -a [ARCH]      Host architecture of toolchains to use (default: ${hostarch})
++ -b [DIR]       Build location (default: ${build_location})
++EOF
++}
++
++while true; do
++	case "$1" in
++		'-j')
++			nproc="$2"
++			shift 2; continue ;;
++		'-p')
++			perform_download=1
++			shift; continue ;;
++		'-d')
++			download_location="$2"
++			shift 2; continue ;;
++		'-c')
++			crosstool_version="$2"
++			shift 2; continue ;;
++		'-a')
++			hostarch="$2"
++			shift 2; continue ;;
++		'-b')
++			build_location="$(realpath "$2")"
++			shift 2; continue ;;
++		'-h')
++			print_usage
++			exit 0
++			;;
++		'--')
++			shift; break ;;
++		*)
++			echo 'Internal error!' >&2; exit 1 ;;
++	esac
++done
++
++if [[ -n "$*" ]]; then
++	archs="$*"
++fi
++
++crosstool_arch() {
++	case "$1" in
++	arm64) echo aarch64;;
++	ppc) echo powerpc;;
++	ppc64) echo powerpc64;;
++	ppc64le) echo powerpc64;;
++	riscv) echo riscv64;;
++	loongarch) echo loongarch64;;
++	mips*) echo mips;;
++	*) echo "$1";;
++	esac
++}
++
++crosstool_abi() {
++	case "$1" in
++	arm) echo linux-gnueabi;;
++	*) echo linux;;
++	esac
++}
++
++download_crosstool() {
++	arch="$(crosstool_arch "$1")"
++	abi="$(crosstool_abi "$1")"
++
++	archive_name="${hostarch}-gcc-${crosstool_version}-nolibc-${arch}-${abi}.tar.gz"
++	url="https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/${hostarch}/${crosstool_version}/${archive_name}"
++	archive="${download_location}${archive_name}"
++	stamp="${archive}.stamp"
++
++	[ -f "${stamp}" ] && return
++
++	echo "Downloading crosstools ${arch} ${crosstool_version}"
++	mkdir -p "${download_location}"
++	curl -o "${archive}" --fail --continue-at - "${url}"
++	tar -C "${download_location}" -xf "${archive}"
++	touch "${stamp}"
++}
++
++# capture command output, print it on failure
++# mimics chronic(1) from moreutils
++function swallow_output() {
++	if ! OUTPUT="$("$@" 2>&1)"; then
++		echo "$OUTPUT"
++		return 1
++	fi
++	return 0
++}
++
++test_arch() {
++	arch=$1
++	ct_arch=$(crosstool_arch "$arch")
++	ct_abi=$(crosstool_abi "$1")
++	cross_compile=$(realpath "${download_location}gcc-${crosstool_version}-nolibc/${ct_arch}-${ct_abi}/bin/${ct_arch}-${ct_abi}-")
++	build_dir="${build_location}/${arch}"
++	MAKE=(make -j"${nproc}" XARCH="${arch}" CROSS_COMPILE="${cross_compile}" O="${build_dir}")
++
++	mkdir -p "$build_dir"
++	if [ ! -f "${build_dir}/.config" ]; then
++		swallow_output "${MAKE[@]}" defconfig
++	fi
++	printf '%-15s' "$arch:"
++	swallow_output "${MAKE[@]}" run V=1
++	cp run.out run.out."${arch}"
++	"${MAKE[@]}" report | grep passed
++}
++
++if [ "$perform_download" -ne 0 ]; then
++	for arch in $archs; do
++		download_crosstool "$arch"
++	done
++fi
++
++for arch in $archs; do
++	test_arch "$arch"
++done
+
+---
+base-commit: 35b6a3c818f4b899164ceeef58dfddb6122d32ea
+change-id: 20231102-nolibc-run-tests-ae80902012e6
+
+Best regards,
+-- 
+Thomas Weißschuh <linux@weissschuh.net>
+
