@@ -2,34 +2,35 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D44EC4167D
-	for <linux-kselftest@archiver.kernel.org>; Sun,  5 Nov 2023 11:35:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16FD5C4167B
+	for <linux-kselftest@archiver.kernel.org>; Sun,  5 Nov 2023 11:35:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230221AbjKELfK (ORCPT
+        id S230251AbjKELfL (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 5 Nov 2023 06:35:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58182 "EHLO
+        Sun, 5 Nov 2023 06:35:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjKELfJ (ORCPT
+        with ESMTP id S229638AbjKELfJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Sun, 5 Nov 2023 06:35:09 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BEC2F2;
-        Sun,  5 Nov 2023 03:35:05 -0800 (PST)
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC6DFA;
+        Sun,  5 Nov 2023 03:35:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1699184103;
-        bh=nyrjPvpNj7WNK2ijhv221XrS7R5GMOB+fysjKb+NE6o=;
+        s=mail; t=1699184102;
+        bh=a+9ND8eF9nLxQ/1grgp4DdoijTDtNpAFxfKUQan+h7M=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=msFqDpcXSSjuZeof1fOOu4F3KvdFjPlRQWnmsbkx5IncwISbVjpvwj1+4HSuM14NX
-         mpPaEfVWolk/aS1Vg1HWeHSomdt/kCxJL9Oe/EC8g0GVQ+cSdnRImwt7jO4a+NJHT0
-         QsaOO4ZajOXcaaF3oKamxoRIjWA3iE2L8ukPUUPk=
+        b=Ve2zD0Vq063PtHS4Lxh8WD9DDxhauFe4gHtNgrPbeBRPljXDqfv9QoEwCmNhDHS5G
+         lK+C2gEE8yzKYMICNcftDE47lMiW6NgIo7LWWV3anX8+XsFPaz8Sp1XhSo9XZsdW1H
+         ii5nZg6Avq/KlnIbXcQNrDtFPCCNW2vdI4iLK6GI=
 From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date:   Sun, 05 Nov 2023 12:35:02 +0100
-Subject: [PATCH v2 5/6] selftests/nolibc: extraconfig support
+Date:   Sun, 05 Nov 2023 12:34:59 +0100
+Subject: [PATCH v2 2/6] tools/nolibc: move MIPS ABI validation into
+ arch-mips.h
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20231105-nolibc-mips-be-v2-5-4ec993cb5407@weissschuh.net>
+Message-Id: <20231105-nolibc-mips-be-v2-2-4ec993cb5407@weissschuh.net>
 References: <20231105-nolibc-mips-be-v2-0-4ec993cb5407@weissschuh.net>
 In-Reply-To: <20231105-nolibc-mips-be-v2-0-4ec993cb5407@weissschuh.net>
 To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
@@ -37,50 +38,58 @@ Cc:     Zhangjin Wu <falcon@tinylab.org>, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
         =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1699184102; l=1285;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1699184102; l=1437;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=nyrjPvpNj7WNK2ijhv221XrS7R5GMOB+fysjKb+NE6o=;
- b=pMFDcAOHYf4oHIZkEkSHQT55uQDBq91NgSrk1f7kzN2JjkQ9CLhIP4kxLS0KgKkI32bVdqLIH
- 2KcXs4Yuyf3DEiRrfyVY62+QU7RUH9pQxmmtF8Ce1pAS4EZ0OTMGa1l
+ bh=a+9ND8eF9nLxQ/1grgp4DdoijTDtNpAFxfKUQan+h7M=;
+ b=eJbW210gN9ZiHm9562zmKqj43K5z7WF41/80UWLA634WixdMeLP8a2IsPlrCKGle0tYPZ1JqO
+ GdIZVn6/JIlCIdaJL0d032Me/fqn7ESrBaPMTAywCsnqJU/ue/4XLzz
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Allow some postprocessing of defconfig files.
+When installing nolibc to a sysroot arch.h is not used so its ABI check
+is bypassed. This makes is possible to compile nolibc with a non O32 ABI
+which may build but can not run.
 
-Suggested-by: Zhangjin Wu <falcon@tinylab.org>
+Move the check into arch-mips.h so it will always be evaluated.
+
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 Acked-by: Willy Tarreau <w@1wt.eu>
 ---
- tools/testing/selftests/nolibc/Makefile | 6 ++++++
- 1 file changed, 6 insertions(+)
+ tools/include/nolibc/arch-mips.h | 4 ++++
+ tools/include/nolibc/arch.h      | 2 +-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index 6a5e67f65daa..6a1f7f9edf91 100644
---- a/tools/testing/selftests/nolibc/Makefile
-+++ b/tools/testing/selftests/nolibc/Makefile
-@@ -81,6 +81,8 @@ DEFCONFIG_s390       = defconfig
- DEFCONFIG_loongarch  = defconfig
- DEFCONFIG            = $(DEFCONFIG_$(XARCH))
+diff --git a/tools/include/nolibc/arch-mips.h b/tools/include/nolibc/arch-mips.h
+index 4ab6fa54beee..3a2c76716b83 100644
+--- a/tools/include/nolibc/arch-mips.h
++++ b/tools/include/nolibc/arch-mips.h
+@@ -10,6 +10,10 @@
+ #include "compiler.h"
+ #include "crt.h"
  
-+EXTRACONFIG           = $(EXTRACONFIG_$(XARCH))
++#if !defined(_ABIO32)
++#error Unsupported MIPS ABI
++#endif
 +
- # optional tests to run (default = all)
- TEST =
- 
-@@ -227,6 +229,10 @@ initramfs: nolibc-test
- 
- defconfig:
- 	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper $(DEFCONFIG) prepare
-+	$(Q)if [ -n "$(EXTRACONFIG)" ]; then \
-+		$(srctree)/scripts/config --file $(objtree)/.config $(EXTRACONFIG); \
-+		$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) olddefconfig < /dev/null; \
-+	fi
- 
- kernel:
- 	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(IMAGE_NAME)
+ /* Syscalls for MIPS ABI O32 :
+  *   - WARNING! there's always a delayed slot!
+  *   - WARNING again, the syntax is different, registers take a '$' and numbers
+diff --git a/tools/include/nolibc/arch.h b/tools/include/nolibc/arch.h
+index 2f72ccac0378..c8f4e5d3add9 100644
+--- a/tools/include/nolibc/arch.h
++++ b/tools/include/nolibc/arch.h
+@@ -23,7 +23,7 @@
+ #include "arch-arm.h"
+ #elif defined(__aarch64__)
+ #include "arch-aarch64.h"
+-#elif defined(__mips__) && defined(_ABIO32)
++#elif defined(__mips__)
+ #include "arch-mips.h"
+ #elif defined(__powerpc__)
+ #include "arch-powerpc.h"
 
 -- 
 2.42.1
