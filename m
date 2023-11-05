@@ -2,81 +2,135 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 723D1C001B0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E452AC001B5
 	for <linux-kselftest@archiver.kernel.org>; Sun,  5 Nov 2023 11:35:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230301AbjKELfM (ORCPT
+        id S230305AbjKELfN (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 5 Nov 2023 06:35:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58214 "EHLO
+        Sun, 5 Nov 2023 06:35:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbjKELfK (ORCPT
+        with ESMTP id S230259AbjKELfL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 5 Nov 2023 06:35:10 -0500
+        Sun, 5 Nov 2023 06:35:11 -0500
 Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37889DE;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 396FEF2;
         Sun,  5 Nov 2023 03:35:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1699184102;
-        bh=jcKz2xJldgOTTRJTHuTkErsvQSzYveVATjaMNJ7HX1A=;
-        h=From:Subject:Date:To:Cc:From;
-        b=su4JMjZSrOZgsDbU3nFqPzOVx2CvABxdIiPHpz2I1HGgAro3OU2+FI0n2C5AaOKvJ
-         HbJJXSquHXUsA901Eo/dfIKz+zwR6RfYshO3coHZF4avHqjnSvFAcFWU6XXdxBvmmj
-         No3Ekl1ZH9H87B0QWVIU/mUd5pzzd9M5fQImrnlQ=
+        s=mail; t=1699184103;
+        bh=JMznj9mOW7CN1oWuJEQJDJv9JNNBt8ZPWdQQ6heUErg=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+        b=TQXfTOvi4UfwXiDRBcFkg5309vTVzgWrz0rUXBX6i4cPRvLckKZI0XB9eTr2f9D2l
+         nXAPe+yHJCpCsuYsAgCMZtZ1+8SgfcSTX/nPhpGc3FotkMcPBEKYHq7EWBcNHV/6Z7
+         6/YmhWRrRVI+P39tlbTrthzvB5rt8REXNh6uxyl8=
 From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH v2 0/6] tools/nolibc: MIPS bugfixes and refactoring
-Date:   Sun, 05 Nov 2023 12:34:57 +0100
-Message-Id: <20231105-nolibc-mips-be-v2-0-4ec993cb5407@weissschuh.net>
+Date:   Sun, 05 Nov 2023 12:35:03 +0100
+Subject: [PATCH v2 6/6] selftests/nolibc: add configuration for mipso32be
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAOF9R2UC/3XMQQ6CMBCF4auQWTumLUHRlfcwLEo72Em0kA6ih
- vTuVvYu/5e8bwWhxCRwrlZItLDwGEuYXQUu2HgjZF8ajDK11qrBON65d/jgSbAnbE/m2Dbe12Q
- tlNOUaOD3Bl670oFlHtNn8xf9W/9Si0aFB2dswRpl9XB5EYuIC8+wjzRDl3P+Ao2qqBKxAAAA
+Message-Id: <20231105-nolibc-mips-be-v2-6-4ec993cb5407@weissschuh.net>
+References: <20231105-nolibc-mips-be-v2-0-4ec993cb5407@weissschuh.net>
+In-Reply-To: <20231105-nolibc-mips-be-v2-0-4ec993cb5407@weissschuh.net>
 To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
 Cc:     Zhangjin Wu <falcon@tinylab.org>, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
         =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1699184102; l=1143;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1699184102; l=3924;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=jcKz2xJldgOTTRJTHuTkErsvQSzYveVATjaMNJ7HX1A=;
- b=hi6TSgBwHVxzSgfjxt6Wao2Ky1gerofKBtjzPC+2RMfyeREKTAqYaO2DHZtsIWLtReb4tqe62
- 3WVFFlan7TaBCnexFL4lpAKAPFkhY+1WTuaNaCKzEqiNoRJaYmVbNYI
+ bh=JMznj9mOW7CN1oWuJEQJDJv9JNNBt8ZPWdQQ6heUErg=;
+ b=e2lPYtGp8wPa8drS+Pws16dnNRxF+v35zT7XNC20bGKTaCuDR3t3uX4E6S541i328LKhkkazb
+ FogZug63MYaB4tBz+mNy4sxa0BcZ7K1qiuLPXDEMkaHDFwZKjzbhqqh
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Two bugfixes and some minor refactorings of the MIPS support.
+Allow testing MIPS O32 big endian.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+Acked-by: Willy Tarreau <w@1wt.eu>
 ---
-Changes in v2:
-- Use olddefconfig instead of oldconfig
-- mipso32{le,be} -> mips32{le,be}
-- Link to v1: https://lore.kernel.org/r/20231105-nolibc-mips-be-v1-0-6c2ad3e50a1f@weissschuh.net
+ tools/testing/selftests/nolibc/Makefile     | 7 +++++++
+ tools/testing/selftests/nolibc/run-tests.sh | 2 +-
+ 2 files changed, 8 insertions(+), 1 deletion(-)
 
----
-Thomas Weißschuh (6):
-      tools/nolibc: error out on unsupported architecture
-      tools/nolibc: move MIPS ABI validation into arch-mips.h
-      selftests/nolibc: use XARCH for MIPS
-      selftests/nolibc: explicitly specify ABI for MIPS
-      selftests/nolibc: extraconfig support
-      selftests/nolibc: add configuration for mipso32be
+diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+index 6a1f7f9edf91..508435b8ac2a 100644
+--- a/tools/testing/selftests/nolibc/Makefile
++++ b/tools/testing/selftests/nolibc/Makefile
+@@ -48,6 +48,7 @@ ARCH_ppc         = powerpc
+ ARCH_ppc64       = powerpc
+ ARCH_ppc64le     = powerpc
+ ARCH_mips32le    = mips
++ARCH_mips32be    = mips
+ ARCH            := $(or $(ARCH_$(XARCH)),$(XARCH))
+ 
+ # kernel image names by architecture
+@@ -57,6 +58,7 @@ IMAGE_x86        = arch/x86/boot/bzImage
+ IMAGE_arm64      = arch/arm64/boot/Image
+ IMAGE_arm        = arch/arm/boot/zImage
+ IMAGE_mips32le   = vmlinuz
++IMAGE_mips32be   = vmlinuz
+ IMAGE_ppc        = vmlinux
+ IMAGE_ppc64      = vmlinux
+ IMAGE_ppc64le    = arch/powerpc/boot/zImage
+@@ -73,6 +75,7 @@ DEFCONFIG_x86        = defconfig
+ DEFCONFIG_arm64      = defconfig
+ DEFCONFIG_arm        = multi_v7_defconfig
+ DEFCONFIG_mips32le   = malta_defconfig
++DEFCONFIG_mips32be   = malta_defconfig
+ DEFCONFIG_ppc        = pmac32_defconfig
+ DEFCONFIG_ppc64      = powernv_be_defconfig
+ DEFCONFIG_ppc64le    = powernv_defconfig
+@@ -81,6 +84,7 @@ DEFCONFIG_s390       = defconfig
+ DEFCONFIG_loongarch  = defconfig
+ DEFCONFIG            = $(DEFCONFIG_$(XARCH))
+ 
++EXTRACONFIG_mips32be = -d CONFIG_CPU_LITTLE_ENDIAN -e CONFIG_CPU_BIG_ENDIAN
+ EXTRACONFIG           = $(EXTRACONFIG_$(XARCH))
+ 
+ # optional tests to run (default = all)
+@@ -93,6 +97,7 @@ QEMU_ARCH_x86        = x86_64
+ QEMU_ARCH_arm64      = aarch64
+ QEMU_ARCH_arm        = arm
+ QEMU_ARCH_mips32le   = mipsel  # works with malta_defconfig
++QEMU_ARCH_mips32be  = mips
+ QEMU_ARCH_ppc        = ppc
+ QEMU_ARCH_ppc64      = ppc64
+ QEMU_ARCH_ppc64le    = ppc64
+@@ -115,6 +120,7 @@ QEMU_ARGS_x86        = -M pc -append "console=ttyS0,9600 i8042.noaux panic=-1 $(
+ QEMU_ARGS_arm64      = -M virt -cpu cortex-a53 -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+ QEMU_ARGS_arm        = -M virt -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+ QEMU_ARGS_mips32le   = -M malta -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
++QEMU_ARGS_mips32be   = -M malta -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+ QEMU_ARGS_ppc        = -M g3beige -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+ QEMU_ARGS_ppc64      = -M powernv -append "console=hvc0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+ QEMU_ARGS_ppc64le    = -M powernv -append "console=hvc0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+@@ -139,6 +145,7 @@ CFLAGS_ppc64 = -m64 -mbig-endian -mno-vsx $(call cc-option,-mmultiple)
+ CFLAGS_ppc64le = -m64 -mlittle-endian -mno-vsx $(call cc-option,-mabi=elfv2)
+ CFLAGS_s390 = -m64
+ CFLAGS_mips32le = -EL -mabi=32
++CFLAGS_mips32be = -EB -mabi=32
+ CFLAGS_STACKPROTECTOR ?= $(call cc-option,-mstack-protector-guard=global $(call cc-option,-fstack-protector-all))
+ CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 -W -Wall -Wextra \
+ 		$(call cc-option,-fno-stack-protector) \
+diff --git a/tools/testing/selftests/nolibc/run-tests.sh b/tools/testing/selftests/nolibc/run-tests.sh
+index 8f2c3bc572cb..3a1eaccfbd8d 100755
+--- a/tools/testing/selftests/nolibc/run-tests.sh
++++ b/tools/testing/selftests/nolibc/run-tests.sh
+@@ -14,7 +14,7 @@ cache_dir="${XDG_CACHE_HOME:-"$HOME"/.cache}"
+ download_location="${cache_dir}/crosstools/"
+ build_location="$(realpath "${cache_dir}"/nolibc-tests/)"
+ perform_download=0
+-archs="i386 x86_64 arm64 arm mips32le ppc ppc64 ppc64le riscv s390 loongarch"
++archs="i386 x86_64 arm64 arm mips32le mips32be ppc ppc64 ppc64le riscv s390 loongarch"
+ 
+ TEMP=$(getopt -o 'j:d:c:b:a:ph' -n "$0" -- "$@")
+ 
 
- tools/include/nolibc/arch-mips.h            |  4 ++++
- tools/include/nolibc/arch.h                 |  4 +++-
- tools/testing/selftests/nolibc/Makefile     | 25 ++++++++++++++++++++-----
- tools/testing/selftests/nolibc/run-tests.sh |  2 +-
- 4 files changed, 28 insertions(+), 7 deletions(-)
----
-base-commit: 6de6466e41182875252fe09658f9b7d74c4fa43c
-change-id: 20231105-nolibc-mips-be-892785dd3eaa
-
-Best regards,
 -- 
-Thomas Weißschuh <linux@weissschuh.net>
+2.42.1
 
