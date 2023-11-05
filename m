@@ -2,81 +2,74 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 341D1C4332F
-	for <linux-kselftest@archiver.kernel.org>; Sun,  5 Nov 2023 10:49:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78A74C4332F
+	for <linux-kselftest@archiver.kernel.org>; Sun,  5 Nov 2023 11:35:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbjKEKtO (ORCPT
+        id S230212AbjKELfK (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Sun, 5 Nov 2023 05:49:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47368 "EHLO
+        Sun, 5 Nov 2023 06:35:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjKEKtN (ORCPT
+        with ESMTP id S229527AbjKELfJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 5 Nov 2023 05:49:13 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45A24C6;
-        Sun,  5 Nov 2023 02:49:11 -0800 (PST)
+        Sun, 5 Nov 2023 06:35:09 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0785DE;
+        Sun,  5 Nov 2023 03:35:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1699181349;
-        bh=5SKORb9FIzkRjaKU7RPndo/ilKQp7h3h2ADgE+ZVSeI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FFulsfCCdxJnz5d+BqwKvkSeDq7f77UROakZPMGfOCF0JeKfnw6kjJ/JqkpBRuU/n
-         hfkJ9TYMSb+XWHvx+zOFOiCq1nP7m7MURc/I/nA1gkKaO0Wywtowt5JDQP6fyYJ6Ka
-         BzAuC0SkaV75A4DdbUw+K42qeaCOay0W+a9cqopQ=
-Date:   Sun, 5 Nov 2023 11:49:08 +0100
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Shuah Khan <shuah@kernel.org>, Zhangjin Wu <falcon@tinylab.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 3/6] selftests/nolibc: use XARCH for MIPS
-Message-ID: <5f35c048-c0bc-4b16-a655-cea54c9f8cf9@t-8ch.de>
-References: <20231105-nolibc-mips-be-v1-0-6c2ad3e50a1f@weissschuh.net>
- <20231105-nolibc-mips-be-v1-3-6c2ad3e50a1f@weissschuh.net>
- <ZUdvO9moDc7X5E54@1wt.eu>
+        s=mail; t=1699184102;
+        bh=1Fz6cfHmleRuZplVAtovhMSjgDBjjcDGQMidibUEkzU=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+        b=TIQDSiJsOnarAiJSnsHU0m5JNYUon3j+xe55ZpI3ASxwzTIdF0eaB5HwHvoxtZN5z
+         NrciJwTZ9Q4iy5MsV+N0PWd4NOO5SytwWLUlsu2fM4LMiVbxXNSc0bi3EmcUNRLWAb
+         ZHZcN8LXskLLUAAOy2ch6nDl7bdehQAz3gVQ45DU=
+From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Date:   Sun, 05 Nov 2023 12:35:01 +0100
+Subject: [PATCH v2 4/6] selftests/nolibc: explicitly specify ABI for MIPS
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZUdvO9moDc7X5E54@1wt.eu>
+Message-Id: <20231105-nolibc-mips-be-v2-4-4ec993cb5407@weissschuh.net>
+References: <20231105-nolibc-mips-be-v2-0-4ec993cb5407@weissschuh.net>
+In-Reply-To: <20231105-nolibc-mips-be-v2-0-4ec993cb5407@weissschuh.net>
+To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
+Cc:     Zhangjin Wu <falcon@tinylab.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.12.4
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1699184102; l=1085;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=1Fz6cfHmleRuZplVAtovhMSjgDBjjcDGQMidibUEkzU=;
+ b=Hk54/oIuM0hpLZtNUSMLxOrddWKinH9QQOjKhEmDZbcOfHO90O9MYdjAXrwxRX2SJmnhU9pZB
+ 9pyHB9q9OlEBM1MUDRc/Ty5Su5pt844ry1CojReLjuUXqfGxyMr6vK3
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2023-11-05 11:32:27+0100, Willy Tarreau wrote:
-> On Sun, Nov 05, 2023 at 11:09:57AM +0100, Thomas Weißschuh wrote:
-> > MIPS has many different configurations prepare the support of additional
-> > ones by moving the build of MIPS to the generic XARCH infrastructure.
-> > 
-> > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> > ---
-> >  tools/testing/selftests/nolibc/Makefile     | 12 +++++++-----
-> >  tools/testing/selftests/nolibc/run-tests.sh |  2 +-
-> >  2 files changed, 8 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-> > index c5df1617cbc3..15c12f3c27ba 100644
-> > --- a/tools/testing/selftests/nolibc/Makefile
-> > +++ b/tools/testing/selftests/nolibc/Makefile
-> > @@ -40,12 +40,14 @@ objtree ?= $(srctree)
-> >  
-> >  # configure default variants for target kernel supported architectures
-> >  XARCH_powerpc    = ppc
-> > +XARCH_mips       = mipso32le
-> >  XARCH            = $(or $(XARCH_$(ARCH)),$(ARCH))
-> >  
-> >  # map from user input variants to their kernel supported architectures
-> >  ARCH_ppc         = powerpc
-> >  ARCH_ppc64       = powerpc
-> >  ARCH_ppc64le     = powerpc
-> > +ARCH_mipso32le   = mips
-> 
-> I *think* that what you called "mipso32le" above corresponds exactly to
-> what is commonly called "mips32le" in toolchains or distros, because,
-> unless I'm mistaken, "mips32" currently uses the O32 ABI. So that would
-> sound more intuitive and natural I think.
+More ABIs exist, for better clarity specify it explicitly everywhere.
 
-Ack.
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+Acked-by: Willy Tarreau <w@1wt.eu>
+---
+ tools/testing/selftests/nolibc/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I did the same for mipso32be -> mips32be.
+diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+index 71fa5fdd10b6..6a5e67f65daa 100644
+--- a/tools/testing/selftests/nolibc/Makefile
++++ b/tools/testing/selftests/nolibc/Makefile
+@@ -136,7 +136,7 @@ CFLAGS_ppc = -m32 -mbig-endian -mno-vsx $(call cc-option,-mmultiple)
+ CFLAGS_ppc64 = -m64 -mbig-endian -mno-vsx $(call cc-option,-mmultiple)
+ CFLAGS_ppc64le = -m64 -mlittle-endian -mno-vsx $(call cc-option,-mabi=elfv2)
+ CFLAGS_s390 = -m64
+-CFLAGS_mips32le = -EL
++CFLAGS_mips32le = -EL -mabi=32
+ CFLAGS_STACKPROTECTOR ?= $(call cc-option,-mstack-protector-guard=global $(call cc-option,-fstack-protector-all))
+ CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 -W -Wall -Wextra \
+ 		$(call cc-option,-fno-stack-protector) \
 
-Thomas
+-- 
+2.42.1
+
