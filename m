@@ -2,49 +2,49 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26A4AC001B5
-	for <linux-kselftest@archiver.kernel.org>; Mon,  6 Nov 2023 23:16:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97EA0C4167D
+	for <linux-kselftest@archiver.kernel.org>; Mon,  6 Nov 2023 23:17:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233693AbjKFXQW (ORCPT
+        id S233755AbjKFXR6 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Mon, 6 Nov 2023 18:16:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34846 "EHLO
+        Mon, 6 Nov 2023 18:17:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233487AbjKFXQC (ORCPT
+        with ESMTP id S233143AbjKFXRj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 Nov 2023 18:16:02 -0500
+        Mon, 6 Nov 2023 18:17:39 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 085C11FE1;
-        Mon,  6 Nov 2023 15:15:22 -0800 (PST)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C53EC433C7;
-        Mon,  6 Nov 2023 23:15:21 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B98626BF;
+        Mon,  6 Nov 2023 15:16:02 -0800 (PST)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE9AFC433D9;
+        Mon,  6 Nov 2023 23:16:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1699312522;
+        s=k20201202; t=1699312561;
         bh=O7HSFgEhnx5j7BpbVRWe3VcvdK1akaOH6gwOipqU6eE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=k4APzwSX/XKR3Idt0k6fGcHiA5YIQPF9oReikaW4F8o3/xF3DyGSwUD2R19tPH4eV
-         ++9LICmX9znHtNG+3ROGYiQAmThdMERRWP9z4zM8wwmSg7V2rEtPaV+3E97uxOXIkd
-         TwlEav2A24lenIbpPeSFvdl+8TLhf6Uz/p7jmdKsOpTdq4lb7t8HjGU7vhjUDiHqK8
-         E1MQlPkSkJHoxevH6ccB3zNIww7Qc8EZRuALqUqozivDFol6bM8waISs2jm6NOlv8A
-         2B6QDBLa6j19N+lfkDRguBjGC0yG1/BapxkkQ3uwpBx9S6MtjGd93KEdk2yykFf11b
-         sbwCAvpW5Fi5w==
+        b=I4lM8voy8CHQBSzCWEvm9EpHbNXiIq3vKXjUDl6jXeH/KXTbG6Kl3Q9ZapzoqP5HT
+         m458aPShdOLW3fC6PLU/PJVgT+dPclAG3NuT1o48WlL82b6WgTE5uIdaKsY7fKGPZ/
+         rNIzOnuJwxSsv1ulbjbZT5MVm2pRVtdilgMgBK2Of9EnIvcSnWavWjgFDPBHZ9ZNLN
+         bdGARym8i9UnhDpy/BMlLawHlPPchWFUKB+1yM9D/ub7HsMQiRxNZOjfzVjm07zPoq
+         BR8fQPhPxYlBxrfKbR+4Ga9aFUvm7svpifIr6+Mpz3LHH16W0+CkJg6R/b/Hhz+V8P
+         VRIphjj/rZ/PA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     =?UTF-8?q?Ricardo=20Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>,
         Kees Cook <keescook@chromium.org>,
         Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.5 04/13] selftests/lkdtm: Disable CONFIG_UBSAN_TRAP in test config
-Date:   Mon,  6 Nov 2023 18:14:57 -0500
-Message-ID: <20231106231514.3735077-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 04/11] selftests/lkdtm: Disable CONFIG_UBSAN_TRAP in test config
+Date:   Mon,  6 Nov 2023 18:15:38 -0500
+Message-ID: <20231106231553.3735366-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231106231514.3735077-1-sashal@kernel.org>
-References: <20231106231514.3735077-1-sashal@kernel.org>
+In-Reply-To: <20231106231553.3735366-1-sashal@kernel.org>
+References: <20231106231553.3735366-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.5.10
+X-stable-base: Linux 6.1.61
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
