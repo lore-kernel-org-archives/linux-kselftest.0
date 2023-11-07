@@ -2,48 +2,48 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FC22C4167D
-	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Nov 2023 12:47:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F37C0C4167B
+	for <linux-kselftest@archiver.kernel.org>; Tue,  7 Nov 2023 12:50:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235417AbjKGMrY (ORCPT
+        id S233854AbjKGMuE (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Tue, 7 Nov 2023 07:47:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54982 "EHLO
+        Tue, 7 Nov 2023 07:50:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235354AbjKGMrB (ORCPT
+        with ESMTP id S235249AbjKGMif (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Nov 2023 07:47:01 -0500
+        Tue, 7 Nov 2023 07:38:35 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F8CAC95D;
-        Tue,  7 Nov 2023 04:33:09 -0800 (PST)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26390C433CC;
-        Tue,  7 Nov 2023 12:33:08 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E8C2699;
+        Tue,  7 Nov 2023 04:27:03 -0800 (PST)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72104C433C9;
+        Tue,  7 Nov 2023 12:27:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1699360388;
+        s=k20201202; t=1699360023;
         bh=IaD5LuAKOSRiEqSUbXrGBACv2jpcb8C7CQaFLspeXIg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R52i5plICzcXNAQx4OvNfu6UCj81TZF0cr6Z8QpR1bBU+YjeMlqpFR9E1I+PnD8nv
-         clq2m7ir5oIZPjQ79WR4mlNi+VGeydCpR+FIm0yZLCR7LzJNtArp4R0u9DX8pi7KWv
-         nj+UUGCYqNBTsRDWK2/H9e61T5HKEI/gfJDeQNMnZ3XdN2HIJGyvcczjIjSS47fdMr
-         JVb1n+V/Xn8S0fObSlwRLSmTrs2fL+2tfOvGRCxh6i9ewnBJ/WdKXxpTFHC8kU34uc
-         C/Y0nlXzljWTuChK7w0dLybw4yI6KeEB33BBhg9zxT1ZAgtPllNS+RA2VIr4Vq/Aip
-         eMsUtsHYP2Sjg==
+        b=N3k3/a+zzr/2TDx/YxRHq0lg37gqPt8LX27+o5r2Wu5zKKzYirv0bGQg/4/JHWEnJ
+         Xc6rIdmmLRABf1JbPl9VMskh4nXPxPoun8YjbMgv/y4FNg0FrM2qGfzMPV+1TZkBCv
+         cN1p+Le4f++nB0rrUehyuWRT87E9H0EoVtUB2g6mUg2D6tSAYkGH7PSXCtmc8B2wB/
+         ZuZiR7ovEBqSfjsjeBgm5olIUioVzaSEGQc1FpPA77jC395Bdg/LtoQQazyxbX63I5
+         jBmlcCcQemczmWqkqZJ4nGh928IeCMY4WV3V84MGI2mYBoJtglIaD5nN4W+i8PH3Zn
+         omg4MUq1qLCrQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     zhujun2 <zhujun2@cmss.chinamobile.com>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 4/4] selftests/efivarfs: create-read: fix a resource leak
-Date:   Tue,  7 Nov 2023 07:32:41 -0500
-Message-ID: <20231107123256.3763357-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.5 37/37] selftests/efivarfs: create-read: fix a resource leak
+Date:   Tue,  7 Nov 2023 07:21:48 -0500
+Message-ID: <20231107122407.3760584-37-sashal@kernel.org>
 X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231107123256.3763357-1-sashal@kernel.org>
-References: <20231107123256.3763357-1-sashal@kernel.org>
+In-Reply-To: <20231107122407.3760584-1-sashal@kernel.org>
+References: <20231107122407.3760584-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 4.14.328
+X-stable-base: Linux 6.5.10
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
