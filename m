@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1294C4167D
-	for <linux-kselftest@archiver.kernel.org>; Wed,  8 Nov 2023 19:00:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BF0EBC04E88
+	for <linux-kselftest@archiver.kernel.org>; Wed,  8 Nov 2023 19:00:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232227AbjKHTAX (ORCPT
+        id S232613AbjKHTA0 (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 8 Nov 2023 14:00:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53162 "EHLO
+        Wed, 8 Nov 2023 14:00:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231544AbjKHTAV (ORCPT
+        with ESMTP id S231990AbjKHTAV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Wed, 8 Nov 2023 14:00:21 -0500
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30DFC2111;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D335C2116;
         Wed,  8 Nov 2023 11:00:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1699470020; x=1731006020;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=KXbsnMJjjkQe9TP5OBPKowAwdzryjmcQQL3QpeWmhAY=;
-  b=GBHs4hUho0ZMf44L5H2r6KsMYKRaIPhe2mB70jXBhtTGi9z417AQJczt
-   1PMdbZnDFCICdfqWNnakrnWyMeK44l4Eti/MlRF5plOq3SLP0B/ZN9m7Z
-   pN79VFWi1LnRj1vO+dbQGuyNNQircgMbBVNS4icWUL52hkSdnFUgfELSM
-   YskspKt/XKd3u6qLh1afJ2rpn5cFQt22op8q3kq+gtWbard2ZgupDsqNI
-   FlzUWMeOzpFkuwxqDqLXxUpEXMJuoo34k6lIBSm0eQzXHbzofmwIlR+uE
-   KHEySALtwHEsm7syEDe9n1WWqvVEmnKHB8vI+CKnCICqIMbi2BZ4Lxclq
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10888"; a="8486241"
+  bh=XBjxJzF23ZyrUcL//Abo2czdnJUCDVfOQL8DmGgF2m8=;
+  b=Q/6YwCg6+2ThjXVGKYUkH/NwkKs2WM3Mr4dWqgSqIQVxO/Oz5n5zVBYf
+   jYp6GXxMOlfUWzdu3BbLo3abjybb/ZWUEvSyEpfaV1an6XDICcBRcR+sM
+   bg+Egp6+zRJfD4f7VBtfaphGP1bANpcVhNdJDFDDHKOp63xSt5q1M3Okh
+   JkHyxLzBfYeLEeu2VA55gqwejYlW/HpGqCmD2LqyqfElBx0ufefHktWox
+   oDOxYrG/vj4qNVs/BZhJV3pY4KUKev3WAQz6gTud9mPOVUoGHfPLAYCuy
+   Q141VC27lHrHuQ/HM5zcBHbfgn7wEmJCZq+W04emD/EaK93CCGtfKpe00
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10888"; a="8486281"
 X-IronPort-AV: E=Sophos;i="6.03,287,1694761200"; 
-   d="scan'208";a="8486241"
+   d="scan'208";a="8486281"
 Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2023 11:00:18 -0800
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2023 11:00:20 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.03,287,1694761200"; 
-   d="scan'208";a="10892423"
+   d="scan'208";a="10892439"
 Received: from unknown (HELO fred..) ([172.25.112.68])
-  by orviesa001.jf.intel.com with ESMTP; 08 Nov 2023 11:00:17 -0800
+  by orviesa001.jf.intel.com with ESMTP; 08 Nov 2023 11:00:19 -0800
 From:   Xin Li <xin3.li@intel.com>
 To:     kvm@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
@@ -49,9 +49,9 @@ Cc:     seanjc@google.com, pbonzini@redhat.com, corbet@lwn.net,
         bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
         hpa@zytor.com, vkuznets@redhat.com, peterz@infradead.org,
         ravi.v.shankar@intel.com
-Subject: [PATCH v1 04/23] KVM: x86: Mark CR4.FRED as not reserved
-Date:   Wed,  8 Nov 2023 10:29:44 -0800
-Message-ID: <20231108183003.5981-5-xin3.li@intel.com>
+Subject: [PATCH v1 07/23] KVM: VMX: Disable intercepting FRED MSRs
+Date:   Wed,  8 Nov 2023 10:29:47 -0800
+Message-ID: <20231108183003.5981-8-xin3.li@intel.com>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20231108183003.5981-1-xin3.li@intel.com>
 References: <20231108183003.5981-1-xin3.li@intel.com>
@@ -61,43 +61,46 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The CR4.FRED bit, i.e., CR4[32], is no longer a reserved bit when a guest
-enumerates FRED, otherwise it is still a reserved bit.
+Add FRED MSRs to the valid passthrough MSR list and disable intercepting
+FRED MSRs only if FRED is enumerated after set CPUID.
 
 Tested-by: Shan Kang <shan.kang@intel.com>
 Signed-off-by: Xin Li <xin3.li@intel.com>
 ---
- arch/x86/include/asm/kvm_host.h | 3 ++-
- arch/x86/kvm/x86.h              | 2 ++
- 2 files changed, 4 insertions(+), 1 deletion(-)
+ arch/x86/kvm/vmx/vmx.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index d7036982332e..1e5a6d9439f8 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -133,7 +133,8 @@
- 			  | X86_CR4_PGE | X86_CR4_PCE | X86_CR4_OSFXSR | X86_CR4_PCIDE \
- 			  | X86_CR4_OSXSAVE | X86_CR4_SMEP | X86_CR4_FSGSBASE \
- 			  | X86_CR4_OSXMMEXCPT | X86_CR4_LA57 | X86_CR4_VMXE \
--			  | X86_CR4_SMAP | X86_CR4_PKE | X86_CR4_UMIP))
-+			  | X86_CR4_SMAP | X86_CR4_PKE | X86_CR4_UMIP \
-+			  | X86_CR4_FRED))
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 5d4786812664..327e052d90c1 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -700,6 +700,9 @@ static bool is_valid_passthrough_msr(u32 msr)
+ 	case MSR_LBR_CORE_TO ... MSR_LBR_CORE_TO + 8:
+ 		/* LBR MSRs. These are handled in vmx_update_intercept_for_lbr_msrs() */
+ 		return true;
++	case MSR_IA32_FRED_RSP0 ... MSR_IA32_FRED_CONFIG:
++		/* FRED MSRs should be passthrough to FRED guests only */
++		return true;
+ 	}
  
- #define CR8_RESERVED_BITS (~(unsigned long)X86_CR8_TPR)
+ 	r = possible_passthrough_msr_slot(msr) != -ENOENT;
+@@ -7813,6 +7816,16 @@ static void vmx_vcpu_config_fred_after_set_cpuid(struct kvm_vcpu *vcpu)
+ 	secondary_vm_exit_controls_setbit(vmx,
+ 					  SECONDARY_VM_EXIT_SAVE_IA32_FRED |
+ 					  SECONDARY_VM_EXIT_LOAD_IA32_FRED);
++
++	vmx_disable_intercept_for_msr(vcpu, MSR_IA32_FRED_RSP0, MSR_TYPE_RW);
++	vmx_disable_intercept_for_msr(vcpu, MSR_IA32_FRED_RSP1, MSR_TYPE_RW);
++	vmx_disable_intercept_for_msr(vcpu, MSR_IA32_FRED_RSP2, MSR_TYPE_RW);
++	vmx_disable_intercept_for_msr(vcpu, MSR_IA32_FRED_RSP3, MSR_TYPE_RW);
++	vmx_disable_intercept_for_msr(vcpu, MSR_IA32_FRED_STKLVLS, MSR_TYPE_RW);
++	vmx_disable_intercept_for_msr(vcpu, MSR_IA32_FRED_SSP1, MSR_TYPE_RW);
++	vmx_disable_intercept_for_msr(vcpu, MSR_IA32_FRED_SSP2, MSR_TYPE_RW);
++	vmx_disable_intercept_for_msr(vcpu, MSR_IA32_FRED_SSP3, MSR_TYPE_RW);
++	vmx_disable_intercept_for_msr(vcpu, MSR_IA32_FRED_CONFIG, MSR_TYPE_RW);
+ }
  
-diff --git a/arch/x86/kvm/x86.h b/arch/x86/kvm/x86.h
-index 5184fde1dc54..60da8cbe6759 100644
---- a/arch/x86/kvm/x86.h
-+++ b/arch/x86/kvm/x86.h
-@@ -530,6 +530,8 @@ bool kvm_msr_allowed(struct kvm_vcpu *vcpu, u32 index, u32 type);
- 		__reserved_bits |= X86_CR4_VMXE;        \
- 	if (!__cpu_has(__c, X86_FEATURE_PCID))          \
- 		__reserved_bits |= X86_CR4_PCIDE;       \
-+	if (!__cpu_has(__c, X86_FEATURE_FRED))          \
-+		__reserved_bits |= X86_CR4_FRED;        \
- 	__reserved_bits;                                \
- })
- 
+ static void vmx_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
 -- 
 2.42.0
 
