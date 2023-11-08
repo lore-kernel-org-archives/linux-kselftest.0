@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DEF2C0018C
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03E5AC4167D
 	for <linux-kselftest@archiver.kernel.org>; Wed,  8 Nov 2023 19:00:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232711AbjKHTAd (ORCPT
+        id S232775AbjKHTAc (ORCPT
         <rfc822;linux-kselftest@archiver.kernel.org>);
-        Wed, 8 Nov 2023 14:00:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56690 "EHLO
+        Wed, 8 Nov 2023 14:00:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232662AbjKHTAa (ORCPT
+        with ESMTP id S232521AbjKHTAY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Nov 2023 14:00:30 -0500
+        Wed, 8 Nov 2023 14:00:24 -0500
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F5A211D;
-        Wed,  8 Nov 2023 11:00:22 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D302119;
+        Wed,  8 Nov 2023 11:00:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699470023; x=1731006023;
+  t=1699470022; x=1731006022;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=bFpGIxylK8ZmSMW102hy9IXnv91TDM4GB/lAo5qMasw=;
-  b=MJylD18kXkXZqAWyjXz0YKXklSXZNjGGz42kvWw/nfQnDm34KVZK7PK9
-   a7JP8NlItAtm7CKWDKT1nehIoBFIJZnYKDqh+1zLwgeNPGLJyvDQXt5hl
-   OYdGTiccmWa11R3TdQsl8F6oCCq56pbh3ga2Zr/bNAbz3XbGcnlEabo8c
-   MbxTrOsJA67ZDh50jqEScmAXng0CWd9EtfRGFffKETLQO+WwgvLrFew6r
-   BF2SKzXKIpi2qGW//TbUtgAeXWe9yEij9fm/6ckixK+GK6nFRURDH3coZ
-   HiqeCJHoPtTssqrimr317krnzWwWC7J9ROdyZRYSCy6U6bJQSM1/pJX70
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10888"; a="8486348"
+  bh=ugNGavNYuSf5wYXEen+dICOBfpsxHOVLj3Ud+LTuUyE=;
+  b=dn8wFB/cveXev6ItVaR48e/7JdR1+mX2WzVWtWYMOe6OQGM0NptivTjg
+   BaHi3JTLprSSe2Ikc0Lo7gQFhxXJ+8Nh+9VExZxvSJSRjPVVtbAlY2AWt
+   w9r8rPv1HCNAT49p4yoaAuhzHiN7S2v+X0Bla3CzQ9GkR8k/L8rmO2WZW
+   yREUpNjlcKHWWkChFEXPID9RpThh+5dhUx5IhOog3Wo6MGjNEphknujLB
+   U3FWT/j7ebOS1vYE2e70Ldbv/WfgcS4c9fuWA5s1WvMYyXs7nDchvUSxX
+   34AcSZTtMuJgfHMgpekMyGEMDAhZTdbJYFENX7YgP45Z6RP5Tie0qh+QX
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10888"; a="8486325"
 X-IronPort-AV: E=Sophos;i="6.03,287,1694761200"; 
-   d="scan'208";a="8486348"
+   d="scan'208";a="8486325"
 Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2023 11:00:23 -0800
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2023 11:00:22 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.03,287,1694761200"; 
-   d="scan'208";a="10892473"
+   d="scan'208";a="10892459"
 Received: from unknown (HELO fred..) ([172.25.112.68])
-  by orviesa001.jf.intel.com with ESMTP; 08 Nov 2023 11:00:22 -0800
+  by orviesa001.jf.intel.com with ESMTP; 08 Nov 2023 11:00:20 -0800
 From:   Xin Li <xin3.li@intel.com>
 To:     kvm@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
@@ -49,9 +49,9 @@ Cc:     seanjc@google.com, pbonzini@redhat.com, corbet@lwn.net,
         bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
         hpa@zytor.com, vkuznets@redhat.com, peterz@infradead.org,
         ravi.v.shankar@intel.com
-Subject: [PATCH v1 12/23] KVM: VMX: Handle FRED event data
-Date:   Wed,  8 Nov 2023 10:29:52 -0800
-Message-ID: <20231108183003.5981-13-xin3.li@intel.com>
+Subject: [PATCH v1 10/23] KVM: VMX: Add support for FRED context save/restore
+Date:   Wed,  8 Nov 2023 10:29:50 -0800
+Message-ID: <20231108183003.5981-11-xin3.li@intel.com>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20231108183003.5981-1-xin3.li@intel.com>
 References: <20231108183003.5981-1-xin3.li@intel.com>
@@ -61,205 +61,168 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Set injected-event data when injecting a #PF, #DB, or #NM caused
-by extended feature disable using FRED event delivery, and save
-original-event data for being used as injected-event data.
+Handle host initiated FRED MSR access requests to allow FRED context
+to be set/get from user level.
 
-Unlike IDT using some extra CPU register as part of an event
-context, e.g., %cr2 for #PF, FRED saves a complete event context
-in its stack frame, e.g., FRED saves the faulting linear address
-of a #PF into the event data field defined in its stack frame.
+During VM save/restore and live migration, FRED context needs to be
+saved/restored, which requires FRED MSRs to be accessed from a user
+level application, e.g., Qemu.
 
-Thus a new VMX control field called injected-event data is added
-to provide the event data that will be pushed into a FRED stack
-frame for VM entries that inject an event using FRED event delivery.
-In addition, a new VM exit information field called original-event
-data is added to store the event data that would have saved into a
-FRED stack frame for VM exits that occur during FRED event delivery.
-After such a VM exit is handled to allow the original-event to be
-delivered, the data in the original-event data VMCS field needs to
-be set into the injected-event data VMCS field for the injection of
-the original event.
+Note, handling of MSR_IA32_FRED_SSP0, i.e., MSR_IA32_PL0_SSP, is not
+added yet, which needs to be aligned with KVM CET patch set.
 
 Tested-by: Shan Kang <shan.kang@intel.com>
 Signed-off-by: Xin Li <xin3.li@intel.com>
 ---
- arch/x86/include/asm/vmx.h |  4 ++
- arch/x86/kvm/vmx/vmx.c     | 84 +++++++++++++++++++++++++++++++++++---
- arch/x86/kvm/x86.c         | 10 ++++-
- 3 files changed, 91 insertions(+), 7 deletions(-)
+ arch/x86/kvm/vmx/vmx.c | 72 ++++++++++++++++++++++++++++++++++++++++++
+ arch/x86/kvm/x86.c     | 23 ++++++++++++++
+ 2 files changed, 95 insertions(+)
 
-diff --git a/arch/x86/include/asm/vmx.h b/arch/x86/include/asm/vmx.h
-index d54a1a1057b0..97729248e844 100644
---- a/arch/x86/include/asm/vmx.h
-+++ b/arch/x86/include/asm/vmx.h
-@@ -253,8 +253,12 @@ enum vmcs_field {
- 	PID_POINTER_TABLE_HIGH		= 0x00002043,
- 	SECONDARY_VM_EXIT_CONTROLS	= 0x00002044,
- 	SECONDARY_VM_EXIT_CONTROLS_HIGH	= 0x00002045,
-+	INJECTED_EVENT_DATA		= 0x00002052,
-+	INJECTED_EVENT_DATA_HIGH	= 0x00002053,
- 	GUEST_PHYSICAL_ADDRESS          = 0x00002400,
- 	GUEST_PHYSICAL_ADDRESS_HIGH     = 0x00002401,
-+	ORIGINAL_EVENT_DATA		= 0x00002404,
-+	ORIGINAL_EVENT_DATA_HIGH	= 0x00002405,
- 	VMCS_LINK_POINTER               = 0x00002800,
- 	VMCS_LINK_POINTER_HIGH          = 0x00002801,
- 	GUEST_IA32_DEBUGCTL             = 0x00002802,
 diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 58d01e845804..67fd4a56d031 100644
+index d00ab9d4c93e..58d01e845804 100644
 --- a/arch/x86/kvm/vmx/vmx.c
 +++ b/arch/x86/kvm/vmx/vmx.c
-@@ -1880,9 +1880,30 @@ static void vmx_inject_exception(struct kvm_vcpu *vcpu)
- 		vmcs_write32(VM_ENTRY_INSTRUCTION_LEN,
- 			     vmx->vcpu.arch.event_exit_inst_len);
- 		intr_info |= INTR_TYPE_SOFT_EXCEPTION;
--	} else
-+	} else {
- 		intr_info |= INTR_TYPE_HARD_EXCEPTION;
- 
-+		if (kvm_is_fred_enabled(vcpu)) {
-+			u64 event_data = 0;
-+
-+			if (is_debug(intr_info))
-+				/*
-+				 * Compared to DR6, FRED #DB event data saved on
-+				 * the stack frame have bits 4 ~ 11 and 16 ~ 31
-+				 * inverted, i.e.,
-+				 *   fred_db_event_data = dr6 ^ 0xFFFF0FF0UL
-+				 */
-+				event_data = vcpu->arch.dr6 ^ DR6_RESERVED;
-+			else if (is_page_fault(intr_info))
-+				event_data = vcpu->arch.cr2;
-+			else if (is_nm_fault(intr_info) &&
-+				 vcpu->arch.guest_fpu.fpstate->xfd)
-+				event_data = vcpu->arch.guest_fpu.xfd_err;
-+
-+			vmcs_write64(INJECTED_EVENT_DATA, event_data);
-+		}
-+	}
-+
- 	vmcs_write32(VM_ENTRY_INTR_INFO_FIELD, intr_info);
- 
- 	vmx_clear_hlt(vcpu);
-@@ -7226,7 +7247,8 @@ static void vmx_recover_nmi_blocking(struct vcpu_vmx *vmx)
- static void __vmx_complete_interrupts(struct kvm_vcpu *vcpu,
- 				      u32 idt_vectoring_info,
- 				      int instr_len_field,
--				      int error_code_field)
-+				      int error_code_field,
-+				      int event_data_field)
- {
- 	u8 vector;
- 	int type;
-@@ -7260,6 +7282,37 @@ static void __vmx_complete_interrupts(struct kvm_vcpu *vcpu,
- 		vcpu->arch.event_exit_inst_len = vmcs_read32(instr_len_field);
- 		fallthrough;
- 	case INTR_TYPE_HARD_EXCEPTION:
-+		if (kvm_is_fred_enabled(vcpu) && event_data_field) {
-+			/*
-+			 * Save original-event data for being used as injected-event data.
-+			 */
-+			u64 event_data = vmcs_read64(event_data_field);
-+
-+			switch (vector) {
-+			case DB_VECTOR:
-+				get_debugreg(vcpu->arch.dr6, 6);
-+				WARN_ON(vcpu->arch.dr6 != (event_data ^ DR6_RESERVED));
-+				vcpu->arch.dr6 = event_data ^ DR6_RESERVED;
-+				break;
-+			case NM_VECTOR:
-+				if (vcpu->arch.guest_fpu.fpstate->xfd) {
-+					rdmsrl(MSR_IA32_XFD_ERR, vcpu->arch.guest_fpu.xfd_err);
-+					WARN_ON(vcpu->arch.guest_fpu.xfd_err != event_data);
-+					vcpu->arch.guest_fpu.xfd_err = event_data;
-+				} else {
-+					WARN_ON(event_data != 0);
-+				}
-+				break;
-+			case PF_VECTOR:
-+				WARN_ON(vcpu->arch.cr2 != event_data);
-+				vcpu->arch.cr2 = event_data;
-+				break;
-+			default:
-+				WARN_ON(event_data != 0);
-+				break;
-+			}
-+		}
-+
- 		if (idt_vectoring_info & VECTORING_INFO_DELIVER_CODE_MASK) {
- 			u32 err = vmcs_read32(error_code_field);
- 			kvm_requeue_exception_e(vcpu, vector, err);
-@@ -7279,9 +7332,11 @@ static void __vmx_complete_interrupts(struct kvm_vcpu *vcpu,
- 
- static void vmx_complete_interrupts(struct vcpu_vmx *vmx)
- {
--	__vmx_complete_interrupts(&vmx->vcpu, vmx->idt_vectoring_info,
-+	__vmx_complete_interrupts(&vmx->vcpu,
-+				  vmx->idt_vectoring_info,
- 				  VM_EXIT_INSTRUCTION_LEN,
--				  IDT_VECTORING_ERROR_CODE);
-+				  IDT_VECTORING_ERROR_CODE,
-+				  ORIGINAL_EVENT_DATA);
+@@ -1429,6 +1429,24 @@ static void vmx_write_guest_kernel_gs_base(struct vcpu_vmx *vmx, u64 data)
+ 	preempt_enable();
+ 	vmx->msr_guest_kernel_gs_base = data;
  }
++
++static u64 vmx_read_guest_fred_rsp0(struct vcpu_vmx *vmx)
++{
++	preempt_disable();
++	if (vmx->guest_state_loaded)
++		vmx->msr_guest_fred_rsp0 = read_msr(MSR_IA32_FRED_RSP0);
++	preempt_enable();
++	return vmx->msr_guest_fred_rsp0;
++}
++
++static void vmx_write_guest_fred_rsp0(struct vcpu_vmx *vmx, u64 data)
++{
++	preempt_disable();
++	if (vmx->guest_state_loaded)
++		wrmsrl(MSR_IA32_FRED_RSP0, data);
++	preempt_enable();
++	vmx->msr_guest_fred_rsp0 = data;
++}
+ #endif
  
- static void vmx_cancel_injection(struct kvm_vcpu *vcpu)
-@@ -7289,7 +7344,8 @@ static void vmx_cancel_injection(struct kvm_vcpu *vcpu)
- 	__vmx_complete_interrupts(vcpu,
- 				  vmcs_read32(VM_ENTRY_INTR_INFO_FIELD),
- 				  VM_ENTRY_INSTRUCTION_LEN,
--				  VM_ENTRY_EXCEPTION_ERROR_CODE);
-+				  VM_ENTRY_EXCEPTION_ERROR_CODE,
-+				  0);
- 
- 	vmcs_write32(VM_ENTRY_INTR_INFO_FIELD, 0);
- }
-@@ -7406,6 +7462,24 @@ static noinstr void vmx_vcpu_enter_exit(struct kvm_vcpu *vcpu,
- 
- 	vmx_disable_fb_clear(vmx);
- 
-+	/*
-+	 * %cr2 needs to be saved after a VM exit and restored before a VM
-+	 * entry in case a VM exit happens immediately after delivery of a
-+	 * guest #PF but before guest reads %cr2.
-+	 *
-+	 * A FRED guest should read its #PF faulting linear address from
-+	 * the event data field in its FRED stack frame instead of %cr2.
-+	 * But the FRED 5.0 spec still requires a FRED CPU to update %cr2
-+	 * in the normal way, thus %cr2 is still updated even for a FRED
-+	 * guest.
-+	 *
-+	 * Note, an NMI could interrupt KVM:
-+	 *   1) after VM exit but before CR2 is saved.
-+	 *   2) after CR2 is restored but before VM entry.
-+	 * And a #PF could happen durng NMI handlng, which overwrites %cr2.
-+	 * Thus exc_nmi() should save and restore %cr2 upon entering and
-+	 * before leaving to make sure %cr2 not corrupted.
-+	 */
- 	if (vcpu->arch.cr2 != native_read_cr2())
- 		native_write_cr2(vcpu->arch.cr2);
- 
+ void vmx_vcpu_load_vmcs(struct kvm_vcpu *vcpu, int cpu,
+@@ -2028,6 +2046,33 @@ static int vmx_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+ 	case MSR_KERNEL_GS_BASE:
+ 		msr_info->data = vmx_read_guest_kernel_gs_base(vmx);
+ 		break;
++	case MSR_IA32_FRED_RSP0:
++		msr_info->data = vmx_read_guest_fred_rsp0(vmx);
++		break;
++	case MSR_IA32_FRED_RSP1:
++		msr_info->data = vmcs_read64(GUEST_IA32_FRED_RSP1);
++		break;
++	case MSR_IA32_FRED_RSP2:
++		msr_info->data = vmcs_read64(GUEST_IA32_FRED_RSP2);
++		break;
++	case MSR_IA32_FRED_RSP3:
++		msr_info->data = vmcs_read64(GUEST_IA32_FRED_RSP3);
++		break;
++	case MSR_IA32_FRED_STKLVLS:
++		msr_info->data = vmcs_read64(GUEST_IA32_FRED_STKLVLS);
++		break;
++	case MSR_IA32_FRED_SSP1:
++		msr_info->data = vmcs_read64(GUEST_IA32_FRED_SSP1);
++		break;
++	case MSR_IA32_FRED_SSP2:
++		msr_info->data = vmcs_read64(GUEST_IA32_FRED_SSP2);
++		break;
++	case MSR_IA32_FRED_SSP3:
++		msr_info->data = vmcs_read64(GUEST_IA32_FRED_SSP3);
++		break;
++	case MSR_IA32_FRED_CONFIG:
++		msr_info->data = vmcs_read64(GUEST_IA32_FRED_CONFIG);
++		break;
+ #endif
+ 	case MSR_EFER:
+ 		return kvm_get_msr_common(vcpu, msr_info);
+@@ -2233,6 +2278,33 @@ static int vmx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+ 			vmx_update_exception_bitmap(vcpu);
+ 		}
+ 		break;
++	case MSR_IA32_FRED_RSP0:
++		vmx_write_guest_fred_rsp0(vmx, data);
++		break;
++	case MSR_IA32_FRED_RSP1:
++		vmcs_write64(GUEST_IA32_FRED_RSP1, data);
++		break;
++	case MSR_IA32_FRED_RSP2:
++		vmcs_write64(GUEST_IA32_FRED_RSP2, data);
++		break;
++	case MSR_IA32_FRED_RSP3:
++		vmcs_write64(GUEST_IA32_FRED_RSP3, data);
++		break;
++	case MSR_IA32_FRED_STKLVLS:
++		vmcs_write64(GUEST_IA32_FRED_STKLVLS, data);
++		break;
++	case MSR_IA32_FRED_SSP1:
++		vmcs_write64(GUEST_IA32_FRED_SSP1, data);
++		break;
++	case MSR_IA32_FRED_SSP2:
++		vmcs_write64(GUEST_IA32_FRED_SSP2, data);
++		break;
++	case MSR_IA32_FRED_SSP3:
++		vmcs_write64(GUEST_IA32_FRED_SSP3, data);
++		break;
++	case MSR_IA32_FRED_CONFIG:
++		vmcs_write64(GUEST_IA32_FRED_CONFIG, data);
++		break;
+ #endif
+ 	case MSR_IA32_SYSENTER_CS:
+ 		if (is_guest_mode(vcpu))
 diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index c5a55810647f..d190bfc63fc4 100644
+index 2c924075f6f1..c5a55810647f 100644
 --- a/arch/x86/kvm/x86.c
 +++ b/arch/x86/kvm/x86.c
-@@ -680,8 +680,14 @@ static void kvm_multiple_exception(struct kvm_vcpu *vcpu,
- 			vcpu->arch.exception.injected = true;
- 			if (WARN_ON_ONCE(has_payload)) {
- 				/*
--				 * A reinjected event has already
--				 * delivered its payload.
-+				 * For a reinjected event, KVM delivers its
-+				 * payload through:
-+				 *   #PF: save %cr2 into arch.cr2 immediately
-+				 *        after VM exits.
-+				 *   #DB: save %dr6 into arch.dr6 later in
-+				 *        sync_dirty_debug_regs().
-+				 *
-+				 * For FRED guest, see __vmx_complete_interrupts().
- 				 */
- 				has_payload = false;
- 				payload = 0;
+@@ -1451,6 +1451,9 @@ static const u32 msrs_to_save_base[] = {
+ 	MSR_STAR,
+ #ifdef CONFIG_X86_64
+ 	MSR_CSTAR, MSR_KERNEL_GS_BASE, MSR_SYSCALL_MASK, MSR_LSTAR,
++	MSR_IA32_FRED_RSP0, MSR_IA32_FRED_RSP1, MSR_IA32_FRED_RSP2,
++	MSR_IA32_FRED_RSP3, MSR_IA32_FRED_STKLVLS, MSR_IA32_FRED_SSP1,
++	MSR_IA32_FRED_SSP2, MSR_IA32_FRED_SSP3, MSR_IA32_FRED_CONFIG,
+ #endif
+ 	MSR_IA32_TSC, MSR_IA32_CR_PAT, MSR_VM_HSAVE_PA,
+ 	MSR_IA32_FEAT_CTL, MSR_IA32_BNDCFGS, MSR_TSC_AUX,
+@@ -1890,6 +1893,16 @@ static int __kvm_set_msr(struct kvm_vcpu *vcpu, u32 index, u64 data,
+ 
+ 		data = (u32)data;
+ 		break;
++	case MSR_IA32_FRED_RSP0 ... MSR_IA32_FRED_CONFIG:
++		if (host_initiated || guest_cpuid_has(vcpu, X86_FEATURE_FRED))
++			break;
++
++		/*
++		 * Inject #GP upon FRED MSRs accesses from a non-FRED guest to
++		 * make sure no malicious guest can write to FRED MSRs thus to
++		 * corrupt host FRED MSRs.
++		 */
++		return 1;
+ 	}
+ 
+ 	msr.data = data;
+@@ -1933,6 +1946,16 @@ int __kvm_get_msr(struct kvm_vcpu *vcpu, u32 index, u64 *data,
+ 		    !guest_cpuid_has(vcpu, X86_FEATURE_RDPID))
+ 			return 1;
+ 		break;
++	case MSR_IA32_FRED_RSP0 ... MSR_IA32_FRED_CONFIG:
++		if (host_initiated || guest_cpuid_has(vcpu, X86_FEATURE_FRED))
++			break;
++
++		/*
++		 * Inject #GP upon FRED MSRs accesses from a non-FRED guest to
++		 * make sure no malicious guest can write to FRED MSRs thus to
++		 * corrupt host FRED MSRs.
++		 */
++		return 1;
+ 	}
+ 
+ 	msr.index = index;
 -- 
 2.42.0
 
