@@ -1,145 +1,70 @@
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAB291BDED
-	for <linux-kselftest@vger.kernel.org>; Sat, 11 Nov 2023 19:23:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC7EE1380;
+	Sun, 12 Nov 2023 00:55:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kXAbuRlf"
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 843E73A85;
-	Sat, 11 Nov 2023 11:23:38 -0800 (PST)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-5c08c47c055so14899297b3.1;
-        Sat, 11 Nov 2023 11:23:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1699730617; x=1700335417; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ag4SMwD5LPw+0jcsV3qgUuDPqlOWxdNIlowPaBbcuVo=;
-        b=kXAbuRlfsfgIIy6rsS3QjBi1EoQDBOCialnW9lR5V4jlMKexTpBo6KZrRKUj3Ickbc
-         JU9BvIMt5PvmgiX0McmkYh6HkwD5qHg+bjDRbqC7I/3dfpR8EAWMl9YcecTHRFUCFE42
-         gadh163zpZxqKF1nPgU6uYMmBWUOs++B+trp+aZot/4uex/X7hjhs0DKlCKl16ZrJ6fu
-         mWHF+t/9rd6Sc+Bfej2EsJQE0Q/LFJO/+MnKQvp799g9w61XR0SKUZSjb/CLLqMb+pSH
-         pFpVrcx8X5j4WSydhcPdvLI8mlRLmGdVeBWj9n4qBMduyKZG2/ZrCEPNgQdh2qginlpI
-         AXmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699730617; x=1700335417;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ag4SMwD5LPw+0jcsV3qgUuDPqlOWxdNIlowPaBbcuVo=;
-        b=oHT/Z8hmG235aNGs1EJA98DiGfrfJplFrhf9bB49C1vcVIJIzGq7xEHUscBifCOxrK
-         kvqjbOa5+uypDhctnKM0m75MMkEPHdEN2Z5er/smNxNC17o6lhz42Rh/W9ttsOc04ugd
-         DTis1Fm9BXE98Xk4YxOdDXhjpwpZvC3GkIFmVnnAUnjlpVgRlF/nwrl+LbUDnPOVNXc6
-         phZhUml1JZGzQVcMCNaCKjDR3IsV1yW7BVmfKFby4M60yrQIfFbZwOjeRHlua+WzTWKO
-         hffWX4FmlPfUCy2jp+me5VJX+04NxBlqt6QJnGNMgictGXpmBDAc+iXICxQvoAsnwvvN
-         +6wg==
-X-Gm-Message-State: AOJu0Yyrmw8JxTz9R1yPoPe6gA4jTtOn6B9meHjGd8hRdcR8XiDWC+CC
-	Ce8Zkg6iIyncYYdfAQvtZdmpR7KydCZeEjE29+u+kagVHME=
-X-Google-Smtp-Source: AGHT+IGMWVLXhpBgAiSiPsJTx4nUCy4nqUL8/YMrfd1oVqT6RrSFrsQ3NogG4u5endsOynqU4DUelokF0fZ6kEQf7lo=
-X-Received: by 2002:a81:d550:0:b0:5a7:e5de:79a4 with SMTP id
- l16-20020a81d550000000b005a7e5de79a4mr2769792ywj.17.1699730617220; Sat, 11
- Nov 2023 11:23:37 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jIrkMdFY"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 42B3DC433C7;
+	Sun, 12 Nov 2023 00:55:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1699750546;
+	bh=g6sSrrVwZDGVPiE2PDTxknYsHB0fe/FH8seuAIgjE4c=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=jIrkMdFYXfoc6646t+fgdmy4sIr1F1ywDUgFixpiXVK2S8hG40s3w/ls/pmJisSN8
+	 TDIGXkLEgC3a/4p90siHf+cDU78je3Td25ZoX2ykDajR5fyvmfG6nqTybR75s0F48X
+	 dhCva+EM+Bb/7XjWSY23pHKwDlaXUgBmmr7RUB+ArjnyC0qTvqnvuv3vHCsNL2LctV
+	 0tXOdFgW8S0nqhX62C+KuwoToju/qNBjgv4ixifAFJngU54rqK79Ui6Hb4tkBa1nhX
+	 eW82M2tmZ+GzdWlCgBnP0vPjBB3jXsurXY6nG0HHjB/zS3YwI2Qi/5HDUR9t2KdWG2
+	 HzjUf7qn1KASQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2A27BE00084;
+	Sun, 12 Nov 2023 00:55:46 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230820141354.29687-1-osmtendev@gmail.com> <CAK6rUAO2hyt0tcXif=kbZj=vd4+O9h3o1quWSF2R6FMm70u_hA@mail.gmail.com>
-In-Reply-To: <CAK6rUAO2hyt0tcXif=kbZj=vd4+O9h3o1quWSF2R6FMm70u_hA@mail.gmail.com>
-From: Osama Muhammad <osmtendev@gmail.com>
-Date: Sun, 12 Nov 2023 00:23:24 +0500
-Message-ID: <CAK6rUANdzA9JNP-Aah+1LbPAdJwBn9Z2_ogDi5i1jE6q6vmWSg@mail.gmail.com>
-Subject: Re: [PATCH v2] selftests: prctl: Add prctl test for PR_GET_NAME
-To: shuah@kernel.org
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [RESEND PATCH 0/2] add loongarch and riscv support for kprobe args
+ test
+From: patchwork-bot+linux-riscv@kernel.org
+Message-Id: 
+ <169975054616.11360.3939944763451576227.git-patchwork-notify@kernel.org>
+Date: Sun, 12 Nov 2023 00:55:46 +0000
+References: <20231018020858.1304218-1-liaoyu15@huawei.com>
+In-Reply-To: <20231018020858.1304218-1-liaoyu15@huawei.com>
+To: Yu Liao <liaoyu15@huawei.com>
+Cc: linux-riscv@lists.infradead.org, skhan@linuxfoundation.org,
+ liwei391@huawei.com, rostedt@goodmis.org, linux-trace-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, shuah@kernel.org, mhiramat@kernel.org
 
-On Tue, 3 Oct 2023 at 21:01, Osama Muhammad <osmtendev@gmail.com> wrote:
->
-> On Sun, 20 Aug 2023 at 19:14, Osama Muhammad <osmtendev@gmail.com> wrote:
-> >
-> > This patch covers the testing of PR_GET_NAME by
-> > reading it's value from proc/self/task/pid/comm
-> > and matching it with the value returned by PR_GET_NAME.
-> > If the values are matched then it's successful, otherwise
-> > it fails.
-Hi Shuah,
-Any Feedback on this patch.
+Hello:
 
-Thanks,
-Osama
->
+This series was applied to riscv/linux.git (fixes)
+by Shuah Khan <skhan@linuxfoundation.org>:
 
-> Any Feedback on this patch?
->
-> >
-> > changes since v1:
-> >         - Handled fscanf,fopen error checking.
-> >         - Defined MAX_PATH_LEN.
-> >
-> > Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
-> > ---
-> >  .../selftests/prctl/set-process-name.c        | 32 +++++++++++++++++++
-> >  1 file changed, 32 insertions(+)
-> >
-> > diff --git a/tools/testing/selftests/prctl/set-process-name.c b/tools/testing/selftests/prctl/set-process-name.c
-> > index 3bc5e0e09..562f707ba 100644
-> > --- a/tools/testing/selftests/prctl/set-process-name.c
-> > +++ b/tools/testing/selftests/prctl/set-process-name.c
-> > @@ -12,6 +12,7 @@
-> >  #define CHANGE_NAME "changename"
-> >  #define EMPTY_NAME ""
-> >  #define TASK_COMM_LEN 16
-> > +#define MAX_PATH_LEN 50
-> >
-> >  int set_name(char *name)
-> >  {
-> > @@ -47,6 +48,35 @@ int check_null_pointer(char *check_name)
-> >         return res;
-> >  }
-> >
-> > +int check_name(void)
-> > +{
-> > +
-> > +       int pid;
-> > +
-> > +       pid = getpid();
-> > +       FILE *fptr = NULL;
-> > +       char path[MAX_PATH_LEN] = {};
-> > +       char name[TASK_COMM_LEN] = {};
-> > +       char output[TASK_COMM_LEN] = {};
-> > +       int j;
-> > +
-> > +       j = snprintf(path, MAX_PATH_LEN, "/proc/self/task/%d/comm", pid);
-> > +       fptr = fopen(path, "r");
-> > +       if (!fptr)
-> > +               return -EIO;
-> > +
-> > +       fscanf(fptr, "%s", output);
-> > +       if (ferror(fptr))
-> > +               return -EIO;
-> > +
-> > +       int res = prctl(PR_GET_NAME, name, NULL, NULL, NULL);
-> > +
-> > +       if (res < 0)
-> > +               return -errno;
-> > +
-> > +       return !strcmp(output, name);
-> > +}
-> > +
-> >  TEST(rename_process) {
-> >
-> >         EXPECT_GE(set_name(CHANGE_NAME), 0);
-> > @@ -57,6 +87,8 @@ TEST(rename_process) {
-> >
-> >         EXPECT_GE(set_name(CHANGE_NAME), 0);
-> >         EXPECT_LT(check_null_pointer(CHANGE_NAME), 0);
-> > +
-> > +       EXPECT_TRUE(check_name());
-> >  }
-> >
-> >  TEST_HARNESS_MAIN
-> > --
-> > 2.34.1
-> >
+On Wed, 18 Oct 2023 10:08:56 +0800 you wrote:
+> Yu Liao (2):
+>   selftests/ftrace: add loongarch support for kprobe args char tests
+>   selftests/ftrace: Add riscv support for kprobe arg tests
+> 
+>  .../selftests/ftrace/test.d/kprobe/kprobe_args_char.tc      | 6 ++++++
+>  .../selftests/ftrace/test.d/kprobe/kprobe_args_string.tc    | 3 +++
+>  .../selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc    | 4 ++++
+>  3 files changed, 13 insertions(+)
+
+Here is the summary with links:
+  - [RESEND,1/2] selftests/ftrace: add loongarch support for kprobe args char tests
+    https://git.kernel.org/riscv/c/2eadb3299256
+  - [RESEND,2/2] selftests/ftrace: Add riscv support for kprobe arg tests
+    https://git.kernel.org/riscv/c/11df28854bee
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
