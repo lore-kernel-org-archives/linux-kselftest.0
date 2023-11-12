@@ -1,26 +1,28 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22A8F15D1;
-	Sun, 12 Nov 2023 00:55:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qgpBSE+z"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6E392C433CC;
-	Sun, 12 Nov 2023 00:55:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699750546;
-	bh=BudbliKklZT1nMXLsYFQyB+Pk18EUouJG6KZUqc8uyA=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=qgpBSE+z2PM5zIUQ4ZiQ42U4qfNh/mK+G0UjLlwezYzovO7Hv0r3U4c2k0cyQdJYu
-	 2tpvqEdQc/11Ql3RizpG4raIDOskXMIAUvBKTtjTHuZBVqO64Ai4BwQvtxiuGP7GE0
-	 CQmDP5c7hXu//cf4WJPIWVVxlHFlXjFtikp2paYREnbtSZEzC4aaPYEiSS3SYENmbA
-	 8Um9rkkzACTUm8CXhr7u/rIYQ204eiVoJlZZJPnezsmOLIDxlNAQc1kpIVDVmquMV2
-	 HIxQgf86TrDBy4GYf8wHAQCmg3P0oq4N21BCiACjV24ts57a55XSwDkPCJQzoigyop
-	 H7y/eALJS/dlA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4CE26E0008B;
-	Sun, 12 Nov 2023 00:55:46 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81118184
+	for <linux-kselftest@vger.kernel.org>; Sun, 12 Nov 2023 02:36:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
+X-Greylist: delayed 310 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 11 Nov 2023 18:36:12 PST
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.197])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DFC130CB
+	for <linux-kselftest@vger.kernel.org>; Sat, 11 Nov 2023 18:36:12 -0800 (PST)
+Received: from localhost ([173.252.127.8]) by mrelay.perfora.net (mreueus003
+ [74.208.5.2]) with ESMTPSA (Nemesis) id 0LmJfA-1rbtEF3naU-00Zu3U; Sun, 12 Nov
+ 2023 03:30:46 +0100
+From: Jordan Rome <linux@jordanrome.com>
+To: bpf@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Kernel Team <kernel-team@fb.com>
+Subject: [PATCH bpf-next] selftests/bpf: add assert for user stacks in test_task_stack
+Date: Sat, 11 Nov 2023 18:30:10 -0800
+Message-Id: <20231112023010.144675-1-linux@jordanrome.com>
+X-Mailer: git-send-email 2.39.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -28,54 +30,73 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3 0/6] KVM RISC-V Conditional Operations
-From: patchwork-bot+linux-riscv@kernel.org
-Message-Id: 
- <169975054631.11360.10958982747975281844.git-patchwork-notify@kernel.org>
-Date: Sun, 12 Nov 2023 00:55:46 +0000
-References: <20231003035226.1945725-1-apatel@ventanamicro.com>
-In-Reply-To: <20231003035226.1945725-1-apatel@ventanamicro.com>
-To: Anup Patel <apatel@ventanamicro.com>
-Cc: linux-riscv@lists.infradead.org, pbonzini@redhat.com,
- atishp@atishpatra.org, palmer@dabbelt.com, paul.walmsley@sifive.com,
- conor@kernel.org, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
- shuah@kernel.org, ajones@ventanamicro.com, mchitale@ventanamicro.com,
- devicetree@vger.kernel.org, kvm@vger.kernel.org,
- kvm-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
+X-Provags-ID: V03:K1:PN7RG/90Yun44E0zzqkcOvPWLKrXq93inSWNwhsV9D4nSM4gWW7
+ IjKZHNvEJ/BG2p6CiZCrF9RghPoRSOAdRuuHoRmyrWDEZqbq6hBWKeIVw8BZcOOa+a5ZfTM
+ hxSvnDOxKrfB0rOiQqfZWZtE94kcN4DNJo0HG0NzwgSwYoGfEh4EIov2dai7HU4u6zJ6/B+
+ YcGqcDOytfYDFiDQTXu5g==
+UI-OutboundReport: notjunk:1;M01:P0:Ye/Dkl8kmoc=;D4UfSGUwJ+JL7FN9y8iOpcyqi+1
+ +GG64O4LmTA/uznRJS3Sk6PsDq5iTh4us8sq8zBFfjPSJ/VDxlnhd+SpkEmGe6Tt4qgkYTkPe
+ 4zgaZbmGnBpH6eKWMqIfJ8TVGHMkSqHMH4F1yKe2FZUPTXWsR9UQFCmVl0G7t/oT/NqRTl42s
+ bJJx9gHuz5P/VY4ufDkZPafa4Z6IKsJMBKuAmHxOeBOmJueXjfxhEoK4vJBA5LC6A8oNKfc//
+ 1aeDSmMap7/d3iCPezuHq+foKsqmskmCL60X5cpfxtPuP08aFN4yyqD+vyXpbj27KM7JmM0ua
+ yfx2pGmYY57vz5KASXAboPAY3GwTjbcTiArclAEjoTu+LwwiGKMG6ADz9oZjV/UUBn9X+x1oy
+ QfDmSMFzP0ECVP1PUYKlmviT2+Qd8OQ/WwVDBfWaYF118cQiQmXYi/N1nXWVJzxrtNZfKcGAr
+ RqFBz7ggn1KCDV6Cd4EQ1EE4v2gH8lLxUyISRjH/NZpbXJcKmKKD9yHVd833dI6SV3XfjFnW7
+ UpphGfQi3noV2PciCioULvjj5fM0ddP65ykr0Gn2JFyd/lzMcW7BIlqt/9y5i4mZ5bUQ7wytg
+ 8qtFW3Vcl4HdwNIEKrDE/ZGmElb8sRZiTN42L2Vu+r774G0DcOAElo4kbmL+XRjogRf9Ps9RC
+ cdGFVj0r8xACQln0X/CUACVxGdNBpQ/avbMWHkNe7nkW4djLZgcBcNoDqjcHIP/xNkETZlHFG
+ yifhEFJpG5D/WkMwRBml3IIR67AipWeiHqbKtZ7Zm8s0zq3qZDSEpd0YX7WK+bdhsbi+WfScP
+ s0mXO7OgcgQQb4ozpmIJ02Y10gm7BIj2qZvA3EJGOfMhGJTUXJ6wCSmnCqaFLtwOMdGdTNXuL
+ KNLpYZqJFCKiIsA==
 
-Hello:
+This is a follow up to:
+commit b8e3a87a627b ("bpf: Add crosstask check to __bpf_get_stack").
 
-This series was applied to riscv/linux.git (fixes)
-by Anup Patel <anup@brainfault.org>:
+This test ensures that the task iterator only gets a single
+user stack (for the current task).
 
-On Tue,  3 Oct 2023 09:22:20 +0530 you wrote:
-> This series extends KVM RISC-V to allow Guest/VM discover and use
-> conditional operations related ISA extensions (namely XVentanaCondOps
-> and Zicond).
-> 
-> To try these patches, use KVMTOOL from riscv_zbx_zicntr_smstateen_condops_v1
-> branch at: https://github.com/avpatel/kvmtool.git
-> 
-> [...]
+Signed-off-by: Jordan Rome <linux@jordanrome.com>
+---
+ tools/testing/selftests/bpf/prog_tests/bpf_iter.c       | 2 ++
+ tools/testing/selftests/bpf/progs/bpf_iter_task_stack.c | 5 +++++
+ 2 files changed, 7 insertions(+)
 
-Here is the summary with links:
-  - [v3,1/6] dt-bindings: riscv: Add Zicond extension entry
-    https://git.kernel.org/riscv/c/00c6f39c8247
-  - [v3,2/6] RISC-V: Detect Zicond from ISA string
-    https://git.kernel.org/riscv/c/662a601aa355
-  - [v3,3/6] RISC-V: KVM: Allow Zicond extension for Guest/VM
-    https://git.kernel.org/riscv/c/df68f4d8cb49
-  - [v3,4/6] KVM: riscv: selftests: Add senvcfg register to get-reg-list test
-    https://git.kernel.org/riscv/c/4d554e0226e6
-  - [v3,5/6] KVM: riscv: selftests: Add smstateen registers to get-reg-list test
-    https://git.kernel.org/riscv/c/e1a8db0c9a0e
-  - [v3,6/6] KVM: riscv: selftests: Add condops extensions to get-reg-list test
-    https://git.kernel.org/riscv/c/2b3f2b78ec93
-
-You are awesome, thank you!
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
+index 4e02093c2cbe..618af9dfae9b 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
+@@ -332,6 +332,8 @@ static void test_task_stack(void)
+ 	do_dummy_read(skel->progs.dump_task_stack);
+ 	do_dummy_read(skel->progs.get_task_user_stacks);
+ 
++	ASSERT_EQ(skel->bss->num_user_stacks, 1, "num_user_stacks");
++
+ 	bpf_iter_task_stack__destroy(skel);
+ }
+ 
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_task_stack.c b/tools/testing/selftests/bpf/progs/bpf_iter_task_stack.c
+index f2b8167b72a8..442f4ca39fd7 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_task_stack.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_task_stack.c
+@@ -35,6 +35,8 @@ int dump_task_stack(struct bpf_iter__task *ctx)
+ 	return 0;
+ }
+ 
++int num_user_stacks = 0;
++
+ SEC("iter/task")
+ int get_task_user_stacks(struct bpf_iter__task *ctx)
+ {
+@@ -51,6 +53,9 @@ int get_task_user_stacks(struct bpf_iter__task *ctx)
+ 	if (res <= 0)
+ 		return 0;
+ 
++	/* Only one task, the current one, should succeed */
++	++num_user_stacks;
++
+ 	buf_sz += res;
+ 
+ 	/* If the verifier doesn't refine bpf_get_task_stack res, and instead
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.39.3
 
