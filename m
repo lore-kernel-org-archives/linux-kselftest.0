@@ -1,18 +1,19 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="l3nZwRC7"
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24FFF198;
-	Wed, 15 Nov 2023 13:08:25 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="QxQFiyVs"
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ABBAB7;
+	Wed, 15 Nov 2023 13:08:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1700082503;
-	bh=EY9qn8OaUJTv8V5Cu9il13Y11SYGGS69Eb4C8YMvjnE=;
+	bh=l0DjQT50wWPCx8bAIk7vWf2LX6LEwzHNYtmJlA8L6J0=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=l3nZwRC7JGGgSRz0lsO64pqUwcDE9YfWL5JqUZFHkGj5vexiXDIPkpnfQow/8f/x+
-	 0HEv1SPACnNYJgLXqUeO/IDfKpl51m7XdFz1C53zN6cKycu5VXb9CSS477AZdhv1no
-	 hcSevf0LgJEE6lu/HTPBSKashg/fcFTn3mg05D/4=
+	b=QxQFiyVsIc6a5YV70upXPlmTRX4ZkcpR0v8ekrkfswJGaLF2P/0k24GAnrzTFbT7c
+	 j9IXsg6HyOtECGGmtWxa3NLU+qqTvrzdRKUlSSC+L4H2mgF4IMw5jxroh8vxY0Nbki
+	 fHm/MF7imxuvdmmGYaYZgqY6sYsWhd1nBQsXIhxc=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Wed, 15 Nov 2023 22:08:19 +0100
-Subject: [PATCH RFC 1/3] selftests/nolibc: add custom test harness
+Date: Wed, 15 Nov 2023 22:08:21 +0100
+Subject: [PATCH RFC 3/3] selftests/nolibc: migrate vfprintf tests to new
+ harness
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -21,319 +22,144 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20231115-nolibc-harness-v1-1-4d61382d9bf3@weissschuh.net>
+Message-Id: <20231115-nolibc-harness-v1-3-4d61382d9bf3@weissschuh.net>
 References: <20231115-nolibc-harness-v1-0-4d61382d9bf3@weissschuh.net>
 In-Reply-To: <20231115-nolibc-harness-v1-0-4d61382d9bf3@weissschuh.net>
 To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
 Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1700082502; l=8371;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1700082502; l=4412;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=EY9qn8OaUJTv8V5Cu9il13Y11SYGGS69Eb4C8YMvjnE=;
- b=OY3t7f91GO/MYUPQCGbAW97VDJ8RZ4ip5LgOGCwX2mJS1Ijqq4vkG3guL2zCavyAsCrogFocr
- Tu/7Dd2bZIcDxtg0m6hxGtVIM3lLpmyykRB4jDOcFgOKl3X4MxakFSb
+ bh=l0DjQT50wWPCx8bAIk7vWf2LX6LEwzHNYtmJlA8L6J0=;
+ b=D5ubOmECihDPDmd+UIRvHxT53OEDtxVHsJ8JxG5/5/6M0grUKMZjRz3CZcM3KiTTNpKB0bKp7
+ iBnTQFNFLhQCExPNZs6sZVF7T6HxzJEll+TB2zy9EwZStzdAmVmzyaB
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-The harness provides a framework to write unit tests for nolibc itself
-and kernel selftests using nolibc.
-
-Advantages over the current harness:
-* Makes it possible to emit KTAP for integration into kselftests.
-* Provides familiarity with the kselftest harness and google test.
-* It is nicer to write testcases that are longer than one line.
-
-Design goals:
-* Compatibility with nolibc. kselftest-harness requires setjmp() and
-  signals which are not supported on nolibc.
-* Provide the same output as the existing unittests.
-* Provide a way to emit KTAP.
-
-Notes:
-* This differs from kselftest-harness in its support for test suites,
-  the same as google test.
+Migrate part of nolibc-test.c to the new test harness.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- tools/testing/selftests/nolibc/nolibc-harness.h | 269 ++++++++++++++++++++++++
- 1 file changed, 269 insertions(+)
+ tools/testing/selftests/nolibc/nolibc-test.c | 74 +++++++++++-----------------
+ 1 file changed, 28 insertions(+), 46 deletions(-)
 
-diff --git a/tools/testing/selftests/nolibc/nolibc-harness.h b/tools/testing/selftests/nolibc/nolibc-harness.h
-new file mode 100644
-index 000000000000..4c82581fab86
---- /dev/null
-+++ b/tools/testing/selftests/nolibc/nolibc-harness.h
-@@ -0,0 +1,269 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Test harness for NOLIBC
-+ *
-+ * Copyright (C) 2023 Thomas Weißschuh <linux@weissschuh.net>
-+ * Copyright (c) 2012 The Chromium OS Authors. All rights reserved.
-+ */
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index 6c1b42b58e3e..c0e7e090a05a 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -1039,10 +1039,13 @@ int run_stdlib(int min, int max)
+ 	return ret;
+ }
+ 
+-#define EXPECT_VFPRINTF(c, expected, fmt, ...)				\
+-	ret += expect_vfprintf(llen, c, expected, fmt, ##__VA_ARGS__)
++#define ASSERT_VFPRINTF(c, expected, fmt, ...)				\
++	enum RESULT res = assert_vfprintf(_metadata, c, expected, fmt, ##__VA_ARGS__); \
++	if (res == SKIPPED) SKIP(return); \
++	if (res == FAIL) FAIL(return);
+ 
+-static int expect_vfprintf(int llen, int c, const char *expected, const char *fmt, ...)
++static enum RESULT assert_vfprintf(struct __test_metadata *_metadata, int c,
++				   const char *expected, const char *fmt, ...)
+ {
+ 	int ret, fd;
+ 	ssize_t w, r;
+@@ -1051,25 +1054,20 @@ static int expect_vfprintf(int llen, int c, const char *expected, const char *fm
+ 	va_list args;
+ 
+ 	fd = open("/tmp", O_TMPFILE | O_EXCL | O_RDWR, 0600);
+-	if (fd == -1) {
+-		result(llen, SKIPPED);
+-		return 0;
+-	}
++	if (fd == -1)
++		return SKIPPED;
+ 
+ 	memfile = fdopen(fd, "w+");
+-	if (!memfile) {
+-		result(llen, FAIL);
+-		return 1;
+-	}
++	if (!memfile)
++		return FAIL;
+ 
+ 	va_start(args, fmt);
+ 	w = vfprintf(memfile, fmt, args);
+ 	va_end(args);
+ 
+ 	if (w != c) {
+-		llen += printf(" written(%d) != %d", (int)w, c);
+-		result(llen, FAIL);
+-		return 1;
++		_metadata->exe.llen += printf(" written(%d) != %d", (int)w, c);
++		return FAIL;
+ 	}
+ 
+ 	fflush(memfile);
+@@ -1080,46 +1078,30 @@ static int expect_vfprintf(int llen, int c, const char *expected, const char *fm
+ 	fclose(memfile);
+ 
+ 	if (r != w) {
+-		llen += printf(" written(%d) != read(%d)", (int)w, (int)r);
+-		result(llen, FAIL);
+-		return 1;
++		_metadata->exe.llen += printf(" written(%d) != read(%d)", (int)w, (int)r);
++		return FAIL;
+ 	}
+ 
+ 	buf[r] = '\0';
+-	llen += printf(" \"%s\" = \"%s\"", expected, buf);
++	_metadata->exe.llen += printf(" \"%s\" = \"%s\"", expected, buf);
+ 	ret = strncmp(expected, buf, c);
+ 
+-	result(llen, ret ? FAIL : OK);
+-	return ret;
++	return ret ? FAIL : OK;
+ }
+ 
+-static int run_vfprintf(int min, int max)
++TEST(vfprintf, empty)     { ASSERT_VFPRINTF(0, "", ""); }
++TEST(vfprintf, simple)    { ASSERT_VFPRINTF(3, "foo", "foo"); }
++TEST(vfprintf, string)    { ASSERT_VFPRINTF(3, "foo", "%s", "foo"); }
++TEST(vfprintf, number)    { ASSERT_VFPRINTF(4, "1234", "%d", 1234); }
++TEST(vfprintf, negnumber) { ASSERT_VFPRINTF(5, "-1234", "%d", -1234); }
++TEST(vfprintf, unsigned)  { ASSERT_VFPRINTF(5, "12345", "%u", 12345); }
++TEST(vfprintf, char)      { ASSERT_VFPRINTF(1, "c", "%c", 'c'); }
++TEST(vfprintf, hex)       { ASSERT_VFPRINTF(1, "f", "%x", 0xf); }
++TEST(vfprintf, pointer)   { ASSERT_VFPRINTF(3, "0x1", "%p", (void *) 0x1); }
 +
-+#include <stdint.h>
-+#include <stdio.h>
-+#include <string.h>
-+
-+static void putcharn(char c, size_t n)
-+{
-+	char buf[64];
-+
-+	memset(buf, c, n);
-+	buf[n] = '\0';
-+	fputs(buf, stdout);
-+}
-+
-+struct __test_setup;
-+
-+struct __test_execution {
-+	int finished, failed, skipped, llen;
-+};
-+
-+struct __test_metadata {
-+	const char *name;
-+	const char *suite;
-+	unsigned int suite_count;
-+	void (*func)(struct __test_metadata *metadata);
-+	struct __test_metadata *next;
-+	struct __test_setup *setup;
-+	struct __test_execution exe;
-+};
-+
-+struct __test_setup {
-+	struct __test_metadata *start, *end;
-+} __test_setup __attribute__((weak));
-+
-+static void __add_metadata(struct __test_metadata *metadata)
-+{
-+	struct __test_metadata *m;
-+
-+	if (!__test_setup.start)
-+		__test_setup.start = metadata;
-+
-+	if (!__test_setup.end) {
-+		__test_setup.end = metadata;
-+	} else {
-+		__test_setup.end->next = metadata;
-+		__test_setup.end = metadata;
-+	}
-+
-+	metadata->setup = &__test_setup;
-+
-+	for (m = __test_setup.start; m; m = m->next) {
-+		if (strcmp(metadata->suite, m->suite) == 0)
-+			metadata->suite_count++;
-+	}
-+}
-+
-+#define TEST(_suite, _name) \
-+	static void _testfunc_ ## _suite ## _name(struct __test_metadata *); \
-+	static struct __test_metadata _metadata_ ## _suite ## _name = { \
-+		.name = #_name, \
-+		.suite = #_suite, \
-+		.func = _testfunc_ ## _suite ## _name, \
-+	}; \
-+	__attribute__((constructor)) \
-+	static void _register_testfunc_ ## _suite ## _name(void) \
-+	{ __add_metadata(&_metadata_ ## _suite ## _name); } \
-+	static void _testfunc_ ## _suite ## _name( \
-+		struct __test_metadata *_metadata __attribute__((unused)))
-+
-+#define SKIP(statement) __extension__ ({ \
-+	_metadata->exe.skipped = 1; \
-+	statement; \
-+})
-+
-+#define FAIL(statement) __extension__ ({ \
-+	_metadata->exe.failed = 1; \
-+	statement; \
-+})
-+
-+static void __run_test(struct __test_metadata *metadata)
-+{
-+	metadata->func(metadata);
-+	metadata->exe.finished = 1;
-+}
-+
-+static __attribute__((unused))
-+unsigned int count_test_suites(void)
-+{
-+	struct __test_metadata *m;
-+	unsigned int r = 0;
-+
-+	for (m = __test_setup.start; m && m->suite_count; m = m->next)
-+		r++;
-+
-+	return r;
-+}
-+
-+static __attribute__((unused))
-+int count_tests(void)
-+{
-+	struct __test_metadata *m;
-+	unsigned int r = 0;
-+
-+	for (m = __test_setup.start; m; m = m->next)
-+		r++;
-+
-+	return r;
-+}
-+
-+static unsigned int count_suite_tests(const char *suite)
-+{
-+	struct __test_metadata *m;
-+	unsigned int c = 0;
-+
-+	for (m = __test_setup.start; m && m->suite_count; m = m->next)
-+		if (strcmp(m->suite, suite) == 0)
-+			c = m->suite_count;
-+
-+	return c;
-+}
-+
-+static __attribute__((unused))
-+void dump_test_plan(void)
-+{
-+	struct __test_metadata *m;
-+	const char *suite = "";
-+
-+	printf("PLAN:\n");
-+	for (m = __test_setup.start; m; m = m->next) {
-+		if (strcmp(suite, m->suite)) {
-+			suite = m->suite;
-+			printf("  Suite %s (%d):\n", suite, count_suite_tests(suite));
-+		}
-+		printf("    %10s:%s %d\n", m->suite, m->name, m->suite_count - 1);
-+	}
-+}
-+
-+static unsigned int run_test_suite(const char *suite, int min, int max)
-+{
-+	struct __test_metadata *m;
-+	const char *status;
-+	unsigned int errors = 0;
-+	int printed;
-+
-+	for (m = __test_setup.start; m; m = m->next) {
-+		int testnum = m->suite_count - 1;
-+
-+		if (strcmp(suite, m->suite) == 0 && testnum >= min && testnum <= max) {
-+			printed = printf("%d %s", testnum, m->name);
-+			__run_test(m);
-+			printed += m->exe.llen;
-+			if (printed < 64)
-+				putcharn(' ', 64 - printed);
-+
-+			if (m->exe.failed)
-+				status = " [FAIL]";
-+			else if (m->exe.skipped)
-+				status = "[SKIPPED]";
-+			else
-+				status = "  [OK]";
-+
-+			printf("%s\n", status);
-+			if (m->exe.failed)
-+				errors++;
-+		}
-+	}
-+	return errors;
-+};
-+
-+static __attribute__((unused))
-+void reset_tests(void)
-+{
-+	struct __test_metadata *m;
-+
-+	for (m = __test_setup.start; m; m = m->next)
-+		memset(&m->exe, 0, sizeof(m->exe));
-+}
-+
-+static __attribute__((unused))
-+unsigned int run_all_tests(void)
-+{
-+	struct __test_metadata *m;
-+	unsigned int suite_errors, errors = 0;
-+
-+	for (m = __test_setup.start; m; m = m->next) {
-+		if (!m->exe.finished) {
-+			printf("Running test '%s'\n", m->suite);
-+			suite_errors = run_test_suite(m->suite, 0, INT_MAX);
-+			printf("Errors during this test: %d\n\n", suite_errors);
-+			errors += suite_errors;
-+		}
-+	}
-+
-+	printf("Total number of errors: %d\n", errors);
-+	return errors;
-+}
-+
-+#define ASSERT_EQ(expected, seen) \
-+	__ASSERT(expected, #expected, seen, #seen, ==)
-+#define ASSERT_NE(expected, seen) \
-+	__ASSERT(expected, #expected, seen, #seen, !=)
-+#define ASSERT_LT(expected, seen) \
-+	__ASSERT(expected, #expected, seen, #seen, <)
-+#define ASSERT_LE(expected, seen) \
-+	__ASSERT(expected, #expected, seen, #seen, <=)
-+#define ASSERT_GT(expected, seen) \
-+	__ASSERT(expected, #expected, seen, #seen, >)
-+#define ASSERT_GE(expected, seen) \
-+	__ASSERT(expected, #expected, seen, #seen, >=)
-+#define ASSERT_NULL(seen) \
-+	__ASSERT(NULL, "NULL", seen, #seen, ==)
-+#define ASSERT_TRUE(seen) \
-+	__ASSERT(0, "0", seen, #seen, !=)
-+#define ASSERT_FALSE(seen) \
-+	__ASSERT(0, "0", seen, #seen, ==)
-+
-+#define is_signed_type(var)       (!!(((__typeof__(var))(-1)) < (__typeof__(var))1))
-+#define is_pointer_type(var)	(__builtin_classify_type(var) == 5)
-+
-+#define __ASSERT(_expected, _expected_str, _seen, _seen_str, _t) __extension__ ({ \
-+	/* Avoid multiple evaluation of the cases */ \
-+	__typeof__(_expected) __exp = (_expected); \
-+	__typeof__(_seen) __seen = (_seen); \
-+	int __ok = __exp _t __seen; \
-+	if (!__ok) \
-+		_metadata->exe.failed = 1; \
-+	if (is_pointer_type(__exp)) { \
-+		void * __expected_print = (void *)(uintptr_t)__exp; \
-+		_metadata->exe.llen = printf(" = <%p> ", __expected_print); \
-+	} else if (is_signed_type(__exp)) { \
-+		long long __expected_print = (intptr_t)__exp; \
-+		_metadata->exe.llen = printf(" = %lld ", __expected_print); \
-+	} else { \
-+		unsigned long long __expected_print = (uintptr_t)__exp; \
-+		_metadata->exe.llen = printf(" = %llu ", __expected_print); \
-+	} \
-+	__ok; \
-+})
-+
-+#define ASSERT_STREQ(expected, seen) \
-+	__ASSERT_STR(expected, seen, ==)
-+#define ASSERT_STRNE(expected, seen) \
-+	__ASSERT_STR(expected, seen, !=)
-+
-+#define __ASSERT_STR(_expected, _seen, _t) __extension__ ({ \
-+	const char *__exp = (_expected); \
-+	const char *__seen = (_seen); \
-+	int __ok = __seen && __exp && strcmp(__exp, __seen) _t 0; \
-+	if (!__ok) \
-+		_metadata->exe.failed = 1; \
-+	_metadata->exe.llen = printf(" = <%s> ", __exp ? __exp : ""); \
-+	__ok; \
-+})
-+
-+#define ASSERT_STRNZ(seen) __extension__ ({ \
-+	const char *__seen = (seen); \
-+	int __ok = !!__seen; \
-+	if (!__ok) \
-+		_metadata->exe.failed = 1; \
-+	_metadata->exe.llen = printf(" = <%s> ", __seen); \
-+	__ok; \
-+})
++int run_vfprintf(int min, int max)
+ {
+-	int test;
+-	int ret = 0;
+-
+-	for (test = min; test >= 0 && test <= max; test++) {
+-		int llen = 0; /* line length */
+-
+-		/* avoid leaving empty lines below, this will insert holes into
+-		 * test numbers.
+-		 */
+-		switch (test + __LINE__ + 1) {
+-		CASE_TEST(empty);        EXPECT_VFPRINTF(0, "", ""); break;
+-		CASE_TEST(simple);       EXPECT_VFPRINTF(3, "foo", "foo"); break;
+-		CASE_TEST(string);       EXPECT_VFPRINTF(3, "foo", "%s", "foo"); break;
+-		CASE_TEST(number);       EXPECT_VFPRINTF(4, "1234", "%d", 1234); break;
+-		CASE_TEST(negnumber);    EXPECT_VFPRINTF(5, "-1234", "%d", -1234); break;
+-		CASE_TEST(unsigned);     EXPECT_VFPRINTF(5, "12345", "%u", 12345); break;
+-		CASE_TEST(char);         EXPECT_VFPRINTF(1, "c", "%c", 'c'); break;
+-		CASE_TEST(hex);          EXPECT_VFPRINTF(1, "f", "%x", 0xf); break;
+-		CASE_TEST(pointer);      EXPECT_VFPRINTF(3, "0x1", "%p", (void *) 0x1); break;
+-		case __LINE__:
+-			return ret; /* must be last */
+-		/* note: do not set any defaults so as to permit holes above */
+-		}
+-	}
+-	return ret;
++	return run_test_suite("vfprintf", min, max);
+ }
+ 
+ static int smash_stack(void)
 
 -- 
 2.42.1
