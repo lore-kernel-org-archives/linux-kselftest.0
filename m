@@ -1,107 +1,190 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B648339FC3
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Nov 2023 16:59:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFD223BB3A
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Nov 2023 17:04:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="XKo7BfFs"
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D1E218B
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Nov 2023 08:59:08 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2c50fbc218bso93588201fa.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Nov 2023 08:59:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1700067546; x=1700672346; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ac4Ls6gftQvQgbcRf5XLhX5PwcgnIwraX4CtQN05HrE=;
-        b=XKo7BfFsmcb0YnmWGpFnRQNbI2Ieviv+2uP/0392a453G8aponkQClciBNjNx83HvJ
-         otRxo545V4Qaj3CIzSwU9Nu3f9Hi1VuVhDDc3eVgvL+7UiuqvYnXeRvozTm4NBl4NcDf
-         1b0+PoQFPZN2fbqXb/iAYA+fXVjOg9nCJA2Gg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700067546; x=1700672346;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ac4Ls6gftQvQgbcRf5XLhX5PwcgnIwraX4CtQN05HrE=;
-        b=OKWjeOPJrN7tz/DKXtrXJd8e4YOUT4bE0kQ62aQnEx1QhjrRrLMRhxq945pVUiKWcS
-         IV8Br6NKdnz/QqQwr+L1yoec3Y1YPweRykUzInbx5HY7+9A+5WUZQPqPkC7aFeuzMxE6
-         h2HabEWDNtQ9cZk6Z5LofIWTINK3Q1u8dyMzHoETw/Pu9w/zmbmxlqkufKx2r3IXQhxM
-         upmMPjTY+NahLBAxSE+mjBabjCqo+cAjyODXgDvcPv/Id4eoitEO8h7ne59r2LstYG7/
-         MrY6Mr0g0x1QfR+oBATrXngXdhP0w1V1mk7SRdbH4CQsw9wHv6vxSNo86aO12G5ZHh4b
-         rOAA==
-X-Gm-Message-State: AOJu0YzskjAXnAyTq3UiNRjQou0EgO+yrArsG1Q7Eq76F3AhoLd9u3bv
-	yus75eWJ3VGjOnK0zv85XsVY+vpfZvzjt9Tx6ncpGw+W
-X-Google-Smtp-Source: AGHT+IEKde8I+FzP0K0Y4CAiLmUSNMZ20gCXEzegaen0aOgJHQ/BQPClLQUxkDRzHjg8h0qbtO9dUA==
-X-Received: by 2002:a05:6512:3f18:b0:50a:764d:7de9 with SMTP id y24-20020a0565123f1800b0050a764d7de9mr10859655lfa.66.1700067546460;
-        Wed, 15 Nov 2023 08:59:06 -0800 (PST)
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com. [209.85.167.42])
-        by smtp.gmail.com with ESMTPSA id o7-20020a05651205c700b00507a8789b43sm1700349lfo.269.2023.11.15.08.59.05
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Nov 2023 08:59:06 -0800 (PST)
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-50943ccbbaeso10007899e87.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Nov 2023 08:59:05 -0800 (PST)
-X-Received: by 2002:a19:7119:0:b0:507:9787:6773 with SMTP id
- m25-20020a197119000000b0050797876773mr9107681lfc.36.1700067545585; Wed, 15
- Nov 2023 08:59:05 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SPvKiP1Z"
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6259A198
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Nov 2023 09:04:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1700067857;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Pt/uc3/sS3+KPK27UtScw6ZAU1P5p5ewZLM2SZmBAtw=;
+	b=SPvKiP1Z/EnSefwS1+YzIe21X4MWtkF1JdSfkqHIEz5DGh4byCBjuy0W3lIrVNUpCAbXL0
+	KXHspIcT1sMMJo7+HfdzvKZ15FQE0NQFUGVMFj+nbsMwdoL3uITBOHANnT+aw3+dq4wrtj
+	v1naGTNFSdD8c1qsaIcC0a0Fvwvq9DQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-411-oDVOxx06MfCUcXt8xdUJZg-1; Wed, 15 Nov 2023 12:04:15 -0500
+X-MC-Unique: oDVOxx06MfCUcXt8xdUJZg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id ABD0385A58C;
+	Wed, 15 Nov 2023 17:04:14 +0000 (UTC)
+Received: from llong.com (unknown [10.22.9.37])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 5B6201121306;
+	Wed, 15 Nov 2023 17:04:14 +0000 (UTC)
+From: Waiman Long <longman@redhat.com>
+To: Tejun Heo <tj@kernel.org>,
+	Zefan Li <lizefan.x@bytedance.com>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Peter Hunt <pehunt@redhat.com>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Waiman Long <longman@redhat.com>
+Subject: [PATCH v3 1/5] workqueue: Make workqueue_set_unbound_cpumask() static
+Date: Wed, 15 Nov 2023 12:03:55 -0500
+Message-Id: <20231115170359.163299-2-longman@redhat.com>
+In-Reply-To: <20231115170359.163299-1-longman@redhat.com>
+References: <20231115170359.163299-1-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231115154946.3933808-1-dhowells@redhat.com> <20231115154946.3933808-6-dhowells@redhat.com>
- <CAHk-=wgHciqm3iaq6hhtP64+Zsca6Y6z5UfzHzjfhUhA=jP0zA@mail.gmail.com> <3936726.1700066370@warthog.procyon.org.uk>
-In-Reply-To: <3936726.1700066370@warthog.procyon.org.uk>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Wed, 15 Nov 2023 11:58:48 -0500
-X-Gmail-Original-Message-ID: <CAHk-=whEj_+oP0mwNr7eArnOzWf_380-+-6LD9RtQXVs29fYJQ@mail.gmail.com>
-Message-ID: <CAHk-=whEj_+oP0mwNr7eArnOzWf_380-+-6LD9RtQXVs29fYJQ@mail.gmail.com>
-Subject: Re: [PATCH v3 05/10] iov_iter: Create a function to prepare userspace
- VM for UBUF/IOVEC tests
-To: David Howells <dhowells@redhat.com>
-Cc: Christian Brauner <christian@brauner.io>, Jens Axboe <axboe@kernel.dk>, 
-	Al Viro <viro@zeniv.linux.org.uk>, Christoph Hellwig <hch@lst.de>, 
-	David Laight <David.Laight@aculab.com>, Matthew Wilcox <willy@infradead.org>, 
-	Brendan Higgins <brendanhiggins@google.com>, David Gow <davidgow@google.com>, 
-	linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org, 
-	linux-mm@kvack.org, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
-	Andrew Morton <akpm@linux-foundation.org>, Christian Brauner <brauner@kernel.org>, 
-	David Hildenbrand <david@redhat.com>, John Hubbard <jhubbard@nvidia.com>, 
-	Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
-	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, loongarch@lists.linux.dev, linux-s390@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
 
-On Wed, 15 Nov 2023 at 11:39, David Howells <dhowells@redhat.com> wrote:
->
-> I was trying to make it possible to do these tests before starting userspace
-> as there's a good chance that if the UBUF/IOVEC iterators don't work right
-> then your system can't be booted.
+The workqueue_set_unbound_cpumask() function is only used inside
+workqueue.c with CONFIG_SYSFS. Make it static and move it down to within
+the ifdef CONFIG_SYSFS block. Also mark workqueue_apply_unbound_cpumask()
+as __maybe_unused for now as it will be used by another function
+introduced in a later commit. There is no functional change.
 
-Oh, I don't think that any unit test should bother to check for that
-kind of catastrophic case.
+Signed-off-by: Waiman Long <longman@redhat.com>
+---
+ include/linux/workqueue.h |  1 -
+ kernel/workqueue.c        | 76 +++++++++++++++++++--------------------
+ 2 files changed, 38 insertions(+), 39 deletions(-)
 
-If something is so broken that the kernel doesn't boot properly even
-into some basic test infrastructure, then bisection will trivially
-find where that breakage was introduced.
+diff --git a/include/linux/workqueue.h b/include/linux/workqueue.h
+index 24b1e5070f4d..cf49b467bd57 100644
+--- a/include/linux/workqueue.h
++++ b/include/linux/workqueue.h
+@@ -491,7 +491,6 @@ struct workqueue_attrs *alloc_workqueue_attrs(void);
+ void free_workqueue_attrs(struct workqueue_attrs *attrs);
+ int apply_workqueue_attrs(struct workqueue_struct *wq,
+ 			  const struct workqueue_attrs *attrs);
+-int workqueue_set_unbound_cpumask(cpumask_var_t cpumask);
+ 
+ extern bool queue_work_on(int cpu, struct workqueue_struct *wq,
+ 			struct work_struct *work);
+diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+index 6e578f576a6f..8996cdba8f07 100644
+--- a/kernel/workqueue.c
++++ b/kernel/workqueue.c
+@@ -5784,7 +5784,7 @@ void thaw_workqueues(void)
+ }
+ #endif /* CONFIG_FREEZER */
+ 
+-static int workqueue_apply_unbound_cpumask(const cpumask_var_t unbound_cpumask)
++static int __maybe_unused workqueue_apply_unbound_cpumask(const cpumask_var_t unbound_cpumask)
+ {
+ 	LIST_HEAD(ctxs);
+ 	int ret = 0;
+@@ -5827,43 +5827,6 @@ static int workqueue_apply_unbound_cpumask(const cpumask_var_t unbound_cpumask)
+ 	return ret;
+ }
+ 
+-/**
+- *  workqueue_set_unbound_cpumask - Set the low-level unbound cpumask
+- *  @cpumask: the cpumask to set
+- *
+- *  The low-level workqueues cpumask is a global cpumask that limits
+- *  the affinity of all unbound workqueues.  This function check the @cpumask
+- *  and apply it to all unbound workqueues and updates all pwqs of them.
+- *
+- *  Return:	0	- Success
+- *  		-EINVAL	- Invalid @cpumask
+- *  		-ENOMEM	- Failed to allocate memory for attrs or pwqs.
+- */
+-int workqueue_set_unbound_cpumask(cpumask_var_t cpumask)
+-{
+-	int ret = -EINVAL;
+-
+-	/*
+-	 * Not excluding isolated cpus on purpose.
+-	 * If the user wishes to include them, we allow that.
+-	 */
+-	cpumask_and(cpumask, cpumask, cpu_possible_mask);
+-	if (!cpumask_empty(cpumask)) {
+-		apply_wqattrs_lock();
+-		if (cpumask_equal(cpumask, wq_unbound_cpumask)) {
+-			ret = 0;
+-			goto out_unlock;
+-		}
+-
+-		ret = workqueue_apply_unbound_cpumask(cpumask);
+-
+-out_unlock:
+-		apply_wqattrs_unlock();
+-	}
+-
+-	return ret;
+-}
+-
+ static int parse_affn_scope(const char *val)
+ {
+ 	int i;
+@@ -6158,6 +6121,43 @@ static struct bus_type wq_subsys = {
+ 	.dev_groups			= wq_sysfs_groups,
+ };
+ 
++/**
++ *  workqueue_set_unbound_cpumask - Set the low-level unbound cpumask
++ *  @cpumask: the cpumask to set
++ *
++ *  The low-level workqueues cpumask is a global cpumask that limits
++ *  the affinity of all unbound workqueues.  This function check the @cpumask
++ *  and apply it to all unbound workqueues and updates all pwqs of them.
++ *
++ *  Return:	0	- Success
++ *		-EINVAL	- Invalid @cpumask
++ *		-ENOMEM	- Failed to allocate memory for attrs or pwqs.
++ */
++static int workqueue_set_unbound_cpumask(cpumask_var_t cpumask)
++{
++	int ret = -EINVAL;
++
++	/*
++	 * Not excluding isolated cpus on purpose.
++	 * If the user wishes to include them, we allow that.
++	 */
++	cpumask_and(cpumask, cpumask, cpu_possible_mask);
++	if (!cpumask_empty(cpumask)) {
++		apply_wqattrs_lock();
++		if (cpumask_equal(cpumask, wq_unbound_cpumask)) {
++			ret = 0;
++			goto out_unlock;
++		}
++
++		ret = workqueue_apply_unbound_cpumask(cpumask);
++
++out_unlock:
++		apply_wqattrs_unlock();
++	}
++
++	return ret;
++}
++
+ static ssize_t wq_unbound_cpumask_show(struct device *dev,
+ 		struct device_attribute *attr, char *buf)
+ {
+-- 
+2.39.3
 
-And if it's something as core as the iov iterators, it won't even get
-past the initial developer unless it's some odd build system
-interaction.
-
-So extreme cases aren't even worth checking for. What's worth testing
-is "the system boots and works, but I want to check the edge cases".
-
-IOW, when it comes to things like user copies, it's things like
-alignment, and the page fault edge cases with EFAULT in particular.
-You can easily get the return value wrong for a user copy that ends up
-with an unaligned fault at the end of the last mapped page. Everything
-normal will still work fine, because nobody does something that odd.
-
-But those are best handled as user mode tests.
-
-           Linus
