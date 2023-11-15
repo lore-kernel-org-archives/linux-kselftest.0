@@ -1,31 +1,32 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="U4cOO5bt"
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF5418E
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Nov 2023 09:52:16 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="akYvoXPN"
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB8D1B8
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Nov 2023 09:52:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1700070736;
+	s=mimecast20190719; t=1700070741;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=P9P/4kWIh/+LckNZQkng2McbTBVZQ+x8Uch1J3tGPx4=;
-	b=U4cOO5btHjZDg6ddTX5YNGB8To2Tswsd5C7vtbUCDY/+WtF4z7PSJlJdwnxuMlmsMZTstr
-	6J9d+YP4U3Iy6kXD7eZSs0xvCibRHgibnM5jD1c0Mm93slB2XI1c+qVxiFyVYlsbJ2fUOd
-	fhZOUrJ5i4yS0fOywuFQ3z/dgq1TBRM=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zkma+ytFECSmUGaVR3H0P8/excTRmPEEewT1e65f88Q=;
+	b=akYvoXPN8A7XHK9ZBSBA0L43/Dz98fs/a3rL8JujbAAlD35Jj0VfHJOMharxnCUqrAYVgZ
+	MsXybdPck+LzEq8eR3U/jtH03osRlz2EY3mgqVGIoGpJk77SY+sBl5uB8gH/nAvzaeidb9
+	M+jUPqaY2bnbYFo5/ElwAWQU6XHbCkY=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-178-3HKLi1t6NoyOaew_TGi1aw-1; Wed, 15 Nov 2023 12:52:13 -0500
-X-MC-Unique: 3HKLi1t6NoyOaew_TGi1aw-1
+ us-mta-373-X-IRN8qTPlG_KX3opGHxDA-1; Wed, 15 Nov 2023 12:52:18 -0500
+X-MC-Unique: X-IRN8qTPlG_KX3opGHxDA-1
 Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 142BC811E7E;
-	Wed, 15 Nov 2023 17:52:12 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 760498007B3;
+	Wed, 15 Nov 2023 17:52:17 +0000 (UTC)
 Received: from ruby.redhat.com (unknown [10.39.192.56])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 5EC7B1121306;
-	Wed, 15 Nov 2023 17:52:09 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 0FB741121306;
+	Wed, 15 Nov 2023 17:52:14 +0000 (UTC)
 From: Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com>
 To: workflows@vger.kernel.org,
 	Joe Perches <joe@perches.com>,
@@ -40,10 +41,13 @@ Cc: kunit-dev@googlegroups.com,
 	linux-kselftest@vger.kernel.org,
 	Veronika Kabatova <vkabatov@redhat.com>,
 	CKI <cki-project@redhat.com>,
-	kernelci@lists.linux.dev
-Subject: [RFC PATCH 0/3] MAINTAINERS: Introduce V: field for required tests
-Date: Wed, 15 Nov 2023 19:43:48 +0200
-Message-ID: <20231115175146.9848-1-Nikolai.Kondrashov@redhat.com>
+	kernelci@lists.linux.dev,
+	Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com>
+Subject: [PATCH 2/3] MAINTAINERS: Require kvm-xfstests smoke for ext4
+Date: Wed, 15 Nov 2023 19:43:50 +0200
+Message-ID: <20231115175146.9848-3-Nikolai.Kondrashov@redhat.com>
+In-Reply-To: <20231115175146.9848-1-Nikolai.Kondrashov@redhat.com>
+References: <20231115175146.9848-1-Nikolai.Kondrashov@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,49 +57,64 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
 
-The idea of this RFC is to introduce a way to catalogue and document any tests
-that should be executed for changes to a subsystem, as well as to make
-checkpatch.pl require a tag in commit messages certifying they were, plus
-hopefully make it easier to discover and run them.
-
-This is following a discussion Veronika Kabatova started with a few
-(addressed) people at the LPC last year (IIRC), where there was a good deal of
-interest for something like this.
-
-Apart from implementing basic support (surely to be improved), two sample
-changes are added on top, adding a few test suites (roughly) based on what the
-maintainers described earlier. I'm definitely not qualified for describing
-them adequately, and don't have the time to dig deeper, but hopefully they
-could serve as illustrations, and shouldn't be merged as is.
-
-I would defer to maintainers of the corresponding subsystems and tests to
-describe their tests and requirements better. Although I would accept
-amendments too, if they prefer it that way.
-
-One bug I know that's definitely there is handling removed files. The
-scripts/get_maintainer.pl chokes on non-existing files, failing to output the
-required test suites (I'm sure there's a good reason, but I couldn't see it).
-My first idea is to only check for required tests upon encountering the '+++
-<file>' line, and ignore the '/dev/null' file, but I hope the checkpatch.pl
-maintainers could recommend a better way.
-
-Anyway, tell me what you think, and I'll work on polishing this.
-
-Thank you!
-Nick
+Signed-off-by: Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com>
 ---
-Nikolai Kondrashov (3):
-      MAINTAINERS: Introduce V: field for required tests
-      MAINTAINERS: Require kvm-xfstests smoke for ext4
-      MAINTAINERS: Require kunit core tests for framework changes
+ Documentation/process/tests.rst | 32 ++++++++++++++++++++++++++++++++
+ MAINTAINERS                     |  1 +
+ 2 files changed, 33 insertions(+)
 
- Documentation/process/submitting-patches.rst |  19 +++++
- Documentation/process/tests.rst              |  80 ++++++++++++++++++
- MAINTAINERS                                  |   8 ++
- scripts/checkpatch.pl                        | 118 ++++++++++++++++++++++++++-
- scripts/get_maintainer.pl                    |  17 +++-
- scripts/parse-maintainers.pl                 |   3 +-
- 6 files changed, 241 insertions(+), 4 deletions(-)
----
-
+diff --git a/Documentation/process/tests.rst b/Documentation/process/tests.rst
+index 907311e91ec45..9a9ea3fe65c37 100644
+--- a/Documentation/process/tests.rst
++++ b/Documentation/process/tests.rst
+@@ -33,3 +33,35 @@ particularly useful:
+ 
+ :Source: A URL pointing to the source code of the test suite
+ :Docs: A URL pointing to further test suite documentation
++
++xfstests
++--------
++
++:Summary: File system regression test suite
++:Source: git://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git
++:Docs: https://github.com/tytso/xfstests-bld/blob/master/Documentation/what-is-xfstests.md
++
++As the name might imply, xfstests is a file system regression test suite which
++was originally developed by Silicon Graphics (SGI) for the XFS file system.
++Originally, xfstests, like XFS was only supported on the SGI's Irix operating
++system. When XFS was ported to Linux, so was xfstests, and now xfstests is
++only supported on Linux.
++
++Today, xfstests is used as a file system regression test suite for all of
++Linux's major file systems: xfs, ext2, ext4, cifs, btrfs, f2fs, reiserfs, gfs,
++jfs, udf, nfs, and tmpfs. Many file system maintainers will run a full set of
++xfstests before sending patches to Linus, and will require that any major
++changes be tested using xfstests before they are submitted for integration.
++
++The easiest way to start running xfstests is under KVM with xfstests-bld:
++https://github.com/tytso/xfstests-bld/blob/master/Documentation/kvm-quickstart.md
++
++kvm-xfstests smoke
++------------------
++
++:Summary: File system smoke tests
++:Superset: xfstests
++:Docs: https://github.com/tytso/xfstests-bld/blob/master/Documentation/kvm-quickstart.md
++
++The "kvm-xfstests smoke" is a minimal subset of xfstests for testing all major
++file systems, running under KVM.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 2565c04f0490e..f81a47d87ac26 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -7974,6 +7974,7 @@ L:	linux-ext4@vger.kernel.org
+ S:	Maintained
+ W:	http://ext4.wiki.kernel.org
+ Q:	http://patchwork.ozlabs.org/project/linux-ext4/list/
++V:	kvm-xfstests smoke
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git
+ F:	Documentation/filesystems/ext4/
+ F:	fs/ext4/
+-- 
+2.42.0
 
