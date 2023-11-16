@@ -1,32 +1,31 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VoTRVsDY"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="D0rYj3Og"
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1FA1B2
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Nov 2023 19:34:39 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBDFB1B9
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Nov 2023 19:34:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1700105678;
+	s=mimecast20190719; t=1700105680;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=HNDkm6mbeRQ+U5vKsB8rY7jHAsMMih9J2Y0gIXrPx78=;
-	b=VoTRVsDYNbYhzrf2Zviqk2yEgVt/RPrM65Bey9jZ5LHQSsD+Vg44nAj6eyCeKPYMU28E4Z
-	DihPr399Q6TIEtVHCk3G68qc+VeGGSVAO0x6zo3/A2uItE3VGIrkuCjrTSEB02aT02DfDr
-	wlzYYkgx4V6sQsxfEesBrKBSajCC2wE=
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Fh6sr5djueJxvg69Qt1Q1YfFiPMkWzsCiD40QbSJilw=;
+	b=D0rYj3Ogczmqte98/c/eknZwZUBN9tPlZ3SUUn/q7uhIuZ6YHtBD6GvYmZSsGn4EgTcOLq
+	ePb2AwcZt2qnBMw2vbgUYzdMNoGAEs4qnal4WfaSqfmSOfpR7bjl4cjPGAtU0YvSp9hp12
+	5duutAWYpVAr4I6AbMBMAD2FDZXV2L0=
 Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
  by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-602-OesBF61SNpqcgKE8DRlJsw-1; Wed,
- 15 Nov 2023 22:34:35 -0500
-X-MC-Unique: OesBF61SNpqcgKE8DRlJsw-1
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-508-LVbmSX7jPZ2g5WfQ6uex4g-1; Wed,
+ 15 Nov 2023 22:34:34 -0500
+X-MC-Unique: LVbmSX7jPZ2g5WfQ6uex4g-1
 Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DCF1F2806674;
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 061C91C04344;
 	Thu, 16 Nov 2023 03:34:34 +0000 (UTC)
 Received: from llong.com (unknown [10.22.8.169])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 7E153492BFE;
-	Thu, 16 Nov 2023 03:34:34 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 241AF492BFD;
+	Thu, 16 Nov 2023 03:34:33 +0000 (UTC)
 From: Waiman Long <longman@redhat.com>
 To: Tejun Heo <tj@kernel.org>,
 	Zefan Li <lizefan.x@bytedance.com>,
@@ -41,238 +40,80 @@ Cc: cgroups@vger.kernel.org,
 	Peter Hunt <pehunt@redhat.com>,
 	Frederic Weisbecker <frederic@kernel.org>,
 	Waiman Long <longman@redhat.com>
-Subject: [PATCH v4 2/5] workqueue: Add workqueue_unbound_exclude_cpumask() to exclude CPUs from wq_unbound_cpumask
-Date: Wed, 15 Nov 2023 22:34:02 -0500
-Message-Id: <20231116033405.185166-3-longman@redhat.com>
-In-Reply-To: <20231116033405.185166-1-longman@redhat.com>
-References: <20231116033405.185166-1-longman@redhat.com>
+Subject: [PATCH v4 0/5] cgroup/cpuset: Improve CPU isolation in isolated partitions
+Date: Wed, 15 Nov 2023 22:34:00 -0500
+Message-Id: <20231116033405.185166-1-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.10
 
-When the "isolcpus" boot command line option is used to add a set
-of isolated CPUs, those CPUs will be excluded automatically from
-wq_unbound_cpumask to avoid running work functions from unbound
-workqueues.
+v4:
+ - Update patch 1 to move apply_wqattrs_lock() and apply_wqattrs_unlock()
+   down into CONFIG_SYSFS block to avoid compilation warnings.
 
-Recently cpuset has been extended to allow the creation of partitions
-of isolated CPUs dynamically. To make it closer to the "isolcpus"
-in functionality, the CPUs in those isolated cpuset partitions should be
-excluded from wq_unbound_cpumask as well. This can be done currently by
-explicitly writing to the workqueue's cpumask sysfs file after creating
-the isolated partitions. However, this process can be error prone.
+v3:
+ - Break out a separate patch to make workqueue_set_unbound_cpumask()
+   static and move it down to the CONFIG_SYSFS section.
+ - Remove the "__DEBUG__." prefix and the CFTYPE_DEBUG flag from the
+   new root only cpuset.cpus.isolated control files and update the
+   test accordingly.
 
-Ideally, the cpuset code should be allowed to request the workqueue code
-to exclude those isolated CPUs from wq_unbound_cpumask so that this
-operation can be done automatically and the isolated CPUs will be returned
-back to wq_unbound_cpumask after the destructions of the isolated
-cpuset partitions.
+v2:
+ - Add 2 read-only workqueue sysfs files to expose the user requested
+   cpumask as well as the isolated CPUs to be excluded from
+   wq_unbound_cpumask.
+ - Ensure that caller of the new workqueue_unbound_exclude_cpumask()
+   hold cpus_read_lock.
+ - Update the cpuset code to make sure the cpus_read_lock is held
+   whenever workqueue_unbound_exclude_cpumask() may be called.
 
-This patch adds a new workqueue_unbound_exclude_cpumask() function to
-enable that. This new function will exclude the specified isolated
-CPUs from wq_unbound_cpumask. To be able to restore those isolated
-CPUs back after the destruction of isolated cpuset partitions, a new
-wq_requested_unbound_cpumask is added to store the user provided unbound
-cpumask either from the boot command line options or from writing to
-the cpumask sysfs file. This new cpumask provides the basis for CPU
-exclusion.
+Isolated cpuset partition can currently be created to contain an
+exclusive set of CPUs not used in other cgroups and with load balancing
+disabled to reduce interference from the scheduler.
 
-To enable users to understand how the wq_unbound_cpumask is being
-modified internally, this patch also exposes the newly introduced
-wq_requested_unbound_cpumask as well as a wq_isolated_cpumask to
-store the cpumask to be excluded from wq_unbound_cpumask as read-only
-sysfs files.
+The main purpose of this isolated partition type is to dynamically
+emulate what can be done via the "isolcpus" boot command line option,
+specifically the default domain flag. One effect of the "isolcpus" option
+is to remove the isolated CPUs from the cpumasks of unbound workqueues
+since running work functions in an isolated CPU can be a major source
+of interference. Changing the unbound workqueue cpumasks can be done at
+run time by writing an appropriate cpumask without the isolated CPUs to
+/sys/devices/virtual/workqueue/cpumask. So one can set up an isolated
+cpuset partition and then write to the cpumask sysfs file to achieve
+similar level of CPU isolation. However, this manual process can be
+error prone.
 
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- include/linux/workqueue.h |  1 +
- kernel/workqueue.c        | 91 +++++++++++++++++++++++++++++++++++----
- 2 files changed, 84 insertions(+), 8 deletions(-)
+This patch series implements automatic exclusion of isolated CPUs from
+unbound workqueue cpumasks when an isolated cpuset partition is created
+and then adds those CPUs back when the isolated partition is destroyed.
 
-diff --git a/include/linux/workqueue.h b/include/linux/workqueue.h
-index cf49b467bd57..b0b9604b76b8 100644
---- a/include/linux/workqueue.h
-+++ b/include/linux/workqueue.h
-@@ -491,6 +491,7 @@ struct workqueue_attrs *alloc_workqueue_attrs(void);
- void free_workqueue_attrs(struct workqueue_attrs *attrs);
- int apply_workqueue_attrs(struct workqueue_struct *wq,
- 			  const struct workqueue_attrs *attrs);
-+extern int workqueue_unbound_exclude_cpumask(cpumask_var_t cpumask);
- 
- extern bool queue_work_on(int cpu, struct workqueue_struct *wq,
- 			struct work_struct *work);
-diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-index 145159f993e9..2fc585d3d6ca 100644
---- a/kernel/workqueue.c
-+++ b/kernel/workqueue.c
-@@ -381,6 +381,12 @@ static bool workqueue_freezing;		/* PL: have wqs started freezing? */
- /* PL&A: allowable cpus for unbound wqs and work items */
- static cpumask_var_t wq_unbound_cpumask;
- 
-+/* PL: user requested unbound cpumask via sysfs */
-+static cpumask_var_t wq_requested_unbound_cpumask;
-+
-+/* PL: isolated cpumask to be excluded from unbound cpumask */
-+static cpumask_var_t wq_isolated_cpumask;
-+
- /* for further constrain wq_unbound_cpumask by cmdline parameter*/
- static struct cpumask wq_cmdline_cpumask __initdata;
- 
-@@ -5771,7 +5777,7 @@ void thaw_workqueues(void)
- }
- #endif /* CONFIG_FREEZER */
- 
--static int __maybe_unused workqueue_apply_unbound_cpumask(const cpumask_var_t unbound_cpumask)
-+static int workqueue_apply_unbound_cpumask(const cpumask_var_t unbound_cpumask)
- {
- 	LIST_HEAD(ctxs);
- 	int ret = 0;
-@@ -5814,6 +5820,44 @@ static int __maybe_unused workqueue_apply_unbound_cpumask(const cpumask_var_t un
- 	return ret;
- }
- 
-+/**
-+ * workqueue_unbound_exclude_cpumask - Exclude given CPUs from unbound cpumask
-+ * @exclude_cpumask: the cpumask to be excluded from wq_unbound_cpumask
-+ *
-+ * This function can be called from cpuset code to provide a set of isolated
-+ * CPUs that should be excluded from wq_unbound_cpumask. The caller must hold
-+ * either cpus_read_lock or cpus_write_lock.
-+ */
-+int workqueue_unbound_exclude_cpumask(cpumask_var_t exclude_cpumask)
-+{
-+	cpumask_var_t cpumask;
-+	int ret = 0;
-+
-+	if (!zalloc_cpumask_var(&cpumask, GFP_KERNEL))
-+		return -ENOMEM;
-+
-+	lockdep_assert_cpus_held();
-+	mutex_lock(&wq_pool_mutex);
-+
-+	/* Save the current isolated cpumask & export it via sysfs */
-+	cpumask_copy(wq_isolated_cpumask, exclude_cpumask);
-+
-+	/*
-+	 * If the operation fails, it will fall back to
-+	 * wq_requested_unbound_cpumask which is initially set to
-+	 * (HK_TYPE_WQ ∩ HK_TYPE_DOMAIN) house keeping mask and rewritten
-+	 * by any subsequent write to workqueue/cpumask sysfs file.
-+	 */
-+	if (!cpumask_andnot(cpumask, wq_requested_unbound_cpumask, exclude_cpumask))
-+		cpumask_copy(cpumask, wq_requested_unbound_cpumask);
-+	if (!cpumask_equal(cpumask, wq_unbound_cpumask))
-+		ret = workqueue_apply_unbound_cpumask(cpumask);
-+
-+	mutex_unlock(&wq_pool_mutex);
-+	free_cpumask_var(cpumask);
-+	return ret;
-+}
-+
- static int parse_affn_scope(const char *val)
- {
- 	int i;
-@@ -6144,6 +6188,7 @@ static int workqueue_set_unbound_cpumask(cpumask_var_t cpumask)
- 	cpumask_and(cpumask, cpumask, cpu_possible_mask);
- 	if (!cpumask_empty(cpumask)) {
- 		apply_wqattrs_lock();
-+		cpumask_copy(wq_requested_unbound_cpumask, cpumask);
- 		if (cpumask_equal(cpumask, wq_unbound_cpumask)) {
- 			ret = 0;
- 			goto out_unlock;
-@@ -6158,19 +6203,36 @@ static int workqueue_set_unbound_cpumask(cpumask_var_t cpumask)
- 	return ret;
- }
- 
--static ssize_t wq_unbound_cpumask_show(struct device *dev,
--		struct device_attribute *attr, char *buf)
-+static ssize_t __wq_cpumask_show(struct device *dev,
-+		struct device_attribute *attr, char *buf, cpumask_var_t mask)
- {
- 	int written;
- 
- 	mutex_lock(&wq_pool_mutex);
--	written = scnprintf(buf, PAGE_SIZE, "%*pb\n",
--			    cpumask_pr_args(wq_unbound_cpumask));
-+	written = scnprintf(buf, PAGE_SIZE, "%*pb\n", cpumask_pr_args(mask));
- 	mutex_unlock(&wq_pool_mutex);
- 
- 	return written;
- }
- 
-+static ssize_t wq_unbound_cpumask_show(struct device *dev,
-+		struct device_attribute *attr, char *buf)
-+{
-+	return __wq_cpumask_show(dev, attr, buf, wq_unbound_cpumask);
-+}
-+
-+static ssize_t wq_requested_cpumask_show(struct device *dev,
-+		struct device_attribute *attr, char *buf)
-+{
-+	return __wq_cpumask_show(dev, attr, buf, wq_requested_unbound_cpumask);
-+}
-+
-+static ssize_t wq_isolated_cpumask_show(struct device *dev,
-+		struct device_attribute *attr, char *buf)
-+{
-+	return __wq_cpumask_show(dev, attr, buf, wq_isolated_cpumask);
-+}
-+
- static ssize_t wq_unbound_cpumask_store(struct device *dev,
- 		struct device_attribute *attr, const char *buf, size_t count)
- {
-@@ -6188,9 +6250,13 @@ static ssize_t wq_unbound_cpumask_store(struct device *dev,
- 	return ret ? ret : count;
- }
- 
--static struct device_attribute wq_sysfs_cpumask_attr =
-+static struct device_attribute wq_sysfs_cpumask_attrs[] = {
- 	__ATTR(cpumask, 0644, wq_unbound_cpumask_show,
--	       wq_unbound_cpumask_store);
-+	       wq_unbound_cpumask_store),
-+	__ATTR(cpumask_requested, 0444, wq_requested_cpumask_show, NULL),
-+	__ATTR(cpumask_isolated, 0444, wq_isolated_cpumask_show, NULL),
-+	__ATTR_NULL,
-+};
- 
- static int __init wq_sysfs_init(void)
- {
-@@ -6203,7 +6269,13 @@ static int __init wq_sysfs_init(void)
- 
- 	dev_root = bus_get_dev_root(&wq_subsys);
- 	if (dev_root) {
--		err = device_create_file(dev_root, &wq_sysfs_cpumask_attr);
-+		struct device_attribute *attr;
-+
-+		for (attr = wq_sysfs_cpumask_attrs; attr->attr.name; attr++) {
-+			err = device_create_file(dev_root, attr);
-+			if (err)
-+				break;
-+		}
- 		put_device(dev_root);
- 	}
- 	return err;
-@@ -6534,11 +6606,14 @@ void __init workqueue_init_early(void)
- 	BUILD_BUG_ON(__alignof__(struct pool_workqueue) < __alignof__(long long));
- 
- 	BUG_ON(!alloc_cpumask_var(&wq_unbound_cpumask, GFP_KERNEL));
-+	BUG_ON(!alloc_cpumask_var(&wq_requested_unbound_cpumask, GFP_KERNEL));
-+	BUG_ON(!zalloc_cpumask_var(&wq_isolated_cpumask, GFP_KERNEL));
- 	cpumask_copy(wq_unbound_cpumask, housekeeping_cpumask(HK_TYPE_WQ));
- 	cpumask_and(wq_unbound_cpumask, wq_unbound_cpumask, housekeeping_cpumask(HK_TYPE_DOMAIN));
- 
- 	if (!cpumask_empty(&wq_cmdline_cpumask))
- 		cpumask_and(wq_unbound_cpumask, wq_unbound_cpumask, &wq_cmdline_cpumask);
-+	cpumask_copy(wq_requested_unbound_cpumask, wq_unbound_cpumask);
- 
- 	pwq_cache = KMEM_CACHE(pool_workqueue, SLAB_PANIC);
- 
+There are also other places in the kernel that look at the HK_FLAG_DOMAIN
+cpumask or other HK_FLAG_* cpumasks and exclude the isolated CPUs from
+certain actions to further reduce interference. CPUs in an isolated
+cpuset partition will not be able to avoid those interferences yet. That
+may change in the future as the need arises.
+
+Waiman Long (5):
+  workqueue: Make workqueue_set_unbound_cpumask() static
+  workqueue: Add workqueue_unbound_exclude_cpumask() to exclude CPUs
+    from wq_unbound_cpumask
+  selftests/cgroup: Minor code cleanup and reorganization of
+    test_cpuset_prs.sh
+  cgroup/cpuset: Keep track of CPUs in isolated partitions
+  cgroup/cpuset: Take isolated CPUs out of workqueue unbound cpumask
+
+ Documentation/admin-guide/cgroup-v2.rst       |  10 +-
+ include/linux/workqueue.h                     |   2 +-
+ kernel/cgroup/cpuset.c                        | 286 +++++++++++++-----
+ kernel/workqueue.c                            | 165 +++++++---
+ .../selftests/cgroup/test_cpuset_prs.sh       | 216 ++++++++-----
+ 5 files changed, 475 insertions(+), 204 deletions(-)
+
 -- 
 2.39.3
 
