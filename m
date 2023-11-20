@@ -1,31 +1,32 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RQX+PiQw"
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B65D119;
-	Mon, 20 Nov 2023 03:15:31 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OzNnbW3A"
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3DCF1AD;
+	Mon, 20 Nov 2023 03:15:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700478931; x=1732014931;
+  t=1700478935; x=1732014935;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=TfMJCb5YpSuuahqqeQzJDceet+atUjOdl8ZAzSVu4hQ=;
-  b=RQX+PiQwWwqY01WIn/sgnsTlBzm+jsaJio7K7LCDQbJvuiIyiwfRhpMS
-   zA6ICHNdDPmEqeonRY7CMGRUIY+H7ef1XNDvgtwFe+Vn4AXzssbHEoxQz
-   +JzvVM90PSzhO+KDg7V2HZIjjdz981GgVJqGhj/51w5ynSnPaGLo9wlPX
-   MZbEbX03wOGdv2WArxUqcA86bbkPDHt4vcmmJfqlEdOnEH3isKqfplQ6/
-   at7hYf8PhRzZm00yOAALyH6pfwzBGHHsu4WZm0jL96WeCPhM7zDzIyKx6
-   2bBbw1r8CGX76ens5y8uMdkA0FZxUXKJ20/LWvjM3yDRjEvdC4a0Edlkq
+  bh=tVN/FhwY6NyA0nXfkYCvWVI9YZaBRRB4ulMKfSyM56g=;
+  b=OzNnbW3A7f78BjWGZgZmIXVoA/ZyE7nlZUPNaBjmd8+t2VdwOAUxKK1M
+   5ienRbiL+U2BSC6uHrB7kQmz7mnZes+heRPmXWShg7poNOOhYFeeoUxMq
+   ZQWdGg0OlD8Abywsc+vOtbFiYArILck9PXIdxLiLUEbUfbp9FYFhDgW3V
+   AUKfxFq10Xjqbsm9RGzjlPy+pkA+F53VdyL/E6UVpHHAMLbZIQMOVHLk7
+   4E+2iiTYCFk3YPLGdnLDO4/gEVYM0esWQuaMEFKZ2pz8Hf4wPuod60CrB
+   aGHIYtxCLghWFFww3OqE8gt/MT9x6yFMvM1Jfp2PvokRJf4akYndhEQnt
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10899"; a="477808965"
+X-IronPort-AV: E=McAfee;i="6600,9927,10899"; a="13151924"
 X-IronPort-AV: E=Sophos;i="6.04,213,1695711600"; 
-   d="scan'208";a="477808965"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 03:15:30 -0800
+   d="scan'208";a="13151924"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 03:15:34 -0800
 X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10899"; a="832238252"
 X-IronPort-AV: E=Sophos;i="6.04,213,1695711600"; 
-   d="scan'208";a="7523272"
+   d="scan'208";a="832238252"
 Received: from sc9itsct4906.amr.corp.intel.com (HELO localhost) ([10.249.46.107])
-  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 03:15:12 -0800
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 03:15:30 -0800
 From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To: linux-kselftest@vger.kernel.org,
 	Reinette Chatre <reinette.chatre@intel.com>,
@@ -35,9 +36,9 @@ To: linux-kselftest@vger.kernel.org,
 	Fenghua Yu <fenghua.yu@intel.com>
 Cc: linux-kernel@vger.kernel.org,
 	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v2 10/26] selftests/resctrl: Remove unnecessary __u64 -> unsigned long conversion
-Date: Mon, 20 Nov 2023 13:13:24 +0200
-Message-Id: <20231120111340.7805-11-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v2 12/26] selftests/resctrl: Consolidate naming of perf event related things
+Date: Mon, 20 Nov 2023 13:13:26 +0200
+Message-Id: <20231120111340.7805-13-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20231120111340.7805-1-ilpo.jarvinen@linux.intel.com>
 References: <20231120111340.7805-1-ilpo.jarvinen@linux.intel.com>
@@ -50,145 +51,138 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Perf counters are __u64 but the code converts them to unsigned long
-before printing them out.
+Naming for perf event related functions, types, and variables is
+currently inconsistent.
 
-Remove unnecessary type conversion and retain the value as __u64 whole
-the time.
+Make struct read_format and all functions related to perf events start
+with "perf_". Adjust variable names towards the same direction but use
+shorter names for variables where appropriate (pe prefix).
 
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- tools/testing/selftests/resctrl/cache.c    | 21 ++++++++-------------
- tools/testing/selftests/resctrl/cat_test.c |  8 ++++----
- tools/testing/selftests/resctrl/resctrl.h  |  3 +--
- 3 files changed, 13 insertions(+), 19 deletions(-)
+ tools/testing/selftests/resctrl/cache.c | 42 ++++++++++++-------------
+ 1 file changed, 21 insertions(+), 21 deletions(-)
 
 diff --git a/tools/testing/selftests/resctrl/cache.c b/tools/testing/selftests/resctrl/cache.c
-index 493e0e924123..6a754ea376c9 100644
+index aea4f54d32bd..52d37d1c380f 100644
 --- a/tools/testing/selftests/resctrl/cache.c
 +++ b/tools/testing/selftests/resctrl/cache.c
-@@ -83,9 +83,8 @@ static int reset_enable_llc_perf(pid_t pid, int cpu_no)
-  *
-  * Return: =0 on success.  <0 on failure.
-  */
--static int get_llc_perf(unsigned long *llc_perf_miss)
-+static int get_llc_perf(__u64 *llc_perf_miss)
- {
--	__u64 total_misses;
- 	int ret;
+@@ -3,7 +3,7 @@
+ #include <stdint.h>
+ #include "resctrl.h"
  
- 	/* Stop counters after one span to get miss rate */
-@@ -98,8 +97,7 @@ static int get_llc_perf(unsigned long *llc_perf_miss)
+-struct read_format {
++struct perf_event_read {
+ 	__u64 nr;			/* The number of events */
+ 	struct {
+ 		__u64 value;		/* The value of the event */
+@@ -11,11 +11,11 @@ struct read_format {
+ };
+ 
+ static struct perf_event_attr pea_llc_miss;
+-static struct read_format rf_cqm;
+-static int fd_lm;
++static struct perf_event_read pe_read;
++static int pe_fd;
+ char llc_occup_path[1024];
+ 
+-static void initialize_perf_event_attr(void)
++static void perf_event_attr_initialize(void)
+ {
+ 	pea_llc_miss.type = PERF_TYPE_HARDWARE;
+ 	pea_llc_miss.size = sizeof(struct perf_event_attr);
+@@ -30,34 +30,34 @@ static void initialize_perf_event_attr(void)
+ }
+ 
+ /* Start counters to log values */
+-static void ioctl_perf_event_ioc_reset_enable(void)
++static void perf_event_reset_enable(void)
+ {
+-	ioctl(fd_lm, PERF_EVENT_IOC_RESET, 0);
+-	ioctl(fd_lm, PERF_EVENT_IOC_ENABLE, 0);
++	ioctl(pe_fd, PERF_EVENT_IOC_RESET, 0);
++	ioctl(pe_fd, PERF_EVENT_IOC_ENABLE, 0);
+ }
+ 
+-static void initialize_llc_perf(void)
++static void perf_event_initialize(void)
+ {
+ 	memset(&pea_llc_miss, 0, sizeof(struct perf_event_attr));
+-	memset(&rf_cqm, 0, sizeof(struct read_format));
++	memset(&pe_read, 0, sizeof(struct perf_event_read));
+ 
+ 	/* Initialize perf_event_attr structures for HW_CACHE_MISSES */
+-	initialize_perf_event_attr();
++	perf_event_attr_initialize();
+ 
+ 	pea_llc_miss.config = PERF_COUNT_HW_CACHE_MISSES;
+ 
+-	rf_cqm.nr = 1;
++	pe_read.nr = 1;
+ }
+ 
+-static int reset_enable_llc_perf(pid_t pid, int cpu_no)
++static int perf_open(pid_t pid, int cpu_no)
+ {
+-	fd_lm = perf_event_open(&pea_llc_miss, pid, cpu_no, -1, PERF_FLAG_FD_CLOEXEC);
+-	if (fd_lm == -1) {
++	pe_fd = perf_event_open(&pea_llc_miss, pid, cpu_no, -1, PERF_FLAG_FD_CLOEXEC);
++	if (pe_fd == -1) {
+ 		perror("Error opening leader");
  		return -1;
  	}
  
--	total_misses = rf_cqm.values[0].value;
--	*llc_perf_miss = total_misses;
-+	*llc_perf_miss = rf_cqm.values[0].value;
+-	ioctl_perf_event_ioc_reset_enable();
++	perf_event_reset_enable();
  
  	return 0;
  }
-@@ -147,14 +145,12 @@ static int get_llc_occu_resctrl(unsigned long *llc_occupancy)
-  *
-  * Return:		0 on success. non-zero on failure.
-  */
--static int print_results_cache(const char *filename, int bm_pid,
--			       unsigned long llc_value)
-+static int print_results_cache(const char *filename, int bm_pid, __u64 llc_value)
- {
- 	FILE *fp;
- 
- 	if (strcmp(filename, "stdio") == 0 || strcmp(filename, "stderr") == 0) {
--		printf("Pid: %d \t LLC_value: %lu\n", bm_pid,
--		       llc_value);
-+		printf("Pid: %d \t LLC_value: %llu\n", bm_pid, llc_value);
- 	} else {
- 		fp = fopen(filename, "a");
- 		if (!fp) {
-@@ -162,7 +158,7 @@ static int print_results_cache(const char *filename, int bm_pid,
- 
- 			return errno;
- 		}
--		fprintf(fp, "Pid: %d \t llc_value: %lu\n", bm_pid, llc_value);
-+		fprintf(fp, "Pid: %d \t llc_value: %llu\n", bm_pid, llc_value);
- 		fclose(fp);
- 	}
- 
-@@ -182,7 +178,7 @@ static int print_results_cache(const char *filename, int bm_pid,
-  */
- static int perf_event_measure(const char *filename, int bm_pid)
- {
--	unsigned long llc_perf_miss = 0;
-+	__u64 llc_perf_miss = 0;
+@@ -141,15 +141,15 @@ static int perf_event_measure(const char *filename, int bm_pid)
  	int ret;
  
- 	ret = get_llc_perf(&llc_perf_miss);
-@@ -287,11 +283,10 @@ int cat_val(struct resctrl_val_param *param, size_t span)
-  * @cache_span:		Cache span
-  * @lines:		@cache_span in lines or bytes
-  */
--void show_cache_info(int no_of_bits, unsigned long avg_llc_val,
--		     size_t cache_span, bool lines)
-+void show_cache_info(int no_of_bits, __u64 avg_llc_val, size_t cache_span, bool lines)
- {
- 	ksft_print_msg("Number of bits: %d\n", no_of_bits);
--	ksft_print_msg("Average LLC val: %lu\n", avg_llc_val);
-+	ksft_print_msg("Average LLC val: %llu\n", avg_llc_val);
- 	ksft_print_msg("Cache span (%s): %zu\n", lines ? "lines" : "bytes",
- 		       cache_span);
+ 	/* Stop counters after one span to get miss rate */
+-	ioctl(fd_lm, PERF_EVENT_IOC_DISABLE, 0);
++	ioctl(pe_fd, PERF_EVENT_IOC_DISABLE, 0);
+ 
+-	ret = read(fd_lm, &rf_cqm, sizeof(struct read_format));
++	ret = read(pe_fd, &pe_read, sizeof(struct perf_event_read));
+ 	if (ret == -1) {
+ 		perror("Could not get perf value");
+ 		return -1;
+ 	}
+ 
+-	return print_results_cache(filename, bm_pid, rf_cqm.values[0].value);
++	return print_results_cache(filename, bm_pid, pe_read.values[0].value);
  }
-diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-index 2842dff292f0..ca2dd46ec733 100644
---- a/tools/testing/selftests/resctrl/cat_test.c
-+++ b/tools/testing/selftests/resctrl/cat_test.c
-@@ -41,12 +41,12 @@ static int cat_setup(struct resctrl_val_param *p)
+ 
+ /*
+@@ -205,7 +205,7 @@ int cat_val(struct resctrl_val_param *param, size_t span)
+ 	if (ret)
+ 		return ret;
+ 
+-	initialize_llc_perf();
++	perf_event_initialize();
+ 
+ 	/* Test runs until the callback setup() tells the test to stop. */
+ 	while (1) {
+@@ -216,7 +216,7 @@ int cat_val(struct resctrl_val_param *param, size_t span)
+ 		}
+ 		if (ret < 0)
+ 			break;
+-		ret = reset_enable_llc_perf(bm_pid, param->cpu_no);
++		ret = perf_open(bm_pid, param->cpu_no);
+ 		if (ret)
+ 			break;
+ 
+@@ -235,7 +235,7 @@ int cat_val(struct resctrl_val_param *param, size_t span)
+ 	return ret;
+ 
+ pe_close:
+-	close(fd_lm);
++	close(pe_fd);
  	return ret;
  }
  
--static int show_results_info(unsigned long sum_llc_val, int no_of_bits,
-+static int show_results_info(__u64 sum_llc_val, int no_of_bits,
- 			     unsigned long cache_span, unsigned long max_diff,
- 			     unsigned long max_diff_percent, unsigned long num_of_runs,
- 			     bool platform)
- {
--	unsigned long avg_llc_val = 0;
-+	__u64 avg_llc_val = 0;
- 	float diff_percent;
- 	int ret;
- 
-@@ -68,8 +68,8 @@ static int show_results_info(unsigned long sum_llc_val, int no_of_bits,
- static int check_results(struct resctrl_val_param *param, size_t span)
- {
- 	char *token_array[8], temp[512];
--	unsigned long sum_llc_perf_miss = 0;
- 	int runs = 0, no_of_bits = 0;
-+	__u64 sum_llc_perf_miss = 0;
- 	FILE *fp;
- 
- 	ksft_print_msg("Checking for pass/fail\n");
-@@ -93,7 +93,7 @@ static int check_results(struct resctrl_val_param *param, size_t span)
- 		 * setup transition phase.
- 		 */
- 		if (runs > 0)
--			sum_llc_perf_miss += strtoul(token_array[3], NULL, 0);
-+			sum_llc_perf_miss += strtoull(token_array[3], NULL, 0);
- 		runs++;
- 	}
- 
-diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index 4a05efccab35..e5a7b02a6a54 100644
---- a/tools/testing/selftests/resctrl/resctrl.h
-+++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -115,8 +115,7 @@ unsigned int count_bits(unsigned long n);
- void cmt_test_cleanup(void);
- int get_core_sibling(int cpu_no);
- int measure_llc_resctrl(const char *filename, int bm_pid);
--void show_cache_info(int no_of_bits, unsigned long avg_llc_val,
--		     size_t cache_span, bool lines);
-+void show_cache_info(int no_of_bits, __u64 avg_llc_val, size_t cache_span, bool lines);
- 
- /*
-  * cache_portion_size - Calculate the size of a cache portion
 -- 
 2.30.2
 
