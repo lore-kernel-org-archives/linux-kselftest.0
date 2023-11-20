@@ -1,32 +1,32 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k4Nc6SRU"
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C75136;
-	Mon, 20 Nov 2023 03:15:11 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kmeEtYJI"
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE4CB10E2;
+	Mon, 20 Nov 2023 03:15:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700478911; x=1732014911;
+  t=1700478928; x=1732014928;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=FNHy54dIhFqpYBQdUdEJaKVZqyF8p5tUZlvi/WMNsXg=;
-  b=k4Nc6SRU4KiqWsWtGs5nH5BSqhaYs2/ypxpxJ45l21gTCrpSx9bKSSRC
-   qfG2y/2Xh7xC5SqSZP8rYaDde5jcV0QhCQIOxZMx4lB06pKmYjN+9y9Wh
-   SC/uE7j+5L6oPPXOgdjTHeFU9lWw81dfchGagpjmOK0A24chEVocwHdoM
-   886LTZv3LU8nc5/ulxD3DenWEw9HZH2jpYkup3vvjcf/BgEVmVP08XbpJ
-   TBXA4qBZs06NFH/CDU8KGEw7ckXaVScoCZ0heKHg+8GtPg8BPxV/sBRlN
-   XyWxBtARmKIKdVPeLRi7NmARDL0XTRGE904/PIY8/pmO+Ly9azttAY0aY
+  bh=nsN9ZlaOmiphawewtImMFNwBEk6HXc44WNYdCCMUuoQ=;
+  b=kmeEtYJIylD2hEbDiNKxEF5ikHWtT9KPKHE+jyM/OlH0VvgXlFKhDFce
+   noOAou83/NeFodJZeZBArEfAYQpKPEBdCgCnKDV3Kcew1Y3XvOSnXxsho
+   OBV6jSmJxT+u7JBRMj2j0fuBNBrW9uQWF0FOCzkL+pR/t03jNVIQWitwx
+   FXtsvWH87twqv2opVWgChud3FY4cGLlJB1SfoykVLzvJXFHkDBCCaiSXp
+   dDhre/HU2Iklt28IvjXR0mXJ2JKt8ueGZW8G8We8cRvOp5rP8hsXKddI6
+   DmNZd0h/Lr9amx5TLhqlbqL4pXOqlJR9rvjq7iQAAzNTCc4qgS7gx7JOq
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10899"; a="394447098"
+X-IronPort-AV: E=McAfee;i="6600,9927,10899"; a="13151915"
 X-IronPort-AV: E=Sophos;i="6.04,213,1695711600"; 
-   d="scan'208";a="394447098"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 03:15:09 -0800
+   d="scan'208";a="13151915"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 03:15:27 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10899"; a="1013559150"
+X-IronPort-AV: E=McAfee;i="6600,9927,10899"; a="832238220"
 X-IronPort-AV: E=Sophos;i="6.04,213,1695711600"; 
-   d="scan'208";a="1013559150"
+   d="scan'208";a="832238220"
 Received: from sc9itsct4906.amr.corp.intel.com (HELO localhost) ([10.249.46.107])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 03:14:47 -0800
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 03:15:21 -0800
 From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To: linux-kselftest@vger.kernel.org,
 	Reinette Chatre <reinette.chatre@intel.com>,
@@ -36,9 +36,9 @@ To: linux-kselftest@vger.kernel.org,
 	Fenghua Yu <fenghua.yu@intel.com>
 Cc: linux-kernel@vger.kernel.org,
 	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v2 07/26] selftests/resctrl: Exclude shareable bits from schemata in CAT test
-Date: Mon, 20 Nov 2023 13:13:21 +0200
-Message-Id: <20231120111340.7805-8-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v2 11/26] selftests/resctrl: Remove nested calls in perf event handling
+Date: Mon, 20 Nov 2023 13:13:25 +0200
+Message-Id: <20231120111340.7805-12-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20231120111340.7805-1-ilpo.jarvinen@linux.intel.com>
 References: <20231120111340.7805-1-ilpo.jarvinen@linux.intel.com>
@@ -51,191 +51,121 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-CAT test doesn't take shareable bits into account, i.e., the test might
-be sharing cache with some devices (e.g., graphics).
+Perf event handling has functions that are the sole caller of another
+perf event handling related function:
+  - reset_enable_llc_perf() calls perf_event_open_llc_miss()
+  - perf_event_measure() calls get_llc_perf()
 
-Introduce get_mask_no_shareable() and use it to provision an
-environment for CAT test where the allocated LLC is isolated better.
-Excluding shareable_bits may create hole(s) into the cbm_mask, thus add
-a new helper count_contiguous_bits() to find the longest contiguous set
-of CBM bits.
-
-create_bit_mask() is needed by an upcoming CAT test rewrite so make it
-available in resctrl.h right away.
+Remove the extra layer of calls to make the code easier to follow by
+moving the code into the calling function.
 
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- tools/testing/selftests/resctrl/cat_test.c  | 12 ++-
- tools/testing/selftests/resctrl/resctrl.h   |  3 +
- tools/testing/selftests/resctrl/resctrlfs.c | 89 +++++++++++++++++++++
- 3 files changed, 100 insertions(+), 4 deletions(-)
+ tools/testing/selftests/resctrl/cache.c | 65 ++++++-------------------
+ 1 file changed, 14 insertions(+), 51 deletions(-)
 
-diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-index cfcdb7bd600f..2c8b37c0a179 100644
---- a/tools/testing/selftests/resctrl/cat_test.c
-+++ b/tools/testing/selftests/resctrl/cat_test.c
-@@ -89,15 +89,19 @@ void cat_test_cleanup(void)
+diff --git a/tools/testing/selftests/resctrl/cache.c b/tools/testing/selftests/resctrl/cache.c
+index 6a754ea376c9..aea4f54d32bd 100644
+--- a/tools/testing/selftests/resctrl/cache.c
++++ b/tools/testing/selftests/resctrl/cache.c
+@@ -29,24 +29,13 @@ static void initialize_perf_event_attr(void)
+ 	pea_llc_miss.disabled = 1;
+ }
  
- int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
++/* Start counters to log values */
+ static void ioctl_perf_event_ioc_reset_enable(void)
  {
-+	unsigned long full_cache_mask, long_mask;
- 	unsigned long l_mask, l_mask_1;
- 	int ret, pipefd[2], sibling_cpu_no;
- 	unsigned long cache_total_size = 0;
--	unsigned long long_mask;
- 	int count_of_bits;
- 	char pipe_message;
- 	size_t span;
- 
--	ret = get_full_cbm(cache_type, &long_mask);
-+	ret = get_full_cbm(cache_type, &full_cache_mask);
-+	if (ret)
-+		return ret;
-+	/* Get the exclusive portion of the cache */
-+	ret = get_mask_no_shareable(cache_type, &long_mask);
- 	if (ret)
- 		return ret;
- 
-@@ -136,7 +140,7 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
- 	/* Set param values for parent thread which will be allocated bitmask
- 	 * with (max_bits - n) bits
- 	 */
--	span = cache_portion_size(cache_total_size, l_mask, long_mask);
-+	span = cache_portion_size(cache_total_size, l_mask, full_cache_mask);
- 	strcpy(param.ctrlgrp, "c2");
- 	strcpy(param.mongrp, "m2");
- 	strcpy(param.filename, RESULT_FILE_NAME2);
-@@ -158,7 +162,7 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
- 		param.mask = l_mask_1;
- 		strcpy(param.ctrlgrp, "c1");
- 		strcpy(param.mongrp, "m1");
--		span = cache_portion_size(cache_total_size, l_mask_1, long_mask);
-+		span = cache_portion_size(cache_total_size, l_mask_1, full_cache_mask);
- 		strcpy(param.filename, RESULT_FILE_NAME1);
- 		param.num_of_runs = 0;
- 		param.cpu_no = sibling_cpu_no;
-diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index 57fe42f4eda2..a911b08fa595 100644
---- a/tools/testing/selftests/resctrl/resctrl.h
-+++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -99,7 +99,10 @@ void tests_cleanup(void);
- void mbm_test_cleanup(void);
- int mba_schemata_change(int cpu_no, const char * const *benchmark_cmd);
- void mba_test_cleanup(void);
-+unsigned long create_bit_mask(unsigned int start, unsigned int len);
- int get_full_cbm(const char *cache_type, unsigned long *mask);
-+int get_shareable_mask(const char *cache_type, unsigned long *shareable_mask);
-+int get_mask_no_shareable(const char *cache_type, unsigned long *mask);
- int get_cache_size(int cpu_no, const char *cache_type, unsigned long *cache_size);
- void ctrlc_handler(int signum, siginfo_t *info, void *ptr);
- int signal_handler_register(void);
-diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
-index 1ea610fa65b1..3a9ed918d657 100644
---- a/tools/testing/selftests/resctrl/resctrlfs.c
-+++ b/tools/testing/selftests/resctrl/resctrlfs.c
-@@ -228,6 +228,44 @@ static int get_bit_mask(const char *filename, unsigned long *mask)
- 	return 0;
+ 	ioctl(fd_lm, PERF_EVENT_IOC_RESET, 0);
+ 	ioctl(fd_lm, PERF_EVENT_IOC_ENABLE, 0);
  }
  
-+/*
-+ * create_bit_mask- Create bit mask from start,len pair
-+ * @start:	LSB of the mask
-+ * @len		Number of bits in the mask
-+ */
-+unsigned long create_bit_mask(unsigned int start, unsigned int len)
-+{
-+	return ((1UL << len) - 1UL) << start;
-+}
-+
-+/*
-+ * count_contiguous_bits - Returns the longest train of bits in a bit mask
-+ * @val		A bit mask
-+ * @start	The location of the least-significant bit of the longest train
-+ *
-+ * Return:	The length of the contiguous bits in the longest train of bits
-+ */
-+static unsigned int count_contiguous_bits(unsigned long val, unsigned int *start)
-+{
-+	unsigned long last_val;
-+	unsigned int count = 0;
-+
-+	while (val) {
-+		last_val = val;
-+		val &= (val >> 1);
-+		count++;
-+	}
-+
-+	if (start) {
-+		if (count)
-+			*start = ffsl(last_val) - 1;
-+		else
-+			*start = 0;
-+	}
-+
-+	return count;
-+}
-+
- /*
-  * get_full_cbm - Get full Cache Bit Mask (CBM)
-  * @cache_type:	Cache type as "L2" or "L3"
-@@ -254,6 +292,57 @@ int get_full_cbm(const char *cache_type, unsigned long *mask)
+-static int perf_event_open_llc_miss(pid_t pid, int cpu_no)
+-{
+-	fd_lm = perf_event_open(&pea_llc_miss, pid, cpu_no, -1,
+-				PERF_FLAG_FD_CLOEXEC);
+-	if (fd_lm == -1) {
+-		perror("Error opening leader");
+-		return -1;
+-	}
+-
+-	return 0;
+-}
+-
+ static void initialize_llc_perf(void)
+ {
+ 	memset(&pea_llc_miss, 0, sizeof(struct perf_event_attr));
+@@ -62,42 +51,13 @@ static void initialize_llc_perf(void)
+ 
+ static int reset_enable_llc_perf(pid_t pid, int cpu_no)
+ {
+-	int ret = 0;
+-
+-	ret = perf_event_open_llc_miss(pid, cpu_no);
+-	if (ret < 0)
+-		return ret;
+-
+-	/* Start counters to log values */
+-	ioctl_perf_event_ioc_reset_enable();
+-
+-	return 0;
+-}
+-
+-/*
+- * get_llc_perf:	llc cache miss through perf events
+- * @llc_perf_miss:	LLC miss counter that is filled on success
+- *
+- * Perf events like HW_CACHE_MISSES could be used to validate number of
+- * cache lines allocated.
+- *
+- * Return: =0 on success.  <0 on failure.
+- */
+-static int get_llc_perf(__u64 *llc_perf_miss)
+-{
+-	int ret;
+-
+-	/* Stop counters after one span to get miss rate */
+-
+-	ioctl(fd_lm, PERF_EVENT_IOC_DISABLE, 0);
+-
+-	ret = read(fd_lm, &rf_cqm, sizeof(struct read_format));
+-	if (ret == -1) {
+-		perror("Could not get llc misses through perf");
++	fd_lm = perf_event_open(&pea_llc_miss, pid, cpu_no, -1, PERF_FLAG_FD_CLOEXEC);
++	if (fd_lm == -1) {
++		perror("Error opening leader");
+ 		return -1;
+ 	}
+ 
+-	*llc_perf_miss = rf_cqm.values[0].value;
++	ioctl_perf_event_ioc_reset_enable();
+ 
  	return 0;
  }
+@@ -178,15 +138,18 @@ static int print_results_cache(const char *filename, int bm_pid, __u64 llc_value
+  */
+ static int perf_event_measure(const char *filename, int bm_pid)
+ {
+-	__u64 llc_perf_miss = 0;
+ 	int ret;
  
-+/*
-+ * get_shareable_mask - Get shareable mask from shareable_bits
-+ * @cache_type:		Cache type as "L2" or "L3"
-+ * @shareable_mask:	Shareable mask returned as unsigned long
-+ *
-+ * Return: = 0 on success, < 0 on failure.
-+ */
-+int get_shareable_mask(const char *cache_type, unsigned long *shareable_mask)
-+{
-+	char mask_path[PATH_MAX];
-+
-+	if (!cache_type)
+-	ret = get_llc_perf(&llc_perf_miss);
+-	if (ret < 0)
+-		return ret;
++	/* Stop counters after one span to get miss rate */
++	ioctl(fd_lm, PERF_EVENT_IOC_DISABLE, 0);
+ 
+-	ret = print_results_cache(filename, bm_pid, llc_perf_miss);
+-	return ret;
++	ret = read(fd_lm, &rf_cqm, sizeof(struct read_format));
++	if (ret == -1) {
++		perror("Could not get perf value");
 +		return -1;
++	}
 +
-+	snprintf(mask_path, sizeof(mask_path), "%s/%s/shareable_bits",
-+		 INFO_PATH, cache_type);
-+
-+	return get_bit_mask(mask_path, shareable_mask);
-+}
-+
-+/*
-+ * get_mask_no_shareable - Get Cache Bit Mask (CBM) without shareable bits
-+ * @cache_type:		Cache type as "L2" or "L3"
-+ * @mask:		The largest exclusive portion of the cache out of the
-+ *			full CBM, returned as unsigned long
-+ *
-+ * Parts of a cache may be shared with other devices such as GPU. This function
-+ * calculates the largest exclusive portion of the cache where no other devices
-+ * besides CPU have access to the cache portion.
-+ *
-+ * Return: = 0 on success, < 0 on failure.
-+ */
-+int get_mask_no_shareable(const char *cache_type, unsigned long *mask)
-+{
-+	unsigned long full_mask, shareable_mask;
-+	unsigned int start, len;
-+
-+	if (get_full_cbm(cache_type, &full_mask) < 0)
-+		return -1;
-+	if (get_shareable_mask(cache_type, &shareable_mask) < 0)
-+		return -1;
-+
-+	len = count_contiguous_bits(full_mask & ~shareable_mask, &start);
-+	if (!len)
-+		return -1;
-+
-+	*mask = create_bit_mask(start, len);
-+
-+	return 0;
-+}
-+
++	return print_results_cache(filename, bm_pid, rf_cqm.values[0].value);
+ }
+ 
  /*
-  * get_core_sibling - Get sibling core id from the same socket for given CPU
-  * @cpu_no:	CPU number
 -- 
 2.30.2
 
