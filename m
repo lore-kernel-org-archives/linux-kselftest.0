@@ -1,89 +1,86 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bo6hEHqa"
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED889D45;
-	Tue, 21 Nov 2023 17:08:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700615331; x=1732151331;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2+fdHO12ohmJATutgg6iYR9BqC3ibMl5puCl9Ejbv/A=;
-  b=bo6hEHqaN0PpPwbSoi/V9yDaE+aXbKy3t4JjpG/mxhxFs/ACMZ8lg8Lh
-   YVcFlXR2SbpLaHvPCSEsmu0WdO0K9oxgcTxtTyW1Np8aP0mxLfjhQxpti
-   22jbDHjb3VknFEG1QpG21uF7rSIR6VaZZu0n4eX1wWg2wSaRdToRbMkL6
-   S9LMDehBL9yaGNa8cCHCCJBXYvvh2X9PPO6d34+CP/CSE1giwl6Qtdhj0
-   x6BW7dfZ72l1I3SKI49OLnxnjW/OsuiXXppqUMQ2dMQGN99Y2qIowAk3L
-   DnQKmZ4wE+A/UQkls48IcoNzDxCkA45z0C1nIq7XcplVzWt5MOIl8pDH3
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10901"; a="5154722"
-X-IronPort-AV: E=Sophos;i="6.04,217,1695711600"; 
-   d="scan'208";a="5154722"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2023 17:08:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10901"; a="801726701"
-X-IronPort-AV: E=Sophos;i="6.04,217,1695711600"; 
-   d="scan'208";a="801726701"
-Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 21 Nov 2023 17:08:43 -0800
-Received: from kbuild by b8de5498638e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r5bjM-0008Tj-2M;
-	Wed, 22 Nov 2023 01:08:40 +0000
-Date: Wed, 22 Nov 2023 09:08:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com>,
-	workflows@vger.kernel.org, Joe Perches <joe@perches.com>,
-	Andy Whitcroft <apw@canonical.com>, Theodore Ts'o <tytso@mit.edu>,
-	David Gow <davidgow@google.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Mark Brown <broonie@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	"Darrick J . Wong" <djwong@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev, kunit-dev@googlegroups.com,
-	linux-kselftest@vger.kernel.org,
-	Veronika Kabatova <vkabatov@redhat.com>,
-	CKI <cki-project@redhat.com>, kernelci@lists.linux.dev,
-	Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com>
-Subject: Re: [PATCH 1/3] MAINTAINERS: Introduce V: field for required tests
-Message-ID: <202311220843.vh7WyxDF-lkp@intel.com>
-References: <20231115175146.9848-2-Nikolai.Kondrashov@redhat.com>
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="UgcGW+Xc"
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBF9A181
+	for <linux-kselftest@vger.kernel.org>; Tue, 21 Nov 2023 18:35:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+	s=smtpout1; t=1700620503;
+	bh=sJ4yOPpLvJ8TPC0dYLPVJzcI3fezKxpuaN38TD041+0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=UgcGW+Xc+p1c+VDckG7GhjDAv6BhTGJsNhPzVN+rL683U+8MgNpdG83LmOEqMidvG
+	 hL3X38CtJfU2K0b9kTooIJvzze+mCpSbEUKGtKdNuddw5n8KKuW56x3RaH6fQ/3diz
+	 A5HmQOUwvc7ZV3IC4Y6J5lJkroyCgxiDc7TVPCwd1uY+/8sUu5miFNaZemj3OxFjfk
+	 kMVFyGWwjCTHQcAVXN/4ZYHOFju8qCeaIs9UeUQQ8Sp08+z25rReqY10wYVTMaMYPs
+	 KkEc5FQdXfdGNoArYsCUBNy+MNCDQA+Cgj0Oz5THT5Ty/HP9dltwqrhH3SpH5t1y0r
+	 Xvm4+GR4XGSqQ==
+Received: from [IPV6:2606:6d00:100:4000:cacb:9855:de1f:ded2] (unknown [IPv6:2606:6d00:100:4000:cacb:9855:de1f:ded2])
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4SZlhR3214z1crn;
+	Tue, 21 Nov 2023 21:35:03 -0500 (EST)
+Message-ID: <938124c8-bc01-4891-a2a5-ea7e933278d7@efficios.com>
+Date: Tue, 21 Nov 2023 21:35:40 -0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231115175146.9848-2-Nikolai.Kondrashov@redhat.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/memfd: fix a memleak
+Content-Language: en-US
+To: Andrew Morton <akpm@linux-foundation.org>,
+ zhujun2 <zhujun2@cmss.chinamobile.com>
+Cc: cyphar@cyphar.com, dverkamp@chromium.org, jeffxu@google.com,
+ keescook@chromium.org, linux-kselftest@vger.kernel.org, shuah@kernel.org
+References: <12dd2fb2-0fac-4763-ad34-02af9653f91b@efficios.com>
+ <20231121025506.2391-1-zhujun2@cmss.chinamobile.com>
+ <20231121154300.734732c744f272214e160a3c@linux-foundation.org>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+In-Reply-To: <20231121154300.734732c744f272214e160a3c@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Nikolai,
+On 2023-11-21 18:43, Andrew Morton wrote:
+> On Mon, 20 Nov 2023 18:55:06 -0800 zhujun2 <zhujun2@cmss.chinamobile.com> wrote:
+> 
+>> The memory allocated within a function should be released
+>> before the function return,otherwise memleak will occur.
+>>
+>> ...
+>>
+>> --- a/tools/testing/selftests/memfd/fuse_test.c
+>> +++ b/tools/testing/selftests/memfd/fuse_test.c
+>> @@ -217,6 +217,7 @@ static pid_t spawn_sealing_thread(void)
+>>   		abort();
+>>   	}
+>>   
+>> +	free(stack);
+>>   	return pid;
+>>   }
+> 
+> We just freed a thread's stack while it is still running?
 
-kernel test robot noticed the following build warnings:
+Indeed, this patch is completely wrong. Freeing the stack memory should
+not happen before joining the thread which uses it.
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.7-rc2 next-20231121]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+This also means that this patch was probably not even runtime-tested, 
+even less tested with tools like valgrind which should have caught this.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Nikolai-Kondrashov/MAINTAINERS-Introduce-V-field-for-required-tests/20231116-015419
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20231115175146.9848-2-Nikolai.Kondrashov%40redhat.com
-patch subject: [PATCH 1/3] MAINTAINERS: Introduce V: field for required tests
-reproduce: (https://download.01.org/0day-ci/archive/20231122/202311220843.vh7WyxDF-lkp@intel.com/reproduce)
+I would advise the patch author to test the changes before submitting a 
+patch, especially considering the amount of tools out there which can be 
+used to validate userspace programs.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202311220843.vh7WyxDF-lkp@intel.com/
+Moreover, the changes done should take into consideration the behavior 
+of the system calls they surround. Trying to "fix" a resource leak 
+without understanding first the semantic of the system call using the 
+resource is causing more problems than it solves.
 
-All warnings (new ones prefixed by >>):
+Thanks,
 
->> Documentation/process/tests.rst: WARNING: document isn't included in any toctree
+Mathieu
+
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
+
