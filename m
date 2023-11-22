@@ -1,174 +1,76 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fromorbit-com.20230601.gappssmtp.com header.i=@fromorbit-com.20230601.gappssmtp.com header.b="eERjgB3s"
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78881112
-	for <linux-kselftest@vger.kernel.org>; Wed, 22 Nov 2023 12:51:47 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1cf56e28465so1480865ad.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Nov 2023 12:51:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20230601.gappssmtp.com; s=20230601; t=1700686307; x=1701291107; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QDYyRLoiycUaY49QoLf26F930m6gNVp1RU3PlgGtl7M=;
-        b=eERjgB3sh2hm3upFresTqzAHyiUxEGuZZ62OrpJkl095cpFA1GYlAE53MC6PsvAsV8
-         6Ut0z2EsXM57RdECbRVT28bCZDG4UXCKcpVHQUhB/hYiRSouQ65gxmHp1nnJolRJLtwy
-         MO8cBR42HRqBYTMseGGfpfyjUVnUZk+Ci90GLmOJaKbM7zpzCJ5IGXv1VlGRLTgGmttl
-         sKSwefTFaYH55NOgeDF96nVKzXwWMfRBUZn2oO7Zd/c9714f1/pdRSbfKYeVyvOwBcos
-         dgNBKY7DeJ+yn0GwXNTq6mXZQVzlmcAdqQldobbq9nem2zHtvkRo2OKJkvpS/4zZjDaX
-         prLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700686307; x=1701291107;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QDYyRLoiycUaY49QoLf26F930m6gNVp1RU3PlgGtl7M=;
-        b=aY/nwld8FgjuJnTll51ErQKj5XViHFRFsc0yA5V3p3x6X816ZuqNMvN3S0Nmd2Dcwc
-         +2jg1s8EOxlyy69fIy7EVOh6FDUcnQu+O6dXalZYk86eXhJiSQAeRZyI9cyRRv5HsXKG
-         AEiuwKhRrlSfCJNJrfQbWmMQYhtXhN3gmFhLq6lo4k274FfwOgDT+2rLd0J38NqeA/kf
-         t9FtSI7Tu0NwRYMonhBQFOghPAMLszeomeKdMaOhyfzK5FsYGxhAxWJyh00EObxhSEif
-         SczC/lv+asmL7QH+OgwKonFmz8VIp/E6znuIZYpFtBLk3hOG9DRzBOjIP9oFBFm/IeaX
-         x9mw==
-X-Gm-Message-State: AOJu0Yzba1npMdmZdJ1JksBsl26cyfdNNdoq26bzvcYX44PLRKZKJxre
-	GOv6+wvGIHzDW/L1wFWHHHGVFA==
-X-Google-Smtp-Source: AGHT+IE6oL5OBU3IwVHKwsZfJXYmwuWE0TSV4peQofShC5i+2wEn3Ehzw2AsBZVt3VWIgqiavzxf1g==
-X-Received: by 2002:a17:902:8649:b0:1cc:e823:c8cc with SMTP id y9-20020a170902864900b001cce823c8ccmr3253781plt.41.1700686306783;
-        Wed, 22 Nov 2023 12:51:46 -0800 (PST)
-Received: from dread.disaster.area (pa49-180-125-5.pa.nsw.optusnet.com.au. [49.180.125.5])
-        by smtp.gmail.com with ESMTPSA id z3-20020a170902ee0300b001cc2ebd2c2csm100557plb.256.2023.11.22.12.51.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Nov 2023 12:51:46 -0800 (PST)
-Received: from dave by dread.disaster.area with local (Exim 4.96)
-	(envelope-from <david@fromorbit.com>)
-	id 1r5uCF-00G9zk-1o;
-	Thu, 23 Nov 2023 07:51:43 +1100
-Date: Thu, 23 Nov 2023 07:51:43 +1100
-From: Dave Chinner <david@fromorbit.com>
-To: "Darrick J. Wong" <djwong@kernel.org>
-Cc: Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com>,
-	Theodore Ts'o <tytso@mit.edu>,
-	Chandan Babu R <chandanbabu@kernel.org>, workflows@vger.kernel.org,
-	Joe Perches <joe@perches.com>, Andy Whitcroft <apw@canonical.com>,
-	David Gow <davidgow@google.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Mark Brown <broonie@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>, kunit-dev@googlegroups.com,
-	linux-kselftest@vger.kernel.org,
-	Veronika Kabatova <vkabatov@redhat.com>,
-	CKI <cki-project@redhat.com>, kernelci@lists.linux.dev,
-	Chandan Babu R <chandanrlinux@gmail.com>
-Subject: Re: [PATCH 2/3] MAINTAINERS: Require kvm-xfstests smoke for ext4
-Message-ID: <ZV5p32opqhX+wtfY@dread.disaster.area>
-References: <20231115175146.9848-1-Nikolai.Kondrashov@redhat.com>
- <20231115175146.9848-3-Nikolai.Kondrashov@redhat.com>
- <20231115185808.GD36211@frogsfrogsfrogs>
- <87v8a096cr.fsf@debian-BULLSEYE-live-builder-AMD64>
- <20231119225437.GA292450@mit.edu>
- <cd2d6ed9-7047-4090-ab44-16540f503087@redhat.com>
- <20231122161746.GM36211@frogsfrogsfrogs>
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="A+DzyIWo"
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45654110;
+	Wed, 22 Nov 2023 15:21:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1700695286;
+	bh=UvTHVLrVS7yXSVngtpUNw0aaFtisHMdv5IagkHAb8Vw=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=A+DzyIWop9H1iQqC4wC7ZOx+e18wBfsDCs2oqTHFLJYmu3W02n86u+DegEehx1vo5
+	 zPnK5LHg5A1Gg9qKYUcvDua/04K/8lWDki8Nk6Hw6ybKKJJvjWzvlD3ht04llm2dg3
+	 vqI0+I1UGmluY0dWiW/xLGaKI5pZkkW/27NZjQjk=
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Date: Thu, 23 Nov 2023 00:21:27 +0100
+Subject: [PATCH 3/3] selftests/nolibc: disable coredump via setrlimit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231122161746.GM36211@frogsfrogsfrogs>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20231123-nolibc-rlimit-v1-3-a428b131de2a@weissschuh.net>
+References: <20231123-nolibc-rlimit-v1-0-a428b131de2a@weissschuh.net>
+In-Reply-To: <20231123-nolibc-rlimit-v1-0-a428b131de2a@weissschuh.net>
+To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.12.4
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1700695285; l=1257;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=UvTHVLrVS7yXSVngtpUNw0aaFtisHMdv5IagkHAb8Vw=;
+ b=6KaZT5arNtlQH/G4RUsDPzhaYavmO+ntu3wPDXuPTC1+AZtPQ7oKArk9dQd3zjNeWdHEh79kF
+ 0mI+PGBl1gJASvDvJ1nsyTFpMpIFBc+504WY/LcH19X3N09dwik+7xk
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-On Wed, Nov 22, 2023 at 08:17:46AM -0800, Darrick J. Wong wrote:
-> On Wed, Nov 22, 2023 at 04:44:58PM +0200, Nikolai Kondrashov wrote:
-> > On 11/20/23 00:54, Theodore Ts'o wrote:
-> > > So as for *me*, I'm going to point people at:
-> > > 
-> > > https://github.com/tytso/xfstests-bld/blob/master/Documentation/kvm-quickstart.md
-> > 
-> > ...
-> > 
-> > > (And note that I keep the xfstests-bld repo's on kernel.org and
-> > > github.com both uptodate, and I prefer using the using the github.com
-> > > URL because it's easier for the new developer to read and understand
-> > > it.)
-> > 
-> > I already queued a switch to the kernel.org URL, which Darrick has suggested.
-> > I'll drop it now, but you guys would have to figure it out between yourselves,
-> > which one you want :D
-> > 
-> > Personally, I agree that the one on GitHub is more reader-friendly, FWIW.
-> 
-> For xfstests-bld links, I'm ok with whichever domain Ted wants.
-> 
-> > > And similarly, just because the V: line might say, "kvm-xfstests
-> > > smoke", someone could certainly use kdevops if they wanted to.  So
-> > > perhaps we need to be a bit clearer about what we expect the V: line
-> > > to mean?
-> > 
-> > I tried to handle some of that with the "subsets", so that you can run a wider
-> > test suite and still pass the Tested-with: check. I think this has to be
-> > balanced between allowing all the possible ways to run the tests and a
-> > reasonable way to certify the commit was tested automatically.
-> > 
-> > E.g. name the test "xfstests", and list all the ways it can be executed, thus
-> > communicating that it should still say "Tested-with: xfstests" regardless of
-> > the way. And if there is a smaller required subset, name it just "xfstests
-> > smoke" and list all the ways it can be run, including the simplest
-> > "kvm-xfstests smoke", but accept just "Tested-with: xfstests-smoke".
-> > 
-> > I'm likely getting things wrong, but I hope you get what I'm trying to say.
-> 
-> Not entirely -- for drive-by contributions and obvious bugfixes, a quick
-> "V: xfstests-bld: kvm-xfstests smoke" / "V: fstests: ./check -g smoke"
-> run is probably sufficient.
+qemu-user does has its own implementation of coredumping.
+That implementation does not respect the call to
+prctl(PR_SET_DUMPABLE, 0) in run_protection().
+This leads to a coredump for every test run under qemu-user.
 
-For trivial drive-by contributions and obvious bug fixes, I think
-this is an unnecessary burden on these potential contributors. If
-it's trivial, then there's little burden on the reviewer/maintainer
-to actually test it, whilst there is significant burden on the
-one-off contributor to set up an entirely new, unfamiliar testing
-environment just to fix something trivial.
+Use also setrlimit() to inhibit coredump creation which is respected by
+qemu-user.
 
-If you want every patch tested, the follow the lead of the btrfs
-developers: set up a CI mechanism on github and ask people to submit
-changes there first and then provide a link to the successful test
-completion ticket with the patch submission.
+Link: https://lore.kernel.org/qemu-devel/20231115-qemu-user-dumpable-v1-2-edbe7f0fbb02@t-8ch.de/
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+ tools/testing/selftests/nolibc/nolibc-test.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> (Insofar as n00bs running ./check isn't sufficient, but that's something
-> that fstests needs to solve...)
-> 
-> For nontrivial code tidying, the author really ought to run the whole
-> test suite.  It's still an open question as to whether xfs tidying
-> should run the full fuzz suite too, since that increases the runtime
-> from overnightish to a week.
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index d07cebace107..ccb8d017a3e7 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -1167,6 +1167,7 @@ static int run_protection(int min __attribute__((unused)),
+ {
+ 	pid_t pid;
+ 	int llen = 0, status;
++	struct rlimit rlimit = { 0, 0 };
+ 
+ 	llen += printf("0 -fstackprotector ");
+ 
+@@ -1198,6 +1199,7 @@ static int run_protection(int min __attribute__((unused)),
+ 		close(STDERR_FILENO);
+ 
+ 		prctl(PR_SET_DUMPABLE, 0, 0, 0, 0);
++		setrlimit(RLIMIT_CORE, &rlimit);
+ 		smash_stack();
+ 		return 1;
+ 
 
-Yes, the auto group tests should be run before non-trivial patch
-sets are submitted. That is the entire premise of the the auto group
-existing - it's the set of regression tests we expect to pass for
-any change.
-
-However, the full on disk format fuzz tests should not be required
-to be run. Asking people to run tests that take a week for general
-cleanups and code quality improvements is just crazy talk - the
-cost-benefit equation is all out of whack here, especially if the
-changes have no interaction with the on-disk format at all.
-
-IMO, extensive fuzz testing is something that should be done
-post-integration - requiring individual developers to run
-tests that take at least a week to run before they can submit a
-patchset for review/inclusion is an excessive burden, and we don't
-need every developer to run such tests every time they do something
-even slightly non-trivial.
-
-It is the job of the release manager to co-ordinate with the testing
-resources to run extensive, long running tests after code has been
-integrated into the tree. Forcing individual developers to run this
-sort of testing just isn't an efficient use of resources....
-
-> For /new features/, the developer(s) ought to come up with a testing
-> plan and run that by the community.  Eventually those will merge into
-> fstests or ktest or wherever.
-
-That's how it already works, isn't it?
-
--Dave.
 -- 
-Dave Chinner
-david@fromorbit.com
+2.43.0
+
