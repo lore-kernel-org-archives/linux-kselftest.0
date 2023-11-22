@@ -1,68 +1,84 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="GS/APCbr";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="szbLNXMR"
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 445AEA2;
-	Wed, 22 Nov 2023 10:21:02 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailout.nyi.internal (Postfix) with ESMTP id 1BD265C0131;
-	Wed, 22 Nov 2023 13:20:59 -0500 (EST)
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="dF50PVdg";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="OF/BwjXR"
+Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E201B3;
+	Wed, 22 Nov 2023 10:21:06 -0800 (PST)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+	by mailnew.nyi.internal (Postfix) with ESMTP id 4FDFA580452;
+	Wed, 22 Nov 2023 13:21:06 -0500 (EST)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Wed, 22 Nov 2023 13:20:59 -0500
+  by compute4.internal (MEProxy); Wed, 22 Nov 2023 13:21:06 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
 	:cc:content-transfer-encoding:content-type:date:date:from:from
-	:in-reply-to:message-id:mime-version:reply-to:sender:subject
-	:subject:to:to; s=fm3; t=1700677259; x=1700763659; bh=IXy9hEwDva
-	zgBgsi6N7DtR+e9WjAm48zXkbX44TGPGQ=; b=GS/APCbrMj2F3EvQBvMqdGxB0m
-	lU0U2qu2WVG+6csf0xBpIO5GR+iNDvatl2UrLabMtjjV4grTi/KwB+nDDbDE4Wpk
-	TG0yiDVlzA0iWJvFlG0ySYigTtNDCuaDckG6qAExIGYAdILqrWwHcJia3jyRcQnu
-	dMxzbakbDjcI7gEhMVwyU9R/Xsl1TQHtuMw5bjV0mwXQk6bpQMZcYqyigWeb3s1T
-	UzRbjGjSVgoo3MYrk5x+S6WhSlrKDLP06Y89J8Z0VsJ6wsflvG4vwSaS+vpvXdZk
-	/aN2S/s+KDJ5S0hH1/GUVEpk4B/igL1YLnOJ5kBLDHlYnmiQSOO+T9oeqXgg==
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:sender:subject:subject:to:to; s=fm3; t=1700677266; x=
+	1700684466; bh=JJhVdczU7V+MRWD9pKXDtWWzYuthdE42AK0YbBKT7ow=; b=d
+	F50PVdgUTy+lowMWaJEiGE3zPZujRZVyTjo9FyOYpxRymzz4dCbUUyRQnC+9ixPu
+	Ae5cUXNfOseMZ8hVjTJNbpYTPWlFFxD9u+4V4lYmGxwdJogtnVogAqxN+I6Yr3L0
+	nbCusAT9W91OPwOkF2WNX37MmDWweQrljYEajhG220IW9l/pc3/D2hFuhbryFXi3
+	F/e77zoKzP9ENJzVOYeaeqf+D1RvLLQ4ATfqvXCnen++OvLFZSAPlHsmLlDxBqlv
+	nFCsZ8BYEVgCiNCUZqj3WccxcQ5oayYjE36dlYcvlluZtj3d9OAp0byVVDRDtdJX
+	Rs7r8KHChg32URIzIFFSA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:message-id:mime-version:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm1; t=1700677259; x=1700763659; bh=IXy9hEwDvazgB
-	gsi6N7DtR+e9WjAm48zXkbX44TGPGQ=; b=szbLNXMRsBV1JbaczpHNx3zsmIhnk
-	QDSvv6xRx5oA2cCrseTNNyZ1C6ELqe3HwIuQu1HGuP+IZJSZGWRJZ3Heehfg6FHo
-	pLCcGjeru4izEzhI0sR0feZLBbT6Ylm267D5/N+hvzl8f3XhaMDZgukhn7Tkkx3c
-	UXNuYfTQy7YTctFi74/M69vsytdZIPQCu8Us6RUFCLKv2yIwb5a7AhCCaQXxxKzA
-	hohTyG1AGg65vPg+lG20IJDOq+zfRt70Zj2PZhy74QpdrShEVZZqjlhsRpYTCykJ
-	6BOJe/Rz8GPDuiFrHZCV1JjKdnIKnxKAMPqsqmhFg4zUdIXfWb1GZc+pQ==
-X-ME-Sender: <xms:ikZeZRA69fsvHlD-91jJp8i6LSJdbtglycXyxoVF5mRExJeH6fMMJg>
-    <xme:ikZeZfg0Skj4tRRhmSd4oXUjGY9YtHOe55HatmKxXcqRvzw8F1rMTHMqhkYKT8su-
-    -QQjkIGg1w7hEQmYw>
-X-ME-Received: <xmr:ikZeZcm1L0-GhzkPVLPqwS4rneerAoAKrzsGl8uZlDvTWCMsGWHxvyxHfZINy3xcNAWzeP87Yh0vaXwvCDJEXDZ4w47ufp4R7iF-FtaElos1AQ>
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1700677266; x=
+	1700684466; bh=JJhVdczU7V+MRWD9pKXDtWWzYuthdE42AK0YbBKT7ow=; b=O
+	F/BwjXRZNdD+dOpCFVX0WjjU5Ya1eFqTyNpSal68q2Ksaq3CaRLdnhqcUwLbkkk8
+	KdiKQSO0YHLJt/IR1HsTjPQDUCac9D8wR+eP2WoMR2f7Pvmx5xHhYU8wDKzl40v6
+	vGNnUb8Pg1kzowjwpikMTz2R4llSCYlHFL8D5dkxQTKNRoF7DNEDlI77Ce2Qw684
+	upgjQI9uMGukASuzT5p4xHY1+TNN73IiAfPQ9qCbW9nEraK8WA2ukqcmeX2J3c3K
+	J0Aq+qKVPBGr5Goo4gMn9H4Wou9TN3kEBxY5So4WQMuelPVMvFzFX3643h49LSfg
+	c97guHywmX8hpDuznn/7A==
+X-ME-Sender: <xms:kkZeZcD9wCPDgksE_Bxv1Am2T4pF3VdrSITyFKtYVmPe8vqkkmXmUQ>
+    <xme:kkZeZeimHFKlw-UtIUINz9eBvvi_Jh4XbKfhy8jWNMI4E5tnpJZWvmOUyVr7VEwQN
+    ofp101GGknKhnEvgA>
+X-ME-Received: <xmr:kkZeZfnYZ7lnOt0Whyb4iaMFR5iItbOm_D7h0LNPk53YWxs5RLueNNGXnZAOkxjqnokgxT291fsM1J_6nkHx8xRZ1FKekswx5P7zCyHDSh1ehg>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudehuddguddutdcutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecufghrlhcuvffnffculddvfedmnecujfgurhephf
-    fvvefufffkofgggfestdekredtredttdenucfhrhhomhepffgrnhhivghlucgiuhcuoegu
-    gihusegugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpeeikeehudegteevuddthf
-    eilefhjefgueeuueffveevheeggfeufeejfeeuudekfeenucffohhmrghinhepihgvthhf
-    rdhorhhgpdhgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrh
-    grmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiii
-X-ME-Proxy: <xmx:ikZeZbxo0rz_iAxlkNzfSmPoqdGaN3jmI4b__fs_TpN-Au_A60T-nQ>
-    <xmx:ikZeZWREQ0H-cS1AXfjDkgS6wr8RaOj8v9wsaPswJqk-3DFnoNS-4Q>
-    <xmx:ikZeZeaSLH4Sxx2sVvoPhJsFKEsxJ5IzzI98YmR8lu41-H8IZphkMA>
-    <xmx:i0ZeZVFDZd7eMFlnhBQZ_ZpJIu3iAsuW0I8M5hjyMDU5wNXaov9_EQ>
+    necuuegrihhlohhuthemuceftddtnecufghrlhcuvffnffculdefhedmnecujfgurhephf
+    fvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepffgrnhhivghlucgiuhcu
+    oegugihusegugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpefgfefggeejhfduie
+    ekvdeuteffleeifeeuvdfhheejleejjeekgfffgefhtddtteenucevlhhushhtvghrufhi
+    iigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiii
+X-ME-Proxy: <xmx:kkZeZSyElnYRO-fk3O5IXcg6T3LJu2Oqv8unyLr12tlpPLlKK4aYaA>
+    <xmx:kkZeZRSTqfUQEI2D1l27cURVcVXbFnHt1J3xC0cVMdU5wc1lEiWlPA>
+    <xmx:kkZeZdYzrmKpZqjqP8HOkBIJpcUbjH6ceGRHMoMhhBhYTOe7ZlLPVg>
+    <xmx:kkZeZTlm-tBzBWHzIEE86XuiYcwNH06f4OXtW9Ih9tTxCynUH_7Yug>
 Feedback-ID: i6a694271:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 22 Nov 2023 13:20:57 -0500 (EST)
+ 22 Nov 2023 13:21:04 -0500 (EST)
 From: Daniel Xu <dxu@dxuuu.xyz>
-To: linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
+To: shuah@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	ast@kernel.org,
 	steffen.klassert@secunet.com,
 	antony.antony@secunet.com,
 	alexei.starovoitov@gmail.com
-Cc: devel@linux-ipsec.org
-Subject: [PATCH ipsec-next v1 0/7] Add bpf_xdp_get_xfrm_state() kfunc
-Date: Wed, 22 Nov 2023 11:20:21 -0700
-Message-ID: <cover.1700676682.git.dxu@dxuuu.xyz>
+Cc: martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@google.com,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	mykolal@fb.com,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	devel@linux-ipsec.org,
+	netdev@vger.kernel.org
+Subject: [PATCH ipsec-next v1 4/7] bpf: selftests: test_tunnel: Mount bpffs if necessary
+Date: Wed, 22 Nov 2023 11:20:25 -0700
+Message-ID: <e0028438c01f733c6d1913db397c0df8f274f537.1700676682.git.dxu@dxuuu.xyz>
 X-Mailer: git-send-email 2.42.1
+In-Reply-To: <cover.1700676682.git.dxu@dxuuu.xyz>
+References: <cover.1700676682.git.dxu@dxuuu.xyz>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -71,49 +87,52 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
+Previously, if bpffs was not already mounted, then the test suite would
+fail during object file pinning steps. Fix by mounting bpffs if
+necessary.
 
-This patchset adds two kfunc helpers, bpf_xdp_get_xfrm_state() and
-bpf_xdp_xfrm_state_release() that wrap xfrm_state_lookup() and
-xfrm_state_put(). The intent is to support software RSS (via XDP) for
-the ongoing/upcoming ipsec pcpu work [0]. Recent experiments performed
-on (hopefully) reproducible AWS testbeds indicate that single tunnel
-pcpu ipsec can reach line rate on 100G ENA nics.
+Co-developed-by: Antony Antony <antony.antony@secunet.com>
+Signed-off-by: Antony Antony <antony.antony@secunet.com>
+Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+---
+ tools/testing/selftests/bpf/test_tunnel.sh | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-Note this patchset only tests/shows generic xfrm_state access. The
-"secret sauce" (if you can really even call it that) involves accessing
-a soon-to-be-upstreamed pcpu_num field in xfrm_state. Early example is
-available here [1].
-
-[0]: https://datatracker.ietf.org/doc/draft-ietf-ipsecme-multi-sa-performance/03/
-[1]: https://github.com/danobi/xdp-tools/blob/e89a1c617aba3b50d990f779357d6ce2863ecb27/xdp-bench/xdp_redirect_cpumap.bpf.c#L385-L406
-
-Changes from RFCv2:
-* Rebased to ipsec-next
-* Fix netns leak
-
-Changes from RFCv1:
-* Add Antony's commit tags
-* Add KF_ACQUIRE and KF_RELEASE semantics
-
-Daniel Xu (7):
-  bpf: xfrm: Add bpf_xdp_get_xfrm_state() kfunc
-  bpf: xfrm: Add bpf_xdp_xfrm_state_release() kfunc
-  bpf: selftests: test_tunnel: Use ping -6 over ping6
-  bpf: selftests: test_tunnel: Mount bpffs if necessary
-  bpf: selftests: test_tunnel: Use vmlinux.h declarations
-  bpf: selftests: test_tunnel: Disable CO-RE relocations
-  bpf: xfrm: Add selftest for bpf_xdp_get_xfrm_state()
-
- include/net/xfrm.h                            |   9 ++
- net/xfrm/Makefile                             |   1 +
- net/xfrm/xfrm_policy.c                        |   2 +
- net/xfrm/xfrm_state_bpf.c                     | 127 ++++++++++++++++++
- .../selftests/bpf/progs/bpf_tracing_net.h     |   1 +
- .../selftests/bpf/progs/test_tunnel_kern.c    |  98 ++++++++------
- tools/testing/selftests/bpf/test_tunnel.sh    |  43 ++++--
- 7 files changed, 227 insertions(+), 54 deletions(-)
- create mode 100644 net/xfrm/xfrm_state_bpf.c
-
+diff --git a/tools/testing/selftests/bpf/test_tunnel.sh b/tools/testing/selftests/bpf/test_tunnel.sh
+index 85ba39992461..dd3c79129e87 100755
+--- a/tools/testing/selftests/bpf/test_tunnel.sh
++++ b/tools/testing/selftests/bpf/test_tunnel.sh
+@@ -46,7 +46,8 @@
+ # 6) Forward the packet to the overlay tnl dev
+ 
+ BPF_FILE="test_tunnel_kern.bpf.o"
+-BPF_PIN_TUNNEL_DIR="/sys/fs/bpf/tc/tunnel"
++BPF_FS="/sys/fs/bpf"
++BPF_PIN_TUNNEL_DIR="${BPF_FS}/tc/tunnel"
+ PING_ARG="-c 3 -w 10 -q"
+ ret=0
+ GREEN='\033[0;92m'
+@@ -668,10 +669,20 @@ check_err()
+ 	fi
+ }
+ 
++mount_bpffs()
++{
++	if ! mount | grep "bpf on /sys/fs/bpf" &>/dev/null; then
++		mount -t bpf bpf "$BPF_FS"
++	fi
++}
++
+ bpf_tunnel_test()
+ {
+ 	local errors=0
+ 
++	echo "Mounting bpffs..."
++	mount_bpffs
++
+ 	echo "Testing GRE tunnel..."
+ 	test_gre
+ 	errors=$(( $errors + $? ))
 -- 
 2.42.1
 
