@@ -1,18 +1,18 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="A+DzyIWo"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="NxtE0Rxs"
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45654110;
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A308191;
 	Wed, 22 Nov 2023 15:21:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1700695286;
-	bh=UvTHVLrVS7yXSVngtpUNw0aaFtisHMdv5IagkHAb8Vw=;
+	bh=srEK4Dv24I4ReE5ME7PGG9hMAt6epR4KY8YZybZeB5w=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=A+DzyIWop9H1iQqC4wC7ZOx+e18wBfsDCs2oqTHFLJYmu3W02n86u+DegEehx1vo5
-	 zPnK5LHg5A1Gg9qKYUcvDua/04K/8lWDki8Nk6Hw6ybKKJJvjWzvlD3ht04llm2dg3
-	 vqI0+I1UGmluY0dWiW/xLGaKI5pZkkW/27NZjQjk=
+	b=NxtE0Rxs/IstNAYI6ArnQO1zYfrUzt6WY1HUy37hXMYugi60xcSbuYmK81IOxZ26C
+	 TmrZYHwk9pMYh5iU2wEC2ZJcFFJ2QcCgokgvYaz0ylU1KCj5l4uhn6QY8boWQSKaZN
+	 eHbcoKEh49DE2zQV8V3m3e86mLkGpo1fTQoQh2pc=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Thu, 23 Nov 2023 00:21:27 +0100
-Subject: [PATCH 3/3] selftests/nolibc: disable coredump via setrlimit
+Date: Thu, 23 Nov 2023 00:21:25 +0100
+Subject: [PATCH 1/3] tools/nolibc: drop custom definition of struct rusage
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -21,55 +21,70 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20231123-nolibc-rlimit-v1-3-a428b131de2a@weissschuh.net>
+Message-Id: <20231123-nolibc-rlimit-v1-1-a428b131de2a@weissschuh.net>
 References: <20231123-nolibc-rlimit-v1-0-a428b131de2a@weissschuh.net>
 In-Reply-To: <20231123-nolibc-rlimit-v1-0-a428b131de2a@weissschuh.net>
 To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
 Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1700695285; l=1257;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1700695285; l=1460;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=UvTHVLrVS7yXSVngtpUNw0aaFtisHMdv5IagkHAb8Vw=;
- b=6KaZT5arNtlQH/G4RUsDPzhaYavmO+ntu3wPDXuPTC1+AZtPQ7oKArk9dQd3zjNeWdHEh79kF
- 0mI+PGBl1gJASvDvJ1nsyTFpMpIFBc+504WY/LcH19X3N09dwik+7xk
+ bh=srEK4Dv24I4ReE5ME7PGG9hMAt6epR4KY8YZybZeB5w=;
+ b=uchEGzHmA/GH3gMecABp7LlEuFjgup5ONftSDDvzrKWXE+Gzoa6yiHURMy9mNvR5ZAOZ/7ZtX
+ 1rCWhkLvVTwDHjsPhl/xbPCbUJYfBicSC4pXpWTxEhvaepi08nbySBD
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-qemu-user does has its own implementation of coredumping.
-That implementation does not respect the call to
-prctl(PR_SET_DUMPABLE, 0) in run_protection().
-This leads to a coredump for every test run under qemu-user.
+A future commit will include linux/resource.h, which will conflict with
+the private definition of struct rusage in nolibc.
+Avoid the conflict by dropping the private definition and use the one
+from the UAPI headers.
 
-Use also setrlimit() to inhibit coredump creation which is respected by
-qemu-user.
-
-Link: https://lore.kernel.org/qemu-devel/20231115-qemu-user-dumpable-v1-2-edbe7f0fbb02@t-8ch.de/
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- tools/testing/selftests/nolibc/nolibc-test.c | 2 ++
- 1 file changed, 2 insertions(+)
+ tools/include/nolibc/types.h | 21 +--------------------
+ 1 file changed, 1 insertion(+), 20 deletions(-)
 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index d07cebace107..ccb8d017a3e7 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -1167,6 +1167,7 @@ static int run_protection(int min __attribute__((unused)),
- {
- 	pid_t pid;
- 	int llen = 0, status;
-+	struct rlimit rlimit = { 0, 0 };
+diff --git a/tools/include/nolibc/types.h b/tools/include/nolibc/types.h
+index ad0ddaa89e50..b26a5d0c417c 100644
+--- a/tools/include/nolibc/types.h
++++ b/tools/include/nolibc/types.h
+@@ -13,6 +13,7 @@
+ #include <linux/stat.h>
+ #include <linux/time.h>
+ #include <linux/wait.h>
++#include <linux/resource.h>
  
- 	llen += printf("0 -fstackprotector ");
  
-@@ -1198,6 +1199,7 @@ static int run_protection(int min __attribute__((unused)),
- 		close(STDERR_FILENO);
+ /* Only the generic macros and types may be defined here. The arch-specific
+@@ -178,26 +179,6 @@ struct linux_dirent64 {
+ 	char           d_name[];
+ };
  
- 		prctl(PR_SET_DUMPABLE, 0, 0, 0, 0);
-+		setrlimit(RLIMIT_CORE, &rlimit);
- 		smash_stack();
- 		return 1;
- 
+-/* needed by wait4() */
+-struct rusage {
+-	struct timeval ru_utime;
+-	struct timeval ru_stime;
+-	long   ru_maxrss;
+-	long   ru_ixrss;
+-	long   ru_idrss;
+-	long   ru_isrss;
+-	long   ru_minflt;
+-	long   ru_majflt;
+-	long   ru_nswap;
+-	long   ru_inblock;
+-	long   ru_oublock;
+-	long   ru_msgsnd;
+-	long   ru_msgrcv;
+-	long   ru_nsignals;
+-	long   ru_nvcsw;
+-	long   ru_nivcsw;
+-};
+-
+ /* The format of the struct as returned by the libc to the application, which
+  * significantly differs from the format returned by the stat() syscall flavours.
+  */
 
 -- 
 2.43.0
