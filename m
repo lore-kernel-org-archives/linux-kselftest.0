@@ -1,161 +1,69 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="mj3VfFIz"
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AD8C199;
-	Wed, 22 Nov 2023 15:21:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1700695286;
-	bh=+wwLWsOzUhO5DcZAPO5W8gHxG/+RvPZMOuDOlIqHikY=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=mj3VfFIzMYATJNncnNxf7lCtyL3K6dQoyS9Lbp0oFSdDotwX8gFxppwzH5tB39izR
-	 7KVuXn1tTQLfyQxb2d8h9IgqbnSjjxUB+fv2JK2aQw0BgqyWviBJEqNbp9pM5Ndl5i
-	 bbZwcEag6OyEdWBkuZ7XPorboZ5kLmF2XcNlaVYc=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Thu, 23 Nov 2023 00:21:26 +0100
-Subject: [PATCH 2/3] tools/nolibc: add support for getrlimit/setrlimit
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hc1wwOrG"
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA6B71B5;
+	Wed, 22 Nov 2023 15:28:29 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-332cc1f176bso182008f8f.2;
+        Wed, 22 Nov 2023 15:28:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1700695708; x=1701300508; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wfE1KTkgq6xLLiPqdRtfBaDM02CW7efViNW5ZFPiv6Y=;
+        b=hc1wwOrGT+29COZc2S5ErMm8kicGbNGH0xm+6D2Z+Y5t9lligQOnixC/Roq69MXkym
+         KeWbv7EUnNbZbLvhTU8y7gQDi0o7O3bh5TJIPsWjFY4RFkPOGpkUJmkr0Qa6bfS2Z9G6
+         c/sLZJeo5BdfDEam8PGXKsnpiV5dFU8htuNh77JWtlZsNRCADghH1CIYZ1WESuhgXz3v
+         7QuHZb02qIe8NqzN0kiwKRdU0CzIgkbTI2O6lvQQxIJoK5y70CKiQPuxg0rKU3lixTwY
+         lkHTHT2LQ8AmUUlT9ExmjwldepdMacPyKS/tuvQsQ8abmWnVAGjr05HwYsEkVQDsTddu
+         f5/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700695708; x=1701300508;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wfE1KTkgq6xLLiPqdRtfBaDM02CW7efViNW5ZFPiv6Y=;
+        b=VZHKwq/83gOoc5SfSFVJw+r7rL+aTGJxAxqmImPXwPjncPnhTdKXrkLpwL0OcE741M
+         Qf4luHnRfAS+pHsfAhmUwrXmaZ1a5SQgFsJHrxhcDCu6Z4WY44LFqFGsDkwjsKqA6hlj
+         qwyXQLj8rszhWobwXqzHxeCGRdhA6xa3FFAaoOEKcrurrQDWwGpSXoPuwfpF2h0nKnl+
+         i+hMwMWnXHI8Ps9kBjrgUehv1e0LHQOqxzyRoOwydV6clGBve83iH4jVgc5l+FCYmEr7
+         zYOIM86B3lhhs2ZnVLOH0O9sGEW+hA0K0BQ2wfyL2U6iCLKCsZu/Pyi64/cbyhEbZnn5
+         YhwA==
+X-Gm-Message-State: AOJu0YwfOYBhNoOXtud3eo7xEulrf8B8FFXnSGfJUs5D70Y/7Lhqm3Na
+	VnkmDRm1W2HTHJZ2VnV83fexU4KWYRqZ5AgS0VtUzeIa
+X-Google-Smtp-Source: AGHT+IEWa+pEGlUg+/D9JPP0S7XYTOdPQaLW3OpbJ4qWMzplMz4rJEDxjuTipm4leeAQKQZkXLmHQEzoc/18EMdp+/4=
+X-Received: by 2002:a5d:5550:0:b0:332:e190:f8dd with SMTP id
+ g16-20020a5d5550000000b00332e190f8ddmr13782wrw.37.1700695708128; Wed, 22 Nov
+ 2023 15:28:28 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20231123-nolibc-rlimit-v1-2-a428b131de2a@weissschuh.net>
-References: <20231123-nolibc-rlimit-v1-0-a428b131de2a@weissschuh.net>
-In-Reply-To: <20231123-nolibc-rlimit-v1-0-a428b131de2a@weissschuh.net>
-To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1700695285; l=3555;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=+wwLWsOzUhO5DcZAPO5W8gHxG/+RvPZMOuDOlIqHikY=;
- b=7MH+fFec8xzEZGptGCONnSZDtxVsM+HH4V2Xb+pgNVsICmD0Q+KtMr6Ifj3FNt2kIOQmsu8G0
- pjNx/wPYoAiDwH6zFsR6eS08MvGJmNRAl0Bokd1kUCjwBTX07S46Hh8
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+References: <cover.1700676682.git.dxu@dxuuu.xyz> <84111ba0ea652a7013df520c151d40d400401e9c.1700676682.git.dxu@dxuuu.xyz>
+In-Reply-To: <84111ba0ea652a7013df520c151d40d400401e9c.1700676682.git.dxu@dxuuu.xyz>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 22 Nov 2023 15:28:16 -0800
+Message-ID: <CAADnVQKg7-T_g7CFRs62ZDFyR9z=FTxfyXyTe=3_ojGpnvxJ4w@mail.gmail.com>
+Subject: Re: [PATCH ipsec-next v1 7/7] bpf: xfrm: Add selftest for bpf_xdp_get_xfrm_state()
+To: Daniel Xu <dxu@dxuuu.xyz>
+Cc: John Fastabend <john.fastabend@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
+	antony.antony@secunet.com, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Mykola Lysenko <mykolal@fb.com>, bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>, devel@linux-ipsec.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The implementation uses the prlimit64 systemcall as that is available on
-all architectures.
+On Wed, Nov 22, 2023 at 10:21=E2=80=AFAM Daniel Xu <dxu@dxuuu.xyz> wrote:
+>
+> +
+> +       bpf_printk("replay-window %d\n", x->replay_esn->replay_window);
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- tools/include/nolibc/sys.h                   | 38 ++++++++++++++++++++++++++++
- tools/testing/selftests/nolibc/nolibc-test.c | 29 +++++++++++++++++++++
- 2 files changed, 67 insertions(+)
-
-diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-index 2f359cb03d10..dda9dffd1d74 100644
---- a/tools/include/nolibc/sys.h
-+++ b/tools/include/nolibc/sys.h
-@@ -21,6 +21,7 @@
- #include <linux/fcntl.h> /* for O_* and AT_* */
- #include <linux/stat.h>  /* for statx() */
- #include <linux/prctl.h>
-+#include <linux/resource.h>
- 
- #include "arch.h"
- #include "errno.h"
-@@ -898,6 +899,43 @@ int reboot(int cmd)
- }
- 
- 
-+/*
-+ * int getrlimit(int resource, struct rlimit *rlim);
-+ * int setrlimit(int resource, const struct rlimit *rlim);
-+ */
-+
-+static __attribute__((unused))
-+int sys_prlimit64(pid_t pid, int resource,
-+		  const struct rlimit64 *new_limit, struct rlimit64 *old_limit)
-+{
-+	return my_syscall4(__NR_prlimit64, pid, resource, new_limit, old_limit);
-+}
-+
-+static __attribute__((unused))
-+int getrlimit(int resource, struct rlimit *rlim)
-+{
-+	struct rlimit64 rlim64;
-+	int ret;
-+
-+	ret = __sysret(sys_prlimit64(0, resource, NULL, &rlim64));
-+	rlim->rlim_cur = rlim64.rlim_cur;
-+	rlim->rlim_max = rlim64.rlim_max;
-+
-+	return ret;
-+}
-+
-+static __attribute__((unused))
-+int setrlimit(int resource, const struct rlimit *rlim)
-+{
-+	struct rlimit64 rlim64 = {
-+		.rlim_cur = rlim->rlim_cur,
-+		.rlim_max = rlim->rlim_max,
-+	};
-+
-+	return __sysret(sys_prlimit64(0, resource, &rlim64, NULL));
-+}
-+
-+
- /*
-  * int sched_yield(void);
-  */
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 2b71fb5fae4e..d07cebace107 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -22,6 +22,7 @@
- #include <sys/mount.h>
- #include <sys/prctl.h>
- #include <sys/reboot.h>
-+#include <sys/resource.h>
- #include <sys/stat.h>
- #include <sys/syscall.h>
- #include <sys/sysmacros.h>
-@@ -839,6 +840,33 @@ int test_pipe(void)
- 	return !!memcmp(buf, msg, len);
- }
- 
-+int test_rlimit(void)
-+{
-+	struct rlimit rlim = {
-+		.rlim_cur = 1 << 20,
-+		.rlim_max = 1 << 20,
-+	};
-+	int ret;
-+
-+	ret = setrlimit(RLIMIT_CORE, &rlim);
-+	if (ret)
-+		return -1;
-+
-+	rlim.rlim_cur = 0;
-+	rlim.rlim_max = 0;
-+
-+	ret = getrlimit(RLIMIT_CORE, &rlim);
-+	if (ret)
-+		return -1;
-+
-+	if (rlim.rlim_cur != 1 << 20)
-+		return -1;
-+	if (rlim.rlim_max != 1 << 20)
-+		return -1;
-+
-+	return 0;
-+}
-+
- 
- /* Run syscall tests between IDs <min> and <max>.
-  * Return 0 on success, non-zero on failure.
-@@ -929,6 +957,7 @@ int run_syscall(int min, int max)
- 		CASE_TEST(poll_fault);        EXPECT_SYSER(1, poll(NULL, 1, 0), -1, EFAULT); break;
- 		CASE_TEST(prctl);             EXPECT_SYSER(1, prctl(PR_SET_NAME, (unsigned long)NULL, 0, 0, 0), -1, EFAULT); break;
- 		CASE_TEST(read_badf);         EXPECT_SYSER(1, read(-1, &tmp, 1), -1, EBADF); break;
-+		CASE_TEST(rlimit);            EXPECT_SYSZR(1, test_rlimit()); break;
- 		CASE_TEST(rmdir_blah);        EXPECT_SYSER(1, rmdir("/blah"), -1, ENOENT); break;
- 		CASE_TEST(sched_yield);       EXPECT_SYSZR(1, sched_yield()); break;
- 		CASE_TEST(select_null);       EXPECT_SYSZR(1, ({ struct timeval tv = { 0 }; select(0, NULL, NULL, NULL, &tv); })); break;
-
--- 
-2.43.0
-
+Pls no printk in tests. Find a different way to validate.
