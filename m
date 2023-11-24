@@ -1,43 +1,42 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vrull.eu header.i=@vrull.eu header.b="ETzqhdXi"
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 192C1D6E
-	for <linux-kselftest@vger.kernel.org>; Thu, 23 Nov 2023 23:22:14 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-5480edd7026so2150731a12.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Nov 2023 23:22:14 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=vrull.eu header.i=@vrull.eu header.b="lcVns6H2"
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B7C10E0
+	for <linux-kselftest@vger.kernel.org>; Thu, 23 Nov 2023 23:22:27 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-507cd62472dso2754841e87.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 Nov 2023 23:22:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vrull.eu; s=google; t=1700810532; x=1701415332; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SyHjshVZY4a+CzgGKu86RdRFHE9Gyk/gNKjRroh1RbA=;
-        b=ETzqhdXi3jJHeyflpyjXWZAHLbBIRj36vUutURfKifa/kwoAXFwgtv+yC9zbisCQsu
-         o3hrVZuZmXin6GgNe1n4+3opXe1XMa/QbFn/YGgxX+6ES3TIV3Gfv5ru9IbvsUY7cFvt
-         weAtYQLrkywn5zcn43OUW0efN4lGfPrRIP4yVUFBh3iuCDwEdv2koR7jWTGV35vpsYB+
-         IxGEet++UtXe8D4UPmCXmhqgzQzUQ2slfJDZ7P11TM/5T9JSxtsbdEkom4HOuDfDnbGB
-         axTTYKX7O9q52CqggSd25tvGUX4miqMQXdJEso7ewU17FE7UxNlLSRdTDyDEpStA9Miw
-         XILA==
+        d=vrull.eu; s=google; t=1700810545; x=1701415345; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=A+QJwQ2ibzfm4ZH4G7RxTWHsFFrHVq+i8PDqnY0Hrac=;
+        b=lcVns6H2pfJSYqMv5D93CbOOs4B6CgPrNkEk8ZrKWnoYUSDz9+vDaIJovSPYEUy6az
+         k/pRaPPFrXQHjcKzMKOz85YmkiALrblpw0xMgXACObsv9J+hbYEY9XKCuhrLOLvwHnVq
+         MGLVNFbk2XYTmR3PdC2fzn1BIdZyP6Ggg7/Wpyz8C9VvK4JjLnaAPK/V/HodrWwhrpbe
+         Gr3/3wdh+FXnsQjeWrGYzpnQIL30YeldnXyKeaPeMTFGKgDhTX1IX94/ldFpBWVSYuoP
+         wsHYs4x7+rnVAt3YLlhqxeWPqh69ZKNytUEiIep7mWpuGSpGmwmfqqOEEUZSTthaIWPG
+         cMOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700810532; x=1701415332;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SyHjshVZY4a+CzgGKu86RdRFHE9Gyk/gNKjRroh1RbA=;
-        b=Lgo5/FjaDbytbN4NBP649Ng6px/uWMFT29I229mic4jtzNpI5Wfm7kLV9iIkGn0imy
-         MkzeTPCp+QjWeeBo1MZq8hjGHKAA+l6s4rp9Z6FNt64NJh+kN92oOaI7e/9bZ16OAryl
-         wqtjcXSgA0V3nrT7sb1TXz/lBcQg2PcAxD9eMfLzH69k/QsH+3Snb7KpxL6auX3XS5SU
-         ZBoqAWE6U+AG0Qe+t2t8Fm0BC/UIbUPQ/GsAprK3ikfjM31T7wDoGV2zf5n/4yvSSTxT
-         PeoBMWvemLqPPiBt4w+iZIGJ13HZGB2mPKaH7u3I2SiLApQDQNsSL2GOOlNquKMetLnn
-         n/Eg==
-X-Gm-Message-State: AOJu0Yw6xOmXKSFjFwh0F2N/SBCN7T6ogb/ouivuBGu5xtnXk3wUOQOm
-	urq0n20BbrDgTpW9LgJ5xPOlNg==
-X-Google-Smtp-Source: AGHT+IEeR8RiraoHcQMfKVQPMc/bI/tKyEPjsNFqwM2sa2syPi4of5FlqT3IwZAKP2ce7aPUm/rHLQ==
-X-Received: by 2002:a17:906:651:b0:9fe:81a:c258 with SMTP id t17-20020a170906065100b009fe081ac258mr1199022ejb.26.1700810532654;
-        Thu, 23 Nov 2023 23:22:12 -0800 (PST)
+        d=1e100.net; s=20230601; t=1700810545; x=1701415345;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=A+QJwQ2ibzfm4ZH4G7RxTWHsFFrHVq+i8PDqnY0Hrac=;
+        b=TEgQXfekxsodICR/2asZOrRfc0FFAfQIeHsUsa7IQn5DgrPZP78OE+f6d5FX+YPWt1
+         ssSdX4o6X2hGF/ycLiFFPNIrchLgXH1CV8jWiknM11Q6pQ/ACMvr3/qg5zRNPnxwkZ/F
+         v5t77YIeCo8UGbZ56XFlZdv9snz+Ubk0AWywP/o4pIeZ5r8oagVtFWFrR1njbJVW8ErT
+         5nNrwyZ8i5T5Op03dx7L631XLwUjkwu9CD+GiviHLDqMQ7aNJj3VQ1gL80gPeFOt6A+g
+         wbi1ajsE8u7kP6mOsPBhv5TGYorQKSa6lWFmlLJjVs0AphhO+rKWsaoFByB5zqe+egNY
+         v7Hw==
+X-Gm-Message-State: AOJu0YzP6insDJdKY7e8GSligvsjMMbd/Yr9IiPObUEkmgC3o+ezpgCy
+	/P3YTZy1g1Re0hOKOXMWNnw0f/iD/1H4GYpHM0LiOIwH
+X-Google-Smtp-Source: AGHT+IG4KyTl5CwzMZ1gy4FucyPBBLxaEgYRfo01XZveBgxlerDUkvXhDFprA+AP7dQahAlFaE4+/g==
+X-Received: by 2002:a17:906:2259:b0:9ee:a767:12e7 with SMTP id 25-20020a170906225900b009eea76712e7mr1762679ejr.6.1700810524590;
+        Thu, 23 Nov 2023 23:22:04 -0800 (PST)
 Received: from beast.fritz.box (62-178-148-172.cable.dynamic.surfer.at. [62.178.148.172])
-        by smtp.gmail.com with ESMTPSA id q18-20020a1709060e5200b00992f2befcbcsm1709930eji.180.2023.11.23.23.22.10
+        by smtp.gmail.com with ESMTPSA id q18-20020a1709060e5200b00992f2befcbcsm1709930eji.180.2023.11.23.23.22.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Nov 2023 23:22:12 -0800 (PST)
+        Thu, 23 Nov 2023 23:22:04 -0800 (PST)
 From: Christoph Muellner <christoph.muellner@vrull.eu>
 To: linux-riscv@lists.infradead.org,
 	linux-kselftest@vger.kernel.org,
@@ -62,12 +61,10 @@ To: linux-riscv@lists.infradead.org,
 	Daniel Lustig <dlustig@nvidia.com>,
 	Peter Zijlstra <peterz@infradead.org>
 Cc: =?UTF-8?q?Christoph=20M=C3=BCllner?= <christoph.muellner@vrull.eu>
-Subject: [RFC PATCH 4/5] RISC-V: Implement prctl call to set/get the memory consistency model
-Date: Fri, 24 Nov 2023 08:21:41 +0100
-Message-ID: <20231124072142.2786653-5-christoph.muellner@vrull.eu>
+Subject: [RFC PATCH 0/5] RISC-V: Add dynamic TSO support
+Date: Fri, 24 Nov 2023 08:21:37 +0100
+Message-ID: <20231124072142.2786653-1-christoph.muellner@vrull.eu>
 X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20231124072142.2786653-1-christoph.muellner@vrull.eu>
-References: <20231124072142.2786653-1-christoph.muellner@vrull.eu>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -79,129 +76,69 @@ Content-Transfer-Encoding: 8bit
 
 From: Christoph Müllner <christoph.muellner@vrull.eu>
 
-We can use the PR_{S,G}ET_MEMORY_CONSISTENCY_MODEL prctl calls to change
-the memory consistency model at run-time if we have Ssdtso.
-This patch registers RISCV_WMO and RISCV_TSO as valid arguments
-for these prctl calls and implements the glue code to switch
-between these.
+The upcoming RISC-V Ssdtso specification introduces a bit in the senvcfg
+CSR to switch the memory consistency model at run-time from RVWMO to TSO
+(and back). The active consistency model can therefore be switched on a
+per-hart base and managed by the kernel on a per-process/thread base.
 
-Signed-off-by: Christoph Müllner <christoph.muellner@vrull.eu>
----
- .../mm/dynamic-memory-consistency-model.rst   | 18 ++++++++++
- arch/riscv/include/asm/processor.h            |  7 ++++
+This patch implements basic Ssdtso support and adds a prctl API on top
+so that user-space processes can switch to a stronger memory consistency
+model (than the kernel was written for) at run-time.
+
+I am not sure if other architectures support switching the memory
+consistency model at run-time, but designing the prctl API in an
+arch-independent way allows reusing it in the future.
+
+The patchset also comes with a short documentation of the prctl API.
+
+This series is based on the second draft of the Ssdtso specification
+which was published recently on an RVI list:
+  https://lists.riscv.org/g/tech-arch-review/message/183
+Note, that the Ssdtso specification is in development state
+(i.e., not frozen or even ratified) which is also the reason
+why I marked the series as RFC.
+
+One aspect that is not covered in this patchset is virtualization.
+It is planned to add virtualization support in a later version.
+Hints/suggestions on how to implement this part are very much
+appreciated.
+
+Christoph Müllner (5):
+  RISC-V: Add basic Ssdtso support
+  RISC-V: Expose Ssdtso via hwprobe API
+  uapi: prctl: Add new prctl call to set/get the memory consistency
+    model
+  RISC-V: Implement prctl call to set/get the memory consistency model
+  RISC-V: selftests: Add DTSO tests
+
+ Documentation/arch/riscv/hwprobe.rst          |  3 +
+ .../mm/dynamic-memory-consistency-model.rst   | 76 ++++++++++++++++++
+ arch/riscv/Kconfig                            | 10 +++
+ arch/riscv/include/asm/csr.h                  |  1 +
+ arch/riscv/include/asm/dtso.h                 | 74 ++++++++++++++++++
+ arch/riscv/include/asm/hwcap.h                |  1 +
+ arch/riscv/include/asm/processor.h            |  8 ++
+ arch/riscv/include/asm/switch_to.h            |  3 +
+ arch/riscv/include/uapi/asm/hwprobe.h         |  1 +
  arch/riscv/kernel/Makefile                    |  1 +
- arch/riscv/kernel/dtso.c                      | 33 +++++++++++++++++++
- include/uapi/linux/prctl.h                    |  2 ++
- 5 files changed, 61 insertions(+)
+ arch/riscv/kernel/cpufeature.c                |  1 +
+ arch/riscv/kernel/dtso.c                      | 33 ++++++++
+ arch/riscv/kernel/process.c                   |  4 +
+ arch/riscv/kernel/sys_riscv.c                 |  1 +
+ include/uapi/linux/prctl.h                    |  5 ++
+ kernel/sys.c                                  | 12 +++
+ tools/testing/selftests/riscv/Makefile        |  2 +-
+ tools/testing/selftests/riscv/dtso/.gitignore |  1 +
+ tools/testing/selftests/riscv/dtso/Makefile   | 11 +++
+ tools/testing/selftests/riscv/dtso/dtso.c     | 77 +++++++++++++++++++
+ 20 files changed, 324 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/mm/dynamic-memory-consistency-model.rst
+ create mode 100644 arch/riscv/include/asm/dtso.h
  create mode 100644 arch/riscv/kernel/dtso.c
+ create mode 100644 tools/testing/selftests/riscv/dtso/.gitignore
+ create mode 100644 tools/testing/selftests/riscv/dtso/Makefile
+ create mode 100644 tools/testing/selftests/riscv/dtso/dtso.c
 
-diff --git a/Documentation/mm/dynamic-memory-consistency-model.rst b/Documentation/mm/dynamic-memory-consistency-model.rst
-index 21675b41ec84..4a6107a4b71f 100644
---- a/Documentation/mm/dynamic-memory-consistency-model.rst
-+++ b/Documentation/mm/dynamic-memory-consistency-model.rst
-@@ -56,3 +56,21 @@ Two prctl calls are defined to get/set the active memory consistency model:
-     to the given model. If the architecture does not support dynamic
-     memory consistency models or does not support the provided model, then
-     -1 is returned, and errno is set to EINVAL.
-+
-+Supported memory consistency models
-+===================================
-+
-+This section defines the memory consistency models which are supported
-+by the prctl interface.
-+
-+RISC-V
-+------
-+
-+RISC-V uses RVWMO (RISC-V weak memory ordering) as default memory consistency
-+model. TSO (total store ordering) is another specified model and provides
-+additional ordering guarantees. Switching from RVWMO to TSO (and back) is
-+possible when the Ssdtso extension is available.
-+
-+* :c:macro:`PR_MEMORY_CONSISTENCY_MODEL_RISCV_WMO`: RISC-V weak memory ordering (default).
-+
-+* :c:macro:`PR_MEMORY_CONSISTENCY_MODEL_RISCV_TSO`: RISC-V total store ordering.
-diff --git a/arch/riscv/include/asm/processor.h b/arch/riscv/include/asm/processor.h
-index 79cc5e6377b8..b0c19ddb2cfb 100644
---- a/arch/riscv/include/asm/processor.h
-+++ b/arch/riscv/include/asm/processor.h
-@@ -146,6 +146,13 @@ extern int set_unalign_ctl(struct task_struct *tsk, unsigned int val);
- #define GET_UNALIGN_CTL(tsk, addr)	get_unalign_ctl((tsk), (addr))
- #define SET_UNALIGN_CTL(tsk, val)	set_unalign_ctl((tsk), (val))
- 
-+#ifdef CONFIG_RISCV_ISA_SSDTSO
-+#define SET_MEMORY_CONSISTENCY_MODEL(arg)	dtso_set_memory_ordering(arg)
-+#define GET_MEMORY_CONSISTENCY_MODEL()		dtso_get_memory_ordering()
-+extern int dtso_set_memory_consistency_model(unsigned long arg);
-+extern int dtso_get_memory_consistency_model(void);
-+#endif /* CONIG_RISCV_ISA_SSDTSO */
-+
- #endif /* __ASSEMBLY__ */
- 
- #endif /* _ASM_RISCV_PROCESSOR_H */
-diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-index fee22a3d1b53..17cf74ac8e21 100644
---- a/arch/riscv/kernel/Makefile
-+++ b/arch/riscv/kernel/Makefile
-@@ -63,6 +63,7 @@ obj-$(CONFIG_MMU) += vdso.o vdso/
- obj-$(CONFIG_RISCV_MISALIGNED)	+= traps_misaligned.o
- obj-$(CONFIG_FPU)		+= fpu.o
- obj-$(CONFIG_RISCV_ISA_V)	+= vector.o
-+obj-$(CONFIG_RISCV_ISA_SSDTSO)	+= dtso.o
- obj-$(CONFIG_SMP)		+= smpboot.o
- obj-$(CONFIG_SMP)		+= smp.o
- obj-$(CONFIG_SMP)		+= cpu_ops.o
-diff --git a/arch/riscv/kernel/dtso.c b/arch/riscv/kernel/dtso.c
-new file mode 100644
-index 000000000000..fcf7e2e80362
---- /dev/null
-+++ b/arch/riscv/kernel/dtso.c
-@@ -0,0 +1,33 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+/*
-+ * Copyright (c) 2023 Christoph Muellner <christoph.muellner@vrull.eu>
-+ */
-+
-+#include <linux/export.h>
-+#include <linux/prctl.h>
-+#include <asm/dtso.h>
-+
-+int riscv_set_memory_consistency_model(unsigned long arg)
-+{
-+	switch (arg) {
-+	case PR_MEMORY_CONSISTENCY_MODEL_RISCV_WMO:
-+		dtso_disable();
-+		break;
-+	case PR_MEMORY_CONSISTENCY_MODEL_RISCV_TSO:
-+		if (!has_dtso())
-+			return -EINVAL;
-+		dtso_enable();
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+int riscv_get_memory_consistency_model(void)
-+{
-+	if (has_dtso() && dtso_is_enabled())
-+		return PR_MEMORY_CONSISTENCY_MODEL_RISCV_TSO;
-+	return PR_MEMORY_CONSISTENCY_MODEL_RISCV_WMO;
-+}
-diff --git a/include/uapi/linux/prctl.h b/include/uapi/linux/prctl.h
-index 579662731eaa..20264bdc3092 100644
---- a/include/uapi/linux/prctl.h
-+++ b/include/uapi/linux/prctl.h
-@@ -308,5 +308,7 @@ struct prctl_mm_map {
- 
- #define PR_SET_MEMORY_CONSISTENCY_MODEL		71
- #define PR_GET_MEMORY_CONSISTENCY_MODEL		72
-+# define PR_MEMORY_CONSISTENCY_MODEL_RISCV_WMO	1
-+# define PR_MEMORY_CONSISTENCY_MODEL_RISCV_TSO	2
- 
- #endif /* _LINUX_PRCTL_H */
 -- 
 2.41.0
 
