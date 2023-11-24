@@ -1,13 +1,13 @@
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2F81F19B9;
-	Fri, 24 Nov 2023 08:36:19 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0EC3919AA;
+	Fri, 24 Nov 2023 08:36:24 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6C1041063;
-	Fri, 24 Nov 2023 08:37:05 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4BB5B1C01;
+	Fri, 24 Nov 2023 08:37:10 -0800 (PST)
 Received: from e124191.cambridge.arm.com (e124191.cambridge.arm.com [10.1.197.45])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BC8493F73F;
-	Fri, 24 Nov 2023 08:36:16 -0800 (PST)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9C6C93F73F;
+	Fri, 24 Nov 2023 08:36:21 -0800 (PST)
 From: Joey Gouly <joey.gouly@arm.com>
 To: linux-arm-kernel@lists.infradead.org
 Cc: akpm@linux-foundation.org,
@@ -27,9 +27,9 @@ Cc: akpm@linux-foundation.org,
 	James Morse <james.morse@arm.com>,
 	Suzuki K Poulose <suzuki.poulose@arm.com>,
 	Zenghui Yu <yuzenghui@huawei.com>
-Subject: [PATCH v3 23/25] kselftest/arm64: parse POE_MAGIC in a signal frame
-Date: Fri, 24 Nov 2023 16:35:08 +0000
-Message-Id: <20231124163510.1835740-24-joey.gouly@arm.com>
+Subject: [PATCH v3 25/25] KVM: selftests: get-reg-list: add Permission Overlay registers
+Date: Fri, 24 Nov 2023 16:35:10 +0000
+Message-Id: <20231124163510.1835740-26-joey.gouly@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20231124163510.1835740-1-joey.gouly@arm.com>
 References: <20231124163510.1835740-1-joey.gouly@arm.com>
@@ -41,34 +41,59 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Teach the signal frame parsing about the new POE frame, avoids warning when it
-is generated.
+Add new system registers:
+  - POR_EL1
+  - POR_EL0
 
 Signed-off-by: Joey Gouly <joey.gouly@arm.com>
 Cc: Catalin Marinas <catalin.marinas@arm.com>
 Cc: Will Deacon <will@kernel.org>
-Cc: Mark Brown <broonie@kernel.org>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: Oliver Upton <oliver.upton@linux.dev>
 Cc: Shuah Khan <shuah@kernel.org>
-Reviewed-by: Mark Brown <broonie@kernel.org>
 ---
- tools/testing/selftests/arm64/signal/testcases/testcases.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ tools/testing/selftests/kvm/aarch64/get-reg-list.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/tools/testing/selftests/arm64/signal/testcases/testcases.c b/tools/testing/selftests/arm64/signal/testcases/testcases.c
-index fe950b6bca6b..5dda753870aa 100644
---- a/tools/testing/selftests/arm64/signal/testcases/testcases.c
-+++ b/tools/testing/selftests/arm64/signal/testcases/testcases.c
-@@ -161,6 +161,10 @@ bool validate_reserved(ucontext_t *uc, size_t resv_sz, char **err)
- 			if (head->size != sizeof(struct esr_context))
- 				*err = "Bad size for esr_context";
- 			break;
-+		case POE_MAGIC:
-+			if (head->size != sizeof(struct poe_context))
-+				*err = "Bad size for poe_context";
-+			break;
- 		case TPIDR2_MAGIC:
- 			if (head->size != sizeof(struct tpidr2_context))
- 				*err = "Bad size for tpidr2_context";
+diff --git a/tools/testing/selftests/kvm/aarch64/get-reg-list.c b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
+index 709d7d721760..ac661ebf6859 100644
+--- a/tools/testing/selftests/kvm/aarch64/get-reg-list.c
++++ b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
+@@ -40,6 +40,18 @@ static struct feature_id_reg feat_id_regs[] = {
+ 		ARM64_SYS_REG(3, 0, 0, 7, 3),	/* ID_AA64MMFR3_EL1 */
+ 		4,
+ 		1
++	},
++	{
++		ARM64_SYS_REG(3, 0, 10, 2, 4),	/* POR_EL1 */
++		ARM64_SYS_REG(3, 0, 0, 7, 3),	/* ID_AA64MMFR3_EL1 */
++		16,
++		1
++	},
++	{
++		ARM64_SYS_REG(3, 3, 10, 2, 4),	/* POR_EL0 */
++		ARM64_SYS_REG(3, 0, 0, 7, 3),	/* ID_AA64MMFR3_EL1 */
++		16,
++		1
+ 	}
+ };
+ 
+@@ -468,6 +480,7 @@ static __u64 base_regs[] = {
+ 	ARM64_SYS_REG(3, 0, 10, 2, 0),	/* MAIR_EL1 */
+ 	ARM64_SYS_REG(3, 0, 10, 2, 2),	/* PIRE0_EL1 */
+ 	ARM64_SYS_REG(3, 0, 10, 2, 3),	/* PIR_EL1 */
++	ARM64_SYS_REG(3, 0, 10, 2, 4),	/* POR_EL1 */
+ 	ARM64_SYS_REG(3, 0, 10, 3, 0),	/* AMAIR_EL1 */
+ 	ARM64_SYS_REG(3, 0, 12, 0, 0),	/* VBAR_EL1 */
+ 	ARM64_SYS_REG(3, 0, 12, 1, 1),	/* DISR_EL1 */
+@@ -475,6 +488,7 @@ static __u64 base_regs[] = {
+ 	ARM64_SYS_REG(3, 0, 13, 0, 4),	/* TPIDR_EL1 */
+ 	ARM64_SYS_REG(3, 0, 14, 1, 0),	/* CNTKCTL_EL1 */
+ 	ARM64_SYS_REG(3, 2, 0, 0, 0),	/* CSSELR_EL1 */
++	ARM64_SYS_REG(3, 3, 10, 2, 4),	/* POR_EL0 */
+ 	ARM64_SYS_REG(3, 3, 13, 0, 2),	/* TPIDR_EL0 */
+ 	ARM64_SYS_REG(3, 3, 13, 0, 3),	/* TPIDRRO_EL0 */
+ 	ARM64_SYS_REG(3, 3, 14, 0, 1),	/* CNTPCT_EL0 */
 -- 
 2.25.1
 
