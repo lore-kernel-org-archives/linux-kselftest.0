@@ -1,43 +1,43 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jy0nuGGd"
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A2E1718;
-	Fri, 24 Nov 2023 09:16:51 -0800 (PST)
-Received: by mail-qt1-x831.google.com with SMTP id d75a77b69052e-41cc535cd5cso10202281cf.2;
-        Fri, 24 Nov 2023 09:16:51 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZYM3NfMz"
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A24E51987;
+	Fri, 24 Nov 2023 09:16:52 -0800 (PST)
+Received: by mail-qt1-x832.google.com with SMTP id d75a77b69052e-4239f5c1ec2so2152221cf.0;
+        Fri, 24 Nov 2023 09:16:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700846211; x=1701451011; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1700846212; x=1701451012; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=af1+2koe7V56mmURceKREPPaIe6SUwS89TrLZExIq8o=;
-        b=Jy0nuGGd/TjVtWvMD0DPR+7658ft96W23ujyUaBknAe8jJIH+dH0OhIxUOdtT7ydmE
-         D8b/aKH2CusSkPhd+dv4NHjxIQOXCBSmuobUDuYWDuhxhX15cwOADn1qdy1wlKqkbBn/
-         /i/USzC7EILHK4s6YFYZqF/CPQZYAz2HnEtswGp0TTEXfehZ5QLRzoJolR6wJRQVkvZx
-         C9tpqyY385zyBF3aBbA3YwicWKQUvSEYMhsCyd1MYz4PRdeb+vDjpwW7AUWRd98gByRY
-         e8QvCrlbnB9yc24vx6Z8siDLLbXkdLxCl8RiXJWkxoU4sYSCJnzomI1NqR2LzmHZVSwr
-         3fzg==
+        bh=+a865Y5eccV4NEfBYguXGSbwXwv2AQMyNfi8KVk866g=;
+        b=ZYM3NfMzU2IKiRXqt4cUkA/vadUGPGLwgNHdEUH/Dr9AVQtJ1plcIwaVPk9KMrP4UU
+         +wj4FXU8Coi18yXCdxWf/uQatMIAEZP5qyRy9XUn4AJLHkZdLQA+EC/G6+5Y93QZ8/8c
+         30TUJcqJpi/4rvBm1gTWMEIMJUpKm1vy/AhyDlYtSc6XCtHFIKHlpBtwQEU7jgrylCl3
+         u10ee/ZTUarzjK5+aAy5M145vDER9ye1Cgf5La2vvSGWSC1VMQEhQTWuV7LmxuYhUwp4
+         DJ73xpYIL2qma5J42fp5W5Hb+Wt0LX2n+EAAhXPkdofFbCiepZONIt6i+uP8OcsUp1cZ
+         TuCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700846211; x=1701451011;
+        d=1e100.net; s=20230601; t=1700846212; x=1701451012;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=af1+2koe7V56mmURceKREPPaIe6SUwS89TrLZExIq8o=;
-        b=uegHy9C6W7LO8qSrJ74UiVjn7VABRmHG7La5avts5VPVjxbZUdA8wAK1a2WUWjEn3g
-         FK9ICaxnnuHPERTw6ya26X1REBcNwc26akY9QTofpcWlB9ClmgkNFKY9Lwjra9h4+coE
-         N8bF2zbO/ivddQNE0ZqBb34eOYRQqOsvqZL1Tb4srUG3UfdlR9Egp5UqL/51pAcm/pRN
-         p/DMeZxNJhreTuQJT1gzpFx816AebTMNdbqzz1tzZhKpoR2/ZMXc+PLijNk0TTeZkTRF
-         V5OTtF0iLUPFqlIQhZFWtzRXPEQu9dxzrsVMHLb3GjqFFK4Q4i1rKoDJBztdiAGdr+9z
-         0Dvg==
-X-Gm-Message-State: AOJu0YzeqBJscMjqxXZNWwEVT2sOR8rENxQwALH3byfWbEukWSIT88TH
-	kacjWiJzPCc9FIEhFzlfBqxx4wHiDbM=
-X-Google-Smtp-Source: AGHT+IHfWRqp0G5GAIhgLsja5PYY9aE/hq9PcYJ5RqZ17mhhd1LspLh6byXAL/qHWyBiv3Ff0xdVag==
-X-Received: by 2002:a05:6214:1fd0:b0:66d:1ae6:2a5a with SMTP id jh16-20020a0562141fd000b0066d1ae62a5amr3618105qvb.7.1700846210686;
-        Fri, 24 Nov 2023 09:16:50 -0800 (PST)
+        bh=+a865Y5eccV4NEfBYguXGSbwXwv2AQMyNfi8KVk866g=;
+        b=mNBF6nooZQSnovhEF9wLIowriQG97vC4E2gvkdqwogVjBvos6JGLGiaEacu9Vn8J3m
+         Ydi35wxlSGQwaR6nrj7T2CnIxOkqy1kJubzqCbM/XIrTFmkQQLQSVcCibuByrvCB7lh8
+         nlQ2Sncotk2Dxu4vCTiEsFVZT4wXcgMKzw6vWkKFn7mycEKWpGkX3vr8XaGe/TdnIQ55
+         lnJEPb0ahiSyMlPr3HSZ/DlQa01mc8WO6PwSc6Yqn6Z2H7Z6xL1CqhFUXXlyZrAAro/R
+         Pu6Xgq8Yja20mwlP2ZAHiUr1bqWxUFvXojldDbVZlJT7kq7madU5NRxJ5jweqNZ9f6vS
+         df/A==
+X-Gm-Message-State: AOJu0YwGXNeH8fBs+9I/e5gYoAzwTAcfHZ9C2DhHxi7LjYNE1KeUD+0X
+	25OujaRzvYsuiw/NwM4cpwlckJsEmm0=
+X-Google-Smtp-Source: AGHT+IE0HeRN63PBpoyZcTtaUbo3vRuh7mcI/BW0ogR+qmamwWOEmndqelPnTfRrMrvrl5t7uNRNPQ==
+X-Received: by 2002:a05:6214:4991:b0:671:dac1:c856 with SMTP id pf17-20020a056214499100b00671dac1c856mr5300384qvb.53.1700846211723;
+        Fri, 24 Nov 2023 09:16:51 -0800 (PST)
 Received: from willemb.c.googlers.com.com (240.157.150.34.bc.googleusercontent.com. [34.150.157.240])
-        by smtp.gmail.com with ESMTPSA id mn23-20020a0562145ed700b0067a0a00b24csm1389278qvb.73.2023.11.24.09.16.50
+        by smtp.gmail.com with ESMTPSA id mn23-20020a0562145ed700b0067a0a00b24csm1389278qvb.73.2023.11.24.09.16.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Nov 2023 09:16:50 -0800 (PST)
+        Fri, 24 Nov 2023 09:16:51 -0800 (PST)
 From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
 To: netdev@vger.kernel.org
 Cc: davem@davemloft.net,
@@ -45,10 +45,11 @@ Cc: davem@davemloft.net,
 	edumazet@google.com,
 	pabeni@redhat.com,
 	linux-kselftest@vger.kernel.org,
-	Willem de Bruijn <willemb@google.com>
-Subject: [PATCH net 2/4] selftests/net: fix a char signedness issue
-Date: Fri, 24 Nov 2023 12:15:20 -0500
-Message-ID: <20231124171645.1011043-3-willemdebruijn.kernel@gmail.com>
+	Willem de Bruijn <willemb@google.com>,
+	Florian Westphal <fw@strlen.de>
+Subject: [PATCH net 4/4] selftests/net: mptcp: fix uninitialized variable warnings
+Date: Fri, 24 Nov 2023 12:15:22 -0500
+Message-ID: <20231124171645.1011043-5-willemdebruijn.kernel@gmail.com>
 X-Mailer: git-send-email 2.43.0.rc1.413.gea7ed67945-goog
 In-Reply-To: <20231124171645.1011043-1-willemdebruijn.kernel@gmail.com>
 References: <20231124171645.1011043-1-willemdebruijn.kernel@gmail.com>
@@ -62,41 +63,99 @@ Content-Transfer-Encoding: 8bit
 
 From: Willem de Bruijn <willemb@google.com>
 
-Signedness of char is signed on x86_64, but unsigned on arm64.
+Same init_rng() in both tests. The function reads /dev/urandom to
+initialize srand(). In case of failure, it falls back onto the
+entropy in the uninitialized variable. Not sure if this is on purpose.
+But failure reading urandom should be rare, so just fail hard. While
+at it, convert to getrandom(). Which man 4 random suggests is simpler
+and more robust.
 
-Fix the warning building cmsg_sender.c on signed platforms or
-forced with -fsigned-char:
+    mptcp_inq.c:525:6:
+    mptcp_connect.c:1131:6:
 
-    msg_sender.c:455:12:
-    error: implicit conversion from 'int' to 'char'
-    changes value from 128 to -128
-    [-Werror,-Wconstant-conversion]
-        buf[0] = ICMPV6_ECHO_REQUEST;
+    error: variable 'foo' is used uninitialized
+    whenever 'if' condition is false
+    [-Werror,-Wsometimes-uninitialized]
 
-constant ICMPV6_ECHO_REQUEST is 128.
-
-Link: https://lwn.net/Articles/911914
-Fixes: de17e305a810 ("selftests: net: cmsg_sender: support icmp and raw sockets")
+Fixes: 048d19d444be ("mptcp: add basic kselftest for mptcp")
+Fixes: b51880568f20 ("selftests: mptcp: add inq test case")
+Cc: Florian Westphal <fw@strlen.de>
 Signed-off-by: Willem de Bruijn <willemb@google.com>
----
- tools/testing/selftests/net/cmsg_sender.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/net/cmsg_sender.c b/tools/testing/selftests/net/cmsg_sender.c
-index 24b21b15ed3fb..6ff3e732f449f 100644
---- a/tools/testing/selftests/net/cmsg_sender.c
-+++ b/tools/testing/selftests/net/cmsg_sender.c
-@@ -416,9 +416,9 @@ int main(int argc, char *argv[])
- {
- 	struct addrinfo hints, *ai;
- 	struct iovec iov[1];
-+	unsigned char *buf;
- 	struct msghdr msg;
- 	char cbuf[1024];
--	char *buf;
- 	int err;
- 	int fd;
+----
+
+When input is randomized because this is expected to meaningfully
+explore edge cases, should we also add
+1. logging the random seed to stdout and
+2. adding a command line argument to replay from a specific seed
+I can do this in net-next, if authors find it useful in this case.
+---
+ tools/testing/selftests/net/mptcp/mptcp_connect.c | 11 ++++-------
+ tools/testing/selftests/net/mptcp/mptcp_inq.c     | 11 ++++-------
+ 2 files changed, 8 insertions(+), 14 deletions(-)
+
+diff --git a/tools/testing/selftests/net/mptcp/mptcp_connect.c b/tools/testing/selftests/net/mptcp/mptcp_connect.c
+index c7f9ebeebc2c5..d2043ec3bf6d6 100644
+--- a/tools/testing/selftests/net/mptcp/mptcp_connect.c
++++ b/tools/testing/selftests/net/mptcp/mptcp_connect.c
+@@ -18,6 +18,7 @@
  
+ #include <sys/ioctl.h>
+ #include <sys/poll.h>
++#include <sys/random.h>
+ #include <sys/sendfile.h>
+ #include <sys/stat.h>
+ #include <sys/socket.h>
+@@ -1125,15 +1126,11 @@ int main_loop_s(int listensock)
+ 
+ static void init_rng(void)
+ {
+-	int fd = open("/dev/urandom", O_RDONLY);
+ 	unsigned int foo;
+ 
+-	if (fd > 0) {
+-		int ret = read(fd, &foo, sizeof(foo));
+-
+-		if (ret < 0)
+-			srand(fd + foo);
+-		close(fd);
++	if (getrandom(&foo, sizeof(foo), 0) == -1) {
++		perror("getrandom");
++		exit(1);
+ 	}
+ 
+ 	srand(foo);
+diff --git a/tools/testing/selftests/net/mptcp/mptcp_inq.c b/tools/testing/selftests/net/mptcp/mptcp_inq.c
+index 8672d898f8cda..218aac4673212 100644
+--- a/tools/testing/selftests/net/mptcp/mptcp_inq.c
++++ b/tools/testing/selftests/net/mptcp/mptcp_inq.c
+@@ -18,6 +18,7 @@
+ #include <time.h>
+ 
+ #include <sys/ioctl.h>
++#include <sys/random.h>
+ #include <sys/socket.h>
+ #include <sys/types.h>
+ #include <sys/wait.h>
+@@ -519,15 +520,11 @@ static int client(int unixfd)
+ 
+ static void init_rng(void)
+ {
+-	int fd = open("/dev/urandom", O_RDONLY);
+ 	unsigned int foo;
+ 
+-	if (fd > 0) {
+-		int ret = read(fd, &foo, sizeof(foo));
+-
+-		if (ret < 0)
+-			srand(fd + foo);
+-		close(fd);
++	if (getrandom(&foo, sizeof(foo), 0) == -1) {
++		perror("getrandom");
++		exit(1);
+ 	}
+ 
+ 	srand(foo);
 -- 
 2.43.0.rc1.413.gea7ed67945-goog
 
