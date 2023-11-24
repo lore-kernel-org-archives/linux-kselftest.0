@@ -1,13 +1,13 @@
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 25BD41733;
-	Fri, 24 Nov 2023 08:36:16 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 89C3F1BC2;
+	Fri, 24 Nov 2023 08:36:21 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0253D1BA8;
-	Fri, 24 Nov 2023 08:37:03 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D5AAD1BF7;
+	Fri, 24 Nov 2023 08:37:07 -0800 (PST)
 Received: from e124191.cambridge.arm.com (e124191.cambridge.arm.com [10.1.197.45])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4BEC63F73F;
-	Fri, 24 Nov 2023 08:36:14 -0800 (PST)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 323DC3F73F;
+	Fri, 24 Nov 2023 08:36:19 -0800 (PST)
 From: Joey Gouly <joey.gouly@arm.com>
 To: linux-arm-kernel@lists.infradead.org
 Cc: akpm@linux-foundation.org,
@@ -27,9 +27,9 @@ Cc: akpm@linux-foundation.org,
 	James Morse <james.morse@arm.com>,
 	Suzuki K Poulose <suzuki.poulose@arm.com>,
 	Zenghui Yu <yuzenghui@huawei.com>
-Subject: [PATCH v3 22/25] kselftest/arm64: add HWCAP test for FEAT_S1POE
-Date: Fri, 24 Nov 2023 16:35:07 +0000
-Message-Id: <20231124163510.1835740-23-joey.gouly@arm.com>
+Subject: [PATCH v3 24/25] kselftest/arm64: Add test case for POR_EL0 signal frame records
+Date: Fri, 24 Nov 2023 16:35:09 +0000
+Message-Id: <20231124163510.1835740-25-joey.gouly@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20231124163510.1835740-1-joey.gouly@arm.com>
 References: <20231124163510.1835740-1-joey.gouly@arm.com>
@@ -41,7 +41,10 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Check that when POE is enabled, the POR_EL0 register is accessible.
+Ensure that we get signal context for POR_EL0 if and only if POE is present
+on the system.
+
+Copied from the TPIDR2 test.
 
 Signed-off-by: Joey Gouly <joey.gouly@arm.com>
 Cc: Catalin Marinas <catalin.marinas@arm.com>
@@ -49,41 +52,115 @@ Cc: Will Deacon <will@kernel.org>
 Cc: Mark Brown <broonie@kernel.org>
 Cc: Shuah Khan <shuah@kernel.org>
 ---
- tools/testing/selftests/arm64/abi/hwcap.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ .../testing/selftests/arm64/signal/.gitignore |  1 +
+ .../arm64/signal/testcases/poe_siginfo.c      | 86 +++++++++++++++++++
+ 2 files changed, 87 insertions(+)
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/poe_siginfo.c
 
-diff --git a/tools/testing/selftests/arm64/abi/hwcap.c b/tools/testing/selftests/arm64/abi/hwcap.c
-index 1189e77c8152..9ee7b04f3fbb 100644
---- a/tools/testing/selftests/arm64/abi/hwcap.c
-+++ b/tools/testing/selftests/arm64/abi/hwcap.c
-@@ -115,6 +115,12 @@ static void pmull_sigill(void)
- 	asm volatile(".inst 0x0ee0e000" : : : );
- }
- 
-+static void poe_sigill(void)
+diff --git a/tools/testing/selftests/arm64/signal/.gitignore b/tools/testing/selftests/arm64/signal/.gitignore
+index 839e3a252629..6bcb27bd506b 100644
+--- a/tools/testing/selftests/arm64/signal/.gitignore
++++ b/tools/testing/selftests/arm64/signal/.gitignore
+@@ -5,6 +5,7 @@ sme_*
+ ssve_*
+ sve_*
+ tpidr2_*
++poe_siginfo
+ za_*
+ zt_*
+ !*.[ch]
+diff --git a/tools/testing/selftests/arm64/signal/testcases/poe_siginfo.c b/tools/testing/selftests/arm64/signal/testcases/poe_siginfo.c
+new file mode 100644
+index 000000000000..d890029304c4
+--- /dev/null
++++ b/tools/testing/selftests/arm64/signal/testcases/poe_siginfo.c
+@@ -0,0 +1,86 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2023 Arm Limited
++ *
++ * Verify that the POR_EL0 register context in signal frames is set up as
++ * expected.
++ */
++
++#include <signal.h>
++#include <ucontext.h>
++#include <sys/auxv.h>
++#include <sys/prctl.h>
++#include <unistd.h>
++#include <asm/sigcontext.h>
++
++#include "test_signals_utils.h"
++#include "testcases.h"
++
++static union {
++	ucontext_t uc;
++	char buf[1024 * 128];
++} context;
++
++#define SYS_POR_EL0 "S3_3_C10_C2_4"
++
++static uint64_t get_por_el0(void)
 +{
-+	/* mrs x0, POR_EL0 */
-+	asm volatile("mrs x0, S3_3_C10_C2_4" : : : "x0");
++	uint64_t val;
++
++	asm volatile (
++		"mrs	%0, " SYS_POR_EL0 "\n"
++		: "=r"(val)
++		:
++		: "cc");
++
++	return val;
 +}
 +
- static void rng_sigill(void)
- {
- 	asm volatile("mrs x0, S3_3_C2_C4_0" : : : "x0");
-@@ -426,6 +432,14 @@ static const struct hwcap_data {
- 		.cpuinfo = "pmull",
- 		.sigill_fn = pmull_sigill,
- 	},
-+	{
-+		.name = "POE",
-+		.at_hwcap = AT_HWCAP2,
-+		.hwcap_bit = HWCAP2_POE,
-+		.cpuinfo = "poe",
-+		.sigill_fn = poe_sigill,
-+		.sigill_reliable = true,
-+	},
- 	{
- 		.name = "RNG",
- 		.at_hwcap = AT_HWCAP2,
++int poe_present(struct tdescr *td, siginfo_t *si, ucontext_t *uc)
++{
++	struct _aarch64_ctx *head = GET_BUF_RESV_HEAD(context);
++	struct poe_context *poe_ctx;
++	size_t offset;
++	bool in_sigframe;
++	bool have_poe;
++	__u64 orig_poe;
++
++	have_poe = getauxval(AT_HWCAP2) & HWCAP2_POE;
++	if (have_poe)
++		orig_poe = get_por_el0();
++
++	if (!get_current_context(td, &context.uc, sizeof(context)))
++		return 1;
++
++	poe_ctx = (struct poe_context *)
++		get_header(head, POE_MAGIC, td->live_sz, &offset);
++
++	in_sigframe = poe_ctx != NULL;
++
++	fprintf(stderr, "POR_EL0 sigframe %s on system %s POE\n",
++		in_sigframe ? "present" : "absent",
++		have_poe ? "with" : "without");
++
++	td->pass = (in_sigframe == have_poe);
++
++	/*
++	 * Check that the value we read back was the one present at
++	 * the time that the signal was triggered.
++	 */
++	if (have_poe && poe_ctx) {
++		if (poe_ctx->por_el0 != orig_poe) {
++			fprintf(stderr, "POR_EL0 in frame is %llx, was %llx\n",
++				poe_ctx->por_el0, orig_poe);
++			td->pass = false;
++		}
++	}
++
++	return 0;
++}
++
++struct tdescr tde = {
++	.name = "POR_EL0",
++	.descr = "Validate that POR_EL0 is present as expected",
++	.timeout = 3,
++	.run = poe_present,
++};
 -- 
 2.25.1
 
