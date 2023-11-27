@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="lkocpGUk"
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE7B53866
-	for <linux-kselftest@vger.kernel.org>; Mon, 27 Nov 2023 06:32:41 -0800 (PST)
-Received: by mail-il1-x12d.google.com with SMTP id e9e14a558f8ab-359c22c44d6so17846995ab.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 27 Nov 2023 06:32:41 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NP26FI7u"
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81FB82721;
+	Mon, 27 Nov 2023 06:37:04 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-40b34563987so24444055e9.1;
+        Mon, 27 Nov 2023 06:37:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1701095560; x=1701700360; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:cc:references:to
+        d=gmail.com; s=20230601; t=1701095823; x=1701700623; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=576agieZsbz96FiroK7MxYXEH2pDI3CMW/6FzJlxhYw=;
-        b=lkocpGUk5mMM6YHccsm29CP+zyKk3th9gRHqNNZcGZ5tKx49nJk+W5k1SSwulXKjnE
-         M2eG1uLDQJG949TEZ0FmWuvJCoKYBtxG8rd9Sa19dD3Mamkl/BZWYAk8EXIxDdBvHVst
-         ZIbgZIsr9zraVTvWblQ2CDuHXA01iJ8CXFmrPqlmDQ8ciDs16ezA6cpWj64QVM/Oqmqr
-         k9xLV8gBd0WnSI8/ZoNy/MraCmxN3zTJSU3/7+wFDozP1WjPCqQXdhuNJQK0WOUhaYZn
-         tlscKTwvRfZS7cN1yFuOBJFinel3wxXASsNZdkh7/0UYFLKOM/AqILGgrKEJK5mEddEy
-         i3Kw==
+        bh=3wkMZvkg5p67oPV5H2cjNwjUF/2UvASsIf9FQuVXTx4=;
+        b=NP26FI7u4PzpK4OFVsdzVItPtQz0r7Jk6OmPtgrwTfUMI7ft3/UkgXgdbqO57qUuHg
+         DCNsbZ/Fd0nIkleT81EvgmccVYnJfW2LHfguDxr3ThDtsX+J2oQReM7t4eGCSmVN0Ew/
+         YWPP8PBg36IiP8eN/9MMDG8P/8KYJsF7dQhiXxzeAPXDQTzzbmqrSlttJBUto0taydMY
+         jR0wMtsB7tkBWSWWE/v0gwAwwzOHD2qJCRZs8j+E8LKtjciJ3YhN0DK3l62VT+llWZWw
+         YSC+C4qFq0v4AiH6bqnWTyoZQQxY81pCCiLPXLdZKReu05lbsRRHWSbxQ+FKXQ646tn7
+         tzDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701095560; x=1701700360;
-        h=content-transfer-encoding:in-reply-to:from:cc:references:to
+        d=1e100.net; s=20230601; t=1701095823; x=1701700623;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=576agieZsbz96FiroK7MxYXEH2pDI3CMW/6FzJlxhYw=;
-        b=ggA0goyiDoSUhoi5sV702KcpZDiiKnKH91doPN2F9AwAXQt6/o9j73I18F0gUH1btW
-         O+P2m+xXaZ5FhIfPzZ8d0l8k4do8rh9fHK11h5H2pb9igqCEWjnhti8EuxTVygU5ClDe
-         +bI4z26QYTkBMYQ5pqFzkRLmWZTlVzyBD72i3qaksJsZAPnjSzxmoLy79dV5gUhl9xgu
-         vdrmZ5JTSucTpYdLXiSfCw+NEG+g8KignL3s76MMhwgsxkHv6Aku6uRUYY2YaTkHs0eh
-         ISGh/yO3RfqgP3wTkwjAZ1Fp431/NGtSullEm9VBaKsuw5SF8/PFdRSSUhazuq7zKoBN
-         qiQg==
-X-Gm-Message-State: AOJu0YxxAYLJxBx9TDfifpXhfpq4Ya+iW0c4qEU774ovfox5UX0lt78i
-	KdsYmLmJ4MLDaV9FFeDyCJUAeQ==
-X-Google-Smtp-Source: AGHT+IG/WGxpvGREvrXBuOJjwOgK3X/z7+Um3ekxoELlMVLqyywHQeQ7S80IRt40ldOt+Chf9dKILA==
-X-Received: by 2002:a05:6e02:388a:b0:35c:5131:cc9f with SMTP id cn10-20020a056e02388a00b0035c5131cc9fmr13225931ilb.23.1701095560675;
-        Mon, 27 Nov 2023 06:32:40 -0800 (PST)
-Received: from ?IPV6:2605:a601:adae:4500:2dd6:4d2f:2741:8d95? ([2605:a601:adae:4500:2dd6:4d2f:2741:8d95])
-        by smtp.gmail.com with ESMTPSA id l15-20020a056e020e4f00b0035b0b56e0e1sm1987657ilk.53.2023.11.27.06.32.39
+        bh=3wkMZvkg5p67oPV5H2cjNwjUF/2UvASsIf9FQuVXTx4=;
+        b=OK3Eef15mTGPUqcpJZNB8sCsa1DCje2ss5YU70XUmZTVYeRDaGvHOr5/fv417froQe
+         6IdFdBZbI1zZSPODXth7/o660xcKs/6V14q7kOXpsV9Otmv57imLmjzherE3O5eTh7cO
+         ja15f3XLdMnh5WNm8zBeBuaM2SyHfZfyK45Uun89JAlV0/jiJU5FaIG0OqxFR5boR2ZF
+         A1gzMYwRpZckg1+0GuCQS0ZQM++oDGqe1rTKifOgEayLd2kzyC+a6lepcZkGARWTrHud
+         /8kICq7Ln1Cn15E1eNkldCaoOqz5SmIVII+YarYo/L3n6wyIgkbNT47KRQvCrYPR2+kx
+         DjpA==
+X-Gm-Message-State: AOJu0YyXrZ3Rtbuk8pEaXUr7JdL55h0974ip9hk9J9FMaHHbmUg8ZPRA
+	DiuwlMpk/fbmPcDVeBkVmf8=
+X-Google-Smtp-Source: AGHT+IENi/hD2FvN9ugjJRDtdV87yRNcDf8vKkEL7rPdiqWCPjKcGz+JFWwUJdB5JxWnXe0AL70Mpg==
+X-Received: by 2002:a05:600c:1c8a:b0:408:369a:dad1 with SMTP id k10-20020a05600c1c8a00b00408369adad1mr9559454wms.4.1701095822569;
+        Mon, 27 Nov 2023 06:37:02 -0800 (PST)
+Received: from [10.83.37.178] ([217.173.96.166])
+        by smtp.gmail.com with ESMTPSA id f9-20020a0560001b0900b003143867d2ebsm12223239wrz.63.2023.11.27.06.37.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Nov 2023 06:32:40 -0800 (PST)
-Message-ID: <2de6d526-918b-44f6-b26a-a0f30c42c5b3@sifive.com>
-Date: Mon, 27 Nov 2023 08:32:39 -0600
+        Mon, 27 Nov 2023 06:37:02 -0800 (PST)
+Message-ID: <f2e3a80b-ea3e-4bd7-bd38-1f36bcfc8b40@gmail.com>
+Date: Mon, 27 Nov 2023 14:37:01 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -47,86 +47,68 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 2/5] RISC-V: Expose Ssdtso via hwprobe API
+Subject: Re: [PATCH net 1/4] selftests/net: ipsec: fix constant out of range
 Content-Language: en-US
-To: Christoph Muellner <christoph.muellner@vrull.eu>
-References: <20231124072142.2786653-1-christoph.muellner@vrull.eu>
- <20231124072142.2786653-3-christoph.muellner@vrull.eu>
-Cc: linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley
- <paul.walmsley@sifive.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>, Anup Patel <apatel@ventanamicro.com>,
- Philipp Tomsich <philipp.tomsich@vrull.eu>,
- Andrew Jones <ajones@ventanamicro.com>, Guo Ren <guoren@kernel.org>,
- Daniel Henrique Barboza <dbarboza@ventanamicro.com>,
- Conor Dooley <conor.dooley@microchip.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
- <bjorn@rivosinc.com>, Alan Stern <stern@rowland.harvard.edu>,
- Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>,
- Daniel Lustig <dlustig@nvidia.com>, Peter Zijlstra <peterz@infradead.org>
-From: Samuel Holland <samuel.holland@sifive.com>
-In-Reply-To: <20231124072142.2786653-3-christoph.muellner@vrull.eu>
+To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>, netdev@vger.kernel.org
+Cc: davem@davemloft.net, kuba@kernel.org, edumazet@google.com,
+ pabeni@redhat.com, linux-kselftest@vger.kernel.org,
+ Willem de Bruijn <willemb@google.com>
+References: <20231124171645.1011043-1-willemdebruijn.kernel@gmail.com>
+ <20231124171645.1011043-2-willemdebruijn.kernel@gmail.com>
+From: Dmitry Safonov <0x7f454c46@gmail.com>
+In-Reply-To: <20231124171645.1011043-2-willemdebruijn.kernel@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-Hi Christoph,
+On 11/24/23 17:15, Willem de Bruijn wrote:
+> From: Willem de Bruijn <willemb@google.com>
+> 
+> Fix a small compiler warning.
+> 
+> nr_process must be a signed long: it is assigned a signed long by
+> strtol() and is compared against LONG_MIN and LONG_MAX.
+> 
+> ipsec.c:2280:65:
+>     error: result of comparison of constant -9223372036854775808
+>     with expression of type 'unsigned int' is always false
+>     [-Werror,-Wtautological-constant-out-of-range-compare]
+> 
+>   if ((errno == ERANGE && (nr_process == LONG_MAX || nr_process == LONG_MIN))
+> 
+> Fixes: bc2652b7ae1e ("selftest/net/xfrm: Add test for ipsec tunnel")
+> Cc: Dmitry Safonov <0x7f454c46@gmail.com>
+> Signed-off-by: Willem de Bruijn <willemb@google.com>
 
-On 2023-11-24 1:21 AM, Christoph Muellner wrote:
-> From: Christoph Müllner <christoph.muellner@vrull.eu>
-> 
-> This patch adds Ssdtso to the list of extensions which
-> are announced to user-space using te hwprobe API.
-> 
-> Signed-off-by: Christoph Müllner <christoph.muellner@vrull.eu>
+LGTM, thanks!
+Reviewed-by: Dmitry Safonov <0x7f454c46@gmail.com>
+
 > ---
->  Documentation/arch/riscv/hwprobe.rst  | 3 +++
->  arch/riscv/include/uapi/asm/hwprobe.h | 1 +
->  arch/riscv/kernel/sys_riscv.c         | 1 +
->  3 files changed, 5 insertions(+)
+>  tools/testing/selftests/net/ipsec.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/Documentation/arch/riscv/hwprobe.rst b/Documentation/arch/riscv/hwprobe.rst
-> index 7b2384de471f..8de3349e0ca2 100644
-> --- a/Documentation/arch/riscv/hwprobe.rst
-> +++ b/Documentation/arch/riscv/hwprobe.rst
-> @@ -80,6 +80,9 @@ The following keys are defined:
->    * :c:macro:`RISCV_HWPROBE_EXT_ZICBOZ`: The Zicboz extension is supported, as
->         ratified in commit 3dd606f ("Create cmobase-v1.0.pdf") of riscv-CMOs.
+> diff --git a/tools/testing/selftests/net/ipsec.c b/tools/testing/selftests/net/ipsec.c
+> index 9a8229abfa026..be4a30a0d02ae 100644
+> --- a/tools/testing/selftests/net/ipsec.c
+> +++ b/tools/testing/selftests/net/ipsec.c
+> @@ -2263,7 +2263,7 @@ static int check_results(void)
 >  
-> +  * :c:macro:`RISCV_HWPROBE_EXT_ZICBOZ`: The Ssdtso extension is supported, as
-
-Should be RISCV_HWPROBE_EXT_SSDTSO.
-
-Regards,
-Samuel
-
-> +       in version v1.0-draft2 of the corresponding extension.
-> +
->  * :c:macro:`RISCV_HWPROBE_KEY_CPUPERF_0`: A bitmask that contains performance
->    information about the selected set of processors.
+>  int main(int argc, char **argv)
+>  {
+> -	unsigned int nr_process = 1;
+> +	long nr_process = 1;
+>  	int route_sock = -1, ret = KSFT_SKIP;
+>  	int test_desc_fd[2];
+>  	uint32_t route_seq;
+> @@ -2284,7 +2284,7 @@ int main(int argc, char **argv)
+>  			exit_usage(argv);
+>  		}
 >  
-> diff --git a/arch/riscv/include/uapi/asm/hwprobe.h b/arch/riscv/include/uapi/asm/hwprobe.h
-> index b659ffcfcdb4..ed450c64e6b2 100644
-> --- a/arch/riscv/include/uapi/asm/hwprobe.h
-> +++ b/arch/riscv/include/uapi/asm/hwprobe.h
-> @@ -30,6 +30,7 @@ struct riscv_hwprobe {
->  #define		RISCV_HWPROBE_EXT_ZBB		(1 << 4)
->  #define		RISCV_HWPROBE_EXT_ZBS		(1 << 5)
->  #define		RISCV_HWPROBE_EXT_ZICBOZ	(1 << 6)
-> +#define		RISCV_HWPROBE_EXT_SSDTSO	(1 << 7)
->  #define RISCV_HWPROBE_KEY_CPUPERF_0	5
->  #define		RISCV_HWPROBE_MISALIGNED_UNKNOWN	(0 << 0)
->  #define		RISCV_HWPROBE_MISALIGNED_EMULATED	(1 << 0)
-> diff --git a/arch/riscv/kernel/sys_riscv.c b/arch/riscv/kernel/sys_riscv.c
-> index c712037dbe10..c654f43b9699 100644
-> --- a/arch/riscv/kernel/sys_riscv.c
-> +++ b/arch/riscv/kernel/sys_riscv.c
-> @@ -162,6 +162,7 @@ static void hwprobe_isa_ext0(struct riscv_hwprobe *pair,
->  		EXT_KEY(ZBB);
->  		EXT_KEY(ZBS);
->  		EXT_KEY(ZICBOZ);
-> +		EXT_KEY(SSDTSO);
->  #undef EXT_KEY
->  	}
->  
+> -		if (nr_process > MAX_PROCESSES || !nr_process) {
+> +		if (nr_process > MAX_PROCESSES || nr_process < 1) {
+>  			printk("nr_process should be between [1; %u]",
+>  					MAX_PROCESSES);
+>  			exit_usage(argv);
+
+-- 
+Dmitry
 
