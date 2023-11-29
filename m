@@ -1,306 +1,171 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4989E249F4;
-	Wed, 29 Nov 2023 15:25:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ed7X4MpL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52208C433CC;
-	Wed, 29 Nov 2023 15:25:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701271524;
-	bh=atlZM4BJ8KQy+D392AjQoHShz//qiSp1cvnKJCX3Ivs=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=ed7X4MpL7h2Q0Nb/a0ndUZr30juQivEfGEe6E21vXmMTPGZ2xplKy4MaLCYkCxZU+
-	 gnH35MT9kzRGFlDeWXhU2/CVsR4nk5Z4ck4wmy6gLw/oOs9ot6Q1K9BtjOZCd9onzd
-	 X/ohJXRAH6CZ8GfmWJnJpxXRq1LWaxTwVsNtamisj/dGW9ueqEBoqQqtdKBVZA2TrF
-	 xZsUbZAdKs3uYvkg9uvsIDPnSZHBrm+8i03t+HSMxRxv5yN5kVy2jy+rUBesHG9TzZ
-	 uEG3GJEmJo7urvpgAUzWJd5f+dg494BQ7fAwKe+gaG0EEpgHh6vO8NjfK0xGbVoF9y
-	 A1RQSbr7fdKVw==
-From: Benjamin Tissoires <bentiss@kernel.org>
-Date: Wed, 29 Nov 2023 16:24:37 +0100
-Subject: [PATCH 12/12] selftests/hid: tablets: be stricter for some
- transitions
+	dkim=pass (2048-bit key) header.d=cmpxchg-org.20230601.gappssmtp.com header.i=@cmpxchg-org.20230601.gappssmtp.com header.b="oczT/7yN"
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA71BD7F
+	for <linux-kselftest@vger.kernel.org>; Wed, 29 Nov 2023 08:21:56 -0800 (PST)
+Received: by mail-qv1-xf2f.google.com with SMTP id 6a1803df08f44-67a34fbaf12so23929206d6.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Nov 2023 08:21:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20230601.gappssmtp.com; s=20230601; t=1701274916; x=1701879716; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=hYHLv9CSAfTThewWoacMTkgj93sBj76qjRtYqdHw6QM=;
+        b=oczT/7yNyh2rO2+7Z2ZVrnrrRD6hoAnih2ZVATXEbWprimOauqiUxqBSSikHAUTivz
+         qNzZEic2KGFZmNoMXcNva4w1+GHOGVpTsihm5aOpN2xls3bhXDn2c4IlEm2UzuLMzVlF
+         /X4VkDvU0oXFoeFNdYCsnxllbNUy79mj/O1p8QW7RzNSnvJ6TA8Hndix9jm8lmYhrE2o
+         +lz2X2SCA9qvQuO8xUHF2Epm1wgGHMB1b9t1rHD3+iuQ+sC6mTRTm94Y5dMxl4B8BzUY
+         QVdab3hzh0OfMkziuJTW74gffSal0jYV5unfwo++rkSmKFcB1tssNiihW24TIpnPJJUw
+         GbGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701274916; x=1701879716;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hYHLv9CSAfTThewWoacMTkgj93sBj76qjRtYqdHw6QM=;
+        b=dZRXem7ZsOTLmfklbcch0+aPyEIK9IiehoE/L/m5OK6pXeog8vED59KsDN1QA93hoS
+         wnDrNtODbqlKgBKccju0kVYgdIGR5WHEqQ5AQi29FzpWgoPeBlRzPdHVjoqoBz47JgiG
+         EwfZmjU8IEqNany6orjkQZ6xJrXuZxVF6havrcNxOvyGtSLAFA5XoHu6bPmkKvTeA7kx
+         5PRGRzUGIwDz+Mypd1fWGAGKKAhEXKsgO5v+77wqsXIAc2v6YBwzQ9SK5wh4Nc3YVotU
+         Hj3+b/RoZheFveMi+JLuRAeg9zwWRNn3/oCZSP67EdE9+y3JXNrbvLWIhdiOam1TL7JN
+         Tglw==
+X-Gm-Message-State: AOJu0YxOKFmod6tGCESaFas8dCT6cgDC2rg7TKZiK1Bz5T0JSBQWFtrU
+	0ggiCztp0DgWxGj0lWuF9Ax1pQ==
+X-Google-Smtp-Source: AGHT+IExE8UXik9bRCJxcJyoMa34oV6Hn3YLIHwRECfowsGDeobteC5UhV2ag8pFjY+6iqyHgOuSyg==
+X-Received: by 2002:a05:6214:86:b0:67a:2b0b:c591 with SMTP id n6-20020a056214008600b0067a2b0bc591mr16240106qvr.25.1701274915900;
+        Wed, 29 Nov 2023 08:21:55 -0800 (PST)
+Received: from localhost (2603-7000-0c01-2716-da5e-d3ff-fee7-26e7.res6.spectrum.com. [2603:7000:c01:2716:da5e:d3ff:fee7:26e7])
+        by smtp.gmail.com with ESMTPSA id k14-20020ad4450e000000b0067a26d7ce6fsm4550774qvu.55.2023.11.29.08.21.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Nov 2023 08:21:55 -0800 (PST)
+Date: Wed, 29 Nov 2023 11:21:50 -0500
+From: Johannes Weiner <hannes@cmpxchg.org>
+To: Nhat Pham <nphamcs@gmail.com>
+Cc: akpm@linux-foundation.org, cerasuolodomenico@gmail.com,
+	yosryahmed@google.com, sjenning@redhat.com, ddstreet@ieee.org,
+	vitaly.wool@konsulko.com, mhocko@kernel.org,
+	roman.gushchin@linux.dev, shakeelb@google.com,
+	muchun.song@linux.dev, chrisl@kernel.org, linux-mm@kvack.org,
+	kernel-team@meta.com, linux-kernel@vger.kernel.org,
+	cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, shuah@kernel.org
+Subject: Re: [PATCH v7 6/6] zswap: shrinks zswap pool based on memory pressure
+Message-ID: <20231129162150.GE135852@cmpxchg.org>
+References: <20231127234600.2971029-1-nphamcs@gmail.com>
+ <20231127234600.2971029-7-nphamcs@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231129-wip-selftests-v1-12-ba15a1fe1b0d@kernel.org>
-References: <20231129-wip-selftests-v1-0-ba15a1fe1b0d@kernel.org>
-In-Reply-To: <20231129-wip-selftests-v1-0-ba15a1fe1b0d@kernel.org>
-To: Jiri Kosina <jikos@kernel.org>, 
- Benjamin Tissoires <benjamin.tissoires@redhat.com>, 
- Shuah Khan <shuah@kernel.org>, Peter Hutterer <peter.hutterer@who-t.net>
-Cc: linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Benjamin Tissoires <bentiss@kernel.org>
-X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1701271499; l=11244;
- i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
- bh=atlZM4BJ8KQy+D392AjQoHShz//qiSp1cvnKJCX3Ivs=;
- b=fU6Sr1TqdI77cJF2Qb3FLZAa85LpecFESZGpPsUjHNBON0dpLDRrEuBbVN+unTfuN8vAUY9a/
- kxSicQAgrhGBSQtF+XeAGGGd1zoz2UgjRXX/FCy6I9ZCMg2vcK3nbQY
-X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
- pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231127234600.2971029-7-nphamcs@gmail.com>
 
-To accommodate for legacy devices, we rely on the last state of a
-transition to be valid:
-for example when we test PEN_IS_OUT_OF_RANGE to PEN_IS_IN_CONTACT,
-any "normal" device that reports an InRange bit would insert a
-PEN_IS_IN_RANGE state between the 2.
+On Mon, Nov 27, 2023 at 03:46:00PM -0800, Nhat Pham wrote:
+> Currently, we only shrink the zswap pool when the user-defined limit is
+> hit. This means that if we set the limit too high, cold data that are
+> unlikely to be used again will reside in the pool, wasting precious
+> memory. It is hard to predict how much zswap space will be needed ahead
+> of time, as this depends on the workload (specifically, on factors such
+> as memory access patterns and compressibility of the memory pages).
+> 
+> This patch implements a memcg- and NUMA-aware shrinker for zswap, that
+> is initiated when there is memory pressure. The shrinker does not
+> have any parameter that must be tuned by the user, and can be opted in
+> or out on a per-memcg basis.
+> 
+> Furthermore, to make it more robust for many workloads and prevent
+> overshrinking (i.e evicting warm pages that might be refaulted into
+> memory), we build in the following heuristics:
+> 
+> * Estimate the number of warm pages residing in zswap, and attempt to
+>   protect this region of the zswap LRU.
+> * Scale the number of freeable objects by an estimate of the memory
+>   saving factor. The better zswap compresses the data, the fewer pages
+>   we will evict to swap (as we will otherwise incur IO for relatively
+>   small memory saving).
+> * During reclaim, if the shrinker encounters a page that is also being
+>   brought into memory, the shrinker will cautiously terminate its
+>   shrinking action, as this is a sign that it is touching the warmer
+>   region of the zswap LRU.
+> 
+> As a proof of concept, we ran the following synthetic benchmark:
+> build the linux kernel in a memory-limited cgroup, and allocate some
+> cold data in tmpfs to see if the shrinker could write them out and
+> improved the overall performance. Depending on the amount of cold data
+> generated, we observe from 14% to 35% reduction in kernel CPU time used
+> in the kernel builds.
 
-This is of course valid, but this solution prevents to detect false
-releases emitted by some firmware:
-when pressing an "eraser mode" button, they might send an extra
-PEN_IS_OUT_OF_RANGE that we may want to filter.
+I think this is a really important piece of functionality for zswap.
 
-So define 2 sets of transitions: one that is the ideal behavior, and
-one that is OK, it won't break user space, but we have serious doubts
-if we are doing the right thing. And depending on the test, either
-ask only for valid transitions, or tolerate weird ones.
+Memory compression has been around and in use for a long time, but the
+question of zswap vs swap sizing has been in the room since the hybrid
+mode was first proposed. Because depending on the reuse patterns,
+putting zswap with a static size limit in front of an existing swap
+file can be a net negative for performance as it consumes more memory.
 
-Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
----
- tools/testing/selftests/hid/tests/test_tablet.py | 122 +++++++++++++++++++----
- 1 file changed, 104 insertions(+), 18 deletions(-)
+It's great to finally see a solution to this which makes zswap *much*
+more general purpose. And something that distributions might want to
+turn on per default when swap is configured.
 
-diff --git a/tools/testing/selftests/hid/tests/test_tablet.py b/tools/testing/selftests/hid/tests/test_tablet.py
-index f24cf2e168a4..625dd9dcb935 100644
---- a/tools/testing/selftests/hid/tests/test_tablet.py
-+++ b/tools/testing/selftests/hid/tests/test_tablet.py
-@@ -109,7 +109,7 @@ class PenState(Enum):
- 
-         return cls((touch, tool, button))
- 
--    def apply(self, events) -> "PenState":
-+    def apply(self, events, strict) -> "PenState":
-         if libevdev.EV_SYN.SYN_REPORT in events:
-             raise ValueError("EV_SYN is in the event sequence")
-         touch = self.touch
-@@ -148,13 +148,97 @@ class PenState(Enum):
-             button = None
- 
-         new_state = PenState((touch, tool, button))
--        assert (
--            new_state in self.valid_transitions()
--        ), f"moving from {self} to {new_state} is forbidden"
-+        if strict:
-+            assert (
-+                new_state in self.valid_transitions()
-+            ), f"moving from {self} to {new_state} is forbidden"
-+        else:
-+            assert (
-+                new_state in self.historical_tolerated_transitions()
-+            ), f"moving from {self} to {new_state} is forbidden"
- 
-         return new_state
- 
-     def valid_transitions(self) -> Tuple["PenState", ...]:
-+        """Following the state machine in the URL above.
-+
-+        Note that those transitions are from the evdev point of view, not HID"""
-+        if self == PenState.PEN_IS_OUT_OF_RANGE:
-+            return (
-+                PenState.PEN_IS_OUT_OF_RANGE,
-+                PenState.PEN_IS_IN_RANGE,
-+                PenState.PEN_IS_IN_RANGE_WITH_BUTTON,
-+                PenState.PEN_IS_IN_RANGE_WITH_SECOND_BUTTON,
-+                PenState.PEN_IS_IN_RANGE_WITH_ERASING_INTENT,
-+                PenState.PEN_IS_IN_CONTACT,
-+                PenState.PEN_IS_IN_CONTACT_WITH_BUTTON,
-+                PenState.PEN_IS_IN_CONTACT_WITH_SECOND_BUTTON,
-+                PenState.PEN_IS_ERASING,
-+            )
-+
-+        if self == PenState.PEN_IS_IN_RANGE:
-+            return (
-+                PenState.PEN_IS_IN_RANGE,
-+                PenState.PEN_IS_IN_RANGE_WITH_BUTTON,
-+                PenState.PEN_IS_IN_RANGE_WITH_SECOND_BUTTON,
-+                PenState.PEN_IS_OUT_OF_RANGE,
-+                PenState.PEN_IS_IN_CONTACT,
-+            )
-+
-+        if self == PenState.PEN_IS_IN_CONTACT:
-+            return (
-+                PenState.PEN_IS_IN_CONTACT,
-+                PenState.PEN_IS_IN_CONTACT_WITH_BUTTON,
-+                PenState.PEN_IS_IN_CONTACT_WITH_SECOND_BUTTON,
-+                PenState.PEN_IS_IN_RANGE,
-+            )
-+
-+        if self == PenState.PEN_IS_IN_RANGE_WITH_ERASING_INTENT:
-+            return (
-+                PenState.PEN_IS_IN_RANGE_WITH_ERASING_INTENT,
-+                PenState.PEN_IS_OUT_OF_RANGE,
-+                PenState.PEN_IS_ERASING,
-+            )
-+
-+        if self == PenState.PEN_IS_ERASING:
-+            return (
-+                PenState.PEN_IS_ERASING,
-+                PenState.PEN_IS_IN_RANGE_WITH_ERASING_INTENT,
-+            )
-+
-+        if self == PenState.PEN_IS_IN_RANGE_WITH_BUTTON:
-+            return (
-+                PenState.PEN_IS_IN_RANGE_WITH_BUTTON,
-+                PenState.PEN_IS_IN_RANGE,
-+                PenState.PEN_IS_OUT_OF_RANGE,
-+                PenState.PEN_IS_IN_CONTACT_WITH_BUTTON,
-+            )
-+
-+        if self == PenState.PEN_IS_IN_CONTACT_WITH_BUTTON:
-+            return (
-+                PenState.PEN_IS_IN_CONTACT_WITH_BUTTON,
-+                PenState.PEN_IS_IN_CONTACT,
-+                PenState.PEN_IS_IN_RANGE_WITH_BUTTON,
-+            )
-+
-+        if self == PenState.PEN_IS_IN_RANGE_WITH_SECOND_BUTTON:
-+            return (
-+                PenState.PEN_IS_IN_RANGE_WITH_SECOND_BUTTON,
-+                PenState.PEN_IS_IN_RANGE,
-+                PenState.PEN_IS_OUT_OF_RANGE,
-+                PenState.PEN_IS_IN_CONTACT_WITH_SECOND_BUTTON,
-+            )
-+
-+        if self == PenState.PEN_IS_IN_CONTACT_WITH_SECOND_BUTTON:
-+            return (
-+                PenState.PEN_IS_IN_CONTACT_WITH_SECOND_BUTTON,
-+                PenState.PEN_IS_IN_CONTACT,
-+                PenState.PEN_IS_IN_RANGE_WITH_SECOND_BUTTON,
-+            )
-+
-+        return tuple()
-+
-+    def historical_tolerated_transitions(self) -> Tuple["PenState", ...]:
-         """Following the state machine in the URL above, with a couple of addition
-         for skipping the in-range state, due to historical reasons.
- 
-@@ -678,10 +762,12 @@ class BaseTest:
-             self.debug_reports(r, uhdev, events)
-             return events
- 
--        def validate_transitions(self, from_state, pen, evdev, events):
-+        def validate_transitions(self, from_state, pen, evdev, events, allow_intermediate_states):
-             # check that the final state is correct
-             pen.assert_expected_input_events(evdev)
- 
-+            state = from_state
-+
-             # check that the transitions are valid
-             sync_events = []
-             while libevdev.InputEvent(libevdev.EV_SYN.SYN_REPORT) in events:
-@@ -691,12 +777,12 @@ class BaseTest:
-                 events = events[idx + 1 :]
- 
-                 # now check for a valid transition
--                from_state = from_state.apply(sync_events)
-+                state = state.apply(sync_events, not allow_intermediate_states)
- 
-             if events:
--                from_state = from_state.apply(sync_events)
-+                state = state.apply(sync_events, not allow_intermediate_states)
- 
--        def _test_states(self, state_list, scribble):
-+        def _test_states(self, state_list, scribble, allow_intermediate_states):
-             """Internal method to test against a list of
-             transition between states.
-             state_list is a list of PenState objects
-@@ -711,7 +797,7 @@ class BaseTest:
-             p = Pen(50, 60)
-             uhdev.move_to(p, PenState.PEN_IS_OUT_OF_RANGE)
-             events = self.post(uhdev, p)
--            self.validate_transitions(cur_state, p, evdev, events)
-+            self.validate_transitions(cur_state, p, evdev, events, allow_intermediate_states)
- 
-             cur_state = p.current_state
- 
-@@ -720,14 +806,14 @@ class BaseTest:
-                     p.x += 1
-                     p.y -= 1
-                     events = self.post(uhdev, p)
--                    self.validate_transitions(cur_state, p, evdev, events)
-+                    self.validate_transitions(cur_state, p, evdev, events, allow_intermediate_states)
-                     assert len(events) >= 3  # X, Y, SYN
-                 uhdev.move_to(p, state)
-                 if scribble and state != PenState.PEN_IS_OUT_OF_RANGE:
-                     p.x += 1
-                     p.y -= 1
-                 events = self.post(uhdev, p)
--                self.validate_transitions(cur_state, p, evdev, events)
-+                self.validate_transitions(cur_state, p, evdev, events, allow_intermediate_states)
-                 cur_state = p.current_state
- 
-         @pytest.mark.parametrize("scribble", [True, False], ids=["scribble", "static"])
-@@ -740,7 +826,7 @@ class BaseTest:
-             we don't have Invert nor Erase bits, so just move in/out-of-range or proximity.
-             https://docs.microsoft.com/en-us/windows-hardware/design/component-guidelines/windows-pen-states
-             """
--            self._test_states(state_list, scribble)
-+            self._test_states(state_list, scribble, False)
- 
-         @pytest.mark.parametrize("scribble", [True, False], ids=["scribble", "static"])
-         @pytest.mark.parametrize(
-@@ -754,7 +840,7 @@ class BaseTest:
-             """This is not adhering to the Windows Pen Implementation state machine
-             but we should expect the kernel to behave properly, mostly for historical
-             reasons."""
--            self._test_states(state_list, scribble)
-+            self._test_states(state_list, scribble, True)
- 
-         @pytest.mark.skip_if_uhdev(
-             lambda uhdev: "Barrel Switch" not in uhdev.fields,
-@@ -770,7 +856,7 @@ class BaseTest:
-         )
-         def test_valid_primary_button_pen_states(self, state_list, scribble):
-             """Rework the transition state machine by adding the primary button."""
--            self._test_states(state_list, scribble)
-+            self._test_states(state_list, scribble, False)
- 
-         @pytest.mark.skip_if_uhdev(
-             lambda uhdev: "Secondary Barrel Switch" not in uhdev.fields,
-@@ -786,7 +872,7 @@ class BaseTest:
-         )
-         def test_valid_secondary_button_pen_states(self, state_list, scribble):
-             """Rework the transition state machine by adding the secondary button."""
--            self._test_states(state_list, scribble)
-+            self._test_states(state_list, scribble, False)
- 
-         @pytest.mark.skip_if_uhdev(
-             lambda uhdev: "Invert" not in uhdev.fields,
-@@ -806,7 +892,7 @@ class BaseTest:
-             to erase.
-             https://docs.microsoft.com/en-us/windows-hardware/design/component-guidelines/windows-pen-states
-             """
--            self._test_states(state_list, scribble)
-+            self._test_states(state_list, scribble, False)
- 
-         @pytest.mark.skip_if_uhdev(
-             lambda uhdev: "Invert" not in uhdev.fields,
-@@ -826,7 +912,7 @@ class BaseTest:
-             to erase.
-             https://docs.microsoft.com/en-us/windows-hardware/design/component-guidelines/windows-pen-states
-             """
--            self._test_states(state_list, scribble)
-+            self._test_states(state_list, scribble, True)
- 
-         @pytest.mark.skip_if_uhdev(
-             lambda uhdev: "Invert" not in uhdev.fields,
-@@ -843,7 +929,7 @@ class BaseTest:
-             For example, a pen that has the eraser button might wobble between
-             touching and erasing if the tablet doesn't enforce the Windows
-             state machine."""
--            self._test_states(state_list, scribble)
-+            self._test_states(state_list, scribble, True)
- 
- 
- class GXTP_pen(PenDigitizer):
+Actually to the point where I think there should be a config option to
+enable the shrinker per default. Maybe not right away, but in a few
+releases when this feature has racked up some more production time.
 
--- 
-2.41.0
+> @@ -687,6 +687,7 @@ struct page *swap_cluster_readahead(swp_entry_t entry, gfp_t gfp_mask,
+>  					&page_allocated, false);
+>  	if (unlikely(page_allocated))
+>  		swap_readpage(page, false, NULL);
+> +	zswap_lruvec_swapin(page);
 
+The "lruvec" in the name vs the page parameter is a bit odd.
+zswap_page_swapin() would be slightly better, but it still also sounds
+like it would cause an actual swapin of some sort.
+
+zswap_record_swapin()?
+
+> @@ -520,6 +575,95 @@ static struct zswap_entry *zswap_entry_find_get(struct rb_root *root,
+>  	return entry;
+>  }
+>  
+> +/*********************************
+> +* shrinker functions
+> +**********************************/
+> +static enum lru_status shrink_memcg_cb(struct list_head *item, struct list_lru_one *l,
+> +				       spinlock_t *lock, void *arg);
+> +
+> +static unsigned long zswap_shrinker_scan(struct shrinker *shrinker,
+> +		struct shrink_control *sc)
+> +{
+> +	struct lruvec *lruvec = mem_cgroup_lruvec(sc->memcg, NODE_DATA(sc->nid));
+> +	unsigned long shrink_ret, nr_protected, lru_size;
+> +	struct zswap_pool *pool = shrinker->private_data;
+> +	bool encountered_page_in_swapcache = false;
+> +
+> +	nr_protected =
+> +		atomic_long_read(&lruvec->zswap_lruvec_state.nr_zswap_protected);
+> +	lru_size = list_lru_shrink_count(&pool->list_lru, sc);
+> +
+> +	/*
+> +	 * Abort if the shrinker is disabled or if we are shrinking into the
+> +	 * protected region.
+> +	 */
+> +	if (!zswap_shrinker_enabled || nr_protected >= lru_size - sc->nr_to_scan) {
+> +		sc->nr_scanned = 0;
+> +		return SHRINK_STOP;
+> +	}
+
+I'm scratching my head at the protection check. zswap_shrinker_count()
+already factors protection into account, so sc->nr_to_scan should only
+be what is left on the list after excluding the protected area.
+
+Do we even get here if the whole list is protected? Is this to protect
+against concurrent shrinking of the list through multiple shrinkers or
+swapins? If so, a comment would be nice :)
+
+Otherwise, this looks great to me!
+
+Just nitpicks, no show stoppers:
+
+Acked-by: Johannes Weiner <hannes@cmpxchg.org>
