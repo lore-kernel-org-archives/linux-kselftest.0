@@ -1,43 +1,43 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b="e3Wfw5lx"
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF373173E
-	for <linux-kselftest@vger.kernel.org>; Wed, 29 Nov 2023 14:24:49 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1cfafe3d46bso3270245ad.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Nov 2023 14:24:49 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b="by6h9GTu"
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C72F210DF
+	for <linux-kselftest@vger.kernel.org>; Wed, 29 Nov 2023 14:24:55 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1cf98ffc257so3048195ad.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Nov 2023 14:24:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20230601.gappssmtp.com; s=20230601; t=1701296689; x=1701901489; darn=vger.kernel.org;
+        d=mojatatu-com.20230601.gappssmtp.com; s=20230601; t=1701296695; x=1701901495; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Nkjwf60hOQWmCO9wJUuBcwdkxaN20yzfTfsYdyEt6b4=;
-        b=e3Wfw5lx9+Z9mcTqPC5ur7+2t/bdm86ClSLUqmv+rk8LfKhOhwEuXIEDWF3bOKv4al
-         whUn1CL7QXRq0j1D4cehIZgvLWZcC60Z89YOB1W5pb2C1Nv99rNHuhAKjD2b48TT+Vsq
-         5qRojGKwmk4HnimwS1hMK8+vkW6oR1xaJ67S07dAw0sG8HPSdPy0t3H4z4LKUa1l3Zo4
-         nw/O6lDOLtrZgx/WH/ogv1Syr6o6CcZFx2IAXughjfXwPnXt5RnXkKeojgdQS780jsK9
-         DcOolm3f23uG1ARO26NqSMr6Afof+mk717R8elQDLl8+uMmOdQsXXAAHaVwbtinHJsfQ
-         +pwA==
+        bh=boH2XvYQnpBpBXH5Z+yQzRXQ5rbOkFbvurC2g24QJlY=;
+        b=by6h9GTuIXHQdcm+9KtaMeVBv/jQBcwbEEH2zt0r1lF5RxjOZEQPMJIt09kUSawI+t
+         Gbzy5PcOuzxIwDSlAQv8gxk9P/kjp5yZIKo2d2RPmBiiqdYsIa2R2BoL/AwRNTQWWvZS
+         iQUmUAfczGjhNJQnNdUAHBsUZqcbL4J34VLTYbqnZkSDIkb2dF1BpvbIF80n9Kb/vrSD
+         HAlj7DrQXudNSjP2I6qAm819VK6VwaNiKfmsJXU4aELgTu1kfpQTIHJJghROmCw6/NdV
+         L/j0VeWoXpLlOcKqaJIHtT7CvNTJUZWUHtTZcAspKxS1EJtoOjhf+GzUWpc8myogTJf0
+         zfsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701296689; x=1701901489;
+        d=1e100.net; s=20230601; t=1701296695; x=1701901495;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Nkjwf60hOQWmCO9wJUuBcwdkxaN20yzfTfsYdyEt6b4=;
-        b=mx6vz8+rEK1c0Ue0UkmLe1kAicIlGidu08GfuAJSqZHZh9ay05nuez6tqjtfgJaekg
-         B68nTyZus6+CpdfD24srRTmQeoBCt8kfxin0qSaDtAfdqg4euXG0jFA8DQZEdbAzurjh
-         roTssgDFgRtPYJXwr3nociISLKeUd1/206V5Os9qTqx72uzxSMyHv7rjTlyuM6AfEx+n
-         Byq+GXZfuifrBssgq/OZEWhABOgo7tKevyw+TriOAGRIbj2r2mG1EHXigKzcuc8Mju0U
-         4bYAmq1rshG22m3eDCv/qfmyluKuB6qx8xF9CYARrQxnphk8wjeUuk5MyJQ+7WxdK/TM
-         YAUA==
-X-Gm-Message-State: AOJu0YxQGixgYIejs1So66RDMhR4n/pN1IKn0GQPr5YkQ5i4Wsxty48r
-	MTgchVRqq1a46Izd/dpnQq9IXQ==
-X-Google-Smtp-Source: AGHT+IGpZNbjdUjvjMHf2+Bo0Y2uskqFlYzxCP56cmcZoiUvM/fR6Dh5tXuBNfRJ7dEB7q25WMWekA==
-X-Received: by 2002:a17:902:e54b:b0:1ce:6589:d1c0 with SMTP id n11-20020a170902e54b00b001ce6589d1c0mr25126311plf.46.1701296689128;
-        Wed, 29 Nov 2023 14:24:49 -0800 (PST)
+        bh=boH2XvYQnpBpBXH5Z+yQzRXQ5rbOkFbvurC2g24QJlY=;
+        b=M0/mzToLTbJ/Q9GbhE/nJsJqkZw1kunicfJwbJuw+MeFwwYUnrnfxwOYpBlu22Hs8k
+         WXyXd6TyzgWPJvsgYWi7lF5RiXQcELa14TacKM1HqQSTqrwAjnq4E03XKlWaHcK0jTBz
+         XZXym7GV7MgtYRzRB54wHBlH7VlGCU9PTSF44mB4kwaDz2JhbJrTMdLn5Vz9LKvuhBYd
+         Y3cD5hH1lfu9gKM4iQhLGR1kR2AD0YYleWjWxzRaW/JKjy4+3VcA9R5+VUSgZNcRpQw7
+         xz4uhopiYUmTc93klj1uzrHqIT74x/E20Bd/VkArHKxT9THFGOdXXK8tspxD+rpB6faC
+         BpWw==
+X-Gm-Message-State: AOJu0YwexMSNv14Nt0O+RM9MuYS0zNc2BA7LBASaWXdJ6EQsmTq9kGPV
+	Y1pBN124ScR/2H5Jd4QG8MeXyg==
+X-Google-Smtp-Source: AGHT+IFvmJExB91/kXCn45gNOep8CJWPXl3id5s9b9Htkc5jp3hI1N5aGUPK/r8ayf6P5+GL9QpEAA==
+X-Received: by 2002:a17:902:da8b:b0:1cf:f506:c98e with SMTP id j11-20020a170902da8b00b001cff506c98emr8020601plx.16.1701296695300;
+        Wed, 29 Nov 2023 14:24:55 -0800 (PST)
 Received: from rogue-one.tail33bf8.ts.net ([201.17.86.134])
-        by smtp.gmail.com with ESMTPSA id l8-20020a170902f68800b001cfb971edf2sm8663697plg.13.2023.11.29.14.24.46
+        by smtp.gmail.com with ESMTPSA id l8-20020a170902f68800b001cfb971edf2sm8663697plg.13.2023.11.29.14.24.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Nov 2023 14:24:48 -0800 (PST)
+        Wed, 29 Nov 2023 14:24:55 -0800 (PST)
 From: Pedro Tammela <pctammela@mojatatu.com>
 To: netdev@vger.kernel.org
 Cc: davem@davemloft.net,
@@ -49,9 +49,9 @@ Cc: davem@davemloft.net,
 	jiri@resnulli.us,
 	linux-kselftest@vger.kernel.org,
 	Pedro Tammela <pctammela@mojatatu.com>
-Subject: [PATCH net-next 1/4] selftests: tc-testing: remove spurious nsPlugin usage
-Date: Wed, 29 Nov 2023 19:24:21 -0300
-Message-Id: <20231129222424.910148-2-pctammela@mojatatu.com>
+Subject: [PATCH net-next 3/4] selftests: tc-testing: rename concurrency.json to flower.json
+Date: Wed, 29 Nov 2023 19:24:23 -0300
+Message-Id: <20231129222424.910148-4-pctammela@mojatatu.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20231129222424.910148-1-pctammela@mojatatu.com>
 References: <20231129222424.910148-1-pctammela@mojatatu.com>
@@ -63,38 +63,18 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Tests using DEV2 should not be run in a dedicated net namespace,
-and in parallel, as this device cannot be shared.
+All tests in this file pertain to flower, so name it appropriately
 
 Signed-off-by: Pedro Tammela <pctammela@mojatatu.com>
 ---
- .../selftests/tc-testing/tc-tests/filters/tests.json        | 6 ------
- 1 file changed, 6 deletions(-)
+ .../tc-testing/tc-tests/filters/{concurrency.json => flower.json} | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ rename tools/testing/selftests/tc-testing/tc-tests/filters/{concurrency.json => flower.json} (100%)
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/filters/tests.json b/tools/testing/selftests/tc-testing/tc-tests/filters/tests.json
-index 361235ad574b..4598f1d330fe 100644
---- a/tools/testing/selftests/tc-testing/tc-tests/filters/tests.json
-+++ b/tools/testing/selftests/tc-testing/tc-tests/filters/tests.json
-@@ -48,9 +48,6 @@
-             "filter",
-             "flower"
-         ],
--        "plugins": {
--                "requires": "nsPlugin"
--        },
-         "setup": [
-             "$TC qdisc add dev $DEV2 ingress",
-             "./tdc_batch.py $DEV2 $BATCH_FILE --share_action -n 1000000"
-@@ -72,9 +69,6 @@
-             "filter",
-             "flower"
-         ],
--        "plugins": {
--                "requires": "nsPlugin"
--        },
-         "setup": [
-             "$TC qdisc add dev $DEV2 ingress",
-             "$TC filter add dev $DEV2 protocol ip prio 1 ingress flower dst_mac e4:11:22:11:4a:51 src_mac e4:11:22:11:4a:50 ip_proto tcp src_ip 1.1.1.1 dst_ip 2.2.2.2 action drop"
+diff --git a/tools/testing/selftests/tc-testing/tc-tests/filters/concurrency.json b/tools/testing/selftests/tc-testing/tc-tests/filters/flower.json
+similarity index 100%
+rename from tools/testing/selftests/tc-testing/tc-tests/filters/concurrency.json
+rename to tools/testing/selftests/tc-testing/tc-tests/filters/flower.json
 -- 
 2.40.1
 
