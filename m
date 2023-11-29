@@ -1,98 +1,134 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D2F838DDF;
-	Wed, 29 Nov 2023 15:25:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NZpcLgMO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DBB9C433CA;
-	Wed, 29 Nov 2023 15:25:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701271517;
-	bh=XtPjsU5+IxLgDeg42cN6iOZ79VywBRfgVyknH2ur/4A=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=NZpcLgMO9RqQMQczNI7n38lEze9h5miaSq4hI89SWSIpk2HAhAo9CDwIqMy5O7lxt
-	 5bfCuMKD9RpgIoLO6lEt4cOjT87ODQrApuUOHJ2XhKs7zcV1M83MJljjlVgwUFURj8
-	 UdYKKMlThyzVjWYhbBbFDTsUIHhxLTCNw61Y++DDOzokm4mvuja1onzdvhkOcNADVb
-	 aq9kD4Tg9gHNQisSd0Vv9HyEa9YVbG3B/yen1428IcJxG5mUhp4eNLG3m+1mrrce+C
-	 LxzTK3uVtOx/BvCFBDyPJKsme4n9mf94OKvP2FY9LhuTaHRcpasx3gopkZu3ARvUn9
-	 IRADik8d2NnIA==
-From: Benjamin Tissoires <bentiss@kernel.org>
-Date: Wed, 29 Nov 2023 16:24:33 +0100
-Subject: [PATCH 08/12] selftests/hid: tablets: set initial data for
- tilt/twist
+	dkim=pass (2048-bit key) header.d=cmpxchg-org.20230601.gappssmtp.com header.i=@cmpxchg-org.20230601.gappssmtp.com header.b="cH3ZXWk2"
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D22FAD7F
+	for <linux-kselftest@vger.kernel.org>; Wed, 29 Nov 2023 07:25:11 -0800 (PST)
+Received: by mail-qt1-x82d.google.com with SMTP id d75a77b69052e-423f2d0c8baso1676481cf.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Nov 2023 07:25:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20230601.gappssmtp.com; s=20230601; t=1701271511; x=1701876311; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9ggscuLXdkbtAnynY3GdTzeA07chUPA8WGR1vy9vM7w=;
+        b=cH3ZXWk2/oyUnIX75QcNokzfI3D4H2OzhpG16aUIyRI1ilDvEcXdf02UICEXQNmIUI
+         FWxTLLy3hDpaNy+ClQPKo1xMP3VkQolaiKPK5mRLtzfT9fTtgk1fGwBlymMihVNujVN2
+         nrNVvRotEGDL9/Cpf/fpIa+FVp0Xd1Vfo2Fzm7256RPvBmK2cX8AIYD2XZBx0bmWLlfD
+         pZsE2fBA7lh/epk+zywODUzH0FQELz/sMfnyICM5RuebgTeIB0xeIGB61JJttvJ/y6V9
+         SQL+AqIZNS/aWObRe9LZONObWrppjFF91e3V+kMNWvpzrOL3uobeg7BCzbxO9OACqYJm
+         toXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701271511; x=1701876311;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9ggscuLXdkbtAnynY3GdTzeA07chUPA8WGR1vy9vM7w=;
+        b=e9qoy6C5yC2t6rQuH2R5gjoE8mnidjGVUFJAiaXdX5dbhsu3Kjern3fhtcToxwVDgU
+         FdjmFfxUDQw0OI5Gsqr1Jdf1MYFU+808MIH9PkqjqzXUrvGiRgj9X9JIInpqmMapOIgY
+         30tQ8i9ETDjU6AhzoeWm6ydb70ulx85jpuk1TzZYl1Lc+ThZWT2b4B5kPVq+ZtYqbal/
+         OzZzMEWgQviPjTPktEP8ghHuJrnLqq8O3T2FYaaq8v2xObacbsc226NtXO0v9yOB2kIs
+         ZNgMYCFzJbpvW2p/0I2wRfeuN4FyWBKbu9uqhHSOMcZLoNJrn9l0dVuAJqsqKI7K3lmO
+         lJlg==
+X-Gm-Message-State: AOJu0Ywt/wo7hShDSzwe2t4LUb2EjEjBHChZY/Qgb4+CJx0FU4Q4ThPw
+	513CNjolgP9H7QoPJ+wfF49qCQ==
+X-Google-Smtp-Source: AGHT+IERC5rUROsi60YXkNf8/r1k/+JDGDC0OGY/HyxD3a7Iu2Iwryw3L5ZWy48uExK2aTbpmhx8CQ==
+X-Received: by 2002:ac8:60b:0:b0:423:b632:eaea with SMTP id d11-20020ac8060b000000b00423b632eaeamr11778830qth.8.1701271510969;
+        Wed, 29 Nov 2023 07:25:10 -0800 (PST)
+Received: from localhost (2603-7000-0c01-2716-da5e-d3ff-fee7-26e7.res6.spectrum.com. [2603:7000:c01:2716:da5e:d3ff:fee7:26e7])
+        by smtp.gmail.com with ESMTPSA id t22-20020ac86a16000000b004196d75d79csm5633606qtr.46.2023.11.29.07.25.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Nov 2023 07:25:10 -0800 (PST)
+Date: Wed, 29 Nov 2023 10:25:09 -0500
+From: Johannes Weiner <hannes@cmpxchg.org>
+To: Nhat Pham <nphamcs@gmail.com>
+Cc: akpm@linux-foundation.org, cerasuolodomenico@gmail.com,
+	yosryahmed@google.com, sjenning@redhat.com, ddstreet@ieee.org,
+	vitaly.wool@konsulko.com, mhocko@kernel.org,
+	roman.gushchin@linux.dev, shakeelb@google.com,
+	muchun.song@linux.dev, chrisl@kernel.org, linux-mm@kvack.org,
+	kernel-team@meta.com, linux-kernel@vger.kernel.org,
+	cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, shuah@kernel.org
+Subject: Re: [PATCH v7 4/6] mm: memcg: add per-memcg zswap writeback stat
+Message-ID: <20231129152509.GD135852@cmpxchg.org>
+References: <20231127234600.2971029-1-nphamcs@gmail.com>
+ <20231127234600.2971029-5-nphamcs@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231129-wip-selftests-v1-8-ba15a1fe1b0d@kernel.org>
-References: <20231129-wip-selftests-v1-0-ba15a1fe1b0d@kernel.org>
-In-Reply-To: <20231129-wip-selftests-v1-0-ba15a1fe1b0d@kernel.org>
-To: Jiri Kosina <jikos@kernel.org>, 
- Benjamin Tissoires <benjamin.tissoires@redhat.com>, 
- Shuah Khan <shuah@kernel.org>, Peter Hutterer <peter.hutterer@who-t.net>
-Cc: linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Benjamin Tissoires <bentiss@kernel.org>
-X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1701271499; l=1586;
- i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
- bh=XtPjsU5+IxLgDeg42cN6iOZ79VywBRfgVyknH2ur/4A=;
- b=CPZpA+NacCCwdjXGsWjew6pe/NmSHolAtr5gZ0Tj4ZfJt7ZIeCAFk1zsMRYilllE3NU0JJ383
- cvHqBfw/8PtAUGPbAOezZ4JgNTtWrxmh7JyiNl/HAScTMAnJQ5iLWgh
-X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
- pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231127234600.2971029-5-nphamcs@gmail.com>
 
-Avoids getting a null event when these usages are set
+On Mon, Nov 27, 2023 at 03:45:58PM -0800, Nhat Pham wrote:
+> From: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+> 
+> Since zswap now writes back pages from memcg-specific LRUs, we now need a
+> new stat to show writebacks count for each memcg.
+> 
+> Suggested-by: Nhat Pham <nphamcs@gmail.com>
+> Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+> Signed-off-by: Nhat Pham <nphamcs@gmail.com>
+> ---
+>  include/linux/vm_event_item.h | 1 +
+>  mm/memcontrol.c               | 1 +
+>  mm/vmstat.c                   | 1 +
+>  mm/zswap.c                    | 3 +++
+>  4 files changed, 6 insertions(+)
+> 
+> diff --git a/include/linux/vm_event_item.h b/include/linux/vm_event_item.h
+> index d1b847502f09..f4569ad98edf 100644
+> --- a/include/linux/vm_event_item.h
+> +++ b/include/linux/vm_event_item.h
+> @@ -142,6 +142,7 @@ enum vm_event_item { PGPGIN, PGPGOUT, PSWPIN, PSWPOUT,
+>  #ifdef CONFIG_ZSWAP
+>  		ZSWPIN,
+>  		ZSWPOUT,
+> +		ZSWP_WB,
+>  #endif
+>  #ifdef CONFIG_X86
+>  		DIRECT_MAP_LEVEL2_SPLIT,
+> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> index 8c0f3f971179..f88c8fd03689 100644
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@ -703,6 +703,7 @@ static const unsigned int memcg_vm_event_stat[] = {
+>  #if defined(CONFIG_MEMCG_KMEM) && defined(CONFIG_ZSWAP)
+>  	ZSWPIN,
+>  	ZSWPOUT,
+> +	ZSWP_WB,
+>  #endif
+>  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+>  	THP_FAULT_ALLOC,
+> diff --git a/mm/vmstat.c b/mm/vmstat.c
+> index afa5a38fcc9c..2249f85e4a87 100644
+> --- a/mm/vmstat.c
+> +++ b/mm/vmstat.c
+> @@ -1401,6 +1401,7 @@ const char * const vmstat_text[] = {
+>  #ifdef CONFIG_ZSWAP
+>  	"zswpin",
+>  	"zswpout",
+> +	"zswp_wb",
 
-Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
----
- tools/testing/selftests/hid/tests/test_tablet.py | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ZSWPWB and "zswpwb" would match the existing naming scheme a bit
+better.
 
-diff --git a/tools/testing/selftests/hid/tests/test_tablet.py b/tools/testing/selftests/hid/tests/test_tablet.py
-index f93dfbb2a3e5..83f6501fe984 100644
---- a/tools/testing/selftests/hid/tests/test_tablet.py
-+++ b/tools/testing/selftests/hid/tests/test_tablet.py
-@@ -276,9 +276,9 @@ class Pen(object):
-         self.barrelswitch = False
-         self.invert = False
-         self.eraser = False
--        self.x_tilt = 0
--        self.y_tilt = 0
--        self.twist = 0
-+        self.xtilt = 1
-+        self.ytilt = 1
-+        self.twist = 1
-         self._old_values = None
-         self.current_state = None
- 
-@@ -292,8 +292,8 @@ class Pen(object):
-                 "width",
-                 "height",
-                 "twist",
--                "x_tilt",
--                "y_tilt",
-+                "xtilt",
-+                "ytilt",
-             ]:
-                 setattr(self, i, getattr(self._old_values, i))
- 
-@@ -361,8 +361,8 @@ class PenDigitizer(base.UHIDTestDevice):
-             pen.height = 0
-             pen.invert = False
-             pen.eraser = False
--            pen.x_tilt = 0
--            pen.y_tilt = 0
-+            pen.xtilt = 0
-+            pen.ytilt = 0
-             pen.twist = 0
-         elif state == PenState.PEN_IS_IN_RANGE:
-             pen.tipswitch = False
+>  #endif
+>  #ifdef CONFIG_X86
+>  	"direct_map_level2_splits",
+> diff --git a/mm/zswap.c b/mm/zswap.c
+> index 5e397fc1f375..6a761753f979 100644
+> --- a/mm/zswap.c
+> +++ b/mm/zswap.c
+> @@ -754,6 +754,9 @@ static enum lru_status shrink_memcg_cb(struct list_head *item, struct list_lru_o
+>  	}
+>  	zswap_written_back_pages++;
+>  
+> +	if (entry->objcg)
+> +		count_objcg_event(entry->objcg, ZSWP_WB);
+> +
 
--- 
-2.41.0
-
+You need to call count_vm_event() as well, otherwise the /proc/vmstat
+counter will stay zero.
