@@ -1,23 +1,23 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=xen.org header.i=@xen.org header.b="FBd2rY30"
+	dkim=pass (1024-bit key) header.d=xen.org header.i=@xen.org header.b="tTXTL+4J"
 Received: from mail.xenproject.org (mail.xenproject.org [104.130.215.37])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67614A1;
-	Mon,  4 Dec 2023 07:00:34 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64336CD;
+	Mon,  4 Dec 2023 07:00:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=xen.org;
-	s=20200302mail; h=Content-Transfer-Encoding:Content-Type:MIME-Version:
-	References:In-Reply-To:Message-Id:Date:Subject:To:From;
-	bh=BvR3OXM2QBAS4liqR3/BSTAsYb++/jFf5LWoqHFrm0w=; b=FBd2rY30hHb3qzxyO7THSSGJm7
-	L55rwkzzTomoRNqnFhi254he9tPLWblSh5/emxvI3Onu0vs3vEC+VeNWIT+JBoWJdMOGc9sadGOkU
-	B77BrVWFDKQqZoLV9UbwNphLof8wbGdgZ9FzrSnLYHE4y11yAG9qsMg5cmHFzP1lA/30=;
+	s=20200302mail; h=Content-Transfer-Encoding:MIME-Version:References:
+	In-Reply-To:Message-Id:Date:Subject:To:From;
+	bh=T6RoDFoPgHMDhYESUsd8zt0jpjP+kMFUQUISmqEC3s8=; b=tTXTL+4JhvMwznd++PkfAQBURt
+	KrgeZAIkJ3Xkp4GEFM8g9HBTwCUM9xlw/Al8W6ah5rhRhVBZU6uwhlfbshwDJzlNoFsxxi+MV9EEZ
+	0ao54N7f0wCrlXRxc6/HmEFNsRqaUpXM/QHLMwgimhPjzQEzm6vrC8LTmzTtSgA/W8Oo=;
 Received: from xenbits.xenproject.org ([104.239.192.120])
 	by mail.xenproject.org with esmtp (Exim 4.92)
 	(envelope-from <paul@xen.org>)
-	id 1rAAQk-00043Z-II; Mon, 04 Dec 2023 15:00:18 +0000
+	id 1rAAQk-00043V-C7; Mon, 04 Dec 2023 15:00:18 +0000
 Received: from 54-240-197-231.amazon.com ([54.240.197.231] helo=REM-PW02S00X.ant.amazon.com)
 	by xenbits.xenproject.org with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <paul@xen.org>)
-	id 1rAABI-00088g-Gw; Mon, 04 Dec 2023 14:44:20 +0000
+	id 1rAABU-00088g-Mo; Mon, 04 Dec 2023 14:44:32 +0000
 From: Paul Durrant <paul@xen.org>
 To: Paolo Bonzini <pbonzini@redhat.com>,
 	Jonathan Corbet <corbet@lwn.net>,
@@ -35,9 +35,9 @@ To: Paolo Bonzini <pbonzini@redhat.com>,
 	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v10 11/19] KVM: xen: allow shared_info to be mapped by fixed HVA
-Date: Mon,  4 Dec 2023 14:43:26 +0000
-Message-Id: <20231204144334.910-12-paul@xen.org>
+Subject: [PATCH v10 16/19] KVM: xen: split up kvm_xen_set_evtchn_fast()
+Date: Mon,  4 Dec 2023 14:43:31 +0000
+Message-Id: <20231204144334.910-17-paul@xen.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231204144334.910-1-paul@xen.org>
 References: <20231204144334.910-1-paul@xen.org>
@@ -47,37 +47,20 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 From: Paul Durrant <pdurrant@amazon.com>
 
-The shared_info page is not guest memory as such. It is a dedicated page
-allocated by the VMM and overlaid onto guest memory in a GFN chosen by the
-guest and specified in the XENMEM_add_to_physmap hypercall. The guest may
-even request that shared_info be moved from one GFN to another by
-re-issuing that hypercall, but the HVA is never going to change.
+The implementation of kvm_xen_set_evtchn_fast() is a rather lengthy piece
+of code that performs two operations: updating of the shared_info
+evtchn_pending mask, and updating of the vcpu_info evtchn_pending_sel
+mask. Introduce a separate function to perform each of those operations and
+re-work kvm_xen_set_evtchn_fast() to use them.
 
-Because the shared_info page is an overlay the memory slots need to be
-updated in response to the hypercall. However, memory slot adjustment is
-not atomic and, whilst all vCPUs are paused, there is still the possibility
-that events may be delivered (which requires the shared_info page to be
-updated) whilst the shared_info GPA is absent. The HVA is never absent
-though, so it makes much more sense to use that as the basis for the
-kernel's mapping.
-
-Hence add a new KVM_XEN_ATTR_TYPE_SHARED_INFO_HVA attribute type for this
-purpose and a KVM_XEN_HVM_CONFIG_SHARED_INFO_HVA flag to advertize its
-availability. Don't actually advertize it yet though. That will be done in
-a subsequent patch, which will also add tests for the new attribute type.
-
-Also update the KVM API documentation with the new attribute and also fix
-it up to consistently refer to 'shared_info' (with the underscore).
+No functional change intended.
 
 Signed-off-by: Paul Durrant <pdurrant@amazon.com>
-Reviewed-by: David Woodhouse <dwmw@amazon.co.uk>
 ---
-Cc: David Woodhouse <dwmw2@infradead.org>
 Cc: Sean Christopherson <seanjc@google.com>
 Cc: Paolo Bonzini <pbonzini@redhat.com>
 Cc: Thomas Gleixner <tglx@linutronix.de>
@@ -85,200 +68,226 @@ Cc: Ingo Molnar <mingo@redhat.com>
 Cc: Borislav Petkov <bp@alien8.de>
 Cc: Dave Hansen <dave.hansen@linux.intel.com>
 Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: David Woodhouse <dwmw2@infradead.org>
 Cc: x86@kernel.org
 
+v10:
+ - Updated in this version. Dropped David'd R-b since the updates are
+   non-trivial.
+
 v8:
- - Re-base.
-
-v2:
- - Define the new attribute and capability but don't advertize the
-   capability yet.
- - Add API documentation.
+ - New in this version.
 ---
- Documentation/virt/kvm/api.rst | 25 ++++++++++++++++------
- arch/x86/kvm/xen.c             | 39 ++++++++++++++++++++++++++--------
- include/uapi/linux/kvm.h       |  6 +++++-
- 3 files changed, 54 insertions(+), 16 deletions(-)
+ arch/x86/kvm/xen.c | 175 ++++++++++++++++++++++++++-------------------
+ 1 file changed, 100 insertions(+), 75 deletions(-)
 
-diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-index 926241e23aeb..689264502a67 100644
---- a/Documentation/virt/kvm/api.rst
-+++ b/Documentation/virt/kvm/api.rst
-@@ -372,7 +372,7 @@ The bits in the dirty bitmap are cleared before the ioctl returns, unless
- KVM_CAP_MANUAL_DIRTY_LOG_PROTECT2 is enabled.  For more information,
- see the description of the capability.
- 
--Note that the Xen shared info page, if configured, shall always be assumed
-+Note that the Xen shared_info page, if configured, shall always be assumed
- to be dirty. KVM will not explicitly mark it such.
- 
- 
-@@ -5499,8 +5499,9 @@ KVM_PV_ASYNC_CLEANUP_PERFORM
- 		__u8 long_mode;
- 		__u8 vector;
- 		__u8 runstate_update_flag;
--		struct {
-+		union {
- 			__u64 gfn;
-+			__u64 hva;
- 		} shared_info;
- 		struct {
- 			__u32 send_port;
-@@ -5528,10 +5529,10 @@ type values:
- 
- KVM_XEN_ATTR_TYPE_LONG_MODE
-   Sets the ABI mode of the VM to 32-bit or 64-bit (long mode). This
--  determines the layout of the shared info pages exposed to the VM.
-+  determines the layout of the shared_info page exposed to the VM.
- 
- KVM_XEN_ATTR_TYPE_SHARED_INFO
--  Sets the guest physical frame number at which the Xen "shared info"
-+  Sets the guest physical frame number at which the Xen shared_info
-   page resides. Note that although Xen places vcpu_info for the first
-   32 vCPUs in the shared_info page, KVM does not automatically do so
-   and instead requires that KVM_XEN_VCPU_ATTR_TYPE_VCPU_INFO be used
-@@ -5540,7 +5541,7 @@ KVM_XEN_ATTR_TYPE_SHARED_INFO
-   not be aware of the Xen CPU id which is used as the index into the
-   vcpu_info[] array, so may know the correct default location.
- 
--  Note that the shared info page may be constantly written to by KVM;
-+  Note that the shared_info page may be constantly written to by KVM;
-   it contains the event channel bitmap used to deliver interrupts to
-   a Xen guest, amongst other things. It is exempt from dirty tracking
-   mechanisms — KVM will not explicitly mark the page as dirty each
-@@ -5549,9 +5550,21 @@ KVM_XEN_ATTR_TYPE_SHARED_INFO
-   any vCPU has been running or any event channel interrupts can be
-   routed to the guest.
- 
--  Setting the gfn to KVM_XEN_INVALID_GFN will disable the shared info
-+  Setting the gfn to KVM_XEN_INVALID_GFN will disable the shared_info
-   page.
- 
-+KVM_XEN_ATTR_TYPE_SHARED_INFO_HVA
-+  If the KVM_XEN_HVM_CONFIG_SHARED_INFO_HVA flag is also set in the
-+  Xen capabilities, then this attribute may be used to set the
-+  userspace address at which the shared_info page resides, which
-+  will always be fixed in the VMM regardless of where it is mapped
-+  in guest physical address space. This attribute should be used in
-+  preference to KVM_XEN_ATTR_TYPE_SHARED_INFO as it avoids
-+  unnecessary invalidation of an internal cache when the page is
-+  re-mapped in guest physcial address space.
-+
-+  Setting the hva to zero will disable the shared_info page.
-+
- KVM_XEN_ATTR_TYPE_UPCALL_VECTOR
-   Sets the exception vector used to deliver Xen event channel upcalls.
-   This is the HVM-wide vector injected directly by the hypervisor
 diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
-index 3aa452a71890..d65b62f19440 100644
+index c6f943362de5..88ceaefaa121 100644
 --- a/arch/x86/kvm/xen.c
 +++ b/arch/x86/kvm/xen.c
-@@ -617,7 +617,6 @@ int kvm_xen_hvm_set_attr(struct kvm *kvm, struct kvm_xen_hvm_attr *data)
- {
- 	int r = -ENOENT;
+@@ -1657,6 +1657,101 @@ static void kvm_xen_check_poller(struct kvm_vcpu *vcpu, int port)
+ 	}
+ }
  
--
- 	switch (data->type) {
- 	case KVM_XEN_ATTR_TYPE_LONG_MODE:
- 		if (!IS_ENABLED(CONFIG_64BIT) && data->u.long_mode) {
-@@ -640,20 +639,32 @@ int kvm_xen_hvm_set_attr(struct kvm *kvm, struct kvm_xen_hvm_attr *data)
- 		}
- 		break;
- 
--	case KVM_XEN_ATTR_TYPE_SHARED_INFO: {
-+	case KVM_XEN_ATTR_TYPE_SHARED_INFO:
-+	case KVM_XEN_ATTR_TYPE_SHARED_INFO_HVA: {
- 		int idx;
- 
- 		mutex_lock(&kvm->arch.xen.xen_lock);
- 
- 		idx = srcu_read_lock(&kvm->srcu);
- 
--		if (data->u.shared_info.gfn == KVM_XEN_INVALID_GFN) {
--			kvm_gpc_deactivate(&kvm->arch.xen.shinfo_cache);
--			r = 0;
-+		if (data->type == KVM_XEN_ATTR_TYPE_SHARED_INFO) {
-+			if (data->u.shared_info.gfn == KVM_XEN_INVALID_GFN) {
-+				kvm_gpc_deactivate(&kvm->arch.xen.shinfo_cache);
-+				r = 0;
-+			} else {
-+				r = kvm_gpc_activate(&kvm->arch.xen.shinfo_cache,
-+						     gfn_to_gpa(data->u.shared_info.gfn),
-+						     PAGE_SIZE);
-+			}
- 		} else {
--			r = kvm_gpc_activate(&kvm->arch.xen.shinfo_cache,
--					     gfn_to_gpa(data->u.shared_info.gfn),
--					     PAGE_SIZE);
-+			if (data->u.shared_info.hva == 0) {
-+				kvm_gpc_deactivate(&kvm->arch.xen.shinfo_cache);
-+				r = 0;
-+			} else {
-+				r = kvm_gpc_activate_hva(&kvm->arch.xen.shinfo_cache,
-+							 data->u.shared_info.hva,
-+							 PAGE_SIZE);
-+			}
- 		}
- 
- 		srcu_read_unlock(&kvm->srcu, idx);
-@@ -714,13 +725,23 @@ int kvm_xen_hvm_get_attr(struct kvm *kvm, struct kvm_xen_hvm_attr *data)
- 		break;
- 
- 	case KVM_XEN_ATTR_TYPE_SHARED_INFO:
--		if (kvm->arch.xen.shinfo_cache.active)
-+		if (kvm->arch.xen.shinfo_cache.active &&
-+		    kvm->arch.xen.shinfo_cache.gpa != KVM_XEN_INVALID_GPA)
- 			data->u.shared_info.gfn = gpa_to_gfn(kvm->arch.xen.shinfo_cache.gpa);
- 		else
- 			data->u.shared_info.gfn = KVM_XEN_INVALID_GFN;
- 		r = 0;
- 		break;
- 
-+	case KVM_XEN_ATTR_TYPE_SHARED_INFO_HVA:
-+		if (kvm->arch.xen.shinfo_cache.active &&
-+		    kvm->arch.xen.shinfo_cache.gpa == KVM_XEN_INVALID_GPA)
-+			data->u.shared_info.hva = kvm->arch.xen.shinfo_cache.uhva;
-+		else
-+			data->u.shared_info.hva = 0;
-+		r = 0;
-+		break;
++static int set_shinfo_evtchn_pending(struct kvm_vcpu *vcpu, u32 port)
++{
++	struct kvm *kvm = vcpu->kvm;
++	struct gfn_to_pfn_cache *gpc = &kvm->arch.xen.shinfo_cache;
++	unsigned long *pending_bits, *mask_bits;
++	unsigned long flags;
++	int rc = -EWOULDBLOCK;
 +
- 	case KVM_XEN_ATTR_TYPE_UPCALL_VECTOR:
- 		data->u.vector = kvm->arch.xen.upcall_vector;
- 		r = 0;
-diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-index e9cb2df67a1d..32cf3432a507 100644
---- a/include/uapi/linux/kvm.h
-+++ b/include/uapi/linux/kvm.h
-@@ -1318,6 +1318,7 @@ struct kvm_x86_mce {
- #define KVM_XEN_HVM_CONFIG_EVTCHN_2LEVEL	(1 << 4)
- #define KVM_XEN_HVM_CONFIG_EVTCHN_SEND		(1 << 5)
- #define KVM_XEN_HVM_CONFIG_RUNSTATE_UPDATE_FLAG	(1 << 6)
-+#define KVM_XEN_HVM_CONFIG_SHARED_INFO_HVA	(1 << 7)
++	read_lock_irqsave(&gpc->lock, flags);
++	if (!kvm_gpc_check(gpc, PAGE_SIZE))
++		goto out;
++
++	if (IS_ENABLED(CONFIG_64BIT) && kvm->arch.xen.long_mode) {
++		struct shared_info *shinfo = gpc->khva;
++
++		pending_bits = (unsigned long *)&shinfo->evtchn_pending;
++		mask_bits = (unsigned long *)&shinfo->evtchn_mask;
++	} else {
++		struct compat_shared_info *shinfo = gpc->khva;
++
++		pending_bits = (unsigned long *)&shinfo->evtchn_pending;
++		mask_bits = (unsigned long *)&shinfo->evtchn_mask;
++	}
++
++	if (test_and_set_bit(port, pending_bits)) {
++		rc = 0; /* It was already raised */
++	} else if (test_bit(port, mask_bits)) {
++		rc = -ENOTCONN; /* It is masked */
++		kvm_xen_check_poller(vcpu, port);
++	} else {
++		rc = 1; /* It is newly raised */
++	}
++
++ out:
++	read_unlock_irqrestore(&gpc->lock, flags);
++	return rc;
++}
++
++static bool set_vcpu_info_evtchn_pending(struct kvm_vcpu *vcpu, u32 port)
++{
++	struct kvm *kvm = vcpu->kvm;
++	struct gfn_to_pfn_cache *gpc = &vcpu->arch.xen.vcpu_info_cache;
++	unsigned long flags;
++	bool kick_vcpu = false;
++
++	read_lock_irqsave(&gpc->lock, flags);
++
++	/*
++	 * Try to deliver the event directly to the vcpu_info. If successful and
++	 * the guest is using upcall_vector delivery, send the MSI.
++	 * If the pfncache is invalid, set the shadow. In this case, or if the
++	 * guest is using another form of event delivery, the vCPU must be
++	 * kicked to complete the delivery.
++	 */
++	if (IS_ENABLED(CONFIG_64BIT) && kvm->arch.xen.long_mode) {
++		struct vcpu_info *vcpu_info = gpc->khva;
++		u32 port_word_bit = port / 32;
++
++		if (!kvm_gpc_check(gpc, sizeof(*vcpu_info))) {
++			if (!test_and_set_bit(port_word_bit, &vcpu->arch.xen.evtchn_pending_sel))
++				kick_vcpu = true;
++			goto out;
++		}
++
++		if (!test_and_set_bit(port_word_bit, &vcpu_info->evtchn_pending_sel)) {
++			WRITE_ONCE(vcpu_info->evtchn_upcall_pending, 1);
++			kick_vcpu = true;
++		}
++	} else {
++		struct compat_vcpu_info *vcpu_info = gpc->khva;
++		u32 port_word_bit = port / 64;
++
++		if (!kvm_gpc_check(gpc, sizeof(*vcpu_info))) {
++			if (!test_and_set_bit(port_word_bit, &vcpu->arch.xen.evtchn_pending_sel))
++				kick_vcpu = true;
++			goto out;
++		}
++
++		if (!test_and_set_bit(port_word_bit,
++				      (unsigned long *)&vcpu_info->evtchn_pending_sel)) {
++			WRITE_ONCE(vcpu_info->evtchn_upcall_pending, 1);
++			kick_vcpu = true;
++		}
++	}
++
++	if (kick_vcpu && vcpu->arch.xen.upcall_vector) {
++		kvm_xen_inject_vcpu_vector(vcpu);
++		kick_vcpu = false;
++	}
++
++ out:
++	read_unlock_irqrestore(&gpc->lock, flags);
++	return kick_vcpu;
++}
++
+ /*
+  * The return value from this function is propagated to kvm_set_irq() API,
+  * so it returns:
+@@ -1665,15 +1760,12 @@ static void kvm_xen_check_poller(struct kvm_vcpu *vcpu, int port)
+  *  > 0   Number of CPUs interrupt was delivered to
+  *
+  * It is also called directly from kvm_arch_set_irq_inatomic(), where the
+- * only check on its return value is a comparison with -EWOULDBLOCK'.
++ * only check on its return value is a comparison with -EWOULDBLOCK
++ * (which may be returned by set_shinfo_evtchn_pending()).
+  */
+ int kvm_xen_set_evtchn_fast(struct kvm_xen_evtchn *xe, struct kvm *kvm)
+ {
+-	struct gfn_to_pfn_cache *gpc = &kvm->arch.xen.shinfo_cache;
+ 	struct kvm_vcpu *vcpu;
+-	unsigned long *pending_bits, *mask_bits;
+-	unsigned long flags;
+-	int port_word_bit;
+ 	bool kick_vcpu = false;
+ 	int vcpu_idx, idx, rc;
  
- struct kvm_xen_hvm_config {
- 	__u32 flags;
-@@ -1833,9 +1834,10 @@ struct kvm_xen_hvm_attr {
- 		__u8 long_mode;
- 		__u8 vector;
- 		__u8 runstate_update_flag;
--		struct {
-+		union {
- 			__u64 gfn;
- #define KVM_XEN_INVALID_GFN ((__u64)-1)
-+			__u64 hva;
- 		} shared_info;
- 		struct {
- 			__u32 send_port;
-@@ -1877,6 +1879,8 @@ struct kvm_xen_hvm_attr {
- #define KVM_XEN_ATTR_TYPE_XEN_VERSION		0x4
- /* Available with KVM_CAP_XEN_HVM / KVM_XEN_HVM_CONFIG_RUNSTATE_UPDATE_FLAG */
- #define KVM_XEN_ATTR_TYPE_RUNSTATE_UPDATE_FLAG	0x5
-+/* Available with KVM_CAP_XEN_HVM / KVM_XEN_HVM_CONFIG_SHARED_INFO_HVA */
-+#define KVM_XEN_ATTR_TYPE_SHARED_INFO_HVA	0x6
+@@ -1693,79 +1785,12 @@ int kvm_xen_set_evtchn_fast(struct kvm_xen_evtchn *xe, struct kvm *kvm)
+ 	if (xe->port >= max_evtchn_port(kvm))
+ 		return -EINVAL;
  
- /* Per-vCPU Xen attributes */
- #define KVM_XEN_VCPU_GET_ATTR	_IOWR(KVMIO, 0xca, struct kvm_xen_vcpu_attr)
+-	rc = -EWOULDBLOCK;
+-
+ 	idx = srcu_read_lock(&kvm->srcu);
+ 
+-	read_lock_irqsave(&gpc->lock, flags);
+-	if (!kvm_gpc_check(gpc, PAGE_SIZE))
+-		goto out_rcu;
+-
+-	if (IS_ENABLED(CONFIG_64BIT) && kvm->arch.xen.long_mode) {
+-		struct shared_info *shinfo = gpc->khva;
+-		pending_bits = (unsigned long *)&shinfo->evtchn_pending;
+-		mask_bits = (unsigned long *)&shinfo->evtchn_mask;
+-		port_word_bit = xe->port / 64;
+-	} else {
+-		struct compat_shared_info *shinfo = gpc->khva;
+-		pending_bits = (unsigned long *)&shinfo->evtchn_pending;
+-		mask_bits = (unsigned long *)&shinfo->evtchn_mask;
+-		port_word_bit = xe->port / 32;
+-	}
++	rc = set_shinfo_evtchn_pending(vcpu, xe->port);
++	if (rc == 1) /* Delivered to the bitmap in shared_info */
++		kick_vcpu = set_vcpu_info_evtchn_pending(vcpu, xe->port);
+ 
+-	/*
+-	 * If this port wasn't already set, and if it isn't masked, then
+-	 * we try to set the corresponding bit in the in-kernel shadow of
+-	 * evtchn_pending_sel for the target vCPU. And if *that* wasn't
+-	 * already set, then we kick the vCPU in question to write to the
+-	 * *real* evtchn_pending_sel in its own guest vcpu_info struct.
+-	 */
+-	if (test_and_set_bit(xe->port, pending_bits)) {
+-		rc = 0; /* It was already raised */
+-	} else if (test_bit(xe->port, mask_bits)) {
+-		rc = -ENOTCONN; /* Masked */
+-		kvm_xen_check_poller(vcpu, xe->port);
+-	} else {
+-		rc = 1; /* Delivered to the bitmap in shared_info. */
+-		/* Now switch to the vCPU's vcpu_info to set the index and pending_sel */
+-		read_unlock_irqrestore(&gpc->lock, flags);
+-		gpc = &vcpu->arch.xen.vcpu_info_cache;
+-
+-		read_lock_irqsave(&gpc->lock, flags);
+-		if (!kvm_gpc_check(gpc, sizeof(struct vcpu_info))) {
+-			/*
+-			 * Could not access the vcpu_info. Set the bit in-kernel
+-			 * and prod the vCPU to deliver it for itself.
+-			 */
+-			if (!test_and_set_bit(port_word_bit, &vcpu->arch.xen.evtchn_pending_sel))
+-				kick_vcpu = true;
+-			goto out_rcu;
+-		}
+-
+-		if (IS_ENABLED(CONFIG_64BIT) && kvm->arch.xen.long_mode) {
+-			struct vcpu_info *vcpu_info = gpc->khva;
+-			if (!test_and_set_bit(port_word_bit, &vcpu_info->evtchn_pending_sel)) {
+-				WRITE_ONCE(vcpu_info->evtchn_upcall_pending, 1);
+-				kick_vcpu = true;
+-			}
+-		} else {
+-			struct compat_vcpu_info *vcpu_info = gpc->khva;
+-			if (!test_and_set_bit(port_word_bit,
+-					      (unsigned long *)&vcpu_info->evtchn_pending_sel)) {
+-				WRITE_ONCE(vcpu_info->evtchn_upcall_pending, 1);
+-				kick_vcpu = true;
+-			}
+-		}
+-
+-		/* For the per-vCPU lapic vector, deliver it as MSI. */
+-		if (kick_vcpu && vcpu->arch.xen.upcall_vector) {
+-			kvm_xen_inject_vcpu_vector(vcpu);
+-			kick_vcpu = false;
+-		}
+-	}
+-
+- out_rcu:
+-	read_unlock_irqrestore(&gpc->lock, flags);
+ 	srcu_read_unlock(&kvm->srcu, idx);
+ 
+ 	if (kick_vcpu) {
 -- 
 2.39.2
 
