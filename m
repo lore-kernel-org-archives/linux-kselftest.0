@@ -1,112 +1,173 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BaZnbVEp"
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13FA2C4;
-	Mon,  4 Dec 2023 06:59:34 -0800 (PST)
-Received: by mail-qv1-xf29.google.com with SMTP id 6a1803df08f44-67aa3b62c35so19743756d6.0;
-        Mon, 04 Dec 2023 06:59:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701701973; x=1702306773; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AEtXrarlRuJeVsqzYM4zb29M+XdIdGWvdhen3lEwn48=;
-        b=BaZnbVEpUZvWZyVgtjKV6YGb+GMtZaVokK55J5t5WfagI0NqBSO9npMk9lqkmqOfF1
-         zHfzBYvQb1dtKXCGSNNbf88clMoRwjuDdULMwU2yQHws1VFpsMEzEtx3y1d++yB0ik9T
-         jbUUtO8DIrJH1uxE19peA6UEsC8qtRLtaypsKG0c9PdZ/8/1VV9quGEiDphOLmqIYd8S
-         3vF21Mk3RhNp7SdAx7eB7UB1wk19s8plhwpuIm8bnBw6357H8BRsqMsRPBi//uh4Me6n
-         mnagWahqm2ho6/89QBNxnJfYLJTvVxtnhAuJG4ARGoTr7LhQox8ojYIpinzrzN4yZo8p
-         6dDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701701973; x=1702306773;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=AEtXrarlRuJeVsqzYM4zb29M+XdIdGWvdhen3lEwn48=;
-        b=LUIzcWuX8AZNse6/tJyIJOMAsJxleCCaerr4SvVphAD65yq98TW2pDKBLLTw23L/c6
-         USTEBPxOJphzKl3q3f8ERz6uMzmYTp6c2ZJfGBmKcAT/EDlis5aabFG00Qml4upQtWOJ
-         WNJTXeiUjtr0FkfIQSFfVS+een5QXfntiJlbyC0zsdYoj0e2X/lm8BxiaPswRRruoPuT
-         WvAZ4VfFARKausV17QhBe2YAnvhFAvJ0r8iDxCOk0FTQ11sMZ6LdhZkI80xbkRyxXH++
-         8xmdcM3GBRwu2vSTYN24iTqHLZ/h1A/4RsMoBcthdWZkpFFJlUQlZTHacDQfKaSwmcSG
-         a88Q==
-X-Gm-Message-State: AOJu0YzH8kSBCmqjAlNXRUltblkTY92SRDABsagJXn3tMPD6qrXhfLI0
-	EVxG0lYpRmQ5vl55cbbEO4U=
-X-Google-Smtp-Source: AGHT+IF3TI2GZnZQV+WfJ1hnsDQUoFtybL3uFMJvxXaDS9FsOiVBo0wGKwsO+64zak8Bz9G8HmuLxw==
-X-Received: by 2002:a05:6214:3902:b0:67a:b6a3:834e with SMTP id nh2-20020a056214390200b0067ab6a3834emr5393712qvb.127.1701701973169;
-        Mon, 04 Dec 2023 06:59:33 -0800 (PST)
-Received: from localhost (114.66.194.35.bc.googleusercontent.com. [35.194.66.114])
-        by smtp.gmail.com with ESMTPSA id mh10-20020a056214564a00b0067a9235d5f0sm3704034qvb.105.2023.12.04.06.59.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Dec 2023 06:59:32 -0800 (PST)
-Date: Mon, 04 Dec 2023 09:59:31 -0500
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Jesper Dangaard Brouer <hawk@kernel.org>, 
- Song Yoong Siang <yoong.siang.song@intel.com>, 
- "David S . Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, 
- Jonathan Corbet <corbet@lwn.net>, 
- Bjorn Topel <bjorn@kernel.org>, 
- Magnus Karlsson <magnus.karlsson@intel.com>, 
- Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
- Jonathan Lemon <jonathan.lemon@gmail.com>, 
- Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Stanislav Fomichev <sdf@google.com>, 
- Lorenzo Bianconi <lorenzo@kernel.org>, 
- Tariq Toukan <tariqt@nvidia.com>, 
- Willem de Bruijn <willemb@google.com>, 
- Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
- Andrii Nakryiko <andrii@kernel.org>, 
- Mykola Lysenko <mykolal@fb.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- KP Singh <kpsingh@kernel.org>, 
- Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, 
- Alexandre Torgue <alexandre.torgue@foss.st.com>, 
- Jose Abreu <joabreu@synopsys.com>
-Cc: netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- linux-doc@vger.kernel.org, 
- bpf@vger.kernel.org, 
- xdp-hints@xdp-project.net, 
- linux-stm32@st-md-mailman.stormreply.com, 
- linux-arm-kernel@lists.infradead.org, 
- linux-kselftest@vger.kernel.org
-Message-ID: <656de953bcc82_2e983e2949a@willemb.c.googlers.com.notmuch>
-In-Reply-To: <8e20031c-83cb-4927-ab6a-e6b4840e1e42@kernel.org>
-References: <20231203165129.1740512-1-yoong.siang.song@intel.com>
- <20231203165129.1740512-4-yoong.siang.song@intel.com>
- <8e20031c-83cb-4927-ab6a-e6b4840e1e42@kernel.org>
-Subject: Re: [PATCH bpf-next v3 3/3] selftests/bpf: add Launch Time request to
- xdp_hw_metadata
+	dkim=pass (1024-bit key) header.d=xen.org header.i=@xen.org header.b="PGObTwzV"
+X-Greylist: delayed 971 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 04 Dec 2023 07:00:30 PST
+Received: from mail.xenproject.org (mail.xenproject.org [104.130.215.37])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52033A1;
+	Mon,  4 Dec 2023 07:00:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=xen.org;
+	s=20200302mail; h=Content-Transfer-Encoding:MIME-Version:References:
+	In-Reply-To:Message-Id:Date:Subject:To:From;
+	bh=WUrV0xv5QN/acorjWX2KEAdt2ICWDXH53A8LzaiykOI=; b=PGObTwzVoq+BOqG1Ep91FZ8Cns
+	b4BQlICAoBDrcriTRLtwGT/7B00y49yoxhxbgtQpY1sdFEAq+3KW0LUBcSA7hjAYT4LyyIowtKmZo
+	36MIffdrgQR8nVnXT46SMswCHjtWud8KQ5ebKdZ9//CA+RfgDcy+S8eORhiEObAQyxLM=;
+Received: from xenbits.xenproject.org ([104.239.192.120])
+	by mail.xenproject.org with esmtp (Exim 4.92)
+	(envelope-from <paul@xen.org>)
+	id 1rAAQk-00043j-TN; Mon, 04 Dec 2023 15:00:18 +0000
+Received: from 54-240-197-231.amazon.com ([54.240.197.231] helo=REM-PW02S00X.ant.amazon.com)
+	by xenbits.xenproject.org with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <paul@xen.org>)
+	id 1rAABN-00088g-Cc; Mon, 04 Dec 2023 14:44:25 +0000
+From: Paul Durrant <paul@xen.org>
+To: Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Sean Christopherson <seanjc@google.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	David Woodhouse <dwmw2@infradead.org>,
+	Paul Durrant <paul@xen.org>,
+	Shuah Khan <shuah@kernel.org>,
+	kvm@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v10 13/19] KVM: selftests / xen: map shared_info using HVA rather than GFN
+Date: Mon,  4 Dec 2023 14:43:28 +0000
+Message-Id: <20231204144334.910-14-paul@xen.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20231204144334.910-1-paul@xen.org>
+References: <20231204144334.910-1-paul@xen.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Jesper Dangaard Brouer wrote:
-> 
-> 
-> On 12/3/23 17:51, Song Yoong Siang wrote:
-> > This patch is tested with stmmac on Intel Tiger Lake platform. Refer to
-> > result below, the delta between pre-determined launch time and actual HW
-> > transmit complete time is around 24 us.
-> 
-> Is there any NIC setup (e.g. ethtool/qdisc) requirements to enable HW 
-> for this feature?
+From: Paul Durrant <pdurrant@amazon.com>
 
-Judging from how we currently use this with FQ and ETF, no.
+Using the HVA of the shared_info page is more efficient, so if the
+capability (KVM_XEN_HVM_CONFIG_SHARED_INFO_HVA) is present use that method
+to do the mapping.
 
-See for instance tools/testing/selftests/net/so_txtime.sh
+NOTE: Have the juggle_shinfo_state() thread map and unmap using both
+      GFN and HVA, to make sure the older mechanism is not broken.
+
+Signed-off-by: Paul Durrant <pdurrant@amazon.com>
+Reviewed-by: David Woodhouse <dwmw@amazon.co.uk>
+---
+Cc: Sean Christopherson <seanjc@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: David Woodhouse <dwmw2@infradead.org>
+
+v3:
+ - Re-work the juggle_shinfo_state() thread
+
+v2:
+ - New in this version.
+---
+ .../selftests/kvm/x86_64/xen_shinfo_test.c    | 44 +++++++++++++++----
+ 1 file changed, 35 insertions(+), 9 deletions(-)
+
+diff --git a/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c b/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c
+index 9ec9ab60b63e..a61500ff0822 100644
+--- a/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c
++++ b/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c
+@@ -389,6 +389,7 @@ static int cmp_timespec(struct timespec *a, struct timespec *b)
+ 		return 0;
+ }
+ 
++static struct shared_info *shinfo;
+ static struct vcpu_info *vinfo;
+ static struct kvm_vcpu *vcpu;
+ 
+@@ -404,20 +405,38 @@ static void *juggle_shinfo_state(void *arg)
+ {
+ 	struct kvm_vm *vm = (struct kvm_vm *)arg;
+ 
+-	struct kvm_xen_hvm_attr cache_activate = {
++	struct kvm_xen_hvm_attr cache_activate_gfn = {
+ 		.type = KVM_XEN_ATTR_TYPE_SHARED_INFO,
+ 		.u.shared_info.gfn = SHINFO_REGION_GPA / PAGE_SIZE
+ 	};
+ 
+-	struct kvm_xen_hvm_attr cache_deactivate = {
++	struct kvm_xen_hvm_attr cache_deactivate_gfn = {
+ 		.type = KVM_XEN_ATTR_TYPE_SHARED_INFO,
+ 		.u.shared_info.gfn = KVM_XEN_INVALID_GFN
+ 	};
+ 
++	struct kvm_xen_hvm_attr cache_activate_hva = {
++		.type = KVM_XEN_ATTR_TYPE_SHARED_INFO_HVA,
++		.u.shared_info.hva = (unsigned long)shinfo
++	};
++
++	struct kvm_xen_hvm_attr cache_deactivate_hva = {
++		.type = KVM_XEN_ATTR_TYPE_SHARED_INFO,
++		.u.shared_info.hva = 0
++	};
++
++	int xen_caps = kvm_check_cap(KVM_CAP_XEN_HVM);
++
+ 	for (;;) {
+-		__vm_ioctl(vm, KVM_XEN_HVM_SET_ATTR, &cache_activate);
+-		__vm_ioctl(vm, KVM_XEN_HVM_SET_ATTR, &cache_deactivate);
++		__vm_ioctl(vm, KVM_XEN_HVM_SET_ATTR, &cache_activate_gfn);
+ 		pthread_testcancel();
++		__vm_ioctl(vm, KVM_XEN_HVM_SET_ATTR, &cache_deactivate_gfn);
++
++		if (xen_caps & KVM_XEN_HVM_CONFIG_SHARED_INFO_HVA) {
++			__vm_ioctl(vm, KVM_XEN_HVM_SET_ATTR, &cache_activate_hva);
++			pthread_testcancel();
++			__vm_ioctl(vm, KVM_XEN_HVM_SET_ATTR, &cache_deactivate_hva);
++		}
+ 	}
+ 
+ 	return NULL;
+@@ -442,6 +461,7 @@ int main(int argc, char *argv[])
+ 	bool do_runstate_flag = !!(xen_caps & KVM_XEN_HVM_CONFIG_RUNSTATE_UPDATE_FLAG);
+ 	bool do_eventfd_tests = !!(xen_caps & KVM_XEN_HVM_CONFIG_EVTCHN_2LEVEL);
+ 	bool do_evtchn_tests = do_eventfd_tests && !!(xen_caps & KVM_XEN_HVM_CONFIG_EVTCHN_SEND);
++	bool has_shinfo_hva = !!(xen_caps & KVM_XEN_HVM_CONFIG_SHARED_INFO_HVA);
+ 
+ 	clock_gettime(CLOCK_REALTIME, &min_ts);
+ 
+@@ -452,7 +472,7 @@ int main(int argc, char *argv[])
+ 				    SHINFO_REGION_GPA, SHINFO_REGION_SLOT, 3, 0);
+ 	virt_map(vm, SHINFO_REGION_GVA, SHINFO_REGION_GPA, 3);
+ 
+-	struct shared_info *shinfo = addr_gpa2hva(vm, SHINFO_VADDR);
++	shinfo = addr_gpa2hva(vm, SHINFO_VADDR);
+ 
+ 	int zero_fd = open("/dev/zero", O_RDONLY);
+ 	TEST_ASSERT(zero_fd != -1, "Failed to open /dev/zero");
+@@ -488,10 +508,16 @@ int main(int argc, char *argv[])
+ 			    "Failed to read back RUNSTATE_UPDATE_FLAG attr");
+ 	}
+ 
+-	struct kvm_xen_hvm_attr ha = {
+-		.type = KVM_XEN_ATTR_TYPE_SHARED_INFO,
+-		.u.shared_info.gfn = SHINFO_REGION_GPA / PAGE_SIZE,
+-	};
++	struct kvm_xen_hvm_attr ha = {};
++
++	if (has_shinfo_hva) {
++		ha.type = KVM_XEN_ATTR_TYPE_SHARED_INFO_HVA;
++		ha.u.shared_info.hva = (unsigned long)shinfo;
++	} else {
++		ha.type = KVM_XEN_ATTR_TYPE_SHARED_INFO;
++		ha.u.shared_info.gfn = SHINFO_ADDR / PAGE_SIZE;
++	}
++
+ 	vm_ioctl(vm, KVM_XEN_HVM_SET_ATTR, &ha);
+ 
+ 	/*
+-- 
+2.39.2
 
