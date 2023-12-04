@@ -1,23 +1,23 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=xen.org header.i=@xen.org header.b="IRtRjHjy"
+	dkim=pass (1024-bit key) header.d=xen.org header.i=@xen.org header.b="IHBVGwe2"
 Received: from mail.xenproject.org (mail.xenproject.org [104.130.215.37])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D03DB2;
-	Mon,  4 Dec 2023 07:00:33 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837E8CA;
+	Mon,  4 Dec 2023 07:00:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=xen.org;
 	s=20200302mail; h=Content-Transfer-Encoding:MIME-Version:References:
 	In-Reply-To:Message-Id:Date:Subject:To:From;
-	bh=xJZFWTBvjZuVJvjXlH2gBtqbwLYgXIWpV3QWq0TFhGs=; b=IRtRjHjynWXP32IDCDqZ88eptC
-	L9NbB/hkTwpJ0uE8e9OMM3S5PgkuVoGitnVR0Piko2TZZMwDQfsCCUvZMaWSJYN0HPwVHnQdZAd4v
-	CC2/yWyMNnX2XwHoEl62SiRBbB02nasLrGdxyF3zAXNuBVe1LKDySZSU4ZQh5K+14x94=;
+	bh=btQo2zPDw064xSTjz2Eq/eRv+OQ6oUKEBtLgT0+MLbo=; b=IHBVGwe21iEqCLiLvHeKue8g0r
+	fJDcN2PNqZyJKM5BTMk7yOt+bW2bWxjZ9EDbLObtJDvuNcKDopw6KMwBLygh4FB+vIvetUGCJ2JHG
+	0MgZyoclWF/xvxF65aYwNcuzar63NuxNVSArvEpfn+BEf5rqYlcrje6Hv5xmMLJyJJ0o=;
 Received: from xenbits.xenproject.org ([104.239.192.120])
 	by mail.xenproject.org with esmtp (Exim 4.92)
 	(envelope-from <paul@xen.org>)
-	id 1rAAQk-00043X-ET; Mon, 04 Dec 2023 15:00:18 +0000
+	id 1rAAQk-00043T-A5; Mon, 04 Dec 2023 15:00:18 +0000
 Received: from 54-240-197-231.amazon.com ([54.240.197.231] helo=REM-PW02S00X.ant.amazon.com)
 	by xenbits.xenproject.org with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <paul@xen.org>)
-	id 1rAABX-00088g-4W; Mon, 04 Dec 2023 14:44:35 +0000
+	id 1rAABS-00088g-8o; Mon, 04 Dec 2023 14:44:30 +0000
 From: Paul Durrant <paul@xen.org>
 To: Paolo Bonzini <pbonzini@redhat.com>,
 	Jonathan Corbet <corbet@lwn.net>,
@@ -35,9 +35,9 @@ To: Paolo Bonzini <pbonzini@redhat.com>,
 	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v10 17/19] KVM: xen: don't block on pfncache locks in kvm_xen_set_evtchn_fast()
-Date: Mon,  4 Dec 2023 14:43:32 +0000
-Message-Id: <20231204144334.910-18-paul@xen.org>
+Subject: [PATCH v10 15/19] KVM: xen: advertize the KVM_XEN_HVM_CONFIG_SHARED_INFO_HVA capability
+Date: Mon,  4 Dec 2023 14:43:30 +0000
+Message-Id: <20231204144334.910-16-paul@xen.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231204144334.910-1-paul@xen.org>
 References: <20231204144334.910-1-paul@xen.org>
@@ -51,14 +51,11 @@ Content-Transfer-Encoding: 8bit
 
 From: Paul Durrant <pdurrant@amazon.com>
 
-As described in [1] compiling with CONFIG_PROVE_RAW_LOCK_NESTING shows that
-kvm_xen_set_evtchn_fast() is blocking on pfncache locks in IRQ context.
-Instead, use read_trylock() and treat failure to lock the same as an
-invalid cache.
-
-[1] https://lore.kernel.org/lkml/99771ef3a4966a01fefd3adbb2ba9c3a75f97cf2.camel@infradead.org/T/#mbd06e5a04534ce9c0ee94bd8f1e8d942b2d45bd6
+Now that all relevant kernel changes and selftests are in place, enable the
+new capability.
 
 Signed-off-by: Paul Durrant <pdurrant@amazon.com>
+Reviewed-by: David Woodhouse <dwmw@amazon.co.uk>
 ---
 Cc: Sean Christopherson <seanjc@google.com>
 Cc: Paolo Bonzini <pbonzini@redhat.com>
@@ -70,96 +67,26 @@ Cc: "H. Peter Anvin" <hpa@zytor.com>
 Cc: David Woodhouse <dwmw2@infradead.org>
 Cc: x86@kernel.org
 
-v10:
+v2:
  - New in this version.
 ---
- arch/x86/kvm/xen.c | 31 +++++++++++++++++++++----------
- 1 file changed, 21 insertions(+), 10 deletions(-)
+ arch/x86/kvm/x86.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
-index 88ceaefaa121..7109d20a4608 100644
---- a/arch/x86/kvm/xen.c
-+++ b/arch/x86/kvm/xen.c
-@@ -1665,10 +1665,13 @@ static int set_shinfo_evtchn_pending(struct kvm_vcpu *vcpu, u32 port)
- 	unsigned long flags;
- 	int rc = -EWOULDBLOCK;
- 
--	read_lock_irqsave(&gpc->lock, flags);
--	if (!kvm_gpc_check(gpc, PAGE_SIZE))
-+	local_irq_save(flags);
-+	if (!read_trylock(&gpc->lock))
- 		goto out;
- 
-+	if (!kvm_gpc_check(gpc, PAGE_SIZE))
-+		goto out_unlock;
-+
- 	if (IS_ENABLED(CONFIG_64BIT) && kvm->arch.xen.long_mode) {
- 		struct shared_info *shinfo = gpc->khva;
- 
-@@ -1690,8 +1693,10 @@ static int set_shinfo_evtchn_pending(struct kvm_vcpu *vcpu, u32 port)
- 		rc = 1; /* It is newly raised */
- 	}
- 
-+ out_unlock:
-+	read_unlock(&gpc->lock);
-  out:
--	read_unlock_irqrestore(&gpc->lock, flags);
-+	local_irq_restore(flags);
- 	return rc;
- }
- 
-@@ -1701,21 +1706,23 @@ static bool set_vcpu_info_evtchn_pending(struct kvm_vcpu *vcpu, u32 port)
- 	struct gfn_to_pfn_cache *gpc = &vcpu->arch.xen.vcpu_info_cache;
- 	unsigned long flags;
- 	bool kick_vcpu = false;
-+	bool locked;
- 
--	read_lock_irqsave(&gpc->lock, flags);
-+	local_irq_save(flags);
-+	locked = read_trylock(&gpc->lock);
- 
- 	/*
- 	 * Try to deliver the event directly to the vcpu_info. If successful and
- 	 * the guest is using upcall_vector delivery, send the MSI.
--	 * If the pfncache is invalid, set the shadow. In this case, or if the
--	 * guest is using another form of event delivery, the vCPU must be
--	 * kicked to complete the delivery.
-+	 * If the pfncache lock is contended or the cache is invalid, set the
-+	 * shadow. In this case, or if the guest is using another form of event
-+	 * delivery, the vCPU must be kicked to complete the delivery.
- 	 */
- 	if (IS_ENABLED(CONFIG_64BIT) && kvm->arch.xen.long_mode) {
- 		struct vcpu_info *vcpu_info = gpc->khva;
- 		u32 port_word_bit = port / 32;
- 
--		if (!kvm_gpc_check(gpc, sizeof(*vcpu_info))) {
-+		if ((!locked || !kvm_gpc_check(gpc, sizeof(*vcpu_info)))) {
- 			if (!test_and_set_bit(port_word_bit, &vcpu->arch.xen.evtchn_pending_sel))
- 				kick_vcpu = true;
- 			goto out;
-@@ -1729,7 +1736,7 @@ static bool set_vcpu_info_evtchn_pending(struct kvm_vcpu *vcpu, u32 port)
- 		struct compat_vcpu_info *vcpu_info = gpc->khva;
- 		u32 port_word_bit = port / 64;
- 
--		if (!kvm_gpc_check(gpc, sizeof(*vcpu_info))) {
-+		if ((!locked || !kvm_gpc_check(gpc, sizeof(*vcpu_info)))) {
- 			if (!test_and_set_bit(port_word_bit, &vcpu->arch.xen.evtchn_pending_sel))
- 				kick_vcpu = true;
- 			goto out;
-@@ -1747,8 +1754,12 @@ static bool set_vcpu_info_evtchn_pending(struct kvm_vcpu *vcpu, u32 port)
- 		kick_vcpu = false;
- 	}
- 
-+
-  out:
--	read_unlock_irqrestore(&gpc->lock, flags);
-+	if (locked)
-+		read_unlock(&gpc->lock);
-+
-+	local_irq_restore(flags);
- 	return kick_vcpu;
- }
- 
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index d2958b27872a..1280bea6399e 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -4649,7 +4649,8 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+ 		    KVM_XEN_HVM_CONFIG_INTERCEPT_HCALL |
+ 		    KVM_XEN_HVM_CONFIG_SHARED_INFO |
+ 		    KVM_XEN_HVM_CONFIG_EVTCHN_2LEVEL |
+-		    KVM_XEN_HVM_CONFIG_EVTCHN_SEND;
++		    KVM_XEN_HVM_CONFIG_EVTCHN_SEND |
++		    KVM_XEN_HVM_CONFIG_SHARED_INFO_HVA;
+ 		if (sched_info_on())
+ 			r |= KVM_XEN_HVM_CONFIG_RUNSTATE |
+ 			     KVM_XEN_HVM_CONFIG_RUNSTATE_UPDATE_FLAG;
 -- 
 2.39.2
 
