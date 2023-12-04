@@ -1,23 +1,23 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=xen.org header.i=@xen.org header.b="A6uPSct+"
+	dkim=pass (1024-bit key) header.d=xen.org header.i=@xen.org header.b="RKdWfr20"
 Received: from mail.xenproject.org (mail.xenproject.org [104.130.215.37])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 531D9124
-	for <linux-kselftest@vger.kernel.org>; Mon,  4 Dec 2023 07:01:42 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B4D1B6
+	for <linux-kselftest@vger.kernel.org>; Mon,  4 Dec 2023 07:01:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=xen.org;
 	s=20200302mail; h=Content-Transfer-Encoding:MIME-Version:References:
 	In-Reply-To:Message-Id:Date:Subject:To:From;
-	bh=DVmkuHvAJAn35Oz9caMUxenePj8iuuNulYJyd17+sk4=; b=A6uPSct+a7nMUo0zj022cXmh8B
-	wxuYnAxtppHaIi6/+xcUYvR3U4HZqQEYQMWq4oUrH0pavbZzvjL1MAEcoYjgbu34o/RZxxYT32won
-	619LjIcy0+e3GAvSPMdXqZxsi9ayfPc5s0YH13G5CWlY1cS1KxrxT+dZFjU3S0JpPvSE=;
+	bh=iyqOFrP3aGKoiCQ7WXZlsE4e+dflFfzsWYBVMlCow44=; b=RKdWfr200BFIUema/55xg+FWV4
+	wMI1fPg4QvaaHQuARZFXsDroQV4YFOs4dNIhRrQnNCSTR874QecJetgrRiYGiUIaoNpN28SskZZZ1
+	nBVSrAC0g7ea87iX2JHazfVX4oHHNHa3/ggmvypWoDcBc4XGVji65T2v4iqyoJtoY3mI=;
 Received: from xenbits.xenproject.org ([104.239.192.120])
 	by mail.xenproject.org with esmtp (Exim 4.92)
 	(envelope-from <paul@xen.org>)
-	id 1rAAAu-0003dc-F4; Mon, 04 Dec 2023 14:43:56 +0000
+	id 1rAAB6-0003ex-KF; Mon, 04 Dec 2023 14:44:08 +0000
 Received: from 54-240-197-231.amazon.com ([54.240.197.231] helo=REM-PW02S00X.ant.amazon.com)
 	by xenbits.xenproject.org with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <paul@xen.org>)
-	id 1rAAAu-00088g-5U; Mon, 04 Dec 2023 14:43:56 +0000
+	id 1rAAB6-00088g-AT; Mon, 04 Dec 2023 14:44:08 +0000
 From: Paul Durrant <paul@xen.org>
 To: Paolo Bonzini <pbonzini@redhat.com>,
 	Jonathan Corbet <corbet@lwn.net>,
@@ -35,9 +35,9 @@ To: Paolo Bonzini <pbonzini@redhat.com>,
 	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v10 01/19] KVM: pfncache: Add a map helper function
-Date: Mon,  4 Dec 2023 14:43:16 +0000
-Message-Id: <20231204144334.910-2-paul@xen.org>
+Subject: [PATCH v10 06/19] KVM: pfncache: stop open-coding offset_in_page()
+Date: Mon,  4 Dec 2023 14:43:21 +0000
+Message-Id: <20231204144334.910-7-paul@xen.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231204144334.910-1-paul@xen.org>
 References: <20231204144334.910-1-paul@xen.org>
@@ -51,117 +51,53 @@ Content-Transfer-Encoding: 8bit
 
 From: Paul Durrant <pdurrant@amazon.com>
 
-There is a pfncache unmap helper but mapping is open-coded. Arguably this
-is fine because mapping is done in only one place, hva_to_pfn_retry(), but
-adding the helper does make that function more readable.
-
-No functional change intended.
+Some code in pfncache uses offset_in_page() but in other places it is open-
+coded. Use offset_in_page() consistently everywhere.
 
 Signed-off-by: Paul Durrant <pdurrant@amazon.com>
 Reviewed-by: David Woodhouse <dwmw@amazon.co.uk>
 ---
 Cc: Sean Christopherson <seanjc@google.com>
-Cc: David Woodhouse <dwmw2@infradead.org>
 Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: David Woodhouse <dwmw2@infradead.org>
 
 v8:
- - Re-work commit comment.
- - Fix CONFIG_HAS_IOMEM=n build.
+ - New in this version.
 ---
- virt/kvm/pfncache.c | 47 ++++++++++++++++++++++++++++-----------------
- 1 file changed, 29 insertions(+), 18 deletions(-)
+ virt/kvm/pfncache.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/virt/kvm/pfncache.c b/virt/kvm/pfncache.c
-index 2d6aba677830..10842f1eeeae 100644
+index 6f4b537eb25b..0eeb034d0674 100644
 --- a/virt/kvm/pfncache.c
 +++ b/virt/kvm/pfncache.c
-@@ -96,17 +96,32 @@ bool kvm_gpc_check(struct gfn_to_pfn_cache *gpc, unsigned long len)
- }
- EXPORT_SYMBOL_GPL(kvm_gpc_check);
+@@ -48,7 +48,7 @@ bool kvm_gpc_check(struct gfn_to_pfn_cache *gpc, unsigned long len)
+ 	if (!gpc->active)
+ 		return false;
  
--static void gpc_unmap_khva(kvm_pfn_t pfn, void *khva)
-+static void *gpc_map(kvm_pfn_t pfn)
+-	if ((gpc->gpa & ~PAGE_MASK) + len > PAGE_SIZE)
++	if (offset_in_page(gpc->gpa) + len > PAGE_SIZE)
+ 		return false;
+ 
+ 	if (gpc->generation != slots->generation || kvm_is_error_hva(gpc->uhva))
+@@ -192,7 +192,7 @@ static kvm_pfn_t hva_to_pfn_retry(struct gfn_to_pfn_cache *gpc)
+ 
+ 	gpc->valid = true;
+ 	gpc->pfn = new_pfn;
+-	gpc->khva = new_khva + (gpc->gpa & ~PAGE_MASK);
++	gpc->khva = new_khva + offset_in_page(gpc->gpa);
+ 
+ 	/*
+ 	 * Put the reference to the _new_ pfn.  The pfn is now tracked by the
+@@ -213,7 +213,7 @@ static int __kvm_gpc_refresh(struct gfn_to_pfn_cache *gpc, gpa_t gpa,
+ 			     unsigned long len)
  {
--	/* Unmap the old pfn/page if it was mapped before. */
--	if (!is_error_noslot_pfn(pfn) && khva) {
--		if (pfn_valid(pfn))
--			kunmap(pfn_to_page(pfn));
-+	if (pfn_valid(pfn))
-+		return kmap(pfn_to_page(pfn));
-+
- #ifdef CONFIG_HAS_IOMEM
--		else
--			memunmap(khva);
-+	return memremap(pfn_to_hpa(pfn), PAGE_SIZE, MEMREMAP_WB);
-+#else
-+	return NULL;
- #endif
-+}
-+
-+static void gpc_unmap(kvm_pfn_t pfn, void *khva)
-+{
-+	/* Unmap the old pfn/page if it was mapped before. */
-+	if (is_error_noslot_pfn(pfn) || !khva)
-+		return;
-+
-+	if (pfn_valid(pfn)) {
-+		kunmap(pfn_to_page(pfn));
-+		return;
- 	}
-+
-+#ifdef CONFIG_HAS_IOMEM
-+	memunmap(khva);
-+#endif
- }
- 
- static inline bool mmu_notifier_retry_cache(struct kvm *kvm, unsigned long mmu_seq)
-@@ -175,7 +190,7 @@ static kvm_pfn_t hva_to_pfn_retry(struct gfn_to_pfn_cache *gpc)
- 			 * the existing mapping and didn't create a new one.
- 			 */
- 			if (new_khva != old_khva)
--				gpc_unmap_khva(new_pfn, new_khva);
-+				gpc_unmap(new_pfn, new_khva);
- 
- 			kvm_release_pfn_clean(new_pfn);
- 
-@@ -193,15 +208,11 @@ static kvm_pfn_t hva_to_pfn_retry(struct gfn_to_pfn_cache *gpc)
- 		 * too must be done outside of gpc->lock!
- 		 */
- 		if (gpc->usage & KVM_HOST_USES_PFN) {
--			if (new_pfn == gpc->pfn) {
-+			if (new_pfn == gpc->pfn)
- 				new_khva = old_khva;
--			} else if (pfn_valid(new_pfn)) {
--				new_khva = kmap(pfn_to_page(new_pfn));
--#ifdef CONFIG_HAS_IOMEM
--			} else {
--				new_khva = memremap(pfn_to_hpa(new_pfn), PAGE_SIZE, MEMREMAP_WB);
--#endif
--			}
-+			else
-+				new_khva = gpc_map(new_pfn);
-+
- 			if (!new_khva) {
- 				kvm_release_pfn_clean(new_pfn);
- 				goto out_error;
-@@ -326,7 +337,7 @@ static int __kvm_gpc_refresh(struct gfn_to_pfn_cache *gpc, gpa_t gpa,
- 	mutex_unlock(&gpc->refresh_lock);
- 
- 	if (unmap_old)
--		gpc_unmap_khva(old_pfn, old_khva);
-+		gpc_unmap(old_pfn, old_khva);
- 
- 	return ret;
- }
-@@ -412,7 +423,7 @@ void kvm_gpc_deactivate(struct gfn_to_pfn_cache *gpc)
- 		list_del(&gpc->list);
- 		spin_unlock(&kvm->gpc_lock);
- 
--		gpc_unmap_khva(old_pfn, old_khva);
-+		gpc_unmap(old_pfn, old_khva);
- 	}
- }
- EXPORT_SYMBOL_GPL(kvm_gpc_deactivate);
+ 	struct kvm_memslots *slots = kvm_memslots(gpc->kvm);
+-	unsigned long page_offset = gpa & ~PAGE_MASK;
++	unsigned long page_offset = offset_in_page(gpa);
+ 	bool unmap_old = false;
+ 	unsigned long old_uhva;
+ 	kvm_pfn_t old_pfn;
 -- 
 2.39.2
 
