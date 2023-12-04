@@ -1,23 +1,23 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=xen.org header.i=@xen.org header.b="aAdU8jXl"
+	dkim=pass (1024-bit key) header.d=xen.org header.i=@xen.org header.b="I+E8ThFu"
 Received: from mail.xenproject.org (mail.xenproject.org [104.130.215.37])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86FAFB9;
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59CDEB3;
 	Mon,  4 Dec 2023 07:00:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=xen.org;
 	s=20200302mail; h=Content-Transfer-Encoding:MIME-Version:References:
 	In-Reply-To:Message-Id:Date:Subject:To:From;
-	bh=Xrs5wM6gBETIHeYh3Xm5diocfhQBioljk8lQV33tdj0=; b=aAdU8jXlc+qOGuZ35FRaNzkHxt
-	8NOpVXOoEM5QqGRzNfJwfz4qdyYvqM3hWnG3IT51xhRREY0h2EZPgc2Ncn1ziUlWV+yNHbJmG2qmc
-	8OQ1u4lMWQmFMGUYjFu0q4FRtsjByD8QUZt3BOHxor7O0hUgDIhUCyb0aGhXrWSktFto=;
+	bh=nuXWSkr0ZyIsLCugqKNNY21HAlliCS4E2dntcvQyiAA=; b=I+E8ThFuekmllmO8UyO+Fs+7Q/
+	DktKO1OiBU1y99hjK+piiY2BeaGE56MMn7HhWUkspKMtMUod04zqVh7QdHhar5BJjxNn+2I1BQ0vU
+	08clVVMIOqaHqaItxzBqh0lybPG119fE3ZYFQP48l8TiMIXDBDE6jzbbAJoE7VWCkl1g=;
 Received: from xenbits.xenproject.org ([104.239.192.120])
 	by mail.xenproject.org with esmtp (Exim 4.92)
 	(envelope-from <paul@xen.org>)
-	id 1rAAQk-00043f-PF; Mon, 04 Dec 2023 15:00:18 +0000
+	id 1rAAQk-00043h-RW; Mon, 04 Dec 2023 15:00:18 +0000
 Received: from 54-240-197-231.amazon.com ([54.240.197.231] helo=REM-PW02S00X.ant.amazon.com)
 	by xenbits.xenproject.org with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <paul@xen.org>)
-	id 1rAABG-00088g-2j; Mon, 04 Dec 2023 14:44:18 +0000
+	id 1rAABP-00088g-Qq; Mon, 04 Dec 2023 14:44:28 +0000
 From: Paul Durrant <paul@xen.org>
 To: Paolo Bonzini <pbonzini@redhat.com>,
 	Jonathan Corbet <corbet@lwn.net>,
@@ -35,9 +35,9 @@ To: Paolo Bonzini <pbonzini@redhat.com>,
 	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v10 10/19] KVM: xen: (re-)initialize shared_info if guest (32/64-bit) mode is set
-Date: Mon,  4 Dec 2023 14:43:25 +0000
-Message-Id: <20231204144334.910-11-paul@xen.org>
+Subject: [PATCH v10 14/19] KVM: selftests / xen: re-map vcpu_info using HVA rather than GPA
+Date: Mon,  4 Dec 2023 14:43:29 +0000
+Message-Id: <20231204144334.910-15-paul@xen.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231204144334.910-1-paul@xen.org>
 References: <20231204144334.910-1-paul@xen.org>
@@ -51,95 +51,63 @@ Content-Transfer-Encoding: 8bit
 
 From: Paul Durrant <pdurrant@amazon.com>
 
-If the shared_info PFN cache has already been initialized then the content
-of the shared_info page needs to be (re-)initialized whenever the guest
-mode is (re)set.
-Setting the guest mode is either done explicitly by the VMM via the
-KVM_XEN_ATTR_TYPE_LONG_MODE attribute, or implicitly when the guest writes
-the MSR to set up the hypercall page.
+If the relevant capability (KVM_XEN_HVM_CONFIG_SHARED_INFO_HVA) is present
+then re-map vcpu_info using the HVA part way through the tests to make sure
+then there is no functional change.
 
 Signed-off-by: Paul Durrant <pdurrant@amazon.com>
+Reviewed-by: David Woodhouse <dwmw@amazon.co.uk>
 ---
 Cc: Sean Christopherson <seanjc@google.com>
 Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
 Cc: David Woodhouse <dwmw2@infradead.org>
-Cc: x86@kernel.org
 
-v10:
+v5:
  - New in this version.
 ---
- arch/x86/kvm/xen.c | 36 +++++++++++++++++++++++++++++-------
- 1 file changed, 29 insertions(+), 7 deletions(-)
+ .../selftests/kvm/x86_64/xen_shinfo_test.c        | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
-index 9351b32cfcba..3aa452a71890 100644
---- a/arch/x86/kvm/xen.c
-+++ b/arch/x86/kvm/xen.c
-@@ -623,10 +623,20 @@ int kvm_xen_hvm_set_attr(struct kvm *kvm, struct kvm_xen_hvm_attr *data)
- 		if (!IS_ENABLED(CONFIG_64BIT) && data->u.long_mode) {
- 			r = -EINVAL;
- 		} else {
-+			bool lm = !!data->u.long_mode;
+diff --git a/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c b/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c
+index a61500ff0822..d2ea0435f4f7 100644
+--- a/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c
++++ b/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c
+@@ -62,6 +62,7 @@ enum {
+ 	TEST_POLL_TIMEOUT,
+ 	TEST_POLL_MASKED,
+ 	TEST_POLL_WAKE,
++	SET_VCPU_INFO,
+ 	TEST_TIMER_PAST,
+ 	TEST_LOCKING_SEND_RACE,
+ 	TEST_LOCKING_POLL_RACE,
+@@ -321,6 +322,10 @@ static void guest_code(void)
+ 
+ 	GUEST_SYNC(TEST_POLL_WAKE);
+ 
++	/* Set the vcpu_info to point at exactly the place it already is to
++	 * make sure the attribute is functional. */
++	GUEST_SYNC(SET_VCPU_INFO);
 +
- 			mutex_lock(&kvm->arch.xen.xen_lock);
--			kvm->arch.xen.long_mode = !!data->u.long_mode;
-+			if (kvm->arch.xen.long_mode != lm) {
-+				kvm->arch.xen.long_mode = lm;
+ 	/* A timer wake an *unmasked* port which should wake us with an
+ 	 * actual interrupt, while we're polling on a different port. */
+ 	ports[0]++;
+@@ -888,6 +893,16 @@ int main(int argc, char *argv[])
+ 				alarm(1);
+ 				break;
+ 
++			case SET_VCPU_INFO:
++				if (has_shinfo_hva) {
++					struct kvm_xen_vcpu_attr vih = {
++						.type = KVM_XEN_VCPU_ATTR_TYPE_VCPU_INFO_HVA,
++						.u.hva = (unsigned long)vinfo
++					};
++					vcpu_ioctl(vcpu, KVM_XEN_VCPU_SET_ATTR, &vih);
++				}
++				break;
 +
-+				/*
-+				 * Re-initialize shared_info to put the wallclock in the
-+				 * correct place.
-+				 */
-+				r = kvm->arch.xen.shinfo_cache.active ?
-+					kvm_xen_shared_info_init(kvm) : 0;
-+			}
- 			mutex_unlock(&kvm->arch.xen.xen_lock);
--			r = 0;
- 		}
- 		break;
- 
-@@ -648,9 +658,6 @@ int kvm_xen_hvm_set_attr(struct kvm *kvm, struct kvm_xen_hvm_attr *data)
- 
- 		srcu_read_unlock(&kvm->srcu, idx);
- 
--		if (!r && kvm->arch.xen.shinfo_cache.active)
--			r = kvm_xen_shared_info_init(kvm);
--
- 		mutex_unlock(&kvm->arch.xen.xen_lock);
- 		break;
- 	}
-@@ -1101,9 +1108,24 @@ int kvm_xen_write_hypercall_page(struct kvm_vcpu *vcpu, u64 data)
- 	u32 page_num = data & ~PAGE_MASK;
- 	u64 page_addr = data & PAGE_MASK;
- 	bool lm = is_long_mode(vcpu);
-+	int r = 0;
-+
-+	mutex_lock(&kvm->arch.xen.xen_lock);
-+	if (kvm->arch.xen.long_mode != lm) {
-+		kvm->arch.xen.long_mode = lm;
-+
-+		/*
-+		 * Re-initialize shared_info to put the wallclock in the
-+		 * correct place.
-+		 */
-+		if (kvm->arch.xen.shinfo_cache.active &&
-+		    kvm_xen_shared_info_init(kvm))
-+			r = 1;
-+	}
-+	mutex_unlock(&kvm->arch.xen.xen_lock);
- 
--	/* Latch long_mode for shared_info pages etc. */
--	vcpu->kvm->arch.xen.long_mode = lm;
-+	if (r)
-+		return r;
- 
- 	/*
- 	 * If Xen hypercall intercept is enabled, fill the hypercall
+ 			case TEST_TIMER_PAST:
+ 				TEST_ASSERT(!evtchn_irq_expected,
+ 					    "Expected event channel IRQ but it didn't happen");
 -- 
 2.39.2
 
