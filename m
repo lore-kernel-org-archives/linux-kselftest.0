@@ -1,23 +1,23 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=xen.org header.i=@xen.org header.b="I+E8ThFu"
+	dkim=pass (1024-bit key) header.d=xen.org header.i=@xen.org header.b="BXioIzqW"
 Received: from mail.xenproject.org (mail.xenproject.org [104.130.215.37])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59CDEB3;
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20681C4;
 	Mon,  4 Dec 2023 07:00:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=xen.org;
 	s=20200302mail; h=Content-Transfer-Encoding:MIME-Version:References:
 	In-Reply-To:Message-Id:Date:Subject:To:From;
-	bh=nuXWSkr0ZyIsLCugqKNNY21HAlliCS4E2dntcvQyiAA=; b=I+E8ThFuekmllmO8UyO+Fs+7Q/
-	DktKO1OiBU1y99hjK+piiY2BeaGE56MMn7HhWUkspKMtMUod04zqVh7QdHhar5BJjxNn+2I1BQ0vU
-	08clVVMIOqaHqaItxzBqh0lybPG119fE3ZYFQP48l8TiMIXDBDE6jzbbAJoE7VWCkl1g=;
+	bh=u3xu4cWioGlm/0Nl4ZRtWZZdIjjd8j62hC7w6zJEnu8=; b=BXioIzqWWZVqflIdLOZVfL3wsh
+	kUWD6QQHc6NI05ep0LckFWjzn50oMDsM0rj1Cv+iUKUaiDciMxW3HG8uWvw0/rWat1sZAdhO3CRp7
+	Qq7EnjH2a0dNuTdOK6TgXjAicPHkmPHSXn2aLTflELtDsOdkhikEWe/y+JoJ1fCvRPyk=;
 Received: from xenbits.xenproject.org ([104.239.192.120])
 	by mail.xenproject.org with esmtp (Exim 4.92)
 	(envelope-from <paul@xen.org>)
-	id 1rAAQk-00043h-RW; Mon, 04 Dec 2023 15:00:18 +0000
+	id 1rAAQk-00043d-N8; Mon, 04 Dec 2023 15:00:18 +0000
 Received: from 54-240-197-231.amazon.com ([54.240.197.231] helo=REM-PW02S00X.ant.amazon.com)
 	by xenbits.xenproject.org with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <paul@xen.org>)
-	id 1rAABP-00088g-Qq; Mon, 04 Dec 2023 14:44:28 +0000
+	id 1rAABc-00088g-03; Mon, 04 Dec 2023 14:44:40 +0000
 From: Paul Durrant <paul@xen.org>
 To: Paolo Bonzini <pbonzini@redhat.com>,
 	Jonathan Corbet <corbet@lwn.net>,
@@ -35,9 +35,9 @@ To: Paolo Bonzini <pbonzini@redhat.com>,
 	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v10 14/19] KVM: selftests / xen: re-map vcpu_info using HVA rather than GPA
-Date: Mon,  4 Dec 2023 14:43:29 +0000
-Message-Id: <20231204144334.910-15-paul@xen.org>
+Subject: [PATCH v10 19/19] KVM: xen: allow vcpu_info content to be 'safely' copied
+Date: Mon,  4 Dec 2023 14:43:34 +0000
+Message-Id: <20231204144334.910-20-paul@xen.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231204144334.910-1-paul@xen.org>
 References: <20231204144334.910-1-paul@xen.org>
@@ -51,63 +51,57 @@ Content-Transfer-Encoding: 8bit
 
 From: Paul Durrant <pdurrant@amazon.com>
 
-If the relevant capability (KVM_XEN_HVM_CONFIG_SHARED_INFO_HVA) is present
-then re-map vcpu_info using the HVA part way through the tests to make sure
-then there is no functional change.
+If the guest sets an explicit vcpu_info GPA then, for any of the first 32
+vCPUs, the content of the default vcpu_info in the shared_info page must be
+copied into the new location. Because this copy may race with event
+delivery (which updates the 'evtchn_pending_sel' field in vcpu_info) there
+needs to be a way to defer that until the copy is complete.
+Happily there is already a shadow of 'evtchn_pending_sel' in kvm_vcpu_xen
+that is used in atomic context if the vcpu_info PFN cache has been
+invalidated so that the update of vcpu_info can be deferred until the
+cache can be refreshed (on vCPU thread's the way back into guest context).
+
+Also use this shadow if the vcpu_info cache has been *deactivated*, so that
+the VMM can safely copy the vcpu_info content and then re-activate the
+cache with the new GPA. To do this, stop considering an inactive vcpu_info
+cache as a hard error in kvm_xen_set_evtchn_fast().
 
 Signed-off-by: Paul Durrant <pdurrant@amazon.com>
 Reviewed-by: David Woodhouse <dwmw@amazon.co.uk>
 ---
+Cc: David Woodhouse <dwmw2@infradead.org>
 Cc: Sean Christopherson <seanjc@google.com>
 Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: David Woodhouse <dwmw2@infradead.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: x86@kernel.org
 
-v5:
+v8:
+ - Update commit comment.
+
+v6:
  - New in this version.
 ---
- .../selftests/kvm/x86_64/xen_shinfo_test.c        | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ arch/x86/kvm/xen.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c b/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c
-index a61500ff0822..d2ea0435f4f7 100644
---- a/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c
-@@ -62,6 +62,7 @@ enum {
- 	TEST_POLL_TIMEOUT,
- 	TEST_POLL_MASKED,
- 	TEST_POLL_WAKE,
-+	SET_VCPU_INFO,
- 	TEST_TIMER_PAST,
- 	TEST_LOCKING_SEND_RACE,
- 	TEST_LOCKING_POLL_RACE,
-@@ -321,6 +322,10 @@ static void guest_code(void)
+diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
+index 7109d20a4608..72a19956d052 100644
+--- a/arch/x86/kvm/xen.c
++++ b/arch/x86/kvm/xen.c
+@@ -1790,9 +1790,6 @@ int kvm_xen_set_evtchn_fast(struct kvm_xen_evtchn *xe, struct kvm *kvm)
+ 		WRITE_ONCE(xe->vcpu_idx, vcpu->vcpu_idx);
+ 	}
  
- 	GUEST_SYNC(TEST_POLL_WAKE);
+-	if (!vcpu->arch.xen.vcpu_info_cache.active)
+-		return -EINVAL;
+-
+ 	if (xe->port >= max_evtchn_port(kvm))
+ 		return -EINVAL;
  
-+	/* Set the vcpu_info to point at exactly the place it already is to
-+	 * make sure the attribute is functional. */
-+	GUEST_SYNC(SET_VCPU_INFO);
-+
- 	/* A timer wake an *unmasked* port which should wake us with an
- 	 * actual interrupt, while we're polling on a different port. */
- 	ports[0]++;
-@@ -888,6 +893,16 @@ int main(int argc, char *argv[])
- 				alarm(1);
- 				break;
- 
-+			case SET_VCPU_INFO:
-+				if (has_shinfo_hva) {
-+					struct kvm_xen_vcpu_attr vih = {
-+						.type = KVM_XEN_VCPU_ATTR_TYPE_VCPU_INFO_HVA,
-+						.u.hva = (unsigned long)vinfo
-+					};
-+					vcpu_ioctl(vcpu, KVM_XEN_VCPU_SET_ATTR, &vih);
-+				}
-+				break;
-+
- 			case TEST_TIMER_PAST:
- 				TEST_ASSERT(!evtchn_irq_expected,
- 					    "Expected event channel IRQ but it didn't happen");
 -- 
 2.39.2
 
