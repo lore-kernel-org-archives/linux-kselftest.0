@@ -1,138 +1,141 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EkrgHiuE"
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCB53173A
-	for <linux-kselftest@vger.kernel.org>; Tue,  5 Dec 2023 10:22:30 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-5482df11e73so7714389a12.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 05 Dec 2023 10:22:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1701800549; x=1702405349; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zmg48ucaNtz1eYQ0lcHiyMSvr8VMzgFNPLFgYJsB9ug=;
-        b=EkrgHiuEMA77/SeoJWOAxYB1N+afZ+15akiee+8nSXBz/ucfjMRvjQJr83dxbITaqC
-         4i9N0Ex4nqfQ3zgJQzu9/k31MlcdVPP0v9Df3rku4g3iQ6qX+C+HajyddKJvkeBhCC4u
-         2RIs6ue7iQi161nt6NSldsuNVDXQh/r+t7JBdmyN5XdpLtV87xkKIeyZSkvI2h3X2nS9
-         TvVB5s5xysIaumHqgHnlSLZCDhlLBkLUS7vV70Ycj7QTS/1XYGCdn3Xu2VbGpSF65hKp
-         r8yefL4USBrBtmjSAt978SKf5766GLc1beI7b99agTlJ++qzMYKy8sirIDEvDHSHPTkV
-         KWrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701800549; x=1702405349;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zmg48ucaNtz1eYQ0lcHiyMSvr8VMzgFNPLFgYJsB9ug=;
-        b=WgNR54Q/bShQaCT0iQoHjCvs02n9o1H6q4oYOmn271GScz54/59opesoUS41fGHHtY
-         GTcyurkLHCJD9oSGNvk3S67igoOHzhZ13pczA2ZSfZjjgluL2Hst1z0FgcyKmcNmaoTT
-         7o7ld7dSiu1it5fqNkL9jb8WaEBcp8vFEcdLRFrSV4p+QnAA/tVi7e6usokpJXy6xjWe
-         N4sriya9IO9KSMzbSY5aEljxICwJ9pMHmbX2l7fSf78DSUUf/k25bz2yx6t3dvwy0Cy2
-         PA6IQS7oePjqxkmCw+UXvx6uOF28XI+sl2UArtO0WNufrJWa67p2ORaQQCmAEFBi0IXv
-         F9Ug==
-X-Gm-Message-State: AOJu0YxPhz/aHnhXyOm5CcyDUTvBPt94dO7Rd9fYlVLzNBxYHCQFP1B9
-	T2Hg6buKOJYyQ9bZhkaBxlyT3CSl06eky4E5NlPZzg==
-X-Google-Smtp-Source: AGHT+IFxluMz9sMmuxSFOhQkmwPCAcZ5/u8Ab6p6UNrzKjlnMibiuPAGPqvvqV6rtEaQ2cNgW+y+zDH5NzMnbiRMc44=
-X-Received: by 2002:a17:906:7:b0:a1a:c8fc:2e2b with SMTP id
- 7-20020a170906000700b00a1ac8fc2e2bmr2763817eja.132.1701800548623; Tue, 05 Dec
- 2023 10:22:28 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LV2Zye/o"
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB7C81A1
+	for <linux-kselftest@vger.kernel.org>; Tue,  5 Dec 2023 10:45:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1701801931;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=eXB6/JKbV4tlSKi16BxWQoAzgHXel/eAulm+zLLiiB4=;
+	b=LV2Zye/oFCOlUAQNqWGNxBN4C8o0MK+xuMMLpx2X0YC/Z9z9UVSS4RKa23fXN93IAcIilq
+	Tm6EcctD2/vciKVzi8KdnsyKw/G2t2cjEBsYajk1KSbJ68oQNbyhwwM3Jzs5HfdP59CaQ+
+	pmXRU9nbok42dpeli1kh0+sQITWxpno=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-350-upjkIcedOdq1iCOpH_d0uw-1; Tue, 05 Dec 2023 13:45:28 -0500
+X-MC-Unique: upjkIcedOdq1iCOpH_d0uw-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 87F2584AEA0;
+	Tue,  5 Dec 2023 18:45:27 +0000 (UTC)
+Received: from ruby.redhat.com (unknown [10.39.192.2])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id C2107492BE6;
+	Tue,  5 Dec 2023 18:45:24 +0000 (UTC)
+From: Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com>
+To: workflows@vger.kernel.org,
+	Jonathan Corbet <corbet@lwn.net>,
+	Joe Perches <joe@perches.com>,
+	Andy Whitcroft <apw@canonical.com>,
+	Theodore Ts'o <tytso@mit.edu>,
+	David Gow <davidgow@google.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Mark Brown <broonie@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	"Darrick J . Wong" <djwong@kernel.org>
+Cc: kunit-dev@googlegroups.com,
+	linux-kselftest@vger.kernel.org,
+	Veronika Kabatova <vkabatov@redhat.com>,
+	CKI <cki-project@redhat.com>,
+	kernelci@lists.linux.dev
+Subject: [RFC PATCH v2 00/10] MAINTAINERS: Introduce V: entry for tests
+Date: Tue,  5 Dec 2023 20:02:56 +0200
+Message-ID: <20231205184503.79769-1-Nikolai.Kondrashov@redhat.com>
+In-Reply-To: <20231115175146.9848-1-Nikolai.Kondrashov@redhat.com>
+References: <20231115175146.9848-1-Nikolai.Kondrashov@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231130194023.4102148-1-nphamcs@gmail.com> <20231130194023.4102148-5-nphamcs@gmail.com>
-In-Reply-To: <20231130194023.4102148-5-nphamcs@gmail.com>
-From: Yosry Ahmed <yosryahmed@google.com>
-Date: Tue, 5 Dec 2023 10:21:52 -0800
-Message-ID: <CAJD7tkZeXY0HbBQu_pZr+kDgoPoDR+kQZq4XxYo6ZXfrO2=BKQ@mail.gmail.com>
-Subject: Re: [PATCH v8 4/6] mm: memcg: add per-memcg zswap writeback stat
-To: Nhat Pham <nphamcs@gmail.com>
-Cc: akpm@linux-foundation.org, hannes@cmpxchg.org, cerasuolodomenico@gmail.com, 
-	sjenning@redhat.com, ddstreet@ieee.org, vitaly.wool@konsulko.com, 
-	mhocko@kernel.org, roman.gushchin@linux.dev, shakeelb@google.com, 
-	muchun.song@linux.dev, chrisl@kernel.org, linux-mm@kvack.org, 
-	kernel-team@meta.com, linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, shuah@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.10
 
-On Thu, Nov 30, 2023 at 11:40=E2=80=AFAM Nhat Pham <nphamcs@gmail.com> wrot=
-e:
->
-> From: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
->
-> Since zswap now writes back pages from memcg-specific LRUs, we now need a
-> new stat to show writebacks count for each memcg.
->
-> Suggested-by: Nhat Pham <nphamcs@gmail.com>
-> Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-> Signed-off-by: Nhat Pham <nphamcs@gmail.com>
-> ---
->  include/linux/vm_event_item.h | 1 +
->  mm/memcontrol.c               | 1 +
->  mm/vmstat.c                   | 1 +
->  mm/zswap.c                    | 4 ++++
->  4 files changed, 7 insertions(+)
->
-> diff --git a/include/linux/vm_event_item.h b/include/linux/vm_event_item.=
-h
-> index d1b847502f09..f4569ad98edf 100644
-> --- a/include/linux/vm_event_item.h
-> +++ b/include/linux/vm_event_item.h
-> @@ -142,6 +142,7 @@ enum vm_event_item { PGPGIN, PGPGOUT, PSWPIN, PSWPOUT=
-,
->  #ifdef CONFIG_ZSWAP
->                 ZSWPIN,
->                 ZSWPOUT,
-> +               ZSWP_WB,
+Alright, here's a second version, attempting to address as many concerns as
+possible. It's likely I've missed something, though.
 
-I think you dismissed Johannes's comment from v7 about ZSWPWB and
-"zswpwb" being more consistent with the existing events.
+Changes from v1:
 
->  #endif
->  #ifdef CONFIG_X86
->                 DIRECT_MAP_LEVEL2_SPLIT,
-> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-> index 792ca21c5815..21d79249c8b4 100644
-> --- a/mm/memcontrol.c
-> +++ b/mm/memcontrol.c
-> @@ -703,6 +703,7 @@ static const unsigned int memcg_vm_event_stat[] =3D {
->  #if defined(CONFIG_MEMCG_KMEM) && defined(CONFIG_ZSWAP)
->         ZSWPIN,
->         ZSWPOUT,
-> +       ZSWP_WB,
->  #endif
->  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
->         THP_FAULT_ALLOC,
-> diff --git a/mm/vmstat.c b/mm/vmstat.c
-> index afa5a38fcc9c..2249f85e4a87 100644
-> --- a/mm/vmstat.c
-> +++ b/mm/vmstat.c
-> @@ -1401,6 +1401,7 @@ const char * const vmstat_text[] =3D {
->  #ifdef CONFIG_ZSWAP
->         "zswpin",
->         "zswpout",
-> +       "zswp_wb",
->  #endif
->  #ifdef CONFIG_X86
->         "direct_map_level2_splits",
-> diff --git a/mm/zswap.c b/mm/zswap.c
-> index f323e45cbdc7..49b79393e472 100644
-> --- a/mm/zswap.c
-> +++ b/mm/zswap.c
-> @@ -760,6 +760,10 @@ static enum lru_status shrink_memcg_cb(struct list_h=
-ead *item, struct list_lru_o
->         }
->         zswap_written_back_pages++;
->
-> +       if (entry->objcg)
-> +               count_objcg_event(entry->objcg, ZSWP_WB);
-> +
-> +       count_vm_event(ZSWP_WB);
->         /*
->          * Writeback started successfully, the page now belongs to the
->          * swapcache. Drop the entry from zswap - unless invalidate alrea=
-dy
-> --
-> 2.34.1
+* Make scripts/get_maintainer.pl survive querying missing files, giving a
+  warning instead. This is necessary to enable scripts/checkpatch.pl to query
+  MAINTAINERS about files being deleted.
+* Start with the minimal change just documenting the V: entry, which accepts
+  test commands directly, and tweaking the tools to deal with that.
+* However, require the commands accept the -h/--help option so that users have
+  an easier time getting *some* help. The run_checks.py missing that is the
+  reason why the patch proposing it for kunit subsystem is marked "DONOTMERGE"
+  in this version. We can drop that requirement, or soften the language, if
+  there's opposition.
+* Have a *separate* patch documenting 'Tested-with:' as the next (early)
+  change. Mention that you can add a '#' followed by a results URL, on the
+  end. Adjust the V: docs/checks to exclude '#'.
+* Have a *separate* patch making scripts/checkpatch.pl propose the execution
+  of the test suite defined in MAINTAINERS whenever the corresponding
+  subsystem is changed.
+* However, use 'CHECK', instead of 'WARNING', to allow submitters specify the
+  exact (and potentially slightly different) command they used, and not have
+  checkpatch.pl complain too loudly that they didn't run the (exact
+  MAINTAINERS-specified) command. This unfortunately means that unless you use
+  --strict, you won't see the message. We'll try to address that in a new
+  change at the end.
+* Have a *separate* patch introducing the test catalog and accepting
+  references to that everywhere, with a special syntax to distinguish them
+  from verbatim/direct commands. The syntax is prepending the test name with a
+  '*' (just like C pointer dereference). Make checkpatch.pl handle that.
+* Drop the recommendation to have the "Docs" and "Sources" fields in test
+  descriptions, as the description text should focus on giving a good
+  introduction and not prompt the user to go somewhere else immediately. They
+  both can be referenced in the text where and how is appropriate.
+* Generally keep the previous changes adding V: entries and test suite docs,
+  and try to accommodate all the requests, but refine the "Summary" fields to
+  fit the checkpatch.pl messages better.
+* Have a separate patch cataloguing the complete kunit suite.
+* Finally, add a patch introducing the "proposal strength" keywords
+  (SUGGESTED/RECOMMENDED/REQUIRED) to the syntax of V: entries, which directly
+  affect which level of checkpatch.pl message missing 'Tested-with:' tags
+  would generate: CHECK/WARNING/ERROR respectively. This allows subsystems to
+  disable checkpatch.pl WARNINGS/ERRORS, and keep their test proposals
+  inobtrusive, if they so wish. E.g. if they expect people to change their
+  commands often. At the same time allow stricter workflows for subsystems
+  with more uniform testing. Or e.g. for subsystems which expect the tests to
+  explain their parameters in their output, and the submitters to upload and
+  link their results in their 'Tested-with:' tags.
+
+That seems to be all, but I'm sure I forgot something :D
+
+Anyway, send me more corrections and I'll try to address them, but it's likely
+going to happen next year only.
+
+Nick
+---
+Nikolai Kondrashov (9):
+      get_maintainer: Survive querying missing files
+      MAINTAINERS: Introduce V: entry for tests
+      MAINTAINERS: Propose kunit core tests for framework changes
+      docs: submitting-patches: Introduce Tested-with:
+      checkpatch: Propose tests to execute
+      MAINTAINERS: Support referencing test docs in V:
+      MAINTAINERS: Propose kvm-xfstests smoke for ext4
+      docs: tests: Document kunit in general
+      MAINTAINERS: Add proposal strength to V: entries
+
+Mark Brown (1):
+      MAINTAINERS: Propose kunit tests for regmap
+
+ Documentation/process/index.rst              |   1 +
+ Documentation/process/submitting-patches.rst |  46 +++++++
+ Documentation/process/tests.rst              |  96 +++++++++++++++
+ MAINTAINERS                                  |  17 +++
+ scripts/checkpatch.pl                        | 174 ++++++++++++++++++++++++++-
+ scripts/get_maintainer.pl                    |  23 +++-
+ scripts/parse-maintainers.pl                 |   3 +-
+ 7 files changed, 355 insertions(+), 5 deletions(-)
+---
+
+
