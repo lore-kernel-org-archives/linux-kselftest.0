@@ -1,126 +1,135 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="MZ0qzKfk"
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2061.outbound.protection.outlook.com [40.107.92.61])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60BB4D3;
-	Wed,  6 Dec 2023 04:36:02 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="HELuf6ZE"
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2071.outbound.protection.outlook.com [40.107.94.71])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB6A11F;
+	Wed,  6 Dec 2023 04:44:49 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BhRqWd5efRvTBJT8qEOw1czSCcx6ArNjVzz+yLf1rhf/WzhYoYq1S97Zt9YZilO026Vj5rCeaUc6Erf5zcYyFenddTTBX2cEFZ+URvaf2EpO6JYwBLdk2V4oXw54x08aZE1SwAohdrJjA5ulrbAYklzg6qa85fQ4znX3iH7tD47cyzpRNLULvIlMPwiFjDMwbkfDWrByJlLTZt5reaFnWY/69Bta7zPKV5L79YWOcW7iM82fjgnI1ls9P5ItoQC14QfF7dFKZ1CVuBY+xgPca6qQhNpifaswAFXcTfhSXqhtPTRrminIEK0DKirXLphqXf+DW9sgEX3vKBWckPTs9A==
+ b=JrlmqHLijaZG7lY3t/3DDPBPMNDqXBBXYUu+9wbXoz/2qh9LTpF9Er5iS70bKK9s8n3AEU4JssuLDH2fSXC0xvKGyBWh4euXTz8J7i3qERYc0IRNR/E0w9TrhKvJAEpfjtWmiOYDD2DqRsTTDEHQp7FgdLAz2oMDnIDX0tWHWGPpb4tsNxGb2HGkDLpMb7255bOcm3pivHPM4FRwRvZLyLhRlLz8CLjlyLm+6Bo7wgcAx+v9C6WyaEvx7Z2N+IOlkeXtF2yQwQT5hJPe6X+yN/614b9ybZZX6j50lCSEst2koh+cN9jLAi2CTAeXk8X/m+D1g9dvyaOSidU2fKggIg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vkgDOQ0mwVDJA0cyQFrP/FeI5Fgzr+viUh7dPsRrw3I=;
- b=K2fDLpan1YMAta2Afn+Uef8Y8HIP1fsxmZ7GlgYSha79Fi/2Y/I92iIT5GizwfsdvL+zezyEpUYWea1ZrcEfHBekbzEgpuGSNtIIdCBbVmfdM5+ryNSCf0Gb4hvcA5Ve61NE9ApXZPcDWYiRPM9FY80YkIB1B1NXjzvY7JMEf3V3ysUNZtk0PGnm/IVGlV5z+b6FZ3UHT7gGWonM0XwC7FCtK5hObUt1Ki5BRh8ng9pmPb0wpf+gljIj+qHcpZgACs0Dw2ZHIUIJZCS2UEC1fEyNOn4iPg2O0HzxZ2IBHMkAq0I0WqCYr2UxBAVDoaY5KZR+MbYztobzAYkelXMAiA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=katalix.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
+ bh=9hiNwnKlSPrFyPes77j5vPOrtYLTcO0PNdwO/JogPYI=;
+ b=KUJd2Uu9uo/rJjhGgLr9XQIuYtF4jAAgyiXEhn2nkqBJNKRjlAYM8SLOAk6Fqa80I9xCAECEuqjlYZ1Jp/LIAbmGiNgdMPLJA/ZdGktdXy+3YMHpsQqBKlMNjsmKAdsIxdH4vXDk/C5xO0Kr+Ec/XtNYPZ6cQzDY0GJ8Cw1ZkPUocg3qK+7pbyC2DsLk5PJMygy5qJM8ZxfjZkVqOwNiSIdwb0Yb5SRp4GtzQeazSFlWiIPUQkLs7+ZAIl7IzdaV7ckN9BiD+smBP0zvL8CT9ujA9u4HbAYjW5deB38DTYP94wnDTVtlYq5Sxu0NQ+V4WdSUTA6JAjx8hfoADRGugg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vkgDOQ0mwVDJA0cyQFrP/FeI5Fgzr+viUh7dPsRrw3I=;
- b=MZ0qzKfkzC9Jr9mX2KfzgmyLN18BkF97SvjNEsdxIgsN3HGh+qrAaDUS7JVX3fS3GinyTQrr0v/GsPx5gKJr1tbNDYcCjRvscBntOiQceu9k4vsXmKRolpDmK9vnW42ntIeeU1CTsTVowSr5AEUAz9loMuoyEyi/6erg/OI6sCop8aUCdMPrMPgmAFB4W06MzCM82rhYy4wsfPSKTwnfauCLPNMNlK7fyDX0VS5nXluKT2X7nwDXFh/28Oq+9ix4i2vUlQOlmrPcvhzwJsgOYQ/4ZflfB3k91BdgbUzqPwWZKaHuKjf4catGvhy0FKqjtab4Fc58MNK8mDX79KnMow==
-Received: from CH2PR16CA0016.namprd16.prod.outlook.com (2603:10b6:610:50::26)
- by BL1PR12MB5064.namprd12.prod.outlook.com (2603:10b6:208:30a::16) with
+ bh=9hiNwnKlSPrFyPes77j5vPOrtYLTcO0PNdwO/JogPYI=;
+ b=HELuf6ZEhtcx0mtiLNxOI2Bxkd95NfGHCLQP/J8QIUvRd0fUyQWvnXLCCm81jkULlbRTvfWHMUPKb3jPLKcnSFZBACJR0Z3Fd7MggwLtMBqG/hsHUzPreBK5dZ/LlEiJSzMdbU0fXZRuSHUwf3weUhBK1Ij9snE9Uy5UwfDRQjnoC/w2gFLbby3Hmglp6KOXqx6DxYppIlm/ztyHsssr6I2zDdwlMO/G9ZZLVR2rBF9+hJS4yyZhMdNBKIIeevXE5xdrL3Ie4tMx2znk3vnLwd6sMI55+gKw5cH8A0x3KGsAIBx54l61qCzKVxlMPwG5xzkpnKL07aOpR8stwb5KiA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CY5PR12MB6179.namprd12.prod.outlook.com (2603:10b6:930:24::22)
+ by CY5PR12MB6381.namprd12.prod.outlook.com (2603:10b6:930:3f::18) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7068.25; Wed, 6 Dec
- 2023 12:35:57 +0000
-Received: from CY4PEPF0000EE39.namprd03.prod.outlook.com
- (2603:10b6:610:50:cafe::95) by CH2PR16CA0016.outlook.office365.com
- (2603:10b6:610:50::26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7046.34 via Frontend
- Transport; Wed, 6 Dec 2023 12:35:57 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- CY4PEPF0000EE39.mail.protection.outlook.com (10.167.242.13) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7068.20 via Frontend Transport; Wed, 6 Dec 2023 12:35:55 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Wed, 6 Dec 2023
- 04:35:39 -0800
-Received: from yaviefel (10.126.231.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Wed, 6 Dec 2023
- 04:35:35 -0800
-References: <20231202020110.362433-1-liuhangbin@gmail.com>
- <20231202020110.362433-2-liuhangbin@gmail.com>
- <7e73dbfe6cad7d551516d02bb02881d885045498.camel@redhat.com>
-User-agent: mu4e 1.8.11; emacs 28.3
-From: Petr Machata <petrm@nvidia.com>
-To: Paolo Abeni <pabeni@redhat.com>
-CC: Hangbin Liu <liuhangbin@gmail.com>, <netdev@vger.kernel.org>, "David S.
- Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, "Eric
- Dumazet" <edumazet@google.com>, Shuah Khan <shuah@kernel.org>, David Ahern
-	<dsahern@kernel.org>, <linux-kselftest@vger.kernel.org>, Po-Hsu Lin
-	<po-hsu.lin@canonical.com>, Guillaume Nault <gnault@redhat.com>, "Petr
- Machata" <petrm@nvidia.com>, James Prestwood <prestwoj@gmail.com>, "Jaehee
- Park" <jhpark1013@gmail.com>, Ido Schimmel <idosch@nvidia.com>, "Justin
- Iurman" <justin.iurman@uliege.be>, Xin Long <lucien.xin@gmail.com>, "James
- Chapman" <jchapman@katalix.com>
-Subject: Re: [PATCHv3 net-next 01/14] selftests/net: add lib.sh
-Date: Wed, 6 Dec 2023 13:32:04 +0100
-In-Reply-To: <7e73dbfe6cad7d551516d02bb02881d885045498.camel@redhat.com>
-Message-ID: <87jzpr5x0r.fsf@nvidia.com>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7046.34; Wed, 6 Dec
+ 2023 12:44:46 +0000
+Received: from CY5PR12MB6179.namprd12.prod.outlook.com
+ ([fe80::fef2:f63d:326c:f63f]) by CY5PR12MB6179.namprd12.prod.outlook.com
+ ([fe80::fef2:f63d:326c:f63f%5]) with mapi id 15.20.7025.022; Wed, 6 Dec 2023
+ 12:44:46 +0000
+Date: Wed, 6 Dec 2023 14:44:43 +0200
+From: Ido Schimmel <idosch@nvidia.com>
+To: Hangbin Liu <liuhangbin@gmail.com>
+Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>, David Ahern <dsahern@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	Po-Hsu Lin <po-hsu.lin@canonical.com>,
+	Guillaume Nault <gnault@redhat.com>,
+	Petr Machata <petrm@nvidia.com>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Vladimir Nikishkin <vladimir@nikishkin.pw>,
+	Roopa Prabhu <roopa@nvidia.com>
+Subject: Re: [PATCH net-next 2/9] selftests/net: convert
+ test_bridge_neigh_suppress.sh to run it in unique namespace
+Message-ID: <ZXBsu7gSlFi7CsYT@shredder>
+References: <20231206070801.1691247-1-liuhangbin@gmail.com>
+ <20231206070801.1691247-3-liuhangbin@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231206070801.1691247-3-liuhangbin@gmail.com>
+X-ClientProxiedBy: FR2P281CA0027.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:14::14) To CY5PR12MB6179.namprd12.prod.outlook.com
+ (2603:10b6:930:24::22)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000EE39:EE_|BL1PR12MB5064:EE_
-X-MS-Office365-Filtering-Correlation-Id: 19022b3b-12d8-4aa0-4017-08dbf657e48a
+X-MS-TrafficTypeDiagnostic: CY5PR12MB6179:EE_|CY5PR12MB6381:EE_
+X-MS-Office365-Filtering-Correlation-Id: e697c98c-9947-4b5c-a353-08dbf65920b7
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	VOPH4jTQMS7jcjsmKEkqU/hIA8UCZfivemn0t4ZgOV+Ya0dPtpKh1F2Fwmqq5jHB9498NXEpbtulyANPNhntI0yhq4K0TFAomihQukKV8geXfhxG9+FNBnGV7hA02kyCNYMQKvm8XrM2kMFVpYXtKGjl6Lx3ILPD9DH07RSzAj4kul+f24XCj6cERihGb7CN80SP4tIlmmLPEo9zrysV2vedSLhkrcNK8IVwH3cm0Jv1qQfpOD3bkGt2Fdfy+BIA9MdW/+zzncwnayDE53YSEBrbHkxpY2fC94Y/4+RRkLcKoawvW0u85/ags7U0hy0xVSfn52mBA7sQHugcC89VazYp/WYvV6fX0GE8yhL2uysZ6/jM/a+LrhdtDK80f2RymjbGIMj/OyLBjYLi2hKYPi0ZEo9a9p+yHkrNDp3BWY5y/0Hp+PjLcCCbxzt8j+zdOJDXoXW71s8W7+C/mNxw5SbgQ5ExnIqLFW8kHEdkJQbFTyrFj2nCqeOWgfD+QRdcZXb5Ml/fUJpGqISFnV3dvsDN7ATxVBGagsmA0IXk6jgWDSGgQCKbKkoJlsOHdX+SVK94i69KL76c2ddA4ezVHYitZntVGU/iTciIDUVgrTXG0+GqUTX3OTKnK2li2YvhUioOf6MsKjYcC/w5O7TdMHY8Ua5+3FYmPcDwe2IeMSZgJoEF5UfCTOgTHgsefLCd9OztqOl7CFBhg0w4SALqwaPd0CbUrNiFbBO1eK9BxeoKZDVVpNZskz0fecJ3URei
+	YH2Y+36hwqD4eOt7GjZ8szP0feBmB8aLoJT+ZBGHabHijmYGYzOcTB9YoylK4BIj9WA9UnYMxaZ98mZjpPbePFZ8CIz0hit5YIdQTYIBg2Zy6WD3hYFaJgVPZd+hpOtbzcpvskwwuSf/VIZb66IiSNyZO4WWPdYmKKpsAjRk7UisurS4j6aZBhi2AqPgnJBmCJ5C0D0twum5IyxgDXZj9l6eaLrTgjotv8ZcV9nEn021h2Ug9pL5yYIYN0Y/wHZeFQQFJDPtXeXL0TPZ8n4wCKsGY6t2mn0WKN2yPEpT3vU0K+LOrBbMz3p/1EzT2GrkTCaX9UEyNRmdLoqheZg56l4jck9ukW6TkmmCjvw3ow9VyoYJ/v6mKacfRQsTT5OEqqYYNURwIzqyOs+w3xII9U8f3RrPkEd4j2jRA7yN9fl91kqk5GQKMSgzzoyTUsjM0x23FwjPMH3QHTF+1fKdoboGHucyC5KwlzQjlcJdscoUim+rn8PqsqKYwUML/QeNMwgaEocZc5bKYtu9rDpSJkdozFgIvXhhXoy9J3VPOlNJIBc3586J05OmEtCwUJQ5
 X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230031)(4636009)(136003)(396003)(376002)(346002)(39860400002)(230922051799003)(186009)(1800799012)(64100799003)(451199024)(82310400011)(40470700004)(46966006)(36840700001)(70206006)(6916009)(8936002)(8676002)(4326008)(70586007)(54906003)(316002)(40480700001)(40460700003)(26005)(16526019)(41300700001)(2616005)(82740400003)(5660300002)(7416002)(2906002)(478600001)(7636003)(6666004)(86362001)(47076005)(36860700001)(83380400001)(356005)(336012)(426003)(36756003)(4744005);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7916004)(346002)(366004)(136003)(376002)(396003)(39860400002)(230922051799003)(1800799012)(186009)(64100799003)(451199024)(6506007)(6486002)(107886003)(6666004)(2906002)(478600001)(8936002)(4744005)(5660300002)(54906003)(4326008)(8676002)(9686003)(6512007)(316002)(26005)(41300700001)(7416002)(86362001)(6916009)(66946007)(66476007)(33716001)(38100700002)(66556008);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?TVu/x/nuCuOPagv+qAdXm41AkbzMuDRt4Ypi9qetH1JnAFvU55Qr7G9261Gm?=
+ =?us-ascii?Q?Nq0MNEBWuWnAsCg6D1elM34zSjtNGJ1J4m+B1KyaXOvgqeHp+5m39/LAwchg?=
+ =?us-ascii?Q?E6+18LkEGCBttpkKbLpZj4+SVRM+gRRO1111LvExvkfR5bawPEj8wzZl9Zc9?=
+ =?us-ascii?Q?PsTI5fMhTfCumx3Eh8VcdokrHgGN3q0IgFE5G5P7aOWeYO5VT5wgjx7dZFVi?=
+ =?us-ascii?Q?wJJUF5JWh/efh1NqHXzgs8916CE725fzzu5ZQ6Q8RAajcNeJyABEUpjQvyUE?=
+ =?us-ascii?Q?mUXHDGXO5R7cknZm6W/LVUnp4FHqWI4p4k2ZRT66yhYrTBLw9pCTBBsB+unp?=
+ =?us-ascii?Q?HWN6XAlhWx5kSIPbXbEzsjuqlnoxR3WXIYsVGillCyEJktWrhiupRwcePLCq?=
+ =?us-ascii?Q?WrxZq33yQ2GaKvHkrk88OhaMmMW7isvR68DEmIjXFAVGSume43Hf92FBLg45?=
+ =?us-ascii?Q?tN1nohX3Y0S5nhlWRUBCRCjto/XrhfKKkwXZnmCzRERAduhuwQ+OvPBvlPjd?=
+ =?us-ascii?Q?r/3iJ3613rTd3y3nEzO9ad2iNR6gtk8vsdyNBqKSbnu2UXHFnMSCDmrIi5FX?=
+ =?us-ascii?Q?mgnB3Pw32YeUXK5iaqkcQDffsB9VTSyJW+U+0q4Ka3GnALJnSLkifY7NEU6S?=
+ =?us-ascii?Q?87qLwDZRiwVZSYie29hH+bjT9N4r4NE4kfWo0YrGFlpi8GbEuiD9k9MgZMyG?=
+ =?us-ascii?Q?Y5Di0g5x8EQWKcHex8QF2lmHHguugE7y95o4RSFSYFYCEPq+5XeuIGYGg+fq?=
+ =?us-ascii?Q?GG0xOgzXeVfbsNa2UM9aiVVBl/yePPhXdhqvTmT3noGCikSeZjHSIknvinwe?=
+ =?us-ascii?Q?G/sA044xZixcegnVS7ASzkpgLJ83gU5n28WrfbaDnE5y3SWLbBGnBGFk0bu2?=
+ =?us-ascii?Q?91V3z5FCnAKvPvy5Nkf4n6XUFK1E85Axfn3OouabTRaGK+16lpW1v3uNPbad?=
+ =?us-ascii?Q?KUBIcmjrsm4rZmbpr/3sjDYkYWqJNWkdA4PU68y4fFJSsfEoEbQohDwGCxHL?=
+ =?us-ascii?Q?mdrFVVHuz9wrhmvvM0vEpaGFlyu5eujEkuznHWSsVx+J/lrj+7Ff7gUijf0t?=
+ =?us-ascii?Q?kvhI4TB6xaDP3US1LBPhIznJQY94GW9G7wWCI7TYapjyWxVVD45wlk1pzGO6?=
+ =?us-ascii?Q?7E3+ho/7+T2JMkCKZx2kei9Xw9RB/YPGQNmx8EYp8Ru376gDVbIkbhWwRAz+?=
+ =?us-ascii?Q?P8lNig9tAtiaiHyGM4XXGiQmSIGVhA2QQyzjT0Q/vWxa1tHJZScj/I+CP7UV?=
+ =?us-ascii?Q?los8aLNfGxY4jaxKktIg57veuuJWRB5fCwV4W/OgL0WWVXn7uNZ1LoE0yc6e?=
+ =?us-ascii?Q?jATwrbwX3bkY44kPhmU5cCUhiX/9KCC48Bx6lpnmGsjY1cwdYQbFQ1P1/Fz8?=
+ =?us-ascii?Q?kfKLb+ZbGs43GG5ueMyBcqUlURb1kCQJwZWEYxQakXoWBuo4M+lyRqENGNQw?=
+ =?us-ascii?Q?5Nm/ZcG6d3vupKLAV600PALeaszL86zx9X7GTda9g3h5YWPVi7a5GpBT4rdG?=
+ =?us-ascii?Q?FmhkC1qTYW83s26U/8DgPVLsXNyCgD8U3F8648tguEtxasTPdQrwu/1aiFIE?=
+ =?us-ascii?Q?4b2HhefsdSPFji+nyT1QCef8aaeOxRaAYx+M5SfT?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Dec 2023 12:35:55.8505
+X-MS-Exchange-CrossTenant-Network-Message-Id: e697c98c-9947-4b5c-a353-08dbf65920b7
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6179.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Dec 2023 12:44:46.6143
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 19022b3b-12d8-4aa0-4017-08dbf657e48a
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CY4PEPF0000EE39.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5064
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: F8cdLfTL7/PBvtNC5BPtL1MrTbffXVxfn4KoFiaishEvWe8M2zMh8BAEQhjtjLQa0KFag7m/L3hSjxt0lGcTFQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6381
 
+On Wed, Dec 06, 2023 at 03:07:54PM +0800, Hangbin Liu wrote:
+> Here is the test result after conversion.
+> 
+> ]# ./test_bridge_neigh_suppress.sh
+> 
+> Per-port ARP suppression - VLAN 10
+> ----------------------------------
+> TEST: arping                                                        [ OK ]
+> TEST: ARP suppression                                               [ OK ]
+> 
+> ...
+> 
+> TEST: NS suppression (VLAN 20)                                      [ OK ]
+> 
+> Tests passed: 148
+> Tests failed:   0
+> 
+> Acked-by: David Ahern <dsahern@kernel.org>
+> Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
 
-Paolo Abeni <pabeni@redhat.com> writes:
-
-> Side note for a possible follow-up: if you maintain $ns_list as global
-> variable, and remove from such list the ns deleted by cleanup_ns, you
-> could remove the cleanup trap from the individual test with something
-> alike:
->
-> final_cleanup_ns()
-> {
-> 	cleanup_ns $ns_list
-> }
->
-> trap final_cleanup_ns EXIT
->
-> No respin needed for the above, could be a follow-up if agreed upon.
-
-If you propose this for the library then I'm against it. The exit trap
-is a global resource that the client scripts sometimes need to use as
-well, to do topology teardowns or just general cleanups. So either the
-library would have to provide APIs for cleanup management, or the trap
-is for exclusive use by clients. The latter is IMHO simpler.
-
-It also puts the cleanups at the same place where the acquisition is
-prompted: the client allocates the NS, the client should prompt its
-cleanup.
+Reviewed-by: Ido Schimmel <idosch@nvidia.com>
+Tested-by: Ido Schimmel <idosch@nvidia.com>
