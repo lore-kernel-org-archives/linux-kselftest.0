@@ -1,40 +1,40 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2Z8Ojc3+"
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A70CB10CB
-	for <linux-kselftest@vger.kernel.org>; Wed,  6 Dec 2023 02:37:08 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5d3a1e5f8d6so98446127b3.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 06 Dec 2023 02:37:08 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Xy4NiCIV"
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E0AD69
+	for <linux-kselftest@vger.kernel.org>; Wed,  6 Dec 2023 02:37:13 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-db7dd9a8bd6so4395946276.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 06 Dec 2023 02:37:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1701859028; x=1702463828; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1701859032; x=1702463832; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9XWOv5VjGfqn4Ye4rb6vL096BWUdHwApYaIgHelXwhw=;
-        b=2Z8Ojc3+f1h+IDCp5TfrmeRF8GsigP5YQiSIY77l2jHvzg0Q/CSwgB8/u/W+SR0+SN
-         AtBv7CX4I8zATdAILvO+i+uysAG2HJP9Kgxg1PgpxNm4g2NWOwKSX9S5i3ECOzCyB7KG
-         Jpe9s3g8ZvsyrEhpE6jNB5PVMc/88Sa2/ItrmTsSEhdYsoh4EBaVyLFP3mpQgMridE5I
-         on4mjyLL6IQlgpjQG0mG1dk5AdXC/BJr1Zr7snqx6RoDAm94qPB24kVBf/tySg4V+uew
-         8Hq7QA00cieb7ItkltuI2Jd918dEv8PWWzFgwAhnwR/Z8T0QLuj+x/t4weatrcLu+Usi
-         f+bQ==
+        bh=Puo0/IOkGZzeDNo6LANVKcztB/uZ2FwQ4rTVo9jmukU=;
+        b=Xy4NiCIVkWQjHZI12g0N2bHajZMA/cr07PnsRO0B/yUClSeECRq/6mEO9aISfKRpqz
+         sMKqEPuTZIptWUi28yRh/GagOLyowh0pz3NvHKcfNsvrXsaeStysyDZQfb6lkVio6ZdR
+         HNLw0RlnJDcBEN3xhiqqQDC6A48MflcgkeItoZh+gSlYV30kiju/qGNN666xj7o5uSC4
+         rEyFUokNkkhA93hCNcy0lphHRtof4yU6KUufzM8dQYKxyswLEUBkK1VHHq+2ACJBaeDk
+         hDphhG6Nqdrcm2JkHhSOwqZ71BqYyLA+yMYTMKbylxEullHjVCQw0qgaiitVLqp1bE4q
+         VPxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701859028; x=1702463828;
+        d=1e100.net; s=20230601; t=1701859032; x=1702463832;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9XWOv5VjGfqn4Ye4rb6vL096BWUdHwApYaIgHelXwhw=;
-        b=TyG6K8smFZNiRIYtlzfAy0DIbHbob7VC3N9gKMOoUYTREOpyPu6c6FnJfPDIKXK5nA
-         5l36hs0x5Bo0KKdttcT6I45fBzgRR6wgFEEAUzH8lYeBsjOg55zu+/5BtERg3tbakrfG
-         JFYrPKrGCOLmZiY9+Bzzgs4joGU9sguAFJ9vPvyhu5j++qqGIZ46QDmXwD5H3UU690sa
-         +JNEyjrWqlB8dunRFJoVDNuth+P1Rvsg9YP1PGAuh7nlnhk8m5TONJYIZwtknm2MPZCQ
-         TokoqKNaS4Y6RKzifectY4tF+VPCK9N2ygTW5nvhsfCJUgnyAXidpQyuMyUBR6zuJZck
-         0Y9w==
-X-Gm-Message-State: AOJu0YwcfyO3qVPkw3TE9Z+NwEfJnxed3hp8vOOs21awgOiobevbGpPp
-	kQXdZcLJQuuq30rdpsqSxdgG/zkANTg=
-X-Google-Smtp-Source: AGHT+IGCulkBJ+T0+9Lwp1vGAWeNFtPWyIYRPjeboNOQrA1z+wrU7Uo8XHJ4cQLDzSxZ9W28kHwF5PDUnGI=
+        bh=Puo0/IOkGZzeDNo6LANVKcztB/uZ2FwQ4rTVo9jmukU=;
+        b=BhAb87qZ5MovrJX5g6qWz4L+sk5v9IAyKVs2nHtOQMqzU5d4s+r9i1DsFUkbanLKwl
+         YvjwFocLzoOfAKnP/s6RKsvG5HFenlQq0Kxb3glkwVFC+1IIgWv3LrbyKf+HZGemE7xh
+         qQH/00cgFsRYZFNZ1CZFxn/hDNJa09PZHRD8wtdl3OUkUkNywINaUcgde2bv0Ewe7p8q
+         0npJLJ4fmlPMLcTwPta9hL+HVLwbrAQsYsIJibD3p7Uvzl5AosIPgr/CqlOyOUjsUJEp
+         RyATrhQbL0CtZ5gfhshn9vDGyr+Hw3jz0iSA+aZpUc6eNwLsLej+pK683FOnIzB+EJca
+         rsuw==
+X-Gm-Message-State: AOJu0Yz7nUSKCqRWNhN14jr+6In1ZwrKj5Zz2jcNWOAmlaCVL6oGoMRM
+	8u81OErxBKoNgIRkzzrA5HYpAX2T3vs=
+X-Google-Smtp-Source: AGHT+IHA1Y29L+NkSe0tx6k2aoEfMY/lNB6ALySjHtUB1ExXnuX9TN8ZY2Jn+/kFOMbKEKZSCPu3KGAmWc0=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:73f6:b5e2:415:6ba5])
- (user=surenb job=sendgmr) by 2002:a25:7690:0:b0:db4:6936:48b7 with SMTP id
- r138-20020a257690000000b00db4693648b7mr5580ybc.2.1701859027736; Wed, 06 Dec
- 2023 02:37:07 -0800 (PST)
-Date: Wed,  6 Dec 2023 02:36:55 -0800
+ (user=surenb job=sendgmr) by 2002:a25:3144:0:b0:da0:5452:29e4 with SMTP id
+ x65-20020a253144000000b00da0545229e4mr5930ybx.0.1701859032195; Wed, 06 Dec
+ 2023 02:37:12 -0800 (PST)
+Date: Wed,  6 Dec 2023 02:36:57 -0800
 In-Reply-To: <20231206103702.3873743-1-surenb@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -44,8 +44,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20231206103702.3873743-1-surenb@google.com>
 X-Mailer: git-send-email 2.43.0.rc2.451.g8631bc7472-goog
-Message-ID: <20231206103702.3873743-2-surenb@google.com>
-Subject: [PATCH v6 1/5] mm/rmap: support move to different root anon_vma in folio_move_anon_rmap()
+Message-ID: <20231206103702.3873743-4-surenb@google.com>
+Subject: [PATCH v6 3/5] selftests/mm: call uffd_test_ctx_clear at the end of
+ the test
 From: Suren Baghdasaryan <surenb@google.com>
 To: akpm@linux-foundation.org
 Cc: viro@zeniv.linux.org.uk, brauner@kernel.org, shuah@kernel.org, 
@@ -59,86 +60,92 @@ Cc: viro@zeniv.linux.org.uk, brauner@kernel.org, shuah@kernel.org,
 	linux-kselftest@vger.kernel.org, kernel-team@android.com
 Content-Type: text/plain; charset="UTF-8"
 
-From: Andrea Arcangeli <aarcange@redhat.com>
+uffd_test_ctx_clear() is being called from uffd_test_ctx_init() to unmap
+areas used in the previous test run. This approach is problematic because
+while unmapping areas uffd_test_ctx_clear() uses page_size and nr_pages
+which might differ from one test run to another.
+Fix this by calling uffd_test_ctx_clear() after each test is done.
 
-For now, folio_move_anon_rmap() was only used to move a folio to a
-different anon_vma after fork(), whereby the root anon_vma stayed
-unchanged. For that, it was sufficient to hold the folio lock when
-calling folio_move_anon_rmap().
-
-However, we want to make use of folio_move_anon_rmap() to move folios
-between VMAs that have a different root anon_vma. As folio_referenced()
-performs an RMAP walk without holding the folio lock but only holding the
-anon_vma in read mode, holding the folio lock is insufficient.
-
-When moving to an anon_vma with a different root anon_vma, we'll have to
-hold both, the folio lock and the anon_vma lock in write mode.
-Consequently, whenever we succeeded in folio_lock_anon_vma_read() to
-read-lock the anon_vma, we have to re-check if the mapping was changed
-in the meantime. If that was the case, we have to retry.
-
-Note that folio_move_anon_rmap() must only be called if the anon page is
-exclusive to a process, and must not be called on KSM folios.
-
-This is a preparation for UFFDIO_MOVE, which will hold the folio lock,
-the anon_vma lock in write mode, and the mmap_lock in read mode.
-
-Signed-off-by: Andrea Arcangeli <aarcange@redhat.com>
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-Acked-by: Peter Xu <peterx@redhat.com>
+Reviewed-by: Peter Xu <peterx@redhat.com>
+Reviewed-by: Axel Rasmussen <axelrasmussen@google.com>
 ---
- mm/rmap.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ tools/testing/selftests/mm/uffd-common.c     | 4 +---
+ tools/testing/selftests/mm/uffd-common.h     | 1 +
+ tools/testing/selftests/mm/uffd-stress.c     | 5 ++++-
+ tools/testing/selftests/mm/uffd-unit-tests.c | 1 +
+ 4 files changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/mm/rmap.c b/mm/rmap.c
-index 7a27a2b41802..525c5bc0b0b3 100644
---- a/mm/rmap.c
-+++ b/mm/rmap.c
-@@ -542,6 +542,7 @@ struct anon_vma *folio_lock_anon_vma_read(struct folio *folio,
- 	struct anon_vma *root_anon_vma;
- 	unsigned long anon_mapping;
+diff --git a/tools/testing/selftests/mm/uffd-common.c b/tools/testing/selftests/mm/uffd-common.c
+index 02b89860e193..583e5a4cc0fd 100644
+--- a/tools/testing/selftests/mm/uffd-common.c
++++ b/tools/testing/selftests/mm/uffd-common.c
+@@ -262,7 +262,7 @@ static inline void munmap_area(void **area)
+ 	*area = NULL;
+ }
  
-+retry:
- 	rcu_read_lock();
- 	anon_mapping = (unsigned long)READ_ONCE(folio->mapping);
- 	if ((anon_mapping & PAGE_MAPPING_FLAGS) != PAGE_MAPPING_ANON)
-@@ -552,6 +553,17 @@ struct anon_vma *folio_lock_anon_vma_read(struct folio *folio,
- 	anon_vma = (struct anon_vma *) (anon_mapping - PAGE_MAPPING_ANON);
- 	root_anon_vma = READ_ONCE(anon_vma->root);
- 	if (down_read_trylock(&root_anon_vma->rwsem)) {
-+		/*
-+		 * folio_move_anon_rmap() might have changed the anon_vma as we
-+		 * might not hold the folio lock here.
-+		 */
-+		if (unlikely((unsigned long)READ_ONCE(folio->mapping) !=
-+			     anon_mapping)) {
-+			up_read(&root_anon_vma->rwsem);
-+			rcu_read_unlock();
-+			goto retry;
+-static void uffd_test_ctx_clear(void)
++void uffd_test_ctx_clear(void)
+ {
+ 	size_t i;
+ 
+@@ -298,8 +298,6 @@ int uffd_test_ctx_init(uint64_t features, const char **errmsg)
+ 	unsigned long nr, cpu;
+ 	int ret;
+ 
+-	uffd_test_ctx_clear();
+-
+ 	ret = uffd_test_ops->allocate_area((void **)&area_src, true);
+ 	ret |= uffd_test_ops->allocate_area((void **)&area_dst, false);
+ 	if (ret) {
+diff --git a/tools/testing/selftests/mm/uffd-common.h b/tools/testing/selftests/mm/uffd-common.h
+index 7c4fa964c3b0..870776b5a323 100644
+--- a/tools/testing/selftests/mm/uffd-common.h
++++ b/tools/testing/selftests/mm/uffd-common.h
+@@ -105,6 +105,7 @@ extern uffd_test_ops_t *uffd_test_ops;
+ 
+ void uffd_stats_report(struct uffd_args *args, int n_cpus);
+ int uffd_test_ctx_init(uint64_t features, const char **errmsg);
++void uffd_test_ctx_clear(void);
+ int userfaultfd_open(uint64_t *features);
+ int uffd_read_msg(int ufd, struct uffd_msg *msg);
+ void wp_range(int ufd, __u64 start, __u64 len, bool wp);
+diff --git a/tools/testing/selftests/mm/uffd-stress.c b/tools/testing/selftests/mm/uffd-stress.c
+index 469e0476af26..7e83829bbb33 100644
+--- a/tools/testing/selftests/mm/uffd-stress.c
++++ b/tools/testing/selftests/mm/uffd-stress.c
+@@ -323,8 +323,10 @@ static int userfaultfd_stress(void)
+ 		uffd_stats_reset(args, nr_cpus);
+ 
+ 		/* bounce pass */
+-		if (stress(args))
++		if (stress(args)) {
++			uffd_test_ctx_clear();
+ 			return 1;
 +		}
-+
- 		/*
- 		 * If the folio is still mapped, then this anon_vma is still
- 		 * its anon_vma, and holding the mutex ensures that it will
-@@ -586,6 +598,18 @@ struct anon_vma *folio_lock_anon_vma_read(struct folio *folio,
- 	rcu_read_unlock();
- 	anon_vma_lock_read(anon_vma);
  
-+	/*
-+	 * folio_move_anon_rmap() might have changed the anon_vma as we might
-+	 * not hold the folio lock here.
-+	 */
-+	if (unlikely((unsigned long)READ_ONCE(folio->mapping) !=
-+		     anon_mapping)) {
-+		anon_vma_unlock_read(anon_vma);
-+		put_anon_vma(anon_vma);
-+		anon_vma = NULL;
-+		goto retry;
-+	}
-+
- 	if (atomic_dec_and_test(&anon_vma->refcount)) {
- 		/*
- 		 * Oops, we held the last refcount, release the lock
+ 		/* Clear all the write protections if there is any */
+ 		if (test_uffdio_wp)
+@@ -354,6 +356,7 @@ static int userfaultfd_stress(void)
+ 
+ 		uffd_stats_report(args, nr_cpus);
+ 	}
++	uffd_test_ctx_clear();
+ 
+ 	return 0;
+ }
+diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
+index 2709a34a39c5..e7d43c198041 100644
+--- a/tools/testing/selftests/mm/uffd-unit-tests.c
++++ b/tools/testing/selftests/mm/uffd-unit-tests.c
+@@ -1319,6 +1319,7 @@ int main(int argc, char *argv[])
+ 				continue;
+ 			}
+ 			test->uffd_fn(&args);
++			uffd_test_ctx_clear();
+ 		}
+ 	}
+ 
 -- 
 2.43.0.rc2.451.g8631bc7472-goog
 
