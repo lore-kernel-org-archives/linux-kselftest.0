@@ -1,145 +1,150 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B701C41840;
-	Wed,  6 Dec 2023 18:24:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s/YlAtrR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AF45C433C8;
-	Wed,  6 Dec 2023 18:24:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701887076;
-	bh=4ociTYjLoBrdbSLdAVJ6LzCaO53NQDE26UM1o9IZWZg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=s/YlAtrRmhrOz+dFkqxppDDn4K8as+geagP17kHHEvfOK0G7t80W7bf6IQ+OPfpsf
-	 lZGBvYzkhbsLel8sAoRPlHGaNyIdiu9QLUsiWWyq1bHqrJOql8doifcUt3iDn5xeXt
-	 nEWqo4cuOFsBmoLzBvCXmtJWmpBzThD6CjI9GO8feB+bn/blEyhK3N8qi+XFw6eAYF
-	 LTtwk1Cj0pIJTy5OJTWCjlq9u4XKeOoR1O4oF66Ciz9hCs6paeWX7BIC4DrXC7FnD3
-	 +McORAGD0rvebh34P2oPjP6a9ufDbCaSyKMZ3ttn7cA3NQ0YcQNa/ORu5/Wlr46tO0
-	 Hab1jL6pQKfDA==
-Date: Wed, 6 Dec 2023 18:24:27 +0000
-From: Mark Brown <broonie@kernel.org>
-To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc: "dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>,
-	"keescook@chromium.org" <keescook@chromium.org>,
-	"shuah@kernel.org" <shuah@kernel.org>,
-	"brauner@kernel.org" <brauner@kernel.org>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"debug@rivosinc.com" <debug@rivosinc.com>,
-	"mgorman@suse.de" <mgorman@suse.de>,
-	"Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
-	"fweimer@redhat.com" <fweimer@redhat.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"mingo@redhat.com" <mingo@redhat.com>,
-	"hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-	"rostedt@goodmis.org" <rostedt@goodmis.org>,
-	"vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
-	"tglx@linutronix.de" <tglx@linutronix.de>,
-	"vschneid@redhat.com" <vschneid@redhat.com>,
-	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-	"bristot@redhat.com" <bristot@redhat.com>,
-	"will@kernel.org" <will@kernel.org>,
-	"hpa@zytor.com" <hpa@zytor.com>,
-	"peterz@infradead.org" <peterz@infradead.org>,
-	"jannh@google.com" <jannh@google.com>,
-	"bp@alien8.de" <bp@alien8.de>,
-	"bsegall@google.com" <bsegall@google.com>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-	"x86@kernel.org" <x86@kernel.org>,
-	"juri.lelli@redhat.com" <juri.lelli@redhat.com>
-Subject: Re: [PATCH RFT v4 2/5] fork: Add shadow stack support to clone3()
-Message-ID: <e3019fc3-3b52-4067-973a-83a2b0e5ae2f@sirena.org.uk>
-References: <20231128-clone3-shadow-stack-v4-0-8b28ffe4f676@kernel.org>
- <20231128-clone3-shadow-stack-v4-2-8b28ffe4f676@kernel.org>
- <61f80d032c6a630dd641c9b598b37c2eb40d51e8.camel@intel.com>
- <ed665d6f-66b0-4eeb-8cf8-db852e017d6a@sirena.org.uk>
- <47bb581c20010552615125fce63e3c5c49d1c690.camel@intel.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Av/p3BCX"
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2048.outbound.protection.outlook.com [40.107.94.48])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B198ED40;
+	Wed,  6 Dec 2023 10:32:13 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YfnBocwpyoOv+GCpWbasZuhvxvEFly9vX2MMlyEkXorF8VPaMJOMxwHnFmlx6/RvBgUxy7rZ+wIuD4LNBry/QdGgBikw/EDItQwWzQcgTrULQcVtZzdw+a7u/zZTsa5I3GQ3TkOS9qLSYoNmorsrfupgxWm+7yLs1TjEg/g8QJgMX2cDbcNrvsVsnvBvGXF7ArpD/gnLVxhMQll6Xp24rpisY6+I1AfsVvxFOVQmKLZtzz5IbG8JoB/ryA3J97e3HmivvLegu46tmPjsdIUCXK/Bn2tD8xWb7T3lSGmtvP0s2s3mk60F/5xGDE9zYuErqKrLgqVg0FXAv2uW/Nf3+Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ASEAT9jBmCqkBackiVAIXVBcP11rwrA5tTsX4oQ88rQ=;
+ b=gqKcH5bSxUnFU/2lvVXAok+l26kTq8vc+apQeWU+y+s0Id4dk4aNfhDZ1X8LfAYjfsGNYm83FiH9sT71ZJ1BoAudXa4s3KRuuzcUvU2IwejNPpmzeOBMuaOvKrQdGsp31Judxr1GKuTmvD5Wl1Hud1dNoWUsxC4M1Ma9raRsM+X0M89NS5CMadxe5bZX9Z5EV2UBn4HhhfI0K+pMs5d2XmmBz9mZPAxWhgXN6aZe+zhV37NKudUCY45bOdGU3EBoiRkKDP8nbLauhEtK3F4nVQ5K8eUvDu+SYQJo8lINMRtejqmYEkFp1WEg3KTq+mnofwdagESYGzI7Wj8i6JC0Vg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ASEAT9jBmCqkBackiVAIXVBcP11rwrA5tTsX4oQ88rQ=;
+ b=Av/p3BCXrDdgD+JN6uC+X531+lAsp4H5nN06duuJ6duVmYRDJEfPB0FgYuxyEjygqpySSnKvPGgO/Y12Irzp9eQnfGVH9V7kuXOk3TokcMaeiHI2YNU3ZP2u0X18Uk/AxQnatkVUgeY5tjmgLocZCVVn+7G3/4qjFBJUkD1wRc4AppYVtqNpxmg6uV7dybuPFOUtt0xQYiC/SXZVknKZqEFAxQBb7u9biePB/CyyR1Hg+1PgBcnKOo+gdUiV1V957DVnUiDTduNnENvJ4iIHQiKhOqszGEJnBXp5LgoTWAVTGjCR2y+kZzat53fxWcGDturTlKcwkh55Uff9YtOTYA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by SN7PR12MB8026.namprd12.prod.outlook.com (2603:10b6:806:34b::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7068.25; Wed, 6 Dec
+ 2023 18:32:11 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::60d4:c1e3:e1aa:8f93]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::60d4:c1e3:e1aa:8f93%4]) with mapi id 15.20.7046.034; Wed, 6 Dec 2023
+ 18:32:10 +0000
+Date: Wed, 6 Dec 2023 14:32:09 -0400
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Yi Liu <yi.l.liu@intel.com>
+Cc: joro@8bytes.org, alex.williamson@redhat.com, kevin.tian@intel.com,
+	robin.murphy@arm.com, baolu.lu@linux.intel.com, cohuck@redhat.com,
+	eric.auger@redhat.com, nicolinc@nvidia.com, kvm@vger.kernel.org,
+	mjrosato@linux.ibm.com, chao.p.peng@linux.intel.com,
+	yi.y.sun@linux.intel.com, peterx@redhat.com, jasowang@redhat.com,
+	shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
+	suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	zhenzhong.duan@intel.com, joao.m.martins@oracle.com,
+	xin.zeng@intel.com, yan.y.zhao@intel.com
+Subject: Re: [PATCH v6 1/6] iommu: Add cache_invalidate_user op
+Message-ID: <20231206183209.GZ2692119@nvidia.com>
+References: <20231117130717.19875-1-yi.l.liu@intel.com>
+ <20231117130717.19875-2-yi.l.liu@intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231117130717.19875-2-yi.l.liu@intel.com>
+X-ClientProxiedBy: MN2PR16CA0047.namprd16.prod.outlook.com
+ (2603:10b6:208:234::16) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="MP7fcSpsVuqtyKiU"
-Content-Disposition: inline
-In-Reply-To: <47bb581c20010552615125fce63e3c5c49d1c690.camel@intel.com>
-X-Cookie: From concentrate.
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|SN7PR12MB8026:EE_
+X-MS-Office365-Filtering-Correlation-Id: 960c16b9-eb15-44bb-42aa-08dbf689a8d0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	6gY6ubHI8USWvvZlyy6CxhpQV9hisXYLeHyMe7IDYA+CX3bLcYKoSlqh9mWgJIBhCv0+z4u1a0PO5A+FAgH7GGPmwbBdySJTRMr7HRVkW7qXbFtgTexNV5uAc57d7CrnKkm80XpTGxvRry9OWHk4seRYE7Hm4xOxvYEjl0W3/E55Yqw4Jn6lsd4rSWiv6hC4f6Ao6yKZcrCtCLHox/yImiIhw19ThhoI0HNfkDefrmexW27AEcyc7aEzvd/wZasCXQpp25zH8aDpudfz3VdIMaUk49AZTjPoekCZyBpMqB0xSQyy3BNNdIOnjXr4xzi0TXuC2HZpkzigDXnz0IDN5hpNINZZy7hFJl5tZWwZN6KnmfHu2686sKIP+MXN5Twyg4dqSUYGHFBQF3snJtjgD4RTTpmavwcQUASDXTl13/Z22fnULbXqjlgBMI6r6j+c5p19CqsYbLsCVlUBZNf9xcoF2GCE4dCuzpzFloxcpBKWWspudwJRb2sqym2iLpWqzg78NL096W3Co1qTktD99CALZz7krmcybPuxHyei3Psv369GezFYzKN2WgbmGmF5
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(376002)(136003)(396003)(346002)(366004)(230922051799003)(1800799012)(186009)(64100799003)(451199024)(33656002)(2906002)(7416002)(5660300002)(36756003)(41300700001)(86362001)(4326008)(8676002)(8936002)(316002)(6916009)(66476007)(66556008)(66946007)(38100700002)(6486002)(478600001)(1076003)(83380400001)(6506007)(26005)(6512007)(2616005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?IjFjst8kbYA9JuEeFxcLYS8g6EVpM2dhnqp9VKRdq9whttMELOOXbgRebHk2?=
+ =?us-ascii?Q?dl9LLHcPxfsBtZnl43PNoQR70Gk1tQGO2IAn3PLfhE5mLXX+SdA4Lmz0/pVv?=
+ =?us-ascii?Q?EnspZuiCkxnnB6yAcEJ/RzWf8M8eAWJwHwxrilUSx2lgCRjNxt6Xr4G45egB?=
+ =?us-ascii?Q?k7xd6Ujr8zUtcczsvPpTNXV87M0CyFV/EGevbr4yEb+eaUnfa6gk1xxAwywQ?=
+ =?us-ascii?Q?ojcAT8+N8GDx3eiXwifvYigAH+srJNwo+LwqEciaZv0Yf6uYt73LxNKOnpuQ?=
+ =?us-ascii?Q?yiGeZdUX2Br86ksfsQki14/b2PO1zEROnD0Tx03Uv3lCixt79iPSMCAQsNHs?=
+ =?us-ascii?Q?afr1epxeeNfiolNOmYTJrQ3XbUDEXIegTSywvDbX31lY3WQa/k1p7Fnkr3ja?=
+ =?us-ascii?Q?LrOkHYT0GP/KLtFExrdqpvOtMYn9hlTVXc5slof9MG1sMJvavspMHM32YNth?=
+ =?us-ascii?Q?oqZdNrgP42VBHxCbZmBuLNo5isrANCjp0oGPiUx9WLlJcC7uffC002OhXeWU?=
+ =?us-ascii?Q?7aQrnsEzWYlIDztfjnKSmKAPMGBvGS9qq7F48sUqn2cYj09JTncPAZEUlR5Z?=
+ =?us-ascii?Q?OfHZN+Y7OiKLDaFLOf3EjsQ/BznqvRYGyjyTBIwaJGL06JJINhypa4cFp/l+?=
+ =?us-ascii?Q?t3b1MtCdp9RsrfwaFKPs92sjct/WTIz8yG23G+oSQMhAE9t8HutiFJLyC0ME?=
+ =?us-ascii?Q?i/tEMNFuKSQ4Sz8Kad5/IJJ3+FcBuU8tiSFBnmS6Ha5kh+ZK+GH3udTLWbvt?=
+ =?us-ascii?Q?+VilkZeFtI3m3J6rGRbEJHtZ85Fp3uKw3RK8qWpvygCcWxT18YbKsi0nz6zZ?=
+ =?us-ascii?Q?M49JkTUZJsID30QjV6KYQbbzf/6sTWiZesPSuy4LmKxjGz1Jqw7hCqIC32dH?=
+ =?us-ascii?Q?KCI+AfDNrCGXmAF/0FZ2JjGEhFenfjuwZO79NTrTGAiI0inPW7KUPsg82BWz?=
+ =?us-ascii?Q?gx17RMHK+gd72HIm9DxDugRowH7yVQCJ7VcjROx8m1bc0eVwA/4Nujy1xzbi?=
+ =?us-ascii?Q?1dGnmEtpQC7VPM5inoIWYr1sygWPzhI5IE1iD9PBJ3Ad2jQLpT1bPpaX5rJM?=
+ =?us-ascii?Q?4jo9D02iuTIFfOixeBPdXuKDSjTStWKFdCL33Oto5FPwG/D2g/qG56saD/lM?=
+ =?us-ascii?Q?LGKj3zoRUuINOAqj0etMPIzCF//qqwX1SefWCKBYZRt5ml3IA1Nv4n4XsUa3?=
+ =?us-ascii?Q?RDfK8OJMHGbpCOaLbu/SimMbPMNThGLAXri4X29aBCz8Sthvdql1e+bKUt1P?=
+ =?us-ascii?Q?8CaNIDdLkkBGhycSeuO0iTNJifcubzStAPiLjsaYR5fpS5ZNrJGMYn3/I8LJ?=
+ =?us-ascii?Q?Pqp8wR+GpIekOfpdlCH3T+F6iJnfMqjKafejtgh0xLqs29JhGCVUAogt7Twg?=
+ =?us-ascii?Q?k/1CyrAwW5sQud0aBDoMQPGgx2CVCOoTGkN0dljqWl6qVFyhtq3Zg06Rk4SS?=
+ =?us-ascii?Q?Ys8gJjlspCnWKVR3Hs+/7bbYapKaqKoK+RY/RLQJ29gZmKnOCfaC1JwHei3A?=
+ =?us-ascii?Q?rzdSDstqt4HrlH6HttLpW7ShCf9agvGgEn4msYJ/Q0209UkQ5hBZyHsJUl2p?=
+ =?us-ascii?Q?8S7Hx5JCl2whaOiTtOMoEEC/bi8eObYrNxHW5WpL?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 960c16b9-eb15-44bb-42aa-08dbf689a8d0
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Dec 2023 18:32:10.7675
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: JXuEgBsvmQCTAQ4SAc5Omd8oO1lRJERSU09BfYR0JiuLIrRXO2lEhNyuJPGNaai3
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB8026
 
+On Fri, Nov 17, 2023 at 05:07:12AM -0800, Yi Liu wrote:
+> +/**
+> + * struct iommu_user_data_array - iommu driver specific user space data array
+> + * @type: The data type of all the entries in the user buffer array
+> + * @uptr: Pointer to the user buffer array for copy_from_user()
+> + * @entry_len: The fixed-width length of a entry in the array, in bytes
+> + * @entry_num: The number of total entries in the array
+> + *
+> + * A array having a @entry_num number of @entry_len sized entries, each entry is
+> + * user space data, an uAPI defined in include/uapi/linux/iommufd.h where @type
+> + * is also defined as enum iommu_xyz_data_type.
+> + */
+> +struct iommu_user_data_array {
+> +	unsigned int type;
+> +	void __user *uptr;
+> +	size_t entry_len;
+> +	int entry_num;
 
---MP7fcSpsVuqtyKiU
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+These are u32 in the uapi, they should probably be u32 here
+too. Otherwise we have to worry about truncation.
 
-On Tue, Dec 05, 2023 at 10:23:08PM +0000, Edgecombe, Rick P wrote:
-> On Tue, 2023-12-05 at 15:51 +0000, Mark Brown wrote:
+> @@ -465,6 +492,9 @@ struct iommu_domain_ops {
+>  			      size_t size);
+>  	void (*iotlb_sync)(struct iommu_domain *domain,
+>  			   struct iommu_iotlb_gather *iotlb_gather);
+> +	int (*cache_invalidate_user)(struct iommu_domain *domain,
+> +				     struct iommu_user_data_array *array,
+> +				     u32 *error_code);
 
-> > Hrm, right.=A0 And we then can't use do_mmap() either.=A0 I'd be somewh=
-at
-> > tempted to disallow that specific case for now rather than deal with
-> > it
-> > though that's not really in the spirit of just always following what
-> > the
-> > user asked for.
+Regarding the other conversation I worry a u32 error_code is too small.
 
-> Oh, yea. What a pain. It doesn't seem like we could easily even add a
-> do_mmap() variant that takes an mm either.
+Unfortunately there is no obvious place to put something better so if
+we reach it we will have to add more error_code space via normal
+extension.
 
-> I did a quick logging test on a Fedora userspace. systemd (I think)
-> appears to do a clone(!CLONE_VM) with a stack passed. So maybe the
-> combo might actually get used with a shadow_stack_size if it used
-> clone3 some day. At the same time, fixing clone to mmap() in the child
-> doesn't seem straight forward at all. Checking with some of our MM
-> folks, the suggestion was to look at doing the child's shadow stack
-> mapping in dup_mm() to avoid tripping over complications that happen
-> when a remote MM becomes more "live".
+Maybe expand this to u64? That is 64 bits of error register data and
+the consumer index. It should do for SMMUv3 at least?
 
-Yeah, I can't see anything that looks particularly tasteful.
-
-> If we just punt on this combination for now, then the documented rules
-> for args->shadow_stack_size would be something like:
-> clone3 will use the parents shadow stack when CLONE_VM is not present.
-> If CLONE_VFORK is set then it will use the parents shadow stack only
-> when args->shadow_stack_size is non-zero. In the cases when the parents
-> shadow stack is not used, args->shadow_stack_size is used for the size
-> whenever non-zero.
-
-> I guess it doesn't seem too overly complicated. But I'm not thinking
-> any of the options seem great. I'd unhappily lean towards not
-
-Indeed, it's all really hard to get enthusiastic about.
-
-> supporting shadow_stack_size!=3D0 && !CLONE_VM for now. But it seems like
-> there may be a user for the unsupported case, so this would be just
-> improving things a little and kicking the can down the road. I also
-> wonder if this is a sign to reconsider the earlier token consuming
-> design.
-
-In the case where we have !CLONE_VM it should actually possible to reuse
-the token (since the user is in at least some sense the child process
-rather than the parent) so it's less pure overhead, providing you don't
-mind the children of a given parent all using the same addresses for
-their initial shadow stack.
-
-I'll have a poke at the various options and come up with something,
-hopefully this month but it's getting a bit busy so might be early=20
-next year instead.
-
---MP7fcSpsVuqtyKiU
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmVwvFoACgkQJNaLcl1U
-h9BjkQf+IKy3MFuF8lImmAni+DxdD+Kaebr+6cdjuI4Q8xYb1rhMSU/IXfh6GAfk
-9J2Fh673QpD3E871HljnXRD2XdevWJxeJjIz2y7vjYVelcrHS71vjvH/mxIJN4We
-gS9enoXEJNwqWyssqMBIUnwGD+kWNs7wvz4cKhRSc1hNd6q7IWCJVGYwOjsoI9/c
-8gaf+t7lMSgrVaWOgkAHafhXfo3yfWfzpDhYBJ9B29gfVpUlQOyvwASElNWyPnUR
-Mgkw1SbfuSxCloqVgZBMq5/kuSg5wCAeyTKtPNkXh3Lxq8/7wIDzb3ioe/Vt0lnr
-m5vMJhWEJhg2/P2arPbdNwZHuwxP4A==
-=WH48
------END PGP SIGNATURE-----
-
---MP7fcSpsVuqtyKiU--
+Jason
