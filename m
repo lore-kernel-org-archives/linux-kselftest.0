@@ -1,350 +1,133 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mKG3LIYS"
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C295519A6
-	for <linux-kselftest@vger.kernel.org>; Thu,  7 Dec 2023 16:53:26 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5d1b2153ba1so15609217b3.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 07 Dec 2023 16:53:26 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kylehuey.com header.i=@kylehuey.com header.b="ejYjWszr"
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701DA1708
+	for <linux-kselftest@vger.kernel.org>; Thu,  7 Dec 2023 17:08:49 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-54cdef4c913so5558387a12.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 07 Dec 2023 17:08:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1701996806; x=1702601606; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MQeyU/Au+VHoLC/CemSxB4TP3xyLB5qWh0DnEWyEst8=;
-        b=mKG3LIYSvgUaZXWqG3b0c+K1M73nhULqOdoFoCOgyTKk66VBWzbX96bgjj6q2coEaB
-         +alO1hqSD/lN3OsaBmALW4aN/tPw1MVkUDbOCh4T2mdmCu1uNA90oIUd9rQSly0q8ySC
-         8F3adQtYkoDGvOFufA+3Ig4bABNF5tDVnew6MHT3sdge26xEWlNaMlGfYhzXcLSBKgLe
-         ur51g6f3iPQT8ses4LqLU3GkMuxWErC6QeP/+h+Nqk+DxPq5JR0KvlUq2R0WuIwOggHy
-         GfqR22DwgU5QoDj18nEnB80rCnzSG39OeKXJby62ESV6fqAgVpSL8isnufEvZn5hEtay
-         nmUw==
+        d=kylehuey.com; s=google; t=1701997728; x=1702602528; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VamHLYhm2WN9bmNhjuvgJGDIjabCdh/6ajHFYfLgx48=;
+        b=ejYjWszroPKefIQq2C/zoAAx6MRQ2r9FgeGnRe4IW20UY3wad7kf2YyUJgYMSvG6ep
+         UAqCPY+xzvI5W8w1+TCZ1Cnt4lXP7kDh5sZtX/kR8Mg7f1EfrlSzDlr9pcAilMum1edu
+         biwqYAxa8aWZQPbu09pEgpJ2MKc9m44ev24ld04BFx/G7/oXfdc3+3J5YtiVeMTLJPjb
+         DmtO9v1uXM7cZThTsgQoWxmbPICfMIrt8IK3AYpLXk9eu3tb3NbtmN2MqKiBBQU+RDhf
+         B9DUeBrDIPPj/sMNwHdbOM3Be2WqL16BvgqOnVA2s2rLfF1Os8HgiFKC+HJWnhK2+pTw
+         VVQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701996806; x=1702601606;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MQeyU/Au+VHoLC/CemSxB4TP3xyLB5qWh0DnEWyEst8=;
-        b=PbNQ8LX9ZqISoJWZdxO203KREy8pVWS8SeOrQqneh7swKXOnFWDAx0bIUwz5qmneQL
-         Xds4C7s73wbMB7BeBLfe52WWF1VrbterB6iKt7Zx/omjCDsAx9pA5khzlfAtgds7UmsH
-         3pP/bAxIRuvM/McBrbcaBsKh+6Zqxgh4uBVsWc94zTFg9F+4PfqN/Fyf/cICth006iN8
-         BnC4m4hZbEPayicY32gup85cLk3SwniV013GLfkM5I2FUXO4Usjeq8in8qFZ37HP2EgG
-         PZhuvwo3PoyGthwwMZGsgVHBcSZtiTl7W4N6sgBW/uLSvZHyCG6O7Gd5Cn5KGQIZbbH8
-         gfJg==
-X-Gm-Message-State: AOJu0YyqaZlqkS6fzPL9rCCWG4YMYo0FE34tvqrKq+MvLRFuiC1AYH9t
-	4bt/GCSYIvBKwQiz+vCkzO9jw4laUfdGBPRT5g==
-X-Google-Smtp-Source: AGHT+IHt3wwGkchwXhPhT37gTHEvIsDNafI3WUhVSez2SisoNvaCQ5bo+W5UfTLYNq1JGlEeDbEiQP2vFK68XfT9/w==
-X-Received: from almasrymina.svl.corp.google.com ([2620:15c:2c4:200:f1cf:c733:235b:9fff])
- (user=almasrymina job=sendgmr) by 2002:a05:690c:844:b0:5d6:cb62:4793 with
- SMTP id bz4-20020a05690c084400b005d6cb624793mr51347ywb.0.1701996806041; Thu,
- 07 Dec 2023 16:53:26 -0800 (PST)
-Date: Thu,  7 Dec 2023 16:52:46 -0800
-In-Reply-To: <20231208005250.2910004-1-almasrymina@google.com>
+        d=1e100.net; s=20230601; t=1701997728; x=1702602528;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VamHLYhm2WN9bmNhjuvgJGDIjabCdh/6ajHFYfLgx48=;
+        b=G6wBgrTdmCN4Q4fervOD9/NJihSH2QTkMIcazaX/63KBeD9DmaaGGRoB4+JorVFc5O
+         c4jCuV0tbg/2mEuelCFaxZ2j//AulUwczjZ+pydo0jBtWroeRNzAq0DKTE0E9ruB8DBh
+         EUJ/Lhkb66JNoAsfPI8TdODQ+UJZhoh0u2bTWHkMZO7WtFCgls5mC0AXLInPqahtptT1
+         1wRfEl+dOFz8XKxf8XVvjoiJjSNLH9Re3TJDn/zSzL4vLfCJdvQ0p8UcJ2Y/UwEjsubv
+         sNcWSkBecLb8PJV3+sUm1h1aXdR7znQ7EauSSjovAedl4TpDLlK44Zkt0kPcV+gT1FZE
+         ktuQ==
+X-Gm-Message-State: AOJu0YymtaPo6Au7r9qL4FAbgmgoQJsLUBLaTFOMVqKB+r62iIcC3Ys9
+	WvB08MM44zUp+/Y0A2fkuz/7tFeclt2UsyS9YmoQLw==
+X-Google-Smtp-Source: AGHT+IFKUFLgG+i0vqmy2QpCsmJ0GjKYQVijPT5fXBQGzBPdhFPbsiYoNVD7utCVpONzjpvzfQo5fozF4NZ/wqCYbqQ=
+X-Received: by 2002:a17:906:1c1:b0:9a9:f0e6:904e with SMTP id
+ 1-20020a17090601c100b009a9f0e6904emr90727ejj.16.1701997727789; Thu, 07 Dec
+ 2023 17:08:47 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20231208005250.2910004-1-almasrymina@google.com>
-X-Mailer: git-send-email 2.43.0.472.g3155946c3a-goog
-Message-ID: <20231208005250.2910004-16-almasrymina@google.com>
-Subject: [net-next v1 15/16] net: add devmem TCP documentation
-From: Mina Almasry <almasrymina@google.com>
-To: Shailend Chand <shailend@google.com>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org
-Cc: Mina Almasry <almasrymina@google.com>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Jeroen de Borst <jeroendb@google.com>, 
-	Praveen Kaligineedi <pkaligineedi@google.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Arnd Bergmann <arnd@arndb.de>, 
-	David Ahern <dsahern@kernel.org>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
-	Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>, 
-	"=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>, Yunsheng Lin <linyunsheng@huawei.com>, 
-	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeelb@google.com>
+MIME-Version: 1.0
+References: <20231207163458.5554-1-khuey@kylehuey.com> <20231207163458.5554-4-khuey@kylehuey.com>
+ <CAEf4Bzbt1abnfj2w6Hmp2w8SqVkQiCW=SimY6ss_Jp_325QyoA@mail.gmail.com>
+ <CANpmjNOLojXk64jvwD+m19B+FsR5MuBwWKv95uakq-Dp1_AGXA@mail.gmail.com> <CAP045AoeVP=n5K+0jt2ddBspif7kx4hzOdBM86CuxNGRCgx4VA@mail.gmail.com>
+In-Reply-To: <CAP045AoeVP=n5K+0jt2ddBspif7kx4hzOdBM86CuxNGRCgx4VA@mail.gmail.com>
+From: Kyle Huey <me@kylehuey.com>
+Date: Thu, 7 Dec 2023 17:08:35 -0800
+Message-ID: <CAP045ArdMgodyOTs_m6-99FxrqUJzRjDth8epkaa69YQtNeSMw@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] selftest/bpf: Test a perf bpf program that
+ suppresses side effects.
+To: Marco Elver <elver@google.com>
+Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, Kyle Huey <khuey@kylehuey.com>, 
+	linux-kernel@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>, 
+	Namhyung Kim <namhyung@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
+	"Robert O'Callahan" <robert@ocallahan.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Mykola Lysenko <mykolal@fb.com>, 
+	Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Mina Almasry <almasrymina@google.com>
----
- Documentation/networking/devmem.rst | 270 ++++++++++++++++++++++++++++
- 1 file changed, 270 insertions(+)
- create mode 100644 Documentation/networking/devmem.rst
+On Thu, Dec 7, 2023 at 2:56=E2=80=AFPM Kyle Huey <me@kylehuey.com> wrote:
+>
+> On Thu, Dec 7, 2023 at 11:20=E2=80=AFAM Marco Elver <elver@google.com> wr=
+ote:
+> >
+> > On Thu, 7 Dec 2023 at 20:12, Andrii Nakryiko <andrii.nakryiko@gmail.com=
+> wrote:
+> > >
+> > > On Thu, Dec 7, 2023 at 8:35=E2=80=AFAM Kyle Huey <me@kylehuey.com> wr=
+ote:
+> > > >
+> > > > The test sets a hardware breakpoint and uses a bpf program to suppr=
+ess the
+> > > > side effects of a perf event sample, including I/O availability sig=
+nals,
+> > > > SIGTRAPs, and decrementing the event counter limit, if the ip match=
+es the
+> > > > expected value. Then the function with the breakpoint is executed m=
+ultiple
+> > > > times to test that all effects behave as expected.
+> > > >
+> > > > Signed-off-by: Kyle Huey <khuey@kylehuey.com>
+> > > > ---
+> > > >  .../selftests/bpf/prog_tests/perf_skip.c      | 145 ++++++++++++++=
+++++
+> > > >  .../selftests/bpf/progs/test_perf_skip.c      |  15 ++
+> > > >  2 files changed, 160 insertions(+)
+> > > >  create mode 100644 tools/testing/selftests/bpf/prog_tests/perf_ski=
+p.c
+> > > >  create mode 100644 tools/testing/selftests/bpf/progs/test_perf_ski=
+p.c
+> > > >
+> > > > diff --git a/tools/testing/selftests/bpf/prog_tests/perf_skip.c b/t=
+ools/testing/selftests/bpf/prog_tests/perf_skip.c
+> > > > new file mode 100644
+> > > > index 000000000000..f6fa9bfd9efa
+> > > > --- /dev/null
+> > > > +++ b/tools/testing/selftests/bpf/prog_tests/perf_skip.c
+> > > > @@ -0,0 +1,145 @@
+> > > > +// SPDX-License-Identifier: GPL-2.0
+> > > > +#define _GNU_SOURCE
+> > > > +
+> > > > +/* We need the latest siginfo from the kernel repo. */
+> > > > +#include <asm/siginfo.h>
+> > >
+> > > selftests are built with UAPI headers' copies under tools/include, so
+> > > CI did catch a real issue, I think. Try copying
+> > > include/uapi/asm-generic/siginfo.h into
+> > > tools/include/uapi/asm-generic/siginfo.h ?
+> >
+> > I believe parts of this were inspired by
+> > tools/testing/selftests/perf_events/sigtrap_threads.c - getting the
+> > kernel headers is allowed, as long as $(KHDR_INCLUDES) is added to
+> > CFLAGS. See tools/testing/selftests/perf_events/Makefile. Not sure
+> > it's appropriate for this test though, if you don't want to add
+> > KHDR_INCLUDES for everything.
+>
+> Yes, that's right. Namhyung's commit message for 91c97b36bd69 leads me
+> to believe that I should copy siginfo.h over into tools/include and
+> fix the perf_events self tests too.
+>
+> - Kyle
 
-diff --git a/Documentation/networking/devmem.rst b/Documentation/networking/devmem.rst
-new file mode 100644
-index 000000000000..ed0d9c88b708
---- /dev/null
-+++ b/Documentation/networking/devmem.rst
-@@ -0,0 +1,270 @@
-+
-+=================
-+Device Memory TCP
-+=================
-+
-+
-+Intro
-+=====
-+
-+Device memory TCP (devmem TCP) enables receiving data directly into device
-+memory (dmabuf). The feature is currently implemented for TCP sockets.
-+
-+
-+Opportunity
-+-----------
-+
-+A large amount of data transfers have device memory as the source and/or
-+destination. Accelerators drastically increased the volume of such transfers.
-+Some examples include:
-+
-+- Distributed training, where ML accelerators, such as GPUs on different hosts,
-+  exchange data among them.
-+
-+- Distributed raw block storage applications transfer large amounts of data with
-+  remote SSDs, much of this data does not require host processing.
-+
-+Today, the majority of the Device-to-Device data transfers the network are
-+implemented as the following low level operations: Device-to-Host copy,
-+Host-to-Host network transfer, and Host-to-Device copy.
-+
-+The implementation is suboptimal, especially for bulk data transfers, and can
-+put significant strains on system resources such as host memory bandwidth and
-+PCIe bandwidth.
-+
-+Devmem TCP optimizes this use case by implementing socket APIs that enable
-+the user to receive incoming network packets directly into device memory.
-+
-+Packet payloads go directly from the NIC to device memory.
-+
-+Packet headers go to host memory and are processed by the TCP/IP stack
-+normally. The NIC must support header split to achieve this.
-+
-+Advantages:
-+
-+- Alleviate host memory bandwidth pressure, compared to existing
-+  network-transfer + device-copy semantics.
-+
-+- Alleviate PCIe bandwidth pressure, by limiting data transfer to the lowest
-+  level of the PCIe tree, compared to traditional path which sends data through
-+  the root complex.
-+
-+
-+More Info
-+---------
-+
-+  slides, video
-+    https://netdevconf.org/0x17/sessions/talk/device-memory-tcp.html
-+
-+  patchset
-+    [RFC PATCH v3 00/12] Device Memory TCP
-+    https://lore.kernel.org/lkml/20231106024413.2801438-1-almasrymina@google.com/T/
-+
-+
-+Interface
-+=========
-+
-+Example
-+-------
-+
-+tools/testing/selftests/net/ncdevmem.c:do_server shows an example of setting up
-+the RX path of this API.
-+
-+NIC Setup
-+---------
-+
-+Header split, flow steering, & RSS are required features for devmem TCP.
-+
-+Header split is used to split incoming packets into a header buffer in host
-+memory, and a payload buffer in device memory.
-+
-+Flow steering & RSS are used to ensure that only flows targeting devmem land on
-+RX queue bound to devmem.
-+
-+Enable header split & flow steering:
-+
-+::
-+
-+	# enable header split (assuming priv-flag)
-+	ethtool --set-priv-flags eth1 enable-header-split on
-+
-+	# enable flow steering
-+	ethtool -K eth1 ntuple on
-+
-+Configure RSS to steer all traffic away from the target RX queue (queue 15 in
-+this example):
-+
-+::
-+
-+	ethtool --set-rxfh-indir eth1 equal 15
-+
-+
-+The user must bind a dmabuf to any number of RX queues on a given NIC using
-+netlink API:
-+
-+::
-+
-+	/* Bind dmabuf to NIC RX queue 15 */
-+	struct netdev_queue *queues;
-+	queues = malloc(sizeof(*queues) * 1);
-+
-+	queues[0]._present.type = 1;
-+	queues[0]._present.idx = 1;
-+	queues[0].type = NETDEV_RX_QUEUE_TYPE_RX;
-+	queues[0].idx = 15;
-+
-+	*ys = ynl_sock_create(&ynl_netdev_family, &yerr);
-+
-+	req = netdev_bind_rx_req_alloc();
-+	netdev_bind_rx_req_set_ifindex(req, 1 /* ifindex */);
-+	netdev_bind_rx_req_set_dmabuf_fd(req, dmabuf_fd);
-+	__netdev_bind_rx_req_set_queues(req, queues, n_queue_index);
-+
-+	rsp = netdev_bind_rx(*ys, req);
-+
-+	dmabuf_id = rsp->dmabuf_id;
-+
-+
-+The netlink API returns a dmabuf_id: a unique ID that refers to this dmabuf
-+that has been bound.
-+
-+Socket Setup
-+------------
-+
-+The socket must be flow steering to the dmabuf bound RX queue:
-+
-+::
-+
-+	ethtool -N eth1 flow-type tcp4 ... queue 15,
-+
-+
-+Receiving data
-+--------------
-+
-+The user application must signal to the kernel that it is capable of receiving
-+devmem data by passing the MSG_SOCK_DEVMEM flag to recvmsg:
-+
-+::
-+
-+	ret = recvmsg(fd, &msg, MSG_SOCK_DEVMEM);
-+
-+Applications that do not specify the MSG_SOCK_DEVMEM flag will receive an EFAULT
-+on devmem data.
-+
-+Devmem data is received directly into the dmabuf bound to the NIC in 'NIC
-+Setup', and the kernel signals such to the user via the SCM_DEVMEM_* cmsgs:
-+
-+::
-+
-+		for (cm = CMSG_FIRSTHDR(&msg); cm; cm = CMSG_NXTHDR(&msg, cm)) {
-+			if (cm->cmsg_level != SOL_SOCKET ||
-+				(cm->cmsg_type != SCM_DEVMEM_DMABUF &&
-+				 cm->cmsg_type != SCM_DEVMEM_LINEAR))
-+				continue;
-+
-+			dmabuf_cmsg = (struct dmabuf_cmsg *)CMSG_DATA(cm);
-+
-+			if (cm->cmsg_type == SCM_DEVMEM_DMABUF) {
-+				/* Frag landed in dmabuf.
-+				 *
-+				 * dmabuf_cmsg->dmabuf_id is the dmabuf the
-+				 * frag landed on.
-+				 *
-+				 * dmabuf_cmsg->frag_offset is the offset into
-+				 * the dmabuf where the frag starts.
-+				 *
-+				 * dmabuf_cmsg->frag_size is the size of the
-+				 * frag.
-+				 *
-+				 * dmabuf_cmsg->frag_token is a token used to
-+				 * refer to this frag for later freeing.
-+				 */
-+
-+				struct dmabuf_token token;
-+				token.token_start = dmabuf_cmsg->frag_token;
-+				token.token_count = 1;
-+				continue;
-+			}
-+
-+			if (cm->cmsg_type == SCM_DEVMEM_LINEAR)
-+				/* Frag landed in linear buffer.
-+				 *
-+				 * dmabuf_cmsg->frag_size is the size of the
-+				 * frag.
-+				 */
-+				continue;
-+
-+		}
-+
-+Applications may receive 2 cmsgs:
-+
-+- SCM_DEVMEM_DMABUF: this indicates the fragment landed in the dmabuf indicated
-+  by dmabuf_id.
-+
-+- SCM_DEVMEM_LINEAR: this indicates the fragment landed in the linear buffer.
-+  This typically happens when the NIC is unable to split the packet at the
-+  header boundary, such that part (or all) of the payload landed in host
-+  memory.
-+
-+Applications may receive no SO_DEVMEM_* cmsgs. That indicates non-devmem,
-+regular TCP data that landed on an RX queue not bound to a dmabuf.
-+
-+
-+Freeing frags
-+-------------
-+
-+Frags received via SCM_DEVMEM_DMABUF are pinned by the kernel while the user
-+processes the frag. The user must return the frag to the kernel via
-+SO_DEVMEM_DONTNEED:
-+
-+::
-+
-+	ret = setsockopt(client_fd, SOL_SOCKET, SO_DEVMEM_DONTNEED, &token,
-+			 sizeof(token));
-+
-+The user must ensure the tokens are returned to the kernel in a timely manner.
-+Failure to do so will exhaust the limited dmabuf that is bound to the RX queue
-+and will lead to packet drops.
-+
-+
-+Implementation & Caveats
-+========================
-+
-+Unreadable skbs
-+---------------
-+
-+Devmem payloads are inaccessible to the kernel processing the packets. This
-+results in a few quirks for payloads of devmem skbs:
-+
-+- Loopback is not functional. Loopback relies on copying the payload, which is
-+  not possible with devmem skbs.
-+
-+- Software checksum calculation fails.
-+
-+- TCP Dump and bpf can't access devmem packet payloads.
-+
-+
-+Testing
-+=======
-+
-+More realistic example code can be found in the kernel source under
-+tools/testing/selftests/net/ncdevmem.c
-+
-+ncdevmem is a devmem TCP netcat. It works very similarly to netcat, but
-+receives data directly into a udmabuf.
-+
-+To run ncdevmem, you need to run it a server on the machine under test, and you
-+need to run netcat on a peer to provide the TX data.
-+
-+ncdevmem has a validation mode as well that expects a repeating pattern of
-+incoming data and validates it as such:
-+
-+::
-+
-+	# On server:
-+	ncdevmem -s <server IP> -c <client IP> -f eth1 -d 3 -n 0000:06:00.0 -l \
-+		 -p 5201 -v 7
-+
-+	# On client:
-+	yes $(echo -e \\x01\\x02\\x03\\x04\\x05\\x06) | \
-+		tr \\n \\0 | head -c 5G | nc <server IP> 5201 -p 5201
--- 
-2.43.0.472.g3155946c3a-goog
+That doesn't really help (though perhaps it should be done anyway so
+the selftests aren't reaching into include/) because the glibc headers
+still redefine a ton of stuff in asm-generic/siginfo.h.
 
+- Kyle
