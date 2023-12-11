@@ -1,106 +1,81 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fZIeWV9+"
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 167A1AB
-	for <linux-kselftest@vger.kernel.org>; Mon, 11 Dec 2023 02:12:32 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id 98e67ed59e1d1-286e03467a3so3130713a91.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 Dec 2023 02:12:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702289551; x=1702894351; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GH7i95L+H2BeLVRjjioDAByqwcO/R3UaRcZe+O+j5uI=;
-        b=fZIeWV9+r6sQ1D+IuzPWD7JmZPBOe4SHEGS4Cnk6elaTOHjmFS5M5h0f1F4h1PbenJ
-         Qdja0Tx6GEW5t5jF7p29kq7plUEFdM5TABAl7Br72fSCWriPXde3gQf7Fg4bWWWygsTi
-         8mjGJLMSbg4U4fHHkH+H1XaQgB1V2Os9oLjKe7nbWYoA32O+DGq0AoammfTUMTW/Oi25
-         kHunCq+WTvplMTofWjYIPTkhFhNPpVAGoSFKWA9Rj0QaHbhjMmUQexFJ5zxZ1304Mb4x
-         dcO+TjQaziLJz4b25YehMsO2m+qZ2gf6uHyJGcoxPak7CnvZEdj4M28iZ4wrryEQkqlR
-         1V2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702289551; x=1702894351;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GH7i95L+H2BeLVRjjioDAByqwcO/R3UaRcZe+O+j5uI=;
-        b=ZoCkIJN1Kig25+SLJ56Ck73q97nEklM+4EUXLKgpMzPkUBUrc5G3axd/c3+MdeAUr5
-         QpocFzkzU0gjEx5jGlAUS/aAYbQQEB243DsUi4XfKrhLeUsOeK7Q0mioUmgr/k3Le5d7
-         /71TaVAR0zBrLAmrsJDfH0xem3RcsmH6emHmio1O9Zl0RnRQMn59/KngChAdIdbl7NG6
-         LWSSnTvQhuyVqtSzba6j/IX7VqiCp1WgrZsA7tZs96GzgLn7y4QVcpkai8ovkis+UG4U
-         TblLUXGYUvkVKC0a8Er1hHXVLatWhD1hotj+fAMb5ReP7ucCFTy8c0oi3wGdtf34jECW
-         ONJA==
-X-Gm-Message-State: AOJu0YxGt0ulwCKy7rtVOERwD3DkUZF4VnjIZ98T4XI87JN2Krezzc85
-	ryX1jHX/2dhij5tbnBzkrQI=
-X-Google-Smtp-Source: AGHT+IHC2ioI999wIUV7sxMWb6JVtOG4phKI2l4wRw1oHKKvsGzWFGKM7vUrC0En+IK+9032COUz0w==
-X-Received: by 2002:a17:90a:7c06:b0:286:6cc1:5fb3 with SMTP id v6-20020a17090a7c0600b002866cc15fb3mr1744888pjf.54.1702289551457;
-        Mon, 11 Dec 2023 02:12:31 -0800 (PST)
-Received: from Laptop-X1 ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id z6-20020a170903018600b001a98f844e60sm6077179plg.263.2023.12.11.02.12.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Dec 2023 02:12:30 -0800 (PST)
-Date: Mon, 11 Dec 2023 18:12:27 +0800
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org, Kees Cook <keescook@chromium.org>
-Subject: Re: [PATCH] kselftests: add per_test_log support
-Message-ID: <ZXbgiwZXt2PVN81e@Laptop-X1>
-References: <20231102075017.4060991-1-liuhangbin@gmail.com>
- <ZV6wziKnIs2jZfa2@Laptop-X1>
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="asK4bqJl"
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [IPv6:2a00:1098:ed:100::25])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4464DC7;
+	Mon, 11 Dec 2023 03:08:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1702292516;
+	bh=rtUQjIROmhcvKCPUzvaAzQ2+fePhDS70mvZIoWhWHcY=;
+	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+	b=asK4bqJldmXIac4/3TTmMi7GWdaUqB7VuBu/KfBQ+t5fHPQI/KGd0sLOjYucopP3r
+	 coupqyEqgBh346fXNiHsryTYs7oJpatHdpcERcWrkbebUjdObt9Qouf45HWKKmhNLT
+	 qjL3HmJqJZowqHjrTYRvdcj6TQD7lP3kfTL6y1zeqppoQKt1qtUxzrDEWAi/8rtajU
+	 mg4EJ4JH3kPULJeZwJyGwMKliA5cuf3llRAveZEoC0p/r9oCISA1fHaVTnWw8/762P
+	 jsxHnq079Cmb+bX6G3yUfA37OZGUEao7LtjX8vqQ3SjT64QUUFH0HEqEGwWXTZiMy2
+	 tyxjPX1HrCz3g==
+Received: from [100.96.234.34] (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 46974378141D;
+	Mon, 11 Dec 2023 11:01:52 +0000 (UTC)
+Message-ID: <2180095f-1dcd-4542-aafe-aa2b4d039e62@collabora.com>
+Date: Mon, 11 Dec 2023 16:01:52 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZV6wziKnIs2jZfa2@Laptop-X1>
+User-Agent: Mozilla Thunderbird
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>, kernel@collabora.com,
+ Aishwarya TCV <aishwarya.tcv@arm.com>, Shuah Khan
+ <skhan@linuxfoundation.org>, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests: core: include linux/close_range.h for
+ CLOSE_RANGE_* macros
+Content-Language: en-US
+To: Shuah Khan <shuah@kernel.org>
+References: <20231024155137.219700-1-usama.anjum@collabora.com>
+ <9dbda2f9-2bb2-4e79-976a-12856ab6936a@collabora.com>
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <9dbda2f9-2bb2-4e79-976a-12856ab6936a@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Ping Shuah. Is there any update I need?
+Soft reminder
 
-Thanks
-Hangbin
-On Thu, Nov 23, 2023 at 09:54:26AM +0800, Hangbin Liu wrote:
-> Hi Shuah,
+On 11/29/23 4:34 PM, Muhammad Usama Anjum wrote:
+> Soft reminder
 > 
-> Any comments for this?
+> On 10/24/23 8:51 PM, Muhammad Usama Anjum wrote:
+>> Correct header file is needed for getting CLOSE_RANGE_* macros.
+>> Previously it was tested with newer glibc which didn't show the need to
+>> include the header which was a mistake.
+>>
+>> Fixes: ec54424923cf ("selftests: core: remove duplicate defines")
+>> Reported-by: Aishwarya TCV <aishwarya.tcv@arm.com>
+>> Link: https://lore.kernel.org/all/7161219e-0223-d699-d6f3-81abd9abf13b@arm.com
+>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>> ---
+>>  tools/testing/selftests/core/close_range_test.c | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/tools/testing/selftests/core/close_range_test.c b/tools/testing/selftests/core/close_range_test.c
+>> index 534576f06df1c..c59e4adb905df 100644
+>> --- a/tools/testing/selftests/core/close_range_test.c
+>> +++ b/tools/testing/selftests/core/close_range_test.c
+>> @@ -12,6 +12,7 @@
+>>  #include <syscall.h>
+>>  #include <unistd.h>
+>>  #include <sys/resource.h>
+>> +#include <linux/close_range.h>
+>>  
+>>  #include "../kselftest_harness.h"
+>>  #include "../clone3/clone3_selftests.h"
 > 
-> Thanks
-> Hangbin
-> On Thu, Nov 02, 2023 at 03:50:17PM +0800, Hangbin Liu wrote:
-> > By default, all the test output will be printed to stdout or output.log if
-> > -s supplied. The kselftest/runner.sh also supports per test log if the
-> > variable per_test_logging is set. So add new option -p to set this
-> > veriable. Note the -p option is conflict with -s option.
-> > 
-> > Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
-> > ---
-> >  tools/testing/selftests/run_kselftest.sh | 6 +++++-
-> >  1 file changed, 5 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/tools/testing/selftests/run_kselftest.sh b/tools/testing/selftests/run_kselftest.sh
-> > index 92743980e553..965220a314ce 100755
-> > --- a/tools/testing/selftests/run_kselftest.sh
-> > +++ b/tools/testing/selftests/run_kselftest.sh
-> > @@ -20,7 +20,8 @@ usage()
-> >  {
-> >  	cat <<EOF
-> >  Usage: $0 [OPTIONS]
-> > -  -s | --summary		Print summary with detailed log in output.log
-> > +  -s | --summary		Print summary with detailed log in output.log (conflict with -p)
-> > +  -p | --per_test_log		Print test log in /tmp with each test name (conflict with -s)
-> >    -t | --test COLLECTION:TEST	Run TEST from COLLECTION
-> >    -c | --collection COLLECTION	Run all tests from COLLECTION
-> >    -l | --list			List the available collection:test entries
-> > @@ -41,6 +42,9 @@ while true; do
-> >  			logfile="$BASE_DIR"/output.log
-> >  			cat /dev/null > $logfile
-> >  			shift ;;
-> > +		-p | --per_test_log)
-> > +			per_test_logging=1
-> > +			shift ;;
-> >  		-t | --test)
-> >  			TESTS="$TESTS $2"
-> >  			shift 2 ;;
-> > -- 
-> > 2.41.0
-> > 
+
+-- 
+BR,
+Muhammad Usama Anjum
