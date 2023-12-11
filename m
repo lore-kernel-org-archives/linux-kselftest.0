@@ -1,99 +1,139 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42C4452F9C;
-	Mon, 11 Dec 2023 20:02:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U5evn4Dx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CA26C433C7;
-	Mon, 11 Dec 2023 20:02:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702324927;
-	bh=0muo1Uoi32hut1hx3yMwoWK9bfatBaZv4kIG4F1glqg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=U5evn4DxU2NcpgJ9s72YHzYM8pWzYiZDS4VpHFRrQVGissAfR7uMl4oZFRg0BIAX7
-	 CN0OS0Kbnft0dHbdlNHlWimW62G0Tsu8P8djSjW15jd4oqZuhepaiT+ixOexOjGttt
-	 cPnuhd5MsxToFTb5zKx0syWfzGQDkNMKfkfSjNEjTG2RaCDiPe/JljeWqSOpmZfkRu
-	 wvlHrsRmoI8VUCkicMgLEmhbgcjQ9xUEe4aWcIw3m/GU6VIXwfV5jlXYUR/XWPv38a
-	 A/UiHNDjqqR7mkW44WT1jP6GGqfzmdm8EgK1+eQZ2erD5oczAltOvjJ5se7zQYESl3
-	 34OdoPsk1CUdg==
-Date: Mon, 11 Dec 2023 20:01:59 +0000
-From: Mark Brown <broonie@kernel.org>
-To: David Hildenbrand <david@redhat.com>
-Cc: Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
-	viro@zeniv.linux.org.uk, brauner@kernel.org, shuah@kernel.org,
-	aarcange@redhat.com, lokeshgidra@google.com, peterx@redhat.com,
-	ryan.roberts@arm.com, hughd@google.com, mhocko@suse.com,
-	axelrasmussen@google.com, rppt@kernel.org, willy@infradead.org,
-	Liam.Howlett@oracle.com, jannh@google.com, zhangpeng362@huawei.com,
-	bgeffon@google.com, kaleshsingh@google.com, ngeoffray@google.com,
-	jdduke@google.com, linux-mm@kvack.org,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, kernel-team@android.com,
-	John Hubbard <jhubbard@nvidia.com>,
-	Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v6 5/5] selftests/mm: add UFFDIO_MOVE ioctl test
-Message-ID: <400c0342-bb28-4dd2-b132-9927c7babec4@sirena.org.uk>
-References: <CAJuCfpHRYi4S9c+KKQqtE6Faw1e0E0ENMMRE17zXsqv_CftTGw@mail.gmail.com>
- <b93b29e9-c176-4111-ae0e-d4922511f223@sirena.org.uk>
- <50385948-5eb4-47ea-87f8-add4265933d6@redhat.com>
- <6a34b0c9-e084-4928-b239-7af01c8d4479@sirena.org.uk>
- <CAJuCfpEcbcO0d5WPDHMqiEJws9k_5c30pE-J+E_VxO_fpTf_mw@mail.gmail.com>
- <3240f4b5-081b-4075-851a-7d1cd86f4333@redhat.com>
- <1368c558-c58c-4574-907e-36b07dee31bb@sirena.org.uk>
- <6ee5d68a-fa54-4ed6-bc41-2bff0d9eb12f@redhat.com>
- <052dc756-cc05-4aa8-9724-14d42853089c@sirena.org.uk>
- <8a2ce635-58f4-44e1-a646-6527936c5836@redhat.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="KGOZaqcd"
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175B7D8;
+	Mon, 11 Dec 2023 12:11:47 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MCO56p2f/hJJVt4trapfi+2mY0z5QHKgWtEDy2xHwEKB4yQzIPEjMgQWc2KAkeJ+G+BDhdZhOlu/Uj0/Wy139fkwiSkrTsYd7SKZyGgn5/tOGot90ZNFAwfnqG4ips8Y+Nnz49h7+UP00JQmhYK1AOyvmKP8XpPAmXnP/UgkOKC8fr4dYThV98x+6Y6FtkW53qUJijlbLVM1G2Nk5kQPnpdCHJnL6z/YO8ynL66WjkiYqhLW3EOE+EPFvF2C1qrmRI5+MqM2RyXkrno0Hdfvf0gOl6jEQ3sqOg3s7IrUJpZ7+bDglUkVIlbsry7bTRxTb+cjUUNEAdCb/Qa9voTp9Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vGBcpctAsuvv1BQ2+Cx81ERhehDJ0sZrjsjKT6lX0/I=;
+ b=AQ6MIpN2SWLXfpdHDzNAxBvHzTxG0or9/gy2v+BuEJbBI0gvlehZTuojAghUeLio3oUDM80ar77Q/zY7fnpevHuEGq0QUJGUpJQskGIypBFAKKllOKS9AokpN2uc5X03ELuWjwuRuI98xyA/W6NE3Bk6lhuIC9d2EV0FlwUcIoHYvlf+/3OmMLBhZOufsEhT1svbufwJIjvoGEO52Ic+iMW3SK/Gbh6+JJSV8C9CDUm2Vzi9IsPv8i8KEsj0I2DycR1DOh6m2ZDuOYN0G8uKtY8fC5JnRbfmAxpVJ4PmlanlqvRO8UZndwbRq0t6tx4NrT+Wh6pTMOE4d3ugj8b8RQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=oracle.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vGBcpctAsuvv1BQ2+Cx81ERhehDJ0sZrjsjKT6lX0/I=;
+ b=KGOZaqcdw9qUBjHfu7W6bEP2pZp4u5jS2P8N7vIes6CrY8G9JmOBQsbQqtzp4rDtUEitG57FnZVwniyQ3VtS3rsZS0zMgXvQxEP4cSazbZxpdZgutYfuvvMnIsMKGo45iv3yrKoVAu47CuQXE/RC8DPmIesNSnlcwMLOEbvtEiQHzdsbjI1u/4VYj78/RQoPHmekh+UZxnsOPU9Hecb95pOALtbgNKL9RKWWoLvZhLPsow7rqVW8DOZz0E+bUCizVYdpG5+ZwgyrT9Fk6ygkOiun3P2RT2+r/WQx9vauCeNOqFmGo/PNSmNSomJ++YhE6aaQsKmTh1YL8HNn6Bx7fQ==
+Received: from CH2PR10CA0027.namprd10.prod.outlook.com (2603:10b6:610:4c::37)
+ by DM8PR12MB5399.namprd12.prod.outlook.com (2603:10b6:8:34::5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7068.32; Mon, 11 Dec 2023 20:11:44 +0000
+Received: from DS3PEPF000099DC.namprd04.prod.outlook.com
+ (2603:10b6:610:4c:cafe::f2) by CH2PR10CA0027.outlook.office365.com
+ (2603:10b6:610:4c::37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7068.32 via Frontend
+ Transport; Mon, 11 Dec 2023 20:11:44 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ DS3PEPF000099DC.mail.protection.outlook.com (10.167.17.198) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7091.18 via Frontend Transport; Mon, 11 Dec 2023 20:11:44 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 11 Dec
+ 2023 12:11:28 -0800
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 11 Dec
+ 2023 12:11:27 -0800
+Received: from Asurada-Nvidia (10.127.8.9) by mail.nvidia.com (10.129.68.10)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41 via Frontend
+ Transport; Mon, 11 Dec 2023 12:11:26 -0800
+Date: Mon, 11 Dec 2023 12:11:25 -0800
+From: Nicolin Chen <nicolinc@nvidia.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+CC: Yi Liu <yi.l.liu@intel.com>, "Giani, Dhaval" <Dhaval.Giani@amd.com>,
+	Vasant Hegde <vasant.hegde@amd.com>, Suravee Suthikulpanit
+	<suravee.suthikulpanit@amd.com>, <joro@8bytes.org>,
+	<alex.williamson@redhat.com>, <kevin.tian@intel.com>, <robin.murphy@arm.com>,
+	<baolu.lu@linux.intel.com>, <cohuck@redhat.com>, <eric.auger@redhat.com>,
+	<kvm@vger.kernel.org>, <mjrosato@linux.ibm.com>,
+	<chao.p.peng@linux.intel.com>, <yi.y.sun@linux.intel.com>,
+	<peterx@redhat.com>, <jasowang@redhat.com>,
+	<shameerali.kolothum.thodi@huawei.com>, <lulu@redhat.com>,
+	<iommu@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <zhenzhong.duan@intel.com>,
+	<joao.m.martins@oracle.com>, <xin.zeng@intel.com>, <yan.y.zhao@intel.com>
+Subject: Re: [PATCH v6 0/6] iommufd: Add nesting infrastructure (part 2/2)
+Message-ID: <ZXds7V0Dz0ycF5IR@Asurada-Nvidia>
+References: <20231117130717.19875-1-yi.l.liu@intel.com>
+ <20231209014726.GA2945299@nvidia.com>
+ <77ac47d0-2ef0-41fa-86c2-091358541465@intel.com>
+ <20231211132041.GE2944114@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="v6cD9Anxo0FHLDGJ"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <8a2ce635-58f4-44e1-a646-6527936c5836@redhat.com>
-X-Cookie: Better dead than mellow.
+In-Reply-To: <20231211132041.GE2944114@nvidia.com>
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS3PEPF000099DC:EE_|DM8PR12MB5399:EE_
+X-MS-Office365-Filtering-Correlation-Id: 348ab46a-cbd1-4c1f-f1bb-08dbfa85656c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	DxpQIPYlNjgIeKYB7doBOlOK5N49fOpsMDYFlLcfsZK07ZlF9kGePziCQiS1tfnO/NFrGjlpdO67qQMurDKJN7wbyE1l+07rOOijTKGxcPeIU/RZYWknWlJdvSEMbjCo9Y0iJnNzopV7ac1syYkk62yAipL4L6G6b2sv1PSBoA0PsRR8JtI5/nli93pGU8NqNUa4tYkkBpRSNv8cH+ABvfuDC+lu1IvEjGVRAcBjgOXHbdR2ywDPvRnpvUCxl85AgX5/gLYnSOB0aProTHaDY7nn/Xe0qE/6m2XhLKO0O4R3nxF2K34wzSGSbjfkduIpDsGNMJ9IHrY/qsAKhl/5YMLtNiRhAEBbd3ObNT8PRBKuxLAvi+yrtoHOlIiMR8gxb0D0n2t6FxsUi4rzWnaAMLBWEVdsh9JG/NYW+Ic23kibkAGa2nIwynpFU0QVKeGhomjZUKhSCOMXcXnDKIZFhr3VkKnDbFuqFr2SuqjZWoXluIl3zCGxwZFRHYMELo9ul8ATDLO7PyZo63yjzku2Zwh3iMu+addfOkbpHV4ca4NXAbWIwKa4GD653V5/iwc2weVnThzMS8oJT0aiGsEgbUfgGbT20GJ5PoRvJoPsI5wxQMKnuCsNNJUtczKhTsFHZ+doUjCjo5OrnPj+8P9hICAQ2M/LED/nFOxzVzeOWP8/8RmOCi08tWUR50CVrSBsaWq+XsvF3bjRouG7jrG/3+7tdIhLgiR9g2H6J8klTbmmxCb+4WafAh1X/f/3nLm8
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230031)(4636009)(346002)(396003)(136003)(39860400002)(376002)(230922051799003)(1800799012)(451199024)(186009)(82310400011)(64100799003)(36840700001)(46966006)(40470700004)(55016003)(40480700001)(66899024)(26005)(426003)(336012)(40460700003)(82740400003)(7636003)(86362001)(356005)(47076005)(70586007)(83380400001)(70206006)(5660300002)(7416002)(36860700001)(316002)(8936002)(8676002)(6636002)(54906003)(9686003)(478600001)(4326008)(41300700001)(2906002)(33716001)(6862004);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Dec 2023 20:11:44.0882
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 348ab46a-cbd1-4c1f-f1bb-08dbfa85656c
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DS3PEPF000099DC.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR12MB5399
 
+On Mon, Dec 11, 2023 at 09:20:41AM -0400, Jason Gunthorpe wrote:
+> On Mon, Dec 11, 2023 at 08:35:09PM +0800, Yi Liu wrote:
+> > > So.. In short.. Invalidation is a PITA. The idea is the same but
+> > > annoying little details interfere with actually having a compltely
+> > > common API here. IMHO the uAPI in this series is fine. It will support
+> > > Intel invalidation and non-ATC invalidation on AMD/ARM. It should be
+> > > setup to allow that the target domain object can be any HWPT.
+> > 
+> > This HWPT is still nested domain. Is it? But it can represent a guest I/O
+> > page table (VT-d), guest CD table (ARM), guest CR3 Table (AMD, it seems to
+> > be a set of guest CR3 table pointers). May ARM and AMD guys keep me honest
+> > here.
+> 
+> I was thinking ARM would not want to use a nested domain because
+> really the invalidation is global to the entire nesting parent.
+> 
+> But, there is an issue with that - the nesting parent could be
+> attached to multiple iommu instances but we only want to invalidate a
+> single instance. 
 
---v6cD9Anxo0FHLDGJ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I am still not sure about attaching an S2 domain to multiple
+SMMUs. An S2 domain is created per SMMU, and we have such a
+rejection in arm_smmu_attach_dev():
+	} else if (smmu_domain->smmu != smmu)
+		ret = -EINVAL;
 
-On Mon, Dec 11, 2023 at 07:00:32PM +0100, David Hildenbrand wrote:
-> On 11.12.23 18:32, Mark Brown wrote:
-> > On Mon, Dec 11, 2023 at 05:53:59PM +0100, David Hildenbrand wrote:
+I understand that it would be probably ideal to share the S2
+iopt among the SMMUs. But in the driver the objects (domain)
+holding a shared S2 iopt must be different to allocate their
+own VMIDs, right?
 
-> > > https://lkml.kernel.org/r/20231209020144.244759-1-jhubbard@nvidia.com
-
-> > I mean, I guess people who don't want to install the headers are just
-> > not going to be able to build a bunch of tests?  There definitely are a
-> > bunch of tests where it's not needed so I can see why people would not
-> > like being forced to do the headers step if they're only interested in
-> > those tests.
-
-> Yes. And before that, people mostly had no clue that headers had to be
-> installed in order to compile successfully.
-
-> So maybe a warning to give at least some hint might be reasonable.
-
-That sounds sensible, especially if we could arrange to flag when the
-specific tests being built need it.
-
---v6cD9Anxo0FHLDGJ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmV3arYACgkQJNaLcl1U
-h9B1kwf9FSJkPhxe7Bh+LVMm9M/JwDNNcn4+8J9LLt5yC5m4APhXIPtgAzsQf7HZ
-pA1lZh6HCE3f7G0WAFms4UkYnL4Sg+/5/1KIJmZZ8PiSelGBMEqQxhqJzWcI6za0
-gZODJQZdI4yuMG7RLnVum7TzOenAd+7RpT8TOmcn/UM6BF8BWLg26DmB+Yf/Hf/f
-gL0W3epHdBysAKO+esLc+6ifEBeokyHtETY9wNLHcKnA09K0YY0Jp55tfwbKvPgi
-D8MyS+1kNPy2to2TMPGxhVilrB0zS0ifR8ELa+Dlnf3A0PfsBa2fdIeW2ARZ7+7C
-UjMVDE+wbqAH29BU8bvGTEEha1jV1w==
-=JgyN
------END PGP SIGNATURE-----
-
---v6cD9Anxo0FHLDGJ--
+Thanks
+Nicolin
