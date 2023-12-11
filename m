@@ -1,216 +1,246 @@
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="HxWFNVAu"
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FB08F7
-	for <linux-kselftest@vger.kernel.org>; Mon, 11 Dec 2023 04:05:58 -0800 (PST)
-Received: by mail-lj1-x241.google.com with SMTP id 38308e7fff4ca-2ca1e6a94a4so55921471fa.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 Dec 2023 04:05:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1702296356; x=1702901156; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=yPRbunJso+hnUcdJBJfP0ri8/wbZ76bB4FYyMhUv7gY=;
-        b=HxWFNVAuQo0MHzywLoHmlwkgb49ngwh5UDL7eD0fhZ8Bl5gBHN6SJ5kyiRod22X8rC
-         +OPzL4PwogYrQdCRzGeXIeaYwmBEIKxuOVbdWpWsh6h0SbWfZd5Sj8ZOhjO15xagl5GP
-         gLYgk41TVcTSwW4NmMpLsdikp4ehQF4uvUxeS3TbMnRz9IIMRPC5LQrOZceyvKUht2AF
-         T91r5ZFSoTwdszSad2V1S/rpkvyyRzTXmRluK/ypnJ609FfyiU9jDA0EELxPst3yMlMr
-         Sk3Kd5laXhurosQuJRfKrKI7kVU5zIWmgUZAlCZNGni1TQBLuQ+CJHQdLhDporvdChz0
-         AcwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702296356; x=1702901156;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yPRbunJso+hnUcdJBJfP0ri8/wbZ76bB4FYyMhUv7gY=;
-        b=G8eJFWxKOrazn8WYfjCM9MY0DHsEO4qg50t9DC+2VLtG14ceo3lTysgIdsMcQrURRt
-         bvcOQ8DBU8JzXxDzgVMd0VHnutSyXQYNgTKBzP0iG3w5sb0+/Hp0ekGUWqmSw4CWJUki
-         Shyty8SozzIoPcK+YZQtbOtAlmwWOmQLETd6LQ3ETQCs2K/wt0a4M+7oGM+U21Me9fBi
-         sp1lKuvL4skx0qrtVMTpYvH9QI+3AM7sL7i6gWaV36J2Pv9Ps7xwvQGkOC5tXz4MzVc6
-         rflSlAhATzBZURwMzvVmqsgdiJRp/CK7iF1T3ppH+eAN74sVNwMmZ3pQ0PpeTsWug3S8
-         jZEQ==
-X-Gm-Message-State: AOJu0Yx1PA+W4RY3Q8rNoYY57iivZCbjt2wyICBzGppUxChJo5qkQKM7
-	tDE8LAfX4NOUH45ofkaiyJboUQ==
-X-Google-Smtp-Source: AGHT+IEig6w1WXc49xuX4iE5CXV95u9WT9rGUAC1VDkUzUgoX3sjzdVK/zLppKXtEn6dZJkEov2UuQ==
-X-Received: by 2002:a05:651c:2207:b0:2cc:2018:64e4 with SMTP id y7-20020a05651c220700b002cc201864e4mr1014427ljq.99.1702296356281;
-        Mon, 11 Dec 2023 04:05:56 -0800 (PST)
-Received: from ?IPv6:2804:30c:915:cb00:89a8:6d94:ec55:e0a3? ([2804:30c:915:cb00:89a8:6d94:ec55:e0a3])
-        by smtp.gmail.com with ESMTPSA id y8-20020a17090322c800b001d1ccb0ac98sm6446003plg.272.2023.12.11.04.05.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Dec 2023 04:05:55 -0800 (PST)
-Message-ID: <921825afe9e434f550d012c7e80c92973b2d93d1.camel@suse.com>
-Subject: Re: [PATCH] Revert "selftests: error out if kernel header files are
- not yet built"
-From: Marcos Paulo de Souza <mpdesouza@suse.com>
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>, John Hubbard
-	 <jhubbard@nvidia.com>, Andrew Morton <akpm@linux-foundation.org>
-Cc: David Hildenbrand <david@redhat.com>, Peter Xu <peterx@redhat.com>, 
- Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- linux-mm@kvack.org,  linux-kselftest@vger.kernel.org, LKML
- <linux-kernel@vger.kernel.org>, Anders Roxell <anders.roxell@linaro.org>,
- Jonathan Corbet <corbet@lwn.net>
-Date: Mon, 11 Dec 2023 09:05:49 -0300
-In-Reply-To: <0b35fcbd-ce8c-4c12-9725-01f18ade9fc0@collabora.com>
-References: <20231209020144.244759-1-jhubbard@nvidia.com>
-	 <0b35fcbd-ce8c-4c12-9725-01f18ade9fc0@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.50.1 
+X-Greylist: delayed 1228 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 11 Dec 2023 04:12:16 PST
+Received: from szxga06-in.huawei.com (szxga06-in.huawei.com [45.249.212.32])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E0B4F2;
+	Mon, 11 Dec 2023 04:12:16 -0800 (PST)
+Received: from mail.maildlp.com (unknown [172.19.163.17])
+	by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4Spg7z2kdDz1vnkK;
+	Mon, 11 Dec 2023 19:51:43 +0800 (CST)
+Received: from dggpemm500005.china.huawei.com (unknown [7.185.36.74])
+	by mail.maildlp.com (Postfix) with ESMTPS id 759501A016F;
+	Mon, 11 Dec 2023 19:51:46 +0800 (CST)
+Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
+ (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Mon, 11 Dec
+ 2023 19:51:46 +0800
+Subject: Re: [net-next v1 09/16] page_pool: device memory support
+To: Mina Almasry <almasrymina@google.com>
+CC: Shailend Chand <shailend@google.com>, <netdev@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<linux-arch@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<bpf@vger.kernel.org>, <linux-media@vger.kernel.org>,
+	<dri-devel@lists.freedesktop.org>, "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
+ Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>, Jeroen de Borst
+	<jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, Jesper
+ Dangaard Brouer <hawk@kernel.org>, Ilias Apalodimas
+	<ilias.apalodimas@linaro.org>, Arnd Bergmann <arnd@arndb.de>, David Ahern
+	<dsahern@kernel.org>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
+	=?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>, Harshitha
+ Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeelb@google.com>
+References: <20231208005250.2910004-1-almasrymina@google.com>
+ <20231208005250.2910004-10-almasrymina@google.com>
+ <32211cbf-3a4e-8a86-6214-4304ddb18a98@huawei.com>
+ <CAHS8izOQcuLPwvDff96fuNB7r6EU9OWt3ShueQp=u7wat3L5LA@mail.gmail.com>
+ <92e30bd9-6df4-b72f-7bcd-f4fe5670eba2@huawei.com>
+ <CAHS8izPEFsqw50qgM+sPot6XVvOExpd+DrwrmPSR3zsWGLysRw@mail.gmail.com>
+ <CAHS8izN6Cbjy0FCYhJyNsP396XfgJ_nTFXWuHb5QWNct=PifAg@mail.gmail.com>
+From: Yunsheng Lin <linyunsheng@huawei.com>
+Message-ID: <59e07233-24cb-7fb2-1aee-e1cf7eb72fa9@huawei.com>
+Date: Mon, 11 Dec 2023 19:51:45 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+In-Reply-To: <CAHS8izN6Cbjy0FCYhJyNsP396XfgJ_nTFXWuHb5QWNct=PifAg@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
 
-T24gTW9uLCAyMDIzLTEyLTExIGF0IDE2OjAwICswNTAwLCBNdWhhbW1hZCBVc2FtYSBBbmp1bSB3
-cm90ZToKPiBPbiAxMi85LzIzIDc6MDEgQU0sIEpvaG4gSHViYmFyZCB3cm90ZToKPiA+IFRoaXMg
-cmV2ZXJ0cyBjb21taXQgOWZjOTZjN2MxOWRmICgic2VsZnRlc3RzOiBlcnJvciBvdXQgaWYga2Vy
-bmVsCj4gPiBoZWFkZXIKPiA+IGZpbGVzIGFyZSBub3QgeWV0IGJ1aWx0IikuCj4gSSBkb24ndCB0
-aGluayB3aG9sZSBvZiB0aGlzIGNvbW1pdCBuZWVkcyB0byBiZSByZXZlcnRlZC4gTGV0cyBsZWF2
-ZQo+IHRoZQo+IHdhcm5pbmcgbWVzc2FnZSBhcyBpdCBpcyBhbmQganVzdCByZW1vdmUgdGhlIGNv
-bmRpdGlvbiB0byBhYm9ydCB0aGUKPiBjb21waWxhdGlvbi4KClJldmVydGluZyBvciBqdXN0IHBy
-aW50aW5nIHRoZSB3YXJuaW5nIHdvdWxkIHdvcmsgZm9yIG91ciB0ZXN0Y2FzZXMsIGFzCmxvbmcg
-YXMgaXQgZG9lc24ndCBlcnJvciBvdXQuCgo+IAo+ID4gCj4gPiBJdCB0dXJucyBvdXQgdGhhdCBy
-ZXF1aXJpbmcgdGhlIGtlcm5lbCBoZWFkZXJzIHRvIGJlIGJ1aWx0IGFzIGEKPiA+IHByZXJlcXVp
-c2l0ZSB0byBidWlsZGluZyBzZWxmdGVzdHMsIGRvZXMgbm90IHdvcmsgaW4gbWFueSBjYXNlcy4K
-PiA+IEZvcgo+ID4gZXhhbXBsZSwgUGV0ZXIgWmlqbHN0cmEgd3JpdGVzOgo+ID4gCj4gPiAiTXkg
-YmlnZ2VzdCBiZWVmIHdpdGggdGhlIHdob2xlIHRoaW5nIGlzIHRoYXQgSSBzaW1wbHkgZG8gbm90
-IHdhbnQKPiA+IHRvIHVzZQo+ID4gJ21ha2UgaGVhZGVycycsIGl0IGRvZXNuJ3Qgd29yayBmb3Ig
-bWUuCj4gPiAKPiA+IEkgaGF2ZSBhIHRvbiBvZiBvdXRwdXQgZGlyZWN0b3JpZXMgYW5kIEkgZG9u
-J3QgY2FyZSB0byBidWlsZCB0b29scwo+ID4gaW50bwo+ID4gdGhlIG91dHB1dCBkaXJzLCBpbiBm
-YWN0IHNvbWUgb2YgdGhlbSBmbGF0IG91dCByZWZ1c2UgdG8gd29yayB0aGF0Cj4gPiB3YXkKPiA+
-IChicGYgY29tZXMgdG8gbWluZCkuIiBbMV0KPiA+IAo+ID4gVGhlcmVmb3JlLCBzdG9wIGVycm9y
-aW5nIG91dCBvbiB0aGUgc2VsZnRlc3RzIGJ1aWxkLiBBZGRpdGlvbmFsCj4gPiBwYXRjaGVzCj4g
-PiB3aWxsIGJlIHJlcXVpcmVkIGluIG9yZGVyIHRvIGNoYW5nZSBvdmVyIHRvIG5vdCByZXF1aXJp
-bmcgdGhlCj4gPiBrZXJuZWwKPiA+IGhlYWRlcnMuCj4gPiAKPiA+IFsxXQo+ID4gaHR0cHM6Ly9s
-b3JlLmtlcm5lbC5vcmcvMjAyMzEyMDgyMjEwMDcuR08yODcyN0Bub2lzeS5wcm9ncmFtbWluZy5r
-aWNrcy1hc3MubmV0Cj4gPiAKPiA+IENjOiBBbmRlcnMgUm94ZWxsIDxhbmRlcnMucm94ZWxsQGxp
-bmFyby5vcmc+Cj4gPiBDYzogTXVoYW1tYWQgVXNhbWEgQW5qdW0gPHVzYW1hLmFuanVtQGNvbGxh
-Ym9yYS5jb20+Cj4gPiBDYzogRGF2aWQgSGlsZGVuYnJhbmQgPGRhdmlkQHJlZGhhdC5jb20+Cj4g
-PiBDYzogUGV0ZXIgWHUgPHBldGVyeEByZWRoYXQuY29tPgo+ID4gQ2M6IEpvbmF0aGFuIENvcmJl
-dCA8Y29yYmV0QGx3bi5uZXQ+Cj4gPiBDYzogTmF0aGFuIENoYW5jZWxsb3IgPG5hdGhhbkBrZXJu
-ZWwub3JnPgo+ID4gQ2M6IFNodWFoIEtoYW4gPHNodWFoQGtlcm5lbC5vcmc+Cj4gPiBTaWduZWQt
-b2ZmLWJ5OiBKb2huIEh1YmJhcmQgPGpodWJiYXJkQG52aWRpYS5jb20+Cj4gPiAtLS0KPiA+IMKg
-dG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvTWFrZWZpbGUgfCAyMSArLS0tLS0tLS0tLS0tLS0tLQo+
-ID4gwqB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9saWIubWvCoMKgIHwgNDAgKysrLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLQo+ID4gLS0tLQo+ID4gwqAyIGZpbGVzIGNoYW5nZWQsIDQgaW5zZXJ0
-aW9ucygrKSwgNTcgZGVsZXRpb25zKC0pCj4gPiAKPiA+IGRpZmYgLS1naXQgYS90b29scy90ZXN0
-aW5nL3NlbGZ0ZXN0cy9NYWtlZmlsZQo+ID4gYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9NYWtl
-ZmlsZQo+ID4gaW5kZXggM2IyMDYxZDFjMWE1Li44MjQ3YTdjNjljMzYgMTAwNjQ0Cj4gPiAtLS0g
-YS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9NYWtlZmlsZQo+ID4gKysrIGIvdG9vbHMvdGVzdGlu
-Zy9zZWxmdGVzdHMvTWFrZWZpbGUKPiA+IEBAIC0xNTUsMTIgKzE1NSwxMCBAQCBpZm5lcSAoJChL
-QlVJTERfT1VUUFVUKSwpCj4gPiDCoMKgIGFic19vYmp0cmVlIDo9ICQocmVhbHBhdGggJChhYnNf
-b2JqdHJlZSkpCj4gPiDCoMKgIEJVSUxEIDo9ICQoYWJzX29ianRyZWUpL2tzZWxmdGVzdAo+ID4g
-wqDCoCBLSERSX0lOQ0xVREVTIDo9IC1pc3lzdGVtICR7YWJzX29ianRyZWV9L3Vzci9pbmNsdWRl
-Cj4gPiAtwqAgS0hEUl9ESVIgOj0gJHthYnNfb2JqdHJlZX0vdXNyL2luY2x1ZGUKPiA+IMKgZWxz
-ZQo+ID4gwqDCoCBCVUlMRCA6PSAkKENVUkRJUikKPiA+IMKgwqAgYWJzX3NyY3RyZWUgOj0gJChz
-aGVsbCBjZCAkKHRvcF9zcmNkaXIpICYmIHB3ZCkKPiA+IMKgwqAgS0hEUl9JTkNMVURFUyA6PSAt
-aXN5c3RlbSAke2Fic19zcmN0cmVlfS91c3IvaW5jbHVkZQo+ID4gLcKgIEtIRFJfRElSIDo9ICR7
-YWJzX3NyY3RyZWV9L3Vzci9pbmNsdWRlCj4gPiDCoMKgIERFRkFVTFRfSU5TVEFMTF9IRFJfUEFU
-SCA6PSAxCj4gPiDCoGVuZGlmCj4gPiDCoAo+ID4gQEAgLTE3NCw3ICsxNzIsNyBAQCBleHBvcnQg
-S0hEUl9JTkNMVURFUwo+ID4gwqAjIGFsbCBpc24ndCB0aGUgZmlyc3QgdGFyZ2V0IGluIHRoZSBm
-aWxlLgo+ID4gwqAuREVGQVVMVF9HT0FMIDo9IGFsbAo+ID4gwqAKPiA+IC1hbGw6IGtlcm5lbF9o
-ZWFkZXJfZmlsZXMKPiA+ICthbGw6Cj4gPiDCoAlAcmV0PTE7CQkJCQkJCj4gPiAJXAo+ID4gwqAJ
-Zm9yIFRBUkdFVCBpbiAkKFRBUkdFVFMpOyBkbwkJCQlcCj4gPiDCoAkJQlVJTERfVEFSR0VUPSQk
-QlVJTEQvJCRUQVJHRVQ7CQkJXAo+ID4gQEAgLTE4NSwyMyArMTgzLDYgQEAgYWxsOiBrZXJuZWxf
-aGVhZGVyX2ZpbGVzCj4gPiDCoAkJcmV0PSQkKChyZXQgKiAkJD8pKTsJCQkJXAo+ID4gwqAJZG9u
-ZTsgZXhpdCAkJHJldDsKPiA+IMKgCj4gPiAta2VybmVsX2hlYWRlcl9maWxlczoKPiA+IC0JQGxz
-ICQoS0hEUl9ESVIpL2xpbnV4LyouaCA+L2Rldi9udWxsCj4gPiAyPi9kZXYvbnVsbDvCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBcCj4gPiAtCWlmIFsg
-JCQ/IC1uZSAwIF07Cj4gPiB0aGVuwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqAgXAo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqAKPiA+IFJFRD0nXDAzM1sx
-OzMxbSc7wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAKPiA+IFwKPiA+
-IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgCj4gPiBOT0NPTE9SPSdcMDMzWzBtJzvCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAKPiA+IFwKPiA+IC3CoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgCj4gPiBlY2hvO8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgCj4gPiBcCj4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oCBlY2hvIC1lICIkJHtSRUR9ZXJyb3IkJHtOT0NPTE9SfTogbWlzc2luZyBrZXJuZWwKPiA+IGhl
-YWRlciBmaWxlcy4iO8KgwqAgXAo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZWNobyAiUGxl
-YXNlIHJ1biB0aGlzIGFuZCB0cnkKPiA+IGFnYWluOiI7wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgXAo+ID4gLcKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqAKPiA+IGVjaG87wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAKPiA+IFwKPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-IGVjaG8gIsKgwqDCoCBjZAo+ID4gJCh0b3Bfc3JjZGlyKSI7wqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBc
-Cj4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBlY2hvICLCoMKgwqAgbWFrZQo+ID4gaGVhZGVy
-cyI7wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIFwKPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgCj4gPiBlY2hvO8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgCj4gPiBcCj4gPiAtCcKgwqDCoCBleGl0Cj4gPiAxO8KgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoCBcCj4gPiAtCWZpCj4gPiAtCj4gPiAtLlBIT05ZOiBrZXJuZWxfaGVhZGVyX2ZpbGVz
-Cj4gPiAtCj4gPiDCoHJ1bl90ZXN0czogYWxsCj4gPiDCoAlAZm9yIFRBUkdFVCBpbiAkKFRBUkdF
-VFMpOyBkbyBcCj4gPiDCoAkJQlVJTERfVEFSR0VUPSQkQlVJTEQvJCRUQVJHRVQ7CVwKPiA+IGRp
-ZmYgLS1naXQgYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9saWIubWsKPiA+IGIvdG9vbHMvdGVz
-dGluZy9zZWxmdGVzdHMvbGliLm1rCj4gPiBpbmRleCAxMThlMDk2NGJkYTkuLmFhNjQ2ZTA2NjFm
-MyAxMDA2NDQKPiA+IC0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2xpYi5tawo+ID4gKysr
-IGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvbGliLm1rCj4gPiBAQCAtNDQsMjYgKzQ0LDEwIEBA
-IGVuZGlmCj4gPiDCoHNlbGZkaXIgPSAkKHJlYWxwYXRoICQoZGlyICQoZmlsdGVyICUvbGliLm1r
-LCQoTUFLRUZJTEVfTElTVCkpKSkKPiA+IMKgdG9wX3NyY2RpciA9ICQoc2VsZmRpcikvLi4vLi4v
-Li4KPiA+IMKgCj4gPiAtaWZlcSAoIiQob3JpZ2luIE8pIiwgImNvbW1hbmQgbGluZSIpCj4gPiAt
-wqAgS0JVSUxEX09VVFBVVCA6PSAkKE8pCj4gPiAraWZlcSAoJChLSERSX0lOQ0xVREVTKSwpCj4g
-PiArS0hEUl9JTkNMVURFUyA6PSAtaXN5c3RlbSAkKHRvcF9zcmNkaXIpL3Vzci9pbmNsdWRlCj4g
-PiDCoGVuZGlmCj4gPiDCoAo+ID4gLWlmbmVxICgkKEtCVUlMRF9PVVRQVVQpLCkKPiA+IC3CoCAj
-IE1ha2UncyBidWlsdC1pbiBmdW5jdGlvbnMgc3VjaCBhcyAkKGFic3BhdGggLi4uKSwgJChyZWFs
-cGF0aAo+ID4gLi4uKSBjYW5ub3QKPiA+IC3CoCAjIGV4cGFuZCBhIHNoZWxsIHNwZWNpYWwgY2hh
-cmFjdGVyICd+Jy4gV2UgdXNlIGEgc29tZXdoYXQKPiA+IHRlZGlvdXMgd2F5IGhlcmUuCj4gPiAt
-wqAgYWJzX29ianRyZWUgOj0gJChzaGVsbCBjZCAkKHRvcF9zcmNkaXIpICYmIG1rZGlyIC1wCj4g
-PiAkKEtCVUlMRF9PVVRQVVQpICYmIGNkICQoS0JVSUxEX09VVFBVVCkgJiYgcHdkKQo+ID4gLcKg
-ICQoaWYgJChhYnNfb2JqdHJlZSksLCBcCj4gPiAtwqDCoMKgICQoZXJyb3IgZmFpbGVkIHRvIGNy
-ZWF0ZSBvdXRwdXQgZGlyZWN0b3J5ICIkKEtCVUlMRF9PVVRQVVQpIikpCj4gPiAtwqAgIyAkKHJl
-YWxwYXRoIC4uLikgcmVzb2x2ZXMgc3ltbGlua3MKPiA+IC3CoCBhYnNfb2JqdHJlZSA6PSAkKHJl
-YWxwYXRoICQoYWJzX29ianRyZWUpKQo+ID4gLcKgIEtIRFJfRElSIDo9ICR7YWJzX29ianRyZWV9
-L3Vzci9pbmNsdWRlCj4gPiAtZWxzZQo+ID4gLcKgIGFic19zcmN0cmVlIDo9ICQoc2hlbGwgY2Qg
-JCh0b3Bfc3JjZGlyKSAmJiBwd2QpCj4gPiAtwqAgS0hEUl9ESVIgOj0gJHthYnNfc3JjdHJlZX0v
-dXNyL2luY2x1ZGUKPiA+IC1lbmRpZgo+ID4gLQo+ID4gLUtIRFJfSU5DTFVERVMgOj0gLWlzeXN0
-ZW0gJChLSERSX0RJUikKPiA+IC0KPiA+IMKgIyBUaGUgZm9sbG93aW5nIGFyZSBidWlsdCBieSBs
-aWIubWsgY29tbW9uIGNvbXBpbGUgcnVsZXMuCj4gPiDCoCMgVEVTVF9DVVNUT01fUFJPR1Mgc2hv
-dWxkIGJlIHVzZWQgYnkgdGVzdHMgdGhhdCByZXF1aXJlCj4gPiDCoCMgY3VzdG9tIGJ1aWxkIHJ1
-bGUgYW5kIHByZXZlbnQgY29tbW9uIGJ1aWxkIHJ1bGUgdXNlLgo+ID4gQEAgLTc0LDI1ICs1OCw3
-IEBAIFRFU1RfR0VOX1BST0dTIDo9ICQocGF0c3Vic3QKPiA+ICUsJChPVVRQVVQpLyUsJChURVNU
-X0dFTl9QUk9HUykpCj4gPiDCoFRFU1RfR0VOX1BST0dTX0VYVEVOREVEIDo9ICQocGF0c3Vic3QK
-PiA+ICUsJChPVVRQVVQpLyUsJChURVNUX0dFTl9QUk9HU19FWFRFTkRFRCkpCj4gPiDCoFRFU1Rf
-R0VOX0ZJTEVTIDo9ICQocGF0c3Vic3QgJSwkKE9VVFBVVCkvJSwkKFRFU1RfR0VOX0ZJTEVTKSkK
-PiA+IMKgCj4gPiAtYWxsOiBrZXJuZWxfaGVhZGVyX2ZpbGVzICQoVEVTVF9HRU5fUFJPR1MpCj4g
-PiAkKFRFU1RfR0VOX1BST0dTX0VYVEVOREVEKSBcCj4gPiAtwqDCoMKgwqAgJChURVNUX0dFTl9G
-SUxFUykKPiA+IC0KPiA+IC1rZXJuZWxfaGVhZGVyX2ZpbGVzOgo+ID4gLQlAbHMgJChLSERSX0RJ
-UikvbGludXgvKi5oID4vZGV2L251bGwKPiA+IDI+L2Rldi9udWxsO8KgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBcCj4gPiAtCWlmIFsgJCQ/IC1uZSAwIF07Cj4gPiB0
-aGVuwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIFwKPiA+IC3CoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgCj4gPiBSRUQ9J1wwMzNbMTszMW0nO8KgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgCj4gPiBcCj4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoAo+
-ID4gTk9DT0xPUj0nXDAzM1swbSc7wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgCj4gPiBcCj4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoAo+ID4gZWNobzvCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoAo+
-ID4gXAo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZWNobyAtZSAiJCR7UkVEfWVycm9yJCR7
-Tk9DT0xPUn06IG1pc3Npbmcga2VybmVsCj4gPiBoZWFkZXIgZmlsZXMuIjvCoMKgIFwKPiA+IC3C
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgIGVjaG8gIlBsZWFzZSBydW4gdGhpcyBhbmQgdHJ5Cj4gPiBh
-Z2FpbjoiO8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgIFwKPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgCj4gPiBlY2hvO8KgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgCj4g
-PiBcCj4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBlY2hvICLCoMKgwqAgY2QKPiA+ICQodG9w
-X3NyY2RpcikiO8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgXAo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqAgZWNobyAiwqDCoMKgIG1ha2UKPiA+IGhlYWRlcnMiO8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoCBcCj4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoAo+ID4gZWNobzvCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoAo+ID4g
-XAo+ID4gLQnCoMKgwqAgZXhpdCAxOyBcCj4gPiAtCWZpCj4gPiAtCj4gPiAtLlBIT05ZOiBrZXJu
-ZWxfaGVhZGVyX2ZpbGVzCj4gPiArYWxsOiAkKFRFU1RfR0VOX1BST0dTKSAkKFRFU1RfR0VOX1BS
-T0dTX0VYVEVOREVEKQo+ID4gJChURVNUX0dFTl9GSUxFUykKPiA+IMKgCj4gPiDCoGRlZmluZSBS
-VU5fVEVTVFMKPiA+IMKgCUJBU0VfRElSPSIkKHNlbGZkaXIpIjsJCQlcCj4gCgo=
+On 2023/12/11 12:04, Mina Almasry wrote:
+> On Sun, Dec 10, 2023 at 6:26 PM Mina Almasry <almasrymina@google.com> wrote:
+>>
+>> On Sun, Dec 10, 2023 at 6:04 PM Yunsheng Lin <linyunsheng@huawei.com> wrote:
+>>>
+>>> On 2023/12/9 0:05, Mina Almasry wrote:
+>>>> On Fri, Dec 8, 2023 at 1:30 AM Yunsheng Lin <linyunsheng@huawei.com> wrote:
+>>>>>
+>>>>>
+>>>>> As mentioned before, it seems we need to have the above checking every
+>>>>> time we need to do some per-page handling in page_pool core, is there
+>>>>> a plan in your mind how to remove those kind of checking in the future?
+>>>>>
+>>>>
+>>>> I see 2 ways to remove the checking, both infeasible:
+>>>>
+>>>> 1. Allocate a wrapper struct that pulls out all the fields the page pool needs:
+>>>>
+>>>> struct netmem {
+>>>>         /* common fields */
+>>>>         refcount_t refcount;
+>>>>         bool is_pfmemalloc;
+>>>>         int nid;
+>>>>         ...
+>>>>         union {
+>>>>                 struct dmabuf_genpool_chunk_owner *owner;
+>>>>                 struct page * page;
+>>>>         };
+>>>> };
+>>>>
+>>>> The page pool can then not care if the underlying memory is iov or
+>>>> page. However this introduces significant memory bloat as this struct
+>>>> needs to be allocated for each page or ppiov, which I imagine is not
+>>>> acceptable for the upside of removing a few static_branch'd if
+>>>> statements with no performance cost.
+>>>>
+>>>> 2. Create a unified struct for page and dmabuf memory, which the mm
+>>>> folks have repeatedly nacked, and I imagine will repeatedly nack in
+>>>> the future.
+>>>>
+>>>> So I imagine the special handling of ppiov in some form is critical
+>>>> and the checking may not be removable.
+>>>
+>>> If the above is true, perhaps devmem is not really supposed to be intergated
+>>> into page_pool.
+>>>
+>>> Adding a checking for every per-page handling in page_pool core is just too
+>>> hacky to be really considerred a longterm solution.
+>>>
+>>
+>> The only other option is to implement another page_pool for ppiov and
+>> have the driver create page_pool or ppiov_pool depending on the state
+>> of the netdev_rx_queue (or some helper in the net stack to do that for
+>> the driver). This introduces some code duplication. The ppiov_pool &
+>> page_pool would look similar in implementation.
 
+I think there is a design pattern already to deal with this kind of problem,
+refactoring common code used by both page_pool and ppiov into a library to
+aovid code duplication if most of them have similar implementation.
+
+>>
+>> But this was all discussed in detail in RFC v2 and the last response I
+>> heard from Jesper was in favor if this approach, if I understand
+>> correctly:
+>>
+>> https://lore.kernel.org/netdev/7aedc5d5-0daf-63be-21bc-3b724cc1cab9@redhat.com/
+>>
+>> Would love to have the maintainer weigh in here.
+>>
+> 
+> I should note we may be able to remove some of the checking, but maybe not all.
+> 
+> - Checks that disable page fragging for ppiov can be removed once
+> ppiov has frag support (in this series or follow up).
+> 
+> - If we use page->pp_frag_count (or page->pp_ref_count) for
+> refcounting ppiov, we can remove the if checking in the refcounting.
+> 
+> - We may be able to store the dma_addr of the ppiov in page->dma_addr,
+> but I'm unsure if that actually works, because the dma_buf dmaddr is
+> dma_addr_t (u32 or u64), but page->dma_addr is unsigned long (4 bytes
+> I think). But if it works for pages I may be able to make it work for
+> ppiov as well.
+> 
+> - Checks that obtain the page->pp can work with ppiov if we align the
+> offset of page->pp and ppiov->pp.
+> 
+> - Checks around page->pp_magic can be removed if we also have offset
+> aligned ppiov->pp_magic.
+> 
+> Sadly I don't see us removing the checking for these other cases:
+> 
+> - page_is_pfmemalloc(): I'm not allowed to pass a non-struct page into
+> that helper.
+
+We can do similar trick like above as bit 1 of page->pp_magic is used to
+indicate that if it is a pfmemalloc page.
+
+> 
+> - page_to_nid(): I'm not allowed to pass a non-struct page into that helper.
+
+Yes, this one need special case.
+
+> 
+> - page_pool_free_va(): ppiov have no va.
+
+Doesn't the skb_frags_readable() checking will protect the page_pool_free_va()
+from being called on devmem?
+
+> 
+> - page_pool_sync_for_dev/page_pool_dma_map: ppiov backed by dma-buf
+> fundamentally can't get mapped again.
+
+Can we just fail the page_pool creation with PP_FLAG_DMA_MAP and
+DMA_ATTR_SKIP_CPU_SYNC flags for devmem provider?
+
+> 
+> Are the removal (or future removal) of these checks enough to resolve this?
+
+Yes, that is somewhat similar to my proposal, the biggest objection seems to
+be that we need to have a safe type checking for it to work correctly.
+
+> 
+>>> It is somewhat ironical that devmem is using static_branch to alliviate the
+>>> performance impact for normal memory at the possible cost of performance
+>>> degradation for devmem, does it not defeat some purpose of intergating devmem
+>>> to page_pool?
+>>>
+>>
+>> I don't see the issue. The static branch sets the non-ppiov path as
+>> default if no memory providers are in use, and flips it when they are,
+>> making the default branch prediction ideal in both cases.
+
+You are assuming the we are not using page pool for both normal memory and
+devmem at the same. But a generic solution should not have that assumption
+as my understanding.
+
+>>
+>>>>
+>>>>> Even though a static_branch check is added in page_is_page_pool_iov(), it
+>>>>> does not make much sense that a core has tow different 'struct' for its
+>>>>> most basic data.
+>>>>>
+>>>>> IMHO, the ppiov for dmabuf is forced fitting into page_pool without much
+>>>>> design consideration at this point.
+>>>>>
+>>>> ...
+>>>>>
+>>>>> For now, the above may work for the the rx part as it seems that you are
+>>>>> only enabling rx for dmabuf for now.
+>>>>>
+>>>>> What is the plan to enable tx for dmabuf? If it is also intergrated into
+>>>>> page_pool? There was a attempt to enable page_pool for tx, Eric seemed to
+>>>>> have some comment about this:
+>>>>> https://lkml.kernel.org/netdev/2cf4b672-d7dc-db3d-ce90-15b4e91c4005@huawei.com/T/#mb6ab62dc22f38ec621d516259c56dd66353e24a2
+>>>>>
+>>>>> If tx is not intergrated into page_pool, do we need to create a new layer for
+>>>>> the tx dmabuf?
+>>>>>
+>>>>
+>>>> I imagine the TX path will reuse page_pool_iov, page_pool_iov_*()
+>>>> helpers, and page_pool_page_*() helpers, but will not need any core
+>>>> page_pool changes. This is because the TX path will have to piggyback
+>>>
+>>> We may need another bit/flags checking to demux between page_pool owned
+>>> devmem and non-page_pool owned devmem.
+>>>
+>>
+>> The way I'm imagining the support, I don't see the need for such
+>> flags. We'd be re-using generic helpers like
+>> page_pool_iov_get_dma_address() and what not that don't need that
+>> checking.
+>>
+>>> Also calling page_pool_*() on non-page_pool owned devmem is confusing
+>>> enough that we may need a thin layer handling non-page_pool owned devmem
+>>> in the end.
+>>>
+>>
+>> The page_pool_page* & page_pool_iov* functions can be renamed if
+>> confusing. I would think that's no issue (note that the page_pool_*
+
+When you rename those functions, you will have a thin layer automatically.
+
+>> functions need not be called for TX path).
+>>
+>>>> on MSG_ZEROCOPY (devmem is not copyable), so no memory allocation from
+>>>> the page_pool (or otherwise) is needed or possible. RFCv1 had a TX
+>>>> implementation based on dmabuf pages without page_pool involvement, I
+>>>> imagine I'll do something similar.
+>>> It would be good to have a tx implementation for the next version, so
+>>> that we can have a whole picture of devmem.
