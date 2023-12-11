@@ -1,246 +1,173 @@
-X-Greylist: delayed 1228 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 11 Dec 2023 04:12:16 PST
-Received: from szxga06-in.huawei.com (szxga06-in.huawei.com [45.249.212.32])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E0B4F2;
-	Mon, 11 Dec 2023 04:12:16 -0800 (PST)
-Received: from mail.maildlp.com (unknown [172.19.163.17])
-	by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4Spg7z2kdDz1vnkK;
-	Mon, 11 Dec 2023 19:51:43 +0800 (CST)
-Received: from dggpemm500005.china.huawei.com (unknown [7.185.36.74])
-	by mail.maildlp.com (Postfix) with ESMTPS id 759501A016F;
-	Mon, 11 Dec 2023 19:51:46 +0800 (CST)
-Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
- (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Mon, 11 Dec
- 2023 19:51:46 +0800
-Subject: Re: [net-next v1 09/16] page_pool: device memory support
-To: Mina Almasry <almasrymina@google.com>
-CC: Shailend Chand <shailend@google.com>, <netdev@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-	<linux-arch@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<bpf@vger.kernel.org>, <linux-media@vger.kernel.org>,
-	<dri-devel@lists.freedesktop.org>, "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
- Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>, Jeroen de Borst
-	<jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, Jesper
- Dangaard Brouer <hawk@kernel.org>, Ilias Apalodimas
-	<ilias.apalodimas@linaro.org>, Arnd Bergmann <arnd@arndb.de>, David Ahern
-	<dsahern@kernel.org>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
-	=?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>, Harshitha
- Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeelb@google.com>
-References: <20231208005250.2910004-1-almasrymina@google.com>
- <20231208005250.2910004-10-almasrymina@google.com>
- <32211cbf-3a4e-8a86-6214-4304ddb18a98@huawei.com>
- <CAHS8izOQcuLPwvDff96fuNB7r6EU9OWt3ShueQp=u7wat3L5LA@mail.gmail.com>
- <92e30bd9-6df4-b72f-7bcd-f4fe5670eba2@huawei.com>
- <CAHS8izPEFsqw50qgM+sPot6XVvOExpd+DrwrmPSR3zsWGLysRw@mail.gmail.com>
- <CAHS8izN6Cbjy0FCYhJyNsP396XfgJ_nTFXWuHb5QWNct=PifAg@mail.gmail.com>
-From: Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <59e07233-24cb-7fb2-1aee-e1cf7eb72fa9@huawei.com>
-Date: Mon, 11 Dec 2023 19:51:45 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C+QQp+fU"
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D66CD;
+	Mon, 11 Dec 2023 04:18:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1702297122; x=1733833122;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=WoCyP7/eVs07Uaxg+Z6bbeKyFt0c/ppUNHZy+vX7I+w=;
+  b=C+QQp+fU30b9FokY+LYJkgJC2H6H7f7aaGMnn3YGozetZ14f7P8JiZIA
+   RSz6DQuzKqF2LIssYpo5+GhBmjrt5jR0r4vNYsswltkgoKPHnG3ed3QnE
+   /IJ6Xxb3D7pJYicWtOejJpoMF8wgpWiznuhDKDLvc22dg/v0MUAVGzpCA
+   mear1ywTP3/YENWvRR0Jd5Becy21+uYO1sshKmTQvs/EPMhEbI7RYb4T3
+   pqfLPvU4cyQqzUDzO+8uBXLZGpIRiTpEhXlSuI0QGyAbOEMnaKKWImTVV
+   cmpy9332D0QN2cZkrTuVSnQe2IQALRBRo4m0vTYgoeRwhoETOjEAuAWfT
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10920"; a="7992227"
+X-IronPort-AV: E=Sophos;i="6.04,267,1695711600"; 
+   d="scan'208";a="7992227"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2023 04:18:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10920"; a="916826074"
+X-IronPort-AV: E=Sophos;i="6.04,267,1695711600"; 
+   d="scan'208";a="916826074"
+Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.246.50.188])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2023 04:18:38 -0800
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To: linux-kselftest@vger.kernel.org,
+	Reinette Chatre <reinette.chatre@intel.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
+	=?UTF-8?q?Maciej=20Wiecz=C3=B3r-Retman?= <maciej.wieczor-retman@intel.com>,
+	Fenghua Yu <fenghua.yu@intel.com>
+Cc: linux-kernel@vger.kernel.org,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v3 00/29] selftests/resctrl: CAT test improvements & generalized test framework
+Date: Mon, 11 Dec 2023 14:17:57 +0200
+Message-Id: <20231211121826.14392-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAHS8izN6Cbjy0FCYhJyNsP396XfgJ_nTFXWuHb5QWNct=PifAg@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500005.china.huawei.com (7.185.36.74)
 
-On 2023/12/11 12:04, Mina Almasry wrote:
-> On Sun, Dec 10, 2023 at 6:26 PM Mina Almasry <almasrymina@google.com> wrote:
->>
->> On Sun, Dec 10, 2023 at 6:04 PM Yunsheng Lin <linyunsheng@huawei.com> wrote:
->>>
->>> On 2023/12/9 0:05, Mina Almasry wrote:
->>>> On Fri, Dec 8, 2023 at 1:30 AM Yunsheng Lin <linyunsheng@huawei.com> wrote:
->>>>>
->>>>>
->>>>> As mentioned before, it seems we need to have the above checking every
->>>>> time we need to do some per-page handling in page_pool core, is there
->>>>> a plan in your mind how to remove those kind of checking in the future?
->>>>>
->>>>
->>>> I see 2 ways to remove the checking, both infeasible:
->>>>
->>>> 1. Allocate a wrapper struct that pulls out all the fields the page pool needs:
->>>>
->>>> struct netmem {
->>>>         /* common fields */
->>>>         refcount_t refcount;
->>>>         bool is_pfmemalloc;
->>>>         int nid;
->>>>         ...
->>>>         union {
->>>>                 struct dmabuf_genpool_chunk_owner *owner;
->>>>                 struct page * page;
->>>>         };
->>>> };
->>>>
->>>> The page pool can then not care if the underlying memory is iov or
->>>> page. However this introduces significant memory bloat as this struct
->>>> needs to be allocated for each page or ppiov, which I imagine is not
->>>> acceptable for the upside of removing a few static_branch'd if
->>>> statements with no performance cost.
->>>>
->>>> 2. Create a unified struct for page and dmabuf memory, which the mm
->>>> folks have repeatedly nacked, and I imagine will repeatedly nack in
->>>> the future.
->>>>
->>>> So I imagine the special handling of ppiov in some form is critical
->>>> and the checking may not be removable.
->>>
->>> If the above is true, perhaps devmem is not really supposed to be intergated
->>> into page_pool.
->>>
->>> Adding a checking for every per-page handling in page_pool core is just too
->>> hacky to be really considerred a longterm solution.
->>>
->>
->> The only other option is to implement another page_pool for ppiov and
->> have the driver create page_pool or ppiov_pool depending on the state
->> of the netdev_rx_queue (or some helper in the net stack to do that for
->> the driver). This introduces some code duplication. The ppiov_pool &
->> page_pool would look similar in implementation.
+Hi all,
 
-I think there is a design pattern already to deal with this kind of problem,
-refactoring common code used by both page_pool and ppiov into a library to
-aovid code duplication if most of them have similar implementation.
+Here's v3 series to improve resctrl selftests with generalized test
+framework and rewritten CAT test. As agreed, v3 does not include the
+group naming patch which will become part of Maciej's non-contiguous
+serie. The error handling cleanups (return errno, perror() & return
+value comment cleanups) and CPU affinity restore for CAT test add to
+the patch count.
 
->>
->> But this was all discussed in detail in RFC v2 and the last response I
->> heard from Jesper was in favor if this approach, if I understand
->> correctly:
->>
->> https://lore.kernel.org/netdev/7aedc5d5-0daf-63be-21bc-3b724cc1cab9@redhat.com/
->>
->> Would love to have the maintainer weigh in here.
->>
-> 
-> I should note we may be able to remove some of the checking, but maybe not all.
-> 
-> - Checks that disable page fragging for ppiov can be removed once
-> ppiov has frag support (in this series or follow up).
-> 
-> - If we use page->pp_frag_count (or page->pp_ref_count) for
-> refcounting ppiov, we can remove the if checking in the refcounting.
-> 
-> - We may be able to store the dma_addr of the ppiov in page->dma_addr,
-> but I'm unsure if that actually works, because the dma_buf dmaddr is
-> dma_addr_t (u32 or u64), but page->dma_addr is unsigned long (4 bytes
-> I think). But if it works for pages I may be able to make it work for
-> ppiov as well.
-> 
-> - Checks that obtain the page->pp can work with ppiov if we align the
-> offset of page->pp and ppiov->pp.
-> 
-> - Checks around page->pp_magic can be removed if we also have offset
-> aligned ppiov->pp_magic.
-> 
-> Sadly I don't see us removing the checking for these other cases:
-> 
-> - page_is_pfmemalloc(): I'm not allowed to pass a non-struct page into
-> that helper.
+The series contains following improvements:
 
-We can do similar trick like above as bit 1 of page->pp_magic is used to
-indicate that if it is a pfmemalloc page.
+- Excludes shareable bits from CAT test allocation to avoid interference
+- Replaces file "sink" with a volatile variable
+- Alters read pattern to defeat HW prefetcher optimizations
+- Rewrites CAT test to make the CAT test reliable and truly measure
+  if CAT is working or not
+- Introduces generalized test framework making easier to add new tests
+- Lots of other cleanups & refactoring
 
-> 
-> - page_to_nid(): I'm not allowed to pass a non-struct page into that helper.
+This serie have been tested across a large number of systems from
+different generations.
 
-Yes, this one need special case.
+v3:
+- New patches to handle return errno, perror() and return value comments
+- Tweak changelogs
+- Moved error printout removal to other patch
+- Zero bit CBM returns error
+- Tweak comments
+- Make get_shareable_mask() static
+- Return directly without storing result into ret variable first
+- llc -> LLC
+- Altered changelog and removed "the whole time" wording because
+  llc occu results are still unsigned long
+- Altered changelog's wording to not say "a volatile pointer"
+- Make min_diff_percent and MIN_DIFF_PERCENT_PER_BIT unsigned long
+- Add patch to restore CPU affinity after CAT test
+- Move uparams clear into init function
+- Add CPU vendor ID bitmask comment
+- Use test_resource_feature_check(test) in CMT
+- "feature" -> "resource" in function comment
 
-> 
-> - page_pool_free_va(): ppiov have no va.
+v2:
+- Postpone adding L2 CAT test as more investigations are necessary
+- Add patch to remove ctrlc_handler() from wrong place
+- Improvements to changelogs
+- Function comments improvements & comment cleanups
+- Move some parts of the changes into more logical patch
+- If checks: buf == NULL -> !buf
+- Variable naming:
+        - p -> buf
+        - cbm_mask_path -> cbm_path
+- Function naming:
+        - get_cbm_mask() -> get_full_cbm()
+        - cache_size() -> cache_portion_size()
+- Use PATH_MAX
+- Improved cache_portion_size() parameter names
+- int count -> unsigned int
+- Pass filename to measurement taking functions instead of
+  resctrl_val_param
+- !lines ? : reversal
+- Removed bogus static from function local variable
+- Open perf fd only once, reset & enable in the innermost test loop
+- Add perf fd ioctl() error handling
+- Add patch to change compiler optimization prevention "sink" from file
+  to volatile variable
+- Remove cpu_no and resource (the latter was added in v1) members from
+  resctrl_val_param (pass uparams and test where those are needed)
+- Removed ARRAY_SIZE() macro
+- Add patch to rename "resource_id" to "domain_id"
 
-Doesn't the skb_frags_readable() checking will protect the page_pool_free_va()
-from being called on devmem?
+Ilpo Järvinen (29):
+  selftests/resctrl: Convert perror() to ksft_perror() or
+    ksft_print_msg()
+  selftests/resctrl: Return -1 instead of errno on error
+  selftests/resctrl: Don't use ctrlc_handler() outside signal handling
+  selftests/resctrl: Change function comments to say < 0 on error
+  selftests/resctrl: Split fill_buf to allow tests finer-grained control
+  selftests/resctrl: Refactor fill_buf functions
+  selftests/resctrl: Refactor get_cbm_mask() and rename to
+    get_full_cbm()
+  selftests/resctrl: Mark get_cache_size() cache_type const
+  selftests/resctrl: Create cache_portion_size() helper
+  selftests/resctrl: Exclude shareable bits from schemata in CAT test
+  selftests/resctrl: Split measure_cache_vals()
+  selftests/resctrl: Split show_cache_info() to test specific and
+    generic parts
+  selftests/resctrl: Remove unnecessary __u64 -> unsigned long
+    conversion
+  selftests/resctrl: Remove nested calls in perf event handling
+  selftests/resctrl: Consolidate naming of perf event related things
+  selftests/resctrl: Improve perf init
+  selftests/resctrl: Convert perf related globals to locals
+  selftests/resctrl: Move cat_val() to cat_test.c and rename to
+    cat_test()
+  selftests/resctrl: Open perf fd before start & add error handling
+  selftests/resctrl: Replace file write with volatile variable
+  selftests/resctrl: Read in less obvious order to defeat prefetch
+    optimizations
+  selftests/resctrl: Rewrite Cache Allocation Technology (CAT) test
+  selftests/resctrl: Restore the CPU affinity after CAT test
+  selftests/resctrl: Create struct for input parameters
+  selftests/resctrl: Introduce generalized test framework
+  selftests/resctrl: Pass write_schemata() resource instead of test name
+  selftests/resctrl: Add helper to convert L2/3 to integer
+  selftests/resctrl: Rename resource ID to domain ID
+  selftests/resctrl: Get domain id from cache id
 
-> 
-> - page_pool_sync_for_dev/page_pool_dma_map: ppiov backed by dma-buf
-> fundamentally can't get mapped again.
+ tools/testing/selftests/resctrl/cache.c       | 287 +++++----------
+ tools/testing/selftests/resctrl/cat_test.c    | 337 +++++++++++-------
+ tools/testing/selftests/resctrl/cmt_test.c    |  80 +++--
+ tools/testing/selftests/resctrl/fill_buf.c    | 132 ++++---
+ tools/testing/selftests/resctrl/mba_test.c    |  30 +-
+ tools/testing/selftests/resctrl/mbm_test.c    |  32 +-
+ tools/testing/selftests/resctrl/resctrl.h     | 126 +++++--
+ .../testing/selftests/resctrl/resctrl_tests.c | 197 ++++------
+ tools/testing/selftests/resctrl/resctrl_val.c | 138 +++----
+ tools/testing/selftests/resctrl/resctrlfs.c   | 321 +++++++++++------
+ 10 files changed, 936 insertions(+), 744 deletions(-)
 
-Can we just fail the page_pool creation with PP_FLAG_DMA_MAP and
-DMA_ATTR_SKIP_CPU_SYNC flags for devmem provider?
+-- 
+2.30.2
 
-> 
-> Are the removal (or future removal) of these checks enough to resolve this?
-
-Yes, that is somewhat similar to my proposal, the biggest objection seems to
-be that we need to have a safe type checking for it to work correctly.
-
-> 
->>> It is somewhat ironical that devmem is using static_branch to alliviate the
->>> performance impact for normal memory at the possible cost of performance
->>> degradation for devmem, does it not defeat some purpose of intergating devmem
->>> to page_pool?
->>>
->>
->> I don't see the issue. The static branch sets the non-ppiov path as
->> default if no memory providers are in use, and flips it when they are,
->> making the default branch prediction ideal in both cases.
-
-You are assuming the we are not using page pool for both normal memory and
-devmem at the same. But a generic solution should not have that assumption
-as my understanding.
-
->>
->>>>
->>>>> Even though a static_branch check is added in page_is_page_pool_iov(), it
->>>>> does not make much sense that a core has tow different 'struct' for its
->>>>> most basic data.
->>>>>
->>>>> IMHO, the ppiov for dmabuf is forced fitting into page_pool without much
->>>>> design consideration at this point.
->>>>>
->>>> ...
->>>>>
->>>>> For now, the above may work for the the rx part as it seems that you are
->>>>> only enabling rx for dmabuf for now.
->>>>>
->>>>> What is the plan to enable tx for dmabuf? If it is also intergrated into
->>>>> page_pool? There was a attempt to enable page_pool for tx, Eric seemed to
->>>>> have some comment about this:
->>>>> https://lkml.kernel.org/netdev/2cf4b672-d7dc-db3d-ce90-15b4e91c4005@huawei.com/T/#mb6ab62dc22f38ec621d516259c56dd66353e24a2
->>>>>
->>>>> If tx is not intergrated into page_pool, do we need to create a new layer for
->>>>> the tx dmabuf?
->>>>>
->>>>
->>>> I imagine the TX path will reuse page_pool_iov, page_pool_iov_*()
->>>> helpers, and page_pool_page_*() helpers, but will not need any core
->>>> page_pool changes. This is because the TX path will have to piggyback
->>>
->>> We may need another bit/flags checking to demux between page_pool owned
->>> devmem and non-page_pool owned devmem.
->>>
->>
->> The way I'm imagining the support, I don't see the need for such
->> flags. We'd be re-using generic helpers like
->> page_pool_iov_get_dma_address() and what not that don't need that
->> checking.
->>
->>> Also calling page_pool_*() on non-page_pool owned devmem is confusing
->>> enough that we may need a thin layer handling non-page_pool owned devmem
->>> in the end.
->>>
->>
->> The page_pool_page* & page_pool_iov* functions can be renamed if
->> confusing. I would think that's no issue (note that the page_pool_*
-
-When you rename those functions, you will have a thin layer automatically.
-
->> functions need not be called for TX path).
->>
->>>> on MSG_ZEROCOPY (devmem is not copyable), so no memory allocation from
->>>> the page_pool (or otherwise) is needed or possible. RFCv1 had a TX
->>>> implementation based on dmabuf pages without page_pool involvement, I
->>>> imagine I'll do something similar.
->>> It would be good to have a tx implementation for the next version, so
->>> that we can have a whole picture of devmem.
