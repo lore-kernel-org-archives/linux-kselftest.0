@@ -1,41 +1,41 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BocrOrrm"
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 135541FE0
-	for <linux-kselftest@vger.kernel.org>; Tue, 12 Dec 2023 12:47:48 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-dbcca990ee9so227918276.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 12 Dec 2023 12:47:48 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="c+xXdegY"
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE6F52125
+	for <linux-kselftest@vger.kernel.org>; Tue, 12 Dec 2023 12:47:52 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5d749e4fa3dso76113727b3.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 Dec 2023 12:47:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1702414068; x=1703018868; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1702414072; x=1703018872; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TFmE+BG4/EJDZrVEh/xZNdnTy9FeH/PqMcDgQWjrrOU=;
-        b=BocrOrrmkssbhlib9beP9WoA7Z7v3DilEbiPuKkZ0DfrgrwhdlpOi2YYApCMtXQnPh
-         kq8Iy6y68vFZ0U7TIstBZjX6W8flf5OY5U8khv/L2/BM3vU7saR8yzpJvVINfFQALyu4
-         OoIS5ktLUis8Dbx+Fpv48HB5XmuLJsclrY70tmZaKXDKDlNyKwuMo8b/hbO/zc2dywLW
-         9/1CQYUn/gv8//TgomMA6k59lBWZMdBUIskZ9xoEKY87C/WsHUgcadDRuJ5Y32OHWLG2
-         tERt3TsFvJEJiIyAWBDjUqAq1o/EkFD5MaF1NE2RKENQ6reSo+hLJKygnrdZOdMSENvq
-         43Cw==
+        bh=9b8Rem1AmPjfYzBNcLPCGf0Ya+tJ/F2me7CGYJ1U7yY=;
+        b=c+xXdegYuCLIzMpK1wqjjpEBsZ3P55jFe4ZwmICAMcSiQ23B3Ru+Aghc88Xh0OZazr
+         A1NZz/VwuLXLVINEPI/B8liuqzf8fqjqSQEH7VuQhnXnjwEkW6odAPMBtRdEStly1Fod
+         iQIkmoMo8z226Po8HUqzwajGJZZ/8UnBGb1Z2G/ypIoyVMTIrI7yKBklzczTEhjND7zF
+         vZhhgGNr+B9QeVSt80m1Zwdb7VUsjJNAOlo+T3a4kkN3grVzvcOPtC84XS312Yl7L3V2
+         If5HPkCmEvy3K6XfzAMDn9FAnBZLANr8FJQ36CdOI1MF/mQNUcT96Y9pVMD35/Km5J81
+         ErbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702414068; x=1703018868;
+        d=1e100.net; s=20230601; t=1702414072; x=1703018872;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TFmE+BG4/EJDZrVEh/xZNdnTy9FeH/PqMcDgQWjrrOU=;
-        b=SKq12mrAL8iiu0WJrhRPha0QAgiEmgy3ktuBE7PgpXuasHpY+n1zbHcIWkSxEh4UiP
-         sAgswbbeHrjEvKdMptnmAs4jgo3iPc2crp9RRIgNp0ATEfZWqWDPaYvkEFKRGB3vRFMV
-         vPmPF3qmQ7pQoBK+sRAJ05pgVl2s53YwzT9fYTBKKlpQxuTjTFqFqme6BdBU96NfnVs3
-         MgwQdwjVPcpQDKWbvayY7NrsedhhA8MqeWu4E2dq0ki0pz8kEr2HOVz4vAA/R4sm+JRQ
-         BqWSl3DHBF8W6kgSsH/8B7Epm9k2Zk1xC6dP0bvY4b2xeQgxTR1kGQw9vE9LeMNetSvj
-         YTTQ==
-X-Gm-Message-State: AOJu0YwxhqWdmrL7x2hu0LPMDKVbSLd/NTrWxNvLCFkxxJbP70Y0N5Nf
-	KBrWISQe6IXQt3ioiFDqW9G5b+z0N8qx+U0OMilIV7MnVDHhH4DP6jf9k/q+5ZipeZUqJDfl4EK
-	nQVdB0paXo1Jlaid+CphYac8G1Hy94C+KlmEk0sf9FwZKfx0fB/AK9evpzDPQKkDCyTSABZM=
-X-Google-Smtp-Source: AGHT+IEfV9mKSOUMKRt6QzMdx4NjK5Xm4g7Lzg/OSBchtLDS9HiwFFeqtcXo/zBjodXwgzfPibVCMzwJXQ==
+        bh=9b8Rem1AmPjfYzBNcLPCGf0Ya+tJ/F2me7CGYJ1U7yY=;
+        b=pgulKcJe5TAD0w8A8yhutX/No6uwAml4SYWpDo4dC8Us4Zx0yR2Pbr0+ViM1NhpxWK
+         Wo+MOEsSaehzCKPbWwpoBk2QEm43kv95nB92lHasAMtVpnW3o7Be0Ktq6ctCfRFSoHad
+         O13juHsPVCbP/19y+p8YLWMzDflXbDnnGjXctLSVcdH5Oz9iqn99pkKGZzDbNdMbMOYt
+         Zg5URTJEqWdU7vMs8hJJzPA1X1lZFjZRnZS7n9/zZHbuSd2ENyOdHVVFtZVuaoa2RJQG
+         7T6kWmQE1QZ5gxTH8KioPmqVkmGluYH8OeFFXl1DCmRcKE/yY2FN3Fb2ZG4jGIr99STJ
+         V0LQ==
+X-Gm-Message-State: AOJu0Yyd/eyiMltpOl5n29CifblECuYCCkY2XObcb8ZR+LThNCM0BoL4
+	joV12Kmm40Yc1vv8CqY84Yu6JFj5Qe/3cWGCfYrxD/FlhZ5EFMpIfiK5dcVEZ8bOScFMVzanj4q
+	L3g5Ha9pQMxoRwwzsG5jKW0vXOeVR4UgrNR2TKSPns8143zSSyUBZly0dMACVhyIX20IdQoc=
+X-Google-Smtp-Source: AGHT+IFxV+KrDYmcwmn1PDxvzNdlpDP4pWeOD1xeuiQDvWiuL5pZVy4R12KnOvAQ3fLYUpwzgPkXIIMt+Q==
 X-Received: from sagi.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:241b])
- (user=sagis job=sendgmr) by 2002:a25:d204:0:b0:dbc:cbd9:3cd0 with SMTP id
- j4-20020a25d204000000b00dbccbd93cd0mr566ybg.8.1702414067193; Tue, 12 Dec 2023
- 12:47:47 -0800 (PST)
-Date: Tue, 12 Dec 2023 12:46:42 -0800
+ (user=sagis job=sendgmr) by 2002:a05:690c:891:b0:5d8:eec5:f57c with SMTP id
+ cd17-20020a05690c089100b005d8eec5f57cmr64746ywb.4.1702414070805; Tue, 12 Dec
+ 2023 12:47:50 -0800 (PST)
+Date: Tue, 12 Dec 2023 12:46:44 -0800
 In-Reply-To: <20231212204647.2170650-1-sagis@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -45,9 +45,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20231212204647.2170650-1-sagis@google.com>
 X-Mailer: git-send-email 2.43.0.472.g3155946c3a-goog
-Message-ID: <20231212204647.2170650-28-sagis@google.com>
-Subject: [RFC PATCH v5 27/29] KVM: selftests: Propagate KVM_EXIT_MEMORY_FAULT
- to userspace
+Message-ID: <20231212204647.2170650-30-sagis@google.com>
+Subject: [RFC PATCH v5 29/29] KVM: selftests: TDX: Add TDX UPM selftests for
+ implicit conversion
 From: Sagi Shahar <sagis@google.com>
 To: linux-kselftest@vger.kernel.org, Ackerley Tng <ackerleytng@google.com>, 
 	Ryan Afranji <afranji@google.com>, Erdem Aktas <erdemaktas@google.com>, 
@@ -60,35 +60,177 @@ Cc: Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>
 	linux-mm@kvack.org
 Content-Type: text/plain; charset="UTF-8"
 
-Allow userspace to handle KVM_EXIT_MEMORY_FAULT instead of triggering
-TEST_ASSERT.
+From: Ackerley Tng <ackerleytng@google.com>
 
-From the KVM_EXIT_MEMORY_FAULT documentation:
-Note!  KVM_EXIT_MEMORY_FAULT is unique among all KVM exit reasons in that it
-accompanies a return code of '-1', not '0'!  errno will always be set to EFAULT
-or EHWPOISON when KVM exits with KVM_EXIT_MEMORY_FAULT, userspace should assume
-kvm_run.exit_reason is stale/undefined for all other error numbers.
+This tests the use of guest memory without explicit MapGPA calls.
 
+Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+Signed-off-by: Ryan Afranji <afranji@google.com>
 Signed-off-by: Sagi Shahar <sagis@google.com>
 ---
- tools/testing/selftests/kvm/lib/kvm_util.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ .../selftests/kvm/x86_64/tdx_upm_test.c       | 86 +++++++++++++++++--
+ 1 file changed, 77 insertions(+), 9 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index d024abc5379c..8fb041e51484 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -1742,6 +1742,10 @@ void vcpu_run(struct kvm_vcpu *vcpu)
+diff --git a/tools/testing/selftests/kvm/x86_64/tdx_upm_test.c b/tools/testing/selftests/kvm/x86_64/tdx_upm_test.c
+index 44671874a4f1..bfa921f125a0 100644
+--- a/tools/testing/selftests/kvm/x86_64/tdx_upm_test.c
++++ b/tools/testing/selftests/kvm/x86_64/tdx_upm_test.c
+@@ -149,7 +149,7 @@ enum {
+  * Does vcpu_run, and also manages memory conversions if requested by the TD.
+  */
+ void vcpu_run_and_manage_memory_conversions(struct kvm_vm *vm,
+-					    struct kvm_vcpu *vcpu)
++					    struct kvm_vcpu *vcpu, bool handle_conversions)
  {
- 	int ret = _vcpu_run(vcpu);
- 
-+	// Allow this scenario to be handled by the caller.
-+	if (ret == -1 && errno == EFAULT)
-+		return;
-+
- 	TEST_ASSERT(!ret, KVM_IOCTL_ERROR(KVM_RUN, ret));
+ 	for (;;) {
+ 		vcpu_run(vcpu);
+@@ -163,6 +163,13 @@ void vcpu_run_and_manage_memory_conversions(struct kvm_vm *vm,
+ 				!(vm->arch.s_bit & vmcall_info->in_r12));
+ 			vmcall_info->status_code = 0;
+ 			continue;
++		} else if (handle_conversions &&
++			vcpu->run->exit_reason == KVM_EXIT_MEMORY_FAULT) {
++			handle_memory_conversion(
++				vm, vcpu->run->memory_fault.gpa,
++				vcpu->run->memory_fault.size,
++				vcpu->run->memory_fault.flags == KVM_MEMORY_EXIT_FLAG_PRIVATE);
++			continue;
+ 		} else if (
+ 			vcpu->run->exit_reason == KVM_EXIT_IO &&
+ 			vcpu->run->io.port == TDX_UPM_TEST_ACCEPT_PRINT_PORT) {
+@@ -243,8 +250,53 @@ static void guest_upm_explicit(void)
+ 	tdx_test_success();
  }
  
++static void guest_upm_implicit(void)
++{
++	struct tdx_upm_test_area *test_area_gva_private =
++		(struct tdx_upm_test_area *)TDX_UPM_TEST_AREA_GVA_PRIVATE;
++	struct tdx_upm_test_area *test_area_gva_shared =
++		(struct tdx_upm_test_area *)TDX_UPM_TEST_AREA_GVA_SHARED;
++
++	/* Check: host reading private memory does not modify guest's view */
++	fill_test_area(test_area_gva_private, PATTERN_GUEST_GENERAL);
++
++	tdx_test_report_to_user_space(SYNC_CHECK_READ_PRIVATE_MEMORY_FROM_HOST);
++
++	TDX_UPM_TEST_ASSERT(
++		check_test_area(test_area_gva_private, PATTERN_GUEST_GENERAL));
++
++	/* Use focus area as shared */
++	fill_focus_area(test_area_gva_shared, PATTERN_GUEST_FOCUS);
++
++	/* General areas should not be affected */
++	TDX_UPM_TEST_ASSERT(
++		check_general_areas(test_area_gva_private, PATTERN_GUEST_GENERAL));
++
++	tdx_test_report_to_user_space(SYNC_CHECK_READ_SHARED_MEMORY_FROM_HOST);
++
++	/* Check that guest has the same view of shared memory */
++	TDX_UPM_TEST_ASSERT(
++		check_focus_area(test_area_gva_shared, PATTERN_HOST_FOCUS));
++
++	/* Use focus area as private */
++	fill_focus_area(test_area_gva_private, PATTERN_GUEST_FOCUS);
++
++	/* General areas should be unaffected by remapping */
++	TDX_UPM_TEST_ASSERT(
++		check_general_areas(test_area_gva_private, PATTERN_GUEST_GENERAL));
++
++	tdx_test_report_to_user_space(SYNC_CHECK_READ_PRIVATE_MEMORY_FROM_HOST_AGAIN);
++
++	/* Check that guest can use private memory after focus area is remapped as private */
++	TDX_UPM_TEST_ASSERT(
++		fill_and_check(test_area_gva_private, PATTERN_GUEST_GENERAL));
++
++	tdx_test_success();
++}
++
+ static void run_selftest(struct kvm_vm *vm, struct kvm_vcpu *vcpu,
+-			 struct tdx_upm_test_area *test_area_base_hva)
++			 struct tdx_upm_test_area *test_area_base_hva,
++			 bool implicit)
+ {
+ 	vcpu_run(vcpu);
+ 	TDX_TEST_CHECK_GUEST_FAILURE(vcpu);
+@@ -263,7 +315,7 @@ static void run_selftest(struct kvm_vm *vm, struct kvm_vcpu *vcpu,
+ 	TEST_ASSERT(check_test_area(test_area_base_hva, PATTERN_CONFIDENCE_CHECK),
+ 		"Host should read PATTERN_CONFIDENCE_CHECK from guest's private memory.");
+ 
+-	vcpu_run_and_manage_memory_conversions(vm, vcpu);
++	vcpu_run_and_manage_memory_conversions(vm, vcpu, implicit);
+ 	TDX_TEST_CHECK_GUEST_FAILURE(vcpu);
+ 	TDX_TEST_ASSERT_IO(vcpu, TDX_TEST_REPORT_PORT, TDX_TEST_REPORT_SIZE,
+ 		 TDG_VP_VMCALL_INSTRUCTION_IO_WRITE);
+@@ -280,7 +332,7 @@ static void run_selftest(struct kvm_vm *vm, struct kvm_vcpu *vcpu,
+ 	TEST_ASSERT(check_focus_area(test_area_base_hva, PATTERN_HOST_FOCUS),
+ 		    "Host should be able to use shared memory.");
+ 
+-	vcpu_run_and_manage_memory_conversions(vm, vcpu);
++	vcpu_run_and_manage_memory_conversions(vm, vcpu, implicit);
+ 	TDX_TEST_CHECK_GUEST_FAILURE(vcpu);
+ 	TDX_TEST_ASSERT_IO(vcpu, TDX_TEST_REPORT_PORT, TDX_TEST_REPORT_SIZE,
+ 		 TDG_VP_VMCALL_INSTRUCTION_IO_WRITE);
+@@ -329,18 +381,20 @@ static void guest_ve_handler(struct ex_regs *regs)
+ 	TDX_UPM_TEST_ASSERT(!ret);
+ }
+ 
+-static void verify_upm_test(void)
++static void verify_upm_test(bool implicit)
+ {
+ 	struct kvm_vm *vm;
+ 	struct kvm_vcpu *vcpu;
+ 
++	void *guest_code;
+ 	vm_vaddr_t test_area_gva_private;
+ 	struct tdx_upm_test_area *test_area_base_hva;
+ 	uint64_t test_area_npages;
+ 
+ 	vm = td_create();
+ 	td_initialize(vm, VM_MEM_SRC_ANONYMOUS, 0);
+-	vcpu = td_vcpu_add(vm, 0, guest_upm_explicit);
++	guest_code = implicit ? guest_upm_implicit : guest_upm_explicit;
++	vcpu = td_vcpu_add(vm, 0, guest_code);
+ 
+ 	vm_install_exception_handler(vm, VE_VECTOR, guest_ve_handler);
+ 
+@@ -379,13 +433,26 @@ static void verify_upm_test(void)
+ 
+ 	td_finalize(vm);
+ 
+-	printf("Verifying UPM functionality: explicit MapGPA\n");
++	if (implicit)
++		printf("Verifying UPM functionality: implicit conversion\n");
++	else
++		printf("Verifying UPM functionality: explicit MapGPA\n");
+ 
+-	run_selftest(vm, vcpu, test_area_base_hva);
++	run_selftest(vm, vcpu, test_area_base_hva, implicit);
+ 
+ 	kvm_vm_free(vm);
+ }
+ 
++void verify_upm_test_explicit(void)
++{
++	verify_upm_test(false);
++}
++
++void verify_upm_test_implicit(void)
++{
++	verify_upm_test(true);
++}
++
+ int main(int argc, char **argv)
+ {
+ 	/* Disable stdout buffering */
+@@ -397,5 +464,6 @@ int main(int argc, char **argv)
+ 		return 0;
+ 	}
+ 
+-	run_in_new_process(&verify_upm_test);
++	run_in_new_process(&verify_upm_test_explicit);
++	run_in_new_process(&verify_upm_test_implicit);
+ }
 -- 
 2.43.0.472.g3155946c3a-goog
 
