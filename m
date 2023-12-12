@@ -1,41 +1,41 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mtpFjSLq"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BocrOrrm"
 Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75D781BE1
-	for <linux-kselftest@vger.kernel.org>; Tue, 12 Dec 2023 12:47:43 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-daee86e2d70so6839889276.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 12 Dec 2023 12:47:43 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 135541FE0
+	for <linux-kselftest@vger.kernel.org>; Tue, 12 Dec 2023 12:47:48 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-dbcca990ee9so227918276.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 Dec 2023 12:47:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1702414062; x=1703018862; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1702414068; x=1703018868; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QZdQqVk39iJlhBpyUnh6sf+6Hw3ATYVfrr1vi3AMJYE=;
-        b=mtpFjSLqKP9FQ+2PgecqAf3DHWIAPOQF2s/DwxfYT7RTWLBqTk2vuzBQ7RV6Uwi0nm
-         JzwTkNEFOCIZvJoS8qYa7VUyAhy88hyg12THsWeP/p52LvmZz7znMXUqM7ORnKfnZ62m
-         UxPdO3//KctHbVTIBOmMvor22gRA2wOuCsJHc0DJ0uc37RgJ0/wiyxfGow8HT4CSjCxA
-         DkTmTcu5s4Ts+MbCKFPoOFZZfW9+U62jTkdktM0RQuPdn8wdtdl55LSlhotMvs/lQ07e
-         CAY7K96Du6ZcOkqdlcW/+oLDosm9PKfmaOBPzTjm2+HIoUHqB1HaXmLruGDzDg5x2SVM
-         grFw==
+        bh=TFmE+BG4/EJDZrVEh/xZNdnTy9FeH/PqMcDgQWjrrOU=;
+        b=BocrOrrmkssbhlib9beP9WoA7Z7v3DilEbiPuKkZ0DfrgrwhdlpOi2YYApCMtXQnPh
+         kq8Iy6y68vFZ0U7TIstBZjX6W8flf5OY5U8khv/L2/BM3vU7saR8yzpJvVINfFQALyu4
+         OoIS5ktLUis8Dbx+Fpv48HB5XmuLJsclrY70tmZaKXDKDlNyKwuMo8b/hbO/zc2dywLW
+         9/1CQYUn/gv8//TgomMA6k59lBWZMdBUIskZ9xoEKY87C/WsHUgcadDRuJ5Y32OHWLG2
+         tERt3TsFvJEJiIyAWBDjUqAq1o/EkFD5MaF1NE2RKENQ6reSo+hLJKygnrdZOdMSENvq
+         43Cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702414062; x=1703018862;
+        d=1e100.net; s=20230601; t=1702414068; x=1703018868;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QZdQqVk39iJlhBpyUnh6sf+6Hw3ATYVfrr1vi3AMJYE=;
-        b=D4p2P5COFbi1ECuv6B1QEzLFGwr0HQSnBP2d4ePL2XK/qHaYQwTG00eCBKhX3Oy1pr
-         UU6eXS7MAlvpIFXd+vDVT0B81iDkOHFnOaOgBbZosq2nrPPcq7ZVaGGdpkwFg/CSoeXA
-         nYoW2ws5BumRXd/1vkqrbmwklCrX2RIYpq+zG8VR0DRhLRVE9uBYA+yl+UODPm2IPmsc
-         pzgZAEsxhB9PvqgYYP/XBLcT9fQfUsonUMd24Iz5daLBsX5PeCpIgJ4OHF4z8WhYObt3
-         2pUlvqD2zy3HXgtXyDzQkLSe3WnBiacJyWl3pyAh2iU4ZW/fZPXnSBynaGNM1N6Yd/5N
-         x2sw==
-X-Gm-Message-State: AOJu0Yw7fFFNrI9gqGAaX4H4iXOq7UmPAFuaO2XjvxF1SkLjgiRZbLwT
-	GalT1KDhF4OSR76H03QOT7u0oq0KS2vzwhIXEsX3xy09/kgHL51B7ngwdASK0SpJtmR+a2KotOk
-	t2dDjINbi5hT6UNDbAeNt0gN6vu6T9KtmJq7Etu9F6i7BI7oYrsueZ4qa8hvm4n3bBnmk0sE=
-X-Google-Smtp-Source: AGHT+IH9RTDsHLGt6TFEaMhulg0Kd1/ZUyxFq2VWB91JPo3oRoRjEYyJ0UXRvW/aN3iOVxrGFxYaEUsQOw==
+        bh=TFmE+BG4/EJDZrVEh/xZNdnTy9FeH/PqMcDgQWjrrOU=;
+        b=SKq12mrAL8iiu0WJrhRPha0QAgiEmgy3ktuBE7PgpXuasHpY+n1zbHcIWkSxEh4UiP
+         sAgswbbeHrjEvKdMptnmAs4jgo3iPc2crp9RRIgNp0ATEfZWqWDPaYvkEFKRGB3vRFMV
+         vPmPF3qmQ7pQoBK+sRAJ05pgVl2s53YwzT9fYTBKKlpQxuTjTFqFqme6BdBU96NfnVs3
+         MgwQdwjVPcpQDKWbvayY7NrsedhhA8MqeWu4E2dq0ki0pz8kEr2HOVz4vAA/R4sm+JRQ
+         BqWSl3DHBF8W6kgSsH/8B7Epm9k2Zk1xC6dP0bvY4b2xeQgxTR1kGQw9vE9LeMNetSvj
+         YTTQ==
+X-Gm-Message-State: AOJu0YwxhqWdmrL7x2hu0LPMDKVbSLd/NTrWxNvLCFkxxJbP70Y0N5Nf
+	KBrWISQe6IXQt3ioiFDqW9G5b+z0N8qx+U0OMilIV7MnVDHhH4DP6jf9k/q+5ZipeZUqJDfl4EK
+	nQVdB0paXo1Jlaid+CphYac8G1Hy94C+KlmEk0sf9FwZKfx0fB/AK9evpzDPQKkDCyTSABZM=
+X-Google-Smtp-Source: AGHT+IEfV9mKSOUMKRt6QzMdx4NjK5Xm4g7Lzg/OSBchtLDS9HiwFFeqtcXo/zBjodXwgzfPibVCMzwJXQ==
 X-Received: from sagi.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:241b])
- (user=sagis job=sendgmr) by 2002:a25:9e90:0:b0:db3:fa34:50b0 with SMTP id
- p16-20020a259e90000000b00db3fa3450b0mr51580ybq.4.1702414061971; Tue, 12 Dec
- 2023 12:47:41 -0800 (PST)
-Date: Tue, 12 Dec 2023 12:46:39 -0800
+ (user=sagis job=sendgmr) by 2002:a25:d204:0:b0:dbc:cbd9:3cd0 with SMTP id
+ j4-20020a25d204000000b00dbccbd93cd0mr566ybg.8.1702414067193; Tue, 12 Dec 2023
+ 12:47:47 -0800 (PST)
+Date: Tue, 12 Dec 2023 12:46:42 -0800
 In-Reply-To: <20231212204647.2170650-1-sagis@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -45,8 +45,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20231212204647.2170650-1-sagis@google.com>
 X-Mailer: git-send-email 2.43.0.472.g3155946c3a-goog
-Message-ID: <20231212204647.2170650-25-sagis@google.com>
-Subject: [RFC PATCH v5 24/29] KVM: selftests: Expose _vm_vaddr_alloc
+Message-ID: <20231212204647.2170650-28-sagis@google.com>
+Subject: [RFC PATCH v5 27/29] KVM: selftests: Propagate KVM_EXIT_MEMORY_FAULT
+ to userspace
 From: Sagi Shahar <sagis@google.com>
 To: linux-kselftest@vger.kernel.org, Ackerley Tng <ackerleytng@google.com>, 
 	Ryan Afranji <afranji@google.com>, Erdem Aktas <erdemaktas@google.com>, 
@@ -59,50 +60,34 @@ Cc: Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>
 	linux-mm@kvack.org
 Content-Type: text/plain; charset="UTF-8"
 
-From: Ackerley Tng <ackerleytng@google.com>
+Allow userspace to handle KVM_EXIT_MEMORY_FAULT instead of triggering
+TEST_ASSERT.
 
-vm_vaddr_alloc always allocates memory in memslot 0. This allows users
-of this function to choose which memslot to allocate virtual memory
-in.
+From the KVM_EXIT_MEMORY_FAULT documentation:
+Note!  KVM_EXIT_MEMORY_FAULT is unique among all KVM exit reasons in that it
+accompanies a return code of '-1', not '0'!  errno will always be set to EFAULT
+or EHWPOISON when KVM exits with KVM_EXIT_MEMORY_FAULT, userspace should assume
+kvm_run.exit_reason is stale/undefined for all other error numbers.
 
-Signed-off-by: Ackerley Tng <ackerleytng@google.com>
-Signed-off-by: Ryan Afranji <afranji@google.com>
 Signed-off-by: Sagi Shahar <sagis@google.com>
 ---
- tools/testing/selftests/kvm/include/kvm_util_base.h | 3 +++
- tools/testing/selftests/kvm/lib/kvm_util.c          | 6 +++---
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ tools/testing/selftests/kvm/lib/kvm_util.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-index efd7ae8abb20..5dbebf5cfd07 100644
---- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-@@ -561,6 +561,9 @@ void vm_mem_region_delete(struct kvm_vm *vm, uint32_t slot);
- struct kvm_vcpu *__vm_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id);
- void vm_populate_vaddr_bitmap(struct kvm_vm *vm);
- vm_vaddr_t vm_vaddr_unused_gap(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min);
-+vm_vaddr_t ____vm_vaddr_alloc(struct kvm_vm *vm, size_t sz,
-+			      vm_vaddr_t vaddr_min, vm_paddr_t paddr_min,
-+			      uint32_t data_memslot, bool encrypt);
- vm_vaddr_t vm_vaddr_alloc(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min);
- vm_vaddr_t __vm_vaddr_alloc(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min,
- 			    enum kvm_mem_region_type type);
 diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index 28780fa1f0f2..d024abc5379c 100644
+index d024abc5379c..8fb041e51484 100644
 --- a/tools/testing/selftests/kvm/lib/kvm_util.c
 +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -1410,9 +1410,9 @@ vm_vaddr_t vm_vaddr_unused_gap(struct kvm_vm *vm, size_t sz,
-  * a unique set of pages, with the minimum real allocation being at least
-  * a page.
-  */
--static vm_vaddr_t ____vm_vaddr_alloc(struct kvm_vm *vm, size_t sz,
--				     vm_vaddr_t vaddr_min, vm_paddr_t paddr_min,
--				     uint32_t data_memslot, bool encrypt)
-+vm_vaddr_t ____vm_vaddr_alloc(struct kvm_vm *vm, size_t sz,
-+			      vm_vaddr_t vaddr_min, vm_paddr_t paddr_min,
-+			      uint32_t data_memslot, bool encrypt)
+@@ -1742,6 +1742,10 @@ void vcpu_run(struct kvm_vcpu *vcpu)
  {
- 	uint64_t pages = (sz >> vm->page_shift) + ((sz % vm->page_size) != 0);
+ 	int ret = _vcpu_run(vcpu);
+ 
++	// Allow this scenario to be handled by the caller.
++	if (ret == -1 && errno == EFAULT)
++		return;
++
+ 	TEST_ASSERT(!ret, KVM_IOCTL_ERROR(KVM_RUN, ret));
+ }
  
 -- 
 2.43.0.472.g3155946c3a-goog
