@@ -1,119 +1,99 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6579CE8;
-	Wed, 13 Dec 2023 07:03:07 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 211E2C15;
-	Wed, 13 Dec 2023 07:03:53 -0800 (PST)
-Received: from e124191.cambridge.arm.com (e124191.cambridge.arm.com [10.1.197.45])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 06D6E3F738;
-	Wed, 13 Dec 2023 07:03:04 -0800 (PST)
-Date: Wed, 13 Dec 2023 15:02:59 +0000
-From: Joey Gouly <joey.gouly@arm.com>
-To: Catalin Marinas <catalin.marinas@arm.com>
-Cc: linux-arm-kernel@lists.infradead.org, akpm@linux-foundation.org,
-	aneesh.kumar@linux.ibm.com, broonie@kernel.org,
-	dave.hansen@linux.intel.com, maz@kernel.org, oliver.upton@linux.dev,
-	shuah@kernel.org, will@kernel.org, kvmarm@lists.linux.dev,
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>
-Subject: Re: [PATCH v3 12/25] arm64: handle PKEY/POE faults
-Message-ID: <20231213150259.GA1129554@e124191.cambridge.arm.com>
-References: <20231124163510.1835740-1-joey.gouly@arm.com>
- <20231124163510.1835740-13-joey.gouly@arm.com>
- <ZXdSaRIJGWrtXin-@arm.com>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D4C52FC43;
+	Wed, 13 Dec 2023 15:04:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FXfv4/Lq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23D54C433C7;
+	Wed, 13 Dec 2023 15:04:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702479894;
+	bh=nLxZSg/yD+znXZHWu4Vars8EQtCSP3KKevIj0nvJOvg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=FXfv4/LqeVxml8cC8xOBVkj+C55XQsUDotUQ7wQUxQWoFbyIib8cxLn83khaDCc4k
+	 TILfe0piJJA6WNjTiLEbHky3WCF3flzGtV+5xo0vYZQlBu4zRP3y29JPvzgpQlvpSX
+	 vVpfhuu6luVuxCbLAUa4tNmNKCq0zOs07W4sF7mJyieBq7NX65GCPoLpF+ROydPe0K
+	 Zz1W/D9mBRGgS/BsylPZd0XI4b2QIJ7IMKiVxK6Ho3Fi47X9WIOzlsYqJJ9ZFxueeg
+	 udiK2Vi7fEU/qhifgMPuGQMc57/j6njhGJ4fwgdvcWN7OvaGicgLZv7oDBpNVisLX/
+	 WMtM18XMSrccg==
+Date: Wed, 13 Dec 2023 16:04:52 +0100
+From: Maxime Ripard <mripard@kernel.org>
+To: davidgow@google.com
+Cc: Rae Moar <rmoar@google.com>, 
+	Brendan Higgins <brendan.higgins@linux.dev>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Matti Vaittinen <mazziesaccount@gmail.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Kees Cook <keescook@chromium.org>, Liam Girdwood <lgirdwood@gmail.com>, 
+	Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org, linux-sound@vger.kernel.org
+Subject: Re: [PATCH v2 0/4] kunit: Add helpers for creating test-managed
+ devices
+Message-ID: <7rgeotye4grxdtbxip53fykjm4a3sudochsfzdvkmyqltvj7zv@qekkt42x2j25>
+References: <20231208-kunit_bus-v2-0-e95905d9b325@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="znksof6fizamytva"
+Content-Disposition: inline
+In-Reply-To: <20231208-kunit_bus-v2-0-e95905d9b325@google.com>
+
+
+--znksof6fizamytva
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZXdSaRIJGWrtXin-@arm.com>
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+Hi David,
 
-On Mon, Dec 11, 2023 at 06:18:17PM +0000, Catalin Marinas wrote:
-> On Fri, Nov 24, 2023 at 04:34:57PM +0000, Joey Gouly wrote:
-> > @@ -497,6 +498,23 @@ static void do_bad_area(unsigned long far, unsigned long esr,
-> >  #define VM_FAULT_BADMAP		((__force vm_fault_t)0x010000)
-> >  #define VM_FAULT_BADACCESS	((__force vm_fault_t)0x020000)
-> >  
-> > +static bool fault_from_pkey(unsigned long esr, struct vm_area_struct *vma,
-> > +			unsigned int mm_flags)
-> > +{
-> > +	unsigned long iss2 = ESR_ELx_ISS2(esr);
-> > +
-> > +	if (!arch_pkeys_enabled())
-> > +		return false;
-> > +
-> > +	if (iss2 & ESR_ELx_Overlay)
-> > +		return true;
-> > +
-> > +	return !arch_vma_access_permitted(vma,
-> > +			mm_flags & FAULT_FLAG_WRITE,
-> > +			mm_flags & FAULT_FLAG_INSTRUCTION,
-> > +			mm_flags & FAULT_FLAG_REMOTE);
-> > +}
-> 
-> Do we actually need this additional arch_vma_access_permitted() check?
-> The ESR should tell us if it was a POE fault. Permission overlay faults
-> have priority over the base permission faults, so we'd not need to fall
-> back to this additional checks. Well, see below, we could do something
-> slightly smarter here.
+On Fri, Dec 08, 2023 at 06:09:28PM +0800, davidgow@google.com wrote:
+> KUnit tests often need to provide a struct device, and thus far have
+> mostly been using root_device_register() or platform devices to create
+> a 'fake device' for use with, e.g., code which uses device-managed
+> resources. This has several disadvantages, including not being designed
+> for test use, scattering files in sysfs, and requiring manual teardown
+> on test exit, which may not always be possible in case of failure.
+>=20
+> Instead, introduce a set of helper functions which allow devices
+> (internally a struct kunit_device) to be created and managed by KUnit --
+> i.e., they will be automatically unregistered on test exit. These
+> helpers can either use a user-provided struct device_driver, or have one
+> automatically created and managed by KUnit. In both cases, the device
+> lives on a new kunit_bus.
+>=20
+> This is a follow-up to a previous proposal here:
+> https://lore.kernel.org/linux-kselftest/20230325043104.3761770-1-davidgow=
+@google.com/
+>=20
+> (The kunit_defer() function in the first patch there has since been
+> merged as the 'deferred actions' feature.)
+>=20
+> My intention is to take this whole series in via the kselftest/kunit
+> branch, but I'm equally okay with splitting up the later patches which
+> use this to go via the various subsystem trees in case there are merge
+> conflicts.
 
-We want this here as it follows other arch's which will fail with a pkey fault
-even if the page isn't actually mapped. If the paged isn't mapped we'd get a
-translation fault, but since we know the type of access and have the pkey in
-the VMA we check it here.
+Could you take (and apply eventually) that patch as part of your series?
+https://lore.kernel.org/linux-kselftest/20231205090405.153140-1-mripard@ker=
+nel.org/
 
-> 
-> I can see x86 and powerpc have similar checks (though at a different
-> point under the mmap lock) but I'm not familiar with their exception
-> model, exception priorities.
-> 
-> > +
-> >  static vm_fault_t __do_page_fault(struct mm_struct *mm,
-> >  				  struct vm_area_struct *vma, unsigned long addr,
-> >  				  unsigned int mm_flags, unsigned long vm_flags,
-> > @@ -688,9 +706,29 @@ static int __kprobes do_page_fault(unsigned long far, unsigned long esr,
-> >  		 * Something tried to access memory that isn't in our memory
-> >  		 * map.
-> >  		 */
-> > -		arm64_force_sig_fault(SIGSEGV,
-> > -				      fault == VM_FAULT_BADACCESS ? SEGV_ACCERR : SEGV_MAPERR,
-> > -				      far, inf->name);
-> > +		int fault_kind;
-> > +		/*
-> > +		 * The pkey value that we return to userspace can be different
-> > +		 * from the pkey that caused the fault.
-> > +		 *
-> > +		 * 1. T1   : mprotect_key(foo, PAGE_SIZE, pkey=4);
-> > +		 * 2. T1   : set AMR to deny access to pkey=4, touches, page
-> > +		 * 3. T1   : faults...
-> > +		 * 4.    T2: mprotect_key(foo, PAGE_SIZE, pkey=5);
-> > +		 * 5. T1   : enters fault handler, takes mmap_lock, etc...
-> > +		 * 6. T1   : reaches here, sees vma_pkey(vma)=5, when we really
-> > +		 *	     faulted on a pte with its pkey=4.
-> > +		 */
-> > +		int pkey = vma_pkey(vma);
-> 
-> Other than the vma_pkey() race, I'm more worried about the vma
-> completely disappearing, e.g. munmap() in another thread. We end up
-> dereferencing a free pointer here. We need to do this under the mmap
-> lock.
-> 
-> Since we need to do this check under the mmap lock, we could add an
-> additional check to see if the pkey fault we got was a racy and just
-> restart the instruction if it no longer faults according to
-> por_el0_allows_pkey(). However, the code below is too late in the fault
-> handling to be able to do much other than SIGSEGV.
+Thanks
+Maxime
 
-After discussing in person, I agree with the assesment that this is the wrong
-place to do the check, and after looking at the x86 arch code, I see how
-they're doing it earlier.
+--znksof6fizamytva
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Thanks,
-Joey
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZXnIFAAKCRDj7w1vZxhR
+xbTWAQC3bH552498SP6tLXv7kKo878Z61Buc15OZAdQwh4kdXQEA9UZqLQkvJTrT
+kQ13+qYaarJ8Jpvwt41WGCqAxaRt7gw=
+=yRUg
+-----END PGP SIGNATURE-----
+
+--znksof6fizamytva--
