@@ -1,23 +1,24 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="BHfF45kB"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="SYGVTs28"
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C84C129;
-	Thu, 14 Dec 2023 06:00:40 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DBC39C;
+	Thu, 14 Dec 2023 06:04:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
 	In-Reply-To:Date:To:From:Subject:Message-ID:Sender:Reply-To:Cc:
 	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=MU4f0tVLKMg54ytXtU1hJWfmTc5gaG5p2fSCF3fAwwo=; b=BHfF45kBVfVmPqzYqXpGASgH7V
-	JUcXB7utmvzc1L3vf9Mdp8TIYyMp5RtOBdoE1Tfco4cRKzwZtc6jD+gjWrqATX5UfkUZQPR0TW5sw
-	14L0YUuxDLrKwFvzOt+ZH9l4hQV5Hl6VUkgC5UcTdIKZLKAgcgXyYvPz5hO/qUbrY85rAFsVibFE0
-	BCi/cLL9uobQRszQIbhrR8S/iH+VqSm8zlwKtfjM6QhSgg8mnJhxhduS91t7Tm9bvmBt80zEnv1mZ
-	fR0kIr2I5XwLHQyNhpN8XrKVPyAyZtYjq7JqJd1T9En15QcAPdRO1G6pFgNNvQ2EvBQFOc89p3KhG
-	rIu6dazQ==;
+	bh=D7ATDqEyCLCcquwiSkXihU8FrmtvHZlqEwojMMRFygs=; b=SYGVTs28e9O9MmHKRsd7dYho0B
+	rTynxP7/uWgj/PV4BsI9r4XHDaneZuabsz6iKoWdJiYzVLKfbCgfs1w1Es8Yzu/hWCCfrtlYcJzZk
+	HJov1QqYaeKRUk4daxKdkKZZZyqTJT1ija+xdmGHDhazOdXG6iGEfSKNJ/fOlXfIn18HG9DSPpkGK
+	kQL49EUsUDhpkMqK3tu1+8FL7dBX97kSGVwTMU92rnsg+Lb1CFFrJUrMa4WbommL0M9Undf/CoxsT
+	6zew/x2REAIyuauqqCGj7tWXCRFGmhFq0W+aoJi2JJaD7Bw5LHVCk4FzQVOOXgzVEsRwc5LX/xjZ/
+	EP6Amdww==;
 Received: from [2001:8b0:10b:5:d232:2f0e:461d:68c2] (helo=u3832b3a9db3152.ant.amazon.com)
 	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1rDmG9-007WiJ-5b; Thu, 14 Dec 2023 14:00:18 +0000
-Message-ID: <e22e354305d853d72039c7e12b166410de3f63c9.camel@infradead.org>
-Subject: Re: [PATCH v10 16/19] KVM: xen: split up kvm_xen_set_evtchn_fast()
+	id 1rDmJO-007YL8-5H; Thu, 14 Dec 2023 14:03:39 +0000
+Message-ID: <1922911f0b27bf60a64e8c1fa56f2247585dd481.camel@infradead.org>
+Subject: Re: [PATCH v10 17/19] KVM: xen: don't block on pfncache locks in
+ kvm_xen_set_evtchn_fast()
 From: David Woodhouse <dwmw2@infradead.org>
 To: Paul Durrant <paul@xen.org>, Paolo Bonzini <pbonzini@redhat.com>, 
  Jonathan Corbet <corbet@lwn.net>, Sean Christopherson <seanjc@google.com>,
@@ -26,12 +27,12 @@ To: Paul Durrant <paul@xen.org>, Paolo Bonzini <pbonzini@redhat.com>,
  x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, Shuah Khan
  <shuah@kernel.org>, kvm@vger.kernel.org,  linux-doc@vger.kernel.org,
  linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org
-Date: Thu, 14 Dec 2023 14:00:16 +0000
-In-Reply-To: <20231204144334.910-17-paul@xen.org>
+Date: Thu, 14 Dec 2023 14:03:38 +0000
+In-Reply-To: <20231204144334.910-18-paul@xen.org>
 References: <20231204144334.910-1-paul@xen.org>
-	 <20231204144334.910-17-paul@xen.org>
+	 <20231204144334.910-18-paul@xen.org>
 Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-	boundary="=-N51QTzTUq+3fiyWcpIYW"
+	boundary="=-/hqsTJefJAdj/HiEtcWv"
 User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -42,63 +43,37 @@ MIME-Version: 1.0
 X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
 
---=-N51QTzTUq+3fiyWcpIYW
+--=-/hqsTJefJAdj/HiEtcWv
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: quoted-printable
 
-T24gTW9uLCAyMDIzLTEyLTA0IGF0IDE0OjQzICswMDAwLCBQYXVsIER1cnJhbnQgd3JvdGU6Cj4g
-RnJvbTogUGF1bCBEdXJyYW50IDxwZHVycmFudEBhbWF6b24uY29tPgo+IAo+IFRoZSBpbXBsZW1l
-bnRhdGlvbiBvZiBrdm1feGVuX3NldF9ldnRjaG5fZmFzdCgpIGlzIGEgcmF0aGVyIGxlbmd0aHkg
-cGllY2UKPiBvZiBjb2RlIHRoYXQgcGVyZm9ybXMgdHdvIG9wZXJhdGlvbnM6IHVwZGF0aW5nIG9m
-IHRoZSBzaGFyZWRfaW5mbwo+IGV2dGNobl9wZW5kaW5nIG1hc2ssIGFuZCB1cGRhdGluZyBvZiB0
-aGUgdmNwdV9pbmZvIGV2dGNobl9wZW5kaW5nX3NlbAo+IG1hc2suIEludHJvZHVjZSBhIHNlcGFy
-YXRlIGZ1bmN0aW9uIHRvIHBlcmZvcm0gZWFjaCBvZiB0aG9zZSBvcGVyYXRpb25zIGFuZAo+IHJl
-LXdvcmsga3ZtX3hlbl9zZXRfZXZ0Y2huX2Zhc3QoKSB0byB1c2UgdGhlbS4KPiAKPiBObyBmdW5j
-dGlvbmFsIGNoYW5nZSBpbnRlbmRlZC4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBQYXVsIER1cnJhbnQg
-PHBkdXJyYW50QGFtYXpvbi5jb20+CgouLi4KCgo+ICvCoMKgwqDCoMKgwqDCoGlmIChJU19FTkFC
-TEVEKENPTkZJR182NEJJVCkgJiYga3ZtLT5hcmNoLnhlbi5sb25nX21vZGUpIHsKPiArwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgc3RydWN0IHZjcHVfaW5mbyAqdmNwdV9pbmZvID0gZ3Bj
-LT5raHZhOwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB1MzIgcG9ydF93b3JkX2Jp
-dCA9IHBvcnQgLyAzMjsKClNob3VsZG4ndCB0aGF0IG9uZSBiZSAvNjQsIGFuZCB0aGUgY29tcGF0
-IG9uZSBiZSAvMzI/CgoKPiArCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGlmICgh
-a3ZtX2dwY19jaGVjayhncGMsIHNpemVvZigqdmNwdV9pbmZvKSkpIHsKPiArwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGlmICghdGVzdF9hbmRfc2V0X2JpdChw
-b3J0X3dvcmRfYml0LCAmdmNwdS0+YXJjaC54ZW4uZXZ0Y2huX3BlbmRpbmdfc2VsKSkKPiArwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqBraWNrX3ZjcHUgPSB0cnVlOwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgZ290byBvdXQ7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoH0K
-PiArCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGlmICghdGVzdF9hbmRfc2V0X2Jp
-dChwb3J0X3dvcmRfYml0LCAmdmNwdV9pbmZvLT5ldnRjaG5fcGVuZGluZ19zZWwpKSB7Cj4gK8Kg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBXUklURV9PTkNFKHZj
-cHVfaW5mby0+ZXZ0Y2huX3VwY2FsbF9wZW5kaW5nLCAxKTsKPiArwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGtpY2tfdmNwdSA9IHRydWU7CgoKVGhpcyBpcyB0
-aGUgb25lIHlvdSdyZSByZW1vdmluZy4uLgoKPiAtwqDCoMKgwqDCoMKgwqBpbnQgcG9ydF93b3Jk
-X2JpdDsKCi4uLgoKPiAtwqDCoMKgwqDCoMKgwqBpZiAoSVNfRU5BQkxFRChDT05GSUdfNjRCSVQp
-ICYmIGt2bS0+YXJjaC54ZW4ubG9uZ19tb2RlKSB7Cj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoHN0cnVjdCBzaGFyZWRfaW5mbyAqc2hpbmZvID0gZ3BjLT5raHZhOwo+IC3CoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBwZW5kaW5nX2JpdHMgPSAodW5zaWduZWQgbG9uZyAqKSZz
-aGluZm8tPmV2dGNobl9wZW5kaW5nOwo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBt
-YXNrX2JpdHMgPSAodW5zaWduZWQgbG9uZyAqKSZzaGluZm8tPmV2dGNobl9tYXNrOwo+IC3CoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBwb3J0X3dvcmRfYml0ID0geGUtPnBvcnQgLyA2NDsK
-PiAtwqDCoMKgwqDCoMKgwqB9IGVsc2Ugewo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqBzdHJ1Y3QgY29tcGF0X3NoYXJlZF9pbmZvICpzaGluZm8gPSBncGMtPmtodmE7Cj4gLcKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHBlbmRpbmdfYml0cyA9ICh1bnNpZ25lZCBsb25nICop
-JnNoaW5mby0+ZXZ0Y2huX3BlbmRpbmc7Cj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oG1hc2tfYml0cyA9ICh1bnNpZ25lZCBsb25nICopJnNoaW5mby0+ZXZ0Y2huX21hc2s7Cj4gLcKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHBvcnRfd29yZF9iaXQgPSB4ZS0+cG9ydCAvIDMy
-Owo+IC3CoMKgwqDCoMKgwqDCoH0KCkFuZCB3aHkgY2hhbmdlIGl0IGZyb20gYW4gaW50IHRvIGEg
-dTMyPyAKCk9uIHg4NiwgYXJjaF90ZXN0X2FuZF9zZXRfYml0KCkgdGFrZXMgYSAnbG9uZycgYXMg
-aXRzIGZpcnN0IGFyZ3VtZW50LAphbmQgYXJjaF9fX3Rlc3RfYW5kX3NldF9iaXQgdGFrZXMgYW4g
-J3Vuc2lnbmVkIGxvbmcnLgpUaGVuIGFnYWluLCBhc20tZ2VuZXJpYy9iaXRvcHMvYXRvbWljLmgg
-aGFzIGFuIGFyY2hfdGVzdF9hbmRfc2V0X2JpdCgpCnRha2luZyBhbiAndW5zaWduZWQgaW50Jy4g
-QW5kIHRoZSBsZSB2ZXJzaW9uIHRha2VzIGFuICdpbnQnLgoKTXkgYnJhaW4gaHVydHMuIFRoYXQn
-cyBhIGNvbXBsZXRlIGNsdXN0ZXJmdWNrIGFuZCBub25lIG9mIGl0IHNlZW1zIHRvCmhhdmUgYW55
-IGNvbW1lbnRhcnkgYWJvdXQgd2h5LgoKRWl0aGVyIHdheSwgKm5vbmUqIG9mIHRoZW0gdGFrZSBh
-IHUzMi4gV2h5IGRpZCB5b3UgY2hhbmdlIHRvIHRoYXQKaW5zdGVhZCBvZiBsZWF2aW5nIHdlbGwg
-YWxvbmU/IEkgbm93IGJsYW1lIHlvdSBmb3IgbXkgaGVhZGFjaGUgOikK
+On Mon, 2023-12-04 at 14:43 +0000, Paul Durrant wrote:
+> From: Paul Durrant <pdurrant@amazon.com>
+>=20
+> As described in [1] compiling with CONFIG_PROVE_RAW_LOCK_NESTING shows th=
+at
+> kvm_xen_set_evtchn_fast() is blocking on pfncache locks in IRQ context.
+> Instead, use read_trylock() and treat failure to lock the same as an
+> invalid cache.
+>=20
+> [1] https://lore.kernel.org/lkml/99771ef3a4966a01fefd3adbb2ba9c3a75f97cf2=
+.camel@infradead.org/T/#mbd06e5a04534ce9c0ee94bd8f1e8d942b2d45bd6
+>=20
+> Signed-off-by: Paul Durrant <pdurrant@amazon.com>
 
+Reviewed-by: David Woodhouse <dwmw@amazon.co.uk>
 
---=-N51QTzTUq+3fiyWcpIYW
+Although I would prefer the commit comment to note that this is only
+wrong for PREEMPT_RT, as all those locks were irq-safe. This is because
+PREEMPT_RT is going to turn them into mutexes =E2=80=94 and mostly trick th=
+ings
+into working by making all IRQ handlers threaded... except this one
+isn't just in an IRQ handler; its in an HRTIMER_MODE_ABS_HARD callback
+which still *will* be in real interrupt context.
+
+And there's no 'raw' version of the rwlock for us to use.
+
+--=-/hqsTJefJAdj/HiEtcWv
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Disposition: attachment; filename="smime.p7s"
 Content-Transfer-Encoding: base64
@@ -190,24 +165,24 @@ IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
 dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
 NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
 xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
-DQEHATAcBgkqhkiG9w0BCQUxDxcNMjMxMjE0MTQwMDE2WjAvBgkqhkiG9w0BCQQxIgQggWtoafCr
-BkGa3AX11Iu1ezZbU5MZwB5jHwQysYkGQHgwgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMjMxMjE0MTQwMzM4WjAvBgkqhkiG9w0BCQQxIgQgzUldH2Ni
+9Yw0AZECmG6fpSCOrarWlGBE18VTIuHJIwYwgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
 BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
 A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
 dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
 DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
 MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
 Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
-lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgCF2ic6MNXeUIzx6x9wJW6BH2dAZAA9y41H
-pGu+vHMd3ipyswsoz1f2d9QzMfLiz96Ab0gKwEFG6MKPmYvIAJRyGUcGPNP5OdLvSr6LWHIuuOUs
-SJTUYPy20IbGzAzjzxlK2XidohwMBzEKscEljUisk+3b5iI4R9mGZN+IoTkx70qwwNOrf1cNwpla
-UuM0At+7q7d3crhicy5YEBfTjwOfrI178U07ks6OkKR+qSNOH40AgIWMynvXo7KPZGQzpcwyrIyl
-kXQWE3QOtc8p5fxOmSg+zvVvKhiDPSbZgtx6c2y4LQuR3IBr5hF7YOWS40vaK90dbijy1ENSBIGu
-UJ2yXS6fWdaGMNBMAFLEIZ36JANsi7bTr5wiR9ajOGjvX/3dx0w4DRO6WuCGWFUm0rKC1TZdmfkI
-K73PE1Q4Ve4ubrTryme9tQ8b2rvQIx4twUd2YZZb/PBP6dzf+02uH24NEx+lxHKqlSuZMr0uucwB
-6L+DEOggPHoP9j8ldVak2l9/GbvODIvs5mNpFk7j3CZci6y2mLVCtt6lGao5vOw43EXsu17G6jEL
-oA+YDlUltQRPwrW0Hoz0Hrj31yiZrG30YK7RrtY3Vm9xTkbsO8snfYocd2mvyTNwjxRIAVYKFztd
-G1Mxzlstd6CULwufCV08Gs8DusRRswjKC8ces/uPaAAAAAAAAA==
+lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgA8uZPEWGTbUTRWgUSoZbvUU5k6fYO+21A5
+Ce5y7UasfEigaZx5uJ9jNbI3KaHsPv2M61cnN1Gi3IaPQJSz3HBsMcIgxj8+rwXjz6/sdwgD9AvF
+00VsFqxib71bFlynVKAFJhSzm7pZSUprOz91uOQZCHh4ravokoxJvlZoLcPOwtm0Wnj3tAh5RhYm
+Zy31KRqGdrDevr7sSHuW49K0UlSA5xYNFWsBTwDI0hz35I3p6Fc4qZpgybfMPO2XdDTvr2V6Ah6u
+mYhlkjFLNtIPC43X8OVfPlqGto5d7ezQu5oGpURv86LaU0cz50ORP5DidSBdTUSBT8J4sbo4hFHH
+Iyi6PKMRj16EZNx/7TcDh5wbeOoCRZxOy/8yA3F+2Sv/9px3APA+ODbLx3O/Dp8fZGm/84EaWtmN
+Gn/FoOYlxx377On7ygCOdHBPefvOdpjyVRO+NDi2L7r6VLehDfyzcCWeNdNu8y9ZpWKWSkdFm4Cd
+eumkBqxPABKiTKSIdagRJIohPaCrPa8uQxF++TX7QXThqSZ663gJaUBvQ4HpQEoXS5XvST7n9A6E
+r4Ppp31ZBSjJRynB3HZSQvETn1vjP5Q6FATme72/AacWkvjUUJGCrqgvXwDDsvf0PAqyhqmY/62n
+n0JfHy5MFo2sjo2fwiif9P2bonz2aPsYlWey3b3+/gAAAAAAAA==
 
 
---=-N51QTzTUq+3fiyWcpIYW--
+--=-/hqsTJefJAdj/HiEtcWv--
