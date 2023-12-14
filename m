@@ -1,101 +1,60 @@
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D817963D;
+	Thu, 14 Dec 2023 01:17:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openbsd.org header.i=@openbsd.org header.b="f8EJnL1p"
-X-Greylist: delayed 399 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 13 Dec 2023 17:16:18 PST
-Received: from cvs.openbsd.org (cvs.openbsd.org [199.185.137.3])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA1CE4;
-	Wed, 13 Dec 2023 17:16:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; s=selector1; bh=whGKbpn2mK
-	dixz+7VYNABz/psNG/LtxK3IfpFNItFm0=; h=date:references:in-reply-to:
-	subject:cc:to:from; d=openbsd.org; b=f8EJnL1pM686HWnsDZ2MM+QERZ5fn5hkB
-	jS2UEz9O0HQ3CMCPdqYpqvgemPzK/k3sYnnneBkmxRB2mwcLGksMDxQUepWmAMwQXOZWow
-	UnukNeZTT7/fyuRPG/vc6WY0665nhjTCzO3swQTttAdyYfO+ykooxNcn7hq9Jif7k877Zg
-	NzTQhv5fS8QmQ1kODqjycmd0+HMFk6tqn25KWRfbvwutgEQ8WduyIIyF5VupOqoooaYpMm
-	PcMkj3UvHwRNaSIbk8cWjCxE4kuZUOGfwXj+Pof8/c4Lkak7sNxM8KgYhPRr+6RT7pTSqL
-	cfcNtU11WwqUAXQZzouEGgjK2Ln1A==
-Received: from cvs.openbsd.org (localhost [127.0.0.1])
-	by cvs.openbsd.org (OpenSMTPD) with ESMTP id 3f9af318;
-	Wed, 13 Dec 2023 18:09:38 -0700 (MST)
-From: "Theo de Raadt" <deraadt@openbsd.org>
-To: Jeff Xu <jeffxu@google.com>
-cc: Linus Torvalds <torvalds@linux-foundation.org>, jeffxu@chromium.org,
-    akpm@linux-foundation.org, keescook@chromium.org, jannh@google.com,
-    sroettger@google.com, willy@infradead.org,
-    gregkh@linuxfoundation.org, jorgelo@chromium.org,
-    groeck@chromium.org, linux-kernel@vger.kernel.org,
-    linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-    pedro.falcato@gmail.com, dave.hansen@intel.com,
-    linux-hardening@vger.kernel.org
-Subject: Re: [RFC PATCH v3 11/11] mseal:add documentation
-In-reply-to: <CALmYWFu39nzHvBmRsA326GcmV9u=eM-2aCGOvLK31rrb2R9NEw@mail.gmail.com>
-References: <20231212231706.2680890-1-jeffxu@chromium.org> <20231212231706.2680890-12-jeffxu@chromium.org> <CAHk-=wgn02cpoFEDQGgS+5BUqA2z-=Ks9+PNd-pEJy8h+NOs5g@mail.gmail.com> <CALmYWFu39nzHvBmRsA326GcmV9u=eM-2aCGOvLK31rrb2R9NEw@mail.gmail.com>
-Comments: In-reply-to Jeff Xu <jeffxu@google.com>
-   message dated "Wed, 13 Dec 2023 16:35:26 -0800."
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ASB0owDz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 435CAC433C7;
+	Thu, 14 Dec 2023 01:17:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702516677;
+	bh=zsaG1Z/V6aX7d8f9bjRUYAcyyvlRqu+OVBtKr82ilo8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=ASB0owDzSZAjwNqEaZNw5l/tG4f5H9NX+k9wIaQk8aZXmjNXWFA3xs3z4915D3ydm
+	 7Ny7vU+2Z7vaKSVVG1qq8axAQ/MCShUSGffVW9XOEwhE7c/wF53+YRFmoEGCRaSXJV
+	 xxx5jmq9TTDBawDFV+xQEVsShfQCo7hbn0fdbEXDcJggTLF+nKeQ0DUI/UxbZMIsOO
+	 5BjG5ifdnXPja4ZIyPRc+ST7CoXQVV+Yuqp2Ss/x8LSXqj0MPfatQDbKpgwNw8T3UN
+	 XTW5ymxEA+Otu6nrG7yjCGi17kV/e48xzniquq3SrjsO19LqX8qx2v133Y2t3Q722V
+	 y4VWpmNMV+zfA==
+Date: Wed, 13 Dec 2023 17:17:55 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Mina Almasry <almasrymina@google.com>
+Cc: Shailend Chand <shailend@google.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ bpf@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Jonathan Corbet <corbet@lwn.net>, Jeroen de Borst <jeroendb@google.com>,
+ Praveen Kaligineedi <pkaligineedi@google.com>, Jesper Dangaard Brouer
+ <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Arnd
+ Bergmann <arnd@arndb.de>, David Ahern <dsahern@kernel.org>, Willem de
+ Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ Sumit Semwal <sumit.semwal@linaro.org>, "Christian =?UTF-8?B?S8O2bmln?="
+ <christian.koenig@amd.com>, Yunsheng Lin <linyunsheng@huawei.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt
+ <shakeelb@google.com>, Stanislav Fomichev <sdf@google.com>
+Subject: Re: [net-next v1 05/16] net: netdev netlink api to bind dma-buf to
+ a net device
+Message-ID: <20231213171755.5965e1ec@kernel.org>
+In-Reply-To: <20231208005250.2910004-6-almasrymina@google.com>
+References: <20231208005250.2910004-1-almasrymina@google.com>
+	<20231208005250.2910004-6-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <45779.1702516178.1@cvs.openbsd.org>
-Date: Wed, 13 Dec 2023 18:09:38 -0700
-Message-ID: <58421.1702516178@cvs.openbsd.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Jeff Xu <jeffxu@google.com> wrote:
+On Thu,  7 Dec 2023 16:52:36 -0800 Mina Almasry wrote:
+> +        name: type
+> +        doc: rx or tx queue
+> +        type: u8
+> +        enum: queue-type
 
-> > Or when would you *ever* say "seal this area, but mprotect()" is ok.
-> >
-> The fact  that openBSD allows RW=>RO transaction, as in its man page [2]
-> 
->  "  At present, mprotect(2) may reduce permissions on immutable pages
->   marked PROT_READ | PROT_WRITE to the less permissive PROT_READ."
-
-Let me explain this.
-
-We encountered two places that needed this less-permission-transition.
-
-Both of these problems were found in either .data or bss, which the
-kernel makes immutable by default.  The OpenBSD kernel makes those
-regions immutable BY DEFAULT, and there is no way to turn that off.
-
-One was in our libc malloc, which after initialization, wants to protect
-a control data structure from being written in the future.
-
-The other was in chrome v8, for the v8_flags variable, this is
-similarily mprotected to less permission after initialization to avoid
-tampering (because it's an amazing relative-address located control
-gadget).
-
-We introduced a different mechanism to solve these problem.
-
-So we added a new ELF section which annotates objects you need to be
-MUTABLE.  If these are .data or .bss, they are placed in the MUTABLE
-region annotated with the following Program Header:
-
-Program Headers:
-  Type           Offset   VirtAddr           PhysAddr           FileSiz  MemSiz   Flg Align
-  OPENBSD_MUTABLE 0x0e9000 0x00000000000ec000 0x00000000000ec000 0x001000 0x001000 RW  0x1000
-
-associated with this Section Header
-
-  [20] .openbsd.mutable  PROGBITS        00000000000ec000 0e9000 001000 00  WA  0   0 4096
-
-(It is vaguely similar to RELRO).
-
-You can place objects there using the a compiler __attribute__((section
-declaration, like this example from our libc/malloc.c code
-
-static union {
-        struct malloc_readonly mopts;
-        u_char _pad[MALLOC_PAGESIZE];
-} malloc_readonly __attribute__((aligned(MALLOC_PAGESIZE)))
-                __attribute__((section(".openbsd.mutable")));
-
-During startup the code can set the protection and then the immutability
-of the object correctly.
-
-Since we have no purpose left for this permission reduction semantic
-upon immutable mappings, we may be deleting that behaviour in the
-future.  I wrote that code, because I needed it to make progress with some
-difficult pieces of code.  But we found a better way.
-
+nit: the queue/napi GET was applied to net-next, would be good to stick
+to the same types (s/u8/u32)
