@@ -1,36 +1,36 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDF454596B;
-	Fri, 15 Dec 2023 15:09:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7B8747786;
+	Fri, 15 Dec 2023 15:10:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="n6EHBiWt"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h0ovr8IU"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702652980; x=1734188980;
+  t=1702653004; x=1734189004;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=VB0+uopmzLBdFoQyH1tNp0ZoBbzjE/BpX5BNhSMP/b4=;
-  b=n6EHBiWttpnLTeGKHOK8p4vEwWfNgEmErycUnkQwPRhCVFdINQLeBHcf
-   adEM9ZyKZEkHPtCrjPAsUlbXViOv2VYN00QFKNWaugTCVl7osd1jOamua
-   VKMSL8vIZJMrRVR3sQipM20+aRXnTaYOR1zXh6ON1dNGV2MgeVKPcfGs3
-   4JDoM9YlTMfq7RQYAVxsQmNL+IXrcm/vLDFy1UH9xByjyk1z6GYoof1XK
-   AZOnmYXDHc65tnz2QqvB6bYm0mgxtdWAqMRixpikJfvaD+dvooeLLlBrX
-   cE3GzzcEP7odaBOXlFDwqMCArv23SFzjZ0Gvr+OTpce9DK3m1PBAAsoOl
+  bh=ywRDd44vKPDZAVx18BFxwm4wvIVelDye2XAYp2fu2Go=;
+  b=h0ovr8IUWtsNlKhi2tyJnL/XXRiQiHBJclpzbM1MhV4Ncs6OzFYwewkl
+   RvXEX+W2oPSjic/qGqw71dIOYK1wVyIPHOAAongbukPuhmEe7GSluThjc
+   ajDHFta3RfO1ie6ND5mokB0eLgeYzpXe3LOpAKTrIYMI8jBuPchS4pEAS
+   wAfMnmKKI6Hn9yJlEdajl10dbhkgwiRv4npo6ylMPeTnIsipLulxN80Lc
+   dIK3BRwae0CrnoMX/tIiW3vW8JHe/69ehQmRLDSFooSas6isGj4XpgE/6
+   aILrYRJ3fDJLuKFnUj/0ZG7dJYMGXs2T5hYRvc+ZS1CkEAKdcf+CctyR3
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10924"; a="392461795"
+X-IronPort-AV: E=McAfee;i="6600,9927,10924"; a="2454158"
 X-IronPort-AV: E=Sophos;i="6.04,279,1695711600"; 
-   d="scan'208";a="392461795"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2023 07:09:40 -0800
+   d="scan'208";a="2454158"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2023 07:09:58 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10924"; a="1106151106"
+X-IronPort-AV: E=McAfee;i="6600,9927,10924"; a="809001718"
 X-IronPort-AV: E=Sophos;i="6.04,279,1695711600"; 
-   d="scan'208";a="1106151106"
+   d="scan'208";a="809001718"
 Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.246.49.116])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2023 07:09:36 -0800
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2023 07:09:54 -0800
 From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To: linux-kselftest@vger.kernel.org,
 	Reinette Chatre <reinette.chatre@intel.com>,
@@ -40,9 +40,9 @@ To: linux-kselftest@vger.kernel.org,
 	Fenghua Yu <fenghua.yu@intel.com>
 Cc: linux-kernel@vger.kernel.org,
 	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v4 27/29] selftests/resctrl: Add helper to convert L2/3 to integer
-Date: Fri, 15 Dec 2023 17:05:13 +0200
-Message-Id: <20231215150515.36983-28-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v4 29/29] selftests/resctrl: Get domain id from cache id
+Date: Fri, 15 Dec 2023 17:05:15 +0200
+Message-Id: <20231215150515.36983-30-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20231215150515.36983-1-ilpo.jarvinen@linux.intel.com>
 References: <20231215150515.36983-1-ilpo.jarvinen@linux.intel.com>
@@ -55,64 +55,127 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-"L2"/"L3" conversion to integer is embedded into get_cache_size()
-which prevents reuse.
+Domain id is acquired differently depending on CPU. AMD tests use id
+from L3 cache, whereas CPUs from other vendors base the id on topology
+package id. In order to support L2 CAT test, this has to be
+generalized.
 
-Create a helper for the cache string to integer conversion to make
-it reusable.
+The driver side code seems to get the domain ids from cache ids so the
+approach used by the AMD branch seems to match the kernel-side code. It
+will also work with L2 domain IDs as long as the cache level is
+generalized.
+
+Using the topology id was always fragile due to mismatch with the
+kernel-side way to acquire the domain id. It got incorrect domain id,
+e.g., when Cluster-on-Die (CoD) is enabled for CPU (but CoD is not well
+suited for resctrl in the first place so it has not been a big issue if
+tests don't work correctly with it).
+
+Taking all the above into account, generalize acquiring the domain id
+by taking it from the cache id and do not hard-code the cache level.
 
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
 ---
- tools/testing/selftests/resctrl/resctrlfs.c | 28 +++++++++++++++------
- 1 file changed, 20 insertions(+), 8 deletions(-)
+ tools/testing/selftests/resctrl/resctrl.h     |  2 +-
+ tools/testing/selftests/resctrl/resctrl_val.c |  4 +--
+ tools/testing/selftests/resctrl/resctrlfs.c   | 27 ++++++++++++-------
+ 3 files changed, 21 insertions(+), 12 deletions(-)
 
+diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
+index d4eef20723fc..c52eaf46f24d 100644
+--- a/tools/testing/selftests/resctrl/resctrl.h
++++ b/tools/testing/selftests/resctrl/resctrl.h
+@@ -129,7 +129,7 @@ extern char llc_occup_path[1024];
+ int get_vendor(void);
+ bool check_resctrlfs_support(void);
+ int filter_dmesg(void);
+-int get_domain_id(int cpu_no, int *domain_id);
++int get_domain_id(const char *resource, int cpu_no, int *domain_id);
+ int mount_resctrlfs(void);
+ int umount_resctrlfs(void);
+ int validate_bw_report_request(char *bw_report);
+diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
+index 631e5f055694..5a49f07a6c85 100644
+--- a/tools/testing/selftests/resctrl/resctrl_val.c
++++ b/tools/testing/selftests/resctrl/resctrl_val.c
+@@ -415,7 +415,7 @@ static void initialize_mem_bw_resctrl(const char *ctrlgrp, const char *mongrp,
+ {
+ 	int domain_id;
+ 
+-	if (get_domain_id(cpu_no, &domain_id) < 0) {
++	if (get_domain_id("MB", cpu_no, &domain_id) < 0) {
+ 		ksft_print_msg("Could not get domain ID\n");
+ 		return;
+ 	}
+@@ -584,7 +584,7 @@ static void initialize_llc_occu_resctrl(const char *ctrlgrp, const char *mongrp,
+ {
+ 	int domain_id;
+ 
+-	if (get_domain_id(cpu_no, &domain_id) < 0) {
++	if (get_domain_id("L3", cpu_no, &domain_id) < 0) {
+ 		ksft_print_msg("Could not get domain ID\n");
+ 		return;
+ 	}
 diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
-index fed6741edc5f..eab928c46f98 100644
+index f29dc65d8b30..5750662cce57 100644
 --- a/tools/testing/selftests/resctrl/resctrlfs.c
 +++ b/tools/testing/selftests/resctrl/resctrlfs.c
-@@ -94,6 +94,23 @@ int umount_resctrlfs(void)
- 	return 0;
+@@ -111,28 +111,37 @@ static int get_cache_level(const char *cache_type)
+ 	return -1;
  }
  
-+/*
-+ * get_cache_level - Convert cache level from string to integer
-+ * @cache_type:		Cache level as string
-+ *
-+ * Return: cache level as integer or -1 if @cache_type is invalid.
-+ */
-+static int get_cache_level(const char *cache_type)
++static int get_resource_cache_level(const char *resource)
 +{
-+	if (!strcmp(cache_type, "L3"))
++	/* "MB" use L3 (LLC) as resource */
++	if (!strcmp(resource, "MB"))
 +		return 3;
-+	if (!strcmp(cache_type, "L2"))
-+		return 2;
-+
-+	ksft_print_msg("Invalid cache level\n");
-+	return -1;
++	return get_cache_level(resource);
 +}
 +
  /*
-  * get_resource_id - Get socket number/l3 id for a specified CPU
+  * get_domain_id - Get resctrl domain ID for a specified CPU
++ * @resource:	resource name
   * @cpu_no:	CPU number
-@@ -144,14 +161,9 @@ int get_cache_size(int cpu_no, const char *cache_type, unsigned long *cache_size
- 	int length, i, cache_num;
+  * @domain_id:	domain ID (cache ID; for MB, L3 cache ID)
+  *
+  * Return: >= 0 on success, < 0 on failure.
+  */
+-int get_domain_id(int cpu_no, int *domain_id)
++int get_domain_id(const char *resource, int cpu_no, int *domain_id)
+ {
+ 	char phys_pkg_path[1024];
++	int cache_num;
  	FILE *fp;
  
--	if (!strcmp(cache_type, "L3")) {
--		cache_num = 3;
--	} else if (!strcmp(cache_type, "L2")) {
--		cache_num = 2;
--	} else {
--		ksft_print_msg("Invalid cache level\n");
--		return -1;
--	}
-+	cache_num = get_cache_level(cache_type);
+-	if (get_vendor() == ARCH_AMD)
+-		sprintf(phys_pkg_path, "%s%d/cache/index3/id",
+-			PHYS_ID_PATH, cpu_no);
+-	else
+-		sprintf(phys_pkg_path, "%s%d/topology/physical_package_id",
+-			PHYS_ID_PATH, cpu_no);
++	cache_num = get_resource_cache_level(resource);
 +	if (cache_num < 0)
 +		return cache_num;
++
++	sprintf(phys_pkg_path, "%s%d/cache/index%d/id", PHYS_ID_PATH, cpu_no, cache_num);
  
- 	sprintf(cache_path, "/sys/bus/cpu/devices/cpu%d/cache/index%d/size",
- 		cpu_no, cache_num);
+ 	fp = fopen(phys_pkg_path, "r");
+ 	if (!fp) {
+-		ksft_perror("Failed to open physical_package_id");
++		ksft_perror("Failed to open cache id file");
+ 
+ 		return -1;
+ 	}
+@@ -559,7 +568,7 @@ int write_schemata(char *ctrlgrp, char *schemata, int cpu_no, const char *resour
+ 		return -1;
+ 	}
+ 
+-	if (get_domain_id(cpu_no, &domain_id) < 0) {
++	if (get_domain_id(resource, cpu_no, &domain_id) < 0) {
+ 		sprintf(reason, "Failed to get domain ID");
+ 		ret = -1;
+ 
 -- 
 2.30.2
 
