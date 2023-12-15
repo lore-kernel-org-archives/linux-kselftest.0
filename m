@@ -1,36 +1,36 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11FDD37153;
-	Fri, 15 Dec 2023 15:06:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECAC3381BB;
+	Fri, 15 Dec 2023 15:07:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cSmBSKNf"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Alb9LMkX"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702652812; x=1734188812;
+  t=1702652821; x=1734188821;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=IlhQml1sdCh4qC+ylgqtmLnXuT5UIH8CGMKrCZvaguw=;
-  b=cSmBSKNfWfvJXrZkWU0djjwelS3G4LOAS5TDjTTd9JWp4luE9lnEjeQ6
-   C3klRzAOzyHtiUzrbks8QBYSM5gf8SPNB2Ck0Fp1EHxzO7mDeW008P3VS
-   nibJfubTKW1oW5ScjDAadtjyx/DnHcOgDnKDB941xUmvHOLKK3m+KwYY3
-   /+6TtV+HTP2UHctOfmmvFEVd+ChjmZU9qIYJmaVtshNBpmjvZdvwUXU4a
-   gBEQL51aQztzVi7IK+vpAjJ5+9IcIs7RWyYvMnC2aq5UCTHX5FLQ69s/5
-   /3jnQHFEAIPzRJ+GxESudUmKwcAjKQd9Hf+KD/47OJrNDZZ6s+DOz6rLU
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10924"; a="2453592"
+  bh=kd5+Mqw+LaVo3fOlOuS2NrZCmYXl5TWJGn3rPOJHuqc=;
+  b=Alb9LMkXr1gR9dfiAoRQdMtZzZhrkxLIFr7s8Nvz/SdwqToJb0bkZBBH
+   VFFjjjQSKSfFjpM6S17arVbn9wn2fTbYHfHunDcx4IY+7hGcYTHCtBqxB
+   FZSHtUi+1ZnIEq2qDRGJLsDeupy7yG1LTW2C2uce251bakvahvUvH3FXM
+   /mJiuw6/Wwic+JWW/r7E75tirqNKd4Jq5D5QbaMlF3Ie2RlR+ZCmVImp1
+   PSnODdIipcbk11ah5ivqpw+0C0Rzi67qUhAojtjSZ4j0tdvVJivkJ9Uwe
+   WaLuFxhNWPZXDm7Vq7TekZm/Vgk1YTtq/Vyi0Tz1AU+PmAX9bxKNqAFCY
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10924"; a="375432965"
 X-IronPort-AV: E=Sophos;i="6.04,279,1695711600"; 
-   d="scan'208";a="2453592"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2023 07:06:52 -0800
+   d="scan'208";a="375432965"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2023 07:06:04 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10924"; a="809000848"
+X-IronPort-AV: E=McAfee;i="6600,9927,10924"; a="1021965754"
 X-IronPort-AV: E=Sophos;i="6.04,279,1695711600"; 
-   d="scan'208";a="809000848"
+   d="scan'208";a="1021965754"
 Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.246.49.116])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2023 07:06:47 -0800
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2023 07:06:00 -0800
 From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To: linux-kselftest@vger.kernel.org,
 	Reinette Chatre <reinette.chatre@intel.com>,
@@ -40,9 +40,9 @@ To: linux-kselftest@vger.kernel.org,
 	Fenghua Yu <fenghua.yu@intel.com>
 Cc: linux-kernel@vger.kernel.org,
 	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v4 09/29] selftests/resctrl: Create cache_portion_size() helper
-Date: Fri, 15 Dec 2023 17:04:55 +0200
-Message-Id: <20231215150515.36983-10-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v4 04/29] selftests/resctrl: Change function comments to say < 0 on error
+Date: Fri, 15 Dec 2023 17:04:50 +0200
+Message-Id: <20231215150515.36983-5-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20231215150515.36983-1-ilpo.jarvinen@linux.intel.com>
 References: <20231215150515.36983-1-ilpo.jarvinen@linux.intel.com>
@@ -55,143 +55,88 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-CAT and CMT tests calculate size of the cache portion for the n-bits
-cache allocation on their own.
+A number function comments state the function return non-zero on
+failure but in reality they can only return 0 on success and < 0 on
+error.
 
-Add cache_portion_size() helper that calculates size of the cache
-portion for the given number of bits and use it to replace the existing
-span calculations. This also prepares for the new CAT test that will
-need to determine the size of the cache portion also during results
-processing.
+Update the comments to say < 0 on error to match the behavior.
 
-Rename also 'cache_size' local variables to 'cache_total_size' to
-prevent misinterpretations.
+While at it, improve cat_val() comment to state that 0 means the test
+was run (either pass or fail).
 
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
 ---
 
-v4:
-- Correct return type
-- Don't allow div-by-zero
+v3:
+- New patch
 ---
- tools/testing/selftests/resctrl/cat_test.c | 10 ++++-----
- tools/testing/selftests/resctrl/cmt_test.c |  8 ++++----
- tools/testing/selftests/resctrl/resctrl.h  | 24 ++++++++++++++++++++++
- 3 files changed, 33 insertions(+), 9 deletions(-)
+ tools/testing/selftests/resctrl/cache.c     |  2 +-
+ tools/testing/selftests/resctrl/resctrlfs.c | 10 +++++-----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-index 242c4c6200aa..f18c95dda5d3 100644
---- a/tools/testing/selftests/resctrl/cat_test.c
-+++ b/tools/testing/selftests/resctrl/cat_test.c
-@@ -91,7 +91,7 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
+diff --git a/tools/testing/selftests/resctrl/cache.c b/tools/testing/selftests/resctrl/cache.c
+index 6d60a2f1b3aa..a9a0394b3d08 100644
+--- a/tools/testing/selftests/resctrl/cache.c
++++ b/tools/testing/selftests/resctrl/cache.c
+@@ -206,7 +206,7 @@ int measure_cache_vals(struct resctrl_val_param *param, int bm_pid)
+  * @param:		parameters passed to cache_val()
+  * @span:		buffer size for the benchmark
+  *
+- * Return:		0 on success. non-zero on failure.
++ * Return:		0 when the test was run, < 0 on error.
+  */
+ int cat_val(struct resctrl_val_param *param, size_t span)
  {
- 	unsigned long l_mask, l_mask_1;
- 	int ret, pipefd[2], sibling_cpu_no;
--	unsigned long cache_size = 0;
-+	unsigned long cache_total_size = 0;
- 	unsigned long long_mask;
- 	int count_of_bits;
- 	char pipe_message;
-@@ -102,10 +102,10 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
- 		return ret;
- 
- 	/* Get L3/L2 cache size */
--	ret = get_cache_size(cpu_no, cache_type, &cache_size);
-+	ret = get_cache_size(cpu_no, cache_type, &cache_total_size);
- 	if (ret)
- 		return ret;
--	ksft_print_msg("Cache size :%lu\n", cache_size);
-+	ksft_print_msg("Cache size :%lu\n", cache_total_size);
- 
- 	count_of_bits = count_bits(long_mask);
- 
-@@ -136,7 +136,7 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
- 	/* Set param values for parent thread which will be allocated bitmask
- 	 * with (max_bits - n) bits
- 	 */
--	span = cache_size * (count_of_bits - n) / count_of_bits;
-+	span = cache_portion_size(cache_total_size, l_mask, long_mask);
- 	strcpy(param.ctrlgrp, "c2");
- 	strcpy(param.mongrp, "m2");
- 	strcpy(param.filename, RESULT_FILE_NAME2);
-@@ -158,7 +158,7 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
- 		param.mask = l_mask_1;
- 		strcpy(param.ctrlgrp, "c1");
- 		strcpy(param.mongrp, "m1");
--		span = cache_size * n / count_of_bits;
-+		span = cache_portion_size(cache_total_size, l_mask_1, long_mask);
- 		strcpy(param.filename, RESULT_FILE_NAME1);
- 		param.num_of_runs = 0;
- 		param.cpu_no = sibling_cpu_no;
-diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
-index a18c6825802c..a14d46353865 100644
---- a/tools/testing/selftests/resctrl/cmt_test.c
-+++ b/tools/testing/selftests/resctrl/cmt_test.c
-@@ -72,7 +72,7 @@ int cmt_resctrl_val(int cpu_no, int n, const char * const *benchmark_cmd)
+diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
+index 5fb595ed8843..81d1e043e17a 100644
+--- a/tools/testing/selftests/resctrl/resctrlfs.c
++++ b/tools/testing/selftests/resctrl/resctrlfs.c
+@@ -56,7 +56,7 @@ static int find_resctrl_mount(char *buffer)
+  * Mounts resctrl FS. Fails if resctrl FS is already mounted to avoid
+  * pre-existing settings interfering with the test results.
+  *
+- * Return: 0 on success, non-zero on failure
++ * Return: 0 on success, < 0 on error.
+  */
+ int mount_resctrlfs(void)
  {
- 	const char * const *cmd = benchmark_cmd;
- 	const char *new_cmd[BENCHMARK_ARGS];
--	unsigned long cache_size = 0;
-+	unsigned long cache_total_size = 0;
- 	unsigned long long_mask;
- 	char *span_str = NULL;
- 	int count_of_bits;
-@@ -83,10 +83,10 @@ int cmt_resctrl_val(int cpu_no, int n, const char * const *benchmark_cmd)
- 	if (ret)
- 		return ret;
- 
--	ret = get_cache_size(cpu_no, "L3", &cache_size);
-+	ret = get_cache_size(cpu_no, "L3", &cache_total_size);
- 	if (ret)
- 		return ret;
--	ksft_print_msg("Cache size :%lu\n", cache_size);
-+	ksft_print_msg("Cache size :%lu\n", cache_total_size);
- 
- 	count_of_bits = count_bits(long_mask);
- 
-@@ -107,7 +107,7 @@ int cmt_resctrl_val(int cpu_no, int n, const char * const *benchmark_cmd)
- 		.setup		= cmt_setup,
- 	};
- 
--	span = cache_size * n / count_of_bits;
-+	span = cache_portion_size(cache_total_size, param.mask, long_mask);
- 
- 	if (strcmp(cmd[0], "fill_buf") == 0) {
- 		/* Duplicate the command to be able to replace span in it */
-diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index 9e5777e1eee3..08647f2c07f5 100644
---- a/tools/testing/selftests/resctrl/resctrl.h
-+++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -116,4 +116,28 @@ int show_cache_info(unsigned long sum_llc_val, int no_of_bits,
- 		    unsigned long max_diff_percent, unsigned long num_of_runs,
- 		    bool platform, bool cmt);
- 
-+/*
-+ * cache_portion_size - Calculate the size of a cache portion
-+ * @cache_size:		Total cache size in bytes
-+ * @portion_mask:	Cache portion mask
-+ * @full_cache_mask:	Full Cache Bit Mask (CBM) for the cache
-+ *
-+ * Return: The size of the cache portion in bytes.
-+ */
-+static inline unsigned long cache_portion_size(unsigned long cache_size,
-+					       unsigned long portion_mask,
-+					       unsigned long full_cache_mask)
-+{
-+	unsigned int bits = count_bits(full_cache_mask);
-+
-+	/*
-+	 * With no bits the full CBM, assume cache cannot be split into
-+	 * smaller portions. To avoid divide by zero, return cache_size.
-+	 */
-+	if (!bits)
-+		return cache_size;
-+
-+	return cache_size * count_bits(portion_mask) / bits;
-+}
-+
- #endif /* RESCTRL_H */
+@@ -276,7 +276,7 @@ int get_core_sibling(int cpu_no)
+  * @bm_pid:	PID that should be binded
+  * @cpu_no:	CPU number at which the PID would be binded
+  *
+- * Return: 0 on success, non-zero on failure
++ * Return: 0 on success, < 0 on error.
+  */
+ int taskset_benchmark(pid_t bm_pid, int cpu_no)
+ {
+@@ -300,7 +300,7 @@ int taskset_benchmark(pid_t bm_pid, int cpu_no)
+  * @grp:	Full path and name of the group
+  * @parent_grp:	Full path and name of the parent group
+  *
+- * Return: 0 on success, non-zero on failure
++ * Return: 0 on success, < 0 on error.
+  */
+ static int create_grp(const char *grp_name, char *grp, const char *parent_grp)
+ {
+@@ -376,7 +376,7 @@ static int write_pid_to_tasks(char *tasks, pid_t pid)
+  * pid is not written, this means that pid is in con_mon grp and hence
+  * should consult con_mon grp's mon_data directory for results.
+  *
+- * Return: 0 on success, non-zero on failure
++ * Return: 0 on success, < 0 on error.
+  */
+ int write_bm_pid_to_resctrl(pid_t bm_pid, char *ctrlgrp, char *mongrp,
+ 			    char *resctrl_val)
+@@ -435,7 +435,7 @@ int write_bm_pid_to_resctrl(pid_t bm_pid, char *ctrlgrp, char *mongrp,
+  * Update schemata of a con_mon grp *only* if requested resctrl feature is
+  * allocation type
+  *
+- * Return: 0 on success, non-zero on failure
++ * Return: 0 on success, < 0 on error.
+  */
+ int write_schemata(char *ctrlgrp, char *schemata, int cpu_no, char *resctrl_val)
+ {
 -- 
 2.30.2
 
