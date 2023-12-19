@@ -1,27 +1,27 @@
 Received: from mail.xenproject.org (mail.xenproject.org [104.130.215.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8767E35888;
-	Tue, 19 Dec 2023 16:41:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F152C20334;
+	Tue, 19 Dec 2023 16:41:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=xen.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xen.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=xen.org header.i=@xen.org header.b="y5/rc8yv"
+	dkim=pass (1024-bit key) header.d=xen.org header.i=@xen.org header.b="oUVOIAFa"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=xen.org;
 	s=20200302mail; h=Content-Transfer-Encoding:MIME-Version:References:
 	In-Reply-To:Message-Id:Date:Subject:To:From;
-	bh=56c4VAAmht5aP1Xr/HfOtUfhqeb/6TaTG7C4X+3Ahp4=; b=y5/rc8yvgOznntZKDJJd5NXbKw
-	ZPB8Xu3r0lRcG5Pp31epUiZi7aR1tgMm+ImMzBnRy96cg/PKz+NOKt0HfCWUGChCe8M9FhYusPYL+
-	+aU5MbUd5s8hAOd69ZZKDR4kurTUu/gSUgxd/NLNFiQolNhnC9WiYr5aXVPbHiBO73Bg=;
+	bh=nuXWSkr0ZyIsLCugqKNNY21HAlliCS4E2dntcvQyiAA=; b=oUVOIAFaNHVexNTFXcA8x8MFdy
+	vkkn0/ldOEiPIARqQ+uoPXqgGxbRTTY9nnLXBIM9mTjduq2/pFUuE4gis186Fuj80AKt56i50Euey
+	FVru3Qk6uLqN/IBQnXEfvK/vwwpUeZRsVj5zhwmEXIHZKzPWN2PJe4vOq5G104Wg4Kqw=;
 Received: from xenbits.xenproject.org ([104.239.192.120])
 	by mail.xenproject.org with esmtp (Exim 4.92)
 	(envelope-from <paul@xen.org>)
-	id 1rFd9x-00064p-O1; Tue, 19 Dec 2023 16:41:33 +0000
+	id 1rFd9y-000653-7I; Tue, 19 Dec 2023 16:41:34 +0000
 Received: from 54-240-197-226.amazon.com ([54.240.197.226] helo=REM-PW02S00X.ant.amazon.com)
 	by xenbits.xenproject.org with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <paul@xen.org>)
-	id 1rFckE-0005h9-EU; Tue, 19 Dec 2023 16:14:58 +0000
+	id 1rFckI-0005h9-T5; Tue, 19 Dec 2023 16:15:03 +0000
 From: Paul Durrant <paul@xen.org>
 To: Paolo Bonzini <pbonzini@redhat.com>,
 	Jonathan Corbet <corbet@lwn.net>,
@@ -39,9 +39,9 @@ To: Paolo Bonzini <pbonzini@redhat.com>,
 	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v11 12/19] KVM: xen: allow vcpu_info to be mapped by fixed HVA
-Date: Tue, 19 Dec 2023 16:11:02 +0000
-Message-Id: <20231219161109.1318-13-paul@xen.org>
+Subject: [PATCH v11 14/19] KVM: selftests / xen: re-map vcpu_info using HVA rather than GPA
+Date: Tue, 19 Dec 2023 16:11:04 +0000
+Message-Id: <20231219161109.1318-15-paul@xen.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231219161109.1318-1-paul@xen.org>
 References: <20231219161109.1318-1-paul@xen.org>
@@ -55,163 +55,63 @@ Content-Transfer-Encoding: 8bit
 
 From: Paul Durrant <pdurrant@amazon.com>
 
-If the guest does not explicitly set the GPA of vcpu_info structure in
-memory then, for guests with 32 vCPUs or fewer, the vcpu_info embedded
-in the shared_info page may be used. As described in a previous commit,
-the shared_info page is an overlay at a fixed HVA within the VMM, so in
-this case it also more optimal to activate the vcpu_info cache with a
-fixed HVA to avoid unnecessary invalidation if the guest memory layout
-is modified.
+If the relevant capability (KVM_XEN_HVM_CONFIG_SHARED_INFO_HVA) is present
+then re-map vcpu_info using the HVA part way through the tests to make sure
+then there is no functional change.
 
 Signed-off-by: Paul Durrant <pdurrant@amazon.com>
 Reviewed-by: David Woodhouse <dwmw@amazon.co.uk>
 ---
-Cc: David Woodhouse <dwmw2@infradead.org>
 Cc: Sean Christopherson <seanjc@google.com>
 Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: x86@kernel.org
-
-v8:
- - Re-base.
+Cc: David Woodhouse <dwmw2@infradead.org>
 
 v5:
  - New in this version.
 ---
- Documentation/virt/kvm/api.rst | 26 +++++++++++++++++++++-----
- arch/x86/kvm/xen.c             | 34 ++++++++++++++++++++++++++++------
- include/uapi/linux/kvm.h       |  3 +++
- 3 files changed, 52 insertions(+), 11 deletions(-)
+ .../selftests/kvm/x86_64/xen_shinfo_test.c        | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-index bb78371807f1..34c04e2c0e9b 100644
---- a/Documentation/virt/kvm/api.rst
-+++ b/Documentation/virt/kvm/api.rst
-@@ -5535,11 +5535,12 @@ KVM_XEN_ATTR_TYPE_SHARED_INFO
-   Sets the guest physical frame number at which the Xen shared_info
-   page resides. Note that although Xen places vcpu_info for the first
-   32 vCPUs in the shared_info page, KVM does not automatically do so
--  and instead requires that KVM_XEN_VCPU_ATTR_TYPE_VCPU_INFO be used
--  explicitly even when the vcpu_info for a given vCPU resides at the
--  "default" location in the shared_info page. This is because KVM may
--  not be aware of the Xen CPU id which is used as the index into the
--  vcpu_info[] array, so may know the correct default location.
-+  and instead requires that KVM_XEN_VCPU_ATTR_TYPE_VCPU_INFO or
-+  KVM_XEN_VCPU_ATTR_TYPE_VCPU_INFO_HVA be used explicitly even when
-+  the vcpu_info for a given vCPU resides at the "default" location
-+  in the shared_info page. This is because KVM may not be aware of
-+  the Xen CPU id which is used as the index into the vcpu_info[]
-+  array, so may know the correct default location.
+diff --git a/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c b/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c
+index a61500ff0822..d2ea0435f4f7 100644
+--- a/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c
++++ b/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c
+@@ -62,6 +62,7 @@ enum {
+ 	TEST_POLL_TIMEOUT,
+ 	TEST_POLL_MASKED,
+ 	TEST_POLL_WAKE,
++	SET_VCPU_INFO,
+ 	TEST_TIMER_PAST,
+ 	TEST_LOCKING_SEND_RACE,
+ 	TEST_LOCKING_POLL_RACE,
+@@ -321,6 +322,10 @@ static void guest_code(void)
  
-   Note that the shared_info page may be constantly written to by KVM;
-   it contains the event channel bitmap used to deliver interrupts to
-@@ -5661,6 +5662,21 @@ KVM_XEN_VCPU_ATTR_TYPE_VCPU_INFO
-   on dirty logging. Setting the gpa to KVM_XEN_INVALID_GPA will disable
-   the vcpu_info.
+ 	GUEST_SYNC(TEST_POLL_WAKE);
  
-+KVM_XEN_VCPU_ATTR_TYPE_VCPU_INFO_HVA
-+  If the KVM_XEN_HVM_CONFIG_SHARED_INFO_HVA flag is also set in the
-+  Xen capabilities, then this attribute may be used to set the
-+  userspace address of the vcpu_info for a given vCPU. It should
-+  only be used when the vcpu_info resides at the "default" location
-+  in the shared_info page. In this case it is safe to assume the
-+  userspace address will not change, because the shared_info page is
-+  an overlay on guest memory and remains at a fixed host address
-+  regardless of where it is mapped in guest physical address space
-+  and hence unnecessary invalidation of an internal cache may be
-+  avoided if the guest memory layout is modified.
-+  If the vcpu_info does not reside at the "default" location then
-+  it is not guaranteed to remain at the same host address and
-+  hence the aforementioned cache invalidation is required.
++	/* Set the vcpu_info to point at exactly the place it already is to
++	 * make sure the attribute is functional. */
++	GUEST_SYNC(SET_VCPU_INFO);
 +
- KVM_XEN_VCPU_ATTR_TYPE_VCPU_TIME_INFO
-   Sets the guest physical address of an additional pvclock structure
-   for a given vCPU. This is typically used for guest vsyscall support.
-diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
-index 8ea68c64a467..9b8f9f8e2da2 100644
---- a/arch/x86/kvm/xen.c
-+++ b/arch/x86/kvm/xen.c
-@@ -781,20 +781,33 @@ int kvm_xen_vcpu_set_attr(struct kvm_vcpu *vcpu, struct kvm_xen_vcpu_attr *data)
+ 	/* A timer wake an *unmasked* port which should wake us with an
+ 	 * actual interrupt, while we're polling on a different port. */
+ 	ports[0]++;
+@@ -888,6 +893,16 @@ int main(int argc, char *argv[])
+ 				alarm(1);
+ 				break;
  
- 	switch (data->type) {
- 	case KVM_XEN_VCPU_ATTR_TYPE_VCPU_INFO:
-+	case KVM_XEN_VCPU_ATTR_TYPE_VCPU_INFO_HVA:
- 		/* No compat necessary here. */
- 		BUILD_BUG_ON(sizeof(struct vcpu_info) !=
- 			     sizeof(struct compat_vcpu_info));
- 		BUILD_BUG_ON(offsetof(struct vcpu_info, time) !=
- 			     offsetof(struct compat_vcpu_info, time));
- 
--		if (data->u.gpa == KVM_XEN_INVALID_GPA) {
--			kvm_gpc_deactivate(&vcpu->arch.xen.vcpu_info_cache);
--			r = 0;
--			break;
-+		if (data->type == KVM_XEN_VCPU_ATTR_TYPE_VCPU_INFO) {
-+			if (data->u.gpa == KVM_XEN_INVALID_GPA) {
-+				kvm_gpc_deactivate(&vcpu->arch.xen.vcpu_info_cache);
-+				r = 0;
++			case SET_VCPU_INFO:
++				if (has_shinfo_hva) {
++					struct kvm_xen_vcpu_attr vih = {
++						.type = KVM_XEN_VCPU_ATTR_TYPE_VCPU_INFO_HVA,
++						.u.hva = (unsigned long)vinfo
++					};
++					vcpu_ioctl(vcpu, KVM_XEN_VCPU_SET_ATTR, &vih);
++				}
 +				break;
-+			}
 +
-+			r = kvm_gpc_activate(&vcpu->arch.xen.vcpu_info_cache,
-+					     data->u.gpa, sizeof(struct vcpu_info));
-+		} else {
-+			if (data->u.hva == 0) {
-+				kvm_gpc_deactivate(&vcpu->arch.xen.vcpu_info_cache);
-+				r = 0;
-+				break;
-+			}
-+
-+			r = kvm_gpc_activate_hva(&vcpu->arch.xen.vcpu_info_cache,
-+						 data->u.hva, sizeof(struct vcpu_info));
- 		}
- 
--		r = kvm_gpc_activate(&vcpu->arch.xen.vcpu_info_cache,
--				     data->u.gpa, sizeof(struct vcpu_info));
- 		if (!r)
- 			kvm_make_request(KVM_REQ_CLOCK_UPDATE, vcpu);
- 
-@@ -1023,6 +1036,15 @@ int kvm_xen_vcpu_get_attr(struct kvm_vcpu *vcpu, struct kvm_xen_vcpu_attr *data)
- 		r = 0;
- 		break;
- 
-+	case KVM_XEN_VCPU_ATTR_TYPE_VCPU_INFO_HVA:
-+		if (vcpu->arch.xen.vcpu_info_cache.active &&
-+		    vcpu->arch.xen.vcpu_info_cache.gpa == KVM_XEN_INVALID_GPA)
-+			data->u.hva = vcpu->arch.xen.vcpu_info_cache.uhva;
-+		else
-+			data->u.hva = 0;
-+		r = 0;
-+		break;
-+
- 	case KVM_XEN_VCPU_ATTR_TYPE_VCPU_TIME_INFO:
- 		if (vcpu->arch.xen.vcpu_time_info_cache.active)
- 			data->u.gpa = vcpu->arch.xen.vcpu_time_info_cache.gpa;
-diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-index 1a878689a76e..02da0cd4153d 100644
---- a/include/uapi/linux/kvm.h
-+++ b/include/uapi/linux/kvm.h
-@@ -1899,6 +1899,7 @@ struct kvm_xen_vcpu_attr {
- 	union {
- 		__u64 gpa;
- #define KVM_XEN_INVALID_GPA ((__u64)-1)
-+		__u64 hva;
- 		__u64 pad[8];
- 		struct {
- 			__u64 state;
-@@ -1929,6 +1930,8 @@ struct kvm_xen_vcpu_attr {
- #define KVM_XEN_VCPU_ATTR_TYPE_VCPU_ID		0x6
- #define KVM_XEN_VCPU_ATTR_TYPE_TIMER		0x7
- #define KVM_XEN_VCPU_ATTR_TYPE_UPCALL_VECTOR	0x8
-+/* Available with KVM_CAP_XEN_HVM / KVM_XEN_HVM_CONFIG_SHARED_INFO_HVA */
-+#define KVM_XEN_VCPU_ATTR_TYPE_VCPU_INFO_HVA	0x9
- 
- /* Secure Encrypted Virtualization command */
- enum sev_cmd_id {
+ 			case TEST_TIMER_PAST:
+ 				TEST_ASSERT(!evtchn_irq_expected,
+ 					    "Expected event channel IRQ but it didn't happen");
 -- 
 2.39.2
 
