@@ -1,186 +1,137 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC6254B5C9;
-	Thu, 21 Dec 2023 09:25:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E75C36A018;
+	Thu, 21 Dec 2023 10:39:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e+a1SPK9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CC26C433C7;
-	Thu, 21 Dec 2023 09:25:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1703150706;
-	bh=AYGf91U8T/JqQeT9S7bNrsfYGOsBnl13+m+5Z2NMRpE=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=e+a1SPK9XQk98t/2P89QLYkpRHBpJS7KY21oexMqyE4ufnNnH1jA60n99byaXUQrG
-	 Whze4kMbMPwcMYcyZxxZthpvZeB86k4WI2aoo5qTNeHpb0hiPYhTvStJ316yvjfq6j
-	 dtlS3klVPy7VJSds3XBKmkSvuP/7RE7bHXFEPyxIYjUUoiWjQ+MzJJ2PQGgJxFGnDy
-	 JglUtTKXGsfwyIxsYSBqcJHYZBf1neH1h3xIwVrp65z5zJTs3+eRYQTEdLTc+zL4H0
-	 Oh8HDT/FEIfnZbhUeAp76Mhb5ygZSOHs3myvlqSoNxw9Mv3cIVXXSMpG/TFhnfbsqA
-	 MM/3QxvCERuTg==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1rGFIc-005wSL-VG;
-	Thu, 21 Dec 2023 09:25:03 +0000
-Date: Thu, 21 Dec 2023 09:25:02 +0000
-Message-ID: <86plyzaowh.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Haibo Xu <xiaobo55x@gmail.com>
-Cc: Haibo Xu <haibo1.xu@intel.com>,
-	ajones@ventanamicro.com,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Anup Patel <anup@brainfault.org>,
-	Atish Patra <atishp@atishpatra.org>,
-	Guo Ren <guoren@kernel.org>,
-	Mayuresh Chitale <mchitale@ventanamicro.com>,
-	Greentime Hu <greentime.hu@sifive.com>,
-	wchen <waylingii@gmail.com>,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Minda Chen <minda.chen@starfivetech.com>,
-	Samuel Holland <samuel@sholland.org>,
-	Jisheng Zhang <jszhang@kernel.org>,
-	Sean Christopherson <seanjc@google.com>,
-	Peter Xu <peterx@redhat.com>,
-	Like Xu <likexu@tencent.com>,
-	Vipin Sharma <vipinsh@google.com>,
-	Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>,
-	Aaron Lewis <aaronlewis@google.com>,
-	Thomas Huth <thuth@redhat.com>,
-	linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	kvm-riscv@lists.infradead.org
-Subject: Re: [PATCH v4 11/11] KVM: selftests: Enable tunning of err_margin_us in arch timer test
-In-Reply-To: <CAJve8o=nTsAwwgSib4vOLXjOWSMV2+J+BFsUZ57OdAK7eW8q8A@mail.gmail.com>
-References: <cover.1702371136.git.haibo1.xu@intel.com>
-	<0343a9e4bfa8011fbb6bca0286cee7eab1f17d5d.1702371136.git.haibo1.xu@intel.com>
-	<8734vy832j.wl-maz@kernel.org>
-	<CAJve8onc0WN5g98aOVBmJx15wFBAqfBKJ+ufoLY+oqYyVL+=3A@mail.gmail.com>
-	<f98879dc24f948f7a8a7b5374a32bc04@kernel.org>
-	<CAJve8ona7g=LxW1YeRB_FqGodF973H=A3b2m8054gmzK=Z7_ww@mail.gmail.com>
-	<87zfy5t1qt.wl-maz@kernel.org>
-	<CAJve8o=nTsAwwgSib4vOLXjOWSMV2+J+BFsUZ57OdAK7eW8q8A@mail.gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="PijBGgiT"
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+	by mx0a-001ae601.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 3BL6AEek014182;
+	Thu, 21 Dec 2023 04:39:03 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=
+	from:to:cc:subject:date:message-id:in-reply-to:references
+	:mime-version:content-transfer-encoding:content-type; s=
+	PODMain02222019; bh=rNoek7i2hFRCbF498o2jHOYXWryLj1e8+AacX3XSeLs=; b=
+	PijBGgiTMMk/lKX+rDChXaawdFoWoo/wCCtCY6Q/h9oR7gOQrvrtJhraKZlB9scW
+	hXpzsTUuAFTo5OHnFkqh3kjWwDKjkc7Ng4eomcFkOUmxL3EShbArXvJqMNmuX4uJ
+	g17acFQgTFYBGfqdxCwVbLCyGsBnielHLpTHoGGqgrUe8Aw+mZqgs69nPRJSRVLO
+	Omq+4c/F0BTkkyBOWWAri0vWAqCn39bpGN9mTh+zDklzzSHiiUr85nAB1SSla8cx
+	h5uOcbufgZjkrd8z5sGrzRotFd+kdhRXy48GdyYr7Ou5Y9YsYP4nYL1CClxPioOg
+	L4qj0Svz6tLLWaPzmaJc3w==
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+	by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3v1a627625-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 21 Dec 2023 04:39:02 -0600 (CST)
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Thu, 21 Dec
+ 2023 10:39:00 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.40 via Frontend Transport; Thu, 21 Dec 2023 10:39:00 +0000
+Received: from work-debian.ad.cirrus.com (unknown [198.61.64.187])
+	by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 3EC9311CC;
+	Thu, 21 Dec 2023 10:39:00 +0000 (UTC)
+From: Richard Fitzgerald <rf@opensource.cirrus.com>
+To: <brendan.higgins@linux.dev>, <davidgow@google.com>, <rmoar@google.com>
+CC: <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
+        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>,
+        "Richard
+ Fitzgerald" <rf@opensource.cirrus.com>
+Subject: [PATCH v2 2/2] kunit: Add example of kunit_activate_static_stub() with pointer-to-function
+Date: Thu, 21 Dec 2023 10:38:57 +0000
+Message-ID: <20231221103858.46010-2-rf@opensource.cirrus.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20231221103858.46010-1-rf@opensource.cirrus.com>
+References: <20231221103858.46010-1-rf@opensource.cirrus.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: xiaobo55x@gmail.com, haibo1.xu@intel.com, ajones@ventanamicro.com, paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, pbonzini@redhat.com, shuah@kernel.org, oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, anup@brainfault.org, atishp@atishpatra.org, guoren@kernel.org, mchitale@ventanamicro.com, greentime.hu@sifive.com, waylingii@gmail.com, conor.dooley@microchip.com, heiko@sntech.de, minda.chen@starfivetech.com, samuel@sholland.org, jszhang@kernel.org, seanjc@google.com, peterx@redhat.com, likexu@tencent.com, vipinsh@google.com, maciej.wieczor-retman@intel.com, aaronlewis@google.com, thuth@redhat.com, linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, kvm-riscv@lists.infradead.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: 90crQN90oj-4uhzrdwETgjBfHpjxCXbE
+X-Proofpoint-ORIG-GUID: 90crQN90oj-4uhzrdwETgjBfHpjxCXbE
+X-Proofpoint-Spam-Reason: safe
 
-On Thu, 21 Dec 2023 02:58:40 +0000,
-Haibo Xu <xiaobo55x@gmail.com> wrote:
->=20
-> On Wed, Dec 20, 2023 at 9:58=E2=80=AFPM Marc Zyngier <maz@kernel.org> wro=
-te:
-> >
-> > On Wed, 20 Dec 2023 13:51:24 +0000,
-> > Haibo Xu <xiaobo55x@gmail.com> wrote:
-> > >
-> > > On Wed, Dec 20, 2023 at 5:00=E2=80=AFPM Marc Zyngier <maz@kernel.org>=
- wrote:
-> > > >
-> > > > On 2023-12-20 06:50, Haibo Xu wrote:
-> > > > > On Wed, Dec 20, 2023 at 2:22=E2=80=AFAM Marc Zyngier <maz@kernel.=
-org> wrote:
-> > > > >>
-> > > > >> On Tue, 12 Dec 2023 09:31:20 +0000,
-> > > > >> Haibo Xu <haibo1.xu@intel.com> wrote:
-> > > > >> > diff --git a/tools/testing/selftests/kvm/include/timer_test.h =
-b/tools/testing/selftests/kvm/include/timer_test.h
-> > > > >> > index 968257b893a7..b1d405e7157d 100644
-> > > > >> > --- a/tools/testing/selftests/kvm/include/timer_test.h
-> > > > >> > +++ b/tools/testing/selftests/kvm/include/timer_test.h
-> > > > >> > @@ -22,6 +22,7 @@ struct test_args {
-> > > > >> >       int nr_iter;
-> > > > >> >       int timer_period_ms;
-> > > > >> >       int migration_freq_ms;
-> > > > >> > +     int timer_err_margin_us;
-> > > > >>
-> > > > >> ... except that you are storing it as a signed value. Some consi=
-stency
-> > > > >> wouldn't hurt, really, and would avoid issues when passing large
-> > > > >> values.
-> > > > >>
-> > > > >
-> > > > > Yes, it's more proper to use an unsigned int for the non-negative=
- error
-> > > > > margin.
-> > > > > Storing as signed here is just to keep the type consistent with t=
-hat
-> > > > > of timer_period_ms
-> > > > > since there will be '+' operation in other places.
-> > > > >
-> > > > >         tools/testing/selftests/kvm/aarch64/arch_timer.c
-> > > > >         /* Setup a timeout for the interrupt to arrive */
-> > > > >          udelay(msecs_to_usecs(test_args.timer_period_ms) +
-> > > > >              test_args.timer_err_margin_us);
-> > > >
-> > > > But that's exactly why using a signed quantity is wrong.
-> > > > What does it mean to have a huge *negative* margin?
-> > > >
-> > >
-> > > Hi Marc,
-> > >
-> > > I agree that negative values are meaningless for the margin.
-> > > If I understand correctly, the negative margin should be filtered by
-> > > assertion in atoi_non_negative().
-> >
-> > No. Please.
-> >
-> > atoi_non_negative() returns a uint32_t, which is what it should do.
-> > The bug is squarely in the use of an 'int' to store such value, and it
-> > is the *storage* that turns a positive value into a negative one.
-> >
->=20
-> Thanks for the detailed info!
->=20
-> May I understand that your concern is mainly for a platform with
-> 64bit int type, which may trigger the positive to negative convert?
+Adds a variant of example_static_stub_test() that shows use of a
+pointer-to-function with kunit_activate_static_stub().
 
-No. It specifically applies to architectures with a 32bit int type,
-which is... *EVERYTHING*. Here's a basic example:
+A const pointer to the add_one() function is declared. This
+pointer-to-function is passed to kunit_activate_static_stub() and
+kunit_deactivate_static_stub() instead of passing add_one directly.
 
-<quote>
-#include <stdio.h>
+Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+---
+V2: Added comment for add_one_fn_ptr.
+---
+ lib/kunit/kunit-example-test.c | 35 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-int main(int argc, char *argv[])
-{
-	int x =3D 1U << 31;
+diff --git a/lib/kunit/kunit-example-test.c b/lib/kunit/kunit-example-test.c
+index 359dbee10201..798924f7cc86 100644
+--- a/lib/kunit/kunit-example-test.c
++++ b/lib/kunit/kunit-example-test.c
+@@ -168,6 +168,16 @@ static int subtract_one(int i)
+ 	return i - 1;
+ }
+ 
++/*
++ * If the function to be replaced is static within a module it is
++ * useful to export a pointer to that function instead of having
++ * to change the static function to a non-static exported function.
++ *
++ * This pointer simulates a module exporting a pointer to a static
++ * function.
++ */
++static int (* const add_one_fn_ptr)(int i) = add_one;
++
+ /*
+  * This test shows the use of static stubs.
+  */
+@@ -187,6 +197,30 @@ static void example_static_stub_test(struct kunit *test)
+ 	KUNIT_EXPECT_EQ(test, add_one(1), 2);
+ }
+ 
++/*
++ * This test shows the use of static stubs when the function being
++ * replaced is provided as a pointer-to-function instead of the
++ * actual function. This is useful for providing access to static
++ * functions in a module by exporting a pointer to that function
++ * instead of having to change the static function to a non-static
++ * exported function.
++ */
++static void example_static_stub_using_fn_ptr_test(struct kunit *test)
++{
++	/* By default, function is not stubbed. */
++	KUNIT_EXPECT_EQ(test, add_one(1), 2);
++
++	/* Replace add_one() with subtract_one(). */
++	kunit_activate_static_stub(test, add_one_fn_ptr, subtract_one);
++
++	/* add_one() is now replaced. */
++	KUNIT_EXPECT_EQ(test, add_one(1), 0);
++
++	/* Return add_one() to normal. */
++	kunit_deactivate_static_stub(test, add_one_fn_ptr);
++	KUNIT_EXPECT_EQ(test, add_one(1), 2);
++}
++
+ static const struct example_param {
+ 	int value;
+ } example_params_array[] = {
+@@ -259,6 +293,7 @@ static struct kunit_case example_test_cases[] = {
+ 	KUNIT_CASE(example_mark_skipped_test),
+ 	KUNIT_CASE(example_all_expect_macros_test),
+ 	KUNIT_CASE(example_static_stub_test),
++	KUNIT_CASE(example_static_stub_using_fn_ptr_test),
+ 	KUNIT_CASE(example_priv_test),
+ 	KUNIT_CASE_PARAM(example_params_test, example_gen_params),
+ 	KUNIT_CASE_SLOW(example_slow_test),
+-- 
+2.30.2
 
-	printf("%d (%d)\n", x, sizeof(x));
-	return 0;
-}
-</quote>
-
-which returns "-2147483648 (4)" on any platform.
-
-This really is basic C, and I am very worried that you don't see the
-issue. I strongly suggest that you go and read about the C type system
-before touching this code.
-
-	M.
-
---=20
-Without deviation from the norm, progress is not possible.
