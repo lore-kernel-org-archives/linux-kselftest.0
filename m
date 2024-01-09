@@ -1,223 +1,298 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F4CB39ADE
-	for <linux-kselftest@vger.kernel.org>; Tue,  9 Jan 2024 15:36:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB9C839FE7
+	for <linux-kselftest@vger.kernel.org>; Tue,  9 Jan 2024 15:46:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="T6CO+6Nd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1704814571;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=qz+Q+JrAWYvS9qf/dHeLoqYAlCn6rbjxNXke5nzk1EE=;
-	b=T6CO+6NdYxX7qpVhAHUaGCQRm7OZNw2PFzJibXvFAHhj9qA0DNW7Gmv1EsluPUJDxScQGq
-	lEdS2ssBFNsYRbi6L+f9KL8TWeAFfOTUe65U0qxQDZ0rh5491BwULVQuBR0wN59QAXdKXi
-	cUEBZFFVqte0oM8Wf8Iuj2brFMLQF/M=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-197-NO_d3IXBOFuVg0vMm5u-RQ-1; Tue, 09 Jan 2024 10:36:07 -0500
-X-MC-Unique: NO_d3IXBOFuVg0vMm5u-RQ-1
-Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-6800714a149so64642806d6.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 09 Jan 2024 07:36:07 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="NCjpjh/i"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1d4ca2fd2fbso14160275ad.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 09 Jan 2024 07:46:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1704815162; x=1705419962; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ig3ohwHzq/4+GvsXCviFQR9Ej/i5Rnl+U+9CFpvV1sg=;
+        b=NCjpjh/iCaA3heLvOS3B4E7Fe4On1CzMaoruY7djqUt71I5ikyNI9ZNgp2VObGucxQ
+         0XhtPKF5oh/VANmRcpxV0xZ5/fwZpQJodMgonyro7eoJbSTq7tFrHWBj0z7NhRw4dTCB
+         uzFkzgURPuiwWHjzEVeVVk/HjeQiRP9Xn83MQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704814567; x=1705419367;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qz+Q+JrAWYvS9qf/dHeLoqYAlCn6rbjxNXke5nzk1EE=;
-        b=UoBDXcU+Nhgo+cre+LEVphLHLhVMgM1YXEdwO+hY8BMivWI7kqyOTHOhzZZXN4brSQ
-         r7qf2cKOxMM1ugyipXna5Ovvwj8tnB08ICJtFZLsqAolfhsTLuAw0KWHVl3ZIwjjeXj0
-         mp6IbkrKnqKtThujua4OpmatTdrvgoZaLVZVVdxuMCA2DeiqTHQx37W9TJfVD4N9NyXK
-         K6tr+u00yQGhNrDZlmOCHFaEv3pyPlk7ISE9EHPV9v0iUlAb90pRTpPi9S3MebpekiIO
-         tJWLKsR8zaNps03mbf85PIlW4HjScgpvjej2p/C1G8D//g1oSPA2xJ/b/Xx6+IjxEn9e
-         e7+w==
-X-Gm-Message-State: AOJu0Yz0JmeF02fu8512R2812TPC5EaXPSONkVYyiaOS8S6vgUbEtkIa
-	G37OBKG4cg2J3gDUi2iDav1u0qis9EsqDv+nvdBPOEAZ+kRJ4s84KAEqzPf2XVnqFE8D4mJugjR
-	LQS0uEtLdn4FNpwJqCMDMOto4GRsj6tFHbDo=
-X-Received: by 2002:a05:6214:2265:b0:681:1849:9c6f with SMTP id gs5-20020a056214226500b0068118499c6fmr1006020qvb.68.1704814567288;
-        Tue, 09 Jan 2024 07:36:07 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHjXC4DqpaaxgJdbTER0Ag1JXtCwg74ti2yIY188/Jz0ndLBxC4V6TDYJt8DOfddWMRDvRGVQ==
-X-Received: by 2002:a05:6214:2265:b0:681:1849:9c6f with SMTP id gs5-20020a056214226500b0068118499c6fmr1006013qvb.68.1704814566990;
-        Tue, 09 Jan 2024 07:36:06 -0800 (PST)
-Received: from [192.168.9.34] (net-2-34-31-72.cust.vodafonedsl.it. [2.34.31.72])
-        by smtp.gmail.com with ESMTPSA id r15-20020a0cf80f000000b00680d1d5a20dsm974838qvn.18.2024.01.09.07.36.04
+        d=1e100.net; s=20230601; t=1704815162; x=1705419962;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ig3ohwHzq/4+GvsXCviFQR9Ej/i5Rnl+U+9CFpvV1sg=;
+        b=rJiruapgKlkjnr5saYJPmcUduHpTHVc/H1D9aViguUAu40SvchK+VVHrU9OkxZuQO0
+         gxzmUcjDPuZutspB/Pi1ODZA+L9EQJpKWnrszzq/HFz7edJZeUwYEcdZv1JTs+piQTGS
+         C8rpzVT88tfLOPwwlV54uETvzQ+7KI+W+tH8d+pb6mJHDTraoMY7av/T9+5ujLup6K1R
+         CUVeWtg2+l3eYvTaxhaLVeNkw1HnJgbGSq+Q1PnYt8ANCLYvJPQO/otj0tu3/PMV6Jtn
+         3eIUnpRtNCbr5VaMI6whA0vPjxZHqiuRIEAsz1MD+1C/bCebDNAV82qIfpEu0WTe/8hj
+         KN8A==
+X-Gm-Message-State: AOJu0YwuImeBv9+gpRAMI8PvnI9+MYpEGfU2j0q/Je5q269XapdtKlHc
+	vbO689pZmA5ipj4Dx9sQmkIhupxok5E3
+X-Google-Smtp-Source: AGHT+IH4k0ufyA+hoVXReRKZGJVZrKy5Y1nbuBoicBfPXBbSt8cSLBYs3HNIHxmv1p7vZ518XLU4cw==
+X-Received: by 2002:a17:902:b405:b0:1d4:133d:6ace with SMTP id x5-20020a170902b40500b001d4133d6acemr2714492plr.7.1704815162231;
+        Tue, 09 Jan 2024 07:46:02 -0800 (PST)
+Received: from localhost (34.85.168.34.bc.googleusercontent.com. [34.168.85.34])
+        by smtp.gmail.com with UTF8SMTPSA id j9-20020a170902690900b001d403969b65sm1939344plk.187.2024.01.09.07.46.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Jan 2024 07:36:06 -0800 (PST)
-Message-ID: <6417e8d1-f768-404a-b21d-6aa897423278@redhat.com>
-Date: Tue, 9 Jan 2024 16:36:03 +0100
+        Tue, 09 Jan 2024 07:46:01 -0800 (PST)
+From: jeffxu@chromium.org
+To: akpm@linux-foundation.org,
+	keescook@chromium.org,
+	jannh@google.com,
+	sroettger@google.com,
+	willy@infradead.org,
+	gregkh@linuxfoundation.org,
+	torvalds@linux-foundation.org,
+	usama.anjum@collabora.com
+Cc: jeffxu@google.com,
+	jorgelo@chromium.org,
+	groeck@chromium.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	pedro.falcato@gmail.com,
+	dave.hansen@intel.com,
+	linux-hardening@vger.kernel.org,
+	deraadt@openbsd.org,
+	Jeff Xu <jeffxu@chromium.org>
+Subject: [RFC PATCH v5 1/4] mseal: Wire up mseal syscall
+Date: Tue,  9 Jan 2024 15:45:39 +0000
+Message-ID: <20240109154547.1839886-2-jeffxu@chromium.org>
+X-Mailer: git-send-email 2.43.0.195.gebba966016-goog
+In-Reply-To: <20240109154547.1839886-1-jeffxu@chromium.org>
+References: <20240109154547.1839886-1-jeffxu@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Marco Pagani <marpagan@redhat.com>
-Subject: Re: [PATCH v3] kunit: run test suites only after module
- initialization completes
-To: David Gow <davidgow@google.com>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>,
- Shuah Khan <skhan@linuxfoundation.org>, Jinjie Ruan <ruanjinjie@huawei.com>,
- Rae Moar <rmoar@google.com>, Richard Fitzgerald <rf@opensource.cirrus.com>,
- Javier Martinez Canillas <javierm@redhat.com>,
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
- linux-kernel@vger.kernel.org
-References: <20231206150729.54604-1-marpagan@redhat.com>
- <CABVgOSnbBzjcb_zt=YJ8p8Rm97s2ZYp=YvjThB_NCZD9BJQaSg@mail.gmail.com>
-Content-Language: en-US
-In-Reply-To: <CABVgOSnbBzjcb_zt=YJ8p8Rm97s2ZYp=YvjThB_NCZD9BJQaSg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+From: Jeff Xu <jeffxu@chromium.org>
 
+Wire up mseal syscall for all architectures.
 
-On 2024-01-08 08:27, David Gow wrote:
-> On Wed, 6 Dec 2023 at 23:07, Marco Pagani <marpagan@redhat.com> wrote:
->>
->> Commit 2810c1e99867 ("kunit: Fix wild-memory-access bug in
->> kunit_free_suite_set()") fixed a wild-memory-access bug that could have
->> happened during the loading phase of test suites built and executed as
->> loadable modules. However, it also introduced a problematic side effect
->> that causes test suites modules to crash when they attempt to register
->> fake devices.
->>
->> When a module is loaded, it traverses the MODULE_STATE_UNFORMED and
->> MODULE_STATE_COMING states before reaching the normal operating state
->> MODULE_STATE_LIVE. Finally, when the module is removed, it moves to
->> MODULE_STATE_GOING before being released. However, if the loading
->> function load_module() fails between complete_formation() and
->> do_init_module(), the module goes directly from MODULE_STATE_COMING to
->> MODULE_STATE_GOING without passing through MODULE_STATE_LIVE.
->>
->> This behavior was causing kunit_module_exit() to be called without
->> having first executed kunit_module_init(). Since kunit_module_exit() is
->> responsible for freeing the memory allocated by kunit_module_init()
->> through kunit_filter_suites(), this behavior was resulting in a
->> wild-memory-access bug.
->>
->> Commit 2810c1e99867 ("kunit: Fix wild-memory-access bug in
->> kunit_free_suite_set()") fixed this issue by running the tests when the
->> module is still in MODULE_STATE_COMING. However, modules in that state
->> are not fully initialized, lacking sysfs kobjects. Therefore, if a test
->> module attempts to register a fake device, it will inevitably crash.
->>
->> This patch proposes a different approach to fix the original
->> wild-memory-access bug while restoring the normal module execution flow
->> by making kunit_module_exit() able to detect if kunit_module_init() has
->> previously initialized the tests suite set. In this way, test modules
->> can once again register fake devices without crashing.
->>
->> This behavior is achieved by checking whether mod->kunit_suites is a
->> virtual or direct mapping address. If it is a virtual address, then
->> kunit_module_init() has allocated the suite_set in kunit_filter_suites()
->> using kmalloc_array(). On the contrary, if mod->kunit_suites is still
->> pointing to the original address that was set when looking up the
->> .kunit_test_suites section of the module, then the loading phase has
->> failed and there's no memory to be freed.
->>
->> v3:
->> - add a comment to clarify why the start address is checked
->> v2:
->> - add include <linux/mm.h>
->>
->> Fixes: 2810c1e99867 ("kunit: Fix wild-memory-access bug in kunit_free_suite_set()")
->> Tested-by: Richard Fitzgerald <rf@opensource.cirrus.com>
->> Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
->> Signed-off-by: Marco Pagani <marpagan@redhat.com>
->> ---
-> 
-> Sorry for the delay here: there are enough subtleties here that I
-> wanted to double check some things.
-> 
-> I keep feeling that there has to be a nicer way of doing this, but I
-> can't think of one, so let's go with this, since it's fixing a real
-> issue.
-> 
-> I'm a little hesitant about our use of the suite_set.start address as
-> an 'is initialised' flag, and depending on it being reallocated via
-> kunit_filter_suites(), but since we already depend on that (by always
-> using kunit_free_suite_set()), I'm okay with it.
->
+Signed-off-by: Jeff Xu <jeffxu@chromium.org>
+---
+ arch/alpha/kernel/syscalls/syscall.tbl      | 1 +
+ arch/arm/tools/syscall.tbl                  | 1 +
+ arch/arm64/include/asm/unistd.h             | 2 +-
+ arch/arm64/include/asm/unistd32.h           | 2 ++
+ arch/m68k/kernel/syscalls/syscall.tbl       | 1 +
+ arch/microblaze/kernel/syscalls/syscall.tbl | 1 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl   | 1 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl   | 1 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl   | 1 +
+ arch/parisc/kernel/syscalls/syscall.tbl     | 1 +
+ arch/powerpc/kernel/syscalls/syscall.tbl    | 1 +
+ arch/s390/kernel/syscalls/syscall.tbl       | 1 +
+ arch/sh/kernel/syscalls/syscall.tbl         | 1 +
+ arch/sparc/kernel/syscalls/syscall.tbl      | 1 +
+ arch/x86/entry/syscalls/syscall_32.tbl      | 1 +
+ arch/x86/entry/syscalls/syscall_64.tbl      | 1 +
+ arch/xtensa/kernel/syscalls/syscall.tbl     | 1 +
+ include/uapi/asm-generic/unistd.h           | 5 ++++-
+ kernel/sys_ni.c                             | 1 +
+ 19 files changed, 23 insertions(+), 2 deletions(-)
 
-I have the same feeling. I spent some thinking about alternative
-solutions that did not require adding a flag in the module struct or
-restructuring significant portions of the code, but I could not think of
-anything better for the moment.
-
-> My only request (other than this needing a rebase, probably on top of
-> 6.8) would be to add a comment in kunit_filter_suites() noting that it
-> must return a virtual address. That's probably something we should've
-> done a while ago, but I can just see this requirement getting
-> forgotten.
-> 
-
-Sure, I'll do it.
-
-Thanks,
-Marco
-
-> Reviewed-by: David Gow <davidgow@google.com>
-> 
-> 
->>  lib/kunit/test.c | 14 +++++++++++---
->>  1 file changed, 11 insertions(+), 3 deletions(-)
->>
->> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
->> index 7aceb07a1af9..3263e0d5e0f6 100644
->> --- a/lib/kunit/test.c
->> +++ b/lib/kunit/test.c
->> @@ -16,6 +16,7 @@
->>  #include <linux/panic.h>
->>  #include <linux/sched/debug.h>
->>  #include <linux/sched.h>
->> +#include <linux/mm.h>
->>
->>  #include "debugfs.h"
->>  #include "hooks-impl.h"
->> @@ -775,12 +776,19 @@ static void kunit_module_exit(struct module *mod)
->>         };
->>         const char *action = kunit_action();
->>
->> +       /*
->> +        * Check if the start address is a valid virtual address to detect
->> +        * if the module load sequence has failed and the suite set has not
->> +        * been initialized and filtered.
->> +        */
->> +       if (!suite_set.start || !virt_addr_valid(suite_set.start))
->> +               return;
->> +
->>         if (!action)
->>                 __kunit_test_suites_exit(mod->kunit_suites,
->>                                          mod->num_kunit_suites);
->>
->> -       if (suite_set.start)
->> -               kunit_free_suite_set(suite_set);
->> +       kunit_free_suite_set(suite_set);
->>  }
->>
->>  static int kunit_module_notify(struct notifier_block *nb, unsigned long val,
->> @@ -790,12 +798,12 @@ static int kunit_module_notify(struct notifier_block *nb, unsigned long val,
->>
->>         switch (val) {
->>         case MODULE_STATE_LIVE:
->> +               kunit_module_init(mod);
->>                 break;
->>         case MODULE_STATE_GOING:
->>                 kunit_module_exit(mod);
->>                 break;
->>         case MODULE_STATE_COMING:
->> -               kunit_module_init(mod);
->>                 break;
->>         case MODULE_STATE_UNFORMED:
->>                 break;
->>
->> base-commit: 33cc938e65a98f1d29d0a18403dbbee050dcad9a
->> --
->> 2.43.0
->>
+diff --git a/arch/alpha/kernel/syscalls/syscall.tbl b/arch/alpha/kernel/syscalls/syscall.tbl
+index 18c842ca6c32..dd92e2639a03 100644
+--- a/arch/alpha/kernel/syscalls/syscall.tbl
++++ b/arch/alpha/kernel/syscalls/syscall.tbl
+@@ -496,3 +496,4 @@
+ 564	common	futex_wake			sys_futex_wake
+ 565	common	futex_wait			sys_futex_wait
+ 566	common	futex_requeue			sys_futex_requeue
++567	common  mseal				sys_mseal
+diff --git a/arch/arm/tools/syscall.tbl b/arch/arm/tools/syscall.tbl
+index 584f9528c996..d96461ee1ebe 100644
+--- a/arch/arm/tools/syscall.tbl
++++ b/arch/arm/tools/syscall.tbl
+@@ -470,3 +470,4 @@
+ 454	common	futex_wake			sys_futex_wake
+ 455	common	futex_wait			sys_futex_wait
+ 456	common	futex_requeue			sys_futex_requeue
++457	common	mseal				sys_mseal
+diff --git a/arch/arm64/include/asm/unistd.h b/arch/arm64/include/asm/unistd.h
+index 531effca5f1f..298313d2e0af 100644
+--- a/arch/arm64/include/asm/unistd.h
++++ b/arch/arm64/include/asm/unistd.h
+@@ -39,7 +39,7 @@
+ #define __ARM_NR_compat_set_tls		(__ARM_NR_COMPAT_BASE + 5)
+ #define __ARM_NR_COMPAT_END		(__ARM_NR_COMPAT_BASE + 0x800)
+ 
+-#define __NR_compat_syscalls		457
++#define __NR_compat_syscalls		458
+ #endif
+ 
+ #define __ARCH_WANT_SYS_CLONE
+diff --git a/arch/arm64/include/asm/unistd32.h b/arch/arm64/include/asm/unistd32.h
+index 9f7c1bf99526..e3118e0327c7 100644
+--- a/arch/arm64/include/asm/unistd32.h
++++ b/arch/arm64/include/asm/unistd32.h
+@@ -919,6 +919,8 @@ __SYSCALL(__NR_futex_wake, sys_futex_wake)
+ __SYSCALL(__NR_futex_wait, sys_futex_wait)
+ #define __NR_futex_requeue 456
+ __SYSCALL(__NR_futex_requeue, sys_futex_requeue)
++#define __NR_mseal 457
++__SYSCALL(__NR_mseal, sys_mseal)
+ 
+ /*
+  * Please add new compat syscalls above this comment and update
+diff --git a/arch/m68k/kernel/syscalls/syscall.tbl b/arch/m68k/kernel/syscalls/syscall.tbl
+index 7a4b780e82cb..105e966db655 100644
+--- a/arch/m68k/kernel/syscalls/syscall.tbl
++++ b/arch/m68k/kernel/syscalls/syscall.tbl
+@@ -456,3 +456,4 @@
+ 454	common	futex_wake			sys_futex_wake
+ 455	common	futex_wait			sys_futex_wait
+ 456	common	futex_requeue			sys_futex_requeue
++457	common	mseal				sys_mseal
+diff --git a/arch/microblaze/kernel/syscalls/syscall.tbl b/arch/microblaze/kernel/syscalls/syscall.tbl
+index 5b6a0b02b7de..18956345d348 100644
+--- a/arch/microblaze/kernel/syscalls/syscall.tbl
++++ b/arch/microblaze/kernel/syscalls/syscall.tbl
+@@ -462,3 +462,4 @@
+ 454	common	futex_wake			sys_futex_wake
+ 455	common	futex_wait			sys_futex_wait
+ 456	common	futex_requeue			sys_futex_requeue
++457	common	mseal				sys_mseal
+diff --git a/arch/mips/kernel/syscalls/syscall_n32.tbl b/arch/mips/kernel/syscalls/syscall_n32.tbl
+index a842b41c8e06..06cac28209d2 100644
+--- a/arch/mips/kernel/syscalls/syscall_n32.tbl
++++ b/arch/mips/kernel/syscalls/syscall_n32.tbl
+@@ -395,3 +395,4 @@
+ 454	n32	futex_wake			sys_futex_wake
+ 455	n32	futex_wait			sys_futex_wait
+ 456	n32	futex_requeue			sys_futex_requeue
++457	n32	mseal				sys_mseal
+diff --git a/arch/mips/kernel/syscalls/syscall_n64.tbl b/arch/mips/kernel/syscalls/syscall_n64.tbl
+index 116ff501bf92..bb8270588953 100644
+--- a/arch/mips/kernel/syscalls/syscall_n64.tbl
++++ b/arch/mips/kernel/syscalls/syscall_n64.tbl
+@@ -371,3 +371,4 @@
+ 454	n64	futex_wake			sys_futex_wake
+ 455	n64	futex_wait			sys_futex_wait
+ 456	n64	futex_requeue			sys_futex_requeue
++457	n64	mseal				sys_mseal
+diff --git a/arch/mips/kernel/syscalls/syscall_o32.tbl b/arch/mips/kernel/syscalls/syscall_o32.tbl
+index 525cc54bc63b..93958f063c3f 100644
+--- a/arch/mips/kernel/syscalls/syscall_o32.tbl
++++ b/arch/mips/kernel/syscalls/syscall_o32.tbl
+@@ -444,3 +444,4 @@
+ 454	o32	futex_wake			sys_futex_wake
+ 455	o32	futex_wait			sys_futex_wait
+ 456	o32	futex_requeue			sys_futex_requeue
++457	o32	mseal				sys_mseal
+diff --git a/arch/parisc/kernel/syscalls/syscall.tbl b/arch/parisc/kernel/syscalls/syscall.tbl
+index a47798fed54e..c6bc9277dcd7 100644
+--- a/arch/parisc/kernel/syscalls/syscall.tbl
++++ b/arch/parisc/kernel/syscalls/syscall.tbl
+@@ -455,3 +455,4 @@
+ 454	common	futex_wake			sys_futex_wake
+ 455	common	futex_wait			sys_futex_wait
+ 456	common	futex_requeue			sys_futex_requeue
++457	common	mseal				sys_mseal
+diff --git a/arch/powerpc/kernel/syscalls/syscall.tbl b/arch/powerpc/kernel/syscalls/syscall.tbl
+index 7fab411378f2..2947c4caf22e 100644
+--- a/arch/powerpc/kernel/syscalls/syscall.tbl
++++ b/arch/powerpc/kernel/syscalls/syscall.tbl
+@@ -543,3 +543,4 @@
+ 454	common	futex_wake			sys_futex_wake
+ 455	common	futex_wait			sys_futex_wait
+ 456	common	futex_requeue			sys_futex_requeue
++457	common	mseal				sys_mseal
+diff --git a/arch/s390/kernel/syscalls/syscall.tbl b/arch/s390/kernel/syscalls/syscall.tbl
+index 86fec9b080f6..2400a0e91883 100644
+--- a/arch/s390/kernel/syscalls/syscall.tbl
++++ b/arch/s390/kernel/syscalls/syscall.tbl
+@@ -459,3 +459,4 @@
+ 454  common	futex_wake		sys_futex_wake			sys_futex_wake
+ 455  common	futex_wait		sys_futex_wait			sys_futex_wait
+ 456  common	futex_requeue		sys_futex_requeue		sys_futex_requeue
++457  common	mseal			sys_mseal			sys_mseal
+diff --git a/arch/sh/kernel/syscalls/syscall.tbl b/arch/sh/kernel/syscalls/syscall.tbl
+index 363fae0fe9bf..6768e43c5d23 100644
+--- a/arch/sh/kernel/syscalls/syscall.tbl
++++ b/arch/sh/kernel/syscalls/syscall.tbl
+@@ -459,3 +459,4 @@
+ 454	common	futex_wake			sys_futex_wake
+ 455	common	futex_wait			sys_futex_wait
+ 456	common	futex_requeue			sys_futex_requeue
++457	common	mseal				sys_mseal
+diff --git a/arch/sparc/kernel/syscalls/syscall.tbl b/arch/sparc/kernel/syscalls/syscall.tbl
+index 7bcaa3d5ea44..4285465f7e4b 100644
+--- a/arch/sparc/kernel/syscalls/syscall.tbl
++++ b/arch/sparc/kernel/syscalls/syscall.tbl
+@@ -502,3 +502,4 @@
+ 454	common	futex_wake			sys_futex_wake
+ 455	common	futex_wait			sys_futex_wait
+ 456	common	futex_requeue			sys_futex_requeue
++457	common	mseal 				sys_mseal
+diff --git a/arch/x86/entry/syscalls/syscall_32.tbl b/arch/x86/entry/syscalls/syscall_32.tbl
+index c8fac5205803..e4e3b2097658 100644
+--- a/arch/x86/entry/syscalls/syscall_32.tbl
++++ b/arch/x86/entry/syscalls/syscall_32.tbl
+@@ -461,3 +461,4 @@
+ 454	i386	futex_wake		sys_futex_wake
+ 455	i386	futex_wait		sys_futex_wait
+ 456	i386	futex_requeue		sys_futex_requeue
++457	i386	mseal 			sys_mseal
+diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
+index 8cb8bf68721c..03cff8a24726 100644
+--- a/arch/x86/entry/syscalls/syscall_64.tbl
++++ b/arch/x86/entry/syscalls/syscall_64.tbl
+@@ -378,6 +378,7 @@
+ 454	common	futex_wake		sys_futex_wake
+ 455	common	futex_wait		sys_futex_wait
+ 456	common	futex_requeue		sys_futex_requeue
++457 	common  mseal			sys_mseal
+ 
+ #
+ # Due to a historical design error, certain syscalls are numbered differently
+diff --git a/arch/xtensa/kernel/syscalls/syscall.tbl b/arch/xtensa/kernel/syscalls/syscall.tbl
+index 06eefa9c1458..3c87cf0424c8 100644
+--- a/arch/xtensa/kernel/syscalls/syscall.tbl
++++ b/arch/xtensa/kernel/syscalls/syscall.tbl
+@@ -427,3 +427,4 @@
+ 454	common	futex_wake			sys_futex_wake
+ 455	common	futex_wait			sys_futex_wait
+ 456	common	futex_requeue			sys_futex_requeue
++457	common	mseal 				sys_mseal
+diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
+index 756b013fb832..9b2b6a4a80b6 100644
+--- a/include/uapi/asm-generic/unistd.h
++++ b/include/uapi/asm-generic/unistd.h
+@@ -829,8 +829,11 @@ __SYSCALL(__NR_futex_wait, sys_futex_wait)
+ #define __NR_futex_requeue 456
+ __SYSCALL(__NR_futex_requeue, sys_futex_requeue)
+ 
++#define __NR_mseal 457
++__SYSCALL(__NR_mseal, sys_mseal)
++
+ #undef __NR_syscalls
+-#define __NR_syscalls 457
++#define __NR_syscalls 458
+ 
+ /*
+  * 32 bit systems traditionally used different
+diff --git a/kernel/sys_ni.c b/kernel/sys_ni.c
+index 9a846439b36a..02280199069b 100644
+--- a/kernel/sys_ni.c
++++ b/kernel/sys_ni.c
+@@ -193,6 +193,7 @@ COND_SYSCALL(migrate_pages);
+ COND_SYSCALL(move_pages);
+ COND_SYSCALL(set_mempolicy_home_node);
+ COND_SYSCALL(cachestat);
++COND_SYSCALL(mseal);
+ 
+ COND_SYSCALL(perf_event_open);
+ COND_SYSCALL(accept4);
+-- 
+2.43.0.195.gebba966016-goog
 
