@@ -1,48 +1,26 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20DF562A;
-	Fri, 12 Jan 2024 00:13:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C893A51;
+	Fri, 12 Jan 2024 00:40:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CPrprL4R"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705018398; x=1736554398;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=AAr1jyF5ycUc3fnsLZxVVxgsc9+kH7u4LIsdUC1Iv88=;
-  b=CPrprL4RslQDBzP9Wkh9a1me/QYZkRnhRHgHzsZqzOakB5P5qgSHSb8i
-   EBX3Cm3pd4tO1ZLC5TNF27m2K+pEIwy821Wz1C9dzu6d3My8QN6CXdpW5
-   9nFZs65aXwt+EDbiRlUjXfZIultIqaueQwcCYF8Jq/lL/sxniI0C09dX6
-   5nGBDDRWl7lBaCeZiH9Scnit/Jzz9gr3EYdvbjpw3Lt1FpwOfzXjmGbda
-   XgGqJO6xS6sgeIQ5VZrFfWQ1M4+VeegsyA2yJ8ULBXPcdrZOAJ1j2EyIx
-   GGaD1x/hk+Nu1WcRD6U0gdT1rAKfh/Jur57RT9F77I/NCYVO1v1K+Z3Jg
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10950"; a="397915559"
-X-IronPort-AV: E=Sophos;i="6.04,187,1695711600"; 
-   d="scan'208";a="397915559"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2024 16:13:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10950"; a="853120102"
-X-IronPort-AV: E=Sophos;i="6.04,187,1695711600"; 
-   d="scan'208";a="853120102"
-Received: from lucas-s2600cw.jf.intel.com ([10.165.21.196])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2024 16:13:16 -0800
-From: Lucas De Marchi <lucas.demarchi@intel.com>
-To: linux-kernel@vger.kernel.org,
-	kunit-dev@googlegroups.com,
-	linux-kselftest@vger.kernel.org
-Cc: David Gow <davidgow@google.com>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	<intel-xe@lists.freedesktop.org>,
-	Lucas De Marchi <lucas.demarchi@intel.com>
-Subject: [PATCH] kunit: Mark filter_glob param as rw
-Date: Thu, 11 Jan 2024 16:12:40 -0800
-Message-Id: <20240112001240.1710962-1-lucas.demarchi@intel.com>
-X-Mailer: git-send-email 2.40.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s37k4LPo"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E2E97C43390;
+	Fri, 12 Jan 2024 00:40:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705020025;
+	bh=Pe69cV68ZbKdlXaX6tPFs9FZpMkP5r1bd8cAtLk6wMk=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=s37k4LPoYdLB59SirtXCv2+Z4D0gXhSOIZXopJafjyH+zKVGPyfHHgDYZwgsNqjfI
+	 ObcqVhCTg6ZZgV9/08kqL7DOO4gssuh80z4cime8QVmOaeLW3Vi1w7VdJYGnSvUvB7
+	 54fjJoi7aOs4YO8yrEwzwJj3vl69/MY/DfZth5bNXOhxUFqxpqq609JA6o6ZIAy82q
+	 +YSbtRCOi/382G6P190Y1kBWhJvHN/tBbEpbcTfH+OVj6n//2F2hfxmqqruqgpnCOV
+	 rpLhi6WSF6mRxf1e6biaMobJYqh7J3jVeB0I8KMdcWw8BoWch5Rt13TPjExbCxvtmh
+	 XrstD7s+G0w2w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CAC63D8C974;
+	Fri, 12 Jan 2024 00:40:25 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -50,46 +28,42 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] selftests/net/tcp-ao: Use LDLIBS instead of LDFLAGS
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <170502002582.17549.11892138227072738598.git-patchwork-notify@kernel.org>
+Date: Fri, 12 Jan 2024 00:40:25 +0000
+References: <20240110-tcp_ao-selftests-makefile-v1-1-aa07d043f052@arista.com>
+In-Reply-To: <20240110-tcp_ao-selftests-makefile-v1-1-aa07d043f052@arista.com>
+To: Dmitry Safonov <dima@arista.com>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, shuah@kernel.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, lkp@intel.com,
+ 0x7f454c46@gmail.com
 
-By allowing the filter_glob parameter to be written to, it's possible to
-tweak the testsuites that will be executed on new module loads. This
-makes it easier to run specific tests without having to reload kunit and
-provides a way to filter tests on real HW even if kunit is builtin.
-Example for xe driver:
+Hello:
 
-1) Run just 1 test
-	# echo -n xe_bo > /sys/module/kunit/parameters/filter_glob
-	# modprobe -r xe_live_test
-	# modprobe xe_live_test
-	# ls /sys/kernel/debug/kunit/
-	xe_bo
+This patch was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-2) Run all tests
-	# echo \* > /sys/module/kunit/parameters/filter_glob
-	# modprobe -r xe_live_test
-	# modprobe xe_live_test
-	# ls /sys/kernel/debug/kunit/
-	xe_bo  xe_dma_buf  xe_migrate  xe_mocs
+On Wed, 10 Jan 2024 21:34:10 +0000 you wrote:
+> The rules to link selftests are:
+> 
+> > $(OUTPUT)/%_ipv4: %.c
+> > 	$(LINK.c) $^ $(LDLIBS) -o $@
+> >
+> > $(OUTPUT)/%_ipv6: %.c
+> > 	$(LINK.c) -DIPV6_TEST $^ $(LDLIBS) -o $@
+> 
+> [...]
 
-References: https://lore.kernel.org/intel-xe/dzacvbdditbneiu3e3fmstjmttcbne44yspumpkd6sjn56jqpk@vxu7sksbqrp6/
-Signed-off-by: Lucas De Marchi <lucas.demarchi@intel.com>
----
- lib/kunit/executor.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Here is the summary with links:
+  - selftests/net/tcp-ao: Use LDLIBS instead of LDFLAGS
+    https://git.kernel.org/netdev/net/c/e689a8769698
 
-diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-index 1236b3cd2fbb..30ed9d321c19 100644
---- a/lib/kunit/executor.c
-+++ b/lib/kunit/executor.c
-@@ -31,7 +31,7 @@ static char *filter_glob_param;
- static char *filter_param;
- static char *filter_action_param;
- 
--module_param_named(filter_glob, filter_glob_param, charp, 0400);
-+module_param_named(filter_glob, filter_glob_param, charp, 0600);
- MODULE_PARM_DESC(filter_glob,
- 		"Filter which KUnit test suites/tests run at boot-time, e.g. list* or list*.*del_test");
- module_param_named(filter, filter_param, charp, 0400);
+You are awesome, thank you!
 -- 
-2.40.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
