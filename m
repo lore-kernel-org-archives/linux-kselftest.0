@@ -1,27 +1,27 @@
 Received: from mail.xenproject.org (mail.xenproject.org [104.130.215.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2CD7175A5;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 243D9175B9;
 	Mon, 15 Jan 2024 13:09:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=xen.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xen.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=xen.org header.i=@xen.org header.b="MHrFpF5I"
+	dkim=pass (1024-bit key) header.d=xen.org header.i=@xen.org header.b="ioaQBr0o"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=xen.org;
 	s=20200302mail; h=Content-Transfer-Encoding:MIME-Version:References:
 	In-Reply-To:Message-Id:Date:Subject:To:From;
-	bh=TGoYbz9rXouSd9WFL4ciI9FwoKQtj7ZUq9cOLPJ0RRg=; b=MHrFpF5IJ+PfFQlCE294QZkLS7
-	j1/pDVM5hSybbNPSM6bz27B/hEc8rQyVvvivfowOtblwXmtVBmpjhVNlW+rsILZE79dR237K3WYe4
-	sWL/GJ3zw5LqApPZ60YVEe5o0HHNWZ/i5HLLuN8wc99AFrvl6Mtrl/xbbb4PtGW9BywY=;
+	bh=z7zH+v6OnxjwAjiPJoCCBsbBFCz5/p3/vhyVHwUde2s=; b=ioaQBr0o5KTn9Br5QwqGYCUaG3
+	cA8gKp8XP14OrX09JaP3bWITXuVxtZ4KhlKAPJT0VuhtQoREzz7+C1LEDXb1enNxkELT3/ZO49gsM
+	eATdbbyFhpqDdsNdeYA85Ier3DbXG1O1PgbvHWoiGO1qZrjvReY4VwsonrKvX8HJM6SA=;
 Received: from xenbits.xenproject.org ([104.239.192.120])
 	by mail.xenproject.org with esmtp (Exim 4.92)
 	(envelope-from <paul@xen.org>)
-	id 1rPMiY-00035c-L6; Mon, 15 Jan 2024 13:09:30 +0000
+	id 1rPMiY-00035a-Ik; Mon, 15 Jan 2024 13:09:30 +0000
 Received: from 54-240-197-231.amazon.com ([54.240.197.231] helo=REM-PW02S00X.ant.amazon.com)
 	by xenbits.xenproject.org with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <paul@xen.org>)
-	id 1rPMXN-0002kM-4Y; Mon, 15 Jan 2024 12:57:57 +0000
+	id 1rPMXf-0002kM-QU; Mon, 15 Jan 2024 12:58:16 +0000
 From: Paul Durrant <paul@xen.org>
 To: Paolo Bonzini <pbonzini@redhat.com>,
 	Jonathan Corbet <corbet@lwn.net>,
@@ -39,9 +39,9 @@ To: Paolo Bonzini <pbonzini@redhat.com>,
 	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v12 10/20] KVM: xen: re-initialize shared_info if guest (32/64-bit) mode is set
-Date: Mon, 15 Jan 2024 12:56:57 +0000
-Message-Id: <20240115125707.1183-11-paul@xen.org>
+Subject: [PATCH v12 18/20] KVM: pfncache: check the need for invalidation under read lock first
+Date: Mon, 15 Jan 2024 12:57:05 +0000
+Message-Id: <20240115125707.1183-19-paul@xen.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240115125707.1183-1-paul@xen.org>
 References: <20240115125707.1183-1-paul@xen.org>
@@ -55,89 +55,62 @@ Content-Transfer-Encoding: 8bit
 
 From: Paul Durrant <pdurrant@amazon.com>
 
-If the shared_info PFN cache has already been initialized then the content
-of the shared_info page needs to be re-initialized whenever the guest
-mode is (re)set.
-Setting the guest mode is either done explicitly by the VMM via the
-KVM_XEN_ATTR_TYPE_LONG_MODE attribute, or implicitly when the guest writes
-the MSR to set up the hypercall page.
+Taking a write lock on a pfncache will be disruptive if the cache is
+heavily used (which only requires a read lock). Hence, in the MMU notifier
+callback, take read locks on caches to check for a match; only taking a
+write lock to actually perform an invalidation (after a another check).
 
 Signed-off-by: Paul Durrant <pdurrant@amazon.com>
 Reviewed-by: David Woodhouse <dwmw@amazon.co.uk>
 ---
 Cc: Sean Christopherson <seanjc@google.com>
 Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
 Cc: David Woodhouse <dwmw2@infradead.org>
-Cc: x86@kernel.org
-
-v12:
- - Fix missing update of return value if mode is not actually changed.
-
-v11:
- - Drop the hunk removing the call to kvm_xen_shared_info_init() when
-   KVM_XEN_ATTR_TYPE_SHARED_INFO is set; it was a mistake and causes self-
-   test failures.
 
 v10:
  - New in this version.
 ---
- arch/x86/kvm/xen.c | 29 ++++++++++++++++++++++++++---
- 1 file changed, 26 insertions(+), 3 deletions(-)
+ virt/kvm/pfncache.c | 22 +++++++++++++++++++---
+ 1 file changed, 19 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
-index df53fea73747..d595d476a5b3 100644
---- a/arch/x86/kvm/xen.c
-+++ b/arch/x86/kvm/xen.c
-@@ -625,8 +625,16 @@ int kvm_xen_hvm_set_attr(struct kvm *kvm, struct kvm_xen_hvm_attr *data)
- 		} else {
- 			mutex_lock(&kvm->arch.xen.xen_lock);
- 			kvm->arch.xen.long_mode = !!data->u.long_mode;
+diff --git a/virt/kvm/pfncache.c b/virt/kvm/pfncache.c
+index ae822bff812f..70394d7c9a38 100644
+--- a/virt/kvm/pfncache.c
++++ b/virt/kvm/pfncache.c
+@@ -29,14 +29,30 @@ void gfn_to_pfn_cache_invalidate_start(struct kvm *kvm, unsigned long start,
+ 
+ 	spin_lock(&kvm->gpc_lock);
+ 	list_for_each_entry(gpc, &kvm->gpc_list, list) {
+-		write_lock_irq(&gpc->lock);
++		read_lock_irq(&gpc->lock);
+ 
+ 		/* Only a single page so no need to care about length */
+ 		if (gpc->valid && !is_error_noslot_pfn(gpc->pfn) &&
+ 		    gpc->uhva >= start && gpc->uhva < end) {
+-			gpc->valid = false;
++			read_unlock_irq(&gpc->lock);
 +
 +			/*
-+			 * Re-initialize shared_info to put the wallclock in the
-+			 * correct place. Whilst it's not necessary to do this
-+			 * unless the mode is actually changed, it does no harm
-+			 * to make the call anyway.
++			 * There is a small window here where the cache could
++			 * be modified, and invalidation would no longer be
++			 * necessary. Hence check again whether invalidation
++			 * is still necessary once the write lock has been
++			 * acquired.
 +			 */
-+			r = kvm->arch.xen.shinfo_cache.active ?
-+				kvm_xen_shared_info_init(kvm) : 0;
- 			mutex_unlock(&kvm->arch.xen.xen_lock);
--			r = 0;
++
++			write_lock_irq(&gpc->lock);
++			if (gpc->valid && !is_error_noslot_pfn(gpc->pfn) &&
++			    gpc->uhva >= start && gpc->uhva < end)
++				gpc->valid = false;
++			write_unlock_irq(&gpc->lock);
++			continue;
  		}
- 		break;
- 
-@@ -1101,9 +1109,24 @@ int kvm_xen_write_hypercall_page(struct kvm_vcpu *vcpu, u64 data)
- 	u32 page_num = data & ~PAGE_MASK;
- 	u64 page_addr = data & PAGE_MASK;
- 	bool lm = is_long_mode(vcpu);
-+	int r = 0;
+-		write_unlock_irq(&gpc->lock);
 +
-+	mutex_lock(&kvm->arch.xen.xen_lock);
-+	if (kvm->arch.xen.long_mode != lm) {
-+		kvm->arch.xen.long_mode = lm;
-+
-+		/*
-+		 * Re-initialize shared_info to put the wallclock in the
-+		 * correct place.
-+		 */
-+		if (kvm->arch.xen.shinfo_cache.active &&
-+		    kvm_xen_shared_info_init(kvm))
-+			r = 1;
-+	}
-+	mutex_unlock(&kvm->arch.xen.xen_lock);
- 
--	/* Latch long_mode for shared_info pages etc. */
--	vcpu->kvm->arch.xen.long_mode = lm;
-+	if (r)
-+		return r;
- 
- 	/*
- 	 * If Xen hypercall intercept is enabled, fill the hypercall
++		read_unlock_irq(&gpc->lock);
+ 	}
+ 	spin_unlock(&kvm->gpc_lock);
+ }
 -- 
 2.39.2
 
