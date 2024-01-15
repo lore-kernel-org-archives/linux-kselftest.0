@@ -1,27 +1,27 @@
 Received: from mail.xenproject.org (mail.xenproject.org [104.130.215.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F44B17BBD;
-	Mon, 15 Jan 2024 13:38:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CDB717C63;
+	Mon, 15 Jan 2024 13:38:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=xen.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xen.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=xen.org header.i=@xen.org header.b="uDJUhlY/"
+	dkim=pass (1024-bit key) header.d=xen.org header.i=@xen.org header.b="IsBcCu7B"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=xen.org;
-	s=20200302mail; h=Content-Transfer-Encoding:MIME-Version:References:
-	In-Reply-To:Message-Id:Date:Subject:To:From;
-	bh=WWVRVO4rk5Tr7MGrSTJbAXSf75JgVNtQ8ev+YYa16zs=; b=uDJUhlY/oy45lsNvYKBA9swDyF
-	i2xUQJq0Gu+9ghCASKR5lww6lrjS3ps7Jo94/XTwg2EegQgFDMwlyKrqp4hcMaMGX4O++NSpfGtaT
-	OrA04cs9LFlfg7M12BZLJ4ys+Ml+FUrEnHTqf0f3YfbSHXYbpiE01cQQDAt4Uo52bSMo=;
+	s=20200302mail; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:
+	Subject:To:From; bh=NGz8qcxOM7EVgEWKAbNKsPiLOwrCtQw4O+B/FkvZxzw=; b=IsBcCu7B0
+	NnP0YAOH73/jBV7BP7Iq9ILAZyrzh1DUpNSxneroBGPmzaZf6KqVAilaM0E3DFTaYvF23+WyGSPcB
+	vTreYUWQskhl56HGD202ytYE3YrB/8cr4pkabFWqi9JQZXdgyAskNkj6bUs5OnOYp97waGek1X7sM
+	oxoYtbIY=;
 Received: from xenbits.xenproject.org ([104.239.192.120])
 	by mail.xenproject.org with esmtp (Exim 4.92)
 	(envelope-from <paul@xen.org>)
-	id 1rPMX4-0002iy-Ng; Mon, 15 Jan 2024 12:57:38 +0000
+	id 1rPMX0-0002iu-4U; Mon, 15 Jan 2024 12:57:34 +0000
 Received: from 54-240-197-231.amazon.com ([54.240.197.231] helo=REM-PW02S00X.ant.amazon.com)
 	by xenbits.xenproject.org with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <paul@xen.org>)
-	id 1rPMX4-0002kM-EQ; Mon, 15 Jan 2024 12:57:38 +0000
+	id 1rPMWz-0002kM-OK; Mon, 15 Jan 2024 12:57:33 +0000
 From: Paul Durrant <paul@xen.org>
 To: Paolo Bonzini <pbonzini@redhat.com>,
 	Jonathan Corbet <corbet@lwn.net>,
@@ -39,12 +39,10 @@ To: Paolo Bonzini <pbonzini@redhat.com>,
 	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v12 02/20] KVM: pfncache: remove unnecessary exports
-Date: Mon, 15 Jan 2024 12:56:49 +0000
-Message-Id: <20240115125707.1183-3-paul@xen.org>
+Subject: [PATCH v12 00/20] KVM: xen: update shared_info and vcpu_info handling
+Date: Mon, 15 Jan 2024 12:56:47 +0000
+Message-Id: <20240115125707.1183-1-paul@xen.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240115125707.1183-1-paul@xen.org>
-References: <20240115125707.1183-1-paul@xen.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -55,63 +53,55 @@ Content-Transfer-Encoding: 8bit
 
 From: Paul Durrant <pdurrant@amazon.com>
 
-There is no need for the existing kvm_gpc_XXX() functions to be exported.
-Clean up now before additional functions are added in subsequent patches.
+This series has one small fix to what was in v11 [1]:
 
-Signed-off-by: Paul Durrant <pdurrant@amazon.com>
-Reviewed-by: David Woodhouse <dwmw@amazon.co.uk>
----
-Cc: Sean Christopherson <seanjc@google.com>
-Cc: David Woodhouse <dwmw2@infradead.org>
-Cc: Paolo Bonzini <pbonzini@redhat.com>
+* KVM: xen: re-initialize shared_info if guest (32/64-bit) mode is set
 
-v8:
- - New in this version.
----
- virt/kvm/pfncache.c | 5 -----
- 1 file changed, 5 deletions(-)
+The v11 patch failed to set the return code of the ioctl if the mode
+was not actually changed, leading to a spurious failure.
 
-diff --git a/virt/kvm/pfncache.c b/virt/kvm/pfncache.c
-index 10842f1eeeae..f3571f44d9af 100644
---- a/virt/kvm/pfncache.c
-+++ b/virt/kvm/pfncache.c
-@@ -94,7 +94,6 @@ bool kvm_gpc_check(struct gfn_to_pfn_cache *gpc, unsigned long len)
- 
- 	return true;
- }
--EXPORT_SYMBOL_GPL(kvm_gpc_check);
- 
- static void *gpc_map(kvm_pfn_t pfn)
- {
-@@ -346,7 +345,6 @@ int kvm_gpc_refresh(struct gfn_to_pfn_cache *gpc, unsigned long len)
- {
- 	return __kvm_gpc_refresh(gpc, gpc->gpa, len);
- }
--EXPORT_SYMBOL_GPL(kvm_gpc_refresh);
- 
- void kvm_gpc_init(struct gfn_to_pfn_cache *gpc, struct kvm *kvm,
- 		  struct kvm_vcpu *vcpu, enum pfn_cache_usage usage)
-@@ -363,7 +361,6 @@ void kvm_gpc_init(struct gfn_to_pfn_cache *gpc, struct kvm *kvm,
- 	gpc->pfn = KVM_PFN_ERR_FAULT;
- 	gpc->uhva = KVM_HVA_ERR_BAD;
- }
--EXPORT_SYMBOL_GPL(kvm_gpc_init);
- 
- int kvm_gpc_activate(struct gfn_to_pfn_cache *gpc, gpa_t gpa, unsigned long len)
- {
-@@ -388,7 +385,6 @@ int kvm_gpc_activate(struct gfn_to_pfn_cache *gpc, gpa_t gpa, unsigned long len)
- 	}
- 	return __kvm_gpc_refresh(gpc, gpa, len);
- }
--EXPORT_SYMBOL_GPL(kvm_gpc_activate);
- 
- void kvm_gpc_deactivate(struct gfn_to_pfn_cache *gpc)
- {
-@@ -426,4 +422,3 @@ void kvm_gpc_deactivate(struct gfn_to_pfn_cache *gpc)
- 		gpc_unmap(old_pfn, old_khva);
- 	}
- }
--EXPORT_SYMBOL_GPL(kvm_gpc_deactivate);
+This version of the series also contains a new bug-fix to the pfncache
+code from David Woodhouse.
+
+[1] https://lore.kernel.org/kvm/20231219161109.1318-1-paul@xen.org/
+
+David Woodhouse (1):
+  KVM: pfncache: rework __kvm_gpc_refresh() to fix locking issues
+
+Paul Durrant (19):
+  KVM: pfncache: Add a map helper function
+  KVM: pfncache: remove unnecessary exports
+  KVM: xen: mark guest pages dirty with the pfncache lock held
+  KVM: pfncache: add a mark-dirty helper
+  KVM: pfncache: remove KVM_GUEST_USES_PFN usage
+  KVM: pfncache: stop open-coding offset_in_page()
+  KVM: pfncache: include page offset in uhva and use it consistently
+  KVM: pfncache: allow a cache to be activated with a fixed (userspace)
+    HVA
+  KVM: xen: separate initialization of shared_info cache and content
+  KVM: xen: re-initialize shared_info if guest (32/64-bit) mode is set
+  KVM: xen: allow shared_info to be mapped by fixed HVA
+  KVM: xen: allow vcpu_info to be mapped by fixed HVA
+  KVM: selftests / xen: map shared_info using HVA rather than GFN
+  KVM: selftests / xen: re-map vcpu_info using HVA rather than GPA
+  KVM: xen: advertize the KVM_XEN_HVM_CONFIG_SHARED_INFO_HVA capability
+  KVM: xen: split up kvm_xen_set_evtchn_fast()
+  KVM: xen: don't block on pfncache locks in kvm_xen_set_evtchn_fast()
+  KVM: pfncache: check the need for invalidation under read lock first
+  KVM: xen: allow vcpu_info content to be 'safely' copied
+
+ Documentation/virt/kvm/api.rst                |  53 ++-
+ arch/x86/kvm/x86.c                            |   7 +-
+ arch/x86/kvm/xen.c                            | 356 +++++++++++-------
+ include/linux/kvm_host.h                      |  40 +-
+ include/linux/kvm_types.h                     |   8 -
+ include/uapi/linux/kvm.h                      |   9 +-
+ .../selftests/kvm/x86_64/xen_shinfo_test.c    |  59 ++-
+ virt/kvm/pfncache.c                           | 340 +++++++++--------
+ 8 files changed, 535 insertions(+), 337 deletions(-)
+
+
+base-commit: 1c6d984f523f67ecfad1083bb04c55d91977bb15
 -- 
 2.39.2
 
