@@ -1,148 +1,160 @@
-Received: from mail.xenproject.org (mail.xenproject.org [104.130.215.37])
+Received: from wp716.webpack.hosteurope.de (wp716.webpack.hosteurope.de [80.237.130.238])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5C1D1802E;
-	Mon, 15 Jan 2024 13:38:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=xen.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xen.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=xen.org header.i=@xen.org header.b="rt0hmIFk"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=xen.org;
-	s=20200302mail; h=Content-Transfer-Encoding:MIME-Version:References:
-	In-Reply-To:Message-Id:Date:Subject:To:From;
-	bh=ZJgqkVOunMDeuyiM5KIGRFb9Ot/uYJQHh1XfCcXIOJs=; b=rt0hmIFk9h9MyzvbDRwsn/mZEW
-	aFg/8/JzWrUvQGR8NPrTeMw6ciRFpw2GTTrMaYUZDHrkSl5gk2wbN3JeTX+gKYXs3he+LPnaIe1CM
-	snKUKg+Cu5nev75Zj50r5OBZ+lTQnfhNUwxbwOKxScmx1Yseilg76UMlqcevid6s3a/0=;
-Received: from xenbits.xenproject.org ([104.239.192.120])
-	by mail.xenproject.org with esmtp (Exim 4.92)
-	(envelope-from <paul@xen.org>)
-	id 1rPMX9-0002jI-Cj; Mon, 15 Jan 2024 12:57:43 +0000
-Received: from 54-240-197-231.amazon.com ([54.240.197.231] helo=REM-PW02S00X.ant.amazon.com)
-	by xenbits.xenproject.org with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <paul@xen.org>)
-	id 1rPMX9-0002kM-3r; Mon, 15 Jan 2024 12:57:43 +0000
-From: Paul Durrant <paul@xen.org>
-To: Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Sean Christopherson <seanjc@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	David Woodhouse <dwmw2@infradead.org>,
-	Paul Durrant <paul@xen.org>,
-	Shuah Khan <shuah@kernel.org>,
-	kvm@vger.kernel.org,
-	linux-doc@vger.kernel.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1F7F1757D;
+	Mon, 15 Jan 2024 13:42:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=alumni.tu-berlin.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=alumni.tu-berlin.de
+Received: from dynamic-2a01-0c23-606a-b500-b981-1935-c9f7-1531.c23.pool.telefonica.de ([2a01:c23:606a:b500:b981:1935:c9f7:1531] helo=jt.fritz.box); authenticated
+	by wp716.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	id 1rPNEg-0006AL-4K; Mon, 15 Jan 2024 14:42:42 +0100
+From: =?UTF-8?q?J=C3=B6rn-Thorben=20Hinz?= <j-t.hinz@alumni.tu-berlin.de>
+To: bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v12 04/20] KVM: pfncache: add a mark-dirty helper
-Date: Mon, 15 Jan 2024 12:56:51 +0000
-Message-Id: <20240115125707.1183-5-paul@xen.org>
+Cc: =?UTF-8?q?J=C3=B6rn-Thorben=20Hinz?= <j-t.hinz@alumni.tu-berlin.de>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Deepa Dinamani <deepa.kernel@gmail.com>,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Subject: [PATCH bpf-next] bpf: Allow setting SO_TIMESTAMPING* with bpf_setsockopt()
+Date: Mon, 15 Jan 2024 14:41:10 +0100
+Message-Id: <20240115134110.11624-1-j-t.hinz@alumni.tu-berlin.de>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240115125707.1183-1-paul@xen.org>
-References: <20240115125707.1183-1-paul@xen.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;j-t.hinz@alumni.tu-berlin.de;1705326171;87aeb70d;
+X-HE-SMSGID: 1rPNEg-0006AL-4K
 
-From: Paul Durrant <pdurrant@amazon.com>
+A BPF application, e.g., a TCP congestion control, might benefit from or
+even require precise (=hardware) packet timestamps. These timestamps are
+already available through __sk_buff.hwtstamp and
+bpf_sock_ops.skb_hwtstamp, but could not be requested: BPF programs were
+not allowed to set SO_TIMESTAMPING* on sockets.
 
-At the moment pages are marked dirty by open-coded calls to
-mark_page_dirty_in_slot(), directly deferefencing the gpa and memslot
-from the cache. After a subsequent patch these may not always be set
-so add a helper now so that caller will protected from the need to know
-about this detail.
+Enable BPF programs to actively request the generation of timestamps
+from a stream socket. The also required ioctl(SIOCSHWTSTAMP) on the
+network device must still be done separately, in user space.
 
-Signed-off-by: Paul Durrant <pdurrant@amazon.com>
-Reviewed-by: David Woodhouse <dwmw@amazon.co.uk>
+This patch had previously been submitted in a two-part series (first
+link below). The second patch has been independently applied in commit
+7f6ca95d16b9 ("net: Implement missing getsockopt(SO_TIMESTAMPING_NEW)")
+(second link below).
+
+On the earlier submission, there was the open question whether to only
+allow, thus enforce, SO_TIMESTAMPING_NEW in this patch:
+
+For a BPF program, this won't make a difference: A timestamp, when
+accessed through the fields mentioned above, is directly read from
+skb_shared_info.hwtstamps, independent of the places where NEW/OLD is
+relevant. See bpf_convert_ctx_access() besides others.
+
+I am unsure, though, when it comes to the interconnection of user space
+and BPF "space", when both are interested in the timestamps. I think it
+would cause an unsolvable conflict when user space is bound to use
+SO_TIMESTAMPING_OLD with a BPF program only allowed to set
+SO_TIMESTAMPING_NEW *on the same socket*? Please correct me if I'm
+mistaken.
+
+Link: https://lore.kernel.org/lkml/20230703175048.151683-1-jthinz@mailbox.tu-berlin.de/
+Link: https://lore.kernel.org/all/20231221231901.67003-1-jthinz@mailbox.tu-berlin.de/
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Deepa Dinamani <deepa.kernel@gmail.com>
+Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Signed-off-by: Jörn-Thorben Hinz <j-t.hinz@alumni.tu-berlin.de>
 ---
-Cc: David Woodhouse <dwmw2@infradead.org>
-Cc: Sean Christopherson <seanjc@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: x86@kernel.org
+ include/uapi/linux/bpf.h                            | 3 ++-
+ net/core/filter.c                                   | 2 ++
+ tools/include/uapi/linux/bpf.h                      | 3 ++-
+ tools/testing/selftests/bpf/progs/bpf_tracing_net.h | 2 ++
+ tools/testing/selftests/bpf/progs/setget_sockopt.c  | 4 ++++
+ 5 files changed, 12 insertions(+), 2 deletions(-)
 
-v8:
- - Make the helper a static inline.
----
- arch/x86/kvm/x86.c       |  2 +-
- arch/x86/kvm/xen.c       |  6 +++---
- include/linux/kvm_host.h | 11 +++++++++++
- 3 files changed, 15 insertions(+), 4 deletions(-)
-
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 27e23714e960..0a0ac91a494f 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -3156,7 +3156,7 @@ static void kvm_setup_guest_pvclock(struct kvm_vcpu *v,
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 754e68ca8744..8825d0648efe 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -2734,7 +2734,8 @@ union bpf_attr {
+  * 		  **SO_RCVBUF**, **SO_SNDBUF**, **SO_MAX_PACING_RATE**,
+  * 		  **SO_PRIORITY**, **SO_RCVLOWAT**, **SO_MARK**,
+  * 		  **SO_BINDTODEVICE**, **SO_KEEPALIVE**, **SO_REUSEADDR**,
+- * 		  **SO_REUSEPORT**, **SO_BINDTOIFINDEX**, **SO_TXREHASH**.
++ * 		  **SO_REUSEPORT**, **SO_BINDTOIFINDEX**, **SO_TXREHASH**,
++ * 		  **SO_TIMESTAMPING_NEW**, **SO_TIMESTAMPING_OLD**.
+  * 		* **IPPROTO_TCP**, which supports the following *optname*\ s:
+  * 		  **TCP_CONGESTION**, **TCP_BPF_IW**,
+  * 		  **TCP_BPF_SNDCWND_CLAMP**, **TCP_SAVE_SYN**,
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 8c9f67c81e22..4f5280874fd8 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -5144,6 +5144,8 @@ static int sol_socket_sockopt(struct sock *sk, int optname,
+ 	case SO_MAX_PACING_RATE:
+ 	case SO_BINDTOIFINDEX:
+ 	case SO_TXREHASH:
++	case SO_TIMESTAMPING_NEW:
++	case SO_TIMESTAMPING_OLD:
+ 		if (*optlen != sizeof(int))
+ 			return -EINVAL;
+ 		break;
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 7f24d898efbb..09eaafa6ab43 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -2734,7 +2734,8 @@ union bpf_attr {
+  * 		  **SO_RCVBUF**, **SO_SNDBUF**, **SO_MAX_PACING_RATE**,
+  * 		  **SO_PRIORITY**, **SO_RCVLOWAT**, **SO_MARK**,
+  * 		  **SO_BINDTODEVICE**, **SO_KEEPALIVE**, **SO_REUSEADDR**,
+- * 		  **SO_REUSEPORT**, **SO_BINDTOIFINDEX**, **SO_TXREHASH**.
++ * 		  **SO_REUSEPORT**, **SO_BINDTOIFINDEX**, **SO_TXREHASH**,
++ * 		  **SO_TIMESTAMPING_NEW**, **SO_TIMESTAMPING_OLD**.
+  * 		* **IPPROTO_TCP**, which supports the following *optname*\ s:
+  * 		  **TCP_CONGESTION**, **TCP_BPF_IW**,
+  * 		  **TCP_BPF_SNDCWND_CLAMP**, **TCP_SAVE_SYN**,
+diff --git a/tools/testing/selftests/bpf/progs/bpf_tracing_net.h b/tools/testing/selftests/bpf/progs/bpf_tracing_net.h
+index 1bdc680b0e0e..95f5f169819e 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_tracing_net.h
++++ b/tools/testing/selftests/bpf/progs/bpf_tracing_net.h
+@@ -15,8 +15,10 @@
+ #define SO_RCVLOWAT		18
+ #define SO_BINDTODEVICE		25
+ #define SO_MARK			36
++#define SO_TIMESTAMPING_OLD     37
+ #define SO_MAX_PACING_RATE	47
+ #define SO_BINDTOIFINDEX	62
++#define SO_TIMESTAMPING_NEW     65
+ #define SO_TXREHASH		74
+ #define __SO_ACCEPTCON		(1 << 16)
  
- 	guest_hv_clock->version = ++vcpu->hv_clock.version;
- 
--	mark_page_dirty_in_slot(v->kvm, gpc->memslot, gpc->gpa >> PAGE_SHIFT);
-+	kvm_gpc_mark_dirty(gpc);
- 	read_unlock_irqrestore(&gpc->lock, flags);
- 
- 	trace_kvm_pvclock_update(v->vcpu_id, &vcpu->hv_clock);
-diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
-index b63bf54bb376..34c48d0029c1 100644
---- a/arch/x86/kvm/xen.c
-+++ b/arch/x86/kvm/xen.c
-@@ -453,11 +453,11 @@ static void kvm_xen_update_runstate_guest(struct kvm_vcpu *v, bool atomic)
- 	}
- 
- 	if (user_len2) {
--		mark_page_dirty_in_slot(v->kvm, gpc2->memslot, gpc2->gpa >> PAGE_SHIFT);
-+		kvm_gpc_mark_dirty(gpc2);
- 		read_unlock(&gpc2->lock);
- 	}
- 
--	mark_page_dirty_in_slot(v->kvm, gpc1->memslot, gpc1->gpa >> PAGE_SHIFT);
-+	kvm_gpc_mark_dirty(gpc1);
- 	read_unlock_irqrestore(&gpc1->lock, flags);
- }
- 
-@@ -565,7 +565,7 @@ void kvm_xen_inject_pending_events(struct kvm_vcpu *v)
- 		WRITE_ONCE(vi->evtchn_upcall_pending, 1);
- 	}
- 
--	mark_page_dirty_in_slot(v->kvm, gpc->memslot, gpc->gpa >> PAGE_SHIFT);
-+	kvm_gpc_mark_dirty(gpc);
- 	read_unlock_irqrestore(&gpc->lock, flags);
- 
- 	/* For the per-vCPU lapic vector, deliver it as MSI. */
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index 7e7fd25b09b3..f3bb9e0a81fe 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -1399,6 +1399,17 @@ int kvm_gpc_refresh(struct gfn_to_pfn_cache *gpc, unsigned long len);
-  */
- void kvm_gpc_deactivate(struct gfn_to_pfn_cache *gpc);
- 
-+/**
-+ * kvm_gpc_mark_dirty - mark a cached page as dirty.
-+ *
-+ * @gpc:	   struct gfn_to_pfn_cache object.
-+ */
-+static inline void kvm_gpc_mark_dirty(struct gfn_to_pfn_cache *gpc)
-+{
-+	lockdep_assert_held(&gpc->lock);
-+	mark_page_dirty_in_slot(gpc->kvm, gpc->memslot, gpc->gpa >> PAGE_SHIFT);
-+}
-+
- void kvm_sigset_activate(struct kvm_vcpu *vcpu);
- void kvm_sigset_deactivate(struct kvm_vcpu *vcpu);
+diff --git a/tools/testing/selftests/bpf/progs/setget_sockopt.c b/tools/testing/selftests/bpf/progs/setget_sockopt.c
+index 7a438600ae98..54205d10793c 100644
+--- a/tools/testing/selftests/bpf/progs/setget_sockopt.c
++++ b/tools/testing/selftests/bpf/progs/setget_sockopt.c
+@@ -48,6 +48,10 @@ static const struct sockopt_test sol_socket_tests[] = {
+ 	{ .opt = SO_MARK, .new = 0xeb9f, .expected = 0xeb9f, },
+ 	{ .opt = SO_MAX_PACING_RATE, .new = 0xeb9f, .expected = 0xeb9f, },
+ 	{ .opt = SO_TXREHASH, .flip = 1, },
++	{ .opt = SO_TIMESTAMPING_NEW, .new = SOF_TIMESTAMPING_RX_HARDWARE,
++		.expected = SOF_TIMESTAMPING_RX_HARDWARE, },
++	{ .opt = SO_TIMESTAMPING_OLD, .new = SOF_TIMESTAMPING_RX_HARDWARE,
++		.expected = SOF_TIMESTAMPING_RX_HARDWARE, },
+ 	{ .opt = 0, },
+ };
  
 -- 
 2.39.2
