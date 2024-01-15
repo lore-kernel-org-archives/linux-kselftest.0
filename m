@@ -1,27 +1,27 @@
 Received: from mail.xenproject.org (mail.xenproject.org [104.130.215.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A2B3179AA;
-	Mon, 15 Jan 2024 13:09:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 716E817C69;
+	Mon, 15 Jan 2024 13:09:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=xen.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xen.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=xen.org header.i=@xen.org header.b="X8tc+QAJ"
+	dkim=pass (1024-bit key) header.d=xen.org header.i=@xen.org header.b="fMdOW6y8"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=xen.org;
 	s=20200302mail; h=Content-Transfer-Encoding:Content-Type:MIME-Version:
 	References:In-Reply-To:Message-Id:Date:Subject:To:From;
-	bh=vhDaPzwkV56FJ2IKKJnZAREIZ8hyNHEQ8EwaNCh+Lzw=; b=X8tc+QAJO4rOAZFb8IlkTFSAzR
-	pxscFvtmYwXukh341UHaiPZiSmVWBqdqwNxevSEZZk/LixVNeozbrES8LhmIMo4TJFr+xnygOtrTh
-	lBJZt8L61vFdK3usLB3lIcKVRxVVUOxlIRiTOLVkrmfUZUSBihxV7ojm2s/wgHUvfU90=;
+	bh=G1MUmXqcUNbndfoB441ogomDIdc1jFzjEaJbDsyBneM=; b=fMdOW6y8mLDlhil3ydDLY0Yg5B
+	7nXngyRdTXYnL8FwuVifLBcVIGr5fZ0Jg/uuWK0v2Rx+pyMfPcPKR1XRtFhKZgn0Ay3T2hGh33jE3
+	CANrdtp3/yiQzphOC1uYK38NdrSCtTMzb8HFO5x2g8XfNJ5ehDSQZFUQfLpJ9SYHzHJU=;
 Received: from xenbits.xenproject.org ([104.239.192.120])
 	by mail.xenproject.org with esmtp (Exim 4.92)
 	(envelope-from <paul@xen.org>)
-	id 1rPMiY-00035k-US; Mon, 15 Jan 2024 13:09:30 +0000
+	id 1rPMiZ-00035m-1u; Mon, 15 Jan 2024 13:09:31 +0000
 Received: from 54-240-197-231.amazon.com ([54.240.197.231] helo=REM-PW02S00X.ant.amazon.com)
 	by xenbits.xenproject.org with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <paul@xen.org>)
-	id 1rPMXP-0002kM-FP; Mon, 15 Jan 2024 12:57:59 +0000
+	id 1rPMXk-0002kM-Fg; Mon, 15 Jan 2024 12:58:20 +0000
 From: Paul Durrant <paul@xen.org>
 To: Paolo Bonzini <pbonzini@redhat.com>,
 	Jonathan Corbet <corbet@lwn.net>,
@@ -39,9 +39,9 @@ To: Paolo Bonzini <pbonzini@redhat.com>,
 	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v12 11/20] KVM: xen: allow shared_info to be mapped by fixed HVA
-Date: Mon, 15 Jan 2024 12:56:58 +0000
-Message-Id: <20240115125707.1183-12-paul@xen.org>
+Subject: [PATCH v12 20/20] KVM: pfncache: rework __kvm_gpc_refresh() to fix locking issues
+Date: Mon, 15 Jan 2024 12:57:07 +0000
+Message-Id: <20240115125707.1183-21-paul@xen.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240115125707.1183-1-paul@xen.org>
 References: <20240115125707.1183-1-paul@xen.org>
@@ -54,235 +54,360 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Paul Durrant <pdurrant@amazon.com>
+From: David Woodhouse <dwmw@amazon.co.uk>
 
-The shared_info page is not guest memory as such. It is a dedicated page
-allocated by the VMM and overlaid onto guest memory in a GFN chosen by the
-guest and specified in the XENMEM_add_to_physmap hypercall. The guest may
-even request that shared_info be moved from one GFN to another by
-re-issuing that hypercall, but the HVA is never going to change.
+This function can race with kvm_gpc_deactivate(), which does not take
+the ->refresh_lock. This means kvm_gpc_deactivate() can wipe the ->pfn
+and ->khva fields, and unmap the latter, while hva_to_pfn_retry() has
+temporarily dropped its write lock on gpc->lock.
 
-Because the shared_info page is an overlay the memory slots need to be
-updated in response to the hypercall. However, memory slot adjustment is
-not atomic and, whilst all vCPUs are paused, there is still the possibility
-that events may be delivered (which requires the shared_info page to be
-updated) whilst the shared_info GPA is absent. The HVA is never absent
-though, so it makes much more sense to use that as the basis for the
-kernel's mapping.
+Then if hva_to_pfn_retry() determines that the PFN hasn't changed and
+that the original pfn and khva can be reused, they get assigned back to
+gpc->pfn and gpc->khva even though the khva was already unmapped by
+kvm_gpc_deactivate(). This leaves the cache in an apparently valid state
+but with ->khva pointing to an address which has been unmapped. Which in
+turn leads to oopses in e.g. __kvm_xen_has_interrupt() and
+set_shinfo_evtchn_pending() when they dereference said khva.
 
-Hence add a new KVM_XEN_ATTR_TYPE_SHARED_INFO_HVA attribute type for this
-purpose and a KVM_XEN_HVM_CONFIG_SHARED_INFO_HVA flag to advertize its
-availability. Don't actually advertize it yet though. That will be done in
-a subsequent patch, which will also add tests for the new attribute type.
+It may be possible to fix this just by making kvm_gpc_deactivate() take
+the ->refresh_lock, but that still leaves ->refresh_lock being basically
+redundant with the write lock on ->lock, which frankly makes my skin
+itch, with the way that pfn_to_hva_retry() operates on fields in the gpc
+without holding a write lock on ->lock.
 
-Also update the KVM API documentation with the new attribute and also fix
-it up to consistently refer to 'shared_info' (with the underscore).
+Instead, fix it by cleaning up the semantics of hva_to_pfn_retry(). It
+now no longer does locking gymnastics because it no longer operates on
+the gpc object at all. I's called with a uhva and simply returns the
+corresponding pfn (pinned), and a mapped khva for it.
 
-Signed-off-by: Paul Durrant <pdurrant@amazon.com>
-Reviewed-by: David Woodhouse <dwmw@amazon.co.uk>
+Its caller __kvm_gpc_refresh() now sets gpc->uhva and clears gpc->valid
+before dropping ->lock, calling hva_to_pfn_retry() and retaking ->lock
+for write.
+
+If hva_to_pfn_retry() fails, *or* if the ->uhva or ->active fields in
+the gpc changed while the lock was dropped, the new mapping is discarded
+and the gpc is not modified. On success with an unchanged gpc, the new
+mapping is installed and the current ->pfn and ->uhva are taken into the
+local old_pfn and old_khva variables to be unmapped once the locks are
+all released.
+
+This simplification means that ->refresh_lock is no longer needed for
+correctness, but it does still provide a minor optimisation because it
+will prevent two concurrent __kvm_gpc_refresh() calls from mapping a
+given PFN, only for one of them to lose the race and discard its
+mapping.
+
+The optimisation in hva_to_pfn_retry() where it attempts to use the old
+mapping if the pfn doesn't change is dropped, since it makes the pinning
+more complex. It's a pointless optimisation anyway, since the odds of
+the pfn ending up the same when the uhva has changed (i.e. the odds of
+the two userspace addresses both pointing to the same underlying
+physical page) are negligible,
+
+The 'hva_changed' local variable in __kvm_gpc_refresh() is also removed,
+since it's simpler just to clear gpc->valid if the uhva changed.
+Likewise the unmap_old variable is dropped because it's just as easy to
+check the old_pfn variable for KVM_PFN_ERR_FAULT.
+
+I remain slightly confused because although this is clearly a race in
+the gfn_to_pfn_cache code, I don't quite know how the Xen support code
+actually managed to trigger it. We've seen oopses from dereferencing a
+valid-looking ->khva in both __kvm_xen_has_interrupt() (the vcpu_info)
+and in set_shinfo_evtchn_pending() (the shared_info). But surely the
+race shouldn't happen for the vcpu_info gpc because all calls to both
+refresh and deactivate hold the vcpu mutex, and it shouldn't happen
+for the shared_info gpc because all calls to both will hold the
+kvm->arch.xen.xen_lock mutex.
+
+Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+Reviewed-by: Paul Durrant <paul@xen.org>
 ---
-Cc: David Woodhouse <dwmw2@infradead.org>
 Cc: Sean Christopherson <seanjc@google.com>
 Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: x86@kernel.org
 
-v8:
- - Re-base.
-
-v2:
- - Define the new attribute and capability but don't advertize the
-   capability yet.
- - Add API documentation.
+v12:
+ - New in this version.
 ---
- Documentation/virt/kvm/api.rst | 25 ++++++++++++++++------
- arch/x86/kvm/xen.c             | 39 ++++++++++++++++++++++++++--------
- include/uapi/linux/kvm.h       |  6 +++++-
- 3 files changed, 54 insertions(+), 16 deletions(-)
+ virt/kvm/pfncache.c | 184 +++++++++++++++++++++-----------------------
+ 1 file changed, 88 insertions(+), 96 deletions(-)
 
-diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-index 3ec0b7a455a0..3372be85b335 100644
---- a/Documentation/virt/kvm/api.rst
-+++ b/Documentation/virt/kvm/api.rst
-@@ -372,7 +372,7 @@ The bits in the dirty bitmap are cleared before the ioctl returns, unless
- KVM_CAP_MANUAL_DIRTY_LOG_PROTECT2 is enabled.  For more information,
- see the description of the capability.
+diff --git a/virt/kvm/pfncache.c b/virt/kvm/pfncache.c
+index 70394d7c9a38..4863f9f3d369 100644
+--- a/virt/kvm/pfncache.c
++++ b/virt/kvm/pfncache.c
+@@ -135,110 +135,67 @@ static inline bool mmu_notifier_retry_cache(struct kvm *kvm, unsigned long mmu_s
+ 	return kvm->mmu_invalidate_seq != mmu_seq;
+ }
  
--Note that the Xen shared info page, if configured, shall always be assumed
-+Note that the Xen shared_info page, if configured, shall always be assumed
- to be dirty. KVM will not explicitly mark it such.
- 
- 
-@@ -5487,8 +5487,9 @@ KVM_PV_ASYNC_CLEANUP_PERFORM
- 		__u8 long_mode;
- 		__u8 vector;
- 		__u8 runstate_update_flag;
--		struct {
-+		union {
- 			__u64 gfn;
-+			__u64 hva;
- 		} shared_info;
- 		struct {
- 			__u32 send_port;
-@@ -5516,10 +5517,10 @@ type values:
- 
- KVM_XEN_ATTR_TYPE_LONG_MODE
-   Sets the ABI mode of the VM to 32-bit or 64-bit (long mode). This
--  determines the layout of the shared info pages exposed to the VM.
-+  determines the layout of the shared_info page exposed to the VM.
- 
- KVM_XEN_ATTR_TYPE_SHARED_INFO
--  Sets the guest physical frame number at which the Xen "shared info"
-+  Sets the guest physical frame number at which the Xen shared_info
-   page resides. Note that although Xen places vcpu_info for the first
-   32 vCPUs in the shared_info page, KVM does not automatically do so
-   and instead requires that KVM_XEN_VCPU_ATTR_TYPE_VCPU_INFO be used
-@@ -5528,7 +5529,7 @@ KVM_XEN_ATTR_TYPE_SHARED_INFO
-   not be aware of the Xen CPU id which is used as the index into the
-   vcpu_info[] array, so may know the correct default location.
- 
--  Note that the shared info page may be constantly written to by KVM;
-+  Note that the shared_info page may be constantly written to by KVM;
-   it contains the event channel bitmap used to deliver interrupts to
-   a Xen guest, amongst other things. It is exempt from dirty tracking
-   mechanisms — KVM will not explicitly mark the page as dirty each
-@@ -5537,9 +5538,21 @@ KVM_XEN_ATTR_TYPE_SHARED_INFO
-   any vCPU has been running or any event channel interrupts can be
-   routed to the guest.
- 
--  Setting the gfn to KVM_XEN_INVALID_GFN will disable the shared info
-+  Setting the gfn to KVM_XEN_INVALID_GFN will disable the shared_info
-   page.
- 
-+KVM_XEN_ATTR_TYPE_SHARED_INFO_HVA
-+  If the KVM_XEN_HVM_CONFIG_SHARED_INFO_HVA flag is also set in the
-+  Xen capabilities, then this attribute may be used to set the
-+  userspace address at which the shared_info page resides, which
-+  will always be fixed in the VMM regardless of where it is mapped
-+  in guest physical address space. This attribute should be used in
-+  preference to KVM_XEN_ATTR_TYPE_SHARED_INFO as it avoids
-+  unnecessary invalidation of an internal cache when the page is
-+  re-mapped in guest physcial address space.
-+
-+  Setting the hva to zero will disable the shared_info page.
-+
- KVM_XEN_ATTR_TYPE_UPCALL_VECTOR
-   Sets the exception vector used to deliver Xen event channel upcalls.
-   This is the HVM-wide vector injected directly by the hypervisor
-diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
-index d595d476a5b3..813d63a8703a 100644
---- a/arch/x86/kvm/xen.c
-+++ b/arch/x86/kvm/xen.c
-@@ -617,7 +617,6 @@ int kvm_xen_hvm_set_attr(struct kvm *kvm, struct kvm_xen_hvm_attr *data)
+-static kvm_pfn_t hva_to_pfn_retry(struct gfn_to_pfn_cache *gpc)
++/*
++ * Given a user virtual address, obtain a pinned host PFN and kernel mapping
++ * for it. The caller will release the PFN after installing it into the GPC
++ * so that the MMU notifier invalidation mechanism is active.
++ */
++static kvm_pfn_t hva_to_pfn_retry(struct kvm *kvm, unsigned long uhva,
++				  kvm_pfn_t *pfn, void **khva)
  {
- 	int r = -ENOENT;
+ 	/* Note, the new page offset may be different than the old! */
+-	void *old_khva = (void *)PAGE_ALIGN_DOWN((uintptr_t)gpc->khva);
+ 	kvm_pfn_t new_pfn = KVM_PFN_ERR_FAULT;
+ 	void *new_khva = NULL;
+ 	unsigned long mmu_seq;
  
+-	lockdep_assert_held(&gpc->refresh_lock);
 -
- 	switch (data->type) {
- 	case KVM_XEN_ATTR_TYPE_LONG_MODE:
- 		if (!IS_ENABLED(CONFIG_64BIT) && data->u.long_mode) {
-@@ -638,20 +637,32 @@ int kvm_xen_hvm_set_attr(struct kvm *kvm, struct kvm_xen_hvm_attr *data)
+-	lockdep_assert_held_write(&gpc->lock);
+-
+-	/*
+-	 * Invalidate the cache prior to dropping gpc->lock, the gpa=>uhva
+-	 * assets have already been updated and so a concurrent check() from a
+-	 * different task may not fail the gpa/uhva/generation checks.
+-	 */
+-	gpc->valid = false;
+-
+-	do {
+-		mmu_seq = gpc->kvm->mmu_invalidate_seq;
++	for (;;) {
++		mmu_seq = kvm->mmu_invalidate_seq;
+ 		smp_rmb();
+ 
+-		write_unlock_irq(&gpc->lock);
+-
+-		/*
+-		 * If the previous iteration "failed" due to an mmu_notifier
+-		 * event, release the pfn and unmap the kernel virtual address
+-		 * from the previous attempt.  Unmapping might sleep, so this
+-		 * needs to be done after dropping the lock.  Opportunistically
+-		 * check for resched while the lock isn't held.
+-		 */
+-		if (new_pfn != KVM_PFN_ERR_FAULT) {
+-			/*
+-			 * Keep the mapping if the previous iteration reused
+-			 * the existing mapping and didn't create a new one.
+-			 */
+-			if (new_khva != old_khva)
+-				gpc_unmap(new_pfn, new_khva);
+-
+-			kvm_release_pfn_clean(new_pfn);
+-
+-			cond_resched();
+-		}
+-
+ 		/* We always request a writeable mapping */
+-		new_pfn = hva_to_pfn(gpc->uhva, false, false, NULL, true, NULL);
++		new_pfn = hva_to_pfn(uhva, false, false, NULL, true, NULL);
+ 		if (is_error_noslot_pfn(new_pfn))
+-			goto out_error;
++			return -EFAULT;
+ 
+ 		/*
+-		 * Obtain a new kernel mapping if KVM itself will access the
+-		 * pfn.  Note, kmap() and memremap() can both sleep, so this
+-		 * too must be done outside of gpc->lock!
++		 * Always obtain a new kernel mapping. Trying to reuse an
++		 * existing one is more complex than it's worth.
+ 		 */
+-		if (new_pfn == gpc->pfn)
+-			new_khva = old_khva;
+-		else
+-			new_khva = gpc_map(new_pfn);
+-
++		new_khva = gpc_map(new_pfn);
+ 		if (!new_khva) {
+ 			kvm_release_pfn_clean(new_pfn);
+-			goto out_error;
++			return -EFAULT;
  		}
- 		break;
  
--	case KVM_XEN_ATTR_TYPE_SHARED_INFO: {
-+	case KVM_XEN_ATTR_TYPE_SHARED_INFO:
-+	case KVM_XEN_ATTR_TYPE_SHARED_INFO_HVA: {
- 		int idx;
+-		write_lock_irq(&gpc->lock);
++		if (!mmu_notifier_retry_cache(kvm, mmu_seq))
++			break;
  
- 		mutex_lock(&kvm->arch.xen.xen_lock);
+ 		/*
+-		 * Other tasks must wait for _this_ refresh to complete before
+-		 * attempting to refresh.
++		 * If this iteration "failed" due to an mmu_notifier event,
++		 * release the pfn and unmap the kernel virtual address, and
++		 * loop around again.
+ 		 */
+-		WARN_ON_ONCE(gpc->valid);
+-	} while (mmu_notifier_retry_cache(gpc->kvm, mmu_seq));
+-
+-	gpc->valid = true;
+-	gpc->pfn = new_pfn;
+-	gpc->khva = new_khva + offset_in_page(gpc->uhva);
++		if (new_pfn != KVM_PFN_ERR_FAULT) {
++			gpc_unmap(new_pfn, new_khva);
++			kvm_release_pfn_clean(new_pfn);
++		}
++	}
  
- 		idx = srcu_read_lock(&kvm->srcu);
+-	/*
+-	 * Put the reference to the _new_ pfn.  The pfn is now tracked by the
+-	 * cache and can be safely migrated, swapped, etc... as the cache will
+-	 * invalidate any mappings in response to relevant mmu_notifier events.
+-	 */
+-	kvm_release_pfn_clean(new_pfn);
++	*pfn = new_pfn;
++	*khva = new_khva;
  
--		if (data->u.shared_info.gfn == KVM_XEN_INVALID_GFN) {
--			kvm_gpc_deactivate(&kvm->arch.xen.shinfo_cache);
--			r = 0;
-+		if (data->type == KVM_XEN_ATTR_TYPE_SHARED_INFO) {
-+			if (data->u.shared_info.gfn == KVM_XEN_INVALID_GFN) {
-+				kvm_gpc_deactivate(&kvm->arch.xen.shinfo_cache);
-+				r = 0;
-+			} else {
-+				r = kvm_gpc_activate(&kvm->arch.xen.shinfo_cache,
-+						     gfn_to_gpa(data->u.shared_info.gfn),
-+						     PAGE_SIZE);
-+			}
- 		} else {
--			r = kvm_gpc_activate(&kvm->arch.xen.shinfo_cache,
--					     gfn_to_gpa(data->u.shared_info.gfn),
--					     PAGE_SIZE);
-+			if (data->u.shared_info.hva == 0) {
-+				kvm_gpc_deactivate(&kvm->arch.xen.shinfo_cache);
-+				r = 0;
-+			} else {
-+				r = kvm_gpc_activate_hva(&kvm->arch.xen.shinfo_cache,
-+							 data->u.shared_info.hva,
-+							 PAGE_SIZE);
-+			}
- 		}
+ 	return 0;
+-
+-out_error:
+-	write_lock_irq(&gpc->lock);
+-
+-	return -EFAULT;
+ }
  
- 		srcu_read_unlock(&kvm->srcu, idx);
-@@ -715,13 +726,23 @@ int kvm_xen_hvm_get_attr(struct kvm *kvm, struct kvm_xen_hvm_attr *data)
- 		break;
+-static int __kvm_gpc_refresh(struct gfn_to_pfn_cache *gpc, gpa_t gpa, unsigned long uhva,
+-			     unsigned long len)
++static int __kvm_gpc_refresh(struct gfn_to_pfn_cache *gpc, gpa_t gpa,
++			     unsigned long uhva, unsigned long len)
+ {
+ 	struct kvm_memslots *slots = kvm_memslots(gpc->kvm);
+ 	unsigned long page_offset = (gpa != KVM_XEN_INVALID_GPA) ?
+ 		offset_in_page(gpa) :
+ 		offset_in_page(uhva);
+-	bool unmap_old = false;
+ 	unsigned long old_uhva;
+-	kvm_pfn_t old_pfn;
+-	bool hva_change = false;
++	kvm_pfn_t old_pfn = KVM_PFN_ERR_FAULT;
+ 	void *old_khva;
+ 	int ret;
  
- 	case KVM_XEN_ATTR_TYPE_SHARED_INFO:
--		if (kvm->arch.xen.shinfo_cache.active)
-+		if (kvm->arch.xen.shinfo_cache.active &&
-+		    kvm->arch.xen.shinfo_cache.gpa != KVM_XEN_INVALID_GPA)
- 			data->u.shared_info.gfn = gpa_to_gfn(kvm->arch.xen.shinfo_cache.gpa);
- 		else
- 			data->u.shared_info.gfn = KVM_XEN_INVALID_GFN;
- 		r = 0;
- 		break;
+@@ -251,8 +208,9 @@ static int __kvm_gpc_refresh(struct gfn_to_pfn_cache *gpc, gpa_t gpa, unsigned l
  
-+	case KVM_XEN_ATTR_TYPE_SHARED_INFO_HVA:
-+		if (kvm->arch.xen.shinfo_cache.active &&
-+		    kvm->arch.xen.shinfo_cache.gpa == KVM_XEN_INVALID_GPA)
-+			data->u.shared_info.hva = kvm->arch.xen.shinfo_cache.uhva;
-+		else
-+			data->u.shared_info.hva = 0;
-+		r = 0;
-+		break;
+ 	/*
+ 	 * If another task is refreshing the cache, wait for it to complete.
+-	 * There is no guarantee that concurrent refreshes will see the same
+-	 * gpa, memslots generation, etc..., so they must be fully serialized.
++	 * This is purely an optimisation, to avoid concurrent mappings from
++	 * hva_to_pfn_retry(), all but one of which will be discarded after
++	 * losing a race to install them in the GPC.
+ 	 */
+ 	mutex_lock(&gpc->refresh_lock);
+ 
+@@ -272,7 +230,7 @@ static int __kvm_gpc_refresh(struct gfn_to_pfn_cache *gpc, gpa_t gpa, unsigned l
+ 		gpc->uhva = PAGE_ALIGN_DOWN(uhva);
+ 
+ 		if (gpc->uhva != old_uhva)
+-			hva_change = true;
++			gpc->valid = false;
+ 	} else if (gpc->gpa != gpa ||
+ 		   gpc->generation != slots->generation ||
+ 		   kvm_is_error_hva(gpc->uhva)) {
+@@ -285,7 +243,11 @@ static int __kvm_gpc_refresh(struct gfn_to_pfn_cache *gpc, gpa_t gpa, unsigned l
+ 
+ 		if (kvm_is_error_hva(gpc->uhva)) {
+ 			ret = -EFAULT;
+-			goto out;
 +
- 	case KVM_XEN_ATTR_TYPE_UPCALL_VECTOR:
- 		data->u.vector = kvm->arch.xen.upcall_vector;
- 		r = 0;
-diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-index c3308536482b..ac5caba313d1 100644
---- a/include/uapi/linux/kvm.h
-+++ b/include/uapi/linux/kvm.h
-@@ -1246,6 +1246,7 @@ struct kvm_x86_mce {
- #define KVM_XEN_HVM_CONFIG_EVTCHN_SEND		(1 << 5)
- #define KVM_XEN_HVM_CONFIG_RUNSTATE_UPDATE_FLAG	(1 << 6)
- #define KVM_XEN_HVM_CONFIG_PVCLOCK_TSC_UNSTABLE	(1 << 7)
-+#define KVM_XEN_HVM_CONFIG_SHARED_INFO_HVA	(1 << 8)
++			gpc->valid = false;
++			gpc->pfn = KVM_PFN_ERR_FAULT;
++			gpc->khva = NULL;
++			goto out_unlock;
+ 		}
  
- struct kvm_xen_hvm_config {
- 	__u32 flags;
-@@ -1744,9 +1745,10 @@ struct kvm_xen_hvm_attr {
- 		__u8 long_mode;
- 		__u8 vector;
- 		__u8 runstate_update_flag;
--		struct {
-+		union {
- 			__u64 gfn;
- #define KVM_XEN_INVALID_GFN ((__u64)-1)
-+			__u64 hva;
- 		} shared_info;
- 		struct {
- 			__u32 send_port;
-@@ -1788,6 +1790,8 @@ struct kvm_xen_hvm_attr {
- #define KVM_XEN_ATTR_TYPE_XEN_VERSION		0x4
- /* Available with KVM_CAP_XEN_HVM / KVM_XEN_HVM_CONFIG_RUNSTATE_UPDATE_FLAG */
- #define KVM_XEN_ATTR_TYPE_RUNSTATE_UPDATE_FLAG	0x5
-+/* Available with KVM_CAP_XEN_HVM / KVM_XEN_HVM_CONFIG_SHARED_INFO_HVA */
-+#define KVM_XEN_ATTR_TYPE_SHARED_INFO_HVA	0x6
+ 		/*
+@@ -293,7 +255,7 @@ static int __kvm_gpc_refresh(struct gfn_to_pfn_cache *gpc, gpa_t gpa, unsigned l
+ 		 * HVA may still be the same.
+ 		 */
+ 		if (gpc->uhva != old_uhva)
+-			hva_change = true;
++			gpc->valid = false;
+ 	} else {
+ 		gpc->uhva = old_uhva;
+ 	}
+@@ -305,9 +267,7 @@ static int __kvm_gpc_refresh(struct gfn_to_pfn_cache *gpc, gpa_t gpa, unsigned l
+ 	 * If the userspace HVA changed or the PFN was already invalid,
+ 	 * drop the lock and do the HVA to PFN lookup again.
+ 	 */
+-	if (!gpc->valid || hva_change) {
+-		ret = hva_to_pfn_retry(gpc);
+-	} else {
++	if (gpc->valid) {
+ 		/*
+ 		 * If the HVA→PFN mapping was already valid, don't unmap it.
+ 		 * But do update gpc->khva because the offset within the page
+@@ -315,30 +275,62 @@ static int __kvm_gpc_refresh(struct gfn_to_pfn_cache *gpc, gpa_t gpa, unsigned l
+ 		 */
+ 		gpc->khva = old_khva + page_offset;
+ 		ret = 0;
+-		goto out_unlock;
+-	}
  
- /* Per-vCPU Xen attributes */
- #define KVM_XEN_VCPU_GET_ATTR	_IOWR(KVMIO, 0xca, struct kvm_xen_vcpu_attr)
+- out:
+-	/*
+-	 * Invalidate the cache and purge the pfn/khva if the refresh failed.
+-	 * Some/all of the uhva, gpa, and memslot generation info may still be
+-	 * valid, leave it as is.
+-	 */
+-	if (ret) {
++		/* old_pfn must not be unmapped because it was reused. */
++		old_pfn = KVM_PFN_ERR_FAULT;
++	} else {
++		kvm_pfn_t new_pfn = KVM_PFN_ERR_FAULT;
++		unsigned long new_uhva = gpc->uhva;
++		void *new_khva = NULL;
++
++		/*
++		 * Invalidate the cache prior to dropping gpc->lock; the
++		 * gpa=>uhva assets have already been updated and so a
++		 * concurrent check() from a different task may not fail
++		 * the gpa/uhva/generation checks as it should.
++		 */
+ 		gpc->valid = false;
+-		gpc->pfn = KVM_PFN_ERR_FAULT;
+-		gpc->khva = NULL;
+-	}
+ 
+-	/* Detect a pfn change before dropping the lock! */
+-	unmap_old = (old_pfn != gpc->pfn);
++		write_unlock_irq(&gpc->lock);
++
++		ret = hva_to_pfn_retry(gpc->kvm, new_uhva, &new_pfn, &new_khva);
++
++		write_lock_irq(&gpc->lock);
++
++		WARN_ON_ONCE(gpc->valid);
++
++		if (ret || !gpc->active || gpc->uhva != new_uhva) {
++			/*
++			 * On failure or if another change occurred while the
++			 * lock was dropped, just purge the new mapping.
++			 */
++			old_pfn = new_pfn;
++			old_khva = new_khva;
++		} else {
++			old_pfn = gpc->pfn;
++			old_khva = gpc->khva;
++
++			gpc->pfn = new_pfn;
++			gpc->khva = new_khva + offset_in_page(gpc->uhva);
++			gpc->valid = true;
++		}
++
++		/*
++		 * Put the reference to the _new_ pfn. On success, the
++		 * pfn is now tracked by the cache and can safely be
++		 * migrated, swapped, etc. as the cache will invalidate
++		 * any mappings in response to relevant mmu_notifier
++		 * events.
++		 */
++		kvm_release_pfn_clean(new_pfn);
++	}
+ 
+ out_unlock:
+ 	write_unlock_irq(&gpc->lock);
+ 
+ 	mutex_unlock(&gpc->refresh_lock);
+ 
+-	if (unmap_old)
++	if (old_pfn != KVM_PFN_ERR_FAULT)
+ 		gpc_unmap(old_pfn, old_khva);
+ 
+ 	return ret;
 -- 
 2.39.2
 
