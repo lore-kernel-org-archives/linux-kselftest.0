@@ -1,137 +1,157 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37CAB200CC;
-	Tue, 16 Jan 2024 19:42:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3700A22314
+	for <linux-kselftest@vger.kernel.org>; Tue, 16 Jan 2024 19:43:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705434178; cv=none; b=HJFWahkp2VvMq4egVzKd1MpFY/2USyxNLXFZBEEjiO7Jlh08ESHstQU4WwlMAlefNu4rvBBOGOMlqBpWDXlClT0t4ekuXTaVDYwJNhkx2qBy+7h8JpYmBx4Yz4PZP4JkJs64Lw73IUX79yjnFm+8AFeuSGbwsV7sDDtvSze8L+Y=
+	t=1705434201; cv=none; b=eFyh9ppw99rjLylzCMNZKVb50iHOJARqK8qkgJyjXxftQrhSlHS9cmWNgCdYEjhzc68y+eIjGlkkD4NWn/VlZg+Nm6WTuDrbMB9DyH7bkxMQQ1aJdq2dyRz/g/gJj0uZddycNfl3BBEDySba+XYfeGIQmNc7lGuIqbChi/eJ2zA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705434178; c=relaxed/simple;
-	bh=0Q6AcfIXVXE2n/0v5NOBdkobeg3VSLD8RabJNfDbq1k=;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:X-stable:
-	 X-Patchwork-Hint:X-stable-base:Content-Transfer-Encoding; b=RoHqlWFQrN7rOowmOFYA+LM+e0F30uH6cMjhRew3Poj7QzMD4dVJnqV5b/qatTQ8nJaQDvswA92U6bi8vbsYyKRL0bwmHgI36CR5Ic+1VZwss/mBvbs8nN7SBK6jkniKPL+jojjVMQFsRZJpt+MP8x6rmHzwtRaXA6cU7cZ72uE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=siofFbCw; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1705434201; c=relaxed/simple;
+	bh=ylXaHvN4FsZJ4dreRqWu7RlLlrpDoxM0H9BJGvVATMA=;
+	h=Received:DKIM-Signature:Received:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Received:X-Google-Smtp-Source:X-Received:
+	 Received:Received:Received:From:To:cc:Subject:In-reply-to:
+	 References:Comments:X-Mailer:MIME-Version:Content-Type:Content-ID:
+	 Content-Transfer-Encoding:Date:Message-ID; b=UhS5JvknD+ADk7y26IMp1+1ANbVvZkh9hJjex7orChTBLu1DprBueeZRRo2TZebWCL2yhQF+C3lzBzigZlA85bH+/ZXpER0FXil2h48CTr7piFLdlZRTMImkDI2r6SGAN1Ynl45XqB19BbvS+fmOa6N3RV0+trMIIhIlArUsvao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=oopk+Fl3; arc=none smtp.client-ip=185.125.188.122
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="siofFbCw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1563C433C7;
-	Tue, 16 Jan 2024 19:42:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705434177;
-	bh=0Q6AcfIXVXE2n/0v5NOBdkobeg3VSLD8RabJNfDbq1k=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=siofFbCwa9G29Ljmhdv421oqEbK97uRqhZUCCHTo2TnaeR8N5sWBbLCAj8A4O7iDa
-	 F3benbDqYSjDHLzQY4GKRU52TeHG2EJqzCLZ/qbDeLqNljWJYatd7KjMqOFMzbJnwQ
-	 7Qny34eNIUJ24Yid7B/vJ7S6g/2S/p6SK6y6lwHRB+nC78oFTLxAuJinsFym5zXrfe
-	 c3s+xVgEBJgeGnsZHp862JYPMAjfnRXafxGhiIhXQiLNQRiv4USJarjmo7Mpt7YJqF
-	 OI626k31saR20z4CNEsT3zv/KAoahsVpD9r1SQhtOBezGaTJfZfjZFr38q6bCr3W8O
-	 AObn2/3YYaIMw==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Yafang Shao <laoar.shao@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	andrii@kernel.org,
-	daniel@iogearbox.net,
-	shuah@kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.7 008/108] selftests/bpf: Fix issues in setup_classid_environment()
-Date: Tue, 16 Jan 2024 14:38:34 -0500
-Message-ID: <20240116194225.250921-8-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240116194225.250921-1-sashal@kernel.org>
-References: <20240116194225.250921-1-sashal@kernel.org>
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="oopk+Fl3"
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id E29BA3F275
+	for <linux-kselftest@vger.kernel.org>; Tue, 16 Jan 2024 19:43:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1705434191;
+	bh=JuJRvvB1+ydFjfdWkwULbdquMIAL4NmSy2J+3MJ9Fds=;
+	h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
+	 Content-Type:Date:Message-ID;
+	b=oopk+Fl3biiAruxqeGR4sbibgd5babSrszHDzIzt8T0tm9WW980H+I3u2nNEEVVyt
+	 La/FuS32eSfF66C496mqRfAq8PTJz6apCxsS+LYH7ijavQT5y+R7klV9y64iLYcyt3
+	 e18F4FU/HKPSbzgMnyaKIi9YSJWY0Adff8ZqJQ5AN+Lo9fF1WNiA+qjyCvPqFmBBoD
+	 jM2q0OcKtrQObEe9Ex3WUyrepAyudxVlNy52XS830089iO7f/tYUkqAa/p/Ejh4GkF
+	 sNvEyy5ituE3iqMoSb48RGrL9XnXgWyjmFsVEDFq6Cuj5bx3Rin9dL24oC34F4S+X3
+	 CxoFt8GcqIs7w==
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-1d4a097002fso107687285ad.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jan 2024 11:43:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705434190; x=1706038990;
+        h=message-id:date:content-transfer-encoding:content-id:mime-version
+         :comments:references:in-reply-to:subject:cc:to:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JuJRvvB1+ydFjfdWkwULbdquMIAL4NmSy2J+3MJ9Fds=;
+        b=pScMY9CTFQFp9cEqUBXqeOpFXYlwjdUIIfEp1FAwWaKcArmuwHXjP9QNFe9WVrxLCJ
+         D0tricPeZ7va2SM6BFvCrcpkoz0ElAYzXDZ0+nvYPNefUNhNn+0mbW4fwta4ECs8N5L7
+         p91upeX07TTdcu1V5oDsUQgfTVPv+5SqHmP7HKi5JwdyryBwa0PB8hRK5eRAvbkoEmqB
+         vPTxR74k3Bix/cOgPB3qqe3bsFd8jEJ/4Qdks2utNzhQNiZaOcjY48QsPTkMZELuoVoD
+         uLr7LMGds0afR/KU9H7LA6JWmXz8AkS/sjHck5+HFiN2qk3+W6vE/0R+E5YndNhea4ea
+         khkQ==
+X-Gm-Message-State: AOJu0Yw4fibWF8vPS9qmzAkYV3VeNpmm3wkKlbSCWn+JL/JiL4UFnJDd
+	rkGYzarc5Rswo06O4osewZnygVz/bXqgz1LQhyhLAx0tdvo9qrWxM52oWz1WK60lI8LySCyYed2
+	5WqMCqEpwNl0OgdQWt9L9YFbDwtXqPmyS1qy+zRDSmJ09uKNUqcnjrEoi/wlQ
+X-Received: by 2002:a17:902:a38c:b0:1d3:5ed5:764a with SMTP id x12-20020a170902a38c00b001d35ed5764amr8626601pla.123.1705434190350;
+        Tue, 16 Jan 2024 11:43:10 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFmZOv1iUaWs4nVED3mP0z7VQpUbtbMUwjRQ1gBwOoo3WCGpNaoC24UTTgJZ0kGqT0kQtNqHA==
+X-Received: by 2002:a17:902:a38c:b0:1d3:5ed5:764a with SMTP id x12-20020a170902a38c00b001d35ed5764amr8626585pla.123.1705434190074;
+        Tue, 16 Jan 2024 11:43:10 -0800 (PST)
+Received: from vermin.localdomain ([209.121.128.189])
+        by smtp.gmail.com with ESMTPSA id t2-20020a1709028c8200b001d5d58216bdsm3017424plo.164.2024.01.16.11.43.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Jan 2024 11:43:09 -0800 (PST)
+Received: by vermin.localdomain (Postfix, from userid 1000)
+	id 21BB11C3BC4; Tue, 16 Jan 2024 11:43:09 -0800 (PST)
+Received: from vermin (localhost [127.0.0.1])
+	by vermin.localdomain (Postfix) with ESMTP id 200D51C3BC3;
+	Tue, 16 Jan 2024 11:43:09 -0800 (PST)
+From: Jay Vosburgh <jay.vosburgh@canonical.com>
+To: Jakub Kicinski <kuba@kernel.org>
+cc: Benjamin Poirier <bpoirier@nvidia.com>,
+    Hangbin Liu <liuhangbin@gmail.com>, netdev@vger.kernel.org,
+    Andy Gospodarek <andy@greyhouse.net>, Shuah Khan <shuah@kernel.org>,
+    "David S. Miller" <davem@davemloft.net>,
+    Jonathan Toppins <jon.toppins+linux@gmail.com>,
+    Nikolay Aleksandrov <razor@blackwall.org>,
+    Michal Kubiak <michal.kubiak@intel.com>,
+    linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net] selftests: bonding: Add more missing config options
+In-reply-to: <20240116112926.541e0651@kernel.org>
+References: <20240116154926.202164-1-bpoirier@nvidia.com> <20240116104402.1203850a@kernel.org> <78106.1705431810@vermin> <20240116112012.026e44d9@kernel.org> <ZabXT2ZepMuinE50@d3> <20240116112926.541e0651@kernel.org>
+Comments: In-reply-to Jakub Kicinski <kuba@kernel.org>
+   message dated "Tue, 16 Jan 2024 11:29:26 -0800."
+X-Mailer: MH-E 8.6+git; nmh 1.7+dev; Emacs 29.0.50
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.7
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <78765.1705434189.1@vermin>
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 16 Jan 2024 11:43:09 -0800
+Message-ID: <78766.1705434189@vermin>
 
-From: Yafang Shao <laoar.shao@gmail.com>
+Jakub Kicinski <kuba@kernel.org> wrote:
 
-[ Upstream commit 4849775587844e44d215289c425bcd70f315efe7 ]
+>On Tue, 16 Jan 2024 14:21:51 -0500 Benjamin Poirier wrote:
+>> real    13m35.065s
+>> user    0m1.657s
+>> sys     0m27.918s
+>> =
 
-If the net_cls subsystem is already mounted, attempting to mount it again
-in setup_classid_environment() will result in a failure with the error code
-EBUSY. Despite this, tmpfs will have been successfully mounted at
-/sys/fs/cgroup/net_cls. Consequently, the /sys/fs/cgroup/net_cls directory
-will be empty, causing subsequent setup operations to fail.
+>> The test is not cpu bound; as Jay pointed out, it spends most of its
+>> time sleeping.
+>
+>Ugh, so it does multiple iterations of 118 sec?
+>
+>Could you send a patch to bump the timeout to 900 or 1200 in this case?
 
-Here's an error log excerpt illustrating the issue when net_cls has already
-been mounted at /sys/fs/cgroup/net_cls prior to running
-setup_classid_environment():
+	We could also lower the interval or number of notifications;
+right now "peer_notif_delay 1000" puts 1 second between the ARPs in the
+num_grat_arp() test.  I'm not sure why that value was chosen, but the
+peer_notify_delay is rounded to units of the miimon interval, and in
+this test miimon is 100 msec.
 
-- Before that change
+	I haven't tested this at all, but something like
 
-  $ tools/testing/selftests/bpf/test_progs --name=cgroup_v1v2
-  test_cgroup_v1v2:PASS:server_fd 0 nsec
-  test_cgroup_v1v2:PASS:client_fd 0 nsec
-  test_cgroup_v1v2:PASS:cgroup_fd 0 nsec
-  test_cgroup_v1v2:PASS:server_fd 0 nsec
-  run_test:PASS:skel_open 0 nsec
-  run_test:PASS:prog_attach 0 nsec
-  test_cgroup_v1v2:PASS:cgroup-v2-only 0 nsec
-  (cgroup_helpers.c:248: errno: No such file or directory) Opening Cgroup Procs: /sys/fs/cgroup/net_cls/cgroup.procs
-  (cgroup_helpers.c:540: errno: No such file or directory) Opening cgroup classid: /sys/fs/cgroup/net_cls/cgroup-test-work-dir/net_cls.classid
-  run_test:PASS:skel_open 0 nsec
-  run_test:PASS:prog_attach 0 nsec
-  (cgroup_helpers.c:248: errno: No such file or directory) Opening Cgroup Procs: /sys/fs/cgroup/net_cls/cgroup-test-work-dir/cgroup.procs
-  run_test:FAIL:join_classid unexpected error: 1 (errno 2)
-  test_cgroup_v1v2:FAIL:cgroup-v1v2 unexpected error: -1 (errno 2)
-  (cgroup_helpers.c:248: errno: No such file or directory) Opening Cgroup Procs: /sys/fs/cgroup/net_cls/cgroup.procs
-  #44      cgroup_v1v2:FAIL
-  Summary: 0/0 PASSED, 0 SKIPPED, 1 FAILED
+diff --git a/tools/testing/selftests/drivers/net/bonding/bond_options.sh b=
+/tools/testing/selftests/drivers/net/bonding/bond_options.sh
+index c54d1697f439..95eb77aebc3c 100755
+--- a/tools/testing/selftests/drivers/net/bonding/bond_options.sh
++++ b/tools/testing/selftests/drivers/net/bonding/bond_options.sh
+@@ -277,7 +277,7 @@ garp_test()
+ 	ip -n ${s_ns} link set ${active_slave} down
+ =
 
-- After that change
-  $ tools/testing/selftests/bpf/test_progs --name=cgroup_v1v2
-  #44      cgroup_v1v2:OK
-  Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+ 	exp_num=3D$(echo "${param}" | cut -f6 -d ' ')
+-	sleep $((exp_num + 2))
++	sleep $((exp_num / 5 + 2))
+ =
 
-Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
-Link: https://lore.kernel.org/r/20231111090034.4248-3-laoar.shao@gmail.com
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+ 	active_slave=3D$(cmd_jq "ip -n ${s_ns} -d -j link show bond0" ".[].linki=
+nfo.info_data.active_slave")
+ =
+
+@@ -297,7 +297,7 @@ num_grat_arp()
+ {
+ 	local val
+ 	for val in 10 20 30 50; do
+-		garp_test "mode active-backup miimon 100 num_grat_arp $val peer_notify_=
+delay 1000"
++		garp_test "mode active-backup miimon 100 num_grat_arp $val peer_notify_=
+delay 200"
+ 		log_test "num_grat_arp" "active-backup miimon num_grat_arp $val"
+ 	done
+ }
+
+	could substantially reduce the time to run the test.  It's kind
+of icky with magic numbers, but that could be cleaned up.
+
+	-J
+
 ---
- tools/testing/selftests/bpf/cgroup_helpers.c | 18 ++++++++++++++----
- 1 file changed, 14 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/cgroup_helpers.c b/tools/testing/selftests/bpf/cgroup_helpers.c
-index 5b1da2a32ea7..10b5f42e65e7 100644
---- a/tools/testing/selftests/bpf/cgroup_helpers.c
-+++ b/tools/testing/selftests/bpf/cgroup_helpers.c
-@@ -523,10 +523,20 @@ int setup_classid_environment(void)
- 		return 1;
- 	}
- 
--	if (mount("net_cls", NETCLS_MOUNT_PATH, "cgroup", 0, "net_cls") &&
--	    errno != EBUSY) {
--		log_err("mount cgroup net_cls");
--		return 1;
-+	if (mount("net_cls", NETCLS_MOUNT_PATH, "cgroup", 0, "net_cls")) {
-+		if (errno != EBUSY) {
-+			log_err("mount cgroup net_cls");
-+			return 1;
-+		}
-+
-+		if (rmdir(NETCLS_MOUNT_PATH)) {
-+			log_err("rmdir cgroup net_cls");
-+			return 1;
-+		}
-+		if (umount(CGROUP_MOUNT_DFLT)) {
-+			log_err("umount cgroup base");
-+			return 1;
-+		}
- 	}
- 
- 	cleanup_classid_environment();
--- 
-2.43.0
-
+	-Jay Vosburgh, jay.vosburgh@canonical.com
