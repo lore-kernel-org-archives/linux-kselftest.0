@@ -1,157 +1,159 @@
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3700A22314
-	for <linux-kselftest@vger.kernel.org>; Tue, 16 Jan 2024 19:43:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.122
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C21752510C;
+	Tue, 16 Jan 2024 19:43:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705434201; cv=none; b=eFyh9ppw99rjLylzCMNZKVb50iHOJARqK8qkgJyjXxftQrhSlHS9cmWNgCdYEjhzc68y+eIjGlkkD4NWn/VlZg+Nm6WTuDrbMB9DyH7bkxMQQ1aJdq2dyRz/g/gJj0uZddycNfl3BBEDySba+XYfeGIQmNc7lGuIqbChi/eJ2zA=
+	t=1705434229; cv=none; b=F9oVrXjYDiW+a/rhJOberFZxJjtHicC2Q0VgeoFPFBjxOLy9ZQHCkoVJOqMu3JXHka1PuWGGjN982RZ9shbjme43aK6feQLoLzkpwX6lt/DmxHc2Cps6r2ZvwWm7SWfzN5ghdCPMhHgHStmNaHPag811H4QFiAZRalhua927rF4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705434201; c=relaxed/simple;
-	bh=ylXaHvN4FsZJ4dreRqWu7RlLlrpDoxM0H9BJGvVATMA=;
-	h=Received:DKIM-Signature:Received:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Received:X-Google-Smtp-Source:X-Received:
-	 Received:Received:Received:From:To:cc:Subject:In-reply-to:
-	 References:Comments:X-Mailer:MIME-Version:Content-Type:Content-ID:
-	 Content-Transfer-Encoding:Date:Message-ID; b=UhS5JvknD+ADk7y26IMp1+1ANbVvZkh9hJjex7orChTBLu1DprBueeZRRo2TZebWCL2yhQF+C3lzBzigZlA85bH+/ZXpER0FXil2h48CTr7piFLdlZRTMImkDI2r6SGAN1Ynl45XqB19BbvS+fmOa6N3RV0+trMIIhIlArUsvao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=oopk+Fl3; arc=none smtp.client-ip=185.125.188.122
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+	s=arc-20240116; t=1705434229; c=relaxed/simple;
+	bh=mUAolhT90PS6HB4l7OMtqRqj16CKTUGvgr60pwrce5I=;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:In-Reply-To:References:MIME-Version:X-stable:
+	 X-Patchwork-Hint:X-stable-base:Content-Transfer-Encoding; b=WFWS9H+qdmcaqnM9HtJ0pVNPFk/Qp34C/FJEZfIRvMVjaBURBNGlevBmy1g09BpPsU/QxIeriHa8DKtIOtl83RnO7w7TiOLp8HneOQvfn4ZmFLqsdOtFi665vVZ1BaMp4Oo9ge07rLnAI/L6lLe6PzsITVdD0liL59MD/xEjyWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uW9iiJiq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="oopk+Fl3"
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id E29BA3F275
-	for <linux-kselftest@vger.kernel.org>; Tue, 16 Jan 2024 19:43:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1705434191;
-	bh=JuJRvvB1+ydFjfdWkwULbdquMIAL4NmSy2J+3MJ9Fds=;
-	h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
-	 Content-Type:Date:Message-ID;
-	b=oopk+Fl3biiAruxqeGR4sbibgd5babSrszHDzIzt8T0tm9WW980H+I3u2nNEEVVyt
-	 La/FuS32eSfF66C496mqRfAq8PTJz6apCxsS+LYH7ijavQT5y+R7klV9y64iLYcyt3
-	 e18F4FU/HKPSbzgMnyaKIi9YSJWY0Adff8ZqJQ5AN+Lo9fF1WNiA+qjyCvPqFmBBoD
-	 jM2q0OcKtrQObEe9Ex3WUyrepAyudxVlNy52XS830089iO7f/tYUkqAa/p/Ejh4GkF
-	 sNvEyy5ituE3iqMoSb48RGrL9XnXgWyjmFsVEDFq6Cuj5bx3Rin9dL24oC34F4S+X3
-	 CxoFt8GcqIs7w==
-Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-1d4a097002fso107687285ad.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jan 2024 11:43:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705434190; x=1706038990;
-        h=message-id:date:content-transfer-encoding:content-id:mime-version
-         :comments:references:in-reply-to:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JuJRvvB1+ydFjfdWkwULbdquMIAL4NmSy2J+3MJ9Fds=;
-        b=pScMY9CTFQFp9cEqUBXqeOpFXYlwjdUIIfEp1FAwWaKcArmuwHXjP9QNFe9WVrxLCJ
-         D0tricPeZ7va2SM6BFvCrcpkoz0ElAYzXDZ0+nvYPNefUNhNn+0mbW4fwta4ECs8N5L7
-         p91upeX07TTdcu1V5oDsUQgfTVPv+5SqHmP7HKi5JwdyryBwa0PB8hRK5eRAvbkoEmqB
-         vPTxR74k3Bix/cOgPB3qqe3bsFd8jEJ/4Qdks2utNzhQNiZaOcjY48QsPTkMZELuoVoD
-         uLr7LMGds0afR/KU9H7LA6JWmXz8AkS/sjHck5+HFiN2qk3+W6vE/0R+E5YndNhea4ea
-         khkQ==
-X-Gm-Message-State: AOJu0Yw4fibWF8vPS9qmzAkYV3VeNpmm3wkKlbSCWn+JL/JiL4UFnJDd
-	rkGYzarc5Rswo06O4osewZnygVz/bXqgz1LQhyhLAx0tdvo9qrWxM52oWz1WK60lI8LySCyYed2
-	5WqMCqEpwNl0OgdQWt9L9YFbDwtXqPmyS1qy+zRDSmJ09uKNUqcnjrEoi/wlQ
-X-Received: by 2002:a17:902:a38c:b0:1d3:5ed5:764a with SMTP id x12-20020a170902a38c00b001d35ed5764amr8626601pla.123.1705434190350;
-        Tue, 16 Jan 2024 11:43:10 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFmZOv1iUaWs4nVED3mP0z7VQpUbtbMUwjRQ1gBwOoo3WCGpNaoC24UTTgJZ0kGqT0kQtNqHA==
-X-Received: by 2002:a17:902:a38c:b0:1d3:5ed5:764a with SMTP id x12-20020a170902a38c00b001d35ed5764amr8626585pla.123.1705434190074;
-        Tue, 16 Jan 2024 11:43:10 -0800 (PST)
-Received: from vermin.localdomain ([209.121.128.189])
-        by smtp.gmail.com with ESMTPSA id t2-20020a1709028c8200b001d5d58216bdsm3017424plo.164.2024.01.16.11.43.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Jan 2024 11:43:09 -0800 (PST)
-Received: by vermin.localdomain (Postfix, from userid 1000)
-	id 21BB11C3BC4; Tue, 16 Jan 2024 11:43:09 -0800 (PST)
-Received: from vermin (localhost [127.0.0.1])
-	by vermin.localdomain (Postfix) with ESMTP id 200D51C3BC3;
-	Tue, 16 Jan 2024 11:43:09 -0800 (PST)
-From: Jay Vosburgh <jay.vosburgh@canonical.com>
-To: Jakub Kicinski <kuba@kernel.org>
-cc: Benjamin Poirier <bpoirier@nvidia.com>,
-    Hangbin Liu <liuhangbin@gmail.com>, netdev@vger.kernel.org,
-    Andy Gospodarek <andy@greyhouse.net>, Shuah Khan <shuah@kernel.org>,
-    "David S. Miller" <davem@davemloft.net>,
-    Jonathan Toppins <jon.toppins+linux@gmail.com>,
-    Nikolay Aleksandrov <razor@blackwall.org>,
-    Michal Kubiak <michal.kubiak@intel.com>,
-    linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net] selftests: bonding: Add more missing config options
-In-reply-to: <20240116112926.541e0651@kernel.org>
-References: <20240116154926.202164-1-bpoirier@nvidia.com> <20240116104402.1203850a@kernel.org> <78106.1705431810@vermin> <20240116112012.026e44d9@kernel.org> <ZabXT2ZepMuinE50@d3> <20240116112926.541e0651@kernel.org>
-Comments: In-reply-to Jakub Kicinski <kuba@kernel.org>
-   message dated "Tue, 16 Jan 2024 11:29:26 -0800."
-X-Mailer: MH-E 8.6+git; nmh 1.7+dev; Emacs 29.0.50
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uW9iiJiq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83F91C433F1;
+	Tue, 16 Jan 2024 19:43:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705434229;
+	bh=mUAolhT90PS6HB4l7OMtqRqj16CKTUGvgr60pwrce5I=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=uW9iiJiqkajnVfvFtgsT74ahpKdkUhm+kse2tT/lrRRzWAYBtjbrCoEZJdFEt1z9w
+	 ZY03P9mhiNT0MV8tjFoClR2Fs6YVcXZFeaBBz2TQM7Vo1WgeF4FaMxeXunmCFCBpxq
+	 P+gLVxorzk7r6NMMqJd8L96e6IwpHuqLsNRL+1ksakpgHUH6+wAu9ME3mZ0V7YJTk7
+	 ZyqSm3FAI0vzpawu6Q7ob0N32z3cNcw42hsLO79oP7uf3Ki79vxln5Kyich418xXuQ
+	 NrAW0K21wAApvjK9FQiY3T7lOs2gO/4dmqk24BpmhDF8h6h6m3UqArvB9VdlFYmOlx
+	 0zKDu6LWi+nXA==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Yonghong Song <yonghong.song@linux.dev>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Sasha Levin <sashal@kernel.org>,
+	ast@kernel.org,
+	andrii@kernel.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	shuah@kernel.org,
+	nathan@kernel.org,
+	sdf@google.com,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 6.7 031/108] bpf: Fix a few selftest failures due to llvm18 change
+Date: Tue, 16 Jan 2024 14:38:57 -0500
+Message-ID: <20240116194225.250921-31-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240116194225.250921-1-sashal@kernel.org>
+References: <20240116194225.250921-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <78765.1705434189.1@vermin>
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 16 Jan 2024 11:43:09 -0800
-Message-ID: <78766.1705434189@vermin>
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.7
+Content-Transfer-Encoding: 8bit
 
-Jakub Kicinski <kuba@kernel.org> wrote:
+From: Yonghong Song <yonghong.song@linux.dev>
 
->On Tue, 16 Jan 2024 14:21:51 -0500 Benjamin Poirier wrote:
->> real    13m35.065s
->> user    0m1.657s
->> sys     0m27.918s
->> =
+[ Upstream commit b16904fd9f01b580db357ef2b1cc9e86d89576c2 ]
 
->> The test is not cpu bound; as Jay pointed out, it spends most of its
->> time sleeping.
->
->Ugh, so it does multiple iterations of 118 sec?
->
->Could you send a patch to bump the timeout to 900 or 1200 in this case?
+With latest upstream llvm18, the following test cases failed:
 
-	We could also lower the interval or number of notifications;
-right now "peer_notif_delay 1000" puts 1 second between the ARPs in the
-num_grat_arp() test.  I'm not sure why that value was chosen, but the
-peer_notify_delay is rounded to units of the miimon interval, and in
-this test miimon is 100 msec.
+  $ ./test_progs -j
+  #13/2    bpf_cookie/multi_kprobe_link_api:FAIL
+  #13/3    bpf_cookie/multi_kprobe_attach_api:FAIL
+  #13      bpf_cookie:FAIL
+  #77      fentry_fexit:FAIL
+  #78/1    fentry_test/fentry:FAIL
+  #78      fentry_test:FAIL
+  #82/1    fexit_test/fexit:FAIL
+  #82      fexit_test:FAIL
+  #112/1   kprobe_multi_test/skel_api:FAIL
+  #112/2   kprobe_multi_test/link_api_addrs:FAIL
+  [...]
+  #112     kprobe_multi_test:FAIL
+  #356/17  test_global_funcs/global_func17:FAIL
+  #356     test_global_funcs:FAIL
 
-	I haven't tested this at all, but something like
+Further analysis shows llvm upstream patch [1] is responsible for the above
+failures. For example, for function bpf_fentry_test7() in net/bpf/test_run.c,
+without [1], the asm code is:
 
-diff --git a/tools/testing/selftests/drivers/net/bonding/bond_options.sh b=
-/tools/testing/selftests/drivers/net/bonding/bond_options.sh
-index c54d1697f439..95eb77aebc3c 100755
---- a/tools/testing/selftests/drivers/net/bonding/bond_options.sh
-+++ b/tools/testing/selftests/drivers/net/bonding/bond_options.sh
-@@ -277,7 +277,7 @@ garp_test()
- 	ip -n ${s_ns} link set ${active_slave} down
- =
+  0000000000000400 <bpf_fentry_test7>:
+     400: f3 0f 1e fa                   endbr64
+     404: e8 00 00 00 00                callq   0x409 <bpf_fentry_test7+0x9>
+     409: 48 89 f8                      movq    %rdi, %rax
+     40c: c3                            retq
+     40d: 0f 1f 00                      nopl    (%rax)
 
- 	exp_num=3D$(echo "${param}" | cut -f6 -d ' ')
--	sleep $((exp_num + 2))
-+	sleep $((exp_num / 5 + 2))
- =
+... and with [1], the asm code is:
 
- 	active_slave=3D$(cmd_jq "ip -n ${s_ns} -d -j link show bond0" ".[].linki=
-nfo.info_data.active_slave")
- =
+  0000000000005d20 <bpf_fentry_test7.specialized.1>:
+    5d20: e8 00 00 00 00                callq   0x5d25 <bpf_fentry_test7.specialized.1+0x5>
+    5d25: c3                            retq
 
-@@ -297,7 +297,7 @@ num_grat_arp()
- {
- 	local val
- 	for val in 10 20 30 50; do
--		garp_test "mode active-backup miimon 100 num_grat_arp $val peer_notify_=
-delay 1000"
-+		garp_test "mode active-backup miimon 100 num_grat_arp $val peer_notify_=
-delay 200"
- 		log_test "num_grat_arp" "active-backup miimon num_grat_arp $val"
- 	done
- }
+... and <bpf_fentry_test7.specialized.1> is called instead of <bpf_fentry_test7>
+and this caused test failures for #13/#77 etc. except #356.
 
-	could substantially reduce the time to run the test.  It's kind
-of icky with magic numbers, but that could be cleaned up.
+For test case #356/17, with [1] (progs/test_global_func17.c)), the main prog
+looks like:
 
-	-J
+  0000000000000000 <global_func17>:
+       0:       b4 00 00 00 2a 00 00 00 w0 = 0x2a
+       1:       95 00 00 00 00 00 00 00 exit
 
+... which passed verification while the test itself expects a verification
+failure.
+
+Let us add 'barrier_var' style asm code in both places to prevent function
+specialization which caused selftests failure.
+
+  [1] https://github.com/llvm/llvm-project/pull/72903
+
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/20231127050342.1945270-1-yonghong.song@linux.dev
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
-	-Jay Vosburgh, jay.vosburgh@canonical.com
+ net/bpf/test_run.c                                     | 2 +-
+ tools/testing/selftests/bpf/progs/test_global_func17.c | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index c9fdcc5cdce1..711cf5d59816 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -542,7 +542,7 @@ struct bpf_fentry_test_t {
+ 
+ int noinline bpf_fentry_test7(struct bpf_fentry_test_t *arg)
+ {
+-	asm volatile ("");
++	asm volatile ("": "+r"(arg));
+ 	return (long)arg;
+ }
+ 
+diff --git a/tools/testing/selftests/bpf/progs/test_global_func17.c b/tools/testing/selftests/bpf/progs/test_global_func17.c
+index a32e11c7d933..5de44b09e8ec 100644
+--- a/tools/testing/selftests/bpf/progs/test_global_func17.c
++++ b/tools/testing/selftests/bpf/progs/test_global_func17.c
+@@ -5,6 +5,7 @@
+ 
+ __noinline int foo(int *p)
+ {
++	barrier_var(p);
+ 	return p ? (*p = 42) : 0;
+ }
+ 
+-- 
+2.43.0
+
