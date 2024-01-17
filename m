@@ -1,131 +1,126 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA2CAD26B;
-	Wed, 17 Jan 2024 08:23:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9374BD30B
+	for <linux-kselftest@vger.kernel.org>; Wed, 17 Jan 2024 08:25:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705479796; cv=none; b=QoRQgexRLJkoh04OwToJZ3MuGAmecqPNKkFKixDj6RM7GZ1Eb/Aa9Cfgr+3wkks4eeFvu2kQh5pA74rL0UArezxyS5k3UPnAXtcqNjocIdvRVD7Izloj9AdZcBeU7gZeo5oUHWdnY46Gpln5vWjMjTlMpAf/fTJNovoAwR3Xu/g=
+	t=1705479925; cv=none; b=M2/144WbgNbyey2yx9lDO1T7ndI4U9brePdEsAoUtQdJONwNuowMyiU2oVarRMTbEWU5mz/6LSTvqzKvQ36e9EFtovsLFL8G1oQ5a+elAk/0EusUb1ISidMad3KjIn5VO/udavFoLdb7um0jrwgn0ZY+02rwP/qsa51ny5fxxZo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705479796; c=relaxed/simple;
-	bh=dTAKx/WvnyQYbWUeQpGK8e4j06ZQKp/QZZb2qlq8/9Q=;
-	h=DKIM-Signature:X-IronPort-AV:X-IronPort-AV:Received:X-ExtLoop1:
-	 X-IronPort-AV:X-IronPort-AV:Received:Message-ID:Date:MIME-Version:
-	 User-Agent:Cc:Subject:Content-Language:To:References:From:
-	 In-Reply-To:Content-Type:Content-Transfer-Encoding; b=iRj22gSkgoKv8KzNgAcduBzItdb9MSATUwflRo53fL/igpUz78Wdg9ExZ9eHmV+9//u9PW6UWbtQXfievrPH7qvdBtk9KKIwvf5gR2o74DgKj1fVgfyTtEWoueB88u42t23GFOqrlAQpax2y6CY4j3AHjZzUMZRYW/a4j2necDM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UsKxdxpb; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1705479925; c=relaxed/simple;
+	bh=KYU+/R9/w0I7hKX9NysG82L25bCespxuVs1S32IvAgI=;
+	h=Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Google-Smtp-Source:X-Received:Received:From:
+	 To:Subject:Date:Message-Id:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding; b=HZCP5f9sineKi/ui1k0BcbVyyiurwmyX4ZeIOJpH8SNjCF3JHNSonBkEKP799XuQbWFzuuPZ/taGwlgAej49jf2plCeyhFnCBnoa9iONUM3PUP5RXyTzvHdxnPPgdCyl6dDHG9CDinkDD+QxmKqwVi34z3T6ovNCaAMZ5wLmgUg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=cbUlO8+f; arc=none smtp.client-ip=209.85.215.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UsKxdxpb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705479795; x=1737015795;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=dTAKx/WvnyQYbWUeQpGK8e4j06ZQKp/QZZb2qlq8/9Q=;
-  b=UsKxdxpbfwEuSqYha0f0hCigfSsTTZu1EUZolvW8KRDrDnm1MJ5tQJp8
-   9xvVpKmel2vPZXvGEBNsZVvQd2vENJf6F0OScV6CN5Lyw0A80V9UZYdyN
-   1frNDWOc8pluQbieJF+OImizrWFu7ZMXWGZrRNrJ2/I+YfoPclXf/dOLZ
-   1aryYQyaw+7Tki4hXc6TQdpABIz+3AAPdofY0GB7Q0Prs6Xt3sjqhmRvY
-   z9MMQqt0M9MmAIBcadSGfzGZKsNmiHBL9cZkZ8F2e9a/rVfVdImK6ZzmT
-   s3oL8DEK1iMzLGCCaHXQ5fDI07g7nTKs0qTTsuv3HZ80oA3XHDuO9wlZN
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10955"; a="6863985"
-X-IronPort-AV: E=Sophos;i="6.05,200,1701158400"; 
-   d="scan'208";a="6863985"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2024 00:21:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10955"; a="777373768"
-X-IronPort-AV: E=Sophos;i="6.05,200,1701158400"; 
-   d="scan'208";a="777373768"
-Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.249.171.146]) ([10.249.171.146])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2024 00:20:52 -0800
-Message-ID: <880545b0-82ae-4d3c-b9e5-e623a4c79c5d@linux.intel.com>
-Date: Wed, 17 Jan 2024 16:20:50 +0800
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="cbUlO8+f"
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-5cf6d5117f9so1902102a12.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jan 2024 00:25:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1705479922; x=1706084722; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BLAj/2p6EWO6CuOFTo5201/UFs9ytEaathr/jXBe1ac=;
+        b=cbUlO8+fCuXiGCm0xFTJFFlQZBTWlVQdnWNbTDZdJK3CBVZuL44atd8Gl2BlPkfrLw
+         8zuZJ0kqPBg3LOnYmlPgBhXhGWuSTqQ6m2LltBM4DRhe9+h+IvstT+bScqCp5Ekq25ka
+         Fzp1wmFLzGj2OF2P0v844Ue0O/ptWKarOp0ifpeGqlRk76K3wL9M9cTML0l3eARurp0w
+         m4qw3NiF2tpNze/myXj65gL2hm5sNanvmbnYitLn/bsocxOMJECrin6hdLjc8P3jPO1k
+         0eJMdbN+d+M/LEoiJAVpxlK8z31JMpNzTy4gvE2yDGvcBOPMkfmqDYJ8lZ11vJcpN++X
+         6Y1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705479922; x=1706084722;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BLAj/2p6EWO6CuOFTo5201/UFs9ytEaathr/jXBe1ac=;
+        b=hbLrd79wRnYXzIsfB5xr5t0NJdyellOcQdqstwO+EPNaml5DWvp3bJ7VHO2ivjxxYy
+         7ILTEh/Ck2UYv/2a+stid9PLbBFrWZSRfRI6r0SLnIBj/BmIP40Sj9bIBWWmOA5Pa8KB
+         xZKcRDCC/yYau6ZZQQ6kRHLlicZBIpjfGkzYkDWTA3DbNhSXZPj+ZsmmRG62Q/DJVSJ5
+         aPQBcxT/r3TQghuZTq7OskUXZzrzsOIyEQqWV0qXjAcuTnzGqciibKj7pOn7HkG484Br
+         v/GL3A3LrKO5k6liLlSmkDeEIl0zxFyGIJYz/Dpj9Y95enMijIysc1obABCXzUK7pqYW
+         sUug==
+X-Gm-Message-State: AOJu0YzSaU3Cgno43/GohN8XxIm2LTw3YTiQ3XgvB0TklpGni1d4JtMn
+	dDFenb9X9CTit2NLJ0C7gKNo7pmuSpnftw==
+X-Google-Smtp-Source: AGHT+IHya5IfDhQf7BZmho8amnGY7/fz5x+QBoLxcJNy/Z6r0mJJOQs3go7xdMoyB52Opolqof04XA==
+X-Received: by 2002:a05:6a21:338f:b0:19b:7e2c:d5db with SMTP id yy15-20020a056a21338f00b0019b7e2cd5dbmr42515pzb.38.1705479921914;
+        Wed, 17 Jan 2024 00:25:21 -0800 (PST)
+Received: from L6YN4KR4K9.bytedance.net ([61.213.176.6])
+        by smtp.gmail.com with ESMTPSA id jg20-20020a17090326d400b001d060c61da5sm10426802plb.134.2024.01.17.00.25.18
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Wed, 17 Jan 2024 00:25:21 -0800 (PST)
+From: Yunhui Cui <cuiyunhui@bytedance.com>
+To: shuah@kernel.org,
+	paul.walmsley@sifive.com,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	cuiyunhui@bytedance.com,
+	ajones@ventanamicro.com,
+	xiao.w.wang@intel.com,
+	linux-kselftest@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	xuzhipeng.1973@bytedance.com
+Subject: [PATCH] RISC-V: selftests: fix cbo.c compilation error
+Date: Wed, 17 Jan 2024 16:25:14 +0800
+Message-Id: <20240117082514.42967-1-cuiyunhui@bytedance.com>
+X-Mailer: git-send-email 2.39.2 (Apple Git-143)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: baolu.lu@linux.intel.com, joro@8bytes.org, alex.williamson@redhat.com,
- kevin.tian@intel.com, robin.murphy@arm.com, cohuck@redhat.com,
- eric.auger@redhat.com, nicolinc@nvidia.com, kvm@vger.kernel.org,
- mjrosato@linux.ibm.com, chao.p.peng@linux.intel.com,
- yi.y.sun@linux.intel.com, peterx@redhat.com, jasowang@redhat.com,
- shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
- suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- zhenzhong.duan@intel.com, joao.m.martins@oracle.com, xin.zeng@intel.com,
- yan.y.zhao@intel.com
-Subject: Re: [PATCH 8/8] iommu/vt-d: Add set_dev_pasid callback for nested
- domain
-Content-Language: en-US
-To: Jason Gunthorpe <jgg@nvidia.com>, Yi Liu <yi.l.liu@intel.com>
-References: <20231127063428.127436-1-yi.l.liu@intel.com>
- <20231127063428.127436-9-yi.l.liu@intel.com>
- <20240115172213.GM734935@nvidia.com>
-From: Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20240115172213.GM734935@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 2024/1/16 1:22, Jason Gunthorpe wrote:
-> On Sun, Nov 26, 2023 at 10:34:28PM -0800, Yi Liu wrote:
-> 
->> +static int intel_nested_set_dev_pasid(struct iommu_domain *domain,
->> +				      struct device *dev, ioasid_t pasid)
->> +{
->> +	struct device_domain_info *info = dev_iommu_priv_get(dev);
->> +	struct dmar_domain *dmar_domain = to_dmar_domain(domain);
->> +	struct intel_iommu *iommu = info->iommu;
->> +	struct dev_pasid_info *dev_pasid;
->> +	unsigned long flags;
->> +	int ret = 0;
->> +
->> +	if (!pasid_supported(iommu))
->> +		return -EOPNOTSUPP;
->> +
->> +	if (iommu->agaw < dmar_domain->s2_domain->agaw)
->> +		return -EINVAL;
->> +
->> +	ret = prepare_domain_attach_device(&dmar_domain->s2_domain->domain, dev);
->> +	if (ret)
->> +		return ret;
->> +
->> +	dev_pasid = kzalloc(sizeof(*dev_pasid), GFP_KERNEL);
->> +	if (!dev_pasid)
->> +		return -ENOMEM;
->> +
->> +	ret = domain_attach_iommu(dmar_domain, iommu);
->> +	if (ret)
->> +		goto err_free;
->> +
->> +	ret = intel_pasid_setup_nested(iommu, dev, pasid, dmar_domain);
->> +	if (ret)
->> +		goto err_detach_iommu;
->> +
->> +	dev_pasid->dev = dev;
->> +	dev_pasid->pasid = pasid;
->> +	spin_lock_irqsave(&dmar_domain->lock, flags);
->> +	list_add(&dev_pasid->link_domain, &dmar_domain->dev_pasids);
->> +	spin_unlock_irqrestore(&dmar_domain->lock, flags);
->> +
->> +	return 0;
->> +err_detach_iommu:
->> +	domain_detach_iommu(dmar_domain, iommu);
->> +err_free:
->> +	kfree(dev_pasid);
->> +	return ret;
->> +}
-> This seems alot longer than I'd think it should be, why isn't it
-> exactly the same code as the other set_dev_pasid's?
+When compiling with -O0, the following error will occur:
+cbo.c: In function 'cbo_insn':
+cbo.c:43:9: warning: 'asm' operand 1 probably does not match constraints
+   43 |         asm volatile(
+      |         ^~~
+cbo.c:43:9: warning: 'asm' operand 2 probably does not match constraints
+cbo.c:43:9: error: impossible constraint in 'asm'
 
-Yes. It should be. The only difference is how to configure the pasid
-entry.
+Add __attribute__((optimize("O"))) to fix.
 
-Best regards,
-baolu
+Fixes: a29e2a48afe3 ("RISC-V: selftests: Add CBO tests")
+Signed-off-by: Yunhui Cui <cuiyunhui@bytedance.com>
+Suggested-by: Zhipeng Xu <xuzhipeng.1973@bytedance.com>
+---
+ tools/testing/selftests/riscv/hwprobe/cbo.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/tools/testing/selftests/riscv/hwprobe/cbo.c b/tools/testing/selftests/riscv/hwprobe/cbo.c
+index 50a2cc8aef38..ff1d8e843d70 100644
+--- a/tools/testing/selftests/riscv/hwprobe/cbo.c
++++ b/tools/testing/selftests/riscv/hwprobe/cbo.c
+@@ -36,7 +36,7 @@ static void sigill_handler(int sig, siginfo_t *info, void *context)
+ 	regs[0] += 4;
+ }
+ 
+-static void cbo_insn(char *base, int fn)
++static __always_inline void cbo_insn(char *base, int fn)
+ {
+ 	uint32_t insn = MK_CBO(fn);
+ 
+@@ -47,10 +47,11 @@ static void cbo_insn(char *base, int fn)
+ 	: : "r" (base), "i" (fn), "i" (insn) : "a0", "a1", "memory");
+ }
+ 
+-static void cbo_inval(char *base) { cbo_insn(base, 0); }
+-static void cbo_clean(char *base) { cbo_insn(base, 1); }
+-static void cbo_flush(char *base) { cbo_insn(base, 2); }
+-static void cbo_zero(char *base)  { cbo_insn(base, 4); }
++#define OPTIMIZE __attribute__((optimize("O")))
++OPTIMIZE static void cbo_inval(char *base) { cbo_insn(base, 0); }
++OPTIMIZE static void cbo_clean(char *base) { cbo_insn(base, 1); }
++OPTIMIZE static void cbo_flush(char *base) { cbo_insn(base, 2); }
++OPTIMIZE static void cbo_zero(char *base)  { cbo_insn(base, 4); }
+ 
+ static void test_no_zicbom(void *arg)
+ {
+-- 
+2.20.1
+
