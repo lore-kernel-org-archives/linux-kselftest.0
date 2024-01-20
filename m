@@ -1,45 +1,47 @@
 Received: from out203-205-221-221.mail.qq.com (out203-205-221-221.mail.qq.com [203.205.221.221])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C875213AC5;
-	Sat, 20 Jan 2024 21:48:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB69714F60;
+	Sat, 20 Jan 2024 21:50:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.221
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705787323; cv=none; b=HM8+c2ha+7iAPZJzXPYVEkLZqf9K019qUimMtRgqQ+LRiSFsLJuCID497zABDg5+sYE6Y+WjcgNeFQiZlOqU/AM/wSJTWTKorY2ZCkppu/+axXshDCcS1I846UW6VrG3R9mHHzVXXiLdogCOoJ1wig3x+1w9xwzAp30q0yeLhtk=
+	t=1705787415; cv=none; b=ONFNLdnCFHY3blq2RHYlUptgAmckaEUT25P8oYfQg94Y7sYKUhCs94ets0irJjF8z9qvmBX+JSyP9WPkyrf7BkIyaTx0cFkX6C+7CzQyP5v2TN+6NKPl7dEvIq3G0es4VFn4fdz0WtyTUUBkg80DOzIY6cydQ+BqIj0YD4R+Pjs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705787323; c=relaxed/simple;
-	bh=UTapdXJqd6/GeU/aS6pjbktBrgPfIjkTYoVhQTZ/yQ4=;
-	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=eba+WrKPP9YYSkxtlrGmE70vUejaDIYpn2BVCF+j64DAbnSwGW2awTb0M+x6WS9Ilc6+jVLC3dfpKtge61Xy7yRnPk26XLZs4q6E3kjzRaHpQkfxgMRhmxxcNvkRMfgz9j6493Oie5vzUBo3ndXLjZ7ZUsiqXoPCNKi7VULudl8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cyyself.name; spf=none smtp.mailfrom=cyyself.name; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=Zf7leXdT; arc=none smtp.client-ip=203.205.221.221
+	s=arc-20240116; t=1705787415; c=relaxed/simple;
+	bh=a9pi9qCyi/Wbo2s5gPt5UbxvztVeuOA7S5vL/DjBm04=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=f1VoGeH07HHhlHskSmHuoVq5X2Lvla6CKsKVjiG2O15Si3wCbVmb/fGIx2S74jYP4k3ecpXvWizl8GcFi7idszJfveVnOyeitxq75h+FDNwen4mEcfj3AgzVcyPG10MpCRUMPsE9af6VB1Te17aQs2QrOwT6EbB5tUyLEG/u7fM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cyyself.name; spf=none smtp.mailfrom=cyyself.name; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=tkkUO3X1; arc=none smtp.client-ip=203.205.221.221
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cyyself.name
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cyyself.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="Zf7leXdT"
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="tkkUO3X1"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1705787311; bh=6U2V9PznT/aHdEhNbmRHZ0xAzvTGSoyQ3tiDTQLv01Y=;
-	h=From:To:Cc:Subject:Date;
-	b=Zf7leXdTRyLHolgwRVNO0JJ8ybL0fo9iCJs/yNoslTvyIEBp+ApMzeOrrcXP6b0rw
-	 0TgoXaq3tj1XNufDdvewTdoAmg2X7MA3OyZrnPYp0b1djY/kXam3si91Jc+wYFQfrk
-	 +qRngseMtYaGWQOYADym1gg+0dspVpY/M2SYr4ro=
+	t=1705787410; bh=wiHZS6ft7NfH/87XosWxG0akHz17+zK84hbyOL+xbfQ=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=tkkUO3X12YqAA6at4NtFba+0ASKEt/e1buGrCZ49fvDwevmnFg4aozaujW4uZqrQf
+	 9p/LzQft4WyK9gnsuENQG5R58YR9AYOVASo4oYcexxZQl3A3PjYwBoesdUhKvQy6Gc
+	 /raIZ/wH/vB6k4dyk9xiEJhPFTqXx+F8HFTHGVM4=
 Received: from cyy-pc.lan ([240e:379:2240:ed00:c92f:86c3:e615:ca18])
-	by newxmesmtplogicsvrszc5-1.qq.com (NewEsmtp) with SMTP
-	id C1339C79; Sun, 21 Jan 2024 05:48:19 +0800
-X-QQ-mid: xmsmtpt1705787299tg307jjo8
-Message-ID: <tencent_B2D0435BC011135736262764B511994F4805@qq.com>
-X-QQ-XMAILINFO: N4/evVE7TFO8CtGPtkNoc+aCCKSp85D26BgfmLO7AQ7zZB5kLxc7ZMOak6XQMh
-	 N5crBuRjsO3x8ZFs1oAsBFekPmMPmz5nYhzCQe2TZX/zw50nA7EeP4w3UwHjygsqGl3Zcp9+fhxa
-	 SHX/6J7KCCW2k1Fr8m4VKyxaupTvvRr19cK5JchF1wFI5gQ8mbHaG1KXLSZ9nCGqA81fw3zU6SkZ
-	 sHSmF7pvwdhR5wPwY+tD4XlXykSivnmZKcKD0sElYvZozC9hro7OdVe7G2V+YJokSMbnYSlu04G8
-	 Xf5ooaLq20OxkDho23odc0UNvp+ThlKCSpw3e5KnWaw1v0LFS2Xp0Wloos63E0sBj6cPhtSvwPH6
-	 bXcR5izmnxPBYeafsfPK7DmliQBEENA7ToITc8DrKU2QonDdwVAPbm1FXAzOVoUNckRq6XhdAa9g
-	 Z7DrlxNkZ2KLUuJm65wvTPZx3bXOyY9o1ZIsKmvDF9X3f/mUyYnrI28d6D3B/cmjXDvDtVOI3E1A
-	 U3xhYVnNAfq1ZMPVAQLltcaQ1JUMosqAmCJY1UQOwLiw22/bZAfefrfulDX8vYnPxh3O9DxtZk8+
-	 oSS/KOv1OQ7fT+JfM7qwox9X22hJCntmqBGfKebcVNjHb5OLXhgsDZyPtIqzO+I+3Rf5iNljK79y
-	 EvxKjR09vGb0NUaMqRs61TBZC3mbbMfRgANe7RL0v9a5JmqLf77KCa/oMiadaiWEtcbx3y4DNP0J
-	 rJOul4O5L9qHT25wZGWSShJ6AKEY3GqMsqA7/16wrF0DlRRJOBITjFYEEp4mdMzltp/eT5bf17YO
-	 8kf7HgBf+HlFF5QIXRRwYryYpbCTy8zCxriOaPsZvku6g4Wht26Lg+CtJ5w0LPsddGmFLiYkstt7
-	 mWEPXxtU/r2QsM09bXb9EIJkLbQhJEvetUdBqt2dnmBFcb0RUKvW3T2+gMftgHjEGGPG3hUrVCO+
-	 kjq2pQVcAI9D3NRADA9Z97NIxn/QbpTx6YDghJW48nB18HxzjF9g1NXIcSpgck
+	by newxmesmtplogicsvrszc5-0.qq.com (NewEsmtp) with SMTP
+	id C832D4DD; Sun, 21 Jan 2024 05:50:03 +0800
+X-QQ-mid: xmsmtpt1705787408t5oxeyvxb
+Message-ID: <tencent_6ADF31EB216F8DAA7C608268DA008EB6B808@qq.com>
+X-QQ-XMAILINFO: MUa7vzS8moCUhEfLw/vyx4sgUoBQIP3idQluppaaYziV3yUX8uYoR2EirwDl7R
+	 y6qE4vaWFEn5uxFjflYiQ8TUINCgioSfsy9gQhrXXNQmC51UBKKhIbDHdDwsLwviIV5p4sdmbcun
+	 saTHYKScF7sDkCM7DSqASJUBmsDe8GN6X+m01eSCsNuqoI0KlrVfHfbv6xpGwDPeDu2BITu9udcJ
+	 G04ri04Dfw/gfWaSeyrUsvCzlGo+EiOPx9L1plLGRyJ7NZu7VJabM1TWGLGNEQpcXrRNY5vNd2oj
+	 u92FFLOA5riEAFvFJQixJcxj8zCxfkpvCe45k8F2piIjOcHens8A3WAWpSadsTHzHaSjYQy3NUE3
+	 uXqvSkqZfm6LTytactOFHwCPZzhf4RmNMx3GR9CienhFl7Wb8J6wD6j+i2PWMYUNaiuikzMZc9qE
+	 ex8dNUHc5bz0rAVVWdmYqQBcT2K57tJSv+NgZ6aaqSw803GwiGdJ4uA78iRiF9ggoaicwrGpwbP0
+	 k37nREd1kVJJC1GqDarjb1GfLk+KKNDZsjTkYbIJAyGyh9bmneNEY0gkd0EFrtWtNRXuzWM7cyGh
+	 BmW8DiDkzQPGBUBizBlGesZBIAR3+jOc8oklmcdhIpskiz6NBejwmqhcflUByoyYU+7YKQWr4yC0
+	 U7g8Lvy2egmT/Fi7nuu/Qup6n6vtbzjgos9xrOMCKNzs9dOGomlWy1vFF/RwNAn0UGSDQpA8UdKj
+	 IDVxpPms0JmykcH2uDSY0HmvESHh7qi6TwnvRsqWx38TFUal2wXLebe52f1mf5wRwQ2pKGuBzDc3
+	 2mLKPyn6uVYw2ftdxx5yJXazQN4k3d9jyta3qR6BI3zh3lkXZZpG2DEJAa0cIxm7iIDeUVGVZQyL
+	 OPNpl/t8shZLdc/5FnUQz3uE6y0eivYs0yipJFkxpBw2KEnAUY4MeSeafi0SjWDRBxVF+yFa5SPH
+	 RW+/qeYJngV9W13p7qDKgCAygh6UCBys9beE2YE7qh5f6ApmdN4At3Eeh6vPQjG6Yb6tky4RoICb
+	 UQ8JGUr/2fB8vGt4WQaU+gLpzfbqjT8NWr6dEy1tayhO7FCmXt
 X-QQ-XMRINFO: NI4Ajvh11aEj8Xl/2s1/T8w=
 From: Yangyu Chen <cyy@cyyself.name>
 To: linux-riscv@lists.infradead.org
@@ -56,10 +58,12 @@ Cc: Charlie Jenkins <charlie@rivosinc.com>,
 	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Yangyu Chen <cyy@cyyself.name>
-Subject: [PATCH v2 0/3] RISC-V: mm: do not treat hint addr on mmap as the upper bound to search
-Date: Sun, 21 Jan 2024 05:48:09 +0800
-X-OQ-MSGID: <20240120214809.291094-1-cyy@cyyself.name>
+Subject: [PATCH v2 3/3] Documentation: riscv: correct sv57 kernel behavior
+Date: Sun, 21 Jan 2024 05:50:00 +0800
+X-OQ-MSGID: <20240120215000.291877-3-cyy@cyyself.name>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <tencent_B2D0435BC011135736262764B511994F4805@qq.com>
+References: <tencent_B2D0435BC011135736262764B511994F4805@qq.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -68,78 +72,81 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Previous patch series[1] changes a mmap behavior that treats the hint
-address as the upper bound of the mmap address range. The motivation of the
-previous patch series is that some user space software may assume 48-bit
-address space and use higher bits to encode some information, which may
-collide with large virtual address space mmap may return. However, to make
-sv48 by default, we don't need to change the meaning of the hint address on
-mmap as the upper bound of the mmap address range, especially when this
-behavior only shows up on the RISC-V. This behavior also breaks some user
-space software which assumes mmap should try to create mapping on the hint
-address if possible.  As the mmap manpage said: 
-
-> If addr is not NULL, then the kernel takes it as a hint about where to
-> place the mapping; on Linux, the kernel will pick a nearby page boundary
-> (but always above or equal to the value  specified by 
-> /proc/sys/vm/mmap_min_addr) and attempt to create the mapping there.
-
-Unfortunately, what mmap said is not true on RISC-V since kernel v6.6.
-
-Other ISAs with larger than 48-bit virtual address space like x86, arm64,
-and powerpc do not have this special mmap behavior on hint address. They
-all just make 48-bit / 47-bit virtual address space by default, and if a
-user space software wants to large virtual address space, it only need to
-specify a hint address larger than 48-bit / 47-bit.
-
-Thus, this patch series keeps the change of mmap to use sv48 by default but
-does not treat the hint address as the upper bound of the mmap address
-range. After this patch, the behavior of mmap will align with existing
-behavior on other ISAs with larger than 48-bit virtual address space like
-x86, arm64, and powerpc. The user space software will no longer need to
-rewrite their code to fit with this special mmap behavior only on RISC-V.
-
-My concern is that the change of mmap behavior on the hint address is
-already in the upstream kernel since v6.6, and it might be hard to revert
-it although it already brings some regression on some user space software.
-And it will be harder than adding it since v6.6 because mmap not creating
-mapping on the hint address is very common, especially when running on a
-machine without sv57 / sv48. However, if some user space software already
-adopted this special mmap behavior on RISC-V, we should not return a mmap
-address larger than the hint if the address is larger than BIT(38). My
-opinion is that revert this change on the next kernel release might be a
-good choice as only a few of hardware support sv57 / sv48 now, these
-changes will have no impact on sv39 systems.
-
-Moreover, previous patch series said it make sv48 by default, which is
-in the cover letter, kernel documentation and MMAP_VA_BITS defination.
-However, the code on arch_get_mmap_end and arch_get_mmap_base marco still
-use sv39 by default, which makes me confused, and I still use sv48 by
-default in this patch series including arch_get_mmap_end and
-arch_get_mmap_base.
-
-Changes in v2:
-- correct arch_get_mmap_end and arch_get_mmap_base
-- Add description in documentation about mmap behavior on kernel v6.6-6.7.
-- Improve commit message and cover letter
-- Rebase to newest riscv/for-next branch
-- Link to v1: https://lore.kernel.org/linux-riscv/tencent_F3B3B5AB1C9D704763CA423E1A41F8BE0509@qq.com/
+The original documentation from the previous patchset[1] treated the hint
+address on mmap as the upper bound, since we have already removed this
+behavior, this document should be updated. Most of the content is copied
+from the corresponding feature in x86_64 with some modifications to align
+with the current kernel's behavior on RISC-V.
 
 [1]. https://lore.kernel.org/linux-riscv/20230809232218.849726-1-charlie@rivosinc.com/
 
-Yangyu Chen (3):
-  RISC-V: mm: do not treat hint addr on mmap as the upper bound to
-    search
-  RISC-V: mm: only test mmap without hint
-  Documentation: riscv: correct sv57 kernel behavior
+Signed-off-by: Yangyu Chen <cyy@cyyself.name>
+---
+ Documentation/arch/riscv/vm-layout.rst | 54 ++++++++++++++++----------
+ 1 file changed, 34 insertions(+), 20 deletions(-)
 
- Documentation/arch/riscv/vm-layout.rst        | 54 ++++++++++++-------
- arch/riscv/include/asm/processor.h            | 38 +++----------
- .../selftests/riscv/mm/mmap_bottomup.c        | 12 -----
- .../testing/selftests/riscv/mm/mmap_default.c | 12 -----
- tools/testing/selftests/riscv/mm/mmap_test.h  | 30 -----------
- 5 files changed, 41 insertions(+), 105 deletions(-)
-
+diff --git a/Documentation/arch/riscv/vm-layout.rst b/Documentation/arch/riscv/vm-layout.rst
+index 69ff6da1dbf8..9d84362b9f91 100644
+--- a/Documentation/arch/riscv/vm-layout.rst
++++ b/Documentation/arch/riscv/vm-layout.rst
+@@ -135,23 +135,37 @@ RISC-V Linux Kernel SV57
+   __________________|____________|__________________|_________|____________________________________________________________
+ 
+ 
+-Userspace VAs
+---------------------
+-To maintain compatibility with software that relies on the VA space with a
+-maximum of 48 bits the kernel will, by default, return virtual addresses to
+-userspace from a 48-bit range (sv48). This default behavior is achieved by
+-passing 0 into the hint address parameter of mmap. On CPUs with an address space
+-smaller than sv48, the CPU maximum supported address space will be the default.
+-
+-Software can "opt-in" to receiving VAs from another VA space by providing
+-a hint address to mmap. A hint address passed to mmap will cause the largest
+-address space that fits entirely into the hint to be used, unless there is no
+-space left in the address space. If there is no space available in the requested
+-address space, an address in the next smallest available address space will be
+-returned.
+-
+-For example, in order to obtain 48-bit VA space, a hint address greater than
+-:code:`1 << 47` must be provided. Note that this is 47 due to sv48 userspace
+-ending at :code:`1 << 47` and the addresses beyond this are reserved for the
+-kernel. Similarly, to obtain 57-bit VA space addresses, a hint address greater
+-than or equal to :code:`1 << 56` must be provided.
++User-space and large virtual address space
++==========================================
++On RISC-V, Sv57 paging enables 56-bit userspace virtual address space.
++Not all user space is ready to handle wide addresses. It's known that
++at least some JIT compilers use higher bits in pointers to encode their
++information. It collides with valid pointers with Sv57 paging and leads
++to crashes.
++
++To mitigate this, we are not going to allocate virtual address space
++above 47-bit by default. And on kernel v6.6-v6.7, that is 38-bit by
++default.
++
++But userspace can ask for allocation from full address space by
++specifying hint address (with or without MAP_FIXED) above 47-bits, or
++hint address + size above 47-bits with MAP_FIXED.
++
++If hint address set above 47-bit, but MAP_FIXED is not specified, we try
++to look for unmapped area by specified address. If it's already
++occupied, we look for unmapped area in *full* address space, rather than
++from 47-bit window.
++
++A high hint address would only affect the allocation in question, but not
++any future mmap()s.
++
++Specifying high hint address without MAP_FIXED on older kernel or on
++machine without Sv57 paging support is safe. On kernel v6.6-v6.7, the
++hint will be treated as the upper bound of the address space to search,
++but this was removed in the future version of kernels. On kernel older
++than v6.6 or on machine without Sv57 paging support, the kernel will
++fall back to allocation from the supported address space.
++
++This approach helps to easily make application's memory allocator aware
++about large address space without manually tracking allocated virtual
++address space.
 -- 
 2.43.0
 
