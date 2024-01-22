@@ -1,83 +1,98 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from cvs.openbsd.org (cvs.openbsd.org [199.185.137.3])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 814C3482F4;
-	Mon, 22 Jan 2024 15:40:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94C103D99A;
+	Mon, 22 Jan 2024 15:49:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.185.137.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705938047; cv=none; b=aff84I0hHNV7lJFYOnpBGXFivy+nd4CG/XzWZoYVA2uONyBG18qGOd7hF2Q3jmH7gDmp5JuMxqjudD63ddExAFMTi1bF/K3q2WLA+W12yHeJ0N+jdu4Kjo/WErcdZaY13NINdurLb7l/Fsxycbb0vpJQQVtUDYAOuCCU2cBaXQE=
+	t=1705938588; cv=none; b=mKq12+Xz0r0n646R+6E9fkRAUFEZGX/XkeLWRTiJ8rAv+pSkg7dcW01j8G5uBxoSGCZrWoslGNUwhviqFoE2tGkoh989eErUlz0RjtJ0sbleQ1PY/nDkguU8Tsg9iZgCNNhRI46Hh4MZDDz5vt3ANL8qnHn6JFbeRrBGddGKZuw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705938047; c=relaxed/simple;
-	bh=Llm/bGfvWQJffn+yLnx+hItsLkbnebNnRSSuJm4Okcw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qlNLLtrWKCfrouOG6hgkr7j79Mdx7XsWg3HZPDkDsfzdJiTENwl12Qfi9rHk/zdCOa4MH6iXg4579Ignom308goOl+n4y06WESnDXPUx4v5f47eDmdGvUaGd8hj+RXE0/e+1wAtmzbA44dnToBvaqyv/Aik+e7jdAWdmoal+cr4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eBcIivUw; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1705938588; c=relaxed/simple;
+	bh=k7nQjJCjWS7QC8MeL9YzD9PrLF0VGaGFHHqIeOBQKAw=;
+	h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
+	 Content-Type:Date:Message-ID; b=fID1Qsy58uP+We1doNCzvyMNE8nLBvii1lY1y71/LYXY09S9l0eHsDV0Hh/JIDPoq7lTpUDfz24AaImDMF6t1z2jAoCDZQhXSRM/v7QvifxPoIZHjw4VxSEIZoQRv8L5F8Dq7x/A2vDZFFSeziZ+cZ4KVanUCi2VmATWh25bERo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=openbsd.org; spf=pass smtp.mailfrom=openbsd.org; dkim=pass (2048-bit key) header.d=openbsd.org header.i=@openbsd.org header.b=n50s5fom; arc=none smtp.client-ip=199.185.137.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=openbsd.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openbsd.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eBcIivUw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B2D5C433F1;
-	Mon, 22 Jan 2024 15:40:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705938045;
-	bh=Llm/bGfvWQJffn+yLnx+hItsLkbnebNnRSSuJm4Okcw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eBcIivUwryCQqSYxtZlJ8Oe2XaMcPw4Dx/pkOKR2BY7QuNUR8r1ujbcqep1cqsz3S
-	 yzUNej2CKbZo4BSc4IufGYJC1SYfkyKwmOkLangoQBjH/7jfqezvjPQAbW7fdtctYB
-	 Dp9xIXCF8DMXTNcD9o0qwmykFOnZj7NTMomaYt5HFeTdmzrGnEbsFoFDb0XQpYKo7o
-	 BOgxsiHQ8zsEFWvYEGSMMxI2wAe0BM2VDr4caw4W+ea5Si6FSnRwRhmXRe30UCMBcN
-	 lU7Zo8lSiuNFmFb6QSESrmzDsK9eIblcXm8CvRDXN+0gYiOuPhSlzp8/s8u365L0h1
-	 fZNb51RXbr55g==
-Date: Mon, 22 Jan 2024 09:40:43 -0600
-From: Rob Herring <robh@kernel.org>
-To: =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado <nfraprado@collabora.com>
-Cc: Shuah Khan <shuah@kernel.org>, Frank Rowand <frowand.list@gmail.com>,
-	devicetree@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernel@collabora.com,
-	Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH v2] kselftest: dt: Stop relying on dirname to improve
- performance
-Message-ID: <20240122154043.GC601827-robh@kernel.org>
-References: <20240122-dt-kselftest-dirname-perf-fix-v2-1-f1630532fd38@collabora.com>
+	dkim=pass (2048-bit key) header.d=openbsd.org header.i=@openbsd.org header.b="n50s5fom"
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; s=selector1; bh=k7nQjJCjWS
+	7QC8MeL9YzD9PrLF0VGaGFHHqIeOBQKAw=; h=date:references:in-reply-to:
+	subject:cc:to:from; d=openbsd.org; b=n50s5fom6DQvnOuPAWppwTTuDx/Hdrg2M
+	7/pKMQklBESCFMqVIrYmB+1FIBZ6frgkrGVkt3TVlG2/fCGGi1k0mvseFvgf3QQnRHxPQZ
+	pNfYfeRwaX414VOclH4koqNNxL1KaQ3r9/E85ErVnankDhKWJlSfkYbxME23q59ndFBIRU
+	FKde24hKJcx4S8gNnST4MkZcAyGU572VL3RobUJ5toxWWSu/Evt/C5N60lWHsq0IkCTWOe
+	a/WwPvGsNQA/yKQK5RMPAAOpAiItgv+A1lV3KKffLznE2p1B7xSxuGwMKU+urD1vRqxMsH
+	T3OFrVd320BK4OhFH394v9SNpAqsw==
+Received: from cvs.openbsd.org (localhost [127.0.0.1])
+	by cvs.openbsd.org (OpenSMTPD) with ESMTP id 2feb09e1;
+	Mon, 22 Jan 2024 08:49:39 -0700 (MST)
+From: "Theo de Raadt" <deraadt@openbsd.org>
+To: jeffxu@chromium.org
+cc: akpm@linux-foundation.org, keescook@chromium.org, jannh@google.com,
+    sroettger@google.com, willy@infradead.org,
+    gregkh@linuxfoundation.org, torvalds@linux-foundation.org,
+    usama.anjum@collabora.com, rdunlap@infradead.org, jeffxu@google.com,
+    jorgelo@chromium.org, groeck@chromium.org,
+    linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+    linux-mm@kvack.org, pedro.falcato@gmail.com, dave.hansen@intel.com,
+    linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v7 0/4] Introduce mseal()
+In-reply-to: <20240122152905.2220849-1-jeffxu@chromium.org>
+References: <20240122152905.2220849-1-jeffxu@chromium.org>
+Comments: In-reply-to jeffxu@chromium.org
+   message dated "Mon, 22 Jan 2024 15:28:46 +0000."
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240122-dt-kselftest-dirname-perf-fix-v2-1-f1630532fd38@collabora.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <8627.1705938579.1@cvs.openbsd.org>
+Date: Mon, 22 Jan 2024 08:49:39 -0700
+Message-ID: <726.1705938579@cvs.openbsd.org>
 
-On Mon, Jan 22, 2024 at 11:29:18AM -0300, Nícolas F. R. A. Prado wrote:
-> When walking directory trees, instead of looking for specific files and
-> running dirname to get the parent folder, traverse all folders and
-> ignore the ones not containing the desired files. This avoids the need
-> to call dirname inside the loop, which drastically decreases run time:
-> Running locally on a mt8192-asurada-spherion, which reports 160 test
-> cases, has gone from 5.5s to 2.9s, while running remotely with an
-> nfsroot has gone from 13.5s to 5.5s.
-> 
-> This change has a side-effect, which is that the root DT node now
-> also shows in the output, even though it isn't expected to bind to a
-> driver. However there shouldn't be a matching driver for the board
-> compatible, so the end result will be just an extra skipped test:
-> 
-> ok 1 / # SKIP
-> 
-> Reported-by: Mark Brown <broonie@kernel.org>
-> Closes: https://lore.kernel.org/all/310391e8-fdf2-4c2f-a680-7744eb685177@sirena.org.uk
-> Fixes: 14571ab1ad21 ("kselftest: Add new test for detecting unprobed Devicetree devices")
-> Tested-by: Mark Brown <broonie@kernel.org>
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> ---
-> Changes in v2:
-> - Tweaked commit message
-> - Added trailer tags
-> - Rebased on 6.8-rc1
-> ---
->  tools/testing/selftests/dt/test_unprobed_devices.sh | 13 +++++++------
->  1 file changed, 7 insertions(+), 6 deletions(-)
+Regarding these pieces
 
-Applied, thanks.
+> The PROT_SEAL bit in prot field of mmap(). When present, it marks
+> the map sealed since creation.
 
-Rob
+OpenBSD won't be doing this.  I had PROT_IMMUTABLE as a draft.  In my
+research I found basically zero circumstances when you userland does
+that.  The most common circumstance is you create a RW mapping, fill it,
+and then change to a more restrictve mapping, and lock it.
+
+There are a few regions in the addressspace that can be locked while RW.
+For instance, the stack.  But the kernel does that, not userland.  I
+found regions where the kernel wants to do this to the address space,
+but there is no need to export useless functionality to userland.
+
+OpenBSD now uses this for a high percent of the address space.  It might
+be worth re-reading a description of the split of responsibility regarding
+who locks different types of memory in a process;
+- kernel (the majority, based upon what ELF layout tell us),
+- shared library linker (the next majority, dealing with shared
+  library mappings and left-overs not determinable at kernel time),
+- libc (a small minority, mostly regarding forced mutable objects)
+- and the applications themselves (only 1 application today)
+
+    https://lwn.net/Articles/915662/
+
+> The MAP_SEALABLE bit in the flags field of mmap(). When present, it marks
+> the map as sealable. A map created without MAP_SEALABLE will not support
+> sealing, i.e. mseal() will fail.
+
+We definately won't be doing this.  We allow a process to lock any and all
+it's memory that isn't locked already, even if it means it is shooting
+itself in the foot.
+
+I think you are going to severely hurt the power of this mechanism,
+because you won't be able to lock memory that has been allocated by a
+different callsite not under your source-code control which lacks the
+MAP_SEALABLE flag.  (Which is extremely common with the system-parts of
+a process, meaning not just libc but kernel allocated objects).
+
+It may be fine inside a program like chrome, but I expect that flag to make
+it harder to use in libc, and it will hinder adoption.
+
