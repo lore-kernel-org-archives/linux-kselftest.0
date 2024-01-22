@@ -1,28 +1,28 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9A85651A1;
-	Tue, 23 Jan 2024 00:59:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85DD06A354;
+	Tue, 23 Jan 2024 02:03:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705971558; cv=none; b=G9FzU0tZ8MNOKzAOmc71sznPUsPewdHAIUMrjxqI5vbZBUGPM2K/CBU4VzMPgdqbtwMXpJfAFh2uWKZENYqJqXuYBZ1kjTicOJSP36SZGKU3dsPSU1Ypq0vcu3EGD69/ADycaePouzTBt2wRzFmU8nqmX862V2a31PE5GzQl4Wk=
+	t=1705975400; cv=none; b=MEKHDLTCUiMHyOTCHt80ZYZ4BmSmfCnKJhHmZjJh5B0sGFIoUkhSkTNcZ/8okxZBn9xxiEqxV2KePyaIzRox2asJXPqr4Rd0XtBS7SrrQIagYIOB/pC6501C3xVTv3MCVUEXy+rCUCQJ+WR28XRxttrTHYoiasoQV44wF+eOqr0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705971558; c=relaxed/simple;
-	bh=SwdYwyu5LPPC2k5+EfmJJnKF6mGVyeSyptesZsjsqvw=;
+	s=arc-20240116; t=1705975400; c=relaxed/simple;
+	bh=c8xwEGJmZiC4PEY0FW+gNYMISXxDbKQZe/pd9tqJpn0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=oJlc7ZBni9zRDaIUZ2ENEbYSvLS/7BxZP1SAWLrg69TpsutoM29DXTucsfwzg3QGmBybgG2othy8gIuzbhoKGfL/J7va+33NGZX0rQSSYhEp55dDc0yD1JYPzn8PcHwNbDOHXZv1eK3k2HNnGG1s35PXPihsfLwrlDTYHwlbkaY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=VvlNBUA/; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=Ge6S1IqEInw2/sTR90PotnZCDKyS2OJTLsfRKKJP3TzWkPhPlUm8dywEosUHCkMuPgrMrBUDV1LfSG6RFfsUpCTZLwC8d6iFjGzcDdusvjjsXIvQ02/DsUHyOqK34oZDXZibEJOoSjcF8k7mnccOY41vrwmhP4LZCZCklDOAfjc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=1YLHgrni; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="VvlNBUA/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68B02C433C7;
-	Tue, 23 Jan 2024 00:59:18 +0000 (UTC)
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="1YLHgrni"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BAAFC433A6;
+	Tue, 23 Jan 2024 02:03:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1705971558;
-	bh=SwdYwyu5LPPC2k5+EfmJJnKF6mGVyeSyptesZsjsqvw=;
+	s=korg; t=1705975400;
+	bh=c8xwEGJmZiC4PEY0FW+gNYMISXxDbKQZe/pd9tqJpn0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=VvlNBUA/boh7JJnV2+hnJ2z8sU3R4NsqRA7ZF/0kRF8UUSItJ/Y2M4swywOAX1+yv
-	 SAU5yjqm6ni6oxSet5hYd2Dwo1CjS43eosYdLdqrR7R0N4ukJN9SaY6mOKTGY/Ikay
-	 9YFKksvzwQaJX71ZieyjXgzyegViDvPV3ER6u5WQ=
+	b=1YLHgrnii0OaGB759RzptkHq++PzwubjUdM9n9ZIk2OPWBk6pI+hvZZHfFJGxAyah
+	 4v/3BuQSw/hFRl6neAcly4RMATXxo/D9Ef32+4gHqflMykTDFcEidmsCblZlRtlsnR
+	 kOxdprmrKayCk/vpy8M/qLLsfS38K+j5fyzltFow=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: stable@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -37,12 +37,12 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>,
 	Takashi Iwai <tiwai@suse.de>,
 	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 6.1 242/417] kselftest/alsa - mixer-test: fix the number of parameters to ksft_exit_fail_msg()
-Date: Mon, 22 Jan 2024 15:56:50 -0800
-Message-ID: <20240122235800.264776887@linuxfoundation.org>
+Subject: [PATCH 6.6 334/583] kselftest/alsa - mixer-test: fix the number of parameters to ksft_exit_fail_msg()
+Date: Mon, 22 Jan 2024 15:56:25 -0800
+Message-ID: <20240122235822.259476148@linuxfoundation.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240122235751.480367507@linuxfoundation.org>
-References: <20240122235751.480367507@linuxfoundation.org>
+In-Reply-To: <20240122235812.238724226@linuxfoundation.org>
+References: <20240122235812.238724226@linuxfoundation.org>
 User-Agent: quilt/0.67
 X-stable: review
 X-Patchwork-Hint: ignore
@@ -55,7 +55,7 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-6.1-stable review patch.  If anyone has any objections, please let me know.
+6.6-stable review patch.  If anyone has any objections, please let me know.
 
 ------------------
 
@@ -93,10 +93,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/alsa/mixer-test.c b/tools/testing/selftests/alsa/mixer-test.c
-index 37da902545a4..d59910658c8c 100644
+index 23df154fcdd7..208c2170c074 100644
 --- a/tools/testing/selftests/alsa/mixer-test.c
 +++ b/tools/testing/selftests/alsa/mixer-test.c
-@@ -205,7 +205,7 @@ static void find_controls(void)
+@@ -166,7 +166,7 @@ static void find_controls(void)
  		err = snd_ctl_poll_descriptors(card_data->handle,
  					       &card_data->pollfd, 1);
  		if (err != 1) {
