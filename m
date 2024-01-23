@@ -1,100 +1,115 @@
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF86451C3A;
-	Tue, 23 Jan 2024 07:36:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 961EE56452;
+	Tue, 23 Jan 2024 07:51:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705995386; cv=none; b=H7wao4Sm4Oe7EOdrP6UzZVwN2I4bkRMFTv6kQSXE0kaWPx8w/2yAOoMCcg+h2NJE3dWGRVrXGa+5FRjOmZRMaqaF/jaKPzJpKQIXgO65QoR1aHZ6KTDU6KifEaq1tp+RNJi0Bu7YLo7Ira4kS27ObV3y5XBosJEsTnpydtrquwk=
+	t=1705996270; cv=none; b=cLNGMnvlmqf/Ams8aOxBDtd6zONYdqi4WCzvlUf1wBFKux1vmaKZLcEyLcqHb1DJSAeOgwopsZ4TpGa1ySv2ti9PKH4zyJ9bXRNPnWABJKAxCXcdhmoz99DK4O0A/YH4+DkbJgmFiRjJ6AfxLfnoxxDlDJNHf3WXrXGvCga1/Xs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705995386; c=relaxed/simple;
-	bh=UjyihoPyN6SOPFC4hXvckN7LSDeJ3FDGKGRL79wdbrI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=J8tKh+f9XwjLHyaQjH3KQPhv60ZXVdaA2A0DTcztzNF2IrTmbX9k7LecL+n9I30BZ9/jNIyD69hVChHZtgUWjIfjjsAv1teQARyV/DENK1nRyGYuqcMBsKKLE9Fzollxd1uMI6g87TXEzOP52wL6PRAXcsVxb8XPNfUosjVuy3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=XJBKv2O/; arc=none smtp.client-ip=46.235.227.194
+	s=arc-20240116; t=1705996270; c=relaxed/simple;
+	bh=zd/j1EL0RWNL3nB5t24QcTLBe0LEMe9+ptv3ScUHGE4=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=eWxo3QBpkmimgdvGKTwOB5+9zqrlBiH0f7bZ3CxcYR8JdIlYgcgrltLYl3XCQpRlVyInscY8lWw9QrioccT34SUr1SWU4lnnvhJhsyn0mqM7tGzUssXfqHmjsXxcXaKm1ywnEMbX7nhyEUeklim20ndzJf3BSxDzBs3szP0v5HE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=BYQQiZeT; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="XJBKv2O/"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="BYQQiZeT"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1705995378;
-	bh=UjyihoPyN6SOPFC4hXvckN7LSDeJ3FDGKGRL79wdbrI=;
-	h=From:To:Cc:Subject:Date:From;
-	b=XJBKv2O/lbViF3stGvXrhrgD6QAkY3LkvT2znhJvBl8JwewmKA+W0sDCCN4Tnsm6c
-	 D1nUuRlb5LJ1l5RbF72JT4R0Mby8v1FB5Fpw0U2caKcFedUzPcv0AV6rKJEnUtTlGO
-	 29DCJMwu7QHL9vYlv7mJ151n+deebekBZGkRqXpAhcm0EyC4GG3Tcbux290jKc3u/e
-	 epJslm+MhXD5jwfuncizu2PfPCTAR1vQtxUYNFP4y9ui8vwDtcGlwUOUBoZjWW3DpW
-	 hjCSW80jWtpD7ohV4IR2LR+61z0XAUPoOhNBCL+dPDvVMFch+iBex9eUAojH5tTPRS
-	 ju3FJeDlSJWJA==
-Received: from localhost.localdomain (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	s=mail; t=1705996266;
+	bh=zd/j1EL0RWNL3nB5t24QcTLBe0LEMe9+ptv3ScUHGE4=;
+	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+	b=BYQQiZeTl9d9jUYXQwlAq2xsSGjXnSj08xc6WQbbiRU8zvqnXznPnH515XlrKNKJ5
+	 RPj1JkvVs/el14sZ6hRHEMdVHmWQx3Rqp9ZbPjy7ljb2chw07kmVACCQD91sm8eNmK
+	 1IMQnBtQbKrCrn8Ck1W1mUL7uFe8Etoe8TgLTam6G6fBUpYobBJNEKxaxmUxQUn5Ko
+	 vp8E5RS4wXCM4IOGDJBjnMsgq59tBA3HsS+78PMxzLUGHg9xMwrUxMRANI+SthenVc
+	 78Li0WbGQVS59l4O/5jUCv5jq5WBYoo6XGWkMhwxDfEfwFJruGyCnN8jQYyrnTygpr
+	 uexNwtqT7ANDg==
+Received: from [100.96.234.34] (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 91D033782039;
-	Tue, 23 Jan 2024 07:36:16 +0000 (UTC)
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	kernel@collabora.com,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/2] selftests/mm: run_vmtests.sh: add missing tests
-Date: Tue, 23 Jan 2024 12:36:13 +0500
-Message-ID: <20240123073615.920324-1-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.42.0
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 779F83782066;
+	Tue, 23 Jan 2024 07:51:03 +0000 (UTC)
+Message-ID: <de0e9e64-9833-4c60-8234-30b709b135db@collabora.com>
+Date: Tue, 23 Jan 2024 12:51:16 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>, kernel@collabora.com,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+ Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH] selftests/mm: run_vmtests.sh: add missing tests
+To: Ryan Roberts <ryan.roberts@arm.com>
+References: <20240116090641.3411660-1-usama.anjum@collabora.com>
+ <ffdba8c4-f1a2-4141-a3d4-0c85dfea6fef@arm.com>
+ <e3b2c142-aaae-481d-8206-5e8f374fd37e@collabora.com>
+ <06d796a1-1ae2-4f97-8fd6-0e3529ae2799@arm.com>
+Content-Language: en-US
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <06d796a1-1ae2-4f97-8fd6-0e3529ae2799@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Add missing tests to run_vmtests.sh. The mm kselftests are run through
-run_vmtests.sh. If a test isn't present in this script, it'll not run
-with run_tests or `make -C tools/testing/selftests/mm run_tests`.
+On 1/22/24 2:59 PM, Ryan Roberts wrote:
+>>>> +CATEGORY="hugetlb" run_test ./hugetlb-read-hwpoison
+>>>
+>>> The addition of this test causes 2 later tests to fail with ENOMEM. I suspect
+>>> its a side-effect of marking the hugetlbs as hwpoisoned? (just a guess based on
+>>> the test name!). Once a page is marked poisoned, is there a way to un-poison it?
+>>> If not, I suspect that's why it wasn't part of the standard test script in the
+>>> first place.
+>> hugetlb-read-hwpoison failed as probably the fix in the kernel for the test
+>> hasn't been merged in the kernel. The other tests (uffd-stress) aren't
+>> failing on my end and on CI [1][2]
+> 
+> To be clear, hugetlb-read-hwpoison isn't failing for me, its just causing the
+> subsequent tests uffd-stress tests to fail. Both of those subsequent tests are
+> allocating hugetlbs so my guess is that since this test is marking some hugetlbs
+> as poisoned, there are no longer enough for the subsequent tests.
+> 
+>>
+>> [1] https://lava.collabora.dev/scheduler/job/12577207#L3677
+>> [2] https://lava.collabora.dev/scheduler/job/12577229#L4027
+>>
+>> Maybe its configurations issue which is exposed now. Not sure. Maybe
+>> hugetlb-read-hwpoison is changing some configuration and not restoring it.
+> 
+> Well yes - its marking some hugetlb pages as HWPOISONED.
+> 
+>> Maybe your system has less number of hugetlb pages.
+> 
+> YEs probably; What is hugetlb-read-hwpoison's requirement for size and number of
+> hugetlb pages? the run_vmtests.sh script allocates the required number of
+> default-sized hugetlb pages before running any tests (I guess this value should
+> be increased for hugetlb-read-hwpoison's requirements?).
+> 
+> Additionally, our CI preallocates non-default sizes from the kernel command line
+> at boot. Happy to increase these if you can tell me what the new requirement is:
+I'm not sure about the exact requirement of the number of hugetlb for these
+tests. But I specify hugepages=1000 and tests work for me.
 
-Cc: Ryan Roberts <ryan.roberts@arm.com>
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
-Changes since v1:
-- Copy the original scripts and their dependence script to install directory as well
----
- tools/testing/selftests/mm/Makefile       | 3 +++
- tools/testing/selftests/mm/run_vmtests.sh | 3 +++
- 2 files changed, 6 insertions(+)
+I've sent v2 [1]. Would it be possible to run your CI on that and share
+results before we merge that one?
 
-diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index 2453add65d12f..c9c8112a7262e 100644
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -114,6 +114,9 @@ TEST_PROGS := run_vmtests.sh
- TEST_FILES := test_vmalloc.sh
- TEST_FILES += test_hmm.sh
- TEST_FILES += va_high_addr_switch.sh
-+TEST_FILES += charge_reserved_hugetlb.sh
-+TEST_FILES += write_hugetlb_memory.sh
-+TEST_FILES += hugetlb_reparenting_test.sh
- 
- include ../lib.mk
- 
-diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-index 246d53a5d7f28..12754af00b39c 100755
---- a/tools/testing/selftests/mm/run_vmtests.sh
-+++ b/tools/testing/selftests/mm/run_vmtests.sh
-@@ -248,6 +248,9 @@ CATEGORY="hugetlb" run_test ./map_hugetlb
- CATEGORY="hugetlb" run_test ./hugepage-mremap
- CATEGORY="hugetlb" run_test ./hugepage-vmemmap
- CATEGORY="hugetlb" run_test ./hugetlb-madvise
-+CATEGORY="hugetlb" run_test ./charge_reserved_hugetlb.sh -cgroup-v2
-+CATEGORY="hugetlb" run_test ./hugetlb_reparenting_test.sh -cgroup-v2
-+CATEGORY="hugetlb" run_test ./hugetlb-read-hwpoison
- 
- nr_hugepages_tmp=$(cat /proc/sys/vm/nr_hugepages)
- # For this test, we need one and just one huge page
+[1]
+https://lore.kernel.org/all/20240123073615.920324-1-usama.anjum@collabora.com
+
+> 
+> hugepagesz=1G hugepages=0:2,1:2 hugepagesz=32M hugepages=0:2,1:2
+> default_hugepagesz=2M hugepages=0:64,1:64 hugepagesz=64K hugepages=0:2,1:2
+> 
+> Thanks,
+> Ryan
+> 
+
 -- 
-2.42.0
-
+BR,
+Muhammad Usama Anjum
