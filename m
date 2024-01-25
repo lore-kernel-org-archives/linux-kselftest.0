@@ -1,22 +1,23 @@
 Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1E6EECC;
-	Thu, 25 Jan 2024 01:54:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 233FF6FCA;
+	Thu, 25 Jan 2024 01:54:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706147667; cv=none; b=gyscpzOVSjzEQxWsLMmiD4LyS/SWDsaoj+PixLaMsD29VnOM/YOCsevXtfKhPT9I/aYEOKnb1wrRJv86DpK1FqrVBfmNp5Te7LSKS69c80gwRnhxzXueSHNflQB5NLcLgaxLkYLtT7+BvpUQsyIYCNJdKO640oH9jukSqSPw1lc=
+	t=1706147674; cv=none; b=fvQ0Ih3UGMrc1Bzc73Myq3NUAcpum4Fj2NlE00/xg7v0vF5n4+paU6Yp2Pr1/WAHxYhSwq5iMGXHYhHmhZ3lARHmOKgycFudj1j4wsey9a2xRNIJhQlxuuD+qXcDt7JbrP5PSTDGSbaLaYgsxDB5LI6txYblh7fd2dkrnzz97O8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706147667; c=relaxed/simple;
-	bh=EYJs42oleCox/S63sw57aXE+eNGfKyc9KiXA8iCOBdI=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=RbKLyH1F0Jc6/Mnc6DdkMlHohPEI8ETZKR5iNBaA9h1XfsD8eY58+yFvqmgzqcJWtRJKLK9ApIL5NcytdIYhHHYb5LO7gJQdzP0rj4WlEvkt2bt22oX6UT7VZ+nLaPU1Rt+AkBNtGT1pyNKBb7WDyuHcSD9X9CljDUvUnCKsAgc=
+	s=arc-20240116; t=1706147674; c=relaxed/simple;
+	bh=iI63PJ2NYgUftm5Hp3yxrWxlYFweWO2E06psH6Sm0o8=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=BG/gWqUSY4NeaZeFxg1RvMexjerDHarQFWlV14GnUwI362QiVm05fGyEDdryYLdiVCi2TU2ffmMod3E7fOYhczISldMeshuXiWghuIRksuHzNqM9YYkyQvvE5nKWs5ETNudrWedrEREv4vAj8O4NUhZuenBU0rlBfKZNYrrrqjY=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
 Received: from loongson.cn (unknown [10.2.5.213])
-	by gateway (Coremail) with SMTP id _____8AxeehNv7Fllj0FAA--.682S3;
-	Thu, 25 Jan 2024 09:54:21 +0800 (CST)
+	by gateway (Coremail) with SMTP id _____8BxyuhWv7FltT0FAA--.686S3;
+	Thu, 25 Jan 2024 09:54:30 +0800 (CST)
 Received: from localhost.localdomain (unknown [10.2.5.213])
-	by localhost.localdomain (Coremail) with SMTP id AQAAf8BxVMxMv7FlojkYAA--.45641S2;
-	Thu, 25 Jan 2024 09:54:20 +0800 (CST)
+	by localhost.localdomain (Coremail) with SMTP id AQAAf8BxVMxMv7FlojkYAA--.45641S5;
+	Thu, 25 Jan 2024 09:54:30 +0800 (CST)
 From: Bibo Mao <maobibo@loongson.cn>
 To: Paolo Bonzini <pbonzini@redhat.com>,
 	Shuah Khan <shuah@kernel.org>,
@@ -25,10 +26,12 @@ Cc: Tianrui Zhao <zhaotianrui@loongson.cn>,
 	linux-kernel@vger.kernel.org,
 	kvm@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v6 0/4] VM: selftests: Add LoongArch support
-Date: Thu, 25 Jan 2024 09:54:16 +0800
-Message-Id: <20240125015420.1960090-1-maobibo@loongson.cn>
+Subject: [PATCH v6 3/4] KVM: selftests: Add ucall test support for LoongArch
+Date: Thu, 25 Jan 2024 09:54:19 +0800
+Message-Id: <20240125015420.1960090-4-maobibo@loongson.cn>
 X-Mailer: git-send-email 2.39.3
+In-Reply-To: <20240125015420.1960090-1-maobibo@loongson.cn>
+References: <20240125015420.1960090-1-maobibo@loongson.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -36,108 +39,111 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:AQAAf8BxVMxMv7FlojkYAA--.45641S2
+X-CM-TRANSID:AQAAf8BxVMxMv7FlojkYAA--.45641S5
 X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxGF4DZFyUtryrury7tF15Jrc_yoW5KrWUpa
-	yI9Fn0gF48JFy2q3Z3J34kXFyfK3Z3GF4xCr1aqrWUuw1jyrW8JrWxKFWqyas5Z398Xa40
-	v3WxtwnxW3WUtacCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
+X-Coremail-Antispam: 1Uk129KBj93XoWxCFyDtF18GF45Cw48AF1UArc_yoW5WF4rpa
+	4fCw18Kr4xKF17A3sxJwnFq3Wftrs2kF1fXFyavrWF9w42y3WxAr1xKFyqyFy2vFZYgrs5
+	ZFn2g3WUuF1UtwbCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
 	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
-	8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AK
-	xVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64
-	vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
-	jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2I
-	x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK
-	8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I
-	0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU7_MaUUUUU
+	0xBIdaVrnRJUUU90b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1q6r4UM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6r4j6r4UJwAaw2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0c
+	Ia020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_
+	WrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
+	xGrwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWU
+	XVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67
+	kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY
+	6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0x
+	vEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVj
+	vjDU0xZFpf9x07UCoGQUUUUU=
 
-This patchset adds KVM selftests for LoongArch system, currently only
-some common test cases are supported and pass to run. These testcase
-are listed as following: 
-	demand_paging_test
-	dirty_log_perf_test
-	dirty_log_test
-	guest_print_test
-	hardware_disable_test
-	kvm_binary_stats_test
-	kvm_create_max_vcpus
-	kvm_page_table_test
-	memslot_modification_stress_test
-	memslot_perf_test
-	set_memory_region_test
+From: Tianrui Zhao <zhaotianrui@loongson.cn>
 
-This patchset originally is posted from zhaotianrui, I continue to work
-on his efforts.
+Add ucall test support for LoongArch, ucall method on LoongArch uses
+undefined mmio area. It will cause causes vcpu exits to hypervisor so
+that hypervisor can communicate with vcpu.
 
+Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
+Signed-off-by: Bibo Mao <maobibo@loongson.cn>
 ---
-Changes in v6:
-1. Refresh the patch based on latest kernel 6.8-rc1, add LoongArch
-support about testcase set_memory_region_test.
-2. Add hardware_disable_test test case.
-3. Drop modification about macro DEFAULT_GUEST_TEST_MEM, it is problem
-of LoongArch binutils, this issue is raised to LoongArch binutils owners.
-
-Changes in v5:
-1. In LoongArch kvm self tests, the DEFAULT_GUEST_TEST_MEM could be
-0x130000000, it is different from the default value in memstress.h.
-So we Move the definition of DEFAULT_GUEST_TEST_MEM into LoongArch
-ucall.h, and add 'ifndef' condition for DEFAULT_GUEST_TEST_MEM
-in memstress.h.
-
-Changes in v4:
-1. Remove the based-on flag, as the LoongArch KVM patch series
-have been accepted by Linux kernel, so this can be applied directly
-in kernel.
-
-Changes in v3:
-1. Improve implementation of LoongArch VM page walk.
-2. Add exception handler for LoongArch.
-3. Add dirty_log_test, dirty_log_perf_test, guest_print_test
-test cases for LoongArch.
-4. Add __ASSEMBLER__ macro to distinguish asm file and c file.
-5. Move ucall_arch_do_ucall to the header file and make it as
-static inline to avoid function calls.
-6. Change the DEFAULT_GUEST_TEST_MEM base addr for LoongArch.
-
-Changes in v2:
-1. We should use ".balign 4096" to align the assemble code with 4K in
-exception.S instead of "align 12".
-2. LoongArch only supports 3 or 4 levels page tables, so we remove the
-hanlders for 2-levels page table.
-3. Remove the DEFAULT_LOONGARCH_GUEST_STACK_VADDR_MIN and use the common
-DEFAULT_GUEST_STACK_VADDR_MIN to allocate stack memory in guest.
-4. Reorganize the test cases supported by LoongArch.
-5. Fix some code comments.
-6. Add kvm_binary_stats_test test case into LoongArch KVM selftests.
-
----
-Tianrui Zhao (4):
-  KVM: selftests: Add KVM selftests header files for LoongArch
-  KVM: selftests: Add core KVM selftests support for LoongArch
-  KVM: selftests: Add ucall test support for LoongArch
-  KVM: selftests: Add test cases for LoongArch
-
- tools/testing/selftests/kvm/Makefile          |  16 +
- .../selftests/kvm/include/kvm_util_base.h     |   5 +
- .../kvm/include/loongarch/processor.h         | 133 +++++++
- .../selftests/kvm/include/loongarch/ucall.h   |  20 ++
- .../selftests/kvm/lib/loongarch/exception.S   |  59 ++++
- .../selftests/kvm/lib/loongarch/processor.c   | 332 ++++++++++++++++++
- .../selftests/kvm/lib/loongarch/ucall.c       |  38 ++
- .../selftests/kvm/set_memory_region_test.c    |   2 +-
- 8 files changed, 604 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/kvm/include/loongarch/processor.h
+ .../selftests/kvm/include/loongarch/ucall.h   | 20 ++++++++++
+ .../selftests/kvm/lib/loongarch/ucall.c       | 38 +++++++++++++++++++
+ 2 files changed, 58 insertions(+)
  create mode 100644 tools/testing/selftests/kvm/include/loongarch/ucall.h
- create mode 100644 tools/testing/selftests/kvm/lib/loongarch/exception.S
- create mode 100644 tools/testing/selftests/kvm/lib/loongarch/processor.c
  create mode 100644 tools/testing/selftests/kvm/lib/loongarch/ucall.c
 
-
-base-commit: 7ed2632ec7d72e926b9e8bcc9ad1bb0cd37274bf
+diff --git a/tools/testing/selftests/kvm/include/loongarch/ucall.h b/tools/testing/selftests/kvm/include/loongarch/ucall.h
+new file mode 100644
+index 000000000000..4b68f37efd36
+--- /dev/null
++++ b/tools/testing/selftests/kvm/include/loongarch/ucall.h
+@@ -0,0 +1,20 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++#ifndef SELFTEST_KVM_UCALL_H
++#define SELFTEST_KVM_UCALL_H
++
++#include "kvm_util_base.h"
++
++#define UCALL_EXIT_REASON       KVM_EXIT_MMIO
++
++/*
++ * ucall_exit_mmio_addr holds per-VM values (global data is duplicated by each
++ * VM), it must not be accessed from host code.
++ */
++extern vm_vaddr_t *ucall_exit_mmio_addr;
++
++static inline void ucall_arch_do_ucall(vm_vaddr_t uc)
++{
++	WRITE_ONCE(*ucall_exit_mmio_addr, uc);
++}
++
++#endif
+diff --git a/tools/testing/selftests/kvm/lib/loongarch/ucall.c b/tools/testing/selftests/kvm/lib/loongarch/ucall.c
+new file mode 100644
+index 000000000000..fc6cbb50573f
+--- /dev/null
++++ b/tools/testing/selftests/kvm/lib/loongarch/ucall.c
+@@ -0,0 +1,38 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * ucall support. A ucall is a "hypercall to userspace".
++ *
++ */
++#include "kvm_util.h"
++
++/*
++ * ucall_exit_mmio_addr holds per-VM values (global data is duplicated by each
++ * VM), it must not be accessed from host code.
++ */
++vm_vaddr_t *ucall_exit_mmio_addr;
++
++void ucall_arch_init(struct kvm_vm *vm, vm_paddr_t mmio_gpa)
++{
++	vm_vaddr_t mmio_gva = vm_vaddr_unused_gap(vm, vm->page_size, KVM_UTIL_MIN_VADDR);
++
++	virt_map(vm, mmio_gva, mmio_gpa, 1);
++
++	vm->ucall_mmio_addr = mmio_gpa;
++
++	write_guest_global(vm, ucall_exit_mmio_addr, (vm_vaddr_t *)mmio_gva);
++}
++
++void *ucall_arch_get_ucall(struct kvm_vcpu *vcpu)
++{
++	struct kvm_run *run = vcpu->run;
++
++	if (run->exit_reason == KVM_EXIT_MMIO &&
++	    run->mmio.phys_addr == vcpu->vm->ucall_mmio_addr) {
++		TEST_ASSERT(run->mmio.is_write && run->mmio.len == sizeof(uint64_t),
++			    "Unexpected ucall exit mmio address access");
++
++		return (void *)(*((uint64_t *)run->mmio.data));
++	}
++
++	return NULL;
++}
 -- 
-2.33.0
+2.39.3
 
