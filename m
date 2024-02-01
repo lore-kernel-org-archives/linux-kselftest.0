@@ -1,45 +1,45 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD0F484FD0
-	for <linux-kselftest@vger.kernel.org>; Thu,  1 Feb 2024 18:43:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E14CF84FB4
+	for <linux-kselftest@vger.kernel.org>; Thu,  1 Feb 2024 18:43:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706812997; cv=none; b=RtHpwagpgRkYAGhvZR9QQ1ARhqrygk9HDaKNUrkN/xzagREkj0Azo+/Yqsu90qJZ00gk6aMiPwqWgkP2Y4/4Y1x/qJg67CLrLkBFXncg0Yk12FKrrcZ9zPV+PaA+A9gU3qxWFYYDTNjvNrQFZgx+773S+xPzpwn5N/A+u+eDQeA=
+	t=1706812998; cv=none; b=sV3sxKyJIszIEQJ8fi+41BYJ6K5sbM6r6pntE9G+AqWGse4Msy38kx/jlv2kcTZiDjaZ1vXk/Ia59Bmo/PF1BfBUtEiSBL+n9vsYBNdtGiqfCtKTtWYkQv8nJvxjVIaQu4T5WClVXcu1tJJQSMirJYUxaaIQ9WKR+RhfeqTwtAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706812997; c=relaxed/simple;
-	bh=kLf/Q9ZIoIeaKBi/0damf+ZeOBQhXeQUNr/Hvey+DGs=;
+	s=arc-20240116; t=1706812998; c=relaxed/simple;
+	bh=+Zw2OOePxeW/RxY8iz4sE5b+Ic1/JlNERv9v1ctZxbQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OWHEP4/FLaxeprnEJBOMiEQHYwpvFLGmMCLfWlPqVOvT9l+FZ7tj9URIYZ+NDnPwuLBx/UvUQte6ECjbraEcPu0BE+oa9PFaofBeHZ5eYVftEkgZrH9ddfTf2h9Rk9UUeIaTb9bpvRFo7OpmLAW+EBys+KPUGSfKRAD3h9IG314=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=i9rEQUgA; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version; b=XVvac5Tk1cOMfoq0eAlXg1AKqkH9ONnzQw36P/sc237xiBOigt6Jj3B2PPy8rYFJgX1io2irk/ZbgSzLelumpLp6t7QPWitbpzKRULyCPYYoMvlES23SCQ0UTQZwvG4VrZpBLSh+v2w7NYPENxzTtBYu4D+gGQoRGX7Efb54nlk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Ge/S1Z9N; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="i9rEQUgA"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ge/S1Z9N"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1706812993;
+	s=mimecast20190719; t=1706812994;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=YpOeKVqI0ILGtiMGt3955YtaEeWDHn2315Jhfo6mUSo=;
-	b=i9rEQUgAJH4ML2/5Owg39CJs+oI6FzYDoHwxnedKrc43mHSqptC4wdJcLucZdZswMFHlJg
-	oYlTwZYgRs99IKxA8M8QxVjPqBfG1XXcethsJoKZAbCoisemt0NWHCtXjdzg6jrpGHPHVm
-	bGkjSPFnQiqTE1nbYQfc8g3FwSteOFA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-32-OdvceS-aMJmLf33I0oaXZQ-1; Thu, 01 Feb 2024 13:43:08 -0500
-X-MC-Unique: OdvceS-aMJmLf33I0oaXZQ-1
+	bh=VeuFY4PVeFzo6AK3paeQU9WqnXIlU4CEzy28HPrqsRI=;
+	b=Ge/S1Z9NajSsJ8nx++yEEUHq7CqBjHHzzLz3BkrOmywdfv8tkySr92nz7mSiuGo5d74NFk
+	RGSN9SRechm4wLFw8FU18nhbRRQUyCbJ9MUy4PvO+QZ5gVCiqWo5+np8ivVIjm9pMFv+FC
+	dFHneUJ45Iete7qlHF7cK6QqCJeIkjc=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-591-po3JcRQeO9iAhTY-UHlIQw-1; Thu,
+ 01 Feb 2024 13:43:12 -0500
+X-MC-Unique: po3JcRQeO9iAhTY-UHlIQw-1
 Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 99BFD85A588;
-	Thu,  1 Feb 2024 18:43:07 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 957BF1C29EA1;
+	Thu,  1 Feb 2024 18:43:11 +0000 (UTC)
 Received: from gerbillo.redhat.com (unknown [10.45.224.214])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id D9505111FB;
-	Thu,  1 Feb 2024 18:43:05 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id DB0A8111F9;
+	Thu,  1 Feb 2024 18:43:09 +0000 (UTC)
 From: Paolo Abeni <pabeni@redhat.com>
 To: netdev@vger.kernel.org
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -50,9 +50,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Florian Westphal <fw@strlen.de>,
 	David Ahern <dsahern@gmail.com>,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 net 1/4] selftests: net: cut more slack for gro fwd tests.
-Date: Thu,  1 Feb 2024 19:42:38 +0100
-Message-ID: <f4b6b11064a0d39182a9ae6a853abae3e9b4426a.1706812005.git.pabeni@redhat.com>
+Subject: [PATCH v2 net 3/4] selftests: net: fix tcp listener handling in pmtu.sh
+Date: Thu,  1 Feb 2024 19:42:40 +0100
+Message-ID: <f8e8f6d44427d8c45e9f6a71ee1a321047452087.1706812005.git.pabeni@redhat.com>
 In-Reply-To: <cover.1706812005.git.pabeni@redhat.com>
 References: <cover.1706812005.git.pabeni@redhat.com>
 Precedence: bulk
@@ -64,90 +64,54 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.5
 
-The udpgro_fwd.sh self-tests are somewhat unstable. There are
-a few timing constraints the we struggle to meet on very slow
-environments.
+The pmtu.sh test uses a few TCP listener in a problematic way:
+It hard-codes a constant timeout to wait for the listener starting-up
+in background. That introduces unneeded latency and on very slow and
+busy host it can fail.
 
-Instead of skipping the whole tests in such envs, increase the
-test resilience WRT very slow hosts: increase the inter-packets
-timeouts, avoid resetting the counters every second and finally
-disable reduce the background traffic noise.
+Additionally the test starts again the same listener in the same
+namespace on the same port, just after the previous connection
+completed. Fast host can attempt starting the new server before the
+old one really closed the socket.
 
-Tested with:
+Address the issues using the wait_local_port_listen helper and
+explicitly waiting for the background listener process exit.
 
-for I in $(seq 1 100); do
-	./tools/testing/selftests/kselftest_install/run_kselftest.sh \
-		-t net:udpgro_fwd.sh || exit -1
-done
-
-in a slow environment.
-
-Fixes: a062260a9d5f ("selftests: net: add UDP GRO forwarding self-tests")
+Fixes: 136a1b434bbb ("selftests: net: test vxlan pmtu exceptions with tcp")
 Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 ---
- tools/testing/selftests/net/udpgro_fwd.sh     | 14 ++++++++++++--
- tools/testing/selftests/net/udpgso_bench_rx.c |  2 +-
- 2 files changed, 13 insertions(+), 3 deletions(-)
+ tools/testing/selftests/net/pmtu.sh | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/net/udpgro_fwd.sh b/tools/testing/selftests/net/udpgro_fwd.sh
-index d6b9c759043c..9cd5e885e91f 100755
---- a/tools/testing/selftests/net/udpgro_fwd.sh
-+++ b/tools/testing/selftests/net/udpgro_fwd.sh
-@@ -39,6 +39,10 @@ create_ns() {
- 	for ns in $NS_SRC $NS_DST; do
- 		ip netns add $ns
- 		ip -n $ns link set dev lo up
-+
-+		# disable route solicitations to decrease 'noise' traffic
-+		ip netns exec $ns sysctl -qw net.ipv6.conf.default.router_solicitations=0
-+		ip netns exec $ns sysctl -qw net.ipv6.conf.all.router_solicitations=0
+diff --git a/tools/testing/selftests/net/pmtu.sh b/tools/testing/selftests/net/pmtu.sh
+index 3f118e3f1c66..f0febc19baae 100755
+--- a/tools/testing/selftests/net/pmtu.sh
++++ b/tools/testing/selftests/net/pmtu.sh
+@@ -199,6 +199,7 @@
+ #	Same as above but with IPv6
+ 
+ source lib.sh
++source net_helper.sh
+ 
+ PAUSE_ON_FAIL=no
+ VERBOSE=0
+@@ -1336,13 +1337,15 @@ test_pmtu_ipvX_over_bridged_vxlanY_or_geneveY_exception() {
+ 			TCPDST="TCP:[${dst}]:50000"
+ 		fi
+ 		${ns_b} socat -T 3 -u -6 TCP-LISTEN:50000 STDOUT > $tmpoutfile &
++		local socat_pid=$!
+ 
+-		sleep 1
++		wait_local_port_listen ${NS_B} 50000 tcp
+ 
+ 		dd if=/dev/zero status=none bs=1M count=1 | ${target} socat -T 3 -u STDIN $TCPDST,connect-timeout=3
+ 
+ 		size=$(du -sb $tmpoutfile)
+ 		size=${size%%/tmp/*}
++		wait ${socat_pid}
+ 
+ 		[ $size -ne 1048576 ] && err "File size $size mismatches exepcted value in locally bridged vxlan test" && return 1
  	done
- 
- 	ip link add name veth$SRC type veth peer name veth$DST
-@@ -80,6 +84,12 @@ create_vxlan_pair() {
- 		create_vxlan_endpoint $BASE$ns veth$ns $BM_NET_V6$((3 - $ns)) vxlan6$ns 6
- 		ip -n $BASE$ns addr add dev vxlan6$ns $OL_NET_V6$ns/24 nodad
- 	done
-+
-+	# preload neighbur cache, do avoid some noisy traffic
-+	local addr_dst=$(ip -j -n $BASE$DST link show dev vxlan6$DST  |jq -r '.[]["address"]')
-+	local addr_src=$(ip -j -n $BASE$SRC link show dev vxlan6$SRC  |jq -r '.[]["address"]')
-+	ip -n $BASE$DST neigh add dev vxlan6$DST lladdr $addr_src $OL_NET_V6$SRC
-+	ip -n $BASE$SRC neigh add dev vxlan6$SRC lladdr $addr_dst $OL_NET_V6$DST
- }
- 
- is_ipv6() {
-@@ -119,7 +129,7 @@ run_test() {
- 	# not enable GRO
- 	ip netns exec $NS_DST $ipt -A INPUT -p udp --dport 4789
- 	ip netns exec $NS_DST $ipt -A INPUT -p udp --dport 8000
--	ip netns exec $NS_DST ./udpgso_bench_rx -C 1000 -R 10 -n 10 -l 1300 $rx_args &
-+	ip netns exec $NS_DST ./udpgso_bench_rx -C 2000 -R 100 -n 10 -l 1300 $rx_args &
- 	local spid=$!
- 	wait_local_port_listen "$NS_DST" 8000 udp
- 	ip netns exec $NS_SRC ./udpgso_bench_tx $family -M 1 -s 13000 -S 1300 -D $dst
-@@ -168,7 +178,7 @@ run_bench() {
- 	# bind the sender and the receiver to different CPUs to try
- 	# get reproducible results
- 	ip netns exec $NS_DST bash -c "echo 2 > /sys/class/net/veth$DST/queues/rx-0/rps_cpus"
--	ip netns exec $NS_DST taskset 0x2 ./udpgso_bench_rx -C 1000 -R 10  &
-+	ip netns exec $NS_DST taskset 0x2 ./udpgso_bench_rx -C 2000 -R 100  &
- 	local spid=$!
- 	wait_local_port_listen "$NS_DST" 8000 udp
- 	ip netns exec $NS_SRC taskset 0x1 ./udpgso_bench_tx $family -l 3 -S 1300 -D $dst
-diff --git a/tools/testing/selftests/net/udpgso_bench_rx.c b/tools/testing/selftests/net/udpgso_bench_rx.c
-index f35a924d4a30..1cbadd267c96 100644
---- a/tools/testing/selftests/net/udpgso_bench_rx.c
-+++ b/tools/testing/selftests/net/udpgso_bench_rx.c
-@@ -375,7 +375,7 @@ static void do_recv(void)
- 			do_flush_udp(fd);
- 
- 		tnow = gettimeofday_ms();
--		if (tnow > treport) {
-+		if (!cfg_expected_pkt_nr && tnow > treport) {
- 			if (packets)
- 				fprintf(stderr,
- 					"%s rx: %6lu MB/s %8lu calls/s\n",
 -- 
 2.43.0
 
