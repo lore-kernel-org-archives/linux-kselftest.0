@@ -1,95 +1,142 @@
-Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE7601C2B2;
-	Mon,  5 Feb 2024 12:29:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.119
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86E072C859;
+	Mon,  5 Feb 2024 12:36:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707136180; cv=none; b=U1gOP2nvb8jVURPr/rcEGFrTaKIzvfy31EQamHnMuX4jNVaFeRMnkerS5ZjCocRKWKnDJK7AbJlVmxeNcnfzE1UGa4ceKfaYsiIoUdEP7gFW4ot5oscp463f96o6+TBxnp++uvqpUm/WiWeslyI0HDmC/bZBiiZEjOiGyFj8oy4=
+	t=1707136563; cv=none; b=Q039HIxyetQidiyk+auvmGWLw7iWVfJ0n0SnMdVp+yuIDbh7JsgGIbsHGEZVwSPSGQ1kkUgIsg9LTDlywJ/etFfmEtchCvVVKb1VBvzegAubMVUITkPwjupK3bYERsZ2bJF0XYqJrAYsXACVEC86K2I3JFnFzuBzqZv61ibUCoI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707136180; c=relaxed/simple;
-	bh=zjQbb33QAX1T1JAhEwYPnm/SGkqzEpXW1ZbAKpPauBo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=DYTgxjt0y6rP0uqb+gZ6Tothta56UR7/RmXEOXwV//vx3aKskyvn+XhjwJLXzMvG5JKEdsYrg0fU21s74gsmN1ZFtSyQqY0vxSOMN4T73nMeC1Lgc0Dzh4+V47vOX5q90v7JV1jrFW7cEpoQaw1VJ8uX0ww8BmLca+yh2G0jb5c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=cneQkTkz; arc=none smtp.client-ip=115.124.30.119
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1707136563; c=relaxed/simple;
+	bh=W/gM23dRxGIQHhXX9oPXf9/doTEakFPicYrHGjQOU1o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nAqc8fxcX4EQ9Hwi0WrQOIw82PJebCvNzno++fG7KNEItPNlKk8E4OUlZAtFuJdM0XUSKmsnod0i/17M9UQX+znq4FbpL2bj1Ud2DLOpSXu23NXdGhp0JkBZe3kZeDR0Yo2dIuiKHGgoqfMBXD3HbQERVQyhtkeFVkaE4PzP+os=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kiq7v3WH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="cneQkTkz"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1707136170; h=From:To:Subject:Date:Message-Id:MIME-Version;
-	bh=0Ich9Lv7jUlR8bH4jRV52p8JlrleP6AcmyrMMLywpAs=;
-	b=cneQkTkzxeFpVP74/kCjY32D8vDbzjo2nOSyx3sc9dsNN7xCembIzc+wQ5IPRV3oJbsieo2pdx13+xEfG0GpM4Ld05476cZudvXVXh/477dpc7i0ECKQuHgViXRJIDa1dyrw2KBQZugDFWCIHdX6VPcu7t2VmOqCUxqx8C6W3OA=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=xiangzao@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0W0AVhQO_1707136168;
-Received: from localhost.localdomain(mailfrom:xiangzao@linux.alibaba.com fp:SMTPD_---0W0AVhQO_1707136168)
-          by smtp.aliyun-inc.com;
-          Mon, 05 Feb 2024 20:29:29 +0800
-From: Yuanhe Shu <xiangzao@linux.alibaba.com>
-To: keescook@chromium.org,
-	tony.luck@intel.com,
-	gpiccoli@igalia.com,
-	shuah@kernel.org,
-	corbet@lwn.net
-Cc: xlpang@linux.alibaba.com,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-hardening@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Yuanhe Shu <xiangzao@linux.alibaba.com>
-Subject: [PATCH 2/3] Documentation: adjust pstore backend related document
-Date: Mon,  5 Feb 2024 20:28:51 +0800
-Message-Id: <20240205122852.7069-3-xiangzao@linux.alibaba.com>
-X-Mailer: git-send-email 2.39.3
-In-Reply-To: <20240205122852.7069-1-xiangzao@linux.alibaba.com>
-References: <20240205122852.7069-1-xiangzao@linux.alibaba.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kiq7v3WH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5E9CC433F1;
+	Mon,  5 Feb 2024 12:35:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707136563;
+	bh=W/gM23dRxGIQHhXX9oPXf9/doTEakFPicYrHGjQOU1o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kiq7v3WH4BXjlBM5da8GhgVzNWrFmT69sXn2Z3kO+XSByinlTm+nldLGPza1A7/ZM
+	 wYC2Gg9vCokYw5fDYx/qQEg2c+CFP8iw+xofOVbNYvnsXNedFxCGd3ufs6VxoNBeXH
+	 50FKZLbJXyju+0fAQ40QoDCyBn6FtSNDMwDjUf/bYITVShxqCLWvtPS6T5UZsH074b
+	 a0LHJ05ccHIX0vYhq4C9uU5ICN03IOzpsz9v1K8Bnll82Jt9fqjDRwilIiy+Cj6O2j
+	 Bj2o/ErTqvL0oT0WwGQ3pMhdwKYHeSpKoUUHqRyRoHtoufMjdrU1igTNgB3FQOIkyG
+	 /jdgN58UpyTUQ==
+Date: Mon, 5 Feb 2024 12:35:53 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Marc Zyngier <maz@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>,
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Florian Weimer <fweimer@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v8 13/38] KVM: arm64: Manage GCS registers for guests
+Message-ID: <825d2b35-fa10-43ad-b3b3-b29a77f3fed0@sirena.org.uk>
+References: <20240203-arm64-gcs-v8-0-c9fec77673ef@kernel.org>
+ <20240203-arm64-gcs-v8-13-c9fec77673ef@kernel.org>
+ <868r3z6y6v.wl-maz@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="SWF5NMV/X92Kf8zP"
+Content-Disposition: inline
+In-Reply-To: <868r3z6y6v.wl-maz@kernel.org>
+X-Cookie: No solicitors.
 
-Pstore now supports multiple backends, adjust related document.
 
-Signed-off-by: Yuanhe Shu <xiangzao@linux.alibaba.com>
----
- Documentation/ABI/testing/pstore                | 8 ++++----
- Documentation/admin-guide/kernel-parameters.txt | 4 +++-
- 2 files changed, 7 insertions(+), 5 deletions(-)
+--SWF5NMV/X92Kf8zP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/Documentation/ABI/testing/pstore b/Documentation/ABI/testing/pstore
-index d3cff4a7ee10..2cd67b502f11 100644
---- a/Documentation/ABI/testing/pstore
-+++ b/Documentation/ABI/testing/pstore
-@@ -41,7 +41,7 @@ Description:	Generic interface to platform dependent persistent storage.
- 		persistent storage until at least this amount is reached.
- 		Default is 10 Kbytes.
- 
--		Pstore only supports one backend at a time. If multiple
--		backends are available, the preferred backend may be
--		set by passing the pstore.backend= argument to the kernel at
--		boot time.
-+		Pstore now supports multiple backends at a time. If multiple
-+		backends are available, the registrable backends may be
-+		set by passing the pstore.backend= argument1, argument2...
-+		or pstore.backend= all to the kernel at boot time.
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 31b3a25680d0..a8a109b822a9 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -4748,7 +4748,9 @@
- 			[HW,MOUSE] Controls Logitech smartscroll autorepeat.
- 			0 = disabled, 1 = enabled (default).
- 
--	pstore.backend=	Specify the name of the pstore backend to use
-+	pstore.backend=backend1,...,backendN
-+			Specify the names of the pstore backends to use
-+			or =all for all available backends
- 
- 	pti=		[X86-64] Control Page Table Isolation of user and
- 			kernel address spaces.  Disabling this feature
--- 
-2.39.3
+On Mon, Feb 05, 2024 at 09:46:16AM +0000, Marc Zyngier wrote:
+> On Sat, 03 Feb 2024 12:25:39 +0000,
+> Mark Brown <broonie@kernel.org> wrote:
 
+> > +++ b/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h
+> > @@ -25,6 +25,8 @@ static inline void __sysreg_save_user_state(struct kvm_cpu_context *ctxt)
+> >  {
+> >  	ctxt_sys_reg(ctxt, TPIDR_EL0)	= read_sysreg(tpidr_el0);
+> >  	ctxt_sys_reg(ctxt, TPIDRRO_EL0)	= read_sysreg(tpidrro_el0);
+> > +	if (has_gcs())
+> > +		ctxt_sys_reg(ctxt, GCSPR_EL0) = read_sysreg_s(SYS_GCSPR_EL0);
+
+> We have had this discussion in the past. This must be based on the
+> VM's configuration. Guarding the check with the host capability is a
+> valuable optimisation, but that's nowhere near enough. See the series
+> that I have posted on this very subject (you're on Cc), but you are
+> welcome to invent your own mechanism in the meantime.
+
+Right, which postdates the version you're replying to and isn't merged
+yet - the current code was what you were asking for at the time.  I'm
+expecting to update all these feature series to work with that once it
+gets finalised and merged but it's not there yet, I do see I forgot to
+put a note in v9 about that like I did for dpISA - sorry about that, I
+was too focused on the clone3() rework when rebasing onto the new
+kernel.
+
+This particular series isn't going to get merged for a while yet anyway
+due to the time it'll take for userspace testing, I'm expecting your
+series to be in by the time it becomes an issue.
+
+> > +	if (has_gcs()) {
+> > +		write_sysreg_el1(ctxt_sys_reg(ctxt, GCSPR_EL1),	SYS_GCSPR);
+> > +		write_sysreg_el1(ctxt_sys_reg(ctxt, GCSCR_EL1),	SYS_GCSCR);
+> > +		write_sysreg_s(ctxt_sys_reg(ctxt, GCSCRE0_EL1),
+> > +			       SYS_GCSCRE0_EL1);
+> > +	}
+
+> For the benefit of the unsuspecting reviewers, and in the absence of a
+> public specification (which the XML drop isn't), it would be good to
+> have the commit message explaining the rationale of what gets saved
+> when.
+
+What are you looking for in terms of rationale here?  The KVM house
+style is often very reliant on reader context so it would be good to
+know what considerations you'd like to see explicitly addressed.  These
+registers shouldn't do anything when we aren't running the guest so
+they're not terribly ordering sensitive, the EL2 ones will need a bit
+more consideration in the face of nested virt.
+
+--SWF5NMV/X92Kf8zP
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXA1iYACgkQJNaLcl1U
+h9Dczgf8Co+AEsFdqthpdeHca9wZHZrvIV4GyHYFYxQUc2QQcQF8l68f9qpa+7WU
+wwyKL5wu1uARGynhBiI1rGQHAv8lBunf5D4wkD3kJ8X/AtB0wSRFutA2Q35fQDo3
+HcJi94+8UvNTLtAgbLMmiyihG6PxVhpUfwA3SZCuun068j81Zcd1hX4hUlpuSEXr
+hm5Hy73ooZ/T/F5OrYsxxUuEbTRWHYhPq+CXEhWhtyTK9wRAzDes+UK6rXdjfOmj
+iFWAR4jYhFukgcENJvGgwKKvS1YUFxMABGAPJmIfjjX/3eVNriZDeh5DFHyrrp+R
+LPixjIxkXqN9p1+ZfpiReAfH4T+wRQ==
+=7b9C
+-----END PGP SIGNATURE-----
+
+--SWF5NMV/X92Kf8zP--
