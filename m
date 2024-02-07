@@ -1,44 +1,44 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D477A8289C;
-	Wed,  7 Feb 2024 17:58:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE91D82D91;
+	Wed,  7 Feb 2024 17:59:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707328742; cv=none; b=HYhyTkUHbxDeuz1X1HHqBqP7dCutnU/I5Hn4CqumPPorWdXMz9yl92HM+bilhduFb8c+aLhAJt7+NyfyoX3qKpIhN2+e4YhM9R3pvoiHlIAfM3JlUUOmln9AngOAlealCAr2496dOb9espMokeg3laOAbdKoFVnQ015XuwHF6YE=
+	t=1707328746; cv=none; b=seoSVQBdB2HnzsYIFezNX7uXixxz4EJU8JUrcPtdjFYR3OTM7ekSQelnlSBKqkklz5vI4ft+b0En8fAbi4SeKoo3Fq4BYUU+QvLZAkrCPUHjrSyqgUyEPe9ss2oSI7vdYTafdLmLj5Q+nsrVH6LQmf9VNOP4tlvWE7Ztubx0PUQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707328742; c=relaxed/simple;
-	bh=GA5wGvEdmsBzr4Wm0VKZyNgDb0Py8f+RvGg72fnnim0=;
+	s=arc-20240116; t=1707328746; c=relaxed/simple;
+	bh=7KPmwPclT/FKLhFcFWIDWM27z0VWKv0aw6taF2QMvjE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Y/DLErRU/aMiZUHDlCNdxC53rGEQ3u4v+T5i14nY54d5XedQoaOFLw1e/pC9VN2h6uIet1RWbB5yIdO94/bmKzrcX/jKXPQvfnOb11X9AdIjoNS6NkzqVI1j6uylpCemEj/jBZknQARz25t5+d64eX+tRSmrXUiqDMJU5KqUdAQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hKe1S0LQ; arc=none smtp.client-ip=198.175.65.11
+	 MIME-Version; b=SLUnv0zKSfRbuqORWU4bP7oDZZAwp5RPmbSj4MQuWEPiK90K2peKt7aTTvuNaQM/9uCKQGsgnkiZTsa+WF7c2aPXROYqGu7ap9yLUti+H09F4+M/ZPpLBcovuDWndkbCjI9l/6v++rYdxSrxGP+mDoom2yJ50kuGr+LbSzYIaXo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OuxLvb5J; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hKe1S0LQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OuxLvb5J"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707328737; x=1738864737;
+  t=1707328741; x=1738864741;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=GA5wGvEdmsBzr4Wm0VKZyNgDb0Py8f+RvGg72fnnim0=;
-  b=hKe1S0LQMFLOohlShixPyUdGmmctGBTOFiyaTM2IcTJGJwmO+bp/dPDH
-   zlVpdvz1PVleOHWF4HxHXjL5pspyGmUv/tPKjbmWutSHVooAHH8If/KRQ
-   vi2aGlS95ceJa6OesHcBgSM/gCu619fvzKWA8s5aaLRmv1TKTXw6QG0V7
-   y7uNMfnkLo572ZnySu+TTFlf6drKyD1Z4gtaysuMIxU88xlaLONL8XPKq
-   aY6GLNfbPhsYAcmMXxmpDw3nujUlkAQ2yuDXMjxmHFKGO8qvBD1cxPAVi
-   QmfYKu35vcc6YhoY6arbtPedkLx/SDfbv7gV3FIk88Gbkp8fTNNJT3WdD
+  bh=7KPmwPclT/FKLhFcFWIDWM27z0VWKv0aw6taF2QMvjE=;
+  b=OuxLvb5J4PGsbqTzqonWOqpzQRnc1b29hErnPSClGKwV4tejtHIV+83d
+   4MOskxdxS+wkMWcDLTVLKnXinwcPbkrzH0RicnMdG1JD5VN3eyaOPJ/Ua
+   JlgWHExdHv0b5q46D8lPMp/Ks5amFPzuqF6qe0fPjfhoc7we87rPRw3nx
+   YPI/+Gh0/tIYV/vJabx79ReIKicK4SOuAhUFQFSIidCM8pnJ9vrS8KWoE
+   6hUCwoz5ChBsazKwjgA8Gy0xC8IO9LFFBTxHQYqHJQoNpYtRm+Hn391GD
+   yowMjIc7tRC9VFfpPSkEsUBFqHcp4gKwCVL9gDPe2mLbfIB40hGXBAXnF
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10977"; a="11622500"
+X-IronPort-AV: E=McAfee;i="6600,9927,10977"; a="11622517"
 X-IronPort-AV: E=Sophos;i="6.05,251,1701158400"; 
-   d="scan'208";a="11622500"
+   d="scan'208";a="11622517"
 Received: from fmviesa004.fm.intel.com ([10.60.135.144])
   by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2024 09:58:55 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.05,251,1701158400"; 
-   d="scan'208";a="6020695"
+   d="scan'208";a="6020704"
 Received: from unknown (HELO fred..) ([172.25.112.68])
-  by fmviesa004.fm.intel.com with ESMTP; 07 Feb 2024 09:58:53 -0800
+  by fmviesa004.fm.intel.com with ESMTP; 07 Feb 2024 09:58:54 -0800
 From: Xin Li <xin3.li@intel.com>
 To: linux-kernel@vger.kernel.org,
 	kvm@vger.kernel.org,
@@ -58,9 +58,9 @@ Cc: seanjc@google.com,
 	peterz@infradead.org,
 	ravi.v.shankar@intel.com,
 	xin@zytor.com
-Subject: [PATCH v2 02/25] KVM: VMX: Cleanup VMX misc information defines and usages
-Date: Wed,  7 Feb 2024 09:26:22 -0800
-Message-ID: <20240207172646.3981-3-xin3.li@intel.com>
+Subject: [PATCH v2 04/25] KVM: x86: Mark CR4.FRED as not reserved
+Date: Wed,  7 Feb 2024 09:26:24 -0800
+Message-ID: <20240207172646.3981-5-xin3.li@intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240207172646.3981-1-xin3.li@intel.com>
 References: <20240207172646.3981-1-xin3.li@intel.com>
@@ -72,205 +72,42 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Define VMX misc information fields with BIT_ULL()/GENMASK_ULL(), and move
-VMX misc field macros to vmx.h if used in multiple files or where they are
-used only once.
+The CR4.FRED bit, i.e., CR4[32], is no longer a reserved bit when a guest
+enumerates FRED, otherwise it is still a reserved bit.
 
 Signed-off-by: Xin Li <xin3.li@intel.com>
+Tested-by: Shan Kang <shan.kang@intel.com>
 ---
- arch/x86/include/asm/msr-index.h |  5 -----
- arch/x86/include/asm/vmx.h       | 12 +++++------
- arch/x86/kvm/vmx/capabilities.h  |  4 ++--
- arch/x86/kvm/vmx/nested.c        | 34 ++++++++++++++++++++++++--------
- arch/x86/kvm/vmx/nested.h        |  2 +-
- arch/x86/kvm/vmx/vmx.c           |  8 +++-----
- 6 files changed, 37 insertions(+), 28 deletions(-)
+ arch/x86/include/asm/kvm_host.h | 2 +-
+ arch/x86/kvm/x86.h              | 2 ++
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-index e8af4cf01e89..4fa2b3dd743e 100644
---- a/arch/x86/include/asm/msr-index.h
-+++ b/arch/x86/include/asm/msr-index.h
-@@ -1129,11 +1129,6 @@
- #define MSR_IA32_SMBA_BW_BASE		0xc0000280
- #define MSR_IA32_EVT_CFG_BASE		0xc0000400
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index b5b2d0fde579..0d88873eba63 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -134,7 +134,7 @@
+ 			  | X86_CR4_OSXSAVE | X86_CR4_SMEP | X86_CR4_FSGSBASE \
+ 			  | X86_CR4_OSXMMEXCPT | X86_CR4_LA57 | X86_CR4_VMXE \
+ 			  | X86_CR4_SMAP | X86_CR4_PKE | X86_CR4_UMIP \
+-			  | X86_CR4_LAM_SUP))
++			  | X86_CR4_LAM_SUP | X86_CR4_FRED))
  
--/* MSR_IA32_VMX_MISC bits */
--#define MSR_IA32_VMX_MISC_INTEL_PT                 (1ULL << 14)
--#define MSR_IA32_VMX_MISC_VMWRITE_SHADOW_RO_FIELDS (1ULL << 29)
--#define MSR_IA32_VMX_MISC_PREEMPTION_TIMER_SCALE   0x1F
--
- /* AMD-V MSRs */
- #define MSR_VM_CR                       0xc0010114
- #define MSR_VM_IGNNE                    0xc0010115
-diff --git a/arch/x86/include/asm/vmx.h b/arch/x86/include/asm/vmx.h
-index 353538b79ce5..76518e21c54d 100644
---- a/arch/x86/include/asm/vmx.h
-+++ b/arch/x86/include/asm/vmx.h
-@@ -132,12 +132,10 @@
- #define VMX_BASIC_TRUE_CTLS			BIT_ULL(55)
+ #define CR8_RESERVED_BITS (~(unsigned long)X86_CR8_TPR)
  
+diff --git a/arch/x86/kvm/x86.h b/arch/x86/kvm/x86.h
+index 2f7e19166658..9a52016ebf5a 100644
+--- a/arch/x86/kvm/x86.h
++++ b/arch/x86/kvm/x86.h
+@@ -532,6 +532,8 @@ bool kvm_msr_allowed(struct kvm_vcpu *vcpu, u32 index, u32 type);
+ 		__reserved_bits |= X86_CR4_PCIDE;       \
+ 	if (!__cpu_has(__c, X86_FEATURE_LAM))           \
+ 		__reserved_bits |= X86_CR4_LAM_SUP;     \
++	if (!__cpu_has(__c, X86_FEATURE_FRED))          \
++		__reserved_bits |= X86_CR4_FRED;        \
+ 	__reserved_bits;                                \
+ })
  
--#define VMX_MISC_PREEMPTION_TIMER_RATE_MASK	0x0000001f
--#define VMX_MISC_SAVE_EFER_LMA			0x00000020
--#define VMX_MISC_ACTIVITY_HLT			0x00000040
--#define VMX_MISC_ACTIVITY_WAIT_SIPI		0x00000100
--#define VMX_MISC_ZERO_LEN_INS			0x40000000
--#define VMX_MISC_MSR_LIST_MULTIPLIER		512
-+/* VMX_MISC bits and bitmasks */
-+#define VMX_MISC_INTEL_PT			BIT_ULL(14)
-+#define VMX_MISC_VMWRITE_SHADOW_RO_FIELDS	BIT_ULL(29)
-+#define VMX_MISC_ZERO_LEN_INS			BIT_ULL(30)
- 
- /* VMFUNC functions */
- #define VMFUNC_CONTROL_BIT(x)	BIT((VMX_FEATURE_##x & 0x1f) - 28)
-@@ -162,7 +160,7 @@ static inline u32 vmx_basic_vmcs_mem_type(u64 vmx_basic)
- 
- static inline int vmx_misc_preemption_timer_rate(u64 vmx_misc)
- {
--	return vmx_misc & VMX_MISC_PREEMPTION_TIMER_RATE_MASK;
-+	return vmx_misc & GENMASK_ULL(4, 0);
- }
- 
- static inline int vmx_misc_cr3_count(u64 vmx_misc)
-diff --git a/arch/x86/kvm/vmx/capabilities.h b/arch/x86/kvm/vmx/capabilities.h
-index 86ce8bb96bed..cb6588238f46 100644
---- a/arch/x86/kvm/vmx/capabilities.h
-+++ b/arch/x86/kvm/vmx/capabilities.h
-@@ -223,7 +223,7 @@ static inline bool cpu_has_vmx_vmfunc(void)
- static inline bool cpu_has_vmx_shadow_vmcs(void)
- {
- 	/* check if the cpu supports writing r/o exit information fields */
--	if (!(vmcs_config.misc & MSR_IA32_VMX_MISC_VMWRITE_SHADOW_RO_FIELDS))
-+	if (!(vmcs_config.misc & VMX_MISC_VMWRITE_SHADOW_RO_FIELDS))
- 		return false;
- 
- 	return vmcs_config.cpu_based_2nd_exec_ctrl &
-@@ -365,7 +365,7 @@ static inline bool cpu_has_vmx_invvpid_global(void)
- 
- static inline bool cpu_has_vmx_intel_pt(void)
- {
--	return (vmcs_config.misc & MSR_IA32_VMX_MISC_INTEL_PT) &&
-+	return (vmcs_config.misc & VMX_MISC_INTEL_PT) &&
- 		(vmcs_config.cpu_based_2nd_exec_ctrl & SECONDARY_EXEC_PT_USE_GPA) &&
- 		(vmcs_config.vmentry_ctrl & VM_ENTRY_LOAD_IA32_RTIT_CTL);
- }
-diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index 14d0167825dd..8a5fda04e2de 100644
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -917,6 +917,8 @@ static int nested_vmx_store_msr_check(struct kvm_vcpu *vcpu,
- 	return 0;
- }
- 
-+#define VMX_MISC_MSR_LIST_MULTIPLIER	512
-+
- static u32 nested_vmx_max_atomic_switch_msrs(struct kvm_vcpu *vcpu)
- {
- 	struct vcpu_vmx *vmx = to_vmx(vcpu);
-@@ -1315,18 +1317,34 @@ vmx_restore_control_msr(struct vcpu_vmx *vmx, u32 msr_index, u64 data)
- 	return 0;
- }
- 
-+#define VMX_MISC_SAVE_EFER_LMA		BIT_ULL(5)
-+#define VMX_MISC_ACTIVITY_STATE_BITMAP	GENMASK_ULL(8, 6)
-+#define VMX_MISC_ACTIVITY_HLT		BIT_ULL(6)
-+#define VMX_MISC_ACTIVITY_WAIT_SIPI	BIT_ULL(8)
-+#define VMX_MISC_RDMSR_IN_SMM		BIT_ULL(15)
-+#define VMX_MISC_VMXOFF_BLOCK_SMI	BIT_ULL(28)
-+
-+#define VMX_MISC_FEATURES_MASK			\
-+	(VMX_MISC_SAVE_EFER_LMA |		\
-+	 VMX_MISC_ACTIVITY_STATE_BITMAP |	\
-+	 VMX_MISC_INTEL_PT |			\
-+	 VMX_MISC_RDMSR_IN_SMM |		\
-+	 VMX_MISC_VMXOFF_BLOCK_SMI |		\
-+	 VMX_MISC_VMWRITE_SHADOW_RO_FIELDS |	\
-+	 VMX_MISC_ZERO_LEN_INS)
-+
-+#define VMX_MISC_RESERVED_BITS			\
-+	(BIT_ULL(31) | GENMASK_ULL(13, 9))
-+
- static int vmx_restore_vmx_misc(struct vcpu_vmx *vmx, u64 data)
- {
--	const u64 feature_and_reserved_bits =
--		/* feature */
--		BIT_ULL(5) | GENMASK_ULL(8, 6) | BIT_ULL(14) | BIT_ULL(15) |
--		BIT_ULL(28) | BIT_ULL(29) | BIT_ULL(30) |
--		/* reserved */
--		GENMASK_ULL(13, 9) | BIT_ULL(31);
- 	u64 vmx_misc = vmx_control_msr(vmcs_config.nested.misc_low,
- 				       vmcs_config.nested.misc_high);
- 
--	if (!is_bitwise_subset(vmx_misc, data, feature_and_reserved_bits))
-+	static_assert(!(VMX_MISC_FEATURES_MASK & VMX_MISC_RESERVED_BITS));
-+
-+	if (!is_bitwise_subset(vmx_misc, data,
-+			       VMX_MISC_FEATURES_MASK | VMX_MISC_RESERVED_BITS))
- 		return -EINVAL;
- 
- 	if ((vmx->nested.msrs.pinbased_ctls_high &
-@@ -6993,7 +7011,7 @@ static void nested_vmx_setup_misc_data(struct vmcs_config *vmcs_conf,
- {
- 	msrs->misc_low = (u32)vmcs_conf->misc & VMX_MISC_SAVE_EFER_LMA;
- 	msrs->misc_low |=
--		MSR_IA32_VMX_MISC_VMWRITE_SHADOW_RO_FIELDS |
-+		VMX_MISC_VMWRITE_SHADOW_RO_FIELDS |
- 		VMX_MISC_EMULATED_PREEMPTION_TIMER_RATE |
- 		VMX_MISC_ACTIVITY_HLT |
- 		VMX_MISC_ACTIVITY_WAIT_SIPI;
-diff --git a/arch/x86/kvm/vmx/nested.h b/arch/x86/kvm/vmx/nested.h
-index cce4e2aa30fb..0782fe599757 100644
---- a/arch/x86/kvm/vmx/nested.h
-+++ b/arch/x86/kvm/vmx/nested.h
-@@ -109,7 +109,7 @@ static inline unsigned nested_cpu_vmx_misc_cr3_count(struct kvm_vcpu *vcpu)
- static inline bool nested_cpu_has_vmwrite_any_field(struct kvm_vcpu *vcpu)
- {
- 	return to_vmx(vcpu)->nested.msrs.misc_low &
--		MSR_IA32_VMX_MISC_VMWRITE_SHADOW_RO_FIELDS;
-+		VMX_MISC_VMWRITE_SHADOW_RO_FIELDS;
- }
- 
- static inline bool nested_cpu_has_zero_length_injection(struct kvm_vcpu *vcpu)
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index a16b3de01e3f..581967d20659 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -2571,7 +2571,6 @@ static int setup_vmcs_config(struct vmcs_config *vmcs_conf,
- 	u32 _vmexit_control = 0;
- 	u32 _vmentry_control = 0;
- 	u64 basic_msr;
--	u64 misc_msr;
- 	int i;
- 
- 	/*
-@@ -2705,8 +2704,6 @@ static int setup_vmcs_config(struct vmcs_config *vmcs_conf,
- 	if (vmx_basic_vmcs_mem_type(basic_msr) != MEM_TYPE_WB)
- 		return -EIO;
- 
--	rdmsrl(MSR_IA32_VMX_MISC, misc_msr);
--
- 	vmcs_conf->basic = basic_msr;
- 	vmcs_conf->pin_based_exec_ctrl = _pin_based_exec_control;
- 	vmcs_conf->cpu_based_exec_ctrl = _cpu_based_exec_control;
-@@ -2714,7 +2711,8 @@ static int setup_vmcs_config(struct vmcs_config *vmcs_conf,
- 	vmcs_conf->cpu_based_3rd_exec_ctrl = _cpu_based_3rd_exec_control;
- 	vmcs_conf->vmexit_ctrl         = _vmexit_control;
- 	vmcs_conf->vmentry_ctrl        = _vmentry_control;
--	vmcs_conf->misc	= misc_msr;
-+
-+	rdmsrl(MSR_IA32_VMX_MISC, vmcs_conf->misc);
- 
- #if IS_ENABLED(CONFIG_HYPERV)
- 	if (enlightened_vmcs)
-@@ -8603,7 +8601,7 @@ static __init int hardware_setup(void)
- 		u64 use_timer_freq = 5000ULL * 1000 * 1000;
- 
- 		cpu_preemption_timer_multi =
--			vmcs_config.misc & VMX_MISC_PREEMPTION_TIMER_RATE_MASK;
-+			vmx_misc_preemption_timer_rate(vmcs_config.misc);
- 
- 		if (tsc_khz)
- 			use_timer_freq = (u64)tsc_khz * 1000;
 -- 
 2.43.0
 
