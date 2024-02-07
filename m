@@ -1,44 +1,44 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82D311292F1;
-	Wed,  7 Feb 2024 17:59:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B67ED126F33;
+	Wed,  7 Feb 2024 17:59:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707328756; cv=none; b=VZRVu6p36VNJd0ddFG8HKv9tfi7s6PlqsLGDyp9B7q6tcmXv8XwA32oZ1rkOeGh6ZMzBF6mgTI8QOZpw4dEp6fUfru2ezAQM2PqlEYGMRBYvsjkw17+K+2woXH7w8tP/fSsa47iOvvmou2JJWg8y3R/+TpBpMY9+JXCgFlhzLAY=
+	t=1707328756; cv=none; b=R+hUCjPxLNSTjSD6XeWqXb6N1kmaaX7ooGWspu44ocH45a+7jgfrHdgHopygaugvevwOuIkjMvwJWCIv4Qv6fUZOPuaLi3vp7oJb5Wg1sTPTSvt8mObtoJ1ohVIDm+TKsAZjSP7TjKWXwCTIo07wieFlKLgrWUH8micX9VA6ukU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1707328756; c=relaxed/simple;
-	bh=hhNjuLldlaiHvg8yHAWCF4e5LFJRIyWq4h1vGubEja0=;
+	bh=1XvBmM+YzYnVz9M1D4uwp8d1EPKb60Zx1bXRfvYrhEc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gQoa2B7Ie0UgU8V2A7PGOYwnjJLNo5IjVdwmHilLGAogJ52UD/Uh58NftfVEwZLr3WixpmJilDmFMZvvX+dBWlOfd8FWBICdbFCkGEhamkQtb20/vuv3P406DYW6vrcK8/JNftbk168q96jSYEN6Rs2KAQRS01Jb9Fawp8QTZQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fO7IYgeQ; arc=none smtp.client-ip=198.175.65.11
+	 MIME-Version; b=HW4kNut2LLSADrDRzTduatZ1Irnm/3FIwkZJmRflrkJzYH0fUzO3T/tTTGr3jLxPc2QTgI04B9JhApgxYAt6qaiBdJSKWaAF/gV9c0tj5y6Y2fkXygeQJb6AyAqPtzdYV9pTVRnkwbzL/S1Zful4ggl8sLjtzVm8tm+hVYGwLpo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FuEdYOm1; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fO7IYgeQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FuEdYOm1"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707328751; x=1738864751;
+  t=1707328755; x=1738864755;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=hhNjuLldlaiHvg8yHAWCF4e5LFJRIyWq4h1vGubEja0=;
-  b=fO7IYgeQUbqdeSvfHMkunhdYm2z7KFbce0Khf1MZZPApeSHq6avBBd/P
-   AfDOyLZZnCop5Tujmbb5wVprnMfVWycXAIGDJ6p9HHSyUCOktfyfmyElk
-   zVRVrEq22tAcURuQ3tt2MX4JpjY00B2ClRJqerExVzGrRzzbrbKTj6bKW
-   Pf3d+5yRnb1hgYvSVgYtbspKbT8eiWzZg6U076iKzzWtuevZnybzfG/6G
-   HWWfQ/28nTQ3nC+mpqEdAUlcWEFD1CEDGzYlrXDLtg7rlGtBqrZmH87v+
-   HiehAvIkEifonG9ctyHJBMX+biETwB4u/UpaJBHHStXOUQnUCfSb5B/Th
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10977"; a="11622581"
+  bh=1XvBmM+YzYnVz9M1D4uwp8d1EPKb60Zx1bXRfvYrhEc=;
+  b=FuEdYOm1jRH2qLR+AI0gR69esI/hL2nRpl/Uz7oDb2N0EnpmZE0bl/Yr
+   9WyPTU51wrboiSlH7oJBQMYnkEBdFw1gxXrfBiJ0ZPyBifAV8hRG6ja56
+   dq/DzDwjT/zoQAAyuZoMYjiE0QlcQR49ss0RhsULD5iyn39dgy7ckeXMl
+   2GpJlGQzG092vwBTkkjfGeqZD1wNmwg8+0RcMi7pG0xvC2o1jR9Wv38GR
+   G19Dz2gjec1tTcj+ikNX2/T64jiQP5IETjz9lf1DEsEXd4MLK6i5uslL4
+   NRnuQBdNKXVLy9NMbm2Jq3389W/qmPFKRNSqqKKn6OhbJ7mKeEn+o/zZk
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10977"; a="11622627"
 X-IronPort-AV: E=Sophos;i="6.05,251,1701158400"; 
-   d="scan'208";a="11622581"
+   d="scan'208";a="11622627"
 Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2024 09:58:57 -0800
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2024 09:58:59 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.05,251,1701158400"; 
-   d="scan'208";a="6020730"
+   d="scan'208";a="6020740"
 Received: from unknown (HELO fred..) ([172.25.112.68])
-  by fmviesa004.fm.intel.com with ESMTP; 07 Feb 2024 09:58:56 -0800
+  by fmviesa004.fm.intel.com with ESMTP; 07 Feb 2024 09:58:57 -0800
 From: Xin Li <xin3.li@intel.com>
 To: linux-kernel@vger.kernel.org,
 	kvm@vger.kernel.org,
@@ -58,9 +58,9 @@ Cc: seanjc@google.com,
 	peterz@infradead.org,
 	ravi.v.shankar@intel.com,
 	xin@zytor.com
-Subject: [PATCH v2 12/25] KVM: VMX: Handle FRED event data
-Date: Wed,  7 Feb 2024 09:26:32 -0800
-Message-ID: <20240207172646.3981-13-xin3.li@intel.com>
+Subject: [PATCH v2 15/25] KVM: VMX: Dump FRED context in dump_vmcs()
+Date: Wed,  7 Feb 2024 09:26:35 -0800
+Message-ID: <20240207172646.3981-16-xin3.li@intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240207172646.3981-1-xin3.li@intel.com>
 References: <20240207172646.3981-1-xin3.li@intel.com>
@@ -72,264 +72,117 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Set injected-event data when injecting a #PF, #DB, or #NM caused
-by extended feature disable using FRED event delivery, and save
-original-event data for being used as injected-event data.
-
-Unlike IDT using some extra CPU register as part of an event
-context, e.g., %cr2 for #PF, FRED saves a complete event context
-in its stack frame, e.g., FRED saves the faulting linear address
-of a #PF into the event data field defined in its stack frame.
-
-Thus a new VMX control field called injected-event data is added
-to provide the event data that will be pushed into a FRED stack
-frame for VM entries that inject an event using FRED event delivery.
-In addition, a new VM exit information field called original-event
-data is added to store the event data that would have saved into a
-FRED stack frame for VM exits that occur during FRED event delivery.
-After such a VM exit is handled to allow the original-event to be
-delivered, the data in the original-event data VMCS field needs to
-be set into the injected-event data VMCS field for the injection of
-the original event.
+Add FRED related VMCS fields to dump_vmcs() to have it dump FRED context.
 
 Signed-off-by: Xin Li <xin3.li@intel.com>
 Tested-by: Shan Kang <shan.kang@intel.com>
 ---
 
 Change since v1:
-* Document event data should be equal to CR2/DR6/IA32_XFD_ERR instead
-  of using WARN_ON() (Chao Gao).
-* Zero event data if a #NM was not caused by extended feature disable
-  (Chao Gao).
+* Use kvm_cpu_cap_has() instead of cpu_feature_enabled() (Chao Gao).
+* Dump guest FRED states only if guest has FRED enabled (Nikolay Borisov).
 ---
- arch/x86/include/asm/vmx.h |   4 ++
- arch/x86/kvm/vmx/vmx.c     | 109 ++++++++++++++++++++++++++++---------
- arch/x86/kvm/vmx/vmx.h     |   1 +
- arch/x86/kvm/x86.c         |  10 +++-
- 4 files changed, 95 insertions(+), 29 deletions(-)
+ arch/x86/kvm/vmx/vmx.c | 46 +++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 39 insertions(+), 7 deletions(-)
 
-diff --git a/arch/x86/include/asm/vmx.h b/arch/x86/include/asm/vmx.h
-index 4889754415b5..6b796c5c9c2b 100644
---- a/arch/x86/include/asm/vmx.h
-+++ b/arch/x86/include/asm/vmx.h
-@@ -256,8 +256,12 @@ enum vmcs_field {
- 	PID_POINTER_TABLE_HIGH		= 0x00002043,
- 	SECONDARY_VM_EXIT_CONTROLS	= 0x00002044,
- 	SECONDARY_VM_EXIT_CONTROLS_HIGH	= 0x00002045,
-+	INJECTED_EVENT_DATA		= 0x00002052,
-+	INJECTED_EVENT_DATA_HIGH	= 0x00002053,
- 	GUEST_PHYSICAL_ADDRESS          = 0x00002400,
- 	GUEST_PHYSICAL_ADDRESS_HIGH     = 0x00002401,
-+	ORIGINAL_EVENT_DATA		= 0x00002404,
-+	ORIGINAL_EVENT_DATA_HIGH	= 0x00002405,
- 	VMCS_LINK_POINTER               = 0x00002800,
- 	VMCS_LINK_POINTER_HIGH          = 0x00002801,
- 	GUEST_IA32_DEBUGCTL             = 0x00002802,
 diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index ee61d2c25cb0..f622fb90a098 100644
+index a484b9ac2400..e3409607122d 100644
 --- a/arch/x86/kvm/vmx/vmx.c
 +++ b/arch/x86/kvm/vmx/vmx.c
-@@ -1871,9 +1871,29 @@ static void vmx_inject_exception(struct kvm_vcpu *vcpu)
- 		vmcs_write32(VM_ENTRY_INSTRUCTION_LEN,
- 			     vmx->vcpu.arch.event_exit_inst_len);
- 		intr_info |= INTR_TYPE_SOFT_EXCEPTION;
--	} else
-+	} else {
- 		intr_info |= INTR_TYPE_HARD_EXCEPTION;
+@@ -6392,7 +6392,7 @@ void dump_vmcs(struct kvm_vcpu *vcpu)
+ 	struct vcpu_vmx *vmx = to_vmx(vcpu);
+ 	u32 vmentry_ctl, vmexit_ctl;
+ 	u32 cpu_based_exec_ctrl, pin_based_exec_ctrl, secondary_exec_control;
+-	u64 tertiary_exec_control;
++	u64 tertiary_exec_control, secondary_vmexit_ctl;
+ 	unsigned long cr4;
+ 	int efer_slot;
  
-+		if (kvm_is_fred_enabled(vcpu)) {
-+			u64 event_data = 0;
-+
-+			if (is_debug(intr_info))
-+				/*
-+				 * Compared to DR6, FRED #DB event data saved on
-+				 * the stack frame have bits 4 ~ 11 and 16 ~ 31
-+				 * inverted, i.e.,
-+				 *   fred_db_event_data = dr6 ^ 0xFFFF0FF0UL
-+				 */
-+				event_data = vcpu->arch.dr6 ^ DR6_RESERVED;
-+			else if (is_page_fault(intr_info))
-+				event_data = vcpu->arch.cr2;
-+			else if (is_nm_fault(intr_info))
-+				event_data = to_vmx(vcpu)->fred_xfd_event_data;
-+
-+			vmcs_write64(INJECTED_EVENT_DATA, event_data);
-+		}
+@@ -6403,6 +6403,8 @@ void dump_vmcs(struct kvm_vcpu *vcpu)
+ 
+ 	vmentry_ctl = vmcs_read32(VM_ENTRY_CONTROLS);
+ 	vmexit_ctl = vmcs_read32(VM_EXIT_CONTROLS);
++	secondary_vmexit_ctl = cpu_has_secondary_vmexit_ctrls() ?
++			       vmcs_read64(SECONDARY_VM_EXIT_CONTROLS) : 0;
+ 	cpu_based_exec_ctrl = vmcs_read32(CPU_BASED_VM_EXEC_CONTROL);
+ 	pin_based_exec_ctrl = vmcs_read32(PIN_BASED_VM_EXEC_CONTROL);
+ 	cr4 = vmcs_readl(GUEST_CR4);
+@@ -6449,6 +6451,19 @@ void dump_vmcs(struct kvm_vcpu *vcpu)
+ 	vmx_dump_sel("LDTR:", GUEST_LDTR_SELECTOR);
+ 	vmx_dump_dtsel("IDTR:", GUEST_IDTR_LIMIT);
+ 	vmx_dump_sel("TR:  ", GUEST_TR_SELECTOR);
++#ifdef CONFIG_X86_64
++	if (kvm_is_fred_enabled(vcpu)) {
++		pr_err("FRED guest: config=0x%016llx, stack levels=0x%016llx\n"
++		       "RSP0=0x%016lx, RSP1=0x%016llx\n"
++		       "RSP2=0x%016llx, RSP3=0x%016llx\n",
++		       vmcs_read64(GUEST_IA32_FRED_CONFIG),
++		       vmcs_read64(GUEST_IA32_FRED_STKLVLS),
++		       read_msr(MSR_IA32_FRED_RSP0),
++		       vmcs_read64(GUEST_IA32_FRED_RSP1),
++		       vmcs_read64(GUEST_IA32_FRED_RSP2),
++		       vmcs_read64(GUEST_IA32_FRED_RSP3));
 +	}
-+
- 	vmcs_write32(VM_ENTRY_INTR_INFO_FIELD, intr_info);
- 
- 	vmx_clear_hlt(vcpu);
-@@ -7082,8 +7102,11 @@ static void handle_nm_fault_irqoff(struct kvm_vcpu *vcpu)
- 	 *
- 	 * Queuing exception is done in vmx_handle_exit. See comment there.
- 	 */
--	if (vcpu->arch.guest_fpu.fpstate->xfd)
-+	if (vcpu->arch.guest_fpu.fpstate->xfd) {
- 		rdmsrl(MSR_IA32_XFD_ERR, vcpu->arch.guest_fpu.xfd_err);
-+		to_vmx(vcpu)->fred_xfd_event_data = vcpu->arch.cr0 & X86_CR0_TS
-+			? 0 : vcpu->arch.guest_fpu.xfd_err;
++#endif
+ 	efer_slot = vmx_find_loadstore_msr_slot(&vmx->msr_autoload.guest, MSR_EFER);
+ 	if (vmentry_ctl & VM_ENTRY_LOAD_IA32_EFER)
+ 		pr_err("EFER= 0x%016llx\n", vmcs_read64(GUEST_IA32_EFER));
+@@ -6496,6 +6511,19 @@ void dump_vmcs(struct kvm_vcpu *vcpu)
+ 	       vmcs_readl(HOST_TR_BASE));
+ 	pr_err("GDTBase=%016lx IDTBase=%016lx\n",
+ 	       vmcs_readl(HOST_GDTR_BASE), vmcs_readl(HOST_IDTR_BASE));
++#ifdef CONFIG_X86_64
++	if (kvm_cpu_cap_has(X86_FEATURE_FRED)) {
++		pr_err("FRED host: config=0x%016llx, stack levels=0x%016llx\n"
++		       "RSP0=0x%016llx, RSP1=0x%016llx\n"
++		       "RSP2=0x%016llx, RSP3=0x%016llx\n",
++		       vmcs_read64(HOST_IA32_FRED_CONFIG),
++		       vmcs_read64(HOST_IA32_FRED_STKLVLS),
++		       vmx->msr_host_fred_rsp0,
++		       vmcs_read64(HOST_IA32_FRED_RSP1),
++		       vmcs_read64(HOST_IA32_FRED_RSP2),
++		       vmcs_read64(HOST_IA32_FRED_RSP3));
 +	}
- }
- 
- static void handle_exception_irqoff(struct vcpu_vmx *vmx)
-@@ -7199,29 +7222,28 @@ static void vmx_recover_nmi_blocking(struct vcpu_vmx *vmx)
- 					      vmx->loaded_vmcs->entry_time));
- }
- 
--static void __vmx_complete_interrupts(struct kvm_vcpu *vcpu,
--				      u32 idt_vectoring_info,
--				      int instr_len_field,
--				      int error_code_field)
-+static void __vmx_complete_interrupts(struct kvm_vcpu *vcpu, bool vectoring)
- {
--	u8 vector;
--	int type;
--	bool idtv_info_valid;
--
--	idtv_info_valid = idt_vectoring_info & VECTORING_INFO_VALID_MASK;
-+	u32 event_id = vectoring ? to_vmx(vcpu)->idt_vectoring_info
-+				 : vmcs_read32(VM_ENTRY_INTR_INFO_FIELD);
-+	int instr_len_field = vectoring ? VM_EXIT_INSTRUCTION_LEN
-+					: VM_ENTRY_INSTRUCTION_LEN;
-+	int error_code_field = vectoring ? IDT_VECTORING_ERROR_CODE
-+					 : VM_ENTRY_EXCEPTION_ERROR_CODE;
-+	int event_data_field = vectoring ? ORIGINAL_EVENT_DATA
-+					 : INJECTED_EVENT_DATA;
-+	u8 vector = event_id & INTR_INFO_VECTOR_MASK;
-+	int type = event_id & INTR_INFO_INTR_TYPE_MASK;
- 
- 	vcpu->arch.nmi_injected = false;
- 	kvm_clear_exception_queue(vcpu);
- 	kvm_clear_interrupt_queue(vcpu);
- 
--	if (!idtv_info_valid)
-+	if (!(event_id & INTR_INFO_VALID_MASK))
- 		return;
- 
- 	kvm_make_request(KVM_REQ_EVENT, vcpu);
- 
--	vector = idt_vectoring_info & VECTORING_INFO_VECTOR_MASK;
--	type = idt_vectoring_info & VECTORING_INFO_TYPE_MASK;
--
- 	switch (type) {
- 	case INTR_TYPE_NMI_INTR:
- 		vcpu->arch.nmi_injected = true;
-@@ -7236,10 +7258,31 @@ static void __vmx_complete_interrupts(struct kvm_vcpu *vcpu,
- 		vcpu->arch.event_exit_inst_len = vmcs_read32(instr_len_field);
- 		fallthrough;
- 	case INTR_TYPE_HARD_EXCEPTION:
--		if (idt_vectoring_info & VECTORING_INFO_DELIVER_CODE_MASK) {
--			u32 err = vmcs_read32(error_code_field);
--			kvm_requeue_exception_e(vcpu, vector, err);
--		} else
-+		if (kvm_is_fred_enabled(vcpu)) {
-+			/* Save event data for being used as injected-event data */
-+			u64 event_data = vmcs_read64(event_data_field);
-+
-+			switch (vector) {
-+			case DB_VECTOR:
-+				/* %dr6 should be equal to (event_data ^ DR6_RESERVED) */
-+				vcpu->arch.dr6 = event_data ^ DR6_RESERVED;
-+				break;
-+			case NM_VECTOR:
-+				to_vmx(vcpu)->fred_xfd_event_data = event_data;
-+				break;
-+			case PF_VECTOR:
-+				/* %cr2 should be equal to event_data */
-+				vcpu->arch.cr2 = event_data;
-+				break;
-+			default:
-+				WARN_ON(event_data != 0);
-+				break;
-+			}
-+		}
-+
-+		if (event_id & INTR_INFO_DELIVER_CODE_MASK)
-+			kvm_requeue_exception_e(vcpu, vector, vmcs_read32(error_code_field));
-+		else
- 			kvm_requeue_exception(vcpu, vector);
- 		break;
- 	case INTR_TYPE_SOFT_INTR:
-@@ -7255,18 +7298,12 @@ static void __vmx_complete_interrupts(struct kvm_vcpu *vcpu,
- 
- static void vmx_complete_interrupts(struct vcpu_vmx *vmx)
- {
--	__vmx_complete_interrupts(&vmx->vcpu, vmx->idt_vectoring_info,
--				  VM_EXIT_INSTRUCTION_LEN,
--				  IDT_VECTORING_ERROR_CODE);
-+	__vmx_complete_interrupts(&vmx->vcpu, true);
- }
- 
- static void vmx_cancel_injection(struct kvm_vcpu *vcpu)
- {
--	__vmx_complete_interrupts(vcpu,
--				  vmcs_read32(VM_ENTRY_INTR_INFO_FIELD),
--				  VM_ENTRY_INSTRUCTION_LEN,
--				  VM_ENTRY_EXCEPTION_ERROR_CODE);
--
-+	__vmx_complete_interrupts(vcpu, false);
- 	vmcs_write32(VM_ENTRY_INTR_INFO_FIELD, 0);
- }
- 
-@@ -7382,6 +7419,24 @@ static noinstr void vmx_vcpu_enter_exit(struct kvm_vcpu *vcpu,
- 
- 	vmx_disable_fb_clear(vmx);
- 
-+	/*
-+	 * %cr2 needs to be saved after a VM exit and restored before a VM
-+	 * entry in case a VM exit happens immediately after delivery of a
-+	 * guest #PF but before guest reads %cr2.
-+	 *
-+	 * A FRED guest should read its #PF faulting linear address from
-+	 * the event data field in its FRED stack frame instead of %cr2.
-+	 * But the FRED 5.0 spec still requires a FRED CPU to update %cr2
-+	 * in the normal way, thus %cr2 is still updated even for a FRED
-+	 * guest.
-+	 *
-+	 * Note, an NMI could interrupt KVM:
-+	 *   1) after VM exit but before CR2 is saved.
-+	 *   2) after CR2 is restored but before VM entry.
-+	 * And a #PF could happen durng NMI handlng, which overwrites %cr2.
-+	 * Thus exc_nmi() should save and restore %cr2 upon entering and
-+	 * before leaving to make sure %cr2 not corrupted.
-+	 */
- 	if (vcpu->arch.cr2 != native_read_cr2())
- 		native_write_cr2(vcpu->arch.cr2);
- 
-diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
-index 176ad39be406..d5738c5a4814 100644
---- a/arch/x86/kvm/vmx/vmx.h
-+++ b/arch/x86/kvm/vmx/vmx.h
-@@ -266,6 +266,7 @@ struct vcpu_vmx {
- 	u32                   exit_intr_info;
- 	u32                   idt_vectoring_info;
- 	ulong                 rflags;
-+	u64                   fred_xfd_event_data;
- 
- 	/*
- 	 * User return MSRs are always emulated when enabled in the guest, but
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 4e8d60f248e3..00c0062726ae 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -680,8 +680,14 @@ static void kvm_multiple_exception(struct kvm_vcpu *vcpu,
- 			vcpu->arch.exception.injected = true;
- 			if (WARN_ON_ONCE(has_payload)) {
- 				/*
--				 * A reinjected event has already
--				 * delivered its payload.
-+				 * For a reinjected event, KVM delivers its
-+				 * payload through:
-+				 *   #PF: save %cr2 into arch.cr2 immediately
-+				 *        after VM exits.
-+				 *   #DB: save %dr6 into arch.dr6 later in
-+				 *        sync_dirty_debug_regs().
-+				 *
-+				 * For FRED guest, see __vmx_complete_interrupts().
- 				 */
- 				has_payload = false;
- 				payload = 0;
++#endif
+ 	pr_err("CR0=%016lx CR3=%016lx CR4=%016lx\n",
+ 	       vmcs_readl(HOST_CR0), vmcs_readl(HOST_CR3),
+ 	       vmcs_readl(HOST_CR4));
+@@ -6517,25 +6545,29 @@ void dump_vmcs(struct kvm_vcpu *vcpu)
+ 	pr_err("*** Control State ***\n");
+ 	pr_err("CPUBased=0x%08x SecondaryExec=0x%08x TertiaryExec=0x%016llx\n",
+ 	       cpu_based_exec_ctrl, secondary_exec_control, tertiary_exec_control);
+-	pr_err("PinBased=0x%08x EntryControls=%08x ExitControls=%08x\n",
+-	       pin_based_exec_ctrl, vmentry_ctl, vmexit_ctl);
++	pr_err("PinBased=0x%08x EntryControls=0x%08x\n",
++	       pin_based_exec_ctrl, vmentry_ctl);
++	pr_err("ExitControls=0x%08x SecondaryExitControls=0x%016llx\n",
++	       vmexit_ctl, secondary_vmexit_ctl);
+ 	pr_err("ExceptionBitmap=%08x PFECmask=%08x PFECmatch=%08x\n",
+ 	       vmcs_read32(EXCEPTION_BITMAP),
+ 	       vmcs_read32(PAGE_FAULT_ERROR_CODE_MASK),
+ 	       vmcs_read32(PAGE_FAULT_ERROR_CODE_MATCH));
+-	pr_err("VMEntry: intr_info=%08x errcode=%08x ilen=%08x\n",
++	pr_err("VMEntry: intr_info=%08x errcode=%08x ilen=%08x event data=%016llx\n",
+ 	       vmcs_read32(VM_ENTRY_INTR_INFO_FIELD),
+ 	       vmcs_read32(VM_ENTRY_EXCEPTION_ERROR_CODE),
+-	       vmcs_read32(VM_ENTRY_INSTRUCTION_LEN));
++	       vmcs_read32(VM_ENTRY_INSTRUCTION_LEN),
++	       kvm_cpu_cap_has(X86_FEATURE_FRED) ? vmcs_read64(INJECTED_EVENT_DATA) : 0);
+ 	pr_err("VMExit: intr_info=%08x errcode=%08x ilen=%08x\n",
+ 	       vmcs_read32(VM_EXIT_INTR_INFO),
+ 	       vmcs_read32(VM_EXIT_INTR_ERROR_CODE),
+ 	       vmcs_read32(VM_EXIT_INSTRUCTION_LEN));
+ 	pr_err("        reason=%08x qualification=%016lx\n",
+ 	       vmcs_read32(VM_EXIT_REASON), vmcs_readl(EXIT_QUALIFICATION));
+-	pr_err("IDTVectoring: info=%08x errcode=%08x\n",
++	pr_err("IDTVectoring: info=%08x errcode=%08x event data=%016llx\n",
+ 	       vmcs_read32(IDT_VECTORING_INFO_FIELD),
+-	       vmcs_read32(IDT_VECTORING_ERROR_CODE));
++	       vmcs_read32(IDT_VECTORING_ERROR_CODE),
++	       kvm_cpu_cap_has(X86_FEATURE_FRED) ? vmcs_read64(ORIGINAL_EVENT_DATA) : 0);
+ 	pr_err("TSC Offset = 0x%016llx\n", vmcs_read64(TSC_OFFSET));
+ 	if (secondary_exec_control & SECONDARY_EXEC_TSC_SCALING)
+ 		pr_err("TSC Multiplier = 0x%016llx\n",
 -- 
 2.43.0
 
