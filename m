@@ -1,95 +1,75 @@
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5F3E10A0D;
-	Wed,  7 Feb 2024 02:20:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBF41FC0A
+	for <linux-kselftest@vger.kernel.org>; Wed,  7 Feb 2024 03:17:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707272404; cv=none; b=opWfevqQCjFBuys6g+TVwWjdguJ37uW0dGoQx+6UPp/PdJDkbs2Q5/bk/QZlvBalhMPZm3718+OaYgnmudcbCcXRqLxj/Whlh/0DeoCsI/TmMFFoynY86hXlNvs3LKW7jAPSGrWtSOf/dlKQRz/SnWhqxmOr0kaDUa1a91rRJ90=
+	t=1707275880; cv=none; b=eaoLC4Tuw14/h0ng8zehTT4Wt4rpr+vpnpS1bxSsnJMPsf9F1AxaXSsuXyZUPGD1gzMTonmNJIbDrzUUGdXUwMCl4iDdJCT7F4/Vb8Gz3eVIokYsrw+y20bBhIevtkTNhjuopIlQR6P3Mj+c5a1ZNQVlGNdsl65TodJagY4Malw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707272404; c=relaxed/simple;
-	bh=zjQbb33QAX1T1JAhEwYPnm/SGkqzEpXW1ZbAKpPauBo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Z3rzfjio2HnhskfjvTk/Wh0VxHOGHCbcpzzEgHoCM9r/t8KxxJaZ0dZ3hn1SzILKt28MX5WBDr6DGFTjDpBiscgun0vblNe6UZGrBIhdUmennBRzDG7l31nw6LHnMHw//wR7mnGhK3yyyCHuW91HUehkz2uZnH4r63cZuSJZo4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=bXe63CSp; arc=none smtp.client-ip=115.124.30.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1707275880; c=relaxed/simple;
+	bh=xv4B1LEIU4KOtG2Ub7BjbYH4Tj88+0kJFfUuhhkXn10=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=YjqQWGpp2lcobNY6JbRsj9MkAAXrMMrZ8VEkAQjSXIgWDIZQZQZI1dfvOUYWTRzcekWH5Tm4dhUIKX8kZijht1jfeKWgM6EV4b+pMRw04j0LQ5s44u3fvvWUODQ6qF8sfiHjbc268w9zjRnM8jewzg2a7RiklLWbM5I9vZ6omNE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=D/+k48pg; arc=none smtp.client-ip=209.85.128.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="bXe63CSp"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1707272393; h=From:To:Subject:Date:Message-Id:MIME-Version;
-	bh=0Ich9Lv7jUlR8bH4jRV52p8JlrleP6AcmyrMMLywpAs=;
-	b=bXe63CSpzVd6eYfyOfftXBOU4lciWYSlJbD01XjzMMevRcBoK7PxoN8sazkvu2RDPeIG4EG6cIlKZ6MGLjaAMX6lcFTb+QjbO03zMYurM7Oms4ufzz4FaV9x7pmhTp2V078L40B9xWoBkv35L360NtbHSZN/N6yaiyBY6J8hwlg=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R511e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=xiangzao@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0W0F5hXj_1707272391;
-Received: from localhost.localdomain(mailfrom:xiangzao@linux.alibaba.com fp:SMTPD_---0W0F5hXj_1707272391)
-          by smtp.aliyun-inc.com;
-          Wed, 07 Feb 2024 10:19:53 +0800
-From: Yuanhe Shu <xiangzao@linux.alibaba.com>
-To: keescook@chromium.org,
-	tony.luck@intel.com,
-	gpiccoli@igalia.com,
-	shuah@kernel.org,
-	corbet@lwn.net
-Cc: xlpang@linux.alibaba.com,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-hardening@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Yuanhe Shu <xiangzao@linux.alibaba.com>
-Subject: [PATCH 2/3] Documentation: adjust pstore backend related document
-Date: Wed,  7 Feb 2024 10:19:20 +0800
-Message-Id: <20240207021921.206425-3-xiangzao@linux.alibaba.com>
-X-Mailer: git-send-email 2.39.3
-In-Reply-To: <20240207021921.206425-1-xiangzao@linux.alibaba.com>
-References: <20240207021921.206425-1-xiangzao@linux.alibaba.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="D/+k48pg"
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-60491e90830so1839577b3.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 06 Feb 2024 19:17:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1707275876; x=1707880676; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=c4CjCucqTLIudtP5PVERixa/oHt8DzPccdaWLPRE6E0=;
+        b=D/+k48pg4+cPb4R97X9AG8UgLKAiJ34XAIe4MLydGty8u8Y8skBBgydIYZ+3EpySDH
+         uVJcq703Ljn5fui46gS6pzdOwwhhFsd4XQl0t2bYvK65VlOaAItTIMH7M5oVsu3iv7Tc
+         0cN+/fmbt74DmVaG57gGZ28NNqhKdaHEoiv0lny2QBO9BWg8FhDaHTQp/TISI0pDJpP/
+         S0BrPTA1cKugS4Z/j/0TQyFW2ayEE4JNZXGSps0yotn8Sn7xSJ2eS4pT5V4Z9ydPSne1
+         hKcX+XQz/zYfLwJuOINqz8PvAm9LJILYPReuXxNFO3LQ4NCBeQnMnCwwxTaUU4VCNkaK
+         XXZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707275876; x=1707880676;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=c4CjCucqTLIudtP5PVERixa/oHt8DzPccdaWLPRE6E0=;
+        b=BBNf0TAtI/6K5pg4cNc4nq+qcjvhJV+Ho0D7UgQzQ64LSvkuyk0xXGePRERh3Bh6kQ
+         Je6Pjlsv2l0bdfgSS7H/RSCtEu41yRmlFUwErKpLe95Uj4LUf5FkJj3YmKdLKewU9+8k
+         WMhhqBEWiupRVdRdVJ9IKDZFCN/BC05Y54njTA5LldotOdL2hZhhIcHjwcKVvvFPp3Lf
+         tzxfNvhRZqMXm7+25puwws4RiNlhhwSLRtP4Kf4/EYO1TF5CFUytdghqiyZAVRIsodPM
+         +L6owiGEXJbVIBMeBjVLo9cfJ/IJMD+Q25ID6iq47P9Y45txNH59C04zCjMhPULbtQsv
+         1sNw==
+X-Forwarded-Encrypted: i=1; AJvYcCXh+y+mrfDHHxqIHmdcML4GsjhPLh0MZHaDma9OLjo/GCrMW3+tHCWkabViAcxNgJ3yZVB17waIEP73IjT78QtLsAH6FoE0bXDTolWcgqdI
+X-Gm-Message-State: AOJu0Yw0X0UMrPgX0gqarNMWgLQ96tLLgKCPdD0GhMZCkgdtnoN8vhtc
+	r+TiOmBvM3uL3+NRp7VxSWq12Wv5PnxEdeOajLT8UWEzNzury1WtMfd4iomwAuoK/YrkExZ/q8C
+	4ig==
+X-Google-Smtp-Source: AGHT+IEDt9S4Bp3akJ9/asxSh8xQpB7ev1QayNj+tDmZqMrZWt3F4FRrmzgPTDDZ2QioeOUf8ryjx+YClGg=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6902:e01:b0:dc6:b768:2994 with SMTP id
+ df1-20020a0569020e0100b00dc6b7682994mr152301ybb.0.1707275876698; Tue, 06 Feb
+ 2024 19:17:56 -0800 (PST)
+Date: Tue, 6 Feb 2024 19:17:55 -0800
+In-Reply-To: <20240115125707.1183-4-paul@xen.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+References: <20240115125707.1183-1-paul@xen.org> <20240115125707.1183-4-paul@xen.org>
+Message-ID: <ZcL2Y1gpRG8C1_8f@google.com>
+Subject: Re: [PATCH v12 03/20] KVM: xen: mark guest pages dirty with the
+ pfncache lock held
+From: Sean Christopherson <seanjc@google.com>
+To: Paul Durrant <paul@xen.org>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, David Woodhouse <dwmw2@infradead.org>, Shuah Khan <shuah@kernel.org>, 
+	kvm@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-Pstore now supports multiple backends, adjust related document.
-
-Signed-off-by: Yuanhe Shu <xiangzao@linux.alibaba.com>
----
- Documentation/ABI/testing/pstore                | 8 ++++----
- Documentation/admin-guide/kernel-parameters.txt | 4 +++-
- 2 files changed, 7 insertions(+), 5 deletions(-)
-
-diff --git a/Documentation/ABI/testing/pstore b/Documentation/ABI/testing/pstore
-index d3cff4a7ee10..2cd67b502f11 100644
---- a/Documentation/ABI/testing/pstore
-+++ b/Documentation/ABI/testing/pstore
-@@ -41,7 +41,7 @@ Description:	Generic interface to platform dependent persistent storage.
- 		persistent storage until at least this amount is reached.
- 		Default is 10 Kbytes.
- 
--		Pstore only supports one backend at a time. If multiple
--		backends are available, the preferred backend may be
--		set by passing the pstore.backend= argument to the kernel at
--		boot time.
-+		Pstore now supports multiple backends at a time. If multiple
-+		backends are available, the registrable backends may be
-+		set by passing the pstore.backend= argument1, argument2...
-+		or pstore.backend= all to the kernel at boot time.
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 31b3a25680d0..a8a109b822a9 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -4748,7 +4748,9 @@
- 			[HW,MOUSE] Controls Logitech smartscroll autorepeat.
- 			0 = disabled, 1 = enabled (default).
- 
--	pstore.backend=	Specify the name of the pstore backend to use
-+	pstore.backend=backend1,...,backendN
-+			Specify the names of the pstore backends to use
-+			or =all for all available backends
- 
- 	pti=		[X86-64] Control Page Table Isolation of user and
- 			kernel address spaces.  Disabling this feature
--- 
-2.39.3
-
+KVM: x86/xen: for the scope please.  A few commits have "KVM: xen:", but "x86/xen"
+is the overwhelming favorite.
