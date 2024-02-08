@@ -1,45 +1,45 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 472544F206
-	for <linux-kselftest@vger.kernel.org>; Thu,  8 Feb 2024 20:48:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B0344A99C
+	for <linux-kselftest@vger.kernel.org>; Thu,  8 Feb 2024 20:49:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707425338; cv=none; b=hgDy2AhyMO1sj18dxhXGXBwmRZgjrKmUAtSCe9qwrMsbSKvbrKOdvq9Ck6k4JI4LR8QQf/MLoR50k4d5VWSY1shZMpA5A5AiHai7o4Rivj6Qzj5OpV1sSdrEUyVizzVIoEeplTt+mq5TxApI0Dp1PMU0G93TukSIr5bkrco/PQY=
+	t=1707425344; cv=none; b=jgc4NJglsup1+dwnlavnl3bNQYsfC3xT1o823JNL/Vie4MlinFe5he2Y6nYrqsAgkbOReoSkqPzDpekGQWYMnS4IRcU1V/PqsGUCoSQkYCK/iNkcyNvBWQxZYXDIagFiczFv1xuyXx8db7/mUR3UhIJrMc8ADbGLHOvkLrDfM6A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707425338; c=relaxed/simple;
-	bh=6P5K6g9DoGyrYeskFG3ZTud2y0Jy5ES1/MaotkbmBnY=;
+	s=arc-20240116; t=1707425344; c=relaxed/simple;
+	bh=VI7qXJxS/lasyNThrbyjvkzs+3R4P9ZKyEkXMk7ilKo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=upq4hs5xLvtMq3arYAYyaHE9d24nFExnTdhxntTb3qUTAbpY1uzqdMV2FU5jfFBqklHJkCpgOw/AnlZ2WpfMbrmAF9kN4VzMCXeBln5EPxp/KzmfkIJK3FGjJ/nmHvuM2rIGHRuaHlVkGsOcE3fK5mKv5rmk2CFGt4GAme3VdRU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BHiYMe/K; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=VqRVucnDaByNKdpawuLmER/yMaOutR7+P1WIwnCehjo+FUFJGuM2l5CoRUfPtkoPVwzKXu/OYUYDlyQvdRFWmhqJnqcDCHtkhDKH826Hf9O2a4Qu5Ie1WsAW7MEMj9qHz48yLG2OBqcOBP/4lqpg5IZKHN3VpvpZ1I8riYBvjkU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Nm2TTpjA; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BHiYMe/K"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Nm2TTpjA"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1707425336;
+	s=mimecast20190719; t=1707425340;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=N1jX8xaWWAWnTKGIXa8/O/uSBdB1VqMshiJadSRg6EY=;
-	b=BHiYMe/Kyh7XgvPY+0qdVwQ0SZuX0jsMVQhlEklHlRFpz5BzStijsHGaGrpNHHmXMM3VOx
-	vObuxxzQNoAvxEYPNkqDXvspDQrH+zw1ebf3WfaI1gbnPUcWqH6zkpZaGJ0H76m3BoJhVh
-	/7v5V+pQwNtONFBQ960pBgNS2m/ukrg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-241-0BBqA1kPNaKq99Sr2-FHuA-1; Thu, 08 Feb 2024 15:48:52 -0500
-X-MC-Unique: 0BBqA1kPNaKq99Sr2-FHuA-1
+	bh=ZBTElX16WHnJ/uasV+kMXYqDLGTcdRCMmjiGOz8erC0=;
+	b=Nm2TTpjAlrcIWMWUFM37Nqn0fQnRGz2YzRWrfC8yHbSwTSxLiR180Y/xzm0FDOlxeDfQo/
+	cuTrqinCpsjGidmAOqnlP144RruqvDuv5qBa9KF48f4FtqOYiavdH1LTJRaFfcObLzClSE
+	/A99EXzmn4AttcnMCWxq3TZW+Zp1PNs=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-328-Fdy4qd_EMbOwjBSIVnuhwQ-1; Thu,
+ 08 Feb 2024 15:48:56 -0500
+X-MC-Unique: Fdy4qd_EMbOwjBSIVnuhwQ-1
 Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7FE3A8432A0;
-	Thu,  8 Feb 2024 20:48:51 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B7D211C05141;
+	Thu,  8 Feb 2024 20:48:55 +0000 (UTC)
 Received: from thuth-p1g4.redhat.com (unknown [10.39.192.46])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id A63531C10C0C;
-	Thu,  8 Feb 2024 20:48:49 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 856C91C10C0E;
+	Thu,  8 Feb 2024 20:48:54 +0000 (UTC)
 From: Thomas Huth <thuth@redhat.com>
 To: kvm@vger.kernel.org,
 	Sean Christopherson <seanjc@google.com>
@@ -47,9 +47,9 @@ Cc: linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Paolo Bonzini <pbonzini@redhat.com>,
 	Andrew Jones <ajones@ventanamicro.com>
-Subject: [PATCH v3 2/8] KVM: selftests: x86: sync_regs_test: Get regs structure before modifying it
-Date: Thu,  8 Feb 2024 21:48:38 +0100
-Message-ID: <20240208204844.119326-3-thuth@redhat.com>
+Subject: [PATCH v3 4/8] KVM: selftests: Add a macro to define a test with one vcpu
+Date: Thu,  8 Feb 2024 21:48:40 +0100
+Message-ID: <20240208204844.119326-5-thuth@redhat.com>
 In-Reply-To: <20240208204844.119326-1-thuth@redhat.com>
 References: <20240208204844.119326-1-thuth@redhat.com>
 Precedence: bulk
@@ -61,29 +61,67 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
 
-The regs structure just accidentally contains the right values
-from the previous test in the spot where we want to change rbx.
-It's cleaner if we properly initialize the structure here before
-using it.
+Most tests are currently not giving any proper output for the user
+to see how much sub-tests have already been run, or whether new
+sub-tests are part of a binary or not. So it would be good to
+support TAP output in the KVM selftests. There is already a nice
+framework for this in the kselftest_harness.h header which we can
+use. But since we also need a vcpu in most KVM selftests, it also
+makes sense to introduce our own wrapper around this which takes
+care of creating a VM with one vcpu, so we don't have to repeat
+this boilerplate in each and every test. Thus let's introduce
+a KVM_ONE_VCPU_TEST() macro here which takes care of this.
 
 Suggested-by: Sean Christopherson <seanjc@google.com>
+Link: https://lore.kernel.org/all/Y2v+B3xxYKJSM%2FfH@google.com/
 Signed-off-by: Thomas Huth <thuth@redhat.com>
 ---
- tools/testing/selftests/kvm/x86_64/sync_regs_test.c | 1 +
- 1 file changed, 1 insertion(+)
+ .../selftests/kvm/include/kvm_test_harness.h  | 36 +++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+ create mode 100644 tools/testing/selftests/kvm/include/kvm_test_harness.h
 
-diff --git a/tools/testing/selftests/kvm/x86_64/sync_regs_test.c b/tools/testing/selftests/kvm/x86_64/sync_regs_test.c
-index 8c3898cf79b31..1cd19dfa0046c 100644
---- a/tools/testing/selftests/kvm/x86_64/sync_regs_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/sync_regs_test.c
-@@ -315,6 +315,7 @@ int main(int argc, char *argv[])
- 	run->kvm_valid_regs = 0;
- 	run->kvm_dirty_regs = 0;
- 	run->s.regs.regs.rbx = 0xAAAA;
-+	vcpu_regs_get(vcpu, &regs);
- 	regs.rbx = 0xBAC0;
- 	vcpu_regs_set(vcpu, &regs);
- 	vcpu_run(vcpu);
+diff --git a/tools/testing/selftests/kvm/include/kvm_test_harness.h b/tools/testing/selftests/kvm/include/kvm_test_harness.h
+new file mode 100644
+index 0000000000000..8f7c6858e8e2d
+--- /dev/null
++++ b/tools/testing/selftests/kvm/include/kvm_test_harness.h
+@@ -0,0 +1,36 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Macros for defining a KVM test
++ *
++ * Copyright (C) 2022, Google LLC.
++ */
++
++#ifndef SELFTEST_KVM_TEST_HARNESS_H
++#define SELFTEST_KVM_TEST_HARNESS_H
++
++#include "kselftest_harness.h"
++
++#define KVM_ONE_VCPU_TEST_SUITE(name)					\
++	FIXTURE(name) {							\
++		struct kvm_vcpu *vcpu;					\
++	};								\
++									\
++	FIXTURE_SETUP(name) {						\
++		(void)vm_create_with_one_vcpu(&self->vcpu, NULL);	\
++	}								\
++									\
++	FIXTURE_TEARDOWN(name) {					\
++		kvm_vm_free(self->vcpu->vm);				\
++	}
++
++#define KVM_ONE_VCPU_TEST(suite, test, guestcode)			\
++static void __suite##_##test(struct kvm_vcpu *vcpu);			\
++									\
++TEST_F(suite, test)							\
++{									\
++	vcpu_arch_set_entry_point(self->vcpu, guestcode);		\
++	__suite##_##test(self->vcpu);					\
++}									\
++static void __suite##_##test(struct kvm_vcpu *vcpu)
++
++#endif /* SELFTEST_KVM_TEST_HARNESS_H */
 -- 
 2.43.0
 
