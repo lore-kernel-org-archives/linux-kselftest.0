@@ -1,96 +1,95 @@
-Received: from mail-vk1-f169.google.com (mail-vk1-f169.google.com [209.85.221.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 678A245016
-	for <linux-kselftest@vger.kernel.org>; Mon, 12 Feb 2024 18:39:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A31A47A5D;
+	Mon, 12 Feb 2024 19:13:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707763169; cv=none; b=WJk+3p3dNZRISBT8+RKoH26GH0C+aJLesUrMRrMxPf2AkQFeHaCTPUR4KNIZJ+nR0IUriVAxWhinskhEflTeHzZjcJmpkPyl8BiRq1bnOxGt6dl86KJk5claxuOD20uTH0wdTidY/y4kCpiH0XMzRrrr8o2qdDp8cmPArC8GYjw=
+	t=1707765206; cv=none; b=qVgUoSkGoa7QAQ08JwuZ021N8FthEIBPGE+0c2+9jvaztyjVwsSDMEq0IeRKXtBRQYqbFk3La89NNGjbBDI9z+XYTiaulZhe5zDS3PvgNnd8LrECwm7JN7RtQdWpCN10Qt2piSXTukiyntXc9Nb9z+X6RpTo8sUlsu33k0CMFJU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707763169; c=relaxed/simple;
-	bh=HCgT/lIF6+pVrFxFVEXRsHMO2HmD8QWBakVqzWoiQ9M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Y66afeTJzZ0zf03l0/oXlH6STCYi1DPkJ8Ag6TrNdshNuzAepI0yRXfh+QTgumIyGJ8hvVYlovqQSVahuklIHMwJcC3Z355wAqeceILE5Ak/+jlAzPkVqI+LgI+BHsBjUVwXIFJ3F6UYu+OW5dVXkGI8nVfmlCPUm0hnCqS1Cjo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=rZnwopuP; arc=none smtp.client-ip=209.85.221.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1707765206; c=relaxed/simple;
+	bh=lVcxz1blE5LkyB5fmTf0yVlJWy7lRWV3QJg/2l55jq0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AITymmRmAb+huiUGETSzc5FROA4JT8OVbOrTaP2Jdv59N1cG9VXwx2XQj2MmF2MOk3leLPgH4IVqOzXLL8N7tvealpQ7q6QAthsy4J79VXSh4Sm9KwFonQN4DM5fQ9yUpYn/CDzpk0HtZQ4t2ku5UFTlAItEDOxLEIb89nloFKc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mVJxBcyW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rZnwopuP"
-Received: by mail-vk1-f169.google.com with SMTP id 71dfb90a1353d-4c01a5e85e8so27008e0c.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 12 Feb 2024 10:39:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1707763166; x=1708367966; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HCgT/lIF6+pVrFxFVEXRsHMO2HmD8QWBakVqzWoiQ9M=;
-        b=rZnwopuPxaz1NRwgOxXRb3HEErW5l+aank023/5PqrsvlWHjSX4ZRpLumO2bX0B7oj
-         AW0BOWxrVJA345klwhGAXEHlyk1JgXLHzfUP16XPhmcDurDzoAxKOjO8eo7S+rc5hJss
-         4HsN97plRqzuJXsSBFeFkMADoZuLBfx1Yu090fYV2nRwI1o5Zi6JATngWobKLFK0bBpr
-         fXeQT9rUoqn70y0PlgiG91/gK1GbEmtOQqcE1tQaBkHI+iS6q6aycbF+STS/Pzh52Aku
-         OFQsvKJjscQxoddZI+HAb2W6u2Fd1KuvLKv+feRIl6C1NPMj8XUzQ9FdWy+H+Ubo9YGA
-         6Qdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707763166; x=1708367966;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HCgT/lIF6+pVrFxFVEXRsHMO2HmD8QWBakVqzWoiQ9M=;
-        b=J9waxxny+p8N5Kn3pPRZ4qU9gX7jBc8oqiL4YRKrVY8LQg6eiKrbJiD0sirqX64cl/
-         RaQaNCfKI+8JXNekSoSPTW/IQ6Y0Hvpfds+XGQN3spTtoaSAkIjki0ICqL49Ipqvi3M7
-         g8zhn1rxxfxzlFvx0Wm1jO8EgLb46cuUWzv3VJzOym4D/VgwpR2B50Yj6aQvigg95XA9
-         3JAj8VIsmZn28LroIsmQTOeHRE1KGq5LhZN7NKN7bjDE6lpjNJWNSn3r8Doq954LlNkw
-         lNE2OTcf753X47WAiq8X0Fw50g2SiCaUa/fYOJMxHIoWREv0lCQNYmJ5Z4OsRwHnhHd9
-         Qzzg==
-X-Forwarded-Encrypted: i=1; AJvYcCWSzVjud3ZD6LNjZxXTosLnrD/TdQaa0AO0GBULuAw8HtOu8MukCJU9U2hHe9eoaeLyXr/XeskPJ5QK1Z8rxR9NC9cMKZKF3UirX+XVcQ5E
-X-Gm-Message-State: AOJu0YwUzTrNA4RENAP2IvN0E2HNwaW0USm43w/37yne43/TtPmw7My/
-	Ryye8TAnC89KXUdZ8SBX3L7e6pzyL0YhTDThJx7OgZXkCQUMJXu3TyAxj9OECGccuQ1u2N8oZQu
-	y7Fm1NzdkSlUMA3k25E+qC8iVyJICmQSYfIekDw==
-X-Google-Smtp-Source: AGHT+IH0eDVCHbyPL9X/VNVKVFp1oXkZRJlvE5Y3OB8AuOpgh8MtouPlypW8yAb8NtGduUZwTTMV+D64YPCooPEabaU=
-X-Received: by 2002:a1f:4c46:0:b0:4c0:3b31:34d3 with SMTP id
- z67-20020a1f4c46000000b004c03b3134d3mr3533056vka.12.1707763166289; Mon, 12
- Feb 2024 10:39:26 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mVJxBcyW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 720D6C433C7;
+	Mon, 12 Feb 2024 19:13:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707765205;
+	bh=lVcxz1blE5LkyB5fmTf0yVlJWy7lRWV3QJg/2l55jq0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mVJxBcyWkPzcN+qZv3RfniWWGIxIMuPq7cihILT1zdcW3PpqQpuzEdZHJken6yMyf
+	 WAvjW6AvzVC/Co6VuJc360H0F+jOU4dobxIDBhHHRdK8myIQH0o+Noh6jug8t6imf2
+	 wzUqv2t02CDOVpFwfoKz/h+43IHzgh+ccr7S2Yw4lV13r4imNb4G6OvsMjGX10Yl6W
+	 RcJB2U4ED2FReuYFniuGnBBtdlP9YtKLEuasCecdh7rChvqi+bwPZ6R5wT6j6aOobN
+	 /Gva6vrnLumFDO0SGBhGNz8ANC4jplUx/cK2rMkXBVVP73Zku488B0NWM0o9oTiUFZ
+	 GhsLHp6DrGmTg==
+Date: Mon, 12 Feb 2024 19:13:21 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Ryan Roberts <ryan.roberts@arm.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/mm: Don't needlessly use sudo to obtain root
+ in run_vmtests.sh
+Message-ID: <75fa3e12-8b0d-407b-b11f-333be70d157e@sirena.org.uk>
+References: <20240209-kselftest-mm-check-deps-v1-1-19b09b151522@kernel.org>
+ <17c0b7a1-6ec2-4504-8287-f0fa111b9748@arm.com>
+ <ZcdthfAvzLQ9lzvd@finisterre.sirena.org.uk>
+ <9ff817f4-e999-4a95-b00d-6984a7ea6181@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240209132512.254520-1-max@internet.ru> <68d61c24-b6d3-450a-8976-e87beb9b54e3@kernel.org>
-In-Reply-To: <68d61c24-b6d3-450a-8976-e87beb9b54e3@kernel.org>
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Tue, 13 Feb 2024 00:09:15 +0530
-Message-ID: <CA+G9fYsBakUkg11TFrKZtsqZH3K=6_C2YvEmx6NoHVTkUNNf1A@mail.gmail.com>
-Subject: Re: [PATCH net] selftests: net: ip_local_port_range: define IPPROTO_MPTCP
-To: Matthieu Baerts <matttbe@kernel.org>
-Cc: Maxim Galaganov <max@internet.ru>, Linux Kernel Functional Testing <lkft@linaro.org>, netdev@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Mat Martineau <martineau@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="uZViTPliezr/CpYc"
+Content-Disposition: inline
+In-Reply-To: <9ff817f4-e999-4a95-b00d-6984a7ea6181@arm.com>
+X-Cookie: I'm not available for comment..
 
-On Fri, 9 Feb 2024 at 19:27, Matthieu Baerts <matttbe@kernel.org> wrote:
->
-> Hi Maxim, Naresh,
->
-> On 09/02/2024 14:25, Maxim Galaganov wrote:
-> > Older glibc's netinet/in.h may leave IPPROTO_MPTCP undefined when
-> > building ip_local_port_range.c, that leads to "error: use of undeclared
-> > identifier 'IPPROTO_MPTCP'".
-> >
-> > Define IPPROTO_MPTCP in such cases, just like in other MPTCP selftests.
-> >
-> > Fixes: 122db5e3634b ("selftests/net: add MPTCP coverage for IP_LOCAL_PORT_RANGE")
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > Closes: https://lore.kernel.org/netdev/CA+G9fYvGO5q4o_Td_kyQgYieXWKw6ktMa-Q0sBu6S-0y3w2aEQ@mail.gmail.com/
-> > Signed-off-by: Maxim Galaganov <max@internet.ru>
->
-> Thank you both for the fix and the bug report!
->
-> Acked-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+--uZViTPliezr/CpYc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
---
-Linaro LKFT
-https://lkft.linaro.org
+On Mon, Feb 12, 2024 at 08:32:58AM +0000, Ryan Roberts wrote:
+> On 10/02/2024 12:35, Mark Brown wrote:
+
+> > Ah, I was assuming that some of the suite ran usefully as non-root given
+> > that the only point of that sudo was to acquire root.  If the whole
+> > thing needs to be root then we should instead have a check for root at
+> > the top of run_vmtests.sh and just skip the whole thing if we aren't
+> > root, but then I'm unclear why it's invoking sudo in the first place.
+
+> I can't speak for how others use the suite, but there are a bunch of setup
+> operations in the script itself that require root (e.g. reserving huge pages).
+> Some of the tests will work without root, I'm sure, but I'm not sure its hugely
+> valuable. Personally, I'd vote for just doing a test for root at the top, as you
+> suggest.
+
+The hugetlb tests appear to be checking for root while running...  I'm
+not super fussed either way myself, I don't really use these tests
+myself except in a general "keeping an eye on CI" kind of way so I'd not
+object if people wanted to just go for just requiring root for the whole
+thing.
+
+--uZViTPliezr/CpYc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXKbdAACgkQJNaLcl1U
+h9C6wgf/RJIOLX4PFd2MsE1xuGjw2/lCoxf8qoDdaoqGpAAVWq86BvYjlgCaB9H4
+g6HK0IaPAvY0XWfuPV4ouY6OsbBE9DuvB7mwNbqG7pg7hKIdpod/fuev95pfWZbo
+SnYocqjGxxYZQwPE+YqWcnbMIvkcboD+8gcIy3yle013yXOkn3dHdndPDpnNzAK0
++Sa8Y8E+pUt4pBJjLIuklEmf9tOfHakk2zMZk0JbF55KQVxcI6hPcENxZ7AGCEOx
+cG8h/N3e/2luVdi7FqAKo7McRek9EQpIpg96YKBA+QX8xgjzEZ2komh6G9hBdvvL
+Xd2XSTk7BozvqzbobHD0PGrBro40CQ==
+=wlBc
+-----END PGP SIGNATURE-----
+
+--uZViTPliezr/CpYc--
