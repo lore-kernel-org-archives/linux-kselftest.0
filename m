@@ -1,116 +1,145 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4422118AE4
-	for <linux-kselftest@vger.kernel.org>; Mon, 12 Feb 2024 10:19:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDD7617C71
+	for <linux-kselftest@vger.kernel.org>; Mon, 12 Feb 2024 10:23:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707733192; cv=none; b=ah9JqSiVmshP1iViVE5giYd+grEOvQL0p0ijswSzjkm1mhaYGnw45U3koAVTCQZC8hFHMxy9n5lRZLlrVye+MSME6J6DOKkOu4c6ElcaOtF6+H3O36evLXlNaqS6P5RZrIiQFGrHRnD2EriRLVfVGx3Yox8ZLPQjkaH89umOMj4=
+	t=1707733438; cv=none; b=W3unPnJQhG8F/8ShWdpU3WW6voER6buwcYxzgKJSOdn0LkcNDlqimZLH7XbTJcx7x5Yop5VIxb+F4S9IbPibKzLDJqt5zhCmX4R6MRysiH2eUPqcUV4srJKip8ewtYUgszsGxt1javzbZEeYttIuSx8bUYsGLlNVM4hh8hykOz4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707733192; c=relaxed/simple;
-	bh=G1u5IgLvZZEE5qO/VlNIX+15/Yl7wlSKTZ7a+esQyIY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Kdhuwi3bxYqvItbLZ4iKgONpPrCzBsiy1GhP9pdepLw2pVkWn74tTcD4HjbyH59q/0wwJrlgzbD358CXr0QW2sNlV45LlsKrFiWPBOXIG3zRipW6jIx5NxdT2Pd7PX5RtPX2K2mEVycHcYAXmtI4LeHQZ8tY5HoFod9zQQjxR3g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FwDflgyX; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1707733438; c=relaxed/simple;
+	bh=TLWj/r7Pgt5h2SbwNEGy7ntlN2xmuVp2ucImosJuV3s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=k26voz/Ef2yqizc2q2Uq6Sq71oi2GY75wZINl4AWtxLd1GDbpr7WBvXArjZKdLsxkNIg0p41Ug9krkWAjZNVEOm2EEgqRWxzhVbJwakyeecgdUzu8qB8jmetsiT3AczxFtLNHw2sgRLNJgWelsrai+nf5BEJwXWyA/95XhXO5YM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=lcKaCn4O; arc=none smtp.client-ip=209.85.218.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FwDflgyX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1707733190;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Cj7JHEQ3aEOOqtHo86kfYJieZSXleOCNgtlV9sLANrk=;
-	b=FwDflgyX01dLXtOZvTUN+1Nmn2SxZ7AdxFscB3VKFc6aJv9wRZB006sXipycfTqQKGBTFQ
-	Uio4rFIoPeZ3K0BAhmaJYyX7MzdZOA1zjNjIs8hVBxPnBfuTFcqnyUvGyQ3f5xq9wt7H1K
-	W/q8UNWxPG8WrbZs1ZfzOjBnMzslQkU=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-157-YtXNUmEzOyaGAmJGKmMF6Q-1; Mon,
- 12 Feb 2024 05:19:47 -0500
-X-MC-Unique: YtXNUmEzOyaGAmJGKmMF6Q-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4F3901C172AC;
-	Mon, 12 Feb 2024 10:19:37 +0000 (UTC)
-Received: from gerbillo.redhat.com (unknown [10.45.224.193])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id C23CF4AE3F1;
-	Mon, 12 Feb 2024 10:19:32 +0000 (UTC)
-From: Paolo Abeni <pabeni@redhat.com>
-To: netdev@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Willem de Bruijn <willemb@google.com>,
-	Lucas Karpinski <lkarpins@redhat.com>,
-	Florian Westphal <fw@strlen.de>,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net 1/2] selftests: net: more strict check in net_helper
-Date: Mon, 12 Feb 2024 11:19:23 +0100
-Message-ID: <192b3dbc443d953be32991d1b0ca432bd4c65008.1707731086.git.pabeni@redhat.com>
-In-Reply-To: <cover.1707731086.git.pabeni@redhat.com>
-References: <cover.1707731086.git.pabeni@redhat.com>
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="lcKaCn4O"
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a3850ce741bso287430266b.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 12 Feb 2024 02:23:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1707733434; x=1708338234; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=er7uqV/3pxqI9E15uDGZ9iWhLJcFGSi+T2B/hFaMbBg=;
+        b=lcKaCn4O8jWvmQj4JVY2b3Hu8aDVbmgdz2MSKl3Gjad+fU4f4dik8oxq9eDiS+drGl
+         IjnyN318J4XOb1A1odLv62vyT/9YQR+VKcjQf+iI5YfGKGVq5MN02f5JMRnUVROj+ci+
+         bgN6ua1ifcd/6Xn2Cq3+expZKP7zP+BLuY3vmbwELmnICmFKL/TIImS6Y1Hxv7f/z8Xm
+         ogdt9pzj4EtkGrvtpwPOUXbxRPoezbAyZUlCuRGBfevvUbQZ4SGChvBUsrPg+3HsQK0a
+         R9Wo59Amv+y1NlFIeZZZHE9ocdY6qyuHG9QFjEZGS1YHvVA9YuCliQYtyVExkaKTnP0I
+         JU0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707733434; x=1708338234;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=er7uqV/3pxqI9E15uDGZ9iWhLJcFGSi+T2B/hFaMbBg=;
+        b=Yd/PHGNRJsahtcmSTHWW0M1tUwSF+4eqyF0qakIF+QWrTwNK8D+vcT7G7zZuR56h+1
+         mzaWYW3hYxvQyy7pXdfSh28MCwWNiTOAncPtq+7XXP+BetGFOeVLBgjlrfJ3hc/qLpCy
+         /UyO43dJlBrGXdvnY02koJWzYHGjE4eeCyEnmAS1S5/fvRi011Zi/52ejwIew331wYWf
+         bcdvjbK4mpP5G7JsGDO6p42H/UqqHco6ffHZyPrBsdFZTSyMJlGowVwDU/G6/RfX+DNm
+         gPjpms2w29QuC4ysV6NjRyuI+i+YJFkxqupHSPZB4u15XeuY/emw78zKeJP0uU9kRPhw
+         PsnQ==
+X-Gm-Message-State: AOJu0YwGfxwoOdfgs7WWtqPCtZd5JWgbTQT3JgpDV6F47pvGP7YND6eg
+	sR0VqIGEpFpUYvxSzb2Ul43qDkYA9ihx7L1FWW/DcJGrW4LTrqiGA4dn9mAC9rk=
+X-Google-Smtp-Source: AGHT+IEIVVAUpTpqdBT16MY7gnKOm8Wgm8lU/UhtOte8u9qNN7LVPAHblq+h85cUkD6/Ed6GGvCddQ==
+X-Received: by 2002:a17:906:a88b:b0:a3c:cebc:9e0e with SMTP id ha11-20020a170906a88b00b00a3ccebc9e0emr567479ejb.66.1707733433939;
+        Mon, 12 Feb 2024 02:23:53 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUPAzE+xdeF9TrZSKLD2pHEr88oRydbkgxmrvinHSvSQxUcUIyGSd4eufO2JDcBJ7dp7k0omkE0TZm5KqaV2RSmopwEH9KJUBeAuNEnCQZp/Na3kZyhqGhtsPoWUFMQWLjH8g1/XK5jmvnK3onAoGGYAjWJYmG20MsKxc8Yn9hXfF2DIBZZzGU6LHBehpCvPsVjofyX2DVddSWuIv/g8ypG3DrQoeVz4cIaOtpF0w2aQFPxniQSHtJKifQoI36QcqUz+GTeRa25cUcHcaFSIQmeIhQc0JSMEzlS4c0IEEQuh4BCexsaE+Q2RkgtWWZhpOa/zFS9tiBq7NOlJoD7GObmq5y2nTJbzou3e8N/JqJSg+NdzdwTTJUpVKPs29VIz44lxoHm6/kZeP4Smk1W08JaOjCzXRt8PuEeZ/ZindEfAW3sw5G8/+7SeMUmw0s+pjY5aq6PL8Es9QTI+gFjyh5aBJdPU11Mw/b8r+ggEfN9EqNFco+lICueODov2KMWeF9NjaBVj7iuEimn1MzGt8h09gt++g3M+hv8cjkxyNnKs568+BR8yc2MOxQQfPS10utFK8+zFVEhGgYzQdUVImLwxe37lmPhh60wZlbX9IzH8qQrJ6pXMKqI7ua/HuD+egoIQG7OQAblqLWyAAYzgzeBywNTlp4Txdjmklview3xwwTap1D5fOGoJcX3j6hu48qZsuyeGsyC9nsBmohNR1DagrdFR+BQPMd8gUJY++R62GwIzRAH4E9fbyPamjyvb3f65wE2mOTSc9FZUoRQcF639WAouaosGVNVx1Lb+cyBEU6FitjgZXDhOSgLIEDineFX73GZcKSrIBtz4oK2eq7mAoQvQNaGVZKmYrzVDunSfj481sy1kH7T62OUcjxcEqkvFA6AoU8syAnrTA/2MrCiJ2cTSBnstrRgHXEzdtHuRyNWjIHVyXNF4EoXfIjpHWpKwC
+ eFJ5J+101mb/s4Q/1cmQ4Wz11QZhp5DbbKlvzcjLsFg2m3gpryp3twJqX5TrxCAcFt/wAV3BkzPRN88+roOQEXkWbekKlM46Y71IoxRtiUkdHJN5WqFsqlTyD5KyCw2GGJTw3SH6T/MmHAr+oOwvKSIc3aC0hV24YWulCM2OsuRuhclbmlzyt6Y2JJxxnVKaEqRxDeMNsLrGMeiDbuUhtua8pSpKm3dNm1G1WDslPC35cV5XDKSWmKAb1/M2wkuq5SETC7B1gv6XnzZnlR1wQSLix+8+kin8J6JO3gm3X+McNhBRLrxx2loxFJMo2c/xjh7wF3wDssyxKjHX5A+5fcuPqv50ODa5GDub27T0Uc32g162GnVdCC+VeowGyq11KgvugkpIVtk10/sJDfMFGpZuviKTl3msRZRr3qrlPR4dQveuCxGTOo6Oyav0FytnJtGp3LnLOhGFP3ew0jwPCoPc6cw6K+VeKW8qiwGLv/Zb8bgVl3bujL9JS6Qo/52tJiC0ZuLRKF0FHpPoBy/q+YQhTYHMl18uxLehORfxoVvopoQWyWBYfdFhJ6Zw4rz8Q3MZWMxMDQ3CncpPaKx2ctow9uTjN8qQgbOhE/nRr55TRTZYeL2J9umD0EbRUOAPfKrtRYeRcln+faWGY1RFXS0SkOu8ul3zt4sehJkmrrwdGMZP7KTM7JcjoVtmgaa5ny3FdpkRXFN6TbIN0bGzTgwdO8Q47IPyS1xFnDgY3d3inqjDrNKZ+ApxxPH0VXmkBGBMUz3yomR0ChsvRgC5CMHBStwF4uSxPqonHfDFzPjINLbSkuK5J1iq1mGTAGg/z4AFlUd/6W2ARQswjf42gEBah0qBZ/jxD0NzH+A1BvfORnnJDXSaxlJzogY3Yqw7ulEjTbff7wBfEAQd1+H23TSbMHcfcEg8bJq1L8w8lzRqmE3x5zY1gHR9uI3y8tKtTr166Quq7EosM5SUUfT9LoO3vcs6beCXmhNk7
+ vesJ1Ft9sE1alaQEh
+Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
+        by smtp.gmail.com with ESMTPSA id cd6-20020a170906b34600b00a34c07816e3sm61419ejb.73.2024.02.12.02.23.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Feb 2024 02:23:53 -0800 (PST)
+Date: Mon, 12 Feb 2024 11:23:52 +0100
+From: Andrew Jones <ajones@ventanamicro.com>
+To: debug@rivosinc.com
+Cc: rick.p.edgecombe@intel.com, broonie@kernel.org, Szabolcs.Nagy@arm.com, 
+	kito.cheng@sifive.com, keescook@chromium.org, paul.walmsley@sifive.com, 
+	palmer@dabbelt.com, conor.dooley@microchip.com, cleger@rivosinc.com, 
+	atishp@atishpatra.org, alex@ghiti.fr, bjorn@rivosinc.com, alexghiti@rivosinc.com, 
+	corbet@lwn.net, aou@eecs.berkeley.edu, oleg@redhat.com, 
+	akpm@linux-foundation.org, arnd@arndb.de, ebiederm@xmission.com, shuah@kernel.org, 
+	brauner@kernel.org, guoren@kernel.org, samitolvanen@google.com, evan@rivosinc.com, 
+	xiao.w.wang@intel.com, apatel@ventanamicro.com, mchitale@ventanamicro.com, 
+	waylingii@gmail.com, greentime.hu@sifive.com, heiko@sntech.de, jszhang@kernel.org, 
+	shikemeng@huaweicloud.com, david@redhat.com, charlie@rivosinc.com, 
+	panqinglin2020@iscas.ac.cn, willy@infradead.org, vincent.chen@sifive.com, 
+	andy.chiu@sifive.com, gerg@kernel.org, jeeheng.sia@starfivetech.com, 
+	mason.huo@starfivetech.com, ancientmodern4@gmail.com, mathis.salmen@matsal.de, 
+	cuiyunhui@bytedance.com, bhe@redhat.com, chenjiahao16@huawei.com, ruscur@russell.cc, 
+	bgray@linux.ibm.com, alx@kernel.org, baruch@tkos.co.il, zhangqing@loongson.cn, 
+	catalin.marinas@arm.com, revest@chromium.org, josh@joshtriplett.org, joey.gouly@arm.com, 
+	shr@devkernel.io, omosnace@redhat.com, ojeda@kernel.org, jhubbard@nvidia.com, 
+	linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH v1 01/28] riscv: abstract envcfg CSR
+Message-ID: <20240212-cf2c44241bfd5e942a4e3752@orel>
+References: <20240125062739.1339782-1-debug@rivosinc.com>
+ <20240125062739.1339782-2-debug@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240125062739.1339782-2-debug@rivosinc.com>
 
-The helper waiting for a listener port can match any socket whose
-hexadecimal representation of source or destination addresses
-matches that of the given port.
+On Wed, Jan 24, 2024 at 10:21:26PM -0800, debug@rivosinc.com wrote:
+> From: Deepak Gupta <debug@rivosinc.com>
+> 
+> This patch abstracts envcfg CSR in kernel (as is done for other homonyn
+> CSRs). CSR_ENVCFG is used as alias for CSR_SENVCFG or CSR_MENVCFG depending
+> on how kernel is compiled.
+> 
+> Additionally it changes CBZE enabling to start using CSR_ENVCFG instead of
+> CSR_SENVCFG.
+> 
+> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+> ---
+>  arch/riscv/include/asm/csr.h   | 2 ++
+>  arch/riscv/kernel/cpufeature.c | 2 +-
+>  2 files changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
+> index 306a19a5509c..b3400517b0a9 100644
+> --- a/arch/riscv/include/asm/csr.h
+> +++ b/arch/riscv/include/asm/csr.h
+> @@ -415,6 +415,7 @@
+>  # define CSR_STATUS	CSR_MSTATUS
+>  # define CSR_IE		CSR_MIE
+>  # define CSR_TVEC	CSR_MTVEC
+> +# define CSR_ENVCFG CSR_MENVCFG
+>  # define CSR_SCRATCH	CSR_MSCRATCH
+>  # define CSR_EPC	CSR_MEPC
+>  # define CSR_CAUSE	CSR_MCAUSE
+> @@ -439,6 +440,7 @@
+>  # define CSR_STATUS	CSR_SSTATUS
+>  # define CSR_IE		CSR_SIE
+>  # define CSR_TVEC	CSR_STVEC
+> +# define CSR_ENVCFG CSR_SENVCFG
+>  # define CSR_SCRATCH	CSR_SSCRATCH
+>  # define CSR_EPC	CSR_SEPC
+>  # define CSR_CAUSE	CSR_SCAUSE
+> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+> index b3785ffc1570..98623393fd1f 100644
+> --- a/arch/riscv/kernel/cpufeature.c
+> +++ b/arch/riscv/kernel/cpufeature.c
+> @@ -725,7 +725,7 @@ arch_initcall(check_unaligned_access_all_cpus);
+>  void riscv_user_isa_enable(void)
+>  {
+>  	if (riscv_cpu_has_extension_unlikely(smp_processor_id(), RISCV_ISA_EXT_ZICBOZ))
+> -		csr_set(CSR_SENVCFG, ENVCFG_CBZE);
+> +		csr_set(CSR_ENVCFG, ENVCFG_CBZE);
+>  }
+>  
+>  #ifdef CONFIG_RISCV_ALTERNATIVE
+> -- 
+> 2.43.0
+>
 
-Additionally, any socket state is accepted.
-
-All the above can let the helper return successfully before the
-relevant listener is actually ready, with unexpected results.
-
-So far I could not find any related failure in the netdev CI, but
-the next patch is going to make the critical event more easily
-reproducible.
-
-Address the issue matching the port hex only vs the relevant socket
-field and additionally checking the socket state for TCP sockets.
-
-Fixes: 3bdd9fd29cb0 ("selftests/net: synchronize udpgro tests' tx and rx connection")
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
----
- tools/testing/selftests/net/net_helper.sh | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/net/net_helper.sh b/tools/testing/selftests/net/net_helper.sh
-index 4fe0befa13fb..6596fe03c77f 100644
---- a/tools/testing/selftests/net/net_helper.sh
-+++ b/tools/testing/selftests/net/net_helper.sh
-@@ -8,13 +8,16 @@ wait_local_port_listen()
- 	local listener_ns="${1}"
- 	local port="${2}"
- 	local protocol="${3}"
--	local port_hex
-+	local pattern
- 	local i
- 
--	port_hex="$(printf "%04X" "${port}")"
-+	pattern=":$(printf "%04X" "${port}") "
-+
-+	# for tcp protocol additionally check the socket state
-+	[ ${protocol} = "tcp" ] && pattern="${pattern}0A"
- 	for i in $(seq 10); do
--		if ip netns exec "${listener_ns}" cat /proc/net/"${protocol}"* | \
--		   grep -q "${port_hex}"; then
-+		if ip netns exec "${listener_ns}" awk '{print $2" "$4}' \
-+		   /proc/net/"${protocol}"* | grep -q "${pattern}"; then
- 			break
- 		fi
- 		sleep 0.1
--- 
-2.43.0
-
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
