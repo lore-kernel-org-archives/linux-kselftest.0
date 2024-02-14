@@ -1,175 +1,359 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EE957C6C9;
-	Wed, 14 Feb 2024 17:19:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9549B8662D;
+	Wed, 14 Feb 2024 17:19:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707931172; cv=none; b=ZSOQqQa+qaRzBepbepLi/rMt05TULqC+wRON8HCJSIYqNtgpkaDBGRqBWwGZgX/WguN74q52H0u5K49hCHPfjjuNev1ExEoq8Qkc4tzKjsXNUnc+VKHEdV+MbocfGJf19U+3YJflGB57+AGhZZdW0utw96lWOmcRvqp31m6vJXw=
+	t=1707931172; cv=none; b=M8QYFruQKWEofvJoVcQabUrcPEAFS1n7c3Rx2bk4i3AFbx007RbCoKkJi6IZxw0a7iEtiXI6kN682OkxNzbe0/QAeinSBfCOFv3NVYlr5xrFMpbxkpnPY6daYBMPqXN13f/moGFjTiO/zYS+IK5XnHL9aaBNpFLd6jdP2n6Havk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1707931172; c=relaxed/simple;
-	bh=115krBgQOqzJZjZdyNNKcB5U5M5YB6JFsKKfrcL2Tvk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=YfIjtd26p2DcINGL7Nn+YDqGf86UbIp0KfCA5JqOaQKQJ4FiAahq88wOh40jxupMaNOJ+/TB5BeafMsb8dJgpGf2zTA3af+kxhuGakuOAWkbQmSwt9/SLlR8Muw8m2ihx4dx9fvOeTYGnuLQQIsDMxvwW+PDmNFj/h5lH0GLeZs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tV2C0zJw; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tV2C0zJw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C93A6C433B2;
-	Wed, 14 Feb 2024 17:19:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707931170;
-	bh=115krBgQOqzJZjZdyNNKcB5U5M5YB6JFsKKfrcL2Tvk=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=tV2C0zJwTuTSLaaG+ibFTQEDbUerBwpdbMCakLK4kbhIKY9skMvvrh8rMYRE28X/g
-	 /TLbNt+/B5WuExuxiest5LVVW55VcISiGfB/MlJkxTbd7yce1NSXYfrVmPOsF2GHx0
-	 AuwSNdEyKDbYtpbHYBpXmlfz/ZudSiTrTrFbAcvuw2OiBm5SzYF7ugrNRmW9F9ztkP
-	 LgwCphHsFwUeePAxMvBLFeYb7K4yF6ZvBZLrFHhF9l/h/MH3VwDmKjuPVUbhuT3N71
-	 vgW/NdOpf+UJ+OOiLZvLG3KpVWlZL9TtNWxsvjfeOgu9P15wc726409Evv8opz15N+
-	 0ONM4l8iMKB/A==
-From: Benjamin Tissoires <bentiss@kernel.org>
-Date: Wed, 14 Feb 2024 18:18:36 +0100
-Subject: [PATCH RFC bpf-next v2 07/10] HID: bpf: allow to inject HID event
- from BPF
+	bh=1Ufz1L53OWf7h8/HiX4mayVIa34dEKUVMvnJozBg2w8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iqkiHXc1AFjzuJrYE5d7LpqxBUlQwl8Xc6i6SvKYGNlk+mEbA6hMcPqVdRMPROeLH9yzafxBP2IYF1cocgYrX8IXRSnBAWgcawMBAjwVwSeHeVsyH36MTnTzQNQt07YBGBAitilrluMKH+G0UHIg/GKN4qA0LUBvbUlgAXeX5MU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B77B31FB;
+	Wed, 14 Feb 2024 09:20:09 -0800 (PST)
+Received: from [10.57.64.120] (unknown [10.57.64.120])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 83F643F766;
+	Wed, 14 Feb 2024 09:19:27 -0800 (PST)
+Message-ID: <0c3182ae-885c-4156-980b-e35d825fe72e@arm.com>
+Date: Wed, 14 Feb 2024 17:19:25 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 09/12] selftests/mm: thp_settings: conform to TAP
+ format output
+Content-Language: en-GB
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
+Cc: kernel@collabora.com, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Aishwarya TCV <Aishwarya.TCV@arm.com>
+References: <20240202113119.2047740-1-usama.anjum@collabora.com>
+ <20240202113119.2047740-10-usama.anjum@collabora.com>
+From: Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <20240202113119.2047740-10-usama.anjum@collabora.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240214-hid-bpf-sleepable-v2-7-5756b054724d@kernel.org>
-References: <20240214-hid-bpf-sleepable-v2-0-5756b054724d@kernel.org>
-In-Reply-To: <20240214-hid-bpf-sleepable-v2-0-5756b054724d@kernel.org>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
- Benjamin Tissoires <benjamin.tissoires@redhat.com>, 
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-input@vger.kernel.org, linux-doc@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Benjamin Tissoires <bentiss@kernel.org>
-X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1707931135; l=4122;
- i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
- bh=115krBgQOqzJZjZdyNNKcB5U5M5YB6JFsKKfrcL2Tvk=;
- b=HVw4zRUildvxD5pMQxd9fTMjiDfEZoxXyNhUOD6ObQFqlvkdTsNZ/7ssEzYTAyrIovRtJtIlS
- XmdTpzLivhHAl+AFVwkn15Dy3zT92gNxx4JgV95moDIY7d2x49M6Vhd
-X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
- pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
 
-It can be interesting to inject events from BPF as if the event were
-to come from the device.
-For example, some multitouch devices do not all the time send a proximity
-out event, and we might want to send it for the physical device.
+On 02/02/2024 11:31, Muhammad Usama Anjum wrote:
+> Conform the layout, informational and status messages to TAP. No
+> functional change is intended other than the layout of output messages.
+> 
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> ---
+>  tools/testing/selftests/mm/khugepaged.c   |   3 +-
+>  tools/testing/selftests/mm/thp_settings.c | 123 ++++++++--------------
+>  tools/testing/selftests/mm/thp_settings.h |   4 +-
+>  3 files changed, 47 insertions(+), 83 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
+> index d51fdaee7dc6a..3f202da0867c5 100644
+> --- a/tools/testing/selftests/mm/khugepaged.c
+> +++ b/tools/testing/selftests/mm/khugepaged.c
+> @@ -152,8 +152,7 @@ static void get_finfo(const char *dir)
+>  		     major(path_stat.st_dev), minor(path_stat.st_dev)) >= sizeof(path))
+>  		ksft_exit_fail_msg("%s: Pathname is too long\n", __func__);
+>  
+> -	if (read_file(path, buf, sizeof(buf)) < 0)
+> -		ksft_exit_fail_msg("read_file(read_num): %s\n", strerror(errno));
+> +	read_file(path, buf, sizeof(buf));
+>  
+>  	if (strstr(buf, "DEVTYPE=disk")) {
+>  		/* Found it */
+> diff --git a/tools/testing/selftests/mm/thp_settings.c b/tools/testing/selftests/mm/thp_settings.c
+> index a4163438108ec..273a95d025285 100644
+> --- a/tools/testing/selftests/mm/thp_settings.c
+> +++ b/tools/testing/selftests/mm/thp_settings.c
+> @@ -5,7 +5,9 @@
+>  #include <stdlib.h>
+>  #include <string.h>
+>  #include <unistd.h>
+> +#include <errno.h>
+>  
+> +#include "../kselftest.h"
+>  #include "thp_settings.h"
+>  
+>  #define THP_SYSFS "/sys/kernel/mm/transparent_hugepage/"
+> @@ -42,58 +44,45 @@ static const char * const shmem_enabled_strings[] = {
+>  	NULL
+>  };
+>  
+> -int read_file(const char *path, char *buf, size_t buflen)
+> +void read_file(const char *path, char *buf, size_t buflen)
+>  {
+>  	int fd;
+>  	ssize_t numread;
+>  
+>  	fd = open(path, O_RDONLY);
+>  	if (fd == -1)
+> -		return 0;
+> +		ksft_exit_fail_msg("%s open failed: %s\n", path, strerror(errno));
 
-Compared to uhid, we can now inject events on any physical device, not
-just uhid virtual ones.
+Hi,
 
-Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
+This change has broken back compat. It's no longer possible to run cow and
+khugepaged tests against older kernels.
 
----
+This function, as well as others in this file are intended to return 0 to
+indicate the file could not be accessed (e.g. doesn't exist or don't have
+permission, etc). Then higher level code can decide how to handle that. For
+example, thp_supported_orders() determines which THP orders are supported by the
+system based on the existence of certain files in sysfs. Then cow decides which
+test variants to run based on the supported orders. With your change, it all
+goes bang on the first probe and the whole test suite gets failed without
+running any tests.
 
-no changes in v2
----
- Documentation/hid/hid-bpf.rst      |  2 +-
- drivers/hid/bpf/hid_bpf_dispatch.c | 29 +++++++++++++++++++++++++++++
- drivers/hid/hid-core.c             |  1 +
- include/linux/hid_bpf.h            |  2 ++
- 4 files changed, 33 insertions(+), 1 deletion(-)
+I've no problem with improving the TAP output from tests, but this must only be
+done at the test level, where it makes sense to do so. You can just call
+ksft_exit_fail_msg() from deep within a utility function.
 
-diff --git a/Documentation/hid/hid-bpf.rst b/Documentation/hid/hid-bpf.rst
-index a575004d9025..0765b3298ecf 100644
---- a/Documentation/hid/hid-bpf.rst
-+++ b/Documentation/hid/hid-bpf.rst
-@@ -179,7 +179,7 @@ Available API that can be used in syscall HID-BPF programs:
- -----------------------------------------------------------
- 
- .. kernel-doc:: drivers/hid/bpf/hid_bpf_dispatch.c
--   :functions: hid_bpf_attach_prog hid_bpf_hw_request hid_bpf_hw_output_report hid_bpf_allocate_context hid_bpf_release_context
-+   :functions: hid_bpf_attach_prog hid_bpf_hw_request hid_bpf_hw_output_report hid_bpf_input_report hid_bpf_allocate_context hid_bpf_release_context
- 
- General overview of a HID-BPF program
- =====================================
-diff --git a/drivers/hid/bpf/hid_bpf_dispatch.c b/drivers/hid/bpf/hid_bpf_dispatch.c
-index a5b88b491b80..e1a650f4a626 100644
---- a/drivers/hid/bpf/hid_bpf_dispatch.c
-+++ b/drivers/hid/bpf/hid_bpf_dispatch.c
-@@ -508,6 +508,34 @@ hid_bpf_hw_output_report(struct hid_bpf_ctx *ctx, __u8 *buf, size_t buf__sz)
- 	kfree(dma_data);
- 	return ret;
- }
-+
-+/**
-+ * hid_bpf_input_report - Inject a HID report in the kernel from a HID device
-+ *
-+ * @ctx: the HID-BPF context previously allocated in hid_bpf_allocate_context()
-+ * @type: the type of the report (%HID_INPUT_REPORT, %HID_FEATURE_REPORT, %HID_OUTPUT_REPORT)
-+ * @buf: a %PTR_TO_MEM buffer
-+ * @buf__sz: the size of the data to transfer
-+ *
-+ * @returns %0 on success, a negative error code otherwise.
-+ */
-+__bpf_kfunc int
-+hid_bpf_input_report(struct hid_bpf_ctx *ctx, enum hid_report_type type, u8 *buf,
-+		     const size_t buf__sz)
-+{
-+	struct hid_device *hdev;
-+	size_t size = buf__sz;
-+	int ret;
-+
-+	/* check arguments */
-+	ret = __hid_bpf_hw_check_params(ctx, buf, &size, type);
-+	if (ret)
-+		return ret;
-+
-+	hdev = (struct hid_device *)ctx->hid; /* discard const */
-+
-+	return hid_input_report(hdev, type, buf, size, 0);
-+}
- __bpf_kfunc_end_defs();
- 
- /*
-@@ -542,6 +570,7 @@ BTF_ID_FLAGS(func, hid_bpf_allocate_context, KF_ACQUIRE | KF_RET_NULL)
- BTF_ID_FLAGS(func, hid_bpf_release_context, KF_RELEASE)
- BTF_ID_FLAGS(func, hid_bpf_hw_request)
- BTF_ID_FLAGS(func, hid_bpf_hw_output_report)
-+BTF_ID_FLAGS(func, hid_bpf_input_report)
- BTF_KFUNCS_END(hid_bpf_syscall_kfunc_ids)
- 
- static const struct btf_kfunc_id_set hid_bpf_syscall_kfunc_set = {
-diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
-index 1243595890ba..b1fa0378e8f4 100644
---- a/drivers/hid/hid-core.c
-+++ b/drivers/hid/hid-core.c
-@@ -2975,6 +2975,7 @@ static struct hid_bpf_ops hid_ops = {
- 	.hid_get_report = hid_get_report,
- 	.hid_hw_raw_request = hid_hw_raw_request,
- 	.hid_hw_output_report = hid_hw_output_report,
-+	.hid_input_report = hid_input_report,
- 	.owner = THIS_MODULE,
- 	.bus_type = &hid_bus_type,
- };
-diff --git a/include/linux/hid_bpf.h b/include/linux/hid_bpf.h
-index 5c7ff93dc73e..17b08f500098 100644
---- a/include/linux/hid_bpf.h
-+++ b/include/linux/hid_bpf.h
-@@ -104,6 +104,8 @@ struct hid_bpf_ops {
- 				  size_t len, enum hid_report_type rtype,
- 				  enum hid_class_request reqtype);
- 	int (*hid_hw_output_report)(struct hid_device *hdev, __u8 *buf, size_t len);
-+	int (*hid_input_report)(struct hid_device *hid, enum hid_report_type type,
-+				u8 *data, u32 size, int interrupt);
- 	struct module *owner;
- 	const struct bus_type *bus_type;
- };
+Please can we remove this from mm-unstable.
 
--- 
-2.43.0
+Thanks,
+Ryan
+
+
+>  
+>  	numread = read(fd, buf, buflen - 1);
+>  	if (numread < 1) {
+>  		close(fd);
+> -		return 0;
+> +		ksft_exit_fail_msg("No data read\n");
+>  	}
+>  
+>  	buf[numread] = '\0';
+>  	close(fd);
+> -
+> -	return (unsigned int) numread;
+>  }
+>  
+> -int write_file(const char *path, const char *buf, size_t buflen)
+> +void write_file(const char *path, const char *buf, size_t buflen)
+>  {
+>  	int fd;
+>  	ssize_t numwritten;
+>  
+>  	fd = open(path, O_WRONLY);
+> -	if (fd == -1) {
+> -		printf("open(%s)\n", path);
+> -		exit(EXIT_FAILURE);
+> -		return 0;
+> -	}
+> +	if (fd == -1)
+> +		ksft_exit_fail_msg("%s open failed\n", path);
+>  
+>  	numwritten = write(fd, buf, buflen - 1);
+>  	close(fd);
+> -	if (numwritten < 1) {
+> -		printf("write(%s)\n", buf);
+> -		exit(EXIT_FAILURE);
+> -		return 0;
+> -	}
+> -
+> -	return (unsigned int) numwritten;
+> +	if (numwritten < 1)
+> +		ksft_exit_fail_msg("write failed (%s)\n", buf);
+>  }
+>  
+>  const unsigned long read_num(const char *path)
+>  {
+>  	char buf[21];
+>  
+> -	if (read_file(path, buf, sizeof(buf)) < 0) {
+> -		perror("read_file()");
+> -		exit(EXIT_FAILURE);
+> -	}
+> +	read_file(path, buf, sizeof(buf));
+>  
+>  	return strtoul(buf, NULL, 10);
+>  }
+> @@ -103,10 +92,7 @@ void write_num(const char *path, unsigned long num)
+>  	char buf[21];
+>  
+>  	sprintf(buf, "%ld", num);
+> -	if (!write_file(path, buf, strlen(buf) + 1)) {
+> -		perror(path);
+> -		exit(EXIT_FAILURE);
+> -	}
+> +	write_file(path, buf, strlen(buf) + 1);
+>  }
+>  
+>  int thp_read_string(const char *name, const char * const strings[])
+> @@ -117,30 +103,22 @@ int thp_read_string(const char *name, const char * const strings[])
+>  	int ret;
+>  
+>  	ret = snprintf(path, PATH_MAX, THP_SYSFS "%s", name);
+> -	if (ret >= PATH_MAX) {
+> -		printf("%s: Pathname is too long\n", __func__);
+> -		exit(EXIT_FAILURE);
+> -	}
+> +	if (ret >= PATH_MAX)
+> +		ksft_exit_fail_msg("%s: Pathname is too long\n", __func__);
+>  
+> -	if (!read_file(path, buf, sizeof(buf))) {
+> -		perror(path);
+> -		exit(EXIT_FAILURE);
+> -	}
+> +	read_file(path, buf, sizeof(buf));
+>  
+>  	c = strchr(buf, '[');
+> -	if (!c) {
+> -		printf("%s: Parse failure\n", __func__);
+> -		exit(EXIT_FAILURE);
+> -	}
+> +	if (!c)
+> +		ksft_exit_fail_msg("%s: Parse failure\n", __func__);
+>  
+>  	c++;
+>  	memmove(buf, c, sizeof(buf) - (c - buf));
+>  
+>  	c = strchr(buf, ']');
+> -	if (!c) {
+> -		printf("%s: Parse failure\n", __func__);
+> -		exit(EXIT_FAILURE);
+> -	}
+> +	if (!c)
+> +		ksft_exit_fail_msg("%s: Parse failure\n", __func__);
+> +
+>  	*c = '\0';
+>  
+>  	ret = 0;
+> @@ -150,8 +128,8 @@ int thp_read_string(const char *name, const char * const strings[])
+>  		ret++;
+>  	}
+>  
+> -	printf("Failed to parse %s\n", name);
+> -	exit(EXIT_FAILURE);
+> +	ksft_exit_fail_msg("Failed to parse %s\n", name);
+> +	return -1;
+>  }
+>  
+>  void thp_write_string(const char *name, const char *val)
+> @@ -160,15 +138,10 @@ void thp_write_string(const char *name, const char *val)
+>  	int ret;
+>  
+>  	ret = snprintf(path, PATH_MAX, THP_SYSFS "%s", name);
+> -	if (ret >= PATH_MAX) {
+> -		printf("%s: Pathname is too long\n", __func__);
+> -		exit(EXIT_FAILURE);
+> -	}
+> +	if (ret >= PATH_MAX)
+> +		ksft_exit_fail_msg("%s: Pathname is too long\n", __func__);
+>  
+> -	if (!write_file(path, val, strlen(val) + 1)) {
+> -		perror(path);
+> -		exit(EXIT_FAILURE);
+> -	}
+> +	write_file(path, val, strlen(val) + 1);
+>  }
+>  
+>  const unsigned long thp_read_num(const char *name)
+> @@ -177,10 +150,9 @@ const unsigned long thp_read_num(const char *name)
+>  	int ret;
+>  
+>  	ret = snprintf(path, PATH_MAX, THP_SYSFS "%s", name);
+> -	if (ret >= PATH_MAX) {
+> -		printf("%s: Pathname is too long\n", __func__);
+> -		exit(EXIT_FAILURE);
+> -	}
+> +	if (ret >= PATH_MAX)
+> +		ksft_exit_fail_msg("%s: Pathname is too long\n", __func__);
+> +
+>  	return read_num(path);
+>  }
+>  
+> @@ -190,10 +162,9 @@ void thp_write_num(const char *name, unsigned long num)
+>  	int ret;
+>  
+>  	ret = snprintf(path, PATH_MAX, THP_SYSFS "%s", name);
+> -	if (ret >= PATH_MAX) {
+> -		printf("%s: Pathname is too long\n", __func__);
+> -		exit(EXIT_FAILURE);
+> -	}
+> +	if (ret >= PATH_MAX)
+> +		ksft_exit_fail_msg("%s: Pathname is too long\n", __func__);
+> +
+>  	write_num(path, num);
+>  }
+>  
+> @@ -275,29 +246,26 @@ void thp_write_settings(struct thp_settings *settings)
+>  
+>  struct thp_settings *thp_current_settings(void)
+>  {
+> -	if (!settings_index) {
+> -		printf("Fail: No settings set");
+> -		exit(EXIT_FAILURE);
+> -	}
+> +	if (!settings_index)
+> +		ksft_exit_fail_msg("Fail: No settings set\n");
+> +
+>  	return settings_stack + settings_index - 1;
+>  }
+>  
+>  void thp_push_settings(struct thp_settings *settings)
+>  {
+> -	if (settings_index >= MAX_SETTINGS_DEPTH) {
+> -		printf("Fail: Settings stack exceeded");
+> -		exit(EXIT_FAILURE);
+> -	}
+> +	if (settings_index >= MAX_SETTINGS_DEPTH)
+> +		ksft_exit_fail_msg("Fail: Settings stack exceeded\n");
+> +
+>  	settings_stack[settings_index++] = *settings;
+>  	thp_write_settings(thp_current_settings());
+>  }
+>  
+>  void thp_pop_settings(void)
+>  {
+> -	if (settings_index <= 0) {
+> -		printf("Fail: Settings stack empty");
+> -		exit(EXIT_FAILURE);
+> -	}
+> +	if (settings_index <= 0)
+> +		ksft_exit_fail_msg("Fail: Settings stack empty\n");
+> +
+>  	--settings_index;
+>  	thp_write_settings(thp_current_settings());
+>  }
+> @@ -335,14 +303,11 @@ unsigned long thp_supported_orders(void)
+>  	for (i = 0; i < NR_ORDERS; i++) {
+>  		ret = snprintf(path, PATH_MAX, THP_SYSFS "hugepages-%ukB/enabled",
+>  			(getpagesize() >> 10) << i);
+> -		if (ret >= PATH_MAX) {
+> -			printf("%s: Pathname is too long\n", __func__);
+> -			exit(EXIT_FAILURE);
+> -		}
+> +		if (ret >= PATH_MAX)
+> +			ksft_exit_fail_msg("%s: Pathname is too long\n", __func__);
+>  
+> -		ret = read_file(path, buf, sizeof(buf));
+> -		if (ret)
+> -			orders |= 1UL << i;
+> +		read_file(path, buf, sizeof(buf));
+> +		orders |= 1UL << i;
+>  	}
+>  
+>  	return orders;
+> diff --git a/tools/testing/selftests/mm/thp_settings.h b/tools/testing/selftests/mm/thp_settings.h
+> index 71cbff05f4c7f..04a6a7bbd08f8 100644
+> --- a/tools/testing/selftests/mm/thp_settings.h
+> +++ b/tools/testing/selftests/mm/thp_settings.h
+> @@ -56,8 +56,8 @@ struct thp_settings {
+>  	struct hugepages_settings hugepages[NR_ORDERS];
+>  };
+>  
+> -int read_file(const char *path, char *buf, size_t buflen);
+> -int write_file(const char *path, const char *buf, size_t buflen);
+> +void read_file(const char *path, char *buf, size_t buflen);
+> +void write_file(const char *path, const char *buf, size_t buflen);
+>  const unsigned long read_num(const char *path);
+>  void write_num(const char *path, unsigned long num);
+>  
 
