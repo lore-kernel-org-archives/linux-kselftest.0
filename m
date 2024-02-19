@@ -1,128 +1,128 @@
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.codeweavers.com (mail.codeweavers.com [4.36.192.163])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29D8053819
-	for <linux-kselftest@vger.kernel.org>; Mon, 19 Feb 2024 22:06:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8C5B55E75;
+	Mon, 19 Feb 2024 22:39:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=4.36.192.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708380416; cv=none; b=ToXAShv5GeAjPhI21YewfaVX7OBvVRV8smyggd717VJvf/aphkVniKo/u9YORvb0DS2FyQTJpNyQZm0LqCqPSCJBoLudINTSEuwuJeqx5oEYdnGI03LJ5Dvqp9v3bqx7PfYW4+RUW5hXMq+bqnPjWnhOr8If6z6S+PEHBPcOj+Q=
+	t=1708382378; cv=none; b=LOCVBEi8Y66pza72+erwteMDMxpaAahs9cqYwjtPTALiOmGtdKVxE4NRlWuW5YKYHEGsQ6yJy8uqN7j8jY1XBzATW1YclIZWIwNo3xGU/k57gOBAyh9+O/dlgwSLpqHIJIfJ6kxHVrhGNImpBTeom0g1j4RSuVlUojyvPrfmY2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708380416; c=relaxed/simple;
-	bh=l0HvovpPqMVUQu9B4ZqhpUtqDN71UcjNp3KMDMRYNP8=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=A9C/QhBDyTKnoTplk6TxljXBESW7bai5vlYon3LqGdwonevhBN++DlhVqc7suD+YVITjQ/p7YFBoz4bGoY+ougIDRZSQSMIBNBp5Nhq67GElDUI7uB/ddCAunKMV5ypoDjSof3H4NrfNgGEqQVV8h30XBFKwQ/p48DRBUUZksek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=oGP+GQB6; arc=none smtp.client-ip=209.85.219.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1708382378; c=relaxed/simple;
+	bh=8vChgnZcciRVIn4A4k5nT/+5cnSjuxpcKRkohbyTjM4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=S0QHNMxhAE1iZ6psQG3lPlo7BGPWvi6ppIEjg90qoaeT3Uux1aoRKYJ3u9NJEgRCQlfzyWWwbACc3VqKlbG3x79Uin87ZxNSVikDYgDHJ+5Nz8JNZVIkOzKbcq96/vVJ+taqeyrHUE1NGLnoEzTkPOLjUX76mIy+c2DMdNxWTDs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeweavers.com; spf=pass smtp.mailfrom=codeweavers.com; dkim=pass (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b=YDeIS2RY; arc=none smtp.client-ip=4.36.192.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeweavers.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeweavers.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="oGP+GQB6"
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dc6ade10cb8so9811500276.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 19 Feb 2024 14:06:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1708380414; x=1708985214; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mpOEZIVxoohE3GrUqHhwdrDwGh8LEXRlOdsMaQjdYhc=;
-        b=oGP+GQB6s2Je7VhzfpYJba2+bM5S9z+eV4RJaJFUN5dWI8Tivumk/t0sg/aOroXc7r
-         29vAAfGLHIWGzvb1+A/6TUuFoyXKyYmnorE/tru2PjJoTGHHQW+J3+0EENgOM1U0Fk74
-         OzzIPNe4OWGIvlDgGSxJW1dpRYaaqylFAy3Ee5wizVqs/rsoCecfT1JfUy3cz53STMix
-         EfEtLuUpTEFjV60iB8pztpvkhV8TApvaXGeNUFktmzrvu56LMgoCIaC8+fyyDC8oU2Tp
-         7KCrtwNqDVrWj24E6lQ/IQ+wWWA7APUXSPwLNZsba9cAWMgAewtpOLK8jUrINYc7YZu3
-         Krow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708380414; x=1708985214;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mpOEZIVxoohE3GrUqHhwdrDwGh8LEXRlOdsMaQjdYhc=;
-        b=iRQi8eKhviRgJkZJwpvzA+ph3SBoiFLYQZC3PdaXOgOgheDYGVD0zzbIHIknrblNem
-         G85lzCmF7Z9ntUXlMIJ8ET8qILL/q967pFOHx1hXShdkVACL+l8/iXc+iJ/dppGOIvK9
-         n9EoI2PxVsjRpXGRcyaKuTFbqnPrpFelaRk7s9AFX0pHUQmf6S57CUsZMtoXRFGB06kV
-         BHHgq0G0d1SOrEti0UloWipvvZf30PNVIUPH/fuyRcw+BVLilci6sLwDbXg7pYtA4k1x
-         dfGu5Pm/eBTGjdj33y28f+futoNEYIJsHwnQ0othhM11xA1Pdj31o2Y8cH3PRuR6EdZy
-         MCvA==
-X-Forwarded-Encrypted: i=1; AJvYcCUeitItnSeHpqg0ZCRmzZs44XErlk8zUk4xaLDEXSq7/lzL409/on9DosQS8ZAh9B8NSkuul+sVrt74ub3B7NIKRBfKBmWvAz87cKKKX8wD
-X-Gm-Message-State: AOJu0Yx6rvu8BHScToHqPmTFscDzppb7KuZ2K+afTu6D7iqbK3nLMCGb
-	1GG8VoxY8aDz8ciIDSutakNqyDJAlGzUDZXWswDNLNTZbjSo6Guf5WvW4ZdWy0IOfOIcQJyBYXR
-	DEQ==
-X-Google-Smtp-Source: AGHT+IGRqD5MJLHGgiuZ4aiPpWZMq+YddUVmGLFXTlIV3IDh3/IjNrlEjd6bMLCvEt6hO0XIgEvR5LwUl4c=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6902:120a:b0:dc7:7655:46ce with SMTP id
- s10-20020a056902120a00b00dc7765546cemr4267897ybu.2.1708380414286; Mon, 19 Feb
- 2024 14:06:54 -0800 (PST)
-Date: Mon, 19 Feb 2024 14:06:52 -0800
-In-Reply-To: <20240215152916.1158-1-paul@xen.org>
+	dkim=pass (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b="YDeIS2RY"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=codeweavers.com; s=s1; h=Message-ID:Date:Subject:Cc:To:From:Sender;
+	bh=318iLk4qhgnvG3UCB4Cli5m+symGF/f8He5a8Oh6z/w=; b=YDeIS2RYr+xKUT8prN4JFPKzg3
+	LGg1VkcbH53dXhRCt65geIPsHQiPqBTE5Od1S+mLwWA7ZcOeZr+iJhGZJPokHeU76xOXrihvhSsN2
+	mha7HNZrQ+cSNUCecj/asvwPbRFzM6XW2gNldw71TTQtTQa8+P/C8XZLXqvNnzw+5QvmoLtsUdctk
+	k1DydH9qrW6dk6aVS5eB9jvCLzJ5MVgg4eCxdMb7Aao3tN59P4710yg9GC/vjlsz63WhMqZbhj7Bb
+	DSLvAB6VawHLodLS8a6wr/2o2sVEuQToG3I3KrqVcguTt9DHVOOr+jwQnAMGlmoei4T/Fj68gBVp3
+	dNDqNEJg==;
+Received: from cw137ip160.mn.codeweavers.com ([10.69.137.160] helo=camazotz.mn.codeweavers.com)
+	by mail.codeweavers.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <zfigura@codeweavers.com>)
+	id 1rcCIN-0037Oz-0P;
+	Mon, 19 Feb 2024 16:39:31 -0600
+From: Elizabeth Figura <zfigura@codeweavers.com>
+To: Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org,
+	linux-api@vger.kernel.org,
+	wine-devel@winehq.org,
+	=?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
+	Wolfram Sang <wsa@kernel.org>,
+	Arkadiusz Hiler <ahiler@codeweavers.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Andy Lutomirski <luto@kernel.org>,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Elizabeth Figura <zfigura@codeweavers.com>
+Subject: [PATCH v2 14/31] ntsync: Introduce NTSYNC_IOC_MUTEX_READ.
+Date: Mon, 19 Feb 2024 16:38:16 -0600
+Message-ID: <20240219223833.95710-15-zfigura@codeweavers.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240219223833.95710-1-zfigura@codeweavers.com>
+References: <20240219223833.95710-1-zfigura@codeweavers.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240215152916.1158-1-paul@xen.org>
-Message-ID: <ZdPQ_AcbTYMtArFJ@google.com>
-Subject: Re: [PATCH v13 00/21] KVM: xen: update shared_info and vcpu_info handling
-From: Sean Christopherson <seanjc@google.com>
-To: Paul Durrant <paul@xen.org>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, David Hildenbrand <david@redhat.com>, 
-	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, David Woodhouse <dwmw2@infradead.org>, Shuah Khan <shuah@kernel.org>, 
-	kvm@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Thu, Feb 15, 2024, Paul Durrant wrote:
-> David Woodhouse (1):
->   KVM: pfncache: rework __kvm_gpc_refresh() to fix locking issues
-> 
-> Paul Durrant (19):
->   KVM: pfncache: Add a map helper function
->   KVM: pfncache: remove unnecessary exports
->   KVM: x86/xen: mark guest pages dirty with the pfncache lock held
->   KVM: pfncache: add a mark-dirty helper
->   KVM: pfncache: remove KVM_GUEST_USES_PFN usage
->   KVM: pfncache: stop open-coding offset_in_page()
->   KVM: pfncache: include page offset in uhva and use it consistently
->   KVM: pfncache: allow a cache to be activated with a fixed (userspace)
->     HVA
->   KVM: x86/xen: separate initialization of shared_info cache and content
->   KVM: x86/xen: re-initialize shared_info if guest (32/64-bit) mode is
->     set
->   KVM: x86/xen: allow shared_info to be mapped by fixed HVA
->   KVM: x86/xen: allow vcpu_info to be mapped by fixed HVA
->   KVM: selftests: map Xen's shared_info page using HVA rather than GFN
->   KVM: selftests: re-map Xen's vcpu_info using HVA rather than GPA
->   KVM: x86/xen: advertize the KVM_XEN_HVM_CONFIG_SHARED_INFO_HVA
->     capability
->   KVM: x86/xen: split up kvm_xen_set_evtchn_fast()
->   KVM: x86/xen: don't block on pfncache locks in
->     kvm_xen_set_evtchn_fast()
->   KVM: pfncache: check the need for invalidation under read lock first
->   KVM: x86/xen: allow vcpu_info content to be 'safely' copied
-> 
-> Sean Christopherson (1):
->   KVM: s390: Refactor kvm_is_error_gpa() into kvm_is_gpa_in_memslot()
-> 
->  Documentation/virt/kvm/api.rst                |  53 ++-
->  arch/s390/kvm/diag.c                          |   2 +-
->  arch/s390/kvm/gaccess.c                       |  14 +-
->  arch/s390/kvm/kvm-s390.c                      |   4 +-
->  arch/s390/kvm/priv.c                          |   4 +-
->  arch/s390/kvm/sigp.c                          |   2 +-
->  arch/x86/kvm/x86.c                            |   7 +-
->  arch/x86/kvm/xen.c                            | 361 +++++++++++------
->  include/linux/kvm_host.h                      |  49 ++-
->  include/linux/kvm_types.h                     |   8 -
->  include/uapi/linux/kvm.h                      |   9 +-
->  .../selftests/kvm/x86_64/xen_shinfo_test.c    |  59 ++-
->  virt/kvm/pfncache.c                           | 382 ++++++++++--------
->  13 files changed, 591 insertions(+), 363 deletions(-)
+This corresponds to the NT syscall NtQueryMutant().
 
-Except for the read_trylock() patch, just a few nits that I can fixup when
-applying, though I'll defeinitely want your eyeballs on the end result as they
-tweaks aren't _that_ trivial.
+This returns the recursion count, owner, and abandoned state of the mutex.
 
-Running tests now, if all goes well I'll push to kvm-x86 within the hour. 
+Signed-off-by: Elizabeth Figura <zfigura@codeweavers.com>
+---
+ drivers/misc/ntsync.c       | 23 +++++++++++++++++++++++
+ include/uapi/linux/ntsync.h |  1 +
+ 2 files changed, 24 insertions(+)
+
+diff --git a/drivers/misc/ntsync.c b/drivers/misc/ntsync.c
+index 0daaeeeba051..b07510035c1f 100644
+--- a/drivers/misc/ntsync.c
++++ b/drivers/misc/ntsync.c
+@@ -547,6 +547,27 @@ static int ntsync_sem_read(struct ntsync_obj *sem, void __user *argp)
+ 	return 0;
+ }
+ 
++static int ntsync_mutex_read(struct ntsync_obj *mutex, void __user *argp)
++{
++	struct ntsync_mutex_args __user *user_args = argp;
++	struct ntsync_mutex_args args;
++	int ret;
++
++	if (mutex->type != NTSYNC_TYPE_MUTEX)
++		return -EINVAL;
++
++	args.mutex = 0;
++	spin_lock(&mutex->lock);
++	args.count = mutex->u.mutex.count;
++	args.owner = mutex->u.mutex.owner;
++	ret = mutex->u.mutex.ownerdead ? -EOWNERDEAD : 0;
++	spin_unlock(&mutex->lock);
++
++	if (copy_to_user(user_args, &args, sizeof(args)))
++		return -EFAULT;
++	return ret;
++}
++
+ static int ntsync_obj_release(struct inode *inode, struct file *file)
+ {
+ 	struct ntsync_obj *obj = file->private_data;
+@@ -572,6 +593,8 @@ static long ntsync_obj_ioctl(struct file *file, unsigned int cmd,
+ 		return ntsync_mutex_unlock(obj, argp);
+ 	case NTSYNC_IOC_MUTEX_KILL:
+ 		return ntsync_mutex_kill(obj, argp);
++	case NTSYNC_IOC_MUTEX_READ:
++		return ntsync_mutex_read(obj, argp);
+ 	case NTSYNC_IOC_EVENT_SET:
+ 		return ntsync_event_set(obj, argp, false);
+ 	case NTSYNC_IOC_EVENT_RESET:
+diff --git a/include/uapi/linux/ntsync.h b/include/uapi/linux/ntsync.h
+index 42f51dc4e57e..25f3296cfabf 100644
+--- a/include/uapi/linux/ntsync.h
++++ b/include/uapi/linux/ntsync.h
+@@ -52,5 +52,6 @@ struct ntsync_wait_args {
+ #define NTSYNC_IOC_EVENT_RESET		_IOR ('N', 0x89, __u32)
+ #define NTSYNC_IOC_EVENT_PULSE		_IOR ('N', 0x8a, __u32)
+ #define NTSYNC_IOC_SEM_READ		_IOR ('N', 0x8b, struct ntsync_sem_args)
++#define NTSYNC_IOC_MUTEX_READ		_IOR ('N', 0x8c, struct ntsync_mutex_args)
+ 
+ #endif
+-- 
+2.43.0
+
