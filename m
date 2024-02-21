@@ -1,126 +1,162 @@
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B17E047A63
-	for <linux-kselftest@vger.kernel.org>; Wed, 21 Feb 2024 09:28:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23F833B799
+	for <linux-kselftest@vger.kernel.org>; Wed, 21 Feb 2024 09:40:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708507724; cv=none; b=jTy7reQphdzzNU2nXlVfY1WuqKC/IOxz2XwvaSX5m2MoThM95b/u3HxsBw1IHgovtnRtibS7K7T31C+zQT9Ny66QbV/RwHCwgst8vQgupJ/X0MJrCRdwG3hGDaSGng3Ueqxj39+kMpPmbZ04m4iCYGH8CToi/8jZFZjm9AykFtA=
+	t=1708508421; cv=none; b=JNY7u/9Pkx//swfUkEL0+rJlXZN15kRzI7DN7qEPUUu0UYq2NaMvZ9PBMuulw9uhB0B9fYBHINPPWS5jH6Da9D8ccD3ErHYav40agdMs1KpkNKdeeFVL15oQEo03O9KbKtunxin/YOD4jGy9/eNkm7pyR8OHnuDl3+6gbAA1MQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708507724; c=relaxed/simple;
-	bh=MALY8PY87om1B5rM9PQyZB962vp0AzyA5B9YGRQAQS4=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=J/h+Ycg3VP+tYL3JtGuob9jXioQK6FsVUuuGKnRLuEWiP7oIwqMCFRsW2f/ncrqILXT12etve5xqIxUwcDnpEz1cFUpM4jhNb38OOp1Syt+jOvHCyIZHv+9PZNuE5bzdcjkFbPJ6vCYNDLqoCVE+H2j1Ho8LRFoVUvh6sYObJ5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZtDnRb1H; arc=none smtp.client-ip=209.85.219.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com
+	s=arc-20240116; t=1708508421; c=relaxed/simple;
+	bh=tKh9ZAtUU4J4QIKzuTlrBzpe58cd5wm+ukU1yETHl8w=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=BTCj//2us+GjN+xUAblnlSYsougL0WWTCZhFfwgKdIe+iODdxdwpV6Lu7q51XaXV7xKibgn55jBhzunW0YVv71QVlXvrXVqQpIj2vRemc0rHq/yLvb6D5OJRSwL5OgYZ3pMe5bwgm0xisuf2UHJDdVJvbCGGxGmFomHtW1ccRIY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=iSEHKZLY; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZtDnRb1H"
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dc6b26eef6cso9488911276.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Feb 2024 01:28:42 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="iSEHKZLY"
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-6e46e07ff07so1875010b3a.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Feb 2024 01:40:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1708507722; x=1709112522; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UtSX1a4twDclpP0XCHq3xRlg28EKI7v3CFBboD2ALTI=;
-        b=ZtDnRb1HzJUvAH/0oR/bwjouHiGv5Hx12Z2jxcyrZDvjJX98lm29rJnvTIR3l4ObQM
-         Ov3OCZO5XOKws6sxRzWJDcWAvUjveniIONlT2qOQU27aN9W5ygjKa9/Dbdy5zxc1xQrN
-         IxNG2r44hsCgnlpuc8kXITwp6cnQeAetTruqquLTRkOSJPERNBjayKovt+WYmuZfmu/N
-         XDYPli2ynlc65GjfIyiP0X/AUvLqv3K3gKJiGwul6r8aRt8FUtd322nyYEHLGyQ2O2FR
-         XoBITuavIT1fSwdX+FNatnoLoYVjFKExpvElpj+OXcfSasXJJVlEAbboVA+Ys4hQDguq
-         qTtA==
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1708508419; x=1709113219; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=HRMaagyqgI0Z4ycsER5eNMichncnU0jNRapInCRX6Kg=;
+        b=iSEHKZLYk6ZwCQom4bEaXDSBHcZeuOezrCjlw0+uDZdYiHUXK5kmE6CTfoDNPxDEPS
+         fGANVMFQdyTHbhyLVkQT7FrBN+lJV6cD1T9l9UxNbSl7y6DklEX0QhNDUB6hY2SNIo+t
+         juk0hBp/yHvFiR01cXt4QJb5NkFCp8e/TBMBRRkNcn+kj5530DmfdlfoW7ecLnP/AelR
+         oN6ZIq05JHAqwYhH7AF8+cRUm8AwAyuR74QJDxUo62IFSJ7BQ/HwBUoHmkE2Y4NN0m9o
+         RwJa9m+DweASvmUlJw6SVxrBJRCtW4ObpofKOCwKyphbkA2vHsMSvm2uf615aluhG87Q
+         t6kA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708507722; x=1709112522;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UtSX1a4twDclpP0XCHq3xRlg28EKI7v3CFBboD2ALTI=;
-        b=Ltj/0fxZWE2VWEoOidXAMwwaZpxmoInWMGZsUVvmmtAzo3OVAI6RgkK0lUIdE1KJ2Q
-         dc2PG4NHd94UVEed0ifI0KxLaKnljelwi2CotEGcL1diUwoFQZ5RbIlKrslngzl3opho
-         7n3BXQXfhrbvYUmTBXqUafbPD+t5Xg75MWj83lFyYf6rZMU1eUXmoSZ61FCHxhRRZ4ye
-         hvFiBtdKiCeRRkXlc4+gPf4LrFZxRVc1O9GSfMklTUfnboXNlJizMGIx8X3F05nkJyoP
-         J1mrpAdZAAbvJAAlfq+aDVmUSb39F/gcW7Vavv66yqbOwHyYJT3/bRh36HvR4pC9Ctxn
-         Afcw==
-X-Forwarded-Encrypted: i=1; AJvYcCXmXwV3YC4hgqAg0cDpEjJPkbrEZs9KosQZOOm7AiWMW17Ou663WYf5jZndl9AzoMX2VWwvhSD2IpfYWDSH0E83UwGUrTaccPaNe0ajC2Kf
-X-Gm-Message-State: AOJu0YwSmeNvXFrQE+IKDua22Nj4HUr28upr5MorJdxTboyUB/qbY1ad
-	z02jchvJ/+srpcRnuiR/mjM3g0XKuAeeAT0zxnLw/sv6V6OOl60WKdQ26U1ZwJhTQ+gUlDLrgk0
-	RvzeDd0TnUA==
-X-Google-Smtp-Source: AGHT+IE+u4BHsnTY4zBV9uwlLnSALfH2VACViqUl+6ZdsI4Ll1wRpv0qUeWfBww+/YNGvG/0sUR+LBCAIAUp6Q==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a05:6902:4ce:b0:dc7:865b:22c6 with SMTP
- id v14-20020a05690204ce00b00dc7865b22c6mr618682ybs.8.1708507721736; Wed, 21
- Feb 2024 01:28:41 -0800 (PST)
-Date: Wed, 21 Feb 2024 17:27:22 +0800
-In-Reply-To: <20240221092728.1281499-1-davidgow@google.com>
+        d=1e100.net; s=20230601; t=1708508419; x=1709113219;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HRMaagyqgI0Z4ycsER5eNMichncnU0jNRapInCRX6Kg=;
+        b=CL0R2gmRVtMc61mgciOlvvVVNFbNYZk+B3lHwAE7fFYfczSlwywQsIARfxUxmJb/vV
+         fd/Fh1UALIChS+CHbOBiTml/wDzuVQG1LTpXHgT1EvJGqu8z95xr6m7negqYlkZzsAu/
+         t5eRfyUIIMExaKZ1WdD2dB1toctp09DdYdizg6m2u0vcN/HOIm4RpHhmvjvkgSohOc5j
+         KubBXXcjsfzwoTgdl8eawhLhFgVRjBjJbKYAJq3F1KooAAVHqLoQBJsNDQEcWvf52Au7
+         FhKwjf2PSmvZEoycUoDWrUUEa1e7zavTcShwQLKLE9VstiKoqQlAoaNjwF+uQNDHCchJ
+         GAhA==
+X-Forwarded-Encrypted: i=1; AJvYcCVWdD0476rGHn784c16dm+aP57J39wNFHon81JM/GAKqzG2ikwUWD7e2Gt5lD7YnmnAjO+qjhXL+2A2CaWruLANsTj/LppCXExn0/Xu3F+I
+X-Gm-Message-State: AOJu0YzHJMoSoOyh++DYMcGsiptV848XUWntiSbY3kxCvWKiV+rAJjnd
+	pEk0kmDWerW0gY9Cr5LIyGMoeKv2+J31JZ43Li9ANB8LaYthddv/tEICnvb6RaE=
+X-Google-Smtp-Source: AGHT+IEK/3JBMN+L50hz1zwmpzD8UYcHsmdsIlQigk6OodLI2v/YlZLcR2UZpMi/0UwfZZHwLkoHOA==
+X-Received: by 2002:a05:6a00:2fda:b0:6e2:ed1d:c5c6 with SMTP id fn26-20020a056a002fda00b006e2ed1dc5c6mr9296156pfb.22.1708508419448;
+        Wed, 21 Feb 2024 01:40:19 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id fd3-20020a056a002e8300b006e0dd50b0d0sm8427833pfb.8.2024.02.21.01.40.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Feb 2024 01:40:18 -0800 (PST)
+Message-ID: <65d5c502.050a0220.8e832.96fa@mx.google.com>
+Date: Wed, 21 Feb 2024 01:40:18 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240221092728.1281499-1-davidgow@google.com>
-X-Mailer: git-send-email 2.44.0.rc0.258.g7320e95886-goog
-Message-ID: <20240221092728.1281499-10-davidgow@google.com>
-Subject: [PATCH 9/9] kunit: Annotate _MSG assertion variants with gnu printf specifiers
-From: David Gow <davidgow@google.com>
-To: Linus Torvalds <torvalds@linux-foundation.org>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Guenter Roeck <linux@roeck-us.net>, Rae Moar <rmoar@google.com>, 
-	Matthew Auld <matthew.auld@intel.com>, 
-	Arunpravin Paneer Selvam <arunpravin.paneerselvam@amd.com>, 
-	"=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>, Kees Cook <keescook@chromium.org>, 
-	"=?UTF-8?q?Ma=C3=ADra=20Canal?=" <mcanal@igalia.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Matthew Brost <matthew.brost@intel.com>, Willem de Bruijn <willemb@google.com>, 
-	Florian Westphal <fw@strlen.de>, Cassio Neri <cassio.neri@gmail.com>, 
-	Javier Martinez Canillas <javierm@redhat.com>, Arthur Grillo <arthur.grillo@usp.br>
-Cc: David Gow <davidgow@google.com>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	Daniel Latypov <dlatypov@google.com>, Stephen Boyd <sboyd@kernel.org>, David Airlie <airlied@gmail.com>, 
-	Maxime Ripard <mripard@kernel.org>, "David S . Miller" <davem@davemloft.net>, 
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
-	intel-xe@lists.freedesktop.org, linux-rtc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-hardening@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Tree: kselftest
+X-Kernelci-Branch: next
+X-Kernelci-Kernel: v6.8-rc1-48-g6f1a214d446b2
+X-Kernelci-Report-Type: test
+Subject: kselftest/next kselftest-livepatch: 1 runs,
+ 1 regressions (v6.8-rc1-48-g6f1a214d446b2)
+To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+ shuah@kernel.org
+From: "kernelci.org bot" <bot@kernelci.org>
 
-KUnit's assertion macros have variants which accept a printf format
-string, to allow tests to specify a more detailed message on failure.
-These (and the related KUNIT_FAIL() macro) ultimately wrap the
-__kunit_do_failed_assertion() function, which accepted a printf format
-specifier, but did not have the __printf attribute, so gcc couldn't warn
-on incorrect agruments.
+kselftest/next kselftest-livepatch: 1 runs, 1 regressions (v6.8-rc1-48-g6f1=
+a214d446b2)
 
-It turns out there were quite a few tests with such incorrect arguments.
+Regressions Summary
+-------------------
 
-Add the __printf() specifier now that we've fixed these errors, to
-prevent them from recurring.
+platform        | arch | lab           | compiler | defconfig              =
+      | regressions
+----------------+------+---------------+----------+------------------------=
+------+------------
+imx6q-sabrelite | arm  | lab-collabora | gcc-10   | multi_v7_defconfig+ksel=
+ftest | 1          =
 
-Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: David Gow <davidgow@google.com>
----
- include/kunit/test.h | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index fcb4a4940ace..61637ef32302 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -579,12 +579,12 @@ void __printf(2, 3) kunit_log_append(struct string_stream *log, const char *fmt,
- 
- void __noreturn __kunit_abort(struct kunit *test);
- 
--void __kunit_do_failed_assertion(struct kunit *test,
--			       const struct kunit_loc *loc,
--			       enum kunit_assert_type type,
--			       const struct kunit_assert *assert,
--			       assert_format_t assert_format,
--			       const char *fmt, ...);
-+void __printf(6, 7) __kunit_do_failed_assertion(struct kunit *test,
-+						const struct kunit_loc *loc,
-+						enum kunit_assert_type type,
-+						const struct kunit_assert *assert,
-+						assert_format_t assert_format,
-+						const char *fmt, ...);
- 
- #define _KUNIT_FAILED(test, assert_type, assert_class, assert_format, INITIALIZER, fmt, ...) do { \
- 	static const struct kunit_loc __loc = KUNIT_CURRENT_LOC;	       \
--- 
-2.44.0.rc0.258.g7320e95886-goog
+  Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/v6.8=
+-rc1-48-g6f1a214d446b2/plan/kselftest-livepatch/
 
+  Test:     kselftest-livepatch
+  Tree:     kselftest
+  Branch:   next
+  Describe: v6.8-rc1-48-g6f1a214d446b2
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
+lftest.git
+  SHA:      6f1a214d446b2f2f9c8c4b96755a8f0316ba4436 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform        | arch | lab           | compiler | defconfig              =
+      | regressions
+----------------+------+---------------+----------+------------------------=
+------+------------
+imx6q-sabrelite | arm  | lab-collabora | gcc-10   | multi_v7_defconfig+ksel=
+ftest | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65d5b512280477c68c637017
+
+  Results:     1 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+kselftest
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//kselftest/next/v6.8-rc1-48-g6f=
+1a214d446b2/arm/multi_v7_defconfig+kselftest/gcc-10/lab-collabora/kselftest=
+-livepatch-imx6q-sabrelite.txt
+  HTML log:    https://storage.kernelci.org//kselftest/next/v6.8-rc1-48-g6f=
+1a214d446b2/arm/multi_v7_defconfig+kselftest/gcc-10/lab-collabora/kselftest=
+-livepatch-imx6q-sabrelite.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
+elftest/20240129.0/armhf/initrd.cpio.gz =
+
+
+
+  * kselftest-livepatch.shardfile-livepatch: https://kernelci.org/test/case=
+/id/65d5b512280477c68c637019
+        failing since 7 days (last pass: v6.8-rc1, first fail: v6.8-rc1-32-=
+g345e8abe4c355)
+
+    2024-02-21T08:31:40.711164  / # =
+
+
+    2024-02-21T08:31:40.719532  =
+
+
+    2024-02-21T08:31:45.869045  / # export NFS_ROOTFS=3D'/var/lib/lava/disp=
+atcher/tmp/12816975/extract-nfsrootfs-ywcdtx_q'
+
+    2024-02-21T08:31:45.883749  export NFS_ROOTFS=3D'/var/lib/lava/dispatch=
+er/tmp/12816975/extract-nfsrootfs-ywcdtx_q'
+
+    2024-02-21T08:31:48.113802  / # export NFS_SERVER_IP=3D'192.168.201.1'
+
+    2024-02-21T08:31:48.125014  export NFS_SERVER_IP=3D'192.168.201.1'
+
+    2024-02-21T08:31:48.242969  / # #
+
+    2024-02-21T08:31:48.250650  #
+
+    2024-02-21T08:31:48.368255  / # export SHELL=3D/bin/bash
+
+    2024-02-21T08:31:48.378558  export SHELL=3D/bin/bash
+ =
+
+    ... (46 line(s) more)  =
+
+ =20
