@@ -1,130 +1,92 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E82D0111A1
-	for <linux-kselftest@vger.kernel.org>; Thu, 22 Feb 2024 00:50:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72DF212B97
+	for <linux-kselftest@vger.kernel.org>; Thu, 22 Feb 2024 01:33:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708563041; cv=none; b=GXwSZjslNt12Wy82a68uwKMKptv7ivinGHldR1TO3IcamzNEwN3Y2hU+naw+ktCYiQnRiQU2wu4+MFC6W31QxXkEww/SEF/0fSg1jxwDsttXZcQ1Fri75K6F0y8xO4l7SyybMJo7a73tPOq/tESG/WiZGKXozQAaAQHjxoA/ZyY=
+	t=1708565583; cv=none; b=k1nWaqavcRlvmcLfLbnXfO/OLfL+W8idg2OnyPVAMtj4iRpH8NYOhknPBIQnlA8zdtGHbbQ6CiIX54xIYXv06ZTbtID0yic4ikOmNAAMIWgg2S6IhMxlJbWVV2fOJcNotankMvHMcfhCvrafH9j0AzBOVJ9ufzMMBDVwUTRIYA8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708563041; c=relaxed/simple;
-	bh=5ne/cwIuCR8FyBAFcmxTad9FZ51QKgKQ/8n60a6xKD8=;
+	s=arc-20240116; t=1708565583; c=relaxed/simple;
+	bh=VyvKbdCBXwoTpc3NUw38Rj/m1VW8rKxO+v0fPJFet10=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YfjM8rXHw9OZDLfV2jLkgHjcCz6u5qA2tGVM587YINvknWbNY9ednIM0Ux/PfQEI8d4UYtj/uByqHkWHALuw55HBLej9iLXWnVigW0ODtM9nnqssmal2t40khvi0gIQOjvA9EluCJckC7XjjB+gYcZbdx+zUls7l6gIhrEUYWPc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=G6aDil3i; arc=none smtp.client-ip=209.85.210.171
+	 Content-Type:Content-Disposition:In-Reply-To; b=MFg+HAW53YdrteOtfbPRf4tndQkD58fwVfpkRyKLcHhB2M5ohknGBNbVAOy2pYl2Rb/tPmfPaTG+uiTmqH3wEuMeJVggh+B6sOo4ZkcJnjo8MqzRLTUFqzs44lcxPeG0JZnRoXOk6JAEW/3uzzWjX28rF1Qpl7ZF8TBVfxTCvG0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=M31wLw/L; arc=none smtp.client-ip=209.85.215.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="G6aDil3i"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-6e4841ce028so1540922b3a.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Feb 2024 16:50:35 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="M31wLw/L"
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-5bdbe2de25fso1008572a12.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Feb 2024 17:33:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1708563035; x=1709167835; darn=vger.kernel.org;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1708565581; x=1709170381; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5ne/cwIuCR8FyBAFcmxTad9FZ51QKgKQ/8n60a6xKD8=;
-        b=G6aDil3iQzDQi4fBtdR3ChTgwGGcVcdnYJVctOH67n4nCkV9pXTHQk2enSZR1qkbKT
-         EH35U0IAkb96ALzT1R5n4yYGAUXJdoeIA/jQfJ9ryXbsU6zbSA0ZF2QrBNaRP9Y/nr7n
-         fiWUtZ9Ho9iqBBjiSVNz/M72t8QSOwiPs5uQz4hwPFbFcxFiPHPjY4ORcd0CN/+dVSPt
-         AVh8/WsbP47YxNPpz06SA2OhOhPqQnARPlG3buF7rpXF/ep7G6WHjMDT3SCxaJHYhJ9v
-         LKjnw9H02qLegeZ5Opv+ub3xUFGEcNI2TQgsUl5NBr1g2zg9Hq7FXnfS186MKv97mkgm
-         jCPQ==
+        bh=n1/PMiHWsYAN4wzFhndBXh4DI3dHrcZRXiJQjN9iXLY=;
+        b=M31wLw/LyRop/Bi6LxVgxe1UG5g7/LB/Lz2W0L4Mm/dut308tMAJrk3mlLp+Qve/zU
+         44XEiqRN7olmitHIDchTRuLANCLDBiI1411xp/MnNt/1de16eQeSRchtmJH7VY8rVlif
+         ERKaTjxACsJrgvtXdcIf/ODMD/E39ipdF4t5m8aZbC3CXrDb3fAt2sXjU/rihYFtT3yA
+         zxTSdS9DC1mP5P5xbxugAFi/ln00vAl1MGQHVaXtZux3AXgTursBm1XKQEPLduX4pY3V
+         Jq0oCw1IaWFwaaRkkSxlYlgBxpaQZdz2Ms3NSMid3Na7FWOVskUAgcI6qo9tqJzsgZiI
+         ZfKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708563035; x=1709167835;
+        d=1e100.net; s=20230601; t=1708565581; x=1709170381;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5ne/cwIuCR8FyBAFcmxTad9FZ51QKgKQ/8n60a6xKD8=;
-        b=KpCcnqmlTMZBCaUTDzWBTM+2tBmRSudcIEBFGrMctMg62YdHCF6f62gpFDqSupF4Dg
-         P264IAp8FKAOP5ddFXZfCSFCy/oAeToUOfp5fjgz6UIOYrNZsyPutVqJdkAgLNwBcpEZ
-         ZFH8ekVGb8SBnwoA83diiflZb9cdRkpojVoX1kZeSSh2SlUQeR5kkiZ8ACJKpLqhV6Dt
-         w74DUDaILv5huUtw5raO05nCOwPmOMZrs8tP4OS6/jG5IchfAkPFi4yYBo2m5wjfwk2L
-         8A7MRetacT8ym3nJLZZ5durHKKLYgGVhuG8dyJxb7s2OOT3nnCswesjQNMYxjq1sCNIN
-         x/QA==
-X-Forwarded-Encrypted: i=1; AJvYcCUZs2xGTMRs/TIBdM9fHJI9FcTgd4Ek7MtTMLzk6TEdIWJBIijDDI5Wu0Krg76rIxXrxDlqpsxrHnb0Ey6WWA4tnZ2eajLj+00ANIpmTAgf
-X-Gm-Message-State: AOJu0YzB6rqx6X1c3WpnZjsQpDeqSNuLeBNYBBZucZzCkDgz6xJ2X+qp
-	RnaNojCs7F69mJCtuCDC8m2sc/REJmypxzNMQKlpZ4/57f6WSyZzIQKTV3ki0hc=
-X-Google-Smtp-Source: AGHT+IHGf00IBRZ94uXhy3F/2SqhItEAHmbVU+XM+K8PgG8OtyyJ9+JfcyGA+LZi58DTqhZ5nGjLug==
-X-Received: by 2002:a05:6a00:ccb:b0:6e4:7b26:3f28 with SMTP id b11-20020a056a000ccb00b006e47b263f28mr7902748pfv.21.1708563035154;
-        Wed, 21 Feb 2024 16:50:35 -0800 (PST)
+        bh=n1/PMiHWsYAN4wzFhndBXh4DI3dHrcZRXiJQjN9iXLY=;
+        b=qAN+pYg/v/R/upnoJDA27SOJkkMgbTJiXE9gbcfyYKV3AFI16sSs3rYDx/QcUvT9p3
+         ndI24IvREyb9zAjQMOrk7ecF9d5kSQ139cxeuFJZa2IKY4FCQJQc80MEWlX5jWyVRpHl
+         OEoYOpx7seuXN0qMzkDidWC6WeNJ64AQ3EIT8M6CJwPonNDDjIhoOQO8QxZrvgeytuqH
+         YR5A+r2eBmyA3sEjCvta//D9hZQDX79uTla6aLRePV1QkIQdQHl92bF3F3Ha4OXV1k6i
+         VeqY+AROtWB2io/b8kl+8whuuOZTVUKe99ODRv6lUqS/dbJztXzFAwQuJoGpqWLhTXKz
+         Pcuw==
+X-Forwarded-Encrypted: i=1; AJvYcCU4cVhNv63fFFVs9Ifepms5ZThbue8y3paXfbvvt537dKug4c9tOMSWT5z7eHvvzDkdkj61bm1IbOrT4IoDl0b3uIb7y2SvTVBoIyNDkMu4
+X-Gm-Message-State: AOJu0YxJLn9bpzqvc2YsrpwZuBWZOSW+b+J+Fdnv2WYsb2rs2JXpU3qy
+	Etw6UdoGG7TKhVlaztqvM5wRuI+tu5hXaavCmW8TwJ1RoWHRl/tGv5uVbSSj/eI=
+X-Google-Smtp-Source: AGHT+IG0sRbKUEOwlZ17s8jdpcAQ2S3+xO2BqNa6Gjn/TJGMcrfmrjlgVTyqtDhwxmWPGy2rlyUFuw==
+X-Received: by 2002:a05:6a21:394c:b0:19e:4aa7:e6ab with SMTP id ac12-20020a056a21394c00b0019e4aa7e6abmr22177735pzc.47.1708565580594;
+        Wed, 21 Feb 2024 17:33:00 -0800 (PST)
 Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id a2-20020aa78642000000b006e34008d0c3sm8898152pfo.100.2024.02.21.16.50.32
+        by smtp.gmail.com with ESMTPSA id lf8-20020a170902fb4800b001db5ea825b2sm8782350plb.123.2024.02.21.17.32.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Feb 2024 16:50:34 -0800 (PST)
-Date: Wed, 21 Feb 2024 16:50:30 -0800
+        Wed, 21 Feb 2024 17:32:59 -0800 (PST)
+Date: Wed, 21 Feb 2024 17:32:56 -0800
 From: Deepak Gupta <debug@rivosinc.com>
-To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc: "ajones@ventanamicro.com" <ajones@ventanamicro.com>,
-	"bjorn@rivosinc.com" <bjorn@rivosinc.com>,
-	"conor.dooley@microchip.com" <conor.dooley@microchip.com>,
-	"broonie@kernel.org" <broonie@kernel.org>,
-	"keescook@chromium.org" <keescook@chromium.org>,
-	"kito.cheng@sifive.com" <kito.cheng@sifive.com>,
-	"paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-	"palmer@dabbelt.com" <palmer@dabbelt.com>,
-	"alex@ghiti.fr" <alex@ghiti.fr>,
-	"Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
-	"alexghiti@rivosinc.com" <alexghiti@rivosinc.com>,
-	"atishp@atishpatra.org" <atishp@atishpatra.org>,
-	"cleger@rivosinc.com" <cleger@rivosinc.com>,
-	"josh@joshtriplett.org" <josh@joshtriplett.org>,
-	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-	"gerg@kernel.org" <gerg@kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"bhe@redhat.com" <bhe@redhat.com>,
-	"charlie@rivosinc.com" <charlie@rivosinc.com>,
-	"david@redhat.com" <david@redhat.com>,
-	"samitolvanen@google.com" <samitolvanen@google.com>,
-	"heiko@sntech.de" <heiko@sntech.de>,
-	"panqinglin2020@iscas.ac.cn" <panqinglin2020@iscas.ac.cn>,
-	"mchitale@ventanamicro.com" <mchitale@ventanamicro.com>,
-	"corbet@lwn.net" <corbet@lwn.net>,
-	"revest@chromium.org" <revest@chromium.org>,
-	"mason.huo@starfivetech.com" <mason.huo@starfivetech.com>,
-	"ojeda@kernel.org" <ojeda@kernel.org>,
-	"baruch@tkos.co.il" <baruch@tkos.co.il>,
-	"waylingii@gmail.com" <waylingii@gmail.com>,
-	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-	"joey.gouly@arm.com" <joey.gouly@arm.com>,
-	"ancientmodern4@gmail.com" <ancientmodern4@gmail.com>,
-	"mathis.salmen@matsal.de" <mathis.salmen@matsal.de>,
-	"aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-	"shr@devkernel.io" <shr@devkernel.io>,
-	"andy.chiu@sifive.com" <andy.chiu@sifive.com>,
-	"shuah@kernel.org" <shuah@kernel.org>,
-	"arnd@arndb.de" <arnd@arndb.de>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"vincent.chen@sifive.com" <vincent.chen@sifive.com>,
-	"greentime.hu@sifive.com" <greentime.hu@sifive.com>,
-	"oleg@redhat.com" <oleg@redhat.com>,
-	"willy@infradead.org" <willy@infradead.org>,
-	"zhangqing@loongson.cn" <zhangqing@loongson.cn>,
-	"jhubbard@nvidia.com" <jhubbard@nvidia.com>,
-	"ebiederm@xmission.com" <ebiederm@xmission.com>,
-	"Wang, Xiao W" <xiao.w.wang@intel.com>,
-	"cuiyunhui@bytedance.com" <cuiyunhui@bytedance.com>,
-	"brauner@kernel.org" <brauner@kernel.org>,
-	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-	"ruscur@russell.cc" <ruscur@russell.cc>,
-	"shikemeng@huaweicloud.com" <shikemeng@huaweicloud.com>,
-	"jszhang@kernel.org" <jszhang@kernel.org>,
-	"jeeheng.sia@starfivetech.com" <jeeheng.sia@starfivetech.com>,
-	"alx@kernel.org" <alx@kernel.org>,
-	"guoren@kernel.org" <guoren@kernel.org>,
-	"chenjiahao16@huawei.com" <chenjiahao16@huawei.com>,
-	"omosnace@redhat.com" <omosnace@redhat.com>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"evan@rivosinc.com" <evan@rivosinc.com>,
-	"bgray@linux.ibm.com" <bgray@linux.ibm.com>,
-	"apatel@ventanamicro.com" <apatel@ventanamicro.com>,
-	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Subject: Re: [RFC PATCH v1 15/28] riscv/mm: Implement map_shadow_stack()
- syscall
-Message-ID: <ZdaaVhM9Yb9Zuj3J@debug.ba.rivosinc.com>
+To: David Hildenbrand <david@redhat.com>
+Cc: rick.p.edgecombe@intel.com, broonie@kernel.org, Szabolcs.Nagy@arm.com,
+	kito.cheng@sifive.com, keescook@chromium.org,
+	ajones@ventanamicro.com, paul.walmsley@sifive.com,
+	palmer@dabbelt.com, conor.dooley@microchip.com, cleger@rivosinc.com,
+	atishp@atishpatra.org, alex@ghiti.fr, bjorn@rivosinc.com,
+	alexghiti@rivosinc.com, corbet@lwn.net, aou@eecs.berkeley.edu,
+	oleg@redhat.com, akpm@linux-foundation.org, arnd@arndb.de,
+	ebiederm@xmission.com, shuah@kernel.org, brauner@kernel.org,
+	guoren@kernel.org, samitolvanen@google.com, evan@rivosinc.com,
+	xiao.w.wang@intel.com, apatel@ventanamicro.com,
+	mchitale@ventanamicro.com, waylingii@gmail.com,
+	greentime.hu@sifive.com, heiko@sntech.de, jszhang@kernel.org,
+	shikemeng@huaweicloud.com, charlie@rivosinc.com,
+	panqinglin2020@iscas.ac.cn, willy@infradead.org,
+	vincent.chen@sifive.com, andy.chiu@sifive.com, gerg@kernel.org,
+	jeeheng.sia@starfivetech.com, mason.huo@starfivetech.com,
+	ancientmodern4@gmail.com, mathis.salmen@matsal.de,
+	cuiyunhui@bytedance.com, bhe@redhat.com, ruscur@russell.cc,
+	bgray@linux.ibm.com, alx@kernel.org, baruch@tkos.co.il,
+	zhangqing@loongson.cn, catalin.marinas@arm.com, revest@chromium.org,
+	josh@joshtriplett.org, joey.gouly@arm.com, shr@devkernel.io,
+	omosnace@redhat.com, ojeda@kernel.org, jhubbard@nvidia.com,
+	linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH v1 09/28] mm: abstract shadow stack vma behind
+ `arch_is_shadow_stack`
+Message-ID: <ZdakSM7KcXGgOoU6@debug.ba.rivosinc.com>
 References: <20240125062739.1339782-1-debug@rivosinc.com>
- <20240125062739.1339782-16-debug@rivosinc.com>
- <ba45e69f69851721419b84f1ff8b66a490f92c86.camel@intel.com>
+ <20240125062739.1339782-10-debug@rivosinc.com>
+ <2f34f6aa-99fa-4545-b706-a1d50864f9e9@redhat.com>
+ <ZbKVNm5ubV8yQtSE@debug.ba.rivosinc.com>
+ <45d5b98c-bad8-471d-a285-47f47c5b50bb@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -133,36 +95,104 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <ba45e69f69851721419b84f1ff8b66a490f92c86.camel@intel.com>
+In-Reply-To: <45d5b98c-bad8-471d-a285-47f47c5b50bb@redhat.com>
 
-On Fri, Feb 09, 2024 at 08:44:53PM +0000, Edgecombe, Rick P wrote:
->On Wed, 2024-01-24 at 22:21 -0800, debug@rivosinc.com wrote:
->> From: Deepak Gupta <debug@rivosinc.com>
+On Tue, Feb 13, 2024 at 11:34:59AM +0100, David Hildenbrand wrote:
+>On 25.01.24 18:07, Deepak Gupta wrote:
+>>On Thu, Jan 25, 2024 at 09:18:07AM +0100, David Hildenbrand wrote:
+>>>On 25.01.24 07:21, debug@rivosinc.com wrote:
+>>>>From: Deepak Gupta <debug@rivosinc.com>
+>>>>
+>>>>x86 has used VM_SHADOW_STACK (alias to VM_HIGH_ARCH_5) to encode shadow
+>>>>stack VMA. VM_SHADOW_STACK is thus not possible on 32bit. Some arches may
+>>>>need a way to encode shadow stack on 32bit and 64bit both and they may
+>>>>encode this information differently in VMAs.
+>>>>
+>>>>This patch changes checks of VM_SHADOW_STACK flag in generic code to call
+>>>>to a function `arch_is_shadow_stack` which will return true if arch
+>>>>supports shadow stack and vma is shadow stack else stub returns false.
+>>>>
+>>>>There was a suggestion to name it as `vma_is_shadow_stack`. I preferred to
+>>>>keep `arch` prefix in there because it's each arch specific.
+>>>>
+>>>>Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+>>>>---
+>>>>  include/linux/mm.h | 18 +++++++++++++++++-
+>>>>  mm/gup.c           |  5 +++--
+>>>>  mm/internal.h      |  2 +-
+>>>>  3 files changed, 21 insertions(+), 4 deletions(-)
+>>>>
+>>>>diff --git a/include/linux/mm.h b/include/linux/mm.h
+>>>>index dfe0e8118669..15c70fc677a3 100644
+>>>>--- a/include/linux/mm.h
+>>>>+++ b/include/linux/mm.h
+>>>>@@ -352,6 +352,10 @@ extern unsigned int kobjsize(const void *objp);
+>>>>   * for more details on the guard size.
+>>>>   */
+>>>>  # define VM_SHADOW_STACK	VM_HIGH_ARCH_5
+>>>>+static inline bool arch_is_shadow_stack(vm_flags_t vm_flags)
+>>>>+{
+>>>>+	return (vm_flags & VM_SHADOW_STACK);
+>>>>+}
+>>>>  #endif
+>>>>  #ifdef CONFIG_RISCV_USER_CFI
+>>>>@@ -362,10 +366,22 @@ extern unsigned int kobjsize(const void *objp);
+>>>>   * with VM_SHARED.
+>>>>   */
+>>>>  #define VM_SHADOW_STACK	VM_WRITE
+>>>>+
+>>>>+static inline bool arch_is_shadow_stack(vm_flags_t vm_flags)
+>>>>+{
+>>>>+	return ((vm_flags & (VM_WRITE | VM_READ | VM_EXEC)) == VM_WRITE);
+>>>>+}
+>>>>+
+>>>
+>>>Please no such hacks just to work around the 32bit vmflags limitation.
 >>
->> As discussed extensively in the changelog for the addition of this
->> syscall on x86 ("x86/shstk: Introduce map_shadow_stack syscall") the
->> existing mmap() and madvise() syscalls do not map entirely well onto
->> the
->> security requirements for guarded control stacks since they lead to
->> windows where memory is allocated but not yet protected or stacks
->> which
->> are not properly and safely initialised. Instead a new syscall
->> map_shadow_stack() has been defined which allocates and initialises a
->> shadow stack page.
->>
->> This patch implements this syscall for riscv. riscv doesn't require
->> token
->> to be setup by kernel because user mode can do that by itself.
->> However to
->> provide compatiblity and portability with other architectues, user
->> mode can
->> specify token set flag.
+>>As I said in another response. Noted.
+>>And if there're no takers for 32bit on riscv (which highly likely is the case)
+>>This will go away in next version of patchsets.
 >
->A lot of this code look very familiar. We'll have to think about at
->what point we could pull some of it into the code kernel.
+>Sorry for the (unusually for me) late reply. Simplifying to riscv64 
+>sounds great.
 >
->I think if we had an arch write_user_shstk(), most of the code could be
->shared here.
+>Alternatively, maybe VM_SHADOW_STACK is not even required at all on 
+>riscv if we can teach all code to only stare at arch_is_shadow_stack() 
+>instead.
 
-Yes it is. I'll think a little bit more on this on next set of patchsets
-when I send.
+Sorry for late reply.
+
+I think for risc-v this can be done, if done in following way
+
+static inline bool arch_is_shadow_stack(struct vm_flags_t vm_flags)
+{
+		return (vm_get_page_prot(vm_flags) == PAGE_SHADOWSTACK);
+}
+
+But doing above will require following
+
+- Inventing a new PROT_XXX type (let's call it PROT_SHADOWSTACK) that
+   is only exposed to kernel. PROT_SHADOWSTACK protection flag would allow
+   `do_mmap` to do right thing and setup appropriate protection perms.
+   We wouldn't want to expose this protection type to user mode (because
+   `map_shadow_stack` already exists for that).
+   Current patch series uses PROT_SHADOWSTACK because VM_SHADOW_STACK was
+   aliased to VM_WRITE.
+
+- As you said teach all the generic code as well to use arch_is_shadow_stack
+   which might become complicated (can't say for sure)
+
+
+>
+>... but, just using the same VM_SHADOW_STACK will it all much cleaner. 
+>Eventually, we can just stop playing arch-specific games with 
+>arch_is_shadow_stack and VM_SHADOW_STACK.
+
+Yeah for now, looks like easier thing to do.
+
+>
+>-- 
+>Cheers,
+>
+>David / dhildenb
+>
