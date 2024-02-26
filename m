@@ -1,176 +1,317 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-8fac.mail.infomaniak.ch (smtp-8fac.mail.infomaniak.ch [83.166.143.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DC1B130AD7
-	for <linux-kselftest@vger.kernel.org>; Mon, 26 Feb 2024 15:11:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF7DE12D772
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 Feb 2024 16:23:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708960275; cv=none; b=Z096tsxWPI5/Tc7khd6UPso6F6g8uEWX7BSpb7oV9vhmh5hdM2PTWSj5V2Vkud8USqX2biIlfWyg1zoaLssmd9E8YmmUH9KJUVhTaQuE6fVXQ7C50qgVkqXqH6O+AYghRlx9tObr8UAAfXhhETcG1C3iLzT+EeD+Jww7znVL+F8=
+	t=1708964638; cv=none; b=UkU/S2Mlr9v43iZj/N838vdi0vGF+NWg1xIytD4ZNwsI9T+BqayuLo6DI1o6rO9tyblEcPurS/74khrGD3SxOKTHZ6iol2KxR/FqHtYEGeqPooTkGA0HDkPvMx2WGxz1e+/Ev2pMUXX64gyAf600j5TI7Mz8rSaaeWSvXs37/NU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708960275; c=relaxed/simple;
-	bh=QMqxmVnBlqgd8i8PUjIsEy2rUcnjR9M6n1w80RURmsw=;
+	s=arc-20240116; t=1708964638; c=relaxed/simple;
+	bh=c3Zr+OccwjA0SrXPF9UpZOuGeG4y5Fl0LEH4JSHh5Do=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gIT2X3ywZRUSnEYw4xAGhrdMg0FzjPM2B1pKkl9CzSGBLBYpbSrmobODwG/ZiKk3lPGLW4hKI0FqXu3ksmYOCNx0zBqMHzegMVpgFdHAVdHmrid22L4CwA83mUG27+s6f7iD/EeQYLkN9mvblPR9eM9WzTi9niaztY9vytvAnM4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=YFlirN4t; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=osXp16o2; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	 MIME-Version:Content-Type; b=Qfp8/fiKSXMEMZq426GGibwgJ7SO/xXhJCzDb5/6DKqbwuffYyJUpqscehzOrpTNekR1FlW4coUTR13Y3mVNc55DyNzhKNiUs4Dkru5HG1EfhA3tXx46plcLs6h7bSjsqIkNMGcXi8ZApOZGdi/TKG4W53E4XJK9U96wQGNkKXs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=fRemlhUx; arc=none smtp.client-ip=83.166.143.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="YFlirN4t";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="osXp16o2"
-Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:98])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 34480225BD;
-	Mon, 26 Feb 2024 15:11:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1708960271; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=dRLEm3blJW2MUUlMTjXImwYPQkg7IRThtpm8+2Ddju8=;
-	b=YFlirN4txHjNaPHqGfwkwj2RdBuxTICmw62zYxJupWup4Zv4F2N/cUx25eZmlJd0Gb0en/
-	bVX8YkQvqMxip6shmMvTfoFZDwUTJzISWScAEpYFoc7FS4dMQJLQijaGyMCfKJoIXQmDds
-	q4sDyFTHdGBqWx3NoAdP15VwR6ktMe8=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1708960270; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=dRLEm3blJW2MUUlMTjXImwYPQkg7IRThtpm8+2Ddju8=;
-	b=osXp16o2YYGJC0ov9CI4vqLFK0D2DtG20gQJUyWITN4olp+yBrFnTm1u1r9HBDPWENFnjJ
-	CcimdeIygcHg37hOMjaircwLs50Sn5Tt0kIYwfEmTM3mnIHs4FOThoAkBzKPx8xMZ3WJt0
-	9/nw5Vlp01Zgd8GTEdoq3dzAGwubVxI=
-Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id B640F13A43;
-	Mon, 26 Feb 2024 15:11:09 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([10.150.64.162])
-	by imap2.dmz-prg2.suse.org with ESMTPSA
-	id VpCIHw2q3GVnawAAn2gu4w
-	(envelope-from <mpdesouza@suse.com>); Mon, 26 Feb 2024 15:11:09 +0000
-From: Marcos Paulo de Souza <mpdesouza@suse.com>
-To: "kernelci.org bot" <bot@kernelci.org>
-Cc: kernelci-results@groups.io,
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="fRemlhUx"
+Received: from smtp-4-0000.mail.infomaniak.ch (unknown [10.7.10.107])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Tk5XM2WdFzMpnw8;
+	Mon, 26 Feb 2024 17:23:47 +0100 (CET)
+Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4Tk5XL5Hcfz6YY;
+	Mon, 26 Feb 2024 17:23:46 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+	s=20191114; t=1708964627;
+	bh=c3Zr+OccwjA0SrXPF9UpZOuGeG4y5Fl0LEH4JSHh5Do=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=fRemlhUxf+yObrmNhLGPbS/xZGyxsFXGUuvYl2zs5JGCqpbDof2KTLcPJjw7gYnMk
+	 QcJwWnRqnO27scec/HibAkHYfE4txhVs/B0GrG5uzjCgVEZ8UZIvRTyYpMEk6YB3LQ
+	 8ZjwxKNDrQU1Eb7ctLxuXkyhZTihAeQzWiGg/1k8=
+From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To: Jakub Kicinski <kuba@kernel.org>,
+	Kees Cook <keescook@chromium.org>,
+	Shuah Khan <shuah@kernel.org>,
+	davem@davemloft.net
+Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
+	Will Drewry <wad@chromium.org>,
+	edumazet@google.com,
+	jakub@cloudflare.com,
+	pabeni@redhat.com,
+	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	shuah@kernel.org
-Subject: Re: kselftest/next kselftest-livepatch: 1 runs, 1 regressions (v6.8-rc1-53-gae638551ab64a)
-Date: Mon, 26 Feb 2024 12:11:05 -0300
-Message-ID: <20240226151106.3256-1-mpdesouza@suse.com>
-X-Mailer: git-send-email 2.42.1
-In-Reply-To: <65d985d0.630a0220.5f483.15a6@mx.google.com>
-References: 
+	linux-security-module@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: [PATCH 2/2] selftests/harness: Merge TEST_F_FORK() into TEST_F()
+Date: Mon, 26 Feb 2024 17:23:35 +0100
+Message-ID: <20240226162335.3532920-3-mic@digikod.net>
+In-Reply-To: <20240226162335.3532920-1-mic@digikod.net>
+References: <20240223160259.22c61d1e@kernel.org>
+ <20240226162335.3532920-1-mic@digikod.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Level: 
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.com header.s=susede1 header.b=osXp16o2
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-1.51 / 50.00];
-	 ARC_NA(0.00)[];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
-	 SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:98:from];
-	 FROM_HAS_DN(0.00)[];
-	 RCPT_COUNT_THREE(0.00)[4];
-	 R_MISSING_CHARSET(2.50)[];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 MIME_GOOD(-0.10)[text/plain];
-	 BROKEN_CONTENT_TYPE(1.50)[];
-	 TO_DN_SOME(0.00)[];
-	 NEURAL_HAM_LONG(-1.00)[-1.000];
-	 RCVD_COUNT_THREE(0.00)[3];
-	 DWL_DNSWL_MED(-2.00)[suse.com:dkim];
-	 DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	 DKIM_TRACE(0.00)[suse.com:+];
-	 MX_GOOD(-0.01)[];
-	 MID_CONTAINS_FROM(1.00)[];
-	 DBL_BLOCKED_OPENRESOLVER(0.00)[kernelci.org:url,kernelci.org:email,suse.com:dkim];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+];
-	 NEURAL_HAM_SHORT(-0.20)[-1.000];
-	 RCVD_TLS_ALL(0.00)[];
-	 BAYES_HAM(-3.00)[100.00%]
-X-Spam-Score: -1.51
-X-Rspamd-Queue-Id: 34480225BD
-X-Spam-Flag: NO
+X-Infomaniak-Routing: alpha
 
-On Fri, 23 Feb 2024 21:59:44 -0800 (PST) "kernelci.org bot" <bot@kernelci.org> wrote:
+Remplace Landlock-specific TEST_F_FORK() with an improved TEST_F() which
+brings four related changes:
 
-> kselftest/next kselftest-livepatch: 1 runs, 1 regressions (v6.8-rc1-53-gae638551ab64a)
-> 
-> Regressions Summary
-> -------------------
-> 
-> platform        | arch | lab           | compiler | defconfig                    | regressions
-> ----------------+------+---------------+----------+------------------------------+------------
-> imx6q-sabrelite | arm  | lab-collabora | gcc-10   | multi_v7_defconfig+kselftest | 1          
-> 
->   Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/v6.8-rc1-53-gae638551ab64a/plan/kselftest-livepatch/
-> 
->   Test:     kselftest-livepatch
->   Tree:     kselftest
->   Branch:   next
->   Describe: v6.8-rc1-53-gae638551ab64a
->   URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git
->   SHA:      ae638551ab64a216364a63c4ee5061f82702fde2 
-> 
-> 
-> Test Regressions
-> ---------------- 
-> 
-> 
-> platform        | arch | lab           | compiler | defconfig                    | regressions
-> ----------------+------+---------------+----------+------------------------------+------------
-> imx6q-sabrelite | arm  | lab-collabora | gcc-10   | multi_v7_defconfig+kselftest | 1          
-> 
->   Details:     https://kernelci.org/test/plan/id/65d97ac95e7438716b637012
-> 
->   Results:     1 PASS, 1 FAIL, 0 SKIP
->   Full config: multi_v7_defconfig+kselftest
->   Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 20210110)
->   Plain log:   https://storage.kernelci.org//kselftest/next/v6.8-rc1-53-gae638551ab64a/arm/multi_v7_defconfig+kselftest/gcc-10/lab-collabora/kselftest-livepatch-imx6q-sabrelite.txt
->   HTML log:    https://storage.kernelci.org//kselftest/next/v6.8-rc1-53-gae638551ab64a/arm/multi_v7_defconfig+kselftest/gcc-10/lab-collabora/kselftest-livepatch-imx6q-sabrelite.html
->   Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-kselftest/20240129.0/armhf/initrd.cpio.gz 
-> 
-> 
->   * kselftest-livepatch.shardfile-livepatch: https://kernelci.org/test/case/id/65d97ac95e7438716b637014
->         failing since 9 days (last pass: v6.8-rc1, first fail: v6.8-rc1-32-g345e8abe4c355)
-> 
->     2024-02-24T05:18:03.496498  / # 
-> 
->     2024-02-24T05:18:03.506371  
-> 
->     2024-02-24T05:18:08.651646  / # export NFS_ROOTFS='/var/lib/lava/dispatcher/tmp/12846770/extract-nfsrootfs-_kckc7kq'
-> 
->     2024-02-24T05:18:08.665764  export NFS_ROOTFS='/var/lib/lava/dispatcher/tmp/12846770/extract-nfsrootfs-_kckc7kq'
-> 
->     2024-02-24T05:18:10.892206  / # export NFS_SERVER_IP='192.168.201.1'
-> 
->     2024-02-24T05:18:10.903149  export NFS_SERVER_IP='192.168.201.1'
-> 
->     2024-02-24T05:18:11.021855  / # #
-> 
->     2024-02-24T05:18:11.030274  #
-> 
->     2024-02-24T05:18:11.147792  / # export SHELL=/bin/bash
-> 
->     2024-02-24T05:18:11.158106  export SHELL=/bin/bash
->  
->     ... (121 line(s) more)  
->   
+Run TEST_F()'s tests in a grandchild process to make it possible to
+drop privileges and delegate teardown to the parent.
 
+Compared to TEST_F_FORK(), simplify handling of the test grandchild
+process thanks to vfork(2), and makes it generic (e.g. no explicit
+conversion between exit code and _metadata).
 
-Is there a way to check this locally? How this teseting image is generated? I would like
-to check if there is something that we need to fix on the livepatch selftests.
+Compared to TEST_F_FORK(), run teardown even when tests failed with an
+assert thanks to commit 63e6b2a42342 ("selftests/harness: Run TEARDOWN
+for ASSERT failures").
 
-Thanks,
-  Marcos
+Simplify the test harness code by removing the no_print and step fields
+which are not used.  I added this feature just after I made
+kselftest_harness.h more broadly available but this step counter
+remained even though it wasn't needed after all. See commit 369130b63178
+("selftests: Enhance kselftest_harness.h to print which assert failed").
+
+Replace spaces with tabs in one line of __TEST_F_IMPL().
+
+Cc: Günther Noack <gnoack@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Will Drewry <wad@chromium.org>
+Signed-off-by: Mickaël Salaün <mic@digikod.net>
+---
+ tools/testing/selftests/kselftest_harness.h | 56 +++++++++----------
+ tools/testing/selftests/landlock/common.h   | 62 +--------------------
+ 2 files changed, 27 insertions(+), 91 deletions(-)
+
+diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+index e05ac8261046..841d34deb1a6 100644
+--- a/tools/testing/selftests/kselftest_harness.h
++++ b/tools/testing/selftests/kselftest_harness.h
+@@ -95,14 +95,6 @@
+  * E.g., #define TH_LOG_ENABLED 1
+  *
+  * If no definition is provided, logging is enabled by default.
+- *
+- * If there is no way to print an error message for the process running the
+- * test (e.g. not allowed to write to stderr), it is still possible to get the
+- * ASSERT_* number for which the test failed.  This behavior can be enabled by
+- * writing `_metadata->no_print = true;` before the check sequence that is
+- * unable to print.  When an error occur, instead of printing an error message
+- * and calling `abort(3)`, the test process call `_exit(2)` with the assert
+- * number as argument, which is then printed by the parent process.
+  */
+ #define TH_LOG(fmt, ...) do { \
+ 	if (TH_LOG_ENABLED) \
+@@ -363,6 +355,11 @@
+  * Defines a test that depends on a fixture (e.g., is part of a test case).
+  * Very similar to TEST() except that *self* is the setup instance of fixture's
+  * datatype exposed for use by the implementation.
++ *
++ * The @test_name code is run in a separate process sharing the same memory
++ * (i.e. vfork), which means that the test process can update its privileges
++ * without impacting the related FIXTURE_TEARDOWN() (e.g. to remove files from
++ * a directory where write access was dropped).
+  */
+ #define TEST_F(fixture_name, test_name) \
+ 	__TEST_F_IMPL(fixture_name, test_name, -1, TEST_TIMEOUT_DEFAULT)
+@@ -384,15 +381,28 @@
+ 	{ \
+ 		/* fixture data is alloced, setup, and torn down per call. */ \
+ 		FIXTURE_DATA(fixture_name) self; \
++		pid_t child; \
+ 		memset(&self, 0, sizeof(FIXTURE_DATA(fixture_name))); \
+ 		if (setjmp(_metadata->env) == 0) { \
+ 			fixture_name##_setup(_metadata, &self, variant->data); \
+ 			/* Let setup failure terminate early. */ \
+-                       if (!_metadata->passed || _metadata->skip) \
++			if (!_metadata->passed || _metadata->skip) \
+ 				return; \
+ 			_metadata->setup_completed = true; \
+-			fixture_name##_##test_name(_metadata, &self, variant->data); \
++			/* Use the same _metadata. */ \
++			child = vfork(); \
++			if (child == 0) { \
++				fixture_name##_##test_name(_metadata, &self, variant->data); \
++				_exit(0); \
++			} \
++			if (child < 0) { \
++				ksft_print_msg("ERROR SPAWNING TEST GANDCHILD\n"); \
++				_metadata->passed = 0; \
++			} \
+ 		} \
++		if (child == 0) \
++			/* Child failed and updated the shared _metadata. */ \
++			_exit(0); \
+ 		if (_metadata->setup_completed) \
+ 			fixture_name##_teardown(_metadata, &self, variant->data); \
+ 		__test_check_assert(_metadata); \
+@@ -694,18 +704,12 @@
+ 	for (; _metadata->trigger; _metadata->trigger = \
+ 			__bail(_assert, _metadata))
+ 
+-#define __INC_STEP(_metadata) \
+-	/* Keep "step" below 255 (which is used for "SKIP" reporting). */	\
+-	if (_metadata->passed && _metadata->step < 253) \
+-		_metadata->step++;
+-
+ #define is_signed_type(var)       (!!(((__typeof__(var))(-1)) < (__typeof__(var))1))
+ 
+ #define __EXPECT(_expected, _expected_str, _seen, _seen_str, _t, _assert) do { \
+ 	/* Avoid multiple evaluation of the cases */ \
+ 	__typeof__(_expected) __exp = (_expected); \
+ 	__typeof__(_seen) __seen = (_seen); \
+-	if (_assert) __INC_STEP(_metadata); \
+ 	if (!(__exp _t __seen)) { \
+ 		/* Report with actual signedness to avoid weird output. */ \
+ 		switch (is_signed_type(__exp) * 2 + is_signed_type(__seen)) { \
+@@ -751,7 +755,6 @@
+ #define __EXPECT_STR(_expected, _seen, _t, _assert) do { \
+ 	const char *__exp = (_expected); \
+ 	const char *__seen = (_seen); \
+-	if (_assert) __INC_STEP(_metadata); \
+ 	if (!(strcmp(__exp, __seen) _t 0))  { \
+ 		__TH_LOG("Expected '%s' %s '%s'.", __exp, #_t, __seen); \
+ 		_metadata->passed = 0; \
+@@ -837,8 +840,6 @@ struct __test_metadata {
+ 	int trigger; /* extra handler after the evaluation */
+ 	int timeout;	/* seconds to wait for test timeout */
+ 	bool timed_out;	/* did this test timeout instead of exiting? */
+-	__u8 step;
+-	bool no_print; /* manual trigger when TH_LOG_STREAM is not available */
+ 	bool aborted;	/* stopped test due to failed ASSERT */
+ 	bool setup_completed; /* did setup finish? */
+ 	jmp_buf env;	/* for exiting out of test early */
+@@ -873,11 +874,8 @@ static inline int __bail(int for_realz, struct __test_metadata *t)
+ 
+ static inline void __test_check_assert(struct __test_metadata *t)
+ {
+-	if (t->aborted) {
+-		if (t->no_print)
+-			_exit(t->step);
++	if (t->aborted)
+ 		abort();
+-	}
+ }
+ 
+ struct __test_metadata *__active_test;
+@@ -954,13 +952,12 @@ void __wait_for_test(struct __test_metadata *t)
+ 			case 0:
+ 				t->passed = 1;
+ 				break;
+-			/* Other failure, assume step report. */
++			/* Failure */
+ 			default:
+ 				t->passed = 0;
+ 				fprintf(TH_LOG_STREAM,
+-					"# %s: Test failed at step #%d\n",
+-					t->name,
+-					WEXITSTATUS(status));
++					"# %s: Test failed\n",
++					t->name);
+ 			}
+ 		}
+ 	} else if (WIFSIGNALED(status)) {
+@@ -1114,8 +1111,6 @@ void __run_test(struct __fixture_metadata *f,
+ 	t->passed = 1;
+ 	t->skip = 0;
+ 	t->trigger = 0;
+-	t->step = 1;
+-	t->no_print = 0;
+ 	memset(t->results->reason, 0, sizeof(t->results->reason));
+ 
+ 	ksft_print_msg(" RUN           %s%s%s.%s ...\n",
+@@ -1137,8 +1132,7 @@ void __run_test(struct __fixture_metadata *f,
+ 		/* Pass is exit 0 */
+ 		if (t->passed)
+ 			_exit(0);
+-		/* Something else happened, report the step. */
+-		_exit(t->step);
++		_exit(1);
+ 	} else {
+ 		__wait_for_test(t);
+ 	}
+diff --git a/tools/testing/selftests/landlock/common.h b/tools/testing/selftests/landlock/common.h
+index 0bc15d36971a..7e2b431b9f90 100644
+--- a/tools/testing/selftests/landlock/common.h
++++ b/tools/testing/selftests/landlock/common.h
+@@ -23,66 +23,8 @@
+ #define __maybe_unused __attribute__((__unused__))
+ #endif
+ 
+-/*
+- * TEST_F_FORK() is useful when a test drop privileges but the corresponding
+- * FIXTURE_TEARDOWN() requires them (e.g. to remove files from a directory
+- * where write actions are denied).  For convenience, FIXTURE_TEARDOWN() is
+- * also called when the test failed, but not when FIXTURE_SETUP() failed.  For
+- * this to be possible, we must not call abort() but instead exit smoothly
+- * (hence the step print).
+- */
+-/* clang-format off */
+-#define TEST_F_FORK(fixture_name, test_name) \
+-	static void fixture_name##_##test_name##_child( \
+-		struct __test_metadata *_metadata, \
+-		FIXTURE_DATA(fixture_name) *self, \
+-		const FIXTURE_VARIANT(fixture_name) *variant); \
+-	__TEST_F_IMPL(fixture_name, test_name, -1, TEST_TIMEOUT_DEFAULT) \
+-	{ \
+-		int status; \
+-		const pid_t child = fork(); \
+-		if (child < 0) \
+-			abort(); \
+-		if (child == 0) { \
+-			_metadata->no_print = 1; \
+-			fixture_name##_##test_name##_child(_metadata, self, variant); \
+-			if (_metadata->skip) \
+-				_exit(255); \
+-			if (_metadata->passed) \
+-				_exit(0); \
+-			_exit(_metadata->step); \
+-		} \
+-		if (child != waitpid(child, &status, 0)) \
+-			abort(); \
+-		if (WIFSIGNALED(status) || !WIFEXITED(status)) { \
+-			_metadata->passed = 0; \
+-			_metadata->step = 1; \
+-			return; \
+-		} \
+-		switch (WEXITSTATUS(status)) { \
+-		case 0: \
+-			_metadata->passed = 1; \
+-			break; \
+-		case 255: \
+-			_metadata->passed = 1; \
+-			_metadata->skip = 1; \
+-			break; \
+-		default: \
+-			_metadata->passed = 0; \
+-			_metadata->step = WEXITSTATUS(status); \
+-			break; \
+-		} \
+-	} \
+-	static void fixture_name##_##test_name##_child( \
+-		struct __test_metadata __attribute__((unused)) *_metadata, \
+-		FIXTURE_DATA(fixture_name) __attribute__((unused)) *self, \
+-		const FIXTURE_VARIANT(fixture_name) \
+-			__attribute__((unused)) *variant)
+-/* clang-format on */
+-
+-/* Makes backporting easier. */
+-#undef TEST_F
+-#define TEST_F(fixture_name, test_name) TEST_F_FORK(fixture_name, test_name)
++/* TEST_F_FORK() should not be used for new tests. */
++#define TEST_F_FORK(fixture_name, test_name) TEST_F(fixture_name, test_name)
+ 
+ #ifndef landlock_create_ruleset
+ static inline int
+-- 
+2.44.0
+
