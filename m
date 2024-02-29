@@ -1,165 +1,190 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C2EF50A78;
-	Thu, 29 Feb 2024 06:39:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAEDC3E46B
+	for <linux-kselftest@vger.kernel.org>; Thu, 29 Feb 2024 06:58:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709188740; cv=none; b=FtLY9H4B1TLdOumwLBdXvnL+J/YNhgDTluDCzBFWoA329M1sZhnkfsDzHIHSgl2xfow4b8BwlwttqhHo4sIZ20wt9vVWc64QIBAsD+kfsUJXYBE0olD0P/Q/02giIT7Uy/RlDUqnvkEJI6TJ8CLgLiHpsy4ybBVEhL+JtGaPLJc=
+	t=1709189882; cv=none; b=nJhOnNuQwOJlW+gyhr+uny88crieVK1l9skwQ4CdAk0oOp1ZYw/iAfVFx6lbqVK1wufsqi1cFT7XUCk3nyz6YcZ7Aio0ZZCYMw2gC6FQmsXSPEL9gw6q1Xgqf8U6UALPcG6Ad3rrmhRdx91CcNm+GwOnW4mjrWRn4g35v9clec4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709188740; c=relaxed/simple;
-	bh=cfh98lsnK1WA24iz8Eoegn/HEuWd+0TrFqTV/dJ6qbA=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=JtqQ85uiA52x9XWSIk3/XJPZhMxIPwToC6R07FEO1StAlbFguiBfatwe4spOXMW15XReoDw2cTbneGTPnJiFrn/ZRu2MrJIz3hL04WgLUACZZVWKGP0C6UikVoy1Djwn3beSUCzcWOHamxW26E4d3Ci0PIKDwtFuNqSKM+vbu9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sa5uX/5L; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1709189882; c=relaxed/simple;
+	bh=kSl3pHe/ihRWWBrf1Tezc0PNoeKDj3aNbp4aK+ZcfUs=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=XD1pcc6VQsy++fQiDWxM2Bb4bM/CQlDdGOJhbVWw+EBdg54X0P7W5eHXSDyjnTDsAFuuGZEA3/q1Tv7LfNwBMAbUxQt1Jq0v5V8435kLeh9jualpVSVrbANX9DJ/FwXyOF2POS3/JQ3yjCHRNjiZIYU0XkSr3zE95RMTuuRS/S0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KU0Rzqq9; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sa5uX/5L"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54D02C433F1;
-	Thu, 29 Feb 2024 06:38:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709188740;
-	bh=cfh98lsnK1WA24iz8Eoegn/HEuWd+0TrFqTV/dJ6qbA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Sa5uX/5L0fo+9Xu4rwU36fBtU3OqtGH71/qOtqqJ6XyZrV71FtwYXIHJ8WUSJqdDj
-	 gd/pZAU0+epjdcjKLR771mYZbVUrf5BzsPE5wBu2b5Y29N14X/PcS7yphvWyFuu+JQ
-	 zyJdsqLIHXyQSx2PFZHdTBdK2SfghMc3+08UFJAS9+SSADAsL3jnoeHssoyscRNynZ
-	 4wii49o7xSJSDrx0NHv2wTVyNMXOQO23MnazuB6SaZjRnugWDEuU6sBXWA/tEuD+VB
-	 x6Bx88vlC1dTVpSgQ5JOY8NKlNcCXlx83iE4UtTayWE113TLVezg8gvh+i4KBGjQx0
-	 aI8rfRWHDiTdg==
-Date: Thu, 29 Feb 2024 15:38:55 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Cc: Jiri Olsa <olsajiri@gmail.com>, Steven Rostedt <rostedt@goodmis.org>,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 0/7] tracing/probes: Support function parameter
- access from return probe
-Message-Id: <20240229153855.6fe3fb454cf56eebc6ea9953@kernel.org>
-In-Reply-To: <20240229145139.a215085c44add62302463312@kernel.org>
-References: <170891987362.609861.6767830614537418260.stgit@devnote2>
-	<Zd9eBn2FTQzYyg7L@krava>
-	<20240229145139.a215085c44add62302463312@kernel.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KU0Rzqq9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1709189879;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YFmwQWt00Kaj3Ot93eqM53gw7IrZWb5swPo/SmIieP0=;
+	b=KU0Rzqq9Th7y+JH2tQUObiwn4ZyMAcaxL0hZECiLoD2XdcWXED+EzNjsW16kGNSDU9SiF1
+	hih70MdboIbMXbw6A+Bdj4zrfaOZEjFNgkjG/hBm7psTMzcG1NamEsY4f0aRCP1rdRHqhU
+	mkzgBdLYQ+6Dvu8L3odlulNhxqEUN5U=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-659-dGxUhgedMeCDdf-lt5JrlQ-1; Thu, 29 Feb 2024 01:57:55 -0500
+X-MC-Unique: dGxUhgedMeCDdf-lt5JrlQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 55E9B185A784;
+	Thu, 29 Feb 2024 06:57:55 +0000 (UTC)
+Received: from virt-mtcollins-01.lab.eng.rdu2.redhat.com (virt-mtcollins-01.lab.eng.rdu2.redhat.com [10.8.1.196])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 45FF148B;
+	Thu, 29 Feb 2024 06:57:55 +0000 (UTC)
+From: Shaoqin Huang <shahuang@redhat.com>
+To: Oliver Upton <oliver.upton@linux.dev>,
+	Marc Zyngier <maz@kernel.org>,
+	kvmarm@lists.linux.dev
+Cc: Eric Auger <eauger@redhat.com>,
+	Shaoqin Huang <shahuang@redhat.com>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v5 1/3] KVM: selftests: aarch64: Add helper function for the vpmu vcpu creation
+Date: Thu, 29 Feb 2024 01:56:19 -0500
+Message-Id: <20240229065625.114207-2-shahuang@redhat.com>
+In-Reply-To: <20240229065625.114207-1-shahuang@redhat.com>
+References: <20240229065625.114207-1-shahuang@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.1
 
-On Thu, 29 Feb 2024 14:51:39 +0900
-Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
+Create a vcpu with vpmu would be a common requirement for the vpmu test,
+so add the helper function for the vpmu vcpu creation. And use those
+helper function in the vpmu_counter_access.c test.
 
-> On Wed, 28 Feb 2024 17:23:34 +0100
-> Jiri Olsa <olsajiri@gmail.com> wrote:
-> 
-> > On Mon, Feb 26, 2024 at 12:57:53PM +0900, Masami Hiramatsu (Google) wrote:
-> > > Hi,
-> > > 
-> > > Here is version 2 series of patches to support accessing function entry data
-> > > from function *return* probes (including kretprobe and fprobe-exit event).
-> > > 
-> > > In this version, I added another cleanup [4/7], updated README[5/7], added
-> > > testcases[6/7] and updated document[7/7].
-> > > 
-> > > This allows us to access the results of some functions, which returns the
-> > > error code and its results are passed via function parameter, such as an
-> > > structure-initialization function.
-> > > 
-> > > For example, vfs_open() will link the file structure to the inode and update
-> > > mode. Thus we can trace that changes.
-> > > 
-> > >  # echo 'f vfs_open mode=file->f_mode:x32 inode=file->f_inode:x64' >> dynamic_events
-> > >  # echo 'f vfs_open%return mode=file->f_mode:x32 inode=file->f_inode:x64' >> dynamic_events 
-> > >  # echo 1 > events/fprobes/enable 
-> > >  # cat trace
-> > >               sh-131     [006] ...1.  1945.714346: vfs_open__entry: (vfs_open+0x4/0x40) mode=0x2 inode=0x0
-> > >               sh-131     [006] ...1.  1945.714358: vfs_open__exit: (do_open+0x274/0x3d0 <- vfs_open) mode=0x4d801e inode=0xffff888008470168
-> > >              cat-143     [007] ...1.  1945.717949: vfs_open__entry: (vfs_open+0x4/0x40) mode=0x1 inode=0x0
-> > >              cat-143     [007] ...1.  1945.717956: vfs_open__exit: (do_open+0x274/0x3d0 <- vfs_open) mode=0x4a801d inode=0xffff888005f78d28
-> > >              cat-143     [007] ...1.  1945.720616: vfs_open__entry: (vfs_open+0x4/0x40) mode=0x1 inode=0x0
-> > >              cat-143     [007] ...1.  1945.728263: vfs_open__exit: (do_open+0x274/0x3d0 <- vfs_open) mode=0xa800d inode=0xffff888004ada8d8
-> > 
-> > hi,
-> > I hit a crash while playing with this, by runnning:
-> > 
-> >   # echo 'f vfs_read%return $arg*' >> dynamic_events
-> >   # echo 1 > events/fprobes/enable 
-> 
-> Thanks for reporting! But I can not reproduce it.
-> Can you share your kconfig?
+Use this chance to delete the meaningless ASSERT about the pmuver,
+because KVM does not advertise an IMP_DEF PMU to guests.
 
-No problem, I could reproduce it.
+No functional changes intended.
 
-/sys/kernel/tracing # echo 'f vfs_read%return $arg* $retval' >> dynamic_events 
-/sys/kernel/tracing # echo 1 > events/fprobes/enable 
-/sys/kernel/tracing # 
-/sys/kernel/tracing # [   67.709725] general protection fault, maybe for address 0xffffc9000047bef8: 0000 [#1] PREEMPT SMP PTI
-[   67.714672] CPU: 5 PID: 132 Comm: sh Tainted: G                 N 6.8.0-rc5-00007-gd5e41e4cee7e #149
-[   67.716491] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
-[   67.718036] RIP: 0010:__x86_indirect_thunk_r13+0xa/0x20
-[   67.719087] Code: e8 01 00 00 00 cc 4c 89 24 24 c3 cc cc cc cc 66 66 2e 0f 1f 84 00 00 00 00 00 66 0f 1f 44 00 00 e8 01 00 00 00 cc 4c 89 2c 24 <c3> cc cc cc cc 66 66 2e 0f 1f 84 00 00 00 00 00 66 0f 1f 44 00 00
-[   67.722314] RSP: 0018:ffffc9000047bdf0 EFLAGS: 00010286
-[   67.723251] RAX: ffffc9000047bef8 RBX: ffff8880073258e0 RCX: ffffc9000047be48
-[   67.724704] RDX: ffffffff813aba09 RSI: 0000000000000000 RDI: ffff8880073258d0
-[   67.725840] RBP: ffff8880073258e0 R08: 0000000000000000 R09: ffff888005053648
-[   67.727017] R10: ffff888008452388 R11: 0000000000000001 R12: ffffffff813aba09
-[   67.728107] R13: 9c73d7ba3660c600 R14: ffffc9000047bef0 R15: ffffc9000047be48
-[   67.729630] FS:  000000000115d8c0(0000) GS:ffff88807d940000(0000) knlGS:0000000000000000
-[   67.731231] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   67.732285] CR2: 00000000005a2319 CR3: 0000000005ad6000 CR4: 00000000000006b0
-[   67.733502] Call Trace:
-[   67.734013]  <TASK>
-[   67.734504]  ? die_addr+0x37/0x90
-[   67.735307]  ? exc_general_protection+0x1ac/0x3f0
-[   67.736158]  ? asm_exc_general_protection+0x26/0x30
-[   67.736984]  ? ksys_read+0x69/0xf0
-[   67.737559]  ? ksys_read+0x69/0xf0
-[   67.738142]  ? __x86_indirect_thunk_r13+0xa/0x20
-[   67.739160]  ? rethook_trampoline_handler+0x95/0x200
-[   67.739919]  ? arch_rethook_trampoline_callback+0x3a/0x50
-[   67.740665]  ? arch_rethook_trampoline+0x2c/0x60
-[   67.741362]  ? ksys_read+0x69/0xf0
-[   67.741980]  ? trace_clock_x86_tsc+0x20/0x20
-[   67.742662]  ? do_syscall_64+0xcc/0x1e0
-[   67.743289]  ? entry_SYSCALL_64_after_hwframe+0x6f/0x77
-[   67.744620]  </TASK>
-[   67.745044] Modules linked in:
-[   67.745559] ---[ end trace 0000000000000000 ]---
-[   67.746221] RIP: 0010:__x86_indirect_thunk_r13+0xa/0x20
-[   67.746927] Code: e8 01 00 00 00 cc 4c 89 24 24 c3 cc cc cc cc 66 66 2e 0f 1f 84 00 00 00 00 00 66 0f 1f 44 00 00 e8 01 00 00 00 cc 4c 89 2c 24 <c3> cc cc cc cc 66 66 2e 0f 1f 84 00 00 00 00 00 66 0f 1f 44 00 00
-[   67.749176] RSP: 0018:ffffc9000047bdf0 EFLAGS: 00010286
-[   67.749835] RAX: ffffc9000047bef8 RBX: ffff8880073258e0 RCX: ffffc9000047be48
-[   67.750687] RDX: ffffffff813aba09 RSI: 0000000000000000 RDI: ffff8880073258d0
-[   67.751880] RBP: ffff8880073258e0 R08: 0000000000000000 R09: ffff888005053648
-[   67.752810] R10: ffff888008452388 R11: 0000000000000001 R12: ffffffff813aba09
-[   67.753721] R13: 9c73d7ba3660c600 R14: ffffc9000047bef0 R15: ffffc9000047be48
-[   67.754554] FS:  000000000115d8c0(0000) GS:ffff88807d940000(0000) knlGS:0000000000000000
-[   67.755568] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   67.756278] CR2: 00000000005a2319 CR3: 0000000005ad6000 CR4: 00000000000006b0
-[   67.757089] Kernel panic - not syncing: Fatal exception
-[   67.757917] Kernel Offset: disabled
-[   67.758404] ---[ end Kernel panic - not syncing: Fatal exception ]---
+Signed-off-by: Shaoqin Huang <shahuang@redhat.com>
+---
+ .../kvm/aarch64/vpmu_counter_access.c         | 33 ++++---------------
+ .../selftests/kvm/include/aarch64/vpmu.h      | 29 ++++++++++++++++
+ 2 files changed, 36 insertions(+), 26 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/include/aarch64/vpmu.h
 
-Hmm, this seems arch_rethook_trampoline caused the issue.
-
-And curiously, it depends on the number of stored data.
-
-OK:
-/sys/kernel/tracing # echo 'f vfs_read%return $arg1 $arg2 $arg3' >> dynamic_events 
-/sys/kernel/tracing # echo 1 > events/fprobes/enable 
-
-NG:
-/sys/kernel/tracing # echo 'f vfs_read%return $arg1 $arg2 $arg3 $arg4' >> dynamic_events 
-/sys/kernel/tracing # echo 1 > events/fprobes/enable 
-
-I also confirmed that on 'vfs_write' caused the same result. 3 arguments(24 bytes) is OK,
-but 4 arguments (32bytes) is NG.
-
-Thank you,
-
-
+diff --git a/tools/testing/selftests/kvm/aarch64/vpmu_counter_access.c b/tools/testing/selftests/kvm/aarch64/vpmu_counter_access.c
+index 5f9713364693..e068a0a7a43b 100644
+--- a/tools/testing/selftests/kvm/aarch64/vpmu_counter_access.c
++++ b/tools/testing/selftests/kvm/aarch64/vpmu_counter_access.c
+@@ -16,6 +16,7 @@
+ #include <processor.h>
+ #include <test_util.h>
+ #include <vgic.h>
++#include <vpmu.h>
+ #include <perf/arm_pmuv3.h>
+ #include <linux/bitfield.h>
+ 
+@@ -426,18 +427,8 @@ static void guest_code(uint64_t expected_pmcr_n)
+ /* Create a VM that has one vCPU with PMUv3 configured. */
+ static void create_vpmu_vm(void *guest_code)
+ {
+-	struct kvm_vcpu_init init;
+-	uint8_t pmuver, ec;
+-	uint64_t dfr0, irq = 23;
+-	struct kvm_device_attr irq_attr = {
+-		.group = KVM_ARM_VCPU_PMU_V3_CTRL,
+-		.attr = KVM_ARM_VCPU_PMU_V3_IRQ,
+-		.addr = (uint64_t)&irq,
+-	};
+-	struct kvm_device_attr init_attr = {
+-		.group = KVM_ARM_VCPU_PMU_V3_CTRL,
+-		.attr = KVM_ARM_VCPU_PMU_V3_INIT,
+-	};
++	uint8_t ec;
++	uint64_t irq = 23;
+ 
+ 	/* The test creates the vpmu_vm multiple times. Ensure a clean state */
+ 	memset(&vpmu_vm, 0, sizeof(vpmu_vm));
+@@ -449,27 +440,17 @@ static void create_vpmu_vm(void *guest_code)
+ 					guest_sync_handler);
+ 	}
+ 
+-	/* Create vCPU with PMUv3 */
+-	vm_ioctl(vpmu_vm.vm, KVM_ARM_PREFERRED_TARGET, &init);
+-	init.features[0] |= (1 << KVM_ARM_VCPU_PMU_V3);
+-	vpmu_vm.vcpu = aarch64_vcpu_add(vpmu_vm.vm, 0, &init, guest_code);
++	vpmu_vm.vcpu = vm_vcpu_add_with_vpmu(vpmu_vm.vm, 0, guest_code);
+ 	vcpu_init_descriptor_tables(vpmu_vm.vcpu);
++
+ 	vpmu_vm.gic_fd = vgic_v3_setup(vpmu_vm.vm, 1, 64,
+ 					GICD_BASE_GPA, GICR_BASE_GPA);
+ 	__TEST_REQUIRE(vpmu_vm.gic_fd >= 0,
+ 		       "Failed to create vgic-v3, skipping");
+ 
+-	/* Make sure that PMUv3 support is indicated in the ID register */
+-	vcpu_get_reg(vpmu_vm.vcpu,
+-		     KVM_ARM64_SYS_REG(SYS_ID_AA64DFR0_EL1), &dfr0);
+-	pmuver = FIELD_GET(ARM64_FEATURE_MASK(ID_AA64DFR0_EL1_PMUVer), dfr0);
+-	TEST_ASSERT(pmuver != ID_AA64DFR0_EL1_PMUVer_IMP_DEF &&
+-		    pmuver >= ID_AA64DFR0_EL1_PMUVer_IMP,
+-		    "Unexpected PMUVER (0x%x) on the vCPU with PMUv3", pmuver);
+-
+ 	/* Initialize vPMU */
+-	vcpu_ioctl(vpmu_vm.vcpu, KVM_SET_DEVICE_ATTR, &irq_attr);
+-	vcpu_ioctl(vpmu_vm.vcpu, KVM_SET_DEVICE_ATTR, &init_attr);
++	vpmu_set_irq(vpmu_vm.vcpu, irq);
++	vpmu_init(vpmu_vm.vcpu);
+ }
+ 
+ static void destroy_vpmu_vm(void)
+diff --git a/tools/testing/selftests/kvm/include/aarch64/vpmu.h b/tools/testing/selftests/kvm/include/aarch64/vpmu.h
+new file mode 100644
+index 000000000000..0dfcc7ab1c4d
+--- /dev/null
++++ b/tools/testing/selftests/kvm/include/aarch64/vpmu.h
+@@ -0,0 +1,29 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#include <kvm_util.h>
++
++static inline struct kvm_vcpu *vm_vcpu_add_with_vpmu(struct kvm_vm *vm,
++						     uint32_t vcpu_id,
++						     void *guest_code)
++{
++	struct kvm_vcpu_init init;
++
++	/* Create vCPU with PMUv3 */
++	vm_ioctl(vm, KVM_ARM_PREFERRED_TARGET, &init);
++	init.features[0] |= (1 << KVM_ARM_VCPU_PMU_V3);
++
++	return aarch64_vcpu_add(vm, 0, &init, guest_code);
++}
++
++static void vpmu_set_irq(struct kvm_vcpu *vcpu, int irq)
++{
++	kvm_device_attr_set(vcpu->fd, KVM_ARM_VCPU_PMU_V3_CTRL,
++			    KVM_ARM_VCPU_PMU_V3_IRQ, &irq);
++}
++
++static void vpmu_init(struct kvm_vcpu *vcpu)
++{
++	kvm_device_attr_set(vcpu->fd, KVM_ARM_VCPU_PMU_V3_CTRL,
++			    KVM_ARM_VCPU_PMU_V3_INIT, NULL);
++}
++
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+2.40.1
+
