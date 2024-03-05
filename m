@@ -1,103 +1,86 @@
-Received: from smtp-42ae.mail.infomaniak.ch (smtp-42ae.mail.infomaniak.ch [84.16.66.174])
+Received: from smtp-42af.mail.infomaniak.ch (smtp-42af.mail.infomaniak.ch [84.16.66.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B778B128392
-	for <linux-kselftest@vger.kernel.org>; Tue,  5 Mar 2024 15:57:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57F28128399;
+	Tue,  5 Mar 2024 16:06:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709654234; cv=none; b=J+LE21PLwxvbai5kZwJt0MY+eOK9xRbstIvZboLQLNClM55pOdsV/rR38ePrCpc8mcWj23qEmNU7+czUZubwEXpc7gb9vb4dR2M+rd6pI+d5NgFrMqgH5WzaCeJdsxb835B3i99b8asZuSSI0driUOm6l1wDnWRiBi1a2HfkFZM=
+	t=1709654774; cv=none; b=RUJ9r34Do+RPZ/taziBly+kU55E+3saUw0JNopveVKx57w7ZYDEQQd1IJEjtesU6TkE4a3cPIL/RgqHAjZa1ap5fDklUvN1JbFkVHTNfMFlC0wziumkEM+NENVZHjFVapv2CT+ZwMWecei9nsRiySF8CH4ElKCzH4A3bW+uPbp0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709654234; c=relaxed/simple;
-	bh=unUHeeD7nB7m3/v8iE28UJN8bXkub1FSGBrDIstyyUY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nbEoQgeWqqwUmNjGNl9lxWeez6FYWmcVtnCwKN1S8MkExS9+MIUACDYEbWHk7MzLxO8KBJl89D9yc6SpuLn2WB8jDe40R0rquUZQhp9Qqw4G3aEjXtjekYYxhZsNZxVVf491D5/10q+LyJae54GXS8HLCWhfptvc6UBEF6G05bk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=u/zwGug3; arc=none smtp.client-ip=84.16.66.174
+	s=arc-20240116; t=1709654774; c=relaxed/simple;
+	bh=z5qhYq1wOr3LpvwmDPTLIjklmi92wexHHTkNSwgx3KA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jYtf9EBHxXXwxEG4HjczBOV6apIjzpEQ5i7BBEhqfdpbEBjhOLEr7H3x528mLzSPKhlQSwz1POBqOMARyfCxhYE6RErPiX6La40jd9dwx49y6zqeM6JP4SDUzW/Tp3Nz2ejHJvQOwso9zeRqf+Vr/jA0ZmWQxzPnU3qePv9Xq2U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=ViLNBG4z; arc=none smtp.client-ip=84.16.66.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="u/zwGug3"
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Tq0Yq2S04zMsWRx;
-	Tue,  5 Mar 2024 16:57:03 +0100 (CET)
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4Tq0Yp67lnz3W;
-	Tue,  5 Mar 2024 16:57:02 +0100 (CET)
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="ViLNBG4z"
+Received: from smtp-3-0000.mail.infomaniak.ch (smtp-3-0000.mail.infomaniak.ch [10.4.36.107])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Tq0mC1WqKzQZM;
+	Tue,  5 Mar 2024 17:06:03 +0100 (CET)
+Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4Tq0mB45ckz3c;
+	Tue,  5 Mar 2024 17:06:02 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-	s=20191114; t=1709654223;
-	bh=unUHeeD7nB7m3/v8iE28UJN8bXkub1FSGBrDIstyyUY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=u/zwGug3aleGhQg4KvJFTjK2nN+Apq9IC6epAkIqgUcw2T6pU0GUrEw4B/7RFJcMX
-	 ayBXPgVJvZ2p/XAIh16xE6d0AGINZyMB97l/46fw9csSW0Eq9kgdX7qP4WAsD+E0Kg
-	 QczqIixu1Hv4e3han6Vsrez5iiXtALzkzvejcxfg=
-From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To: Jakub Kicinski <kuba@kernel.org>,
-	Kees Cook <keescook@chromium.org>,
-	Mark Brown <broonie@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	davem@davemloft.net
-Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
-	Will Drewry <wad@chromium.org>,
-	edumazet@google.com,
-	jakub@cloudflare.com,
-	pabeni@redhat.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: [PATCH v1 1/2] selftests/landlock: Redefine TEST_F() as TEST_F_FORK()
-Date: Tue,  5 Mar 2024 16:56:47 +0100
-Message-ID: <20240305155648.1292566-2-mic@digikod.net>
-In-Reply-To: <20240305155648.1292566-1-mic@digikod.net>
-References: <20240305.eth2Ohcawa7u@digikod.net>
- <20240305155648.1292566-1-mic@digikod.net>
+	s=20191114; t=1709654763;
+	bh=z5qhYq1wOr3LpvwmDPTLIjklmi92wexHHTkNSwgx3KA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ViLNBG4zZyHukjR+pPE3Npp+xJMeeEdAtJ5bSJBdhDr0r74HIFUI9xA1A2l28Vz43
+	 tRVTIzqkaR62K7ViMK3MFbC8izVwZI13GRWY1R1Kie/fmkjM9bkMwo6B4b+SX1uitI
+	 m/P1Mm6nPAGLs0zkHr3IRA9oqePot/VUUC/qf3SU=
+Date: Tue, 5 Mar 2024 17:05:51 +0100
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Kees Cook <keescook@chromium.org>
+Cc: Jakub Kicinski <kuba@kernel.org>, Mark Brown <broonie@kernel.org>, 
+	davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com, 
+	shuah@kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, jakub@cloudflare.com
+Subject: Re: [PATCH v4 00/12] selftests: kselftest_harness: support using
+ xfail
+Message-ID: <20240305.phohPh8saa4i@digikod.net>
+References: <20240229005920.2407409-1-kuba@kernel.org>
+ <05f7bf89-04a5-4b65-bf59-c19456aeb1f0@sirena.org.uk>
+ <20240304150411.6a9bd50b@kernel.org>
+ <202403041512.402C08D@keescook>
+ <20240304153902.30cd2edd@kernel.org>
+ <202403050141.C8B1317C9@keescook>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <202403050141.C8B1317C9@keescook>
 X-Infomaniak-Routing: alpha
 
-This has the effect of creating a new test process for either TEST_F()
-or TEST_F_FORK(), which doesn't change tests but will ease potential
-backports.  See next commit for the TEST_F_FORK() merge into TEST_F().
+On Tue, Mar 05, 2024 at 01:43:14AM -0800, Kees Cook wrote:
+> On Mon, Mar 04, 2024 at 03:39:02PM -0800, Jakub Kicinski wrote:
+> > On Mon, 4 Mar 2024 15:14:04 -0800 Kees Cook wrote:
+> > > > Ugh, I'm guessing vfork() "eats" the signal, IOW grandchild signals,
+> > > > child exits? vfork() and signals.. I'd rather leave to Kees || Mickael.  
+> > > 
+> > > Oh no, that does seem bad. Since Mickaël is also seeing weird issues,
+> > > can we drop the vfork changes for now?
+> > 
+> > Seems doable, but won't be a simple revert. "drop" means we'd need 
+> > to bring ->step back. More or less go back to v3.
+> 
+> I think we have to -- other CIs are now showing the most of seccomp
+> failing now. (And I can confirm this now -- I had only tested seccomp
+> on earlier versions of the series.)
 
-Cc: Günther Noack <gnoack@google.com>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Will Drewry <wad@chromium.org>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
----
- tools/testing/selftests/landlock/common.h | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Sorry for the trouble, I found and fixed the vfork issues.  I tested
+with seccomp and Landlock.  You can find a dedicated branch here (with
+some Reviewed-by and Acked-by removed because of the changes):
+https://git.kernel.org/pub/scm/linux/kernel/git/mic/linux.git/log/?h=kselftest-xfail-fix
 
-diff --git a/tools/testing/selftests/landlock/common.h b/tools/testing/selftests/landlock/common.h
-index e64bbdf0e86e..f40146d40763 100644
---- a/tools/testing/selftests/landlock/common.h
-+++ b/tools/testing/selftests/landlock/common.h
-@@ -37,7 +37,7 @@
- 		struct __test_metadata *_metadata, \
- 		FIXTURE_DATA(fixture_name) *self, \
- 		const FIXTURE_VARIANT(fixture_name) *variant); \
--	TEST_F(fixture_name, test_name) \
-+	__TEST_F_IMPL(fixture_name, test_name, -1, TEST_TIMEOUT_DEFAULT) \
- 	{ \
- 		int status; \
- 		const pid_t child = fork(); \
-@@ -80,6 +80,10 @@
- 			__attribute__((unused)) *variant)
- /* clang-format on */
- 
-+/* Makes backporting easier. */
-+#undef TEST_F
-+#define TEST_F(fixture_name, test_name) TEST_F_FORK(fixture_name, test_name)
-+
- #ifndef landlock_create_ruleset
- static inline int
- landlock_create_ruleset(const struct landlock_ruleset_attr *const attr,
--- 
-2.44.0
+Jakub, please send a v5 series with this updated patch and your
+exit/_exit fixes.
 
+> 
+> -- 
+> Kees Cook
+> 
