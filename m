@@ -1,136 +1,173 @@
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from wfout7-smtp.messagingengine.com (wfout7-smtp.messagingengine.com [64.147.123.150])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D440D4DA10
-	for <linux-kselftest@vger.kernel.org>; Tue,  5 Mar 2024 08:54:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B1635025C;
+	Tue,  5 Mar 2024 09:05:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709628874; cv=none; b=hm5nqKgONKD3K969i7Ng7hilnQX5/ov804IBKRZTxXU6nme4FqPhvDh0hN5qjKA5Jq+dHjKr5RRroJRFVD00EXvsyo3ZBHM4T84Br+BgTLGRy4JMPHvHxYGaNuAOxxmwlCsvqym51SZ1dELwEuPP7Y5McR9kaa6qgC6YgK7bjrA=
+	t=1709629509; cv=none; b=jLMkebHKu19+W/+rqGCDC47y3G9KZCUIQ8gd8Jbhh0yDiU9HW8go6sd9Q1rIgGwdCKre6zP/gQPoIvtNI3d6Nz6HusXlSTwOnPO5K6hM3oIUPjNHOLxdu+eKDB5QCDK8qgu8WxWrsTaM97SWtcCGMI4frwc6/QwjhdhtphAG1uk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709628874; c=relaxed/simple;
-	bh=3gsa7dmhhZiuwqDBEHXvgj6AiAc2EP5PhuS9rOIziOg=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=XChe+YCZjaotMimkn/ZTF+0DmxR1ixxL/PNvmdB/+L7aTssXWsH6UP3UMZ2W5/AFG5HdPtCNOZ8C/NUysGPWjUlXq5DWUx8IA5ViUzcvdMaUCMbtodqu38hFO0HCa/CDjoRM2+Fw9np31J+mUPEP9GNj5rzkK6x/2ZHPp1RD1PI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=p2+/jN/H; arc=none smtp.client-ip=209.85.216.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+	s=arc-20240116; t=1709629509; c=relaxed/simple;
+	bh=4vEnG02ligmP4LrcfFUAEQhjxpcNYEU0JASPzUPZp/M=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=OI7HcGOtHaAphoatAjA+1DDgwQxAeldkrMRefKnzo3G112Jk/ivKcweRdPFIPwP/pqmDUXByzyRIWtP/ojjH/QisoFH5fsfZp3Kpm0+iUaDsYNJV+GO0iLWn033aEfSsRzjibHYGxSqqvsc7G3HvhIqr0kveYWJZJEnQdtd5KQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=SUA7qEcP; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=dK6WqAJW; arc=none smtp.client-ip=64.147.123.150
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="p2+/jN/H"
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-29a430c3057so3550977a91.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 05 Mar 2024 00:54:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1709628872; x=1710233672; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=U0Zc8ekOwhHhrF9mh2Y411P9ivun1wnkGOEwR+pJoWc=;
-        b=p2+/jN/HiHm7Dv562qUQEFBqZt4ztbiv338ooMme/DKHhYBHlAYmERUIbuDK9tdtPJ
-         yJQFsWEesP+tMCPRWtRyijJ7JLcjp4XkH/qbYDKRx+RaWYjSaL4ZoKgmX9GSG3Adenx0
-         h1CdlFGSzglwAL0NG5s093Ijk6f+uQaABQp3EbPqA1yI1NfxXo+UvMrMY3u3SN8LXsM5
-         eyQ+qJqQa/xhaRKRKmXGk5ZVaIhkt57x1i8mMi03qyTi423zUTDB6rcipX9M35tXNi01
-         03gmJyYYSPHtbi8sqWM5tmAelh4CQ8FAHlovwU6hKTqqwtJBcB/geXnEiRFNYqM1RBjf
-         qFew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709628872; x=1710233672;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=U0Zc8ekOwhHhrF9mh2Y411P9ivun1wnkGOEwR+pJoWc=;
-        b=ITD5p1e1hQcPCVJO+qtGIns20qzJb/Wrsuam2XUhpfQnzDKyjQkNmvGFmDfdLAnz8E
-         P09g7FUVM5vrvhKzUKIaoK9tdZzNlMRO1EkDWBrLzQMQ8W9Q1lQkSWJ5Asjbmd9D9kfx
-         32vAEz8wMi3oTvvgehGeCknVSNoYWs81bY3ZIPo0eTq6VhKuQm8/SZxWKgQTIBJwHyTx
-         dGrROBmGbcWUptaUDqSC/MgVn4GpFk+ouY4FwBoNr28YyXDPn7M157wDShT7R+MpbFlC
-         4d5c4aWEwpopwZbcpx8X9kzwrc+aUNmKqTZJwkuibagWHs7ZC2kv8131qe1Lp+C0kwSF
-         D5Rw==
-X-Forwarded-Encrypted: i=1; AJvYcCUVMBSFbsaAmBg6ypa+pJIET21FDUeptQyxItvpQPYOlqUOHtifEeaAMSIE9a+m4aREOkxO551u/OCEXJd84R5EMLP+9tPQyWWaDYnSgfyT
-X-Gm-Message-State: AOJu0YxFmSfDk2O0BqztsT0LV9tFy/gJK5+Oh2kka6RrH4S5oY6wegzR
-	EQ4kwLWDlehfP3d6nRRxAlihuGWGId8EROjZwWNKVDIMhfiDJi2gGfEPsj/PDOASOMvgeAgv1e5
-	yRrA=
-X-Google-Smtp-Source: AGHT+IGDJqnmBLiSRzSKUWf75zZICw1ZY/nIbw3OqmXl3+FlHXLWxRGuNeZc8TwdIvF5RcmbDQcM4g==
-X-Received: by 2002:a17:90b:3a8a:b0:29a:e095:25ca with SMTP id om10-20020a17090b3a8a00b0029ae09525camr8534010pjb.6.1709628872210;
-        Tue, 05 Mar 2024 00:54:32 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id il18-20020a17090b165200b0029b6a3e1794sm487885pjb.28.2024.03.05.00.54.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Mar 2024 00:54:31 -0800 (PST)
-Message-ID: <65e6ddc7.170a0220.51cb5.0e7b@mx.google.com>
-Date: Tue, 05 Mar 2024 00:54:31 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="SUA7qEcP";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="dK6WqAJW"
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfout.west.internal (Postfix) with ESMTP id 22F5F1C000A7;
+	Tue,  5 Mar 2024 04:05:06 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Tue, 05 Mar 2024 04:05:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm3; t=1709629505; x=1709715905; bh=ekmA5RBZ+C
+	vAhdFbvGw1i/0H90ih8Imy4vkxYH5RFbI=; b=SUA7qEcPhA1VtahsdC2df931yx
+	WPbB2j3ZYmy701buT133pPpg1BhTzr7LF+TWNzdIkaWuMpprUFOS48zOhjCA8X4L
+	QrZ0PgfUBHST7vlB23iK8TH+TnQdfOWnY8aOrjupIq/qqANsZJWFyvJpyjWg49XQ
+	kjRXOzZoQ77VNo+thJ82UMaXMQWyNFyk79VVagp2IFPTRJrbjNr8CBts1AxVPG8M
+	bjO7GLbM23jEwBjN3BWsei4NC56uzvQrCWHyScODnQymG6o+zFz4Vj3N2qCbSW81
+	wItzocagCMHv3/TV7LNM6a5j/ru4N0O9LvD+qMa63R76kXfYgkWIAudRwfUQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm1; t=1709629505; x=1709715905; bh=ekmA5RBZ+CvAhdFbvGw1i/0H90ih
+	8Imy4vkxYH5RFbI=; b=dK6WqAJWMa4c4fjlHpghFjdIt3LMY3xxMkWUuukHuwfJ
+	Fn5R3/jVLrvPK8HPH0xCLR/+EQRpUAFUnWeAiAO+ZCuiq7mxhTwCGwC3vudSRYpt
+	MeEvo6I1Ro59HzaAWLL9L8NGtrxfmpvxyurfxdpMhbcqggJi2damWFe0e3ex8i8z
+	Eqv+wuJnxl0fXLh/9OXryAC1UYrzcyYWGCIn8Zkc5jwx6wVXoHqm9AT52SlDjrOs
+	0f100LdiAiVQXqNw0pVjgHTryUqiRWP7/Beoq04XH3IJ2YH6FjRUMC91NnB331QM
+	8LzFD0JzIrOBD8QThpScqDeqGHRDE8eYEs7KAfNUMg==
+X-ME-Sender: <xms:QeDmZYcmTl0_cUKPjzetyUgwCOJP16-giZuGRCd23Fcaod5mvwuasg>
+    <xme:QeDmZaPNTc_AthIszgRYHzvvnFvvonjkI_CtQvZRuxXxbMGIW4iUjEpDMn314RxJy
+    bedEwcNX31bqifDbbs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrheekgdduvdegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:QeDmZZhYhQ4N-Vq4pFq8_Jb84muPkreZpR2XpPiBbPCfq5bfWtDhBA>
+    <xmx:QeDmZd-0Yr0yXb4o9AIDX5bt4MvLmUCpkIyuHvt2PZ4e6x8RKq95Ew>
+    <xmx:QeDmZUshX60bTjTnFeVR9hjLDGUNMOB81JWBVd_07wIqc9qNaUxp0g>
+    <xmx:QeDmZSCXGxdi68ql_0o-PZ2wrqACrIJGaPXzq2fBVieFxYOJvISpL5s74vQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 6329AB6008F; Tue,  5 Mar 2024 04:05:05 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-208-g3f1d79aedb-fm-20240301.002-g3f1d79ae
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: next
-X-Kernelci-Tree: kselftest
-X-Kernelci-Kernel: v6.8-rc1-57-g5d94da7ff00e
-X-Kernelci-Report-Type: test
-Subject: kselftest/next kselftest-seccomp: 3 runs,
- 1 regressions (v6.8-rc1-57-g5d94da7ff00e)
-To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
- shuah@kernel.org
-From: "kernelci.org bot" <bot@kernelci.org>
+Message-Id: <5e2f9342-4ee9-4b30-9dcf-393e57e0f7c6@app.fastmail.com>
+In-Reply-To: <20240305020153.2787423-6-almasrymina@google.com>
+References: <20240305020153.2787423-1-almasrymina@google.com>
+ <20240305020153.2787423-6-almasrymina@google.com>
+Date: Tue, 05 Mar 2024 10:04:45 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Mina Almasry" <almasrymina@google.com>, Netdev <netdev@vger.kernel.org>,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc: "David S . Miller" <davem@davemloft.net>,
+ "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
+ "Paolo Abeni" <pabeni@redhat.com>, "Jonathan Corbet" <corbet@lwn.net>,
+ "Richard Henderson" <richard.henderson@linaro.org>,
+ "Ivan Kokshaysky" <ink@jurassic.park.msu.ru>,
+ "Matt Turner" <mattst88@gmail.com>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+ "Helge Deller" <deller@gmx.de>, "Andreas Larsson" <andreas@gaisler.com>,
+ "Jesper Dangaard Brouer" <hawk@kernel.org>,
+ "Ilias Apalodimas" <ilias.apalodimas@linaro.org>,
+ "Steven Rostedt" <rostedt@goodmis.org>,
+ "Masami Hiramatsu" <mhiramat@kernel.org>,
+ "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>,
+ "Alexei Starovoitov" <ast@kernel.org>,
+ "Daniel Borkmann" <daniel@iogearbox.net>,
+ "Andrii Nakryiko" <andrii@kernel.org>,
+ "Martin KaFai Lau" <martin.lau@linux.dev>,
+ "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>,
+ "John Fastabend" <john.fastabend@gmail.com>,
+ "KP Singh" <kpsingh@kernel.org>, "Stanislav Fomichev" <sdf@google.com>,
+ "Hao Luo" <haoluo@google.com>, "Jiri Olsa" <jolsa@kernel.org>,
+ "David Ahern" <dsahern@kernel.org>,
+ "Willem de Bruijn" <willemdebruijn.kernel@gmail.com>,
+ shuah <shuah@kernel.org>, "Sumit Semwal" <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ "Pavel Begunkov" <asml.silence@gmail.com>, "David Wei" <dw@davidwei.uk>,
+ "Jason Gunthorpe" <jgg@ziepe.ca>,
+ "Yunsheng Lin" <linyunsheng@huawei.com>,
+ "Shailend Chand" <shailend@google.com>,
+ "Harshitha Ramamurthy" <hramamurthy@google.com>,
+ "Shakeel Butt" <shakeelb@google.com>,
+ "Jeroen de Borst" <jeroendb@google.com>,
+ "Praveen Kaligineedi" <pkaligineedi@google.com>,
+ "Willem de Bruijn" <willemb@google.com>,
+ "Kaiyuan Zhang" <kaiyuanz@google.com>
+Subject: Re: [RFC PATCH net-next v6 05/15] netdev: support binding dma-buf to netdevice
+Content-Type: text/plain
 
-kselftest/next kselftest-seccomp: 3 runs, 1 regressions (v6.8-rc1-57-g5d94d=
-a7ff00e)
+On Tue, Mar 5, 2024, at 03:01, Mina Almasry wrote:
 
-Regressions Summary
--------------------
+> +int netdev_bind_dmabuf(struct net_device *dev, unsigned int dmabuf_fd,
+> +		       struct netdev_dmabuf_binding **out)
+> +{
+> +	struct netdev_dmabuf_binding *binding;
+> +	static u32 id_alloc_next;
+> +	struct scatterlist *sg;
+> +	struct dma_buf *dmabuf;
+> +	unsigned int sg_idx, i;
+> +	unsigned long virtual;
+> +	int err;
+> +
+> +	if (!capable(CAP_NET_ADMIN))
+> +		return -EPERM;
+> +
+> +	dmabuf = dma_buf_get(dmabuf_fd);
+> +	if (IS_ERR_OR_NULL(dmabuf))
+> +		return -EBADFD;
 
-platform                     | arch  | lab         | compiler | defconfig  =
-         | regressions
------------------------------+-------+-------------+----------+------------=
----------+------------
-meson-gxl-s905x-libretech-cc | arm64 | lab-broonie | gcc-10   | defconfig+k=
-selftest | 1          =
+You should never need to use IS_ERR_OR_NULL() for a properly
+defined kernel interface. This one should always return an
+error or a valid pointer, so don't check for NULL.
 
+> +	binding->attachment = dma_buf_attach(binding->dmabuf, dev->dev.parent);
+> +	if (IS_ERR(binding->attachment)) {
+> +		err = PTR_ERR(binding->attachment);
+> +		goto err_free_id;
+> +	}
+> +
+> +	binding->sgt =
+> +		dma_buf_map_attachment(binding->attachment, DMA_BIDIRECTIONAL);
+> +	if (IS_ERR(binding->sgt)) {
+> +		err = PTR_ERR(binding->sgt);
+> +		goto err_detach;
+> +	}
 
-  Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/v6.8=
--rc1-57-g5d94da7ff00e/plan/kselftest-seccomp/
+Should there be a check to verify that this buffer
+is suitable for network data?
 
-  Test:     kselftest-seccomp
-  Tree:     kselftest
-  Branch:   next
-  Describe: v6.8-rc1-57-g5d94da7ff00e
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
-lftest.git
-  SHA:      5d94da7ff00ef45737a64d947e7ff45aca972782 =
+In general, dmabuf allows buffers that are uncached or reside
+in MMIO space of another device, but I think this would break
+when you get an skb with those buffers and try to parse the
+data inside of the kernel on architectures where MMIO space
+is not a normal pointer or unaligned access is disallowed on
+uncached data.
 
-
-
-Test Regressions
----------------- =
-
-
-
-platform                     | arch  | lab         | compiler | defconfig  =
-         | regressions
------------------------------+-------+-------------+----------+------------=
----------+------------
-meson-gxl-s905x-libretech-cc | arm64 | lab-broonie | gcc-10   | defconfig+k=
-selftest | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/65e6d29f785c3883f74c4372
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//kselftest/next/v6.8-rc1-57-g5d=
-94da7ff00e/arm64/defconfig+kselftest/gcc-10/lab-broonie/kselftest-seccomp-m=
-eson-gxl-s905x-libretech-cc.txt
-  HTML log:    https://storage.kernelci.org//kselftest/next/v6.8-rc1-57-g5d=
-94da7ff00e/arm64/defconfig+kselftest/gcc-10/lab-broonie/kselftest-seccomp-m=
-eson-gxl-s905x-libretech-cc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20240129.0/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-seccomp.login: https://kernelci.org/test/case/id/65e6d29f785c=
-3883f74c4373
-        failing since 501 days (last pass: linux-kselftest-next-6.0-rc2-11-=
-g144eeb2fc761, first fail: v6.1-rc1-1-gde3ee3f63400a) =
-
- =20
+        Arnd
