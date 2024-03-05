@@ -1,183 +1,162 @@
-Received: from wfout6-smtp.messagingengine.com (wfout6-smtp.messagingengine.com [64.147.123.149])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C555C2E40B;
-	Tue,  5 Mar 2024 08:42:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E09F14EB31
+	for <linux-kselftest@vger.kernel.org>; Tue,  5 Mar 2024 08:54:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709628140; cv=none; b=IuDCgWE0ElNh4fAngvLvjgvKNuMF3zcxJrwP62yhKRmbcuLk1t2PN4oYWRondMDEhpcCH0TCtZcCEAFthcY4gPx5lTV4KVbaxmoCloCIWQFnK/F2qIOxovHYLm80BP6aQWne3RsubB6Fz8RzAxpUBpGmmuttloD9JR9aXARK3qk=
+	t=1709628871; cv=none; b=XhHA+30rFhdXf98n++INeUG4kfVUHOhFDDIiA+FzuTXp4xIEvdPnqTEC+n22CF2BWpTp7OqapCrLHjNryX5I5fRooO2HA+ulIpshPoeNtArhbI3qG+E7QX/UuDEtwqlF9fuYOTqboiFCFfRn94DpoLrI8gfQomcsIvjSAIJgGGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709628140; c=relaxed/simple;
-	bh=NmJCAuRJ199Nz8coLDr4s+3BbQ9AxZ5w+P+Jx63NVw4=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=KKQ27b7rQWyv1YzcEjRRSKF6uIk9CsJMtCEOwknbNukNVyrM1TulLEWP42KquIABrfI7Xav2nPz1uy6eG/99XGdLDJny/KzmRSVmEC+C18PkeUKPVz84vtmGPpBcBj4I9WcuXUXy8jeOv6T5CYR9Nq/BoKEOwHw8tLXOFt6JpEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=nFCUr8mh; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=MeGRT64E; arc=none smtp.client-ip=64.147.123.149
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1709628871; c=relaxed/simple;
+	bh=CyfboY5SvYIhCJu+rIdtEN/Er9X5FnUfODDWn8XEfWA=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=mf5hTVcWmnyTQ70HaKxzXBNuiEs4g702cXpDfdd+IaPjW2rJ7HfI4WT2mYgh1nkAO/kDV7UmyiKXln7L9tZSZQS+G3v1w5ph/tA1LhMt8ogaNOCNccliMnIWXN7hK6i0PCFd6HqC3dvMVqSKbE1+vaJkRm04QFyf6PUeFqpBQ7k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=qXq70kdv; arc=none smtp.client-ip=209.85.215.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="nFCUr8mh";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="MeGRT64E"
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfout.west.internal (Postfix) with ESMTP id 1AD091C0009F;
-	Tue,  5 Mar 2024 03:42:16 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Tue, 05 Mar 2024 03:42:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm3; t=1709628135; x=1709714535; bh=QeA3EPMJnw
-	t6NmNxY9VsOPm58VedM11auwf8kvd3l10=; b=nFCUr8mh4qirfdLiF7rJ3ln4Ee
-	ac3TZcBsBjTwt2v0sdIiovpLKYKyf84Jxe23adpiNL58TY/A6Un5jj6iESmOfBN+
-	NH3EgOLGaP2DQpO5LGujPp+1ACooTgAvYIJALYP/zB1DPOPdMHqcSl6pneGLIuSd
-	0k9KzYIWTlZUxiE5d/Z/VfhGrlYPtpIrvzzKaxh55J1YvHGR53svoOQw5rECchxc
-	E9ikW19OkQ636itot1R2TSnpEFaS+eT+JgKKFsBgMEmk8BlUWkauiXR3Ls5Vvsp5
-	YZii5Qv8k/VvvLOAqjcoX8BsdOlRwRXYH9ceE7QjJGsmut+vnb/zrjODKYag==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm1; t=1709628135; x=1709714535; bh=QeA3EPMJnwt6NmNxY9VsOPm58Ved
-	M11auwf8kvd3l10=; b=MeGRT64EA+QDDWf22wqOrRSkQjCcngCXPFXQcuj7sKlb
-	fsKykmy6Wo/2udr6Dj45/3j5m0Am1YNFMh5ogK0TGmfT3J3p1lUk5UkjwIxfJ/Ci
-	Pk+CIVw/J74yah5SJbYvq+QLaOyKzQH6iNNSmcFd0y5fFCKb9E+Yfzt3yz+45LdK
-	9sFUcb6Fxl0Wjzf+1CiXDA/ghzeaVvr1VBLLs58vNnkiklddooZ4bWdiOUY+GqIR
-	hy0uslWehpOhOdN1+n7zG5X3CplnE4+mdGGx1Yzro47d/GdIV8wduDcs4mOaIpqy
-	CGRzWIXTXwbBC9s0rVJ0cHgCt/kyzi8t44pW07QIUA==
-X-ME-Sender: <xms:59rmZebHuiNKE7gBn9g7Zws1CrVENXbBVlU7KpglFLP7T_XtZaHvBg>
-    <xme:59rmZRbdHQpICUlzFZ9DMOnUcwCIgRZrUGHMk8EmzSdzq9snWlaZ46aLWKLTaTvHK
-    Cg5wi_afUGNXBIHc_8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrheekgdduvddtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:59rmZY8-Af8ZUR5f35jgIeJGVWX966qCxdxdr_0n3EPth7aYYPYY2Q>
-    <xmx:59rmZQqJc6RxhGOktKKAE7ByIoMRz8lUdJERuu3D_WLY5uFdFRGIxA>
-    <xmx:59rmZZoZzA-bUCffCtvffkklND4SVShkax7NIxvDvebcxKbcpR8E8A>
-    <xmx:59rmZdfoSPIHkIwIoZkPmTYx3CVSLM8Fpjgeg_PGly9T-_ds2f3zKnQLvGs>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 5045FB6008D; Tue,  5 Mar 2024 03:42:15 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-208-g3f1d79aedb-fm-20240301.002-g3f1d79ae
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="qXq70kdv"
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-5ce9555d42eso4647550a12.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 05 Mar 2024 00:54:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1709628869; x=1710233669; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=hBocK4Ahd53+VtFH4R3AXm3RVkDUThoISySqORpXXjI=;
+        b=qXq70kdv4y5CaYyp0MSJqFLPOvowJIz06GYNpIFOJPFZVpb7ikTeFIL+FozhOWa7kK
+         +amn05jak2FGc0MZRlwgsPMoe9I2t4/jC053b5//sKAlxkDwSrivb5e+mep3hqaiwr/j
+         jrB3xGIzvZDhi6/sM+1YLMNsc9QSKJXh+a5n0Z7dZ5I8FFBZcXQjx1ub7GrU2bDq6uge
+         Hd8SO9Lgj1MZgKEnwXrnFcQ4lyRjrt72n/+mbqLwNj6BegnOkPyqzaKsNBKHeHSurUAh
+         zsFWB1QhU3veWHgfmDlBUB2CSX2FZ7Mc0i7SznokwR5Ht12Sqj3ZG5hvOzp5JYfcHrvs
+         /6ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709628869; x=1710233669;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hBocK4Ahd53+VtFH4R3AXm3RVkDUThoISySqORpXXjI=;
+        b=Q+DkMxcRSvxfmEpYmdP63URp6/0jVRP2YgwHXVWRQjOBAIRTEgAPz2PtcVgm5OYPqo
+         sfresGv1GHvfDAUtzL1jc+6X30gctBgK4B6wFOGcCF8t8s/Y7P0D4NlHa68nitvev5Ne
+         XDBbihHzHOzof+FAO3h3DSdHJ9P+Vgw2oO4JpJfAYa5jlVETn6Dw4PzZfsRD/3U8cIVz
+         ejh3GRVEnNCxUQf4VSKahmDbOZ/pEzNOQtfdact9+poo++iIZRg/x8tBE3smVBDL8Adc
+         y8cDvqrBTIz5zcz42HNCEQe9soe/at58DdhyAszVO5WqQqa5A+VY0gFEMlPNQFE13Wm+
+         vpLQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUpyZl3cA9mTWavVELM9TjL80wrlbkovKsykIS/TVt8aYlvGw5SYUCiApLYy4LX3i1lXMGb6mh60aaszCr1te0LmwWqlZxOipqOreKG6Sp4
+X-Gm-Message-State: AOJu0YzioZqro1A8/OaQ9lqc413mc3mCYi7dKA22bDR1WnC1odqX707k
+	5sYs/f/O4sIkL/GD+T2xpkKx6oSl+GWZv2hrlVykwU2vKR1YQZsu36QfezJ4g5w=
+X-Google-Smtp-Source: AGHT+IHUQ/i4uaqKWMU+j5jlObVifXz5tctSHEJEnSDlqZh1zZUowzufjSrum73WDR/Kn0Teb7KxIg==
+X-Received: by 2002:a05:6a20:54a3:b0:1a1:4848:981e with SMTP id i35-20020a056a2054a300b001a14848981emr1433909pzk.14.1709628869342;
+        Tue, 05 Mar 2024 00:54:29 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id r5-20020aa79885000000b006e530aca55asm8488376pfl.123.2024.03.05.00.54.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Mar 2024 00:54:28 -0800 (PST)
+Message-ID: <65e6ddc4.a70a0220.b73e0.215e@mx.google.com>
+Date: Tue, 05 Mar 2024 00:54:28 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <a2d926be-695a-484b-b2b5-098da47e372e@app.fastmail.com>
-In-Reply-To: <20240305020153.2787423-13-almasrymina@google.com>
-References: <20240305020153.2787423-1-almasrymina@google.com>
- <20240305020153.2787423-13-almasrymina@google.com>
-Date: Tue, 05 Mar 2024 09:41:55 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Mina Almasry" <almasrymina@google.com>, Netdev <netdev@vger.kernel.org>,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org
-Cc: "David S . Miller" <davem@davemloft.net>,
- "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
- "Paolo Abeni" <pabeni@redhat.com>, "Jonathan Corbet" <corbet@lwn.net>,
- "Richard Henderson" <richard.henderson@linaro.org>,
- "Ivan Kokshaysky" <ink@jurassic.park.msu.ru>,
- "Matt Turner" <mattst88@gmail.com>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
- "Helge Deller" <deller@gmx.de>, "Andreas Larsson" <andreas@gaisler.com>,
- "Jesper Dangaard Brouer" <hawk@kernel.org>,
- "Ilias Apalodimas" <ilias.apalodimas@linaro.org>,
- "Steven Rostedt" <rostedt@goodmis.org>,
- "Masami Hiramatsu" <mhiramat@kernel.org>,
- "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>,
- "Alexei Starovoitov" <ast@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>,
- "Andrii Nakryiko" <andrii@kernel.org>,
- "Martin KaFai Lau" <martin.lau@linux.dev>,
- "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>,
- "John Fastabend" <john.fastabend@gmail.com>,
- "KP Singh" <kpsingh@kernel.org>, "Stanislav Fomichev" <sdf@google.com>,
- "Hao Luo" <haoluo@google.com>, "Jiri Olsa" <jolsa@kernel.org>,
- "David Ahern" <dsahern@kernel.org>,
- "Willem de Bruijn" <willemdebruijn.kernel@gmail.com>,
- shuah <shuah@kernel.org>, "Sumit Semwal" <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- "Pavel Begunkov" <asml.silence@gmail.com>, "David Wei" <dw@davidwei.uk>,
- "Jason Gunthorpe" <jgg@ziepe.ca>,
- "Yunsheng Lin" <linyunsheng@huawei.com>,
- "Shailend Chand" <shailend@google.com>,
- "Harshitha Ramamurthy" <hramamurthy@google.com>,
- "Shakeel Butt" <shakeelb@google.com>,
- "Jeroen de Borst" <jeroendb@google.com>,
- "Praveen Kaligineedi" <pkaligineedi@google.com>,
- "Willem de Bruijn" <willemb@google.com>,
- "Kaiyuan Zhang" <kaiyuanz@google.com>
-Subject: Re: [RFC PATCH net-next v6 12/15] tcp: RX path for devmem TCP
-Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: next
+X-Kernelci-Tree: kselftest
+X-Kernelci-Kernel: v6.8-rc1-57-g5d94da7ff00e
+X-Kernelci-Report-Type: test
+Subject: kselftest/next kselftest-livepatch: 1 runs,
+ 1 regressions (v6.8-rc1-57-g5d94da7ff00e)
+To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+ shuah@kernel.org
+From: "kernelci.org bot" <bot@kernelci.org>
 
-On Tue, Mar 5, 2024, at 03:01, Mina Almasry wrote:
-> --- a/arch/alpha/include/uapi/asm/socket.h
-> +++ b/arch/alpha/include/uapi/asm/socket.h
->  #define SO_PEERPIDFD		77
-> +#define SO_DEVMEM_LINEAR	79
-> +#define SO_DEVMEM_DMABUF	80
-> --- a/arch/mips/include/uapi/asm/socket.h
-> +++ b/arch/mips/include/uapi/asm/socket.h
->  #define SO_PEERPIDFD		77
-> +#define SO_DEVMEM_LINEAR	79
-> +#define SO_DEVMEM_DMABUF	80
-> --- a/arch/parisc/include/uapi/asm/socket.h
-> +++ b/arch/parisc/include/uapi/asm/socket.h
->  #define SO_PEERPIDFD		0x404B
-> +#define SO_DEVMEM_LINEAR	98
-> +#define SO_DEVMEM_DMABUF	99
-> --- a/arch/sparc/include/uapi/asm/socket.h
-> +++ b/arch/sparc/include/uapi/asm/socket.h
->  #define SO_PEERPIDFD             0x0056
-> +#define SO_DEVMEM_LINEAR         0x0058
-> +#define SO_DEVMEM_DMABUF         0x0059
-> --- a/include/uapi/asm-generic/socket.h
-> +++ b/include/uapi/asm-generic/socket.h
-> @@ -135,6 +135,11 @@
->  #define SO_PEERPIDFD		77
-> +#define SO_DEVMEM_LINEAR	98
-> +#define SO_DEVMEM_DMABUF	99
+kselftest/next kselftest-livepatch: 1 runs, 1 regressions (v6.8-rc1-57-g5d9=
+4da7ff00e)
 
-These look inconsistent. I can see how you picked the
-alpha and mips numbers, but how did you come up with
-the generic and parisc ones? Can you follow the existing
-scheme instead?
+Regressions Summary
+-------------------
 
-> diff --git a/include/uapi/linux/uio.h b/include/uapi/linux/uio.h
-> index 059b1a9147f4..ad92e37699da 100644
-> --- a/include/uapi/linux/uio.h
-> +++ b/include/uapi/linux/uio.h
-> @@ -20,6 +20,16 @@ struct iovec
->  	__kernel_size_t iov_len; /* Must be size_t (1003.1g) */
->  };
-> 
-> +struct dmabuf_cmsg {
-> +	__u64 frag_offset;	/* offset into the dmabuf where the frag starts.
-> +				 */
-> +	__u32 frag_size;	/* size of the frag. */
-> +	__u32 frag_token;	/* token representing this frag for
-> +				 * DEVMEM_DONTNEED.
-> +				 */
-> +	__u32  dmabuf_id;	/* dmabuf id this frag belongs to. */
-> +};
+platform        | arch | lab           | compiler | defconfig              =
+      | regressions
+----------------+------+---------------+----------+------------------------=
+------+------------
+imx6q-sabrelite | arm  | lab-collabora | gcc-10   | multi_v7_defconfig+ksel=
+ftest | 1          =
 
-This structure requires a special compat handler to run
-x86-32 binaries on x86-64 because of the different alignment
-requirements. Any uapi-visible structures should be defined
-to avoid this and just have no holes in them. Maybe extend
-one of the __u32 members to __u64 or add another 32-bit padding field?
 
-       Arnd
+  Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/v6.8=
+-rc1-57-g5d94da7ff00e/plan/kselftest-livepatch/
+
+  Test:     kselftest-livepatch
+  Tree:     kselftest
+  Branch:   next
+  Describe: v6.8-rc1-57-g5d94da7ff00e
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
+lftest.git
+  SHA:      5d94da7ff00ef45737a64d947e7ff45aca972782 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform        | arch | lab           | compiler | defconfig              =
+      | regressions
+----------------+------+---------------+----------+------------------------=
+------+------------
+imx6q-sabrelite | arm  | lab-collabora | gcc-10   | multi_v7_defconfig+ksel=
+ftest | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/65e6cdcbc6d2c9f73b4c42e9
+
+  Results:     1 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+kselftest
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//kselftest/next/v6.8-rc1-57-g5d=
+94da7ff00e/arm/multi_v7_defconfig+kselftest/gcc-10/lab-collabora/kselftest-=
+livepatch-imx6q-sabrelite.txt
+  HTML log:    https://storage.kernelci.org//kselftest/next/v6.8-rc1-57-g5d=
+94da7ff00e/arm/multi_v7_defconfig+kselftest/gcc-10/lab-collabora/kselftest-=
+livepatch-imx6q-sabrelite.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
+elftest/20240129.0/armhf/initrd.cpio.gz =
+
+
+
+  * kselftest-livepatch.shardfile-livepatch: https://kernelci.org/test/case=
+/id/65e6cdcbc6d2c9f73b4c42eb
+        failing since 20 days (last pass: v6.8-rc1, first fail: v6.8-rc1-32=
+-g345e8abe4c355)
+
+    2024-03-05T07:45:44.826582  / # =
+
+
+    2024-03-05T07:45:44.834815  =
+
+
+    2024-03-05T07:45:49.986367  / # export NFS_ROOTFS=3D'/var/lib/lava/disp=
+atcher/tmp/12943976/extract-nfsrootfs-9i1x1ntv'
+
+    2024-03-05T07:45:49.997706  export NFS_ROOTFS=3D'/var/lib/lava/dispatch=
+er/tmp/12943976/extract-nfsrootfs-9i1x1ntv'
+
+    2024-03-05T07:45:52.243187  / # export NFS_SERVER_IP=3D'192.168.201.1'
+
+    2024-03-05T07:45:52.254179  export NFS_SERVER_IP=3D'192.168.201.1'
+
+    2024-03-05T07:45:52.369458  / # #
+
+    2024-03-05T07:45:52.379584  #
+
+    2024-03-05T07:45:52.529346  / # export SHELL=3D/bin/bash
+
+    2024-03-05T07:45:52.539274  export SHELL=3D/bin/bash
+ =
+
+    ... (47 line(s) more)  =
+
+ =20
