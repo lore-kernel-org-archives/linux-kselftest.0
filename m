@@ -1,248 +1,425 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from smtp-42aa.mail.infomaniak.ch (smtp-42aa.mail.infomaniak.ch [84.16.66.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7BEC12B6C;
-	Tue,  5 Mar 2024 15:54:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.14
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709654093; cv=fail; b=Y6SCCYmvTQ5gWQqbniTNgmH3192E7q4dl0WRChinWIypoc/ObCCpcBFAFfXfl6EA5tog3CYpY+P30ATzPK1zSNfP6YfXO9w1n1zQA1Rq9YTY6A/JdBzdF3MjGEeKNA3xDcKm9CpBUyAuch+katOZRLMdnl6poWcgNUrQfVXRBD8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709654093; c=relaxed/simple;
-	bh=hqoHwt9ecQxCNTnd+sHpErGT761y/h55L/8j9ofF+yw=;
-	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=PXObISUAueLRzXsdS/95TD+HE6Flmxl8WrKMq7wn+3CXghUa65l3BUQyjH4ioc8/FhF9WgzxITHVx/dJrgL5ZEyuO9o6nLgCG5WDNnv96iQPVBovneXApT02m/PU3Ga/dGG7jH3qWotuN6EGZ36XnUXwjAnFRZv8mUC3KP8k8Eo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=N9faKc1X; arc=fail smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B098F127B7A;
+	Tue,  5 Mar 2024 15:57:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.170
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709654231; cv=none; b=h+mpBQKTjo1BVvAq6yj3D9dDTPHTQ45CvupQLrggn65/2ybZbAnzG/BpkL3gWAsoHgqaIHmvRADoQrGRbDgVPKsnqpRzwk2uwha96mB8BX9B5utHxERWsnkAtD/FDYa8TKcnwph0WE3oiUiP0dvoRTyugZKdroytn8INVjarkdQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709654231; c=relaxed/simple;
+	bh=Rs0Jkg+AK63hN5zWADFuYAjfsZqO2y6I0/L5O6JIRnY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=WCqUAJs3QQ1cp/HdtI2nTyFontDN6xaOyTYc4H9hcdNsnNRVL+Y34Ym6o17ATykB+J9JOL8j5YH/Qt41lyxp3X/Lrz/FylmlUNo7gjWKP6yfdXpATaB86jkvT7NFRs1apU1WORe67PilvmHvDMlXcKrBDHnqeD4SWZE7WHJCYRk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=atsjRvu1; arc=none smtp.client-ip=84.16.66.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="N9faKc1X"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709654092; x=1741190092;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=hqoHwt9ecQxCNTnd+sHpErGT761y/h55L/8j9ofF+yw=;
-  b=N9faKc1X1y65ZwNtiVG759YloG+O200lFWCim7936uJXt9D405eyKdV3
-   MGyeOq/PKH75ycZZgrke0S5FDxVPk35BmqmG1oYgO6N8/EkCGeRuSmXTr
-   8sIb2wx4SH3Ebj1Bw79Tcl7CFacuYnQToMT4GpNddGQreRhQr8kPbLADJ
-   m+5z9KRzA4WKPbGT5NDKRVz6C2gQ0NzLnMKJTgHgXdAIKQcQKuJoSfdAT
-   ywg57FcuAYqPhu1gkkJ2aWTEcR+ldtSztl7NqmIdPfe7ilTMBEfD+lImb
-   8CFs70F9i5itpNE3zFrJbxotDYI7l/8yF+AoFkMdUKRc65vOr0VFq1JcJ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11003"; a="8033204"
-X-IronPort-AV: E=Sophos;i="6.06,205,1705392000"; 
-   d="scan'208";a="8033204"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2024 07:54:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,205,1705392000"; 
-   d="scan'208";a="9319295"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by fmviesa009.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 05 Mar 2024 07:54:51 -0800
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Tue, 5 Mar 2024 07:54:50 -0800
-Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Tue, 5 Mar 2024 07:54:49 -0800
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35 via Frontend Transport; Tue, 5 Mar 2024 07:54:49 -0800
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (104.47.51.41) by
- edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Tue, 5 Mar 2024 07:54:49 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dtK3E/DA0AMyFBZ8vPGQLHb7/dykX3egBf/Z+5cvcHvnz4miupYEBih94POQbo7AQR4Y8MmTvzFOroLc8aTyb6KqzshbnxzFSOfRHjFQjz6xha0RT5g7uM74tHhQYQaRCR7dLsbOpnH3fL977X5MLj0MPkHj77DDNy2qxAbkP0tMOi1vBudbDsdizSnI5WO8gKPb7Ki5eNYTSoVqlgW5cJDN+U1OdrxVXgCTgUfTyqrv83Q4LpCYIi5Jo5p3es1imCvqPrtkWQiNDTelCYIbPB/y/dp64yf/VcBKqZY7QAHkxqvRdTwr5d6WjYTx521kh5jc9ZonC3BSBZSGVNbX8g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wfuPYClZIxnM7X7D4JYbkUqBPtgY6F8L7t2qdWwFud0=;
- b=J6jmnD9ttAf72cC8mR5NtJJw+ttxdwb1XpyFGjv2e/pJU78Qn1pKFVv5LIEna8Dv72m3Ngl/6/Mw70/yNe5NFt2pPGs/hNBoqyk+BSF/wCuVIMAwlvvMAYcpOjjIcMvyenb/vQYvynFYQhtTiTmhKMxszEPp5s0HCfsjOy4wKHTSEqRdGlKdDxyiiEUFbuSoJ0FeNV4VbRJrzFvHLKtFa2p1QGF8fNiBkXhqGpDTzvzN44uMfon4cvqZDD1Lso4T8z0CYA33PEKGWOiVXRTdzLSFIML4pKr8OqajkUPM1kyw7iwSHsncPumTSZiVw/lDAbWISt/dsqDkXwnD7Jqs8g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MN6PR11MB8102.namprd11.prod.outlook.com (2603:10b6:208:46d::9)
- by DS0PR11MB6517.namprd11.prod.outlook.com (2603:10b6:8:d3::6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7362.23; Tue, 5 Mar 2024 15:54:45 +0000
-Received: from MN6PR11MB8102.namprd11.prod.outlook.com
- ([fe80::618b:b1ee:1f99:76ea]) by MN6PR11MB8102.namprd11.prod.outlook.com
- ([fe80::618b:b1ee:1f99:76ea%5]) with mapi id 15.20.7362.019; Tue, 5 Mar 2024
- 15:54:45 +0000
-Message-ID: <24a1f5df-1629-4569-ac1e-b7c9a128f0c7@intel.com>
-Date: Tue, 5 Mar 2024 16:54:37 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next] selftests: avoid using SKIP(exit()) in harness
- fixure setup
-Content-Language: en-US
-To: Jakub Kicinski <kuba@kernel.org>, <davem@davemloft.net>
-CC: <netdev@vger.kernel.org>, <edumazet@google.com>, <pabeni@redhat.com>, Mark
- Brown <broonie@kernel.org>, <ivan.orlov0322@gmail.com>, <perex@perex.cz>,
-	<tiwai@suse.com>, <shuah@kernel.org>, <jglisse@redhat.com>,
-	<akpm@linux-foundation.org>, <keescook@chromium.org>,
-	<linux-sound@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-mm@kvack.org>
-References: <20240304233621.646054-1-kuba@kernel.org>
-From: Przemek Kitszel <przemyslaw.kitszel@intel.com>
-In-Reply-To: <20240304233621.646054-1-kuba@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR4P281CA0139.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:b8::19) To MN6PR11MB8102.namprd11.prod.outlook.com
- (2603:10b6:208:46d::9)
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="atsjRvu1"
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Tq0Yr2mjkzMsdB1;
+	Tue,  5 Mar 2024 16:57:04 +0100 (CET)
+Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4Tq0Yq5wDqzvh;
+	Tue,  5 Mar 2024 16:57:03 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+	s=20191114; t=1709654224;
+	bh=Rs0Jkg+AK63hN5zWADFuYAjfsZqO2y6I0/L5O6JIRnY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=atsjRvu1BWI6JXWh+8BdHrdtA+aGqHDnrdK8MvgL/ETV2s6tvSvZ4ozqYPUj6Vkpp
+	 jkfGKJrGUJgCwX0dwz2qigCKCBu+bT4DnMtbod1mxQspPPIahxqVAM/jfplDc1Efj9
+	 pi8iDJyPCP4dGO0733XCHEwodeCrtBK0Vz7Lgkhs=
+From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To: Jakub Kicinski <kuba@kernel.org>,
+	Kees Cook <keescook@chromium.org>,
+	Mark Brown <broonie@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	davem@davemloft.net
+Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
+	Will Drewry <wad@chromium.org>,
+	edumazet@google.com,
+	jakub@cloudflare.com,
+	pabeni@redhat.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: [PATCH v1 2/2] selftests/harness: Merge TEST_F_FORK() into TEST_F()
+Date: Tue,  5 Mar 2024 16:56:48 +0100
+Message-ID: <20240305155648.1292566-3-mic@digikod.net>
+In-Reply-To: <20240305155648.1292566-1-mic@digikod.net>
+References: <20240305.eth2Ohcawa7u@digikod.net>
+ <20240305155648.1292566-1-mic@digikod.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN6PR11MB8102:EE_|DS0PR11MB6517:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0db03913-5a9f-46a3-26b5-08dc3d2c9446
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: aTaOafrnb6vCsiv/hkMymesjnytD6RoE04FklfaKqxAsA1LCB5wFlfbEGHGxGv91SYQd8zCIVh+X/JWpf63S/KxyUD7DwRB/mK1AI55oQX9mJ088Oq3G+GD8COHSYp3ZFBdQFGtGGNMmsw5THdjw0OJ9X8OfAnckk+Y/B2jAKwHwi9PznR4AXHS4T8Tftqs9SnQdNcSQ8CoB+e/AnTsVcqzOIx7ZNkTxqVEFmfAQWOn7gxrAJBZpZdSFgAH09DxhaTRS8Siv005+P40WkbgnCPCOYEMHSx5iozsCMigfWkDXuegLzonqeCF/bSAcypATH+bsDTneDDefrFISFfvzHrZf1GixZ0DYcVylD3ctXbkIXuBV75dvNVu9aspfn/U6ziHT+J+rB/eZIApJ71kzrYpMbrIteOBTancjRAzKG0/6vQtvoEqp5syioAaYwL9hO9nzg7fFgwY2nPG3ZvGy0U64kIivG4n6w+oLXyhH0x7ZYBZqz6w75RYMnYvsIu3yKzBgB+SD1vy4+5pYWCgsad1f5jJWYppsnQMmbeGy3+TyBkutqKML3U4RFlCuxodaPQxl14L3OIJwtgyIRksokqjTMBaWlIIwxomVgOvLrVU=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN6PR11MB8102.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?M052blNXVHFQa24wYzQ5UUlYOHJQejBWMmdERlVlU1NOZkM2Q0xtWkN0ay9L?=
- =?utf-8?B?RHhMdGNPRzh5SXBjdEpYK3JOVXpNZWY2MnJLbEJ5Nk1TaTE1Z0VyYk5qYUcr?=
- =?utf-8?B?QUE5cHpoaHNidFYwOWYrU1hUQkl0TVlXY0c4L1NJdjVZTFFKTmJkYTBJMjdt?=
- =?utf-8?B?dVdwbGhSZGZqUGVPRlZSZGdqQjRPdFdtZnhkdnpZREhVMmhLcllNTDBGUHAx?=
- =?utf-8?B?K1ZuNk5LWkVEMGdhODNTUHNyNkNSbGFka05DS09ic0RjdmRYOFJOcE9yYXox?=
- =?utf-8?B?NUNaZnFJYnd3aUk3QWltN3lBRHlvZGJSSzdLT2lJTzRoc1FwRTR6ZlN4Rjk4?=
- =?utf-8?B?WWtUS1ZJa1dRUkwwYjVoRndubTNPNmt1WThOS1ZaMWJMSzd0NnpGTzNzaUEx?=
- =?utf-8?B?YmFvNHdzVWxWMWZwOExIalAxNXc5QnNyZ21uOXFQMjMvYkhoRFNEQkFEdlBp?=
- =?utf-8?B?ZWZ5SU5KazRuRlBKcGkrMUt3dGtlNmV0a3ltYmhaOSs4emJUaS9obzZveUky?=
- =?utf-8?B?SXpIaTZpVklUZDZaQ09Rb25WZGZQMnltdnpVRC9nRmhQckJhY2dscmhsSStQ?=
- =?utf-8?B?bEFVM2VVL09JZTQvdHA4VWVpVEgvTkR2L2Fhb2VVcDM5VGZjQjdtdXFrZlBV?=
- =?utf-8?B?Z1VhUFBvMXpiTno0SWRJZEJZclFzZ25EaFhzUmoxV21rNGpLQ0lZVk1OOXBX?=
- =?utf-8?B?TlZwOWZWbHdyT0Q2QUxFd3FjUTVCc3dBdUZZMkdHbm5VTXBsRWFCL3MxUVc0?=
- =?utf-8?B?bktKRzgzT3lXL2dabEpGMEN1UCt5b0VHTFhPaWl6Zk9zUGJkV004WklpQ3RM?=
- =?utf-8?B?V2tHRnphWFpVTFNPU0tDUmtkUTlRbTNqN2xwQUltaG5IVnRrcGJDMnZMMTFH?=
- =?utf-8?B?S2RYUjJ2K1BZMlRicUswRXNMUW4yR1RaT1JZOE8ycGVHdzV0ZG9rMXhLTEp5?=
- =?utf-8?B?NTRsRWVGdjhYVkRKNDc0UkhuYVFNWHl0WWExZDJqSkJWRGNCdS9TQ1RHbFF1?=
- =?utf-8?B?UmhwUTJ0eTJKUU8xWkpCQnBIMzZEbzJTVlpmWDExVlNFQlVuWGp5Wk9tT1Jh?=
- =?utf-8?B?bEtUWHZEZ0FPMFJZeWc5MjVDR0ZoOU4wOEdBUlBiSWlvZ2w1amVFN0x5ZStt?=
- =?utf-8?B?b3VBK1ZOVFlWd1M5a0l0VXFrV1BMTGdVbUVoNDN5eG1kYXBMbWJWNCt1Wlcy?=
- =?utf-8?B?c2NCTVlFL25ubnk3YlRVZEU0OFhOSE9XWHhWTEhudFNjQnJ4YnJiYTlsNkdm?=
- =?utf-8?B?NTNRTTVYVC9nOFhOQUlGUytYQU9uVVNrc2JVL3BKNnV1TmRXTjlYcGYvWVpP?=
- =?utf-8?B?UUtHZUYvaXBFeVAyTUFvVkprQytvYTV6S0dISnBFOUY3Q0R6NW5QY3c1ZHd3?=
- =?utf-8?B?eXdCbGptU1pObXlSMkdWTHNVeGxqV1NYZklhTFMxbVIzOVRBQkcwMmdCaWZR?=
- =?utf-8?B?dHZYQjBFemNrdkRiK3ZSM2tCdmgrNVBQUW16U2Y5WXg3L3ErQkJlblp6Nlhu?=
- =?utf-8?B?V1YxcDZFa1k3K2F2b2toekNLUnRDcjVKWjhnUmZLR0JzQ2grMUVKZXFHZ2kz?=
- =?utf-8?B?S3NhQUlkZEQ3a096d2NJYjJXWW0rMzhyckcvWTlqSUhNaFdyaU1vK2EyWW95?=
- =?utf-8?B?eVdEQTYzK0ZsZTJ4bVRHZjhvU0VUaDNkdGszVTlpeGkzMnp2RS9ULy9GN1o3?=
- =?utf-8?B?c3pFZ0dLZ0dUUUtGODJQT2pGZVBuWHFlbkJ1aloxRzh4QnM5VVFrTkJCcm1P?=
- =?utf-8?B?TElJOHRlaENvN0FCcTNEbVFHazRqaHQydmtpVi9tWit2U0x1MHFGVGhzb0VH?=
- =?utf-8?B?QndjMjJpYVNsN0JMcDRnckZPaDBRejVRYXVMbWJsQWYvV3oyN0ZLU25DUFJS?=
- =?utf-8?B?Qndkay9uMUp2ckVEOGo2NEM3dWo2VzJLTVJDQVRCSkxYdHZaL1ZEemFia1E4?=
- =?utf-8?B?b0FmWnN2Z0hzNWZWb1pucnNyMmVuS0tRaGNCY0xjMm0wQzhTbnl5L3JLaG1P?=
- =?utf-8?B?UFJ0RU9OZHhub3NxbGdna2hrWkJaMWN0UmhmUTU1VkplZm1peWVaSWVQVzdO?=
- =?utf-8?B?VzhlR1B0R04vaGtiK0hTUEgvZ2RzZzZ4a3ZYTFRoRWhZdkZlNGdrUnpNZHY0?=
- =?utf-8?B?cEIyV3dIWGtoN0o5RjBHUUlOaGFDTEd4RVpPQUJ0VWR3MHFQdGNkS01hTXR1?=
- =?utf-8?B?bEE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0db03913-5a9f-46a3-26b5-08dc3d2c9446
-X-MS-Exchange-CrossTenant-AuthSource: MN6PR11MB8102.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Mar 2024 15:54:45.6961
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: hYDNO1nkWoHuP4wHwR6OPcVmDvA09AmllfPLpRhSrxoJcO8R3c0y/MrqH5J4kmNRMy318pZRIU8A1rmeFkS56aFqVwjq4BeT06Oc12iDWpk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB6517
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Infomaniak-Routing: alpha
 
-On 3/5/24 00:36, Jakub Kicinski wrote:
-> selftest harness uses various exit codes to signal test
-> results. Avoid calling exit() directly, otherwise tests
-> may get broken by harness refactoring (like the commit
-> under Fixes). SKIP() will instruct the harness that the
-> test shouldn't run, it used to not be the case, but that
-> has been fixed. So just return, no need to exit.
-> 
-> Note that for hmm-tests this actually changes the result
-> from pass to skip. Which seems fair, the test is skipped,
-> after all.
-> 
-> Reported-by: Mark Brown <broonie@kernel.org>
-> Link: https://lore.kernel.org/all/05f7bf89-04a5-4b65-bf59-c19456aeb1f0@sirena.org.uk
-> Fixes: a724707976b0 ("selftests: kselftest_harness: use KSFT_* exit codes")
+Replace Landlock-specific TEST_F_FORK() with an improved TEST_F() which
+brings four related changes:
 
-I believe that the next patch of the linked series is a culprit,
-but that does not mandate a next revision in my eyes
+Run TEST_F()'s tests in a grandchild process to make it possible to
+drop privileges and delegate teardown to the parent.
 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> ---
-> This needs to go to net-next because that's where the breaking
-> patch was (mis?)-applied.
-> 
-> CC: ivan.orlov0322@gmail.com
-> CC: perex@perex.cz
-> CC: tiwai@suse.com
-> CC: broonie@kernel.org
-> CC: shuah@kernel.org
-> CC: jglisse@redhat.com
-> CC: akpm@linux-foundation.org
-> CC: keescook@chromium.org
-> CC: linux-sound@vger.kernel.org
-> CC: linux-kselftest@vger.kernel.org
-> CC: linux-mm@kvack.org
-> ---
->   tools/testing/selftests/alsa/test-pcmtest-driver.c | 4 ++--
->   tools/testing/selftests/mm/hmm-tests.c             | 4 ++--
->   2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/alsa/test-pcmtest-driver.c b/tools/testing/selftests/alsa/test-pcmtest-driver.c
-> index a52ecd43dbe3..ca81afa4ee90 100644
-> --- a/tools/testing/selftests/alsa/test-pcmtest-driver.c
-> +++ b/tools/testing/selftests/alsa/test-pcmtest-driver.c
-> @@ -127,11 +127,11 @@ FIXTURE_SETUP(pcmtest) {
->   	int err;
->   
->   	if (geteuid())
-> -		SKIP(exit(-1), "This test needs root to run!");
-> +		SKIP(return, "This test needs root to run!");
->   
->   	err = read_patterns();
->   	if (err)
-> -		SKIP(exit(-1), "Can't read patterns. Probably, module isn't loaded");
-> +		SKIP(return, "Can't read patterns. Probably, module isn't loaded");
->   
->   	card_name = malloc(127);
->   	ASSERT_NE(card_name, NULL);
-> diff --git a/tools/testing/selftests/mm/hmm-tests.c b/tools/testing/selftests/mm/hmm-tests.c
-> index 20294553a5dd..d2cfc9b494a0 100644
-> --- a/tools/testing/selftests/mm/hmm-tests.c
-> +++ b/tools/testing/selftests/mm/hmm-tests.c
-> @@ -138,7 +138,7 @@ FIXTURE_SETUP(hmm)
->   
->   	self->fd = hmm_open(variant->device_number);
->   	if (self->fd < 0 && hmm_is_coherent_type(variant->device_number))
-> -		SKIP(exit(0), "DEVICE_COHERENT not available");
-> +		SKIP(return, "DEVICE_COHERENT not available");
->   	ASSERT_GE(self->fd, 0);
->   }
->   
-> @@ -149,7 +149,7 @@ FIXTURE_SETUP(hmm2)
->   
->   	self->fd0 = hmm_open(variant->device_number0);
->   	if (self->fd0 < 0 && hmm_is_coherent_type(variant->device_number0))
-> -		SKIP(exit(0), "DEVICE_COHERENT not available");
-> +		SKIP(return, "DEVICE_COHERENT not available");
->   	ASSERT_GE(self->fd0, 0);
->   	self->fd1 = hmm_open(variant->device_number1);
->   	ASSERT_GE(self->fd1, 0);
+Compared to TEST_F_FORK(), simplify handling of the test grandchild
+process thanks to vfork(2), and makes it generic (e.g. no explicit
+conversion between exit code and _metadata).
 
-Reviewed-by: Przemek Kitszel <przemyslaw.kitszel@intel.com>
-- that's totally what mandates vfork() introduced in recent refactor
+Compared to TEST_F_FORK(), run teardown even when tests failed with an
+assert thanks to commit 63e6b2a42342 ("selftests/harness: Run TEARDOWN
+for ASSERT failures").
 
-(Sorry for pointing the same in the Link:-ed thread, it was just
-newer/higher in my email client)
+By default teardown is run by the grandchild process, but it can be run
+by its parent process if _metadata->teardown_parent is set to true.
+
+Update Landlock tests' fixture setup to set _metadata->teardown, and
+remove now-invalid umount calls in Landlock test teardowns.
+
+Simplify the test harness code by removing the no_print and step fields
+which are not used.  I added this feature just after I made
+kselftest_harness.h more broadly available but this step counter
+remained even though it wasn't needed after all. See commit 369130b63178
+("selftests: Enhance kselftest_harness.h to print which assert failed").
+
+Replace spaces with tabs in one line of __TEST_F_IMPL().
+
+Cc: Günther Noack <gnoack@google.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Will Drewry <wad@chromium.org>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Mickaël Salaün <mic@digikod.net>
+---
+
+v5:
+ - Fix TEST_SIGNAL() by forwarding grandchild signal to parent.
+ - By default, run teardown in the grandchild, but allow teardown to be
+   run in its parent if _metadata->teardown_parent is set to true.  This
+   fixes seccomp tests that have assumptions about the process
+   hierarchy.
+ - Remove now-invalid umount calls in Landlock test teardowns.
+
+v4:
+ - GAND -> GRAND
+ - init child to 1, otherwise assert in setup triggers a longjmp
+   which in turn reads child without it ever getting initialized
+   (or being 0, i.e. we mistakenly assume we're in the grandchild)
+---
+ tools/testing/selftests/kselftest_harness.h | 72 ++++++++++-----------
+ tools/testing/selftests/landlock/common.h   | 62 +-----------------
+ tools/testing/selftests/landlock/fs_test.c  | 22 +++----
+ 3 files changed, 48 insertions(+), 108 deletions(-)
+
+diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+index e05ac8261046..4f192904dfd6 100644
+--- a/tools/testing/selftests/kselftest_harness.h
++++ b/tools/testing/selftests/kselftest_harness.h
+@@ -95,14 +95,6 @@
+  * E.g., #define TH_LOG_ENABLED 1
+  *
+  * If no definition is provided, logging is enabled by default.
+- *
+- * If there is no way to print an error message for the process running the
+- * test (e.g. not allowed to write to stderr), it is still possible to get the
+- * ASSERT_* number for which the test failed.  This behavior can be enabled by
+- * writing `_metadata->no_print = true;` before the check sequence that is
+- * unable to print.  When an error occur, instead of printing an error message
+- * and calling `abort(3)`, the test process call `_exit(2)` with the assert
+- * number as argument, which is then printed by the parent process.
+  */
+ #define TH_LOG(fmt, ...) do { \
+ 	if (TH_LOG_ENABLED) \
+@@ -363,6 +355,11 @@
+  * Defines a test that depends on a fixture (e.g., is part of a test case).
+  * Very similar to TEST() except that *self* is the setup instance of fixture's
+  * datatype exposed for use by the implementation.
++ *
++ * The @test_name code is run in a separate process sharing the same memory
++ * (i.e. vfork), which means that the test process can update its privileges
++ * without impacting the related FIXTURE_TEARDOWN() (e.g. to remove files from
++ * a directory where write access was dropped).
+  */
+ #define TEST_F(fixture_name, test_name) \
+ 	__TEST_F_IMPL(fixture_name, test_name, -1, TEST_TIMEOUT_DEFAULT)
+@@ -384,17 +381,34 @@
+ 	{ \
+ 		/* fixture data is alloced, setup, and torn down per call. */ \
+ 		FIXTURE_DATA(fixture_name) self; \
++		pid_t child = 1; \
++		int status = 0; \
+ 		memset(&self, 0, sizeof(FIXTURE_DATA(fixture_name))); \
+ 		if (setjmp(_metadata->env) == 0) { \
+-			fixture_name##_setup(_metadata, &self, variant->data); \
+-			/* Let setup failure terminate early. */ \
+-                       if (!_metadata->passed || _metadata->skip) \
+-				return; \
+-			_metadata->setup_completed = true; \
+-			fixture_name##_##test_name(_metadata, &self, variant->data); \
++			/* Use the same _metadata. */ \
++			child = vfork(); \
++			if (child == 0) { \
++				fixture_name##_setup(_metadata, &self, variant->data); \
++				/* Let setup failure terminate early. */ \
++				if (!_metadata->passed || _metadata->skip) \
++					_exit(0); \
++				_metadata->setup_completed = true; \
++				fixture_name##_##test_name(_metadata, &self, variant->data); \
++			} else if (child < 0 || child != waitpid(child, &status, 0)) { \
++				ksft_print_msg("ERROR SPAWNING TEST GRANDCHILD\n"); \
++				_metadata->passed = 0; \
++			} \
+ 		} \
+-		if (_metadata->setup_completed) \
++		if (child == 0) { \
++			if (_metadata->setup_completed && !_metadata->teardown_parent) \
++				fixture_name##_teardown(_metadata, &self, variant->data); \
++			_exit(0); \
++		} \
++		if (_metadata->setup_completed && _metadata->teardown_parent) \
+ 			fixture_name##_teardown(_metadata, &self, variant->data); \
++		if (!WIFEXITED(status) && WIFSIGNALED(status)) \
++			/* Forward signal to __wait_for_test(). */ \
++			kill(getpid(), WTERMSIG(status)); \
+ 		__test_check_assert(_metadata); \
+ 	} \
+ 	static struct __test_metadata \
+@@ -404,6 +418,7 @@
+ 		.fixture = &_##fixture_name##_fixture_object, \
+ 		.termsig = signal, \
+ 		.timeout = tmout, \
++		.teardown_parent = false, \
+ 	 }; \
+ 	static void __attribute__((constructor)) \
+ 			_register_##fixture_name##_##test_name(void) \
+@@ -694,18 +709,12 @@
+ 	for (; _metadata->trigger; _metadata->trigger = \
+ 			__bail(_assert, _metadata))
+ 
+-#define __INC_STEP(_metadata) \
+-	/* Keep "step" below 255 (which is used for "SKIP" reporting). */	\
+-	if (_metadata->passed && _metadata->step < 253) \
+-		_metadata->step++;
+-
+ #define is_signed_type(var)       (!!(((__typeof__(var))(-1)) < (__typeof__(var))1))
+ 
+ #define __EXPECT(_expected, _expected_str, _seen, _seen_str, _t, _assert) do { \
+ 	/* Avoid multiple evaluation of the cases */ \
+ 	__typeof__(_expected) __exp = (_expected); \
+ 	__typeof__(_seen) __seen = (_seen); \
+-	if (_assert) __INC_STEP(_metadata); \
+ 	if (!(__exp _t __seen)) { \
+ 		/* Report with actual signedness to avoid weird output. */ \
+ 		switch (is_signed_type(__exp) * 2 + is_signed_type(__seen)) { \
+@@ -751,7 +760,6 @@
+ #define __EXPECT_STR(_expected, _seen, _t, _assert) do { \
+ 	const char *__exp = (_expected); \
+ 	const char *__seen = (_seen); \
+-	if (_assert) __INC_STEP(_metadata); \
+ 	if (!(strcmp(__exp, __seen) _t 0))  { \
+ 		__TH_LOG("Expected '%s' %s '%s'.", __exp, #_t, __seen); \
+ 		_metadata->passed = 0; \
+@@ -837,10 +845,9 @@ struct __test_metadata {
+ 	int trigger; /* extra handler after the evaluation */
+ 	int timeout;	/* seconds to wait for test timeout */
+ 	bool timed_out;	/* did this test timeout instead of exiting? */
+-	__u8 step;
+-	bool no_print; /* manual trigger when TH_LOG_STREAM is not available */
+ 	bool aborted;	/* stopped test due to failed ASSERT */
+ 	bool setup_completed; /* did setup finish? */
++	bool teardown_parent; /* run teardown in a parent process */
+ 	jmp_buf env;	/* for exiting out of test early */
+ 	struct __test_results *results;
+ 	struct __test_metadata *prev, *next;
+@@ -873,11 +880,8 @@ static inline int __bail(int for_realz, struct __test_metadata *t)
+ 
+ static inline void __test_check_assert(struct __test_metadata *t)
+ {
+-	if (t->aborted) {
+-		if (t->no_print)
+-			_exit(t->step);
++	if (t->aborted)
+ 		abort();
+-	}
+ }
+ 
+ struct __test_metadata *__active_test;
+@@ -954,13 +958,12 @@ void __wait_for_test(struct __test_metadata *t)
+ 			case 0:
+ 				t->passed = 1;
+ 				break;
+-			/* Other failure, assume step report. */
++			/* Failure */
+ 			default:
+ 				t->passed = 0;
+ 				fprintf(TH_LOG_STREAM,
+-					"# %s: Test failed at step #%d\n",
+-					t->name,
+-					WEXITSTATUS(status));
++					"# %s: Test failed\n",
++					t->name);
+ 			}
+ 		}
+ 	} else if (WIFSIGNALED(status)) {
+@@ -1114,8 +1117,6 @@ void __run_test(struct __fixture_metadata *f,
+ 	t->passed = 1;
+ 	t->skip = 0;
+ 	t->trigger = 0;
+-	t->step = 1;
+-	t->no_print = 0;
+ 	memset(t->results->reason, 0, sizeof(t->results->reason));
+ 
+ 	ksft_print_msg(" RUN           %s%s%s.%s ...\n",
+@@ -1137,8 +1138,7 @@ void __run_test(struct __fixture_metadata *f,
+ 		/* Pass is exit 0 */
+ 		if (t->passed)
+ 			_exit(0);
+-		/* Something else happened, report the step. */
+-		_exit(t->step);
++		_exit(1);
+ 	} else {
+ 		__wait_for_test(t);
+ 	}
+diff --git a/tools/testing/selftests/landlock/common.h b/tools/testing/selftests/landlock/common.h
+index f40146d40763..401e2eb092a3 100644
+--- a/tools/testing/selftests/landlock/common.h
++++ b/tools/testing/selftests/landlock/common.h
+@@ -23,66 +23,8 @@
+ #define __maybe_unused __attribute__((__unused__))
+ #endif
+ 
+-/*
+- * TEST_F_FORK() is useful when a test drop privileges but the corresponding
+- * FIXTURE_TEARDOWN() requires them (e.g. to remove files from a directory
+- * where write actions are denied).  For convenience, FIXTURE_TEARDOWN() is
+- * also called when the test failed, but not when FIXTURE_SETUP() failed.  For
+- * this to be possible, we must not call abort() but instead exit smoothly
+- * (hence the step print).
+- */
+-/* clang-format off */
+-#define TEST_F_FORK(fixture_name, test_name) \
+-	static void fixture_name##_##test_name##_child( \
+-		struct __test_metadata *_metadata, \
+-		FIXTURE_DATA(fixture_name) *self, \
+-		const FIXTURE_VARIANT(fixture_name) *variant); \
+-	__TEST_F_IMPL(fixture_name, test_name, -1, TEST_TIMEOUT_DEFAULT) \
+-	{ \
+-		int status; \
+-		const pid_t child = fork(); \
+-		if (child < 0) \
+-			abort(); \
+-		if (child == 0) { \
+-			_metadata->no_print = 1; \
+-			fixture_name##_##test_name##_child(_metadata, self, variant); \
+-			if (_metadata->skip) \
+-				_exit(255); \
+-			if (_metadata->passed) \
+-				_exit(0); \
+-			_exit(_metadata->step); \
+-		} \
+-		if (child != waitpid(child, &status, 0)) \
+-			abort(); \
+-		if (WIFSIGNALED(status) || !WIFEXITED(status)) { \
+-			_metadata->passed = 0; \
+-			_metadata->step = 1; \
+-			return; \
+-		} \
+-		switch (WEXITSTATUS(status)) { \
+-		case 0: \
+-			_metadata->passed = 1; \
+-			break; \
+-		case 255: \
+-			_metadata->passed = 1; \
+-			_metadata->skip = 1; \
+-			break; \
+-		default: \
+-			_metadata->passed = 0; \
+-			_metadata->step = WEXITSTATUS(status); \
+-			break; \
+-		} \
+-	} \
+-	static void fixture_name##_##test_name##_child( \
+-		struct __test_metadata __attribute__((unused)) *_metadata, \
+-		FIXTURE_DATA(fixture_name) __attribute__((unused)) *self, \
+-		const FIXTURE_VARIANT(fixture_name) \
+-			__attribute__((unused)) *variant)
+-/* clang-format on */
+-
+-/* Makes backporting easier. */
+-#undef TEST_F
+-#define TEST_F(fixture_name, test_name) TEST_F_FORK(fixture_name, test_name)
++/* TEST_F_FORK() should not be used for new tests. */
++#define TEST_F_FORK(fixture_name, test_name) TEST_F(fixture_name, test_name)
+ 
+ #ifndef landlock_create_ruleset
+ static inline int
+diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
+index 2d6d9b43d958..1d5952897e05 100644
+--- a/tools/testing/selftests/landlock/fs_test.c
++++ b/tools/testing/selftests/landlock/fs_test.c
+@@ -285,6 +285,8 @@ static void prepare_layout_opt(struct __test_metadata *const _metadata,
+ 
+ static void prepare_layout(struct __test_metadata *const _metadata)
+ {
++	_metadata->teardown_parent = true;
++
+ 	prepare_layout_opt(_metadata, &mnt_tmp);
+ }
+ 
+@@ -3861,9 +3863,7 @@ FIXTURE_SETUP(layout1_bind)
+ 
+ FIXTURE_TEARDOWN(layout1_bind)
+ {
+-	set_cap(_metadata, CAP_SYS_ADMIN);
+-	EXPECT_EQ(0, umount(dir_s2d2));
+-	clear_cap(_metadata, CAP_SYS_ADMIN);
++	/* umount(dir_s2d2)) is handled by namespace lifetime. */
+ 
+ 	remove_layout1(_metadata);
+ 
+@@ -4276,9 +4276,8 @@ FIXTURE_TEARDOWN(layout2_overlay)
+ 	EXPECT_EQ(0, remove_path(lower_fl1));
+ 	EXPECT_EQ(0, remove_path(lower_do1_fo2));
+ 	EXPECT_EQ(0, remove_path(lower_fo1));
+-	set_cap(_metadata, CAP_SYS_ADMIN);
+-	EXPECT_EQ(0, umount(LOWER_BASE));
+-	clear_cap(_metadata, CAP_SYS_ADMIN);
++
++	/* umount(LOWER_BASE)) is handled by namespace lifetime. */
+ 	EXPECT_EQ(0, remove_path(LOWER_BASE));
+ 
+ 	EXPECT_EQ(0, remove_path(upper_do1_fu3));
+@@ -4287,14 +4286,11 @@ FIXTURE_TEARDOWN(layout2_overlay)
+ 	EXPECT_EQ(0, remove_path(upper_do1_fo2));
+ 	EXPECT_EQ(0, remove_path(upper_fo1));
+ 	EXPECT_EQ(0, remove_path(UPPER_WORK "/work"));
+-	set_cap(_metadata, CAP_SYS_ADMIN);
+-	EXPECT_EQ(0, umount(UPPER_BASE));
+-	clear_cap(_metadata, CAP_SYS_ADMIN);
++
++	/* umount(UPPER_BASE)) is handled by namespace lifetime. */
+ 	EXPECT_EQ(0, remove_path(UPPER_BASE));
+ 
+-	set_cap(_metadata, CAP_SYS_ADMIN);
+-	EXPECT_EQ(0, umount(MERGE_DATA));
+-	clear_cap(_metadata, CAP_SYS_ADMIN);
++	/* umount(MERGE_DATA)) is handled by namespace lifetime. */
+ 	EXPECT_EQ(0, remove_path(MERGE_DATA));
+ 
+ 	cleanup_layout(_metadata);
+@@ -4691,6 +4687,8 @@ FIXTURE_SETUP(layout3_fs)
+ 		SKIP(return, "this filesystem is not supported (setup)");
+ 	}
+ 
++	_metadata->teardown_parent = true;
++
+ 	slash = strrchr(variant->file_path, '/');
+ 	ASSERT_NE(slash, NULL);
+ 	dir_len = (size_t)slash - (size_t)variant->file_path;
+-- 
+2.44.0
+
