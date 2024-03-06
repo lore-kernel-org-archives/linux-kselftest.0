@@ -1,86 +1,57 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 191D11D547
-	for <linux-kselftest@vger.kernel.org>; Wed,  6 Mar 2024 22:38:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2215F1B59D;
+	Wed,  6 Mar 2024 22:51:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709764703; cv=none; b=mKRpMaMtZUf5WEutWS4UU2JcfjYFBxt0OhFeSk5JcwIjHIl+/IrNDwYItZg6Gq3z3jpG2H/ttp9VWm/90gMjhC3cU3N2D+3kMMEACPAQLKKdiAtys2RSwI0CRq1aJu4ci+GJ5NUvSNNrzK6y1NMOTdLBLpkvmJ3MdsLKlNsr+R4=
+	t=1709765503; cv=none; b=maUAGO2F7TzfsRYqWbonTQmCvfXXR+bn3XgjF0k2WO8rawi9aMTkIfTC9qvttoJRIAS2EFQ/0jhBbIT5gOa0+2fBw6xKcYrpUFWMs5YTThqjRA1xzsv9iZGd/trvDbkCw1s0eosimoanQ9RSzdNmbG0rj3WgNjjNv2eSwFQFt3k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709764703; c=relaxed/simple;
-	bh=ffbOlrqTwYJ/jZ1HLkY21kGOkQvioZziUqhpiJPsuSc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AdvT8E6aELitTbxwIyeXB4XHe47VrDFh5X8VgbbtYND79u6B5n3wZEMN/64SjEdfsAlG0FYLAHqeF1JBh6lgdN11lGaDAiA/AIXxCLe0N9hfGUTez9OsSuodS+zCYlpQIF2kq6Aufb4WTUHUp6ssZxaz4iYVXDhQmIPL3hVdwds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Y0bTUEOt; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1709765503; c=relaxed/simple;
+	bh=HNBDIUXB8ADe3S0CerOS4/GQYaPpXqbqYxKNF0I8pJg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=G7qZrnR4z9JlzzfjQuhBqDCQXCvHfz10UKt/6CHucud8YDynPoY5R1XkSzD5OiHcjG88MK7GW0v9imVBWRZC4W3Cs25TpeftTQt3beTpUut+G9JcavCQh1Y8OgL8I/jmaGkcv65MEmBL2rZf75G4cc8XckM4FBLTGDMyIsOd70o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=GFD37nTy; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Y0bTUEOt"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1709764701;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=+ifJ4/8mTgVXdkLtTQ3Zdd4IQQKyln2F43BUCv9cvQ8=;
-	b=Y0bTUEOt3aY86S+xy5gUQux7XsICSh1VYOFTSoUNfdxhwTCpyP9sKoY6DMv+BFNMx3gbKg
-	esNGBeL5sxbts74DynWmW86FydDnzZN1L9GYqOvSZj5SpRPjMqBW4jQbusiKFexhsKmCGS
-	BLwAK3iX0UkBAbxQhku4yNmzA+JYRGo=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-639-mYyl0hfOMk2bG2oTxsARlA-1; Wed,
- 06 Mar 2024 17:38:18 -0500
-X-MC-Unique: mYyl0hfOMk2bG2oTxsARlA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0944F280480C;
-	Wed,  6 Mar 2024 22:38:02 +0000 (UTC)
-Received: from localhost.redhat.com (unknown [10.22.9.120])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 58820111D792;
-	Wed,  6 Mar 2024 22:38:01 +0000 (UTC)
-From: Nico Pache <npache@redhat.com>
-To: linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: ben@decadent.org.uk,
-	shuah@kernel.org,
-	akpm@linux-foundation.org,
-	usama.anjum@collabora.com
-Subject: [PATCH v2 0/3] selftests/mm: Improve Hugepage Test Handling in MM Selftests
-Date: Wed,  6 Mar 2024 15:37:11 -0700
-Message-ID: <20240306223714.320681-1-npache@redhat.com>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="GFD37nTy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 845D1C433C7;
+	Wed,  6 Mar 2024 22:51:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1709765503;
+	bh=HNBDIUXB8ADe3S0CerOS4/GQYaPpXqbqYxKNF0I8pJg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GFD37nTysBPDZ+h/N+DQPS8ZoSVnEVzoQ0XSdvrhF2b/3QQn3w0ZRVcZ3DwOZrYsp
+	 56vgJbJqyYShpt5m8kByYnY1GEUX6eKKARyMgLGvh/Bo7yEali0+eO1S8+wU52RkAR
+	 b0ovhdHg7RhyJatRPlBVLSq8dpCqix6svtoI71LE=
+Date: Wed, 6 Mar 2024 22:51:40 +0000
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Shuah Khan <shuah@kernel.org>, Jiri Slaby <jirislaby@kernel.org>,
+	Michal Sekletar <msekleta@redhat.com>, linux-serial@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] kselftest/tty: Improve integration with automated
+ systems
+Message-ID: <2024030633-managing-identical-9b92@gregkh>
+References: <20240306-kselftest-tty-tname-v1-0-33505b31629e@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240306-kselftest-tty-tname-v1-0-33505b31629e@kernel.org>
 
-This series addresses issues related to hugepage requirements in the MM
-selftests, ensuring tests are skipped rather than failing when the
-necessary hugepage count is not met.
+On Wed, Mar 06, 2024 at 07:21:24PM +0000, Mark Brown wrote:
+> This cleans up the output of the tty_tstamp_update selftest to play a
+> bit more nicely with automated systems parsing the test output.
+> 
+> To do this I've also added a new helper ksft_test_result() which takes a
+> KSFT_ code as a report, this is something I've wanted on other occasions
+> but restructured things to avoid needing it.  This time I figured I'd
+> just add it since it keeps coming up.
+> 
+> Signed-off-by: Mark Brown <broonie@kernel.org>
 
-This adjustment allows for a more graceful handling for systems with
-insufficient hugepages, preventing unnecessary test failures and improving
-the overall robustness of the test suite.
-
-Nico Pache (3):
-  selftests/mm: Dont fail testsuite due to a lack of hugepages
-  selftests/mm: Skip uffd hugetlb tests with insufficient hugepages
-  selftests/mm: Skip the hugetlb-madvise tests on unmet hugepage
-    requirements
-
-Changes from v1:
-  - Added checks to skip tests when hugepage requirements are not met, rather
-    than exiting with a failure.
-
- tools/testing/selftests/mm/hugetlb-madvise.c | 2 +-
- tools/testing/selftests/mm/run_vmtests.sh    | 1 -
- tools/testing/selftests/mm/uffd-stress.c     | 6 ++++++
- 3 files changed, 7 insertions(+), 2 deletions(-)
-
--- 
-2.44.0
-
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
