@@ -1,97 +1,92 @@
-Received: from quicklyemailsend77.com (quicklyemailsend77.com [57.128.172.43])
+Received: from smtp-190f.mail.infomaniak.ch (smtp-190f.mail.infomaniak.ch [185.125.25.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C02781BF31
-	for <linux-kselftest@vger.kernel.org>; Wed,  6 Mar 2024 06:24:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.128.172.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DCF15C5EB
+	for <linux-kselftest@vger.kernel.org>; Wed,  6 Mar 2024 07:25:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709706243; cv=none; b=nsEDVbtsg2dBeigGk6/ycxaLaysAit9jFSVBHjOHAO8Q41rp5rYk+Hn83+A+SUwwzTt8nSUbk62+fIwAzUGkQMFfsACON7I8phRfxuk0EflKKCW5decSI/GfX/wVkd/rguucFaNYQ7+qyCIbtVeNZJdlIrkLD6mbCI99Xk9a63E=
+	t=1709709963; cv=none; b=QVA05GRVlNcjMPtqlwN13Bnpj3OLwFVjhrcwsOKFTTdZZCC2M1NNKtRCUfZJSBOUS+KIzNSGhNwj2wgb+vcH45KZKuvPgQ6S1pCuWZrX7RuqFYJNqjQWSm+OLn/76moWtddc+HPUTKlMbQo3cCfJYeYxJEfk2+14lZR7d1urYeM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709706243; c=relaxed/simple;
-	bh=UkCnC3hxyWUR811IY5T5PlAQFaHotSY7xhHSl4hh88I=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=dh/5VbGwn81t/FmZEa+S/sgjXmgHjpcjsDZ4Spx/a3ywvjTIUNg8ZvAB+6YM+wB0pjLLZeqZVAkJMB0fcIJ2ZGUXZ0LKAboEUpQVaj6dgRpuZOxQ4fXb7pVcjvsXd2q9GpbVzi/F3dkjzkeLnL7q+SKA0D3j74p+MnxLYfh+W3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicklyemailsend77.com; spf=pass smtp.mailfrom=quicklyemailsend77.com; dkim=pass (2048-bit key) header.d=quicklyemailsend77.com header.i=@quicklyemailsend77.com header.b=xm4Ws8mL; arc=none smtp.client-ip=57.128.172.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicklyemailsend77.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicklyemailsend77.com
+	s=arc-20240116; t=1709709963; c=relaxed/simple;
+	bh=Z1nsfA7d27x2MPQyf9yBVEThRd7U3+QWKY6OTCTdDOM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=biTGbDem4RdALzHMRDf4+6GV3EG3FOoBw+Vc4ZnDrjuVaUhDFtcqhzqoltsXxSG657ct9JrfOgla7Sq5QFL2czOV1uI04EsFwXWRiKfFLOQOzRQea6OVwXxJDJkydWrOYtmR1mE1H9iTQUP2jGUYbCbnlR+qswVp80rmduu7Q0o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=ctO2DSiL; arc=none smtp.client-ip=185.125.25.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicklyemailsend77.com header.i=@quicklyemailsend77.com header.b="xm4Ws8mL"
-Received: from quicklyemailsend77.com (unknown [185.255.114.95])
-	by quicklyemailsend77.com (Postfix) with ESMTPA id A00E539779E
-	for <linux-kselftest@vger.kernel.org>; Wed,  6 Mar 2024 03:51:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 quicklyemailsend77.com A00E539779E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=quicklyemailsend77.com; s=default; t=1709697105;
-	bh=eefLZdwY5mr6nwq86b3d+rtsxGUHJntuGmXl+R35AcQ=;
-	h=Reply-To:From:To:Subject:Date:From;
-	b=xm4Ws8mLl8wPQn/vh1EeDJWTfDTGFrmcVrm1mGgA6Pz/Lqu1LWAU5AjrDpEd8c/B0
-	 yZstmY/sA302iTKsBuwxW4lzSkq1C5iMgFpDqs96JXsnm2elpXDOr2CwXknhybxIPP
-	 gwGiNi11fHR9CAmERJE/Y6FHQL11bQ6IRSzh8CMOVfUC1NcgKz8BfsXtUUeLdK2YsE
-	 WVxgMuuyvrAVNCmE7y8fbk5lrBrVMgW3xT0ryXL5iTLtR9kPky//n6BwoDtAsPQUQE
-	 LrDPaH94kEx6Pnbuj8MCxjB/7iMmPewhSq9AxgagM0lVM/LUxfNqJ4fMniulJsRiTy
-	 GvkSyKIOE+VNg==
-Reply-To: joakimlarson@skendiaelevator.com
-From: info@quicklyemailsend77.com
-To: linux-kselftest@vger.kernel.org
-Subject: =?UTF-8?B?7YyQ66ekIOusuOydmCAyMDI0?=
-Date: 05 Mar 2024 19:51:44 -0800
-Message-ID: <20240305195143.2EA92930F4CF740C@quicklyemailsend77.com>
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="ctO2DSiL"
+Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch [10.7.10.108])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4TqP9Z4kq6zJND;
+	Wed,  6 Mar 2024 08:25:54 +0100 (CET)
+Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4TqP9Y5nGPzgdC;
+	Wed,  6 Mar 2024 08:25:53 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+	s=20191114; t=1709709954;
+	bh=Z1nsfA7d27x2MPQyf9yBVEThRd7U3+QWKY6OTCTdDOM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ctO2DSiLO+vK5KmeHfs8b6V0dgjR7bszcgds6DtedXdNBQ//TV6I04aD6lQJbe1Sy
+	 i/igkeHWkD3OWAroBzbK7bhwPzzUDOqqwMkgfR9SRrk0i0wXElKjMz83bx4aWqQF2M
+	 rmQOaT7gT05NyZPC36vItGgZ6sQSusKmYNLbKorE=
+Date: Wed, 6 Mar 2024 08:25:43 +0100
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: "David S . Miller" <davem@davemloft.net>, 
+	Kees Cook <keescook@chromium.org>, Mark Brown <broonie@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, Will Drewry <wad@chromium.org>, edumazet@google.com, 
+	jakub@cloudflare.com, pabeni@redhat.com, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-security-module@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH] selftests/harness: Fix TEST_F()'s vfork handling
+Message-ID: <20240306.Hei7aekahvaj@digikod.net>
+References: <20240305.sheeF9yain1O@digikod.net>
+ <20240305201029.1331333-1-mic@digikod.net>
+ <20240305122554.1e42c423@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240305122554.1e42c423@kernel.org>
+X-Infomaniak-Routing: alpha
 
+On Tue, Mar 05, 2024 at 12:25:54PM -0800, Jakub Kicinski wrote:
+> On Tue,  5 Mar 2024 21:10:29 +0100 Mickaël Salaün wrote:
+> > Always run fixture setup in the grandchild process, and by default also
+> > run the teardown in the same process.  However, this change makes it
+> > possible to run the teardown in a parent process when
+> > _metadata->teardown_parent is set to true (e.g. in fixture setup).
+> > 
+> > Fix TEST_SIGNAL() by forwarding grandchild's signal to its parent.  Fix
+> > seccomp tests by running the test setup in the parent of the test
+> > thread, as expected by the related test code.  Fix Landlock tests by
+> > waiting for the grandchild before processing _metadata.
+> > 
+> > Use of exit(3) in tests should be OK because the environment in which
+> > the vfork(2) call happen is already dedicated to the running test (with
+> > flushed stdio, setpgrp() call), see __run_test() and the call to fork(2)
+> > just before running the setup/test/teardown.  Even if the test
+> > configures its own exit handlers, they will not be run by the parent
+> > because it never calls exit(3), and the test function either ends with a
+> > call to _exit(2) or a signal.
+> > 
+> > Cc: David S. Miller <davem@davemloft.net>
+> > Cc: Günther Noack <gnoack@google.com>
+> > Cc: Jakub Kicinski <kuba@kernel.org>
+> > Cc: Kees Cook <keescook@chromium.org>
+> > Cc: Mark Brown <broonie@kernel.org>
+> > Cc: Shuah Khan <shuah@kernel.org>
+> > Cc: Will Drewry <wad@chromium.org>
+> > Fixes: 0710a1a73fb4 ("selftests/harness: Merge TEST_F_FORK() into TEST_F()")
+> > Link: https://lore.kernel.org/r/20240305201029.1331333-1-mic@digikod.net
 
-=EC=95=88=EB=85=95=ED=95=98=EC=84=B8=EC=9A=94
-=20
-=EC=8A=A4=EC=9B=A8=EB=8D=B4 =EC=8A=A4=EC=B9=B8=EB=94=94=EC=95=84 =EC=97=98=
-=EB=A0=88=EB=B0=94=ED=86=A0(Skandia Elevato)=EC=97=90=EC=84=9C =EC=98=A8 =
-=EC=9A=94=EC=95=84=ED=82=B4 =EB=9D=BC=EB=A5=B4=EC=86=90(JOAKIM LARSSON) .
-=20
-=EC=9A=B0=EB=A6=AC=EB=8A=94 =EA=B8=B4=EA=B8=89=ED=95=98=EA=B2=8C =EA=B7=80=
-=ED=95=98=EC=9D=98 =EC=A0=9C=ED=92=88=EC=9D=84 =ED=95=84=EC=9A=94=EB=A1=9C =
-=ED=95=98=EB=A9=B0 =EA=B0=80=EB=8A=A5=ED=95=9C =ED=95=9C =EB=B9=A8=EB=A6=AC=
- =EC=8B=9C=ED=97=98 =EC=A3=BC=EB=AC=B8=EC=9D=84 =ED=95=98=EA=B3=A0 =EC=8B=
-=B6=EC=8A=B5=EB=8B=88=EB=8B=A4. 
-=20
-=EC=98=A8=EB=9D=BC=EC=9D=B8=EC=9C=BC=EB=A1=9C =EC=A0=9C=ED=92=88=EC=97=90 =
-=EB=8C=80=ED=95=9C =EC=A0=95=EB=B3=B4=EB=A5=BC =EC=88=98=EC=A7=91=ED=95=98=
-=EA=B3=A0 =EC=9E=88=EC=8A=B5=EB=8B=88=EB=8B=A4. 
-=20
-=EA=B7=B8=EB=A6=AC=EA=B3=A0 =EB=82=B4 =EB=AA=A8=EC=9E=84=EC=97=90=EC=84=9C =
-=EB=82=98=EB=8A=94 =EC=9A=B0=EB=A6=AC=EA=B0=80 =EB=8B=B9=EC=8B=A0=EC=9D=98 =
-=EC=A0=9C=ED=92=88=EC=9D=84 =EC=A3=BC=EB=AC=B8=ED=95=A0 =EA=B2=83=EC=9D=B4=
-=EB=9D=BC=EA=B3=A0 =EC=83=9D=EA=B0=81=ED=95=A9=EB=8B=88=EB=8B=A4.
-=20
-1. =EC=B5=9C=EC=8B=A0 Catalouge=EB=A5=BC =EB=B3=B4=EB=82=BC =EC=88=98 =EC=
-=9E=88=EC=8A=B5=EB=8B=88=EA=B9=8C?
-=20
-2. =EC=9A=B0=EB=A6=AC=EA=B0=80 =EC=A3=BC=EB=AC=B8=ED=95=A0 =EC=88=98 =EC=9E=
-=88=EB=8A=94 =EC=B5=9C=EC=86=8C=ED=95=9C=EC=9D=80 =EB=AC=B4=EC=97=87=EC=9D=
-=B4=EA=B3=A0 =EB=98=90=ED=95=9C =EA=B8=B0=EA=B0=84=EC=9D=84 =EB=B3=B4=EB=82=
-=B4=EC=8B=AD=EC=8B=9C=EC=98=A4=20
-=EB=B0=8F =EC=A1=B0=EA=B1=B4.
-3. =EC=9A=B0=EB=A6=AC=EA=B0=80 =EC=A3=BC=EB=AC=B8=ED=95=98=EB=8A=94 =EA=B2=
-=BD=EC=9A=B0 =EC=A7=80=EB=B6=88=EC=9D=84 =EC=96=B4=EB=96=BB=EA=B2=8C =ED=95=
-=B4=EA=B2=B0=ED=95=98=EA=B8=B0=EB=A5=BC =EC=9B=90=ED=95=98=EC=8B=AD=EB=8B=
-=88=EA=B9=8C?
-=20
-=EA=B7=80=ED=95=98=EC=9D=98 =ED=9A=8C=EC=8B=A0 =EB=8C=80=EA=B8=B0 =EC=A4=91=
+Signed-off-by: Mickaël Salaün <mic@digikod.net>
 
-
-Mr Joakim larssonv(=EB=B6=80=EC=82=AC=EC=9E=A5/=EC=98=81=EC=97=85 =EA=B4=80=
-=EB=A6=AC=EC=9E=90)
-
-=EB=B0=A9=EB=AC=B8=EC=9E=90 =EC=A3=BC=EC=86=8C: Kedumsv=C3=A4gen 14, SE-534=
- 94 Vara, Sweden
-
-=EB=B0=B0=EC=86=A1 =EC=A3=BC=EC=86=8C: Industriv=C3=A4gen, SE-534 94 Vara, =
-Sweden
-
-joakimlarson@skendiaelevator.com
-https://skandiaelevator.com
-
+> 
+> Your S-o-b is missing. Should be enough if you responded with it.
+> 
+> Code LGTM, thanks!
+> 
