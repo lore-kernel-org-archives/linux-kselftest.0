@@ -1,45 +1,45 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76F891B806
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FD971B7EB
 	for <linux-kselftest@vger.kernel.org>; Wed,  6 Mar 2024 22:38:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709764690; cv=none; b=aWBYzzPRTdPEX/ipIcNXDgePNHkzGvZnFRzp1J7ilnwnvZ8E27M4hJdMew2ETGDdVnl2RbFXD/xk/EBfLMsFGxhAVpPCXhgk2LnA1eqOXRDf7BlylybWZlyfVoYzarEiGC4NgfgsNzNIV1laahHKi0SKe81+NIB+kGDB5BOaPWU=
+	t=1709764690; cv=none; b=UU9lm/IdHqcCNWGt4sclQQc9YVVB2oIn+IImH1W5olYJLxHqh0nRUROPixh3SEiYX/vSOXDkwK55pwnivdks9QeDsrdoC6ZYX0lqcVdRiLx8wztob8XeHONhX7x1BG+5WQ5k2I7piTcb7fAY1Ep3XY5G8fi6JsquT3ArlJWbaZg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1709764690; c=relaxed/simple;
-	bh=QMHws1QctT5NyUyniNy/i1yS7FjuctqycFRrFidhZb8=;
+	bh=Ep40Xcm6pZhFQkrUWqmoylBGgAY8tpj9s93wzpMQ1M0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Fu0m+qnK1qjt7O050v5dx1nSGSGdpvq2phttzMUiV8XPrmFSVjDeHZos8UK9hVpxk5yaNjxfvTy8vh5x4kId8Th/I+pNeNtqf1Ny/k1aRqk5Maa4dBtEhhOrmJGpz6oAD2KZCIwCJKVkEkDwkdLsBDGAvhtKGHqrea4f3OI8dXM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DIUpxR3V; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=XCZAGd/eB8Yydf5u6gA1ZTiF5bxP1NRj4xf98KZnRPKBW1aQBK7s7Qy9ZtYMaj/oG7FxeDwdclboobr6FMnaUt1U+YQvieDPwlfXmi2B9N1Jclf5P6Kb0Al1VY81YQLox717pvD0K7+zqRFpFAkXpQaXW2Gt/bJuXTUiqD/HFs8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DQzW9QvJ; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DIUpxR3V"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DQzW9QvJ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1709764687;
+	s=mimecast20190719; t=1709764688;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=WhvHTa8E6KIfz47SC53e3jlZc8KPDvEvRYf6GRtCMqU=;
-	b=DIUpxR3VFiTfKNEbbarPUtDc0HfThXwcU7So/bFDJNIxQDCQilXTg9p/T86YqP2tfEi8VM
-	tHS4JecbYe9bySOD50oY+lKsMlCJwMNu6bkW4ldC1qDsK8sLidYoEEUUws74dJAtEmx+Vn
-	IHAjRp4Qun/64B9zaD8O086NdyRD7qc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-659-QO_v-DYrOPqLzMUdIsx2gA-1; Wed, 06 Mar 2024 17:38:03 -0500
-X-MC-Unique: QO_v-DYrOPqLzMUdIsx2gA-1
+	bh=y5UoDnaGLpcXO5m45dBk4QmmCIzBiCAc96cRj4x0Prw=;
+	b=DQzW9QvJo7WOhyvnr4V43VJDX3YcWjrQ57RyfqmPARfZbI9F6D1eh0xvCXSJeCHg5AcrB5
+	cN1BX5bHgbH/XIFFaTVrlHvy39Tm3F+JHojePb5nHYCWsU1YGKH5H+Ao0v2pTd0opmd9o8
+	trWhwj7Jvg+keDP0kT4ZlpG/KuQICl4=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-624-DskwdaCkNtWCQR4R0kgcgQ-1; Wed,
+ 06 Mar 2024 17:38:04 -0500
+X-MC-Unique: DskwdaCkNtWCQR4R0kgcgQ-1
 Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A430E857A81;
-	Wed,  6 Mar 2024 22:38:02 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E91CD2804808;
+	Wed,  6 Mar 2024 22:38:03 +0000 (UTC)
 Received: from localhost.redhat.com (unknown [10.22.9.120])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 1E907111D793;
-	Wed,  6 Mar 2024 22:38:02 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 63AA5111D793;
+	Wed,  6 Mar 2024 22:38:03 +0000 (UTC)
 From: Nico Pache <npache@redhat.com>
 To: linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
@@ -48,9 +48,9 @@ Cc: ben@decadent.org.uk,
 	shuah@kernel.org,
 	akpm@linux-foundation.org,
 	usama.anjum@collabora.com
-Subject: [PATCH v2 1/3] selftests/mm: Dont fail testsuite due to a lack of hugepages
-Date: Wed,  6 Mar 2024 15:37:12 -0700
-Message-ID: <20240306223714.320681-2-npache@redhat.com>
+Subject: [PATCH v2 3/3] selftests/mm: Skip the hugetlb-madvise tests on unmet hugepage requirements
+Date: Wed,  6 Mar 2024 15:37:14 -0700
+Message-ID: <20240306223714.320681-4-npache@redhat.com>
 In-Reply-To: <20240306223714.320681-1-npache@redhat.com>
 References: <20240306223714.320681-1-npache@redhat.com>
 Precedence: bulk
@@ -62,31 +62,36 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
 
-On systems that have large core counts and large page sizes, but limited
-memory, the userfaultfd test hugepage requirement is too large.
+Now that run_vmtests.sh does not guarantee that the correct hugepage
+count is available, skip the hugetlb-madvise test if the requirements
+are not met rather than failing.
 
-Exiting early due to missing one test's requirements is a rather aggressive
-strategy, and prevents a lot of other tests from running. Remove the
-early exit to prevent this.
-
-Fixes: ee00479d6702 ("selftests: vm: Try harder to allocate huge pages")
 Signed-off-by: Nico Pache <npache@redhat.com>
 ---
- tools/testing/selftests/mm/run_vmtests.sh | 1 -
- 1 file changed, 1 deletion(-)
+ tools/testing/selftests/mm/hugetlb-madvise.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-index 246d53a5d7f28..727ea22ba408e 100755
---- a/tools/testing/selftests/mm/run_vmtests.sh
-+++ b/tools/testing/selftests/mm/run_vmtests.sh
-@@ -173,7 +173,6 @@ if [ -n "$freepgs" ] && [ -n "$hpgsize_KB" ]; then
- 	if [ "$freepgs" -lt "$needpgs" ]; then
- 		printf "Not enough huge pages available (%d < %d)\n" \
- 		       "$freepgs" "$needpgs"
--		exit 1
- 	fi
- else
- 	echo "no hugetlbfs support in kernel?"
+diff --git a/tools/testing/selftests/mm/hugetlb-madvise.c b/tools/testing/selftests/mm/hugetlb-madvise.c
+index f32d99565c5ea..e74107185324f 100644
+--- a/tools/testing/selftests/mm/hugetlb-madvise.c
++++ b/tools/testing/selftests/mm/hugetlb-madvise.c
+@@ -19,6 +19,7 @@
+ #include <sys/mman.h>
+ #include <fcntl.h>
+ #include "vm_util.h"
++#include "../kselftest.h"
+ 
+ #define MIN_FREE_PAGES	20
+ #define NR_HUGE_PAGES	10	/* common number of pages to map/allocate */
+@@ -78,7 +79,7 @@ int main(int argc, char **argv)
+ 	free_hugepages = get_free_hugepages();
+ 	if (free_hugepages < MIN_FREE_PAGES) {
+ 		printf("Not enough free huge pages to test, exiting!\n");
+-		exit(1);
++		exit(KSFT_SKIP);
+ 	}
+ 
+ 	fd = memfd_create(argv[0], MFD_HUGETLB);
 -- 
 2.44.0
 
