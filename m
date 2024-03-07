@@ -1,140 +1,123 @@
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2069.outbound.protection.outlook.com [40.107.237.69])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 364BE1CA83;
-	Thu,  7 Mar 2024 05:46:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.69
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709790414; cv=fail; b=CsN8Bv25/XEb5JuzBWZFQ4wQF3gTylha/Py/CRg0WJEkCU4BP4NK0j4Rf8bB1xRukpnT8B4vKsYXxRyXmn8yy1RKjLfK7P9g/wFLyemylBSWKDr/w7OU8fm2j0IEF+zKnhoPQ0xDUcLs0owSReeotIMbdfXZxLmfaZeFFX/XpY4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709790414; c=relaxed/simple;
-	bh=bAjO314ciVrCF+94M9UvgNY22pwQXfrbDbECdfTzVJI=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=rtkn3iYgPW3pYfOGsmnL0hfzu0DesWa9gEA1ybkjzLJGBYqPlQ/RoMbM3GIRQRSOBM2w23swgiQFMyHDm1eASwnbBJLQmXNemYKR0pTjvs8pK7E3tqt/PEDnB53hmqwCic4bMQ3JGE0E2+IelP4qNnJ4DWGGiOWv6emeiaNH2jo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=V1SlQoNz; arc=fail smtp.client-ip=40.107.237.69
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2513851C54;
+	Thu,  7 Mar 2024 08:19:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709799596; cv=none; b=i8/xsjhWPlKwXLwc1TV9psAf0gD/NOMlI9wdgHt6dHQqb338+GtIuTRWeEcc2MgqUdZcVfuonFQRzsq/t3JoTpZNJaV0wpP0WmFV0eV95ZSHGpAeK+qI+PggjGi7bINHaXeT8ANOWiJrlpJjLzTrHftOBI1OtYEYDNVbpd7Jq/I=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709799596; c=relaxed/simple;
+	bh=8FP38S7OrZ+MpTjf4w+My1/hNKejVVNsZfh22HhsIUI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=DYOjrfq2chQnrFqexlbuFei0KrHgsRcIaQrFDD2iGMk8OBwiQjbM2qyBeENB4flhCnZqJ818Q0Z4gJZtD76gHrr0L/aycMF/Nl3cXskti+kpFxo6DS3F18tSaCAyN/xNjSi9VhWJ40NI7wwXTe18/ebO7PimkqywA9ckFj9TtdA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c7hYvPur; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="V1SlQoNz"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GEWPuUBdl2D6qo0nef54xP2jX7mVGeD+B0J+8CVrFQcA3T+LEsqXSCgtrTNnf1cMzHlNAvV/f25oT1Kx1h7IX4zMGiF7bHGxmDd1oIW1uf/JoUq8hcdyC0jPp1Ueiz5r+4TYmVoXoVcCkzcBFttGx6jJ/MIoGQgYUiSCrnqIx95ggYe77cEySJIqonLhqnWWMOy0MDGtB4ZAfv6s8SQlKmAgFy6Y3/EV5dnGnxwC+0tyB4LbavldkjqNN5bt9bqqgr3I/wsHgknfPfqFcwWHsgmio7+TVWaHjXlXaIB5Pg91vRN1+48SdQKUTSgyq+rCx2AG7gvHdvcDerOGm0wImQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=e829xi7zXSXC6+lziItPzgd3I2nLjYUcDCjcci0rWUk=;
- b=R7VnKNqxSMcAMDYTJljOAp9/mu0uQfFypIzpAacKoy/uCRHct4KiTlo+AHC/LNpiIGfhmktOsYji2ZySlHprht+L3zh3FNgOOPnwKJPUP4ev3A5GKPpeB4D2y/EQyxsjlE9YF4g83pjIYxnONjHPFbpzLqL2veoax2dvOjLmn6JarzM82M2hXtKNh3tdZ6k+cehJsw6PtOj95EDyN5NVSSvmz4SBGFX38srjxCy10Y1f6LUyd58liPbvC/iBmaECaRLQTVAjIzt4oLTXfY9Eqh6D9bScGlv2HwrX1j/8OOmcpCt7zp8bBqWRAIth8gswq0R5HC8qyiXa8fY5V1wG5Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=e829xi7zXSXC6+lziItPzgd3I2nLjYUcDCjcci0rWUk=;
- b=V1SlQoNzWyNZkPw2U8w/AohWZ52380t5f1DP5jFrShk2BQiiK9CcjsrVTxRFpY0jLFvDJvTPnZOs1bYJZlHGFPNtvM1jdij4DvnCykhf6qMQyxvc64V/jbuLW1+lq+UCmZiX+9NNBPBpsAPQg3mYw/Sv46aaoJXFWFdec66C85w=
-Received: from BL0PR0102CA0014.prod.exchangelabs.com (2603:10b6:207:18::27) by
- SJ0PR12MB8139.namprd12.prod.outlook.com (2603:10b6:a03:4e8::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7362.24; Thu, 7 Mar 2024 05:46:48 +0000
-Received: from BL02EPF0001A108.namprd05.prod.outlook.com
- (2603:10b6:207:18:cafe::53) by BL0PR0102CA0014.outlook.office365.com
- (2603:10b6:207:18::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7362.26 via Frontend
- Transport; Thu, 7 Mar 2024 05:46:47 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BL02EPF0001A108.mail.protection.outlook.com (10.167.241.138) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7362.11 via Frontend Transport; Thu, 7 Mar 2024 05:46:47 +0000
-Received: from chalupa-4a00host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Wed, 6 Mar
- 2024 23:46:46 -0600
-From: Manali Shukla <manali.shukla@amd.com>
-To: <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-CC: <pbonzini@redhat.com>, <seanjc@google.com>, <shuah@kernel.org>,
-	<nikunj@amd.com>, <thomas.lendacky@amd.com>, <vkuznets@redhat.com>,
-	<bp@alien8.de>, <manali.shukla@amd.com>
-Subject: [PATCH v1 3/5] tools: Add KVM exit reason for the Idle HLT
-Date: Thu, 7 Mar 2024 05:46:21 +0000
-Message-ID: <20240307054623.13632-4-manali.shukla@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240307054623.13632-1-manali.shukla@amd.com>
-References: <20240307054623.13632-1-manali.shukla@amd.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c7hYvPur"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-412fe981ef1so3301645e9.1;
+        Thu, 07 Mar 2024 00:19:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1709799593; x=1710404393; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q3cfeh/qgTCzNyqJWZG5K1iEv2VogtsczNtBj4FEYbc=;
+        b=c7hYvPurgYXZGHx8zWUSDfdQtxiAKaKw6r3bd69EIKDeliNnstLdYr70aU0xynM9/N
+         DvyFY/khAEpJH4RLLbglYqzErnhnjRSCXtKmyGKVH9b0w+HOcXEOLk3SMKXevGAVn5KC
+         i9wqPSaQiVO/JRDyD7M29frCmYo2jyJ5A2sY6sJgpl10HJQPCkHqq6/gIhzEvzvbzgSc
+         a3oh3GQGownVWjnCM6nUNhQe6/luU/lDRIMXnWBmYE8oPemxw5DBKfRMPZPENF501pli
+         zMbKcE8bX8FRAFvgVjHZ+Qyv7siJcVZFnGsAujoP1cSlXwaROX/7+Ev2xzK0HSq1hJgq
+         h5kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709799593; x=1710404393;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Q3cfeh/qgTCzNyqJWZG5K1iEv2VogtsczNtBj4FEYbc=;
+        b=PQq9m0BpU3LZkE/mTi7LObQpJBlccaqRY25aJMwvtwoK+Y8kDceaTacL1hv+Ykz9ql
+         DZM6ErBqrEXsIe9WaBIqahjE6Z/s7mnuvdl5MwNGjQdLWOvo3D7QpkGM2QFBzGWJS4mO
+         J23oTHmqRt7LYXGuq/EyoOZWhwvQd2TI8jq/gDNYdvcjQqFNBRV6Tlkef2L555vm9ahQ
+         V6+EOZfKUspdQ2egClIg3QwWcqGocJ7w65ZUaKkRXvqaDd8TJOSLebwLIc1w70tdXzT0
+         DZJYyKW+F/MBGrT9rDfxhXHhRCRZjMNSofUJg6emtKntF07s0Vjl3utxLfpglNwG2dO2
+         x3Ig==
+X-Forwarded-Encrypted: i=1; AJvYcCW/bgG3OSYgQ+GE5XZKqrbQhfV1/yTAkia8akWV8fySBmkbqOYUl6rYjkkcCDfNpQOZYIFdhAHUOkC8PQL0bRqTiXkZuzjG3XXPpLBFURLb48J/s9Ft9Kr2osQtp7su4U1XtF21rirhDfFgyUAAjyXKq+0OKzp8X/3r/4Bf0zQdHtit
+X-Gm-Message-State: AOJu0YxAMkmopqviI9j/rIQhoY6UB6YlZVir/CLX3OTYGUobUPWdZC5Y
+	clqm6a5YdCAH2L3gme2nJ+Cr3ZFtPpk8pAUnoOU/8mGXiLWBJuKz
+X-Google-Smtp-Source: AGHT+IHxp22ZICjNl26x1Qf0pwp3S9ZJz469LBsA59Wew3XXWy7W/Otp9bwAH8nrbisN+qEZRG5Xig==
+X-Received: by 2002:a05:600c:4f91:b0:413:119:33e2 with SMTP id n17-20020a05600c4f9100b00413011933e2mr701067wmq.14.1709799593095;
+        Thu, 07 Mar 2024 00:19:53 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id fb12-20020a05600c520c00b00412f81ba413sm1788954wmb.11.2024.03.07.00.19.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Mar 2024 00:19:52 -0800 (PST)
+From: Colin Ian King <colin.i.king@gmail.com>
+To: Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Anup Patel <anup@brainfault.org>,
+	Atish Patra <atishp@atishpatra.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kvm-riscv@lists.infradead.org,
+	linux-riscv@lists.infradead.org
+Cc: kernel-janitors@vger.kernel.org
+Subject: [PATCH][next] KVM: selftests: Fix spelling mistake "trigged" -> "triggered"
+Date: Thu,  7 Mar 2024 08:19:51 +0000
+Message-Id: <20240307081951.1954830-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF0001A108:EE_|SJ0PR12MB8139:EE_
-X-MS-Office365-Filtering-Correlation-Id: 27a88b56-519e-4444-ddf5-08dc3e69faad
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	OtwQkyhIQXfPMIpcqO/r+A3O4ti62t2XpgOtmfR5mvUZ/DZuUeRuxU8bfJac72UoCC9XqUe+jl44CbRXXZ6DK9rlGCxJierDUL58rOB7b45nUAd8xvQugQlcDEcy7T7LWcZqJSLzQsl47GPt4/iTafpZFtI7iYW2+K6N4maYC97rxjGEXiG+mKb3UawvMvLWUIHyC+yEcj+2k4+NeV+9sM3AebD+ER7MuGhwK8MgKxNw05mH680wIOxx62o1zZD2BVi43WDy9GqoQ+Zk9QJS/P9iNBBcKqvvHU0LDqJK34cCTGds4GuGJVLBvM90hluiWFUnGacZMDuZq1pbG2dYra/gf/6ymCfxqxH5jhq80+RJVjYWSO9r+yvzn2pOd63HkBbnSbrROnzt65i4CMlrbghtoYBhlpnNW4Lt+K4N1qGPbXhga0XWyElHlpswuMrEgfGPNTquYkQnDE6MwB37DmS7RanQctzLBFDqXmrzkhBFi82dQDolF5Jd7ruoWyjJsP/JNZyIqQuYQx6YUmDJNShFMapsYs9eeDQfA8BdZYAY38Yal7EvMy8ddmxUixDkoEtdB1WBlwGWBF97QXz9QiOsnAM7SMdxQL3H2aK33kBAVSySiKye03GaKdSdltfROnmMn+RE/QIipbKmD+w5fTujDdt1R+ePAYoABCOOaiSpznP39jvEluc4bhq6ZOlBSlTU32ki7U/CH+uNLcOjze102yxrGTLxXmkratVbG12cd7LfsSBWE6eIMzdk4BXI
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(36860700004)(376005)(82310400014);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2024 05:46:47.7485
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 27a88b56-519e-4444-ddf5-08dc3e69faad
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BL02EPF0001A108.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB8139
 
-From: Manali Shukla <Manali.Shukla@amd.com>
+There are spelling mistakes in __GUEST_ASSERT messages. Fix them.
 
-The Idle HLT intercept feature allows for the HLT instruction execution
-by a vCPU to be intercepted by hypervisor only if there are no pending
-V_INR and V_NMI events for the vCPU. The Idle HLT intercept will not be
-triggerred when vCPU is expected to service pending events (V_INTR and
-V_NMI).
-
-The new SVM_EXIT_IDLE_HLT is introduced as part of the Idle HLT
-intercept feature. Add it to SVM_EXIT_REASONS, so that the
-SVM_EXIT_IDLE_HLT type of VMEXIT is recognized by tools like perf etc.
-
-Signed-off-by: Manali Shukla <Manali.Shukla@amd.com>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
- tools/arch/x86/include/uapi/asm/svm.h | 2 ++
- 1 file changed, 2 insertions(+)
+ tools/testing/selftests/kvm/aarch64/arch_timer.c | 2 +-
+ tools/testing/selftests/kvm/riscv/arch_timer.c   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/arch/x86/include/uapi/asm/svm.h b/tools/arch/x86/include/uapi/asm/svm.h
-index 80e1df482337..5bf1ad15e1ee 100644
---- a/tools/arch/x86/include/uapi/asm/svm.h
-+++ b/tools/arch/x86/include/uapi/asm/svm.h
-@@ -95,6 +95,7 @@
- #define SVM_EXIT_CR14_WRITE_TRAP		0x09e
- #define SVM_EXIT_CR15_WRITE_TRAP		0x09f
- #define SVM_EXIT_INVPCID       0x0a2
-+#define SVM_EXIT_IDLE_HLT      0x0a6
- #define SVM_EXIT_NPF           0x400
- #define SVM_EXIT_AVIC_INCOMPLETE_IPI		0x401
- #define SVM_EXIT_AVIC_UNACCELERATED_ACCESS	0x402
-@@ -224,6 +225,7 @@
- 	{ SVM_EXIT_CR8_WRITE_TRAP,	"write_cr8_trap" }, \
- 	{ SVM_EXIT_INVPCID,     "invpcid" }, \
- 	{ SVM_EXIT_NPF,         "npf" }, \
-+	{ SVM_EXIT_IDLE_HLT,         "idle-halt" }, \
- 	{ SVM_EXIT_AVIC_INCOMPLETE_IPI,		"avic_incomplete_ipi" }, \
- 	{ SVM_EXIT_AVIC_UNACCELERATED_ACCESS,   "avic_unaccelerated_access" }, \
- 	{ SVM_EXIT_VMGEXIT,		"vmgexit" }, \
+diff --git a/tools/testing/selftests/kvm/aarch64/arch_timer.c b/tools/testing/selftests/kvm/aarch64/arch_timer.c
+index ddba2c2fb5de..16ac74d07d68 100644
+--- a/tools/testing/selftests/kvm/aarch64/arch_timer.c
++++ b/tools/testing/selftests/kvm/aarch64/arch_timer.c
+@@ -136,7 +136,7 @@ static void guest_run_stage(struct test_vcpu_shared_data *shared_data,
+ 		irq_iter = READ_ONCE(shared_data->nr_iter);
+ 		__GUEST_ASSERT(config_iter + 1 == irq_iter,
+ 				"config_iter + 1 = 0x%lx, irq_iter = 0x%lx.\n"
+-				"  Guest timer interrupt was not trigged within the specified\n"
++				"  Guest timer interrupt was not triggered within the specified\n"
+ 				"  interval, try to increase the error margin by [-e] option.\n",
+ 				config_iter + 1, irq_iter);
+ 	}
+diff --git a/tools/testing/selftests/kvm/riscv/arch_timer.c b/tools/testing/selftests/kvm/riscv/arch_timer.c
+index e22848f747c0..0f9cabd99fd4 100644
+--- a/tools/testing/selftests/kvm/riscv/arch_timer.c
++++ b/tools/testing/selftests/kvm/riscv/arch_timer.c
+@@ -60,7 +60,7 @@ static void guest_run(struct test_vcpu_shared_data *shared_data)
+ 		irq_iter = READ_ONCE(shared_data->nr_iter);
+ 		__GUEST_ASSERT(config_iter + 1 == irq_iter,
+ 				"config_iter + 1 = 0x%x, irq_iter = 0x%x.\n"
+-				"  Guest timer interrupt was not trigged within the specified\n"
++				"  Guest timer interrupt was not triggered within the specified\n"
+ 				"  interval, try to increase the error margin by [-e] option.\n",
+ 				config_iter + 1, irq_iter);
+ 	}
 -- 
-2.34.1
+2.39.2
 
