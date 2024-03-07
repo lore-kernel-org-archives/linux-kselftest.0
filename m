@@ -1,45 +1,45 @@
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2046.outbound.protection.outlook.com [40.107.92.46])
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2069.outbound.protection.outlook.com [40.107.237.69])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD65A1CA81;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 364BE1CA83;
 	Thu,  7 Mar 2024 05:46:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.46
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.69
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709790414; cv=fail; b=PVwFrkb90XFXFcpVqfDmjwGnM+xc5kLu0reV2BbU0/dfvxashDRWTK2SyQJsbICTd0odfZ23stdp6nMLVR9BOM4BvUfQ2T4sEos3egJv0LYFzjtwBF71cKM9TDzvWwO71QUVwhjyMGVlPV9GckkX2NYEPnC3jxj8Ov134YdI7ks=
+	t=1709790414; cv=fail; b=CsN8Bv25/XEb5JuzBWZFQ4wQF3gTylha/Py/CRg0WJEkCU4BP4NK0j4Rf8bB1xRukpnT8B4vKsYXxRyXmn8yy1RKjLfK7P9g/wFLyemylBSWKDr/w7OU8fm2j0IEF+zKnhoPQ0xDUcLs0owSReeotIMbdfXZxLmfaZeFFX/XpY4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1709790414; c=relaxed/simple;
-	bh=c0qqNCoZ1BjWCamzX8Wj0FI8tw5sFKTIc977NKQ/RAo=;
+	bh=bAjO314ciVrCF+94M9UvgNY22pwQXfrbDbECdfTzVJI=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=M9zVN7qGKz4qAAIZ4OguUFEn5L81fBIjprXaM4yOKSX9HH30PsEdLkwfjCV+QhLKn9DvN3bV+qgymXWZUwnrQBTDXgRhoU22F/FawoTBovrsX/1LI2WYkfRnR/dErafDihiyvGPjZyesQkMkHR4FNvRgx3WBhVfK297Mdcyilh0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Lzibkzoi; arc=fail smtp.client-ip=40.107.92.46
+	 MIME-Version:Content-Type; b=rtkn3iYgPW3pYfOGsmnL0hfzu0DesWa9gEA1ybkjzLJGBYqPlQ/RoMbM3GIRQRSOBM2w23swgiQFMyHDm1eASwnbBJLQmXNemYKR0pTjvs8pK7E3tqt/PEDnB53hmqwCic4bMQ3JGE0E2+IelP4qNnJ4DWGGiOWv6emeiaNH2jo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=V1SlQoNz; arc=fail smtp.client-ip=40.107.237.69
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Lzibkzoi"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="V1SlQoNz"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CRuistx740COSSwjvgjBNSj5MY3WQNjAwxZW7wcpaPENramivCF3X545/Brxm2SM3sU4QggxBqofPaqOzgveA2aEu4N2mH+2mV9dI0QOm4/s4ys+9NG9Oeg0q+Jd95iRL7nPkDfsXB3kpGV/r9Z5hYKlrs5YIbnsA1UmtQzYysex7QC2pArsS3ucbr9emmOf9BEzGoBkAJeh0fZ1Wf47MLQWkxq7/C7R3ijbmlXeFgELd3nBBlmOBpVMBfZv72ZKprG5s8AAXvAvfLU4+KZSbL8nlZb6tlwF+lqm77K5rmhJJ/9Fsrk4t8yJYnPUPo9ibQWWvH1g/yeyXxyQXTSROA==
+ b=GEWPuUBdl2D6qo0nef54xP2jX7mVGeD+B0J+8CVrFQcA3T+LEsqXSCgtrTNnf1cMzHlNAvV/f25oT1Kx1h7IX4zMGiF7bHGxmDd1oIW1uf/JoUq8hcdyC0jPp1Ueiz5r+4TYmVoXoVcCkzcBFttGx6jJ/MIoGQgYUiSCrnqIx95ggYe77cEySJIqonLhqnWWMOy0MDGtB4ZAfv6s8SQlKmAgFy6Y3/EV5dnGnxwC+0tyB4LbavldkjqNN5bt9bqqgr3I/wsHgknfPfqFcwWHsgmio7+TVWaHjXlXaIB5Pg91vRN1+48SdQKUTSgyq+rCx2AG7gvHdvcDerOGm0wImQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=a6MVw/l1yHU3lulYT4ZVcMcgUWub85R8yT6m9cZOkFw=;
- b=aBb4kUXR5mwH/q39dW7YxSN3IsjHnoOdw78r/+iLF7Hs0c92Bnye0dMNnxdYNcKc2kuixnhZowpGOhzU6Hv16gibAKzW0WjLj62ZhZjZkmHIHWLP1r27oKaKgQsLvb7TDaSWPT64v0m7XFDaCUEAL7A1cg86NO1B49Gw0lsSA4mBTtCprUkkdaRB6YTQeWDx7YCCSjHmtqyZVwnyTL1MVoupQJpjglJ3Xu86rH4G8hfNbbx7XBWYarJAFhS1A+gnhWobi2NtFUZTUiiy/G8DZSsAjPpivkx3tBPdtWq2u2APumauDMxppdJ4Q6Z56vAoiz7d366SEQwS1qLhfxXDeA==
+ bh=e829xi7zXSXC6+lziItPzgd3I2nLjYUcDCjcci0rWUk=;
+ b=R7VnKNqxSMcAMDYTJljOAp9/mu0uQfFypIzpAacKoy/uCRHct4KiTlo+AHC/LNpiIGfhmktOsYji2ZySlHprht+L3zh3FNgOOPnwKJPUP4ev3A5GKPpeB4D2y/EQyxsjlE9YF4g83pjIYxnONjHPFbpzLqL2veoax2dvOjLmn6JarzM82M2hXtKNh3tdZ6k+cehJsw6PtOj95EDyN5NVSSvmz4SBGFX38srjxCy10Y1f6LUyd58liPbvC/iBmaECaRLQTVAjIzt4oLTXfY9Eqh6D9bScGlv2HwrX1j/8OOmcpCt7zp8bBqWRAIth8gswq0R5HC8qyiXa8fY5V1wG5Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=a6MVw/l1yHU3lulYT4ZVcMcgUWub85R8yT6m9cZOkFw=;
- b=LzibkzoigiegNKgoUMcptAoe4FF+bFa3jCQHt6MHYJ/t9uo4GNBvLsqHgbDqscZTJqgtqThtd/hJHDrEM4JsEe7p7NSMVSDNdLWYkTkpNUEVH+i3IyRYlniuR0iU8lt6E2weiFXrwQRT5IB8hSnr0r8LmGawseSwPtlr+AopIs8=
-Received: from BL0PR0102CA0012.prod.exchangelabs.com (2603:10b6:207:18::25) by
- SJ2PR12MB8848.namprd12.prod.outlook.com (2603:10b6:a03:537::6) with Microsoft
+ bh=e829xi7zXSXC6+lziItPzgd3I2nLjYUcDCjcci0rWUk=;
+ b=V1SlQoNzWyNZkPw2U8w/AohWZ52380t5f1DP5jFrShk2BQiiK9CcjsrVTxRFpY0jLFvDJvTPnZOs1bYJZlHGFPNtvM1jdij4DvnCykhf6qMQyxvc64V/jbuLW1+lq+UCmZiX+9NNBPBpsAPQg3mYw/Sv46aaoJXFWFdec66C85w=
+Received: from BL0PR0102CA0014.prod.exchangelabs.com (2603:10b6:207:18::27) by
+ SJ0PR12MB8139.namprd12.prod.outlook.com (2603:10b6:a03:4e8::5) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7362.24; Thu, 7 Mar 2024 05:46:50 +0000
+ 15.20.7362.24; Thu, 7 Mar 2024 05:46:48 +0000
 Received: from BL02EPF0001A108.namprd05.prod.outlook.com
- (2603:10b6:207:18:cafe::f8) by BL0PR0102CA0012.outlook.office365.com
- (2603:10b6:207:18::25) with Microsoft SMTP Server (version=TLS1_2,
+ (2603:10b6:207:18:cafe::53) by BL0PR0102CA0014.outlook.office365.com
+ (2603:10b6:207:18::27) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7362.26 via Frontend
- Transport; Thu, 7 Mar 2024 05:46:49 +0000
+ Transport; Thu, 7 Mar 2024 05:46:47 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -49,19 +49,19 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
  BL02EPF0001A108.mail.protection.outlook.com (10.167.241.138) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7362.11 via Frontend Transport; Thu, 7 Mar 2024 05:46:49 +0000
+ 15.20.7362.11 via Frontend Transport; Thu, 7 Mar 2024 05:46:47 +0000
 Received: from chalupa-4a00host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Wed, 6 Mar
- 2024 23:46:48 -0600
+ 2024 23:46:46 -0600
 From: Manali Shukla <manali.shukla@amd.com>
 To: <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
 CC: <pbonzini@redhat.com>, <seanjc@google.com>, <shuah@kernel.org>,
 	<nikunj@amd.com>, <thomas.lendacky@amd.com>, <vkuznets@redhat.com>,
 	<bp@alien8.de>, <manali.shukla@amd.com>
-Subject: [PATCH v1 5/5] selftests: KVM: SVM: Add Idle HLT intercept test
-Date: Thu, 7 Mar 2024 05:46:23 +0000
-Message-ID: <20240307054623.13632-6-manali.shukla@amd.com>
+Subject: [PATCH v1 3/5] tools: Add KVM exit reason for the Idle HLT
+Date: Thu, 7 Mar 2024 05:46:21 +0000
+Message-ID: <20240307054623.13632-4-manali.shukla@amd.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240307054623.13632-1-manali.shukla@amd.com>
 References: <20240307054623.13632-1-manali.shukla@amd.com>
@@ -77,182 +77,64 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF0001A108:EE_|SJ2PR12MB8848:EE_
-X-MS-Office365-Filtering-Correlation-Id: 60e0551a-e8ea-4bb8-f8c8-08dc3e69fbcb
+X-MS-TrafficTypeDiagnostic: BL02EPF0001A108:EE_|SJ0PR12MB8139:EE_
+X-MS-Office365-Filtering-Correlation-Id: 27a88b56-519e-4444-ddf5-08dc3e69faad
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	8AFR0dLH4yhZpeIXrXWiPx0LZoFobvd/a7QfCl7ncizdK65piQSKpehylibcsqHaIJR0jTQEVmkGWWmzkaRVdDPQaO6V89s0M4aQVSZMJzSI/n8urQQ1XTda+YaRliV95EKRyp5zsuXRKgW9x0UE9VyjM/Bah7n/RNbY+3NnW9a743sm1i5DHsSHGWtW+JXWE+QFQLGv+309gjvKu8bI/bUyUtB4uZcxpK5s27hCx27/qQkIwQ8r+R0fKnAITBlGdF48+Nj/1YRw2AVFm2VVhp2Aei5Ps+8XN5hwY3uyXo5GAsffw71Zdf99L64ivo/Jo5NrvWZJGtgl2NykXAK5g4ogBd/S6jDTr7874WQ5eGXUjgCXFs7EmKjsTWRBEugobsNFZSe2nfAT7h6TH/NCHVFHIDx2BFYnHanMkX6bx8EeZIP58DtxZe8X9sm1fCGuigwndo7D9vVdOMhWbO7RBck4y1ZzebL/o3GJVZEe+e3llk5mnr+qwwlbO+StNGrTp66mgLRvCrsNyKypGe4Me4bpA2uKpFYRYlsXwFnWB6+2dtzEFArw6jinXzr86Yx5ZdDjrK5HlY8yvdT6PssHFWkX/0IMvLFqvbqXJPATtXqw8+yZfOOvdBA4pFo0ZI7psVavcVMll8kEHapF6eNs2Ofvh53iHPIN5CMZIcqiWLFDs/Kc5ryd4rbkZvkw/WTjS8WZuqNcMDxLNUOwPE3/gcHrX6E/4fNn6xCu4k+joTFJb8S7yKTdJdzCo989CQYC
+	OtwQkyhIQXfPMIpcqO/r+A3O4ti62t2XpgOtmfR5mvUZ/DZuUeRuxU8bfJac72UoCC9XqUe+jl44CbRXXZ6DK9rlGCxJierDUL58rOB7b45nUAd8xvQugQlcDEcy7T7LWcZqJSLzQsl47GPt4/iTafpZFtI7iYW2+K6N4maYC97rxjGEXiG+mKb3UawvMvLWUIHyC+yEcj+2k4+NeV+9sM3AebD+ER7MuGhwK8MgKxNw05mH680wIOxx62o1zZD2BVi43WDy9GqoQ+Zk9QJS/P9iNBBcKqvvHU0LDqJK34cCTGds4GuGJVLBvM90hluiWFUnGacZMDuZq1pbG2dYra/gf/6ymCfxqxH5jhq80+RJVjYWSO9r+yvzn2pOd63HkBbnSbrROnzt65i4CMlrbghtoYBhlpnNW4Lt+K4N1qGPbXhga0XWyElHlpswuMrEgfGPNTquYkQnDE6MwB37DmS7RanQctzLBFDqXmrzkhBFi82dQDolF5Jd7ruoWyjJsP/JNZyIqQuYQx6YUmDJNShFMapsYs9eeDQfA8BdZYAY38Yal7EvMy8ddmxUixDkoEtdB1WBlwGWBF97QXz9QiOsnAM7SMdxQL3H2aK33kBAVSySiKye03GaKdSdltfROnmMn+RE/QIipbKmD+w5fTujDdt1R+ePAYoABCOOaiSpznP39jvEluc4bhq6ZOlBSlTU32ki7U/CH+uNLcOjze102yxrGTLxXmkratVbG12cd7LfsSBWE6eIMzdk4BXI
 X-Forefront-Antispam-Report:
 	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(36860700004)(376005)(82310400014);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2024 05:46:49.6235
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2024 05:46:47.7485
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 60e0551a-e8ea-4bb8-f8c8-08dc3e69fbcb
+X-MS-Exchange-CrossTenant-Network-Message-Id: 27a88b56-519e-4444-ddf5-08dc3e69faad
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
 	BL02EPF0001A108.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8848
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB8139
 
 From: Manali Shukla <Manali.Shukla@amd.com>
 
-The Execution of the HLT instruction results in a VMEXIT. Hypervisor
-observes pending V_INTR and V_NMI events just after the VMEXIT
-generated by the HLT for the vCPU and causes VM entry to service the
-pending events.  The Idle HLT intercept feature avoids the wasteful
-VMEXIT during the halt if there are pending V_INTR and V_NMI events
-for the vCPU.
+The Idle HLT intercept feature allows for the HLT instruction execution
+by a vCPU to be intercepted by hypervisor only if there are no pending
+V_INR and V_NMI events for the vCPU. The Idle HLT intercept will not be
+triggerred when vCPU is expected to service pending events (V_INTR and
+V_NMI).
 
-The selftest for the Idle HLT intercept instruments the above-mentioned
-scenario.
+The new SVM_EXIT_IDLE_HLT is introduced as part of the Idle HLT
+intercept feature. Add it to SVM_EXIT_REASONS, so that the
+SVM_EXIT_IDLE_HLT type of VMEXIT is recognized by tools like perf etc.
 
 Signed-off-by: Manali Shukla <Manali.Shukla@amd.com>
 ---
- tools/testing/selftests/kvm/Makefile          |   1 +
- .../selftests/kvm/x86_64/svm_idlehlt_test.c   | 118 ++++++++++++++++++
- 2 files changed, 119 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/x86_64/svm_idlehlt_test.c
+ tools/arch/x86/include/uapi/asm/svm.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index 492e937fab00..7ad03dc4f35e 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -89,6 +89,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/smaller_maxphyaddr_emulation_test
- TEST_GEN_PROGS_x86_64 += x86_64/smm_test
- TEST_GEN_PROGS_x86_64 += x86_64/state_test
- TEST_GEN_PROGS_x86_64 += x86_64/vmx_preemption_timer_test
-+TEST_GEN_PROGS_x86_64 += x86_64/svm_idlehlt_test
- TEST_GEN_PROGS_x86_64 += x86_64/svm_vmcall_test
- TEST_GEN_PROGS_x86_64 += x86_64/svm_int_ctl_test
- TEST_GEN_PROGS_x86_64 += x86_64/svm_nested_shutdown_test
-diff --git a/tools/testing/selftests/kvm/x86_64/svm_idlehlt_test.c b/tools/testing/selftests/kvm/x86_64/svm_idlehlt_test.c
-new file mode 100644
-index 000000000000..1564511799d4
---- /dev/null
-+++ b/tools/testing/selftests/kvm/x86_64/svm_idlehlt_test.c
-@@ -0,0 +1,118 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ *  svm_idlehalt_test
-+ *
-+ *  Copyright (C) 2024 Advanced Micro Devices, Inc.
-+ *
-+ *  For licencing details see kernel-base/COPYING
-+ *
-+ *  Author:
-+ *  Manali Shukla  <manali.shukla@amd.com>
-+ */
-+#include "kvm_util.h"
-+#include "svm_util.h"
-+#include "processor.h"
-+#include "test_util.h"
-+#include "apic.h"
-+
-+#define VINTR_VECTOR     0x30
-+#define NUM_ITERATIONS 100000
-+
-+/*
-+ * Incremented in the VINTR handler. Provides evidence to the sender that the
-+ * VINR is arrived at the destination.
-+ */
-+static volatile uint64_t vintr_rcvd;
-+
-+void verify_apic_base_addr(void)
-+{
-+	uint64_t msr = rdmsr(MSR_IA32_APICBASE);
-+	uint64_t base = GET_APIC_BASE(msr);
-+
-+	GUEST_ASSERT(base == APIC_DEFAULT_GPA);
-+}
-+
-+/*
-+ * The halting guest code instruments the scenario where there is a V_INTR pending
-+ * event available while hlt instruction is executed. The HLT VM Exit doesn't
-+ * occur in above-mentioned scenario if the Idle HLT intercept feature is enabled.
-+ */
-+
-+static void halter_guest_code(void)
-+{
-+	uint32_t icr_val;
-+	int i;
-+
-+	verify_apic_base_addr();
-+	xapic_enable();
-+
-+	icr_val = (APIC_DEST_SELF | APIC_INT_ASSERT | VINTR_VECTOR);
-+
-+	for (i = 0; i < NUM_ITERATIONS; i++) {
-+		xapic_write_reg(APIC_ICR, icr_val);
-+		asm volatile("sti; hlt; cli");
-+	}
-+	GUEST_DONE();
-+}
-+
-+static void guest_vintr_handler(struct ex_regs *regs)
-+{
-+	vintr_rcvd++;
-+	xapic_write_reg(APIC_EOI, 0x30);
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	struct kvm_vm *vm;
-+	struct kvm_vcpu *vcpu;
-+	struct ucall uc;
-+	uint64_t  halt_exits, vintr_exits;
-+	uint64_t *pvintr_rcvd;
-+
-+	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_SVM));
-+
-+	/* Check the extension for binary stats */
-+	TEST_REQUIRE(kvm_has_cap(KVM_CAP_BINARY_STATS_FD));
-+
-+	vm = vm_create_with_one_vcpu(&vcpu, halter_guest_code);
-+
-+	vm_init_descriptor_tables(vm);
-+	vcpu_init_descriptor_tables(vcpu);
-+	vm_install_exception_handler(vm, VINTR_VECTOR, guest_vintr_handler);
-+	virt_pg_map(vm, APIC_DEFAULT_GPA, APIC_DEFAULT_GPA);
-+
-+	vcpu_run(vcpu);
-+	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_IO);
-+
-+	halt_exits = vcpu_get_stat(vcpu, "halt_exits");
-+	vintr_exits = vcpu_get_stat(vcpu, "irq_window_exits");
-+	pvintr_rcvd = (uint64_t *)addr_gva2hva(vm, (uint64_t)&vintr_rcvd);
-+
-+	switch (get_ucall(vcpu, &uc)) {
-+	case UCALL_ABORT:
-+		REPORT_GUEST_ASSERT(uc);
-+		/* NOT REACHED */
-+	case UCALL_DONE:
-+		goto done;
-+	default:
-+		TEST_FAIL("Unknown ucall 0x%lx.", uc.cmd);
-+	}
-+
-+done:
-+	TEST_ASSERT(halt_exits == 0,
-+		    "Test Failed:\n"
-+		    "Guest executed VINTR followed by halts: %d times\n"
-+		    "The guest exited due to halt: %ld times and number\n"
-+		    "of vintr exits: %ld and vintr got re-injected: %ld times\n",
-+		    NUM_ITERATIONS, halt_exits, vintr_exits, *pvintr_rcvd);
-+
-+	fprintf(stderr,
-+		"Test Successful:\n"
-+		"Guest executed VINTR followed by halts: %d times\n"
-+		"The guest exited due to halt: %ld times and number\n"
-+		"of vintr exits: %ld and vintr got re-injected: %ld times\n",
-+		NUM_ITERATIONS, halt_exits, vintr_exits, *pvintr_rcvd);
-+
-+	kvm_vm_free(vm);
-+	return 0;
-+}
+diff --git a/tools/arch/x86/include/uapi/asm/svm.h b/tools/arch/x86/include/uapi/asm/svm.h
+index 80e1df482337..5bf1ad15e1ee 100644
+--- a/tools/arch/x86/include/uapi/asm/svm.h
++++ b/tools/arch/x86/include/uapi/asm/svm.h
+@@ -95,6 +95,7 @@
+ #define SVM_EXIT_CR14_WRITE_TRAP		0x09e
+ #define SVM_EXIT_CR15_WRITE_TRAP		0x09f
+ #define SVM_EXIT_INVPCID       0x0a2
++#define SVM_EXIT_IDLE_HLT      0x0a6
+ #define SVM_EXIT_NPF           0x400
+ #define SVM_EXIT_AVIC_INCOMPLETE_IPI		0x401
+ #define SVM_EXIT_AVIC_UNACCELERATED_ACCESS	0x402
+@@ -224,6 +225,7 @@
+ 	{ SVM_EXIT_CR8_WRITE_TRAP,	"write_cr8_trap" }, \
+ 	{ SVM_EXIT_INVPCID,     "invpcid" }, \
+ 	{ SVM_EXIT_NPF,         "npf" }, \
++	{ SVM_EXIT_IDLE_HLT,         "idle-halt" }, \
+ 	{ SVM_EXIT_AVIC_INCOMPLETE_IPI,		"avic_incomplete_ipi" }, \
+ 	{ SVM_EXIT_AVIC_UNACCELERATED_ACCESS,   "avic_unaccelerated_access" }, \
+ 	{ SVM_EXIT_VMGEXIT,		"vmgexit" }, \
 -- 
 2.34.1
 
