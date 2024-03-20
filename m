@@ -1,143 +1,94 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9C621A5A2;
-	Wed, 20 Mar 2024 06:03:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 415BB2DF7D;
+	Wed, 20 Mar 2024 08:18:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710914609; cv=none; b=mJbIPYwAviDf4QPhygR9QCiG53FM1nZuJwQpJNGPXQsTk2qdSoBsechRCxak6TGQJsGpWfo8MO+N0mp3O3XBfo50Tifj3/RKTJI1ffuP/DoXNZ5U9as0zUhlAZ9ygls2Cy4dSHqXHd+uv0vxdNwcgira0/oLMbqPVNypiCmVNhw=
+	t=1710922694; cv=none; b=nTftO7V3ZBKI36QVXvEGYTHk3eZKCPpX/UdSzxuJllt9ePBQpDKGklgwp7481d7HuSikCthSoD3hL/u6x6m5E0xT9N63mjCHiF6a8I7YTGLbEKKHWyaR28ObCJ5Rk2IALJWw2FuJBUloim/T3RQaBJC7ndYAfPrUY23DrqRizks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710914609; c=relaxed/simple;
-	bh=Xj+0EJwM7uAPM9IYGHMym6tea0yeShSg9UcqikTwriI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SzTVOuNIK0HdtfiaSnU8H+3ZXj5NJ8/g8eIvz6Y2zsMFvgVIhP6rRdS3FS1bI21DwJtJR/tQN4De9Um0GqGXObQ1rbc+8XPcaLBZpzlRfq2cTsRuE0kciOJLs3nksrAmIPfh6Ywd/hQo+BX9oeOETxhmfhQwl6GZACCm2m7ZcQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PH6vwttF; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PH6vwttF"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-341730bfc46so1779863f8f.3;
-        Tue, 19 Mar 2024 23:03:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710914606; x=1711519406; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ao8qG1eSPb4R5Tf5aIIiQnLt3AJxqdYQvtHZM6vC9CY=;
-        b=PH6vwttFtq+Qjy+GnG+JelPOdmjZenrcU8KkxGoZkM7ERCqFC9KVMwto9bNPRIqPyF
-         Akv/ftL3ItZwrM3UTI6OtUSGGANuD+V/qvObV+pLXffW+Bq2USEYOF8cn2HG8/H6jaiO
-         QSiqX5eBWKWxyOUaZxPeu3COzFF23PFk94/K7Mb0nQVRYu97oY87HAI95/Z+qSLV7x32
-         nO/FL+eBdS0RMS5KwAJRJGfZBBbfaSXteeAWUWn/hDeD0xkmsdpU0hD4lpmb1MHDlZaV
-         RS/VejVnd5CwHqgxGdkhiactK2ly7AqaPBj5dt4biG8d5nanq+ikTrjbzY9gdpJzKErB
-         ZxhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710914606; x=1711519406;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ao8qG1eSPb4R5Tf5aIIiQnLt3AJxqdYQvtHZM6vC9CY=;
-        b=ISpBvJab7WrBrKNpJsCdw43Z1tWmTuy+xgQgR/FyT5p/Yy8MjJAvFRZvYoIg3xu44I
-         LUYGBW3dBl5XcNIYABV2GfSZnILAO2TejjFk19s1hYfoSkWXW0i13K75oWnQIQm4ivjB
-         rcicbYLcnj1I8t/Wg8y3J2u13OlKXVOgKUy+tMKO7DTxGe5Uel61NQmyZHY2UO2mpuO7
-         3M7gEMmFW7nRrgowWLsJiEUMx27s07/McOjko/SysW31LpfZQmcrpCiOcUVJk7YA90tP
-         GqB7UO9nlEmnipECOTt6MmbtXoQxnaZG68Xc857BGQqWkWutgKvkMxj2OLkYkcitfAbw
-         8JVQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWJY47Du8+YxZkxyPWZnQpI65ZyI5oHih4zyQbgUtiXWTsZuj2jLsW2Vx4RDg/xTocEH0XwVKJlK+02AYF52GdW9vwtm7vc5piiLrrU2B+HdP+wpdLuLUf/3KBNYWMpvd5CS1L+Bi7jlXU9ZY9PhH9UcpFOcnEEhto4Or3IQnIQzhY4
-X-Gm-Message-State: AOJu0YyUvGtmxDUEwwCV/Kkbc3qSDVFrWCioqypnemE0VKsEBtW7/+xi
-	9kCzeuRAWb37/p2tRVYZOJ6QtH/U/6Ana77UYpzSSYcnhvVvJqkAB+VR30qVVpcyxOImsS0Gt3m
-	q1Lxq/G4AW5NznCeMHAIcq/WlTRA=
-X-Google-Smtp-Source: AGHT+IH1rdMb3LEWwbjbirEDhmFBs9QAAhpWIj+p8X1QiKJltlr/RabGEulNmHtplvCFddTMVgDaubwKn8kaCsU1i4k=
-X-Received: by 2002:adf:f38c:0:b0:33e:7a1f:5824 with SMTP id
- m12-20020adff38c000000b0033e7a1f5824mr12414766wro.0.1710914605898; Tue, 19
- Mar 2024 23:03:25 -0700 (PDT)
+	s=arc-20240116; t=1710922694; c=relaxed/simple;
+	bh=60sKjZFMDkIGBZ34PBAlSHbXPnG2diZASmVrBzUBnok=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=NvsK+x7n3Llla4xM6zMmvLz9pjBx+LW8Z+cIvt+E0CcrBap2cWTw9TfxCBW/VgRBVysNb55ZVvUOj+8tyEiIPG3SN1FStM2RVxyhnrlkBBu7GpTXgM/m6Lep6j91AjpecglGg+Dmtn/nMs4HZU+nh42tJRqJb9dLw/2eSVcUq2Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.93.142])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4V01gH1LT4z4f3kK1;
+	Wed, 20 Mar 2024 16:18:03 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.252])
+	by mail.maildlp.com (Postfix) with ESMTP id 1085A1A0172;
+	Wed, 20 Mar 2024 16:18:07 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.101.6])
+	by APP3 (Coremail) with SMTP id _Ch0CgDnpZ29m_plVnGcHQ--.12753S2;
+	Wed, 20 Mar 2024 16:18:06 +0800 (CST)
+From: Kemeng Shi <shikemeng@huaweicloud.com>
+To: brendan.higgins@linux.dev,
+	davidgow@google.com,
+	rmoar@google.com,
+	corbet@lwn.net
+Cc: linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] Documentation: kunit: correct KUNIT_VERY_SLOW to KUNIT_SPEED_VERY_SLOW
+Date: Thu, 21 Mar 2024 01:14:24 +0800
+Message-Id: <20240320171424.6536-1-shikemeng@huaweicloud.com>
+X-Mailer: git-send-email 2.30.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240319050302.1085006-1-josef@netflix.com>
-In-Reply-To: <20240319050302.1085006-1-josef@netflix.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 19 Mar 2024 23:03:14 -0700
-Message-ID: <CAADnVQJ=HGFBn-8aKb2efUh2NxUe-wJc_FqPKROGZxz6d4L_vQ@mail.gmail.com>
-Subject: Re: [PATCH V3 bpf-next 1/2] bpf: add bpf_task_get_cgroup kfunc
-To: Jose Fernandez <josef@netflix.com>, Tejun Heo <tj@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Tycho Andersen <tycho@tycho.pizza>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_Ch0CgDnpZ29m_plVnGcHQ--.12753S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Jry5Zry3XFyDtr4kArWxCrg_yoWDtFXEva
+	4rZFn3CFW3tr9aqr4jyF1SyFn3GFW8Cr48Wr4DKF98Cr1SyasrKFyDJ3sF9r1Uur1S9a4f
+	tan7ur1jvwn7AjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUb28YFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
+	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l87I20VAvwVAaII0Ic2I_JFv_Gryl8c
+	AvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq
+	3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gc
+	CE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxI
+	r21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87
+	Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IY
+	c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
+	026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF
+	0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0x
+	vE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
+	jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jIGQDUUUUU=
+X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
 
-On Mon, Mar 18, 2024 at 10:04=E2=80=AFPM Jose Fernandez <josef@netflix.com>=
- wrote:
->
-> This patch enhances the BPF helpers by adding a kfunc to retrieve the
-> cgroup v2 of a task, addressing a previous limitation where only
-> bpf_task_get_cgroup1 was available for cgroup v1. The new kfunc is
-> particularly useful for scenarios where obtaining the cgroup ID of a
-> task other than the "current" one is necessary, which the existing
-> bpf_get_current_cgroup_id helper cannot accommodate. A specific use
-> case at Netflix involved the sched_switch tracepoint, where we had to
-> get the cgroup IDs of both the prev and next tasks.
->
-> The bpf_task_get_cgroup kfunc acquires and returns a reference to a
-> task's default cgroup, ensuring thread-safe access by correctly
-> implementing RCU read locking and unlocking. It leverages the existing
-> cgroup.h helper, and cgroup_tryget to safely acquire a reference to it.
->
-> Signed-off-by: Jose Fernandez <josef@netflix.com>
-> Reviewed-by: Tycho Andersen <tycho@tycho.pizza>
-> Acked-by: Yonghong Song <yonghong.song@linux.dev>
-> Acked-by: Stanislav Fomichev <sdf@google.com>
-> ---
-> V2 -> V3: No changes
-> V1 -> V2: Return a pointer to the cgroup instead of the cgroup ID
->
->  kernel/bpf/helpers.c | 26 ++++++++++++++++++++++++++
->  1 file changed, 26 insertions(+)
->
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> index a89587859571..bbd19d5eedb6 100644
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-> @@ -2266,6 +2266,31 @@ bpf_task_get_cgroup1(struct task_struct *task, int=
- hierarchy_id)
->                 return NULL;
->         return cgrp;
->  }
-> +
-> +/**
-> + * bpf_task_get_cgroup - Acquire a reference to the default cgroup of a =
-task.
-> + * @task: The target task
-> + *
-> + * This function returns the task's default cgroup, primarily
-> + * designed for use with cgroup v2. In cgroup v1, the concept of default
-> + * cgroup varies by subsystem, and while this function will work with
-> + * cgroup v1, it's recommended to use bpf_task_get_cgroup1 instead.
-> + * A cgroup returned by this kfunc which is not subsequently stored in a
-> + * map, must be released by calling bpf_cgroup_release().
-> + *
-> + * Return: On success, the cgroup is returned. On failure, NULL is retur=
-ned.
-> + */
-> +__bpf_kfunc struct cgroup *bpf_task_get_cgroup(struct task_struct *task)
-> +{
-> +       struct cgroup *cgrp;
-> +
-> +       rcu_read_lock();
-> +       cgrp =3D task_dfl_cgroup(task);
-> +       if (!cgroup_tryget(cgrp))
-> +               cgrp =3D NULL;
-> +       rcu_read_unlock();
-> +       return cgrp;
-> +}
+There is no KUNIT_VERY_SLOW, I guess we mean KUNIT_SPEED_VERY_SLOW.
 
-Tejun,
+Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
+---
+ Documentation/dev-tools/kunit/running_tips.rst | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Does this patch look good to you?
+diff --git a/Documentation/dev-tools/kunit/running_tips.rst b/Documentation/dev-tools/kunit/running_tips.rst
+index bd689db6fdd2..482f598d141c 100644
+--- a/Documentation/dev-tools/kunit/running_tips.rst
++++ b/Documentation/dev-tools/kunit/running_tips.rst
+@@ -294,7 +294,7 @@ macro to define the test case instead of ``KUNIT_CASE(test_name)``.
+ .. code-block:: c
+ 
+ 	static const struct kunit_attributes example_attr = {
+-		.speed = KUNIT_VERY_SLOW,
++		.speed = KUNIT_SPEED_VERY_SLOW,
+ 	};
+ 
+ 	static struct kunit_case example_test_cases[] = {
+@@ -311,7 +311,7 @@ suite definition.
+ .. code-block:: c
+ 
+ 	static const struct kunit_attributes example_attr = {
+-		.speed = KUNIT_VERY_SLOW,
++		.speed = KUNIT_SPEED_VERY_SLOW,
+ 	};
+ 
+ 	static struct kunit_suite example_test_suite = {
+-- 
+2.30.0
+
